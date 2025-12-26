@@ -6,7 +6,8 @@ import { GuideCategory } from '../domain/structures'
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 
 type Request = {
-  guideDto: GuideDto
+  guideTitle: string
+  guideCategory: string
 }
 
 type Response = Promise<GuideDto>
@@ -14,17 +15,21 @@ type Response = Promise<GuideDto>
 export class CreateGuideUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: GuidesRepository) {}
 
-  async execute({ guideDto }: Request): Response {
-    const position = await this.findLastGuidePosition()
-    const guide = Guide.create({ ...guideDto, position: position.value })
+  async execute({ guideTitle, guideCategory }: Request): Response {
+    const category = GuideCategory.create(guideCategory)
+    const position = await this.findLastGuidePosition(category)
+    const guide = Guide.create({ 
+      title: guideTitle,
+      content: '',
+      position: position.value,
+      category: category.value,
+    })
     await this.repository.add(guide)
     return guide.dto
   }
 
-  private async findLastGuidePosition() {
-    const guide = await this.repository.findLastByPositionAndCategory(
-      GuideCategory.createAsLsp(),
-    )
+  private async findLastGuidePosition(category: GuideCategory) {
+    const guide = await this.repository.findLastByPositionAndCategory(category)
     if (!guide) return OrdinalNumber.create(1)
     return guide.position.increment()
   }
