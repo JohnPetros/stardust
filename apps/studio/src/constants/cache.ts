@@ -26,4 +26,7 @@ export const CACHE = {
   insigniasTable: {
     key: 'insignias-table',
   },
+  guidesGrid: {
+    key: 'guides-grid',
+  },
 }
