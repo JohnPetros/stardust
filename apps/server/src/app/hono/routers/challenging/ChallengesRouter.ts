@@ -2,7 +2,6 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 
 import {
-  booleanSchema,
   idSchema,
   idsListSchema,
   itemsPerPageSchema,

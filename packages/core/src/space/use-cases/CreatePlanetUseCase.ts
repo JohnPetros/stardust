@@ -2,7 +2,7 @@ import type { UseCase } from '#global/interfaces/UseCase'
 import type { PlanetDto } from '../domain/entities/dtos'
 import type { PlanetsRepository } from '../interfaces'
 import { Planet } from '../domain/entities'
-import { PlanetNotFoundError } from '../domain/errors'
+import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 
 type Request = {
   name: string
@@ -16,13 +16,13 @@ export class CreatePlanetUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: PlanetsRepository) {}
 
   async execute({ name, image, icon }: Request): Response {
-    const lastPlanet = await this.findLastPlanet()
+    const lastPlanetPosition = await this.findLastPlanetPosition()
     const planet = Planet.create({
       name,
       icon,
       image,
       isAvailable: false,
-      position: lastPlanet?.position.value + 1,
+      position: lastPlanetPosition.value,
       stars: [],
       completionsCount: 0,
     })
@@ -30,9 +30,9 @@ export class CreatePlanetUseCase implements UseCase<Request, Response> {
     return planet.dto
   }
 
-  private async findLastPlanet(): Promise<Planet> {
+  private async findLastPlanetPosition(): Promise<OrdinalNumber> {
     const planet = await this.repository.findLastPlanet()
-    if (!planet) throw new PlanetNotFoundError()
-    return planet
+    if (!planet) return OrdinalNumber.create(1)
+    return planet.position.increment()
   }
 }

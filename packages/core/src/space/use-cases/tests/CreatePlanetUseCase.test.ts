@@ -2,7 +2,6 @@ import { mock } from 'ts-jest-mocker'
 import { CreatePlanetUseCase } from '../CreatePlanetUseCase'
 import type { PlanetsRepository } from '../../interfaces'
 import { PlanetsFaker } from '../../domain/entities/tests/fakers'
-import { PlanetNotFoundError } from '../../domain/errors'
 
 describe('Create Planet Use Case', () => {
   let useCase: CreatePlanetUseCase
@@ -31,25 +30,29 @@ describe('Create Planet Use Case', () => {
     expect(createdPlanet.name.value).toBe(planetDto.name)
     expect(createdPlanet.icon.value).toBe(planetDto.icon)
     expect(createdPlanet.image.value).toBe(planetDto.image)
-    expect(createdPlanet.position.value).toBe(lastPlanet.position.value + 1)
+    // Expect increment
+    expect(createdPlanet.position.value).toBe(6)
     expect(createdPlanet.isAvailable.isFalse).toBe(true)
     expect(createdPlanet.completionsCount.value).toBe(0)
     expect(createdPlanet.stars).toHaveLength(0)
     expect(response).toEqual(createdPlanet.dto)
   })
 
-  it('should throw an error when the last planet does not exist', async () => {
+  it('should create the first planet with position 1 if no previous planet exists', async () => {
     const planetDto = PlanetsFaker.fakeDto()
+    planetsRepository.findLastPlanet.mockResolvedValue(null)
 
-    expect(
-      useCase.execute({
-        name: planetDto.name,
-        icon: planetDto.icon,
-        image: planetDto.image,
-      }),
-    ).rejects.toThrow(PlanetNotFoundError)
+    const response = await useCase.execute({
+      name: planetDto.name,
+      icon: planetDto.icon,
+      image: planetDto.image,
+    })
 
     expect(planetsRepository.findLastPlanet).toHaveBeenCalledTimes(1)
-    expect(planetsRepository.add).not.toHaveBeenCalled()
+    expect(planetsRepository.add).toHaveBeenCalledTimes(1)
+
+    const createdPlanet = planetsRepository.add.mock.calls[0][0]
+    expect(createdPlanet.position.value).toBe(1)
+    expect(response).toEqual(createdPlanet.dto)
   })
 })

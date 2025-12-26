@@ -6,7 +6,7 @@ import { Guide } from '@stardust/core/manual/entities'
 import { CACHE } from '@/constants'
 import { useCache } from '@/ui/global/hooks/useCache'
 
-export function useGuidesDialog(ManualService: ManualService) {
+export function useGuidesDialog(manualService: ManualService) {
   const [content, setContent] = useState('')
   const [shouldFetchGuides, setShouldFetchGuides] = useState(false)
 
@@ -27,7 +27,7 @@ export function useGuidesDialog(ManualService: ManualService) {
   }
 
   async function fetchGuides() {
-    const response = await ManualService.fetchAllGuides()
+    const response = await manualService.fetchAllGuides()
     if (response.isFailure) response.throwError()
     return response.body
   }

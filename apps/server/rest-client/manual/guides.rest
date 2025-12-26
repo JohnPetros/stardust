@@ -1,4 +1,53 @@
 @URL = {{BASE_URL}}/manual/guides
+@GUIDE_ID = f120c915-1b1d-46c8-a395-4c8001496cfe
 
-### Fetch all guides
-GET {{URL}}
+### Fetch all LSP guides
+GET {{URL}}?category=lsp
+
+### Create guide
+POST {{URL}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "title": "New guide title",
+  "content": "New guide content",
+  "category": "lsp",
+  "position": 1
+}
+
+### Edit guide title
+PATCH {{URL}}/{{GUIDE_ID}}/title
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "guideTitle": "Updated guide title"
+}
+
+### Edit guide content
+PATCH {{URL}}/{{GUIDE_ID}}/content
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "guideContent": "Updated guide content"
+}
+
+### Delete guide
+DELETE {{URL}}/{{GUIDE_ID}}
+Authorization: Bearer {{JWT}}
+
+### Reorder guides
+POST {{URL}}/reorder
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "guideIds": [
+    "ac4abe58-0268-4acb-bbbd-fde909a50b81",
+    "bda4c82c-9466-4619-bdd6-89f719c54c27",
+    "c3d4e5f6-g7h8-i9j0-k1l2-m3n4o5p6q7r8"
+  ]
+}
+
