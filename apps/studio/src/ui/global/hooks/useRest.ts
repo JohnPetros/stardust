@@ -11,6 +11,7 @@ import {
   ProfileService,
   ChallengingService,
   ShopService,
+  ManualService,
 } from '@/rest/services'
 import { ENV, SESSION_STORAGE_KEYS } from '@/constants'
 
@@ -31,5 +32,6 @@ export function useRest() {
     profileService: ProfileService(restClient),
     challengingService: ChallengingService(restClient),
     shopService: ShopService(restClient),
+    manualService: ManualService(restClient),
   }
 }
