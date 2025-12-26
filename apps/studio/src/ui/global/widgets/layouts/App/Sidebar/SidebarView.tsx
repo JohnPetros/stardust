@@ -66,6 +66,21 @@ export const SidebarView = () => {
           Avatares
         </NavigationLink>
       </div>
+      <div>
+        <NavigationTitle>Manual</NavigationTitle>
+        <NavigationLink
+          href={ROUTES.manual.lspGuides}
+          icon={<Icon name='lsp-guide' size={16} />}
+        >
+          Guias LSP
+        </NavigationLink>
+        <NavigationLink
+          href={ROUTES.manual.mdxGuides}
+          icon={<Icon name='mdx-guide' size={16} />}
+        >
+          Guias MDX
+        </NavigationLink>
+      </div>
     </aside>
   )
 }

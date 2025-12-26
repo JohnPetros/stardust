@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { idSchema } from '@stardust/validation/global/schemas'
-import { guideCategorySchema, guideSchema } from '@stardust/validation/manual/schemas'
+import { guideCategorySchema } from '@stardust/validation/manual/schemas'
 import {
   FetchAllGuidesController,
   CreateGuideController,
@@ -43,7 +43,13 @@ export class GuidesRouter extends HonoRouter {
     this.router.post(
       '/',
       this.authMiddleware.verifyAuthentication,
-      this.validationMiddleware.validate('json', guideSchema),
+      this.validationMiddleware.validate(
+        'json',
+        z.object({
+          guideTitle: z.string().min(1),
+          guideCategory: guideCategorySchema,
+        }),
+      ),
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseGuidesRepository(http.getSupabase())

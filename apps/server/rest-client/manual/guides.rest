@@ -10,10 +10,8 @@ Content-Type: application/json
 Authorization: Bearer {{JWT}}
 
 {
-  "title": "New guide title",
-  "content": "New guide content",
-  "category": "lsp",
-  "position": 1
+  "guideTitle": "new LSP guide",
+  "guideCategory": "lsp"
 }
 
 ### Edit guide title

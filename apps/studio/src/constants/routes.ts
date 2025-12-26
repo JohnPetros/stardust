@@ -1,4 +1,5 @@
 import type { Slug } from '@stardust/core/global/structures'
+import type { Guide } from '@stardust/core/manual/entities'
 
 export const ROUTES = {
   index: '/',
@@ -24,5 +25,10 @@ export const ROUTES = {
     insignias: '/shop/insignias',
     rockets: '/shop/rockets',
     avatars: '/shop/avatars',
+  },
+  manual: {
+    guide: (guide: Guide) => `/manual/guides/${guide.category.value}/${guide.id.value}`,
+    lspGuides: '/manual/guides/lsp',
+    mdxGuides: '/manual/guides/mdx',
   },
 }
