@@ -60,6 +60,7 @@ export function useGuidesPage({ manualService, toast, category }: Params) {
     }
 
     refetch()
+    toast.showSuccess('Guia renomeada com sucesso!')
   }
 
   async function handleDeleteGuide(guideId: string) {
