@@ -1,4 +1,4 @@
-import { RocketsTable } from '../Shop/RocketsTable'
+import { RocketsTable } from './RocketsTable'
 
 export const RocketsPageView = () => {
   return (
