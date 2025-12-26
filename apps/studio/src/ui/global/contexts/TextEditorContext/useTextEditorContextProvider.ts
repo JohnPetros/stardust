@@ -274,10 +274,10 @@ export function useTextEditorContextProvider(
           insertTagElement('Quote', 'Insira seu texto de reflexão aqui', props)
           break
         case 'runnableCodeBlock':
-          insertTagElement('Code', 'Insira seu codigo aqui', props)
+          insertTagElement('Code', 'Insira seu código aqui', props)
           break
         case 'codeBlock':
-          insertTagElement('Code', 'Insira seu codigo aqui', props)
+          insertTagElement('Code', 'Insira seu código aqui', props)
           break
         case 'link':
           insertTagElement('Link', 'Insira seu link aqui', [
