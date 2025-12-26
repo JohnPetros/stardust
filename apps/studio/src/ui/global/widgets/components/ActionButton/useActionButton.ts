@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
-import type { ActionButtonProps } from './types/ActionButtonProps'
 import type { ActionButtonTitles } from './types/ActionButtonTitles'
 
 const variants = {
-  default: 'bg-red-700 text-green-950',
+  default: 'bg-green-800 text-green-950',
   canExecute: 'animate-pulse',
   executing: 'border-yellow-400 bg-transparent text-yellow-400',
   success: 'border-green-400 bg-transparent text-green-400',

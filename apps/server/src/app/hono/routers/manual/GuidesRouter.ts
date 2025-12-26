@@ -4,6 +4,7 @@ import { idSchema } from '@stardust/validation/global/schemas'
 import { guideCategorySchema } from '@stardust/validation/manual/schemas'
 import {
   FetchAllGuidesController,
+  FetchGuideController,
   CreateGuideController,
   DeleteGuideController,
   ReorderGuidesController,
@@ -33,6 +34,25 @@ export class GuidesRouter extends HonoRouter {
         const http = new HonoHttp(context)
         const repository = new SupabaseGuidesRepository(http.getSupabase())
         const controller = new FetchAllGuidesController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerFetchGuideRoute(): void {
+    this.router.get(
+      '/:guideId',
+      this.validationMiddleware.validate(
+        'param',
+        z.object({
+          guideId: idSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseGuidesRepository(http.getSupabase())
+        const controller = new FetchGuideController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -154,6 +174,7 @@ export class GuidesRouter extends HonoRouter {
 
   registerRoutes(): Hono {
     this.registerFetchAllGuidesRoute()
+    this.registerFetchGuideRoute()
     this.registerCreateGuideRoute()
     this.registerDeleteGuideRoute()
     this.registerReorderGuidesRoute()

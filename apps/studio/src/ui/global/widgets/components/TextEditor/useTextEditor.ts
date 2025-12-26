@@ -2,8 +2,7 @@ import { useCallback, useRef } from 'react'
 import type monaco from 'monaco-editor'
 
 import { Backup } from '@stardust/core/global/structures'
-
-import type { CursorPosition } from './types/CursorPosition'
+import type { CursorPosition } from '../CodeEditor/types'
 
 export function useTextEditor(initialValue: string, onChange?: (value: string) => void) {
   const monacoEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
@@ -370,9 +369,9 @@ export function useTextEditor(initialValue: string, onChange?: (value: string) =
   }
 
   function handleChange(value: string | undefined) {
-    if (onChange && value) {
-      onChange(value)
-      backup.current = backup.current?.save(value)
+    if (onChange) {
+      onChange(value ?? '')
+      backup.current = backup.current?.save(value ?? '')
     }
   }
 

@@ -11,6 +11,7 @@ import {
   ProfileService,
   ChallengingService,
   ShopService,
+  ManualService,
 } from '@/rest/services'
 import { authContext } from '../contexts/AuthContext'
 import { restContext } from '../contexts/RestContext'
@@ -40,6 +41,7 @@ export const RestMiddleware = async ({ context }: Route.ActionArgs) => {
   const profileService = ProfileService(restClient)
   const challengingService = ChallengingService(restClient)
   const shopService = ShopService(restClient)
+  const manualService = ManualService(restClient)
 
   context.set(restContext, {
     authService,
@@ -49,5 +51,6 @@ export const RestMiddleware = async ({ context }: Route.ActionArgs) => {
     profileService,
     challengingService,
     shopService,
+    manualService,
   })
 }
