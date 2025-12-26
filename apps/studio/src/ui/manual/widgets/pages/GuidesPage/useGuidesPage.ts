@@ -2,11 +2,11 @@ import { IdsList, Id } from '@stardust/core/global/structures'
 import { Guide } from '@stardust/core/manual/entities'
 import type { GuideCategory } from '@stardust/core/manual/structures'
 import type { GuideDto } from '@stardust/core/manual/entities/dtos'
+import type { ManualService } from '@stardust/core/manual/interfaces'
+import type { ToastProvider } from '@stardust/core/global/interfaces'
 
 import { CACHE } from '@/constants/cache'
 import { useCache } from '@/ui/global/hooks/useCache'
-import type { ManualService } from '@stardust/core/manual/interfaces'
-import type { ToastProvider } from '@/ui/global/hooks/useToastProvider'
 import type { SortableItem } from '@/ui/global/widgets/components/SortableGrid/types'
 
 type Params = {
