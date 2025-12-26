@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-A página de guide deve ser agnostica a categoria de guide (mdx/lsp). Atualmente só exsite a página, mas focada somente LSP guides.
+A página de guide deve ser agnóstica a categoria de guide (mdx/lsp). Atualmente só existe e a página, mas focada somente LSP guides.
 
 ## Camada App
 
@@ -18,4 +18,4 @@ A página de guide deve ser agnostica a categoria de guide (mdx/lsp). Atualmente
 
 - importe o category e use-o como GuideCategory logo de cara, deve ser usado como param no hook `useGuidesPage`
 - Não altere nenhuma funcionalidade do widget
-- Certifique-se de que o widget `GuidesPage` seja agnostico a categoria
+- Certifique-se de que o widget `GuidesPage` seja agnóstico a categoria
