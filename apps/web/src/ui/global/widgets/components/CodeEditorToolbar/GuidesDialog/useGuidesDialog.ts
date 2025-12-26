@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import type { ManualService } from '@stardust/core/manual/interfaces'
 import { Guide } from '@stardust/core/manual/entities'
+import { GuideCategory } from '@stardust/core/manual/structures'
 
 import { CACHE } from '@/constants'
 import { useCache } from '@/ui/global/hooks/useCache'
@@ -9,6 +10,19 @@ import { useCache } from '@/ui/global/hooks/useCache'
 export function useGuidesDialog(manualService: ManualService) {
   const [content, setContent] = useState('')
   const [shouldFetchGuides, setShouldFetchGuides] = useState(false)
+
+  async function fetchGuides() {
+    const response = await manualService.fetchGuidesByCategory(
+      GuideCategory.createAsLsp(),
+    )
+    if (response.isFailure) response.throwError()
+    return response.body
+  }
+
+  const { data: guides, isLoading } = useCache({
+    key: CACHE.keys.guides,
+    fetcher: fetchGuides,
+  })
 
   function handleDialogOpen(isOpen: boolean) {
     if (isOpen && !shouldFetchGuides) {
@@ -25,17 +39,6 @@ export function useGuidesDialog(manualService: ManualService) {
   function handleBackButtonClick() {
     setContent('')
   }
-
-  async function fetchGuides() {
-    const response = await manualService.fetchAllGuides()
-    if (response.isFailure) response.throwError()
-    return response.body
-  }
-
-  const { data: guides, isLoading } = useCache({
-    key: CACHE.keys.guides,
-    fetcher: fetchGuides,
-  })
 
   return {
     guides: guides ? guides.map(Guide.create) : [],
