@@ -11,6 +11,10 @@ export const ManualService = (restClient: RestClient): IManualService => {
       return await restClient.get('/manual/guides')
     },
 
+    async fetchGuide(guideId: Id) {
+      return await restClient.get(`/manual/guides/${guideId.value}`)
+    },
+
     async createGuide(category: GuideCategory, title: string) {
       return await restClient.post('/manual/guides', {
         guideTitle: title,

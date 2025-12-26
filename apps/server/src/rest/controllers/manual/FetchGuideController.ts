@@ -3,7 +3,7 @@ import type { Controller, Http } from '@stardust/core/global/interfaces'
 import { GetGuideUseCase } from '@stardust/core/manual/use-cases'
 
 type Schema = {
-  pathParams: {
+  routeParams: {
     guideId: string
   }
 }
@@ -14,7 +14,7 @@ export class FetchGuideController implements Controller<Schema> {
   async handle(http: Http<Schema>) {
     const { guideId } = http.getRouteParams()
     const useCase = new GetGuideUseCase(this.repository)
-    const guide = await useCase.execute({ guideId })
-    return http.send(guide.dto)
+    const response = await useCase.execute({ guideId })
+    return http.send(response)
   }
 }
