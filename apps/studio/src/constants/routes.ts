@@ -25,4 +25,9 @@ export const ROUTES = {
     rockets: '/shop/rockets',
     avatars: '/shop/avatars',
   },
+  manual: {
+    guides: (category: string) => `/manual/guides/${category}`,
+    lspGuides: '/manual/guides/lsp',
+    mdxGuides: '/manual/guides/mdx',
+  },
 }
