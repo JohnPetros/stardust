@@ -16,5 +16,6 @@ export default [
     route(ROUTES.shop.rockets, 'routes/RocketsRoute.tsx'),
     route(ROUTES.shop.avatars, 'routes/AvatarsRoute.tsx'),
     route('/manual/guides/:category', 'routes/GuidesRoute.tsx'),
+    route('/manual/guides/:category/:guideId', 'routes/GuidePageRoute.tsx'),
   ]),
 ] satisfies RouteConfig
