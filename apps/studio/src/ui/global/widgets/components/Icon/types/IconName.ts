@@ -31,3 +31,5 @@ export type IconName =
   | 'copy'
   | 'plus'
   | 'configuration'
+  | 'lsp-guide'
+  | 'mdx-guide'
