@@ -1,5 +1,5 @@
 @URL = {{BASE_URL}}/manual/guides
-@GUIDE_ID = f120c915-1b1d-46c8-a395-4c8001496cfe
+@GUIDE_ID = a38c4e30-1f60-48b0-8cb7-1af796d82c4c
 
 ### Fetch all LSP guides
 GET {{URL}}?category=lsp
@@ -29,7 +29,7 @@ Content-Type: application/json
 Authorization: Bearer {{JWT}}
 
 {
-  "guideContent": "Updated guide content"
+  "guideContent": "## Funções\n### Função com nome\n<Text>Funções com nome podem ser criadas usando a palavra-chave *funcao* (ou *função*), seguida de um nome, e uma lista de parâmetros dentro de parênteses, sendo que cada parâmetro deve ser separado por vírgula. Além disso, bloco de código da função, que é delimitado entre chaves *{}*.</Text>"
 }
 
 ### Delete guide
