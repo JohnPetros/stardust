@@ -14,6 +14,6 @@ export class Chat extends Entity<ChatProps> {
       title: Text.create(dto.title),
       userId: Id.create(dto.userId),
       createdAt: new Date(dto.createdAt),
-    })
+    }, dto.id)
   }
 }
