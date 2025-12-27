@@ -1473,6 +1473,35 @@ export type Database = {
           },
         ]
       }
+      guide_embeddings: {
+        Row: {
+          guide_id: string
+          id: string
+          text: string
+          vector: string
+        }
+        Insert: {
+          guide_id: string
+          id?: string
+          text: string
+          vector: string
+        }
+        Update: {
+          guide_id?: string
+          id?: string
+          text?: string
+          vector?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_embeddings_guide_id_fkey"
+            columns: ["guide_id"]
+            isOneToOne: false
+            referencedRelation: "guides"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       guides: {
         Row: {
           category: Database["public"]["Enums"]["guide_category"]
