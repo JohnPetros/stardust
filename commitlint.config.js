@@ -28,6 +28,7 @@ module.exports = {
         '🔀 merge',
         '⏪ revert',
         '▶️ cr',
+        '📤 response',
         '🗃️ ftree',
         '📜 cert',
         '🚧 wip',
