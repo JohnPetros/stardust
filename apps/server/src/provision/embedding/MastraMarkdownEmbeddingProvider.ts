@@ -6,11 +6,11 @@ import { Embedding, type Text } from '@stardust/core/global/structures'
 import type { EmbeddingProvider } from '@stardust/core/global/interfaces'
 
 export class MastraMarkdownEmbeddingProvider implements EmbeddingProvider {
-  async generate(content: Text) {
+  async generate(content: Text): Promise<Embedding[]> {
     const documents = MDocument.fromMarkdown(content.value)
     const chunks = await documents.chunk({
       strategy: 'markdown',
-      headers: [['##','title'],['###', 'section']],
+      headers: [['##', 'title'],['###', 'section']],
       size: 1000, 
       overlap: 100
     })
@@ -21,7 +21,7 @@ export class MastraMarkdownEmbeddingProvider implements EmbeddingProvider {
     const embeddings = chunks.map((chunk, index) => Embedding.create(
       chunk.text,
       result.embeddings[index]
-    ));
+    ))
     return embeddings
   }
 }

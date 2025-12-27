@@ -1,12 +1,11 @@
 import type { GuidesRepository } from '@stardust/core/manual/interfaces'
 import type { Guide } from '@stardust/core/manual/entities'
 import type { GuideCategory } from '@stardust/core/manual/structures'
-import type { Embedding, Id, List, Text } from '@stardust/core/global/structures'
+import type { Embedding, Id } from '@stardust/core/global/structures'
 
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabaseGuideMapper } from '../../mappers/manual'
 import { SupabasePostgreError } from '../../errors'
-import { text } from 'stream/consumers'
 
 export class SupabaseGuidesRepository
   extends SupabaseRepository
@@ -118,18 +117,15 @@ export class SupabaseGuidesRepository
     }
   }
 
-  async addManyEmbeddings(
-    guideId: Id,
-    guideEmbeddings: Embedding[],
-  ): Promise<void> {
+  async addManyEmbeddings(guideId: Id, guideEmbeddings: Embedding[]): Promise<void> {
     await this.removeAllEmbeddings(guideId)
-    const { error } = await this.supabase
-      .from('guide_embeddings')
-      .insert(guideEmbeddings.map((embedding) => ({
+    const { error } = await this.supabase.from('guide_embeddings').insert(
+      guideEmbeddings.map((embedding) => ({
         guide_id: guideId.value,
         text: embedding.text.value,
         vector: `[${embedding.vector.items.join()}]`,
-      })))
+      })),
+    )
 
     if (error) {
       throw new SupabasePostgreError(error)

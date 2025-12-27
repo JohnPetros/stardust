@@ -11,5 +11,6 @@ export interface GuidesRepository {
   add(guide: Guide): Promise<void>
   addManyEmbeddings(guideId: Id, embeddings: Embedding[]): Promise<void>
   replace(guide: Guide): Promise<void>
+  replaceMany(guides: Guide[]): Promise<void>
   remove(guide: Guide): Promise<void>
 }
