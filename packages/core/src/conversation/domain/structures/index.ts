@@ -1,2 +1,5 @@
 export { ChatMessage } from './ChatMessage'
 export { ChatMessageSender } from './ChatMessageSender'
+export { ChatAction } from './ChatAction'
+export { ChatActionIntent } from './ChatActionIntent'
+export { ChatActionStatus } from './ChatActionStatus'
