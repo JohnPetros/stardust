@@ -150,6 +150,19 @@ export class HonoHttp<HonoContext extends Context>
     return this
   }
 
+  stream(response: Response): RestResponse<Response> {
+    const body = response
+    const headers = this.getResponseHeaders()
+    return new RestResponse({
+      body,
+      statusCode: body.status,
+      headers: {
+        'X-Hono-Response': 'true',
+        ...headers,
+      },
+    })
+  }
+
   send(data?: unknown): RestResponse<Response> {
     const body = this.context.json(data as object)
     const headers = this.getResponseHeaders()

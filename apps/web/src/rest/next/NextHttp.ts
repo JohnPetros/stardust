@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import type { ZodSchema } from 'zod'
 
 import type { Http, HttpMethod, HttpSchema } from '@stardust/core/global/interfaces'
+import type { ChatMessage } from '@stardust/core/conversation/structures'
 import { type PaginationResponse, RestResponse } from '@stardust/core/global/responses'
 import { AppError, MethodNotImplementedError } from '@stardust/core/global/errors'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
@@ -165,6 +166,13 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
         body: nextResponse,
         statusCode: HTTP_STATUS_CODE.redirect,
         headers: { [HTTP_HEADERS.location]: route },
+      })
+    },
+
+    stream(response: Response) {
+      return new RestResponse({
+        body: response as unknown as NextResponse,
+        statusCode: HTTP_STATUS_CODE.ok,
       })
     },
 
