@@ -20,7 +20,7 @@ export class SendChatMessageUseCase implements UseCase<Request, Response> {
   async execute({ chatId, chatMessageDto }: Request) {
     const chat = await this.findChat(Id.create(chatId))
     const messages = await this.repository.findAllMessagesByChat(chat.id)
-    if (messages.length > SendChatMessageUseCase.MAX_MESSAGES_PER_CHAT) {
+    if (messages.length >= SendChatMessageUseCase.MAX_MESSAGES_PER_CHAT) {
       throw new ChatMessagesExceededError()
     }
     const chatMessage = ChatMessage.create(chatMessageDto)

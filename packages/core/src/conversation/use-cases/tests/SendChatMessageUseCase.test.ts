@@ -34,7 +34,7 @@ describe('Send Chat Message Use Case', () => {
   it('should throw an error if the max messages limit is exceeded', async () => {
     const chatId = Id.create().value
     const chat = Chat.create({ id: chatId, name: 'Chat Name' })
-    const messages = Array.from({ length: 51 }, () =>
+    const messages = Array.from({ length: 50 }, () =>
       ChatMessage.create({
         id: Id.create().value,
         content: 'content',
