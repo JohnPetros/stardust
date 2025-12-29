@@ -12,8 +12,4 @@ export const assistantAgent = new ToolLoopAgent({
   tools: {
     getMdxGuide: manualToolset.getMdxGuideTool,
   },
-  toolChoice: {
-    type: 'tool',
-    toolName: 'getMdxGuide',
-  },
 })
