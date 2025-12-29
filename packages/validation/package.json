@@ -18,6 +18,7 @@
     "./shop/schemas": "./src/modules/shop/index.ts",
     "./forum/schemas": "./src/modules/forum/index.ts",
     "./playground/schemas": "./src/modules/playground/schema/index.ts",
+    "./conversation/schemas": "./src/modules/conversation/schemas/index.ts",
     "./storage/schemas": "./src/modules/storage/index.ts",
     "./auth/schemas": "./src/modules/auth/schemas/index.ts",
     "./manual/schemas": "./src/modules/manual/index.ts",

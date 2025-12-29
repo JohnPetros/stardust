@@ -35,40 +35,40 @@ export class DeleguaLsp implements LspProvider {
       funcaoDeSaida,
       funcaoDeSaida,
     )
-    const resultadoLexador = this.lexador.mapear(code.split('\n'), -1)
-    if (resultadoLexador.erros.length) {
-      return this.trateErro(resultadoLexador.erros[0])
-    }
-    const resultadoAvaliacaoSintatica = this.avaliadorSintatico.analisar(
-      resultadoLexador,
-      0,
-    )
-    if (resultadoAvaliacaoSintatica.erros.length) {
-      return this.trateErro(resultadoAvaliacaoSintatica.erros[0])
-    }
-    const resultadoInterpretador = await interpretador.interpretar(
-      resultadoAvaliacaoSintatica.declaracoes,
-      false,
-    )
-    if (resultadoInterpretador.erros.length) {
-      return this.trateErro(resultadoInterpretador.erros[0])
-    }
+    // const resultadoLexador = this.lexador.mapear(code.split('\n'), -1)
+    // if (resultadoLexador.erros.length) {
+    //   return this.trateErro(resultadoLexador.erros[0])
+    // }
+    // const resultadoAvaliacaoSintatica = this.avaliadorSintatico.analisar(
+    //   resultadoLexador,
+    //   0,
+    // )
+    // if (resultadoAvaliacaoSintatica.erros.length) {
+    //   return this.trateErro(resultadoAvaliacaoSintatica.erros[0])
+    // }
+    // const resultadoInterpretador = await interpretador.interpretar(
+    //   resultadoAvaliacaoSintatica.declaracoes,
+    //   false,
+    // )
+    // if (resultadoInterpretador.erros.length) {
+    //   return this.trateErro(resultadoInterpretador.erros[0])
+    // }
 
-    console.log(resultadoInterpretador.resultado)
+    // console.log(resultadoInterpretador.resultado)
 
     let resultado = null
 
-    if (resultadoInterpretador?.resultado?.at(-1)) {
-      resultado = resultadoInterpretador?.resultado.at(-1)?.valorRetornado.valor
+    // if (resultadoInterpretador?.resultado?.at(-1)) {
+    //   resultado = resultadoInterpretador?.resultado.at(-1)?.valorRetornado.valor
 
-      if (typeof resultado === 'object' && resultado !== null && 'valor' in resultado) {
-        resultado = resultado.valor
-      }
-    }
+    //   if (typeof resultado === 'object' && resultado !== null && 'valor' in resultado) {
+    //     resultado = resultado.valor
+    //   }
+    // }
 
     console.log(resultado)
 
-    return new LspResponse({ result: resultado, outputs })
+    return new LspResponse({ result: '', outputs })
   }
 
   getInput(code: string) {
@@ -143,27 +143,30 @@ export class DeleguaLsp implements LspProvider {
       ? JSON.stringify(jsCode)
       : String(jsCode)
 
-    try {
-      const lexador = new LexadorJavaScript()
-      const avaliadorSintatico = new AvaliadorSintaticoJavaScript()
-      const resultadoLexico = lexador.mapear(codigo.split('\n'), -1)
-      const resultadoSintatico = avaliadorSintatico.analisar(resultadoLexico, -1)
-      const tradutor = new TradutorReversoJavaScript()
-      const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
-      return traducao.trim().replace(' \n', '').replaceAll('\\"', '')
-    } catch {
-      return codigo
-    }
+    return codigo
+
+    // try {
+    //   const lexador = new LexadorJavaScript()
+    //   const avaliadorSintatico = new AvaliadorSintaticoJavaScript()
+    //   const resultadoLexico = lexador.mapear(codigo.split('\n'), -1)
+    //   const resultadoSintatico = avaliadorSintatico.analisar(resultadoLexico, -1)
+    //   const tradutor = new TradutorReversoJavaScript()
+    //   const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
+    //   return traducao.trim().replace(' \n', '').replaceAll('\\"', '')
+    // } catch {
+    //   return codigo
+    // }
   }
 
   translateToJs(codeRunnerCode: string) {
-    const lexador = new Lexador()
-    const avaliadorSintatico = new AvaliadorSintatico()
-    const resultadoLexico = lexador.mapear(codeRunnerCode.split('\n'), -1)
-    const resultadoSintatico = avaliadorSintatico.analisar(resultadoLexico, -1)
-    const tradutor = new TradutorJavaScript()
-    const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
-    return traducao.trim()
+    return ''
+    // const lexador = new Lexador()
+    // const avaliadorSintatico = new AvaliadorSintatico()
+    // const resultadoLexico = lexador.mapear(codeRunnerCode.split('\n'), -1)
+    // const resultadoSintatico = avaliadorSintatico.analisar(resultadoLexico, -1)
+    // const tradutor = new TradutorJavaScript()
+    // const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
+    // return traducao.trim()
   }
 
   private obtenhaTipo(valor: unknown) {
@@ -214,31 +217,31 @@ export class DeleguaLsp implements LspProvider {
   }
 
   performSyntaxAnalysis(code: string): LspResponse {
-    const retornoLexador = this.lexador.mapear(code.split('\n'), -1)
-    const retornoAvaliadorSintatico = this.avaliadorSintatico.analisar(retornoLexador, -1)
-    if (retornoAvaliadorSintatico.erros.length > 0) {
-      const errors = retornoAvaliadorSintatico.erros.map(
-        (erro) => new LspError(erro.message, erro.linha ?? 0),
-      )
-      return new LspResponse({ errors })
-    }
+    // const retornoLexador = this.lexador.mapear(code.split('\n'), -1)
+    // const retornoAvaliadorSintatico = this.avaliadorSintatico.analisar(retornoLexador, -1)
+    // if (retornoAvaliadorSintatico.erros.length > 0) {
+    //   const errors = retornoAvaliadorSintatico.erros.map(
+    //     (erro) => new LspError(erro.message, erro.linha ?? 0),
+    //   )
+    //   return new LspResponse({ errors })
+    // }
 
     return new LspResponse({})
   }
 
   performSemanticAnalysis(code: string): LspResponse {
-    const retornoLexador = this.lexador.mapear(code.split('\n'), -1)
-    const retornoAvaliadorSintatico = this.avaliadorSintatico.analisar(retornoLexador, -1)
-    const analisadorSemantico = this.analisadorSemantico.analisar(
-      retornoAvaliadorSintatico.declaracoes,
-    )
-    const errosAnaliseSemantica = analisadorSemantico.diagnosticos
-    if (errosAnaliseSemantica.length > 0) {
-      const errors = errosAnaliseSemantica.map(
-        (erro) => new LspError(String(erro.mensagem), erro.linha ?? 0),
-      )
-      return new LspResponse({ errors })
-    }
+    // const retornoLexador = this.lexador.mapear(code.split('\n'), -1)
+    // const retornoAvaliadorSintatico = this.avaliadorSintatico.analisar(retornoLexador, -1)
+    // const analisadorSemantico = this.analisadorSemantico.analisar(
+    //   retornoAvaliadorSintatico.declaracoes,
+    // )
+    // const errosAnaliseSemantica = analisadorSemantico.diagnosticos
+    // if (errosAnaliseSemantica.length > 0) {
+    //   const errors = errosAnaliseSemantica.map(
+    //     (erro) => new LspError(String(erro.mensagem), erro.linha ?? 0),
+    //   )
+    //   return new LspResponse({ errors })
+    // }
     return new LspResponse({})
   }
 }

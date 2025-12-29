@@ -1,18 +1,14 @@
 'use client'
 
-import { type ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react'
+import { useImperativeHandle, useRef, useState } from 'react'
 
-import type { LottieRef } from 'lottie-react'
-import type { AnimationRef, AnimationProps } from '../types'
+import type { AnimationProps } from '../types'
 import { LOTTIES } from './lotties'
 import { useLottieAnimation } from './useLottieAnimation'
 import { LottieAnimationView } from './LottieAnimationView'
 
-const Widget = (
-  { name, size, hasLoop = true }: AnimationProps,
-  ref: ForwardedRef<AnimationRef>,
-) => {
-  const lottieRef = useRef(null) as LottieRef
+export const LottieAnimation = ({ ref, name, size, hasLoop = true }: AnimationProps) => {
+  const lottieRef = useRef(null)
   const { windowWidth, stopAt, setSpeed, restart } = useLottieAnimation(lottieRef)
   const lottieData = LOTTIES[name]
 
@@ -34,5 +30,3 @@ const Widget = (
     />
   )
 }
-
-export const LottieAnimation = forwardRef(Widget)

@@ -29,7 +29,6 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@react-router/node": "^7.5.3",
     "@react-router/serve": "^7.5.3",
-    "@stardust/code-runner": "*",
     "@stardust/core": "*",
     "@stardust/validation": "*",
     "@tanstack/react-query": "^5.83.0",

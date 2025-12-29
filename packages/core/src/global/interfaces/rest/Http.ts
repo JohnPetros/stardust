@@ -30,6 +30,7 @@ export interface Http<Schema extends HttpSchema = HttpSchema, Response = unknown
   statusOk(): this
   statusCreated(): this
   statusNoContent(): this
+  stream(response: Response): RestResponse<Response>
   sendPagination<PaginationItem>(
     pagination: PaginationResponse<PaginationItem>,
   ): RestResponse<Response>

@@ -34,7 +34,7 @@ export function TypeWriter({
   })
 
   if (!isEnable) {
-    return <span dangerouslySetInnerHTML={{ __html: content }} />
+    return <span dangerouslySetInnerHTML={{ __html: String(content) }} />
   }
 
   if (Array.isArray(content)) {

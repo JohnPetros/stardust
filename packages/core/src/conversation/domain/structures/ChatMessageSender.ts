@@ -1,4 +1,5 @@
 import { ValidationError } from '#global/domain/errors/ValidationError'
+import { Logical } from '#global/domain/structures/Logical'
 
 type ChatMessageSenderValue = 'user' | 'assistant'
 
@@ -19,5 +20,13 @@ export class ChatMessageSender {
 
   static isValid(value: string): value is ChatMessageSenderValue {
     return value === 'user' || value === 'assistant'
+  }
+
+  get isUser(): Logical {
+    return Logical.create(this.value === 'user')
+  }
+
+  get isAssistant(): Logical {
+    return Logical.create(this.value === 'assistant')
   }
 }

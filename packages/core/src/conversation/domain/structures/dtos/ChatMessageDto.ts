@@ -1,7 +1,6 @@
-import type { ChatActionDto } from './ChatActionDto'
-
 export type ChatMessageDto = {
-  content: string | ChatActionDto
+  id?: string
+  content: string
   sender: string
-  sentAt: string
+  sentAt?: string
 }
