@@ -1,15 +1,13 @@
 'use client'
 
-import { useImperativeHandle, useRef } from 'react'
+import { useImperativeHandle, useRef, useState } from 'react'
 
-import type {  AnimationProps } from '../types'
+import type { AnimationProps } from '../types'
 import { LOTTIES } from './lotties'
 import { useLottieAnimation } from './useLottieAnimation'
 import { LottieAnimationView } from './LottieAnimationView'
 
-export const LottieAnimation = (
-  { ref, name, size, hasLoop = true }: AnimationProps,
-) => {
+export const LottieAnimation = ({ ref, name, size, hasLoop = true }: AnimationProps) => {
   const lottieRef = useRef(null)
   const { windowWidth, stopAt, setSpeed, restart } = useLottieAnimation(lottieRef)
   const lottieData = LOTTIES[name]
@@ -32,4 +30,3 @@ export const LottieAnimation = (
     />
   )
 }
-
