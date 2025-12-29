@@ -27,7 +27,7 @@ export const CodeEditorView = ({
   isMobile,
   tabSize,
   fontSize,
-  onMount = () => {},
+  onMount,
   onChange = () => {},
 }: CodeEditorProps) => {
   return (
@@ -59,8 +59,8 @@ export const CodeEditorView = ({
         </div>
       }
       value={value}
-      onMount={onMount}
       onChange={onChange}
-    />
+      onMount={(editor, monaco) => onMount(editor as unknown as monaco.editor.IStandaloneCodeEditor, monaco)}
+      />
   )
 }
