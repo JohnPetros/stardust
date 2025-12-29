@@ -69,7 +69,6 @@ export class SupabaseChatsRepository
 
   async add(chat: Chat, userId: Id): Promise<void> {
     const supabaseChat = SupabaseChatMapper.toSupabase(chat)
-    console.log(supabaseChat)
     const { error } = await this.supabase.from('chats').insert({
       ...supabaseChat,
       user_id: userId.value,
