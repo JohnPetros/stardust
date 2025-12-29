@@ -2,7 +2,6 @@ import { type NextRequest, NextResponse } from 'next/server'
 import type { ZodSchema } from 'zod'
 
 import type { Http, HttpMethod, HttpSchema } from '@stardust/core/global/interfaces'
-import type { ChatMessage } from '@stardust/core/conversation/structures'
 import { type PaginationResponse, RestResponse } from '@stardust/core/global/responses'
 import { AppError, MethodNotImplementedError } from '@stardust/core/global/errors'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
