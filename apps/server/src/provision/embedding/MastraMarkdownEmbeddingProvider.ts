@@ -11,10 +11,11 @@ export class MastraMarkdownEmbeddingProvider implements EmbeddingProvider {
     const chunks = await documents.chunk({
       strategy: 'markdown',
       headers: [['##', 'title'],['###', 'section']],
-      size: 1000, 
+      maxSize: 1000, 
       overlap: 100
     })
     const result = await embedMany({
+      // @ts-ignore
       model: google.embedding('gemini-embedding-001'),
       values: chunks.map((chunk) => chunk.text),
     })
