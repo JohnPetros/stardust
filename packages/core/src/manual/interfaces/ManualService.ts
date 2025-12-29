@@ -7,6 +7,7 @@ import type { IdsList } from '#global/domain/structures/IdsList'
 
 export interface ManualService {
   fetchGuidesByCategory(category: GuideCategory): Promise<RestResponse<GuideDto[]>>
+  fetchGuide(guideId: Id): Promise<RestResponse<GuideDto>>
   createGuide(category: GuideCategory, title: string): Promise<RestResponse<GuideDto>>
   editGuideTitle(guide: Guide): Promise<RestResponse<GuideDto>>
   editGuideContent(guide: Guide): Promise<RestResponse<GuideDto>>
