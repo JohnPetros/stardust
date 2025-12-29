@@ -16,10 +16,10 @@ type Cookie = {
   duration: number
 }
 
-type NextHttpParams = {
+type NextHttpParams<Params extends string = ''> = {
   request?: NextRequest
   schema?: ZodSchema
-  params?: NextParams
+  params?: NextParams<Params>
 }
 
 export const NextHttp = async <NextSchema extends HttpSchema>({
