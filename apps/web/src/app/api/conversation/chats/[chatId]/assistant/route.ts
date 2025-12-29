@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server'
-import { z } from 'zod'
+import { string, z } from 'zod'
 
-import { idSchema } from '@stardust/validation/global/schemas'
+import { idSchema, stringSchema } from '@stardust/validation/global/schemas'
 import { chatMessageSchema } from '@stardust/validation/conversation/schemas'
 
 import { NextHttp } from '@/rest/next/NextHttp'
@@ -16,7 +16,10 @@ const schema = z.object({
   routeParams: z.object({
     chatId: idSchema,
   }),
-  body: chatMessageSchema,
+  body: z.object({
+    question: stringSchema,
+    challengeId: idSchema,
+  }),
 })
 
 type Schema = z.infer<typeof schema>

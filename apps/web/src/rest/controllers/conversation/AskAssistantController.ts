@@ -9,7 +9,10 @@ type Schema = {
   routeParams: {
     chatId: string
   }
-  body: ChatMessageDto
+  body: {
+    question: string
+    challengeId: string
+  }
 }
 
 export const AskAssistantController = (
@@ -19,13 +22,16 @@ export const AskAssistantController = (
   return {
     async handle(http: Http<Schema>) {
       const { chatId } = http.getRouteParams()
-      const userMessage = await http.getBody()
+      const { challengeId, question } = await http.getBody()
       const response = await service.fetchChatMessages(Id.create(chatId))
       if (response.isFailure) response.throwError()
 
       const chatMessages = response.body
         .map(ChatMessage.create)
-        .concat(ChatMessage.create(userMessage))
+        .concat(ChatMessage.create({
+          content: `ID do desafio: ${challengeId}, pergunta: ${question}`,
+          sender: 'user'
+        }))
 
       const result = await workflow.assistantUser(chatMessages, async (lastMessage) => {
         console.log(lastMessage)
