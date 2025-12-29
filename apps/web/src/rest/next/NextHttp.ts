@@ -16,17 +16,19 @@ type Cookie = {
   duration: number
 }
 
-type NextHttpParams = {
+type NextHttpParams<Params extends string = ''> = {
   request?: NextRequest
   schema?: ZodSchema
-  params?: NextParams
+  params?: NextParams<Params>
 }
 
 export const NextHttp = async <NextSchema extends HttpSchema>({
   request,
   schema,
   params,
-}: NextHttpParams = {}): Promise<Http<NextSchema, NextResponse<unknown>>> => {
+}: NextHttpParams<NextSchema['routeParams'] extends Record<string, string>
+? Extract<keyof NextSchema['routeParams'], string>
+: string> = {}): Promise<Http<NextSchema, NextResponse<unknown>>> => {
   let httpSchema: NextSchema
   const cookies: Cookie[] = []
   let statusCode: (typeof HTTP_STATUS_CODE)[keyof typeof HTTP_STATUS_CODE] =
@@ -165,6 +167,13 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
         body: nextResponse,
         statusCode: HTTP_STATUS_CODE.redirect,
         headers: { [HTTP_HEADERS.location]: route },
+      })
+    },
+
+    stream(response: Response) {
+      return new RestResponse({
+        body: response as unknown as NextResponse,
+        statusCode: HTTP_STATUS_CODE.ok,
       })
     },
 

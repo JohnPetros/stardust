@@ -23,8 +23,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.1",
     "@hono/node-server": "^1.14.1",
     "@hono/zod-validator": "^0.5.0",
+    "@mastra/hono": "^0.1.0-beta.13",
+    "@mastra/rag": "^2.0.0-beta.4",
     "@sentry/node": "^10.17.0",
     "@stardust/core": "*",
     "@stardust/validation": "*",
@@ -42,6 +45,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^20.11.17",
     "jest": "^30.2.0",
+    "mastra": "^1.0.0-beta.12",
     "npm-run-all": "^4.1.5",
     "supabase": "^2.30.4",
     "ts-jest": "^29.4.4",

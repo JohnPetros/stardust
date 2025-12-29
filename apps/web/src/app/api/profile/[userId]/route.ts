@@ -20,7 +20,7 @@ const schema = z.object({
 
 type Schema = z.infer<typeof schema>
 
-export async function GET(request: NextRequest, params: NextParams) {
+export async function GET(request: NextRequest, params: NextParams<'userId'>) {
   return runApiRoute(async () => {
     const http = await NextHttp<Schema>({ request, params, schema })
     const restClient = await NextServerRestClient()
