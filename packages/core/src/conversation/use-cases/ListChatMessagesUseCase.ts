@@ -37,6 +37,7 @@ export class ListChatMessagesUseCase implements UseCase<Request, Response> {
         Chat.create({ id: chatId.value, name: lastChat.name.deduplicate().value }),
         userId,
       )
+      return
     }
     await this.repository.add(
       Chat.create({ id: chatId.value, name: ListChatMessagesUseCase.NEW_CHAT_NAME }),
