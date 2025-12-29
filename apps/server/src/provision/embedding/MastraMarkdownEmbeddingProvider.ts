@@ -15,6 +15,7 @@ export class MastraMarkdownEmbeddingProvider implements EmbeddingProvider {
       overlap: 100
     })
     const result = await embedMany({
+      // @ts-ignore
       model: google.embedding('gemini-embedding-001'),
       values: chunks.map((chunk) => chunk.text),
     })
