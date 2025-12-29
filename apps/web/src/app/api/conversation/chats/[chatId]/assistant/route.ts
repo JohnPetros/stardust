@@ -24,7 +24,7 @@ const schema = z.object({
 
 type Schema = z.infer<typeof schema>
 
-export const POST = async (request: NextRequest, params: NextParams) => {
+export const POST = async (request: NextRequest, params: NextParams<'chatId'>) => {
   return await runApiRoute(async () => {
     const http = await NextHttp<Schema>({ request, schema, params })
     const restClient = await NextServerRestClient()
