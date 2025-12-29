@@ -60,6 +60,7 @@ describe('List Chat Messages Use Case', () => {
         name: expect.objectContaining({ value: 'Novo chat' }),
         id: expect.objectContaining({ value: chatId }),
       }),
+      expect.objectContaining({ value: userId }),
     )
   })
 
@@ -77,22 +78,22 @@ describe('List Chat Messages Use Case', () => {
     expect(result).toEqual([])
     expect(repository.add).toHaveBeenCalledTimes(2)
 
-    // Check first call (deduplicated name)
     expect(repository.add).toHaveBeenNthCalledWith(
       1,
       expect.objectContaining({
         id: expect.objectContaining({ value: chatId }),
         name: expect.objectContaining({ value: 'Novo chat(1)' }),
       }),
+      expect.objectContaining({ value: userId }),
     )
 
-    // Check second call (new chat name)
     expect(repository.add).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
         id: expect.objectContaining({ value: chatId }),
         name: expect.objectContaining({ value: 'Novo chat' }),
       }),
+      expect.objectContaining({ value: userId }),
     )
   })
 })
