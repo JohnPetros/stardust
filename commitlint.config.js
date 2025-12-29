@@ -10,6 +10,7 @@ module.exports = {
         '🌐 domain',
         '📶 rest',
         '🖥️ ui',
+        '🤖 ai',
         '💾 db',
         '🎞️ queue',
         '🧰 prov',
