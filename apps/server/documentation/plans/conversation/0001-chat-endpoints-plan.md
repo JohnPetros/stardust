@@ -1,4 +1,4 @@
-# Endpoins de conversação por chat
+# Endpoints de conversação por chat
 
 ## Objetivo
 
@@ -13,7 +13,8 @@ status: Concluído
 - ChatsRepository, repositório de chats
 - ChatMessage, entidade que representa uma mensagem de um chat
 - ListChatMessagesUseCase, use case que lista as mensagens de um chat
-- SendChatMessageUseCase, use case que envia uma mensagem para um chat (anteriormente CreateChatMessageUseCase)
+- SendChatMessageUseCase, use case que envia uma mensagem para um chat
+  (anteriormente CreateChatMessageUseCase)
 - EditChatNameUseCase, use case que edita o nome de um chat
 - DeleteChatUseCase, use case que deleta um chat
 
@@ -59,5 +60,7 @@ status: Concluído
 - Use a tabela `chats` para armazenar os chats
 - Use a tabela `chat_messages` para armazenar as mensagens
 - Crie o mapper `SupabaseChatMapper` para converter entre entidade e banco
-- Crie o mapper `SupabaseChatMessageMapper` para converter entre estrutura e banco
-- Defina os tipos `SupabaseChat` e `SupabaseChatMessage` baseados no generated types do Supabase
+- Crie o mapper `SupabaseChatMessageMapper` para converter entre estrutura e
+  banco
+- Defina os tipos `SupabaseChat` e `SupabaseChatMessage` baseados no generated
+  types do Supabase
