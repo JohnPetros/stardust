@@ -1,8 +1,8 @@
 import { stepCountIs, ToolLoopAgent } from 'ai'
 import { openai } from '@ai-sdk/openai'
 
-import { manualToolset } from '../toolsets'
 import { MANUAL_PROMPTS } from '@/ai/constants'
+import { challengingToolset, manualToolset } from '../toolsets'
 
 export const assistantAgent = new ToolLoopAgent({
   id: 'assistant-agent',
@@ -11,5 +11,6 @@ export const assistantAgent = new ToolLoopAgent({
   stopWhen: stepCountIs(3),
   tools: {
     getMdxGuide: manualToolset.getMdxGuideTool,
+    getChallengeDescription: challengingToolset.getChallengeDescriptionTool,
   },
 })
