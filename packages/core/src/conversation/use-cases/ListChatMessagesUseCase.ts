@@ -33,12 +33,10 @@ export class ListChatMessagesUseCase implements UseCase<Request, Response> {
 
   private async createChat(chatId: Id, lastChat: Chat | null, userId: Id) {
     if (lastChat?.name.value.startsWith(ListChatMessagesUseCase.NEW_CHAT_NAME)) {
-      await this.repository.add(
-        Chat.create({ id: chatId.value, name: lastChat.name.deduplicate().value }),
-        userId,
-      )
-      return
+      lastChat.name = lastChat.name.deduplicate()
+      await this.repository.replace(lastChat)
     }
+
     await this.repository.add(
       Chat.create({ id: chatId.value, name: ListChatMessagesUseCase.NEW_CHAT_NAME }),
       userId,

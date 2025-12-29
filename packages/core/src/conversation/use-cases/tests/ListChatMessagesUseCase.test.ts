@@ -15,6 +15,7 @@ describe('List Chat Messages Use Case', () => {
     repository.findLastCreatedByUser.mockImplementation()
     repository.findAllMessagesByChat.mockImplementation()
     repository.add.mockImplementation()
+    repository.replace.mockImplementation()
 
     useCase = new ListChatMessagesUseCase(repository)
   })
@@ -76,19 +77,19 @@ describe('List Chat Messages Use Case', () => {
     const result = await useCase.execute({ chatId, userId })
 
     expect(result).toEqual([])
-    expect(repository.add).toHaveBeenCalledTimes(2)
 
-    expect(repository.add).toHaveBeenNthCalledWith(
-      1,
+    // Should rename the previous chat
+    expect(repository.replace).toHaveBeenCalledTimes(1)
+    expect(repository.replace).toHaveBeenCalledWith(
       expect.objectContaining({
-        id: expect.objectContaining({ value: chatId }),
+        id: expect.objectContaining({ value: lastChatId.value }),
         name: expect.objectContaining({ value: 'Novo chat(1)' }),
       }),
-      expect.objectContaining({ value: userId }),
     )
 
-    expect(repository.add).toHaveBeenNthCalledWith(
-      2,
+    // Should create the new chat
+    expect(repository.add).toHaveBeenCalledTimes(1)
+    expect(repository.add).toHaveBeenCalledWith(
       expect.objectContaining({
         id: expect.objectContaining({ value: chatId }),
         name: expect.objectContaining({ value: 'Novo chat' }),
