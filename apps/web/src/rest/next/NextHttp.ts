@@ -26,7 +26,9 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
   request,
   schema,
   params,
-}: NextHttpParams = {}): Promise<Http<NextSchema, NextResponse<unknown>>> => {
+}: NextHttpParams<NextSchema['routeParams'] extends Record<string, string>
+? Extract<keyof NextSchema['routeParams'], string>
+: string> = {}): Promise<Http<NextSchema, NextResponse<unknown>>> => {
   let httpSchema: NextSchema
   const cookies: Cookie[] = []
   let statusCode: (typeof HTTP_STATUS_CODE)[keyof typeof HTTP_STATUS_CODE] =

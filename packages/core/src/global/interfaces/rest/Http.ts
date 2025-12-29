@@ -4,7 +4,7 @@ import type { PaginationResponse } from '#global/responses/index'
 
 export type HttpSchema = {
   body?: unknown
-  routeParams?: unknown
+  routeParams?: Record<string, string>
   queryParams?: unknown
 }
 
