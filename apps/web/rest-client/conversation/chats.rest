@@ -1,10 +1,11 @@
 @URL = http://localhost:3000/api/conversation/chats
+@CHAT_ID = 340b6aa5-e1af-40e5-a4ea-fd2cecfafec8
 
 ### Ask assistant
-POST {{URL}}/340b6aa5-e1af-40e5-a4ea-fd2cecfafec8/assistant
+POST {{URL}}/{{CHAT_ID}}/assistant
 Content-Type: application/json
 
 {
-  "content": "Olá tudo bem? Conte uma piada relativamente longa e depois me forneça uma código de soma em delegua", 
-  "sender": "user"
+  "question": "Como usar o bloco de código?",
+  "challengeId": "17ba01ec-7aa6-4971-9760-537127e03b4d"
 }
