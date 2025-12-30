@@ -2,7 +2,12 @@ import { EventSchemas, Inngest } from 'inngest'
 import { z } from 'zod'
 
 import { UserCreatedEvent } from '@stardust/core/profile/events'
-import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/schemas'
+import {
+  emailSchema,
+  idSchema,
+  nameSchema,
+  stringSchema,
+} from '@stardust/validation/global/schemas'
 import {
   FirstStarUnlockedEvent,
   PlanetsOrderChangedEvent,
@@ -20,6 +25,7 @@ import { UserSignedInEvent, UserSignedUpEvent } from '@stardust/core/auth/events
 
 import { ENV } from '../../constants'
 import { platformSchema } from '@stardust/validation/profile/schemas'
+import { GuideContentEditedEvent } from '@stardust/core/manual/events'
 
 const eventsSchema = {
   [UserCreatedEvent._NAME]: {
@@ -98,6 +104,12 @@ const eventsSchema = {
     data: z.object({
       userId: idSchema,
       platform: platformSchema,
+    }),
+  },
+  [GuideContentEditedEvent._NAME]: {
+    data: z.object({
+      guideId: idSchema,
+      guideContent: stringSchema,
     }),
   },
 }
