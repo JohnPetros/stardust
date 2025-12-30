@@ -23,7 +23,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@ai-sdk/google": "^3.0.1",
+    "@ai-sdk/google": "^2.0.51",
     "@hono/node-server": "^1.14.1",
     "@hono/zod-validator": "^0.5.0",
     "@mastra/hono": "^0.1.0-beta.13",
@@ -33,6 +33,8 @@
     "@stardust/validation": "*",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
+    "@upstash/vector": "^1.2.2",
+    "ai": "^5.0.116",
     "axios": "^1.12.2",
     "dropbox": "^10.34.0",
     "googleapis": "^153.0.0",
