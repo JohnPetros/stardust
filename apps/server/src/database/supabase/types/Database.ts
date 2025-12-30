@@ -1412,6 +1412,81 @@ export type Database = {
           },
         ]
       }
+      chat_messages: {
+        Row: {
+          chat_id: string
+          content: string
+          created_at: string
+          id: string
+          sender: Database["public"]["Enums"]["chat_message_sender"]
+        }
+        Insert: {
+          chat_id?: string
+          content: string
+          created_at?: string
+          id?: string
+          sender: Database["public"]["Enums"]["chat_message_sender"]
+        }
+        Update: {
+          chat_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          sender?: Database["public"]["Enums"]["chat_message_sender"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_chat_id_fkey"
+            columns: ["chat_id"]
+            isOneToOne: false
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chats: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chats_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chats_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "chats_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comments: {
         Row: {
           content: string
@@ -2981,6 +3056,7 @@ export type Database = {
     Enums: {
       challenge_difficulty_level: "easy" | "medium" | "hard"
       challenge_vote: "upvote" | "downvote"
+      chat_message_sender: "user" | "assistant"
       guide_category: "lsp" | "mdx"
       insignia_role: "engineer" | "god"
       platform: "web" | "mobile"
@@ -4073,6 +4149,7 @@ export const Constants = {
     Enums: {
       challenge_difficulty_level: ["easy", "medium", "hard"],
       challenge_vote: ["upvote", "downvote"],
+      chat_message_sender: ["user", "assistant"],
       guide_category: ["lsp", "mdx"],
       insignia_role: ["engineer", "god"],
       platform: ["web", "mobile"],

@@ -1,7 +1,7 @@
+import type { Id } from '#global/domain/structures/Id'
 import type { ChatMessage } from '../domain/structures'
-import type { ChatMessagesListingParams } from '../domain/types'
 
 export interface ChatMessagesRepository {
-  add(chatMessage: ChatMessage): Promise<void>
-  findMany(params: ChatMessagesListingParams): Promise<ChatMessage[]>
+  findAllByChat(chatId: Id): Promise<ChatMessage[]>
+  add(chatId: Id, chatMessage: ChatMessage): Promise<void>
 }

@@ -1,0 +1,30 @@
+@URL = {{BASE_URL}}/conversation/chats
+@CHAT_ID = 70ba01ec-7aa6-4971-9760-537127e03b4d
+
+### Fetch chat messages
+GET {{URL}}/{{CHAT_ID}}/messages
+Authorization: Bearer {{JWT}}
+
+### Edit chat name
+PATCH {{URL}}/{{CHAT_ID}}/name
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "chatName": "Novo nome do chat"
+}
+
+### Delete chat
+DELETE {{URL}}/{{CHAT_ID}}
+Authorization: Bearer {{JWT}}
+
+### Send chat message
+POST {{URL}}/{{CHAT_ID}}/messages
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "content": "Como usar o bloco de código?",
+  "sender": "user",
+  "sentAt": "2023-06-01T00:00:00.000Z"
+}
