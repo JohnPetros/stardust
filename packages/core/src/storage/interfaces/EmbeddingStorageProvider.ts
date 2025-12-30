@@ -1,7 +1,7 @@
 import type { List } from '#global/domain/structures/List'
 import type { Id } from '#global/domain/structures/Id'
-import { Integer } from '#global/domain/structures/Integer'
-import { Embedding, EmbeddingNamespace } from '../domain/structures'
+import type { Integer } from '#global/domain/structures/Integer'
+import type { Embedding, EmbeddingNamespace } from '../domain/structures'
 
 export interface EmbeddingsStorageProvider {
   store(embeddings: Embedding[], namespace: EmbeddingNamespace): Promise<void>
