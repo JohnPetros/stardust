@@ -1,6 +1,6 @@
 import type { Text } from '#global/domain/structures/Text'
 import type { ManyItems } from '../../global/domain/types'
-import type { StorageFolder } from '../structures'
+import type { StorageFolder } from '../domain/structures'
 import type { FilesListingParams } from '../types'
 
 export interface StorageProvider {

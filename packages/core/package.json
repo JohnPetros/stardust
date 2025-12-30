@@ -145,7 +145,7 @@
     "./conversation/structures/dtos": "./src/conversation/domain/structures/dtos/index.ts",
     "./conversation/interfaces": "./src/conversation/interfaces/index.ts",
     "./conversation/use-cases": "./src/conversation/use-cases/index.ts",
-    "./storage/structures": "./src/storage/structures/index.ts",
+    "./storage/structures": "./src/storage/domain/structures/index.ts",
     "./storage/types": "./src/storage/types/index.ts",
     "./storage/interfaces": "./src/storage/interfaces/index.ts",
     "./storage/use-cases": "./src/storage/use-cases/index.ts",

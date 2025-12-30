@@ -6,8 +6,8 @@ import type {
 import { GenerateEmbeddingsUseCase } from '../GenerateEmbeddingsUseCase'
 import { Text } from '#global/domain/structures/Text'
 import { Id } from '#global/domain/structures/Id'
-import { EmbeddingNamespace } from '#storage/structures/EmbeddingNamespace'
-import { Embedding } from '#storage/structures/Embedding'
+import { EmbeddingNamespace } from '#storage/domain/structures/EmbeddingNamespace'
+import { Embedding } from '#storage/domain/structures/Embedding'
 
 describe('Generate Embeddings Use Case', () => {
   let generatorProvider: Mock<EmbeddingsGeneratorProvider>

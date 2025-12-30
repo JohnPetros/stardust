@@ -2,7 +2,7 @@ import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { DatabaseProvider } from '#global/interfaces/provision/DatabaseProvider'
 import type { StorageProvider } from '#storage/interfaces/StorageProvider'
-import { StorageFolder } from '#storage/structures/StorageFolder'
+import { StorageFolder } from '#storage/domain/structures/StorageFolder'
 import { BackupDatabaseUseCase } from '../BackupDatabaseUseCase'
 
 describe('Backup Database Use Case', () => {

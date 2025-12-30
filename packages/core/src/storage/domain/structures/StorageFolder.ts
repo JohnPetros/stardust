@@ -1,6 +1,6 @@
 import { StringValidation } from '#global/libs/index'
 import { Logical } from '#global/domain/structures/Logical'
-import type { StorageFolderName } from '../types'
+import type { StorageFolderName } from '../../types'
 
 export class StorageFolder {
   private constructor(readonly name: StorageFolderName) {}
