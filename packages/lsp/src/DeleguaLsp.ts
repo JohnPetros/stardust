@@ -35,24 +35,24 @@ export class DeleguaLsp implements LspProvider {
       funcaoDeSaida,
       funcaoDeSaida,
     )
-    // const resultadoLexador = this.lexador.mapear(code.split('\n'), -1)
-    // if (resultadoLexador.erros.length) {
-    //   return this.trateErro(resultadoLexador.erros[0])
-    // }
-    // const resultadoAvaliacaoSintatica = this.avaliadorSintatico.analisar(
-    //   resultadoLexador,
-    //   0,
-    // )
-    // if (resultadoAvaliacaoSintatica.erros.length) {
-    //   return this.trateErro(resultadoAvaliacaoSintatica.erros[0])
-    // }
-    // const resultadoInterpretador = await interpretador.interpretar(
-    //   resultadoAvaliacaoSintatica.declaracoes,
-    //   false,
-    // )
-    // if (resultadoInterpretador.erros.length) {
-    //   return this.trateErro(resultadoInterpretador.erros[0])
-    // }
+    const resultadoLexador = this.lexador.mapear(code.split('\n'), -1)
+    if (resultadoLexador.erros.length) {
+      return this.trateErro(resultadoLexador.erros[0])
+    }
+    const resultadoAvaliacaoSintatica = await this.avaliadorSintatico.analisar(
+      resultadoLexador,
+      0,
+    )
+    if (resultadoAvaliacaoSintatica.erros.length) {
+      return this.trateErro(resultadoAvaliacaoSintatica.erros[0])
+    }
+    const resultadoInterpretador = await interpretador.interpretar(
+      resultadoAvaliacaoSintatica.declaracoes,
+      false,
+    )
+    if (resultadoInterpretador.erros.length) {
+      return this.trateErro(resultadoInterpretador.erros[0])
+    }
 
     // console.log(resultadoInterpretador.resultado)
 
@@ -66,7 +66,6 @@ export class DeleguaLsp implements LspProvider {
     //   }
     // }
 
-    console.log(resultado)
 
     return new LspResponse({ result: '', outputs })
   }
