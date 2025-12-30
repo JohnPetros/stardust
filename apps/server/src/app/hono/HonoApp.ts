@@ -38,6 +38,7 @@ import {
   LessonRouter,
   StorageRouter,
   NotificationRouter,
+  ConversationRouter,
 } from './routers'
 import { ForumRouter } from './routers/forum'
 import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
@@ -153,6 +154,7 @@ export class HonoApp {
     const manualRouter = new ManualRouter(this)
     const storageRouter = new StorageRouter(this)
     const notificationRouter = new NotificationRouter(this)
+    const conversationRouter = new ConversationRouter(this)
 
     this.hono.get('/', (context) => {
       return context.json({ message: 'Everything is working!' })
@@ -170,6 +172,7 @@ export class HonoApp {
     this.hono.route('/', manualRouter.registerRoutes())
     this.hono.route('/', storageRouter.registerRoutes())
     this.hono.route('/', notificationRouter.registerRoutes())
+    this.hono.route('/', conversationRouter.registerRoutes())
   }
 
   private registerMiddlewares() {

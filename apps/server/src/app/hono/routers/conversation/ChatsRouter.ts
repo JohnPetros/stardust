@@ -11,7 +11,10 @@ import {
   DeleteChatController,
 } from '@/rest/controllers/conversation'
 
-import { SupabaseChatsRepository } from '@/database/supabase/repositories/conversation/SupabaseChatsRepository'
+import {
+  SupabaseChatMessagesRepository,
+  SupabaseChatsRepository,
+} from '@/database/supabase/repositories/conversation'
 import { HonoHttp } from '../../HonoHttp'
 import { HonoRouter } from '../../HonoRouter'
 import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
@@ -33,8 +36,14 @@ export class ChatsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChatsRepository(http.getSupabase())
-        const controller = new FetchChatMessagesController(repository)
+        const chatsRepository = new SupabaseChatsRepository(http.getSupabase())
+        const chatMessagesRepository = new SupabaseChatMessagesRepository(
+          http.getSupabase(),
+        )
+        const controller = new FetchChatMessagesController(
+          chatsRepository,
+          chatMessagesRepository,
+        )
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -54,8 +63,14 @@ export class ChatsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', chatMessageSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChatsRepository(http.getSupabase())
-        const controller = new SendChatMessageController(repository)
+        const chatsRepository = new SupabaseChatsRepository(http.getSupabase())
+        const chatMessagesRepository = new SupabaseChatMessagesRepository(
+          http.getSupabase(),
+        )
+        const controller = new SendChatMessageController(
+          chatsRepository,
+          chatMessagesRepository,
+        )
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
