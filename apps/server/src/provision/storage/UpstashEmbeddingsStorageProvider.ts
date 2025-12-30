@@ -53,8 +53,8 @@ export class UpstashEmbeddingsStorageProvider implements EmbeddingsStorageProvid
 
   async delete(documentId: Id, namespace: EmbeddingNamespace): Promise<void> {
     await this.index.delete(
-      { filter: "documentId = '" + documentId.value + "'" }, 
-      { namespace: namespace.value }
+      { filter: `documentId = '${documentId.value}'` },
+      { namespace: namespace.value },
     )
   }
 }
