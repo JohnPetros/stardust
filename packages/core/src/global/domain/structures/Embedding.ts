@@ -5,6 +5,7 @@ export class Embedding {
   private constructor(
     readonly text: Text,
     readonly vector: List<number>,
+    readonly workspace: string = 'default',
   ) {}
 
   static create(text: string, vector: number[]): Embedding {
