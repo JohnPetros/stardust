@@ -15,7 +15,7 @@ import { SupabaseGuidesRepository } from '@/database'
 import { HonoHttp } from '../../HonoHttp'
 import { HonoRouter } from '../../HonoRouter'
 import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
-import { MastraMarkdownEmbeddingProvider } from '@/provision/embedding/MastraMarkdownEmbeddingProvider'
+import { InngestBroker } from '@/queue/inngest/InngestBroker'
 
 export class GuidesRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/guides')
@@ -166,8 +166,8 @@ export class GuidesRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseGuidesRepository(http.getSupabase())
-        const embeddingProvider = new MastraMarkdownEmbeddingProvider()
-        const controller = new EditGuideContentController(repository, embeddingProvider)
+        const broker = new InngestBroker()
+        const controller = new EditGuideContentController(repository, broker)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },

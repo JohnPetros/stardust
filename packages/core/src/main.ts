@@ -120,7 +120,7 @@ export * from './conversation/domain/structures/dtos/index'
 export * from './conversation/interfaces/index'
 
 // Storage
-export * from './storage/structures/index'
+export * from './storage/domain/structures/index'
 export * from './storage/interfaces/index'
 export * from './storage/use-cases/index'
 
