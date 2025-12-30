@@ -1,10 +1,10 @@
 import type { ChatsRepository } from '@stardust/core/conversation/interfaces'
 import type { Chat } from '@stardust/core/conversation/entities'
-import type { ChatMessage } from '@stardust/core/conversation/structures'
+
 import type { Id } from '@stardust/core/global/structures'
 
 import { SupabaseRepository } from '../SupabaseRepository'
-import { SupabaseChatMapper, SupabaseChatMessageMapper } from '../../mappers/conversation'
+import { SupabaseChatMapper } from '../../mappers/conversation'
 import { SupabasePostgreError } from '../../errors'
 
 export class SupabaseChatsRepository
@@ -53,20 +53,6 @@ export class SupabaseChatsRepository
     return SupabaseChatMapper.toEntity(data)
   }
 
-  async findAllMessagesByChat(chatId: Id): Promise<ChatMessage[]> {
-    const { data, error } = await this.supabase
-      .from('chat_messages')
-      .select('*')
-      .eq('chat_id', chatId.value)
-      .order('created_at', { ascending: true })
-
-    if (error) {
-      throw new SupabasePostgreError(error)
-    }
-
-    return data.map(SupabaseChatMessageMapper.toEntity)
-  }
-
   async add(chat: Chat, userId: Id): Promise<void> {
     const supabaseChat = SupabaseChatMapper.toSupabase(chat)
     const { error } = await this.supabase.from('chats').insert({
@@ -94,16 +80,6 @@ export class SupabaseChatsRepository
 
   async remove(chatId: Id): Promise<void> {
     const { error } = await this.supabase.from('chats').delete().eq('id', chatId.value)
-
-    if (error) {
-      throw new SupabasePostgreError(error)
-    }
-  }
-
-  async addMessage(chatId: Id, chatMessage: ChatMessage): Promise<void> {
-    const { error } = await this.supabase
-      .from('chat_messages')
-      .insert(SupabaseChatMessageMapper.toSupabase(chatId.value, chatMessage))
 
     if (error) {
       throw new SupabasePostgreError(error)
