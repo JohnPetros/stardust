@@ -3,21 +3,25 @@ import { Id } from '#global/domain/structures/Id'
 import { ListChatMessagesUseCase } from '../ListChatMessagesUseCase'
 import { Chat } from '../../domain/entities'
 import { ChatMessage } from '../../domain/structures'
-import type { ChatsRepository } from '../../interfaces'
+import type { ChatMessagesRepository, ChatsRepository } from '../../interfaces'
 
 describe('List Chat Messages Use Case', () => {
-  let repository: Mock<ChatsRepository>
+  let chatsRepository: Mock<ChatsRepository>
+  let chatMessagesRepository: Mock<ChatMessagesRepository>
   let useCase: ListChatMessagesUseCase
 
   beforeEach(() => {
-    repository = mock<ChatsRepository>()
-    repository.findById.mockImplementation()
-    repository.findLastCreatedByUser.mockImplementation()
-    repository.findAllMessagesByChat.mockImplementation()
-    repository.add.mockImplementation()
-    repository.replace.mockImplementation()
+    chatsRepository = mock<ChatsRepository>()
+    chatMessagesRepository = mock<ChatMessagesRepository>()
 
-    useCase = new ListChatMessagesUseCase(repository)
+    chatsRepository.findById.mockImplementation()
+    chatsRepository.findLastCreatedByUser.mockImplementation()
+    chatsRepository.add.mockImplementation()
+    chatsRepository.replace.mockImplementation()
+
+    chatMessagesRepository.findAllByChat.mockImplementation()
+
+    useCase = new ListChatMessagesUseCase(chatsRepository, chatMessagesRepository)
   })
 
   it('should return chat messages if chat exists', async () => {
@@ -33,8 +37,8 @@ describe('List Chat Messages Use Case', () => {
       }),
     ]
 
-    repository.findById.mockResolvedValue(chat)
-    repository.findAllMessagesByChat.mockResolvedValue(messages)
+    chatsRepository.findById.mockResolvedValue(chat)
+    chatMessagesRepository.findAllByChat.mockResolvedValue(messages)
 
     const result = await useCase.execute({
       chatId: chatId.value,
@@ -46,8 +50,8 @@ describe('List Chat Messages Use Case', () => {
   })
 
   it('should create a new chat if chat does not exist and no previous "Novo chat"', async () => {
-    repository.findById.mockResolvedValue(null)
-    repository.findLastCreatedByUser.mockResolvedValue(null)
+    chatsRepository.findById.mockResolvedValue(null)
+    chatsRepository.findLastCreatedByUser.mockResolvedValue(null)
 
     const chatId = Id.create().value
     const userId = Id.create().value
@@ -55,8 +59,8 @@ describe('List Chat Messages Use Case', () => {
     const result = await useCase.execute({ chatId, userId })
 
     expect(result).toEqual([])
-    expect(repository.add).toHaveBeenCalledTimes(1)
-    expect(repository.add).toHaveBeenCalledWith(
+    expect(chatsRepository.add).toHaveBeenCalledTimes(1)
+    expect(chatsRepository.add).toHaveBeenCalledWith(
       expect.objectContaining({
         name: expect.objectContaining({ value: 'Novo chat' }),
         id: expect.objectContaining({ value: chatId }),
@@ -66,10 +70,10 @@ describe('List Chat Messages Use Case', () => {
   })
 
   it('should rename previous chat and create new one if chat does not exist and previous chat is "Novo chat"', async () => {
-    repository.findById.mockResolvedValue(null)
+    chatsRepository.findById.mockResolvedValue(null)
     const lastChatId = Id.create()
     const lastChat = Chat.create({ id: lastChatId.value, name: 'Novo chat' })
-    repository.findLastCreatedByUser.mockResolvedValue(lastChat)
+    chatsRepository.findLastCreatedByUser.mockResolvedValue(lastChat)
 
     const chatId = Id.create().value
     const userId = Id.create().value
@@ -79,8 +83,8 @@ describe('List Chat Messages Use Case', () => {
     expect(result).toEqual([])
 
     // Should rename the previous chat
-    expect(repository.replace).toHaveBeenCalledTimes(1)
-    expect(repository.replace).toHaveBeenCalledWith(
+    expect(chatsRepository.replace).toHaveBeenCalledTimes(1)
+    expect(chatsRepository.replace).toHaveBeenCalledWith(
       expect.objectContaining({
         id: expect.objectContaining({ value: lastChatId.value }),
         name: expect.objectContaining({ value: 'Novo chat(1)' }),
@@ -88,8 +92,8 @@ describe('List Chat Messages Use Case', () => {
     )
 
     // Should create the new chat
-    expect(repository.add).toHaveBeenCalledTimes(1)
-    expect(repository.add).toHaveBeenCalledWith(
+    expect(chatsRepository.add).toHaveBeenCalledTimes(1)
+    expect(chatsRepository.add).toHaveBeenCalledWith(
       expect.objectContaining({
         id: expect.objectContaining({ value: chatId }),
         name: expect.objectContaining({ value: 'Novo chat' }),

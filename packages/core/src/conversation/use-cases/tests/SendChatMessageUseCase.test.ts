@@ -4,24 +4,27 @@ import { ChatMessagesExceededError, ChatNotFoundError } from '../../domain/error
 import { SendChatMessageUseCase } from '../SendChatMessageUseCase'
 import { Chat } from '../../domain/entities'
 import { ChatMessage } from '../../domain/structures'
-import type { ChatsRepository } from '../../interfaces'
+import type { ChatMessagesRepository, ChatsRepository } from '../../interfaces'
 import type { ChatMessageDto } from '../../domain/structures/dtos'
 
 describe('Send Chat Message Use Case', () => {
-  let repository: Mock<ChatsRepository>
+  let chatsRepository: Mock<ChatsRepository>
+  let chatMessagesRepository: Mock<ChatMessagesRepository>
   let useCase: SendChatMessageUseCase
 
   beforeEach(() => {
-    repository = mock<ChatsRepository>()
-    repository.findById.mockImplementation()
-    repository.findAllMessagesByChat.mockImplementation()
-    repository.addMessage.mockImplementation()
+    chatsRepository = mock<ChatsRepository>()
+    chatMessagesRepository = mock<ChatMessagesRepository>()
 
-    useCase = new SendChatMessageUseCase(repository)
+    chatsRepository.findById.mockImplementation()
+    chatMessagesRepository.findAllByChat.mockImplementation()
+    chatMessagesRepository.add.mockImplementation()
+
+    useCase = new SendChatMessageUseCase(chatsRepository, chatMessagesRepository)
   })
 
   it('should throw an error if the chat does not exist', async () => {
-    repository.findById.mockResolvedValue(null)
+    chatsRepository.findById.mockResolvedValue(null)
 
     await expect(
       useCase.execute({
@@ -43,8 +46,8 @@ describe('Send Chat Message Use Case', () => {
       }),
     )
 
-    repository.findById.mockResolvedValue(chat)
-    repository.findAllMessagesByChat.mockResolvedValue(messages)
+    chatsRepository.findById.mockResolvedValue(chat)
+    chatMessagesRepository.findAllByChat.mockResolvedValue(messages)
 
     await expect(
       useCase.execute({
@@ -58,8 +61,8 @@ describe('Send Chat Message Use Case', () => {
     const chatId = Id.create().value
     const chat = Chat.create({ id: chatId, name: 'Chat Name' })
 
-    repository.findById.mockResolvedValue(chat)
-    repository.findAllMessagesByChat.mockResolvedValue([])
+    chatsRepository.findById.mockResolvedValue(chat)
+    chatMessagesRepository.findAllByChat.mockResolvedValue([])
 
     const chatMessageDto: ChatMessageDto = {
       id: Id.create().value,
@@ -73,7 +76,10 @@ describe('Send Chat Message Use Case', () => {
       chatMessageDto,
     })
 
-    expect(repository.addMessage).toHaveBeenCalledWith(chat.id, expect.any(ChatMessage))
+    expect(chatMessagesRepository.add).toHaveBeenCalledWith(
+      chat.id,
+      expect.any(ChatMessage),
+    )
     expect(result).toEqual(chatMessageDto)
   })
 })
