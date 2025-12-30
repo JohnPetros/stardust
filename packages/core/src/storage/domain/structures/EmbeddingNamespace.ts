@@ -9,8 +9,8 @@ export class EmbeddingNamespace {
     if (!EmbeddingNamespace.isValid(value)) {
       throw new ValidationError([
         {
-          name: 'embedding-workspace',
-          messages: ['Workspace deve ser "guides" ou "challenges"'],
+          name: 'embedding-namespace',
+          messages: ['Namespace deve ser "guides" ou "challenges"'],
         },
       ])
     }
