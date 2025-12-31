@@ -34,15 +34,18 @@ export const AskAssistantController = (
 
       const chatMessages = response.body.map(ChatMessage.create).concat(userMessage)
 
-      const result = await workflow.assistUser(chatMessages, async (assistantMessage) => {
-        const userMessageResponse = await service.sendChatMessage(chatId, userMessage)
-        const assistantMessageResponse = await service.sendChatMessage(
-          chatId,
-          assistantMessage,
-        )
-        console.log(userMessageResponse)
-        console.log(assistantMessageResponse)
-      })
+      const result = await workflow.assistUser(
+        chatMessages,
+        async (assistantMessage: ChatMessage) => {
+          const userMessageResponse = await service.sendChatMessage(chatId, userMessage)
+          const assistantMessageResponse = await service.sendChatMessage(
+            chatId,
+            assistantMessage,
+          )
+          console.log(userMessageResponse)
+          console.log(assistantMessageResponse)
+        },
+      )
       return http.stream(result)
     },
   }
