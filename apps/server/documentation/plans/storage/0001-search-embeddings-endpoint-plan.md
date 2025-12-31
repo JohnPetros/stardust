@@ -4,7 +4,7 @@
 
 Implementar a rota/controller para fazer busca inteligente por embeddings.
 
-status: Em progresso
+status: Concluído
 
 ## Camada Core
 
