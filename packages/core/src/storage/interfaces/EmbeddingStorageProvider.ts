@@ -4,7 +4,7 @@ import type { Integer } from '#global/domain/structures/Integer'
 import type { Embedding, EmbeddingNamespace } from '../domain/structures'
 
 export interface EmbeddingsStorageProvider {
-  store(embeddings: Embedding[], namespace: EmbeddingNamespace): Promise<void>
+  store(embeddings: Embedding[], documentId: Id, namespace: EmbeddingNamespace): Promise<void>
   search(
     vector: List<number>,
     topK: Integer,
