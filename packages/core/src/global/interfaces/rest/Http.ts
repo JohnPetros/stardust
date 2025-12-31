@@ -19,6 +19,7 @@ export interface Http<Schema extends HttpSchema = HttpSchema, Response = unknown
   getAccount(): Promise<AccountDto>
   getAccountId(): Promise<string>
   getMethod(): HttpMethod
+  getHeader(key: string): string | null
   getFile(): Promise<File>
   setCookie(key: string, value: string, duration: number): void
   getCookie(key: string): Promise<string | null>
