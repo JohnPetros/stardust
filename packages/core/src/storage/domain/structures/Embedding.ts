@@ -7,7 +7,6 @@ export class Embedding {
   private constructor(
     readonly id: Id,
     readonly text: Text,
-    readonly documentId: Id,
     readonly vector: List<number>,
   ) {}
 
@@ -15,7 +14,6 @@ export class Embedding {
     return new Embedding(
       Id.create(dto.id),
       Text.create(dto.text),
-      Id.create(dto.documentId),
       List.create(dto.vector),
     )
   }

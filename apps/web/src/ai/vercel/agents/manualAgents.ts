@@ -8,9 +8,10 @@ export const assistantAgent = new ToolLoopAgent({
   id: 'assistant-agent',
   instructions: MANUAL_PROMPTS.agents.assistant,
   model: openai('gpt-4'),
-  stopWhen: stepCountIs(3),
+  stopWhen: stepCountIs(5),
   tools: {
     getMdxGuide: manualToolset.getMdxGuideTool,
+    searchGuides: manualToolset.searchGuidesTool,
     getChallengeDescription: challengingToolset.getChallengeDescriptionTool,
   },
 })

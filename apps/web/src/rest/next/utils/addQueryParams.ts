@@ -10,7 +10,10 @@ export function addQueryParams(url: string, params: Record<string, string>) {
         urlParams.push(`${key.replace('[]', '')}=${value}`)
       })
     } else {
-      urlParams.push(`${key}=${value}`)
+      const queryParam = new URLSearchParams({
+        [key]: value,
+      })
+      urlParams.push(queryParam.toString())
     }
   }
 

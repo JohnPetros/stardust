@@ -12,14 +12,14 @@ type EmbeddingMetadata = {
 export class UpstashEmbeddingsStorageProvider implements EmbeddingsStorageProvider {
   private readonly index: Index = Index.fromEnv()
 
-  async store(embeddings: Embedding[], namespace: EmbeddingNamespace): Promise<void> {
+  async store(embeddings: Embedding[], documentId: Id, namespace: EmbeddingNamespace): Promise<void> {
     await this.index.upsert(
       embeddings.map((embedding) => ({
         id: embedding.id.value,
         vector: embedding.vector.items,
         metadata: {
           text: embedding.text.value,
-          documentId: embedding.documentId.value,
+          documentId: documentId.value,
         },
       })),
       { namespace: namespace.value },
@@ -45,7 +45,6 @@ export class UpstashEmbeddingsStorageProvider implements EmbeddingsStorageProvid
       Embedding.create({
         id: result.id.toString(),
         text: result.metadata?.text ?? '',
-        documentId: result.metadata?.documentId ?? '',
         vector: [],
       }),
     )

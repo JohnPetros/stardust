@@ -39,7 +39,6 @@ describe('Generate Embeddings Use Case', () => {
     const dummyEmbedding = Embedding.create({
       id: validId2,
       text: 'content',
-      documentId: validId1,
       vector: [0.1, 0.2],
     })
 
@@ -47,10 +46,7 @@ describe('Generate Embeddings Use Case', () => {
 
     await useCase.execute(request)
 
-    expect(generatorProvider.generate).toHaveBeenCalledWith(
-      Text.create(request.content),
-      Id.create(request.documentId),
-    )
+    expect(generatorProvider.generate).toHaveBeenCalledWith(Text.create(request.content))
 
     expect(storageProvider.delete).toHaveBeenCalledWith(
       Id.create(request.documentId),
@@ -59,6 +55,7 @@ describe('Generate Embeddings Use Case', () => {
 
     expect(storageProvider.store).toHaveBeenCalledWith(
       [dummyEmbedding],
+      Id.create(validId1),
       EmbeddingNamespace.create(request.namespace),
     )
   })
@@ -73,7 +70,6 @@ describe('Generate Embeddings Use Case', () => {
     const dummyEmbedding = Embedding.create({
       id: validId2,
       text: 'content',
-      documentId: validId1,
       vector: [0.1],
     })
 
@@ -114,7 +110,6 @@ describe('Generate Embeddings Use Case', () => {
     const dummyEmbedding = Embedding.create({
       id: validId2,
       text: 'content',
-      documentId: validId1,
       vector: [0.1],
     })
 

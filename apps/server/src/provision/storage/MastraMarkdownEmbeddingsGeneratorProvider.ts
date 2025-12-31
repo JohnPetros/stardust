@@ -2,14 +2,14 @@ import { MDocument } from '@mastra/rag'
 import { google } from '@ai-sdk/google'
 import { embedMany } from 'ai'
 
-import type { Id, Text } from '@stardust/core/global/structures'
+import type { Text } from '@stardust/core/global/structures'
 import type { EmbeddingsGeneratorProvider } from '@stardust/core/storage/interfaces'
 import { Embedding } from '@stardust/core/storage/structures'
 
 export class MastraMarkdownEmbeddingsGeneratorProvider
   implements EmbeddingsGeneratorProvider
 {
-  async generate(content: Text, documentId: Id): Promise<Embedding[]> {
+  async generate(content: Text): Promise<Embedding[]> {
     const documents = MDocument.fromMarkdown(content.value)
     const chunks = await documents.chunk({
       strategy: 'markdown',
@@ -34,7 +34,6 @@ export class MastraMarkdownEmbeddingsGeneratorProvider
         { 
           vector: result.embeddings[index],
           text: chunk.text,
-          documentId: documentId.value,
         }, 
       ),
     )
