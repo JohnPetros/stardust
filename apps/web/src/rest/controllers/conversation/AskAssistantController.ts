@@ -38,12 +38,12 @@ export const AskAssistantController = (
         chatMessages,
         async (assistantMessage: ChatMessage) => {
           const userMessageResponse = await service.sendChatMessage(chatId, userMessage)
+          if (userMessageResponse.isFailure) userMessageResponse.throwError()
           const assistantMessageResponse = await service.sendChatMessage(
             chatId,
             assistantMessage,
           )
-          console.log(userMessageResponse)
-          console.log(assistantMessageResponse)
+          if (assistantMessageResponse.isFailure) assistantMessageResponse.throwError()
         },
       )
       return http.stream(result)
