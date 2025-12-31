@@ -9,6 +9,7 @@ export const SetAccessTokenController = (): Controller => {
       if (!header) return http.pass()
 
       const token = header.split(' ')[1]
+      if (!token) return http.pass()
 
       http.setCookie(
         COOKIES.accessToken.key,
