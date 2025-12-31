@@ -28,7 +28,7 @@ export const manualToolset = {
       query: z
         .string()
         .describe(
-          'A palavra ou frase a ser pesquisada. Nunca forneça uma frase com mais de uma linha',
+          'Uma palavra ou frase a ser pesquisada nos guias. Nunca forneça uma frase com mais de uma linha',
         ),
     }),
     execute: async (input) => {
