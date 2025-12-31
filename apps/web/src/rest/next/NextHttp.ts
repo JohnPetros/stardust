@@ -26,9 +26,11 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
   request,
   schema,
   params,
-}: NextHttpParams<NextSchema['routeParams'] extends Record<string, string>
-? Extract<keyof NextSchema['routeParams'], string>
-: string> = {}): Promise<Http<NextSchema, NextResponse<unknown>>> => {
+}: NextHttpParams<
+  NextSchema['routeParams'] extends Record<string, string>
+    ? Extract<keyof NextSchema['routeParams'], string>
+    : string
+> = {}): Promise<Http<NextSchema, NextResponse<unknown>>> => {
   let httpSchema: NextSchema
   const cookies: Cookie[] = []
   let statusCode: (typeof HTTP_STATUS_CODE)[keyof typeof HTTP_STATUS_CODE] =
@@ -104,6 +106,10 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
       return httpSchema?.queryParams
     },
 
+    getHeader(key: string) {
+      return request?.headers.get(key) ?? null
+    },
+
     setCookie(key: string, value: string, duration: number) {
       cookies.push({ key, value, duration })
     },
@@ -123,6 +129,15 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     async pass() {
+      if (cookies.length) {
+        for (const cookie of cookies) {
+          await cookieActions.setCookie({
+            key: cookie.key,
+            value: cookie.value,
+            durationInSeconds: cookie.duration,
+          })
+        }
+      }
       return new RestResponse({ headers: { [HTTP_HEADERS.xPass]: 'true' } })
     },
 

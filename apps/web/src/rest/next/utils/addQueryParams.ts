@@ -14,7 +14,6 @@ export function addQueryParams(url: string, params: Record<string, string>) {
         [key]: value,
       })
       urlParams.push(queryParam.toString())
-      // urlParams.push(`${key}=${value}`)
     }
   }
 

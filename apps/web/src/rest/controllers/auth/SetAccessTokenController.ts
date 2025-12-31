@@ -1,10 +1,9 @@
 import type { Controller, Http } from '@stardust/core/global/interfaces'
-import type { AuthService } from '@stardust/core/auth/interfaces'
 
 import { COOKIES } from '@/constants'
 
 export const SetAccessTokenController = (): Controller => {
-return {
+  return {
     async handle(http: Http) {
       const header = http.getHeader('Authorization')
       if (!header) return http.pass()
