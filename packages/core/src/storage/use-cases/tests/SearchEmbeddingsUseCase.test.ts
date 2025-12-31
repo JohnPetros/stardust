@@ -37,14 +37,12 @@ describe('Search Embeddings Use Case', () => {
     const queryEmbedding = Embedding.create({
       id: validId,
       text: request.query,
-      documentId: validId,
       vector: [0.1, 0.2, 0.3],
     })
 
     const searchResultEmbedding = Embedding.create({
       id: '123e4567-e89b-12d3-a456-426614174001',
       text: 'result text',
-      documentId: '123e4567-e89b-12d3-a456-426614174002',
       vector: [0.4, 0.5, 0.6],
     })
 
@@ -88,7 +86,6 @@ describe('Search Embeddings Use Case', () => {
     const queryEmbedding = Embedding.create({
       id: validId,
       text: request.query,
-      documentId: validId,
       vector: [0.1, 0.2, 0.3],
     })
 
