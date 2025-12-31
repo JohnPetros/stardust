@@ -8,7 +8,7 @@ import { convertToUiMessages } from '../utils/convertToUiMessages'
 
 export const VercelManualWorkflow = (): ManualWorkflow => {
   return {
-    async assistantUser(
+    async assistUser(
       chatMessages: ChatMessage[],
       onFinish: (lastMessage: ChatMessage) => Promise<void>,
     ) {
