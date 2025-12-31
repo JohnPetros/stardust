@@ -2,7 +2,7 @@
 
 ### Search guides
 GET {{URL}}
-?query=como remomover o elemento de uma lista?
+?query=como remover o elemento de uma lista?
 &namespace=guides
 &topK=3
 Authorization: Bearer {{JWT}}
