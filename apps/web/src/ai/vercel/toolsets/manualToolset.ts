@@ -1,11 +1,12 @@
 import { tool as createTool } from 'ai'
 import { z } from 'zod'
 
+import { MANUAL_PROMPTS } from '@/ai/constants'
+import { SearchGuidesTool } from '@/ai/tools/manual'
 import { GetMdxGuideTool } from '@/ai/tools/manual/GetMdxGuideTool'
-import { ManualService } from '@/rest/services'
+import { ManualService, StorageService } from '@/rest/services'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import { VercelMcp } from '../VercelMcp'
-import { MANUAL_PROMPTS } from '@/ai/constants'
 
 export const manualToolset = {
   getMdxGuideTool: createTool({
@@ -18,6 +19,23 @@ export const manualToolset = {
       const service = ManualService(restClient)
       const mcp = VercelMcp(undefined)
       const tool = GetMdxGuideTool(service)
+      return await tool.handle(mcp)
+    },
+  }),
+  searchGuidesTool: createTool({
+    description: MANUAL_PROMPTS.tools.searchGuides,
+    inputSchema: z.object({
+      query: z
+        .string()
+        .describe(
+          'A palavra ou frase a ser pesquisada. Nunca forneça uma frase com mais de uma linha',
+        ),
+    }),
+    execute: async (input) => {
+      const restClient = await NextServerRestClient()
+      const service = StorageService(restClient)
+      const mcp = VercelMcp(input)
+      const tool = SearchGuidesTool(service)
       return await tool.handle(mcp)
     },
   }),
