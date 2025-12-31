@@ -23,8 +23,8 @@ export class GenerateEmbeddingsUseCase implements UseCase<Request> {
     const content = Text.create(request.content)
     const documentId = Id.create(request.documentId)
     const embeddingNamespace = EmbeddingNamespace.create(request.namespace)
-    const embeddings = await this.generatorProvider.generate(content, documentId)
+    const embeddings = await this.generatorProvider.generate(content)
     await this.storageProvider.delete(documentId, embeddingNamespace)
-    await this.storageProvider.store(embeddings, embeddingNamespace)
+    await this.storageProvider.store(embeddings, documentId, embeddingNamespace)
   }
 }
