@@ -1,4 +1,4 @@
-@URL = {{BASE_URL}}/storage
+@URL = {{BASE_URL}}/storage/files
 @FILE_NAME = abacaxi.jpg
 @FOLDER = story
 
@@ -11,4 +11,11 @@ Authorization: Bearer {{JWT}}
 
 ### Remove file
 DELETE {{URL}}/{{FOLDER}}/{{FILE_NAME}}
+Authorization: Bearer {{JWT}}
+
+### Search guides
+GET {{URL}}/{{FOLDER}}
+?query=Delegua
+&namespace=guides
+&topK=1
 Authorization: Bearer {{JWT}}
