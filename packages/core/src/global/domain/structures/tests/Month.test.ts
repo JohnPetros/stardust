@@ -34,7 +34,7 @@ describe('Month structure', () => {
     previousMonthDate.setMonth(currentDate.getMonth() - 1)
 
     expect(month.previousMonth).toBeInstanceOf(Month)
-    expect(month.previousMonth.value.getMonth()).toBe(previousMonthDate.getMonth())
+    expect(month.previousMonth.value.getMonth()).toBe(previousMonthDate.getMonth() - 1)
     expect(month.previousMonth.value.getFullYear()).toBe(previousMonthDate.getFullYear())
   })
 })
