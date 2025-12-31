@@ -93,6 +93,10 @@ export class HonoHttp<HonoContext extends Context>
     return this.context.req.method as HttpMethod
   }
 
+  getHeader(key: string): string | null {
+    return this.context.req.header(key) ?? null
+  }
+
   setCookie(key: string, value: string, duration: number): void {
     setCookie(this.context, key, value, {
       maxAge: duration,
