@@ -1,5 +1,4 @@
 import type { ConversationService } from '@stardust/core/conversation/interfaces'
-import type { ChatMessageDto } from '@stardust/core/conversation/structures/dtos'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { ManualWorkflow } from '@stardust/core/manual/interfaces'
 import { ChatMessage } from '@stardust/core/conversation/structures'
