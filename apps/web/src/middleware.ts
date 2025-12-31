@@ -1,7 +1,10 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 
-import { VerifyAuthRoutesController } from './rest/controllers/auth'
+import {
+  SetAccessTokenController,
+  VerifyAuthRoutesController,
+} from './rest/controllers/auth'
 import { NextHttp } from './rest/next/NextHttp'
 import { HandleRewardingPayloadController } from './rest/controllers/lesson'
 import { HandleRedirectController } from './rest/controllers/global'
@@ -23,6 +26,7 @@ export const middleware = async (request: NextRequest) => {
   const restClient = await NextServerRestClient({ isCacheEnabled: false })
   const authService = AuthService(restClient)
   const controllers = [
+    SetAccessTokenController(),
     VerifyAuthRoutesController(authService),
     HandleRewardingPayloadController(),
     HandleRedirectController(),
