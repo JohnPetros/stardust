@@ -14,7 +14,7 @@ status: Em progresso
 
 ### Controller `SearchEmbeddingsController`
 
-- método GET `/storage/embeddings/search`
+- método GET `/storage/embeddings`
 - queryParams: `query` (string), `namespace` (string), `topK` (number)
 - Status Code: 200
 - Response: array de strings
