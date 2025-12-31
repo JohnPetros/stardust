@@ -21,20 +21,27 @@ export const AskAssistantController = (
 ): Controller<Schema> => {
   return {
     async handle(http: Http<Schema>) {
-      const { chatId } = http.getRouteParams()
+      const routeParams = http.getRouteParams()
+      const chatId = Id.create(routeParams.chatId)
       const { challengeId, question } = await http.getBody()
-      const response = await service.fetchChatMessages(Id.create(chatId))
+      const response = await service.fetchChatMessages(chatId)
       if (response.isFailure) response.throwError()
 
-      const chatMessages = response.body
-        .map(ChatMessage.create)
-        .concat(ChatMessage.create({
-          content: `ID do desafio: ${challengeId}, pergunta: ${question}`,
-          sender: 'user'
-        }))
+      const userMessage = ChatMessage.create({
+        content: `ID do desafio: ${challengeId}, pergunta: ${question}`,
+        sender: 'user',
+      })
 
-      const result = await workflow.assistantUser(chatMessages, async (lastMessage) => {
-        console.log(lastMessage)
+      const chatMessages = response.body.map(ChatMessage.create).concat(userMessage)
+
+      const result = await workflow.assistUser(chatMessages, async (assistantMessage) => {
+        const userMessageResponse = await service.sendChatMessage(chatId, userMessage)
+        const assistantMessageResponse = await service.sendChatMessage(
+          chatId,
+          assistantMessage,
+        )
+        console.log(userMessageResponse)
+        console.log(assistantMessageResponse)
       })
       return http.stream(result)
     },
