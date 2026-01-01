@@ -117,6 +117,7 @@ export * from './manual/use-cases/index'
 export * from './conversation/domain/entities/index'
 export * from './conversation/domain/structures/index'
 export * from './conversation/domain/structures/dtos/index'
+export * from './conversation/domain/types/index'
 export * from './conversation/interfaces/index'
 
 // Storage
