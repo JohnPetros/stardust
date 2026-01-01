@@ -19,12 +19,11 @@ export class FetchChatMessagesController implements Controller<Schema> {
 
   async handle(http: Http<Schema>) {
     const { chatId } = http.getRouteParams()
-    const accountId = await http.getAccountId()
     const useCase = new ListChatMessagesUseCase(
       this.chatsRepository,
       this.chatMessagesRepository,
     )
-    const response = await useCase.execute({ chatId, userId: accountId })
+    const response = await useCase.execute({ chatId })
     return http.send(response)
   }
 }
