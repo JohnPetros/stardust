@@ -17,12 +17,14 @@ import {
   DeleteChatController,
   CreateChatController,
   FetchChatsController,
+  IncrementAssistantChatMessageCountController,
 } from '@/rest/controllers/conversation'
 
 import {
   SupabaseChatMessagesRepository,
   SupabaseChatsRepository,
 } from '@/database/supabase/repositories/conversation'
+import { UpstashCacheProvider } from '@/provision/cache/UpstashCacheProvider'
 import { HonoHttp } from '../../HonoHttp'
 import { HonoRouter } from '../../HonoRouter'
 import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
@@ -141,6 +143,20 @@ export class ChatsRouter extends HonoRouter {
     })
   }
 
+  private registerIncrementAssistantChatMessageCountRoute(): void {
+    this.router.patch(
+      '/assistant',
+      this.authMiddleware.verifyAuthentication,
+      async (context) => {
+        const http = new HonoHttp(context)
+        const cacheProvider = new UpstashCacheProvider()
+        const controller = new IncrementAssistantChatMessageCountController(cacheProvider)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   private registerFetchChatsRoute(): void {
     this.router.get(
       '/',
@@ -169,6 +185,7 @@ export class ChatsRouter extends HonoRouter {
     this.registerEditChatNameRoute()
     this.registerDeleteChatRoute()
     this.registerCreateChatRoute()
+    this.registerIncrementAssistantChatMessageCountRoute()
     this.registerFetchChatsRoute()
     return this.router
   }

@@ -34,29 +34,6 @@ describe('Send Chat Message Use Case', () => {
     ).rejects.toThrow(ChatNotFoundError)
   })
 
-  it('should throw an error if the max messages limit is exceeded', async () => {
-    const chatId = Id.create().value
-    const chat = Chat.create({ id: chatId, name: 'Chat Name' })
-    const messages = Array.from({ length: 50 }, () =>
-      ChatMessage.create({
-        id: Id.create().value,
-        content: 'content',
-        sender: 'user',
-        sentAt: new Date().toISOString(),
-      }),
-    )
-
-    chatsRepository.findById.mockResolvedValue(chat)
-    chatMessagesRepository.findAllByChat.mockResolvedValue(messages)
-
-    await expect(
-      useCase.execute({
-        chatId: chatId,
-        chatMessageDto: {} as ChatMessageDto,
-      }),
-    ).rejects.toThrow(ChatMessagesExceededError)
-  })
-
   it('should send and add a message to the chat', async () => {
     const chatId = Id.create().value
     const chat = Chat.create({ id: chatId, name: 'Chat Name' })

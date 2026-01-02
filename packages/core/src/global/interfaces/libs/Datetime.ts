@@ -10,7 +10,9 @@ export type DateFormat =
 
 export interface Datetime {
   format(dateFormat: DateFormat): string
+  formatTimeAgo(): string
   getDaysCountToSunday(): number
+  getEndOfDay(): Date
   convertSecondsToTime(seconds: number): string
   getTodayIndex(): number
   getYesterdayWeekdayIndex(): number
