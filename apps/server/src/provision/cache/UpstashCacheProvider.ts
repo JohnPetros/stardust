@@ -18,7 +18,7 @@ export class UpstashCacheProvider implements CacheProvider {
   async set<Data>(key: string, value: Data, options?: CacheOptions): Promise<void> {
     if (options?.expiresAt) {
       await this.redis.set(key, value, {
-        exat: options.expiresAt.getTime(),
+        pxat: options.expiresAt.getTime(),
       })
       return
     }
