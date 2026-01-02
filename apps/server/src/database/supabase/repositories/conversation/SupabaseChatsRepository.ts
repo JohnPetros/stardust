@@ -1,7 +1,8 @@
 import type { ChatsRepository } from '@stardust/core/conversation/interfaces'
 import type { Chat } from '@stardust/core/conversation/entities'
-
 import type { Id } from '@stardust/core/global/structures'
+import type { ManyItems } from '@stardust/core/global/types'
+import type { ChatsListingParams } from '@stardust/core/conversation/types'
 
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabaseChatMapper } from '../../mappers/conversation'
@@ -24,18 +25,32 @@ export class SupabaseChatsRepository
     return SupabaseChatMapper.toEntity(data)
   }
 
-  async findAllByUser(userId: Id): Promise<Chat[]> {
-    const { data, error } = await this.supabase
+  async findManyByUser(params: ChatsListingParams): Promise<ManyItems<Chat>> {
+    const range = this.calculateQueryRange(params.page.value, params.itemsPerPage.value)
+
+    let query = this.supabase
       .from('chats')
-      .select('*')
-      .eq('user_id', userId.value)
+      .select('*', { count: 'exact', head: false })
+      .eq('user_id', params.userId.value)
+
+    if (params.search && params.search.value.length > 1) {
+      query = query.ilike('name', `%${params.search.value}%`)
+    }
+
+    const { data, count, error } = await query
       .order('created_at', { ascending: false })
+      .range(range.from, range.to)
 
     if (error) {
       throw new SupabasePostgreError(error)
     }
 
-    return data.map(SupabaseChatMapper.toEntity)
+    const chats = data.map(SupabaseChatMapper.toEntity)
+
+    return {
+      items: chats,
+      count: count ?? chats.length,
+    }
   }
 
   async findLastCreatedByUser(userId: Id): Promise<Chat | null> {

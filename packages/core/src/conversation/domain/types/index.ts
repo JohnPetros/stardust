@@ -1,1 +1,1 @@
-export type { ChatMessagesListingParams } from './ChatMessagesListingParams'
+export type { ChatsListingParams } from './ChatsListingParams'

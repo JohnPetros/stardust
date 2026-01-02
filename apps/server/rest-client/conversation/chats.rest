@@ -1,8 +1,19 @@
 @URL = {{BASE_URL}}/conversation/chats
-@CHAT_ID = 70ba01ec-7aa6-4971-9760-537127e03b4d
+@CHAT_ID = 73ff999f-558e-4fe6-8c85-1024ba293304
+
+### Fetch chats
+GET {{URL}}
+?search=
+&page=1
+&itemsPerPage=2
+Authorization: Bearer {{JWT}}
 
 ### Fetch chat messages
 GET {{URL}}/{{CHAT_ID}}/messages
+Authorization: Bearer {{JWT}}
+
+### Create chat
+POST {{URL}}
 Authorization: Bearer {{JWT}}
 
 ### Edit chat name

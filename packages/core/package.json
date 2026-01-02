@@ -143,6 +143,7 @@
     "./conversation/entities/dtos": "./src/conversation/domain/entities/dtos/index.ts",
     "./conversation/structures": "./src/conversation/domain/structures/index.ts",
     "./conversation/structures/dtos": "./src/conversation/domain/structures/dtos/index.ts",
+    "./conversation/types": "./src/conversation/domain/types/index.ts",
     "./conversation/interfaces": "./src/conversation/interfaces/index.ts",
     "./conversation/use-cases": "./src/conversation/use-cases/index.ts",
     "./storage/structures": "./src/storage/domain/structures/index.ts",

@@ -1,7 +1,13 @@
 import { Hono } from 'hono'
 import { z } from 'zod'
 
-import { idSchema, stringSchema } from '@stardust/validation/global/schemas'
+import {
+  idSchema,
+  stringSchema,
+  searchSchema,
+  pageSchema,
+  itemsPerPageSchema,
+} from '@stardust/validation/global/schemas'
 import { chatMessageSchema } from '@stardust/validation/conversation/schemas'
 
 import {
@@ -9,6 +15,8 @@ import {
   SendChatMessageController,
   EditChatNameController,
   DeleteChatController,
+  CreateChatController,
+  FetchChatsController,
 } from '@/rest/controllers/conversation'
 
 import {
@@ -123,11 +131,45 @@ export class ChatsRouter extends HonoRouter {
     )
   }
 
+  private registerCreateChatRoute(): void {
+    this.router.post('/', this.authMiddleware.verifyAuthentication, async (context) => {
+      const http = new HonoHttp(context)
+      const repository = new SupabaseChatsRepository(http.getSupabase())
+      const controller = new CreateChatController(repository)
+      const response = await controller.handle(http)
+      return http.sendResponse(response)
+    })
+  }
+
+  private registerFetchChatsRoute(): void {
+    this.router.get(
+      '/',
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate(
+        'query',
+        z.object({
+          search: searchSchema.default(''),
+          page: pageSchema,
+          itemsPerPage: itemsPerPageSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseChatsRepository(http.getSupabase())
+        const controller = new FetchChatsController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   registerRoutes(): Hono {
     this.registerFetchChatMessagesRoute()
     this.registerSendChatMessageRoute()
     this.registerEditChatNameRoute()
     this.registerDeleteChatRoute()
+    this.registerCreateChatRoute()
+    this.registerFetchChatsRoute()
     return this.router
   }
 }
