@@ -9,6 +9,7 @@ import { jwtDecode } from 'jwt-decode'
 import {
   AuthError,
   ConflictError,
+  NotAllowedError,
   NotFoundError,
   ValidationError,
 } from '@stardust/core/global/errors'
@@ -106,6 +107,9 @@ export class HonoApp {
 
         if (error instanceof ValidationError)
           return context.json(response, HTTP_STATUS_CODE.badRequest)
+
+        if (error instanceof NotAllowedError)
+          return context.json(response, HTTP_STATUS_CODE.notAllowed)
 
         return context.json(response, HTTP_STATUS_CODE.serverError)
       }
