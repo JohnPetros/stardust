@@ -33,6 +33,7 @@
     "@stardust/validation": "*",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
+    "@upstash/redis": "^1.36.0",
     "@upstash/vector": "^1.2.2",
     "ai": "^5.0.116",
     "axios": "^1.12.2",
