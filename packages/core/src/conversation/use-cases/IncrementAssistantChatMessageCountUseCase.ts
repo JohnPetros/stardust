@@ -12,7 +12,7 @@ type Response = Promise<void>
 export class IncrementAssistantChatMessageCountUseCase
   implements UseCase<Request, Response>
 {
-  private static readonly MAX_MESSAGE_COUNT = 5
+  private static readonly MAX_MESSAGE_COUNT = 10
 
   constructor(private readonly cache: CacheProvider) {}
 
@@ -21,7 +21,7 @@ export class IncrementAssistantChatMessageCountUseCase
     const messageCount = (await this.cache.get(cacheKey)) ?? '0'
     const count = Number(messageCount)
 
-    if (count > IncrementAssistantChatMessageCountUseCase.MAX_MESSAGE_COUNT) {
+    if (count >= IncrementAssistantChatMessageCountUseCase.MAX_MESSAGE_COUNT) {
       throw new ChatMessagesExceededError()
     } else {
       await this.cache.set(cacheKey, count + 1, {
