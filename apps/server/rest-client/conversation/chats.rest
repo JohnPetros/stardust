@@ -39,3 +39,7 @@ Authorization: Bearer {{JWT}}
   "sender": "user",
   "sentAt": "2023-06-01T00:00:00.000Z"
 }
+
+### Increment assistant chat message count
+PATCH {{URL}}/assistant
+Authorization: Bearer {{JWT}}
