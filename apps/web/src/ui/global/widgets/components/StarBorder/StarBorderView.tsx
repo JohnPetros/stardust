@@ -1,3 +1,4 @@
+import { twMerge } from 'tailwind-merge'
 import './StarBorderStyles.css'
 
 type Props<T extends React.ElementType> = React.ComponentPropsWithoutRef<T> & {
@@ -22,7 +23,7 @@ export const StarBorderView = <T extends React.ElementType = 'button'>({
 
   return (
     <Component
-      className={`star-border-container ${className}`}
+      className='star-border-container'
       {...(rest as any)}
       style={{
         padding: `${thickness}px 0`,
@@ -43,7 +44,7 @@ export const StarBorderView = <T extends React.ElementType = 'button'>({
           animationDuration: speed,
         }}
       />
-      <div className='inner-content'>{children}</div>
+      <div className={twMerge('inner-content p-4', className)}>{children}</div>
     </Component>
   )
 }
