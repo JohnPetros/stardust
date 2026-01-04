@@ -13,7 +13,7 @@ type Props = {
   messages: ChatMessage[]
   assistantMessageContentParts: string[]
   isAssistantThinking: boolean
-  isAssistantAnsering: boolean
+  isAssistantAnswering: boolean
   isChatEmpty: boolean
   containerRef: RefObject<HTMLDivElement | null>
   chatErrorType: ChatErrorType | null
@@ -23,7 +23,7 @@ type Props = {
 export const AssistantChatView = ({
   messages,
   isAssistantThinking,
-  isAssistantAnsering,
+  isAssistantAnswering,
   assistantMessageContentParts,
   isChatEmpty,
   containerRef,
@@ -67,7 +67,7 @@ export const AssistantChatView = ({
       <div className='mt-auto -translate-y-8'>
         <ChatInput
           isDisabled={
-            isAssistantThinking || isAssistantAnsering || Boolean(chatErrorType)
+            isAssistantThinking || isAssistantAnswering || Boolean(chatErrorType)
           }
           onSendMessage={onSendMessageButtonClick}
         />

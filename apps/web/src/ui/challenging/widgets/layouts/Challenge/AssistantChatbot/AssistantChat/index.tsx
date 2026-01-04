@@ -138,7 +138,7 @@ export const AssistantChat = ({
         status === 'submitted' ||
         (status === 'streaming' && assistantMessageContentParts.length === 0)
       }
-      isAssistantAnsering={status === 'streaming'}
+      isAssistantAnswering={status === 'streaming'}
       chatErrorType={errorType}
       assistantMessageContentParts={assistantMessageContentParts}
       isChatEmpty={chatMessages.length === 0}
