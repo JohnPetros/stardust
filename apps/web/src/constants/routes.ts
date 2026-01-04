@@ -68,6 +68,11 @@ export const ROUTES = {
       confirmPasswordReset: '/api/auth/confirm-password-reset',
       confirmSocialSignIn: '/api/auth/confirm-social-sign-in',
     },
+    conversation: {
+      chats: {
+        assistant: (chatId: string) => `/api/conversation/chats/${chatId}/assistant`,
+      },
+    },
     profile: {
       user: (userId: string) => `/api/profile/${userId}`,
     },
