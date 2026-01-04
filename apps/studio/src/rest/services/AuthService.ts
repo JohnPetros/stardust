@@ -3,11 +3,16 @@ import { MethodNotImplementedError } from '@stardust/core/global/errors'
 import type { RestClient } from '@stardust/core/global/interfaces'
 import type { Email, Name, Text } from '@stardust/core/global/structures'
 import type { Password } from '@stardust/core/auth/structures'
+import type { Account } from '@stardust/core/auth/entities'
 
 export const AuthService = (restClient: RestClient): IAuthService => {
   return {
     async fetchAccount() {
       return await restClient.get('/auth/account')
+    },
+
+    async fetchSocialAccount() {
+      return await restClient.get('/auth/social-account')
     },
 
     async signIn(email: Email, password: Password) {
@@ -17,8 +22,27 @@ export const AuthService = (restClient: RestClient): IAuthService => {
       })
     },
 
+    async signInGodAccount(email: Email, password: Password) {
+      return await restClient.post('/auth/sign-in/god', {
+        email: email.value,
+        password: password.value,
+      })
+    },
+
+    async signInWithGoogleAccount() {
+      return await restClient.post('/auth/sign-in/google')
+    },
+
+    async signInWithGithubAccount() {
+      return await restClient.post('/auth/sign-in/github')
+    },
+
     async signUp() {
       throw new MethodNotImplementedError('signUp')
+    },
+
+    async signUpWithSocialAccount(account: Account) {
+      return await restClient.post('/auth/sign-up/social-account', account.dto)
     },
 
     async signOut() {
@@ -65,6 +89,34 @@ export const AuthService = (restClient: RestClient): IAuthService => {
 
     async confirmPasswordReset(token: Text) {
       return await restClient.post('/auth/confirm-password-reset', { token: token.value })
+    },
+
+    async connectGithubAccount(returnUrl: Text) {
+      return await restClient.post(
+        `/auth/social-account/github?returnUrl=${returnUrl.value}`,
+      )
+    },
+
+    async connectGoogleAccount(returnUrl: Text) {
+      return await restClient.post(
+        `/auth/social-account/google?returnUrl=${returnUrl.value}`,
+      )
+    },
+
+    async disconnectGithubAccount() {
+      return await restClient.delete('/auth/social-account/github')
+    },
+
+    async disconnectGoogleAccount() {
+      return await restClient.delete('/auth/social-account/google')
+    },
+
+    async fetchGithubAccountConnection() {
+      return await restClient.get('/auth/social-account/github/connection')
+    },
+
+    async fetchGoogleAccountConnection() {
+      return await restClient.get('/auth/social-account/google/connection')
     },
   }
 }
