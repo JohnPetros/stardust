@@ -50,6 +50,7 @@ export function useAuthContextProvider({
     fetcher: fetchUser,
     isEnabled: Boolean(accountDto),
     dependencies: [account?.id],
+    shouldRefetchOnFocus: false,
   })
 
   const notifyUserChanges = useCallback(() => {

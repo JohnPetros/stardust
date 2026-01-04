@@ -1,4 +1,5 @@
 export type IconName =
+  | 'ai'
   | 'achievement'
   | 'alert'
   | 'arrow-down'
@@ -16,6 +17,7 @@ export type IconName =
   | 'code'
   | 'comment'
   | 'command'
+  | 'robot'
   | 'copy'
   | 'description'
   | 'divider'
@@ -65,6 +67,7 @@ export type IconName =
   | 'stop-sign'
   | 'strong'
   | 'strong-text-block'
+  | 'history'
   | 'tag'
   | 'target'
   | 'terminal'

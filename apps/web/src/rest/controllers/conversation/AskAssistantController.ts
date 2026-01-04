@@ -25,9 +25,6 @@ export const AskAssistantController = ({
 }: Dependencies): Controller<Schema> => {
   return {
     async handle(http: Http<Schema>) {
-      const assistantChatResponse = await service.incrementAssistantChatMessageCount()
-      if (assistantChatResponse.isFailure) assistantChatResponse.throwError()
-
       const routeParams = http.getRouteParams()
       const chatId = Id.create(routeParams.chatId)
       const { challengeId, question } = await http.getBody()

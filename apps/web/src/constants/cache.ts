@@ -23,5 +23,6 @@ export const CACHE = {
     guides: '/guides',
     googleAccountConnection: '/google-account-connection',
     githubAccountConnection: '/github-account-connection',
+    assistantChats: '/assistant-chats',
   },
 }

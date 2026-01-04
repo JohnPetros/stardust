@@ -5,7 +5,6 @@ import { Animation } from '../Animation'
 import { Content } from '../Content'
 
 type UserProps = {
-  title: string
   children: string | string[]
   hasAnimation?: boolean
 }
@@ -24,7 +23,7 @@ export const UserView = ({ children, hasAnimation = true }: UserProps) => {
             <UserAvatar
               avatarName={user.avatar.name.value}
               avatarImage={user.avatar.image.value}
-              size={80}
+              size={64}
             />
           )}
         </div>

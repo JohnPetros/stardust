@@ -10,6 +10,7 @@ import { HotkeysDialog } from './HotkeysDialog'
 import { CodeEditorSettingsDialog } from './CodeEditorSettingsDialog'
 import { useCodeEditorToolbar } from './useCodeEditorToolbar'
 import type { CodeEditorRef } from '../CodeEditor/types'
+import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 
 type CodeEditorToolbarProps = {
   children: ReactNode
@@ -26,6 +27,8 @@ export function CodeEditorToolbar({
 }: CodeEditorToolbarProps) {
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
   const guidesDialogButtonRef = useRef<HTMLButtonElement>(null)
+  const { getIsAssistantEnabledSlice } = useChallengeStore()
+  const { isAssistantEnabled, setIsAssistantEnabled } = getIsAssistantEnabledSlice()
   const { handleKeyDown, resetCode } = useCodeEditorToolbar({
     originalCode,
     codeEditorRef,
@@ -78,6 +81,12 @@ export function CodeEditorToolbar({
           <CodeEditorSettingsDialog>
             <Toolbar.Button label='Configurações' icon='gear' />
           </CodeEditorSettingsDialog>
+
+          <Toolbar.Button
+            label='Assistente de código'
+            icon='ai'
+            onClick={() => setIsAssistantEnabled(!isAssistantEnabled)}
+          />
         </Toolbar.Container>
       </div>
       {children}

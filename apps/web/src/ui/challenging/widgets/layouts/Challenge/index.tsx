@@ -29,8 +29,8 @@ export const ChallengeLayout = ({
     tabsPanelRef,
     codeEditorPanelRef,
   )
-  const { getPanelsLayoutSlice } = useChallengeStore()
-  const { panelsLayout } = getPanelsLayoutSlice()
+  const { getIsAssistantEnabledSlice } = useChallengeStore()
+  const { isAssistantEnabled } = getIsAssistantEnabledSlice()
 
   return (
     <ChallengeLayoutView
@@ -38,10 +38,10 @@ export const ChallengeLayout = ({
       tabContent={tabContent}
       codeEditor={codeEditor}
       panelsOffset={panelsOffset}
-      panelsLayout={panelsLayout}
       tabsPanelRef={tabsPanelRef}
       codeEditorPanelRef={codeEditorPanelRef}
       isTransitionPageVisible={isTransitionPageVisible}
+      isAssistantEnabled={isAssistantEnabled}
       handlePanelDragging={handlePanelDragging}
     />
   )

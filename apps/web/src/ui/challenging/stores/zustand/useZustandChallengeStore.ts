@@ -46,6 +46,12 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
           })
         },
 
+        setIsAssistantEnabled(isAssistantEnabled: boolean) {
+          return set(({ state }) => {
+            state.isAssistantEnabled = isAssistantEnabled
+          })
+        },
+
         setTabHandler(tabHandler: TabHandler) {
           return set(({ state }) => {
             state.tabHandler = tabHandler
