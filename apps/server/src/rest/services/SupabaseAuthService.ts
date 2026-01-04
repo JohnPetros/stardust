@@ -54,6 +54,10 @@ export class SupabaseAuthService implements AuthService {
     return new RestResponse({ body: session, statusCode: HTTP_STATUS_CODE.created })
   }
 
+  async signInGodAccount(): Promise<RestResponse<SessionDto>> {
+    throw new MethodNotImplementedError('signInGodAccount')
+  }
+
   async signUp(email: Email, password: Password): Promise<RestResponse<AccountDto>> {
     const { data, error } = await this.supabase.auth.signUp({
       email: email.value,
