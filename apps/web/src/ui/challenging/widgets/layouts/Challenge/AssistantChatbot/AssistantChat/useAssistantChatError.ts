@@ -22,8 +22,6 @@ export function useAssistantChatError({ error, service, toastProvider }: Params)
     async function handleChatError(error: Error) {
       let response: RestResponse = new RestResponse()
 
-      console.log(error.message.includes('Limite de mensagens por chat excedido'))
-
       if (error.message.includes('You exceeded your current quota')) {
         if (CLIENT_ENV.mode === 'production' || CLIENT_ENV.mode === 'staging') {
           response = await service.sendErrorNotification(
