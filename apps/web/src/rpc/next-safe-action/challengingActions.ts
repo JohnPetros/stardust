@@ -2,6 +2,7 @@
 
 import { z } from 'zod'
 
+import { actionClient } from './clients/actionClient'
 import { authActionClient } from './clients/authActionClient'
 import { NextCall } from '../next/NextCall'
 
@@ -14,7 +15,6 @@ import {
   AccessSolutionPageAction,
   ViewSolutionAction,
 } from '../actions/challenging'
-import { actionClient } from './clients/actionClient'
 
 export const accessAuthenticatedChallengePage = authActionClient
   .schema(z.object({ challengeSlug: z.string() }))
