@@ -80,7 +80,7 @@ export const ChallengeLayoutView = ({
                 <>
                   <PanelHandle direction={DIRECTION} onDragging={handlePanelDragging} />
 
-                  <Panel id='assistant' ref={codeEditorPanelRef} minSize={15} order={3}>
+                  <Panel id='assistant' minSize={15} order={3}>
                     <AssistantChatbot />
                   </Panel>
                 </>
