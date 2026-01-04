@@ -3,12 +3,12 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { type ImperativePanelHandle, Panel, PanelGroup } from 'react-resizable-panels'
 
+import type { PanelsOffset } from './types'
 import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
-import type { PanelsLayout } from '@/ui/challenging/stores/ChallengeStore/types'
 import { ChallengeSlider } from './ChallengeSlider'
 import { PanelHandle } from './PandleHandle'
 import { ChallengeTabs } from './ChallengeTabs'
-import type { PanelsOffset } from './types'
+import { AssistantChatbot } from './AssistantChatbot'
 
 const DIRECTION = 'horizontal'
 const HORIZONTAL_PADDNG = 24
@@ -22,7 +22,7 @@ type Props = {
   tabsPanelRef: RefObject<ImperativePanelHandle | null>
   codeEditorPanelRef: RefObject<ImperativePanelHandle | null>
   panelsOffset: PanelsOffset
-  panelsLayout: PanelsLayout
+  isAssistantEnabled: boolean
   handlePanelDragging: (isDragging: boolean) => void
 }
 
@@ -33,8 +33,8 @@ export const ChallengeLayoutView = ({
   tabsPanelRef,
   codeEditorPanelRef,
   panelsOffset,
-  panelsLayout,
   isTransitionPageVisible,
+  isAssistantEnabled,
   handlePanelDragging,
 }: Props) => {
   return (
@@ -53,56 +53,39 @@ export const ChallengeLayoutView = ({
             }}
             className='hidden h-full w-screen grid-cols-[1fr,auto] md:grid'
           >
-            {panelsLayout === 'tabs-left;code_editor-right' && (
-              <PanelGroup direction='horizontal'>
-                <Panel
-                  id='tabs'
-                  ref={tabsPanelRef}
-                  defaultSize={panelsOffset.tabsPanelSize}
-                  minSize={1}
-                  order={1}
-                >
-                  <ChallengeTabs>{tabContent}</ChallengeTabs>
-                </Panel>
+            <PanelGroup direction='horizontal'>
+              <Panel
+                id='tabs'
+                ref={tabsPanelRef}
+                defaultSize={panelsOffset.tabsPanelSize}
+                minSize={1}
+                order={1}
+              >
+                <ChallengeTabs>{tabContent}</ChallengeTabs>
+              </Panel>
 
-                <PanelHandle direction={DIRECTION} onDragging={handlePanelDragging} />
+              <PanelHandle direction={DIRECTION} onDragging={handlePanelDragging} />
 
-                <Panel
-                  id='code-editor'
-                  ref={codeEditorPanelRef}
-                  defaultSize={panelsOffset.codeEditorPanelSize}
-                  minSize={1}
-                  order={2}
-                >
-                  {codeEditor as null}
-                </Panel>
-              </PanelGroup>
-            )}
-            {panelsLayout === 'tabs-right;code_editor-left' && (
-              <PanelGroup direction='horizontal'>
-                <Panel
-                  id='code-editor'
-                  ref={codeEditorPanelRef}
-                  defaultSize={panelsOffset.codeEditorPanelSize}
-                  minSize={1}
-                  order={1}
-                >
-                  {codeEditor as null}
-                </Panel>
+              <Panel
+                id='code-editor'
+                ref={codeEditorPanelRef}
+                defaultSize={panelsOffset.codeEditorPanelSize}
+                minSize={1}
+                order={2}
+              >
+                {codeEditor}
+              </Panel>
 
-                <PanelHandle direction={DIRECTION} onDragging={handlePanelDragging} />
+              {isAssistantEnabled && (
+                <>
+                  <PanelHandle direction={DIRECTION} onDragging={handlePanelDragging} />
 
-                <Panel
-                  id='tabs'
-                  ref={tabsPanelRef}
-                  defaultSize={panelsOffset.tabsPanelSize}
-                  minSize={1}
-                  order={2}
-                >
-                  <ChallengeTabs>{tabContent}</ChallengeTabs>
-                </Panel>
-              </PanelGroup>
-            )}
+                  <Panel id='assistant' ref={codeEditorPanelRef} minSize={15} order={3}>
+                    <AssistantChatbot />
+                  </Panel>
+                </>
+              )}
+            </PanelGroup>
           </div>
         </main>
       </div>
