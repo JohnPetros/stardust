@@ -13,33 +13,38 @@ export const KpiCardView = ({ title, kpi }: Props) => {
     <article className='flex flex-col gap-2 bg-zinc-900 border border-zinc-700 rounded-md p-4 shadow-sm'>
       <div className='flex items-center justify-between'>
         <h2 className='text-sm text-zinc-400'>{title}</h2>
-       <Tooltip content='Porcentagem de variação do mês atual em relação ao mês anterior'>
-          <Badge variant="outline" className='border-zinc-700'>
-            <Icon name={kpi.isTrendingUp.isTrue ? 'trending-up' : kpi.isTrendingDown.isTrue ? 'trending-down' : 'minus'} />
+        <Tooltip content='Porcentagem de variação do mês atual em relação ao mês anterior'>
+          <Badge variant='outline' className='border-zinc-700'>
+            <Icon
+              name={
+                kpi.isTrendingUp.isTrue
+                  ? 'trending-up'
+                  : kpi.isTrendingDown.isTrue
+                    ? 'trending-down'
+                    : 'minus'
+              }
+            />
             {kpi.trendPercentage.value}%
           </Badge>
-       </Tooltip>
+        </Tooltip>
       </div>
-
 
       <strong className='text-4xl font-bold text-zinc-50'>{kpi.value.value}</strong>
 
       <div className='mt-3'>
         {kpi.isTrendingUp.isTrue && (
           <span className='flex items-center gap-2 text-md font-bold text-zinc-50'>
-            {kpi.currentMonthValue.value - kpi.previousMonthValue.value} registrado(s)
-            neste mês
+            {kpi.currentMonthValue.value - kpi.previousMonthValue.value} a mais este mês
             <Icon name='trending-up' size={16} />
           </span>
         )}
         {kpi.isTrendingDown.isTrue && (
           <span className='flex items-center gap-2 text-md font-bold text-zinc-50'>
-            {kpi.currentMonthValue.value - kpi.previousMonthValue.value} removido(s)
-            neste mês
+            {kpi.previousMonthValue.value - kpi.currentMonthValue.value} a menos este mês
             <Icon name='trending-down' size={16} />
           </span>
         )}
-          {kpi.hasNoTrend.isTrue && (
+        {kpi.hasNoTrend.isTrue && (
           <span className='flex items-center gap-2 text-md font-bold text-zinc-50'>
             Nenhuma alteração desde o mês anterior
             <Icon name='minus' size={16} />
