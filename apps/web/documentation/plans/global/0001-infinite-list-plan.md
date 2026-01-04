@@ -5,12 +5,12 @@
 Criar um widget de listagem infinita que faça fetching de mais dados a medida
 que o usuário rola a tela.
 
-stato: Em desenvolvimento
+status: Concluído
 
 ## Camada UI
 
 - Crie o widget como um component global com o nome `InfiniteList`.
-- Deve conter um prop chamda `onShowMore` que é chamado quando o usuário atinge
+- Deve conter um prop chamada `onShowMore` que é chamado quando o usuário atinge
   o fim da lista
 - Deve conter `children` que é o conteúdo do widget
 - Use o código abaixo como base para o hook do widget:
