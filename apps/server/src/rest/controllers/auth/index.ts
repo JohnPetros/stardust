@@ -1,6 +1,7 @@
 export { SignInController } from './SignInController'
 export { SignUpController } from './SignUpController'
 export { SignOutController } from './SignOutController'
+export { SignInGodAccountController } from './SignInGodAccountController'
 export { RequestPasswordResetController } from './RequestPasswordResetController'
 export { ResetPasswordController } from './ResetPasswordController'
 export { ConfirmEmailController } from './ConfirmEmailController'
@@ -19,3 +20,4 @@ export { DisconnectGoogleAccountController } from './DisconnectGoogleAccountCont
 export { DisconnectGithubAccountController } from './DisconnectGithubAccountController'
 export { FetchGithubAccountConnectionController } from './FetchGithubAccountConnectionController'
 export { FetchGoogleAccountConnectionController } from './FetchGoogleAccountConnectionController'
+export { VerifyGodAccountController } from './VerifyGodAccountController'
