@@ -12,7 +12,7 @@ type Response = Promise<void>
 export class IncrementAssistantChatMessageCountUseCase
   implements UseCase<Request, Response>
 {
-  private static readonly MAX_MESSAGE_COUNT = 10
+  static readonly MAX_MESSAGE_COUNT = 10
 
   constructor(private readonly cache: CacheProvider) {}
 
