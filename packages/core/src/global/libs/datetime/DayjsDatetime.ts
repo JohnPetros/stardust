@@ -14,12 +14,28 @@ export class DayJsDatetime implements Datetime {
     this.dayjs = dayjs(date ?? new Date()).subtract(3, 'hours')
   }
 
+  formatTimeAgo(): string {
+    const now = dayjs().subtract(3, 'hours')
+    const diff = now.diff(this.dayjs, 'second')
+
+    if (diff < 60) return 'Agora'
+    if (diff < 3600) return `${Math.floor(diff / 60)} minutos atrás`
+    if (diff < 86400) return `${Math.floor(diff / 3600)} horas atrás`
+    if (diff < 2592000) return `${Math.floor(diff / 86400)} dias atrás`
+
+    return `${Math.floor(diff / 2592000)} meses atrás`
+  }
+
   getDaysCountToSunday(): number {
     const todayIndex = dayjs().day()
     const sundayIndex = 0
     const daysCount = todayIndex === sundayIndex ? 7 : 7 - todayIndex
 
     return daysCount
+  }
+
+  getEndOfDay(): Date {
+    return this.dayjs.endOf('day').toDate()
   }
 
   getTodayIndex(): number {

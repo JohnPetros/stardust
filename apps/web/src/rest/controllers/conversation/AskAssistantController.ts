@@ -14,24 +14,39 @@ type Schema = {
   }
 }
 
-export const AskAssistantController = (
-  service: ConversationService,
-  workflow: ManualWorkflow,
-): Controller<Schema> => {
+type Dependencies = {
+  service: ConversationService
+  workflow: ManualWorkflow
+}
+
+export const AskAssistantController = ({
+  service,
+  workflow,
+}: Dependencies): Controller<Schema> => {
   return {
     async handle(http: Http<Schema>) {
+      const assistantChatResponse = await service.incrementAssistantChatMessageCount()
+      if (assistantChatResponse.isFailure) assistantChatResponse.throwError()
+
       const routeParams = http.getRouteParams()
       const chatId = Id.create(routeParams.chatId)
       const { challengeId, question } = await http.getBody()
-      const response = await service.fetchChatMessages(chatId)
-      if (response.isFailure) response.throwError()
+      const chatResponse = await service.fetchChatMessages(chatId)
+      if (chatResponse.isFailure) chatResponse.throwError()
 
-      const userMessage = ChatMessage.create({
+      const userMessageForAssistant = ChatMessage.create({
         content: `ID do desafio: ${challengeId}, pergunta: ${question}`,
         sender: 'user',
       })
+      const userMessage = ChatMessage.create({
+        content: question,
+        sender: 'user',
+        sentAt: userMessageForAssistant.sentAt.toISOString(),
+      })
 
-      const chatMessages = response.body.map(ChatMessage.create).concat(userMessage)
+      const chatMessages = chatResponse.body
+        .map(ChatMessage.create)
+        .concat(userMessageForAssistant)
 
       const result = await workflow.assistUser(
         chatMessages,
