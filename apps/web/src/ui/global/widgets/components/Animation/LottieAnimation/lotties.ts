@@ -24,6 +24,8 @@ import Space from '../../../../../../../public/lotties/space.json'
 import Spinner from '../../../../../../../public/lotties/spinner.json'
 import Shinning from '../../../../../../../public/lotties/reward-shinning.json'
 import InternalError from '../../../../../../../public/lotties/internal-error.json'
+import Hourglass from '../../../../../../../public/lotties/hourglass.json'
+import Robot from '../../../../../../../public/lotties/robot.json'
 
 import type { AnimationName } from '../types'
 
@@ -47,6 +49,7 @@ export const LOTTIES: Record<AnimationName, unknown> = {
   'internal-error': InternalError,
   galaxy: Galaxy,
   coins: Coins,
+  hourglass: Hourglass,
   spiral: Spiral,
   podium: Podium,
   trophy: Trophy,
@@ -54,4 +57,5 @@ export const LOTTIES: Record<AnimationName, unknown> = {
   streak: Streak,
   space: Space,
   spinner: Spinner,
+  robot: Robot,
 }
