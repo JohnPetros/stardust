@@ -47,6 +47,7 @@ export const ChallengeDescriptionSlotView = ({
       </div>
       <div className='mt-6 pb-6'>
         <Mdx>{mdx}</Mdx>
+        <Mdx>{mdx}</Mdx>
       </div>
     </div>
   )
