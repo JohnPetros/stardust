@@ -7,5 +7,6 @@ export const INITIAL_CHALLENGE_STORE_STATE: ChallengeStoreState = {
   mdx: '',
   results: [],
   tabHandler: null,
+  isAssistantEnabled: false,
   panelsLayout: 'tabs-left;code_editor-right',
 }

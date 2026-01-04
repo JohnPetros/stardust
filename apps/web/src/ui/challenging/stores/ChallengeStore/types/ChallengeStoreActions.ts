@@ -11,6 +11,7 @@ export type ChallengeStoreActions = {
   setCraftsVisibility: (craftsVislibility: ChallengeCraftsVisibility) => void
   setTabHandler: (tabHandler: TabHandler) => void
   setResults: (results: boolean[]) => void
+  setIsAssistantEnabled: (isAssistantEnabled: boolean) => void
   setMdx: (mdx: string) => void
   resetStore: () => void
 }

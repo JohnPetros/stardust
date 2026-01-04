@@ -84,6 +84,20 @@ export function useChallengeStore() {
       }
     },
 
+    getIsAssistantEnabledSlice() {
+      const isAssistantEnabled = useZustandChallengeStore(
+        (store) => store.state.isAssistantEnabled,
+      )
+      const setIsAssistantEnabled = useZustandChallengeStore(
+        (store) => store.actions.setIsAssistantEnabled,
+      )
+
+      return {
+        isAssistantEnabled,
+        setIsAssistantEnabled,
+      }
+    },
+
     resetStore() {
       return useZustandChallengeStore.setState({ state: INITIAL_CHALLENGE_STORE_STATE })
     },
