@@ -112,6 +112,7 @@ export class AchievementsRouter extends HonoRouter {
     this.router.post(
       '/',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate('json', achievementSchema),
       async (context) => {
         const http = new HonoHttp(context)
@@ -127,6 +128,7 @@ export class AchievementsRouter extends HonoRouter {
     this.router.put(
       '/:achievementId',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'param',
         z.object({
@@ -148,6 +150,7 @@ export class AchievementsRouter extends HonoRouter {
     this.router.delete(
       '/:achievementId',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'param',
         z.object({
@@ -168,6 +171,7 @@ export class AchievementsRouter extends HonoRouter {
     this.router.patch(
       '/order',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'json',
         z.object({

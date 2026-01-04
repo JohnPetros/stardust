@@ -52,6 +52,7 @@ export class AvatarsRouter extends HonoRouter {
     this.router.post(
       '/',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate('json', avatarSchema),
       async (context) => {
         const http = new HonoHttp(context)
@@ -67,6 +68,7 @@ export class AvatarsRouter extends HonoRouter {
     this.router.put(
       '/:avatarId',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'param',
         z.object({
@@ -88,6 +90,7 @@ export class AvatarsRouter extends HonoRouter {
     this.router.delete(
       '/:avatarId',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'param',
         z.object({

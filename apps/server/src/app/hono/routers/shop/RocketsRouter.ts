@@ -51,6 +51,7 @@ export class RocketsRouter extends HonoRouter {
     this.router.post(
       '/',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate('json', rocketSchema),
       async (context) => {
         const http = new HonoHttp(context)
@@ -66,6 +67,7 @@ export class RocketsRouter extends HonoRouter {
     this.router.put(
       '/:rocketId',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'param',
         z.object({
@@ -87,6 +89,7 @@ export class RocketsRouter extends HonoRouter {
     this.router.delete(
       '/:rocketId',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'param',
         z.object({

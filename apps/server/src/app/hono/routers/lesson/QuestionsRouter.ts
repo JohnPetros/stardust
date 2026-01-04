@@ -38,6 +38,7 @@ export class QuestionsRouter extends HonoRouter {
     this.router.put(
       '/star/:starId',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate('param', z.object({ starId: idSchema })),
       this.validationMiddleware.validate(
         'json',

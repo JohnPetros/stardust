@@ -20,6 +20,15 @@ Content-Type: application/json
   "name": "Ctrl Alt Del"
 }
 
+### Sign in God account
+POST {{URL}}/sign-in/god
+Content-Type: application/json
+
+{
+  "email": "{{EMAIL}}",
+  "password": "123456"
+}
+
 ### Sign in with Google
 GET {{URL}}/sign-in/google?returnUrl=http://localhost:3000/auth/social-account-confirmation
 
