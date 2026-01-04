@@ -1,4 +1,4 @@
-import { convertToModelMessages } from 'ai'
+import { convertToModelMessages, smoothStream } from 'ai'
 
 import type { ManualWorkflow } from '@stardust/core/manual/interfaces'
 import { ChatMessage } from '@stardust/core/conversation/structures'
@@ -15,7 +15,13 @@ export const VercelManualWorkflow = (): ManualWorkflow => {
       const uiMessages = convertToUiMessages(chatMessages)
       const modelMessages = await convertToModelMessages(uiMessages)
 
-      const result = await assistantAgent.stream({ messages: modelMessages })
+      const result = await assistantAgent.stream({
+        messages: modelMessages,
+        experimental_transform: smoothStream({
+          delayInMs: 50,
+          chunking: 'word',
+        }),
+      })
 
       return result.toUIMessageStreamResponse({
         originalMessages: uiMessages,
