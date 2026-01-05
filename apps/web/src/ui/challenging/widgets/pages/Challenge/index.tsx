@@ -12,6 +12,7 @@ type Props = {
 }
 
 export const ChallengePage = ({ challengeDto, userChallengeVote }: Props) => {
+  console.log('challengeDto', challengeDto)
   const { user, isAccountAuthenticated } = useAuthContext()
   const {
     challengeTitle,
