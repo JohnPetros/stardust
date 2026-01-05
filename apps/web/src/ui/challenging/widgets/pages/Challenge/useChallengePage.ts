@@ -16,7 +16,6 @@ import type {
 } from '@/ui/challenging/stores/ChallengeStore/types'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
-import { Logical } from '@stardust/core/global/structures'
 import type { User } from '@stardust/core/profile/entities'
 
 type Params = {
@@ -121,6 +120,8 @@ export function useChallengePage({
       resetStore()
     }
   }, [])
+
+  console.log('challenge page', challenge)
 
   return {
     challengeTitle: challenge?.title.value ?? null,

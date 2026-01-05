@@ -32,6 +32,7 @@ export const AccessChallengePageAction = ({
     const response = await challengingService.fetchChallengeBySlug(
       Slug.create(challengeSlug),
     )
+    console.log('fetchChallenge', response)
     if (response.isFailure) response.throwError()
     return Challenge.create(response.body)
   }
