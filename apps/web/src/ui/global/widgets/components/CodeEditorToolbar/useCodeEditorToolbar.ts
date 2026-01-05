@@ -16,7 +16,15 @@ export function useCodeEditorToolbar({
 }: UseCodeEditorToolbarParams) {
   const hasCodedEditorReset = useRef(false)
 
-  function resetCode() {
+  function handleResetCodeButtonClick() {
+    if (originalCode) {
+      codeEditorRef.current?.setValue(originalCode)
+      return
+    }
+    codeEditorRef.current?.reloadValue()
+  }
+
+  function handleAssistantButtonClick() {
     if (originalCode) {
       codeEditorRef.current?.setValue(originalCode)
       return
@@ -102,7 +110,8 @@ export function useCodeEditorToolbar({
   }
 
   return {
-    resetCode,
+    handleResetCodeButtonClick,
+    handleAssistantButtonClick,
     handleKeyDown,
   }
 }
