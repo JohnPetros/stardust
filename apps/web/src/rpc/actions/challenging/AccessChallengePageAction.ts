@@ -36,7 +36,7 @@ export const AccessChallengePageAction = ({
       Slug.create(challengeSlug),
     )
     console.log('fetchChallenge', response)
-    notificationService.sendErrorNotification('web', JSON.stringify(response))
+    await notificationService.sendErrorNotification('web', JSON.stringify(response))
     if (response.isFailure) response.throwError()
     return Challenge.create(response.body)
   }

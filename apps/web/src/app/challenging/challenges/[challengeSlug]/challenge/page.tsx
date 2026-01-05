@@ -12,7 +12,6 @@ const Page = async ({ params }: NextParams<'challengeSlug'>) => {
   const accessTokenCookie = await cookieActions.getCookie(COOKIES.accessToken.key)
   const restClient = await NextServerRestClient({ isCacheEnabled: false })
   const notificationService = NotificationService(restClient)
-  await notificationService.sendErrorNotification('web', 'test')
   let challengeDto: ChallengeDto | null = null
   let userChallengeVote: string | null = null
 
@@ -29,7 +28,10 @@ const Page = async ({ params }: NextParams<'challengeSlug'>) => {
     const response = await challengingActions.accessChallengePage({
       challengeSlug,
     })
-    console.log('Page.accessChallengePage', response)
+    await notificationService.sendErrorNotification(
+      'web',
+      `action response ${JSON.stringify(response)}`,
+    )
 
     if (response?.data) {
       challengeDto = response.data.challengeDto
