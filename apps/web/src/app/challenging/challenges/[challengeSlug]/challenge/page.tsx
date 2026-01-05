@@ -4,10 +4,15 @@ import type { NextParams } from '@/rpc/next/types'
 import { challengingActions, cookieActions } from '@/rpc/next-safe-action'
 import { COOKIES } from '@/constants'
 import { ChallengePage } from '@/ui/challenging/widgets/pages/Challenge'
+import { NotificationService } from '@/rest/services'
+import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 
 const Page = async ({ params }: NextParams<'challengeSlug'>) => {
   const { challengeSlug } = await params
   const accessTokenCookie = await cookieActions.getCookie(COOKIES.accessToken.key)
+  const restClient = await NextServerRestClient({ isCacheEnabled: false })
+  const notificationService = NotificationService(restClient)
+  await notificationService.sendErrorNotification('web', 'test')
   let challengeDto: ChallengeDto | null = null
   let userChallengeVote: string | null = null
 
