@@ -24,6 +24,8 @@ const Page = async ({ params }: NextParams<'challengeSlug'>) => {
     const response = await challengingActions.accessChallengePage({
       challengeSlug,
     })
+    console
+    log('Page.accessChallengePage', response)
 
     if (response?.data) {
       challengeDto = response.data.challengeDto
