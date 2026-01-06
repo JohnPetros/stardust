@@ -1,7 +1,7 @@
 import { RestResponse } from '@stardust/core/global/responses'
 
 import { parseResponseJson } from './parseResponseJson'
-import { cookieActions } from '@/rpc/next-safe-action'
+import { getCookie, setCookie } from '@/rpc/next-safe-action/cookieActions'
 import { CLIENT_ENV, COOKIES } from '@/constants'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import type { SessionDto } from '@stardust/core/auth/structures/dtos'
@@ -10,7 +10,7 @@ import { AuthService } from '@/rest/services'
 import { Text } from '@stardust/core/global/structures'
 
 async function refreshAuthSession() {
-  const refreshToken = await cookieActions.getCookie(COOKIES.refreshToken.key)
+  const refreshToken = await getCookie(COOKIES.refreshToken.key)
   if (!refreshToken?.data) {
     return new RestResponse<SessionDto>({ statusCode: HTTP_STATUS_CODE.badRequest })
   }
@@ -21,12 +21,12 @@ async function refreshAuthSession() {
   const response = await service.refreshSession(Text.create(refreshToken.data))
 
   await Promise.all([
-    cookieActions.setCookie({
+    setCookie({
       key: COOKIES.accessToken.key,
       value: response.body.accessToken,
       durationInSeconds: response.body.durationInSeconds,
     }),
-    cookieActions.setCookie({
+    setCookie({
       key: COOKIES.refreshToken.key,
       value: response.body.refreshToken,
       durationInSeconds: response.body.durationInSeconds,
