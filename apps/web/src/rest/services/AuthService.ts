@@ -22,6 +22,13 @@ export const AuthService = (restClient: RestClient): IAuthService => {
       })
     },
 
+    async signInGodAccount(email: Email, password: Password) {
+      return await restClient.post('/auth/sign-in/god', {
+        email: email.value,
+        password: password.value,
+      })
+    },
+
     async signInWithGoogleAccount() {
       return await restClient.post('/auth/sign-in/google')
     },

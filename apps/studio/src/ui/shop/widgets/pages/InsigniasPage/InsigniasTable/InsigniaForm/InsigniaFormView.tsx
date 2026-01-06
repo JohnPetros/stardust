@@ -143,7 +143,6 @@ export const InsigniaFormView = ({
                     </FormControl>
                     <SelectContent>
                       <SelectItem value='engineer'>Engenheiro espacial</SelectItem>
-                      <SelectItem value='god'>Deus</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

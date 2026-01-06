@@ -34,6 +34,7 @@ export class InsigniasRouter extends HonoRouter {
     this.router.post(
       '/',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate('json', insigniaSchema),
       async (context) => {
         const http = new HonoHttp(context)
@@ -49,6 +50,7 @@ export class InsigniasRouter extends HonoRouter {
     this.router.put(
       '/:insigniaId',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'param',
         z.object({
@@ -70,6 +72,7 @@ export class InsigniasRouter extends HonoRouter {
     this.router.delete(
       '/:insigniaId',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'param',
         z.object({

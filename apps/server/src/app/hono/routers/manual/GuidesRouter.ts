@@ -64,6 +64,7 @@ export class GuidesRouter extends HonoRouter {
     this.router.post(
       '/',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'json',
         z.object({
@@ -85,6 +86,7 @@ export class GuidesRouter extends HonoRouter {
     this.router.delete(
       '/:guideId',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'param',
         z.object({
@@ -105,6 +107,7 @@ export class GuidesRouter extends HonoRouter {
     this.router.post(
       '/reorder',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'json',
         z.object({
@@ -125,6 +128,7 @@ export class GuidesRouter extends HonoRouter {
     this.router.patch(
       '/:guideId/title',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'param',
         z.object({
@@ -151,6 +155,7 @@ export class GuidesRouter extends HonoRouter {
     this.router.patch(
       '/:guideId/content',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'param',
         z.object({

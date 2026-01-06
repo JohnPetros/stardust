@@ -9,6 +9,7 @@ export interface AuthService {
   fetchAccount(): Promise<RestResponse<AccountDto>>
   fetchSocialAccount(): Promise<RestResponse<AccountDto>>
   signIn(email: Email, password: Password): Promise<RestResponse<SessionDto>>
+  signInGodAccount(email: Email, password: Password): Promise<RestResponse<SessionDto>>
   signUp(email: Email, password: Password): Promise<RestResponse<AccountDto>>
   signInWithGoogleAccount(returnUrl: Text): Promise<RestResponse<{ signInUrl: string }>>
   signInWithGithubAccount(returnUrl: Text): Promise<RestResponse<{ signInUrl: string }>>

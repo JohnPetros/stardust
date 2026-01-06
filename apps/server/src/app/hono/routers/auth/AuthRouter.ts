@@ -17,6 +17,7 @@ import {
   SignInWithGoogleAccountController,
   SignOutController,
   SignUpController,
+  SignInGodAccountController,
   FetchSessionController,
   ConfirmEmailController,
   ResendSignUpEmailController,
@@ -51,6 +52,7 @@ export class AuthRouter extends HonoRouter {
   static readonly ROUTE_PREFIX = ROUTE_PREFIX
   static readonly ROUTES = {
     signIn: '/sign-in',
+    signInGodAccount: '/sign-in/god',
     signUp: '/sign-up',
     signOut: '/sign-out',
     signInWithGoogle: '/sign-in/google',
@@ -84,6 +86,26 @@ export class AuthRouter extends HonoRouter {
         const http = new HonoHttp(context)
         const service = new SupabaseAuthService(http.getSupabase())
         const controller = new SignInController(service)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerSignInGodAccountRoute(): void {
+    this.router.post(
+      AuthRouter.ROUTES.signInGodAccount,
+      this.validationMiddleware.validate(
+        'json',
+        z.object({
+          email: emailSchema,
+          password: passwordSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const service = new SupabaseAuthService(http.getSupabase())
+        const controller = new SignInGodAccountController(service)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -413,6 +435,7 @@ export class AuthRouter extends HonoRouter {
     this.registerSignInRoute()
     this.registerSignUpRoute()
     this.registerSignOutRoute()
+    this.registerSignInGodAccountRoute()
     this.registerSignInWithGoogleRoute()
     this.registerSignInWithGithubRoute()
     this.registerResendSignUpEmailRoute()
