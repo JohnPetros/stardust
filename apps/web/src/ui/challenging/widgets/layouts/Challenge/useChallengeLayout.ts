@@ -13,7 +13,6 @@ export function useChallengeLayout(
 ) {
   const { getChallengeSlice } = useChallengeStore()
   const { challenge } = getChallengeSlice()
-  console.log('useChallengeLayout', challenge)
   const { setCookie } = useCookieActions()
   const [isTransitionPageVisible, setIsTransitionPageVisible] = useState(true)
   const isChallengeCompleted = challenge?.isCompleted.isFalse ?? false

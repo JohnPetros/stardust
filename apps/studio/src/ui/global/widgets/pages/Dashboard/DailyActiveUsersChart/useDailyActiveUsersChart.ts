@@ -12,7 +12,6 @@ export function useDailyActiveUsersChart(profileService: ProfileService) {
   const [days, setDays] = useState<Integer>(DEFAULT_DAYS)
 
   function handleDaysSelectChange(value: number) {
-    console.log('value', value)
     if (!value) {
       setDays(DEFAULT_DAYS)
       return

@@ -121,8 +121,6 @@ export function useChallengePage({
     }
   }, [])
 
-  console.log('challenge page', challenge)
-
   return {
     challengeTitle: challenge?.title.value ?? null,
     panelsLayout,
