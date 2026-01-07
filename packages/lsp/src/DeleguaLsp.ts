@@ -68,7 +68,7 @@ export class DeleguaLsp implements LspProvider {
       resultadoRetornado = JSON.parse(resultadoRetornado)
     }
 
-    resultadoFinal = resultadoRetornado.valorRetornado.valor
+    resultadoFinal = resultadoRetornado?.valorRetornado?.valor
 
     if (typeof resultadoFinal === 'object' && resultadoFinal !== null && 'valor' in resultadoFinal) {
       resultadoFinal = resultadoFinal.valor
