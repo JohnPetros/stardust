@@ -39,45 +39,45 @@ describe('Code strucutre', () => {
     expect(code.value).toBe(newValue)
   })
 
-  it('should add inputs to value', () => {
+  it('should add inputs to value', async () => {
     const lspProviderMock = mock<LspProvider>()
     const codeWithInputs = 'fake code with inputs'
-    lspProviderMock.addInputs.mockReturnValue(codeWithInputs)
+    lspProviderMock.addInputs.mockResolvedValue(codeWithInputs)
     const codeValue = 'fake code value'
     const inputs: any[] = []
 
     let code = Code.create(lspProviderMock, codeValue)
-    code = code.addInputs(inputs)
+    code = await code.addInputs(inputs)
 
     expect(lspProviderMock.addInputs).toHaveBeenCalledTimes(1)
     expect(lspProviderMock.addInputs).toHaveBeenCalledWith(inputs, codeValue)
     expect(code.value).toBe(codeWithInputs)
   })
 
-  it('should format value translating it for the code runner', () => {
+  it('should format value translating it for the code runner', async () => {
     const lspProviderMock = mock<LspProvider>()
     const translatedCode = 'fake translated code'
-    lspProviderMock.translateToLsp.mockReturnValue(translatedCode)
+    lspProviderMock.translateToLsp.mockResolvedValue(translatedCode)
     const codeValue = 'fake code value'
     const codeToFormat = 'fake code to format'
 
     let code = Code.create(lspProviderMock, codeValue)
-    code = code.format(codeToFormat)
+    code = await code.format(codeToFormat)
 
     expect(lspProviderMock.translateToLsp).toHaveBeenCalledTimes(1)
     expect(lspProviderMock.translateToLsp).toHaveBeenCalledWith(codeToFormat)
     expect(code.value).toBe(translatedCode)
   })
 
-  it('should add a function call to the value', () => {
+  it('should add a function call to the value', async () => {
     const lspProviderMock = mock<LspProvider>()
     const codeWithFunctionCall = 'fake code with function call'
-    lspProviderMock.addFunctionCall.mockReturnValue(codeWithFunctionCall)
+    lspProviderMock.addFunctionCall.mockResolvedValue(codeWithFunctionCall)
     const codeValue = 'fake code value'
     const functionParams: unknown[] = []
 
     let code = Code.create(lspProviderMock, codeValue)
-    code = code.addFunctionCall(functionParams)
+    code = await code.addFunctionCall(functionParams)
 
     expect(lspProviderMock.addFunctionCall).toHaveBeenCalledTimes(1)
     expect(lspProviderMock.addFunctionCall).toHaveBeenCalledWith(
