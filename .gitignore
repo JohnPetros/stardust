@@ -18,6 +18,9 @@ issue.md
 .next
 /out/
 
+# netlify
+.netlify
+
 # React router
 .react-router
 
