@@ -5,7 +5,7 @@
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev --port 8000",
-    "start": "react-router-serve ./build/server/index.js",
+    "start": "serve -s ./build/client/index.html",
     "check-types": "react-router typegen && tsc"
   },
   "dependencies": {
