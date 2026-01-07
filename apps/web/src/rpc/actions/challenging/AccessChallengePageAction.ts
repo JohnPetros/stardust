@@ -7,12 +7,10 @@ import { Star } from '@stardust/core/space/entities'
 import { User } from '@stardust/core/global/entities'
 import { Slug, type Id } from '@stardust/core/global/structures'
 import { ChallengeVote } from '@stardust/core/challenging/structures'
-import type { NotificationService } from '@stardust/core/notification/interfaces'
 
 type Dependencies = {
   challengingService: ChallengingService
   spaceService: SpaceService
-  notificationService: NotificationService
   isAuthenticated: boolean
 }
 
@@ -28,15 +26,12 @@ type Response = {
 export const AccessChallengePageAction = ({
   challengingService,
   spaceService,
-  notificationService,
   isAuthenticated,
 }: Dependencies): Action<Request, Response> => {
   async function fetchChallenge(challengeSlug: string) {
     const response = await challengingService.fetchChallengeBySlug(
       Slug.create(challengeSlug),
     )
-    console.log('fetchChallenge', response)
-    await notificationService.sendErrorNotification('web', JSON.stringify(response))
     if (response.isFailure) response.throwError()
     return Challenge.create(response.body)
   }

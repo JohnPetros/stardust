@@ -6,7 +6,7 @@ import { actionClient } from './clients/actionClient'
 import { authActionClient } from './clients/authActionClient'
 import { NextCall } from '../next/NextCall'
 
-import { ChallengingService, NotificationService, SpaceService } from '@/rest/services'
+import { ChallengingService, SpaceService } from '@/rest/services'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import {
   AccessChallengePageAction,
@@ -26,11 +26,9 @@ export const accessAuthenticatedChallengePage = authActionClient
     const restClient = await NextServerRestClient({ isCacheEnabled: false })
     const challengingService = ChallengingService(restClient)
     const spaceService = SpaceService(restClient)
-    const notificationService = NotificationService(restClient)
     const action = AccessChallengePageAction({
       isAuthenticated: true,
       challengingService,
-      notificationService,
       spaceService,
     })
     return action.handle(call)
@@ -45,10 +43,8 @@ export const accessChallengePage = actionClient
     const restClient = await NextServerRestClient({ isCacheEnabled: false })
     const challengingService = ChallengingService(restClient)
     const spaceService = SpaceService(restClient)
-    const notificationService = NotificationService(restClient)
     const action = AccessChallengePageAction({
       isAuthenticated: false,
-      notificationService,
       challengingService,
       spaceService,
     })
