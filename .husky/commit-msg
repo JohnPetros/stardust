@@ -1,1 +1,1 @@
-echo "Commit-msg executed"
+npx --no-install commitlint --edit ${1}
