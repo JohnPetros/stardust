@@ -10,11 +10,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import type { Route } from './+types/root'
 
-import '@/ui/global/styles/global.css'
+import '../ui/global/styles/global.css'
+import globalStyles from '../ui/global/styles/global.css?url'
 import { Toaster } from 'sonner'
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+  { rel: 'stylesheet', href: globalStyles },
   {
     rel: 'preconnect',
     href: 'https://fonts.gstatic.com',
@@ -33,7 +35,7 @@ export const links: Route.LinksFunction = () => [
 
 const queryClient = new QueryClient()
 
-export const Root = ({ children }: { children: React.ReactNode }) => {
+export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang='pt-BR'>
       <head>
