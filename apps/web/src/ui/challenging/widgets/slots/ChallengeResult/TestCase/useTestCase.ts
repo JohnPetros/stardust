@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { useLsp } from '@/ui/global/hooks/useLsp'
+import type { LspProvider } from '@stardust/core/global/interfaces'
 
 type Params = {
   isLocked: boolean
@@ -8,6 +8,7 @@ type Params = {
   inputs: unknown[]
   userOutput: unknown | undefined
   expectedOutput: unknown
+  lspProvider: LspProvider
 }
 
 export function useTestCase({
@@ -16,12 +17,15 @@ export function useTestCase({
   inputs,
   userOutput,
   expectedOutput,
+  lspProvider,
 }: Params) {
   const [isOpen, setIsOpen] = useState(false)
-  const { lspProvider } = useLsp()
+  const [translatedInputs, setTranslatedInputs] = useState('sem entrada')
+  const [translatedUserOutput, setTranslatedUserOutput] = useState('')
+  const [translatedExpectedOutput, setTranslatedExpectedOutput] = useState('')
 
   function handleButtonClick() {
-    setIsOpen(!isOpen)
+    setIsOpen((prev) => !prev)
   }
 
   useEffect(() => {
@@ -30,24 +34,63 @@ export function useTestCase({
     }
   }, [userOutput, isLocked, isCorrect])
 
-  const translatedInputs = useMemo(() => {
-    if (inputs.length > 0) {
-      return inputs
-        .map((input) => {
-          return lspProvider.translateToLsp(input).replaceAll('\n', '')
-        })
-        .join(',')
+  useEffect(() => {
+    let cancelled = false
+
+    async function run() {
+      if (!inputs?.length) {
+        if (!cancelled) setTranslatedInputs('sem entrada')
+        return
+      }
+
+      const values = await Promise.all(
+        inputs.map(async (input) => {
+          const t = await lspProvider.translateToLsp(input)
+          return t.replaceAll('\n', '')
+        }),
+      )
+
+      if (!cancelled) setTranslatedInputs(values.join(','))
     }
-    return 'sem entrada'
-  }, [inputs, lspProvider.translateToLsp])
 
-  const translatedUserOutput = useMemo(() => {
-    return lspProvider.translateToLsp(userOutput)
-  }, [userOutput, lspProvider.translateToLsp])
+    run()
+    return () => {
+      cancelled = true
+    }
+  }, [inputs, lspProvider])
 
-  const translatedExpectedOutput = useMemo(() => {
-    return lspProvider.translateToLsp(expectedOutput).replaceAll('\n', '')
-  }, [expectedOutput, lspProvider.translateToLsp])
+  useEffect(() => {
+    let cancelled = false
+
+    async function run() {
+      if (userOutput === undefined) {
+        if (!cancelled) setTranslatedUserOutput('')
+        return
+      }
+
+      const translation = await lspProvider.translateToLsp(userOutput)
+      if (!cancelled) setTranslatedUserOutput(translation.replaceAll('\n', ''))
+    }
+
+    run()
+    return () => {
+      cancelled = true
+    }
+  }, [userOutput, lspProvider])
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function run() {
+      const translation = await lspProvider.translateToLsp(expectedOutput)
+      if (!cancelled) setTranslatedExpectedOutput(translation.replaceAll('\n', ''))
+    }
+
+    run()
+    return () => {
+      cancelled = true
+    }
+  }, [expectedOutput, lspProvider])
 
   return {
     isOpen,
