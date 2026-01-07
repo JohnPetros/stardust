@@ -12,7 +12,6 @@ type Schema = {
 
 export class FetchChatsController implements Controller<Schema> {
   constructor(private readonly repository: ChatsRepository) {}
-
   async handle(http: Http<Schema>) {
     const accountId = await http.getAccountId()
     const { search, page, itemsPerPage } = http.getQueryParams()
