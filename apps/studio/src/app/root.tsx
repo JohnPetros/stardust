@@ -10,7 +10,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import type { Route } from './+types/root'
 
-import '../ui/global/styles/global.css'
 import globalStyles from '../ui/global/styles/global.css?url'
 import { Toaster } from 'sonner'
 
