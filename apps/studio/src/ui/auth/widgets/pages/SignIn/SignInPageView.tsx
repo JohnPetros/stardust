@@ -10,7 +10,7 @@ export const SignInPageView = () => {
             <Icon name='rocket' className='text-green-400' />
           </div>
           <img src='/images/logo.svg' alt='logo' className='w-32 h-auto' />
-          <span className='text-zinc-300 font-medium'>Studio Teste de deploy</span>
+          <span className='text-zinc-300 font-medium'>Studio</span>
         </div>
         <SignInForm />
       </div>
