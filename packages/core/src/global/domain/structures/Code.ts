@@ -24,16 +24,16 @@ export class Code {
     return await this.lsp.run(this.value)
   }
 
-  format(codeValue: string) {
-    return this.changeValue(this.lsp.translateToLsp(codeValue))
+  async format(codeValue: string) {
+    return this.changeValue(await this.lsp.translateToLsp(codeValue))
   }
 
-  addInputs(inputs: CodeInput[]) {
-    return this.changeValue(this.lsp.addInputs(inputs, this.value))
+  async addInputs(inputs: CodeInput[]) {
+    return this.changeValue(await this.lsp.addInputs(inputs, this.value))
   }
 
-  addFunctionCall(functionParams: unknown[]) {
-    return this.changeValue(this.lsp.addFunctionCall(functionParams, this.value))
+  async addFunctionCall(functionParams: unknown[]) {
+    return this.changeValue(await this.lsp.addFunctionCall(functionParams, this.value))
   }
 
   changeValue(value: string) {

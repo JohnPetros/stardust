@@ -119,7 +119,7 @@ export function useCodeEditor({
     monacoRef.current?.editor.setModelMarkers(editorModel, LANGUAGE, monacoErrors)
   }
 
-  function handleChange(value: string | undefined) {
+  async function handleChange(value: string | undefined) {
     if (!value) return
 
     if (onChange) {
@@ -129,8 +129,8 @@ export function useCodeEditor({
 
     if (!isCodeCheckerEnabled) return
 
-    setTimeout(() => {
-      const syntaxAnalysisResponse = lspProvider.performSyntaxAnalysis(value)
+    setTimeout(async () => {
+      const syntaxAnalysisResponse = await lspProvider.performSyntaxAnalysis(value)
       handleSyntaxAnalysisErrors(syntaxAnalysisResponse)
     }, 100)
   }

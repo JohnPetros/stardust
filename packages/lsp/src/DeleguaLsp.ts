@@ -54,20 +54,27 @@ export class DeleguaLsp implements LspProvider {
       return this.trateErro(resultadoInterpretador.erros[0])
     }
 
-    // console.log(resultadoInterpretador.resultado)
+    
+    const resultadoInterpretadorFiltrado = resultadoInterpretador.resultado.filter(Boolean)
+    
+    if (resultadoInterpretadorFiltrado.length === 0) {
+      return new LspResponse({ result: undefined })
+    }
 
-    let resultado = null
+    let resultadoFinal = null
+    let resultadoRetornado = resultadoInterpretadorFiltrado?.at(-1)
+    
+    if (typeof resultadoRetornado === 'string') {
+      resultadoRetornado = JSON.parse(resultadoRetornado)
+    }
 
-    // if (resultadoInterpretador?.resultado?.at(-1)) {
-    //   resultado = resultadoInterpretador?.resultado.at(-1)?.valorRetornado.valor
+    resultadoFinal = resultadoRetornado?.valorRetornado?.valor
 
-    //   if (typeof resultado === 'object' && resultado !== null && 'valor' in resultado) {
-    //     resultado = resultado.valor
-    //   }
-    // }
+    if (typeof resultadoFinal === 'object' && resultadoFinal !== null && 'valor' in resultadoFinal) {
+      resultadoFinal = resultadoFinal.valor
+    }
 
-
-    return new LspResponse({ result: '', outputs })
+    return new LspResponse({ result: resultadoFinal, outputs })
   }
 
   getInput(code: string) {
@@ -77,25 +84,33 @@ export class DeleguaLsp implements LspProvider {
     return entrada ? entrada[0] : null
   }
 
-  addInputs(codeInputs: CodeInput[], codeValue: string) {
+  async addInputs(codeInputs: CodeInput[], codeValue: string) {
     let codigo = codeValue
 
     for (const input of codeInputs) {
-      const entrada = this.translateToLsp(input)
+      const entrada = await this.translateToLsp(input)
       codigo = codigo.replace(DELEGUA_REGEX.conteudoDeFuncaoLeia, entrada)
     }
 
     return codigo
   }
 
-  addFunctionCall(functionParams: unknown[], code: string) {
-    const paramsValues = functionParams.map((param) => {
-      return Array.isArray(param)
-        ? `[${param.map((value) => this.translateToLsp(value)).join(',')}]`
-        : this.translateToLsp(param)
-    })
+  async addFunctionCall(functionParams: unknown[], code: string) {
+    const paramsValues: string[] = await Promise.all(
+      functionParams.map(async (param) => {
+        if (Array.isArray(param)) {
+          const values = await Promise.all(
+            param.map((value) => this.translateToLsp(value))
+          )
+          return `[${values.join(',')}]`
+        }
+        return this.translateToLsp(param)
+      })
+    )
+  
     const params = `(${paramsValues.join(',')})`
     const functionName = this.getFunctionName(code)
+  
     return code.concat(`\n${functionName}${params};`)
   }
 
@@ -131,7 +146,7 @@ export class DeleguaLsp implements LspProvider {
     return comandosLeia?.length ?? 0
   }
 
-  translateToLsp(jsCode: unknown) {
+  async translateToLsp(jsCode: unknown) {
     const tipo = this.obtenhaTipo(jsCode)
 
     if (tipo === 'nulo') {
@@ -142,30 +157,27 @@ export class DeleguaLsp implements LspProvider {
       ? JSON.stringify(jsCode)
       : String(jsCode)
 
-    return codigo
-
-    // try {
-    //   const lexador = new LexadorJavaScript()
-    //   const avaliadorSintatico = new AvaliadorSintaticoJavaScript()
-    //   const resultadoLexico = lexador.mapear(codigo.split('\n'), -1)
-    //   const resultadoSintatico = avaliadorSintatico.analisar(resultadoLexico, -1)
-    //   const tradutor = new TradutorReversoJavaScript()
-    //   const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
-    //   return traducao.trim().replace(' \n', '').replaceAll('\\"', '')
-    // } catch {
-    //   return codigo
-    // }
+    try {
+      const lexador = new LexadorJavaScript()
+      const avaliadorSintatico = new AvaliadorSintaticoJavaScript()
+      const resultadoLexico = lexador.mapear(codigo.split('\n'), -1)
+      const resultadoSintatico = await avaliadorSintatico.analisar(resultadoLexico, -1)
+      const tradutor = new TradutorReversoJavaScript()
+      const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
+      return traducao.trim().replace(' \n', '').replaceAll('\\"', '')
+    } catch {
+      return codigo
+    }
   }
 
-  translateToJs(codeRunnerCode: string) {
-    return ''
-    // const lexador = new Lexador()
-    // const avaliadorSintatico = new AvaliadorSintatico()
-    // const resultadoLexico = lexador.mapear(codeRunnerCode.split('\n'), -1)
-    // const resultadoSintatico = avaliadorSintatico.analisar(resultadoLexico, -1)
-    // const tradutor = new TradutorJavaScript()
-    // const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
-    // return traducao.trim()
+  async translateToJs(codeRunnerCode: string) {
+    const lexador = new Lexador()
+    const avaliadorSintatico = new AvaliadorSintatico()
+    const resultadoLexico = lexador.mapear(codeRunnerCode.split('\n'), -1)
+    const resultadoSintatico = await avaliadorSintatico.analisar(resultadoLexico, -1)
+    const tradutor = new TradutorJavaScript()
+    const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
+    return traducao.trim()
   }
 
   private obtenhaTipo(valor: unknown) {
@@ -215,32 +227,38 @@ export class DeleguaLsp implements LspProvider {
     return new LspResponse({ error })
   }
 
-  performSyntaxAnalysis(code: string): LspResponse {
-    // const retornoLexador = this.lexador.mapear(code.split('\n'), -1)
-    // const retornoAvaliadorSintatico = this.avaliadorSintatico.analisar(retornoLexador, -1)
-    // if (retornoAvaliadorSintatico.erros.length > 0) {
-    //   const errors = retornoAvaliadorSintatico.erros.map(
-    //     (erro) => new LspError(erro.message, erro.linha ?? 0),
-    //   )
-    //   return new LspResponse({ errors })
-    // }
+  async performSyntaxAnalysis(code: string): Promise<LspResponse> {
+    const retornoLexador = await this.lexador.mapear(code.split('\n'), -1)
+    const retornoAvaliadorSintatico = await this.avaliadorSintatico.analisar(
+      retornoLexador,
+      -1,
+    )
+    if (retornoAvaliadorSintatico.erros.length > 0) {
+      const errors = retornoAvaliadorSintatico.erros.map(
+        (erro) => new LspError(erro.message, erro.linha ?? 0),
+      )
+      return new LspResponse({ errors })
+    }
 
     return new LspResponse({})
   }
 
-  performSemanticAnalysis(code: string): LspResponse {
-    // const retornoLexador = this.lexador.mapear(code.split('\n'), -1)
-    // const retornoAvaliadorSintatico = this.avaliadorSintatico.analisar(retornoLexador, -1)
-    // const analisadorSemantico = this.analisadorSemantico.analisar(
-    //   retornoAvaliadorSintatico.declaracoes,
-    // )
-    // const errosAnaliseSemantica = analisadorSemantico.diagnosticos
-    // if (errosAnaliseSemantica.length > 0) {
-    //   const errors = errosAnaliseSemantica.map(
-    //     (erro) => new LspError(String(erro.mensagem), erro.linha ?? 0),
-    //   )
-    //   return new LspResponse({ errors })
-    // }
+  async performSemanticAnalysis(code: string): Promise<LspResponse> {
+    const retornoLexador = this.lexador.mapear(code.split('\n'), -1)
+    const retornoAvaliadorSintatico = await this.avaliadorSintatico.analisar(
+      retornoLexador,
+      -1,
+    )
+    const analisadorSemantico = await this.analisadorSemantico.analisar(
+      retornoAvaliadorSintatico.declaracoes,
+    )
+    const errosAnaliseSemantica = analisadorSemantico.diagnosticos
+    if (errosAnaliseSemantica.length > 0) {
+      const errors = errosAnaliseSemantica.map(
+        (erro) => new LspError(String(erro.mensagem), erro.linha ?? 0),
+      )
+      return new LspResponse({ errors })
+    }
     return new LspResponse({})
   }
 }

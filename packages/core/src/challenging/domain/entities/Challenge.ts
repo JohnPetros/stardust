@@ -49,21 +49,21 @@ export class Challenge extends Entity<ChallengeProps> {
     return new Challenge(ChallengeFactory.produce(dto), dto?.id)
   }
 
-  private formatCode(code: Code, testCase: TestCase) {
+  private async formatCode(code: Code, testCase: TestCase) {
     if (code.hasFunction.isTrue) {
-      return code.addFunctionCall(testCase.inputs)
+      return await code.addFunctionCall(testCase.inputs)
     }
 
     if (code.inputsCount !== testCase.inputs.length) {
       throw new InsufficientInputsError()
     }
 
-    return code.addInputs(testCase.inputs)
+    return await code.addInputs(testCase.inputs)
   }
 
-  private verifyResult(result: unknown, testCase: TestCase, code: Code) {
-    const translatedResult = code.translateToLsp(result)
-    const translatedExpectedOutput = code.translateToLsp(testCase.expectedOutput)
+  private async verifyResult(result: unknown, testCase: TestCase, code: Code) {
+    const translatedResult = await code.translateToLsp(result)
+    const translatedExpectedOutput = await code.translateToLsp(testCase.expectedOutput)
     const isCorrect = translatedResult === translatedExpectedOutput
 
     if (!isCorrect)
@@ -77,17 +77,21 @@ export class Challenge extends Entity<ChallengeProps> {
     this.props.userOutputs = this.props.userOutputs.becomeEmpty()
 
     for (const testCase of this.testCases) {
-      const formattedCode = this.formatCode(code, testCase)
+      const formattedCode = await this.formatCode(code, testCase)
       const response = await formattedCode.run()
       if (response.isFailure) response.throwError()
 
       let result = ''
 
-      if (code.hasFunction.isTrue) result = response.result
-      else if (response.outputs[0]) result = code.format(response.outputs[0]).value
+      if (code.hasFunction.isTrue) {
+        result = response.result
+      } else if (response.outputs[0]) {
+        const formattedCode = await code.format(response.outputs[0])
+        result = formattedCode.value
+      }
 
       this.props.results = this.results.add(
-        this.verifyResult(result, testCase, formattedCode),
+        await this.verifyResult(result, testCase, formattedCode),
       )
       this.props.userOutputs = this.userOutputs.add(result)
     }

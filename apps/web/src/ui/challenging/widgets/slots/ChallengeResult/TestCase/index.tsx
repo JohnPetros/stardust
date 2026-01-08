@@ -1,5 +1,6 @@
 'use client'
 
+import { useLsp } from '@/ui/global/hooks/useLsp'
 import { useTestCase } from './useTestCase'
 import { TestCaseView } from './TestCaseView'
 
@@ -20,6 +21,7 @@ export const TestCase = ({
   isCorrect,
   userOutput,
 }: Props) => {
+  const { lspProvider } = useLsp()
   const {
     isOpen,
     translatedInputs,
@@ -32,6 +34,7 @@ export const TestCase = ({
     isCorrect,
     userOutput,
     expectedOutput,
+    lspProvider,
   })
 
   return (
