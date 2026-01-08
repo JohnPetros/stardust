@@ -1,9 +1,9 @@
 name: Studio app CD to Vercel
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - ffjgofngofoiu
 
 permissions:
   id-token: write
