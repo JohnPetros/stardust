@@ -27,63 +27,27 @@ export function useChallengesPage() {
     key: 'challenge-categories',
     fetcher: () => challengingService.fetchAllChallengeCategories(),
   })
-  const [page, setPage] = useState(1)
-  const itemsPerPage = 2
 
   const { data: challengesData, isLoading } = useCache({
     key: 'challenges-page-list',
-    dependencies: [debouncedSearch, difficulty, selectedCategories, page],
+    dependencies: [debouncedSearch, difficulty, selectedCategories],
     fetcher: async () =>
       await challengingService.fetchChallengesList({
-        page: OrdinalNumber.create(page),
-        itemsPerPage: OrdinalNumber.create(itemsPerPage),
+        page: OrdinalNumber.create(1),
+        itemsPerPage: OrdinalNumber.create(5),
         categoriesIds: IdsList.create(selectedCategories),
         completionStatus: ChallengeCompletionStatus.create('any'),
         difficulty: ChallengeDifficulty.create(difficulty),
         upvotesCountOrder: ListingOrder.create('any'),
         postingOrder: ListingOrder.create('desc'),
-        shouldIncludeOnlyAuthorChallenges: Logical.create(false),
-        shouldIncludeStarChallenges: Logical.create(false),
         title: Text.create(debouncedSearch),
+        shouldIncludeStarChallenges: Logical.create(false),
+        shouldIncludeOnlyAuthorChallenges: Logical.create(false),
         userId: null,
       }),
   })
 
   const categories = categoriesData ?? []
-  const totalItemsCount = challengesData?.totalItemsCount ?? 0
-  const totalPages = Math.ceil(totalItemsCount / itemsPerPage)
-
-  const handleNextPage = () => {
-    if (page < totalPages) setPage((prev) => prev + 1)
-  }
-
-  const handlePrevPage = () => {
-    if (page > 1) setPage((prev) => prev - 1)
-  }
-
-  const handleSearchChange = (value: string) => {
-    setSearch(value)
-    setPage(1)
-  }
-
-  const handleDifficultyChange = (value: string) => {
-    setDifficulty(value)
-    setPage(1)
-  }
-
-  const handleCategoriesChange = (value: string[]) => {
-    setSelectedCategories(value)
-    setPage(1)
-  }
-
-  console.log({
-    page,
-    totalPages,
-    totalItemsCount,
-    itemsPerPage,
-    handleNextPage,
-    handlePrevPage,
-  })
 
   return {
     challenges: challengesData?.items ?? [],
@@ -91,19 +55,11 @@ export function useChallengesPage() {
     categories,
     filters: {
       search,
-      setSearch: handleSearchChange,
+      setSearch,
       difficulty,
-      setDifficulty: handleDifficultyChange,
+      setDifficulty,
       selectedCategories,
-      setSelectedCategories: handleCategoriesChange,
-    },
-    pagination: {
-      page,
-      totalPages,
-      totalItemsCount,
-      itemsPerPage,
-      handleNextPage,
-      handlePrevPage,
+      setSelectedCategories,
     },
   }
 }

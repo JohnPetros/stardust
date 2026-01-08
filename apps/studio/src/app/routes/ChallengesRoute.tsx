@@ -1,4 +1,4 @@
-import { ChallengesPage } from '@/ui/global/widgets/pages/Challenges'
+import { ChallengesPage } from '@/ui/challenging/Challenges'
 
 const ChallengesRoute = () => {
   return <ChallengesPage />

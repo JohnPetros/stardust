@@ -19,12 +19,11 @@ import {
 import { Button } from '@/ui/shadcn/components/button'
 import { Badge } from '@/ui/shadcn/components/badge'
 import { ChallengesTableView } from '@/ui/global/widgets/components/ChallengesTable'
-import { Pagination } from '@/ui/global/widgets/components/Pagination'
 
 import { useChallengesPage } from './useChallengesPage'
 
 export const ChallengesPageView = () => {
-  const { challenges, isLoading, categories, filters, pagination } = useChallengesPage()
+  const { challenges, isLoading, categories, filters } = useChallengesPage()
 
   const toggleCategory = (categoryId: string) => {
     if (filters.selectedCategories.includes(categoryId)) {
@@ -102,18 +101,9 @@ export const ChallengesPageView = () => {
         </DropdownMenu>
       </div>
 
-      <div className='flex-1 overflow-auto border rounded-md'>
+      <div className='flex-1'>
         <ChallengesTableView challenges={challenges} isLoading={isLoading} />
       </div>
-
-      <Pagination
-        page={pagination.page}
-        totalPages={pagination.totalPages}
-        totalItemsCount={pagination.totalItemsCount}
-        itemsPerPage={pagination.itemsPerPage}
-        onNextPage={pagination.handleNextPage}
-        onPrevPage={pagination.handlePrevPage}
-      />
     </div>
   )
 }
