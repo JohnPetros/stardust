@@ -29,7 +29,7 @@ Implementar a página de desafios no sistema para visualização.
 - Coloque filtros:
   - Filtro de search através de um text input
   - Select para filtro de dificuldade
-  - Filtro por tags, exbida esse filtro como popover
+  - Filtro por tags, exiba esse filtro como popover
   - Não coloque botão para fazer o filtro, deve ser automático
 
 ## Fluxo de usuário
