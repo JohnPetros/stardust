@@ -4,10 +4,6 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - "apps/studio/**"
-      - "packages/core/**"
-      - "packages/validation/**"
 
 permissions:
   id-token: write
