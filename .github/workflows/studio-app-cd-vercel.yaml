@@ -39,7 +39,7 @@ jobs:
           env-slug: "prod"
           project-slug: "stardust-studio-app"
           export-type: "file"
-          file-output-path: "./apps/studio/.env"
+          file-output-path: "./.env"
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
