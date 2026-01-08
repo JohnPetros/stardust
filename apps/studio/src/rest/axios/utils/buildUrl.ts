@@ -11,7 +11,6 @@ export function buildUrl(
         value.forEach((v) => {
           if (v !== undefined && v !== null) {
             url.searchParams.append(key, v)
-            url.searchParams.append(key, v)
           }
         })
       }
