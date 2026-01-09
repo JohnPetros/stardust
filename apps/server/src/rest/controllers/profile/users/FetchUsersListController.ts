@@ -9,6 +9,11 @@ type Schema = {
     search: string
     page: number
     itemsPerPage: number
+    levelSorter: string
+    weeklyXpSorter: string
+    unlockedStarCountSorter: string
+    unlockedAchievementCountSorter: string
+    completedChallengeCountSorter: string
   }
 }
 
