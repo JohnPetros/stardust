@@ -6,11 +6,12 @@
 GET {{URL}}
 ?page=1
 &itemsPerPage=10
-&levelSorter=ascending
-&weeklyXpSorter=ascending
-&unlockedStarCountSorter=ascending
-&unlockedAchievementCountSorter=ascending
-&completedChallengeCountSorter=ascending
+&levelSorter=none
+&weeklyXpSorter=none
+&unlockedStarCountSorter=none
+&unlockedAchievementCountSorter=descending
+&completedChallengeCountSorter=none
+&spaceCompletionStatus=not-completed
 Authorization: Bearer {{JWT}}
 
 ### Fetch user by id

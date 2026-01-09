@@ -5,6 +5,8 @@ import { ListUsersUseCase } from '../ListUsersUseCase'
 import { Text } from '#global/domain/structures/Text'
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 import { Sorter } from '#global/domain/structures/Sorter'
+import { SpaceCompletionStatus } from '#profile/domain/structures/SpaceCompletionStatus'
+import { InsigniaRole } from '#global/domain/structures/InsigniaRole'
 import { PaginationResponse } from '#global/responses/PaginationResponse'
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
 
@@ -32,6 +34,8 @@ describe('List Users Use Case', () => {
       unlockedStarCountSorter: Sorter.create('none'),
       unlockedAchievementCountSorter: Sorter.create('none'),
       completedChallengeCountSorter: Sorter.create('none'),
+      spaceCompletionStatus: SpaceCompletionStatus.create('all'),
+      insigniaRoles: [],
     }
 
     await useCase.execute({
@@ -43,6 +47,8 @@ describe('List Users Use Case', () => {
       unlockedStarCountSorter: 'none',
       unlockedAchievementCountSorter: 'none',
       completedChallengeCountSorter: 'none',
+      spaceCompletionStatus: 'all',
+      insigniaRoles: [],
     })
 
     expect(repository.findMany).toHaveBeenCalledWith(request)
@@ -63,6 +69,8 @@ describe('List Users Use Case', () => {
       unlockedStarCountSorter: Sorter.create('none'),
       unlockedAchievementCountSorter: Sorter.create('none'),
       completedChallengeCountSorter: Sorter.create('none'),
+      spaceCompletionStatus: SpaceCompletionStatus.create('all'),
+      insigniaRoles: [],
     }
 
     const response = await useCase.execute({
@@ -74,6 +82,8 @@ describe('List Users Use Case', () => {
       unlockedStarCountSorter: 'none',
       unlockedAchievementCountSorter: 'none',
       completedChallengeCountSorter: 'none',
+      spaceCompletionStatus: 'all',
+      insigniaRoles: [],
     })
 
     expect(response).toBeInstanceOf(PaginationResponse)
