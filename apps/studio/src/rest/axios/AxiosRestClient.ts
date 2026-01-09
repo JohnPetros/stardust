@@ -48,7 +48,7 @@ export const AxiosRestClient = (): RestClient => {
         return new RestResponse({
           body: response.data,
           statusCode: response.status,
-          headers: [],
+          headers,
         })
       } catch (error) {
         return await handleError<Body>(error)

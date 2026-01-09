@@ -80,16 +80,16 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       return await restClient.get('/challenging/solutions')
     },
 
+    async fetchAllChallenges(params) {
+      throw new Error('Not implemented')
+    },
+
     async fetchSolutionBySlug(solutionSlug: Slug) {
       return await restClient.get(`/challenging/solutions/${solutionSlug.value}`)
     },
 
     async fetchChallengeByStarId(starId: Id) {
       return await restClient.get(`/challenging/challenges/star/${starId.value}`)
-    },
-
-    async fetchChallengeBySolutionId(solutionId: Id) {
-      return await restClient.get(`/challenging/challenges/solution/${solutionId.value}`)
     },
 
     async postChallenge(challenge: Challenge) {
