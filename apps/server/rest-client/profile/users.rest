@@ -3,7 +3,14 @@
 @USER_SLUG = ctrl
 
 ### Fetch users list
-GET {{URL}}?page=1&itemsPerPage=10
+GET {{URL}}
+?page=1
+&itemsPerPage=10
+&levelSorter=ascending
+&weeklyXpSorter=ascending
+&unlockedStarCountSorter=ascending
+&unlockedAchievementCountSorter=ascending
+&completedChallengeCountSorter=ascending
 Authorization: Bearer {{JWT}}
 
 ### Fetch user by id
