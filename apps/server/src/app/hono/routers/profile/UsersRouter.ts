@@ -9,6 +9,7 @@ import {
   itemsPerPageSchema,
   nameSchema,
   pageSchema,
+  sorterSchema,
   stringSchema,
 } from '@stardust/validation/global/schemas'
 import { userSchema } from '@stardust/validation/profile/schemas'
@@ -395,6 +396,11 @@ export class UsersRouter extends HonoRouter {
           search: stringSchema.default(''),
           page: pageSchema,
           itemsPerPage: itemsPerPageSchema,
+          levelSorter: sorterSchema,
+          weeklyXpSorter: sorterSchema,
+          unlockedStarCountSorter: sorterSchema,
+          unlockedAchievementCountSorter: sorterSchema,
+          completedChallengeCountSorter: sorterSchema,
         }),
       ),
       async (context) => {
