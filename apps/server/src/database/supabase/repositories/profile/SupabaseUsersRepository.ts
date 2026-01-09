@@ -12,7 +12,8 @@ import {
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import type { User } from '@stardust/core/profile/entities'
 import type { Platform, Visit } from '@stardust/core/profile/structures'
-import type { FilteringParams, ManyItems } from '@stardust/core/global/types'
+import type { ManyItems } from '@stardust/core/global/types'
+import type { UsersListingParams } from '@stardust/core/profile/types'
 
 import type { SupabaseUser } from '../../types'
 import { SupabaseUserMapper } from '../../mappers/profile'
@@ -300,7 +301,7 @@ export class SupabaseUsersRepository
     return data.map(SupabaseUserMapper.toEntity)
   }
 
-  async findMany(params: FilteringParams): Promise<ManyItems<User>> {
+  async findMany(params: UsersListingParams): Promise<ManyItems<User>> {
     let query = this.supabase.from('users').select(
       `*,
       avatar:avatars(*), 
@@ -324,6 +325,36 @@ export class SupabaseUsersRepository
 
     if (params.search && params.search.value.length > 1) {
       query = query.ilike('name', `%${params.search.value}%`)
+    }
+
+    if (params.levelSorter.isAscending.isTrue) {
+      query = query.order('level', { ascending: true })
+    } else if (params.levelSorter.isDescending.isTrue) {
+      query = query.order('level', { ascending: false })
+    }
+
+    if (params.weeklyXpSorter.isAscending.isTrue) {
+      query = query.order('weekly_xp', { ascending: true })
+    } else if (params.weeklyXpSorter.isDescending.isTrue) {
+      query = query.order('weekly_xp', { ascending: false })
+    }
+
+    if (params.unlockedStarCountSorter.isAscending.isTrue) {
+      query = query.order('count_user_unlocked_stars', { ascending: true })
+    } else if (params.unlockedStarCountSorter.isDescending.isTrue) {
+      query = query.order('count_user_unlocked_stars', { ascending: false })
+    }
+
+    if (params.unlockedAchievementCountSorter.isAscending.isTrue) {
+      query = query.order('count_user_unlocked_achievements', { ascending: true })
+    } else if (params.unlockedAchievementCountSorter.isDescending.isTrue) {
+      query = query.order('count_user_unlocked_achievements', { ascending: false })
+    }
+
+    if (params.completedChallengeCountSorter.isAscending.isTrue) {
+      query = query.order('count_user_completed_challenges', { ascending: true })
+    } else if (params.completedChallengeCountSorter.isDescending.isTrue) {
+      query = query.order('count_user_completed_challenges', { ascending: false })
     }
 
     const range = this.calculateQueryRange(params.page.value, params.itemsPerPage.value)
