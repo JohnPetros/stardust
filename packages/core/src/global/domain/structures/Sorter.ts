@@ -4,7 +4,7 @@ import { Logical } from './Logical'
 type SorterValue = 'ascending' | 'descending' | 'none'
 
 export class Sorter {
-  private constructor(private readonly value: SorterValue) {}
+  private constructor(readonly value: SorterValue) {}
 
   static create(value?: string, name?: string) {
     if (!value) return new Sorter('none')
