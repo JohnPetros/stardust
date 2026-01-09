@@ -307,7 +307,7 @@ export class SupabaseUsersRepository
       avatar:avatars(*), 
       rocket:rockets(*), 
       tier:tiers(*),
-      insignias(role),
+      ${params.insigniaRoles.length ? 'insignias!inner(role)' : 'insignias(role)'},
       users_unlocked_stars(star_id),
       users_recently_unlocked_stars(star_id),
       users_unlocked_achievements(achievement_id),
@@ -355,6 +355,24 @@ export class SupabaseUsersRepository
       query = query.order('count_user_completed_challenges', { ascending: true })
     } else if (params.completedChallengeCountSorter.isDescending.isTrue) {
       query = query.order('count_user_completed_challenges', { ascending: false })
+    }
+
+    if (params.spaceCompletionStatus.isCompleted.isTrue) {
+      query = query.eq('verify_user_space_completion', true)
+    } else if (params.spaceCompletionStatus.isNotCompleted.isTrue) {
+      query = query.eq('verify_user_space_completion', false)
+    }
+
+    console.log(params.insigniaRoles)
+    if (params.insigniaRoles.length) {
+      const insigniaRoleValues = params.insigniaRoles.map((role) => role.value)
+      query = query.in('insignias.role', insigniaRoleValues)
+    }
+
+    if (params.creationPeriod) {
+      query = query
+        .gte('created_at', params.creationPeriod.startDate.toISOString())
+        .lte('created_at', params.creationPeriod.endDate.toISOString())
     }
 
     const range = this.calculateQueryRange(params.page.value, params.itemsPerPage.value)
