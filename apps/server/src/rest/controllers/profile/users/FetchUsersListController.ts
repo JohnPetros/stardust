@@ -14,6 +14,10 @@ type Schema = {
     unlockedStarCountSorter: string
     unlockedAchievementCountSorter: string
     completedChallengeCountSorter: string
+    spaceCompletionStatus: string
+    insigniaRoles: string[]
+    createdAtStartDate?: string
+    createdAtEndDate?: string
   }
 }
 
