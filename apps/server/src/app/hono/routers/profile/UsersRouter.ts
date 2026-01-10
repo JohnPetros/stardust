@@ -413,7 +413,6 @@ export class UsersRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const queryParams = http.getQueryParams()
         const repository = new SupabaseUsersRepository(http.getSupabase())
         const controller = new FetchUsersListController(repository)
         const response = await controller.handle(http)

@@ -1,11 +1,10 @@
 import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc' // Importe o plugin UTC
+import utc from 'dayjs/plugin/utc'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/pt-br'
 
 import type { DateFormat, Datetime } from '#global/interfaces/libs/Datetime'
 
-// Configuração de plugins
 dayjs.extend(utc)
 dayjs.extend(relativeTime)
 dayjs.locale('pt-br')
