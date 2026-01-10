@@ -69,7 +69,7 @@ export const ChallengesPageView = () => {
           <DropdownMenuTrigger asChild>
             <Button variant='outline' className='h-10 gap-2 border-dashed'>
               <Filter className='h-4 w-4' />
-              Tags
+              Categorias
               {filters.selectedCategories.length > 0 && (
                 <Badge variant='secondary' className='ml-1 h-5 rounded-sm px-1 text-xs'>
                   {filters.selectedCategories.length}
@@ -78,11 +78,11 @@ export const ChallengesPageView = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-[200px]'>
-            <DropdownMenuLabel>Filtrar por tags</DropdownMenuLabel>
+            <DropdownMenuLabel>Filtrar por categorias</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {categories.length === 0 ? (
               <div className='p-2 text-sm text-center text-muted-foreground'>
-                Nenhuma tag encontrada
+                Nenhuma categoria encontrada
               </div>
             ) : (
               categories.map((category) => {
@@ -111,6 +111,8 @@ export const ChallengesPageView = () => {
         itemsPerPage={pagination.itemsPerPage}
         onNextPage={pagination.handleNextPage}
         onPrevPage={pagination.handlePrevPage}
+        onPageChange={pagination.handlePageChange}
+        onItemsPerPageChange={pagination.handleItemsPerPageChange}
       />
     </div>
   )
