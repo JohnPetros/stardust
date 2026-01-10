@@ -19,6 +19,8 @@ export const RocketsTable = () => {
     handleOrderChange,
     handlePrevPage,
     handleNextPage,
+    handlePageChange,
+    handleItemsPerPageChange,
     handleCreateRocket,
     handleUpdateRocket,
     handleDeleteRocket,
@@ -38,6 +40,8 @@ export const RocketsTable = () => {
       onOrderChange={handleOrderChange}
       onPrevPage={handlePrevPage}
       onNextPage={handleNextPage}
+      onPageChange={handlePageChange}
+      onItemsPerPageChange={handleItemsPerPageChange}
       onCreateRocket={handleCreateRocket}
       onUpdateRocket={handleUpdateRocket}
       onDeleteRocket={handleDeleteRocket}
