@@ -1,4 +1,5 @@
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
+import type { Sorter } from '@stardust/core/global/structures'
 
 import {
   Table,
@@ -9,28 +10,34 @@ import {
   TableRow,
 } from '@/ui/shadcn/components/table'
 import { Badge } from '@/ui/shadcn/components/badge'
-import { Loading } from '@/ui/global/widgets/components/Loading'
+
 import { Datetime } from '@stardust/core/global/libs'
 import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
 import { Button } from '@/ui/shadcn/components/button'
 import { ExternalLinkIcon } from 'lucide-react'
 import { ENV } from '@/constants'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
+import { SortableColumn } from '@/ui/global/widgets/components/SortableColumn'
+import { UsersTableSkeleton } from './UsersTableSkeleton'
 
 type Props = {
   users: UserDto[]
   isLoading: boolean
+  sorters: {
+    level: Sorter
+    weeklyXp: Sorter
+    unlockedStarCount: Sorter
+    unlockedAchievementCount: Sorter
+    completedChallengeCount: Sorter
+  }
+  onSort: (column: string, sorter: Sorter) => void
 }
 
-export const UsersTableView = ({ users, isLoading }: Props) => {
+export const UsersTableView = ({ users, isLoading, sorters, onSort }: Props) => {
   const { openExternal } = useNavigationProvider()
 
   if (isLoading) {
-    return (
-      <div className='flex items-center justify-center h-[400px]'>
-        <Loading size={48} />
-      </div>
-    )
+    return <UsersTableSkeleton />
   }
 
   return (
@@ -38,11 +45,31 @@ export const UsersTableView = ({ users, isLoading }: Props) => {
       <TableHeader>
         <TableRow>
           <TableHead>Nome</TableHead>
-          <TableHead>Nível</TableHead>
-          <TableHead>XP Semanal</TableHead>
-          <TableHead>Estrelas Desbloqueadas</TableHead>
-          <TableHead>Conquistas Desbloqueadas</TableHead>
-          <TableHead>Desafios Completados</TableHead>
+          <SortableColumn
+            label='Nível'
+            sorter={sorters.level}
+            onSort={(sorter) => onSort('level', sorter)}
+          />
+          <SortableColumn
+            label='XP Semanal'
+            sorter={sorters.weeklyXp}
+            onSort={(sorter) => onSort('weeklyXp', sorter)}
+          />
+          <SortableColumn
+            label='Estrelas Desbloqueadas'
+            sorter={sorters.unlockedStarCount}
+            onSort={(sorter) => onSort('unlockedStarCount', sorter)}
+          />
+          <SortableColumn
+            label='Conquistas Desbloqueadas'
+            sorter={sorters.unlockedAchievementCount}
+            onSort={(sorter) => onSort('unlockedAchievementCount', sorter)}
+          />
+          <SortableColumn
+            label='Desafios Completados'
+            sorter={sorters.completedChallengeCount}
+            onSort={(sorter) => onSort('completedChallengeCount', sorter)}
+          />
           <TableHead>Status do Espaço</TableHead>
           <TableHead>Insígnias</TableHead>
           <TableHead>Data de Criação</TableHead>
