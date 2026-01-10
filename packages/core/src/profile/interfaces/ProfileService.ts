@@ -22,6 +22,7 @@ import type { WeekStatusValue } from '../domain/types'
 import type { AvatarAggregate, RocketAggregate } from '../domain/aggregates'
 import type { KpiDto } from '#global/domain/structures/dtos/KpiDto'
 import type { PaginationResponse } from '#global/responses/PaginationResponse'
+import type { UsersListingParams } from '../domain/types/UsersListingParams'
 
 type RewardingResponse = {
   newLevel: number | null
@@ -37,6 +38,14 @@ export interface ProfileService {
   fetchUserBySlug(userSlug: Slug): Promise<RestResponse<UserDto>>
   fetchAchievements(): Promise<RestResponse<AchievementDto[]>>
   fetchUnlockedAchievements(userId: Id): Promise<RestResponse<AchievementDto[]>>
+  fetchCreatedUsersKpi(): Promise<RestResponse<KpiDto>>
+  fetchUnlockedStarsKpi(): Promise<RestResponse<KpiDto>>
+  fetchCompletedChallengesKpi(): Promise<RestResponse<KpiDto>>
+  fetchDailyActiveUsersReport(days: Integer): Promise<RestResponse<DailyActiveUsersDto>>
+  fetchUsersList(
+    params: UsersListingParams,
+  ): Promise<RestResponse<PaginationResponse<UserDto>>>
+  fetchAllAchievements(): Promise<RestResponse<AchievementDto[]>>
   observeNewUnlockedAchievements(userId: Id): Promise<RestResponse<AchievementDto[]>>
   rescueAchievement(achievementId: Id, userId: Id): Promise<RestResponse<UserDto>>
   updateUser(user: User): Promise<RestResponse<UserDto>>
@@ -45,16 +54,7 @@ export interface ProfileService {
   ): Promise<RestResponse<{ userUpvotedCommentsIds: string[] }>>
   verifyUserNameInUse(userName: Name): Promise<RestResponse>
   verifyUserEmailInUse(userEmail: Email): Promise<RestResponse>
-  fetchCreatedUsersKpi(): Promise<RestResponse<KpiDto>>
-  fetchUnlockedStarsKpi(): Promise<RestResponse<KpiDto>>
-  fetchCompletedChallengesKpi(): Promise<RestResponse<KpiDto>>
-  fetchDailyActiveUsersReport(days: Integer): Promise<RestResponse<DailyActiveUsersDto>>
-  fetchUsersList(params: {
-    search: string
-    page: number
-    itemsPerPage: number
-  }): Promise<RestResponse<PaginationResponse<UserDto>>>
-  fetchAllAchievements(): Promise<RestResponse<AchievementDto[]>>
+
   createAchievement(achievement: Achievement): Promise<RestResponse<AchievementDto>>
   updateAchievement(achievement: Achievement): Promise<RestResponse<AchievementDto>>
   deleteAchievement(achievementId: Id): Promise<RestResponse>
