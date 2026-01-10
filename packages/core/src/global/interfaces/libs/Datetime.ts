@@ -1,6 +1,7 @@
 export type DateFormat =
   | 'Y-m-d H:i:s'
   | 'YYYY/MM/DD HH:mm:ss'
+  | 'YYYY-MM-DD'
   | 'DD MMMM [de] YYYY'
   | 'DD/MM/YYYY'
   | 'DD/MM/YYYY HH:mm:ss'
@@ -18,5 +19,6 @@ export interface Datetime {
   getYesterdayWeekdayIndex(): number
   getRelativeTime(): string
   date(): Date
+  addHours(hours: number): Date
   minusMonths(months: number): Date
 }
