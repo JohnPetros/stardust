@@ -42,6 +42,8 @@ import {
   Code,
   FileCode,
   Link,
+  ArrowUp,
+  ArrowDown,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -91,4 +93,6 @@ export const ICONS: Record<IconName, LucideIcon> = {
   code: Code,
   'runnable-code': FileCode,
   link: Link,
+  'sort-asc': ArrowUp,
+  'sort-desc': ArrowDown,
 }
