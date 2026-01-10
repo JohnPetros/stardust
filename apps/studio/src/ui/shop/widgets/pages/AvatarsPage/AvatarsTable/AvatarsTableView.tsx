@@ -34,6 +34,8 @@ type Props = {
   totalPages: number
   totalItemsCount: number
   itemsPerPage: number
+  onItemsPerPageChange: (count: number) => void
+  onPageChange: (page: number) => void
   onSearchChange: (value: string) => void
   onOrderChange: (order: ListingOrder) => void
   onPrevPage: () => void
@@ -52,6 +54,8 @@ export const AvatarsTableView = ({
   totalPages,
   totalItemsCount,
   itemsPerPage,
+  onItemsPerPageChange,
+  onPageChange,
   onSearchChange,
   onOrderChange,
   onPrevPage,
@@ -173,6 +177,8 @@ export const AvatarsTableView = ({
               itemsPerPage={itemsPerPage}
               onPrevPage={onPrevPage}
               onNextPage={onNextPage}
+              onPageChange={onPageChange}
+              onItemsPerPageChange={onItemsPerPageChange}
             />
           )}
         </>

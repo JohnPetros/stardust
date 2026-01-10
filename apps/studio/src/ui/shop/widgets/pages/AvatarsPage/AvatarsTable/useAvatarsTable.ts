@@ -12,8 +12,6 @@ import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import { Avatar } from '@stardust/core/shop/entities'
 import { StorageFolder } from '@stardust/core/storage/structures'
 
-const ITEMS_PER_PAGE = OrdinalNumber.create(10)
-
 type Params = {
   shopService: ShopService
   toastProvider: ToastProvider
@@ -27,6 +25,7 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
   const [page, setPage] = useState(1)
   const [isCreating, setIsCreating] = useState(false)
   const [isUpdating, setIsUpdating] = useState(false)
+  const [itemsPerPage, setItemsPerPage] = useState(10)
 
   const search = useMemo(() => {
     return debouncedSearch ? Text.create(debouncedSearch) : undefined
@@ -43,15 +42,15 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
       await shopService.fetchAvatarsList({
         search,
         page: OrdinalNumber.create(page),
-        itemsPerPage: ITEMS_PER_PAGE,
+        itemsPerPage: OrdinalNumber.create(itemsPerPage),
         order,
       }),
-    dependencies: [debouncedSearch, order.value, page],
-    itemsPerPage: ITEMS_PER_PAGE.value,
+    dependencies: [debouncedSearch, order.value, page, itemsPerPage],
+    itemsPerPage,
   })
 
   const avatars = avatarsData ?? []
-  const totalPages = Math.ceil(totalItemsCount / ITEMS_PER_PAGE.value)
+  const totalPages = Math.ceil(totalItemsCount / itemsPerPage)
 
   async function removeImageFile(imageName: string) {
     const response = await storageService.removeFile(
@@ -84,6 +83,15 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
     if (page < totalPages) {
       setPage(page + 1)
     }
+  }
+
+  function handlePageChange(page: number) {
+    setPage(page)
+  }
+
+  function handleItemsPerPageChange(count: number) {
+    setItemsPerPage(count)
+    setPage(1)
   }
 
   async function handleCreateAvatar(dto: AvatarDto) {
@@ -161,11 +169,13 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
     page,
     totalPages,
     totalItemsCount,
-    itemsPerPage: ITEMS_PER_PAGE.value,
+    itemsPerPage,
     handleSearchChange,
     handleOrderChange,
     handlePrevPage,
     handleNextPage,
+    handlePageChange,
+    handleItemsPerPageChange,
     handleCreateAvatar,
     handleUpdateAvatar,
     handleDeleteAvatar,

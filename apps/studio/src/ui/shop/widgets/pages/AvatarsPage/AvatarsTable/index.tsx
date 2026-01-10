@@ -19,6 +19,8 @@ export const AvatarsTable = () => {
     handleOrderChange,
     handlePrevPage,
     handleNextPage,
+    handlePageChange,
+    handleItemsPerPageChange,
     handleCreateAvatar,
     handleUpdateAvatar,
     handleDeleteAvatar,
@@ -38,6 +40,8 @@ export const AvatarsTable = () => {
       onOrderChange={handleOrderChange}
       onPrevPage={handlePrevPage}
       onNextPage={handleNextPage}
+      onPageChange={handlePageChange}
+      onItemsPerPageChange={handleItemsPerPageChange}
       onCreateAvatar={handleCreateAvatar}
       onUpdateAvatar={handleUpdateAvatar}
       onDeleteAvatar={handleDeleteAvatar}
