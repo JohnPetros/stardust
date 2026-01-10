@@ -9,9 +9,14 @@ import {
   itemsPerPageSchema,
   nameSchema,
   pageSchema,
+  sorterSchema,
   stringSchema,
+  dateRangeSchema,
 } from '@stardust/validation/global/schemas'
-import { userSchema } from '@stardust/validation/profile/schemas'
+import {
+  userSchema,
+  spaceCompletionStatusSchema,
+} from '@stardust/validation/profile/schemas'
 
 import { SupabaseUsersRepository } from '@/database'
 import {
@@ -395,6 +400,15 @@ export class UsersRouter extends HonoRouter {
           search: stringSchema.default(''),
           page: pageSchema,
           itemsPerPage: itemsPerPageSchema,
+          levelSorter: sorterSchema,
+          weeklyXpSorter: sorterSchema,
+          unlockedStarCountSorter: sorterSchema,
+          unlockedAchievementCountSorter: sorterSchema,
+          completedChallengeCountSorter: sorterSchema,
+          spaceCompletionStatus: spaceCompletionStatusSchema,
+          insigniaRoles: z.array(insigniaRoleSchema).default([]),
+          createdAtStartDate: dateRangeSchema,
+          createdAtEndDate: dateRangeSchema,
         }),
       ),
       async (context) => {

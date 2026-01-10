@@ -4,6 +4,9 @@ import type { UsersRepository } from '#profile/interfaces/UsersRepository'
 import { ListUsersUseCase } from '../ListUsersUseCase'
 import { Text } from '#global/domain/structures/Text'
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
+import { Sorter } from '#global/domain/structures/Sorter'
+import { SpaceCompletionStatus } from '#profile/domain/structures/SpaceCompletionStatus'
+import { InsigniaRole } from '#global/domain/structures/InsigniaRole'
 import { PaginationResponse } from '#global/responses/PaginationResponse'
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
 
@@ -26,12 +29,26 @@ describe('List Users Use Case', () => {
       search: Text.create(''),
       page: OrdinalNumber.create(1),
       itemsPerPage: OrdinalNumber.create(10),
+      levelSorter: Sorter.create('none'),
+      weeklyXpSorter: Sorter.create('none'),
+      unlockedStarCountSorter: Sorter.create('none'),
+      unlockedAchievementCountSorter: Sorter.create('none'),
+      completedChallengeCountSorter: Sorter.create('none'),
+      spaceCompletionStatus: SpaceCompletionStatus.create('all'),
+      insigniaRoles: [],
     }
 
     await useCase.execute({
       search: request.search.value,
       page: request.page.value,
       itemsPerPage: request.itemsPerPage.value,
+      levelSorter: 'none',
+      weeklyXpSorter: 'none',
+      unlockedStarCountSorter: 'none',
+      unlockedAchievementCountSorter: 'none',
+      completedChallengeCountSorter: 'none',
+      spaceCompletionStatus: 'all',
+      insigniaRoles: [],
     })
 
     expect(repository.findMany).toHaveBeenCalledWith(request)
@@ -47,12 +64,26 @@ describe('List Users Use Case', () => {
       search: Text.create(''),
       page: OrdinalNumber.create(1),
       itemsPerPage: OrdinalNumber.create(10),
+      levelSorter: Sorter.create('none'),
+      weeklyXpSorter: Sorter.create('none'),
+      unlockedStarCountSorter: Sorter.create('none'),
+      unlockedAchievementCountSorter: Sorter.create('none'),
+      completedChallengeCountSorter: Sorter.create('none'),
+      spaceCompletionStatus: SpaceCompletionStatus.create('all'),
+      insigniaRoles: [],
     }
 
     const response = await useCase.execute({
       search: request.search.value,
       page: request.page.value,
       itemsPerPage: request.itemsPerPage.value,
+      levelSorter: 'none',
+      weeklyXpSorter: 'none',
+      unlockedStarCountSorter: 'none',
+      unlockedAchievementCountSorter: 'none',
+      completedChallengeCountSorter: 'none',
+      spaceCompletionStatus: 'all',
+      insigniaRoles: [],
     })
 
     expect(response).toBeInstanceOf(PaginationResponse)

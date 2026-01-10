@@ -12,7 +12,8 @@ import {
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import type { User } from '@stardust/core/profile/entities'
 import type { Platform, Visit } from '@stardust/core/profile/structures'
-import type { FilteringParams, ManyItems } from '@stardust/core/global/types'
+import type { ManyItems } from '@stardust/core/global/types'
+import type { UsersListingParams } from '@stardust/core/profile/types'
 
 import type { SupabaseUser } from '../../types'
 import { SupabaseUserMapper } from '../../mappers/profile'
@@ -300,13 +301,13 @@ export class SupabaseUsersRepository
     return data.map(SupabaseUserMapper.toEntity)
   }
 
-  async findMany(params: FilteringParams): Promise<ManyItems<User>> {
+  async findMany(params: UsersListingParams): Promise<ManyItems<User>> {
     let query = this.supabase.from('users').select(
       `*,
       avatar:avatars(*), 
       rocket:rockets(*), 
       tier:tiers(*),
-      insignias(role),
+      ${params.insigniaRoles.length ? 'insignias!inner(role)' : 'insignias(role)'},
       users_unlocked_stars(star_id),
       users_recently_unlocked_stars(star_id),
       users_unlocked_achievements(achievement_id),
@@ -324,6 +325,54 @@ export class SupabaseUsersRepository
 
     if (params.search && params.search.value.length > 1) {
       query = query.ilike('name', `%${params.search.value}%`)
+    }
+
+    if (params.levelSorter.isAscending.isTrue) {
+      query = query.order('level', { ascending: true })
+    } else if (params.levelSorter.isDescending.isTrue) {
+      query = query.order('level', { ascending: false })
+    }
+
+    if (params.weeklyXpSorter.isAscending.isTrue) {
+      query = query.order('weekly_xp', { ascending: true })
+    } else if (params.weeklyXpSorter.isDescending.isTrue) {
+      query = query.order('weekly_xp', { ascending: false })
+    }
+
+    if (params.unlockedStarCountSorter.isAscending.isTrue) {
+      query = query.order('count_user_unlocked_stars', { ascending: true })
+    } else if (params.unlockedStarCountSorter.isDescending.isTrue) {
+      query = query.order('count_user_unlocked_stars', { ascending: false })
+    }
+
+    if (params.unlockedAchievementCountSorter.isAscending.isTrue) {
+      query = query.order('count_user_unlocked_achievements', { ascending: true })
+    } else if (params.unlockedAchievementCountSorter.isDescending.isTrue) {
+      query = query.order('count_user_unlocked_achievements', { ascending: false })
+    }
+
+    if (params.completedChallengeCountSorter.isAscending.isTrue) {
+      query = query.order('count_user_completed_challenges', { ascending: true })
+    } else if (params.completedChallengeCountSorter.isDescending.isTrue) {
+      query = query.order('count_user_completed_challenges', { ascending: false })
+    }
+
+    if (params.spaceCompletionStatus.isCompleted.isTrue) {
+      query = query.eq('verify_user_space_completion', true)
+    } else if (params.spaceCompletionStatus.isNotCompleted.isTrue) {
+      query = query.eq('verify_user_space_completion', false)
+    }
+
+    console.log(params.insigniaRoles)
+    if (params.insigniaRoles.length) {
+      const insigniaRoleValues = params.insigniaRoles.map((role) => role.value)
+      query = query.in('insignias.role', insigniaRoleValues)
+    }
+
+    if (params.creationPeriod) {
+      query = query
+        .gte('created_at', params.creationPeriod.startDate.toISOString())
+        .lte('created_at', params.creationPeriod.endDate.toISOString())
     }
 
     const range = this.calculateQueryRange(params.page.value, params.itemsPerPage.value)

@@ -55,9 +55,9 @@ dependências externas.
 
 - [Rodando a aplicação web](https://github.com/JohnPetros/stardust/wiki/Aplica%C3%A7%C3%A3o-web#executando-a-aplica%C3%A7%C3%A3o)
 
-- [Rodando a aplicação mobile](https://github.com/JohnPetros/stardust/wiki/Aplica%C3%A7%C3%A3o-mobile)
+- [Rodando a aplicação server](https://github.com/JohnPetros/stardust/wiki/Aplica%C3%A7%C3%A3o-server)
 
-- [Rodando a aplicação admin](https://github.com/JohnPetros/stardust/wiki/Aplica%C3%A7%C3%A3o-admin)
+- [Rodando a aplicação studio](https://github.com/JohnPetros/stardust/wiki/Aplica%C3%A7%C3%A3o-studio)
 
 ## 📝 Licença
 
