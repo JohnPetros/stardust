@@ -363,7 +363,6 @@ export class SupabaseUsersRepository
       query = query.eq('verify_user_space_completion', false)
     }
 
-    console.log(params.insigniaRoles)
     if (params.insigniaRoles.length) {
       const insigniaRoleValues = params.insigniaRoles.map((role) => role.value)
       query = query.in('insignias.role', insigniaRoleValues)
