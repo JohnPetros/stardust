@@ -7,6 +7,7 @@ import {
   ScrollRestoration,
 } from 'react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { NuqsAdapter } from 'nuqs/adapters/react-router/v7'
 
 import type { Route } from './+types/root'
 
@@ -84,10 +85,12 @@ export const ErrorBoundary = ({ error }: Route.ErrorBoundaryProps) => {
 export const App = () => {
   return (
     <div className='w-full h-screen dark'>
-      <QueryClientProvider client={queryClient}>
-        <Toaster position='top-right' richColors />
-        <Outlet />
-      </QueryClientProvider>
+      <NuqsAdapter>
+        <QueryClientProvider client={queryClient}>
+          <Toaster position='top-right' richColors />
+          <Outlet />
+        </QueryClientProvider>
+      </NuqsAdapter>
     </div>
   )
 }
