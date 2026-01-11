@@ -1,8 +1,12 @@
 import { InngestFunctions } from './InngestFunctions'
 
-import { GuideContentEditedEvent } from '@stardust/core/manual/events'
+import { GuideContentEditedEvent, GuideDeletedEvent } from '@stardust/core/manual/events'
 
-import { BackupDatabaseJob, GenerateGuideEmbeddingsJob } from '@/queue/jobs/storage'
+import {
+  BackupDatabaseJob,
+  GenerateGuideEmbeddingsJob,
+  DeleteGuideEmbeddingsJob,
+} from '@/queue/jobs/storage'
 import { SupabaseDatabaseProvider } from '@/provision/database'
 import { DropboxStorageProvider } from '@/provision/storage'
 import { MastraMarkdownEmbeddingsGeneratorProvider } from '@/provision/storage/MastraMarkdownEmbeddingsGeneratorProvider'
@@ -39,7 +43,24 @@ export class StorageFunctions extends InngestFunctions {
     )
   }
 
+  private createDeleteGuideEmbeddingsJob() {
+    return this.inngest.createFunction(
+      { id: DeleteGuideEmbeddingsJob.KEY },
+      { event: GuideDeletedEvent._NAME },
+      async (context) => {
+        const storageProvider = new UpstashEmbeddingsStorageProvider()
+        const job = new DeleteGuideEmbeddingsJob(storageProvider)
+        const amqp = new InngestAmqp<typeof context.event.data>(context)
+        return await job.handle(amqp)
+      },
+    )
+  }
+
   getFunctions() {
-    return [this.createGenerateGuideEmbeddingsJob(), this.createBackupDatabaseJob()]
+    return [
+      this.createGenerateGuideEmbeddingsJob(),
+      this.createDeleteGuideEmbeddingsJob(),
+      this.createBackupDatabaseJob(),
+    ]
   }
 }
