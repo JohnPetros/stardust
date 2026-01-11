@@ -14,8 +14,8 @@ export const DateRangePicker = ({ startDate, endDate, onChange }: Props) => {
   const dateRange: DateRange | undefined = React.useMemo(() => {
     if (!startDate && !endDate) return undefined
     return {
-      from: new Datetime(startDate).addHours(3),
-      to: new Datetime(endDate).addHours(3),
+      from: new Datetime(startDate).dateWithoutTimeZone(),
+      to: new Datetime(endDate).dateWithoutTimeZone(),
     }
   }, [startDate, endDate])
 
