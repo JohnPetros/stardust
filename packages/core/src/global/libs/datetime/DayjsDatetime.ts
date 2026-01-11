@@ -78,7 +78,7 @@ export class DayJsDatetime implements Datetime {
   dateWithoutTimeZone(): Date {
     const dateString = this.dayjs.toDate().toString()
     const offsetMatch = dateString.match(/GMT([+-]\d{4})/)
-    if (!offsetMatch) throw new AppError('Offset not found')
+    if (!offsetMatch) throw new AppError('Offset não encontrado na data')
     const offset = offsetMatch[1]
 
     const signal = offset[0]
