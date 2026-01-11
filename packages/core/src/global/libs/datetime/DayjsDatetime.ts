@@ -74,6 +74,23 @@ export class DayJsDatetime implements Datetime {
     return this.dayjs.endOf('month').toDate()
   }
 
+  dateWithoutTimeZone(): Date {
+    const dateString = this.dayjs.toDate().toString()
+    const offsetMatch = dateString.match(/GMT([+-]\d{4})/)
+    const offset = offsetMatch[1]
+
+    const signal = offset[0]
+    const hours = Number(offset.slice(1, 3))
+    const minutes = Number(offset.slice(3, 5))
+
+    const date = new Date(dateString)
+
+    const offsetMinutes = signal === '-' ? hours * 60 + minutes : -(hours * 60 + minutes)
+
+    const utcDate = new Date(date.getTime() + offsetMinutes * 60 * 1000)
+    return utcDate
+  }
+
   date(): Date {
     return this.dayjs.toDate()
   }

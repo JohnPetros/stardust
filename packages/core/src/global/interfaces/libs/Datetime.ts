@@ -18,7 +18,8 @@ export interface Datetime {
   getTodayIndex(): number
   getYesterdayWeekdayIndex(): number
   getRelativeTime(): string
-  date(): Date
   addHours(hours: number): Date
   minusMonths(months: number): Date
+  dateWithoutTimeZone(): Date
+  date(): Date
 }
