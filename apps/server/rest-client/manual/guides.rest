@@ -1,5 +1,5 @@
 @URL = {{BASE_URL}}/manual/guides
-@GUIDE_ID = c762ffce-30e2-4382-90f1-4a5747cb2707
+@GUIDE_ID = d14d91d2-9fb5-49d0-a7f7-d3fc3530fd5e
 
 ### Fetch all LSP guides
 GET {{URL}}?category=lsp

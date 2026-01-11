@@ -96,7 +96,8 @@ export class GuidesRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseGuidesRepository(http.getSupabase())
-        const controller = new DeleteGuideController(repository)
+        const broker = new InngestBroker()
+        const controller = new DeleteGuideController(repository, broker)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
