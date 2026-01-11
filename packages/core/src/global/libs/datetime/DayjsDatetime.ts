@@ -4,6 +4,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/pt-br'
 
 import type { DateFormat, Datetime } from '#global/interfaces/libs/Datetime'
+import { AppError } from '#global/domain/errors/AppError'
 
 dayjs.extend(utc)
 dayjs.extend(relativeTime)
@@ -77,6 +78,7 @@ export class DayJsDatetime implements Datetime {
   dateWithoutTimeZone(): Date {
     const dateString = this.dayjs.toDate().toString()
     const offsetMatch = dateString.match(/GMT([+-]\d{4})/)
+    if (!offsetMatch) throw new AppError('Offset not found')
     const offset = offsetMatch[1]
 
     const signal = offset[0]
