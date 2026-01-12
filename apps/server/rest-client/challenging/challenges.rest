@@ -13,15 +13,32 @@ GET {{URL}}/slug/{{CHALLENGE_SLUG}}
 GET {{URL}}/star/{{STAR_ID}}
 Authorization: Bearer {{JWT}}
 
-### Fetch challenges list
+### Fetch all challenges
 GET {{URL}}
-?page=1
-&itemsPerPage=10
+?page=1 
+&itemsPerPage=25
 &title=
 &difficulty=any
 &completionStatus=any
-&upvotesCountOrder=any
+&upvotesCountOrder=descending
 &postingOrder=any
+&shouldIncludePrivateChallenges=false
+&shouldIncludeOnlyAuthorChallenges=false
+&shouldIncludeStarChallenges=false
+Authorization: Bearer {{JWT}}
+
+### Fetch challenges list
+GET {{URL}}/list
+?page=1 
+&itemsPerPage=25
+&title=
+&difficulty=any
+&completionStatus=any
+&upvotesCountOrder=ascending
+&postingOrder=ascending
+&shouldIncludePrivateChallenges=false
+&shouldIncludeOnlyAuthorChallenges=false
+&shouldIncludeStarChallenges=false
 
 ### Fetch completed challenges count by difficulty level
 GET {{URL}}/completed-by-difficulty-level
