@@ -327,33 +327,33 @@ export class SupabaseUsersRepository
       query = query.ilike('name', `%${params.search.value}%`)
     }
 
-    if (params.levelSorter.isAscending.isTrue) {
+    if (params.levelOrder.isAscending.isTrue) {
       query = query.order('level', { ascending: true })
-    } else if (params.levelSorter.isDescending.isTrue) {
+    } else if (params.levelOrder.isDescending.isTrue) {
       query = query.order('level', { ascending: false })
     }
 
-    if (params.weeklyXpSorter.isAscending.isTrue) {
+    if (params.weeklyXpOrder.isAscending.isTrue) {
       query = query.order('weekly_xp', { ascending: true })
-    } else if (params.weeklyXpSorter.isDescending.isTrue) {
+    } else if (params.weeklyXpOrder.isDescending.isTrue) {
       query = query.order('weekly_xp', { ascending: false })
     }
 
-    if (params.unlockedStarCountSorter.isAscending.isTrue) {
+    if (params.unlockedStarCountOrder.isAscending.isTrue) {
       query = query.order('count_user_unlocked_stars', { ascending: true })
-    } else if (params.unlockedStarCountSorter.isDescending.isTrue) {
+    } else if (params.unlockedStarCountOrder.isDescending.isTrue) {
       query = query.order('count_user_unlocked_stars', { ascending: false })
     }
 
-    if (params.unlockedAchievementCountSorter.isAscending.isTrue) {
+    if (params.unlockedAchievementCountOrder.isAscending.isTrue) {
       query = query.order('count_user_unlocked_achievements', { ascending: true })
-    } else if (params.unlockedAchievementCountSorter.isDescending.isTrue) {
+    } else if (params.unlockedAchievementCountOrder.isDescending.isTrue) {
       query = query.order('count_user_unlocked_achievements', { ascending: false })
     }
 
-    if (params.completedChallengeCountSorter.isAscending.isTrue) {
+    if (params.completedChallengeCountOrder.isAscending.isTrue) {
       query = query.order('count_user_completed_challenges', { ascending: true })
-    } else if (params.completedChallengeCountSorter.isDescending.isTrue) {
+    } else if (params.completedChallengeCountOrder.isDescending.isTrue) {
       query = query.order('count_user_completed_challenges', { ascending: false })
     }
 

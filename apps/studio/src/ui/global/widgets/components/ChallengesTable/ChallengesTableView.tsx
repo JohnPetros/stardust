@@ -1,4 +1,5 @@
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
+import type { ListingOrder } from '@stardust/core/global/structures'
 
 import {
   Table,
@@ -9,19 +10,32 @@ import {
   TableRow,
 } from '@/ui/shadcn/components/table'
 import { Badge } from '@/ui/shadcn/components/badge'
-import { Loading } from '@/ui/global/widgets/components/Loading'
 import { Datetime } from '@stardust/core/global/libs'
 import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
 import { Button } from '@/ui/shadcn/components/button'
 import { ExternalLink } from 'lucide-react'
 import { ENV } from '@/constants/env'
+import { SortableColumn } from '@/ui/global/widgets/components/SortableColumn'
+import { ChallengesTableSkeleton } from './ChallengesTableSkeleton'
 
 type Props = {
   challenges: ChallengeDto[]
   isLoading: boolean
+  orders: {
+    upvotesCount: ListingOrder
+    downvoteCount: ListingOrder
+    completionCount: ListingOrder
+    posting: ListingOrder
+  }
+  onOrderChange: (column: string, order: ListingOrder) => void
 }
 
-export const ChallengesTableView = ({ challenges, isLoading }: Props) => {
+export const ChallengesTableView = ({
+  challenges,
+  isLoading,
+  orders,
+  onOrderChange,
+}: Props) => {
   function getDifficultyLabel(difficultyLevel: string) {
     const labels: Record<string, string> = {
       easy: 'Fácil',
@@ -41,11 +55,7 @@ export const ChallengesTableView = ({ challenges, isLoading }: Props) => {
   }
 
   if (isLoading) {
-    return (
-      <div className='flex items-center justify-center h-[400px]'>
-        <Loading size={48} />
-      </div>
-    )
+    return <ChallengesTableSkeleton />
   }
 
   return (
@@ -55,11 +65,27 @@ export const ChallengesTableView = ({ challenges, isLoading }: Props) => {
           <TableHead>Título</TableHead>
           <TableHead>Autor</TableHead>
           <TableHead>Dificuldade</TableHead>
-          <TableHead>Data de Postagem</TableHead>
+          <SortableColumn
+            label='Data de Postagem'
+            order={orders.posting}
+            onOrderChange={(order) => onOrderChange('posting', order)}
+          />
           <TableHead>Visibilidade</TableHead>
-          <TableHead>Downvotes</TableHead>
-          <TableHead>Upvotes</TableHead>
-          <TableHead>Qtd. de usuários que completaram</TableHead>
+          <SortableColumn
+            label='Downvotes'
+            order={orders.downvoteCount}
+            onOrderChange={(order) => onOrderChange('downvoteCount', order)}
+          />
+          <SortableColumn
+            label='Upvotes'
+            order={orders.upvotesCount}
+            onOrderChange={(order) => onOrderChange('upvotesCount', order)}
+          />
+          <SortableColumn
+            label='Qtd. de usuários que completaram'
+            order={orders.completionCount}
+            onOrderChange={(order) => onOrderChange('completionCount', order)}
+          />
           <TableHead>Link</TableHead>
         </TableRow>
       </TableHeader>

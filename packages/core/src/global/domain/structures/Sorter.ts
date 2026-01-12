@@ -31,4 +31,8 @@ export class Sorter {
   get isDescending() {
     return Logical.create(this.value === 'descending')
   }
+
+  get isNone(): Logical {
+    return Logical.create(this.value === 'none')
+  }
 }

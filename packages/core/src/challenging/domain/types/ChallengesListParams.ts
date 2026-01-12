@@ -11,7 +11,10 @@ export type ChallengesListParams = {
   categoriesIds: IdsList
   postingOrder: ListingOrder
   upvotesCountOrder: ListingOrder
+  downvoteCountOrder: ListingOrder
+  completionCountOrder: ListingOrder
   completionStatus: ChallengeCompletionStatus
   shouldIncludeStarChallenges: Logical
   shouldIncludeOnlyAuthorChallenges: Logical
+  shouldIncludePrivateChallenges: Logical
 } & PaginationParams

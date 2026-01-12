@@ -98,6 +98,8 @@ export class SupabaseChallengesRepository
     title,
     difficulty,
     upvotesCountOrder,
+    downvoteCountOrder,
+    completionCountOrder,
     postingOrder,
     categoriesIds,
     shouldIncludeStarChallenges,
@@ -134,9 +136,15 @@ export class SupabaseChallengesRepository
       })
     }
 
-    if (upvotesCountOrder.isAny.isFalse) {
-      query = query.order('upvotes_count', {
-        ascending: upvotesCountOrder.isAscending.isTrue,
+    if (downvoteCountOrder.isAny.isFalse) {
+      query = query.order('downvotes_count', {
+        ascending: downvoteCountOrder.isAscending.isTrue,
+      })
+    }
+
+    if (completionCountOrder.isAny.isFalse) {
+      query = query.order('total_completitions', {
+        ascending: completionCountOrder.isAscending.isTrue,
       })
     }
 

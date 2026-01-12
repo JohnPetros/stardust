@@ -16,6 +16,8 @@ type Request = {
   categoriesIds: string[]
   difficulty: string
   upvotesCountOrder: string
+  downvoteCountOrder: string
+  completionCountOrder: string
   postingOrder: string
   completionStatus: string
   userId?: string
@@ -37,6 +39,8 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       difficulty: ChallengeDifficulty.create(request.difficulty),
       title: Text.create(request.title),
       upvotesCountOrder: ListingOrder.create(request.upvotesCountOrder),
+      downvoteCountOrder: ListingOrder.create(request.downvoteCountOrder),
+      completionCountOrder: ListingOrder.create(request.completionCountOrder),
       postingOrder: ListingOrder.create(request.postingOrder),
       userId: request.userId ? Id.create(request.userId) : null,
       page: OrdinalNumber.create(request.page),
@@ -45,6 +49,9 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       shouldIncludeStarChallenges: Logical.create(request.shouldIncludeStarChallenges),
       shouldIncludeOnlyAuthorChallenges: Logical.create(
         request.shouldIncludeOnlyAuthorChallenges,
+      ),
+      shouldIncludePrivateChallenges: Logical.create(
+        request.shouldIncludePrivateChallenges,
       ),
     })
     let challenges = items
@@ -89,7 +96,9 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       case 'completed':
         return challenges.filter((challenge) => {
           const isCompleted = completedChallengesIds.includes(challenge.id)
-          const isAccountAuthor = accountId ? challenge.isChallengeAuthor(accountId) : Logical.createAsFalse()
+          const isAccountAuthor = accountId
+            ? challenge.isChallengeAuthor(accountId)
+            : Logical.createAsFalse()
           if (shouldIncludePrivateChallenges.or(isAccountAuthor).isTrue) {
             return isCompleted.isTrue
           }
@@ -98,7 +107,9 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       case 'not-completed':
         return challenges.filter((challenge) => {
           const isCompleted = completedChallengesIds.includes(challenge.id)
-          const isAccountAuthor = accountId ? challenge.isChallengeAuthor(accountId) : Logical.createAsFalse()
+          const isAccountAuthor = accountId
+            ? challenge.isChallengeAuthor(accountId)
+            : Logical.createAsFalse()
           if (shouldIncludePrivateChallenges.or(isAccountAuthor).isTrue) {
             return isCompleted.isFalse
           }
@@ -106,7 +117,9 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
         })
       default:
         return challenges.filter((challenge) => {
-          const isAccountAuthor = accountId ? challenge.isChallengeAuthor(accountId) : Logical.createAsFalse()
+          const isAccountAuthor = accountId
+            ? challenge.isChallengeAuthor(accountId)
+            : Logical.createAsFalse()
           if (shouldIncludePrivateChallenges.or(isAccountAuthor).isTrue) {
             return true
           }

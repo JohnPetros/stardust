@@ -8,9 +8,9 @@ Application: `studio`
 Deve ser acrescentado a filtragem de lista de usuários pelas seguintes
 propriedades:
 
-- unlockedStarCountSorter (Número de Estrelas Desbloqueadas)
-- unlockedAchievementCountSorter (Número de Conquistas Desbloqueadas)
-- completedChallengeCountSorter (Número de Desafios Completados)
+- unlockedStarCountOrder (Número de Estrelas Desbloqueadas)
+- unlockedAchievementCountOrder (Número de Conquistas Desbloqueadas)
+- completedChallengeCountOrder (Número de Desafios Completados)
 
 Também deve ser possível filtrar os usuários pelo status que verifica que se o usuário já completou o espaço ou não.
 Também deve ser possível filtrar os usuário pela seleção de insígnias.

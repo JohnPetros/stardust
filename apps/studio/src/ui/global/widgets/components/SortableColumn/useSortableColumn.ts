@@ -1,23 +1,23 @@
-import { Sorter } from '@stardust/core/global/structures'
+import { ListingOrder } from '@stardust/core/global/structures'
 
 type Params = {
-  sorter: Sorter
-  onSort: (sorter: Sorter) => void
+  order: ListingOrder
+  onOrderChange: (order: ListingOrder) => void
 }
 
-export const useSortableColumn = ({ sorter, onSort }: Params) => {
-  function handleSortChange(value: string) {
-    onSort(Sorter.create(value))
+export const useSortableColumn = ({ order, onOrderChange }: Params) => {
+  function handleOrderChange(value: string) {
+    onOrderChange(ListingOrder.create(value))
   }
 
-  const currentValue = sorter.isAscending.value
+  const currentValue = order.isAscending.value
     ? 'ascending'
-    : sorter.isDescending.value
+    : order.isDescending.value
       ? 'descending'
-      : 'none'
+      : 'any'
 
   return {
-    handleSortChange,
+    handleOrderChange,
     currentValue,
   }
 }

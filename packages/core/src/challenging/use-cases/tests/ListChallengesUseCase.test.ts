@@ -19,6 +19,8 @@ const createRequest = (
   categoriesIds: [],
   difficulty: 'any',
   upvotesCountOrder: 'ascending',
+  downvoteCountOrder: 'any',
+  completionCountOrder: 'any',
   postingOrder: 'descending',
   completionStatus: 'any',
   shouldIncludePrivateChallenges: false,
@@ -60,6 +62,8 @@ describe('List Challenges Use Case', () => {
       page: 2,
       postingOrder: 'ascending',
       upvotesCountOrder: 'descending',
+      downvoteCountOrder: 'descending',
+      completionCountOrder: 'ascending',
       userCompletedChallengesIds: [challenge.id.value],
       title: 'Recursion patterns',
     })
@@ -77,6 +81,8 @@ describe('List Challenges Use Case', () => {
     expect(params.difficulty.level).toBe(request.difficulty)
     expect(params.title.value).toBe(request.title)
     expect(params.upvotesCountOrder.value).toBe(request.upvotesCountOrder)
+    expect(params.downvoteCountOrder.value).toBe(request.downvoteCountOrder)
+    expect(params.completionCountOrder.value).toBe(request.completionCountOrder)
     expect(params.postingOrder.value).toBe(request.postingOrder)
     expect(params.completionStatus.value).toBe(request.completionStatus)
     expect(params.userId?.value).toBe(request.userId)

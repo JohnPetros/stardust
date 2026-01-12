@@ -1,6 +1,11 @@
 import { useMemo } from 'react'
 
-import { OrdinalNumber, Period, Sorter, Text } from '@stardust/core/global/structures'
+import {
+  OrdinalNumber,
+  Period,
+  ListingOrder,
+  Text,
+} from '@stardust/core/global/structures'
 import { SpaceCompletionStatus } from '@stardust/core/profile/structures'
 import { InsigniaRole } from '@stardust/core/global/structures'
 import type { ProfileService } from '@stardust/core/profile/interfaces'
@@ -22,27 +27,27 @@ export function useUsersPage({ service }: Params) {
   const debouncedSearch = useDebounce(search, 500)
   const [page, setPage] = useQueryNumberParam('page', 1)
   const [itemsPerPage, setItemsPerPage] = useQueryNumberParam('limit', 10)
-  const [levelSort, setLevelSort] = useQueryStringParam('levelSort', 'none')
-  const [xpSort, setXpSort] = useQueryStringParam('xpSort', 'none')
-  const [starsSort, setStarsSort] = useQueryStringParam('starsSort', 'none')
-  const [achievementsSort, setAchievementsSort] = useQueryStringParam(
-    'achievementsSort',
-    'none',
+  const [levelOrder, setLevelOrder] = useQueryStringParam('levelOrder', 'any')
+  const [xpOrder, setXpOrder] = useQueryStringParam('xpOrder', 'any')
+  const [starsOrder, setStarsOrder] = useQueryStringParam('starsOrder', 'any')
+  const [achievementsOrder, setAchievementsOrder] = useQueryStringParam(
+    'achievementsOrder',
+    'any',
   )
-  const [challengesSort, setChallengesSort] = useQueryStringParam(
-    'challengesSort',
-    'none',
+  const [challengesOrder, setChallengesOrder] = useQueryStringParam(
+    'challengesOrder',
+    'any',
   )
 
-  const sorters = useMemo(
+  const orders = useMemo(
     () => ({
-      level: Sorter.create(levelSort),
-      weeklyXp: Sorter.create(xpSort),
-      unlockedStarCount: Sorter.create(starsSort),
-      unlockedAchievementCount: Sorter.create(achievementsSort),
-      completedChallengeCount: Sorter.create(challengesSort),
+      level: ListingOrder.create(levelOrder),
+      weeklyXp: ListingOrder.create(xpOrder),
+      unlockedStarCount: ListingOrder.create(starsOrder),
+      unlockedAchievementCount: ListingOrder.create(achievementsOrder),
+      completedChallengeCount: ListingOrder.create(challengesOrder),
     }),
-    [levelSort, xpSort, starsSort, achievementsSort, challengesSort],
+    [levelOrder, xpOrder, starsOrder, achievementsOrder, challengesOrder],
   )
 
   const [statusParam, setStatusParam] = useQueryStringParam('status', 'all')
@@ -67,7 +72,7 @@ export function useUsersPage({ service }: Params) {
       debouncedSearch,
       page,
       itemsPerPage,
-      sorters,
+      orders,
       spaceCompletionStatus,
       insigniaRoles,
       creationPeriod,
@@ -84,14 +89,14 @@ export function useUsersPage({ service }: Params) {
         search: Text.create(debouncedSearch),
         page: OrdinalNumber.create(page),
         itemsPerPage: OrdinalNumber.create(itemsPerPage),
-        levelSorter: sorters.level,
-        weeklyXpSorter: sorters.weeklyXp,
-        unlockedStarCountSorter: sorters.unlockedStarCount,
-        unlockedAchievementCountSorter: sorters.unlockedAchievementCount,
-        completedChallengeCountSorter: sorters.completedChallengeCount,
-        spaceCompletionStatus,
+        levelOrder: orders.level,
+        weeklyXpOrder: orders.weeklyXp,
+        unlockedStarCountOrder: orders.unlockedStarCount,
+        unlockedAchievementCountOrder: orders.unlockedAchievementCount,
+        completedChallengeCountOrder: orders.completedChallengeCount,
         insigniaRoles: insigniaRoles.map((role) => InsigniaRole.create(role)),
         creationPeriod: period,
+        spaceCompletionStatus,
       })
     },
   })
@@ -114,24 +119,24 @@ export function useUsersPage({ service }: Params) {
     setPage(1)
   }
 
-  function handleSort(column: string, sorter: Sorter) {
-    const sorterValue = sorter.value as 'asc' | 'desc' | 'none'
+  function handleOrderChange(column: string, order: ListingOrder) {
+    const orderValue = order.value as 'ascending' | 'descending' | 'any'
 
     switch (column) {
       case 'level':
-        setLevelSort(sorterValue)
+        setLevelOrder(orderValue)
         break
       case 'weeklyXp':
-        setXpSort(sorterValue)
+        setXpOrder(orderValue)
         break
       case 'unlockedStarCount':
-        setStarsSort(sorterValue)
+        setStarsOrder(orderValue)
         break
       case 'unlockedAchievementCount':
-        setAchievementsSort(sorterValue)
+        setAchievementsOrder(orderValue)
         break
       case 'completedChallengeCount':
-        setChallengesSort(sorterValue)
+        setChallengesOrder(orderValue)
         break
     }
     setPage(1)
@@ -170,8 +175,6 @@ export function useUsersPage({ service }: Params) {
     setPage(1)
   }
 
-  console.log('creationPeriod', creationPeriod)
-
   return {
     users: data?.items ?? [],
     isLoading,
@@ -179,14 +182,14 @@ export function useUsersPage({ service }: Params) {
     totalPages,
     page,
     itemsPerPage,
-    sorters,
+    orders,
     spaceCompletionStatus,
     insigniaRoles,
     creationPeriod,
     handleNextPage,
     handlePrevPage,
     handleSearchChange,
-    handleSort,
+    handleOrderChange,
     handleSpaceCompletionStatusChange,
     handleInsigniaRolesChange,
     handleCreationPeriodChange,

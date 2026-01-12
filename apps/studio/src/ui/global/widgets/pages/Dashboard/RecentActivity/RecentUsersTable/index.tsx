@@ -4,9 +4,14 @@ import { useRecentUsersTable } from './useRecentUsersTable'
 
 export const RecentUsersTable = () => {
   const { profileService } = useRest()
-  const { users, isLoading, sorters, onSort } = useRecentUsersTable(profileService)
+  const { users, isLoading, orders, onOrderChange } = useRecentUsersTable(profileService)
 
   return (
-    <UsersTable users={users} isLoading={isLoading} sorters={sorters} onSort={onSort} />
+    <UsersTable
+      users={users}
+      isLoading={isLoading}
+      orders={orders}
+      onOrderChange={onOrderChange}
+    />
   )
 }
