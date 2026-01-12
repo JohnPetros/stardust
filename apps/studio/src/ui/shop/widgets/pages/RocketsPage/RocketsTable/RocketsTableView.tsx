@@ -34,6 +34,8 @@ type Props = {
   totalPages: number
   totalItemsCount: number
   itemsPerPage: number
+  onItemsPerPageChange: (count: number) => void
+  onPageChange: (page: number) => void
   onSearchChange: (value: string) => void
   onOrderChange: (order: ListingOrder) => void
   onPrevPage: () => void
@@ -52,6 +54,8 @@ export const RocketsTableView = ({
   totalPages,
   totalItemsCount,
   itemsPerPage,
+  onItemsPerPageChange,
+  onPageChange,
   onSearchChange,
   onOrderChange,
   onPrevPage,
@@ -174,6 +178,8 @@ export const RocketsTableView = ({
               itemsPerPage={itemsPerPage}
               onPrevPage={onPrevPage}
               onNextPage={onNextPage}
+              onPageChange={onPageChange}
+              onItemsPerPageChange={onItemsPerPageChange}
             />
           )}
         </>

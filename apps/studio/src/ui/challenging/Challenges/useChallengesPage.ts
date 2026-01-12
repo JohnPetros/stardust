@@ -28,11 +28,11 @@ export function useChallengesPage() {
     fetcher: () => challengingService.fetchAllChallengeCategories(),
   })
   const [page, setPage] = useState(1)
-  const itemsPerPage = 20
+  const [itemsPerPage, setItemsPerPage] = useState(20)
 
   const { data: challengesData, isLoading } = useCache({
     key: 'challenges-page-list',
-    dependencies: [debouncedSearch, difficulty, selectedCategories, page],
+    dependencies: [debouncedSearch, difficulty, selectedCategories, page, itemsPerPage],
     fetcher: async () =>
       await challengingService.fetchChallengesList({
         page: OrdinalNumber.create(page),
@@ -61,6 +61,15 @@ export function useChallengesPage() {
     if (page > 1) setPage((prev) => prev - 1)
   }
 
+  const handlePageChange = (page: number) => {
+    setPage(page)
+  }
+
+  const handleItemsPerPageChange = (itemsPerPage: number) => {
+    setItemsPerPage(itemsPerPage)
+    setPage(1)
+  }
+
   const handleSearchChange = (value: string) => {
     setSearch(value)
     setPage(1)
@@ -75,15 +84,6 @@ export function useChallengesPage() {
     setSelectedCategories(value)
     setPage(1)
   }
-
-  console.log({
-    page,
-    totalPages,
-    totalItemsCount,
-    itemsPerPage,
-    handleNextPage,
-    handlePrevPage,
-  })
 
   return {
     challenges: challengesData?.items ?? [],
@@ -104,6 +104,8 @@ export function useChallengesPage() {
       itemsPerPage,
       handleNextPage,
       handlePrevPage,
+      handlePageChange,
+      handleItemsPerPageChange,
     },
   }
 }

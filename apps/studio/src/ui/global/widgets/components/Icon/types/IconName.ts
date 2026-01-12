@@ -42,3 +42,5 @@ export type IconName =
   | 'code'
   | 'runnable-code'
   | 'link'
+  | 'sort-asc'
+  | 'sort-desc'

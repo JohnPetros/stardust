@@ -11,7 +11,7 @@ import {
   pageSchema,
   sorterSchema,
   stringSchema,
-  dateRangeSchema,
+  dateSchema,
 } from '@stardust/validation/global/schemas'
 import {
   userSchema,
@@ -407,8 +407,8 @@ export class UsersRouter extends HonoRouter {
           completedChallengeCountSorter: sorterSchema,
           spaceCompletionStatus: spaceCompletionStatusSchema,
           insigniaRoles: z.array(insigniaRoleSchema).default([]),
-          createdAtStartDate: dateRangeSchema,
-          createdAtEndDate: dateRangeSchema,
+          createdAtStartDate: dateSchema,
+          createdAtEndDate: dateSchema,
         }),
       ),
       async (context) => {

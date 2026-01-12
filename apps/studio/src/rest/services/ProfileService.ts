@@ -13,8 +13,10 @@ import type {
   StarRewardingPayload,
   StarChallengeRewardingPayload,
   ChallengeRewardingPayload,
+  UsersListingParams,
 } from '@stardust/core/profile/types'
 import type { AvatarAggregate, RocketAggregate } from '@stardust/core/profile/aggregates'
+import { Datetime } from '@stardust/core/global/libs'
 
 export const ProfileService = (restClient: RestClient): IProfileService => {
   return {
@@ -137,10 +139,46 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
       })
     },
 
-    async fetchUsersList(params: { search: string; page: number; itemsPerPage: number }) {
-      return await restClient.get(
-        `/profile/users?search=${params.search}&page=${params.page}&itemsPerPage=${params.itemsPerPage}`,
+    async fetchUsersList(params: UsersListingParams) {
+      restClient.clearQueryParams()
+      restClient.setQueryParam('search', params.search?.value ?? '')
+      restClient.setQueryParam('page', String(params.page?.value))
+      restClient.setQueryParam('itemsPerPage', String(params.itemsPerPage?.value))
+      restClient.setQueryParam('levelSorter', params.levelSorter.value)
+      restClient.setQueryParam('weeklyXpSorter', params.weeklyXpSorter.value)
+      restClient.setQueryParam(
+        'unlockedStarCountSorter',
+        params.unlockedStarCountSorter.value,
       )
+      restClient.setQueryParam(
+        'unlockedAchievementCountSorter',
+        params.unlockedAchievementCountSorter.value,
+      )
+      restClient.setQueryParam(
+        'completedChallengeCountSorter',
+        params.completedChallengeCountSorter.value,
+      )
+      restClient.setQueryParam(
+        'spaceCompletionStatus',
+        params.spaceCompletionStatus.value,
+      )
+      restClient.setQueryParam(
+        'insigniaRoles',
+        params.insigniaRoles.map((role) => role.value),
+      )
+      if (params.creationPeriod?.startDate) {
+        restClient.setQueryParam(
+          'createdAtStartDate',
+          new Datetime(params.creationPeriod.startDate).format('YYYY-MM-DD'),
+        )
+      }
+      if (params.creationPeriod?.endDate) {
+        restClient.setQueryParam(
+          'createdAtEndDate',
+          new Datetime(params.creationPeriod.endDate).format('YYYY-MM-DD'),
+        )
+      }
+      return await restClient.get('/profile/users')
     },
 
     async fetchAllAchievements() {

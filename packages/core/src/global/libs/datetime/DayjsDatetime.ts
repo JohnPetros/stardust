@@ -1,21 +1,24 @@
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/pt-br'
 
 import type { DateFormat, Datetime } from '#global/interfaces/libs/Datetime'
+import { AppError } from '#global/domain/errors/AppError'
 
-dayjs.locale('pt-br')
+dayjs.extend(utc)
 dayjs.extend(relativeTime)
+dayjs.locale('pt-br')
 
 export class DayJsDatetime implements Datetime {
   private dayjs: dayjs.Dayjs
 
   constructor(date?: Date | string | null) {
-    this.dayjs = dayjs(date ?? new Date()).subtract(3, 'hours')
+    this.dayjs = dayjs.utc(date ?? new Date())
   }
 
   formatTimeAgo(): string {
-    const now = dayjs().subtract(3, 'hours')
+    const now = dayjs.utc()
     const diff = now.diff(this.dayjs, 'second')
 
     if (diff < 60) return 'Agora'
@@ -27,11 +30,9 @@ export class DayJsDatetime implements Datetime {
   }
 
   getDaysCountToSunday(): number {
-    const todayIndex = dayjs().day()
+    const todayIndex = dayjs.utc().day()
     const sundayIndex = 0
-    const daysCount = todayIndex === sundayIndex ? 7 : 7 - todayIndex
-
-    return daysCount
+    return todayIndex === sundayIndex ? 7 : 7 - todayIndex
   }
 
   getEndOfDay(): Date {
@@ -47,7 +48,7 @@ export class DayJsDatetime implements Datetime {
   }
 
   convertSecondsToTime(seconds: number): string {
-    return dayjs(seconds * 1000).format('mm:ss')
+    return dayjs.utc(seconds * 1000).format('mm:ss')
   }
 
   format(dateFormat: DateFormat): string {
@@ -55,7 +56,11 @@ export class DayJsDatetime implements Datetime {
   }
 
   getRelativeTime(): string {
-    return this.dayjs.fromNow()
+    return this.dayjs.from(dayjs.utc())
+  }
+
+  addHours(hours: number): Date {
+    return this.dayjs.add(hours, 'hour').toDate()
   }
 
   minusMonths(months: number): Date {
@@ -68,6 +73,24 @@ export class DayJsDatetime implements Datetime {
 
   lastDayOfMonth(): Date {
     return this.dayjs.endOf('month').toDate()
+  }
+
+  dateWithoutTimeZone(): Date {
+    const dateString = this.dayjs.toDate().toString()
+    const offsetMatch = dateString.match(/GMT([+-]\d{4})/)
+    if (!offsetMatch) throw new AppError('Offset não encontrado na data')
+    const offset = offsetMatch[1]
+
+    const signal = offset[0]
+    const hours = Number(offset.slice(1, 3))
+    const minutes = Number(offset.slice(3, 5))
+
+    const date = new Date(dateString)
+
+    const offsetMinutes = signal === '-' ? hours * 60 + minutes : -(hours * 60 + minutes)
+
+    const utcDate = new Date(date.getTime() + offsetMinutes * 60 * 1000)
+    return utcDate
   }
 
   date(): Date {
