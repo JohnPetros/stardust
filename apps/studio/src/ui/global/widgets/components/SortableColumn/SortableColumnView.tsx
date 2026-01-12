@@ -14,7 +14,6 @@ type Props = {
   label: string
   order: ListingOrder
   currentValue: string
-  onOrderChange: (order: ListingOrder) => void
   handleOrderChange: (value: string) => void
 }
 
