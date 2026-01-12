@@ -1,6 +1,6 @@
-import { ListChallengesUseCase } from '@stardust/core/challenging/use-cases'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
+import { ListChallengesUseCase } from '@stardust/core/challenging/use-cases'
 
 type Schema = {
   queryParams: {
@@ -10,6 +10,8 @@ type Schema = {
     categoriesIds: string[]
     difficulty: string
     upvotesCountOrder: string
+    downvoteCountOrder: string
+    completionCountOrder: string
     postingOrder: string
     completionStatus: string
     userId?: string
@@ -30,6 +32,8 @@ export class FetchAllChallengesController implements Controller<Schema> {
       categoriesIds,
       difficulty,
       upvotesCountOrder,
+      downvoteCountOrder,
+      completionCountOrder,
       postingOrder,
       userId,
       title,
@@ -51,8 +55,10 @@ export class FetchAllChallengesController implements Controller<Schema> {
       title,
       completionStatus,
       shouldIncludePrivateChallenges: true,
-      shouldIncludeStarChallenges: true,
+      shouldIncludeStarChallenges: false,
       shouldIncludeOnlyAuthorChallenges: false,
+      completionCountOrder,
+      downvoteCountOrder,
     })
     return http.sendPagination(response)
   }
