@@ -8,7 +8,7 @@ import type { AvatarDto } from '../domain/entities/dtos'
 
 type Request = {
   search: string
-  order: string
+  priceOrder: string
   page: number
   itemsPerPage: number
 }
@@ -18,12 +18,12 @@ type Response = Promise<PaginationResponse<AvatarDto>>
 export class ListAvatarsUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: AvatarsRepository) {}
 
-  async execute({ search, order, page, itemsPerPage }: Request) {
+  async execute({ search, priceOrder, page, itemsPerPage }: Request) {
     const { items, count } = await this.repository.findMany({
       search: Text.create(search),
       page: OrdinalNumber.create(page),
       itemsPerPage: OrdinalNumber.create(itemsPerPage),
-      order: ListingOrder.create(order),
+      priceOrder: ListingOrder.create(priceOrder),
     })
 
     return new PaginationResponse(
