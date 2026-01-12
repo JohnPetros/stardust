@@ -144,19 +144,19 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
       restClient.setQueryParam('search', params.search?.value ?? '')
       restClient.setQueryParam('page', String(params.page?.value))
       restClient.setQueryParam('itemsPerPage', String(params.itemsPerPage?.value))
-      restClient.setQueryParam('levelSorter', params.levelSorter.value)
-      restClient.setQueryParam('weeklyXpSorter', params.weeklyXpSorter.value)
+      restClient.setQueryParam('levelOrder', params.levelOrder.value)
+      restClient.setQueryParam('weeklyXpOrder', params.weeklyXpOrder.value)
       restClient.setQueryParam(
-        'unlockedStarCountSorter',
-        params.unlockedStarCountSorter.value,
+        'unlockedStarCountOrder',
+        params.unlockedStarCountOrder.value,
       )
       restClient.setQueryParam(
-        'unlockedAchievementCountSorter',
-        params.unlockedAchievementCountSorter.value,
+        'unlockedAchievementCountOrder',
+        params.unlockedAchievementCountOrder.value,
       )
       restClient.setQueryParam(
-        'completedChallengeCountSorter',
-        params.completedChallengeCountSorter.value,
+        'completedChallengeCountOrder',
+        params.completedChallengeCountOrder.value,
       )
       restClient.setQueryParam(
         'spaceCompletionStatus',
