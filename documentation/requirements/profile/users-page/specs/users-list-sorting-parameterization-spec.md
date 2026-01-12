@@ -19,8 +19,8 @@ propriedades:
 - Use a structure `Sorter`, que representa o tipo de ordenação.
 - Use o use case `ListUsersUseCase`, que lista os usuários.
 - Atualize os testes unitários do `ListUsersUseCase` para incluir os parâmetros
-  de ordenação (`levelSorter`, `weeklyXpSorter`, `unlockedStarCountSorter`,
-  `unlockedAchievementCountSorter`, `completedChallengeCountSorter`) nas
+  de ordenação (`levelOrder`, `weeklyXpOrder`, `unlockedStarCountOrder`,
+  `unlockedAchievementCountOrder`, `completedChallengeCountOrder`) nas
   chamadas do use case.
 
 ## Pacote Validation
@@ -34,9 +34,9 @@ propriedades:
 
 ## Camada REST
 
-- Adicione as propriedades `levelSorter`, `weeklyXpSorter`,
-  `unlockedStarCountSorter`, `unlockedAchievementCountSorter`,
-  `completedChallengeCountSorter` ao schema do controller `ListUsersController`.
+- Adicione as propriedades `levelOrder`, `weeklyXpOrder`,
+  `unlockedStarCountOrder`, `unlockedAchievementCountOrder`,
+  `completedChallengeCountOrder` ao schema do controller `ListUsersController`.
 
 ## Camada de banco de dados
 
