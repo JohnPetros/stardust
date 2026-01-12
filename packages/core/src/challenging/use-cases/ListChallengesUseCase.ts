@@ -50,6 +50,9 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       shouldIncludeOnlyAuthorChallenges: Logical.create(
         request.shouldIncludeOnlyAuthorChallenges,
       ),
+      shouldIncludePrivateChallenges: Logical.create(
+        request.shouldIncludePrivateChallenges,
+      ),
     })
     let challenges = items
 
