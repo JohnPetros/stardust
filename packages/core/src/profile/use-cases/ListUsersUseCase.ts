@@ -1,7 +1,7 @@
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 import { Text } from '#global/domain/structures/Text'
 import { Period } from '#global/domain/structures/Period'
-import { Sorter } from '#global/domain/structures/Sorter'
+import { ListingOrder } from '#global/domain/structures/ListingOrder'
 import { InsigniaRole } from '#global/domain/structures/InsigniaRole'
 import type { UseCase } from '#global/interfaces/UseCase'
 import { PaginationResponse } from '#global/responses/PaginationResponse'
@@ -13,11 +13,11 @@ type Request = {
   search: string
   page: number
   itemsPerPage: number
-  levelSorter: string
-  weeklyXpSorter: string
-  unlockedStarCountSorter: string
-  unlockedAchievementCountSorter: string
-  completedChallengeCountSorter: string
+  levelOrder: string
+  weeklyXpOrder: string
+  unlockedStarCountOrder: string
+  unlockedAchievementCountOrder: string
+  completedChallengeCountOrder: string
   spaceCompletionStatus: string
   insigniaRoles: string[]
   createdAtStartDate?: string
@@ -33,11 +33,11 @@ export class ListUsersUseCase implements UseCase<Request, Response> {
     search,
     page,
     itemsPerPage,
-    levelSorter,
-    weeklyXpSorter,
-    unlockedStarCountSorter,
-    unlockedAchievementCountSorter,
-    completedChallengeCountSorter,
+    levelOrder,
+    weeklyXpOrder,
+    unlockedStarCountOrder,
+    unlockedAchievementCountOrder,
+    completedChallengeCountOrder,
     spaceCompletionStatus,
     insigniaRoles,
     createdAtStartDate,
@@ -47,11 +47,11 @@ export class ListUsersUseCase implements UseCase<Request, Response> {
       search: Text.create(search),
       page: OrdinalNumber.create(page),
       itemsPerPage: OrdinalNumber.create(itemsPerPage),
-      levelSorter: Sorter.create(levelSorter),
-      weeklyXpSorter: Sorter.create(weeklyXpSorter),
-      unlockedStarCountSorter: Sorter.create(unlockedStarCountSorter),
-      unlockedAchievementCountSorter: Sorter.create(unlockedAchievementCountSorter),
-      completedChallengeCountSorter: Sorter.create(completedChallengeCountSorter),
+      levelOrder: ListingOrder.create(levelOrder),
+      weeklyXpOrder: ListingOrder.create(weeklyXpOrder),
+      unlockedStarCountOrder: ListingOrder.create(unlockedStarCountOrder),
+      unlockedAchievementCountOrder: ListingOrder.create(unlockedAchievementCountOrder),
+      completedChallengeCountOrder: ListingOrder.create(completedChallengeCountOrder),
       spaceCompletionStatus: SpaceCompletionStatus.create(spaceCompletionStatus),
       insigniaRoles: insigniaRoles.map(InsigniaRole.create),
       creationPeriod:
