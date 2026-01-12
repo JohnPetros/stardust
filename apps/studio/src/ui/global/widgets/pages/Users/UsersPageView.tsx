@@ -1,5 +1,5 @@
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
-import type { Sorter } from '@stardust/core/global/structures'
+import type { ListingOrder } from '@stardust/core/global/structures'
 import type { SpaceCompletionStatus } from '@stardust/core/profile/structures'
 
 import { Input } from '@/ui/shadcn/components/input'
@@ -22,12 +22,12 @@ type Props = {
   totalPages: number
   page: number
   itemsPerPage: number
-  sorters: {
-    level: Sorter
-    weeklyXp: Sorter
-    unlockedStarCount: Sorter
-    unlockedAchievementCount: Sorter
-    completedChallengeCount: Sorter
+  orders: {
+    level: ListingOrder
+    weeklyXp: ListingOrder
+    unlockedStarCount: ListingOrder
+    unlockedAchievementCount: ListingOrder
+    completedChallengeCount: ListingOrder
   }
   spaceCompletionStatus: SpaceCompletionStatus
   insigniaRoles: string[]
@@ -38,7 +38,7 @@ type Props = {
   handleNextPage: () => void
   handlePrevPage: () => void
   handleSearchChange: (value: string) => void
-  handleSort: (column: string, sorter: Sorter) => void
+  handleOrderChange: (column: string, order: ListingOrder) => void
   handleSpaceCompletionStatusChange: (status: string) => void
   handleInsigniaRolesChange: (roles: string[]) => void
   handleCreationPeriodChange: (period: { startDate?: Date; endDate?: Date }) => void
@@ -53,14 +53,14 @@ export const UsersPageView = ({
   totalPages,
   page,
   itemsPerPage,
-  sorters,
+  orders,
   spaceCompletionStatus,
   insigniaRoles,
   creationPeriod,
   handleNextPage,
   handlePrevPage,
   handleSearchChange,
-  handleSort,
+  handleOrderChange,
   handleSpaceCompletionStatusChange,
   handleInsigniaRolesChange,
   handleCreationPeriodChange,
@@ -114,8 +114,8 @@ export const UsersPageView = ({
       <UsersTable
         users={users}
         isLoading={isLoading}
-        sorters={sorters}
-        onSort={handleSort}
+        orders={orders}
+        onOrderChange={handleOrderChange}
       />
 
       <Pagination
