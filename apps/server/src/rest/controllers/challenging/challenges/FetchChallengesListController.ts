@@ -43,7 +43,6 @@ export class FetchChallengesListController implements Controller<Schema> {
       shouldIncludeOnlyAuthorChallenges,
       shouldIncludePrivateChallenges,
     } = http.getQueryParams()
-    console.log({ shouldIncludePrivateChallenges })
     const { userCompletedChallengesIds = [] } = await http.getBody()
     const account = await http.getAccount()
     const useCase = new ListChallengesUseCase(this.challengesRepository)
