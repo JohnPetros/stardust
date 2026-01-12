@@ -31,12 +31,12 @@ export const ShopService = (restClient: RestClient): IShopService => {
       search,
       page,
       itemsPerPage,
-      order,
+      priceOrder,
     }: ShopItemsListingParams) {
       restClient.setQueryParam('search', search?.value ?? '')
       restClient.setQueryParam('page', page.value.toString())
       restClient.setQueryParam('itemsPerPage', itemsPerPage.value.toString())
-      restClient.setQueryParam('order', order.value)
+      restClient.setQueryParam('priceOrder', priceOrder.value)
       const response =
         await restClient.get<PaginationResponse<RocketDto>>('/shop/rockets')
       restClient.clearQueryParams()
@@ -47,12 +47,12 @@ export const ShopService = (restClient: RestClient): IShopService => {
       search,
       page,
       itemsPerPage,
-      order,
+      priceOrder,
     }: ShopItemsListingParams) {
       restClient.setQueryParam('search', search?.value ?? '')
       restClient.setQueryParam('page', page.value.toString())
       restClient.setQueryParam('itemsPerPage', itemsPerPage.value.toString())
-      restClient.setQueryParam('order', order.value)
+      restClient.setQueryParam('priceOrder', priceOrder.value)
       const response =
         await restClient.get<PaginationResponse<AvatarDto>>('/shop/avatars')
       restClient.clearQueryParams()
