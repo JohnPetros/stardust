@@ -15,6 +15,7 @@ import {
   pageSchema,
   stringSchema,
   idSchema,
+  listingOrderSchema,
 } from '@stardust/validation/global/schemas'
 import { rocketSchema } from '@stardust/validation/shop/schemas'
 import { ValidationMiddleware } from '../../middlewares'
@@ -32,7 +33,7 @@ export class RocketsRouter extends HonoRouter {
         'query',
         z.object({
           search: stringSchema.default(''),
-          order: stringSchema,
+          priceOrder: listingOrderSchema,
           page: pageSchema,
           itemsPerPage: itemsPerPageSchema,
         }),

@@ -3,6 +3,7 @@ import { z } from 'zod'
 
 import {
   itemsPerPageSchema,
+  listingOrderSchema,
   pageSchema,
   stringSchema,
   idSchema,
@@ -33,7 +34,7 @@ export class AvatarsRouter extends HonoRouter {
         'query',
         z.object({
           search: stringSchema.default(''),
-          order: stringSchema,
+          priceOrder: listingOrderSchema,
           page: pageSchema,
           itemsPerPage: itemsPerPageSchema,
         }),
