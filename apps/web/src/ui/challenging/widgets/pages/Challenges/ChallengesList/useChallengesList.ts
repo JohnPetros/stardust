@@ -48,6 +48,9 @@ export function useChallengesList({ challengingService, userId }: Params) {
       upvotesCountOrder: ListingOrder.create('any'),
       shouldIncludeStarChallenges: Logical.createAsFalse(),
       shouldIncludeOnlyAuthorChallenges: Logical.createAsFalse(),
+      shouldIncludePrivateChallenges: Logical.createAsTrue(),
+      completionCountOrder: ListingOrder.create('any'),
+      downvoteCountOrder: ListingOrder.create('any'),
       title: Text.create(title),
       userId,
     })

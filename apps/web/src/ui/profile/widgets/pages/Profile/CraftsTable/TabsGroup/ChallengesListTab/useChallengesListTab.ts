@@ -39,6 +39,9 @@ export function useChallengesListTab(
       ),
       shouldIncludeStarChallenges: Logical.createAsFalse(),
       shouldIncludeOnlyAuthorChallenges: Logical.createAsTrue(),
+      shouldIncludePrivateChallenges: Logical.createAsFalse(),
+      completionCountOrder: ListingOrder.create('any'),
+      downvoteCountOrder: ListingOrder.create('any'),
       userId: Id.create(userId),
     })
     if (response.isFailure) response.throwError()
