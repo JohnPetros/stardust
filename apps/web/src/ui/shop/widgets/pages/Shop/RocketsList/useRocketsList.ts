@@ -18,7 +18,7 @@ export function useRocketsList(shopService: ShopService) {
       search: search,
       page: OrdinalNumber.create(page),
       itemsPerPage: ROCKETS_PER_PAGE,
-      order: priceOrder,
+      priceOrder: priceOrder,
     })
     if (response.isFailure) response.throwError()
     return response.body

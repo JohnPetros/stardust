@@ -11,6 +11,8 @@ import { StorageFolder } from '@stardust/core/storage/structures'
 
 import { CACHE } from '@/constants'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
+import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
+import { useQueryNumberParam } from '@/ui/global/hooks/useQueryNumberParam'
 
 type Params = {
   shopService: ShopService
@@ -19,13 +21,21 @@ type Params = {
 }
 
 export function useRocketsTable({ shopService, toastProvider, storageService }: Params) {
-  const [searchInput, setSearchInput] = useState('')
+  const [searchInput, setSearchInput] = useQueryStringParam('q', '')
   const [debouncedSearch] = useDebounceValue(searchInput, 500)
-  const [order, setOrder] = useState<ListingOrder>(ListingOrder.createAsAscending())
-  const [page, setPage] = useState(1)
+  const [priceOrderValue, setPriceOrderValue] = useQueryStringParam(
+    'priceOrder',
+    'ascending',
+  )
+  const [page, setPage] = useQueryNumberParam('page', 1)
   const [isCreating, setIsCreating] = useState(false)
   const [isUpdating, setIsUpdating] = useState(false)
-  const [itemsPerPage, setItemsPerPage] = useState(10)
+  const [itemsPerPage, setItemsPerPage] = useQueryNumberParam('limit', 10)
+
+  const priceOrder = useMemo(
+    () => ListingOrder.create(priceOrderValue),
+    [priceOrderValue],
+  )
 
   const search = useMemo(() => {
     return debouncedSearch ? Text.create(debouncedSearch) : undefined
@@ -43,9 +53,9 @@ export function useRocketsTable({ shopService, toastProvider, storageService }: 
         search,
         page: OrdinalNumber.create(page),
         itemsPerPage: OrdinalNumber.create(itemsPerPage),
-        order,
+        priceOrder,
       }),
-    dependencies: [debouncedSearch, order.value, page, itemsPerPage],
+    dependencies: [debouncedSearch, priceOrder.value, page, itemsPerPage],
     itemsPerPage,
   })
 
@@ -68,8 +78,8 @@ export function useRocketsTable({ shopService, toastProvider, storageService }: 
     setPage(1)
   }
 
-  function handleOrderChange(newOrder: ListingOrder) {
-    setOrder(newOrder)
+  function handlePriceOrderChange(newOrder: ListingOrder) {
+    setPriceOrderValue(newOrder.value)
     setPage(1)
   }
 
@@ -154,13 +164,13 @@ export function useRocketsTable({ shopService, toastProvider, storageService }: 
     rockets,
     isLoading: isFetching || isCreating || isUpdating,
     searchInput,
-    order,
+    priceOrder,
     page,
     totalPages,
     totalItemsCount,
     itemsPerPage,
     handleSearchChange,
-    handleOrderChange,
+    handlePriceOrderChange,
     handlePrevPage,
     handleNextPage,
     handlePageChange,

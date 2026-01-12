@@ -31,7 +31,7 @@ export function useAvatarsList(shopService: ShopService) {
       search: search,
       page: OrdinalNumber.create(page),
       itemsPerPage: OrdinalNumber.create(AVATARS_PER_PAGE),
-      order: priceOrder,
+      priceOrder: priceOrder,
     })
 
     if (response.isFailure) response.throwError()
