@@ -21,21 +21,19 @@ import { Badge } from '@/ui/shadcn/components/badge'
 import { ChallengesTableView } from '@/ui/global/widgets/components/ChallengesTable'
 import { Pagination } from '@/ui/global/widgets/components/Pagination'
 
-import { useChallengesPage } from './useChallengesPage'
+import type { useChallengesPage } from './useChallengesPage'
 
-export const ChallengesPageView = () => {
-  const { challenges, isLoading, categories, filters, pagination } = useChallengesPage()
+type ChallengesPageViewProps = ReturnType<typeof useChallengesPage>
 
-  const toggleCategory = (categoryId: string) => {
-    if (filters.selectedCategories.includes(categoryId)) {
-      filters.setSelectedCategories(
-        filters.selectedCategories.filter((c) => c !== categoryId),
-      )
-    } else {
-      filters.setSelectedCategories([...filters.selectedCategories, categoryId])
-    }
-  }
-
+export const ChallengesPageView = ({
+  challenges,
+  isLoading,
+  categories,
+  orders,
+  filters,
+  pagination,
+  handleOrderChange,
+}: ChallengesPageViewProps) => {
   return (
     <div className='p-8 space-y-8 h-full flex flex-col'>
       <div className='flex justify-between items-center'>
@@ -65,6 +63,17 @@ export const ChallengesPageView = () => {
           </SelectContent>
         </Select>
 
+        <Select value={filters.visibility} onValueChange={filters.setVisibility}>
+          <SelectTrigger className='w-[180px]'>
+            <SelectValue placeholder='Visibilidade' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='all'>Todos</SelectItem>
+            <SelectItem value='public'>Público</SelectItem>
+            <SelectItem value='private'>Privado</SelectItem>
+          </SelectContent>
+        </Select>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='outline' className='h-10 gap-2 border-dashed'>
@@ -91,7 +100,7 @@ export const ChallengesPageView = () => {
                   <DropdownMenuCheckboxItem
                     key={category.id}
                     checked={filters.selectedCategories.includes(category.id)}
-                    onCheckedChange={() => toggleCategory(category.id as string)}
+                    onCheckedChange={() => filters.toggleCategory(category.id as string)}
                   >
                     {category.name}
                   </DropdownMenuCheckboxItem>
@@ -102,7 +111,12 @@ export const ChallengesPageView = () => {
         </DropdownMenu>
       </div>
 
-      <ChallengesTableView challenges={challenges} isLoading={isLoading} />
+      <ChallengesTableView
+        challenges={challenges}
+        isLoading={isLoading}
+        orders={orders}
+        onOrderChange={handleOrderChange}
+      />
 
       <Pagination
         page={pagination.page}
