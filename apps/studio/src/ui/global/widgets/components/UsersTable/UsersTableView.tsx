@@ -1,5 +1,5 @@
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
-import type { Sorter } from '@stardust/core/global/structures'
+import type { ListingOrder } from '@stardust/core/global/structures'
 
 import {
   Table,
@@ -23,17 +23,17 @@ import { UsersTableSkeleton } from './UsersTableSkeleton'
 type Props = {
   users: UserDto[]
   isLoading: boolean
-  sorters: {
-    level: Sorter
-    weeklyXp: Sorter
-    unlockedStarCount: Sorter
-    unlockedAchievementCount: Sorter
-    completedChallengeCount: Sorter
+  orders: {
+    level: ListingOrder
+    weeklyXp: ListingOrder
+    unlockedStarCount: ListingOrder
+    unlockedAchievementCount: ListingOrder
+    completedChallengeCount: ListingOrder
   }
-  onSort: (column: string, sorter: Sorter) => void
+  onOrderChange: (column: string, order: ListingOrder) => void
 }
 
-export const UsersTableView = ({ users, isLoading, sorters, onSort }: Props) => {
+export const UsersTableView = ({ users, isLoading, orders, onOrderChange }: Props) => {
   const { openExternal } = useNavigationProvider()
 
   if (isLoading) {
@@ -47,28 +47,28 @@ export const UsersTableView = ({ users, isLoading, sorters, onSort }: Props) => 
           <TableHead>Nome</TableHead>
           <SortableColumn
             label='Nível'
-            sorter={sorters.level}
-            onSort={(sorter) => onSort('level', sorter)}
+            order={orders.level}
+            onOrderChange={(order) => onOrderChange('level', order)}
           />
           <SortableColumn
             label='XP Semanal'
-            sorter={sorters.weeklyXp}
-            onSort={(sorter) => onSort('weeklyXp', sorter)}
+            order={orders.weeklyXp}
+            onOrderChange={(order) => onOrderChange('weeklyXp', order)}
           />
           <SortableColumn
             label='Estrelas Desbloqueadas'
-            sorter={sorters.unlockedStarCount}
-            onSort={(sorter) => onSort('unlockedStarCount', sorter)}
+            order={orders.unlockedStarCount}
+            onOrderChange={(order) => onOrderChange('unlockedStarCount', order)}
           />
           <SortableColumn
             label='Conquistas Desbloqueadas'
-            sorter={sorters.unlockedAchievementCount}
-            onSort={(sorter) => onSort('unlockedAchievementCount', sorter)}
+            order={orders.unlockedAchievementCount}
+            onOrderChange={(order) => onOrderChange('unlockedAchievementCount', order)}
           />
           <SortableColumn
             label='Desafios Completados'
-            sorter={sorters.completedChallengeCount}
-            onSort={(sorter) => onSort('completedChallengeCount', sorter)}
+            order={orders.completedChallengeCount}
+            onOrderChange={(order) => onOrderChange('completedChallengeCount', order)}
           />
           <TableHead>Status do Espaço</TableHead>
           <TableHead>Insígnias</TableHead>
