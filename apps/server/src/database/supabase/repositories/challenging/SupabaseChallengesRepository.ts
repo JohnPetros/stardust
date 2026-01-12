@@ -131,7 +131,6 @@ export class SupabaseChallengesRepository
     }
 
     if (upvotesCountOrder.isAny.isFalse) {
-      console.log('upvotesCountOrder', upvotesCountOrder.isAscending.isTrue)
       query = query.order('upvotes_count', {
         ascending: upvotesCountOrder.isAscending.isTrue,
       })
