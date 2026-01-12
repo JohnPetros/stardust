@@ -19,7 +19,6 @@ export class FetchRocketsListController implements Controller<Schema> {
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const request = http.getQueryParams()
     const useCase = new ListRocketsUseCase(this.rocketsRepository)
-    console.log(request)
     const response = await useCase.execute(request)
     return http.sendPagination(response)
   }
