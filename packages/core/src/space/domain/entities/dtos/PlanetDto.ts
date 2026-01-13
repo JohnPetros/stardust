@@ -6,7 +6,8 @@ export type PlanetDto = {
   icon: string
   image: string
   position: number
-  completionsCount: number
+  completionCount: number
+  userCount: number
   stars: StarDto[]
   isAvailable: boolean
 }
