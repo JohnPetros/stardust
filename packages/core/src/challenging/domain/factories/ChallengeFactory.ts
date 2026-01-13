@@ -33,8 +33,8 @@ export class ChallengeFactory {
       difficulty: ChallengeDifficulty.create(dto.difficultyLevel),
       starId: dto.starId ? Id.create(dto.starId) : null,
       testCases: dto.testCases.map(TestCase.create),
-      completionsCount: Integer.create(
-        dto.completionsCount ?? 0,
+      completionCount: Integer.create(
+        dto.completionCount ?? 0,
         'Quantidade de vezes que esse desafio foi completado',
       ),
       downvotesCount: Integer.create(dto.downvotesCount ?? 0, 'Contagem de dowvotes'),
