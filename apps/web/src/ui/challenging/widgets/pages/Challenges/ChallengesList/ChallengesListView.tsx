@@ -43,7 +43,7 @@ export const ChallengesListView = ({
                 categories={challenge.categories}
                 difficultyLevel={challenge.difficulty.level}
                 downvotesCount={challenge.downvotesCount.value}
-                completionsCount={challenge.completionsCount.value}
+                completionCount={challenge.completionCount.value}
                 upvotesCount={challenge.upvotesCount.value}
               />
             ))}

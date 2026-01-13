@@ -5,7 +5,7 @@ type ChallengeInfo = {
   isCompleted: boolean
   downvotes: number
   upvotes: number
-  completionsCount: number
+  completionCount: number
   authorName: string
   authorSlug: string
 }
@@ -21,10 +21,5 @@ export const ChallengeInfo = (props: ChallengeInfo) => {
       />
     )
 
-  return (
-    <ChallengeInfoView
-      {...props}
-      isAccountAuthenticated={false}
-    />
-  )
+  return <ChallengeInfoView {...props} isAccountAuthenticated={false} />
 }
