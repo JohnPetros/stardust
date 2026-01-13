@@ -26,7 +26,6 @@ type Schema = {
 
 export class FetchChallengesListController implements Controller<Schema> {
   constructor(private readonly challengesRepository: ChallengesRepository) {}
-
   async handle(http: Http<Schema>) {
     const {
       page,
