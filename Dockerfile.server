@@ -22,8 +22,11 @@ RUN npm run build:server
 
 FROM base AS runner
 WORKDIR /stardust
+
+RUN apk add --no-cache postgresql15-client
 RUN addgroup --system --gid 1001 stardust
 RUN adduser --system --uid 1001 server
+
 USER server
 COPY --from=installer --chown=stardust:server /stardust/node_modules ./node_modules
 COPY --from=installer --chown=stardust:server /stardust/packages/core/package.json ./packages/core/package.json
