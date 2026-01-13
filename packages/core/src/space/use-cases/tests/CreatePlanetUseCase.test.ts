@@ -33,7 +33,7 @@ describe('Create Planet Use Case', () => {
     // Expect increment
     expect(createdPlanet.position.value).toBe(6)
     expect(createdPlanet.isAvailable.isFalse).toBe(true)
-    expect(createdPlanet.completionsCount.value).toBe(0)
+    expect(createdPlanet.completionCount.value).toBe(0)
     expect(createdPlanet.stars).toHaveLength(0)
     expect(response).toEqual(createdPlanet.dto)
   })

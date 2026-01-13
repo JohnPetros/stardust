@@ -24,7 +24,8 @@ export class CreatePlanetUseCase implements UseCase<Request, Response> {
       isAvailable: false,
       position: lastPlanetPosition.value,
       stars: [],
-      completionsCount: 0,
+      completionCount: 0,
+      userCount: 0,
     })
     await this.repository.add(planet)
     return planet.dto
