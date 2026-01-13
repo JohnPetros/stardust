@@ -44,8 +44,6 @@ export class DropboxStorageProvider implements StorageProvider {
         this.handleError('Failed to upload file to Dropbox')
       }
 
-      await fs.unlink(file.name)
-
       return file
     } catch (error) {
       console.log('error', error)
