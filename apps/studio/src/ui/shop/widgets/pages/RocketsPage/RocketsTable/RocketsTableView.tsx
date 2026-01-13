@@ -1,5 +1,5 @@
 import type { RocketDto } from '@stardust/core/shop/entities/dtos'
-import { ListingOrder } from '@stardust/core/global/structures'
+import type { ListingOrder } from '@stardust/core/global/structures'
 
 import {
   Table,
@@ -10,26 +10,20 @@ import {
   TableRow,
 } from '@/ui/shadcn/components/table'
 import { Input } from '@/ui/shadcn/components/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/ui/shadcn/components/select'
 import { Button } from '@/ui/shadcn/components/button'
-import { Loading } from '@/ui/global/widgets/components/Loading'
 import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
 import { Pagination } from '@/ui/global/widgets/components/Pagination'
 import { Badge } from '@/ui/shadcn/components/badge'
+import { SortableColumn } from '@/ui/global/widgets/components/SortableColumn'
 import { RocketForm } from './RocketForm'
 import { DeleteRocketDialog } from './DeleteRocketDialog'
+import { RocketsTableSkeleton } from './RocketsTableSkeleton'
 
 type Props = {
   rockets: RocketDto[]
   isLoading: boolean
   searchInput: string
-  order: ListingOrder
+  priceOrder: ListingOrder
   page: number
   totalPages: number
   totalItemsCount: number
@@ -37,7 +31,7 @@ type Props = {
   onItemsPerPageChange: (count: number) => void
   onPageChange: (page: number) => void
   onSearchChange: (value: string) => void
-  onOrderChange: (order: ListingOrder) => void
+  onPriceOrderChange: (order: ListingOrder) => void
   onPrevPage: () => void
   onNextPage: () => void
   onCreateRocket: (dto: RocketDto) => Promise<void>
@@ -49,7 +43,7 @@ export const RocketsTableView = ({
   rockets,
   isLoading,
   searchInput,
-  order,
+  priceOrder,
   page,
   totalPages,
   totalItemsCount,
@@ -57,7 +51,7 @@ export const RocketsTableView = ({
   onItemsPerPageChange,
   onPageChange,
   onSearchChange,
-  onOrderChange,
+  onPriceOrderChange,
   onPrevPage,
   onNextPage,
   onCreateRocket,
@@ -74,18 +68,6 @@ export const RocketsTableView = ({
             onChange={(e) => onSearchChange(e.target.value)}
             className='max-w-sm'
           />
-          <Select
-            value={order.value}
-            onValueChange={(value) => onOrderChange(ListingOrder.create(value))}
-          >
-            <SelectTrigger className='w-[180px]'>
-              <SelectValue placeholder='Ordenar por' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='ascending'>Preço: Menor para Maior</SelectItem>
-              <SelectItem value='descending'>Preço: Maior para Menor</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
 
         <RocketForm onSubmit={onCreateRocket}>
@@ -94,9 +76,7 @@ export const RocketsTableView = ({
       </div>
 
       {isLoading ? (
-        <div className='flex items-center justify-center h-[400px]'>
-          <Loading size={48} />
-        </div>
+        <RocketsTableSkeleton />
       ) : (
         <>
           <Table>
@@ -104,7 +84,11 @@ export const RocketsTableView = ({
               <TableRow>
                 <TableHead>Nome</TableHead>
                 <TableHead>Imagem</TableHead>
-                <TableHead>Preço</TableHead>
+                <SortableColumn
+                  label='Preço'
+                  order={priceOrder}
+                  onOrderChange={onPriceOrderChange}
+                />
                 <TableHead>Adquirido por padrão</TableHead>
                 <TableHead>Selecionado por padrão</TableHead>
                 <TableHead>Ações</TableHead>

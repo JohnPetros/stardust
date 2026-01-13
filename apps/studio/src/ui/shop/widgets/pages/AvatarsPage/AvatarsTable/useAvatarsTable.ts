@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useDebounceValue } from 'usehooks-ts'
 
 import type { ShopService } from '@stardust/core/shop/interfaces'
@@ -11,6 +11,8 @@ import { CACHE } from '@/constants'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import { Avatar } from '@stardust/core/shop/entities'
 import { StorageFolder } from '@stardust/core/storage/structures'
+import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
+import { useQueryNumberParam } from '@/ui/global/hooks/useQueryNumberParam'
 
 type Params = {
   shopService: ShopService
@@ -19,13 +21,15 @@ type Params = {
 }
 
 export function useAvatarsTable({ shopService, toastProvider, storageService }: Params) {
-  const [searchInput, setSearchInput] = useState('')
+  const [searchInput, setSearchInput] = useQueryStringParam('q', '')
   const [debouncedSearch] = useDebounceValue(searchInput, 500)
-  const [order, setOrder] = useState<ListingOrder>(ListingOrder.createAsAscending())
-  const [page, setPage] = useState(1)
+  const [orderValue, setOrderValue] = useQueryStringParam('order', 'ascending')
+  const [page, setPage] = useQueryNumberParam('page', 1)
   const [isCreating, setIsCreating] = useState(false)
   const [isUpdating, setIsUpdating] = useState(false)
-  const [itemsPerPage, setItemsPerPage] = useState(10)
+  const [itemsPerPage, setItemsPerPage] = useQueryNumberParam('limit', 10)
+
+  const priceOrder = useMemo(() => ListingOrder.create(orderValue), [orderValue])
 
   const search = useMemo(() => {
     return debouncedSearch ? Text.create(debouncedSearch) : undefined
@@ -43,9 +47,9 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
         search,
         page: OrdinalNumber.create(page),
         itemsPerPage: OrdinalNumber.create(itemsPerPage),
-        order,
+        priceOrder,
       }),
-    dependencies: [debouncedSearch, order.value, page, itemsPerPage],
+    dependencies: [debouncedSearch, priceOrder.value, page, itemsPerPage],
     itemsPerPage,
   })
 
@@ -69,7 +73,7 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
   }
 
   function handleOrderChange(newOrder: ListingOrder) {
-    setOrder(newOrder)
+    setOrderValue(newOrder.value)
     setPage(1)
   }
 
@@ -165,7 +169,7 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
     avatars,
     isLoading: isFetching || isCreating || isUpdating,
     searchInput,
-    order,
+    priceOrder,
     page,
     totalPages,
     totalItemsCount,

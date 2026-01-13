@@ -10,7 +10,7 @@ export const AvatarsTable = () => {
     avatars,
     isLoading,
     searchInput,
-    order,
+    priceOrder,
     page,
     totalPages,
     totalItemsCount,
@@ -31,7 +31,7 @@ export const AvatarsTable = () => {
       avatars={avatars}
       isLoading={isLoading}
       searchInput={searchInput}
-      order={order}
+      priceOrder={priceOrder}
       page={page}
       totalPages={totalPages}
       totalItemsCount={totalItemsCount}

@@ -10,13 +10,13 @@ export const RocketsTable = () => {
     rockets,
     isLoading,
     searchInput,
-    order,
+    priceOrder,
     page,
     totalPages,
     totalItemsCount,
     itemsPerPage,
     handleSearchChange,
-    handleOrderChange,
+    handlePriceOrderChange,
     handlePrevPage,
     handleNextPage,
     handlePageChange,
@@ -31,13 +31,13 @@ export const RocketsTable = () => {
       rockets={rockets}
       isLoading={isLoading}
       searchInput={searchInput}
-      order={order}
+      priceOrder={priceOrder}
       page={page}
       totalPages={totalPages}
       totalItemsCount={totalItemsCount}
       itemsPerPage={itemsPerPage}
       onSearchChange={handleSearchChange}
-      onOrderChange={handleOrderChange}
+      onPriceOrderChange={handlePriceOrderChange}
       onPrevPage={handlePrevPage}
       onNextPage={handleNextPage}
       onPageChange={handlePageChange}

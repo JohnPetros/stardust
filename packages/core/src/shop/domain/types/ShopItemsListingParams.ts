@@ -1,3 +1,6 @@
-import type { FilteringParams, SortingParams } from '../../../global/domain/types'
+import type { ListingOrder } from '#global/domain/structures/ListingOrder'
+import type { FilteringParams } from '#global/domain/types/FilteringParams'
 
-export type ShopItemsListingParams = FilteringParams & SortingParams
+export type ShopItemsListingParams = FilteringParams & {
+  priceOrder: ListingOrder
+}

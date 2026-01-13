@@ -44,7 +44,7 @@ export class SupabaseRocketsRepository
     search,
     page,
     itemsPerPage,
-    order,
+    priceOrder,
   }: ShopItemsListingParams): Promise<ManyItems<Rocket>> {
     let query = this.supabase.from('rockets').select('*', {
       count: 'exact',
@@ -57,9 +57,11 @@ export class SupabaseRocketsRepository
 
     const range = this.calculateQueryRange(page.value, itemsPerPage.value)
 
-    query = query
-      .order('price', { ascending: order.value === 'ascending' })
-      .range(range.from, range.to)
+    if (priceOrder.isAny.isFalse) {
+      query = query.order('price', { ascending: priceOrder.isAscending.value })
+    }
+
+    query = query.range(range.from, range.to)
 
     const { data, count, error } = await query
 

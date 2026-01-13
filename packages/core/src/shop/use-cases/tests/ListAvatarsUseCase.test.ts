@@ -25,7 +25,7 @@ describe('List Avatars Use Case', () => {
     })
     const request = {
       search: Text.create(''),
-      order: ListingOrder.create('ascending'),
+      priceOrder: ListingOrder.create('ascending'),
       page: OrdinalNumber.create(1),
       itemsPerPage: OrdinalNumber.create(10),
     }
@@ -33,7 +33,7 @@ describe('List Avatars Use Case', () => {
     await useCase.execute({
       search: request.search.value,
       page: request.page.value,
-      order: request.order.value,
+      priceOrder: request.priceOrder.value,
       itemsPerPage: request.itemsPerPage.value,
     })
 
@@ -48,7 +48,7 @@ describe('List Avatars Use Case', () => {
     })
     const request = {
       search: Text.create(''),
-      order: ListingOrder.create('ascending'),
+      priceOrder: ListingOrder.create('ascending'),
       page: OrdinalNumber.create(1),
       itemsPerPage: OrdinalNumber.create(10),
     }
@@ -56,7 +56,7 @@ describe('List Avatars Use Case', () => {
     const response = await useCase.execute({
       search: request.search.value,
       page: request.page.value,
-      order: request.order.value,
+      priceOrder: request.priceOrder.value,
       itemsPerPage: request.itemsPerPage.value,
     })
 

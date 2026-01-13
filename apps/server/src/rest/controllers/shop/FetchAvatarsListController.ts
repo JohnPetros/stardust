@@ -7,7 +7,7 @@ import { ListAvatarsUseCase } from '@stardust/core/shop/use-cases'
 type Schema = {
   queryParams: {
     search: string
-    order: string
+    priceOrder: string
     page: number
     itemsPerPage: number
   }

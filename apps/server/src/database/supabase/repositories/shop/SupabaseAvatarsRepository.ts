@@ -57,7 +57,7 @@ export class SupabaseAvatarsRepository
     search,
     page,
     itemsPerPage,
-    order,
+    priceOrder,
   }: ShopItemsListingParams): Promise<ManyItems<Avatar>> {
     let query = this.supabase.from('avatars').select('*', {
       count: 'exact',
@@ -68,11 +68,12 @@ export class SupabaseAvatarsRepository
       query = query.ilike('name', `%${search.value}%`)
     }
 
-    const range = this.calculateQueryRange(page.value, itemsPerPage.value)
+    if (priceOrder.isAny.isFalse) {
+      query = query.order('price', { ascending: priceOrder.isAscending.value })
+    }
 
-    query = query
-      .order('price', { ascending: order.value === 'ascending' })
-      .range(range.from, range.to)
+    const range = this.calculateQueryRange(page.value, itemsPerPage.value)
+    query = query.range(range.from, range.to)
 
     const { data, count, error } = await query
 

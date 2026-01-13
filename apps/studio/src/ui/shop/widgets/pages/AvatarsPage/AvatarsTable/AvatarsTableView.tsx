@@ -1,5 +1,5 @@
 import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
-import { ListingOrder } from '@stardust/core/global/structures'
+import type { ListingOrder } from '@stardust/core/global/structures'
 
 import {
   Table,
@@ -10,26 +10,20 @@ import {
   TableRow,
 } from '@/ui/shadcn/components/table'
 import { Input } from '@/ui/shadcn/components/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/ui/shadcn/components/select'
 import { Button } from '@/ui/shadcn/components/button'
-import { Loading } from '@/ui/global/widgets/components/Loading'
 import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
 import { Pagination } from '@/ui/global/widgets/components/Pagination'
 import { Badge } from '@/ui/shadcn/components/badge'
+import { SortableColumn } from '@/ui/global/widgets/components/SortableColumn'
 import { AvatarForm } from './AvatarForm'
 import { DeleteAvatarDialog } from './DeleteAvatarDialog'
+import { AvatarsTableSkeleton } from './AvatarsTableSkeleton'
 
 type Props = {
   avatars: AvatarDto[]
   isLoading: boolean
   searchInput: string
-  order: ListingOrder
+  priceOrder: ListingOrder
   page: number
   totalPages: number
   totalItemsCount: number
@@ -49,7 +43,7 @@ export const AvatarsTableView = ({
   avatars,
   isLoading,
   searchInput,
-  order,
+  priceOrder,
   page,
   totalPages,
   totalItemsCount,
@@ -67,35 +61,19 @@ export const AvatarsTableView = ({
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex items-center justify-between gap-4'>
-        <div className='flex items-center gap-4 flex-1'>
-          <Input
-            placeholder='Buscar avatares...'
-            value={searchInput}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className='max-w-sm'
-          />
-          <Select
-            value={order.value}
-            onValueChange={(value) => onOrderChange(ListingOrder.create(value))}
-          >
-            <SelectTrigger className='w-[180px]'>
-              <SelectValue placeholder='Ordenar por' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='ascending'>Preço: Menor para Maior</SelectItem>
-              <SelectItem value='descending'>Preço: Maior para Menor</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <Input
+          placeholder='Buscar avatares...'
+          value={searchInput}
+          onChange={(e) => onSearchChange(e.target.value)}
+          className='max-w-sm'
+        />
         <AvatarForm onSubmit={onCreateAvatar}>
           <Button>Criar avatar</Button>
         </AvatarForm>
       </div>
 
       {isLoading ? (
-        <div className='flex items-center justify-center h-[400px]'>
-          <Loading size={48} />
-        </div>
+        <AvatarsTableSkeleton />
       ) : (
         <>
           <Table>
@@ -103,7 +81,11 @@ export const AvatarsTableView = ({
               <TableRow>
                 <TableHead>Nome</TableHead>
                 <TableHead>Imagem</TableHead>
-                <TableHead>Preço</TableHead>
+                <SortableColumn
+                  label='Preço'
+                  order={priceOrder}
+                  onOrderChange={onOrderChange}
+                />
                 <TableHead>Adquirido por padrão</TableHead>
                 <TableHead>Selecionado por padrão</TableHead>
                 <TableHead>Ações</TableHead>
