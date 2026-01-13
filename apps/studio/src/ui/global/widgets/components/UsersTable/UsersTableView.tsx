@@ -79,7 +79,7 @@ export const UsersTableView = ({ users, isLoading, orders, onOrderChange }: Prop
       <TableBody>
         {users.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={10} className='text-center text-muted-foreground'>
+            <TableCell colSpan={10} className='text-center text-zinc-500'>
               Nenhum usuário encontrado
             </TableCell>
           </TableRow>

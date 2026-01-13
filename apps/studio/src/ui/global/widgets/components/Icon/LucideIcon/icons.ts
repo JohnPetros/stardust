@@ -44,6 +44,8 @@ import {
   Link,
   ArrowUp,
   ArrowDown,
+  UserRoundCog,
+  UserCheck,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -81,6 +83,8 @@ export const ICONS: Record<IconName, LucideIcon> = {
   copy: Copy,
   upload: Upload,
   reload: RotateCcw,
+  'planet-user': UserRoundCog,
+  'planet-completion': UserCheck,
   plus: Plus,
   configuration: Settings,
   shop: ShoppingCart,

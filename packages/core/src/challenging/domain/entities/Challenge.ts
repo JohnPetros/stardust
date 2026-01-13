@@ -25,7 +25,7 @@ export type ChallengeProps = {
   categories: ChallengeCategory[]
   downvotesCount: Integer
   upvotesCount: Integer
-  completionsCount: Integer
+  completionCount: Integer
   postedAt: Date
   starId: Id | null
   description: Text
@@ -257,8 +257,8 @@ export class Challenge extends Entity<ChallengeProps> {
     this.props.downvotesCount = downvotesCount
   }
 
-  get completionsCount() {
-    return this.props.completionsCount
+  get completionCount() {
+    return this.props.completionCount
   }
 
   get testCases() {
@@ -288,7 +288,7 @@ export class Challenge extends Entity<ChallengeProps> {
       downvotesCount: this.downvotesCount.value,
       starId: this.props.starId?.value,
       upvotesCount: this.upvotesCount.value,
-      completionsCount: this.completionsCount.value,
+      completionCount: this.completionCount.value,
       isPublic: this.isPublic.value,
       userOutputs: this.props.userOutputs.items,
       results: this.props.results.items,

@@ -13,7 +13,7 @@ type Props = {
   categories: ChallengeCategory[]
   upvotesCount: number
   downvotesCount: number
-  completionsCount: number
+  completionCount: number
   authorSlug: string
   authorName: string
 }

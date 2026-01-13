@@ -5,6 +5,8 @@ export type IconName =
   | 'challenge'
   | 'dashboard'
   | 'planet'
+  | 'planet-user'
+  | 'planet-completion'
   | 'edition'
   | 'rocket'
   | 'loading'

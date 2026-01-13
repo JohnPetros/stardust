@@ -5,6 +5,7 @@ import type { Planet } from '@stardust/core/space/entities'
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabasePostgreError } from '../../errors'
 import { SupabasePlanetMapper } from '../../mappers/space'
+import { SupabasePlanet, SupabaseStar } from '../../types'
 
 export class SupabasePlanetsRepository
   extends SupabaseRepository
@@ -12,10 +13,25 @@ export class SupabasePlanetsRepository
 {
   async findAll(): Promise<Planet[]> {
     const { data, error } = await this.supabase
-      .from('planets_view')
-      .select('*, stars(id, name, number, slug, is_available, is_challenge)')
+      .from('planets')
+      .select(`
+        *,
+        completion_count: count_planet_completions,
+        user_count: count_users_at_planet,
+        stars(
+          id, 
+          name, 
+          number, 
+          slug, 
+          is_available,
+          is_challenge,
+          user_count: count_users_at_star,
+          unlock_count: count_star_unlocks
+        )
+      `)
       .order('position', { ascending: true })
       .order('number', { foreignTable: 'stars', ascending: true })
+      .overrideTypes<SupabasePlanet[]>()
 
     if (error) {
       throw new SupabasePostgreError(error)
@@ -26,11 +42,25 @@ export class SupabasePlanetsRepository
 
   async findById(id: Id): Promise<Planet | null> {
     const { data, error } = await this.supabase
-      .from('planets_view')
-      .select('*, stars(id, name, number, slug, is_available, is_challenge)')
+      .from('planets')
+     .select(`
+        *,
+        completion_count: count_planet_completions,
+        user_count: count_users_at_planet,
+        stars(
+          id, 
+          name, 
+          number, 
+          slug, 
+          is_available,
+          is_challenge,
+          user_count: count_users_at_star,
+          unlock_count: count_star_unlocks
+        )
+      `)
       .eq('id', id.value)
       .order('number', { foreignTable: 'stars', ascending: true })
-      .single()
+      .single<SupabasePlanet>()
 
     if (error) {
       return this.handleQueryPostgresError(error)
@@ -41,11 +71,25 @@ export class SupabasePlanetsRepository
 
   async findByPosition(position: OrdinalNumber): Promise<Planet | null> {
     const { data, error } = await this.supabase
-      .from('planets_view')
-      .select('*, stars(id, name, number, slug, is_available, is_challenge)')
+      .from('planets')
+     .select(`
+        *,
+        completion_count: count_planet_completions,
+        user_count: count_users_at_planet,
+        stars(
+          id, 
+          name, 
+          number, 
+          slug, 
+          is_available,
+          is_challenge,
+          user_count: count_users_at_star,
+          unlock_count: count_star_unlocks
+        )
+      `)
       .eq('position', position.value)
       .order('number', { foreignTable: 'stars', ascending: true })
-      .single()
+      .single<SupabasePlanet>()
 
     if (error) {
       return this.handleQueryPostgresError(error)
@@ -56,10 +100,24 @@ export class SupabasePlanetsRepository
 
   async findByStar(starId: Id): Promise<Planet | null> {
     const { data, error } = await this.supabase
-      .from('planets_view')
-      .select('*, stars!inner(id, name, number, slug, is_available, is_challenge)')
+      .from('planets')
+      .select(`
+        *,
+        completion_count: count_planet_completions,
+        user_count: count_users_at_planet,
+        stars(
+          id, 
+          name, 
+          number, 
+          slug, 
+          is_available,
+          is_challenge,
+          user_count: count_users_at_star,
+          unlock_count: count_star_unlocks
+        )
+      `)
       .eq('stars.id', starId.value)
-      .single()
+      .single<SupabasePlanet>()
 
     if (error) {
       return this.handleQueryPostgresError(error)
@@ -67,8 +125,13 @@ export class SupabasePlanetsRepository
 
     const { data: stars, error: starsError } = await this.supabase
       .from('stars')
-      .select('*')
+      .select(`
+        *,
+        user_count: count_users_at_star,
+        unlock_count: count_star_unlocks  
+      `)
       .eq('planet_id', data?.id ?? '')
+      .overrideTypes<SupabaseStar[]>()
 
     if (starsError) {
       return this.handleQueryPostgresError(starsError)
@@ -81,11 +144,25 @@ export class SupabasePlanetsRepository
 
   async findLastPlanet(): Promise<Planet | null> {
     const { data, error } = await this.supabase
-      .from('planets_view')
-      .select('*, stars!inner(id, name, number, slug, is_available, is_challenge)')
+      .from('planets')
+      .select(`
+        *,
+        completion_count: count_planet_completions,
+        user_count: count_users_at_planet,
+        stars(
+          id, 
+          name, 
+          number, 
+          slug, 
+          is_available,
+          is_challenge,
+          user_count: count_users_at_star,
+          unlock_count: count_star_unlocks
+        )
+      `)
       .order('position', { ascending: false })
       .limit(1)
-      .single()
+      .single<SupabasePlanet>()
 
     if (error) {
       return this.handleQueryPostgresError(error)

@@ -98,11 +98,20 @@ export const PlanetCollapsibleView = ({
         </div>
         <div className='flex items-center gap-6'>
           <Metric
-            title='Qtd. de usuários'
-            icon='user'
+            title='Qtd. que estão neste planeta'
+            icon='planet-user'
             value={
               <p className='text-base text-center font-semibold text-zinc-300'>
-                {planet.completionsCount.value}
+                {planet.userCount.value}
+              </p>
+            }
+          />
+          <Metric
+            title='Qtd. que completaram este planeta'
+            icon='planet-completion'
+            value={
+              <p className='text-base text-center font-semibold text-zinc-300'>
+                {planet.completionCount.value}
               </p>
             }
           />

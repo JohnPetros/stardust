@@ -100,7 +100,7 @@ export const RecentChallengesTableView = ({ challenges, isLoading }: Props) => {
               </TableCell>
               <TableCell>{challenge.downvotesCount ?? 0}</TableCell>
               <TableCell>{challenge.upvotesCount ?? 0}</TableCell>
-              <TableCell>{challenge.completionsCount ?? 0}</TableCell>
+              <TableCell>{challenge.completionCount ?? 0}</TableCell>
             </TableRow>
           ))
         )}

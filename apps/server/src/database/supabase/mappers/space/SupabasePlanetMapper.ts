@@ -16,7 +16,8 @@ export class SupabasePlanetMapper {
       image: supabasePlanet.image ?? '',
       icon: supabasePlanet.icon ?? '',
       position: supabasePlanet.position ?? 1,
-      completionsCount: supabasePlanet.completions_count ?? 0,
+      completionCount: supabasePlanet.completion_count ?? 0,
+      userCount: supabasePlanet.user_count ?? 0,
       stars: supabasePlanet.stars.map(SupabaseStarMapper.toDto),
       isAvailable: supabasePlanet.is_available ?? false,
     }
@@ -33,7 +34,8 @@ export class SupabasePlanetMapper {
       icon: planetDto.icon,
       image: planetDto.image,
       position: planetDto.position,
-      completions_count: 0,
+      completion_count: 0,
+      user_count: 0,
       stars: [],
       is_available: planetDto.isAvailable,
     }

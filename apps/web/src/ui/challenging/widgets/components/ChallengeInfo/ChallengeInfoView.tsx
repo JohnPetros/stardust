@@ -8,7 +8,7 @@ type ChallengeInfo = {
   isCompleted: boolean
   downvotes: number
   upvotes: number
-  completionsCount: number
+  completionCount: number
   authorName: string
   authorSlug: string
   isAccountAuthenticated: boolean
@@ -16,7 +16,7 @@ type ChallengeInfo = {
 
 export const ChallengeInfoView = ({
   isCompleted,
-  completionsCount,
+  completionCount,
   authorName,
   downvotes,
   upvotes,
@@ -52,7 +52,7 @@ export const ChallengeInfoView = ({
       <li>
         <Info
           icon='target'
-          label={completionsCount}
+          label={completionCount}
           tooltipText={'Número de usuários que concluiram esse desafio.'}
         />
       </li>

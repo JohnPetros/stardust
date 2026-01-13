@@ -6,12 +6,13 @@
 GET {{URL}}
 ?page=1
 &itemsPerPage=10
-&levelOrder=descending
+&levelOrder=any
 &weeklyXpOrder=any
 &unlockedStarCountOrder=any
-&unlockedAchievementCountOrder=descending
+&unlockedAchievementCountOrder=any
 &completedChallengeCountOrder=any
 &spaceCompletionStatus=not-completed
+&lastUnlockedStarId=b34a4a76-0615-4910-89a9-05d34925dc70
 Authorization: Bearer {{JWT}}
 
 ### Fetch user by id

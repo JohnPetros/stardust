@@ -1,6 +1,8 @@
 import type { Database } from './Database'
 import type { SupabaseStar } from './SupabaseStar'
 
-export type SupabasePlanet = Database['public']['Views']['planets_view']['Row'] & {
+export type SupabasePlanet = Database['public']['Tables']['planets']['Row'] & {
   stars: SupabaseStar[]
+  completion_count: number
+  user_count: number
 }

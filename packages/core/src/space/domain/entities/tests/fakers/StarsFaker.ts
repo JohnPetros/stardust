@@ -15,6 +15,8 @@ export class StarsFaker {
       slug: faker.lorem.slug(),
       isAvailable: faker.datatype.boolean(),
       isChallenge: faker.datatype.boolean(),
+      unlockCount: faker.number.int({ min: 0, max: 100 }),
+      userCount: faker.number.int({ min: 0, max: 100 }),
       ...baseDto,
     }
   }

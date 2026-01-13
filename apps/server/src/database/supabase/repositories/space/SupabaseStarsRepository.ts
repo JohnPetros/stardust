@@ -5,6 +5,7 @@ import type { Star } from '@stardust/core/space/entities'
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabaseStarMapper } from '../../mappers/space'
 import { SupabasePostgreError } from '../../errors'
+import type { SupabaseStar } from '../../types'
 
 export class SupabaseStarsRepository
   extends SupabaseRepository
@@ -15,6 +16,7 @@ export class SupabaseStarsRepository
       .from('stars')
       .select('id, name, number, slug, is_available, is_challenge')
       .order('id', { ascending: true })
+      .overrideTypes<SupabaseStar[]>()
 
     if (error) {
       throw new SupabasePostgreError(error)
@@ -28,7 +30,7 @@ export class SupabaseStarsRepository
       .from('stars')
       .select('id, name, number, slug, is_available, is_challenge')
       .eq('id', starId.value)
-      .single()
+      .single<SupabaseStar>()
 
     if (error) {
       return null
@@ -42,7 +44,7 @@ export class SupabaseStarsRepository
       .from('stars')
       .select('id, name, number, slug, is_available, is_challenge')
       .eq('slug', starSlug.value)
-      .single()
+      .single<SupabaseStar>()
 
     if (error) {
       return null
@@ -57,7 +59,7 @@ export class SupabaseStarsRepository
       .select('id, name, number, slug, is_available, is_challenge')
       .eq('number', number.value)
       .order('number', { ascending: true })
-      .single()
+      .single<SupabaseStar>()
 
     if (error) {
       return null

@@ -17,7 +17,7 @@ export type ChallengeDto = {
   isPublic?: boolean
   downvotesCount?: number
   upvotesCount?: number
-  completionsCount?: number
+  completionCount?: number
   postedAt?: Date
   function?: ChallengeFunctionDto
   userOutputs?: unknown[]

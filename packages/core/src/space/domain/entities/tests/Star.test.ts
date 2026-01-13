@@ -46,6 +46,8 @@ describe('Star Entity', () => {
       slug: star.slug.value,
       isChallenge: star.isChallenge.value,
       isAvailable: star.isAvailable.value,
+      unlockCount: star.unlockCount.value,
+      userCount: star.userCount.value,
     })
   })
 })

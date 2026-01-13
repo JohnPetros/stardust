@@ -16,13 +16,15 @@ type PlanetProps = {
   icon: Image
   image: Image
   position: OrdinalNumber
-  completionsCount: Integer
+  userCount: Integer
+  completionCount: Integer
   isAvailable: Logical
   stars: Star[]
 }
 
 export class Planet extends Entity<PlanetProps> {
   static create(dto: PlanetDto): Planet {
+    console.log(dto)
     const stars = dto.stars.map(Star.create)
     stars.sort((a, b) => a.number.value - b.number.value)
     return new Planet(
@@ -31,9 +33,13 @@ export class Planet extends Entity<PlanetProps> {
         icon: Image.create(dto.icon),
         image: Image.create(dto.image),
         position: OrdinalNumber.create(dto.position, 'Posição do planeta'),
-        completionsCount: Integer.create(
-          dto.completionsCount,
+        completionCount: Integer.create(
+          dto.completionCount,
           'Quantidade de usuários que completaram esse planeta',
+        ),
+        userCount: Integer.create(
+          dto.userCount,
+          'Quantidade de usuários que estão nesse planeta',
         ),
         isAvailable: Logical.create(
           dto.isAvailable,
@@ -58,6 +64,8 @@ export class Planet extends Entity<PlanetProps> {
       name: starName.value,
       slug: starName.slug.value,
       number: this.stars.length + 1,
+      userCount: 0,
+      unlockCount: 0,
       isAvailable: false,
       isChallenge: false,
     })
@@ -167,8 +175,12 @@ export class Planet extends Entity<PlanetProps> {
     return this.props.isAvailable
   }
 
-  get completionsCount(): Integer {
-    return this.props.completionsCount
+  get completionCount(): Integer {
+    return this.props.completionCount
+  }
+
+  get userCount(): Integer {
+    return this.props.userCount
   }
 
   get dto(): PlanetDto {
@@ -178,7 +190,8 @@ export class Planet extends Entity<PlanetProps> {
       image: this.image.value,
       icon: this.icon.value,
       position: this.position.value,
-      completionsCount: this.completionsCount.value,
+      completionCount: this.completionCount.value,
+      userCount: this.userCount.value,
       isAvailable: this.isAvailable.value,
       stars: this.stars.map((star) => star.dto),
     }

@@ -28,7 +28,7 @@ export class ChallengesFaker {
         TestCaseFaker.fake().dto,
       ],
       description: '',
-      completionsCount: 0,
+      completionCount: 0,
       downvotesCount: 0,
       upvotesCount: 0,
       starId: '',

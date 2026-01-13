@@ -14,7 +14,7 @@ type Props = {
   difficultyLevel: ChallengeDifficultyLevel
   upvotesCount: number
   downvotesCount: number
-  completionsCount: number
+  completionCount: number
   authorSlug: string
   authorName: string
   categories: ChallengeCategory[]
@@ -29,7 +29,7 @@ export const ChallengeCardView = ({
   difficultyLevel,
   upvotesCount,
   downvotesCount,
-  completionsCount,
+  completionCount,
   categories,
   isCompleted,
 }: Props) => {
@@ -47,7 +47,7 @@ export const ChallengeCardView = ({
       </div>
       <ChallengeInfo
         isCompleted={isCompleted ?? false}
-        completionsCount={completionsCount}
+        completionCount={completionCount}
         authorName={authorName}
         authorSlug={authorSlug}
         upvotes={upvotesCount}
