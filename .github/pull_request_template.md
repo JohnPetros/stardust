@@ -1,11 +1,11 @@
-## 🎯 Objetivo
+## 🎯 Objetivo (obrigatório)
 
-## #️⃣ Issues relacionadas
+## #️⃣ Issues relacionadas (opcional)
 
-## 🐛 Causa do bug
+## 🐛 Causa do bug (obrigatório se for um bug)
 
-## 📋 Changelog
+## 📋 Changelog (obrigatório)
 
-## 👀 Observação
+## 👀 Observação (opcional)
 
-## 🧪 Como testar 
+## 🧪 Como testar (obrigatório) 
