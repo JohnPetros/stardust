@@ -40,7 +40,7 @@ export const AvatarFormView = ({
   initialValues,
   onSubmit,
 }: PropsWithChildren<Props>) => {
-  const {storageService} = useRest()
+  const { storageService } = useRest()
   const {
     form,
     avatarImage,

@@ -75,7 +75,8 @@ GEMINI.md
 AGENTS.md
 
 # Antigravity
-# .agent/
+.agent/
+
+.opencode/
 
 .context/
-.opencode
