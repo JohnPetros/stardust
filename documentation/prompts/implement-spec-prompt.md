@@ -10,13 +10,16 @@ Executar o plano de implementação técnica de forma iterativa, organizada e va
 
 1.  **Validação de Diretrizes e Arquitetura:**
     Antes de iniciar a implementação, certifique-se de que compreende as diretrizes e a estrutura do projeto:
+    *   **Índice de Diretrizes:** `documentation/guidelines/guidelines-rule.md` (Verifique aqui diretrizes específicas extras)
     *   **Arquitetura & Clean Architecture:** `documentation/architecture.md` (Fonte primária de verdade)
     *   **Padronização de Código:** `documentation/guidelines/code-conventions-guidelines.md`
-    *   **Diretrizes de Camadas:**
-        *   **Core:** `documentation/guidelines/core-package-guideines.md`
-        *   **UI:** `documentation/guidelines/ui-later-guidelines.md`
-        *   **REST:** `documentation/guidelines/rest-layer-guidelines.md`
-        *   **RPC:** `documentation/guidelines/rpc-layer-guidelines.md`
+    *   **Diretrizes por Camada:**
+        *   **Core (Domínio):** `documentation/guidelines/core-package-guideines.md`
+        *   **UI (Widgets & Design):** `documentation/guidelines/ui-layer-guidelines.md`
+        *   **REST (Integrações HTTP):** `documentation/guidelines/rest-layer-guidelines.md`
+        *   **RPC (Server Actions):** `documentation/guidelines/rpc-layer-guidelines.md`
+        *   **Queue (Background Jobs):** `documentation/guidelines/queue-layer-guidelines.md`
+        *   **Database (Persistência):** `documentation/guidelines/database-guidelines.md`
     *   **Padrões de Testes:** `documentation/guidelines/unit-tests-guidelines.md`
 
 2.  **Decomposição Atômica:**
@@ -34,7 +37,7 @@ Executar o plano de implementação técnica de forma iterativa, organizada e va
 4.  **Ciclo de Qualidade e Verificação (Por Tarefa):**
     Ao finalizar a codificação de *cada micro-tarefa*, execute os passos de validação ANTES de passar para a próxima:
     *   **Formatação e Lint:** Execute `npx biome check --apply .` para garantir conformidade e formatação.
-    *   **Testes:** Execute `npm run test -- caminho/do/arquivo.test.ts` para validar a lógica implementada.
+    *   **Testes:** Execute `npm run test` para validar a lógica implementada
     *   **Contexto de Monorepo:** O comando deve ser executado **dentro do diretório da aplicação ou pacote específico** (onde reside o `package.json`, ex: `apps/web` ou `packages/core`), e não na raiz do workspace.
     *   **Critério de Aceite:** Corrija imediatamente quaisquer erros do linter ou testes falhando. Não avance com código "quebrado".
 
