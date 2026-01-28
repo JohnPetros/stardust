@@ -6,13 +6,16 @@ export class FeedbackIntent {
   private constructor(readonly value: FeedbackIntentValue) {}
 
   static create(value: string): FeedbackIntent {
-    const validValues: FeedbackIntentValue[] = ['bug', 'idea', 'other']
-
-    if (!validValues.includes(value as FeedbackIntentValue)) {
+    if (!FeedbackIntent.isValid(value)) {
       throw new Error(`Invalid feedback intent: ${value}`)
     }
 
     return new FeedbackIntent(value as FeedbackIntentValue)
+  }
+
+  static isValid(value: string): value is FeedbackIntentValue {
+    const validValues: FeedbackIntentValue[] = ['bug', 'idea', 'other']
+    return validValues.includes(value as FeedbackIntentValue)
   }
 
   get isBug(): Logical {
