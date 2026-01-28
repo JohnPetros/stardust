@@ -22,6 +22,7 @@ export class SendFeedbackReportUseCase implements UseCase<Request, Response> {
       feedbackReportContent: report.content.value,
       feedbackReportIntent: report.intent.value,
       feedbackReportSentAt: report.sentAt.toISOString(),
+      screenshot: report.screenshot?.value,
       author: report.author.dto,
     })
     await this.broker.publish(event)

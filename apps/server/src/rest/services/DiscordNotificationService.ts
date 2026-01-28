@@ -87,16 +87,18 @@ export class DiscordNotificationService implements NotificationService {
     })
   }
 
-  async sendFeedbackReportNotification(payload: EventPayload<typeof FeedbackReportSentEvent>): Promise<RestResponse> {
+  async sendFeedbackReportNotification(
+    payload: EventPayload<typeof FeedbackReportSentEvent>,
+  ): Promise<RestResponse> {
     const colors = {
-      ISSUE: 16711680, // Red
-      IDEA: 16776960, // Yellow
-      PRAISE: 65280, // Green
+      bug: 16711680, // Red
+      idea: 16776960, // Yellow
+      other: 65280, // Green
     }
     const intents = {
-      ISSUE: 'Bug',
-      IDEA: 'Sugerir Ideia',
-      PRAISE: 'Elogio',
+      bug: 'Bug',
+      idea: 'Sugerir Ideia',
+      other: 'Outro',
     }
 
     const color = colors[payload.feedbackReportIntent as keyof typeof colors] || 0x3498db
@@ -113,17 +115,22 @@ export class DiscordNotificationService implements NotificationService {
               value: payload.author.entity?.name ?? 'Anônimo',
               inline: true,
             },
+            ...(payload.author.entity?.slug
+              ? [
+                  {
+                    name: 'Link para o perfil',
+                    value: `https://stardust-app.com.br/profile/${payload.author.entity.slug}`,
+                    inline: true,
+                  },
+                ]
+              : []),
             {
-              name: 'Link para o perfil',
-              value: `https://stardust-app.com.br/profile/${payload.author.entity?.slug}`,
-              inline: true,
-            },
-             {
               name: 'Link para o ver o feedback',
               value: `https://stardust-app.com.br/reporting/feedback/${payload.feedbackReportId}`,
               inline: false,
             },
           ],
+          image: payload.screenshot ? { url: payload.screenshot } : undefined,
           timestamp: payload.feedbackReportSentAt,
         },
       ],

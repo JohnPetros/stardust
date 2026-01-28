@@ -21,8 +21,6 @@ export class SendFeedbackReportController implements Controller<Schema> {
       await http.getBody()
     const accountId = await http.getAccountId()
 
-    console.log(userName, userSlug, userAvatar)
-
     const response = await this.useCase.execute({
       content,
       intent,
