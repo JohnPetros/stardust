@@ -1,0 +1,1 @@
+export { FeedbackIntent } from './FeedbackIntent'
