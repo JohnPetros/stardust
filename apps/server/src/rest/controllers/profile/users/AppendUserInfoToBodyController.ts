@@ -12,6 +12,7 @@ export class AppendUserInfoToBodyController implements Controller {
     http.extendBody({
       userName: user.name,
       userSlug: user.slug,
+      userAvatar: user.avatar,
     })
     return http.pass()
   }
