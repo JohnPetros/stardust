@@ -18,6 +18,9 @@ issue.md
 .next
 /out/
 
+# TypeScript
+tsconfig.tsbuildinfo
+
 # netlify
 .netlify
 
