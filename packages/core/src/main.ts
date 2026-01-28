@@ -131,5 +131,11 @@ export * from './storage/use-cases/index'
 // Notification
 export * from './notification/interfaces/index'
 
+// Reporting
+export * from './reporting/interfaces/index'
+export * from './reporting/use-cases/index'
+export * from './reporting/domain/entities/index'
+export * from './reporting/domain/entities/dtos/index'
+
 // UI
 export * from './ui/interfaces/index'
