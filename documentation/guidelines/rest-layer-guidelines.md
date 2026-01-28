@@ -1,116 +1,121 @@
----
-alwaysApply: false
----
-# Camada REST
+# Diretrizes da Camada REST
 
 A camada `rest` é responsável por realizar requisições HTTP para APIs externas e serviços remotos. Ela atua como uma porta de saída da aplicação, permitindo que o sistema interaja com outros serviços através do protocolo HTTP.
 
-## Componentes Principais
+## Visão Geral
 
-### **RestClient (AxiosRestClient)**
+O objetivo principal desta camada é abstrair a complexidade das requisições HTTP (como configuração de headers, parsing de resposta, tratamento de erros e paginação) através de uma interface unificada `RestClient`.
 
-Implementação da interface `RestClient` do core usando Axios como biblioteca HTTP.
+*   **Interface Base:** `RestClient` (`@stardust/core/global/interfaces`)
+*   **Resposta Padrão:** `RestResponse<Body>` (`@stardust/core/global/responses`)
 
-**Características:**
-- Suporte completo aos métodos HTTP (GET, POST, PUT, PATCH, DELETE)
-- Configuração de base URL e headers customizados
-- Gerenciamento de query parameters
-- Tratamento automático de erros HTTP
-- Suporte a autenticação via Bearer token
+## Implementações
 
-**Exemplo de uso:**
+Existem duas implementações principais do `RestClient`, adaptadas para cada ambiente:
+
+### 1. Web (`apps/web`) -> `NextRestClient`
+Utilizada pelo Frontend (Next.js) para se comunicar com o Backend (`apps/server`) ou outras APIs.
+*   **Tecnologia Base:** `fetch` (Nativo)
+*   **Recursos Específicos:** Suporte a cache e revalidação do Next.js 13+ (`tags`, `revalidate`).
+*   **Localização:** `apps/web/src/rest/next/NextRestClient.ts`
+
+### 2. Studio (`apps/studio`) -> `AxiosRestClient`
+Utilizada pelo Painel Admin (Remix/Vite) para comunicação com o Backend.
+*   **Tecnologia Base:** `axios`
+*   **Padrão:** Factory Function (diferente do Server que usa Class)
+*   **Localização:** `apps/studio/src/rest/axios/AxiosRestClient.ts`
+
+### 3. Server (`apps/server`) -> `AxiosRestClient`
+Utilizada pelo Backend para consumir serviços externos (ex: Supabase, Discord, Gateways de Pagamento).
+*   **Tecnologia Base:** `axios`
+*   **Padrão:** Classe Singleton/Instanciável
+*   **Localização:** `apps/server/src/rest/axios/AxiosRestClient.ts`
+
+## Estrutura de Pastas
+
+```text
+src/rest/
+├── axios/ ou next/      # Implementação concreta do cliente (Infrastructure)
+└── services/            # Serviços de domínio que consomem APIs (Use Cases)
+```
+
+## Como Implementar um Novo Serviço REST
+
+Os serviços REST devem implementar interfaces de domínio definidas no pacote `core`. Eles traduzem chamadas de métodos tipados para rotas HTTP.
+
+### Passo 1: Definir a Interface no Core
+Garanta que a interface do serviço exista em `@stardust/core/<dominio>/interfaces`.
+
 ```typescript
-import { AxiosRestClient } from '@/rest/axios/axios-rest-client'
-
-const restClient = AxiosRestClient('https://api.exemplo.com')
-restClient.setAuthorization('seu-token-aqui')
-restClient.setHeader('Content-Type', 'application/json')
-
-const response = await restClient.get<User[]>('/users')
-if (response.isSuccessful) {
-  const users = response.body
+// core/src/notification/interfaces/NotificationService.ts
+export interface NotificationService {
+  sendPlanetCompletedNotification(user: string, planet: string): Promise<RestResponse>
 }
 ```
 
-### **Services**
+### Passo 2: Criar a Classe/Factory de Serviço
+Implemente a interface injetando o `RestClient`.
 
-Factory functions que implementam a lógica de comunicação com APIs externas.
-
-**Padrão de implementação:**
+**No Server (Classe):**
 ```typescript
-export const MembershipService = (restClient: RestClient) => {
-  return {
-    async fetchUsers() {
-      return await restClient.get<User[]>('/users')
-    },
-    
-    async createUser(userData: CreateUserDto) {
-      return await restClient.post<User>('/users', userData)
-    }
+import type { RestClient } from '@stardust/core/global/interfaces'
+import type { NotificationService } from '@stardust/core/notification/interfaces'
+
+export class DiscordNotificationService implements NotificationService {
+  constructor(private readonly restClient: RestClient) {}
+
+  async sendPlanetCompletedNotification(user: string, planet: string) {
+    return await this.restClient.post('/', {
+      content: `Usuário ${user} completou o planeta ${planet}`,
+    })
   }
 }
 ```
 
-**Services disponíveis:**
-- `MembershipService`: Operações relacionadas a usuários e membership
-- `TelemetryService`: Operações de telemetria (⚠️ **incompleto**)
-
-### **Utilitários**
-
-#### **buildUrl**
-Constrói URLs completas com query parameters:
+**Na Web e Studio (Factory Function):**
 ```typescript
-buildUrl('https://api.com', '/users', { page: '1', limit: '10' })
-// Resultado: 'https://api.com/users?page=1&limit=10'
-```
+import type { ProfileService as IProfileService } from '@stardust/core/profile/interfaces'
+import type { RestClient } from '@stardust/core/global/interfaces'
 
-#### **createRestResponse**
-Converte respostas do Axios para o formato `RestResponse`:
-```typescript
-const restResponse = createRestResponse(axiosResponse)
-```
-
-#### **handleError**
-Trata erros HTTP e os converte para `RestResponse`:
-```typescript
-const errorResponse = handleError(error)
-```
-
-## Padrões e Convenções
-
-### **1. Nomeação de Arquivos**
-- Services: `[module]-service.ts` (ex: `membership-service.ts`)
-- Utilitários: `[function-name].ts` (ex: `build-url.ts`)
-- Barrel files: `index.ts` para exportações centralizadas
-
-### **2. Factory Functions**
-- Services são implementados como factory functions
-- Recebem `RestClient` como dependência
-- Retornam objetos com métodos que fazem requisições HTTP
-- Seguem o padrão de injeção de dependência
-
-### **3. Tratamento de Respostas**
-- Todas as respostas são encapsuladas em `RestResponse<T>`
-- Verificação de sucesso através de `response.isSuccessful`
-- Acesso aos dados via `response.body`
-- Tratamento de erros via `response.errorMessage`
-
-### **4. Tipagem**
-- Uso de generics para tipagem forte das respostas
-- Interfaces definidas no core (`@/core/interfaces`)
-- DTOs para transferência de dados
-
-## Integração com o Core
-
-A camada REST implementa a interface `RestClient` definida no core:
-
-```typescript
-// src/core/interfaces/rest-client.ts
-export interface RestClient {
-  get<ResponseBody>(url: string): Promise<RestResponse<ResponseBody>>
-  post<ResponseBody>(url: string, body?: unknown): Promise<RestResponse<ResponseBody>>
-  // ... outros métodos
+export const ProfileService = (restClient: RestClient): IProfileService => {
+  return {
+    async fetchUserById(userId: Id) {
+      return await restClient.get(`/profile/users/id/${userId.value}`)
+    },
+    // ...
+  }
 }
 ```
 
-Esta camada garante uma comunicação robusta e tipada com APIs externas, mantendo a separação de responsabilidades e facilitando a manutenção do código.
+## Funcionalidades do RestClient
+
+### Gerenciamento de Query Params
+Use `setQueryParam` para adicionar parâmetros de busca de forma estruturada antes de realizar a chamada. O `clearQueryParams` deve ser chamado quando necessário (embora o cliente Web faça isso automaticamente após um GET bem-sucedido em alguns casos).
+
+```typescript
+restClient.setQueryParam('page', '1')
+restClient.setQueryParam('search', 'query')
+const response = await restClient.get('/users')
+```
+
+### Tratamento de Paginação
+O `RestClient` detecta automaticamente headers de paginação (ex: `x-pagination-response`). Se presentes, ele encapsula o corpo da resposta em um `PaginationResponse`.
+
+```typescript
+if (response.body instanceof PaginationResponse) {
+  console.log(response.body.items)      // Dados
+  console.log(response.body.totalItems) // Total
+}
+```
+
+### Tratamento de Erros
+Todas as respostas são envolvidas em um `RestResponse`.
+*   Verifique `response.isFailure` para erros.
+*   Use `response.throwError()` para lançar o erro capturado se necessário.
+
+## Boas Práticas
+
+1.  **Sempre tipar o retorno:** Use `Promise<RestResponse<SeuTipoDTO>>`.
+2.  **Injeção de Dependência:** Nunca instancie o `RestClient` diretamente dentro do serviço. Receba-o via construtor ou argumento.
+3.  **URLs Relativas:** Configure a `baseUrl` no cliente, e use caminhos relativos nos serviços (`/users` em vez de `http://api.../users`).
+4.  **Mapeamentos:** Se a API externa retornar dados em formato diferente do esperado pelo domínio, faça a conversão dentro do serviço REST antes de retornar.

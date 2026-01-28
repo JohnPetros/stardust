@@ -1,68 +1,154 @@
----
-alwaysApply: false
----
-# Camada de Fila (queue)
+# Diretrizes da Camada de Fila (queue)
 
-A camada `queue` é responsável por todo o processamento assíncrono da aplicação, como execução de jobs em background, cron jobs, filas de mensagens e fluxos automatizados. Ela permite desacoplar a execução de tarefas pesadas ou demoradas do fluxo principal da aplicação.
+Esta diretriz detalha como implementar e gerenciar processamento assíncrono e jobs em background na aplicação server-side (`apps/server`).
 
-## Componentes Principais
+## Visão Geral
 
-### **Job (Handler)**
+A camada de fila utiliza **Inngest** como motor de execução de workflows e jobs. Adotamos um padrão de design que separa a **definição do Job** (lógica de execução) da **implementação da infraestrutura** (Inngest Functions), utilizando uma abstração `Amqp` para facilitar testes e desacoplamento.
 
-O `Job` é o `handler` responsável por processar uma mensagem recebida pela fila. Diferente de controllers ou actions, os jobs são implementados como **Classes** que implementam a interface `Job<Payload>`.
+## Estrutura de Pastas
 
-**Características:**
-- Implementa a interface `Job<Payload>` do core.
-- Define uma chave estática `KEY` para identificação única do job.
-- Recebe dependências (Use Cases, Repositories) via construtor.
-- Possui um método `handle` que recebe o protocolo `Amqp`.
+```text
+apps/server/src/queue/
+├── inngest/                # Implementação específica da infraestrutura (Inngest)
+│   ├── functions/          # Agrupamento de funções Inngest por domínio
+│   ├── InngestAmqp.ts      # Adaptador da interface Amqp para o Inngest
+│   └── inngest.ts          # Configuração do cliente e schemas de eventos
+└── jobs/                   # Definições de Jobs agnósticos à infraestrutura
+    ├── notification/       # Jobs do domínio de notificação
+    ├── profile/            # Jobs do domínio de perfil
+    └── ...
+```
 
-**Exemplo de Implementação:**
+## 1. Definindo um Novo Job
+
+Os Jobs devem encapsular a lógica a ser executada quando um evento ocorre. Eles residem em `src/queue/jobs/<dominio>`.
+
+### Padrão de Implementação
+
+1.  **Nomenclatura**: Use `VerboSubstantivoJob` (ex: `SendPlanetCompletedNotificationJob`).
+2.  **Identificadores**: Defina `KEY` (identificador único do job) e `SERVICE_NAME`.
+3.  **Dependências**: Injete serviços necessários via construtor.
+4.  **Método Handle**: Recebe `InngestAmqp<Payload>` para execução.
+
+**Exemplo:**
 
 ```typescript
-import type { Job, Amqp } from '@stardust/core/global/interfaces'
+import type { InngestAmqp } from '@/queue/inngest/InngestAmqp'
+import type { NotificationService } from '@stardust/core/notification/interfaces'
+import type { PlanetCompletedEvent } from '@stardust/core/space/events'
 import type { EventPayload } from '@stardust/core/global/types'
-import { CreateUserUseCase } from '@stardust/core/profile/use-cases'
 
-type Payload = EventPayload<typeof SomeEvent>
+// Helper para inferir tipo do payload do evento
+type Payload = EventPayload<typeof PlanetCompletedEvent>
 
-export class CreateUserJob implements Job<Payload> {
-  static readonly KEY = 'profile/create.user.job'
+export class SendPlanetCompletedNotificationJob {
+  // Chave única para logs e identificação
+  static readonly KEY = 'notification/send.planet.completed.notification.job'
+  static readonly SERVICE_NAME = 'Notification Service'
 
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(private readonly service: NotificationService) {}
 
-  async handle(amqp: Amqp<Payload>) {
-    const payload = amqp.getPayload()
-    const createUserUseCase = new CreateUserUseCase(this.usersRepository)
+  async handle(amqp: InngestAmqp<Payload>) {
+    // Recupera dados do evento
+    const { userSlug, userName, planetName } = amqp.getPayload()
 
-    // O amqp.run permite executar passos de forma resiliente (steps)
-    await amqp.run(
-      async () => await createUserUseCase.execute(payload),
-      CreateUserUseCase.name,
+    // amqp.run cria um "step" rastreável no Inngest
+    const response = await amqp.run(
+      async () =>
+        await this.service.sendPlanetCompletedNotification(
+          userSlug,
+          userName,
+          planetName,
+        ),
+      SendPlanetCompletedNotificationJob.SERVICE_NAME,
     )
+
+    if (response?.isFailure) response.throwError()
   }
 }
 ```
 
-### **Amqp (Protocol)**
+## 2. Implementando a Função Inngest
 
-O `Amqp` é o `protocol` que fornece acesso aos dados do job e métodos de controle de fluxo. Na implementação atual, ele abstrai a biblioteca **Inngest**.
+Para que o Job seja executado, ele precisa ser registrado como uma Inngest Function em `src/queue/inngest/functions`.
 
-**Funcionalidades:**
-- `getPayload()`: Retorna os dados da mensagem/evento.
-- `run(step, name)`: Executa um passo da tarefa. O `run` é crucial para garantir idempotência e retries em etapas específicas (step functions).
-- Controle de falhas e retries.
+### Padrão de Implementação
 
-## Fluxo de Execução
+1.  Agrupe funções por domínio (ex: `NotificationFunctions` gerencia todos os jobs de notificação).
+2.  Estenda a classe base `InngestFunctions` (caso exista) ou siga o padrão de fábrica.
+3.  Realize a **Injeção de Dependências** dentro do corpo da função (Composition Root).
+4.  Instancie o `InngestAmqp` com o contexto do Inngest.
 
-1. Um evento é disparado na aplicação ou um agendamento é acionado.
-2. O provedor de fila (Inngest) recebe o sinal e instancia o `Job` correspondente.
-3. O método `handle` é chamado, recebendo uma instância de `Amqp`.
-4. O Job utiliza `amqp.run()` para executar casos de uso ou lógica de negócio, garantindo que cada passo seja registrado e possa ser recuperado em caso de falha.
+**Exemplo:**
 
-## Padrões e Convenções
+```typescript
+// src/queue/inngest/functions/NotificationFunctions.ts
 
-1. **Classes para Jobs**: Use classes para permitir injeção de dependências no construtor.
-2. **Identificação Única**: Defina sempre `static readonly KEY` com um formato hierárquico (ex: `domain/action.job`).
-3. **Uso de Steps**: Envolva chamadas importantes (como UseCases) em `amqp.run()` para aproveitar os recursos de steps e retries da infraestrutura de fila.
-4. **Payload Tipado**: Utilize `EventPayload<Type>` para garantir tipagem correta dos dados recebidos.
+import { PlanetCompletedEvent } from '@stardust/core/space/events'
+import { SendPlanetCompletedNotificationJob } from '@/queue/jobs/notification'
+// ... importações de implementações concretas (Axios, Repositories)
+
+export class NotificationFunctions extends InngestFunctions {
+  
+  private createSendPlanetNotificationFunction() {
+    return this.inngest.createFunction(
+      { id: SendPlanetCompletedNotificationJob.KEY }, // ID do Job
+      { event: PlanetCompletedEvent._NAME },          // Evento gatilho
+      async (context) => {
+        // COMPOSITION ROOT: Instanciar dependências concretas aqui
+        const restClient = new AxiosRestClient(ENV.discordWebhookUrl)
+        const service = new DiscordNotificationService(restClient)
+        
+        // Configurar adaptadores
+        const amqp = new InngestAmqp<typeof context.event.data>(context)
+        const job = new SendPlanetCompletedNotificationJob(service)
+        
+        // Executar
+        return await job.handle(amqp)
+      },
+    )
+  }
+
+  getFunctions() {
+    return [
+      this.createSendPlanetNotificationFunction(),
+      // ... outros jobs
+    ]
+  }
+}
+```
+
+## 3. Registrando Eventos e Schemas
+
+Ao criar novos eventos que disparam jobs, adicione seus schemas de validação Zod no arquivo `src/queue/inngest/inngest.ts`.
+
+```typescript
+// src/queue/inngest/inngest.ts
+
+const eventsSchema = {
+  // ... outros eventos
+  [NovoEvento._NAME]: {
+    data: z.object({
+      userId: idSchema,
+      payloadField: z.string(),
+    }),
+  },
+}
+```
+
+## Detalhes da Interface Amqp (`InngestAmqp`)
+
+A classe `InngestAmqp` fornece métodos para interagir com o fluxo de trabalho de maneira segura e tipada:
+
+*   `run(callback, stepName)`: Executa um bloco de código como um passo atômico do Inngest (com retentativas automáticas e memoização). **Sempre envolva chamadas a serviços externos ou efeitos colaterais nisto.**
+*   `waitFor(eventName, timeout)`: Pausa a execução até que outro evento ocorra.
+*   `sleepFor(timeExpression)`: Pausa a execução por um tempo determinado.
+*   `getPayload()`: Retorna os dados tipados do evento gatilho.
+
+## Fluxo de Desenvolvimento
+
+1.  **Defina o Evento** no pacote `core` (se ainda não existir).
+2.  **Crie o Job** em `apps/server/src/queue/jobs/<domain>` focando apenas na lógica de negócios e orquestração.
+3.  **Adicione o Schema** em `apps/server/src/queue/inngest/inngest.ts` para validação de tipos.
+4.  **Implemente a Função** em `apps/server/src/queue/inngest/functions/<Domain>Functions.ts`, conectando o Evento ao Job e injetando as dependências reais.
