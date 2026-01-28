@@ -3,7 +3,7 @@
 Este arquivo serve como índice para as diretrizes de documentação do projeto. Consulte os arquivos específicos abaixo com base na tarefa em questão.
 
 ## Diretrizes de Interface de Usuário (ui)
-**Arquivo:** `/home/petros/projects/stardust/documentation/guidelines/ui-later-guidelines.md`
+**Arquivo:** `/home/petros/projects/stardust/documentation/guidelines/ui-layer-guidelines.md`
 **Quando consultar:**
 - Ao criar ou modificar componentes React (Widgets).
 - Para entender a estrutura de um widget (View, Hook, Index).
