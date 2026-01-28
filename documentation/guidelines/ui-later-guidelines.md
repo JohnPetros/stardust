@@ -119,6 +119,10 @@ componente.
 
 **Características principais:**
 
+
+
+
+
 - **Integração**: Conecta o hook com a view, passando os dados e funções necessárias
 - **Exportação de tipos**: Ele apenas exporta o a arrow function principal, nunca a view, hook ou tipos
 - **Composição**: Combina props recebidas com dados do hook antes de passar para a view
