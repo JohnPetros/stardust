@@ -12,7 +12,6 @@ import {
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import { SignOutButton } from './SignOutButton'
 
-
 type Props = {
   left?: ReactNode
   right?: ReactNode

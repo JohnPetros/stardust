@@ -1,4 +1,6 @@
-export function normalizeHeaders(headers: Record<string, unknown>): Record<string, string> {
+export function normalizeHeaders(
+  headers: Record<string, unknown>,
+): Record<string, string> {
   const result: Record<string, string> = {}
   if (!headers) return result
   for (const [key, value] of Object.entries(headers)) {
