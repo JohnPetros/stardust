@@ -80,3 +80,4 @@ AGENTS.md
 .opencode/
 
 .context/
+*.tsbuildinfo
