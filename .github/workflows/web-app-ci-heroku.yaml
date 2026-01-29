@@ -52,7 +52,7 @@ jobs:
         working-directory: apps/web
 
       - name: Check types
-        run: npm run check-types
+        run: npm run typecheck
         working-directory: apps/web
 
       - name: Run tests
