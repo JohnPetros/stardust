@@ -22,6 +22,7 @@ export class GoogleDriveStorageProvider implements StorageProvider {
     planets: '',
     achievements: '',
     insignias: '',
+    'feedback-reports': '',
   }
   private readonly drive: drive_v3.Drive
 
