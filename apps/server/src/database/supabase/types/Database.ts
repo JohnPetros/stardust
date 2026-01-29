@@ -1548,31 +1548,51 @@ export type Database = {
           },
         ]
       }
-      guide_embeddings: {
+      feedback_reports: {
         Row: {
-          guide_id: string
+          content: string
+          created_at: string
           id: string
-          text: string
-          vector: string
+          intent: string
+          screenshot: string | null
+          user_id: string
         }
         Insert: {
-          guide_id: string
+          content: string
+          created_at?: string
           id?: string
-          text: string
-          vector: string
+          intent: string
+          screenshot?: string | null
+          user_id: string
         }
         Update: {
-          guide_id?: string
+          content?: string
+          created_at?: string
           id?: string
-          text?: string
-          vector?: string
+          intent?: string
+          screenshot?: string | null
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "guide_embeddings_guide_id_fkey"
-            columns: ["guide_id"]
+            foreignKeyName: "feedback_reports_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "guides"
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feedback_reports_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_completed_planets_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "feedback_reports_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_view"
             referencedColumns: ["id"]
           },
         ]
@@ -2304,17 +2324,17 @@ export type Database = {
       users_completed_challenges: {
         Row: {
           challenge_id: string
-          created_at: string | null
+          created_at: string
           user_id: string
         }
         Insert: {
           challenge_id: string
-          created_at?: string | null
+          created_at?: string
           user_id: string
         }
         Update: {
           challenge_id?: string
-          created_at?: string | null
+          created_at?: string
           user_id?: string
         }
         Relationships: [
@@ -3016,6 +3036,34 @@ export type Database = {
           error: true
         } & "the function public.count_comments_upvotes with parameter or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache"
       }
+      count_planet_completions: {
+        Args: { planet_row: Database["public"]["Tables"]["planets"]["Row"] }
+        Returns: number
+      }
+      count_star_unlocks: {
+        Args: { star_row: Database["public"]["Tables"]["stars"]["Row"] }
+        Returns: number
+      }
+      count_user_completed_challenges: {
+        Args: { user_row: Database["public"]["Tables"]["users"]["Row"] }
+        Returns: number
+      }
+      count_user_unlocked_achievements: {
+        Args: { user_row: Database["public"]["Tables"]["users"]["Row"] }
+        Returns: number
+      }
+      count_user_unlocked_stars: {
+        Args: { user_row: Database["public"]["Tables"]["users"]["Row"] }
+        Returns: number
+      }
+      count_users_at_planet: {
+        Args: { planet_row: Database["public"]["Tables"]["planets"]["Row"] }
+        Returns: number
+      }
+      count_users_at_star: {
+        Args: { star_row: Database["public"]["Tables"]["stars"]["Row"] }
+        Returns: number
+      }
       delete_public_user: { Args: { userid: string }; Returns: undefined }
       delete_user: { Args: { userid: string }; Returns: undefined }
       deleteuser: { Args: { userid: string }; Returns: undefined }
@@ -3028,6 +3076,10 @@ export type Database = {
             Args: { difficulty: string; status: string; userid: string }
             Returns: undefined
           }
+      get_last_user_unlocked_star_id: {
+        Args: { user_row: Database["public"]["Tables"]["users"]["Row"] }
+        Returns: string
+      }
       get_next_star_from_next_planet: {
         Args: { _current_planet_id: string; _user_id: string }
         Returns: {
@@ -3051,6 +3103,10 @@ export type Database = {
       update_user_email: {
         Args: { new_email: string; user_id: string }
         Returns: undefined
+      }
+      verify_user_space_completion: {
+        Args: { user_row: Database["public"]["Tables"]["users"]["Row"] }
+        Returns: boolean
       }
     }
     Enums: {
@@ -3116,7 +3172,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_12_12: {
+      messages_2026_01_05: {
         Row: {
           event: string | null
           extension: string
@@ -3149,7 +3205,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_12_13: {
+      messages_2026_01_06: {
         Row: {
           event: string | null
           extension: string
@@ -3182,7 +3238,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_12_14: {
+      messages_2026_01_07: {
         Row: {
           event: string | null
           extension: string
@@ -3215,7 +3271,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_12_15: {
+      messages_2026_01_08: {
         Row: {
           event: string | null
           extension: string
@@ -3248,7 +3304,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_12_16: {
+      messages_2026_01_09: {
         Row: {
           event: string | null
           extension: string
@@ -3281,7 +3337,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_12_17: {
+      messages_2026_01_10: {
         Row: {
           event: string | null
           extension: string
@@ -3314,7 +3370,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2025_12_18: {
+      messages_2026_01_11: {
         Row: {
           event: string | null
           extension: string

@@ -1,4 +1,4 @@
-# Promtp: Criar PRD
+# Promtp: Criar Pull Request
 
 **Objetivo:**
 Padronizar a criação de Pull Requests (PRs), garantindo descrições claras que facilitem a revisão de código e o rastreamento de tarefas. O foco é utilizar exclusivamente as ferramentas do **GitHub MCP** para manter a integridade do fluxo de trabalho.

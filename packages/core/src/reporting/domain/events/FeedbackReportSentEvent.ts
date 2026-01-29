@@ -6,6 +6,7 @@ type Payload = {
   feedbackReportContent: string
   feedbackReportIntent: string
   feedbackReportSentAt: string
+  screenshot?: string
   author: AuthorAggregateDto
 }
 
