@@ -6,9 +6,11 @@
     "queue": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/serverless",
     "build": "next build",
     "start": "node .next/standalone/apps/web/server.js -p $PORT",
+    "codecheck": "npm run lint && npm run format",
+    "typecheck": "tsc --noEmit",
     "lint": "biome lint src --diagnostic-level=error",
+    "format": "biome format src --write",
     "db:types": "supabase gen types typescript --project-id aukqejqsiqsqowafpppb > src/api/supabase/types/Database.ts",
-    "check-types": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watchAll"
   },
