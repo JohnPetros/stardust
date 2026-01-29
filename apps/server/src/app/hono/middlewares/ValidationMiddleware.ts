@@ -13,6 +13,7 @@ export class ValidationMiddleware {
     return zValidator(target, schema, (result, context) => {
       if (!result.success) {
         const error = ZodValidationErrorFactory.produce(result.error)
+        console.log('Validation error:', error)
         return context.json(error, HTTP_STATUS_CODE.badRequest)
       }
     })

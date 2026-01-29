@@ -33,6 +33,7 @@ export class FilesStorageRouter extends HonoRouter {
         z.object({ folder: storageFolderSchema }),
       ),
       async (context) => {
+        console.log('Received file upload request')
         const http = new HonoHttp(context)
         const storageProvider = new SupabaseStorageProvider()
         const controller = new UploadFileController(storageProvider)
