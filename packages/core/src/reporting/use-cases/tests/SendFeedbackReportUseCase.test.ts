@@ -10,12 +10,12 @@ describe('SendFeedbackReportUseCase', () => {
   let broker: Mock<Broker>
   let useCase: SendFeedbackReportUseCase
 
-  beforeEach(() => {
+  beforeAll(() => {
     repository = mock<FeedbackReportsRepository>()
     broker = mock<Broker>()
 
-    repository.add.mockImplementation()
-    broker.publish.mockImplementation()
+    repository.add.mockResolvedValue(undefined)
+    broker.publish.mockResolvedValue(undefined)
 
     useCase = new SendFeedbackReportUseCase(repository, broker)
   })
@@ -47,11 +47,9 @@ describe('SendFeedbackReportUseCase', () => {
   })
 
   it('should throw if repository fails', async () => {
-    // Arrange
     const dto = FeedbackReportsFaker.fakeDto()
     repository.add.mockRejectedValue(new Error('Repo error'))
 
-    // Act & Assert
     await expect(useCase.execute(dto)).rejects.toThrow('Repo error')
   })
 })

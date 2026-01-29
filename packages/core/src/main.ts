@@ -136,6 +136,8 @@ export * from './reporting/interfaces/index'
 export * from './reporting/use-cases/index'
 export * from './reporting/domain/entities/index'
 export * from './reporting/domain/entities/dtos/index'
+export * from './reporting/domain/structures/index'
+export * from './reporting/domain/events/index'
 
 // UI
 export * from './ui/interfaces/index'

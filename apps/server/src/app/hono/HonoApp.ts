@@ -26,6 +26,7 @@ import {
   RankingFunctions,
   NotificationFunctions,
   StorageFunctions,
+  ReportingFunctions,
 } from '@/queue/inngest/functions'
 import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
 import {
@@ -40,6 +41,7 @@ import {
   StorageRouter,
   NotificationRouter,
   ConversationRouter,
+  ReportingRouter,
 } from './routers'
 import { ForumRouter } from './routers/forum'
 import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
@@ -159,6 +161,7 @@ export class HonoApp {
     const storageRouter = new StorageRouter(this)
     const notificationRouter = new NotificationRouter(this)
     const conversationRouter = new ConversationRouter(this)
+    const reportingRouter = new ReportingRouter(this)
 
     this.hono.get('/', (context) => {
       return context.json({ message: 'Everything is working!' })
@@ -177,6 +180,7 @@ export class HonoApp {
     this.hono.route('/', storageRouter.registerRoutes())
     this.hono.route('/', notificationRouter.registerRoutes())
     this.hono.route('/', conversationRouter.registerRoutes())
+    this.hono.route('/', reportingRouter.registerRoutes())
   }
 
   private registerMiddlewares() {
@@ -193,6 +197,7 @@ export class HonoApp {
       const rankingFunctions = new RankingFunctions(inngest)
       const storageFunctions = new StorageFunctions(inngest)
       const notificationFunctions = new NotificationFunctions(inngest)
+      const reportingFunctions = new ReportingFunctions(inngest)
 
       return serveInngest({
         client: inngest,
@@ -203,6 +208,7 @@ export class HonoApp {
           ...rankingFunctions.getFunctions(supabase),
           ...storageFunctions.getFunctions(),
           ...notificationFunctions.getFunctions(),
+          ...reportingFunctions.getFunctions(),
         ],
       })(context)
     })

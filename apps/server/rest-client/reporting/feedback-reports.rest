@@ -1,0 +1,11 @@
+@URL = {{BASE_URL}}/reporting/feedback
+
+### Create a feedback report
+POST {{URL}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "content": "Conteúdo do feedback de teste",
+  "intent": "bug"
+}
