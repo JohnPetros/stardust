@@ -12,7 +12,7 @@ export const challengingToolset = {
   getChallengeDescriptionTool: createTool({
     description: CHALLENGING_PROMPTS.tools.getChallengeDescription,
     inputSchema: z.object({
-      challengeId: idSchema.describe('Id do desafio'), 
+      challengeId: idSchema.describe('Id do desafio'),
     }),
     execute: async (input) => {
       const restClient = await NextServerRestClient()

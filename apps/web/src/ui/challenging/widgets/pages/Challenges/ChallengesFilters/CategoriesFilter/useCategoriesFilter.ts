@@ -28,7 +28,9 @@ export function useCategoriesFilter(initialCategories: ChallengeCategory[]) {
   function handleSearchChange(search: string) {
     const filteredCategories = !search
       ? initialCategories
-      : initialCategories.filter((category) => category.name.isLike(Text.create(search)).isTrue)
+      : initialCategories.filter(
+          (category) => category.name.isLike(Text.create(search)).isTrue,
+        )
     setCategories(filteredCategories)
     searchRef.current?.focus()
   }

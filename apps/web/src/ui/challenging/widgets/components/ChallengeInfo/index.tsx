@@ -21,10 +21,5 @@ export const ChallengeInfo = (props: ChallengeInfo) => {
       />
     )
 
-  return (
-    <ChallengeInfoView
-      {...props}
-      isAccountAuthenticated={false}
-    />
-  )
+  return <ChallengeInfoView {...props} isAccountAuthenticated={false} />
 }

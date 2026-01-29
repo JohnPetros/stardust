@@ -11,7 +11,7 @@ export function Separator({ isColumn = true, className }: SeparatorProps) {
       className={twMerge(
         'block rounded-md bg-gray-600',
         isColumn ? 'h-full w-[1px]' : 'mx-auto h-[1px] w-full',
-        className
+        className,
       )}
     />
   )

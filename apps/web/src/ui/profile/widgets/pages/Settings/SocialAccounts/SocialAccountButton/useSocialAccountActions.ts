@@ -1,7 +1,7 @@
-import { authActions } from "@/rpc/next-safe-action";
-import { ActionResponse } from "@stardust/core/global/responses";
-import { useAction } from "next-safe-action/hooks";
-import { useCallback } from "react";
+import { authActions } from '@/rpc/next-safe-action'
+import { ActionResponse } from '@stardust/core/global/responses'
+import { useAction } from 'next-safe-action/hooks'
+import { useCallback } from 'react'
 
 export function useSocialAccountActions(socialAccountProvider: 'google' | 'github') {
   const { executeAsync: disconnectSocialAccountAction } = useAction(
@@ -11,9 +11,7 @@ export function useSocialAccountActions(socialAccountProvider: 'google' | 'githu
     authActions.connectSocialAccount,
   )
 
-  const connectSocialAccount = useCallback(async (): Promise<
-    ActionResponse
-  > => {
+  const connectSocialAccount = useCallback(async (): Promise<ActionResponse> => {
     const response = await connectSocialAccountAction({
       socialAccountProvider: socialAccountProvider,
     })
@@ -22,9 +20,7 @@ export function useSocialAccountActions(socialAccountProvider: 'google' | 'githu
       : new ActionResponse({ data: response?.data })
   }, [connectSocialAccountAction])
 
-  const disconnectSocialAccount = useCallback(async (): Promise<
-    ActionResponse
-  > => {
+  const disconnectSocialAccount = useCallback(async (): Promise<ActionResponse> => {
     const response = await disconnectSocialAccountAction({
       socialAccountProvider: socialAccountProvider,
     })

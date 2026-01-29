@@ -60,7 +60,9 @@ export const CodeEditorView = ({
       }
       value={value}
       onChange={onChange}
-      onMount={(editor, monaco) => onMount(editor as unknown as monaco.editor.IStandaloneCodeEditor, monaco)}
-      />
+      onMount={(editor, monaco) =>
+        onMount(editor as unknown as monaco.editor.IStandaloneCodeEditor, monaco)
+      }
+    />
   )
 }

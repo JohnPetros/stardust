@@ -14,7 +14,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
 }
 
 body {
@@ -31,7 +30,6 @@ body {
 }
 
 @media (max-width: 1080px) {
-
   html,
   body {
     font-size: 94.75%;
@@ -39,7 +37,6 @@ body {
 }
 
 @media (max-width: 720px) {
-
   html,
   body {
     font-size: 90.5%;
@@ -91,15 +88,18 @@ button:hover {
 }
 
 input[type="time"]::-webkit-calendar-picker-indicator {
-  filter: invert(48%) sepia(13%) saturate(3207%) hue-rotate(140deg) brightness(95%) contrast(80%);
+  filter: invert(48%) sepia(13%) saturate(3207%) hue-rotate(140deg) brightness(95%)
+    contrast(80%);
 }
 
 .shiny-text {
   color: #b5b5b5a4;
-  background: linear-gradient(120deg,
-      rgba(255, 255, 255, 0) 40%,
-      rgba(255, 255, 255, 0.8) 50%,
-      rgba(255, 255, 255, 0) 60%);
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 60%
+  );
   background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;

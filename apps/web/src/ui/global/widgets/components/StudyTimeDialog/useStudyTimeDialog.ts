@@ -1,15 +1,13 @@
 'use client'
 
-import { useState } from "react"
+import { useState } from 'react'
 
 export function useStudyTimeDialog() {
   const [time, setTime] = useState()
 
-  function handleTimeChange() {
-    
-  }
+  function handleTimeChange() {}
 
   return {
-    handleTimeChange
+    handleTimeChange,
   }
 }

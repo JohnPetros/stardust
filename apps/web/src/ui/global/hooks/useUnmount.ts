@@ -11,6 +11,6 @@ export function useUnmount(onUnmount: () => void): void {
     () => () => {
       unmountHanlder.current()
     },
-    []
+    [],
   )
 }
