@@ -1,18 +1,18 @@
 import { Button } from '../Button'
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../Dialog'
+import * as Dialog from '../Dialog'
 import { useStudyTimeDialog } from './useStudyTimeDialog'
 
 type StudyTimeDialogProps = {
   onSelectTime: (time: string) => void
 }
 
-export function StudyTimeDialog({ onSelectTime }: StudyTimeDialogProps) {
+export const StudyTimeDialog = ({ onSelectTime }: StudyTimeDialogProps) => {
   const { handleTimeChange } = useStudyTimeDialog()
 
   return (
-    <Dialog>
-      <DialogContent>
-        <DialogHeader>Escolha o seu melhor horário de estudos</DialogHeader>
+    <Dialog.Container>
+      <Dialog.Content>
+        <Dialog.Header>Escolha o seu melhor horário de estudos</Dialog.Header>
         <div className='space-y-6 mt-6'>
           <div className='w-24 mx-auto p-2 rounded-md border border-gray-400 text-gray-400 focus-within:border-green-400'>
             <input
@@ -23,10 +23,10 @@ export function StudyTimeDialog({ onSelectTime }: StudyTimeDialogProps) {
           </div>
           <Button>Confirmar</Button>
         </div>
-      </DialogContent>
-      <DialogTrigger>
+      </Dialog.Content>
+      <Dialog.Trigger>
         <Button className='w-72'>Ir para a página principal</Button>
-      </DialogTrigger>
-    </Dialog>
+      </Dialog.Trigger>
+    </Dialog.Container>
   )
 }

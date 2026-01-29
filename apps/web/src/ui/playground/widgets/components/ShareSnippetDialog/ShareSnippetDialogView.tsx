@@ -3,12 +3,7 @@
 import type { PropsWithChildren } from 'react'
 
 import { Button } from '@/ui/global/widgets/components/Button'
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogTrigger,
-} from '@/ui/global/widgets/components/Dialog'
+import * as Dialog from '@/ui/global/widgets/components/Dialog'
 import { Input } from '@/ui/global/widgets/components/Input'
 
 type Props = {
@@ -22,8 +17,8 @@ export const ShareSnippetDialogView = ({
   onShareSnippet,
 }: PropsWithChildren<Props>) => {
   return (
-    <Dialog>
-      <DialogContent>
+    <Dialog.Container>
+      <Dialog.Content>
         <Input
           type='text'
           label='Url desse snippet'
@@ -32,15 +27,15 @@ export const ShareSnippetDialogView = ({
           readOnly
         />
         <div className='mt-6 grid grid-cols-2 items-center gap-2'>
-          <DialogClose asChild>
+          <Dialog.Close asChild>
             <Button className='text-gray-900' onClick={onShareSnippet}>
               Copiar
             </Button>
-          </DialogClose>
-          <DialogClose>Cancelar</DialogClose>
+          </Dialog.Close>
+          <Dialog.Close>Cancelar</Dialog.Close>
         </div>
-      </DialogContent>
-      <DialogTrigger>{trigger}</DialogTrigger>
-    </Dialog>
+      </Dialog.Content>
+      <Dialog.Trigger>{trigger}</Dialog.Trigger>
+    </Dialog.Container>
   )
 }

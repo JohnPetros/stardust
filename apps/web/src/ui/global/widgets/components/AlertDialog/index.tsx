@@ -4,7 +4,7 @@ import { type ForwardedRef, forwardRef, type ReactNode, useImperativeHandle } fr
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 
 import type { AlertDialogRef, AlertDialogType } from './types'
-import { DialogAnimation } from '../Dialog'
+import { Animation as DialogAnimation } from '../Dialog'
 import { Hydration } from '../Hydration'
 import { Animation } from '../Animation'
 import { useAlertDialog } from './useAlertDialog'

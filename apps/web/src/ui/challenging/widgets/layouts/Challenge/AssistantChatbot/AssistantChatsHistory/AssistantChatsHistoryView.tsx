@@ -5,12 +5,7 @@ import type { ChatDto } from '@stardust/core/conversation/entities/dtos'
 import { Datetime } from '@stardust/core/global/libs'
 
 import { Button } from '@/ui/global/widgets/components/Button'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTrigger,
-} from '@/ui/global/widgets/components/Dialog'
+import * as Dialog from '@/ui/global/widgets/components/Dialog'
 import { Loading } from '@/ui/global/widgets/components/Loading'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { InfiniteList } from '@/ui/global/widgets/components/InfiniteList'
@@ -40,10 +35,10 @@ export const AssistantChatsHistoryView = ({
   onDeleteChat,
 }: Props) => {
   return (
-    <Dialog ref={dialogRef} onOpenChange={onOpenChange}>
-      <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent className='max-w-2xl bg-zinc-950 p-0 text-gray-200'>
-        <DialogHeader>Histórico de conversas</DialogHeader>
+    <Dialog.Container ref={dialogRef} onOpenChange={onOpenChange}>
+      <Dialog.Trigger>{children}</Dialog.Trigger>
+      <Dialog.Content className='max-w-2xl bg-zinc-950 p-0 text-gray-200'>
+        <Dialog.Header>Histórico de conversas</Dialog.Header>
         <div className='max-h-[60vh] overflow-y-auto px-2 pb-2'>
           {chats.length === 0 && !isLoading ? (
             <p className='p-4 text-center text-gray-400'>Nenhuma conversa encontrada.</p>
@@ -91,7 +86,7 @@ export const AssistantChatsHistoryView = ({
             </div>
           )}
         </div>
-      </DialogContent>
-    </Dialog>
+      </Dialog.Content>
+    </Dialog.Container>
   )
 }

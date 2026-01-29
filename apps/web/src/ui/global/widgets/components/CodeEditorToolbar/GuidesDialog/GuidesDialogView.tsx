@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import type { Guide } from '@stardust/core/manual/entities'
 
 import { Button } from '../../Button'
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../../Dialog'
+import * as Dialog from '../../Dialog'
 import { Loading } from '../../Loading'
 import { Mdx } from '../../Mdx'
 import { Icon } from '../../Icon'
@@ -28,9 +28,9 @@ export const GuidesDialogView = ({
   onBackButtonClick,
 }: Props) => {
   return (
-    <Dialog onOpenChange={onDialogOpen}>
-      <DialogContent className='max-w-3xl'>
-        <DialogHeader>Guias</DialogHeader>
+    <Dialog.Container onOpenChange={onDialogOpen}>
+      <Dialog.Content className='max-w-3xl'>
+        <Dialog.Header>Guias</Dialog.Header>
         <div className='mt-6 max-h-[32rem] overflow-auto'>
           {content ? (
             <div>
@@ -82,8 +82,8 @@ export const GuidesDialogView = ({
             </div>
           )}
         </div>
-      </DialogContent>
-      <DialogTrigger>{children}</DialogTrigger>
-    </Dialog>
+      </Dialog.Content>
+      <Dialog.Trigger>{children}</Dialog.Trigger>
+    </Dialog.Container>
   )
 }

@@ -1,15 +1,15 @@
 import { Dialog } from './Dialog'
 import { DialogAnimation } from './DialogAnimation'
-import { DialogClose } from './DialogClose'
 import { DialogContent } from './DialogContent'
+import { DialogClose } from './DialogClose'
 import { DialogHeader } from './DialogHeader'
 import { DialogTrigger } from './DialogTrigger'
 
 export {
-  Dialog,
-  DialogAnimation,
-  DialogClose,
-  DialogContent,
-  DialogHeader,
-  DialogTrigger,
+  Dialog as Container,
+  DialogAnimation as Animation,
+  DialogContent as Content,
+  DialogHeader as Header,
+  DialogClose as Close,
+  DialogTrigger as Trigger,
 }

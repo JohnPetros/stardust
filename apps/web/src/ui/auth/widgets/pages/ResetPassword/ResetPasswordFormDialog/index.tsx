@@ -5,12 +5,7 @@ import { type ReactNode, useRef } from 'react'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Input } from '@/ui/global/widgets/components/Input'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTrigger,
-} from '@/ui/global/widgets/components/Dialog'
+import * as Dialog from '@/ui/global/widgets/components/Dialog'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { useResetPasswordFormDialog } from './useResetPasswordFormDialog'
 import { useRest } from '@/ui/global/hooks/useRest'
@@ -49,9 +44,9 @@ export const ResetPasswordFormDialog = ({
         onOpenChange={handleOpenChange}
         action={<Button onClick={onPasswordReset}>Fazer login</Button>}
       />
-      <Dialog>
-        <DialogContent>
-          <DialogHeader>Insira sua nova senha</DialogHeader>
+      <Dialog.Container>
+        <Dialog.Content>
+          <Dialog.Header>Insira sua nova senha</Dialog.Header>
 
           <form className='mt-3'>
             <div>
@@ -79,9 +74,9 @@ export const ResetPasswordFormDialog = ({
               Redefinir senha
             </Button>
           </form>
-        </DialogContent>
-        <DialogTrigger>{children}</DialogTrigger>
-      </Dialog>
+        </Dialog.Content>
+        <Dialog.Trigger>{children}</Dialog.Trigger>
+      </Dialog.Container>
     </>
   )
 }

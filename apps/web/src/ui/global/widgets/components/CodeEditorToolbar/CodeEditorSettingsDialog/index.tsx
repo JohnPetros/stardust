@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../../Dialog'
+import * as Dialog from '../../Dialog'
 import { RangeInput } from '../../RadioInput'
 import { useCodeEditorSettingsDialog } from './useCodeEditorSettingsDialog'
 import { Switch } from '../../Switch'
@@ -20,9 +20,9 @@ export function CodeEditorSettingsDialog({ children }: CodeEditorSettingsProps) 
   } = useCodeEditorSettingsDialog()
 
   return (
-    <Dialog>
-      <DialogContent>
-        <DialogHeader>Configurações</DialogHeader>
+    <Dialog.Container>
+      <Dialog.Content>
+        <Dialog.Header>Configurações</Dialog.Header>
         <div className='mt-6 space-y-6'>
           <div className='flex items-center justify-between'>
             <label htmlFor='fontSize' className='text-gray-100'>
@@ -54,13 +54,17 @@ export function CodeEditorSettingsDialog({ children }: CodeEditorSettingsProps) 
           </div>
           <div className='flex items-center justify-between'>
             <div>
-               <Switch label='Detector de erros' defaultCheck={isCodeCheckerEnabled} onCheck={handleErrorDetectorToggle} />
+              <Switch
+                label='Detector de erros'
+                defaultCheck={isCodeCheckerEnabled}
+                onCheck={handleErrorDetectorToggle}
+              />
             </div>
           </div>
         </div>
-      </DialogContent>
+      </Dialog.Content>
 
-      <DialogTrigger>{children}</DialogTrigger>
-    </Dialog>
+      <Dialog.Trigger>{children}</Dialog.Trigger>
+    </Dialog.Container>
   )
 }
