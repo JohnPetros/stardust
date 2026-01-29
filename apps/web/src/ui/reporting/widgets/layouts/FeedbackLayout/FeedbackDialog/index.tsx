@@ -18,12 +18,16 @@ export function FeedbackDialog() {
     setContent,
     intent,
     screenshotPreview,
+    rawScreenshot,
     isCapturing,
+    isCropping,
     isLoading,
     handleSelectIntent,
     handleBack,
     handleReset,
     handleCapture,
+    handleCropComplete,
+    handleCancelCrop,
     handleDeleteScreenshot,
     handleSubmit,
   } = useFeedbackDialog({
@@ -41,12 +45,16 @@ export function FeedbackDialog() {
       onContentChange={setContent}
       intent={intent}
       screenshotPreview={screenshotPreview}
+      rawScreenshot={rawScreenshot}
       isCapturing={isCapturing}
+      isCropping={isCropping}
       isLoading={isLoading}
       handleSelectIntent={handleSelectIntent}
       handleBack={handleBack}
       handleReset={handleReset}
       handleCapture={handleCapture}
+      handleCropComplete={handleCropComplete}
+      handleCancelCrop={handleCancelCrop}
       handleDeleteScreenshot={handleDeleteScreenshot}
       handleSubmit={handleSubmit}
     />

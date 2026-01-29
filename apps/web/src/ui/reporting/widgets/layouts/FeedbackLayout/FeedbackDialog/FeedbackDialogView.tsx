@@ -5,6 +5,7 @@ import { Icon } from '@/ui/global/widgets/components/Icon'
 import { InitialStep } from './InitialStep'
 import { FormStep } from './FormStep'
 import { SuccessStep } from './SuccessStep'
+import { ScreenCropper } from '../../../../../global/widgets/components/ScreenCropper'
 import type { FeedbackStep } from './useFeedbackDialog'
 
 type Props = {
@@ -13,7 +14,9 @@ type Props = {
   content: string
   intent: string
   screenshotPreview?: string
+  rawScreenshot?: string
   isCapturing: boolean
+  isCropping: boolean
   isLoading: boolean
   onOpenChange: (open: boolean) => void
   onContentChange: (content: string) => void
@@ -21,6 +24,8 @@ type Props = {
   handleBack: () => void
   handleReset: () => void
   handleCapture: () => void
+  handleCropComplete: (image: string) => void
+  handleCancelCrop: () => void
   handleDeleteScreenshot: () => void
   handleSubmit: () => void
 }
@@ -42,19 +47,26 @@ export function FeedbackDialogView({
   onContentChange,
   intent,
   screenshotPreview,
+  rawScreenshot,
   isCapturing,
+  isCropping,
   isLoading,
   handleSelectIntent,
   handleBack,
   handleReset,
   handleCapture,
+  handleCropComplete,
+  handleCancelCrop,
   handleDeleteScreenshot,
   handleSubmit,
 }: Props) {
   const currentIntent = INTENT_HEADER_METADATA[intent] || INTENT_HEADER_METADATA.other
 
   return (
-    <Dialog.Container open={!isCapturing && isOpen} onOpenChange={onOpenChange}>
+    <Dialog.Container
+      open={!isCapturing && !isCropping && isOpen}
+      onOpenChange={onOpenChange}
+    >
       <Dialog.Content className='sm:max-w-[400px] md:max-w-[620px] rounded-3xl border-gray-800 bg-[#121214] p-6 text-gray-100 shadow-2xl overflow-hidden'>
         <div className='flex items-center justify-between mb-2'>
           {step === 'form' ? (
@@ -136,6 +148,14 @@ export function FeedbackDialogView({
           <div className='absolute -right-1 -top-1 h-3 w-3 rounded-full border-2 border-[#121214] bg-[#8257e5]' />
         </button>
       </Dialog.Trigger>
+
+      {isCropping && rawScreenshot && (
+        <ScreenCropper
+          image={rawScreenshot}
+          onCropComplete={handleCropComplete}
+          onCancel={handleCancelCrop}
+        />
+      )}
     </Dialog.Container>
   )
 }

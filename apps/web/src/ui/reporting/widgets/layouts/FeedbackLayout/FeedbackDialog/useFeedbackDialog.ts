@@ -4,6 +4,7 @@ import { AuthorAggregate } from '@stardust/core/global/aggregates'
 import type { ReportingService } from '@stardust/core/reporting/interfaces'
 import type { User } from '@stardust/core/global/entities'
 import type { ToastContextValue } from '@/ui/global/contexts/ToastContext/types'
+import html2canvas from 'html2canvas'
 
 export type FeedbackStep = 'initial' | 'form' | 'success'
 
@@ -19,7 +20,9 @@ export function useFeedbackDialog({ reportingService, user, toast }: Params) {
   const [content, setContent] = useState('')
   const [intent, setIntent] = useState<string>('idea')
   const [screenshotPreview, setScreenshotPreview] = useState<string | undefined>()
+  const [rawScreenshot, setRawScreenshot] = useState<string | undefined>()
   const [isCapturing, setIsCapturing] = useState(false)
+  const [isCropping, setIsCropping] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   function handleOpenChange(open: boolean) {
@@ -31,6 +34,8 @@ export function useFeedbackDialog({ reportingService, user, toast }: Params) {
         setContent('')
         setIntent('idea')
         setScreenshotPreview(undefined)
+        setRawScreenshot(undefined)
+        setIsCropping(false)
       }, 300)
     }
   }
@@ -49,37 +54,43 @@ export function useFeedbackDialog({ reportingService, user, toast }: Params) {
     setContent('')
     setIntent('idea')
     setScreenshotPreview(undefined)
+    setRawScreenshot(undefined)
+    setIsCropping(false)
   }
 
   async function handleCapture() {
     try {
       setIsCapturing(true)
+
+      // Wait for dialog to close
       await new Promise((resolve) => setTimeout(resolve, 300))
 
-      const stream = await navigator.mediaDevices.getDisplayMedia({
-        video: { displaySurface: 'browser' } as any,
+      const canvas = await html2canvas(document.body, {
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#121214', // Default background color
       })
 
-      const video = document.createElement('video')
-      video.srcObject = stream
-      await video.play()
-
-      const canvas = document.createElement('canvas')
-      canvas.width = video.videoWidth
-      canvas.height = video.videoHeight
-      const ctx = canvas.getContext('2d')
-      ctx?.drawImage(video, 0, 0)
-
       const base64Image = canvas.toDataURL('image/png')
-      setScreenshotPreview(base64Image)
-
-      stream.getTracks().forEach((track) => track.stop())
+      setRawScreenshot(base64Image)
+      setIsCropping(true)
       setIsCapturing(false)
-    } catch {
-      console.error('Capture failed')
+    } catch (error) {
+      console.error('Capture failed', error)
       setIsCapturing(false)
       toast.showError('Falha ao capturar a tela.')
     }
+  }
+
+  function handleCropComplete(croppedImage: string) {
+    setScreenshotPreview(croppedImage)
+    setIsCropping(false)
+    setRawScreenshot(undefined)
+  }
+
+  function handleCancelCrop() {
+    setIsCropping(false)
+    setRawScreenshot(undefined)
   }
 
   function handleDeleteScreenshot() {
@@ -121,8 +132,6 @@ export function useFeedbackDialog({ reportingService, user, toast }: Params) {
 
       const response = await reportingService.sendFeedbackReport(feedbackReport)
 
-      console.log(response)
-
       if (response.isSuccessful) {
         setStep('success')
         toast.showSuccess('Feedback enviado com sucesso! Obrigado.')
@@ -143,14 +152,17 @@ export function useFeedbackDialog({ reportingService, user, toast }: Params) {
     content,
     setContent,
     intent,
-    setIntent,
     screenshotPreview,
+    rawScreenshot,
     isCapturing,
+    isCropping,
     isLoading,
     handleSelectIntent,
     handleBack,
     handleReset,
     handleCapture,
+    handleCropComplete,
+    handleCancelCrop,
     handleDeleteScreenshot,
     handleSubmit,
   }
