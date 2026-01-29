@@ -11,8 +11,9 @@ Detalhar a implementação técnica de uma feature, fix ou refatoração, atuand
 **Diretrizes de Execução:**
 
 1.  **Pesquisa e Contextualização (Chain of Thought):**
-    *   **Mapeie o Fluxo:** Antes de escrever, entenda a origem e o destino dos dados (UI -> Store -> Service -> API).
-    *   **Verifique a Existência:** Investigue a codebase para identificar recursos existentes (Widgets, DTOs, Services) que devem ser reutilizados ou estendidos. Evite duplicidade.
+    *   **Mapeie o Fluxo:** Antes de escrever, leia o PRD associado a spec que está um nível acima na arvore de documentos.
+    *   **Mapeie o Fluxo:** Entenda a origem e o destino dos dados (por exemplo, UI -> Store -> Service -> API).
+    *   **Verifique a Existência:** Investigue a codebase para identificar recursos existentes (Widgets, DTOs, Use Cases, Services etc) que devem ser reutilizados ou estendidos. Evite duplicidade.
     *   **Consulte Guidelines:** Aplique os padrões das camadas definidos em `documentation/guidelines/guidelines-rule.md` (core, rest, ui, database, provision, rpc, ai).
     *   **Identifique Referências:** Procure na codebase por exemplos similares ("copy-paste inteligente") para sugerir como referência.
 
