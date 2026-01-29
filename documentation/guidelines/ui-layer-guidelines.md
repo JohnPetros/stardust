@@ -40,8 +40,8 @@ Responsável **apenas** por renderizar a interface.
 *   Utiliza Tailwind CSS para estilização (`className` merged via `twMerge` se necessário).
 
 ```tsx
-// ActionButtonView.tsx
-export const ActionButtonView = ({ title, onClick, variant }: Props) => (
+// ButtonView.tsx
+export const ButtonView = ({ title, onClick, variant }: Props) => (
   <button className={twMerge('base-class', variant)} onClick={onClick}>
     {title}
   </button>
@@ -54,15 +54,25 @@ Responsável por toda a lógica do componente.
 *   Executa efeitos colaterais (`useEffect`).
 *   Calcula valores derivados (`useMemo`).
 *   Prepara props para a View.
+*   funções handlers deve usar a notação function e não arrow function
 
 ```typescript
-// useActionButton.ts
-export function useActionButton(props: ActionButtonProps) {
-  const variant = useMemo(() => isExecuting ? 'loading' : 'default', [props.isExecuting])
+// useButton.ts
+type Params = {
+  isExecuting: boolean;
+  onAction: () => void;
+}
+
+export function useButton({ onAction, isExecuting }: Params) {
+  const variant = useMemo(() => isExecuting ? 'loading' : 'default', [isExecuting])
+
+  function handleClick() {
+    onAction()
+  }
   
   return {
     variant,
-    handleClick: () => props.action()
+    handleClick
   }
 }
 ```
@@ -73,12 +83,80 @@ Orquestra a chamada do Hook e renderiza a View.
 
 ```tsx
 // index.tsx
-export const ActionButton = (props: ActionButtonProps) => {
-  const logic = useActionButton(props)
+export const Button = ({ onAction, isExecuting }: ActionButtonProps) => {
+  const { variant, handleClick } = useButton({
+    onAction,
+    isExecuting
+  })
   
-  return <ActionButtonView {...props} {...logic} />
+  return <ActionButtonView variant={variant} onClick={handleClick} />
 }
 ```
+
+*   Evite usar spread operator nas props na View, como `<ActionButtonView {...props} />`, prefira sempre declarar as props explicitamente.
+*   Nunca use hooks de contexts ou de providers diretamente no hook, sempre use primeiro no entry point e passe as props para o hook.
+
+```tsx
+// index.tsx
+export const Button = (props: ActionButtonProps) => {
+  const { user } = useAuthContext()
+  const { authService } = useRest()
+  const toastProvider = useToast()
+  const { variant, handleClick } = useButton({
+    userId: user?.id,
+    onAction,
+    isExecuting: false
+  })
+  
+  return <ActionButtonView variant={variant} onClick={handleClick} />
+}
+```
+
+### Server components
+
+*   Se o widget for um server component, ele não deve conter hook, mas apenas view e entry point
+*   No entry point, ele pode executar actions da camada RPC diretamente
+
+```tsx
+// index.tsx
+export const UserAvatar = (props: Props) => {
+  const user = await authActions.getUser()
+  
+  return <UserAvatarView image={user.avatar} />
+}
+```
+
+*   No entry point, ele pode executar services diretamente, desde que o rest client do service não dependa do client.
+
+```tsx
+// index.tsx
+export const UserAvatar = (props: Props) => {
+  const restClient = NextServerRestClient()
+  const service = AuthService(restClient)
+  const user = await service.fetchUser()
+  
+  return <UserAvatarView image={user.avatar} />
+}
+```
+
+*   No entry point, o que define se um widget é client ou server é o uso da diretriva `use client`
+
+```tsx
+// index.tsx (client widget)
+'use client'
+
+export const Button = (props: Props) => {
+  ...
+}
+```
+
+```tsx
+// index.tsx (server widget)
+export const UserAvatar = (props: Props) => {
+  ...
+}
+```
+
 
 ## Bibliotecas e Ferramentas
 

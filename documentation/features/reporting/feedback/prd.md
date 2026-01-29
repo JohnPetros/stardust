@@ -33,6 +33,8 @@ O **Widget de Feedback** é uma ferramenta de engajamento e monitoramento de qua
 - [ ] **Captura de Tela (Screenshot):**
     - Botão com ícone de câmera ao lado do botão de enviar.
     - Ao clicar, acionar a captura de tela (fluxo via API do navegador `getDisplayMedia` ou similar).
+    - Enquanto estiver selecionando a captura, o modal deve estar fechado.
+    - Ao selecionar a captura, o modal deve ser reaberto.
     - Exibir visualização (thumbnail) da imagem capturada antes do envio, permitindo remoção.
 - [ ] **Ação de Envio:** Botão "Enviar feedback" com destaque visual (cor primária do projeto).
 
@@ -46,10 +48,10 @@ O **Widget de Feedback** é uma ferramenta de engajamento e monitoramento de qua
 - [ ] **Persistência:** Salvar o feedback no banco de dados com:
     - Conteúdo da mensagem.
     - Tipo (bug/ideia/outro).
-    - URL da imagem (se houver).
+    - URL da screenshot (se houver).
     - ID do usuário.
     - Data/Hora.
-- [ ] **Notificação (Discord):** Enviar um alerta para um canal único configurado via Webhook. A mensagem deve conter o tipo, o texto e o link da imagem.
+- [ ] **Notificação (Discord):** Enviar um alerta para um canal único configurado via Webhook. A mensagem deve conter o tipo, o texto e o link da screenshot.
 
 ---
 
