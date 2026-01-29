@@ -60,7 +60,7 @@ Detalhar a implementação técnica de uma feature, fix ou refatoração, atuand
     *   **Métodos:** Assinatura e responsabilidade.
 
     #### Camada UI (Widgets)
-    *   **Localização:** `caminho/do/arquivo`
+    *   **Localização:** `caminho/do/diretorio`
     *   **Props:** Parâmetros recebidos.
     *   **Estados (Client Component):** Como se comporta em Loading, Error, Empty, Content.
     *   **View:** Nome e caminho da view do widget.
@@ -69,10 +69,15 @@ Detalhar a implementação técnica de uma feature, fix ou refatoração, atuand
     *   **Widgets internos:** Widgets filhos a serem criados.
 
     #### Camada UI (Stores)
-    *   **Localização:** `caminho/do/arquivo`
+    *   **Localização:** `caminho/do/diretorio`
     *   **Props:** Parâmetros recebidos no construtor.
     *   **Estados:** Estrutura do estado (Loading, Error, Data).
     *   **Actions:** Métodos de mutação.
+
+    #### Camada UI (Contexts)
+    *   **Localização:** `caminho/do/diretorio`
+    *   **Props:** Parâmetros recebidos no construtor.
+    *   **Estados:** Estrutura do estado (Loading, Error, Data).
 
     #### Camada Hono App (Routes)
     *   **Localização:** `caminho/do/arquivo`

@@ -4,22 +4,26 @@ import { useState } from 'react'
 
 export function useDialog(
   shouldStartOpen: boolean,
-  onOpenChange?: (isOpen: boolean) => void
+  onOpenChange?: (isOpen: boolean) => void,
+  openProp?: boolean,
 ) {
-  const [isOpen, setIsOpen] = useState(shouldStartOpen)
+  const [internalIsOpen, setInternalIsOpen] = useState(shouldStartOpen)
+  const isControlled = openProp !== undefined
+  const isOpen = isControlled ? openProp : internalIsOpen
 
   function open() {
-    setIsOpen(true)
+    if (!isControlled) setInternalIsOpen(true)
+    onOpenChange?.(true)
   }
 
   function close() {
-    setIsOpen(false)
+    if (!isControlled) setInternalIsOpen(false)
+    onOpenChange?.(false)
   }
 
-  function handleOpenChange(isOpen: boolean) {
-    if (onOpenChange) onOpenChange(isOpen)
-
-    setIsOpen(isOpen)
+  function handleOpenChange(open: boolean) {
+    if (!isControlled) setInternalIsOpen(open)
+    onOpenChange?.(open)
   }
 
   return {

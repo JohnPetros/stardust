@@ -53,6 +53,7 @@
     "ai": "^6.0.3",
     "apexcharts": "^4.7.0",
     "autoprefixer": "10.4.21",
+    "html2canvas": "^1.4.1",
     "immer": "^10.1.1",
     "inngest": "^3.40.1",
     "jsonwebtoken": "^9.0.2",

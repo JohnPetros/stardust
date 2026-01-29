@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react'
-import { GoogleAnalytics } from "@next/third-parties/google"
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 import '@/ui/global/styles/global.css'
 import { roboto_mono, poppins } from '@/constants/fonts'
@@ -13,7 +13,7 @@ export const RootLayoutView = ({ children }: PropsWithChildren) => {
       <body
         className={`${roboto_mono.variable} ${poppins.variable} relative h-screen bg-gray-900 font-normal`}
       >
-     {SERVER_ENV.mode === 'production' && <GoogleAnalytics gaId="G-S77CE2QV3E" />}
+        {SERVER_ENV.mode === 'production' && <GoogleAnalytics gaId='G-S77CE2QV3E' />}
         <ServerProviders>
           <ClientProviders>{children}</ClientProviders>
         </ServerProviders>

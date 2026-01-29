@@ -36,7 +36,7 @@ Executar o plano de implementação técnica de forma iterativa, organizada e va
 
 4.  **Ciclo de Qualidade e Verificação (Por Tarefa):**
     Ao finalizar a codificação de *cada micro-tarefa*, execute os passos de validação ANTES de passar para a próxima:
-    *   **Formatação e Lint:** Execute `npx biome check --apply .` para garantir conformidade e formatação.
+    *   **Formatação e Lint:** Execute `npm run lint` para garantir conformidade e formatação.
     *   **Testes:** Execute `npm run test` para validar a lógica implementada
     *   **Contexto de Monorepo:** O comando deve ser executado **dentro do diretório da aplicação ou pacote específico** (onde reside o `package.json`, ex: `apps/web` ou `packages/core`), e não na raiz do workspace.
     *   **Critério de Aceite:** Corrija imediatamente quaisquer erros do linter ou testes falhando. Não avance com código "quebrado".
@@ -51,4 +51,5 @@ Executar o plano de implementação técnica de forma iterativa, organizada e va
     *   **Camada UI (Widget Pattern):**
         *   Todo componente reutilizável deve seguir a estrutura de Widget: `Index` (.tsx), `View` (.tsx) e `Hook` (.ts).
         *   Evite lógica de negócio na View.
+        *   Se sentir necessidade de criar um widget dentro de outro widget, não crie uma pasta components mas sim crie uma pasta para cada widget interno e certifique-se de que cada um deles também siga a estrutura de Widget descrita acima.
         *   **Importante:** Utilize `Tailwind CSS` e primitivos do `Radix UI` (ou componentes `shadcn` existentes), evitando estilos inline ou bibliotecas não aprovadas como Material UI.

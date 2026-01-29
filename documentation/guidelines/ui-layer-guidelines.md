@@ -59,10 +59,14 @@ Responsável por toda a lógica do componente.
 // useActionButton.ts
 export function useActionButton(props: ActionButtonProps) {
   const variant = useMemo(() => isExecuting ? 'loading' : 'default', [props.isExecuting])
+
+  function handleClick() {
+    props.action()
+  }
   
   return {
     variant,
-    handleClick: () => props.action()
+    handleClick
   }
 }
 ```

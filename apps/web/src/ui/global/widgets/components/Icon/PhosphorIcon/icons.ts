@@ -77,6 +77,9 @@ import {
   Cloud,
   TerminalWindow,
   Article,
+  Bug,
+  Camera,
+  XCircle,
 } from '@phosphor-icons/react/dist/ssr'
 import type { Icon } from '@phosphor-icons/react'
 
@@ -163,4 +166,7 @@ export const ICONS: Record<IconName, Icon> = {
   lock: Lock,
   pause: Pause,
   start: Play,
+  bug: Bug,
+  camera: Camera,
+  'x-circle': XCircle,
 }

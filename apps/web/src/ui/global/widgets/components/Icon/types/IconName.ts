@@ -8,6 +8,8 @@ export type IconName =
   | 'arrow-up'
   | 'arrow-up-down'
   | 'book'
+  | 'bug'
+  | 'camera'
   | 'calendar'
   | 'check'
   | 'checked'
@@ -79,3 +81,4 @@ export type IconName =
   | 'unchecked'
   | 'unordered-list'
   | 'upvote'
+  | 'x-circle'
