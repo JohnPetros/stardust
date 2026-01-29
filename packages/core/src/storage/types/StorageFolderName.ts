@@ -7,3 +7,4 @@ export type StorageFolderName =
   | 'planets'
   | 'achievements'
   | 'insignias'
+  | 'feedback-reports'

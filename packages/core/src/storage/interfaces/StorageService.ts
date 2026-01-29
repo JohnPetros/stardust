@@ -5,7 +5,10 @@ import type { EmbeddingNamespace, StorageFolder } from '../domain/structures'
 
 export interface StorageService {
   listFiles(params: FilesListingParams): Promise<RestResponse<PaginationResponse<string>>>
-  uploadFile(folder: StorageFolder, file: File): Promise<RestResponse<string>>
+  uploadFile(
+    folder: StorageFolder,
+    file: File,
+  ): Promise<RestResponse<{ filename: string }>>
   removeFile(folder: StorageFolder, filename: Text): Promise<RestResponse>
   searchEmbeddings(
     query: Text,
