@@ -17,6 +17,7 @@ import {
   NotificationService,
   ConversationService,
   ReportingService,
+  StorageService,
 } from '@/rest/services'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
@@ -47,5 +48,6 @@ export function useRest({ isAuthenticated = true }: Params = {}) {
     notificationService: NotificationService(restClient),
     conversationService: ConversationService(restClient),
     reportingService: ReportingService(restClient),
+    storageService: StorageService(restClient),
   }
 }
