@@ -7,6 +7,7 @@ import { FormStep } from './FormStep'
 import { SuccessStep } from './SuccessStep'
 import { ScreenCropper } from './ScreenCropper'
 import type { FeedbackStep } from './useFeedbackDialog'
+import type { IconName } from '@/ui/global/widgets/components/Icon/types'
 
 type Props = {
   isOpen: boolean
@@ -28,11 +29,12 @@ type Props = {
   handleCancelCrop: () => void
   handleDeleteScreenshot: () => void
   handleSubmit: () => void
+  triggerClassName?: string
 }
 
 const INTENT_HEADER_METADATA: Record<
   string,
-  { label: string; icon: string; color: string }
+  { label: string; icon: IconName; color: string }
 > = {
   bug: { label: 'Problema', icon: 'bug', color: 'text-green-500' },
   idea: { label: 'Ideia', icon: 'lightbulb', color: 'text-yellow-400' },
@@ -59,6 +61,7 @@ export function FeedbackDialogView({
   handleCancelCrop,
   handleDeleteScreenshot,
   handleSubmit,
+  triggerClassName = 'bottom-6 left-24',
 }: Props) {
   const currentIntent = INTENT_HEADER_METADATA[intent] || INTENT_HEADER_METADATA.other
 
@@ -85,7 +88,7 @@ export function FeedbackDialogView({
             {step === 'form' ? (
               <>
                 <Icon
-                  name={currentIntent.icon as any}
+                  name={currentIntent.icon}
                   className={currentIntent.color}
                   size={24}
                 />
@@ -134,22 +137,26 @@ export function FeedbackDialogView({
         )}
       </Dialog.Content>
 
-      <Dialog.Trigger className='group fixed w-auto h-12 bottom-6 left-24 z-50 flex items-center justify-center rounded-full bg-green-500 text-black opacity-25 transition-all duration-300 hover:opacity-100 hover:scale-[1.02] active:scale-95 px-3'>
-        <button
-          type='button'
-          aria-label='Feedback'
-          className='flex items-center gap-0 hover:gap-2 transition-all duration-300'
+      {!isCapturing && (
+        <Dialog.Trigger
+          className={`group fixed w-auto h-12 z-50 flex items-center justify-center rounded-full bg-green-500 text-black opacity-25 transition-all duration-300 hover:opacity-100 hover:scale-[1.02] active:scale-95 px-3 ${triggerClassName}`}
         >
-          <Icon
-            name='comment'
-            size={24}
-            className='transition-transform group-hover:rotate-12'
-          />
-          <span className='max-w-0 overflow-hidden whitespace-nowrap text-md font-semibold transition-all duration-300 group-hover:max-w-[124px]'>
-            Fazer feedback
-          </span>
-        </button>
-      </Dialog.Trigger>
+          <button
+            type='button'
+            aria-label='Feedback'
+            className='flex items-center gap-0 hover:gap-2 transition-all duration-300'
+          >
+            <Icon
+              name='comment'
+              size={24}
+              className='transition-transform group-hover:rotate-12'
+            />
+            <span className='max-w-0 overflow-hidden whitespace-nowrap text-md font-semibold transition-all duration-300 group-hover:max-w-[124px]'>
+              Fazer feedback
+            </span>
+          </button>
+        </Dialog.Trigger>
+      )}
 
       {isCropping && rawScreenshot && (
         <ScreenCropper

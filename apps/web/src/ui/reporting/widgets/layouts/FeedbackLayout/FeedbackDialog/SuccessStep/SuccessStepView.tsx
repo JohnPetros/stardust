@@ -5,7 +5,7 @@ type Props = {
   onReset: () => void
 }
 
-export function SuccessStep({ onReset }: Props) {
+export const SuccessStepView = ({ onReset }: Props) => {
   return (
     <div className='flex flex-col items-center justify-center py-8 text-center animate-in fade-in zoom-in duration-500'>
       <div className='mb-6 flex h-16 w-16 items-center justify-center rounded-lg bg-green-500'>

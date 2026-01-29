@@ -38,7 +38,7 @@ const INTENT_METADATA: Record<
   },
 }
 
-export function FormStep({
+export const FormStepView = ({
   intent,
   content,
   onContentChange,
@@ -47,7 +47,7 @@ export function FormStep({
   onCapture,
   onDeleteScreenshot,
   onSubmit,
-}: Props) {
+}: Props) => {
   const metadata = INTENT_METADATA[intent] || INTENT_METADATA.other
 
   return (

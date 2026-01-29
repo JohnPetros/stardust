@@ -77,17 +77,14 @@ export function useFeedbackDialog({
       ) as HTMLElement
       if (feedbackButton) feedbackButton.style.display = 'none'
 
-      // Delay reduzido para fechar o diálogo
       await new Promise((resolve) => setTimeout(resolve, 250))
 
-      // Captura ultra-rápida limitada apenas ao Viewport (área visível)
       const dataUrl = await domToPng(document.documentElement, {
         backgroundColor: '#121214',
         scale: 1.2,
         width: window.innerWidth,
         height: window.innerHeight,
         style: {
-          // Desloca o conteúdo para capturar exatamente o que o usuário está vendo
           marginTop: `-${scrollY}px`,
           marginLeft: `-${scrollX}px`,
         },

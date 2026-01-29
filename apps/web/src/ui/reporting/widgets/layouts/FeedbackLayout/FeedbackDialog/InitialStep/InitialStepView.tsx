@@ -29,7 +29,7 @@ const INTENTS = [
   },
 ]
 
-export function InitialStep({ onSelectIntent }: Props) {
+export const InitialStepView = ({ onSelectIntent }: Props) => {
   return (
     <div className='flex flex-col items-center gap-6 py-4'>
       <div className='grid grid-cols-3 gap-3 w-full'>

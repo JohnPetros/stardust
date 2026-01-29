@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react'
-import { CropperRef } from 'react-advanced-cropper'
+import { useRef } from 'react'
+import type { CropperRef } from 'react-advanced-cropper'
 
 type Params = {
   image: string
