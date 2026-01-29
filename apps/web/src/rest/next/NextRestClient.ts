@@ -92,8 +92,6 @@ export const NextRestClient = ({
         body,
       })
 
-      console.log('Response:', response)
-
       if (!response.ok) {
         return await handleRestError<Body>(
           response,

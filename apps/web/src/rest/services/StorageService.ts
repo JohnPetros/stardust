@@ -16,7 +16,6 @@ export const StorageService = (restClient: RestClient): IStorageService => {
     async uploadFile(folder: StorageFolder, file: File) {
       const formData = new FormData()
       formData.append('file', file)
-      console.log('Uploading file:', file)
       return await restClient.postFormData(`/storage/files/${folder.name}`, formData)
     },
 
