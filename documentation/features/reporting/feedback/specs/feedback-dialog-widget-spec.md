@@ -37,12 +37,13 @@ Implementar o widget `FeedbackDialog` para coletar feedbacks dos usuários. O wi
     *   Gerencia o estado do formulário (content, intent, screenshot).
     *   **Lógica de Screenshot:**
         - Utiliza biblioteca `modern-screenshot` (`domToPng`) para capturar `document.documentElement`.
-        - Estratégia de ocultar o botão de feedback durante a captura.
+        - Utiliza estado React (`isCapturing`) e delay (`setTimeout`) para ocultar o botão de feedback durante a captura, sem manipulação direta do DOM.
         - Estado `rawScreenshot`: Armazena a captura bruta para edição.
         - Estado `screenshotPreview`: Armazena a imagem recortada final.
         - Estado `isCapturing` e `isCropping`: Controlam a visibilidade do modal e do cropper.
     *   **Lógica de Upload:**
         - No `handleSubmit`, converte o base64 do crop em `File`.
+        - Valida tamanho do arquivo (máximo 5MB).
         - Realiza upload via `storageService` para a pasta `feedback-reports`.
         - Anexa a URL retornada ao `FeedbackReport`.
     *   Consome `reportingService` e `storageService` do `useRest`.
