@@ -10,12 +10,7 @@ type Props = {
   handleDone: () => void
 }
 
-export function ScreenCropperView({
-  image,
-  cropperRef,
-  onCancel,
-  handleDone,
-}: Props) {
+export function ScreenCropperView({ image, cropperRef, onCancel, handleDone }: Props) {
   return (
     <div className='fixed inset-0 z-[10000] flex flex-col bg-black'>
       <div className='relative flex-1 min-h-0'>

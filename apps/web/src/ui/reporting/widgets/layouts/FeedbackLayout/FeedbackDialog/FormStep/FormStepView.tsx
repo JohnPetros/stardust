@@ -20,7 +20,7 @@ const INTENT_METADATA: Record<
   bug: {
     label: 'Problema',
     icon: 'bug',
-    color: 'text-purple-500',
+    color: 'text-green-500',
     placeholder:
       'Algo não está funcionando bem? Queremos corrigir. Conte com detalhes o que está acontecendo...',
   },
@@ -56,7 +56,7 @@ export function FormStep({
         value={content}
         onChange={(e) => onContentChange(e.target.value)}
         placeholder={metadata.placeholder}
-        className='h-40 w-full resize-none rounded-lg border border-gray-800 bg-gray-950 p-4 text-sm text-gray-100 outline-none transition-all placeholder:text-gray-500 focus:border-purple-600'
+        className='h-40 w-full resize-none rounded-lg border border-gray-800 bg-gray-950 p-4 text-sm text-gray-100 outline-none transition-all placeholder:text-gray-500 focus:border-green-500'
         autoFocus
       />
 
@@ -72,7 +72,7 @@ export function FormStep({
         <Button
           onClick={onSubmit}
           isLoading={isLoading}
-          className='flex-1 h-12 rounded-lg bg-purple-600 text-sm font-bold text-white hover:bg-purple-700'
+          className='flex-1 h-12 rounded-lg bg-green-500 text-sm text-gray-900 hover:bg-green-600'
         >
           Enviar feedback
         </Button>

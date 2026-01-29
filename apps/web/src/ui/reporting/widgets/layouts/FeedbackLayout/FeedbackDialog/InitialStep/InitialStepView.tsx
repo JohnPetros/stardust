@@ -10,8 +10,8 @@ const INTENTS = [
     value: 'bug',
     label: 'Problema',
     icon: 'bug',
-    color: 'text-purple-500',
-    bgColor: 'bg-purple-500/10',
+    color: 'text-green-500',
+    bgColor: 'bg-green-500/10',
   },
   {
     value: 'idea',

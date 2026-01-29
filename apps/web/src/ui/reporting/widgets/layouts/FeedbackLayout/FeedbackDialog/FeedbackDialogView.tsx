@@ -5,7 +5,7 @@ import { Icon } from '@/ui/global/widgets/components/Icon'
 import { InitialStep } from './InitialStep'
 import { FormStep } from './FormStep'
 import { SuccessStep } from './SuccessStep'
-import { ScreenCropper } from '../../../../../global/widgets/components/ScreenCropper'
+import { ScreenCropper } from './ScreenCropper'
 import type { FeedbackStep } from './useFeedbackDialog'
 
 type Props = {
@@ -34,7 +34,7 @@ const INTENT_HEADER_METADATA: Record<
   string,
   { label: string; icon: string; color: string }
 > = {
-  bug: { label: 'Problema', icon: 'bug', color: 'text-purple-500' },
+  bug: { label: 'Problema', icon: 'bug', color: 'text-green-500' },
   idea: { label: 'Ideia', icon: 'lightbulb', color: 'text-yellow-400' },
   other: { label: 'Outro', icon: 'comment', color: 'text-blue-400' },
 }
@@ -67,7 +67,7 @@ export function FeedbackDialogView({
       open={!isCapturing && !isCropping && isOpen}
       onOpenChange={onOpenChange}
     >
-      <Dialog.Content className='sm:max-w-[400px] md:max-w-[620px] rounded-3xl border-gray-800 bg-[#121214] p-6 text-gray-100 shadow-2xl overflow-hidden'>
+      <Dialog.Content className='sm:max-w-[400px] md:max-w-[620px] rounded-3xl border-gray-800 bg-[#121214] p-6 text-gray-100 overflow-hidden'>
         <div className='flex items-center justify-between mb-2'>
           {step === 'form' ? (
             <button
@@ -123,7 +123,7 @@ export function FeedbackDialogView({
         {(step === 'initial' || step === 'form' || step === 'success') && (
           <div className='mt-4 flex justify-center'>
             <a
-              href='https://discord.gg/stardust'
+              href='https://discord.com/channels/987782561252143205/1377325380037509212'
               target='_blank'
               rel='noreferrer'
               className='text-xs text-gray-400 underline underline-offset-4 hover:text-gray-300'
@@ -134,18 +134,20 @@ export function FeedbackDialogView({
         )}
       </Dialog.Content>
 
-      <Dialog.Trigger>
+      <Dialog.Trigger className='group fixed w-auto h-12 bottom-6 left-24 z-50 flex items-center justify-center rounded-full bg-green-500 text-black opacity-25 transition-all duration-300 hover:opacity-100 hover:scale-[1.02] active:scale-95 px-3'>
         <button
           type='button'
-          className='group fixed bottom-6 right-6 z-[9999] flex h-14 w-14 items-center justify-center rounded-full bg-[#8257e5] text-white shadow-[0_8px_32px_rgba(130,87,229,0.4)] transition-all duration-300 hover:scale-110 active:scale-95'
           aria-label='Feedback'
+          className='flex items-center gap-0 hover:gap-2 transition-all duration-300'
         >
           <Icon
             name='comment'
-            size={28}
+            size={24}
             className='transition-transform group-hover:rotate-12'
           />
-          <div className='absolute -right-1 -top-1 h-3 w-3 rounded-full border-2 border-[#121214] bg-[#8257e5]' />
+          <span className='max-w-0 overflow-hidden whitespace-nowrap text-md font-semibold transition-all duration-300 group-hover:max-w-[124px]'>
+            Fazer feedback
+          </span>
         </button>
       </Dialog.Trigger>
 

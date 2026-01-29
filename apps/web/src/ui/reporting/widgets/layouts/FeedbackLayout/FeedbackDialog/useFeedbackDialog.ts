@@ -2,19 +2,27 @@ import { useState } from 'react'
 import { FeedbackReport } from '@stardust/core/reporting/entities'
 import { AuthorAggregate } from '@stardust/core/global/aggregates'
 import type { ReportingService } from '@stardust/core/reporting/interfaces'
+import type { StorageService } from '@stardust/core/storage/interfaces'
+import { StorageFolder } from '@stardust/core/storage/structures'
 import type { User } from '@stardust/core/global/entities'
 import type { ToastContextValue } from '@/ui/global/contexts/ToastContext/types'
-import html2canvas from 'html2canvas'
+import { domToPng } from 'modern-screenshot'
 
 export type FeedbackStep = 'initial' | 'form' | 'success'
 
 type Params = {
   reportingService: ReportingService
+  storageService: StorageService
   user: User | null
   toast: ToastContextValue
 }
 
-export function useFeedbackDialog({ reportingService, user, toast }: Params) {
+export function useFeedbackDialog({
+  reportingService,
+  storageService,
+  user,
+  toast,
+}: Params) {
   const [isOpen, setIsOpen] = useState(false)
   const [step, setStep] = useState<FeedbackStep>('initial')
   const [content, setContent] = useState('')
@@ -27,7 +35,7 @@ export function useFeedbackDialog({ reportingService, user, toast }: Params) {
 
   function handleOpenChange(open: boolean) {
     setIsOpen(open)
-    if (!open) {
+    if (!open && !isCapturing && !isCropping) {
       // Small delay to reset after transition
       setTimeout(() => {
         setStep('initial')
@@ -61,18 +69,33 @@ export function useFeedbackDialog({ reportingService, user, toast }: Params) {
   async function handleCapture() {
     try {
       setIsCapturing(true)
+      const scrollY = window.scrollY
+      const scrollX = window.scrollX
 
-      // Wait for dialog to close
-      await new Promise((resolve) => setTimeout(resolve, 300))
+      const feedbackButton = document.querySelector(
+        'button[aria-label="Feedback"]',
+      ) as HTMLElement
+      if (feedbackButton) feedbackButton.style.display = 'none'
 
-      const canvas = await html2canvas(document.body, {
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#121214', // Default background color
+      // Delay reduzido para fechar o diálogo
+      await new Promise((resolve) => setTimeout(resolve, 250))
+
+      // Captura ultra-rápida limitada apenas ao Viewport (área visível)
+      const dataUrl = await domToPng(document.documentElement, {
+        backgroundColor: '#121214',
+        scale: 1.2,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        style: {
+          // Desloca o conteúdo para capturar exatamente o que o usuário está vendo
+          marginTop: `-${scrollY}px`,
+          marginLeft: `-${scrollX}px`,
+        },
       })
 
-      const base64Image = canvas.toDataURL('image/png')
-      setRawScreenshot(base64Image)
+      if (feedbackButton) feedbackButton.style.display = 'flex'
+
+      setRawScreenshot(dataUrl)
       setIsCropping(true)
       setIsCapturing(false)
     } catch (error) {
@@ -122,23 +145,48 @@ export function useFeedbackDialog({ reportingService, user, toast }: Params) {
         },
       })
 
+      let screenshotUrl = screenshotPreview
+
+      if (screenshotPreview && screenshotPreview.startsWith('data:')) {
+        try {
+          const res = await fetch(screenshotPreview)
+          const blob = await res.blob()
+          const file = new File([blob], `feedback-screenshot-${Date.now()}.png`, {
+            type: 'image/png',
+          })
+          const uploadResponse = await storageService.uploadFile(
+            StorageFolder.createAsFeedbackReports(),
+            file,
+          )
+
+          if (uploadResponse.isSuccessful) {
+            screenshotUrl = uploadResponse.body.filename
+          } else {
+            toast.showError('Falha ao enviar feedback.')
+          }
+        } catch (error) {
+          console.error('Error uploading screenshot', error)
+          toast.showError('Falha ao enviar feedback.')
+        }
+      }
+
       const feedbackReport = FeedbackReport.create({
         content,
         intent,
         author: author.dto,
-        screenshot: screenshotPreview,
+        screenshot: screenshotUrl,
         sentAt: new Date().toISOString(),
       })
 
       const response = await reportingService.sendFeedbackReport(feedbackReport)
-
       if (response.isSuccessful) {
         setStep('success')
         toast.showSuccess('Feedback enviado com sucesso! Obrigado.')
       } else {
         toast.showError(response.errorMessage || 'Falha ao enviar feedback.')
       }
-    } catch {
+    } catch (error) {
+      console.error('Error sending feedback', error)
       toast.showError('Erro inesperado ao enviar feedback.')
     } finally {
       setIsLoading(false)
@@ -147,17 +195,17 @@ export function useFeedbackDialog({ reportingService, user, toast }: Params) {
 
   return {
     isOpen,
-    handleOpenChange,
     step,
     content,
-    setContent,
     intent,
     screenshotPreview,
     rawScreenshot,
     isCapturing,
     isCropping,
     isLoading,
+    setContent,
     handleSelectIntent,
+    handleOpenChange,
     handleBack,
     handleReset,
     handleCapture,
