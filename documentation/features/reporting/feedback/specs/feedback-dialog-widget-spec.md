@@ -2,7 +2,7 @@
 
 ### Application: web
 ### Ultima atualização: 29/01/2026
-### Status: em desenvolvimento
+### Status: concluído
 
 ### 1. Objetivo
 Implementar o widget `FeedbackDialog` para coletar feedbacks dos usuários. O widget permitirá que o usuário descreva sua experiência, selecione uma intenção (ex: bug, sugestão, elogio) e opcionalmente anexe uma captura de tela. Tecnicamente, a solução envolve a criação de um novo widget seguindo o padrão View-Hook-Index e a implementação da camada de serviço REST para integração com o backend.
@@ -21,6 +21,11 @@ Implementar o widget `FeedbackDialog` para coletar feedbacks dos usuários. O wi
 *   **Métodos:** 
     *   `sendFeedbackReport(dto: FeedbackReportDto): Promise<RestResponse<void>>`: Envia o feedback para o endpoint `POST /reporting/feedback`.
 
+*   **Localização:** `apps/web/src/rest/services/StorageService.ts`
+*   **Dependências:** `RestClient` injetado via factory.
+*   **Métodos:**
+    *   `uploadFile(folder: StorageFolder, file: File): Promise<RestResponse<{ filename: string }>>`: Realiza upload de arquivos.
+
 #### Camada UI (Widgets)
 
 ##### FeedbackDialog (Widget interno de FeedbackLayout)
@@ -31,38 +36,40 @@ Implementar o widget `FeedbackDialog` para coletar feedbacks dos usuários. O wi
 *   **Hook:** `apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackDialog/useFeedbackDialog.ts`
     *   Gerencia o estado do formulário (content, intent, screenshot).
     *   **Lógica de Screenshot:**
-        - Estado `screenshotPreview`: Armazena a URL base64 da imagem capturada.
-        - Estado `isCapturing`: Controla o fechamento temporário do modal para a captura.
-        - Handler `handleCapture`:
-            1. Seta `isCapturing` como true (o que deve fechar o modal via prop no componente).
-            2. Utiliza `navigator.mediaDevices.getDisplayMedia` para obter o stream de vídeo da tela.
-            3. Captura o frame atual em um `HTMLCanvasElement`.
-            4. Converte o canvas para base64 e salva em `screenshotPreview`.
-            5. Para todos os tracks do stream e seta `isCapturing` como false (reabrindo o modal).
-    *   Consome `reportingService` do `useRest`.
-    *   Handler `handleSubmit`: Valida os dados, cria o DTO (incluindo a screenshot em base64 se houver) e chama `reportingService.sendFeedbackReport`.
-    *   Gerencia estados de `isLoading` e `isSuccess`.
-*   **View:** `apps/web/src/ui/reporting/widgets/FeedbackDialog/FeedbackDialogView.tsx`
+        - Utiliza biblioteca `modern-screenshot` (`domToPng`) para capturar `document.documentElement`.
+        - Estratégia de ocultar o botão de feedback durante a captura.
+        - Estado `rawScreenshot`: Armazena a captura bruta para edição.
+        - Estado `screenshotPreview`: Armazena a imagem recortada final.
+        - Estado `isCapturing` e `isCropping`: Controlam a visibilidade do modal e do cropper.
+    *   **Lógica de Upload:**
+        - No `handleSubmit`, converte o base64 do crop em `File`.
+        - Realiza upload via `storageService` para a pasta `feedback-reports`.
+        - Anexa a URL retornada ao `FeedbackReport`.
+    *   Consome `reportingService` e `storageService` do `useRest`.
+*   **Recurso:** `apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackDialog/ScreenCropper`
+    - Componente dedicado para recorte da captura usando `react-advanced-cropper`.
+*   **View:** `apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackDialog/FeedbackDialogView.tsx`
     *   Utiliza os componentes do `Dialog` global.
-    *   A prop `open` do `Dialog` deve ser controlada pelo `!isCapturing && isOpen`.
     *   Renderiza:
-        - Seleção de intenção (Bug, Ideia, Outro).
+        - Seleção de intenção (Bug [Verde], Ideia [Amarelo], Outro [Azul]).
         - Área de texto para o conteúdo.
         - Botão de captura com ícone de câmera.
-        - Preview da screenshot (se houver) com botão de exclusão.
-    *   Exibe feedback visual de envio (loading/sucesso).
+        - Preview da screenshot.
+        - Link para Discord.
 
 ##### FeedbackLayout (Widget de Layout)
 *   **Localização:** `apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout.tsx`
 *   **Props:** `children: ReactNode`.
-*   **Responsabilidade:** Define a estrutura visual externa do dialog, em que o children vai ser colocado ao lado do dialog de forma que o dialog fique fixo no canto superior direito da tela. Além disso, envolva o layout em apps/web/src/app/(home)/layout.tsx
+*   **Responsabilidade:** Envolve a aplicação para prover o contexto do Dialog fixo. Configurado no layout da aplicação.
 
 ### 4. O que deve ser modificado?
 
 *   **Arquivo:** `apps/web/src/rest/services/index.ts`
-    *   **Mudança:** Exportar a nova factory function `ReportingService`.
+    *   **Mudança:** Exportar `ReportingService` e `StorageService`.
 *   **Arquivo:** `apps/web/src/ui/global/hooks/useRest.ts`
-    *   **Mudança:** Adicionar o `reportingService` ao retorno do hook, instanciando-o com o `restClient`.
+    *   **Mudança:** Adicionar `reportingService` e `storageService` ao hook.
+*   **Arquivo:** `packages/core/src/storage/domain/structures/StorageFolder.ts`
+    *   **Mudança:** Adicionar suporte a pasta `feedback-reports`.
 
 ### 5. O que deve ser removido?
 Nenhum código será removido nesta tarefa.
@@ -71,12 +78,12 @@ Nenhum código será removido nesta tarefa.
 
 #### Fluxo de Dados
 ```ascii
-[FeedbackDialogView] --(evento: submit)--> [useFeedbackDialog]
-                                                 |
-                                                 v
-[ReportingService] <--(sendFeedbackReport)-- [useRest]
-       |
-       +--(POST /reporting/feedback)--> [Backend API]
+[FeedbackDialogView] --(submit)--> [useFeedbackDialog] --(1. upload)--> [StorageService]
+                                          |
+                                          +--(2. send)----> [ReportingService]
+                                                                  |
+                                                                  v
+                                                            [Backend API]
 ```
 
 #### Referências

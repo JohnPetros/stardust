@@ -17,7 +17,11 @@ Detalhar a implementação técnica de uma feature, fix ou refatoração, atuand
     *   **Consulte Guidelines:** Aplique os padrões das camadas definidos em `documentation/guidelines/guidelines-rule.md` (core, rest, ui, database, provision, rpc, ai).
     *   **Identifique Referências:** Procure na codebase por exemplos similares ("copy-paste inteligente") para sugerir como referência.
 
-2.  **Estruturação do Documento:**
+2.  **Uso de Ferramentas Auxiliares:**
+    *  **MCP Serena**: Quando não souber onde exatamente está um arquivo ou pasta, utilize o MCP do Serena para facilitar sua busca pelo projeto.
+    *  **MCP Context7:** Caso tenha dúvidas sobre como usar uma biblioteca específica (ex: `shadcn/ui`, `radix-ui`, `inngest`, `supabase`), utilize o MCP do Context7 para obter documentação e exemplos de uso.
+
+3.  **Estruturação do Documento:**
     Gere o arquivo Markdown da Spec seguindo estritamente o modelo de seções e nível de detalhe abaixo:
 
     ---
@@ -68,12 +72,20 @@ Detalhar a implementação técnica de uma feature, fix ou refatoração, atuand
     *   **Hook (se aplicável):** Nome e caminho do hook do widget.
     *   **Index:** Hooks, actions e stores usadas no index.
     *   **Widgets internos:** Widgets filhos a serem criados.
+    *   **Estrutura de pastas:** Caso haja widgets internos, escreva a estrutura de pastas completa do widget pai.
 
     #### Camada UI (Stores)
     *   **Localização:** `caminho/do/arquivo`
     *   **Props:** Parâmetros recebidos no construtor.
     *   **Estados:** Estrutura do estado (Loading, Error, Data).
     *   **Actions:** Métodos de mutação.
+
+    #### Camada UI (Contexts)
+    *   **Localização:** `caminho/da/pasta`
+    *   **Props:** Parâmetros recebidos via props.
+    *   **hook do provider:** Nome e caminho do hook do provider.
+    *   **Responsabilidade:** Lista de responsabilidades do context.
+    *   **Value:** Objeto que contém os dados e métodos do context que serão disponibilizados para os filhos.
 
     #### Camada Hono App (Routes)
     *   **Localização:** `caminho/do/arquivo`

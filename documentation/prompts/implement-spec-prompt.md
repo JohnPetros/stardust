@@ -42,8 +42,9 @@ Executar o plano de implementação técnica de forma iterativa, organizada e va
     *   **Contexto de Monorepo:** O comando deve ser executado **dentro do diretório da aplicação ou pacote específico** (onde reside o `package.json`, ex: `apps/web` ou `packages/core`), e não na raiz do workspace.
     *   **Critério de Aceite:** Corrija imediatamente quaisquer erros do linter ou testes falhando. Não avance com código "quebrado".
 
-5.  **Uso de Ferramentas Auxiliares (Context7):**
-    *   Caso tenha dúvidas sobre como usar uma biblioteca específica (ex: `shadcn/ui`, `radix-ui`, `inngest`, `supabase`), utilize o MCP do Context7 para obter documentação e exemplos de uso.
+5.  **Uso de Ferramentas Auxiliares:**
+    *  **MCP Context7:** Caso tenha dúvidas sobre como usar uma biblioteca específica (ex: `shadcn/ui`, `radix-ui`, `inngest`, `supabase`), utilize o MCP do Context7 para obter documentação e exemplos de uso.
+    *  **MCP Serena**: Quando não souber onde exatamente está um arquivo ou pasta, utilize o MCP do Serena para facilitar sua busca pelo projeto.
 
 6.  **Planejamento e Tarefas:**
     *   Caso tenha sido realizado o planejamento e a definição de tarefas prévias, leve-as em consideração durante a implementação.

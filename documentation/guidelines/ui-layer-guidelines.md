@@ -35,6 +35,7 @@ MeuWidget/
 ### 1. View (`ComponentView.tsx`)
 Responsável **apenas** por renderizar a interface.
 *   Deve ser uma função pura (sempre que possível).
+*   Deve sempre ser declarada como arrow function
 *   Não deve conter lógica de negócios ou `useEffect`.
 *   Recebe dados e callbacks via props.
 *   Utiliza Tailwind CSS para estilização (`className` merged via `twMerge` se necessário).
@@ -55,6 +56,9 @@ Responsável por toda a lógica do componente.
 *   Calcula valores derivados (`useMemo`).
 *   Prepara props para a View.
 *   funções handlers deve usar a notação function e não arrow function
+*   Deve sempre ser declarada como function
+*   Todas as funções internas deve declaradas como function
+
 
 ```typescript
 // useButton.ts
@@ -80,6 +84,7 @@ export function useButton({ onAction, isExecuting }: Params) {
 ### 3. Container (`index.tsx`) (Entry Point)
 Orquestra a chamada do Hook e renderiza a View.
 *   Deve ser o único ponto de exportação do componente para consumo externo.
+*   Deve sempre ser declarada como arrow function
 
 ```tsx
 // index.tsx
