@@ -5,5 +5,7 @@ import { BackPageLinkView } from './BackPageLinkView'
 
 export const BackPageLink = () => {
   const { account } = useAuthContext()
-  return <BackPageLinkView isAccountAuthenticated={account?.isAuthenticated.isTrue ?? false} />
+  return (
+    <BackPageLinkView isAccountAuthenticated={account?.isAuthenticated.isTrue ?? false} />
+  )
 }

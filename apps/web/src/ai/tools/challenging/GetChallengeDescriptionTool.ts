@@ -13,7 +13,7 @@ export const GetChallengeDescriptionTool = (
 ): Tool<Input, string> => {
   return {
     async handle(mcp: Mcp<Input>) {
-      const { challengeId }= mcp.getInput() 
+      const { challengeId } = mcp.getInput()
       const response = await service.fetchChallengeById(Id.create(challengeId))
       if (response.isFailure) response.throwError()
       const challenge = Challenge.create(response.body)

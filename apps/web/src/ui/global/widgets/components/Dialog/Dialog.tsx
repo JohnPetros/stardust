@@ -8,25 +8,28 @@ import { useDialog } from './useDialog'
 
 type DialogProps = {
   children: ReactNode
+  open?: boolean
   shouldStartOpen?: boolean
   onOpenChange?: (isOpen: boolean) => void
 }
 
 export const DialogComponent = (
-  { children, shouldStartOpen = false, onOpenChange }: DialogProps,
+  { children, open, shouldStartOpen = false, onOpenChange }: DialogProps,
   ref: ForwardedRef<DialogRef>,
 ) => {
-  const { isOpen, open, close, handleOpenChange } = useDialog(
-    shouldStartOpen,
-    onOpenChange,
-  )
+  const {
+    isOpen,
+    open: openDialog,
+    close,
+    handleOpenChange,
+  } = useDialog(open ?? shouldStartOpen, onOpenChange)
 
   useImperativeHandle(ref, () => {
     return {
-      open,
+      open: openDialog,
       close,
     }
-  }, [open, close])
+  }, [openDialog, close])
 
   return (
     <Root open={isOpen} onOpenChange={handleOpenChange}>

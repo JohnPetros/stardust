@@ -6,7 +6,7 @@
     "build": "react-router build",
     "dev": "react-router dev --port 8000",
     "start": "serve -s ./build/client/index.html",
-    "check-types": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

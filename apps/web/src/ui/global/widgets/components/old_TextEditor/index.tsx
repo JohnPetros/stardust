@@ -27,17 +27,13 @@ const TextEditorComponent = (
     moveCursorToEnd,
   } = useTextEditor(onChange)
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        moveCursorToEnd,
-        insertSnippet,
-        insertValue,
-      }
-    },
-    [moveCursorToEnd, insertValue, insertSnippet],
-  )
+  useImperativeHandle(ref, () => {
+    return {
+      moveCursorToEnd,
+      insertSnippet,
+      insertValue,
+    }
+  }, [moveCursorToEnd, insertValue, insertSnippet])
 
   return (
     <textarea

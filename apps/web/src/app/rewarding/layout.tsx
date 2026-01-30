@@ -2,6 +2,7 @@ import type { PropsWithChildren } from 'react'
 import type { Metadata } from 'next'
 
 import { STARDUST_METADATA } from '@/constants/stardust-metadata'
+import { FeedbackLayout } from '@/ui/reporting/widgets/layouts/FeedbackLayout'
 
 export const metadata: Metadata = {
   ...STARDUST_METADATA,
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
 }
 
 const Layout = async ({ children }: PropsWithChildren) => {
-  return children
+  return <FeedbackLayout>{children}</FeedbackLayout>
 }
 
 export default Layout

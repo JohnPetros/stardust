@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsup",
     "lint": "biome lint src --diagnostic-level=error",
-    "check-types": "tsc --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@designliquido/delegua": "^1.0.0",

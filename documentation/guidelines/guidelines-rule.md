@@ -3,7 +3,7 @@
 Este arquivo serve como índice para as diretrizes de documentação do projeto. Consulte os arquivos específicos abaixo com base na tarefa em questão.
 
 ## Diretrizes de Interface de Usuário (ui)
-**Arquivo:** `/home/petros/projects/stardust/documentation/guidelines/ui-layer-guidelines.md`
+**Arquivo:** `/documentation/guidelines/ui-layer-guidelines.md`
 **Quando consultar:**
 - Ao criar ou modificar componentes React (Widgets).
 - Para entender a estrutura de um widget (View, Hook, Index).
@@ -12,7 +12,7 @@ Este arquivo serve como índice para as diretrizes de documentação do projeto.
 - Para entender quando usar `forwardRef`.
 
 ## Convenções de Código
-**Arquivo:** `/home/petros/projects/stardust/documentation/guidelines/code-conventions-guidelines.md`
+**Arquivo:** `/documentation/guidelines/code-conventions-guidelines.md`
 **Quando consultar:**
 - Para convenções gerais de nomenclatura (variáveis, funções, classes, arquivos).
 - Para entender o uso de Factory Functions e Objetos de Domínio (Entidades, Objetos de Valor, Agregados).
@@ -20,53 +20,53 @@ Este arquivo serve como índice para as diretrizes de documentação do projeto.
 - Ao criar classes de Evento ou Erro.
 
 ## Diretrizes da Camada RPC
-**Arquivo:** `/home/petros/projects/stardust/documentation/guidelines/rpc-layer-guidelines.md`
+**Arquivo:** `/documentation/guidelines/rpc-layer-guidelines.md`
 **Quando consultar:**
 - Ao implementar Actions no servidor usando o padrão Factory Function.
 - Para entender a interface `Call` e como lidar com requisições/redirecionamentos.
 - Ao organizar actions por domínio.
 
 ## Diretrizes da Camada REST
-**Arquivo:** `/home/petros/projects/stardust/documentation/guidelines/rest-layer-guidelines.md`
+**Arquivo:** `/documentation/guidelines/rest-layer-guidelines.md`
 **Quando consultar:**
 - Ao realizar requisições HTTP para APIs externas ou serviços.
 - Para implementar novos Services usando `RestClient`.
 - Para entender como funciona `RestResponse` e o tratamento de erros nesta camada.
 
 ## Diretrizes da Camada de Fila (queue)
-**Arquivo:** `/home/petros/projects/stardust/documentation/guidelines/queue-layer-guidelines.md`
+**Arquivo:** `/documentation/guidelines/queue-layer-guidelines.md`
 **Quando consultar:**
 - Ao implementar jobs em background ou processamento assíncrono.
 - Para entender a interface `Job` e o protocolo `Amqp`.
 - Ao definir novos jobs com a estrutura `Job<Payload>`.
 
 ## Diretrizes da Camada de Provision (prov)
-**Arquivo:** `/home/petros/projects/stardust/documentation/guidelines/provision-layer-guidelines.md`
+**Arquivo:** `/documentation/guidelines/provision-layer-guidelines.md`
 **Quando consultar:**
 - Ao integrar com ferramentas de terceiros (Armazenamento, Email, Pagamentos, etc.).
 - Para implementar novos Providers (Gateways) que encapsulam SDKs externos.
 
 ## Diretrizes da Aplicação Web
-**Arquivo:** `/home/petros/projects/stardust/documentation/guidelines/web-application-guidelines.md`
+**Arquivo:** `/documentation/guidelines/web-application-guidelines.md`
 **Quando consultar:**
 - Para uma visão geral da arquitetura e stack da Aplicação Web (Next.js, Tailwind, etc.).
 - Para entender a estrutura de pastas do projeto `apps/web`.
 
 ## Diretrizes da Aplicação Studio
-**Arquivo:** `/home/petros/projects/stardust/documentation/guidelines/studio-appllication-guidelines.md`
+**Arquivo:** `/documentation/guidelines/studio-appllication-guidelines.md`
 **Quando consultar:**
 - Para uma visão geral da arquitetura e stack da Aplicação Studio (Painel Admin - Remix, Vite, Shadcn).
 - Para entender a estrutura de pastas do projeto `apps/studio`.
 
 ## Diretrizes da Camada de Banco de Dados (db)
-**Arquivo:** `/home/petros/projects/stardust/documentation/guidelines/database-guidelines.md`
+**Arquivo:** `/documentation/guidelines/database-guidelines.md`
 **Quando consultar:**
 - Ao implementar persistência de dados (Repositories).
 - Para entender o padrão de Mappers (conversão DB <-> Entidade).
 - Ao configurar conexões ou tratar erros específicos de banco de dados.
 
 ## Diretrizes do Pacote Core (core)
-**Arquivo:** `/home/petros/projects/stardust/documentation/guidelines/core-package-guideines.md`
+**Arquivo:** `/documentation/guidelines/core-package-guideines.md`
 **Quando consultar:**
 - Para entender a arquitetura de Domínio (DD Tático).
 - Ao criar Entidades, Estruturas (Value Objects), Agregados e Eventos.
@@ -74,7 +74,7 @@ Este arquivo serve como índice para as diretrizes de documentação do projeto.
 - Ao escrever testes unitários, Fakers ou Mocks para o domínio.
 
 ## Diretrizes de Testes Unitários
-**Arquivo:** `/home/petros/projects/stardust/documentation/guidelines/unit-tests-guidelines.md`
+**Arquivo:** `/documentation/guidelines/unit-tests-guidelines.md`
 **Quando consultar:**
 - Ao escrever testes para Casos de Uso (Use Cases) e identificar padrões de teste.
 - Para entender como usar mocks (`ts-jest-mocker`) e fakers (`@faker-js/faker`).

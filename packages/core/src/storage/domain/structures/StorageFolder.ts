@@ -45,6 +45,10 @@ export class StorageFolder {
     return StorageFolder.create('insignias')
   }
 
+  static createAsFeedbackReports() {
+    return StorageFolder.create('feedback-reports')
+  }
+
   private static isStorageFolderName(name: string): name is StorageFolderName {
     new StringValidation(name).oneOf([
       'story',
@@ -55,6 +59,7 @@ export class StorageFolder {
       'planets',
       'achievements',
       'insignias',
+      'feedback-reports',
     ])
     return true
   }

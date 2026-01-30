@@ -29,7 +29,9 @@ export const ContentView = ({ type, children, hasAnimation = false }: Props) => 
         .map((child) =>
           typeof child !== 'string' && typeof child.props.children === 'string'
             ? `<strong class="strong">${child.props.children}</strong>`
-            : typeof child !== 'string' ? child.props.children : child,
+            : typeof child !== 'string'
+              ? child.props.children
+              : child,
         )
         .join(' ')
     : children

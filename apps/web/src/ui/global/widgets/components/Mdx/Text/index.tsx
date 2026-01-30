@@ -1,3 +1,3 @@
-import { TextView } from "./TextView";
+import { TextView } from './TextView'
 
 export const Text = TextView

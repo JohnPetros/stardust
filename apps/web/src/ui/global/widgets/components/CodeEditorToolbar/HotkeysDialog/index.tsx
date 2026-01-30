@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../../Dialog'
+import * as Dialog from '../../Dialog'
 
 import { HOTKEYS } from './hotkeys'
 
@@ -10,9 +10,9 @@ type HotkeysDialogProps = {
 
 export function HotkeysDialog({ children }: HotkeysDialogProps) {
   return (
-    <Dialog>
-      <DialogContent>
-        <DialogHeader>Atalhos</DialogHeader>
+    <Dialog.Container>
+      <Dialog.Content>
+        <Dialog.Header>Atalhos</Dialog.Header>
         <dl className='mt-3 space-y-6'>
           {HOTKEYS.map((hotkey) => (
             <div key={hotkey.action} className='grid grid-cols-[2fr_1fr] items-center'>
@@ -21,8 +21,8 @@ export function HotkeysDialog({ children }: HotkeysDialogProps) {
             </div>
           ))}
         </dl>
-      </DialogContent>
-      <DialogTrigger>{children}</DialogTrigger>
-    </Dialog>
+      </Dialog.Content>
+      <Dialog.Trigger>{children}</Dialog.Trigger>
+    </Dialog.Container>
   )
 }

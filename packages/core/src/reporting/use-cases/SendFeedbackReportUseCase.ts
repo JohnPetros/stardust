@@ -15,6 +15,7 @@ export class SendFeedbackReportUseCase implements UseCase<Request, Response> {
   ) {}
 
   async execute(request: Request): Response {
+    console.log('Sending feedback report:', request)
     const report = FeedbackReport.create(request)
     await this.repository.add(report)
     const event = new FeedbackReportSentEvent({

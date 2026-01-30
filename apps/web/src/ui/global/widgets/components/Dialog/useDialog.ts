@@ -1,12 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export function useDialog(
   shouldStartOpen: boolean,
-  onOpenChange?: (isOpen: boolean) => void
+  onOpenChange?: (isOpen: boolean) => void,
 ) {
   const [isOpen, setIsOpen] = useState(shouldStartOpen)
+
+  useEffect(() => {
+    setIsOpen(shouldStartOpen)
+  }, [shouldStartOpen])
 
   function open() {
     setIsOpen(true)

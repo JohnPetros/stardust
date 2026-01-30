@@ -36,19 +36,24 @@ Executar o plano de implementação técnica de forma iterativa, organizada e va
 
 4.  **Ciclo de Qualidade e Verificação (Por Tarefa):**
     Ao finalizar a codificação de *cada micro-tarefa*, execute os passos de validação ANTES de passar para a próxima:
-    *   **Formatação e Lint:** Execute `npx biome check --apply .` para garantir conformidade e formatação.
+    *   **Formatação e Lint:** Execute `npm run codecheck` para garantir conformidade e formatação.
+    *   **Typecheck:** Execute `npm run typecheck` para garantir que o código seja válido com relação a tipagem.
     *   **Testes:** Execute `npm run test` para validar a lógica implementada
     *   **Contexto de Monorepo:** O comando deve ser executado **dentro do diretório da aplicação ou pacote específico** (onde reside o `package.json`, ex: `apps/web` ou `packages/core`), e não na raiz do workspace.
     *   **Critério de Aceite:** Corrija imediatamente quaisquer erros do linter ou testes falhando. Não avance com código "quebrado".
 
-5.  **Uso de Ferramentas Auxiliares (Context7):**
-    *   Caso tenha dúvidas sobre como usar uma biblioteca específica (ex: `shadcn/ui`, `radix-ui`, `inngest`, `supabase`), utilize o MCP do Context7 para obter documentação e exemplos de uso.
+5.  **Uso de Ferramentas Auxiliares:**
+    *  **MCP Context7:** Caso tenha dúvidas sobre como usar uma biblioteca específica (ex: `shadcn/ui`, `radix-ui`, `inngest`, `supabase`), utilize o MCP do Context7 para obter documentação e exemplos de uso.
+    *  **MCP Serena**: Quando não souber onde exatamente está um arquivo ou pasta, utilize o MCP do Serena para facilitar sua busca pelo projeto.
 
 6.  **Planejamento e Tarefas:**
     *   Caso tenha sido realizado o planejamento e a definição de tarefas prévias, leve-as em consideração durante a implementação.
 
 7.  **Consistência de Padrões:**
-    *   **Camada UI (Widget Pattern):**
-        *   Todo componente reutilizável deve seguir a estrutura de Widget: `Index` (.tsx), `View` (.tsx) e `Hook` (.ts).
+    *   **Camada UI:**
+        *   Todo widget deve seguir a estrutura de Widget: `Index` (.tsx), `View` (.tsx) e `Hook` (.ts).
         *   Evite lógica de negócio na View.
+        *   Prefira dividir o widget em widgets menores para melhorar a reutilização e a manutenção do código.
+        *   Se precisar criar um widget interno, siga a estrutura de Widget: `Index` (.tsx), `View` (.tsx) e `Hook` (.ts) também
+        *   Funções dentro de hooks devem usar a notação function em vez de arrow functions, exceto em casos específicos como useCallback.
         *   **Importante:** Utilize `Tailwind CSS` e primitivos do `Radix UI` (ou componentes `shadcn` existentes), evitando estilos inline ou bibliotecas não aprovadas como Material UI.

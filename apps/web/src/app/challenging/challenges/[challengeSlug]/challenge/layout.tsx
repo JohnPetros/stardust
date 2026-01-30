@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 
 import { ChallengeLayout } from '@/ui/challenging/widgets/layouts/Challenge'
 import type { PanelsOffset } from '@/ui/challenging/widgets/layouts/Challenge/types'
+import { FeedbackLayout } from '@/ui/reporting/widgets/layouts/FeedbackLayout'
 import { cookieActions } from '@/rpc/next-safe-action'
 import { COOKIES } from '@/constants'
 
@@ -33,12 +34,14 @@ const Layout = async ({
   }
 
   return (
-    <ChallengeLayout
-      header={header}
-      tabContent={tabContent}
-      codeEditor={codeEditor}
-      panelsOffset={panelsOffset}
-    />
+    <FeedbackLayout>
+      <ChallengeLayout
+        header={header}
+        tabContent={tabContent}
+        codeEditor={codeEditor}
+        panelsOffset={panelsOffset}
+      />
+    </FeedbackLayout>
   )
 }
 

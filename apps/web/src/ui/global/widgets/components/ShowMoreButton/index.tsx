@@ -13,7 +13,10 @@ export function ShowMoreButton({ onClick, isLoading, className }: ShowMoreButton
     <Button
       isLoading={isLoading}
       onClick={onClick}
-      className={twMerge('bg-transparent border border-gray-600 text-gray-600', className)}
+      className={twMerge(
+        'bg-transparent border border-gray-600 text-gray-600',
+        className,
+      )}
     >
       Mostrar mais
     </Button>

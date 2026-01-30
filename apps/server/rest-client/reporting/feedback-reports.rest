@@ -6,6 +6,6 @@ Content-Type: application/json
 Authorization: Bearer {{JWT}}
 
 {
-  "content": "Conteúdo do feedback de teste",
+  "contt": "Conteúdo do feedback de teste",
   "intent": "bug"
 }

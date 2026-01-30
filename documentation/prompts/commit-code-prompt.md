@@ -1,71 +1,47 @@
-# Prompt: Commitar Código
+# Prompt: Commit Code
 
-**Objetivo:**
-Orientar o agrupamento lógico de alterações e a criação de commits padronizados seguindo estritamente as diretrizes do projeto definidas em `CONTRIBUTING.md`.
-
-**Entrada:**
-*   Lista de arquivos modificados, criados ou deletados (staged ou não).
-*   Contexto das alterações (o que foi implementado, corrigido ou refatorado).
+**Objetivo Principal**
+Gerar mensagens de commit altamente descritivas e padronizadas para as alterações realizadas no código, seguindo rigorosamente as diretrizes de contribuição do projeto.
 
 **Diretrizes de Execução:**
 
-1.  **Análise de Status:**
-    *   Execute (ou analise) o `git status` para visualizar todas as pendências.
-    *   Identifique arquivos que não devem ser comitados (arquivos de log, temporários, ou fora do escopo da tarefa atual).
+1.  **Análise do Contexto:**
+    *   Analise somente o nome dos arquivos alterados para entender exatamente o que mudou
+    *   Agrupe as alterações por responsabilidade. Se houver mudanças em camadas diferentes (ex: UI e REST), sugira commits separados.
+    *   Analise o conteúdo dos arquivos agrupados alterados para entender exatamente o que mudou
 
-2.  **Agrupamento Lógico (Atomicidade):**
-    *   Separe as alterações em grupos lógicos e atômicos.
-    *   Evite "mega-commits". Se possível, separe alterações de Backend (Domain, RPC, DB) de Frontend (UI), refatorações de novas features, e correções de bugs.
+2.  **Padrão de Mensagem (Strict):**
+    Cada commit deve seguir o formato: `emoji prefix: concise description in English`.
 
-3.  **Padrão de Mensagem de Commit:**
-    *   **Estrutura:** `<emoji> <prefixo>(<escopo opcional>): <corpo>`
-    *   **Idioma:** Inglês (conforme `CONTRIBUTING.md`).
-    *   **Regras:**
-        *   O arquivo `CONTRIBUTING.md` define que commits devem ser escritos em **inglês**.
-        *   Para *use cases* e *testes*, o corpo da mensagem não precisa começar por um verbo.
+    *   **Idioma:** A mensagem de commit **deve ser em Inglês**.
+    *   **Prefixo:** Escolha o prefixo e emoji correto com base na tabela abaixo:
 
-    *   **Exemplos:**
-        *   `🐛 fix(server): ensure only one achievement is unlocked at once`
-        *   `📑 interface: add AchievementsRepository`
-        *   `✨ use case: list all challenges`
-        *   `🧪 test: useChallengePage hook`
+    | Tipo                           | Prefixo    | Emoji |
+    | :----------------------------- | :--------- | :---- |
+    | Camada de domínio              | domain     | 🌐    |
+    | Camada de API REST             | rest       | 📶    |
+    | Camada de UI                   | ui         | 🖥️    |
+    | Camada de banco de dados       | db         | 💾    |
+    | Use cases                      | use case   | ✨    |
+    | Interfaces                     | interface  | 📑    |
+    | Tipagem                        | type       | 🏷️    |
+    | Documentação                   | docs       | 📚    |
+    | Correção de bug                | fix        | 🐛    |
+    | Refatoração                    | refactor   | ♻️    |
+    | Teste                          | test       | 🧪    |
+    | Configuração/Infra             | config     | ⚙️    |
+    | Dependências                   | deps       | 📦    |
+    | Estrutura de pastas            | ftree      | 🗃️    |
+    | Trabalho em progresso          | wip        | 🚧    |
 
-4.  **Tabela de Tipos de Commit (Obrigatório):**
-    Utilize **exclusivamente** os prefixos e emojis definidos abaixo:
+3.  **Exemplos de Referência:**
+    *   `🐛 fix(server): ensure only one achievement is unlocked at once`
+    *   `📑 interface: add AchievementsRepository`
+    *   `✨ use case: list all challenges`
+    *   `🧪 test: list all challenges use case`
 
-    | Tipo de commit | Prefixo | Emoji |
-    | :--- | :--- | :--- |
-    | Camada de domínio | `domain` | 🌐 |
-    | Camada de API REST | `rest` | 📶 |
-    | Camada de UI | `ui` | �️ |
-    | Camada de banco de dados | `db` | � |
-    | Camada de fila/mensageria | `queue` | 🎞️ |
-    | Camada de provisão | `provision` | 🧰 |
-    | Camada de API RPC | `rpc` | � |
-    | Use cases | `use case` | ✨ |
-    | Interfaces | `interface` | 📑 |
-    | Tipagem | `type` | �️ |
-    | Documentação | `docs` | 📚 |
-    | Correção de bug | `fix` | 🐛 |
-    | Refatoração de código | `refactor` | ♻️ |
-    | Teste automatizado | `test` | 🧪 |
-    | Configuração/infraestrutura | `config` | ⚙️ |
-    | Constantes | `constants` | � |
-    | Dependências | `deps` | 📦 |
-    | Arquivos estáticos | `assets` | 🎴 |
-    | Merge de branches | `merge` | 🔀 |
-    | Reset de histórico | `revert` | ⏪ |
-    | Executor/Interpretador | `cr` | ⏪ |
-    | Estruturação pastas/arquivos | `ftree` | 🗃️ |
-    | Certificados e licenças | `cert` | � |
-    | Schema para validação | `validation` | 📮 |
-    | Trabalho em andamento | `wip` | 🚧 |
-    | Conserto de emergência | `hotfix` | 🚑 |
-    | Entrega contínua | `cd` | � |
-    | Integração contínua | `ci` | 🏎️ |
-    | Nova release | `release` | 🔖 |
-    | Containers Docker | `docker` | 🐳 |
-
-5.  **Execução:**
-    *   Adicione os arquivos para o grupo identificado: `git add <caminho/arquivo>`
-    *   Realize o commit: `git commit -m "<mensagem padronizada>"`
+4.  **Verificação Final:**
+    *   A mensagem é curta e direta?
+    *   O emoji corresponde ao prefixo?
+    *   O prefixo está na lista permitida?
+    *   A descrição está em Inglês?

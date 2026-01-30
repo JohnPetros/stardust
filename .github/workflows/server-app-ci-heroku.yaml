@@ -31,7 +31,7 @@ jobs:
         working-directory: apps/server
 
       - name: Check types
-        run: npm run check-types
+        run: npm run typecheck
         working-directory: apps/server
 
       - name: Install turbo

@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react'
 
-import { Dialog, DialogTrigger, DialogContent, DialogHeader } from '../Dialog'
+import * as Dialog from '../Dialog'
 import { RangeInput } from '../RadioInput'
 import { Switch } from '../Switch'
 
@@ -27,9 +27,9 @@ export const SpeakerSettingsDialogView = ({
   handleEnableToggle,
 }: PropsWithChildren<Props>) => {
   return (
-    <Dialog>
-      <DialogContent>
-        <DialogHeader>Configurações de sintetizador de voz</DialogHeader>
+    <Dialog.Container>
+      <Dialog.Content>
+        <Dialog.Header>Configurações de sintetizador de voz</Dialog.Header>
 
         <div className='mt-6 space-y-6'>
           <Switch
@@ -83,8 +83,8 @@ export const SpeakerSettingsDialogView = ({
             />
           </div>
         </div>
-      </DialogContent>
-      <DialogTrigger className='w-max'>{children}</DialogTrigger>
-    </Dialog>
+      </Dialog.Content>
+      <Dialog.Trigger className='w-max'>{children}</Dialog.Trigger>
+    </Dialog.Container>
   )
 }
