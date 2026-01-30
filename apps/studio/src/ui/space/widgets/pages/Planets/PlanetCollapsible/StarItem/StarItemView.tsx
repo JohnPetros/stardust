@@ -8,6 +8,9 @@ import { Toggle } from '@/ui/global/widgets/components/Toggle'
 import { Button } from '@/ui/shadcn/components/button'
 import { ConfirmDialog } from '@/ui/global/widgets/components/ConfirmDialog'
 import { ExpandableInput } from '@/ui/lesson/widgets/components/ExpandableInput'
+import { Tooltip } from '@/ui/global/widgets/components/Tooltip'
+import { StarUserIcon } from './StarUserIcon'
+import { StarUnlockIcon } from './StarUnlockIcon'
 
 type Props = {
   star: StarEntity
@@ -68,6 +71,20 @@ export const StarItemView = ({
           </div>
         )}
       </div>
+
+      <Tooltip content='Quantidade de usuários que pararam nesta estrela'>
+        <div className='flex items-center gap-2 text-sm'>
+          <span>{star.userCount.value}</span>
+          <StarUserIcon className='text-zinc-400 w-4 h-5' />
+        </div>
+      </Tooltip>
+
+      <Tooltip content='Quantidade de usuários que desbloquearam esta estrela'>
+        <div className='flex items-center gap-2 text-sm'>
+          <span>{star.unlockCount.value}</span>
+          <StarUnlockIcon className='text-zinc-400 w-4 h-4' />
+        </div>
+      </Tooltip>
 
       <Toggle
         label='Disponível para os usuários?'

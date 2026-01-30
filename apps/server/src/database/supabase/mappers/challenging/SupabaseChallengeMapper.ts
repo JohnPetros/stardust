@@ -33,7 +33,7 @@ export class SupabaseChallengeMapper {
       },
       upvotesCount: supabaseChallenge.upvotes_count ?? 0,
       downvotesCount: supabaseChallenge.downvotes_count ?? 0,
-      completionsCount: supabaseChallenge.total_completitions ?? 0,
+      completionCount: supabaseChallenge.total_completitions ?? 0,
       description: supabaseChallenge.description ?? '',
       isPublic: Boolean(supabaseChallenge.is_public),
       testCases: (

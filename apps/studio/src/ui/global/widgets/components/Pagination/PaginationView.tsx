@@ -47,13 +47,13 @@ export const PaginationView = ({
 }: ViewProps) => {
   return (
     <div className='flex items-center justify-between gap-4 flex-wrap'>
-      <div className='text-sm text-muted-foreground'>
+      <div className='text-sm text-zinc-500'>
         Mostrando {startItem} a {endItem} de {totalItemsCount} itens
       </div>
 
       <div className='flex items-center gap-4'>
         <div className='flex items-center gap-2'>
-          <span className='text-sm text-muted-foreground'>Itens por página:</span>
+          <span className='text-sm text-zinc-500'>Itens por página:</span>
           <Select
             value={String(itemsPerPage)}
             onValueChange={(value) => onItemsPerPageChange(Number(value))}
@@ -77,7 +77,7 @@ export const PaginationView = ({
           </Button>
 
           <div className='flex items-center gap-2'>
-            <span className='text-sm text-muted-foreground'>Página</span>
+            <span className='text-sm text-zinc-500'>Página</span>
             <Input
               type='number'
               min={1}
@@ -88,7 +88,7 @@ export const PaginationView = ({
               onKeyDown={handlePageInputKeyDown}
               className='w-16 text-center'
             />
-            <span className='text-sm text-muted-foreground'>de {totalPages}</span>
+            <span className='text-sm text-zinc-500'>de {totalPages}</span>
           </div>
 
           <Button variant='outline' onClick={onNextPage} disabled={page >= totalPages}>

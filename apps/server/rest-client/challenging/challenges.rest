@@ -79,7 +79,7 @@ Authorization: Bearer {{JWT}}
     }
   ],
   "languages": [],
-  "completionsCount": 0,
+  "completionCount": 0,
   "description": "minha descrição",
   "downvotesCount": 0,
   "isPublic": false,
@@ -139,7 +139,7 @@ Content-Type: application/json
     }
   ],
   "languages": [],
-  "completionsCount": 0,
+  "completionCount": 0,
   "description": "minha descrição",
   "downvotesCount": 0,
   "isPublic": false,

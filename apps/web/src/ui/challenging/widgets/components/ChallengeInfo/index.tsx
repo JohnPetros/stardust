@@ -5,7 +5,7 @@ type ChallengeInfo = {
   isCompleted: boolean
   downvotes: number
   upvotes: number
-  completionsCount: number
+  completionCount: number
   authorName: string
   authorSlug: string
 }

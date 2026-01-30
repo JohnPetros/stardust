@@ -1844,7 +1844,7 @@
 - 🪨 constants(studio): add env (070bd3b7)
 - 📶 rest(studio): implement rest client using Axios (f09f1989)
 - 💾 db(server): use planets_view to create SupabasePlanet (2bd14fcb)
-- 🌐 domain: add completionsCount prop to Planet (b0dbf6ed)
+- 🌐 domain: add completionCount prop to Planet (b0dbf6ed)
 - 📦 deps(studio): install core and validation packages (db8b8d8f)
 - 🔀 merge: pull request #97 (aaf97402)
 - ♻️ refactor(studio): prefix all imports with '@/' (a7b21f31)

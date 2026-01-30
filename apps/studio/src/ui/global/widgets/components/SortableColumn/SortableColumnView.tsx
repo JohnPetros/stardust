@@ -30,10 +30,10 @@ export const SortableColumnView = ({
           <button
             type='button'
             className={cn(
-              'flex items-center gap-2 hover:text-foreground transition-colors outline-hidden cursor-pointer w-full justify-start',
+              'flex items-center gap-2 hover:text-zinc-500 transition-colors outline-hidden cursor-pointer w-full justify-start',
               order.isAscending.value || order.isDescending.value
-                ? 'text-foreground'
-                : 'text-muted-foreground',
+                ? 'text-zinc-400'
+                : 'text-zinc-500',
             )}
           >
             <span className='whitespace-nowrap'>{label}</span>

@@ -37,7 +37,7 @@ export const ChallengeDescriptionSlotView = ({
           downvotes={challenge.downvotesCount.value}
           isCompleted={isCompleted}
           upvotes={challenge.upvotesCount.value}
-          completionsCount={challenge.completionsCount.value}
+          completionCount={challenge.completionCount.value}
         />
         <ChallengeVoteControl />
         <ChallengeContentNav contents={['comments', 'solutions']} />

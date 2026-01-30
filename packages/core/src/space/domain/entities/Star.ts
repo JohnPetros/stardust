@@ -1,11 +1,19 @@
 import { Entity } from '#global/domain/abstracts/Entity'
-import { Slug, OrdinalNumber, Name, Logical } from '#global/domain/structures/index'
+import {
+  Slug,
+  OrdinalNumber,
+  Name,
+  Logical,
+  Integer,
+} from '#global/domain/structures/index'
 import type { StarDto } from './dtos'
 
 type StarsProps = {
   slug: Slug
   name: Name
   number: OrdinalNumber
+  userCount: Integer
+  unlockCount: Integer
   isAvailable: Logical
   isChallenge: Logical
 }
@@ -20,6 +28,14 @@ export class Star extends Entity<StarsProps> {
         isAvailable: Logical.create(
           dto.isAvailable,
           'A estrela está disponível para os usuários?',
+        ),
+        userCount: Integer.create(
+          dto.userCount,
+          'Quantidade de usuários que estão nessa estrela',
+        ),
+        unlockCount: Integer.create(
+          dto.unlockCount,
+          'Quantidade de usuários que completaram essa estrela',
         ),
         isChallenge: Logical.create(dto.isChallenge, 'A estrela é um desafio?'),
       },
@@ -53,6 +69,22 @@ export class Star extends Entity<StarsProps> {
     return this.props.slug
   }
 
+  get userCount(): Integer {
+    return this.props.userCount
+  }
+
+  set userCount(userCount: Integer) {
+    this.props.userCount = userCount
+  }
+
+  get unlockCount(): Integer {
+    return this.props.unlockCount
+  }
+
+  set unlockCount(unlockCount: Integer) {
+    this.props.unlockCount = unlockCount
+  }
+
   get isChallenge(): Logical {
     return this.props.isChallenge
   }
@@ -75,6 +107,8 @@ export class Star extends Entity<StarsProps> {
       name: this.name.value,
       number: this.number.value,
       slug: this.slug.value,
+      userCount: this.userCount.value,
+      unlockCount: this.unlockCount.value,
       isChallenge: this.isChallenge.value,
       isAvailable: this.isAvailable.value,
     }

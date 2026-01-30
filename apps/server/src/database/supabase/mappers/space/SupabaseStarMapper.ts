@@ -14,6 +14,8 @@ export class SupabaseStarMapper {
       name: supabaseStar.name ?? '',
       number: supabaseStar.number ?? 1,
       slug: supabaseStar.slug,
+      userCount: supabaseStar.user_count ?? 0,
+      unlockCount: supabaseStar.unlock_count ?? 0,
       isAvailable: supabaseStar.is_available ?? true,
       isChallenge: supabaseStar.is_challenge,
     }
@@ -29,6 +31,8 @@ export class SupabaseStarMapper {
       name: StarDto.name,
       number: StarDto.number,
       slug: StarDto.slug,
+      user_count: StarDto.userCount,
+      unlock_count: StarDto.unlockCount,
       is_available: StarDto.isAvailable,
       is_challenge: StarDto.isChallenge,
     }

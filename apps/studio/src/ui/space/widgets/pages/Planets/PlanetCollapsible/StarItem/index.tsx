@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { Star } from '@stardust/core/space/entities'
 
 import { useRest } from '@/ui/global/hooks/useRest'
