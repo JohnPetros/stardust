@@ -13,11 +13,11 @@ export class SupabaseDatabaseProvider implements DatabaseProvider {
   async backup(): Promise<File> {
     const date = new Date().toISOString().split('T')[0]
     const filename = `backup-${date}.dump`
-    
+
     const filePath = path.resolve(filename)
 
     const command = `pg_dump '${ENV.databaseUrl}' -F c -f '${filePath}'`
-    
+
     console.log(`🔄 Running backup: ${command}`)
 
     try {
@@ -30,19 +30,18 @@ export class SupabaseDatabaseProvider implements DatabaseProvider {
 
       const fileBuffer = await fs.readFile(filePath)
 
-      const file = new File([fileBuffer as any], filename, { 
-        type: 'application/octet-stream', 
-        lastModified: Date.now() 
+      const file = new File([fileBuffer as any], filename, {
+        type: 'application/octet-stream',
+        lastModified: Date.now(),
       })
 
       await fs.unlink(filePath)
       console.log('Temporary file removed from disk')
 
       return file
-
     } catch (error) {
       console.error('Failed to run pg_dump:', error)
-      
+
       try {
         await fs.unlink(filePath)
       } catch (cleanupError) {

@@ -1,11 +1,26 @@
 @URL = {{BASE_URL}}/reporting/feedback
+@FEEDBACK_REPORT_ID = c582f971-6f9a-47bb-b3e2-ef36c124e145
 
-### Create a feedback report
+### Send a feedback report
 POST {{URL}}
 Content-Type: application/json
 Authorization: Bearer {{JWT}}
 
 {
-  "contt": "Conteúdo do feedback de teste",
+  "content": "Conteúdo do feedback de teste",
   "intent": "bug"
 }
+
+### List feedback reports
+GET {{URL}}
+?page=1
+&itemsPerPage=10
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+### Delete feedback report
+DELETE {{URL}}/{{FEEDBACK_REPORT_ID}}
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+

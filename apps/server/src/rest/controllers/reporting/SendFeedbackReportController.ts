@@ -38,6 +38,6 @@ export class SendFeedbackReportController implements Controller<Schema> {
       },
     })
 
-    return http.send(response)
+    return http.statusCreated().send(response)
   }
 }

@@ -43,7 +43,7 @@ export class SupabasePlanetsRepository
   async findById(id: Id): Promise<Planet | null> {
     const { data, error } = await this.supabase
       .from('planets')
-     .select(`
+      .select(`
         *,
         completion_count: count_planet_completions,
         user_count: count_users_at_planet,
@@ -72,7 +72,7 @@ export class SupabasePlanetsRepository
   async findByPosition(position: OrdinalNumber): Promise<Planet | null> {
     const { data, error } = await this.supabase
       .from('planets')
-     .select(`
+      .select(`
         *,
         completion_count: count_planet_completions,
         user_count: count_users_at_planet,

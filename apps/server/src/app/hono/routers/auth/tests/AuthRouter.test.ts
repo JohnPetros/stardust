@@ -11,7 +11,5 @@ describe(`Auth Router (${AuthRouter.ROUTE_PREFIX})`, () => {
     server.close()
   })
 
-  test(`[POST] ${AuthRouter.ROUTES.signIn}`, async () => {
-   
-  })
+  test(`[POST] ${AuthRouter.ROUTES.signIn}`, async () => {})
 })
