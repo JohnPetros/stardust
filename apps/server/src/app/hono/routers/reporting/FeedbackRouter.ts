@@ -3,10 +3,12 @@ import { z } from 'zod'
 
 import { feedbackReportSchema } from '@stardust/validation/reporting/schemas'
 import {
+  DeleteFeedbackReportController,
   ListFeedbackReportsController,
   SendFeedbackReportController,
 } from '@/rest/controllers/reporting'
 import {
+  DeleteFeedbackReportUseCase,
   ListFeedbackReportsUseCase,
   SendFeedbackReportUseCase,
 } from '@stardust/core/reporting/use-cases'
@@ -21,6 +23,7 @@ import {
 } from '../../middlewares'
 import {
   dateSchema,
+  idSchema,
   itemsPerPageSchema,
   pageSchema,
 } from '@stardust/validation/global/schemas'
@@ -36,6 +39,7 @@ export class FeedbackRouter extends HonoRouter {
     this.router.get(
       '/',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'query',
         z.object({
@@ -76,9 +80,27 @@ export class FeedbackRouter extends HonoRouter {
     )
   }
 
+  private registerDeleteFeedbackRoute(): void {
+    this.router.delete(
+      '/:feedbackId',
+      this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
+      this.validationMiddleware.validate('param', z.object({ feedbackId: idSchema })),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseFeedbackReportsRepository(http.getSupabase())
+        const useCase = new DeleteFeedbackReportUseCase(repository)
+        const controller = new DeleteFeedbackReportController(useCase)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   registerRoutes(): Hono {
     this.registerListFeedbackReportsRoute()
     this.registerSendFeedbackRoute()
+    this.registerDeleteFeedbackRoute()
     return this.router
   }
 }
