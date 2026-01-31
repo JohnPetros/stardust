@@ -5,7 +5,7 @@ import { Id, Integer } from '@stardust/core/global/structures'
 import { useRocketItem } from './useRocketItem'
 import { RocketAggregate } from '@stardust/core/profile/aggregates'
 import { useImage } from '@/ui/global/hooks/useImage'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { RocketItemView } from './RocketItemView'
 
@@ -18,7 +18,7 @@ type Props = {
 
 export const RocketItem = ({ id, name, image, price }: Props) => {
   const { user } = useAuthContext()
-  const { profileService } = useRest()
+  const { profileService } = useRestContext()
   const { handleRocketAcquire } = useRocketItem(
     RocketAggregate.create({
       id,

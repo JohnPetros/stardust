@@ -2,7 +2,7 @@ import { useRef } from 'react'
 
 import type { Image } from '@stardust/core/global/structures'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import type { DialogRef } from '@/ui/shadcn/components/dialog'
 import { PictureInputView } from './PictureInputView'
 import { usePictureInput } from './usePictureInput'
@@ -13,7 +13,7 @@ type Props = {
 }
 
 export const PictureInput = ({ defaultPicture, onChange }: Props) => {
-  const { storageService } = useRest()
+  const { storageService } = useRestContext()
   const dialogRef = useRef<DialogRef>(null)
   const {
     selectedImage,

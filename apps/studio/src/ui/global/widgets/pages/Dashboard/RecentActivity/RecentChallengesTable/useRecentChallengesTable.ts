@@ -11,10 +11,10 @@ import {
 } from '@stardust/core/global/structures'
 
 import { CACHE } from '@/constants'
-import { useCache } from '@/ui/global/hooks/useCache'
+import { useFetch } from '@/ui/global/hooks/useFetch'
 
 export function useRecentChallengesTable(challengingService: ChallengingService) {
-  const { data, isLoading } = useCache({
+  const { data, isLoading } = useFetch({
     key: CACHE.recentChallengesTable.key,
     fetcher: async () =>
       await challengingService.fetchChallengesList({

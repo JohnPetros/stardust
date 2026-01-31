@@ -1,12 +1,12 @@
 'use client'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useSnippetsList } from './useSnippetsList'
 import { SnippetsListView } from './SnippetsListView'
 
 export const SnippetsList = () => {
-  const { playgroundService } = useRest()
+  const { playgroundService } = useRestContext()
   const {
     snippets,
     page,

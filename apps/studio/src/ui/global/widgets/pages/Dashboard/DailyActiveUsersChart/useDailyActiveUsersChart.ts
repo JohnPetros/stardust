@@ -4,7 +4,7 @@ import { Integer } from '@stardust/core/global/structures'
 import type { ProfileService } from '@stardust/core/profile/interfaces'
 
 import { CACHE } from '@/constants'
-import { useCache } from '@/ui/global/hooks/useCache'
+import { useFetch } from '@/ui/global/hooks/useFetch'
 
 const DEFAULT_DAYS = Integer.create(30)
 
@@ -19,7 +19,7 @@ export function useDailyActiveUsersChart(profileService: ProfileService) {
     setDays(Integer.create(value))
   }
 
-  const { data, isLoading } = useCache({
+  const { data, isLoading } = useFetch({
     key: CACHE.dailyActiveUsersChart.key,
     fetcher: async () => await profileService.fetchDailyActiveUsersReport(days),
     dependencies: [days.value],

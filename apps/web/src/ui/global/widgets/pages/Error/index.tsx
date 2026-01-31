@@ -11,7 +11,7 @@ type Props = {
 
 export const ErrorPage = ({ error }: Props) => {
   const telemetryProvider = useTelemetryProvider()
-  const { notificationService } = useRest()
+  const { notificationService } = useRestContext()
   const { handleReload } = useErrorPage({ telemetryProvider, notificationService, error })
 
   return <ErrorPageView errorMessage={error.message} onReload={handleReload} />

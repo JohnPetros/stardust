@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Star } from '@stardust/core/space/entities'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { StarItemView } from './StarItemView'
@@ -13,7 +13,7 @@ type Props = {
 }
 
 export const StarItem = ({ star, onDelete }: Props) => {
-  const { spaceService, challengingService } = useRest()
+  const { spaceService, challengingService } = useRestContext()
   const toastProvider = useToastProvider()
   const navigationProvider = useNavigationProvider()
 

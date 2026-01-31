@@ -2,7 +2,7 @@
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useUserSolutionButtons } from './useUserSolutionButtons'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { Id, Slug } from '@stardust/core/global/structures'
 import { UserSolutionButtonsView } from './UserSolutionButtonsView'
 
@@ -20,7 +20,7 @@ export const UserSolutionButtons = ({
   challengeSlug,
 }: Props) => {
   const { user } = useAuthContext()
-  const { challengingService } = useRest()
+  const { challengingService } = useRestContext()
   const { handleDeleteSolutionButtonClick } = useUserSolutionButtons({
     solutionId: Id.create(solutionId),
     challengeSlug: Slug.create(challengeSlug),

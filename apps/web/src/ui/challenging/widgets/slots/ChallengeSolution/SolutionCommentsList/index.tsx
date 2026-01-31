@@ -2,7 +2,7 @@
 
 import { Id } from '@stardust/core/global/structures'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useSolutionsCommentsList } from './useSolutionCommentsList'
 import { SolutionCommentsListView } from './SolutionCommentsListView'
 
@@ -11,7 +11,7 @@ type SolutionCommentsListProps = {
 }
 
 export const SolutionCommentsList = ({ solutionId }: SolutionCommentsListProps) => {
-  const { forumService } = useRest()
+  const { forumService } = useRestContext()
   const { handlePostComment, handleFetchComments } = useSolutionsCommentsList(
     Id.create(solutionId),
     forumService,

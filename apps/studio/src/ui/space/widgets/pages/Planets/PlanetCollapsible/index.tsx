@@ -1,5 +1,5 @@
 import type { Planet } from '@stardust/core/space/entities'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 import { useUiProvider } from '@/ui/global/hooks/useUiProvider'
 import { PlanetCollapsibleView } from './PlanetCollapsibleView'
@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const PlanetCollapsible = ({ planet: defaultPlanet }: Props) => {
-  const { spaceService, storageService } = useRest()
+  const { spaceService, storageService } = useRestContext()
   const toastProvider = useToastProvider()
   const uiProvider = useUiProvider()
   const {

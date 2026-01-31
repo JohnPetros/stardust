@@ -3,7 +3,7 @@ import { InsigniaItemView } from './InsigniaItemView'
 import { useInsigniaItem } from './useInsigniaItem'
 import { useImage } from '@/ui/global/hooks/useImage'
 import { Integer } from '@stardust/core/global/structures'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import type { Insignia } from '@stardust/core/shop/entities'
@@ -14,7 +14,7 @@ type Props = {
 
 export const InsigniaItem = ({ insignia }: Props) => {
   const { user, updateUserCache } = useAuthContext()
-  const { profileService } = useRest()
+  const { profileService } = useRestContext()
   const toastProvider = useToastContext()
   const audioProvider = useAudioContext()
   const { handleInsigniaAcquire } = useInsigniaItem({

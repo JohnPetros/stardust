@@ -5,20 +5,20 @@ import type { PaginationResponse, RestResponse } from '@stardust/core/global/res
 
 import { useToastProvider } from './useToastProvider'
 
-type PaginatedCacheConfig<CacheItem> = {
+type PaginatedFetchConfig<FetchItem> = {
   key: string
-  fetcher: (page: number) => Promise<RestResponse<PaginationResponse<CacheItem>>>
+  fetcher: (page: number) => Promise<RestResponse<PaginationResponse<FetchItem>>>
   itemsPerPage: number
   dependencies?: unknown[]
   isEnabled?: boolean
-  initialData?: PaginationResponse<CacheItem>
+  initialData?: PaginationResponse<FetchItem>
   refreshInterval?: number
   isInfinity?: boolean
   shouldRefetchOnFocus?: boolean
 }
 
-type PaginatedCache<CacheItem> = {
-  data: CacheItem[]
+type PaginatedFetch<FetchItem> = {
+  data: FetchItem[]
   isFetching: boolean
   isRefetching: boolean
   isReachedEnd: boolean
@@ -31,7 +31,7 @@ type PaginatedCache<CacheItem> = {
   setPage: (page: number) => void
 }
 
-export function usePaginatedCache<CacheItem>({
+export function usePaginatedFetch<FetchItem>({
   key,
   fetcher,
   itemsPerPage,
@@ -41,7 +41,7 @@ export function usePaginatedCache<CacheItem>({
   shouldRefetchOnFocus = true,
   refreshInterval = 0,
   dependencies,
-}: PaginatedCacheConfig<CacheItem>): PaginatedCache<CacheItem> {
+}: PaginatedFetchConfig<FetchItem>): PaginatedFetch<FetchItem> {
   const [totalItemsCount, setTotalItemsCount] = useState(0)
   const toast = useToastProvider()
 

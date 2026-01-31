@@ -8,7 +8,7 @@ import { ListingOrder, OrdinalNumber, Text, Id } from '@stardust/core/global/str
 import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
 
 import { CACHE } from '@/constants'
-import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
+import { usePaginatedFetch } from '@/ui/global/hooks/usePaginatedFetch'
 import { Avatar } from '@stardust/core/shop/entities'
 import { StorageFolder } from '@stardust/core/storage/structures'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
@@ -40,7 +40,7 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
     isFetching,
     refetch,
     totalItemsCount,
-  } = usePaginatedCache({
+  } = usePaginatedFetch({
     key: CACHE.avatarsTable.key,
     fetcher: async () =>
       await shopService.fetchAvatarsList({

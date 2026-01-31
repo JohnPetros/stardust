@@ -4,14 +4,14 @@ import { useLoaderData } from 'react-router'
 import { Id } from '@stardust/core/global/structures'
 
 import type { clientLoader } from '@/app/routes/LessonStoryRoute'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { LessonStoryPageView } from './LessonStoryPageView'
 import { useLessonStoryPage } from './useLessonStoryPage'
 import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 
 export const LessonStoryPage = () => {
   const { starId, defaultStory } = useLoaderData<typeof clientLoader>()
-  const { lessonService } = useRest()
+  const { lessonService } = useRestContext()
   const toastProvider = useToastProvider()
   const { story, handleSaveButtonClick, handleStoryChange } = useLessonStoryPage({
     lessonService,

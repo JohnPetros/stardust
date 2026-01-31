@@ -1,4 +1,4 @@
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { AchievementFormView } from './AchievementFormView'
 import type { PropsWithChildren } from 'react'
 import type { AchievementDto } from '@stardust/core/profile/entities/dtos'
@@ -20,7 +20,7 @@ export const AchievementForm = ({
   achievementDto,
   onSubmit,
 }: PropsWithChildren<Props>) => {
-  const { storageService } = useRest()
+  const { storageService } = useRestContext()
   return (
     <AchievementFormView
       achievementDto={achievementDto}

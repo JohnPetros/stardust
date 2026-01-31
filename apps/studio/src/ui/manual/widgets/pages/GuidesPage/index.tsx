@@ -1,4 +1,4 @@
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 import type { GuideCategory } from '@stardust/core/manual/structures'
 
@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const GuidesPage = ({ category }: Props) => {
-  const { manualService } = useRest()
+  const { manualService } = useRestContext()
   const toast = useToastProvider()
   const props = useGuidesPage({ manualService, toast, category })
 

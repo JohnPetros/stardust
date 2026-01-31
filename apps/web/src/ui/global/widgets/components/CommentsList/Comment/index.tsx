@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Id } from '@stardust/core/global/structures'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { ROUTES } from '@/constants'
 import { useComment } from './useComment'
 import { AlertDialog } from '../../AlertDialog'
@@ -51,7 +51,7 @@ export const Comment = ({
   isAccountAuthenticated,
   onDelete,
 }: Props) => {
-  const { forumService } = useRest()
+  const { forumService } = useRestContext()
   const {
     replies,
     isUserReplyInputVisible,

@@ -10,7 +10,7 @@ import { SpaceCompletionStatus } from '@stardust/core/profile/structures'
 import { InsigniaRole } from '@stardust/core/global/structures'
 import type { ProfileService } from '@stardust/core/profile/interfaces'
 
-import { useCache } from '@/ui/global/hooks/useCache'
+import { useFetch } from '@/ui/global/hooks/useFetch'
 import { useDebounce } from '@/ui/global/hooks/useDebounce'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useQueryNumberParam } from '@/ui/global/hooks/useQueryNumberParam'
@@ -66,7 +66,7 @@ export function useUsersPage({ service }: Params) {
     return result
   }, [startDateParam, endDateParam])
 
-  const { data, isLoading, refetch } = useCache({
+  const { data, isLoading, refetch } = useFetch({
     key: CACHE.usersTable.key,
     dependencies: [
       debouncedSearch,

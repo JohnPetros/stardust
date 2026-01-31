@@ -3,7 +3,7 @@
 import { useUpvoteSolutionButton } from './useUpvoteSolutionButton'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { Id } from '@stardust/core/global/structures'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { UpvoteSolutionButtonView } from './UpvoteSolutionButtonView'
 
 type Props = {
@@ -17,7 +17,7 @@ export const UpvoteSolutionButton = ({
   initialUpvotesCount,
   authorId,
 }: Props) => {
-  const { challengingService } = useRest()
+  const { challengingService } = useRestContext()
   const { user } = useAuthContext()
   const { isUpvoted, upvotesCount, handleButtonClick } = useUpvoteSolutionButton({
     initialIsUpvoted: user?.hasUpvotedSolution(Id.create(solutionId)).isTrue ?? false,

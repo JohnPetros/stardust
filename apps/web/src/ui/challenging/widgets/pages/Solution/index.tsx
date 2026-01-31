@@ -4,7 +4,7 @@ import type { SolutionDto } from '@stardust/core/challenging/entities/dtos'
 
 import { useSolutionPage } from './useSolutionPage'
 import { Id, Slug } from '@stardust/core/global/structures'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { SolutionPageView } from './SolutionPageView'
 
 type SolutionPageProps = {
@@ -18,7 +18,7 @@ export const SolutionPage = ({
   challengeId,
   challengeSlug,
 }: SolutionPageProps) => {
-  const { challengingService } = useRest()
+  const { challengingService } = useRestContext()
   const {
     solutionTitle,
     solutionContent,

@@ -6,7 +6,7 @@ import { AvatarAggregate } from '@stardust/core/profile/aggregates'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext/hooks/useAuthContext'
 import { useImage } from '@/ui/global/hooks/useImage'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useAvatarItem } from './useAvatarItem'
 import { AvatarItemView } from './AvatarItemView'
 
@@ -18,7 +18,7 @@ type Props = {
 }
 
 export function AvatarItem({ id, name, image, price }: Props) {
-  const { profileService } = useRest()
+  const { profileService } = useRestContext()
   const { user } = useAuthContext()
   const { handleAvatarAcquire } = useAvatarItem(
     AvatarAggregate.create({ id, entity: { name, image } }),

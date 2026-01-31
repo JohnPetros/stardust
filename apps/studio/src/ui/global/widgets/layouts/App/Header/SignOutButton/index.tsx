@@ -1,12 +1,12 @@
 import { useSignOutButton } from './useSignOutButton'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { SignOutButtonView } from './SignOutButtonView'
 import { SESSION_STORAGE_KEYS } from '@/constants'
 import { useSessionStorage } from 'usehooks-ts'
 
 export const SignOutButton = () => {
-  const { authService } = useRest()
+  const { authService } = useRestContext()
   const navigationProvider = useNavigationProvider()
   const [_, setAccessToken] = useSessionStorage(SESSION_STORAGE_KEYS.accessToken, '')
   const { handleClick } = useSignOutButton({

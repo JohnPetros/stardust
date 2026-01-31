@@ -10,7 +10,7 @@ import { Rocket } from '@stardust/core/shop/entities'
 import { StorageFolder } from '@stardust/core/storage/structures'
 
 import { CACHE } from '@/constants'
-import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
+import { usePaginatedFetch } from '@/ui/global/hooks/usePaginatedFetch'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useQueryNumberParam } from '@/ui/global/hooks/useQueryNumberParam'
 
@@ -46,7 +46,7 @@ export function useRocketsTable({ shopService, toastProvider, storageService }: 
     isFetching,
     refetch,
     totalItemsCount,
-  } = usePaginatedCache({
+  } = usePaginatedFetch({
     key: CACHE.rocketsTable.key,
     fetcher: async () =>
       await shopService.fetchRocketsList({

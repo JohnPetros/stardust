@@ -1,12 +1,12 @@
 'use client'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { ChallengeVoteControlView } from './ChallengeVoteControlView'
 import { useChallengeVoteControl } from './useChallengeVoteControl'
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 
 export const ChallengeVoteControl = () => {
-  const { challengingService } = useRest()
+  const { challengingService } = useRestContext()
   const { isAccountAuthenticated } = useAuthContext()
   const { challengeVote, upvotesCount, isUserChallengeAuthor, handleVoteButtonClick } =
     useChallengeVoteControl(challengingService)

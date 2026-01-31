@@ -10,7 +10,7 @@ import { ChatMessage } from '@stardust/core/conversation/structures'
 
 import { ROUTES } from '@/constants'
 import { AssistantChatView } from './AssistantChatView'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useAssistantChatError } from './useAssistantChatError'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
@@ -32,7 +32,7 @@ export const AssistantChat = ({
   const containerRef = useRef<HTMLDivElement | null>(null)
   const lastAssistanteMessage = useRef<ChatMessage | null>(null)
   const toastProvider = useToastContext()
-  const { conversationService, notificationService } = useRest()
+  const { conversationService, notificationService } = useRestContext()
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>(initialMessages)
   const [assistantMessageContentParts, setAssistantMessageContentParts] = useState<
     string[]

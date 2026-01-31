@@ -5,7 +5,7 @@ import { Id, Name, OrdinalNumber, Slug } from '@stardust/core/global/structures'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { useRef } from 'react'
 import { useStar } from './useStar'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { StarView } from './StarView'
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
@@ -18,7 +18,7 @@ type StarProps = {
 }
 
 export const Star = ({ id, name, number, slug }: StarProps) => {
-  const { challengingService } = useRest()
+  const { challengingService } = useRestContext()
   const { user } = useAuthContext()
   const { lastUnlockedStarId } = useSpaceContext()
   const isLastUnlockedStar = lastUnlockedStarId === id.value

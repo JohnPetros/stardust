@@ -9,6 +9,8 @@ import { ToastContextProvider } from '@/ui/global/contexts/ToastContext'
 import { AuthContextProvider } from '@/ui/auth/contexts/AuthContext'
 import { AudioContextProvider } from '@/ui/global/contexts/AudioContext'
 
+import { RestContextProvider } from '@/ui/global/contexts/RestContext'
+
 type Props = {
   children: ReactNode
 }
@@ -29,7 +31,7 @@ export const ServerProviders = async ({ children }: Props) => {
             accountDto={accountDto}
             accessToken={accessToken?.data ?? null}
           >
-            {children}
+            <RestContextProvider>{children}</RestContextProvider>
           </AuthContextProvider>
         </AudioContextProvider>
       </ToastContextProvider>

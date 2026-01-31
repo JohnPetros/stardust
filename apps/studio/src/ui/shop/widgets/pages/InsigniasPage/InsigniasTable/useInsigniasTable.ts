@@ -9,7 +9,7 @@ import { StorageFolder } from '@stardust/core/storage/structures'
 import { Text } from '@stardust/core/global/structures'
 
 import { CACHE } from '@/constants'
-import { useCache } from '@/ui/global/hooks/useCache'
+import { useFetch } from '@/ui/global/hooks/useFetch'
 
 type Params = {
   shopService: ShopService
@@ -24,7 +24,7 @@ export function useInsigniasTable({
 }: Params) {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const { data, isLoading, refetch } = useCache({
+  const { data, isLoading, refetch } = useFetch({
     key: CACHE.insigniasTable.key,
     fetcher: async () => await shopService.fetchInsigniasList(),
     dependencies: [],

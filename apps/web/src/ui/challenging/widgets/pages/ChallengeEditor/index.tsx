@@ -8,7 +8,7 @@ import type {
 
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { ChallengeEditorPageView } from './ChallengeEditorPageView'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 
@@ -19,7 +19,7 @@ type Props = {
 
 export const ChallengeEditorPage = ({ challengeDto, challengeCategoriesDto }: Props) => {
   const { user } = useAuthContext()
-  const { challengingService } = useRest()
+  const { challengingService } = useRestContext()
   const navigationProvider = useNavigationProvider()
   const toastProvider = useToastContext()
   const categories = challengeCategoriesDto.map((categoryDto) =>
