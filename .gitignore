@@ -80,6 +80,7 @@ AGENTS.md
 
 # Antigravity
 .agent/
+.agents/
 
 # Open Code
 .opencode/

@@ -3,12 +3,14 @@ import { PlanetCompletedEvent, SpaceCompletedEvent } from '@stardust/core/space/
 import { ENV } from '@/constants'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 import {
+  SendFeedbackNotificationJob,
   SendPlanetCompletedNotificationJob,
   SendSpaceCompletedNotificationJob,
 } from '@/queue/jobs/notification'
 import { DiscordNotificationService } from '@/rest/services'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestFunctions } from './InngestFunctions'
+import { FeedbackReportSentEvent } from '@stardust/core/reporting/events'
 
 export class NotificationFunctions extends InngestFunctions {
   private createCreateUserFunction() {
@@ -39,10 +41,25 @@ export class NotificationFunctions extends InngestFunctions {
     )
   }
 
+  private createSendFeedbackNotificationFunction() {
+    return this.inngest.createFunction(
+      { id: SendFeedbackNotificationJob.KEY },
+      { event: FeedbackReportSentEvent._NAME },
+      async (context) => {
+        const restClient = new AxiosRestClient(ENV.discordWebhookUrl)
+        const repository = new DiscordNotificationService(restClient)
+        const amqp = new InngestAmqp<typeof context.event.data>(context)
+        const job = new SendFeedbackNotificationJob(repository)
+        return await job.handle(amqp)
+      },
+    )
+  }
+
   getFunctions() {
     return [
       this.createCreateUserFunction(),
       this.createSendSpaceCompletedNotificationFunction(),
+      this.createSendFeedbackNotificationFunction(),
     ]
   }
 }
