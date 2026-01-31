@@ -1,6 +1,6 @@
 # Guia de Documentação
 
-Este arquivo serve como índice para as diretrizes de documentação do projeto. Consulte os arquivos específicos abaixo com base na tarefa em questão.
+Este arquivo serve como índice para as diretrizes de documentação do projeto. Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 
 ## Diretrizes de Interface de Usuário (ui)
 **Arquivo:** `/documentation/guidelines/ui-layer-guidelines.md`
