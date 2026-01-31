@@ -11,11 +11,11 @@ import type {
 
 export type RestContextValue = {
   authService: ReturnType<typeof AuthService>
-  spaceService: ReturnType<typeof SpaceService>
-  storageService: ReturnType<typeof StorageService>
-  lessonService: ReturnType<typeof LessonService>
   profileService: ReturnType<typeof ProfileService>
-  challengingService: ReturnType<typeof ChallengingService>
+  spaceService: ReturnType<typeof SpaceService>
   shopService: ReturnType<typeof ShopService>
+  challengingService: ReturnType<typeof ChallengingService>
   manualService: ReturnType<typeof ManualService>
+  lessonService: ReturnType<typeof LessonService>
+  storageService: ReturnType<typeof StorageService>
 }

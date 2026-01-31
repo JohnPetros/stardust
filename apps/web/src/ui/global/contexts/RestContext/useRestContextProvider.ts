@@ -33,7 +33,7 @@ export function useRestContextProvider(): RestContextValue {
     if (accessToken) {
       restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken}`)
     } else {
-      restClient.unsetHeader(HTTP_HEADERS.authorization)
+      restClient.setHeader(HTTP_HEADERS.authorization, '')
     }
   }, [accessToken])
 

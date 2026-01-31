@@ -15,7 +15,7 @@ import {
   ManualService,
 } from '@/rest/services'
 import { ENV, SESSION_STORAGE_KEYS } from '@/constants'
-import type { RestContextValue } from './RestContextValue'
+import type { RestContextValue } from './types/RestContextValue'
 
 const restClient = AxiosRestClient()
 restClient.setBaseUrl(ENV.stardustServerUrl)

@@ -1,7 +1,7 @@
 'use client'
 
+import { useRestContext } from '@/ui/global/contexts/RestContext'
 import { useTelemetryProvider } from '../../../hooks/useTelemetryProvider'
-import { useRest } from '../../../hooks/useRest'
 import { ErrorPageView } from './ErrorPageView'
 import { useErrorPage } from './useErrorPage'
 

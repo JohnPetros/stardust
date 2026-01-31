@@ -8,5 +8,5 @@ export interface ReportingService {
   listFeedbackReports(
     params: FeedbackReportsListingParams,
   ): Promise<RestResponse<FeedbackReport[]>>
-  deleteFeedbackReport(feedbackId: Id): Promise<RestResponse<void>>
+  deleteFeedbackReport(feedbackId: Id): Promise<RestResponse>
 }

@@ -1,5 +1,5 @@
 import { createContext, type PropsWithChildren } from 'react'
-import type { RestContextValue } from './RestContextValue'
+import type { RestContextValue } from './types/RestContextValue'
 import { useRestProvider } from './useRestContextProvider'
 import { useRestContext } from '../../hooks/useRestContext'
 

@@ -24,8 +24,8 @@ export type RestContextValue = {
   playgroundService: ReturnType<typeof PlaygroundService>
   manualService: ReturnType<typeof ManualService>
   lessonService: ReturnType<typeof LessonService>
-  notificationService: ReturnType<typeof NotificationService>
   conversationService: ReturnType<typeof ConversationService>
   reportingService: ReturnType<typeof ReportingService>
   storageService: ReturnType<typeof StorageService>
+  notificationService: ReturnType<typeof NotificationService>
 }
