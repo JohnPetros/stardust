@@ -44,6 +44,7 @@ Orientar a criação de testes unitários e de integração (widgets) padronizad
 *   **Arrange-Act-Assert:** Estruture seus testes claramente nestas 3 fases.
 *   **Isolamento:** Use `beforeEach` para reiniciar mocks e estado.
 *   **Legibilidade:** Nomes de testes devem ser frases descritivas ("should do something when condition").
+*   **Comentários**: Evite usar comentários desnecessários, mas use-os para explicar o propósito de um teste ou uma estratégia de teste caso seja necessário.
 
 ---
 

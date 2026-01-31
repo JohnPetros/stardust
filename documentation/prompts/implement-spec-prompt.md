@@ -9,7 +9,7 @@ Executar o plano de implementação técnica de forma iterativa, organizada e va
 **Diretrizes de Execução:**
 
 1.  **Validação de Diretrizes e Arquitetura:**
-    Antes de iniciar a implementação, certifique-se de que compreende as diretrizes e a estrutura do projeto:
+    Antes de iniciar a implementação, certifique-se de que compreende as diretrizes (de acordo com a spec) e a estrutura do projeto:
     *   **Índice de Diretrizes:** `documentation/guidelines/guidelines-rule.md` (Verifique aqui diretrizes específicas extras)
     *   **Arquitetura & Clean Architecture:** `documentation/architecture.md` (Fonte primária de verdade)
     *   **Padronização de Código:** `documentation/guidelines/code-conventions-guidelines.md`

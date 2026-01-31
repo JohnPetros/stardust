@@ -19,7 +19,7 @@ Detalhar a implementação técnica de uma feature, fix ou refatoração, atuand
 
 2.  **Uso de Ferramentas Auxiliares:**
     *  **MCP Serena**: Quando não souber onde exatamente está um arquivo ou pasta, utilize o MCP do Serena para facilitar sua busca pelo projeto.
-    *  **MCP Context7:** Caso tenha dúvidas sobre como usar uma biblioteca específica (ex: `shadcn/ui`, `radix-ui`, `inngest`, `supabase`), utilize o MCP do Context7 para obter documentação e exemplos de uso.
+    *  **MCP Context7:** Caso tenha dúvidas sobre como usar uma biblioteca específica (ex: `shadcn/ui`, `radix-ui`, `inngest`, `supabase`, `hono`, `zod`), utilize o MCP do Context7 para obter documentação e exemplos de uso.
 
 3.  **Estruturação do Documento:**
     Gere o arquivo Markdown da Spec seguindo estritamente o modelo de seções e nível de detalhe abaixo:
