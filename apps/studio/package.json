@@ -6,6 +6,9 @@
     "build": "react-router build",
     "dev": "react-router dev --port 8000",
     "start": "serve -s ./build/client/index.html",
+    "lint": "biome lint src --diagnostic-level=error",
+    "format": "biome format src --write",
+    "codecheck": "npm run lint && npm run format",
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
