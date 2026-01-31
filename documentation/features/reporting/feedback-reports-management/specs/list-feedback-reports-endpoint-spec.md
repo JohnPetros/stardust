@@ -1,8 +1,6 @@
 # Spec: Endpoint de Listagem de Feedback Reports
 
-### Application server
-### Ultima atualização: 31/01/2026
-### Status: finalizado
+> application: server
 
 ### 1. Objetivo
 Implementar o endpoint REST `GET /feedback` para listar os relatórios de feedback enviados pelos usuários. O endpoint deve suportar filtros por autor, tipo (intent) e data, além de paginação, conforme requisitos do PRD. Também inclui a implementação dos métodos necessários no repositório e ajustes no use case.

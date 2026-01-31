@@ -58,6 +58,7 @@ Orientar a criação de testes unitários e de integração (widgets) padronizad
 2.  **🎭 Mocking & Faking:**
     *   Instancie as dependências usando `mock<T>()`.
     *   Gere dados de entrada usando `<Entity>Faker.fake()`.
+    *   Se precisar cria um Id, use o `IdFaker.fake()`.
 
 3.  **🛠️ Implementação:**
     *   Escreva casos `it('should ...')` para o "Happy Path".

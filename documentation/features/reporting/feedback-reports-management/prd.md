@@ -30,7 +30,7 @@ Componente principal para visualização dos relatórios de feedback cadastrados
 - [ ] **Paginação:** Permitir navegação entre páginas de resultados.
 - [ ] **Ações por Linha:**
   - Botão para visualizar detalhes (abre Dialog).
-  - Botão para deletar o relatório.
+- [ ] **Botão para deletar o relatório.**
 - [ ] **Estado Vazio:** Exibir mensagem amigável quando não houver registros.
 
 ### B. Dialog de Detalhes do Feedback
@@ -70,7 +70,7 @@ Modal para visualização completa das informações de um relatório específic
 
 ## 4. Regras de Negócio
 
-- **Delete Lógico/Físico:**
+- [x] **Delete Lógico/Físico:**
   - A ação de deletar remove o relatório permanentemente da visualização. (Confirmar se é soft delete ou hard delete com backend - assumir hard delete por padrão para "limpeza").
 
 - **Formatação de Data:**

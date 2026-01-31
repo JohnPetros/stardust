@@ -27,9 +27,7 @@ Detalhar a implementação técnica de uma feature, fix ou refatoração, atuand
     ---
     # Spec: [Título]
 
-    ### Application [server|studio|web] (Obrigatório)
-    ### Ultima atualização: DD/MM/AAAA (Obrigatório)
-    ### Status: [em desenvolvimento|concluído] (Obrigatório)
+    > application: [server|studio|web] (Obrigatório)
 
     ### 1. Objetivo (Obrigatório)
     [Resumo claro em um parágrafo do que será entregue funcionalmente e tecnicamente.]

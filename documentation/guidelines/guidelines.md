@@ -5,7 +5,7 @@ Este arquivo serve como índice para as diretrizes de documentação do projeto.
 ## Diretrizes de Interface de Usuário (ui)
 **Arquivo:** `/documentation/guidelines/ui-layer-guidelines.md`
 **Quando consultar:**
-- Ao criar ou modificar um documento mencione a camada UI.
+- Ao criar ou modificar um documento relacionado a camada UI.
 - Ao criar ou modificar componentes React (Widgets).
 - Para entender a estrutura de um widget (View, Hook, Index).
 - Para convenções de nomenclatura de Views, Hooks e Props.
@@ -24,7 +24,7 @@ Este arquivo serve como índice para as diretrizes de documentação do projeto.
 ## Diretrizes da Camada RPC
 **Arquivo:** `/documentation/guidelines/rpc-layer-guidelines.md`
 **Quando consultar:**
-- Ao criar ou modificar um documento mencione a camada RPC.
+- Ao criar ou modificar um documento relacionado a camada RPC.
 - Ao implementar Actions no servidor usando o padrão Factory Function.
 - Para entender a interface `Call` e como lidar com requisições/redirecionamentos.
 - Ao organizar actions por domínio.
@@ -32,7 +32,7 @@ Este arquivo serve como índice para as diretrizes de documentação do projeto.
 ## Diretrizes da Camada REST
 **Arquivo:** `/documentation/guidelines/rest-layer-guidelines.md`
 **Quando consultar:**
-- Ao criar ou modificar um documento mencione a camada REST.
+- Ao criar ou modificar um documento relacionado a camada REST.
 - Ao realizar requisições HTTP para APIs externas ou serviços.
 - Para implementar novos Services usando `RestClient`.
 - Para entender como funciona `RestResponse` e o tratamento de erros nesta camada.
@@ -40,7 +40,7 @@ Este arquivo serve como índice para as diretrizes de documentação do projeto.
 ## Diretrizes da Camada de Fila (queue)
 **Arquivo:** `/documentation/guidelines/queue-layer-guidelines.md`
 **Quando consultar:**
-- Ao criar ou modificar um documento mencione a camada de fila.
+- Ao criar ou modificar um documento relacionado a camada de fila.
 - Ao implementar jobs em background ou processamento assíncrono.
 - Para entender a interface `Job` e o protocolo `Amqp`.
 - Ao definir novos jobs com a estrutura `Job<Payload>`.
@@ -48,28 +48,28 @@ Este arquivo serve como índice para as diretrizes de documentação do projeto.
 ## Diretrizes da Camada de Provision (prov)
 **Arquivo:** `/documentation/guidelines/provision-layer-guidelines.md`
 **Quando consultar:**
-- Ao criar ou modificar um documento mencione a camada de provision.
+- Ao criar ou modificar um documento relacionado a camada de provision.
 - Ao integrar com ferramentas de terceiros (Armazenamento, Email, Pagamentos, etc.).
 - Para implementar novos Providers (Gateways) que encapsulam SDKs externos.
 
 ## Diretrizes da Aplicação Web
 **Arquivo:** `/documentation/guidelines/web-application-guidelines.md`
 **Quando consultar:**
-- Ao criar ou modificar um documento mencione a aplicação web.
+- Ao criar ou modificar um documento relacionado a aplicação web.
 - Para uma visão geral da arquitetura e stack da Aplicação Web (Next.js, Tailwind, etc.).
 - Para entender a estrutura de pastas do projeto `apps/web`.
 
 ## Diretrizes da Aplicação Studio
 **Arquivo:** `/documentation/guidelines/studio-appllication-guidelines.md`
 **Quando consultar:**
-- Ao criar ou modificar um documento mencione a aplicação studio.  
+- Ao criar ou modificar um documento relacionado a aplicação studio.  
 - Para uma visão geral da arquitetura e stack da Aplicação Studio (Painel Admin - Remix, Vite, Shadcn).
 - Para entender a estrutura de pastas do projeto `apps/studio`.
 
 ## Diretrizes da Camada de Banco de Dados (db)
 **Arquivo:** `/documentation/guidelines/database-guidelines.md`
 **Quando consultar:**
-- Ao criar ou modificar um documento mencione a camada de banco de dados.  
+- Ao criar ou modificar um documento relacionado a camada de banco de dados.  
 - Ao implementar persistência de dados (Repositories).
 - Para entender o padrão de Mappers (conversão DB <-> Entidade).
 - Ao configurar conexões ou tratar erros específicos de banco de dados.
@@ -77,7 +77,7 @@ Este arquivo serve como índice para as diretrizes de documentação do projeto.
 ## Diretrizes do Pacote Core (core)
 **Arquivo:** `/documentation/guidelines/core-package-guideines.md`
 **Quando consultar:**
-- Ao criar ou modificar um documento mencione ao pacote core.  
+- Ao criar ou modificar um documento relacionado ao pacote core.  
 - Para entender a arquitetura de Domínio (DD Tático).
 - Ao criar Entidades, Estruturas (Value Objects), Agregados e Eventos.
 - Ao implementar Casos de Uso (Use Cases) e DTOs.
@@ -86,7 +86,7 @@ Este arquivo serve como índice para as diretrizes de documentação do projeto.
 ## Diretrizes de Testes Unitários
 **Arquivo:** `/documentation/guidelines/unit-tests-guidelines.md`
 **Quando consultar:**
-- Ao criar ou modificar um documento mencione aos testes unitários.  
+- Ao criar ou modificar um documento relacionado aos testes unitários.  
 - Ao escrever testes para Casos de Uso (Use Cases) e identificar padrões de teste.
 - Para entender como usar mocks (`ts-jest-mocker`) e fakers (`@faker-js/faker`).
 - Ao criar testes de integração para Widgets (Frontend) complexos (formulários).
