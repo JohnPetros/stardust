@@ -79,7 +79,26 @@ export function useButton({ onAction, isExecuting }: Params) {
     handleClick
   }
 }
+
+
 ```
+
+**Importante:** Nunca use services, providers ou hooks de contexts diretamente no hook, sempre use primeiro no entry point e passe as props para o hook
+
+Exemplo:
+
+```tsx
+
+export const ButtonView = ({ title, onClick, variant }: Props) => (
+  const { service } = useRestContext()
+  const { user, updateUser } = useAuthContext()
+  useButton({  userId: user, service, onClick: updateUser })
+
+  ...
+)
+```
+
+
 
 ### 3. Container (`index.tsx`) (Entry Point)
 Orquestra a chamada do Hook e renderiza a View.

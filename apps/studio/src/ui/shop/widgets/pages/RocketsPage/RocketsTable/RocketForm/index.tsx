@@ -1,4 +1,4 @@
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { RocketFormView } from './RocketFormView'
 import type { PropsWithChildren } from 'react'
 import type { RocketDto } from '@stardust/core/shop/entities/dtos'
@@ -13,7 +13,7 @@ export const RocketForm = ({
   onSubmit,
   initialValues,
 }: PropsWithChildren<Props>) => {
-  const { storageService } = useRest()
+  const { storageService } = useRestContext()
   return (
     <RocketFormView
       storageService={storageService}

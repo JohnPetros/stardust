@@ -1,9 +1,9 @@
 import { useUsersPage } from './useUsersPage'
 import { UsersPageView } from './UsersPageView'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 
 export const UsersPage = () => {
-  const { profileService } = useRest()
+  const { profileService } = useRestContext()
   const usersPage = useUsersPage({ service: profileService })
 
   return <UsersPageView {...usersPage} />

@@ -1,6 +1,6 @@
 import { useUpvoteComment } from './useUpvoteComment'
 import { UpvoteButtonView } from './UpvoteButtonView'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 
 export type Props = {
@@ -15,7 +15,7 @@ export const UpvoteButton = ({
   commentId,
 }: Props) => {
   const { isAccountAuthenticated } = useAuthContext()
-  const { profileService } = useRest()
+  const { profileService } = useRestContext()
   const { isUpvoted, upvotesCount, handleButtonClick } = useUpvoteComment({
     profileService,
     initialUpvotesCount,

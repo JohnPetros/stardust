@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useGuidesDialog } from './useGuidesDialog'
 import { GuidesDialogView } from './GuidesDialogView'
 
@@ -11,7 +11,7 @@ type Props = {
 }
 
 export const GuidesDialog = ({ children }: Props) => {
-  const { manualService } = useRest()
+  const { manualService } = useRestContext()
   const {
     isLoading,
     content,

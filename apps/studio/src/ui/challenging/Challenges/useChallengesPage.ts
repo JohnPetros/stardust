@@ -12,7 +12,7 @@ import {
 } from '@stardust/core/global/structures'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 
-import { useCache } from '@/ui/global/hooks/useCache'
+import { useFetch } from '@/ui/global/hooks/useFetch'
 import { useDebounce } from '@/ui/global/hooks/useDebounce'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useQueryNumberParam } from '@/ui/global/hooks/useQueryNumberParam'
@@ -56,14 +56,14 @@ export function useChallengesPage({ service }: Params) {
     }),
     [upvotesCountOrder, downvoteCountOrder, completionCountOrder, postingOrder],
   )
-  const { data: categoriesData } = useCache({
+  const { data: categoriesData } = useFetch({
     key: 'challenge-categories',
     fetcher: () => service.fetchAllChallengeCategories(),
   })
   const [page, setPage] = useQueryNumberParam('page', 1)
   const [itemsPerPage, setItemsPerPage] = useQueryNumberParam('limit', 25)
 
-  const { data: challengesData, isLoading } = useCache({
+  const { data: challengesData, isLoading } = useFetch({
     key: 'challenges-page-list',
     dependencies: [
       debouncedSearch,

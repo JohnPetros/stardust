@@ -8,7 +8,7 @@ import { Input } from '@/ui/global/widgets/components/Input'
 import * as Dialog from '@/ui/global/widgets/components/Dialog'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { useResetPasswordFormDialog } from './useResetPasswordFormDialog'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 
 type Props = {
   children: ReactNode
@@ -25,7 +25,7 @@ export const ResetPasswordFormDialog = ({
   onPasswordReset,
 }: Props) => {
   const alertDialogRef = useRef<AlertDialogRef | null>(null)
-  const { authService } = useRest()
+  const { authService } = useRestContext()
   const { errors, isSubmitting, register, handleSubmit, handleOpenChange } =
     useResetPasswordFormDialog(authService, alertDialogRef, onNewPasswordSubmit)
 

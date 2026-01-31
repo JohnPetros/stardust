@@ -6,7 +6,7 @@ import type { ManualService } from '@stardust/core/manual/interfaces'
 import type { ToastProvider } from '@stardust/core/global/interfaces'
 
 import { CACHE } from '@/constants/cache'
-import { useCache } from '@/ui/global/hooks/useCache'
+import { useFetch } from '@/ui/global/hooks/useFetch'
 import type { SortableItem } from '@/ui/global/widgets/components/SortableGrid/types'
 
 type Params = {
@@ -20,7 +20,7 @@ export function useGuidesPage({ manualService, toast, category }: Params) {
     data: guidesDto,
     isLoading,
     refetch,
-  } = useCache<GuideDto[]>({
+  } = useFetch<GuideDto[]>({
     key: CACHE.guidesGrid.key,
     fetcher: () => manualService.fetchGuidesByCategory(category),
     dependencies: [category.value],

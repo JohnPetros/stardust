@@ -1,11 +1,11 @@
 'use client'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useAvatarsList } from './useAvatarsList'
 import { AvatarsListView } from './AvatarsListView'
 
 export const AvatarsList = () => {
-  const { shopService } = useRest()
+  const { shopService } = useRestContext()
   const {
     page,
     avatars,

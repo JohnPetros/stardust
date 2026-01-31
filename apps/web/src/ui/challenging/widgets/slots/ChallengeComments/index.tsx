@@ -2,7 +2,7 @@
 
 import { useChallengeCommentsSlot } from './useChallengeCommentsSlot'
 import { ChallengeCommentsSlotView } from './ChallengeCommentsSlotView'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { Id } from '@stardust/core/global/structures'
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const ChallengeCommentsSlot = ({ challengeId }: Props) => {
-  const { forumService } = useRest()
+  const { forumService } = useRestContext()
   const { handleCommentListFetch, handleCommentPost } = useChallengeCommentsSlot(
     forumService,
     Id.create(challengeId),

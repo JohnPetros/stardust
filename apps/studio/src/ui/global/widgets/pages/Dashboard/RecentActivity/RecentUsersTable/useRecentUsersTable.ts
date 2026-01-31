@@ -4,7 +4,7 @@ import { OrdinalNumber, ListingOrder, Text } from '@stardust/core/global/structu
 import { SpaceCompletionStatus } from '@stardust/core/profile/structures'
 
 import { CACHE } from '@/constants'
-import { useCache } from '@/ui/global/hooks/useCache'
+import { useFetch } from '@/ui/global/hooks/useFetch'
 
 export function useRecentUsersTable(profileService: ProfileService) {
   const [orders, setOrders] = useState({
@@ -15,7 +15,7 @@ export function useRecentUsersTable(profileService: ProfileService) {
     completedChallengeCount: ListingOrder.create('any'),
   })
 
-  const { data, isLoading } = useCache({
+  const { data, isLoading } = useFetch({
     key: CACHE.recentUsersTable.key,
     dependencies: [orders],
     fetcher: async () =>

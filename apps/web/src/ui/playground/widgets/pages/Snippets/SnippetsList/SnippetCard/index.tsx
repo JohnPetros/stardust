@@ -2,7 +2,7 @@
 
 import { Id, Text } from '@stardust/core/global/structures'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { SnippetCardView } from './SnippetCardView'
 import { useSnippetCard } from './useSnippetCard'
 
@@ -17,7 +17,7 @@ export const SnippetCard = ({
   snippetTitle: initialSnippetTitle,
   onDeleteSnippet,
 }: Props) => {
-  const { playgroundService } = useRest()
+  const { playgroundService } = useRestContext()
   const {
     snippetTitle,
     snippetUrl,

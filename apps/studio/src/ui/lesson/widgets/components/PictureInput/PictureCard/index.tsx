@@ -1,4 +1,4 @@
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { PictureCardView } from './PictureCardView'
 import { usePictureCard } from './usePictureCard'
 
@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const PictureCard = ({ imageName, isSelected, onClick, onRemove }: Props) => {
-  const { storageService } = useRest()
+  const { storageService } = useRestContext()
   const { handleRemoveButtonClick } = usePictureCard(storageService, onRemove)
 
   return (

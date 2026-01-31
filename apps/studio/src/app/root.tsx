@@ -14,6 +14,8 @@ import type { Route } from './+types/root'
 import globalStyles from '../ui/global/styles/global.css?url'
 import { Toaster } from 'sonner'
 
+import { RestContextProvider } from '@/ui/global/contexts/RestContext'
+
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   { rel: 'stylesheet', href: globalStyles },
@@ -87,8 +89,10 @@ export const App = () => {
     <div className='w-full h-screen dark'>
       <NuqsAdapter>
         <QueryClientProvider client={queryClient}>
-          <Toaster position='top-right' richColors />
-          <Outlet />
+          <RestContextProvider>
+            <Toaster position='top-right' richColors />
+            <Outlet />
+          </RestContextProvider>
         </QueryClientProvider>
       </NuqsAdapter>
     </div>

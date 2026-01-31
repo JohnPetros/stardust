@@ -1,6 +1,6 @@
 'use client'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { AssistantChatbotView } from './AssistantChatbotView'
@@ -9,7 +9,7 @@ import { useAssistantChatbot } from './useAssistantChatbot'
 export const AssistantChatbot = () => {
   const { getChallengeSlice } = useChallengeStore()
   const { challenge } = getChallengeSlice()
-  const { conversationService } = useRest()
+  const { conversationService } = useRestContext()
   const toastProvider = useToastContext()
   const {
     firstQuestion,

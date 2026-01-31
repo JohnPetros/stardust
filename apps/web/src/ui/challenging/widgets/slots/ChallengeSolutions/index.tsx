@@ -15,7 +15,7 @@ import { useChallengeSolutionsSlot } from './useChallengeSolutionsSlot'
 import { SolutionCard } from './SolutionCard'
 import { ChallengeContentNav } from '../../components/ChallengeContentNav'
 import { BlockedContentAlertDialog } from '../../components/BlockedContentMessage'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 
 const SORTER_BUTTON_TITLES: Record<string, string> = {
   date: 'recentes',
@@ -25,7 +25,7 @@ const SORTER_BUTTON_TITLES: Record<string, string> = {
 } as const
 
 export function ChallengeSolutionsSlot() {
-  const { challengingService } = useRest()
+  const { challengingService } = useRestContext()
   const {
     solutions,
     sorter,

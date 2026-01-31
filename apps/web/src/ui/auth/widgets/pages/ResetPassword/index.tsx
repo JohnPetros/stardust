@@ -1,7 +1,7 @@
 'use client'
 
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useResetPassword } from './useResetPassword'
 import { ResetPasswordPageView } from './ResetPasswordPageView'
 
@@ -10,7 +10,7 @@ type ResetPasswordPageProps = {
 }
 
 export function ResetPasswordPage({ canResetPassword }: ResetPasswordPageProps) {
-  const { authService, profileService } = useRest()
+  const { authService, profileService } = useRestContext()
   const { getCookie, deleteCookie } = useCookieActions()
   const {
     isLoading,

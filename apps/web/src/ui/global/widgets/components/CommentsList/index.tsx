@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useCommentsList } from './useCommentsList'
 import { CommentsListView } from './CommentsListView'
 import type { CommentsListProps } from './CommentsListProps'
@@ -19,7 +19,7 @@ export const CommentsList = ({
   onFetchComments,
 }: Props) => {
   const { user, isAccountAuthenticated } = useAuthContext()
-  const { forumService } = useRest()
+  const { forumService } = useRestContext()
   const {
     isLoading,
     comments,

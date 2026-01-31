@@ -1,11 +1,11 @@
 'use client'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useRocketsList } from './useRocketsList'
 import { RocketsListView } from './RocketsListView'
 
 export const RocketsList = () => {
-  const { shopService } = useRest()
+  const { shopService } = useRestContext()
   const {
     totalRocketsCount,
     rocketsPerPage,

@@ -1,9 +1,9 @@
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { DailyActiveUsersChartView } from './DailyActiveUsersChartView'
 import { useDailyActiveUsersChart } from './useDailyActiveUsersChart'
 
 export const DailyActiveUsersChart = () => {
-  const { profileService } = useRest()
+  const { profileService } = useRestContext()
   const { dailyActiveUsers, days, isLoading, handleDaysSelectChange } =
     useDailyActiveUsersChart(profileService)
 

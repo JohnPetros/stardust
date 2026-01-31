@@ -1,11 +1,11 @@
 import { RocketsTableView } from './RocketsTableView'
 import { useRocketsTable } from './useRocketsTable'
 import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 
 export const RocketsTable = () => {
   const toastProvider = useToastProvider()
-  const { shopService, storageService } = useRest()
+  const { shopService, storageService } = useRestContext()
   const {
     rockets,
     isLoading,

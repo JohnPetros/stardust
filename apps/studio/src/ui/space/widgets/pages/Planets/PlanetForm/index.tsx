@@ -1,4 +1,4 @@
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { PlanetFormView } from './PlanetFormView'
 import type { PlanetDto } from '@stardust/core/space/entities/dtos'
 import type { PropsWithChildren } from 'react'
@@ -13,7 +13,7 @@ export const PlanetForm = ({
   planetDto,
   onSubmit,
 }: PropsWithChildren<Props>) => {
-  const { storageService } = useRest()
+  const { storageService } = useRestContext()
   return (
     <PlanetFormView
       storageService={storageService}

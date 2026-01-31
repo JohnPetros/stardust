@@ -1,10 +1,10 @@
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 import { InsigniasTableView } from './InsigniasTableView'
 import { useInsigniasTable } from './useInsigniasTable'
 
 export const InsigniasTable = () => {
-  const { shopService, storageService } = useRest()
+  const { shopService, storageService } = useRestContext()
   const toastProvider = useToastProvider()
   const {
     insignias,

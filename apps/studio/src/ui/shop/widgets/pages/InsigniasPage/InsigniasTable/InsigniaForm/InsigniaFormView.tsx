@@ -31,7 +31,7 @@ import { ImageInput } from '@/ui/global/widgets/components/ImageInput'
 import { StorageFolder } from '@stardust/core/storage/structures'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useStorageImage } from '@/ui/global/hooks/useStorageImage'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 
 const INSIGNIAS_FOLDER = StorageFolder.createAsInsignias()
 
@@ -45,7 +45,7 @@ export const InsigniaFormView = ({
   initialValues,
   onSubmit,
 }: PropsWithChildren<Props>) => {
-  const { storageService } = useRest()
+  const { storageService } = useRestContext()
   const {
     form,
     insigniaImage,

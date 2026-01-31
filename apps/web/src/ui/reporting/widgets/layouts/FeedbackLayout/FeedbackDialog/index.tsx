@@ -1,13 +1,13 @@
 'use client'
 
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useFeedbackDialog } from './useFeedbackDialog'
 import { FeedbackDialogView } from './FeedbackDialogView'
 
 export function FeedbackDialog() {
-  const { reportingService, storageService } = useRest()
+  const { reportingService, storageService } = useRestContext()
   const { user } = useAuthContext()
   const toast = useToastContext()
   const {

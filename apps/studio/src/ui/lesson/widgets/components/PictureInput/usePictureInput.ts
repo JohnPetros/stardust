@@ -5,7 +5,7 @@ import type { DialogRef } from '@/ui/shadcn/components/dialog'
 import { StorageFolder } from '@stardust/core/storage/structures'
 
 import { CACHE } from '@/constants'
-import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
+import { usePaginatedFetch } from '@/ui/global/hooks/usePaginatedFetch'
 import { Image, OrdinalNumber, Text } from '@stardust/core/global/structures'
 
 const ITEMS_PER_PAGE = OrdinalNumber.create(30)
@@ -29,7 +29,7 @@ export function usePictureInput({
   const [search, setSearch] = useState<Text>(Text.create(''))
   const containerRef = useRef<HTMLDivElement>(null)
   const { data, isFetching, isFetchingNextPage, hasNextPage, nextPage, refetch } =
-    usePaginatedCache<string>({
+    usePaginatedFetch<string>({
       key: CACHE.storyPictures.key,
       fetcher: async (page: number) =>
         await storageService.listFiles({

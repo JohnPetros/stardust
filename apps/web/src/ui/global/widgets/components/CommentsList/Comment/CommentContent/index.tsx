@@ -3,7 +3,7 @@
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { CommentContentView } from './CommentContentView'
 import { useCommentContent } from './useCommentContent'
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 
 type Props = {
   commentId: string
@@ -20,7 +20,7 @@ export const CommentContent = ({
   onEdit,
   onCancel,
 }: Props) => {
-  const { forumService } = useRest()
+  const { forumService } = useRestContext()
   const { content, handleEditComment, handleCancelCommentEdition } = useCommentContent({
     forumService,
     commentId,

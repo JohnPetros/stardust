@@ -1,4 +1,4 @@
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { ChallengeControlView } from './ChallengeControlView'
 import { useChallengeControl } from './useChallengeControl'
 
@@ -7,7 +7,7 @@ type Props = {
 }
 
 export const ChallengeControl = ({ isChallengePublic }: Props) => {
-  const { challengingService } = useRest()
+  const { challengingService } = useRestContext()
   const {
     challenge,
     isPublic,

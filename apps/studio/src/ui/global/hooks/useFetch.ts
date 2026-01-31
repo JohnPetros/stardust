@@ -9,28 +9,28 @@ type MutateConfig = {
   shouldRevalidate: boolean
 }
 
-type CacheConfig<CacheData> = {
+type FetchConfig<FetchData> = {
   key: string
-  fetcher: () => Promise<RestResponse<CacheData>>
+  fetcher: () => Promise<RestResponse<FetchData>>
   onError?: (errorMessage: string) => void
   dependencies?: unknown[]
   isEnabled?: boolean
-  initialData?: CacheData
+  initialData?: FetchData
   refreshInterval?: number
   shouldRefetchOnFocus?: boolean
   canShowErrorMessage?: boolean
 }
 
-type Cache<CacheData> = {
-  data: CacheData | null
+type Fetch<FetchData> = {
+  data: FetchData | null
   error: string
   isLoading: boolean
   isRefetching: boolean
   refetch: () => void
-  updateCache: (newCacheData: CacheData | null, config?: MutateConfig) => void
+  updateData: (newFetchData: FetchData | null, config?: MutateConfig) => void
 }
 
-export function useCache<CacheData>({
+export function useFetch<FetchData>({
   key,
   fetcher,
   onError,
@@ -40,7 +40,7 @@ export function useCache<CacheData>({
   refreshInterval = 0,
   initialData,
   canShowErrorMessage = true,
-}: CacheConfig<CacheData>): Cache<CacheData> {
+}: FetchConfig<FetchData>): Fetch<FetchData> {
   const queryClient = useQueryClient()
   const queryKey = dependencies ? [key, ...dependencies] : [key]
   const toast = useToastProvider()
@@ -50,7 +50,7 @@ export function useCache<CacheData>({
     isLoading,
     isFetching: isRefetching,
     refetch,
-  } = useQuery<CacheData | undefined, unknown>({
+  } = useQuery<FetchData | undefined, unknown>({
     queryKey,
     queryFn: async () => {
       const response = await fetcher()
@@ -69,9 +69,9 @@ export function useCache<CacheData>({
     refetchOnWindowFocus: shouldRefetchOnFocus,
   })
 
-  const updateCache = useCallback(
-    (newCacheData: CacheData | null, mutateConfig?: MutateConfig) => {
-      queryClient.setQueryData(queryKey, newCacheData)
+  const updateData = useCallback(
+    (newFetchData: FetchData | null, mutateConfig?: MutateConfig) => {
+      queryClient.setQueryData(queryKey, newFetchData)
       if (mutateConfig?.shouldRevalidate) {
         queryClient.invalidateQueries({ queryKey })
       }
@@ -80,11 +80,11 @@ export function useCache<CacheData>({
   )
 
   return {
-    data: (data ?? null) as CacheData | null,
+    data: (data ?? null) as FetchData | null,
     error: error instanceof Error ? error.message : error ? String(error) : '',
     isLoading,
     isRefetching,
     refetch,
-    updateCache,
+    updateData,
   }
 }

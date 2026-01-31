@@ -1,4 +1,4 @@
-import { useRest } from '@/ui/global/hooks/useRest'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { ChallengesListTabView } from './ChallengesListTabView'
 import { useChallengesListTab } from './useChallengesListTab'
 import type { TabListSorter } from '../../TabListSorter'
@@ -9,7 +9,7 @@ type Props = {
 }
 
 export const ChallengesListTab = ({ userId, tabListSorter }: Props) => {
-  const { challengingService } = useRest()
+  const { challengingService } = useRestContext()
   const { challenges, isLoading, isReachedEnd, nextPage } = useChallengesListTab(
     challengingService,
     tabListSorter,

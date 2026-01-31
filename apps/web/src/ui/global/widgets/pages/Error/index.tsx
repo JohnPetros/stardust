@@ -1,7 +1,7 @@
 'use client'
 
+import { useRestContext } from '@/ui/global/contexts/RestContext'
 import { useTelemetryProvider } from '../../../hooks/useTelemetryProvider'
-import { useRest } from '../../../hooks/useRest'
 import { ErrorPageView } from './ErrorPageView'
 import { useErrorPage } from './useErrorPage'
 
@@ -11,7 +11,7 @@ type Props = {
 
 export const ErrorPage = ({ error }: Props) => {
   const telemetryProvider = useTelemetryProvider()
-  const { notificationService } = useRest()
+  const { notificationService } = useRestContext()
   const { handleReload } = useErrorPage({ telemetryProvider, notificationService, error })
 
   return <ErrorPageView errorMessage={error.message} onReload={handleReload} />
