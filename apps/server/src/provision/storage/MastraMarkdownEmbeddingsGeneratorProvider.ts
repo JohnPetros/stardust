@@ -21,21 +21,19 @@ export class MastraMarkdownEmbeddingsGeneratorProvider
       overlap: 100,
     })
     const result = await embedMany({
-      model: google.textEmbedding('gemini-embedding-001'), 
+      model: google.textEmbedding('gemini-embedding-001'),
       values: chunks.map((chunk) => chunk.text),
       providerOptions: {
         google: {
-          outputDimensionality: 1536
-        }
-      }
+          outputDimensionality: 1536,
+        },
+      },
     })
     const embeddings = chunks.map((chunk, index) =>
-      Embedding.create(
-        { 
-          vector: result.embeddings[index],
-          text: chunk.text,
-        }, 
-      ),
+      Embedding.create({
+        vector: result.embeddings[index],
+        text: chunk.text,
+      }),
     )
     return embeddings
   }

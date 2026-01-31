@@ -24,11 +24,12 @@ export class GenerateGuideEmbeddingsJob implements Job {
       this.storageProvider,
     )
     await amqp.run(
-      async () => await useCase.execute({
-        content: payload.guideContent,
-        documentId: payload.guideId,
-        namespace: 'guides',
-      }),
+      async () =>
+        await useCase.execute({
+          content: payload.guideContent,
+          documentId: payload.guideId,
+          namespace: 'guides',
+        }),
       GenerateEmbeddingsUseCase.name,
     )
   }
