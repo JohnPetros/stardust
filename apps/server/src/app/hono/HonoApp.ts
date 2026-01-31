@@ -26,7 +26,6 @@ import {
   RankingFunctions,
   NotificationFunctions,
   StorageFunctions,
-  ReportingFunctions,
 } from '@/queue/inngest/functions'
 import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
 import {
@@ -197,7 +196,6 @@ export class HonoApp {
       const rankingFunctions = new RankingFunctions(inngest)
       const storageFunctions = new StorageFunctions(inngest)
       const notificationFunctions = new NotificationFunctions(inngest)
-      const reportingFunctions = new ReportingFunctions(inngest)
 
       return serveInngest({
         client: inngest,
@@ -208,7 +206,6 @@ export class HonoApp {
           ...rankingFunctions.getFunctions(supabase),
           ...storageFunctions.getFunctions(),
           ...notificationFunctions.getFunctions(),
-          ...reportingFunctions.getFunctions(),
         ],
       })(context)
     })
