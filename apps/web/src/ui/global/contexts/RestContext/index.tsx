@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext, type PropsWithChildren } from 'react'
 
 import type { RestContextValue } from './types'
