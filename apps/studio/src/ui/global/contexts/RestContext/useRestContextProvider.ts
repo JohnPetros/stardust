@@ -20,7 +20,7 @@ import type { RestContextValue } from './types/RestContextValue'
 const restClient = AxiosRestClient()
 restClient.setBaseUrl(ENV.stardustServerUrl)
 
-export function useRestProvider(): RestContextValue {
+export function useRestContextProvider(): RestContextValue {
   const [accessToken] = useSessionStorage(SESSION_STORAGE_KEYS.accessToken, '')
   const location = useLocation()
 
