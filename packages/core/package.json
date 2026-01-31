@@ -154,6 +154,7 @@
     "./reporting/events": "./src/reporting/domain/events/index.ts",
     "./reporting/use-cases": "./src/reporting/use-cases/index.ts",
     "./reporting/interfaces": "./src/reporting/interfaces/index.ts",
+    "./reporting/types": "./src/reporting/domain/types/index.ts",
     "./reporting/structures/dtos": "./src/reporting/domain/structures/dtos/index.ts",
     "./reporting/structures/fakers": "./src/reporting/domain/structures/fakers/index.ts",
     "./storage/events": "./src/storage/domain/events/index.ts",

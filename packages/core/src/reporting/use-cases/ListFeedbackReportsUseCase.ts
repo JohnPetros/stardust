@@ -4,12 +4,15 @@ import type { FeedbackReportDto } from '../domain/entities/dtos'
 import type { FeedbackReportsRepository } from '../interfaces'
 import { Text } from '#global/domain/structures/Text'
 import { Period } from '#global/domain/structures/Period'
+import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 
 type Request = {
   authorName?: string
   intent?: string
   sentAtStartDate?: string
   sentAtEndDate?: string
+  page?: number
+  itemsPerPage?: number
 }
 
 type Response = Promise<PaginationResponse<FeedbackReportDto>>
@@ -25,11 +28,16 @@ export class ListFeedbackReportsUseCase implements UseCase<Request, Response> {
         request.sentAtStartDate && request.sentAtEndDate
           ? Period.create(request.sentAtStartDate, request.sentAtEndDate)
           : undefined,
+      page: request.page ? OrdinalNumber.create(request.page, 'Página') : undefined,
+      itemsPerPage: request.itemsPerPage
+        ? OrdinalNumber.create(request.itemsPerPage, 'Itens por página')
+        : undefined,
     })
 
     return new PaginationResponse(
       items.map((report) => report.dto),
       count,
+      request.itemsPerPage,
     )
   }
 }
