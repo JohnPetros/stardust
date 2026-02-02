@@ -1,4 +1,4 @@
-import type { AuthorAggregateDto } from "#global/domain/aggregates/dtos/index"
+import type { AuthorAggregateDto } from '#global/domain/aggregates/dtos/index'
 
 export type SnippetDto = {
   id?: string
