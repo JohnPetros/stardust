@@ -5,13 +5,6 @@ feedbacks pendentes em um Pull Request (PR) específico do GitHub. O foco é
 garantir que todos os pontos de melhoria, correções de bugs e sugestões de
 design levantadas pelos revisores sejam devidamente endereçados no código.
 
-**Entrada:**
-
-- **Link do PR:** URL completa do Pull Request no GitHub (ex:
-  `https://github.com/owner/repo/pull/123`).
-
----
-
 ## Diretrizes de Execução
 
 ### 1️⃣ Extração de Contexto
