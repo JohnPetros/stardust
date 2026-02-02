@@ -1,50 +1,171 @@
-# Promtp: Criar Pull Request
+# Prompt: Resolve PR Conversations (usando gh CLI)
 
-**Objetivo:**
-Padronizar a criação de Pull Requests (PRs), garantindo descrições claras que facilitem a revisão de código e o rastreamento de tarefas. O foco é utilizar exclusivamente as ferramentas do **GitHub MCP** para manter a integridade do fluxo de trabalho.
+**Objetivo Principal** Analisar, implementar e resolver todas as conversas e
+feedbacks pendentes em um Pull Request (PR) específico do GitHub. O foco é
+garantir que todos os pontos de melhoria, correções de bugs e sugestões de
+design levantadas pelos revisores sejam devidamente endereçados no código.
 
 **Entrada:**
-*   Uma Spec (especificação) devidamente implementada e validada.
-*   Uma Bug Report (relatório de bug) devidamente implementada e validada.
-*   Uma branch de funcionalidade (`feature/`), correção (`fix/`) ou refatoração (`refactor/`) com as alterações comitadas.
 
-**Diretrizes de Execução:**
-
-1.  **Análise do Contexto:**
-    *   Revise a Spec implementada e o changelog das alterações realizadas.
-    *   Identifique os impactos técnicos e as decisões de design tomadas.
-
-2.  **Definição do Título:**
-    *   O título deve ser curto, direto, em PT-BR e seguir a essência da alteração (ex: "Implementação da listagem de produtos" ou "Correção do erro de carregamento de imagem" ou ainda "Correção de navegação para tela de catálogo").
-    *   Não inclua prefixos no título, como `feat/`, `fix/` ou `refactor/`.
-
-3.  **Estrutura da Descrição (Body):**
-    O corpo do PR deve seguir o template abaixo, preenchendo as seções relevantes. **Nota:** Utilize sempre formatação Markdown para garantir legibilidade e organização. Evite usar título principal `#`, use apenas subtítulos como `##` e demais com nível abaixo.
-
-    *   🎯 **Objetivo (obrigatório):** Explique *por que* este PR foi criado e qual o seu propósito central.
-    *   #️⃣ **Issues relacionadas (opcional):** Vincule tarefas ou bugs utilizando as palavras-chave do GitHub (ex: `fixes #123`).
-    *   🐛 **Causa do bug (opcional):** Caso seja um `fix`, detalhe a razão técnica raiz do problema.
-    *   📋 **Changelog (obrigatório):** Liste de forma técnica as principais modificações realizadas no código.
-    *   🧪 **Como testar (obrigatório):** Forneça um guia passo a passo para que o revisor possa validar as alterações.
-    *   👀 **Observações (opcional):** Adicione informações sobre decisões de arquitetura, limitações identificadas ou novos contextos.
-
-4.  **Criação via GitHub MCP:**
-    *   **Atenção:** Nunca utilize comandos `git` diretamente no terminal em qualquer etapa do processo. 
-    *   Utilize a ferramenta `create_pull_request`.
-    *   Siga o formato de dados abaixo para a execução da ferramenta:
-
-```json
-{
-  "owner": "JohnPetros",
-  "repo": "stardust",
-  "base": "main",
-  "head": "<Nome da branch>",
-  "title": "<Titulo do PR>",
-  "body": "<Descrição formatada conforme o item 3>"
-}
-```
-
-5.  **Retorno:**
-    *   Junto com a sua resposta, envie o link do PR criado no GitHub.
+- **Link do PR:** URL completa do Pull Request no GitHub (ex:
+  `https://github.com/owner/repo/pull/123`).
 
 ---
+
+## Diretrizes de Execução
+
+### 1️⃣ Extração de Contexto
+
+- Identifique o `owner`, `repo` e `pullNumber` a partir da URL fornecida.
+- Utilize o **gh CLI** para obter os detalhes do PR.
+
+Exemplo:
+
+```
+gh pr view <pullNumber> --repo owner/repo --comments
+```
+
+---
+
+### 2️⃣ Mapeamento de Conversas
+
+- Liste todos os comentários de revisão do PR.
+
+Comandos possíveis:
+
+```
+gh pr view <pullNumber> --repo owner/repo --json reviewThreads
+```
+
+ou via API:
+
+```
+gh api repos/owner/repo/pulls/<pullNumber>/comments
+```
+
+- Filtre as conversas:
+
+  - não resolvidas
+  - com change request
+  - com sugestões de alteração de código
+
+---
+
+### 3️⃣ Análise e Implementação
+
+Para cada comentário:
+
+- Identifique:
+
+  - arquivo afetado
+  - trecho de código
+  - sugestão do revisor
+
+- Aplique as alterações no código local usando ferramentas de edição de arquivo:
+
+  - replace_file_content
+  - multi_replace_file_content
+
+- Garanta conformidade com:
+
+```
+documentation/code-conventions-guidelines.md
+documentation/architecture.md
+```
+
+---
+
+### 4️⃣ Validação das Alterações
+
+Após implementar:
+
+Rodar analyzer:
+
+```
+flutter analyze
+```
+
+Rodar testes:
+
+```
+flutter test
+```
+
+---
+
+### 5️⃣ Finalização
+
+Fornecer resumo detalhado:
+
+- quais conversas foram resolvidas
+- quais arquivos foram alterados
+- quais padrões foram ajustados
+- quais bugs foram corrigidos
+
+---
+
+## FLUXO DE TRABALHO (Workflow)
+
+### ✅ Passo 1 — Coleta de Dados
+
+Listar comentários do PR:
+
+```
+gh api repos/owner/repo/pulls/<pullNumber>/comments
+```
+
+ou
+
+```
+gh pr view <pullNumber> --comments
+```
+
+---
+
+### ✅ Passo 2 — Diagnóstico
+
+Para cada thread:
+
+- arquivo afetado
+- problema descrito
+- solução proposta
+
+---
+
+### ✅ Passo 3 — Execução
+
+Modificar arquivos locais conforme necessário.
+
+Se o comentário for ambíguo → pedir esclarecimento antes de alterar.
+
+---
+
+### ✅ Passo 4 — Conclusão
+
+Relatório de progresso:
+
+```
+[x] Arquivo X — comentário Y resolvido (descrição)
+[x] Arquivo Z — ajuste de padrão aplicado
+```
+
+---
+
+### ✅ Passo 5 — Validação
+
+Executar:
+
+```
+flutter analyze
+flutter test
+```
+
+---
+
+### ✅ Passo 6 — Atualização da Documentação
+
+Atualizar, se necessário:
+
+- Spec
+- Bug Report
+- PRD relacionado

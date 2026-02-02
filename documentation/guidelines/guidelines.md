@@ -1,4 +1,4 @@
-# Guia de Documentação
+# Diretrizes do Projeto
 
 Este arquivo serve como índice para as diretrizes de documentação do projeto. Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 

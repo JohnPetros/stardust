@@ -6,13 +6,10 @@
 Implementar a página de gerenciamento de relatórios de feedback na aplicação StarDust Studio. A funcionalidade permitirá aos administradores visualizar uma listagem paginada de feedbacks, aplicar filtros (por autor, data, tipo), visualizar os detalhes completos de um relatório e realizar a exclusão de relatórios indesejados.
 
 ### 2. O que já existe?
-*   **`SupabaseFeedbackReportsRepository`** (`apps/server/src/database/supabase/repositories/reporting`) - Repositório já implementado no backend.
-*   **`ListFeedbackReportsUseCase`** (`packages/core/src/reporting/use-cases`) - Caso de uso para listagem.
-*   **`DeleteFeedbackReportUseCase`** (`packages/core/src/reporting/use-cases`) - Caso de uso para exclusão.
 *   **`FeedbackRouter`** (`apps/server/src/app/hono/routers/reporting/FeedbackRouter.ts`) - Expõe as rotas GET `/feedback` e DELETE `/feedback/:feedbackId`.
 *   **`FeedbackReport`** (`packages/core/src/reporting/domain/entities`) - Entidade de domínio.
 *   **`useRestContext`** (`apps/studio/src/ui/global/hooks/useRestContext.ts`) - Hook para acesso ao RestContext.
-*   **`usePaginatedCache`** (`apps/studio/src/ui/global/hooks/usePaginatedCache.ts`) - Hook para fetch de dados paginados.
+*   **`usePaginatedFetch`** (`apps/studio/src/ui/global/hooks/usePaginatedFetch.ts`) - Hook para fetch de dados paginados.
 
 ### 3. O que deve ser criado?
 
@@ -24,7 +21,7 @@ Implementar a página de gerenciamento de relatórios de feedback na aplicação
     *   `deleteFeedbackReport(feedbackId: string): Promise<RestResponse<void>>` - Realiza DELETE em `/feedback/:feedbackId`.
 
 #### Camada UI (Widgets - Page)
-*   **Localização:** `apps/studio/src/ui/reporting/pages/FeedbackReportsPage`
+*   **Localização:** `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage`
 *   **Props:** Nenhuma (Página principal).
 *   **Estados (Hook `useFeedbackReportsPage`):**
     *   `isLoading`: boolean
@@ -39,7 +36,7 @@ Implementar a página de gerenciamento de relatórios de feedback na aplicação
     *   `DeleteFeedbackReportDialog`
 
 #### Camada UI (Widgets - Components)
-*   **Localização:** `apps/studio/src/ui/reporting/pages/FeedbackReportsPage/FeedbackReportsTable`
+*   **Localização:** `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsTable`
 *   **Props:**
     *   `reports`: FeedbackReport[]
     *   `isLoading`: boolean
@@ -53,7 +50,7 @@ Implementar a página de gerenciamento de relatórios de feedback na aplicação
         *   **Preview:** Miniatura do screenshot (lazy loaded) ou texto.
         *   **Ações:** Botões View (ícone olho) e Delete (ícone lixeira).
 
-*   **Localização:** `apps/studio/src/ui/reporting/pages/FeedbackReportsPage/FeedbackReportDialog`
+*   **Localização:** `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportDialog`
 *   **Props:**
     *   `report`: FeedbackReport | null
     *   `isOpen`: boolean
@@ -63,7 +60,7 @@ Implementar a página de gerenciamento de relatórios de feedback na aplicação
     *   Exibir detalhes completos, incluindo screenshot com opção de zoom/expandir.
     *   **Footer:** Botão "Fechar" e Botão "Deletar" (Destructive).
 
-*   **Localização:** `apps/studio/src/ui/reporting/pages/FeedbackReportsPage/DeleteFeedbackReportDialog`
+*   **Localização:** `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/DeleteFeedbackReportDialog`
 *   **Props:**
     *   `report`: FeedbackReport | null
     *   `isOpen`: boolean
@@ -125,3 +122,5 @@ N/A
 |           |                 <  1 2 3  >                   |
 +-------------------------------------------------------+
 ```
+
+**ChallengesTable**: `apps/studio/src/ui/global/widgets/components/ChallengesTable`
