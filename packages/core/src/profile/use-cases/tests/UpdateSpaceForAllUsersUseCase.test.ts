@@ -74,7 +74,11 @@ describe('Update Space For All Users Use Case', () => {
   })
 
   it('should not add stars that are already in the recently unlocked list', async () => {
-    const reorderedStarIds = [IdFaker.fake().value, IdFaker.fake().value, IdFaker.fake().value]
+    const reorderedStarIds = [
+      IdFaker.fake().value,
+      IdFaker.fake().value,
+      IdFaker.fake().value,
+    ]
     const unlockedStarIds = [reorderedStarIds[0], IdFaker.fake().value]
     const users = UsersFaker.fakeMany(1)
     repository.findAll.mockResolvedValue(users)

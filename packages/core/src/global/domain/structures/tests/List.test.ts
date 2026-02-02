@@ -119,5 +119,4 @@ describe('List structure', () => {
     expect(List.create([1, true, '', 0]).hasItems.value).toBeTruthy()
     expect(List.create([]).hasItems.value).toBeFalsy()
   })
-
 })

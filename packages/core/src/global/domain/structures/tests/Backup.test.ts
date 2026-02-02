@@ -1,4 +1,4 @@
-import { Backup } from "../Backup"
+import { Backup } from '../Backup'
 
 describe('Bakcup structure', () => {
   it('should save a new state', () => {
