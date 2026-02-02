@@ -24,7 +24,8 @@
   },
   "dependencies": {
     "@designliquido/delegua": "^1.0.0",
-    "@stardust/core": "*"
+    "@stardust/core": "*",
+    "monaco-editor": "^0.55.1"
   },
   "devDependencies": {
     "@stardust/typescript-config": "*",
