@@ -46,3 +46,4 @@ export type IconName =
   | 'link'
   | 'sort-asc'
   | 'sort-desc'
+  | 'feedback'

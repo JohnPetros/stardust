@@ -46,6 +46,7 @@ import {
   ArrowDown,
   UserRoundCog,
   UserCheck,
+  MessageSquare,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -99,4 +100,5 @@ export const ICONS: Record<IconName, LucideIcon> = {
   link: Link,
   'sort-asc': ArrowUp,
   'sort-desc': ArrowDown,
+  feedback: MessageSquare,
 }
