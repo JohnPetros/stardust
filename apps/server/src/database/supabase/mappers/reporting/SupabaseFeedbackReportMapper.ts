@@ -4,6 +4,7 @@ import type { SupabaseFeedbackReport } from '../../types/SupabaseFeedbackReport'
 
 export class SupabaseFeedbackReportMapper {
   static toEntity(row: SupabaseFeedbackReport): FeedbackReport {
+    console.log(row)
     return FeedbackReportEntity.create({
       id: row.id,
       content: row.content,
