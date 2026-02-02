@@ -1,6 +1,6 @@
 import { BooleanValidation } from '../../libs'
 
-export class  Logical {
+export class Logical {
   readonly value: boolean
 
   private constructor(value: boolean) {
