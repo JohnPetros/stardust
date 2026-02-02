@@ -57,6 +57,12 @@ export function useAssistantChatbot({ service, toastProvider }: Params) {
     }
   }
 
+  async function handleEditChatName(chatId: string, chatName: string) {
+    if (selectedChat && chatId === selectedChat.id.value) {
+      setSelectedChat(Chat.create({ ...selectedChat.dto, name: chatName }))
+    }
+  }
+
   async function handleSendFirstMessage() {
     setFirstQuestion(null)
   }
@@ -69,6 +75,7 @@ export function useAssistantChatbot({ service, toastProvider }: Params) {
     handleCreateChatButtonClick,
     handleSelectChat,
     handleDeleteChat,
+    handleEditChatName,
     handleSendFirstMessage,
   }
 }

@@ -12,12 +12,13 @@ import type { DialogRef } from '@/ui/global/widgets/components/Dialog/types'
 
 const CHATS_PER_PAGE = OrdinalNumber.create(10)
 
-type Params = {
+export type Params = {
   service: ConversationService
   toastProvider: ToastProvider
   dialogRef: RefObject<DialogRef | null>
   onSelectChat: (chatDto: ChatDto) => void
   onDeleteChat: (chatId: string) => void
+  onEditChatName?: (chatId: string, chatName: string) => void
 }
 
 export function useAssistantChatsHistory({
@@ -26,6 +27,7 @@ export function useAssistantChatsHistory({
   dialogRef,
   onSelectChat,
   onDeleteChat,
+  onEditChatName,
 }: Params) {
   async function fetchChats(page: number) {
     const response = await service.fetchChats({
@@ -67,6 +69,22 @@ export function useAssistantChatsHistory({
     dialogRef.current?.close()
   }
 
+  async function handleEditChatName(chatId: string, chatName: string) {
+    if (chatName.length < 2) {
+      toastProvider.showError('O nome deve ter pelo menos 2 caracteres')
+      return
+    }
+
+    const response = await service.editChatName(Id.create(chatId), Text.create(chatName))
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+
+    toastProvider.showSuccess('Nome do chat atualizado')
+    refetch()
+  }
+
   return {
     chats: data.map(Chat.create),
     isLoading,
@@ -75,5 +93,6 @@ export function useAssistantChatsHistory({
     handleOpenChange,
     handleDeleteChat,
     handleChatSelect,
+    handleEditChatName,
   }
 }

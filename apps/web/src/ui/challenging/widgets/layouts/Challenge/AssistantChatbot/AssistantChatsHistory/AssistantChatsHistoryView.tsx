@@ -10,8 +10,9 @@ import { Loading } from '@/ui/global/widgets/components/Loading'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { InfiniteList } from '@/ui/global/widgets/components/InfiniteList'
 import type { DialogRef } from '@/ui/global/widgets/components/Dialog/types'
+import { ChatNameEditionDialog } from './ChatNameEditionDialog'
 
-type Props = {
+export type Props = {
   children: ReactNode
   chats: Chat[]
   isLoading: boolean
@@ -21,6 +22,7 @@ type Props = {
   onSelectChat: (chatDto: ChatDto) => void
   onShowMore: () => void
   onDeleteChat?: (chatId: string) => void
+  onEditChatName?: (chatId: string, chatName: string) => Promise<void>
 }
 
 export const AssistantChatsHistoryView = ({
@@ -33,6 +35,7 @@ export const AssistantChatsHistoryView = ({
   onSelectChat,
   onShowMore,
   onDeleteChat,
+  onEditChatName,
 }: Props) => {
   return (
     <Dialog.Container ref={dialogRef} onOpenChange={onOpenChange}>
@@ -52,7 +55,7 @@ export const AssistantChatsHistoryView = ({
               {chats.map((chat) => (
                 <div key={chat.id.value} className='group relative'>
                   <Button
-                    className='flex h-auto w-full items-center justify-between rounded-lg border-0 bg-transparent pl-4 pr-12 py-3 hover:bg-white/5'
+                    className='flex h-auto w-full items-center justify-between rounded-lg border-0 bg-transparent pl-4 pr-24 py-3 hover:bg-white/5'
                     onClick={() => onSelectChat(chat.dto)}
                   >
                     <span className='truncate font-medium text-gray-300 group-hover:text-white'>
@@ -65,16 +68,29 @@ export const AssistantChatsHistoryView = ({
                       </span>
                     </div>
                   </Button>
-                  <button
-                    type='button'
-                    className='absolute top-[12px] right-3 transition-all hover:text-red-400 group-hover:opacity-100'
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      onDeleteChat?.(chat.id.value)
-                    }}
-                  >
-                    <Icon name='trash' size={16} />
-                  </button>
+                  <div className='absolute top-[12px] right-3 flex items-center gap-2 transition-all group-hover:opacity-100 opacity-0'>
+                    {onEditChatName && (
+                      <ChatNameEditionDialog
+                        chatId={chat.id.value}
+                        initialChatName={chat.name.value}
+                        onEditChatName={onEditChatName}
+                      >
+                        <div className='transition-all hover:text-green-400'>
+                          <Icon name='edit' size={16} />
+                        </div>
+                      </ChatNameEditionDialog>
+                    )}
+                    <button
+                      type='button'
+                      className='transition-all hover:text-red-400'
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onDeleteChat?.(chat.id.value)
+                      }}
+                    >
+                      <Icon name='trash' size={16} />
+                    </button>
+                  </div>
                 </div>
               ))}
             </InfiniteList>

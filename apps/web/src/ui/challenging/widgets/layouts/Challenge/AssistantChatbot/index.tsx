@@ -19,6 +19,7 @@ export const AssistantChatbot = () => {
     handleCreateChatButtonClick,
     handleSelectChat,
     handleDeleteChat,
+    handleEditChatName,
     handleSendFirstMessage,
   } = useAssistantChatbot({
     service: conversationService,
@@ -36,6 +37,7 @@ export const AssistantChatbot = () => {
       firstQuestion={firstQuestion}
       onSelectChat={handleSelectChat}
       onDeleteChat={handleDeleteChat}
+      onEditChatName={handleEditChatName}
       onCreateChat={handleCreateChatButtonClick}
       onSendFirstQuestion={handleSendFirstMessage}
     />
