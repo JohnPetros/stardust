@@ -26,6 +26,9 @@ export const ROUTES = {
     rockets: '/shop/rockets',
     avatars: '/shop/avatars',
   },
+  reporting: {
+    feedback: '/reporting/feedback',
+  },
   manual: {
     guide: (guide: Guide) => `/manual/guides/${guide.category.value}/${guide.id.value}`,
     lspGuides: '/manual/guides/lsp',

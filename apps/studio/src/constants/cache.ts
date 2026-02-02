@@ -29,4 +29,7 @@ export const CACHE = {
   guidesGrid: {
     key: 'guides-grid',
   },
+  feedbackReportsTable: {
+    key: 'feedback-reports-table',
+  },
 }
