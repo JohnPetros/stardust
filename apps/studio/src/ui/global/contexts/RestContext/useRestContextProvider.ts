@@ -13,6 +13,7 @@ import {
   ChallengingService,
   ShopService,
   ManualService,
+  ReportingService,
 } from '@/rest/services'
 import { ENV, SESSION_STORAGE_KEYS } from '@/constants'
 import type { RestContextValue } from './types/RestContextValue'
@@ -40,6 +41,7 @@ export function useRestContextProvider(): RestContextValue {
       challengingService: ChallengingService(restClient),
       shopService: ShopService(restClient),
       manualService: ManualService(restClient),
+      reportingService: ReportingService(restClient),
     }),
     [],
   )

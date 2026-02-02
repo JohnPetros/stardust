@@ -1,4 +1,4 @@
-import { ENV } from '@/constants'
+import { ENV } from '@/constants/env'
 import type { StorageFolder } from '@stardust/core/storage/structures'
 
 export function useStorageImage(storageFolder: StorageFolder, imageName: string) {
