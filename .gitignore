@@ -74,13 +74,12 @@ google-key-file.json
 # Gemini
 GEMINI.md
 
-# Codex
-AGENTS.md
-.codex/
-
 # Antigravity
 .agent/
 .agents/
+
+# Codex
+.codex/
 
 # Open Code
 .opencode/
@@ -88,6 +87,7 @@ AGENTS.md
 # Ai Content
 .context/
 
+# Serena MCP
 .serena
 
 *.tsbuildinfo
