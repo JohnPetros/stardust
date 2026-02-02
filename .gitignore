@@ -83,6 +83,7 @@ GEMINI.md
 
 # Open Code
 .opencode/
+opencode.jsonc
 
 # Ai Content
 .context/

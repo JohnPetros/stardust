@@ -1,164 +1,165 @@
-# Prompt: Resolve PR Conversations (usando gh CLI)
+# Prompt: Criar PRD
 
-**Objetivo Principal** Analisar, implementar e resolver todas as conversas e
-feedbacks pendentes em um Pull Request (PR) específico do GitHub. O foco é
-garantir que todos os pontos de melhoria, correções de bugs e sugestões de
-design levantadas pelos revisores sejam devidamente endereçados no código.
+**Objetivo:** Padronizar a criação de Pull Requests (PRs), garantindo descrições
+claras que facilitem a revisão de código e o rastreamento de tarefas. O foco é
+utilizar exclusivamente a **GitHub CLI (gh)** para manter a integridade do fluxo
+de trabalho.
+
+---
+
+## Entrada
+
+- Uma Spec (especificação) devidamente implementada e validada.
+- Uma Bug Report (relatório de bug) devidamente implementada e validada.
+- Uma branch de funcionalidade (`feature/`), correção (`fix/`) ou refatoração
+  (`refactor/`) com as alterações comitadas.
+
+---
 
 ## Diretrizes de Execução
 
-### 1️⃣ Extração de Contexto
+### 1️⃣ Análise do Contexto
 
-- Identifique o `owner`, `repo` e `pullNumber` a partir da URL fornecida.
-- Utilize o **gh CLI** para obter os detalhes do PR.
-
-Exemplo:
-
-```
-gh pr view <pullNumber> --repo owner/repo --comments
-```
-
----
-
-### 2️⃣ Mapeamento de Conversas
-
-- Liste todos os comentários de revisão do PR.
-
-Comandos possíveis:
-
-```
-gh pr view <pullNumber> --repo owner/repo --json reviewThreads
-```
-
-ou via API:
-
-```
-gh api repos/owner/repo/pulls/<pullNumber>/comments
-```
-
-- Filtre as conversas:
-
-  - não resolvidas
-  - com change request
-  - com sugestões de alteração de código
-
----
-
-### 3️⃣ Análise e Implementação
-
-Para cada comentário:
-
+- Revise a Spec implementada e o changelog das alterações realizadas.
 - Identifique:
 
-  - arquivo afetado
-  - trecho de código
-  - sugestão do revisor
+  - impactos técnicos
+  - decisões de design tomadas
+  - riscos e efeitos colaterais
 
-- Aplique as alterações no código local usando ferramentas de edição de arquivo:
+---
 
-  - replace_file_content
-  - multi_replace_file_content
+### 2️⃣ Definição do Título
 
-- Garanta conformidade com:
+- Deve ser:
+
+  - curto
+  - direto
+  - em PT-BR
+  - refletir a essência da alteração
+
+Exemplos:
+
+- Implementação da listagem de produtos
+- Correção do erro de carregamento de imagem
+- Correção de navegação para tela de catálogo
+
+⚠️ Não incluir prefixos no título:
 
 ```
-documentation/code-conventions-guidelines.md
-documentation/architecture.md
+feat/
+fix/
+refactor/
 ```
 
 ---
 
-### 4️⃣ Validação das Alterações
+### 3️⃣ Estrutura da Descrição (Body)
 
-Após implementar:
+O corpo do PR deve seguir o template abaixo.
 
-Rodar analyzer:
+**Regras de formatação:**
+
+- usar Markdown
+- não usar título principal `#`
+- usar `##` e níveis abaixo
+
+---
+
+## 🎯 Objetivo (obrigatório)
+
+Explique por que este PR foi criado e qual seu propósito central.
+
+## #️⃣ Issues relacionadas (opcional)
+
+Vincule tarefas/buffs:
 
 ```
-flutter analyze
-```
-
-Rodar testes:
-
-```
-flutter test
+fixes #123
+closes #456
 ```
 
 ---
 
-### 5️⃣ Finalização
+## 🐛 Causa do bug (opcional — apenas fix)
 
-Fornecer resumo detalhado:
-
-- quais conversas foram resolvidas
-- quais arquivos foram alterados
-- quais padrões foram ajustados
-- quais bugs foram corrigidos
+Descreva a causa técnica raiz.
 
 ---
 
-## FLUXO DE TRABALHO (Workflow)
+## 📋 Changelog (obrigatório)
 
-### ✅ Passo 1 — Coleta de Dados
+Lista técnica das mudanças:
 
-Listar comentários do PR:
+- arquivos alterados
+- comportamento modificado
+- regras adicionadas
+- refatorações feitas
+
+---
+
+## 🧪 Como testar (obrigatório)
+
+Passo a passo claro para o revisor validar:
+
+1. …
+2. …
+3. …
+
+---
+
+## 👀 Observações (opcional)
+
+- decisões de arquitetura
+- limitações conhecidas
+- tradeoffs
+- próximos passos
+
+---
+
+## 4️⃣ Criação via gh CLI
+
+⚠️ Não usar GitHub MCP. ⚠️ Não usar APIs MCP. Usar exclusivamente **gh**.
+
+Comando padrão:
 
 ```
-gh api repos/owner/repo/pulls/<pullNumber>/comments
+gh pr create \
+  --repo owner/repo \
+  --base main \
+  --head <nome-da-branch> \
+  --title "<Titulo do PR>" \
+  --body-file pr_body.md
+```
+
+Ou inline:
+
+```
+gh pr create \
+  --base main \
+  --head <branch> \
+  --title "<Titulo>" \
+  --body "<Descrição formatada>"
+```
+
+---
+
+## 5️⃣ Retorno
+
+Após criação:
+
+```
+gh pr view --web
 ```
 
 ou
 
 ```
-gh pr view <pullNumber> --comments
+gh pr view --json url
 ```
 
----
+Retornar:
 
-### ✅ Passo 2 — Diagnóstico
-
-Para cada thread:
-
-- arquivo afetado
-- problema descrito
-- solução proposta
-
----
-
-### ✅ Passo 3 — Execução
-
-Modificar arquivos locais conforme necessário.
-
-Se o comentário for ambíguo → pedir esclarecimento antes de alterar.
-
----
-
-### ✅ Passo 4 — Conclusão
-
-Relatório de progresso:
-
-```
-[x] Arquivo X — comentário Y resolvido (descrição)
-[x] Arquivo Z — ajuste de padrão aplicado
-```
-
----
-
-### ✅ Passo 5 — Validação
-
-Executar:
-
-```
-flutter analyze
-flutter test
-```
-
----
-
-### ✅ Passo 6 — Atualização da Documentação
-
-Atualizar, se necessário:
-
-- Spec
-- Bug Report
-- PRD relacionado
+- link do PR criado
+- título final
+- resumo do body gerado
