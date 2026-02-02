@@ -54,23 +54,27 @@ export class DeleguaLsp implements LspProvider {
       return this.trateErro(resultadoInterpretador.erros[0])
     }
 
-    
-    const resultadoInterpretadorFiltrado = resultadoInterpretador.resultado.filter(Boolean)
-    
+    const resultadoInterpretadorFiltrado =
+      resultadoInterpretador.resultado.filter(Boolean)
+
     if (resultadoInterpretadorFiltrado.length === 0) {
       return new LspResponse({ result: undefined })
     }
 
     let resultadoFinal = null
     let resultadoRetornado = resultadoInterpretadorFiltrado?.at(-1)
-    
+
     if (typeof resultadoRetornado === 'string') {
       resultadoRetornado = JSON.parse(resultadoRetornado)
     }
 
     resultadoFinal = resultadoRetornado?.valorRetornado?.valor
 
-    if (typeof resultadoFinal === 'object' && resultadoFinal !== null && 'valor' in resultadoFinal) {
+    if (
+      typeof resultadoFinal === 'object' &&
+      resultadoFinal !== null &&
+      'valor' in resultadoFinal
+    ) {
       resultadoFinal = resultadoFinal.valor
     }
 
@@ -100,17 +104,17 @@ export class DeleguaLsp implements LspProvider {
       functionParams.map(async (param) => {
         if (Array.isArray(param)) {
           const values = await Promise.all(
-            param.map((value) => this.translateToLsp(value))
+            param.map((value) => this.translateToLsp(value)),
           )
           return `[${values.join(',')}]`
         }
         return this.translateToLsp(param)
-      })
+      }),
     )
-  
+
     const params = `(${paramsValues.join(',')})`
     const functionName = this.getFunctionName(code)
-  
+
     return code.concat(`\n${functionName}${params};`)
   }
 
