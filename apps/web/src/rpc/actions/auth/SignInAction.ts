@@ -7,6 +7,7 @@ import { Password } from '@stardust/core/auth/structures'
 import { COOKIES } from '@/constants'
 import { UserSignedInEvent } from '@stardust/core/auth/events'
 import { AppError } from '@stardust/core/global/errors'
+import { SERVER_ENV } from '@/constants/server-env'
 
 type Request = {
   email: string
@@ -38,7 +39,7 @@ export const SignInAction = (
       })
 
       await Promise.all([
-        broker.publish(event),
+        SERVER_ENV.mode === 'production' ? broker.publish(event) : null,
         call.setCookie(
           COOKIES.accessToken.key,
           session.accessToken,
