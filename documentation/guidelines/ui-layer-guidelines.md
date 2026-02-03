@@ -136,6 +136,15 @@ export const Button = (props: ActionButtonProps) => {
 }
 ```
 
+*   Se o widget não tiver hook e não executar nenhum código assíncrono, declare o entry point diretamente como view na exportação:
+
+```tsx
+// index.tsx
+import { ButtonView } from './ButtonView'
+
+export const Button = ButtonView
+```
+
 ### Server components
 
 *   Se o widget for um server component, ele não deve conter hook, mas apenas view e entry point

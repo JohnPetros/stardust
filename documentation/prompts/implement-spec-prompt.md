@@ -8,10 +8,21 @@ Executar o plano de implementação técnica de forma iterativa, organizada e va
 
 **Diretrizes de Execução:**
 
+## REGRA MESTRA (NÃO IGNORE)
+Antes de gerar qualquer linha de código ou resposta técnica, você deve executar o seguinte algoritmo mental:
+
+1. **Classificar:** Qual é a natureza da tarefa? (ex: UI, Banco de Dados, RPC, Testes).
+2. **Consultar o Índice:** Olhe para o arquivo `# Diretrizes do Projeto` (index).
+3. **Verificar Contexto:** O arquivo específico indicado no índice está carregado no meu contexto atual?
+   - [SIM] -> Prossiga e cite qual regra específica você está aplicando.
+   - [NÃO] -> PARE IMEDIATAMENTE. Solicite ao usuário: "Por favor, adicione o arquivo [caminho_do_arquivo] ao contexto para que eu possa seguir as diretrizes de [Nome da Camada]."
+
+## PROIBIÇÕES
+- NUNCA assuma padrões de arquitetura genéricos (ex: Clean Arch padrão, MVC padrão) sem ler o arquivo de diretriz específico do projeto.
+- NUNCA gere código baseado apenas no resumo do arquivo de índice.
+
 1.  **Validação de Diretrizes e Arquitetura:**
     Antes de iniciar a implementação, certifique-se de que compreende as diretrizes (de acordo com a spec) e a estrutura do projeto:
-    *   **Índice de Diretrizes:** `documentation/guidelines/guidelines-rule.md` (Verifique aqui diretrizes específicas extras)
-    *   **Arquitetura & Clean Architecture:** `documentation/architecture.md` (Fonte primária de verdade)
     *   **Padronização de Código:** `documentation/guidelines/code-conventions-guidelines.md`
     *   **Diretrizes por Camada:**
         *   **Core (Domínio):** `documentation/guidelines/core-package-guideines.md`

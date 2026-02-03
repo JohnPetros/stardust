@@ -16,7 +16,7 @@ export class SupabaseFeedbackReportsRepository
   ): Promise<ManyItems<FeedbackReport>> {
     let query = this.supabase
       .from('feedback_reports')
-      .select('*, users(name, slug, avatar:avatar_id(name, image))', {
+      .select('*, users!inner(name, slug, avatar:avatar_id(name, image))', {
         count: 'exact',
       })
 

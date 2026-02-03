@@ -8,6 +8,7 @@ import type { ProfileService } from '@stardust/core/profile/interfaces'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { ShopService } from '@stardust/core/shop/interfaces'
 import type { ManualService } from '@stardust/core/manual/interfaces'
+import type { ReportingService } from '@stardust/core/reporting/interfaces'
 
 type RestContext = {
   authService: AuthService
@@ -18,6 +19,7 @@ type RestContext = {
   challengingService: ChallengingService
   shopService: ShopService
   manualService: ManualService
+  reportingService: ReportingService
 }
 
 export const restContext = createContext<RestContext>()

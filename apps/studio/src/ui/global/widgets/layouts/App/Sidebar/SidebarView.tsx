@@ -81,6 +81,15 @@ export const SidebarView = () => {
           Guias MDX
         </NavigationLink>
       </div>
+      <div>
+        <NavigationTitle>Relatórios</NavigationTitle>
+        <NavigationLink
+          href={ROUTES.reporting.feedback}
+          icon={<Icon name='feedback' size={16} />}
+        >
+          Feedbacks
+        </NavigationLink>
+      </div>
     </aside>
   )
 }

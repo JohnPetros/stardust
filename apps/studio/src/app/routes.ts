@@ -15,6 +15,7 @@ export default [
     route(ROUTES.shop.insignias, 'routes/InsigniasRoute.tsx'),
     route(ROUTES.shop.rockets, 'routes/RocketsRoute.tsx'),
     route(ROUTES.shop.avatars, 'routes/AvatarsRoute.tsx'),
+    route(ROUTES.reporting.feedback, 'routes/FeedbackReportsRoute.tsx'),
     route('/manual/guides/:category', 'routes/GuidesRoute.tsx'),
     route('/manual/guides/:category/:guideId', 'routes/GuidePageRoute.tsx'),
   ]),

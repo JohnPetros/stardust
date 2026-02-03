@@ -7,6 +7,7 @@ import type {
   ChallengingService,
   ShopService,
   ManualService,
+  ReportingService,
 } from '@/rest/services'
 
 export type RestContextValue = {
@@ -16,6 +17,7 @@ export type RestContextValue = {
   shopService: ReturnType<typeof ShopService>
   challengingService: ReturnType<typeof ChallengingService>
   manualService: ReturnType<typeof ManualService>
+  reportingService: ReturnType<typeof ReportingService>
   lessonService: ReturnType<typeof LessonService>
   storageService: ReturnType<typeof StorageService>
 }
