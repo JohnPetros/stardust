@@ -11,10 +11,10 @@ type UseTextSelectionProps = {
   setTextSelection: (selection: TextSelection | null) => void
 }
 
-export const useTextSelection = ({
+export function useTextSelection({
   containerRef,
   setTextSelection,
-}: UseTextSelectionProps) => {
+}: UseTextSelectionProps) {
   const [isButtonVisible, setIsButtonVisible] = useState(false)
   const [buttonPosition, setButtonPosition] = useState<Position>({ top: 0, left: 0 })
   const [selectedText, setSelectedText] = useState('')
