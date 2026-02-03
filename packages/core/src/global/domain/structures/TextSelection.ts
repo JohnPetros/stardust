@@ -6,7 +6,7 @@ export class TextSelection {
     readonly preview: string,
   ) {}
 
-  static create(dto: TextSelectionDto): TextSelection {
+static create(dto: TextSelectionDto): TextSelection {
     return new TextSelection(dto.content, dto.preview)
   }
 
