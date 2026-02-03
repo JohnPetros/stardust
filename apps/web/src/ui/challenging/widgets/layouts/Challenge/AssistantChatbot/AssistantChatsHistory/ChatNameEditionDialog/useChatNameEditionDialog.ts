@@ -21,7 +21,11 @@ export const useChatNameEditionDialog = ({
       return
     }
 
-    await onEditChatName(chatId, chatName)
+    try {
+      await onEditChatName(chatId, chatName)
+    } finally {
+      promptRef.current?.close()
+    }
   }
 
   function handleOpen() {
