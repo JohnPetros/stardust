@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Symlink root node_modules to app level
+        run: ln -sf ../../node_modules apps/web/node_modules
+
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
 
