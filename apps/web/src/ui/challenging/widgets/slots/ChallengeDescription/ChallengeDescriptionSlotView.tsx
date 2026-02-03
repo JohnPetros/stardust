@@ -62,7 +62,7 @@ export const ChallengeDescriptionSlotView = ({
           <ChallengeControl isChallengePublic={challenge.isPublic.value} />
         )}
       </div>
-      <div ref={contentRef} className='mt-6 pb-6 relative'>
+      <div ref={contentRef} className='mt-6 pb-6 relative select-text'>
         <Mdx>{mdx}</Mdx>
         {isAssistantEnabled && isSelectionButtonVisible && (
           <SelectionActionButtonView

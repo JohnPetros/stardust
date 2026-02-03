@@ -26,6 +26,7 @@ export function useCodeSelection({
     start: number
     end: number
   } | null>(null)
+  const [isDismissed, setIsDismissed] = useState(false)
 
   const checkSelection = useCallback(() => {
     const editor = codeEditorRef.current
@@ -41,6 +42,27 @@ export function useCodeSelection({
     if (!range || range.start > range.end) {
       setIsButtonVisible(false)
       setSelectedRange(null)
+      setIsDismissed(false)
+      return
+    }
+
+    // Verifica se é uma nova seleção diferente da anterior
+    const isNewSelection =
+      !selectedRange ||
+      selectedRange.start !== range.start ||
+      selectedRange.end !== range.end
+
+    // Se é uma nova seleção, reseta o estado de dismissed
+    if (isNewSelection) {
+      setIsDismissed(false)
+    }
+
+    // Se o usuário descartou o tooltip e ainda está na mesma seleção, não mostra
+    if (isDismissed && !isNewSelection) {
+      return
+    }
+
+    if (!isNewSelection) {
       return
     }
 
@@ -57,21 +79,21 @@ export function useCodeSelection({
       left,
     })
     setIsButtonVisible(true)
-  }, [codeEditorRef, editorContainerRef])
+  }, [codeEditorRef, editorContainerRef, isDismissed, selectedRange])
 
   function handleAddSelection() {
     if (!selectedRange || !codeEditorRef.current) return
 
     const editor = codeEditorRef.current
-    const fullCode = editor.getValue()
-    const lines = fullCode.split('\n')
 
-    const selectedLines = lines.slice(selectedRange.start - 1, selectedRange.end)
-    const content = selectedLines.join('\n')
+    // Pega o texto exatamente como foi selecionado
+    const selectedText = editor.getSelectedText()
+
+    if (!selectedText) return
 
     setCodeSelection(
       CodeSelection.create({
-        content,
+        content: selectedText,
         startLine: selectedRange.start,
         endLine: selectedRange.end,
       }),
@@ -79,10 +101,12 @@ export function useCodeSelection({
 
     setIsButtonVisible(false)
     setSelectedRange(null)
+    setIsDismissed(false)
   }
 
   function hideButton() {
     setIsButtonVisible(false)
+    setIsDismissed(true)
   }
 
   useEffect(() => {
@@ -100,6 +124,7 @@ export function useCodeSelection({
     function handleClickOutside(event: MouseEvent) {
       if (!editorContainerRef.current?.contains(event.target as Node)) {
         setIsButtonVisible(false)
+        setIsDismissed(true)
       }
     }
 
