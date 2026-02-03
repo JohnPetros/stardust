@@ -65,7 +65,7 @@ export class HonoApp {
     new AxiosRestClient(ENV.discordWebhookUrl),
   )
 
-  startServer() {
+  startServer(port = ENV.port) {
     this.setUpCors()
     this.registerMiddlewares()
     this.registerRoutes()
@@ -74,7 +74,7 @@ export class HonoApp {
     const server = serve(
       {
         fetch: this.hono.fetch,
-        port: ENV.port,
+        port,
       },
       (info) => {
         console.log(`🏢 Server is running on ${ENV.baseUrl}:${info.port}`)

@@ -3,6 +3,8 @@ import { immer } from 'zustand/middleware/immer'
 
 import type { Challenge } from '@stardust/core/challenging/entities'
 import type { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
+import type { TextSelection, CodeSelection } from '@stardust/core/global/structures'
+
 import { INITIAL_CHALLENGE_STORE_STATE } from '../ChallengeStore/constants'
 import type {
   ChallengeStore,
@@ -61,6 +63,39 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
         setMdx(mdx: string) {
           return set(({ state }) => {
             state.mdx = mdx
+          })
+        },
+
+        setTextSelection(textSelection: TextSelection | null) {
+          return set(({ state }) => {
+            state.assistantSelections.textSelection = textSelection
+          })
+        },
+
+        setCodeSelection(codeSelection: CodeSelection | null) {
+          return set(({ state }) => {
+            state.assistantSelections.codeSelection = codeSelection
+          })
+        },
+
+        clearTextSelection() {
+          return set(({ state }) => {
+            state.assistantSelections.textSelection = null
+          })
+        },
+
+        clearCodeSelection() {
+          return set(({ state }) => {
+            state.assistantSelections.codeSelection = null
+          })
+        },
+
+        clearAssistantSelections() {
+          return set(({ state }) => {
+            state.assistantSelections = {
+              textSelection: null,
+              codeSelection: null,
+            }
           })
         },
 

@@ -1,110 +1,110 @@
-# PRD: Agente Assistente de Codigo (Manual)
+# PRD: Agente Assistente de Código (Manual)
 
-## 1. Visao Geral
+## 1. Visão Geral
 
-Usuarios iniciantes na linguagem Delegua frequentemente encontram barreiras na
-resolucao de desafios, seja por duvidas de sintaxe ou por dificuldade em
-estruturar o raciocinio logico.
+Usuários iniciantes na linguagem Delegua frequentemente encontram barreiras na
+resolução de desafios, seja por dúvidas de sintaxe ou por dificuldade em
+estruturar o raciocínio lógico.
 
-Esta funcionalidade introduz um assistente inteligente com abordagem pedagogica,
-atuando como mentor durante a resolucao de desafios. O foco desta entrega e
+Esta funcionalidade introduz um assistente inteligente com abordagem pedagógica,
+atuando como mentor durante a resolução de desafios. O foco desta entrega é
 disponibilizar o suporte via API (com resposta em tempo real) e registrar a
-feature na documentacao do projeto. Nao ha entrega de interface (UI) nesta
+feature na documentação do projeto. Não há entrega de interface (UI) nesta
 etapa.
 
 ---
 
-## 2. Requisitos Funcionais
+## 2. Requisitos
 
-### Assistente (Comportamento Pedagogico)
+### Assistente (Comportamento Pedagógico)
 
-**Descricao:** O assistente deve orientar o usuario a chegar na resposta por
-conta propria, sem entregar a solucao final.
+**Descrição:** O assistente deve orientar o usuário a chegar na resposta por
+conta própria, sem entregar a solução final.
 
 - [x] **Mentoria guiada:** Fazer perguntas, sugerir passos e ajudar a decompor o
       problema.
-- [x] **Sem resposta direta:** Nunca fornecer o codigo completo que resolve o
+- [x] **Sem resposta direta:** Nunca fornecer o código completo que resolve o
       desafio.
 - [x] **Foco no desafio:** Responder apenas quando a pergunta estiver
-      relacionada ao desafio ou a linguagem Delegua.
+      relacionada ao desafio ou à linguagem Delegua.
 - [x] **Apoio de sintaxe:** Explicar e exemplificar sintaxe de Delegua quando
-      necessario.
-- [x] **Analise de codigo:** Identificar e explicar possiveis erros logicos e
-      sintaticos em codigos fornecidos pelo usuario.
+      necessário.
+- [x] **Análise de código:** Identificar e explicar possíveis erros lógicos e
+      sintáticos em códigos fornecidos pelo usuário.
 - [x] **Limites de certeza:** Quando faltar contexto suficiente, declarar que
-      nao consegue responder adequadamente.
+      não consegue responder adequadamente.
 
-##### Regras de Negocio
+#### Regras de Negócio
 
 - **Idioma:** Responder sempre em PT-BR.
-- **Somente Delegua:** Nao sugerir codigo em outras linguagens.
-- **Nao expor informacoes internas:** Nao mencionar identificadores internos do
+- **Somente Delegua:** Não sugerir código em outras linguagens.
+- **Não expor informações internas:** Não mencionar identificadores internos do
   desafio.
 
 ---
 
 ### Formato da Resposta (Blocos de Texto)
 
-**Descricao:** O retorno deve ser estruturado para renderizacao consistente no
+**Descrição:** O retorno deve ser estruturado para renderização consistente no
 produto.
 
-- [x] **Paragrafos estruturados:** Organizar a resposta em paragrafos, com uso
+- [x] **Parágrafos estruturados:** Organizar a resposta em parágrafos, com uso
       de blocos de texto quando fizer sentido.
-- [x] **Destaques importantes:** Informacoes criticas (alertas, cuidados,
+- [x] **Destaques importantes:** Informações críticas (alertas, cuidados,
       pontos-chave) devem vir destacadas.
-- [x] **Codigo multiline:** Trechos de codigo com mais de uma linha devem vir em
-      um bloco dedicado de codigo.
-- [x] **Codigo executavel:** Quando enviar codigo, o bloco deve permitir que o
-      usuario execute o exemplo.
+- [x] **Código multiline:** Trechos de código com mais de uma linha devem vir em
+      um bloco dedicado de código.
+- [x] **Código executável:** Quando enviar código, o bloco deve permitir que o
+      usuário execute o exemplo.
 
-##### Regras de Negocio
+##### Regras de Negócio
 
-- **Sem formato tecnico para o usuario:** Nao mencionar termos como
+- **Sem formato técnico para o usuário:** Não mencionar termos como
   markdown/mdx.
-- **Sem delimitadores de codigo comuns:** Evitar backticks e cercas de codigo;
-  usar apenas o bloco de codigo previsto.
+- **Sem delimitadores de código comuns:** Evitar backticks e cercas de código;
+  usar apenas o bloco de código previsto.
 
 ---
 
-### Disponibilizacao via API (Streaming)
+### Disponibilização via API (Streaming)
 
-**Descricao:** O assistente deve estar disponivel por uma rota de API que aceite
+**Descrição:** O assistente deve estar disponível por uma rota de API que aceite
 mensagens e retorne resposta em tempo real.
 
-- [x] **Receber mensagens:** Aceitar uma pergunta do usuario vinculada a um chat
+- [x] **Receber mensagens:** Aceitar uma pergunta do usuário vinculada a um chat
       e a um desafio.
 - [x] **Responder em tempo real:** Enviar a resposta de forma progressiva
-      (streaming) para melhorar a experiencia.
-- [x] **Historico de conversa:** Utilizar o historico do chat como contexto de
+      (streaming) para melhorar a experiência.
+- [x] **Histórico de conversa:** Utilizar o histórico do chat como contexto de
       conversa.
-- [x] **Salvar mensagens:** Ao final, registrar a mensagem do usuario e a
-      resposta final do assistente no historico.
+- [x] **Salvar mensagens:** Ao final, registrar a mensagem do usuário e a
+      resposta final do assistente no histórico.
 
-##### Regras de Negocio
+##### Regras de Negócio
 
 - **Contexto do desafio:** Ajudar levando em conta o desafio atual, sem revelar
-  informacoes internas.
+  informações internas.
 
 ---
 
 ### Limites e Tratamento de Erros
 
-**Descricao:** Garantir confiabilidade e evitar abuso.
+**Descrição:** Garantir confiabilidade e evitar abuso.
 
 - [x] **Limite de uso:** Aplicar limite de mensagens do assistente para evitar
       uso excessivo.
-- [x] **Erros de indisponibilidade/cota:** Se o servico de IA estiver
-      indisponivel ou sem cota, retornar mensagem clara e orientar o usuario.
-- [x] **Mensagens amigaveis:** Erros devem ser explicados de forma simples, sem
-      detalhes tecnicos.
+- [x] **Erros de indisponibilidade/cota:** Se o serviço de IA estiver
+      indisponível ou sem cota, retornar mensagem clara e orientar o usuário.
+- [x] **Mensagens amigáveis:** Erros devem ser explicados de forma simples, sem
+      detalhes técnicos.
 
 ---
 
 ### Edição do nome do chat
 
-**Descricao:** O usuário deve ser capaz de alterar o nome do chat já existente.
+**Descrição:** O usuário deve ser capaz de alterar o nome do chat já existente.
 
-#### Regras de Negocio
+#### Regras de Negócio
 
 - [x] **Nome do chat:** O nome do chat deve ser mais que um caractere.
 - [x] **Chat existente:** Apenas o chat existente pode ser alterado.
@@ -119,50 +119,50 @@ mensagens e retorne resposta em tempo real.
 
 ### Adição de texto e de código como contexto para o chat
 
-**Descricao:** O usuário deve ser capaz de adicionar texto da descrição do
-desafio e/ou código do editor de código do desagio ao chat
+**Descrição:** O usuário deve ser capaz de adicionar texto da descrição do
+desafio e/ou código do editor de código do desafio ao chat
 
-#### Regras de Negocio
+#### Regras de Negócio
 
-- [ ] Apenas um seleção de texto e uma seleção de código pode ser adicionado ao
+- [x] Apenas um seleção de texto e uma seleção de código pode ser adicionado ao
       chat, ou seja não pode existir mais de um trecho de texto ou mais de um
       trecho de código.
-- [ ] os trechos de texto e código devem ser enviados juntos com a pergunta do
+- [x] os trechos de texto e código devem ser enviados juntos com a pergunta do
       usuário para o agente.
-- [ ] O trecho de código deve corresponder pelo menos uma linha inteira de
+- [x] O trecho de código deve corresponder pelo menos uma linha inteira de
       código
 
 #### Regras de Interface
 
-- [ ] Ao selecionar um trecho de texto ou código, o botão de adicionar o trecho
-      deve aperecer acima da seleção.
-- [ ] Os trechos selecionados devem aparecer no chat como blocos de texto no
+- [x] Ao selecionar um trecho de texto ou código, o botão de adicionar o trecho
+      deve aparecer acima da seleção.
+- [x] Os trechos selecionados devem aparecer no chat como blocos de texto no
       campo de texto, sendo que se for um trecho código, deve aparecer no bloco
-      "Linha - [númro da linha inicial]-[número da linha final]". Se for um
+      "Linha - [número da linha inicial]-[número da linha final]". Se for um
       trecho de texto, deve aparecer no bloco um preview do texto com 500
-      caracteres mais redicencias do texto.
-- [ ] Ao descansar o mouse em cima de um bloco de seleção. deve aparecer um
+      caracteres mais reticências do texto.
+- [x] Ao descansar o mouse em cima de um bloco de seleção, deve aparecer um
       tooltip com o texto do bloco selecionado.
-- [ ] Cada tipo de seleção (texto ou código) deve ter seu próprio estilização no
-      campo de pergunta do usuário: icone de código em verde para trecho de
-      código e icone de texto em azul para trecho de texto.
+- [x] Cada tipo de seleção (texto ou código) deve ter seu próprio estilização no
+      campo de pergunta do usuário: ícone de código em verde para trecho de
+      código e ícone de texto em azul para trecho de texto.
 
 ---
 
-## 3. Fluxo de Usuario (User Flow)
+## 3. Fluxo de Usuário (User Flow)
 
 **Nome do fluxo:** Pedir ajuda ao assistente durante um desafio.
 
-1. O usuario abre o assistente durante um desafio.
-2. O usuario envia uma pergunta (podendo incluir um trecho de codigo).
-3. O sistema responde em tempo real com orientacoes e exemplos.
-4. O usuario ajusta seu codigo e continua tentando resolver o desafio.
-5. O chat mantem historico das mensagens para que o usuario retome o raciocinio.
+1. O usuário abre o assistente durante um desafio.
+2. O usuário envia uma pergunta (podendo incluir um trecho de código).
+3. O sistema responde em tempo real com orientações e exemplos.
+4. O usuário ajusta seu código e continua tentando resolver o desafio.
+5. O chat mantém histórico das mensagens para que o usuário retome o raciocínio.
 
 ---
 
 ## 4. Fora do Escopo (Out of Scope)
 
-- Geracao de solucao completa do desafio.
-- Funcionalidades avancadas de avaliacao automatica do codigo do usuario pelo
+- Geração de solução completa do desafio.
+- Funcionalidades avançadas de avaliação automática do código do usuário pelo
   assistente.

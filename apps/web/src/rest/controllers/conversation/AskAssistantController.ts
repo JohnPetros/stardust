@@ -3,6 +3,10 @@ import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { ManualWorkflow } from '@stardust/core/manual/interfaces'
 import { ChatMessage } from '@stardust/core/conversation/structures'
 import { Id } from '@stardust/core/global/structures'
+import type {
+  TextSelectionDto,
+  CodeSelectionDto,
+} from '@stardust/core/global/structures/dtos'
 
 type Schema = {
   routeParams: {
@@ -11,12 +15,35 @@ type Schema = {
   body: {
     question: string
     challengeId: string
+    textSelection?: TextSelectionDto | null
+    codeSelection?: CodeSelectionDto | null
   }
 }
 
 type Dependencies = {
   service: ConversationService
   workflow: ManualWorkflow
+}
+
+function buildContextMessage(
+  challengeId: string,
+  question: string,
+  textSelection?: TextSelectionDto | null,
+  codeSelection?: CodeSelectionDto | null,
+): string {
+  let context = `ID do desafio: ${challengeId}`
+
+  if (textSelection) {
+    context += `\n\nTexto selecionado:\n${textSelection.content}`
+  }
+
+  if (codeSelection) {
+    context += `\n\nCódigo selecionado (linhas ${codeSelection.startLine}-${codeSelection.endLine}):\n${codeSelection.content}`
+  }
+
+  context += `\n\nPergunta: ${question}`
+
+  return context
 }
 
 export const AskAssistantController = ({
@@ -27,12 +54,19 @@ export const AskAssistantController = ({
     async handle(http: Http<Schema>) {
       const routeParams = http.getRouteParams()
       const chatId = Id.create(routeParams.chatId)
-      const { challengeId, question } = await http.getBody()
+      const { challengeId, question, textSelection, codeSelection } = await http.getBody()
       const chatResponse = await service.fetchChatMessages(chatId)
       if (chatResponse.isFailure) chatResponse.throwError()
 
+      const contextMessage = buildContextMessage(
+        challengeId,
+        question,
+        textSelection,
+        codeSelection,
+      )
+
       const userMessageForAssistant = ChatMessage.create({
-        content: `ID do desafio: ${challengeId}, pergunta: ${question}`,
+        content: contextMessage,
         sender: 'user',
       })
       const userMessage = ChatMessage.create({

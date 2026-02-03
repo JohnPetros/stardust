@@ -141,7 +141,8 @@ describe('AssistantChatsHistoryView', () => {
   })
 
   it('should show relative time for chat creation', () => {
-    const chats = ChatFaker.fakeMany(1)
+    const createdAt = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+    const chats = ChatFaker.fakeMany(1, { createdAt })
 
     View({ chats })
 

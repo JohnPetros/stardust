@@ -11,6 +11,19 @@ import { ConversationService } from '@/rest/services'
 import { AskAssistantController } from '@/rest/controllers/conversation'
 import { VercelManualWorkflow } from '@/ai/vercel/workflows/VercelManualWorkflow'
 
+const textSelectionSchema = z.object({
+  kind: z.literal('text').optional(),
+  content: z.string(),
+  preview: z.string(),
+})
+
+const codeSelectionSchema = z.object({
+  kind: z.literal('code').optional(),
+  content: z.string(),
+  startLine: z.number(),
+  endLine: z.number(),
+})
+
 const schema = z.object({
   routeParams: z.object({
     chatId: idSchema,
@@ -18,6 +31,8 @@ const schema = z.object({
   body: z.object({
     question: stringSchema,
     challengeId: idSchema,
+    textSelection: z.union([textSelectionSchema, z.null()]).optional(),
+    codeSelection: z.union([codeSelectionSchema, z.null()]).optional(),
   }),
 })
 

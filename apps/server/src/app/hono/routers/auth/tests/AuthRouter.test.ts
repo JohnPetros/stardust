@@ -4,7 +4,7 @@ import { app } from '@/app'
 import { AuthRouter } from '../AuthRouter'
 
 describe(`Auth Router (${AuthRouter.ROUTE_PREFIX})`, () => {
-  const server = app.startServer()
+  const server = app.startServer(0)
   server.setRoutePrefix(AuthRouter.ROUTE_PREFIX)
 
   afterAll(() => {
