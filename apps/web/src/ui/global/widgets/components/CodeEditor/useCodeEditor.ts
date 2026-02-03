@@ -70,6 +70,15 @@ export function useCodeEditor({
     const selection = monacoEditorRef.current?.getSelection()
 
     if (selection) {
+      // Verifica se há uma seleção real (não apenas cursor em uma linha)
+      const hasRealSelection =
+        selection.startLineNumber !== selection.endLineNumber ||
+        selection.startColumn !== selection.endColumn
+
+      if (!hasRealSelection) {
+        return null
+      }
+
       return {
         start: selection.startLineNumber,
         end: selection.endLineNumber,
@@ -77,6 +86,27 @@ export function useCodeEditor({
     }
 
     return null
+  }, [])
+
+  const getSelectedText = useCallback(() => {
+    const selection = monacoEditorRef.current?.getSelection()
+    const model = monacoEditorRef.current?.getModel()
+
+    if (!selection || !model) {
+      return null
+    }
+
+    // Verifica se há uma seleção real (não apenas cursor em uma linha)
+    const hasRealSelection =
+      selection.startLineNumber !== selection.endLineNumber ||
+      selection.startColumn !== selection.endColumn
+
+    if (!hasRealSelection) {
+      return null
+    }
+
+    // Retorna o texto exatamente como foi selecionado
+    return model.getValueInRange(selection)
   }, [])
 
   const getValue = useCallback(() => {
@@ -179,7 +209,7 @@ export function useCodeEditor({
     monaco.languages.setMonarchTokensProvider(LANGUAGE, monacoTokensProvider)
     monaco.languages.setLanguageConfiguration(LANGUAGE, monacoLanguageConfiguration)
     monaco.languages.registerHoverProvider(LANGUAGE, { provideHover })
-    // @ts-ignore
+    // @ts-expect-error
     monaco.languages.registerCompletionItemProvider(LANGUAGE, { provideCompletionItems })
 
     const rules = getEditorRules()
@@ -203,6 +233,7 @@ export function useCodeEditor({
     getCursorPosition,
     setCursorPosition,
     getSelectedLinesRange,
+    getSelectedText,
     handleChange,
     handleEditorDidMount,
   }
