@@ -82,6 +82,7 @@ export function useAssistantChatsHistory({
     }
 
     toastProvider.showSuccess('Nome do chat atualizado')
+    onEditChatName?.(chatId, chatName)
     refetch()
   }
 
