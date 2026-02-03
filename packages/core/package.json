@@ -17,8 +17,10 @@
   },
   "scripts": {
     "build": "tsup",
-    "lint": "biome lint src --diagnostic-level=error",
     "typecheck": "tsc --noEmit",
+    "codecheck": "npm run lint && npm run format",
+    "lint": "biome lint src --diagnostic-level=error",
+    "format": "biome format src --write",
     "test": "jest"
   },
   "exports": {
@@ -141,6 +143,7 @@
     "./manual/use-cases": "./src/manual/use-cases/index.ts",
     "./conversation/entities": "./src/conversation/domain/entities/index.ts",
     "./conversation/entities/dtos": "./src/conversation/domain/entities/dtos/index.ts",
+    "./conversation/entities/fakers": "./src/conversation/domain/entities/fakers/index.ts",
     "./conversation/structures": "./src/conversation/domain/structures/index.ts",
     "./conversation/structures/dtos": "./src/conversation/domain/structures/dtos/index.ts",
     "./conversation/types": "./src/conversation/domain/types/index.ts",

@@ -60,7 +60,7 @@ export const SnippetCardView = ({
         </AlertDialog>
         <Prompt
           ref={promptRef}
-          title='Digite o novo título'
+          initialTitle='Digite o novo título'
           onConfirm={onEditSnippetTitlePromptConfirm}
         >
           <Toolbar.Button label='Editar código' icon='pencil' />

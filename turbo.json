@@ -12,6 +12,10 @@
         "packages/**/build/**"
       ]
     },
+    "codecheck": {
+      "persistent": false,
+      "cache": false
+    },
     "typecheck": {
       "persistent": false,
       "cache": false

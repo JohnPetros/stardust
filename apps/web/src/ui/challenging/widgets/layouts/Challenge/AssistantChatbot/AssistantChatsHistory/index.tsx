@@ -13,12 +13,14 @@ type Props = {
   children: ReactNode
   onDeleteChat: (chatId: string) => void
   onSelectChat: (chatDto: ChatDto) => void
+  onEditChatName?: (chatId: string, chatName: string) => Promise<void>
 }
 
 export const AssistantChatsHistory = ({
   children,
   onSelectChat,
   onDeleteChat,
+  onEditChatName,
 }: Props) => {
   const dialogRef = useRef<DialogRef | null>(null)
   const { conversationService } = useRestContext()
@@ -31,12 +33,14 @@ export const AssistantChatsHistory = ({
     handleOpenChange,
     handleChatSelect,
     handleDeleteChat,
+    handleEditChatName,
   } = useAssistantChatsHistory({
     service: conversationService,
     toastProvider,
     dialogRef,
     onSelectChat,
     onDeleteChat,
+    onEditChatName,
   })
 
   return (
@@ -49,6 +53,7 @@ export const AssistantChatsHistory = ({
       onOpenChange={handleOpenChange}
       onSelectChat={handleChatSelect}
       onDeleteChat={handleDeleteChat}
+      onEditChatName={handleEditChatName}
     >
       {children}
     </AssistantChatsHistoryView>

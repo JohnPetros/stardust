@@ -9,12 +9,10 @@ export class DragAndDropQuestionsFaker {
   }
 
   static fakeDto(baseDto?: Partial<DragAndDropQuestionDto>): DragAndDropQuestionDto {
-    const items =
-      baseDto?.items ??
-      [
-        { index: 1, label: faker.lorem.word() },
-        { index: 2, label: faker.lorem.word() },
-      ]
+    const items = baseDto?.items ?? [
+      { index: 1, label: faker.lorem.word() },
+      { index: 2, label: faker.lorem.word() },
+    ]
     const correctItems =
       baseDto?.correctItems ?? items.map((item) => item.label ?? faker.lorem.word())
 

@@ -18,7 +18,7 @@ export class CreateGuideUseCase implements UseCase<Request, Response> {
   async execute({ guideTitle, guideCategory }: Request): Response {
     const category = GuideCategory.create(guideCategory)
     const position = await this.findLastGuidePosition(category)
-    const guide = Guide.create({ 
+    const guide = Guide.create({
       title: guideTitle,
       content: '',
       position: position.value,

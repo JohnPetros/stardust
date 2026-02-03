@@ -19,8 +19,10 @@
   },
   "scripts": {
     "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "codecheck": "npm run lint && npm run format",
     "lint": "biome lint src --diagnostic-level=error",
-    "typecheck": "tsc --noEmit"
+    "format": "biome format src --write"
   },
   "dependencies": {
     "@designliquido/delegua": "^1.0.0",

@@ -33,5 +33,11 @@ export const ConversationService = (restClient: RestClient): IConversationServic
     async incrementAssistantChatMessageCount() {
       return await restClient.patch('/conversation/chats/assistant')
     },
+
+    async editChatName(chatId, chatName) {
+      return await restClient.patch(`/conversation/chats/${chatId.value}/name`, {
+        chatName: chatName.value,
+      })
+    },
   }
 }
