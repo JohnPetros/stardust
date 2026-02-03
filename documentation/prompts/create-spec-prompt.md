@@ -19,18 +19,21 @@ sem ambiguidades.
      um nível acima na arvore de documentos.
    - **Mapeie o Fluxo:** Entenda a origem e o destino dos dados (por exemplo, UI
      -> Store -> Service -> API).
+   - **Indentifique as camadas:** Identifique as camadas que serão utilizadas
+     para implementar a feature sendo descritas em
+     `documentation/guidelines/guidelines-rule.md`.
    - **Verifique a Existência:** Investigue a codebase para identificar recursos
      existentes (Widgets, DTOs, Use Cases, Services etc) que devem ser
      reutilizados ou estendidos. Evite duplicidade.
-   - **Consulte Guidelines:** Aplique os padrões das camadas definidos em
-     `documentation/guidelines/guidelines-rule.md` (core, rest, ui, database,
-     provision, rpc, ai).
+   - **Consulte Guidelines:** Obedeça os padrões das camadas e
+     aplicações/packages definidos em
+     `documentation/guidelines/guidelines-rule.md`.
    - **Identifique Referências:** Procure na codebase por exemplos similares
-     ("copy-paste inteligente") para sugerir como referência.
+     para sugerir como referência.
 
 2. **Uso de Ferramentas Auxiliares:**
-   - **MCP Serena**: Utilize o MCP do Serena para facilitar sua busca pelo
-     projeto.
+   - **MCP Serena**: Utilize o MCP do Serena para facilitar sua busca por
+     arquivos projeto.
    - **MCP Context7:** Caso tenha dúvidas sobre como usar uma biblioteca
      específica (ex: `shadcn/ui`, `radix-ui`, `inngest`, `supabase`, `hono`,
      `zod`), utilize o MCP do Context7 para obter documentação e exemplos de
@@ -39,27 +42,27 @@ sem ambiguidades.
 3. **Estruturação do Documento:** Gere o arquivo Markdown da Spec seguindo
    estritamente o modelo de seções e nível de detalhe abaixo:
 
-   ---
-   # Spec: [Título]
+   Cabeçalho (Frontmatter):
+   - title: [Título]
+   - application: [server|studio|web] (Obrigatório)
+   - status: [concluído|em progresso|]
 
-   > application: [server|studio|web] (Obrigatório)
-
-   ### 1. Objetivo (Obrigatório)
+   # 1. Objetivo (Obrigatório)
    [Resumo claro em um parágrafo do que será entregue funcionalmente e
    tecnicamente.]
 
-   ### 2. O que já existe? (Obrigatório)
+   # 2. O que já existe? (Obrigatório)
    [Liste recursos da codebase que serão utilizados ou impactados.]
 
-   #### [Nome da Camada]
+   ## [Nome da Camada]
    - **`NomeDaClasse`** (`caminho/relativo/do/arquivo`) - _[Breve descrição do
      uso (ex: método a chamar, store a consumir).]_
 
-   ### 3. O que deve ser criado? (Depende da tarefa)
+   # 3. O que deve ser criado? (Depende da tarefa)
    [Descreva novos componentes dividindo por camadas. Para cada arquivo novo,
    detalhe:]
 
-   #### Camada REST (Controllers)
+   ## Camada REST (Controllers)
    - **Localização:** `caminho/do/arquivo`
    - **Dependências:** O que deve ser injetado.
    - **Dados de request:** Liste os valores que devem ser recebidos pelo
@@ -68,16 +71,16 @@ sem ambiguidades.
      controller.
    - **Métodos:** Assinatura e responsabilidade.
 
-   #### Camada REST (Services)
+   ## Camada REST (Services)
    - **Localização:** `caminho/do/arquivo`
    - **Dependências:** O que deve ser injetado.
    - **Métodos:** Assinatura e responsabilidade.
 
-   #### Pacote Validation (Schemas)
+   ## Pacote Validation (Schemas)
    - **Localização:** `caminho/do/arquivo`
    - **Atributos:** Dados que devem ser validados com Zod.
 
-   #### Camada RPC (Actions)
+   ## Camada RPC (Actions)
    - **Localização:** `caminho/do/arquivo`
    - **Dependências:** O que deve ser injetado.
    - **Dados de request:** Liste os valores que devem ser recebidos pela action.
@@ -85,7 +88,7 @@ sem ambiguidades.
      action.
    - **Métodos:** Assinatura e responsabilidade.
 
-   #### Camada UI (Widgets)
+   ## Camada UI (Widgets)
    - **Localização:** `caminho/do/arquivo`
    - **Props:** Parâmetros recebidos.
    - **Estados (Client Component):** Como se comporta em Loading, Error, Empty,
@@ -97,13 +100,13 @@ sem ambiguidades.
    - **Estrutura de pastas:** Caso haja widgets internos, escreva a estrutura de
      pastas completa do widget pai.
 
-   #### Camada UI (Stores)
+   ## Camada UI (Stores)
    - **Localização:** `caminho/do/arquivo`
    - **Props:** Parâmetros recebidos no construtor.
    - **Estados:** Estrutura do estado (Loading, Error, Data).
    - **Actions:** Métodos de mutação.
 
-   #### Camada UI (Contexts)
+   ## Camada UI (Contexts)
    - **Localização:** `caminho/da/pasta`
    - **Props:** Parâmetros recebidos via props.
    - **hook do provider:** Nome e caminho do hook do provider.
@@ -111,45 +114,45 @@ sem ambiguidades.
    - **Value:** Objeto que contém os dados e métodos do context que serão
      disponibilizados para os filhos.
 
-   #### Camada Hono App (Routes)
+   ## Camada Hono App (Routes)
    - **Localização:** `caminho/do/arquivo`
    - **Middlewares:** Lista de middlewares.
    - **Caminho da rota:** Relativo à raiz da API.
    - **Dados de schema:** Zod Schema para validação.
 
-   #### Camada Ingest App (Functions)
+   ## Camada Ingest App (Functions)
    - **Localização:** `caminho/do/arquivo`
    - **metodos:** Assinatura e responsabilidade.
 
-   #### Camada Nextjs App (Pages, Layouts)
+   ## Camada Nextjs App (Pages, Layouts)
    - **Localização:** `caminho/do/arquivo`
    - **Widgets:** Widget principal da rota.
    - **Caminho da rota:** Relativo à raiz da aplicação Next.js.
 
-   #### Camada React Router App (Pages, Layouts)
+   ## Camada React Router App (Pages, Layouts)
    - **Localização:** `caminho/do/arquivo`
    - **Widgets:** Widget principal da rota.
    - **Caminho da rota:** Relativo à raiz da aplicação React Router.
 
-   #### Camada AI (Workflows)
+   ## Camada AI (Workflows)
    - **Localização:** `caminho/do/arquivo`
    - **Dependências:** O que deve ser injetado.
    - **Entrada/Saída:** Dados processados.
    - **Métodos:** Assinatura e responsabilidade.
 
-   ### 4. O que deve ser modificado? (Depende da tarefa)
+   # 4. O que deve ser modificado? (Depende da tarefa)
    [Alterações em código existente.]
-   #### [Nome da Camada]
+   ## [Nome da Camada]
    - **Arquivo:** `caminho/do/arquivo`
    - **Mudança:** [Descreva a mudança específica (ex: "Adicionar prop `onTap`",
      "Injetar novo service")]
 
-   ### 5. O que deve ser removido? (Depende da tarefa)
+   # 5. O que deve ser removido? (Depende da tarefa)
    [Limpeza de código legado ou refatoração.]
-   #### [Nome da Camada]
+   ## [Nome da Camada]
    - **Arquivo:** `caminho/do/arquivo` -
 
-   ### 6. Diagramas e Referências
+   # 6. Diagramas e Referências
    - **Fluxo de Dados:** Gere um diagrama em notação ASCII ou Text-based
      mostrando a interação entre as camadas.
    - **Layout:** Use ASCII para representar a hierarquia visual de telas e

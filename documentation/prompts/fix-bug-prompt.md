@@ -29,5 +29,35 @@ Ler o bug report, planejar a correção e implementar as mudanças necessárias 
     *   **Critério de Aceite:** Não avance com código que apresente erros de linter ou falhas de compilação.
 
 5.  **Revisão Final**
-    *   Verifique se a solução completa atende aos requisitos descritos no Bug Report.
-    *   Confirme se não foram introduzidos novos efeitos colaterais.
+
+    A revisão final é a etapa crítica que garante a qualidade e integridade da solução antes da entrega. Deve ser realizada **somente após** a conclusão de todas as micro-tarefas.
+
+    ##### 5.1 Checklist de Validação
+
+    Execute as verificações abaixo para assegurar que o bug foi corrigido corretamente:
+
+    | # | Verificação | Critério de Aceite |
+    |---|-------------|-------------------|
+    | 1 | **Completude** | Todos os requisitos do Bug Report foram implementados? |
+    | 2 | **Funcionalidade** | O bug original não ocorre mais nos cenários de teste? |
+    | 3 | **Regressão** | Testes existentes continuam passando (sem quebras)? |
+    | 4 | **Efeitos Colaterais** | Nenhum comportamento inesperado foi introduzido? |
+    | 5 | **Código** | Formatação, lint e análise estática estão aprovadas? |
+
+    ##### 5.2 Procedimento de Validação
+
+    1. **Leitura Recontextualizada**
+       *   Releia o Bug Report na íntegra para garantir que nenhum requisito foi omitido.
+
+    2. **Execução de Testes de Aceitação**
+       *   Execute o teste que reproduzia o bug original.
+       *   Confirme que o teste agora passa (comportamento esperado).
+
+    3. **Análise de Impacto**
+       *   Revise os arquivos modificados além da área direta do bug.
+       *   Identifique possíveis dependências quebradas ou comportamentos alterados.
+
+    4. **Execução da Suite Completa**
+       *   Execute todos os testes do módulo afetado: `npm run test -- <caminho-do-modulo>`
+
+    > ⚠️ **IMPORTANTE:** Se qualquer item do checklist falhar, retorne à fase de **Implementação Iterativa** e corrija antes de prosseguir.
