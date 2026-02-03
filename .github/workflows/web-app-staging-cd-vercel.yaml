@@ -1,0 +1,70 @@
+name: Web app staging CD to Vercel
+
+on:
+  pull_request:
+    branches:
+      - main
+    # paths:
+    #   - "apps/web/**"
+    #   - "packages/core/**"
+    #   - "packages/validation/**"
+    #   - "packages/lsp/**"
+    #   - "turbo.json"
+    #   - "package.json"
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Symlink root node_modules to app level
+        run: ln -sf ../../node_modules apps/web/node_modules
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel@latest
+
+      - name: Pull Vercel environment information
+        run: |
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/web 
+          cp apps/web/.vercel/.env.preview.local apps/web/.env
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Build with Vercel (gera .vercel/output)
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/web
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Deploy to Vercel (Preview)
+        id: deploy
+        run: |
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/web)
+          echo "deployment_url=$url" >> $GITHUB_OUTPUT
+          echo "Deployed to: $url"
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Send Discord notification
+        if: success()
+        uses: appleboy/discord-action@v1.2.0
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: |
+            ✅ Nova versão de staging do Stardust Web implantada com sucesso no Vercel!
+            🔗 URL: ${{ steps.deploy.outputs.deployment_url }}
