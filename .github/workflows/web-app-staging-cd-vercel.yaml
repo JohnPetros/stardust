@@ -4,13 +4,13 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - "apps/web/**"
-      - "packages/core/**"
-      - "packages/validation/**"
-      - "packages/lsp/**"
-      - "turbo.json"
-      - "package.json"
+    # paths:
+    #   - "apps/web/**"
+    #   - "packages/core/**"
+    #   - "packages/validation/**"
+    #   - "packages/lsp/**"
+    #   - "turbo.json"
+    #   - "package.json"
 
 permissions:
   id-token: write
