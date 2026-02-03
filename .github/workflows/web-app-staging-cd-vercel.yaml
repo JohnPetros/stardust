@@ -43,8 +43,6 @@ jobs:
 
       - name: Build project with TurboRepo
         run: npm run build:web
-        env:
-          NODE_ENV: production
 
       - name: Deploy to Vercel (Preview)
         id: deploy
