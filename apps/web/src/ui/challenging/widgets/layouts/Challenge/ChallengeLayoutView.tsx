@@ -10,7 +10,6 @@ import { PanelHandle } from './PandleHandle'
 import { ChallengeTabs } from './ChallengeTabs'
 import { AssistantChatbot } from './AssistantChatbot'
 
-const DIRECTION = 'horizontal'
 const HORIZONTAL_PADDNG = 24
 const VERTICAL_PADDNG = 24
 
@@ -64,7 +63,7 @@ export const ChallengeLayoutView = ({
                 <ChallengeTabs>{tabContent}</ChallengeTabs>
               </Panel>
 
-              <PanelHandle direction={DIRECTION} onDragging={handlePanelDragging} />
+              <PanelHandle onDragging={handlePanelDragging} />
 
               <Panel
                 id='code-editor'
@@ -78,7 +77,7 @@ export const ChallengeLayoutView = ({
 
               {isAssistantEnabled && (
                 <>
-                  <PanelHandle direction={DIRECTION} onDragging={handlePanelDragging} />
+                  <PanelHandle onDragging={handlePanelDragging} />
 
                   <Panel id='assistant' minSize={30} order={3}>
                     <AssistantChatbot />
