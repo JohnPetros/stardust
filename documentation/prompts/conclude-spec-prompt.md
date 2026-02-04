@@ -14,10 +14,10 @@ criação de um Pull Request.
 **Diretrizes de Execução:**
 
 1. **Validação de Qualidade Final:**
-   - **Análise Estática e Formatação:** Execute `npm run codecheck` em todo o
-     projeto para garantir que não existam warnings ou erros remanescentes.
-   - **Testes Unitários:** Execute `npm run test` para validar que todos os
-     testes (novos e existentes) estão passando.
+   - **Análise Estática e Formatação:** Execute `npm run codecheck` na raiz do
+     monotepo para garantir que não existam warnings ou erros remanescentes.
+   - **Testes Unitários:** Execute `npm run test` na raiz do monorepo para
+     validar que todos os testes (novos e existentes) estão passando.
 
 2. **Verificação de Requisitos:**
    - Compare o código final com cada seção da Spec (O que deve ser
