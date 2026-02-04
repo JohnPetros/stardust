@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react'
+import { act, renderHook, waitFor } from '@testing-library/react'
 import { type Mock, mock } from 'ts-jest-mocker'
 
 import type { AuthService } from '@stardust/core/auth/interfaces'
@@ -29,10 +29,12 @@ describe('useSignUpPage', () => {
     )
   })
 
-  it('should request sign up with email, password and name', () => {
+  it('should request sign up with email, password and name', async () => {
     const { result } = renderHook(Hook)
 
-    result.current.handleFormSubmit(email, password, name)
+    await act(async () => {
+      await result.current.handleFormSubmit(email, password, name)
+    })
 
     expect(authService.requestSignUp).toHaveBeenCalledWith(
       Email.create(email),
@@ -47,7 +49,9 @@ describe('useSignUpPage', () => {
     )
     const { result } = renderHook(Hook)
 
-    result.current.handleFormSubmit(email, password, name)
+    await act(async () => {
+      await result.current.handleFormSubmit(email, password, name)
+    })
 
     await waitFor(() => {
       expect(result.current.userEmail).toEqual(Email.create(email))
@@ -65,7 +69,9 @@ describe('useSignUpPage', () => {
     const { showError } = useToastContextMock()
     const { result } = renderHook(Hook)
 
-    result.current.handleFormSubmit(email, password, name)
+    await act(async () => {
+      await result.current.handleFormSubmit(email, password, name)
+    })
 
     await waitFor(() => {
       expect(result.current.userEmail).toBeNull()
@@ -85,13 +91,19 @@ describe('useSignUpPage', () => {
     const { showSuccess } = useToastContextMock()
     const { result } = renderHook(Hook)
 
-    await result.current.handleFormSubmit(email, password, name)
+    await act(async () => {
+      await result.current.handleFormSubmit(email, password, name)
+    })
     await waitFor(() => expect(result.current.userEmail).toEqual(Email.create(email)))
 
-    result.current.handleUserCreated(event)
+    act(() => {
+      result.current.handleUserCreated(event)
+    })
     event.payload.userEmail = 'other-email@email.com'
-    result.current.handleUserCreated(event)
-    result.current.handleUserCreated(event)
+    act(() => {
+      result.current.handleUserCreated(event)
+      result.current.handleUserCreated(event)
+    })
 
     expect(showSuccess).toHaveBeenCalledTimes(1)
     expect(showSuccess).toHaveBeenCalledWith(
@@ -105,7 +117,9 @@ describe('useSignUpPage', () => {
     const { showError } = useToastContextMock()
     const { result } = renderHook(Hook)
 
-    await result.current.handleResendEmail()
+    await act(async () => {
+      await result.current.handleResendEmail()
+    })
 
     expect(showError).toHaveBeenCalledWith(
       'Seu cadastro já foi confirmado',
@@ -127,10 +141,14 @@ describe('useSignUpPage', () => {
     const { showError } = useToastContextMock()
     const { result } = renderHook(Hook)
 
-    await result.current.handleFormSubmit(email, password, name)
+    await act(async () => {
+      await result.current.handleFormSubmit(email, password, name)
+    })
     await waitFor(() => expect(result.current.userEmail).toEqual(Email.create(email)))
 
-    await result.current.handleResendEmail()
+    await act(async () => {
+      await result.current.handleResendEmail()
+    })
 
     expect(showError).toHaveBeenCalledWith(errorMessage, expect.any(Number))
   })
@@ -147,10 +165,14 @@ describe('useSignUpPage', () => {
     const { showSuccess } = useToastContextMock()
     const { result } = renderHook(Hook)
 
-    await result.current.handleFormSubmit(email, password, name)
+    await act(async () => {
+      await result.current.handleFormSubmit(email, password, name)
+    })
     await waitFor(() => expect(result.current.userEmail).toEqual(Email.create(email)))
 
-    await result.current.handleResendEmail()
+    await act(async () => {
+      await result.current.handleResendEmail()
+    })
 
     expect(showSuccess).toHaveBeenCalledWith(
       'Reenviamos para você o e-mail de confirmação',
