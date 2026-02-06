@@ -97,6 +97,7 @@
     "./challenging/structures/dtos": "./src/challenging/domain/structures/dtos/index.ts",
     "./challenging/constants": "./src/challenging/domain/constants/index.ts",
     "./challenging/errors": "./src/challenging/domain/errors/index.ts",
+    "./challenging/events": "./src/challenging/domain/events/index.ts",
     "./challenging/interfaces": "./src/challenging/interfaces/index.ts",
     "./challenging/use-cases": "./src/challenging/use-cases/index.ts",
     "./shop/abstracts": "./src/shop/domain/abstracts/index.ts",
