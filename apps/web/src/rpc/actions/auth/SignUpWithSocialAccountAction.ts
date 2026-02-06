@@ -6,6 +6,7 @@ import { Account } from '@stardust/core/auth/entities'
 import { UserSignedInEvent } from '@stardust/core/auth/events'
 
 import { COOKIES } from '@/constants'
+import { SERVER_ENV } from '@/constants/server-env'
 
 type Request = {
   accessToken: string
@@ -37,7 +38,7 @@ export const SignUpWithSocialAccountAction = (
       })
 
       await Promise.all([
-        broker.publish(event),
+        SERVER_ENV.mode === 'production' ? broker.publish(event) : null,
         call.setCookie(
           COOKIES.accessToken.key,
           accessToken,
