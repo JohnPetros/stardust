@@ -1,0 +1,1 @@
+export { ChallengePostedEvent } from './ChallengePostedEvent'
