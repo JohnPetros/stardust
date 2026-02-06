@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.2 (2026-02-06)
+
+* 📚 docs: add detailed bug report for after sign-in error in social login flow (f2ae11373)
+* 🖥️ ui: update padding in ContentView component for improved layout (71c0a2264)
+
 ## 1.0.1 (2026-02-06)
 
 * 📚 docs: enhance bug report prompt with detailed guidelines and structured output format (55e28453a)
