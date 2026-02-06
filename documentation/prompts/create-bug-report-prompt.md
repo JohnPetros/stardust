@@ -75,7 +75,7 @@ Exemplo: validação ausente, estado inconsistente, contrato quebrado, erro de m
 
 **Contexto e Análise:**
 
-### [Nome da Camada (ex: Camada UI, Camada Core, Camada REST, Camada Drivers)]
+### [Nome da Camada (ex: Camada UI, Camada Core, Camada REST, Camada Banco de Dados)]
 
 <!-- Repita o bloco abaixo para cada camada afetada -->
 - Arquivo: `[caminho/relativo/do/arquivo]`
