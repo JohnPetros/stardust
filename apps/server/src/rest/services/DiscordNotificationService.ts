@@ -3,6 +3,7 @@ import type { RestResponse } from '@stardust/core/global/responses'
 import type { NotificationService } from '@stardust/core/notification/interfaces'
 import type { EventPayload } from '@stardust/core/global/types'
 import type { FeedbackReportSentEvent } from '@stardust/core/reporting/events'
+import type { ChallengePostedEvent } from '@stardust/core/challenging/events'
 
 export class DiscordNotificationService implements NotificationService {
   constructor(private readonly restClient: RestClient) {}
@@ -132,6 +133,38 @@ export class DiscordNotificationService implements NotificationService {
           ],
           image: payload.screenshot ? { url: payload.screenshot } : undefined,
           timestamp: payload.feedbackReportSentAt,
+        },
+      ],
+    })
+  }
+
+  async sendChallengePostedNotification(
+    payload: EventPayload<typeof ChallengePostedEvent>,
+  ): Promise<RestResponse> {
+    return await this.restClient.post('/', {
+      embeds: [
+        {
+          title: '🎯 Novo Desafio Criado!',
+          description: `Um novo desafio foi criado pelo sistema: **${payload.challengeTitle}**`,
+          color: 5763719, // Purple
+          fields: [
+            {
+              name: 'Título',
+              value: payload.challengeTitle,
+              inline: false,
+            },
+            {
+              name: 'Link do desafio',
+              value: `https://stardust-app.com.br/challenging/${payload.challengeSlug}`,
+              inline: false,
+            },
+            {
+              name: 'Autor',
+              value: payload.challengeAuthor.entity?.name ?? 'Sistema',
+              inline: false,
+            },
+          ],
+          timestamp: new Date().toISOString(),
         },
       ],
     })
