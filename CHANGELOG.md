@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 (2026-02-06)
+
+* 📚 docs: enhance bug report prompt with detailed guidelines and structured output format (55e28453a)
+
 ## 1.0.0 (2026-02-06)
 
 * 📚 docs: remove code and tests conventions documentation (1edcf8cd0)
