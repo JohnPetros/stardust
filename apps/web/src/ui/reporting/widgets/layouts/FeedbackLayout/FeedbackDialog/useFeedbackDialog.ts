@@ -153,6 +153,7 @@ export function useFeedbackDialog({
           const file = new File([blob], `feedback-screenshot-${Date.now()}.png`, {
             type: 'image/png',
           })
+          console.log('file name', file.name)
           const uploadResponse = await storageService.uploadFile(
             StorageFolder.createAsFeedbackReports(),
             file,
