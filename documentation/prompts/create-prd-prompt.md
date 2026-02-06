@@ -6,6 +6,7 @@ desenvolvimento.
 
 **Entradas (Inputs):**
 
+1. URL da milestone no Github use a tool de `webfetch` para obter os dados da página.
 1. Esboço, rascunho ou descrição da funcionalidade.
 2. Informações de contexto, código relevante ou screenshots.
 3. Documentação de referência (se houver).
@@ -25,7 +26,9 @@ perguntas para preencher lacunas. Organize as perguntas em:
 2. **UX/Design:** Público-alvo, jornada, dores atuais.
 3. **Técnico:** Plataformas, integrações, performance, dados.
 
+**-> Use a tool `question` para gerar perguntas.**
 **-> Pare e aguarde as minhas respostas antes de continuar.**
+**-> Se necessário, faça mais perguntas com base nas respostas anteriores.**
 
 ### ETAPA 2: ESCRITA DO PRD
 
@@ -92,3 +95,7 @@ menores caso necessário._
 ### 4. Fora do Escopo (Out of Scope)
 
 _O que NÃO será desenvolvido nesta versão para evitar scope creep._
+
+## Restrições para o PRD
+
+- Não inclua tópicos de design, arquitetura, design de interação, design de código, etc. O PRD deve ser focado em funcionalidades.
