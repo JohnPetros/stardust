@@ -1,4 +1,5 @@
 import type { ComponentProps, PropsWithChildren } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 export type NavButtonProps = PropsWithChildren<
   {
@@ -17,5 +18,3 @@ export const NavButtonView = ({ children, isActive, ...buttonProps }: NavButtonP
     {children}
   </button>
 )
-
-import { twMerge } from 'tailwind-merge'

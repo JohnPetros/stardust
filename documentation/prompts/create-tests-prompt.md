@@ -68,8 +68,8 @@ Identifique o tipo de código que está sendo testado e leia e siga a diretriz c
   - `npm run test:server` para executar todos os testes da app server.
   - `npm run test:studio` para executar todos os testes da app studio.
   - `npm run test:core` para executar todos os testes do package core.
-  - `cd app/web && npm run test -- caminho/do/arquivo` para executar um teste específico dentro da app web.
-  - `cd app/server && npm run test -- caminho/do/arquivo` para executar um teste específico da app server.
-  - `cd app/studio && npm run test -- caminho/do/arquivo` para executar um teste específico da app studio.
-  - `cd app/core && npm run test -- caminho/do/arquivo` para executar um teste específico da app core.
+  - `cd apps/web && npm run test -- caminho/do/arquivo` para executar um teste específico dentro da app web.
+  - `cd apps/server && npm run test -- caminho/do/arquivo` para executar um teste específico da app server.
+  - `cd apps/studio && npm run test -- caminho/do/arquivo` para executar um teste específico da app studio.
+  - `cd packages/core && npm run test -- caminho/do/arquivo` para executar um teste específico da app core.
 

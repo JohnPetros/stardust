@@ -15,7 +15,7 @@ criação de um Pull Request.
 
 1. **Validação de Qualidade Final:**
    - **Análise Estática e Formatação:** Execute `npm run codecheck` na raiz do
-     monotepo para garantir que não existam warnings ou erros remanescentes.
+     monorepo para garantir que não existam warnings ou erros remanescentes.
    - **Testes Unitários:** Execute `npm run test` na raiz do monorepo para
      validar que todos os testes (novos e existentes) estão passando.
 

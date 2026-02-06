@@ -6,7 +6,7 @@ import { type ImperativePanelHandle, Panel, PanelGroup } from 'react-resizable-p
 import type { PanelsOffset } from './types'
 import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
 import { ChallengeSlider } from './ChallengeSlider'
-import { PanelHandle } from './PandleHandle'
+import { PanelHandle } from './PanelHandle'
 import { ChallengeTabs } from './ChallengeTabs'
 import { AssistantChatbot } from './AssistantChatbot'
 
