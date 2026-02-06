@@ -22,10 +22,11 @@ import {
   RankingWinnersDefinedEvent,
 } from '@stardust/core/ranking/events'
 import { UserSignedInEvent, UserSignedUpEvent } from '@stardust/core/auth/events'
+import { GuideContentEditedEvent } from '@stardust/core/manual/events'
+import { ChallengePostedEvent } from '@stardust/core/challenging/events'
 
 import { ENV } from '../../constants'
 import { platformSchema } from '@stardust/validation/profile/schemas'
-import { GuideContentEditedEvent } from '@stardust/core/manual/events'
 
 const eventsSchema = {
   [UserCreatedEvent._NAME]: {
@@ -110,6 +111,21 @@ const eventsSchema = {
     data: z.object({
       guideId: idSchema,
       guideContent: stringSchema,
+    }),
+  },
+  [ChallengePostedEvent._NAME]: {
+    data: z.object({
+      challengeSlug: stringSchema,
+      challengeTitle: stringSchema,
+      challengeAuthor: z.object({
+        id: idSchema,
+        entity: z
+          .object({
+            name: nameSchema,
+            slug: stringSchema,
+          })
+          .nullable(),
+      }),
     }),
   },
 }
