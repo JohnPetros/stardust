@@ -6,6 +6,8 @@ import { ordinalNumberSchema, titleSchema } from '../../global/schemas'
 import { challengeCategoriesSchema } from './challengeCategoriesSchema'
 import { challengeDifficultyLevelSchema } from './challengeDifficultyLevelSchema'
 
+const data = z.union([z.string(), z.number(), z.boolean()])
+
 export const challengeSchema = z.object({
   title: titleSchema,
   description: contentSchema,
@@ -16,8 +18,8 @@ export const challengeSchema = z.object({
   testCases: z
     .array(
       z.object({
-        inputs: z.array(z.unknown()),
-        expectedOutput: z.unknown().readonly(),
+        inputs: z.array(data),
+        expectedOutput: data,
         isLocked: booleanSchema,
         position: ordinalNumberSchema,
       }),
@@ -25,5 +27,5 @@ export const challengeSchema = z.object({
     .min(3, 'Deve haver pelo menos 3 testes casos'),
   categories: challengeCategoriesSchema,
   difficultyLevel: challengeDifficultyLevelSchema,
-  isPublic: booleanSchema,
+  isPublic: z.boolean().optional().default(false),
 })
