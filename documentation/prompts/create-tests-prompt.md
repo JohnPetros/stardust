@@ -63,4 +63,13 @@ Identifique o tipo de código que está sendo testado e leia e siga a diretriz c
 1. **🔍 Setup:** Crie a pasta `tests/` e o arquivo `<Nome>.test.ts(x)`.
 2. **🎭 Mocking:** Identifique as interfaces de dependência e instancie os mocks.
 3. **🛠️ Implementação:** Comece pelo caminho de sucesso e depois cubra os cenários de erro/exceção.
-4. **✅ Validação:** Execute o teste no escopo correto do monorepo (ex: `npm run test -- caminho/do/arquivo`).
+4. **✅ Validação:** Execute o teste no escopo correto do monorepo:
+  - `npm run test:web` para executar todos os testes da app web.
+  - `npm run test:server` para executar todos os testes da app server.
+  - `npm run test:studio` para executar todos os testes da app studio.
+  - `npm run test:core` para executar todos os testes do package core.
+  - `cd apps/web && npm run test -- caminho/do/arquivo` para executar um teste específico dentro da app web.
+  - `cd apps/server && npm run test -- caminho/do/arquivo` para executar um teste específico da app server.
+  - `cd apps/studio && npm run test -- caminho/do/arquivo` para executar um teste específico da app studio.
+  - `cd packages/core && npm run test -- caminho/do/arquivo` para executar um teste específico da app core.
+

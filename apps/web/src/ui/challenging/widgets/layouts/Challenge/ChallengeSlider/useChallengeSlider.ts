@@ -6,16 +6,26 @@ import type { Swiper as SwiperInstance } from 'swiper'
 import { register } from 'swiper/element'
 import { useAnimate } from 'motion/react'
 
-import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
-import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
+import type { ChallengeContent } from '@/ui/challenging/stores/ChallengeStore/types/ChallengeContent'
+import type { TabHandler } from '@/ui/challenging/stores/ChallengeStore/types/TabHandler'
 
 register()
 
-export function useChallengeSlider() {
-  const { getTabHandlerSlice, getActiveContentSlice } = useChallengeStore()
-  const { tabHandler, setTabHandler } = getTabHandlerSlice()
-  const { activeContent } = getActiveContentSlice()
-  const { md: isMobile } = useBreakpoint()
+type Params = {
+  tabHandler: TabHandler | null
+  activeContent: ChallengeContent
+  isMobile: boolean
+  slidesCount: number
+  onSetTabHandler: (tabHandler: TabHandler) => void
+}
+
+export function useChallengeSlider({
+  tabHandler,
+  activeContent,
+  isMobile,
+  slidesCount,
+  onSetTabHandler,
+}: Params) {
   const [activeSlideIndex, setActiveSlideIndex] = useState(0)
   const [motionScope, animate] = useAnimate()
   const swiperRef = useRef<SwiperRef>(null)
@@ -27,7 +37,7 @@ export function useChallengeSlider() {
   function handleSlideChange(swiper: SwiperInstance) {
     animate(
       motionScope.current,
-      { x: Math.abs(swiper.translate / 3) },
+      { x: Math.abs(swiper.translate / slidesCount) },
       { ease: 'linear', duration: 0.2 },
     )
     setActiveSlideIndex(swiper.activeIndex)
@@ -42,14 +52,22 @@ export function useChallengeSlider() {
       swiperRef.current?.swiper.slideTo(1)
     }
 
-    if (!tabHandler && isMobile)
-      setTabHandler({
+    function showAssistantTab() {
+      swiperRef.current?.swiper.slideTo(3)
+    }
+
+    if (!tabHandler && isMobile) {
+      onSetTabHandler({
         showResultTab,
         showCodeTab,
+        showAssistantTab,
       })
+    }
 
-    if (activeContent === 'result') showResultTab()
-  }, [setTabHandler, tabHandler, isMobile, activeContent])
+    if (activeContent === 'result') {
+      showResultTab()
+    }
+  }, [onSetTabHandler, tabHandler, isMobile, activeContent])
 
   return {
     swiperRef,

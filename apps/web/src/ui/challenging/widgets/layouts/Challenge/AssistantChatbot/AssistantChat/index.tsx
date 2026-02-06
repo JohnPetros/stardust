@@ -1,9 +1,8 @@
 'use client'
 
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
-
-import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
 import type { Id } from '@stardust/core/global/structures'
 import { ChatMessage } from '@stardust/core/conversation/structures'

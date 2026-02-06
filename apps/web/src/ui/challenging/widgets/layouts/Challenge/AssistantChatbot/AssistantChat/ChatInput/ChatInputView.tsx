@@ -33,7 +33,7 @@ export const ChatInputView = ({
   return (
     <div
       className={twMerge(
-        'relative flex flex-col bg-[#1A1A1A] border border-[#333] rounded-xl p-3 transition-colors focus-within:border-[#555]',
+        'relative flex flex-col bg-[#1A1A1A] border border-[#333] rounded-xl w-[95%] md:w-full mx-auto p-3 transition-colors focus-within:border-[#555]',
         isDisabled && 'opacity-50 cursor-not-allowed',
       )}
     >

@@ -68,7 +68,7 @@ export const AssistantChatsHistoryView = ({
                       </span>
                     </div>
                   </Button>
-                  <div className='absolute top-[12px] right-3 flex items-center gap-2 transition-all group-hover:opacity-100 opacity-0'>
+                  <div className='absolute top-[12px] right-3 flex items-center gap-2 transition-all md:group-hover:opacity-100 md:opacity-0'>
                     {onEditChatName && (
                       <ChatNameEditionDialog
                         chatId={chat.id.value}

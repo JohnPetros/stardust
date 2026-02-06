@@ -19,6 +19,7 @@ type Props = {
   isCapturing: boolean
   isCropping: boolean
   isLoading: boolean
+  triggerClassName?: string
   onOpenChange: (open: boolean) => void
   onContentChange: (content: string) => void
   handleSelectIntent: (intent: string) => void
@@ -29,7 +30,6 @@ type Props = {
   handleCancelCrop: () => void
   handleDeleteScreenshot: () => void
   handleSubmit: () => void
-  triggerClassName?: string
 }
 
 const INTENT_HEADER_METADATA: Record<
@@ -43,10 +43,8 @@ const INTENT_HEADER_METADATA: Record<
 
 export function FeedbackDialogView({
   isOpen,
-  onOpenChange,
   step,
   content,
-  onContentChange,
   intent,
   screenshotPreview,
   rawScreenshot,
@@ -61,6 +59,8 @@ export function FeedbackDialogView({
   handleCancelCrop,
   handleDeleteScreenshot,
   handleSubmit,
+  onOpenChange,
+  onContentChange,
   triggerClassName = 'bottom-6 left-24',
 }: Props) {
   const currentIntent = INTENT_HEADER_METADATA[intent] || INTENT_HEADER_METADATA.other
@@ -139,7 +139,7 @@ export function FeedbackDialogView({
 
       {!isCapturing && (
         <Dialog.Trigger
-          className={`group fixed w-auto h-12 z-50 flex items-center justify-center rounded-full bg-green-500 text-black opacity-25 transition-all duration-300 hover:opacity-100 hover:scale-[1.02] active:scale-95 px-3 ${triggerClassName}`}
+          className={`hidden md:flex group fixed w-auto h-12 z-50 items-center justify-center rounded-full bg-green-500 text-black opacity-25 transition-all duration-300 hover:opacity-100 hover:scale-[1.02] active:scale-95 px-3 ${triggerClassName}`}
         >
           <button
             type='button'

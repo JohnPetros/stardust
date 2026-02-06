@@ -45,10 +45,14 @@ const parseStream = (rawText: string): Block[] => {
 export const AssistantMessageView = ({ children, isThinking }: Props) => {
   const blocks = children ? parseStream(children) : []
   return (
-    <div>
+    <div className='mt-6'>
       <Icon className='text-green-400' name='robot' weight='normal' size={36} />
-      <div className='mt-1'>
-        {isThinking && <Animation name='hourglass' size={80} hasLoop />}
+      <div className='-translate-y-6'>
+        {isThinking && (
+          <div className='mt-6'>
+            <Animation name='hourglass' size={80} hasLoop />
+          </div>
+        )}
         {!isThinking &&
           blocks.map((block) => (
             <Mdx key={block.content}>

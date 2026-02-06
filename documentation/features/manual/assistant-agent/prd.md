@@ -149,6 +149,16 @@ desafio e/ou código do editor de código do desafio ao chat
 
 ---
 
+### Responsividade do Chatbot (Mobile)
+
+**Descrição:** O assistente deve estar disponível no mobile dentro do slider do desafio.
+
+- [x] **Nova aba no slider:** Incluir a aba "Assistente" no slider do desafio em telas menores.
+- [x] **Disponibilidade contínua:** A aba do assistente deve ficar sempre disponível no mobile.
+- [x] **Desktop inalterado:** Manter o painel lateral existente no desktop, sem alterar o fluxo do chat.
+
+---
+
 ## 3. Fluxo de Usuário (User Flow)
 
 **Nome do fluxo:** Pedir ajuda ao assistente durante um desafio.
