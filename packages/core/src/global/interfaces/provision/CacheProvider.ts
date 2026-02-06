@@ -3,7 +3,8 @@ export type CacheOptions = {
 }
 
 export interface CacheProvider {
-  get<Data = string>(key: string): Promise<Data | null>
-  set<Data = string>(key: string, value: Data, options?: CacheOptions): Promise<void>
+  get(key: string): Promise<string | null>
+  set(key: string, value: string, options?: CacheOptions): Promise<void>
+  getListItem(key: string, itemIndex: number): Promise<string | null>
   delete(key: string): Promise<void>
 }
