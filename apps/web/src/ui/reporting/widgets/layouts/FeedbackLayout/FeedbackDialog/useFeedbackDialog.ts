@@ -142,9 +142,11 @@ export function useFeedbackDialog({
         },
       })
 
+      console.log({ screenshotPreview })
+
       let screenshotUrl = screenshotPreview
 
-      if (screenshotPreview && screenshotPreview.startsWith('data:')) {
+      if (screenshotPreview?.startsWith('data:')) {
         try {
           const res = await fetch(screenshotPreview)
           const blob = await res.blob()
