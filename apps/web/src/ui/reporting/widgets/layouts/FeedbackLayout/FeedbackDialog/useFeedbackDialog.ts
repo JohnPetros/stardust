@@ -67,21 +67,29 @@ export function useFeedbackDialog({
   }
 
   async function handleCapture() {
+    const feedbackButton = document.querySelector(
+      'button[aria-label="Feedback"]',
+    ) as HTMLElement | null
+    const previousDisplay = feedbackButton?.style.display
+
     try {
       setIsCapturing(true)
       const scrollY = window.scrollY
       const scrollX = window.scrollX
 
-      const feedbackButton = document.querySelector(
-        'button[aria-label="Feedback"]',
-      ) as HTMLElement
-      if (feedbackButton) feedbackButton.style.display = 'none'
+      if (feedbackButton) {
+        feedbackButton.style.display = 'none'
+      }
 
-      await new Promise((resolve) => setTimeout(resolve, 250))
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => resolve())
+        })
+      })
 
-      const dataUrl = await domToPng(document.documentElement, {
+      const dataUrl = await domToPng(document.body, {
         backgroundColor: '#121214',
-        scale: 1.2,
+        scale: 1,
         width: window.innerWidth,
         height: window.innerHeight,
         style: {
@@ -90,15 +98,17 @@ export function useFeedbackDialog({
         },
       })
 
-      if (feedbackButton) feedbackButton.style.display = 'flex'
-
       setRawScreenshot(dataUrl)
       setIsCropping(true)
-      setIsCapturing(false)
     } catch (error) {
       console.error('Capture failed', error)
-      setIsCapturing(false)
       toast.showError('Falha ao capturar a tela.')
+    } finally {
+      if (feedbackButton) {
+        feedbackButton.style.display = previousDisplay || 'flex'
+      }
+
+      setIsCapturing(false)
     }
   }
 
