@@ -4,12 +4,13 @@
 garantindo clareza técnica e alinhamento entre as equipes de produto, design e
 desenvolvimento.
 
-**Entradas (Inputs):**
+**Entradas possíveis (Inputs):**
 
-1. URL da milestone no Github use a tool de `webfetch` para obter os dados da página.
-1. Esboço, rascunho ou descrição da funcionalidade.
-2. Informações de contexto, código relevante ou screenshots.
-3. Documentação de referência (se houver).
+- URL da milestone no Github use a tool de `webfetch` para obter os dados da página.
+- Esboço, rascunho ou descrição da funcionalidade.
+- Informações de contexto, código relevante ou screenshots.
+- Documentação de referência (se houver).
+- Parte da codebase que já implementa a PRD.
 
 ---
 
@@ -62,22 +63,22 @@ _(Repita para todos os requisitos)_
 
 _Liste as regras lógicas e comportamentais (Backend/Lógica)._
 
-- [ ] **[Nome da Regra]:** Descrição detalhada do comportamento, validações,
+- **[Nome da Regra]:** Descrição detalhada do comportamento, validações,
       condições, gatilhos e cálculos.
-- [ ] **[Nome da Regra]:** Descrição detalhada...
+- **[Nome da Regra]:** Descrição detalhada...
 
 ##### Regras de UI/UX (se houver)
 
 _Especifique aspectos visuais e de interação (Frontend)._
 
-- [ ] **[Elemento Visual]:** Especificação (Cores, Tipografia, Estados).
-- [ ] **Responsividade:** Comportamento em mobile/desktop.
-- [ ] **Acessibilidade:** Regras de contraste e navegação por teclado.
-- [ ] **Feedback:** Mensagens de erro, sucesso e estados de loading.
-- [ ] **Performance:** (Tempo de carregamento, resposta).
-- [ ] **Segurança:** (Autenticação, proteção de dados).
-- [ ] **Confiabilidade:** (Tratamento de erros, fallbacks).
-- [ ] **Compatibilidade:** (Navegadores, dispositivos).
+- **[Elemento Visual]:** Especificação (Cores, Tipografia, Estados).
+- **Responsividade:** Comportamento em mobile/desktop.
+- **Acessibilidade:** Regras de contraste e navegação por teclado.
+- **Feedback:** Mensagens de erro, sucesso e estados de loading.
+- **Performance:** (Tempo de carregamento, resposta).
+- **Segurança:** (Autenticação, proteção de dados).
+- **Confiabilidade:** (Tratamento de erros, fallbacks).
+- **Compatibilidade:** (Navegadores, dispositivos).
 
 ### 3. Fluxo de Usuário (User Flow)
 

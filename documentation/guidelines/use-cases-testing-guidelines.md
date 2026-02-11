@@ -103,3 +103,13 @@ const dto = UsersFaker.fakeDto(); // Retorna um DTO
 2.  **Mocks Type-Safe:** Sempre use `Mock<T>` para tipar as variáveis de mock.
 3.  **Asserções Específicas:** Prefira `toHaveBeenCalledWith` com valores específicos em vez de apenas `toHaveBeenCalled`.
 4.  **Async/Await:** A maioria dos Use Cases são assíncronos; certifique-se de usar `await` no `execute` e no `expect(...).rejects`.
+
+## Tooling
+
+- Runner de testes: Jest.
+- Mocks type-safe: `ts-jest-mocker`.
+- Comandos:
+  - Pacote core: `npm run test -w @stardust/core`.
+  - Global (Turbo): `npm run test`.
+- Tipos e qualidade (antes de abrir PR): `npm run typecheck -w @stardust/core` e `npm run codecheck -w @stardust/core`.
+- Referencia geral: `documentation/tooling.md`.

@@ -48,11 +48,22 @@ npm run dev
 ## Executando os testes
 
 ```bash
-npm run tests
+npm run test
 ```
 > [!NOTE]
 > Defina as variáveis de ambiente de desenvolvimento no arquivo .env.development
 > Para isso veja o arquivo [.env.example](https://github.com/JohnPetros/stardust/blob/main/apps/web/.env.example) para saber quais variáveis devem ser preenchidas
+
+## Tooling
+
+- Scripts do workspace `@stardust/studio`:
+  - Dev: `npm run dev -w @stardust/studio`
+  - Build: `npm run build -w @stardust/studio`
+  - Start (static): `npm run start -w @stardust/studio`
+  - Qualidade: `npm run codecheck -w @stardust/studio` (`lint` + `format`)
+  - Tipos: `npm run typecheck -w @stardust/studio` (inclui `react-router typegen && tsc`)
+  - Testes: `npm run test -w @stardust/studio` / `npm run test:watch -w @stardust/studio`
+- Referencia geral: `documentation/tooling.md`.
 
 ## Tecnologias e bibliotecas
 

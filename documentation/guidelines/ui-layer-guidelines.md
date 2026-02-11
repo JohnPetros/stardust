@@ -268,3 +268,19 @@ export function useChallengeStore() {
 - **Props**: Para passar dados entre pai e filho imediato.
 - **Contexto**: Para dados "estáticos" ou de configuração que muitos componentes precisam (ex: `AuthContext`, `ToastContext`).
 - **Store**: Para fluxos de dados complexos, interações entre componentes distantes ou quando a performance de re-renderização é crítica (Zustand permite seletores granulares).
+
+## Tooling
+
+- Web (Next.js):
+  - `npm run dev -w @stardust/web`
+  - `npm run build -w @stardust/web`
+  - `npm run codecheck -w @stardust/web`
+  - `npm run typecheck -w @stardust/web`
+  - `npm run test -w @stardust/web`
+- Studio (React Router):
+  - `npm run dev -w @stardust/studio`
+  - `npm run build -w @stardust/studio`
+  - `npm run codecheck -w @stardust/studio`
+  - `npm run typecheck -w @stardust/studio` (inclui `react-router typegen`)
+  - `npm run test -w @stardust/studio`
+- Referencia geral: `documentation/tooling.md`.

@@ -216,3 +216,14 @@ describe("Search Guides Tool", () => {
 5. **Fluent Interface:** Para controllers, lembre-se de que métodos como
    `statusCreated`, `statusOk`, etc., retornam a própria instância do `http`.
    Mocke-os adequadamente: `http.statusOk.mockReturnValue(http)`.
+
+## Tooling
+
+- Runner de testes: Jest.
+- TypeScript em testes:
+  - `ts-jest` para transformar TS quando configurado no workspace.
+  - `ts-jest-mocker` para mocks type-safe de interfaces.
+- Comandos:
+  - Global (Turbo): `npm run test`.
+  - Por workspace: `npm run test -w @stardust/server`, `npm run test -w @stardust/web`, `npm run test -w @stardust/studio`, `npm run test -w @stardust/core`.
+- Referencia geral: `documentation/tooling.md`.

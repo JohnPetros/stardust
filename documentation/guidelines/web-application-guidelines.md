@@ -46,11 +46,24 @@ npm run dev
 ## Executando os testes
 
 ```bash
-npm run tests
+npm run test
 ```
 > [!NOTE]
 > Defina as variáveis de ambiente de desenvolvimento no arquivo .env.development
 > Para isso veja o arquivo [.env.example](https://github.com/JohnPetros/stardust/blob/main/apps/web/.env.example) para saber quais variáveis devem ser preenchidas
+
+## Tooling
+
+- Scripts do workspace `@stardust/web`:
+  - Dev: `npm run dev -w @stardust/web`
+  - Queue (Inngest local): `npm run queue -w @stardust/web`
+  - Build: `npm run build -w @stardust/web`
+  - Start (standalone): `npm run start -w @stardust/web`
+  - Qualidade: `npm run codecheck -w @stardust/web` (`lint` + `format`)
+  - Tipos: `npm run typecheck -w @stardust/web`
+  - Testes: `npm run test -w @stardust/web` / `npm run test:watch -w @stardust/web`
+  - Tipos do banco (Supabase): `npm run db:types -w @stardust/web`
+- Referencia geral: `documentation/tooling.md`.
 
 ## Estruturação de pastas
 
@@ -85,4 +98,3 @@ npm run tests
 ```
 
 Onde houver um emoji diferente de ⚙️, ele se refere a uma camada descrita na página de [arquitetura global](https://github.com/JohnPetros/stardust/wiki/Arquitetura-global). Se o emoji for ⚙️ seguido pelo nome de um framework, isso indica que há a implementação de algo dessa camada utilizando esse framework.
-

@@ -5,8 +5,8 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 
 ## Diretrizes de Convenções de Código
 
-**Arquivo:** `/documentation/guidelines/code-conventions-guidelines.md` **Quando
-consultar:**
+**Arquivo:** `/documentation/guidelines/code-conventions-guidelines.md`
+**Quando consultar:**
 
 - Ao criar ou modificar um documento relacionado às convenções de código.
 - Para convenções gerais de nomenclatura (variáveis, funções, classes,
@@ -18,8 +18,8 @@ consultar:**
 
 ## Diretrizes da Camada UI
 
-**Arquivo:** `/documentation/guidelines/ui-layer-guidelines.md` **Quando
-consultar:**
+**Arquivo:** `/documentation/guidelines/ui-layer-guidelines.md`
+**Quando consultar:**
 
 - Ao criar ou modificar um documento relacionado a camada UI.
 - Ao criar ou modificar componentes React (Widgets).
@@ -30,8 +30,8 @@ consultar:**
 
 ## Diretrizes da Camada REST
 
-**Arquivo:** `/documentation/guidelines/rest-layer-guidelines.md` **Quando
-consultar:**
+**Arquivo:** `/documentation/guidelines/rest-layer-guidelines.md`
+**Quando consultar:**
 
 - Ao criar ou modificar um documento relacionado a camada REST.
 - Ao realizar requisições HTTP para APIs externas ou serviços.
@@ -41,8 +41,8 @@ consultar:**
 
 ## Diretrizes da Camada RPC
 
-**Arquivo:** `/documentation/guidelines/rpc-layer-guidelines.md` **Quando
-consultar:**
+**Arquivo:** `/documentation/guidelines/rpc-layer-guidelines.md`
+**Quando consultar:**
 
 - Ao criar ou modificar um documento relacionado a camada RPC.
 - Ao implementar Actions no servidor usando o padrão Factory Function.
@@ -52,8 +52,8 @@ consultar:**
 
 ## Diretrizes da Camada de Fila (queue)
 
-**Arquivo:** `/documentation/guidelines/queue-layer-guidelines.md` **Quando
-consultar:**
+**Arquivo:** `/documentation/guidelines/queue-layer-guidelines.md`
+**Quando consultar:**
 
 - Ao criar ou modificar um documento relacionado a camada de fila.
 - Ao implementar jobs em background ou processamento assíncrono.
@@ -62,8 +62,8 @@ consultar:**
 
 ## Diretrizes da Camada de Providers (provision)
 
-**Arquivo:** `/documentation/guidelines/provision-layer-guidelines.md` **Quando
-consultar:**
+**Arquivo:** `/documentation/guidelines/provision-layer-guidelines.md`
+**Quando consultar:**
 
 - Ao criar ou modificar um documento relacionado a camada de provision.
 - Ao integrar com ferramentas de terceiros (Armazenamento, Email, Pagamentos,
@@ -72,8 +72,8 @@ consultar:**
 
 ## Diretrizes da Aplicação Web
 
-**Arquivo:** `/documentation/guidelines/web-application-guidelines.md` **Quando
-consultar:**
+**Arquivo:** `/documentation/guidelines/web-application-guidelines.md`
+**Quando consultar:**
 
 - Ao criar ou modificar um documento relacionado a aplicação web.
 - Para uma visão geral da arquitetura e stack da Aplicação Web (Next.js,
@@ -92,8 +92,8 @@ consultar:**
 
 ## Diretrizes da Camada de Banco de Dados (db)
 
-**Arquivo:** `/documentation/guidelines/database-guidelines.md` **Quando
-consultar:**
+**Arquivo:** `/documentation/guidelines/database-guidelines.md`
+**Quando consultar:**
 
 - Ao criar ou modificar um documento relacionado a camada de banco de dados.
 - Ao implementar persistência de dados (Repositories).
@@ -102,8 +102,8 @@ consultar:**
 
 ## Diretrizes do Pacote Core (core)
 
-**Arquivo:** `/documentation/guidelines/core-package-guideines.md` **Quando
-consultar:**
+**Arquivo:** `/documentation/guidelines/core-package-guideines.md`
+**Quando consultar:**
 
 - Ao criar ou modificar um documento relacionado ao pacote core.
 - Para entender a arquitetura de Domínio (DD Tático).
@@ -113,8 +113,8 @@ consultar:**
 
 ## Diretrizes de Testes de Handlers
 
-**Arquivo:** `/documentation/guidelines/handlers-testing-guidelines.md` **Quando
-consultar:**
+**Arquivo:** `/documentation/guidelines/handlers-testing-guidelines.md`
+**Quando consultar:**
 
 - Ao escrever testes para Controllers (REST), Actions (RPC) ou Tools (AI).
 - Para entender como mockar os objetos de contexto `Http`, `Call` e `Mcp`.
@@ -134,8 +134,8 @@ consultar:**
 
 ## Diretrizes de Testes de Widgets
 
-**Arquivo:** `/documentation/guidelines/widget-tests-guidelines.md` **Quando
-consultar:**
+**Arquivo:** `/documentation/guidelines/widget-tests-guidelines.md`
+**Quando consultar:**
 
 - Ao testar componentes React (Widgets) na camada de UI.
 - Para entender a separação de testes entre Hooks e Views.

@@ -68,3 +68,19 @@ Objetos ou classes responsáveis por traduzir dados entre o formato do banco de 
 2. **Mappers**: Use mappers explícitos. Não faça casting direto se houver diferença de estrutura ou regras de validação nas entidades.
 3. **Tratamento de Strings/IDs**: As entidades usam Value Objects (ex: `Id`, `Email`, `Name`). O repositório deve desembrulhar esses valores (`.value`) para salvar e recriá-los (`Id.create(...)`) ao ler.
 4. **Classe Base**: Utilize a classe base (`SupabaseRepository`) para compartilhar a instância do cliente e tratamento de erros comum.
+
+## Tooling
+
+- Scripts (workspace `@stardust/server`):
+  - `npm run db:local`: inicia Supabase local.
+  - `npm run db:sync`: aplica migrações.
+  - `npm run db:migrate`: gera diff de migração (usa `$npm_schema_file`).
+  - `npm run db:pull`: sincroniza schema do remoto.
+  - `npm run db:push`: aplica schema local no remoto.
+  - `npm run db:revert`: marca migração como revertida (usa `$npm_config_migration_id`).
+  - `npm run db:types`: gera tipos do banco em `apps/server/src/database/supabase/types/Database.ts`.
+- Pastas/arquivos relevantes:
+  - Migrações: `apps/server/supabase/migrations`.
+  - Schema SQL: `apps/server/supabase/schemas/schema.sql`.
+  - Integração Supabase (infra/app): `apps/server/src/database/supabase`.
+- Referência geral: `documentation/tooling.md`.

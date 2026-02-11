@@ -119,3 +119,13 @@ Todas as respostas são envolvidas em um `RestResponse`.
 2.  **Injeção de Dependência:** Nunca instancie o `RestClient` diretamente dentro do serviço. Receba-o via construtor ou argumento.
 3.  **URLs Relativas:** Configure a `baseUrl` no cliente, e use caminhos relativos nos serviços (`/users` em vez de `http://api.../users`).
 4.  **Mapeamentos:** Se a API externa retornar dados em formato diferente do esperado pelo domínio, faça a conversão dentro do serviço REST antes de retornar.
+
+## Tooling
+
+- Execucao por app (onde a implementacao vive):
+  - Web: `npm run dev -w @stardust/web`.
+  - Studio: `npm run dev -w @stardust/studio`.
+  - Server: `npm run dev -w @stardust/server`.
+- Qualidade (por workspace): `npm run codecheck -w <workspace>` e `npm run typecheck -w <workspace>`.
+- Testes (quando aplicavel): `npm run test -w <workspace>`.
+- Referencia geral: `documentation/tooling.md`.
