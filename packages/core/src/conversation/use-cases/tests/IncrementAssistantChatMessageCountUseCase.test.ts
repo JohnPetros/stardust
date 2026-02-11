@@ -30,26 +30,26 @@ describe('Increment Assistant Chat Message Count Use Case', () => {
 
     await useCase.execute({ userId })
 
-    expect(cache.set).toHaveBeenCalledWith(cacheKey, 1, { expiresAt })
+    expect(cache.set).toHaveBeenCalledWith(cacheKey, '1', { expiresAt })
   })
 
   it('should increment the message count while within the limit', async () => {
     cache.get.mockResolvedValue(
-      IncrementAssistantChatMessageCountUseCase.MAX_MESSAGE_COUNT - 2,
+      String(IncrementAssistantChatMessageCountUseCase.MAX_MESSAGE_COUNT - 2),
     )
 
     await useCase.execute({ userId })
 
     expect(cache.set).toHaveBeenCalledWith(
       cacheKey,
-      IncrementAssistantChatMessageCountUseCase.MAX_MESSAGE_COUNT - 1,
+      String(IncrementAssistantChatMessageCountUseCase.MAX_MESSAGE_COUNT - 1),
       { expiresAt },
     )
   })
 
   it('should throw when the user already exceeded the limit', async () => {
     cache.get.mockResolvedValue(
-      IncrementAssistantChatMessageCountUseCase.MAX_MESSAGE_COUNT,
+      String(IncrementAssistantChatMessageCountUseCase.MAX_MESSAGE_COUNT),
     )
 
     await expect(useCase.execute({ userId })).rejects.toThrow(ChatMessagesExceededError)

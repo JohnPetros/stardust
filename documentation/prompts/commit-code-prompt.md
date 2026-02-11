@@ -60,23 +60,34 @@ emoji prefix: concise description in English
 
 ## 📋 Tabela de Prefixos (MANTIDA)
 
-| Tipo                     | Prefixo   | Emoji |
-| :----------------------- | :-------- | :---- |
-| Camada de domínio        | domain    | 🌐    |
-| Camada de API REST       | rest      | 📶    |
-| Camada de UI             | ui        | 🖥️    |
-| Camada de banco de dados | db        | 💾    |
-| Use cases                | use case  | ✨    |
-| Interfaces               | interface | 📑    |
-| Tipagem                  | type      | 🏷️    |
-| Documentação             | docs      | 📚    |
-| Correção de bug          | fix       | 🐛    |
-| Refatoração              | refactor  | ♻️    |
-| Teste                    | test      | 🧪    |
-| Configuração/Infra       | config    | ⚙️    |
-| Dependências             | deps      | 📦    |
-| Estrutura de pastas      | ftree     | 🗃️    |
-| Trabalho em progresso    | wip       | 🚧    |
+| Type                            | Prefix      | Emoji |
+| :------------------------------ | :---------- | :---- |
+| Domain layer                    | domain      | 🌐    |
+| REST API layer                  | rest        | 📶    |
+| UI layer                        | ui          | 🖥️    |
+| Database layer                  | db          | 💾    |
+| Work in progress                | wip         | 🚧    |
+| Artificial intelligence layer   | ai          | 🤖    |
+| RPC layer                       | rpc         | 📟    |
+| Use cases                       | use case    | ✨    |
+| Interfaces                      | interface   | 📑    |
+| Typings                         | type        | 🏷️    |
+| Documentation                   | docs        | 📚    |
+| Bug fix                         | fix         | 🐛    |
+| Refactoring                     | refactor    | ♻️    |
+| Test                            | test        | 🧪    |
+| Config/Infrastructure           | config      | ⚙️    |
+| Dependencies                    | deps        | 📦    |
+| Folder structure                | ftree       | 🗃️    |
+| Provision layer                 | provision   | 🧰    |
+| Response                        | response    | 📤    |
+| Certificates/Licensing          | cert        | 📜    |
+| Validation schema               | validation  | 📮    |
+| Emergency hotfix                | hotfix      | 🚑    |
+| Continuous delivery             | cd          | 🚚    |
+| Continuous integration          | ci          | 🏎️    |
+| New release                     | release     | 🔖    |
+| Docker files                    | docker      | 🐳    |
 
 ---
 

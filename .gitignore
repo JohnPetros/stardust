@@ -68,27 +68,15 @@ google-key-file.json
 # VSCode
 .vscode/
 
-# Cursor
-.cursor/
-
-# Gemini
-GEMINI.md
-
-# Antigravity
+# Agents
 .agent/
 .agents/
-
-# Codex
+.cursor/
 .codex/
-
-# Open Code
+.context/
+.serena/
 .opencode/
 opencode.jsonc
-
-# Ai Content
-.context/
-
-# Serena MCP
-.serena
-
-*.tsbuildinfo
+GEMINI.md
+CLAUDE.md
+prompt.md

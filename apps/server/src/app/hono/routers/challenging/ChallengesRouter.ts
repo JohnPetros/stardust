@@ -33,6 +33,7 @@ import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
 import { ProfileMiddleware } from '../../middlewares/ProfileMiddleware'
+import { InngestBroker } from '@/queue/inngest/InngestBroker'
 
 export class ChallengesRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/challenges')
@@ -195,7 +196,8 @@ export class ChallengesRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseChallengesRepository(http.getSupabase())
-        const controller = new PostChallengeController(repository)
+        const broker = new InngestBroker()
+        const controller = new PostChallengeController(repository, broker)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
