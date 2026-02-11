@@ -6,7 +6,9 @@ import { ordinalNumberSchema, titleSchema } from '../../global/schemas'
 import { challengeCategoriesSchema } from './challengeCategoriesSchema'
 import { challengeDifficultyLevelSchema } from './challengeDifficultyLevelSchema'
 
-const data: z.ZodType<unknown> = z.lazy(() =>
+type ChallengeData = string | number | boolean | null | ChallengeData[]
+
+const data: z.ZodType<ChallengeData> = z.lazy(() =>
   z.union([z.string(), z.number(), z.boolean(), z.null(), z.array(data)]),
 )
 
