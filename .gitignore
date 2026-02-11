@@ -65,6 +65,9 @@ dist
 # Certificates
 google-key-file.json
 
+# Excalidraw
+.excalidraw
+
 # VSCode
 .vscode/
 
