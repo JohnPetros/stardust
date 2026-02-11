@@ -15,14 +15,16 @@ export class UpstashCacheProvider implements CacheProvider {
     return data
   }
 
-  async set(key: string, value: string, options?: CacheOptions): Promise<void> {
+  async set(key: string, value: string | number, options?: CacheOptions): Promise<void> {
+    const parsedValue = String(value)
+
     if (options?.expiresAt) {
-      await this.redis.set(key, value, {
+      await this.redis.set(key, parsedValue, {
         pxat: options.expiresAt.getTime(),
       })
       return
     }
-    await this.redis.set(key, value)
+    await this.redis.set(key, parsedValue)
   }
 
   async delete(key: string): Promise<void> {
