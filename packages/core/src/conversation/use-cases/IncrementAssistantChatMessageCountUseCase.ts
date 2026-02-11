@@ -24,7 +24,7 @@ export class IncrementAssistantChatMessageCountUseCase
     if (count >= IncrementAssistantChatMessageCountUseCase.MAX_MESSAGE_COUNT) {
       throw new ChatMessagesExceededError()
     } else {
-      await this.cache.set(cacheKey, count + 1, {
+      await this.cache.set(cacheKey, String(count + 1), {
         expiresAt: new Datetime().getEndOfDay(),
       })
     }
