@@ -39,7 +39,15 @@ O **Agente Criador de Desafios** é uma funcionalidade de backend automatizada p
 
 - [ ] **Badge "Novo":** Na listagem de desafios, os cards que possuírem `isNew: true` devem exibir um badge ou etiqueta visual com o texto "Novo" (ou ícone correspondente).
 - [ ] **Destaque Visual:** O badge deve utilizar uma cor de destaque (ex: cor primária ou de atenção) para diferenciar-se dos demais elementos do card.
-- [ ] **Sem Notificação Ativa:** Não deve ser enviada notificação por push, e-mail ou central de notificações; a descoberta é passiva ao navegar pela lista.
+- [ ] **Sem Notificação Ativa ao Usuário Final:** Não deve ser enviada notificação por push, e-mail ou central de notificações para usuários finais; a descoberta é passiva ao navegar pela lista.
+
+#### Notificação Operacional
+
+**Descrição:** Notificação interna para monitoramento da publicação automática de desafios.
+
+##### Regras de Negócio
+
+- [ ] **Notificação no Discord:** Após a criação automática de um desafio, o sistema deve enviar uma mensagem para o canal de monitoramento no Discord com título, autor e link do desafio.
 
 ### 3. Fluxo de Usuário (User Flow)
 
@@ -57,6 +65,6 @@ O **Agente Criador de Desafios** é uma funcionalidade de backend automatizada p
 
 - **Personalização:** Geração de desafios baseada no nível ou histórico específico do usuário.
 - **Streak/Gamificação Extra:** Integração da geração com sistemas de ofensiva ou recompensas especiais (além do XP padrão).
-- **Notificações Ativas:** Envio de e-mails ou push notifications avisando sobre o novo desafio.
+- **Notificações Ativas ao Usuário Final:** Envio de e-mails, push notifications ou central de notificações avisando sobre o novo desafio.
 - **Revisão Humana:** Interface para aprovação manual dos desafios antes da publicação.
 - **Edição de IA:** Capacidade de regenerar um desafio específico se ele for "ruim".

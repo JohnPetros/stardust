@@ -18,10 +18,9 @@ O que já existe?
 
 O que precisa ser criado?
 
-job SendNotificationJob
+job SendChallengePostedNotificationJob (key: `notification/send.challenge.posted.notification.job`)
 
 O que precisa ser modificado?
 
 - apps/server/src/queue/inngest/functions/NotificationFunctions.ts
-
 
