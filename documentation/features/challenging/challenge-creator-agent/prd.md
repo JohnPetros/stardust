@@ -15,11 +15,11 @@ O **Agente Criador de Desafios** é uma funcionalidade de backend automatizada p
 
 ##### Regras de Negócio
 
-- [ ] **Agendamento da Geração (Cron):** O sistema deve executar um Job de geração **diariamente** (uma vez a cada 24 horas).
-- [ ] **Volume de Geração:** A cada execução, deve ser gerado **1 (um) único desafio**.
-- [ ] **Integração com IA:** O Job deve solicitar o conteúdo ao módulo centralizado `ai` (utilizando Vercel AI SDK), fornecendo um prompt que instrua a criação de: Enunciado, Dificuldade (Fácil/Médio/Difícil), Restrições e Critérios de Validação (Testes).
-- [ ] **Marcação de Novidade:** Todo desafio gerado automaticamente deve ser persistido no banco de dados com a flag `isNew` definida como `true`.
-- [ ] **Persistência:** O desafio deve ser salvo no módulo `challenging` com todos os campos obrigatórios preenchidos pela resposta da IA.
+- **Agendamento da Geração (Cron):** O sistema deve executar um Job de geração **diariamente** (uma vez a cada 24 horas).
+- **Volume de Geração:** A cada execução, deve ser gerado **1 (um) único desafio**.
+- **Integração com IA:** O Job deve solicitar o conteúdo ao módulo centralizado `ai` (utilizando Vercel AI SDK), fornecendo um prompt que instrua a criação de: Enunciado, Dificuldade (Fácil/Médio/Difícil), Restrições e Critérios de Validação (Testes).
+- **Marcação de Novidade:** Todo desafio gerado automaticamente deve ser persistido no banco de dados com a flag `isNew` definida como `true`.
+- **Persistência:** O desafio deve ser salvo no módulo `challenging` com todos os campos obrigatórios preenchidos pela resposta da IA.
 
 #### Gestão do Ciclo de Vida da Novidade
 
@@ -27,9 +27,9 @@ O **Agente Criador de Desafios** é uma funcionalidade de backend automatizada p
 
 ##### Regras de Negócio
 
-- [ ] **Agendamento de Limpeza (Cron):** O sistema deve executar um Job de verificação diariamente (pode ser o mesmo job de geração ou um dedicado).
-- [ ] **Regra de Expiração:** O sistema deve identificar desafios onde a data de criação (`createdAt`) exceda **3 dias** e atualizar a flag `isNew` para `false`.
-- [ ] **Imutabilidade Histórica:** A remoção da flag `isNew` não deve alterar ou remover o desafio do catálogo, apenas mudar seu estado visual.
+- **Agendamento de Limpeza (Cron):** O sistema deve executar um Job de verificação diariamente (pode ser o mesmo job de geração ou um dedicado).
+- **Regra de Expiração:** O sistema deve identificar desafios onde a data de criação (`createdAt`) exceda **3 dias** e atualizar a flag `isNew` para `false`.
+- **Imutabilidade Histórica:** A remoção da flag `isNew` não deve alterar ou remover o desafio do catálogo, apenas mudar seu estado visual.
 
 #### Visualização de Novos Desafios
 
@@ -37,9 +37,9 @@ O **Agente Criador de Desafios** é uma funcionalidade de backend automatizada p
 
 ##### Regras de UI/UX
 
-- [ ] **Badge "Novo":** Na listagem de desafios, os cards que possuírem `isNew: true` devem exibir um badge ou etiqueta visual com o texto "Novo" (ou ícone correspondente).
-- [ ] **Destaque Visual:** O badge deve utilizar uma cor de destaque (ex: cor primária ou de atenção) para diferenciar-se dos demais elementos do card.
-- [ ] **Sem Notificação Ativa ao Usuário Final:** Não deve ser enviada notificação por push, e-mail ou central de notificações para usuários finais; a descoberta é passiva ao navegar pela lista.
+- **Badge "Novo":** Na listagem de desafios, os cards que possuírem `isNew: true` devem exibir um badge ou etiqueta visual com o texto "Novo" (ou ícone correspondente).
+- **Destaque Visual:** O badge deve utilizar uma cor de destaque (ex: cor primária ou de atenção) para diferenciar-se dos demais elementos do card.
+- **Sem Notificação Ativa ao Usuário Final:** Não deve ser enviada notificação por push, e-mail ou central de notificações para usuários finais; a descoberta é passiva ao navegar pela lista.
 
 #### Notificação Operacional
 
@@ -47,7 +47,7 @@ O **Agente Criador de Desafios** é uma funcionalidade de backend automatizada p
 
 ##### Regras de Negócio
 
-- [ ] **Notificação no Discord:** Após a criação automática de um desafio, o sistema deve enviar uma mensagem para o canal de monitoramento no Discord com título, autor e link do desafio.
+- **Notificação no Discord:** Após a criação automática de um desafio, o sistema deve enviar uma mensagem para o canal de monitoramento no Discord com título, autor e link do desafio.
 
 ### 3. Fluxo de Usuário (User Flow)
 
