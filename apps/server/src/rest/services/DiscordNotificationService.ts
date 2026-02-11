@@ -155,7 +155,7 @@ export class DiscordNotificationService implements NotificationService {
             },
             {
               name: 'Link do desafio',
-              value: `https://stardust-app.com.br/challenging/${payload.challengeSlug}`,
+              value: `https://stardust-app.com.br/challenging/challenges/${payload.challengeSlug}/challenge`,
               inline: false,
             },
             {

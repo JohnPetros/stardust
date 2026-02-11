@@ -123,7 +123,12 @@ const eventsSchema = {
           .object({
             name: nameSchema,
             slug: stringSchema,
+            avatar: z.object({
+              name: nameSchema,
+              image: stringSchema,
+            }),
           })
+          .optional()
           .nullable(),
       }),
     }),

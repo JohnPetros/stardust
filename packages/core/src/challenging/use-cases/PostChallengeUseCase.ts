@@ -20,10 +20,7 @@ export class PostChallengeUseCase implements UseCase<Request, Response> {
   ) {}
 
   async execute({ challengeDto }: Request) {
-    const challenge = Challenge.create({
-      ...challengeDto,
-      isPublic: false,
-    })
+    const challenge = Challenge.create(challengeDto)
     await this.findChallenge(challenge.slug)
     await this.repository.add(challenge)
     const event = new ChallengePostedEvent({

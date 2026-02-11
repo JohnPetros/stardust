@@ -8,7 +8,7 @@ import type { InngestAmqp } from '@/queue/inngest/InngestAmqp'
 type Payload = EventPayload<typeof ChallengePostedEvent>
 
 export class SendChallengePostedNotificationJob {
-  static readonly KEY = 'notification/send.challenge.posted.job'
+  static readonly KEY = 'notification/send.challenge.posted.notification.job'
   static readonly SERVICE_NAME = 'Notification Service'
 
   constructor(private readonly service: NotificationService) {}

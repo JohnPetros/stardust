@@ -6,7 +6,9 @@ import { ordinalNumberSchema, titleSchema } from '../../global/schemas'
 import { challengeCategoriesSchema } from './challengeCategoriesSchema'
 import { challengeDifficultyLevelSchema } from './challengeDifficultyLevelSchema'
 
-const data = z.union([z.string(), z.number(), z.boolean()])
+const data: z.ZodType<unknown> = z.lazy(() =>
+  z.union([z.string(), z.number(), z.boolean(), z.null(), z.array(data)]),
+)
 
 export const challengeSchema = z.object({
   title: titleSchema,
