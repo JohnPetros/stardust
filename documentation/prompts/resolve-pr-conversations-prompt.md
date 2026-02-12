@@ -29,6 +29,7 @@ Analisar, implementar e resolver todas as conversas e feedbacks pendentes em um 
    * Verifique se as alterações atendem aos requisitos do PRD e Spec.
 
 5. **Finalização:**
+   * Resolvas as conversas do PR usando usando a mutation resolveReviewThread via GitHub GraphQL API
    * Forneça um resumo detalhado de quais conversas foram resolvidas e quais alterações de código foram realizadas.
 
 ---
