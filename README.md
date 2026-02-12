@@ -1,71 +1,125 @@
-<div align="center">
-  <img width="360" height="100" src="https://aukqejqsiqsqowafpppb.supabase.co/storage/v1/object/public/images/marketing/logo.png" alt="StarDustt" />
-</div>
+<h1 align="center">✨ StarDust</h1>
 
-<br />
+Plataforma educativa **gamificada** desenvolvida para o ensino de **lógica de programação**. O projeto utiliza uma metáfora espacial para engajar os estudantes em uma jornada de aprendizado, combinando elementos de jogos com conteúdo técnico estruturado.
 
-<div align="center" >
-   <a href="https://github.com/JohnPetros">
-      <img alt="Made by JohnPetros" src="https://img.shields.io/badge/made%20by-JohnPetros-blueviolet">
-   </a>
-   <img alt="GitHub Language Count" src="https://img.shields.io/github/languages/count/JohnPetros/stardust">
-   <a href="https://github.com/JohnPetros/stardust/commits/main">
-      <img alt="GitHub Last Commit" src="https://img.shields.io/github/last-commit/JohnPetros/stardust">
-   </a>
-  </a>
-   </a>
-   <a href="https://github.com/JohnPetros/stardust/blob/main/LICENSE.md">
-      <img alt="GitHub License" src="https://img.shields.io/github/license/JohnPetros/stardust">
-   </a>
-    <img alt="Stargazers" src="https://img.shields.io/github/stars/JohnPetros/stardust?style=social">
-</div>
-<br>
+## 🚀 Visão Geral
 
-## 🖥️ Sobre o Projeto
+O objetivo do StarDust é tornar o aprendizado de programação acessível e divertido, oferecendo:
 
-**Stardust** é uma **aplicação educativa** focada em ensinar lógica de
-programação utilizando o conceito de
-[gamificação](https://www.ludospro.com.br/blog/o-que-e-gamificacao), isto é,
-utilizar elementos normalmente presentes em jogos para alcançar objetivos que
-vão além de um contexto de um simples jogo, como educar pessoas a respeito de
-assunto, sendo nesse caso específico a lógica de programação em si.
+-   **Gamificação Robusta:** Sistema de pontos (XP), moedas (StarCoins), ofensiva (Streak) e conquistas.
+-   **Jornada Espacial:** Organização do conteúdo em "Planetas" (temas) e "Estrelas" (fases).
+-   **Arquitetura Modular:** Separação clara de responsabilidades com foco em escalabilidade.
+-   **Ambiente Completo:** Inclui plataforma de estudo (Web), área administrativa (Studio) e API (Server).
 
-Por ser uma solução gamificada, é possível encontrar elementos como obtenção de
-pontos, desbloqueio de fases, desafios, compra de itens, ranking de usuários e
-narrativa envolvente.
+## 🛠 Tech Stack
 
-O objetivo ao realizar esse projeto foi concluir o **TCC** do curso técnico em
-**Desenvolvimento de Sistemas** da
-[ETEC de São José dos Campos](https://www.etecsjcampos.com.br/), a qual eu
-agradeço por ter me instigado a aprender cada mais e me tornar um desenvolvedor
-melhor.
+O projeto é um **monorepo** gerenciado pelo **TurboRepo** e utiliza as tecnologias mais modernas do ecossistema JavaScript/TypeScript:
 
----
+-   **Gerenciamento:** [TurboRepo](https://turbo.build/) + NPM
+-   **Linguagem:** [TypeScript](https://www.typescriptlang.org/) 5.8+
+-   **Frontend (Web):** [Next.js](https://nextjs.org/) 15 + [React](https://react.dev/) 19
+-   **Estilização:** [Tailwind CSS](https://tailwindcss.com/) + [Radix UI](https://www.radix-ui.com/)
+-   **Backend (Server):** [Node.js](https://nodejs.org/) + [Hono](https://hono.dev/)
+-   **Fila/Jobs:** [Inngest](https://www.inngest.com/)
+-   **App Interno (Studio):** [React Router](https://reactrouter.com/) v7
+-   **Banco de Dados:** [Supabase](https://supabase.com/) (PostgreSQL)
+-   **Qualidade:** [Biome](https://biomejs.dev/) + [Jest](https://jestjs.io/)
 
-## ⚙️ Arquitetura
+## 🏗 Arquitetura
 
-StarDust é um [monorepo](https://monorepo.tools/), ou seja, um único repositório
-que agrupa diversas aplicações e pacotes independentes. Por ser um projeto
-modular, o StarDust adota os princípios da
-[arquitetura limpa](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html),
-promovendo o isolamento das regras de negócio em relação a ferramentas e
-dependências externas.
+O StarDust segue os princípios da **Arquitetura Limpa (Clean Architecture)** e **Domain-Driven Design (DDD)**, adotando um modelo **Hexagonal (Ports and Adapters)**.
 
-## Como rodar a aplicação?
+-   **Core Agnóstico:** O pacote `@stardust/core` contém toda a lógica de negócio e é independente de frameworks.
+-   **Camadas Bem Definidas:** Separação estrita entre Domínio, Casos de Uso, Interfaces e Infraestrutura.
+-   **Adaptação:** As aplicações (`web`, `server`, `studio`) atuam como adaptadores que consomem o núcleo do sistema.
 
-- [Rodando a aplicação web](https://github.com/JohnPetros/stardust/wiki/Aplica%C3%A7%C3%A3o-web#executando-a-aplica%C3%A7%C3%A3o)
+Para detalhes profundos sobre as decisões técnicas, consulte a [Documentação de Arquitetura](documentation/architecture.md).
 
-- [Rodando a aplicação server](https://github.com/JohnPetros/stardust/wiki/Aplica%C3%A7%C3%A3o-server)
+## 📂 Estrutura do Projeto
 
-- [Rodando a aplicação studio](https://github.com/JohnPetros/stardust/wiki/Aplica%C3%A7%C3%A3o-studio)
+```bash
+stardust/
+├── apps/                  # Aplicações executáveis
+│   ├── web/               # Frontend principal (Next.js)
+│   ├── server/            # Backend API (Hono/Node)
+│   └── studio/            # Painel Administrativo (React Router)
+├── packages/              # Bibliotecas compartilhadas
+│   ├── core/              # Regras de Negócio e Domínio (DDD)
+│   ├── validation/        # Schemas de validação (Zod)
+│   ├── email/             # Serviços de Email
+│   ├── lsp/               # Language Server Protocol (Lógica)
+│   └── typescript-config/ # Configurações base de TS
+└── documentation/         # Documentação centralizada
+```
+
+## ⚙️ Configuração e Instalação
+
+### Pré-requisitos
+-   Node.js 22 ou superior.
+-   NPM (gerenciador de pacotes).
+
+### Passo a Passo
+
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/JohnPetros/stardust.git
+    cd stardust
+    ```
+
+2.  **Configure o Ambiente:**
+    Crie um arquivo `.env` na raiz do projeto (e nos apps específicos, se necessário) contendo as variáveis de ambiente. Consulte o time de desenvolvimento para obter as credenciais do Supabase e outros serviços.
+
+3.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
+
+4.  **Execute o projeto (modo desenvolvimento):**
+    ```bash
+    npm run dev
+    ```
+    Isso iniciará todas as aplicações do monorepo simultaneamente via TurboRepo.
+
+## 📖 Documentação
+
+A documentação completa do projeto está organizada no diretório `documentation/`. Comece por aqui:
+
+-   [Visão Geral do Produto](documentation/overview.md)
+-   [Arquitetura e Decisões Técnicas](documentation/architecture.md)
+-   [Regras e Convenções](documentation/rules/rules.md)
+    -   [Convenções de Código](documentation/rules/code-conventions-rules.md)
+    -   [Core e Domínio](documentation/rules/core-package-rules.md)
+    -   [Regras de UI](documentation/rules/ui-layer-rules.md)
+    -   [Camada REST](documentation/rules/rest-layer-rules.md)
+    -   [Camada RPC](documentation/rules/rpc-layer-rules.md)
+    -   [Camada de Fila](documentation/rules/queue-layer-rules.md)
+    -   [Banco de Dados](documentation/rules/database-rules.md)
+    -   [Providers](documentation/rules/provision-layer-rules.md)
+    -   [Aplicação Web](documentation/rules/web-application-rules.md)
+    -   [Aplicação Studio](documentation/rules/studio-appllication-rules.md)
+    -   [Testes de Handlers](documentation/rules/handlers-testing-rules.md)
+    -   [Testes de Casos de Uso](documentation/rules/use-cases-testing-rules.md)
+    -   [Testes de Widgets](documentation/rules/widget-tests-rules.md)
+    -   [Testes de Objetos de Domínio](documentation/rules/domain-objects-testing-rules.md)
+
+## 🧪 Testes
+
+O projeto utiliza `Jest` para testes automatizados, cobrindo desde regras de negócio no core até componentes de UI.
+
+```bash
+# Executar todos os testes
+npm run test
+
+# Executar testes apenas do core
+npm run test:core
+```
 
 ## 📝 Licença
 
-Esta aplicação está sob licença do MIT. Consulte o [Arquivo de licença](LICENSE)
-para obter mais detalhes sobre.
+Este projeto está sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
 <p align="center">
-  Feito com 💜 por John Petros 👋🏻
+  Feito com 💜 por <a href="https://github.com/JohnPetros">John Petros</a> 👋🏻
 </p>
