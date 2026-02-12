@@ -17,9 +17,7 @@ export function useTestCaseInputs(testCaseIndex: number) {
   const functionParamsSignature = useMemo(() => {
     if (!functionParams) return ''
 
-    return functionParams
-      .map((param) => `${param?.name ?? ''}:${param?.dataTypeName ?? ''}`)
-      .join('|')
+    return JSON.stringify(functionParams)
   }, [functionParams])
 
   useEffect(() => {
@@ -35,7 +33,7 @@ export function useTestCaseInputs(testCaseIndex: number) {
             : DEFAULT_VALUE_BY_DATA_TYPE_NAME[param.dataTypeName],
       })),
     )
-  }, [functionParamsSignature, functionParams, getValues, replace, testCaseIndex])
+  }, [functionParamsSignature, getValues, replace, testCaseIndex])
 
   const testCaseError = formState.errors.testCases
     ? formState.errors.testCases[testCaseIndex]

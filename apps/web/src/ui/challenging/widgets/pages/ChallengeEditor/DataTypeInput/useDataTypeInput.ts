@@ -6,6 +6,7 @@ import { DEFAULT_VALUE_BY_DATA_TYPE_NAME } from '@stardust/core/challenging/cons
 
 function detectDataTypeName(value: unknown): DataTypeName {
   if (Array.isArray(value)) return 'array'
+  if (value === null) return 'undefined'
   if (typeof value === 'string') return 'string'
   if (typeof value === 'number') return 'number'
   if (typeof value === 'boolean') return 'boolean'
@@ -69,6 +70,8 @@ export function useDataTypeInput(
     if (selectedDataType.isArray() && selectedDataType.value.length > 0) {
       const lastItem = selectedDataType.value[selectedDataType.value.length - 1]
       lastArrayItemDataTypeNameRef.current = detectDataTypeName(lastItem)
+    } else if (!selectedDataType.isArray()) {
+      lastArrayItemDataTypeNameRef.current = selectedDataType.name
     }
 
     setDataType(selectedDataType)
