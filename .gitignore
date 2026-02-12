@@ -75,7 +75,10 @@ google-key-file.json
 .agent/
 .agents/
 .cursor/
+<<<<<<< feat/assistant-chatbot-responsiveness
+=======
 .claude/
+>>>>>>> main
 .codex/
 .context/
 .serena/
