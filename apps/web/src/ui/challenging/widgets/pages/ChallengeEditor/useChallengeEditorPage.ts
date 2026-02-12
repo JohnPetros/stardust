@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
+import type z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-import type { ChallengeSchema } from '@stardust/validation/challenging/types'
 import { challengeFormSchema } from '@stardust/validation/challenging/schemas'
 import { DataType } from '@stardust/core/challenging/structures'
 import { Challenge } from '@stardust/core/challenging/entities'
@@ -12,6 +12,9 @@ import type { NavigationProvider, ToastProvider } from '@stardust/core/global/in
 
 import { ROUTES } from '@/constants'
 import { useLsp } from '@/ui/global/hooks/useLsp'
+
+type ChallengeFormInput = z.input<typeof challengeFormSchema>
+type ChallengeForm = z.output<typeof challengeFormSchema>
 
 type Params = {
   currentChallenge: Challenge | null
@@ -35,7 +38,7 @@ export function useChallengeEditorPage({
     return 'easy'
   }, [currentChallenge])
   const { lspProvider } = useLsp()
-  const form = useForm<ChallengeSchema>({
+  const form = useForm<ChallengeFormInput, any, ChallengeForm>({
     resolver: zodResolver(challengeFormSchema),
     defaultValues: {
       title: currentChallenge?.title.value,
@@ -97,7 +100,7 @@ export function useChallengeEditorPage({
     allFields.categories.length,
   ].every(Boolean)
 
-  async function handleSubmit(formData: ChallengeSchema) {
+  async function handleSubmit(formData: ChallengeForm) {
     const challenge = Challenge.create({
       title: formData.title,
       code: formData.code,
@@ -113,7 +116,7 @@ export function useChallengeEditorPage({
         expectedOutput: testCase.expectedOutput.value,
       })),
       categories: formData.categories,
-      isPublic: formData.isPublic,
+      isPublic: formData.isPublic ?? false,
     })
 
     if (currentChallenge) {

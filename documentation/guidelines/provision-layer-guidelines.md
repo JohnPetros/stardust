@@ -58,3 +58,13 @@ export class SupabaseStorageProvider implements StorageProvider {
 2. **Tratamento de Erros**: Sempre capture erros da biblioteca externa e relance como erros da aplicação (ex: `AppError`) para evitar vazamento de detalhes de implementação.
 3. **Interfaces do Core**: Sempre implemente uma interface definida no `core`. O `core` define "O que eu preciso" (ex: salvar arquivo), e o `prov` define "Como eu faço" (ex: usar Supabase S3).
 4. **Variáveis de Ambiente**: Configure clientes externos utilizando constantes de ambiente (`ENV`).
+
+## Tooling
+
+- Providers no geral nao exigem um CLI unico: o "tooling" principal aqui e a configuracao de variaveis de ambiente e os SDKs usados pelo provider.
+- Email templates (quando aplicavel):
+  - Dev/preview: `npm run dev -w @stardust/email` (React Email).
+  - Export/build: `npm run build -w @stardust/email`.
+  - Typecheck: `npm run typecheck -w @stardust/email`.
+- Observabilidade/infra (quando aplicavel): siga o provider concreto (ex: Sentry, Upstash, Dropbox) e mantenha credenciais fora do codigo.
+- Referencia geral: `documentation/tooling.md`.

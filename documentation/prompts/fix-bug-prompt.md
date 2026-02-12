@@ -11,7 +11,7 @@ Ler o bug report, planejar a correção e implementar as mudanças necessárias 
 1.  **Análise e Planejamento**
     *   Revise cuidadosamente o Bug Report fornecido.
     *   Entenda o contexto do erro, os impactos técnicos e as decisões de design envolvidas.
-    *   Elabore ou refine o plano de correção, assegurando conformidade com as diretrizes de arquitetura de cada camada (Core, UI, Drivers, REST).
+    *   Elabore ou refine o plano de correção, assegurando conformidade com as diretrizes de arquitetura de cada camada (Core, UI, Banco de Dados, REST).
 
 2.  **Decomposição de Tarefas**
     *   Divida o plano de correção em micro-tarefas atômicas e gerenciáveis.

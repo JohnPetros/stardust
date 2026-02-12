@@ -152,3 +152,15 @@ A classe `InngestAmqp` fornece métodos para interagir com o fluxo de trabalho d
 2.  **Crie o Job** em `apps/server/src/queue/jobs/<domain>` focando apenas na lógica de negócios e orquestração.
 3.  **Adicione o Schema** em `apps/server/src/queue/inngest/inngest.ts` para validação de tipos.
 4.  **Implemente a Função** em `apps/server/src/queue/inngest/functions/<Domain>Functions.ts`, conectando o Evento ao Job e injetando as dependências reais.
+
+## Tooling
+
+- Inngest CLI (local):
+  - Server: `npm run dev -w @stardust/server` (roda API + `dev:queue` em paralelo).
+  - Apenas painel/worker: `npm run dev:queue -w @stardust/server` (usa `npx inngest-cli@latest`).
+  - Web (serverless): `npm run queue -w @stardust/web` (usa `npx inngest-cli@latest`).
+- Endpoints usados pelos scripts:
+  - Server: `http://localhost:3333/inngest`.
+  - Web: `http://localhost:3000/api/serverless`.
+- Observacao: a fila roda via `npx inngest-cli@latest` (versao nao fixa por lockfile).
+- Referencia geral: `documentation/tooling.md`.

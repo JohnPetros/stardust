@@ -346,3 +346,12 @@ describe("SignInForm", () => {
   (digitação, clique).
 - Use `waitFor` para asserções que dependem de mudanças de estado assíncronas do
   React Hook Form.
+
+## Tooling
+
+- Runner de testes: Jest.
+- Bibliotecas de teste (UI): `@testing-library/react`, `@testing-library/user-event`.
+- Comandos:
+  - Web: `npm run test -w @stardust/web` / `npm run test:watch -w @stardust/web`.
+  - Studio: `npm run test -w @stardust/studio` / `npm run test:watch -w @stardust/studio`.
+- Referencia geral: `documentation/tooling.md`.

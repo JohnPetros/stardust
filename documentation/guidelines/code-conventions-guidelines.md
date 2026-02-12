@@ -225,3 +225,16 @@ export const AccessChallengeEditorPageAction = (
   };
 };
 ```
+
+# Tooling
+
+- Padrao de qualidade do monorepo:
+  - Lint/format: Biome (via scripts `lint`, `format`, `codecheck`).
+  - Typecheck: TypeScript (`tsc`).
+  - Testes: Jest.
+- Execucao recomendada:
+  - Global: `npm run codecheck`, `npm run typecheck`, `npm run test` (na raiz, via Turbo).
+  - Workspace especifico: `npm run codecheck -w <workspace>`.
+- Hooks de commit/release:
+  - Husky e commitlint sao usados na raiz (ver `/package.json`).
+- Referencia geral: `documentation/tooling.md`.

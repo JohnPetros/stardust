@@ -216,3 +216,12 @@ Actions são organizadas em pastas por domínio (ex: `membership/`) com:
 5. **Siga convenções de nomenclatura** do projeto
 6. **Trate erros** de forma consistente
 7. **Documente tipos** de Request adequadamente
+
+## Tooling
+
+- Typecheck:
+  - Web (actions/Next Safe Action): `npm run typecheck -w @stardust/web`.
+  - Studio (rotas tipadas): `npm run typecheck -w @stardust/studio` (inclui `react-router typegen`).
+- Qualidade: `npm run lint -w @stardust/web` / `npm run lint -w @stardust/studio`.
+- Testes: `npm run test -w @stardust/web` / `npm run test -w @stardust/studio`.
+- Referencia geral: `documentation/tooling.md`.

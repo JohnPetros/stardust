@@ -118,3 +118,12 @@ Como agregados apenas encapsulam uma relação entre entidades, seus testes gera
     - **Act**: Chame o método de domínio.
     - **Assert**: Verifique o resultado ou a mudança de estado.
 4.  **Use Spies com moderação**: Se um objeto de domínio interage com outro objeto complexo passado por parâmetro, use `jest.spyOn` para verificar a interação se necessário.
+
+## Tooling
+
+- Runner de testes: Jest (principalmente no pacote `@stardust/core`).
+- Geracao de dados: fakers do core + `@faker-js/faker` (quando aplicavel).
+- Comandos:
+  - `npm run test -w @stardust/core`
+  - `npm run typecheck -w @stardust/core`
+- Referencia geral: `documentation/tooling.md`.

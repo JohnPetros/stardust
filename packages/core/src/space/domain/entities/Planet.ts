@@ -24,7 +24,6 @@ type PlanetProps = {
 
 export class Planet extends Entity<PlanetProps> {
   static create(dto: PlanetDto): Planet {
-    console.log('dto', dto)
     const stars = dto.stars.map(Star.create)
     stars.sort((a, b) => a.number.value - b.number.value)
     return new Planet(

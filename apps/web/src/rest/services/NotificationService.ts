@@ -21,5 +21,9 @@ export const NotificationService = (restClient: RestClient): INotificationServic
     async sendFeedbackReportNotification(_) {
       throw new MethodNotImplementedError('sendSpaceCompletedNotification')
     },
+
+    async sendChallengePostedNotification(_) {
+      throw new MethodNotImplementedError('sendChallengePostedNotification')
+    },
   }
 }

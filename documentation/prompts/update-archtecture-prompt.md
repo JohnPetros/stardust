@@ -22,7 +22,7 @@ Manter atualizado o documento de arquitetura do projeto (`documentation/architec
     *   **Visão Geral e Diagramas:** Atualize os diagramas ASCII se houver mudanças no fluxo de dados ou relação entre camadas.
     *   **Módulos de Domínio:** Adicione novos módulos ou atualize os DTOs listados na tabela de contextos delimitados.
     *   **Stack Tecnológica:** Mantenha as versões das dependências atualizadas conforme o `pubspec.yaml` e documente novas bibliotecas chave.
-    *   **Camadas (UI, Core, Rest, Drivers):** Reflita mudanças na estrutura de pastas ou responsabilidades de cada camada. Se novos padrões forem adotados (ex: mudou de MVP para MVVM), atualize as explicações e exemplos de código.
+    *   **Camadas (UI, Core, Rest, Banco de Dados, RPC etc):** Reflita mudanças na estrutura de pastas ou responsabilidades de cada camada. Se novos padrões forem adotados (ex: mudou de MVP para MVVM), atualize as explicações e exemplos de código.
     *   **Estrutura de Diretórios:** Mantenha a árvore de diretórios no final do documento sincronizada com a realidade do projeto.
 
 3.  **Validação de Consistência:**
