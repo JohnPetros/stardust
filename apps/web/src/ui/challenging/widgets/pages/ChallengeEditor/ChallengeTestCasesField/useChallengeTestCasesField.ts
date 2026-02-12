@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import type { ChallengeSchema } from '@stardust/validation/challenging/types'
@@ -11,11 +12,13 @@ export function useChallengeTestCasesField() {
     control,
     name: 'testCases',
   })
+  const lastDataTypeNameRef = useRef<DataTypeName>('string')
 
   function handleExpectedOutputDataTypeNameChange(
     dataTypeName: DataTypeName,
     testCaseIndex: number,
   ) {
+    lastDataTypeNameRef.current = dataTypeName
     const currentExpectedOutput = fields[testCaseIndex]?.expectedOutput
     if (currentExpectedOutput?.dataTypeName !== dataTypeName)
       setValue(
@@ -26,12 +29,13 @@ export function useChallengeTestCasesField() {
   }
 
   function handleAddTestCaseButtonClick() {
-    const dataType = DataType.create('')
+    const defaultValue = DEFAULT_VALUE_BY_DATA_TYPE_NAME[lastDataTypeNameRef.current]
+    const dataType = DataType.create(defaultValue)
     append({
       inputs: [],
       expectedOutput: {
         value: dataType.value,
-        dataTypeName: dataType.name,
+        dataTypeName: lastDataTypeNameRef.current,
       },
       isLocked: false,
     })
