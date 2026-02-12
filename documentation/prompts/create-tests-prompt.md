@@ -8,16 +8,16 @@
 
 ---
 
-## 📋 Diretrizes de Execução
+## 📋 Regras de Execução
 
 ### 1. Adesão às Normas do Projeto
 
-Identifique o tipo de código que está sendo testado e leia e siga a diretriz correspondente em `documentation/guidelines/`: 
+Identifique o tipo de código que está sendo testado e leia e siga a regra correspondente em `documentation/rules/`: 
 
-- **Objetos de Domínio:** [domain-objects-testing-guidelines.md](./documentation/guidelines/domain-objects-testing-guidelines.md)
-- **Casos de Uso:** [use-cases-testing-guidelines.md](./documentation/guidelines/use-cases-testing-guidelines.md)
-- **Handlers (REST, RPC, AI):** [handlers-testing-guidelines.md](./documentation/guidelines/handlers-testing-guidelines.md)
-- **Widgets (UI):** [widget-tests-guidelines.md](./documentation/guidelines/widget-tests-guidelines.md)
+- **Objetos de Domínio:** [domain-objects-testing-rules.md](./documentation/rules/domain-objects-testing-rules.md)
+- **Casos de Uso:** [use-cases-testing-rules.md](./documentation/rules/use-cases-testing-rules.md)
+- **Handlers (REST, RPC, AI):** [handlers-testing-rules.md](./documentation/rules/handlers-testing-rules.md)
+- **Widgets (UI):** [widget-tests-rules.md](./documentation/rules/widget-tests-rules.md)
 
 ### 2. Estrutura e Nomenclatura 📁
 

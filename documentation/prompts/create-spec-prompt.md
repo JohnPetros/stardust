@@ -21,13 +21,13 @@ sem ambiguidades.
      -> Store -> Service -> API).
    - **Indentifique as camadas:** Identifique as camadas que serão utilizadas
      para implementar a feature sendo descritas em
-     `documentation/guidelines/guidelines-rule.md`.
+     `documentation/rules/rules.md`.
    - **Verifique a Existência:** Investigue a codebase para identificar recursos
      existentes (Widgets, DTOs, Use Cases, Services etc) que devem ser
      reutilizados ou estendidos. Evite duplicidade.
-   - **Consulte Guidelines:** Obedeça os padrões das camadas e
+   - **Consulte Regras:** Obedeça os padrões das camadas e
      aplicações/packages definidos em
-     `documentation/guidelines/guidelines-rule.md`.
+     `documentation/rules/rules.md`.
    - **Identifique Referências:** Procure na codebase por exemplos similares
      para sugerir como referência.
 

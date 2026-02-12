@@ -7,7 +7,7 @@ organizada e validada, garantindo qualidade e integração contínua.
 
 - Documento de Spec técnica aprovado/finalizado.
 
-**Diretrizes de Execução:**
+**Regras de Execução:**
 
 ## REGRA MESTRA (NÃO IGNORE)
 
@@ -16,39 +16,39 @@ o seguinte algoritmo mental:
 
 1. **Classificar:** Qual é a natureza da tarefa? (ex: UI, Banco de Dados, RPC,
    Testes).
-2. **Consultar o Índice:** Olhe para o arquivo `# Diretrizes do Projeto`
+2. **Consultar o Índice:** Olhe para o arquivo `# Regras do Projeto`
    (index).
 3. **Verificar Contexto:** O arquivo específico indicado no índice está
    carregado no meu contexto atual?
    - [SIM] -> Prossiga e cite qual regra específica você está aplicando.
    - [NÃO] -> PARE IMEDIATAMENTE. Solicite ao usuário: "Por favor, adicione o
      arquivo [caminho_do_arquivo] ao contexto para que eu possa seguir as
-     diretrizes de [Nome da Camada]."
+     regraes de [Nome da Camada]."
 
 ## PROIBIÇÕES
 
 - NUNCA assuma padrões de arquitetura genéricos (ex: Clean Arch padrão, MVC
-  padrão) sem ler o arquivo de diretriz específico do projeto.
+  padrão) sem ler o arquivo de regra específico do projeto.
 - NUNCA gere código baseado apenas no resumo do arquivo de índice.
 
-1. **Validação de Diretrizes e Arquitetura:** Antes de iniciar a implementação,
-   certifique-se de que compreende as diretrizes (de acordo com a spec) e a
+1. **Validação de Regras e Arquitetura:** Antes de iniciar a implementação,
+   certifique-se de que compreende as regraes (de acordo com a spec) e a
    estrutura do projeto:
    - **Padronização de Código:**
-     `documentation/guidelines/code-conventions-guidelines.md`
-   - **Diretrizes por Camada:**
-     - **Core (Domínio):** `documentation/guidelines/core-package-guideines.md`
+     `documentation/rules/code-conventions-rules.md`
+   - **Regras por Camada:**
+     - **Core (Domínio):** `documentation/rules/core-package-rules.md`
      - **UI (Widgets & Design):**
-       `documentation/guidelines/ui-layer-guidelines.md`
+       `documentation/rules/ui-layer-rules.md`
      - **REST (Integrações HTTP):**
-       `documentation/guidelines/rest-layer-guidelines.md`
+       `documentation/rules/rest-layer-rules.md`
      - **RPC (Server Actions):**
-       `documentation/guidelines/rpc-layer-guidelines.md`
+       `documentation/rules/rpc-layer-rules.md`
      - **Queue (Background Jobs):**
-       `documentation/guidelines/queue-layer-guidelines.md`
+       `documentation/rules/queue-layer-rules.md`
      - **Database (Persistência):**
-       `documentation/guidelines/database-guidelines.md`
-   - **Padrões de Testes:** `documentation/guidelines/unit-tests-guidelines.md`
+       `documentation/rules/database-rules.md`
+   - **Padrões de Testes:** `documentation/rules/unit-tests-rules.md`
 
 2. **Decomposição Atômica:**
    - Divida o plano macro em micro-tarefas atômicas.
