@@ -53,8 +53,30 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:release -a ${{ env.HEROKU_APP_NAME }} web
 
-      - name: Send message
-        uses: appleboy/discord-action@v1.2.0
-        with:
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          message: "✅ Deploy do Stardust Web em produção concluído — ${{ github.event.release.tag_name }} | ${{ github.event.release.html_url }}"
+      - name: Send Discord notification
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_URL: ${{ github.event.release.html_url }}
+        run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          EMBED=$(jq -n \
+            --arg ts "$TIMESTAMP" \
+            --arg url "$RELEASE_URL" \
+            --arg tag "$RELEASE_TAG" \
+            '{
+              embeds: [{
+                title: "✅ Deploy Produção Concluído",
+                description: "Uma nova versão do Stardust Web foi implantada em produção com sucesso.",
+                url: ($url | .),
+                color: 3066993,
+                fields: [
+                  { name: "🏷️ Release", value: ("[" + ($tag | .) + "](" + ($url | .) + ")"), inline: false }
+                ],
+                footer: { text: "GitHub Actions • Stardust" },
+                timestamp: ($ts | .)
+              }]
+            }')
+          curl -H "Content-Type: application/json" \
+            -d "$EMBED" \
+            "$DISCORD_WEBHOOK_URL"
