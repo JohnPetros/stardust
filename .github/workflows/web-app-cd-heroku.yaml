@@ -52,3 +52,9 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:release -a ${{ env.HEROKU_APP_NAME }} web
+
+      - name: Send message
+        uses: appleboy/discord-action@v1.2.0
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: "✅ Deploy do Stardust Web em produção concluído — ${{ github.event.release.tag_name }} | ${{ github.event.release.html_url }}"
