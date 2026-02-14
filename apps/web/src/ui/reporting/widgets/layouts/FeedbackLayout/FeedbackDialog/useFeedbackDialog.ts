@@ -37,16 +37,6 @@ export function useFeedbackDialog({
   const isCaptureWarmRef = useRef(false)
   const captureWarmupPromiseRef = useRef<Promise<void> | null>(null)
 
-  function waitForIdle() {
-    return new Promise<void>((resolve) => {
-      if (typeof window.requestIdleCallback === 'function') {
-        window.requestIdleCallback(() => resolve(), { timeout: 500 })
-        return
-      }
-      setTimeout(() => resolve(), 100)
-    })
-  }
-
   async function warmupCaptureEngine() {
     if (isCaptureWarmRef.current) return
 
@@ -55,8 +45,6 @@ export function useFeedbackDialog({
         let warmupNode: HTMLDivElement | null = null
 
         try {
-          // await waitForIdle()
-
           warmupNode = document.createElement('div')
           warmupNode.style.position = 'fixed'
           warmupNode.style.left = '-99999px'
@@ -75,7 +63,8 @@ export function useFeedbackDialog({
           })
 
           isCaptureWarmRef.current = true
-        } catch {
+        } catch (error) {
+          console.error('Failed to warm up capture engine', error)
           return
         } finally {
           if (warmupNode && warmupNode.parentNode) {
@@ -151,6 +140,10 @@ export function useFeedbackDialog({
         width: window.innerWidth,
         height: window.innerHeight,
         pixelRatio: 1,
+        filter: (node) => {
+          if (!(node instanceof HTMLElement)) return true
+          return node.dataset.feedbackIgnoreCapture !== 'true'
+        },
         style: {
           marginTop: `-${scrollY}px`,
           marginLeft: `-${scrollX}px`,
