@@ -12,9 +12,13 @@ on:
     #   - "turbo.json"
     #   - "package.json"
 
+concurrency:
+  group: vercel-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
-    name: Build and Deploy
+    name: Deploy Preview to Vercel
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +28,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: "npm"
 
       - name: Install dependencies
@@ -35,14 +39,8 @@ jobs:
 
       - name: Pull Vercel environment information
         run: |
-          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/web 
-          cp apps/web/.vercel/.env.preview.local apps/web/.env
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: Build with Vercel (gera .vercel/output)
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/web
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/web
+          cp apps/web/.vercel/.env.preview.local apps/web/.env.local
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -50,7 +48,7 @@ jobs:
       - name: Deploy to Vercel (Preview)
         id: deploy
         run: |
-          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/web)
+          url=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/web)
           echo "deployment_url=$url" >> $GITHUB_OUTPUT
           echo "Deployed to: $url"
         env:
