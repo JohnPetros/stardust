@@ -1,27 +1,46 @@
 # Para que serve?
 
-A aplicação studio serve como um painel administrativo, ou seja, ela serve como o núcleo operacional para a gestão digital do StarDust. Ela capacita o usuário administrador com uma visão abrangente e controle total sobre as métricas essenciais dos usuários, permitindo entender o engajamento, o comportamento e as tendências. Além disso, é a ferramenta que centraliza a criação, edição e publicação de conteúdo para ser disponível tanto para o website quanto para o aplicativo mobile. Isso garante que a informação esteja sempre atualizada, consistente e relevante em todas as interfaces, otimizando a experiência do usuário e a eficiência da gestão da plataforma.
+A aplicação studio serve como um painel administrativo (Admin), atuando como o nucleo operacional para a gestao digital do StarDust. Ela capacita o usuario administrador com uma visao abrangente e controle sobre metricas essenciais (engajamento, comportamento e tendencias). Alem disso, centraliza a criacao, edicao e publicacao de conteudo para disponibilizacao consistente no website e no aplicativo mobile.
 
 # Funcionalidades principais
 
 ## Dashboard
-* Contagem de desafios cadastrados.
-* Contagem de usuários cadastrados.
-* Contagem de planetas cadastrados.
-* Contagem de estrelas cadastradas.
 
-## Espaço
-* Listagem de planetas com suas respectivas estrelas.
+- Contagem de desafios cadastrados.
+- Contagem de usuarios cadastrados.
+- Contagem de planetas cadastrados.
+- Contagem de estrelas cadastradas.
 
-## Lição
-* Listagem de lições de uma determinada estrela.
-* Editor de história de uma lição.
+## Espaco
 
-## Desafios de código
-* Listagem de desafios.
-* Editor de desafio.
+- Listagem de planetas com suas respectivas estrelas.
+
+## Licao
+
+- Listagem de licoes de uma determinada estrela.
+- Editor de historia de uma licao.
+
+## Desafios de codigo
+
+- Listagem de desafios.
+- Editor de desafio.
 
 # Desenvolvimento
+
+## Tecnologias e bibliotecas
+
+- Framework: React Router v7 (App) com TypeScript
+- Ferramenta de build: Vite
+- Estilizacao: Tailwind CSS com biblioteca de componentes Shadcn
+- Caching de dados (REST): TanStack Query (React Query)
+- Formularios: React Hook Form com validacao via Zod
+- Componentes de UI: Primitivas Radix UI (via Shadcn)
+- Gerenciamento de estado: Zustand
+- Drag-and-drop: Dndkit
+- Testes automatizados: Jest
+- Testes de UI: React Testing Library
+
+> Para mais detalhes sobre as dependencias e versoes, consulte o arquivo [package.json](https://github.com/JohnPetros/stardust/blob/main/apps/studio/package.json).
 
 ## Executando a aplicação
 
@@ -43,7 +62,7 @@ npm install
 npm run dev
 ```
 
-> Será aberto o painel de desenvolvimento da aplicação studio em http://localhost:8000
+> Sera aberto o painel de desenvolvimento da aplicacao studio em http://localhost:8000
 
 ## Executando os testes
 
@@ -51,8 +70,8 @@ npm run dev
 npm run test
 ```
 > [!NOTE]
-> Defina as variáveis de ambiente de desenvolvimento no arquivo .env.development
-> Para isso veja o arquivo [.env.example](https://github.com/JohnPetros/stardust/blob/main/apps/web/.env.example) para saber quais variáveis devem ser preenchidas
+> Defina as variaveis de ambiente de desenvolvimento no arquivo `.env.development`.
+> Referencia: `apps/studio/.env.development`.
 
 ## Tooling
 
@@ -64,21 +83,6 @@ npm run test
   - Tipos: `npm run typecheck -w @stardust/studio` (inclui `react-router typegen && tsc`)
   - Testes: `npm run test -w @stardust/studio` / `npm run test:watch -w @stardust/studio`
 - Referencia geral: `documentation/tooling.md`.
-
-## Tecnologias e bibliotecas
-
-- Framework: [Remix](https://remix.run/) com TypeScript
-- Ferramenta de Build: Vite com plugin SWC para compilação rápida
-- Estilização: [Tailwind CSS](https://tailwindcss.com/) com biblioteca de componentes [Shadcn](https://ui.shadcn.com/)
-- Caching de dados assíncronos de REST APIs: [React Query (TanStack Query)](https://tanstack.com/query/v5/docs/framework/react/overview)
-- Roteamento: React Router DOM v7
-- Formulários: [React Hook Form](https://react-hook-form.com/) com validação de schema com [Zod](https://zod.dev/).
-- Componentes de UI: [Primitivas Radix UI](https://www.radix-ui.com/) via [Shadcn](https://ui.shadcn.com/)
-- Funcionalidade de arrastar e soltar (drag-and-drop): [Dndkit](https://dndkit.com/)
-- Teste automatizados: [Jest](https://jestjs.io/)
-- Testes unitários de interface UI: [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
-
-> Para mais detalhes sobre as dependências e versões, consulte o arquivo [package.json](https://github.com/JohnPetros/stardust/blob/main/apps/studio/package.json).
 
 ## Estruturação do projeto
 

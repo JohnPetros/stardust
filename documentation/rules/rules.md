@@ -86,9 +86,18 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 **Quando consultar:**
 
 - Ao criar ou modificar um documento relacionado a aplicação studio.
-- Para uma visão geral da arquitetura e stack da Aplicação Studio (Painel
-  Admin - Remix, Vite, Shadcn).
+- Para uma visao geral da arquitetura e stack da Aplicacao Studio (Painel
+  Admin - React Router v7, Vite, Shadcn).
 - Para entender a estrutura de pastas do projeto `apps/studio`.
+
+## Regras da Aplicacao Server
+
+**Arquivo:** `/documentation/rules/server-application-rules.md`
+**Quando consultar:**
+
+- Ao criar ou modificar um documento relacionado a aplicacao server.
+- Para uma visao geral da arquitetura e stack da Aplicacao Server (Hono, Inngest, Supabase, etc.).
+- Para entender a estrutura de pastas do projeto `apps/server`.
 
 ## Regras da Camada de Banco de Dados (db)
 

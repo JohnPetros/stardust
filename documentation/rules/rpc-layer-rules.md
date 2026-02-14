@@ -1,227 +1,79 @@
-# Camada RPC (Remote Procedure Call)
+# Regras da Camada RPC
 
-A camada RPC é responsável por abstrair a comunicação entre as rotas da API e os serviços de domínio, implementando o padrão de **Factory Functions** para criar actions reutilizáveis e testáveis.
+## Visao Geral
 
-## Conceitos Principais
+A camada **RPC** expoe chamadas de aplicacao como `actions` tipadas, conectando UI/rotas/server actions ao core por meio do contrato `Action` + `Call`.
 
-### 1. Interface Call
+| Item | Definicao |
+| --- | --- |
+| **Objetivo** | Fornecer uma fronteira tipada para executar logica do core na borda (Next.js). |
+| **Responsabilidades** | Definir `actions` por dominio; adaptar `Call` para o `runtime`; executar `actions` em `composition roots` com validacao de input. |
+| **Nao faz** | Regra de negocio; instanciar dependencias dentro da `action`; acoplar `action` a `runtime`. |
 
-A interface `Call<Request>` define o contrato para comunicação entre actions e rotas:
+## Estrutura de Diretorios
 
-```typescript
-interface Call<Request = void> {
-  getFormData(): Promise<Request>
-  redirect(route: string): void
-}
-```
+| Pasta/Arquivo | Finalidade |
+| --- | --- |
+| `apps/web/src/rpc/actions/` | Actions organizadas por dominio. |
+| `apps/web/src/rpc/next/NextCall.ts` | Adaptador Next para `Call` do core. |
+| `apps/web/src/rpc/next-safe-action/` | Composition root: validacao `zod`, instanciacao de dependencias e execucao. |
+| `apps/web/src/rpc/next-safe-action/clients/actionClient.ts` | Client com tratamento consistente de erro. |
+| `packages/core/src/global/interfaces/rpc/Action.ts` | Contrato `Action` (core). |
+| `packages/core/src/global/interfaces/rpc/Call.ts` | Contrato `Call` (core). |
 
-### 2. Actions (Factory Functions)
+## Regras
 
-As actions são implementadas como **Factory Functions** que recebem dependências e retornam objetos com métodos executáveis:
+- **Contratos do core**: toda `action` implementa `Action<Request, Response>`; toda execucao passa por `Call<Request>`.
+- **Inversao de dependencia**: `action` recebe dependencias (`services`, `broker`, etc.) via parametros.
+- **Validacao na borda**: `composition root` valida inputs com `zod` antes de criar o `Call`.
+- **Erros**: erros de dominio sao propagados como `AppError` e tratados pelo `actionClient`.
 
-```typescript
-export const CreateUserAction = (service: MembershipService) => {
+> ⚠️ Proibido: `action` importar `next/*` ou `next-safe-action`.
+
+## Organizacao e Nomeacao
+
+- Action: `VerboSubstantivoAction` e exportada como `export const`.
+- Actions por dominio: expor por `index.ts` dentro da pasta de dominio.
+
+## Exemplo
+
+```ts
+import type { Action, Call, Broker } from '@stardust/core/global/interfaces'
+import type { AuthService } from '@stardust/core/auth/interfaces'
+
+type Request = { email: string; password: string }
+type Response = unknown
+
+export const SignInAction = (authService: AuthService, broker: Broker): Action<Request, Response> => {
   return {
-    async execute(call: Call<Request>) {
-      const userDto = await call.getFormData()
-      const response = await service.createUser(userDto)
+    async handle(call: Call<Request>) {
+      const { email, password } = call.getRequest()
+      const response = await authService.signIn(/* ... */)
       if (response.isFailure) response.throwError()
-      return call.redirect(ROUTES.users)
+
+      await call.setCookie('accessToken', '...', 3600)
+      return response.body as Response
     },
   }
 }
 ```
 
-### 3. Padrão de Execução
+## Integracao com Outras Camadas
 
-Todas as actions seguem o mesmo padrão:
+- **Permitido**: actions dependerem de interfaces do core e de services REST da app (injetados).
+- **Permitido (composition root)**: instanciar broker (ex: `apps/web/src/rpc/next-safe-action/authActions.ts`).
+- **Proibido**: `@stardust/core` depender de `apps/web/src/rpc/**`; action depender de UI.
+- **Direcao**: UI -> RPC -> REST/Queue -> Core (dependencias sempre apontam para dentro do core).
 
-1. **Recebem dependências** via parâmetros da factory function
-2. **Retornam um objeto** com método `execute`
-3. **Processam dados** via `call.getFormData()`
-4. **Executam operação** no serviço de domínio
-5. **Tratam erros** verificando `response.isFailure`
-6. **Redirecionam** via `call.redirect()`
+## Checklist (antes do PR)
 
-## Vantagens da Arquitetura
+- Existe schema `zod` no composition root.
+- Action recebe dependencias por parametro.
+- Action implementa `Action<Request, Response>`.
+- `Call` correto foi usado (ex: `NextCall`).
+- Tratamento de erro segue o padrao do `actionClient`.
 
-### 1. **Inversão de Dependência**
-- Actions recebem dependências como parâmetros
-- Facilita testes unitários com mocks
-- Desacopla actions de implementações específicas
+## Notas
 
-### 2. **Reutilização**
-- Actions podem ser usadas em diferentes contextos
-- Mesma action funciona em diferentes frameworks (Remix, Express, etc.)
-- Lógica de negócio centralizada
-
-### 3. **Testabilidade**
-- Fácil criação de mocks para dependências
-- Testes isolados sem dependências externas
-- Validação independente de frameworks
-
-### 4. **Consistência**
-- Padrão uniforme para todas as actions
-- Tratamento de erro padronizado
-- Estrutura previsível e manutenível
-
-## Uso nas Rotas
-
-```typescript
-export const action = async (args: RouteArgs) => {
-  const call = RemixCall<UserDto>(args, userSchema)
-  const { membershipService } = args.context.get(restContext)
-  const action = CreateUserAction(membershipService)
-  return action.execute(call)
-}
-```
-
-## Implementações de Call
-
-### RemixCall
-- Adapta a interface `Call` para o Remix
-- Integra com `@conform-to/zod` para validação
-- Suporta redirecionamentos do React Router
-
-## Organização por Domínio
-
-Actions são organizadas em pastas por domínio (ex: `membership/`) com:
-
-- **Arquivos individuais** para cada action
-- **Barrel file** (`index.ts`) para exportações centralizadas
-- **Nomenclatura consistente** seguindo padrões do projeto
-
-## Boas Práticas
-
-1. **Sempre use Factory Functions** para actions
-2. **Injete dependências** via parâmetros
-3. **Mantenha actions focadas** em uma única responsabilidade
-4. **Use barrel files** para exportações organizadas
-5. **Siga convenções de nomenclatura** do projeto
-6. **Trate erros** de forma consistente
-7. **Documente tipos** de Request adequadamente# Camada RPC (Remote Procedure Call)
-
-A camada RPC é responsável por abstrair a comunicação entre as rotas da API e os serviços de domínio, implementando o padrão de **Factory Functions** para criar actions reutilizáveis e testáveis.
-
-## Estrutura
-
-```
-src/rpc/
-├── actions/           # Actions organizadas por domínio
-│   └── membership/    # Actions relacionadas a usuários
-│       ├── create-user-action.ts
-│       ├── update-user-action.ts
-│       ├── activate-user-action.ts
-│       ├── deactivate-user-action.ts
-│       └── index.ts   # Barrel file para exportações
-└── remix/            # Implementações específicas do Remix
-    └── remix-call.ts # Adaptador para Remix
-```
-
-## Conceitos Principais
-
-### 1. Interface Call
-
-A interface `Call<Request>` define o contrato para comunicação entre actions e rotas:
-
-```typescript
-interface Call<Request = void> {
-  getFormData(): Promise<Request>
-  redirect(route: string): void
-}
-```
-
-### 2. Actions (Factory Functions)
-
-As actions são implementadas como **Factory Functions** que recebem dependências e retornam objetos com métodos executáveis:
-
-```typescript
-export const CreateUserAction = (service: MembershipService) => {
-  return {
-    async execute(call: Call<Request>) {
-      const userDto = await call.getFormData()
-      const response = await service.createUser(userDto)
-      if (response.isFailure) response.throwError()
-      return call.redirect(ROUTES.users)
-    },
-  }
-}
-```
-
-### 3. Padrão de Execução
-
-Todas as actions seguem o mesmo padrão:
-
-1. **Recebem dependências** via parâmetros da factory function
-2. **Retornam um objeto** com método `execute`
-3. **Processam dados** via `call.getFormData()`
-4. **Executam operação** no serviço de domínio
-5. **Tratam erros** verificando `response.isFailure`
-6. **Redirecionam** via `call.redirect()`
-
-## Vantagens da Arquitetura
-
-### 1. **Inversão de Dependência**
-- Actions recebem dependências como parâmetros
-- Facilita testes unitários com mocks
-- Desacopla actions de implementações específicas
-
-### 2. **Reutilização**
-- Actions podem ser usadas em diferentes contextos
-- Mesma action funciona em diferentes frameworks (Remix, Express, etc.)
-- Lógica de negócio centralizada
-
-### 3. **Testabilidade**
-- Fácil criação de mocks para dependências
-- Testes isolados sem dependências externas
-- Validação independente de frameworks
-
-### 4. **Consistência**
-- Padrão uniforme para todas as actions
-- Tratamento de erro padronizado
-- Estrutura previsível e manutenível
-
-## Uso nas Rotas
-
-```typescript
-export const action = async (args: RouteArgs) => {
-  const call = RemixCall<UserDto>(args, userSchema)
-  const { membershipService } = args.context.get(restContext)
-  const action = CreateUserAction(membershipService)
-  return action.execute(call)
-}
-```
-
-## Implementações de Call
-
-### RemixCall
-- Adapta a interface `Call` para o Remix
-- Integra com `@conform-to/zod` para validação
-- Suporta redirecionamentos do React Router
-
-## Organização por Domínio
-
-Actions são organizadas em pastas por domínio (ex: `membership/`) com:
-
-- **Arquivos individuais** para cada action
-- **Barrel file** (`index.ts`) para exportações centralizadas
-- **Nomenclatura consistente** seguindo padrões do projeto
-
-## Boas Práticas
-
-1. **Sempre use Factory Functions** para actions
-2. **Injete dependências** via parâmetros
-3. **Mantenha actions focadas** em uma única responsabilidade
-4. **Use barrel files** para exportações organizadas
-5. **Siga convenções de nomenclatura** do projeto
-6. **Trate erros** de forma consistente
-7. **Documente tipos** de Request adequadamente
-
-## Tooling
-
-- Typecheck:
-  - Web (actions/Next Safe Action): `npm run typecheck -w @stardust/web`.
-  - Studio (rotas tipadas): `npm run typecheck -w @stardust/studio` (inclui `react-router typegen`).
-- Qualidade: `npm run lint -w @stardust/web` / `npm run lint -w @stardust/studio`.
-- Testes: `npm run test -w @stardust/web` / `npm run test -w @stardust/studio`.
-- Referencia geral: `documentation/tooling.md`.
+- A camada RPC existe hoje em `apps/web/src/rpc`.
+- Para testes de handlers/actions: `documentation/rules/handlers-testing-rules.md`.

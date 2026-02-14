@@ -96,5 +96,3 @@ npm run test
          │  └─ slots
          └─ contexts
 ```
-
-Onde houver um emoji diferente de ⚙️, ele se refere a uma camada descrita na página de [arquitetura global](https://github.com/JohnPetros/stardust/wiki/Arquitetura-global). Se o emoji for ⚙️ seguido pelo nome de um framework, isso indica que há a implementação de algo dessa camada utilizando esse framework.

@@ -1,70 +1,53 @@
----
-alwaysApply: false
----
-# Camada de Provision (prov)
+# Regras da Camada Provision
 
-A camada `prov` (Provision) é responsável por prover recursos que dependem de serviços externos, bibliotecas de terceiros ou funcionalidades de infraestrutura que não se encaixam estritamente como banco de dados ou chamadas HTTP/REST de APIs de negócio.
+## Visao Geral
 
-Exemplos comuns incluem: armazenamento de arquivos (Storage), serviços de e-mail, processamento de pagamentos, ferramentas de monitoramento, etc.
+A camada **Provision** encapsula SDKs e servicos externos como `providers` (gateways) que implementam **interfaces do core**, mantendo o dominio desacoplado de terceiros.
 
-## Componentes Principais
+| Item | Definicao |
+| --- | --- |
+| **Objetivo** | Adaptar infraestrutura externa (SDKs/servicos) para contratos do core. |
+| **Responsabilidades** | Implementar `providers`; mapear erros para `AppError`; centralizar configuracao via `ENV`/`fromEnv` sem vazar segredos. |
+| **Nao faz** | Regra de negocio; expor tipos/clients do SDK; decidir politicas de dominio. |
 
-### **Provider (Gateway)**
+## Estrutura de Diretorios
 
-Um `Provider` é um `gateway` que encapsula a interação com uma ferramenta externa. Ele implementa uma interface definida no `core`, garantindo que o domínio não dependa da ferramenta específica.
+Diretorio base: `apps/server/src/provision`.
 
-**Características:**
-- Implementa uma interface do `core` (ex: `StorageProvider`).
-- Encapsula clientes de SDKs externos (ex: Supabase Client, AWS SDK, Stripe).
-- Converte erros da biblioteca externa em erros de domínio (`AppError`).
-- Mapeia tipos externos para tipos de domínio.
+| Pasta | Finalidade | Exemplo |
+| --- | --- | --- |
+| `cache/` | Implementa `CacheProvider` (core) sem expor Redis/Upstash. | `apps/server/src/provision/cache/UpstashCacheProvider.ts` |
+| `storage/` | Implementa `StorageProvider` (core) sem expor bucket/SDK. | `apps/server/src/provision/storage/SupabaseStorageProvider.ts` |
+| `monitor/` | Implementa `TelemetryProvider` (core). | `apps/server/src/provision/monitor/SentryTelemetryProvider.ts` |
+| `database/` | Implementa `DatabaseProvider` (core) para operacoes auxiliares (ex: backup). | `apps/server/src/provision/database/SupabaseDatabaseProvider.ts` |
 
-**Exemplo de Implementação (Storage):**
+## Regras
 
-```typescript
-import { createClient } from '@supabase/supabase-js'
-import { AppError } from '@stardust/core/global/errors'
-import type { StorageProvider } from '@stardust/core/storage/interfaces'
+- **Implementacao**: `provider` deve apenas adaptar o SDK externo para a interface do core.
+- **Error mapping**: capturar erros do SDK e relancar como `AppError` (ou erro equivalente do dominio) para evitar vazamento de detalhes.
+- **Tipos**: nao retornar tipos do SDK; mapear para tipos do core/dominio.
+- **Configuracao**: ler variaveis de ambiente (ex: `ENV`) sem registrar/propagar segredos.
 
-export class SupabaseStorageProvider implements StorageProvider {
-  private readonly supabase
+> ⚠️ Sinal de alerta: qualquer `import`/retorno de tipos do SDK fora do `provider` indica vazamento de infraestrutura.
 
-  constructor() {
-    this.supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey)
-  }
+## Organizacao e Nomeacao
 
-  async upload(folder: StorageFolder, file: File): Promise<File> {
-    const { data, error } = await this.supabase.storage
-      .from('bucket-name')
-      .upload(`${folder.name}/${file.name}`, file)
+- `provider`: `<Vendor><Capability>Provider` (ex: `UpstashCacheProvider`).
+- `client` do SDK: detalhe interno do `provider` (nao expor por propriedade publica).
 
-    if (error) {
-      this.handleError(error) // Converte e lança erro tratável
-    }
+## Integracao com Outras Camadas
 
-    return file
-  }
+- **Permitido**: depender de SDKs de terceiros; depender de interfaces/erros do core.
+- **Proibido**: o core importar `apps/server/src/provision/**`.
+- **Direcao de dependencia**: apps/adapters implementam providers; o core consome por interface.
 
-  private handleError(error: Error): never {
-    console.error('Provider Error:', error)
-    throw new AppError(error.message, 'ProviderError')
-  }
-}
-```
+## Checklist (antes do PR)
 
-## Padrões e Convenções
+- Interface do core existe para o provider.
+- Provider implementa a interface e nao expoe SDK.
+- Erros externos sao convertidos para `AppError`.
+- Segredos ficam em variaveis de ambiente (sem credenciais em codigo).
 
-1. **Gateways Puros**: Providers não devem conter regras de negócio, apenas lógica de adaptação e comunicação com a ferramenta externa.
-2. **Tratamento de Erros**: Sempre capture erros da biblioteca externa e relance como erros da aplicação (ex: `AppError`) para evitar vazamento de detalhes de implementação.
-3. **Interfaces do Core**: Sempre implemente uma interface definida no `core`. O `core` define "O que eu preciso" (ex: salvar arquivo), e o `prov` define "Como eu faço" (ex: usar Supabase S3).
-4. **Variáveis de Ambiente**: Configure clientes externos utilizando constantes de ambiente (`ENV`).
+## Notas
 
-## Tooling
-
-- Providers no geral nao exigem um CLI unico: o "tooling" principal aqui e a configuracao de variaveis de ambiente e os SDKs usados pelo provider.
-- Email templates (quando aplicavel):
-  - Dev/preview: `npm run dev -w @stardust/email` (React Email).
-  - Export/build: `npm run build -w @stardust/email`.
-  - Typecheck: `npm run typecheck -w @stardust/email`.
-- Observabilidade/infra (quando aplicavel): siga o provider concreto (ex: Sentry, Upstash, Dropbox) e mantenha credenciais fora do codigo.
-- Referencia geral: `documentation/tooling.md`.
+- A camada Provision atual vive em `apps/server/src/provision`.

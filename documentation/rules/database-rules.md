@@ -1,86 +1,72 @@
 ---
 alwaysApply: false
 ---
-# Camada de Banco de Dados (db)
+# Regras da Camada Database (db)
 
-A camada `db` cuida da persistência de dados da aplicação. Ela é composta exclusivamente por Gateways, chamados de **Repositories**, que isolam o domínio dos detalhes de implementação do banco de dados (SQL, NoSQL, ORMs, etc.).
+## Visao Geral
 
-## Componentes Principais
+A camada **Database (db)** implementa persistencia no server atraves de `repositories` (gateways) que isolam o dominio dos detalhes do banco.
 
-### **Repository (Gateway)**
+| Item | Definicao |
+| --- | --- |
+| **Objetivo** | Persistir/consultar dados sem vazar detalhes de Supabase/PostgreSQL para o core. |
+| **Responsabilidades** | Implementar `repositories` do core; manter `mappers` DB <-> dominio; encapsular erros do banco. |
+| **Nao faz** | Regra de negocio; retornar tipos gerados do banco para fora da camada. |
 
-O Repository é responsável por salvar, buscar, atualizar e deletar dados de entidades.
+## Estrutura de Diretorios
 
-**Características:**
-- Implementa interfaces de repositório definidas no `core` (ex: `UsersRepository`).
-- Estende uma classe base (ex: `SupabaseRepository`) que fornece acesso ao cliente do banco e métodos utilitários.
-- Utiliza **Mappers** para converter dados brutos do banco (linhas/documentos) em Entidades de Domínio e vice-versa.
-- Lida com erros específicos do banco e os converte, se necessário.
+| Caminho | Finalidade |
+| --- | --- |
+| `apps/server/src/database/` | Raiz da camada. |
+| `apps/server/src/database/supabase/` | Integracao Supabase/PostgreSQL. |
+| `apps/server/src/database/supabase/repositories/` | Implementacoes concretas (ex: `apps/server/src/database/supabase/repositories/SupabaseRepository.ts`). |
+| `apps/server/src/database/supabase/types/Database.ts` | Tipos gerados do banco (nao devem vazar). |
+| `apps/server/supabase/migrations` | Migracoes. |
+| `apps/server/supabase/schemas/schema.sql` | Schema SQL. |
 
-**Exemplo de Implementação:**
+## Regras
 
-```typescript
-import type { UsersRepository } from '@stardust/core/profile/interfaces'
-import { SupabaseRepository } from '../SupabaseRepository'
-import { SupabaseUserMapper } from '../../mappers/profile'
+- **Contracts first**: `repository` implementa interfaces definidas no core.
+- **Mappers explicitos**
+  - Ao ler: DB shape -> entidade/estrutura do dominio.
+  - Ao escrever: entidade/estrutura -> DB shape.
+- **Erros**: encapsular/converter erros do Postgres/Supabase quando necessario.
 
-export class SupabaseUsersRepository extends SupabaseRepository implements UsersRepository {
-  
-  async findById(userId: Id): Promise<User | null> {
-    const { data, error } = await this.supabase
-      .from('users')
-      .select('*')
-      .eq('id', userId.value)
-      .single()
+> ⚠️ Proibido: retornar tipos gerados (ex: `Database.ts`) fora de `apps/server/src/database/**`.
 
-    if (error) {
-       // Tratamento de erro ou retorno null
-       return this.handleQueryPostgresError(error)
-    }
+## Organizacao e Nomeacao
 
-    // Conversão de DB Type -> Entity
-    return SupabaseUserMapper.toEntity(data)
-  }
+- Repositories: `Supabase<Entidade>Repository` quando a implementacao for especifica.
+- Mappers: metodos como `toEntity` e `toSupabase` (ou `toPersistence`).
 
-  async add(user: User): Promise<void> {
-    // Conversão de Entity -> DB Type
-    const supabaseUser = SupabaseUserMapper.toSupabase(user)
+## Exemplo
 
-    const { error } = await this.supabase
-      .from('users')
-      .insert(supabaseUser)
-
-    if (error) throw new SupabasePostgreError(error)
+```ts
+// Exemplo ilustrativo (nomes concretos variam por dominio)
+export class SupabaseUsersRepository /* extends SupabaseRepository */ {
+  async findById(userId) {
+    // query no supabase
+    // mapper: toEntity
+    return null
   }
 }
 ```
 
-### **Mapper**
+## Integracao com Outras Camadas
 
-Objetos ou classes responsáveis por traduzir dados entre o formato do banco de dados e as Entidades do Domínio. Isso garante que o Domínio não conheça a estrutura das tabelas.
+- **Permitido**: depender do client do Supabase e tipos gerados; depender de entidades/estruturas e interfaces do core.
+- **Proibido**: o core importar `apps/server/src/database/**`.
+- **Contrato**: interfaces de repository no core.
+- **Direcao**: controllers/jobs/tools instanciam repositories e injetam em use-cases.
 
-- `toEntity`: DB Data -> Domain Entity
-- `toSupabase` (ou `toPersistence`): Domain Entity -> DB Data
+## Checklist (antes do PR)
 
-## Padrões e Convenções
+- Interface de repository no core existe.
+- Repository retorna dominio (nao tipos do banco).
+- Mapper cobre leitura e escrita.
+- Erros de banco sao tratados/convertidos.
 
-1. **Separação de Modelos**: Nunca vaze tipos do banco de dados (ex: tipos gerados pelo ORM) para fora da camada `db`. Sempre retorne Entidades ou Primitivos.
-2. **Mappers**: Use mappers explícitos. Não faça casting direto se houver diferença de estrutura ou regras de validação nas entidades.
-3. **Tratamento de Strings/IDs**: As entidades usam Value Objects (ex: `Id`, `Email`, `Name`). O repositório deve desembrulhar esses valores (`.value`) para salvar e recriá-los (`Id.create(...)`) ao ler.
-4. **Classe Base**: Utilize a classe base (`SupabaseRepository`) para compartilhar a instância do cliente e tratamento de erros comum.
+## Notas
 
-## Tooling
-
-- Scripts (workspace `@stardust/server`):
-  - `npm run db:local`: inicia Supabase local.
-  - `npm run db:sync`: aplica migrações.
-  - `npm run db:migrate`: gera diff de migração (usa `$npm_schema_file`).
-  - `npm run db:pull`: sincroniza schema do remoto.
-  - `npm run db:push`: aplica schema local no remoto.
-  - `npm run db:revert`: marca migração como revertida (usa `$npm_config_migration_id`).
-  - `npm run db:types`: gera tipos do banco em `apps/server/src/database/supabase/types/Database.ts`.
-- Pastas/arquivos relevantes:
-  - Migrações: `apps/server/supabase/migrations`.
-  - Schema SQL: `apps/server/supabase/schemas/schema.sql`.
-  - Integração Supabase (infra/app): `apps/server/src/database/supabase`.
-- Referência geral: `documentation/tooling.md`.
+- O server usa Supabase como integracao principal.
+- Tooling: `documentation/tooling.md`.
