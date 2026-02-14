@@ -98,6 +98,36 @@ export function useChallengeStore() {
       }
     },
 
+    getAssistantSelectionsSlice() {
+      const assistantSelections = useZustandChallengeStore(
+        (store) => store.state.assistantSelections,
+      )
+      const setTextSelection = useZustandChallengeStore(
+        (store) => store.actions.setTextSelection,
+      )
+      const setCodeSelection = useZustandChallengeStore(
+        (store) => store.actions.setCodeSelection,
+      )
+      const clearTextSelection = useZustandChallengeStore(
+        (store) => store.actions.clearTextSelection,
+      )
+      const clearCodeSelection = useZustandChallengeStore(
+        (store) => store.actions.clearCodeSelection,
+      )
+      const clearAssistantSelections = useZustandChallengeStore(
+        (store) => store.actions.clearAssistantSelections,
+      )
+
+      return {
+        assistantSelections,
+        setTextSelection,
+        setCodeSelection,
+        clearTextSelection,
+        clearCodeSelection,
+        clearAssistantSelections,
+      }
+    },
+
     resetStore() {
       return useZustandChallengeStore.setState({ state: INITIAL_CHALLENGE_STORE_STATE })
     },

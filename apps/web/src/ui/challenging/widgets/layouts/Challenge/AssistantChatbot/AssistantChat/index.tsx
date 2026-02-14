@@ -1,9 +1,8 @@
 'use client'
 
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
-
-import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
 import type { Id } from '@stardust/core/global/structures'
 import { ChatMessage } from '@stardust/core/conversation/structures'
@@ -13,6 +12,7 @@ import { AssistantChatView } from './AssistantChatView'
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useAssistantChatError } from './useAssistantChatError'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
+import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 
 type Props = {
   initialMessages: ChatMessage[]
@@ -33,6 +33,8 @@ export const AssistantChat = ({
   const lastAssistanteMessage = useRef<ChatMessage | null>(null)
   const toastProvider = useToastContext()
   const { conversationService, notificationService } = useRestContext()
+  const { assistantSelections, clearAssistantSelections } =
+    useChallengeStore().getAssistantSelectionsSlice()
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>(initialMessages)
   const [assistantMessageContentParts, setAssistantMessageContentParts] = useState<
     string[]
@@ -86,14 +88,23 @@ export const AssistantChat = ({
 
         sendMessage(
           { text: messageContent },
-          { body: { question: messageContent, challengeId: challengeId.value } },
+          {
+            body: {
+              question: messageContent,
+              challengeId: challengeId.value,
+              textSelection: assistantSelections.textSelection,
+              codeSelection: assistantSelections.codeSelection,
+            },
+          },
         )
+
+        clearAssistantSelections()
       }
 
       setAssistantMessageContentParts([])
       setTimeout(() => scrollToBottom(), 100)
     },
-    [challengeId],
+    [challengeId, assistantSelections, clearAssistantSelections],
   )
 
   useEffect(() => {

@@ -1,7 +1,21 @@
 import { render, screen } from '@testing-library/react'
+import type { ReactNode } from 'react'
+
+import { ROUTES } from '@/constants'
 import { animationRefMock } from '@/ui/global/widgets/components/Animation/tests/mocks'
 import { SignInPageView } from '../SignInPageView'
-import { ROUTES } from '@/constants'
+
+jest.mock('@/ui/auth/widgets/pages/ResetPassword/AnimatedForm', () => ({
+  AnimatedForm: ({ children }: { children: ReactNode }) => <div>{children}</div>,
+}))
+
+jest.mock('@/ui/auth/widgets/pages/SignIn/AnimatedHero', () => ({
+  AnimatedHero: () => <div data-testid='animated-hero' />,
+}))
+
+jest.mock('@/ui/auth/widgets/components/RocketAnimation', () => ({
+  RocketAnimation: () => <div data-testid='rocket-animation' />,
+}))
 
 describe('SignInPageView', () => {
   const handleFormSubmit = jest.fn()

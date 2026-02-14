@@ -1,10 +1,19 @@
 import { render, screen, waitFor } from '@testing-library/react'
+import type { ReactNode } from 'react'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { ProfileService } from '@stardust/core/profile/interfaces'
 
 import { SignUpPageView } from '../SignUpPageView'
 import { ROUTES } from '@/constants/routes'
+
+jest.mock('@/ui/global/widgets/components/AnimatedOpacity', () => ({
+  AnimatedOpacity: ({ children }: { children: ReactNode }) => <div>{children}</div>,
+}))
+
+jest.mock('@/ui/global/widgets/components/Animation', () => ({
+  Animation: () => <div data-testid='animation' />,
+}))
 
 describe('SignUpPageView', () => {
   let profileService: Mock<ProfileService>

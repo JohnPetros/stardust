@@ -1,7 +1,7 @@
 # Spec: Widget de Dialog de Feedback
 
 ### Application: web
-### Ultima atualização: 29/01/2026
+### Ultima atualização: 14/02/2026
 ### Status: concluído
 
 ### 1. Objetivo
@@ -36,14 +36,14 @@ Implementar o widget `FeedbackDialog` para coletar feedbacks dos usuários. O wi
 *   **Hook:** `apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackDialog/useFeedbackDialog.ts`
     *   Gerencia o estado do formulário (content, intent, screenshot).
     *   **Lógica de Screenshot:**
-        - Utiliza biblioteca `modern-screenshot` (`domToPng`) para capturar `document.documentElement`.
-        - Utiliza estado React (`isCapturing`) e delay (`setTimeout`) para ocultar o botão de feedback durante a captura, sem manipulação direta do DOM.
+        - Utiliza biblioteca `html-to-image` (`toPng`) para capturar o `document.body`.
+        - Executa um warmup do motor de captura ao abrir o dialog/selecionar intenção para reduzir delay na primeira captura.
+        - Oculta temporariamente o botão de feedback durante a captura e aplica filtro para ignorar nós com `data-feedback-ignore-capture='true'`.
         - Estado `rawScreenshot`: Armazena a captura bruta para edição.
         - Estado `screenshotPreview`: Armazena a imagem recortada final.
         - Estado `isCapturing` e `isCropping`: Controlam a visibilidade do modal e do cropper.
     *   **Lógica de Upload:**
         - No `handleSubmit`, converte o base64 do crop em `File`.
-        - Valida tamanho do arquivo (máximo 5MB).
         - Realiza upload via `storageService` para a pasta `feedback-reports`.
         - Anexa a URL retornada ao `FeedbackReport`.
     *   Consome `reportingService` e `storageService` do `useRest`.

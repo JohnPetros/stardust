@@ -6,17 +6,20 @@ import {
   type ChangeEvent,
 } from 'react'
 
+import type { AssistantSelections } from '@/ui/challenging/stores/ChallengeStore/types'
+
 type Params = {
-  onSendMessage: (message: string) => void
+  assistantSelections: AssistantSelections
+  onSendMessage: (message: string, selections: AssistantSelections) => void
 }
 
-export const useChatInput = ({ onSendMessage }: Params) => {
+export const useChatInput = ({ assistantSelections, onSendMessage }: Params) => {
   const [message, setMessage] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      onSendMessage(message)
+      onSendMessage(message, assistantSelections)
       setMessage('')
     }
   }

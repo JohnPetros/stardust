@@ -1,4 +1,5 @@
 import type { Challenge } from '@stardust/core/challenging/entities'
+import type { RefObject } from 'react'
 
 import { ChallengeInfo } from '@/ui/challenging/widgets/components/ChallengeInfo'
 import { DifficultyBadge } from '@/ui/global/widgets/components/DifficultyBadge'
@@ -7,6 +8,12 @@ import { Mdx } from '@/ui/global/widgets/components/Mdx'
 import { ChallengeVoteControl } from './ChallengeVoteControl'
 import { ChallengeControl } from './ChallengeControl'
 import { ChallengeContentNav } from '../../components/ChallengeContentNav'
+import { SelectionActionButtonView } from '@/ui/challenging/widgets/components/SelectionActionButton/SelectionActionButtonView'
+
+type Position = {
+  top: number
+  left: number
+}
 
 type Props = {
   isLoading: boolean
@@ -14,6 +21,11 @@ type Props = {
   isUserChallengeAuthor: boolean
   isCompleted: boolean
   mdx: string
+  contentRef: RefObject<HTMLDivElement | null>
+  isAssistantEnabled: boolean
+  isSelectionButtonVisible: boolean
+  selectionButtonPosition: Position
+  onAddTextSelection: () => void
 }
 
 export const ChallengeDescriptionSlotView = ({
@@ -22,6 +34,11 @@ export const ChallengeDescriptionSlotView = ({
   isUserChallengeAuthor,
   isCompleted,
   mdx,
+  contentRef,
+  isAssistantEnabled,
+  isSelectionButtonVisible,
+  selectionButtonPosition,
+  onAddTextSelection,
 }: Props) => {
   return isLoading || !challenge ? (
     <div className='grid h-full place-content-center'>
@@ -45,8 +62,16 @@ export const ChallengeDescriptionSlotView = ({
           <ChallengeControl isChallengePublic={challenge.isPublic.value} />
         )}
       </div>
-      <div className='mt-6 pb-6'>
+      <div ref={contentRef} className='mt-6 pb-6 relative select-text'>
         <Mdx>{mdx}</Mdx>
+        {isAssistantEnabled && isSelectionButtonVisible && (
+          <SelectionActionButtonView
+            label='Adicionar'
+            iconName='description'
+            position={selectionButtonPosition}
+            onClick={onAddTextSelection}
+          />
+        )}
       </div>
     </div>
   )

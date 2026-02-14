@@ -1,3 +1,7 @@
+---
+description: Prompt para concluir a correcao de bug com validacao, aderencia arquitetural e atualizacao do bug report.
+---
+
 # Prompt: Commit Bug Report
 
 **Objetivo:**

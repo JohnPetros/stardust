@@ -44,6 +44,7 @@ export const Widget = (
     getCursorPosition,
     setCursorPosition,
     getSelectedLinesRange,
+    getSelectedText,
     handleChange,
     handleEditorDidMount,
   } = useCodeEditor({
@@ -65,6 +66,7 @@ export const Widget = (
       getCursorPosition,
       setCursorPosition,
       getSelectedLinesRange,
+      getSelectedText,
     }
   }, [
     getValue,
@@ -74,6 +76,7 @@ export const Widget = (
     getCursorPosition,
     setCursorPosition,
     getSelectedLinesRange,
+    getSelectedText,
   ])
 
   return (

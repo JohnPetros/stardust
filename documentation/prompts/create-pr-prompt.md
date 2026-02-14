@@ -1,3 +1,7 @@
+---
+description: Prompt para criar pull requests padronizados via gh com titulo, body e checklist de validacao.
+---
+
 # Prompt: Criar PRD
 
 **Objetivo:** Padronizar a criação de Pull Requests (PRs), garantindo descrições
