@@ -77,11 +77,16 @@ jobs:
             --arg sha "$SHA_SHORT" \
             '{
               embeds: [{
-                title: "✅ Deploy Staging Concluído",
-                description: "Uma nova versão de staging do Stardust Web foi implantada com sucesso.",
+                title: "✅ Stardust Web - Staging Deploy (Heroku)",
+                description: "Uma nova versão de staging do Stardust Web foi implantada com sucesso na Heroku.",
                 url: $url,
                 color: 3066993,
                 fields: [
+                  {
+                    "name": "🌐 Preview URL",
+                    "value": "https://stardust-web-app-c9db624e9ebb.herokuapp.com/",
+                    "inline": false
+                  },
                   {
                     name: "🔗 Commit",
                     value: ("[" + $sha + "](" + $url + ")"),

@@ -54,18 +54,18 @@ jobs:
               "content": "",
               "embeds": [
                 {
-                  "title": "Stardust Web - Staging Deploy",
+                  "title": "✅ Stardust Web - Staging Deploy (Vercel)",
                   "description": "Nova versão de staging implantada com sucesso na Vercel.",
                   "color": 5763719,
                   "fields": [
                     {
-                      "name": "Preview URL",
+                      "name": "🌐 Preview URL",
                       "value": "${{ steps.deploy.outputs.deployment_url }}",
                       "inline": false
                     },
                     {
-                      "name": "Pull Request",
-                      "value": "${{ github.event.pull_request.html_url }}",
+                      "name": "🔗 Commit",
+                      "value": ("[" + $sha + "](" + $url + ")"),
                       "inline": true
                     }
                   ],
