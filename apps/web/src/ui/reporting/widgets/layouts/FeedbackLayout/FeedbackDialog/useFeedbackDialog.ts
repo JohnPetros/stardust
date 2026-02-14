@@ -1,12 +1,14 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { toPng } from 'html-to-image'
+
 import { FeedbackReport } from '@stardust/core/reporting/entities'
 import { AuthorAggregate } from '@stardust/core/global/aggregates'
 import type { ReportingService } from '@stardust/core/reporting/interfaces'
 import type { StorageService } from '@stardust/core/storage/interfaces'
 import { StorageFolder } from '@stardust/core/storage/structures'
 import type { User } from '@stardust/core/global/entities'
+
 import type { ToastContextValue } from '@/ui/global/contexts/ToastContext/types'
-import { domToPng } from 'modern-screenshot'
 
 export type FeedbackStep = 'initial' | 'form' | 'success'
 
@@ -32,11 +34,66 @@ export function useFeedbackDialog({
   const [isCapturing, setIsCapturing] = useState(false)
   const [isCropping, setIsCropping] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const isCaptureWarmRef = useRef(false)
+  const captureWarmupPromiseRef = useRef<Promise<void> | null>(null)
+
+  function waitForIdle() {
+    return new Promise<void>((resolve) => {
+      if (typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(() => resolve(), { timeout: 500 })
+        return
+      }
+      setTimeout(() => resolve(), 100)
+    })
+  }
+
+  async function warmupCaptureEngine() {
+    if (isCaptureWarmRef.current) return
+
+    if (!captureWarmupPromiseRef.current) {
+      captureWarmupPromiseRef.current = (async () => {
+        let warmupNode: HTMLDivElement | null = null
+
+        try {
+          // await waitForIdle()
+
+          warmupNode = document.createElement('div')
+          warmupNode.style.position = 'fixed'
+          warmupNode.style.left = '-99999px'
+          warmupNode.style.top = '-99999px'
+          warmupNode.style.width = '16px'
+          warmupNode.style.height = '16px'
+          warmupNode.style.background = '#121214'
+
+          document.body.appendChild(warmupNode)
+
+          await toPng(warmupNode, {
+            backgroundColor: '#121214',
+            width: 16,
+            height: 16,
+            pixelRatio: 1,
+          })
+
+          isCaptureWarmRef.current = true
+        } catch {
+          return
+        } finally {
+          if (warmupNode && warmupNode.parentNode) {
+            warmupNode.parentNode.removeChild(warmupNode)
+          }
+          captureWarmupPromiseRef.current = null
+        }
+      })()
+    }
+
+    await captureWarmupPromiseRef.current
+  }
 
   function handleOpenChange(open: boolean) {
     setIsOpen(open)
+    if (open) void warmupCaptureEngine()
+
     if (!open && !isCapturing && !isCropping) {
-      // Small delay to reset after transition
       setTimeout(() => {
         setStep('initial')
         setContent('')
@@ -49,6 +106,7 @@ export function useFeedbackDialog({
   }
 
   function handleSelectIntent(selectedIntent: string) {
+    void warmupCaptureEngine()
     setIntent(selectedIntent)
     setStep('form')
   }
@@ -73,41 +131,44 @@ export function useFeedbackDialog({
     const previousDisplay = feedbackButton?.style.display
 
     try {
+      await warmupCaptureEngine()
       setIsCapturing(true)
+
       const scrollY = window.scrollY
       const scrollX = window.scrollX
 
-      if (feedbackButton) {
-        feedbackButton.style.display = 'none'
-      }
+      if (feedbackButton) feedbackButton.style.display = 'none'
+
+      document.documentElement.setAttribute('data-screenshot', 'true')
+      ;(document.activeElement as HTMLElement | null)?.blur?.()
 
       await new Promise<void>((resolve) => {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => resolve())
-        })
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
       })
 
-      const dataUrl = await domToPng(document.body, {
+      const dataUrl = await toPng(document.body, {
         backgroundColor: '#121214',
-        scale: 1,
         width: window.innerWidth,
         height: window.innerHeight,
+        pixelRatio: 1,
         style: {
           marginTop: `-${scrollY}px`,
           marginLeft: `-${scrollX}px`,
         },
       })
 
+      document.documentElement.removeAttribute('data-screenshot')
+
       setRawScreenshot(dataUrl)
       setIsCropping(true)
     } catch (error) {
+      document.documentElement.removeAttribute('data-screenshot')
       console.error('Capture failed', error)
       toast.showError('Falha ao capturar a tela.')
     } finally {
       if (feedbackButton) {
         feedbackButton.style.display = previousDisplay || 'flex'
       }
-
       setIsCapturing(false)
     }
   }
@@ -152,8 +213,6 @@ export function useFeedbackDialog({
         },
       })
 
-      console.log({ screenshotPreview })
-
       let screenshotUrl = screenshotPreview
 
       if (screenshotPreview?.startsWith('data:')) {
@@ -163,7 +222,7 @@ export function useFeedbackDialog({
           const file = new File([blob], `feedback-screenshot-${Date.now()}.png`, {
             type: 'image/png',
           })
-          console.log('file name', file.name)
+
           const uploadResponse = await storageService.uploadFile(
             StorageFolder.createAsFeedbackReports(),
             file,
