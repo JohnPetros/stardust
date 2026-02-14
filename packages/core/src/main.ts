@@ -70,6 +70,7 @@ export * from './challenging/domain/entities/dtos/index'
 export * from './challenging/domain/constants/index'
 export * from './challenging/domain/types/index'
 export * from './challenging/domain/errors/index'
+export * from './challenging/domain/events/index'
 export * from './challenging/interfaces/index'
 export * from './challenging/use-cases/index'
 
