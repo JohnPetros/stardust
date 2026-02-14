@@ -1,5 +1,5 @@
 @URL = {{BASE_URL}}/storage/files
-@FILE_NAME = abacaxi.jpg
+@FILE_NAME = banana.jpg
 @FOLDER = story
 
 ### Get files
