@@ -1,8 +1,8 @@
 import type { Id, Text } from '#global/domain/structures/index'
 import type { RestResponse } from '#global/responses/RestResponse'
 import type { TextBlockDto } from '#global/domain/entities/dtos/TextBlockDto'
-import type { QuestionDto } from '../domain/entities/dtos'
 import type { Question } from '../domain/abstracts'
+import type { QuestionDto } from '../domain/entities/dtos'
 
 export interface LessonService {
   fetchQuestions(starId: Id): Promise<RestResponse<QuestionDto[]>>
