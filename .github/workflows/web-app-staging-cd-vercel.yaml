@@ -41,9 +41,32 @@ jobs:
 
       - name: Send Discord notification
         if: success()
-        uses: appleboy/discord-action@v1.2.0
-        with:
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          message: |
-            ✅ Nova versão de staging do Stardust Web implantada com sucesso no Vercel!
-            🔗 URL: ${{ steps.deploy.outputs.deployment_url }}
+        run: |
+          curl -sS -X POST "${{ secrets.DISCORD_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "content": "",
+              "embeds": [
+                {
+                  "title": "Stardust Web - Staging Deploy",
+                  "description": "Nova versão de staging implantada com sucesso na Vercel.",
+                  "color": 5763719,
+                  "fields": [
+                    {
+                      "name": "Preview URL",
+                      "value": "${{ steps.deploy.outputs.deployment_url }}",
+                      "inline": false
+                    },
+                    {
+                      "name": "Pull Request",
+                      "value": "${{ github.event.pull_request.html_url }}",
+                      "inline": true
+                    },
+                  ],
+                  "footer": {
+                    "text": "GitHub Actions · Web app staging CD"
+                  },
+                  "timestamp": "${{ github.event.pull_request.updated_at }}"
+                }
+              ]
+            }'
