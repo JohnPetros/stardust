@@ -75,15 +75,17 @@ google-key-file.json
 .agent/
 .agents/
 .cursor/
-<<<<<<< feat/assistant-chatbot-responsiveness
-=======
-.claude/
->>>>>>> main
 .codex/
 .context/
 .serena/
 .opencode/
 opencode.jsonc
-GEMINI.md
-CLAUDE.md
+
+# Ai Content
+.context/
+
+# Serena MCP
+.serena
+
+*.tsbuildinfo
 prompt.md

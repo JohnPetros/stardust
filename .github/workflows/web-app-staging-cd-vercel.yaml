@@ -1,0 +1,78 @@
+name: Web app staging CD to Vercel
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/web/**"
+      - "packages/core/**"
+      - "packages/validation/**"
+      - "packages/lsp/**"
+
+concurrency:
+  group: vercel-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    name: Deploy Preview to Vercel
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install dependencies (monorepo)
+        run: npm ci
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel@latest
+
+      - name: Deploy to Vercel (Preview) - remote build
+        id: deploy
+        run: |
+          url=$(vercel deploy --yes --token=${{ secrets.VERCEL_TOKEN }})
+          echo "deployment_url=$url" >> $GITHUB_OUTPUT
+          echo "Deployed to: $url"
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Send Discord notification
+        if: success()
+        run: |
+          curl -sS -X POST "${{ secrets.DISCORD_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "content": "",
+              "embeds": [
+                {
+                  "title": "Stardust Web - Staging Deploy",
+                  "description": "Nova versão de staging implantada com sucesso na Vercel.",
+                  "color": 5763719,
+                  "fields": [
+                    {
+                      "name": "Preview URL",
+                      "value": "${{ steps.deploy.outputs.deployment_url }}",
+                      "inline": false
+                    },
+                    {
+                      "name": "Pull Request",
+                      "value": "${{ github.event.pull_request.html_url }}",
+                      "inline": true
+                    },
+                  ],
+                  "footer": {
+                    "text": "GitHub Actions · Web app staging CD"
+                  },
+                  "timestamp": "${{ github.event.pull_request.updated_at }}"
+                }
+              ]
+            }'
