@@ -72,6 +72,7 @@ jobs:
             --arg ts "$TIMESTAMP" \
             --arg url "$COMMIT_URL" \
             --arg sha "$SHA_SHORT" \
+            
             '{
               embeds: [{
                 title: "✅ Deploy Staging Concluído",
@@ -79,7 +80,11 @@ jobs:
                 url: ($url | .),
                 color: 3066993,
                 fields: [
-                  { name: "🔗 Commit", value: ("[" + ($sha | .) + "](" + ($url | .) + ")"), inline: false }
+                  { 
+                    name: "🔗 Commit",
+                    value: ("[" + ($sha | .) + "](" + ($url | .) + ")"),
+                    inline: true
+                  },
                 ],
                 footer: { text: "GitHub Actions • Stardust" },
                 timestamp: ($ts | .)
