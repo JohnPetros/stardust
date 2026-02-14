@@ -1,8 +1,14 @@
 name: Web app staging CD to Vercel
 
 on:
-  pull_request:
-    branches: [main]
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/web/**"
+      - "packages/core/**"
+      - "packages/validation/**"
+      - "packages/lsp/**"
 
 concurrency:
   group: vercel-preview-${{ github.event.pull_request.number }}
