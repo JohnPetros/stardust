@@ -67,7 +67,7 @@ jobs:
                       "name": "Pull Request",
                       "value": "${{ github.event.pull_request.html_url }}",
                       "inline": true
-                    },
+                    }
                   ],
                   "footer": {
                     "text": "GitHub Actions · Web app staging CD"

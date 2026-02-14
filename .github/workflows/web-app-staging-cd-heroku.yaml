@@ -65,31 +65,34 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
+          set -euo pipefail
+
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           COMMIT_URL="https://github.com/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}"
           SHA_SHORT=$(echo "$GITHUB_SHA" | cut -c1-7)
+
           EMBED=$(jq -n \
             --arg ts "$TIMESTAMP" \
             --arg url "$COMMIT_URL" \
             --arg sha "$SHA_SHORT" \
-            
             '{
               embeds: [{
                 title: "✅ Deploy Staging Concluído",
                 description: "Uma nova versão de staging do Stardust Web foi implantada com sucesso.",
-                url: ($url | .),
+                url: $url,
                 color: 3066993,
                 fields: [
-                  { 
+                  {
                     name: "🔗 Commit",
-                    value: ("[" + ($sha | .) + "](" + ($url | .) + ")"),
+                    value: ("[" + $sha + "](" + $url + ")"),
                     inline: true
-                  },
+                  }
                 ],
                 footer: { text: "GitHub Actions • Stardust" },
-                timestamp: ($ts | .)
+                timestamp: $ts
               }]
             }')
+
           curl -H "Content-Type: application/json" \
             -d "$EMBED" \
             "$DISCORD_WEBHOOK_URL"
