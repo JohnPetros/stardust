@@ -1,3 +1,7 @@
+---
+description: Prompt para concluir uma spec com validacao final, atualizacao de documentacao e resumo tecnico.
+---
+
 # Prompt: Conclude Spec
 
 **Objetivo:** Finalizar e consolidar a implementação de uma Spec técnica,

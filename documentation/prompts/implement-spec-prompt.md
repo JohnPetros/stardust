@@ -1,3 +1,7 @@
+---
+description: Prompt para implementar uma spec tecnica de forma iterativa, validada e aderente as regras do projeto.
+---
+
 # Prompt: Implementar Spec
 
 **Objetivo:** Executar o plano de implementação técnica de forma iterativa,

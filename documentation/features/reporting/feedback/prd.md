@@ -33,7 +33,7 @@ O **Widget de Feedback** é uma ferramenta de engajamento e monitoramento de qua
 - [x] **Captura de Tela (Screenshot):**
     - Botão com ícone de câmera ao lado do botão de enviar.
     - Ao clicar, o modal deve se ocultar momentaneamente.
-    - Capturar a tela do usuário com alta fidelidade (biblioteca `modern-screenshot`).
+    - Capturar a tela do usuário com alta fidelidade (biblioteca `html-to-image`, com warmup para reduzir atraso inicial).
     - **Edição/Recorte (Crop):** Abrir uma interface de recorte (`ScreenCropper`) em tela cheia para que o usuário selecione a área relevante.
     - Exibir visualização (thumbnail) da imagem recortada no formulário.
 - [x] **Ação de Envio:** Botão "Enviar feedback" com destaque visual (cor primária do projeto).
@@ -76,5 +76,4 @@ Conforme mockups fornecidos, o design deve seguir uma estética **moderna e escu
 - **Acesso Autenticado:** Apenas usuários logados podem visualizar e enviar feedbacks. O ID do usuário deve ser vinculado automaticamente ao registro.
 - **Campos Obrigatórios:** O campo de mensagem de texto é obrigatório para o envio. A captura de tela é opcional.
 - **Canal Único:** Todos os tipos de feedback (Bug, Ideia, Outro) devem ser encaminhados para o mesmo canal do Discord, diferenciados visualmente na mensagem (ex: Emoji no título do embed).
-
 

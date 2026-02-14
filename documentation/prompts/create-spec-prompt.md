@@ -1,3 +1,7 @@
+---
+description: Prompt para criar uma especificacao tecnica detalhada com base no PRD e na arquitetura do projeto.
+---
+
 # Prompt: Criar Spec
 
 **Objetivo:** Detalhar a implementação técnica de uma feature, fix ou

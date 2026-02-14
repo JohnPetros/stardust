@@ -1,3 +1,7 @@
+---
+description: Prompt para criar um PRD com discovery, clarificacao e estrutura padronizada de requisitos e fluxos.
+---
+
 # Prompt: Criar PRD
 
 **Objetivo:** Padronizar a criação de Product Requirements Documents (PRDs),

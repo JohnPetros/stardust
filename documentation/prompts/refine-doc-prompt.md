@@ -1,3 +1,7 @@
+---
+description: Prompt para refinar documentos markdown com foco em estrutura, clareza, consistencia e qualidade textual.
+---
+
 # Prompt: Refinar Documento (PRD/Spec/MD)
 
 **Objetivo Principal** Atuar como um Technical Writer Sênior para revisar,

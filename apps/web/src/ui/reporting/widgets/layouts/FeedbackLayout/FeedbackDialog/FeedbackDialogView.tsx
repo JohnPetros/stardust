@@ -70,7 +70,10 @@ export function FeedbackDialogView({
       open={!isCapturing && !isCropping && isOpen}
       onOpenChange={onOpenChange}
     >
-      <Dialog.Content className='sm:max-w-[400px] md:max-w-[620px] rounded-3xl border-gray-800 bg-[#121214] p-6 text-gray-100 overflow-hidden'>
+      <Dialog.Content
+        data-feedback-ignore-capture='true'
+        className='sm:max-w-[400px] md:max-w-[620px] rounded-3xl border-gray-800 bg-[#121214] p-6 text-gray-100 overflow-hidden'
+      >
         <div className='flex items-center justify-between mb-2'>
           {step === 'form' ? (
             <button
@@ -139,6 +142,7 @@ export function FeedbackDialogView({
 
       {!isCapturing && (
         <Dialog.Trigger
+          data-feedback-ignore-capture='true'
           className={`hidden md:flex group fixed w-auto h-12 z-50 items-center justify-center rounded-full bg-green-500 text-black opacity-25 transition-all duration-300 hover:opacity-100 hover:scale-[1.02] active:scale-95 px-3 ${triggerClassName}`}
         >
           <button

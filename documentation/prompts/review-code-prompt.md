@@ -1,3 +1,7 @@
+---
+description: Prompt para revisar codigo com foco em conformidade com spec, padroes do projeto e qualidade tecnica.
+---
+
 # Prompt: Revisar código
 
 **Objetivo:** Realizar uma revisão técnica rigorosa da base de código para

@@ -1,3 +1,7 @@
+---
+description: Prompt para resolver conversas pendentes de um pull request com analise, implementacao e fechamento de threads.
+---
+
 # Prompt: Resolver conversas de PR 
 
 **Objetivo Principal**
