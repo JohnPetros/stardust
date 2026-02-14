@@ -2,15 +2,7 @@ name: Web app staging CD to Vercel
 
 on:
   pull_request:
-    branches:
-      - main
-    # paths:
-    #   - "apps/web/**"
-    #   - "packages/core/**"
-    #   - "packages/validation/**"
-    #   - "packages/lsp/**"
-    #   - "turbo.json"
-    #   - "package.json"
+    branches: [main]
 
 concurrency:
   group: vercel-preview-${{ github.event.pull_request.number }}
@@ -28,27 +20,34 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: "npm"
 
-      - name: Install dependencies
+      - name: Install dependencies (monorepo)
         run: npm ci
 
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
 
+      # IMPORTANT: agora o pull é na raiz (sem --cwd=apps/web)
       - name: Pull Vercel environment information
         run: |
-          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/web
-          cp apps/web/.vercel/.env.preview.local apps/web/.env.local
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+          cp .vercel/.env.preview.local apps/web/.env.local
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Deploy to Vercel (Preview)
+      - name: Build (prebuilt)
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Deploy (prebuilt preview)
         id: deploy
         run: |
-          url=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/web)
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "deployment_url=$url" >> $GITHUB_OUTPUT
           echo "Deployed to: $url"
         env:
