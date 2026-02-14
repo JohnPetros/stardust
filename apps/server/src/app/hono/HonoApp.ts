@@ -26,6 +26,7 @@ import {
   RankingFunctions,
   NotificationFunctions,
   StorageFunctions,
+  ChallengingFunctions,
 } from '@/queue/inngest/functions'
 import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
 import {
@@ -65,7 +66,7 @@ export class HonoApp {
     new AxiosRestClient(ENV.discordWebhookUrl),
   )
 
-  startServer() {
+  startServer(port = ENV.port) {
     this.setUpCors()
     this.registerMiddlewares()
     this.registerRoutes()
@@ -74,7 +75,7 @@ export class HonoApp {
     const server = serve(
       {
         fetch: this.hono.fetch,
-        port: ENV.port,
+        port,
       },
       (info) => {
         console.log(`🏢 Server is running on ${ENV.baseUrl}:${info.port}`)
@@ -196,6 +197,7 @@ export class HonoApp {
       const rankingFunctions = new RankingFunctions(inngest)
       const storageFunctions = new StorageFunctions(inngest)
       const notificationFunctions = new NotificationFunctions(inngest)
+      const challengingFunctions = new ChallengingFunctions(inngest)
 
       return serveInngest({
         client: inngest,
@@ -206,6 +208,7 @@ export class HonoApp {
           ...rankingFunctions.getFunctions(supabase),
           ...storageFunctions.getFunctions(),
           ...notificationFunctions.getFunctions(),
+          ...challengingFunctions.getFunctions(),
         ],
       })(context)
     })

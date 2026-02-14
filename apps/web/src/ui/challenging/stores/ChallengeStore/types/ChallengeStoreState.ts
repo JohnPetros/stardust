@@ -3,6 +3,7 @@ import type { ChallengeCraftsVisibility } from '@stardust/core/challenging/struc
 import type { PanelsLayout } from './PanelsLayout'
 import type { TabHandler } from './TabHandler'
 import type { ChallengeContent } from './ChallengeContent'
+import type { AssistantSelections } from './AssistantSelection'
 
 export type ChallengeStoreState = {
   challenge: Challenge | null
@@ -13,4 +14,5 @@ export type ChallengeStoreState = {
   results: boolean[]
   tabHandler: TabHandler | null
   isAssistantEnabled: boolean
+  assistantSelections: AssistantSelections
 }

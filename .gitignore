@@ -65,23 +65,19 @@ dist
 # Certificates
 google-key-file.json
 
+# Excalidraw
+.excalidraw
+
 # VSCode
 .vscode/
 
-# Cursor
-.cursor/
-
-# Gemini
-GEMINI.md
-
-# Antigravity
+# Agents
 .agent/
 .agents/
-
-# Codex
+.cursor/
 .codex/
-
-# Open Code
+.context/
+.serena/
 .opencode/
 opencode.jsonc
 

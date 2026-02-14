@@ -3,6 +3,7 @@ import type { PanelsLayout } from './PanelsLayout'
 import type { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
 import type { TabHandler } from './TabHandler'
 import type { ChallengeContent } from './ChallengeContent'
+import type { CodeSelection, TextSelection } from '@stardust/core/global/structures'
 
 export type ChallengeStoreActions = {
   setChallenge: (challenge: Challenge | null) => void
@@ -13,5 +14,10 @@ export type ChallengeStoreActions = {
   setResults: (results: boolean[]) => void
   setIsAssistantEnabled: (isAssistantEnabled: boolean) => void
   setMdx: (mdx: string) => void
+  setTextSelection: (textSelection: TextSelection | null) => void
+  setCodeSelection: (codeSelection: CodeSelection | null) => void
+  clearTextSelection: () => void
+  clearCodeSelection: () => void
+  clearAssistantSelections: () => void
   resetStore: () => void
 }

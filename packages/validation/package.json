@@ -6,7 +6,10 @@
   "types": "build/main.d.ts",
   "scripts": {
     "build": "tsup",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "codecheck": "npm run lint && npm run format",
+    "lint": "biome lint src --diagnostic-level=error",
+    "format": "biome format src --write"
   },
   "exports": {
     ".": "./build/main.js",

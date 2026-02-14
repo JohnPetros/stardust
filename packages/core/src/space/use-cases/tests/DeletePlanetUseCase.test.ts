@@ -32,9 +32,9 @@ describe('Delete Planet Use Case', () => {
   it('should throw when the planet does not exist', async () => {
     planetsRepository.findById.mockResolvedValue(null)
 
-    await expect(
-      useCase.execute({ planetId: faker.string.uuid() }),
-    ).rejects.toThrow(PlanetNotFoundError)
+    await expect(useCase.execute({ planetId: faker.string.uuid() })).rejects.toThrow(
+      PlanetNotFoundError,
+    )
 
     expect(planetsRepository.remove).not.toHaveBeenCalled()
   })

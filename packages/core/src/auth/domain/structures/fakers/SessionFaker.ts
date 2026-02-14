@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
 
-import { Session } from "../Session"
-import type { SessionDto } from "../dtos"
-import { AccountsFaker } from "../../entities/fakers"
+import { Session } from '../Session'
+import type { SessionDto } from '../dtos'
+import { AccountsFaker } from '../../entities/fakers'
 
 export class SessionFaker {
   static fake(): Session {

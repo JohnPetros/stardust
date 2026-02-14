@@ -79,20 +79,23 @@ export const ScreenCropperView = ({
         </div>
       </div>
 
-      <div className='relative flex-1 min-h-0 bg-[#09090A]'>
-        <Cropper
-          ref={cropperRef}
-          src={image}
-          className='h-full w-full'
-          stencilProps={{
-            grid: true,
-            overlayClassName: 'bg-black/60',
-          }}
-          backgroundProps={{
-            className: 'bg-black',
-          }}
-        />
-      </div>
+      <Cropper
+        ref={cropperRef}
+        src={image}
+        className='h-full w-full'
+        wrapperProps={{
+          style: { position: 'absolute', inset: 0, width: '100%', height: '100%' },
+        }}
+        backgroundWrapperProps={{
+          style: { position: 'absolute', inset: 0, width: '100%', height: '100%' },
+        }}
+        boundaryProps={{
+          style: { position: 'absolute', inset: 0, width: '100%', height: '100%' },
+        }}
+        stencilProps={{
+          grid: true,
+        }}
+      />
 
       <div className='bg-[#121214] px-4 md:px-6 py-3 flex justify-center border-t border-white/5 text-center'>
         <p className='text-[9px] md:text-[10px] text-gray-500 uppercase tracking-widest font-medium'>

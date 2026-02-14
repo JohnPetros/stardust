@@ -9,4 +9,5 @@ export type CodeEditorRef = {
   getCursorPosition: () => CursorPosition | null
   setCursorPosition: (cursorPositon: CursorPosition) => void
   getSelectedLinesRange: () => SelectedLinesRange | null
+  getSelectedText: () => string | null
 }

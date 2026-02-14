@@ -6,13 +6,13 @@ import { PromptView } from './PromptView'
 
 type PromptProps = {
   children?: ReactNode
-  title?: string
+  initialTitle?: string
   onConfirm: () => void
   onCancel?: () => void
 }
 
 export function PromptComponent(
-  { onConfirm, onCancel, children: trigger, title: initialTitle }: PromptProps,
+  { onConfirm, onCancel, children: trigger, initialTitle }: PromptProps,
   ref: ForwardedRef<PromptRef>,
 ) {
   const { title, value, alertDialogRef, open, close, setTitle, setValue } = usePrompt(

@@ -20,6 +20,7 @@ type Props = {
   onCreateChat: (question?: string) => void
   onSelectChat: (chatDto: ChatDto) => void
   onDeleteChat: (chatId: string) => void
+  onEditChatName?: (chatId: string, chatName: string) => Promise<void>
   onSendFirstQuestion: () => void
 }
 
@@ -32,6 +33,7 @@ export const AssistantChatbotView = ({
   onCreateChat,
   onDeleteChat,
   onSelectChat,
+  onEditChatName,
   onSendFirstQuestion,
 }: Props) => {
   return (
@@ -51,7 +53,11 @@ export const AssistantChatbotView = ({
           >
             <Icon name='plus' size={20} />
           </button>
-          <AssistantChatsHistory onSelectChat={onSelectChat} onDeleteChat={onDeleteChat}>
+          <AssistantChatsHistory
+            onSelectChat={onSelectChat}
+            onDeleteChat={onDeleteChat}
+            onEditChatName={onEditChatName}
+          >
             <button
               type='button'
               className='p-2 rounded-md text-green-400 hover:bg-gray-800'

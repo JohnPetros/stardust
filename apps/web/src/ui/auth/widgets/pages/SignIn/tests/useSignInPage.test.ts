@@ -33,7 +33,9 @@ describe('useSignInPage hook', () => {
   it('should call handleSignIn with email and password when form is submitted', async () => {
     const { result } = renderHook(Hook)
 
-    await result.current.handleFormSubmit({ email, password })
+    await act(async () => {
+      await result.current.handleFormSubmit({ email, password })
+    })
 
     expect(handleSignIn).toHaveBeenCalledWith(email, password)
   })
@@ -43,7 +45,9 @@ describe('useSignInPage hook', () => {
 
     const { result } = renderHook(Hook)
 
-    await result.current.handleFormSubmit({ email, password })
+    await act(async () => {
+      await result.current.handleFormSubmit({ email, password })
+    })
 
     expect(result.current.isRocketVisible).toBe(false)
   })

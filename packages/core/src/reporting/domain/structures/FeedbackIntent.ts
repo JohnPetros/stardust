@@ -1,4 +1,4 @@
-import { Logical } from "#global/domain/structures/Logical"
+import { Logical } from '#global/domain/structures/Logical'
 
 export type FeedbackIntentValue = 'bug' | 'idea' | 'other'
 
