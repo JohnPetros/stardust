@@ -1,3 +1,7 @@
+---
+description: Prompt para identificar e corrigir efeitos colaterais apos alteracoes manuais, incluindo validacoes e testes.
+---
+
 # Fix Side Effect Skill
 
 **Objetivo:**

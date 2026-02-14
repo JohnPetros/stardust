@@ -1,3 +1,7 @@
+---
+description: Prompt para corrigir bugs a partir de bug report com planejamento, implementacao iterativa e revisao final.
+---
+
 # Prompt: Fix Bug
 
 **Objetivo Principal**

@@ -1,3 +1,7 @@
+---
+description: Prompt para transformar relatos informais em bug reports tecnicos claros, acionaveis e orientados a correcao.
+---
+
 # Prompt: Criar Bug Report
 
 **Objetivo:**

@@ -1,3 +1,7 @@
+---
+description: Prompt para criar testes unitarios e de integracao seguindo os padroes de testes do projeto.
+---
+
 # Prompt: Criar testes 🧪
 
 **Objetivo:** Orientar a criação de testes unitários e de integração padronizados e eficientes, garantindo a integridade da lógica de negócios, a orquestração correta dos handlers e a fidelidade funcional dos componentes de UI.
@@ -72,4 +76,3 @@ Identifique o tipo de código que está sendo testado e leia e siga a regra corr
   - `cd apps/server && npm run test -- caminho/do/arquivo` para executar um teste específico da app server.
   - `cd apps/studio && npm run test -- caminho/do/arquivo` para executar um teste específico da app studio.
   - `cd packages/core && npm run test -- caminho/do/arquivo` para executar um teste específico da app core.
-

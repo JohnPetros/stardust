@@ -1,3 +1,7 @@
+---
+description: Prompt para analisar alteracoes e executar commits reais com padrao de mensagens definido.
+---
+
 # Prompt: Fazer Commits no Código
 
 **Objetivo Principal**

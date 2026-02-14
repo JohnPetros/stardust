@@ -1,3 +1,7 @@
+---
+description: Prompt para atualizar o documento de arquitetura com base em PRDs, specs, guidelines e mudancas no codigo.
+---
+
 # Prompt: Atualizar documento de arquitetura
 
 **Objetivo:**
@@ -28,4 +32,3 @@ Manter atualizado o documento de arquitetura do projeto (`documentation/architec
 3.  **Validação de Consistência:**
     *   Garanta que os exemplos de código no documento de arquitetura compilem ou sejam sintaticamente corretos e representativos do código real.
     *   Verifique se as "Armadilhas a Evitar" ainda são relevantes ou se novas lições aprendidas devem ser adicionadas.
-
