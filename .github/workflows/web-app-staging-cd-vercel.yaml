@@ -29,17 +29,16 @@ jobs:
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
 
-      # IMPORTANT: agora o pull é na raiz (sem --cwd=apps/web)
       - name: Pull Vercel environment information
         run: |
-          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-          cp .vercel/.env.preview.local apps/web/.env.local
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/web
+          cp apps/web/.vercel/.env.preview.local apps/web/.env.local
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Build (prebuilt)
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/web
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -47,7 +46,7 @@ jobs:
       - name: Deploy (prebuilt preview)
         id: deploy
         run: |
-          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/web)
           echo "deployment_url=$url" >> $GITHUB_OUTPUT
           echo "Deployed to: $url"
         env:
