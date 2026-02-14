@@ -1,4 +1,4 @@
-name: Web app staging CD to Vercel
+name: Web app staging CD to Vercel.
 
 on:
   push:
