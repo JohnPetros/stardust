@@ -25,6 +25,10 @@ export function useRestContextProvider(): RestContextValue {
   const [accessToken] = useSessionStorage(SESSION_STORAGE_KEYS.accessToken, '')
   const location = useLocation()
 
+  if (accessToken) {
+    restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken}`)
+  }
+
   useEffect(() => {
     if (accessToken) {
       restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken}`)
