@@ -31,6 +31,14 @@ export const NextRestClient = ({
   }
   let queryParams: Record<string, string> = {}
 
+  function getFileName(headers: Headers, fallbackName: string): string {
+    const contentDisposition = headers.get('content-disposition')
+    if (!contentDisposition) return fallbackName
+
+    const match = contentDisposition.match(/filename="?([^";]+)"?/i)
+    return match?.[1] ?? fallbackName
+  }
+
   return {
     async get<Body>(route: string): Promise<RestResponse<Body>> {
       const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
@@ -59,6 +67,34 @@ export const NextRestClient = ({
 
       this.clearQueryParams()
       return new RestResponse({ body: data, statusCode: response.status })
+    },
+
+    async getFile(route: string): Promise<RestResponse<File>> {
+      const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
+        ...requestInit,
+        method: 'GET',
+      })
+
+      if (!response.ok) {
+        return await handleRestError<File>(
+          response,
+          async () => await this.getFile(route),
+        )
+      }
+
+      const blob = await response.blob()
+      const fileName = getFileName(response.headers, 'download.bin')
+      const file = new File([blob], fileName, {
+        type: response.headers.get('content-type') || 'application/octet-stream',
+        lastModified: Date.now(),
+      })
+
+      this.clearQueryParams()
+      return new RestResponse({
+        body: file,
+        statusCode: response.status,
+        headers: Object.fromEntries(response.headers.entries()),
+      })
     },
 
     async post<Body>(route: string, body: unknown): Promise<RestResponse<Body>> {
