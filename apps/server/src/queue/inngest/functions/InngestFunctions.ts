@@ -13,26 +13,40 @@ type OnFailureCtx<TClient extends Inngest.Any> = Omit<
   FailureEventArgs
 
 export class InngestFunctions {
-  constructor(protected readonly inngest: Inngest) {}
+  private telemetryProvider?: SentryTelemetryProvider
+  private readonly notificationService: DiscordNotificationService
+
+  constructor(protected readonly inngest: Inngest) {
+    this.notificationService = new DiscordNotificationService(
+      new AxiosRestClient(ENV.discordWebhookUrl),
+    )
+  }
+
+  private getTelemetryProvider(): SentryTelemetryProvider {
+    if (!this.telemetryProvider) {
+      this.telemetryProvider = new SentryTelemetryProvider()
+    }
+    return this.telemetryProvider
+  }
 
   protected async handleFailure({ error }: OnFailureCtx<Inngest>) {
     if (ENV.mode === 'development') return
 
-    const telemetryProvider = new SentryTelemetryProvider()
-    const notificationService = new DiscordNotificationService(
-      new AxiosRestClient(ENV.discordWebhookUrl),
-    )
+    const telemetryProvider = this.getTelemetryProvider()
+
     if (error instanceof AppError) {
-      await notificationService.sendErrorNotification(
+      await this.notificationService.sendErrorNotification(
         'server',
-        `Erro capturado na fila: título: ${error.title} menssagem de erro: ${error.message}`,
+        `Erro capturado na fila: título: ${error.title} mensagem de erro: ${error.message}`,
       )
     } else if (error instanceof Error) {
-      await notificationService.sendErrorNotification(
+      await this.notificationService.sendErrorNotification(
         'server',
-        `Erro desconhecido capturado na fila: título: ${error.name} menssagem de erro: ${error.message}`,
+        `Erro desconhecido capturado na fila: título: ${error.name} mensagem de erro: ${error.message}`,
       )
     }
-    telemetryProvider.trackError(error)
+
+    const normalizedError = error instanceof Error ? error : new Error(String(error))
+    telemetryProvider.trackError(normalizedError)
   }
 }
