@@ -45,7 +45,7 @@ import {
 } from './routers'
 import { ForumRouter } from './routers/forum'
 import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
-import { SentryTelemetryProvider } from '@/provision/monitor'
+import { SentryTelemetryProvider } from '@/provision/telemetry'
 import { DiscordNotificationService } from '@/rest/services'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 import { HonoServer } from './HonoServer'

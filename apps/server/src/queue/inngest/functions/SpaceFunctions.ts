@@ -15,7 +15,7 @@ import { InngestBroker } from '../InngestBroker'
 export class SpaceFunctions extends InngestFunctions {
   private createUnlockFirstStarFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: UnlockFirstStarJob.KEY },
+      { id: UnlockFirstStarJob.KEY, onFailure: this.handleFailure },
       { event: UserSignedUpEvent._NAME },
       async (context) => {
         const repository = new SupabasePlanetsRepository(supabase)
@@ -29,7 +29,7 @@ export class SpaceFunctions extends InngestFunctions {
 
   private createHandleStarsNewOrderFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: HandleStarsNewOrderJob.KEY },
+      { id: HandleStarsNewOrderJob.KEY, onFailure: this.handleFailure },
       [
         { event: PlanetsOrderChangedEvent._NAME },
         { event: StarsOrderChangedEvent._NAME },

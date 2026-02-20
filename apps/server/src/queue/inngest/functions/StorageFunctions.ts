@@ -17,7 +17,7 @@ import { InngestAmqp } from '../InngestAmqp'
 export class StorageFunctions extends InngestFunctions {
   private createGenerateGuideEmbeddingsJob() {
     return this.inngest.createFunction(
-      { id: GenerateGuideEmbeddingsJob.KEY },
+      { id: GenerateGuideEmbeddingsJob.KEY, onFailure: this.handleFailure },
       { event: GuideContentEditedEvent._NAME },
       async (context) => {
         const generatorProvider = new MastraMarkdownEmbeddingsGeneratorProvider()
@@ -31,9 +31,9 @@ export class StorageFunctions extends InngestFunctions {
 
   private createBackupDatabaseJob() {
     return this.inngest.createFunction(
-      { id: BackupDatabaseJob.KEY },
+      { id: BackupDatabaseJob.KEY, onFailure: this.handleFailure },
       { cron: BackupDatabaseJob.CRON_EXPRESSION },
-      async () => {
+      async (context) => {
         const databaseProvider = new SupabaseDatabaseProvider()
         const restClient = new AxiosRestClient()
         const storageProvider = new DropboxStorageProvider(restClient)
@@ -45,7 +45,7 @@ export class StorageFunctions extends InngestFunctions {
 
   private createDeleteGuideEmbeddingsJob() {
     return this.inngest.createFunction(
-      { id: DeleteGuideEmbeddingsJob.KEY },
+      { id: DeleteGuideEmbeddingsJob.KEY, onFailure: this.handleFailure },
       { event: GuideDeletedEvent._NAME },
       async (context) => {
         const storageProvider = new UpstashEmbeddingsStorageProvider()

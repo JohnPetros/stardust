@@ -12,7 +12,7 @@ import { InngestBroker } from '../InngestBroker'
 export class RankingFunctions extends InngestFunctions {
   private reachFirstTierJob(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: ReachFirstTierJob.KEY },
+      { id: ReachFirstTierJob.KEY, onFailure: this.handleFailure },
       { event: FirstStarUnlockedEvent._NAME },
       async (context) => {
         const repository = new SupabaseTiersRepository(supabase)
@@ -26,7 +26,7 @@ export class RankingFunctions extends InngestFunctions {
 
   private updateRankingsJob(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: UpdateRankingsJob.KEY },
+      { id: UpdateRankingsJob.KEY, onFailure: this.handleFailure },
       { cron: UpdateRankingsJob.cronExpression },
       async (context) => {
         const tiersRepository = new SupabaseTiersRepository(supabase)
