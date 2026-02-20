@@ -30,7 +30,7 @@ export class InngestFunctions {
   }
 
   protected async handleFailure({ error }: OnFailureCtx<Inngest>) {
-    if (ENV.mode === 'development') return
+    if (ENV.mode !== 'development') return
 
     const telemetryProvider = this.getTelemetryProvider()
 
