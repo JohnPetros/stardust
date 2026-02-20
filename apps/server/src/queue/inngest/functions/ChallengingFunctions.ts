@@ -6,7 +6,7 @@ import { MastraCreateChallengeWorkflow } from '@/ai/mastra/workflows/MastraCreat
 export class ChallengingFunctions extends InngestFunctions {
   private createCreateChallengeFunction() {
     return this.inngest.createFunction(
-      { id: CreateChallengeJob.KEY },
+      { id: CreateChallengeJob.KEY, onFailure: this.handleFailure, retries: 0 },
       { cron: CreateChallengeJob.CRON_EXPRESSION },
       async (context) => {
         const workflow = new MastraCreateChallengeWorkflow()

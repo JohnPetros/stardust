@@ -1,8 +1,9 @@
-import { ENV } from '@/constants'
 import * as Sentry from '@sentry/node'
 
 import type { TelemetryProvider } from '@stardust/core/global/interfaces'
 import { AppError } from '@stardust/core/global/errors'
+
+import { ENV } from '@/constants'
 
 export class SentryTelemetryProvider implements TelemetryProvider {
   private readonly sentry: Sentry.NodeClient

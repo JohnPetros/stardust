@@ -17,7 +17,7 @@ import { InngestFunctions } from './InngestFunctions'
 export class NotificationFunctions extends InngestFunctions {
   private createCreateUserFunction() {
     return this.inngest.createFunction(
-      { id: SendPlanetCompletedNotificationJob.KEY },
+      { id: SendPlanetCompletedNotificationJob.KEY, onFailure: this.handleFailure },
       { event: PlanetCompletedEvent._NAME },
       async (context) => {
         const restClient = new AxiosRestClient(ENV.discordWebhookUrl)
@@ -31,7 +31,7 @@ export class NotificationFunctions extends InngestFunctions {
 
   private createSendSpaceCompletedNotificationFunction() {
     return this.inngest.createFunction(
-      { id: SendSpaceCompletedNotificationJob.KEY },
+      { id: SendSpaceCompletedNotificationJob.KEY, onFailure: this.handleFailure },
       { event: SpaceCompletedEvent._NAME },
       async (context) => {
         const restClient = new AxiosRestClient(ENV.discordWebhookUrl)
@@ -45,7 +45,7 @@ export class NotificationFunctions extends InngestFunctions {
 
   private createSendFeedbackNotificationFunction() {
     return this.inngest.createFunction(
-      { id: SendFeedbackNotificationJob.KEY },
+      { id: SendFeedbackNotificationJob.KEY, onFailure: this.handleFailure },
       { event: FeedbackReportSentEvent._NAME },
       async (context) => {
         const restClient = new AxiosRestClient(ENV.discordWebhookUrl)
@@ -59,7 +59,7 @@ export class NotificationFunctions extends InngestFunctions {
 
   private createSendChallengePostedNotificationFunction() {
     return this.inngest.createFunction(
-      { id: SendChallengePostedNotificationJob.KEY },
+      { id: SendChallengePostedNotificationJob.KEY, onFailure: this.handleFailure },
       { event: ChallengePostedEvent._NAME },
       async (context) => {
         const restClient = new AxiosRestClient(ENV.discordWebhookUrl)

@@ -24,7 +24,7 @@ import { UserSignedInEvent } from '@stardust/core/auth/events'
 export class ProfileFunctions extends InngestFunctions {
   private createCreateUserFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: CreateUserJob.KEY },
+      { id: CreateUserJob.KEY, onFailure: this.handleFailure },
       { event: ShopItemsAcquiredByDefaultEvent._NAME },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
@@ -37,7 +37,7 @@ export class ProfileFunctions extends InngestFunctions {
 
   private createUpdateTierForRankingWinnersFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: UpdateTierForRankingWinnersJob.KEY },
+      { id: UpdateTierForRankingWinnersJob.KEY, onFailure: this.handleFailure },
       { event: RankingWinnersDefinedEvent._NAME },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
@@ -50,7 +50,7 @@ export class ProfileFunctions extends InngestFunctions {
 
   private createUpdateTierForRankingLosersFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: UpdateTierForRankingLosersJob.KEY },
+      { id: UpdateTierForRankingLosersJob.KEY, onFailure: this.handleFailure },
       { event: RankingLosersDefinedEvent._NAME },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
@@ -63,7 +63,7 @@ export class ProfileFunctions extends InngestFunctions {
 
   private createObserveStreakBreakFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: ObserveStreakBreakJob.KEY },
+      { id: ObserveStreakBreakJob.KEY, onFailure: this.handleFailure },
       { cron: ObserveStreakBreakJob.CRON_EXPRESSION },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
@@ -76,7 +76,7 @@ export class ProfileFunctions extends InngestFunctions {
 
   private createResetWeekStatusForAllUsersFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: ResetWeekStatusForAllUsersJob.KEY },
+      { id: ResetWeekStatusForAllUsersJob.KEY, onFailure: this.handleFailure },
       { cron: ResetWeekStatusForAllUsersJob.CRON_EXPRESSION },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
@@ -89,7 +89,7 @@ export class ProfileFunctions extends InngestFunctions {
 
   private createUpdateSpaceForAllUsersFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: UpdateSpaceForAllUsersJob.KEY },
+      { id: UpdateSpaceForAllUsersJob.KEY, onFailure: this.handleFailure },
       { event: SpaceOrderChangedEvent._NAME },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
@@ -102,7 +102,7 @@ export class ProfileFunctions extends InngestFunctions {
 
   private createRegisterUserVisitFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: RegisterUserVisitJob.KEY },
+      { id: RegisterUserVisitJob.KEY, onFailure: this.handleFailure },
       { event: UserSignedInEvent._NAME },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)

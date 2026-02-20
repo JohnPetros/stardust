@@ -1,1 +1,0 @@
-export { SentryTelemetryProvider } from './SentryTelemetryProvider'

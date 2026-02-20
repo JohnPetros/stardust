@@ -14,7 +14,7 @@ import { InngestFunctions } from './InngestFunctions'
 export class ShopFunctions extends InngestFunctions {
   private acquireDefaultShopItemsJob(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: AcquireDefaultShopItemsJob.KEY },
+      { id: AcquireDefaultShopItemsJob.KEY, onFailure: this.handleFailure },
       { event: FirstTierReachedEvent._NAME },
       async (context) => {
         const rocketsRepository = new SupabaseRocketsRepository(supabase)
