@@ -1,5 +1,4 @@
-import { useMemo, useEffect } from 'react'
-import { useLocation } from 'react-router'
+import { useMemo } from 'react'
 import { useSessionStorage } from 'usehooks-ts'
 import { HTTP_HEADERS } from '@stardust/core/global/constants'
 
@@ -18,18 +17,19 @@ import {
 import { ENV, SESSION_STORAGE_KEYS } from '@/constants'
 import type { RestContextValue } from './types/RestContextValue'
 
-const restClient = AxiosRestClient()
-restClient.setBaseUrl(ENV.stardustServerUrl)
-
 export function useRestContextProvider(): RestContextValue {
   const [accessToken] = useSessionStorage(SESSION_STORAGE_KEYS.accessToken, '')
-  const location = useLocation()
 
-  useEffect(() => {
+  const restClient = useMemo(() => {
+    const client = AxiosRestClient()
+    client.setBaseUrl(ENV.stardustServerUrl)
+
     if (accessToken) {
-      restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken}`)
+      client.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken}`)
     }
-  }, [accessToken, location.pathname])
+
+    return client
+  }, [accessToken])
 
   return useMemo(
     () => ({
@@ -43,6 +43,6 @@ export function useRestContextProvider(): RestContextValue {
       manualService: ManualService(restClient),
       reportingService: ReportingService(restClient),
     }),
-    [],
+    [restClient],
   )
 }

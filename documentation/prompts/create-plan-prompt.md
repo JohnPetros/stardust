@@ -1,3 +1,7 @@
+---
+description: Prompt para criar um plano de implementacao a partir de um documento de spec tecnica.
+---
+
 # Prompt: Criar Plano
 
 **Objetivo principal** Criar um plano de implementacao a partir de um documento de spec tecnica.

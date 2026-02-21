@@ -1,4 +1,4 @@
-import { UsersPage } from '@/ui/global/widgets/pages/Users'
+import { UsersPage } from '@/ui/profile/widgets/pages/Users'
 import { AuthMiddleware } from '../middlewares/AuthMiddleware'
 import { RestMiddleware } from '../middlewares/RestMiddleware'
 

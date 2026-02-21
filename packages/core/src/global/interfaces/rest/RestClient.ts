@@ -2,6 +2,7 @@ import type { RestResponse } from '../../responses'
 
 export interface RestClient {
   get<ResponseBody>(url: string): Promise<RestResponse<ResponseBody>>
+  getFile(url: string): Promise<RestResponse<File>>
   post<ResponseBody>(url: string, body?: unknown): Promise<RestResponse<ResponseBody>>
   postFormData<ResponseBody>(
     url: string,

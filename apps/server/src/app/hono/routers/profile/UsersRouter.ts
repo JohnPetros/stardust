@@ -36,7 +36,9 @@ import {
   FetchUnlockedStarsKpiController,
   FetchDailyActiveUsersReportController,
   FetchUsersListController,
+  GenerateUsersXlsxFileController,
 } from '@/rest/controllers/profile'
+import { ExcelJsXlsxProvider } from '@/provision/xlsx'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import {
@@ -421,6 +423,22 @@ export class UsersRouter extends HonoRouter {
     )
   }
 
+  private registerGenerateUsersXlsxFileRoute() {
+    this.router.get(
+      '/xlsx',
+      this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const xlsxProvider = new ExcelJsXlsxProvider()
+        const controller = new GenerateUsersXlsxFileController(repository, xlsxProvider)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   registerRoutes(): Hono {
     this.registerFetchUserByIdRoute()
     this.registerFetchUserBySlugRoute()
@@ -439,6 +457,7 @@ export class UsersRouter extends HonoRouter {
     this.registerFetchUnlockedStarsKpiRoute()
     this.registerFetchDailyActiveUsersRoute()
     this.registerFetchUsersListRoute()
+    this.registerGenerateUsersXlsxFileRoute()
     return this.router
   }
 }

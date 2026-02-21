@@ -181,6 +181,10 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
       return await restClient.get('/profile/users')
     },
 
+    async fetchUsersXlsxFile() {
+      return await restClient.getFile('/profile/users/xlsx')
+    },
+
     async fetchAllAchievements() {
       return await restClient.get('/profile/achievements')
     },
