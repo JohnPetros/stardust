@@ -131,7 +131,7 @@ export class AxiosRestClient implements RestClient {
   async getFile(route: string): Promise<RestResponse<File>> {
     try {
       const response = await this.axios.get(this.buildUrl(route), {
-        responseType: 'blob',
+        responseType: 'arraybuffer',
       })
       const headers = this.normalizeHeaders(response.headers)
       const fileName = this.getFileName(headers, 'download.bin')
