@@ -1,7 +1,7 @@
 import { AppError, LspError } from '../domain/errors'
 
 type LspResponseProps = {
-  result?: string
+  result?: any
   outputs?: string[]
   error?: LspError | null
   errors?: LspError[]
