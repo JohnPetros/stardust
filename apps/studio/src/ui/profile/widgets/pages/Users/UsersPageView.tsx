@@ -81,7 +81,7 @@ export const UsersPageView = ({
           <p className='text-muted-foreground'>Gerencie os usuários da plataforma.</p>
         </div>
 
-        {/* <Button
+        <Button
           type='button'
           variant='outline'
           className='gap-2'
@@ -90,7 +90,7 @@ export const UsersPageView = ({
         >
           <DownloadIcon className='w-4 h-4' />
           {isDownloadingUsersXlsxFile ? 'Baixando...' : 'Baixar XLSX'}
-        </Button> */}
+        </Button>
       </div>
 
       <div className='flex flex-wrap items-center gap-4'>
