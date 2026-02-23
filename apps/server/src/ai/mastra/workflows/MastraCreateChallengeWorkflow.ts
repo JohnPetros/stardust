@@ -1,13 +1,11 @@
 import { createStep, createWorkflow } from '@mastra/core/workflows'
 import z from 'zod'
 
-import { challengeSchema } from '@stardust/validation/challenging/schemas'
+import { challengeDraftSchema } from '@stardust/validation/challenging/schemas'
 import type { CreateChallengeWorkflow } from '@stardust/core/challenging/interfaces'
 
 import { ChallengingToolset } from '../toolsets/ChallengingToolset'
 import { ChallengingTeam } from '../teams/ChallengingTeam'
-
-const createdChallengeSchema = challengeSchema.omit({ author: true })
 
 export class MastraCreateChallengeWorkflow implements CreateChallengeWorkflow {
   async run() {
@@ -23,7 +21,12 @@ export class MastraCreateChallengeWorkflow implements CreateChallengeWorkflow {
       .commit()
 
     const run = await workflow.createRun()
-    await run.start({ inputData: undefined })
+    try {
+      await run.start({ inputData: undefined })
+    } catch (error) {
+      run.cancel()
+      throw error
+    }
   }
 
   private getChallengeProblem() {
@@ -32,7 +35,7 @@ export class MastraCreateChallengeWorkflow implements CreateChallengeWorkflow {
 
   private createChallenge() {
     return createStep(ChallengingTeam.challengingCreatorAgent, {
-      structuredOutput: { schema: createdChallengeSchema },
+      structuredOutput: { schema: challengeDraftSchema },
     })
   }
 
