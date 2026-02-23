@@ -70,15 +70,27 @@ export class DeleguaLsp implements LspProvider {
 
     resultadoFinal = resultadoRetornado?.valorRetornado?.valor
 
+    while ('valorRetornado' in resultadoFinal) {
+      resultadoFinal = resultadoFinal.valorRetornado.valor
+    }
+
+    resultadoFinal = Array.isArray(resultadoFinal)
+      ? resultadoFinal.map(this.pegarValorDeResultadoFinal)
+      : this.pegarValorDeResultadoFinal(resultadoFinal)
+
+    return new LspResponse({ result: resultadoFinal, outputs })
+  }
+
+  private pegarValorDeResultadoFinal(resultadoFinal: unknown) {
     if (
       typeof resultadoFinal === 'object' &&
       resultadoFinal !== null &&
       'valor' in resultadoFinal
     ) {
-      resultadoFinal = resultadoFinal.valor
+      return resultadoFinal.valor
     }
 
-    return new LspResponse({ result: resultadoFinal, outputs })
+    return resultadoFinal
   }
 
   getInput(code: string) {
