@@ -6,7 +6,7 @@ const clientEnv = {
   mode: process.env.MODE,
   supabaseCdnUrl: process.env.NEXT_PUBLIC_SUPABASE_CDN_URL,
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-  supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_KEY,
+  supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   stardustWebUrl: process.env.NEXT_PUBLIC_STARDUST_WEB_URL,
   stardustServerUrl: process.env.NEXT_PUBLIC_STARDUST_SERVER_URL,
   discordChannelUrl: process.env.NEXT_PUBLIC_DISCORD_CHANNEL_URL,
