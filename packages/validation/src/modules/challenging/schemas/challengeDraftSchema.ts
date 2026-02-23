@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { contentSchema } from '../../global/schemas/contentSchema'
 import { idSchema } from '../../global/schemas/idSchema'
-import { titleSchema } from '../../global/schemas'
+import { ordinalNumberSchema, titleSchema } from '../../global/schemas'
 import { challengeCategoriesSchema } from './challengeCategoriesSchema'
 import { challengeDifficultyLevelSchema } from './challengeDifficultyLevelSchema'
 
@@ -19,7 +19,7 @@ export const challengeDraftSchema = z
           inputs: z.string(),
           expectedOutput: z.string(),
           isLocked: z.boolean(),
-          position: z.number().int(),
+          position: ordinalNumberSchema,
         }),
       )
       .min(3, 'Deve haver pelo menos 3 testes casos'),
