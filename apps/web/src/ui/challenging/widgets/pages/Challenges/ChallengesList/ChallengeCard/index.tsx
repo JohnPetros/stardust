@@ -26,8 +26,9 @@ export const ChallengeCard = (props: Props) => {
       <ChallengeCardView
         {...props}
         isCompleted={user.hasCompletedChallenge(props.id).isTrue}
+        isUserGod={user.isGod.isTrue}
       />
     )
 
-  return <ChallengeCardView {...props} isCompleted={false} />
+  return <ChallengeCardView {...props} isCompleted={false} isUserGod={false} />
 }
