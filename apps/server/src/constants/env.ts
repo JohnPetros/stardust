@@ -19,6 +19,8 @@ const env = {
   sentryDsn: process.env.SENTRY_DSN,
 }
 
+console.log('godAccountIds', env.godAccountIds)
+
 const envSchema = z.object({
   mode: z.enum(['development', 'production', 'test']),
   port: z.coerce.number().default(3333),
