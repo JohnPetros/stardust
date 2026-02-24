@@ -15,7 +15,7 @@ const env = {
   dropboxAppKey: process.env.DROPBOX_APP_KEY,
   dropboxAppSecret: process.env.DROPBOX_APP_SECRET,
   discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
-  godAccountIds: process.env.GOD_ACCOUNT_IDS?.split(','),
+  godAccountIds: process.env.GOD_ACCOUNT_IDS?.split(',').map(Boolean),
   sentryDsn: process.env.SENTRY_DSN,
 }
 
