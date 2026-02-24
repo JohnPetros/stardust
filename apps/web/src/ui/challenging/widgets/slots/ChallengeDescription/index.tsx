@@ -10,8 +10,15 @@ import { useTextSelection } from './useTextSelection'
 
 export const ChallengeDescriptionSlot = () => {
   const { user } = useAuthContext()
-  const { mdx, isUserChallengeAuthor, isCompleted, challenge, isLoading } =
-    useChallengeDescriptionSlot(user)
+  const {
+    mdx,
+    isUserChallengeAuthor,
+    canManageChallenge,
+    isManagingAsAdmin,
+    isCompleted,
+    challenge,
+    isLoading,
+  } = useChallengeDescriptionSlot(user)
   const contentRef = useRef<HTMLDivElement>(null)
   const { isAssistantEnabled } = useChallengeStore().getIsAssistantEnabledSlice()
   const { setTextSelection } = useChallengeStore().getAssistantSelectionsSlice()
@@ -25,6 +32,8 @@ export const ChallengeDescriptionSlot = () => {
       isLoading={isLoading}
       challenge={challenge}
       isUserChallengeAuthor={isUserChallengeAuthor}
+      canManageChallenge={canManageChallenge}
+      isManagingAsAdmin={isManagingAsAdmin}
       isCompleted={isCompleted}
       mdx={mdx}
       contentRef={contentRef}

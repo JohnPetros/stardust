@@ -41,7 +41,17 @@ export class ProfileMiddleware {
     const http = new HonoHttp(context, next)
     const usersRepository = new SupabaseUsersRepository(http.getSupabase())
     const controller = new VerifyUserInsigniaController(
-      InsigniaRole.createAsEngineer(),
+      [InsigniaRole.createAsEngineer()],
+      usersRepository,
+    )
+    await controller.handle(http)
+  }
+
+  async verifyUserEngineerOrGodInsignia(context: Context, next: Next) {
+    const http = new HonoHttp(context, next)
+    const usersRepository = new SupabaseUsersRepository(http.getSupabase())
+    const controller = new VerifyUserInsigniaController(
+      [InsigniaRole.createAsEngineer(), InsigniaRole.createAsGod()],
       usersRepository,
     )
     await controller.handle(http)

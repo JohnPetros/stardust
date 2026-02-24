@@ -23,6 +23,7 @@ import { ChallengeCategoriesField } from './ChallengeCategoriesField'
 type Props = {
   currentChallenge: Challenge | null
   userId: Id
+  isEditingAsAdmin: boolean
   navigationProvider: NavigationProvider
   toastProvider: ToastProvider
   challengeCategories: ChallengeCategory[]
@@ -32,6 +33,7 @@ type Props = {
 export const ChallengeEditorPageView = ({
   currentChallenge,
   challengeCategories,
+  isEditingAsAdmin,
   navigationProvider,
   toastProvider,
   service,
@@ -54,6 +56,7 @@ export const ChallengeEditorPageView = ({
     service,
     navigationProvider,
     toastProvider,
+    isEditingAsAdmin,
   })
   const ACTION_BUTTON_TITLES: ActionButtonTitles = {
     canExecute: shouldEditChallenge ? 'atualizar?' : 'postar?',
@@ -87,15 +90,23 @@ export const ChallengeEditorPageView = ({
             />
             {currentChallenge && (
               <AlertDialog
-                title='Seu desafio está preste a ser removido'
+                title={
+                  isEditingAsAdmin
+                    ? 'Este desafio está prestes a ser removido'
+                    : 'Seu desafio está prestes a ser removido'
+                }
                 type='crying'
                 body={
                   <div className='mt-3'>
                     <p className='text-gray-50'>
-                      Tem certeza que deseja deletar esse desafio?
+                      {isEditingAsAdmin
+                        ? 'Tem certeza que deseja deletar este desafio de outro autor?'
+                        : 'Tem certeza que deseja deletar esse desafio?'}
                     </p>
                     <p className='text-gray-50'>
-                      Todos os dados do seu desafio serão perdidos.
+                      {isEditingAsAdmin
+                        ? 'Todos os dados desse desafio serão perdidos.'
+                        : 'Todos os dados do seu desafio serão perdidos.'}
                     </p>
                   </div>
                 }
@@ -104,7 +115,7 @@ export const ChallengeEditorPageView = ({
                     onClick={handleDeleteChallengeButtonClick}
                     className='bg-red-800 text-gray-50'
                   >
-                    Deletar meu desafio
+                    {isEditingAsAdmin ? 'Deletar desafio' : 'Deletar meu desafio'}
                   </Button>
                 }
                 cancel={
@@ -126,6 +137,11 @@ export const ChallengeEditorPageView = ({
             {message}
           </p>
         ))}
+        {isEditingAsAdmin && (
+          <p className='text-amber-400'>
+            Você está editando o desafio de outro autor como administrador.
+          </p>
+        )}
         <p className='text-gray-200'>
           Certifique-se de preencher todos os campos adequadamente.
         </p>

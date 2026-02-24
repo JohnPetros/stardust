@@ -8,7 +8,7 @@ import { User } from '@stardust/core/profile/entities'
 
 export class VerifyUserInsigniaController implements Controller {
   constructor(
-    private readonly insigniaRole: InsigniaRole,
+    private readonly insigniaRoles: InsigniaRole[],
     private readonly repository: UsersRepository,
   ) {}
 
@@ -17,7 +17,11 @@ export class VerifyUserInsigniaController implements Controller {
     const useCase = new GetUserUseCase(this.repository)
     const user = User.create(await useCase.execute({ userId: account.id }))
 
-    if (user.hasInsignia(this.insigniaRole).isFalse) {
+    const hasAnyInsignia = this.insigniaRoles.some(
+      (insigniaRole) => user.hasInsignia(insigniaRole).isTrue,
+    )
+
+    if (!hasAnyInsignia) {
       throw new InsigniaNotIncludedError()
     }
 

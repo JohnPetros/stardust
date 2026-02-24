@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useLsp } from '@/ui/global/hooks/useLsp'
 import type { User } from '@stardust/core/profile/entities'
+import { InsigniaRole } from '@stardust/core/global/structures'
 
 export function useChallengeDescriptionSlot(user: User | null) {
   const [isLoading, setIsLoading] = useState(true)
@@ -39,6 +40,18 @@ export function useChallengeDescriptionSlot(user: User | null) {
     challenge,
     isUserChallengeAuthor:
       user && challenge ? challenge.author.isEqualTo(user).isTrue : false,
+    canManageChallenge:
+      user && challenge
+        ? challenge.author
+            .isEqualTo(user)
+            .or(user.hasInsignia(InsigniaRole.createAsGod())).isTrue
+        : false,
+    isManagingAsAdmin:
+      user && challenge
+        ? user
+            .hasInsignia(InsigniaRole.createAsGod())
+            .and(challenge.author.isEqualTo(user).invertValue()).isTrue
+        : false,
     isCompleted:
       user && challenge
         ? user.hasCompletedChallenge(challenge.id).or(challenge.isCompleted).isTrue

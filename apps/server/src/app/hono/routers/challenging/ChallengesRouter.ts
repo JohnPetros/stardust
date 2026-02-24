@@ -31,13 +31,18 @@ import {
 } from '@/rest/controllers/challenging/challenges'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
-import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
+import {
+  AuthMiddleware,
+  ChallengingMiddleware,
+  ValidationMiddleware,
+} from '../../middlewares'
 import { ProfileMiddleware } from '../../middlewares/ProfileMiddleware'
 import { InngestBroker } from '@/queue/inngest/InngestBroker'
 
 export class ChallengesRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/challenges')
   private readonly authMiddleware = new AuthMiddleware()
+  private readonly challengingMiddleware = new ChallengingMiddleware()
   private readonly profileMiddleware = new ProfileMiddleware()
   private readonly validationMiddleware = new ValidationMiddleware()
 
@@ -191,7 +196,7 @@ export class ChallengesRouter extends HonoRouter {
     this.router.post(
       '/',
       this.authMiddleware.verifyAuthentication,
-      this.profileMiddleware.verifyUserEngineerInsignia,
+      this.profileMiddleware.verifyUserEngineerOrGodInsignia,
       this.validationMiddleware.validate('json', challengeSchema),
       async (context) => {
         const http = new HonoHttp(context)
@@ -208,13 +213,13 @@ export class ChallengesRouter extends HonoRouter {
     this.router.put(
       '/:challengeId',
       this.authMiddleware.verifyAuthentication,
-      this.profileMiddleware.verifyUserEngineerInsignia,
       this.validationMiddleware.validate(
         'param',
         z.object({
           challengeId: idSchema,
         }),
       ),
+      this.challengingMiddleware.verifyChallengeManagementPermission,
       this.validationMiddleware.validate('json', challengeSchema),
       async (context) => {
         const http = new HonoHttp(context)
@@ -256,13 +261,13 @@ export class ChallengesRouter extends HonoRouter {
     this.router.delete(
       '/:challengeId',
       this.authMiddleware.verifyAuthentication,
-      this.profileMiddleware.verifyUserEngineerInsignia,
       this.validationMiddleware.validate(
         'param',
         z.object({
           challengeId: idSchema,
         }),
       ),
+      this.challengingMiddleware.verifyChallengeManagementPermission,
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseChallengesRepository(http.getSupabase())

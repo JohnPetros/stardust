@@ -19,6 +19,8 @@ type Props = {
   isLoading: boolean
   challenge: Challenge | null
   isUserChallengeAuthor: boolean
+  canManageChallenge: boolean
+  isManagingAsAdmin: boolean
   isCompleted: boolean
   mdx: string
   contentRef: RefObject<HTMLDivElement | null>
@@ -32,6 +34,8 @@ export const ChallengeDescriptionSlotView = ({
   isLoading,
   challenge,
   isUserChallengeAuthor,
+  canManageChallenge,
+  isManagingAsAdmin,
   isCompleted,
   mdx,
   contentRef,
@@ -58,8 +62,11 @@ export const ChallengeDescriptionSlotView = ({
         />
         <ChallengeVoteControl />
         <ChallengeContentNav contents={['comments', 'solutions']} />
-        {isUserChallengeAuthor && (
-          <ChallengeControl isChallengePublic={challenge.isPublic.value} />
+        {canManageChallenge && (
+          <ChallengeControl
+            isChallengePublic={challenge.isPublic.value}
+            isManagingAsAdmin={isManagingAsAdmin}
+          />
         )}
       </div>
       <div ref={contentRef} className='mt-6 pb-6 relative select-text'>

@@ -5,7 +5,7 @@ import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 import { Challenge } from '@stardust/core/challenging/entities'
 import { Star } from '@stardust/core/space/entities'
 import { User } from '@stardust/core/global/entities'
-import { Slug, type Id } from '@stardust/core/global/structures'
+import { InsigniaRole, Slug, type Id } from '@stardust/core/global/structures'
 import { ChallengeVote } from '@stardust/core/challenging/structures'
 
 type Dependencies = {
@@ -63,7 +63,10 @@ export const AccessChallengePageAction = ({
       }
 
       if (user) {
-        if (challenge.isPublic.notAndNot(challenge.isChallengeAuthor(user.id)).isTrue) {
+        const isAuthor = challenge.isChallengeAuthor(user.id).isTrue
+        const isGod = user.hasInsignia(InsigniaRole.createAsGod()).isTrue
+
+        if (challenge.isPublic.isFalse && !isAuthor && !isGod) {
           call.notFound()
         }
 

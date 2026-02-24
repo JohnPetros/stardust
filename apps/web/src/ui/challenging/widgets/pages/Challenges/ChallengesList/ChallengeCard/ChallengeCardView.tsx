@@ -7,6 +7,7 @@ import { ROUTES } from '@/constants'
 import { DifficultyBadge } from '@/ui/global/widgets/components/DifficultyBadge'
 import { ChallengeInfo } from '@/ui/challenging/widgets/components/ChallengeInfo'
 import { AnimatedCard } from './AnimatedCard'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 
 type Props = {
   slug: string
@@ -19,6 +20,7 @@ type Props = {
   authorName: string
   categories: ChallengeCategory[]
   isCompleted: boolean
+  isUserGod: boolean
 }
 
 export const ChallengeCardView = ({
@@ -32,6 +34,7 @@ export const ChallengeCardView = ({
   completionCount,
   categories,
   isCompleted,
+  isUserGod,
 }: Props) => {
   return (
     <AnimatedCard>
@@ -44,6 +47,20 @@ export const ChallengeCardView = ({
         >
           {title}
         </Link>
+        {isUserGod && (
+          <Link
+            href={`${ROUTES.challenging.challenge(slug)}`}
+            prefetch={false}
+            className='flex items-center gap-1 w-64 text-sm text-gray-500 transition-colors duration-200 group hover:text-gray-700'
+          >
+            <Icon
+              name='pencil'
+              size={14}
+              className='text-gray-500 group-hover:text-gray-700'
+            />
+            Editar desafio
+          </Link>
+        )}
       </div>
       <ChallengeInfo
         isCompleted={isCompleted ?? false}

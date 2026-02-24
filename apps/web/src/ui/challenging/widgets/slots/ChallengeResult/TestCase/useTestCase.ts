@@ -45,12 +45,12 @@ export function useTestCase({
 
       const values = await Promise.all(
         inputs.map(async (input) => {
-          const t = await lspProvider.translateToLsp(input)
-          return t.replaceAll('\n', '')
+          const translatedInput = await lspProvider.translateToLsp(input)
+          return translatedInput.replaceAll('\n', '')
         }),
       )
 
-      if (!cancelled) setTranslatedInputs(values.join(','))
+      if (!cancelled) setTranslatedInputs(values.join(' '))
     }
 
     run()
