@@ -101,7 +101,6 @@ export class DiscordNotificationService implements NotificationService {
       idea: 'Sugerir Ideia',
       other: 'Outro',
     }
-
     const color = colors[payload.feedbackReportIntent as keyof typeof colors] || 0x3498db
 
     return await this.restClient.post('/', {
