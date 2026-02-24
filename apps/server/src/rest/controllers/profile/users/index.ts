@@ -19,3 +19,4 @@ export { FetchCompletedChallengesKpiController } from './FetchCompletedChallenge
 export { FetchUnlockedStarsKpiController } from './FetchUnlockedStarsKpiController'
 export { FetchDailyActiveUsersReportController } from './FetchDailyActiveUsersReportController'
 export { FetchUsersListController } from './FetchUsersListController'
+export { GenerateUsersXlsxFileController } from './GenerateUsersXlsxFileController'
