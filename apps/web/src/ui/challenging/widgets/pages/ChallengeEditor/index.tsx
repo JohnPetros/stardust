@@ -5,6 +5,7 @@ import type {
   ChallengeCategoryDto,
   ChallengeDto,
 } from '@stardust/core/challenging/entities/dtos'
+import { InsigniaRole } from '@stardust/core/global/structures'
 
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
@@ -26,15 +27,23 @@ export const ChallengeEditorPage = ({ challengeDto, challengeCategoriesDto }: Pr
     ChallengeCategory.create(categoryDto),
   )
 
-  if (user)
+  if (user) {
+    const currentChallenge = challengeDto ? Challenge.create(challengeDto) : null
+    const isGod = user.hasInsignia(InsigniaRole.createAsGod()).isTrue
+    const isEditingThirdPartyChallenge = currentChallenge
+      ? currentChallenge.isChallengeAuthor(user.id).isFalse
+      : false
+
     return (
       <ChallengeEditorPageView
-        currentChallenge={challengeDto ? Challenge.create(challengeDto) : null}
+        currentChallenge={currentChallenge}
         userId={user.id}
+        isEditingAsAdmin={isGod && isEditingThirdPartyChallenge}
         navigationProvider={navigationProvider}
         toastProvider={toastProvider}
         challengeCategories={categories}
         service={challengingService}
       />
     )
+  }
 }

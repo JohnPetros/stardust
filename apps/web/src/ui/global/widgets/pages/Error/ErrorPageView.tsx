@@ -38,10 +38,10 @@ export const ErrorPageView = ({ errorMessage, onReload }: Props) => {
       </Button>
 
       <a
-        href="https://discord.com/channels/987782561252143205/1377325380037509212"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-green-600 underline hover:text-green-800 transition-colors"
+        href='https://discord.com/channels/987782561252143205/1377325380037509212'
+        target='_blank'
+        rel='noopener noreferrer'
+        className='text-green-600 underline hover:text-green-800 transition-colors'
       >
         Pedir ajuda no Discord
       </a>

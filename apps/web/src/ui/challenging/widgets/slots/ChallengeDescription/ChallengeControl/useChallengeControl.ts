@@ -9,6 +9,7 @@ import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 export function useChallengeControl(
   challengingService: ChallengingService,
   isChallengePublic: boolean,
+  isManagingAsAdmin: boolean,
 ) {
   const router = useNavigationProvider()
   const toast = useToastContext()
@@ -50,6 +51,7 @@ export function useChallengeControl(
   return {
     challenge,
     isPublic,
+    isManagingAsAdminContext: isManagingAsAdmin,
     handleIsChallengePublicSwitchChange,
     handleDeleteChallengeButtonClick,
   }

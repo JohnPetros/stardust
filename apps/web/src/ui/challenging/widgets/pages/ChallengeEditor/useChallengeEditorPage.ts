@@ -19,6 +19,7 @@ type ChallengeForm = z.output<typeof challengeFormSchema>
 type Params = {
   currentChallenge: Challenge | null
   userId: Id
+  isEditingAsAdmin: boolean
   service: ChallengingService
   navigationProvider: NavigationProvider
   toastProvider: ToastProvider
@@ -30,6 +31,7 @@ export function useChallengeEditorPage({
   navigationProvider,
   toastProvider,
   userId,
+  isEditingAsAdmin,
 }: Params) {
   const difficultyLevel = useMemo(() => {
     if (!currentChallenge) return 'easy'
@@ -46,7 +48,10 @@ export function useChallengeEditorPage({
       code: currentChallenge?.code ?? '',
       difficultyLevel,
       author: {
-        id: userId.value,
+        id:
+          currentChallenge && isEditingAsAdmin
+            ? currentChallenge.author.id.value
+            : userId.value,
       },
       function: {
         name: currentChallenge?.code
@@ -107,7 +112,10 @@ export function useChallengeEditorPage({
       description: formData.description,
       difficultyLevel: formData.difficultyLevel,
       author: {
-        id: userId.value,
+        id:
+          currentChallenge && isEditingAsAdmin
+            ? currentChallenge.author.id.value
+            : userId.value,
       },
       testCases: formData.testCases.map((testCase, index) => ({
         position: index + 1,

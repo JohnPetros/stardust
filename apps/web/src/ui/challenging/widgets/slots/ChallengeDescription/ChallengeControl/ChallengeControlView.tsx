@@ -7,6 +7,7 @@ import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 
 type Props = {
   isChallengePublic: boolean
+  isManagingAsAdmin: boolean
   challengeSlug: string
   onDeleteChallengeButtonClick: () => void
   onIsChallengePublicSwitchChange: (isPublic: boolean) => void
@@ -14,6 +15,7 @@ type Props = {
 
 export const ChallengeControlView = ({
   isChallengePublic,
+  isManagingAsAdmin,
   challengeSlug,
   onDeleteChallengeButtonClick,
   onIsChallengePublicSwitchChange,
@@ -22,10 +24,13 @@ export const ChallengeControlView = ({
     <div>
       <div>
         <p className='p-3 rounded-md border border-dashed border-yellow-500 text-sm leading-6 text-yellow-500 font-medium'>
-          Você é o autor desse desafio, qualquer recompensa recebida será inválida. Use
-          essa página apenas como um meio para testar o seu desafio.{' '}
+          {isManagingAsAdmin
+            ? 'Você está gerenciando este desafio como administrador. Alterações e remoções impactam o conteúdo original do autor.'
+            : 'Você é o autor desse desafio, qualquer recompensa recebida será inválida. Use essa página apenas como um meio para testar o seu desafio.'}{' '}
           {!isChallengePublic &&
-            'Lembre-se também que você não habilitou seu desafio como público para outros usuários acessarem.'}
+            (isManagingAsAdmin
+              ? 'Este desafio está privado para outros usuários.'
+              : 'Lembre-se também que você não habilitou seu desafio como público para outros usuários acessarem.')}
         </p>
       </div>
       <div className='flex items-center gap-3 mt-3 px-3'>
@@ -33,13 +38,23 @@ export const ChallengeControlView = ({
           <Link href={ROUTES.challenging.challenge(challengeSlug)}>editar desafio</Link>
         </Button>
         <AlertDialog
-          title='Seu desafio está preste a ser removido'
+          title={
+            isManagingAsAdmin
+              ? 'Este desafio está preste a ser removido'
+              : 'Seu desafio está preste a ser removido'
+          }
           type='crying'
           body={
             <div className='mt-3'>
-              <p className='text-gray-50'>Tem certeza que deseja deletar esse desafio?</p>
               <p className='text-gray-50'>
-                Todos os dados do seu desafio serão perdidos.
+                {isManagingAsAdmin
+                  ? 'Tem certeza que deseja deletar o desafio de outro autor?'
+                  : 'Tem certeza que deseja deletar esse desafio?'}
+              </p>
+              <p className='text-gray-50'>
+                {isManagingAsAdmin
+                  ? 'Todos os dados desse desafio serão perdidos.'
+                  : 'Todos os dados do seu desafio serão perdidos.'}
               </p>
             </div>
           }
@@ -48,7 +63,7 @@ export const ChallengeControlView = ({
               onClick={onDeleteChallengeButtonClick}
               className='bg-red-800 text-gray-50'
             >
-              Deletar meu desafio
+              {isManagingAsAdmin ? 'Deletar desafio' : 'Deletar meu desafio'}
             </Button>
           }
           cancel={
@@ -59,7 +74,7 @@ export const ChallengeControlView = ({
           shouldPlayAudio={false}
         >
           <Button className='h-8 text-gray-50 text-xs w-max bg-red-800 font-medium px-3'>
-            deletar seu desafio
+            {isManagingAsAdmin ? 'deletar desafio' : 'deletar seu desafio'}
           </Button>
         </AlertDialog>
         <Switch
