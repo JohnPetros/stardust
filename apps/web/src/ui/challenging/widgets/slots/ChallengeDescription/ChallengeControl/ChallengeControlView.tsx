@@ -40,8 +40,8 @@ export const ChallengeControlView = ({
         <AlertDialog
           title={
             isManagingAsAdmin
-              ? 'Este desafio está preste a ser removido'
-              : 'Seu desafio está preste a ser removido'
+              ? 'Este desafio está prestes a ser removido'
+              : 'Seu desafio está prestes a ser removido'
           }
           type='crying'
           body={

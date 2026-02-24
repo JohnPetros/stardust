@@ -93,7 +93,7 @@ export const ChallengeEditorPageView = ({
                 title={
                   isEditingAsAdmin
                     ? 'Este desafio está prestes a ser removido'
-                    : 'Seu desafio está preste a ser removido'
+                    : 'Seu desafio está prestes a ser removido'
                 }
                 type='crying'
                 body={

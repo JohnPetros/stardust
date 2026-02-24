@@ -203,6 +203,7 @@ Challenge Editor Page
 - Negacao de acesso em gerenciamento segue mascaramento com `ChallengeNotFoundError` (404), sem vazamento de existencia.
 - Fluxo de edicao administrativa preserva `author.id` original do desafio durante update.
 - `apps/server/src/app/hono/middlewares/index.ts` nao precisou de alteracao estrutural, pois o middleware `ChallengingMiddleware` ja era exportado e o novo metodo foi consumido sem quebra de contrato.
+- Ajuste de UX aplicado na listagem de desafios: o link de "Editar desafio" foi removido do card para evitar sugestao de acao sem permissao e reduzir navegacoes para 404 desnecessarias.
 
 ## Checklist final
 - [x] Criado `VerifyChallengeManagementPermissionController` com validacao `autor || god`.

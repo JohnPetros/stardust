@@ -46,4 +46,6 @@ export const ChallengeEditorPage = ({ challengeDto, challengeCategoriesDto }: Pr
       />
     )
   }
+
+  return null
 }
