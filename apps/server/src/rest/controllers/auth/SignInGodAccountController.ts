@@ -26,7 +26,7 @@ export class SignInGodAccountController implements Controller<Schema> {
     )
     if (response.isFailure) response.throwError()
 
-    if (response.body.account.id !== ENV.godAccountId) {
+    if (!ENV.godAccountIds.includes(String(response.body.account.id))) {
       throw new NotGodAccountError()
     }
 

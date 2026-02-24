@@ -1,6 +1,5 @@
-import { z } from 'zod'
-
 import { idSchema } from '@stardust/validation/global/schemas'
+import { z } from 'zod'
 
 const env = {
   mode: process.env.MODE,
@@ -16,7 +15,7 @@ const env = {
   dropboxAppKey: process.env.DROPBOX_APP_KEY,
   dropboxAppSecret: process.env.DROPBOX_APP_SECRET,
   discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
-  godAccountId: process.env.GOD_ACCOUNT_ID,
+  godAccountIds: process.env.GOD_ACCOUNT_IDS?.split(','),
   sentryDsn: process.env.SENTRY_DSN,
 }
 
@@ -35,7 +34,7 @@ const envSchema = z.object({
   discordWebhookUrl: z.string().url(),
   sentryDsn: z.string().url(),
   stardustWebUrl: z.string().url(),
-  godAccountId: idSchema,
+  godAccountIds: z.array(idSchema),
 })
 
 export const ENV = envSchema.parse(env)

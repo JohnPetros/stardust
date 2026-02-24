@@ -6,7 +6,7 @@ import type { RestResponse } from '@stardust/core/global/responses'
 export class VerifyGodAccountController implements Controller {
   async handle(http: Http): Promise<RestResponse> {
     const accountId = await http.getAccountId()
-    if (accountId !== ENV.godAccountId) {
+    if (!ENV.godAccountIds.includes(accountId)) {
       throw new NotGodAccountError()
     }
     return http.pass()
