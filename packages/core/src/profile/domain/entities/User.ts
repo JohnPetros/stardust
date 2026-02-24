@@ -107,6 +107,7 @@ export class User extends Entity<UserProps> {
   }
 
   hasInsignia(insigniaRole: InsigniaRole): Logical {
+    console.log(this.props.insigniaRoles)
     return Logical.create(
       this.props.insigniaRoles.some((role) => role.value === insigniaRole.value),
     )
