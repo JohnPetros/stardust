@@ -1,16 +1,10 @@
-import type { GetFunctionInput, FailureEventArgs, Inngest } from 'inngest'
+import type { Inngest } from 'inngest'
 import { AppError } from '@stardust/core/global/errors'
 
 import { ENV } from '@/constants'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 import { DiscordNotificationService } from '@/rest/services'
 import { SentryTelemetryProvider } from '@/provision/telemetry'
-
-type OnFailureCtx<TClient extends Inngest.Any> = Omit<
-  GetFunctionInput<TClient, 'inngest/function.failed'>,
-  'event'
-> &
-  FailureEventArgs
 
 export class InngestFunctions {
   private telemetryProvider?: SentryTelemetryProvider
@@ -29,20 +23,20 @@ export class InngestFunctions {
     return this.telemetryProvider
   }
 
-  protected async handleFailure({ error }: OnFailureCtx<Inngest>) {
-    if (ENV.mode !== 'production') return
+  protected async handleFailure({ error }: { error: unknown }, jobName: string) {
+    if (ENV.mode === 'production') return
 
     const telemetryProvider = this.getTelemetryProvider()
 
     if (error instanceof AppError) {
       await this.notificationService.sendErrorNotification(
         'server',
-        `Erro capturado na fila: título: ${error.title} mensagem de erro: ${error.message}`,
+        `Erro capturado na fila.Job: ${jobName}.\nTítulo: ${error.title}.\nMensagem de erro: ${error.message}`,
       )
     } else if (error instanceof Error) {
       await this.notificationService.sendErrorNotification(
         'server',
-        `Erro desconhecido capturado na fila: título: ${error.name} mensagem de erro: ${error.message}`,
+        `Erro desconhecido capturado na fila.\nJob: ${jobName}.\nTítulo: ${error.name}.\nMensagem de erro: ${error.message}`,
       )
     }
 

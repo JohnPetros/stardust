@@ -24,7 +24,10 @@ import { UserSignedInEvent } from '@stardust/core/auth/events'
 export class ProfileFunctions extends InngestFunctions {
   private createCreateUserFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: CreateUserJob.KEY, onFailure: this.handleFailure },
+      {
+        id: CreateUserJob.KEY,
+        onFailure: (context) => this.handleFailure(context, CreateUserJob.name),
+      },
       { event: ShopItemsAcquiredByDefaultEvent._NAME },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
@@ -37,7 +40,11 @@ export class ProfileFunctions extends InngestFunctions {
 
   private createUpdateTierForRankingWinnersFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: UpdateTierForRankingWinnersJob.KEY, onFailure: this.handleFailure },
+      {
+        id: UpdateTierForRankingWinnersJob.KEY,
+        onFailure: (context) =>
+          this.handleFailure(context, UpdateTierForRankingWinnersJob.name),
+      },
       { event: RankingWinnersDefinedEvent._NAME },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
@@ -50,7 +57,11 @@ export class ProfileFunctions extends InngestFunctions {
 
   private createUpdateTierForRankingLosersFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: UpdateTierForRankingLosersJob.KEY, onFailure: this.handleFailure },
+      {
+        id: UpdateTierForRankingLosersJob.KEY,
+        onFailure: (context) =>
+          this.handleFailure(context, UpdateTierForRankingLosersJob.name),
+      },
       { event: RankingLosersDefinedEvent._NAME },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
@@ -63,7 +74,10 @@ export class ProfileFunctions extends InngestFunctions {
 
   private createObserveStreakBreakFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: ObserveStreakBreakJob.KEY, onFailure: this.handleFailure },
+      {
+        id: ObserveStreakBreakJob.KEY,
+        onFailure: (context) => this.handleFailure(context, ObserveStreakBreakJob.name),
+      },
       { cron: ObserveStreakBreakJob.CRON_EXPRESSION },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
@@ -76,7 +90,11 @@ export class ProfileFunctions extends InngestFunctions {
 
   private createResetWeekStatusForAllUsersFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: ResetWeekStatusForAllUsersJob.KEY, onFailure: this.handleFailure },
+      {
+        id: ResetWeekStatusForAllUsersJob.KEY,
+        onFailure: (context) =>
+          this.handleFailure(context, ResetWeekStatusForAllUsersJob.name),
+      },
       { cron: ResetWeekStatusForAllUsersJob.CRON_EXPRESSION },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
@@ -89,7 +107,11 @@ export class ProfileFunctions extends InngestFunctions {
 
   private createUpdateSpaceForAllUsersFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: UpdateSpaceForAllUsersJob.KEY, onFailure: this.handleFailure },
+      {
+        id: UpdateSpaceForAllUsersJob.KEY,
+        onFailure: (context) =>
+          this.handleFailure(context, UpdateSpaceForAllUsersJob.name),
+      },
       { event: SpaceOrderChangedEvent._NAME },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
@@ -102,7 +124,10 @@ export class ProfileFunctions extends InngestFunctions {
 
   private createRegisterUserVisitFunction(supabase: SupabaseClient) {
     return this.inngest.createFunction(
-      { id: RegisterUserVisitJob.KEY, onFailure: this.handleFailure },
+      {
+        id: RegisterUserVisitJob.KEY,
+        onFailure: (context) => this.handleFailure(context, RegisterUserVisitJob.name),
+      },
       { event: UserSignedInEvent._NAME },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)

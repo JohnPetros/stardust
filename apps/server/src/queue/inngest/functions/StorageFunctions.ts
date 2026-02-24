@@ -17,7 +17,11 @@ import { InngestAmqp } from '../InngestAmqp'
 export class StorageFunctions extends InngestFunctions {
   private createGenerateGuideEmbeddingsJob() {
     return this.inngest.createFunction(
-      { id: GenerateGuideEmbeddingsJob.KEY, onFailure: this.handleFailure },
+      {
+        id: GenerateGuideEmbeddingsJob.KEY,
+        onFailure: (context) =>
+          this.handleFailure(context, GenerateGuideEmbeddingsJob.name),
+      },
       { event: GuideContentEditedEvent._NAME },
       async (context) => {
         const generatorProvider = new MastraMarkdownEmbeddingsGeneratorProvider()
@@ -31,7 +35,10 @@ export class StorageFunctions extends InngestFunctions {
 
   private createBackupDatabaseJob() {
     return this.inngest.createFunction(
-      { id: BackupDatabaseJob.KEY, onFailure: this.handleFailure },
+      {
+        id: BackupDatabaseJob.KEY,
+        onFailure: (context) => this.handleFailure(context, BackupDatabaseJob.name),
+      },
       { cron: BackupDatabaseJob.CRON_EXPRESSION },
       async (context) => {
         const databaseProvider = new SupabaseDatabaseProvider()
@@ -45,7 +52,11 @@ export class StorageFunctions extends InngestFunctions {
 
   private createDeleteGuideEmbeddingsJob() {
     return this.inngest.createFunction(
-      { id: DeleteGuideEmbeddingsJob.KEY, onFailure: this.handleFailure },
+      {
+        id: DeleteGuideEmbeddingsJob.KEY,
+        onFailure: (context) =>
+          this.handleFailure(context, DeleteGuideEmbeddingsJob.name),
+      },
       { event: GuideDeletedEvent._NAME },
       async (context) => {
         const storageProvider = new UpstashEmbeddingsStorageProvider()

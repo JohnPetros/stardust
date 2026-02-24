@@ -17,7 +17,11 @@ import { InngestFunctions } from './InngestFunctions'
 export class NotificationFunctions extends InngestFunctions {
   private createCreateUserFunction() {
     return this.inngest.createFunction(
-      { id: SendPlanetCompletedNotificationJob.KEY, onFailure: this.handleFailure },
+      {
+        id: SendPlanetCompletedNotificationJob.KEY,
+        onFailure: (context) =>
+          this.handleFailure(context, SendPlanetCompletedNotificationJob.name),
+      },
       { event: PlanetCompletedEvent._NAME },
       async (context) => {
         const restClient = new AxiosRestClient(ENV.discordWebhookUrl)
@@ -31,7 +35,11 @@ export class NotificationFunctions extends InngestFunctions {
 
   private createSendSpaceCompletedNotificationFunction() {
     return this.inngest.createFunction(
-      { id: SendSpaceCompletedNotificationJob.KEY, onFailure: this.handleFailure },
+      {
+        id: SendSpaceCompletedNotificationJob.KEY,
+        onFailure: (context) =>
+          this.handleFailure(context, SendSpaceCompletedNotificationJob.name),
+      },
       { event: SpaceCompletedEvent._NAME },
       async (context) => {
         const restClient = new AxiosRestClient(ENV.discordWebhookUrl)
@@ -45,7 +53,11 @@ export class NotificationFunctions extends InngestFunctions {
 
   private createSendFeedbackNotificationFunction() {
     return this.inngest.createFunction(
-      { id: SendFeedbackNotificationJob.KEY, onFailure: this.handleFailure },
+      {
+        id: SendFeedbackNotificationJob.KEY,
+        onFailure: (context) =>
+          this.handleFailure(context, SendFeedbackNotificationJob.name),
+      },
       { event: FeedbackReportSentEvent._NAME },
       async (context) => {
         const restClient = new AxiosRestClient(ENV.discordWebhookUrl)
@@ -59,7 +71,11 @@ export class NotificationFunctions extends InngestFunctions {
 
   private createSendChallengePostedNotificationFunction() {
     return this.inngest.createFunction(
-      { id: SendChallengePostedNotificationJob.KEY, onFailure: this.handleFailure },
+      {
+        id: SendChallengePostedNotificationJob.KEY,
+        onFailure: (context) =>
+          this.handleFailure(context, SendChallengePostedNotificationJob.name),
+      },
       { event: ChallengePostedEvent._NAME },
       async (context) => {
         const restClient = new AxiosRestClient(ENV.discordWebhookUrl)
