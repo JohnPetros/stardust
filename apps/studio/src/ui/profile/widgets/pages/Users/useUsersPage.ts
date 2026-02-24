@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   OrdinalNumber,
@@ -23,6 +23,7 @@ type Params = {
 }
 
 export function useUsersPage({ service }: Params) {
+  const [isDownloadingUsersXlsxFile, setIsDownloadingUsersXlsxFile] = useState(false)
   const [search, setSearch] = useQueryStringParam('q', '')
   const debouncedSearch = useDebounce(search, 500)
   const [page, setPage] = useQueryNumberParam('page', 1)
@@ -175,6 +176,36 @@ export function useUsersPage({ service }: Params) {
     setPage(1)
   }
 
+  async function handleUsersXlsxFileDownload() {
+    try {
+      setIsDownloadingUsersXlsxFile(true)
+      const response = await service.fetchUsersXlsxFile()
+
+      if (response.isFailure) {
+        response.throwError()
+      }
+
+      const file = response.body
+      const fallbackName = `users-export-${new Datetime().format('YYYY-MM-DD')}.xlsx`
+      const fileName = file.name.endsWith('.xlsx') ? file.name : fallbackName
+      const normalizedFile = new File([file], fileName, {
+        type:
+          file.type ||
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        lastModified: Date.now(),
+      })
+
+      const objectUrl = URL.createObjectURL(normalizedFile)
+      const anchor = document.createElement('a')
+      anchor.href = objectUrl
+      anchor.download = normalizedFile.name
+      anchor.click()
+      URL.revokeObjectURL(objectUrl)
+    } finally {
+      setIsDownloadingUsersXlsxFile(false)
+    }
+  }
+
   return {
     users: data?.items ?? [],
     isLoading,
@@ -196,5 +227,7 @@ export function useUsersPage({ service }: Params) {
     handlePageChange,
     handleItemsPerPageChange,
     refetch,
+    isDownloadingUsersXlsxFile,
+    handleUsersXlsxFileDownload,
   }
 }

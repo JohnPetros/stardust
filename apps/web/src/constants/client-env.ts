@@ -9,6 +9,7 @@ const clientEnv = {
   supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   stardustWebUrl: process.env.NEXT_PUBLIC_STARDUST_WEB_URL,
   stardustServerUrl: process.env.NEXT_PUBLIC_STARDUST_SERVER_URL,
+  discordChannelUrl: process.env.NEXT_PUBLIC_DISCORD_CHANNEL_URL,
 }
 
 const schema = z.object({
@@ -18,6 +19,7 @@ const schema = z.object({
   supabaseKey: z.string(),
   stardustWebUrl: z.string().url(),
   stardustServerUrl: z.string().url(),
+  discordChannelUrl: z.string().url(),
 })
 
 export const CLIENT_ENV = schema.parse(clientEnv)

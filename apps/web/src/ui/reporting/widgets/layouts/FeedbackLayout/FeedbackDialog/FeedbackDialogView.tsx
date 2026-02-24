@@ -1,5 +1,6 @@
 'use client'
 
+import { CLIENT_ENV } from '@/constants'
 import * as Dialog from '@/ui/global/widgets/components/Dialog'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { InitialStep } from './InitialStep'
@@ -129,7 +130,7 @@ export function FeedbackDialogView({
         {(step === 'initial' || step === 'form' || step === 'success') && (
           <div className='mt-4 flex justify-center'>
             <a
-              href='https://discord.com/channels/987782561252143205/1377325380037509212'
+              href={CLIENT_ENV.discordChannelUrl}
               target='_blank'
               rel='noreferrer'
               className='text-xs text-gray-400 underline underline-offset-4 hover:text-gray-300'
