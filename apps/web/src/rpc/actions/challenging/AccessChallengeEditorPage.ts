@@ -4,7 +4,7 @@ import type {
   ChallengeCategoryDto,
   ChallengeDto,
 } from '@stardust/core/challenging/entities/dtos'
-import { Slug } from '@stardust/core/global/structures'
+import { InsigniaRole, Slug } from '@stardust/core/global/structures'
 import { User } from '@stardust/core/profile/entities'
 import { Challenge } from '@stardust/core/challenging/entities'
 
@@ -43,7 +43,10 @@ export const AccessChallengeEditorPageAction = (
       const challenge = Challenge.create(await fetchChallenge(challengeSlug, call))
       const categories = await fetchAllChallengeCategories()
 
-      if (challenge.isChallengeAuthor(user.id).isFalse) call.notFound()
+      const isAuthor = challenge.isChallengeAuthor(user.id).isTrue
+      const isGod = user.hasInsignia(InsigniaRole.createAsGod()).isTrue
+
+      if (!isAuthor && !isGod) call.notFound()
 
       return {
         challenge: challenge.dto,
