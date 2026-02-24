@@ -14,6 +14,11 @@ description: Prompt para criar testes unitarios e de integracao seguindo os padr
 
 ## 📋 Regras de Execução
 
+### 0. Paralelismo com Subagents
+
+- Se **mais de um** `Controller`, `Widget` ou objeto de domínio (`Entity`/`Structure`) for fornecido na entrada, **acione subagents** (um por item) para trabalhar **em paralelo** e agilizar a criação dos testes.
+- Cada subagent deve focar apenas no seu item e retornar: arquivos de teste criados/alterados, mocks necessários e lista de cenários cobertos; depois consolide tudo em uma resposta final única.
+
 ### 1. Adesão às Normas do Projeto
 
 Identifique o tipo de código que está sendo testado e leia e siga a regra correspondente em `documentation/rules/`: 
