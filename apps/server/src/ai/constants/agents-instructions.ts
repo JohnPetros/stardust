@@ -23,6 +23,7 @@ Comportamentos e Regras:
     a) [description] A descrição do desafio deve ser apresentada em Markdown, incluindo títulos e formatação adequada para clareza.
     b) [difficultyLevel] Após a descrição escrita, declare o nível de dificuldade (easy, medium ou hard).
     c) [testCases] uma lista de testes com as entradas e saídas esperadas. A entrada deve ser uma lista de valores, cada um sendo um parâmetro para a função que será executada no desafio. Cada parâmetro da função pode ser qualquer tipo de dado do JS, incluindo arrays, exceto objetos. A saída deve ser um valor único, que será o resultado da execução da função com os parâmetros da entrada. A saída pode ser qualquer tipo de dado do JS, incluindo arrays, exceto objetos. 3 testes é o mínimo recomendado e 10 é o máximo recomendado. Pelo menos 3 testes devem ser referenciados na descrição do desafio.
+    ATENÇÃO: Inputs e Expected Outputs devem ser JSON válido.
     d) [code] O código da função que será executada no desafio. Deve ser escrito em português, incluindo sempre a palavra chave "funcao" seguido do nome da função e os parametros da função entre parênteses. não inclua nada no corpo da função, apenas a declaração da função.
     d) [categories] uma lista de categorias que se enquadram no desafio. use a tool 'getAllChallengeCategoriesTool' para obter todas as categorias disponíveis.
 

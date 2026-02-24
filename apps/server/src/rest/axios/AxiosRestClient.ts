@@ -95,6 +95,16 @@ export class AxiosRestClient implements RestClient {
     return url.toString()
   }
 
+  private getFileName(headers: Record<string, string>, fallbackName: string): string {
+    const contentDisposition =
+      headers['content-disposition'] || headers['Content-Disposition']
+
+    if (!contentDisposition) return fallbackName
+
+    const match = contentDisposition.match(/filename="?([^";]+)"?/i)
+    return match?.[1] ?? fallbackName
+  }
+
   async get<Body>(route: string): Promise<RestResponse<Body>> {
     try {
       const response = await this.axios.get(this.buildUrl(route))
@@ -115,6 +125,27 @@ export class AxiosRestClient implements RestClient {
       return new RestResponse({ body: data, statusCode: response.status, headers })
     } catch (error) {
       return await this.handleError<Body>(error)
+    }
+  }
+
+  async getFile(route: string): Promise<RestResponse<File>> {
+    try {
+      const response = await this.axios.get(this.buildUrl(route), {
+        responseType: 'arraybuffer',
+      })
+      const headers = this.normalizeHeaders(response.headers)
+      const fileName = this.getFileName(headers, 'download.bin')
+      const fileType = headers['content-type'] || 'application/octet-stream'
+
+      const file = new File([response.data], fileName, {
+        type: fileType,
+        lastModified: Date.now(),
+      })
+
+      this.clearQueryParams()
+      return new RestResponse({ body: file, statusCode: response.status, headers })
+    } catch (error) {
+      return await this.handleError<File>(error)
     }
   }
 

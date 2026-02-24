@@ -1,5 +1,6 @@
 import Image from 'next/image'
 
+import { CLIENT_ENV } from '@/constants'
 import { Animation } from '../../components/Animation'
 import { DecryptedText } from '../../components/DecryptedText'
 import { Button } from '../../components/Button'
@@ -38,7 +39,7 @@ export const ErrorPageView = ({ errorMessage, onReload }: Props) => {
       </Button>
 
       <a
-        href='https://discord.com/channels/987782561252143205/1377325380037509212'
+        href={CLIENT_ENV.discordChannelUrl}
         target='_blank'
         rel='noopener noreferrer'
         className='text-green-600 underline hover:text-green-800 transition-colors'

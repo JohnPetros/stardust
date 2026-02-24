@@ -5,6 +5,7 @@ import type { SpaceCompletionStatus } from '@stardust/core/profile/structures'
 import { Input } from '@/ui/shadcn/components/input'
 import { UsersTable } from '@/ui/global/widgets/components/UsersTable'
 import { Pagination } from '@/ui/global/widgets/components/Pagination'
+import { Button } from '@/ui/shadcn/components/button'
 import {
   Select,
   SelectContent,
@@ -14,6 +15,7 @@ import {
 } from '@/ui/shadcn/components/select'
 import { PeriodPicker } from '@/ui/global/widgets/components/PeriodPicker'
 import { InsigniaRolesSelect } from './InsigniaRolesSelect'
+import { DownloadIcon } from 'lucide-react'
 
 type Props = {
   users: UserDto[]
@@ -44,6 +46,8 @@ type Props = {
   handleCreationPeriodChange: (period: { startDate?: Date; endDate?: Date }) => void
   handlePageChange: (newPage: number) => void
   handleItemsPerPageChange: (count: number) => void
+  isDownloadingUsersXlsxFile: boolean
+  handleUsersXlsxFileDownload: () => Promise<void>
 }
 
 export const UsersPageView = ({
@@ -57,6 +61,7 @@ export const UsersPageView = ({
   spaceCompletionStatus,
   insigniaRoles,
   creationPeriod,
+  isDownloadingUsersXlsxFile,
   handleNextPage,
   handlePrevPage,
   handleSearchChange,
@@ -66,12 +71,26 @@ export const UsersPageView = ({
   handleCreationPeriodChange,
   handlePageChange,
   handleItemsPerPageChange,
+  handleUsersXlsxFileDownload,
 }: Props) => {
   return (
     <div className='flex flex-col gap-6 p-6'>
-      <div className='flex flex-col gap-2'>
-        <h1 className='text-3xl font-bold tracking-tight'>Usuários</h1>
-        <p className='text-muted-foreground'>Gerencie os usuários da plataforma.</p>
+      <div className='flex items-start justify-between gap-4'>
+        <div className='flex flex-col gap-2'>
+          <h1 className='text-3xl font-bold tracking-tight'>Usuários</h1>
+          <p className='text-muted-foreground'>Gerencie os usuários da plataforma.</p>
+        </div>
+
+        <Button
+          type='button'
+          variant='outline'
+          className='gap-2'
+          disabled={isDownloadingUsersXlsxFile}
+          onClick={handleUsersXlsxFileDownload}
+        >
+          <DownloadIcon className='w-4 h-4' />
+          {isDownloadingUsersXlsxFile ? 'Baixando...' : 'Baixar XLSX'}
+        </Button>
       </div>
 
       <div className='flex flex-wrap items-center gap-4'>

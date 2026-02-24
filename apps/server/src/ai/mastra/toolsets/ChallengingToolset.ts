@@ -3,7 +3,7 @@ import { createTool } from '@mastra/core/tools'
 
 import {
   challengeCategoriesSchema,
-  challengeSchema,
+  challengeDraftSchema,
 } from '@stardust/validation/challenging/schemas'
 
 import { supabase } from '@/database/supabase'
@@ -23,10 +23,17 @@ export class ChallengingToolset {
     return createTool({
       id: 'post-challenging-tool',
       description: TOOLS_DESCRIPTIONS.postChallenge,
-      inputSchema: challengeSchema.omit({ author: true }),
+      inputSchema: challengeDraftSchema,
       outputSchema: z.void(),
       execute: async (input) => {
-        const mcp = new MastraMcp(input)
+        const mcp = new MastraMcp({
+          ...input,
+          testCases: input.testCases.map((testCase) => ({
+            ...testCase,
+            inputs: JSON.parse(testCase.inputs),
+            expectedOutput: JSON.parse(testCase.expectedOutput),
+          })),
+        })
         const repository = new SupabaseChallengesRepository(supabase)
         const broker = new InngestBroker()
         const tool = new PostChallengeTool(repository, broker)

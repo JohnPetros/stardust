@@ -45,6 +45,7 @@ export interface ProfileService {
   fetchUsersList(
     params: UsersListingParams,
   ): Promise<RestResponse<PaginationResponse<UserDto>>>
+  fetchUsersXlsxFile(): Promise<RestResponse<File>>
   fetchAllAchievements(): Promise<RestResponse<AchievementDto[]>>
   observeNewUnlockedAchievements(userId: Id): Promise<RestResponse<AchievementDto[]>>
   rescueAchievement(achievementId: Id, userId: Id): Promise<RestResponse<UserDto>>
