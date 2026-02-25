@@ -1,5 +1,5 @@
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
-import type { ListingOrder } from '@stardust/core/global/structures'
+import { ListingOrder } from '@stardust/core/global/structures'
 
 import {
   Table,
@@ -21,21 +21,25 @@ import { ChallengesTableSkeleton } from './ChallengesTableSkeleton'
 type Props = {
   challenges: ChallengeDto[]
   isLoading: boolean
-  orders: {
+  onSelectChallenge?: (challengeId: string) => void
+  orders?: {
     upvotesCount: ListingOrder
     downvoteCount: ListingOrder
     completionCount: ListingOrder
     posting: ListingOrder
   }
-  onOrderChange: (column: string, order: ListingOrder) => void
+  onOrderChange?: (column: string, order: ListingOrder) => void
 }
 
 export const ChallengesTableView = ({
   challenges,
   isLoading,
+  onSelectChallenge,
   orders,
   onOrderChange,
 }: Props) => {
+  const defaultOrder = ListingOrder.create('any')
+
   function getDifficultyLabel(difficultyLevel: string) {
     const labels: Record<string, string> = {
       easy: 'Fácil',
@@ -67,32 +71,36 @@ export const ChallengesTableView = ({
           <TableHead>Dificuldade</TableHead>
           <SortableColumn
             label='Data de Postagem'
-            order={orders.posting}
-            onOrderChange={(order) => onOrderChange('posting', order)}
+            order={orders?.posting ?? defaultOrder}
+            onOrderChange={(order) => onOrderChange?.('posting', order)}
           />
           <TableHead>Visibilidade</TableHead>
           <SortableColumn
             label='Downvotes'
-            order={orders.downvoteCount}
-            onOrderChange={(order) => onOrderChange('downvoteCount', order)}
+            order={orders?.downvoteCount ?? defaultOrder}
+            onOrderChange={(order) => onOrderChange?.('downvoteCount', order)}
           />
           <SortableColumn
             label='Upvotes'
-            order={orders.upvotesCount}
-            onOrderChange={(order) => onOrderChange('upvotesCount', order)}
+            order={orders?.upvotesCount ?? defaultOrder}
+            onOrderChange={(order) => onOrderChange?.('upvotesCount', order)}
           />
           <SortableColumn
             label='Qtd. de usuários que completaram'
-            order={orders.completionCount}
-            onOrderChange={(order) => onOrderChange('completionCount', order)}
+            order={orders?.completionCount ?? defaultOrder}
+            onOrderChange={(order) => onOrderChange?.('completionCount', order)}
           />
           <TableHead>Link</TableHead>
+          {onSelectChallenge ? <TableHead>Ação</TableHead> : null}
         </TableRow>
       </TableHeader>
       <TableBody>
         {challenges.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={9} className='text-center text-muted-foreground'>
+            <TableCell
+              colSpan={onSelectChallenge ? 10 : 9}
+              className='text-center text-muted-foreground'
+            >
               Nenhum desafio encontrado
             </TableCell>
           </TableRow>
@@ -144,6 +152,19 @@ export const ChallengesTableView = ({
                   </Button>
                 ) : null}
               </TableCell>
+              {onSelectChallenge ? (
+                <TableCell>
+                  {challenge.id ? (
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      onClick={() => onSelectChallenge?.(challenge.id!)}
+                    >
+                      Selecionar
+                    </Button>
+                  ) : null}
+                </TableCell>
+              ) : null}
             </TableRow>
           ))
         )}

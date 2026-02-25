@@ -14,7 +14,7 @@ type Props = {
 
 export const PlanetsPageView = ({ planets, onPlanetFormSubmit, onDragEnd }: Props) => {
   return (
-    <div className='max-w-7xl mx-auto py-12'>
+    <div className='max-w-340 mx-auto py-12'>
       <PlanetForm onSubmit={onPlanetFormSubmit}>
         <Button variant='outline'>Adicionar planeta</Button>
       </PlanetForm>
