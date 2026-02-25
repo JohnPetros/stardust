@@ -17,6 +17,9 @@ export class GetChallengeUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: ChallengesRepository) {}
 
   async execute({ challengeId, challengeSlug, starId }: Request) {
+    console.log('challengeId', challengeId)
+    console.log('challengeSlug', challengeSlug)
+    console.log('starId', starId)
     if (challengeId) {
       const challenge = await this.repository.findById(Id.create(challengeId))
       if (!challenge) throw new ChallengeNotFoundError()
