@@ -40,6 +40,8 @@ export interface ChallengingService {
   ): Promise<RestResponse<{ userChallengeVote: string }>>
   postChallenge(challenge: Challenge): Promise<RestResponse<ChallengeDto>>
   updateChallenge(challenge: Challenge): Promise<RestResponse<ChallengeDto>>
+  editChallengeStar(challengeId: Id, starId: Id): Promise<RestResponse<ChallengeDto>>
+  removeChallengeStar(challengeId: Id): Promise<RestResponse>
   deleteChallenge(challenge: Challenge): Promise<RestResponse>
   postSolution(
     solutionTitle: Text,
