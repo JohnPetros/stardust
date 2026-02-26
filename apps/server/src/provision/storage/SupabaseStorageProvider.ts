@@ -18,6 +18,8 @@ export class SupabaseStorageProvider implements StorageProvider {
   }
 
   async upload(folder: StorageFolder, file: File): Promise<File> {
+    console.log('folder', folder)
+    console.log('file', file)
     const { data, error } = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
       .upload(`${folder.name}/${file.name}`, file, {
