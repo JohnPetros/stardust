@@ -58,8 +58,7 @@ export const AccessChallengePageAction = ({
         const star = await fetchChallengeStar(challenge.starId)
         if (star) {
           if (!user) call.notFound()
-          if (user.isGod.notAndNot(user.hasUnlockedStar(star.id))) {
-            console.log('not found found found')
+          if (user.isGod.notAndNot(user.hasUnlockedStar(star.id)).isTrue) {
             call.notFound()
           }
         }
@@ -67,11 +66,6 @@ export const AccessChallengePageAction = ({
 
       if (user) {
         const isAuthor = challenge.isChallengeAuthor(user.id)
-
-        console.log(
-          'isAuthor:',
-          challenge.isPublic.isFalse && isAuthor.isFalse && user.isGod.isFalse,
-        )
 
         if (challenge.isPublic.isFalse && isAuthor.isFalse && user.isGod.isFalse) {
           call.notFound()
