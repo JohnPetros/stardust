@@ -19,19 +19,13 @@ export class EditChallengeStarUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: ChallengesRepository) {}
 
   async execute({ challengeId, starId }: Request): Response {
-    const challenge = await this.findChallengeById(Id.create(challengeId))
+    const challenge = await this.repository.findById(Id.create(challengeId))
     if (!challenge) throw new ChallengeNotFoundError()
     if (challenge.isStarChallenge.isTrue) throw new ChallengeIsAlreadyStarError()
     await this.findChallengeByStar(Id.create(starId))
     challenge.starId = Id.create(starId)
     await this.repository.replace(challenge)
     return challenge.dto
-  }
-
-  private async findChallengeById(challengeId: Id) {
-    const challenge = await this.repository.findById(challengeId)
-    if (!challenge) throw new ChallengeNotFoundError()
-    return challenge
   }
 
   private async findChallengeByStar(starId: Id) {
