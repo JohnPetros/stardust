@@ -21,8 +21,8 @@
     "build": "tsup",
     "typecheck": "tsc --noEmit",
     "codecheck": "npm run lint && npm run format",
-    "lint": "biome lint src --diagnostic-level=error",
-    "format": "biome format src --write"
+    "lint": "biome lint src/**/*.ts --diagnostic-level=error",
+    "format": "biome format src/**/*.ts --write"
   },
   "dependencies": {
     "@designliquido/delegua": "^1.0.0",

@@ -32,7 +32,6 @@
     "build:studio": "turbo build --filter=@stardust/studio",
     "build:web": "turbo build --filter=@stardust/web",
     "build:core": "turbo build --filter=@stardust/core",
-    "lint": "turbo lint",
     "test": "turbo test",
     "test:server": "turbo test --filter=@stardust/server",
     "test:studio": "turbo test --filter=@stardust/studio",
