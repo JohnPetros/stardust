@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 import { AppError } from '@stardust/core/global/errors'
 import type { StorageProvider } from '@stardust/core/storage/interfaces'
@@ -7,19 +7,14 @@ import type { StorageFolder } from '@stardust/core/storage/structures'
 import { Text } from '@stardust/core/global/structures'
 import type { ManyItems } from '@stardust/core/global/types'
 
-import { ENV } from '@/constants'
-
 export class SupabaseStorageProvider implements StorageProvider {
   private static readonly BUCKET_NAME = 'images'
-  private readonly supabase
 
-  constructor() {
-    this.supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey)
-  }
+  constructor(private readonly supabase: SupabaseClient) {}
 
   async upload(folder: StorageFolder, file: File): Promise<File> {
     console.log('folder', folder)
-    console.log('file', file)
+
     const { data, error } = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
       .upload(`${folder.name}/${file.name}`, file, {
