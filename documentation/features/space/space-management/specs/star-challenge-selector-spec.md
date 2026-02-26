@@ -1,9 +1,9 @@
 ---
 title: Seletor de Desafio por Estrela
 prd: documentation/features/space/space-management/prd.md
-app: server
+apps: server
 status: concluido
-last_updated_at: 2026-02-25
+last_updated_at: 2026-02-26
 ---
 
 # 1. Objetivo
@@ -48,7 +48,7 @@ Implementar, no Studio, um widget de selecao de desafio dentro do item de estrel
 - O endpoint deve atualizar o `starId` do desafio e retornar `ChallengeDto` atualizado.
 - Ao mudar a estrela de "desafio" para "trilha normal", o Studio deve chamar `DELETE /challenging/challenges/:challengeId/star` para remover o vinculo (`starId = null`).
 - Quando a estrela ja possuir desafio vinculado e o admin selecionar outro desafio, o fluxo deve trocar o vinculo sem bloqueio (remover vinculo atual e aplicar o novo).
-- O endpoint deve exigir autenticacao e permissao de gerenciamento de desafio (mesmo padrao de update/delete de challenge).
+- Os endpoints devem exigir autenticacao e permissao de conta god para vinculo e desvinculo.
 - O fluxo deve mostrar feedback de sucesso/erro na UI e manter comportamento consistente com widgets existentes.
 - O gatilho do seletor deve exibir o titulo do desafio atualmente vinculado na estrela (com truncamento por ellipsis quando exceder o limite visual).
 - O dialog do seletor deve exibir o desafio atualmente vinculado e disponibilizar acao explicita de desvinculo.
@@ -56,7 +56,7 @@ Implementar, no Studio, um widget de selecao de desafio dentro do item de estrel
 ## 3.2 Nao funcionais
 
 * Seguranca
-  - Endpoint protegido por `AuthMiddleware.verifyAuthentication` e `ChallengingMiddleware.verifyChallengeManagementPermission`.
+  - Endpoints protegidos por `AuthMiddleware.verifyAuthentication` e `AuthMiddleware.verifyGodAccount`.
 * Validacao
   - Validacao de `challengeId` e `starId` com Zod (`idSchema`) antes do controller.
 * Compatibilidade retroativa
@@ -79,7 +79,7 @@ Implementar, no Studio, um widget de selecao de desafio dentro do item de estrel
 ## Camada Hono App (Routes e Middlewares)
 
 * **`ChallengesRouter`** (`apps/server/src/app/hono/routers/challenging/ChallengesRouter.ts`) - *Router de desafios com padrao de validacao + controller por rota.*
-* **`ChallengingMiddleware`** (`apps/server/src/app/hono/middlewares/ChallengingMiddleware.ts`) - *Ja possui `verifyChallengeManagementPermission` para reuso no novo PATCH.*
+* **`AuthMiddleware`** (`apps/server/src/app/hono/middlewares/AuthMiddleware.ts`) - *Fornece `verifyAuthentication` e `verifyGodAccount` para proteger operacoes de vinculo/desvinculo de estrela por desafio.*
 * **`ValidationMiddleware`** (`apps/server/src/app/hono/middlewares/ValidationMiddleware.ts`) - *Padroniza validacao Zod de params/query/body.*
 
 ## Camada REST (Controllers/Repositories)
@@ -256,10 +256,10 @@ Nao aplicavel.
 * **Motivo da escolha:** Endpoint atual ja cobre paginacao, busca e filtro de star challenge.
 * **Impactos / trade-offs:** Menos codigo novo; depende de parametros existentes e da semantica atual de listagem.
 
-* **Decisao:** Manter permissao de gerenciamento no PATCH via `verifyChallengeManagementPermission`.
-* **Alternativas consideradas:** Permitir apenas `god`; sem middleware adicional.
-* **Motivo da escolha:** Alinha com padrao de update/delete de challenge no mesmo router.
-* **Impactos / trade-offs:** Consistencia de seguranca, com dependencia do middleware de dominio existente.
+* **Decisao:** Exigir permissao de conta `god` no PATCH e no DELETE via `verifyGodAccount`.
+* **Alternativas consideradas:** Usar `verifyChallengeManagementPermission`; sem middleware adicional.
+* **Motivo da escolha:** Alinha as operacoes de vinculo e desvinculo sob o mesmo nivel de privilegio administrativo.
+* **Impactos / trade-offs:** Maior restricao de acesso e menor risco de alteracoes indevidas em vinculos challenge-star.
 
 ---
 
@@ -288,7 +288,7 @@ Selecao de item:
       v
 [ChallengesRouter]
   -> verifyAuthentication
-  -> verifyChallengeManagementPermission
+  -> verifyGodAccount
   -> ValidationMiddleware(param+json)
       v
 [EditChallengeStarController]
