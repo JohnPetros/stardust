@@ -32,7 +32,7 @@ export function useStarItem({
     let isMounted = true
 
     async function fetchSelectedChallengeByStar() {
-      if (isChallenge.isFalse) {
+      if (isStarChallenge.isFalse) {
         if (isMounted) setSelectedChallengeId('')
         if (isMounted) setSelectedChallengeTitle('')
         return
@@ -59,7 +59,7 @@ export function useStarItem({
     return () => {
       isMounted = false
     }
-  }, [challengingService, isChallenge, starId])
+  }, [challengingService, isStarChallenge, starId])
 
   async function handleStarNameChange(starName: string) {
     const response = await service.editStarName(starId, Text.create(starName))
