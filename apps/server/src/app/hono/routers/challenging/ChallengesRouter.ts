@@ -308,6 +308,7 @@ export class ChallengesRouter extends HonoRouter {
     this.router.delete(
       '/:challengeId/star',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'param',
         z.object({
