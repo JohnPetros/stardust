@@ -113,9 +113,7 @@ export class User extends Entity<UserProps> {
   }
 
   get isGod(): Logical {
-    return Logical.create(
-      this.props.insigniaRoles.some((role) => role.value === 'god'),
-    )
+    return Logical.create(this.props.insigniaRoles.some((role) => role.value === 'god'))
   }
 
   acquireInsignia(insigniaRole: InsigniaRole, insigniaPrice: Integer): void {
