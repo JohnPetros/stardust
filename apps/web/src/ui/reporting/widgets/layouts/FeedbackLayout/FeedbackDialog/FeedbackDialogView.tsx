@@ -52,6 +52,7 @@ export function FeedbackDialogView({
   isCapturing,
   isCropping,
   isLoading,
+  triggerClassName = 'bottom-6 left-24',
   handleSelectIntent,
   handleBack,
   handleReset,
@@ -62,7 +63,6 @@ export function FeedbackDialogView({
   handleSubmit,
   onOpenChange,
   onContentChange,
-  triggerClassName = 'bottom-6 left-24',
 }: Props) {
   const currentIntent = INTENT_HEADER_METADATA[intent] || INTENT_HEADER_METADATA.other
 

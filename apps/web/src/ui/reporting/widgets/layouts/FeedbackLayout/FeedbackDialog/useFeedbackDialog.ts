@@ -240,6 +240,8 @@ export function useFeedbackDialog({
         sentAt: new Date().toISOString(),
       })
 
+      console.log('screenshotUrl', screenshotUrl)
+
       const response = await reportingService.sendFeedbackReport(feedbackReport)
       if (response.isSuccessful) {
         setStep('success')
