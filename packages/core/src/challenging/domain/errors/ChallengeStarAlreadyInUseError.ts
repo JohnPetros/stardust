@@ -2,6 +2,6 @@ import { ConflictError } from '#global/domain/errors/ConflictError'
 
 export class ChallengeStarAlreadyInUseError extends ConflictError {
   constructor() {
-    super('Desafio já é uma estrela')
+    super('Esta estrela já está vinculada a outro desafio')
   }
 }
