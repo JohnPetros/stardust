@@ -232,6 +232,8 @@ export function useFeedbackDialog({
         }
       }
 
+      console.log('screenshotUrl', screenshotUrl)
+
       const feedbackReport = FeedbackReport.create({
         content,
         intent,
@@ -239,8 +241,6 @@ export function useFeedbackDialog({
         screenshot: screenshotUrl,
         sentAt: new Date().toISOString(),
       })
-
-      console.log('screenshotUrl', screenshotUrl)
 
       const response = await reportingService.sendFeedbackReport(feedbackReport)
       if (response.isSuccessful) {
