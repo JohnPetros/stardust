@@ -36,6 +36,7 @@ export class SupabaseChallengeMapper {
       completionCount: supabaseChallenge.total_completitions ?? 0,
       description: supabaseChallenge.description ?? '',
       isPublic: Boolean(supabaseChallenge.is_public),
+      isNew: supabaseChallenge.is_new !== null ? Boolean(supabaseChallenge.is_new) : true,
       testCases: (
         (typeof supabaseChallenge.test_cases === 'string'
           ? JSON.parse(supabaseChallenge.test_cases)
@@ -66,7 +67,7 @@ export class SupabaseChallengeMapper {
   static toSupabase(challenge: Challenge): SupabaseChallenge {
     const challengeDto = challenge.dto
 
-    // @ts-ignore
+    // @ts-expect-error
     const supabaseChallenge: SupabaseChallenge = {
       id: challenge.id.value,
       slug: challenge.slug.value,
@@ -77,6 +78,7 @@ export class SupabaseChallengeMapper {
       description: challengeDto.description,
       user_id: challengeDto.author.id,
       is_public: challenge.isPublic.value,
+      is_new: challenge.isNew.value,
       created_at: challenge.postedAt.toDateString(),
       categories: [],
       star_id: '',
