@@ -54,10 +54,15 @@ export const VerifyAuthRoutesController = (authService: AuthService): Controller
       const isPublicRoute =
         PUBLIC_ROUTES.map(String).includes(currentRoute) ||
         PUBLIC_ROUTE_GROUPS.some((group) => currentRoute.startsWith(group))
-      const response = await authService.fetchAccount()
-      const hasSession = response.isSuccessful
       const isRootRoute = currentRoute === ROUTES.landing
       const isSignInRoute = currentRoute === ROUTES.auth.signIn
+
+      if (isPublicRoute && !isRootRoute && !isSignInRoute) {
+        return http.pass()
+      }
+
+      const response = await authService.fetchAccount()
+      const hasSession = response.isSuccessful
 
       if (!hasSession) {
         const response = await refreshAuthSession(http)
