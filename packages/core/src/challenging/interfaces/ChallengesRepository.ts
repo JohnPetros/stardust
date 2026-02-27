@@ -20,4 +20,5 @@ export interface ChallengesRepository {
   replaceVote(challengeId: Id, userId: Id, challengeVote: ChallengeVote): Promise<void>
   countAll(): Promise<Integer>
   countByMonth(month: Month): Promise<Integer>
+  expireNewChallengesOlderThanOneWeek(): Promise<void>
 }
