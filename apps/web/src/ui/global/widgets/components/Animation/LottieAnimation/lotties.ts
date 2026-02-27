@@ -1,61 +1,32 @@
-import ApolloAsking from '../../../../../../../public/lotties/apollo-asking.json'
-import ApoloCrying from '../../../../../../../public/lotties/apollo-crying.json'
-import ApoloDenying from '../../../../../../../public/lotties/apollo-denying.json'
-import ApolloEarning from '../../../../../../../public/lotties/apollo-earning.json'
-import ApolloMissing from '../../../../../../../public/lotties/apollo-missing.json'
-import ApolloRidingRocket from '../../../../../../../public/lotties/apollo-riding-rocket.json'
-import ApolloCongratulating from '../../../../../../../public/lotties/apollo-congratulating.json'
-import ApolloGreeting from '../../../../../../../public/lotties/apollo-greeting.json'
-import PlanetsExploration from '../../../../../../../public/lotties/planets-exploration.json'
-import Trophy from '../../../../../../../public/lotties/trophy.json'
-import Podium from '../../../../../../../public/lotties/podium.json'
-import RocketCrossingSky from '../../../../../../../public/lotties/rocket-crossing-sky.json'
-import RocketLaunching from '../../../../../../../public/lotties/rocket-launching.json'
-import FastRocket from '../../../../../../../public/lotties/fast-rocket.json'
-import PageNotFound from '../../../../../../../public/lotties/404.json'
-import Galaxy from '../../../../../../../public/lotties/galaxy.json'
-import Coins from '../../../../../../../public/lotties/coins.json'
-import RocketFloating from '../../../../../../../public/lotties/rocket-floating.json'
-import RocketExploring from '../../../../../../../public/lotties/rocket-exploring.json'
-import UnlockedStar from '../../../../../../../public/lotties/unlocked-star.json'
-import Streak from '../../../../../../../public/lotties/streak.json'
-import Spiral from '../../../../../../../public/lotties/spiral.json'
-import Space from '../../../../../../../public/lotties/space.json'
-import Spinner from '../../../../../../../public/lotties/spinner.json'
-import Shinning from '../../../../../../../public/lotties/reward-shinning.json'
-import InternalError from '../../../../../../../public/lotties/internal-error.json'
-import Hourglass from '../../../../../../../public/lotties/hourglass.json'
-import Robot from '../../../../../../../public/lotties/robot.json'
-
 import type { AnimationName } from '../types'
 
-export const LOTTIES: Record<AnimationName, unknown> = {
-  '404': PageNotFound,
-  'apollo-crying': ApoloCrying,
-  'apollo-asking': ApolloAsking,
-  'apollo-denying': ApoloDenying,
-  'apollo-earning': ApolloEarning,
-  'apollo-missing': ApolloMissing,
-  'apollo-riding-rocket': ApolloRidingRocket,
-  'rocket-lauching': RocketLaunching,
-  'rocket-floating': RocketFloating,
-  'rocket-crossing-sky': RocketCrossingSky,
-  'rocket-exploring': RocketExploring,
-  'apollo-congratulating': ApolloCongratulating,
-  'apollo-greeting': ApolloGreeting,
-  'unlocked-star': UnlockedStar,
-  'planets-exploration': PlanetsExploration,
-  'fast-rocket': FastRocket,
-  'internal-error': InternalError,
-  galaxy: Galaxy,
-  coins: Coins,
-  hourglass: Hourglass,
-  spiral: Spiral,
-  podium: Podium,
-  trophy: Trophy,
-  shinning: Shinning,
-  streak: Streak,
-  space: Space,
-  spinner: Spinner,
-  robot: Robot,
+export const LOTTIE_PATHS: Record<AnimationName, string> = {
+  '404': '/lotties/404.json',
+  'apollo-crying': '/lotties/apollo-crying.json',
+  'apollo-asking': '/lotties/apollo-asking.json',
+  'apollo-denying': '/lotties/apollo-denying.json',
+  'apollo-earning': '/lotties/apollo-earning.json',
+  'apollo-missing': '/lotties/apollo-missing.json',
+  'apollo-riding-rocket': '/lotties/apollo-riding-rocket.json',
+  'rocket-lauching': '/lotties/rocket-launching.json',
+  'rocket-floating': '/lotties/rocket-floating.json',
+  'rocket-crossing-sky': '/lotties/rocket-crossing-sky.json',
+  'rocket-exploring': '/lotties/rocket-exploring.json',
+  'apollo-congratulating': '/lotties/apollo-congratulating.json',
+  'apollo-greeting': '/lotties/apollo-greeting.json',
+  'unlocked-star': '/lotties/unlocked-star.json',
+  'planets-exploration': '/lotties/planets-exploration.json',
+  'fast-rocket': '/lotties/fast-rocket.json',
+  'internal-error': '/lotties/internal-error.json',
+  galaxy: '/lotties/galaxy.json',
+  coins: '/lotties/coins.json',
+  hourglass: '/lotties/hourglass.json',
+  spiral: '/lotties/spiral.json',
+  podium: '/lotties/podium.json',
+  trophy: '/lotties/trophy.json',
+  shinning: '/lotties/reward-shinning.json',
+  streak: '/lotties/streak.json',
+  space: '/lotties/space.json',
+  spinner: '/lotties/spinner.json',
+  robot: '/lotties/robot.json',
 }

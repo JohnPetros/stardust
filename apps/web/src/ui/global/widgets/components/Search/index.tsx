@@ -1,5 +1,5 @@
 import { type ForwardedRef, forwardRef, type InputHTMLAttributes } from 'react'
-import { MagnifyingGlass } from '@phosphor-icons/react'
+import { MagnifyingGlass } from '@phosphor-icons/react/dist/ssr'
 import { twMerge } from 'tailwind-merge'
 
 import { useSearch } from './useSearch'

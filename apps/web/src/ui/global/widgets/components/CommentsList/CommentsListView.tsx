@@ -103,22 +103,19 @@ export const CommentsListView = ({
         </p>
       ) : (
         <div className='px-6 mt-16'>
-          <ul className='mt-6 space-y-6'>
-            {isLoading && (
-              <>
-                <CommentSkeleton />
-                <Separator isColumn={false} />
-                <CommentSkeleton />
-                <Separator isColumn={false} />
-                <CommentSkeleton />
-                <Separator isColumn={false} />
-                <CommentSkeleton />
-              </>
-            )}
-
-            {!isLoading &&
-              comments &&
-              comments.map((comment, index, commentsList) => {
+          {isLoading ? (
+            <ul className='mt-6 space-y-6'>
+              <CommentSkeleton />
+              <Separator isColumn={false} />
+              <CommentSkeleton />
+              <Separator isColumn={false} />
+              <CommentSkeleton />
+              <Separator isColumn={false} />
+              <CommentSkeleton />
+            </ul>
+          ) : (
+            <ul className='mt-6 space-y-6'>
+              {comments?.map((comment, index, commentsList) => {
                 return (
                   <li key={comment.id.value}>
                     <Comment
@@ -142,7 +139,8 @@ export const CommentsListView = ({
                   </li>
                 )
               })}
-          </ul>
+            </ul>
+          )}
           {!isReachedEnd && (
             <ShowMoreButton
               isLoading={isLoading}

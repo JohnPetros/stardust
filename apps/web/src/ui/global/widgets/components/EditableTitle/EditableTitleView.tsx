@@ -1,4 +1,4 @@
-import { Pencil } from '@phosphor-icons/react'
+import { Pencil } from '@phosphor-icons/react/dist/ssr'
 import type { RefObject } from 'react'
 
 type Props = {

@@ -1,4 +1,4 @@
-import { ArrowDown } from '@phosphor-icons/react'
+import { ArrowDown } from '@phosphor-icons/react/dist/ssr'
 import { motion, type Variants } from 'motion/react'
 
 const arrowAnimations: Variants = {

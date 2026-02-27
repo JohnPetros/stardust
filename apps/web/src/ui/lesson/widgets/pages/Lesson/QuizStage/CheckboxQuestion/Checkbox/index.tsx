@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { Check } from '@phosphor-icons/react'
+import { Check } from '@phosphor-icons/react/dist/ssr'
 import * as C from '@radix-ui/react-checkbox'
 
 import { AnimatedLabel } from './AnimatedLabel'
