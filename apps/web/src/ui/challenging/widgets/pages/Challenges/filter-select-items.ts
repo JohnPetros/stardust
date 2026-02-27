@@ -4,10 +4,15 @@ import type { IconName } from '@/ui/global/widgets/components/Icon/types'
 import type {
   ChallengeCompletionStatusValue,
   ChallengeDifficultyLevel,
+  ChallengeIsNewStatusValue,
 } from '@stardust/core/challenging/types'
 
 type SelectsItem = {
-  value: ChallengeCompletionStatusValue | ChallengeDifficultyLevel | 'all'
+  value:
+    | ChallengeCompletionStatusValue
+    | ChallengeDifficultyLevel
+    | ChallengeIsNewStatusValue
+    | 'all'
   label: string
   labelStyles?: ClassNameValue
   icon?: IconName
@@ -15,7 +20,7 @@ type SelectsItem = {
 }
 
 export const FILTER_SELECTS_ITEMS: Record<
-  'completionStatus' | 'difficultyLevel',
+  'completionStatus' | 'difficultyLevel' | 'isNewStatus',
   SelectsItem[]
 > = {
   completionStatus: [
@@ -58,6 +63,23 @@ export const FILTER_SELECTS_ITEMS: Record<
       value: 'hard',
       label: 'Difícil',
       labelStyles: 'text-red-700',
+    },
+  ],
+  isNewStatus: [
+    {
+      value: 'all',
+      label: 'Todos',
+      labelStyles: 'text-gray-500',
+    },
+    {
+      value: 'new',
+      label: 'Novo',
+      labelStyles: 'text-blue-400',
+    },
+    {
+      value: 'old',
+      label: 'Antigo',
+      labelStyles: 'text-gray-400',
     },
   ],
 } as const

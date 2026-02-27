@@ -16,6 +16,7 @@ type Props = {
   completionCount: number
   authorSlug: string
   authorName: string
+  isNew: boolean
 }
 
 export const ChallengeCard = (props: Props) => {

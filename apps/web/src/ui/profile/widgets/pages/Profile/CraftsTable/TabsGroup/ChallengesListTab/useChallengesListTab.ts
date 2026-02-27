@@ -13,6 +13,7 @@ import {
 import {
   ChallengeCompletionStatus,
   ChallengeDifficulty,
+  ChallengeIsNewStatus,
 } from '@stardust/core/challenging/structures'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 
@@ -31,6 +32,7 @@ export function useChallengesListTab(
       categoriesIds: IdsList.create([]),
       difficulty: ChallengeDifficulty.create('any'),
       completionStatus: ChallengeCompletionStatus.create('any'),
+      isNewStatus: ChallengeIsNewStatus.create('all'),
       upvotesCountOrder: ListingOrder.create(
         tabListSorter === 'date' ? 'descending' : 'any',
       ),

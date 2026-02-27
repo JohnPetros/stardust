@@ -45,6 +45,7 @@ export const ChallengesListView = ({
                 downvotesCount={challenge.downvotesCount.value}
                 completionCount={challenge.completionCount.value}
                 upvotesCount={challenge.upvotesCount.value}
+                isNew={challenge.isNew.value}
               />
             ))}
           </>
