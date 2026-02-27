@@ -36,4 +36,8 @@ export class UpstashCacheProvider implements CacheProvider {
     if (!data) return null
     return data
   }
+
+  async deleteListItem(key: string, itemIndex: number): Promise<void> {
+    await this.redis.lrem(key, 0, itemIndex)
+  }
 }
