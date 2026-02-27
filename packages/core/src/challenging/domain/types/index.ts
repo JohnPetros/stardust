@@ -1,5 +1,6 @@
 export type { ChallengeDifficultyLevel } from './ChallengeDifficultyLevel'
 export type { ChallengeCompletionStatusValue } from './ChallengeCompletionStatusValue'
+export type { ChallengeIsNewStatusValue } from './ChallengeIsNewStatusValue'
 export type { CompletedChallengesCountByDifficultyLevel } from './CompletedChallengesCountByDifficulty'
 export type { ChallengesListParams } from './ChallengesListParams'
 export type { DataTypeName } from './DataTypeName'
