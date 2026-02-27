@@ -16,7 +16,11 @@ type Props = {
 }
 
 export const ServerProviders = async ({ children }: Props) => {
-  const restClient = await NextServerRestClient({ isCacheEnabled: false })
+  const restClient = await NextServerRestClient({
+    isCacheEnabled: true,
+    refetchInterval: 60,
+    cacheKey: 'auth-session',
+  })
   const authService = AuthService(restClient)
   const response = await authService.fetchAccount()
   const accountDto = response.isSuccessful ? response.body : null
