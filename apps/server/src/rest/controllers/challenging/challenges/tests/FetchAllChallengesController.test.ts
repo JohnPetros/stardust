@@ -22,6 +22,7 @@ describe('Fetch All Challenges Controller', () => {
       completionCountOrder: string
       postingOrder: string
       completionStatus: string
+      isNewStatus: string
       userId?: string
       userCompletedChallengesIds?: string[]
     }
@@ -57,6 +58,7 @@ describe('Fetch All Challenges Controller', () => {
       completionCountOrder: 'desc',
       postingOrder: 'desc',
       completionStatus: 'completed',
+      isNewStatus: 'all',
       userId,
     }
     const pagination = new PaginationResponse([ChallengesFaker.fakeDto()], 1)
@@ -85,6 +87,7 @@ describe('Fetch All Challenges Controller', () => {
       userCompletedChallengesIds,
       title: queryParams.title,
       completionStatus: queryParams.completionStatus,
+      isNewStatus: queryParams.isNewStatus,
       shouldIncludePrivateChallenges: true,
       shouldIncludeStarChallenges: false,
       shouldIncludeOnlyAuthorChallenges: false,

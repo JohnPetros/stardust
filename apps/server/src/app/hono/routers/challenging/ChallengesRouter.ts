@@ -112,6 +112,7 @@ export class ChallengesRouter extends HonoRouter {
           postingOrder: listingOrderSchema,
           userId: stringSchema.optional(),
           completionStatus: stringSchema,
+          isNewStatus: stringSchema,
           shouldIncludeOnlyAuthorChallenges: queryParamBooleanSchema.default('false'),
           shouldIncludePrivateChallenges: queryParamBooleanSchema.default('false'),
         }),
@@ -143,6 +144,7 @@ export class ChallengesRouter extends HonoRouter {
           postingOrder: listingOrderSchema,
           userId: stringSchema.optional(),
           completionStatus: stringSchema,
+          isNewStatus: stringSchema,
         }),
       ),
       async (context) => {
