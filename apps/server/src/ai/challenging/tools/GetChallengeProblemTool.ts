@@ -10,6 +10,7 @@ export class GetChallengeProblemTool implements Tool {
       CACHE.challenging.challengeProblems.key,
       0,
     )
+    await this.cacheProvider.deleteListItem(CACHE.challenging.challengeProblems.key, 0)
     if (!challengeProblem) {
       throw new ChallengeProblemNotFoundError()
     }
