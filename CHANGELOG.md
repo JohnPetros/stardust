@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.1.1 (2026-02-27)
+
+* 🐛 fix(server): enhance error handling in SupabaseStorageProvider with detailed messages for upload, list, find, and remove operations (8a66c0ab8)
+* ♻️ refactor(server): update SupabaseStorageProvider initialization to accept SupabaseClient instance (e2a82e094)
+* 🧰 prov(server): add logging for folder and file during upload in SupabaseStorageProvider (e4317caf2)
+* ⚙️ config: update pre-commit hook to run codecheck instead of lint (62faa7af7)
+* 🖥️ ui(web): improve logging in useFeedbackDialog and update insigniaRoleSchema to include 'god' role (3611bf315)
+* 📦 deps: update package.json files to refine linting and formatting commands (fb872458d)
+* 📚 docs: add PRD for Lesson Page detailing functional requirements and user experience guidelines (a93ff2a80)
+* 🖥️ ui(web): enhance logging in useFeedbackDialog to improve debugging of screenshot URL (ddca50b2f)
+* 🖥️ ui(web): add default trigger class name and enhance logging in FeedbackDialog for improved debugging (22bbb7031)
+* ♻️ refactor(server): remove console log for godAccountIds in environment configuration to streamline code (aa7b9f62e)
+* 🐛 fix: resolve PR review feedback for env and testing docs (d64a1250c)
+* ♻️ refactor(server): update godAccountIds processing in environment configuration to filter out falsy values (e6d20da5d)
+* 🐛 fix(server): enhance console log for godAccountIds in environment configuration for better clarity (0a54e39fa)
+* ♻️ refactor(server): update godAccountIds processing in environment configuration to ensure boolean values (28b15554b)
+* ⚙️ config(server): add console log for godAccountIds in environment configuration for troubleshooting (ae07a4cd6)
+* 📚 docs: add testing agent documentation (d7150a9bd)
+* 🧪 test: add challenge controllers tests (01a95d70d)
+* 🌐 domain: add challenge categories faker (bb7fbceb7)
+* ⚙️ config: update server environment constants (f900d90e3)
+* ♻️ refactor(server): remove unnecessary blank line in DiscordNotificationService for cleaner code (021ec85ea)
+* 📚 docs: update create-prompt-prompt.md and add web-app-performance-report.md for improved prompt guidelines and performance diagnostics (e6a6c17bb)
+* ♻️ refactor(server): update environment configuration to support multiple God account IDs (abbdecf4a)
+* ⚙️ config: add install-skills.sh to automate skill installations for web quality and performance (f9d2b44f0)
+* 📦 deps: add skills-lock.json to define web quality skills configuration (7bf283e45)
+* ♻️ refactor(web): remove unused notification service and error notification logic (7f9986111)
+
 ## 1.1.0 (2026-02-24)
 
 * ♻️ refactor(server): enhance error handling in Inngest functions by including job names in failure notifications (caa0cb75e)
