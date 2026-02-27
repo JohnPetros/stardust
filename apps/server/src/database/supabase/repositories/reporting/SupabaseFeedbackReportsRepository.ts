@@ -25,7 +25,7 @@ export class SupabaseFeedbackReportsRepository
     }
 
     if (params.intent) {
-      query = query.eq('intent', params.intent.value)
+      query = query.eq('intent', params.intent.value as 'bug' | 'idea' | 'other')
     }
 
     if (params.sentAtPeriod) {
