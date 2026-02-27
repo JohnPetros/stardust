@@ -1,5 +1,15 @@
-import { Stars } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
+import dynamic from 'next/dynamic'
+
+const Canvas = dynamic(
+  () => import('@react-three/fiber').then((module) => module.Canvas),
+  {
+    ssr: false,
+  },
+)
+
+const Stars = dynamic(() => import('@react-three/drei').then((module) => module.Stars), {
+  ssr: false,
+})
 
 export function Particles() {
   return (

@@ -1,5 +1,7 @@
-import ReactConfetti from 'react-confetti'
+import dynamic from 'next/dynamic'
 import { useConfettiAnimation } from './useConfettiAnimation'
+
+const ReactConfetti = dynamic(() => import('react-confetti'), { ssr: false })
 
 type ConfettiAnimationProps = {
   delay?: number // seconds

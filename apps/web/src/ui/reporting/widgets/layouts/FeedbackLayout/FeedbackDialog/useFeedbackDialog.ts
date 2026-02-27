@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react'
-import { toPng } from 'html-to-image'
 
 import { FeedbackReport } from '@stardust/core/reporting/entities'
 import { AuthorAggregate } from '@stardust/core/global/aggregates'
@@ -37,6 +36,11 @@ export function useFeedbackDialog({
   const isCaptureWarmRef = useRef(false)
   const captureWarmupPromiseRef = useRef<Promise<void> | null>(null)
 
+  async function getToPng() {
+    const { toPng } = await import('html-to-image')
+    return toPng
+  }
+
   async function warmupCaptureEngine() {
     if (isCaptureWarmRef.current) return
 
@@ -55,6 +59,7 @@ export function useFeedbackDialog({
 
           document.body.appendChild(warmupNode)
 
+          const toPng = await getToPng()
           await toPng(warmupNode, {
             backgroundColor: '#121214',
             width: 16,
@@ -135,6 +140,7 @@ export function useFeedbackDialog({
         requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
       })
 
+      const toPng = await getToPng()
       const dataUrl = await toPng(document.body, {
         backgroundColor: '#121214',
         width: window.innerWidth,

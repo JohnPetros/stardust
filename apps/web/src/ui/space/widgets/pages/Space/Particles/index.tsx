@@ -1,13 +1,20 @@
-import TsParticles from '@tsparticles/react'
+import dynamic from 'next/dynamic'
 
 import { useParticles } from './useParticles'
 import { options } from './options'
 import { memo } from 'react'
 
+const TsParticles = dynamic(
+  () => import('@tsparticles/react').then((module) => module.default),
+  {
+    ssr: false,
+  },
+)
+
 const ParticlesComponent = () => {
   const { isLoaded } = useParticles()
 
-  // @ts-ignore
+  // @ts-expect-error
   return isLoaded && <TsParticles options={options} />
 }
 

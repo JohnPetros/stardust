@@ -1,9 +1,15 @@
 'use client'
 
-import TypewriterEffect from 'typewriter-effect'
-import { Typewriter as SimpleTypewriter } from 'react-simple-typewriter'
+import dynamic from 'next/dynamic'
 
 import { useTypeWriter } from './useTypeWriter'
+
+const TypewriterEffectDynamic = dynamic(() => import('typewriter-effect'), { ssr: false })
+
+const SimpleTypewriterDynamic = dynamic(
+  () => import('react-simple-typewriter').then((module) => module.Typewriter),
+  { ssr: false },
+)
 
 export type TypeWriterProps = {
   content: string | string[]
@@ -39,7 +45,7 @@ export function TypeWriter({
 
   if (Array.isArray(content)) {
     return (
-      <SimpleTypewriter
+      <SimpleTypewriterDynamic
         words={content}
         loop={hasLoop ? false : 1}
         cursor
@@ -52,7 +58,7 @@ export function TypeWriter({
   }
 
   return (
-    <TypewriterEffect
+    <TypewriterEffectDynamic
       component={'span'}
       options={options}
       onInit={(typewriter) => {
