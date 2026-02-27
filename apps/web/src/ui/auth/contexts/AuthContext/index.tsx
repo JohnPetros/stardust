@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, type PropsWithChildren } from 'react'
+import { createContext, type PropsWithChildren, useMemo } from 'react'
 
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import { HTTP_HEADERS } from '@stardust/core/global/constants'
@@ -46,16 +46,15 @@ export const AuthContextProvider = ({
     signUpWithSocialAccount,
   })
 
-  return (
-    <AuthContext.Provider
-      value={{
-        ...authContextValue,
-        accessToken,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({
+      ...authContextValue,
+      accessToken,
+    }),
+    [authContextValue, accessToken],
   )
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export { useAuthContext }
