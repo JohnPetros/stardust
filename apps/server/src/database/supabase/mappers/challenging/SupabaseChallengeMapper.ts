@@ -36,7 +36,7 @@ export class SupabaseChallengeMapper {
       completionCount: supabaseChallenge.total_completitions ?? 0,
       description: supabaseChallenge.description ?? '',
       isPublic: Boolean(supabaseChallenge.is_public),
-      isNew: supabaseChallenge.is_new !== null ? Boolean(supabaseChallenge.is_new) : true,
+      isNew: Boolean(supabaseChallenge.is_new ?? false),
       testCases: (
         (typeof supabaseChallenge.test_cases === 'string'
           ? JSON.parse(supabaseChallenge.test_cases)

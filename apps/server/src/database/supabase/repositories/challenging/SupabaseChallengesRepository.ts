@@ -156,7 +156,7 @@ export class SupabaseChallengesRepository
     if (isNewStatus.value === 'new') {
       query = query.eq('is_new', true)
     } else if (isNewStatus.value === 'old') {
-      query = query.eq('is_new', false)
+      query = query.or('is_new.is.null,is_new.eq.false')
     }
 
     const range = this.calculateQueryRange(page.value, itemsPerPage.value)

@@ -12,8 +12,13 @@ export class ChallengeIsNewStatus {
   }
 
   static isValid(value: string): value is Value {
-    new StringValidation(value, 'Challenge is new status').oneOf(['new', 'old', 'all'])
-
-    return true
+    try {
+      new StringValidation(value, 'Challenge is new status')
+        .oneOf(['new', 'old', 'all'])
+        .validate()
+      return true
+    } catch {
+      return false
+    }
   }
 }
