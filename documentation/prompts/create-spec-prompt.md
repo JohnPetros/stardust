@@ -63,7 +63,7 @@ Gere o arquivo Markdown da Spec seguindo **estritamente** o modelo de seções a
 ---
 title: <Título claro>
 prd: <link para o PRD referente à spec, localizado no nível acima do diretório da spec>
-app: <server|studio|web> # obrigatório
+apps: <server|studio|web> lista de apps que serão impactados pela spec, separados por vírgula
 status: <em_progresso|concluido>
 last_updated_at: <YYYY-MM-DD>
 ---
