@@ -6,7 +6,7 @@ import { VerifyFileExistsController } from '@/rest/controllers/storage'
 export class StorageMiddleware {
   async verifyFileExists(context: Context, next: Next) {
     const http = new HonoHttp(context, next)
-    const storageProvider = new SupabaseStorageProvider()
+    const storageProvider = new SupabaseStorageProvider(http.getSupabase())
     const controller = new VerifyFileExistsController('images', storageProvider)
     await controller.handle(http)
   }

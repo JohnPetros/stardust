@@ -36,6 +36,7 @@ export type ChallengeProps = {
   incorrectAnswersCount: Integer
   isCompleted: Logical
   isPublic: Logical
+  isNew: Logical
   author: AuthorAggregate
 }
 
@@ -237,6 +238,10 @@ export class Challenge extends Entity<ChallengeProps> {
     this.props.isPublic = Logical.create(isPublic)
   }
 
+  get isNew(): Logical {
+    return this.props.isNew
+  }
+
   get author() {
     return this.props.author
   }
@@ -290,6 +295,7 @@ export class Challenge extends Entity<ChallengeProps> {
       upvotesCount: this.upvotesCount.value,
       completionCount: this.completionCount.value,
       isPublic: this.isPublic.value,
+      isNew: this.isNew.value,
       userOutputs: this.props.userOutputs.items,
       results: this.props.results.items,
       description: this.description.value,

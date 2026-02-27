@@ -14,6 +14,7 @@ type Schema = {
     completionCountOrder: string
     postingOrder: string
     completionStatus: string
+    isNewStatus: string
     shouldIncludeOnlyAuthorChallenges: boolean
     shouldIncludePrivateChallenges: boolean
     userId?: string
@@ -39,6 +40,7 @@ export class FetchChallengesListController implements Controller<Schema> {
       userId,
       title,
       completionStatus,
+      isNewStatus,
       shouldIncludeOnlyAuthorChallenges,
       shouldIncludePrivateChallenges,
     } = http.getQueryParams()
@@ -59,6 +61,7 @@ export class FetchChallengesListController implements Controller<Schema> {
       userCompletedChallengesIds,
       title,
       completionStatus,
+      isNewStatus,
       shouldIncludeOnlyAuthorChallenges,
       shouldIncludePrivateChallenges,
       shouldIncludeStarChallenges: false,

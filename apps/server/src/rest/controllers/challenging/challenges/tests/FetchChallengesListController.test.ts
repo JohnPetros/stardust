@@ -22,6 +22,7 @@ describe('Fetch Challenges List Controller', () => {
       completionCountOrder: string
       postingOrder: string
       completionStatus: string
+      isNewStatus: string
       shouldIncludeOnlyAuthorChallenges: boolean
       shouldIncludePrivateChallenges: boolean
       userId?: string
@@ -56,6 +57,7 @@ describe('Fetch Challenges List Controller', () => {
       completionCountOrder: 'desc',
       postingOrder: 'desc',
       completionStatus: 'all',
+      isNewStatus: 'all',
       shouldIncludeOnlyAuthorChallenges: true,
       shouldIncludePrivateChallenges: true,
       userId: IdFaker.fake().value,
@@ -89,6 +91,7 @@ describe('Fetch Challenges List Controller', () => {
       userCompletedChallengesIds,
       title: queryParams.title,
       completionStatus: queryParams.completionStatus,
+      isNewStatus: queryParams.isNewStatus,
       shouldIncludeOnlyAuthorChallenges: queryParams.shouldIncludeOnlyAuthorChallenges,
       shouldIncludePrivateChallenges: queryParams.shouldIncludePrivateChallenges,
       shouldIncludeStarChallenges: false,
@@ -109,6 +112,7 @@ describe('Fetch Challenges List Controller', () => {
       completionCountOrder: 'desc',
       postingOrder: 'desc',
       completionStatus: 'all',
+      isNewStatus: 'all',
       shouldIncludeOnlyAuthorChallenges: false,
       shouldIncludePrivateChallenges: false,
       userId: undefined,

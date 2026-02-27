@@ -3,4 +3,5 @@ export const QUERY_PARAMS = {
   difficultyLevel: 'difficultyLevel',
   title: 'title',
   completionStatus: 'status',
+  isNewStatus: 'isNewStatus',
 }

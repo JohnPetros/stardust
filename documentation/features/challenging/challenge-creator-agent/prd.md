@@ -27,9 +27,10 @@ O **Agente Criador de Desafios** é uma funcionalidade de backend automatizada p
 
 ##### Regras de Negócio
 
-- **Agendamento de Limpeza (Cron):** O sistema deve executar um Job de verificação diariamente (pode ser o mesmo job de geração ou um dedicado).
-- **Regra de Expiração:** O sistema deve identificar desafios onde a data de criação (`createdAt`) exceda **3 dias** e atualizar a flag `isNew` para `false`.
+- **Agendamento de Limpeza (Cron):** O sistema deve executar um Job dedicado (`ExpireNewChallengesJob`) diariamente às 00:05 (fuso `America/Sao_Paulo`).
+- **Regra de Expiração:** O sistema deve identificar desafios onde a data de criação (`createdAt`) exceda **1 semana (7 dias)** e atualizar a flag `isNew` para `false` em lote (sem loop N+1).
 - **Imutabilidade Histórica:** A remoção da flag `isNew` não deve alterar ou remover o desafio do catálogo, apenas mudar seu estado visual.
+- **[CONCLUIDO]** Implementado via `ExpireNewChallengesJob` + `ExpireNewChallengesUseCase` + `ChallengesRepository.expireNewChallengesOlderThanOneWeek()`.
 
 #### Visualização de Novos Desafios
 
@@ -40,6 +41,18 @@ O **Agente Criador de Desafios** é uma funcionalidade de backend automatizada p
 - **Badge "Novo":** Na listagem de desafios, os cards que possuírem `isNew: true` devem exibir um badge ou etiqueta visual com o texto "Novo" (ou ícone correspondente).
 - **Destaque Visual:** O badge deve utilizar uma cor de destaque (ex: cor primária ou de atenção) para diferenciar-se dos demais elementos do card.
 - **Sem Notificação Ativa ao Usuário Final:** Não deve ser enviada notificação por push, e-mail ou central de notificações para usuários finais; a descoberta é passiva ao navegar pela lista.
+- **[CONCLUIDO]** Badge "Novo" renderizado em `ChallengeCardView` com borda azul quando `isNew === true`.
+
+#### Filtro de Novidade na Listagem
+
+**Descrição:** Controle de filtragem da lista de desafios por estado de novidade.
+
+##### Regras de UI/UX
+
+- **Select de Novidade:** Na pagina de desafios, o usuário pode filtrar por: `Todos`, `Novo`, `Antigo`.
+- **Sincronização de URL:** O filtro selecionado é persistido como query param `isNewStatus` na URL.
+- **Tags de filtro ativo:** Filtros ativos aparecem como tags removíveis abaixo dos selects.
+- **[CONCLUIDO]** Implementado em `ChallengesFilters` com select "Novidade" e integração completa com `useChallengesList` e o endpoint REST.
 
 #### Notificação Operacional
 

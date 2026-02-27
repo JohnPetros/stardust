@@ -104,6 +104,7 @@ export class SupabaseChallengesRepository
     categoriesIds,
     shouldIncludeStarChallenges,
     shouldIncludeOnlyAuthorChallenges,
+    isNewStatus,
     userId,
   }: ChallengesListParams): Promise<ManyItems<Challenge>> {
     let query = this.supabase
@@ -152,6 +153,12 @@ export class SupabaseChallengesRepository
       query = query.in('challenges_categories.category_id', categoriesIds.dto)
     }
 
+    if (isNewStatus.value === 'new') {
+      query = query.eq('is_new', true)
+    } else if (isNewStatus.value === 'old') {
+      query = query.or('is_new.is.null,is_new.eq.false')
+    }
+
     const range = this.calculateQueryRange(page.value, itemsPerPage.value)
 
     const { data, count, error } = await query.range(range.from, range.to)
@@ -194,6 +201,7 @@ export class SupabaseChallengesRepository
       user_id: challenge.author.id.value,
       star_id: challenge.starId?.value,
       is_public: challenge.isPublic.value,
+      is_new: challenge.isNew.value,
       slug: challenge.slug.value,
       test_cases: challenge.testCases.map((testCase) => testCase.dto) as Json,
     })
@@ -230,6 +238,7 @@ export class SupabaseChallengesRepository
         user_id: challenge.author.id.value,
         star_id: challenge.starId?.value,
         is_public: challenge.isPublic.value,
+        is_new: challenge.isNew.value,
         slug: challenge.slug.value,
         test_cases: challenge.testCases.map((testCase) => testCase.dto) as Json,
       })
@@ -311,6 +320,21 @@ export class SupabaseChallengesRepository
       challenge_id: challengeId.value,
       user_id: userId.value,
     })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
+  async expireNewChallengesOlderThanOneWeek(): Promise<void> {
+    const oneWeekAgo = new Date()
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
+
+    const { error } = await this.supabase
+      .from('challenges')
+      .update({ is_new: false })
+      .eq('is_new', true)
+      .lte('created_at', oneWeekAgo.toISOString())
 
     if (error) {
       throw new SupabasePostgreError(error)

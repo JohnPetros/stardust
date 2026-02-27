@@ -72,6 +72,7 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       title,
       difficulty,
       completionStatus,
+      isNewStatus,
       upvotesCountOrder,
       postingOrder,
       categoriesIds,
@@ -85,6 +86,7 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       restClient.setQueryParam('title', title.value)
       restClient.setQueryParam('difficulty', difficulty.level)
       restClient.setQueryParam('completionStatus', completionStatus.value)
+      restClient.setQueryParam('isNewStatus', isNewStatus.value)
       restClient.setQueryParam('upvotesCountOrder', upvotesCountOrder.value)
       restClient.setQueryParam('postingOrder', postingOrder.value)
       restClient.setQueryParam('categoriesIds', categoriesIds.dto)

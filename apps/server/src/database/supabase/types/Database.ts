@@ -38,46 +38,146 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_oauth_providers: {
+        Row: {
+          acceptable_client_ids: string[]
+          attribute_mapping: Json
+          authorization_params: Json
+          authorization_url: string | null
+          cached_discovery: Json | null
+          client_id: string
+          client_secret: string
+          created_at: string
+          discovery_cached_at: string | null
+          discovery_url: string | null
+          email_optional: boolean
+          enabled: boolean
+          id: string
+          identifier: string
+          issuer: string | null
+          jwks_uri: string | null
+          name: string
+          pkce_enabled: boolean
+          provider_type: string
+          scopes: string[]
+          skip_nonce_check: boolean
+          token_url: string | null
+          updated_at: string
+          userinfo_url: string | null
+        }
+        Insert: {
+          acceptable_client_ids?: string[]
+          attribute_mapping?: Json
+          authorization_params?: Json
+          authorization_url?: string | null
+          cached_discovery?: Json | null
+          client_id: string
+          client_secret: string
+          created_at?: string
+          discovery_cached_at?: string | null
+          discovery_url?: string | null
+          email_optional?: boolean
+          enabled?: boolean
+          id?: string
+          identifier: string
+          issuer?: string | null
+          jwks_uri?: string | null
+          name: string
+          pkce_enabled?: boolean
+          provider_type: string
+          scopes?: string[]
+          skip_nonce_check?: boolean
+          token_url?: string | null
+          updated_at?: string
+          userinfo_url?: string | null
+        }
+        Update: {
+          acceptable_client_ids?: string[]
+          attribute_mapping?: Json
+          authorization_params?: Json
+          authorization_url?: string | null
+          cached_discovery?: Json | null
+          client_id?: string
+          client_secret?: string
+          created_at?: string
+          discovery_cached_at?: string | null
+          discovery_url?: string | null
+          email_optional?: boolean
+          enabled?: boolean
+          id?: string
+          identifier?: string
+          issuer?: string | null
+          jwks_uri?: string | null
+          name?: string
+          pkce_enabled?: boolean
+          provider_type?: string
+          scopes?: string[]
+          skip_nonce_check?: boolean
+          token_url?: string | null
+          updated_at?: string
+          userinfo_url?: string | null
+        }
+        Relationships: []
+      }
       flow_state: {
         Row: {
-          auth_code: string
+          auth_code: string | null
           auth_code_issued_at: string | null
           authentication_method: string
-          code_challenge: string
-          code_challenge_method: Database['auth']['Enums']['code_challenge_method']
+          code_challenge: string | null
+          code_challenge_method: Database['auth']['Enums']['code_challenge_method'] | null
           created_at: string | null
+          email_optional: boolean
           id: string
+          invite_token: string | null
+          linking_target_id: string | null
+          oauth_client_state_id: string | null
           provider_access_token: string | null
           provider_refresh_token: string | null
           provider_type: string
+          referrer: string | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
-          auth_code: string
+          auth_code?: string | null
           auth_code_issued_at?: string | null
           authentication_method: string
-          code_challenge: string
-          code_challenge_method: Database['auth']['Enums']['code_challenge_method']
+          code_challenge?: string | null
+          code_challenge_method?:
+            | Database['auth']['Enums']['code_challenge_method']
+            | null
           created_at?: string | null
+          email_optional?: boolean
           id: string
+          invite_token?: string | null
+          linking_target_id?: string | null
+          oauth_client_state_id?: string | null
           provider_access_token?: string | null
           provider_refresh_token?: string | null
           provider_type: string
+          referrer?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
-          auth_code?: string
+          auth_code?: string | null
           auth_code_issued_at?: string | null
           authentication_method?: string
-          code_challenge?: string
-          code_challenge_method?: Database['auth']['Enums']['code_challenge_method']
+          code_challenge?: string | null
+          code_challenge_method?:
+            | Database['auth']['Enums']['code_challenge_method']
+            | null
           created_at?: string | null
+          email_optional?: boolean
           id?: string
+          invite_token?: string | null
+          linking_target_id?: string | null
+          oauth_client_state_id?: string | null
           provider_access_token?: string | null
           provider_refresh_token?: string | null
           provider_type?: string
+          referrer?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -390,6 +490,7 @@ export type Database = {
           logo_uri: string | null
           redirect_uris: string
           registration_type: Database['auth']['Enums']['oauth_registration_type']
+          token_endpoint_auth_method: string
           updated_at: string
         }
         Insert: {
@@ -404,6 +505,7 @@ export type Database = {
           logo_uri?: string | null
           redirect_uris: string
           registration_type: Database['auth']['Enums']['oauth_registration_type']
+          token_endpoint_auth_method: string
           updated_at?: string
         }
         Update: {
@@ -418,6 +520,7 @@ export type Database = {
           logo_uri?: string | null
           redirect_uris?: string
           registration_type?: Database['auth']['Enums']['oauth_registration_type']
+          token_endpoint_auth_method?: string
           updated_at?: string
         }
         Relationships: []
@@ -1247,6 +1350,7 @@ export type Database = {
           difficulty_level: string
           function_name: string | null
           id: string
+          is_new: boolean
           is_public: boolean
           slug: string
           star_id: string | null
@@ -1262,6 +1366,7 @@ export type Database = {
           difficulty_level?: string
           function_name?: string | null
           id?: string
+          is_new?: boolean
           is_public?: boolean
           slug: string
           star_id?: string | null
@@ -1277,6 +1382,7 @@ export type Database = {
           difficulty_level?: string
           function_name?: string | null
           id?: string
+          is_new?: boolean
           is_public?: boolean
           slug?: string
           star_id?: string | null
@@ -1551,7 +1657,7 @@ export type Database = {
           content: string
           created_at: string
           id: string
-          intent: string
+          intent: Database['public']['Enums']['feedback_intent']
           screenshot: string | null
           user_id: string
         }
@@ -1559,7 +1665,7 @@ export type Database = {
           content: string
           created_at?: string
           id?: string
-          intent: string
+          intent: Database['public']['Enums']['feedback_intent']
           screenshot?: string | null
           user_id: string
         }
@@ -1567,7 +1673,7 @@ export type Database = {
           content?: string
           created_at?: string
           id?: string
-          intent?: string
+          intent?: Database['public']['Enums']['feedback_intent']
           screenshot?: string | null
           user_id?: string
         }
@@ -2731,6 +2837,7 @@ export type Database = {
           downvotes_count: number | null
           function_name: string | null
           id: string | null
+          is_new: boolean | null
           is_public: boolean | null
           slug: string | null
           star_id: string | null
@@ -2758,13 +2865,6 @@ export type Database = {
           },
           {
             foreignKeyName: 'challenges_user_id_fkey'
-            columns: ['author_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'challenges_user_id_fkey'
             columns: ['user_id']
             isOneToOne: false
             referencedRelation: 'users'
@@ -2774,8 +2874,8 @@ export type Database = {
             foreignKeyName: 'challenges_user_id_fkey'
             columns: ['author_id']
             isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
           },
           {
             foreignKeyName: 'challenges_user_id_fkey'
@@ -2787,13 +2887,20 @@ export type Database = {
           {
             foreignKeyName: 'challenges_user_id_fkey'
             columns: ['author_id']
+            isOneToOne: false
+            referencedRelation: 'users_completed_planets_view'
+            referencedColumns: ['user_id']
+          },
+          {
+            foreignKeyName: 'challenges_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
             referencedRelation: 'users_view'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'challenges_user_id_fkey'
-            columns: ['user_id']
+            columns: ['author_id']
             isOneToOne: false
             referencedRelation: 'users_view'
             referencedColumns: ['id']
@@ -3111,6 +3218,7 @@ export type Database = {
       challenge_difficulty_level: 'easy' | 'medium' | 'hard'
       challenge_vote: 'upvote' | 'downvote'
       chat_message_sender: 'user' | 'assistant'
+      feedback_intent: 'bug' | 'idea' | 'other'
       guide_category: 'lsp' | 'mdx'
       insignia_role: 'engineer' | 'god'
       platform: 'web' | 'mobile'
@@ -3170,7 +3278,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_01_05: {
+      messages_2026_02_24: {
         Row: {
           event: string | null
           extension: string
@@ -3203,7 +3311,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_01_06: {
+      messages_2026_02_25: {
         Row: {
           event: string | null
           extension: string
@@ -3236,7 +3344,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_01_07: {
+      messages_2026_02_26: {
         Row: {
           event: string | null
           extension: string
@@ -3269,7 +3377,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_01_08: {
+      messages_2026_02_27: {
         Row: {
           event: string | null
           extension: string
@@ -3302,7 +3410,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_01_09: {
+      messages_2026_02_28: {
         Row: {
           event: string | null
           extension: string
@@ -3335,7 +3443,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_01_10: {
+      messages_2026_03_01: {
         Row: {
           event: string | null
           extension: string
@@ -3368,7 +3476,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_01_11: {
+      messages_2026_03_02: {
         Row: {
           event: string | null
           extension: string
@@ -3418,6 +3526,7 @@ export type Database = {
       }
       subscription: {
         Row: {
+          action_filter: string | null
           claims: Json
           claims_role: unknown
           created_at: string
@@ -3427,6 +3536,7 @@ export type Database = {
           subscription_id: string
         }
         Insert: {
+          action_filter?: string | null
           claims: Json
           claims_role?: unknown
           created_at?: string
@@ -3436,6 +3546,7 @@ export type Database = {
           subscription_id: string
         }
         Update: {
+          action_filter?: string | null
           claims?: Json
           claims_role?: unknown
           created_at?: string
@@ -3670,7 +3781,6 @@ export type Database = {
           created_at: string | null
           id: string
           last_accessed_at: string | null
-          level: number | null
           metadata: Json | null
           name: string | null
           owner: string | null
@@ -3685,7 +3795,6 @@ export type Database = {
           created_at?: string | null
           id?: string
           last_accessed_at?: string | null
-          level?: number | null
           metadata?: Json | null
           name?: string | null
           owner?: string | null
@@ -3700,7 +3809,6 @@ export type Database = {
           created_at?: string | null
           id?: string
           last_accessed_at?: string | null
-          level?: number | null
           metadata?: Json | null
           name?: string | null
           owner?: string | null
@@ -3713,38 +3821,6 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: 'objects_bucketId_fkey'
-            columns: ['bucket_id']
-            isOneToOne: false
-            referencedRelation: 'buckets'
-            referencedColumns: ['id']
-          },
-        ]
-      }
-      prefixes: {
-        Row: {
-          bucket_id: string
-          created_at: string | null
-          level: number
-          name: string
-          updated_at: string | null
-        }
-        Insert: {
-          bucket_id: string
-          created_at?: string | null
-          level?: number
-          name: string
-          updated_at?: string | null
-        }
-        Update: {
-          bucket_id?: string
-          created_at?: string | null
-          level?: number
-          name?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'prefixes_bucketId_fkey'
             columns: ['bucket_id']
             isOneToOne: false
             referencedRelation: 'buckets'
@@ -3899,10 +3975,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      add_prefixes: {
-        Args: { _bucket_id: string; _name: string }
-        Returns: undefined
-      }
       can_insert_object: {
         Args: { bucketid: string; metadata: Json; name: string; owner: string }
         Returns: undefined
@@ -3911,13 +3983,13 @@ export type Database = {
         Args: { bucket_ids: string[]; names: string[] }
         Returns: undefined
       }
-      delete_prefix: {
-        Args: { _bucket_id: string; _name: string }
-        Returns: boolean
-      }
       extension: { Args: { name: string }; Returns: string }
       filename: { Args: { name: string }; Returns: string }
       foldername: { Args: { name: string }; Returns: string[] }
+      get_common_prefix: {
+        Args: { p_delimiter: string; p_key: string; p_prefix: string }
+        Returns: string
+      }
       get_level: { Args: { name: string }; Returns: number }
       get_prefix: { Args: { name: string }; Returns: string }
       get_prefixes: { Args: { name: string }; Returns: string[] }
@@ -3945,23 +4017,22 @@ export type Database = {
       }
       list_objects_with_delimiter: {
         Args: {
-          bucket_id: string
+          _bucket_id: string
           delimiter_param: string
           max_keys?: number
           next_token?: string
           prefix_param: string
+          sort_order?: string
           start_after?: string
         }
         Returns: {
+          created_at: string
           id: string
+          last_accessed_at: string
           metadata: Json
           name: string
           updated_at: string
         }[]
-      }
-      lock_top_prefixes: {
-        Args: { bucket_ids: string[]; names: string[] }
-        Returns: undefined
       }
       operation: { Args: never; Returns: string }
       search: {
@@ -3984,27 +4055,28 @@ export type Database = {
           updated_at: string
         }[]
       }
-      search_legacy_v1: {
+      search_by_timestamp: {
         Args: {
-          bucketname: string
-          levels?: number
-          limits?: number
-          offsets?: number
-          prefix: string
-          search?: string
-          sortcolumn?: string
-          sortorder?: string
+          p_bucket_id: string
+          p_level: number
+          p_limit: number
+          p_prefix: string
+          p_sort_column: string
+          p_sort_column_after: string
+          p_sort_order: string
+          p_start_after: string
         }
         Returns: {
           created_at: string
           id: string
+          key: string
           last_accessed_at: string
           metadata: Json
           name: string
           updated_at: string
         }[]
       }
-      search_v1_optimised: {
+      search_legacy_v1: {
         Args: {
           bucketname: string
           levels?: number
@@ -4204,6 +4276,7 @@ export const Constants = {
       challenge_difficulty_level: ['easy', 'medium', 'hard'],
       challenge_vote: ['upvote', 'downvote'],
       chat_message_sender: ['user', 'assistant'],
+      feedback_intent: ['bug', 'idea', 'other'],
       guide_category: ['lsp', 'mdx'],
       insignia_role: ['engineer', 'god'],
       platform: ['web', 'mobile'],

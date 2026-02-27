@@ -19,6 +19,7 @@ export const ChallengesFilters = ({ categoriesDto }: Props) => {
     handleTitleChange,
     handleCompletionStatusChange,
     handleDifficultyLevelChange,
+    handleIsNewStatusChange,
     handleTagClick,
   } = useChallengesFilter(categories)
 
@@ -30,6 +31,7 @@ export const ChallengesFilters = ({ categoriesDto }: Props) => {
       handleTitleChange={handleTitleChange}
       handleCompletionStatusChange={handleCompletionStatusChange}
       handleDifficultyLevelChange={handleDifficultyLevelChange}
+      handleIsNewStatusChange={handleIsNewStatusChange}
       handleTagClick={handleTagClick}
     />
   )

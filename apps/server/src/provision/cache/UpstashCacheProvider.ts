@@ -31,8 +31,8 @@ export class UpstashCacheProvider implements CacheProvider {
     await this.redis.del(key)
   }
 
-  async getListItem(key: string, itemIndex: number): Promise<string | null> {
-    const data = await this.redis.lindex(key, itemIndex)
+  async popListItem(key: string): Promise<string | null> {
+    const data = await this.redis.lpop<string>(key)
     if (!data) return null
     return data
   }
