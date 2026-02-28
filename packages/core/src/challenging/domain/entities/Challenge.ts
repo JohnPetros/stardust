@@ -269,6 +269,10 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.starId
   }
 
+  set starId(starId: Id | null) {
+    this.props.starId = starId
+  }
+
   get isCompleted() {
     return this.props.isCompleted
   }

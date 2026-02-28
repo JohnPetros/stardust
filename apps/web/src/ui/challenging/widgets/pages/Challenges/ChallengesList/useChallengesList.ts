@@ -26,9 +26,10 @@ const CHALLENGES_PER_PAGE = 20
 type Params = {
   challengingService: ChallengingService
   userId: Id | null
+  isUserGod: Logical
 }
 
-export function useChallengesList({ challengingService, userId }: Params) {
+export function useChallengesList({ challengingService, userId, isUserGod }: Params) {
   const [difficultyLevel] = useQueryStringParam(QUERY_PARAMS.difficultyLevel, 'any')
   const [completionStatus] = useQueryStringParam(QUERY_PARAMS.completionStatus, 'any')
   const [title] = useQueryStringParam(QUERY_PARAMS.title, '')
@@ -46,9 +47,9 @@ export function useChallengesList({ challengingService, userId }: Params) {
       itemsPerPage: OrdinalNumber.create(CHALLENGES_PER_PAGE),
       postingOrder: ListingOrder.create('any'),
       upvotesCountOrder: ListingOrder.create('any'),
-      shouldIncludeStarChallenges: Logical.createAsFalse(),
       shouldIncludeOnlyAuthorChallenges: Logical.createAsFalse(),
-      shouldIncludePrivateChallenges: Logical.createAsTrue(),
+      shouldIncludeStarChallenges: isUserGod,
+      shouldIncludePrivateChallenges: isUserGod,
       completionCountOrder: ListingOrder.create('any'),
       downvoteCountOrder: ListingOrder.create('any'),
       title: Text.create(title),

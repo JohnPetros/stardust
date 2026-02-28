@@ -156,6 +156,16 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       )
     },
 
+    async editChallengeStar(challengeId: Id, starId: Id) {
+      return await restClient.patch(`/challenging/challenges/${challengeId.value}/star`, {
+        starId: starId.value,
+      })
+    },
+
+    async removeChallengeStar(challengeId: Id) {
+      return await restClient.delete(`/challenging/challenges/${challengeId.value}/star`)
+    },
+
     async deleteChallenge(challenge: Challenge) {
       return await restClient.delete(`/challenging/challenges/${challenge.id.value}`)
     },

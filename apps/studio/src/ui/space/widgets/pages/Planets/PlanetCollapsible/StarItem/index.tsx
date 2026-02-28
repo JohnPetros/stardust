@@ -1,9 +1,9 @@
-import { useState } from 'react'
 import type { Star } from '@stardust/core/space/entities'
 
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
+import { StarChallengeSelector } from './StarChallengeSelector'
 import { StarItemView } from './StarItemView'
 import { useStarItem } from './useStarItem'
 
@@ -22,6 +22,10 @@ export const StarItem = ({ star, onDelete }: Props) => {
     handleStarNameChange,
     handleStarAvailabilityChange,
     handleStarTypeChange,
+    selectedChallengeId,
+    selectedChallengeTitle,
+    handleChallengeLinking,
+    handleChallengeUnlink,
     handleChallengeClick,
   } = useStarItem({
     service: spaceService,
@@ -40,6 +44,18 @@ export const StarItem = ({ star, onDelete }: Props) => {
       onAvailabilityChange={handleStarAvailabilityChange}
       onTypeChange={handleStarTypeChange}
       onChallengeClick={handleChallengeClick}
+      challengeSelector={
+        <StarChallengeSelector
+          starId={star.id}
+          isStarChallenge={isChallenge.value}
+          selectedChallengeId={selectedChallengeId}
+          selectedChallengeTitle={selectedChallengeTitle}
+          challengingService={challengingService}
+          toastProvider={toastProvider}
+          onChallengeLinked={handleChallengeLinking}
+          onChallengeUnlinked={handleChallengeUnlink}
+        />
+      }
       onDelete={onDelete}
     />
   )

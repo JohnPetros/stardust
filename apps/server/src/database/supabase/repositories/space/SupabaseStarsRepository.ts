@@ -83,9 +83,16 @@ export class SupabaseStarsRepository
   }
 
   async replace(star: Star): Promise<void> {
+    const supabaseStar = SupabaseStarMapper.toSupabase(star)
     const { error } = await this.supabase
       .from('stars')
-      .update(SupabaseStarMapper.toSupabase(star))
+      .update({
+        name: supabaseStar.name,
+        number: supabaseStar.number,
+        slug: supabaseStar.slug,
+        is_available: supabaseStar.is_available,
+        is_challenge: supabaseStar.is_challenge,
+      })
       .eq('id', star.id.value)
 
     if (error) {

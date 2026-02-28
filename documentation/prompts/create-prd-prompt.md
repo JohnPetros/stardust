@@ -80,7 +80,6 @@ _Especifique aspectos visuais e de interação (Frontend)._
 - **Acessibilidade:** Regras de contraste e navegação por teclado.
 - **Feedback:** Mensagens de erro, sucesso e estados de loading.
 - **Performance:** (Tempo de carregamento, resposta).
-- **Segurança:** (Autenticação, proteção de dados).
 - **Confiabilidade:** (Tratamento de erros, fallbacks).
 - **Compatibilidade:** (Navegadores, dispositivos).
 

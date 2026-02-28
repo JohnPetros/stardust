@@ -35,7 +35,7 @@ export class SupabaseChallengesRepository
       .single()
 
     if (error) {
-      return null
+      return this.handleQueryPostgresError(error)
     }
 
     return SupabaseChallengeMapper.toEntity(data)
@@ -49,7 +49,7 @@ export class SupabaseChallengesRepository
       .single()
 
     if (error) {
-      return null
+      return this.handleQueryPostgresError(error)
     }
 
     const { data: challenge, error: challengeError } = await this.supabase
@@ -73,7 +73,7 @@ export class SupabaseChallengesRepository
       .single()
 
     if (error) {
-      return null
+      return this.handleQueryPostgresError(error)
     }
 
     return SupabaseChallengeMapper.toEntity(data)
@@ -228,7 +228,7 @@ export class SupabaseChallengesRepository
         description: challenge.description.value,
         difficulty_level: challenge.difficulty.level,
         user_id: challenge.author.id.value,
-        star_id: challenge.starId?.value,
+        star_id: challenge.starId ? challenge.starId.value : null,
         is_public: challenge.isPublic.value,
         slug: challenge.slug.value,
         test_cases: challenge.testCases.map((testCase) => testCase.dto) as Json,

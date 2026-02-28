@@ -21,19 +21,20 @@ Antes de escrever a spec:
 - Identifique requisitos relevantes para implementação.
 - **Não replique o PRD completo**; resuma apenas o que impacta a execução técnica.
 
-#### 1.2 Identificação de camadas
-- Identifique a aplicação e as camadas que serão utilizadas para implementar a feature, conforme descrito em `documentation/rules/rules.md`.
+#### 1.2 Identificação de camadas e apps/pacotes
+- Identifique a aplicação/pacote e as camadas que serão utilizadas para implementar a feature, conforme descrito em `documentation/rules/rules.md`.
 
 #### 1.3 Delegação para subagentes
-Distribua estrategicamente a pesquisa da codebase e das regras específicas por camada para subagentes especializados.
+Distribua estrategicamente a pesquisa da codebase e das regras específicas por app/pacote para subagentes especializados.
 
 Cada subagente deve retornar, para sua camada:
 - Arquivos relevantes encontrados
-- Padrões e convenções da camada
+- Camadas envolvidas
 - Implementações similares na codebase (com caminhos)
 - Dependências envolvidas
 - Riscos e pontos de atenção
 - Lacunas, inconsistências ou dúvidas
+- Fluxo de dados relevante para a implementação
 
 #### 1.4 Síntese
 - Consolide as descobertas dos subagentes em um único documento.
@@ -63,7 +64,7 @@ Gere o arquivo Markdown da Spec seguindo **estritamente** o modelo de seções a
 ---
 title: <Título claro>
 prd: <link para o PRD referente à spec, localizado no nível acima do diretório da spec>
-app: <server|studio|web> # obrigatório
+apps: <server|studio|web> (separe os apps por vírgula)
 status: <em_progresso|concluido>
 last_updated_at: <YYYY-MM-DD>
 ---
