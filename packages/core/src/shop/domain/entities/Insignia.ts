@@ -21,7 +21,7 @@ export class Insignia extends ShopItem<Props> {
         image: Image.create(dto.image),
         role,
         isPurchasable: Logical.create(
-          dto?.isPurchasable ?? role.isEngineer.value,
+          dto?.isPurchasable ?? false,
           'A insígnia está disponível para compra?',
         ),
         isAcquiredByDefault: Logical.createAsFalse(),
