@@ -50,7 +50,7 @@ export class SupabaseInsigniasRepository
     const { data, error } = await this.supabase
       .from('insignias')
       .select('*')
-      .neq('role', 'god')
+      .or('is_purchasable.eq.true,and(is_purchasable.is.null,role.neq.god)')
 
     if (error) {
       throw new SupabasePostgreError(error)
@@ -67,6 +67,7 @@ export class SupabaseInsigniasRepository
       image: supabaseInsignia.image,
       price: supabaseInsignia.price,
       role: supabaseInsignia.role,
+      is_purchasable: supabaseInsignia.is_purchasable,
     })
 
     if (error) {
@@ -83,6 +84,7 @@ export class SupabaseInsigniasRepository
         image: supabaseInsignia.image,
         price: supabaseInsignia.price,
         role: supabaseInsignia.role,
+        is_purchasable: supabaseInsignia.is_purchasable,
       })
       .eq('id', insignia.id.value)
 
