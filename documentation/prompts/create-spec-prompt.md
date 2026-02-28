@@ -322,5 +322,6 @@ Para cada item:
 * Toda referência a código existente deve incluir caminho relativo real.
 * Se uma seção não se aplicar, preencher explicitamente com **Não aplicável**.
 * A spec deve ser consistente com os padrões já existentes na codebase (nomenclatura, organização de pastas, contratos e convenções por camada).
+* Não replicar os termos entre parênteses que estão nos titulos, como (Quando aplicável), (Obrigatório), (Depende da tarefa), etc.
 
 

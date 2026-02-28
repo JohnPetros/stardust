@@ -3,6 +3,7 @@ export type ShopItemDto = {
   image: string
   name: string
   price: number
+  isPurchasable?: boolean
   isAcquiredByDefault?: boolean
   isSelectedByDefault?: boolean
 }
