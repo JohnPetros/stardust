@@ -59,9 +59,12 @@ describe('ListFeedbackReportsUseCase', () => {
 
     expect(repository.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        authorName: expect.any(Text),
-        intent: expect.any(Text),
-        sentAtPeriod: expect.any(Period),
+        authorName: expect.objectContaining({ value: request.authorName }),
+        intent: expect.objectContaining({ value: request.intent }),
+        sentAtPeriod: expect.objectContaining({
+          startDate: expect.any(Date),
+          endDate: expect.any(Date),
+        }),
       }),
     )
 
