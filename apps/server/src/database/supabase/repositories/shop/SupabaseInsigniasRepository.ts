@@ -46,6 +46,19 @@ export class SupabaseInsigniasRepository
     return data.map(SupabaseInsigniaMapper.toEntity)
   }
 
+  async findAllPurchasable() {
+    const { data, error } = await this.supabase
+      .from('insignias')
+      .select('*')
+      .neq('role', 'god')
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+
+    return data.map(SupabaseInsigniaMapper.toEntity)
+  }
+
   async add(insignia: Insignia): Promise<void> {
     const supabaseInsignia = SupabaseInsigniaMapper.toSupabase(insignia)
     const { error } = await this.supabase.from('insignias').insert({

@@ -12,12 +12,18 @@ type Props = {
 
 export class Insignia extends ShopItem<Props> {
   static create(dto: InsigniaDto): Insignia {
+    const role = InsigniaRole.create(dto.role)
+
     return new Insignia(
       {
         name: Name.create(dto.name),
         price: Integer.create(dto.price, 'Preço da insígnia'),
         image: Image.create(dto.image),
-        role: InsigniaRole.create(dto.role),
+        role,
+        isPurchasable: Logical.create(
+          dto?.isPurchasable ?? role.isEngineer.value,
+          'A insígnia está disponível para compra?',
+        ),
         isAcquiredByDefault: Logical.createAsFalse(),
         isSelectedByDefault: Logical.createAsFalse(),
       },
@@ -36,6 +42,7 @@ export class Insignia extends ShopItem<Props> {
       price: this.price.value,
       image: this.image.value,
       role: this.role.value,
+      isPurchasable: this.isPurchasable.value,
     }
   }
 }

@@ -4,4 +4,5 @@ export type InsigniaDto = {
   price: number
   image: string
   role: string
+  isPurchasable?: boolean
 }

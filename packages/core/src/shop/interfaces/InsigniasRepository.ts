@@ -5,6 +5,7 @@ import type { InsigniaRole } from '#global/domain/structures/index'
 export interface InsigniasRepository {
   findById(insigniaId: Id): Promise<Insignia | null>
   findAll(): Promise<Insignia[]>
+  findAllPurchasable(): Promise<Insignia[]>
   findByRole(role: InsigniaRole): Promise<Insignia | null>
   add(insignia: Insignia): Promise<void>
   replace(insignia: Insignia): Promise<void>

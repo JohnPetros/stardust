@@ -9,6 +9,10 @@ export class Avatar extends ShopItem {
         name: Name.create(dto.name),
         price: Integer.create(dto.price, 'Preço do avatar'),
         image: Image.create(dto.image),
+        isPurchasable: Logical.create(
+          dto?.isPurchasable ?? true,
+          'O avatar está disponível para compra?',
+        ),
         isAcquiredByDefault: Logical.create(
           dto?.isAcquiredByDefault ?? false,
           'O avatar é adquirido por padrão?',
