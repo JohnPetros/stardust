@@ -20,16 +20,16 @@ description: Implementar um plano de implementacao derivado de uma spec tecnica.
    - Antes de implementar uma camada, se necessario, consulte as regras correspondentes em `documentation/rules/`.
    - Preserve padroes existentes (nomenclatura, organizacao de pastas, convenções de código, etc).
 
-4. **Ciclo de implementacao por tarefa**
+3. **Ciclo de implementacao por tarefa**
    - Para cada tarefa do plano:
      - Localize codigo existente semelhante antes de criar algo novo.
      - Implemente a mudanca minima que entrega valor observavel.
 
-5. **Verificacao (obrigatorio) para cada fase**
+4. **Verificacao (obrigatorio) para cada fase**
    - Garanta que o projeto compila e que fluxos impactados funcionam.
    - Rode checks existentes `npm run typecheck`, `npm run codecheck` e `npm run test` e corrija possíveis falhas antes de seguir.
 
-6. **Progresso e reporte**
+5. **Progresso e reporte**
    - atualize o checklist de tarefas implementadas.
    - Ao final, reporte: o que foi implementado, arquivos principais tocados, pendencias e proximos passos.
 

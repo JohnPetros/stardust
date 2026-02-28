@@ -3,7 +3,7 @@ title: Insígnia "God" na página da loja
 prd: documentation/features/shop/shop-page/prd.md
 apps: web, server
 status: concluido
-last_updated_at: 28/02/2026
+last_updated_at: 2026-02-28
 ---
 
 ## 🐛 Bug Report: Insígnia "God" Exibida Incorretamente na Página da Loja
@@ -147,9 +147,11 @@ adquirível por qualquer usuário na loja.
 
 - **Server (Database)**
   - `SupabaseInsigniasRepository` — `apps/server/src/database/supabase/repositories/shop/SupabaseInsigniasRepository.ts`
-    — Implementar `findAllPurchasable()` com filtro no Supabase SDK:
-    `.from('insignias').select('*').neq('role', 'god')`. Isso garante que a consulta ao banco nunca
-    retorne a insígnia `"god"` no contexto de listagem pública da loja.
+    — Implementar `findAllPurchasable()` com filtro no Supabase SDK priorizando o campo
+    `is_purchasable` e mantendo compatibilidade com registros legados sem essa coluna populada:
+    `.from('insignias').select('*').or('is_purchasable.eq.true,and(is_purchasable.is.null,role.neq.god)')`.
+    Isso garante que a consulta pública respeite a semântica de comprável e continue excluindo a
+    insígnia `"god"` em cenários de fallback.
 
 ---
 
@@ -166,8 +168,8 @@ adquirível por qualquer usuário na loja.
 
 - `FetchInsigniasListController` foi atualizado para usar `repository.findAllPurchasable()`.
 - `InsigniasRepository` agora expõe explicitamente o contrato `findAllPurchasable()`.
-- `SupabaseInsigniasRepository.findAllPurchasable()` foi implementado com filtro de exclusão para
-  role `"god"` na consulta pública da loja.
+- `SupabaseInsigniasRepository.findAllPurchasable()` foi implementado priorizando
+  `is_purchasable = true`, com fallback para excluir role `"god"` em dados legados.
 - A modelagem de item de loja foi evoluída com `isPurchasable` no `ShopItem`, propagada para
   `Insignia`, `Avatar` e `Rocket`, além de mappers/DTOs de suporte.
 - Foram adicionados testes de regressão cobrindo:
