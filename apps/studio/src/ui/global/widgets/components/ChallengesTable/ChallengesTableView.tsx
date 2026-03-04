@@ -143,7 +143,7 @@ export const ChallengesTableView = ({
                 {challenge.slug ? (
                   <Button variant='ghost' size='icon' asChild>
                     <a
-                      href={`${ENV.webAppUrl}/challenging/challenges/${challenge.slug}`}
+                      href={`${ENV.stadustWebAppUrl}/challenging/challenges/${challenge.slug}`}
                       target='_blank'
                       rel='noreferrer'
                     >
