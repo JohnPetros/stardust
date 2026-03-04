@@ -32,4 +32,7 @@ export const CACHE = {
   feedbackReportsTable: {
     key: 'feedback-reports-table',
   },
+  challengeSourcesTable: {
+    key: 'challenge-sources-table',
+  },
 }
