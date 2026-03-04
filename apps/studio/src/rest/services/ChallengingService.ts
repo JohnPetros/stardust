@@ -1,14 +1,18 @@
 import type { ChallengingService as IChallengingService } from '@stardust/core/challenging/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
-import type { Id, Slug, Text } from '@stardust/core/global/structures'
+import type { Id, IdsList, Slug, Text, Url } from '@stardust/core/global/structures'
 import type {
   ChallengesListParams,
+  ChallengeSourcesListParams,
   SolutionsListingParams,
 } from '@stardust/core/challenging/types'
 import type { ChallengeVote } from '@stardust/core/challenging/structures'
 import type { Challenge } from '@stardust/core/challenging/entities'
 import type { PaginationResponse } from '@stardust/core/global/responses'
-import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
+import type {
+  ChallengeDto,
+  ChallengeSourceDto,
+} from '@stardust/core/challenging/entities/dtos'
 
 export const ChallengingService = (restClient: RestClient): IChallengingService => {
   return {
@@ -120,6 +124,21 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       return await restClient.get('/challenging/challenges/posted-challenges-kpi')
     },
 
+    async fetchChallengeSourcesList({
+      page,
+      itemsPerPage,
+      title,
+    }: ChallengeSourcesListParams) {
+      restClient.setQueryParam('page', page.value.toString())
+      restClient.setQueryParam('itemsPerPage', itemsPerPage.value.toString())
+      restClient.setQueryParam('title', title.value)
+      const response = await restClient.get<PaginationResponse<ChallengeSourceDto>>(
+        '/challenging/challenge-sources',
+      )
+      restClient.clearQueryParams()
+      return response
+    },
+
     async fetchSolutionsList({
       page,
       itemsPerPage,
@@ -168,6 +187,28 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
 
     async deleteChallenge(challenge: Challenge) {
       return await restClient.delete(`/challenging/challenges/${challenge.id.value}`)
+    },
+
+    async CreateChallengeSource(challengeId: Id, url: Url) {
+      return await restClient.post<ChallengeSourceDto>('/challenging/challenge-sources', {
+        challengeId: challengeId.value,
+        url: url.value,
+      })
+    },
+
+    async deleteChallengeSource(challengeSourceId: Id) {
+      return await restClient.delete(
+        `/challenging/challenge-sources/${challengeSourceId.value}`,
+      )
+    },
+
+    async reorderChallengeSources(challengeSourceIds: IdsList) {
+      return await restClient.patch<ChallengeSourceDto[]>(
+        '/challenging/challenge-sources/order',
+        {
+          challengeSourceIds: challengeSourceIds.dto,
+        },
+      )
     },
 
     async voteChallenge(challengeId: Id, challengeVote: ChallengeVote) {
