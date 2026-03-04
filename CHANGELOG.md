@@ -806,12 +806,12 @@
 * 📚 docs(studio): update users page plan with formatting improvements and checklist completion (329d2e0a9)
 * 📚 docs(studio): add user management page plan with routing and UI components (71e253967)
 * 🖥️ ui(studio): implement UsersPage widget and integrate it into UsersPageView (529ce6a22)
-* 🪨 constants(studio): add webAppUrl to environment configuration and schema validation (e9baab48a)
+* 🪨 constants(studio): add stadustWebAppUrl to environment configuration and schema validation (e9baab48a)
 * 🖥️ ui(studio): add useDebounce custom hook for debouncing values (c7ba3f5db)
 * 🖥️ ui(studio): add openExternal method to NavigationProvider interface and implementation (4d2e554c6)
 * 🖥️ ui(studio): enhance openExternal method with security features and update navigationProvider type (d111a7e7d)
 * ♻️ refactor: code structure for improved readability and maintainability (a6f1d7be2)
-* 🪨 constants(studio): add webAppUrl to environment configuration and schema validation (4db20cee8)
+* 🪨 constants(studio): add stadustWebAppUrl to environment configuration and schema validation (4db20cee8)
 * 🖥️ ui(studio): implement challenge click handler in StarItem component (1cfb74a38)
 * 🖥️ ui: add openExternal method to NavigationProvider (c0218ae74)
 * 📚 docs(studio): add star challenge link plan documentation (df25f0329)
@@ -1998,7 +1998,7 @@
   server and web environment configurations (dc65b809)
 - 🚚 cd: change trigger from pull_request to push in server app Heroku CD
   workflow and add permissions in web app staging CD workflow (ef8df72e)
-- ♻️ refactor(web): rename webAppUrl and serverAppUrl to stardustWebUrl and
+- ♻️ refactor(web): rename stadustWebAppUrl and serverAppUrl to stardustWebUrl and
   stardustServerUrl in CLIENT_ENV configuration (d9e14652)
 - 🚚 cd: change trigger from push to pull_request in Heroku CD workflow
   (a9224db0)
@@ -2014,7 +2014,7 @@
   content reading (b99e4d68)
 - 🚚 cd: update Heroku CD workflow to use Infisical for environment variable
   management and change trigger to pull_request (d3eab1d4)
-- ♻️ refactor(server): rename webAppUrl to stardustWebUrl and update references
+- ♻️ refactor(server): rename stadustWebAppUrl to stardustWebUrl and update references
   in SupabaseAuthService and RestMiddleware (8cf0594d)
 - 📦 deps(lsp): update @designliquido/delegua to version 0.54.4 in package.json
   and package-lock.json (26f4e007)
@@ -2032,12 +2032,12 @@
   stardustServerUrl for consistency (6b517c34)
 - ⚙️ config(web): include app directory in Tailwind CSS content paths for
   improved styling coverage (03275a8f)
-- ♻️ refactor(web): update all instances of webAppUrl and serverAppUrl to
+- ♻️ refactor(web): update all instances of stadustWebAppUrl and serverAppUrl to
   stardustWebUrl and stardustServerUrl for consistency across the application
   (62ae7a6a)
 - 📶 rest(web): add NotificationService for handling notifications and integrate
   it into the service index (e76a1ef3)
-- ♻️ refactor(web): update environment variable names from webAppUrl and
+- ♻️ refactor(web): update environment variable names from stadustWebAppUrl and
   serverAppUrl to stardustWebUrl and stardustServerUrl for improved clarity
   (585d7502)
 - ⚙️ config(web): add Sentry client initialization and request error handling
@@ -2047,7 +2047,7 @@
 - 🎴 assets(web): add new Apollo Mendigo image to the public assets (8660678d)
 - 🖥️ ui: add internal error animation to Lottie animations and update type
   definitions (ab0a55e8)
-- ♻️ refactor: rename webAppUrl to stardustWebUrl in environment configuration
+- ♻️ refactor: rename stadustWebAppUrl to stardustWebUrl in environment configuration
   for consistency across services (d5546950)
 - 📶 rest(server): add NotificationRouter for handling error notifications and
   integrate it into HonoApp (a6957af5)
