@@ -43,7 +43,7 @@ export interface ChallengingService {
     challengeId: Id,
     challengeVote: ChallengeVote,
   ): Promise<RestResponse<{ userChallengeVote: string }>>
-  CreateChallengeSource(
+  createChallengeSource(
     challengeId: Id,
     url: Url,
   ): Promise<RestResponse<ChallengeSourceDto>>

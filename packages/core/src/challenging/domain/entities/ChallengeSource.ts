@@ -17,7 +17,7 @@ type ChallengeSourceProps = {
   isUsed: Logical
   url: Url
   position: OrdinalNumber
-  challenge: ChallengeSourceChallenge | null
+  challenge: ChallengeSourceChallenge
 }
 
 export class ChallengeSource extends Entity<ChallengeSourceProps> {
@@ -53,7 +53,7 @@ export class ChallengeSource extends Entity<ChallengeSourceProps> {
     this.props.position = position
   }
 
-  get challenge(): ChallengeSourceChallenge | null {
+  get challenge(): ChallengeSourceChallenge {
     return this.props.challenge
   }
 
@@ -64,9 +64,9 @@ export class ChallengeSource extends Entity<ChallengeSourceProps> {
       isUsed: this.isUsed.value,
       position: this.position.value,
       challenge: {
-        id: this.challenge?.id.value ?? '',
-        title: this.challenge?.title.value ?? '',
-        slug: this.challenge?.slug.value ?? '',
+        id: this.challenge.id.value,
+        title: this.challenge.title.value,
+        slug: this.challenge.slug.value,
       },
     }
   }

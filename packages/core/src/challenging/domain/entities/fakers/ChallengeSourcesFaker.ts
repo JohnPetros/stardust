@@ -26,7 +26,10 @@ export class ChallengeSourcesFaker {
     return {
       ...dto,
       ...baseDto,
-      challenge: baseDto?.challenge ?? dto.challenge,
+      challenge: {
+        ...dto.challenge,
+        ...(baseDto?.challenge ?? {}),
+      },
     }
   }
 

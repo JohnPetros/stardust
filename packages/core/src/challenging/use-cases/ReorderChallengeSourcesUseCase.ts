@@ -16,9 +16,6 @@ export class ReorderChallengeSourcesUseCase implements UseCase<Request, Response
   constructor(private readonly repository: ChallengeSourcesRepository) {}
 
   async execute({ challengeSourceIds }: Request): Response {
-    const challengeSources = await this.repository.findAll()
-    const reorderedChallengeSources: ChallengeSource[] = []
-
     if (challengeSourceIds.length === 0) {
       throw new ConflictError('Informe ao menos uma fonte para reordenação')
     }
@@ -27,12 +24,18 @@ export class ReorderChallengeSourcesUseCase implements UseCase<Request, Response
       throw new ConflictError('Os IDs das fontes devem ser únicos')
     }
 
+    const challengeSources = await this.repository.findAll()
+    const reorderedChallengeSources: ChallengeSource[] = []
+    const challengeSourcesMap = new Map(
+      challengeSources.map((challengeSource) => [
+        challengeSource.id.value,
+        challengeSource,
+      ]),
+    )
+
     const positions = challengeSourceIds
       .map((challengeSourceId) => {
-        const challengeSource = challengeSources.find(
-          (currentChallengeSource) =>
-            currentChallengeSource.id.value === challengeSourceId,
-        )
+        const challengeSource = challengeSourcesMap.get(challengeSourceId)
 
         if (!challengeSource) throw new ChallengeSourceNotFoundError()
 
@@ -42,9 +45,7 @@ export class ReorderChallengeSourcesUseCase implements UseCase<Request, Response
 
     for (let index = 0; index < challengeSourceIds.length; index++) {
       const challengeSourceId = challengeSourceIds[index]
-      const challengeSource = challengeSources.find(
-        (currentChallengeSource) => currentChallengeSource.id.value === challengeSourceId,
-      )
+      const challengeSource = challengeSourcesMap.get(challengeSourceId)
       if (!challengeSource) throw new ChallengeSourceNotFoundError()
 
       challengeSource.position = OrdinalNumber.create(
