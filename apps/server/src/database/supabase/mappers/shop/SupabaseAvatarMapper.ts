@@ -16,6 +16,7 @@ export class SupabaseAvatarMapper {
       name: supabaseAvatar.name,
       image: supabaseAvatar.image,
       price: supabaseAvatar.price,
+      isPurchasable: supabaseAvatar.is_purchasable,
       isAcquiredByDefault: supabaseAvatar.is_acquired_by_default,
       isSelectedByDefault: supabaseAvatar.is_selected_by_default,
     }
@@ -31,6 +32,7 @@ export class SupabaseAvatarMapper {
       name: avatarDto.name,
       image: avatarDto.image,
       price: avatarDto.price,
+      is_purchasable: avatarDto.isPurchasable ?? true,
       is_acquired_by_default: avatarDto.isAcquiredByDefault ?? false,
       is_selected_by_default: avatarDto.isSelectedByDefault ?? false,
     }

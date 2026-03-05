@@ -24,6 +24,7 @@ Analisar, implementar e resolver todas as conversas e feedbacks pendentes em um 
    * Para cada comentário:
      * Localize o arquivo e as linhas de código mencionadas.
      * Analise a sugestão ou problema apontado pelo revisor.
+     * Se houver dúvidas sobre a implementação, peça esclarecimentos ao usuário antes de prosseguir usando o tool `question`.
      * Aplique as alterações necessárias no código local utilizando as ferramentas de edição de arquivo (`replace_file_content`, `multi_replace_file_content`).
      * Garanta que as mudanças sigam os padrões do projeto descritos em `documentation/code-conventions-guidelines.md` e `documentation/architecture.md`.
 

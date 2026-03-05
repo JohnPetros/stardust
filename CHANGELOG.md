@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.2.0 (2026-03-04)
+
+* 📚 docs: update star challenge selector specification (77ce1432e)
+* 🖥️ ui: refine planet and challenge interface behavior (bd5b81969)
+* 📟 rpc: adjust access challenge page action flow (9dd55bd2d)
+* 📶 rest: update challenge routes and controller tests (64b247030)
+* ✨ use case: refine challenge star selection flows (6cf88dbbb)
+* 🌐 domain: rename challenge star error contract (9db5d7f70)
+* 📚 docs: update prompts and add space management feature documentation (4cef273da)
+* 🖥️ ui: add StarChallengeSelector component and update StarItem and Planets views (69d468e61)
+* 🖥️ ui: update ChallengesList page on web app (9dcd9b1ac)
+* 📶 rest: add star management methods to ChallengingService clients (9d8eb4d34)
+* 📟 rpc: update AccessChallengePage action (8f28470d8)
+* 📶 rest: add EditChallengeStar and RemoveChallengeStar controllers and routes (ecc059237)
+* 💾 db: update Supabase repositories to support challenge star assignment (a171d436c)
+* 📮 validation: add challenge star assignment schema (2d2a5d74a)
+* 📑 interface: update ChallengingService with star management methods (41c50987c)
+* 🧪 test: add tests for EditChallengeStar and RemoveChallengeStar use cases (957762554)
+* ✨ use case: add EditChallengeStar and RemoveChallengeStar use cases (72f153dd2)
+* 🌐 domain: add star assignment errors and update Challenge and User entities (032695758)
+
 ## 1.1.1 (2026-02-27)
 
 * 🐛 fix(server): enhance error handling in SupabaseStorageProvider with detailed messages for upload, list, find, and remove operations (8a66c0ab8)

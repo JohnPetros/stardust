@@ -16,6 +16,7 @@ export class SupabaseRocketMapper {
       name: supabaseRocket.name,
       price: supabaseRocket.price,
       image: supabaseRocket.image,
+      isPurchasable: supabaseRocket.is_purchasable,
       isAcquiredByDefault: supabaseRocket.is_acquired_by_default,
       isSelectedByDefault: supabaseRocket.is_selected_by_default,
     }
@@ -31,6 +32,7 @@ export class SupabaseRocketMapper {
       name: rocketDto.name,
       price: rocketDto.price,
       image: rocketDto.image,
+      is_purchasable: rocketDto.isPurchasable ?? true,
     }
 
     return supabaseRocket
