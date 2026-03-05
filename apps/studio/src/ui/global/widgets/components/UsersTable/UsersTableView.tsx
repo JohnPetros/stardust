@@ -131,7 +131,7 @@ export const UsersTableView = ({ users, isLoading, orders, onOrderChange }: Prop
                     variant='ghost'
                     size='icon'
                     onClick={() =>
-                      openExternal(`${ENV.stadustWebAppUrl}/profile/${user.slug}`)
+                      openExternal(`${ENV.stardustWebAppUrl}/profile/${user.slug}`)
                     }
                     title='Ver perfil no app'
                   >

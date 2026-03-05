@@ -17,6 +17,7 @@ import {
   FetchChallengeSourcesListController,
   CreateChallengeSourceController,
   ReorderChallengeSourcesController,
+  UpdateChallengeSourceController,
 } from '@/rest/controllers/challenging/sources'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
@@ -38,6 +39,7 @@ export class ChallengeSourcesRouter extends HonoRouter {
           page: pageSchema,
           itemsPerPage: itemsPerPageSchema,
           title: z.string().default(''),
+          positionOrder: z.enum(['ascending', 'descending', 'any']).optional(),
         }),
       ),
       async (context) => {
@@ -94,6 +96,35 @@ export class ChallengeSourcesRouter extends HonoRouter {
     )
   }
 
+  private registerUpdateChallengeSourceRoute(): void {
+    this.router.put(
+      '/:challengeSourceId',
+      this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
+      this.validationMiddleware.validate(
+        'param',
+        z.object({
+          challengeSourceId: idSchema,
+        }),
+      ),
+      this.validationMiddleware.validate('json', challengeSourceSchema),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const supabase = http.getSupabase()
+        const challengeSourcesRepository = new SupabaseChallengeSourcesRepository(
+          supabase,
+        )
+        const challengesRepository = new SupabaseChallengesRepository(supabase)
+        const controller = new UpdateChallengeSourceController(
+          challengeSourcesRepository,
+          challengesRepository,
+        )
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   private registerReorderChallengeSourcesRoute(): void {
     this.router.patch(
       '/order',
@@ -118,6 +149,7 @@ export class ChallengeSourcesRouter extends HonoRouter {
   registerRoutes(): Hono {
     this.registerFetchChallengeSourcesListRoute()
     this.registerCreateChallengeSourceRoute()
+    this.registerUpdateChallengeSourceRoute()
     this.registerDeleteChallengeSourceRoute()
     this.registerReorderChallengeSourcesRoute()
     return this.router

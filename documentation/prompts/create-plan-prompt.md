@@ -1,3 +1,7 @@
+---
+description: Criar um plano de implementacao estruturado em fases e tarefas a partir de uma spec tecnica.
+---
+
 ## Pendencias (quando aplicavel)
 
 - [ ] <descricao da pendencia ou ambiguidade encontrada na spec>

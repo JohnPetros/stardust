@@ -8,7 +8,7 @@ description: Implementar um plano de implementacao derivado de uma spec tecnica.
 
 ## Entrada
 
-- Contexnto do plano gerado.
+- Contexto do plano gerado.
 
 ## REGRA MESTRA (NAO IGNORE)
 

@@ -29,11 +29,11 @@ export function useChallengeSourcesPage({ challengingService, toastProvider }: P
   const [itemsPerPage, setItemsPerPage] = useQueryNumberParam('limit', 10)
   const debouncedSearch = useDebounce(search, 500)
   const [challengeSources, setChallengeSources] = useState<ChallengeSourceDto[]>([])
+  const [isReordering, setIsReordering] = useState(false)
 
   const {
     data: challengeSourcesData,
     isLoading,
-    isRefetching,
     refetch,
   } = useFetch({
     key: CACHE.challengeSourcesTable.key,
@@ -68,10 +68,10 @@ export function useChallengeSourcesPage({ challengingService, toastProvider }: P
     return sortableChallengeSources.map((challengeSource) => challengeSource.id).join('-')
   }, [sortableChallengeSources])
 
-  async function handleCreateChallengeSource(url: string, challengeId: string) {
+  async function handleCreateChallengeSource(url: string, challengeId?: string) {
     try {
       const response = await challengingService.createChallengeSource(
-        Id.create(challengeId),
+        challengeId ? Id.create(challengeId) : null,
         Url.create(url),
       )
 
@@ -84,6 +84,30 @@ export function useChallengeSourcesPage({ challengingService, toastProvider }: P
       return null
     } catch {
       return 'Não foi possível criar a fonte de desafio'
+    }
+  }
+
+  async function handleUpdateChallengeSource(
+    challengeSourceId: string,
+    url: string,
+    challengeId: string | undefined,
+  ) {
+    try {
+      const response = await challengingService.updateChallengeSource(
+        Id.create(challengeSourceId),
+        Url.create(url),
+        challengeId ? Id.create(challengeId) : null,
+      )
+
+      if (response.isFailure) {
+        return response.errorMessage
+      }
+
+      toastProvider.showSuccess('Fonte atualizada com sucesso')
+      refetch()
+      return null
+    } catch {
+      return 'Não foi possível atualizar a fonte de desafio'
     }
   }
 
@@ -106,11 +130,13 @@ export function useChallengeSourcesPage({ challengingService, toastProvider }: P
   ) {
     const previousChallengeSources = challengeSources
     setChallengeSources(reorderedChallengeSources)
+    setIsReordering(true)
 
     const challengeSourceIds = IdsList.create(
       reorderedChallengeSources.map((challengeSource) => challengeSource.id),
     )
     const response = await challengingService.reorderChallengeSources(challengeSourceIds)
+    setIsReordering(false)
 
     if (response.isFailure) {
       setChallengeSources(previousChallengeSources)
@@ -157,13 +183,14 @@ export function useChallengeSourcesPage({ challengingService, toastProvider }: P
     sortableChallengeSources,
     sortableKey,
     isLoading,
-    isReordering: isRefetching,
+    isReordering,
     onSearchChange: handleSearchChange,
     onPageChange: handlePageChange,
     onNextPage: handleNextPage,
     onPrevPage: handlePrevPage,
     onItemsPerPageChange: handleItemsPerPageChange,
     onCreateChallengeSource: handleCreateChallengeSource,
+    onUpdateChallengeSource: handleUpdateChallengeSource,
     onDeleteChallengeSource: handleDeleteChallengeSource,
     onReorderChallengeSources: handleReorderChallengeSources,
   }

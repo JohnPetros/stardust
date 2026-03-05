@@ -13,6 +13,22 @@ export class SupabaseChallengeSourcesRepository
   extends SupabaseRepository
   implements ChallengeSourcesRepository
 {
+  async findNextNotUsed(): Promise<ChallengeSource | null> {
+    const { data, error } = await this.supabase
+      .from('challenge_sources')
+      .select('*, challenges(id, title, slug)')
+      .eq('is_used', false)
+      .order('position', { ascending: true })
+      .limit(1)
+      .single()
+
+    if (error) {
+      return this.handleQueryPostgresError(error)
+    }
+
+    return SupabaseChallengeSourceMapper.toEntity(data as SupabaseChallengeSource)
+  }
+
   async findById(challengeSourceId: Id): Promise<ChallengeSource | null> {
     const { data, error } = await this.supabase
       .from('challenge_sources')
@@ -47,7 +63,7 @@ export class SupabaseChallengeSourcesRepository
     const { title, page, itemsPerPage, positionOrder } = params
     let query = this.supabase
       .from('challenge_sources')
-      .select('*, challenges!inner(id, title, slug)', { count: 'exact' })
+      .select('*, challenges(id, title, slug)', { count: 'exact' })
 
     if (title.isEmpty.isFalse) {
       query = query.ilike('challenges.title', `%${title.value}%`)
@@ -96,34 +112,41 @@ export class SupabaseChallengeSourcesRepository
   }
 
   async replaceMany(challengeSources: ChallengeSource[]): Promise<void> {
-    for (let index = 0; index < challengeSources.length; index++) {
-      const challengeSource = challengeSources[index]
-      const temporaryPosition = -1000000 - index
-
-      const { error } = await this.supabase
-        .from('challenge_sources')
-        .update({ position: temporaryPosition })
-        .eq('id', challengeSource.id.value)
-
-      if (error) {
-        throw new SupabasePostgreError(error)
+    const rows = challengeSources.map((challengeSource) => {
+      const challenge = challengeSource.challenge
+      return {
+        id: challengeSource.id.value,
+        position: challengeSource.position.value,
+        challenge_id: challenge ? challenge.id.value : null,
+        url: challengeSource.url.value,
+        is_used: Boolean(challenge),
       }
+    })
+
+    const { error } = await this.supabase
+      .from('challenge_sources')
+      .upsert(rows, { onConflict: 'id' })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
     }
+  }
 
-    for (const challengeSource of challengeSources) {
-      const { error } = await this.supabase
-        .from('challenge_sources')
-        .update({
-          position: challengeSource.position.value,
-          challenge_id: challengeSource.challenge?.id.value ?? null,
-          url: challengeSource.url.value,
-          is_used: challengeSource.isUsed.value,
-        })
-        .eq('id', challengeSource.id.value)
+  async replace(challengeSource: ChallengeSource): Promise<void> {
+    const challenge = challengeSource.challenge
 
-      if (error) {
-        throw new SupabasePostgreError(error)
-      }
+    const { error } = await this.supabase
+      .from('challenge_sources')
+      .update({
+        position: challengeSource.position.value,
+        challenge_id: challenge ? challenge.id.value : null,
+        url: challengeSource.url.value,
+        is_used: Boolean(challenge),
+      })
+      .eq('id', challengeSource.id.value)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
     }
   }
 

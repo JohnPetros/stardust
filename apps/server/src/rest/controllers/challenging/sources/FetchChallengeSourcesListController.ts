@@ -7,6 +7,7 @@ type Schema = {
     page: number
     itemsPerPage: number
     title: string
+    positionOrder?: string
   }
 }
 
@@ -14,9 +15,9 @@ export class FetchChallengeSourcesListController implements Controller<Schema> {
   constructor(private readonly repository: ChallengeSourcesRepository) {}
 
   async handle(http: Http<Schema>) {
-    const { page, itemsPerPage, title } = http.getQueryParams()
+    const { page, itemsPerPage, title, positionOrder } = http.getQueryParams()
     const useCase = new ListChallengeSourcesUseCase(this.repository)
-    const response = await useCase.execute({ page, itemsPerPage, title })
+    const response = await useCase.execute({ page, itemsPerPage, title, positionOrder })
     return http.sendPagination(response)
   }
 }

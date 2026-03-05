@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp, Search, Trash2 } from 'lucide-react'
+import { ChevronDown, ChevronUp, Pencil, Search, Trash2 } from 'lucide-react'
 
 import { ENV } from '@/constants/env'
 import { Button } from '@/ui/shadcn/components/button'
@@ -34,6 +34,7 @@ export const ChallengeSourcesPageView = ({
   onPrevPage,
   onItemsPerPageChange,
   onCreateChallengeSource,
+  onUpdateChallengeSource,
   onDeleteChallengeSource,
   onReorderChallengeSources,
 }: Props) => {
@@ -52,7 +53,10 @@ export const ChallengeSourcesPageView = ({
     <div className='p-8 space-y-6'>
       <div className='flex items-center justify-between'>
         <h1 className='text-3xl font-bold tracking-tight'>Fontes de desafios</h1>
-        <ChallengeSourceForm onSubmit={onCreateChallengeSource} />
+        <ChallengeSourceForm
+          onCreate={onCreateChallengeSource}
+          onUpdate={onUpdateChallengeSource}
+        />
       </div>
 
       <div className='relative max-w-sm'>
@@ -93,9 +97,12 @@ export const ChallengeSourcesPageView = ({
             ) : (
               sortableChallengeSources.map((item, index) => {
                 const source = item.data
-                const challengeUrl = source.challenge.slug
-                  ? `${ENV.stardustWebAppUrl}/challenging/challenges/${source.challenge.slug}`
+                const challengeSlug = source.challenge?.slug
+                const challengeUrl = challengeSlug
+                  ? `${ENV.stardustWebAppUrl}/challenging/challenges/${challengeSlug}`
                   : '-'
+                const challengeTitle = source.challenge?.title ?? 'Sem desafio vinculado'
+                const isUsed = Boolean(source.challenge)
 
                 return (
                   <TableRow key={source.id}>
@@ -104,6 +111,7 @@ export const ChallengeSourcesPageView = ({
                         <Button
                           variant='ghost'
                           size='icon'
+                          aria-label='Mover para cima'
                           onClick={() => handleMove(index, index - 1)}
                           disabled={index === 0}
                         >
@@ -112,6 +120,7 @@ export const ChallengeSourcesPageView = ({
                         <Button
                           variant='ghost'
                           size='icon'
+                          aria-label='Mover para baixo'
                           onClick={() => handleMove(index, index + 1)}
                           disabled={index === sortableChallengeSources.length - 1}
                         >
@@ -144,23 +153,40 @@ export const ChallengeSourcesPageView = ({
                       )}
                     </TableCell>
                     <TableCell>
-                      <span className='block truncate'>{source.challenge.title}</span>
+                      <span className='block truncate'>{challengeTitle}</span>
                     </TableCell>
                     <TableCell>
-                      {source.isUsed ? (
+                      {isUsed ? (
                         <Badge variant='default'>Sim</Badge>
                       ) : (
                         <Badge variant='outline'>Não</Badge>
                       )}
                     </TableCell>
                     <TableCell>
-                      <DeleteChallengeSourceDialog
-                        onConfirm={() => onDeleteChallengeSource(source.id)}
-                      >
-                        <Button variant='destructive' size='icon'>
-                          <Trash2 className='h-4 w-4' />
-                        </Button>
-                      </DeleteChallengeSourceDialog>
+                      <div className='flex items-center gap-2'>
+                        <ChallengeSourceForm
+                          challengeSourceId={source.id}
+                          initialValues={{
+                            url: source.url,
+                            challengeId: source.challenge?.id,
+                            challengeTitle: source.challenge?.title,
+                          }}
+                          onCreate={onCreateChallengeSource}
+                          onUpdate={onUpdateChallengeSource}
+                        >
+                          <Button variant='outline' size='icon'>
+                            <Pencil className='h-4 w-4' />
+                          </Button>
+                        </ChallengeSourceForm>
+
+                        <DeleteChallengeSourceDialog
+                          onConfirm={() => onDeleteChallengeSource(source.id)}
+                        >
+                          <Button variant='destructive' size='icon' aria-label='Excluir fonte'>
+                            <Trash2 className='h-4 w-4' />
+                          </Button>
+                        </DeleteChallengeSourceDialog>
+                      </div>
                     </TableCell>
                   </TableRow>
                 )

@@ -8,7 +8,7 @@ description: Implementar um plano de implementacao derivado de uma spec tecnica.
 
 ## Entrada
 
-- Contexnto do plano gerado.
+- Contexto do plano gerado.
 
 ## REGRA MESTRA (NAO IGNORE)
 
@@ -118,6 +118,7 @@ Instrucoes:
 
 - **MCP Serena:** utilize para buscar arquivos e implementacoes similares no projeto antes de criar algo novo.
 - **MCP Context7:** utilize quando houver duvida sobre como usar uma biblioteca especifica (ex: `shadcn/ui`, `radix-ui`, `inngest`, `supabase`, `hono`, `zod`).
+- **Tool de todo:** utilize para criar um todo list com as tarefas a serem implementadas.
 
 ### 8. Progresso e reporte
 
