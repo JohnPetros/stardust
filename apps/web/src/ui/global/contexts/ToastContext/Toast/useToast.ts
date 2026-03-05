@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAnimate } from 'motion/react'
+import throttle from 'throttleit'
 
 import type { OpenToastParams, ToastType } from '../types'
 
@@ -13,7 +14,7 @@ export function useToast() {
   const [message, setMessage] = useState('')
   const [seconds, setSeconds] = useState(DEFAULT_TOAST_DURATION)
   const [scope, animate] = useAnimate()
-  const [scrollPosition, setScrollPosition] = useState(0)
+  const scrollPosition = useRef(0)
 
   function open({ type, message, seconds = 2.5 }: OpenToastParams) {
     setType(type)
@@ -42,9 +43,9 @@ export function useToast() {
   }, [isOpen, seconds])
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollPosition(window.scrollY)
-    }
+    const handleScroll = throttle(() => {
+      scrollPosition.current = window.scrollY
+    }, 100)
 
     window.addEventListener('scroll', handleScroll)
 
@@ -56,7 +57,7 @@ export function useToast() {
   }, [])
 
   useEffect(() => {
-    if (!isOpen) window.scrollTo(0, scrollPosition)
+    if (!isOpen) window.scrollTo(0, scrollPosition.current)
   }, [isOpen])
 
   return {

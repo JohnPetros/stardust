@@ -1,11 +1,16 @@
 'use client'
 
 import type { PropsWithChildren } from 'react'
+import dynamic from 'next/dynamic'
 
 import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useChallengeSlider } from './useChallengeSlider'
-import { ChallengeSliderView } from './ChallengeSliderView'
+
+const ChallengeSliderView = dynamic(
+  () => import('./ChallengeSliderView').then((module) => module.ChallengeSliderView),
+  { ssr: false },
+)
 
 export const ChallengeSlider = ({ children }: PropsWithChildren) => {
   const { getTabHandlerSlice, getActiveContentSlice } = useChallengeStore()

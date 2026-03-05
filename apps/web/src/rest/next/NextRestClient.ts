@@ -8,8 +8,8 @@ import { parseResponseJson } from './utils/parseResponseJson'
 import type { NextRestClientConfig } from './types'
 
 export const NextRestClient = ({
-  isCacheEnabled = false,
-  refetchInterval = 60 * 60 * 24, // 1 day
+  isCacheEnabled = true,
+  refetchInterval = 60,
   cacheKey,
   headers = new Headers(),
 }: NextRestClientConfig = {}): RestClient => {

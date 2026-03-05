@@ -22,15 +22,18 @@ export const FetchLessonStoryAndQuestionsAction = (
       const { starId: starIdValue } = call.getRequest()
       const starId = Id.create(starIdValue)
 
-      const questionsResponse = await service.fetchQuestions(starId)
+      const [questionsResponse, textsBlocksResponse, storyResponse] = await Promise.all([
+        service.fetchQuestions(starId),
+        service.fetchTextsBlocks(starId),
+        service.fetchStarStory(starId),
+      ])
+
       if (questionsResponse.isFailure) questionsResponse.throwError()
       const questions = questionsResponse.body
 
-      const textsBlocksResponse = await service.fetchTextsBlocks(starId)
       if (textsBlocksResponse.isFailure) textsBlocksResponse.throwError()
       const textsBlocks = textsBlocksResponse.body
 
-      const storyResponse = await service.fetchStarStory(starId)
       if (storyResponse.isFailure) storyResponse.throwError()
       const story = storyResponse.body.story
 
