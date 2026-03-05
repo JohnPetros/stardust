@@ -40,6 +40,28 @@ prosseguir.
 Execute `npm run test` na raiz do monorepo. Todos os testes — novos e
 existentes — devem estar passando. Caso algum falhe, interrompa e reporte.
 
+**1.2.1 Cobertura de Testes**
+
+Com base no diff injetado no contexto, verifique se os novos comportamentos
+introduzidos pela Spec possuem testes correspondentes. Considere como caminhos
+críticos que exigem cobertura:
+
+- Lógica de negócio nova ou modificada na camada Core
+- Casos de erro e edge cases relevantes
+- Contratos de integração entre camadas (ex: Core ↔ Rest, Core ↔ Drivers)
+
+Ao final desta etapa, produza um relatório de cobertura no seguinte formato:
+```markdown
+## Cobertura de Testes
+
+- [x] <Comportamento A> — coberto em `caminho/do/arquivo.test.ts`
+- [x] <Comportamento B> — coberto em `caminho/do/arquivo.test.ts`
+- [ ] <Comportamento C> — **sem cobertura** (detalhe o que está faltando)
+```
+
+Caso existam lacunas, liste-as como pendências e aguarde decisão antes de
+prosseguir para a Fase 2. Não avance com itens críticos descobertos.
+
 **1.3 Cobertura de Requisitos**
 
 Com base no diff real injetado no contexto, compare cada componente descrito na
@@ -112,6 +134,7 @@ identificado.">
 
 - [ ] `npm run codecheck` passou sem warnings
 - [ ] `npm run test` passou sem falhas
+- [ ] Cobertura de testes verificada e lacunas endereçadas
 - [ ] Spec atualizada e marcada como concluída
 - [ ] PRD atualizado com os itens concluídos
 ```
@@ -122,7 +145,8 @@ identificado.">
 
 Ao final da execução, devem ter sido produzidos:
 
-1. **Checklist de validação** de requisitos (Fase 1.3)
-2. **Spec atualizada** com status `concluído` e data de atualização (Fase 2.1)
-3. **PRD atualizado** com itens marcados como concluídos (Fase 2.2)
-4. **Rascunho de PR** com estrutura completa (Fase 3.1)
+1. **Relatório de cobertura de testes** (Fase 1.2.1)
+2. **Checklist de validação** de requisitos (Fase 1.3)
+3. **Spec atualizada** com status `concluído` e data de atualização (Fase 2.1)
+4. **PRD atualizado** com itens marcados como concluídos (Fase 2.2)
+5. **Rascunho de PR** com estrutura completa (Fase 3.1)

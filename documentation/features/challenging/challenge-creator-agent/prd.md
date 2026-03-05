@@ -68,3 +68,17 @@ O **Agente Criador de Desafios** é uma funcionalidade de backend automatizada p
 - **Notificações Ativas ao Usuário Final:** Envio de e-mails, push notifications ou central de notificações avisando sobre o novo desafio.
 - **Revisão Humana:** Interface para aprovação manual dos desafios antes da publicação.
 - **Edição de IA:** Capacidade de regenerar um desafio específico se ele for "ruim".
+
+### 5. Atualizacao de Produto (2026-03-05)
+
+#### Entregas consolidadas
+
+- [x] O fluxo automatico de criacao passou a consumir a proxima fonte disponivel no banco de dados, reduzindo dependencia operacional de cache.
+- [x] A publicacao do desafio agora vincula a fonte utilizada no mesmo fluxo, reduzindo risco de repeticao de entradas no catalogo.
+- [x] O pipeline de geracao manteve publicacao automatica de 1 desafio por execucao, sem alterar a experiencia final de descoberta no catalogo.
+
+#### Impacto de negocio
+
+- A curadoria automatica fica mais previsivel porque a origem do conteudo passa a seguir uma fila ordenada.
+- O risco de gerar desafios repetidos diminui, aumentando a percepcao de novidade para usuarios recorrentes.
+- A operacao ganha rastreabilidade entre "fonte" e "desafio publicado", facilitando auditoria e ajustes editoriais.
