@@ -7,7 +7,7 @@ export class FetchInsigniasListController implements Controller {
   constructor(private readonly repository: InsigniasRepository) {}
 
   async handle(http: Http): Promise<RestResponse> {
-    const insignias = await this.repository.findAll()
+    const insignias = await this.repository.findAllPurchasable()
     return http.send(insignias.map((insignia) => insignia.dto))
   }
 }

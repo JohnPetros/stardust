@@ -15,6 +15,7 @@ export class SupabaseInsigniaMapper {
       image: supabaseInsignia.image,
       price: supabaseInsignia.price,
       role: supabaseInsignia.role,
+      isPurchasable: supabaseInsignia.is_purchasable,
     }
 
     return dto
@@ -29,6 +30,7 @@ export class SupabaseInsigniaMapper {
       image: insigniaDto.image,
       price: insigniaDto.price,
       role: insigniaDto.role as SupabaseInsigniaRole,
+      is_purchasable: insigniaDto.isPurchasable ?? false,
     }
 
     return supabaseInsignia

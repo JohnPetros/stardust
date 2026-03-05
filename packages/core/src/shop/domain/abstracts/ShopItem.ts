@@ -6,6 +6,7 @@ type ShopItemProps = {
   name: Name
   price: Integer
   image: Image
+  isPurchasable: Logical
   isAcquiredByDefault: Logical
   isSelectedByDefault: Logical
 }
@@ -23,6 +24,10 @@ export abstract class ShopItem<ItemProps = ShopItemProps> extends Entity<
 
   get price() {
     return this.props.price
+  }
+
+  get isPurchasable() {
+    return this.props.isPurchasable
   }
 
   get isAcquiredByDefault() {
@@ -43,6 +48,7 @@ export abstract class ShopItem<ItemProps = ShopItemProps> extends Entity<
       name: this.name.value,
       price: this.price.value,
       image: this.image.value,
+      isPurchasable: this.isPurchasable.value,
       isAcquiredByDefault: this.isAcquiredByDefault.value,
       isSelectedByDefault: this.isSelectedByDefault.value,
     }
