@@ -4,21 +4,24 @@ import { ChallengesFaker } from '#challenging/domain/entities/fakers/ChallengesF
 import { PostChallengeUseCase } from '../PostChallengeUseCase'
 import { ChallengeAlreadyExistsError } from '#challenging/domain/errors/ChallengeAlreadyExistsError'
 import { ChallengePostedEvent } from '#challenging/domain/events/ChallengePostedEvent'
+import type { ChallengeSourcesRepository } from '#challenging/interfaces/ChallengeSourcesRepository'
 import type { ChallengesRepository } from '#challenging/interfaces/ChallengesRepository'
 import type { Broker } from '#global/interfaces/Broker'
 
 describe('Post Challenge Use Case', () => {
   let repository: Mock<ChallengesRepository>
+  let challengeSourcesRepository: Mock<ChallengeSourcesRepository>
   let broker: Mock<Broker>
   let useCase: PostChallengeUseCase
 
   beforeEach(() => {
     repository = mock<ChallengesRepository>()
+    challengeSourcesRepository = mock<ChallengeSourcesRepository>()
     broker = mock<Broker>()
     repository.findBySlug.mockImplementation()
     repository.add.mockImplementation()
     broker.publish.mockImplementation()
-    useCase = new PostChallengeUseCase(repository, broker)
+    useCase = new PostChallengeUseCase(repository, challengeSourcesRepository, broker)
   })
 
   it('should throw an error if the challenge title is already in use', async () => {
