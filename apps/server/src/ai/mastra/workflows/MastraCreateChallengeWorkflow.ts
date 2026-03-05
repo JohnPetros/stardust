@@ -9,15 +9,27 @@ import { ChallengingTeam } from '../teams/ChallengingTeam'
 
 export class MastraCreateChallengeWorkflow implements CreateChallengeWorkflow {
   async run() {
+    const getNextChallengeSourceStep = this.getNextChallengeSource()
+    const createChallengeStep = this.createChallenge()
+    const postChallengeStep = this.postChallenge()
+
     const workflow = createWorkflow({
       id: 'create-challenge-workflow',
       inputSchema: z.void(),
       outputSchema: z.void(),
     })
-      .then(this.getChallengeProblem())
-      .map(async ({ inputData }) => ({ prompt: inputData.problem }))
-      .then(this.createChallenge())
-      .then(this.postChallenge())
+      .then(getNextChallengeSourceStep)
+      .map(async ({ inputData }) => ({ prompt: `URL da fonte: ${inputData.url}` }))
+      .then(createChallengeStep)
+      .map(async ({ inputData, getStepResult }) => {
+        const challengeSource = getStepResult(getNextChallengeSourceStep)
+        console.log('challengeSource from step', challengeSource)
+        return {
+          ...inputData,
+          challengeSourceId: challengeSource.id,
+        }
+      })
+      .then(postChallengeStep)
       .commit()
 
     const run = await workflow.createRun()
@@ -29,8 +41,8 @@ export class MastraCreateChallengeWorkflow implements CreateChallengeWorkflow {
     }
   }
 
-  private getChallengeProblem() {
-    return createStep(ChallengingToolset.getChallengeProblemTool)
+  private getNextChallengeSource() {
+    return createStep(ChallengingToolset.getNextChallengeSourceTool)
   }
 
   private createChallenge() {
