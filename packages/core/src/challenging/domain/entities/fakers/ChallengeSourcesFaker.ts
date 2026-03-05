@@ -14,22 +14,34 @@ export class ChallengeSourcesFaker {
     const dto: ChallengeSourceDto = {
       id: faker.string.uuid(),
       url: faker.internet.url(),
-      isUsed: faker.datatype.boolean(),
       position: faker.number.int({ min: 1, max: 100 }),
       challenge: {
         id: challenge.id ?? faker.string.uuid(),
-        title: challenge.title,
+        title: challenge.title ?? faker.lorem.words(3),
         slug: challenge.slug ?? faker.lorem.slug(),
       },
     }
 
+    if (baseDto?.challenge === null) {
+      return {
+        id: baseDto.id ?? dto.id,
+        url: baseDto.url ?? dto.url,
+        position: baseDto.position ?? dto.position,
+        challenge: null,
+      }
+    }
+
+    const mergedChallenge: NonNullable<ChallengeSourceDto['challenge']> = {
+      id: baseDto?.challenge?.id ?? dto.challenge?.id ?? faker.string.uuid(),
+      title: baseDto?.challenge?.title ?? dto.challenge?.title ?? faker.lorem.words(3),
+      slug: baseDto?.challenge?.slug ?? dto.challenge?.slug ?? faker.lorem.slug(),
+    }
+
     return {
-      ...dto,
-      ...baseDto,
-      challenge: {
-        ...dto.challenge,
-        ...(baseDto?.challenge ?? {}),
-      },
+      id: baseDto?.id ?? dto.id,
+      url: baseDto?.url ?? dto.url,
+      position: baseDto?.position ?? dto.position,
+      challenge: mergedChallenge,
     }
   }
 
