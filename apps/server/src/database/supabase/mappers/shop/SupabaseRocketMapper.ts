@@ -1,7 +1,9 @@
 import type { RocketDto } from '@stardust/core/shop/entities/dtos'
 import { Rocket } from '@stardust/core/shop/entities'
 
-import type { SupabaseRocket } from '../../types'
+import type { Database, SupabaseRocket } from '../../types'
+
+type SupabaseRocketPayload = Database['public']['Tables']['rockets']['Insert']
 
 export class SupabaseRocketMapper {
   static toEntity(supabaseRocket: SupabaseRocket): Rocket {
@@ -21,15 +23,10 @@ export class SupabaseRocketMapper {
     return rocketDto
   }
 
-  static toSupabase(
-    rocket: Rocket,
-  ): Omit<SupabaseRocket, 'is_acquired_by_default' | 'is_selected_by_default'> {
+  static toSupabase(rocket: Rocket): SupabaseRocketPayload {
     const rocketDto = rocket.dto
 
-    const supabaseRocket: Omit<
-      SupabaseRocket,
-      'is_acquired_by_default' | 'is_selected_by_default'
-    > = {
+    const supabaseRocket: SupabaseRocketPayload = {
       id: rocket.id.value,
       name: rocketDto.name,
       price: rocketDto.price,
