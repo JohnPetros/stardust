@@ -182,12 +182,12 @@ export function useStarItem({
 
     if (response.isSuccessful) {
       navigationProvider.openExternal(
-        `${ENV.webAppUrl}/challenging/challenge/${response.body.slug}`,
+        `${ENV.stardustWebAppUrl}/challenging/challenge/${response.body.slug}`,
       )
       return
     }
 
-    navigationProvider.openExternal(`${ENV.webAppUrl}/challenging/challenge`)
+    navigationProvider.openExternal(`${ENV.stardustWebAppUrl}/challenging/challenge`)
   }
 
   return {

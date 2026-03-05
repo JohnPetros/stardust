@@ -8,6 +8,7 @@ type Request = {
   page: number
   itemsPerPage: number
   title: string
+  positionOrder?: string
 }
 
 type Response = Promise<PaginationResponse<ChallengeSourceDto>>
@@ -15,12 +16,12 @@ type Response = Promise<PaginationResponse<ChallengeSourceDto>>
 export class ListChallengeSourcesUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: ChallengeSourcesRepository) {}
 
-  async execute({ page, itemsPerPage, title }: Request): Response {
+  async execute({ page, itemsPerPage, title, positionOrder }: Request): Response {
     const response = await this.repository.findMany({
       page: OrdinalNumber.create(page),
       itemsPerPage: OrdinalNumber.create(itemsPerPage),
       title: Text.create(title),
-      positionOrder: ListingOrder.createAsAscending(),
+      positionOrder: ListingOrder.create(positionOrder),
     })
 
     return new PaginationResponse(

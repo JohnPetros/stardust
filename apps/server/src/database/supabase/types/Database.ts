@@ -1345,6 +1345,48 @@ export type Database = {
         }
         Relationships: []
       }
+      challenge_sources: {
+        Row: {
+          challenge_id: string | null
+          created_at: string
+          id: string
+          is_used: boolean
+          position: number
+          url: string
+        }
+        Insert: {
+          challenge_id?: string | null
+          created_at?: string
+          id?: string
+          is_used: boolean
+          position: number
+          url: string
+        }
+        Update: {
+          challenge_id?: string | null
+          created_at?: string
+          id?: string
+          is_used?: boolean
+          position?: number
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'challenge_sources_challenge_id_fkey'
+            columns: ['challenge_id']
+            isOneToOne: false
+            referencedRelation: 'challenges'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'challenge_sources_challenge_id_fkey'
+            columns: ['challenge_id']
+            isOneToOne: false
+            referencedRelation: 'challenges_view'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       challenges: {
         Row: {
           code: string
@@ -3255,39 +3297,6 @@ export type Database = {
   realtime: {
     Tables: {
       messages: {
-        Row: {
-          event: string | null
-          extension: string
-          id: string
-          inserted_at: string
-          payload: Json | null
-          private: boolean | null
-          topic: string
-          updated_at: string
-        }
-        Insert: {
-          event?: string | null
-          extension: string
-          id?: string
-          inserted_at?: string
-          payload?: Json | null
-          private?: boolean | null
-          topic: string
-          updated_at?: string
-        }
-        Update: {
-          event?: string | null
-          extension?: string
-          id?: string
-          inserted_at?: string
-          payload?: Json | null
-          private?: boolean | null
-          topic?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      messages_2026_02_24: {
         Row: {
           event: string | null
           extension: string

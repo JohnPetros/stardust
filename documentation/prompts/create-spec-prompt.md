@@ -6,8 +6,12 @@ description: Prompt para criar uma especificação técnica detalhada com base n
 
 ## Entrada
 
-- Esboço da tarefa ou solicitação de mudança.
-- Acesso à codebase atual.
+- **PRD:** deve existir e estar finalizado antes de iniciar a spec.
+- **Esboço da tarefa:** descrição da feature, fix ou refatoração a implementar.
+- **Acesso à codebase:** necessário para pesquisa e validação de padrões.
+
+> Se o PRD estiver ausente ou incompleto, não inicie a spec.
+> Registre a lacuna em **Pendências / Dúvidas** e use a tool `question`.
 
 ---
 
@@ -16,41 +20,65 @@ description: Prompt para criar uma especificação técnica detalhada com base n
 ### 1. Pesquisa e Contextualização
 
 #### 1.1 PRD
+
 Antes de escrever a spec:
 - Leia o PRD associado à spec (localizado um nível acima na árvore de documentos).
 - Identifique requisitos relevantes para implementação.
 - **Não replique o PRD completo**; resuma apenas o que impacta a execução técnica.
 
 #### 1.2 Identificação de camadas e apps/pacotes
-- Identifique a aplicação/pacote e as camadas que serão utilizadas para implementar a feature, conforme descrito em `documentation/rules/rules.md`.
+
+- Leia `documentation/rules/rules.md` e identifique:
+  - Quais apps serão tocados (`server`, `web`, `studio`)
+  - Quais camadas serão envolvidas por app (ex: `ui`, `rest`, `database`, `ai`)
+- Com base nisso, defina:
+  - Quantos subagentes serão criados (um por app tocado + um para pacotes compartilhados, quando aplicável)
+  - O escopo exato de cada subagente antes de delegar
 
 #### 1.3 Delegação para subagentes
-Distribua estrategicamente a pesquisa da codebase e das regras específicas por app/pacote para subagentes especializados.
 
-Cada subagente deve retornar, para sua camada:
-- Arquivos relevantes encontrados
-- Camadas envolvidas
-- Implementações similares na codebase (com caminhos)
-- Dependências envolvidas
-- Riscos e pontos de atenção
-- Lacunas, inconsistências ou dúvidas
-- Fluxo de dados relevante para a implementação
+Distribua estrategicamente a pesquisa da codebase por app/pacote para subagentes especializados, conforme o escopo definido em 1.2.
+
+Cada subagente deve **pesquisar e reportar**, sem tomar decisões de implementação. O agente principal é responsável pela síntese e pelas decisões finais.
+
+Cada subagente deve retornar:
+
+**Mapeamento do que existe:**
+- Arquivos e módulos diretamente relacionados à feature (com caminhos relativos reais)
+- Implementações similares na codebase que devem servir de referência
+- Dependências envolvidas (libs, providers, interfaces do core)
+- Contratos existentes que a feature deve respeitar (interfaces, schemas, tipos)
+
+**Fluxo de dados:**
+- Como dados trafegam nas camadas relevantes para essa feature
+- Onde o fluxo atual precisaria ser estendido ou alterado
+
+**Pontos de atenção:**
+- Arquivos que provavelmente serão impactados e por quê
+- Padrões que devem ser seguidos com base no que foi encontrado
+- Riscos, acoplamentos ou inconsistências observadas
+
+**Lacunas:**
+- O que não foi encontrado e seria esperado
+- Dúvidas que dependem de confirmação antes de implementar
 
 #### 1.4 Síntese
-- Consolide as descobertas dos subagentes em um único documento.
-- Organize as informações de forma clara e objetiva.
-- Priorize consistência com os padrões existentes da codebase.
+
+O agente principal consolida as descobertas dos subagentes e, com base nelas, toma as decisões de implementação:
+
+- Resolve conflitos ou sobreposições entre os relatórios dos subagentes
+- Define o que será criado, modificado e removido — com justificativa baseada nas evidências coletadas
+- Prioriza consistência com os padrões identificados na codebase
+- Para features que tocam múltiplos apps, mapeia explicitamente o contrato entre eles: qual app expõe, qual consome e qual o formato de comunicação (REST, RPC, evento). Esse contrato deve aparecer na seção 9 (Diagramas) como fluxo de dados cross-app.
+- Registra em **Pendências / Dúvidas** (seção 10) tudo que não teve evidência suficiente para decidir
 
 ---
 
 ### 2. Uso de Ferramentas Auxiliares
 
-- **MCP Serena:** Utilize para facilitar a busca por arquivos no projeto.
-- **MCP Context7:** Caso tenha dúvidas sobre como usar bibliotecas específicas (ex: `shadcn/ui`, `radix-ui`, `inngest`, `supabase`, `hono`, `zod`), utilize para obter documentação e exemplos.
-- **Tool `question`:** Use para fazer perguntas ao solicitante quando houver:
-  - lacunas no PRD
-  - incongruências com a codebase
-  - decisões críticas sem evidência suficiente
+- **MCP Serena:** Use para localizar arquivos e implementações similares na codebase. Acione sempre na fase de pesquisa dos subagentes.
+- **MCP Context7:** Use quando houver dúvida sobre uso correto de uma biblioteca específica (ex: `shadcn/ui`, `radix-ui`, `inngest`, `supabase`, `hono`, `zod`). Não use para decisões de arquitetura — essas seguem as regras do projeto.
+- **Tool `question`:** Use quando houver lacunas no PRD, incongruências com a codebase ou decisões críticas sem evidência suficiente. Não avance sem resposta quando o impacto for alto.
 
 ---
 
@@ -111,7 +139,7 @@ Exemplos de categorias (usar apenas se aplicável):
 * Acessibilidade
 * Latência
 
-> Evite requisitos vagos (ex: “ser rápido”). Prefira critérios verificáveis.
+> Evite requisitos vagos (ex: "ser rápido"). Prefira critérios verificáveis.
 
 ---
 
@@ -128,6 +156,10 @@ Exemplos de categorias (usar apenas se aplicável):
 # 5. O que deve ser criado? (Depende da tarefa)
 
 [Descreva novos componentes dividindo por camadas. Para cada arquivo novo, detalhe e marque explicitamente como **novo arquivo**.]
+
+> **Nível de detalhe esperado em métodos:** descreva a assinatura em TypeScript (nome, parâmetros tipados e retorno) e uma linha de responsabilidade. Não escreva implementação — a spec define contratos, não código.
+>
+> Exemplo: `findByUserId(userId: string): Promise<Challenge | null>` — busca um desafio ativo pelo ID do usuário, retorna `null` se não encontrado.
 
 ## Camada REST (Controllers)
 
@@ -164,7 +196,7 @@ Exemplos de categorias (usar apenas se aplicável):
 * **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
 * **Dependências:** O que deve ser injetado
 * **Biblioteca:** Nome da biblioteca utilizada pelo provider
-* **métodos:** Assinatura e responsabilidade
+* **Métodos:** Assinatura e responsabilidade
 
 ## Pacote Validation (Schemas)
 
@@ -245,7 +277,7 @@ Exemplos de categorias (usar apenas se aplicável):
 * **Caminho da rota:** Relativo à raiz da aplicação React Router
 
 > Se uma camada não se aplicar, **não inclua ela na spec**.
-> Se achar necessário falar sobre um recurso não mapeado na seção acima, sinta-se livre para adicionar uma seção extra para falar sobre ele seguindo o seu próprio padrão mas condizente com o padrão dos outros recursos mapeados.
+> Se achar necessário falar sobre um recurso não mapeado na seção acima, sinta-se livre para adicionar uma seção extra seguindo o padrão condizente com os outros recursos mapeados.
 
 ---
 
@@ -256,7 +288,7 @@ Exemplos de categorias (usar apenas se aplicável):
 ## [Nome da Camada]
 
 * **Arquivo:** `caminho/do/arquivo`
-* **Mudança:** [Descreva a mudança específica (ex: “Adicionar prop `onTap`”, “Injetar novo service”)]
+* **Mudança:** [Descreva a mudança específica (ex: "Adicionar prop `onTap`", "Injetar novo service")]
 * **Justificativa:** [Explique por que a mudança é necessária]
 * **Camada:** `ui` | `core` | `rest` | `provision` | `queue` | `database` | `ai`
 
@@ -294,6 +326,7 @@ Para cada decisão importante:
 # 9. Diagramas e Referências (Obrigatório)
 
 * **Fluxo de Dados:** Gere um diagrama em notação ASCII ou text-based mostrando a interação entre camadas.
+* **Fluxo Cross-app (se aplicável):** Para features que tocam múltiplos apps, inclua um diagrama explicitando qual app expõe, qual consome e o formato de comunicação (REST, RPC, evento).
 * **Layout (se aplicável):** Use ASCII para representar a hierarquia visual de telas e widgets complexos.
 * **Referências:** Liste links/caminhos de arquivos similares na codebase para servir de exemplo.
 
@@ -322,6 +355,3 @@ Para cada item:
 * Toda referência a código existente deve incluir caminho relativo real.
 * Se uma seção não se aplicar, preencher explicitamente com **Não aplicável**.
 * A spec deve ser consistente com os padrões já existentes na codebase (nomenclatura, organização de pastas, contratos e convenções por camada).
-* Não replicar os termos entre parênteses que estão nos titulos, como (Quando aplicável), (Obrigatório), (Depende da tarefa), etc.
-
-

@@ -128,10 +128,12 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       page,
       itemsPerPage,
       title,
+      positionOrder,
     }: ChallengeSourcesListParams) {
       restClient.setQueryParam('page', page.value.toString())
       restClient.setQueryParam('itemsPerPage', itemsPerPage.value.toString())
       restClient.setQueryParam('title', title.value)
+      restClient.setQueryParam('positionOrder', positionOrder.value)
       const response = await restClient.get<PaginationResponse<ChallengeSourceDto>>(
         '/challenging/challenge-sources',
       )
@@ -189,7 +191,7 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       return await restClient.delete(`/challenging/challenges/${challenge.id.value}`)
     },
 
-    async CreateChallengeSource(challengeId: Id, url: Url) {
+    async createChallengeSource(challengeId: Id, url: Url) {
       return await restClient.post<ChallengeSourceDto>('/challenging/challenge-sources', {
         challengeId: challengeId.value,
         url: url.value,

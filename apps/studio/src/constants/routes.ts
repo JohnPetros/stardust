@@ -13,6 +13,7 @@ export const ROUTES = {
   },
   challenging: {
     challenges: '/challenging/challenges',
+    sources: '/challenging/sources',
     challenge: (challengeSlug: Slug) => `/challenging/challenge/${challengeSlug.value}`,
   },
   lesson: {
