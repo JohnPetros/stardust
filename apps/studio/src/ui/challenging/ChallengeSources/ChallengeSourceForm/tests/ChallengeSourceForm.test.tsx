@@ -24,8 +24,15 @@ jest.mock('@/ui/global/widgets/components/Pagination', () => ({
 
 describe('ChallengeSourceForm', () => {
   let challengingService: Mock<ChallengingService>
-  let onSubmit: jest.MockedFunction<
-    (url: string, challengeId: string) => Promise<string | null>
+  let onCreate: jest.MockedFunction<
+    (url: string, challengeId?: string) => Promise<string | null>
+  >
+  let onUpdate: jest.MockedFunction<
+    (
+      challengeSourceId: string,
+      url: string,
+      challengeId: string | undefined,
+    ) => Promise<string | null>
   >
 
   const mockedUseRestContext = jest.mocked(useRestContext)
@@ -42,7 +49,8 @@ describe('ChallengeSourceForm', () => {
     },
   ]
 
-  const Widget = () => render(<ChallengeSourceForm onSubmit={onSubmit} />)
+  const Widget = () =>
+    render(<ChallengeSourceForm onCreate={onCreate} onUpdate={onUpdate} />)
 
   const openDialog = async (user: ReturnType<typeof userEvent.setup>) => {
     await user.click(screen.getByRole('button', { name: 'Adicionar fonte' }))
@@ -52,7 +60,8 @@ describe('ChallengeSourceForm', () => {
     jest.clearAllMocks()
 
     challengingService = mock<ChallengingService>()
-    onSubmit = jest.fn()
+    onCreate = jest.fn()
+    onUpdate = jest.fn()
 
     mockedUseRestContext.mockReturnValue({
       challengingService,
@@ -86,10 +95,9 @@ describe('ChallengeSourceForm', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/invalid url/i)).toBeInTheDocument()
-      expect(screen.getByText(/uuid/i)).toBeInTheDocument()
     })
 
-    expect(onSubmit).not.toHaveBeenCalled()
+    expect(onCreate).not.toHaveBeenCalled()
   })
 
   it('should select a challenge from the list', async () => {
@@ -108,7 +116,7 @@ describe('ChallengeSourceForm', () => {
   it('should submit successfully with correct values', async () => {
     const user = userEvent.setup()
     const url = 'https://example.com/artigo'
-    onSubmit.mockResolvedValue(null)
+    onCreate.mockResolvedValue(null)
 
     Widget()
     await openDialog(user)
@@ -118,14 +126,30 @@ describe('ChallengeSourceForm', () => {
     await user.click(screen.getByRole('button', { name: 'Salvar' }))
 
     await waitFor(() => {
-      expect(onSubmit).toHaveBeenCalledWith(url, challenges[0].id)
+      expect(onCreate).toHaveBeenCalledWith(url, challenges[0].id)
+    })
+  })
+
+  it('should submit successfully without selecting challenge', async () => {
+    const user = userEvent.setup()
+    const url = 'https://example.com/artigo-sem-vinculo'
+    onCreate.mockResolvedValue(null)
+
+    Widget()
+    await openDialog(user)
+
+    await user.type(screen.getByPlaceholderText('https://exemplo.com/artigo'), url)
+    await user.click(screen.getByRole('button', { name: 'Salvar' }))
+
+    await waitFor(() => {
+      expect(onCreate).toHaveBeenCalledWith(url, undefined)
     })
   })
 
   it('should show submit error when submission fails', async () => {
     const user = userEvent.setup()
     const submitError = 'Falha ao adicionar fonte'
-    onSubmit.mockResolvedValue(submitError)
+    onCreate.mockResolvedValue(submitError)
 
     Widget()
     await openDialog(user)
@@ -141,6 +165,6 @@ describe('ChallengeSourceForm', () => {
       expect(screen.getByText(submitError)).toBeInTheDocument()
     })
 
-    expect(onSubmit).toHaveBeenCalledWith('https://example.com/artigo', challenges[1].id)
+    expect(onCreate).toHaveBeenCalledWith('https://example.com/artigo', challenges[1].id)
   })
 })

@@ -12,7 +12,7 @@ import {
   Text,
 } from '@stardust/core/global/structures'
 import { challengeSourceSchema } from '@stardust/validation/challenging/schemas'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
 
@@ -23,10 +23,28 @@ type FormData = z.infer<typeof challengeSourceSchema>
 
 type Params = {
   challengingService: ChallengingService
-  onSubmit: (url: string, challengeId: string) => Promise<string | null>
+  challengeSourceId?: string
+  initialValues?: {
+    url: string
+    challengeId?: string | null
+    challengeTitle?: string | null
+  }
+  onCreate: (url: string, challengeId?: string) => Promise<string | null>
+  onUpdate: (
+    challengeSourceId: string,
+    url: string,
+    challengeId: string | undefined,
+  ) => Promise<string | null>
 }
 
-export function useChallengeSourceForm({ challengingService, onSubmit }: Params) {
+export function useChallengeSourceForm({
+  challengingService,
+  challengeSourceId,
+  initialValues,
+  onCreate,
+  onUpdate,
+}: Params) {
+  const isEditing = Boolean(challengeSourceId)
   const [isOpen, setIsOpen] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [search, setSearch] = useState('')
@@ -37,7 +55,7 @@ export function useChallengeSourceForm({ challengingService, onSubmit }: Params)
   const form = useForm<FormData>({
     resolver: zodResolver(challengeSourceSchema),
     defaultValues: {
-      challengeId: '',
+      challengeId: undefined,
       url: '',
     },
   })
@@ -78,9 +96,22 @@ export function useChallengeSourceForm({ challengingService, onSubmit }: Params)
     return challenges.find((challenge) => challenge.id === selectedChallengeId)
   }, [challenges, selectedChallengeId])
 
+  const selectedChallengeTitle =
+    selectedChallenge?.title ??
+    (selectedChallengeId === initialValues?.challengeId
+      ? (initialValues?.challengeTitle ?? null)
+      : null)
+
   async function handleSubmit(values: FormData) {
     setSubmitError('')
-    const error = await onSubmit(values.url, values.challengeId)
+
+    const error = isEditing
+      ? await onUpdate(
+          challengeSourceId as string,
+          values.url,
+          values.challengeId ?? undefined,
+        )
+      : await onCreate(values.url, values.challengeId ?? undefined)
 
     if (error) {
       setSubmitError(error)
@@ -88,7 +119,7 @@ export function useChallengeSourceForm({ challengingService, onSubmit }: Params)
     }
 
     form.reset({
-      challengeId: '',
+      challengeId: undefined,
       url: '',
     })
     setIsOpen(false)
@@ -104,14 +135,26 @@ export function useChallengeSourceForm({ challengingService, onSubmit }: Params)
       setSearch('')
       setPage(1)
       form.reset({
-        challengeId: '',
+        challengeId: undefined,
         url: '',
       })
+      return
     }
+
+    form.reset({
+      challengeId: initialValues?.challengeId ?? undefined,
+      url: initialValues?.url ?? '',
+    })
   }
 
   function handleSelectChallenge(challengeId: string) {
     form.setValue('challengeId', challengeId, {
+      shouldValidate: true,
+    })
+  }
+
+  function handleClearChallenge() {
+    form.setValue('challengeId', undefined, {
       shouldValidate: true,
     })
   }
@@ -142,8 +185,20 @@ export function useChallengeSourceForm({ challengingService, onSubmit }: Params)
     setPage(1)
   }
 
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    form.reset({
+      challengeId: initialValues?.challengeId ?? undefined,
+      url: initialValues?.url ?? '',
+    })
+  }, [form, initialValues, isOpen])
+
   return {
     form,
+    isEditing,
     isOpen,
     search,
     challenges,
@@ -152,12 +207,13 @@ export function useChallengeSourceForm({ challengingService, onSubmit }: Params)
     page,
     itemsPerPage,
     submitError,
-    selectedChallenge,
+    selectedChallengeTitle,
     selectedChallengeId,
     isLoading: isLoading || isRefetching,
     onDialogChange: handleOpenChange,
     onSearchChange: handleSearchChange,
     onSelectChallenge: handleSelectChallenge,
+    onClearChallenge: handleClearChallenge,
     onNextPage: handleNextPage,
     onPrevPage: handlePrevPage,
     onPageChange: handlePageChange,
