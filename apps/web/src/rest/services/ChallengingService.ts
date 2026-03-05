@@ -191,11 +191,25 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       return await restClient.delete(`/challenging/challenges/${challenge.id.value}`)
     },
 
-    async createChallengeSource(challengeId: Id, url: Url) {
+    async createChallengeSource(challengeId: Id | null, url: Url) {
       return await restClient.post<ChallengeSourceDto>('/challenging/challenge-sources', {
-        challengeId: challengeId.value,
+        challengeId: challengeId?.value ?? null,
         url: url.value,
       })
+    },
+
+    async updateChallengeSource(
+      challengeSourceId: Id,
+      url: Url,
+      challengeId?: Id | null,
+    ) {
+      return await restClient.put<ChallengeSourceDto>(
+        `/challenging/challenge-sources/${challengeSourceId.value}`,
+        {
+          url: url.value,
+          challengeId: challengeId?.value ?? null,
+        },
+      )
     },
 
     async deleteChallengeSource(challengeSourceId: Id) {
