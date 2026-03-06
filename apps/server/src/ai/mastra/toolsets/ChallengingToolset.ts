@@ -43,13 +43,13 @@ export class ChallengingToolset {
             expectedOutput: JSON.parse(testCase.expectedOutput),
           })),
         })
-        const challengeAuthorRepository = new SupabaseChallengesRepository(supabase)
+        const challengesRepository = new SupabaseChallengesRepository(supabase)
         const challengeSourcesRepository = new SupabaseChallengeSourcesRepository(
           supabase,
         )
         const broker = new InngestBroker()
         const tool = new PostChallengeTool(
-          challengeAuthorRepository,
+          challengesRepository,
           challengeSourcesRepository,
           broker,
         )

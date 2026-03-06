@@ -23,7 +23,6 @@ export class MastraCreateChallengeWorkflow implements CreateChallengeWorkflow {
       .then(createChallengeStep)
       .map(async ({ inputData, getStepResult }) => {
         const challengeSource = getStepResult(getNextChallengeSourceStep)
-        console.log('challengeSource from step', challengeSource)
         return {
           ...inputData,
           challengeSourceId: challengeSource.id,
