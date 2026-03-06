@@ -21,8 +21,7 @@
         "noDoubleEquals": "warn",
         "noAssignInExpressions": "off",
         "noRedeclare": "warn",
-        "useIterableCallbackReturn": "off",
-        "noUnknownAtRules": "off"
+        "useIterableCallbackReturn": "off"
       },
       "style": {
         "noParameterAssign": "warn",
