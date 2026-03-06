@@ -1,8 +1,10 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { ChallengesFaker } from '#challenging/domain/entities/fakers/ChallengesFaker'
+import { ChallengeSourcesFaker } from '#challenging/domain/entities/fakers/ChallengeSourcesFaker'
 import { PostChallengeUseCase } from '../PostChallengeUseCase'
 import { ChallengeAlreadyExistsError } from '#challenging/domain/errors/ChallengeAlreadyExistsError'
+import { ChallengeSourceNotFoundError } from '#challenging/domain/errors/ChallengeSourceNotFoundError'
 import { ChallengePostedEvent } from '#challenging/domain/events/ChallengePostedEvent'
 import type { ChallengeSourcesRepository } from '#challenging/interfaces/ChallengeSourcesRepository'
 import type { ChallengesRepository } from '#challenging/interfaces/ChallengesRepository'
@@ -20,6 +22,8 @@ describe('Post Challenge Use Case', () => {
     broker = mock<Broker>()
     repository.findBySlug.mockImplementation()
     repository.add.mockImplementation()
+    challengeSourcesRepository.findById.mockImplementation()
+    challengeSourcesRepository.replace.mockImplementation()
     broker.publish.mockImplementation()
     useCase = new PostChallengeUseCase(repository, challengeSourcesRepository, broker)
   })
@@ -60,5 +64,42 @@ describe('Post Challenge Use Case', () => {
     expect(event.payload.challengeSlug).toBe(challenge.slug.value)
     expect(event.payload.challengeTitle).toBe(challenge.title.value)
     expect(event.payload.challengeAuthor).toEqual(challenge.author.dto)
+  })
+
+  it('should link challenge source when challengeSourceId is provided', async () => {
+    const challenge = ChallengesFaker.fake()
+    const challengeSource = ChallengeSourcesFaker.fake({ challenge: null })
+
+    repository.findBySlug.mockResolvedValue(null)
+    challengeSourcesRepository.findById.mockResolvedValue(challengeSource)
+
+    await useCase.execute({
+      challengeDto: challenge.dto,
+      challengeSourceId: challengeSource.id.value,
+    })
+
+    expect(challengeSourcesRepository.findById).toHaveBeenCalledWith(
+      expect.objectContaining({ value: challengeSource.id.value }),
+    )
+    expect(challengeSource.challenge?.id.value).toBe(challenge.id.value)
+    expect(challengeSource.challenge?.title.value).toBe(challenge.title.value)
+    expect(challengeSource.challenge?.slug.value).toBe(challenge.slug.value)
+    expect(challengeSourcesRepository.replace).toHaveBeenCalledWith(challengeSource)
+  })
+
+  it('should throw when challengeSourceId is provided but source is not found', async () => {
+    const challenge = ChallengesFaker.fake()
+
+    repository.findBySlug.mockResolvedValue(null)
+    challengeSourcesRepository.findById.mockResolvedValue(null)
+
+    await expect(
+      useCase.execute({
+        challengeDto: challenge.dto,
+        challengeSourceId: '550e8400-e29b-41d4-a716-446655440100',
+      }),
+    ).rejects.toThrow(ChallengeSourceNotFoundError)
+
+    expect(challengeSourcesRepository.replace).not.toHaveBeenCalled()
   })
 })

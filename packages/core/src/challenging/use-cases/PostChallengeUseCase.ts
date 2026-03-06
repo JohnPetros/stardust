@@ -34,7 +34,6 @@ export class PostChallengeUseCase implements UseCase<Request, Response> {
       challengeTitle: challenge.title.value,
       challengeAuthor: challenge.author.dto,
     })
-    console.log('challengeSourceId', challengeSourceId)
     if (challengeSourceId)
       await this.markChallengeSourceAsUsed(Id.create(challengeSourceId), challenge)
 
@@ -51,7 +50,11 @@ export class PostChallengeUseCase implements UseCase<Request, Response> {
     const challengeSource =
       await this.challengeSourcesRepository.findById(challengeSourceId)
     if (!challengeSource) throw new ChallengeSourceNotFoundError()
-    challengeSource.linkToChallenge(challenge)
+    challengeSource.linkToChallenge({
+      id: challenge.id,
+      title: challenge.title,
+      slug: challenge.slug,
+    })
     await this.challengeSourcesRepository.replace(challengeSource)
     return challengeSource
   }
