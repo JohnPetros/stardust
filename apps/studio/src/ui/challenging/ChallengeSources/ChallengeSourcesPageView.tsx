@@ -182,7 +182,11 @@ export const ChallengeSourcesPageView = ({
                         <DeleteChallengeSourceDialog
                           onConfirm={() => onDeleteChallengeSource(source.id)}
                         >
-                          <Button variant='destructive' size='icon' aria-label='Excluir fonte'>
+                          <Button
+                            variant='destructive'
+                            size='icon'
+                            aria-label='Excluir fonte'
+                          >
                             <Trash2 className='h-4 w-4' />
                           </Button>
                         </DeleteChallengeSourceDialog>
