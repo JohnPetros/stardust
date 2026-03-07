@@ -58,7 +58,7 @@ export class DeleguaLsp implements LspProvider {
       resultadoInterpretador.resultado.filter(Boolean)
 
     if (resultadoInterpretadorFiltrado.length === 0) {
-      return new LspResponse({ result: undefined })
+      return new LspResponse({ result: undefined, outputs })
     }
 
     let resultadoFinal = null
@@ -70,7 +70,7 @@ export class DeleguaLsp implements LspProvider {
 
     resultadoFinal = resultadoRetornado?.valorRetornado?.valor
 
-    while ('valorRetornado' in resultadoFinal) {
+    while (typeof resultadoFinal === 'object' && 'valorRetornado' in resultadoFinal) {
       resultadoFinal = resultadoFinal.valorRetornado.valor
     }
 
