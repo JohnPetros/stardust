@@ -12,7 +12,7 @@ assignees: ''
 
 ## ✍️ Como reproduzir
 
-## 🎋 Ambiente
+## 🎋 Ambiente (opcional, mas ajuda)
 - OS:
 - Dispositivo:
 - Navegador: 
