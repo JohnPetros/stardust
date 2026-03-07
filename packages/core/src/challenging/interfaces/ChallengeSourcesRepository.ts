@@ -10,5 +10,6 @@ export interface ChallengeSourcesRepository {
   add(challengeSource: ChallengeSource): Promise<void>
   findAll(): Promise<ChallengeSource[]>
   replaceMany(challengeSources: ChallengeSource[]): Promise<void>
+  replace(challengeSource: ChallengeSource): Promise<void>
   remove(challengeSourceId: Id): Promise<void>
 }
