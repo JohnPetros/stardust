@@ -2,10 +2,7 @@ import type { UseCase } from '#global/interfaces/UseCase'
 import { Id, Logical } from '#global/domain/structures/index'
 import type { ChallengeSourceDto } from '../domain/entities/dtos'
 import { ChallengeSource, type Challenge } from '../domain/entities'
-import {
-  ChallengeNotFoundError,
-  ChallengeSourceNotFoundError,
-} from '../domain/errors'
+import { ChallengeNotFoundError, ChallengeSourceNotFoundError } from '../domain/errors'
 import type { ChallengeSourcesRepository, ChallengesRepository } from '../interfaces'
 
 type Request = {
@@ -25,14 +22,19 @@ export class UpdateChallengeSourceUseCase implements UseCase<Request, Response> 
   async execute({ challengeSourceId, challengeId, url }: Request): Response {
     const challengeSource = await this.findChallengeSource(Id.create(challengeSourceId))
     const challenge = await this.findChallenge(Id.create(challengeId))
-    const updatedChallengeSource = this.updateChallengeSource(challengeSource, challenge, url)
+    const updatedChallengeSource = this.updateChallengeSource(
+      challengeSource,
+      challenge,
+      url,
+    )
 
     await this.challengeSourcesRepository.replace(updatedChallengeSource)
     return updatedChallengeSource.dto
   }
 
   private async findChallengeSource(challengeSourceId: Id): Promise<ChallengeSource> {
-    const challengeSource = await this.challengeSourcesRepository.findById(challengeSourceId)
+    const challengeSource =
+      await this.challengeSourcesRepository.findById(challengeSourceId)
     if (!challengeSource) throw new ChallengeSourceNotFoundError()
     return challengeSource
   }
