@@ -79,12 +79,6 @@ describe('ChallengeSourcesPageView', () => {
   const sourceB = ChallengeSourcesFaker.fakeDto({
     id: 'source-b',
     url: 'https://source-b.test',
-    challenge: {
-      id: 'challenge-b',
-      title: 'Challenge B',
-      slug: 'challenge-b',
-    },
-    isUsed: false,
   })
 
   const defaultProps: Props = {
@@ -107,6 +101,7 @@ describe('ChallengeSourcesPageView', () => {
     onPrevPage: jest.fn(),
     onItemsPerPageChange: jest.fn(),
     onCreateChallengeSource: jest.fn(async () => null),
+    onUpdateChallengeSource: jest.fn(async () => null),
     onDeleteChallengeSource: jest.fn(async () => undefined),
     onReorderChallengeSources: jest.fn(async () => undefined),
   }
@@ -125,7 +120,7 @@ describe('ChallengeSourcesPageView', () => {
     expect(
       screen.getByPlaceholderText('Buscar por título do desafio...'),
     ).toBeInTheDocument()
-    expect(screen.getByTestId('challenge-source-form')).toBeInTheDocument()
+    expect(screen.getAllByTestId('challenge-source-form')).toHaveLength(3)
   })
 
   it('should render loading state', () => {
@@ -156,8 +151,7 @@ describe('ChallengeSourcesPageView', () => {
       challengeUrl,
     )
 
-    expect(screen.getByText('Sim')).toBeInTheDocument()
-    expect(screen.getByText('Não')).toBeInTheDocument()
+    expect(screen.getAllByText('Sim')).toHaveLength(2)
   })
 
   it('should call onSearchChange when user types in search input', async () => {

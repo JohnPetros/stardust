@@ -120,7 +120,7 @@ export function useChallengeResultSlot({
       if (craftsVislibility) setCraftsVislibility(craftsVislibility.showAll())
     }
 
-    if (newUserAnswer.isCorrect.isFalse && newUserAnswer.isVerified.isTrue && isMobile) {
+    if (newUserAnswer.isCorrect.isFalse && newUserAnswer.isVerified.isFalse && isMobile) {
       tabHandler?.showCodeTab()
     }
 

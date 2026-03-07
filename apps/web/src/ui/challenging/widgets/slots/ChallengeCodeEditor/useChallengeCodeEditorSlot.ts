@@ -7,6 +7,7 @@ import { LspError } from '@stardust/core/global/errors'
 import { ROUTES, STORAGE } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
+import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useLsp } from '@/ui/global/hooks/useLsp'
 import type { ConsoleRef } from '@/ui/global/widgets/components/Console/types'
 import type { CodeEditorRef } from '@/ui/global/widgets/components/CodeEditor/types'
@@ -15,10 +16,19 @@ import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 
 export function useChallengeCodeEditorSlot() {
-  const { getChallengeSlice, getPanelsLayoutSlice, getResultsSlice } = useChallengeStore()
+  const {
+    getChallengeSlice,
+    getPanelsLayoutSlice,
+    getResultsSlice,
+    getTabHandlerSlice,
+    getActiveContentSlice,
+  } = useChallengeStore()
   const { setResults } = getResultsSlice()
   const { challenge } = getChallengeSlice()
   const { panelsLayout } = getPanelsLayoutSlice()
+  const { tabHandler } = getTabHandlerSlice()
+  const { setActiveContent } = getActiveContentSlice()
+  const { md: isMobile } = useBreakpoint()
   const { playAudio } = useAudioContext()
   const { lspProvider } = useLsp()
   const toast = useToastContext()
@@ -29,6 +39,7 @@ export function useChallengeCodeEditorSlot() {
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
   const consoleRef = useRef<ConsoleRef>(null)
   const [codeEditorHeight, setCodeEditorHeight] = useState(0)
+  const [outputs, setOutputs] = useState<string[]>([])
   const localStorage = useLocalStorage(
     STORAGE.keys.challengeCode(challenge?.id.value ?? ''),
   )
@@ -52,9 +63,24 @@ export function useChallengeCodeEditorSlot() {
   async function handleRunCode() {
     if (!challenge) return
 
+    setOutputs([])
+    consoleRef.current?.close()
+
     try {
-      await challenge.runCode(userCode.current)
+      const executionOutputs = await challenge.runCode(userCode.current)
+
+      setOutputs(executionOutputs.items)
       setResults(challenge.results.items)
+
+      if (executionOutputs.length > 0) {
+        consoleRef.current?.open()
+      }
+
+      if (isMobile) {
+        setActiveContent('result')
+        tabHandler?.showResultTab()
+      }
+
       router.goTo(ROUTES.challenging.challenges.challengeResult(challenge.slug.value))
     } catch (error) {
       playAudio('fail-code-result.wav')
@@ -65,10 +91,16 @@ export function useChallengeCodeEditorSlot() {
       }
 
       if (error instanceof InsufficientInputsError) {
-        toast.show('Não mexa em nenhum comando Leia()!')
+        toast.showError('Não mexa em nenhum comando Leia()!')
         return
       }
+
+      toast.showError('Erro interno do interpretador!')
     }
+  }
+
+  function handleOpenConsole() {
+    consoleRef.current?.open()
   }
 
   function handleCodeChange(value: string) {
@@ -107,9 +139,12 @@ export function useChallengeCodeEditorSlot() {
     consoleRef,
     codeEditorRef,
     codeEditorHeight,
+    outputs,
+    isMobile,
     originalCode: Code.create(lspProvider, challenge?.code),
     initialCode,
     handleRunCode,
+    handleOpenConsole,
     handleCodeChange,
   }
 }
