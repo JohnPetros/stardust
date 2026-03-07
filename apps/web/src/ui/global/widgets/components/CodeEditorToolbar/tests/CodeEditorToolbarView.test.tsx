@@ -66,4 +66,10 @@ describe('CodeEditorToolbarView', () => {
 
     expect(onOpenConsole).toHaveBeenCalledTimes(1)
   })
+
+  it('should not render the console button when no console handler is provided', () => {
+    View({ onOpenConsole: undefined })
+
+    expect(screen.queryByText('Console')).not.toBeInTheDocument()
+  })
 })

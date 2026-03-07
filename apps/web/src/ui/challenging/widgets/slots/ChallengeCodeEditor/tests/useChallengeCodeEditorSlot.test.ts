@@ -42,6 +42,7 @@ describe('useChallengeCodeEditorSlot', () => {
   const showResultTab = jest.fn()
   const goTo = jest.fn()
   const show = jest.fn()
+  const showError = jest.fn()
   const playAudio = jest.fn()
   const localStorageGet = jest.fn()
   const localStorageSet = jest.fn()
@@ -89,7 +90,7 @@ describe('useChallengeCodeEditorSlot', () => {
     jest.mocked(useToastContext).mockReturnValue({
       show,
       showSuccess: jest.fn(),
-      showError: jest.fn(),
+      showError,
     } as ReturnType<typeof useToastContext>)
 
     jest.mocked(useBreakpoint).mockReturnValue({
@@ -192,5 +193,18 @@ describe('useChallengeCodeEditorSlot', () => {
     })
 
     expect(open).toHaveBeenCalledTimes(1)
+  })
+
+  it('should show the corrected interpreter error message on unexpected failures', async () => {
+    challenge.runCode.mockRejectedValue(new Error('unexpected'))
+
+    const { result } = renderHook(() => useChallengeCodeEditorSlot())
+
+    await act(async () => {
+      await result.current.handleRunCode()
+    })
+
+    expect(playAudio).toHaveBeenCalledWith('fail-code-result.wav')
+    expect(showError).toHaveBeenCalledWith('Erro interno do interpretador!')
   })
 })

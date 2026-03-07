@@ -306,4 +306,31 @@ describe('useChallengeResultSlot', () => {
       expect(result.current.userAnswer.isCorrect.isTrue).toBe(true)
     })
   })
+
+  it('should show the code tab on mobile when the answer is incorrect', () => {
+    const incorrectAnswer = {
+      isCorrect: { isTrue: false, isFalse: true },
+      isVerified: { isTrue: false, isFalse: true },
+    }
+
+    challenge.verifyUserAnswer = jest.fn(() => incorrectAnswer) as never
+    setupStore()
+    jest.mocked(useBreakpoint).mockReturnValue({
+      xs: false,
+      sm: false,
+      md: true,
+      lg: false,
+      xl: false,
+    })
+
+    const { result } = Hook()
+
+    act(() => {
+      result.current.handleUserAnswer()
+    })
+
+    expect(showCodeTab).toHaveBeenCalledTimes(1)
+    expect(challenge.verifyUserAnswer).toHaveBeenCalled()
+    expect(result.current.userAnswer).toBe(incorrectAnswer)
+  })
 })
