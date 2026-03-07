@@ -95,7 +95,7 @@ export function useChallengeCodeEditorSlot() {
         return
       }
 
-      toast.showError('Erro interno do intepretador!')
+      toast.showError('Erro interno do interpretador!')
     }
   }
 

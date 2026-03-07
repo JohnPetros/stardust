@@ -71,7 +71,9 @@ export const CodeEditorToolbarView = ({
             <Toolbar.Button ref={guidesDialogButtonRef} label='Guias' icon='code' />
           </GuidesDialog>
 
-          <Toolbar.Button label='Console' icon='terminal' onClick={onOpenConsole} />
+          {onOpenConsole && (
+            <Toolbar.Button label='Console' icon='terminal' onClick={onOpenConsole} />
+          )}
 
           <HotkeysDialog>
             <Toolbar.Button label='Comandos' icon='command' />

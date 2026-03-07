@@ -37,7 +37,7 @@ export const ConsoleWidget = (
     />
   )
 
-  if (shouldRenderInPortal) {
+  if (shouldRenderInPortal && typeof document !== 'undefined') {
     return createPortal(content, document.body)
   }
 
