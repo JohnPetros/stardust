@@ -12,11 +12,9 @@ assignees: ''
 
 ## ✍️ Como reproduzir
 
-## 🔍 Detalhes
-
 ## 🎋 Ambiente
 - OS:
 - Dispositivo:
 - Navegador: 
 
-## 👀 Observação
+## 🖥️ Screenshot ou gravação
