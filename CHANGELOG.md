@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.1 (2026-03-07)
+
+* 🐳 docker: update base image in Dockerfile.web from node:20.15.1-alpine to node:22-alpine for improved performance and compatibility (db5cee4b1)
+* ⚙️ config: remove unused "noUnknownAtRules" rule from biome.json to streamline configuration (2adff93cc)
+
 ## 1.3.0 (2026-03-06)
 
 * 📚 docs: remove detailed sections from Product Requirements Document for Challenge Creator Agent to enhance focus and include link to milestone (3ba737372)
