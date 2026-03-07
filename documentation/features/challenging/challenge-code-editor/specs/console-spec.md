@@ -134,8 +134,8 @@ Implementar o console de output do `Challenge Code Editor` na aplicacao `web`, r
 * **Camada:** `ui`
 
 * **Arquivo:** `apps/web/src/ui/global/widgets/components/CodeEditorToolbar/CodeEditorToolbarView.tsx`
-* **Mudanca:** Adicionar um novo `Toolbar.Button` para abrir o console manualmente, sempre disponivel ao lado das demais acoes do editor.
-* **Justificativa:** O PRD exige acesso manual via botao; a toolbar e a localizacao mais consistente com os controles existentes de guias, comandos e configuracoes.
+* **Mudanca:** Adicionar um novo `Toolbar.Button` para abrir o console manualmente quando o widget receber `onOpenConsole`, mantendo os demais consumidores sem acao vazia na toolbar.
+* **Justificativa:** O PRD exige acesso manual via botao para o editor de desafio; a toolbar e a localizacao mais consistente com os controles existentes, mas o botao nao deve aparecer em fluxos que nao expõem console.
 * **Camada:** `ui`
 
 * **Arquivo:** `apps/web/src/ui/global/widgets/components/Console/index.tsx`
