@@ -12,8 +12,12 @@ export const ChallengeCodeEditorSlot = () => {
     editorContainerRef,
     codeEditorRef,
     codeEditorHeight,
+    consoleRef,
+    outputs,
+    isMobile,
     handleCodeChange,
     handleRunCode,
+    handleOpenConsole,
   } = useChallengeCodeEditorSlot()
 
   const { isAssistantEnabled } = useChallengeStore().getIsAssistantEnabledSlice()
@@ -30,11 +34,15 @@ export const ChallengeCodeEditorSlot = () => {
       editorContainerRef={editorContainerRef}
       codeEditorRef={codeEditorRef}
       codeEditorHeight={codeEditorHeight}
+      consoleRef={consoleRef}
+      outputs={outputs}
+      isMobile={isMobile}
       originalCode={originalCode.value}
       initialCode={initialCode}
       isCodeCheckerDisabled={originalCode.hasFunction.isFalse}
       onCodeChange={handleCodeChange}
       onRunCode={handleRunCode}
+      onOpenConsole={handleOpenConsole}
       isAssistantEnabled={isAssistantEnabled}
       isSelectionButtonVisible={isButtonVisible}
       selectionButtonPosition={buttonPosition}
