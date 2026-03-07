@@ -16,6 +16,7 @@ type CodeEditorToolbarProps = {
   guidesDialogButtonRef: RefObject<HTMLButtonElement | null>
   isAssistantAllowed: boolean
   onRunCode: () => void
+  onOpenConsole?: () => void
   onKeyDown: (event: KeyboardEvent) => void
   onResetCodeButtonClick: () => void
   onAssistantEnabledChange: () => void
@@ -29,6 +30,7 @@ export const CodeEditorToolbarView = ({
   onAssistantEnabledChange,
   onResetCodeButtonClick,
   onRunCode,
+  onOpenConsole,
   onKeyDown,
 }: CodeEditorToolbarProps) => {
   return (
@@ -68,6 +70,8 @@ export const CodeEditorToolbarView = ({
           <GuidesDialog>
             <Toolbar.Button ref={guidesDialogButtonRef} label='Guias' icon='code' />
           </GuidesDialog>
+
+          <Toolbar.Button label='Console' icon='terminal' onClick={onOpenConsole} />
 
           <HotkeysDialog>
             <Toolbar.Button label='Comandos' icon='command' />
