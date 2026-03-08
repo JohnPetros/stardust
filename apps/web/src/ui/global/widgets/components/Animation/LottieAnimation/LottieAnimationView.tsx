@@ -7,7 +7,7 @@ const Lottie = dynamic(() => import('lottie-react'), {
 
 type Props = {
   lottieRef: LottieRef
-  data: unknown
+  data: unknown | null
   size: number | 'full'
   windowWidth: number
   hasLoop: boolean
@@ -20,6 +20,8 @@ export const LottieAnimationView = ({
   windowWidth,
   hasLoop = true,
 }: Props) => {
+  if (!data) return null
+
   if (size === 'full')
     return (
       <Lottie

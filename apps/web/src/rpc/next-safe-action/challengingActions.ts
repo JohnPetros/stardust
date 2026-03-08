@@ -23,7 +23,11 @@ export const accessAuthenticatedChallengePage = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const restClient = await NextServerRestClient({
+      isCacheEnabled: true,
+      refetchInterval: 60,
+      cacheKey: 'challenging-actions',
+    })
     const challengingService = ChallengingService(restClient)
     const spaceService = SpaceService(restClient)
     const action = AccessChallengePageAction({
@@ -40,7 +44,11 @@ export const accessChallengePage = actionClient
     const call = NextCall({
       request: clientInput,
     })
-    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const restClient = await NextServerRestClient({
+      isCacheEnabled: true,
+      refetchInterval: 60,
+      cacheKey: 'challenging-actions',
+    })
     const challengingService = ChallengingService(restClient)
     const spaceService = SpaceService(restClient)
     const action = AccessChallengePageAction({
@@ -58,7 +66,11 @@ export const accessChallengeEditorPage = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const restClient = await NextServerRestClient({
+      isCacheEnabled: true,
+      refetchInterval: 60,
+      cacheKey: 'challenging-actions',
+    })
     const challengingService = ChallengingService(restClient)
     const action = AccessChallengeEditorPageAction(challengingService)
     return action.handle(call)
@@ -74,7 +86,11 @@ export const accessChallengeCommentsSlot = actionClient
     const call = NextCall({
       request: clientInput,
     })
-    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const restClient = await NextServerRestClient({
+      isCacheEnabled: true,
+      refetchInterval: 60,
+      cacheKey: 'challenging-actions',
+    })
     const challengingService = ChallengingService(restClient)
     const action = AccessChallengeCommentsSlotAction(challengingService)
     return action.handle(call)
@@ -92,7 +108,11 @@ export const accessSolutionPage = authActionClient
       request: clientInput,
       user: ctx.user,
     })
-    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const restClient = await NextServerRestClient({
+      isCacheEnabled: true,
+      refetchInterval: 60,
+      cacheKey: 'challenging-actions',
+    })
     const challengingService = ChallengingService(restClient)
     const action = AccessSolutionPageAction(challengingService)
     return action.handle(call)
@@ -104,7 +124,11 @@ export const viewSolution = authActionClient
     const call = NextCall({
       request: clientInput,
     })
-    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const restClient = await NextServerRestClient({
+      isCacheEnabled: true,
+      refetchInterval: 60,
+      cacheKey: 'challenging-actions',
+    })
     const challengingService = ChallengingService(restClient)
     const action = ViewSolutionAction(challengingService)
     return action.handle(call)

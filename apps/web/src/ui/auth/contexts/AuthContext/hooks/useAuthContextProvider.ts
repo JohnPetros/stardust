@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { User } from '@stardust/core/global/entities'
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
@@ -58,40 +58,43 @@ export function useAuthContextProvider({
     window.dispatchEvent(userChangeEvent)
   }, [])
 
-  async function handleSignIn(email: string, password: string) {
-    const response = await signIn(email, password)
+  const handleSignIn = useCallback(
+    async (email: string, password: string) => {
+      const response = await signIn(email, password)
 
-    if (response.isSuccessful) {
-      setAccount(Account.create(response.data))
-      return true
-    }
+      if (response.isSuccessful) {
+        setAccount(Account.create(response.data))
+        return true
+      }
 
-    toast.showError(response.errorMessage, 10)
-    return false
-  }
+      toast.showError(response.errorMessage, 10)
+      return false
+    },
+    [signIn, toast],
+  )
 
-  async function handleSignUpWithSocialAccount(
-    accessToken: string,
-    refreshToken: string,
-  ) {
-    const response = await signUpWithSocialAccount(accessToken, refreshToken)
+  const handleSignUpWithSocialAccount = useCallback(
+    async (accessToken: string, refreshToken: string) => {
+      const response = await signUpWithSocialAccount(accessToken, refreshToken)
 
-    if (response.isSuccessful) {
-      setAccount(Account.create(response.data.account))
-      return { isNewAccount: response.data.isNewAccount }
-    }
+      if (response.isSuccessful) {
+        setAccount(Account.create(response.data.account))
+        return { isNewAccount: response.data.isNewAccount }
+      }
 
-    return { isNewAccount: false }
-  }
+      return { isNewAccount: false }
+    },
+    [signUpWithSocialAccount],
+  )
 
-  async function handleSignOut() {
+  const handleSignOut = useCallback(async () => {
     const response = await signOut()
 
     if (response.isFailure) {
       toast.showError(response.errorMessage, 4)
       return
     }
-  }
+  }, [signOut, toast])
 
   const updateUserCache = useCallback(
     (userData: UserDto | null, shouldRevalidate = true) => {
@@ -126,17 +129,33 @@ export function useAuthContextProvider({
     }
   }, [account, updateUserCache])
 
-  return {
-    user: userDto ? User.create(userDto) : null,
-    account,
-    isAccountAuthenticated: account?.isAuthenticated.isTrue ?? false,
-    isLoading,
-    handleSignIn,
-    handleSignOut,
-    handleSignUpWithSocialAccount,
-    updateUser,
-    refetchUser: refetch,
-    updateUserCache,
-    notifyUserChanges,
-  }
+  const user = useMemo(() => (userDto ? User.create(userDto) : null), [userDto])
+
+  return useMemo(
+    () => ({
+      user,
+      account,
+      isAccountAuthenticated: account?.isAuthenticated.isTrue ?? false,
+      isLoading,
+      handleSignIn,
+      handleSignOut,
+      handleSignUpWithSocialAccount,
+      updateUser,
+      refetchUser: refetch,
+      updateUserCache,
+      notifyUserChanges,
+    }),
+    [
+      user,
+      account,
+      isLoading,
+      handleSignIn,
+      handleSignOut,
+      handleSignUpWithSocialAccount,
+      updateUser,
+      refetch,
+      updateUserCache,
+      notifyUserChanges,
+    ],
+  )
 }

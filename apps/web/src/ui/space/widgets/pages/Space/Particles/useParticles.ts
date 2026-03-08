@@ -1,16 +1,23 @@
 import { useEffect, useState } from 'react'
-import { initParticlesEngine } from '@tsparticles/react'
-import { loadBasic } from '@tsparticles/basic'
 
 export function useParticles() {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadBasic(engine)
-    }).then(() => {
+    async function initializeParticles() {
+      const [{ initParticlesEngine }, { loadBasic }] = await Promise.all([
+        import('@tsparticles/react'),
+        import('@tsparticles/basic'),
+      ])
+
+      await initParticlesEngine(async (engine) => {
+        await loadBasic(engine)
+      })
+
       setIsLoaded(true)
-    })
+    }
+
+    void initializeParticles()
   }, [])
 
   return {

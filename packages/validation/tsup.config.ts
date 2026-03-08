@@ -7,7 +7,7 @@ export default defineConfig({
   clean: true,
   splitting: false,
   treeshake: true,
-  sourcemap: true,
+  sourcemap: false,
   outDir: 'build',
   // external: ['zod', 'dayjs'],
 })
