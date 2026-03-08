@@ -1,7 +1,10 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { ChallengesFaker } from '@stardust/core/challenging/entities/fakers'
-import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
+import type {
+  ChallengeSourcesRepository,
+  ChallengesRepository,
+} from '@stardust/core/challenging/interfaces'
 import { PostChallengeUseCase } from '@stardust/core/challenging/use-cases'
 import type { Broker, Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
@@ -15,6 +18,7 @@ describe('Post Challenge Controller', () => {
 
   let http: Mock<Http<Schema>>
   let repository: Mock<ChallengesRepository>
+  let challengeSourcesRepository: Mock<ChallengeSourcesRepository>
   let broker: Mock<Broker>
   let controller: PostChallengeController
 
@@ -22,8 +26,13 @@ describe('Post Challenge Controller', () => {
     jest.restoreAllMocks()
     http = mock()
     repository = mock()
+    challengeSourcesRepository = mock()
     broker = mock()
-    controller = new PostChallengeController(repository, broker)
+    controller = new PostChallengeController(
+      repository,
+      challengeSourcesRepository,
+      broker,
+    )
   })
 
   it('should post challenge using body dto and send response', async () => {
@@ -40,7 +49,10 @@ describe('Post Challenge Controller', () => {
 
     const response = await controller.handle(http)
 
-    expect(executeSpy).toHaveBeenCalledWith({ challengeDto })
+    expect(executeSpy).toHaveBeenCalledWith({
+      challengeDto,
+      challengeSourceId: null,
+    })
     expect(http.send).toHaveBeenCalledWith(responseDto)
     expect(response).toBe(restResponse)
   })

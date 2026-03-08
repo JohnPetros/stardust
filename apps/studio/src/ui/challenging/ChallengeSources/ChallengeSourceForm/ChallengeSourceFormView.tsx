@@ -1,6 +1,7 @@
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 
 import { Search } from 'lucide-react'
+import type { ReactNode } from 'react'
 
 import { Button } from '@/ui/shadcn/components/button'
 import {
@@ -27,12 +28,32 @@ import { useChallengeSourceForm } from './useChallengeSourceForm'
 
 type Props = {
   challengingService: ChallengingService
-  onSubmit: (url: string, challengeId: string) => Promise<string | null>
+  challengeSourceId?: string
+  initialValues?: {
+    url: string
+    challengeId?: string | null
+    challengeTitle?: string | null
+  }
+  onCreate: (url: string, challengeId?: string) => Promise<string | null>
+  onUpdate: (
+    challengeSourceId: string,
+    url: string,
+    challengeId: string | undefined,
+  ) => Promise<string | null>
+  trigger?: ReactNode
 }
 
-export const ChallengeSourceFormView = ({ challengingService, onSubmit }: Props) => {
+export const ChallengeSourceFormView = ({
+  challengingService,
+  challengeSourceId,
+  initialValues,
+  onCreate,
+  onUpdate,
+  trigger,
+}: Props) => {
   const {
     form,
+    isEditing,
     isOpen,
     search,
     challenges,
@@ -41,12 +62,13 @@ export const ChallengeSourceFormView = ({ challengingService, onSubmit }: Props)
     page,
     itemsPerPage,
     submitError,
-    selectedChallenge,
+    selectedChallengeTitle,
     selectedChallengeId,
     isLoading,
     onDialogChange,
     onSearchChange,
     onSelectChallenge,
+    onClearChallenge,
     onNextPage,
     onPrevPage,
     onPageChange,
@@ -54,19 +76,22 @@ export const ChallengeSourceFormView = ({ challengingService, onSubmit }: Props)
     onSubmit: handleSubmit,
   } = useChallengeSourceForm({
     challengingService,
-    onSubmit,
+    challengeSourceId,
+    initialValues,
+    onCreate,
+    onUpdate,
   })
 
   return (
     <Dialog open={isOpen} onOpenChange={onDialogChange}>
-      <DialogTrigger asChild>
-        <Button>Adicionar fonte</Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger ?? <Button>Adicionar fonte</Button>}</DialogTrigger>
       <DialogContent className='sm:max-w-2xl'>
         <DialogHeader>
-          <DialogTitle>Adicionar fonte de desafio</DialogTitle>
+          <DialogTitle>
+            {isEditing ? 'Editar fonte de desafio' : 'Adicionar fonte de desafio'}
+          </DialogTitle>
           <DialogDescription>
-            Informe a URL de origem e selecione o desafio vinculado.
+            Informe a URL de origem e, se desejar, vincule um desafio.
           </DialogDescription>
         </DialogHeader>
 
@@ -87,7 +112,7 @@ export const ChallengeSourceFormView = ({ challengingService, onSubmit }: Props)
             />
 
             <div className='space-y-2'>
-              <FormLabel>Selecionar desafio</FormLabel>
+              <FormLabel>Selecionar desafio (opcional)</FormLabel>
               <div className='relative'>
                 <Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
                 <Input
@@ -139,11 +164,27 @@ export const ChallengeSourceFormView = ({ challengingService, onSubmit }: Props)
                 )}
               />
 
-              {selectedChallenge ? (
-                <p className='text-xs text-muted-foreground'>
-                  Desafio selecionado: <strong>{selectedChallenge.title}</strong>
-                </p>
-              ) : null}
+              <div className='flex items-center justify-between gap-2'>
+                {selectedChallengeTitle ? (
+                  <p className='text-xs text-muted-foreground'>
+                    Desafio selecionado: <strong>{selectedChallengeTitle}</strong>
+                  </p>
+                ) : (
+                  <p className='text-xs text-muted-foreground'>
+                    Nenhum desafio vinculado
+                  </p>
+                )}
+
+                <Button
+                  type='button'
+                  variant='ghost'
+                  size='sm'
+                  disabled={!selectedChallengeId}
+                  onClick={onClearChallenge}
+                >
+                  Remover vínculo
+                </Button>
+              </div>
 
               <Pagination
                 page={page}
