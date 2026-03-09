@@ -2,11 +2,10 @@ import { type RefObject, useEffect, useRef } from 'react'
 
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { Id, Slug } from '@stardust/core/global/structures'
+import type { LastUnlockedStarViewPortPosition } from '@/ui/space/contexts/SpaceContext/types'
 
 import { ROUTES } from '@/constants'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
-import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
-import { useInView } from '@/ui/global/hooks/useInView'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 
@@ -16,6 +15,10 @@ type Params = {
   isLastUnlockedStar: boolean
   starAnimationRef: RefObject<AnimationRef | null>
   challengingService: ChallengingService
+  lastUnlockedStarRef: RefObject<HTMLDivElement | null>
+  lastUnlockedStarPosition: LastUnlockedStarViewPortPosition
+  scrollIntoLastUnlockedStar: () => void
+  setLastUnlockedStarPosition: (position: LastUnlockedStarViewPortPosition) => void
 }
 
 export function useStar({
@@ -24,13 +27,15 @@ export function useStar({
   isLastUnlockedStar,
   starAnimationRef,
   challengingService,
+  lastUnlockedStarRef,
+  lastUnlockedStarPosition,
+  scrollIntoLastUnlockedStar,
+  setLastUnlockedStarPosition,
 }: Params) {
-  const { lastUnlockedStarRef, scrollIntoLastUnlockedStar, setLastUnlockedStarPosition } =
-    useSpaceContext()
   const { playAudio } = useAudioContext()
   const isFirstScroll = useRef(true)
   const navigationProvider = useNavigationProvider()
-  const isInView = useInView(lastUnlockedStarRef)
+  const isInView = lastUnlockedStarPosition === 'in'
 
   async function handleStarNavigation() {
     const reponse = await challengingService.fetchChallengeByStarId(starId)
