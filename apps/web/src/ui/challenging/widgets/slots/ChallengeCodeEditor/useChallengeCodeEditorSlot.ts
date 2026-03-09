@@ -91,11 +91,13 @@ export function useChallengeCodeEditorSlot() {
       }
 
       if (error instanceof InsufficientInputsError) {
-        toast.showError('Não mexa em nenhum comando Leia()!')
+        toast.showError(
+          'Para a aceitação do exercício, nenhum comando leia() deve ser alterado.',
+        )
         return
       }
 
-      toast.showError('Erro interno do interpretador!')
+      toast.showError('Erro interno do interpretador.')
     }
   }
 
