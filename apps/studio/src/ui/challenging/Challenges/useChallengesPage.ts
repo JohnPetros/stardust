@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import {
   ChallengeCompletionStatus,
   ChallengeDifficulty,
+  ChallengeIsNewStatus,
 } from '@stardust/core/challenging/structures'
 import {
   IdsList,
@@ -90,6 +91,7 @@ export function useChallengesPage({ service }: Params) {
         ),
         shouldIncludeOnlyAuthorChallenges: Logical.create(false),
         shouldIncludeStarChallenges: Logical.create(false),
+        isNewStatus: ChallengeIsNewStatus.create('all'),
         title: Text.create(debouncedSearch),
         userId: null,
       }),

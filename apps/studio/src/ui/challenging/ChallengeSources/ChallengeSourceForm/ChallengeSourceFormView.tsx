@@ -111,92 +111,96 @@ export const ChallengeSourceFormView = ({
               )}
             />
 
-            <div className='space-y-2'>
-              <FormLabel>Selecionar desafio (opcional)</FormLabel>
-              <div className='relative'>
-                <Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
-                <Input
-                  value={search}
-                  onChange={(event) => onSearchChange(event.target.value)}
-                  className='pl-8'
-                  placeholder='Buscar desafio por título...'
+            {isEditing ? (
+              <div className='space-y-2'>
+                <FormLabel>Selecionar desafio (opcional)</FormLabel>
+                <div className='relative'>
+                  <Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
+                  <Input
+                    value={search}
+                    onChange={(event) => onSearchChange(event.target.value)}
+                    className='pl-8'
+                    placeholder='Buscar desafio por título...'
+                  />
+                </div>
+
+                <div className='max-h-52 space-y-2 overflow-y-auto rounded-md border p-2'>
+                  {isLoading ? (
+                    <p className='text-sm text-muted-foreground'>
+                      Carregando desafios...
+                    </p>
+                  ) : challenges.length === 0 ? (
+                    <p className='text-sm text-muted-foreground'>
+                      Nenhum desafio encontrado
+                    </p>
+                  ) : (
+                    challenges.map((challenge) => {
+                      if (!challenge.id) return null
+                      const challengeId = challenge.id
+
+                      return (
+                        <button
+                          type='button'
+                          key={challengeId}
+                          onClick={() => onSelectChallenge(challengeId)}
+                          className={cn(
+                            'w-full rounded-md border px-3 py-2 text-left text-sm',
+                            selectedChallengeId === challengeId
+                              ? 'border-primary bg-primary text-primary-foreground'
+                              : 'hover:bg-zinc-500',
+                          )}
+                        >
+                          {challenge.title}
+                        </button>
+                      )
+                    })
+                  )}
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name='challengeId'
+                  render={() => (
+                    <FormItem>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className='flex items-center justify-between gap-2'>
+                  {selectedChallengeTitle ? (
+                    <p className='text-xs text-muted-foreground'>
+                      Desafio selecionado: <strong>{selectedChallengeTitle}</strong>
+                    </p>
+                  ) : (
+                    <p className='text-xs text-muted-foreground'>
+                      Nenhum desafio vinculado
+                    </p>
+                  )}
+
+                  <Button
+                    type='button'
+                    variant='ghost'
+                    size='sm'
+                    disabled={!selectedChallengeId}
+                    onClick={onClearChallenge}
+                  >
+                    Remover vínculo
+                  </Button>
+                </div>
+
+                <Pagination
+                  page={page}
+                  totalPages={totalPages}
+                  totalItemsCount={totalItemsCount}
+                  itemsPerPage={itemsPerPage}
+                  onNextPage={onNextPage}
+                  onPrevPage={onPrevPage}
+                  onPageChange={onPageChange}
+                  onItemsPerPageChange={onItemsPerPageChange}
                 />
               </div>
-
-              <div className='max-h-52 overflow-y-auto rounded-md border p-2 space-y-2'>
-                {isLoading ? (
-                  <p className='text-sm text-muted-foreground'>Carregando desafios...</p>
-                ) : challenges.length === 0 ? (
-                  <p className='text-sm text-muted-foreground'>
-                    Nenhum desafio encontrado
-                  </p>
-                ) : (
-                  challenges.map((challenge) => {
-                    if (!challenge.id) return null
-                    const challengeId = challenge.id
-
-                    return (
-                      <button
-                        type='button'
-                        key={challengeId}
-                        onClick={() => onSelectChallenge(challengeId)}
-                        className={cn(
-                          'w-full text-left px-3 py-2 rounded-md border text-sm',
-                          selectedChallengeId === challengeId
-                            ? 'bg-primary text-primary-foreground border-primary'
-                            : 'hover:bg-zinc-500',
-                        )}
-                      >
-                        {challenge.title}
-                      </button>
-                    )
-                  })
-                )}
-              </div>
-
-              <FormField
-                control={form.control}
-                name='challengeId'
-                render={() => (
-                  <FormItem>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className='flex items-center justify-between gap-2'>
-                {selectedChallengeTitle ? (
-                  <p className='text-xs text-muted-foreground'>
-                    Desafio selecionado: <strong>{selectedChallengeTitle}</strong>
-                  </p>
-                ) : (
-                  <p className='text-xs text-muted-foreground'>
-                    Nenhum desafio vinculado
-                  </p>
-                )}
-
-                <Button
-                  type='button'
-                  variant='ghost'
-                  size='sm'
-                  disabled={!selectedChallengeId}
-                  onClick={onClearChallenge}
-                >
-                  Remover vínculo
-                </Button>
-              </div>
-
-              <Pagination
-                page={page}
-                totalPages={totalPages}
-                totalItemsCount={totalItemsCount}
-                itemsPerPage={itemsPerPage}
-                onNextPage={onNextPage}
-                onPrevPage={onPrevPage}
-                onPageChange={onPageChange}
-                onItemsPerPageChange={onItemsPerPageChange}
-              />
-            </div>
+            ) : null}
 
             {submitError ? (
               <p className='text-sm text-destructive'>{submitError}</p>
