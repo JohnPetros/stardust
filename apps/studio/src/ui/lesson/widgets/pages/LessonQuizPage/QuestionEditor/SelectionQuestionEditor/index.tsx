@@ -6,6 +6,11 @@ import { useSelectionQuestionEditor } from './useSelectionQuestionEditor'
 
 export const SelectionQuestionEditor = () => {
   const { selectedQuestion, replaceSelectedQuestion } = useQuizContext()
+
+  if (!selectedQuestion) {
+    return null
+  }
+
   const question = selectedQuestion.data as SelectionQuestion
   const {
     handleAnswerInputChange,

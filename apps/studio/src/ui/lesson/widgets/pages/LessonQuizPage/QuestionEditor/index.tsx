@@ -4,7 +4,7 @@ import { useQuizContext } from '@/ui/global/hooks/useQuizContext'
 export const QuestionEditor = () => {
   const { questions, selectedQuestion } = useQuizContext()
 
-  if (questions.length === 0) {
+  if (questions.length === 0 || !selectedQuestion) {
     return null
   }
 
