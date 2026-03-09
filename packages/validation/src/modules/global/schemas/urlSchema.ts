@@ -1,3 +1,3 @@
 import { z } from 'zod'
 
-export const urlSchema = z.string().url('deve ser uma url válida')
+export const urlSchema = z.string().url('deve ser uma URL válida')
