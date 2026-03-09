@@ -6,9 +6,8 @@ export class GetChallengeProblemTool implements Tool {
   constructor(private readonly cacheProvider: CacheProvider) {}
 
   async handle(_: Mcp) {
-    const challengeProblem = await this.cacheProvider.getListItem(
+    const challengeProblem = await this.cacheProvider.popListItem(
       CACHE.challenging.challengeProblems.key,
-      0,
     )
     if (!challengeProblem) {
       throw new ChallengeProblemNotFoundError()

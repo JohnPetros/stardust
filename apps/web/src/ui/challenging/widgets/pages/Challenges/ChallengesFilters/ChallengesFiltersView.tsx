@@ -20,6 +20,7 @@ type Props = {
   handleTitleChange: (title: string) => void
   handleCompletionStatusChange: (status: string) => void
   handleDifficultyLevelChange: (difficulty: string) => void
+  handleIsNewStatusChange: (isNewStatus: string) => void
   handleTagClick: (tag: string, value: string) => void
 }
 
@@ -30,6 +31,7 @@ export const ChallengesFiltersView = ({
   handleTitleChange,
   handleCompletionStatusChange,
   handleDifficultyLevelChange,
+  handleIsNewStatusChange,
   handleTagClick,
 }: Props) => {
   return (
@@ -94,6 +96,31 @@ export const ChallengesFiltersView = ({
           </Select.Content>
         </Select.Container>
 
+        <Select.Container
+          defaultValue='all'
+          onValueChange={(newIsNewStatus: string) =>
+            handleIsNewStatusChange(newIsNewStatus)
+          }
+        >
+          <Select.Trigger value='Novidade' className='h-10' />
+          <Select.Content>
+            {FILTER_SELECTS_ITEMS.isNewStatus.map((item, index, allItems) => {
+              const isLastItem = index === allItems.length - 1
+              return (
+                <div key={String(index + 1)}>
+                  <Select.Item value={item.value} className={item.labelStyles}>
+                    {item.icon && (
+                      <Icon name={item.icon} size={16} className={item.iconStyles} />
+                    )}
+                    <Select.Text>{item.label}</Select.Text>
+                  </Select.Item>
+                  {!isLastItem && <Select.Separator />}
+                </div>
+              )
+            })}
+          </Select.Content>
+        </Select.Container>
+
         <CategoriesFilter initialCategories={categories} />
       </div>
 
@@ -102,6 +129,7 @@ export const ChallengesFiltersView = ({
           const item = [
             ...FILTER_SELECTS_ITEMS.completionStatus,
             ...FILTER_SELECTS_ITEMS.difficultyLevel,
+            ...FILTER_SELECTS_ITEMS.isNewStatus,
           ].find((item) => item.label === tag)
           if (item)
             return (

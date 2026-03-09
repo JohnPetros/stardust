@@ -14,9 +14,10 @@ type Schema = {
     completionCountOrder: string
     postingOrder: string
     completionStatus: string
-    shouldIncludeStarChallenges: boolean
+    isNewStatus: string
     shouldIncludeOnlyAuthorChallenges: boolean
     shouldIncludePrivateChallenges: boolean
+    shouldIncludeStarChallenges: boolean
     userId?: string
     userCompletedChallengesIds?: string[]
   }
@@ -40,6 +41,7 @@ export class FetchChallengesListController implements Controller<Schema> {
       userId,
       title,
       completionStatus,
+      isNewStatus,
       shouldIncludeOnlyAuthorChallenges,
       shouldIncludePrivateChallenges,
       shouldIncludeStarChallenges,
@@ -61,6 +63,7 @@ export class FetchChallengesListController implements Controller<Schema> {
       userCompletedChallengesIds,
       title,
       completionStatus,
+      isNewStatus,
       shouldIncludeOnlyAuthorChallenges,
       shouldIncludePrivateChallenges,
       shouldIncludeStarChallenges: shouldIncludeStarChallenges ?? false,

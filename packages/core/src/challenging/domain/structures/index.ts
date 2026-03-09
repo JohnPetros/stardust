@@ -1,5 +1,6 @@
 export { ChallengeDifficulty } from './ChallengeDifficulty'
 export { ChallengeCompletionStatus } from './ChallengeCompletionStatus'
+export { ChallengeIsNewStatus } from './ChallengeIsNewStatus'
 export { ChallengeFunction } from './ChallengeFunction'
 export { ChallengeVote } from './ChallengeVote'
 export { ChallengeCraftsVisibility } from './ChallengeCraftsVisibility'

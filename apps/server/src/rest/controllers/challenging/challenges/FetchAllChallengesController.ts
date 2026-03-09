@@ -14,6 +14,7 @@ type Schema = {
     completionCountOrder: string
     postingOrder: string
     completionStatus: string
+    isNewStatus: string
     userId?: string
     userCompletedChallengesIds?: string[]
   }
@@ -38,6 +39,7 @@ export class FetchAllChallengesController implements Controller<Schema> {
       userId,
       title,
       completionStatus,
+      isNewStatus,
     } = http.getQueryParams()
     const { userCompletedChallengesIds = [] } = await http.getBody()
     const accountId = await http.getAccountId()
@@ -54,6 +56,7 @@ export class FetchAllChallengesController implements Controller<Schema> {
       userCompletedChallengesIds,
       title,
       completionStatus,
+      isNewStatus,
       shouldIncludePrivateChallenges: true,
       shouldIncludeStarChallenges: false,
       shouldIncludeOnlyAuthorChallenges: false,

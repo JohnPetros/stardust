@@ -208,7 +208,7 @@ export class HonoApp {
           ...rankingFunctions.getFunctions(supabase),
           ...storageFunctions.getFunctions(),
           ...notificationFunctions.getFunctions(),
-          ...challengingFunctions.getFunctions(),
+          ...challengingFunctions.getFunctions(supabase),
         ],
       })(context)
     })

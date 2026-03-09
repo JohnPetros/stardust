@@ -4,7 +4,11 @@ import { ListingOrder } from '#global/domain/structures/ListingOrder'
 import { Id, Text, OrdinalNumber, Logical } from '#global/domain/structures/index'
 import type { ChallengeDto } from '../domain/entities/dtos'
 import type { Challenge } from '../domain/entities'
-import { ChallengeCompletionStatus, ChallengeDifficulty } from '../domain/structures'
+import {
+  ChallengeCompletionStatus,
+  ChallengeDifficulty,
+  ChallengeIsNewStatus,
+} from '../domain/structures'
 import { PaginationResponse } from '../../global/responses'
 import type { ChallengesRepository } from '../interfaces'
 
@@ -20,6 +24,7 @@ type Request = {
   completionCountOrder: string
   postingOrder: string
   completionStatus: string
+  isNewStatus: string
   userId?: string
   accountId?: string
   shouldIncludePrivateChallenges: boolean
@@ -46,6 +51,7 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       page: OrdinalNumber.create(request.page),
       itemsPerPage: OrdinalNumber.create(request.itemsPerPage),
       completionStatus: ChallengeCompletionStatus.create(request.completionStatus),
+      isNewStatus: ChallengeIsNewStatus.create(request.isNewStatus),
       shouldIncludeStarChallenges: Logical.create(request.shouldIncludeStarChallenges),
       shouldIncludeOnlyAuthorChallenges: Logical.create(
         request.shouldIncludeOnlyAuthorChallenges,
