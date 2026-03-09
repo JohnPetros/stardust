@@ -38,7 +38,7 @@ export function usePlaygroundCodeEditor(
   )
 
   async function runCodeWithInput(input: string) {
-    codeRef.current = codeRef.current.addInputs([input])
+    codeRef.current = await codeRef.current.addInputs([input])
 
     promptRef.current?.setValue('')
     runCode()
