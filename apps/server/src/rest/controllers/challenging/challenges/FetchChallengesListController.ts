@@ -17,6 +17,7 @@ type Schema = {
     isNewStatus: string
     shouldIncludeOnlyAuthorChallenges: boolean
     shouldIncludePrivateChallenges: boolean
+    shouldIncludeStarChallenges: boolean
     userId?: string
     userCompletedChallengesIds?: string[]
   }
