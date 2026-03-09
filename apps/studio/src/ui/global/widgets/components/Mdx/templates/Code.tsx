@@ -8,12 +8,7 @@ type CodeProps = {
   hasAnimation: boolean
 }
 
-export function Code({
-  children,
-  isRunnable = false,
-  exec = false,
-  hasAnimation = true,
-}: CodeProps) {
+export function Code({ children, isRunnable = false, exec = false }: CodeProps) {
   if (!children) return
   let code = ''
 
@@ -26,8 +21,6 @@ export function Code({
       code = children[0].props.children.props.children
     } else code = children[0].props.children
   }
-
-  void hasAnimation
 
   if (code) return <CodeSnippet code={code as string} isRunnable={isRunnable || exec} />
 }

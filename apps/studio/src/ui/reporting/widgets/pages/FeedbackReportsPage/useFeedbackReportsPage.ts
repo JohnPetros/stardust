@@ -45,6 +45,11 @@ export function useFeedbackReportsPage({ reportingService, toastProvider }: Para
     return Period.create(startDateParam, endDateParam)
   }, [startDateParam, endDateParam])
 
+  const validIntent =
+    intent !== 'all' && FeedbackIntent.isValid(intent)
+      ? FeedbackIntent.create(intent)
+      : undefined
+
   const { data, isFetching, totalItemsCount, refetch } = usePaginatedFetch({
     key: CACHE.feedbackReportsTable.key,
     itemsPerPage,
@@ -61,7 +66,7 @@ export function useFeedbackReportsPage({ reportingService, toastProvider }: Para
         page: OrdinalNumber.create(page),
         itemsPerPage: OrdinalNumber.create(itemsPerPage),
         authorName: debouncedAuthorName ? Text.create(debouncedAuthorName) : undefined,
-        intent: intent === 'all' ? undefined : FeedbackIntent.create(intent),
+        intent: validIntent,
         sentAtPeriod,
       }),
   })
