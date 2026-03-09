@@ -10,13 +10,13 @@ Analisar, implementar e resolver todas as conversas **não resolvidas** em um Pu
 **Entrada:**
 - **Link do PR:** URL completa do Pull Request no GitHub (ex: `https://github.com/owner/repo/pull/123`).
 
-> ⚠️ **Ferramenta exclusiva:** Use apenas o **GitHub CLI (`gh`)** para interagir com o GitHub. Nenhum MCP server deve ser utilizado.
+> **Ferramenta exclusiva:** Use apenas o **GitHub CLI (`gh`)** para interagir com o GitHub. Nenhum MCP server deve ser utilizado.
 
 ---
 
 ## Diretrizes de Execução
 
-### 1️⃣ Extração de Contexto
+### 1. Extração de Contexto
 
 Identifique `owner`, `repo` e `pull_number` a partir da URL fornecida. Em seguida, obtenha os metadados do PR:
 
@@ -26,7 +26,7 @@ gh pr view <pull_number> --repo <owner>/<repo> --json title,headRefName,body,fil
 
 ---
 
-### 2️⃣ Listagem de Conversas Não Resolvidas
+### 2. Listagem de Conversas Não Resolvidas
 
 Liste **somente** os comentários de revisão não resolvidos via GitHub API:
 
@@ -67,7 +67,7 @@ Filtre apenas os nós onde `isResolved: false` e `isOutdated: false`. Esses são
 
 ---
 
-### 3️⃣ Triagem das Threads
+### 3. Triagem das Threads
 
 Classifique cada thread não resolvida em uma das categorias:
 
@@ -77,13 +77,13 @@ Classifique cada thread não resolvida em uma das categorias:
 | **Escalar** | Mudança arquitetural, decisão de design, conflito com Spec/PRD | Consultar o usuário antes de agir |
 | **Ignorar** | Comentário meramente informativo, já endereçado no código | Pular |
 
-> ⚠️ **Regra de escalada:** Qualquer comentário que implique mudança de arquitetura, remoção de funcionalidade ou conflito com o PRD/Spec associado deve ser **escalado** — nunca implementado de forma autônoma.
+> **Regra de escalada:** Qualquer comentário que implique mudança de arquitetura, remoção de funcionalidade ou conflito com o PRD/Spec associado deve ser **escalado** — nunca implementado de forma autônoma.
 
 Apresente a lista classificada ao usuário antes de avançar caso haja itens na categoria **Escalar**.
 
 ---
 
-### 4️⃣ Implementação
+### 4. Implementação
 
 Para cada thread categorizada como **Implementar**:
 
@@ -104,7 +104,7 @@ Para cada thread categorizada como **Escalar**:
 
 ---
 
-### 5️⃣ Validação das Alterações
+### 5. Validação das Alterações
 
 Após implementar todas as correções:
 
@@ -118,7 +118,7 @@ Corrija eventuais erros antes de prosseguir. Verifique também se as alteraçõe
 
 ---
 
-### 6️⃣ Fechamento das Threads
+### 6. Fechamento das Threads
 
 Resolva cada thread implementada via GraphQL API:
 
@@ -138,7 +138,7 @@ mutation {
 
 ---
 
-### 7️⃣ Atualização da Documentação
+### 7. Atualização da Documentação
 
 Localize o documento de Spec ou Bug Report associado à branch do PR (`documentation/features/.../specs/...`) e, se as alterações implementadas afetarem o escopo documentado:
 
@@ -188,16 +188,16 @@ npm run test
 Relate o progresso com o seguinte formato:
 
 ```
-## Resumo de Resoluções
+## Resumo de Resolucoes
 
-### ✅ Implementadas
-- [x] `caminho/do/arquivo.ts` — [descrição da mudança realizada]
+### Implementadas
+- [x] `caminho/do/arquivo.ts` — [descricao da mudanca realizada]
 
-### ⏳ Aguardando decisão
-- [ ] `caminho/do/arquivo.ts` — [comentário do revisor] → [motivo da escalada]
+### Aguardando decisao
+- [ ] `caminho/do/arquivo.ts` — [comentario do revisor] -> [motivo da escalada]
 
-### ⏭️ Ignoradas
-- `caminho/do/arquivo.ts` — thread meramente informativa / já endereçada
+### Ignoradas
+- `caminho/do/arquivo.ts` — thread meramente informativa / ja enderecada
 ```
 
 ### Passo 6 — Atualização da Documentação
