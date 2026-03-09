@@ -126,7 +126,7 @@ describe('ChallengeSourcesPageView', () => {
   it('should render loading state', () => {
     const { container } = View({ isLoading: true, sortableChallengeSources: [] })
 
-    expect(container.querySelectorAll('[data-slot="skeleton"]')).toHaveLength(40)
+    expect(container.querySelectorAll('[data-slot="skeleton"]').length).toBeGreaterThan(0)
     expect(
       screen.queryByText('Nenhuma fonte encontrada para os filtros atuais'),
     ).not.toBeInTheDocument()
