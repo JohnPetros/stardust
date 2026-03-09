@@ -8,6 +8,7 @@ on:
       - "apps/studio/**"
       - "packages/core/**"
       - "packages/validation/**"
+      - "package-lock.json"
 
 permissions:
   contents: read
@@ -40,6 +41,8 @@ jobs:
   typecheck:
     name: Typecheck
     runs-on: ubuntu-latest
+    needs:
+      - codecheck
 
     steps:
       - name: Checkout code
@@ -61,6 +64,9 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
+    needs:
+      - codecheck
+      - typecheck
 
     steps:
       - name: Checkout code
