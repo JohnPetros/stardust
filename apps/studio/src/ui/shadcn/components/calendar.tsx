@@ -1,6 +1,12 @@
 import * as React from 'react'
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
-import { DayPicker, getDefaultClassNames, type DayButton } from 'react-day-picker'
+import {
+  DayPicker,
+  getDefaultClassNames,
+  type ChevronProps,
+  type DayButton,
+  type RootProps,
+} from 'react-day-picker'
 
 import { cn } from '@/ui/shadcn/utils/index'
 import { Button, buttonVariants } from '@/ui/shadcn/components/button'
@@ -120,23 +126,11 @@ function Calendar({
   )
 }
 
-function CalendarRoot({
-  className,
-  rootRef,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement> & {
-  rootRef?: React.Ref<HTMLDivElement>
-}) {
+function CalendarRoot({ className, rootRef, ...props }: RootProps) {
   return <div data-slot='calendar' ref={rootRef} className={cn(className)} {...props} />
 }
 
-function CalendarChevron({
-  className,
-  orientation,
-  ...props
-}: React.ComponentProps<typeof ChevronDownIcon> & {
-  orientation?: 'left' | 'right'
-}) {
+function CalendarChevron({ className, orientation, ...props }: ChevronProps) {
   if (orientation === 'left') {
     return <ChevronLeftIcon className={cn('size-4', className)} {...props} />
   }

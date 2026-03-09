@@ -46,7 +46,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className='dark bg-background text-foreground'>
         {children}
         <Scripts />
         <ScrollRestoration />
@@ -86,7 +86,7 @@ export const ErrorBoundary = ({ error }: Route.ErrorBoundaryProps) => {
 
 export const App = () => {
   return (
-    <div className='w-full h-screen dark'>
+    <div className='h-screen w-full'>
       <NuqsAdapter>
         <QueryClientProvider client={queryClient}>
           <RestContextProvider>
