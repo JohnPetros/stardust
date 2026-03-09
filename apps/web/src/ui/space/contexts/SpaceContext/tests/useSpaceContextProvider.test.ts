@@ -206,4 +206,54 @@ describe('useSpaceContextProvider', () => {
       behavior: 'smooth',
     })
   })
+
+  it('should track scroll position on container after user refetch', () => {
+    const unlockedStar = StarsFaker.fake({ number: 1 })
+    const planets = [
+      PlanetsFaker.fake({
+        stars: [unlockedStar.dto, StarsFaker.fake({ number: 2 }).dto],
+      }),
+    ]
+    const scrollContainer = document.createElement('section')
+    const starElement = document.createElement('div')
+
+    scrollContainer.style.overflowY = 'auto'
+    Object.defineProperty(scrollContainer, 'scrollHeight', {
+      value: 600,
+      configurable: true,
+    })
+    Object.defineProperty(scrollContainer, 'clientHeight', {
+      value: 400,
+      configurable: true,
+    })
+
+    scrollContainer.appendChild(starElement)
+    document.body.appendChild(scrollContainer)
+
+    jest
+      .spyOn(starElement, 'getBoundingClientRect')
+      .mockReturnValue(createRect({ top: 700, bottom: 760 }))
+    jest
+      .spyOn(scrollContainer, 'getBoundingClientRect')
+      .mockReturnValue(createRect({ top: 0, bottom: 500 }))
+
+    const { result, rerender } = renderHook(
+      ({ user }) => useSpaceContextProvider(planets, user),
+      {
+        initialProps: { user: null as ReturnType<typeof UsersFaker.fake> | null },
+      },
+    )
+
+    setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
+
+    rerender({
+      user: UsersFaker.fake({ unlockedStarsIds: [unlockedStar.id.value] }),
+    })
+
+    act(() => {
+      scrollContainer.dispatchEvent(new Event('scroll'))
+    })
+
+    expect(result.current.lastUnlockedStarPosition).toBe('above')
+  })
 })

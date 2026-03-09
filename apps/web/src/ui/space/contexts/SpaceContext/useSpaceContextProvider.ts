@@ -11,12 +11,49 @@ export function useSpaceContextProvider(planets: Planet[], user: User | null) {
   const lastUnlockedStarRef = useRef<HTMLDivElement | null>(null)
   const scrollContainerRef = useRef<HTMLElement | null>(null)
 
+  const lastUnlockedStarId = useMemo(() => {
+    if (!user) return null
+
+    const reversedPlanets = [...planets]
+    reversedPlanets.reverse()
+
+    for (const planet of reversedPlanets) {
+      const reversedStars = [...planet.stars]
+      reversedStars.reverse()
+
+      for (const star of reversedStars) {
+        const isUnlocked = user.hasUnlockedStar(star.id)
+
+        if (isUnlocked.isTrue) {
+          return star.id.value
+        }
+      }
+    }
+
+    const firstStarId = planets[0]?.stars[0]?.id
+    return firstStarId?.value
+  }, [user, planets])
+
   const resolveScrollContainer = useCallback(() => {
     const starElement = lastUnlockedStarRef.current
 
     if (!starElement) {
       scrollContainerRef.current = null
       return null
+    }
+
+    const cachedContainer = scrollContainerRef.current
+
+    if (cachedContainer && cachedContainer.contains(starElement)) {
+      const cachedContainerStyles = window.getComputedStyle(cachedContainer)
+      const isCachedContainerScrollableByStyles =
+        cachedContainerStyles.overflowY === 'auto' ||
+        cachedContainerStyles.overflowY === 'scroll' ||
+        cachedContainerStyles.overflowY === 'overlay'
+
+      if (isCachedContainerScrollableByStyles) {
+        return cachedContainer
+      }
     }
 
     let parentElement = starElement.parentElement
@@ -27,9 +64,8 @@ export function useSpaceContextProvider(planets: Planet[], user: User | null) {
         styles.overflowY === 'auto' ||
         styles.overflowY === 'scroll' ||
         styles.overflowY === 'overlay'
-      const canScroll = parentElement.scrollHeight > parentElement.clientHeight
 
-      if (isScrollableByStyles && canScroll) {
+      if (isScrollableByStyles) {
         scrollContainerRef.current = parentElement
         return parentElement
       }
@@ -114,43 +150,47 @@ export function useSpaceContextProvider(planets: Planet[], user: User | null) {
   }, [resolveScrollContainer])
 
   useEffect(() => {
-    const scrollContainer = resolveScrollContainer()
-    const target = scrollContainer ?? window
+    const targets: Array<HTMLElement | Window> = []
 
-    target.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
-
-    return () => {
-      target.removeEventListener('scroll', handleScroll)
-    }
-  }, [handleScroll, resolveScrollContainer])
-
-  const spaceContextValue = useMemo(() => {
-    function getLastUnlockedStarId() {
-      if (!user) return null
-
-      const reversedPlants = [...planets]
-      reversedPlants.reverse()
-
-      for (const planet of reversedPlants) {
-        const reversedStars = [...planet.stars]
-        reversedStars.reverse()
-
-        for (const star of reversedStars) {
-          const isUnlocked = user.hasUnlockedStar(star.id)
-
-          if (isUnlocked.isTrue) {
-            return star.id.value
-          }
-        }
+    function registerTarget(target: HTMLElement | Window) {
+      if (targets.includes(target)) {
+        return
       }
 
-      const lastUnlockedStarId = planets[0]?.stars[0]?.id
-      return lastUnlockedStarId?.value
+      target.addEventListener('scroll', handleScroll, { passive: true })
+      targets.push(target)
     }
 
-    const lastUnlockedStarId = getLastUnlockedStarId()
+    registerTarget(window)
 
+    const initialScrollContainer = resolveScrollContainer()
+
+    if (initialScrollContainer) {
+      registerTarget(initialScrollContainer)
+    }
+
+    handleScroll()
+
+    const animationFrameId = window.requestAnimationFrame(() => {
+      const delayedScrollContainer = resolveScrollContainer()
+
+      if (delayedScrollContainer) {
+        registerTarget(delayedScrollContainer)
+      }
+
+      handleScroll()
+    })
+
+    return () => {
+      window.cancelAnimationFrame(animationFrameId)
+
+      for (const target of targets) {
+        target.removeEventListener('scroll', handleScroll)
+      }
+    }
+  }, [handleScroll, resolveScrollContainer, lastUnlockedStarId])
+
+  const spaceContextValue = useMemo(() => {
     return {
       planets,
       lastUnlockedStarId,
@@ -159,7 +199,7 @@ export function useSpaceContextProvider(planets: Planet[], user: User | null) {
       scrollIntoLastUnlockedStar,
       setLastUnlockedStarPosition,
     }
-  }, [user, planets, lastUnlockedStarPosition, scrollIntoLastUnlockedStar])
+  }, [planets, lastUnlockedStarId, lastUnlockedStarPosition, scrollIntoLastUnlockedStar])
 
   return spaceContextValue
 }
