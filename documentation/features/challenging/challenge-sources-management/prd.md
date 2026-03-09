@@ -1,24 +1,25 @@
 # PRD - Gerenciamento de Fontes de Desafios
 
 ## Contexto
-Disponibilizar no StarDust Studio uma pagina administrativa para gerenciar fontes de desafios, com listagem paginada, busca por titulo do desafio vinculado, criacao, exclusao e reordenacao.
+Disponibilizar no StarDust Studio uma pagina administrativa para gerenciar fontes de desafios, com listagem paginada, busca por titulo do desafio vinculado, criacao, edicao, exclusao e reordenacao.
 
 Referencia de produto: https://github.com/JohnPetros/stardust/milestone/12
 
 ## Objetivos
-- Centralizar a gestao de `challenge_sources` no Studio com fluxo CRUD essencial (create/list/delete).
+- Centralizar a gestao de `challenge_sources` no Studio com fluxo CRUD essencial (create/read/update/delete).
 - Garantir vinculo 1:1 entre `challenge` e `challenge_source` com erro de dominio claro para conflitos.
+- Permitir cadastrar fontes sem vinculo obrigatorio de desafio, reduzindo friccao operacional para ingestao inicial.
 - Permitir reorganizacao da ordem de exibicao das fontes com persistencia no backend.
 - Exibir URLs de origem e URL publica do desafio para auditoria e operacao rapida.
 
 ## Escopo entregue
-- Studio UI: pagina `ChallengeSources` com tabela, busca com debounce, paginacao, criacao via dialog e exclusao com confirmacao.
-- Studio REST: metodos de `fetchChallengeSourcesList`, `createChallengeSource`, `deleteChallengeSource` e `reorderChallengeSources`.
-- Server Hono: novo `ChallengeSourcesRouter` com rotas de listagem, criacao, exclusao e reordenacao.
-- Server REST controllers: handlers dedicados para os quatro fluxos de challenge sources.
-- Core: entidade/DTO de `ChallengeSource` alinhados, repositorio dedicado, erros de dominio e use cases de list/create/delete/reorder.
+- Studio UI: pagina `ChallengeSources` com tabela, busca com debounce, paginacao, criacao/edicao via dialog reutilizado e exclusao com confirmacao.
+- Studio REST: metodos de `fetchChallengeSourcesList`, `createChallengeSource`, `updateChallengeSource`, `deleteChallengeSource` e `reorderChallengeSources`.
+- Server Hono: `ChallengeSourcesRouter` com rotas de listagem, criacao, atualizacao, exclusao e reordenacao, todas protegidas por autenticacao e permissao `god`.
+- Server REST controllers: handlers dedicados para os cinco fluxos de challenge sources.
+- Core: entidade/DTO de `ChallengeSource` com `challenge` opcional, erros de dominio e use cases de list/create/update/delete/reorder.
 - Database/Supabase: repository, mapper, type e atualizacao de `Database.ts` com `challenge_sources`.
-- Validation: novo `challengeSourceSchema` e export nos barrels.
+- Validation: `challengeSourceSchema` atualizado para aceitar `challengeId` opcional/nullable.
 
 ## Checklist de requisitos
 - [x] Listagem paginada de fontes no Studio.
@@ -26,7 +27,9 @@ Referencia de produto: https://github.com/JohnPetros/stardust/milestone/12
 - [x] Colunas de URL de origem, URL do desafio, desafio vinculado, status de uso e acoes.
 - [x] URL do desafio composta com `ENV.stardustWebAppUrl` + `slug`.
 - [x] Estado de loading e estado vazio na listagem.
-- [x] Dialog de criacao com campos `url` e `challengeId` obrigatorios.
+- [x] Dialog unico de criacao/edicao com campos `url` e `challengeId` opcional.
+- [x] Acao de editar por linha na tabela de fontes.
+- [x] Fallback de exibicao para fontes sem desafio vinculado.
 - [x] Validacao de URL com Zod e validacao de IDs com `idSchema`.
 - [x] Regra 1:1 (`challengeId` unico em source) com erro tratavel na UI sem fechar o dialog.
 - [x] Exclusao com confirmacao explicita e feedback visual de sucesso/erro.
@@ -47,4 +50,4 @@ Referencia de produto: https://github.com/JohnPetros/stardust/milestone/12
 **Concluido**
 
 ## Ultima atualizacao
-2026-03-04
+2026-03-05

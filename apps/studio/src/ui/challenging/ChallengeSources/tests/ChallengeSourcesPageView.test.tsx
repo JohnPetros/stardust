@@ -73,18 +73,12 @@ describe('ChallengeSourcesPageView', () => {
       title: 'Challenge A',
       slug: 'challenge-a',
     },
-    isUsed: true,
   })
 
   const sourceB = ChallengeSourcesFaker.fakeDto({
     id: 'source-b',
     url: 'https://source-b.test',
-    challenge: {
-      id: 'challenge-b',
-      title: 'Challenge B',
-      slug: 'challenge-b',
-    },
-    isUsed: false,
+    challenge: null,
   })
 
   const defaultProps: Props = {
@@ -107,6 +101,7 @@ describe('ChallengeSourcesPageView', () => {
     onPrevPage: jest.fn(),
     onItemsPerPageChange: jest.fn(),
     onCreateChallengeSource: jest.fn(async () => null),
+    onUpdateChallengeSource: jest.fn(async () => null),
     onDeleteChallengeSource: jest.fn(async () => undefined),
     onReorderChallengeSources: jest.fn(async () => undefined),
   }
@@ -125,7 +120,7 @@ describe('ChallengeSourcesPageView', () => {
     expect(
       screen.getByPlaceholderText('Buscar por título do desafio...'),
     ).toBeInTheDocument()
-    expect(screen.getByTestId('challenge-source-form')).toBeInTheDocument()
+    expect(screen.getAllByTestId('challenge-source-form').length).toBeGreaterThan(0)
   })
 
   it('should render loading state', () => {
@@ -156,6 +151,9 @@ describe('ChallengeSourcesPageView', () => {
       challengeUrl,
     )
 
+    expect(screen.getByText('Sem desafio vinculado')).toBeInTheDocument()
+    expect(screen.getByText('-', { selector: 'span' })).toBeInTheDocument()
+
     expect(screen.getByText('Sim')).toBeInTheDocument()
     expect(screen.getByText('Não')).toBeInTheDocument()
   })
@@ -181,7 +179,7 @@ describe('ChallengeSourcesPageView', () => {
 
     View({ onReorderChallengeSources })
 
-    const firstRow = screen.getByText(sourceA.challenge.title).closest('tr')
+    const firstRow = screen.getByText('Challenge A').closest('tr')
     if (!firstRow) throw new Error('First row not found')
 
     const buttons = within(firstRow).getAllByRole('button')

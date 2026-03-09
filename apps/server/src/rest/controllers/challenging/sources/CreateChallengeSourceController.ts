@@ -7,7 +7,7 @@ import type { Controller, Http } from '@stardust/core/global/interfaces'
 
 type Schema = {
   body: {
-    challengeId: string
+    challengeId?: string | null
     url: string
   }
 }

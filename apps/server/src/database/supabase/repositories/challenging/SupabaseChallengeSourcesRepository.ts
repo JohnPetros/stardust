@@ -17,7 +17,7 @@ export class SupabaseChallengeSourcesRepository
     const { data, error } = await this.supabase
       .from('challenge_sources')
       .select('*, challenges(id, title, slug)')
-      .eq('is_used', false)
+      .is('challenge_id', null)
       .order('position', { ascending: true })
       .limit(1)
       .single()
@@ -112,23 +112,35 @@ export class SupabaseChallengeSourcesRepository
   }
 
   async replaceMany(challengeSources: ChallengeSource[]): Promise<void> {
-    const rows = challengeSources.map((challengeSource) => {
-      const challenge = challengeSource.challenge
-      return {
-        id: challengeSource.id.value,
-        position: challengeSource.position.value,
-        challenge_id: challenge ? challenge.id.value : null,
-        url: challengeSource.url.value,
-        is_used: Boolean(challenge),
+    for (let index = 0; index < challengeSources.length; index++) {
+      const challengeSource = challengeSources[index]
+      const temporaryPosition = 1_000_000 + index
+
+      const { error } = await this.supabase
+        .from('challenge_sources')
+        .update({ position: temporaryPosition })
+        .eq('id', challengeSource.id.value)
+
+      if (error) {
+        throw new SupabasePostgreError(error)
       }
-    })
+    }
 
-    const { error } = await this.supabase
-      .from('challenge_sources')
-      .upsert(rows, { onConflict: 'id' })
+    for (const challengeSource of challengeSources) {
+      const challenge = challengeSource.challenge
 
-    if (error) {
-      throw new SupabasePostgreError(error)
+      const { error } = await this.supabase
+        .from('challenge_sources')
+        .update({
+          position: challengeSource.position.value,
+          challenge_id: challenge ? challenge.id.value : null,
+          url: challengeSource.url.value,
+        })
+        .eq('id', challengeSource.id.value)
+
+      if (error) {
+        throw new SupabasePostgreError(error)
+      }
     }
   }
 
@@ -141,7 +153,6 @@ export class SupabaseChallengeSourcesRepository
         position: challengeSource.position.value,
         challenge_id: challenge ? challenge.id.value : null,
         url: challengeSource.url.value,
-        is_used: Boolean(challenge),
       })
       .eq('id', challengeSource.id.value)
 

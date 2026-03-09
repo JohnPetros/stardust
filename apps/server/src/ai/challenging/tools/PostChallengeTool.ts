@@ -2,7 +2,10 @@ import type {
   ChallengeCategoryDto,
   TestCaseDto,
 } from '@stardust/core/challenging/entities/dtos'
-import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
+import type {
+  ChallengesRepository,
+  ChallengeSourcesRepository,
+} from '@stardust/core/challenging/interfaces'
 import type { Broker, Mcp, Tool } from '@stardust/core/global/interfaces'
 import { PostChallengeUseCase } from '@stardust/core/challenging/use-cases'
 import { ENV } from '@/constants'
@@ -14,18 +17,31 @@ type Input = {
   difficultyLevel: string
   testCases: TestCaseDto[]
   categories: ChallengeCategoryDto[]
+  challengeSourceId?: string | null
 }
 
 export class PostChallengeTool implements Tool<Input> {
   constructor(
     private readonly repository: ChallengesRepository,
+    private readonly challengeSourcesRepository: ChallengeSourcesRepository,
     private readonly broker: Broker,
   ) {}
 
   async handle(mcp: Mcp<Input>) {
-    const { title, description, code, difficultyLevel, testCases, categories } =
-      mcp.getInput()
-    const useCase = new PostChallengeUseCase(this.repository, this.broker)
+    const {
+      title,
+      description,
+      code,
+      difficultyLevel,
+      testCases,
+      categories,
+      challengeSourceId,
+    } = mcp.getInput()
+    const useCase = new PostChallengeUseCase(
+      this.repository,
+      this.challengeSourcesRepository,
+      this.broker,
+    )
 
     await useCase.execute({
       challengeDto: {
@@ -51,6 +67,7 @@ export class PostChallengeTool implements Tool<Input> {
           },
         },
       },
+      challengeSourceId: challengeSourceId ?? null,
     })
   }
 }
