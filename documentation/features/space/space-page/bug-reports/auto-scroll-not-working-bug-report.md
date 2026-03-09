@@ -287,13 +287,17 @@ FAB atualiza icone/visibilidade com base na area rolavel correta
 ## 11.1 Implementacao consolidada
 
 * a logica de recentralizacao foi consolidada em `apps/web/src/ui/space/contexts/SpaceContext/useSpaceContextProvider.ts`, que agora resolve o scrollable parent da ultima estrela e aplica `scrollTo(...)` no container correto, com fallback para `window`
+* o listener de scroll passou a ser re-registrado quando a referencia da ultima estrela desbloqueada muda (incluindo fluxo de `refetchUser`), evitando ficar preso no fallback `window` quando o container real aparece depois
+* a resolucao do container foi otimizada com cache (`scrollContainerRef`) e validacao rapida antes do fallback para busca por parents, reduzindo custo em eventos de scroll
 * o estado `above | in | bellow` passou a ser recalculado contra a mesma superficie de scroll usada pela recentralizacao, eliminando a divergencia entre scroll real e estado do FAB
 * `apps/web/src/ui/space/widgets/pages/Space/Planet/Star/useStar.ts` deixou de depender de `useInView` no viewport global e passou a usar o estado calculado pelo contexto, mantendo o auto-scroll inicial alinhado ao container real
 * `apps/web/src/ui/space/widgets/pages/Space/index.tsx` e `apps/web/src/ui/space/widgets/pages/Space/Planet/Star/index.tsx` passaram a resolver dependencias de contexto no entry point, mantendo os hooks de widget focados em estado e efeitos de UI
+* os fakers de `space` foram centralizados em `packages/core/src/space/domain/entities/fakers` e os antigos caminhos de `tests/fakers` passaram a reexportar a fonte unica para evitar duplicacao
 
 ## 11.2 Validacao e regressao
 
 * testes adicionados em `apps/web/src/ui/space/contexts/SpaceContext/tests/useSpaceContextProvider.test.ts` cobrindo ultima estrela desbloqueada, fallback para primeira estrela, centralizacao via `window`, centralizacao via container com `overflow-auto` e estados `above`/`bellow`
+* teste adicional no provider garante que, apos refetch do usuario, o estado volta a observar o scroll do container real
 * testes atualizados em `apps/web/src/ui/space/widgets/pages/Space/Planet/Star/tests/useStar.test.ts` para garantir o auto-scroll inicial e a sincronizacao do estado visual da ultima estrela
 * testes de view mantidos em `apps/web/src/ui/space/widgets/pages/Space/Planet/Star/tests/StarView.test.tsx`
 * regressao completa executada com `npm run test` na raiz do monorepo, sem falhas
