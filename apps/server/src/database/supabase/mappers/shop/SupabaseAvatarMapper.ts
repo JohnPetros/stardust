@@ -1,7 +1,9 @@
 import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
 import { Avatar } from '@stardust/core/shop/entities'
 
-import type { SupabaseAvatar } from '../../types'
+import type { Database, SupabaseAvatar } from '../../types'
+
+type SupabaseAvatarPayload = Database['public']['Tables']['avatars']['Insert']
 
 export class SupabaseAvatarMapper {
   static toEntity(supabaseAvatar: SupabaseAvatar): Avatar {
@@ -14,6 +16,7 @@ export class SupabaseAvatarMapper {
       name: supabaseAvatar.name,
       image: supabaseAvatar.image,
       price: supabaseAvatar.price,
+      isPurchasable: supabaseAvatar.is_purchasable,
       isAcquiredByDefault: supabaseAvatar.is_acquired_by_default,
       isSelectedByDefault: supabaseAvatar.is_selected_by_default,
     }
@@ -21,14 +24,15 @@ export class SupabaseAvatarMapper {
     return avatarDto
   }
 
-  static toSupabase(avatar: Avatar): SupabaseAvatar {
+  static toSupabase(avatar: Avatar): SupabaseAvatarPayload {
     const avatarDto = avatar.dto
 
-    const supabaseAvatar: SupabaseAvatar = {
+    const supabaseAvatar: SupabaseAvatarPayload = {
       id: avatar.id.value,
       name: avatarDto.name,
       image: avatarDto.image,
       price: avatarDto.price,
+      is_purchasable: avatarDto.isPurchasable ?? true,
       is_acquired_by_default: avatarDto.isAcquiredByDefault ?? false,
       is_selected_by_default: avatarDto.isSelectedByDefault ?? false,
     }

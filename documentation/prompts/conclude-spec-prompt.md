@@ -1,44 +1,152 @@
 ---
-description: Prompt para concluir uma spec com validacao final, atualizacao de documentacao e resumo tecnico.
+description: Prompt para concluir uma spec com validação final, atualização de documentação e geração de resumo estruturado para PR.
 ---
 
 # Prompt: Conclude Spec
 
 **Objetivo:** Finalizar e consolidar a implementação de uma Spec técnica,
-garantindo que o código esteja polido, documentado, validado e pronto para a
-criação de um Pull Request.
+garantindo que o código esteja polido, documentado e validado — produzindo ao
+final um checklist de validação, os documentos atualizados e um rascunho
+estruturado para o Pull Request.
 
-**Entrada:**
+---
+
+## Entradas Esperadas
 
 - **Spec Técnica:** O documento que guiou a implementação
-  (`documentation/features/.../specs/...`).
-- **Código Implementado:** As alterações realizadas nas camadas UI, Core, Rest e
-  Drivers.
+  (`documentation/features/.../specs/...`), injetado integralmente no contexto.
+- **Diff do Código:** As alterações realizadas nas camadas UI, Core, Rest e
+  Drivers, injetadas como contexto para permitir verificação real dos requisitos.
 
-**Diretrizes de Execução:**
+> ⚠️ Ambas as entradas devem estar presentes no contexto antes da execução.
+> Não simule a verificação caso alguma delas esteja ausente — interrompa e
+> sinalize o que está faltando.
 
-1. **Validação de Qualidade Final:**
-   - **Análise Estática e Formatação:** Execute `npm run codecheck` na raiz do
-     monorepo para garantir que não existam warnings ou erros remanescentes.
-   - **Testes Unitários:** Execute `npm run test` na raiz do monorepo para
-     validar que todos os testes (novos e existentes) estão passando.
+---
 
-2. **Verificação de Requisitos:**
-   - Compare o código final com cada seção da Spec (O que deve ser
-     criado/modificado).
-   - Certifique-se de que todos os componentes descritos foram implementados
-     conforme planejado.
+## Fase 1 — Verificação
 
-3. **Atualização da Documentação e Visualização:**
-   - Refine o documento da Spec original para refletir decisões de design de
-     última hora ou mudanças de caminho.
-   - **PRD:** Atualize o PRD associado a spec com as mudanças implementadas.
-     Verifique se os itens foram concluídos e marque-os como concluídos.
+Esta fase é analítica e deve ser concluída antes de qualquer atualização de
+documento.
 
-4. **Atualização do Status da Spec:**
-   - Atualize o status da Spec para "concluído".
-   - Atualize a data da última atualização.
+**1.1 Análise Estática e Formatação**
 
-5. **Geração de Resumo Final:**
-   - Forneça um resumo técnico do que foi concluído para facilitar a criação do
-     PR subsequente.
+Execute `npm run codecheck` na raiz do monorepo. Nenhum warning ou erro deve
+restar. Caso existam, liste-os explicitamente e aguarde correção antes de
+prosseguir.
+
+**1.2 Testes Unitários**
+
+Execute `npm run test` na raiz do monorepo. Todos os testes — novos e
+existentes — devem estar passando. Caso algum falhe, interrompa e reporte.
+
+**1.2.1 Cobertura de Testes**
+
+Com base no diff injetado no contexto, verifique se os novos comportamentos
+introduzidos pela Spec possuem testes correspondentes. Considere como caminhos
+críticos que exigem cobertura:
+
+- Lógica de negócio nova ou modificada na camada Core
+- Casos de erro e edge cases relevantes
+- Contratos de integração entre camadas (ex: Core ↔ Rest, Core ↔ Drivers)
+
+Ao final desta etapa, produza um relatório de cobertura no seguinte formato:
+```markdown
+## Cobertura de Testes
+
+- [x] <Comportamento A> — coberto em `caminho/do/arquivo.test.ts`
+- [x] <Comportamento B> — coberto em `caminho/do/arquivo.test.ts`
+- [ ] <Comportamento C> — **sem cobertura** (detalhe o que está faltando)
+```
+
+Caso existam lacunas, liste-as como pendências e aguarde decisão antes de
+prosseguir para a Fase 2. Não avance com itens críticos descobertos.
+
+**1.3 Cobertura de Requisitos**
+
+Com base no diff real injetado no contexto, compare cada componente descrito na
+Spec (seções "O que deve ser criado" e "O que deve ser modificado") contra o
+código implementado. Ao final desta etapa, produza um **checklist de validação**
+no seguinte formato:
+```markdown
+## Checklist de Validação
+
+- [x] <Requisito A> — implementado em `caminho/do/arquivo.ts`
+- [x] <Requisito B> — implementado em `caminho/do/arquivo.ts`
+- [ ] <Requisito C> — **ausente ou incompleto** (detalhe o gap)
+```
+
+---
+
+## Fase 2 — Consolidação de Documentos
+
+Esta fase é de síntese. Execute-a somente após a Fase 1 estar completa e sem
+pendências.
+
+**2.1 Atualização da Spec Técnica**
+
+Refine o documento da Spec para refletir decisões de design tomadas durante a
+implementação ou desvios de caminho. A audiência é técnica — mantenha o nível
+de detalhe de engenharia. Atualize também:
+
+- **Status:** `concluído`
+- **Última atualização:** `{{ today }}`
+
+**2.2 Atualização do PRD**
+
+Atualize o PRD associado à Spec com as mudanças implementadas. A audiência aqui
+é de produto — traduza o impacto técnico para linguagem de negócio. Marque como
+concluídos os itens que foram endereçados pela implementação.
+
+> 💡 Trate Spec e PRD como documentos separados com propósitos distintos. Não
+> copie conteúdo técnico de baixo nível para o PRD — sintetize o valor entregue.
+
+---
+
+## Fase 3 — Comunicação
+
+Esta fase produz o artefato final para facilitar a abertura do Pull Request.
+
+**3.1 Rascunho do Pull Request**
+
+Gere um rascunho de descrição de PR com a seguinte estrutura obrigatória:
+```markdown
+## O que foi feito
+
+<Descrição objetiva das mudanças implementadas, em linguagem técnica>
+
+## Por que foi feito assim
+
+<Decisões de design relevantes e tradeoffs considerados>
+
+## O que mudou em relação à Spec original
+
+<Desvios ou refinamentos ocorridos durante a implementação. Se nenhum, declare
+explicitamente "Nenhum desvio em relação à Spec original.">
+
+## Pontos de atenção para o revisor
+
+<Riscos, áreas sensíveis, dependências externas ou decisões que merecem revisão
+cuidadosa. Se nenhum, declare explicitamente "Nenhum ponto de atenção
+identificado.">
+
+## Checklist
+
+- [ ] `npm run codecheck` passou sem warnings
+- [ ] `npm run test` passou sem falhas
+- [ ] Cobertura de testes verificada e lacunas endereçadas
+- [ ] Spec atualizada e marcada como concluída
+- [ ] PRD atualizado com os itens concluídos
+```
+
+---
+
+## Saídas Esperadas
+
+Ao final da execução, devem ter sido produzidos:
+
+1. **Relatório de cobertura de testes** (Fase 1.2.1)
+2. **Checklist de validação** de requisitos (Fase 1.3)
+3. **Spec atualizada** com status `concluído` e data de atualização (Fase 2.1)
+4. **PRD atualizado** com itens marcados como concluídos (Fase 2.2)
+5. **Rascunho de PR** com estrutura completa (Fase 3.1)

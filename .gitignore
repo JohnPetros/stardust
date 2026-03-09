@@ -89,3 +89,6 @@ opencode.jsonc
 
 *.tsbuildinfo
 prompt.md
+
+# Terminal Paste Image folder
+.cp-images/

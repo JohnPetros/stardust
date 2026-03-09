@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { X } from '@phosphor-icons/react'
+import { X } from '@phosphor-icons/react/dist/ssr'
 import { DialogClose, DialogTitle } from '@radix-ui/react-dialog'
 import { twMerge } from 'tailwind-merge'
 

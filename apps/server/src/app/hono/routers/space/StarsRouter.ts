@@ -94,6 +94,7 @@ export class StarsRouter extends HonoRouter {
     this.router.patch(
       '/:starId/availability',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'param',
         z.object({
@@ -120,6 +121,7 @@ export class StarsRouter extends HonoRouter {
     this.router.patch(
       '/:starId/type',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'param',
         z.object({

@@ -2,10 +2,17 @@
 
 import { type PropsWithChildren, useEffect } from 'react'
 import { useMotionTemplate, useMotionValue, motion, animate } from 'motion/react'
+import dynamic from 'next/dynamic'
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { Particles } from '../../Particles'
 import { Animation } from '@/ui/global/widgets/components/Animation'
 import { AnimatedOpacity } from '@/ui/global/widgets/components/AnimatedOpacity'
+
+const Particles = dynamic(
+  () => import('../../Particles').then((module) => module.Particles),
+  {
+    ssr: false,
+  },
+)
 
 const COLORS = ['#13FFAA', '#1E67C6', '#CE84CF', '#DD335C']
 

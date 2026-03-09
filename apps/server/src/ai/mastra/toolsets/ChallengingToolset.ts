@@ -5,14 +5,19 @@ import {
   challengeCategoriesSchema,
   challengeDraftSchema,
 } from '@stardust/validation/challenging/schemas'
+import { idSchema } from '@stardust/validation/global/schemas'
 
 import { supabase } from '@/database/supabase'
-import { SupabaseChallengesRepository } from '@/database/supabase/repositories'
+import {
+  SupabaseChallengesRepository,
+  SupabaseChallengeSourcesRepository,
+} from '@/database/supabase/repositories'
 import { InngestBroker } from '@/queue/inngest/InngestBroker'
 import { TOOLS_DESCRIPTIONS } from '@/ai/constants'
 import {
   GetAllChallengeCategoriesTool,
   GetChallengeProblemTool,
+  GetNextChallengeSourceTool,
   PostChallengeTool,
 } from '@/ai/challenging/tools'
 import { MastraMcp } from '../MastraMcp'
@@ -20,10 +25,14 @@ import { UpstashCacheProvider } from '@/provision/cache/UpstashCacheProvider'
 
 export class ChallengingToolset {
   static get postChallengingTool() {
+    const postChallengeSchema = challengeDraftSchema.extend({
+      challengeSourceId: idSchema.nullable().optional(),
+    })
+
     return createTool({
       id: 'post-challenging-tool',
       description: TOOLS_DESCRIPTIONS.postChallenge,
-      inputSchema: challengeDraftSchema,
+      inputSchema: postChallengeSchema,
       outputSchema: z.void(),
       execute: async (input) => {
         const mcp = new MastraMcp({
@@ -34,10 +43,36 @@ export class ChallengingToolset {
             expectedOutput: JSON.parse(testCase.expectedOutput),
           })),
         })
-        const repository = new SupabaseChallengesRepository(supabase)
+        const challengesRepository = new SupabaseChallengesRepository(supabase)
+        const challengeSourcesRepository = new SupabaseChallengeSourcesRepository(
+          supabase,
+        )
         const broker = new InngestBroker()
-        const tool = new PostChallengeTool(repository, broker)
+        const tool = new PostChallengeTool(
+          challengesRepository,
+          challengeSourcesRepository,
+          broker,
+        )
         await tool.handle(mcp)
+      },
+    })
+  }
+
+  static get getNextChallengeSourceTool() {
+    return createTool({
+      id: 'get-next-challenge-source-tool',
+      description: TOOLS_DESCRIPTIONS.getNextChallengeSource,
+      inputSchema: z.void(),
+      outputSchema: z.object({
+        id: idSchema,
+        url: z.string().url(),
+        position: z.number(),
+      }),
+      execute: async (input) => {
+        const mcp = new MastraMcp(input)
+        const repository = new SupabaseChallengeSourcesRepository(supabase)
+        const tool = new GetNextChallengeSourceTool(repository)
+        return await tool.handle(mcp)
       },
     })
   }

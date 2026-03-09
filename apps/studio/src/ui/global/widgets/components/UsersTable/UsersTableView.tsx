@@ -130,7 +130,9 @@ export const UsersTableView = ({ users, isLoading, orders, onOrderChange }: Prop
                   <Button
                     variant='ghost'
                     size='icon'
-                    onClick={() => openExternal(`${ENV.webAppUrl}/profile/${user.slug}`)}
+                    onClick={() =>
+                      openExternal(`${ENV.stardustWebAppUrl}/profile/${user.slug}`)
+                    }
                     title='Ver perfil no app'
                   >
                     <ExternalLinkIcon className='w-4 h-4' />

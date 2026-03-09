@@ -1,4 +1,5 @@
 import type { Star as StarEntity } from '@stardust/core/space/entities'
+import type { ReactNode } from 'react'
 
 import { ROUTES } from '@/constants'
 import { Icon } from '@/ui/global/widgets/components/Icon'
@@ -19,6 +20,7 @@ type Props = {
   onAvailabilityChange: (isAvailable: boolean) => void
   onTypeChange: (isChallenge: boolean) => void
   onChallengeClick: () => void
+  challengeSelector: ReactNode
   onDelete: (starId: string) => void
 }
 
@@ -29,6 +31,7 @@ export const StarItemView = ({
   onAvailabilityChange,
   onTypeChange,
   onChallengeClick,
+  challengeSelector,
   onDelete,
 }: Props) => {
   return (
@@ -41,15 +44,17 @@ export const StarItemView = ({
       </div>
       <div className='flex items-center gap-2 bg-zinc-900 rounded-lg px-4 py-2'>
         {isChallenge ? (
-          <button
-            type='button'
-            onClick={onChallengeClick}
-            className='flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity bg-transparent border-none'
-          >
-            <Icon name='challenge' className='text-zinc-400' size={16} />
-            <span className='text-zinc-400 text-sm'>Desafio</span>
-            <Icon name='edition' className='text-zinc-400' size={14} />
-          </button>
+          <div className='flex items-center gap-3'>
+            <button
+              type='button'
+              onClick={onChallengeClick}
+              className='flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity bg-transparent border-none'
+            >
+              <Icon name='challenge' className='text-zinc-400' size={16} />
+              <span className='text-zinc-400 text-sm'>Editar desafio</span>
+            </button>
+            {challengeSelector}
+          </div>
         ) : (
           <div className='flex items-center gap-6'>
             <Link

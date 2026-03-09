@@ -1,7 +1,9 @@
 import { Insignia } from '@stardust/core/shop/entities'
 import type { InsigniaDto } from '@stardust/core/shop/entities/dtos'
 
-import type { SupabaseInsignia, SupabaseInsigniaRole } from '../../types'
+import type { Database, SupabaseInsignia, SupabaseInsigniaRole } from '../../types'
+
+type SupabaseInsigniaPayload = Database['public']['Tables']['insignias']['Insert']
 
 export class SupabaseInsigniaMapper {
   static toEntity(supabaseInsignia: SupabaseInsignia): Insignia {
@@ -15,20 +17,22 @@ export class SupabaseInsigniaMapper {
       image: supabaseInsignia.image,
       price: supabaseInsignia.price,
       role: supabaseInsignia.role,
+      isPurchasable: supabaseInsignia.is_purchasable,
     }
 
     return dto
   }
 
-  static toSupabase(insignia: Insignia): SupabaseInsignia {
+  static toSupabase(insignia: Insignia): SupabaseInsigniaPayload {
     const insigniaDto = insignia.dto
 
-    const supabaseInsignia: SupabaseInsignia = {
+    const supabaseInsignia: SupabaseInsigniaPayload = {
       id: insignia.id.value,
       name: insigniaDto.name,
       image: insigniaDto.image,
       price: insigniaDto.price,
       role: insigniaDto.role as SupabaseInsigniaRole,
+      is_purchasable: insigniaDto.isPurchasable ?? false,
     }
 
     return supabaseInsignia

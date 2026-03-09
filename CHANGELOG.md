@@ -1,5 +1,98 @@
 # Changelog
 
+## 1.3.1 (2026-03-07)
+
+* 🐳 docker: update base image in Dockerfile.web from node:20.15.1-alpine to node:22-alpine for improved performance and compatibility (db5cee4b1)
+* ⚙️ config: remove unused "noUnknownAtRules" rule from biome.json to streamline configuration (2adff93cc)
+
+## 1.3.0 (2026-03-06)
+
+* 📚 docs: remove detailed sections from Product Requirements Document for Challenge Creator Agent to enhance focus and include link to milestone (3ba737372)
+* 📚 docs: remove extensive content from Product Requirements Document for Challenge Listing feature to improve clarity and focus (90dbf39f9)
+* 📚 docs: remove outdated sections from Product Requirements Document for Challenge Layout feature to streamline content (ff3c990ed)
+* 📚 docs: update Product Requirements Document for Challenge Code Editor feature to include link to milestone (a05b66ad6)
+* 📚 docs: add Product Requirements Document for Challenges Navigation feature (59a21810c)
+* 📚 docs: update PRD prompt to include mode detection and enhance clarity for prospective and retrospective features (919781a4b)
+* 📚 docs: add comprehensive Product Requirements Document for Challenge Listing feature (af63889fa)
+* 📚 docs: add comprehensive Product Requirements Document for Challenge Result Tab feature (63c2c0776)
+* 📚 docs: add detailed Product Requirements Document for Challenge Layout feature (12164a343)
+* 📚 docs: add comprehensive Product Requirements Document for Challenge Description feature (516960b4c)
+* 📚 docs: add Product Requirements Document for Challenge Code Editor feature (a5d6f58b0)
+* 🖥️ ui: enhance button formatting in ChallengeSourcesPageView for improved readability (71ddee2ca)
+* 📚 docs: remove outdated documentation files for application, database, provision, queue, rest, and realtime layers (8459bb891)
+* ♻️ refactor: address PR 353 review comments (1eafad86f)
+* 📚 docs: refine conclude spec prompt workflow (9a07d8a10)
+* 💾 db: align Supabase payload typings and feedback intent filter (d3e268617)
+* 📚 docs: update changelog and prompts documentation (c25a33c45)
+* 🧪 test: update auth router test (c8dd5437a)
+* 🖥️ ui: update users table sidebar and star item components (06adf8654)
+* ⚙️ config: update studio constants with cache and routes (3c28e9942)
+* ✨ use case: add challenge sources management feature with CRUD operations (652a4ff2e)
+* ♻️ refactor(web): update ChallengeSource to enforce non-null challenge property, enhance ChallengeSourcesFaker for better challenge handling (e5731f50b)
+* 📶 rest(web): add fetchChallengeSourcesList, createChallengeSource, deleteChallengeSource, and reorderChallengeSources methods to ChallengingService (ce2e07129)
+* 🐛 fix: update StorageMiddleware to use Supabase instance from HonoHttp for file verification (f0d8868cf)
+* ⚙️ config: update .gitignore to include prompt.md and add a new folder for Terminal Paste Images (ed1e8e2e9)
+* ✨ use case: export new challenge source use cases including List, Create, Delete, and Reorder functionalities (52c87dd00)
+* 🧪 test: add unit tests for ListChallengeSourcesUseCase to validate pagination and response structure (8126573b6)
+* 🧪 test: add unit tests for ReorderChallengeSourcesUseCase to validate error handling and source reordering logic (1950662ab)
+* 🧪 test: add unit tests for DeleteChallengeSourceUseCase to verify error handling and successful deletion of challenge sources (8603983bd)
+* 🧪 test: add unit tests for CreateChallengeSourceUseCase to validate error handling and source creation logic (1ed999381)
+* ✨ use case: implement DeleteChallengeSourceUseCase for removing challenge sources with validation and error handling (09bf94c5c)
+* ✨ use case: implement ReorderChallengeSourcesUseCase for reordering challenge sources with validation and error handling (6cd39a652)
+* ✨ use case: add ListChallengeSourcesUseCase for paginated retrieval of challenge sources (1bd4f2841)
+* ✨ use case: implement CreateChallengeSourceUseCase for creating challenge sources with validation and error handling (c65543684)
+* 🌐 domain: add ChallengeSourceAlreadyExistsError and ChallengeSourceNotFoundError for error handling (ffe66f2ae)
+* 🌐 domain: add ChallengeSourcesFaker for generating fake ChallengeSource data (0a998c522)
+* 📑 interface: add ChallengeSourcesRepository for managing ChallengeSource entities (5807d89bc)
+* 📑 interface: extend ChallengingService with ChallengeSource operations and update index exports (6a2a4aea2)
+* 📑 interface: implement fetch, create, delete, and reorder operations for ChallengeSource in ChallengingService (f0e58b751)
+* 🌐 domain: introduce ChallengeSource entity and ChallengeSourceDto for challenge management (636577c7f)
+* 🌐 domain(core): add Url structure with validation and export it (2dd300217)
+* 📚 docs: rename webAppUrl to stardustWebAppUrl (d2594c71d)
+* 🐛 fix(core): format isPurchasable property initialization for better readability in Avatar entity (39b2b1207)
+* 🐛 fix(core): streamline isPurchasable property initialization in Avatar entity (60fe4fc65)
+* 🧪 test: remove Insignia entity tests as part of code cleanup (30bc07893)
+* 🧪 test: enhance ListFeedbackReportsUseCase tests to validate request structure with object containment (760185908)
+* 🐛 fix(core): update default purchasable status in Insignia entity to false (1fbe70d3c)
+* 🐛 fix(server): improve insignia filtering logic in SupabaseInsigniasRepository to handle purchasable status (35b714e94)
+* 📚 docs: update bug report for "God" insignia in shop page with improved filtering logic and documentation structure (9de9ee4b1)
+* 📚 docs: add clarification on seeking user input for implementation doubts in PR conversation resolution prompt (90dbb8d89)
+* ♻️ refactor(core): change intent type in FeedbackReportsListingParams to FeedbackIntent (19796bc60)
+* 🧪 test: add shop controllers and domain entity tests (5edd5d67c)
+* 📚 docs: update prompts for bug report and implementation (baf7cb0b6)
+* 📶 rest: update storage middleware and insignias controller (886eb79de)
+* 💾 db: add shop domain entities and repository updates (bc4e7532d)
+* 🖥️ ui(web): refactor useAuthContextProvider to utilize useCallback and useMemo for improved performance and readability (a1e2e47e5)
+* 🖥️ ui(web): refactor useToast to utilize useRef for scroll position and throttle scroll event handling (f527f7501)
+* 🖥️ ui(web): optimize AuthContext provider with useMemo for improved performance (310c76849)
+* 🖥️ ui(web): refactor CommentsListView to streamline loading state rendering (feaf89b88)
+* 🖥️ ui: enable short-lived auth cache in root server providers (c31517e01)
+* 📟 rpc: parallelize lesson loading and enable cached safe-action clients (d210c7889)
+* 📶 rest: optimize auth route checks and default REST cache policy (e52d47dda)
+* 🖥️ ui: optimize client-only loading for animations and visual widgets (e08ebdf5c)
+* ⚙️ config: adjust web middleware and Next.js runtime settings (e8ec104e4)
+
+## 1.2.0 (2026-03-04)
+
+* 📚 docs: update star challenge selector specification (77ce1432e)
+* 🖥️ ui: refine planet and challenge interface behavior (bd5b81969)
+* 📟 rpc: adjust access challenge page action flow (9dd55bd2d)
+* 📶 rest: update challenge routes and controller tests (64b247030)
+* ✨ use case: refine challenge star selection flows (6cf88dbbb)
+* 🌐 domain: rename challenge star error contract (9db5d7f70)
+* 📚 docs: update prompts and add space management feature documentation (4cef273da)
+* 🖥️ ui: add StarChallengeSelector component and update StarItem and Planets views (69d468e61)
+* 🖥️ ui: update ChallengesList page on web app (9dcd9b1ac)
+* 📶 rest: add star management methods to ChallengingService clients (9d8eb4d34)
+* 📟 rpc: update AccessChallengePage action (8f28470d8)
+* 📶 rest: add EditChallengeStar and RemoveChallengeStar controllers and routes (ecc059237)
+* 💾 db: update Supabase repositories to support challenge star assignment (a171d436c)
+* 📮 validation: add challenge star assignment schema (2d2a5d74a)
+* 📑 interface: update ChallengingService with star management methods (41c50987c)
+* 🧪 test: add tests for EditChallengeStar and RemoveChallengeStar use cases (957762554)
+* ✨ use case: add EditChallengeStar and RemoveChallengeStar use cases (72f153dd2)
+* 🌐 domain: add star assignment errors and update Challenge and User entities (032695758)
+
 ## 1.1.1 (2026-02-27)
 
 * 🐛 fix(server): enhance error handling in SupabaseStorageProvider with detailed messages for upload, list, find, and remove operations (8a66c0ab8)
@@ -806,12 +899,12 @@
 * 📚 docs(studio): update users page plan with formatting improvements and checklist completion (329d2e0a9)
 * 📚 docs(studio): add user management page plan with routing and UI components (71e253967)
 * 🖥️ ui(studio): implement UsersPage widget and integrate it into UsersPageView (529ce6a22)
-* 🪨 constants(studio): add webAppUrl to environment configuration and schema validation (e9baab48a)
+* 🪨 constants(studio): add stardustWebAppUrl to environment configuration and schema validation (e9baab48a)
 * 🖥️ ui(studio): add useDebounce custom hook for debouncing values (c7ba3f5db)
 * 🖥️ ui(studio): add openExternal method to NavigationProvider interface and implementation (4d2e554c6)
 * 🖥️ ui(studio): enhance openExternal method with security features and update navigationProvider type (d111a7e7d)
 * ♻️ refactor: code structure for improved readability and maintainability (a6f1d7be2)
-* 🪨 constants(studio): add webAppUrl to environment configuration and schema validation (4db20cee8)
+* 🪨 constants(studio): add stardustWebAppUrl to environment configuration and schema validation (4db20cee8)
 * 🖥️ ui(studio): implement challenge click handler in StarItem component (1cfb74a38)
 * 🖥️ ui: add openExternal method to NavigationProvider (c0218ae74)
 * 📚 docs(studio): add star challenge link plan documentation (df25f0329)
@@ -1998,7 +2091,7 @@
   server and web environment configurations (dc65b809)
 - 🚚 cd: change trigger from pull_request to push in server app Heroku CD
   workflow and add permissions in web app staging CD workflow (ef8df72e)
-- ♻️ refactor(web): rename webAppUrl and serverAppUrl to stardustWebUrl and
+- ♻️ refactor(web): rename stardustWebAppUrl and serverAppUrl to stardustWebUrl and
   stardustServerUrl in CLIENT_ENV configuration (d9e14652)
 - 🚚 cd: change trigger from push to pull_request in Heroku CD workflow
   (a9224db0)
@@ -2014,7 +2107,7 @@
   content reading (b99e4d68)
 - 🚚 cd: update Heroku CD workflow to use Infisical for environment variable
   management and change trigger to pull_request (d3eab1d4)
-- ♻️ refactor(server): rename webAppUrl to stardustWebUrl and update references
+- ♻️ refactor(server): rename stardustWebAppUrl to stardustWebUrl and update references
   in SupabaseAuthService and RestMiddleware (8cf0594d)
 - 📦 deps(lsp): update @designliquido/delegua to version 0.54.4 in package.json
   and package-lock.json (26f4e007)
@@ -2032,12 +2125,12 @@
   stardustServerUrl for consistency (6b517c34)
 - ⚙️ config(web): include app directory in Tailwind CSS content paths for
   improved styling coverage (03275a8f)
-- ♻️ refactor(web): update all instances of webAppUrl and serverAppUrl to
+- ♻️ refactor(web): update all instances of stardustWebAppUrl and serverAppUrl to
   stardustWebUrl and stardustServerUrl for consistency across the application
   (62ae7a6a)
 - 📶 rest(web): add NotificationService for handling notifications and integrate
   it into the service index (e76a1ef3)
-- ♻️ refactor(web): update environment variable names from webAppUrl and
+- ♻️ refactor(web): update environment variable names from stardustWebAppUrl and
   serverAppUrl to stardustWebUrl and stardustServerUrl for improved clarity
   (585d7502)
 - ⚙️ config(web): add Sentry client initialization and request error handling
@@ -2047,7 +2140,7 @@
 - 🎴 assets(web): add new Apollo Mendigo image to the public assets (8660678d)
 - 🖥️ ui: add internal error animation to Lottie animations and update type
   definitions (ab0a55e8)
-- ♻️ refactor: rename webAppUrl to stardustWebUrl in environment configuration
+- ♻️ refactor: rename stardustWebAppUrl to stardustWebUrl in environment configuration
   for consistency across services (d5546950)
 - 📶 rest(server): add NotificationRouter for handling error notifications and
   integrate it into HonoApp (a6957af5)

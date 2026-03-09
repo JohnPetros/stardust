@@ -1,5 +1,3 @@
-import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
-
 import { app } from '@/app'
 import { AuthRouter } from '../AuthRouter'
 

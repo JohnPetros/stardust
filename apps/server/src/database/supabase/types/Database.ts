@@ -1305,6 +1305,7 @@ export type Database = {
           id: string
           image: string
           is_acquired_by_default: boolean
+          is_purchasable: boolean
           is_selected_by_default: boolean
           name: string
           price: number
@@ -1313,6 +1314,7 @@ export type Database = {
           id?: string
           image: string
           is_acquired_by_default?: boolean
+          is_purchasable?: boolean
           is_selected_by_default?: boolean
           name: string
           price: number
@@ -1321,6 +1323,7 @@ export type Database = {
           id?: string
           image?: string
           is_acquired_by_default?: boolean
+          is_purchasable?: boolean
           is_selected_by_default?: boolean
           name?: string
           price?: number
@@ -1341,6 +1344,45 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      challenge_sources: {
+        Row: {
+          challenge_id: string | null
+          created_at: string
+          id: string
+          position: number
+          url: string
+        }
+        Insert: {
+          challenge_id?: string | null
+          created_at?: string
+          id?: string
+          position: number
+          url: string
+        }
+        Update: {
+          challenge_id?: string | null
+          created_at?: string
+          id?: string
+          position?: number
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'challenge_sources_challenge_id_fkey'
+            columns: ['challenge_id']
+            isOneToOne: false
+            referencedRelation: 'challenges'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'challenge_sources_challenge_id_fkey'
+            columns: ['challenge_id']
+            isOneToOne: false
+            referencedRelation: 'challenges_view'
+            referencedColumns: ['id']
+          },
+        ]
       }
       challenges: {
         Row: {
@@ -1729,6 +1771,7 @@ export type Database = {
         Row: {
           id: string
           image: string
+          is_purchasable: boolean
           name: string
           price: number
           role: Database['public']['Enums']['insignia_role']
@@ -1736,6 +1779,7 @@ export type Database = {
         Insert: {
           id?: string
           image: string
+          is_purchasable?: boolean
           name: string
           price: number
           role: Database['public']['Enums']['insignia_role']
@@ -1743,6 +1787,7 @@ export type Database = {
         Update: {
           id?: string
           image?: string
+          is_purchasable?: boolean
           name?: string
           price?: number
           role?: Database['public']['Enums']['insignia_role']
@@ -1870,6 +1915,7 @@ export type Database = {
           id: string
           image: string
           is_acquired_by_default: boolean
+          is_purchasable: boolean
           is_selected_by_default: boolean
           name: string
           price: number
@@ -1878,6 +1924,7 @@ export type Database = {
           id?: string
           image: string
           is_acquired_by_default?: boolean
+          is_purchasable?: boolean
           is_selected_by_default?: boolean
           name: string
           price: number
@@ -1886,6 +1933,7 @@ export type Database = {
           id?: string
           image?: string
           is_acquired_by_default?: boolean
+          is_purchasable?: boolean
           is_selected_by_default?: boolean
           name?: string
           price?: number
@@ -3278,39 +3326,6 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_02_24: {
-        Row: {
-          event: string | null
-          extension: string
-          id: string
-          inserted_at: string
-          payload: Json | null
-          private: boolean | null
-          topic: string
-          updated_at: string
-        }
-        Insert: {
-          event?: string | null
-          extension: string
-          id?: string
-          inserted_at?: string
-          payload?: Json | null
-          private?: boolean | null
-          topic: string
-          updated_at?: string
-        }
-        Update: {
-          event?: string | null
-          extension?: string
-          id?: string
-          inserted_at?: string
-          payload?: Json | null
-          private?: boolean | null
-          topic?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       messages_2026_02_25: {
         Row: {
           event: string | null
@@ -3477,6 +3492,39 @@ export type Database = {
         Relationships: []
       }
       messages_2026_03_02: {
+        Row: {
+          event: string | null
+          extension: string
+          id: string
+          inserted_at: string
+          payload: Json | null
+          private: boolean | null
+          topic: string
+          updated_at: string
+        }
+        Insert: {
+          event?: string | null
+          extension: string
+          id?: string
+          inserted_at?: string
+          payload?: Json | null
+          private?: boolean | null
+          topic: string
+          updated_at?: string
+        }
+        Update: {
+          event?: string | null
+          extension?: string
+          id?: string
+          inserted_at?: string
+          payload?: Json | null
+          private?: boolean | null
+          topic?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      messages_2026_03_03: {
         Row: {
           event: string | null
           extension: string

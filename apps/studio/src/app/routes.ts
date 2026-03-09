@@ -9,6 +9,7 @@ export default [
     route(ROUTES.space.planets, 'routes/PlanetsRoute.tsx'),
     route(ROUTES.profile.users, 'routes/UsersRoute.tsx'),
     route(ROUTES.challenging.challenges, 'routes/ChallengesRoute.tsx'),
+    route(ROUTES.challenging.sources, 'routes/ChallengeSourcesRoute.tsx'),
     route(ROUTES.profile.achievements, 'routes/AchievementsRoute.tsx'),
     route(ROUTES.lesson.questions(), 'routes/LessonQuestionsRoute.tsx'),
     route(ROUTES.lesson.story(), 'routes/LessonStoryRoute.tsx'),

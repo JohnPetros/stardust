@@ -3,5 +3,6 @@ export type { ChallengeCompletionStatusValue } from './ChallengeCompletionStatus
 export type { ChallengeIsNewStatusValue } from './ChallengeIsNewStatusValue'
 export type { CompletedChallengesCountByDifficultyLevel } from './CompletedChallengesCountByDifficulty'
 export type { ChallengesListParams } from './ChallengesListParams'
+export type { ChallengeSourcesListParams } from './ChallengeSourcesListParams'
 export type { DataTypeName } from './DataTypeName'
 export type { SolutionsListingParams } from './SolutionsListingParams'

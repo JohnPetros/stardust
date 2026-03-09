@@ -25,6 +25,7 @@ describe('Fetch Challenges List Controller', () => {
       isNewStatus: string
       shouldIncludeOnlyAuthorChallenges: boolean
       shouldIncludePrivateChallenges: boolean
+      shouldIncludeStarChallenges: boolean
       userId?: string
       userCompletedChallengesIds?: string[]
     }
@@ -60,6 +61,7 @@ describe('Fetch Challenges List Controller', () => {
       isNewStatus: 'all',
       shouldIncludeOnlyAuthorChallenges: true,
       shouldIncludePrivateChallenges: true,
+      shouldIncludeStarChallenges: false,
       userId: IdFaker.fake().value,
     }
     const userCompletedChallengesIds = [IdFaker.fake().value]
@@ -115,6 +117,7 @@ describe('Fetch Challenges List Controller', () => {
       isNewStatus: 'all',
       shouldIncludeOnlyAuthorChallenges: false,
       shouldIncludePrivateChallenges: false,
+      shouldIncludeStarChallenges: false,
       userId: undefined,
     }
     const pagination = new PaginationResponse([ChallengesFaker.fakeDto()], 1)

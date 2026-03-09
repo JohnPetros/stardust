@@ -12,10 +12,14 @@ import {
 } from '@stardust/validation/global/schemas'
 import {
   challengeSchema,
+  challengeStarSchema,
   challengeVoteSchema,
 } from '@stardust/validation/challenging/schemas'
 
-import { SupabaseChallengesRepository } from '@/database/supabase/repositories/challenging'
+import {
+  SupabaseChallengesRepository,
+  SupabaseChallengeSourcesRepository,
+} from '@/database/supabase/repositories/challenging'
 import {
   FetchChallengeController,
   FetchChallengesListController,
@@ -25,6 +29,8 @@ import {
   VoteChallengeController,
   PostChallengeController,
   UpdateChallengeController,
+  EditChallengeStarController,
+  RemoveChallengeStarController,
   DeleteChallengeController,
   FetchPostedChallengesKpiController,
   FetchAllChallengesController,
@@ -115,6 +121,7 @@ export class ChallengesRouter extends HonoRouter {
           isNewStatus: z.enum(['all', 'new', 'old']).optional().default('all'),
           shouldIncludeOnlyAuthorChallenges: queryParamBooleanSchema.default('false'),
           shouldIncludePrivateChallenges: queryParamBooleanSchema.default('false'),
+          shouldIncludeStarChallenges: queryParamBooleanSchema.default('false'),
         }),
       ),
       async (context) => {
@@ -203,8 +210,15 @@ export class ChallengesRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const challengeSourcesRepository = new SupabaseChallengeSourcesRepository(
+          http.getSupabase(),
+        )
         const broker = new InngestBroker()
-        const controller = new PostChallengeController(repository, broker)
+        const controller = new PostChallengeController(
+          repository,
+          challengeSourcesRepository,
+          broker,
+        )
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -227,6 +241,28 @@ export class ChallengesRouter extends HonoRouter {
         const http = new HonoHttp(context)
         const repository = new SupabaseChallengesRepository(http.getSupabase())
         const controller = new UpdateChallengeController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerEditChallengeStarRoute(): void {
+    this.router.patch(
+      '/:challengeId/star',
+      this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
+      this.validationMiddleware.validate(
+        'param',
+        z.object({
+          challengeId: idSchema,
+        }),
+      ),
+      this.validationMiddleware.validate('json', challengeStarSchema),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const controller = new EditChallengeStarController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -280,6 +316,27 @@ export class ChallengesRouter extends HonoRouter {
     )
   }
 
+  private registerRemoveChallengeStarRoute(): void {
+    this.router.delete(
+      '/:challengeId/star',
+      this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
+      this.validationMiddleware.validate(
+        'param',
+        z.object({
+          challengeId: idSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const controller = new RemoveChallengeStarController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   private registerFetchAllChallengeCategoriesRoute(): void {
     this.router.get(
       '/categories',
@@ -320,7 +377,9 @@ export class ChallengesRouter extends HonoRouter {
     this.registerVoteChallengeRoute()
     this.registerPostChallengeRoute()
     this.registerUpdateChallengeRoute()
+    this.registerEditChallengeStarRoute()
     this.registerDeleteChallengeRoute()
+    this.registerRemoveChallengeStarRoute()
     this.registerFetchPostedChallengesKpiRoute()
     return this.router
   }

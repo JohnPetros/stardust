@@ -1,41 +1,47 @@
 ---
-description: Prompt para criar um plano de implementacao a partir de um documento de spec tecnica.
+description: Criar um plano de implementacao estruturado em fases e tarefas a partir de uma spec tecnica.
 ---
 
-# Prompt: Criar Plano
+## Pendencias (quando aplicavel)
 
-**Objetivo principal** Criar um plano de implementacao a partir de um documento de spec tecnica.
+- [ ] <descricao da pendencia ou ambiguidade encontrada na spec>
 
-## Entrada
+---
 
-- Caminho do arquivo do documento de spec tecnica.
+## Tabela de Dependencias de Fases
 
-## Diretrizes de execucao
+| Fase | Objetivo | Depende de | Pode rodar em paralelo com |
+| --- | --- | --- | --- |
+| F1 | <definir> | - | - |
+| F2 | <definir> | F1 | - |
 
-1. **Decomposicao atomica**
-   - Quebre o trabalho em **fases** e **tarefas**.
-   - Cada **fase** deve representar uma etapa macro do plano.
-   - Cada **tarefa** deve ser uma unidade de trabalho executavel, com resultado observavel.
+---
 
-2. **Mapa de dependencias (obrigatorio)**
-   - Inclua uma tabela com as fases, suas dependencias e o que pode rodar em paralelo.
+## F1 — <Nome da Fase>
 
-   | Fase | Objetivo | Depende de | Pode rodar em paralelo com |
-   | --- | --- | --- | --- |
-   | F1 | <definir> | - | - |
-   | F2 | <definir> | F1 | - |
+**Objetivo:** <descricao objetiva do que essa fase entrega>
 
-3. **Ordem de execucao (bottom-up)**
-   - Defina as tarefas seguindo rigorosamente a hierarquia de dependencias, nesta ordem:
-     1. **Core**: `DTOs`, Entidades e Interfaces.
-     2. **Drivers/Infra**: implementacoes de Repositories e Gateways (ex: `Supabase`, `Inngest`).
-     3. **API layer**: Actions (`RPC`) ou Controllers (`REST`).
-     4. **UI**: Widgets e Paginas.
+### Tarefas
 
-> ⚠️ **Regra** Se uma tarefa exige outra (ex: um Controller depende de um Use Case), a tarefa dependente deve aparecer depois e referenciar explicitamente a dependencia.
+- [ ] **T1.1** — <nome da tarefa>
+  - **Depende de:** -
+  - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
+  - **Camada:** `core` | `infra` | `rpc` | `rest` | `ui` | `queue` | `database`
 
-## Saida esperada
+- [ ] **T1.2** — <nome da tarefa>
+  - **Depende de:** T1.1
+  - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
+  - **Camada:** `core` | `infra` | `rpc` | `rest` | `ui` | `queue` | `database`
 
-- Uma lista de fases (com objetivo).
-- Uma lista de tarefas por fase, com dependencias explicitas.
-- A tabela de dependencias das fases.
+---
+
+## F2 — <Nome da Fase>
+
+**Objetivo:** <descricao objetiva do que essa fase entrega>
+
+### Tarefas
+
+- [ ] **T2.1** — <nome da tarefa>
+  - **Depende de:** T1.2
+  - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
+  - **Camada:** `core` | `infra` | `rpc` | `rest` | `ui` | `queue` | `database`
