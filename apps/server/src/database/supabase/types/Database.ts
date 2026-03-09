@@ -1350,7 +1350,6 @@ export type Database = {
           challenge_id: string | null
           created_at: string
           id: string
-          is_used: boolean
           position: number
           url: string
         }
@@ -1358,7 +1357,6 @@ export type Database = {
           challenge_id?: string | null
           created_at?: string
           id?: string
-          is_used: boolean
           position: number
           url: string
         }
@@ -1366,7 +1364,6 @@ export type Database = {
           challenge_id?: string | null
           created_at?: string
           id?: string
-          is_used?: boolean
           position?: number
           url?: string
         }

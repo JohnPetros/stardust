@@ -15,6 +15,7 @@ export type ChallengeDto = {
   starId?: string | null
   categories: ChallengeCategoryDto[]
   isPublic?: boolean
+  isNew?: boolean
   downvotesCount?: number
   upvotesCount?: number
   completionCount?: number

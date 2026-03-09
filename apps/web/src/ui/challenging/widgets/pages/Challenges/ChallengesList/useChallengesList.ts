@@ -5,10 +5,11 @@ import { QUERY_PARAMS } from '../query-params'
 import {
   ChallengeCompletionStatus,
   ChallengeDifficulty,
+  ChallengeIsNewStatus,
 } from '@stardust/core/challenging/structures'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import {
-  Id,
+  type Id,
   IdsList,
   ListingOrder,
   Logical,
@@ -32,6 +33,7 @@ type Params = {
 export function useChallengesList({ challengingService, userId, isUserGod }: Params) {
   const [difficultyLevel] = useQueryStringParam(QUERY_PARAMS.difficultyLevel, 'any')
   const [completionStatus] = useQueryStringParam(QUERY_PARAMS.completionStatus, 'any')
+  const [isNewStatus] = useQueryStringParam(QUERY_PARAMS.isNewStatus, 'all')
   const [title] = useQueryStringParam(QUERY_PARAMS.title, '')
   const [categoriesIds] = useQueryArrayParam(QUERY_PARAMS.categoriesIds)
   const { sleep } = useSleep()
@@ -43,6 +45,7 @@ export function useChallengesList({ challengingService, userId, isUserGod }: Par
       page: OrdinalNumber.create(page),
       categoriesIds: IdsList.create(categoriesIds),
       completionStatus: ChallengeCompletionStatus.create(completionStatus),
+      isNewStatus: ChallengeIsNewStatus.create(isNewStatus),
       difficulty: ChallengeDifficulty.create(difficultyLevel),
       itemsPerPage: OrdinalNumber.create(CHALLENGES_PER_PAGE),
       postingOrder: ListingOrder.create('any'),
@@ -66,7 +69,14 @@ export function useChallengesList({ challengingService, userId, isUserGod }: Par
     itemsPerPage: CHALLENGES_PER_PAGE,
     shouldRefetchOnFocus: true,
     isInfinity: true,
-    dependencies: [completionStatus, difficultyLevel, categoriesIds, title, userId],
+    dependencies: [
+      completionStatus,
+      difficultyLevel,
+      categoriesIds,
+      title,
+      userId,
+      isNewStatus,
+    ],
   })
 
   function handleShowMore() {

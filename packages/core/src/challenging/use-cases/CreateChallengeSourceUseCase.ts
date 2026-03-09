@@ -1,5 +1,5 @@
 import type { UseCase } from '#global/interfaces/UseCase'
-import { Id, Logical } from '#global/domain/structures/index'
+import { Id } from '#global/domain/structures/index'
 import type { ChallengeSourceDto } from '../domain/entities/dtos'
 import { ChallengeSource, type Challenge } from '../domain/entities'
 import {
@@ -9,7 +9,7 @@ import {
 import type { ChallengeSourcesRepository, ChallengesRepository } from '../interfaces'
 
 type Request = {
-  challengeId: string
+  challengeId?: string | null
   url: string
 }
 
@@ -22,8 +22,12 @@ export class CreateChallengeSourceUseCase implements UseCase<Request, Response> 
   ) {}
 
   async execute({ challengeId, url }: Request): Response {
-    const challenge = await this.findChallenge(Id.create(challengeId))
-    await this.verifyIfChallengeSourceExists(challenge.id)
+    const challenge = await this.findChallengeIfProvided(challengeId)
+
+    if (challenge) {
+      await this.verifyIfChallengeSourceExists(challenge.id)
+    }
+
     const challengeSource = await this.createChallengeSource(challenge, url)
 
     await this.challengeSourcesRepository.add(challengeSource)
@@ -36,6 +40,16 @@ export class CreateChallengeSourceUseCase implements UseCase<Request, Response> 
     return challenge
   }
 
+  private async findChallengeIfProvided(
+    challengeId?: string | null,
+  ): Promise<Challenge | null> {
+    if (!challengeId) {
+      return null
+    }
+
+    return this.findChallenge(Id.create(challengeId))
+  }
+
   private async verifyIfChallengeSourceExists(challengeId: Id): Promise<void> {
     const challengeSource =
       await this.challengeSourcesRepository.findByChallengeId(challengeId)
@@ -43,7 +57,7 @@ export class CreateChallengeSourceUseCase implements UseCase<Request, Response> 
   }
 
   private async createChallengeSource(
-    challenge: Challenge,
+    challenge: Challenge | null,
     url: string,
   ): Promise<ChallengeSource> {
     const challengeSources = await this.challengeSourcesRepository.findAll()
@@ -54,13 +68,14 @@ export class CreateChallengeSourceUseCase implements UseCase<Request, Response> 
     return ChallengeSource.create({
       id: Id.create().value,
       url,
-      isUsed: Logical.createAsFalse().value,
       position: lastPosition + 1,
-      challenge: {
-        id: challenge.id.value,
-        title: challenge.title.value,
-        slug: challenge.slug.value,
-      },
+      challenge: challenge
+        ? {
+            id: challenge.id.value,
+            title: challenge.title.value,
+            slug: challenge.slug.value,
+          }
+        : null,
     })
   }
 }

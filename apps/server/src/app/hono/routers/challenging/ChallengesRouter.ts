@@ -16,7 +16,10 @@ import {
   challengeVoteSchema,
 } from '@stardust/validation/challenging/schemas'
 
-import { SupabaseChallengesRepository } from '@/database/supabase/repositories/challenging'
+import {
+  SupabaseChallengesRepository,
+  SupabaseChallengeSourcesRepository,
+} from '@/database/supabase/repositories/challenging'
 import {
   FetchChallengeController,
   FetchChallengesListController,
@@ -115,6 +118,7 @@ export class ChallengesRouter extends HonoRouter {
           postingOrder: listingOrderSchema,
           userId: stringSchema.optional(),
           completionStatus: stringSchema,
+          isNewStatus: z.enum(['all', 'new', 'old']).optional().default('all'),
           shouldIncludeOnlyAuthorChallenges: queryParamBooleanSchema.default('false'),
           shouldIncludePrivateChallenges: queryParamBooleanSchema.default('false'),
           shouldIncludeStarChallenges: queryParamBooleanSchema.default('false'),
@@ -147,6 +151,7 @@ export class ChallengesRouter extends HonoRouter {
           postingOrder: listingOrderSchema,
           userId: stringSchema.optional(),
           completionStatus: stringSchema,
+          isNewStatus: z.enum(['all', 'new', 'old']).optional().default('all'),
         }),
       ),
       async (context) => {
@@ -205,8 +210,15 @@ export class ChallengesRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const challengeSourcesRepository = new SupabaseChallengeSourcesRepository(
+          http.getSupabase(),
+        )
         const broker = new InngestBroker()
-        const controller = new PostChallengeController(repository, broker)
+        const controller = new PostChallengeController(
+          repository,
+          challengeSourcesRepository,
+          broker,
+        )
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },

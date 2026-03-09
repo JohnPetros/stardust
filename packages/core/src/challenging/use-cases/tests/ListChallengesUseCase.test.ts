@@ -23,6 +23,7 @@ const createRequest = (
   completionCountOrder: 'any',
   postingOrder: 'descending',
   completionStatus: 'any',
+  isNewStatus: 'all',
   shouldIncludePrivateChallenges: false,
   shouldIncludeStarChallenges: false,
   shouldIncludeOnlyAuthorChallenges: false,

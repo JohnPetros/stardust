@@ -5,6 +5,7 @@ import { List } from '@stardust/core/global/structures'
 import {
   ChallengeCompletionStatus,
   ChallengeDifficulty,
+  ChallengeIsNewStatus,
 } from '@stardust/core/challenging/structures'
 
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
@@ -20,6 +21,10 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
   )
   const [completionStatus, setCompletionStatus] = useQueryStringParam(
     QUERY_PARAMS.completionStatus,
+    'all',
+  )
+  const [isNewStatus, setIsNewStatus] = useQueryStringParam(
+    QUERY_PARAMS.isNewStatus,
     'all',
   )
   const [title, setTitle] = useQueryStringParam(QUERY_PARAMS.title, 'all')
@@ -43,7 +48,7 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
   }
 
   const getTag = useCallback(
-    (value: string, filter: 'completionStatus' | 'difficultyLevel') => {
+    (value: string, filter: 'completionStatus' | 'difficultyLevel' | 'isNewStatus') => {
       return FILTER_SELECTS_ITEMS[filter].find((item) => item.value === value)?.label
     },
     [],
@@ -70,6 +75,15 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
     )
     if (difficultyLevels.includes(tagValue)) {
       setDifficultyLevel('all')
+      setTags(tags.remove(tagLabel))
+      return
+    }
+
+    const isNewStatuses = FILTER_SELECTS_ITEMS.isNewStatus.map((item) =>
+      String(item.value),
+    )
+    if (isNewStatuses.includes(tagValue)) {
+      setIsNewStatus('all')
       setTags(tags.remove(tagLabel))
       return
     }
@@ -122,6 +136,30 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
     setTags(currentTags)
   }
 
+  function handleIsNewStatusChange(newIsNewStatus: string) {
+    setIsNewStatus(newIsNewStatus)
+  }
+
+  function addIsNewStatusTag(isNewStatus: string) {
+    if (!ChallengeIsNewStatus.isValid(isNewStatus)) return
+    const tag = getTag(isNewStatus, 'isNewStatus')
+    if (!tag || tag === 'Todos') return
+
+    let currentTags = tags
+
+    const possibleIsNewStatusTags = FILTER_SELECTS_ITEMS.isNewStatus.map(
+      (item) => item.label,
+    )
+    const currentIsNewStatusTag = tags.getSome(possibleIsNewStatusTags)
+
+    if (currentIsNewStatusTag) {
+      currentTags = currentTags.remove(currentIsNewStatusTag)
+    }
+    currentTags = currentTags.add(tag)
+
+    setTags(currentTags)
+  }
+
   function handleTitleChange(title: string) {
     setTitle(title.trim().toLowerCase())
   }
@@ -133,6 +171,10 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
   useEffect(() => {
     if (difficultyLevel) addDifficultyLevelTag(difficultyLevel)
   }, [difficultyLevel])
+
+  useEffect(() => {
+    if (isNewStatus) addIsNewStatusTag(isNewStatus)
+  }, [isNewStatus])
 
   useEffect(() => {
     categoriesIds.filter(Boolean).forEach((id) => {
@@ -159,6 +201,7 @@ export function useChallengesFilter(categories: ChallengeCategory[]) {
     difficultyLevel,
     handleDifficultyLevelChange,
     handleCompletionStatusChange,
+    handleIsNewStatusChange,
     handleTitleChange,
     handleTagClick,
   }

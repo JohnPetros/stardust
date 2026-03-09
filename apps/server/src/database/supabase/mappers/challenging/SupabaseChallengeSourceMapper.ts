@@ -4,28 +4,20 @@ import type { SupabaseChallengeSource } from '../../types'
 
 export class SupabaseChallengeSourceMapper {
   static toEntity(supabaseChallengeSource: SupabaseChallengeSource): ChallengeSource {
-    const challengeId =
-      supabaseChallengeSource.challenges?.id ?? supabaseChallengeSource.challenge_id
-
-    if (!challengeId) {
-      throw new Error(
-        `SupabaseChallengeSourceMapper.toEntity: missing challenge_id and challenges join for ChallengeSource ${supabaseChallengeSource.id}`,
-      )
-    }
-
-    const challengeTitle = supabaseChallengeSource.challenges?.title ?? ''
-    const challengeSlug = supabaseChallengeSource.challenges?.slug ?? ''
+    const challenge = supabaseChallengeSource.challenges
+      ? {
+          id: supabaseChallengeSource.challenges.id,
+          title: supabaseChallengeSource.challenges.title,
+          slug: supabaseChallengeSource.challenges.slug,
+        }
+      : null
 
     return ChallengeSource.create({
       id: supabaseChallengeSource.id,
       url: supabaseChallengeSource.url,
       isUsed: supabaseChallengeSource.is_used,
       position: supabaseChallengeSource.position,
-      challenge: {
-        id: challengeId,
-        title: challengeTitle,
-        slug: challengeSlug,
-      },
+      challenge,
     })
   }
 
@@ -36,7 +28,6 @@ export class SupabaseChallengeSourceMapper {
       id: challengeSource.id.value,
       url: challengeSource.url.value,
       challenge_id: challenge ? challenge.id.value : null,
-      is_used: Boolean(challenge),
       position: challengeSource.position.value,
     }
   }

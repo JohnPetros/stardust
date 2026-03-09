@@ -1,34 +1,24 @@
-import type {
-  ChallengeSourcesRepository,
-  ChallengesRepository,
-} from '@stardust/core/challenging/interfaces'
-import { UpdateChallengeSourceUseCase } from '@stardust/core/challenging/use-cases'
+import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
+import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
+import { UpdateChallengeUseCase } from '@stardust/core/challenging/use-cases'
 
 type Schema = {
   routeParams: {
-    challengeSourceId: string
-  }
-  body: {
     challengeId: string
-    url: string
   }
+  body: ChallengeDto
 }
 
-export class UpdateChallengeSourceController implements Controller<Schema> {
-  constructor(
-    private readonly challengeSourcesRepository: ChallengeSourcesRepository,
-    private readonly challengesRepository: ChallengesRepository,
-  ) {}
+export class UpdateChallengeController implements Controller<Schema> {
+  constructor(private readonly repository: ChallengesRepository) {}
 
   async handle(http: Http<Schema>) {
-    const { challengeSourceId } = http.getRouteParams()
-    const { challengeId, url } = await http.getBody()
-    const useCase = new UpdateChallengeSourceUseCase(
-      this.challengeSourcesRepository,
-      this.challengesRepository,
-    )
-    const response = await useCase.execute({ challengeSourceId, challengeId, url })
+    const { challengeId } = http.getRouteParams()
+    const challengeDto = await http.getBody()
+    challengeDto.id = challengeId
+    const useCase = new UpdateChallengeUseCase(this.repository)
+    const response = await useCase.execute({ challengeDto })
     return http.send(response)
   }
 }

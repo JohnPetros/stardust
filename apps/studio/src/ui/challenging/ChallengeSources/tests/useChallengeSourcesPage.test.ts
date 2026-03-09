@@ -115,7 +115,14 @@ describe('useChallengeSourcesPage', () => {
   })
 
   it('should create challenge source successfully', async () => {
-    const createdSource = ChallengeSourcesFaker.fakeDto()
+    const challengeId = '550e8400-e29b-41d4-a716-446655440015'
+    const createdSource = ChallengeSourcesFaker.fakeDto({
+      challenge: {
+        id: challengeId,
+        title: 'Desafio vinculado',
+        slug: 'desafio-vinculado',
+      },
+    })
     const refetch = jest.fn()
     mockUseFetchReturn.refetch = refetch
 
@@ -129,13 +136,13 @@ describe('useChallengeSourcesPage', () => {
     await act(async () => {
       errorMessage = await result.current.onCreateChallengeSource(
         createdSource.url,
-        createdSource.challenge.id,
+        challengeId,
       )
     })
 
     expect(errorMessage).toBeNull()
     expect(challengingService.createChallengeSource).toHaveBeenCalledWith(
-      expect.objectContaining({ value: createdSource.challenge.id }),
+      expect.objectContaining({ value: challengeId }),
       expect.objectContaining({ value: createdSource.url }),
     )
     expect(toastProvider.showSuccess).toHaveBeenCalledWith('Fonte criada com sucesso')
@@ -153,13 +160,47 @@ describe('useChallengeSourcesPage', () => {
     await act(async () => {
       errorMessage = await result.current.onCreateChallengeSource(
         'https://invalid-source.test',
-        '550e8400-e29b-41d4-a716-446655440010',
+        undefined,
       )
     })
 
     expect(errorMessage).toBe('URL inválida')
     expect(toastProvider.showSuccess).not.toHaveBeenCalled()
     expect(mockUseFetchReturn.refetch).not.toHaveBeenCalled()
+  })
+
+  it('should update challenge source successfully', async () => {
+    const updatedSource = ChallengeSourcesFaker.fakeDto({
+      id: '550e8400-e29b-41d4-a716-446655440099',
+      url: 'https://updated-source.test',
+      challenge: null,
+    })
+    const refetch = jest.fn()
+    mockUseFetchReturn.refetch = refetch
+
+    challengingService.updateChallengeSource.mockResolvedValue(
+      new RestResponse({ body: updatedSource, statusCode: 200 }),
+    )
+
+    const { result } = Hook()
+
+    let errorMessage: string | null = 'unexpected'
+    await act(async () => {
+      errorMessage = await result.current.onUpdateChallengeSource(
+        updatedSource.id,
+        updatedSource.url,
+        undefined,
+      )
+    })
+
+    expect(errorMessage).toBeNull()
+    expect(challengingService.updateChallengeSource).toHaveBeenCalledWith(
+      expect.objectContaining({ value: updatedSource.id }),
+      expect.objectContaining({ value: updatedSource.url }),
+      null,
+    )
+    expect(toastProvider.showSuccess).toHaveBeenCalledWith('Fonte atualizada com sucesso')
+    expect(refetch).toHaveBeenCalled()
   })
 
   it('should show success toast and refetch when deleting challenge source succeeds', async () => {

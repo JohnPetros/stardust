@@ -21,6 +21,7 @@ type Props = {
   categories: ChallengeCategory[]
   isCompleted: boolean
   isUserGod: boolean
+  isNew: boolean
 }
 
 export const ChallengeCardView = ({
@@ -35,11 +36,17 @@ export const ChallengeCardView = ({
   categories,
   isCompleted,
   isUserGod,
+  isNew,
 }: Props) => {
   return (
     <AnimatedCard>
       <div className='flex items-center gap-3'>
         <DifficultyBadge difficultyLevel={difficultyLevel} />
+        {isNew && (
+          <span className='font-medium text-sm border border-blue-400 text-blue-400 p-2 rounded-lg'>
+            Novo
+          </span>
+        )}
         <Link
           href={`${ROUTES.challenging.challenges.challenge(slug)}`}
           prefetch={false}

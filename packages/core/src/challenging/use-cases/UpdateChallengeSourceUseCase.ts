@@ -1,14 +1,17 @@
 import type { UseCase } from '#global/interfaces/UseCase'
-import { Id, Logical } from '#global/domain/structures/index'
+import { Id, Name, Slug, Url } from '#global/domain/structures/index'
 import type { ChallengeSourceDto } from '../domain/entities/dtos'
-import { ChallengeSource, type Challenge } from '../domain/entities'
-import { ChallengeNotFoundError, ChallengeSourceNotFoundError } from '../domain/errors'
 import type { ChallengeSourcesRepository, ChallengesRepository } from '../interfaces'
+import {
+  ChallengeNotFoundError,
+  ChallengeSourceAlreadyExistsError,
+  ChallengeSourceNotFoundError,
+} from '../domain/errors'
 
 type Request = {
   challengeSourceId: string
-  challengeId: string
   url: string
+  challengeId?: string | null
 }
 
 type Response = Promise<ChallengeSourceDto>
@@ -19,47 +22,44 @@ export class UpdateChallengeSourceUseCase implements UseCase<Request, Response> 
     private readonly challengesRepository: ChallengesRepository,
   ) {}
 
-  async execute({ challengeSourceId, challengeId, url }: Request): Response {
-    const challengeSource = await this.findChallengeSource(Id.create(challengeSourceId))
-    const challenge = await this.findChallenge(Id.create(challengeId))
-    const updatedChallengeSource = this.updateChallengeSource(
-      challengeSource,
-      challenge,
-      url,
+  async execute({ challengeSourceId, url, challengeId }: Request): Response {
+    const challengeSource = await this.challengeSourcesRepository.findById(
+      Id.create(challengeSourceId),
     )
 
-    await this.challengeSourcesRepository.replace(updatedChallengeSource)
-    return updatedChallengeSource.dto
-  }
+    if (!challengeSource) {
+      throw new ChallengeSourceNotFoundError()
+    }
 
-  private async findChallengeSource(challengeSourceId: Id): Promise<ChallengeSource> {
-    const challengeSource =
-      await this.challengeSourcesRepository.findById(challengeSourceId)
-    if (!challengeSource) throw new ChallengeSourceNotFoundError()
-    return challengeSource
-  }
+    challengeSource.url = Url.create(url)
 
-  private async findChallenge(challengeId: Id): Promise<Challenge> {
-    const challenge = await this.challengesRepository.findById(challengeId)
-    if (!challenge) throw new ChallengeNotFoundError()
-    return challenge
-  }
+    if (!challengeId) {
+      challengeSource.challenge = null
+    } else {
+      const challenge = await this.challengesRepository.findById(Id.create(challengeId))
 
-  private updateChallengeSource(
-    challengeSource: ChallengeSource,
-    challenge: Challenge,
-    url: string,
-  ): ChallengeSource {
-    return ChallengeSource.create({
-      id: challengeSource.id.value,
-      url,
-      isUsed: Logical.create(true).value,
-      position: challengeSource.position.value,
-      challenge: {
-        id: challenge.id.value,
-        title: challenge.title.value,
-        slug: challenge.slug.value,
-      },
-    })
+      if (!challenge) {
+        throw new ChallengeNotFoundError()
+      }
+
+      const existingChallengeSource =
+        await this.challengeSourcesRepository.findByChallengeId(challenge.id)
+
+      if (
+        existingChallengeSource &&
+        existingChallengeSource.id.value !== challengeSource.id.value
+      ) {
+        throw new ChallengeSourceAlreadyExistsError()
+      }
+
+      challengeSource.challenge = {
+        id: challenge.id,
+        title: Name.create(challenge.title.value),
+        slug: Slug.create(challenge.slug.value),
+      }
+    }
+
+    await this.challengeSourcesRepository.replace(challengeSource)
+    return challengeSource.dto
   }
 }
