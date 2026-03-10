@@ -205,6 +205,6 @@ describe('useChallengeCodeEditorSlot', () => {
     })
 
     expect(playAudio).toHaveBeenCalledWith('fail-code-result.wav')
-    expect(showError).toHaveBeenCalledWith('Erro interno do interpretador!')
+    expect(showError).toHaveBeenCalledWith('Erro interno do interpretador.')
   })
 })
