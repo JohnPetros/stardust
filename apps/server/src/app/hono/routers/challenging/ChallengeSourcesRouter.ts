@@ -114,7 +114,11 @@ export class ChallengeSourcesRouter extends HonoRouter {
         const challengeSourcesRepository = new SupabaseChallengeSourcesRepository(
           supabase,
         )
-        const controller = new UpdateChallengeSourceController(challengeSourcesRepository)
+        const challengesRepository = new SupabaseChallengesRepository(supabase)
+        const controller = new UpdateChallengeSourceController(
+          challengeSourcesRepository,
+          challengesRepository,
+        )
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
