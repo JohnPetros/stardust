@@ -1,6 +1,6 @@
 'use client'
 
-import { Id, Name, OrdinalNumber, Slug } from '@stardust/core/global/structures'
+import type { Id, Name, OrdinalNumber, Slug } from '@stardust/core/global/structures'
 
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { useRef } from 'react'
@@ -8,7 +8,7 @@ import { useStar } from './useStar'
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { StarView } from './StarView'
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
-import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
+import { useSpaceContext } from '@/ui/space/hooks/useSpaceContext'
 
 type StarProps = {
   id: Id
@@ -20,15 +20,25 @@ type StarProps = {
 export const Star = ({ id, name, number, slug }: StarProps) => {
   const { challengingService } = useRestContext()
   const { user } = useAuthContext()
-  const { lastUnlockedStarId } = useSpaceContext()
+  const {
+    lastUnlockedStarId,
+    lastUnlockedStarRef,
+    lastUnlockedStarPosition,
+    scrollIntoLastUnlockedStar,
+    setLastUnlockedStarPosition,
+  } = useSpaceContext()
   const isLastUnlockedStar = lastUnlockedStarId === id.value
   const starAnimationRef = useRef<AnimationRef>(null)
-  const { lastUnlockedStarRef, handleStarClick } = useStar({
+  const { lastUnlockedStarRef: starRef, handleStarClick } = useStar({
     starId: id,
     starSlug: slug,
     isLastUnlockedStar,
     starAnimationRef,
     challengingService,
+    lastUnlockedStarRef,
+    lastUnlockedStarPosition,
+    scrollIntoLastUnlockedStar,
+    setLastUnlockedStarPosition,
   })
 
   if (user)
@@ -39,7 +49,7 @@ export const Star = ({ id, name, number, slug }: StarProps) => {
         isUnlocked={user?.hasUnlockedStar(id).isTrue}
         isRecentlyUnlocked={user?.hasRecentlyUnlockedStar(id).isTrue}
         isLastUnlockedStar={isLastUnlockedStar}
-        lastUnlockedStarRef={lastUnlockedStarRef}
+        lastUnlockedStarRef={starRef}
         starAnimationRef={starAnimationRef}
         onClick={handleStarClick}
       />

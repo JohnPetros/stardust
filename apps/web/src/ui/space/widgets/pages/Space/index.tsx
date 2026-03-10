@@ -3,7 +3,7 @@
 import Link from 'next/link'
 
 import { Fab } from '@/ui/global/widgets/components/Fab'
-import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
+import { useSpaceContext } from '@/ui/space/hooks/useSpaceContext'
 
 import { useSpacePage } from './useSpacePage'
 import { Planet } from './Planet'
@@ -14,8 +14,16 @@ import { Animation } from '@/ui/global/widgets/components/Animation'
 import { ROUTES } from '@/constants'
 
 export function SpacePage() {
-  const { lastUnlockedStarPosition, handleFabClick } = useSpacePage()
-  const { planets, lastUnlockedStarId } = useSpaceContext()
+  const {
+    planets,
+    lastUnlockedStarId,
+    lastUnlockedStarPosition,
+    scrollIntoLastUnlockedStar,
+  } = useSpaceContext()
+  const { handleFabClick } = useSpacePage({
+    lastUnlockedStarPosition,
+    scrollIntoLastUnlockedStar,
+  })
   const { user } = useAuthContext()
 
   return (

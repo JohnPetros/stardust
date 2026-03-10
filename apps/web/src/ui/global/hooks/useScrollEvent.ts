@@ -1,7 +1,12 @@
 import { useMotionValueEvent, useScroll } from 'motion/react'
+import type { RefObject } from 'react'
 
-export function useScrollEvent(onScroll: VoidFunction) {
-  const { scrollY } = useScroll()
+type Options = {
+  container?: RefObject<HTMLElement | null>
+}
+
+export function useScrollEvent(onScroll: VoidFunction, { container }: Options = {}) {
+  const { scrollY } = useScroll(container ? { container } : undefined)
 
   useMotionValueEvent(scrollY, 'change', onScroll)
 }

@@ -1,8 +1,12 @@
-import { useSpaceContext } from '@/ui/space/contexts/SpaceContext'
+type Params = {
+  lastUnlockedStarPosition: 'above' | 'in' | 'bellow'
+  scrollIntoLastUnlockedStar: () => void
+}
 
-export function useSpacePage() {
-  const { lastUnlockedStarPosition, scrollIntoLastUnlockedStar } = useSpaceContext()
-
+export function useSpacePage({
+  lastUnlockedStarPosition,
+  scrollIntoLastUnlockedStar,
+}: Params) {
   function handleFabClick() {
     scrollIntoLastUnlockedStar()
   }
