@@ -1,0 +1,32 @@
+import { faker } from '@faker-js/faker'
+
+import type { StarDto } from '../dtos'
+import { Star } from '../Star'
+
+export class StarsFaker {
+  static fake(baseDto?: Partial<StarDto>): Star {
+    return Star.create(StarsFaker.fakeDto(baseDto))
+  }
+
+  static fakeDto(baseDto?: Partial<StarDto>): StarDto {
+    return {
+      id: faker.string.uuid(),
+      name: faker.person.firstName(),
+      number: faker.number.int({ min: 1, max: 20 }),
+      slug: faker.lorem.slug(),
+      isAvailable: faker.datatype.boolean(),
+      isChallenge: faker.datatype.boolean(),
+      unlockCount: faker.number.int({ min: 0, max: 100 }),
+      userCount: faker.number.int({ min: 0, max: 100 }),
+      ...baseDto,
+    }
+  }
+
+  static fakeMany(count?: number): Star[] {
+    return Array.from({ length: count ?? 10 }).map(() => StarsFaker.fake())
+  }
+
+  static fakeManyDto(count?: number): StarDto[] {
+    return Array.from({ length: count ?? 10 }).map(() => StarsFaker.fake().dto)
+  }
+}

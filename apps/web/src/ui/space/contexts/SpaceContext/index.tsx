@@ -5,8 +5,8 @@ import { createContext, useEffect, type ReactNode } from 'react'
 import type { PlanetDto } from '@stardust/core/space/entities/dtos'
 import { Planet } from '@stardust/core/space/entities'
 
-import { useSpaceProvider, useSpaceContext } from './hooks'
 import type { SpaceContextValue } from './types/SpaceContextValue'
+import { useSpaceContextProvider } from './useSpaceContextProvider'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 type SpaceContextProps = {
@@ -14,11 +14,11 @@ type SpaceContextProps = {
   planetsDto: PlanetDto[]
 }
 
-export const SpaceContext = createContext({} as SpaceContextValue)
+export const SpaceContext = createContext<SpaceContextValue | undefined>(undefined)
 
 export function SpaceProvider({ children, planetsDto }: SpaceContextProps) {
   const { user, refetchUser } = useAuthContext()
-  const spaceContextValue = useSpaceProvider(planetsDto.map(Planet.create), user)
+  const spaceContextValue = useSpaceContextProvider(planetsDto.map(Planet.create), user)
 
   useEffect(() => {
     refetchUser()
@@ -28,5 +28,3 @@ export function SpaceProvider({ children, planetsDto }: SpaceContextProps) {
     <SpaceContext.Provider value={spaceContextValue}>{children}</SpaceContext.Provider>
   )
 }
-
-export { useSpaceContext }
