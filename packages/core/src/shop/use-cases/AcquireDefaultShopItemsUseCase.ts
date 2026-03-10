@@ -13,7 +13,7 @@ type Request = {
     email: string
   }
   firstTierId: string
-  firstStarId: string
+  firstUnlockedStarId: string
 }
 
 export class AcquireDefaultShopItemsUseCase implements UseCase<Request, void> {
@@ -23,7 +23,7 @@ export class AcquireDefaultShopItemsUseCase implements UseCase<Request, void> {
     private readonly broker: Broker,
   ) {}
 
-  async execute({ user, firstStarId, firstTierId }: Request) {
+  async execute({ user, firstUnlockedStarId, firstTierId }: Request) {
     const [rockets, avatars] = await Promise.all([
       this.rocketsRepository.findAllByPrice(Integer.create(0)),
       this.avatarsRepository.findAllByPrice(Integer.create(0)),
@@ -44,7 +44,7 @@ export class AcquireDefaultShopItemsUseCase implements UseCase<Request, void> {
       acquiredAvatarsByDefaultIds: avatarsToAquire.map((avatar) => avatar.id.value),
       acquiredRocketsByDefaultIds: rocketsToAquire.map((rocket) => rocket.id.value),
       firstTierId,
-      firstStarId,
+      firstUnlockedStarId,
       user,
     })
     await this.broker.publish(event)

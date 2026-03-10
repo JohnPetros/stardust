@@ -4,6 +4,7 @@ import type { NotificationService } from '@stardust/core/notification/interfaces
 import type { EventPayload } from '@stardust/core/global/types'
 import type { FeedbackReportSentEvent } from '@stardust/core/reporting/events'
 import type { ChallengePostedEvent } from '@stardust/core/challenging/events'
+import type { UserCreatedEvent } from '@stardust/core/profile/events'
 
 export class DiscordNotificationService implements NotificationService {
   constructor(private readonly restClient: RestClient) {}
@@ -161,6 +162,33 @@ export class DiscordNotificationService implements NotificationService {
               name: 'Autor',
               value: payload.challengeAuthor.entity?.name ?? 'Sistema',
               inline: false,
+            },
+          ],
+          timestamp: new Date().toISOString(),
+        },
+      ],
+    })
+  }
+
+  async sendUserCreatedNotification(
+    payload: EventPayload<typeof UserCreatedEvent>,
+  ): Promise<RestResponse> {
+    return await this.restClient.post('/', {
+      embeds: [
+        {
+          title: 'Perfil inicial criado',
+          description: 'Um novo usuario concluiu o onboarding inicial da plataforma.',
+          color: 3066993,
+          fields: [
+            {
+              name: 'Usuário',
+              value: payload.userName,
+              inline: true,
+            },
+            {
+              name: 'Perfil',
+              value: `https://stardust-app.com.br/profile/${payload.userSlug}`,
+              inline: true,
             },
           ],
           timestamp: new Date().toISOString(),

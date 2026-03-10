@@ -1,10 +1,13 @@
 import type { EventPayload } from '@stardust/core/global/types'
 import type { Amqp, Job } from '@stardust/core/global/interfaces'
+import type { Broker } from '@stardust/core/global/interfaces'
+import { Name } from '@stardust/core/global/structures'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import {
   CreateUserUseCase,
   AcquireAvatarUseCase,
   AcquireRocketUseCase,
+  FinishUserCreationUseCase,
   UnlockStarUseCase,
 } from '@stardust/core/profile/use-cases'
 import type { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
@@ -14,13 +17,16 @@ type Payload = EventPayload<typeof ShopItemsAcquiredByDefaultEvent>
 export class CreateUserJob implements Job<Payload> {
   static readonly KEY = 'profile/create.user.job'
 
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly broker: Broker,
+  ) {}
 
   async handle(amqp: Amqp<Payload>) {
     const {
       user,
       firstTierId,
-      firstStarId,
+      firstUnlockedStarId,
       acquiredAvatarsByDefaultIds,
       acquiredRocketsByDefaultIds,
       selectedAvatarByDefaultId,
@@ -30,6 +36,7 @@ export class CreateUserJob implements Job<Payload> {
     const unlockStarUseCase = new UnlockStarUseCase(this.usersRepository)
     const acquireRocketUseCase = new AcquireRocketUseCase(this.usersRepository)
     const acquireAvatarUseCase = new AcquireAvatarUseCase(this.usersRepository)
+    const finishUserCreationUseCase = new FinishUserCreationUseCase(this.broker)
 
     await amqp.run(
       async () =>
@@ -48,7 +55,7 @@ export class CreateUserJob implements Job<Payload> {
       async () =>
         await unlockStarUseCase.execute({
           userId: user.id,
-          starId: firstStarId,
+          starId: firstUnlockedStarId,
         }),
       UnlockStarUseCase.name,
     )
@@ -76,5 +83,16 @@ export class CreateUserJob implements Job<Payload> {
         ),
       )
     }, AcquireAvatarUseCase.name)
+
+    await amqp.run(
+      async () =>
+        await finishUserCreationUseCase.execute({
+          userId: user.id,
+          userName: user.name,
+          userEmail: user.email,
+          userSlug: Name.create(user.name).slug.value,
+        }),
+      FinishUserCreationUseCase.name,
+    )
   }
 }

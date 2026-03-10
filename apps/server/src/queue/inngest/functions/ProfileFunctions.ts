@@ -17,6 +17,7 @@ import {
 } from '@/queue/jobs/profile'
 import { SupabaseUsersRepository } from '@/database'
 import { InngestAmqp } from '../InngestAmqp'
+import { InngestBroker } from '../InngestBroker'
 import { InngestFunctions } from './InngestFunctions'
 import { SpaceOrderChangedEvent } from '@stardust/core/space/events'
 import { UserSignedInEvent } from '@stardust/core/auth/events'
@@ -31,8 +32,9 @@ export class ProfileFunctions extends InngestFunctions {
       { event: ShopItemsAcquiredByDefaultEvent._NAME },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
+        const broker = new InngestBroker()
         const amqp = new InngestAmqp<typeof context.event.data>(context)
-        const job = new CreateUserJob(repository)
+        const job = new CreateUserJob(repository, broker)
         return await job.handle(amqp)
       },
     )

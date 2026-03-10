@@ -4,6 +4,7 @@ type Payload = {
   userId: string
   userName: string
   userEmail: string
+  userSlug: string
 }
 
 export class UserCreatedEvent extends Event<Payload> {

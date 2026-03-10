@@ -1,6 +1,7 @@
 import { PlanetCompletedEvent, SpaceCompletedEvent } from '@stardust/core/space/events'
 import { FeedbackReportSentEvent } from '@stardust/core/reporting/events'
 import { ChallengePostedEvent } from '@stardust/core/challenging/events'
+import { UserCreatedEvent } from '@stardust/core/profile/events'
 
 import { ENV } from '@/constants'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
@@ -9,6 +10,7 @@ import {
   SendPlanetCompletedNotificationJob,
   SendSpaceCompletedNotificationJob,
   SendChallengePostedNotificationJob,
+  SendUserCreatedNotificationJob,
 } from '@/queue/jobs/notification'
 import { DiscordNotificationService } from '@/rest/services'
 import { InngestAmqp } from '../InngestAmqp'
@@ -87,12 +89,31 @@ export class NotificationFunctions extends InngestFunctions {
     )
   }
 
+  private createSendUserCreatedNotificationFunction() {
+    return this.inngest.createFunction(
+      {
+        id: SendUserCreatedNotificationJob.KEY,
+        onFailure: (context) =>
+          this.handleFailure(context, SendUserCreatedNotificationJob.name),
+      },
+      { event: UserCreatedEvent._NAME },
+      async (context) => {
+        const restClient = new AxiosRestClient(ENV.discordWebhookUrl)
+        const service = new DiscordNotificationService(restClient)
+        const amqp = new InngestAmqp<typeof context.event.data>(context)
+        const job = new SendUserCreatedNotificationJob(service)
+        return await job.handle(amqp)
+      },
+    )
+  }
+
   getFunctions() {
     return [
       this.createCreateUserFunction(),
       this.createSendSpaceCompletedNotificationFunction(),
       this.createSendFeedbackNotificationFunction(),
       this.createSendChallengePostedNotificationFunction(),
+      this.createSendUserCreatedNotificationFunction(),
     ]
   }
 }

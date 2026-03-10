@@ -63,7 +63,7 @@ describe('Unlock First Star Use Case', () => {
           name: user.name.value,
           email: user.email.value,
         },
-        firstStarId: String(firstStar.id),
+        firstUnlockedStarId: String(firstStar.id),
       }),
     )
   })
