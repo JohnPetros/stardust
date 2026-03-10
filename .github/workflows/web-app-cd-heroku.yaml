@@ -1,9 +1,8 @@
 name: Web app CD to Heroku
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
 
 permissions:
   id-token: write
