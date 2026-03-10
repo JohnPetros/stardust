@@ -27,6 +27,7 @@ Implementar a página de gerenciamento de relatórios de feedback na aplicação
     *   `isLoading`: boolean
     *   `reports`: FeedbackReport[]
     *   `filters`: Objeto com estados dos filtros (page, authorName, intent, dates).
+    *   `intent` inválido na query string deve ser tratado com fallback para `all`/`undefined` (sem quebrar renderização).
     *   `selectedReport`: FeedbackReport | null (para dialog de detalhes).
     *   `reportToDelete`: FeedbackReport | null (para dialog de exclusão).
 *   **View:** `FeedbackReportsPageView.tsx`

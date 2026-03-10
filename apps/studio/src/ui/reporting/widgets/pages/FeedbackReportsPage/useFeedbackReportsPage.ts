@@ -11,6 +11,7 @@ import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useQueryNumberParam } from '@/ui/global/hooks/useQueryNumberParam'
 import { useDebounce } from '@/ui/global/hooks/useDebounce'
 import { CACHE } from '@/constants'
+import { FeedbackIntent } from '@stardust/core/reporting/structures'
 
 export type FeedbackReportsFilters = {
   page: number
@@ -44,6 +45,11 @@ export function useFeedbackReportsPage({ reportingService, toastProvider }: Para
     return Period.create(startDateParam, endDateParam)
   }, [startDateParam, endDateParam])
 
+  const validIntent =
+    intent !== 'all' && FeedbackIntent.isValid(intent)
+      ? FeedbackIntent.create(intent)
+      : undefined
+
   const { data, isFetching, totalItemsCount, refetch } = usePaginatedFetch({
     key: CACHE.feedbackReportsTable.key,
     itemsPerPage,
@@ -60,7 +66,7 @@ export function useFeedbackReportsPage({ reportingService, toastProvider }: Para
         page: OrdinalNumber.create(page),
         itemsPerPage: OrdinalNumber.create(itemsPerPage),
         authorName: debouncedAuthorName ? Text.create(debouncedAuthorName) : undefined,
-        intent: intent === 'all' ? undefined : Text.create(intent),
+        intent: validIntent,
         sentAtPeriod,
       }),
   })

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import {
   ChallengeCompletionStatus,
   ChallengeDifficulty,
+  ChallengeIsNewStatus,
 } from '@stardust/core/challenging/structures'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { ToastProvider } from '@stardust/core/global/interfaces'
@@ -58,6 +59,7 @@ export function useStarChallengeSelector({
         shouldIncludeOnlyAuthorChallenges: Logical.create(false),
         shouldIncludeStarChallenges: Logical.create(false),
         title: Text.create(debouncedSearch),
+        isNewStatus: ChallengeIsNewStatus.create('all'),
         userId: null,
       }),
   })

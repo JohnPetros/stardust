@@ -2,10 +2,12 @@ import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import {
   ChallengeCompletionStatus,
   ChallengeDifficulty,
+  ChallengeIsNewStatus,
 } from '@stardust/core/challenging/structures'
 import {
   IdsList,
   ListingOrder,
+  Logical,
   OrdinalNumber,
   Text,
 } from '@stardust/core/global/structures'
@@ -24,7 +26,13 @@ export function useRecentChallengesTable(challengingService: ChallengingService)
         completionStatus: ChallengeCompletionStatus.create('any'),
         difficulty: ChallengeDifficulty.create('any'),
         upvotesCountOrder: ListingOrder.create('any'),
-        postingOrder: ListingOrder.create('desc'),
+        downvoteCountOrder: ListingOrder.create('any'),
+        completionCountOrder: ListingOrder.create('any'),
+        postingOrder: ListingOrder.create('descending'),
+        isNewStatus: ChallengeIsNewStatus.create('all'),
+        shouldIncludeStarChallenges: Logical.create(false),
+        shouldIncludeOnlyAuthorChallenges: Logical.create(false),
+        shouldIncludePrivateChallenges: Logical.create(false),
         title: Text.create(''),
         userId: null,
       }),
