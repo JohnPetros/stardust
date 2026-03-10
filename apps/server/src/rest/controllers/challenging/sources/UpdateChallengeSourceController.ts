@@ -10,7 +10,7 @@ type Schema = {
   body: ChallengeDto
 }
 
-export class UpdateChallengeController implements Controller<Schema> {
+export class UpdateChallengeSourceController implements Controller<Schema> {
   constructor(private readonly repository: ChallengesRepository) {}
 
   async handle(http: Http<Schema>) {

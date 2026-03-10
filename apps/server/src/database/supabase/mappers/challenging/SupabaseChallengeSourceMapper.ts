@@ -15,7 +15,6 @@ export class SupabaseChallengeSourceMapper {
     return ChallengeSource.create({
       id: supabaseChallengeSource.id,
       url: supabaseChallengeSource.url,
-      isUsed: supabaseChallengeSource.is_used,
       position: supabaseChallengeSource.position,
       challenge,
     })
