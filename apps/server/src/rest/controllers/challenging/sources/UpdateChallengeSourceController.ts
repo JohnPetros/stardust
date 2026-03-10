@@ -2,8 +2,8 @@ import type {
   ChallengeSourcesRepository,
   ChallengesRepository,
 } from '@stardust/core/challenging/interfaces'
-import { UpdateChallengeSourceUseCase } from '@stardust/core/challenging/use-cases'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
+import { UpdateChallengeSourceUseCase } from '@stardust/core/challenging/use-cases'
 
 type Schema = {
   routeParams: {
@@ -28,13 +28,7 @@ export class UpdateChallengeSourceController implements Controller<Schema> {
       this.challengeSourcesRepository,
       this.challengesRepository,
     )
-
-    const response = await useCase.execute({
-      challengeSourceId,
-      url,
-      challengeId,
-    })
-
+    const response = await useCase.execute({ challengeSourceId, url, challengeId })
     return http.send(response)
   }
 }

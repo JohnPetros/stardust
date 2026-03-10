@@ -10,6 +10,7 @@ export type Props = {
   panelHeight: string
   onDragDown: VoidFunction
   onClose: VoidFunction
+  positionMode: 'absolute' | 'fixed'
 }
 
 export const ConsoleView = ({
@@ -18,13 +19,19 @@ export const ConsoleView = ({
   panelHeight,
   onDragDown,
   onClose,
+  positionMode,
 }: Props) => {
+  const positionClassName =
+    positionMode === 'fixed'
+      ? 'fixed bottom-0 left-0 z-50 w-screen cursor-pointer rounded-t-lg bg-gray-700'
+      : 'absolute -bottom-4 w-full cursor-pointer rounded-t-lg bg-gray-700'
+
   return (
     <AnimatedPanel
       isOpen={isOpen}
       height={panelHeight}
       onDragDown={onDragDown}
-      className='absolute -bottom-4 w-full cursor-pointer rounded-t-lg bg-gray-700'
+      className={positionClassName}
     >
       <div className='border-b border-gray-400 px-6 py-2'>
         <span className='mx-auto block h-[2px] w-1/6 rounded-md bg-gray-400' />
@@ -46,8 +53,8 @@ export const ConsoleView = ({
 
       {outputs.length > 0 ? (
         <ul className='px-6 py-2'>
-          {outputs.map((output) => (
-            <li key={String(output)} className='block text-sm text-gray-300'>
+          {outputs.map((output, index) => (
+            <li key={`${index}-${output}`} className='block text-sm text-gray-300'>
               {output}
             </li>
           ))}

@@ -12,6 +12,7 @@ type Props = {
   originalCode?: string
   codeEditorRef: RefObject<CodeEditorRef | null>
   onRunCode: () => void
+  onOpenConsole?: () => void
 }
 
 export const CodeEditorToolbar = ({
@@ -19,6 +20,7 @@ export const CodeEditorToolbar = ({
   originalCode,
   codeEditorRef,
   onRunCode,
+  onOpenConsole,
 }: PropsWithChildren<Props>) => {
   const runCodeButtonRef = useRef<HTMLButtonElement | null>(null)
   const guidesDialogButtonRef = useRef<HTMLButtonElement | null>(null)
@@ -37,6 +39,7 @@ export const CodeEditorToolbar = ({
       runCodeButtonRef={runCodeButtonRef}
       guidesDialogButtonRef={guidesDialogButtonRef}
       onRunCode={onRunCode}
+      onOpenConsole={onOpenConsole}
       onKeyDown={handleKeyDown}
       onResetCodeButtonClick={handleAssistantButtonClick}
       onAssistantEnabledChange={() => setIsAssistantEnabled(!isAssistantEnabled)}
