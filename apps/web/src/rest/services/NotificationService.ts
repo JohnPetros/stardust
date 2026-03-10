@@ -25,5 +25,9 @@ export const NotificationService = (restClient: RestClient): INotificationServic
     async sendChallengePostedNotification(_) {
       throw new MethodNotImplementedError('sendChallengePostedNotification')
     },
+
+    async sendUserCreatedNotification(_) {
+      throw new MethodNotImplementedError('sendUserCreatedNotification')
+    },
   }
 }

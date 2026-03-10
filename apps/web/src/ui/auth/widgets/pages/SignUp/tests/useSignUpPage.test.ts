@@ -87,6 +87,7 @@ describe('useSignUpPage', () => {
       userId: Id.create().value,
       userEmail: email,
       userName: name,
+      userSlug: Name.create(name).slug.value,
     })
     const { showSuccess } = useToastContextMock()
     const { result } = renderHook(Hook)

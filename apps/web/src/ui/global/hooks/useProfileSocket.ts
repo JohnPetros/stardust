@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 
+import { Name } from '@stardust/core/global/structures'
 import { UserCreatedEvent } from '@stardust/core/profile/events'
 
 import { SupabaseClient } from '@/realtime/supabase/client'
@@ -19,6 +20,7 @@ export function useProfileSocket(onCreateUser: (event: UserCreatedEvent) => void
             userId: payload.new.id,
             userName: payload.new.name,
             userEmail: payload.new.email,
+            userSlug: Name.create(payload.new.name).slug.value,
           })
           onCreateUser(event)
         },
