@@ -18,8 +18,8 @@ describe('Handle Redirect Controller', () => {
     controller = HandleRedirectController()
   })
 
-  it('should redirect when redirect_to query param is present', async () => {
-    const redirectUrl = 'https://example.com/redirect'
+  it('should redirect when redirect_to is an internal relative route', async () => {
+    const redirectUrl = '/dashboard'
     http.getQueryParams.mockReturnValue({ redirect_to: redirectUrl })
 
     await controller.handle(http)
@@ -67,22 +67,25 @@ describe('Handle Redirect Controller', () => {
     expect(http.redirect).not.toHaveBeenCalled()
   })
 
-  it('should redirect with relative URL', async () => {
-    const redirectUrl = '/dashboard'
-    http.getQueryParams.mockReturnValue({ redirect_to: redirectUrl })
-
-    await controller.handle(http)
-
-    expect(http.redirect).toHaveBeenCalledWith(redirectUrl)
-  })
-
-  it('should redirect with absolute URL', async () => {
+  it('should pass through when redirect_to is an absolute URL', async () => {
     const redirectUrl = 'https://example.com/external'
     http.getQueryParams.mockReturnValue({ redirect_to: redirectUrl })
+    http.pass.mockResolvedValue(mockResponse)
 
     await controller.handle(http)
 
-    expect(http.redirect).toHaveBeenCalledWith(redirectUrl)
+    expect(http.pass).toHaveBeenCalled()
+    expect(http.redirect).not.toHaveBeenCalled()
+  })
+
+  it('should pass through when redirect_to uses a protocol-relative URL', async () => {
+    http.getQueryParams.mockReturnValue({ redirect_to: '//example.com/external' })
+    http.pass.mockResolvedValue(mockResponse)
+
+    await controller.handle(http)
+
+    expect(http.pass).toHaveBeenCalled()
+    expect(http.redirect).not.toHaveBeenCalled()
   })
 
   it('should get query params correctly', async () => {
