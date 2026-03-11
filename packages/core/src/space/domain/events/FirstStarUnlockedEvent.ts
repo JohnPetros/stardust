@@ -6,7 +6,7 @@ type Payload = {
     name: string
     email: string
   }
-  firstStarId: string
+  firstUnlockedStarId: string
 }
 
 export class FirstStarUnlockedEvent extends Event<Payload> {

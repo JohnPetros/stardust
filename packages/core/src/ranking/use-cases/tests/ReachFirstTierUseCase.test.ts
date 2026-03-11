@@ -29,7 +29,7 @@ describe('Reach First Tier Use Case', () => {
     expect(
       useCase.execute({
         user: { id: user.id.value, name: user.name.value, email: user.email.value },
-        firstStarId: Id.create().value,
+        firstUnlockedStarId: Id.create().value,
       }),
     ).rejects.toThrow(TierNotFoundError)
   })
@@ -41,7 +41,7 @@ describe('Reach First Tier Use Case', () => {
 
     await useCase.execute({
       user: { id: user.id.value, name: user.name.value, email: user.email.value },
-      firstStarId: Id.create().value,
+      firstUnlockedStarId: Id.create().value,
     })
 
     expect(tiersRepository.findByPosition).toHaveBeenCalledWith(OrdinalNumber.create(1))
@@ -50,18 +50,18 @@ describe('Reach First Tier Use Case', () => {
   it('should publish the first tier reached event', async () => {
     const user = UsersFaker.fake()
     const firstTier = TiersFaker.fake()
-    const firstStarId = Id.create()
+    const firstUnlockedStarId = Id.create()
     tiersRepository.findByPosition.mockResolvedValue(firstTier)
 
     await useCase.execute({
       user: { id: user.id.value, name: user.name.value, email: user.email.value },
-      firstStarId: firstStarId.value,
+      firstUnlockedStarId: firstUnlockedStarId.value,
     })
 
     expect(Broker.publish).toHaveBeenCalledWith(
       new FirstTierReachedEvent({
         user: { id: user.id.value, name: user.name.value, email: user.email.value },
-        firstStarId: firstStarId.value,
+        firstUnlockedStarId: firstUnlockedStarId.value,
         firstTierId: firstTier.id.value,
       }),
     )

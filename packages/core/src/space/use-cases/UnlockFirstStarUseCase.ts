@@ -31,7 +31,7 @@ export class UnlockFirstStarUseCase implements UseCase<Request, Response> {
         name: request.userName,
         email: request.userEmail,
       },
-      firstStarId: firstPlanet.firstStar.id.value,
+      firstUnlockedStarId: firstPlanet.firstStar.id.value,
     })
     await this.broker.publish(event)
   }

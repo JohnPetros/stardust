@@ -10,7 +10,7 @@ type Payload = {
   selectedAvatarByDefaultId: string
   acquiredRocketsByDefaultIds: string[]
   acquiredAvatarsByDefaultIds: string[]
-  firstStarId: string
+  firstUnlockedStarId: string
   firstTierId: string
 }
 

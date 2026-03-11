@@ -2,6 +2,7 @@ import type { EventPayload } from '@stardust/core/global/types'
 import type { RestResponse } from '@stardust/core/global/responses'
 import type { FeedbackReportSentEvent } from '../../reporting/domain/events/FeedbackReportSentEvent'
 import type { ChallengePostedEvent } from '#challenging/domain/events/ChallengePostedEvent'
+import type { UserCreatedEvent } from '#profile/domain/events/UserCreatedEvent'
 
 export interface NotificationService {
   sendPlanetCompletedNotification(
@@ -22,5 +23,8 @@ export interface NotificationService {
   ): Promise<RestResponse>
   sendChallengePostedNotification(
     payload: EventPayload<typeof ChallengePostedEvent>,
+  ): Promise<RestResponse>
+  sendUserCreatedNotification(
+    payload: EventPayload<typeof UserCreatedEvent>,
   ): Promise<RestResponse>
 }
