@@ -73,7 +73,7 @@ last_updated_at: 2026-03-11
   http.setCookie(
     COOKIES.accessToken.key,
     token,
-    COOKIES.accessToken.durationInISSUEonds,
+    COOKIES.accessToken.durationInSeconds,
   )
   ```
 - **Impacto:** o browser pode persistir um token arbitrario como sessao do app, abrindo espaco para fixation/confusao de sessao e estados inconsistentes entre web e backend.
@@ -107,7 +107,7 @@ last_updated_at: 2026-03-11
 
 ---
 
-### [ISSUE-06] Cookies de autenticacao nao definem hardening explicito de `iSSUEure` e `sameSite`
+### [ISSUE-06] Cookies de autenticacao nao definem hardening explicito de `secure` e `sameSite`
 
 - **Severidade:** Medium
 - **Camada:** rpc
@@ -120,11 +120,11 @@ last_updated_at: 2026-03-11
     value,
     httpOnly: true,
     path: '/',
-    maxAge: durationInISSUEonds,
+    maxAge: durationInSeconds,
   })
   ```
 - **Impacto:** a aplicacao nao explicita as garantias recomendadas para cookies de sessao em ambiente autenticado, reduzindo a defesa contra transporte inseguro e cenarios de cross-site request.
-- **Recomendacao:** definir `iSSUEure: true` em ambientes HTTPS e `sameSite: 'lax'` (ou mais restritivo quando possivel) nos emissores centrais de cookie, mantendo a configuracao padronizada na borda.
+- **Recomendacao:** definir `secure: true` em ambientes HTTPS e `sameSite: 'lax'` (ou mais restritivo quando possivel) nos emissores centrais de cookie, mantendo a configuracao padronizada na borda.
 - **Referencia:** `documentation/rules/rpc-layer-rules.md`
 - **Status:** resolved
 
@@ -174,7 +174,7 @@ last_updated_at: 2026-03-11
 | 2   | Bloquear redirects externos em `redirect_to` e aceitar apenas caminhos internos ou allowlist assinada                                                                                    | ISSUE-02          | Medium       | S       |
 | 3   | Remover `SetAccessTokenController` do middleware e criar `NextApiRestClient` para `apps/web/src/app/api`, usando `Authorization` ou cookie apenas como credencial transitória da request | ISSUE-03          | Medium       | S       |
 | 4   | Padronizar mascaramento de erros nas server actions e helpers REST, removendo `error.message` da resposta ao cliente                                                                     | ISSUE-05          | High         | M       |
-| 5   | Endurecer emissores de cookie com `iSSUEure` e `sameSite`, e remover logs de debug do fluxo de feedback                                                                                    | ISSUE-06, ISSUE-07 | Medium / Low | S       |
+| 5   | Endurecer emissores de cookie com `secure` e `sameSite`, e remover logs de debug do fluxo de feedback                                                                                     | ISSUE-06, ISSUE-07 | Medium / Low | S       |
 
 
 ---
