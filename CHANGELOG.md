@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.4.1 (2026-03-12)
+
+* ♻️ refactor: streamline query parameter handling in HandleRedirectController (4b79b75eb)
+* 📚 docs: correct cookie hardening terms in security report (d0393820b)
+* ♻️ refactor: remove debug log from user unlock check (6b510215e)
+* ♻️ refactor: simplify challenge reward completion branch (f478ba2ff)
+* 🐛 fix: enforce safe redirect query param handling (fc15b1332)
+* 🐛 fix: update mock implementations in Challenge tests to include result fields (2e4488223)
+* 📚 docs: consolidate report prompts and archive wiki content (0d2ad4535)
+* 🌐 domain: update recently unlocked star state transitions (11f849c81)
+* 🐛 fix: remove debug logging from lottie loader fallback (aa04f5fc1)
+* 💾 db: enforce inner join when loading planet stars (bc1093f5e)
+* 🧪 test: stabilize async queries in sign up form tests (d077bc5c6)
+* 🐛 fix: preserve reward flow for completed star challenges (9f41118d4)
+* 🐛 fix: harden web auth boundary and mask internal errors (a656acebf)
+
 ## 1.4.0 (2026-03-10)
 
 * 🐛 fix(web): align user created payload consumers (1cfb7b197)
