@@ -227,10 +227,7 @@ export function useFeedbackDialog({
             file,
           )
 
-          console.log('uploadResponse', uploadResponse)
-
           if (uploadResponse.isSuccessful) {
-            console.log('uploadResponse.body.filename', uploadResponse.body.filename)
             screenshotUrl = uploadResponse.body.filename
           } else {
             toast.showError('Falha ao enviar feedback.')
@@ -240,8 +237,6 @@ export function useFeedbackDialog({
           toast.showError('Falha ao enviar feedback.')
         }
       }
-
-      console.log('screenshotUrl', screenshotUrl)
 
       const feedbackReport = FeedbackReport.create({
         content,

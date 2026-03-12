@@ -2,10 +2,10 @@ import type { Id, OrdinalNumber } from '@stardust/core/global/structures'
 import type { PlanetsRepository } from '@stardust/core/space/interfaces'
 import type { Planet } from '@stardust/core/space/entities'
 
+import type { SupabasePlanet, SupabaseStar } from '../../types'
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabasePostgreError } from '../../errors'
 import { SupabasePlanetMapper } from '../../mappers/space'
-import { SupabasePlanet, SupabaseStar } from '../../types'
 
 export class SupabasePlanetsRepository
   extends SupabaseRepository
@@ -105,7 +105,7 @@ export class SupabasePlanetsRepository
         *,
         completion_count: count_planet_completions,
         user_count: count_users_at_planet,
-        stars(
+        stars!inner(
           id, 
           name, 
           number, 

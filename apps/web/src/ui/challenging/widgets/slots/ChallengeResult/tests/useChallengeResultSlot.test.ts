@@ -175,7 +175,7 @@ describe('useChallengeResultSlot', () => {
     expect(result.current.userAnswer.isCorrect.isTrue).toBe(true)
   })
 
-  it('should go to space when a star challenge is already completed by the user', () => {
+  it('should still show star challenge rewards when a star challenge is already completed by the user', async () => {
     challenge = ChallengesFaker.fake({ starId: UsersFaker.fake().id.value })
     challenge.becomeCompleted()
     user = UsersFaker.fake({ completedChallengesIds: [challenge.id.value] })
@@ -188,9 +188,23 @@ describe('useChallengeResultSlot', () => {
       result.current.handleUserAnswer()
     })
 
-    expect(localStorageRemove).toHaveBeenCalledTimes(1)
-    expect(goTo).toHaveBeenCalledWith(ROUTES.space)
-    expect(setCookie).not.toHaveBeenCalled()
+    await waitFor(() => {
+      expect(setCookie).toHaveBeenCalledWith({
+        key: COOKIES.keys.rewardingPayload,
+        value: JSON.stringify({
+          secondsCount: 42,
+          incorrectAnswersCount: challenge.incorrectAnswersCount.value,
+          maximumIncorrectAnswersCount: challenge.maximumIncorrectAnswersCount.value,
+          challengeId: challenge.id.value,
+          starId: challenge.starId?.value,
+        }),
+      })
+    })
+
+    await waitFor(() => {
+      expect(localStorageRemove).toHaveBeenCalledTimes(1)
+      expect(goTo).toHaveBeenCalledWith(ROUTES.rewarding.starChallenge)
+    })
   })
 
   it('should open the alert dialog when an unauthenticated user finishes a regular challenge', () => {

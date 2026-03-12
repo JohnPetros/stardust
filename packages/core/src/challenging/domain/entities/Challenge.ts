@@ -85,12 +85,12 @@ export class Challenge extends Entity<ChallengeProps> {
 
       let result = ''
 
-      for (const output of response.outputs) {
-        executionOutputs = executionOutputs.add(output)
-      }
-
       if (code.hasFunction.isTrue) {
         result = response.result
+
+        for (const output of response.outputs) {
+          executionOutputs = executionOutputs.add(output)
+        }
       } else if (response.outputs[0]) {
         const formattedCode = await code.format(response.outputs[0])
         result = formattedCode.value

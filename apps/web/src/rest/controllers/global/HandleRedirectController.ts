@@ -1,16 +1,21 @@
 import type { Controller, Http } from '@stardust/core/global/interfaces'
 
-type Schema = {
-  queryParams?: {
-    redirect_to?: string
-  }
+function isInternalRedirect(route: string) {
+  return route.startsWith('/') && !route.startsWith('//')
 }
 
-export const HandleRedirectController = (): Controller<Schema> => {
+export const HandleRedirectController = (): Controller => {
   return {
-    async handle(http: Http<Schema>) {
+    async handle(http: Http) {
       const queryParams = http.getQueryParams()
-      if (queryParams?.redirect_to) return http.redirect(queryParams?.redirect_to)
+      const redirectTo =
+        typeof queryParams === 'object' && queryParams !== null
+          ? (queryParams as Record<string, unknown>).redirect_to
+          : undefined
+
+      if (typeof redirectTo === 'string' && isInternalRedirect(redirectTo)) {
+        return http.redirect(redirectTo)
+      }
 
       return await http.pass()
     },

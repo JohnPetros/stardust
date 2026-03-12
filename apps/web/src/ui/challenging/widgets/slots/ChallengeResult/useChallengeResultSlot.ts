@@ -87,11 +87,7 @@ export function useChallengeResultSlot({
     if (!challenge) return
 
     if (challenge.isCompleted.and(challenge.isStarChallenge).isTrue) {
-      if (user && user.isGod.or(user.hasCompletedChallenge(challenge.id)).isTrue) {
-        leavePage(ROUTES.space)
-      } else {
-        showRewards()
-      }
+      showRewards()
       return
     }
 

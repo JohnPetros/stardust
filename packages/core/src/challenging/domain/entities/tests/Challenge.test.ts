@@ -26,14 +26,22 @@ describe('Challenge Entity', () => {
       ],
     })
 
-    lspProviderMock.getFunctionName.mockReturnValue(null)
+    lspProviderMock.getFunctionName.mockReturnValue('solution')
     lspProviderMock.getInputsCount.mockReturnValue(0)
     lspProviderMock.getInput.mockReturnValue(null)
     lspProviderMock.addInputs.mockImplementation(async (_, code) => code)
+    lspProviderMock.addFunctionCall.mockImplementation(async (_, code) => code)
     lspProviderMock.translateToLsp.mockImplementation(async (value) => String(value))
     lspProviderMock.run
-      .mockResolvedValueOnce(new LspResponse({ outputs: ['first line', 'second line'] }))
-      .mockResolvedValueOnce(new LspResponse({ outputs: ['third line'] }))
+      .mockResolvedValueOnce(
+        new LspResponse({
+          result: 'first line',
+          outputs: ['first line', 'second line'],
+        }),
+      )
+      .mockResolvedValueOnce(
+        new LspResponse({ result: 'third line', outputs: ['third line'] }),
+      )
 
     const code = Code.create(lspProviderMock, challenge.code)
 
@@ -66,13 +74,17 @@ describe('Challenge Entity', () => {
       userOutputs: ['old output'],
     })
 
-    lspProviderMock.getFunctionName.mockReturnValue(null)
+    lspProviderMock.getFunctionName.mockReturnValue('solution')
     lspProviderMock.getInputsCount.mockReturnValue(0)
     lspProviderMock.getInput.mockReturnValue(null)
     lspProviderMock.addInputs.mockImplementation(async (_, code) => code)
+    lspProviderMock.addFunctionCall.mockImplementation(async (_, code) => code)
     lspProviderMock.translateToLsp.mockImplementation(async (value) => String(value))
     lspProviderMock.run.mockResolvedValue(
-      new LspResponse({ outputs: ['current output', 'extra output'] }),
+      new LspResponse({
+        result: 'current output',
+        outputs: ['current output', 'extra output'],
+      }),
     )
 
     const code = Code.create(lspProviderMock, challenge.code)

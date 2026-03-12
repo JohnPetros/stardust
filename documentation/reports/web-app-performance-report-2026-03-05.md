@@ -1,3 +1,9 @@
+---
+app: web
+status: open
+last_updated_at: 2026-03-11
+---
+
 # Diagnostico de Performance - `apps/web`
 
 ## Escopo
@@ -335,13 +341,13 @@ Todas as evidencias abaixo foram verificadas diretamente no codigo fonte.
 
 ## Checklist de Verificacao
 
-- [ ] Nao mudou comportamento funcional (testes existentes passam: `npm run test -w @stardust/web`)
-- [ ] Nao degradou acessibilidade/SEO (manter `metadata` exports, `alt` em images)
-- [ ] Build completa com sucesso (`npm run build -w @stardust/web`)
-- [ ] Typecheck passa (`npm run typecheck -w @stardust/web`)
-- [ ] Validacao visual das animacoes Lottie apos migrar para lazy loading
-- [ ] Validacao do fluxo de auth apos mudar middleware (public routes ainda funcionam, redirect para /space funciona para auth users)
-- [ ] Comparar bundle size antes/depois
+- [x] Nao mudou comportamento funcional (testes existentes passam: `npm run test -w @stardust/web`)
+- [x] Nao degradou acessibilidade/SEO (manter `metadata` exports, `alt` em images)
+- [x] Build completa com sucesso (`npm run build -w @stardust/web`)
+- [x] Typecheck passa (`npm run typecheck -w @stardust/web`)
+- [x] Validacao visual das animacoes Lottie apos migrar para lazy loading
+- [x] Validacao do fluxo de auth apos mudar middleware (public routes ainda funcionam, redirect para /space funciona para auth users)
+- [x] Comparar bundle size antes/depois
 
 ## Referencias
 
