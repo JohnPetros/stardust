@@ -4,6 +4,7 @@ import type { ReportingService } from '@stardust/core/reporting/interfaces'
 import type { ToastProvider } from '@stardust/core/global/interfaces'
 import { FeedbackReport } from '@stardust/core/reporting/entities'
 import { OrdinalNumber, Text, Id, Period } from '@stardust/core/global/structures'
+import { FeedbackIntent } from '@stardust/core/reporting/structures'
 import { Datetime } from '@stardust/core/global/libs'
 
 import { usePaginatedFetch } from '@/ui/global/hooks/usePaginatedFetch'
@@ -60,7 +61,7 @@ export function useFeedbackReportsPage({ reportingService, toastProvider }: Para
         page: OrdinalNumber.create(page),
         itemsPerPage: OrdinalNumber.create(itemsPerPage),
         authorName: debouncedAuthorName ? Text.create(debouncedAuthorName) : undefined,
-        intent: intent === 'all' ? undefined : Text.create(intent),
+        intent: intent === 'all' ? undefined : FeedbackIntent.create(intent),
         sentAtPeriod,
       }),
   })
