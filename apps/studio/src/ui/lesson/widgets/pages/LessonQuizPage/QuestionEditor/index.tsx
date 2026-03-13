@@ -8,6 +8,8 @@ export const QuestionEditor = () => {
     return null
   }
 
+  if (!selectedQuestion) return null
+
   const question = selectedQuestion.data
 
   return <QuestionEditorView selectedQuestionType={question.type} />

@@ -30,7 +30,7 @@ export function useExpandableInput(
     setValue(defaultValue)
   }, [defaultValue])
 
-  useEventListener('keyup', handleKeyUp, inputRef)
+  useEventListener('keyup', handleKeyUp, inputRef as RefObject<HTMLInputElement>)
 
   return {
     value,

@@ -80,6 +80,8 @@ google-key-file.json
 .serena/
 .opencode/
 opencode.jsonc
+CLAUDE.md
+GEMINI.md
 
 # Ai Content
 .context/

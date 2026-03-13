@@ -129,8 +129,8 @@ export function useCodeEditor({
 
     if (!isCodeCheckerEnabled) return
 
-    setTimeout(() => {
-      const syntaxAnalysisResponse = lspProvider.performSyntaxAnalysis(value)
+    setTimeout(async () => {
+      const syntaxAnalysisResponse = await lspProvider.performSyntaxAnalysis(value)
       handleSyntaxAnalysisErrors(syntaxAnalysisResponse)
     }, 100)
   }
@@ -179,7 +179,6 @@ export function useCodeEditor({
     monaco.languages.setMonarchTokensProvider(LANGUAGE, monacoTokensProvider)
     monaco.languages.setLanguageConfiguration(LANGUAGE, monacoLanguageConfiguration)
     monaco.languages.registerHoverProvider(LANGUAGE, { provideHover })
-    // @ts-expect-error
     monaco.languages.registerCompletionItemProvider(LANGUAGE, { provideCompletionItems })
 
     const rules = getEditorRules()
