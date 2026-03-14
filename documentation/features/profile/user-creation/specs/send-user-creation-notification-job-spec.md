@@ -46,7 +46,7 @@ Implementar um job assíncrono no `server` para enviar uma notificacao operacion
 
 - Idempotencia: a criacao do perfil continua protegida pelas validacoes de unicidade de nome e email ja existentes em `CreateUserUseCase`.
 - Observabilidade: o envio da notificacao deve executar dentro de `amqp.run(...)`, seguindo o padrao atual dos jobs Inngest para rastreabilidade e retry.
-- Compatibilidade retroativa: o cadastro via `SignUpController` e `SignUpWithSocialAccountController` nao deve mudar contrato HTTP nem payload publicado em `UserSignedUpEvent`.
+- Compatibilidade retroativa: o cadastro via `SignUpController` e `SignUpWithSocialAccountController` nao deve mudar contrato HTTP; o onboarding deve consumir o payload canonico atual de `AccountSignedUpEvent` (`accountId`, `accountName`, `accountEmail`).
 - Resiliencia: a composicao concreta do job deve permanecer em `apps/server/src/queue/inngest/functions/**`, mantendo o job agnostico de Inngest e do provider REST.
 
 ---
@@ -55,7 +55,7 @@ Implementar um job assíncrono no `server` para enviar uma notificacao operacion
 
 ## Queue
 
-* **`UnlockFirstStarJob`** (`apps/server/src/queue/jobs/space/UnlockFirstStarJob.ts`) - inicia o onboarding a partir de `UserSignedUpEvent`.
+* **`UnlockFirstStarJob`** (`apps/server/src/queue/jobs/space/UnlockFirstStarJob.ts`) - inicia o onboarding a partir de `AccountSignedUpEvent`.
 * **`ReachFirstTierJob`** (`apps/server/src/queue/jobs/ranking/ReachFirstTierJob.ts`) - continua a cadeia de onboarding apos o desbloqueio da primeira estrela.
 * **`AcquireDefaultShopItemsJob`** (`apps/server/src/queue/jobs/shop/AcquireDefaultShopItemsJob.ts`) - concede os itens padrao e publica o evento consumido por `profile`.
 * **`CreateUserJob`** (`apps/server/src/queue/jobs/profile/CreateUserJob.ts`) - persiste o usuario no modulo `profile`, desbloqueia a estrela inicial e registra os itens adquiridos.
@@ -71,12 +71,12 @@ Implementar um job assíncrono no `server` para enviar uma notificacao operacion
 ## REST
 
 * **`DiscordNotificationService`** (`apps/server/src/rest/services/DiscordNotificationService.ts`) - implementa `NotificationService` e envia notificacoes para o webhook atual.
-* **`SignUpController`** (`apps/server/src/rest/controllers/auth/SignUpController.ts`) - publica `UserSignedUpEvent` para cadastros por email e senha.
-* **`SignUpWithSocialAccountController`** (`apps/server/src/rest/controllers/auth/SignUpWithSocialAccountController.ts`) - publica `UserSignedUpEvent` para cadastros sociais.
+* **`SignUpController`** (`apps/server/src/rest/controllers/auth/SignUpController.ts`) - publica `AccountSignedUpEvent` para cadastros por email e senha.
+* **`SignUpWithSocialAccountController`** (`apps/server/src/rest/controllers/auth/SignUpWithSocialAccountController.ts`) - publica `AccountSignedUpEvent` para cadastros sociais.
 
 ## Core
 
-* **`UserSignedUpEvent`** (`packages/core/src/auth/domain/events/UserSignedUpEvent.ts`) - evento de entrada do onboarding contendo `userId`, `userName` e `userEmail`.
+* **`AccountSignedUpEvent`** (`packages/core/src/auth/domain/events/AccountSignedUpEvent.ts`) - evento de entrada do onboarding contendo `accountId`, `accountName` e `accountEmail`.
 * **`UserCreatedEvent`** (`packages/core/src/profile/domain/events/UserCreatedEvent.ts`) - evento existente e semanticamente aderente para representar a criacao do usuario no modulo `profile`.
 * **`CreateUserUseCase`** (`packages/core/src/profile/use-cases/CreateUserUseCase.ts`) - valida unicidade e persiste o usuario base no repositorio.
 * **`FinishUserCreationUseCase`** (`packages/core/src/profile/use-cases/FinishUserCreationUseCase.ts`) - publica `UserCreatedEvent` a partir dos dados finais do usuario criado.
@@ -191,7 +191,7 @@ Implementar um job assíncrono no `server` para enviar uma notificacao operacion
 SignUpController | SignUpWithSocialAccountController
         |
         v
-  UserSignedUpEvent
+  AccountSignedUpEvent
         |
         v
  UnlockFirstStarJob
@@ -247,5 +247,4 @@ SignUpController | SignUpWithSocialAccountController
   * `apps/server/src/rest/services/DiscordNotificationService.ts`
 
 ---
-
 

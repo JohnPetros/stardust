@@ -1,6 +1,7 @@
 ---
 title: After sign in error bug report
-status: open
+status: closed
+prd: documentation/features/auth/sign-in/prd.md
 last_updated: 06/02/2026
 ---
 
