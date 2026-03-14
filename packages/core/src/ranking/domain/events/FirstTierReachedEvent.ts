@@ -6,7 +6,7 @@ type Payload = {
     name: string
     email: string
   }
-  firstTierId: string
+  firstReachedTierId: string
   firstUnlockedStarId: string
 }
 
