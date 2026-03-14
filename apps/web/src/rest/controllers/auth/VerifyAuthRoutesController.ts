@@ -2,25 +2,11 @@ import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import type { SessionDto } from '@stardust/core/auth/structures/dtos'
 
-import { COOKIES, ROUTES } from '@/constants'
+import { COOKIES, PUBLIC_ROUTE_GROUPS, PUBLIC_ROUTES, ROUTES } from '@/constants'
 import { cookieActions } from '@/rpc/next-safe-action'
 import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { Text } from '@stardust/core/global/structures'
-
-const PUBLIC_ROUTES = [
-  ROUTES.landing,
-  ROUTES.playground.snippets,
-  ...Object.values(ROUTES.seo),
-  ...Object.values(ROUTES.auth),
-  ...Object.values(ROUTES.api.auth),
-]
-
-const PUBLIC_ROUTE_GROUPS = [
-  '/challenging/challenges',
-  '/playground/snippets/',
-  '/api/conversation',
-]
 
 export const VerifyAuthRoutesController = (authService: AuthService): Controller => {
   async function refreshAuthSession(http: Http) {

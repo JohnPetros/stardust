@@ -4,24 +4,9 @@ import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { VerifyAuthRoutesController } from './rest/controllers/auth'
 import { NextHttp } from './rest/next/NextHttp'
 import { HandleRewardingPayloadController } from './rest/controllers/lesson'
-import { HandleRedirectController } from './rest/controllers/global'
 import { AuthService } from './rest/services'
 import { NextServerRestClient } from './rest/next/NextServerRestClient'
-import { ROUTES } from './constants'
-
-const PUBLIC_ROUTES = [
-  ROUTES.landing,
-  ROUTES.playground.snippets,
-  ...Object.values(ROUTES.seo),
-  ...Object.values(ROUTES.auth),
-  ...Object.values(ROUTES.api.auth),
-]
-
-const PUBLIC_ROUTE_GROUPS = [
-  '/challenging/challenges',
-  '/playground/snippets/',
-  '/api/conversation',
-]
+import { PUBLIC_ROUTE_GROUPS, PUBLIC_ROUTES, ROUTES } from './constants'
 
 export const middleware = async (request: NextRequest) => {
   const http = await NextHttp({ request })
@@ -30,13 +15,14 @@ export const middleware = async (request: NextRequest) => {
   const controllers = [
     VerifyAuthRoutesController(authService),
     HandleRewardingPayloadController(),
-    HandleRedirectController(),
   ]
 
   const currentRoute = request.nextUrl.pathname
+
   const isPublicRoute =
     PUBLIC_ROUTES.map(String).includes(currentRoute) ||
     PUBLIC_ROUTE_GROUPS.some((group) => currentRoute.startsWith(group))
+
   const isApiRoute = currentRoute.startsWith('/api/')
 
   try {
@@ -55,17 +41,13 @@ export const middleware = async (request: NextRequest) => {
       return NextResponse.json(
         {
           title: 'Unauthorized',
-          message: 'Nao autorizado.',
+          message: 'Não autorizado.',
         },
         { status: HTTP_STATUS_CODE.unauthorized },
       )
     }
 
     return NextResponse.redirect(new URL(ROUTES.auth.signIn, request.url))
-  }
-
-  if (isApiRoute && isPublicRoute) {
-    return NextResponse.next()
   }
 
   return NextResponse.next()

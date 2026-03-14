@@ -11,7 +11,7 @@ type Request = {
   userId: string
   userEmail: string
   userName: string
-  firstTierId: string
+  firstReachedTierId: string
   selectedAvatarByDefaultId: string
   selectedRocketByDefaultId: string
 }
@@ -25,7 +25,7 @@ export class CreateUserUseCase implements UseCase<Request, Response> {
     userId,
     userEmail,
     userName,
-    firstTierId,
+    firstReachedTierId,
     selectedRocketByDefaultId,
     selectedAvatarByDefaultId,
   }: Request) {
@@ -33,6 +33,12 @@ export class CreateUserUseCase implements UseCase<Request, Response> {
       this.verifyUserEmailInUse(Email.create(userEmail)),
       this.verifyUserNameInUse(Name.create(userName)),
     ])
+
+    console.log({
+      firstReachedTierId,
+      selectedRocketByDefaultId,
+      selectedAvatarByDefaultId,
+    })
 
     const user = User.create({
       id: userId,
@@ -45,7 +51,7 @@ export class CreateUserUseCase implements UseCase<Request, Response> {
         id: selectedRocketByDefaultId,
       },
       tier: {
-        id: firstTierId,
+        id: firstReachedTierId,
       },
       createdAt: new Date(),
     })

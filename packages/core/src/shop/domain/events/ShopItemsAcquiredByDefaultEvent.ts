@@ -11,7 +11,7 @@ type Payload = {
   acquiredRocketsByDefaultIds: string[]
   acquiredAvatarsByDefaultIds: string[]
   firstUnlockedStarId: string
-  firstTierId: string
+  firstReachedTierId: string
 }
 
 export class ShopItemsAcquiredByDefaultEvent extends Event<Payload> {

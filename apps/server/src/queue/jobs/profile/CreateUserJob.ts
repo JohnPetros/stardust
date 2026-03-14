@@ -25,7 +25,7 @@ export class CreateUserJob implements Job<Payload> {
   async handle(amqp: Amqp<Payload>) {
     const {
       user,
-      firstTierId,
+      firstReachedTierId,
       firstUnlockedStarId,
       acquiredAvatarsByDefaultIds,
       acquiredRocketsByDefaultIds,
@@ -44,7 +44,7 @@ export class CreateUserJob implements Job<Payload> {
           userId: user.id,
           userName: user.name,
           userEmail: user.email,
-          firstTierId,
+          firstReachedTierId,
           selectedAvatarByDefaultId,
           selectedRocketByDefaultId,
         }),

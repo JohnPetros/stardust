@@ -2,7 +2,7 @@ import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Controller, Broker, Http } from '@stardust/core/global/interfaces'
 import { AccountsFaker } from '@stardust/core/auth/entities/fakers'
-import { UserSignedUpEvent } from '@stardust/core/auth/events'
+import { AccountSignedUpEvent } from '@stardust/core/auth/events'
 
 import { SignUpWithSocialAccountController } from '../SignUpWithSocialAccountController'
 
@@ -26,10 +26,10 @@ describe('Sign Up With Social Account Controller', () => {
     await controller.handle(http)
 
     expect(Broker.publish).toHaveBeenCalledWith(
-      new UserSignedUpEvent({
-        userId: String(accountDto.id),
-        userEmail: accountDto.email,
-        userName: accountDto.name,
+      new AccountSignedUpEvent({
+        accountId: String(accountDto.id),
+        accountEmail: accountDto.email,
+        accountName: accountDto.name,
       }),
     )
     expect(http.send).toHaveBeenCalledWith({ isNewAccount: true })

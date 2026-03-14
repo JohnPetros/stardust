@@ -176,19 +176,19 @@ export class DiscordNotificationService implements NotificationService {
     return await this.restClient.post('/', {
       embeds: [
         {
-          title: 'Perfil inicial criado',
+          title: 'Usuário criado',
           description: 'Um novo usuario concluiu o onboarding inicial da plataforma.',
           color: 3066993,
           fields: [
             {
-              name: 'Usuário',
+              name: 'Nome de usuário',
               value: payload.userName,
-              inline: true,
+              inline: false,
             },
             {
               name: 'Perfil',
               value: `https://stardust-app.com.br/profile/${payload.userSlug}`,
-              inline: true,
+              inline: false,
             },
           ],
           timestamp: new Date().toISOString(),

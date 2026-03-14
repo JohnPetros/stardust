@@ -26,9 +26,11 @@ export class ReachFirstTierUseCase implements UseCase<Request, void> {
       throw new TierNotFoundError()
     }
 
+    console.log('tier.id', tier.id.value)
+
     const event = new FirstTierReachedEvent({
       user,
-      firstTierId: tier.id.value,
+      firstReachedTierId: tier.id.value,
       firstUnlockedStarId,
     })
     await this.broker.publish(event)

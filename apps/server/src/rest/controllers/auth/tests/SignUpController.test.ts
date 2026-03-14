@@ -4,7 +4,7 @@ import type { Controller, Broker, Http } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
 import { AccountsFaker } from '@stardust/core/auth/entities/fakers'
-import { UserSignedUpEvent } from '@stardust/core/auth/events'
+import { AccountSignedUpEvent } from '@stardust/core/auth/events'
 import { Password } from '@stardust/core/auth/structures'
 import { Email } from '@stardust/core/global/structures'
 
@@ -58,10 +58,10 @@ describe('Sign Up Controller', () => {
     await controller.handle(http)
 
     expect(Broker.publish).toHaveBeenCalledWith(
-      new UserSignedUpEvent({
-        userId: String(restResponse.body.id),
-        userEmail: email,
-        userName: name,
+      new AccountSignedUpEvent({
+        accountId: String(restResponse.body.id),
+        accountEmail: email,
+        accountName: name,
       }),
     )
   })

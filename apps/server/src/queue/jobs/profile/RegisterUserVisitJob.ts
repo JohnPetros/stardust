@@ -1,10 +1,10 @@
 import type { Amqp, Job } from '@stardust/core/global/interfaces'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import type { EventPayload } from '@stardust/core/global/types'
-import type { UserSignedInEvent } from '@stardust/core/auth/events'
+import type { AccountSignedInEvent } from '@stardust/core/auth/events'
 import { RegisterUserVisitUseCase } from '@stardust/core/profile/use-cases'
 
-type Payload = EventPayload<typeof UserSignedInEvent>
+type Payload = EventPayload<typeof AccountSignedInEvent>
 
 export class RegisterUserVisitJob implements Job<Payload> {
   static readonly KEY = 'profile/register.user.visit.job'
@@ -17,7 +17,7 @@ export class RegisterUserVisitJob implements Job<Payload> {
     await amqp.run(
       async () =>
         await useCase.execute({
-          userId: payload.userId,
+          userId: payload.accountId,
           platform: payload.platform,
         }),
       RegisterUserVisitUseCase.name,

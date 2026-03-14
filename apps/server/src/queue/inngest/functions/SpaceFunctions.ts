@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 
-import { UserSignedUpEvent } from '@stardust/core/auth/events'
+import { AccountSignedUpEvent } from '@stardust/core/auth/events'
 import {
   PlanetsOrderChangedEvent,
   StarsOrderChangedEvent,
@@ -19,7 +19,7 @@ export class SpaceFunctions extends InngestFunctions {
         id: UnlockFirstStarJob.KEY,
         onFailure: (context) => this.handleFailure(context, UnlockFirstStarJob.name),
       },
-      { event: UserSignedUpEvent._NAME },
+      { event: AccountSignedUpEvent._NAME },
       async (context) => {
         const repository = new SupabasePlanetsRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)

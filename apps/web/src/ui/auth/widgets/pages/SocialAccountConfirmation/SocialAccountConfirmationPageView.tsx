@@ -1,8 +1,6 @@
 import type { RefObject } from 'react'
 import { AnimatePresence } from 'framer-motion'
 
-import type { UserDto } from '@stardust/core/profile/entities/dtos'
-
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { Loading } from '@/ui/global/widgets/components/Loading'
 import { Button } from '@/ui/global/widgets/components/Button'

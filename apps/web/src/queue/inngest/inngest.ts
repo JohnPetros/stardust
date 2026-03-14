@@ -16,7 +16,7 @@ import {
   RankingUpdatedEvent,
   RankingWinnersDefinedEvent,
 } from '@stardust/core/ranking/events'
-import { UserSignedInEvent, UserSignedUpEvent } from '@stardust/core/auth/events'
+import { AccountSignedInEvent, AccountSignedUpEvent } from '@stardust/core/auth/events'
 
 import { platformSchema } from '@stardust/validation/profile/schemas'
 import { SERVER_ENV } from '@/constants/server-env'
@@ -29,11 +29,11 @@ const eventsSchema = {
       acquiredAvatarsIds: z.array(idSchema),
     }),
   },
-  [UserSignedUpEvent._NAME]: {
+  [AccountSignedUpEvent._NAME]: {
     data: z.object({
-      userId: idSchema,
-      userName: nameSchema,
-      userEmail: emailSchema,
+      accountId: idSchema,
+      accountName: nameSchema,
+      accountEmail: emailSchema,
     }),
   },
   [FirstStarUnlockedEvent._NAME]: {
@@ -96,9 +96,9 @@ const eventsSchema = {
       tierId: idSchema,
     }),
   },
-  [UserSignedInEvent._NAME]: {
+  [AccountSignedInEvent._NAME]: {
     data: z.object({
-      userId: idSchema,
+      accountId: idSchema,
       platform: platformSchema,
     }),
   },

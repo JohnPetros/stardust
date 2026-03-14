@@ -6,23 +6,19 @@ import type { AnimationRef } from '@/ui/global/widgets/components/Animation/type
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 import { SocialAccountConfirmationPageView } from './SocialAccountConfirmationPageView'
 import { useSocialAccountConfirmationPage } from './useSocialAccountConfirmationPage'
-import { useProfileSocket } from '@/ui/global/hooks/useProfileSocket'
+import { useRealtimeContext } from '@/ui/global/hooks/useRealtimeContext'
 
 export const SocialAccountConfirmationPage = () => {
   const rocketAnimationRef = useRef<AnimationRef | null>(null)
   const { account, handleSignUpWithSocialAccount } = useAuthContext()
-  const {
-    isNewAccount,
-    isRocketVisible,
-    isUserCreated,
-    handleLinkClick,
-    handleUserCreated,
-  } = useSocialAccountConfirmationPage({
-    rocketAnimationRef,
-    account,
-    handleSignUpWithSocialAccount,
-  })
-  useProfileSocket(handleUserCreated)
+  const { profileChannel } = useRealtimeContext()
+  const { isNewAccount, isRocketVisible, isUserCreated, handleLinkClick } =
+    useSocialAccountConfirmationPage({
+      rocketAnimationRef,
+      account,
+      profileChannel,
+      onSignUpWithSocialAccount: handleSignUpWithSocialAccount,
+    })
 
   return (
     <SocialAccountConfirmationPageView
