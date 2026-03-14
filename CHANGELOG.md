@@ -1238,13 +1238,13 @@
 * 🧪 test: add unit test for user visit registration in User entity (0574d648)
 * 🐛 fix(server): update hasVisit method to check user visits within the same day and improve error handling (e22a892c)
 * 🎞️ queue(server): update Inngest ID from 'StarDust ServerQueue' to 'StarDust Queue' (f1a7e44c)
-* 🎞️ queue(server): enhance inngest to support UserSignedInEvent and register user visit functionality (ff67a594)
+* 🎞️ queue(server): enhance inngest to support AccountSignedInEvent and register user visit functionality (ff67a594)
 * 🎞️ queue(server): implement RegisterUserVisitJob for processing user visit events (1e63d004)
 * 🧪 test: add unit tests for RegisterUserVisitUseCase to validate user visit registration logic (53087eae)
 * ✨ use case: add RegisterUserVisitUseCase for tracking user visits (2e99127b)
 * 🐛 fix(server): modify error handling in SupabaseUsersRepository to return Logical.createAsFalse() instead of throwing an error (9f7cf216)
 * 💾 db(server): add users_visits table type definition and update message versioning (2fee19b9)
-* 🌐 domain: add UserSignedInEvent class and export from events index (43321fd0)
+* 🌐 domain: add AccountSignedInEvent class and export from events index (43321fd0)
 * 🌐 domain: add registerVisit method to User class for tracking user visits (117921ef)
 * 🌐 domain: add VisitDto and Visit structure for user visit management (68ca38b1)
 * 🌐 domain: introduce Platform class for platform type validation and creation (d045e180)
@@ -2598,7 +2598,7 @@
   authentication (9af83924)
 - 📶 rest(server): add signInWithGithubAccount method to SupabaseAuthService and
   update AuthService interface (7edf5144)
-- 🌐 domain: add accountProvider field to UserSignedUpEvent,
+- 🌐 domain: add accountProvider field to AccountSignedUpEvent,
   FirstTierReachedEvent, and FirstStarUnlockedEvent payloads (31ac9282)
 - 🐛 fix(server): ensure event publishing in SignUpWithSocialAccountController
   is correctly awaited (92efbcab)
