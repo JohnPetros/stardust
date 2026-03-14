@@ -2,7 +2,7 @@
 title: Retry de Criacao de Usuario na Confirmacao de Conta
 prd: ../prd.md
 apps: web,server
-status: em_progresso
+status: closed
 last_updated_at: 2026-03-14
 ---
 
