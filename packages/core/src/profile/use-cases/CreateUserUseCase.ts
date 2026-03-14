@@ -34,12 +34,6 @@ export class CreateUserUseCase implements UseCase<Request, Response> {
       this.verifyUserNameInUse(Name.create(userName)),
     ])
 
-    console.log({
-      firstReachedTierId,
-      selectedRocketByDefaultId,
-      selectedAvatarByDefaultId,
-    })
-
     const user = User.create({
       id: userId,
       name: userName,

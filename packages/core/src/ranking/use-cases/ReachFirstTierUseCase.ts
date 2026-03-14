@@ -26,8 +26,6 @@ export class ReachFirstTierUseCase implements UseCase<Request, void> {
       throw new TierNotFoundError()
     }
 
-    console.log('tier.id', tier.id.value)
-
     const event = new FirstTierReachedEvent({
       user,
       firstReachedTierId: tier.id.value,
