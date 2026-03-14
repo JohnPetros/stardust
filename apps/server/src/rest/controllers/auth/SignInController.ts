@@ -17,7 +17,6 @@ export class SignInController implements Controller<Schema> {
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { email, password } = await http.getBody()
-    console.log({ email, password })
     return await this.service.signIn(Email.create(email), Password.create(password))
   }
 }

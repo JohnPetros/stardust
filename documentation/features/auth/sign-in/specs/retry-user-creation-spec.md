@@ -34,7 +34,6 @@ Implementar no `web` um fluxo unico de confirmacao para contas autenticadas cujo
 - Criar novo endpoint REST no `server` para retry.
 - Alterar o fluxo de login com email e senha alem do redirecionamento para a pagina de confirmacao quando o perfil estiver ausente.
 - Substituir `SocialAccountConfirmationPage` como pagina de callback OAuth.
-- Substituir `SocialAccountConfirmationPage` como pagina de callback OAuth.
 - Alterar `studio` ou adicionar novos providers sociais.
 - Incluir testes automatizados nesta spec.
 

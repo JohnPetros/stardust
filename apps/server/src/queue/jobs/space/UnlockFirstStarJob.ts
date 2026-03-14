@@ -17,7 +17,6 @@ export class UnlockFirstStarJob implements Job<Payload> {
 
   async handle(amqp: Amqp<Payload>) {
     const payload = amqp.getPayload()
-    console.log({ payload })
     const useCase = new UnlockFirstStarUseCase(this.planetsRepository, this.broker)
 
     await amqp.run(

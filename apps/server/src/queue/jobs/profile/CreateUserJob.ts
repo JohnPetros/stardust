@@ -33,8 +33,6 @@ export class CreateUserJob implements Job<Payload> {
       selectedRocketByDefaultId,
     } = amqp.getPayload()
 
-    console.log(user)
-
     const createUserUseCase = new CreateUserUseCase(this.usersRepository)
     const unlockStarUseCase = new UnlockStarUseCase(this.usersRepository)
     const acquireRocketUseCase = new AcquireRocketUseCase(this.usersRepository)
