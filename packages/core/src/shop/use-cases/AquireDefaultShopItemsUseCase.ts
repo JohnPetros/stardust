@@ -12,7 +12,7 @@ type Request = {
     name: string
     email: string
   }
-  firstTierId: string
+  firstReachedTierId: string
   firstUnlockedStarId: string
 }
 
@@ -23,7 +23,7 @@ export class AquireDefaultShopItemsUseCase implements UseCase<Request, void> {
     private readonly broker: Broker,
   ) {}
 
-  async execute({ user, firstUnlockedStarId, firstTierId }: Request) {
+  async execute({ user, firstUnlockedStarId, firstReachedTierId }: Request) {
     const [rockets, avatars] = await Promise.all([
       this.rocketsRepository.findAllByPrice(Integer.create(0)),
       this.avatarsRepository.findAllByPrice(Integer.create(0)),
@@ -43,7 +43,7 @@ export class AquireDefaultShopItemsUseCase implements UseCase<Request, void> {
       selectedRocketByDefaultId: selectedRocketByDefault.id.value,
       acquiredAvatarsByDefaultIds: avatarsToAquire.map((avatar) => avatar.id.value),
       acquiredRocketsByDefaultIds: rocketsToAquire.map((rocket) => rocket.id.value),
-      firstTierId,
+      firstReachedTierId,
       firstUnlockedStarId,
       user,
     })
