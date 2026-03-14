@@ -1,0 +1,6 @@
+prd: documentation/features/auth/sign-in/prd.md
+
+objetivo: Implementar a funcionalidade de tentativa de criação de conta após sign in com conta com sucesso mas detectado que o usuário ainda não existe.
+
+handleSignIn deve retornar { isNewAccount: false } quando o sign in ocorreu com sucesso e mas foi detectado o usuário atrelado ainda não existe (use fetchUserById do ProfileService passando account id em handleSignIn do useAuthContextProvider). Se  isNewAccount for true deve redirecionar o user para a página de retentativa de criação de conta (essa página não exite ainda), caso seja false deve prosseguir o fluxo normal como está.
+Dentro da página de retentativa de criação de conta (UserCreationRetryPage), deve ser acionado uma server action `RetryUserCreationAction` que é responsável em disparar o evento `AccountSignedUpEvent` que é responsável em acionar o job de criação de usuário. Além disso, deve haver um channel ouvido o evendo `UserCreatedEvent` que atualiza a tela para o user proseguir para a tela de space, de forma similar a página `apps/web/src/ui/auth/widgets/pages/SocialAccountConfirmation`. Também, deve controller na camada rest que verifique nas rotas autenticas se o user já existe com base no account id, caso não exista, redirecione para a página `UserCreationRetryPage`.
