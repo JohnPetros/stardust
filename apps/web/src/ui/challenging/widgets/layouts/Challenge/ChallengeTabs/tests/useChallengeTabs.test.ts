@@ -62,6 +62,7 @@ describe('useChallengeTabs', () => {
     const handleSignIn = jest.fn()
     const handleSignOut = jest.fn()
     const handleSignUpWithSocialAccount = jest.fn()
+    const handleRetryUserCreation = jest.fn()
     const updateUserCache = jest.fn()
     const refetchUser = jest.fn()
     const notifyUserChanges = jest.fn()
@@ -78,6 +79,7 @@ describe('useChallengeTabs', () => {
       handleSignIn,
       handleSignOut,
       handleSignUpWithSocialAccount,
+      handleRetryUserCreation,
       updateUser,
       updateUserCache,
       refetchUser,

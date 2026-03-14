@@ -1,4 +1,4 @@
-import { type RefObject, useCallback, useEffect, useState } from 'react'
+import { type RefObject, useCallback, useEffect, useRef, useState } from 'react'
 
 import type { Account } from '@stardust/core/auth/entities'
 import type { UserCreatedEvent } from '@stardust/core/profile/events'
@@ -15,16 +15,20 @@ type Params = {
   rocketAnimationRef: RefObject<AnimationRef | null>
   account: Account | null
   profileChannel: ProfileChannel
+  onRetryUserCreation: () => Promise<boolean>
   onSignUpWithSocialAccount: (
     accessToken: string,
     refreshToken: string,
   ) => Promise<{ isNewAccount: boolean }>
 }
 
+const RETRY_VISIBILITY_DELAY_IN_MS = 7000
+
 export function useSocialAccountConfirmationPage({
   rocketAnimationRef,
   account,
   profileChannel,
+  onRetryUserCreation,
   onSignUpWithSocialAccount,
 }: Params) {
   const accessToken = useHashParam('access_token')
@@ -32,6 +36,9 @@ export function useSocialAccountConfirmationPage({
   const [isNewAccount, setIsNewAccount] = useState(false)
   const [isUserCreated, setIsUserCreated] = useState(false)
   const [isRocketVisible, setIsRocketVisible] = useState(false)
+  const [isRetryVisible, setIsRetryVisible] = useState(false)
+  const [isRetryingUserCreation, setIsRetryingUserCreation] = useState(false)
+  const hasHandledSignUpRef = useRef(false)
   const { sleep } = useSleep()
   const router = useNavigationProvider()
 
@@ -45,16 +52,21 @@ export function useSocialAccountConfirmationPage({
 
   useEffect(() => {
     async function signUpWithSocialAccount() {
+      if (hasHandledSignUpRef.current) return
       await sleep(2000)
       if (!accessToken || !refreshToken) return
 
+      hasHandledSignUpRef.current = true
+
       const { isNewAccount } = await onSignUpWithSocialAccount(accessToken, refreshToken)
       setIsNewAccount(isNewAccount)
+      setIsUserCreated(!isNewAccount)
+
       if (!isNewAccount) showRocketAnimation()
     }
 
     signUpWithSocialAccount()
-  }, [accessToken, refreshToken])
+  }, [accessToken, refreshToken, onSignUpWithSocialAccount, showRocketAnimation, sleep])
 
   useEffect(() => {
     return profileChannel.onCreateUser((event: UserCreatedEvent) => {
@@ -64,10 +76,35 @@ export function useSocialAccountConfirmationPage({
     })
   }, [account?.email?.value, profileChannel])
 
+  useEffect(() => {
+    if (!isNewAccount || isUserCreated) {
+      setIsRetryVisible(false)
+      return
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setIsRetryVisible(true)
+    }, RETRY_VISIBILITY_DELAY_IN_MS)
+
+    return () => {
+      window.clearTimeout(timeoutId)
+    }
+  }, [isNewAccount, isUserCreated])
+
+  const handleRetryUserCreation = useCallback(async () => {
+    setIsRetryingUserCreation(true)
+
+    await onRetryUserCreation()
+    setIsRetryingUserCreation(false)
+  }, [onRetryUserCreation])
+
   return {
     isNewAccount,
     isUserCreated,
     isRocketVisible,
+    isRetryVisible,
+    isRetryingUserCreation,
     handleLinkClick: showRocketAnimation,
+    handleRetryUserCreation,
   }
 }

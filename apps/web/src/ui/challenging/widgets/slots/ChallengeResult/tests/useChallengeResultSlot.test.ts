@@ -87,6 +87,7 @@ describe('useChallengeResultSlot', () => {
       handleSignIn: jest.fn(),
       handleSignOut: jest.fn(),
       handleSignUpWithSocialAccount: jest.fn(),
+      handleRetryUserCreation: jest.fn(),
       updateUser: jest.fn(),
       updateUserCache: jest.fn(),
       refetchUser: jest.fn(),

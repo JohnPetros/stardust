@@ -10,15 +10,24 @@ import { useRealtimeContext } from '@/ui/global/hooks/useRealtimeContext'
 
 export const SocialAccountConfirmationPage = () => {
   const rocketAnimationRef = useRef<AnimationRef | null>(null)
-  const { account, handleSignUpWithSocialAccount } = useAuthContext()
+  const { account, handleRetryUserCreation, handleSignUpWithSocialAccount } =
+    useAuthContext()
   const { profileChannel } = useRealtimeContext()
-  const { isNewAccount, isRocketVisible, isUserCreated, handleLinkClick } =
-    useSocialAccountConfirmationPage({
-      rocketAnimationRef,
-      account,
-      profileChannel,
-      onSignUpWithSocialAccount: handleSignUpWithSocialAccount,
-    })
+  const {
+    isNewAccount,
+    isRocketVisible,
+    isUserCreated,
+    isRetryVisible,
+    isRetryingUserCreation,
+    handleLinkClick,
+    handleRetryUserCreation: handleRetry,
+  } = useSocialAccountConfirmationPage({
+    rocketAnimationRef,
+    account,
+    profileChannel,
+    onRetryUserCreation: handleRetryUserCreation,
+    onSignUpWithSocialAccount: handleSignUpWithSocialAccount,
+  })
 
   return (
     <SocialAccountConfirmationPageView
@@ -26,7 +35,10 @@ export const SocialAccountConfirmationPage = () => {
       isRocketVisible={isRocketVisible}
       rocketAnimationRef={rocketAnimationRef}
       isUserCreated={isUserCreated}
+      isRetryVisible={isRetryVisible}
+      isRetryingUserCreation={isRetryingUserCreation}
       onLinkClick={handleLinkClick}
+      onRetryUserCreation={handleRetry}
     />
   )
 }
