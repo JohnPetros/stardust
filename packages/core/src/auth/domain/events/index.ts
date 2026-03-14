@@ -1,2 +1,2 @@
-export { UserSignedUpEvent } from './UserSignedUpEvent'
-export { UserSignedInEvent } from './UserSignedInEvent'
+export { AccountSignedUpEvent } from './AccountSignedUpEvent'
+export { AccountSignedInEvent } from './AccountSignedInEvent'
