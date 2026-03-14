@@ -3,7 +3,7 @@ import type { AuthService } from '@stardust/core/auth/interfaces'
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import type { Broker } from '@stardust/core/global/interfaces'
 import { Account } from '@stardust/core/auth/entities'
-import { UserSignedInEvent } from '@stardust/core/auth/events'
+import { AccountSignedInEvent } from '@stardust/core/auth/events'
 
 import { COOKIES } from '@/constants'
 import { SERVER_ENV } from '@/constants/server-env'
@@ -32,8 +32,8 @@ export const SignUpWithSocialAccountAction = (
 
       const signUpResponse = await service.signUpWithSocialAccount(account)
 
-      const event = new UserSignedInEvent({
-        userId: account.id.value,
+      const event = new AccountSignedInEvent({
+        accountId: account.id.value,
         platform: 'web',
       })
 

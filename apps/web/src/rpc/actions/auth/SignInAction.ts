@@ -5,7 +5,7 @@ import { Email } from '@stardust/core/global/structures'
 import { Password } from '@stardust/core/auth/structures'
 
 import { COOKIES } from '@/constants'
-import { UserSignedInEvent } from '@stardust/core/auth/events'
+import { AccountSignedInEvent } from '@stardust/core/auth/events'
 import { AppError } from '@stardust/core/global/errors'
 import { SERVER_ENV } from '@/constants/server-env'
 
@@ -30,11 +30,11 @@ export const SignInAction = (
       if (response.isFailure) response.throwError()
 
       const session = response.body
-      const userId = session.account.id
-      if (!userId) throw new AppError('User ID is required')
+      const accountId = session.account.id
+      if (!accountId) throw new AppError('Account ID is required')
 
-      const event = new UserSignedInEvent({
-        userId,
+      const event = new AccountSignedInEvent({
+        accountId,
         platform: 'web',
       })
 

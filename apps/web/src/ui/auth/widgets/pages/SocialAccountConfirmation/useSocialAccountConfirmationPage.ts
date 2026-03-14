@@ -9,11 +9,13 @@ import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useSleep } from '@/ui/global/hooks/useSleep'
 import { ROCKET_ANIMATION_DELAY } from '@/ui/auth/constants'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
+import type { ProfileChannel } from '@stardust/core/profile/interfaces'
 
 type Params = {
   rocketAnimationRef: RefObject<AnimationRef | null>
   account: Account | null
-  handleSignUpWithSocialAccount: (
+  profileChannel: ProfileChannel
+  onSignUpWithSocialAccount: (
     accessToken: string,
     refreshToken: string,
   ) => Promise<{ isNewAccount: boolean }>
@@ -22,7 +24,8 @@ type Params = {
 export function useSocialAccountConfirmationPage({
   rocketAnimationRef,
   account,
-  handleSignUpWithSocialAccount,
+  profileChannel,
+  onSignUpWithSocialAccount,
 }: Params) {
   const accessToken = useHashParam('access_token')
   const refreshToken = useHashParam('refresh_token')
@@ -31,12 +34,6 @@ export function useSocialAccountConfirmationPage({
   const [isRocketVisible, setIsRocketVisible] = useState(false)
   const { sleep } = useSleep()
   const router = useNavigationProvider()
-
-  function handleUserCreated(event: UserCreatedEvent) {
-    if (event.payload.userEmail === account?.email?.value) {
-      setIsUserCreated(true)
-    }
-  }
 
   const showRocketAnimation = useCallback(async () => {
     setIsRocketVisible(true)
@@ -51,10 +48,7 @@ export function useSocialAccountConfirmationPage({
       await sleep(2000)
       if (!accessToken || !refreshToken) return
 
-      const { isNewAccount } = await handleSignUpWithSocialAccount(
-        accessToken,
-        refreshToken,
-      )
+      const { isNewAccount } = await onSignUpWithSocialAccount(accessToken, refreshToken)
       setIsNewAccount(isNewAccount)
       if (!isNewAccount) showRocketAnimation()
     }
@@ -62,11 +56,18 @@ export function useSocialAccountConfirmationPage({
     signUpWithSocialAccount()
   }, [accessToken, refreshToken])
 
+  useEffect(() => {
+    return profileChannel.onCreateUser((event: UserCreatedEvent) => {
+      if (event.payload.userEmail === account?.email?.value) {
+        setIsUserCreated(true)
+      }
+    })
+  }, [account?.email?.value, profileChannel])
+
   return {
     isNewAccount,
     isUserCreated,
     isRocketVisible,
     handleLinkClick: showRocketAnimation,
-    handleUserCreated,
   }
 }
