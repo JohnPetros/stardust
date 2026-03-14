@@ -28,6 +28,7 @@ export class ProfileFunctions extends InngestFunctions {
       {
         id: CreateUserJob.KEY,
         onFailure: (context) => this.handleFailure(context, CreateUserJob.name),
+        retries: 0,
       },
       { event: ShopItemsAcquiredByDefaultEvent._NAME },
       async (context) => {

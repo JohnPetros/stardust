@@ -39,6 +39,8 @@ export class SupabaseAuthService implements AuthService {
         HTTP_STATUS_CODE.unauthorized,
       )
 
+    console.log(data.user.user_metadata)
+
     const session: SessionDto = {
       account: {
         id: data.user.id,
