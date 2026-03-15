@@ -32,6 +32,8 @@ export const SignUpWithSocialAccountAction = (
 
       const signUpResponse = await service.signUpWithSocialAccount(account)
 
+      console.log('signUpWithSocialAccountAction signUpResponse', signUpResponse)
+
       const event = new AccountSignedInEvent({
         accountId: account.id.value,
         platform: 'web',

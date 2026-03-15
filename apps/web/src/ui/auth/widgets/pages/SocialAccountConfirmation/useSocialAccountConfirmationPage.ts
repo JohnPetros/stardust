@@ -59,6 +59,7 @@ export function useSocialAccountConfirmationPage({
       hasHandledSignUpRef.current = true
 
       const { isNewAccount } = await onSignUpWithSocialAccount(accessToken, refreshToken)
+      console.log({ isNewAccount })
       setIsNewAccount(isNewAccount)
       setIsUserCreated(!isNewAccount)
 
@@ -66,7 +67,7 @@ export function useSocialAccountConfirmationPage({
     }
 
     signUpWithSocialAccount()
-  }, [accessToken, refreshToken, onSignUpWithSocialAccount, showRocketAnimation, sleep])
+  }, [])
 
   useEffect(() => {
     return profileChannel.onCreateUser((event: UserCreatedEvent) => {
