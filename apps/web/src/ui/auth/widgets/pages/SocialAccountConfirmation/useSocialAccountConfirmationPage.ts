@@ -63,6 +63,8 @@ export function useSocialAccountConfirmationPage({
       }
     }
 
+    console.log({ accessToken, refreshToken })
+
     if (hasHandledSignUpRef.current) return
     if (!accessToken || !refreshToken) return
 
