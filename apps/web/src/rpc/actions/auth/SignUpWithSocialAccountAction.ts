@@ -32,17 +32,13 @@ export const SignUpWithSocialAccountAction = (
 
       const signUpResponse = await service.signUpWithSocialAccount(account)
 
-      console.log('signUpResponse', signUpResponse)
-
-      if (signUpResponse.isFailure) {
-        return {
-          account: account.dto,
-          isNewAccount: false,
-          signUpResponse: signUpResponse.errorMessage,
-        }
-      }
+      const event = new AccountSignedInEvent({
+        accountId: account.id.value,
+        platform: 'web',
+      })
 
       await Promise.all([
+        // SERVER_ENV.mode === 'production' ? broker.publish(event) : null,
         call.setCookie(
           COOKIES.accessToken.key,
           accessToken,
@@ -55,13 +51,12 @@ export const SignUpWithSocialAccountAction = (
         ),
       ])
 
-      if (SERVER_ENV.mode === 'production' && !signUpResponse.body.isNewAccount) {
-        await broker.publish(
-          new AccountSignedInEvent({
-            accountId: account.id.value,
-            platform: 'web',
-          }),
-        )
+      if (signUpResponse.isFailure) {
+        return {
+          account: account.dto,
+          isNewAccount: false,
+          signUpResponse: signUpResponse.errorMessage,
+        }
       }
 
       return {
