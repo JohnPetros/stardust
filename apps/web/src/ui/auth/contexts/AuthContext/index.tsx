@@ -14,6 +14,7 @@ import {
   useAuthContextProvider,
   useSignInAction,
   useSignOutAction,
+  useRetryUserCreationAction,
   useSignUpWithSocialAccountAction,
 } from './hooks'
 
@@ -36,6 +37,7 @@ export const AuthContextProvider = ({
     restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken}`)
   const profileService = ProfileService(restClient)
   const { signUpWithSocialAccount } = useSignUpWithSocialAccountAction()
+  const { retryUserCreation } = useRetryUserCreationAction()
   const { signIn } = useSignInAction()
   const { signOut } = useSignOutAction()
   const authContextValue = useAuthContextProvider({
@@ -43,6 +45,7 @@ export const AuthContextProvider = ({
     accountDto,
     signIn,
     signOut,
+    retryUserCreation,
     signUpWithSocialAccount,
   })
 

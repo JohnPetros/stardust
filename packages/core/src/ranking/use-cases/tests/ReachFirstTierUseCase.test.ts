@@ -62,7 +62,7 @@ describe('Reach First Tier Use Case', () => {
       new FirstTierReachedEvent({
         user: { id: user.id.value, name: user.name.value, email: user.email.value },
         firstUnlockedStarId: firstUnlockedStarId.value,
-        firstTierId: firstTier.id.value,
+        firstReachedTierId: firstTier.id.value,
       }),
     )
   })

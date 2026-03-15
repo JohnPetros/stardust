@@ -8,9 +8,9 @@ import { useRealtimeContextProvider } from './useRealtimeContextProvider'
 export const RealtimeContext = createContext({} as RealtimeContextValue)
 
 export const RealtimeContextProvider = ({ children }: PropsWithChildren) => {
-  const value = useRealtimeContextProvider()
+  const contextValue = useRealtimeContextProvider()
 
-  console.log('RealtimeContextProvider', value)
-
-  return <RealtimeContext.Provider value={value}>{children}</RealtimeContext.Provider>
+  return (
+    <RealtimeContext.Provider value={contextValue}>{children}</RealtimeContext.Provider>
+  )
 }

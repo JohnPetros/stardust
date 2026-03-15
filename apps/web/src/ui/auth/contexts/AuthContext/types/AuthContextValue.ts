@@ -14,6 +14,7 @@ export type AuthContextValue = {
     accessToken: string,
     refreshToken: string,
   ): Promise<{ isNewAccount: boolean }>
+  handleRetryUserCreation(): Promise<boolean>
   updateUser(newUser: User): Promise<void>
   updateUserCache(userData: UserDto | null, shouldRevalidate?: boolean): void
   refetchUser(): void

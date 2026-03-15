@@ -60,6 +60,16 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 - Para entender a interface `Job` e o protocolo `Amqp`.
 - Ao definir novos jobs com a estrutura `Job<Payload>`.
 
+## Regras da Camada Realtime
+
+**Arquivo:** `/documentation/rules/realtime-rules.md`
+**Quando consultar:**
+
+- Ao criar ou modificar um documento relacionado a camada realtime.
+- Ao implementar novos canais, adaptadores ou clients realtime no `apps/web`.
+- Para entender como expor eventos do provedor para a UI sem acoplar widgets ao SDK externo.
+- Ao integrar hooks, contexts e listeners com contratos do core, como `ProfileChannel`.
+
 ## Regras da Camada de Providers (provision)
 
 **Arquivo:** `/documentation/rules/provision-layer-rules.md`
