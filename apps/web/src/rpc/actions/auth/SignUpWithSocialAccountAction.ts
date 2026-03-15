@@ -32,13 +32,15 @@ export const SignUpWithSocialAccountAction = (
 
       const signUpResponse = await service.signUpWithSocialAccount(account)
 
+      console.log('signUpResponse', signUpResponse)
+
       const event = new AccountSignedInEvent({
         accountId: account.id.value,
         platform: 'web',
       })
 
       await Promise.all([
-        SERVER_ENV.mode === 'production' ? broker.publish(event) : null,
+        // SERVER_ENV.mode === 'production' ? broker.publish(event) : null,
         call.setCookie(
           COOKIES.accessToken.key,
           accessToken,
