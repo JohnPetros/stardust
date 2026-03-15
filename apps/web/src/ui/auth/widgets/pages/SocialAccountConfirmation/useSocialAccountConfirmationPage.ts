@@ -51,31 +51,34 @@ export function useSocialAccountConfirmationPage({
   }, [sleep, rocketAnimationRef, router])
 
   useEffect(() => {
-    async function signUpWithSocialAccount() {
-      if (hasHandledSignUpRef.current) return
+    async function signUpWithSocialAccount(accessToken: string, refreshToken: string) {
       await sleep(2000)
-      if (!accessToken || !refreshToken) return
-
-      hasHandledSignUpRef.current = true
 
       const { isNewAccount } = await onSignUpWithSocialAccount(accessToken, refreshToken)
-      console.log({ isNewAccount })
       setIsNewAccount(isNewAccount)
       setIsUserCreated(!isNewAccount)
 
-      if (!isNewAccount) showRocketAnimation()
+      if (!isNewAccount) {
+        void showRocketAnimation()
+      }
     }
 
-    signUpWithSocialAccount()
-  }, [])
+    if (hasHandledSignUpRef.current) return
+    if (!accessToken || !refreshToken) return
+
+    hasHandledSignUpRef.current = true
+    void signUpWithSocialAccount(accessToken, refreshToken)
+  }, [accessToken, refreshToken, onSignUpWithSocialAccount, showRocketAnimation, sleep])
 
   useEffect(() => {
     return profileChannel.onCreateUser((event: UserCreatedEvent) => {
+      console.log({ event })
+      console.log({ account })
       if (event.payload.userEmail === account?.email?.value) {
         setIsUserCreated(true)
       }
     })
-  }, [account?.email?.value, profileChannel])
+  }, [account])
 
   useEffect(() => {
     if (!isNewAccount || isUserCreated) {

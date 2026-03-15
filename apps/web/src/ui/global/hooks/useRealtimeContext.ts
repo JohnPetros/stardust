@@ -11,6 +11,5 @@ export function useRealtimeContext() {
     throw new AppError('useRealtimeContext must be used inside RealtimeContextProvider')
   }
 
-  console.log(context.profileChannel)
   return context
 }
