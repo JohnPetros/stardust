@@ -42,11 +42,11 @@ export const ContentView = ({ type, children, hasAnimation = false }: Props) => 
     <div className={contentStyles({ type })}>
       {typeof content === 'string' ? (
         <div>
-          <Speaker
+          {/* <Speaker
             text={formattedContent
               .replaceAll('<strong class="strong">', '')
               .replaceAll('</strong>', '')}
-          />
+          /> */}
           <div className='py-3'>
             {hasAnimation ? (
               <TypeWriter content={content} isEnable={hasAnimation} />
