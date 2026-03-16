@@ -73,7 +73,7 @@ export const accessChallengeEditorPage = authActionClient
     })
     const challengingService = ChallengingService(restClient)
     const action = AccessChallengeEditorPageAction(challengingService)
-    return action.handle(call)
+    return await action.handle(call)
   })
 
 export const accessChallengeCommentsSlot = actionClient

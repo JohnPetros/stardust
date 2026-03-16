@@ -7,7 +7,7 @@ import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import { authActions } from '@/rpc/next-safe-action'
 
 export function useSignUpWithSocialAccountAction() {
-  const { executeAsync, hasErrored } = useAction(authActions.signUpWithSocialAccount)
+  const { executeAsync } = useAction(authActions.signUpWithSocialAccount)
 
   const signUpWithSocialAccount = useCallback(
     async (
@@ -21,8 +21,6 @@ export function useSignUpWithSocialAccountAction() {
     },
     [executeAsync],
   )
-
-  console.log({ hasErrored })
 
   return { signUpWithSocialAccount }
 }
