@@ -6,7 +6,7 @@ import { ActionResponse } from '@stardust/core/global/responses'
 import { authActions } from '@/rpc/next-safe-action'
 
 export function useRetryUserCreationAction() {
-  const { executeAsync, hasErrored } = useAction(authActions.retryUserCreation)
+  const { executeAsync } = useAction(authActions.retryUserCreation)
 
   const retryUserCreation = useCallback(async (): Promise<ActionResponse<void>> => {
     const response = await executeAsync()
@@ -15,8 +15,6 @@ export function useRetryUserCreationAction() {
       ? new ActionResponse({ errorMessage: response.serverError })
       : new ActionResponse()
   }, [executeAsync])
-
-  console.log({ hasErrored })
 
   return { retryUserCreation }
 }
