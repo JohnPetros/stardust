@@ -1,45 +1,32 @@
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
-import { Button } from '@/ui/global/widgets/components/Button'
-import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
-import { Integer } from '@stardust/core/global/structures'
 import type { ReactNode } from 'react'
+import { Integer } from '@stardust/core/global/structures'
+import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
 
-type BlockedCommentsAlertDialogProps = {
+import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
+import { BlockedSolutionsAlertDialogView } from './BlockedSolutionsAlertDialogView'
+
+type Props = {
   children: ReactNode
   onShowSolutions: () => void
 }
 
-export function BlockedSolutionsAlertDialog({
+export const BlockedSolutionsAlertDialog = ({
   children: trigger,
   onShowSolutions,
-}: BlockedCommentsAlertDialogProps) {
+}: Props) => {
   const { user } = useAuthContext()
+
+  const coins = user?.coins.value ?? 0
+  const canAcquireSolutions =
+    user?.canAcquire(Integer.create(ChallengeCraftsVisibility.solutionsVisibilityPrice))
+      .isTrue ?? false
+
   return (
-    <AlertDialog
-      type='denying'
-      title='Opa!'
-      body={
-        <div>
-          <p className='text-center leading-8 text-gray-100'>
-            Para ver as soluções de outros usuários para esse desafio você deve pagar{' '}
-            <span className='font-medium text-yellow-400'>10 de starcoins</span> em troca.
-            Você possui atualmente {user?.coins.value} de starcoins.{' '}
-            {user?.canAcquire(
-              Integer.create(ChallengeCraftsVisibility.solutionsVisibilityPrice),
-            ).isTrue &&
-              `Contudo, você não será mais apto a ganhar recompensas ao terminar esse
-            desafio.`}
-          </p>
-          <p className='my-4 text-center uppercase text-red-500'>
-            Você tem certeza que deseja continuar?
-          </p>
-        </div>
-      }
-      action={<Button onClick={onShowSolutions}>Entendido</Button>}
-      cancel={<Button className='bg-red-500 text-gray-100'>Cancelar</Button>}
-    >
-      {trigger}
-    </AlertDialog>
+    <BlockedSolutionsAlertDialogView
+      trigger={trigger}
+      coins={coins}
+      canAcquireSolutions={canAcquireSolutions}
+      onShowSolutions={onShowSolutions}
+    />
   )
 }
