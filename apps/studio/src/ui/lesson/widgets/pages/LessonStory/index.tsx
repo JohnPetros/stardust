@@ -1,4 +1,3 @@
-import { useScreen } from 'usehooks-ts'
 import { useLoaderData } from 'react-router'
 
 import { Id } from '@stardust/core/global/structures'
@@ -10,24 +9,14 @@ import { useLessonStoryPage } from './useLessonStoryPage'
 import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 
 export const LessonStoryPage = () => {
-  const { starId, defaultStory } = useLoaderData<typeof clientLoader>()
+  const { starId } = useLoaderData<typeof clientLoader>()
   const { lessonService } = useRestContext()
   const toastProvider = useToastProvider()
-  const { story, handleSaveButtonClick, handleStoryChange } = useLessonStoryPage({
+  const page = useLessonStoryPage({
     lessonService,
     toastProvider,
     starId: Id.create(starId),
-    defaultStory,
   })
-  const screen = useScreen()
 
-  return (
-    <LessonStoryPageView
-      story={story}
-      editorHeight={screen.height * 0.68}
-      isStorySaveDisabled={Boolean(!story)}
-      onStoryChange={handleStoryChange}
-      onStorySave={handleSaveButtonClick}
-    />
-  )
+  return <LessonStoryPageView {...page} />
 }

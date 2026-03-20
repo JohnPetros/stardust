@@ -46,7 +46,7 @@ export const CodeSnippetView = ({
                 className={TOOLBAR_BUTTON_CLASS_NAME}
                 onClick={onReloadCodeButtonClick}
               >
-                <Icon name='reload' size={14} className='text-green-900 font-bold' />
+                <Icon name='reload' size={14} className='text-gray-900 font-bold' />
               </ToolBar.Button>
             </Tooltip>
             <Tooltip content='Copiar código'>
@@ -55,7 +55,7 @@ export const CodeSnippetView = ({
                 className={TOOLBAR_BUTTON_CLASS_NAME}
                 onClick={onCopyCodeButtonClick}
               >
-                <Icon name='copy' size={14} className='text-green-900 font-bold' />
+                <Icon name='copy' size={14} className='text-gray-900 font-bold' />
               </ToolBar.Button>
             </Tooltip>
             <ToolBar.Button
