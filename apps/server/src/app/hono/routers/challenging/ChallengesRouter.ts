@@ -22,6 +22,7 @@ import {
 } from '@/database/supabase/repositories/challenging'
 import {
   FetchChallengeController,
+  FetchChallengeNavigationController,
   FetchChallengesListController,
   FetchCompletedChallengesCountByDifficultyLevelController,
   FetchAllChallengeCategoriesController,
@@ -79,6 +80,25 @@ export class ChallengesRouter extends HonoRouter {
         const http = new HonoHttp(context)
         const repository = new SupabaseChallengesRepository(http.getSupabase())
         const controller = new FetchChallengeController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerFetchChallengeNavigationBySlugRoute(): void {
+    this.router.get(
+      '/slug/:challengeSlug/navigation',
+      this.validationMiddleware.validate(
+        'param',
+        z.object({
+          challengeSlug: stringSchema,
+        }),
+      ),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const controller = new FetchChallengeNavigationController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -368,6 +388,7 @@ export class ChallengesRouter extends HonoRouter {
   registerRoutes(): Hono {
     this.registerFetchChallengeByIdRoute()
     this.registerFetchChallengeBySlugRoute()
+    this.registerFetchChallengeNavigationBySlugRoute()
     this.registerFetchChallengeByStarRoute()
     this.registerFetchChallengesListRoute()
     this.registerFetchAllChallengesRoute()
