@@ -9,6 +9,11 @@ import { useRouterMock } from '@/ui/global/hooks/tests/mocks/useRouterMock'
 jest.mock('@/ui/global/hooks/useAuthContext')
 jest.mock('@/ui/global/contexts/ToastContext')
 jest.mock('@/ui/global/hooks/useNavigationProvider')
+jest.mock('@/ui/global/hooks/useSleep', () => ({
+  useSleep: () => ({
+    sleep: jest.fn().mockResolvedValue(undefined),
+  }),
+}))
 
 describe('useSignInPage hook', () => {
   const email = 'fake email'

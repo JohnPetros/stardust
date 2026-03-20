@@ -32,7 +32,7 @@ describe('SignUpForm', () => {
 
     await userEvent.type(nameInput, '1')
 
-    const nameInputError = screen.queryByTestId('name-input-error')
+    const nameInputError = await screen.findByTestId('name-input-error')
 
     expect(nameInputError).toBeVisible()
   })
@@ -52,7 +52,7 @@ describe('SignUpForm', () => {
     const nameInput = screen.getByTestId('name-input')
     await userEvent.type(nameInput, userName)
 
-    emailInput = screen.queryByTestId('email-input')
+    emailInput = await screen.findByTestId('email-input')
     expect(emailInput).toBeVisible()
   })
 
