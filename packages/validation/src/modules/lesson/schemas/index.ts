@@ -1,0 +1,1 @@
+export { textBlockSchema } from './textBlockSchema'
