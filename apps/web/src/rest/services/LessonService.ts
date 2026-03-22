@@ -2,6 +2,7 @@ import type { Id, Text } from '@stardust/core/global/structures'
 import type { LessonService as ILessonService } from '@stardust/core/lesson/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
 import type { Question } from '@stardust/core/lesson/abstracts'
+import type { TextBlockDto } from '@stardust/core/global/entities/dtos'
 
 export const LessonService = (restClient: RestClient): ILessonService => {
   return {
@@ -15,6 +16,12 @@ export const LessonService = (restClient: RestClient): ILessonService => {
 
     async fetchStarStory(starId: Id) {
       return await restClient.get(`/lesson/stories/star/${starId.value}`)
+    },
+
+    async updateTextBlocks(starId: Id, textBlocks: TextBlockDto[]) {
+      return await restClient.put(`/lesson/text-blocks/star/${starId.value}`, {
+        textBlocks,
+      })
     },
 
     async updateStory(starId: Id, story: Text) {
