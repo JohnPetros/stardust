@@ -2,6 +2,8 @@ import nextJest from 'next/jest.js'
 import { config } from 'dotenv'
 import { TextEncoder, TextDecoder } from 'node:util'
 
+process.env.NEXT_IGNORE_INCORRECT_LOCKFILE = '1'
+
 config({ path: '.env.test' })
 
 /** @type {import('jest').Config} */

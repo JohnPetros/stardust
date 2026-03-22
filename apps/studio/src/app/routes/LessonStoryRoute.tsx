@@ -11,19 +11,16 @@ import { restContext } from '../contexts/RestContext'
 export const clientMiddleware = [AuthMiddleware, RestMiddleware]
 
 export const clientLoader = async ({ context, params }: Route.LoaderArgs) => {
-  const { spaceService, lessonService } = context.get(restContext)
+  const { spaceService } = context.get(restContext)
   const response = await spaceService.fetchStarBySlug(Slug.create(params.starSlug))
   if (response.isFailure) response.throwError()
 
   const star = Star.create(response.body)
-  const lessonResponse = await lessonService.fetchStarStory(star.id)
-  if (lessonResponse.isFailure) lessonResponse.throwError()
 
   return {
     starId: star.id.value,
     starName: star.name.value,
     starNumber: star.number.value,
-    defaultStory: lessonResponse.body.story,
   }
 }
 

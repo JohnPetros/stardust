@@ -10,9 +10,16 @@ import { usePictureInput } from './usePictureInput'
 type Props = {
   defaultPicture?: Image
   onChange: (picture: Image) => void
+  isOptional?: boolean
+  onClear?: () => void
 }
 
-export const PictureInput = ({ defaultPicture, onChange }: Props) => {
+export const PictureInput = ({
+  defaultPicture,
+  onChange,
+  isOptional,
+  onClear,
+}: Props) => {
   const { storageService } = useRestContext()
   const dialogRef = useRef<DialogRef>(null)
   const {
@@ -26,18 +33,22 @@ export const PictureInput = ({ defaultPicture, onChange }: Props) => {
     handlePictureCardClick,
     handleLoadMoreButtonClick,
     handlePictureCardRemove,
+    handleClearSelection,
   } = usePictureInput({
     defaultPicture,
     storageService,
     dialogRef,
+    isOptional,
+    onClear,
     onChange,
   })
 
   return (
     <PictureInputView
       dialogRef={dialogRef}
-      selectedImage={selectedImage.value}
+      selectedImage={selectedImage?.value}
       images={images}
+      isOptional={Boolean(isOptional)}
       isFetching={isFetching}
       isFetchingNextPage={isFetchingNextPage}
       hasNextPage={hasNextPage}
@@ -46,6 +57,7 @@ export const PictureInput = ({ defaultPicture, onChange }: Props) => {
       onLoadMoreButtonClick={handleLoadMoreButtonClick}
       onPictureCardRemove={handlePictureCardRemove}
       onSubmitImage={handleImageSubmit}
+      onClearSelection={handleClearSelection}
     />
   )
 }

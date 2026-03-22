@@ -26,6 +26,7 @@
     "./auth/schemas": "./src/modules/auth/schemas/index.ts",
     "./manual/schemas": "./src/modules/manual/index.ts",
     "./reporting/schemas": "./src/modules/reporting/index.ts",
+    "./lesson/schemas": "./src/modules/lesson/index.ts",
     "./factories": "./src/factories/index.ts"
   },
   "imports": {

@@ -20,8 +20,9 @@ import { StorageImage } from '@/ui/global/widgets/components/StorageImage'
 
 type Props = {
   dialogRef: RefObject<DialogRef | null>
-  selectedImage: string
+  selectedImage?: string
   images: Image[]
+  isOptional: boolean
   isFetching: boolean
   isFetchingNextPage: boolean
   hasNextPage: boolean
@@ -30,12 +31,14 @@ type Props = {
   onLoadMoreButtonClick: () => void
   onPictureCardRemove: () => void
   onSubmitImage: () => void
+  onClearSelection: () => void
 }
 
 export const PictureInputView = ({
   dialogRef,
   selectedImage,
   images,
+  isOptional,
   isFetching,
   isFetchingNextPage,
   hasNextPage,
@@ -44,16 +47,23 @@ export const PictureInputView = ({
   onLoadMoreButtonClick,
   onPictureCardRemove,
   onSubmitImage,
+  onClearSelection,
 }: Props) => {
   return (
     <Dialog ref={dialogRef}>
       <DialogTrigger className='cursor-pointer'>
-        <StorageImage
-          folder='story'
-          src={selectedImage}
-          alt='Imagem'
-          className='w-12 h-10'
-        />
+        {selectedImage ? (
+          <StorageImage
+            folder='story'
+            src={selectedImage}
+            alt='Imagem'
+            className='w-12 h-10'
+          />
+        ) : (
+          <div className='grid h-10 w-12 place-content-center rounded-md border border-dashed border-zinc-700 text-[10px] text-zinc-400'>
+            Sem imagem
+          </div>
+        )}
       </DialogTrigger>
       <DialogContent
         showCloseButton
@@ -70,13 +80,22 @@ export const PictureInputView = ({
           />
           <div className='flex items-center justify-between gap-2 px-3 py-1 w-64 border border-zinc-700 rounded text-sm text-zinc-300'>
             Selecionado:
-            <StorageImage
-              folder='story'
-              src={selectedImage}
-              alt='Imagem'
-              className='w-10 h-8'
-            />
+            {selectedImage ? (
+              <StorageImage
+                folder='story'
+                src={selectedImage}
+                alt='Imagem'
+                className='w-10 h-8'
+              />
+            ) : (
+              <span className='text-xs text-zinc-400'>Sem imagem</span>
+            )}
           </div>
+          {isOptional && (
+            <Button variant='ghost' type='button' onClick={onClearSelection}>
+              Sem imagem
+            </Button>
+          )}
           <ImageInput folder='story' onSubmit={onSubmitImage}>
             <Button variant='outline' className='flex items-center gap-2'>
               <Icon name='upload' className='w-4 h-4' />

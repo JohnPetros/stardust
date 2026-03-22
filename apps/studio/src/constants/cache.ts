@@ -35,4 +35,7 @@ export const CACHE = {
   challengeSourcesTable: {
     key: 'challenge-sources-table',
   },
+  lessonStoryTextBlocks: {
+    key: 'lesson-story-text-blocks',
+  },
 }

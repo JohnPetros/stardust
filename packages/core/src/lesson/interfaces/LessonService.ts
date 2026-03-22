@@ -8,6 +8,10 @@ export interface LessonService {
   fetchQuestions(starId: Id): Promise<RestResponse<QuestionDto[]>>
   fetchTextsBlocks(starId: Id): Promise<RestResponse<TextBlockDto[]>>
   fetchStarStory(starId: Id): Promise<RestResponse<{ story: string }>>
+  updateTextBlocks(
+    starId: Id,
+    textBlocks: TextBlockDto[],
+  ): Promise<RestResponse<TextBlockDto[]>>
   updateStory(starId: Id, story: Text): Promise<RestResponse<void>>
   updateQuestions(starId: Id, questions: Question[]): Promise<RestResponse<void>>
 }
