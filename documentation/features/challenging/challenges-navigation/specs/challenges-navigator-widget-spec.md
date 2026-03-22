@@ -1,6 +1,7 @@
 ---
 title: Controles Next e Prev de Desafios
 prd: https://github.com/JohnPetros/stardust/milestone/16
+issue: https://github.com/JohnPetros/stardust/issues/357
 apps: server, web
 status: closed
 last_updated_at: 2026-03-20
