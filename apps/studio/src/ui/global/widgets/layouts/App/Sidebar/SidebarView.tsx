@@ -10,19 +10,19 @@ export const SidebarView = () => {
         <NavigationTitle>Dashboard</NavigationTitle>
         <NavigationLink
           href={ROUTES.dashboard}
-          icon={<Icon name='dashboard' size={16} />}
+          icon={<Icon name='dashboard' size={15} />}
         >
           Dashboard
         </NavigationLink>
       </nav>
       <div>
         <NavigationTitle>Perfis</NavigationTitle>
-        <NavigationLink href={ROUTES.profile.users} icon={<Icon name='user' size={16} />}>
+        <NavigationLink href={ROUTES.profile.users} icon={<Icon name='user' size={15} />}>
           Usuários
         </NavigationLink>
         <NavigationLink
           href={ROUTES.profile.achievements}
-          icon={<Icon name='achievement' size={16} />}
+          icon={<Icon name='achievement' size={15} />}
         >
           Conquistas
         </NavigationLink>
@@ -31,7 +31,7 @@ export const SidebarView = () => {
         <NavigationTitle>Progresso espacial</NavigationTitle>
         <NavigationLink
           href={ROUTES.space.planets}
-          icon={<Icon name='planet' size={16} />}
+          icon={<Icon name='planet' size={15} />}
         >
           Planetas
         </NavigationLink>
@@ -40,13 +40,13 @@ export const SidebarView = () => {
         <NavigationTitle>Desafios de código</NavigationTitle>
         <NavigationLink
           href={ROUTES.challenging.challenges}
-          icon={<Icon name='challenge' size={16} />}
+          icon={<Icon name='challenge' size={15} />}
         >
           Desafios
         </NavigationLink>
         <NavigationLink
           href={ROUTES.challenging.sources}
-          icon={<Icon name='link' size={16} />}
+          icon={<Icon name='link' size={15} />}
         >
           Fontes
         </NavigationLink>
@@ -55,19 +55,19 @@ export const SidebarView = () => {
         <NavigationTitle>Loja</NavigationTitle>
         <NavigationLink
           href={ROUTES.shop.insignias}
-          icon={<Icon name='insignia' size={16} />}
+          icon={<Icon name='insignia' size={15} />}
         >
           Insígnias
         </NavigationLink>
         <NavigationLink
           href={ROUTES.shop.rockets}
-          icon={<Icon name='rocket' size={16} />}
+          icon={<Icon name='rocket' size={15} />}
         >
           Foguetes
         </NavigationLink>
         <NavigationLink
           href={ROUTES.shop.avatars}
-          icon={<Icon name='avatar' size={16} />}
+          icon={<Icon name='avatar' size={15} />}
         >
           Avatares
         </NavigationLink>
@@ -76,13 +76,13 @@ export const SidebarView = () => {
         <NavigationTitle>Manual</NavigationTitle>
         <NavigationLink
           href={ROUTES.manual.lspGuides}
-          icon={<Icon name='lsp-guide' size={16} />}
+          icon={<Icon name='lsp-guide' size={15} />}
         >
           Guias LSP
         </NavigationLink>
         <NavigationLink
           href={ROUTES.manual.mdxGuides}
-          icon={<Icon name='mdx-guide' size={16} />}
+          icon={<Icon name='mdx-guide' size={15} />}
         >
           Guias MDX
         </NavigationLink>
@@ -91,7 +91,7 @@ export const SidebarView = () => {
         <NavigationTitle>Relatórios</NavigationTitle>
         <NavigationLink
           href={ROUTES.reporting.feedback}
-          icon={<Icon name='feedback' size={16} />}
+          icon={<Icon name='feedback' size={15} />}
         >
           Feedbacks
         </NavigationLink>

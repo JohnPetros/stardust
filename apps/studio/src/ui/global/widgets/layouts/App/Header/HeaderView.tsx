@@ -30,7 +30,7 @@ export const HeaderView = ({ left, right, className = '', account }: Props) => {
       <div className='flex items-center gap-4'>
         {left ?? (
           <>
-            <img src='/images/rocket.svg' alt='' className='w-8 h-8' />
+            <img src='/images/rocket.svg' alt='' className='w-6 h-6' />
             <span className='block bg-slate-500 w-0.5 h-6 rotate-[30deg] rounded-full' />
             <img src='/images/logo.svg' alt='StarDust' className='w-24 h-24' />
           </>

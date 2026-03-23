@@ -26,11 +26,16 @@ export const ContentView = ({
     ? children
         .map((child) =>
           typeof child !== 'string'
-            ? `<strong class="strong">${child.props.children}</strong>`
+            ? `<strong class="inline-block mx-1 rounded-md bg-gray-800 px-[10px] font-code text-gray-50">${child.props.children}</strong>`
             : child,
         )
         .join(' ')
     : children
 
-  return <div className={contentVariants({ type })}>{content}</div>
+  if (content)
+    return (
+      <div className={contentVariants({ type })}>
+        <span dangerouslySetInnerHTML={{ __html: content?.toString() }} />
+      </div>
+    )
 }
