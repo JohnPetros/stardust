@@ -5,7 +5,7 @@ description: Registra um anti-padrão cometido durante a implementação no doc 
 # Prompt: Registrar Anti-padrão
 
 **Objetivo:** Documentar um erro de implementação cometido pela IA no arquivo
-de regras da camada correspondente, de forma clara e acionável — para que o
+de regras da camada correspondente, de forma clara e acionável para que o
 mesmo anti-padrão não se repita em sessões futuras.
 
 > Antes de registrar o anti-padrão, leia:
