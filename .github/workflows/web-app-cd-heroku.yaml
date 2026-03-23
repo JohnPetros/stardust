@@ -1,9 +1,6 @@
 name: Web app CD to Heroku
 
 on:
-  push:
-    branches:
-      - main
   release:
     types: [published]
 
@@ -83,5 +80,3 @@ jobs:
           curl -H "Content-Type: application/json" \
             -d "$EMBED" \
             "$DISCORD_WEBHOOK_URL"
-
-
