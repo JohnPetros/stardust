@@ -116,6 +116,7 @@ export class SupabaseAuthService implements AuthService {
   async signInWithGoogleAccount(
     returnUrl: Text,
   ): Promise<RestResponse<{ signInUrl: string }>> {
+    console.log('returnUrl', returnUrl.value)
     const { data, error } = await this.supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {

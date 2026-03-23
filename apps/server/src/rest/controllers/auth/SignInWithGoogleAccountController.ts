@@ -15,12 +15,14 @@ export class SignInWithGoogleAccountController implements Controller<Schema> {
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { returnUrl } = http.getQueryParams()
-    console.log({ returnUrl })
     const response = await this.service.signInWithGoogleAccount(Text.create(returnUrl))
 
     if (response.isFailure) {
       return response
     }
+
+    console.log('signInUrl', response.body.signInUrl)
+
 
     return http.redirect(response.body.signInUrl)
   }
