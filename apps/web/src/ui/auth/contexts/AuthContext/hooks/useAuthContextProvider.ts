@@ -7,15 +7,23 @@ import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import { Account } from '@stardust/core/auth/entities'
 import type { ActionResponse } from '@stardust/core/global/responses'
 
-import { CACHE, DOM_EVENTS } from '@/constants'
+import {
+  CACHE,
+  DOM_EVENTS,
+  PUBLIC_ROUTE_GROUPS,
+  PUBLIC_ROUTES,
+  ROUTES,
+} from '@/constants'
 import { useCache } from '@/ui/global/hooks/useCache'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 
 type Params = {
   profileService: ProfileService
   accountDto: AccountDto | null
   signIn: (email: string, password: string) => Promise<ActionResponse<AccountDto>>
   signOut: () => Promise<ActionResponse<void>>
+  retryUserCreation: () => Promise<ActionResponse<void>>
   signUpWithSocialAccount: (
     accessToken: string,
     refreshToken: string,
@@ -27,12 +35,14 @@ export function useAuthContextProvider({
   accountDto,
   signIn,
   signOut,
+  retryUserCreation,
   signUpWithSocialAccount,
 }: Params) {
   const [account, setAccount] = useState<Account | null>(
     accountDto ? Account.create(accountDto) : null,
   )
   const toast = useToastContext()
+  const navigationProvider = useNavigationProvider()
 
   async function fetchUser() {
     if (!account) return
@@ -48,7 +58,7 @@ export function useAuthContextProvider({
   } = useCache({
     key: CACHE.keys.authUser,
     fetcher: fetchUser,
-    isEnabled: Boolean(accountDto),
+    isEnabled: Boolean(account),
     dependencies: [account?.id],
     shouldRefetchOnFocus: false,
   })
@@ -96,6 +106,17 @@ export function useAuthContextProvider({
     }
   }, [signOut, toast])
 
+  const handleRetryUserCreation = useCallback(async () => {
+    const response = await retryUserCreation()
+
+    if (response.isFailure) {
+      toast.showError(response.errorMessage, 8)
+      return false
+    }
+
+    return true
+  }, [retryUserCreation, toast])
+
   const updateUserCache = useCallback(
     (userData: UserDto | null, shouldRevalidate = true) => {
       updateCache(userData, {
@@ -129,6 +150,30 @@ export function useAuthContextProvider({
     }
   }, [account, updateUserCache])
 
+  useEffect(() => {
+    const currentRoute = navigationProvider.currentRoute
+    const isPublicRoute =
+      PUBLIC_ROUTES.map(String).includes(currentRoute) ||
+      PUBLIC_ROUTE_GROUPS.some((group) => currentRoute.startsWith(group))
+
+    const shouldRedirectToAccountConfirmation =
+      account?.isAuthenticated.isTrue &&
+      !userDto &&
+      !isLoading &&
+      !isPublicRoute &&
+      currentRoute !== ROUTES.auth.accountConfirmation
+
+    if (!shouldRedirectToAccountConfirmation) return
+
+    navigationProvider.goTo(ROUTES.auth.accountConfirmation)
+  }, [
+    account?.isAuthenticated.isTrue,
+    userDto,
+    isLoading,
+    navigationProvider.currentRoute,
+    navigationProvider.goTo,
+  ])
+
   const user = useMemo(() => (userDto ? User.create(userDto) : null), [userDto])
 
   return useMemo(
@@ -140,6 +185,7 @@ export function useAuthContextProvider({
       handleSignIn,
       handleSignOut,
       handleSignUpWithSocialAccount,
+      handleRetryUserCreation,
       updateUser,
       refetchUser: refetch,
       updateUserCache,
@@ -152,6 +198,7 @@ export function useAuthContextProvider({
       handleSignIn,
       handleSignOut,
       handleSignUpWithSocialAccount,
+      handleRetryUserCreation,
       updateUser,
       refetch,
       updateUserCache,

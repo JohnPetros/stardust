@@ -21,7 +21,7 @@ import {
   RankingUpdatedEvent,
   RankingWinnersDefinedEvent,
 } from '@stardust/core/ranking/events'
-import { UserSignedInEvent, UserSignedUpEvent } from '@stardust/core/auth/events'
+import { AccountSignedInEvent, AccountSignedUpEvent } from '@stardust/core/auth/events'
 import { GuideContentEditedEvent } from '@stardust/core/manual/events'
 import { ChallengePostedEvent } from '@stardust/core/challenging/events'
 
@@ -32,15 +32,16 @@ const eventsSchema = {
   [UserCreatedEvent._NAME]: {
     data: z.object({
       userId: idSchema,
-      acquiredRocketsIds: z.array(idSchema),
-      acquiredAvatarsIds: z.array(idSchema),
-    }),
-  },
-  [UserSignedUpEvent._NAME]: {
-    data: z.object({
-      userId: idSchema,
       userName: nameSchema,
       userEmail: emailSchema,
+      userSlug: stringSchema,
+    }),
+  },
+  [AccountSignedUpEvent._NAME]: {
+    data: z.object({
+      accountId: idSchema,
+      accountName: nameSchema,
+      accountEmail: emailSchema,
     }),
   },
   [FirstStarUnlockedEvent._NAME]: {
@@ -50,8 +51,7 @@ const eventsSchema = {
         name: nameSchema,
         email: emailSchema,
       }),
-      selectedAvatarByDefaultId: idSchema,
-      selectedRocketByDefaultId: idSchema,
+      firstUnlockedStarId: idSchema,
     }),
   },
   [PlanetsOrderChangedEvent._NAME]: {},
@@ -68,6 +68,11 @@ const eventsSchema = {
         name: nameSchema,
         email: emailSchema,
       }),
+      selectedAvatarByDefaultId: idSchema,
+      selectedRocketByDefaultId: idSchema,
+      acquiredAvatarsByDefaultIds: z.array(idSchema),
+      acquiredRocketsByDefaultIds: z.array(idSchema),
+      firstTierId: idSchema,
       firstUnlockedStarId: idSchema,
     }),
   },
@@ -78,8 +83,6 @@ const eventsSchema = {
         name: nameSchema,
         email: emailSchema,
       }),
-      selectedAvatarByDefaultId: idSchema,
-      selectedRocketByDefaultId: idSchema,
       firstUnlockedStarId: idSchema,
       firstTierId: idSchema,
     }),
@@ -101,9 +104,9 @@ const eventsSchema = {
       tierId: idSchema,
     }),
   },
-  [UserSignedInEvent._NAME]: {
+  [AccountSignedInEvent._NAME]: {
     data: z.object({
-      userId: idSchema,
+      accountId: idSchema,
       platform: platformSchema,
     }),
   },

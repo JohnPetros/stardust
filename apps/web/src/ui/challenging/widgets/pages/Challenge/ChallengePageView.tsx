@@ -1,7 +1,6 @@
-import type { PopoverMenuButton } from '@/ui/global/widgets/components/PopoverMenu/types'
+import type { ReactNode } from 'react'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Button } from '@/ui/global/widgets/components/Button'
-import { PopoverMenu } from '@/ui/global/widgets/components/PopoverMenu'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Loading } from '@/ui/global/widgets/components/Loading'
 import type { PanelsLayout } from '@/ui/challenging/stores/ChallengeStore/types'
@@ -11,16 +10,18 @@ type Props = {
   challengeTitle: string | null
   panelsLayout: PanelsLayout
   shouldHaveConfettiAnimation: boolean
+  challengeNavigationSlot: ReactNode
+  challengeNavigationAlertDialogSlot: ReactNode
   handleBackButtonClick: () => void
   handlePanelsLayoutButtonClick: (layout: PanelsLayout) => void
 }
 
 export const ChallengePageView = ({
   challengeTitle,
-  panelsLayout,
   shouldHaveConfettiAnimation,
+  challengeNavigationSlot,
+  challengeNavigationAlertDialogSlot,
   handleBackButtonClick,
-  handlePanelsLayoutButtonClick,
 }: Props) => {
   if (!challengeTitle) {
     return <Loading isSmall={false} />
@@ -68,7 +69,11 @@ export const ChallengePageView = ({
           </AlertDialog>
           <h1 className='text-lg font-semibold text-gray-100'>{challengeTitle}</h1>
         </div>
+
+        {challengeNavigationSlot}
       </div>
+
+      {challengeNavigationAlertDialogSlot}
     </header>
   )
 }

@@ -4,7 +4,7 @@ import type { RestResponse } from '@stardust/core/global/responses'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import { Email } from '@stardust/core/global/structures'
 import { Password } from '@stardust/core/auth/structures'
-import { UserSignedUpEvent } from '@stardust/core/auth/events'
+import { AccountSignedUpEvent } from '@stardust/core/auth/events'
 
 type Schema = {
   body: {
@@ -29,10 +29,10 @@ export class SignUpController implements Controller<Schema> {
     const accountId = String(response.body.id)
 
     if (response.isSuccessful) {
-      const event = new UserSignedUpEvent({
-        userId: accountId,
-        userEmail: email,
-        userName: name,
+      const event = new AccountSignedUpEvent({
+        accountId: accountId,
+        accountEmail: email,
+        accountName: name,
       })
       await this.broker.publish(event)
     }

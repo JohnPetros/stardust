@@ -46,7 +46,7 @@ export class TextBlock {
 
   static isType(type: string): type is TextBlockType {
     new StringValidation(type, 'Text Block Type')
-      .oneOf(['default', 'quote', 'alert', 'list', 'image', 'code', 'user'])
+      .oneOf(['default', 'quote', 'alert', 'list', 'image', 'code', 'code-line', 'user'])
       .validate()
 
     return true

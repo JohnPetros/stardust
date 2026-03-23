@@ -1,6 +1,6 @@
 @URL = {{BASE_URL}}/challenging/challenges
 @CHALLENGE_ID = 17ba01ec-7aa6-4971-9760-537127e03b4d
-@CHALLENGE_SLUG = area-do-escudo-protetor
+@CHALLENGE_SLUG = o-codigo-espelhado-do-comando-estelar
 @STAR_ID = bda4c82c-9466-4619-bdd6-89f719c54c27
 
 ### Fetch challenge by id
@@ -8,6 +8,9 @@ GET {{URL}}/id/{{CHALLENGE_ID}}
 
 ### Fetch challenge by slug
 GET {{URL}}/slug/{{CHALLENGE_SLUG}}
+
+### Fetch challenge navigation by slug
+GET {{URL}}/slug/{{CHALLENGE_SLUG}}/navigation
 
 ### Fetch challenge by star
 GET {{URL}}/star/{{STAR_ID}}

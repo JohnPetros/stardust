@@ -5,7 +5,7 @@ import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 import { Challenge } from '@stardust/core/challenging/entities'
 import { Star } from '@stardust/core/space/entities'
 import { User } from '@stardust/core/global/entities'
-import { InsigniaRole, Slug, type Id } from '@stardust/core/global/structures'
+import { Slug, type Id } from '@stardust/core/global/structures'
 import { ChallengeVote } from '@stardust/core/challenging/structures'
 
 type Dependencies = {
@@ -21,6 +21,13 @@ type Request = {
 type Response = {
   challengeDto: ChallengeDto
   userChallengeVote: string
+  previousChallengeSlug: string | null
+  nextChallengeSlug: string | null
+}
+
+const EMPTY_NAVIGATION = {
+  previousChallengeSlug: null,
+  nextChallengeSlug: null,
 }
 
 export const AccessChallengePageAction = ({
@@ -48,6 +55,14 @@ export const AccessChallengePageAction = ({
     return ChallengeVote.create(response.body.challengeVote)
   }
 
+  async function fetchChallengeNavigation(challengeSlug: string) {
+    const response = await challengingService.fetchChallengeNavigation(
+      Slug.create(challengeSlug),
+    )
+    if (response.isFailure) response.throwError()
+    return response.body
+  }
+
   return {
     async handle(call: Call<Request>) {
       const { challengeSlug } = call.getRequest()
@@ -64,6 +79,10 @@ export const AccessChallengePageAction = ({
         }
       }
 
+      const challengeNavigation = challenge.starId
+        ? EMPTY_NAVIGATION
+        : await fetchChallengeNavigation(challengeSlug)
+
       if (user) {
         const isAuthor = challenge.isChallengeAuthor(user.id)
 
@@ -76,6 +95,8 @@ export const AccessChallengePageAction = ({
         return {
           challengeDto: challenge.dto,
           userChallengeVote: userChallengeVote.value,
+          previousChallengeSlug: challengeNavigation.previousChallengeSlug,
+          nextChallengeSlug: challengeNavigation.nextChallengeSlug,
         }
       }
 
@@ -84,6 +105,8 @@ export const AccessChallengePageAction = ({
       return {
         challengeDto: challenge.dto,
         userChallengeVote: ChallengeVote.createAsNone().value,
+        previousChallengeSlug: challengeNavigation.previousChallengeSlug,
+        nextChallengeSlug: challengeNavigation.nextChallengeSlug,
       }
     },
   }

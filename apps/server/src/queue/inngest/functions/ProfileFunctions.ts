@@ -17,9 +17,10 @@ import {
 } from '@/queue/jobs/profile'
 import { SupabaseUsersRepository } from '@/database'
 import { InngestAmqp } from '../InngestAmqp'
+import { InngestBroker } from '../InngestBroker'
 import { InngestFunctions } from './InngestFunctions'
 import { SpaceOrderChangedEvent } from '@stardust/core/space/events'
-import { UserSignedInEvent } from '@stardust/core/auth/events'
+import { AccountSignedInEvent } from '@stardust/core/auth/events'
 
 export class ProfileFunctions extends InngestFunctions {
   private createCreateUserFunction(supabase: SupabaseClient) {
@@ -27,12 +28,14 @@ export class ProfileFunctions extends InngestFunctions {
       {
         id: CreateUserJob.KEY,
         onFailure: (context) => this.handleFailure(context, CreateUserJob.name),
+        retries: 0,
       },
       { event: ShopItemsAcquiredByDefaultEvent._NAME },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
+        const broker = new InngestBroker()
         const amqp = new InngestAmqp<typeof context.event.data>(context)
-        const job = new CreateUserJob(repository)
+        const job = new CreateUserJob(repository, broker)
         return await job.handle(amqp)
       },
     )
@@ -128,7 +131,7 @@ export class ProfileFunctions extends InngestFunctions {
         id: RegisterUserVisitJob.KEY,
         onFailure: (context) => this.handleFailure(context, RegisterUserVisitJob.name),
       },
-      { event: UserSignedInEvent._NAME },
+      { event: AccountSignedInEvent._NAME },
       async (context) => {
         const repository = new SupabaseUsersRepository(supabase)
         const amqp = new InngestAmqp<typeof context.event.data>(context)

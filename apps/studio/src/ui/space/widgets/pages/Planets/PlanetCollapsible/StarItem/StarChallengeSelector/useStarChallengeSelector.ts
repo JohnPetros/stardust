@@ -58,6 +58,7 @@ export function useStarChallengeSelector({
         shouldIncludePrivateChallenges: Logical.create(true),
         shouldIncludeOnlyAuthorChallenges: Logical.create(false),
         shouldIncludeStarChallenges: Logical.create(false),
+        isNewStatus: ChallengeIsNewStatus.create('all'),
         title: Text.create(debouncedSearch),
         isNewStatus: ChallengeIsNewStatus.create('all'),
         userId: null,

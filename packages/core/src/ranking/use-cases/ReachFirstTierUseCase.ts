@@ -11,7 +11,7 @@ type Request = {
     name: string
     email: string
   }
-  firstStarId: string
+  firstUnlockedStarId: string
 }
 
 export class ReachFirstTierUseCase implements UseCase<Request, void> {
@@ -20,7 +20,7 @@ export class ReachFirstTierUseCase implements UseCase<Request, void> {
     private readonly broker: Broker,
   ) {}
 
-  async execute({ user, firstStarId }: Request) {
+  async execute({ user, firstUnlockedStarId }: Request) {
     const tier = await this.repository.findByPosition(OrdinalNumber.create(1))
     if (!tier) {
       throw new TierNotFoundError()
@@ -28,8 +28,8 @@ export class ReachFirstTierUseCase implements UseCase<Request, void> {
 
     const event = new FirstTierReachedEvent({
       user,
-      firstTierId: tier.id.value,
-      firstStarId: firstStarId,
+      firstReachedTierId: tier.id.value,
+      firstUnlockedStarId,
     })
     await this.broker.publish(event)
   }

@@ -2,7 +2,7 @@ import type { ChallengesRepository } from '@stardust/core/challenging/interfaces
 import { type Challenge, ChallengeCategory } from '@stardust/core/challenging/entities'
 import type { ChallengesListParams } from '@stardust/core/challenging/types'
 import { Integer, type Id, type Month, type Slug } from '@stardust/core/global/structures'
-import { ChallengeVote } from '@stardust/core/challenging/structures'
+import { ChallengeNavigation, ChallengeVote } from '@stardust/core/challenging/structures'
 import type { ManyItems } from '@stardust/core/global/types'
 
 import type { Json } from '../../types/Database'
@@ -14,6 +14,46 @@ export class SupabaseChallengesRepository
   extends SupabaseRepository
   implements ChallengesRepository
 {
+  async findChallengeNavigationBySlug(
+    challengeSlug: Slug,
+  ): Promise<ChallengeNavigation | null> {
+    const { data: challenges, error } = await this.supabase
+      .from('challenges')
+      .select('id, slug, created_at')
+      .is('star_id', null)
+
+    if (error) {
+      return this.handleQueryPostgresError(error)
+    }
+
+    const sortedChallenges = [...challenges].sort((left, right) => {
+      const leftDate = new Date(left.created_at ?? 0).getTime()
+      const rightDate = new Date(right.created_at ?? 0).getTime()
+
+      if (leftDate !== rightDate) {
+        return leftDate - rightDate
+      }
+
+      return left.id.localeCompare(right.id)
+    })
+
+    const currentChallengeIndex = sortedChallenges.findIndex(
+      (challenge) => challenge.slug === challengeSlug.value,
+    )
+
+    if (currentChallengeIndex === -1) {
+      return null
+    }
+
+    const previousChallenge = sortedChallenges[currentChallengeIndex - 1] ?? null
+    const nextChallenge = sortedChallenges[currentChallengeIndex + 1] ?? null
+
+    return ChallengeNavigation.create({
+      previousChallengeSlug: previousChallenge?.slug ?? null,
+      nextChallengeSlug: nextChallenge?.slug ?? null,
+    })
+  }
+
   async findVoteByChallengeAndUser(challengeId: Id, userId: Id): Promise<ChallengeVote> {
     const { data, error } = await this.supabase
       .from('users_challenge_votes')

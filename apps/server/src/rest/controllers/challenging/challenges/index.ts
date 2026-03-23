@@ -1,6 +1,7 @@
 export { AppendChallengeRewardToBodyController } from './AppendChallengeRewardToBody'
 export { FetchCompletedChallengesCountByDifficultyLevelController } from './FetchCompletedChallengesCountByDifficultyLevelController'
 export { FetchChallengeController } from './FetchChallengeController'
+export { FetchChallengeNavigationController } from './FetchChallengeNavigationController'
 export { FetchChallengesListController } from './FetchChallengesListController'
 export { FetchAllChallengeCategoriesController } from './FetchAllChallengeCategories'
 export { FetchChallengeVoteController } from './FetchChallengeVoteController'

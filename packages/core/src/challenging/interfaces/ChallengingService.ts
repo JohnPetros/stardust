@@ -15,10 +15,14 @@ import type { Id, IdsList, Slug, Text, Url } from '#global/domain/structures/ind
 import type { ChallengeVote } from '../domain/structures'
 import type { KpiDto } from '#global/domain/structures/dtos/KpiDto'
 import type { ChallengeSourceDto } from '../domain/entities/dtos'
+import type { ChallengeNavigationDto } from '../domain/structures/dtos'
 
 export interface ChallengingService {
   fetchChallengeById(challengeId: Id): Promise<RestResponse<ChallengeDto>>
   fetchChallengeBySlug(challengeSlug: Slug): Promise<RestResponse<ChallengeDto>>
+  fetchChallengeNavigation(
+    challengeSlug: Slug,
+  ): Promise<RestResponse<ChallengeNavigationDto>>
   fetchCompletedChallengesByDifficultyLevel(): Promise<
     RestResponse<CompletedChallengesCountByDifficultyLevel>
   >

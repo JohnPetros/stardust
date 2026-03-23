@@ -6,23 +6,28 @@ import type { AnimationRef } from '@/ui/global/widgets/components/Animation/type
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 import { SocialAccountConfirmationPageView } from './SocialAccountConfirmationPageView'
 import { useSocialAccountConfirmationPage } from './useSocialAccountConfirmationPage'
-import { useProfileSocket } from '@/ui/global/hooks/useProfileSocket'
+import { useRealtimeContext } from '@/ui/global/hooks/useRealtimeContext'
 
 export const SocialAccountConfirmationPage = () => {
   const rocketAnimationRef = useRef<AnimationRef | null>(null)
-  const { account, handleSignUpWithSocialAccount } = useAuthContext()
+  const { account, handleRetryUserCreation, handleSignUpWithSocialAccount } =
+    useAuthContext()
+  const { profileChannel } = useRealtimeContext()
   const {
     isNewAccount,
     isRocketVisible,
     isUserCreated,
+    isRetryVisible,
+    isRetryingUserCreation,
     handleLinkClick,
-    handleUserCreated,
+    handleRetryUserCreation: handleRetry,
   } = useSocialAccountConfirmationPage({
     rocketAnimationRef,
     account,
-    handleSignUpWithSocialAccount,
+    profileChannel,
+    onRetryUserCreation: handleRetryUserCreation,
+    onSignUpWithSocialAccount: handleSignUpWithSocialAccount,
   })
-  useProfileSocket(handleUserCreated)
 
   return (
     <SocialAccountConfirmationPageView
@@ -30,7 +35,10 @@ export const SocialAccountConfirmationPage = () => {
       isRocketVisible={isRocketVisible}
       rocketAnimationRef={rocketAnimationRef}
       isUserCreated={isUserCreated}
+      isRetryVisible={isRetryVisible}
+      isRetryingUserCreation={isRetryingUserCreation}
       onLinkClick={handleLinkClick}
+      onRetryUserCreation={handleRetry}
     />
   )
 }

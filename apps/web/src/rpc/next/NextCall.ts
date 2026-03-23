@@ -6,6 +6,8 @@ import type { Call } from '@stardust/core/global/interfaces'
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
 import { AppError } from '@stardust/core/global/errors'
 
+import { SERVER_ENV } from '@/constants/server-env'
+
 type NextCallParams<Request> = {
   request?: Request
   user?: UserDto
@@ -15,6 +17,8 @@ export const NextCall = <Request = unknown>({
   request,
   user,
 }: NextCallParams<Request> = {}): Call<Request> => {
+  const isSecureCookie = SERVER_ENV.mode === 'production' || SERVER_ENV.mode === 'staging'
+
   return {
     getRequest() {
       if (!request) throw new AppError('Action server request undefined')
@@ -35,6 +39,8 @@ export const NextCall = <Request = unknown>({
         name: key,
         value,
         httpOnly: true,
+        sameSite: 'lax',
+        secure: isSecureCookie,
         path: '/',
         maxAge: durationInSeconds,
       })

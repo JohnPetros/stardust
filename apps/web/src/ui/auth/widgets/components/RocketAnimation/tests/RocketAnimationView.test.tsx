@@ -1,5 +1,24 @@
 import { render, screen, waitFor } from '@testing-library/react'
 
+jest.mock('motion/react', () => ({
+  motion: {
+    div: ({ variants, initial, animate, style, ...props }: any) => {
+      const initialVariant = initial ? variants?.[initial] : undefined
+      const animateVariant = animate ? variants?.[animate] : undefined
+
+      return (
+        <div
+          {...props}
+          style={{
+            ...style,
+            opacity: animateVariant?.opacity ?? initialVariant?.opacity,
+          }}
+        />
+      )
+    },
+  },
+}))
+
 import { animationRefMock } from '@/ui/global/widgets/components/Animation/tests/mocks'
 import { RocketAnimationView } from '../RocketAnimationView'
 

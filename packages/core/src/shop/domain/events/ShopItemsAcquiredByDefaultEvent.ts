@@ -10,8 +10,8 @@ type Payload = {
   selectedAvatarByDefaultId: string
   acquiredRocketsByDefaultIds: string[]
   acquiredAvatarsByDefaultIds: string[]
-  firstStarId: string
-  firstTierId: string
+  firstUnlockedStarId: string
+  firstReachedTierId: string
 }
 
 export class ShopItemsAcquiredByDefaultEvent extends Event<Payload> {

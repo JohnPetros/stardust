@@ -35,7 +35,7 @@ export const ServerProviders = async ({ children }: Props) => {
             accountDto={accountDto}
             accessToken={accessToken?.data ?? null}
           >
-            <RestContextProvider>{children}</RestContextProvider>
+            {children}
           </AuthContextProvider>
         </AudioContextProvider>
       </ToastContextProvider>

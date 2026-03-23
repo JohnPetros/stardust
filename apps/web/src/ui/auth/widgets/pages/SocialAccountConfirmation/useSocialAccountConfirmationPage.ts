@@ -1,4 +1,4 @@
-import { type RefObject, useCallback, useEffect, useState } from 'react'
+import { type RefObject, useCallback, useEffect, useRef, useState } from 'react'
 
 import type { Account } from '@stardust/core/auth/entities'
 import type { UserCreatedEvent } from '@stardust/core/profile/events'
@@ -9,34 +9,38 @@ import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useSleep } from '@/ui/global/hooks/useSleep'
 import { ROCKET_ANIMATION_DELAY } from '@/ui/auth/constants'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
+import type { ProfileChannel } from '@stardust/core/profile/interfaces'
 
 type Params = {
   rocketAnimationRef: RefObject<AnimationRef | null>
   account: Account | null
-  handleSignUpWithSocialAccount: (
+  profileChannel: ProfileChannel
+  onRetryUserCreation: () => Promise<boolean>
+  onSignUpWithSocialAccount: (
     accessToken: string,
     refreshToken: string,
   ) => Promise<{ isNewAccount: boolean }>
 }
 
+const RETRY_VISIBILITY_DELAY_IN_MS = 7000
+
 export function useSocialAccountConfirmationPage({
   rocketAnimationRef,
   account,
-  handleSignUpWithSocialAccount,
+  profileChannel,
+  onRetryUserCreation,
+  onSignUpWithSocialAccount,
 }: Params) {
   const accessToken = useHashParam('access_token')
   const refreshToken = useHashParam('refresh_token')
   const [isNewAccount, setIsNewAccount] = useState(false)
   const [isUserCreated, setIsUserCreated] = useState(false)
   const [isRocketVisible, setIsRocketVisible] = useState(false)
+  const [isRetryVisible, setIsRetryVisible] = useState(false)
+  const [isRetryingUserCreation, setIsRetryingUserCreation] = useState(false)
+  const hasHandledSignUpRef = useRef(false)
   const { sleep } = useSleep()
   const router = useNavigationProvider()
-
-  function handleUserCreated(event: UserCreatedEvent) {
-    if (event.payload.userEmail === account?.email?.value) {
-      setIsUserCreated(true)
-    }
-  }
 
   const showRocketAnimation = useCallback(async () => {
     setIsRocketVisible(true)
@@ -47,26 +51,66 @@ export function useSocialAccountConfirmationPage({
   }, [sleep, rocketAnimationRef, router])
 
   useEffect(() => {
-    async function signUpWithSocialAccount() {
+    async function signUpWithSocialAccount(accessToken: string, refreshToken: string) {
       await sleep(2000)
-      if (!accessToken || !refreshToken) return
 
-      const { isNewAccount } = await handleSignUpWithSocialAccount(
-        accessToken,
-        refreshToken,
-      )
+      const { isNewAccount } = await onSignUpWithSocialAccount(accessToken, refreshToken)
       setIsNewAccount(isNewAccount)
-      if (!isNewAccount) showRocketAnimation()
+      setIsUserCreated(!isNewAccount)
+
+      if (!isNewAccount) {
+        void showRocketAnimation()
+      }
     }
 
-    signUpWithSocialAccount()
-  }, [accessToken, refreshToken])
+    console.log({ accessToken, refreshToken })
+
+    if (hasHandledSignUpRef.current) return
+    if (!accessToken || !refreshToken) return
+
+    hasHandledSignUpRef.current = true
+    void signUpWithSocialAccount(accessToken, refreshToken)
+  }, [accessToken, refreshToken, onSignUpWithSocialAccount, showRocketAnimation, sleep])
+
+  useEffect(() => {
+    return profileChannel.onCreateUser((event: UserCreatedEvent) => {
+      console.log({ event })
+      console.log({ account })
+      if (event.payload.userEmail === account?.email?.value) {
+        setIsUserCreated(true)
+      }
+    })
+  }, [account])
+
+  useEffect(() => {
+    if (!isNewAccount || isUserCreated) {
+      setIsRetryVisible(false)
+      return
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setIsRetryVisible(true)
+    }, RETRY_VISIBILITY_DELAY_IN_MS)
+
+    return () => {
+      window.clearTimeout(timeoutId)
+    }
+  }, [isNewAccount, isUserCreated])
+
+  const handleRetryUserCreation = useCallback(async () => {
+    setIsRetryingUserCreation(true)
+
+    await onRetryUserCreation()
+    setIsRetryingUserCreation(false)
+  }, [onRetryUserCreation])
 
   return {
     isNewAccount,
     isUserCreated,
     isRocketVisible,
+    isRetryVisible,
+    isRetryingUserCreation,
     handleLinkClick: showRocketAnimation,
-    handleUserCreated,
+    handleRetryUserCreation,
   }
 }

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { createElement, useEffect, useMemo, useRef } from 'react'
 
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 import { Challenge } from '@stardust/core/challenging/entities'
@@ -17,10 +17,16 @@ import type {
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import type { User } from '@stardust/core/profile/entities'
+import { useChallengeNavigationGuard } from '@/ui/challenging/hooks/useChallengeNavigationGuard'
+import { ChallengeNavigation } from '../../components/ChallengeNavigation'
+import { ChallengeNavigationAlertDialog } from '../../components/ChallengeNavigationAlertDialog'
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 
 type Params = {
   challengeDto: ChallengeDto
   userChallengeVote: string
+  previousChallengeSlug: string | null
+  nextChallengeSlug: string | null
   user: User | null
   isAccountAuthenticated: boolean
 }
@@ -28,6 +34,8 @@ type Params = {
 export function useChallengePage({
   challengeDto,
   userChallengeVote,
+  previousChallengeSlug,
+  nextChallengeSlug,
   user,
   isAccountAuthenticated,
 }: Params) {
@@ -43,8 +51,16 @@ export function useChallengePage({
   const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { currentRoute, goTo } = useNavigationProvider()
+  const navigationProvider = useNavigationProvider()
   const [isNew] = useQueryStringParam('isNew')
   const secondCounterLocalstorage = useLocalStorage(STORAGE.keys.secondsCounter)
+  const challengeNavigationAlertDialogRef = useRef<AlertDialogRef | null>(null)
+  const { requestNavigation, confirmNavigation, cancelNavigation } =
+    useChallengeNavigationGuard({
+      challenge,
+      navigationProvider,
+      dialogRef: challengeNavigationAlertDialogRef,
+    })
 
   function handleBackButtonClick() {
     if (!challenge) return
@@ -56,6 +72,18 @@ export function useChallengePage({
 
   function handlePanelsLayoutButtonClick(panelsLayout: PanelsLayout) {
     setPanelsLayout(panelsLayout)
+  }
+
+  function handlePreviousChallengeClick() {
+    if (!previousChallengeSlug) return
+
+    requestNavigation(ROUTES.challenging.challenges.challenge(previousChallengeSlug))
+  }
+
+  function handleNextChallengeClick() {
+    if (!nextChallengeSlug) return
+
+    requestNavigation(ROUTES.challenging.challenges.challenge(nextChallengeSlug))
   }
 
   useEffect(() => {
@@ -121,11 +149,30 @@ export function useChallengePage({
     }
   }, [])
 
+  const challengeNavigationSlot = useMemo(() => {
+    return createElement(ChallengeNavigation, {
+      previousChallengeSlug,
+      nextChallengeSlug,
+      onPreviousChallengeClick: handlePreviousChallengeClick,
+      onNextChallengeClick: handleNextChallengeClick,
+    })
+  }, [nextChallengeSlug, previousChallengeSlug])
+
+  const challengeNavigationAlertDialogSlot = useMemo(() => {
+    return createElement(ChallengeNavigationAlertDialog, {
+      dialogRef: challengeNavigationAlertDialogRef,
+      onConfirm: confirmNavigation,
+      onCancel: cancelNavigation,
+    })
+  }, [confirmNavigation, cancelNavigation])
+
   return {
     challengeTitle: challenge?.title.value ?? null,
     panelsLayout,
     shouldHaveConfettiAnimation:
       challenge && user && isNew ? challenge?.author.isEqualTo(user).isTrue : false,
+    challengeNavigationSlot,
+    challengeNavigationAlertDialogSlot,
     handleBackButtonClick,
     handlePanelsLayoutButtonClick,
   }

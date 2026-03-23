@@ -16,14 +16,14 @@ export class AcquireDefaultShopItemsJob implements Job<Payload> {
   ) {}
 
   async handle(amqp: Amqp<Payload>) {
-    const { user, firstStarId, firstTierId } = amqp.getPayload()
+    const { user, firstUnlockedStarId, firstReachedTierId } = amqp.getPayload()
     const useCase = new AcquireDefaultShopItemsUseCase(
       this.rocketsRepository,
       this.avatarsRepository,
       this.broker,
     )
     await amqp.run(
-      async () => useCase.execute({ user, firstStarId, firstTierId }),
+      async () => useCase.execute({ user, firstUnlockedStarId, firstReachedTierId }),
       AcquireDefaultShopItemsUseCase.name,
     )
   }

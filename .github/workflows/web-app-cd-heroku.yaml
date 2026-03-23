@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+  release:
+    types: [published]
 
 permissions:
   id-token: write
@@ -81,3 +83,5 @@ jobs:
           curl -H "Content-Type: application/json" \
             -d "$EMBED" \
             "$DISCORD_WEBHOOK_URL"
+
+

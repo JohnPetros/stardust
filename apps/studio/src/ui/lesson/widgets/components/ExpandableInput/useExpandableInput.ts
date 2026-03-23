@@ -1,4 +1,5 @@
 import { type RefObject, useEffect, useState } from 'react'
+import { useEventListener } from 'usehooks-ts'
 
 export function useExpandableInput(
   defaultValue: string,
@@ -29,19 +30,7 @@ export function useExpandableInput(
     setValue(defaultValue)
   }, [defaultValue])
 
-  useEffect(() => {
-    const inputElement = inputRef.current
-
-    if (!inputElement) {
-      return
-    }
-
-    inputElement.addEventListener('keyup', handleKeyUp)
-
-    return () => {
-      inputElement.removeEventListener('keyup', handleKeyUp)
-    }
-  }, [inputRef])
+  useEventListener('keyup', handleKeyUp, inputRef as RefObject<HTMLInputElement>)
 
   return {
     value,

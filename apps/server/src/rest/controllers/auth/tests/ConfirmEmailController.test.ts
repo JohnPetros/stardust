@@ -7,7 +7,7 @@ import { Text } from '@stardust/core/global/structures'
 import { SessionFaker } from '@stardust/core/auth/structures/fakers'
 
 import { ConfirmEmailController } from '../ConfirmEmailController'
-import { UserSignedInEvent } from '@stardust/core/auth/events'
+import { AccountSignedInEvent } from '@stardust/core/auth/events'
 
 describe('Confirm Email Controller', () => {
   let http: Mock<Http>
@@ -44,8 +44,8 @@ describe('Confirm Email Controller', () => {
     await controller.handle(http)
 
     expect(broker.publish).toHaveBeenCalledWith(
-      new UserSignedInEvent({
-        userId: String(restResponse.body.account.id),
+      new AccountSignedInEvent({
+        accountId: String(restResponse.body.account.id),
         platform: 'web',
       }),
     )

@@ -15,6 +15,8 @@ type Props = {
   storageService: StorageService
   dialogRef: RefObject<DialogRef | null>
   onChange: (picture: Image) => void
+  isOptional?: boolean
+  onClear?: () => void
 }
 
 export function usePictureInput({
@@ -22,9 +24,11 @@ export function usePictureInput({
   storageService,
   dialogRef,
   onChange,
+  isOptional = false,
+  onClear,
 }: Props) {
-  const [selectedImage, setSelectedImage] = useState<Image>(
-    defaultPicture ?? Image.create('panda.jpg'),
+  const [selectedImage, setSelectedImage] = useState<Image | null>(
+    defaultPicture ?? (isOptional ? null : Image.create('panda.jpg')),
   )
   const [search, setSearch] = useState<Text>(Text.create(''))
   const containerRef = useRef<HTMLDivElement>(null)
@@ -55,6 +59,14 @@ export function usePictureInput({
     onChange(image)
   }
 
+  function handleClearSelection() {
+    if (!isOptional) return
+
+    setSelectedImage(null)
+    dialogRef.current?.close()
+    onClear?.()
+  }
+
   function handleLoadMoreButtonClick() {
     nextPage()
   }
@@ -72,12 +84,16 @@ export function usePictureInput({
   useEffect(() => {
     if (defaultPicture) {
       setSelectedImage(defaultPicture)
+      return
     }
-  }, [defaultPicture])
+
+    setSelectedImage(isOptional ? null : Image.create('panda.jpg'))
+  }, [defaultPicture, isOptional])
 
   return {
     images: data ? data.map((image) => Image.create(image)) : [],
     selectedImage,
+    isOptional,
     isFetching,
     isFetchingNextPage,
     hasNextPage,
@@ -87,5 +103,6 @@ export function usePictureInput({
     handlePictureCardRemove,
     handleImageSubmit,
     handleLoadMoreButtonClick,
+    handleClearSelection,
   }
 }

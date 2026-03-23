@@ -22,7 +22,7 @@ description: Prompt para criar uma especificação técnica detalhada com base n
 #### 1.1 PRD
 
 Antes de escrever a spec:
-- Leia o PRD associado à spec (localizado um nível acima na árvore de documentos).
+- Leia o PRD associado à spec, sendo que ela é uma milestone do GitHub.
 - Identifique requisitos relevantes para implementação.
 - **Não replique o PRD completo**; resuma apenas o que impacta a execução técnica.
 
@@ -30,7 +30,7 @@ Antes de escrever a spec:
 
 - Leia `documentation/rules/rules.md` e identifique:
   - Quais apps serão tocados (`server`, `web`, `studio`)
-  - Quais camadas serão envolvidas por app (ex: `ui`, `rest`, `database`, `ai`)
+  - Quais camadas serão envolvidas por app (ex: `ui`, `rest`, `database`, `ai` etc)
 - Com base nisso, defina:
   - Quantos subagentes serão criados (um por app tocado + um para pacotes compartilhados, quando aplicável)
   - O escopo exato de cada subagente antes de delegar
@@ -91,7 +91,8 @@ Gere o arquivo Markdown da Spec seguindo **estritamente** o modelo de seções a
 ```md
 ---
 title: <Título claro>
-prd: <link para o PRD referente à spec, localizado no nível acima do diretório da spec>
+prd: <link para o PRD referente à spec, sendo uma milestone do GitHub>
+issue: <link para o issue referente à spec, servindo como esboço para a spec>
 apps: <server|studio|web> lista de apps que serão impactados pela spec, separados por vírgula
 status: <em_progresso|concluido>
 last_updated_at: <YYYY-MM-DD>
@@ -161,9 +162,17 @@ Exemplos de categorias (usar apenas se aplicável):
 >
 > Exemplo: `findByUserId(userId: string): Promise<Challenge | null>` — busca um desafio ativo pelo ID do usuário, retorna `null` se não encontrado.
 
+## Camada Core (Use Cases)
+
+* **Localização:** `caminho/do/arquivo`
+* **Dependências:** O que deve ser injetado
+* **Dados de request:** Liste os valores que devem ser recebidos pelo controller
+* **Dados de response:** Liste os valores que devem ser retornados pelo controller
+* **Métodos:** Assinatura e responsabilidade
+
 ## Camada REST (Controllers)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Dependências:** O que deve ser injetado
 * **Dados de request:** Liste os valores que devem ser recebidos pelo controller
 * **Dados de response:** Liste os valores que devem ser retornados pelo controller
@@ -171,41 +180,41 @@ Exemplos de categorias (usar apenas se aplicável):
 
 ## Camada REST (Services)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Dependências:** O que deve ser injetado
 * **Métodos:** Assinatura e responsabilidade
 
 ## Camada Banco de Dados (Repositories)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Dependências:** O que deve ser injetado
 * **Métodos:** Assinatura e responsabilidade
 
 ## Camada Banco de Dados (Mappers)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Métodos:** Assinatura e responsabilidade
 
 ## Camada Banco de Dados (Types)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **props:** Propriedades do tipo
 
 ## Camada Provision (Providers)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Dependências:** O que deve ser injetado
 * **Biblioteca:** Nome da biblioteca utilizada pelo provider
 * **Métodos:** Assinatura e responsabilidade
 
 ## Pacote Validation (Schemas)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Atributos:** Dados que devem ser validados com Zod
 
 ## Camada RPC (Actions)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Dependências:** O que deve ser injetado
 * **Dados de request:** Liste os valores que devem ser recebidos pela action
 * **Dados de response:** Liste os valores que devem ser retornados pela action
@@ -213,7 +222,7 @@ Exemplos de categorias (usar apenas se aplicável):
 
 ## Camada UI (Widgets)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Props:** Parâmetros recebidos
 * **Estados (Client Component):** Como se comporta em Loading, Error, Empty, Content
 * **View:** Nome e caminho da view do widget
@@ -224,14 +233,14 @@ Exemplos de categorias (usar apenas se aplicável):
 
 ## Camada UI (Stores)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Props:** Parâmetros recebidos no construtor
 * **Estados:** Estrutura do estado (Loading, Error, Data)
 * **Actions:** Métodos de mutação
 
 ## Camada UI (Contexts)
 
-* **Localização:** `caminho/da/pasta` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/da/pasta`
 * **Props:** Parâmetros recebidos via props
 * **Hook do provider:** Nome e caminho do hook do provider
 * **Responsabilidade:** Lista de responsabilidades do context
@@ -239,14 +248,14 @@ Exemplos de categorias (usar apenas se aplicável):
 
 ## Camada AI (Workflows)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Dependências:** O que deve ser injetado
 * **Entrada/Saída:** Dados processados
 * **Métodos:** Assinatura e responsabilidade
 
 ## Camada AI (Tools)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Dependências:** O que deve ser injetado
 * **Dados de request:** Liste os valores que devem ser recebidos pelo controller
 * **Dados de response:** Liste os valores que devem ser retornados pelo controller
@@ -254,25 +263,25 @@ Exemplos de categorias (usar apenas se aplicável):
 
 ## Camada Hono App (Routes)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Middlewares:** Lista de middlewares
 * **Caminho da rota:** Relativo à raiz da API
 * **Dados de schema:** Zod Schema para validação
 
 ## Camada Inngest App (Functions)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Métodos:** Assinatura e responsabilidade
 
 ## Camada Next.js App (Pages, Layouts)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Widget principal:** Widget principal da rota
 * **Caminho da rota:** Relativo à raiz da aplicação Next.js
 
 ## Camada React Router App (Pages, Layouts)
 
-* **Localização:** `caminho/do/arquivo` (**novo arquivo** se aplicável)
+* **Localização:** `caminho/do/arquivo`
 * **Widget principal:** Widget principal da rota
 * **Caminho da rota:** Relativo à raiz da aplicação React Router
 
@@ -290,7 +299,7 @@ Exemplos de categorias (usar apenas se aplicável):
 * **Arquivo:** `caminho/do/arquivo`
 * **Mudança:** [Descreva a mudança específica (ex: "Adicionar prop `onTap`", "Injetar novo service")]
 * **Justificativa:** [Explique por que a mudança é necessária]
-* **Camada:** `ui` | `core` | `rest` | `provision` | `queue` | `database` | `ai`
+* **Camada:** `ui` | `core` | `rest` | `provision` | `queue` | `database` | `ai` | `realtime` | `rpc`
 
 > Se não houver alterações em código existente, escrever: **Não aplicável**.
 

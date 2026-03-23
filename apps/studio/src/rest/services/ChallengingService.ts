@@ -7,6 +7,7 @@ import type {
   SolutionsListingParams,
 } from '@stardust/core/challenging/types'
 import type { ChallengeVote } from '@stardust/core/challenging/structures'
+import type { ChallengeNavigationDto } from '@stardust/core/challenging/structures/dtos'
 import type { Challenge } from '@stardust/core/challenging/entities'
 import type { PaginationResponse } from '@stardust/core/global/responses'
 import type {
@@ -22,6 +23,12 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
 
     async fetchChallengeBySlug(challengeSlug: Slug) {
       return await restClient.get(`/challenging/challenges/slug/${challengeSlug.value}`)
+    },
+
+    async fetchChallengeNavigation(challengeSlug: Slug) {
+      return await restClient.get<ChallengeNavigationDto>(
+        `/challenging/challenges/slug/${challengeSlug.value}/navigation`,
+      )
     },
 
     async fetchCompletedChallengesByDifficultyLevel() {

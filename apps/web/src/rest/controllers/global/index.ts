@@ -1,1 +1,0 @@
-export { HandleRedirectController } from './HandleRedirectController'

@@ -38,7 +38,6 @@ export const LottieAnimation = ({ ref, name, size, hasLoop = true }: AnimationPr
         lottieDataCache.set(name, animationData)
         setLottieData(animationData)
       } catch {
-        console.log('Failed to load animation data: ', name)
         if (!abortController.signal.aborted) {
           setLottieData(null)
         }

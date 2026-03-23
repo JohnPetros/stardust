@@ -72,6 +72,10 @@ export class User extends Entity<UserProps> {
     if (this.props.unlockedStarsIds.includes(starId).isFalse) {
       this.props.unlockedStarsIds = this.props.unlockedStarsIds.add(starId)
     }
+    if (this.props.recentlyUnlockedStarsIds.includes(starId).isTrue) {
+      this.props.recentlyUnlockedStarsIds =
+        this.props.recentlyUnlockedStarsIds.remove(starId)
+    }
   }
 
   rescueAchievement(achievementId: Id, achievementReward: Integer): void {

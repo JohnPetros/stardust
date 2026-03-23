@@ -1,5 +1,5 @@
 export { FetchChallengeSourcesListController } from './FetchChallengeSourcesListController'
 export { CreateChallengeSourceController } from './CreateChallengeSourceController'
-export { UpdateChallengeSourceController } from './UpdateChallengeSourceController'
 export { DeleteChallengeSourceController } from './DeleteChallengeSourceController'
+export { UpdateChallengeSourceController } from './UpdateChallengeSourceController'
 export { ReorderChallengeSourcesController } from './ReorderChallengeSourcesController'

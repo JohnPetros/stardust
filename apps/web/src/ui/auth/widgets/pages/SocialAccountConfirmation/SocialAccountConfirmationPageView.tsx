@@ -1,8 +1,6 @@
 import type { RefObject } from 'react'
 import { AnimatePresence } from 'framer-motion'
 
-import type { UserDto } from '@stardust/core/profile/entities/dtos'
-
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
 import { Loading } from '@/ui/global/widgets/components/Loading'
 import { Button } from '@/ui/global/widgets/components/Button'
@@ -15,7 +13,10 @@ type Props = {
   isRocketVisible: boolean
   isNewAccount: boolean
   isUserCreated: boolean
-  onLinkClick: () => void
+  isRetryVisible: boolean
+  isRetryingUserCreation: boolean
+  onLinkClick: () => void | Promise<void>
+  onRetryUserCreation: () => void | Promise<void>
 }
 
 export const SocialAccountConfirmationPageView = ({
@@ -23,7 +24,10 @@ export const SocialAccountConfirmationPageView = ({
   isRocketVisible,
   isNewAccount,
   isUserCreated,
+  isRetryVisible,
+  isRetryingUserCreation,
   onLinkClick,
+  onRetryUserCreation,
 }: Props) => {
   return (
     <>
@@ -46,6 +50,15 @@ export const SocialAccountConfirmationPageView = ({
               <div className='flex flex-col items-center justify-center'>
                 <Loading />
                 <UserCreationPendingMessage />
+                {isRetryVisible && (
+                  <Button
+                    onClick={onRetryUserCreation}
+                    isLoading={isRetryingUserCreation}
+                    className='mt-8 w-72'
+                  >
+                    Tentar novamente
+                  </Button>
+                )}
               </div>
             )}
           </main>

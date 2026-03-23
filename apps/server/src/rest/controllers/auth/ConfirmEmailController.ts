@@ -1,5 +1,5 @@
 import { Text } from '@stardust/core/global/structures'
-import { UserSignedInEvent } from '@stardust/core/auth/events'
+import { AccountSignedInEvent } from '@stardust/core/auth/events'
 import { AppError } from '@stardust/core/global/errors'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import type { Controller, Http, Broker } from '@stardust/core/global/interfaces'
@@ -24,8 +24,8 @@ export class ConfirmEmailController implements Controller<Schema> {
     if (response.isSuccessful) {
       const accountId = response.body.account.id
       if (!accountId) throw new AppError('Account ID is required')
-      const event = new UserSignedInEvent({
-        userId: accountId,
+      const event = new AccountSignedInEvent({
+        accountId,
         platform: 'web',
       })
       await this.broker.publish(event)

@@ -51,6 +51,7 @@
     "./global/constants": "./src/global/constants/index.ts",
     "./lesson/abstracts": "./src/lesson/domain/abstracts/index.ts",
     "./lesson/entities": "./src/lesson/domain/entities/index.ts",
+    "./lesson/entities/fakers": "./src/lesson/domain/entities/fakers/index.ts",
     "./lesson/entities/dtos": "./src/lesson/domain/entities/dtos/index.ts",
     "./lesson/structures/dtos": "./src/lesson/domain/structures/dtos/index.ts",
     "./lesson/structures": "./src/lesson/domain/structures/index.ts",

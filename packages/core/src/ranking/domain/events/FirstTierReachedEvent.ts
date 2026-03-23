@@ -6,8 +6,8 @@ type Payload = {
     name: string
     email: string
   }
-  firstTierId: string
-  firstStarId: string
+  firstReachedTierId: string
+  firstUnlockedStarId: string
 }
 
 export class FirstTierReachedEvent extends Event<Payload> {

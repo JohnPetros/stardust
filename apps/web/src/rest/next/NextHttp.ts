@@ -36,13 +36,14 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
   let statusCode: (typeof HTTP_STATUS_CODE)[keyof typeof HTTP_STATUS_CODE] =
     HTTP_STATUS_CODE.ok
   let extendedBody = {}
+  const isSecureCookie = CLIENT_ENV.mode === 'production' || CLIENT_ENV.mode === 'staging'
 
   if (request && schema) {
     let body: HttpSchema['body']
     let queryParams: HttpSchema['queryParams']
     let routeParams: HttpSchema['routeParams']
 
-    // @ts-ignore
+    // @ts-expect-error
     const keys = schema.keyof().options
 
     if (keys.includes('queryParams')) {
@@ -174,6 +175,8 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
           nextResponse.cookies.set(cookie.key, cookie.value, {
             path: '/',
             httpOnly: true,
+            sameSite: 'lax',
+            secure: isSecureCookie,
             maxAge: cookie.duration,
           })
         }
@@ -202,6 +205,8 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
           nextResponse.cookies.set(cookie.key, cookie.value, {
             path: '/',
             httpOnly: true,
+            sameSite: 'lax',
+            secure: isSecureCookie,
             maxAge: cookie.duration,
           })
         }

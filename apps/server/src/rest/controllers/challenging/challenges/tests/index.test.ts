@@ -4,6 +4,7 @@ import {
   FetchAllChallengeCategoriesController,
   FetchAllChallengesController,
   FetchChallengeController,
+  FetchChallengeNavigationController,
   FetchChallengesListController,
   FetchChallengeVoteController,
   FetchCompletedChallengesCountByDifficultyLevelController,
@@ -21,6 +22,7 @@ describe('challenging/challenges controllers barrel exports', () => {
     expect(FetchAllChallengeCategoriesController).toBeDefined()
     expect(FetchAllChallengesController).toBeDefined()
     expect(FetchChallengeController).toBeDefined()
+    expect(FetchChallengeNavigationController).toBeDefined()
     expect(FetchChallengesListController).toBeDefined()
     expect(FetchChallengeVoteController).toBeDefined()
     expect(FetchCompletedChallengesCountByDifficultyLevelController).toBeDefined()

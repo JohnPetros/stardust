@@ -21,6 +21,19 @@ export class SupabaseTextBlocksRepository
       throw new SupabasePostgreError(error)
     }
 
-    return (data.texts as TextBlockDto[]).map(SupabaseTextBlockMapper.toEntity)
+    const textBlocks = data.texts ? (data.texts as TextBlockDto[]) : []
+
+    return textBlocks.map(SupabaseTextBlockMapper.toEntity)
+  }
+
+  async updateMany(textBlocks: TextBlock[], starId: Id): Promise<void> {
+    const { error } = await this.supabase
+      .from('stars')
+      .update({ texts: textBlocks.map(SupabaseTextBlockMapper.toSupabase) })
+      .eq('id', starId.value)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
   }
 }

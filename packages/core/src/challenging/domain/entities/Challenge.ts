@@ -1,12 +1,12 @@
 import {
   type Code,
   type Id,
-  type List,
   type Name,
   type Slug,
   type UserAnswer,
   type Text,
   Integer,
+  List,
   Logical,
 } from '#global/domain/structures/index'
 import { Entity } from '#global/domain/abstracts/index'
@@ -73,9 +73,10 @@ export class Challenge extends Entity<ChallengeProps> {
     return isCorrect
   }
 
-  async runCode(code: Code) {
+  async runCode(code: Code): Promise<List<string>> {
     this.props.results = this.props.results.becomeEmpty()
     this.props.userOutputs = this.props.userOutputs.becomeEmpty()
+    let executionOutputs = List.create<string>([])
 
     for (const testCase of this.testCases) {
       const formattedCode = await this.formatCode(code, testCase)
@@ -86,6 +87,10 @@ export class Challenge extends Entity<ChallengeProps> {
 
       if (code.hasFunction.isTrue) {
         result = response.result
+
+        for (const output of response.outputs) {
+          executionOutputs = executionOutputs.add(output)
+        }
       } else if (response.outputs[0]) {
         const formattedCode = await code.format(response.outputs[0])
         result = formattedCode.value
@@ -96,6 +101,8 @@ export class Challenge extends Entity<ChallengeProps> {
       )
       this.props.userOutputs = this.userOutputs.add(result)
     }
+
+    return executionOutputs
   }
 
   verifyUserAnswer(userAnswer: UserAnswer): UserAnswer {

@@ -15,6 +15,7 @@ describe('SignUpForm', () => {
   beforeEach(() => {
     profileService = mock<ProfileService>()
     profileService.verifyUserNameInUse.mockImplementation()
+    profileService.verifyUserEmailInUse.mockImplementation()
     onSubmit = jest.fn()
   })
 
@@ -31,7 +32,7 @@ describe('SignUpForm', () => {
 
     await userEvent.type(nameInput, '1')
 
-    const nameInputError = screen.queryByTestId('name-input-error')
+    const nameInputError = await screen.findByTestId('name-input-error')
 
     expect(nameInputError).toBeVisible()
   })
@@ -51,7 +52,7 @@ describe('SignUpForm', () => {
     const nameInput = screen.getByTestId('name-input')
     await userEvent.type(nameInput, userName)
 
-    emailInput = screen.queryByTestId('email-input')
+    emailInput = await screen.findByTestId('email-input')
     expect(emailInput).toBeVisible()
   })
 
@@ -69,13 +70,11 @@ describe('SignUpForm', () => {
 
     const nameInput = screen.getByTestId('name-input')
     await userEvent.type(nameInput, userName)
-    const emailInput = screen.getByTestId('email-input')
+    const emailInput = await screen.findByTestId('email-input')
     await userEvent.type(emailInput, userEmail)
 
-    passwordInput = screen.queryByTestId('password-input')
-    await waitFor(() => {
-      expect(passwordInput).toBeVisible()
-    })
+    passwordInput = await screen.findByTestId('password-input')
+    expect(passwordInput).toBeInTheDocument()
   })
 
   it('should render submit button only when password input is valid', async () => {
@@ -92,15 +91,13 @@ describe('SignUpForm', () => {
 
     const nameInput = screen.getByTestId('name-input')
     await userEvent.type(nameInput, userName)
-    const emailInput = screen.getByTestId('email-input')
+    const emailInput = await screen.findByTestId('email-input')
     await userEvent.type(emailInput, userEmail)
-    const passwordInput = screen.getByTestId('password-input')
+    const passwordInput = await screen.findByTestId('password-input')
     await userEvent.type(passwordInput, userPassword)
 
-    submitButton = screen.queryByTestId('submit-button')
-    await waitFor(() => {
-      expect(submitButton).toBeVisible()
-    })
+    submitButton = await screen.findByTestId('submit-button')
+    expect(submitButton).toBeInTheDocument()
   })
 
   it('should call onSubmit when form is submitted with user email, password and name', async () => {
@@ -114,9 +111,9 @@ describe('SignUpForm', () => {
 
     const nameInput = screen.getByTestId('name-input')
     await userEvent.type(nameInput, userName)
-    const emailInput = screen.getByTestId('email-input')
+    const emailInput = await screen.findByTestId('email-input')
     await userEvent.type(emailInput, userEmail)
-    const passwordInput = screen.getByTestId('password-input')
+    const passwordInput = await screen.findByTestId('password-input')
     await userEvent.type(passwordInput, userPassword)
 
     const submitButton = screen.getByTestId('submit-button')

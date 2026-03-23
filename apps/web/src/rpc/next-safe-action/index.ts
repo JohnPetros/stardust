@@ -22,12 +22,14 @@ import {
   signIn,
   signOut,
   signUpWithSocialAccount,
+  retryUserCreation,
 } from './authActions'
 
 export const authActions = {
   signIn,
   signOut,
   signUpWithSocialAccount,
+  retryUserCreation,
   connectSocialAccount,
   disconnectSocialAccount,
 }

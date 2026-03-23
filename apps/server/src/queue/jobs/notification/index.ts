@@ -2,3 +2,4 @@ export { SendPlanetCompletedNotificationJob } from './SendPlanetCompletedNotific
 export { SendSpaceCompletedNotificationJob } from './SendSpaceCompletedNotificationJob'
 export { SendFeedbackNotificationJob } from './SendFeedbackNotificationJob'
 export { SendChallengePostedNotificationJob } from './SendChallengePostedNotificationJob'
+export { SendUserCreatedNotificationJob } from './SendUserCreatedNotificationJob'

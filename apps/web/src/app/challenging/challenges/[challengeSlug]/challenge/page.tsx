@@ -10,6 +10,8 @@ const Page = async ({ params }: NextParams<'challengeSlug'>) => {
   const accessTokenCookie = await cookieActions.getCookie(COOKIES.accessToken.key)
   let challengeDto: ChallengeDto | null = null
   let userChallengeVote: string | null = null
+  let previousChallengeSlug: string | null = null
+  let nextChallengeSlug: string | null = null
 
   if (accessTokenCookie?.data) {
     const response = await challengingActions.accessAuthenticatedChallengePage({
@@ -19,6 +21,8 @@ const Page = async ({ params }: NextParams<'challengeSlug'>) => {
     if (response?.data) {
       challengeDto = response.data.challengeDto
       userChallengeVote = response.data.userChallengeVote
+      previousChallengeSlug = response.data.previousChallengeSlug
+      nextChallengeSlug = response.data.nextChallengeSlug
     }
   } else {
     const response = await challengingActions.accessChallengePage({
@@ -28,12 +32,19 @@ const Page = async ({ params }: NextParams<'challengeSlug'>) => {
     if (response?.data) {
       challengeDto = response.data.challengeDto
       userChallengeVote = response.data.userChallengeVote
+      previousChallengeSlug = response.data.previousChallengeSlug
+      nextChallengeSlug = response.data.nextChallengeSlug
     }
   }
 
   if (challengeDto && userChallengeVote)
     return (
-      <ChallengePage challengeDto={challengeDto} userChallengeVote={userChallengeVote} />
+      <ChallengePage
+        challengeDto={challengeDto}
+        userChallengeVote={userChallengeVote}
+        previousChallengeSlug={previousChallengeSlug}
+        nextChallengeSlug={nextChallengeSlug}
+      />
     )
 }
 

@@ -7,7 +7,7 @@ import { NextHttp } from '@/rest/next/NextHttp'
 import { runApiRoute } from '@/rest/next/utils'
 import { AccessProfilePageController } from '@/rest/controllers/profile'
 import type { NextRequest } from 'next/server'
-import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
+import { NextApiRestClient } from '@/rest/next/NextApiRestClient'
 import { ProfileService } from '@/rest/services'
 
 export const dynamic = 'force-dynamic'
@@ -23,7 +23,7 @@ type Schema = z.infer<typeof schema>
 export async function GET(request: NextRequest, params: NextParams<'userId'>) {
   return runApiRoute(async () => {
     const http = await NextHttp<Schema>({ request, params, schema })
-    const restClient = await NextServerRestClient()
+    const restClient = await NextApiRestClient(request)
     const service = ProfileService(restClient)
     const controller = AccessProfilePageController(service)
     return await controller.handle(http)

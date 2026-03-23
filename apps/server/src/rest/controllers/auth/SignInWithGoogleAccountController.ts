@@ -21,6 +21,8 @@ export class SignInWithGoogleAccountController implements Controller<Schema> {
       return response
     }
 
+    console.log('signInUrl', response.body.signInUrl)
+
     return http.redirect(response.body.signInUrl)
   }
 }

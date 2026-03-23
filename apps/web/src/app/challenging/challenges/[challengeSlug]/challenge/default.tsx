@@ -13,6 +13,8 @@ export const Page = async ({ params }: NextParams<'challengeSlug'>) => {
     <ChallengePage
       challengeDto={response.data.challengeDto}
       userChallengeVote={response.data.userChallengeVote}
+      previousChallengeSlug={response.data.previousChallengeSlug}
+      nextChallengeSlug={response.data.nextChallengeSlug}
     />
   )
 }
