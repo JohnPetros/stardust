@@ -14,7 +14,7 @@ export const actionClient = createSafeActionClient({
         title: error.title,
         message: error.message,
       })
-      return 'Nao foi possivel concluir sua solicitacao.'
+      return error.message
     }
 
     console.error('Action error:', error)
