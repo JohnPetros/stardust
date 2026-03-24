@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
-import { idSchema } from '../../global/schemas'
+import { idSchema, urlSchema } from '../../global/schemas'
 
 export const challengeSourceSchema = z.object({
-  url: z.string().url(),
+  url: urlSchema,
   challengeId: idSchema.optional().nullable(),
 })

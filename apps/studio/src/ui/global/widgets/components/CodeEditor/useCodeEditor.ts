@@ -119,7 +119,7 @@ export function useCodeEditor({
     monacoRef.current?.editor.setModelMarkers(editorModel, LANGUAGE, monacoErrors)
   }
 
-  function handleChange(value: string | undefined) {
+  async function handleChange(value: string | undefined) {
     if (!value) return
 
     if (onChange) {

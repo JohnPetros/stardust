@@ -52,6 +52,20 @@ describe('ChallengeSourceForm', () => {
   const Widget = () =>
     render(<ChallengeSourceForm onCreate={onCreate} onUpdate={onUpdate} />)
 
+  const EditWidget = () =>
+    render(
+      <ChallengeSourceForm
+        challengeSourceId='source-id'
+        initialValues={{
+          url: 'https://example.com/fonte-existente',
+          challengeId: challenges[1].id,
+          challengeTitle: challenges[1].title,
+        }}
+        onCreate={onCreate}
+        onUpdate={onUpdate}
+      />,
+    )
+
   const openDialog = async (user: ReturnType<typeof userEvent.setup>) => {
     await user.click(screen.getByRole('button', { name: 'Adicionar fonte' }))
   }
@@ -94,22 +108,36 @@ describe('ChallengeSourceForm', () => {
     await user.click(screen.getByRole('button', { name: 'Salvar' }))
 
     await waitFor(() => {
-      expect(screen.getByText(/invalid url/i)).toBeInTheDocument()
+      expect(screen.getByText(/deve ser uma url válida/i)).toBeInTheDocument()
     })
 
     expect(onCreate).not.toHaveBeenCalled()
   })
 
-  it('should select a challenge from the list', async () => {
+  it('should hide challenge selection when adding a source', async () => {
     const user = userEvent.setup()
     Widget()
 
     await openDialog(user)
-    await user.click(screen.getByRole('button', { name: 'Desafio de Lacos' }))
 
-    expect(screen.getByText('Desafio selecionado:', { exact: false })).toBeInTheDocument()
+    expect(screen.queryByText('Selecionar desafio (opcional)')).not.toBeInTheDocument()
     expect(
-      screen.getByText('Desafio de Lacos', { selector: 'strong' }),
+      screen.queryByPlaceholderText('Buscar desafio por título...'),
+    ).not.toBeInTheDocument()
+  })
+
+  it('should show challenge selection when editing a source', async () => {
+    const user = userEvent.setup()
+    EditWidget()
+
+    await openDialog(user)
+
+    expect(screen.getByText('Selecionar desafio (opcional)')).toBeInTheDocument()
+    expect(
+      screen.getByPlaceholderText('Buscar desafio por título...'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText('Desafio de Condicionais', { selector: 'strong' }),
     ).toBeInTheDocument()
   })
 
@@ -122,11 +150,10 @@ describe('ChallengeSourceForm', () => {
     await openDialog(user)
 
     await user.type(screen.getByPlaceholderText('https://exemplo.com/artigo'), url)
-    await user.click(screen.getByRole('button', { name: 'Desafio de Lacos' }))
     await user.click(screen.getByRole('button', { name: 'Salvar' }))
 
     await waitFor(() => {
-      expect(onCreate).toHaveBeenCalledWith(url, challenges[0].id)
+      expect(onCreate).toHaveBeenCalledWith(url, undefined)
     })
   })
 
@@ -158,13 +185,36 @@ describe('ChallengeSourceForm', () => {
       screen.getByPlaceholderText('https://exemplo.com/artigo'),
       'https://example.com/artigo',
     )
-    await user.click(screen.getByRole('button', { name: 'Desafio de Condicionais' }))
     await user.click(screen.getByRole('button', { name: 'Salvar' }))
 
     await waitFor(() => {
       expect(screen.getByText(submitError)).toBeInTheDocument()
     })
 
-    expect(onCreate).toHaveBeenCalledWith('https://example.com/artigo', challenges[1].id)
+    expect(onCreate).toHaveBeenCalledWith('https://example.com/artigo', undefined)
+  })
+
+  it('should submit update with selected challenge when editing', async () => {
+    const user = userEvent.setup()
+    onUpdate.mockResolvedValue(null)
+
+    EditWidget()
+    await openDialog(user)
+
+    await user.clear(screen.getByPlaceholderText('https://exemplo.com/artigo'))
+    await user.type(
+      screen.getByPlaceholderText('https://exemplo.com/artigo'),
+      'https://example.com/fonte-editada',
+    )
+    await user.click(screen.getByRole('button', { name: 'Desafio de Lacos' }))
+    await user.click(screen.getByRole('button', { name: 'Salvar' }))
+
+    await waitFor(() => {
+      expect(onUpdate).toHaveBeenCalledWith(
+        'source-id',
+        'https://example.com/fonte-editada',
+        challenges[0].id,
+      )
+    })
   })
 })

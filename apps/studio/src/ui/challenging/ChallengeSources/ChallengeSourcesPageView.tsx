@@ -2,6 +2,7 @@ import { ChevronDown, ChevronUp, Pencil, Search, Trash2 } from 'lucide-react'
 
 import { ENV } from '@/constants/env'
 import { Button } from '@/ui/shadcn/components/button'
+import { Skeleton } from '@/ui/shadcn/components/skeleton'
 import { Input } from '@/ui/shadcn/components/input'
 import { Badge } from '@/ui/shadcn/components/badge'
 import {
@@ -19,6 +20,8 @@ import { ChallengeSourceForm } from './ChallengeSourceForm'
 import { DeleteChallengeSourceDialog } from './DeleteChallengeSourceDialog'
 
 type Props = ReturnType<typeof useChallengeSourcesPage>
+
+const LOADING_ROWS_COUNT = 5
 
 export const ChallengeSourcesPageView = ({
   search,
@@ -83,11 +86,34 @@ export const ChallengeSourcesPageView = ({
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={6} className='text-center text-muted-foreground py-8'>
-                  Carregando fontes...
-                </TableCell>
-              </TableRow>
+              Array.from({ length: LOADING_ROWS_COUNT }).map((_, index) => (
+                <TableRow key={`loading-row-${String(index)}`}>
+                  <TableCell>
+                    <div className='flex items-center gap-1'>
+                      <Skeleton className='h-8 w-8 rounded-md' />
+                      <Skeleton className='h-8 w-8 rounded-md' />
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className='h-5 w-full max-w-[320px]' />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className='h-5 w-full max-w-[320px]' />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className='h-5 w-full max-w-[220px]' />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className='h-6 w-16 rounded-full' />
+                  </TableCell>
+                  <TableCell>
+                    <div className='flex items-center gap-2'>
+                      <Skeleton className='h-8 w-8 rounded-md' />
+                      <Skeleton className='h-8 w-8 rounded-md' />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
             ) : sortableChallengeSources.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className='text-center text-muted-foreground py-8'>
