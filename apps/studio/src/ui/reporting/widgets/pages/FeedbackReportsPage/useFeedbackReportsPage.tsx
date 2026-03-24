@@ -1,8 +1,8 @@
 import type { SelectionQuestion } from '@stardust/core/lesson/entities'
 
 import { useQuizContext } from '@/ui/global/hooks/useQuizContext'
-import { SelectionQuestionEditorView } from './SelectionQuestionEditorView'
-import { useSelectionQuestionEditor } from './useSelectionQuestionEditor'
+import { useSelectionQuestionEditor } from '@/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/SelectionQuestionEditor/useSelectionQuestionEditor'
+import { SelectionQuestionEditorView } from '@/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/SelectionQuestionEditor/SelectionQuestionEditorView'
 
 export const SelectionQuestionEditor = () => {
   const { selectedQuestion, replaceSelectedQuestion } = useQuizContext()
