@@ -108,7 +108,7 @@ describe('ChallengeSourceForm', () => {
     await user.click(screen.getByRole('button', { name: 'Salvar' }))
 
     await waitFor(() => {
-      expect(screen.getByText('deve ser uma url válida')).toBeInTheDocument()
+      expect(screen.getByText(/deve ser uma url válida/i)).toBeInTheDocument()
     })
 
     expect(onCreate).not.toHaveBeenCalled()
