@@ -1,11 +1,11 @@
-import { renderHook, act, waitFor } from '@testing-library/react'
+import { renderHook, act } from '@testing-library/react'
 import { mock, type Mock } from 'ts-jest-mocker'
-import { useFeedbackReportsPage } from '../useFeedbackReportsPage'
 import type { ReportingService } from '@stardust/core/reporting/interfaces'
 import type { ToastProvider } from '@stardust/core/global/interfaces'
 import { FeedbackReportsFaker } from '@stardust/core/reporting/entities/fakers'
 import type { FeedbackReport } from '@stardust/core/reporting/entities'
 import { RestResponse } from '@stardust/core/global/responses'
+import { useFeedbackReportsPage } from '../useFeedbackReportsPage'
 
 // Mocks
 const mockPaginatedFetchReturn = {
