@@ -200,10 +200,15 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       return await restClient.delete(`/challenging/challenges/${challenge.id.value}`)
     },
 
-    async createChallengeSource(challengeId: Id | null, url: Url) {
+    async createChallengeSource(
+      challengeId: Id | null,
+      url: Url,
+      additionalInstructions?: Text | null,
+    ) {
       return await restClient.post<ChallengeSourceDto>('/challenging/challenge-sources', {
         challengeId: challengeId?.value ?? null,
         url: url.value,
+        additionalInstructions: additionalInstructions?.value ?? null,
       })
     },
 
@@ -211,12 +216,14 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       challengeSourceId: Id,
       url: Url,
       challengeId?: Id | null,
+      additionalInstructions?: Text | null,
     ) {
       return await restClient.put<ChallengeSourceDto>(
         `/challenging/challenge-sources/${challengeSourceId.value}`,
         {
           url: url.value,
           challengeId: challengeId?.value ?? null,
+          additionalInstructions: additionalInstructions?.value ?? null,
         },
       )
     },
