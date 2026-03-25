@@ -152,6 +152,92 @@ describe('Update Challenge Source Use Case', () => {
     expect(response).toEqual(challengeSource.dto)
   })
 
+  it('should update additional instructions when a non-empty string is provided', async () => {
+    const challenge = ChallengesFaker.fake()
+    const challengeSource = ChallengeSourcesFaker.fake({
+      challenge: {
+        id: challenge.id.value,
+        title: challenge.title.value,
+        slug: challenge.slug.value,
+      },
+      additionalInstructions: null,
+    })
+    const additionalInstructions = 'Prioritize edge cases and mention common mistakes.'
+
+    challengeSourcesRepository.findById.mockResolvedValue(challengeSource)
+    challengesRepository.findById.mockResolvedValue(challenge)
+    challengeSourcesRepository.findByChallengeId.mockResolvedValue(challengeSource)
+
+    const response = await useCase.execute({
+      challengeSourceId: challengeSource.id.value,
+      challengeId: challenge.id.value,
+      url: 'https://example.com/source-with-instructions',
+      additionalInstructions,
+    })
+
+    expect(challengeSource.additionalInstructions?.value).toBe(additionalInstructions)
+    expect(challengeSource.challenge?.id.value).toBe(challenge.id.value)
+    expect(challengeSourcesRepository.replace).toHaveBeenCalledWith(challengeSource)
+    expect(response.additionalInstructions).toBe(additionalInstructions)
+    expect(response.challenge?.id).toBe(challenge.id.value)
+  })
+
+  it('should clear additional instructions when null is provided', async () => {
+    const challenge = ChallengesFaker.fake()
+    const challengeSource = ChallengeSourcesFaker.fake({
+      challenge: {
+        id: challenge.id.value,
+        title: challenge.title.value,
+        slug: challenge.slug.value,
+      },
+    })
+
+    challengeSourcesRepository.findById.mockResolvedValue(challengeSource)
+    challengesRepository.findById.mockResolvedValue(challenge)
+    challengeSourcesRepository.findByChallengeId.mockResolvedValue(challengeSource)
+
+    const response = await useCase.execute({
+      challengeSourceId: challengeSource.id.value,
+      challengeId: challenge.id.value,
+      url: 'https://example.com/source-cleared-with-null',
+      additionalInstructions: null,
+    })
+
+    expect(challengeSource.additionalInstructions).toBeNull()
+    expect(challengeSource.challenge?.id.value).toBe(challenge.id.value)
+    expect(challengeSourcesRepository.replace).toHaveBeenCalledWith(challengeSource)
+    expect(response.additionalInstructions).toBeNull()
+    expect(response.challenge?.id).toBe(challenge.id.value)
+  })
+
+  it('should clear additional instructions when an empty string is provided', async () => {
+    const challenge = ChallengesFaker.fake()
+    const challengeSource = ChallengeSourcesFaker.fake({
+      challenge: {
+        id: challenge.id.value,
+        title: challenge.title.value,
+        slug: challenge.slug.value,
+      },
+    })
+
+    challengeSourcesRepository.findById.mockResolvedValue(challengeSource)
+    challengesRepository.findById.mockResolvedValue(challenge)
+    challengeSourcesRepository.findByChallengeId.mockResolvedValue(challengeSource)
+
+    const response = await useCase.execute({
+      challengeSourceId: challengeSource.id.value,
+      challengeId: challenge.id.value,
+      url: 'https://example.com/source-cleared-with-empty-string',
+      additionalInstructions: '',
+    })
+
+    expect(challengeSource.additionalInstructions).toBeNull()
+    expect(challengeSource.challenge?.id.value).toBe(challenge.id.value)
+    expect(challengeSourcesRepository.replace).toHaveBeenCalledWith(challengeSource)
+    expect(response.additionalInstructions).toBeNull()
+    expect(response.challenge?.id).toBe(challenge.id.value)
+  })
+
   it('should update source url and challenge link when challengeId is provided', async () => {
     const challenge = ChallengesFaker.fake()
     const challengeSource = ChallengeSourcesFaker.fake({
