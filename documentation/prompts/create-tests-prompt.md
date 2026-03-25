@@ -12,6 +12,22 @@ Orientar a criacao de testes unitarios e de integracao **padronizados** e **efic
 - orquestracao correta de `handlers`
 - fidelidade funcional de componentes de UI
 
+## Escopo permitido
+
+No StarDust, **so e permitido criar testes para**:
+
+- objetos de dominio (`Entity`, `Structure`, `Aggregate`)
+- `Use Case`
+- `View` ou `Hook`
+- `handlers` (`Controller`, `Job`, `Action`, `Tool`)
+
+**Nao e permitido criar testes novos** para `repository`, `service`, `provider`,
+`gateway`, `client`, `mapper`, `factory`, `config`, adaptadores de
+infraestrutura ou arquivos de composicao. Se a entrada apontar para um arquivo
+fora desse escopo, nao gere teste direto para ele; em vez disso, identifique o
+objeto de dominio, use case, widget ou handler responsavel pelo comportamento e
+concentre a cobertura nele.
+
 ## Entrada
 
 - **Codigo fonte:** arquivo a ser testado (`Entity`, `Structure`, `Use Case`, `Controller`, `Action`, `Tool`, `Hook` ou `Widget`).
@@ -38,8 +54,12 @@ Identifique o tipo de codigo e siga a regra correspondente em `documentation/rul
 
 - **Objetos de dominio:** [domain-objects-testing-rules.md](../rules/domain-objects-testing-rules.md)
 - **Casos de uso:** [use-cases-testing-rules.md](../rules/use-cases-testing-rules.md)
-- **Handlers** (`REST`, `RPC`, `AI`): [handlers-testing-rules.md](../rules/handlers-testing-rules.md)
+- **Handlers** (`REST`, `RPC`, `AI`, `Queue`): [handlers-testing-rules.md](../rules/handlers-testing-rules.md)
 - **Widgets** (UI): [widget-tests-rules.md](../rules/widget-tests-rules.md)
+
+Se o arquivo nao pertencer a uma dessas categorias permitidas, interrompa a
+criacao do teste direto e reporte claramente que o tipo de arquivo nao pode
+receber testes dedicados segundo as regras do projeto.
 
 ### Estrutura e nomenclatura
 
@@ -71,7 +91,7 @@ Identifique o tipo de codigo e siga a regra correspondente em `documentation/rul
 
 - **Domain objects:** validacoes de regras no construtor/factory e metodos de comportamento.
 - **Use cases:** 100% da logica de negocio, cobrindo `happy path` e todas as excecoes de dominio.
-- **Handlers:** extracao de dados do contexto (`Http`, `Call`, `Mcp`), orquestracao do caso de uso/servico e formatacao da resposta.
+- **Handlers:** extracao de dados do contexto (`Http`, `Call`, `Amqp`, `Mcp`), orquestracao do caso de uso/servico e formatacao da resposta.
 - **Widgets:**
   - testar `hooks` e `views` separadamente usando `Hook()` e `View()`
   - para formularios complexos, testar integracao no `Widget` (Index)
