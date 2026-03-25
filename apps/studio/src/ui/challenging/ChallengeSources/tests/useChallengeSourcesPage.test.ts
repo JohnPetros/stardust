@@ -144,6 +144,7 @@ describe('useChallengeSourcesPage', () => {
     expect(challengingService.createChallengeSource).toHaveBeenCalledWith(
       expect.objectContaining({ value: challengeId }),
       expect.objectContaining({ value: createdSource.url }),
+      null,
     )
     expect(toastProvider.showSuccess).toHaveBeenCalledWith('Fonte criada com sucesso')
     expect(refetch).toHaveBeenCalled()
@@ -197,6 +198,7 @@ describe('useChallengeSourcesPage', () => {
     expect(challengingService.updateChallengeSource).toHaveBeenCalledWith(
       expect.objectContaining({ value: updatedSource.id }),
       expect.objectContaining({ value: updatedSource.url }),
+      null,
       null,
     )
     expect(toastProvider.showSuccess).toHaveBeenCalledWith('Fonte atualizada com sucesso')
