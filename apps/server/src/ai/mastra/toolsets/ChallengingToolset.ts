@@ -23,6 +23,21 @@ import {
 import { MastraMcp } from '../MastraMcp'
 import { UpstashCacheProvider } from '@/provision/cache/UpstashCacheProvider'
 
+const challengeSourceDtoSchema = z.object({
+  id: idSchema,
+  url: z.string().url(),
+  position: z.number(),
+  additionalInstructions: z.string().nullable(),
+  challenge: z
+    .object({
+      id: idSchema,
+      title: z.string(),
+      slug: z.string(),
+    })
+    .nullable()
+    .optional(),
+})
+
 export class ChallengingToolset {
   static get postChallengingTool() {
     const postChallengeSchema = challengeDraftSchema.extend({
@@ -63,11 +78,7 @@ export class ChallengingToolset {
       id: 'get-next-challenge-source-tool',
       description: TOOLS_DESCRIPTIONS.getNextChallengeSource,
       inputSchema: z.void(),
-      outputSchema: z.object({
-        id: idSchema,
-        url: z.string().url(),
-        position: z.number(),
-      }),
+      outputSchema: challengeSourceDtoSchema,
       execute: async (input) => {
         const mcp = new MastraMcp(input)
         const repository = new SupabaseChallengeSourcesRepository(supabase)
