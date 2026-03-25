@@ -1,5 +1,5 @@
 import type { UseCase } from '#global/interfaces/UseCase'
-import { Id, Name, Slug, Url } from '#global/domain/structures/index'
+import { Id, Name, Slug, Text, Url } from '#global/domain/structures/index'
 import type { ChallengeSourceDto } from '../domain/entities/dtos'
 import type { ChallengeSourcesRepository, ChallengesRepository } from '../interfaces'
 import {
@@ -12,6 +12,7 @@ type Request = {
   challengeSourceId: string
   url: string
   challengeId?: string | null
+  additionalInstructions?: string | null
 }
 
 type Response = Promise<ChallengeSourceDto>
@@ -22,7 +23,12 @@ export class UpdateChallengeSourceUseCase implements UseCase<Request, Response> 
     private readonly challengesRepository: ChallengesRepository,
   ) {}
 
-  async execute({ challengeSourceId, url, challengeId }: Request): Response {
+  async execute({
+    challengeSourceId,
+    url,
+    challengeId,
+    additionalInstructions,
+  }: Request): Response {
     const challengeSource = await this.challengeSourcesRepository.findById(
       Id.create(challengeSourceId),
     )
@@ -32,6 +38,12 @@ export class UpdateChallengeSourceUseCase implements UseCase<Request, Response> 
     }
 
     challengeSource.url = Url.create(url)
+
+    if (additionalInstructions !== undefined) {
+      challengeSource.additionalInstructions = additionalInstructions
+        ? Text.create(additionalInstructions)
+        : null
+    }
 
     if (!challengeId) {
       challengeSource.challenge = null
