@@ -23,15 +23,16 @@ describe('Get Challenge Description Tool', () => {
       title: 'FizzBuzz',
       description: 'Implemente o algoritmo de FizzBuzz.',
     })
+    const challengeId = challengeDto.id ?? '11111111-1111-1111-1111-111111111111'
 
-    mcp.getInput.mockReturnValue({ challengeId: challengeDto.id })
+    mcp.getInput.mockReturnValue({ challengeId })
     service.fetchChallengeById.mockResolvedValue(new RestResponse({ body: challengeDto }))
 
     const result = await tool.handle(mcp)
 
     expect(mcp.getInput).toHaveBeenCalled()
     expect(service.fetchChallengeById).toHaveBeenCalledWith(
-      expect.objectContaining({ value: challengeDto.id }),
+      expect.objectContaining({ value: challengeId }),
     )
     expect(result).toBe(
       'Título: FizzBuzz \nDescrição: \nImplemente o algoritmo de FizzBuzz.',
