@@ -22,7 +22,7 @@ const createRequest = (
   downvoteCountOrder: 'any',
   completionCountOrder: 'any',
   postingOrder: 'descending',
-  completionStatus: 'any',
+  completionStatus: 'all',
   isNewStatus: 'all',
   shouldIncludePrivateChallenges: false,
   shouldIncludeStarChallenges: false,
