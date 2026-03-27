@@ -1,6 +1,6 @@
 import { StringValidation } from '../../../global/libs'
 
-type Value = 'completed' | 'not-completed' | 'any'
+type Value = 'completed' | 'not-completed' | 'all'
 
 export class ChallengeCompletionStatus {
   private constructor(readonly value: Value) {}
@@ -15,7 +15,7 @@ export class ChallengeCompletionStatus {
     new StringValidation(value, 'Challenge completition status').oneOf([
       'completed',
       'not-completed',
-      'any',
+      'all',
     ])
 
     return true

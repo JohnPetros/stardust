@@ -1,1 +1,1 @@
-export type ChallengeCompletionStatusValue = 'completed' | 'not-completed'
+export type ChallengeCompletionStatusValue = 'all' | 'completed' | 'not-completed'
