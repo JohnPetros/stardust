@@ -211,6 +211,20 @@ export class SupabaseChallengesRepository
     return { items: challenges, count: Number(count) }
   }
 
+  async countAllChallengesForNavigationSidebar(): Promise<Integer> {
+    const { count, error } = await this.supabase
+      .from('challenges_view')
+      .select('*', { count: 'exact', head: true })
+      .is('star_id', null)
+      .eq('is_public', true)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+
+    return Integer.create(count ?? 0)
+  }
+
   async findAllCategories(): Promise<ChallengeCategory[]> {
     const { data, error } = await this.supabase
       .from('categories')
