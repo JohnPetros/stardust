@@ -35,13 +35,20 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       return await restClient.get('/challenging/challenges/completed-by-difficulty-level')
     },
 
+    async fetchChallengesNavigationSidebarProgress() {
+      return await restClient.get('/challenging/challenges/sidebar/progress')
+    },
+
     async fetchAllChallenges({
       page,
       itemsPerPage,
       title,
       difficulty,
       completionStatus,
+      isNewStatus,
       upvotesCountOrder,
+      downvoteCountOrder,
+      completionCountOrder,
       postingOrder,
       categoriesIds,
       shouldIncludePrivateChallenges,
@@ -54,7 +61,10 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       restClient.setQueryParam('title', title.value)
       restClient.setQueryParam('difficulty', difficulty.level)
       restClient.setQueryParam('completionStatus', completionStatus.value)
+      restClient.setQueryParam('isNewStatus', isNewStatus.value)
       restClient.setQueryParam('upvotesCountOrder', upvotesCountOrder.value)
+      restClient.setQueryParam('downvoteCountOrder', downvoteCountOrder.value)
+      restClient.setQueryParam('completionCountOrder', completionCountOrder.value)
       restClient.setQueryParam('postingOrder', postingOrder.value)
       restClient.setQueryParam('categoriesIds', categoriesIds.dto)
       restClient.setQueryParam(
