@@ -11,6 +11,8 @@ import {
   stringSchema,
 } from '@stardust/validation/global/schemas'
 import {
+  challengeCompletionStatusSchema,
+  challengeDifficultyLevelSchema,
   challengeSchema,
   challengeStarSchema,
   challengeVoteSchema,
@@ -24,6 +26,7 @@ import {
   FetchChallengeController,
   FetchChallengeNavigationController,
   FetchChallengesListController,
+  FetchChallengesCompletionProgressController,
   FetchCompletedChallengesCountByDifficultyLevelController,
   FetchAllChallengeCategoriesController,
   FetchChallengeVoteController,
@@ -131,13 +134,13 @@ export class ChallengesRouter extends HonoRouter {
           itemsPerPage: itemsPerPageSchema,
           title: stringSchema,
           categoriesIds: idsListSchema,
-          difficulty: stringSchema,
+          difficulty: challengeDifficultyLevelSchema,
           upvotesCountOrder: listingOrderSchema,
           downvoteCountOrder: listingOrderSchema,
           completionCountOrder: listingOrderSchema,
           postingOrder: listingOrderSchema,
           userId: stringSchema.optional(),
-          completionStatus: stringSchema,
+          completionStatus: challengeCompletionStatusSchema,
           isNewStatus: z.enum(['all', 'new', 'old']).optional().default('all'),
           shouldIncludeOnlyAuthorChallenges: queryParamBooleanSchema.default('false'),
           shouldIncludePrivateChallenges: queryParamBooleanSchema.default('false'),
@@ -164,13 +167,13 @@ export class ChallengesRouter extends HonoRouter {
           itemsPerPage: itemsPerPageSchema,
           title: stringSchema,
           categoriesIds: idsListSchema,
-          difficulty: stringSchema,
+          difficulty: challengeDifficultyLevelSchema,
           upvotesCountOrder: listingOrderSchema,
           downvoteCountOrder: listingOrderSchema,
           completionCountOrder: listingOrderSchema,
           postingOrder: listingOrderSchema,
           userId: stringSchema.optional(),
-          completionStatus: stringSchema,
+          completionStatus: challengeCompletionStatusSchema,
           isNewStatus: z.enum(['all', 'new', 'old']).optional().default('all'),
         }),
       ),
@@ -195,6 +198,20 @@ export class ChallengesRouter extends HonoRouter {
         const controller = new FetchCompletedChallengesCountByDifficultyLevelController(
           repository,
         )
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerFetchChallengesSidebarProgressRoute(): void {
+    this.router.get(
+      '/sidebar/progress',
+      this.profileMiddleware.appendUserCompletedChallengesIdsToBody,
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const controller = new FetchChallengesCompletionProgressController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -392,6 +409,7 @@ export class ChallengesRouter extends HonoRouter {
     this.registerFetchChallengeByStarRoute()
     this.registerFetchChallengesListRoute()
     this.registerFetchAllChallengesRoute()
+    this.registerFetchChallengesSidebarProgressRoute()
     this.registerFetchCompletedChallengesByDifficultyLevelRoute()
     this.registerFetchAllChallengeCategoriesRoute()
     this.registerFetchChallengeVoteRoute()
