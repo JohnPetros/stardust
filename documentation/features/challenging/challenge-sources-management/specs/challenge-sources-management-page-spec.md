@@ -2,7 +2,7 @@
 title: Gerenciamento de Fontes de Desafios no StarDust Studio
 prd: documentation/features/challenging/challenge-sources-management/prd.md
 apps: studio, server
-status: concluido
+status: closed
 last_updated_at: 2026-03-04
 ---
 

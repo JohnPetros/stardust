@@ -2,7 +2,7 @@
 title: Endpoint de geração de arquivo XLSX de usuários
 prd: documentation/features/profile/users-management/prd.md
 app: server
-status: concluido
+status: closed
 last_updated_at: 2026-02-20
 ---
 

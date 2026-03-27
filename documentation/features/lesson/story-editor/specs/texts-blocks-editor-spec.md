@@ -2,7 +2,7 @@
 title: Aba de Blocos de Texto do Editor de História
 prd: documentation/features/lesson/story-editor/prd.md
 apps: server, studio
-status: em_progresso
+status: open
 last_updated_at: 2026-03-16
 ---
 
