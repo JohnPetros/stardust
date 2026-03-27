@@ -7,6 +7,7 @@ import type {
   ChallengesListParams,
   ChallengeSourcesListParams,
   CompletedChallengesCountByDifficultyLevel,
+  ChallengesNavigationSidebarProgressDto,
 } from '../domain/types'
 import type { Challenge } from '../domain/entities'
 import type { SolutionsListingParams } from '../domain/types'
@@ -25,6 +26,9 @@ export interface ChallengingService {
   ): Promise<RestResponse<ChallengeNavigationDto>>
   fetchCompletedChallengesByDifficultyLevel(): Promise<
     RestResponse<CompletedChallengesCountByDifficultyLevel>
+  >
+  fetchChallengesNavigationSidebarProgress(): Promise<
+    RestResponse<ChallengesNavigationSidebarProgressDto>
   >
   fetchChallengeByStarId(starId: Id): Promise<RestResponse<ChallengeDto>>
   fetchSolutionBySlug(solutionSlug: Slug): Promise<RestResponse<SolutionDto>>

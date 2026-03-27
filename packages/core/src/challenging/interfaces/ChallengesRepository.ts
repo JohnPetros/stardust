@@ -11,6 +11,7 @@ export interface ChallengesRepository {
   findChallengeNavigationBySlug(challengeSlug: Slug): Promise<ChallengeNavigation | null>
   findAllByNotAuthor(authorId: Id): Promise<Challenge[]>
   findMany(params: ChallengesListParams): Promise<ManyItems<Challenge>>
+  countAllChallengesForNavigationSidebar(): Promise<Integer>
   findAllCategories(): Promise<ChallengeCategory[]>
   findVoteByChallengeAndUser(challengeId: Id, userId: Id): Promise<ChallengeVote>
   add(challenge: Challenge): Promise<void>
