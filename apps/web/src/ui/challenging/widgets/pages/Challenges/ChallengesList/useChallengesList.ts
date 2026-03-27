@@ -32,7 +32,7 @@ type Params = {
 
 export function useChallengesList({ challengingService, userId, isUserGod }: Params) {
   const [difficultyLevel] = useQueryStringParam(QUERY_PARAMS.difficultyLevel, 'any')
-  const [completionStatus] = useQueryStringParam(QUERY_PARAMS.completionStatus, 'any')
+  const [completionStatus] = useQueryStringParam(QUERY_PARAMS.completionStatus, 'all')
   const [isNewStatus] = useQueryStringParam(QUERY_PARAMS.isNewStatus, 'all')
   const [title] = useQueryStringParam(QUERY_PARAMS.title, '')
   const [categoriesIds] = useQueryArrayParam(QUERY_PARAMS.categoriesIds)

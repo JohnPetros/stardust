@@ -31,7 +31,7 @@ export function useChallengesListTab(
       title: Text.create(''),
       categoriesIds: IdsList.create([]),
       difficulty: ChallengeDifficulty.create('any'),
-      completionStatus: ChallengeCompletionStatus.create('any'),
+      completionStatus: ChallengeCompletionStatus.create('all'),
       isNewStatus: ChallengeIsNewStatus.create('all'),
       upvotesCountOrder: ListingOrder.create(
         tabListSorter === 'date' ? 'descending' : 'any',

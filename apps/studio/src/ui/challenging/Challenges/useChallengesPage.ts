@@ -80,7 +80,7 @@ export function useChallengesPage({ service }: Params) {
         page: OrdinalNumber.create(page),
         itemsPerPage: OrdinalNumber.create(itemsPerPage),
         categoriesIds: IdsList.create(selectedCategories),
-        completionStatus: ChallengeCompletionStatus.create('any'),
+        completionStatus: ChallengeCompletionStatus.create('all'),
         difficulty: ChallengeDifficulty.create(difficulty),
         upvotesCountOrder: ListingOrder.create(upvotesCountOrder),
         downvoteCountOrder: ListingOrder.create(downvoteCountOrder),

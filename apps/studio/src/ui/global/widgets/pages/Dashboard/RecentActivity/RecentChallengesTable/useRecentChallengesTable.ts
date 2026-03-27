@@ -23,7 +23,7 @@ export function useRecentChallengesTable(challengingService: ChallengingService)
         page: OrdinalNumber.create(1),
         itemsPerPage: OrdinalNumber.create(10),
         categoriesIds: IdsList.create([]),
-        completionStatus: ChallengeCompletionStatus.create('any'),
+        completionStatus: ChallengeCompletionStatus.create('all'),
         difficulty: ChallengeDifficulty.create('any'),
         upvotesCountOrder: ListingOrder.create('any'),
         downvoteCountOrder: ListingOrder.create('any'),

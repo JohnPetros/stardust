@@ -49,7 +49,7 @@ export function useStarChallengeSelector({
         page: OrdinalNumber.create(page),
         itemsPerPage: OrdinalNumber.create(itemsPerPage),
         categoriesIds: IdsList.create([]),
-        completionStatus: ChallengeCompletionStatus.create('any'),
+        completionStatus: ChallengeCompletionStatus.create('all'),
         difficulty: ChallengeDifficulty.create('any'),
         upvotesCountOrder: ListingOrder.create('any'),
         downvoteCountOrder: ListingOrder.create('any'),

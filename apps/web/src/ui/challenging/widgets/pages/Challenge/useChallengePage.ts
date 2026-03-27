@@ -1,4 +1,4 @@
-import { createElement, useEffect, useMemo, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 import { Challenge } from '@stardust/core/challenging/entities'
@@ -18,8 +18,6 @@ import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import type { User } from '@stardust/core/profile/entities'
 import { useChallengeNavigationGuard } from '@/ui/challenging/hooks/useChallengeNavigationGuard'
-import { ChallengeNavigation } from '../../components/ChallengeNavigation'
-import { ChallengeNavigationAlertDialog } from '../../components/ChallengeNavigationAlertDialog'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 
 type Params = {
@@ -55,6 +53,7 @@ export function useChallengePage({
   const [isNew] = useQueryStringParam('isNew')
   const secondCounterLocalstorage = useLocalStorage(STORAGE.keys.secondsCounter)
   const challengeNavigationAlertDialogRef = useRef<AlertDialogRef | null>(null)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const { requestNavigation, confirmNavigation, cancelNavigation } =
     useChallengeNavigationGuard({
       challenge,
@@ -84,6 +83,18 @@ export function useChallengePage({
     if (!nextChallengeSlug) return
 
     requestNavigation(ROUTES.challenging.challenges.challenge(nextChallengeSlug))
+  }
+
+  function handleOpenSidebar() {
+    setIsSidebarOpen(true)
+  }
+
+  function handleCloseSidebar() {
+    setIsSidebarOpen(false)
+  }
+
+  function handleSidebarChallengeSelect(challengeSlug: string) {
+    goTo(ROUTES.challenging.challenges.challenge(challengeSlug))
   }
 
   useEffect(() => {
@@ -149,31 +160,24 @@ export function useChallengePage({
     }
   }, [])
 
-  const challengeNavigationSlot = useMemo(() => {
-    return createElement(ChallengeNavigation, {
-      previousChallengeSlug,
-      nextChallengeSlug,
-      onPreviousChallengeClick: handlePreviousChallengeClick,
-      onNextChallengeClick: handleNextChallengeClick,
-    })
-  }, [nextChallengeSlug, previousChallengeSlug])
-
-  const challengeNavigationAlertDialogSlot = useMemo(() => {
-    return createElement(ChallengeNavigationAlertDialog, {
-      dialogRef: challengeNavigationAlertDialogRef,
-      onConfirm: confirmNavigation,
-      onCancel: cancelNavigation,
-    })
-  }, [confirmNavigation, cancelNavigation])
-
   return {
     challengeTitle: challenge?.title.value ?? null,
     panelsLayout,
     shouldHaveConfettiAnimation:
       challenge && user && isNew ? challenge?.author.isEqualTo(user).isTrue : false,
-    challengeNavigationSlot,
-    challengeNavigationAlertDialogSlot,
+    previousChallengeSlug,
+    nextChallengeSlug,
+    isSidebarOpen,
+    challengeSlug: challengeDto.slug ?? '',
+    challengeNavigationAlertDialogRef,
+    confirmNavigation,
+    cancelNavigation,
     handleBackButtonClick,
     handlePanelsLayoutButtonClick,
+    handlePreviousChallengeClick,
+    handleNextChallengeClick,
+    handleOpenSidebar,
+    handleCloseSidebar,
+    handleSidebarChallengeSelect,
   }
 }
