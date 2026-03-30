@@ -2,7 +2,7 @@
   "name": "@stardust/web",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=1 next dev",
     "queue": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/serverless",
     "build": "next build",
     "start": "node .next/standalone/apps/web/server.js -p $PORT",
@@ -43,7 +43,6 @@
     "@radix-ui/react-tooltip": "^1.2.7",
     "@react-three/drei": "^10.5.1",
     "@react-three/fiber": "^9.2.0",
-    "@sentry/nextjs": "^10.17.0",
     "@stardust/core": "*",
     "@stardust/lsp": "*",
     "@stardust/validation": "*",
