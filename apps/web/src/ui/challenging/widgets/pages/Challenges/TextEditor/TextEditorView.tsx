@@ -5,6 +5,11 @@ import { Loading } from '@/ui/global/widgets/components/Loading'
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), {
   ssr: false,
+  loading: () => (
+    <div className='grid place-content-center'>
+      <Loading />
+    </div>
+  ),
 })
 
 type Props = {
