@@ -1,19 +1,20 @@
-# Regras de Teste de Handlers (Controllers, Actions e Tools)
+# Regras de Teste de Handlers (Controllers, Actions, Jobs e Tools)
 
 Esta documentação define os padrões e práticas para escrever testes unitários
 para os diferentes tipos de handlers no projeto Stardust: **Controllers**
-(REST), **Actions** (RPC) e **Tools** (AI).
+(REST), **Actions** (RPC), **Jobs** (Queue) e **Tools** (AI).
 
 ## 1. Visão Geral
 
 Handlers são os pontos de entrada da aplicação. Sua responsabilidade é receber
-dados de uma fonte externa (HTTP, RPC, IA), orquestrar a chamada para a camada
+dados de uma fonte externa (HTTP, RPC, Queue, IA), orquestrar a chamada para a camada
 de domínio ou casos de uso e retornar uma resposta formatada.
 
 | Tipo           | Camada | Contexto (Entrada) | Retorno (Saída)         |
 | :------------- | :----- | :----------------- | :---------------------- |
 | **Controller** | REST   | `Http<T>`          | `Promise<RestResponse>` |
 | **Action**     | RPC    | `Call<T>`          | `Promise<U>`            |
+| **Job**        | Queue  | `Amqp<T>`          | `Promise<U>`            |
 | **Tool**       | AI     | `Mcp<T>`           | `Promise<U>`            |
 
 ---
@@ -150,12 +151,63 @@ describe("Sign In Action", () => {
 
 ---
 
-## 4. Tools (AI)
+## 4. Jobs (Queue)
+
+Os jobs vivem principalmente em `apps/server/src/queue/jobs` e representam os
+handlers assíncronos da aplicação. Eles recebem eventos via `Amqp<T>`,
+orquestram workflows, casos de uso ou serviços e delegam a execução ao motor
+de fila na borda da aplicação.
+
+### 4.1. Padrão de Teste
+
+O teste deve garantir que o Job:
+
+1. Extraia corretamente o payload do objeto `Amqp` através de `getPayload()`.
+2. Chame o workflow, caso de uso ou serviço com os parâmetros transformados.
+3. Execute efeitos colaterais e IO dentro de `amqp.run(...)` quando aplicável.
+4. Propague falhas corretamente quando a dependência retornar erro.
+
+### 4.2. Exemplo de Implementação
+
+```ts
+import { type Mock, mock } from "ts-jest-mocker";
+import type { Amqp } from "@stardust/core/global/interfaces";
+import type { CreateChallengeWorkflow } from "@stardust/core/challenging/interfaces";
+import { CreateChallengeJob } from "../CreateChallengeJob";
+
+describe("Create Challenge Job", () => {
+  let amqp: Mock<Amqp>;
+  let workflow: Mock<CreateChallengeWorkflow>;
+  let job: CreateChallengeJob;
+
+  beforeEach(() => {
+    amqp = mock();
+    workflow = mock();
+    job = new CreateChallengeJob(workflow);
+
+    amqp.run.mockImplementation(async (callback) => await callback());
+  });
+
+  it("should run workflow inside amqp.run", async () => {
+    await job.handle(amqp);
+
+    expect(amqp.run).toHaveBeenCalledWith(
+      expect.any(Function),
+      "Create Challenge Workflow",
+    );
+    expect(workflow.run).toHaveBeenCalled();
+  });
+});
+```
+
+---
+
+## 5. Tools (AI)
 
 As tools são utilizadas por assistentes de IA e vivem em
 `apps/web/src/ai/tools`. Elas também seguem o padrão _Factory Function_.
 
-### 4.1. Padrão de Teste
+### 5.1. Padrão de Teste
 
 Tools usam o objeto `Mcp` (Model Context Protocol) para entrada. O teste deve
 validar se a Tool:
@@ -165,7 +217,7 @@ validar se a Tool:
    informações.
 3. Retorna uma resposta amigável para o modelo de linguagem.
 
-### 4.2. Exemplo de Implementação
+### 5.2. Exemplo de Implementação
 
 ```ts
 import { type Mock, mock } from "ts-jest-mocker";
@@ -201,13 +253,13 @@ describe("Search Guides Tool", () => {
 
 ---
 
-## 5. Boas Práticas Comuns
+## 6. Boas Práticas Comuns
 
 1. **Iisolar o Handler:** Não teste a lógica de negócio dentro do handler. Ela
    deve estar no Caso de Uso ou Serviço. O teste do handler foca na
    **orquestração** e **tradução de dados**.
 2. **Mocks de Interfaces:** Sempre prefira mockar interfaces (`Http`, `Call`,
-   `Mcp`, `Broker`, `UseCase`) em vez de implementações concretas.
+   `Amqp`, `Mcp`, `Broker`, `UseCase`) em vez de implementações concretas.
 3. **Uso de Fakers:** Utilize os Fakers do core para gerar dados de resposta das
    dependências, mantendo os testes limpos e focados.
 4. **Async/Await:** Todos os handlers são inerentemente assíncronos.
@@ -216,6 +268,9 @@ describe("Search Guides Tool", () => {
 5. **Fluent Interface:** Para controllers, lembre-se de que métodos como
    `statusCreated`, `statusOk`, etc., retornam a própria instância do `http`.
    Mocke-os adequadamente: `http.statusOk.mockReturnValue(http)`.
+6. **Contexto de Queue:** Para jobs, mocke explicitamente `amqp.getPayload()` e,
+   quando houver IO ou efeitos colaterais, faça `amqp.run.mockImplementation(async (callback) => await callback())`
+   para validar a orquestração sem depender da infraestrutura real da fila.
 
 ## Tooling
 

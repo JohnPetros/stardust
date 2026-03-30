@@ -7,16 +7,22 @@ type InitialValues = {
   url: string
   challengeId?: string | null
   challengeTitle?: string | null
+  additionalInstructions?: string | null
 }
 
 type Props = {
   challengeSourceId?: string
   initialValues?: InitialValues
-  onCreate: (url: string, challengeId?: string) => Promise<string | null>
+  onCreate: (
+    url: string,
+    challengeId?: string,
+    additionalInstructions?: string | null,
+  ) => Promise<string | null>
   onUpdate: (
     challengeSourceId: string,
     url: string,
     challengeId: string | undefined,
+    additionalInstructions?: string | null,
   ) => Promise<string | null>
 }
 

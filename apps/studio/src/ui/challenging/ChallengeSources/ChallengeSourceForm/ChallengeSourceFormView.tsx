@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from '@/ui/shadcn/components/form'
 import { Input } from '@/ui/shadcn/components/input'
+import { Textarea } from '@/ui/shadcn/components/textarea'
 import { Pagination } from '@/ui/global/widgets/components/Pagination'
 import { cn } from '@/ui/shadcn/utils'
 import { useChallengeSourceForm } from './useChallengeSourceForm'
@@ -33,12 +34,18 @@ type Props = {
     url: string
     challengeId?: string | null
     challengeTitle?: string | null
+    additionalInstructions?: string | null
   }
-  onCreate: (url: string, challengeId?: string) => Promise<string | null>
+  onCreate: (
+    url: string,
+    challengeId?: string,
+    additionalInstructions?: string | null,
+  ) => Promise<string | null>
   onUpdate: (
     challengeSourceId: string,
     url: string,
     challengeId: string | undefined,
+    additionalInstructions?: string | null,
   ) => Promise<string | null>
   trigger?: ReactNode
 }
@@ -105,6 +112,25 @@ export const ChallengeSourceFormView = ({
                   <FormLabel>URL de origem</FormLabel>
                   <FormControl>
                     <Input placeholder='https://exemplo.com/artigo' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='additionalInstructions'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Instruções adicionais (opcional)</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder='Ex.: priorize explicações em português e exemplos objetivos.'
+                      {...field}
+                      className='h-32'
+                      value={field.value ?? ''}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

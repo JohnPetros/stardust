@@ -80,6 +80,7 @@ export const ChallengeSourcesPageView = ({
               <TableHead className='min-w-[360px]'>URL de origem</TableHead>
               <TableHead className='min-w-[360px]'>URL do desafio</TableHead>
               <TableHead className='min-w-[240px]'>Desafio vinculado</TableHead>
+              <TableHead className='min-w-[280px]'>Instruções adicionais</TableHead>
               <TableHead className='w-[120px]'>Em uso</TableHead>
               <TableHead className='w-[90px]'>Ações</TableHead>
             </TableRow>
@@ -104,6 +105,9 @@ export const ChallengeSourcesPageView = ({
                     <Skeleton className='h-5 w-full max-w-[220px]' />
                   </TableCell>
                   <TableCell>
+                    <Skeleton className='h-5 w-full max-w-[260px]' />
+                  </TableCell>
+                  <TableCell>
                     <Skeleton className='h-6 w-16 rounded-full' />
                   </TableCell>
                   <TableCell>
@@ -116,7 +120,7 @@ export const ChallengeSourcesPageView = ({
               ))
             ) : sortableChallengeSources.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className='text-center text-muted-foreground py-8'>
+                <TableCell colSpan={7} className='text-center text-muted-foreground py-8'>
                   Nenhuma fonte encontrada para os filtros atuais
                 </TableCell>
               </TableRow>
@@ -128,6 +132,8 @@ export const ChallengeSourcesPageView = ({
                   ? `${ENV.stardustWebAppUrl}/challenging/challenges/${challengeSlug}`
                   : '-'
                 const challengeTitle = source.challenge?.title ?? 'Sem desafio vinculado'
+                const additionalInstructions =
+                  source.additionalInstructions?.trim() || '-'
                 const isUsed = Boolean(source.challenge)
 
                 return (
@@ -182,6 +188,11 @@ export const ChallengeSourcesPageView = ({
                       <span className='block truncate'>{challengeTitle}</span>
                     </TableCell>
                     <TableCell>
+                      <span className='block max-w-[260px] truncate'>
+                        {additionalInstructions}
+                      </span>
+                    </TableCell>
+                    <TableCell>
                       {isUsed ? (
                         <Badge variant='default'>Sim</Badge>
                       ) : (
@@ -196,6 +207,7 @@ export const ChallengeSourcesPageView = ({
                             url: source.url,
                             challengeId: source.challenge?.id,
                             challengeTitle: source.challenge?.title,
+                            additionalInstructions: source.additionalInstructions,
                           }}
                           onCreate={onCreateChallengeSource}
                           onUpdate={onUpdateChallengeSource}

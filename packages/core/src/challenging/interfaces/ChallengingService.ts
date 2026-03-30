@@ -50,11 +50,13 @@ export interface ChallengingService {
   createChallengeSource(
     challengeId: Id | null,
     url: Url,
+    additionalInstructions?: Text | null,
   ): Promise<RestResponse<ChallengeSourceDto>>
   updateChallengeSource(
     challengeSourceId: Id,
     url: Url,
     challengeId?: Id | null,
+    additionalInstructions?: Text | null,
   ): Promise<RestResponse<ChallengeSourceDto>>
   deleteChallengeSource(challengeSourceId: Id): Promise<RestResponse>
   reorderChallengeSources(

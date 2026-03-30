@@ -19,7 +19,9 @@ export class MastraCreateChallengeWorkflow implements CreateChallengeWorkflow {
       outputSchema: z.void(),
     })
       .then(getNextChallengeSourceStep)
-      .map(async ({ inputData }) => ({ prompt: `URL da fonte: ${inputData.url}` }))
+      .map(async ({ inputData }) => ({
+        prompt: `URL da fonte: ${inputData.url}. Instruções adicionais: ${inputData.additionalInstructions ?? 'nenhuma'}.`,
+      }))
       .then(createChallengeStep)
       .map(async ({ inputData, getStepResult }) => {
         const challengeSource = getStepResult(getNextChallengeSourceStep)

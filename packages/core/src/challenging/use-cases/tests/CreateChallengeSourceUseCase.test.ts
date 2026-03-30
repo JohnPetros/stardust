@@ -93,6 +93,33 @@ describe('Create Challenge Source Use Case', () => {
     expect(response).toEqual(createdChallengeSource.dto)
   })
 
+  it('should persist additional instructions when provided', async () => {
+    const challenge = ChallengesFaker.fake()
+    const existingSources = [ChallengeSourcesFaker.fake({ position: 3 })]
+    const additionalInstructions =
+      'Adapt examples to beginners and keep explanations short.'
+
+    challengesRepository.findById.mockResolvedValue(challenge)
+    challengeSourcesRepository.findByChallengeId.mockResolvedValue(null)
+    challengeSourcesRepository.findAll.mockResolvedValue(existingSources)
+
+    const response = await useCase.execute({
+      challengeId: challenge.id.value,
+      url: 'https://example.com/source-with-instructions',
+      additionalInstructions,
+    })
+
+    expect(challengeSourcesRepository.add).toHaveBeenCalledTimes(1)
+
+    const [createdChallengeSource] = challengeSourcesRepository.add.mock.calls[0]
+    expect(createdChallengeSource.additionalInstructions?.value).toBe(
+      additionalInstructions,
+    )
+    expect(createdChallengeSource.challenge?.id.value).toBe(challenge.id.value)
+    expect(response.additionalInstructions).toBe(additionalInstructions)
+    expect(response.challenge?.id).toBe(challenge.id.value)
+  })
+
   it('should create challenge source without linked challenge when challengeId is not provided', async () => {
     const existingSources = [
       ChallengeSourcesFaker.fake({ position: 2 }),
@@ -116,5 +143,23 @@ describe('Create Challenge Source Use Case', () => {
     expect(createdChallengeSource.position.value).toBe(5)
     expect(createdChallengeSource.challenge).toBeNull()
     expect(response).toEqual(createdChallengeSource.dto)
+  })
+
+  it('should preserve additional instructions as null when omitted', async () => {
+    const existingSources = [ChallengeSourcesFaker.fake({ position: 4 })]
+
+    challengeSourcesRepository.findAll.mockResolvedValue(existingSources)
+
+    const response = await useCase.execute({
+      url: 'https://example.com/source-without-instructions',
+    })
+
+    expect(challengeSourcesRepository.add).toHaveBeenCalledTimes(1)
+
+    const [createdChallengeSource] = challengeSourcesRepository.add.mock.calls[0]
+    expect(createdChallengeSource.additionalInstructions).toBeNull()
+    expect(createdChallengeSource.challenge).toBeNull()
+    expect(response.additionalInstructions).toBeNull()
+    expect(response.challenge).toBeNull()
   })
 })

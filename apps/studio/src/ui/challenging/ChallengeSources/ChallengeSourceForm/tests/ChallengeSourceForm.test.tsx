@@ -25,13 +25,18 @@ jest.mock('@/ui/global/widgets/components/Pagination', () => ({
 describe('ChallengeSourceForm', () => {
   let challengingService: Mock<ChallengingService>
   let onCreate: jest.MockedFunction<
-    (url: string, challengeId?: string) => Promise<string | null>
+    (
+      url: string,
+      challengeId?: string,
+      additionalInstructions?: string | null,
+    ) => Promise<string | null>
   >
   let onUpdate: jest.MockedFunction<
     (
       challengeSourceId: string,
       url: string,
       challengeId: string | undefined,
+      additionalInstructions?: string | null,
     ) => Promise<string | null>
   >
 
@@ -60,6 +65,7 @@ describe('ChallengeSourceForm', () => {
           url: 'https://example.com/fonte-existente',
           challengeId: challenges[1].id,
           challengeTitle: challenges[1].title,
+          additionalInstructions: 'Instruções já salvas',
         }}
         onCreate={onCreate}
         onUpdate={onUpdate}
@@ -139,6 +145,7 @@ describe('ChallengeSourceForm', () => {
     expect(
       screen.getByText('Desafio de Condicionais', { selector: 'strong' }),
     ).toBeInTheDocument()
+    expect(screen.getByDisplayValue('Instruções já salvas')).toBeInTheDocument()
   })
 
   it('should submit successfully with correct values', async () => {
@@ -153,7 +160,7 @@ describe('ChallengeSourceForm', () => {
     await user.click(screen.getByRole('button', { name: 'Salvar' }))
 
     await waitFor(() => {
-      expect(onCreate).toHaveBeenCalledWith(url, undefined)
+      expect(onCreate).toHaveBeenCalledWith(url, undefined, null)
     })
   })
 
@@ -169,7 +176,7 @@ describe('ChallengeSourceForm', () => {
     await user.click(screen.getByRole('button', { name: 'Salvar' }))
 
     await waitFor(() => {
-      expect(onCreate).toHaveBeenCalledWith(url, undefined)
+      expect(onCreate).toHaveBeenCalledWith(url, undefined, null)
     })
   })
 
@@ -191,7 +198,7 @@ describe('ChallengeSourceForm', () => {
       expect(screen.getByText(submitError)).toBeInTheDocument()
     })
 
-    expect(onCreate).toHaveBeenCalledWith('https://example.com/artigo', undefined)
+    expect(onCreate).toHaveBeenCalledWith('https://example.com/artigo', undefined, null)
   })
 
   it('should submit update with selected challenge when editing', async () => {
@@ -214,6 +221,35 @@ describe('ChallengeSourceForm', () => {
         'source-id',
         'https://example.com/fonte-editada',
         challenges[0].id,
+        'Instruções já salvas',
+      )
+    })
+  })
+
+  it('should submit additional instructions when filled', async () => {
+    const user = userEvent.setup()
+    onCreate.mockResolvedValue(null)
+
+    Widget()
+    await openDialog(user)
+
+    await user.type(
+      screen.getByPlaceholderText('https://exemplo.com/artigo'),
+      'https://example.com/source',
+    )
+    await user.type(
+      screen.getByPlaceholderText(
+        'Ex.: priorize explicações em português e exemplos objetivos.',
+      ),
+      'Use exemplos curtos',
+    )
+    await user.click(screen.getByRole('button', { name: 'Salvar' }))
+
+    await waitFor(() => {
+      expect(onCreate).toHaveBeenCalledWith(
+        'https://example.com/source',
+        undefined,
+        'Use exemplos curtos',
       )
     })
   })

@@ -68,6 +68,8 @@ describe('ChallengeSourcesPageView', () => {
   const sourceA = ChallengeSourcesFaker.fakeDto({
     id: 'source-a',
     url: 'https://source-a.test',
+    additionalInstructions:
+      'Explique o contexto antes da resposta e forneca exemplos curtos em seguida.',
     challenge: {
       id: 'challenge-a',
       title: 'Challenge A',
@@ -78,6 +80,7 @@ describe('ChallengeSourcesPageView', () => {
   const sourceB = ChallengeSourcesFaker.fakeDto({
     id: 'source-b',
     url: 'https://source-b.test',
+    additionalInstructions: null,
     challenge: null,
   })
 
@@ -156,6 +159,9 @@ describe('ChallengeSourcesPageView', () => {
 
     expect(screen.getByText('Sem desafio vinculado')).toBeInTheDocument()
     expect(screen.getByText('-', { selector: 'span' })).toBeInTheDocument()
+    expect(
+      screen.getByText(sourceA.additionalInstructions as string, { exact: false }),
+    ).toBeInTheDocument()
 
     expect(screen.getByText('Sim')).toBeInTheDocument()
     expect(screen.getByText('Não')).toBeInTheDocument()

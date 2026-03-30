@@ -16,6 +16,7 @@ export class SupabaseChallengeSourceMapper {
       id: supabaseChallengeSource.id,
       url: supabaseChallengeSource.url,
       position: supabaseChallengeSource.position,
+      additionalInstructions: supabaseChallengeSource.additional_instructions ?? null,
       challenge,
     })
   }
@@ -28,6 +29,9 @@ export class SupabaseChallengeSourceMapper {
       url: challengeSource.url.value,
       challenge_id: challenge ? challenge.id.value : null,
       position: challengeSource.position.value,
+      additional_instructions: challengeSource.additionalInstructions
+        ? challengeSource.additionalInstructions.value
+        : null,
     }
   }
 }
