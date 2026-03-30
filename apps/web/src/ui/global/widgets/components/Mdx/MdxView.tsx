@@ -9,6 +9,7 @@ import { Strong } from './Strong'
 import { Text } from './Text'
 import { User } from './User'
 import { CodeLine } from './CodeLine'
+import { Paragraph } from './Paragraph'
 
 type Props = {
   children: string
@@ -52,6 +53,9 @@ export const MdxView = ({ children }: Props) => {
             },
             a: {
               component: Link,
+            },
+            p: {
+              component: Paragraph,
             },
           },
         }}
