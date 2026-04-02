@@ -4,7 +4,7 @@ import { ChallengesFaker } from '@stardust/core/challenging/entities/fakers'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { Call } from '@stardust/core/global/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
-import { CACHE_KEYS } from '@/constants/server-cache-keys'
+import { CACHE_KEYS } from '@/constants/cache-keys'
 
 import { UpdateChallengeVisibilityAction } from '../UpdateChallengeVisibilityAction'
 

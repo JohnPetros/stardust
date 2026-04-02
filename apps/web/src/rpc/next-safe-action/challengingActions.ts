@@ -10,7 +10,7 @@ import { NextCall } from '../next/NextCall'
 
 import { ChallengingService, SpaceService } from '@/rest/services'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
-import { CACHE_KEYS } from '@/constants/server-cache-keys'
+import { CACHE_KEYS } from '@/constants/cache-keys'
 import {
   AccessChallengePageAction,
   AccessChallengeCommentsSlotAction,

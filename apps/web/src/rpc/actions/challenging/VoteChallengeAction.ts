@@ -2,7 +2,7 @@ import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import { ChallengeVote } from '@stardust/core/challenging/structures'
 import type { Action, Call } from '@stardust/core/global/interfaces'
 import { Id } from '@stardust/core/global/structures'
-import { CACHE_KEYS } from '@/constants/server-cache-keys'
+import { CACHE_KEYS } from '@/constants/cache-keys'
 
 type Request = {
   challengeId: string
