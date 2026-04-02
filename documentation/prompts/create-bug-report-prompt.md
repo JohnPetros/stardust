@@ -64,10 +64,10 @@ Salve o arquivo em `documentation/features/{dominio}/bug-reports/{nome-descritiv
 ```md
 ---
 title: {Titulo Curto e Descritivo}
-apps: {web|server|studio}
-status: {open|closed}
 prd: {url-para-recuperar-o-prd}
 issue: {url-para-recuperar-a-issue}
+apps: {web|server|studio}
+status: {open|closed}
 last_updated_at: {YYYY-MM-DD}
 ---
 
