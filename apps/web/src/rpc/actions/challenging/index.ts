@@ -3,3 +3,5 @@ export { AccessChallengeCommentsSlotAction } from './AccessChallengeCommentsSlot
 export { AccessChallengeEditorPageAction } from './AccessChallengeEditorPage'
 export { AccessSolutionPageAction } from './AccessSolutionPageAction'
 export { ViewSolutionAction } from './ViewSolutionAction'
+export { VoteChallengeAction } from './VoteChallengeAction'
+export { UpdateChallengeVisibilityAction } from './UpdateChallengeVisibilityAction'

@@ -1,6 +1,8 @@
 'use server'
 
 import { z } from 'zod'
+import { challengeVoteSchema } from '@stardust/validation/challenging/schemas'
+import { idSchema } from '@stardust/validation/global/schemas'
 
 import { actionClient } from './clients/actionClient'
 import { authActionClient } from './clients/authActionClient'
@@ -13,8 +15,12 @@ import {
   AccessChallengeCommentsSlotAction,
   AccessChallengeEditorPageAction,
   AccessSolutionPageAction,
+  UpdateChallengeVisibilityAction,
   ViewSolutionAction,
+  VoteChallengeAction,
 } from '../actions/challenging'
+
+const CHALLENGING_ACTIONS_CACHE_KEY = 'challenging-actions'
 
 export const accessAuthenticatedChallengePage = authActionClient
   .schema(z.object({ challengeSlug: z.string() }))
@@ -26,7 +32,7 @@ export const accessAuthenticatedChallengePage = authActionClient
     const restClient = await NextServerRestClient({
       isCacheEnabled: true,
       refetchInterval: 60,
-      cacheKey: 'challenging-actions',
+      cacheKey: CHALLENGING_ACTIONS_CACHE_KEY,
     })
     const challengingService = ChallengingService(restClient)
     const spaceService = SpaceService(restClient)
@@ -47,7 +53,7 @@ export const accessChallengePage = actionClient
     const restClient = await NextServerRestClient({
       isCacheEnabled: true,
       refetchInterval: 60,
-      cacheKey: 'challenging-actions',
+      cacheKey: CHALLENGING_ACTIONS_CACHE_KEY,
     })
     const challengingService = ChallengingService(restClient)
     const spaceService = SpaceService(restClient)
@@ -69,7 +75,7 @@ export const accessChallengeEditorPage = authActionClient
     const restClient = await NextServerRestClient({
       isCacheEnabled: true,
       refetchInterval: 60,
-      cacheKey: 'challenging-actions',
+      cacheKey: CHALLENGING_ACTIONS_CACHE_KEY,
     })
     const challengingService = ChallengingService(restClient)
     const action = AccessChallengeEditorPageAction(challengingService)
@@ -89,7 +95,7 @@ export const accessChallengeCommentsSlot = actionClient
     const restClient = await NextServerRestClient({
       isCacheEnabled: true,
       refetchInterval: 60,
-      cacheKey: 'challenging-actions',
+      cacheKey: CHALLENGING_ACTIONS_CACHE_KEY,
     })
     const challengingService = ChallengingService(restClient)
     const action = AccessChallengeCommentsSlotAction(challengingService)
@@ -111,7 +117,7 @@ export const accessSolutionPage = authActionClient
     const restClient = await NextServerRestClient({
       isCacheEnabled: true,
       refetchInterval: 60,
-      cacheKey: 'challenging-actions',
+      cacheKey: CHALLENGING_ACTIONS_CACHE_KEY,
     })
     const challengingService = ChallengingService(restClient)
     const action = AccessSolutionPageAction(challengingService)
@@ -127,9 +133,45 @@ export const viewSolution = authActionClient
     const restClient = await NextServerRestClient({
       isCacheEnabled: true,
       refetchInterval: 60,
-      cacheKey: 'challenging-actions',
+      cacheKey: CHALLENGING_ACTIONS_CACHE_KEY,
     })
     const challengingService = ChallengingService(restClient)
     const action = ViewSolutionAction(challengingService)
+    return action.handle(call)
+  })
+
+export const voteChallenge = authActionClient
+  .schema(
+    z.object({
+      challengeId: idSchema,
+      challengeVote: challengeVoteSchema,
+    }),
+  )
+  .action(async ({ clientInput, ctx }) => {
+    const call = NextCall({
+      request: clientInput,
+      user: ctx.user,
+    })
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const challengingService = ChallengingService(restClient)
+    const action = VoteChallengeAction(challengingService)
+    return action.handle(call)
+  })
+
+export const updateChallengeVisibility = authActionClient
+  .schema(
+    z.object({
+      challengeId: idSchema,
+      isPublic: z.boolean(),
+    }),
+  )
+  .action(async ({ clientInput, ctx }) => {
+    const call = NextCall({
+      request: clientInput,
+      user: ctx.user,
+    })
+    const restClient = await NextServerRestClient({ isCacheEnabled: false })
+    const challengingService = ChallengingService(restClient)
+    const action = UpdateChallengeVisibilityAction(challengingService)
     return action.handle(call)
   })

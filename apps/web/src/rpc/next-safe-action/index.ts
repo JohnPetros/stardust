@@ -5,6 +5,8 @@ import {
   accessSolutionPage,
   accessChallengeEditorPage,
   viewSolution,
+  voteChallenge,
+  updateChallengeVisibility,
 } from './challengingActions'
 import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
 import { accessEndingPage, fetchLessonStoryAndQuestions } from './lessonActions'
@@ -43,6 +45,8 @@ export const challengingActions = {
   accessChallengeEditorPage,
   accessSolutionPage,
   viewSolution,
+  voteChallenge,
+  updateChallengeVisibility,
 }
 
 export const playgroundActions = { accessSnippetPage }
