@@ -4,6 +4,7 @@ import { ChallengesFaker } from '@stardust/core/challenging/entities/fakers'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { Call } from '@stardust/core/global/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
+import { CACHE_KEYS } from '@/constants/server-cache-keys'
 
 import { UpdateChallengeVisibilityAction } from '../UpdateChallengeVisibilityAction'
 
@@ -45,7 +46,7 @@ describe('Update Challenge Visibility Action', () => {
         isPublic: expect.objectContaining({ isTrue: true }),
       }),
     )
-    expect(call.resetCache).toHaveBeenCalledWith('challenging-actions')
+    expect(call.resetCache).toHaveBeenCalledWith(CACHE_KEYS.challenging.challenge)
     expect(response).toEqual({ isPublic: true })
   })
 

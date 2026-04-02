@@ -25,7 +25,7 @@ export function useChallengeVoteControl(onVoteChallenge: OnVoteChallenge) {
   const toast = useToastContext()
   const { challenge, setChallenge } = getChallengeSlice()
   const [initialState, setInitialState] = useState<State>({
-    userChallengeVote: ChallengeVote.createAsNone(),
+    userChallengeVote: challenge?.userVote ?? ChallengeVote.createAsNone(),
     upvotesCount: challenge?.upvotesCount.value ?? 0,
     downvotesCount: challenge?.downvotesCount.value ?? 0,
   })

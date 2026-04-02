@@ -1,6 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 
 import { ChallengesFaker } from '@stardust/core/challenging/entities/fakers'
+import { ChallengeVote } from '@stardust/core/challenging/structures'
 import { ActionResponse } from '@stardust/core/global/responses'
 import { UsersFaker } from '@stardust/core/profile/entities/fakers'
 
@@ -115,6 +116,25 @@ describe('useChallengeVoteControl', () => {
     expect(result.current.challengeVote?.value).toBe('none')
     expect(result.current.upvotesCount).toBe(1)
     expect(challenge.downvotesCount.value).toBe(0)
+  })
+
+  it('should rollback to the previous persisted user vote when voting fails', async () => {
+    challenge.userVote = ChallengeVote.create('upvote')
+
+    const onVoteChallenge = jest
+      .fn()
+      .mockResolvedValue(
+        new ActionResponse({ errorMessage: 'Failed to vote on challenge' }),
+      )
+
+    const { result } = Hook(onVoteChallenge)
+
+    await act(async () => {
+      await result.current.handleVoteButtonClick('downvote')
+    })
+
+    expect(showError).toHaveBeenCalledWith('Failed to vote on challenge')
+    expect(result.current.challengeVote?.value).toBe('upvote')
   })
 
   it('should expose whether the current user is the challenge author', () => {
