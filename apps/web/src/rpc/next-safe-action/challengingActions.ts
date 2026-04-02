@@ -10,6 +10,7 @@ import { NextCall } from '../next/NextCall'
 
 import { ChallengingService, SpaceService } from '@/rest/services'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
+import { CACHE_KEYS } from '@/constants/server-cache-keys'
 import {
   AccessChallengePageAction,
   AccessChallengeCommentsSlotAction,
@@ -19,8 +20,6 @@ import {
   ViewSolutionAction,
   VoteChallengeAction,
 } from '../actions/challenging'
-
-const CHALLENGING_ACTIONS_CACHE_KEY = 'challenging-actions'
 
 export const accessAuthenticatedChallengePage = authActionClient
   .schema(z.object({ challengeSlug: z.string() }))
@@ -32,7 +31,7 @@ export const accessAuthenticatedChallengePage = authActionClient
     const restClient = await NextServerRestClient({
       isCacheEnabled: true,
       refetchInterval: 60,
-      cacheKey: CHALLENGING_ACTIONS_CACHE_KEY,
+      cacheKey: CACHE_KEYS.challenging.challenge,
     })
     const challengingService = ChallengingService(restClient)
     const spaceService = SpaceService(restClient)
@@ -53,7 +52,7 @@ export const accessChallengePage = actionClient
     const restClient = await NextServerRestClient({
       isCacheEnabled: true,
       refetchInterval: 60,
-      cacheKey: CHALLENGING_ACTIONS_CACHE_KEY,
+      cacheKey: CACHE_KEYS.challenging.challenge,
     })
     const challengingService = ChallengingService(restClient)
     const spaceService = SpaceService(restClient)
@@ -75,7 +74,7 @@ export const accessChallengeEditorPage = authActionClient
     const restClient = await NextServerRestClient({
       isCacheEnabled: true,
       refetchInterval: 60,
-      cacheKey: CHALLENGING_ACTIONS_CACHE_KEY,
+      cacheKey: CACHE_KEYS.challenging.challenge,
     })
     const challengingService = ChallengingService(restClient)
     const action = AccessChallengeEditorPageAction(challengingService)
@@ -95,7 +94,7 @@ export const accessChallengeCommentsSlot = actionClient
     const restClient = await NextServerRestClient({
       isCacheEnabled: true,
       refetchInterval: 60,
-      cacheKey: CHALLENGING_ACTIONS_CACHE_KEY,
+      cacheKey: CACHE_KEYS.challenging.challenge,
     })
     const challengingService = ChallengingService(restClient)
     const action = AccessChallengeCommentsSlotAction(challengingService)
@@ -117,7 +116,7 @@ export const accessSolutionPage = authActionClient
     const restClient = await NextServerRestClient({
       isCacheEnabled: true,
       refetchInterval: 60,
-      cacheKey: CHALLENGING_ACTIONS_CACHE_KEY,
+      cacheKey: CACHE_KEYS.challenging.challenge,
     })
     const challengingService = ChallengingService(restClient)
     const action = AccessSolutionPageAction(challengingService)
@@ -133,7 +132,7 @@ export const viewSolution = authActionClient
     const restClient = await NextServerRestClient({
       isCacheEnabled: true,
       refetchInterval: 60,
-      cacheKey: CHALLENGING_ACTIONS_CACHE_KEY,
+      cacheKey: CACHE_KEYS.challenging.challenge,
     })
     const challengingService = ChallengingService(restClient)
     const action = ViewSolutionAction(challengingService)

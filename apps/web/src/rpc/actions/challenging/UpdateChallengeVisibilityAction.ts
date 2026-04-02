@@ -2,6 +2,7 @@ import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { Action, Call } from '@stardust/core/global/interfaces'
 import { Id } from '@stardust/core/global/structures'
 import { Challenge } from '@stardust/core/challenging/entities'
+import { CACHE_KEYS } from '@/constants/server-cache-keys'
 
 type Request = {
   challengeId: string
@@ -11,8 +12,6 @@ type Request = {
 type Response = {
   isPublic: boolean
 }
-
-const CHALLENGING_CACHE_KEY = 'challenging-actions'
 
 export const UpdateChallengeVisibilityAction = (
   service: ChallengingService,
@@ -30,7 +29,7 @@ export const UpdateChallengeVisibilityAction = (
       const response = await service.updateChallenge(challenge)
       if (response.isFailure) response.throwError()
 
-      call.resetCache(CHALLENGING_CACHE_KEY)
+      call.resetCache(CACHE_KEYS.challenging.challenge)
 
       return { isPublic }
     },

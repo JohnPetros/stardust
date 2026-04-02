@@ -2,6 +2,7 @@ import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import { ChallengeVote } from '@stardust/core/challenging/structures'
 import type { Action, Call } from '@stardust/core/global/interfaces'
 import { Id } from '@stardust/core/global/structures'
+import { CACHE_KEYS } from '@/constants/server-cache-keys'
 
 type Request = {
   challengeId: string
@@ -11,8 +12,6 @@ type Request = {
 type Response = {
   userChallengeVote: string
 }
-
-const CHALLENGING_CACHE_KEY = 'challenging-actions'
 
 export const VoteChallengeAction = (
   service: ChallengingService,
@@ -27,7 +26,7 @@ export const VoteChallengeAction = (
 
       if (response.isFailure) response.throwError()
 
-      call.resetCache(CHALLENGING_CACHE_KEY)
+      call.resetCache(CACHE_KEYS.challenging.challenge)
 
       return response.body
     },
