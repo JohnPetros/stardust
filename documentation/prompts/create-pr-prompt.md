@@ -78,9 +78,11 @@ Explique por que este PR foi criado e qual seu propósito central.
 
 Vincule tarefas/buffs:
 
+**Padrão obrigatório:** usar sempre `resolve #<numero-da-issue>`.
+
 ```
-fixes #123
-closes #456
+resolve #123
+resolve #456
 ```
 
 ---
@@ -99,6 +101,16 @@ Lista técnica das mudanças:
 - comportamento modificado
 - regras adicionadas
 - refatorações feitas
+
+---
+
+## 📦 Novas dependências (opcional)
+
+Liste dependências adicionadas ou atualizadas neste PR e o motivo:
+
+- `nome-da-dependencia` — {motivo da adição/atualização}
+
+Se não houver mudanças, declarar explicitamente: `Nenhuma nova dependência.`
 
 ---
 
