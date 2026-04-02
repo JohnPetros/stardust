@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { Integer } from '@stardust/core/global/structures'
 import { ChallengeVote } from '@stardust/core/challenging/structures'
-import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import type { ActionResponse } from '@stardust/core/global/responses'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
@@ -14,7 +14,12 @@ type State = {
   downvotesCount: number
 }
 
-export function useChallengeVoteControl(challengingService: ChallengingService) {
+type OnVoteChallenge = (
+  challengeId: string,
+  challengeVote: ChallengeVote['value'],
+) => Promise<ActionResponse<{ userChallengeVote: string }>>
+
+export function useChallengeVoteControl(onVoteChallenge: OnVoteChallenge) {
   const { user } = useAuthContext()
   const { getChallengeSlice } = useChallengeStore()
   const toast = useToastContext()
@@ -38,7 +43,7 @@ export function useChallengeVoteControl(challengingService: ChallengingService) 
   async function executeVoteChallengeAction(userVote: ChallengeVote) {
     if (!challenge) return
 
-    const response = await challengingService.voteChallenge(challenge.id, userVote)
+    const response = await onVoteChallenge(challenge.id.value, userVote.value)
 
     if (response.isFailure) {
       toast.showError(response.errorMessage)
@@ -49,7 +54,7 @@ export function useChallengeVoteControl(challengingService: ChallengingService) 
       updateState({
         upvotesCount: challenge.upvotesCount.value,
         downvotesCount: challenge.downvotesCount.value,
-        userChallengeVote: ChallengeVote.create(response.body.userChallengeVote),
+        userChallengeVote: ChallengeVote.create(response.data.userChallengeVote),
       })
     }
   }

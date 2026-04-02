@@ -5,9 +5,16 @@ import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import type { ActionResponse } from '@stardust/core/global/responses'
+
+type OnUpdateChallengeVisibility = (
+  challengeId: string,
+  isPublic: boolean,
+) => Promise<ActionResponse<{ isPublic: boolean }>>
 
 export function useChallengeControl(
   challengingService: ChallengingService,
+  onUpdateChallengeVisibility: OnUpdateChallengeVisibility,
   isChallengePublic: boolean,
   isManagingAsAdmin: boolean,
 ) {
@@ -23,7 +30,7 @@ export function useChallengeControl(
     challenge.isPublic = isPublic
     setIsPublic(isPublic)
 
-    const response = await challengingService.updateChallenge(challenge)
+    const response = await onUpdateChallengeVisibility(challenge.id.value, isPublic)
 
     if (response.isFailure) {
       challenge.isPublic = !isPublic
