@@ -17,6 +17,14 @@ documentos atualizados e um resumo estruturado para PR.
   (`documentation/features/<modulo>/specs/<nome>-spec.md`), injetado
   como caminho para o arquivo no contexto.
 
+> A spec pode ter sido gerada a partir de um **PRD de feature** ou de um
+> **Bug Report** (`documentation/features/<dominio>/bug-reports/<nome>-bug-report.md`).
+> Identifique a origem lendo o frontmatter da spec — o campo `prd` aponta para
+> uma milestone do GitHub (feature) e o campo `issue` aponta para a issue
+> correspondente. Se o campo `issue` referenciar um bug report local, trate
+> como **Spec de Bug Report** e aplique o comportamento diferenciado descrito
+> nas fases abaixo.
+
 ---
 
 ## Fase 1 — Verificação
@@ -57,6 +65,10 @@ Considere como caminhos críticos que exigem cobertura:
 - Ports/interfaces do `core` implementados em adapters como `database`,
   `provision`, `rest`, `rpc`, `queue` ou `realtime`
 
+> **Spec de Bug Report:** dê prioridade de cobertura ao caminho que reproduz o
+> bug corrigido — o teste deve provar que o comportamento incorreto deixou de
+> ocorrer e que o comportamento esperado foi restaurado.
+
 Ao final desta etapa, produza um relatório de cobertura no seguinte formato:
 ```markdown
 ## Cobertura de Testes
@@ -78,6 +90,10 @@ O subagent deve receber como contexto:
   com os caminhos reais dos arquivos fonte (`apps/...` ou `packages/...`).
 - O caminho da Spec técnica, para referência de contratos e comportamentos
   esperados.
+- **Spec de Bug Report:** forneça também o caminho do bug report de origem
+  (`documentation/features/<dominio>/bug-reports/<nome>-bug-report.md`) para
+  que o subagent use o "Problema Identificado" e o "Plano de Correção" como
+  referência dos comportamentos que precisam ser cobertos.
 
 > O subagent é responsável por criar os arquivos de teste, seguir as regras de
 > nomenclatura e estrutura do projeto, e garantir que `npm run test` passe ao
@@ -100,8 +116,13 @@ prosseguir.
 
 Com base no diff real injetado no contexto, compare cada componente descrito na
 Spec (seções "O que deve ser criado" e "O que deve ser modificado") contra o
-código implementado. Ao final desta etapa, produza um **checklist de validação**
-no seguinte formato:
+código implementado.
+
+> **Spec de Bug Report:** compare também contra as seções "O que deve ser
+> modificado" e "O que deve ser removido" do bug report de origem, garantindo
+> que todas as correções planejadas foram de fato aplicadas.
+
+Ao final desta etapa, produza um **checklist de validação** no seguinte formato:
 ```markdown
 ## Checklist de Validação
 
@@ -162,24 +183,32 @@ Atualize apenas os metadados da Spec para refletir a conclusão da implementaç�
 Não altere o conteúdo técnico da spec nesta fase — desvios de implementação
 devem ter sido capturados pelo `update-spec-prompt` durante o desenvolvimento.
 
-**2.2 Atualização do PRD**
+**2.2 Atualização do documento de origem**
 
-Atualize o PRD associado à Spec. Ele está localizado no nível acima do diretório
-da spec — ex.: se a spec está em
-`documentation/features/<modulo>/specs/<nome>-spec.md`, o PRD está em
-`documentation/features/<modulo>/prd.md`.
+O documento a ser atualizado depende da origem da spec:
 
-Marque como concluídos os itens endereçados pela implementação. A audiência aqui
-é de produto — traduza o impacto técnico para linguagem de negócio.
+- **Spec de Feature (PRD):** atualize o PRD associado à Spec. Ele está
+  localizado no nível acima do diretório da spec — ex.: se a spec está em
+  `documentation/features/<modulo>/specs/<nome>-spec.md`, o PRD está em
+  `documentation/features/<modulo>/prd.md`. Marque como concluídos os itens
+  endereçados pela implementação. A audiência aqui é de produto — traduza o
+  impacto técnico para linguagem de negócio.
+
+- **Spec de Bug Report:** atualize o bug report de origem
+  (`documentation/features/<dominio>/bug-reports/<nome>-bug-report.md`),
+  alterando o campo `status` do frontmatter de `open` para `closed` e
+  atualizando `last_updated_at` com a data atual. Não altere o corpo do
+  documento — ele deve permanecer como registro histórico do diagnóstico.
 
 > 💡 Não copie conteúdo técnico de baixo nível para o PRD — sintetize o valor
 > entregue.
 
-**Divergência spec → PRD:** Caso a implementação concluída introduza algum
-aspecto que contradiga ou não esteja coberto pelo PRD (ex: regra de negócio
-refinada, escopo ampliado ou reduzido, comportamento diferente do especificado),
-atualize o PRD para refletir a realidade entregue. Registre a divergência no
-campo **"O que mudou em relação à Spec original"** do resumo de conclusão da spec (seção 3.1).
+**Divergência spec → documento de origem:** Caso a implementação concluída
+introduza algum aspecto que contradiga ou não esteja coberto pelo documento de
+origem (PRD ou bug report), registre a divergência no campo
+**"O que mudou em relação à Spec original"** do resumo de conclusão (seção 3.1).
+Para PRDs, atualize também o conteúdo para refletir a realidade entregue.
+Para bug reports, não altere o corpo — apenas registre no resumo.
 
 **2.3 Atualização da Arquitetura (se aplicável)**
 
@@ -205,7 +234,9 @@ Gere um resumo de conclusão com a seguinte estrutura obrigatória:
 ```markdown
 ## O que foi feito
 
-<Descrição objetiva das mudanças implementadas, em linguagem técnica>
+<Descrição objetiva das mudanças implementadas, em linguagem técnica.
+Para Specs de Bug Report, inclua explicitamente qual era o comportamento
+incorreto e como a correção o restaurou.>
 
 ## Por que foi feito assim
 
@@ -214,7 +245,8 @@ Gere um resumo de conclusão com a seguinte estrutura obrigatória:
 ## O que mudou em relação à Spec original
 
 <Desvios ou refinamentos ocorridos durante a implementação, incluindo
-divergências que implicaram atualização do PRD. Se nenhum, declarar
+divergências que implicaram atualização do PRD (feature) ou que foram
+registradas como nota no bug report (correção). Se nenhum, declarar
 explicitamente "Nenhum desvio em relação à Spec original.">
 
 ## Pontos de atenção para o revisor
@@ -233,7 +265,7 @@ identificado.">
 - [ ] Cobertura de testes verificada e lacunas críticas endereçadas
 - [ ] Limites arquiteturais validados
 - [ ] Spec atualizada com status `closed` e data
-- [ ] PRD atualizado com os itens concluídos (e divergências registradas, se houver)
+- [ ] PRD atualizado com os itens concluídos (feature) OU bug report fechado com status `closed` (correção)
 - [ ] `architecture.md` atualizado (se aplicável)
 - [ ] Rules atualizadas (se novos padrões foram introduzidos)
 ```
@@ -248,5 +280,5 @@ Ao final da execução, devem ter sido produzidos:
 2. **Testes criados pelo subagent** para componentes sem cobertura (Fase 1.1.2, quando aplicável)
 3. **Checklist de validação** de requisitos (Fase 1.4)
 4. **Spec atualizada** com status `closed` e data (Fase 2.1)
-5. **PRD atualizado** com itens marcados como concluídos e divergências registradas, se houver (Fase 2.2)
+5. **PRD atualizado** com itens marcados como concluídos (feature) **OU bug report fechado** com `status: closed` (correção) (Fase 2.2)
 6. **Resumo de conclusão da spec** com estrutura completa (Fase 3.1)

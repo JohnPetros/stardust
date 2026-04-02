@@ -66,10 +66,10 @@ Salve o arquivo em `documentation/features/{dominio}/bug-reports/{nome-descritiv
 title: {Titulo Curto e Descritivo}
 apps: {web|server|studio}
 status: {open|closed}
+prd: {url-para-recuperar-o-prd}
+issue: {url-para-recuperar-a-issue}
 last_updated_at: {YYYY-MM-DD}
 ---
-
-# Bug Report: {Titulo Curto e Descritivo}
 
 ## Problema Identificado
 
@@ -81,38 +81,38 @@ last_updated_at: {YYYY-MM-DD}
 
 ## Contexto e Análise
 
-### {Nome da Camada} (ex: Camada UI, Camada Core, Camada REST, Camada Banco de Dados)
+### {Nome da Camada} (ex: Camada UI, Camada Core, Camada REST, Camada Banco de Dados, Camada AI, Camada RPC, Camada Providers, Camada LSP etc.)
 
 <!-- Repita o bloco abaixo para cada camada afetada -->
 - **Arquivo:** `{caminho/relativo/do/arquivo}`
 - **Diagnóstico:** {Explique o que está errado neste ponto, incluindo falhas de responsabilidade, fluxo, estado ou contrato.}
 
-## Plano de Correção
+## Plano de Correção (Spec)
 
 ### 1. O que já existe?
 
-Liste recursos existentes da codebase que estão envolvidos no bug, serão reutilizados na correção ou podem ser impactados indiretamente.
+> Liste recursos existentes da codebase que estão envolvidos no bug, serão reutilizados na correção ou podem ser impactados indiretamente.
 
 - **{Camada}**
   - `{Nome do Recurso}` — {Responsabilidade atual e relação com o bug}
 
 ### 2. O que deve ser criado?
 
-Descreva novos recursos necessários **apenas se estritamente necessários**.
+> Descreva novos recursos necessários **apenas se estritamente necessários**.
 
 - **{Camada}**
   - `{Nome do Recurso}` — {Nova responsabilidade introduzida}
 
 ### 3. O que deve ser modificado?
 
-Liste mudanças pontuais em código existente, explicando o motivo da alteração.
+> Liste mudanças pontuais em código existente, explicando o motivo da alteração.
 
 - **{Camada}**
   - `{Nome do Recurso}` — {Descrição clara da modificação}
 
 ### 4. O que deve ser removido?
 
-Liste código redundante, legado ou incorreto que deve ser eliminado como parte da correção.
+> Liste código redundante, legado ou incorreto que deve ser eliminado como parte da correção.
 
 - **{Camada}**
   - `{Nome do Recurso}` — {Motivo da remoção}
