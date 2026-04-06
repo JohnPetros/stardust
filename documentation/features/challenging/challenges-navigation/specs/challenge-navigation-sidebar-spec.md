@@ -3,8 +3,8 @@ title: Sidebar de Navegacao de Desafios
 prd: https://github.com/JohnPetros/stardust/milestone/16
 issue: https://github.com/JohnPetros/stardust/issues/374
 apps: server, web
-status: open
-last_updated_at: 2026-03-25
+status: closed
+last_updated_at: 2026-04-06
 ---
 
 # 1. Objetivo
@@ -55,6 +55,7 @@ Implementar a sidebar lateral de navegacao de desafios na pagina de execucao de 
 - O filtro de status deve ficar visivel apenas para usuarios autenticados.
 - O filtro de dificuldade deve aceitar uma unica selecao por vez, refletindo o contrato atual reutilizado de `fetchChallengesList(...)`.
 - O filtro por categorias deve aceitar multiplas selecoes sobre `ChallengeCategory`.
+- A listagem deve usar skeleton loading no estado de carregamento, sem spinner central.
 - Ao aplicar ou limpar filtros, a paginacao deve voltar para a primeira pagina.
 - Quando nao houver resultados, a sidebar deve exibir uma mensagem amigavel de lista vazia.
 - Ao clicar em um desafio da lista, o sistema deve navegar imediatamente para esse desafio.
@@ -94,7 +95,7 @@ Implementar a sidebar lateral de navegacao de desafios na pagina de execucao de 
 * **`ChallengesFilters`** (`apps/web/src/ui/challenging/widgets/pages/Challenges/ChallengesFilters/index.tsx`) - referencia de busca e filtros por status, dificuldade e categorias.
 * **`ChallengesList`** (`apps/web/src/ui/challenging/widgets/pages/Challenges/ChallengesList/useChallengesList.ts`) - referencia de integracao client-side com listagem paginada de desafios.
 * **`ChallengeCard`** (`apps/web/src/ui/challenging/widgets/pages/Challenges/ChallengesList/ChallengeCard/index.tsx`) - referencia de como o estado de completude por item e calculado a partir de `user.hasCompletedChallenge(...)`.
-* **`Dialog`** (`apps/web/src/ui/global/widgets/components/Dialog/index.tsx`) - base Radix ja existente para overlay, fechamento por `Esc` e portal.
+* **`Drawer`** (`vaul`) - base de overlay ja utilizada no widget para abertura lateral, fechamento por `Esc` e clique no overlay.
 * **`Search`** (`apps/web/src/ui/global/widgets/components/Search/index.tsx`) - componente reutilizavel para busca textual.
 
 ## Camada REST
@@ -145,19 +146,27 @@ Implementar a sidebar lateral de navegacao de desafios na pagina de execucao de 
   - `categoriesIds: IdsList`
   - `completionStatus: 'all' | ChallengeCompletionStatusValue`
 
-## Pacote Core (Types)
+## Pacote Core (Structures + DTOs)
 
-* **Localização:** `packages/core/src/challenging/domain/types/ChallengesNavigationSidebarProgressDto.ts` (**novo arquivo**)
+* **Localização:** `packages/core/src/challenging/domain/structures/dtos/ChallengesCompletionDto.ts` (**novo arquivo**)
 * **props:**
   - `completedChallengesCount: number | null`
   - `totalChallengesCount: number`
 
+* **Localização:** `packages/core/src/challenging/domain/structures/ChallengesCompletion.ts` (**novo arquivo**)
+* **props:**
+  - `completedChallengesCount: number | null`
+  - `totalChallengesCount: number`
+* **Métodos:**
+  - `static create(props: { completedChallengesCount: number | null; totalChallengesCount: number }): ChallengesCompletion`
+  - `get dto(): ChallengesCompletionDto`
+
 ## Pacote Core (Use Cases)
 
-* **Localização:** `packages/core/src/challenging/use-cases/GetChallengesNavigationSidebarProgressUseCase.ts` (**novo arquivo**)
+* **Localização:** `packages/core/src/challenging/use-cases/FetchChallengesCompletionProgressUseCase.ts` (**novo arquivo**)
 * **Dependências:** `ChallengesRepository`
 * **Métodos:**
-  - `execute({ userCompletedChallengesIds }: { userCompletedChallengesIds: string[] }): Promise<ChallengesNavigationSidebarProgressDto>` - calcula os totais `completedChallengesCount` e `totalChallengesCount` considerando apenas desafios sem `star_id` visiveis na sidebar.
+  - `execute({ userCompletedChallengesIds }: { userCompletedChallengesIds: string[] }): Promise<ChallengesCompletionDto>` - calcula os totais `completedChallengesCount` e `totalChallengesCount` considerando apenas desafios sem `star_id` visiveis na sidebar.
 
 ## Pacote Validation (Schemas)
 
@@ -184,7 +193,7 @@ Implementar a sidebar lateral de navegacao de desafios na pagina de execucao de 
   - `completedChallengesCount`
   - `totalChallengesCount`
 * **Métodos:**
-  - `handle(http: Http<Schema>)` - consome `userCompletedChallengesIds`, chama `GetChallengesNavigationSidebarProgressUseCase` e responde com `http.send(...)`.
+  - `handle(http: Http<Schema>)` - consome `userCompletedChallengesIds`, chama `FetchChallengesCompletionProgressUseCase` e responde com `http.send(...)`.
 
 ## Camada UI (Widgets)
 
@@ -195,13 +204,13 @@ Implementar a sidebar lateral de navegacao de desafios na pagina de execucao de 
   - `currentChallengeSlug: string`
   - `onChallengeSelect: (challengeSlug: string) => void`
 * **Estados (Client Component):**
-  - `Loading`: exibe indicador de carregamento para a lista e desabilita controles de paginacao/filtro dependentes do payload.
+  - `Loading`: exibe skeleton loaders na listagem e desabilita controles de paginacao/filtro dependentes do payload.
   - `Error`: exibe mensagem de falha e CTA para nova tentativa.
   - `Empty`: exibe mensagem amigavel quando nenhum desafio satisfaz busca/filtros.
   - `Content`: renderiza cabecalho com progresso, campo de busca, botao de filtro com badge, lista paginada e destaque do desafio ativo.
 * **View:** `apps/web/src/ui/challenging/widgets/components/ChallengesNavigationSidebar/ChallengesNavigationSidebarView.tsx` (**novo arquivo**)
 * **Hook (se aplicável):** `apps/web/src/ui/challenging/widgets/components/ChallengesNavigationSidebar/useChallengesNavigationSidebar.ts` (**novo arquivo**)
-* **Index:** resolve `challengingService` via `useRestContext`, `user` e `isAccountAuthenticated` via `useAuthContext`, chama a listagem via `fetchChallengesList(...)` e os totais via `fetchChallengesNavigationSidebarProgress(...)`, e injeta essas dependencias no hook.
+* **Index:** resolve `challengingService` via `useRestContext`, `user` e `isAccountAuthenticated` via `useAuthContext`, chama a listagem via `fetchChallengesList(...)` e os totais via `fetchChallengesCompletionProgress(...)`, e injeta essas dependencias no hook.
 * **Widgets internos:**
   - `apps/web/src/ui/challenging/widgets/components/ChallengesNavigationSidebar/SidebarFiltersPopover/index.tsx` (**novo arquivo**)
   - `apps/web/src/ui/challenging/widgets/components/ChallengesNavigationSidebar/SidebarFiltersPopover/SidebarFiltersPopoverView.tsx` (**novo arquivo**)
@@ -235,7 +244,7 @@ apps/web/src/ui/challenging/widgets/components/ChallengesNavigationSidebar/
   - `itemsPerPage`: valor fixo `20`.
   - `title`: termo de busca atual; string vazia quando nao houver busca.
   - `categoriesIds`: categorias selecionadas no filtro; array vazio quando nao houver selecao.
-  - `difficulty`: enviar `all` quando nenhuma dificuldade estiver selecionada; quando houver multisselecao, enviar uma chamada por combinacao consolidada no backend nao e suportado pelo contrato atual, entao a spec passa a restringir a sidebar a selecao de uma unica dificuldade por vez no request de listagem.
+  - `difficulty`: enviar `any` quando nenhuma dificuldade estiver selecionada; quando houver multisselecao, enviar uma chamada por combinacao consolidada no backend nao e suportado pelo contrato atual, entao a spec passa a restringir a sidebar a selecao de uma unica dificuldade por vez no request de listagem.
   - `completionStatus`: `all | completed | not-completed`.
   - `upvotesCountOrder`: `any`.
   - `downvoteCountOrder`: `any`.
@@ -270,7 +279,7 @@ apps/web/src/ui/challenging/widgets/components/ChallengesNavigationSidebar/
 ## Camada REST (Services)
 
 * **Arquivo:** `apps/web/src/rest/services/ChallengingService.ts`
-* **Mudança:** Reaproveitar `fetchChallengesList(...)` para a listagem da sidebar e adicionar `fetchChallengesNavigationSidebarProgress(): Promise<RestResponse<ChallengesNavigationSidebarProgressDto>>` consumindo `GET /challenging/challenges/sidebar/progress`.
+* **Mudança:** Reaproveitar `fetchChallengesList(...)` para a listagem da sidebar e adicionar `fetchChallengesCompletionProgress(): Promise<RestResponse<ChallengesCompletionDto>>` consumindo `GET /challenging/challenges/sidebar/progress`.
 * **Justificativa:** A listagem ja existe e deve ser reutilizada; apenas os totais de progresso exigem um contrato complementar para a sidebar.
 * **Camada:** `rest`
 
@@ -303,17 +312,22 @@ apps/web/src/ui/challenging/widgets/components/ChallengesNavigationSidebar/
 * **Camada:** `core`
 
 * **Arquivo:** `packages/core/src/challenging/interfaces/ChallengingService.ts`
-* **Mudança:** Reaproveitar `fetchChallengesList(params: ChallengesListParams)` para a lista da sidebar e adicionar `fetchChallengesNavigationSidebarProgress(): Promise<RestResponse<ChallengesNavigationSidebarProgressDto>>`.
+* **Mudança:** Reaproveitar `fetchChallengesList(params: ChallengesListParams)` para a lista da sidebar e adicionar `fetchChallengesCompletionProgress(): Promise<RestResponse<ChallengesCompletionDto>>`.
 * **Justificativa:** Mantem a listagem acoplada ao contrato ja existente e introduz apenas o contrato complementar necessario para os totais.
 * **Camada:** `core`
 
 * **Arquivo:** `packages/core/src/challenging/domain/types/index.ts`
-* **Mudança:** Exportar `ChallengesNavigationSidebarParams` e `ChallengesNavigationSidebarProgressDto`.
-* **Justificativa:** Tornar os contratos compartilhados disponiveis para `web`, `server` e pacotes consumidores.
+* **Mudança:** Exportar `ChallengesNavigationSidebarParams`.
+* **Justificativa:** Manter o tipo de parametros da sidebar compartilhado entre `web` e `server`.
+* **Camada:** `core`
+
+* **Arquivo:** `packages/core/src/challenging/domain/structures/index.ts`
+* **Mudança:** Exportar `ChallengesCompletion` e `ChallengesCompletionDto`.
+* **Justificativa:** Tornar o contrato de progresso da sidebar consumivel por use case, service e controller.
 * **Camada:** `core`
 
 * **Arquivo:** `packages/core/src/challenging/use-cases/index.ts`
-* **Mudança:** Exportar `GetChallengesNavigationSidebarProgressUseCase`.
+* **Mudança:** Exportar `FetchChallengesCompletionProgressUseCase`.
 * **Justificativa:** Manter o barrel file consistente com o padrao atual do modulo.
 * **Camada:** `core`
 
@@ -373,10 +387,10 @@ Não aplicável.
 * **Motivo da escolha:** Foi definido que apenas desafios sem `star_id` devem ficar visiveis na sidebar.
 * **Impactos / trade-offs:** A feature fica consistente com a navegacao adjacente atual, mas nao cobre desafios da trilha espacial.
 
-* **Decisão:** Usar `Categorias` como nomenclatura funcional e tecnica da sidebar.
-* **Alternativas consideradas:** Criar um novo conceito de `Tag` ou usar `tags` apenas na copy.
-* **Motivo da escolha:** O usuario definiu explicitamente o uso de `Categorias`, que ja e o modelo existente na codebase.
-* **Impactos / trade-offs:** Elimina ambiguidade de naming nesta entrega, mas qualquer evolucao futura para `tags` exigira novo contrato de dominio.
+* **Decisão:** Manter `ChallengeCategory` como modelo tecnico, usando `Tags` apenas como copy visual no popover.
+* **Alternativas consideradas:** Renomear o modelo de dominio para `Tag` ou usar apenas `Categorias` tambem na copy.
+* **Motivo da escolha:** A copy `Tags` aproxima a experiencia visual esperada, enquanto o contrato tecnico permanece estavel e reaproveita a modelagem existente.
+* **Impactos / trade-offs:** Evita breaking change no dominio/REST, mas exige alinhamento de documentacao para deixar claro que `Tags` na UI mapeia para `ChallengeCategory`.
 
 * **Decisão:** Aplicar `AND` entre grupos de filtro, manter selecao unica para dificuldade e `AND` dentro de `categoriesIds`.
 * **Alternativas consideradas:** Multisselecao de dificuldade com `OR`, `OR` entre todos os filtros ou `OR` tambem entre categorias selecionadas.
@@ -418,7 +432,7 @@ useChallengesNavigationSidebar
   |      v
   |   ListChallengesUseCase -> ChallengesRepository.findMany(...) -> challenges_view
   |
-  `-- ChallengingService.fetchChallengesNavigationSidebarProgress()
+  `-- ChallengingService.fetchChallengesCompletionProgress()
          |
          v
       GET /challenging/challenges/sidebar/progress
@@ -427,7 +441,7 @@ useChallengesNavigationSidebar
       FetchChallengesCompletionProgressController
          |
          v
-      GetChallengesNavigationSidebarProgressUseCase
+      FetchChallengesCompletionProgressUseCase
          |
          v
       ChallengesRepository -> SupabaseChallengesRepository -> challenges_view

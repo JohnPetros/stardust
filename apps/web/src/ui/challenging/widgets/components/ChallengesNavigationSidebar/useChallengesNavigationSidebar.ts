@@ -91,17 +91,19 @@ export function useChallengesNavigationSidebar({
           difficulty: ChallengeDifficulty.create(selectedDifficulty),
           completionStatus: ChallengeCompletionStatus.create(completionStatus),
           isNewStatus: ChallengeIsNewStatus.create('all'),
-          upvotesCountOrder: ListingOrder.create('any'),
-          downvoteCountOrder: ListingOrder.create('any'),
-          completionCountOrder: ListingOrder.create('any'),
+          upvotesCountOrder: ListingOrder.create('all'),
+          downvoteCountOrder: ListingOrder.create('all'),
+          completionCountOrder: ListingOrder.create('all'),
           postingOrder: ListingOrder.create('ascending'),
           shouldIncludeOnlyAuthorChallenges: Logical.createAsFalse(),
           shouldIncludePrivateChallenges: Logical.createAsFalse(),
           shouldIncludeStarChallenges: Logical.createAsFalse(),
           userId: null,
+          accountId: null,
+          completedChallengesIds: IdsList.create([]),
         }),
         challengingService.fetchAllChallengeCategories(),
-        challengingService.fetchChallengesNavigationSidebarProgress(),
+        challengingService.fetchChallengesCompletionProgress(),
       ])
 
       if (listResponse.isFailure) listResponse.throwError()

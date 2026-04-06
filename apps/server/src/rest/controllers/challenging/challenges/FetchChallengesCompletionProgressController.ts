@@ -1,4 +1,4 @@
-import { GetChallengesNavigationSidebarProgressUseCase } from '@stardust/core/challenging/use-cases'
+import { FetchChallengesCompletionProgressUseCase } from '@stardust/core/challenging/use-cases'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
 import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
 
@@ -15,7 +15,7 @@ export class FetchChallengesCompletionProgressController implements Controller<S
     const account = await http.getAccount()
     const { userCompletedChallengesIds = [] } = await http.getBody()
 
-    const useCase = new GetChallengesNavigationSidebarProgressUseCase(
+    const useCase = new FetchChallengesCompletionProgressUseCase(
       this.challengesRepository,
     )
 

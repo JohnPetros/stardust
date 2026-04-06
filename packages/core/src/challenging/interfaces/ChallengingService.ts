@@ -7,7 +7,6 @@ import type {
   ChallengesListParams,
   ChallengeSourcesListParams,
   CompletedChallengesCountByDifficultyLevel,
-  ChallengesNavigationSidebarProgressDto,
 } from '../domain/types'
 import type { Challenge } from '../domain/entities'
 import type { SolutionsListingParams } from '../domain/types'
@@ -16,7 +15,10 @@ import type { Id, IdsList, Slug, Text, Url } from '#global/domain/structures/ind
 import type { ChallengeVote } from '../domain/structures'
 import type { KpiDto } from '#global/domain/structures/dtos/KpiDto'
 import type { ChallengeSourceDto } from '../domain/entities/dtos'
-import type { ChallengeNavigationDto } from '../domain/structures/dtos'
+import type {
+  ChallengeNavigationDto,
+  ChallengesCompletionDto,
+} from '../domain/structures/dtos'
 
 export interface ChallengingService {
   fetchChallengeById(challengeId: Id): Promise<RestResponse<ChallengeDto>>
@@ -27,9 +29,7 @@ export interface ChallengingService {
   fetchCompletedChallengesByDifficultyLevel(): Promise<
     RestResponse<CompletedChallengesCountByDifficultyLevel>
   >
-  fetchChallengesNavigationSidebarProgress(): Promise<
-    RestResponse<ChallengesNavigationSidebarProgressDto>
-  >
+  fetchChallengesCompletionProgress(): Promise<RestResponse<ChallengesCompletionDto>>
   fetchChallengeByStarId(starId: Id): Promise<RestResponse<ChallengeDto>>
   fetchSolutionBySlug(solutionSlug: Slug): Promise<RestResponse<SolutionDto>>
   fetchChallengesList(
@@ -54,11 +54,13 @@ export interface ChallengingService {
   createChallengeSource(
     challengeId: Id | null,
     url: Url,
+    additionalInstructions?: Text | null,
   ): Promise<RestResponse<ChallengeSourceDto>>
   updateChallengeSource(
     challengeSourceId: Id,
     url: Url,
     challengeId?: Id | null,
+    additionalInstructions?: Text | null,
   ): Promise<RestResponse<ChallengeSourceDto>>
   deleteChallengeSource(challengeSourceId: Id): Promise<RestResponse>
   reorderChallengeSources(
