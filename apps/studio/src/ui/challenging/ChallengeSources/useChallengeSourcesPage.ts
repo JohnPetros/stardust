@@ -68,11 +68,19 @@ export function useChallengeSourcesPage({ challengingService, toastProvider }: P
     return sortableChallengeSources.map((challengeSource) => challengeSource.id).join('-')
   }, [sortableChallengeSources])
 
-  async function handleCreateChallengeSource(url: string, challengeId?: string) {
+  async function handleCreateChallengeSource(
+    url: string,
+    challengeId?: string,
+    additionalInstructions?: string | null,
+  ) {
     try {
+      const normalizedAdditionalInstructions = additionalInstructions?.trim()
       const response = await challengingService.createChallengeSource(
         challengeId ? Id.create(challengeId) : null,
         Url.create(url),
+        normalizedAdditionalInstructions
+          ? Text.create(normalizedAdditionalInstructions)
+          : null,
       )
 
       if (response.isFailure) {
@@ -91,12 +99,17 @@ export function useChallengeSourcesPage({ challengingService, toastProvider }: P
     challengeSourceId: string,
     url: string,
     challengeId: string | undefined,
+    additionalInstructions?: string | null,
   ) {
     try {
+      const normalizedAdditionalInstructions = additionalInstructions?.trim()
       const response = await challengingService.updateChallengeSource(
         Id.create(challengeSourceId),
         Url.create(url),
         challengeId ? Id.create(challengeId) : null,
+        normalizedAdditionalInstructions
+          ? Text.create(normalizedAdditionalInstructions)
+          : null,
       )
 
       if (response.isFailure) {

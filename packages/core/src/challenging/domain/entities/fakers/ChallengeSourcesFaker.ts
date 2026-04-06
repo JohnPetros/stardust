@@ -15,6 +15,7 @@ export class ChallengeSourcesFaker {
       id: faker.string.uuid(),
       url: faker.internet.url(),
       position: faker.number.int({ min: 1, max: 100 }),
+      additionalInstructions: faker.lorem.sentences(2),
       challenge: {
         id: challenge.id ?? faker.string.uuid(),
         title: challenge.title ?? faker.lorem.words(3),
@@ -27,6 +28,8 @@ export class ChallengeSourcesFaker {
         id: baseDto.id ?? dto.id,
         url: baseDto.url ?? dto.url,
         position: baseDto.position ?? dto.position,
+        additionalInstructions:
+          baseDto.additionalInstructions ?? dto.additionalInstructions,
         challenge: null,
       }
     }
@@ -41,6 +44,8 @@ export class ChallengeSourcesFaker {
       id: baseDto?.id ?? dto.id,
       url: baseDto?.url ?? dto.url,
       position: baseDto?.position ?? dto.position,
+      additionalInstructions:
+        baseDto?.additionalInstructions ?? dto.additionalInstructions,
       challenge: mergedChallenge,
     }
   }

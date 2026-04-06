@@ -135,6 +135,9 @@ export class SupabaseChallengeSourcesRepository
           position: challengeSource.position.value,
           challenge_id: challenge ? challenge.id.value : null,
           url: challengeSource.url.value,
+          additional_instructions: challengeSource.additionalInstructions
+            ? challengeSource.additionalInstructions.value
+            : null,
         })
         .eq('id', challengeSource.id.value)
 
@@ -153,6 +156,9 @@ export class SupabaseChallengeSourcesRepository
         position: challengeSource.position.value,
         challenge_id: challenge ? challenge.id.value : null,
         url: challengeSource.url.value,
+        additional_instructions: challengeSource.additionalInstructions
+          ? challengeSource.additionalInstructions.value
+          : null,
       })
       .eq('id', challengeSource.id.value)
 

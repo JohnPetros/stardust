@@ -3,8 +3,9 @@ import { Id } from '#global/domain/structures/Id'
 import { Name } from '#global/domain/structures/Name'
 import { Slug } from '#global/domain/structures/Slug'
 import { Url } from '#global/domain/structures/Url'
-import type { ChallengeSourceDto } from './dtos'
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
+import { Text } from '#global/domain/structures/Text'
+import type { ChallengeSourceDto } from './dtos'
 
 type ChallengeSourceChallenge = {
   id: Id
@@ -16,6 +17,7 @@ type ChallengeSourceProps = {
   url: Url
   position: OrdinalNumber
   challenge: ChallengeSourceChallenge | null
+  additionalInstructions: Text | null
 }
 
 export class ChallengeSource extends Entity<ChallengeSourceProps> {
@@ -24,6 +26,9 @@ export class ChallengeSource extends Entity<ChallengeSourceProps> {
       {
         url: Url.create(dto.url),
         position: OrdinalNumber.create(dto.position),
+        additionalInstructions: dto.additionalInstructions
+          ? Text.create(dto.additionalInstructions)
+          : null,
         challenge: dto.challenge
           ? {
               id: Id.create(dto.challenge.id),
@@ -64,11 +69,22 @@ export class ChallengeSource extends Entity<ChallengeSourceProps> {
     this.props.challenge = challenge
   }
 
+  get additionalInstructions(): Text | null {
+    return this.props.additionalInstructions
+  }
+
+  set additionalInstructions(additionalInstructions: Text | null) {
+    this.props.additionalInstructions = additionalInstructions
+  }
+
   get dto(): ChallengeSourceDto {
     return {
       id: this.id.value,
       url: this.url.value,
       position: this.position.value,
+      additionalInstructions: this.additionalInstructions
+        ? this.additionalInstructions.value
+        : null,
       challenge: this.challenge
         ? {
             id: this.challenge.id.value,

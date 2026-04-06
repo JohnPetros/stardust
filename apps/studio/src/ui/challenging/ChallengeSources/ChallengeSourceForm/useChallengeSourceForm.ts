@@ -29,12 +29,18 @@ type Params = {
     url: string
     challengeId?: string | null
     challengeTitle?: string | null
+    additionalInstructions?: string | null
   }
-  onCreate: (url: string, challengeId?: string) => Promise<string | null>
+  onCreate: (
+    url: string,
+    challengeId?: string,
+    additionalInstructions?: string | null,
+  ) => Promise<string | null>
   onUpdate: (
     challengeSourceId: string,
     url: string,
     challengeId: string | undefined,
+    additionalInstructions?: string | null,
   ) => Promise<string | null>
 }
 
@@ -58,6 +64,7 @@ export function useChallengeSourceForm({
     defaultValues: {
       challengeId: undefined,
       url: '',
+      additionalInstructions: '',
     },
   })
 
@@ -75,10 +82,10 @@ export function useChallengeSourceForm({
         itemsPerPage: OrdinalNumber.create(itemsPerPage),
         categoriesIds: IdsList.create([]),
         completionStatus: ChallengeCompletionStatus.create('all'),
-        difficulty: ChallengeDifficulty.create('any'),
-        upvotesCountOrder: ListingOrder.create('any'),
-        downvoteCountOrder: ListingOrder.create('any'),
-        completionCountOrder: ListingOrder.create('any'),
+        difficulty: ChallengeDifficulty.create('all'),
+        upvotesCountOrder: ListingOrder.create('all'),
+        downvoteCountOrder: ListingOrder.create('all'),
+        completionCountOrder: ListingOrder.create('all'),
         postingOrder: ListingOrder.create('descending'),
         shouldIncludePrivateChallenges: Logical.create(true),
         shouldIncludeOnlyAuthorChallenges: Logical.create(false),
@@ -86,6 +93,8 @@ export function useChallengeSourceForm({
         title: Text.create(debouncedSearch),
         isNewStatus: ChallengeIsNewStatus.create('all'),
         userId: null,
+        accountId: null,
+        completedChallengesIds: IdsList.create([]),
       }),
   })
 
@@ -106,14 +115,20 @@ export function useChallengeSourceForm({
 
   async function handleSubmit(values: FormData) {
     setSubmitError('')
+    const additionalInstructions = values.additionalInstructions?.trim()
 
     const error = isEditing
       ? await onUpdate(
           challengeSourceId as string,
           values.url,
           values.challengeId ?? undefined,
+          additionalInstructions || null,
         )
-      : await onCreate(values.url, values.challengeId ?? undefined)
+      : await onCreate(
+          values.url,
+          values.challengeId ?? undefined,
+          additionalInstructions || null,
+        )
 
     if (error) {
       setSubmitError(error)
@@ -123,6 +138,7 @@ export function useChallengeSourceForm({
     form.reset({
       challengeId: undefined,
       url: '',
+      additionalInstructions: '',
     })
     setIsOpen(false)
     setSearch('')
@@ -139,6 +155,7 @@ export function useChallengeSourceForm({
       form.reset({
         challengeId: undefined,
         url: '',
+        additionalInstructions: '',
       })
       return
     }
@@ -146,6 +163,7 @@ export function useChallengeSourceForm({
     form.reset({
       challengeId: initialValues?.challengeId ?? undefined,
       url: initialValues?.url ?? '',
+      additionalInstructions: initialValues?.additionalInstructions ?? '',
     })
   }
 
@@ -195,6 +213,7 @@ export function useChallengeSourceForm({
     form.reset({
       challengeId: initialValues?.challengeId ?? undefined,
       url: initialValues?.url ?? '',
+      additionalInstructions: initialValues?.additionalInstructions ?? '',
     })
   }, [form, initialValues, isOpen])
 

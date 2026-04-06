@@ -12,6 +12,7 @@ type Schema = {
   body: {
     url: string
     challengeId?: string | null
+    additionalInstructions?: string | null
   }
 }
 
@@ -23,12 +24,17 @@ export class UpdateChallengeSourceController implements Controller<Schema> {
 
   async handle(http: Http<Schema>) {
     const { challengeSourceId } = http.getRouteParams()
-    const { url, challengeId } = await http.getBody()
+    const { url, challengeId, additionalInstructions } = await http.getBody()
     const useCase = new UpdateChallengeSourceUseCase(
       this.challengeSourcesRepository,
       this.challengesRepository,
     )
-    const response = await useCase.execute({ challengeSourceId, url, challengeId })
+    const response = await useCase.execute({
+      challengeSourceId,
+      url,
+      challengeId,
+      additionalInstructions,
+    })
     return http.send(response)
   }
 }

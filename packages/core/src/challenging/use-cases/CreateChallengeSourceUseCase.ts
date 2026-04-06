@@ -11,6 +11,7 @@ import type { ChallengeSourcesRepository, ChallengesRepository } from '../interf
 type Request = {
   challengeId?: string | null
   url: string
+  additionalInstructions?: string | null
 }
 
 type Response = Promise<ChallengeSourceDto>
@@ -21,14 +22,18 @@ export class CreateChallengeSourceUseCase implements UseCase<Request, Response> 
     private readonly challengesRepository: ChallengesRepository,
   ) {}
 
-  async execute({ challengeId, url }: Request): Response {
+  async execute({ challengeId, url, additionalInstructions }: Request): Response {
     const challenge = await this.findChallengeIfProvided(challengeId)
 
     if (challenge) {
       await this.verifyIfChallengeSourceExists(challenge.id)
     }
 
-    const challengeSource = await this.createChallengeSource(challenge, url)
+    const challengeSource = await this.createChallengeSource(
+      challenge,
+      url,
+      additionalInstructions,
+    )
 
     await this.challengeSourcesRepository.add(challengeSource)
     return challengeSource.dto
@@ -59,6 +64,7 @@ export class CreateChallengeSourceUseCase implements UseCase<Request, Response> 
   private async createChallengeSource(
     challenge: Challenge | null,
     url: string,
+    additionalInstructions?: string | null,
   ): Promise<ChallengeSource> {
     const challengeSources = await this.challengeSourcesRepository.findAll()
     const lastPosition = challengeSources.reduce((position, challengeSource) => {
@@ -69,6 +75,7 @@ export class CreateChallengeSourceUseCase implements UseCase<Request, Response> 
       id: Id.create().value,
       url,
       position: lastPosition + 1,
+      additionalInstructions: additionalInstructions ?? null,
       challenge: challenge
         ? {
             id: challenge.id.value,
