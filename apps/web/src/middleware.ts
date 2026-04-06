@@ -11,6 +11,7 @@ import { PUBLIC_ROUTE_GROUPS, PUBLIC_ROUTES, ROUTES } from './constants'
 export const middleware = async (request: NextRequest) => {
   const http = await NextHttp({ request })
   const restClient = await NextServerRestClient({ isCacheEnabled: false })
+
   const authService = AuthService(restClient)
   const controllers = [
     VerifyAuthRoutesController(authService),
@@ -49,6 +50,8 @@ export const middleware = async (request: NextRequest) => {
 
     return NextResponse.redirect(new URL(ROUTES.auth.signIn, request.url))
   }
+
+  console.log('Middleware auth flow started 2')
 
   return NextResponse.next()
 }
