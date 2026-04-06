@@ -18,7 +18,7 @@ type Response = Promise<PaginationResponse<AvatarDto>>
 export class ListAvatarsUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: AvatarsRepository) {}
 
-  async execute({ search, priceOrder, page, itemsPerPage }: Request) {
+  async execute({ search, priceOrder, page, itemsPerPage }: Request): Response {
     const { items, count } = await this.repository.findMany({
       search: Text.create(search),
       page: OrdinalNumber.create(page),
@@ -26,10 +26,11 @@ export class ListAvatarsUseCase implements UseCase<Request, Response> {
       priceOrder: ListingOrder.create(priceOrder),
     })
 
-    return new PaginationResponse(
-      items.map((avatar) => avatar.dto),
-      count,
+    return new PaginationResponse({
+      items: items.map((avatar) => avatar.dto),
+      totalItemsCount: count,
       itemsPerPage,
-    )
+      page,
+    })
   }
 }

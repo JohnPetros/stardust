@@ -8,11 +8,11 @@ import { useFetch } from '@/ui/global/hooks/useFetch'
 
 export function useRecentUsersTable(profileService: ProfileService) {
   const [orders, setOrders] = useState({
-    level: ListingOrder.create('any'),
-    weeklyXp: ListingOrder.create('any'),
-    unlockedStarCount: ListingOrder.create('any'),
-    unlockedAchievementCount: ListingOrder.create('any'),
-    completedChallengeCount: ListingOrder.create('any'),
+    level: ListingOrder.create('all'),
+    weeklyXp: ListingOrder.create('all'),
+    unlockedStarCount: ListingOrder.create('all'),
+    unlockedAchievementCount: ListingOrder.create('all'),
+    completedChallengeCount: ListingOrder.create('all'),
   })
 
   const { data, isLoading } = useFetch({

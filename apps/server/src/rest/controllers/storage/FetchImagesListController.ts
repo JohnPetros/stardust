@@ -28,11 +28,12 @@ export class FetchImagesListController implements Controller {
       search: Text.create(search),
     })
     return http.statusOk().sendPagination(
-      new PaginationResponse(
-        items.map((file) => file.name),
-        count,
+      new PaginationResponse({
+        items: items.map((file) => file.name),
+        totalItemsCount: count,
         itemsPerPage,
-      ),
+        page,
+      }),
     )
   }
 }

@@ -28,16 +28,16 @@ export function useUsersPage({ service }: Params) {
   const debouncedSearch = useDebounce(search, 500)
   const [page, setPage] = useQueryNumberParam('page', 1)
   const [itemsPerPage, setItemsPerPage] = useQueryNumberParam('limit', 10)
-  const [levelOrder, setLevelOrder] = useQueryStringParam('levelOrder', 'any')
-  const [xpOrder, setXpOrder] = useQueryStringParam('xpOrder', 'any')
-  const [starsOrder, setStarsOrder] = useQueryStringParam('starsOrder', 'any')
+  const [levelOrder, setLevelOrder] = useQueryStringParam('levelOrder', 'all')
+  const [xpOrder, setXpOrder] = useQueryStringParam('xpOrder', 'all')
+  const [starsOrder, setStarsOrder] = useQueryStringParam('starsOrder', 'all')
   const [achievementsOrder, setAchievementsOrder] = useQueryStringParam(
     'achievementsOrder',
-    'any',
+    'all',
   )
   const [challengesOrder, setChallengesOrder] = useQueryStringParam(
     'challengesOrder',
-    'any',
+    'all',
   )
 
   const orders = useMemo(
@@ -121,7 +121,7 @@ export function useUsersPage({ service }: Params) {
   }
 
   function handleOrderChange(column: string, order: ListingOrder) {
-    const orderValue = order.value as 'ascending' | 'descending' | 'any'
+    const orderValue = order.value as 'ascending' | 'descending' | 'all'
 
     switch (column) {
       case 'level':

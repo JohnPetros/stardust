@@ -60,10 +60,11 @@ export class ListUsersUseCase implements UseCase<Request, Response> {
           : undefined,
     })
 
-    return new PaginationResponse(
-      items.map((user) => user.dto),
-      count,
+    return new PaginationResponse({
+      items: items.map((user) => user.dto),
+      totalItemsCount: count,
       itemsPerPage,
-    )
+      page,
+    })
   }
 }

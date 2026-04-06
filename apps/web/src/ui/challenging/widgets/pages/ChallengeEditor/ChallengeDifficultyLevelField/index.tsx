@@ -11,7 +11,6 @@ const CHALLENGE_DIFFICULTY_LEVEL_LABELS: Record<ChallengeDifficultyLevel, string
   easy: 'Fácil',
   medium: 'Médio',
   hard: 'Difícil',
-  any: 'Qualquer',
   all: 'Todos',
 }
 

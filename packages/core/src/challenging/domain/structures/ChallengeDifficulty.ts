@@ -17,10 +17,6 @@ export class ChallengeDifficulty {
       coins: 30,
       xp: 40,
     },
-    any: {
-      coins: 0,
-      xp: 0,
-    },
     all: {
       coins: 0,
       xp: 0,
@@ -47,7 +43,6 @@ export class ChallengeDifficulty {
       'easy',
       'medium',
       'hard',
-      'any',
       'all',
     ])
 
@@ -71,6 +66,6 @@ export class ChallengeDifficulty {
   }
 
   get isAny(): Logical {
-    return Logical.create(this.level === 'any')
+    return Logical.createAsFalse()
   }
 }

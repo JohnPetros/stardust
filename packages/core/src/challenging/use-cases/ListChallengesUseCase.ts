@@ -1,16 +1,15 @@
 import type { UseCase } from '#global/interfaces/UseCase'
+import type { ChallengesRepository } from '../interfaces'
 import { IdsList } from '#global/domain/structures/IdsList'
 import { ListingOrder } from '#global/domain/structures/ListingOrder'
 import { Id, Text, OrdinalNumber, Logical } from '#global/domain/structures/index'
-import type { ChallengeDto } from '../domain/entities/dtos'
-import type { Challenge } from '../domain/entities'
 import {
   ChallengeCompletionStatus,
   ChallengeDifficulty,
   ChallengeIsNewStatus,
 } from '../domain/structures'
-import { PaginationResponse } from '../../global/responses'
-import type { ChallengesRepository } from '../interfaces'
+import type { ChallengeDto } from '../domain/entities/dtos'
+import { PaginationResponse } from '#global/responses/PaginationResponse'
 
 type Request = {
   userCompletedChallengesIds: string[]
@@ -31,14 +30,55 @@ type Request = {
   shouldIncludeStarChallenges: boolean
   shouldIncludeOnlyAuthorChallenges: boolean
 }
+
 type Response = Promise<PaginationResponse<ChallengeDto>>
 
 export class ListChallengesUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: ChallengesRepository) {}
 
-  async execute(request: Request) {
-    const completedChallengesIds = IdsList.create(request.userCompletedChallengesIds)
+  private getDifficultyRank(difficultyLevel: string) {
+    switch (difficultyLevel) {
+      case 'easy':
+        return 0
+      case 'medium':
+        return 1
+      case 'hard':
+        return 2
+      default:
+        return 3
+    }
+  }
 
+  private filterVisibleChallenges(challenges: ChallengeDto[], request: Request) {
+    if (request.completionStatus === 'all' || !request.userId) return challenges
+
+    const completedChallengesIds = new Set(request.userCompletedChallengesIds)
+
+    return challenges.filter((challenge) => {
+      const isChallengeCompleted = challenge.id
+        ? completedChallengesIds.has(challenge.id)
+        : false
+      const isOwnChallenge = challenge.author.id === request.userId
+      const canAccessChallenge = challenge.isPublic || isOwnChallenge
+
+      if (request.completionStatus === 'completed') {
+        return isChallengeCompleted && canAccessChallenge
+      }
+
+      return !isChallengeCompleted && canAccessChallenge
+    })
+  }
+
+  private sortChallenges(challenges: ChallengeDto[]) {
+    return [...challenges].sort((leftChallenge, rightChallenge) => {
+      return (
+        this.getDifficultyRank(leftChallenge.difficultyLevel) -
+        this.getDifficultyRank(rightChallenge.difficultyLevel)
+      )
+    })
+  }
+
+  async execute(request: Request): Response {
     const { items, count } = await this.repository.findMany({
       categoriesIds: IdsList.create(request.categoriesIds),
       difficulty: ChallengeDifficulty.create(request.difficulty),
@@ -48,6 +88,8 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
       completionCountOrder: ListingOrder.create(request.completionCountOrder),
       postingOrder: ListingOrder.create(request.postingOrder),
       userId: request.userId ? Id.create(request.userId) : null,
+      accountId: request.accountId ? Id.create(request.accountId) : null,
+      completedChallengesIds: IdsList.create(request.userCompletedChallengesIds),
       page: OrdinalNumber.create(request.page),
       itemsPerPage: OrdinalNumber.create(request.itemsPerPage),
       completionStatus: ChallengeCompletionStatus.create(request.completionStatus),
@@ -60,77 +102,18 @@ export class ListChallengesUseCase implements UseCase<Request, Response> {
         request.shouldIncludePrivateChallenges,
       ),
     })
-    let challenges = items
-
-    challenges = this.filterChallenges(
-      ChallengeCompletionStatus.create(request.completionStatus),
-      challenges,
-      completedChallengesIds,
-      request.accountId ? Id.create(request.accountId) : null,
-      Logical.create(request.shouldIncludePrivateChallenges),
-    )
-    challenges = this.orderChallengesByDifficultyLevel(challenges)
-
-    return new PaginationResponse(
-      challenges.map((challenge) => challenge.dto),
-      count,
-    )
-  }
-
-  private orderChallengesByDifficultyLevel(challenges: Challenge[]): Challenge[] {
-    const easyChallenges = challenges.filter(
-      (challenge) => challenge.difficulty.isEasy.isTrue,
-    )
-    const mediumChallenges = challenges.filter(
-      (challenge) => challenge.difficulty.isMedium.isTrue,
-    )
-    const hardChallenges = challenges.filter(
-      (challenge) => challenge.difficulty.isHard.isTrue,
+    const challenges = this.sortChallenges(
+      this.filterVisibleChallenges(
+        items.map((challenge) => challenge.dto),
+        request,
+      ),
     )
 
-    return easyChallenges.concat(mediumChallenges, hardChallenges)
-  }
-
-  private filterChallenges(
-    challengeCompletionStatus: ChallengeCompletionStatus,
-    challenges: Challenge[],
-    completedChallengesIds: IdsList,
-    accountId: Id | null,
-    shouldIncludePrivateChallenges: Logical,
-  ): Challenge[] {
-    switch (challengeCompletionStatus.value) {
-      case 'completed':
-        return challenges.filter((challenge) => {
-          const isCompleted = completedChallengesIds.includes(challenge.id)
-          const isAccountAuthor = accountId
-            ? challenge.isChallengeAuthor(accountId)
-            : Logical.createAsFalse()
-          if (shouldIncludePrivateChallenges.or(isAccountAuthor).isTrue) {
-            return isCompleted.isTrue
-          }
-          return challenge.isPublic.and(isCompleted).isTrue
-        })
-      case 'not-completed':
-        return challenges.filter((challenge) => {
-          const isCompleted = completedChallengesIds.includes(challenge.id)
-          const isAccountAuthor = accountId
-            ? challenge.isChallengeAuthor(accountId)
-            : Logical.createAsFalse()
-          if (shouldIncludePrivateChallenges.or(isAccountAuthor).isTrue) {
-            return isCompleted.isFalse
-          }
-          return challenge.isPublic.andNot(isCompleted).isTrue
-        })
-      default:
-        return challenges.filter((challenge) => {
-          const isAccountAuthor = accountId
-            ? challenge.isChallengeAuthor(accountId)
-            : Logical.createAsFalse()
-          if (shouldIncludePrivateChallenges.or(isAccountAuthor).isTrue) {
-            return true
-          }
-          return challenge.isPublic.isTrue
-        })
-    }
+    return new PaginationResponse({
+      items: challenges,
+      totalItemsCount: count,
+      itemsPerPage: request.itemsPerPage,
+      page: request.page,
+    })
   }
 }

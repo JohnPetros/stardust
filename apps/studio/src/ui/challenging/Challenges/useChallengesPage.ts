@@ -26,7 +26,7 @@ type Params = {
 export function useChallengesPage({ service }: Params) {
   const [search, setSearch] = useQueryStringParam('q', '')
   const debouncedSearch = useDebounce(search, 500)
-  const [difficulty, setDifficulty] = useQueryStringParam('difficulty', 'any')
+  const [difficulty, setDifficulty] = useQueryStringParam('difficulty', 'all')
   const [visibility, setVisibility] = useQueryStringParam('visibility', 'all')
   const [selectedCategories, setSelectedCategories] = useQueryStringArrayParam(
     'categories',
@@ -34,15 +34,15 @@ export function useChallengesPage({ service }: Params) {
   )
   const [upvotesCountOrder, setUpvotesCountOrder] = useQueryStringParam(
     'upvotesCountOrder',
-    'any',
+    'all',
   )
   const [downvoteCountOrder, setDownvoteCountOrder] = useQueryStringParam(
     'downvoteCountOrder',
-    'any',
+    'all',
   )
   const [completionCountOrder, setCompletionCountOrder] = useQueryStringParam(
     'completionCountOrder',
-    'any',
+    'all',
   )
   const [postingOrder, setPostingOrder] = useQueryStringParam(
     'postingOrder',
@@ -94,6 +94,8 @@ export function useChallengesPage({ service }: Params) {
         isNewStatus: ChallengeIsNewStatus.create('all'),
         title: Text.create(debouncedSearch),
         userId: null,
+        accountId: null,
+        completedChallengesIds: IdsList.create([]),
       }),
   })
 
@@ -158,7 +160,7 @@ export function useChallengesPage({ service }: Params) {
   }
 
   function handleOrderChange(column: string, order: ListingOrder) {
-    const orderValue = order.value as 'ascending' | 'descending' | 'any'
+    const orderValue = order.value as 'ascending' | 'descending' | 'all'
 
     switch (column) {
       case 'upvotesCount':

@@ -10,6 +10,8 @@ import type { PaginationParams } from '../../../global/domain/types'
 
 export type ChallengesListParams = {
   userId: Id | null
+  accountId: Id | null
+  completedChallengesIds: IdsList
   difficulty: ChallengeDifficulty
   title: Text
   categoriesIds: IdsList

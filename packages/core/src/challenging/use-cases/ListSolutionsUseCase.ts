@@ -19,7 +19,7 @@ type Response = Promise<PaginationResponse<SolutionDto>>
 export class ListSolutionsUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: SolutionsRepository) {}
 
-  async execute(request: Request) {
+  async execute(request: Request): Response {
     const { items, count } = await this.repository.findMany({
       challengeId: request.challengeId ? Id.create(request.challengeId) : null,
       userId: request.userId ? Id.create(request.userId) : null,
@@ -29,9 +29,11 @@ export class ListSolutionsUseCase implements UseCase<Request, Response> {
       itemsPerPage: OrdinalNumber.create(request.itemsPerPage),
     })
 
-    return new PaginationResponse(
-      items.map((solution) => solution.dto),
-      count,
-    )
+    return new PaginationResponse({
+      items: items.map((solution) => solution.dto),
+      totalItemsCount: count,
+      itemsPerPage: request.itemsPerPage,
+      page: request.page,
+    })
   }
 }

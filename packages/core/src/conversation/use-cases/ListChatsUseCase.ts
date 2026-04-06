@@ -18,17 +18,18 @@ type Response = Promise<PaginationResponse<ChatDto>>
 export class ListChatsUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: ChatsRepository) {}
 
-  async execute({ userId, search, page, itemsPerPage }: Request) {
+  async execute({ userId, search, page, itemsPerPage }: Request): Response {
     const { items, count } = await this.repository.findManyByUser({
       userId: Id.create(userId),
       search: Text.create(search),
       page: OrdinalNumber.create(page),
       itemsPerPage: OrdinalNumber.create(itemsPerPage),
     })
-    return new PaginationResponse(
-      items.map((chat) => chat.dto),
-      count,
+    return new PaginationResponse({
+      items: items.map((chat) => chat.dto),
+      totalItemsCount: count,
       itemsPerPage,
-    )
+      page,
+    })
   }
 }

@@ -24,10 +24,10 @@ export function useRecentChallengesTable(challengingService: ChallengingService)
         itemsPerPage: OrdinalNumber.create(10),
         categoriesIds: IdsList.create([]),
         completionStatus: ChallengeCompletionStatus.create('all'),
-        difficulty: ChallengeDifficulty.create('any'),
-        upvotesCountOrder: ListingOrder.create('any'),
-        downvoteCountOrder: ListingOrder.create('any'),
-        completionCountOrder: ListingOrder.create('any'),
+        difficulty: ChallengeDifficulty.create('all'),
+        upvotesCountOrder: ListingOrder.create('all'),
+        downvoteCountOrder: ListingOrder.create('all'),
+        completionCountOrder: ListingOrder.create('all'),
         postingOrder: ListingOrder.create('desc'),
         shouldIncludePrivateChallenges: Logical.create(true),
         shouldIncludeOnlyAuthorChallenges: Logical.create(false),
@@ -35,6 +35,8 @@ export function useRecentChallengesTable(challengingService: ChallengingService)
         isNewStatus: ChallengeIsNewStatus.create('all'),
         title: Text.create(''),
         userId: null,
+        accountId: null,
+        completedChallengesIds: IdsList.create([]),
       }),
   })
 

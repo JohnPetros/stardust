@@ -61,7 +61,10 @@ describe('Fetch All Challenges Controller', () => {
       isNewStatus: 'all',
       userId,
     }
-    const pagination = new PaginationResponse([ChallengesFaker.fakeDto()], 1)
+    const pagination = new PaginationResponse({
+      items: [ChallengesFaker.fakeDto()],
+      totalItemsCount: 1,
+    })
     const restResponse = mock<RestResponse>()
 
     http.getQueryParams.mockReturnValue(queryParams)

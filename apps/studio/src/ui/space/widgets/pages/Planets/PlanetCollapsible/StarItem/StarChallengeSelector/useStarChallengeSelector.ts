@@ -50,10 +50,10 @@ export function useStarChallengeSelector({
         itemsPerPage: OrdinalNumber.create(itemsPerPage),
         categoriesIds: IdsList.create([]),
         completionStatus: ChallengeCompletionStatus.create('all'),
-        difficulty: ChallengeDifficulty.create('any'),
-        upvotesCountOrder: ListingOrder.create('any'),
-        downvoteCountOrder: ListingOrder.create('any'),
-        completionCountOrder: ListingOrder.create('any'),
+        difficulty: ChallengeDifficulty.create('all'),
+        upvotesCountOrder: ListingOrder.create('all'),
+        downvoteCountOrder: ListingOrder.create('all'),
+        completionCountOrder: ListingOrder.create('all'),
         postingOrder: ListingOrder.create('descending'),
         shouldIncludePrivateChallenges: Logical.create(true),
         shouldIncludeOnlyAuthorChallenges: Logical.create(false),
@@ -61,6 +61,8 @@ export function useStarChallengeSelector({
         title: Text.create(debouncedSearch),
         isNewStatus: ChallengeIsNewStatus.create('all'),
         userId: null,
+        accountId: null,
+        completedChallengesIds: IdsList.create([]),
       }),
   })
 

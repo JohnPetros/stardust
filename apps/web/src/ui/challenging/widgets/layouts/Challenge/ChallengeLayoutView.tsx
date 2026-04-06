@@ -1,4 +1,4 @@
-import type { ReactNode, RefObject } from 'react'
+import { useEffect, useState, type ReactNode, type RefObject } from 'react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { type ImperativePanelHandle, Panel, PanelGroup } from 'react-resizable-panels'
@@ -36,6 +36,12 @@ export const ChallengeLayoutView = ({
   isAssistantEnabled,
   handlePanelDragging,
 }: Props) => {
+  const [isDesktopPanelsReady, setIsDesktopPanelsReady] = useState(false)
+
+  useEffect(() => {
+    setIsDesktopPanelsReady(true)
+  }, [])
+
   return (
     <>
       <PageTransitionAnimation isVisible={isTransitionPageVisible} hasTips />
@@ -52,39 +58,41 @@ export const ChallengeLayoutView = ({
             }}
             className='hidden h-full w-screen grid-cols-[1fr,auto] md:grid'
           >
-            <PanelGroup direction='horizontal'>
-              <Panel
-                id='tabs'
-                ref={tabsPanelRef}
-                defaultSize={panelsOffset.tabsPanelSize}
-                minSize={1}
-                order={1}
-              >
-                <ChallengeTabs>{tabContent}</ChallengeTabs>
-              </Panel>
+            {isDesktopPanelsReady && (
+              <PanelGroup direction='horizontal'>
+                <Panel
+                  id='tabs'
+                  ref={tabsPanelRef}
+                  defaultSize={panelsOffset.tabsPanelSize}
+                  minSize={1}
+                  order={1}
+                >
+                  <ChallengeTabs>{tabContent}</ChallengeTabs>
+                </Panel>
 
-              <PanelHandle onDragging={handlePanelDragging} />
+                <PanelHandle onDragging={handlePanelDragging} />
 
-              <Panel
-                id='code-editor'
-                ref={codeEditorPanelRef}
-                defaultSize={panelsOffset.codeEditorPanelSize}
-                minSize={1}
-                order={2}
-              >
-                {codeEditor}
-              </Panel>
+                <Panel
+                  id='code-editor'
+                  ref={codeEditorPanelRef}
+                  defaultSize={panelsOffset.codeEditorPanelSize}
+                  minSize={1}
+                  order={2}
+                >
+                  {codeEditor}
+                </Panel>
 
-              {isAssistantEnabled && (
-                <>
-                  <PanelHandle onDragging={handlePanelDragging} />
+                {isAssistantEnabled && (
+                  <>
+                    <PanelHandle onDragging={handlePanelDragging} />
 
-                  <Panel id='assistant' minSize={30} order={3}>
-                    <AssistantChatbot />
-                  </Panel>
-                </>
-              )}
-            </PanelGroup>
+                    <Panel id='assistant' minSize={30} order={3}>
+                      <AssistantChatbot />
+                    </Panel>
+                  </>
+                )}
+              </PanelGroup>
+            )}
           </div>
         </main>
       </div>

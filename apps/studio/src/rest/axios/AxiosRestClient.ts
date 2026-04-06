@@ -37,7 +37,11 @@ export const AxiosRestClient = (): RestClient => {
           const totalItems = Number(headers[HTTP_HEADERS.xTotalItemsCount.toLowerCase()])
           const itemsPerPage = Number(headers[HTTP_HEADERS.xItemsPerPage.toLowerCase()])
           return new RestResponse<Body>({
-            body: new PaginationResponse(data, totalItems, itemsPerPage) as Body,
+            body: new PaginationResponse({
+              items: data,
+              totalItemsCount: totalItems,
+              itemsPerPage,
+            }) as Body,
             statusCode: response.status,
             headers,
           })

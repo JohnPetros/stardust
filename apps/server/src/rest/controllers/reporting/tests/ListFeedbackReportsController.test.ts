@@ -18,7 +18,10 @@ describe('List Feedback Reports Controller', () => {
 
   it('should call the use case with default parameters', async () => {
     const dtos = [FeedbackReportsFaker.fakeDto()]
-    const paginationResponse = new PaginationResponse(dtos, 1)
+    const paginationResponse = new PaginationResponse({
+      items: dtos,
+      totalItemsCount: 1,
+    })
     const restResponse = mock<RestResponse>()
 
     http.getQueryParams.mockReturnValue({})
@@ -49,7 +52,10 @@ describe('List Feedback Reports Controller', () => {
       endDate: '2023-01-31',
     }
     const dtos = [FeedbackReportsFaker.fakeDto()]
-    const paginationResponse = new PaginationResponse(dtos, 1)
+    const paginationResponse = new PaginationResponse({
+      items: dtos,
+      totalItemsCount: 1,
+    })
     const restResponse = mock<RestResponse>()
 
     http.getQueryParams.mockReturnValue(params)

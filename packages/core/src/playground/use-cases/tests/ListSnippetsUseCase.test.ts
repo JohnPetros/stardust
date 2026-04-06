@@ -56,11 +56,12 @@ describe('List Snippets Use Case', () => {
     })
 
     expect(response).toEqual(
-      new PaginationResponse(
-        snippets.map((snippet) => snippet.dto),
-        snippets.length,
+      new PaginationResponse({
+        items: snippets.map((snippet) => snippet.dto),
+        totalItemsCount: snippets.length,
         itemsPerPage,
-      ),
+        page,
+      }),
     )
   })
 })

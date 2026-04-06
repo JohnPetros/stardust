@@ -88,11 +88,12 @@ describe('List Users Use Case', () => {
 
     expect(response).toBeInstanceOf(PaginationResponse)
     expect(response).toEqual(
-      new PaginationResponse(
-        users.map((user) => user.dto),
-        users.length,
-        request.itemsPerPage.value,
-      ),
+      new PaginationResponse({
+        items: users.map((user) => user.dto),
+        totalItemsCount: users.length,
+        itemsPerPage: request.itemsPerPage.value,
+        page: request.page.value,
+      }),
     )
   })
 })

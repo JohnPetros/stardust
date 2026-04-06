@@ -35,10 +35,11 @@ export class ListFeedbackReportsUseCase implements UseCase<Request, Response> {
         : undefined,
     })
 
-    return new PaginationResponse(
-      items.map((report) => report.dto),
-      count,
-      request.itemsPerPage,
-    )
+    return new PaginationResponse({
+      items: items.map((report) => report.dto),
+      totalItemsCount: count,
+      itemsPerPage: request.itemsPerPage,
+      page: request.page,
+    })
   }
 }

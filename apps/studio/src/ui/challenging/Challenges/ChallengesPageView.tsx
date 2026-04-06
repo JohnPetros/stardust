@@ -56,7 +56,7 @@ export const ChallengesPageView = ({
             <SelectValue placeholder='Dificuldade' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='any'>Qualquer dificuldade</SelectItem>
+            <SelectItem value='all'>Todas as dificuldades</SelectItem>
             <SelectItem value='easy'>Fácil</SelectItem>
             <SelectItem value='medium'>Médio</SelectItem>
             <SelectItem value='hard'>Difícil</SelectItem>

@@ -65,7 +65,10 @@ describe('Fetch Challenges List Controller', () => {
       userId: IdFaker.fake().value,
     }
     const userCompletedChallengesIds = [IdFaker.fake().value]
-    const pagination = new PaginationResponse([ChallengesFaker.fakeDto()], 1)
+    const pagination = new PaginationResponse({
+      items: [ChallengesFaker.fakeDto()],
+      totalItemsCount: 1,
+    })
     const restResponse = mock<RestResponse>()
 
     http.getQueryParams.mockReturnValue(queryParams)
@@ -120,7 +123,10 @@ describe('Fetch Challenges List Controller', () => {
       shouldIncludeStarChallenges: false,
       userId: undefined,
     }
-    const pagination = new PaginationResponse([ChallengesFaker.fakeDto()], 1)
+    const pagination = new PaginationResponse({
+      items: [ChallengesFaker.fakeDto()],
+      totalItemsCount: 1,
+    })
     const restResponse = mock<RestResponse>()
 
     http.getQueryParams.mockReturnValue(queryParams)

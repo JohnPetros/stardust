@@ -38,7 +38,7 @@ export const ChallengesTableView = ({
   orders,
   onOrderChange,
 }: Props) => {
-  const defaultOrder = ListingOrder.create('any')
+  const defaultOrder = ListingOrder.create('all')
 
   function getDifficultyLabel(difficultyLevel: string) {
     const labels: Record<string, string> = {

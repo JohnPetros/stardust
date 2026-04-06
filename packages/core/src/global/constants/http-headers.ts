@@ -5,5 +5,6 @@ export const HTTP_HEADERS = {
   xTotalItemsCount: 'X-Total-Items-Count',
   xTotalPagesCount: 'X-Total-Pages-Count',
   xItemsPerPage: 'X-Items-Per-Page',
+  xPage: 'X-Page',
   location: 'Location',
 } as const

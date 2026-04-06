@@ -191,6 +191,7 @@ export class HonoHttp<HonoContext extends Context>
       response.totalPagesCount.toString(),
     )
     this.context.header(HTTP_HEADERS.xItemsPerPage, response.itemsPerPage.toString())
+    this.context.header(HTTP_HEADERS.xPage, response.page.toString())
     return this.send(response.items)
   }
 
