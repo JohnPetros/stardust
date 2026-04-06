@@ -33,7 +33,8 @@ export function useSignInForm({
     resolver: zodResolver(formSchema),
     mode: 'onSubmit',
   })
-  const [_, setAccessToken] = useSessionStorage(SESSION_STORAGE_KEYS.accessToken, '')
+  const [, setAccessToken] = useSessionStorage(SESSION_STORAGE_KEYS.accessToken, '')
+  const [, setRefreshToken] = useSessionStorage(SESSION_STORAGE_KEYS.refreshToken, '')
 
   async function handleSubmit(data: SignInFormData) {
     const response = await authService.signInGodAccount(
@@ -44,6 +45,7 @@ export function useSignInForm({
     if (response.isSuccessful) {
       toastProvider.showSuccess('Login realizado com sucesso')
       setAccessToken(response.body.accessToken)
+      setRefreshToken(response.body.refreshToken)
       navigationProvider.goTo(ROUTES.dashboard)
     }
 
