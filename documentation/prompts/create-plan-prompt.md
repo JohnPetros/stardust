@@ -1,4 +1,62 @@
 ---
+description: Criar um plano de implementacao estruturado em fases e tarefas a partir de uma spec tecnica ou bug report.
+---
+
+# Prompt: Criar Plano
+
+**Objetivo:** Transformar uma Spec técnica ou Bug Report em um **plano de implementação estruturado**, dividido em fases e tarefas atômicas, com dependências explícitas e resultados observáveis por tarefa. O plano deve ser diretamente acionável por um desenvolvedor ou agente de implementação.
+
+---
+
+## Entrada
+
+Exatamente um dos seguintes documentos deve ser fornecido:
+
+- **Spec técnica** (`documentation/features/{dominio}/specs/{nome}-spec.md`) — para features, refatorações ou correções com spec prévia.
+- **Bug Report** (`documentation/features/{dominio}/reports/{nome}-bug-report.md`) — para correções onde a spec foi derivada diretamente do bug report.
+
+> Se nenhum dos dois for fornecido, ou se o documento estiver incompleto, não inicie o plano. Registre a lacuna em **Pendências** e solicite o documento correto.
+
+---
+
+## Diretrizes de Execução
+
+### 1. Leitura do Documento de Entrada
+
+- Leia integralmente a Spec ou o Bug Report fornecido.
+- Identifique:
+  - Quais apps serão tocados (`server`, `web`, `studio`)
+  - Quais camadas serão envolvidas por app
+  - Dependências entre os artefatos a serem criados, modificados ou removidos
+  - Pendências ou ambiguidades que impediriam a implementação
+
+### 2. Definição de Fases
+
+- Sempre inicie pelo **core** (F1): domínio, structures e use cases.
+- Crie uma fase por app tocado (F2 para `server`, F3 para `web`, F4 para `studio`).
+- Omita fases de apps que não forem impactados pelo documento de entrada.
+- Fases de app (F2, F3, F4) só podem iniciar após F1 estar concluída e podem rodar em paralelo entre si.
+
+### 3. Definição de Tarefas
+
+- Cada tarefa deve ser **atômica** — uma única responsabilidade, um único artefato.
+- O **resultado observável** deve ser verificável sem ambiguidade (ex: "rota retorna 200 com payload X", "widget renderiza estado de erro quando Y").
+- A **camada** deve usar exclusivamente os valores: `core`, `database`, `rest`, `provision`, `rpc`, `ui`, `ai`, `queue`, `web`, `studio`.
+- As dependências entre tarefas devem refletir a ordem real de implementação.
+
+### 4. Pendências
+
+- Registre qualquer ambiguidade, informação ausente ou decisão não resolvida que possa bloquear a implementação.
+- Cada pendência deve descrever o impacto e a ação necessária para resolvê-la.
+
+---
+
+## Template de Saída (Estrutura Obrigatória)
+
+Salve o arquivo em `documentation/features/{dominio}/plans/{nome-descritivo}-plan.md` seguindo **estritamente** o template abaixo.
+
+```md
+---
 description: Criar um plano de implementacao estruturado em fases e tarefas a partir de uma spec tecnica.
 ---
 
@@ -50,7 +108,7 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
 - [ ] **T2.1** — <nome da tarefa>
   - **Depende de:** T1.2
   - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
-  - **Camada:** `core` | `database` | `rpc` | `rest` | `queue` | `ui`
+  - **Camada:** `core` | `database` | `rpc` | `rest` | `queue` | `provision`
 
 ---
 
@@ -65,7 +123,7 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
 - [ ] **T3.1** — <nome da tarefa>
   - **Depende de:** T1.2
   - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
-  - **Camada:** `core` | `database` | `rpc` | `rest` | `queue` | `ui`
+  - **Camada:** `ui` | `rpc` | `rest` | `web`
 
 ---
 
@@ -80,4 +138,16 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
 - [ ] **T4.1** — <nome da tarefa>
   - **Depende de:** T1.2
   - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
-  - **Camada:** `core` | `database` | `rpc` | `rest` | `queue` | `ui`
+  - **Camada:** `ui` | `rpc` | `rest` | `studio`
+```
+
+---
+
+## Restrições
+
+- O plano deve ser derivado exclusivamente do documento de entrada — não invente tarefas sem evidência na Spec ou no Bug Report.
+- Omita fases de apps que não forem mencionados no documento de entrada.
+- Use apenas as camadas definidas na seção 3. Definição de Tarefas — não crie camadas arbitrárias.
+- Cada tarefa deve ter exatamente um resultado observável verificável.
+- Não inclua tarefas de teste automatizado no plano.
+- Se o documento de entrada for um Bug Report, as tarefas devem derivar do **Plano de Correção** do bug report, não do relato do problema.
