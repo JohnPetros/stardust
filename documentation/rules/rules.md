@@ -135,8 +135,8 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 **Arquivo:** `/documentation/rules/handlers-testing-rules.md`
 **Quando consultar:**
 
-- Ao escrever testes para Controllers (REST), Actions (RPC) ou Tools (AI).
-- Para entender como mockar os objetos de contexto `Http`, `Call` e `Mcp`.
+- Ao escrever testes para Controllers (REST), Actions (RPC), Jobs (Queue) ou Tools (AI).
+- Para entender como mockar os objetos de contexto `Http`, `Call`, `Amqp` e `Mcp`.
 - Para seguir os padrões de orquestração e tradução de dados nos testes de
   entrada da aplicação.
 
