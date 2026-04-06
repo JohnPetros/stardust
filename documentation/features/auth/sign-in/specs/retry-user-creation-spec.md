@@ -1,6 +1,6 @@
 ---
 title: Retry de Criacao de Usuario na Confirmacao de Conta
-prd: ../prd.md
+prd: https://github.com/JohnPetros/stardust/milestone/20
 apps: web,server
 status: closed
 last_updated_at: 2026-03-14

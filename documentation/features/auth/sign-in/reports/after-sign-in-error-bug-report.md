@@ -1,7 +1,7 @@
 ---
 title: After sign in error bug report
 status: closed
-prd: documentation/features/auth/sign-in/prd.md
+prd: https://github.com/JohnPetros/stardust/milestone/20
 last_updated: 06/02/2026
 ---
 
