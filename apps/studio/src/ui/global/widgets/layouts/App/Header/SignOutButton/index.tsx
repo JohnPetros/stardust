@@ -8,11 +8,15 @@ import { useSessionStorage } from 'usehooks-ts'
 export const SignOutButton = () => {
   const { authService } = useRestContext()
   const navigationProvider = useNavigationProvider()
-  const [_, setAccessToken] = useSessionStorage(SESSION_STORAGE_KEYS.accessToken, '')
+  const [, setAccessToken] = useSessionStorage(SESSION_STORAGE_KEYS.accessToken, '')
+  const [, setRefreshToken] = useSessionStorage(SESSION_STORAGE_KEYS.refreshToken, '')
   const { handleClick } = useSignOutButton({
     authService,
     navigationProvider,
-    onSignOut: () => setAccessToken(''),
+    onSignOut: () => {
+      setAccessToken('')
+      setRefreshToken('')
+    },
   })
 
   return <SignOutButtonView onClick={handleClick} />

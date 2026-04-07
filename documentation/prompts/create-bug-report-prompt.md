@@ -13,6 +13,8 @@ O bug report deve:
 - Indicar **onde e por que provavelmente está quebrado**
 - Sugerir **como corrigir**, respeitando a arquitetura do projeto
 
+Após a criação do Bug Report, uma **Spec de correção** deve ser gerada automaticamente com base no plano de correção levantado, seguindo o prompt `documentation/prompts/create-spec-prompt.md`.
+
 ---
 
 ## Entrada
@@ -49,17 +51,38 @@ O bug report deve:
 
 - Determine quais camadas estão envolvidas direta ou indiretamente.
 - Sempre que possível, associe o problema a **arquivos reais** da codebase.
+- Use exclusivamente as camadas definidas abaixo:
+  - `core` — Use Cases
+  - `rest` — Controllers e Services HTTP
+  - `database` — Repositories, Mappers e Types
+  - `provision` — Providers e integrações externas
+  - `rpc` — Actions
+  - `ui` — Widgets, Stores e Contexts
+  - `ai` — Workflows e Tools
+  - `queue` — Inngest Functions
+  - `web` — Pages e Layouts Next.js
+  - `studio` — Pages e Layouts React Router
 
 ### 4. Plano de Correção
 
 - Proponha uma solução técnica **incremental e segura**, separada por camadas.
 - O plano deve ser claro o suficiente para servir como base de implementação.
 
+### 5. Geração da Spec de Correção
+
+Após salvar o Bug Report, gere automaticamente uma Spec de correção seguindo `documentation/prompts/create-spec-prompt.md`, com as seguintes adaptações:
+
+- O **esboço da tarefa** é o próprio Bug Report gerado.
+- O **PRD de referência** é o PRD da feature afetada, encontrado em `documentation/features/<dominio>/`.
+- O **frontmatter** da Spec deve referenciar o Bug Report no campo `issue`.
+- As seções **O que já existe**, **O que deve ser criado**, **O que deve ser modificado** e **O que deve ser removido** devem ser derivadas diretamente do plano de correção do Bug Report, sem retrabalho de pesquisa.
+- Salve a Spec em `documentation/features/{dominio}/specs/{nome-descritivo}-fix-spec.md`.
+
 ---
 
 ## Template de Saída (Estrutura Obrigatória)
 
-Salve o arquivo em `documentation/features/{dominio}/bug-reports/{nome-descritivo}-bug-report.md` seguindo **estritamente** o template abaixo. Não adicione seções extras nem altere os títulos.
+Salve o arquivo em `documentation/features/{dominio}/reports/{nome-descritivo}-bug-report.md` seguindo **estritamente** o template abaixo. Não adicione seções extras nem altere os títulos.
 
 ```md
 ---
@@ -81,11 +104,85 @@ last_updated_at: {YYYY-MM-DD}
 
 ## Contexto e Análise
 
-### {Nome da Camada} (ex: Camada UI, Camada Core, Camada REST, Camada Banco de Dados)
-
-<!-- Repita o bloco abaixo para cada camada afetada -->
+### Camada Core (Use Cases)
+<!-- Incluir apenas se aplicável -->
 - **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto, incluindo falhas de responsabilidade, fluxo, estado ou contrato.}
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada REST (Controllers)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada REST (Services)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada Banco de Dados (Repositories)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada Banco de Dados (Mappers)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada Banco de Dados (Types)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada Provision (Providers)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada RPC (Actions)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada UI (Widgets)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada UI (Stores)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada UI (Contexts)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada AI (Workflows)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada AI (Tools)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada Inngest App (Functions)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada Next.js App (Pages, Layouts)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
+
+### Camada React Router App (Pages, Layouts)
+<!-- Incluir apenas se aplicável -->
+- **Arquivo:** `{caminho/relativo/do/arquivo}`
+- **Diagnóstico:** {Explique o que está errado neste ponto.}
 
 ## Plano de Correção
 
@@ -126,3 +223,7 @@ Liste código redundante, legado ou incorreto que deve ser eliminado como parte 
 - Cite sempre o arquivo do problema — sem diagnósticos genéricos sem localização.
 - Separe fato (evidência encontrada no código) de hipótese (suspeita sem confirmação).
 - Não proponha correções que violem os contratos entre camadas definidos em `documentation/rules/`.
+- Use apenas as camadas listadas na seção 3. Mapeamento de Camadas — não crie camadas arbitrárias.
+- Omita do template as camadas que não forem aplicáveis ao bug em questão.
+- A Spec de correção deve ser gerada **sempre**, sem necessidade de solicitação explícita.
+- A Spec de correção **não pode contradizer** o Bug Report — ela é uma derivação direta dele.
