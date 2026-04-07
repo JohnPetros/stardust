@@ -56,12 +56,17 @@ export const NextRestClient = ({
       const data = await parseResponseJson(response)
 
       if (response.headers.get(HTTP_HEADERS.xPaginationResponse)) {
+        const totalItemsCount =
+          Number(response.headers.get(HTTP_HEADERS.xTotalItemsCount)) || 0
+        const itemsPerPage = Number(response.headers.get(HTTP_HEADERS.xItemsPerPage)) || 0
+        const page = Number(response.headers.get(HTTP_HEADERS.xPage)) || 1
+
         return new RestResponse<Body>({
           body: new PaginationResponse({
             items: data,
-            totalItemsCount: Number(response.headers.get(HTTP_HEADERS.xTotalItemsCount)),
-            itemsPerPage: Number(response.headers.get(HTTP_HEADERS.xItemsPerPage)),
-            page: Number(response.headers.get(HTTP_HEADERS.xPage)),
+            totalItemsCount,
+            itemsPerPage,
+            page,
           }) as Body,
         })
       }

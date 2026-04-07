@@ -51,8 +51,6 @@ export const middleware = async (request: NextRequest) => {
     return NextResponse.redirect(new URL(ROUTES.auth.signIn, request.url))
   }
 
-  console.log('Middleware auth flow started 2')
-
   return NextResponse.next()
 }
 

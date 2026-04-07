@@ -12,7 +12,7 @@ export class ChallengeCompletionStatus {
   }
 
   static isValid(value: string): value is Value {
-    new StringValidation(value, 'Challenge completition status').oneOf([
+    new StringValidation(value, 'Challenge completion status').oneOf([
       'completed',
       'not-completed',
       'all',
