@@ -2,7 +2,7 @@
 title: Expiração da Flag isNew e Badge Novo em Challenges
 prd: documentation/features/challenging/challenge-creator-agent/prd.md
 apps: server, web
-status: concluido
+status: closed
 last_updated_at: 2026-02-27
 ---
 

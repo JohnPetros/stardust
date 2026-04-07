@@ -62,11 +62,12 @@ describe('List Avatars Use Case', () => {
 
     expect(response).toBeInstanceOf(PaginationResponse)
     expect(response).toEqual(
-      new PaginationResponse(
-        avatars.map((avatar) => avatar.dto),
-        avatars.length,
-        request.itemsPerPage.value,
-      ),
+      new PaginationResponse({
+        items: avatars.map((avatar) => avatar.dto),
+        totalItemsCount: avatars.length,
+        itemsPerPage: request.itemsPerPage.value,
+        page: request.page.value,
+      }),
     )
   })
 })

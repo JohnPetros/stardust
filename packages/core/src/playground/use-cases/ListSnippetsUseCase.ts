@@ -16,16 +16,17 @@ type Response = Promise<PaginationResponse<SnippetDto>>
 export class ListSnippetsUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: SnippetsRepository) {}
 
-  async execute({ page, itemsPerPage, authorId }: Request) {
+  async execute({ page, itemsPerPage, authorId }: Request): Response {
     const { items, count } = await this.repository.findManySnippets({
       page: OrdinalNumber.create(page),
       itemsPerPage: OrdinalNumber.create(itemsPerPage),
       authorId: Id.create(authorId),
     })
-    return new PaginationResponse(
-      items.map((snippet) => snippet.dto),
-      count,
+    return new PaginationResponse({
+      items: items.map((snippet) => snippet.dto),
+      totalItemsCount: count,
       itemsPerPage,
-    )
+      page,
+    })
   }
 }

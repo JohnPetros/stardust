@@ -2,7 +2,7 @@
 title: Console de output do editor de desafios
 prd: ../prd.md
 apps: web
-status: concluido
+status: closed
 last_updated_at: 2026-03-07
 ---
 

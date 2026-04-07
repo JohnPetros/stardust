@@ -45,7 +45,7 @@ export const SortableColumnView = ({
           <DropdownMenuRadioGroup value={currentValue} onValueChange={handleOrderChange}>
             <DropdownMenuRadioItem value='ascending'>Ascendente</DropdownMenuRadioItem>
             <DropdownMenuRadioItem value='descending'>Descendente</DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value='any'>Nenhum</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value='all'>Nenhum</DropdownMenuRadioItem>
           </DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>

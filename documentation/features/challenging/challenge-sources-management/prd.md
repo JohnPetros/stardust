@@ -54,7 +54,7 @@ Referencia de produto: https://github.com/JohnPetros/stardust/milestone/12
 - [x] `npm run test` na raiz.
 
 ## Status
-**Concluido**
+**closed**
 
 ## Ultima atualizacao
 2026-03-25

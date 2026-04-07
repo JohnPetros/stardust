@@ -61,7 +61,11 @@ describe('useAssistantChatsHistory', () => {
 
     service.fetchChats.mockResolvedValue(
       createRestResponse({
-        body: new PaginationResponse<ChatDto>([], 0, 10),
+        body: new PaginationResponse<ChatDto>({
+          items: [],
+          totalItemsCount: 0,
+          itemsPerPage: 10,
+        }),
         statusCode: 200,
       }),
     )
@@ -79,7 +83,11 @@ describe('useAssistantChatsHistory', () => {
     const chat = ChatFaker.fake()
     service.fetchChats.mockResolvedValueOnce(
       createRestResponse({
-        body: new PaginationResponse([chat.dto], 1, 10),
+        body: new PaginationResponse({
+          items: [chat.dto],
+          totalItemsCount: 1,
+          itemsPerPage: 10,
+        }),
         statusCode: 200,
       }),
     )
@@ -95,7 +103,11 @@ describe('useAssistantChatsHistory', () => {
     const chat = ChatFaker.fake()
     service.fetchChats.mockResolvedValueOnce(
       createRestResponse({
-        body: new PaginationResponse([chat.dto], 1, 10),
+        body: new PaginationResponse({
+          items: [chat.dto],
+          totalItemsCount: 1,
+          itemsPerPage: 10,
+        }),
         statusCode: 200,
       }),
     )
@@ -120,7 +132,11 @@ describe('useAssistantChatsHistory', () => {
 
     service.fetchChats.mockResolvedValueOnce(
       createRestResponse({
-        body: new PaginationResponse([chat.dto], 1, 10),
+        body: new PaginationResponse({
+          items: [chat.dto],
+          totalItemsCount: 1,
+          itemsPerPage: 10,
+        }),
         statusCode: 200,
       }),
     )
@@ -146,7 +162,11 @@ describe('useAssistantChatsHistory', () => {
 
     service.fetchChats.mockResolvedValueOnce(
       createRestResponse({
-        body: new PaginationResponse([chat.dto], 1, 10),
+        body: new PaginationResponse({
+          items: [chat.dto],
+          totalItemsCount: 1,
+          itemsPerPage: 10,
+        }),
         statusCode: 200,
       }),
     )
@@ -217,11 +237,19 @@ describe('useAssistantChatsHistory', () => {
     const chat = ChatFaker.fake()
 
     const firstResponse = createRestResponse({
-      body: new PaginationResponse([chat.dto], 1, 10),
+      body: new PaginationResponse({
+        items: [chat.dto],
+        totalItemsCount: 1,
+        itemsPerPage: 10,
+      }),
       statusCode: 200,
     })
     const secondResponse = createRestResponse({
-      body: new PaginationResponse([], 0, 10),
+      body: new PaginationResponse({
+        items: [],
+        totalItemsCount: 0,
+        itemsPerPage: 10,
+      }),
       statusCode: 200,
     })
 
@@ -248,7 +276,11 @@ describe('useAssistantChatsHistory', () => {
     const chat = ChatFaker.fake()
 
     const response = createRestResponse({
-      body: new PaginationResponse([chat.dto], 1, 10),
+      body: new PaginationResponse({
+        items: [chat.dto],
+        totalItemsCount: 1,
+        itemsPerPage: 10,
+      }),
       statusCode: 200,
     })
 
@@ -272,7 +304,11 @@ describe('useAssistantChatsHistory', () => {
 
     service.fetchChats.mockResolvedValueOnce(
       createRestResponse({
-        body: new PaginationResponse([chat.dto], 1, 10),
+        body: new PaginationResponse({
+          items: [chat.dto],
+          totalItemsCount: 1,
+          itemsPerPage: 10,
+        }),
         statusCode: 200,
       }),
     )

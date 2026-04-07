@@ -992,6 +992,100 @@ export type Database = {
         }
         Relationships: []
       }
+      webauthn_challenges: {
+        Row: {
+          challenge_type: string
+          created_at: string
+          expires_at: string
+          id: string
+          session_data: Json
+          user_id: string | null
+        }
+        Insert: {
+          challenge_type: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          session_data: Json
+          user_id?: string | null
+        }
+        Update: {
+          challenge_type?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          session_data?: Json
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'webauthn_challenges_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      webauthn_credentials: {
+        Row: {
+          aaguid: string | null
+          attestation_type: string
+          backed_up: boolean
+          backup_eligible: boolean
+          created_at: string
+          credential_id: string
+          friendly_name: string
+          id: string
+          last_used_at: string | null
+          public_key: string
+          sign_count: number
+          transports: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          aaguid?: string | null
+          attestation_type?: string
+          backed_up?: boolean
+          backup_eligible?: boolean
+          created_at?: string
+          credential_id: string
+          friendly_name?: string
+          id?: string
+          last_used_at?: string | null
+          public_key: string
+          sign_count?: number
+          transports?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          aaguid?: string | null
+          attestation_type?: string
+          backed_up?: boolean
+          backup_eligible?: boolean
+          created_at?: string
+          credential_id?: string
+          friendly_name?: string
+          id?: string
+          last_used_at?: string | null
+          public_key?: string
+          sign_count?: number
+          transports?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'webauthn_credentials_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -1347,6 +1441,7 @@ export type Database = {
       }
       challenge_sources: {
         Row: {
+          additional_instructions: string | null
           challenge_id: string | null
           created_at: string
           id: string
@@ -1354,6 +1449,7 @@ export type Database = {
           url: string
         }
         Insert: {
+          additional_instructions?: string | null
           challenge_id?: string | null
           created_at?: string
           id?: string
@@ -1361,6 +1457,7 @@ export type Database = {
           url: string
         }
         Update: {
+          additional_instructions?: string | null
           challenge_id?: string | null
           created_at?: string
           id?: string
@@ -3247,6 +3344,53 @@ export type Database = {
         }
       }
       install_available_extensions_and_test: { Args: never; Returns: boolean }
+      list_challenges: {
+        Args: {
+          p_account_id?: string
+          p_categories_ids?: string[]
+          p_completed_challenges_ids?: string[]
+          p_completion_count_order?: string
+          p_completion_status?: string
+          p_difficulty?: string
+          p_downvote_count_order?: string
+          p_is_new_status?: string
+          p_items_per_page?: number
+          p_page?: number
+          p_posting_order?: string
+          p_should_include_only_author?: boolean
+          p_should_include_private_challenges?: boolean
+          p_should_include_star_challenges?: boolean
+          p_title?: string
+          p_upvotes_count_order?: string
+          p_user_id?: string
+        }
+        Returns: {
+          author_avatar_image: string
+          author_avatar_name: string
+          author_id: string
+          author_name: string
+          author_slug: string
+          categories: Json[]
+          code: string
+          created_at: string
+          description: string
+          difficulty_level: string
+          downvotes_count: number
+          function_name: string
+          id: string
+          is_new: boolean
+          is_public: boolean
+          slug: string
+          star_id: string
+          test_cases: Json
+          texts: Json
+          title: string
+          total_completitions: number
+          total_count: number
+          upvotes_count: number
+          user_id: string
+        }[]
+      }
       olamundo: { Args: never; Returns: string }
       resetstreak: { Args: never; Returns: undefined }
       slugify: { Args: { name: string }; Returns: string }
@@ -3326,7 +3470,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_02_25: {
+      messages_2026_03_27: {
         Row: {
           event: string | null
           extension: string
@@ -3359,7 +3503,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_02_26: {
+      messages_2026_03_28: {
         Row: {
           event: string | null
           extension: string
@@ -3392,7 +3536,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_02_27: {
+      messages_2026_03_29: {
         Row: {
           event: string | null
           extension: string
@@ -3425,7 +3569,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_02_28: {
+      messages_2026_03_30: {
         Row: {
           event: string | null
           extension: string
@@ -3458,7 +3602,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_03_01: {
+      messages_2026_03_31: {
         Row: {
           event: string | null
           extension: string
@@ -3491,7 +3635,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_03_02: {
+      messages_2026_04_01: {
         Row: {
           event: string | null
           extension: string
@@ -3524,7 +3668,7 @@ export type Database = {
         }
         Relationships: []
       }
-      messages_2026_03_03: {
+      messages_2026_04_02: {
         Row: {
           event: string | null
           extension: string
@@ -3883,6 +4027,7 @@ export type Database = {
           id: string
           in_progress_size: number
           key: string
+          metadata: Json | null
           owner_id: string | null
           upload_signature: string
           user_metadata: Json | null
@@ -3894,6 +4039,7 @@ export type Database = {
           id: string
           in_progress_size?: number
           key: string
+          metadata?: Json | null
           owner_id?: string | null
           upload_signature: string
           user_metadata?: Json | null
@@ -3905,6 +4051,7 @@ export type Database = {
           id?: string
           in_progress_size?: number
           key?: string
+          metadata?: Json | null
           owner_id?: string | null
           upload_signature?: string
           user_metadata?: Json | null
@@ -4023,6 +4170,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      allow_any_operation: {
+        Args: { expected_operations: string[] }
+        Returns: boolean
+      }
+      allow_only_operation: {
+        Args: { expected_operation: string }
+        Returns: boolean
+      }
       can_insert_object: {
         Args: { bucketid: string; metadata: Json; name: string; owner: string }
         Returns: undefined

@@ -1,7 +1,7 @@
 import { StringValidation } from '#global/libs/index'
 import { Logical } from './Logical'
 
-type ListingOrderValue = 'ascending' | 'descending' | 'any'
+type ListingOrderValue = 'ascending' | 'descending' | 'all'
 
 export class ListingOrder {
   private constructor(readonly value: ListingOrderValue) {}
@@ -23,7 +23,7 @@ export class ListingOrder {
   }
 
   private static isListingOrderValue(value: string): value is ListingOrderValue {
-    new StringValidation(value).oneOf(['ascending', 'descending', 'any'])
+    new StringValidation(value).oneOf(['ascending', 'descending', 'all'])
     return true
   }
 
@@ -36,6 +36,6 @@ export class ListingOrder {
   }
 
   get isAny(): Logical {
-    return Logical.create(this.value === 'any')
+    return Logical.create(this.value === 'all')
   }
 }

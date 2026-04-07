@@ -9,6 +9,7 @@ import type { Json } from '../../types/Database'
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabaseChallengeMapper } from '../../mappers/challenging'
 import { SupabasePostgreError } from '../../errors'
+import { SupabaseChallenge } from '../../types'
 
 export class SupabaseChallengesRepository
   extends SupabaseRepository
@@ -144,6 +145,57 @@ export class SupabaseChallengesRepository
     categoriesIds,
     shouldIncludeStarChallenges,
     shouldIncludeOnlyAuthorChallenges,
+    shouldIncludePrivateChallenges,
+    isNewStatus,
+    userId,
+    accountId,
+    completionStatus,
+    completedChallengesIds,
+  }: ChallengesListParams): Promise<ManyItems<Challenge>> {
+    const { data, error } = await this.supabase
+      .rpc('list_challenges', {
+        p_title: title.value,
+        p_difficulty: difficulty.level,
+        p_categories_ids: categoriesIds.dto,
+        p_completion_status: completionStatus.value,
+        p_completed_challenges_ids: completedChallengesIds?.dto ?? [],
+        p_account_id: accountId?.value ?? undefined,
+        p_user_id: userId?.value ?? undefined,
+        p_should_include_star_challenges: shouldIncludeStarChallenges.value,
+        p_should_include_private_challenges: shouldIncludePrivateChallenges.value,
+        p_should_include_only_author: shouldIncludeOnlyAuthorChallenges.value,
+        p_is_new_status: isNewStatus.value,
+        p_items_per_page: itemsPerPage.value,
+        p_upvotes_count_order: upvotesCountOrder.value,
+        p_downvote_count_order: downvoteCountOrder.value,
+        p_completion_count_order: completionCountOrder.value,
+        p_posting_order: postingOrder.value,
+        p_page: page.value,
+      })
+      .overrideTypes<(SupabaseChallenge & { total_count: number })[]>()
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+
+    const totalCount = data[0]?.total_count ?? 0
+    const challenges = data.map(SupabaseChallengeMapper.toEntity)
+
+    return { items: challenges, count: Number(totalCount) }
+  }
+
+  async _findMany({
+    page,
+    itemsPerPage,
+    title,
+    difficulty,
+    upvotesCountOrder,
+    downvoteCountOrder,
+    completionCountOrder,
+    postingOrder,
+    categoriesIds,
+    shouldIncludeStarChallenges,
+    shouldIncludeOnlyAuthorChallenges,
     isNewStatus,
     userId,
   }: ChallengesListParams): Promise<ManyItems<Challenge>> {
@@ -209,6 +261,20 @@ export class SupabaseChallengesRepository
 
     const challenges = data.map(SupabaseChallengeMapper.toEntity)
     return { items: challenges, count: Number(count) }
+  }
+
+  async countPublicChallenges(): Promise<Integer> {
+    const { count, error } = await this.supabase
+      .from('challenges_view')
+      .select('*', { count: 'exact', head: true })
+      .is('star_id', null)
+      .eq('is_public', true)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+
+    return Integer.create(count ?? 0)
   }
 
   async findAllCategories(): Promise<ChallengeCategory[]> {

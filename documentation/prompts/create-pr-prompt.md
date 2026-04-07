@@ -22,7 +22,7 @@ de trabalho.
 
 ## Diretrizes de Execução
 
-### 1️⃣ Análise do Contexto
+### 1. Análise do Contexto
 
 - Revise a Spec implementada e o changelog das alterações realizadas.
 - Identifique:
@@ -33,7 +33,7 @@ de trabalho.
 
 ---
 
-### 2️⃣ Definição do Título
+### 2. Definição do Título
 
 - Deve ser:
 
@@ -58,7 +58,7 @@ refactor/
 
 ---
 
-### 3️⃣ Estrutura da Descrição (Body)
+### 3. Estrutura da Descrição (Body)
 
 O corpo do PR deve seguir o template abaixo.
 
@@ -70,28 +70,30 @@ O corpo do PR deve seguir o template abaixo.
 
 ---
 
-## 🎯 Objetivo (obrigatório)
+## Objetivo (obrigatório)
 
 Explique por que este PR foi criado e qual seu propósito central.
 
-## #️⃣ Issues relacionadas (opcional)
+## Issues relacionadas (opcional)
 
-Vincule tarefas/buffs:
+Vincule tarefas/bugs usando **exclusivamente** a palavra-chave `resolve`:
 
 ```
-fixes #123
-closes #456
+resolve #123
+resolve #456
 ```
+
+⚠️ Não usar `resolves`, `closes`, `fixes` ou qualquer outra variação. Apenas `resolve`.
 
 ---
 
-## 🐛 Causa do bug (opcional — apenas fix)
+## Causa do bug (opcional — apenas fix)
 
 Descreva a causa técnica raiz.
 
 ---
 
-## 📋 Changelog (obrigatório)
+## Changelog (obrigatório)
 
 Lista técnica das mudanças:
 
@@ -102,7 +104,7 @@ Lista técnica das mudanças:
 
 ---
 
-## 🧪 Como testar (obrigatório)
+## Como testar (obrigatório)
 
 Passo a passo claro para o revisor validar:
 
@@ -112,7 +114,7 @@ Passo a passo claro para o revisor validar:
 
 ---
 
-## 👀 Observações (opcional)
+## Observações (opcional)
 
 - decisões de arquitetura
 - limitações conhecidas
@@ -121,7 +123,7 @@ Passo a passo claro para o revisor validar:
 
 ---
 
-## 4️⃣ Criação via gh CLI
+### 4. Criação via gh CLI
 
 ⚠️ Não usar GitHub MCP. ⚠️ Não usar APIs MCP. Usar exclusivamente **gh**.
 
@@ -148,7 +150,7 @@ gh pr create \
 
 ---
 
-## 5️⃣ Retorno
+### 5. Retorno
 
 Após criação:
 

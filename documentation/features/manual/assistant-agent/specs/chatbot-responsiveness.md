@@ -1,7 +1,7 @@
 ---
 title: Responsividade do Chatbot
 application: web
-status: concluido
+status: closed
 last_updated: 04/02/2026
 ---
 

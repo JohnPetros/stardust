@@ -2,7 +2,7 @@
 title: Seletor de Desafio por Estrela
 prd: documentation/features/space/space-management/prd.md
 apps: server
-status: concluido
+status: closed
 last_updated_at: 2026-02-26
 ---
 

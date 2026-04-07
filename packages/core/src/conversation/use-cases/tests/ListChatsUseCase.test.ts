@@ -44,6 +44,13 @@ describe('List Chats Use Case', () => {
     expect(callArgs.page.value).toBe(request.page)
     expect(callArgs.itemsPerPage.value).toBe(request.itemsPerPage)
 
-    expect(response).toEqual(new PaginationResponse([chat.dto], 1, request.itemsPerPage))
+    expect(response).toEqual(
+      new PaginationResponse({
+        items: [chat.dto],
+        totalItemsCount: 1,
+        itemsPerPage: request.itemsPerPage,
+        page: request.page,
+      }),
+    )
   })
 })

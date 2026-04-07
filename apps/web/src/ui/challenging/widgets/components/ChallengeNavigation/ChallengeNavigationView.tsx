@@ -6,6 +6,7 @@ type Props = {
   canNavigateToNext: boolean
   onPreviousChallengeClick: () => void
   onNextChallengeClick: () => void
+  onOpenSidebar?: () => void
 }
 
 const TOOLTIP_CONTENT =
@@ -16,13 +17,19 @@ export const ChallengeNavigationView = ({
   canNavigateToNext,
   onPreviousChallengeClick,
   onNextChallengeClick,
+  onOpenSidebar,
 }: Props) => {
   return (
     <div className='flex h-10 items-center rounded-md border border-gray-700 bg-gray-950/80'>
-      <div className='flex items-center gap-2 px-3'>
+      <button
+        type='button'
+        onClick={onOpenSidebar}
+        aria-label='Abrir barra lateral de desafios'
+        className='flex h-full items-center gap-2 px-3 text-left transition-colors hover:bg-gray-900'
+      >
         <Icon name='menu' size={14} className='text-gray-500' />
         <span className='text-sm font-semibold text-blue-100'>Desafios</span>
-      </div>
+      </button>
 
       <div className='h-full w-px bg-gray-700' />
 

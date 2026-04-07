@@ -1,1 +1,1 @@
-export type ChallengeDifficultyLevel = 'easy' | 'medium' | 'hard' | 'any' | 'all'
+export type ChallengeDifficultyLevel = 'easy' | 'medium' | 'hard' | 'all'

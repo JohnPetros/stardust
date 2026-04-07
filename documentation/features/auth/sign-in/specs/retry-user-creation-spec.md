@@ -149,7 +149,7 @@ Implementar no `web` um fluxo unico de confirmacao para contas autenticadas cujo
 
 * **Arquivo:** `apps/web/src/ui/auth/widgets/pages/AccountConfirmation/AccountConfirmationPageView.tsx`
 * **Mudanca:** Renderizar o estado pendente com `Loading` + `UserCreationPendingMessage`, mostrar um botao de retry quando o atraso expirar e manter a mensagem de sucesso com CTA manual para `ROUTES.space` quando `user` existir.
-* **Justificativa:** A pagina precisa refletir os tres estados do fluxo descrito pela feature: aguardando, tentando novamente e concluido.
+* **Justificativa:** A pagina precisa refletir os tres estados do fluxo descrito pela feature: aguardando, tentando novamente e closed.
 * **Camada:** `ui`
 
 * **Arquivo:** `apps/web/src/ui/auth/widgets/pages/SocialAccountConfirmation/index.tsx`

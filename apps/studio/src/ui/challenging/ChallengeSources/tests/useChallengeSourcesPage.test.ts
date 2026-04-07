@@ -66,7 +66,10 @@ describe('useChallengeSourcesPage', () => {
     toastProvider.showSuccess = jest.fn()
     toastProvider.showError = jest.fn()
 
-    mockUseFetchReturn.data = new PaginationResponse([], 0)
+    mockUseFetchReturn.data = new PaginationResponse({
+      items: [],
+      totalItemsCount: 0,
+    })
     mockUseFetchReturn.isLoading = false
     mockUseFetchReturn.isRefetching = false
     mockUseFetchReturn.refetch = jest.fn()
@@ -80,7 +83,10 @@ describe('useChallengeSourcesPage', () => {
     const validSource = ChallengeSourcesFaker.fakeDto({ id: 'source-1' })
     const invalidSource = ChallengeSourcesFaker.fakeDto({ id: '' })
 
-    mockUseFetchReturn.data = new PaginationResponse([validSource, invalidSource], 23)
+    mockUseFetchReturn.data = new PaginationResponse({
+      items: [validSource, invalidSource],
+      totalItemsCount: 23,
+    })
 
     const { result } = Hook()
 
@@ -246,7 +252,10 @@ describe('useChallengeSourcesPage', () => {
       id: '550e8400-e29b-41d4-a716-446655440014',
     })
 
-    mockUseFetchReturn.data = new PaginationResponse([sourceA, sourceB], 2)
+    mockUseFetchReturn.data = new PaginationResponse({
+      items: [sourceA, sourceB],
+      totalItemsCount: 2,
+    })
     challengingService.reorderChallengeSources.mockResolvedValue(
       new RestResponse({ statusCode: 400, errorMessage: 'Não foi possível reordenar' }),
     )

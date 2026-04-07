@@ -19,7 +19,7 @@ type Response = Promise<PaginationResponse<CommentDto>>
 export class ListSolutionCommentsUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: CommentsRepository) {}
 
-  async execute({ solutionId, sorter, order, page, itemsPerPage }: Request) {
+  async execute({ solutionId, sorter, order, page, itemsPerPage }: Request): Response {
     const { items, count } = await this.repository.findManyBySolution(
       Id.create(solutionId),
       {
@@ -30,10 +30,11 @@ export class ListSolutionCommentsUseCase implements UseCase<Request, Response> {
       },
     )
 
-    return new PaginationResponse(
-      items.map((comment) => comment.dto),
-      count,
+    return new PaginationResponse({
+      items: items.map((comment) => comment.dto),
+      totalItemsCount: count,
       itemsPerPage,
-    )
+      page,
+    })
   }
 }

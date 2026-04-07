@@ -31,8 +31,8 @@ type Params = {
 }
 
 export function useChallengesList({ challengingService, userId, isUserGod }: Params) {
-  const [difficultyLevel] = useQueryStringParam(QUERY_PARAMS.difficultyLevel, 'any')
-  const [completionStatus] = useQueryStringParam(QUERY_PARAMS.completionStatus, 'any')
+  const [difficultyLevel] = useQueryStringParam(QUERY_PARAMS.difficultyLevel, 'all')
+  const [completionStatus] = useQueryStringParam(QUERY_PARAMS.completionStatus, 'all')
   const [isNewStatus] = useQueryStringParam(QUERY_PARAMS.isNewStatus, 'all')
   const [title] = useQueryStringParam(QUERY_PARAMS.title, '')
   const [categoriesIds] = useQueryArrayParam(QUERY_PARAMS.categoriesIds)
@@ -48,15 +48,17 @@ export function useChallengesList({ challengingService, userId, isUserGod }: Par
       isNewStatus: ChallengeIsNewStatus.create(isNewStatus),
       difficulty: ChallengeDifficulty.create(difficultyLevel),
       itemsPerPage: OrdinalNumber.create(CHALLENGES_PER_PAGE),
-      postingOrder: ListingOrder.create('any'),
-      upvotesCountOrder: ListingOrder.create('any'),
+      postingOrder: ListingOrder.create('all'),
+      upvotesCountOrder: ListingOrder.create('all'),
       shouldIncludeOnlyAuthorChallenges: Logical.createAsFalse(),
       shouldIncludeStarChallenges: isUserGod,
       shouldIncludePrivateChallenges: isUserGod,
-      completionCountOrder: ListingOrder.create('any'),
-      downvoteCountOrder: ListingOrder.create('any'),
+      completionCountOrder: ListingOrder.create('all'),
+      downvoteCountOrder: ListingOrder.create('all'),
       title: Text.create(title),
       userId,
+      accountId: null,
+      completedChallengesIds: IdsList.create([]),
     })
     if (response.isFailure) response.throwError()
 

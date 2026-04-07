@@ -2,7 +2,7 @@
 title: Insígnia "God" na página da loja
 prd: documentation/features/shop/shop-page/prd.md
 apps: web, server
-status: concluido
+status: closed
 last_updated_at: 2026-02-28
 ---
 

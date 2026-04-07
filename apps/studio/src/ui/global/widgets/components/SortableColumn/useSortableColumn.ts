@@ -14,7 +14,7 @@ export const useSortableColumn = ({ order, onOrderChange }: Params) => {
     ? 'ascending'
     : order.isDescending.value
       ? 'descending'
-      : 'any'
+      : 'all'
 
   return {
     handleOrderChange,

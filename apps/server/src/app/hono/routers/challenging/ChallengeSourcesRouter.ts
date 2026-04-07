@@ -39,7 +39,7 @@ export class ChallengeSourcesRouter extends HonoRouter {
           page: pageSchema,
           itemsPerPage: itemsPerPageSchema,
           title: z.string().default(''),
-          positionOrder: z.enum(['ascending', 'descending', 'any']).optional(),
+          positionOrder: z.enum(['ascending', 'descending', 'all']).optional(),
         }),
       ),
       async (context) => {

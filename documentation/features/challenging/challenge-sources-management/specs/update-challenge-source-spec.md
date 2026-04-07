@@ -2,7 +2,7 @@
 title: Edição de Fontes de Desafio e Criação sem Vinculo Obrigatório
 prd: documentation/features/challenging/challenge-sources-management/prd.md
 apps: server, studio, web
-status: concluido
+status: closed
 last_updated_at: 2026-03-05
 ---
 

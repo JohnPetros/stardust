@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=1 next dev",
     "queue": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/serverless",
-    "build": "next build",
+    "build": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=1 next build",
     "start": "node .next/standalone/apps/web/server.js -p $PORT",
     "codecheck": "npm run lint && npm run format",
     "typecheck": "tsc --noEmit",
@@ -88,6 +88,7 @@
     "throttleit": "^2.1.0",
     "typewriter-effect": "^2.22.0",
     "uuid": "^11.1.0",
+    "vaul": "^1.1.2",
     "zod": "^3.25.76",
     "zustand": "^4.5.7"
   },

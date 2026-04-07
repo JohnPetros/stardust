@@ -62,11 +62,12 @@ describe('List Rockets Use Case', () => {
 
     expect(response).toBeInstanceOf(PaginationResponse)
     expect(response).toEqual(
-      new PaginationResponse(
-        rockets.map((rocket) => rocket.dto),
-        rockets.length,
-        request.itemsPerPage.value,
-      ),
+      new PaginationResponse({
+        items: rockets.map((rocket) => rocket.dto),
+        totalItemsCount: rockets.length,
+        itemsPerPage: request.itemsPerPage.value,
+        page: request.page.value,
+      }),
     )
   })
 })

@@ -1,7 +1,7 @@
 ---
 title: Permissao de Usuario God no Challenge Editor
 application: web
-status: concluido
+status: closed
 last_updated: 2026-02-24
 ---
 

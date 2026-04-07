@@ -30,21 +30,23 @@ export function useChallengesListTab(
       itemsPerPage: CHALLENGES_PER_PAGE,
       title: Text.create(''),
       categoriesIds: IdsList.create([]),
-      difficulty: ChallengeDifficulty.create('any'),
-      completionStatus: ChallengeCompletionStatus.create('any'),
+      difficulty: ChallengeDifficulty.create('all'),
+      completionStatus: ChallengeCompletionStatus.create('all'),
       isNewStatus: ChallengeIsNewStatus.create('all'),
       upvotesCountOrder: ListingOrder.create(
-        tabListSorter === 'date' ? 'descending' : 'any',
+        tabListSorter === 'date' ? 'descending' : 'all',
       ),
       postingOrder: ListingOrder.create(
-        tabListSorter === 'upvotesCount' ? 'descending' : 'any',
+        tabListSorter === 'upvotesCount' ? 'descending' : 'all',
       ),
       shouldIncludeStarChallenges: Logical.createAsFalse(),
       shouldIncludeOnlyAuthorChallenges: Logical.createAsTrue(),
       shouldIncludePrivateChallenges: Logical.createAsFalse(),
-      completionCountOrder: ListingOrder.create('any'),
-      downvoteCountOrder: ListingOrder.create('any'),
+      completionCountOrder: ListingOrder.create('all'),
+      downvoteCountOrder: ListingOrder.create('all'),
       userId: Id.create(userId),
+      accountId: null,
+      completedChallengesIds: IdsList.create([]),
     })
     if (response.isFailure) response.throwError()
     return response.body

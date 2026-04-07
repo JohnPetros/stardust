@@ -26,10 +26,15 @@ describe('ChallengeNavigationView', () => {
         canNavigateToNext={true}
         onPreviousChallengeClick={jest.fn()}
         onNextChallengeClick={jest.fn()}
+        onOpenSidebar={jest.fn()}
         {...props}
       />,
     )
   }
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
 
   it('should render the navigation header and sequential navigation tooltips', () => {
     View()
@@ -49,6 +54,19 @@ describe('ChallengeNavigationView', () => {
         'Navegacao sequencial pela ordem global de criacao dos desafios (ignora filtros).',
       )
     })
+  })
+
+  it('should call onOpenSidebar from the accessible Desafios trigger', async () => {
+    const user = userEvent.setup()
+    const onOpenSidebar = jest.fn()
+
+    View({ onOpenSidebar })
+
+    await user.click(
+      screen.getByRole('button', { name: 'Abrir barra lateral de desafios' }),
+    )
+
+    expect(onOpenSidebar).toHaveBeenCalledTimes(1)
   })
 
   it('should disable navigation buttons when previous and next challenges are unavailable', () => {

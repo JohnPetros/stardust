@@ -2,7 +2,7 @@
 title: Get Next Challenge Source Tool
 prd: documentation/features/challenging/challenge-creator-agent/prd.md
 apps: server
-status: concluido
+status: closed
 last_updated_at: 2026-03-05
 ---
 

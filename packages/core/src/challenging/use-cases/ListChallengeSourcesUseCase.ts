@@ -24,10 +24,11 @@ export class ListChallengeSourcesUseCase implements UseCase<Request, Response> {
       positionOrder: ListingOrder.create(positionOrder),
     })
 
-    return new PaginationResponse(
-      response.items.map((challengeSource) => challengeSource.dto),
-      response.count,
+    return new PaginationResponse({
+      items: response.items.map((challengeSource) => challengeSource.dto),
+      totalItemsCount: response.count,
       itemsPerPage,
-    )
+      page,
+    })
   }
 }
