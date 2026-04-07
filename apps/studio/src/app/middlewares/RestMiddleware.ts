@@ -74,6 +74,8 @@ export const RestMiddleware = async ({ context }: Route.ActionArgs) => {
   }
 
   if (accountResponse.isFailure) {
+    sessionStorage.removeItem(SESSION_STORAGE_KEYS.accessToken)
+    sessionStorage.removeItem(SESSION_STORAGE_KEYS.refreshToken)
     throw redirect(ROUTES.index)
   }
 
