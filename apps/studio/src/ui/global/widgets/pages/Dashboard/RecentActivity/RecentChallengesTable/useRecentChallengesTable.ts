@@ -28,7 +28,7 @@ export function useRecentChallengesTable(challengingService: ChallengingService)
         upvotesCountOrder: ListingOrder.create('all'),
         downvoteCountOrder: ListingOrder.create('all'),
         completionCountOrder: ListingOrder.create('all'),
-        postingOrder: ListingOrder.create('desc'),
+        postingOrder: ListingOrder.create('descending'),
         shouldIncludePrivateChallenges: Logical.create(true),
         shouldIncludeOnlyAuthorChallenges: Logical.create(false),
         shouldIncludeStarChallenges: Logical.create(false),

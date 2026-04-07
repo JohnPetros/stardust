@@ -3,12 +3,12 @@ title: Job de Notificacao de Criacao de Usuario
 prd: ../prd.md
 apps: server
 status: open
-last_updated_at: 2026-03-10
+last_updated_at: 2026-04-07
 ---
 
 # 1. Objetivo
 
-Implementar um job assíncrono no `server` para enviar uma notificacao operacional quando o onboarding de criacao de usuario for closed com sucesso no modulo `profile`, reutilizando a infraestrutura atual de notificacoes via Inngest + Discord e preservando a cadeia existente de eventos (`auth` -> `space` -> `ranking` -> `shop` -> `profile`). A entrega inclui o disparo do evento canonico de criacao do usuario via `FinishUserCreationUseCase`, o consumo desse evento pela camada de notificacao e o alinhamento do schema Inngest usado por esse fluxo.
+Implementar um job assíncrono no `server` para enviar uma notificacao operacional quando o onboarding de criacao de usuario for concluido com sucesso no modulo `profile`, reutilizando a infraestrutura atual de notificacoes via Inngest + Discord e preservando a cadeia existente de eventos (`auth` -> `space` -> `ranking` -> `shop` -> `profile`). A entrega inclui o disparo do evento canonico de criacao do usuario via `FinishUserCreationUseCase`, o consumo desse evento pela camada de notificacao e o alinhamento do schema Inngest usado por esse fluxo.
 ---
 
 
@@ -247,4 +247,3 @@ SignUpController | SignUpWithSocialAccountController
   * `apps/server/src/rest/services/DiscordNotificationService.ts`
 
 ---
-
