@@ -10,12 +10,14 @@ import { Text } from './Text'
 import { User } from './User'
 import { CodeLine } from './CodeLine'
 import { Paragraph } from './Paragraph'
+import type { LessonCodeExplanation } from '../CodeSnippet'
 
 type Props = {
   children: string
+  lessonCodeExplanation?: LessonCodeExplanation
 }
 
-export const MdxView = ({ children }: Props) => {
+export const MdxView = ({ children, lessonCodeExplanation }: Props) => {
   return (
     <div className='prose prose-invert max-w-[80ch]'>
       <Markdown
@@ -40,7 +42,9 @@ export const MdxView = ({ children }: Props) => {
               component: Link,
             },
             Code: {
-              component: Code,
+              component: (props) => (
+                <Code {...props} lessonCodeExplanation={lessonCodeExplanation} />
+              ),
             },
             code: {
               component: CodeLine,

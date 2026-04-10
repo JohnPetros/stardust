@@ -1,5 +1,6 @@
 import { CodeSnippet } from '../../CodeSnippet'
 import { Animation } from '../Animation'
+import type { LessonCodeExplanation } from '../../CodeSnippet'
 
 type CodeProps = {
   code: string
@@ -7,6 +8,7 @@ type CodeProps = {
   exec: boolean
   children: unknown
   hasAnimation: boolean
+  lessonCodeExplanation?: LessonCodeExplanation
 }
 
 export const CodeView = ({
@@ -14,6 +16,7 @@ export const CodeView = ({
   isRunnable = false,
   exec = false,
   hasAnimation = true,
+  lessonCodeExplanation,
 }: CodeProps) => {
   if (!children) return
   let code = ''
@@ -31,7 +34,11 @@ export const CodeView = ({
   if (code)
     return (
       <Animation hasAnimation={hasAnimation}>
-        <CodeSnippet code={code as string} isRunnable={isRunnable || exec} />
+        <CodeSnippet
+          code={code as string}
+          isRunnable={isRunnable || exec}
+          lessonCodeExplanation={lessonCodeExplanation}
+        />
       </Animation>
     )
 }

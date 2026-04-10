@@ -12,5 +12,7 @@ export const STORAGE = {
     speakerPitch: `${APP_PREFIX}:speaker-pitch`,
     speakerEnabled: `${APP_PREFIX}:speaker-enabled`,
     challengeCode: (challengeId: string) => `${APP_PREFIX}:challenge-code.${challengeId}`,
+    lessonCodeExplanation: (chunkIndex: number) =>
+      `${APP_PREFIX}:lesson:code-explanation:${chunkIndex}`,
   },
 }

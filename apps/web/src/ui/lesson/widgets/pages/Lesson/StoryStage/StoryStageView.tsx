@@ -39,6 +39,7 @@ export const StoryStageView = ({
                 <StoryChunk
                   key={chunk}
                   value={chunk}
+                  chunkIndex={index}
                   hasAnimation={hasAnimation}
                   shouldMemoized={shouldMemoized}
                 />
