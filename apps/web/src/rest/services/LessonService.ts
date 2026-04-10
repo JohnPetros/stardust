@@ -18,6 +18,14 @@ export const LessonService = (restClient: RestClient): ILessonService => {
       return await restClient.get(`/lesson/stories/star/${starId.value}`)
     },
 
+    async fetchRemainingCodeExplanationUses() {
+      return await restClient.get('/lesson/code-explanation/remaining-uses')
+    },
+
+    async explainCode(code: string) {
+      return await restClient.post('/lesson/code-explanation', { code })
+    },
+
     async updateTextBlocks(starId: Id, textBlocks: TextBlockDto[]) {
       return await restClient.put(`/lesson/text-blocks/star/${starId.value}`, {
         textBlocks,
