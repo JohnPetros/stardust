@@ -51,14 +51,7 @@ Exatamente um dos seguintes documentos deve ser fornecido:
 
 ---
 
-## Template de Saída (Estrutura Obrigatória)
-
-Salve o arquivo em `documentation/features/{dominio}/plans/{nome-descritivo}-plan.md` seguindo **estritamente** o template abaixo.
-
 ```md
----
-description: Criar um plano de implementacao estruturado em fases e tarefas a partir de uma spec tecnica.
----
 
 ## Pendencias (quando aplicavel)
 

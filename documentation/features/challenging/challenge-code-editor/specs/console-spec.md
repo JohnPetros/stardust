@@ -1,6 +1,6 @@
 ---
 title: Console de output do editor de desafios
-prd: ../prd.md
+prd: https://github.com/JohnPetros/stardust/milestone/13
 apps: web
 status: closed
 last_updated_at: 2026-03-07
