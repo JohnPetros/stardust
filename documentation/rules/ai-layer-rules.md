@@ -104,7 +104,7 @@
 ### Agent/team pattern
 
 - `agents` recebem instrucoes via `constants` e expõem ferramentas explicitamente.
-- Exemplos reais: `apps/server/src/ai/mastra/teams/ChallengingTeam.ts`, `apps/web/src/ai/vercel/agents/manualAgents.ts`.
+- Exemplos reais: `apps/server/src/ai/mastra/teams/ChallengingSquad.ts`, `apps/web/src/ai/vercel/agents/manualAgents.ts`.
 
 ## Padroes de uso aplicados
 
@@ -116,7 +116,7 @@
    - **Persistencia**: `PostChallengeTool` delega para `PostChallengeUseCase` em `apps/server/src/ai/challenging/tools/PostChallengeTool.ts`.
 2. **Assistente de manual/conteudo (web)**
    - **Entrada**: rota `POST` em `apps/web/src/app/api/conversation/chats/[chatId]/assistant/route.ts`.
-   - **Orquestracao**: `AskAssistantController` + `VercelManualWorkflow` em `apps/web/src/rest/controllers/conversation/AskAssistantController.ts` e `apps/web/src/ai/vercel/workflows/VercelManualWorkflow.ts`.
+   - **Orquestracao**: `AskAssistantController` + `VercelAssistUserWorkflow` em `apps/web/src/rest/controllers/conversation/AskAssistantController.ts` e `apps/web/src/ai/vercel/workflows/VercelAssistUserWorkflow.ts`.
    - **Ferramentas**: `manualToolset` e `challengingToolset` em `apps/web/src/ai/vercel/toolsets`.
 
 ### Exemplo de implementacao correta (tool)
