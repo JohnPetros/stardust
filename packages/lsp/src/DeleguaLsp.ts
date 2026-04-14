@@ -1,23 +1,46 @@
 import {
   AvaliadorSintatico,
+  FormatadorDelegua,
   Lexador,
   TradutorJavaScript,
   TradutorReversoJavaScript,
 } from '@designliquido/delegua'
 import { AnalisadorSemantico } from '@designliquido/delegua/analisador-semantico'
 import { AvaliadorSintaticoJavaScript } from '@designliquido/delegua/avaliador-sintatico/traducao/avaliador-sintatico-javascript'
+import type { Declaracao } from '@designliquido/delegua/declaracoes'
+import { EstilizadorDelegua } from '@designliquido/delegua/estilizador/estilizador-delegua'
+import { QuebradorDeLinha } from '@designliquido/delegua/estilizador/quebrador-linha'
+import { RegraConvencaoNomenclatura } from '@designliquido/delegua/estilizador/regras/regra-convencao-nomenclatura'
+import { RegraParadigmaConsistente } from '@designliquido/delegua/estilizador/regras/regra-paradigma-consistente'
 import { LexadorJavaScript } from '@designliquido/delegua/lexador/traducao/lexador-javascript'
+import type {
+  DelimitadorTextoFormatacao,
+  TipoParadigma,
+} from '@designliquido/delegua/tipos'
 
-import { LspResponse } from '@stardust/core/global/responses'
 import { LspError } from '@stardust/core/global/errors'
-import type { CodeInput } from '@stardust/core/global/types'
 import type { LspProvider } from '@stardust/core/global/interfaces'
+import { LspResponse } from '@stardust/core/global/responses'
+import {
+  LspFormatterConfiguration,
+  LspLinterConfiguration,
+  type LspParadigm,
+  type TextDelimiter,
+} from '@stardust/core/global/structures'
+import type {
+  LspFormatterConfigurationDto,
+  LspLinterConfigurationDto,
+} from '@stardust/core/global/structures/dtos'
+import type { CodeInput } from '@stardust/core/global/types'
 
 import { DELEGUA_REGEX } from './constants'
 import type { DeleguaErro } from '../types/DeleguaErro'
 import { DeleguaInterpretador } from './DeleguaInterpretador'
 
 export class DeleguaLsp implements LspProvider {
+  private static readonly DEFAULT_LINE_BREAK = '\n'
+  private static readonly DEFAULT_INDENTATION_SIZE = 4
+
   private readonly lexador: Lexador = new Lexador()
   private readonly avaliadorSintatico: AvaliadorSintatico = new AvaliadorSintatico()
   private readonly analisadorSemantico: AnalisadorSemantico = new AnalisadorSemantico()
@@ -194,6 +217,200 @@ export class DeleguaLsp implements LspProvider {
     const tradutor = new TradutorJavaScript()
     const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
     return traducao.trim()
+  }
+
+  async lintCode(code: string, linterConfigurationDto: LspLinterConfigurationDto) {
+    const linterConfiguration = LspLinterConfiguration.create(linterConfigurationDto)
+
+    if (!linterConfiguration.isEnabled.value) return code
+
+    const rules: Array<RegraConvencaoNomenclatura | RegraParadigmaConsistente> = []
+
+    if (linterConfiguration.namingConvention.isEnabled.value) {
+      rules.push(
+        new RegraConvencaoNomenclatura({
+          variavel: this.mapVariableNamingConventionToDelegua(
+            linterConfiguration.namingConvention.variableNaming.value,
+          ),
+          constante: this.mapConstantNamingConventionToDelegua(
+            linterConfiguration.namingConvention.constantNaming.value,
+          ),
+          funcao: this.mapFunctionNamingConventionToDelegua(
+            linterConfiguration.namingConvention.functionNaming.value,
+          ),
+        }),
+      )
+    }
+
+    if (linterConfiguration.consistentParadigm.isEnabled.value) {
+      rules.push(
+        new RegraParadigmaConsistente({
+          paradigma: this.mapParadigmToDelegua(
+            linterConfiguration.consistentParadigm.paradigm.value,
+          ),
+        }),
+      )
+    }
+
+    if (!rules.length) return code
+
+    const declarations = await this.getDeclarations(code)
+    const estilizador = new EstilizadorDelegua(rules)
+    const lintedDeclarations = estilizador.estilizar(declarations)
+
+    return this.formatDeclarations(
+      lintedDeclarations,
+      'preservar',
+      DeleguaLsp.DEFAULT_INDENTATION_SIZE,
+    )
+  }
+
+  async formatCode(
+    code: string,
+    formatterConfigurationDto: LspFormatterConfigurationDto,
+  ) {
+    const formatterConfiguration = LspFormatterConfiguration.create(
+      formatterConfigurationDto,
+    )
+    const declarations = await this.getDeclarations(code)
+    const mappedDelimiter = this.mapTextDelimiterToDelegua(
+      formatterConfiguration.textDelimiter.value,
+    )
+    const formattedWithPreserveDelimiter = this.formatDeclarations(
+      declarations,
+      'preservar',
+      formatterConfiguration.indentationSize.value,
+    )
+
+    const formattedCode = this.formatDeclarations(
+      declarations,
+      mappedDelimiter,
+      formatterConfiguration.indentationSize.value,
+    )
+    const codeWithDelimiterFallback = this.applyTextDelimiterFallback(
+      formattedCode,
+      formattedWithPreserveDelimiter,
+      formatterConfiguration.textDelimiter.value,
+      mappedDelimiter,
+    )
+    const lineBreaker = new QuebradorDeLinha(
+      formatterConfiguration.maxCharsPerLine.value,
+      formatterConfiguration.indentationSize.value,
+      DeleguaLsp.DEFAULT_LINE_BREAK,
+    )
+
+    return lineBreaker.quebrar(codeWithDelimiterFallback)
+  }
+
+  private async getDeclarations(code: string): Promise<Declaracao[]> {
+    const lexingResult = this.lexador.mapear(code.split('\n'), -1)
+
+    if (lexingResult.erros.length) {
+      throw lexingResult.erros[0]
+    }
+
+    const parsingResult = await this.avaliadorSintatico.analisar(lexingResult, -1)
+
+    if (parsingResult.erros.length) {
+      throw parsingResult.erros[0]
+    }
+
+    return parsingResult.declaracoes
+  }
+
+  private formatDeclarations(
+    declarations: Declaracao[],
+    textDelimiter: DelimitadorTextoFormatacao,
+    indentationSize: number,
+  ) {
+    const formatter = new FormatadorDelegua(
+      DeleguaLsp.DEFAULT_LINE_BREAK,
+      indentationSize,
+      { delimitadorTexto: textDelimiter },
+    )
+
+    const codigoFormatado = formatter.formatar(declarations)
+
+    return this.adicionarLinhaEmBrancoEmFuncoesVazias(codigoFormatado)
+  }
+
+  private adicionarLinhaEmBrancoEmFuncoesVazias(codigo: string) {
+    return codigo.replace(DELEGUA_REGEX.funcaoVazia, '$1\n$2')
+  }
+
+  private mapTextDelimiterToDelegua(
+    textDelimiter: TextDelimiter['value'],
+  ): DelimitadorTextoFormatacao {
+    switch (textDelimiter) {
+      case 'single':
+        return 'aspas-simples'
+      case 'double':
+        return 'aspas-duplas'
+      default:
+        return 'preservar'
+    }
+  }
+
+  private mapParadigmToDelegua(paradigm: LspParadigm['value']): TipoParadigma {
+    switch (paradigm) {
+      case 'imperative':
+        return 'imperativo'
+      case 'infinitive':
+        return 'infinitivo'
+      default:
+        return 'ambos'
+    }
+  }
+
+  private mapVariableNamingConventionToDelegua(
+    namingConvention: 'caixaCamelo' | 'caixa_cobra' | 'CaixaPascal' | 'CAIXA_ALTA',
+  ): 'caixaCamelo' | 'caixa_cobra' | 'CaixaPascal' {
+    if (namingConvention === 'CAIXA_ALTA') return 'caixaCamelo'
+
+    return namingConvention
+  }
+
+  private mapConstantNamingConventionToDelegua(
+    namingConvention: 'caixaCamelo' | 'caixa_cobra' | 'CaixaPascal' | 'CAIXA_ALTA',
+  ): 'caixaCamelo' | 'CAIXA_ALTA' {
+    if (namingConvention === 'caixa_cobra' || namingConvention === 'CaixaPascal') {
+      return 'CAIXA_ALTA'
+    }
+
+    return namingConvention
+  }
+
+  private mapFunctionNamingConventionToDelegua(
+    namingConvention: 'caixaCamelo' | 'caixa_cobra' | 'CaixaPascal' | 'CAIXA_ALTA',
+  ): 'caixaCamelo' | 'caixa_cobra' | 'CaixaPascal' {
+    if (namingConvention === 'CAIXA_ALTA') return 'caixaCamelo'
+
+    return namingConvention
+  }
+
+  private applyTextDelimiterFallback(
+    code: string,
+    formattedWithPreserveDelimiter: string,
+    textDelimiter: TextDelimiter['value'],
+    mappedDelimiter: DelimitadorTextoFormatacao,
+  ) {
+    if (textDelimiter === 'preserve') return code
+
+    if (formattedWithPreserveDelimiter !== code) return code
+
+    if (mappedDelimiter === 'aspas-simples') {
+      return code.replace(/"([^"\\]*(?:\\.[^"\\]*)*)"/g, (_, content: string) => {
+        const escapedContent = content.replace(/'/g, "\\'")
+        const normalizedContent = escapedContent.replace(/\\"/g, '"')
+        return `'${normalizedContent}'`
+      })
+    }
+
+    return code.replace(/'([^'\\]*(?:\\.[^'\\]*)*)'/g, (_, content: string) => {
+      const escapedContent = content.replace(/"/g, '\\"')
+      const normalizedContent = escapedContent.replace(/\\'/g, "'")
+      return `"${normalizedContent}"`
+    })
   }
 
   private obtenhaTipo(valor: unknown) {

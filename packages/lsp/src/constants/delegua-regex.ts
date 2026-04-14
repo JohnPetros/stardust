@@ -6,5 +6,6 @@ export const DELEGUA_REGEX = {
   funcaoEscreva: /escreva\([^'"]*?(?:(['"])(?:(?!\1)[^\\]|\\.)*\1[^'"]*?)*[^'"]*?\)/,
   conteudoDeFuncaoEscreva: /escreva\((.*?)\)/,
   parametrosDeFuncaoQualquer: /\(([^)]+)\)/,
-  nomeDeFuncaoQualquer: /funcao\s+(\w+)\s*\(/,
+  nomeDeFuncaoQualquer: /fun[cç][aã]o\s+([\p{L}_][\p{L}\p{N}_]*)\s*\(/u,
+  funcaoVazia: /(fun[cç][aã]o\s+[\p{L}_][\p{L}\p{N}_]*\s*\([^)]*\)\s*\{\n)(\})/gu,
 }
