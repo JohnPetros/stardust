@@ -1,3 +1,5 @@
+import type { LspFormatterConfigurationDto } from '#global/domain/structures/dtos/LspFormatterConfigurationDto'
+import type { LspLinterConfigurationDto } from '#global/domain/structures/dtos/LspLinterConfigurationDto'
 import type { CodeInput } from '../../domain/types'
 import type { LspResponse } from '../../responses'
 
@@ -11,6 +13,14 @@ export interface LspProvider {
   getInput(code: string): string | null
   translateToLsp(jsCode: unknown): Promise<string>
   translateToJs(codeRunnerCode: string): Promise<string>
+  formatCode(
+    code: string,
+    formatterConfigurationDto: LspFormatterConfigurationDto,
+  ): Promise<string>
+  lintCode(
+    code: string,
+    linterConfigurationDto: LspLinterConfigurationDto,
+  ): Promise<string>
   getInputsCount(code: string): number
   performSyntaxAnalysis(code: string): Promise<LspResponse>
   performSemanticAnalysis(code: string): Promise<LspResponse>
