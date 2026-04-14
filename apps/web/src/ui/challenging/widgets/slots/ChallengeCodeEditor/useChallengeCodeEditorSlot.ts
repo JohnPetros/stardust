@@ -8,6 +8,7 @@ import { ROUTES, STORAGE } from '@/constants'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
+import { useEditorContext } from '@/ui/global/hooks/useEditorContext'
 import { useLsp } from '@/ui/global/hooks/useLsp'
 import type { ConsoleRef } from '@/ui/global/widgets/components/Console/types'
 import type { CodeEditorRef } from '@/ui/global/widgets/components/CodeEditor/types'
@@ -31,9 +32,11 @@ export function useChallengeCodeEditorSlot() {
   const { md: isMobile } = useBreakpoint()
   const { playAudio } = useAudioContext()
   const { lspProvider } = useLsp()
+  const { getEditorConfig } = useEditorContext()
   const toast = useToastContext()
   const router = useNavigationProvider()
   const userCode = useRef<Code>(Code.create(lspProvider))
+  const lastAutoFormattedCodeRef = useRef<string | null>(null)
   const editorContainerRef = useRef<HTMLDivElement>(null)
   const codeEditorRef = useRef<CodeEditorRef>(null)
   const runCodeButtonRef = useRef<HTMLButtonElement>(null)
@@ -45,6 +48,22 @@ export function useChallengeCodeEditorSlot() {
   )
   const initialCode =
     typeof window !== 'undefined' ? (localStorage.get() ?? challenge?.code ?? '') : ''
+
+  async function formatInitialCode(code: string) {
+    const { formatter, linter, tabSize } = getEditorConfig()
+    const formatterConfiguration = {
+      ...formatter,
+      indentationSize: tabSize,
+    }
+
+    const lintedCode =
+      linter.isEnabled &&
+      (linter.namingConvention.isEnabled || linter.consistentParadigm.isEnabled)
+        ? await lspProvider.lintCode(code, linter)
+        : code
+
+    return lspProvider.formatCode(lintedCode, formatterConfiguration)
+  }
 
   const handleLspError = useCallback(
     (message: string, line: number) => {
@@ -115,10 +134,37 @@ export function useChallengeCodeEditorSlot() {
   }, [])
 
   useEffect(() => {
-    if (!userCode?.current.value && challenge) {
-      userCode.current = Code.create(lspProvider, initialCode)
-    }
+    if (!challenge || !initialCode) return
+
+    userCode.current = Code.create(lspProvider, initialCode)
   }, [challenge, lspProvider, initialCode])
+
+  useEffect(() => {
+    if (!challenge || !initialCode) return
+
+    const challengeLoadId = `${challenge.id.value}:${initialCode}`
+
+    if (lastAutoFormattedCodeRef.current === challengeLoadId) return
+
+    lastAutoFormattedCodeRef.current = challengeLoadId
+
+    void (async () => {
+      try {
+        const formattedCode = await formatInitialCode(initialCode)
+
+        if (formattedCode === initialCode) return
+
+        localStorage.set(formattedCode)
+        userCode.current = Code.create(lspProvider, formattedCode)
+        setTimeout(() => {
+          codeEditorRef.current?.setValue(formattedCode)
+          console.log('Formatado')
+        }, 2000)
+      } catch {
+        userCode.current = Code.create(lspProvider, initialCode)
+      }
+    })()
+  }, [])
 
   useEffect(() => {
     if (panelsLayout) {

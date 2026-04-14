@@ -1,6 +1,7 @@
 'use client'
 
 import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
+import { useEffect } from 'react'
 
 import type { CodeEditorRef, CodeEditorTheme } from './types'
 import { useCodeEditor } from './useCodeEditor'
@@ -47,6 +48,7 @@ export const Widget = (
     getSelectedText,
     handleChange,
     handleEditorDidMount,
+    updateEditorOptions,
   } = useCodeEditor({
     initialValue: value,
     theme,
@@ -56,6 +58,10 @@ export const Widget = (
     lspSnippets: snippets,
     onChange,
   })
+
+  useEffect(() => {
+    updateEditorOptions(tabSize, fontSize - (isMobile ? 2 : 0))
+  }, [tabSize, fontSize, isMobile, updateEditorOptions])
 
   useImperativeHandle(ref, () => {
     return {
@@ -77,6 +83,7 @@ export const Widget = (
     setCursorPosition,
     getSelectedLinesRange,
     getSelectedText,
+    updateEditorOptions,
   ])
 
   return (

@@ -12,10 +12,10 @@ type EditorProviderProps = {
 export const EditorContext = createContext({} as EditorContextValue)
 
 export function EditorProvider({ children }: EditorProviderProps) {
-  const { state, dispatch } = useEditorContextProvider()
+  const { state, dispatch, getEditorConfig } = useEditorContextProvider()
 
   return (
-    <EditorContext.Provider value={{ state, dispatch }}>
+    <EditorContext.Provider value={{ state, dispatch, getEditorConfig }}>
       {children}
     </EditorContext.Provider>
   )

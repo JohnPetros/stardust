@@ -17,6 +17,9 @@ jest.mock('@/ui/global/hooks/useBreakpoint', () => ({
 jest.mock('@/ui/global/hooks/useLsp', () => ({
   useLsp: jest.fn(),
 }))
+jest.mock('@/ui/global/hooks/useEditorContext', () => ({
+  useEditorContext: jest.fn(),
+}))
 jest.mock('@/ui/global/hooks/useLocalStorage', () => ({
   useLocalStorage: jest.fn(),
 }))
@@ -32,6 +35,7 @@ const { useChallengeStore } = require('@/ui/challenging/stores/ChallengeStore')
 const { useToastContext } = require('@/ui/global/contexts/ToastContext')
 const { useBreakpoint } = require('@/ui/global/hooks/useBreakpoint')
 const { useLsp } = require('@/ui/global/hooks/useLsp')
+const { useEditorContext } = require('@/ui/global/hooks/useEditorContext')
 const { useLocalStorage } = require('@/ui/global/hooks/useLocalStorage')
 const { useNavigationProvider } = require('@/ui/global/hooks/useNavigationProvider')
 const { useAudioContext } = require('@/ui/global/hooks/useAudioContext')
@@ -57,6 +61,8 @@ describe('useChallengeCodeEditorSlot', () => {
     getInput: jest.fn(() => null),
     translateToLsp: jest.fn(async (value) => String(value ?? '')),
     translateToJs: jest.fn(),
+    formatCode: jest.fn(async (code) => code),
+    lintCode: jest.fn(async (code) => code),
     getInputsCount: jest.fn(() => 0),
     performSyntaxAnalysis: jest.fn(),
     performSemanticAnalysis: jest.fn(),
@@ -102,6 +108,35 @@ describe('useChallengeCodeEditorSlot', () => {
     })
 
     jest.mocked(useLsp).mockReturnValue({ lspProvider } as ReturnType<typeof useLsp>)
+
+    jest.mocked(useEditorContext).mockReturnValue({
+      state: {} as never,
+      dispatch: jest.fn(),
+      getEditorConfig: () => ({
+        fontSize: 16,
+        tabSize: 4,
+        themeName: 'darkSpace',
+        isCodeCheckerEnabled: true,
+        formatter: {
+          textDelimiter: 'preserve',
+          maxCharsPerLine: 100,
+          indentationSize: 4,
+        },
+        linter: {
+          isEnabled: true,
+          namingConvention: {
+            isEnabled: false,
+            variable: 'caixaCamelo',
+            constant: 'CAIXA_ALTA',
+            function: 'caixaCamelo',
+          },
+          consistentParadigm: {
+            isEnabled: false,
+            paradigm: 'both',
+          },
+        },
+      }),
+    })
 
     jest.mocked(useLocalStorage).mockReturnValue({
       get: localStorageGet,
@@ -206,5 +241,23 @@ describe('useChallengeCodeEditorSlot', () => {
 
     expect(playAudio).toHaveBeenCalledWith('fail-code-result.wav')
     expect(showError).toHaveBeenCalledWith('Erro interno do interpretador.')
+  })
+
+  it('should auto format initial challenge code on load and persist formatted value', async () => {
+    localStorageGet.mockReturnValue('escreva("oi")')
+    lspProvider.formatCode.mockResolvedValue('escreva("oi");')
+
+    renderHook(() => useChallengeCodeEditorSlot())
+
+    await act(async () => {
+      await Promise.resolve()
+    })
+
+    expect(lspProvider.formatCode).toHaveBeenCalledWith('escreva("oi")', {
+      textDelimiter: 'preserve',
+      maxCharsPerLine: 100,
+      indentationSize: 4,
+    })
+    expect(localStorageSet).toHaveBeenCalledWith('escreva("oi");')
   })
 })

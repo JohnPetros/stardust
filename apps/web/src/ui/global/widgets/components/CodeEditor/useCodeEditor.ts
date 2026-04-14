@@ -13,6 +13,8 @@ import { CODE_EDITOR_THEMES } from './code-editor-themes'
 import type { CodeEditorTheme, CursorPosition } from './types'
 import { LANGUAGE } from './language'
 
+let deleguaCompletionProvider: monaco.IDisposable | null = null
+
 type Params = {
   initialValue: string
   theme: CodeEditorTheme
@@ -165,15 +167,141 @@ export function useCodeEditor({
     }, 100)
   }
 
-  function provideCompletionItems() {
-    const suggestions = lspSnippets.map((snippet) => ({
+  function extractLocalFunctionNames(code: string) {
+    const functionNames = new Set<string>()
+
+    const functionDeclarationRegex = /\b(?:funcao|função)\s+([a-zA-ZÀ-ú_][\wÀ-ú]*)\s*\(/g
+    const assignedFunctionRegex =
+      /\b(?:var|variavel|variável|const|constante|fixo)\s+([a-zA-ZÀ-ú_][\wÀ-ú]*)\s*=\s*(?:funcao|função)\s*\(/g
+
+    let match: RegExpExecArray | null
+
+    while ((match = functionDeclarationRegex.exec(code)) !== null) {
+      if (match[1]) {
+        functionNames.add(match[1])
+      }
+    }
+
+    while ((match = assignedFunctionRegex.exec(code)) !== null) {
+      if (match[1]) {
+        functionNames.add(match[1])
+      }
+    }
+
+    return [...functionNames]
+  }
+
+  function extractLocalBindingNames(code: string) {
+    const variableNames = new Set<string>()
+    const constantNames = new Set<string>()
+
+    const variableDeclarationRegex =
+      /\b(?:var|variavel|variável)\s+([a-zA-ZÀ-ú_][\wÀ-ú]*)/g
+    const constantDeclarationRegex =
+      /\b(?:const|constante|fixo)\s+([a-zA-ZÀ-ú_][\wÀ-ú]*)/g
+
+    let match: RegExpExecArray | null
+
+    while ((match = variableDeclarationRegex.exec(code)) !== null) {
+      if (match[1]) {
+        variableNames.add(match[1])
+      }
+    }
+
+    while ((match = constantDeclarationRegex.exec(code)) !== null) {
+      if (match[1]) {
+        constantNames.add(match[1])
+      }
+    }
+
+    return {
+      variableNames: [...variableNames],
+      constantNames: [...constantNames],
+    }
+  }
+
+  function provideCompletionItems(
+    model: monaco.editor.ITextModel,
+    position: monaco.Position,
+  ) {
+    const snippetsSuggestions = lspSnippets.map((snippet) => ({
       label: snippet.label,
-      kind: 17, // Monaco keyword,
+      kind: monacoRef.current?.languages.CompletionItemKind.Keyword ?? 17,
       insertText: snippet.code,
       insertTextRules: 4,
     }))
+
+    const wordUntilPosition = model.getWordUntilPosition(position)
+    const range = {
+      startLineNumber: position.lineNumber,
+      endLineNumber: position.lineNumber,
+      startColumn: wordUntilPosition.startColumn,
+      endColumn: wordUntilPosition.endColumn,
+    }
+    const currentWord = wordUntilPosition.word.toLowerCase()
+
+    const localFunctionSuggestions = extractLocalFunctionNames(model.getValue())
+      .filter((functionName) => {
+        if (!currentWord) return true
+
+        return functionName.toLowerCase().startsWith(currentWord)
+      })
+      .map((functionName) => ({
+        label: functionName,
+        kind: monacoRef.current?.languages.CompletionItemKind.Function ?? 1,
+        insertText: functionName,
+        range,
+        detail: 'Função local',
+      }))
+
+    const { variableNames, constantNames } = extractLocalBindingNames(model.getValue())
+
+    const localVariableSuggestions = variableNames
+      .filter((variableName) => {
+        if (!currentWord) return true
+
+        return variableName.toLowerCase().startsWith(currentWord)
+      })
+      .map((variableName) => ({
+        label: variableName,
+        kind: monacoRef.current?.languages.CompletionItemKind.Variable ?? 6,
+        insertText: variableName,
+        range,
+        detail: 'Variável local',
+      }))
+
+    const localConstantSuggestions = constantNames
+      .filter((constantName) => {
+        if (!currentWord) return true
+
+        return constantName.toLowerCase().startsWith(currentWord)
+      })
+      .map((constantName) => ({
+        label: constantName,
+        kind: monacoRef.current?.languages.CompletionItemKind.Constant ?? 21,
+        insertText: constantName,
+        range,
+        detail: 'Constante local',
+      }))
+
+    const uniqueSuggestions = [
+      ...localFunctionSuggestions,
+      ...localVariableSuggestions,
+      ...localConstantSuggestions,
+      ...snippetsSuggestions,
+    ].filter((suggestion, index, suggestions) => {
+      return (
+        suggestions.findIndex((current) => {
+          return (
+            current.label === suggestion.label &&
+            current.insertText === suggestion.insertText
+          )
+        }) === index
+      )
+    })
+
     return {
-      suggestions,
+      suggestions: uniqueSuggestions,
     }
   }
 
@@ -209,7 +337,12 @@ export function useCodeEditor({
     monaco.languages.setMonarchTokensProvider(LANGUAGE, monacoTokensProvider)
     monaco.languages.setLanguageConfiguration(LANGUAGE, monacoLanguageConfiguration)
     monaco.languages.registerHoverProvider(LANGUAGE, { provideHover })
-    monaco.languages.registerCompletionItemProvider(LANGUAGE, { provideCompletionItems })
+    if (!deleguaCompletionProvider) {
+      deleguaCompletionProvider = monaco.languages.registerCompletionItemProvider(
+        LANGUAGE,
+        { provideCompletionItems },
+      )
+    }
 
     const rules = getEditorRules()
     monaco.editor.defineTheme('dark-space', {
@@ -224,6 +357,22 @@ export function useCodeEditor({
     monacoRef.current = monaco
   }
 
+  function updateEditorOptions(tabSize: number, fontSize: number) {
+    monacoEditorRef.current?.updateOptions({
+      tabSize,
+      fontSize,
+      detectIndentation: false,
+      insertSpaces: true,
+    })
+
+    monacoEditorRef.current?.getModel()?.updateOptions({
+      tabSize,
+      indentSize: tabSize,
+      insertSpaces: true,
+      trimAutoWhitespace: true,
+    })
+  }
+
   return {
     getValue,
     setValue,
@@ -235,5 +384,6 @@ export function useCodeEditor({
     getSelectedText,
     handleChange,
     handleEditorDidMount,
+    updateEditorOptions,
   }
 }

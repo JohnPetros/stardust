@@ -1,4 +1,8 @@
 import { type KeyboardEvent, type RefObject, useRef } from 'react'
+
+import type { LspProvider } from '@stardust/core/global/interfaces'
+
+import type { EditorContextState } from '@/ui/global/contexts/EditorContext/types'
 import type { CodeEditorRef } from '../CodeEditor/types'
 
 type UseCodeEditorToolbarParams = {
@@ -6,6 +10,9 @@ type UseCodeEditorToolbarParams = {
   codeEditorRef: RefObject<CodeEditorRef | null>
   runCodeButtonRef: RefObject<HTMLButtonElement | null>
   guidesDialogButtonRef: RefObject<HTMLButtonElement | null>
+  lspProvider: LspProvider
+  isMacOS: boolean
+  onEditorConfig: () => EditorContextState
 }
 
 export function useCodeEditorToolbar({
@@ -13,6 +20,9 @@ export function useCodeEditorToolbar({
   codeEditorRef,
   runCodeButtonRef,
   guidesDialogButtonRef,
+  lspProvider,
+  isMacOS,
+  onEditorConfig,
 }: UseCodeEditorToolbarParams) {
   const hasCodedEditorReset = useRef(false)
 
@@ -83,25 +93,59 @@ export function useCodeEditorToolbar({
     codeEditorRef.current?.undoValue()
   }
 
-  function handleKeyDown({ altKey, ctrlKey, key }: KeyboardEvent) {
+  async function handleFormatCode() {
+    const currentCode = codeEditorRef.current?.getValue()
+
+    if (!currentCode) return
+
+    const { formatter, linter, tabSize } = onEditorConfig()
+    const formatterConfiguration = {
+      ...formatter,
+      indentationSize: tabSize,
+    }
+
+    try {
+      const lintedCode =
+        linter.isEnabled &&
+        (linter.namingConvention.isEnabled || linter.consistentParadigm.isEnabled)
+          ? await lspProvider.lintCode(currentCode, linter)
+          : currentCode
+      const formattedCode = await lspProvider.formatCode(
+        lintedCode,
+        formatterConfiguration,
+      )
+
+      codeEditorRef.current?.setValue(formattedCode)
+    } catch {
+      codeEditorRef.current?.setValue(currentCode)
+    }
+  }
+
+  function handleKeyDown({ altKey, ctrlKey, metaKey, key }: KeyboardEvent) {
     const typedKey = key.toLowerCase()
+    const isPrimaryModifierPressed = isMacOS ? metaKey : ctrlKey
 
     if (altKey && typedKey === 'enter') {
       handleAltEnter()
       return
     }
 
-    if (ctrlKey && typedKey === '.') {
+    if (isPrimaryModifierPressed && typedKey === 'm') {
+      void handleFormatCode()
+      return
+    }
+
+    if (isPrimaryModifierPressed && typedKey === '.') {
       handleCtrlDot()
       return
     }
 
-    if (ctrlKey && typedKey === 'k') {
+    if (isPrimaryModifierPressed && typedKey === 'k') {
       handleCtrlK()
       return
     }
 
-    if (ctrlKey && typedKey === 'z') {
+    if (isPrimaryModifierPressed && typedKey === 'z') {
       handleCtrlZ()
       return
     }
@@ -113,5 +157,6 @@ export function useCodeEditorToolbar({
     handleResetCodeButtonClick,
     handleAssistantButtonClick,
     handleKeyDown,
+    handleFormatCode,
   }
 }

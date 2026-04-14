@@ -43,8 +43,10 @@ describe('CodeEditorToolbarView', () => {
       <CodeEditorToolbarView
         runCodeButtonRef={{ current: null }}
         guidesDialogButtonRef={{ current: null }}
+        isMacOS={false}
         isAssistantAllowed={false}
         onRunCode={jest.fn()}
+        onFormatCode={jest.fn()}
         onOpenConsole={jest.fn()}
         onKeyDown={jest.fn()}
         onResetCodeButtonClick={jest.fn()}

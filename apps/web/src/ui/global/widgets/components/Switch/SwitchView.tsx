@@ -49,6 +49,7 @@ export const SwitchView = ({
         id={id}
         name={name}
         value={value}
+        disabled={isDisabled}
         checked={isChecked}
         defaultChecked={defaultChecked}
         onCheckedChange={onCheck}

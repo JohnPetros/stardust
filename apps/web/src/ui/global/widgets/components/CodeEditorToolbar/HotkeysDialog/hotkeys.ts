@@ -1,26 +1,38 @@
-export const HOTKEYS = [
+type BuildHotkeysParams = {
+  primaryModifierKeyLabel: 'Ctrl' | 'Cmd'
+  altModifierKeyLabel: 'Alt' | 'Option'
+}
+
+export const buildHotkeys = ({
+  primaryModifierKeyLabel,
+  altModifierKeyLabel,
+}: BuildHotkeysParams) => [
   {
     action: 'Executar código',
-    command: 'Alt + Enter',
+    command: `${altModifierKeyLabel} + Enter`,
+  },
+  {
+    action: 'Arrumar código',
+    command: `${primaryModifierKeyLabel} + M`,
   },
   {
     action: 'Exibir documentação da linguagem',
-    command: 'Ctrl + K',
+    command: `${primaryModifierKeyLabel} + K`,
   },
   {
     action: 'Deletar/copiar linha',
-    command: 'Ctrl + X',
+    command: `${primaryModifierKeyLabel} + X`,
   },
   {
     action: 'Selecionar linha',
-    command: 'Ctrl + L',
+    command: `${primaryModifierKeyLabel} + L`,
   },
   {
     action: 'Comentar código',
-    command: 'Ctrl + .',
+    command: `${primaryModifierKeyLabel} + .`,
   },
   {
     action: 'Apagar último código digitado',
-    command: 'Ctrl + Z',
+    command: `${primaryModifierKeyLabel} + Z`,
   },
 ]

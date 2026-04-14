@@ -14,8 +14,10 @@ type CodeEditorToolbarProps = {
   originalCode?: string
   runCodeButtonRef: RefObject<HTMLButtonElement | null>
   guidesDialogButtonRef: RefObject<HTMLButtonElement | null>
+  isMacOS: boolean
   isAssistantAllowed: boolean
   onRunCode: () => void
+  onFormatCode: () => void
   onOpenConsole?: () => void
   onKeyDown: (event: KeyboardEvent) => void
   onResetCodeButtonClick: () => void
@@ -26,15 +28,17 @@ export const CodeEditorToolbarView = ({
   children,
   runCodeButtonRef,
   guidesDialogButtonRef,
+  isMacOS,
   isAssistantAllowed,
   onAssistantEnabledChange,
   onResetCodeButtonClick,
   onRunCode,
+  onFormatCode,
   onOpenConsole,
   onKeyDown,
 }: CodeEditorToolbarProps) => {
   return (
-    <div onKeyUp={onKeyDown}>
+    <div onKeyDown={onKeyDown}>
       <div className='flex items-center justify-between rounded-t-md bg-gray-700 px-3 py-2'>
         <div className='flex items-center gap-4'>
           <Button
@@ -47,6 +51,8 @@ export const CodeEditorToolbarView = ({
         </div>
 
         <Toolbar.Container className='flex items-center gap-3'>
+          <Toolbar.Button label='Arrumar código' icon='function' onClick={onFormatCode} />
+
           <AlertDialog
             type='asking'
             title='Tem certeza que deseja voltar para o código inicial?'
@@ -75,7 +81,7 @@ export const CodeEditorToolbarView = ({
             <Toolbar.Button label='Console' icon='terminal' onClick={onOpenConsole} />
           )}
 
-          <HotkeysDialog>
+          <HotkeysDialog isMacOS={isMacOS}>
             <Toolbar.Button label='Comandos' icon='command' />
           </HotkeysDialog>
 

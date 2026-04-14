@@ -24,7 +24,7 @@ export const RangeInputView = ({
       <strong className='text-gray-100 w-10'>{value}</strong>
       <Slider.Root
         id={id}
-        defaultValue={[value]}
+        value={[value]}
         min={min}
         max={max}
         step={step}
