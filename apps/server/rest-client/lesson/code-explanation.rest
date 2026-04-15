@@ -1,0 +1,32 @@
+@URL = {{BASE_URL}}/lesson/code-explanation
+
+### Fetch remaining code explanation uses
+GET {{URL}}/remaining-uses
+Authorization: Bearer {{JWT}}
+
+### Explain code
+POST {{URL}}
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "code": "funcao eitaPreula() {\nescreva('Olá, mundo!')\n}"
+}
+
+### Explain incomplete code (fallback behavior)
+POST {{URL}}
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "code": "para (var i = 0; i < 3; i++) {"
+}
+
+### Explain code invalid payload (validation)
+POST {{URL}}
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "code": 123
+}

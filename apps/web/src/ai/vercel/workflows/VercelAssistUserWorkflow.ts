@@ -1,14 +1,14 @@
 import { convertToModelMessages, smoothStream } from 'ai'
 
-import type { ManualWorkflow } from '@stardust/core/manual/interfaces'
+import type { AssistUserWorkflow } from '@stardust/core/manual/interfaces'
 import { ChatMessage } from '@stardust/core/conversation/structures'
 
 import { assistantAgent } from '../agents/manualAgents'
 import { convertToUiMessages } from '../utils/convertToUiMessages'
 
-export const VercelManualWorkflow = (): ManualWorkflow => {
+export const VercelAssistUserWorkflow = (): AssistUserWorkflow => {
   return {
-    async assistUser(
+    async run(
       chatMessages: ChatMessage[],
       onFinish: (lastMessage: ChatMessage) => Promise<void>,
     ) {

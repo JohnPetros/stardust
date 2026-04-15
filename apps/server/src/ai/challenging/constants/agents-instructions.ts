@@ -95,7 +95,7 @@ Super-Rotação: O fator k pode ser superior ao número total de módulos. Caso 
 
 Exemplo de código para a função:
 
-funcao encontrarModulo(modulos, k) {
+  funcao encontrarModulo(modulos, k) {
 
 }
 `,

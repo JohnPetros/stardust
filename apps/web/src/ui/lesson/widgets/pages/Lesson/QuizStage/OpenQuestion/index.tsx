@@ -31,7 +31,11 @@ export function OpenQuestion({
 
       {code && (
         <div className='mt-3 w-full'>
-          <CodeSnippet code={code} isRunnable={false} />
+          <CodeSnippet
+            code={code}
+            isRunnable={false}
+            lessonCodeExplanation={{ source: 'quiz' }}
+          />
         </div>
       )}
 

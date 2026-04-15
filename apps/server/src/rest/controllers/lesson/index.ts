@@ -1,6 +1,8 @@
 export { FetchQuestionsController } from './FetchQuestionsController'
 export { FetchTextBlocksController } from './FetchTextBlocksController'
 export { FetchStoryController } from './FetchStoryController'
+export { FetchRemainingCodeExplanationUsesController } from './FetchRemainingCodeExplanationUsesController'
+export { ExplainCodeController } from './ExplainCodeController'
 export { UpdateStoryController } from './UpdateStoryController'
 export { UpdateQuestionsController } from './UpdateQuestionsController'
 export { UpdateTextBlocksController } from './UpdateTextBlocksController'

@@ -1,6 +1,6 @@
 import type { ConversationService } from '@stardust/core/conversation/interfaces'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
-import type { ManualWorkflow } from '@stardust/core/manual/interfaces'
+import type { AssistUserWorkflow } from '@stardust/core/manual/interfaces'
 import { ChatMessage } from '@stardust/core/conversation/structures'
 import { Id } from '@stardust/core/global/structures'
 import type {
@@ -22,7 +22,7 @@ type Schema = {
 
 type Dependencies = {
   service: ConversationService
-  workflow: ManualWorkflow
+  workflow: AssistUserWorkflow
 }
 
 function buildContextMessage(
@@ -79,7 +79,7 @@ export const AskAssistantController = ({
         .map(ChatMessage.create)
         .concat(userMessageForAssistant)
 
-      const result = await workflow.assistUser(
+      const result = await workflow.run(
         chatMessages,
         async (assistantMessage: ChatMessage) => {
           const userMessageResponse = await service.sendChatMessage(chatId, userMessage)
