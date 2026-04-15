@@ -1,1 +1,1 @@
-export { MANUAL_PROMPTS } from './manual-prompts'
+export { MANUAL_INSTRUCTIONS } from './manual-instructions'

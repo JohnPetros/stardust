@@ -56,12 +56,11 @@ export const AssistantMessageView = ({ children, isThinking }: Props) => {
         {!isThinking &&
           blocks.map((block) => (
             <Mdx key={block.content}>
-              {`\n${block.content}`}
-              {/* {block.type !== 'normal-text'
+              {block.type !== 'normal-text'
                 ? block.type === 'Code'
                   ? `<Code exec>${block.content}</Code>`
                   : `<${block.type}>\n${block.content}\n</${block.type}>`
-                : `\n${block.content}`} */}
+                : `\n${block.content}`}
             </Mdx>
           ))}
       </div>

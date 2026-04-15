@@ -16,11 +16,12 @@ export const SearchGuidesTool = (service: StorageService): Tool<Input, Output> =
       const { query } = mcp.getInput()
       const response = await service.searchEmbeddings(
         Text.create(query),
-        Integer.create(3),
+        Integer.create(10),
         EmbeddingNamespace.createAsGuides(),
       )
       if (response.isFailure) response.throwError()
-      console.log(response.body)
+      console.log('query', query)
+      console.log('response', response.body)
       return response.body
     },
   }

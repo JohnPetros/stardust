@@ -6,7 +6,7 @@ type CodeLineProps = {
 
 export const CodeLineView = ({ children }: CodeLineProps) => {
   return (
-    <span className='inline-block mx-1 rounded-md bg-gray-400 px-[10px] font-code text-gray-900'>
+    <span className='inline-block mx-1 rounded-md bg-gray-400 px-[8px] font-code text-sm text-gray-900'>
       {children}
     </span>
   )

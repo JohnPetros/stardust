@@ -2,7 +2,7 @@ import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Mcp } from '@stardust/core/global/interfaces'
 
-import { GetMdxBlocksGuideTool } from '../getMdxBlocksGuideTool'
+import { GetMdxBlocksGuideTool } from '../GetMdxBlocksGuideTool'
 
 describe('Get Mdx Blocks Guide Tool', () => {
   let mcp: Mock<Mcp>

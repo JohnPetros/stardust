@@ -22,7 +22,10 @@ import {
   RankingWinnersDefinedEvent,
 } from '@stardust/core/ranking/events'
 import { AccountSignedInEvent, AccountSignedUpEvent } from '@stardust/core/auth/events'
-import { GuideContentEditedEvent } from '@stardust/core/manual/events'
+import {
+  GuideContentEditedEvent,
+  GuidesEmbeddingsReindexRequestedEvent,
+} from '@stardust/core/manual/events'
 import { ChallengePostedEvent } from '@stardust/core/challenging/events'
 
 import { ENV } from '../../constants'
@@ -116,6 +119,7 @@ const eventsSchema = {
       guideContent: stringSchema,
     }),
   },
+  [GuidesEmbeddingsReindexRequestedEvent._NAME]: {},
   [ChallengePostedEvent._NAME]: {
     data: z.object({
       challengeSlug: stringSchema,

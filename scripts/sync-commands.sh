@@ -5,6 +5,7 @@ PROMPTS_DIR="documentation/prompts"
 OUT_DIRS=(
   ".cursor/commands"
   ".opencode/commands"
+  ".claude/commands"
 )
 
 # Garante que existem prompts

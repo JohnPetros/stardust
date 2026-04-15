@@ -27,6 +27,7 @@ import {
   NotificationFunctions,
   StorageFunctions,
   ChallengingFunctions,
+  ManualFunctions,
 } from '@/queue/inngest/functions'
 import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
 import {
@@ -198,6 +199,7 @@ export class HonoApp {
       const storageFunctions = new StorageFunctions(inngest)
       const notificationFunctions = new NotificationFunctions(inngest)
       const challengingFunctions = new ChallengingFunctions(inngest)
+      const manualFunctions = new ManualFunctions(inngest)
 
       return serveInngest({
         client: inngest,
@@ -209,6 +211,7 @@ export class HonoApp {
           ...storageFunctions.getFunctions(),
           ...notificationFunctions.getFunctions(),
           ...challengingFunctions.getFunctions(supabase),
+          ...manualFunctions.getFunctions(supabase),
         ],
       })(context)
     })

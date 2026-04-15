@@ -18,6 +18,7 @@ type Props = {
   containerRef: RefObject<HTMLDivElement | null>
   chatErrorType: ChatErrorType | null
   onSendMessageButtonClick: (messageContent: string) => void
+  onPauseAssistantResponseButtonClick: () => void
 }
 
 export const AssistantChatView = ({
@@ -29,6 +30,7 @@ export const AssistantChatView = ({
   containerRef,
   chatErrorType,
   onSendMessageButtonClick,
+  onPauseAssistantResponseButtonClick,
 }: Props) => {
   return (
     <div className='relative flex flex-col justify-between h-full'>
@@ -69,7 +71,9 @@ export const AssistantChatView = ({
           isDisabled={
             isAssistantThinking || isAssistantAnswering || Boolean(chatErrorType)
           }
+          isAssistantGenerating={isAssistantThinking || isAssistantAnswering}
           onSendMessage={onSendMessageButtonClick}
+          onPauseAssistantResponse={onPauseAssistantResponseButtonClick}
         />
       </div>
     </div>
