@@ -30,7 +30,6 @@ export class CodeExplanationRouter extends HonoRouter {
         const cacheProvider = new UpstashCacheProvider()
         const controller = new FetchRemainingCodeExplanationUsesController(cacheProvider)
         const response = await controller.handle(http)
-        remainingCodeExplanationUsesSchema.parse(response.body)
         return http.sendResponse(response)
       },
     )
@@ -47,11 +46,6 @@ export class CodeExplanationRouter extends HonoRouter {
         const explainCodeWorkflow = new MastraExplainCodeWorkflow()
         const controller = new ExplainCodeController(cacheProvider, explainCodeWorkflow)
         const response = await controller.handle(http)
-
-        if (response.isSuccessful) {
-          codeExplanationResponseSchema.parse(response.body)
-        }
-
         return http.sendResponse(response)
       },
     )
