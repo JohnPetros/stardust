@@ -4,7 +4,7 @@ import z from 'zod'
 import type { ExplainCodeWorkflow } from '@stardust/core/lesson/interfaces'
 import { codeExplanationResponseSchema } from '@stardust/validation/lesson/schemas'
 
-import { LessonTeam } from '../teams'
+import { LessonSquad } from '../squads'
 
 export class MastraExplainCodeWorkflow implements ExplainCodeWorkflow {
   async run(code: string): Promise<string> {
@@ -43,7 +43,7 @@ export class MastraExplainCodeWorkflow implements ExplainCodeWorkflow {
   }
 
   private explainCode() {
-    return createStep(LessonTeam.codeExplainerAgent, {
+    return createStep(LessonSquad.codeExplainerAgent, {
       structuredOutput: {
         schema: codeExplanationResponseSchema,
       },

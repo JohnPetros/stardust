@@ -13,7 +13,7 @@ import {
   SupabaseChallengeSourcesRepository,
 } from '@/database/supabase/repositories'
 import { InngestBroker } from '@/queue/inngest/InngestBroker'
-import { TOOLS_DESCRIPTIONS } from '@/ai/constants'
+import { TOOLS_DESCRIPTIONS } from '@/ai/challenging/constants'
 import {
   GetAllChallengeCategoriesTool,
   GetChallengeProblemTool,
