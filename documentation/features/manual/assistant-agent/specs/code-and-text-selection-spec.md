@@ -34,7 +34,7 @@ Implementar seleção de texto da descrição do desafio e seleção de linhas d
 - **`ConversationService`** (`packages/core/src/conversation/interfaces/ConversationService.ts`) - _Contrato de serviços de conversa._
 
 ## Camada AI (Workflows)
-- **`VercelManualWorkflow`** (`apps/web/src/ai/vercel/workflows/VercelManualWorkflow.ts`) - _Converte mensagens e stream de resposta._
+- **`VercelAssistUserWorkflow`** (`apps/web/src/ai/vercel/workflows/VercelAssistUserWorkflow.ts`) - _Converte mensagens e stream de resposta._
 - **`assistantAgent`** (`apps/web/src/ai/vercel/agents/manualAgents.ts`) - _Agente que responde no chat._
 
 # 3. O que deve ser criado?
@@ -129,7 +129,7 @@ Não há remoções.
               [AskAssistantController]
                          |
                          v
-                 [VercelManualWorkflow]
+                 [VercelAssistUserWorkflow]
                          |
                          v
                     [assistantAgent]

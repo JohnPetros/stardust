@@ -3,8 +3,8 @@ title: Explicacao de Blocos de Codigo por IA na Lesson Page
 prd: https://github.com/JohnPetros/stardust/milestone/25
 issue: https://github.com/JohnPetros/stardust/issues/382
 apps: server, web, studio
-status: em_progresso
-last_updated_at: 2026-04-07
+status: closed
+last_updated_at: 2026-04-14
 ---
 
 # 1. Objetivo
@@ -59,6 +59,7 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
 * O `web` deve manter `remainingUses` apenas em estado local de interface a partir do `GET /lesson/code-explanation/remaining-uses`, sem depender do POST para esse valor.
 * Quando o dialog tiver sido aberto a partir de cache HIT da `Story`, o primeiro `Retry` deve buscar o saldo atual antes de exibir o aviso de consumo.
 * Em `Retry`, se o POST retornar `403`, o dialog de explicacao deve fechar e o aviso de bloqueio deve ser exibido.
+* Em `Retry` quando a explicacao atual tiver sido carregada do cache local da `Story`, o `web` deve limpar esse cache antes de iniciar a nova geracao, garantindo substituicao por resposta fresca.
 
 ## 3.2 Nao funcionais
 
@@ -91,6 +92,9 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
 
 * **`MastraCreateChallengeWorkflow`** (`apps/server/src/ai/mastra/workflows/MastraCreateChallengeWorkflow.ts`) - referencia de workflow Mastra com `createWorkflow`, `createStep` e `commit()`.
 * **`ChallengingToolset`** (`apps/server/src/ai/mastra/toolsets/ChallengingToolset.ts`) - referencia de composition root para tools Mastra no `server`.
+* **`LessonToolset`** (`apps/server/src/ai/mastra/toolsets/LessonToolset.ts`) - composition root das tools Mastra de `lesson`, incluindo consulta do guia de componentes de documentacao.
+* **`GetDocumentationComponentsGuideTool`** (`apps/server/src/ai/lesson/tools/GetDocumentationComponentsGuideTool.ts`) - tool de dominio que retorna o guia de componentes (`Text`, `Alert`, `Quote`, `Code`).
+* **`AGENTS_INSTRUCTIONS`** (`apps/server/src/ai/lesson/constants/agents-instructions.ts`) - instrucoes do code explainer agent com uso obrigatorio da tool de guia para melhorar formatacao da resposta.
 * **`AGENTS_INSTRUCTIONS`** (`apps/server/src/ai/constants/agents-instructions.ts`) - centraliza instrucoes textuais usadas na camada AI.
 * **`TOOLS_DESCRIPTIONS`** (`apps/server/src/ai/constants/tools-descriptions.ts`) - centraliza descricoes das tools usadas pelo Mastra.
 * **`MastraMcp`** (`apps/server/src/ai/mastra/MastraMcp.ts`) - adapter que conecta input do workflow/toolset ao contrato `Mcp<Input>` do core.
@@ -162,8 +166,19 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
 ## Camada AI (Teams)
 
 * **Localizacao:** `apps/server/src/ai/mastra/teams/LessonTeam.ts` - **novo arquivo**
-  **Dependencias:** `EXPLAIN_CODE_INSTRUCTION`, modelo configurado com a mesma familia usada em `ChallengingTeam`
-  **Metodos:** `static get codeExplainerAgent(): Agent` - expoe um agent Mastra especializado em explicar codigo em pt-BR com saida estruturada `{ explanation: string }`.
+  **Dependencias:** `AGENTS_INSTRUCTIONS.codeExplainerAgent`, `LessonToolset.getDocumentationComponentsGuideTool`, modelo configurado com a mesma familia usada em `ChallengingTeam`
+  **Metodos:** `static get codeExplainerAgent(): Agent` - expoe um agent Mastra especializado em explicar codigo em pt-BR com saida estruturada `{ explanation: string }` e com tool de guia acoplada.
+
+## Camada AI (Tools)
+
+* **Localizacao:** `apps/server/src/ai/lesson/tools/GetDocumentationComponentsGuideTool.ts` - **novo arquivo**
+  **Dependencias:** contrato `Tool` e `Mcp` do core
+  **Entrada/Saida:** entrada vazia; saida `{ guide: string }`
+  **Metodos:** `handle(_: Mcp): Promise<{ guide: string }>` - retorna o documento canonico "Guia de Componentes de Documentacao", incluindo regra de proibicao de aninhamento de blocos e exemplos atualizados.
+
+* **Localizacao:** `apps/server/src/ai/mastra/toolsets/LessonToolset.ts` - **novo arquivo**
+  **Dependencias:** `GetDocumentationComponentsGuideTool`, `MastraMcp`
+  **Metodos:** `static get getDocumentationComponentsGuideTool()` - expoe a tool para o agent via `createTool` do Mastra.
 
 ## Camada AI (Workflows)
 
@@ -254,14 +269,19 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
 
 ## Server AI
 
-* **Arquivo:** `apps/server/src/ai/constants/agents-instructions.ts`
-  **Mudanca:** exportar a constante nomeada `EXPLAIN_CODE_INSTRUCTION` e, se necessario para manter o padrao do arquivo, agrega-la ao objeto `AGENTS_INSTRUCTIONS`.
-  **Justificativa:** centralizar a instrucao do modelo no mesmo ponto ja adotado por `challenging`, preservando um contrato explicito para o novo agent.
+* **Arquivo:** `apps/server/src/ai/lesson/constants/agents-instructions.ts`
+  **Mudanca:** atualizar `AGENTS_INSTRUCTIONS.codeExplainerAgent` para tornar obrigatorio o uso da tool `getDocumentationComponentsGuideTool` antes da resposta e reforcar formatacao com componentes de documentacao.
+  **Justificativa:** melhorar consistencia de formato da explicacao gerada e alinhar o agent ao guia oficial de componentes.
   **Camada:** `ai`
 
 * **Arquivo:** `apps/server/src/ai/mastra/teams/index.ts` - **novo arquivo**
   **Mudanca:** exportar `LessonTeam` pelo barrel de teams.
   **Justificativa:** alinhar a organizacao da camada AI ao novo fluxo de lesson baseado em agent.
+  **Camada:** `ai`
+
+* **Arquivo:** `apps/server/src/ai/mastra/toolsets/index.ts`
+  **Mudanca:** exportar `LessonToolset` pelo barrel de toolsets.
+  **Justificativa:** permitir composicao do `LessonTeam` com as tools de `lesson` via import centralizado.
   **Camada:** `ai`
 
 * **Arquivo:** `apps/server/src/ai/mastra/workflows/index.ts`
@@ -338,7 +358,7 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
   **Camada:** `ui`
 
 * **Arquivo:** `apps/web/src/ui/global/widgets/components/CodeSnippet/useCodeSnippet.ts`
-  **Mudanca:** incorporar o estado local da explicacao, cache da `Story`, consulta de saldo, fluxo de confirmacao, bloqueio e retry, mantendo `remainingUses` sincronizado pelo `GET` e decrementando-o localmente apos POST bem-sucedido.
+  **Mudanca:** incorporar o estado local da explicacao, cache da `Story`, consulta de saldo, fluxo de confirmacao, bloqueio e retry, mantendo `remainingUses` sincronizado pelo `GET` e decrementando-o localmente apos POST bem-sucedido; no retry de explicacao carregada de cache, limpar o storage local antes de regenerar.
   **Justificativa:** concentrar a logica de interface da feature no hook do proprio widget sem criar store global nova.
   **Camada:** `ui`
 
@@ -422,10 +442,10 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
   **Motivo da escolha:** segue a regra arquitetural definida para esta feature: controllers REST executam workflows diretamente, e use cases do core permanecem responsaveis apenas por regras de dominio e controle de saldo.
   **Impactos / trade-offs:** a orquestracao da geracao fica mais concentrada na borda REST, com menos encapsulamento em um unico use case.
 
-* **Decisao:** usar um `LessonTeam.codeExplainerAgent` como step do workflow, sem `ExplainCodeTool` dedicada.
-  **Alternativas consideradas:** criar `ExplainCodeTool` e `LessonToolset` para encapsular a chamada ao LLM.
-  **Motivo da escolha:** reduz camadas desnecessarias para um fluxo de um unico prompt e fica mais alinhado ao uso nativo de agent como step do Mastra.
-  **Impactos / trade-offs:** a customizacao futura via tools especializadas fica menos preparada, mas a implementacao atual fica menor e mais direta.
+* **Decisao:** usar `LessonTeam.codeExplainerAgent` com `LessonToolset.getDocumentationComponentsGuideTool` acoplada.
+  **Alternativas consideradas:** manter agent sem tools e depender apenas de prompt estatico.
+  **Motivo da escolha:** melhora a padronizacao da formatacao, reaproveita o guia oficial de componentes de documentacao e facilita evolucoes futuras sem alterar o workflow principal.
+  **Impactos / trade-offs:** adiciona uma chamada de tool no fluxo do agent, aumentando um pouco a complexidade operacional da camada AI.
 
 * **Decisao:** persistir cache local apenas na `Story`.
   **Alternativas consideradas:** cachear tambem no `Quiz`; criar chave posicional especifica para o quiz.
@@ -436,6 +456,16 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
   **Alternativas consideradas:** persistir `remainingUses` junto do cache local; omitir o valor `N` no aviso.
   **Motivo da escolha:** decisao validada com produto durante a elaboracao da spec e evita alterar o payload persistido no browser.
   **Impactos / trade-offs:** o primeiro retry apos abrir de cache faz um GET extra antes da confirmacao.
+
+* **Decisao:** ao clicar em `Retry` com explicacao carregada do cache local da `Story`, remover o cache antes da nova geracao.
+  **Alternativas consideradas:** manter o cache ate receber nova resposta; limpar cache apenas apos sucesso da nova geracao.
+  **Motivo da escolha:** evita reaproveitamento acidental de conteudo antigo durante o ciclo de retry e garante que a UI reflita claramente o estado de regeneracao.
+  **Impactos / trade-offs:** em caso de falha de rede apos limpar cache, o usuario perde temporariamente a explicacao antiga daquele chunk.
+
+* **Decisao:** manter cache no server apenas para controle de cota diaria (`remainingUses`), sem cachear `explanation`.
+  **Alternativas consideradas:** cachear explicacao por hash de codigo para reaproveitamento.
+  **Motivo da escolha:** preservar simplicidade da regra de negocio atual, evitar risco de servir resposta desatualizada e manter comportamento previsivel de regeneracao.
+  **Impactos / trade-offs:** repetir a mesma solicitacao pode consumir nova chamada ao workflow/LLM.
 
 * **Decisao:** manter a feature como opt-in no `CodeSnippet` via prop de contexto da lesson.
   **Alternativas consideradas:** habilitar o botao globalmente em todos os usos do `CodeSnippet`; criar um widget de codigo totalmente separado para lesson.
@@ -461,6 +491,7 @@ StoryStage/QuizQuestion
   -> localStorage['lesson:code-explanation:{chunkIndex}']
   -> abre Dialog de explicacao
   -> Retry sem remainingUses em memoria
+     -> limpa cache local da explicacao atual
      -> GET /lesson/code-explanation/remaining-uses
 
 [Story cache MISS ou Quiz]
@@ -480,6 +511,7 @@ StoryStage/QuizQuestion
   -> valida saldo atual
   -> MastraExplainCodeWorkflow
   -> LessonTeam.codeExplainerAgent
+  -> getDocumentationComponentsGuideTool
   -> LLM
   -> RegisterCodeExplanationUsageUseCase
   -> CacheProvider.set(..., expiresAt=endOfDayUtc)
@@ -539,6 +571,9 @@ Dialog de explicacao
 * **Referencias:**
   `apps/server/src/ai/mastra/workflows/MastraCreateChallengeWorkflow.ts`
   `apps/server/src/ai/mastra/teams/ChallengingTeam.ts`
+  `apps/server/src/ai/mastra/teams/LessonTeam.ts`
+  `apps/server/src/ai/mastra/toolsets/LessonToolset.ts`
+  `apps/server/src/ai/lesson/tools/GetDocumentationComponentsGuideTool.ts`
   `apps/server/src/provision/cache/UpstashCacheProvider.ts`
   `packages/core/src/conversation/use-cases/IncrementAssistantChatMessageCountUseCase.ts`
   `apps/server/src/app/hono/routers/lesson/TextBlocksRouter.ts`

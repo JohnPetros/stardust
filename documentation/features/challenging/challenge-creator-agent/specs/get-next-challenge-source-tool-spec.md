@@ -212,7 +212,7 @@ Implementar uma nova tool na camada AI do `server` para recuperar a proxima font
       source DTO (title/url/...)
               |
               v
-      prompt -> [ChallengingTeam Agent]
+      prompt -> [ChallengingSquad Agent]
               |
               v
       [PostChallengeTool] -> [PostChallengeUseCase]
