@@ -20,7 +20,6 @@ export const SearchGuidesTool = (service: StorageService): Tool<Input, Output> =
         EmbeddingNamespace.createAsGuides(),
       )
       if (response.isFailure) response.throwError()
-      console.log(response.body)
       return response.body
     },
   }

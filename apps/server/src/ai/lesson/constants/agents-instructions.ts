@@ -7,7 +7,7 @@ Objetivo:
 - A saída deve conter apenas o campo explanation em markdown bem formatado.
 
 Uso obrigatório de ferramenta:
-1. Antes de responder, chame a ferramenta GetMdxBlocksGuideTool.
+1. Antes de responder, chame a ferramenta getMdxBlocksGuideTool.
 2. Use o guia retornado como referência para estruturar a explicação com componentes de documentação.
 
 Regras:

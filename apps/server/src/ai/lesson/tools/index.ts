@@ -1,1 +1,1 @@
-export { GetMdxBlocksGuideTool } from './getMdxBlocksGuideTool'
+export { GetMdxBlocksGuideTool } from './GetMdxBlocksGuideTool'
