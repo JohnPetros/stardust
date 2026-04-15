@@ -1,10 +1,6 @@
 import { Hono } from 'hono'
 
-import {
-  codeExplanationResponseSchema,
-  explainCodeRequestSchema,
-  remainingCodeExplanationUsesSchema,
-} from '@stardust/validation/lesson/schemas'
+import { explainCodeRequestSchema } from '@stardust/validation/lesson/schemas'
 
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
