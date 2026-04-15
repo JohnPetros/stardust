@@ -12,6 +12,14 @@ type Block = {
   content: string
 }
 
+const buildMdxBlock = (block: Block) => {
+  if (block.type === 'normal-text') return `\n${block.content}`
+
+  if (block.type === 'Code') return `<Code exec>${block.content}</Code>`
+
+  return `<${block.type}>\n${block.content}\n</${block.type}>`
+}
+
 const parseStream = (rawText: string): Block[] => {
   const blocks: Block[] = []
 
@@ -54,15 +62,8 @@ export const AssistantMessageView = ({ children, isThinking }: Props) => {
           </div>
         )}
         {!isThinking &&
-          blocks.map((block) => (
-            <Mdx key={block.content}>
-              {`\n${block.content}`}
-              {/* {block.type !== 'normal-text'
-                ? block.type === 'Code'
-                  ? `<Code exec>${block.content}</Code>`
-                  : `<${block.type}>\n${block.content}\n</${block.type}>`
-                : `\n${block.content}`} */}
-            </Mdx>
+          blocks.map((block, index) => (
+            <Mdx key={`${block.type}-${index}`}>{buildMdxBlock(block)}</Mdx>
           ))}
       </div>
     </div>
