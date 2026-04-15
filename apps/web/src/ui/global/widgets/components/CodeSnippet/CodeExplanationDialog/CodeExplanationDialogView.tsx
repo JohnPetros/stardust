@@ -2,6 +2,7 @@ import * as Dialog from '../../Dialog'
 import { Button } from '../../Button'
 import { Loading } from '../../Loading'
 import { PlaygroundCodeEditor } from '../../PlaygroundCodeEditor'
+import { Mdx } from '../../Mdx'
 
 type CodeExplanationDialogViewProps = {
   isOpen: boolean
@@ -30,13 +31,13 @@ export const CodeExplanationDialogView = ({
       <Dialog.Content className='max-w-6xl'>
         <Dialog.Header>
           <div className='flex w-full items-center justify-between gap-2'>
-            <span>Explicacao do codigo</span>
+            <span>Explicação do código</span>
             <Button
-              className='h-8 w-max px-3 text-xs'
+              className='h-8 w-max px-3 text-xs text-gray-800'
               isLoading={isLoading}
               onClick={onRetry}
             >
-              Retry
+              Regerar explicação
             </Button>
           </div>
         </Dialog.Header>
@@ -57,7 +58,7 @@ export const CodeExplanationDialogView = ({
               </div>
             ) : (
               <div className='max-h-[24rem] overflow-auto whitespace-pre-wrap text-sm text-gray-100'>
-                {explanation}
+                <Mdx>{explanation}</Mdx>
               </div>
             )}
           </div>

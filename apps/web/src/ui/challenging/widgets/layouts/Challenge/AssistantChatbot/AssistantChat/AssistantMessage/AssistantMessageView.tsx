@@ -47,20 +47,21 @@ export const AssistantMessageView = ({ children, isThinking }: Props) => {
   return (
     <div className='mt-6'>
       <Icon className='text-green-400' name='robot' weight='normal' size={36} />
-      <div className='-translate-y-6'>
+      <div className='-translate-y-3'>
         {isThinking && (
-          <div className='mt-6'>
+          <div className='mt-4'>
             <Animation name='hourglass' size={80} hasLoop />
           </div>
         )}
         {!isThinking &&
           blocks.map((block) => (
             <Mdx key={block.content}>
-              {block.type !== 'normal-text'
+              {`\n${block.content}`}
+              {/* {block.type !== 'normal-text'
                 ? block.type === 'Code'
                   ? `<Code exec>${block.content}</Code>`
                   : `<${block.type}>\n${block.content}\n</${block.type}>`
-                : `\n${block.content}`}
+                : `\n${block.content}`} */}
             </Mdx>
           ))}
       </div>

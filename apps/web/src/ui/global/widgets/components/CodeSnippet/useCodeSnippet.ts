@@ -38,6 +38,8 @@ export function useCodeSnippet({
   const [explanation, setExplanation] = useState('')
   const [shouldFetchRemainingUsesOnRetry, setShouldFetchRemainingUsesOnRetry] =
     useState(false)
+  const [hasLoadedExplanationFromCache, setHasLoadedExplanationFromCache] =
+    useState(false)
 
   const canExplainCode = Boolean(lessonCodeExplanation)
   const isStorySource = lessonCodeExplanation?.source === 'story'
@@ -107,6 +109,7 @@ export function useCodeSnippet({
 
       const generatedExplanation = response.body.explanation
       setExplanation(generatedExplanation)
+      setHasLoadedExplanationFromCache(false)
 
       if (isStorySource) {
         storyExplanationStorage.set(generatedExplanation)
@@ -131,6 +134,7 @@ export function useCodeSnippet({
 
       if (cachedExplanation) {
         setExplanation(cachedExplanation)
+        setHasLoadedExplanationFromCache(true)
         setIsCodeExplanationDialogOpen(true)
         setShouldFetchRemainingUsesOnRetry(true)
         return
@@ -144,6 +148,12 @@ export function useCodeSnippet({
   }
 
   async function handleCodeExplanationRetry() {
+    if (hasLoadedExplanationFromCache && isStorySource) {
+      storyExplanationStorage.remove()
+      setExplanation('')
+      setHasLoadedExplanationFromCache(false)
+    }
+
     if (shouldFetchRemainingUsesOnRetry || remainingUses === null) {
       const fetchedRemainingUses = await fetchRemainingCodeExplanationUses()
       if (fetchedRemainingUses === null) return
