@@ -1,5 +1,5 @@
 export type { LessonService } from './LessonService'
-export type { ExplainCodeWorkflow } from './ExplainCodeWokflow'
+export type { ExplainCodeWorkflow } from './ExplainCodeWorkflow'
 export type { QuestionsRepository } from './QuestionsRepository'
 export type { TextBlocksRepository } from './TextBlocksRepository'
 export type { StoriesRepository } from './StoriesRepository'
