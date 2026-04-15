@@ -9,7 +9,7 @@ import { NextApiRestClient } from '@/rest/next/NextApiRestClient'
 import { runApiRoute } from '@/rest/next/utils'
 import { ConversationService } from '@/rest/services'
 import { AskAssistantController } from '@/rest/controllers/conversation'
-import { VercelManualWorkflow } from '@/ai/vercel/workflows/VercelManualWorkflow'
+import { VercelAssistUserWorkflow } from '@/ai/vercel/workflows/VercelAssistUserWorkflow'
 
 const textSelectionSchema = z.object({
   kind: z.literal('text').optional(),
@@ -43,7 +43,7 @@ export const POST = async (request: NextRequest, params: NextParams<'chatId'>) =
     const http = await NextHttp<Schema>({ request, schema, params })
     const restClient = await NextApiRestClient(request)
     const service = ConversationService(restClient)
-    const workflow = VercelManualWorkflow()
+    const workflow = VercelAssistUserWorkflow()
     const controller = AskAssistantController({ service, workflow })
     return await controller.handle(http)
   })

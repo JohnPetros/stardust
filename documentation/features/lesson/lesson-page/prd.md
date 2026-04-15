@@ -45,6 +45,26 @@ O objetivo principal deste PRD é padronizar e documentar o comportamento funcio
 - **Feedback de Ação:** O botão "Continuar" deve manter foco e resposta visual clara.
 - **Acessibilidade:** Garantir navegação por teclado na ação de continuar e confirmação de avanço.
 
+#### [x] Explicação Assistida de Blocos de Código
+
+**Descrição:** Permitir que o aluno solicite explicações em linguagem simples para trechos de código exibidos na Lesson Page, com controle de uso diário e experiência otimizada para leitura progressiva.
+
+##### Regras de Negócio
+
+- **Disponibilidade Contextual:** O recurso deve aparecer apenas nos blocos de código exibidos dentro da Lesson Page, tanto na Story quanto no Quiz.
+- **Limite Diário de Uso:** O sistema deve permitir até 10 novas explicações por dia para cada usuário autenticado.
+- **Consumo Inteligente na Story:** Quando uma explicação já tiver sido gerada para um bloco da Story no mesmo navegador, ela deve ser reutilizada sem consumir novo uso.
+- **Consulta de Saldo Antes do Consumo:** Antes de gerar uma nova explicação, o sistema deve validar se o usuário ainda possui usos disponíveis no dia.
+- **Bloqueio ao Esgotar a Cota:** Quando não houver saldo restante, a geração deve ser bloqueada e o aluno deve receber um aviso claro.
+- **Regeneração Controlada:** O aluno pode pedir uma nova versão da explicação, consumindo um novo uso quando houver saldo disponível.
+
+##### Regras de UI/UX (se houver)
+
+- **Ação Visível no Código:** Exibir um botão dedicado de IA junto das ações do bloco de código.
+- **Leitura Lado a Lado:** Exibir a explicação em um dialog com código e explicação apresentados em duas colunas.
+- **Persistência Seletiva:** No Quiz, a explicação não deve ser preservada entre reaberturas da página; na Story, pode ser reaproveitada localmente para o mesmo trecho.
+- **Acessibilidade:** O botão de IA e os dialogs de confirmação, bloqueio e explicação devem funcionar por teclado e manter foco previsível.
+
 #### [x] Execução do Quiz Multiformato
 
 **Descrição:** Permitir responder questões em diferentes formatos, mantendo validação uniforme da resposta do usuário.

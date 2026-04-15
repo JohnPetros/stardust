@@ -97,11 +97,14 @@
 
 - `workflows` encadeiam steps pequenos e substituiveis.
 - Exemplo real: `apps/server/src/ai/mastra/workflows/MastraCreateChallengeWorkflow.ts` (get problem -> gerar desafio -> persistir).
+- `workflows` nao devem ser usados dentro de `use-cases` do core.
+- A direcao correta e: `controller`/`job`/entrypoint executa o `workflow`; quando o `workflow` precisar aplicar regra de negocio ou efeito do sistema, ele deve acionar uma `tool`, e essa `tool` delega para `use-cases`/interfaces do core.
+- Em outras palavras: **workflow -> tool -> use case**, nunca **use case -> workflow**.
 
 ### Agent/team pattern
 
 - `agents` recebem instrucoes via `constants` e expõem ferramentas explicitamente.
-- Exemplos reais: `apps/server/src/ai/mastra/teams/ChallengingTeam.ts`, `apps/web/src/ai/vercel/agents/manualAgents.ts`.
+- Exemplos reais: `apps/server/src/ai/mastra/teams/ChallengingSquad.ts`, `apps/web/src/ai/vercel/agents/manualAgents.ts`.
 
 ## Padroes de uso aplicados
 
@@ -113,7 +116,7 @@
    - **Persistencia**: `PostChallengeTool` delega para `PostChallengeUseCase` em `apps/server/src/ai/challenging/tools/PostChallengeTool.ts`.
 2. **Assistente de manual/conteudo (web)**
    - **Entrada**: rota `POST` em `apps/web/src/app/api/conversation/chats/[chatId]/assistant/route.ts`.
-   - **Orquestracao**: `AskAssistantController` + `VercelManualWorkflow` em `apps/web/src/rest/controllers/conversation/AskAssistantController.ts` e `apps/web/src/ai/vercel/workflows/VercelManualWorkflow.ts`.
+   - **Orquestracao**: `AskAssistantController` + `VercelAssistUserWorkflow` em `apps/web/src/rest/controllers/conversation/AskAssistantController.ts` e `apps/web/src/ai/vercel/workflows/VercelAssistUserWorkflow.ts`.
    - **Ferramentas**: `manualToolset` e `challengingToolset` em `apps/web/src/ai/vercel/toolsets`.
 
 ### Exemplo de implementacao correta (tool)
@@ -139,6 +142,7 @@ export const ExampleTool = (service: SomeService): Tool<Input, Output> => {
 - `toolset` com logica de negocio: deve apenas compor dependencias e acionar `tool.handle(mcp)`.
 - `agent` sem limites: deve configurar `stop conditions`/`step limits` quando suportado pelo runtime.
 - Prompt sem restricoes de saida: deve declarar formato, idioma e restricoes de conteudo (ex: `apps/web/src/ai/constants/manual-prompts.ts`).
+- `use-case` chamando `workflow`: a orquestracao de `LLM` pertence a camada `AI`; o core nao deve depender de runtime de agent/workflow.
 
 ## Regras de integracao com outras camadas
 
@@ -163,6 +167,7 @@ export const ExampleTool = (service: SomeService): Tool<Input, Output> => {
 
 - A camada `AI` e um adaptador: depende do core e de infraestrutura local da app.
 - Integracoes (routes/jobs/controllers) devem referenciar `workflows`/`tools` por interfaces quando possivel (ex: `CreateChallengeJob` depende de `CreateChallengeWorkflow`).
+- `controllers` REST podem executar `workflows` diretamente quando a feature for essencialmente uma orquestracao de IA; nesse caso, use-cases do core continuam restritos a regras de negocio e nao coordenam o runtime de IA.
 
 ## Checklist rapido para novas features
 
@@ -171,6 +176,7 @@ export const ExampleTool = (service: SomeService): Tool<Input, Output> => {
 - A feature usa contratos do core (`Tool`, `ManualWorkflow`, `CreateChallengeWorkflow`) em vez de acoplamento direto ao runtime.
 - Entrada/saida do boundary validada com `zod` no `toolset`.
 - A `tool` e pequena (uma responsabilidade) e nao contem regra de negocio (delegou para service/use-case do core).
+- Nenhum `use-case` do core executa `workflow`; se houver orquestracao de IA, ela parte da borda da app e desce para `tools`/`use-cases`.
 - Dependencias concretas criadas no `composition root` (toolset/controller/job), nao dentro do core.
 - `agent`/`workflow` com limites de execucao (steps/iteracoes) e caminho de erro previsivel.
 

@@ -13,7 +13,7 @@ O que já existe?
 
 - apps/server/src/ai/mastra/workflows/MastraCreateChallengeWorkflow.ts
 - apps/server/src/ai/mastra/toolsets/ChallengingToolset.ts
-- apps/server/src/ai/mastra/teams/ChallengingTeam.ts
+- apps/server/src/ai/mastra/teams/ChallengingSquad.ts
 - apps/server/src/queue/inngest/functions/NotificationFunctions.ts
 
 O que precisa ser criado?

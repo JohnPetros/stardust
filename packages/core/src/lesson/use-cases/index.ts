@@ -1,3 +1,5 @@
 export { UpdateStoryUseCase } from './UpdateStoryUseCase'
 export { UpdateQuestionsUseCase } from './UpdateQuestionsUseCase'
 export { UpdateTextBlocksUseCase } from './UpdateTextBlocksUseCase'
+export { GetRemainingCodeExplanationUsesUseCase } from './GetRemainingCodeExplanationUsesUseCase'
+export { RegisterCodeExplanationUsageUseCase } from './RegisterCodeExplanationUsageUseCase'

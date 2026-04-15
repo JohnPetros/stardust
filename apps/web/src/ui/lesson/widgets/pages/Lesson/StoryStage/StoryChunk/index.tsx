@@ -7,14 +7,17 @@ import { StoryChunkView } from './StoryChunkView'
 
 type Props = {
   value: string
+  chunkIndex: number
   hasAnimation: boolean
   shouldMemoized: boolean
 }
 
-const Widget = ({ value, hasAnimation }: Props) => {
+const Widget = ({ value, hasAnimation, chunkIndex }: Props) => {
   const { storyChunkRef, animatedChunk } = useStoryChunk(value, hasAnimation)
 
-  return <StoryChunkView ref={storyChunkRef} chunk={animatedChunk} />
+  return (
+    <StoryChunkView ref={storyChunkRef} chunk={animatedChunk} chunkIndex={chunkIndex} />
+  )
 }
 
 export const StoryChunk = memo(Widget, (_, currentProps) => {

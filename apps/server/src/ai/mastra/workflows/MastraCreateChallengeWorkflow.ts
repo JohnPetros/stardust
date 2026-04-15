@@ -5,7 +5,7 @@ import { challengeDraftSchema } from '@stardust/validation/challenging/schemas'
 import type { CreateChallengeWorkflow } from '@stardust/core/challenging/interfaces'
 
 import { ChallengingToolset } from '../toolsets/ChallengingToolset'
-import { ChallengingTeam } from '../teams/ChallengingTeam'
+import { ChallengingSquad } from '../squads/ChallengingSquad'
 
 export class MastraCreateChallengeWorkflow implements CreateChallengeWorkflow {
   async run() {
@@ -47,7 +47,7 @@ export class MastraCreateChallengeWorkflow implements CreateChallengeWorkflow {
   }
 
   private createChallenge() {
-    return createStep(ChallengingTeam.challengingCreatorAgent, {
+    return createStep(ChallengingSquad.challengingCreatorAgent, {
       structuredOutput: { schema: challengeDraftSchema },
     })
   }
