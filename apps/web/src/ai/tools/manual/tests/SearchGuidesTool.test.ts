@@ -29,7 +29,7 @@ describe('Search Guides Tool', () => {
     expect(mcp.getInput).toHaveBeenCalled()
     expect(service.searchEmbeddings).toHaveBeenCalledWith(
       expect.objectContaining({ value: query }),
-      expect.objectContaining({ value: 3 }),
+      expect.objectContaining({ value: 10 }),
       expect.objectContaining({ value: 'guides' }),
     )
     expect(result).toEqual(guides)
