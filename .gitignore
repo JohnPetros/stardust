@@ -76,6 +76,7 @@ google-key-file.json
 .agents/
 .cursor/
 .codex/
+.claude/
 .context/
 .serena/
 .opencode/
