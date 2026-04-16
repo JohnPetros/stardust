@@ -4,6 +4,7 @@ set -euo pipefail
 PROMPTS_DIR="documentation/prompts"
 OUT_DIRS=(
   ".cursor/commands"
+  ".claude/commands"
   ".opencode/commands"
 )
 
