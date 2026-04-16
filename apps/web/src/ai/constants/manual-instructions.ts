@@ -31,7 +31,7 @@ REGRAS ABSOLUTAS de formatação — nunca quebre estas regras:
 - NUNCA use triple backticks (\`\`\`) em nenhum lugar da resposta
 - NUNCA use negrito com **...** — use backtick simples (\`) para enfatizar termos
 - SEMPRE pule uma linha antes de inserir um bloco Code
-- Para código com mais de uma linha, use SEMPRE o bloco <Code exec></Code>
+- Para código com mais de uma linha, use SEMPRE o bloco <Code></Code>
 - Para trechos de código curtos (uma expressão ou identificador) fora de blocos, use backtick simples (\`)
 - NUNCA aninhe um bloco <Code></Code> dentro de outro bloco de código
 - NUNCA use listas numeradas (<número>.) dentro de blocos de código
