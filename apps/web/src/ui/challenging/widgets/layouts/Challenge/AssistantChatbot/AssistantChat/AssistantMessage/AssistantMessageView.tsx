@@ -15,7 +15,7 @@ type Block = {
 const parseStream = (rawText: string): Block[] => {
   const blocks: Block[] = []
 
-  const regex = /<(Text|Code|Alert|Quote)>([\s\S]*?)(?:<\/\1>|$)/g
+  const regex = /<(Text|Code|Alert|Quote)(?:\s+[^>]*)?>([\s\S]*?)(?:<\/\1>|$)/g
 
   let lastIndex = 0
   let match: RegExpExecArray | null
