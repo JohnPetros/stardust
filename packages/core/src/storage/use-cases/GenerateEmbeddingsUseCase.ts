@@ -11,6 +11,7 @@ type Request = {
   namespace: string
   documentId: string
   content: string
+  shouldDeleteBeforeStore?: boolean
 }
 
 export class GenerateEmbeddingsUseCase implements UseCase<Request> {
@@ -24,7 +25,11 @@ export class GenerateEmbeddingsUseCase implements UseCase<Request> {
     const documentId = Id.create(request.documentId)
     const embeddingNamespace = EmbeddingNamespace.create(request.namespace)
     const embeddings = await this.generatorProvider.generate(content)
-    await this.storageProvider.delete(documentId, embeddingNamespace)
+
+    if (request.shouldDeleteBeforeStore !== false) {
+      await this.storageProvider.delete(documentId, embeddingNamespace)
+    }
+
     await this.storageProvider.store(embeddings, documentId, embeddingNamespace)
   }
 }
