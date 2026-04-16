@@ -18,7 +18,7 @@ export class ReindexGuidesEmbeddingsJob implements Job {
   ) {}
 
   async handle(amqp: Amqp): Promise<void> {
-    const namespace = EmbeddingNamespace.create('guides')
+    const namespace = EmbeddingNamespace.createAsGuides()
     const guides = await amqp.run<Guide[]>(
       async () => await this.guidesRepository.findAll(),
       'Find all guides',
@@ -41,6 +41,7 @@ export class ReindexGuidesEmbeddingsJob implements Job {
             content: guide.content.value,
             documentId: guide.id.value,
             namespace: namespace.value,
+            shouldDeleteBeforeStore: false,
           }),
         `Generate embeddings for guide ${guide.id.value}`,
       )
