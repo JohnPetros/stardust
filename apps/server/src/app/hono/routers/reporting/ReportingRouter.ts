@@ -3,10 +3,8 @@ import { Hono } from 'hono'
 import { HonoRouter } from '../../HonoRouter'
 import { FeedbackRouter } from './FeedbackRouter'
 
-const ROUTE_PREFIX = '/reporting'
-
 export class ReportingRouter extends HonoRouter {
-  private readonly router = new Hono().basePath(ROUTE_PREFIX)
+  private readonly router = new Hono().basePath('/reporting')
 
   registerRoutes(): Hono {
     const feedbackRouter = new FeedbackRouter(this.app)
