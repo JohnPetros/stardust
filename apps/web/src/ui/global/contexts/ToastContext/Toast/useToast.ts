@@ -13,7 +13,7 @@ export function useToast() {
   const [type, setType] = useState<ToastType>('error')
   const [message, setMessage] = useState('')
   const [seconds, setSeconds] = useState(DEFAULT_TOAST_DURATION)
-  const [scope, animate] = useAnimate()
+  const [scope, animate] = useAnimate<HTMLDivElement>()
   const scrollPosition = useRef(0)
 
   function open({ type, message, seconds = 2.5 }: OpenToastParams) {
