@@ -8,6 +8,7 @@ export * from './auth/domain/structures/fakers/index'
 export * from './auth/domain/errors/index'
 export * from './auth/domain/events/index'
 export * from './auth/interfaces/index'
+export * from './auth/use-cases/index'
 
 // Global
 export * from './global/domain/abstracts/index'

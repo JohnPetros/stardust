@@ -34,6 +34,7 @@
     "./auth/errors": "./src/auth/domain/errors/index.ts",
     "./auth/events": "./src/auth/domain/events/index.ts",
     "./auth/interfaces": "./src/auth/interfaces/index.ts",
+    "./auth/use-cases": "./src/auth/use-cases/index.ts",
     "./global/abstracts": "./src/global/domain/abstracts/index.ts",
     "./global/entities": "./src/global/domain/entities/index.ts",
     "./global/entities/dtos": "./src/global/domain/entities/dtos/index.ts",
