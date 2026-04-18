@@ -1,6 +1,7 @@
 export const CACHE = {
   keys: {
     authUser: '/auth-user',
+    authApiKeys: '/auth-api-keys',
     userAchievements: '/user-achievements',
     challengesSummary: '/challenges-summary',
     challengesList: '/challenges-list',

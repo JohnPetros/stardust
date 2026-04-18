@@ -33,6 +33,7 @@ export type IconName =
   | 'function'
   | 'gear'
   | 'home'
+  | 'key'
   | 'layout'
   | 'level'
   | 'lightbulb'
