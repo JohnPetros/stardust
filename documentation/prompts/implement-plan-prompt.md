@@ -8,7 +8,9 @@ description: Implementar no codebase um plano de implementacao derivado de uma s
 
 ## Entrada
 
-- Caminho do arquivo `plan.md` (Markdown) **ou**, se nao houver plano, caminho da spec tecnica (Markdown).
+- Plano ativo em `documentation/plan.md` — esse e o ponto de entrada padrao.
+- Se um caminho alternativo for fornecido explicitamente, use-o no lugar de `documentation/plan.md`.
+- Se nao houver plano, use a spec tecnica como entrada e gere o plano antes de implementar.
 
 > O `plan.md` pode estar **novo** (nenhuma tarefa iniciada) ou **em andamento** (execucao anterior parcialmente concluida). O prompt deve lidar com ambos os casos — veja Secao 1.1.
 
