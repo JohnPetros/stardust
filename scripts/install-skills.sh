@@ -1,4 +1,3 @@
 #!/bin/bash
-npx skills add https://github.com/bobmatnyc/claude-mpm-skills --skill sqlalchemy-orm
-npx skills add https://github.com/github/awesome-copilot --skill gh-cli
-npx skills add https://github.com/addyosmani/web-quality-skills --skill performance 
+npx skills add https://github.com/anthropics/skills --skill frontend-design
+npx skills add https://github.com/chiroro-jr/pencil-design-skill --skill pencil-design
