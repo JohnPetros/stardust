@@ -1,7 +1,7 @@
 import type { AuthService as IAuthService } from '@stardust/core/auth/interfaces'
 import { MethodNotImplementedError } from '@stardust/core/global/errors'
 import type { RestClient } from '@stardust/core/global/interfaces'
-import type { Email, Name, Text } from '@stardust/core/global/structures'
+import type { Email, Id, Name, Text } from '@stardust/core/global/structures'
 import type { Password } from '@stardust/core/auth/structures'
 import type { Account } from '@stardust/core/auth/entities'
 
@@ -117,6 +117,24 @@ export const AuthService = (restClient: RestClient): IAuthService => {
 
     async fetchGoogleAccountConnection() {
       return await restClient.get('/auth/social-account/google/connection')
+    },
+
+    async listApiKeys() {
+      return await restClient.get('/auth/api-keys')
+    },
+
+    async createApiKey(name: Name) {
+      return await restClient.post('/auth/api-keys', { name: name.value })
+    },
+
+    async renameApiKey(apiKeyId: Id, name: Name) {
+      return await restClient.put(`/auth/api-keys/${apiKeyId.value}`, {
+        name: name.value,
+      })
+    },
+
+    async revokeApiKey(apiKeyId: Id) {
+      return await restClient.delete(`/auth/api-keys/${apiKeyId.value}`)
     },
   }
 }

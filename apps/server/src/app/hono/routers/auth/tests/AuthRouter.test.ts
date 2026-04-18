@@ -1,13 +1,13 @@
 import { app } from '@/app'
 import { AuthRouter } from '../AuthRouter'
 
-describe(`Auth Router (${AuthRouter.ROUTE_PREFIX})`, () => {
+describe('Auth Router (/auth)', () => {
   const server = app.startServer(0)
-  server.setRoutePrefix(AuthRouter.ROUTE_PREFIX)
+  server.setRoutePrefix('/auth')
 
   afterAll(() => {
     server.close()
   })
 
-  test(`[POST] ${AuthRouter.ROUTES.signIn}`, async () => {})
+  test('[POST] /sign-in', async () => {})
 })
