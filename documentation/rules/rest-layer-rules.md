@@ -43,6 +43,34 @@ A camada **REST** padroniza comunicacao HTTP com APIs externas e com o backend, 
 - **Paginacao**: clients detectam headers e retornam `PaginationResponse` quando aplicavel.
 - **Query params**: preferir `setQueryParam` no `RestClient`.
 
+### Anti-padroes registrados
+
+### Anti-padrão: Service REST com parâmetros primitivos no lugar de objetos de domínio
+
+**O que foi feito:**
+Foram implementados métodos de service REST com parâmetros primitivos para casos de API keys, por exemplo:
+`async createApiKey(name: string)` e `async renameApiKey(apiKeyId: Id, name: string)`.
+
+**Por que está errado:**
+Quando o contrato do core já define objetos de domínio/estruturas (como `Name` e `Id`), usar primitivas no service quebra a fronteira tipada entre domínio e adapter, facilita bypass de validações semânticas e cria divergência entre interface e implementação nas apps (`web`, `server`, `studio`).
+
+**O que deve ser feito:**
+Os métodos de `services` devem receber apenas objetos de domínio definidos no contrato do core e serializar para primitivas apenas no momento da chamada HTTP.
+
+Exemplo correto:
+
+```ts
+async createApiKey(name: Name) {
+  return await restClient.post('/auth/api-keys', { name: name.value })
+}
+
+async renameApiKey(apiKeyId: Id, name: Name) {
+  return await restClient.patch(`/auth/api-keys/${apiKeyId.value}`, {
+    name: name.value,
+  })
+}
+```
+
 ## Exemplo
 
 ```ts
