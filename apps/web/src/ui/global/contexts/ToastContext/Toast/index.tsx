@@ -7,7 +7,7 @@ import type { ToastRef } from '../types'
 import { useToast } from './useToast'
 import { ToastView } from './ToastView'
 
-export const Wdiget = (_: unknown, ref: ForwardedRef<ToastRef>) => {
+export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
   const { type, message, seconds, isOpen, scope, open, close, handleDragEnd } = useToast()
 
   useImperativeHandle(ref, () => {
@@ -29,4 +29,4 @@ export const Wdiget = (_: unknown, ref: ForwardedRef<ToastRef>) => {
   )
 }
 
-export const Toast = forwardRef(Wdiget)
+export const Toast = forwardRef(ToastComponent)

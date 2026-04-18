@@ -2,6 +2,7 @@ export const GLOBAL_ERROR_MESSAGES = {
   nonempty: 'Campo obrigatório',
   name: {
     min: 'Seu nome deve conter pelo menos 3 letras',
+    max: 'Seu nome deve conter no máximo 100 caracteres',
   },
   email: {
     regex: 'Informe um e-mail válido!',

@@ -29,8 +29,8 @@ export class SupabaseApiKeyMapper {
       key_hash: apiKey.keyHash,
       key_preview: apiKey.keyPreview,
       user_id: apiKey.userId.value,
-      created_at: apiKey.createdAt.toUTCString(),
-      revoked_at: apiKey.revokedAt?.toUTCString() ?? null,
+      created_at: apiKey.createdAt.toISOString(),
+      revoked_at: apiKey.revokedAt?.toISOString() ?? null,
     }
   }
 }

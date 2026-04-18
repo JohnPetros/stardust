@@ -62,7 +62,7 @@ export class SupabaseApiKeysRepository
   async revoke(apiKeyId: Id, revokedAt: Date): Promise<void> {
     const { error } = await this.supabase
       .from('api_keys')
-      .update({ revoked_at: revokedAt.toUTCString() })
+      .update({ revoked_at: revokedAt.toISOString() })
       .eq('id', apiKeyId.value)
 
     if (error) {
