@@ -80,7 +80,7 @@ google-key-file.json
 .context/
 .serena/
 .opencode/
-opencode.jsonc
+opencode.json
 CLAUDE.md
 GEMINI.md
 
