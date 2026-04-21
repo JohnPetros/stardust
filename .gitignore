@@ -81,8 +81,11 @@ google-key-file.json
 .serena/
 .opencode/
 opencode.json
+.mcp.json
 CLAUDE.md
 GEMINI.md
+prompt.md
+documentation/plan.md
 
 # Ai Content
 .context/
@@ -91,7 +94,6 @@ GEMINI.md
 .serena
 
 *.tsbuildinfo
-prompt.md
 
 # Terminal Paste Image folder
 .cp-images/

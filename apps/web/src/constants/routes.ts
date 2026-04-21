@@ -40,6 +40,7 @@ export const ROUTES = {
   profile: {
     user: (userSlug: string) => `/profile/${userSlug}`,
     settings: (userSlug: string) => `/profile/${userSlug}/settings`,
+    apiKeys: (userSlug: string) => `/profile/${userSlug}/api-keys`,
   },
   lesson: {
     star: (starSlug: string) => `/lesson/${starSlug}`,

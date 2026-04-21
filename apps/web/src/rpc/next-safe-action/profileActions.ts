@@ -2,9 +2,9 @@
 
 import { z } from 'zod'
 
+import { Slug } from '@stardust/core/global/structures'
 import { authActionClient } from './clients/authActionClient'
 import { NextCall } from '../next/NextCall'
-import { AccessProfilePageAction } from '../actions/profile'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import { ProfileService } from '@/rest/services'
 import { stringSchema } from '@stardust/validation/global/schemas'
@@ -16,13 +16,15 @@ const accessProfilePage = authActionClient
     }),
   )
   .action(async ({ clientInput }) => {
-    const call = NextCall({
-      request: clientInput,
-    })
     const restClient = await NextServerRestClient()
     const profileService = ProfileService(restClient)
-    const action = AccessProfilePageAction(profileService)
-    return await action.handle(call)
+    const response = await profileService.fetchUserBySlug(
+      Slug.create(clientInput.userSlug),
+    )
+    const call = NextCall({ request: clientInput })
+
+    if (response.isFailure) call.notFound()
+    return response.body
   })
 
 export { accessProfilePage }

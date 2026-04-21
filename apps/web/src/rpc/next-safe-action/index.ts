@@ -47,7 +47,9 @@ export const challengingActions = {
 
 export const playgroundActions = { accessSnippetPage }
 
-export const profileActions = { accessProfilePage }
+export const profileActions = {
+  accessProfilePage,
+}
 
 export const spaceActions = { accessStarPage }
 

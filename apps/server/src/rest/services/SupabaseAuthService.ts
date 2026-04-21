@@ -1,12 +1,14 @@
 import type { AuthError, UserIdentity } from '@supabase/supabase-js'
 
 import type { AuthService } from '@stardust/core/auth/interfaces'
+import type { ApiKeyData } from '@stardust/core/auth/interfaces'
 import type { SessionDto } from '@stardust/core/auth/structures/dtos'
-import type { Email, Id, Text } from '@stardust/core/global/structures'
+import type { Email, Id, Name, Text } from '@stardust/core/global/structures'
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import type { Password } from '@stardust/core/auth/structures'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { RestResponse } from '@stardust/core/global/responses'
+import { ListResponse } from '@stardust/core/global/responses'
 import { ConflictError, MethodNotImplementedError } from '@stardust/core/global/errors'
 
 import type { Supabase } from '@/database/supabase/types'
@@ -474,6 +476,22 @@ export class SupabaseAuthService implements AuthService {
     }
 
     return new RestResponse({ body: account })
+  }
+
+  async listApiKeys(): Promise<RestResponse<ListResponse<ApiKeyData>>> {
+    throw new MethodNotImplementedError('listApiKeys')
+  }
+
+  async createApiKey(_name: Name): Promise<RestResponse<ApiKeyData & { key: string }>> {
+    throw new MethodNotImplementedError('createApiKey')
+  }
+
+  async renameApiKey(_apiKeyId: Id, _name: Name): Promise<RestResponse<ApiKeyData>> {
+    throw new MethodNotImplementedError('renameApiKey')
+  }
+
+  async revokeApiKey(_apiKeyId: Id): Promise<RestResponse> {
+    throw new MethodNotImplementedError('revokeApiKey')
   }
 
   async deleteAccount(accountId: Id): Promise<RestResponse> {

@@ -24,6 +24,15 @@ export const AccountLinksView = ({ isAccountUser, accountSlug }: Props) => {
           </Link>
         </li>
         <li>
+          <Link href={ROUTES.profile.apiKeys(accountSlug)}>
+            <Tooltip direction='top' content='API keys'>
+              <motion.div whileHover={{ rotate: '90deg' }}>
+                <Icon name='key' className='text-green-500' />
+              </motion.div>
+            </Tooltip>
+          </Link>
+        </li>
+        <li>
           <Link href={ROUTES.playground.snippets}>
             <Tooltip direction='top' content='Snippets de código'>
               <motion.div whileHover={{ rotate: '90deg' }}>

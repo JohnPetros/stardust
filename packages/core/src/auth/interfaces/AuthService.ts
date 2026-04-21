@@ -1,9 +1,18 @@
 import type { Email, Name, Text } from '#global/domain/structures/index'
+import type { Id } from '#global/domain/structures/Id'
 import type { RestResponse } from '#global/responses/RestResponse'
 import type { Password } from '../domain/structures'
 import type { AccountDto } from '../domain/entities/dtos'
 import type { SessionDto } from '../domain/structures/dtos'
 import type { Account } from '../domain/entities'
+import { ListResponse } from '#global/responses/ListResponse'
+
+export type ApiKeyData = {
+  id: string
+  name: string
+  keyPreview: string
+  createdAt: Date
+}
 
 export interface AuthService {
   fetchAccount(): Promise<RestResponse<AccountDto>>
@@ -34,4 +43,8 @@ export interface AuthService {
   disconnectGoogleAccount(): Promise<RestResponse>
   fetchGithubAccountConnection(): Promise<RestResponse<{ isConnected: boolean }>>
   fetchGoogleAccountConnection(): Promise<RestResponse<{ isConnected: boolean }>>
+  listApiKeys(): Promise<RestResponse<ListResponse<ApiKeyData>>>
+  createApiKey(name: Name): Promise<RestResponse<ApiKeyData & { key: string }>>
+  renameApiKey(apiKeyId: Id, name: Name): Promise<RestResponse<ApiKeyData>>
+  revokeApiKey(apiKeyId: Id): Promise<RestResponse>
 }
