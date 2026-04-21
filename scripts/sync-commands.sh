@@ -6,6 +6,7 @@ OUT_DIRS=(
   ".cursor/commands"
   ".claude/commands"
   ".opencode/commands"
+  ".claude/commands"
 )
 
 # Garante que existem prompts

@@ -1,7 +1,7 @@
 import { tool as createTool } from 'ai'
 import { z } from 'zod'
 
-import { CHALLENGING_PROMPTS } from '@/ai/constants/challenging-prompts'
+import { CHALLENGING_PROMPTS } from '@/ai/constants/challenging-instructions'
 import { GetChallengeDescriptionTool } from '@/ai/tools/challenging'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import { ChallengingService } from '@/rest/services'

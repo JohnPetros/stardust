@@ -84,7 +84,6 @@ export const CodeSnippetView = ({
                 type='button'
                 className={TOOLBAR_BUTTON_CLASS_NAME}
                 onClick={onReloadCodeButtonClick}
-                disabled={!isRunnable}
               >
                 <Icon name='reload' size={16} className='text-green-900' weight='bold' />
               </ToolBar.Button>
@@ -94,7 +93,6 @@ export const CodeSnippetView = ({
                 type='button'
                 className={TOOLBAR_BUTTON_CLASS_NAME}
                 onClick={onCopyCodeButtonClick}
-                disabled={!isRunnable}
               >
                 <Icon name='copy' size={16} className='text-green-900' weight='bold' />
               </ToolBar.Button>

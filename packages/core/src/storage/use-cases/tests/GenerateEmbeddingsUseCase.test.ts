@@ -122,4 +122,30 @@ describe('Generate Embeddings Use Case', () => {
     expect(generatorProvider.generate).toHaveBeenCalledTimes(1)
     expect(storageProvider.store).not.toHaveBeenCalled()
   })
+
+  it('should skip delete before store when explicitly disabled', async () => {
+    const request = {
+      namespace: 'guides',
+      documentId: validId1,
+      content: 'content',
+      shouldDeleteBeforeStore: false,
+    }
+
+    const dummyEmbedding = Embedding.create({
+      id: validId2,
+      text: 'content',
+      vector: [0.1],
+    })
+
+    generatorProvider.generate.mockResolvedValue([dummyEmbedding])
+
+    await useCase.execute(request)
+
+    expect(storageProvider.delete).not.toHaveBeenCalled()
+    expect(storageProvider.store).toHaveBeenCalledWith(
+      [dummyEmbedding],
+      Id.create(validId1),
+      EmbeddingNamespace.create(request.namespace),
+    )
+  })
 })

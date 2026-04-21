@@ -60,4 +60,11 @@ export class UpstashEmbeddingsStorageProvider implements EmbeddingsStorageProvid
       { namespace: namespace.value },
     )
   }
+
+  async clear(namespace: EmbeddingNamespace): Promise<void> {
+    await this.index.delete(
+      { filter: "documentId != ''" },
+      { namespace: namespace.value },
+    )
+  }
 }

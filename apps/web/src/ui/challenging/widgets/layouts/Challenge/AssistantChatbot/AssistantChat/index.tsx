@@ -39,7 +39,7 @@ export const AssistantChat = ({
   const [assistantMessageContentParts, setAssistantMessageContentParts] = useState<
     string[]
   >([])
-  const { messages, status, error, sendMessage } = useChat({
+  const { messages, status, error, sendMessage, stop } = useChat({
     transport: new DefaultChatTransport({
       api: ROUTES.api.conversation.chats.assistant(chatId.value),
     }),
@@ -107,6 +107,21 @@ export const AssistantChat = ({
     [challengeId, assistantSelections, clearAssistantSelections],
   )
 
+  const pauseAssistantResponse = useCallback(() => {
+    if (status !== 'submitted' && status !== 'streaming') return
+
+    stop()
+
+    const assistantPartialResponse = assistantMessageContentParts.join('')
+
+    if (assistantPartialResponse.trim()) {
+      lastAssistanteMessage.current = ChatMessage.create({
+        sender: 'assistant',
+        content: assistantPartialResponse,
+      })
+    }
+  }, [status, stop, assistantMessageContentParts])
+
   useEffect(() => {
     const lastMessage = messages.at(-1)
 
@@ -154,6 +169,7 @@ export const AssistantChat = ({
       assistantMessageContentParts={assistantMessageContentParts}
       isChatEmpty={chatMessages.length === 0}
       onSendMessageButtonClick={sendChatMessage}
+      onPauseAssistantResponseButtonClick={pauseAssistantResponse}
     />
   )
 }

@@ -76,7 +76,7 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
 
 ## Core
 
-* **`ExplainCodeWorkflow`** (`packages/core/src/lesson/interfaces/ExplainCodeWokflow.ts`) - contrato existente para executar explicacao de codigo via workflow, ainda nao exportado pelo barrel de `lesson/interfaces`.
+* **`ExplainCodeWorkflow`** (`packages/core/src/lesson/interfaces/ExplainCodeWorkflow.ts`) - contrato existente para executar explicacao de codigo via workflow, ainda nao exportado pelo barrel de `lesson/interfaces`.
 * **`LessonService`** (`packages/core/src/lesson/interfaces/LessonService.ts`) - contrato REST compartilhado entre apps para operacoes de lesson; hoje ainda nao contem endpoints de explicacao por IA.
 * **`Story`** (`packages/core/src/lesson/domain/structures/Story.ts`) - estrutura que transforma a narrativa em `chunks[]` e fornece o indice usado no fluxo da `Story`.
 * **`Tool`** (`packages/core/src/global/interfaces/ai/Tool.ts`) - interface base para tools de IA no core.

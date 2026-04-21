@@ -7,18 +7,22 @@ import type { TextSelection, CodeSelection } from '@stardust/core/global/structu
 
 type Props = {
   isDisabled: boolean
+  isAssistantGenerating: boolean
   textSelection: TextSelection | null
   codeSelection: CodeSelection | null
   onSendMessage: (message: string) => void
+  onPauseAssistantResponse: () => void
   onRemoveTextSelection: () => void
   onRemoveCodeSelection: () => void
 }
 
 export const ChatInputView = ({
   isDisabled,
+  isAssistantGenerating,
   textSelection,
   codeSelection,
   onSendMessage,
+  onPauseAssistantResponse,
   onRemoveTextSelection,
   onRemoveCodeSelection,
 }: Props) => {
@@ -34,7 +38,7 @@ export const ChatInputView = ({
     <div
       className={twMerge(
         'relative flex flex-col bg-[#1A1A1A] border border-[#333] rounded-xl w-[95%] md:w-full mx-auto p-3 transition-colors focus-within:border-[#555]',
-        isDisabled && 'opacity-50 cursor-not-allowed',
+        isDisabled && !isAssistantGenerating && 'opacity-50 cursor-not-allowed',
       )}
     >
       <ChatInputSelections
@@ -57,16 +61,30 @@ export const ChatInputView = ({
           onChange={handleMessageChange}
           onKeyDown={handleKeyDown}
         />
-        <button
-          type='button'
-          className='absolute bottom-2 right-2 flex items-center justify-center w-8 h-8 border-none rounded-full bg-[#333] text-white cursor-pointer transition-all hover:enabled:bg-[#444] disabled:opacity-50 disabled:cursor-not-allowed'
-          onClick={handleSendMessage}
-          disabled={!message.trim()}
-        >
-          <div className='w-4 h-4 flex items-center justify-center'>
-            <Icon name='arrow-right' />
-          </div>
-        </button>
+        {isAssistantGenerating ? (
+          <button
+            type='button'
+            className='absolute bottom-2 right-2 flex items-center justify-center w-8 h-8 border-none rounded-full bg-[#333] text-white cursor-pointer transition-all hover:bg-[#444]'
+            onClick={onPauseAssistantResponse}
+            aria-label='Pausar geração da resposta'
+          >
+            <div className='w-4 h-4 flex items-center justify-center'>
+              <Icon name='pause' />
+            </div>
+          </button>
+        ) : (
+          <button
+            type='button'
+            className='absolute bottom-2 right-2 flex items-center justify-center w-8 h-8 border-none rounded-full bg-[#333] text-white cursor-pointer transition-all hover:enabled:bg-[#444] disabled:opacity-50 disabled:cursor-not-allowed'
+            onClick={handleSendMessage}
+            disabled={!message.trim()}
+            aria-label='Enviar mensagem'
+          >
+            <div className='w-4 h-4 flex items-center justify-center'>
+              <Icon name='arrow-right' />
+            </div>
+          </button>
+        )}
       </div>
     </div>
   )

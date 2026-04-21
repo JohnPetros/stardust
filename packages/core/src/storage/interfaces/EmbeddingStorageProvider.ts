@@ -15,4 +15,5 @@ export interface EmbeddingsStorageProvider {
     namespace: EmbeddingNamespace,
   ): Promise<Embedding[]>
   delete(documentId: Id, namespace: EmbeddingNamespace): Promise<void>
+  clear(namespace: EmbeddingNamespace): Promise<void>
 }

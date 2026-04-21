@@ -104,7 +104,7 @@
 ### Agent/team pattern
 
 - `agents` recebem instrucoes via `constants` e expõem ferramentas explicitamente.
-- Exemplos reais: `apps/server/src/ai/mastra/teams/ChallengingSquad.ts`, `apps/web/src/ai/vercel/agents/manualAgents.ts`.
+- Exemplos reais: `apps/server/src/ai/mastra/squads/ChallengingSquad.ts`, `apps/web/src/ai/vercel/agents/manualAgents.ts`.
 
 ## Padroes de uso aplicados
 
