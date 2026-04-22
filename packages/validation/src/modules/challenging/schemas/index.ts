@@ -1,5 +1,6 @@
 export { challengeCompletionStatusSchema } from './challengeCompletionStatusSchema'
 export { challengeDifficultyLevelSchema } from './challengeDifficultyLevelSchema'
+export { challengeIsNewStatusSchema } from './challengeIsNewStatusSchema'
 export { challengeSchema } from './challengeSchema'
 export { challengeVoteSchema } from './challengeVoteSchema'
 export { challengeFormSchema } from './challengeFormSchema'
