@@ -1,13 +1,9 @@
-import { app } from '@/app'
 import { AuthRouter } from '../AuthRouter'
 
 describe('Auth Router (/auth)', () => {
-  const server = app.startServer(0)
-  server.setRoutePrefix('/auth')
+  test('should register routes without booting the full app', () => {
+    const router = new AuthRouter({} as never)
 
-  afterAll(() => {
-    server.close()
+    expect(router.registerRoutes()).toBeDefined()
   })
-
-  test('[POST] /sign-in', async () => {})
 })

@@ -12,11 +12,9 @@ import {
   RevokeApiKeyController,
 } from '@/rest/controllers/auth'
 import { HonoHttp } from '../../HonoHttp'
-import {
-  AuthMiddleware,
-  ProfileMiddleware,
-  ValidationMiddleware,
-} from '../../middlewares'
+import { AuthMiddleware } from '../../middlewares/AuthMiddleware'
+import { ProfileMiddleware } from '../../middlewares/ProfileMiddleware'
+import { ValidationMiddleware } from '../../middlewares/ValidationMiddleware'
 import { HonoRouter } from '../../HonoRouter'
 
 export class ApiKeysRouter extends HonoRouter {
