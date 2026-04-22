@@ -23,7 +23,8 @@ export class UpdateChallengeUseCase implements UseCase<Request, Response> {
     }
 
     await this.repository.replace(challenge)
-    return challenge.dto
+    const updatedChallenge = await this.findChallenge(challenge.id)
+    return updatedChallenge.dto
   }
 
   private async findChallenge(challengeId: Id) {
