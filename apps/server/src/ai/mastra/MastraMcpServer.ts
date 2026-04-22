@@ -17,43 +17,29 @@ type Params = {
 }
 
 export class MastraMcpServer {
-  private readonly server: McpServer
-  private readonly transport: WebStandardStreamableHTTPServerTransport
-  private readonly connectionPromise: Promise<void>
+  private readonly name: string
+  private readonly version: string
+  private readonly instructions?: string
+  private readonly tools: ToolRegistry
   private readonly authInfoStorage = new AsyncLocalStorage<AuthInfo>()
 
   constructor({ name, version, instructions, tools }: Params) {
-    this.server = new McpServer(
-      {
-        name,
-        version,
-      },
-      {
-        instructions,
-        capabilities: {
-          tools: {
-            listChanged: false,
-          },
-        },
-      },
-    )
-
-    this.transport = new WebStandardStreamableHTTPServerTransport({
-      sessionIdGenerator: undefined,
-    })
-
-    this.registerTools(tools)
-    this.connectionPromise = this.server.connect(this.transport)
+    this.name = name
+    this.version = version
+    this.instructions = instructions
+    this.tools = tools
   }
 
   async handleRequest(request: Request, authInfo: AuthInfo): Promise<Response> {
+    const { server, transport } = this.createServerWithTransport()
+
     try {
-      await this.connectionPromise
+      await server.connect(transport)
 
       return await this.authInfoStorage.run(
         authInfo,
         async () =>
-          await this.transport.handleRequest(request, {
+          await transport.handleRequest(request, {
             authInfo,
           }),
       )
@@ -76,10 +62,38 @@ export class MastraMcpServer {
   }
 
   async close(): Promise<void> {
-    await this.server.close()
+    return Promise.resolve()
   }
 
-  private registerTools(tools: ToolRegistry) {
+  private createServerWithTransport() {
+    const server = new McpServer(
+      {
+        name: this.name,
+        version: this.version,
+      },
+      {
+        instructions: this.instructions,
+        capabilities: {
+          tools: {
+            listChanged: false,
+          },
+        },
+      },
+    )
+
+    const transport = new WebStandardStreamableHTTPServerTransport({
+      sessionIdGenerator: undefined,
+    })
+
+    this.registerTools(server, this.tools)
+
+    return {
+      server,
+      transport,
+    }
+  }
+
+  private registerTools(server: McpServer, tools: ToolRegistry) {
     Object.entries(tools).forEach(([toolKey, tool]) => {
       if (!(tool instanceof Tool) || !tool.execute) {
         return
@@ -88,7 +102,7 @@ export class MastraMcpServer {
       const execute = tool.execute
       const toolId = tool.id ?? toolKey
 
-      this.server.registerTool(
+      server.registerTool(
         toolId,
         {
           description: tool.description,
