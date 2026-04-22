@@ -24,9 +24,7 @@ export const accessAuthenticatedChallengePage = authActionClient
       user: ctx.user,
     })
     const restClient = await NextServerRestClient({
-      isCacheEnabled: true,
-      refetchInterval: 60,
-      cacheKey: 'challenging-actions',
+      isCacheEnabled: false,
     })
     const challengingService = ChallengingService(restClient)
     const spaceService = SpaceService(restClient)
@@ -45,9 +43,7 @@ export const accessChallengePage = actionClient
       request: clientInput,
     })
     const restClient = await NextServerRestClient({
-      isCacheEnabled: true,
-      refetchInterval: 60,
-      cacheKey: 'challenging-actions',
+      isCacheEnabled: false,
     })
     const challengingService = ChallengingService(restClient)
     const spaceService = SpaceService(restClient)
@@ -67,9 +63,7 @@ export const accessChallengeEditorPage = authActionClient
       user: ctx.user,
     })
     const restClient = await NextServerRestClient({
-      isCacheEnabled: true,
-      refetchInterval: 60,
-      cacheKey: 'challenging-actions',
+      isCacheEnabled: false,
     })
     const challengingService = ChallengingService(restClient)
     const action = AccessChallengeEditorPageAction(challengingService)
