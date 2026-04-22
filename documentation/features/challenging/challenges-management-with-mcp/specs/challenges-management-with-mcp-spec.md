@@ -4,7 +4,7 @@ prd: https://github.com/JohnPetros/stardust/milestone/26
 issue: https://github.com/JohnPetros/stardust/issues/390
 apps: server
 status: closed
-last_updated_at: 2026-04-21
+last_updated_at: 2026-04-22
 ---
 
 # 1. Objetivo
@@ -128,7 +128,7 @@ Expor um único servidor MCP HTTP do Stardust em `apps/server` na rota `/mcp`, a
 ## Validation
 
 * **`challengeSchema`** (`packages/validation/src/modules/challenging/schemas/challengeSchema.ts`) - schema compartilhado com `title`, `description`, `author.id`, `code`, `difficultyLevel`, `categories`, `isPublic` opcional e mínimo de 3 `testCases` estruturados.
-* **`challengeDraftSchema`** (`packages/validation/src/modules/challenging/schemas/challengeDraftSchema.ts`) - schema atual usado pelo workflow Mastra; omite `author` e serializa `testCases` como strings JSON.
+* **Schema derivado de `challengeSchema`** (`challengeSchema.omit({ author: true, isPublic: true })`) - contrato aplicado nas entradas MCP e no parse do workflow para manter `testCases` estruturados (`inputs`/`expectedOutput`) sem serialização em strings JSON.
 * **`idSchema`** (`packages/validation/src/modules/global/schemas/idSchema.ts`) - schema base para `challengeId` e `challengeSourceId`.
 * **`challengeSourceSchema`** (`packages/validation/src/modules/challenging/schemas/challengeSourceSchema.ts`) - referência de contrato compartilhado para `additionalInstructions` em `challenge_sources`.
 
