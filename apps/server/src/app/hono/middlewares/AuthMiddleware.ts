@@ -39,20 +39,16 @@ export class AuthMiddleware {
     const secretProvider = new NodeCryptoApiKeySecretProvider()
     const useCase = new AuthenticateApiKeyUseCase(repository, secretProvider)
 
-    try {
-      const { userId } = await useCase.execute({ apiKey })
+    const { userId } = await useCase.execute({ apiKey })
 
-      const accountDto: AccountDto = {
-        id: userId,
-        email: '',
-        name: '',
-        isAuthenticated: true,
-      }
-
-      context.set('account', accountDto)
-      await next()
-    } catch {
-      throw new AuthError('Invalid API key')
+    const accountDto: AccountDto = {
+      id: userId,
+      email: '',
+      name: '',
+      isAuthenticated: true,
     }
+
+    context.set('account', accountDto)
+    await next()
   }
 }
