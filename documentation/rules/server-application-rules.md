@@ -1,6 +1,6 @@
 # Para que serve?
 
-E a aplicacao responsavel por expor as funcionalidades do StarDust Core via HTTP (API) para consumo do Web, Studio e outros clientes. Alem de rotas REST, a aplicacao executa tarefas assincronas e workflows baseados em eventos por meio do Inngest, e integra com servicos externos (ex.: Supabase, cache, storage, telemetria e provedores de IA).
+E a aplicacao responsavel por expor as funcionalidades do StarDust Core via HTTP (API) para consumo do Web, Studio e outros clientes. Alem de rotas REST, a aplicacao executa tarefas assincronas e workflows baseados em eventos por meio do Inngest, integra com servicos externos (ex.: Supabase, cache, storage, telemetria e provedores de IA) e pode expor endpoints MCP autenticados quando a integracao precisar disponibilizar tools do dominio para clientes externos.
 
 # Desenvolvimento
 
@@ -73,6 +73,8 @@ npm run test
 Server
 ├─ src
 │  ├─ ai
+│  │  └─ mastra
+│  │     └─ toolkits
 │  ├─ app
 │  │  └─ hono
 │  │     ├─ middlewares
@@ -88,3 +90,10 @@ Server
 │  └─ main.ts
 └─ supabase
 ```
+
+## Convencoes relevantes da app
+
+- Endpoints MCP HTTP devem ficar em `src/app/hono/routers/mcp`.
+- A autenticacao e autorizacao do MCP devem acontecer na borda da app antes da execucao das tools.
+- Toolkits MCP devem viver em `src/ai/mastra/toolkits` e concentrar schemas Zod e composicao de dependencias concretas.
+- Tools MCP devem delegar regra de negocio para `use cases` e entidades do `@stardust/core`.

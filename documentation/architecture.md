@@ -7,7 +7,7 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 ## Apps e Pacotes
 
 - **Web (`apps/web/`)**: Frontend principal em Next.js 15 com React Server Components. UI organizada por domínio seguindo o padrão Widget (View + Hook + Index).
-- **Server (`apps/server/`)**: API REST em Hono/Node.js. Processa requisições via Actions (RPC) e jobs assíncronos via Inngest.
+- **Server (`apps/server/`)**: API REST em Hono/Node.js. Processa requisições HTTP, expõe um endpoint MCP autenticado em `/mcp` e executa jobs assíncronos via Inngest.
 - **Studio (`apps/studio/`)**: Aplicação administrativa interna em React Router v7.
 - **Core (`packages/core/`)**: Regras de negócio puras com DDD tático. Sem dependência de frameworks. Contém Entities, Structures, Aggregates, Use Cases e Interfaces.
 - **Validation (`packages/validation/`)**: Schemas de validação com Zod, compartilhados entre as apps.
@@ -24,12 +24,15 @@ O `@stardust/core` define interfaces (Repositories, Gateways, Jobs). As apps imp
 
 **REST**: Service → RestClient (Axios/Fetch) → API externa → RestResponse\<T\>
 
+**MCP**: Hono `/mcp` → API key auth + verificação de insignia → Toolkit/Tool → Use Case
+
 **Queue**: Event Dispatcher → Inngest → Job.handle(amqp) → Use Case
 
 ## Padrões Principais
 
 - **Widget** na UI para separar View (renderização), Hook (lógica/estado) e Index (integração).
 - **Action/RPC** para conectar rotas ao domínio sem acoplar o framework ao Core.
+- **MCP Toolkit** no server para compor tools com `inputSchema`/`outputSchema` na borda e delegar comportamento ao Core.
 - **RestClient** como adapter sobre Axios/Fetch para chamadas HTTP externas.
 - **Job** para tarefas assíncronas, agendadas ou falháveis (e-mail, relatórios).
 - **Factory Functions** no lugar de `new Class()` para Serviços e Controllers.
