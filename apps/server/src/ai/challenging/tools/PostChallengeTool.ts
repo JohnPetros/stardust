@@ -1,4 +1,5 @@
 import type {
+  ChallengeDto,
   ChallengeCategoryDto,
   TestCaseDto,
 } from '@stardust/core/challenging/entities/dtos'
@@ -19,14 +20,14 @@ type Input = {
   challengeSourceId?: string | null
 }
 
-export class PostChallengeTool implements Tool<Input> {
+export class PostChallengeTool implements Tool<Input, ChallengeDto> {
   constructor(
     private readonly repository: ChallengesRepository,
     private readonly challengeSourcesRepository: ChallengeSourcesRepository,
     private readonly broker: Broker,
   ) {}
 
-  async handle(mcp: Mcp<Input>) {
+  async handle(mcp: Mcp<Input>): Promise<ChallengeDto> {
     const {
       title,
       description,
@@ -43,7 +44,7 @@ export class PostChallengeTool implements Tool<Input> {
       this.broker,
     )
 
-    await useCase.execute({
+    return await useCase.execute({
       challengeDto: {
         title: title,
         description: description,

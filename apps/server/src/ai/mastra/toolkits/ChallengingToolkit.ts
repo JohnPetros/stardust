@@ -31,7 +31,6 @@ import {
   searchSchema,
 } from '@stardust/validation/global/schemas'
 import {
-  challengeDraftSchema,
   challengeCompletionStatusSchema,
   challengeDifficultyLevelSchema,
   challengeIsNewStatusSchema,
@@ -43,22 +42,12 @@ export class ChallengingToolkit {
     return createTool({
       id: 'post-challenging-tool',
       description: TOOLS_DESCRIPTIONS.postChallenge,
-      inputSchema: challengeDraftSchema.omit({ isPublic: true }).extend({
+      inputSchema: challengeSchema.omit({ author: true, isPublic: true }).extend({
         challengeSourceId: idSchema.nullable().optional(),
       }),
       outputSchema: z.void(),
       execute: async (input, context) => {
-        const mcp = new MastraMcp(
-          {
-            ...input,
-            testCases: input.testCases.map((testCase) => ({
-              ...testCase,
-              inputs: JSON.parse(testCase.inputs),
-              expectedOutput: JSON.parse(testCase.expectedOutput),
-            })),
-          },
-          context,
-        )
+        const mcp = new MastraMcp(input, context)
         const challengesRepository = new SupabaseChallengesRepository(supabase)
         const challengeSourcesRepository = new SupabaseChallengeSourcesRepository(
           supabase,
@@ -97,16 +86,7 @@ export class ChallengingToolkit {
         challengeId: idSchema,
       }),
       execute: async (input, context) => {
-        const mcp = new MastraMcp(
-          {
-            ...input,
-            testCases: input.testCases.map((testCase) => ({
-              ...testCase,
-              expectedOutput: testCase.expectedOutput ?? null,
-            })),
-          },
-          context,
-        )
+        const mcp = new MastraMcp(input, context)
         const repository = new SupabaseChallengesRepository(supabase)
         const tool = new UpdateChallengeTool(repository)
         await tool.handle(mcp)
