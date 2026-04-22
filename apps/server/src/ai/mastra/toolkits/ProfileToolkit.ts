@@ -1,4 +1,3 @@
-import z from 'zod'
 import { createTool } from '@mastra/core/tools'
 
 import { supabase } from '@/database/supabase'

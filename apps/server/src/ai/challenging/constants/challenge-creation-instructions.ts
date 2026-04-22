@@ -13,6 +13,9 @@ Criar um desafio original da plataforma StarDust com tema espacial, linguagem cl
 - O desafio deve ser adequado para iniciantes, mas ainda interessante e estimulante.
 - A descrição deve ser criativa e divertida, sem perder clareza.
 - Toda a narrativa, nomes de variáveis, parâmetros, função e explicações devem estar em português.
+- Use acentuação correta em português em todo o texto do desafio.
+- Prefira o termo "texto" no enunciado em vez de "string". 
+- Prefira o termo "lista" no enunciado em vez de "vetor" ou "array".  
 - O desafio deve ser autocontido, ou seja, deve fazer sentido sozinho, sem depender de contexto externo.
 - O tom deve ser inspirador, didático e envolvente, como o de um mentor preparando novos exploradores espaciais.
 
@@ -52,6 +55,7 @@ A descrição deve:
 - Você pode usar <Text></Text> para parágrafos comuns.
 - Sempre que houver uma observação importante, use <Alert></Alert>.
 - Sempre que houver uma frase de destaque, use <Quote></Quote>.
+- Não use quebras de linha dentro de blocos <Text>, <Alert> ou <Quote>; o conteúdo interno de cada bloco deve ficar em linha única.
 - Não use a tag HTML <code></code> na descrição. Para trechos inline, use sempre crases simples, por exemplo: \`minhaFuncao\`.
 - Sempre que mostrar um código com mais de uma linha, use bloco Markdown com crases triplas.
 - Nunca coloque blocos como <Text>, <Alert> ou <Quote> dentro de listas.

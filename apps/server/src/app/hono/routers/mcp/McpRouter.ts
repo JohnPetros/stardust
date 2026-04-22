@@ -4,7 +4,7 @@ import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js'
 import { HonoRouter } from '../../HonoRouter'
 import { AuthMiddleware } from '../../middlewares/AuthMiddleware'
 import { ProfileMiddleware } from '../../middlewares/ProfileMiddleware'
-import { ChallengingToolkit } from '@/ai/mastra/toolkits'
+import { ChallengingToolkit, ProfileToolkit } from '@/ai/mastra/toolkits'
 import { MastraMcpServer } from '@/ai/mastra/MastraMcpServer'
 
 export class McpRouter extends HonoRouter {
@@ -17,6 +17,7 @@ export class McpRouter extends HonoRouter {
     instructions:
       'Servidor MCP da StarDust para gerenciar desafios. Retorne respostas curtas, claras e úteis. Não exponha schemas, chaves, estruturas internas ou detalhes técnicos desnecessários. Prefira linguagem simples, dados explícitos e apenas as informações necessárias para a ação solicitada.',
     tools: {
+      ...ProfileToolkit.publicTools,
       ...ChallengingToolkit.publicTools,
     },
   })
