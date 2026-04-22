@@ -550,14 +550,18 @@ create or replace view "public"."challenges_view" as  SELECT c.title,
             ELSE NULL::integer
         END) AS downvotes_count,
     count(DISTINCT ucc.challenge_id) AS total_completitions,
-    array_agg(json_build_object('id', ccc.id, 'name', ccc.name)) AS categories
-   FROM ((((((challenges c
-     LEFT JOIN users u ON (((u.id)::text = c.user_id)))
-     LEFT JOIN users_challenge_votes uvc ON ((uvc.challenge_id = c.id)))
-     LEFT JOIN users_completed_challenges ucc ON ((ucc.challenge_id = c.id)))
-     LEFT JOIN challenges_categories cc ON ((cc.challenge_id = c.id)))
-     LEFT JOIN categories ccc ON ((ccc.id = cc.category_id)))
-     LEFT JOIN avatars a ON ((a.id = u.avatar_id)))
+    ARRAY( SELECT json_build_object('id', category.id, 'name', category.name) AS json_build_object
+           FROM ( SELECT DISTINCT ccc2.id,
+                    ccc2.name
+                   FROM (challenges_categories cc2
+                     JOIN categories ccc2 ON ((ccc2.id = cc2.category_id)))
+                  WHERE (cc2.challenge_id = c.id)
+                  ORDER BY ccc2.name) category) AS categories
+   FROM ((((challenges c
+      LEFT JOIN users u ON (((u.id)::text = c.user_id)))
+      LEFT JOIN users_challenge_votes uvc ON ((uvc.challenge_id = c.id)))
+      LEFT JOIN users_completed_challenges ucc ON ((ucc.challenge_id = c.id)))
+      LEFT JOIN avatars a ON ((a.id = u.avatar_id)))
   GROUP BY c.id, u.id, a.name, a.image;
 
 
@@ -1791,5 +1795,4 @@ grant trigger on table "public"."users_upvoted_solutions" to "service_role";
 grant truncate on table "public"."users_upvoted_solutions" to "service_role";
 
 grant update on table "public"."users_upvoted_solutions" to "service_role";
-
 

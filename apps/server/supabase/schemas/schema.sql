@@ -477,14 +477,27 @@ select
     end
   ) as downvotes_count,
   count(distinct ucc.challenge_id) as total_completitions,
-  array_agg(json_build_object('id', ccc.id, 'name', ccc.name)) as categories
+  array(
+    select
+      json_build_object('id', category.id, 'name', category.name)
+    from (
+      select distinct
+        ccc2.id,
+        ccc2.name
+      from
+        challenges_categories cc2
+        join categories ccc2 on ccc2.id = cc2.category_id
+      where
+        cc2.challenge_id = c.id
+      order by
+        ccc2.name
+    ) as category
+  ) as categories
 from
   challenges c
   left join users u on u.id::text = c.user_id
   left join users_challenge_votes uvc on uvc.challenge_id = c.id
   left join users_completed_challenges ucc on ucc.challenge_id = c.id
-  left join challenges_categories cc on cc.challenge_id = c.id
-  left join categories ccc on ccc.id = cc.category_id
   left join avatars a on a.id = u.avatar_id
 group by
   c.id,
