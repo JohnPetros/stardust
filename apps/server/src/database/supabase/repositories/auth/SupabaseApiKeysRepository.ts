@@ -1,6 +1,7 @@
 import type { ApiKey } from '@stardust/core/auth/entities'
 import type { ApiKeysRepository } from '@stardust/core/auth/interfaces'
 import type { Id } from '@stardust/core/global/structures'
+import type { Text } from '@stardust/core/global/structures'
 
 import { SupabasePostgreError } from '../../errors'
 import { SupabaseApiKeyMapper } from '../../mappers/auth'
@@ -37,6 +38,20 @@ export class SupabaseApiKeysRepository
     }
 
     return data.map(SupabaseApiKeyMapper.toEntity)
+  }
+
+  async findByHash(keyHash: Text): Promise<ApiKey | null> {
+    const { data, error } = await this.supabase
+      .from('api_keys')
+      .select('*')
+      .eq('key_hash', keyHash.value)
+      .single()
+
+    if (error) {
+      return this.handleQueryPostgresError(error)
+    }
+
+    return SupabaseApiKeyMapper.toEntity(data)
   }
 
   async add(apiKey: ApiKey): Promise<void> {

@@ -1,3 +1,4 @@
+export { AuthenticateApiKeyUseCase } from './AuthenticateApiKeyUseCase'
 export { CreateApiKeyUseCase } from './CreateApiKeyUseCase'
 export { ListApiKeysUseCase } from './ListApiKeysUseCase'
 export { RenameApiKeyUseCase } from './RenameApiKeyUseCase'

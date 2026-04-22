@@ -43,6 +43,7 @@ import {
   NotificationRouter,
   ConversationRouter,
   ReportingRouter,
+  McpRouter,
 } from './routers'
 import { ForumRouter } from './routers/forum'
 import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
@@ -55,6 +56,7 @@ type SupabaseSession = User & { sub: string }
 
 declare module 'hono' {
   interface ContextVariableMap {
+    account: AccountDto
     supabase: SupabaseClient
     inngest: InngestAmqp<void>
   }
@@ -163,6 +165,7 @@ export class HonoApp {
     const notificationRouter = new NotificationRouter(this)
     const conversationRouter = new ConversationRouter(this)
     const reportingRouter = new ReportingRouter(this)
+    const mcpRouter = new McpRouter(this)
 
     this.hono.get('/', (context) => {
       return context.json({ message: 'Everything is working!' })
@@ -182,6 +185,7 @@ export class HonoApp {
     this.hono.route('/', notificationRouter.registerRoutes())
     this.hono.route('/', conversationRouter.registerRoutes())
     this.hono.route('/', reportingRouter.registerRoutes())
+    this.hono.route('/', mcpRouter.registerRoutes())
   }
 
   private registerMiddlewares() {
@@ -231,6 +235,7 @@ export class HonoApp {
   private createSupabaseClient() {
     return async (context: Context, next: Next) => {
       const accessToken = context.req.header('Authorization')?.split(' ')[1]
+      const isMcpRoute = context.req.path.startsWith('/mcp')
       const supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey, {
         global: {
           headers: {
@@ -239,7 +244,7 @@ export class HonoApp {
         },
       })
       context.set('supabase', supabase)
-      if (accessToken) this.setAccount(accessToken, context)
+      if (accessToken && !isMcpRoute) this.setAccount(accessToken, context)
       await next()
     }
   }

@@ -5,11 +5,11 @@ import { Integer, type Id, type Month, type Slug } from '@stardust/core/global/s
 import { ChallengeNavigation, ChallengeVote } from '@stardust/core/challenging/structures'
 import type { ManyItems } from '@stardust/core/global/types'
 
+import type { SupabaseChallenge } from '../../types'
 import type { Json } from '../../types/Database'
 import { SupabaseRepository } from '../SupabaseRepository'
 import { SupabaseChallengeMapper } from '../../mappers/challenging'
 import { SupabasePostgreError } from '../../errors'
-import { SupabaseChallenge } from '../../types'
 
 export class SupabaseChallengesRepository
   extends SupabaseRepository

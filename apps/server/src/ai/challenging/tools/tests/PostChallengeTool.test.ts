@@ -1,11 +1,5 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
-jest.mock('@/constants', () => ({
-  ENV: {
-    mode: 'test',
-  },
-}))
-
 import type {
   ChallengesRepository,
   ChallengeSourcesRepository,
@@ -43,6 +37,7 @@ describe('Post Challenge Tool', () => {
     }
 
     mcp.getInput.mockReturnValue(input)
+    mcp.getAccountId.mockReturnValue('99968fac-8a67-46c6-90e5-63ae175961b5')
 
     const executeSpy = jest
       .spyOn(PostChallengeUseCase.prototype, 'execute')
@@ -61,6 +56,7 @@ describe('Post Challenge Tool', () => {
         author: expect.objectContaining({
           id: '99968fac-8a67-46c6-90e5-63ae175961b5',
         }),
+        isPublic: false,
       }),
       challengeSourceId: input.challengeSourceId,
     })
@@ -77,6 +73,7 @@ describe('Post Challenge Tool', () => {
     }
 
     mcp.getInput.mockReturnValue(input)
+    mcp.getAccountId.mockReturnValue('99968fac-8a67-46c6-90e5-63ae175961b5')
 
     const executeSpy = jest
       .spyOn(PostChallengeUseCase.prototype, 'execute')

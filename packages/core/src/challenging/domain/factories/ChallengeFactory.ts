@@ -15,16 +15,6 @@ import { ChallengeCategory } from '../entities'
 
 export class ChallengeFactory {
   static produce(dto: ChallengeDto) {
-    const categories: ChallengeCategory[] = []
-    const includedCategoriesIds: string[] = []
-    for (const category of dto.categories) {
-      const challengeCategory = ChallengeCategory.create(category)
-      if (!includedCategoriesIds.includes(challengeCategory.id.value)) {
-        categories.push(challengeCategory)
-        includedCategoriesIds.push(challengeCategory.id.value) // supabase's repeated categories bug fix
-      }
-    }
-
     return {
       title: Name.create(dto.title),
       slug: Slug.create(dto.title),
@@ -39,7 +29,7 @@ export class ChallengeFactory {
       ),
       downvotesCount: Integer.create(dto.downvotesCount ?? 0, 'Contagem de dowvotes'),
       upvotesCount: Integer.create(dto.upvotesCount ?? 0, 'Contagem de upvotes'),
-      categories,
+      categories: dto.categories.map(ChallengeCategory.create),
       userVote: ChallengeVote.createAsNone(),
       description: Text.create(dto.description),
       isPublic: Logical.create(

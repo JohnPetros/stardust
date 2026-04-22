@@ -1,4 +1,5 @@
 import type {
+  ChallengeDto,
   ChallengeCategoryDto,
   TestCaseDto,
 } from '@stardust/core/challenging/entities/dtos'
@@ -8,7 +9,6 @@ import type {
 } from '@stardust/core/challenging/interfaces'
 import type { Broker, Mcp, Tool } from '@stardust/core/global/interfaces'
 import { PostChallengeUseCase } from '@stardust/core/challenging/use-cases'
-import { ENV } from '@/constants'
 
 type Input = {
   title: string
@@ -20,14 +20,14 @@ type Input = {
   challengeSourceId?: string | null
 }
 
-export class PostChallengeTool implements Tool<Input> {
+export class PostChallengeTool implements Tool<Input, ChallengeDto> {
   constructor(
     private readonly repository: ChallengesRepository,
     private readonly challengeSourcesRepository: ChallengeSourcesRepository,
     private readonly broker: Broker,
   ) {}
 
-  async handle(mcp: Mcp<Input>) {
+  async handle(mcp: Mcp<Input>): Promise<ChallengeDto> {
     const {
       title,
       description,
@@ -37,13 +37,14 @@ export class PostChallengeTool implements Tool<Input> {
       categories,
       challengeSourceId,
     } = mcp.getInput()
+    const accountId = mcp.getAccountId()
     const useCase = new PostChallengeUseCase(
       this.repository,
       this.challengeSourcesRepository,
       this.broker,
     )
 
-    await useCase.execute({
+    return await useCase.execute({
       challengeDto: {
         title: title,
         description: description,
@@ -52,20 +53,9 @@ export class PostChallengeTool implements Tool<Input> {
         testCases: testCases,
         categories: categories,
         author: {
-          id:
-            ENV.mode === 'production'
-              ? 'df0757dd-3b9f-4d21-96cc-497483cc0f2e'
-              : '99968fac-8a67-46c6-90e5-63ae175961b5',
-          entity: {
-            name: 'Agente criador de desafios',
-            slug: 'mastra',
-            avatar: {
-              name: 'Mastra',
-              image:
-                'https://www.shutterstock.com/image-vector/chat-bot-ai-robot-icon-260nw-2559707511.jpg',
-            },
-          },
+          id: accountId,
         },
+        isPublic: false,
       },
       challengeSourceId: challengeSourceId ?? null,
     })

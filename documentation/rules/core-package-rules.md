@@ -12,6 +12,26 @@ Dessa forma, o domínio (ou `domain`) é a camada principal do `core` do StarDus
 
 A implementação do domínio segue os princípios da modelagem do DDD tático (com algumas adaptações), obedecendo às regras de *[Object Calisthenics](https://developerhandbook.stakater.com/architecture/object-calisthenics.html)* e contendo exclusivamente classes que representam os objetos de domínio descritos a seguir.
 
+## 🔌 Desacoplamento entre módulos
+
+Os módulos dentro de `packages/core` devem permanecer **desacoplados por padrão**. O fato de todos viverem no mesmo pacote não significa que podem depender livremente uns dos outros.
+
+Regras obrigatórias:
+
+- Um módulo não deve importar repositórios, services, use cases ou entidades de outro módulo apenas por conveniência.
+- Quando um fluxo exigir coordenação entre módulos, prefira comunicação por contratos explícitos, eventos de domínio ou composição na borda da app, conforme o padrão já existente na codebase.
+- Autenticação, autorização, montagem de contexto HTTP, checks de ownership ligados ao transporte e adaptação de payloads **não devem ser empurrados para o core** quando já forem responsabilidades da borda (`middleware`, `controller`, `router`, `tool`, `job`, `action`).
+- Um `use case` pode depender de interfaces de outro módulo apenas quando essa colaboração fizer parte da regra de negócio do domínio e houver evidência clara desse padrão no projeto.
+- Na dúvida, preserve o módulo dono da responsabilidade. Exemplo: validar API key pertence ao módulo `auth`; validar insignia/papel do usuário pertence ao módulo que já resolve perfil/permissão no fluxo real.
+
+Sinais de alerta:
+
+- `use case` de um módulo precisando importar `Repository` de outro módulo só para resolver permissão.
+- `use case` assumindo detalhes de transporte, como headers, cookies, sessão, bearer token ou contexto HTTP.
+- criação de dependências cross-domain no core sem referência semelhante na codebase.
+
+Quando houver necessidade real de cruzar módulos e não existir evidência suficiente para decidir, registre isso como pendência arquitetural e valide antes de consolidar a implementação/spec.
+
 ---
 
 ### Entidade (Entity)
@@ -114,6 +134,20 @@ Uma `factory` deve seguir o padrão:
 São os contratos que definem como um handler, gateway ou protocol deve se comportar através exclusivamente métodos. Uma interface pode se implementada por uma classe ou função. No caso da função ela deve retonar um objeto que atenda contenha os métodos estabelecidos pela interface em questão.
 
 A interface serve justamente para aplicar o princípio de inversão de indepedância para desacoplar aplicações, serviços e bibliotecas.
+
+Regras obrigatórias para interfaces de `repository` e contratos equivalentes:
+
+- Métodos devem receber **objetos de domínio/estruturas do core** sempre que esse tipo já existir para representar o dado com significado semântico.
+- Evite parâmetros primitivos em contratos do core quando o módulo já possuir uma `structure` ou outro objeto apropriado para aquele valor.
+- A conversão entre primitivo e objeto de domínio deve acontecer antes da chamada ao contrato, normalmente no `use case` ou na borda da aplicação.
+- O adapter concreto pode serializar o objeto de domínio para primitivo apenas no momento de conversar com banco, API externa ou SDK.
+
+Exemplos:
+
+- Correto: `findByHash(keyHash: Text): Promise<ApiKey | null>`
+- Incorreto: `findByHash(keyHash: string): Promise<ApiKey | null>`
+- Correto: `findById(userId: Id): Promise<User | null>`
+- Incorreto: `findById(userId: string): Promise<User | null>`
 
 ## 📤 Respostas (Responses)
 

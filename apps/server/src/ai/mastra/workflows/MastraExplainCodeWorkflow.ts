@@ -2,7 +2,6 @@ import { createStep, createWorkflow } from '@mastra/core/workflows'
 import z from 'zod'
 
 import type { ExplainCodeWorkflow } from '@stardust/core/lesson/interfaces'
-import { codeExplanationResponseSchema } from '@stardust/validation/lesson/schemas'
 
 import { LessonSquad } from '../squads'
 
@@ -20,7 +19,7 @@ export class MastraExplainCodeWorkflow implements ExplainCodeWorkflow {
       }))
       .then(explainCodeStep)
       .map(async ({ inputData }) => ({
-        explanation: inputData.explanation,
+        explanation: inputData.text,
       }))
       .commit()
 
@@ -43,10 +42,6 @@ export class MastraExplainCodeWorkflow implements ExplainCodeWorkflow {
   }
 
   private explainCode() {
-    return createStep(LessonSquad.codeExplainerAgent, {
-      structuredOutput: {
-        schema: codeExplanationResponseSchema,
-      },
-    })
+    return createStep(LessonSquad.codeExplainerAgent)
   }
 }

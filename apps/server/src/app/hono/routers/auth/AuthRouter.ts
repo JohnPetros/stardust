@@ -37,11 +37,9 @@ import { InngestBroker } from '@/queue/inngest/InngestBroker'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import { ApiKeysRouter } from './ApiKeysRouter'
-import {
-  AuthMiddleware,
-  ProfileMiddleware,
-  ValidationMiddleware,
-} from '../../middlewares'
+import { AuthMiddleware } from '../../middlewares/AuthMiddleware'
+import { ProfileMiddleware } from '../../middlewares/ProfileMiddleware'
+import { ValidationMiddleware } from '../../middlewares/ValidationMiddleware'
 
 export class AuthRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/auth')

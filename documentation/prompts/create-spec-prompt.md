@@ -72,6 +72,24 @@ O agente principal consolida as descobertas dos subagentes e, com base nelas, to
 - Para features que tocam múltiplos apps, mapeia explicitamente o contrato entre eles: qual app expõe, qual consome e qual o formato de comunicação (REST, RPC, evento). Esse contrato deve aparecer na seção 9 (Diagramas) como fluxo de dados cross-app.
 - Registra em **Pendências / Dúvidas** (seção 10) tudo que não teve evidência suficiente para decidir
 
+#### 1.5 Guardrails de arquitetura
+
+Antes de propor criação ou alteração em `core`, valide explicitamente os limites entre domínios e camadas com base na codebase real.
+
+- **Não cruze domínios no core sem evidência forte na codebase.**
+  Exemplo: um use case de `auth` não deve depender de `UsersRepository` do domínio `profile` apenas para resolver autorização/permissão, a menos que já exista um padrão consolidado assim no projeto.
+- **Não mova regra de aplicação para o core quando ela já vive na borda.**
+  Se autenticação, autorização por papel/insígnia, ownership check, montagem de contexto HTTP, ou adaptação de payload já acontecem em `controller`, `middleware`, `tool`, `router` ou outro adapter da app, a spec deve preservar esse padrão em vez de empurrá-lo para `use case` por conveniência.
+- **Diferencie claramente autenticação, autorização e regra de domínio.**
+  - Autenticação: validar credencial e resolver identidade.
+  - Autorização: verificar se a identidade pode acessar/operar o recurso.
+  - Regra de domínio: invariantes e comportamentos do módulo.
+  Essas três responsabilidades não devem ser fundidas na spec sem evidência concreta de que o projeto já faz isso naquele fluxo.
+- **Evite que schemas/boundaries aceitem campos controlados pelo servidor.**
+  Se um campo é definido pelo sistema no fluxo descrito pelo PRD (ex: `author`, `isPublic`, `status`, `userId`), a spec deve preferir schemas derivados/estritos na borda, em vez de aceitar o contrato completo e “sobrescrever depois”.
+- **Ao detectar possível transgressão arquitetural, não decida por conta própria.**
+  Registre em **Pendências / Dúvidas** e use a tool `question` quando o impacto for alto.
+
 ---
 
 ### 2. Uso de Ferramentas Auxiliares
@@ -360,6 +378,9 @@ Para cada item:
 * **Não inclua testes automatizados na spec.**
 * Todos os caminhos citados devem existir no projeto **ou** estar explicitamente marcados como **novo arquivo**.
 * **Não invente** arquivos, métodos, contratos, schemas ou integrações sem evidência no PRD/codebase.
+* **Não proponha acoplamento cross-domain no `core` sem evidência explícita na codebase.** Se a necessidade for autenticação, autorização, ownership, montagem de contexto ou adaptação de transporte, prefira manter isso na borda da app quando esse já for o padrão encontrado.
+* **Não use o `core` para resolver conveniências da app.** Se uma responsabilidade pertence a `middleware`, `controller`, `toolset`, `router` ou adapter local, a spec não deve empurrá-la para `use case` apenas para “centralizar”.
+* **Não exponha em schemas de entrada campos controlados pelo servidor** quando o fluxo do PRD exigir que esses valores sejam definidos internamente.
 * Quando faltar informação suficiente, registrar em **Pendências / Dúvidas** e usar a tool `question` se necessário.
 * Toda referência a código existente deve incluir caminho relativo real.
 * Se uma seção não se aplicar, preencher explicitamente com **Não aplicável**.

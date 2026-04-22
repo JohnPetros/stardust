@@ -12,6 +12,11 @@ Ler um PRD do projeto ou um contexto técnico e propor uma issue do GitHub clara
 - Link do PRD do projeto, quando houver.
 - Link da issue existente no GitHub, quando houver.
 
+### Tipos de issue disponíveis
+
+- `task` - para nova funcionalidade, melhoria ou entrega orientada por PRD.
+- `bug` - para correção de comportamento incorreto.
+
 ### Regras da entrada
 
 - Quando o input indicar `tipo = task`, a issue deve ser orientada pelos PRDs publicados.
@@ -31,7 +36,8 @@ Ler um PRD do projeto ou um contexto técnico e propor uma issue do GitHub clara
 9. Quando a funcionalidade couber em uma única entrega coerente, proponha uma única issue.
 10. Quando o escopo for grande, com dependências ou etapas bem separadas, quebre em múltiplas issues menores.
 11. **Apresente o rascunho completo ao usuário antes de criar qualquer issue. Aguarde aprovação explícita.**
-12. Após aprovação, crie as issues usando `gh` conforme as regras abaixo.
+12. O rascunho deve ser escrito em `documentation/issue.md` antes da criação da issue no GitHub.
+13. Após aprovação, crie as issues usando `gh` conforme as regras abaixo.
 
 ## Critérios para quebrar issues
 
@@ -49,16 +55,12 @@ Para cada issue, apresente um bloco seguindo exatamente esta estrutura:
 ### Título
 <!-- Título curto e objetivo. NUNCA usar prefixos como feat:, feat(...):, fix:, chore:, etc. -->
 
-**Tipo:** `task` | `bug`
 **Labels:** <!-- ex: enhancement, bug, documentation -->
 **Milestone:** <!-- nome da milestone do projeto, quando aplicável -->
 
 ## Objetivo
 
 <!-- Descreva o que será implementado, o resultado esperado e o contexto funcional. -->
-
-Camadas impactadas: `core` · `rest` · `routers` · `validation` · `pipes` · `ui` etc.
-<!-- Ajuste a lista conforme o escopo real da issue. -->
 
 ## Requisitos de Produto
 
@@ -95,6 +97,12 @@ Contratos esperados:
 ## Criação via `gh` (somente após aprovação do usuário)
 
 **Nunca criar a issue sem aprovação explícita do usuário.**
+
+### Regras obrigatórias de publicação
+
+- O corpo publicado da issue no GitHub **não deve conter da seção `Objetivo` para baixo**. Essas seções podem existir no rascunho para validação, mas não devem ser enviadas na publicação final.
+- Cada issue deve estar vinculada a **apenas um PRD principal**. Não publicar issues com múltiplos PRDs associados no corpo final.
+- Toda issue do tipo `task` publicada deve ser adicionada ao project `2` e ter o campo `Status` definido como `Todo`.
 
 Após aprovação, usar os comandos abaixo conforme o tipo:
 
@@ -147,6 +155,19 @@ gh api graphql -f query='
   }' \
   -f project="$PROJECT_ID" \
   -f contentId="$ISSUE_NODE_ID"
+
+# 6. Definir status como Todo no project
+gh api graphql -f query='
+  mutation($project:ID!, $item:ID!, $field:ID!, $option:String!) {
+    updateProjectV2ItemFieldValue(input:{
+      projectId:$project,
+      itemId:$item,
+      fieldId:$field,
+      value:{ singleSelectOptionId:$option }
+    }) {
+      projectV2Item { id }
+    }
+  }'
 ```
 
 ### Issues do tipo `bug`
@@ -162,11 +183,22 @@ gh issue create \
 
 ### Labels disponíveis (usar conforme contexto)
 
+Labels atualmente disponíveis no repositório `JohnPetros/stardust`:
+
+- `bug`
+- `documentation`
+- `feature`
+- `infra`
+- `refactor`
+- `server`
+- `studio`
+- `web`
+
 **Tipo de trabalho** (sempre incluir ao menos uma):
 
 | Label | Quando usar |
 |---|---|
-| `enhancement` | Nova funcionalidade (task) |
+| `feature` | Nova funcionalidade (task) |
 | `bug` | Correção de comportamento incorreto |
 | `documentation` | Atualização de docs |
 | `refactor` | Melhoria sem mudança de comportamento |
@@ -183,13 +215,17 @@ gh issue create \
 ## Regras para preenchimento
 
 - O conteúdo deve sair pronto para colar no GitHub Issues.
+- O corpo publicado da issue no GitHub não deve conter da seção `Objetivo` para baixo; essas seções servem apenas para o rascunho de validação.
+- A seção `Objetivo` não deve conter a linha `Camadas impactadas`.
 - O título da issue NUNCA deve conter prefixos de commit (ex: `feat:`, `feat(...):`, `fix:`, `chore:`, `refactor:`). O título deve ser direto e descritivo.
 - Sempre incluir as labels de aplicação (`web`, `server`, `studio`) correspondentes às camadas impactadas pela issue, além das labels de tipo de trabalho.
 - Issues do tipo `task` devem sempre ser vinculadas ao project **https://github.com/users/JohnPetros/projects/2** via GraphQL após a criação.
+- Issues do tipo `task` devem sempre ter o campo `Status` definido como `Todo` no project `2` após a criação.
 - Antes de criar qualquer issue do tipo `task`, perguntar ao usuário o nível de prioridade (`HIGH`, `MEDIUM` ou `LOW`) caso não tenha sido informado. Após criação e vínculo ao project, definir a prioridade via GraphQL.
 - Não resuma em excesso; detalhe o suficiente para orientar implementação.
 - Para issues do tipo `task`, sempre carregue e considere primeiro os PRDs antes de redigir.
-- Para issues do tipo `task`, sempre inclua os links reais dos PRDs usados como referência.
+- Para issues do tipo `task`, sempre inclua no rascunho os links reais dos PRDs usados como referência.
+- Cada issue deve ficar vinculada a apenas um PRD principal no corpo publicado.
 - Para issues do tipo `bug`, não invente PRD nem mantenha a seção `Requisitos de Produto` por padrão; omita essa seção quando não houver documento funcional associado.
 - Em issues técnicas, inclua fluxos, contratos esperados e referências reais da codebase sempre que possível.
 - Quando houver endpoints, descreva cada fluxo separadamente.

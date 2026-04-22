@@ -1,7 +1,7 @@
 import { AGENTS_INSTRUCTIONS } from '@/ai/lesson/constants'
 import { openai } from '@ai-sdk/openai'
 import { Agent } from '@mastra/core/agent'
-import { LessonToolset } from '../toolsets'
+import { LessonToolkit } from '../toolkits'
 
 export class LessonSquad {
   static get codeExplainerAgent() {
@@ -11,7 +11,7 @@ export class LessonSquad {
       instructions: AGENTS_INSTRUCTIONS.codeExplainerAgent,
       model: openai('gpt-4o'),
       tools: {
-        getMdxBlocksGuideTool: LessonToolset.getMdxBlocksGuideTool,
+        getMdxBlocksGuideTool: LessonToolkit.getMdxBlocksGuideTool,
       },
     })
   }
