@@ -1,6 +1,8 @@
 ---
 title: Challenge Editor stale data after update
 apps: web
+prd: https://github.com/JohnPetros/stardust/milestone/4
+issue: https://github.com/JohnPetros/stardust/issues/392
 status: closed
 last_updated_at: 2026-04-22
 ---
