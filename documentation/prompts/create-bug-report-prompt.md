@@ -13,7 +13,14 @@ O bug report deve:
 - Indicar **onde e por que provavelmente está quebrado**
 - Sugerir **como corrigir**, respeitando a arquitetura do projeto
 
-Após a criação do Bug Report, uma **Spec de correção** deve ser gerada automaticamente com base no plano de correção levantado, seguindo o prompt `documentation/prompts/create-spec-prompt.md`.
+O resultado desta tarefa e' **sempre composto por dois artefatos gerados no mesmo fluxo**:
+- o **Bug Report**
+- a **Spec de correcao derivada dele**
+
+Apos a criacao do Bug Report, uma **Spec de correcao** deve ser gerada automaticamente com base no plano de correcao levantado, seguindo o prompt `documentation/prompts/create-spec-prompt.md`.
+
+> A Spec nao e' uma etapa opcional, posterior ou separada.
+> Ela faz parte da mesma entrega do Bug Report e deve ser salva na mesma execucao.
 
 ---
 
@@ -72,6 +79,10 @@ Após a criação do Bug Report, uma **Spec de correção** deve ser gerada auto
 
 Após salvar o Bug Report, gere automaticamente uma Spec de correção seguindo `documentation/prompts/create-spec-prompt.md`, com as seguintes adaptações:
 
+- A geracao da Spec deve acontecer **na mesma tarefa**, imediatamente apos salvar o Bug Report, sem depender de nova solicitacao do usuario.
+- O trabalho **so pode ser considerado concluido quando os dois arquivos existirem**: o Bug Report e a Spec derivada.
+- A Spec deve ser tratada como **continuação direta do Bug Report**, e nao como entregavel independente.
+
 - O **esboço da tarefa** é o próprio Bug Report gerado.
 - O **PRD de referência** é o PRD da feature afetada, encontrado em `documentation/features/<dominio>/`.
 - O **frontmatter** da Spec deve referenciar o Bug Report no campo `issue`.
@@ -87,7 +98,8 @@ Salve o arquivo em `documentation/features/{dominio}/reports/{nome-descritivo}-b
 ```md
 ---
 title: {Titulo Curto e Descritivo}
-apps: {web|server|studio}
+prd: <link para o PRD referente à spec, sendo uma milestone do GitHub>
+issue: <link para o issue referente à spec, servindo como esboço para a spec>
 status: {open|closed}
 last_updated_at: {YYYY-MM-DD}
 ---
@@ -226,4 +238,5 @@ Liste código redundante, legado ou incorreto que deve ser eliminado como parte 
 - Use apenas as camadas listadas na seção 3. Mapeamento de Camadas — não crie camadas arbitrárias.
 - Omita do template as camadas que não forem aplicáveis ao bug em questão.
 - A Spec de correção deve ser gerada **sempre**, sem necessidade de solicitação explícita.
+- O processo nao deve parar apos criar apenas o Bug Report; a tarefa permanece incompleta ate a Spec ser criada e salva.
 - A Spec de correção **não pode contradizer** o Bug Report — ela é uma derivação direta dele.
