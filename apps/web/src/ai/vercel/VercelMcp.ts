@@ -3,5 +3,9 @@ export const VercelMcp = <Input = void>(input: Input) => {
     getInput(): Input {
       return input
     },
+
+    getAccountId(): string {
+      return ''
+    },
   }
 }

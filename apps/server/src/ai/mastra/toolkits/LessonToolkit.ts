@@ -3,13 +3,12 @@ import { createTool } from '@mastra/core/tools'
 import { GetMdxBlocksGuideTool } from '@/ai/lesson/tools'
 import { MastraMcp } from '../MastraMcp'
 
-export class LessonToolset {
+export class LessonToolkit {
   static get getMdxBlocksGuideTool() {
     return createTool({
       id: 'get-documentation-components-guide-tool',
       description:
         'Retorna o guia de componentes de documentacao para uso em conteudo MDX.',
-      inputSchema: z.object({}),
       outputSchema: z.object({
         guide: z.string(),
       }),

@@ -1,4 +1,8 @@
 export { PostChallengeTool } from './PostChallengeTool'
+export { UpdateChallengeTool } from './UpdateChallengeTool'
+export { DeleteChallengeTool } from './DeleteChallengeTool'
+export { GetChallengeCreationInstructionsTool } from './GetChallengeCreationInstructionsTool'
 export { GetChallengeProblemTool } from './GetChallengeProblemTool'
 export { GetAllChallengeCategoriesTool } from './GetAllChallengeCategoriesTool'
 export { GetNextChallengeSourceTool } from './GetNextChallengeSourceTool'
+export { ListChallengesTool } from './ListChallengesTool'
