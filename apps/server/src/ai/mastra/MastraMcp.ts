@@ -26,10 +26,10 @@ export class MastraMcp<Input = unknown> implements Mcp<Input> {
   getAccountId(): string {
     const accountIdFromExtra = this.context?.mcp?.extra?.authInfo?.extra?.accountId
 
-    if (typeof accountIdFromExtra === 'string') {
+    if (typeof accountIdFromExtra === 'string' && accountIdFromExtra.trim()) {
       return accountIdFromExtra
     }
 
-    return this.context?.mcp?.extra?.authInfo?.token ?? ''
+    throw new Error('MCP accountId is required in auth context')
   }
 }
