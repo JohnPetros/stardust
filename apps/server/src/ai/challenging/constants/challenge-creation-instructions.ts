@@ -84,9 +84,9 @@ Regras obrigatórias:
 - máximo recomendado de 10 testes;
 - pelo menos 3 testes devem ser mencionados ou explicados na descrição;
 - cada item deve conter:
-  - \`input\`: uma lista de parâmetros passados para a função;
+  - \`inputs\`: uma lista de parâmetros passados para a função;
   - \`expectedOutput\`: o valor esperado de retorno;
-- \`input\` e \`expectedOutput\` devem ser JSON válido;
+- \`inputs\` e \`expectedOutput\` devem ser JSON válido já estruturado (não use string JSON);
 - os parâmetros podem ser números, strings, booleanos ou arrays;
 - não use objetos como entrada nem como saída;
 - todos os testes devem ser coerentes com a assinatura da função em [code].
@@ -94,7 +94,7 @@ Regras obrigatórias:
 Exemplo:
 [
   {
-    "input": [[1, 2, 3], 2],
+    "inputs": [[1, 2, 3], 2],
     "expectedOutput": [3, 1, 2]
   }
 ]
@@ -131,7 +131,7 @@ Regras:
 
 # Fluxo de publicação
 
-- Antes de postar de fato o desafio, mostre o rascunho completo para o usuário avaliar.
+- Antes de usar a tool de postChallenge de fato com o desafio como input, mostre o rascunho completo para o usuário avaliar.  
 - Colete o feedback do usuário sobre o rascunho (ajustes de texto, testes, categorias e dificuldade) antes da publicação final.
 - Só publique depois da confirmação explícita do usuário.
 - Sem feedback + confirmação explícita, não publique o desafio.
@@ -155,7 +155,7 @@ Antes de responder, valide se:
 
 - Não escreva a solução do desafio.
 - Não inclua implementação da função.
-- Não use objetos em \`input\` ou \`expectedOutput\`.
+- Não use objetos em \`inputs\` ou \`expectedOutput\`.
 - Não crie inconsistências entre descrição, testes e assinatura da função.
 - Não dependa de contexto externo para explicar o desafio.
 
