@@ -87,6 +87,8 @@ Salve o arquivo em `documentation/features/{dominio}/reports/{nome-descritivo}-b
 ```md
 ---
 title: {Titulo Curto e Descritivo}
+prd: <link para o PRD referente à bug, sendo uma milestone do GitHub>
+issue: <link para o issue referente à bug, servindo como esboço para a bug>
 apps: {web|server|studio}
 status: {open|closed}
 last_updated_at: {YYYY-MM-DD}
