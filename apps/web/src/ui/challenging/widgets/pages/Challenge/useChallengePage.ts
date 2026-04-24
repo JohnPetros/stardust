@@ -29,6 +29,60 @@ type Params = {
   isAccountAuthenticated: boolean
 }
 
+type HydrationComparablePayload = {
+  id: string | null
+  title: string
+  code: string
+  difficultyLevel: string
+  description: string
+  starId: string | null
+  isPublic: boolean
+  downvotesCount: number
+  upvotesCount: number
+  completionCount: number
+  categories: ChallengeDto['categories']
+  testCases: ChallengeDto['testCases']
+  userChallengeVote: string
+}
+
+function toHydrationComparablePayload(
+  challengeDto: ChallengeDto,
+  userChallengeVote: string,
+): HydrationComparablePayload {
+  return {
+    id: challengeDto.id ?? null,
+    title: challengeDto.title,
+    code: challengeDto.code,
+    difficultyLevel: challengeDto.difficultyLevel,
+    description: challengeDto.description,
+    starId: challengeDto.starId ? challengeDto.starId : null,
+    isPublic: challengeDto.isPublic ?? false,
+    downvotesCount: challengeDto.downvotesCount ?? 0,
+    upvotesCount: challengeDto.upvotesCount ?? 0,
+    completionCount: challengeDto.completionCount ?? 0,
+    categories: challengeDto.categories,
+    testCases: challengeDto.testCases,
+    userChallengeVote,
+  }
+}
+
+function shouldHydrateChallenge(
+  challengeDto: ChallengeDto,
+  userChallengeVote: string,
+  currentChallenge: Challenge | null,
+) {
+  if (!currentChallenge) return true
+
+  const incomingPayload = JSON.stringify(
+    toHydrationComparablePayload(challengeDto, userChallengeVote),
+  )
+  const currentPayload = JSON.stringify(
+    toHydrationComparablePayload(currentChallenge.dto, currentChallenge.userVote.value),
+  )
+
+  return incomingPayload !== currentPayload
+}
+
 export function useChallengePage({
   challengeDto,
   userChallengeVote,
@@ -98,7 +152,7 @@ export function useChallengePage({
   }
 
   useEffect(() => {
-    if (!challenge) {
+    if (shouldHydrateChallenge(challengeDto, userChallengeVote, challenge)) {
       const challenge = Challenge.create(challengeDto)
       challenge.userVote = ChallengeVote.create(userChallengeVote)
       setChallenge(challenge)
