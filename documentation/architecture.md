@@ -14,10 +14,6 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 - **Email (`packages/email/`)**: Templates de e-mail construidos com React Email para envio de e-mails.
 - **LSP (`packages/lsp/`)**: Implementação da Linguagem de Programação Delegua para análise e execução de código.
 
-## Injeção de Dependências
-
-O `@stardust/core` define interfaces (Repositories, Gateways, Jobs). As apps implementam e injetam essas interfaces em runtime — nunca o Core conhece as implementações.
-
 ## Fluxo de Dados (resumo)
 
 **RPC**: Route/Controller → Action.execute(call) → Use Case → call.redirect() ou call.json()
@@ -44,14 +40,6 @@ O `@stardust/core` define interfaces (Repositories, Gateways, Jobs). As apps imp
 - TurboRepo garante compartilhamento de código e orquestração de scripts entre as apps.
 - TypeScript estrito em todo o projeto para máxima segurança de tipos.
 
-## Armadilhas a Evitar
-
-1. Importar código de Apps dentro do Core.
-2. Chamar banco de dados ou APIs diretamente em Use Cases (use interfaces/gateways).
-3. Lógica de negócio fora do `core/`.
-4. Usar `new Class()` diretamente — prefira Factory Functions.
-5. Dependências circulares entre pacotes do monorepo.
-
 ## Stack Tecnológica
 
 | Tecnologia | Pacote/Ferramenta | Finalidade |
@@ -68,7 +56,7 @@ O `@stardust/core` define interfaces (Repositories, Gateways, Jobs). As apps imp
 | **Linter/Formatter** | Biome | Qualidade e padronização de código |
 | **Testes** | Jest | Testes unitários e de integração |
 
-## Estrutura de Diretórios
+## Estrutura de Diretórios Geral
 
 ```
 stardust/
