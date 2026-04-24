@@ -4,12 +4,12 @@ prd: documentation/features/challenging/challenge-editor/prd.md
 issue: documentation/features/challenging/challenge-editor/reports/challenge-editor-stale-data-after-update-bug-report.md
 apps: web
 status: open
-last_updated_at: 2026-04-22
+last_updated_at: 2026-04-24
 ---
 
 # 1. Objetivo
 
-Corrigir o fluxo de retorno do Challenge Editor para que a pagina do desafio sempre exiba o snapshot mais recente recebido da action RPC apos um update bem-sucedido, mesmo quando o titulo nao muda e a navegacao retorna para a mesma `slug`. A implementacao deve permanecer restrita ao `web`, reutilizando o fetch server-side e a store Zustand ja existentes, sem alterar contratos de `rest`, `core` ou `database`.
+Corrigir o fluxo de retorno do Challenge Editor para que a pagina do desafio sempre exiba o snapshot mais recente apos um update bem-sucedido, mesmo quando o titulo nao muda e a navegacao retorna para a mesma `slug`. A implementacao deve alinhar `core` e `web`: no `core`, garantir que o payload retornado pelo update reflita o estado persistido mais recente; no `web`, sincronizar hidratacao client-side e desabilitar cache nas actions de acesso afetadas para evitar stale data.
 
 ---
 
@@ -19,11 +19,13 @@ Corrigir o fluxo de retorno do Challenge Editor para que a pagina do desafio sem
 
 - Sincronizar a store client-side do desafio com o `challengeDto` recebido pela pagina do desafio quando houver divergencia entre o snapshot server-side e o estado atual.
 - Garantir que alteracoes persistidas em descricao, codigo, casos de teste, categorias e visibilidade aparecam apos salvar no Challenge Editor, independentemente de mudanca de `title`/`slug`.
+- Garantir no `core` que `UpdateChallengeUseCase` retorne o estado persistido apos `replace(...)`, evitando retornar snapshot potencialmente defasado do pre-update.
+- Desabilitar cache de leitura nas actions de acesso da pagina de desafio (publica/autenticada) e no acesso ao editor para reduzir risco de stale data no retorno imediato apos update.
 - Manter o fluxo atual de acesso via `AccessChallengePageAction` e a estrutura da pagina `apps/web/src/app/challenging/challenges/[challengeSlug]/challenge/page.tsx`.
 
 ## 2.2 Out-of-scope
 
-- Alteracoes em contratos REST, controllers, use cases ou repositories do modulo `challenging`.
+- Alteracoes em contratos REST, controllers, repositories ou banco de dados do modulo `challenging`.
 - Mudancas no fluxo de criacao de desafios.
 - Mudancas na navegacao do editor para usar hard reload, refresh global da pagina ou invalidacao manual fora do widget da pagina do desafio.
 
@@ -94,6 +96,20 @@ Corrigir o fluxo de retorno do Challenge Editor para que a pagina do desafio sem
 * **Justificativa:** A correcao precisa atacar apenas a divergencia de snapshot sem degradar o comportamento existente de votacao, navegacao e estados locais do widget.
 * **Camada:** `ui`
 
+## Camada RPC (Actions)
+
+* **Arquivo:** `apps/web/src/rpc/next-safe-action/challengingActions.ts`
+* **Mudanca:** Desabilitar cache de leitura nas actions `accessChallengePage`, `accessAuthenticatedChallengePage` e `accessChallengeEditorPage` para forcar leitura fresca apos update.
+* **Justificativa:** Mesmo com sincronizacao correta no client, respostas cacheadas na borda web podem reintroduzir stale data imediatamente apos salvar no editor.
+* **Camada:** `rpc`
+
+## Camada Core (Use Cases)
+
+* **Arquivo:** `packages/core/src/challenging/use-cases/UpdateChallengeUseCase.ts`
+* **Mudanca:** Apos persistir com `replace(...)`, reler o desafio por id e retornar o snapshot persistido no payload final do update.
+* **Justificativa:** O fluxo de retorno para o `web` deve refletir exatamente o estado que ficou no repositorio, inclusive quando a `slug` permanece igual e apenas campos editaveis sao alterados.
+* **Camada:** `core`
+
 ---
 
 # 7. O que deve ser removido?
@@ -105,25 +121,16 @@ Corrigir o fluxo de retorno do Challenge Editor para que a pagina do desafio sem
 # 8. Decisoes Tecnicas e Trade-offs
 
 * **Decisao**
-  - Corrigir o bug na camada `ui`, em `useChallengePage`, sincronizando a store com o `challengeDto` recebido pela pagina.
+  - Corrigir o bug com ajuste combinado de `core` + `web`: retorno consistente no `UpdateChallengeUseCase`, cache desabilitado nas actions de acesso e sincronizacao da store em `useChallengePage`.
 * **Alternativas consideradas**
   - Forcar `window.location.reload()` apos update.
   - Resetar a store no editor antes do redirecionamento.
   - Alterar contratos de backend para devolver algum mecanismo extra de invalidacao.
 * **Motivo da escolha**
-  - O dado fresco ja esta disponivel no `web` via `AccessChallengePageAction` e `page.tsx`. O problema esta na hidratacao client-side, entao a correcao mais consistente e menor e alinhar a sincronizacao no ponto em que o snapshot entra no widget.
+  - O dado precisa estar fresco em toda a cadeia de retorno. Apenas ajustar hidratacao client-side nao cobre cenarios em que o payload de update ou a leitura server-side imediata estejam defasados por cache/snapshot anterior.
 * **Impactos / trade-offs**
   - A logica de comparacao entre props e store precisa ser cuidadosa para nao sobrescrever estados client-side legitimos quando nao houver divergencia real.
-
-* **Decisao**
-  - Nao alterar `core`, `rest` ou `database` nesta correcao.
-* **Alternativas consideradas**
-  - Reabrir o fluxo completo de update do backend.
-  - Introduzir novo contrato no service para invalidacao explicita.
-* **Motivo da escolha**
-  - As evidencias atuais mostram que controller, use case e repository ja persistem corretamente os campos editados. Alterar essas camadas aumentaria o escopo sem atacar a causa real.
-* **Impactos / trade-offs**
-  - A spec assume que a origem do bug esta restrita ao reaproveitamento indevido do estado no `web`, o que esta alinhado com o codigo analisado.
+  - A leitura sem cache nas actions prioriza consistencia pos-update em detrimento de possivel reducao marginal de hit de cache nessas rotas.
 
 ---
 

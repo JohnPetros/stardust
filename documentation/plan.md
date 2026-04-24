@@ -16,7 +16,7 @@ status: closed
 | F1 | Consolidar no core os criterios de integridade do update de desafio para servir como contrato da correcao client-side. | - | - |
 | F3 | Corrigir sincronizacao de estado no `web` para sempre refletir o `challengeDto` fresco apos update. | F1 | - |
 
-> **Estratégia de paralelismo:** sempre comece pelo core (domínio, structures e use cases). Assim que o core estiver concluído, as fases de `server`, `web` e `studio` podem ser executadas em paralelo, pois todas dependem apenas do contrato definido no core.
+> **Estratégia de paralelismo:** sempre comece pelo core (domínio, structures e use cases). Assim que o core estiver concluído, a fase `web` pode ser executada, pois depende apenas do contrato definido no core.
 
 ---
 
@@ -44,7 +44,7 @@ status: closed
 
 ## F3 — Web: UI e Integração
 
-> ⚡ Pode rodar em paralelo com F2 e F4 após F1 estar concluída.
+> ⚡ Inicia após F1 estar concluída.
 
 **Objetivo:** Implementar a interface e integração client-side na aplicação web — widgets, actions e chamadas RPC/REST — consumindo os contratos definidos no core.
 
