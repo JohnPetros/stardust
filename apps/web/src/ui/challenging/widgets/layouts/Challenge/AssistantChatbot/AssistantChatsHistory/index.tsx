@@ -5,6 +5,7 @@ import type { ChatDto } from '@stardust/core/conversation/entities/dtos'
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import type { DialogRef } from '@/ui/global/widgets/components/Dialog/types'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 
 import { AssistantChatsHistoryView } from './AssistantChatsHistoryView'
 import { useAssistantChatsHistory } from './useAssistantChatsHistory'
@@ -25,6 +26,7 @@ export const AssistantChatsHistory = ({
   const dialogRef = useRef<DialogRef | null>(null)
   const { conversationService } = useRestContext()
   const toastProvider = useToastContext()
+  const { isAccountAuthenticated } = useAuthContext()
   const {
     chats,
     isLoading,
@@ -38,6 +40,7 @@ export const AssistantChatsHistory = ({
     service: conversationService,
     toastProvider,
     dialogRef,
+    isAccountAuthenticated,
     onSelectChat,
     onDeleteChat,
     onEditChatName,

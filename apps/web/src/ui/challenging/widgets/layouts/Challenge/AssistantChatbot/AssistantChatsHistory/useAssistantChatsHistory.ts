@@ -16,6 +16,7 @@ export type Params = {
   service: ConversationService
   toastProvider: ToastProvider
   dialogRef: RefObject<DialogRef | null>
+  isAccountAuthenticated: boolean
   onSelectChat: (chatDto: ChatDto) => void
   onDeleteChat: (chatId: string) => void
   onEditChatName?: (chatId: string, chatName: string) => void
@@ -25,6 +26,7 @@ export function useAssistantChatsHistory({
   service,
   toastProvider,
   dialogRef,
+  isAccountAuthenticated,
   onSelectChat,
   onDeleteChat,
   onEditChatName,
@@ -45,6 +47,7 @@ export function useAssistantChatsHistory({
       fetcher: fetchChats,
       itemsPerPage: CHATS_PER_PAGE.value,
       isInfinity: true,
+      isEnabled: isAccountAuthenticated,
     },
   )
 
@@ -59,7 +62,7 @@ export function useAssistantChatsHistory({
   }
 
   function handleOpenChange(isOpen: boolean) {
-    if (isOpen) {
+    if (isOpen && isAccountAuthenticated) {
       refetch()
     }
   }
