@@ -85,23 +85,18 @@ export const ToastView = ({
               <Container.Description className='flex items-center gap-2 text-gray-100'>
                 <span
                   className={twMerge(
-                    'size-4 rounded p-1 text-gray-100',
+                    'flex place-content-center size-6 rounded p-1 text-gray-100',
                     type === 'error' ? 'bg-red-700' : 'bg-green-500',
                   )}
                 >
                   {type === 'error' ? (
-                    <Icon
-                      name='stop-sign'
-                      size={16}
-                      weight='bold'
-                      className='-translate-x-1 -translate-y-2'
-                    />
+                    <Icon name='stop-sign' size={16} weight='bold' />
                   ) : (
                     <Icon
                       name='check'
                       size={16}
                       weight='bold'
-                      className='-translate-x-1 -translate-y-1 text-green-900'
+                      className='text-green-900'
                     />
                   )}
                 </span>

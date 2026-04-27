@@ -15,6 +15,8 @@ async function refreshAuthSession() {
     return new RestResponse<SessionDto>({ statusCode: HTTP_STATUS_CODE.badRequest })
   }
 
+  console.log('refreshToken', refreshToken.data)
+
   const restClient = NextRestClient()
   restClient.setBaseUrl(CLIENT_ENV.stardustServerUrl)
   const service = AuthService(restClient)

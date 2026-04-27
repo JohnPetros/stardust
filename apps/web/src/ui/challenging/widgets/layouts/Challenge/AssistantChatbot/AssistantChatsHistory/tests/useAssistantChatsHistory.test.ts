@@ -103,8 +103,8 @@ describe('useAssistantChatsHistory', () => {
   it('should not fetch chats on mount when account is not authenticated', async () => {
     Hook({ isAccountAuthenticated: false })
 
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 20))
+    await waitFor(() => {
+      expect(service.fetchChats).not.toHaveBeenCalled()
     })
 
     expect(service.fetchChats).not.toHaveBeenCalled()
@@ -313,8 +313,8 @@ describe('useAssistantChatsHistory', () => {
   it('should not refetch when dialog opens without authenticated account', async () => {
     const { result } = Hook({ isAccountAuthenticated: false })
 
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 20))
+    await waitFor(() => {
+      expect(service.fetchChats).not.toHaveBeenCalled()
     })
 
     const initialCalls = service.fetchChats.mock.calls.length
@@ -323,8 +323,8 @@ describe('useAssistantChatsHistory', () => {
       result.current.handleOpenChange(true)
     })
 
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 20))
+    await waitFor(() => {
+      expect(service.fetchChats).toHaveBeenCalledTimes(initialCalls)
     })
 
     expect(service.fetchChats).toHaveBeenCalledTimes(initialCalls)
