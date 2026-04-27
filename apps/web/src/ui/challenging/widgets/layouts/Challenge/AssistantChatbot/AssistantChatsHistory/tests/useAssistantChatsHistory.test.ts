@@ -40,6 +40,7 @@ describe('useAssistantChatsHistory', () => {
           service,
           toastProvider,
           dialogRef,
+          isAccountAuthenticated: true,
           onSelectChat,
           onDeleteChat,
           onEditChatName,
@@ -79,7 +80,7 @@ describe('useAssistantChatsHistory', () => {
     )
   })
 
-  it('should fetch chats on mount', async () => {
+  it('should fetch chats on mount when account is authenticated', async () => {
     const chat = ChatFaker.fake()
     service.fetchChats.mockResolvedValueOnce(
       createRestResponse({
@@ -97,6 +98,16 @@ describe('useAssistantChatsHistory', () => {
     await waitFor(() => expect(result.current.chats).toHaveLength(1))
 
     expect(result.current.chats[0].dto).toEqual(chat.dto)
+  })
+
+  it('should not fetch chats on mount when account is not authenticated', async () => {
+    Hook({ isAccountAuthenticated: false })
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 20))
+    })
+
+    expect(service.fetchChats).not.toHaveBeenCalled()
   })
 
   it('should close dialog and select chat when handleChatSelect is called', async () => {
@@ -233,7 +244,7 @@ describe('useAssistantChatsHistory', () => {
     expect(toastProvider.showSuccess).toHaveBeenCalledWith('Nome do chat atualizado')
   })
 
-  it('should refetch when dialog opens', async () => {
+  it('should refetch when dialog opens with authenticated account', async () => {
     const chat = ChatFaker.fake()
 
     const firstResponse = createRestResponse({
@@ -257,7 +268,7 @@ describe('useAssistantChatsHistory', () => {
       .mockResolvedValueOnce(firstResponse)
       .mockResolvedValueOnce(secondResponse)
 
-    const { result } = Hook()
+    const { result } = Hook({ isAccountAuthenticated: true })
 
     await waitFor(() => expect(result.current.chats).toHaveLength(1))
 
@@ -286,7 +297,7 @@ describe('useAssistantChatsHistory', () => {
 
     service.fetchChats.mockResolvedValueOnce(response)
 
-    const { result } = Hook()
+    const { result } = Hook({ isAccountAuthenticated: true })
 
     await waitFor(() => expect(result.current.chats).toHaveLength(1))
 
@@ -294,6 +305,26 @@ describe('useAssistantChatsHistory', () => {
 
     act(() => {
       result.current.handleOpenChange(false)
+    })
+
+    expect(service.fetchChats).toHaveBeenCalledTimes(initialCalls)
+  })
+
+  it('should not refetch when dialog opens without authenticated account', async () => {
+    const { result } = Hook({ isAccountAuthenticated: false })
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 20))
+    })
+
+    const initialCalls = service.fetchChats.mock.calls.length
+
+    act(() => {
+      result.current.handleOpenChange(true)
+    })
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 20))
     })
 
     expect(service.fetchChats).toHaveBeenCalledTimes(initialCalls)

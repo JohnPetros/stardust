@@ -5,7 +5,7 @@ status: closed
 
 ## Pendencias (quando aplicavel)
 
-- [ ] Nenhuma pendencia bloqueante identificada no bug report de entrada.
+- Sem pendencias identificadas no bug report informado.
 
 ---
 
@@ -13,60 +13,73 @@ status: closed
 
 | Fase | Objetivo | Depende de | Pode rodar em paralelo com |
 | --- | --- | --- | --- |
-| F1 | Consolidar no core os criterios de integridade do update de desafio para servir como contrato da correcao client-side. | - | - |
-| F3 | Corrigir sincronizacao de estado no `web` para sempre refletir o `challengeDto` fresco apos update. | F1 | - |
+| F1 | Consolidar o contrato funcional da correcao no core (sem alterar dominio, use cases ou contratos protegidos) | - | - |
+| F3 | Implementar a correcao na web para impedir fetch protegido sem autenticacao no historico do assistente | F1 | - |
 
-> **Estratégia de paralelismo:** sempre comece pelo core (domínio, structures e use cases). Assim que o core estiver concluído, a fase `web` pode ser executada, pois depende apenas do contrato definido no core.
+> **Estrategia de paralelismo:** sempre comece pelo core (dominio, structures e use cases). Nesta correcao, apos F1 apenas a fase de `web` e necessaria.
 
 ---
 
-## F1 — Core: Domínio, Structures e Use Cases
+## F1 — Core: Dominio, Structures e Use Cases
 
-**Objetivo:** Definir o contrato do domínio — entidades, structures, interfaces de repositório/provider e use cases — sem nenhuma dependência de infraestrutura. Essa fase desbloqueia F3.
+**Objetivo:** Definir o contrato funcional da correcao sem dependencia de infraestrutura, preservando que historico de chats permanece recurso autenticado.
 
 ### Tarefas
 
-- [x] **T1.1** — Cobrir no core o cenario de update sem mudanca de titulo
+- [x] **T1.1** — Validar e congelar o contrato autenticado do historico de chats
   - **Depende de:** -
-  - **Resultado observavel:** os testes de `UpdateChallengeUseCase` passam a garantir explicitamente que alteracoes em `description`, `code`, `testCases`, `categories` e `isPublic` sao persistidas mesmo quando `title`/`slug` nao mudam.
+  - **Resultado observavel:** Fica explicitado que `ListChatsUseCase` continua exigindo `userId` autenticado e que `GET /conversation/chats` permanece protegido, sem alteracoes em core/server.
   - **Camada:** `core`
-  - **Artefatos:** `packages/core/src/challenging/use-cases/tests/UpdateChallengeUseCase.test.ts`
-  - **Concluido em:** 2026-04-22
+  - **Artefatos:** `packages/core/src/conversation/use-cases/ListChatsUseCase.ts`, `apps/server/src/app/hono/routers/conversation/ChatsRouter.ts`, `apps/server/src/rest/controllers/conversation/FetchChatsController.ts`
+  - **Concluido em:** 2026-04-24
 
-- [x] **T1.2** — Formalizar no core o contrato de payload atualizado apos update
+- [x] **T1.2** — Definir pre-condicoes funcionais para o consumo do historico na UI
   - **Depende de:** T1.1
-  - **Resultado observavel:** o resultado consumido pela borda web para leitura de desafio permanece consistente com o estado persistido apos update no mesmo `slug`, sem perda de campos editaveis.
+  - **Resultado observavel:** Fica definido como criterio de implementacao que `fetchChats` e `refetch` do historico so podem executar quando `isAccountAuthenticated` for `true`.
   - **Camada:** `core`
-  - **Artefatos:** `packages/core/src/challenging/use-cases/UpdateChallengeUseCase.ts`, `packages/core/src/challenging/use-cases/tests/UpdateChallengeUseCase.test.ts`
-  - **Concluido em:** 2026-04-22
+  - **Artefatos:** `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/index.tsx`, `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/useAssistantChatsHistory.ts`
+  - **Concluido em:** 2026-04-24
 
 ---
 
-## F3 — Web: UI e Integração
+## F3 — Web: UI e Integracao
 
-> ⚡ Inicia após F1 estar concluída.
+> ⚡ Pode rodar em paralelo com F2 e F4 apos F1 estar concluida.
 
-**Objetivo:** Implementar a interface e integração client-side na aplicação web — widgets, actions e chamadas RPC/REST — consumindo os contratos definidos no core.
+**Objetivo:** Implementar a correcao na aplicacao web para impedir chamadas autenticadas indevidas no carregamento inicial da pagina publica do desafio.
 
 ### Tarefas
 
-- [x] **T3.1** — Ajustar hidratacao do `useChallengePage` para reconciliar props com store
+- [x] **T3.1** — Injetar estado de autenticacao no entry point de `AssistantChatsHistory`
   - **Depende de:** T1.2
-  - **Resultado observavel:** ao abrir a pagina com `challengeDto` diferente do estado atual em store, o hook atualiza o store com o payload novo, inclusive quando a navegacao retorna para a mesma `slug`.
+  - **Resultado observavel:** `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/index.tsx` passa `isAccountAuthenticated` para `useAssistantChatsHistory`, mantendo a resolucao de dependencias no entry point do widget.
   - **Camada:** `ui`
-  - **Artefatos:** `apps/web/src/ui/challenging/widgets/pages/Challenge/useChallengePage.ts`
-  - **Concluido em:** 2026-04-22
+  - **Artefatos:** `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/index.tsx`, `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/useAssistantChatsHistory.ts`
+  - **Concluido em:** 2026-04-24
 
-- [x] **T3.2** — Preservar estado client-side quando nao houver divergencia de payload
+- [x] **T3.2** — Condicionar o fetch inicial do historico a autenticacao
   - **Depende de:** T3.1
-  - **Resultado observavel:** em navegacoes sem alteracao real de dados, o hook nao sobrescreve o estado local desnecessariamente e mantem o comportamento atual da pagina.
+  - **Resultado observavel:** `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/useAssistantChatsHistory.ts` passa `isEnabled: isAccountAuthenticated` para `usePaginatedCache` e visitantes anonimos nao disparam `GET /conversation/chats` na montagem.
   - **Camada:** `ui`
-  - **Artefatos:** `apps/web/src/ui/challenging/widgets/pages/Challenge/useChallengePage.ts`
-  - **Concluido em:** 2026-04-22
+  - **Artefatos:** `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/useAssistantChatsHistory.ts`, `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/tests/useAssistantChatsHistory.test.ts`, `apps/web/src/ui/global/hooks/usePaginatedCache.ts`
+  - **Concluido em:** 2026-04-24
 
-- [x] **T3.3** — Cobrir em testes do widget os cenarios de estado stale e estado estavel
-  - **Depende de:** T3.1, T3.2
-  - **Resultado observavel:** existe teste automatizado validando que (a) dados atualizados apos edicao na mesma `slug` passam a ser exibidos e (b) payload identico nao dispara reidratacao redundante.
+- [x] **T3.3** — Bloquear `refetch` ao abrir historico sem sessao ativa
+  - **Depende de:** T3.2
+  - **Resultado observavel:** `handleOpenChange` chama `refetch()` apenas quando `isOpen` e `isAccountAuthenticated` forem verdadeiros, evitando `401` esperado para visitante anonimo.
+  - **Camada:** `ui`
+  - **Artefatos:** `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/useAssistantChatsHistory.ts`, `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/tests/useAssistantChatsHistory.test.ts`
+  - **Concluido em:** 2026-04-24
+
+- [x] **T3.4** — Validar comportamento final da pagina publica do desafio
+  - **Depende de:** T3.3
+  - **Resultado observavel:** Ao abrir `/challenging/challenges/[challengeSlug]/challenge` sem sessao, nenhum toast `Conta nao autorizada` aparece no carregamento inicial; com sessao ativa, historico do assistente continua carregando normalmente.
   - **Camada:** `web`
-  - **Artefatos:** `apps/web/src/ui/challenging/widgets/pages/Challenge/tests/useChallengePage.test.ts`
-  - **Concluido em:** 2026-04-22
+  - **Artefatos:** `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/tests/useAssistantChatsHistory.test.ts`
+  - **Concluido em:** 2026-04-24
+
+---
+
+## Divergencias em relacao a Spec
+
+- **T3.2:** Foi necessario corrigir a implementacao de `isEnabled` em `apps/web/src/ui/global/hooks/usePaginatedCache.ts` para que a pre-condicao de autenticacao realmente bloqueie o fetch inicial quando desabilitado.

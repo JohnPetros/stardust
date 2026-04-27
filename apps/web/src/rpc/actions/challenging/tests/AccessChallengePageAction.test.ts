@@ -3,8 +3,8 @@ import { mock, type Mock } from 'ts-jest-mocker'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import { Challenge } from '@stardust/core/challenging/entities'
 import { ChallengesFaker } from '@stardust/core/challenging/entities/fakers'
-import { ChallengeNavigationFaker } from '@stardust/core/challenging/structures/fakers'
 import { ChallengeVote } from '@stardust/core/challenging/structures'
+import { ChallengeNavigationFaker } from '@stardust/core/challenging/structures/fakers'
 import type { Call } from '@stardust/core/global/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
 import { Slug } from '@stardust/core/global/structures'
@@ -40,7 +40,7 @@ describe('Access Challenge Page Action', () => {
     })
   })
 
-  it('should return the navigation payload for unauthenticated public access', async () => {
+  it('should return the navigation payload for unauthenticated public access without star', async () => {
     const postedAt = new Date('2026-03-20T00:00:00.000Z')
     const challengeDto = ChallengesFaker.fakeDto({
       slug: challengeSlug,
@@ -75,8 +75,9 @@ describe('Access Challenge Page Action', () => {
       previousChallengeSlug: navigationDto.previousChallengeSlug,
       nextChallengeSlug: navigationDto.nextChallengeSlug,
     })
-    expect(call.getUser).not.toHaveBeenCalled()
+    expect(call.notFound).not.toHaveBeenCalled()
     expect(challengingService.fetchChallengeVote).not.toHaveBeenCalled()
+    expect(call.getUser).not.toHaveBeenCalled()
   })
 
   it('should return the user vote and navigation payload for authenticated access', async () => {
@@ -166,12 +167,29 @@ describe('Access Challenge Page Action', () => {
 
     await expect(makeAction().handle(call)).rejects.toThrow('Not found')
 
-    expect(spaceService.fetchStarById).toHaveBeenCalledWith(
-      expect.objectContaining({ value: starDto.id }),
-    )
+    expect(spaceService.fetchStarById).not.toHaveBeenCalled()
     expect(call.notFound).toHaveBeenCalled()
     expect(challengingService.fetchChallengeNavigation).not.toHaveBeenCalled()
     expect(challengingService.fetchChallengeVote).not.toHaveBeenCalled()
+  })
+
+  it('should call notFound for unauthenticated users on private challenges', async () => {
+    const challengeDto = ChallengesFaker.fakeDto({
+      slug: challengeSlug,
+      isPublic: false,
+      starId: undefined,
+    })
+
+    challengingService.fetchChallengeBySlug.mockResolvedValue(
+      new RestResponse({ body: challengeDto }),
+    )
+
+    await expect(makeAction().handle(call)).rejects.toThrow('Not found')
+
+    expect(call.notFound).toHaveBeenCalled()
+    expect(challengingService.fetchChallengeNavigation).not.toHaveBeenCalled()
+    expect(challengingService.fetchChallengeVote).not.toHaveBeenCalled()
+    expect(call.getUser).not.toHaveBeenCalled()
   })
 
   it('should call notFound when the authenticated user has not unlocked the star', async () => {

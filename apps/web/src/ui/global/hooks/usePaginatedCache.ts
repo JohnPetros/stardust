@@ -47,6 +47,10 @@ export function usePaginatedCache<CacheItem>({
     : ''
 
   function getKey(pageIndex: number, previousPageData: CacheItem[]) {
+    if (!isEnabled) {
+      return null
+    }
+
     if (isEnabled && previousPageData && !previousPageData.length) {
       return null
     }

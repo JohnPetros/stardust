@@ -13,14 +13,15 @@ O bug report deve:
 - Indicar **onde e por que provavelmente está quebrado**
 - Sugerir **como corrigir**, respeitando a arquitetura do projeto
 
-O resultado desta tarefa é **sempre composto por dois artefatos gerados no mesmo fluxo**:
+O resultado desta tarefa é **sempre um único arquivo Markdown** contendo dois artefatos no mesmo documento:
 - o **Bug Report**
 - a **Spec de correção derivada dele**
 
-Após a criação do Bug Report, uma **Spec de correção** deve ser gerada automaticamente com base no plano de correção levantado, seguindo o prompt `documentation/prompts/create-spec-prompt.md`.
+Após a criação do Bug Report, uma **Spec de correção** deve ser gerada automaticamente com base no plano de correção levantado, seguindo o prompt `documentation/prompts/create-spec-prompt.md`, mas deve ser incorporada ao mesmo arquivo `.md` do Bug Report.
 
 > A Spec não é uma etapa opcional, posterior ou separada.
-> Ela faz parte da mesma entrega do Bug Report e deve ser salva na mesma execução.
+> Ela faz parte da mesma entrega do Bug Report e deve ser salva na mesma execução, no mesmo arquivo Markdown.
+> Não crie um segundo arquivo em `specs/` para a Spec derivada de Bug Report.
 
 ---
 
@@ -77,31 +78,29 @@ Após a criação do Bug Report, uma **Spec de correção** deve ser gerada auto
 
 ### 5. Geração da Spec de Correção
 
-Após salvar o Bug Report, gere automaticamente uma Spec de correção seguindo `documentation/prompts/create-spec-prompt.md`, com as seguintes adaptações:
+Após salvar a seção de Bug Report, gere automaticamente uma Spec de correção no mesmo arquivo Markdown, seguindo `documentation/prompts/create-spec-prompt.md`, com as seguintes adaptações:
 
 - A geração da Spec deve acontecer **na mesma tarefa**, imediatamente após salvar o Bug Report, sem depender de nova solicitação do usuário.
-- O trabalho **só pode ser considerado concluído quando os dois arquivos existirem**: o Bug Report e a Spec derivada.
-- A Spec deve ser tratada como **continuação direta do Bug Report**, e não como entregável independente.
+- O trabalho **só pode ser considerado concluído quando o arquivo único contiver** o Bug Report e a Spec derivada.
+- A Spec deve ser tratada como **continuação direta do Bug Report no mesmo `.md`**, e não como entregável independente.
 
 - O **esboço da tarefa** é o próprio Bug Report gerado.
 - O **PRD de referência** é o PRD da feature afetada, encontrado em `documentation/features/<dominio>/`.
-- O **frontmatter** da Spec deve referenciar o Bug Report no campo `issue`.
+- A Spec **não deve ter frontmatter próprio**; o frontmatter único do arquivo deve permanecer no topo do Bug Report.
 - As seções **O que já existe**, **O que deve ser criado**, **O que deve ser modificado** e **O que deve ser removido** devem ser derivadas diretamente do plano de correção do Bug Report, sem retrabalho de pesquisa.
-- Salve a Spec em `documentation/features/{dominio}/specs/{nome-descritivo}-fix-spec.md`.
+- Salve a Spec como seção adicional dentro de `documentation/features/{dominio}/reports/{nome-descritivo}-bug-report.md`.
 
 ---
 
 ## Template de Saída (Estrutura Obrigatória)
 
-Salve o arquivo em `documentation/features/{dominio}/reports/{nome-descritivo}-bug-report.md` seguindo **estritamente** o template abaixo. Não adicione seções extras nem altere os títulos.
+Salve um único arquivo em `documentation/features/{dominio}/reports/{nome-descritivo}-bug-report.md` seguindo **estritamente** o template abaixo. O mesmo arquivo deve conter o Bug Report e, ao final, a seção `# Spec de Correção` derivada dele. Não crie arquivo separado em `specs/`.
 
 ```md
 ---
 title: {Titulo Curto e Descritivo}
-prd: <link para o PRD referente à bug, sendo uma milestone do GitHub>
-issue: <link para o issue referente à bug, servindo como esboço para a bug>
-prd: <link para o PRD referente à spec, sendo uma milestone do GitHub>
-issue: <link para o issue referente à spec, servindo como esboço para a spec>
+prd: <link para o PRD referente ao bug e à spec, sendo uma milestone do GitHub>
+issue: <link para o issue referente ao bug, servindo como esboço para a spec>
 apps: {web|server|studio}
 status: {open|closed}
 last_updated_at: {YYYY-MM-DD}
@@ -228,6 +227,10 @@ Liste código redundante, legado ou incorreto que deve ser eliminado como parte 
 
 - **{Camada}**
   - `{Nome do Recurso}` — {Motivo da remoção}
+
+# Spec de Correção: {Titulo Curto e Descritivo}
+
+<!-- Gerar a spec no mesmo arquivo, seguindo a estrutura de `documentation/prompts/create-spec-prompt.md`, sem frontmatter próprio. -->
 ```
 
 ---
@@ -241,5 +244,6 @@ Liste código redundante, legado ou incorreto que deve ser eliminado como parte 
 - Use apenas as camadas listadas na seção 3. Mapeamento de Camadas — não crie camadas arbitrárias.
 - Omita do template as camadas que não forem aplicáveis ao bug em questão.
 - A Spec de correção deve ser gerada **sempre**, sem necessidade de solicitação explícita.
-- O processo não deve parar após criar apenas o Bug Report; a tarefa permanece incompleta até a Spec ser criada e salva.
+- O processo não deve parar após criar apenas o Bug Report; a tarefa permanece incompleta até a Spec ser criada no mesmo arquivo Markdown.
 - A Spec de correção **não pode contradizer** o Bug Report — ela é uma derivação direta dele.
+- A Spec de correção **não deve ser salva em arquivo separado**; Bug Report e Spec devem coexistir em um único `.md`.

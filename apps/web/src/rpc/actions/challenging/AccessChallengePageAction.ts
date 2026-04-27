@@ -3,10 +3,10 @@ import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import type { SpaceService } from '@stardust/core/space/interfaces'
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 import { Challenge } from '@stardust/core/challenging/entities'
+import { ChallengeVote } from '@stardust/core/challenging/structures'
 import { Star } from '@stardust/core/space/entities'
 import { User } from '@stardust/core/global/entities'
 import { Slug, type Id } from '@stardust/core/global/structures'
-import { ChallengeVote } from '@stardust/core/challenging/structures'
 
 type Dependencies = {
   challengingService: ChallengingService
@@ -69,10 +69,24 @@ export const AccessChallengePageAction = ({
       const challenge = await fetchChallenge(challengeSlug)
       const user = isAuthenticated ? User.create(await call.getUser()) : null
 
+      if (!user) {
+        if (challenge.starId || challenge.isPublic.isFalse) {
+          call.notFound()
+        }
+
+        const challengeNavigation = await fetchChallengeNavigation(challengeSlug)
+
+        return {
+          challengeDto: challenge.dto,
+          userChallengeVote: ChallengeVote.createAsNone().value,
+          previousChallengeSlug: challengeNavigation.previousChallengeSlug,
+          nextChallengeSlug: challengeNavigation.nextChallengeSlug,
+        }
+      }
+
       if (challenge.starId) {
         const star = await fetchChallengeStar(challenge.starId)
         if (star) {
-          if (!user) call.notFound()
           if (user.isGod.notAndNot(user.hasUnlockedStar(star.id)).isTrue) {
             call.notFound()
           }
@@ -83,28 +97,17 @@ export const AccessChallengePageAction = ({
         ? EMPTY_NAVIGATION
         : await fetchChallengeNavigation(challengeSlug)
 
-      if (user) {
-        const isAuthor = challenge.isChallengeAuthor(user.id)
+      const isAuthor = challenge.isChallengeAuthor(user.id)
 
-        if (challenge.isPublic.isFalse && isAuthor.isFalse && user.isGod.isFalse) {
-          call.notFound()
-        }
-
-        const userChallengeVote = await fetchUserChallengeVote(challenge.id)
-
-        return {
-          challengeDto: challenge.dto,
-          userChallengeVote: userChallengeVote.value,
-          previousChallengeSlug: challengeNavigation.previousChallengeSlug,
-          nextChallengeSlug: challengeNavigation.nextChallengeSlug,
-        }
+      if (challenge.isPublic.isFalse && isAuthor.isFalse && user.isGod.isFalse) {
+        call.notFound()
       }
 
-      if (challenge.isPublic.isFalse) call.notFound()
+      const userChallengeVote = await fetchUserChallengeVote(challenge.id)
 
       return {
         challengeDto: challenge.dto,
-        userChallengeVote: ChallengeVote.createAsNone().value,
+        userChallengeVote: userChallengeVote.value,
         previousChallengeSlug: challengeNavigation.previousChallengeSlug,
         nextChallengeSlug: challengeNavigation.nextChallengeSlug,
       }

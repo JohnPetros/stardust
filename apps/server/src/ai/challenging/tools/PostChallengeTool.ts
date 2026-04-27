@@ -56,6 +56,7 @@ export class PostChallengeTool implements Tool<Input, ChallengeDto> {
           id: accountId,
         },
         isPublic: false,
+        isNew: true,
       },
       challengeSourceId: challengeSourceId ?? null,
     })
