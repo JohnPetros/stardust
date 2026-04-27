@@ -13,11 +13,26 @@ Criar um desafio original da plataforma StarDust com tema espacial, linguagem cl
 - O desafio deve ser adequado para iniciantes, mas ainda interessante e estimulante.
 - A descrição deve ser criativa e divertida, sem perder clareza.
 - Toda a narrativa, nomes de variáveis, parâmetros, função e explicações devem estar em português.
+- Todo o conteúdo textual da descrição deve estar em pt-BR, incluindo introdução, regras, exemplos, observações e qualquer texto de saída exibido no enunciado.
 - Use acentuação correta em português em todo o texto do desafio.
 - Prefira o termo "texto" no enunciado em vez de "string". 
 - Prefira o termo "lista" no enunciado em vez de "vetor" ou "array".  
+- Evite usar palavras reservadas da linguagem como nome de função, nome de parâmetro, nome de variável ou qualquer outro identificador do código do desafio.
 - O desafio deve ser autocontido, ou seja, deve fazer sentido sozinho, sem depender de contexto externo.
 - O tom deve ser inspirador, didático e envolvente, como o de um mentor preparando novos exploradores espaciais.
+
+## Palavras reservadas essenciais
+
+- Declaração: \`var\`, \`const\`
+- Funções: \`funcao\`, \`função\`, \`retorna\`
+- Condicionais: \`se\`, \`senao\`, \`senão\`
+- Laços: \`para\`, \`enquanto\`, \`fazer\`, \`para cada\`, \`em\`
+- Lógico: \`verdadeiro\`, \`falso\`, \`e\`, \`ou\`, \`nao\`, \`não\`
+- Saída: \`escreva\`
+- Tipos: \`texto\`, \`numero\`, \`número\`, \`logico\`, \`lógico\`, \`nulo\`, \`qualquer\`
+- Tratamento de erros: \`tente\`, \`pegue\`, \`finalmente\`
+
+Se precisar representar um valor textual no código do desafio, prefira nomes como \`txt\`, \`frase\`, \`mensagem\` ou \`palavra\` em vez de \`texto\`.
 
 # Estrutura obrigatória da resposta
 
@@ -52,7 +67,9 @@ A descrição deve:
 
 ### Regras de formatação da descrição
 
-- Você pode usar <Text></Text> para parágrafos comuns.
+- Escreva toda a descrição em pt-BR. Não misture inglês com português em títulos, frases, explicações ou textos de saída mostrados no enunciado.
+- Você pode usar <Text></Text> para parágrafos comuns, mas sem exagero.
+- Prefira Markdown simples quando um trecho ficar mais natural sem bloco, especialmente em exemplos curtos em sequência.
 - Sempre que houver uma observação importante, use <Alert></Alert>.
 - Sempre que houver uma frase de destaque, use <Quote></Quote>.
 - Não use quebras de linha dentro de blocos <Text>, <Alert> ou <Quote>; o conteúdo interno de cada bloco deve ficar em linha única.
@@ -60,6 +77,7 @@ A descrição deve:
 - Sempre que mostrar um código com mais de uma linha, use bloco Markdown com crases triplas.
 - Nunca coloque blocos como <Text>, <Alert> ou <Quote> dentro de listas.
 - Use títulos e subtítulos em Markdown quando isso melhorar a leitura.
+- Na seção de exemplos, prefira frases soltas em Markdown simples em vez de vários blocos <Text> consecutivos.
 
 ### Estrutura recomendada da descrição
 
@@ -113,6 +131,7 @@ Regras obrigatórias:
 - não implemente a lógica;
 - deixe o corpo vazio;
 - os nomes da função e dos parâmetros devem ser compatíveis com a descrição e os testes.
+- nunca use palavras reservadas da linguagem como identificadores; por exemplo, prefira \`txt\` em vez de \`texto\`.
 
 Exemplo:
 
