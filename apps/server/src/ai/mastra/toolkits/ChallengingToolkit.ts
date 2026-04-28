@@ -45,7 +45,6 @@ export class ChallengingToolkit {
       inputSchema: challengeSchema.omit({ author: true, isPublic: true }).extend({
         challengeSourceId: idSchema.nullable().optional(),
       }),
-      outputSchema: z.void(),
       execute: async (input, context) => {
         const mcp = new MastraMcp(input, context)
         const challengesRepository = new SupabaseChallengesRepository(supabase)
@@ -102,7 +101,6 @@ export class ChallengingToolkit {
         challengeId: idSchema,
         confirmacao: z.literal(true),
       }),
-      outputSchema: z.void(),
       execute: async (input, context) => {
         const mcp = new MastraMcp(input, context)
         const repository = new SupabaseChallengesRepository(supabase)
