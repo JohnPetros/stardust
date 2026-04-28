@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.5.1 (2026-04-28)
+
+* 🚧 wip: add parser and interpreter error logging in lsp (9ce06bde6)
+* 📦 deps: bump delegua to ^1.18.5 in lsp (5f535ec74)
+* 🐛 fix: stabilize auth toast behavior and related ui tests (eb16bf345)
+* 🤖 ai: refine challenge creation rules and toolkit schemas (041719876)
+* 📚 docs: add stardust wiki snapshot (26f18cc42)
+* 📚 docs: close auth toast bug report (cbd1177a7)
+* 🧪 test: add challenging rpc action coverage (2ffd5d231)
+* 🤖 ai: mark posted challenges as new (305e48767)
+* 📟 rpc: restrict anonymous challenge access (13cbb9077)
+* 🖥️ ui: prevent unauthenticated assistant history fetch (b3797efe8)
+
 ## 1.5.0 (2026-04-24)
 
 * 📚 docs: add new bug report template for unexpected auth error and update existing bug report prompt with PRD and issue links (fcb957d7f)
