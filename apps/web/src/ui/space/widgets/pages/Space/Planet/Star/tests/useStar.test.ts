@@ -29,6 +29,7 @@ describe('useStar', () => {
   let setLastUnlockedStarPosition: jest.Mock
   let starAnimationRef: React.RefObject<AnimationRef | null>
   let lastUnlockedStarPosition: 'above' | 'in' | 'bellow'
+  let getBoundingClientRectMock: jest.SpyInstance
 
   const star = ChallengesFaker.fake()
   const starId = IdFaker.fake()
@@ -60,6 +61,9 @@ describe('useStar', () => {
     scrollIntoLastUnlockedStar = jest.fn()
     setLastUnlockedStarPosition = jest.fn()
     lastUnlockedStarPosition = 'in'
+    getBoundingClientRectMock = jest
+      .spyOn(lastUnlockedStarRef.current, 'getBoundingClientRect')
+      .mockReturnValue({ top: 300, height: 80 } as DOMRect)
     starAnimationRef = {
       current: {
         restart: jest.fn(),
@@ -145,7 +149,28 @@ describe('useStar', () => {
     Hook(true)
 
     act(() => {
-      jest.advanceTimersByTime(1500)
+      jest.advanceTimersByTime(300)
+    })
+
+    expect(scrollIntoLastUnlockedStar).toHaveBeenCalledTimes(1)
+  })
+
+  it('should wait for layout to stabilize before scrolling into last unlocked star', () => {
+    getBoundingClientRectMock
+      .mockReturnValueOnce({ top: 300, height: 80 } as DOMRect)
+      .mockReturnValueOnce({ top: 420, height: 80 } as DOMRect)
+      .mockReturnValue({ top: 420, height: 80 } as DOMRect)
+
+    Hook(true)
+
+    act(() => {
+      jest.advanceTimersByTime(200)
+    })
+
+    expect(scrollIntoLastUnlockedStar).not.toHaveBeenCalled()
+
+    act(() => {
+      jest.advanceTimersByTime(300)
     })
 
     expect(scrollIntoLastUnlockedStar).toHaveBeenCalledTimes(1)
@@ -157,7 +182,7 @@ describe('useStar', () => {
     unmount()
 
     act(() => {
-      jest.advanceTimersByTime(1500)
+      jest.advanceTimersByTime(3000)
     })
 
     expect(scrollIntoLastUnlockedStar).not.toHaveBeenCalled()

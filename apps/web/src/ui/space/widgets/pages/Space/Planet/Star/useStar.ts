@@ -37,6 +37,22 @@ export function useStar({
   const navigationProvider = useNavigationProvider()
   const isInView = lastUnlockedStarPosition === 'in'
 
+  function getLayoutSnapshot() {
+    const starElement = lastUnlockedStarRef.current
+
+    if (!starElement) {
+      return null
+    }
+
+    const starRect = starElement.getBoundingClientRect()
+
+    return [
+      Math.round(starRect.top),
+      Math.round(starRect.height),
+      document.documentElement.scrollHeight,
+    ].join(':')
+  }
+
   async function handleStarNavigation() {
     const reponse = await challengingService.fetchChallengeByStarId(starId)
 
@@ -66,14 +82,45 @@ export function useStar({
   }, [isLastUnlockedStar, isInView, setLastUnlockedStarPosition])
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout
+    let timeout: ReturnType<typeof window.setTimeout> | undefined
 
     if (isLastUnlockedStar && lastUnlockedStarRef.current && isFirstScroll.current) {
-      timeout = setTimeout(() => {
-        scrollIntoLastUnlockedStar()
-        isFirstScroll.current = false
-      }, 1500)
+      let attempts = 0
+      let stableIterations = 0
+      let previousSnapshot = getLayoutSnapshot()
+
+      const waitForStableLayout = () => {
+        if (!lastUnlockedStarRef.current || !isFirstScroll.current) {
+          return
+        }
+
+        const currentSnapshot = getLayoutSnapshot()
+
+        if (!currentSnapshot) {
+          return
+        }
+
+        attempts += 1
+
+        if (currentSnapshot === previousSnapshot) {
+          stableIterations += 1
+        } else {
+          previousSnapshot = currentSnapshot
+          stableIterations = 0
+        }
+
+        if (stableIterations >= 2 || attempts >= 30) {
+          scrollIntoLastUnlockedStar()
+          isFirstScroll.current = false
+          return
+        }
+
+        timeout = window.setTimeout(waitForStableLayout, 100)
+      }
+
+      timeout = window.setTimeout(waitForStableLayout, 100)
     }
+
     return () => clearTimeout(timeout)
   }, [isLastUnlockedStar, lastUnlockedStarRef, scrollIntoLastUnlockedStar])
 
