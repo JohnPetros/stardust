@@ -86,10 +86,13 @@ export function useChallengesList({ challengingService, userId, isUserGod }: Par
   }
 
   const challenges = data.map(Challenge.create)
+  const isInitialLoading = isLoading && challenges.length === 0
+  const isLoadingMore = isLoading && challenges.length > 0
 
   return {
     challenges,
-    isLoading: isLoading && challenges.length === 0,
+    isInitialLoading,
+    isLoadingMore,
     isReachedEnd,
     handleShowMore,
   }
