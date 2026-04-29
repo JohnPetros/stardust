@@ -1,12 +1,9 @@
-import { ReachFirstTierJob, UpdateRankingsJob } from '@/queue/jobs/ranking'
+import { ReachFirstTierJob } from '@/queue/jobs/ranking'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestFunctions } from './InngestFunctions'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { FirstStarUnlockedEvent } from '@stardust/core/space/events'
-import {
-  SupabaseTiersRepository,
-  SupabaseRankersRepository,
-} from '@/database/supabase/repositories/ranking'
+import { SupabaseTiersRepository } from '@/database/supabase/repositories/ranking'
 import { InngestBroker } from '../InngestBroker'
 
 export class RankingFunctions extends InngestFunctions {
@@ -27,25 +24,7 @@ export class RankingFunctions extends InngestFunctions {
     )
   }
 
-  private updateRankingsJob(supabase: SupabaseClient) {
-    return this.inngest.createFunction(
-      {
-        id: UpdateRankingsJob.KEY,
-        onFailure: (context) => this.handleFailure(context, UpdateRankingsJob.name),
-      },
-      { cron: UpdateRankingsJob.cronExpression },
-      async (context) => {
-        const tiersRepository = new SupabaseTiersRepository(supabase)
-        const rankersRepository = new SupabaseRankersRepository(supabase)
-        const amqp = new InngestAmqp<typeof context.event.data>(context)
-        const Broker = new InngestBroker()
-        const job = new UpdateRankingsJob(tiersRepository, rankersRepository, Broker)
-        return job.handle(amqp)
-      },
-    )
-  }
-
   getFunctions(supabase: SupabaseClient) {
-    return [this.reachFirstTierJob(supabase), this.updateRankingsJob(supabase)]
+    return [this.reachFirstTierJob(supabase)]
   }
 }
