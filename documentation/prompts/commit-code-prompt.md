@@ -95,7 +95,7 @@ Se um arquivo puder pertencer a mais de um grupo:
 | Folder structure              | ftree      | 🗃️    |
 | Provision layer               | provision  | 🧰    |
 | Response                      | response   | 📤    |
-| Design                        | design   | 🎨    |
+| Design                        | design     | 🎨    |
 | Certificates/Licensing        | cert       | 📜    |
 | Validation schema             | validation | 📮    |
 | Emergency hotfix              | hotfix     | 🚑    |
