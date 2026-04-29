@@ -82,7 +82,7 @@ export function useStar({
   }, [isLastUnlockedStar, isInView, setLastUnlockedStarPosition])
 
   useEffect(() => {
-    let timeout: ReturnType<typeof window.setTimeout> | undefined
+    let timeout: number | undefined
 
     if (isLastUnlockedStar && lastUnlockedStarRef.current && isFirstScroll.current) {
       let attempts = 0
@@ -121,7 +121,7 @@ export function useStar({
       timeout = window.setTimeout(waitForStableLayout, 100)
     }
 
-    return () => clearTimeout(timeout)
+    return () => window.clearTimeout(timeout)
   }, [isLastUnlockedStar, lastUnlockedStarRef, scrollIntoLastUnlockedStar])
 
   return {

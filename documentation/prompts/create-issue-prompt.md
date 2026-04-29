@@ -231,7 +231,6 @@ Labels atualmente disponíveis no repositório `JohnPetros/stardust`:
 - Quando houver endpoints, descreva cada fluxo separadamente.
 - Quando houver lacunas arquiteturais, explicite o que ainda não existe e precisa ser criado.
 - Ajuste as camadas impactadas conforme a issue; não mantenha exemplos genéricos.
-- A seção `Observações / Dependências` é sempre fixa e deve ser reproduzida exatamente como definida neste prompt.
 - Vincule cada issue à milestone fornecida quando aplicável.
 - **Issues do tipo `task` devem sempre ser adicionadas ao project https://github.com/users/JohnPetros/projects/2 via GraphQL após criação.**
 
@@ -250,6 +249,5 @@ Labels atualmente disponíveis no repositório `JohnPetros/stardust`:
 - Quando houver endpoints, descreva cada fluxo separadamente.
 - Quando houver lacunas arquiteturais, explicite o que ainda não existe e precisa ser criado.
 - Ajuste as camadas impactadas conforme a issue; não mantenha exemplos genéricos.
-- A seção `Observações / Dependências` é sempre fixa e deve ser reproduzida exatamente como definida neste prompt.
 - Vincule cada issue à milestone fornecida quando aplicável.
 - **Issues do tipo `task` devem sempre ser adicionadas ao project https://github.com/users/JohnPetros/projects/2 via GraphQL após criação.**
