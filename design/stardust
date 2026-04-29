@@ -13901,6 +13901,362 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "rigKm",
+      "x": 7237,
+      "y": -75,
+      "name": "Playground Snippets Hub",
+      "width": 1920,
+      "height": 854,
+      "fill": "$gray-950",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "JV0wP",
+          "name": "Hero",
+          "width": "fill_container",
+          "height": 391,
+          "fill": "$gray-800",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": [
+            34,
+            0
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "idACW",
+              "name": "Back Navigation Row",
+              "width": 994,
+              "height": 28,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "HpiIh",
+                  "name": "backIcon",
+                  "width": 24,
+                  "height": 24,
+                  "iconFontName": "arrow_back",
+                  "iconFontFamily": "Material Symbols Outlined",
+                  "fill": "$green-500"
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "sdGWQ",
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "stardust-rocket.png",
+                "mode": "fill"
+              },
+              "width": 146,
+              "height": 145
+            },
+            {
+              "type": "frame",
+              "id": "Ti9ix",
+              "name": "Brand Lockup",
+              "gap": 10,
+              "alignItems": "end",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "A3VhD",
+                  "name": "brandName",
+                  "fill": "$green-500",
+                  "content": "StarDust",
+                  "lineHeight": 1,
+                  "fontFamily": "Poppins",
+                  "fontSize": 48
+                },
+                {
+                  "type": "text",
+                  "id": "L95UV3",
+                  "name": "brandProduct",
+                  "fill": "$green-500",
+                  "content": "Playground",
+                  "lineHeight": 1.1,
+                  "fontFamily": "Poppins",
+                  "fontSize": 22,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "uQVuW",
+              "name": "Create Snippet CTA",
+              "fill": "$green-500",
+              "cornerRadius": 5,
+              "gap": 8,
+              "padding": [
+                12,
+                16
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "Evllp",
+                  "name": "ctaIcon",
+                  "width": 18,
+                  "height": 18,
+                  "iconFontName": "add_circle",
+                  "iconFontFamily": "Material Symbols Outlined",
+                  "fill": "$gray-950"
+                },
+                {
+                  "type": "text",
+                  "id": "eML9n",
+                  "name": "ctaText",
+                  "fill": "$gray-950",
+                  "content": "Criar Novo Snippet",
+                  "lineHeight": 1,
+                  "fontFamily": "Poppins",
+                  "fontSize": 16,
+                  "fontWeight": "700"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "jcQSJ",
+          "name": "Snippet Collection",
+          "width": "fill_container",
+          "height": "fill_container",
+          "fill": "$gray-900",
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            14,
+            0,
+            0,
+            0
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "fMO7a",
+              "name": "Snippet Cards Grid",
+              "width": 986,
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "sKDxr",
+                  "name": "Snippet Card - Meu Snippet",
+                  "width": "fill_container",
+                  "height": 106,
+                  "fill": "$green-900",
+                  "cornerRadius": 6,
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": [
+                    20,
+                    18,
+                    14,
+                    18
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "TSRC2",
+                      "name": "Card Header",
+                      "width": "fill_container",
+                      "gap": 10,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "xk8bN",
+                          "name": "codeIcon1",
+                          "width": 20,
+                          "height": 20,
+                          "iconFontName": "code",
+                          "iconFontFamily": "Material Symbols Outlined",
+                          "fill": "$green-500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "NWMzn",
+                          "name": "title1",
+                          "fill": "$gray-100",
+                          "content": "Meu Snippet",
+                          "lineHeight": 1.2,
+                          "fontFamily": "Poppins",
+                          "fontSize": 18,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "iZrgM",
+                      "name": "Card Divider",
+                      "width": "fill_container",
+                      "height": 1,
+                      "fill": "$green-500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "G4B4o1",
+                      "name": "Card Actions",
+                      "width": "fill_container",
+                      "height": 20,
+                      "gap": 14,
+                      "justifyContent": "end",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "PeTQt",
+                          "name": "delete1",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "delete",
+                          "iconFontFamily": "Material Symbols Outlined",
+                          "fill": "$green-500"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "mK8V2",
+                          "name": "edit1",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "edit",
+                          "iconFontFamily": "Material Symbols Outlined",
+                          "fill": "$green-500"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "D17fD",
+                          "name": "share1",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "share",
+                          "iconFontFamily": "Material Symbols Outlined",
+                          "fill": "$green-500"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "pLcu3",
+                  "name": "Snippet Card - Snippet do JP",
+                  "width": "fill_container",
+                  "height": 106,
+                  "fill": "$green-900",
+                  "cornerRadius": 6,
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": [
+                    20,
+                    18,
+                    14,
+                    18
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "fWfQs",
+                      "name": "Card Header",
+                      "width": "fill_container",
+                      "gap": 10,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "SaRRi",
+                          "name": "codeIcon2",
+                          "width": 20,
+                          "height": 20,
+                          "iconFontName": "code",
+                          "iconFontFamily": "Material Symbols Outlined",
+                          "fill": "$green-500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "mQhEB",
+                          "name": "title2",
+                          "fill": "$gray-100",
+                          "content": "Snippet do JP",
+                          "lineHeight": 1.2,
+                          "fontFamily": "Poppins",
+                          "fontSize": 18,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "T7BCJX",
+                      "name": "Card Divider",
+                      "width": "fill_container",
+                      "height": 1,
+                      "fill": "$green-500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "L8TVoA",
+                      "name": "Card Actions",
+                      "width": "fill_container",
+                      "height": 20,
+                      "gap": 14,
+                      "justifyContent": "end",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "EJIzx",
+                          "name": "delete2",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "delete",
+                          "iconFontFamily": "Material Symbols Outlined",
+                          "fill": "$green-500"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "Ho8d5",
+                          "name": "edit2",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "edit",
+                          "iconFontFamily": "Material Symbols Outlined",
+                          "fill": "$green-500"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "Uwnm2",
+                          "name": "share2",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "share",
+                          "iconFontFamily": "Material Symbols Outlined",
+                          "fill": "$green-500"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "themes": {
