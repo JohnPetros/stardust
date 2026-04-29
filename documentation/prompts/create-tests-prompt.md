@@ -107,18 +107,26 @@ receber testes dedicados segundo as regras do projeto.
 1. Setup: criar `tests/` e o arquivo `<Nome>.test.ts(x)`.
 2. Mocking: identificar interfaces de dependencia e instanciar `mocks`.
 3. Implementacao: comecar pelo caminho de sucesso e depois cobrir cenarios de erro/excecao.
-4. Validacao: executar no escopo correto do monorepo.
+4. Validacao de testes: executar no escopo correto do monorepo.
+5. Validacao de qualidade: executar `typecheck` e `codecheck` antes de concluir.
 
 ```bash
 npm run test:web
 npm run test:server
 npm run test:studio
 npm run test:core
+npm run typecheck
+npm run codecheck
 
 cd apps/web && npm run test -- caminho/do/arquivo
 cd apps/server && npm run test -- caminho/do/arquivo
 cd apps/studio && npm run test -- caminho/do/arquivo
 cd packages/core && npm run test -- caminho/do/arquivo
+
+cd apps/web && npm run typecheck && npm run codecheck
+cd apps/server && npm run typecheck && npm run codecheck
+cd apps/studio && npm run typecheck && npm run codecheck
+cd packages/core && npm run typecheck && npm run codecheck
 ```
 
 <Prompt para subagent>

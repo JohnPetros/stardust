@@ -26,6 +26,7 @@ module.exports = {
         '🪨 constants',
         '📦 deps',
         '🎴 assets',
+        '🎨 design',
         '🔀 merge',
         '⏪ revert',
         '▶️ cr',

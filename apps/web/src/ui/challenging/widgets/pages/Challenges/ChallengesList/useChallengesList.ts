@@ -85,9 +85,11 @@ export function useChallengesList({ challengingService, userId, isUserGod }: Par
     nextPage()
   }
 
+  const challenges = data.map(Challenge.create)
+
   return {
-    challenges: data.map(Challenge.create),
-    isLoading,
+    challenges,
+    isLoading: isLoading && challenges.length === 0,
     isReachedEnd,
     handleShowMore,
   }
