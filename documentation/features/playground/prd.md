@@ -23,8 +23,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Paginacao:** A listagem deve ser apresentada em paginas com quantidade fixa de itens por pagina.
 - **Estado vazio:** Quando nao houver snippets cadastrados, o sistema deve informar que o usuario ainda nao criou nenhum snippet.
 - **Separacao de contextos:** O hub de snippets nao se confunde com a visualizacao de snippets publicos de terceiros por link direto.
-- **Experiencia sem login:** `🚧 Em construcao`.
-  O comportamento completo do hub para usuarios nao autenticados nao foi validado nesta auditoria.
+- **Acesso autenticado:** A rota principal `/playground/snippets` exige sessao autenticada validada server-side antes da renderizacao da pagina.
 
 ##### Regras de UI/UX
 
@@ -35,32 +34,37 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Acessibilidade:** Os controles de navegacao e paginacao devem ser acionaveis por teclado.
 - **Feedback:** O usuario deve perceber claramente carregamento, ausencia de itens e mudanca de pagina.
 - **Performance:** A troca de pagina deve responder sem recarregamento manual da tela.
-- **Confiabilidade:** Falhas de carregamento devem impedir a exibicao de dados inconsistentes.
+- **Confiabilidade:** Falhas de autenticacao devem impedir a exibicao da colecao protegida.
 - **Compatibilidade:** A experiencia deve funcionar nos navegadores suportados pela aplicacao web.
 
 #### REQ-02 Criar e editar um snippet no playground
 
 - [x] **Criar e editar um snippet no playground**
 
-**Descricao:** O usuario deve conseguir abrir um editor livre, preencher titulo e codigo, executar o trecho digitado e preparar o snippet para salvamento.
+**Descricao:** O usuario deve conseguir abrir um editor livre, preencher titulo e codigo, executar o trecho digitado, aplicar exemplos prontos localmente e preparar o snippet para salvamento manual.
 
 ##### Regras de Negocio
 
 - **Novo snippet:** Um novo snippet deve iniciar com um titulo padrao quando nenhum titulo tiver sido definido.
 - **Edicao livre:** O usuario pode alterar titulo e codigo antes de salvar.
 - **Execucao local:** O codigo digitado pode ser executado diretamente no playground.
+- **Catalogo de exemplos:** O editor deve oferecer uma acao manual `Exemplos`, fechada por padrao, com 10 exemplos iniciais para acelerar o preenchimento do editor.
+- **Aplicacao local:** Ao selecionar um exemplo, o sistema preenche titulo e codigo apenas no estado local do editor, sem salvar automaticamente.
+- **Confirmacao de substituicao:** Se titulo ou codigo ja tiverem alteracoes locais, o sistema deve solicitar confirmacao antes de substituir o conteudo atual.
 - **Persistencia protegida:** Se o usuario tentar salvar sem estar autenticado, o sistema deve solicitar login antes de concluir a persistencia.
 - **Retorno ao hub:** O usuario deve conseguir voltar para a listagem de snippets a partir do editor.
 
 ##### Regras de UI/UX
 
 - **Editor:** A tela deve oferecer campo de titulo e editor de codigo no mesmo fluxo.
-- **Barra de acoes:** O usuario deve ter acesso a acoes de voltar, executar e salvar.
+- **Barra de acoes:** O usuario deve ter acesso a acoes de voltar, executar, salvar e abrir o catalogo de exemplos.
+- **Sem assistente de codigo:** O editor de snippets nao deve exibir o botao do assistente de codigo nesse contexto.
+- **Confirmacao acessivel:** A substituicao de conteudo deve usar dialogo confirmatorio acionavel por teclado.
 - **Responsividade:** O editor deve ocupar a area util da tela em diferentes tamanhos de viewport.
 - **Acessibilidade:** Campos e botoes devem possuir rotulos compreensiveis e navegacao por teclado.
 - **Feedback:** O sistema deve exibir feedback visual para salvar com sucesso, erro ou processamento em andamento.
-- **Performance:** A execucao do codigo deve responder sem exigir troca de pagina.
-- **Confiabilidade:** O sistema deve bloquear a persistencia quando a autenticacao for obrigatoria e inexistente.
+- **Performance:** A abertura do catalogo de exemplos deve ser local e imediata, sem requisicoes adicionais.
+- **Confiabilidade:** Cancelar a substituicao de um exemplo nao deve apagar o conteudo atual.
 - **Compatibilidade:** O fluxo deve funcionar em mobile e desktop.
 
 #### REQ-03 Salvar e atualizar snippets
@@ -122,8 +126,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 ##### Regras de Negocio
 
 - **Controle de visibilidade:** O autor pode marcar o snippet como publico ou privado.
-- **Compartilhamento permitido:** `Assuncao validada com stakeholder`.
-  Apenas snippets publicos podem expor acao de compartilhamento.
+- **Compartilhamento permitido:** Apenas snippets publicos podem expor acao de compartilhamento.
 - **Restricao do privado:** Snippets privados nao devem disponibilizar compartilhamento por link.
 - **Acesso por link:** Usuarios podem acessar snippets de outros usuarios quando eles estiverem publicos.
 - **Acesso negado:** Quando o usuario nao puder acessar um snippet por visibilidade, o sistema deve exibir uma mensagem de indisponibilidade e direcionar para criacao do proprio playground.
@@ -170,11 +173,12 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 
 **Fluxo 1 - Criar um novo snippet:** O usuario inicia um novo experimento no playground.
 
-1. O usuario acessa a listagem de snippets do playground.
+1. O usuario acessa a listagem de snippets do playground autenticado.
 2. O usuario aciona a criacao de um novo snippet.
-3. O usuario preenche titulo e codigo no editor.
-4. O usuario executa o codigo, se desejar validar o conteudo antes de salvar.
-5. O usuario tenta salvar:
+3. O usuario preenche titulo e codigo no editor ou aplica um exemplo pronto pelo catalogo `Exemplos`.
+4. Se houver conteudo local e um novo exemplo for escolhido, o sistema pede confirmacao antes de substituir.
+5. O usuario executa o codigo, se desejar validar o conteudo antes de salvar.
+6. O usuario tenta salvar:
    - **Sucesso:** O snippet e persistido com titulo, codigo e visibilidade definidos.
    - **Falha:** O sistema apresenta erro de validacao ou solicita login para concluir a persistencia.
 
@@ -218,7 +222,8 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 
 ### 4. Fora do Escopo (Out of Scope)
 
-- Galeria publica ou exemplos definidos para usuarios nao autenticados.
+- Galeria publica ou exemplos definidos para usuarios nao autenticados fora do fluxo autenticado do playground.
 - Compartilhamento de snippets privados.
 - Edicao de snippets de terceiros, mesmo quando eles forem publicos.
 - Galeria navegavel de snippets publicos de outros usuarios dentro do hub principal.
+- Persistencia automatica ao aplicar exemplos.
