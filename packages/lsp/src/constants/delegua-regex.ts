@@ -1,5 +1,5 @@
 export const DELEGUA_REGEX = {
-  conteudoDeFuncaoLeia: /(leia\(.*\))/,
+  conteudoDeFuncaoLeia: /leia\([^)]*\)/,
   funcaoLeia: /(leia\(\))/,
   valoresLogicos: /(?<!['"])\b(verdadeiro|falso|nulo)\b(?!['"])/g,
   parametroDeFuncaoLeia: /["'].*["']/,
@@ -7,4 +7,4 @@ export const DELEGUA_REGEX = {
   conteudoDeFuncaoEscreva: /escreva\((.*?)\)/,
   parametrosDeFuncaoQualquer: /\(([^)]+)\)/,
   nomeDeFuncaoQualquer: /funcao\s+(\w+)\s*\(/,
-}
+} as const

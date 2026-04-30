@@ -1,6 +1,6 @@
 import type { LspSnippet } from '@stardust/core/global/types'
 
-export const DELEGUA_SNIPPETS_METODOS_DICIONARIOS: LspSnippet[] = [
+export const DELEGUA_SNIPPETS_METODOS_DICIONARIOS = [
   {
     label: 'chaves',
     code: 'chaves()',
@@ -14,11 +14,7 @@ export const DELEGUA_SNIPPETS_METODOS_DICIONARIOS: LspSnippet[] = [
     code: 'contém(${1:})',
   },
   {
-    label: 'remover',
-    code: 'remover(${1:})',
-  },
-  {
     label: 'valores',
     code: 'valores()',
   },
-]
+] as const satisfies readonly LspSnippet[]

@@ -1,6 +1,6 @@
 import type { LspDocumentation } from '@stardust/core/global/types'
 
-export const DELEGUA_DOCUMENTACOES_METODOS_LISTA: LspDocumentation[] = [
+export const DELEGUA_DOCUMENTACOES_METODOS_LISTA = [
   {
     word: 'adicionar',
     content: `### Descrição 
@@ -232,4 +232,4 @@ Retorna o número de elementos que compõem o lista.
 ### Formas de uso  `,
     example: 'lista.tamanho()',
   },
-]
+] as const satisfies readonly LspDocumentation[]

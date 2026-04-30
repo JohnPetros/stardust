@@ -1,3 +1,5 @@
+import type { LspDocumentation } from '@stardust/core/global/types'
+
 export const DELEGUA_DOCUMENTACOES_METODOS_DICIONARIOS = [
   {
     word: 'chaves',
@@ -67,4 +69,4 @@ Retorna uma lista com todos os valores de um dicionário.
 ### Formas de uso  `,
     example: 'dicionário.valores()',
   },
-]
+] as const satisfies readonly LspDocumentation[]
