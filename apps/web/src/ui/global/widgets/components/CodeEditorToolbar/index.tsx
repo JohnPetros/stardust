@@ -1,6 +1,6 @@
 'use client'
 
-import { type PropsWithChildren, type RefObject, useRef } from 'react'
+import { type PropsWithChildren, type ReactNode, type RefObject, useRef } from 'react'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
@@ -13,6 +13,10 @@ type Props = {
   codeEditorRef: RefObject<CodeEditorRef | null>
   onRunCode: () => void
   onOpenConsole?: () => void
+  options?: {
+    customActions?: ReactNode
+    shouldHideAssistantButton?: boolean
+  }
 }
 
 export const CodeEditorToolbar = ({
@@ -21,6 +25,7 @@ export const CodeEditorToolbar = ({
   codeEditorRef,
   onRunCode,
   onOpenConsole,
+  options,
 }: PropsWithChildren<Props>) => {
   const runCodeButtonRef = useRef<HTMLButtonElement | null>(null)
   const guidesDialogButtonRef = useRef<HTMLButtonElement | null>(null)
@@ -44,6 +49,8 @@ export const CodeEditorToolbar = ({
       onResetCodeButtonClick={handleAssistantButtonClick}
       onAssistantEnabledChange={() => setIsAssistantEnabled(!isAssistantEnabled)}
       isAssistantAllowed={isAccountAuthenticated}
+      customActions={options?.customActions}
+      shouldHideAssistantButton={options?.shouldHideAssistantButton}
     >
       {children}
     </CodeEditorToolbarView>
