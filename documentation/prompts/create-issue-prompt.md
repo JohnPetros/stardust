@@ -100,7 +100,9 @@ Contratos esperados:
 
 ### Regras obrigatórias de publicação
 
-- O corpo publicado da issue no GitHub **não deve conter da seção `Objetivo` para baixo**. Essas seções podem existir no rascunho para validação, mas não devem ser enviadas na publicação final.
+- O corpo publicado da issue no GitHub deve conter obrigatoriamente as seções `## Objetivo`, `## Requisitos de Produto` e `## Referências na Codebase`.
+- A seção `## Requisitos Técnicos` deve estar no corpo final **apenas** para issues do tipo `task`.
+- Para issues do tipo `bug` sem PRD relevante, a seção `## Requisitos de Produto` pode ser omitida.
 - Cada issue deve estar vinculada a **apenas um PRD principal**. Não publicar issues com múltiplos PRDs associados no corpo final.
 - Toda issue do tipo `task` publicada deve ser adicionada ao project `2` e ter o campo `Status` definido como `Todo`.
 
@@ -215,7 +217,8 @@ Labels atualmente disponíveis no repositório `JohnPetros/stardust`:
 ## Regras para preenchimento
 
 - O conteúdo deve sair pronto para colar no GitHub Issues.
-- O corpo publicado da issue no GitHub não deve conter da seção `Objetivo` para baixo; essas seções servem apenas para o rascunho de validação.
+- O corpo publicado da issue no GitHub deve conter `## Objetivo`, `## Requisitos de Produto` e `## Referências na Codebase`.
+- A seção `## Requisitos Técnicos` deve existir no corpo final apenas em issues do tipo `task`.
 - A seção `Objetivo` não deve conter a linha `Camadas impactadas`.
 - O título da issue NUNCA deve conter prefixos de commit (ex: `feat:`, `feat(...):`, `fix:`, `chore:`, `refactor:`). O título deve ser direto e descritivo.
 - Sempre incluir as labels de aplicação (`web`, `server`, `studio`) correspondentes às camadas impactadas pela issue, além das labels de tipo de trabalho.
