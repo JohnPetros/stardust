@@ -55,7 +55,7 @@ Leitura de entrada do usuário:
 
 <Code>
 var entrada = leia()
-var numero = inteiroParaTexto(entrada)
+var numero = numero(entrada)
 </Code>`
 export class GetMdxBlocksGuideTool implements Tool {
   async handle(_: Mcp) {
