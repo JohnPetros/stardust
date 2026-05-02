@@ -9,7 +9,7 @@ export class LessonSquad {
       id: 'explain-code-agent',
       name: 'Explain Code Agent',
       instructions: AGENTS_INSTRUCTIONS.codeExplainerAgent,
-      model: openai('gpt-4o'),
+      model: openai('gpt-5.4-mini'),
       tools: {
         getMdxBlocksGuideTool: LessonToolkit.getMdxBlocksGuideTool,
       },
