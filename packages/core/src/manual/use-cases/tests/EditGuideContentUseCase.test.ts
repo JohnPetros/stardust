@@ -4,23 +4,18 @@ import { GuidesFaker } from '#manual/domain/entities/fakers/GuidesFaker'
 import { EditGuideContentUseCase } from '../EditGuideContentUseCase'
 import { GuideNotFoundError } from '#manual/domain/errors/GuideNotFoundError'
 import type { GuidesRepository } from '#manual/interfaces/GuidesRepository'
-import type { Broker } from '#global/interfaces/index'
-import { GuideContentEditedEvent } from '#manual/domain/events/GuideContentEditedEvent'
 
 describe('Edit Guide Content Use Case', () => {
   let repository: Mock<GuidesRepository>
-  let broker: Mock<Broker>
   let useCase: EditGuideContentUseCase
 
   beforeEach(() => {
     repository = mock<GuidesRepository>()
-    broker = mock<Broker>()
 
     repository.findById.mockImplementation()
     repository.replace.mockImplementation()
-    broker.publish.mockImplementation()
 
-    useCase = new EditGuideContentUseCase(repository, broker)
+    useCase = new EditGuideContentUseCase(repository)
   })
 
   it('should throw an error if the guide does not exist', async () => {
@@ -53,11 +48,6 @@ describe('Edit Guide Content Use Case', () => {
     const replacedGuide = repository.replace.mock.calls[0][0]
     expect(replacedGuide.id.value).toBe(existingGuide.id.value)
     expect(replacedGuide.content.value).toBe(newContent)
-
-    expect(broker.publish).toHaveBeenCalledTimes(1)
-    expect(broker.publish).toHaveBeenCalledWith(expect.any(GuideContentEditedEvent))
-    const event = broker.publish.mock.calls[0][0] as GuideContentEditedEvent
-    expect(event.payload.guideContent).toBe(newContent)
 
     expect(result.content).toBe(newContent)
   })
