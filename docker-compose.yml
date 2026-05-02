@@ -1,0 +1,12 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: stardust-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - stardust-redis-data:/data
+    command: redis-server --appendonly yes
+
+volumes:
+  stardust-redis-data:
