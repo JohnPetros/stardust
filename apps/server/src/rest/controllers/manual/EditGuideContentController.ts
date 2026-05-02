@@ -1,5 +1,5 @@
 import type { GuidesRepository } from '@stardust/core/manual/interfaces'
-import type { Controller, Broker, Http } from '@stardust/core/global/interfaces'
+import type { Controller, Http } from '@stardust/core/global/interfaces'
 import { EditGuideContentUseCase } from '@stardust/core/manual/use-cases'
 
 type Schema = {
@@ -12,15 +12,12 @@ type Schema = {
 }
 
 export class EditGuideContentController implements Controller<Schema> {
-  constructor(
-    private readonly repository: GuidesRepository,
-    private readonly broker: Broker,
-  ) {}
+  constructor(private readonly repository: GuidesRepository) {}
 
   async handle(http: Http<Schema>) {
     const { guideId } = http.getRouteParams()
     const { guideContent } = await http.getBody()
-    const useCase = new EditGuideContentUseCase(this.repository, this.broker)
+    const useCase = new EditGuideContentUseCase(this.repository)
     const response = await useCase.execute({ guideId, guideContent })
     return http.send(response)
   }

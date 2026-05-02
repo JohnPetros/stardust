@@ -126,7 +126,7 @@ export const SnippetPageView = ({
             title='Substituir conteúdo atual?'
             body={
               <p className='text-center leading-8 text-gray-100'>
-                Esse exemplo vai substituir o título e o código atuais. Nada sera salvo
+                Esse exemplo vai substituir o título e o código atuais. Nada será salvo
                 automaticamente.
               </p>
             }
@@ -163,7 +163,7 @@ export const SnippetPageView = ({
                       className='text-gray-900'
                       weight='bold'
                     />
-                    Compatilhar
+                    Compartilhar
                   </Button>
                 </ShareSnippetDialog>
               )}

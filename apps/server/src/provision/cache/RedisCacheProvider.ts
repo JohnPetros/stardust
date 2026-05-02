@@ -1,17 +1,20 @@
-import { Redis } from '@upstash/redis'
+import Redis from 'ioredis'
 
-import type { CacheProvider, CacheOptions } from '@stardust/core/global/interfaces'
+import type { CacheOptions, CacheProvider } from '@stardust/core/global/interfaces'
+import { ENV } from '@/constants/env'
 
-export class UpstashCacheProvider implements CacheProvider {
-  private redis: ReturnType<typeof Redis.fromEnv>
+export class RedisCacheProvider implements CacheProvider {
+  private readonly redis: Redis
 
   constructor() {
-    this.redis = Redis.fromEnv()
+    this.redis = new Redis(ENV.redisUrl, { tls: {} })
   }
 
   async get(key: string): Promise<string | null> {
-    const data = await this.redis.get<string>(key)
+    const data = await this.redis.get(key)
+
     if (!data) return null
+
     return data
   }
 
@@ -19,11 +22,10 @@ export class UpstashCacheProvider implements CacheProvider {
     const parsedValue = String(value)
 
     if (options?.expiresAt) {
-      await this.redis.set(key, parsedValue, {
-        pxat: options.expiresAt.getTime(),
-      })
+      await this.redis.set(key, parsedValue, 'PXAT', options.expiresAt.getTime())
       return
     }
+
     await this.redis.set(key, parsedValue)
   }
 
@@ -32,8 +34,10 @@ export class UpstashCacheProvider implements CacheProvider {
   }
 
   async popListItem(key: string): Promise<string | null> {
-    const data = await this.redis.lpop<string>(key)
+    const data = await this.redis.lpop(key)
+
     if (!data) return null
+
     return data
   }
 }
