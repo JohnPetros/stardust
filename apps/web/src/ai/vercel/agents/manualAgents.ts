@@ -7,10 +7,10 @@ import { challengingToolset, manualToolset } from '../toolsets'
 export const assistantAgent = new ToolLoopAgent({
   id: 'assistant-agent',
   instructions: MANUAL_INSTRUCTIONS.agents.assistant,
-  model: openai('gpt-4o'),
+  model: openai('gpt-5.4-mini'),
   stopWhen: stepCountIs(3),
   tools: {
-    searchGuides: manualToolset.searchGuidesTool,
+    getLspGuides: manualToolset.getLspGuidesTool,
     getChallengeDescription: challengingToolset.getChallengeDescriptionTool,
   },
 })
