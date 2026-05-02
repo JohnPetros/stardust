@@ -8,7 +8,17 @@ import { PlaygroundService } from '@/rest/services'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import { NextCall } from '../next/NextCall'
 import { authActionClient } from './clients/authActionClient'
-import { AccessSnippetPageAction } from '../actions/playground'
+import { AccessSnippetPageAction, AccessSnippetsPageAction } from '../actions/playground'
+
+export const accessSnippetsPage = authActionClient.action(async ({ ctx }) => {
+  const call = NextCall({
+    user: ctx.user,
+  })
+
+  const action = AccessSnippetsPageAction()
+
+  return await action.handle(call)
+})
 
 export const accessSnippetPage = authActionClient
   .schema(

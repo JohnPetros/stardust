@@ -3,9 +3,11 @@ import { DELEGUA_DOCUMENTACOES_METODOS_GLOBAIS } from './delegua-documentacoes-m
 import { DELEGUA_DOCUMENTACOES_METODOS_TEXTO } from './delegua-documentacoes-metodos-texto'
 import { DELEGUA_DOCUMENTACOES_METODOS_LISTA } from './delegua-documentacoes-metodos-lista'
 
+import type { LspDocumentation } from '@stardust/core/global/types'
+
 export const DELEGUA_DOCUMENTACOES = [
   ...DELEGUA_DOCUMENTACOES_METODOS_GLOBAIS,
   ...DELEGUA_DOCUMENTACOES_METODOS_TEXTO,
   ...DELEGUA_DOCUMENTACOES_METODOS_LISTA,
   ...DELEGUA_DOCUMENTACOES_METODOS_DICIONARIOS,
-]
+] as const satisfies readonly LspDocumentation[]

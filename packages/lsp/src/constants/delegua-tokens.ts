@@ -130,4 +130,4 @@ export const DELEGUA_TOKENS = {
   numbers: [],
   editor: [],
   rest: [],
-}
+} as const

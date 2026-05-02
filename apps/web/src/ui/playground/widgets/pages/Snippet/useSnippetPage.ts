@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import type { SnippetDto } from '@stardust/core/playground/entities/dtos'
 import { Snippet } from '@stardust/core/playground/entities'
+import type { LspSnippet } from '@stardust/core/global/types'
 import {
   booleanSchema,
   idSchema,
@@ -31,13 +32,14 @@ const snippetSchema = z.object({
 })
 
 type SnippetFormInput = z.input<typeof snippetSchema>
-type SnippetForm = z.output<typeof snippetSchema>
+export type SnippetForm = z.output<typeof snippetSchema>
 
 type UseSnippetPageParams = {
   playgroundService: PlaygroundService
   userId?: Id
   playgroudCodeEditorRef: RefObject<PlaygroundCodeEditorRef | null>
   authAlertDialogRef: RefObject<AlertDialogRef | null>
+  replaceSnippetAlertDialogRef: RefObject<AlertDialogRef | null>
   snippetDto?: SnippetDto
 }
 
@@ -47,16 +49,20 @@ export function useSnippetPage({
   snippetDto,
   playgroudCodeEditorRef,
   authAlertDialogRef,
+  replaceSnippetAlertDialogRef,
 }: UseSnippetPageParams) {
   const snippet = snippetDto ? Snippet.create(snippetDto) : null
   const [isActionSuccess, setIsActionSuccess] = useState(false)
   const [isActionFailure, setIsActionFailure] = useState(false)
   const [isUserSnippetAuthor, setIsUserSnippetAuthor] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [pendingExampleSnippet, setPendingExampleSnippet] = useState<LspSnippet | null>(
+    null,
+  )
   const [snippetFieldErrors, setSnippetFieldErrors] = useState<Record<string, string[]>>(
     {},
   )
-  const { control, formState, getValues, reset, watch } = useForm<SnippetForm>({
+  const { control, formState, getValues, reset, setValue, watch } = useForm<SnippetForm>({
     resolver: zodResolver(snippetSchema) as unknown as Resolver<
       SnippetForm,
       any,
@@ -73,6 +79,33 @@ export function useSnippetPage({
   const windowSize = useWindowSize()
   const router = useNavigationProvider()
   const formValues = getValues()
+  const { dirtyFields } = formState
+
+  function applyExampleSnippet(snippet: LspSnippet) {
+    setValue('snippetTitle', snippet.label, { shouldDirty: true, shouldValidate: true })
+    setValue('snippetCode', snippet.code, { shouldDirty: true, shouldValidate: true })
+    playgroudCodeEditorRef.current?.setValue(snippet.code)
+  }
+
+  function handleExampleSnippetSelect(snippet: LspSnippet) {
+    const shouldConfirmReplace = Boolean(
+      dirtyFields.snippetTitle || dirtyFields.snippetCode,
+    )
+
+    if (shouldConfirmReplace) {
+      setPendingExampleSnippet(snippet)
+      replaceSnippetAlertDialogRef.current?.open()
+      return
+    }
+
+    applyExampleSnippet(snippet)
+  }
+
+  function handleExampleSnippetReplaceConfirm() {
+    if (!pendingExampleSnippet) return
+    applyExampleSnippet(pendingExampleSnippet)
+    setPendingExampleSnippet(null)
+  }
 
   async function handleSnippetCreated(snippet: Snippet) {
     setIsUserSnippetAuthor(snippet.isPublic.isTrue)
@@ -207,5 +240,7 @@ export function useSnippetPage({
     handleRunCode,
     handleActionButtonClick,
     handleAuthAlertDialogConfirm,
+    handleExampleSnippetSelect,
+    handleExampleSnippetReplaceConfirm,
   }
 }

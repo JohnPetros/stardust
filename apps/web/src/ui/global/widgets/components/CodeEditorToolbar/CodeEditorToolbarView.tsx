@@ -20,6 +20,8 @@ type CodeEditorToolbarProps = {
   onKeyDown: (event: KeyboardEvent) => void
   onResetCodeButtonClick: () => void
   onAssistantEnabledChange: () => void
+  customActions?: ReactNode
+  shouldHideAssistantButton?: boolean
 }
 
 export const CodeEditorToolbarView = ({
@@ -32,6 +34,8 @@ export const CodeEditorToolbarView = ({
   onRunCode,
   onOpenConsole,
   onKeyDown,
+  customActions,
+  shouldHideAssistantButton,
 }: CodeEditorToolbarProps) => {
   return (
     <div onKeyUp={onKeyDown}>
@@ -47,6 +51,8 @@ export const CodeEditorToolbarView = ({
         </div>
 
         <Toolbar.Container className='flex items-center gap-3'>
+          {customActions}
+
           <AlertDialog
             type='asking'
             title='Tem certeza que deseja voltar para o código inicial?'
@@ -83,7 +89,7 @@ export const CodeEditorToolbarView = ({
             <Toolbar.Button label='Configurações' icon='gear' />
           </CodeEditorSettingsDialog>
 
-          {isAssistantAllowed && (
+          {isAssistantAllowed && !shouldHideAssistantButton && (
             <Toolbar.Button
               label='Assistente de código'
               icon='ai'

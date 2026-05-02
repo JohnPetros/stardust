@@ -6,8 +6,8 @@ export function useLsp() {
   return useMemo(() => {
     return {
       lspProvider: new DeleguaLsp(),
-      documentations: DELEGUA_DOCUMENTACOES,
-      snippets: DELEGUA_SNIPPETS,
+      documentations: [...DELEGUA_DOCUMENTACOES],
+      snippets: [...DELEGUA_SNIPPETS],
     }
   }, [])
 }

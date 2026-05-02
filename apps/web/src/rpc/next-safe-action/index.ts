@@ -10,7 +10,7 @@ import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
 import { accessEndingPage, fetchLessonStoryAndQuestions } from './lessonActions'
 import { accessStarPage } from './spaceActions'
 import { accessProfilePage } from './profileActions'
-import { accessSnippetPage } from './playgroundActions'
+import { accessSnippetPage, accessSnippetsPage } from './playgroundActions'
 import {
   accessRewardForStarCompletionPage,
   accessRewardForStarChallengeCompletionPage,
@@ -45,7 +45,7 @@ export const challengingActions = {
   viewSolution,
 }
 
-export const playgroundActions = { accessSnippetPage }
+export const playgroundActions = { accessSnippetPage, accessSnippetsPage }
 
 export const profileActions = {
   accessProfilePage,

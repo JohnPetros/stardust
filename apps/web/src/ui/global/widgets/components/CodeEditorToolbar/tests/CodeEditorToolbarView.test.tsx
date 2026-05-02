@@ -72,4 +72,33 @@ describe('CodeEditorToolbarView', () => {
 
     expect(screen.queryByText('Console')).not.toBeInTheDocument()
   })
+
+  it('should render custom actions inside the toolbar when provided', () => {
+    View({
+      customActions: <button type='button'>Exemplos</button>,
+    })
+
+    expect(screen.getByRole('button', { name: 'Exemplos' })).toBeInTheDocument()
+  })
+
+  it('should not render assistant button when shouldHideAssistantButton is true', () => {
+    View({
+      isAssistantAllowed: true,
+      shouldHideAssistantButton: true,
+    })
+
+    expect(
+      screen.queryByRole('button', { name: 'Assistente de código' }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('should render assistant button when assistant is allowed and hide flag is not provided', () => {
+    View({
+      isAssistantAllowed: true,
+    })
+
+    expect(
+      screen.getByRole('button', { name: 'Assistente de código' }),
+    ).toBeInTheDocument()
+  })
 })

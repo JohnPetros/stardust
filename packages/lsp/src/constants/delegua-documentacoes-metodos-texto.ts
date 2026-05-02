@@ -1,6 +1,6 @@
 import type { LspDocumentation } from '@stardust/core/global/types'
 
-export const DELEGUA_DOCUMENTACOES_METODOS_TEXTO: LspDocumentation[] = [
+export const DELEGUA_DOCUMENTACOES_METODOS_TEXTO = [
   {
     word: 'aparar',
     content: `### Descrição 
@@ -176,4 +176,4 @@ Devolve um número inteiro com o número de caracteres do texto.
 ### Formas de uso  `,
     example: 'texto.tamanho()',
   },
-]
+] as const satisfies readonly LspDocumentation[]

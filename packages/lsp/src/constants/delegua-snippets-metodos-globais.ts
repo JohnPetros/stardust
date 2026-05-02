@@ -1,6 +1,6 @@
 import type { LspSnippet } from '@stardust/core/global/types'
 
-export const DELEGUA_SNIPPETS_METODOS_GLOBAIS: LspSnippet[] = [
+export const DELEGUA_SNIPPETS_METODOS_GLOBAIS = [
   {
     label: 'aleatorio',
     code: 'aleatorio()',
@@ -97,4 +97,4 @@ export const DELEGUA_SNIPPETS_METODOS_GLOBAIS: LspSnippet[] = [
     label: 'tupla',
     code: 'tupla(${1:})',
   },
-]
+] as const satisfies readonly LspSnippet[]

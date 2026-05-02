@@ -1,3 +1,5 @@
+import type { LspDocumentation } from '@stardust/core/global/types'
+
 export const DELEGUA_DOCUMENTACOES_METODOS_GLOBAIS = [
   {
     word: 'aleatorio',
@@ -321,4 +323,4 @@ Transforma uma lista de elementos em uma tupla de N elementos (2 a 10 elementos)
 ### Formas de uso  `,
     example: 'tupla(vetor)',
   },
-]
+] as const satisfies readonly LspDocumentation[]

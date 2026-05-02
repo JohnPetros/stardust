@@ -1,6 +1,6 @@
 import type { LspSnippet } from '@stardust/core/global/types'
 
-export const DELEGUA_SNIPPETS_METODOS_LISTA: LspSnippet[] = [
+export const DELEGUA_SNIPPETS_METODOS_LISTA = [
   {
     label: 'adicionar',
     code: 'adicionar(${1:})',
@@ -61,8 +61,4 @@ export const DELEGUA_SNIPPETS_METODOS_LISTA: LspSnippet[] = [
     label: 'somar',
     code: 'somar()',
   },
-  {
-    label: 'tamanho',
-    code: 'tamanho()',
-  },
-]
+] as const satisfies readonly LspSnippet[]

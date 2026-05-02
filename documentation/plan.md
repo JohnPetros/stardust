@@ -5,7 +5,7 @@ status: closed
 
 ## Pendencias (quando aplicavel)
 
-- Sem pendencias identificadas no bug report informado.
+Sem pendencias bloqueantes no documento de entrada.
 
 ---
 
@@ -13,73 +13,74 @@ status: closed
 
 | Fase | Objetivo | Depende de | Pode rodar em paralelo com |
 | --- | --- | --- | --- |
-| F1 | Consolidar o contrato funcional da correcao no core (sem alterar dominio, use cases ou contratos protegidos) | - | - |
-| F3 | Implementar a correcao na web para impedir fetch protegido sem autenticacao no historico do assistente | F1 | - |
+| F1 | Definir o contrato compartilhado dos exemplos de Playground no catalogo da linguagem, preservando o contrato atual de autocomplete | - | - |
+| F3 | Integrar o catalogo de exemplos ao editor de snippets da web com dialog, confirmacao e toolbar contextual | F1 | - |
 
-> **Estrategia de paralelismo:** sempre comece pelo core (dominio, structures e use cases). Nesta correcao, apos F1 apenas a fase de `web` e necessaria.
+> **Estratégia de paralelismo:** sempre comece pelo core (domínio, structures e use cases). Assim que o core estiver concluído, as fases de `server`, `web` e `studio` podem ser executadas em paralelo, pois todas dependem apenas do contrato definido no core.
 
 ---
 
-## F1 — Core: Dominio, Structures e Use Cases
+## F1 — Core: Domínio, Structures e Use Cases
 
-**Objetivo:** Definir o contrato funcional da correcao sem dependencia de infraestrutura, preservando que historico de chats permanece recurso autenticado.
+**Objetivo:** Definir o contrato do domínio — entidades, structures, interfaces de repositório/provider e use cases — sem nenhuma dependência de infraestrutura. Essa fase desbloqueia F2, F3 e F4 para rodarem em paralelo.
 
 ### Tarefas
 
-- [x] **T1.1** — Validar e congelar o contrato autenticado do historico de chats
+- [x] **T1.1** — Declarar o catalogo compartilhado `DELEGUA_EXAMPLE_SNIPPETS` com 10 exemplos completos reutilizando `LspSnippet`
   - **Depende de:** -
-  - **Resultado observavel:** Fica explicitado que `ListChatsUseCase` continua exigindo `userId` autenticado e que `GET /conversation/chats` permanece protegido, sem alteracoes em core/server.
+  - **Resultado observavel:** existe o arquivo `packages/lsp/src/constants/delegua-example-snippets.ts` exportando `DELEGUA_EXAMPLE_SNIPPETS: LspSnippet[]` com exatamente 10 itens, na ordem da spec, usando apenas `{ label, code }` sem placeholders do Monaco.
   - **Camada:** `core`
-  - **Artefatos:** `packages/core/src/conversation/use-cases/ListChatsUseCase.ts`, `apps/server/src/app/hono/routers/conversation/ChatsRouter.ts`, `apps/server/src/rest/controllers/conversation/FetchChatsController.ts`
-  - **Concluido em:** 2026-04-24
+  - **Artefatos:** `packages/lsp/src/constants/delegua-example-snippets.ts`
+  - **Concluido em:** 2026-04-29
 
-- [x] **T1.2** — Definir pre-condicoes funcionais para o consumo do historico na UI
+- [x] **T1.2** — Publicar o catalogo novo sem alterar o contrato atual de autocomplete
   - **Depende de:** T1.1
-  - **Resultado observavel:** Fica definido como criterio de implementacao que `fetchChats` e `refetch` do historico so podem executar quando `isAccountAuthenticated` for `true`.
+  - **Resultado observavel:** `packages/lsp/src/constants/index.ts` e o export publico do pacote continuam expondo `DELEGUA_SNIPPETS` inalterado e passam a expor `DELEGUA_EXAMPLE_SNIPPETS` como constante distinta para consumo externo.
   - **Camada:** `core`
-  - **Artefatos:** `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/index.tsx`, `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/useAssistantChatsHistory.ts`
-  - **Concluido em:** 2026-04-24
+  - **Artefatos:** `packages/lsp/src/constants/index.ts`
+  - **Concluido em:** 2026-04-29
 
 ---
 
-## F3 — Web: UI e Integracao
+## F3 — Web: UI e Integração
 
-> ⚡ Pode rodar em paralelo com F2 e F4 apos F1 estar concluida.
+> ⚡ Pode rodar em paralelo com F2 e F4 após F1 estar concluída.
 
-**Objetivo:** Implementar a correcao na aplicacao web para impedir chamadas autenticadas indevidas no carregamento inicial da pagina publica do desafio.
+**Objetivo:** Implementar a interface e integração client-side na aplicação web — widgets, actions e chamadas RPC/REST — consumindo os contratos definidos no core.
 
 ### Tarefas
 
-- [x] **T3.1** — Injetar estado de autenticacao no entry point de `AssistantChatsHistory`
+- [x] **T3.1** — Expor `exampleSnippets` em `useLsp()` sem mudar o retorno atual de `snippets`
   - **Depende de:** T1.2
-  - **Resultado observavel:** `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/index.tsx` passa `isAccountAuthenticated` para `useAssistantChatsHistory`, mantendo a resolucao de dependencias no entry point do widget.
+  - **Resultado observavel:** `apps/web/src/ui/global/hooks/useLsp.ts` retorna `exampleSnippets` com base em `DELEGUA_EXAMPLE_SNIPPETS`, enquanto `snippets` continua alimentando apenas o autocomplete do Monaco.
   - **Camada:** `ui`
-  - **Artefatos:** `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/index.tsx`, `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/useAssistantChatsHistory.ts`
-  - **Concluido em:** 2026-04-24
+  - **Artefatos:** `apps/web/src/ui/global/hooks/useLsp.ts`
+  - **Concluido em:** 2026-04-29
 
-- [x] **T3.2** — Condicionar o fetch inicial do historico a autenticacao
-  - **Depende de:** T3.1
-  - **Resultado observavel:** `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/useAssistantChatsHistory.ts` passa `isEnabled: isAccountAuthenticated` para `usePaginatedCache` e visitantes anonimos nao disparam `GET /conversation/chats` na montagem.
+- [x] **T3.2** — Criar o widget `SnippetExamplesDialog` para listar e selecionar exemplos
+  - **Depende de:** T1.2
+  - **Resultado observavel:** existem `apps/web/src/ui/playground/widgets/components/SnippetExamplesDialog/index.tsx` e `SnippetExamplesDialogView.tsx`, com trigger fechado por padrao, lista acessivel de exemplos e mensagem de estado vazio quando `snippets.length === 0`.
   - **Camada:** `ui`
-  - **Artefatos:** `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/useAssistantChatsHistory.ts`, `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/tests/useAssistantChatsHistory.test.ts`, `apps/web/src/ui/global/hooks/usePaginatedCache.ts`
-  - **Concluido em:** 2026-04-24
+  - **Artefatos:** `apps/web/src/ui/playground/widgets/components/SnippetExamplesDialog/index.tsx`, `apps/web/src/ui/playground/widgets/components/SnippetExamplesDialog/SnippetExamplesDialogView.tsx`
+  - **Concluido em:** 2026-04-29
 
-- [x] **T3.3** — Bloquear `refetch` ao abrir historico sem sessao ativa
-  - **Depende de:** T3.2
-  - **Resultado observavel:** `handleOpenChange` chama `refetch()` apenas quando `isOpen` e `isAccountAuthenticated` forem verdadeiros, evitando `401` esperado para visitante anonimo.
+- [x] **T3.3** — Estender `CodeEditorToolbar` para aceitar acao customizada e ocultar o assistente por contexto
+  - **Depende de:** T1.2
+  - **Resultado observavel:** `CodeEditorToolbar` e `CodeEditorToolbarView` aceitam `options.customActions` e `options.shouldHideAssistantButton`; quando a flag estiver ativa, o botao `Assistente de codigo` nao e renderizado e a acao customizada aparece dentro de `Toolbar.Container`.
   - **Camada:** `ui`
-  - **Artefatos:** `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/useAssistantChatsHistory.ts`, `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/tests/useAssistantChatsHistory.test.ts`
-  - **Concluido em:** 2026-04-24
+  - **Artefatos:** `apps/web/src/ui/global/widgets/components/CodeEditorToolbar/index.tsx`, `apps/web/src/ui/global/widgets/components/CodeEditorToolbar/CodeEditorToolbarView.tsx`
+  - **Concluido em:** 2026-04-29
 
-- [x] **T3.4** — Validar comportamento final da pagina publica do desafio
-  - **Depende de:** T3.3
-  - **Resultado observavel:** Ao abrir `/challenging/challenges/[challengeSlug]/challenge` sem sessao, nenhum toast `Conta nao autorizada` aparece no carregamento inicial; com sessao ativa, historico do assistente continua carregando normalmente.
+- [x] **T3.4** — Implementar no `useSnippetPage` o fluxo local de aplicar exemplo e confirmar sobrescrita
+  - **Depende de:** T1.2
+  - **Resultado observavel:** `useSnippetPage` passa a expor handlers para selecionar e confirmar exemplo; se `snippetTitle` ou `snippetCode` estiverem dirty, a confirmacao e aberta antes da substituicao; se nao estiverem dirty, titulo e codigo sao atualizados localmente com `setValue(..., { shouldDirty: true, shouldValidate: true })` e `playgroudCodeEditorRef.current?.setValue(...)`, sem chamar `createSnippet` nem `updateSnippet`.
+  - **Camada:** `ui`
+  - **Artefatos:** `apps/web/src/ui/playground/widgets/pages/Snippet/useSnippetPage.ts`
+  - **Concluido em:** 2026-04-29
+
+- [x] **T3.5** — Integrar dialog de exemplos e confirmacao na composicao de `SnippetPage`
+  - **Depende de:** T3.1, T3.2, T3.3, T3.4
+  - **Resultado observavel:** em `/playground/snippets/new` e `/playground/snippets/:snippetId`, a toolbar exibe a acao `Exemplos`, abre o dialog local com os 10 itens, pede confirmacao antes de sobrescrever titulo/codigo alterados, nao salva automaticamente e nao mostra o botao `Assistente de codigo`.
   - **Camada:** `web`
-  - **Artefatos:** `apps/web/src/ui/challenging/widgets/layouts/Challenge/AssistantChatbot/AssistantChatsHistory/tests/useAssistantChatsHistory.test.ts`
-  - **Concluido em:** 2026-04-24
-
----
-
-## Divergencias em relacao a Spec
-
-- **T3.2:** Foi necessario corrigir a implementacao de `isEnabled` em `apps/web/src/ui/global/hooks/usePaginatedCache.ts` para que a pre-condicao de autenticacao realmente bloqueie o fetch inicial quando desabilitado.
+  - **Artefatos:** `apps/web/src/ui/playground/widgets/pages/Snippet/index.tsx`
+  - **Concluido em:** 2026-04-29

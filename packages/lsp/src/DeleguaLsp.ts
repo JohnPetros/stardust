@@ -37,7 +37,6 @@ export class DeleguaLsp implements LspProvider {
     )
     const resultadoLexador = this.lexador.mapear(code.split('\n'), -1)
     if (resultadoLexador.erros.length) {
-      console.log(resultadoLexador.erros)
       return this.trateErro(resultadoLexador.erros[0])
     }
     const resultadoAvaliacaoSintatica = await this.avaliadorSintatico.analisar(
@@ -45,7 +44,6 @@ export class DeleguaLsp implements LspProvider {
       0,
     )
     if (resultadoAvaliacaoSintatica.erros.length) {
-      console.log(resultadoAvaliacaoSintatica.erros)
       return this.trateErro(resultadoAvaliacaoSintatica.erros[0])
     }
     const resultadoInterpretador = await interpretador.interpretar(
@@ -53,7 +51,6 @@ export class DeleguaLsp implements LspProvider {
       false,
     )
     if (resultadoInterpretador.erros.length) {
-      console.log(resultadoInterpretador.erros)
       return this.trateErro(resultadoInterpretador.erros[0])
     }
 
