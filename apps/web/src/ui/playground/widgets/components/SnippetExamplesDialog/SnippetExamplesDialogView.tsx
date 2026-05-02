@@ -24,7 +24,7 @@ export const SnippetExamplesDialogView = ({
         <div className='mt-6 max-h-[28rem] overflow-auto'>
           {snippets.length === 0 ? (
             <p className='text-center text-sm text-gray-300'>
-              Nenhum exemplo disponivel no momento.
+              Nenhum exemplo disponível no momento.
             </p>
           ) : (
             <div className='grid grid-cols-1 gap-2 sm:grid-cols-2'>
