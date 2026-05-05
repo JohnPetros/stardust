@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.5.2 (2026-05-05)
+
+* 📚 docs: update planning and issue publishing guidance (c290f9ca9)
+* 📚 docs: close playground example snippets spec (eececcb6a)
+* 🧪 test: cover playground snippet examples flow (9e4ecee13)
+* 🖥️ ui: add playground example snippets flow (efa796f92)
+* 📟 rpc: protect playground snippets page access (79a056438)
+* 🧰 prov: expand delegua editor catalogs and example snippets (ad2447cec)
+* 📚 docs: correct formatting in commit-code-prompt documentation for design category (8506887fe)
+* 🎨 design: add Playground Snippets Hub design with new components and assets (698ec840e)
+* 📚 docs: add detailed documentation for the Playground feature, including requirements and UI/UX guidelines (db95746d8)
+* 📚 docs: update test creation workflow validations (75464b675)
+* 🧪 test: add shop REST controller coverage (70fcda880)
+* 🧪 test: add and align rest controller test suites for strict typing (9c3939c15)
+* 🐛 fix: ensure proper timeout handling for last unlocked star scroll (d959dd38d)
+* 🐛 fix: delay last unlocked star scroll until layout stabilizes (d585518ef)
+* 🐛 fix: keep challenge list visible during pagination loading (caa703bdd)
+* ♻️ refactor: remove rankings cron function registration (af834dc66)
+
 ## 1.5.1 (2026-04-28)
 
 * 🚧 wip: add parser and interpreter error logging in lsp (9ce06bde6)
