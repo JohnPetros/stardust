@@ -1,4 +1,4 @@
-import { SupabaseStorageProvider } from '@/provision/storage'
+import { SupabaseStorageProvider } from '@/provision/storage/SupabaseStorageProvider'
 import { HonoHttp } from '../HonoHttp'
 import type { Context, Next } from 'hono'
 import { VerifyFileExistsController } from '@/rest/controllers/storage'

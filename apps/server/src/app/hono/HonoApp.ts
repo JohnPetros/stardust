@@ -63,7 +63,7 @@ declare module 'hono' {
 }
 
 export class HonoApp {
-  private readonly hono = new Hono()
+  readonly hono = new Hono()
   private readonly telemetryProvider = new SentryTelemetryProvider()
   private readonly notificationService = new DiscordNotificationService(
     new AxiosRestClient(ENV.discordWebhookUrl),
@@ -73,6 +73,7 @@ export class HonoApp {
     this.setUpCors()
     this.registerMiddlewares()
     this.registerRoutes()
+    this.registerInngestRoute()
     this.setUpErrorHandler()
 
     const server = serve(
@@ -88,7 +89,7 @@ export class HonoApp {
     return new HonoServer(this.hono, server)
   }
 
-  private setUpErrorHandler() {
+  setUpErrorHandler() {
     this.hono.onError(async (error, context) => {
       console.error('Error:', error)
 
@@ -150,7 +151,7 @@ export class HonoApp {
     )
   }
 
-  private registerRoutes() {
+  registerRoutes() {
     const profileRouter = new ProfileRouter(this)
     const authRouter = new AuthRouter(this)
     const spaceRouter = new SpaceRouter(this)
@@ -188,12 +189,12 @@ export class HonoApp {
     this.hono.route('/', mcpRouter.registerRoutes())
   }
 
-  private registerMiddlewares() {
+  registerMiddlewares() {
     this.hono.use('*', this.createSupabaseClient())
     this.hono.use('*', this.createInngestAmqp())
   }
 
-  private registerInngestRoute() {
+  registerInngestRoute() {
     this.hono.on(['GET', 'PUT', 'POST'], '/inngest', (context) => {
       const supabase = context.get('supabase')
       const profileFunctions = new ProfileFunctions(inngest)
