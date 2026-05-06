@@ -1,7 +1,7 @@
 import type { Config } from 'jest'
 
 const config: Config = {
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/default-esm',
 
   testEnvironment: 'node',
 
@@ -22,13 +22,19 @@ const config: Config = {
         useESM: true,
       },
     ],
+    '^.+\\.m?[jc]s$': [
+      'babel-jest',
+      {
+        presets: [['@babel/preset-env', { targets: { node: 'current' }, modules: 'commonjs' }]],
+      },
+    ],
   },
 
-  moduleFileExtensions: ['ts', 'js', 'json'],
+  moduleFileExtensions: ['ts', 'js', 'mjs', 'cjs', 'json'],
 
   extensionsToTreatAsEsm: ['.ts'],
 
-  transformIgnorePatterns: ['node_modules/(?!(.*\\.mjs$))'],
+  transformIgnorePatterns: ['node_modules/(?!((@mastra|tokenx|ai|@ai-sdk)/))'],
 
   setupFiles: ['<rootDir>/jest.setup.js'],
 }
