@@ -7,6 +7,7 @@ export interface AchievementsRepository {
   findAll(): Promise<Achievement[]>
   findAllUnlockedByUser(userId: Id): Promise<Achievement[]>
   add(achievement: Achievement): Promise<void>
+  addMany(achievements: Achievement[]): Promise<void>
   replace(achievement: Achievement): Promise<void>
   replaceMany(achievements: Achievement[]): Promise<void>
   remove(achievement: Achievement): Promise<void>
