@@ -1,3 +1,3 @@
-import { app } from './app/index.js'
+import { app } from './app'
 
-app.startServer()
+void app.startServer()

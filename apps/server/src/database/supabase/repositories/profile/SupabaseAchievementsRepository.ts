@@ -80,6 +80,35 @@ export class SupabaseAchievementsRepository
     }
   }
 
+  async addMany(achievements: Achievement[]): Promise<void> {
+    if (achievements.length === 0) {
+      return
+    }
+
+    const supabaseAchievements = achievements.map((achievement) => {
+      const supabaseAchievement = SupabaseAchievementMapper.toSupabase(achievement)
+
+      return {
+        id: achievement.id.value,
+        name: supabaseAchievement.name,
+        icon: supabaseAchievement.icon,
+        reward: supabaseAchievement.reward,
+        description: supabaseAchievement.description,
+        metric: supabaseAchievement.metric,
+        position: supabaseAchievement.position,
+        required_count: supabaseAchievement.required_count,
+      }
+    })
+
+    const { error } = await this.supabase
+      .from('achievements')
+      .insert(supabaseAchievements)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
+
   async replace(achievement: Achievement): Promise<void> {
     const supabaseAchievement = SupabaseAchievementMapper.toSupabase(achievement)
     const { error } = await this.supabase

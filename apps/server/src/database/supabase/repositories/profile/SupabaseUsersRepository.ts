@@ -25,33 +25,59 @@ export class SupabaseUsersRepository
   implements UsersRepository
 {
   async findById(userId: Id): Promise<User | null> {
-    const { data, error } = await this.supabase
+    const fallbackSelect = `*,
+      avatar:avatars(*), 
+      rocket:rockets(*), 
+      tier:tiers(*),
+      users_unlocked_stars(star_id),
+      users_unlocked_achievements(achievement_id),
+      users_rescuable_achievements(achievement_id),
+      users_acquired_rockets(rocket_id),
+      users_acquired_avatars(avatar_id),
+      users_completed_challenges(challenge_id),
+      users_upvoted_solutions(solution_id),
+      users_upvoted_comments(comment_id)`
+    const fullSelect = `${fallbackSelect}, insignias(role), users_recently_unlocked_stars(star_id)`
+
+    const primaryResponse = await this.supabase
       .from('users')
-      .select(
-        `*,
-          avatar:avatars(*), 
-          rocket:rockets(*), 
-          tier:tiers(*),
-          insignias(role),
-          users_unlocked_stars(star_id),
-          users_recently_unlocked_stars(star_id),
-          users_unlocked_achievements(achievement_id),
-          users_rescuable_achievements(achievement_id),
-          users_acquired_rockets(rocket_id),
-          users_acquired_avatars(avatar_id),
-          users_completed_challenges(challenge_id),
-          users_upvoted_solutions(solution_id),
-          users_upvoted_comments(comment_id)`,
-      )
+      .select(fullSelect)
       .eq('id', userId.value)
       .single()
+
+    let data: SupabaseUser | null = primaryResponse.data as SupabaseUser | null
+    let error = primaryResponse.error
+
+    if (
+      error?.message.includes(
+        "Could not find a relationship between 'users' and 'insignias'",
+      ) ||
+      error?.message.includes(
+        "Could not find a relationship between 'users' and 'users_recently_unlocked_stars'",
+      )
+    ) {
+      const fallbackResponse = await this.supabase
+        .from('users')
+        .select(fallbackSelect)
+        .eq('id', userId.value)
+        .single()
+
+      data = fallbackResponse.data as SupabaseUser | null
+      error = fallbackResponse.error
+    }
 
     if (error) {
       return this.handleQueryPostgresError(error)
     }
 
+    if (!data) {
+      return null
+    }
+
     const supabaseUser: SupabaseUser = {
-      ...data,
+      ...(data as SupabaseUser),
+      insignias: data.insignias ?? [],
+      users_recently_unlocked_stars: data.users_recently_unlocked_stars ?? [],
       users_completed_planets: await this.findUserCompletedPlanets(data.id),
     }
 
@@ -481,6 +507,38 @@ export class SupabaseUsersRepository
     })
 
     if (error) throw new SupabasePostgreError(error)
+  }
+
+  async addMany(users: User[]): Promise<void> {
+    if (users.length === 0) {
+      return
+    }
+
+    const supabaseUsers = users.map((user) => {
+      const supabaseUser = SupabaseUserMapper.toSupabase(user)
+
+      return {
+        id: user.id.value,
+        name: supabaseUser.name,
+        email: supabaseUser.email,
+        slug: supabaseUser.slug,
+        avatar_id: supabaseUser.avatar_id,
+        rocket_id: supabaseUser.rocket_id,
+        tier_id: supabaseUser.tier_id,
+        coins: supabaseUser.coins,
+        xp: supabaseUser.xp,
+        weekly_xp: supabaseUser.weekly_xp,
+        streak: supabaseUser.streak,
+        level: supabaseUser.level,
+        week_status: supabaseUser.week_status,
+      }
+    })
+
+    const { error } = await this.supabase.from('users').insert(supabaseUsers)
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
   }
 
   async addAcquiredRocket(rocketId: Id, userId: Id): Promise<void> {

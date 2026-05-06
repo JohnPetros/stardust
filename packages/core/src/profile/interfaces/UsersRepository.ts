@@ -29,6 +29,7 @@ export interface UsersRepository {
   containsWithName(name: Name): Promise<Logical>
   findAll(): Promise<User[]>
   add(user: User): Promise<void>
+  addMany(users: User[]): Promise<void>
   addAcquiredAvatar(avatarId: Id, userId: Id): Promise<void>
   addAcquiredRocket(rocketId: Id, userId: Id): Promise<void>
   addAcquiredInsignia(insigniaRole: InsigniaRole, userId: Id): Promise<void>

@@ -29,6 +29,14 @@ export class AchievementsFaker {
     }
   }
 
+  static fakeUniqueDto(baseDto?: Partial<AchievementDto>): AchievementDto {
+    return AchievementsFaker.fakeDto({
+      name: `achievement-${faker.string.uuid()}`,
+      icon: `${faker.string.uuid()}.jpg`,
+      ...baseDto,
+    })
+  }
+
   static fakeMany(count?: number, baseDto?: Partial<AchievementDto>): Achievement[] {
     return Array.from({ length: count ?? 10 }).map(() => AchievementsFaker.fake(baseDto))
   }
@@ -39,6 +47,15 @@ export class AchievementsFaker {
   ): AchievementDto[] {
     return Array.from({ length: count ?? 10 }).map(() =>
       AchievementsFaker.fakeDto(baseDto),
+    )
+  }
+
+  static fakeManyUniqueDto(
+    count?: number,
+    baseDto?: Partial<AchievementDto>,
+  ): AchievementDto[] {
+    return Array.from({ length: count ?? 10 }).map(() =>
+      AchievementsFaker.fakeUniqueDto(baseDto),
     )
   }
 }

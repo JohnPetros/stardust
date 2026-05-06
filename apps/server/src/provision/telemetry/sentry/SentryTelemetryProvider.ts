@@ -14,8 +14,6 @@ export class SentryTelemetryProvider implements TelemetryProvider {
     })
     if (!sentry) throw new AppError('Failed to initialize Sentry')
 
-    console.log('🔍 Sentry initialized')
-
     this.sentry = sentry
   }
 
