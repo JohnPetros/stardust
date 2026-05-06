@@ -83,10 +83,12 @@ jobs:
           version: latest
 
       - name: Setup Supabase
+        working-directory: apps/server
         run: supabase start
 
-      - name: Run migrations
-        run: supabase migration up
+      - name: Reset local database
+        working-directory: apps/server
+        run: supabase db reset --local --yes
 
       - uses: Infisical/secrets-action@v1.0.9
         with:
