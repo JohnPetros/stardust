@@ -39,11 +39,14 @@ export class SupabaseUsersRepository
       users_upvoted_comments(comment_id)`
     const fullSelect = `${fallbackSelect}, insignias(role), users_recently_unlocked_stars(star_id)`
 
-    let { data, error } = await this.supabase
+    const primaryResponse = await this.supabase
       .from('users')
       .select(fullSelect)
       .eq('id', userId.value)
       .single()
+
+    let data: SupabaseUser | null = primaryResponse.data as SupabaseUser | null
+    let error = primaryResponse.error
 
     if (
       error?.message.includes(
@@ -59,7 +62,7 @@ export class SupabaseUsersRepository
         .eq('id', userId.value)
         .single()
 
-      data = fallbackResponse.data
+      data = fallbackResponse.data as SupabaseUser | null
       error = fallbackResponse.error
     }
 
@@ -67,8 +70,14 @@ export class SupabaseUsersRepository
       return this.handleQueryPostgresError(error)
     }
 
+    if (!data) {
+      return null
+    }
+
     const supabaseUser: SupabaseUser = {
-      ...data,
+      ...(data as SupabaseUser),
+      insignias: data.insignias ?? [],
+      users_recently_unlocked_stars: data.users_recently_unlocked_stars ?? [],
       users_completed_planets: await this.findUserCompletedPlanets(data.id),
     }
 
