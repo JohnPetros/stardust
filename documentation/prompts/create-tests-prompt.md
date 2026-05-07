@@ -10,6 +10,7 @@ Orientar a criacao de testes unitarios e de integracao **padronizados** e **efic
 
 - integridade da logica de negocio
 - orquestracao correta de `handlers`
+- fidelidade da borda HTTP nas rotas da aplicacao server
 - fidelidade funcional de componentes de UI
 
 ## Escopo permitido
@@ -20,17 +21,18 @@ No StarDust, **so e permitido criar testes para**:
 - `Use Case`
 - `View` ou `Hook`
 - `handlers` (`Controller`, `Job`, `Action`, `Tool`)
+- rotas HTTP da app server (`apps/server`) via testes de integracao
 
 **Nao e permitido criar testes novos** para `repository`, `service`, `provider`,
 `gateway`, `client`, `mapper`, `factory`, `config`, adaptadores de
 infraestrutura ou arquivos de composicao. Se a entrada apontar para um arquivo
 fora desse escopo, nao gere teste direto para ele; em vez disso, identifique o
-objeto de dominio, use case, widget ou handler responsavel pelo comportamento e
-concentre a cobertura nele.
+objeto de dominio, use case, widget, handler ou rota responsavel pelo
+comportamento e concentre a cobertura nele.
 
 ## Entrada
 
-- **Codigo fonte:** arquivo a ser testado (`Entity`, `Structure`, `Use Case`, `Controller`, `Action`, `Tool`, `Hook` ou `Widget`).
+- **Codigo fonte:** arquivo a ser testado (`Entity`, `Structure`, `Use Case`, `Controller`, `Action`, `Tool`, `Hook`, `Widget` ou `Route`).
 
 ## Regras de execucao
 
@@ -55,6 +57,7 @@ Identifique o tipo de codigo e siga a regra correspondente em `documentation/rul
 - **Objetos de dominio:** [domain-objects-testing-rules.md](../rules/domain-objects-testing-rules.md)
 - **Casos de uso:** [use-cases-testing-rules.md](../rules/use-cases-testing-rules.md)
 - **Handlers** (`REST`, `RPC`, `AI`, `Queue`): [handlers-testing-rules.md](../rules/handlers-testing-rules.md)
+- **Rotas HTTP da app server:** [server-routes-testing-rules.md](../rules/server-routes-testing-rules.md)
 - **Widgets** (UI): [widget-tests-rules.md](../rules/widget-tests-rules.md)
 
 Se o arquivo nao pertencer a uma dessas categorias permitidas, interrompa a
@@ -63,17 +66,21 @@ receber testes dedicados segundo as regras do projeto.
 
 ### Estrutura e nomenclatura
 
-- **Localizacao:** crie testes **co-localizados** em uma subpasta `tests/` no diretorio do arquivo original.
+- **Localizacao padrao:** crie testes **co-localizados** em uma subpasta `tests/` no diretorio do arquivo original.
+- **Excecao para rotas do server:** crie os testes em `apps/server/src/tests/routes/<dominio>/...`, espelhando o dominio e o recurso testado.
 - **Extensao:**
 
 | Tipo | Extensao |
 | --- | --- |
 | Logica e `handlers` | `.test.ts` |
+| Rotas HTTP do server | `.test.ts` |
 | Componentes (`Widget`, `Page`) | `.test.tsx` |
 
 - **Exemplo:**
   - Original: `src/auth/actions/SignInAction.ts`
   - Teste: `src/auth/actions/tests/SignInAction.test.ts`
+  - Rota server: `apps/server/src/app/hono/routers/profile/achievements/CreateAchievementRoute.ts`
+  - Teste: `apps/server/src/tests/routes/profile/achievements/CreateAchievementRoute.test.ts`
 
 ### Stack de testes
 
@@ -81,6 +88,7 @@ receber testes dedicados segundo as regras do projeto.
 - **Mocking:** `ts-jest-mocker` (usar `mock<Interface>()` e `Mock<Interface>`)
 - **Fakers:** `@faker-js/faker` via classes estaticas em `domain/entities/fakers/`
 - **React:** `@testing-library/react` e `@testing-library/user-event`
+- **Rotas server:** `supertest`, `HonoFixture`, `SupabaseFixture`, `AuthFixture` e fixtures de dominio quando necessario
 
 ### Preparacao de dados (`fakers`)
 
@@ -92,6 +100,7 @@ receber testes dedicados segundo as regras do projeto.
 - **Domain objects:** validacoes de regras no construtor/factory e metodos de comportamento.
 - **Use cases:** 100% da logica de negocio, cobrindo `happy path` e todas as excecoes de dominio.
 - **Handlers:** extracao de dados do contexto (`Http`, `Call`, `Amqp`, `Mcp`), orquestracao do caso de uso/servico e formatacao da resposta.
+- **Rotas HTTP do server:** exercitar a app Hono real, cobrindo autenticacao, validacao, autorizacao, mapeamento de erros, payload de resposta e efeitos persistidos no banco sem mockar dependencias internas, salvo necessidade excepcional.
 - **Widgets:**
   - testar `hooks` e `views` separadamente usando `Hook()` e `View()`
   - para formularios complexos, testar integracao no `Widget` (Index)
@@ -105,28 +114,36 @@ receber testes dedicados segundo as regras do projeto.
 ### Workflow sugerido
 
 1. Setup: criar `tests/` e o arquivo `<Nome>.test.ts(x)`.
+   Para rotas do server, criar o arquivo em `apps/server/src/tests/routes/<dominio>/`.
 2. Mocking: identificar interfaces de dependencia e instanciar `mocks`.
+   Para rotas do server, preparar fixtures reais em vez de mockar a stack interna.
 3. Implementacao: comecar pelo caminho de sucesso e depois cobrir cenarios de erro/excecao.
 4. Validacao de testes: executar no escopo correto do monorepo.
 5. Validacao de qualidade: executar `typecheck` e `codecheck` antes de concluir.
 
 ```bash
-npm run test:web
-npm run test:server
-npm run test:studio
-npm run test:core
+npm run test
 npm run typecheck
 npm run codecheck
 
-cd apps/web && npm run test -- caminho/do/arquivo
-cd apps/server && npm run test -- caminho/do/arquivo
-cd apps/studio && npm run test -- caminho/do/arquivo
-cd packages/core && npm run test -- caminho/do/arquivo
+npm run test -w @stardust/web
+npm run test -w @stardust/server
+npm run test -w @stardust/studio
+npm run test -w @stardust/core
 
-cd apps/web && npm run typecheck && npm run codecheck
-cd apps/server && npm run typecheck && npm run codecheck
-cd apps/studio && npm run typecheck && npm run codecheck
-cd packages/core && npm run typecheck && npm run codecheck
+npm run test -w @stardust/web -- caminho/do/arquivo
+npm run test -w @stardust/server -- caminho/do/arquivo
+npm run test -w @stardust/studio -- caminho/do/arquivo
+npm run test -w @stardust/core -- caminho/do/arquivo
+
+npm run typecheck -w @stardust/web
+npm run codecheck -w @stardust/web
+npm run typecheck -w @stardust/server
+npm run codecheck -w @stardust/server
+npm run typecheck -w @stardust/studio
+npm run codecheck -w @stardust/studio
+npm run typecheck -w @stardust/core
+npm run codecheck -w @stardust/core
 ```
 
 <Prompt para subagent>
