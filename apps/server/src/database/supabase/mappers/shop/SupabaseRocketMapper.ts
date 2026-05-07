@@ -27,14 +27,12 @@ export class SupabaseRocketMapper {
   static toSupabase(rocket: Rocket): SupabaseRocketPayload {
     const rocketDto = rocket.dto
 
-    const supabaseRocket: SupabaseRocketPayload = {
+    return {
       id: rocket.id.value,
       name: rocketDto.name,
       price: rocketDto.price,
       image: rocketDto.image,
-      is_purchasable: rocketDto.isPurchasable ?? true,
-    }
-
-    return supabaseRocket
+      slug: rocket.name.slug.value,
+    } as SupabaseRocketPayload
   }
 }
