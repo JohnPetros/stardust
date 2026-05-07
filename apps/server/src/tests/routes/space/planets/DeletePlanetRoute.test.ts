@@ -1,0 +1,86 @@
+import request from 'supertest'
+
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import { AuthError, ValidationError } from '@stardust/core/global/errors'
+import { Id } from '@stardust/core/global/structures'
+import { PlanetNotFoundError } from '@stardust/core/space/errors'
+import { PlanetsFaker } from '@stardust/core/space/entities/fakers'
+
+import { SupabasePlanetsRepository } from '@/database'
+import { AuthFixture } from '@/tests/fixtures/AuthFixture'
+import { HonoFixture } from '@/tests/fixtures/HonoFixture'
+import { SupabaseFixture } from '@/tests/fixtures/SupabaseFixture'
+
+describe('[DELETE] /space/planets/:planetId', () => {
+  const honoFixture = new HonoFixture()
+  const supabaseFixture = new SupabaseFixture()
+  const authFixture = new AuthFixture(supabaseFixture.supabase)
+  const planetsRepository = new SupabasePlanetsRepository(supabaseFixture.supabase)
+
+  beforeAll(async () => {
+    await honoFixture.setup()
+  })
+
+  beforeEach(async () => {
+    await supabaseFixture.supabase.from('stars').delete()
+    await supabaseFixture.supabase.from('planets').delete()
+    await supabaseFixture.clearDatabase()
+    await authFixture.createAccount()
+  })
+
+  it('should return 401 when not authenticated', async () => {
+    const response = await request(honoFixture.server).delete(
+      `/space/planets/${Id.create().value}`,
+    )
+
+    expect(response.status).toBe(HTTP_STATUS_CODE.unauthorized)
+    expect(response.body).toEqual(
+      expect.objectContaining({ ...new AuthError('Conta não autorizada') }),
+    )
+  })
+
+  it('should return 400 when planet id is invalid', async () => {
+    const response = await request(honoFixture.server)
+      .delete('/space/planets/invalid-id')
+      .set(authFixture.getAuthorizationHeader())
+
+    expect(response.status).toBe(HTTP_STATUS_CODE.badRequest)
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        ...new ValidationError([{ name: 'planetId', messages: ['Invalid uuid'] }]),
+      }),
+    )
+  })
+
+  it('should return 404 when planet does not exist', async () => {
+    const response = await request(honoFixture.server)
+      .delete(`/space/planets/${Id.create().value}`)
+      .set(authFixture.getAuthorizationHeader())
+
+    expect(response.status).toBe(HTTP_STATUS_CODE.notFound)
+    expect(response.body).toEqual(
+      expect.objectContaining({ ...new PlanetNotFoundError() }),
+    )
+  })
+
+  it('should delete a planet', async () => {
+    const planet = PlanetsFaker.fake({
+      position: 1,
+      stars: [],
+      completionCount: 0,
+      userCount: 0,
+      isAvailable: false,
+    })
+    await planetsRepository.add(planet)
+
+    const response = await request(honoFixture.server)
+      .delete(`/space/planets/${planet.id.value}`)
+      .set(authFixture.getAuthorizationHeader())
+
+    const deletedPlanet = await planetsRepository.findById(planet.id)
+
+    expect(response.status).toBe(HTTP_STATUS_CODE.noContent)
+    expect(response.text).toBe('')
+    expect(deletedPlanet).toBeNull()
+  })
+})
