@@ -1,4 +1,5 @@
 export type { AchievementsRepository } from './AchievementsRepository'
+export type { NotesRepository } from './NotesRepository'
 export type { ProfileService } from './ProfileService'
 export type { ProfileChannel } from './ProfileChannel'
 export type { UsersRepository } from './UsersRepository'
