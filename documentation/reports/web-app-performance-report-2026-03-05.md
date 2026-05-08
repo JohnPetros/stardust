@@ -160,7 +160,7 @@ Todas as evidencias abaixo foram verificadas diretamente no codigo fonte.
   import { Canvas } from '@react-three/fiber'
   ```
 - **Impacto:** ~800KB+ de JS adicionados ao bundle da landing page. Afeta TODOS os visitantes iniciais.
-- **Risco:** Baixo. Regressao: flash de conteudo vazio ate o componente carregar.
+- **Risco:** Baixo. Regressao: flash de conteúdo vazio ate o componente carregar.
 - **Correcao (quick win):** Envolver o componente `Particles` com `next/dynamic({ ssr: false })`.
 - **Como validar:** `next build` -> comparar chunk size da rota `/`.
 - **Estimativa:** S (15 min).

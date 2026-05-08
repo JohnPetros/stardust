@@ -50,7 +50,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Execucao local:** O codigo digitado pode ser executado diretamente no playground.
 - **Catalogo de exemplos:** O editor deve oferecer uma acao manual `Exemplos`, fechada por padrao, com 10 exemplos iniciais para acelerar o preenchimento do editor.
 - **Aplicacao local:** Ao selecionar um exemplo, o sistema preenche titulo e codigo apenas no estado local do editor, sem salvar automaticamente.
-- **Confirmacao de substituicao:** Se titulo ou codigo ja tiverem alteracoes locais, o sistema deve solicitar confirmacao antes de substituir o conteudo atual.
+- **Confirmacao de substituicao:** Se titulo ou codigo ja tiverem alteracoes locais, o sistema deve solicitar confirmacao antes de substituir o conteúdo atual.
 - **Persistencia protegida:** Se o usuario tentar salvar sem estar autenticado, o sistema deve solicitar login antes de concluir a persistencia.
 - **Retorno ao hub:** O usuario deve conseguir voltar para a listagem de snippets a partir do editor.
 
@@ -59,12 +59,12 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Editor:** A tela deve oferecer campo de titulo e editor de codigo no mesmo fluxo.
 - **Barra de acoes:** O usuario deve ter acesso a acoes de voltar, executar, salvar e abrir o catalogo de exemplos.
 - **Sem assistente de codigo:** O editor de snippets nao deve exibir o botao do assistente de codigo nesse contexto.
-- **Confirmacao acessivel:** A substituicao de conteudo deve usar dialogo confirmatorio acionavel por teclado.
+- **Confirmacao acessivel:** A substituicao de conteúdo deve usar dialogo confirmatorio acionavel por teclado.
 - **Responsividade:** O editor deve ocupar a area util da tela em diferentes tamanhos de viewport.
 - **Acessibilidade:** Campos e botoes devem possuir rotulos compreensiveis e navegacao por teclado.
 - **Feedback:** O sistema deve exibir feedback visual para salvar com sucesso, erro ou processamento em andamento.
 - **Performance:** A abertura do catalogo de exemplos deve ser local e imediata, sem requisicoes adicionais.
-- **Confiabilidade:** Cancelar a substituicao de um exemplo nao deve apagar o conteudo atual.
+- **Confiabilidade:** Cancelar a substituicao de um exemplo nao deve apagar o conteúdo atual.
 - **Compatibilidade:** O fluxo deve funcionar em mobile e desktop.
 
 #### REQ-03 Salvar e atualizar snippets
@@ -90,7 +90,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Acessibilidade:** Mensagens de erro e sucesso devem ser perceptiveis para tecnologias assistivas.
 - **Feedback:** O usuario deve receber confirmacao imediata quando a operacao terminar.
 - **Performance:** O salvamento deve ocorrer em uma unica interacao, sem etapas adicionais obrigatorias.
-- **Confiabilidade:** Falhas nao devem apagar automaticamente o conteudo digitado.
+- **Confiabilidade:** Falhas nao devem apagar automaticamente o conteúdo digitado.
 - **Compatibilidade:** O mesmo fluxo deve valer para criacao e edicao.
 
 #### REQ-04 Gerenciar snippets salvos
@@ -158,10 +158,10 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 
 ##### Regras de UI/UX
 
-- **Leitura do snippet:** O usuario deve conseguir abrir o snippet publico e visualizar seu conteudo no editor.
+- **Leitura do snippet:** O usuario deve conseguir abrir o snippet publico e visualizar seu conteúdo no editor.
 - **Ausencia de acoes de dono:** A interface nao deve induzir o visitante a acreditar que pode gerenciar um snippet de terceiro.
 - **Responsividade:** A visualizacao por link deve funcionar em mobile e desktop.
-- **Acessibilidade:** O acesso ao conteudo e aos controles disponiveis deve funcionar por teclado.
+- **Acessibilidade:** O acesso ao conteúdo e aos controles disponiveis deve funcionar por teclado.
 - **Feedback:** Quando o acesso nao for permitido, o sistema deve comunicar isso de forma explicita.
 - **Performance:** Abrir um snippet publico por link deve ocorrer em fluxo direto, sem navegacao intermediaria obrigatoria.
 - **Confiabilidade:** O sistema deve respeitar a visibilidade configurada pelo autor.
@@ -176,8 +176,8 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 1. O usuario acessa a listagem de snippets do playground autenticado.
 2. O usuario aciona a criacao de um novo snippet.
 3. O usuario preenche titulo e codigo no editor ou aplica um exemplo pronto pelo catalogo `Exemplos`.
-4. Se houver conteudo local e um novo exemplo for escolhido, o sistema pede confirmacao antes de substituir.
-5. O usuario executa o codigo, se desejar validar o conteudo antes de salvar.
+4. Se houver conteúdo local e um novo exemplo for escolhido, o sistema pede confirmacao antes de substituir.
+5. O usuario executa o codigo, se desejar validar o conteúdo antes de salvar.
 6. O usuario tenta salvar:
    - **Sucesso:** O snippet e persistido com titulo, codigo e visibilidade definidos.
    - **Falha:** O sistema apresenta erro de validacao ou solicita login para concluir a persistencia.
@@ -200,7 +200,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 2. O usuario ajusta a visibilidade do snippet.
 3. O sistema valida a configuracao:
    - **Sucesso:** O snippet permanece salvo com o novo status de visibilidade.
-   - **Falha:** O sistema informa o erro e preserva o conteudo.
+   - **Falha:** O sistema informa o erro e preserva o conteúdo.
 4. Quando o snippet puder ser compartilhado, o usuario copia o link direto.
 5. O sistema valida o acesso ao link:
    - **Sucesso:** O usuario acessa diretamente o snippet publico.
@@ -213,7 +213,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 3. O sistema valida o acesso:
    - **Sucesso:** O snippet publico e exibido para visualizacao e uso no editor.
    - **Falha:** O sistema exibe a mensagem de indisponibilidade quando o snippet nao puder ser acessado.
-4. O usuario navega pelo conteudo visivel do snippet.
+4. O usuario navega pelo conteúdo visivel do snippet.
 5. O sistema preserva as restricoes de gerenciamento:
    - **Sucesso:** O visitante apenas visualiza o snippet.
    - **Falha:** Qualquer tentativa de acao reservada ao autor deve permanecer indisponivel.

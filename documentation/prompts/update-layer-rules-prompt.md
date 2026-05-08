@@ -4,7 +4,7 @@ description: Atualizar um documento de regras de uma camada existente, corrigind
 
 # Prompt: Atualizar Regras de Camada
 
-**Objetivo:** Atualizar o documento `{ARQUIVO_ALVO}` (regras da camada `{CAMADA}`) preservando o conteudo valido existente, corrigindo problemas estruturais, validando referencias a paths e alinhando o documento com a arquitetura e convencoes vigentes do projeto. O resultado deve ser o Markdown final pronto para substituir o arquivo diretamente.
+**Objetivo:** Atualizar o documento `{ARQUIVO_ALVO}` (regras da camada `{CAMADA}`) preservando o conteúdo valido existente, corrigindo problemas estruturais, validando referencias a paths e alinhando o documento com a arquitetura e convencoes vigentes do projeto. O resultado deve ser o Markdown final pronto para substituir o arquivo diretamente.
 
 **Entrada:**
 
@@ -29,7 +29,7 @@ description: Atualizar um documento de regras de uma camada existente, corrigind
 
 1. **Entendimento e validacao de entradas**
    - Confirmar que `{ARQUIVO_ALVO}` existe e e um arquivo Markdown.
-   - Ler o conteudo atual na integra e identificar:
+   - Ler o conteúdo atual na integra e identificar:
      - Lacunas em relacao ao template padrao de regras de camada.
      - Repeticoes, inconsistencias de termos e problemas de hierarquia (H1/H2/H3).
      - Todos os paths e links referenciados no documento (extrair como lista).
@@ -42,10 +42,10 @@ description: Atualizar um documento de regras de uma camada existente, corrigind
      - `documentation/rules/rules.md`
    - Se houver ferramenta de busca no repositorio (MCP Serena), validar os paths listados na etapa anterior e localizar 2-5 exemplos reais da camada para referenciar.
    - Se houver duvida de biblioteca/framework, consultar documentacao oficial com ferramenta de docs (MCP Context7).
-   - Sem ferramentas, solicitar ao usuario: conteudo de `{ARQUIVO_ALVO}`, docs base relevantes e os 2-5 exemplos minimos necessarios.
+   - Sem ferramentas, solicitar ao usuario: conteúdo de `{ARQUIVO_ALVO}`, docs base relevantes e os 2-5 exemplos minimos necessarios.
 
 3. **Atualizacao do documento (reescrita final)**
-   - Reescrever preservando conteudo valido e aplicando as correcoes de `{OBJETIVO_DA_ATUALIZACAO}`.
+   - Reescrever preservando conteúdo valido e aplicando as correcoes de `{OBJETIVO_DA_ATUALIZACAO}`.
    - Manter tom profissional, direto e tecnico.
    - Corpo do texto em Portugues (Brasil); termos tecnicos em Ingles como `code` (ex: `provider`, `repository`, `service`, `DTO`, `handler`, `runtime`).
    - Melhorar escaneabilidade:
@@ -130,11 +130,11 @@ O documento atualizado deve seguir exatamente esta estrutura de secoes:
 - Nao pular niveis de cabecalho (H1 -> H2 -> H3).
 - Nao omitir secoes obrigatorias do template.
 - Nao inventar paths, nomes de arquivos, contratos ou componentes inexistentes.
-- Preservar conteudo valido do documento original — atualizar nao e reescrever do zero sem criterio.
+- Preservar conteúdo valido do documento original — atualizar nao e reescrever do zero sem criterio.
 - Manter linguagem normativa: usar "deve", "nao deve", "pode" com criterio.
 - Termos tecnicos permanecem em Ingles como `code`.
 - Se houver conflito entre `{RESTRICOES}` e o padrao do template, priorizar `{RESTRICOES}` e registrar o impacto em `## Notas`.
-- Entregar o conteudo Markdown completo e final, pronto para substituir `{ARQUIVO_ALVO}` diretamente.
+- Entregar o conteúdo Markdown completo e final, pronto para substituir `{ARQUIVO_ALVO}` diretamente.
 
 **Saida esperada:**
 
@@ -149,7 +149,7 @@ Alem do documento Markdown final, incluir ao final um bloco de validacao resumid
 - [ ] Termos tecnicos em `code`
 - [ ] Links externos com sintaxe correta (quando existirem)
 - [ ] Blocos de codigo com linguagem declarada
-- [ ] Conteudo valido do original preservado
+- [ ] conteúdo valido do original preservado
 - [ ] Pendencias registradas (se houver)
 ```
 

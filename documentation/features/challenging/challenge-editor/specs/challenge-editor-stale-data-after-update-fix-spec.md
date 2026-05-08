@@ -35,7 +35,7 @@ Corrigir o fluxo de retorno do Challenge Editor para que a pagina do desafio sem
 
 ## 3.1 Funcionais
 
-- A pagina do desafio deve refletir o conteudo persistido mais recente apos um update realizado no Challenge Editor.
+- A pagina do desafio deve refletir o conteúdo persistido mais recente apos um update realizado no Challenge Editor.
 - A correcao deve funcionar quando o usuario altera apenas campos diferentes de `title`.
 - O comportamento de acesso e fetch atual da pagina do desafio deve ser preservado.
 

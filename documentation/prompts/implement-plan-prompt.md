@@ -24,11 +24,11 @@ description: Implementar no codebase um plano de implementacao derivado de uma s
 
 Leia o `plan.md` na integra antes de escrever qualquer linha de codigo. Identifique: escopo, fases, mapa de paralelizacao, gargalos, criterios de aceite, riscos e pendencias. Se o documento estiver incompleto, nao invente: crie uma secao `Pendencias` e avance apenas com defaults seguros.
 
-**Detecte o estado atual do plano** inspecionando os checkboxes e anotacoes das tarefas:
+**Detecte o estado atual do plano** inspecionando os checkboxes e anotações das tarefas:
 
 | Condicao no `plan.md` | Acao |
 |---|---|
-| Todas as tarefas com `- [ ]` sem anotacao | Plano novo — inicialize o tracking e comece pela primeira tarefa. |
+| Todas as tarefas com `- [ ]` sem anotação | Plano novo — inicialize o tracking e comece pela primeira tarefa. |
 | Alguma tarefa com `- [x]` ou `⚠️ bloqueado` | Plano em andamento — **retome a partir da primeira tarefa `- [ ]` nao bloqueada**. |
 | Todas as tarefas com `- [x]` | Plano concluido — informe e nao reexecute. |
 
@@ -105,7 +105,7 @@ Independentemente de a fase ser paralela ou sequencial, **cada fase do plano dev
 
 1. O escopo exato da fase: lista de tarefas, artefatos esperados e dependencias.
 2. Os contratos do `core` que a fase consome (interfaces, DTOs) — mesmo que ainda nao implementados, forneça as assinaturas definidas na spec para que o subagente possa trabalhar.
-3. O conteudo das **regras das camadas impactadas** (`documentation/rules/<camada>-rules.md`) — nao assuma que o subagente lera por conta propria.
+3. O conteúdo das **regras das camadas impactadas** (`documentation/rules/<camada>-rules.md`) — nao assuma que o subagente lera por conta propria.
 4. Os arquivos existentes na codebase relevantes para a fase, localizados com Serena no pre-check (Secao 1.2).
 5. O estado atual do `plan.md` — para que o subagente saiba o que ja foi concluido e atualize apenas as tarefas da sua fase.
 6. Instrucao explicita para: atualizar o `plan.md` (checkboxes + artefatos) e rodar o ciclo de qualidade (`npm run codecheck`, `npm run typecheck`, `npm run test`) ao concluir cada tarefa.
