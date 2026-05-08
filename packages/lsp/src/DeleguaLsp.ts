@@ -94,7 +94,7 @@ export class DeleguaLsp implements LspProvider {
   }
 
   getInput(code: string) {
-    const regex = DELEGUA_REGEX.conteudoDeFuncaoLeia
+    const regex = DELEGUA_REGEX.conteúdoDeFuncaoLeia
     const entrada = code.match(regex)
 
     return entrada ? entrada[0] : null
@@ -105,7 +105,7 @@ export class DeleguaLsp implements LspProvider {
 
     for (const input of codeInputs) {
       const entrada = await this.translateToLsp(input)
-      codigo = codigo.replace(DELEGUA_REGEX.conteudoDeFuncaoLeia, entrada)
+      codigo = codigo.replace(DELEGUA_REGEX.conteúdoDeFuncaoLeia, entrada)
     }
 
     return codigo
