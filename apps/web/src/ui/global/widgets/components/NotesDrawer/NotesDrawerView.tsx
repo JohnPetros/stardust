@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ReactElement } from 'react'
 import { Drawer } from 'vaul'
 import type { NoteDto } from '@stardust/core/profile/entities/dtos'
 
@@ -8,7 +8,7 @@ import { TiptapEditorField } from './TiptapEditorField'
 import { NotesListDialog } from './NotesListDialog'
 
 type Props = {
-  children: ReactNode
+  children: ReactElement
   isDrawerOpen: boolean
   isDialogOpen: boolean
   isLoadingNotes: boolean
@@ -70,15 +70,8 @@ export const NotesDrawerView = ({
 }: Props) => {
   return (
     <>
-      <button
-        type='button'
-        onClick={() => onDrawerOpenChange(true)}
-        aria-label='Abrir anotacoes'
-      >
-        {children}
-      </button>
-
       <Drawer.Root open={isDrawerOpen} onOpenChange={onDrawerOpenChange}>
+        <Drawer.Trigger asChild>{children}</Drawer.Trigger>
         <Drawer.Portal>
           <Drawer.Overlay className='fixed inset-0 z-[500] bg-gray-950/70 backdrop-blur-[1px]' />
           <Drawer.Content className='fixed right-0 top-0 z-[500] h-screen w-full max-w-[560px] border-l border-[#303030] bg-[#0b0e0f] outline-none'>

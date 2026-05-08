@@ -5,7 +5,7 @@ import {
   idSchema,
   itemsPerPageSchema,
   pageSchema,
-  stringSchema,
+  searchSchema,
 } from '@stardust/validation/global/schemas'
 import { noteSchema } from '@stardust/validation/profile/schemas'
 
@@ -34,7 +34,7 @@ export class NotesRouter extends HonoRouter {
         z.object({
           page: pageSchema,
           itemsPerPage: itemsPerPageSchema,
-          search: stringSchema.default(''),
+          search: searchSchema.default(''),
         }),
       ),
       async (context) => {

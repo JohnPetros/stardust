@@ -1,6 +1,6 @@
 'use client'
 
-import type { PropsWithChildren } from 'react'
+import type { ReactElement } from 'react'
 
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
@@ -8,7 +8,11 @@ import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useNotesDrawer } from './useNotesDrawer'
 import { NotesDrawerView } from './NotesDrawerView'
 
-export const NotesDrawer = ({ children }: PropsWithChildren) => {
+type Props = {
+  children: ReactElement
+}
+
+export const NotesDrawer = ({ children }: Props) => {
   const { profileService } = useRestContext()
   const { user } = useAuthContext()
   const toast = useToastContext()

@@ -36,7 +36,6 @@ export function useNotesDrawer({
   const [isDeleting, setIsDeleting] = useState(false)
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
-  const [searchInputValue, setSearchInputValue] = useState('')
   const [activeNote, setActiveNote] = useState<NoteDto | null>(null)
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -178,7 +177,6 @@ export function useNotesDrawer({
   }
 
   function handleSearchChange(value: string) {
-    setSearchInputValue(value)
     debouncedSearch(value)
   }
 
@@ -366,7 +364,6 @@ export function useNotesDrawer({
     notes,
     page,
     totalPagesCount,
-    searchInputValue,
     errorMessage: getErrorMessage(error),
     isEmpty: notes.length === 0,
     handleDrawerOpenChange,

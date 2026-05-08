@@ -6,6 +6,11 @@ import type { NoteDto } from '@stardust/core/profile/entities/dtos'
 
 jest.mock('vaul', () => {
   const Root = ({ children }: any) => <div data-testid='drawer-root'>{children}</div>
+  const Trigger = ({ children }: any) => (
+    <button type='button' aria-label='Abrir anotacoes'>
+      {children}
+    </button>
+  )
   const Portal = ({ children }: any) => <>{children}</>
   const Overlay = ({ children, ...props }: any) => <div {...props}>{children}</div>
   const Content = ({ children, ...props }: any) => <div {...props}>{children}</div>
@@ -14,6 +19,7 @@ jest.mock('vaul', () => {
   return {
     Drawer: {
       Root,
+      Trigger,
       Portal,
       Overlay,
       Content,
@@ -202,7 +208,6 @@ describe('NotesDrawerView', () => {
     await user.click(screen.getByRole('button', { name: 'Excluir anotação' }))
     await user.click(screen.getByRole('button', { name: 'Fechar anotações' }))
 
-    expect(onDrawerOpenChange).toHaveBeenCalledWith(true)
     expect(onOpenNotesDialog).toHaveBeenCalledTimes(1)
     expect(onTitleChange).toHaveBeenCalled()
     expect(onContentChange).toHaveBeenCalled()

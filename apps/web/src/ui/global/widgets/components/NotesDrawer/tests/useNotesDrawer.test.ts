@@ -272,7 +272,6 @@ describe('useNotesDrawer', () => {
       result.current.handleSearchChange('algoritmo')
     })
 
-    expect(result.current.searchInputValue).toBe('algoritmo')
     expect(result.current.page).toBe(1)
     expect(lastUseCacheConfig.dependencies).toEqual(['user-1', 1, 'algoritmo'])
 
