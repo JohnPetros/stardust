@@ -171,6 +171,7 @@ describe('useNotesDrawer', () => {
 
     act(() => {
       result.current.handleTitleChange('Nova nota')
+      result.current.handleContentChange('Conteudo de teste')
     })
 
     await act(async () => {
