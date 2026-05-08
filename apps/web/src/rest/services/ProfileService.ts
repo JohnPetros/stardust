@@ -4,8 +4,9 @@ import type {
   Email,
   Id,
   Integer,
-  Name,
   Slug,
+  Text,
+  Name,
   InsigniaRole,
 } from '@stardust/core/global/structures'
 import type { User, Achievement } from '@stardust/core/profile/entities'
@@ -90,6 +91,33 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
 
     async observeNewUnlockedAchievements(userId: Id) {
       return await restClient.post(`/profile/achievements/${userId.value}/observe`)
+    },
+
+    async fetchNotes({ page, itemsPerPage, search }) {
+      restClient.clearQueryParams()
+      restClient.setQueryParam('page', String(page.value))
+      restClient.setQueryParam('itemsPerPage', String(itemsPerPage.value))
+      restClient.setQueryParam('search', search?.value ?? '')
+
+      return await restClient.get('/profile/notes')
+    },
+
+    async createNote(params) {
+      return await restClient.post('/profile/notes', {
+        title: params.noteTitle.value,
+        content: params.noteContent.value,
+      })
+    },
+
+    async updateNote(params) {
+      return await restClient.put(`/profile/notes/${params.noteId.value}`, {
+        title: params.noteTitle.value,
+        content: params.noteContent.value,
+      })
+    },
+
+    async deleteNote(noteId: Id) {
+      return await restClient.delete(`/profile/notes/${noteId.value}`)
     },
 
     async rescueAchievement(achievementId: Id, userId: Id) {
