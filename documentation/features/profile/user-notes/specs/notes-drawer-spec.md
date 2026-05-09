@@ -333,6 +333,7 @@ apps/web/src/ui/global/widgets/components/WYSIWYGEditor/
 
 * **Responsabilidades do `WYSIWYGEditor`:**
   * encapsular o Tiptap usando `@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/pm`, `@tiptap/extension-placeholder` e `tiptap-markdown` para emitir/receber Markdown;
+  * substituir o `codeBlock` padrao por `interactiveCodeBlock`, um node customizado com React NodeView que renderiza o componente `Code` da `web` dentro do proprio editor;
   * expor toolbar com `bold`, `italic`, `code`, `codeBlock`, `bulletList` e `orderedList`, usando icones para listas;
   * preservar foco e selecao ao aplicar comandos de toolbar via `onMouseDown` com `preventDefault`;
   * expor `value`, `disabled` e `onChange(markdown: string)` para integracao no widget raiz.

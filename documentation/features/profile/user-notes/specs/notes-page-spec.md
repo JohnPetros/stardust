@@ -84,7 +84,7 @@ Entregar a rota autenticada `/notes` na `web` como area dedicada de gerenciament
 * **`NotesDrawer`** (`apps/web/src/ui/global/widgets/components/NotesDrawer/index.tsx`) - Implementacao client-side ja funcional para CRUD de notes, usando `AuthContext`, `RestContext` e `ToastContext`.
 * **`useNotesDrawer`** (`apps/web/src/ui/global/widgets/components/NotesDrawer/useNotesDrawer.ts`) - Referencia principal de busca, paginacao, validacao, reconcilacao local e dirty state do recurso `notes`.
 * **`NotesDrawerView`** (`apps/web/src/ui/global/widgets/components/NotesDrawer/NotesDrawerView.tsx`) - Referencia visual de editor rico, botoes de salvar/excluir e listagem paginada em overlay.
-* **`WYSIWYGEditor`** (`apps/web/src/ui/global/widgets/components/WYSIWYGEditor/index.tsx`) - Editor rico compartilhado entre `NotesDrawer` e pagina `/notes`, com persistencia textual em Markdown.
+* **`WYSIWYGEditor`** (`apps/web/src/ui/global/widgets/components/WYSIWYGEditor/index.tsx`) - Editor rico compartilhado entre `NotesDrawer` e pagina `/notes`, com persistencia textual em Markdown e node customizado de bloco de codigo interativo.
 * **`TitleInput`** (`apps/web/src/ui/global/widgets/components/TitleInput/index.tsx`) - Componente global reutilizavel para titulo inline com erro de validacao.
 * **`AlertDialog`** (`apps/web/src/ui/global/widgets/components/AlertDialog/index.tsx`) - Componente global de confirmacao que deve substituir `window.confirm` na experiencia da pagina.
 * **`Sidenav`** (`apps/web/src/ui/profile/widgets/layouts/Home/Sidenav/index.tsx`) - Sidebar autenticada onde hoje convivem entradas via `NavLink` e acoes locais via `SidenavButton`; sera o ponto de entrada de `Notas` nesta spec.
@@ -328,6 +328,11 @@ apps/web/src/ui/profile/widgets/pages/Notes/
 * **Alternativas consideradas:** Inserir placeholder de conteudo na pagina; tratar `content` vazio apenas no client e manter o server mais restritivo.
 * **Motivo da escolha:** O PRD define corpo opcional e o dominio `Text` ja aceita string vazia; a divergencia atual esta apenas na borda de validacao.
 * **Impactos / trade-offs:** A mudanca afeta tambem o drawer existente, mas corrige um desvio funcional compartilhado em vez de criar excecao apenas para `/notes`.
+
+* **Decisao:** Substituir o `codeBlock` padrao do Tiptap por um node customizado `interactiveCodeBlock`, renderizado com React NodeView e o componente `Code` da `web`.
+* **Alternativas consideradas:** manter o bloco de codigo padrao e renderizar `Code` apenas em preview MDX; salvar MDX bruto como fonte primaria do editor.
+* **Motivo da escolha:** O usuario precisa interagir com o componente `Code` dentro do proprio editor, sem alternar para preview.
+* **Impactos / trade-offs:** A edicao do bloco passa a acontecer dentro do componente interativo; a persistencia continua em fenced code block Markdown para compatibilidade com notas ja salvas e com o backend existente.
 
 ---
 
