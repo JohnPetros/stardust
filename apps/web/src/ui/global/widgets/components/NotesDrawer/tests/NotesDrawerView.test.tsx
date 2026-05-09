@@ -46,8 +46,8 @@ jest.mock('@/ui/global/widgets/components/Button', () => ({
   ),
 }))
 
-jest.mock('../TiptapEditorField', () => ({
-  TiptapEditorField: ({ value, onChange }: any) => (
+jest.mock('@/ui/global/widgets/components/WYSIWYGEditor', () => ({
+  WYSIWYGEditor: ({ value, onChange }: any) => (
     <textarea
       aria-label='Editor de anotacao'
       value={value}

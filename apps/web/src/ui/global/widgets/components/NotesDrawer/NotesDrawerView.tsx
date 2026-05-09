@@ -4,7 +4,7 @@ import type { NoteDto } from '@stardust/core/profile/entities/dtos'
 
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Button } from '@/ui/global/widgets/components/Button'
-import { TiptapEditorField } from './TiptapEditorField'
+import { WYSIWYGEditor } from '@/ui/global/widgets/components/WYSIWYGEditor'
 import { NotesListDialog } from './NotesListDialog'
 
 type Props = {
@@ -150,7 +150,7 @@ export const NotesDrawerView = ({
                     Limpar
                   </button>
                 </div>
-                <TiptapEditorField value={content} onChange={onContentChange} />
+                <WYSIWYGEditor value={content} onChange={onContentChange} />
               </div>
 
               <div className='grid grid-cols-2 gap-3'>

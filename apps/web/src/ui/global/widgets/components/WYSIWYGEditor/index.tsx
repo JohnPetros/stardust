@@ -2,7 +2,7 @@
 
 import { EditorContent } from '@tiptap/react'
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { useTiptapEditorField } from './useTiptapEditorField'
+import { useWYSIWYGEditor } from './useWYSIWYGEditor'
 
 type Props = {
   value: string
@@ -10,8 +10,8 @@ type Props = {
   onChange: (markdown: string) => void
 }
 
-export const TiptapEditorField = ({ value, disabled = false, onChange }: Props) => {
-  const { editor, runEditorCommand } = useTiptapEditorField({
+export const WYSIWYGEditor = ({ value, disabled = false, onChange }: Props) => {
+  const { editor, runEditorCommand } = useWYSIWYGEditor({
     value,
     disabled,
     onChange,
