@@ -61,9 +61,13 @@ export const WYSIWYGEditor = ({ value, disabled = false, onChange }: Props) => {
           type='button'
           disabled={!editor || disabled}
           onMouseDown={runEditorCommand(() =>
-            editor?.chain().focus().toggleCodeBlock().run(),
+            editor
+              ?.chain()
+              .focus()
+              .insertContent({ type: 'interactiveCodeBlock', attrs: { code: '' } })
+              .run(),
           )}
-          className={`${toolButtonClassName} font-mono ${editor?.isActive('codeBlock') ? activeToolButtonClassName : ''}`}
+          className={`${toolButtonClassName} font-mono ${editor?.isActive('interactiveCodeBlock') ? activeToolButtonClassName : ''}`}
           aria-label='Bloco de codigo'
         >
           {'{ }'}
