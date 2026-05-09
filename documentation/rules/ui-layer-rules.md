@@ -28,6 +28,7 @@ A camada **UI** implementa a interface (Web e Studio) com foco em usabilidade, a
 - **View**: apenas renderizacao.
 - **Hook**: estado, efeitos de UI e handlers.
 - **Entry Point** (`index.tsx`): composicao (conecta Hook + View) e integracoes (RPC/REST/context).
+- **Regra estrutural**: todo widget deve ter um `Entry Point` em `index.tsx` e uma `View` explicita com sufixo `View`. Mesmo widgets simples ou wrappers de dialog/estado vazio nao devem concentrar renderizacao diretamente no `index.tsx`.
 
 > 💡 Regra pratica: integracoes e resolucao de dependencias acontecem no **Entry Point**.
 
@@ -74,8 +75,44 @@ export function useTiptapEditorField({
 - Pasta do widget: PascalCase.
 - Entry Point: `index.tsx` (unico ponto de export publico do widget).
 - View: sufixo `View` (ex: `ButtonView.tsx`).
+- Todo widget deve possuir sua propria `View`, inclusive dialogs, empty states e widgets sem hook.
 - Hook: prefixo `use` (ex: `useButton.ts`).
 - Tipos: `types/` quando a tipagem nao for trivial.
+
+### Anti-padrao: renderizar widget inteiro no `index.tsx`
+
+**O que evitar:**
+Criar widgets cuja renderizacao fica toda dentro do `index.tsx`, sem um arquivo `*View.tsx` dedicado.
+
+**Por que esta errado:**
+Isso quebra a consistencia do Widget Pattern, dificulta leitura, reduz previsibilidade estrutural e torna mais custoso evoluir widgets simples para widgets com mais estados ou composicao.
+
+**Como fazer:**
+Mesmo quando o widget nao possui hook proprio, o `index.tsx` deve funcionar como entry point e delegar a renderizacao para uma `View`.
+
+Exemplo correto:
+
+```tsx
+// index.tsx
+import { EmptyStateView } from './EmptyStateView'
+
+type Props = {
+  title: string
+}
+
+export const EmptyState = ({ title }: Props) => {
+  return <EmptyStateView title={title} />
+}
+
+// EmptyStateView.tsx
+type EmptyStateViewProps = {
+  title: string
+}
+
+export const EmptyStateView = ({ title }: EmptyStateViewProps) => {
+  return <div>{title}</div>
+}
+```
 
 ## Exemplo
 
@@ -114,6 +151,7 @@ export const Button = ({ title, onAction }: { title: string; onAction: () => voi
 ## Checklist (antes do PR)
 
 - Widget segue View/Hook/Entry Point.
+- Todo widget possui `index.tsx` e `*View.tsx`, mesmo sem hook.
 - Hook nao acessa contexts/providers; recebe dependencias via params.
 - Integracao com dados acontece via RPC/REST.
 - Props tipadas; exports sao named.

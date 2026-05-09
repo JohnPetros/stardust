@@ -1,34 +1,34 @@
-# PRD - Notas Privadas do Usuario em Lesson e Challenge
+# PRD - Notas Privadas do Usuario
 
 ---
 
 ### 1. Visao Geral
 
-- A funcionalidade adiciona um espaco privado de anotacoes dentro dos fluxos de `lesson` e `challenge`, sem exigir troca de pagina.
-- Ela resolve a necessidade de registrar insights, resumos e rascunhos durante o estudo, mantendo esse conteudo vinculado apenas ao proprio usuario.
-- O objetivo principal e permitir criar, consultar, editar e excluir notas pessoais com experiencia rapida, contextual e persistida.
+- A funcionalidade oferece um espaco privado de anotacoes para o usuario autenticado, acessivel tanto nos fluxos de `lesson` e `challenge` quanto por uma area dedicada de notas.
+- Ela resolve a necessidade de registrar insights, resumos e rascunhos durante o estudo, sem misturar esse conteudo com recursos publicos ou colaborativos.
+- O objetivo principal e permitir criar, consultar, editar e excluir notas pessoais com experiencia rapida, contextual, persistida e reutilizavel em diferentes momentos da jornada.
 
 ---
 
 ### 2. Requisitos
 
-#### REQ-01 [Acessar o drawer de notas durante o estudo]
+#### REQ-01 [Acessar notas privadas a partir da navegacao e do estudo]
 
-- [x] **Acessar o drawer de notas durante o estudo**
+- [x] **Acessar notas privadas a partir da navegacao e do estudo**
 
-**Descricao:** O usuario autenticado deve conseguir abrir um drawer de notas pessoais diretamente nas paginas de licao e desafio, sem sair do fluxo atual.
+**Descricao:** O usuario autenticado deve conseguir acessar suas notas pessoais tanto pelos fluxos de estudo quanto por uma entrada dedicada de navegacao autenticada.
 
 ##### Regras de Negocio
 
-- **Escopo do atalho:** O acesso a notas existe apenas nos fluxos de `lesson` e `challenge`.
+- **Acesso multi-contexto:** O acesso a notas existe nos fluxos de `lesson` e `challenge`, e tambem em uma pagina dedicada acessivel pela navegacao autenticada.
 - **Acesso autenticado:** O atalho de notas aparece somente para usuarios autenticados.
-- **Sem navegacao adicional:** Abrir notas nao altera rota nem desmonta o estado principal da tela.
+- **Area privada dedicada:** A plataforma deve oferecer uma area privada de gerenciamento de notas para quem precisa consultar ou editar anotacoes fora do contexto imediato da aula.
 
 ##### Regras de UI/UX
 
-- **Abertura contextual:** O drawer deve abrir a partir de um atalho visual no cabecalho da tela atual.
-- **Fluxo inicial:** Ao abrir o drawer, o usuario encontra imediatamente o formulario de nova nota.
-- **Responsividade:** O drawer deve ocupar toda a largura no mobile e manter largura fixa no desktop.
+- **Abertura contextual:** O drawer continua abrindo a partir de um atalho visual no cabecalho da tela atual.
+- **Navegacao dedicada:** A navegacao autenticada deve expor uma entrada `Notas` para acesso rapido ao workspace completo.
+- **Responsividade:** O acesso dedicado precisa funcionar bem em desktop e mobile sem quebrar a navegacao principal.
 
 #### REQ-02 [Criar e editar notas privadas]
 
@@ -86,6 +86,24 @@
 - **Atualizacao imediata:** A lista local deve refletir create, update e delete sem exigir recarregamento completo.
 - **Feedback:** O usuario deve receber retorno claro em caso de sucesso ou erro.
 
+#### REQ-05 [Gerenciar notas em uma pagina dedicada]
+
+- [x] **Gerenciar notas em uma pagina dedicada**
+
+**Descricao:** O usuario autenticado deve conseguir abrir uma area exclusiva para notas privadas, com lista, busca, edicao e exclusao sem depender do contexto de uma aula ou desafio.
+
+##### Regras de Negocio
+
+- **Workspace privado:** A pagina dedicada mostra apenas notas do proprio usuario autenticado.
+- **Busca por titulo:** O usuario pode localizar notas pelo titulo sem perder a ordenacao por atualizacao mais recente.
+- **Mesma base de dados:** A experiencia dedicada reutiliza o mesmo recurso de notas ja usado no drawer, sem criar um fluxo paralelo.
+
+##### Regras de UI/UX
+
+- **Desktop em duas colunas:** No desktop, a pagina deve exibir lista lateral e editor ao mesmo tempo.
+- **Fluxo mobile em uma tela por vez:** No mobile, a experiencia alterna entre lista e editor sem mudar de rota.
+- **Edicao sem friccao:** Criacao, selecao, salvamento e exclusao devem acontecer no mesmo workspace, com confirmacao para descarte e exclusao.
+
 ---
 
 ### 3. Fluxo de Usuario (User Flow)
@@ -122,7 +140,6 @@
 
 ### 4. Fora do Escopo (Out of Scope)
 
-- Pagina dedicada de notas fora dos fluxos de `lesson` e `challenge`.
 - Compartilhamento de notas entre usuarios.
 - Organizacao por tags, pastas, busca global ou historico de versoes.
 - Vinculo das notas a estrelas, desafios especificos, questoes ou comentarios.
