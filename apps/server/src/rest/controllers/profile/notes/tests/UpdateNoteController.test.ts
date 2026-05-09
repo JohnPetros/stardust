@@ -98,4 +98,36 @@ describe('Update Note Controller', () => {
     expect(http.send).toHaveBeenCalledWith(response)
     expect(result).toBe(restResponse)
   })
+
+  it('should handle empty content on update flow', async () => {
+    const noteId = 'note-id'
+    const body = {
+      title: 'Nota atualizada',
+      content: '',
+    }
+    const userId = 'user-id'
+    const response: NoteDto = {
+      id: noteId,
+      title: body.title,
+      content: body.content,
+      userId,
+    }
+
+    jest.spyOn(UpdateNoteUseCase.prototype, 'execute').mockResolvedValue(response)
+    http.getRouteParams.mockReturnValue({ noteId })
+    http.getBody.mockResolvedValue(body)
+    http.getAccountId.mockResolvedValue(userId)
+    http.statusOk.mockReturnValue(http)
+    http.send.mockReturnValue(mock<RestResponse>())
+
+    await controller.handle(http)
+
+    expect(UpdateNoteUseCase.prototype.execute).toHaveBeenCalledWith({
+      noteId,
+      noteTitle: body.title,
+      noteContent: body.content,
+      userId,
+    })
+    expect(http.statusOk).toHaveBeenCalledTimes(1)
+  })
 })
