@@ -2,7 +2,7 @@
 
 import { EditorContent } from '@tiptap/react'
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { useTiptapEditorField } from './useTiptapEditorField'
+import { useWYSIWYGEditor } from './useWYSIWYGEditor'
 
 type Props = {
   value: string
@@ -10,8 +10,8 @@ type Props = {
   onChange: (markdown: string) => void
 }
 
-export const TiptapEditorField = ({ value, disabled = false, onChange }: Props) => {
-  const { editor, runEditorCommand } = useTiptapEditorField({
+export const WYSIWYGEditor = ({ value, disabled = false, onChange }: Props) => {
+  const { editor, runEditorCommand } = useWYSIWYGEditor({
     value,
     disabled,
     onChange,
@@ -61,9 +61,13 @@ export const TiptapEditorField = ({ value, disabled = false, onChange }: Props) 
           type='button'
           disabled={!editor || disabled}
           onMouseDown={runEditorCommand(() =>
-            editor?.chain().focus().toggleCodeBlock().run(),
+            editor
+              ?.chain()
+              .focus()
+              .insertContent({ type: 'interactiveCodeBlock', attrs: { code: '' } })
+              .run(),
           )}
-          className={`${toolButtonClassName} font-mono ${editor?.isActive('codeBlock') ? activeToolButtonClassName : ''}`}
+          className={`${toolButtonClassName} font-mono ${editor?.isActive('interactiveCodeBlock') ? activeToolButtonClassName : ''}`}
           aria-label='Bloco de codigo'
         >
           {'{ }'}

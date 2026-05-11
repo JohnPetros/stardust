@@ -4,7 +4,7 @@ prd: https://github.com/JohnPetros/stardust/milestone/30
 issue: https://github.com/JohnPetros/stardust/issues/403
 apps: server, web
 status: closed
-last_updated_at: 2026-05-08
+last_updated_at: 2026-05-09
 ---
 
 # 1. Objetivo (Obrigatorio)
@@ -48,7 +48,7 @@ Implementar o fluxo ponta a ponta de notas privadas do usuario no modulo `profil
 - O usuario deve conseguir abrir uma listagem modal sobre o drawer para visualizar suas notas privadas.
 - A listagem deve mostrar titulo, preview truncado do corpo e data relativa da ultima atualizacao.
 - O usuario deve conseguir filtrar a listagem por busca textual em `title`.
-- O usuario deve conseguir selecionar uma nota da lista para preencher o formulario e editar no mesmo drawer.
+- O usuario deve conseguir selecionar uma nota da lista para preencher o formulario e editar no mesmo drawer, sem fechar o drawer principal durante a selecao.
 - O usuario deve conseguir excluir uma nota mediante confirmacao explicita.
 - O backend deve retornar apenas notas do usuario autenticado, ordenadas por `updated_at` decrescente, dentro de `PaginationResponse`.
 - O backend nao deve aceitar `authorId`, `isPublic`, `status` ou qualquer outro campo controlado pelo servidor nos payloads de entrada.
@@ -294,7 +294,7 @@ Implementar o fluxo ponta a ponta de notas privadas do usuario no modulo `profil
 * **View:** `NotesDrawerView.tsx`
 * **Hook (se aplicavel):** `useNotesDrawer.ts`
 * **Index:** Resolve `profileService` via `useRestContext`, `user/isAccountAuthenticated` via `useAuthContext` e `toast` via `useToastContext`; so renderiza trigger e drawer quando autenticado, usando `children` como elemento trigger do `Drawer`.
-* **Widgets internos:** `NotesListDialog`, `TiptapEditorField`
+* **Widgets internos:** `NotesListDialog`, `WYSIWYGEditor`
 * **Estrutura de pastas:**
 
 ```text
@@ -305,28 +305,35 @@ apps/web/src/ui/global/widgets/components/NotesDrawer/
 ├── NotesListDialog/
 │   ├── index.tsx
 │   └── NotesListDialogView.tsx
-└── TiptapEditorField/
-    ├── index.tsx
-    └── useTiptapEditorField.ts
 ```
 
-* **Atualizacoes implementadas (2026-05-08):**
+Editor compartilhado utilizado pelo drawer:
+
+```text
+apps/web/src/ui/global/widgets/components/WYSIWYGEditor/
+├── index.tsx
+└── useWYSIWYGEditor.ts
+```
+
+* **Atualizacoes implementadas (2026-05-09):**
   * `NotesListDialog` foi separado em `index.tsx` (composicao) e `NotesListDialogView.tsx` (renderizacao);
-  * `TiptapEditorField` recebeu hook dedicado `useTiptapEditorField.ts` para encapsular setup/comandos do editor;
+  * o editor foi extraido para `apps/web/src/ui/global/widgets/components/WYSIWYGEditor`, compartilhado entre drawer e pagina `/notes`;
+  * a selecao de nota no `NotesListDialog` passou a preservar o drawer aberto, evitando fechamento acidental por eventos de `onOpenChange(false)` durante a troca de nota;
   * o drawer ganhou a acao `Adicionar nota` no header para limpar o formulario e iniciar uma nova nota;
   * o bloco introdutorio `Nova nota` e omitido quando existe nota ativa em edicao;
   * o corpo do drawer passou a usar `overflow-y-auto` para suportar scroll de conteudo;
   * o editor usa `data-vaul-no-drag` para evitar conflito de drag do drawer com selecao multipla de texto.
 
 * **Responsabilidades do hook raiz:**
-  * controlar `isDrawerOpen`, `isListDialogOpen`, `selectedNoteId`, `notes`, `isSubmitting`, `isListLoading`, `isDeleting`;
+  * controlar `isDrawerOpen`, `isDialogOpen`, `activeNote`, `notes`, `isSaving`, `isLoading`, `isDeleting`;
   * abrir confirmacao de descarte quando o formulario estiver dirty e o usuario tentar fechar o drawer ou trocar de nota;
   * buscar notas ao abrir a listagem pela primeira vez;
   * reconciliar a lista local apos create/update/delete sem refetch obrigatorio;
   * aplicar rollback local em delete caso o endpoint falhe.
 
-* **Responsabilidades do `TiptapEditorField`:**
+* **Responsabilidades do `WYSIWYGEditor`:**
   * encapsular o Tiptap usando `@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/pm`, `@tiptap/extension-placeholder` e `tiptap-markdown` para emitir/receber Markdown;
+  * substituir o `codeBlock` padrao por `interactiveCodeBlock`, um node customizado com React NodeView que renderiza o componente `Code` da `web` dentro do proprio editor;
   * expor toolbar com `bold`, `italic`, `code`, `codeBlock`, `bulletList` e `orderedList`, usando icones para listas;
   * preservar foco e selecao ao aplicar comandos de toolbar via `onMouseDown` com `preventDefault`;
   * expor `value`, `disabled` e `onChange(markdown: string)` para integracao no widget raiz.
@@ -631,9 +638,9 @@ LessonHeader / ChallengeHeader
 
 # 10. Pendencias / Duvidas (Quando aplicavel)
 
-* **Descricao da pendencia:** A codebase atual nao possui Tiptap nem adaptador existente de Markdown roundtrip no `web`.
-* **Impacto na implementacao:** A implementacao ainda precisa apenas materializar a configuracao ja definida na spec dentro do widget `TiptapEditorField`.
-* **Acao sugerida:** Implementar o editor com os pacotes e extensoes fixados nesta spec e registrar eventuais ajustes finos de toolbar no PR tecnico.
+* **Descricao da pendencia:** Nao aplicavel (pendencia encerrada em 2026-05-09 com a consolidacao do `WYSIWYGEditor` global e reutilizacao no drawer).
+* **Impacto na implementacao:** Nao aplicavel.
+* **Acao sugerida:** Nao aplicavel.
 
 * **Descricao da pendencia:** O baseline de grants das tabelas autorais legadas (`snippets`, `solutions`, `comments`) e mais permissivo do que o requerido por `notes`, e esta entrega nao deve introduzir RLS para `notes`.
 * **Impacto na implementacao:** A seguranca do recurso continuara concentrada na autenticacao da app e no filtro por `user_id` no repository/use case, com grants SQL restritos sem policies RLS adicionais.
