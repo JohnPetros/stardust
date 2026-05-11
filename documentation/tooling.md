@@ -45,12 +45,18 @@ npm run dev:queue -w @stardust/server
 
 ```bash
 npm run db:local -w @stardust/server
+npm run db:dev -w @stardust/server
+npm run db:prod -w @stardust/server
 npm run db:sync -w @stardust/server
 npm run db:migrate -w @stardust/server
 npm run db:pull -w @stardust/server
 npm run db:push -w @stardust/server
 npm run db:types -w @stardust/server
 ```
+
+Notas:
+- A fonte de verdade da Supabase CLI do server e `apps/server/supabase/`.
+- Em producao, as migrations devem rodar no workflow de deploy antes do release da aplicacao.
 
 ## Hooks
 
