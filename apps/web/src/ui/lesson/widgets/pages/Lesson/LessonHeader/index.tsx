@@ -9,6 +9,7 @@ import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { AnimatedProgressBar } from '@/ui/global/widgets/components/AnimatedProgressBar'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useLessonHeader } from './useLessonHeader'
+import { NotesDrawer } from '@/ui/global/widgets/components/NotesDrawer'
 
 type LessonHeaderProps = {
   onLeavePage: VoidFunction
@@ -54,11 +55,22 @@ export function LessonHeader({ onLeavePage }: LessonHeaderProps) {
             indicatorImage={rocketImage}
           />
 
-          <div className='flex items-center gap-2'>
-            <div>
-              <Image src='/icons/life.svg' width={36} height={36} alt='' priority />
+          <div className='flex items-center justify-between gap-2'>
+            <div className='flex items-center justify-center gap-1'>
+              <div className='h-6 w-6 shrink-0'>
+                <Image src='/icons/life.svg' width={24} height={24} alt='' priority />
+              </div>
+              <span className='text-xl -translate-y-0.5 font-bold text-red-700'>
+                {livesCount}
+              </span>
             </div>
-            <span className='text-lg font-bold text-red-700'>{livesCount}</span>
+            <div>
+              <NotesDrawer>
+                <div className='rounded-md p-1 text-gray-300 transition-colors hover:bg-gray-800 hover:text-gray-100'>
+                  <Icon name='book' size={20} />
+                </div>
+              </NotesDrawer>
+            </div>
           </div>
         </div>
       </header>

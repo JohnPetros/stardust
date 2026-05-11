@@ -61,7 +61,7 @@ Esse comportamento tambem e coerente com a implementacao existente:
 # 4. Causas Provaveis
 
 * **Causa provavel:** a feature esta tentando controlar o scroll da janela (`window`), mas a Space Page vive dentro de um container interno com `overflow-auto`
-  * **Evidencia encontrada:** `apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackLayoutView.tsx` encapsula o conteudo em `<div className='flex-1 overflow-auto'>`, enquanto a implementacao anterior da Space Page usava `window.scrollTo(...)`
+  * **Evidencia encontrada:** `apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackLayoutView.tsx` encapsula o conteúdo em `<div className='flex-1 overflow-auto'>`, enquanto a implementacao anterior da Space Page usava `window.scrollTo(...)`
   * **Nivel de confianca:** alto
   * **Impacto no bug:** tanto o auto-scroll inicial quanto o clique no FAB atuam no alvo errado e, por isso, nao movem a area realmente rolavel da pagina
 
@@ -115,10 +115,10 @@ Esse comportamento tambem e coerente com a implementacao existente:
 ## UI - Layout compartilhado
 
 * **Arquivo:** `apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackLayoutView.tsx`
-* **Responsabilidade atual:** envolver as paginas autenticadas em um layout com area de conteudo rolavel e dialogo de feedback.
+* **Responsabilidade atual:** envolver as paginas autenticadas em um layout com area de conteúdo rolavel e dialogo de feedback.
 * **Diagnostico:** a pagina nao usa o `window` como superficie principal de scroll; o scroll real acontece em um `div` interno.
 * **Evidencia:** o layout renderiza `<div className='flex-1 overflow-auto'>{children}</div>`.
-* **Risco associado:** qualquer feature que tente recentralizar conteudo com `window.scrollTo(...)` dentro desse layout pode aparentar "nao fazer nada".
+* **Risco associado:** qualquer feature que tente recentralizar conteúdo com `window.scrollTo(...)` dentro desse layout pode aparentar "nao fazer nada".
 
 ## UI - Estado da Space Page
 

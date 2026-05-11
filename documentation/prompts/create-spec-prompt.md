@@ -208,6 +208,21 @@ Exemplos de categorias (usar apenas se aplicável):
 * **Dependências:** O que deve ser injetado
 * **Métodos:** Assinatura e responsabilidade
 
+## Camada Banco de Dados (Migrations)
+
+* **Localização:** `apps/server/supabase/migrations/<timestamp>_<descricao>.sql` ou `Não aplicável`
+* **Objetivo:** Descreva a alteração estrutural no banco (tabela, coluna, índice, view, constraint, grants etc.)
+* **Escopo SQL:** Liste exatamente o que deve ser criado, alterado ou removido
+* **Segurança:** Descreva grants esperados e diga explicitamente se haverá ou não RLS
+* **Dependências de código:** Liste os artefatos que precisarão refletir a migration (`Database.ts`, types, mappers, repositories)
+
+> **Regras para migrations na spec:**
+> - Use `apps/server/supabase/migrations/**` como diretório canônico para novas migrations.
+> - Não trate `apps/server/src/database/supabase/migrations/**` como destino de novas migrations; esse diretório pode existir como snapshot/schema remoto e não deve ser proposto como fonte principal da mudança.
+> - Só inclua a seção de migration quando houver mudança real de schema/grants/view/índice/constraint no banco.
+> - Se a alteração de banco já existir e a entrega apenas propagar tipos/código, escreva explicitamente em escopo ou decisões que **não haverá migration nesta entrega**.
+> - Ao propor migration, detalhe também os reflexos obrigatórios em `apps/server/src/database/supabase/types/Database.ts` e nos adapters da camada database.
+
 ## Camada Banco de Dados (Mappers)
 
 * **Localização:** `caminho/do/arquivo`
@@ -378,6 +393,7 @@ Para cada item:
 * **Não inclua testes automatizados na spec.**
 * Todos os caminhos citados devem existir no projeto **ou** estar explicitamente marcados como **novo arquivo**.
 * **Não invente** arquivos, métodos, contratos, schemas ou integrações sem evidência no PRD/codebase.
+* **Não invente migrations** quando a alteração de banco não for necessária ou já existir; se houver migration, use como referência apenas `apps/server/supabase/migrations/**`.
 * **Não proponha acoplamento cross-domain no `core` sem evidência explícita na codebase.** Se a necessidade for autenticação, autorização, ownership, montagem de contexto ou adaptação de transporte, prefira manter isso na borda da app quando esse já for o padrão encontrado.
 * **Não use o `core` para resolver conveniências da app.** Se uma responsabilidade pertence a `middleware`, `controller`, `toolset`, `router` ou adapter local, a spec não deve empurrá-la para `use case` apenas para “centralizar”.
 * **Não exponha em schemas de entrada campos controlados pelo servidor** quando o fluxo do PRD exigir que esses valores sejam definidos internamente.

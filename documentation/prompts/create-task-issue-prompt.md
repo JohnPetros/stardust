@@ -113,7 +113,7 @@ DoD - Verificar antes de mover para Concluido:
 
 ## Regras para preenchimento
 
-- O conteudo deve sair pronto para colar no Jira.
+- O conteúdo deve sair pronto para colar no Jira.
 - Nao resuma em excesso; detalhe o suficiente para orientar implementacao.
 - Para issues do tipo `task`, sempre carregue e considere primeiro os PRDs publicados no Confluence antes de redigir as issues.
 - Para issues do tipo `task`, sempre inclua os links reais dos PRDs usados como referencia, priorizando o link publicado no Confluence em vez de rascunhos ou links de edicao.

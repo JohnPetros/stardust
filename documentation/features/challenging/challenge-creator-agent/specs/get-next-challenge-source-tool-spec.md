@@ -165,7 +165,7 @@ Implementar uma nova tool na camada AI do `server` para recuperar a proxima font
 * **Decisao:** Usar `url` da source como prompt inicial no workflow (`URL da fonte: ...`).
 * **Alternativas consideradas:** Usar `challenge.title` como entrada principal do agente.
 * **Motivo da escolha:** Quando a source nao esta previamente vinculada a um desafio, a URL continua sendo o identificador mais confiavel para preservar contexto da origem.
-* **Impactos / trade-offs:** Exige que o agente extraia contexto do link de origem; pode demandar refinamento futuro de prompt para melhorar consistencia do conteudo gerado.
+* **Impactos / trade-offs:** Exige que o agente extraia contexto do link de origem; pode demandar refinamento futuro de prompt para melhorar consistencia do conteúdo gerado.
 
 * **Decisao:** Marcar `isUsed` durante a publicacao do desafio no `PostChallengeUseCase` quando houver `challengeSourceId`.
 * **Alternativas consideradas:** Marcar em um job separado posterior ou manter sem marcacao.

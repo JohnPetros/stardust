@@ -64,7 +64,7 @@ describe('LessonStoryPageView', () => {
     previewScrollRef: createRef<HTMLDivElement>(),
     expandedBlockId: null,
     sortableItems,
-    previewContent: 'Conteudo preview',
+    previewContent: 'conteúdo preview',
     isLoading: false,
     isBlocked: false,
     blockingReason: '',

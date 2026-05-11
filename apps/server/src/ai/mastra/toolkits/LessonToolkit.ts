@@ -8,7 +8,7 @@ export class LessonToolkit {
     return createTool({
       id: 'get-documentation-components-guide-tool',
       description:
-        'Retorna o guia de componentes de documentacao para uso em conteudo MDX.',
+        'Retorna o guia de componentes de documentacao para uso em conteúdo MDX.',
       outputSchema: z.object({
         guide: z.string(),
       }),

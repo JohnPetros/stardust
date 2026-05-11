@@ -42,6 +42,33 @@ A camada **UI** implementa a interface (Web e Studio) com foco em usabilidade, a
 > - View conter `useEffect` ou chamadas de service.
 > - UI importar `apps/server/**`.
 
+### Anti-padrão: Declarar hook com `const` em vez de `function`
+
+**O que foi feito:**
+Foi criado um hook de widget usando expressao com `const`, por exemplo:
+
+```ts
+export const useTiptapEditorField = ({ value, disabled = false, onChange }: Params) => {
+  // ...
+}
+```
+
+**Por que está errado:**
+Na camada UI do StarDust, hooks devem seguir a convencao de declaracao com `function` para manter consistencia com o Widget Pattern, melhorar legibilidade e padronizar manutencao entre widgets.
+
+**O que deve ser feito:**
+Declarar hooks sempre com `function`, mantendo o prefixo `use`:
+
+```ts
+export function useTiptapEditorField({
+  value,
+  disabled = false,
+  onChange,
+}: Params) {
+  // ...
+}
+```
+
 ## Organizacao e Nomeacao
 
 - Pasta do widget: PascalCase.

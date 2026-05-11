@@ -114,7 +114,7 @@
    - **Entrada**: job cron `CreateChallengeJob` em `apps/server/src/queue/jobs/challenging/CreateChallengeJob.ts`.
    - **Orquestracao**: `MastraCreateChallengeWorkflow` em `apps/server/src/ai/mastra/workflows/MastraCreateChallengeWorkflow.ts`.
    - **Persistencia**: `PostChallengeTool` delega para `PostChallengeUseCase` em `apps/server/src/ai/challenging/tools/PostChallengeTool.ts`.
-2. **Assistente de manual/conteudo (web)**
+2. **Assistente de manual/conteúdo (web)**
    - **Entrada**: rota `POST` em `apps/web/src/app/api/conversation/chats/[chatId]/assistant/route.ts`.
    - **Orquestracao**: `AskAssistantController` + `VercelAssistUserWorkflow` em `apps/web/src/rest/controllers/conversation/AskAssistantController.ts` e `apps/web/src/ai/vercel/workflows/VercelAssistUserWorkflow.ts`.
    - **Ferramentas**: `manualToolset` e `challengingToolset` em `apps/web/src/ai/vercel/toolsets`.
@@ -141,7 +141,7 @@ export const ExampleTool = (service: SomeService): Tool<Input, Output> => {
 
 - `toolset` com logica de negocio: deve apenas compor dependencias e acionar `tool.handle(mcp)`.
 - `agent` sem limites: deve configurar `stop conditions`/`step limits` quando suportado pelo runtime.
-- Prompt sem restricoes de saida: deve declarar formato, idioma e restricoes de conteudo (ex: `apps/web/src/ai/constants/manual-prompts.ts`).
+- Prompt sem restricoes de saida: deve declarar formato, idioma e restricoes de conteúdo (ex: `apps/web/src/ai/constants/manual-prompts.ts`).
 - `use-case` chamando `workflow`: a orquestracao de `LLM` pertence a camada `AI`; o core nao deve depender de runtime de agent/workflow.
 
 ## Regras de integracao com outras camadas

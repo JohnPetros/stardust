@@ -6,10 +6,12 @@ import type {
   Integer,
   Name,
   Slug,
+  Text,
 } from '#global/domain/structures/index'
 import type {
   AchievementDto,
   DailyActiveUsersDto,
+  NoteDto,
   UserDto,
 } from '../domain/entities/dtos'
 import type { Achievement, User } from '../domain/entities'
@@ -49,6 +51,21 @@ export interface ProfileService {
   fetchAllAchievements(): Promise<RestResponse<AchievementDto[]>>
   observeNewUnlockedAchievements(userId: Id): Promise<RestResponse<AchievementDto[]>>
   rescueAchievement(achievementId: Id, userId: Id): Promise<RestResponse<UserDto>>
+  fetchNotes(params: {
+    page: Integer
+    itemsPerPage: Integer
+    search?: Text
+  }): Promise<RestResponse<PaginationResponse<NoteDto>>>
+  createNote(params: {
+    noteTitle: Text
+    noteContent: Text
+  }): Promise<RestResponse<NoteDto>>
+  updateNote(params: {
+    noteId: Id
+    noteTitle: Text
+    noteContent: Text
+  }): Promise<RestResponse<NoteDto>>
+  deleteNote(noteId: Id): Promise<RestResponse>
   updateUser(user: User): Promise<RestResponse<UserDto>>
   upvoteComment(
     commentId: Id,
