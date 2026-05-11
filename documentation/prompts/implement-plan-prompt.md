@@ -112,12 +112,6 @@ Independentemente de a fase ser paralela ou sequencial, **cada fase do plano dev
 
 > ⚠️ Subagentes nao compartilham contexto entre si. Todo o conhecimento necessario para executar a fase deve ser passado explicitamente no prompt de despacho. Um subagente sem contexto suficiente vai adivinhar — e adivinhar gera retrabalho.
 
-**Apos a conclusao de cada subagente**, o orquestrador deve:
-
-1. Verificar se o `plan.md` foi atualizado corretamente pelo subagente.
-2. Sincronizar a todo tool com o novo estado do `plan.md`.
-3. Confirmar que os artefatos declarados pelo subagente existem na codebase antes de disparar a proxima fase.
-
 **Formato de despacho (instrucao ao subagente):**
 
 ```
@@ -137,6 +131,45 @@ Instrucoes:
 3. Ao concluir cada tarefa: atualize o plan.md (checkbox + artefatos) e rode o ciclo de qualidade.
 4. Ao concluir a fase, reporte: arquivos criados/alterados, resultado observavel atingido e divergencias em relacao a spec.
 ```
+
+---
+
+### 3.1 Review do orquestrador apos cada fase (obrigatorio)
+
+**A proxima fase so pode ser iniciada apos o orquestrador aprovar a fase atual.** Este gate e obrigatorio — nao e opcional mesmo quando o subagente reportar sucesso.
+
+Ao receber o reporte de conclusao de um subagente, o orquestrador executa os seguintes checks **na ordem abaixo** antes de disparar qualquer fase subsequente:
+
+**Check 1 — Rastreabilidade**
+- O `plan.md` foi atualizado com `- [x]`, artefatos gerados e data de conclusao para cada tarefa da fase?
+- Se nao: solicite ao subagente que atualize o `plan.md` antes de prosseguir.
+
+**Check 2 — Existencia dos artefatos**
+- Use Serena para confirmar que cada arquivo declarado no reporte do subagente existe na codebase com o caminho correto.
+- Se algum artefato estiver ausente: marque a tarefa correspondente como reaberta no `plan.md` e redespacha o subagente para corrigi-la.
+
+**Check 3 — Qualidade verificada**
+- O ciclo de qualidade (`codecheck`, `typecheck`, `test`) foi executado e passou para o workspace da fase?
+- Nao aceite "passou" como afirmacao — verifique se ha erros registrados no reporte. Se o subagente nao rodou os checks ou reportou falhas ignoradas: bloqueie o avanco e exija correcao.
+
+**Check 4 — Aderencia aos padroes**
+- Os artefatos criados seguem a nomenclatura, estrutura de pastas e contratos definidos nas regras da camada?
+- Use Serena para comparar com implementacoes similares identificadas no pre-check (Secao 1.2).
+- Se houver desvio de padrao nao justificado: registre como divergencia no `plan.md` e avalie se exige correcao ou apenas documentacao.
+
+**Check 5 — Divergencias em relacao a spec**
+- O subagente declarou alguma divergencia em relacao a spec (decisao de design, ajuste de contrato, comportamento nao previsto)?
+- Se sim: classifique cada divergencia:
+  - **Aceitavel** (ex: separacao de arquivo por SRP, renomeacao por clareza) → registre na secao `Divergencias` do `plan.md` e prossiga.
+  - **Estrutural** (ex: mudanca de contrato de interface, novo campo em DTO, alteracao de fluxo de dados) → acione o `update-spec-prompt` para atualizar a spec antes de liberar a proxima fase.
+
+> ⚠️ **Criterio de bloqueio:** qualquer check reprovado impede o inicio da proxima fase. O orquestrador nao abre excecoes — correcoes sao obrigatorias antes de avancar.
+
+**Apos todos os checks aprovados**, o orquestrador:
+
+1. Sincroniza a todo tool com o estado atual do `plan.md`.
+2. Registra o resultado do review na secao `Divergencias` do `plan.md` (mesmo que seja "Nenhuma divergencia identificada na fase FX").
+3. Dispara a proxima fase conforme o mapa de paralelizacao.
 
 ---
 
