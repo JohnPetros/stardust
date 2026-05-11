@@ -54,7 +54,6 @@ export class ProfileFixture {
         name: rocket.name,
         image: rocket.image,
         price: rocket.price,
-        slug: `rocket-${randomUUID()}`,
         is_acquired_by_default: rocket.isAcquiredByDefault ?? false,
         is_selected_by_default: rocket.isSelectedByDefault ?? false,
       }),
