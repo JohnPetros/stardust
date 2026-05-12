@@ -13,6 +13,10 @@ permissions:
   id-token: write
   contents: read
 
+concurrency:
+  group: server-app-cd-heroku-production
+  cancel-in-progress: true
+
 jobs:
   migrate-database:
     name: Migrate database
@@ -29,7 +33,7 @@ jobs:
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 2.98.2
 
       - name: Link production database
         working-directory: apps/server

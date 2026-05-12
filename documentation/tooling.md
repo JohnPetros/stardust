@@ -55,8 +55,8 @@ npm run db:types -w @stardust/server
 ```
 
 Notas:
-- A fonte de verdade da Supabase CLI do server e `apps/server/supabase/`.
-- Em producao, as migrations devem rodar no workflow de deploy antes do release da aplicacao.
+- A fonte de verdade da Supabase CLI do server é `apps/server/supabase/`.
+- Em produção, as migrations devem rodar no workflow de deploy antes do release da aplicação.
 
 ## Hooks
 
