@@ -1,5 +1,5 @@
 import type { UseCase } from '#global/interfaces/UseCase'
-import type { StorageProvider } from '#storage/interfaces/StorageProvider'
+import type { StorageProvider } from '#storage/interfaces/FileStorageProvider'
 import { Text } from '#global/domain/structures/Text'
 import { StorageFolder } from '../domain/structures'
 import { FileNotFoundError } from '../errors'

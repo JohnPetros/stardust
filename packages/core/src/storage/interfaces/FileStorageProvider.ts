@@ -9,3 +9,5 @@ export interface StorageProvider {
   listFiles(params: FilesListingParams): Promise<ManyItems<File>>
   removeFile(folder: StorageFolder, fileName: Text): Promise<void>
 }
+
+export type FileStorageProvider = StorageProvider
