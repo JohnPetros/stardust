@@ -48,17 +48,15 @@ describe('Fetch Images List Controller', () => {
     })
 
     const result = await controller.handle(http)
+    const [params] = storageProvider.listFiles.mock.calls[0]
 
     expect(http.getRouteParams).toHaveBeenCalledTimes(1)
     expect(http.getQueryParams).toHaveBeenCalledTimes(1)
-    expect(storageProvider.listFiles).toHaveBeenCalledWith(
-      expect.objectContaining({
-        folder: expect.objectContaining({ name: routeParams.folder }),
-        page: expect.objectContaining({ value: queryParams.page }),
-        itemsPerPage: expect.objectContaining({ value: queryParams.itemsPerPage }),
-        search: expect.objectContaining({ value: queryParams.search }),
-      }),
-    )
+    expect(storageProvider.listFiles).toHaveBeenCalledTimes(1)
+    expect(params.folder.name).toBe('images/avatars')
+    expect(params.page.value).toBe(queryParams.page)
+    expect(params.itemsPerPage.value).toBe(queryParams.itemsPerPage)
+    expect(params.search.value).toBe(queryParams.search)
     expect(http.statusOk).toHaveBeenCalledTimes(1)
     expect(http.sendPagination).toHaveBeenCalledWith(
       new PaginationResponse({
@@ -81,15 +79,13 @@ describe('Fetch Images List Controller', () => {
     storageProvider.listFiles.mockResolvedValue({ items: [], count: 0 })
 
     await controller.handle(http)
+    const [params] = storageProvider.listFiles.mock.calls[0]
 
-    expect(storageProvider.listFiles).toHaveBeenCalledWith(
-      expect.objectContaining({
-        folder: expect.objectContaining({ name: routeParams.folder }),
-        page: expect.objectContaining({ value: queryParams.page }),
-        itemsPerPage: expect.objectContaining({ value: queryParams.itemsPerPage }),
-        search: expect.objectContaining({ value: queryParams.search }),
-      }),
-    )
+    expect(storageProvider.listFiles).toHaveBeenCalledTimes(1)
+    expect(params.folder.name).toBe('images/planets')
+    expect(params.page.value).toBe(queryParams.page)
+    expect(params.itemsPerPage.value).toBe(queryParams.itemsPerPage)
+    expect(params.search.value).toBe(queryParams.search)
     expect(http.sendPagination).toHaveBeenCalledWith(
       new PaginationResponse({
         items: [],

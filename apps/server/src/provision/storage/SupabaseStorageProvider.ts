@@ -8,7 +8,7 @@ import { Text } from '@stardust/core/global/structures'
 import type { ManyItems } from '@stardust/core/global/types'
 
 export class SupabaseStorageProvider implements StorageProvider {
-  private static readonly BUCKET_NAME = 'images'
+  private static readonly BUCKET_NAME = 'supabase-bucket'
 
   constructor(private readonly supabase: SupabaseClient) {}
 
@@ -216,6 +216,8 @@ export class SupabaseStorageProvider implements StorageProvider {
     return messageParts.join(' | ')
   }
 }
+
+export { SupabaseStorageProvider as SupabaseFileStorageProvider }
 
 type ErrorWithOriginalError = Error & {
   originalError?: unknown

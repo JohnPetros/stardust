@@ -9,6 +9,10 @@ import type { StorageFolder } from '@stardust/core/storage/structures'
 import { RemoveFileController } from '../RemoveFileController'
 
 describe('Remove File Controller', () => {
+  const INTERNAL_FOLDER_NAMES = {
+    avatars: 'images/avatars',
+  } as const
+
   let http: Mock<Http<{ routeParams: { fileName: string; folder: string } }>>
   let storageProvider: Mock<StorageProvider>
   let controller: RemoveFileController
@@ -39,7 +43,7 @@ describe('Remove File Controller', () => {
       Text,
     ]
 
-    expect(storageFolder.name).toBe(folder)
+    expect(storageFolder.name).toBe(INTERNAL_FOLDER_NAMES[folder])
     expect(text.value).toBe(fileName)
     expect(http.statusNoContent).toHaveBeenCalledTimes(1)
     expect(http.send).toHaveBeenCalledTimes(1)
