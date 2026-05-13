@@ -1,7 +1,7 @@
 import type { StorageService as IStorageService } from '@stardust/core/storage/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
 import type { FilesListingParams } from '@stardust/core/storage/types'
-import type { StorageFolder } from '@stardust/core/storage/structures'
+import type { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import type { Text } from '@stardust/core/global/structures'
 
 export const StorageService = (restClient: RestClient): IStorageService => {
@@ -13,13 +13,13 @@ export const StorageService = (restClient: RestClient): IStorageService => {
       return await restClient.get(`/storage/files/${params.folder.value}`)
     },
 
-    async uploadFile(folder: StorageFolder, file: File) {
+    async uploadFile(folder: FileStorageFolderPath, file: File) {
       const formData = new FormData()
       formData.append('file', file)
       return await restClient.postFormData(`/storage/files/${folder.value}`, formData)
     },
 
-    async removeFile(folder: StorageFolder, fileName: Text) {
+    async removeFile(folder: FileStorageFolderPath, fileName: Text) {
       return await restClient.delete(`/storage/files/${folder.value}/${fileName.value}`)
     },
 
