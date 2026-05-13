@@ -69,7 +69,7 @@ Implementar o widget `FeedbackDialog` para coletar feedbacks dos usuários. O wi
     *   **Mudança:** Exportar `ReportingService` e `StorageService`.
 *   **Arquivo:** `apps/web/src/ui/global/hooks/useRest.ts`
     *   **Mudança:** Adicionar `reportingService` e `storageService` ao hook.
-*   **Arquivo:** `packages/core/src/storage/domain/structures/StorageFolder.ts`
+*   **Arquivo:** `packages/core/src/storage/domain/structures/FileStorageFolder.ts`
     *   **Mudança:** Adicionar suporte a pasta `feedback-reports`.
 
 ### 5. O que deve ser removido?
