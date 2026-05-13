@@ -113,7 +113,10 @@ export class SupabaseStorageProvider implements StorageProvider {
       .remove([`${folder.value}/${fileName.value}`])
 
     if (error) {
-      await this.handleError(error, `removing file ${fileName.value} from ${folder.value}`)
+      await this.handleError(
+        error,
+        `removing file ${fileName.value} from ${folder.value}`,
+      )
     }
   }
 
