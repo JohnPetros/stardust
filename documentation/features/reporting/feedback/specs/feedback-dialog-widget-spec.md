@@ -24,7 +24,7 @@ Implementar o widget `FeedbackDialog` para coletar feedbacks dos usuários. O wi
 *   **Localização:** `apps/web/src/rest/services/StorageService.ts`
 *   **Dependências:** `RestClient` injetado via factory.
 *   **Métodos:**
-    *   `uploadFile(folder: StorageFolder, file: File): Promise<RestResponse<{ filename: string }>>`: Realiza upload de arquivos.
+    *   `uploadFile(folder: FileStorageFolderPath, file: File): Promise<RestResponse<{ filename: string }>>`: Realiza upload de arquivos.
 
 #### Camada UI (Widgets)
 
@@ -69,7 +69,7 @@ Implementar o widget `FeedbackDialog` para coletar feedbacks dos usuários. O wi
     *   **Mudança:** Exportar `ReportingService` e `StorageService`.
 *   **Arquivo:** `apps/web/src/ui/global/hooks/useRest.ts`
     *   **Mudança:** Adicionar `reportingService` e `storageService` ao hook.
-*   **Arquivo:** `packages/core/src/storage/domain/structures/FileStorageFolder.ts`
+*   **Arquivo:** `packages/core/src/storage/domain/structures/FileFileStorageFolderPath.ts`
     *   **Mudança:** Adicionar suporte a pasta `feedback-reports`.
 
 ### 5. O que deve ser removido?
