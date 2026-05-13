@@ -3,7 +3,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { AppError } from '@stardust/core/global/errors'
 import type { StorageProvider } from '@stardust/core/storage/interfaces'
 import type { FilesListingParams } from '@stardust/core/storage/types'
-import type { StorageFolder } from '@stardust/core/storage/structures'
+import type { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { Text } from '@stardust/core/global/structures'
 import type { ManyItems } from '@stardust/core/global/types'
 
@@ -12,8 +12,8 @@ export class SupabaseStorageProvider implements StorageProvider {
 
   constructor(private readonly supabase: SupabaseClient) {}
 
-  async upload(folder: StorageFolder, file: File): Promise<File> {
-    const filePath = `${folder.name}/${file.name}`
+  async upload(folder: FileStorageFolderPath, file: File): Promise<File> {
+    const filePath = `${folder.value}/${file.name}`
     const contentType = file.type || 'application/octet-stream'
 
     const { data, error } = await this.supabase.storage
@@ -43,19 +43,19 @@ export class SupabaseStorageProvider implements StorageProvider {
   }: FilesListingParams): Promise<ManyItems<File>> {
     const { data, error } = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
-      .list(folder.name, {
+      .list(folder.value, {
         limit: itemsPerPage.value,
         offset: (page.value - 1) * itemsPerPage.value,
         search: search.value,
       })
 
     if (error) {
-      await this.handleError(error, `listing files in ${folder.name}`)
+      await this.handleError(error, `listing files in ${folder.value}`)
     }
 
     const response = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
-      .list(folder.name, {
+      .list(folder.value, {
         offset: 0,
         search: search.value,
       })
@@ -72,16 +72,16 @@ export class SupabaseStorageProvider implements StorageProvider {
     return { items: files, count: response.data?.length ?? 0 }
   }
 
-  async findFile(folder: StorageFolder, fileName: Text): Promise<File | null> {
+  async findFile(folder: FileStorageFolderPath, fileName: Text): Promise<File | null> {
     const { data, error } = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
-      .list(folder.name, {
+      .list(folder.value, {
         offset: 0,
         search: fileName.value,
       })
 
     if (error) {
-      await this.handleError(error, `finding file ${fileName.value} in ${folder.name}`)
+      await this.handleError(error, `finding file ${fileName.value} in ${folder.value}`)
     }
 
     if (!data?.length) {
@@ -91,10 +91,13 @@ export class SupabaseStorageProvider implements StorageProvider {
     return this.getFile(folder, fileName)
   }
 
-  private async getFile(folder: StorageFolder, fileName: Text): Promise<File | null> {
+  private async getFile(
+    folder: FileStorageFolderPath,
+    fileName: Text,
+  ): Promise<File | null> {
     const { data: urlData } = this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
-      .getPublicUrl(`${folder.name}/${fileName.value}`)
+      .getPublicUrl(`${folder.value}/${fileName.value}`)
 
     const response = await fetch(urlData.publicUrl)
     const blob = await response.blob()
@@ -104,13 +107,13 @@ export class SupabaseStorageProvider implements StorageProvider {
     return file
   }
 
-  async removeFile(folder: StorageFolder, fileName: Text): Promise<void> {
+  async removeFile(folder: FileStorageFolderPath, fileName: Text): Promise<void> {
     const { error } = await this.supabase.storage
       .from(SupabaseStorageProvider.BUCKET_NAME)
-      .remove([`${folder.name}/${fileName.value}`])
+      .remove([`${folder.value}/${fileName.value}`])
 
     if (error) {
-      await this.handleError(error, `removing file ${fileName.value} from ${folder.name}`)
+      await this.handleError(error, `removing file ${fileName.value} from ${folder.value}`)
     }
   }
 

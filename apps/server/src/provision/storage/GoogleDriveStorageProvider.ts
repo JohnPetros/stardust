@@ -3,7 +3,7 @@ import { type drive_v3, google } from 'googleapis'
 
 import { AppError } from '@stardust/core/global/errors'
 import type { StorageProvider } from '@stardust/core/storage/interfaces'
-import type { StorageFolder } from '@stardust/core/storage/structures'
+import type { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import type {
   FileStorageFolderPathValue,
   FilesListingParams,
@@ -40,8 +40,8 @@ export class GoogleDriveStorageProvider implements StorageProvider {
     this.drive = google.drive({ version: GoogleDriveStorageProvider.DRIVE_VERSION, auth })
   }
 
-  async upload(folder: StorageFolder, file: File): Promise<File> {
-    const parentFolderId = GoogleDriveStorageProvider.PARENT_FOLDER_IDS[folder.name]
+  async upload(folder: FileStorageFolderPath, file: File): Promise<File> {
+    const parentFolderId = GoogleDriveStorageProvider.PARENT_FOLDER_IDS[folder.value]
     const fileMetadata = {
       name: file.name,
       parents: [parentFolderId],
@@ -72,7 +72,7 @@ export class GoogleDriveStorageProvider implements StorageProvider {
     throw new MethodNotImplementedError('listFiles')
   }
 
-  async findFile(_folder: StorageFolder, _fileName: Text): Promise<File | null> {
+  async findFile(_folder: FileStorageFolderPath, _fileName: Text): Promise<File | null> {
     throw new Error('Method not implemented.')
   }
 
