@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 import Image from 'next/image'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 import { AnimatedContainer } from './AnimatedContainer'
 import { AnimatedSpan } from './AnimatedSpan'
@@ -35,7 +35,7 @@ export function AchievementCard({
   children: progress,
 }: AchievementCardProps) {
   const { handleRescueButtonClick } = useAchievementCard(id, reward)
-  const iconImage = useFileStorage(StorageFolder.createAsAchievements(), icon)
+  const iconImage = useFileStorage(FileStorageFolderPath.createAsAchievements(), icon)
 
   return (
     <AnimatedContainer>

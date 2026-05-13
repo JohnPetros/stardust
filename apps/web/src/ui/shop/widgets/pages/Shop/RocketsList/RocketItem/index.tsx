@@ -1,7 +1,7 @@
 'use client'
 
 import { Id, Integer } from '@stardust/core/global/structures'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 import { useRocketItem } from './useRocketItem'
 import { RocketAggregate } from '@stardust/core/profile/aggregates'
@@ -31,7 +31,7 @@ export const RocketItem = ({ id, name, image, price }: Props) => {
     Integer.create(price),
     profileService,
   )
-  const rocketImage = useFileStorage(StorageFolder.createAsRockets(), image)
+  const rocketImage = useFileStorage(FileStorageFolderPath.createAsImagesRockets(), image)
 
   if (user)
     return (

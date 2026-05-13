@@ -28,12 +28,12 @@ import { Button } from '@/ui/shadcn/components/button'
 import { useInsigniaForm } from './useInsigniaForm'
 import type { PropsWithChildren } from 'react'
 import { ImageInput } from '@/ui/global/widgets/components/ImageInput'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
 
-const INSIGNIAS_FOLDER = StorageFolder.createAsInsignias()
+const INSIGNIAS_FOLDER = FileStorageFolderPath.createAsInsignias()
 
 type Props = {
   onSubmit: (dto: InsigniaDto) => Promise<void>

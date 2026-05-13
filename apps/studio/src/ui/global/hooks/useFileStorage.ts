@@ -1,6 +1,9 @@
 import { ENV } from '@/constants/env'
-import type { StorageFolder } from '@stardust/core/storage/structures'
+import type { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
-export function useFileStorage(storageFolder: StorageFolder, fileName: string) {
-  return `${ENV.supabaseCdnUrl}/${storageFolder.value}/${fileName}`
+export function useFileStorage(
+  FileStorageFolderPath: FileStorageFolderPath,
+  fileName: string,
+) {
+  return `${ENV.supabaseCdnUrl}/${FileStorageFolderPath.value}/${fileName}`
 }

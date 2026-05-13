@@ -1,4 +1,4 @@
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 import { InsigniaItemView } from './InsigniaItemView'
@@ -29,7 +29,7 @@ export const InsigniaItem = ({ insignia }: Props) => {
     onAcquireInsignia: updateUserCache,
   })
   const insigniaImage = useFileStorage(
-    StorageFolder.createAsInsignias(),
+    FileStorageFolderPath.createAsInsignias(),
     insignia.image.value,
   )
 

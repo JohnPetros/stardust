@@ -1,6 +1,6 @@
 'use client'
 
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
@@ -13,7 +13,7 @@ type TitleProps = {
 
 export function QuestionStem({ children, picture }: TitleProps) {
   const { parseMdxToText } = useMdx()
-  const image = useFileStorage(StorageFolder.createAsStory(), picture ?? '')
+  const image = useFileStorage(FileStorageFolderPath.createAsStory(), picture ?? '')
 
   return (
     <div className='flex w-full flex-col items-center justify-center gap-3 rounded-md md:flex-row'>

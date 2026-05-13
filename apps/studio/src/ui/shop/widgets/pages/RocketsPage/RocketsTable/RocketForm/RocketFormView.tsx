@@ -21,13 +21,13 @@ import { Button } from '@/ui/shadcn/components/button'
 import { useRocketForm } from './useRocketForm'
 import type { PropsWithChildren } from 'react'
 import { ImageInput } from '@/ui/global/widgets/components/ImageInput'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import type { StorageService } from '@stardust/core/storage/interfaces'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { Checkbox } from '@/ui/shadcn/components/checkbox'
 
-const ROCKETS_FOLDER = StorageFolder.createAsRockets()
+const ROCKETS_FOLDER = FileStorageFolderPath.createAsImagesRockets()
 
 type Props = {
   storageService: StorageService

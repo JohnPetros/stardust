@@ -19,13 +19,13 @@ import { Button } from '@/ui/shadcn/components/button'
 import { usePlanetForm } from './usePlanetForm'
 import type { PlanetDto } from '@stardust/core/space/entities/dtos'
 import { ImageInput } from '@/ui/global/widgets/components/ImageInput'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import type { PropsWithChildren } from 'react'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import type { StorageService } from '@stardust/core/storage/interfaces'
 
-const PLANETS_FOLDER = StorageFolder.createAsPlanets()
+const PLANETS_FOLDER = FileStorageFolderPath.createAsPlanets()
 
 type Props = {
   planetDto?: PlanetDto

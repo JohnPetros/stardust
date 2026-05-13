@@ -4,7 +4,7 @@ import { FeedbackReport } from '@stardust/core/reporting/entities'
 import { AuthorAggregate } from '@stardust/core/global/aggregates'
 import type { ReportingService } from '@stardust/core/reporting/interfaces'
 import type { StorageService } from '@stardust/core/storage/interfaces'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import type { User } from '@stardust/core/global/entities'
 
 import type { ToastContextValue } from '@/ui/global/contexts/ToastContext/types'
@@ -223,7 +223,7 @@ export function useFeedbackDialog({
           })
 
           const uploadResponse = await storageService.uploadFile(
-            StorageFolder.createAsFeedbackReports(),
+            FileStorageFolderPath.createAsFeedbackReports(),
             file,
           )
 

@@ -8,7 +8,7 @@ import type { SortableItem } from '@/ui/global/widgets/components/SortableList/t
 import type { PlanetDto } from '@stardust/core/space/entities/dtos'
 import type { UiProvider } from '@stardust/core/ui/interfaces'
 import type { StorageService } from '@stardust/core/storage/interfaces'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 type Params = {
   service: SpaceService
@@ -87,7 +87,7 @@ export function usePlanetCollapsible({
 
   async function handlePlanetDelete() {
     const storageResponse = await storageService.removeFile(
-      StorageFolder.createAsPlanets(),
+      FileStorageFolderPath.createAsPlanets(),
       planet.image.text,
     )
     if (storageResponse.isFailure) {

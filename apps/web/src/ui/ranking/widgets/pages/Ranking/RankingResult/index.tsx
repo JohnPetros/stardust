@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useRef } from 'react'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
@@ -32,7 +32,10 @@ export function RankingResult() {
   })
   const { user } = useAuthContext()
   const tierImage = user
-    ? useFileStorage(StorageFolder.createAsRankings(), user.tier.image.value)
+    ? useFileStorage(
+        FileStorageFolderPath.createAsImagesRankings(),
+        user.tier.image.value,
+      )
     : ''
 
   if (isLoading) return <Loading isSmall={false} />

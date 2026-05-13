@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react'
 import type { z } from 'zod'
 
 import { avatarSchema } from '@stardust/validation/shop/schemas'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { Text } from '@stardust/core/global/structures'
 import type { StorageService } from '@stardust/core/storage/interfaces'
 import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
 
-const AVATAR_FOLDER = StorageFolder.createAsAvatars()
+const AVATAR_FOLDER = FileStorageFolderPath.createAsImagesAvatars()
 
 type FormData = z.infer<typeof avatarSchema>
 

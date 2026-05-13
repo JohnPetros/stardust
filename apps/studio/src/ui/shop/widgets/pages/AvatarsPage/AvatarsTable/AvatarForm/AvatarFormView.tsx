@@ -21,14 +21,13 @@ import { Button } from '@/ui/shadcn/components/button'
 import { useAvatarForm } from './useAvatarForm'
 import type { PropsWithChildren } from 'react'
 import { ImageInput } from '@/ui/global/widgets/components/ImageInput'
-import { StorageFolder } from '@stardust/core/storage/structures'
-import type { StorageService } from '@stardust/core/storage/interfaces'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { Checkbox } from '@/ui/shadcn/components/checkbox'
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
 
-const AVATARS_FOLDER = StorageFolder.createAsAvatars()
+const AVATARS_FOLDER = FileStorageFolderPath.createAsImagesAvatars()
 
 type Props = {
   initialValues?: AvatarDto

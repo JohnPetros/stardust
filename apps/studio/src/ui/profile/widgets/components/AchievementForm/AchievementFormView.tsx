@@ -21,7 +21,7 @@ import { Button } from '@/ui/shadcn/components/button'
 import { useAchievementForm } from './useAchievementForm'
 import type { PropsWithChildren } from 'react'
 import { ImageInput } from '@/ui/global/widgets/components/ImageInput'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import type { StorageService } from '@stardust/core/storage/interfaces'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
@@ -34,7 +34,7 @@ import {
 } from '@/ui/shadcn/components/select'
 import type { AchievementDto } from '@stardust/core/profile/entities/dtos'
 
-const ACHIEVEMENTS_FOLDER = StorageFolder.createAsAchievements()
+const ACHIEVEMENTS_FOLDER = FileStorageFolderPath.createAsAchievements()
 
 const METRIC_LABELS: Record<string, string> = {
   unlockedStarsCount: 'Estrelas Desbloqueadas',

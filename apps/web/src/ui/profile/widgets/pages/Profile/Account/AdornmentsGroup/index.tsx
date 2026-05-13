@@ -1,6 +1,6 @@
 'use client'
 
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { Adornment } from './Adornment'
@@ -17,8 +17,14 @@ type ItemsProps = {
 }
 
 export function AdornmentGroup({ tier, rocket }: ItemsProps) {
-  const tierImage = useFileStorage(StorageFolder.createAsRankings(), tier.image)
-  const rocketImage = useFileStorage(StorageFolder.createAsRockets(), rocket.image)
+  const tierImage = useFileStorage(
+    FileStorageFolderPath.createAsImagesRankings(),
+    tier.image,
+  )
+  const rocketImage = useFileStorage(
+    FileStorageFolderPath.createAsImagesRockets(),
+    rocket.image,
+  )
 
   return (
     <>
