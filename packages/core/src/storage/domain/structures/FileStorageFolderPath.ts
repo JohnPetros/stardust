@@ -1,6 +1,6 @@
 import { StringValidation } from '#global/libs/index'
 import { Logical } from '#global/domain/structures/Logical'
-import type { FileStorageFolderPathValue, StorageFolderName } from '../../types'
+import type { FileStorageFolderPathValue } from '../../types'
 
 export class FileStorageFolderPath {
   private constructor(readonly value: FileStorageFolderPathValue) {}
@@ -35,16 +35,8 @@ export class FileStorageFolderPath {
     return FileStorageFolderPath.create('images/rockets')
   }
 
-  static createAsRockets(): FileStorageFolderPath {
-    return FileStorageFolderPath.createAsImagesRockets()
-  }
-
   static createAsImagesAvatars(): FileStorageFolderPath {
     return FileStorageFolderPath.create('images/avatars')
-  }
-
-  static createAsAvatars(): FileStorageFolderPath {
-    return FileStorageFolderPath.createAsImagesAvatars()
   }
 
   static createAsImagesAchievements(): FileStorageFolderPath {
@@ -59,10 +51,6 @@ export class FileStorageFolderPath {
     return FileStorageFolderPath.create('images/rankings')
   }
 
-  static createAsRankings(): FileStorageFolderPath {
-    return FileStorageFolderPath.createAsImagesRankings()
-  }
-
   static createAsImagesInsignias(): FileStorageFolderPath {
     return FileStorageFolderPath.create('images/insignias')
   }
@@ -75,7 +63,7 @@ export class FileStorageFolderPath {
     return FileStorageFolderPath.create('database-backups')
   }
 
-  static createAsFeedbackReports(): FileStorageFolderPath {
+  static createAsImagesFeedbackReports(): FileStorageFolderPath {
     return FileStorageFolderPath.create('images/feedback-reports')
   }
 
@@ -104,23 +92,4 @@ export class FileStorageFolderPath {
     ])
     return true
   }
-
-  private static isStorageFolderValue(value: string): value is StorageFolderName {
-    new StringValidation(value).oneOf([
-      'story',
-      'rockets',
-      'avatars',
-      'planets',
-      'achievements',
-      'rankings',
-      'database-backups',
-      'feedback-reports',
-      'insignias',
-    ])
-
-    return true
-  }
 }
-
-export { FileStorageFolderPath as StorageFolder }
-export { FileStorageFolderPath as FileStorageFolder }

@@ -2,7 +2,7 @@ import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { DatabaseProvider } from '#global/interfaces/provision/DatabaseProvider'
 import type { StorageProvider } from '#storage/interfaces/FileStorageProvider'
-import { StorageFolder } from '#storage/domain/structures/FileStorageFolderPath'
+import { FileStorageFolderPath } from '#storage/domain/structures/FileStorageFolderPath'
 import { BackupDatabaseUseCase } from '../BackupDatabaseUseCase'
 
 describe('Backup Database Use Case', () => {
@@ -35,7 +35,7 @@ describe('Backup Database Use Case', () => {
     await useCase.execute()
 
     expect(storageProvider.upload).toHaveBeenCalledWith(
-      StorageFolder.createAsDatabaseBackups(),
+      FileStorageFolderPath.createAsDatabaseBackups(),
       backupFile,
     )
   })
@@ -50,7 +50,7 @@ describe('Backup Database Use Case', () => {
     expect(databaseProvider.backup).toHaveBeenCalledTimes(1)
     expect(storageProvider.upload).toHaveBeenCalledTimes(1)
     expect(storageProvider.upload).toHaveBeenCalledWith(
-      StorageFolder.createAsDatabaseBackups(),
+      FileStorageFolderPath.createAsDatabaseBackups(),
       backupFile,
     )
   })

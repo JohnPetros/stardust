@@ -1,6 +1,6 @@
 import type { DatabaseProvider, UseCase } from '../../global/interfaces'
 import type { StorageProvider } from '../interfaces'
-import { StorageFolder } from '../domain/structures'
+import { FileStorageFolderPath } from '../domain/structures'
 
 export class BackupDatabaseUseCase implements UseCase {
   constructor(
@@ -10,6 +10,9 @@ export class BackupDatabaseUseCase implements UseCase {
 
   async execute() {
     const backupFile = await this.databaseProvider.backup()
-    await this.storageProvider.upload(StorageFolder.createAsDatabaseBackups(), backupFile)
+    await this.storageProvider.upload(
+      FileStorageFolderPath.createAsDatabaseBackups(),
+      backupFile,
+    )
   }
 }

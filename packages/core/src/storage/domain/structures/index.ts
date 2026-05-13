@@ -1,5 +1,3 @@
 export { FileStorageFolderPath } from './FileStorageFolderPath'
-export { StorageFolder } from './FileStorageFolderPath'
-export { FileStorageFolder } from './FileStorageFolderPath'
 export { Embedding } from './Embedding'
 export { EmbeddingNamespace } from './EmbeddingNamespace'

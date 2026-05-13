@@ -10,7 +10,7 @@ export type FileStorageFolderPathValue =
   | 'images/feedback-reports'
   | 'database-backups'
 
-export type StorageFolderName =
+export type FileStorageFolderPathName =
   | 'story'
   | 'rockets'
   | 'avatars'
@@ -21,4 +21,4 @@ export type StorageFolderName =
   | 'feedback-reports'
   | 'insignias'
 
-export type FileStorageFolderName = FileStorageFolderPathValue
+export type FileFileStorageFolderPathName = FileStorageFolderPathValue
