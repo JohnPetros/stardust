@@ -1,14 +1,14 @@
 import { StorageFolder } from '@stardust/core/storage/structures'
 
 import { REGEX } from '@/constants'
-import { useStorageImage } from '@/ui/global/hooks/useStorageImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 
 type Props = {
   url: string
 }
 
 export const PictureView = ({ url }: Props) => {
-  const image = useStorageImage(StorageFolder.createAsStory(), url)
+  const image = useFileStorage(StorageFolder.createAsStory(), url)
   const formattedImage = image.replace(REGEX.quotes, '')
 
   return (

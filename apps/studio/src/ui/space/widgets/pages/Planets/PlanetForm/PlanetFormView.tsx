@@ -22,7 +22,7 @@ import { ImageInput } from '@/ui/global/widgets/components/ImageInput'
 import { StorageFolder } from '@stardust/core/storage/structures'
 import type { PropsWithChildren } from 'react'
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { useStorageImage } from '@/ui/global/hooks/useStorageImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import type { StorageService } from '@stardust/core/storage/interfaces'
 
 const PLANETS_FOLDER = StorageFolder.createAsPlanets()
@@ -48,8 +48,8 @@ export const PlanetFormView = ({
     handleSubmit,
     handleDialogChange,
   } = usePlanetForm({ planetDto, storageService, onSubmit })
-  const imageUrl = useStorageImage(PLANETS_FOLDER, planetImage)
-  const iconUrl = useStorageImage(PLANETS_FOLDER, planetIcon)
+  const imageUrl = useFileStorage(PLANETS_FOLDER, planetImage)
+  const iconUrl = useFileStorage(PLANETS_FOLDER, planetIcon)
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
@@ -80,7 +80,7 @@ export const PlanetFormView = ({
                   <FormItem>
                     <FormLabel>Imagem do planeta</FormLabel>
                     <FormControl>
-                      <ImageInput folder={PLANETS_FOLDER.name} onSubmit={field.onChange}>
+                      <ImageInput folder={PLANETS_FOLDER.value} onSubmit={field.onChange}>
                         <Button
                           variant='ghost'
                           className='rounded-full border border-dashed mt-2 w-20 h-20'
@@ -108,7 +108,7 @@ export const PlanetFormView = ({
                   <FormItem>
                     <FormLabel>Ícone do planeta</FormLabel>
                     <FormControl>
-                      <ImageInput folder={PLANETS_FOLDER.name} onSubmit={field.onChange}>
+                      <ImageInput folder={PLANETS_FOLDER.value} onSubmit={field.onChange}>
                         <Button
                           variant='ghost'
                           className='border border-dashed mt-2 w-48 h-12'

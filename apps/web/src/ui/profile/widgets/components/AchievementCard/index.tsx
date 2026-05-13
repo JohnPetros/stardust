@@ -2,13 +2,14 @@
 
 import type { ReactNode } from 'react'
 import Image from 'next/image'
+import { StorageFolder } from '@stardust/core/storage/structures'
 
 import { AnimatedContainer } from './AnimatedContainer'
 import { AnimatedSpan } from './AnimatedSpan'
 import { RewardAlertDialog } from './RewardAlertDialog'
 
 import { Button } from '@/ui/global/widgets/components/Button'
-import { useImage } from '@/ui/global/hooks/useImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 
 import { useAchievementCard } from './useAchievementCard'
 
@@ -34,7 +35,7 @@ export function AchievementCard({
   children: progress,
 }: AchievementCardProps) {
   const { handleRescueButtonClick } = useAchievementCard(id, reward)
-  const iconImage = useImage('achievements', icon)
+  const iconImage = useFileStorage(StorageFolder.createAsAchievements(), icon)
 
   return (
     <AnimatedContainer>

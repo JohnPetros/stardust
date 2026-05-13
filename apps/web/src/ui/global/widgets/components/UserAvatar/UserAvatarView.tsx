@@ -1,6 +1,7 @@
 import * as Avatar from '@radix-ui/react-avatar'
+import { StorageFolder } from '@stardust/core/storage/structures'
 
-import { useImage } from '@/ui/global/hooks/useImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 
 type Props = {
   avatarImage: string
@@ -9,7 +10,7 @@ type Props = {
 }
 
 export const UserAvatarView = ({ avatarImage, avatarName, size }: Props) => {
-  const avatarImageSrc = useImage('avatars', avatarImage)
+  const avatarImageSrc = useFileStorage(StorageFolder.createAsAvatars(), avatarImage)
 
   return (
     <Avatar.Root>

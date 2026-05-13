@@ -1,8 +1,9 @@
 import Image from 'next/image'
 import { motion, type Variants } from 'motion/react'
+import { StorageFolder } from '@stardust/core/storage/structures'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { useImage } from '@/ui/global/hooks/useImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 
 const rocketVariants: Variants = {
   hidden: {
@@ -25,7 +26,9 @@ type Props = {
 
 export const AnimatedRocketView = ({ shouldAnimate }: Props) => {
   const { user } = useAuthContext()
-  const rocketImage = user ? useImage('rockets', user.rocket.image.value) : ''
+  const rocketImage = user
+    ? useFileStorage(StorageFolder.createAsRockets(), user.rocket.image.value)
+    : ''
 
   return (
     <motion.div

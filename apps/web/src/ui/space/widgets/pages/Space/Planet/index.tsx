@@ -2,8 +2,9 @@
 
 import { memo } from 'react'
 import type { Star as StarEntity } from '@stardust/core/space/entities'
+import { StorageFolder } from '@stardust/core/storage/structures'
 
-import { useImage } from '@/ui/global/hooks/useImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { PlanetView } from './PlanetView'
 
 type PlanetProps = {
@@ -14,8 +15,9 @@ type PlanetProps = {
 }
 
 export const Widget = ({ name, image, icon, stars }: PlanetProps) => {
-  const planetImage = useImage('planets', image)
-  const planetIconImage = useImage('planets', icon)
+  const planetImage = useFileStorage(StorageFolder.createAsImagesPlanets(), image)
+  console.log(StorageFolder.createAsImagesPlanets())
+  const planetIconImage = useFileStorage(StorageFolder.createAsImagesPlanets(), icon)
 
   return (
     <PlanetView name={name} image={planetImage} icon={planetIconImage} stars={stars} />
