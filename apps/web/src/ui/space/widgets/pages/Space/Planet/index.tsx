@@ -16,7 +16,6 @@ type PlanetProps = {
 
 export const Widget = ({ name, image, icon, stars }: PlanetProps) => {
   const planetImage = useFileStorage(FileStorageFolderPath.createAsImagesPlanets(), image)
-  console.log(FileStorageFolderPath.createAsImagesPlanets())
   const planetIconImage = useFileStorage(
     FileStorageFolderPath.createAsImagesPlanets(),
     icon,
