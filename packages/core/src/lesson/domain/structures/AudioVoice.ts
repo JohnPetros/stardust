@@ -18,7 +18,7 @@ export class AudioVoice {
   }
 
   private static isAudioVoiceValue(name: string): name is AudioVoiceValue {
-    new StringValidation(name).oneOf(['panda', 'shark', 'princess'])
+    new StringValidation(name).oneOf(['panda', 'shark', 'princess']).validate()
     return true
   }
 }

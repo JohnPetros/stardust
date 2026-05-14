@@ -6,9 +6,11 @@ export class FileStorageFolderPath {
   private constructor(readonly value: FileStorageFolderPathValue) {}
 
   static create(value: string): FileStorageFolderPath {
-    if (!FileStorageFolderPath.isFileStorageFolderPathValue(value)) throw new Error()
+    const resolvedValue = FileStorageFolderPath.resolveLegacyFolderPath(value)
 
-    return new FileStorageFolderPath(value)
+    if (!FileStorageFolderPath.isFileStorageFolderPathValue(resolvedValue)) throw new Error()
+
+    return new FileStorageFolderPath(resolvedValue)
   }
 
   static createAsStory(): FileStorageFolderPath {
@@ -67,6 +69,10 @@ export class FileStorageFolderPath {
     return FileStorageFolderPath.create('images/feedback-reports')
   }
 
+  static createAsFeedbackReports(): FileStorageFolderPath {
+    return FileStorageFolderPath.createAsImagesFeedbackReports()
+  }
+
   get isStory(): Logical {
     return Logical.create(this.value === 'images/story' || this.value === 'audios/story')
   }
@@ -78,18 +84,36 @@ export class FileStorageFolderPath {
   private static isFileStorageFolderPathValue(
     value: string,
   ): value is FileStorageFolderPathValue {
-    new StringValidation(value).oneOf([
-      'images/story',
-      'audios/story',
-      'images/planets',
-      'images/rockets',
-      'images/avatars',
-      'images/achievements',
-      'images/rankings',
-      'images/insignias',
-      'images/feedback-reports',
-      'database-backups',
-    ])
+    new StringValidation(value)
+      .oneOf([
+        'images/story',
+        'audios/story',
+        'images/planets',
+        'images/rockets',
+        'images/avatars',
+        'images/achievements',
+        'images/rankings',
+        'images/insignias',
+        'images/feedback-reports',
+        'database-backups',
+      ])
+      .validate()
     return true
+  }
+
+  private static resolveLegacyFolderPath(value: string): string {
+    const legacyFolderMap: Record<string, FileStorageFolderPathValue> = {
+      story: 'images/story',
+      planets: 'images/planets',
+      rockets: 'images/rockets',
+      avatars: 'images/avatars',
+      achievements: 'images/achievements',
+      rankings: 'images/rankings',
+      insignias: 'images/insignias',
+      'feedback-reports': 'images/feedback-reports',
+      'database-backups': 'database-backups',
+    }
+
+    return legacyFolderMap[value] ?? value
   }
 }
