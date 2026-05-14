@@ -3,9 +3,10 @@
 import { Integer } from '@stardust/core/global/structures'
 import { Id } from '@stardust/core/global/structures'
 import { AvatarAggregate } from '@stardust/core/profile/aggregates'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext/hooks/useAuthContext'
-import { useImage } from '@/ui/global/hooks/useImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useAvatarItem } from './useAvatarItem'
 import { AvatarItemView } from './AvatarItemView'
@@ -25,7 +26,7 @@ export function AvatarItem({ id, name, image, price }: Props) {
     Integer.create(price),
     profileService,
   )
-  const avatarImage = useImage('avatars', image)
+  const avatarImage = useFileStorage(FileStorageFolderPath.createAsImagesAvatars(), image)
 
   if (user)
     return (

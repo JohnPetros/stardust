@@ -1,8 +1,9 @@
 'use client'
 
 import Image from 'next/image'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
-import { useImage } from '@/ui/global/hooks/useImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { REGEX } from '@/constants'
 
 type Props = {
@@ -10,7 +11,7 @@ type Props = {
 }
 
 export const PictureView = ({ url }: Props) => {
-  const image = useImage('story', url)
+  const image = useFileStorage(FileStorageFolderPath.createAsStory(), url)
   const formattedImage = image.replace(REGEX.quotes, '')
 
   return (

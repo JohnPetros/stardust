@@ -1,9 +1,10 @@
-import { Image } from './Image'
-import { Logical } from './Logical'
-import { Name } from './Name'
-import { StringValidation } from '../../libs'
-import type { TextBlockDto } from './dtos'
-import type { TextBlockType } from '../types'
+import { Image } from '../../../global/domain/structures/Image'
+import { Logical } from '../../../global/domain/structures/Logical'
+import { Name } from '../../../global/domain/structures/Name'
+import { StringValidation } from '../../../global/libs'
+import type { TextBlockDto } from '../../../global/domain/structures/dtos'
+import type { TextBlockType } from '../../../global/domain/types'
+import type { TextBlockAudio } from './TextBlockAudio'
 
 type TextBlockProps = {
   type: TextBlockType
@@ -19,6 +20,7 @@ export class TextBlock {
   readonly isRunnable: Logical
   readonly title?: Name
   readonly picture?: Image
+  readonly audio?: TextBlockAudio
 
   private constructor(props: TextBlockProps) {
     this.type = props.type

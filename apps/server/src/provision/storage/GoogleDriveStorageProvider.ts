@@ -3,8 +3,11 @@ import { type drive_v3, google } from 'googleapis'
 
 import { AppError } from '@stardust/core/global/errors'
 import type { StorageProvider } from '@stardust/core/storage/interfaces'
-import type { StorageFolder } from '@stardust/core/storage/structures'
-import type { StorageFolderName, FilesListingParams } from '@stardust/core/storage/types'
+import type { FileStorageFolderPath } from '@stardust/core/storage/structures'
+import type {
+  FileStorageFolderPathValue,
+  FilesListingParams,
+} from '@stardust/core/storage/types'
 import type { Text } from '@stardust/core/global/structures'
 import { MethodNotImplementedError } from '@stardust/core/global/errors'
 import type { ManyItems } from '@stardust/core/global/types'
@@ -13,17 +16,19 @@ export class GoogleDriveStorageProvider implements StorageProvider {
   private static readonly KEY_FILE_PATH = './certificates/google-key-file.json'
   private static readonly SCOPES = ['https://www.googleapis.com/auth/drive']
   private static readonly DRIVE_VERSION = 'v3'
-  private static readonly PARENT_FOLDER_IDS: Record<StorageFolderName, string> = {
-    'database-backups': '1XsXyob4JyuqzfeZ_6AQK3f6lgqiE8HrB',
-    story: '',
-    avatars: '',
-    rockets: '',
-    rankings: '',
-    planets: '',
-    achievements: '',
-    insignias: '',
-    'feedback-reports': '',
-  }
+  private static readonly PARENT_FOLDER_IDS: Record<FileStorageFolderPathValue, string> =
+    {
+      'database-backups': '1XsXyob4JyuqzfeZ_6AQK3f6lgqiE8HrB',
+      'audios/story': '',
+      'images/story': '',
+      'images/avatars': '',
+      'images/rockets': '',
+      'images/rankings': '',
+      'images/planets': '',
+      'images/achievements': '',
+      'images/insignias': '',
+      'images/feedback-reports': '',
+    }
   private readonly drive: drive_v3.Drive
 
   constructor() {
@@ -35,8 +40,8 @@ export class GoogleDriveStorageProvider implements StorageProvider {
     this.drive = google.drive({ version: GoogleDriveStorageProvider.DRIVE_VERSION, auth })
   }
 
-  async upload(folder: StorageFolder, file: File): Promise<File> {
-    const parentFolderId = GoogleDriveStorageProvider.PARENT_FOLDER_IDS[folder.name]
+  async upload(folder: FileStorageFolderPath, file: File): Promise<File> {
+    const parentFolderId = GoogleDriveStorageProvider.PARENT_FOLDER_IDS[folder.value]
     const fileMetadata = {
       name: file.name,
       parents: [parentFolderId],
@@ -67,7 +72,7 @@ export class GoogleDriveStorageProvider implements StorageProvider {
     throw new MethodNotImplementedError('listFiles')
   }
 
-  async findFile(_folder: StorageFolder, _fileName: Text): Promise<File | null> {
+  async findFile(_folder: FileStorageFolderPath, _fileName: Text): Promise<File | null> {
     throw new Error('Method not implemented.')
   }
 

@@ -28,12 +28,12 @@ import { Button } from '@/ui/shadcn/components/button'
 import { useInsigniaForm } from './useInsigniaForm'
 import type { PropsWithChildren } from 'react'
 import { ImageInput } from '@/ui/global/widgets/components/ImageInput'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { useStorageImage } from '@/ui/global/hooks/useStorageImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
 
-const INSIGNIAS_FOLDER = StorageFolder.createAsInsignias()
+const INSIGNIAS_FOLDER = FileStorageFolderPath.createAsInsignias()
 
 type Props = {
   onSubmit: (dto: InsigniaDto) => Promise<void>
@@ -54,7 +54,7 @@ export const InsigniaFormView = ({
     handleSubmit,
     handleDialogChange,
   } = useInsigniaForm({ storageService, onSubmit, initialValues })
-  const imageUrl = useStorageImage(INSIGNIAS_FOLDER, insigniaImage)
+  const imageUrl = useFileStorage(INSIGNIAS_FOLDER, insigniaImage)
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
@@ -88,7 +88,7 @@ export const InsigniaFormView = ({
                 <FormItem>
                   <FormLabel>Imagem da insígnia</FormLabel>
                   <FormControl>
-                    <ImageInput folder={INSIGNIAS_FOLDER.name} onSubmit={field.onChange}>
+                    <ImageInput folder={INSIGNIAS_FOLDER.value} onSubmit={field.onChange}>
                       <Button
                         variant='ghost'
                         className='rounded-full border border-dashed mt-2 w-20 h-20'

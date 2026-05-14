@@ -1,8 +1,9 @@
 'use client'
 
 import Image from 'next/image'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
-import { useImage } from '@/ui/global/hooks/useImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
@@ -18,7 +19,12 @@ type LessonHeaderProps = {
 export function LessonHeader({ onLeavePage }: LessonHeaderProps) {
   const { user } = useAuthContext()
   const { lessonProgress, livesCount } = useLessonHeader()
-  const rocketImage = user ? useImage('rockets', user.rocket.image.value) : ''
+  const rocketImage = user
+    ? useFileStorage(
+        FileStorageFolderPath.createAsImagesRockets(),
+        user.rocket.image.value,
+      )
+    : ''
 
   if (lessonProgress)
     return (

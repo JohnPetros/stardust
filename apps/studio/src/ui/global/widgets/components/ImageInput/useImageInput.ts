@@ -1,7 +1,7 @@
 import { useState, type RefObject } from 'react'
 
 import type { StorageService } from '@stardust/core/storage/interfaces'
-import type { StorageFolder } from '@stardust/core/storage/structures'
+import type { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { Image } from '@stardust/core/global/structures'
 
 import type { DialogRef } from '@/ui/shadcn/components/dialog'
@@ -9,7 +9,7 @@ import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 
 type Params = {
   storageService: StorageService
-  folder: StorageFolder
+  folder: FileStorageFolderPath
   dialogRef: RefObject<DialogRef | null>
   onSubmit: (imageName: string) => void
 }

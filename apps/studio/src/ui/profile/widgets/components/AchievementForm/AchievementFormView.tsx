@@ -21,10 +21,10 @@ import { Button } from '@/ui/shadcn/components/button'
 import { useAchievementForm } from './useAchievementForm'
 import type { PropsWithChildren } from 'react'
 import { ImageInput } from '@/ui/global/widgets/components/ImageInput'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import type { StorageService } from '@stardust/core/storage/interfaces'
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { useStorageImage } from '@/ui/global/hooks/useStorageImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import {
   Select,
   SelectContent,
@@ -34,7 +34,7 @@ import {
 } from '@/ui/shadcn/components/select'
 import type { AchievementDto } from '@stardust/core/profile/entities/dtos'
 
-const ACHIEVEMENTS_FOLDER = StorageFolder.createAsAchievements()
+const ACHIEVEMENTS_FOLDER = FileStorageFolderPath.createAsAchievements()
 
 const METRIC_LABELS: Record<string, string> = {
   unlockedStarsCount: 'Estrelas Desbloqueadas',
@@ -82,7 +82,7 @@ export const AchievementFormView = ({
     handleDialogChange,
     isEditMode,
   } = useAchievementForm({ achievementDto, storageService, onSubmit })
-  const iconUrl = useStorageImage(ACHIEVEMENTS_FOLDER, achievementIcon)
+  const iconUrl = useFileStorage(ACHIEVEMENTS_FOLDER, achievementIcon)
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
@@ -117,7 +117,7 @@ export const AchievementFormView = ({
                   <FormLabel>Ícone da conquista</FormLabel>
                   <FormControl>
                     <ImageInput
-                      folder={ACHIEVEMENTS_FOLDER.name}
+                      folder={ACHIEVEMENTS_FOLDER.value}
                       onSubmit={field.onChange}
                     >
                       <Button

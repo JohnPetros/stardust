@@ -1,4 +1,4 @@
-export type { TextBlockDto } from './TextBlockDto'
+export type { TextBlockDto } from '../../entities/dtos/TextBlockDto'
 export type { KpiDto } from './KpiDto'
 export type { EmbeddingDto } from './EmbeddingDto'
 export type { TextSelectionDto } from './TextSelectionDto'

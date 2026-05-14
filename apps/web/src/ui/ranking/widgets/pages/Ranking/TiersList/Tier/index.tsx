@@ -3,8 +3,9 @@
 import Image from 'next/image'
 import { useRef } from 'react'
 import { twMerge } from 'tailwind-merge'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
-import { useImage } from '@/ui/global/hooks/useImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { useTier } from './useTier'
 import { AnimatedImage } from './AnimatedImage'
 
@@ -18,7 +19,10 @@ type TierProps = {
 export function Tier({ index, rankingId, rankingName, rankingImage }: TierProps) {
   const tierRef = useRef<HTMLDivElement | null>(null)
   const { isLocked, isFromCurrentTier } = useTier(tierRef, rankingId, index)
-  const imageSrc = useImage('rankings', rankingImage)
+  const imageSrc = useFileStorage(
+    FileStorageFolderPath.createAsImagesRankings(),
+    rankingImage,
+  )
 
   return (
     <div
