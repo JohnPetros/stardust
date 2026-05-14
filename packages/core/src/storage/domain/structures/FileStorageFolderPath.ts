@@ -8,7 +8,8 @@ export class FileStorageFolderPath {
   static create(value: string): FileStorageFolderPath {
     const resolvedValue = FileStorageFolderPath.resolveLegacyFolderPath(value)
 
-    if (!FileStorageFolderPath.isFileStorageFolderPathValue(resolvedValue)) throw new Error()
+    if (!FileStorageFolderPath.isFileStorageFolderPathValue(resolvedValue))
+      throw new Error()
 
     return new FileStorageFolderPath(resolvedValue)
   }
