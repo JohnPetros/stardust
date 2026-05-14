@@ -10,7 +10,7 @@ import { RemoveFileController } from '../RemoveFileController'
 
 describe('Remove File Controller', () => {
   const INTERNAL_FOLDER_NAMES = {
-    avatars: 'avatars',
+    avatars: 'images/avatars',
   } as const
 
   let http: Mock<Http<{ routeParams: { fileName: string; folder: string } }>>

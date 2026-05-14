@@ -53,7 +53,7 @@ describe('Fetch Images List Controller', () => {
     expect(http.getRouteParams).toHaveBeenCalledTimes(1)
     expect(http.getQueryParams).toHaveBeenCalledTimes(1)
     expect(storageProvider.listFiles).toHaveBeenCalledTimes(1)
-    expect(params.folder.value).toBe('avatars')
+    expect(params.folder.value).toBe('images/avatars')
     expect(params.page.value).toBe(queryParams.page)
     expect(params.itemsPerPage.value).toBe(queryParams.itemsPerPage)
     expect(params.search.value).toBe(queryParams.search)
@@ -82,7 +82,7 @@ describe('Fetch Images List Controller', () => {
     const [params] = storageProvider.listFiles.mock.calls[0]
 
     expect(storageProvider.listFiles).toHaveBeenCalledTimes(1)
-    expect(params.folder.value).toBe('planets')
+    expect(params.folder.value).toBe('images/planets')
     expect(params.page.value).toBe(queryParams.page)
     expect(params.itemsPerPage.value).toBe(queryParams.itemsPerPage)
     expect(params.search.value).toBe(queryParams.search)
