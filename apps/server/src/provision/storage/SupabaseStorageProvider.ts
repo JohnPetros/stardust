@@ -8,7 +8,7 @@ import { Text } from '@stardust/core/global/structures'
 import type { ManyItems } from '@stardust/core/global/types'
 
 export class SupabaseStorageProvider implements StorageProvider {
-  private static readonly BUCKET_NAME = 'supabase-bucket'
+  private static readonly BUCKET_NAME = 'images'
 
   constructor(private readonly supabase: SupabaseClient) {}
 
