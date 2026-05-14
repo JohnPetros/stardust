@@ -1296,7 +1296,7 @@
 * 📚 docs(studio): update file paths in delete insignia plan documentation (90fc136d6)
 * 🖥️ ui(studio): update SidebarView to include separate links for Insígnias, Foguetes, and Avatares in the shop section (ae04e8375)
 * 🖥️ ui(studio): add Avatars and Rockets pages with tables, and update ShopPageView to include Insignias tab (a12ccc4a0)
-* 📮 validation: add 'insignias' to storageFolderSchema enum (0406d0b05)
+* 📮 validation: add 'insignias' to fileStorageFolderPathSchema enum (0406d0b05)
 * 🖥️ ui(studio): change React import to type-only import for better performance (7ff7247c4)
 * ⚙️ config(studio): restructure shop routes to include insignias, rockets, and avatars (310c1b8c3)
 * 🌐 domain: export InsigniaRoleValue type for external usage (ca4913c67)
@@ -1464,7 +1464,7 @@
 * 🖥️ ui(studio): implement AchievementsPage component with view and logic for managing achievements (343657a4)
 * 🖥️ ui(studio): create custom hook useAchievementForm for managing achievement form state and submission logic (02a8d073)
 * 🖥️ ui(studio): add AchievementsCard component for displaying and managing achievements with edit and delete functionality (124fd9e5)
-* 📮 validation: add 'achievements' and 'rankings' to storageFolderSchema for enhanced validation options (073dfb36)
+* 📮 validation: add 'achievements' and 'rankings' to fileStorageFolderPathSchema for enhanced validation options (073dfb36)
 * 🖥️ ui(studio): refactor Select component for improved styling and add new Textarea component (3186d20c)
 * ♻️ refactor(studio): update AchievementsRoute to use new AchievementsPage component and implement clientLoader for fetching achievements (5916ea7f)
 * 🖥️ ui(studio): implement AchievementForm components for creating and editing achievements with form validation and UI integration (9a665a28)
@@ -2715,7 +2715,7 @@
   (fe1e59a2)
 - 🏎️ ci: add GitHub Actions workflow for web app CI on pull requests (c12ec846)
 - 🐛 fix: correct unlockedStarsCount logic in User entity and update
-  BackupDatabaseUseCase tests to use StorageFolder for uploads (70f4d4ac)
+  BackupDatabaseUseCase tests to use FileStorageFolderPath for uploads (70f4d4ac)
 - ♻️ refactor: remove console log from VerifyUserSocialAccountUseCase and update
   tests to reflect changes in user retrieval logic (66c877d0)
 - ⚙️ config(web): remove empty line from .env.example file for cleaner
@@ -3145,9 +3145,9 @@
 - 🔀 merge pull request #112 (028bcf44)
 - ♻️ refactor(web): deactivate postFormData in NextRestClient (2aafb764)
 - ♻️ refactor: remove logs (20b1c738)
-- ♻️ refactor(studio): replace StorageFolder as a type with StorageFolder as a
+- ♻️ refactor(studio): replace FileStorageFolderPath as a type with FileStorageFolderPath as a
   structure (d732d633)
-- 🌐 domain: add StorageFolder (9393173b)
+- 🌐 domain: add FileStorageFolderPath (9393173b)
 - 🖥️ ui(web): add useImage hook (9760e9e3)
 - 🐛 fix(server): remove description field from rocket and avatar schemas
   (51e26eb6)
@@ -3209,7 +3209,7 @@
 - 🧰 provision(server): implement listFiles method in SupabaseStorageProvider
   (fbbf99e2)
 - 📑 interface: add listFiles method to StorageProvider (d40d619c)
-- 📮 validation: add storageFolderSchema (36ae5c4b)
+- 📮 validation: add fileStorageFolderPathSchema (36ae5c4b)
 - 📮 validation: add searchSchema (c954085d)
 - ⚙️ config: add commit type for validation (fd2fa2e3)
 - ⚙️ config: ignore issue.md file (1d9a52e6)

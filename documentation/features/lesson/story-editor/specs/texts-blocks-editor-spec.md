@@ -138,13 +138,13 @@ Entregar a nova aba de blocos de texto do editor de história no Studio, substit
 * **`TextBlock`** (`packages/core/src/global/domain/structures/TextBlock.ts`) - *Estrutura compartilhada dos blocos, com `type`, `content`, `picture` e `isRunnable`.*
 * **`TextBlockType`** (`packages/core/src/global/domain/types/TextBlockType.ts`) - *Define o universo atual de tipos, incluindo valores legados fora do escopo desta aba.*
 * **`Story`** (`packages/core/src/lesson/domain/structures/Story.ts`) - *Estrutura legada baseada em chunks separados por `----`, mantida fora do escopo desta entrega.*
-* **`StorageFolder`** (`packages/core/src/storage/domain/structures/StorageFolder.ts`) - *Define `story` como a pasta já existente para os assets da narrativa.*
+* **`FileStorageFolderPath`** (`packages/core/src/storage/domain/structures/FileFileStorageFolderPath.ts`) - *Define a pasta canônica `images/story` para os assets da narrativa.*
 
 ## Pacote Validation
 
 * **`contentSchema`** (`packages/validation/src/modules/global/schemas/contentSchema.ts`) - *Validação compartilhada mais adequada para o conteúdo dos blocos.*
 * **`booleanSchema`** (`packages/validation/src/modules/global/schemas/booleanSchema.ts`) - *Base para validar `isRunnable`.*
-* **`storageFolderSchema`** (`packages/validation/src/modules/storage/storageFolderSchema.ts`) - *Confirma `story` como pasta válida no fluxo de assets.*
+* **`fileStorageFolderPathSchema`** (`packages/validation/src/modules/storage/fileStorageFolderPathSchema.ts`) - *Confirma `story` como pasta válida no fluxo de assets.*
 
 ---
 

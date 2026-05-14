@@ -1,7 +1,9 @@
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
+
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 import { InsigniaItemView } from './InsigniaItemView'
 import { useInsigniaItem } from './useInsigniaItem'
-import { useImage } from '@/ui/global/hooks/useImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { Integer } from '@stardust/core/global/structures'
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
@@ -26,7 +28,10 @@ export const InsigniaItem = ({ insignia }: Props) => {
     acquiredInsigniaRoleCount: user?.insigniaRolesCount,
     onAcquireInsignia: updateUserCache,
   })
-  const insigniaImage = useImage('insignias', insignia.image.value)
+  const insigniaImage = useFileStorage(
+    FileStorageFolderPath.createAsInsignias(),
+    insignia.image.value,
+  )
 
   if (user)
     return (

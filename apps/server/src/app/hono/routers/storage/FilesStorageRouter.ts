@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { z } from 'zod'
 
-import { storageFolderSchema } from '@stardust/validation/storage/schemas'
+import { fileStorageFolderPathSchema } from '@stardust/validation/storage/schemas'
 import {
   itemsPerPageSchema,
   pageSchema,
@@ -30,7 +30,7 @@ export class FilesStorageRouter extends HonoRouter {
       this.authMiddleware.verifyAuthentication,
       this.validationMiddleware.validate(
         'param',
-        z.object({ folder: storageFolderSchema }),
+        z.object({ folder: fileStorageFolderPathSchema }),
       ),
       async (context) => {
         const http = new HonoHttp(context)
@@ -48,7 +48,7 @@ export class FilesStorageRouter extends HonoRouter {
       this.authMiddleware.verifyAuthentication,
       this.validationMiddleware.validate(
         'param',
-        z.object({ folder: storageFolderSchema }),
+        z.object({ folder: fileStorageFolderPathSchema }),
       ),
       this.validationMiddleware.validate(
         'query',
@@ -76,7 +76,7 @@ export class FilesStorageRouter extends HonoRouter {
         'param',
         z.object({
           fileName: stringSchema,
-          folder: storageFolderSchema,
+          folder: fileStorageFolderPathSchema,
         }),
       ),
       async (context) => {

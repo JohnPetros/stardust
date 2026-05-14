@@ -21,14 +21,13 @@ import { Button } from '@/ui/shadcn/components/button'
 import { useAvatarForm } from './useAvatarForm'
 import type { PropsWithChildren } from 'react'
 import { ImageInput } from '@/ui/global/widgets/components/ImageInput'
-import { StorageFolder } from '@stardust/core/storage/structures'
-import type { StorageService } from '@stardust/core/storage/interfaces'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { useStorageImage } from '@/ui/global/hooks/useStorageImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { Checkbox } from '@/ui/shadcn/components/checkbox'
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
 
-const AVATARS_FOLDER = StorageFolder.createAsAvatars()
+const AVATARS_FOLDER = FileStorageFolderPath.createAsImagesAvatars()
 
 type Props = {
   initialValues?: AvatarDto
@@ -49,7 +48,7 @@ export const AvatarFormView = ({
     handleSubmit,
     handleDialogChange,
   } = useAvatarForm({ storageService, initialValues, onSubmit })
-  const imageUrl = useStorageImage(AVATARS_FOLDER, avatarImage)
+  const imageUrl = useFileStorage(AVATARS_FOLDER, avatarImage)
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
@@ -81,7 +80,7 @@ export const AvatarFormView = ({
                 <FormItem>
                   <FormLabel>Imagem do avatar</FormLabel>
                   <FormControl>
-                    <ImageInput folder={AVATARS_FOLDER.name} onSubmit={field.onChange}>
+                    <ImageInput folder={AVATARS_FOLDER.value} onSubmit={field.onChange}>
                       <Button
                         variant='ghost'
                         className='rounded-full border border-dashed mt-2 w-20 h-20'
