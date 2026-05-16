@@ -4,7 +4,7 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
 
 ## Pendencias (quando aplicavel)
 
-- [x] O conflito da spec sobre `KokoroTtsProvider` foi resolvido pela propria definicao dos artefatos obrigatorios nas secoes `5`, `6` e `8`, que foram implementados no `server`.
+- [x] O conflito da spec sobre o provider TTS principal foi resolvido pela definição final do fluxo com `OpenAITtsProvider` como implementação padrão e providers alternativos isolados fora do caminho principal.
 
 ---
 
@@ -175,19 +175,19 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
   - **Resultado observavel:** `@stardust/validation/lesson/schemas` passa a expor `audioVoiceSchema` e `requestTextBlockAudioGenerationSchema`.
   - **Camada:** `rest`
 
-- [x] **F2-T8** — Adicionar `kokoro-js` em `apps/server/package.json`
-  - **Depende de:** -
-  - **Resultado observavel:** o workspace `@stardust/server` passa a declarar a dependencia necessaria para o provider TTS concreto.
+- [x] **F2-T8** — Criar `OpenAITtsProvider`
+  - **Depende de:** F1-T5
+  - **Resultado observavel:** existe um adapter TTS HTTP que recebe `Text` e `AudioVoice`, gera um `File` de audio em `wav` e mapeia as vozes do dominio para vozes concretas da OpenAI.
   - **Camada:** `provision`
 
-- [x] **F2-T9** — Criar `KokoroTtsProvider`
-  - **Depende de:** F1-T5, F2-T8
-  - **Resultado observavel:** existe um adapter TTS que recebe `Text` e `AudioVoice`, gera um `File` de audio e mapeia as vozes do dominio para vozes concretas do Kokoro.
+- [x] **F2-T9** — Criar providers TTS alternativos para futura composicao
+  - **Depende de:** F1-T5
+  - **Resultado observavel:** existem adapters alternativos `ElevenLabsTtsProvider` e `OpenRouterElevenLabsTtsProvider` isolados em subpastas proprias, sem entrar no caminho principal desta entrega.
   - **Camada:** `provision`
 
 - [x] **F2-T10** — Criar o barrel `apps/server/src/provision/tts/index.ts`
-  - **Depende de:** F2-T9
-  - **Resultado observavel:** `@/provision/tts` passa a exportar `KokoroTtsProvider` para composicao dos jobs.
+  - **Depende de:** F2-T8, F2-T9
+  - **Resultado observavel:** `@/provision/tts` passa a exportar os providers TTS usados na composicao do server sem incluir `KokoroTtsProvider`.
   - **Camada:** `provision`
 
 - [x] **F2-T11** — Criar `GenerateTextBlocksAudioBatchJob`

@@ -514,9 +514,9 @@ Não aplicável.
 * **Impactos / trade-offs:** Introduz um evento extra e duas funções Inngest para o fluxo individual, mas deixa a divisão modular consistente com a responsabilidade de cada domínio.
 
 * **Decisão:** Usar `OpenAITtsProvider` em `apps/server/src/provision/tts/open-ai/OpenAITtsProvider.ts` como adapter concreto do fluxo principal de geração de áudio.
-* **Alternativas consideradas:** `KokoroTtsProvider`, `OpenRouterElevenLabsTtsProvider` e `ElevenLabsTtsProvider` mantidos como implementações alternativas em subpastas próprias de `apps/server/src/provision/tts/`.
+* **Alternativas consideradas:** `OpenRouterElevenLabsTtsProvider` e `ElevenLabsTtsProvider` mantidos como implementações alternativas em subpastas próprias de `apps/server/src/provision/tts/`.
 * **Motivo da escolha:** A integração HTTP com a OpenAI encaixa no contrato atual `TtsProvider`, evita dependência do runtime local de inferência e mantém a implementação simples dentro da camada `provision`.
-* **Impactos / trade-offs:** O fluxo principal passa a depender de `OPENAI_API_KEY`, latência/custo externos e disponibilidade da API; em contrapartida, o monorepo preserva implementações alternativas sem conflitar paths nem sobrescrever adapters.
+* **Impactos / trade-offs:** O fluxo principal passa a depender de `OPENAI_API_KEY`, latência/custo externos e disponibilidade da API; em contrapartida, o monorepo preserva implementações alternativas sem conflitar paths nem sobrescrever adapters. A entrega nao inclui mais `KokoroTtsProvider` nem a dependencia `kokoro-js`.
 
 * **Decisão:** Não criar schema de entrada que aceite `audio.status` ou `audio.fileName` nos endpoints novos.
 * **Alternativas consideradas:** Reutilizar um schema completo de `TextBlockAudio` no body.

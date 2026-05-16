@@ -5,7 +5,7 @@ import { audioVoiceSchema } from './audioVoiceSchema'
 export const requestTextBlockAudioGenerationSchema = z.object({
   blockIndex: z
     .number()
-    .int('Indice do bloco invalido')
-    .min(0, 'Indice do bloco invalido'),
+    .int('Índice do bloco inválido')
+    .min(0, 'Índice do bloco inválido'),
   voice: audioVoiceSchema,
 })

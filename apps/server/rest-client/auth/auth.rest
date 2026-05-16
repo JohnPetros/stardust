@@ -1,5 +1,7 @@
 @URL = {{BASE_URL}}/auth
-@EMAIL = stardust.app.team@gmail.com
+@EMAIL = {{AUTH_EMAIL}}
+@PASSWORD = {{AUTH_PASSWORD}}
+@SOCIAL_ACCOUNT_EMAIL = {{SOCIAL_ACCOUNT_EMAIL}}
 
 ### Sign in
 POST {{URL}}/sign-in
@@ -7,7 +9,7 @@ Content-Type: application/json
 
 {
   "email": "{{EMAIL}}",
-  "password": "Backshift7-Favorite8-Glancing6-Luridness3-Symptom9"
+  "password": "{{PASSWORD}}"
 }
 
 ### Sign up
@@ -16,7 +18,7 @@ Content-Type: application/json
 
 {
   "email": "{{EMAIL}}",
-  "password": "123456",
+  "password": "{{PASSWORD}}",
   "name": "Ctrl Alt Del"
 }
 
@@ -26,7 +28,7 @@ Content-Type: application/json
 
 {
   "email": "{{EMAIL}}",
-  "password": "123456"
+  "password": "{{PASSWORD}}"
 }
 
 ### Sign in with Google
@@ -57,8 +59,8 @@ Content-Type: application/json
 
 {
   "id": "f26ee48b-c0c0-41b1-a3e8-1761bec71eb5",
-  "email": "neila@gmail.com",
-  "name": "Neylton Almeida"
+  "email": "{{SOCIAL_ACCOUNT_EMAIL}}",
+  "name": "Social Account User"
 }
 
 ### Sign out

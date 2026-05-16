@@ -32,13 +32,16 @@ export class TriggerTextBlocksAudioGenerationInBatchUseCase
       return [{ textBlock, index, audio }]
     })
 
-    for (const block of blocksToGenerate) {
-      await this.repository.updateAudio(
-        parsedStarId,
-        Integer.create(block.index, 'Indice do bloco'),
-        block.audio,
-      )
-    }
+    await Promise.all(
+      blocksToGenerate.map(
+        async (block) =>
+          await this.repository.updateAudio(
+            parsedStarId,
+            Integer.create(block.index, 'Indice do bloco'),
+            block.audio,
+          ),
+      ),
+    )
 
     const updatedTextBlocks = textBlocks.map((textBlock, index) => {
       const block = blocksToGenerate.find((currentBlock) => currentBlock.index === index)

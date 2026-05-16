@@ -25,11 +25,11 @@ import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 import { SupabaseTextBlocksRepository } from '@/database'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestBroker } from '../InngestBroker'
-import { LessonFunctions } from './LessonFunctions'
 import { eventType } from 'inngest'
 import z from 'zod'
 import { idSchema, stringSchema } from '@stardust/validation/global/schemas'
 import { audioVoiceSchema } from '@stardust/validation/lesson/schemas'
+import { createMarkTextBlockAudioAsErrorOnFailure } from '../createMarkTextBlockAudioAsErrorOnFailure'
 
 type GuideContentEditedPayload = EventPayload<typeof GuideContentEditedEvent>
 type GuideDeletedPayload = EventPayload<typeof GuideDeletedEvent>
@@ -106,8 +106,6 @@ export class StorageFunctions extends InngestFunctions {
   }
 
   private createGenerateTextBlockAudioJob(supabase: SupabaseClient<Database>) {
-    const lessonFunctions = new LessonFunctions(this.inngest)
-
     return this.inngest.createFunction(
       {
         id: GenerateTextBlockAudioJob.KEY,
@@ -119,7 +117,10 @@ export class StorageFunctions extends InngestFunctions {
             if: 'async.data.starId == event.data.starId && async.data.blockIndex == event.data.blockIndex',
           },
         ],
-        onFailure: lessonFunctions.createMarkTextBlockAudioAsErrorFunction(supabase),
+        onFailure: createMarkTextBlockAudioAsErrorOnFailure(
+          supabase,
+          async (context, jobName) => await this.handleFailure(context, jobName),
+        ),
         triggers: {
           event: eventType(TextBlockAudioGenerationRequestedEvent._NAME, {
             schema: z.object({

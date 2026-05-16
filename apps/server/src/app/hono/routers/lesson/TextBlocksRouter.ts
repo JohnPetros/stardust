@@ -116,8 +116,8 @@ export class TextBlocksRouter extends HonoRouter {
         z.object({
           blockIndex: z
             .number()
-            .int('Indice do bloco invalido')
-            .min(0, 'Indice do bloco invalido'),
+            .int('Índice do bloco inválido')
+            .min(0, 'Índice do bloco inválido'),
         }),
       ),
       this.spaceMiddleware.verifyStarExists,

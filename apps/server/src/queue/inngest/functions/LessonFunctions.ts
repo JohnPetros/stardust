@@ -1,11 +1,9 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 
-import { Id, Integer } from '@stardust/core/global/structures'
 import type { EventPayload } from '@stardust/core/global/types'
 import {
   TextBlockAudioGeneratedEvent,
   TextBlockAudioGenerationCancelledEvent,
-  TextBlockAudioGenerationRequestedEvent,
   TextBlocksAudioGenerationInBatchRequestedEvent,
 } from '@stardust/core/lesson/events'
 
@@ -14,13 +12,11 @@ import { SupabaseTextBlocksRepository } from '@/database'
 import {
   CancelTextBlockAudioGenerationJob,
   GenerateTextBlocksAudioBatchJob,
-  MarkTextBlockAudioAsErrorJob,
   UpdateTextBlockAudioJob,
 } from '@/queue/jobs/lesson'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestBroker } from '../InngestBroker'
 import { InngestFunctions } from './InngestFunctions'
-import { GenerateTextBlockAudioJob } from '@/queue/jobs/storage'
 import { eventType } from 'inngest'
 import z from 'zod'
 import { idSchema, stringSchema } from '@stardust/validation/global/schemas'
@@ -114,30 +110,6 @@ export class LessonFunctions extends InngestFunctions {
         return await job.handle(amqp)
       },
     )
-  }
-
-  createMarkTextBlockAudioAsErrorFunction(supabase: SupabaseClient<Database>) {
-    return async (context: {
-      error: unknown
-      event: { data: { starId: string; blockIndex: number; voice: string } }
-    }) => {
-      await this.handleFailure(context, GenerateTextBlockAudioJob.name)
-
-      const repository = new SupabaseTextBlocksRepository(supabase)
-      const job = new MarkTextBlockAudioAsErrorJob(repository)
-
-      await job.handle({
-        getPayload: () => context.event.data,
-        run: async <Response = void>(callback: () => Promise<unknown>) =>
-          (await callback()) as Response,
-        waitFor: async () => {
-          throw new Error('waitFor is not available in this context')
-        },
-        sleepFor: async () => {
-          throw new Error('sleepFor is not available in this context')
-        },
-      })
-    }
   }
 
   getFunctions(supabase: SupabaseClient<Database>) {

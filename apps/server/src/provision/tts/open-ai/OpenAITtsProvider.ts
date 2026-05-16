@@ -50,7 +50,7 @@ export class OpenAITtsProvider implements TtsProvider {
           model: OpenAITtsProvider.MODEL,
           voice: characterVoice.voice,
           input: text.value,
-          format: 'wav',
+          response_format: 'wav',
           instructions: characterVoice.instructions,
         }),
       })
