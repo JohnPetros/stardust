@@ -1,18 +1,41 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
+
 import { InngestFunctions } from './InngestFunctions'
+import type { EventPayload } from '@stardust/core/global/types'
 
 import { GuideContentEditedEvent, GuideDeletedEvent } from '@stardust/core/manual/events'
+import {
+  TextBlockAudioGenerationCancelledEvent,
+  TextBlockAudioGenerationRequestedEvent,
+} from '@stardust/core/lesson/events'
 
 import {
   BackupDatabaseJob,
-  GenerateGuideEmbeddingsJob,
   DeleteGuideEmbeddingsJob,
+  GenerateGuideEmbeddingsJob,
+  GenerateTextBlockAudioJob,
 } from '@/queue/jobs/storage'
+import type { Database } from '@/database/supabase/types/Database'
 import { SupabaseDatabaseProvider } from '@/provision/database'
-import { DropboxStorageProvider } from '@/provision/storage'
+import { DropboxStorageProvider, SupabaseFileStorageProvider } from '@/provision/storage'
+import { OpenAITtsProvider } from '@/provision/tts'
 import { MastraMarkdownEmbeddingsGeneratorProvider } from '@/provision/storage/MastraMarkdownEmbeddingsGeneratorProvider'
 import { UpstashEmbeddingsStorageProvider } from '@/provision/storage/UpstashEmbeddingsStorageProvider'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
+import { SupabaseTextBlocksRepository } from '@/database'
 import { InngestAmqp } from '../InngestAmqp'
+import { InngestBroker } from '../InngestBroker'
+import { LessonFunctions } from './LessonFunctions'
+import { eventType } from 'inngest'
+import z from 'zod'
+import { idSchema, stringSchema } from '@stardust/validation/global/schemas'
+import { audioVoiceSchema } from '@stardust/validation/lesson/schemas'
+
+type GuideContentEditedPayload = EventPayload<typeof GuideContentEditedEvent>
+type GuideDeletedPayload = EventPayload<typeof GuideDeletedEvent>
+type TextBlockAudioGenerationRequestedPayload = EventPayload<
+  typeof TextBlockAudioGenerationRequestedEvent
+>
 
 export class StorageFunctions extends InngestFunctions {
   private createGenerateGuideEmbeddingsJob() {
@@ -21,13 +44,20 @@ export class StorageFunctions extends InngestFunctions {
         id: GenerateGuideEmbeddingsJob.KEY,
         onFailure: (context) =>
           this.handleFailure(context, GenerateGuideEmbeddingsJob.name),
+        triggers: {
+          event: eventType(GuideContentEditedEvent._NAME, {
+            schema: z.object({
+              guideId: idSchema,
+              guideContent: stringSchema,
+            }),
+          }),
+        },
       },
-      { event: GuideContentEditedEvent._NAME },
       async (context) => {
         const generatorProvider = new MastraMarkdownEmbeddingsGeneratorProvider()
         const storageProvider = new UpstashEmbeddingsStorageProvider()
         const job = new GenerateGuideEmbeddingsJob(generatorProvider, storageProvider)
-        const amqp = new InngestAmqp<typeof context.event.data>(context)
+        const amqp = new InngestAmqp<GuideContentEditedPayload>(context)
         return await job.handle(amqp)
       },
     )
@@ -38,9 +68,11 @@ export class StorageFunctions extends InngestFunctions {
       {
         id: BackupDatabaseJob.KEY,
         onFailure: (context) => this.handleFailure(context, BackupDatabaseJob.name),
+        triggers: {
+          cron: BackupDatabaseJob.CRON_EXPRESSION,
+        },
       },
-      { cron: BackupDatabaseJob.CRON_EXPRESSION },
-      async (context) => {
+      async () => {
         const databaseProvider = new SupabaseDatabaseProvider()
         const restClient = new AxiosRestClient()
         const storageProvider = new DropboxStorageProvider(restClient)
@@ -56,22 +88,72 @@ export class StorageFunctions extends InngestFunctions {
         id: DeleteGuideEmbeddingsJob.KEY,
         onFailure: (context) =>
           this.handleFailure(context, DeleteGuideEmbeddingsJob.name),
+        triggers: {
+          event: eventType(GuideDeletedEvent._NAME, {
+            schema: z.object({
+              guideId: idSchema,
+            }),
+          }),
+        },
       },
-      { event: GuideDeletedEvent._NAME },
       async (context) => {
         const storageProvider = new UpstashEmbeddingsStorageProvider()
         const job = new DeleteGuideEmbeddingsJob(storageProvider)
-        const amqp = new InngestAmqp<typeof context.event.data>(context)
+        const amqp = new InngestAmqp<GuideDeletedPayload>(context)
         return await job.handle(amqp)
       },
     )
   }
 
-  getFunctions() {
+  private createGenerateTextBlockAudioJob(supabase: SupabaseClient<Database>) {
+    const lessonFunctions = new LessonFunctions(this.inngest)
+
+    return this.inngest.createFunction(
+      {
+        id: GenerateTextBlockAudioJob.KEY,
+        retries: 2,
+        concurrency: { limit: 3, key: 'event.data.starId' },
+        cancelOn: [
+          {
+            event: TextBlockAudioGenerationCancelledEvent._NAME,
+            if: 'async.data.starId == event.data.starId && async.data.blockIndex == event.data.blockIndex',
+          },
+        ],
+        onFailure: lessonFunctions.createMarkTextBlockAudioAsErrorFunction(supabase),
+        triggers: {
+          event: eventType(TextBlockAudioGenerationRequestedEvent._NAME, {
+            schema: z.object({
+              starId: idSchema,
+              blockIndex: z.number().int().min(0),
+              content: stringSchema,
+              voice: audioVoiceSchema,
+            }),
+          }),
+        },
+      },
+      async (context) => {
+        const repository = new SupabaseTextBlocksRepository(supabase)
+        const ttsProvider = new OpenAITtsProvider()
+        const fileStorageProvider = new SupabaseFileStorageProvider(supabase)
+        const broker = new InngestBroker()
+        const job = new GenerateTextBlockAudioJob(
+          repository,
+          ttsProvider,
+          fileStorageProvider,
+          broker,
+        )
+        const amqp = new InngestAmqp<TextBlockAudioGenerationRequestedPayload>(context)
+        return await job.handle(amqp)
+      },
+    )
+  }
+
+  getFunctions(supabase: SupabaseClient<Database>) {
     return [
       this.createGenerateGuideEmbeddingsJob(),
       this.createDeleteGuideEmbeddingsJob(),
       this.createBackupDatabaseJob(),
+      this.createGenerateTextBlockAudioJob(supabase),
     ]
   }
 }
