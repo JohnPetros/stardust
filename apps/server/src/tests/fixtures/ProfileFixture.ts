@@ -33,10 +33,21 @@ export class ProfileFixture {
   }
 
   async createAccountUser(accountId: string) {
-    const avatar = AvatarsFaker.fakeDto({ name: `Avatar ${randomUUID()}` })
-    const rocket = RocketsFaker.fake({ name: `Rocket ${randomUUID()}` }).dto
+    const avatarId = randomUUID()
+    const rocketId = randomUUID()
+    const tierId = randomUUID()
+
+    const avatar = AvatarsFaker.fakeDto({
+      name: `Avatar ${avatarId}`,
+      image: `https://stardust.dev/test/avatar-${avatarId}.jpg`,
+    })
+    const rocket = RocketsFaker.fake({
+      name: `Rocket ${rocketId}`,
+      image: `https://stardust.dev/test/rocket-${rocketId}.jpg`,
+    }).dto
     const tier = TiersFaker.fakeDto({
-      name: `Tier ${randomUUID()}`,
+      name: `Tier ${tierId}`,
+      image: `https://stardust.dev/test/tier-${tierId}.jpg`,
       position: Math.floor(Math.random() * 100000) + 1000,
     })
 

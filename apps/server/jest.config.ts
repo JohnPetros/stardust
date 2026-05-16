@@ -9,6 +9,10 @@ const config: Config = {
 
   coverageProvider: 'v8',
 
+  // Route tests share Supabase-backed fixtures and become flaky under heavy parallelism.
+  maxWorkers: 1,
+  testTimeout: 15000,
+
   testMatch: ['**/tests/**/*.test.ts'],
 
   moduleNameMapper: {
