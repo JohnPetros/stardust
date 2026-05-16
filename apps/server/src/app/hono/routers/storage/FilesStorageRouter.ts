@@ -14,7 +14,7 @@ import {
   RemoveFileController,
   UploadFileController,
 } from '@/rest/controllers/storage'
-import { SupabaseStorageProvider } from '@/provision/storage'
+import { SupabaseFileStorageProvider } from '@/provision/storage'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
@@ -34,7 +34,7 @@ export class FilesStorageRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const storageProvider = new SupabaseStorageProvider(http.getSupabase())
+        const storageProvider = new SupabaseFileStorageProvider(http.getSupabase())
         const controller = new UploadFileController(storageProvider)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -60,7 +60,7 @@ export class FilesStorageRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const storageProvider = new SupabaseStorageProvider(http.getSupabase())
+        const storageProvider = new SupabaseFileStorageProvider(http.getSupabase())
         const controller = new FetchImagesListController(storageProvider)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -81,7 +81,7 @@ export class FilesStorageRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const storageProvider = new SupabaseStorageProvider(http.getSupabase())
+        const storageProvider = new SupabaseFileStorageProvider(http.getSupabase())
         const controller = new RemoveFileController(storageProvider)
         const response = await controller.handle(http)
         return http.sendResponse(response)

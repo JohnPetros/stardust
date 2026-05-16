@@ -1,5 +1,5 @@
 @URL = {{BASE_URL}}/auth
-@EMAIL = ctrlaltdel.cursor@gmail.com
+@EMAIL = stardust.app.team@gmail.com
 
 ### Sign in
 POST {{URL}}/sign-in
@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
   "email": "{{EMAIL}}",
-  "password": "123456"
+  "password": "Backshift7-Favorite8-Glancing6-Luridness3-Symptom9"
 }
 
 ### Sign up

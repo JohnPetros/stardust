@@ -1,6 +1,33 @@
 @URL = {{BASE_URL}}/lesson/text-blocks
-@STAR_ID = b34a4a76-0615-4910-89a9-05d34925dc70
+@STAR_ID = 05a206ae-69f0-4263-87a5-1dd0018d15d8
 
 ### Fetch text blocks
 GET {{URL}}/star/{{STAR_ID}}
+Authorization: Bearer {{JWT}}
+
+### Request text block audio generation
+POST {{URL}}/star/{{STAR_ID}}/audio
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "blockIndex": 4,
+  "voice": "panda"
+}
+
+### Request text blocks audio generation in batch
+POST {{URL}}/star/{{STAR_ID}}/audio/batch
+Authorization: Bearer {{JWT}}
+
+### Cancel text block audio generation
+DELETE {{URL}}/star/{{STAR_ID}}/audio
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "blockIndex": 0
+}
+
+### Cancel text blocks audio generation in batch
+DELETE {{URL}}/star/{{STAR_ID}}/audio/batch
 Authorization: Bearer {{JWT}}
