@@ -4,7 +4,7 @@ import { Name } from '../../../global/domain/structures/Name'
 import { StringValidation } from '../../../global/libs'
 import type { TextBlockDto } from '../../../global/domain/structures/dtos'
 import type { TextBlockType } from '../../../global/domain/types'
-import type { TextBlockAudio } from './TextBlockAudio'
+import { TextBlockAudio } from './TextBlockAudio'
 
 type TextBlockProps = {
   type: TextBlockType
@@ -12,6 +12,7 @@ type TextBlockProps = {
   title?: Name
   picture?: Image
   isRunnable: Logical
+  audio?: TextBlockAudio
 }
 
 export class TextBlock {
@@ -28,6 +29,7 @@ export class TextBlock {
     this.isRunnable = props.isRunnable
     if (props.title) this.title = props.title
     if (props.picture) this.picture = props.picture
+    if (props.audio) this.audio = props.audio
   }
 
   static create(dto: TextBlockDto) {
@@ -43,6 +45,7 @@ export class TextBlock {
       isRunnable: dto.isRunnable
         ? Logical.create(dto.isRunnable)
         : Logical.createAsFalse(),
+      audio: dto.audio ? TextBlockAudio.create(dto.audio) : undefined,
     })
   }
 
@@ -68,6 +71,10 @@ export class TextBlock {
     })
   }
 
+  setAudio(audio: TextBlockAudio) {
+    return this.clone({ audio })
+  }
+
   get dto(): TextBlockDto {
     return {
       type: this.type,
@@ -75,7 +82,14 @@ export class TextBlock {
       isRunnable: this.isRunnable.value,
       picture: this.picture?.value,
       title: this.title?.value,
+      audio: this.audio?.dto,
     }
+  }
+
+  get canHaveAudio(): Logical {
+    return Logical.create(
+      this.type === 'default' || this.type === 'alert' || this.type === 'quote',
+    )
   }
 
   private clone(dto?: Partial<TextBlockProps>) {
@@ -85,6 +99,7 @@ export class TextBlock {
       isRunnable: this.isRunnable,
       title: this.title,
       picture: this.picture,
+      audio: this.audio,
       ...dto,
     })
   }

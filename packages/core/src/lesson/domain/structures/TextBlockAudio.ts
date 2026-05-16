@@ -3,7 +3,7 @@ import { Text } from '#global/domain/structures/Text'
 import { StringValidation } from '#global/libs/index'
 import { AudioVoice } from './AudioVoice'
 
-export type TextBlockAudioStatus = 'idle' | 'pending' | 'error' | 'done'
+export type TextBlockAudioStatus = 'idle' | 'pending' | 'error' | 'done' | 'cancelled'
 
 type TextBlockAudioProps = {
   fileName: Text
@@ -49,12 +49,20 @@ export class TextBlockAudio {
     return this.clone({ status: 'error' })
   }
 
+  markAsCancelled(): TextBlockAudio {
+    return this.clone({ status: 'cancelled' })
+  }
+
   get isPending(): boolean {
     return this.status === 'pending'
   }
 
   get isDone(): boolean {
     return this.status === 'done'
+  }
+
+  get isCancelled(): boolean {
+    return this.status === 'cancelled'
   }
 
   get dto(): TextBlockAudioDto {
@@ -67,7 +75,7 @@ export class TextBlockAudio {
 
   private static parseStatus(value: string): TextBlockAudioStatus {
     new StringValidation(value, 'Audio status')
-      .oneOf(['idle', 'pending', 'error', 'done'])
+      .oneOf(['idle', 'pending', 'error', 'done', 'cancelled'])
       .validate()
     return value as TextBlockAudioStatus
   }

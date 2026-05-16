@@ -1,7 +1,12 @@
 import { ValidationError } from '#global/domain/errors/ValidationError'
 import { StringValidation } from '#global/libs/index'
 
-export type TextBlockAudioStatusValue = 'idle' | 'pending' | 'error' | 'done'
+export type TextBlockAudioStatusValue =
+  | 'idle'
+  | 'pending'
+  | 'error'
+  | 'done'
+  | 'cancelled'
 
 export class TextBlockAudioStatus {
   private constructor(readonly value: TextBlockAudioStatusValue) {}
@@ -33,6 +38,10 @@ export class TextBlockAudioStatus {
     return new TextBlockAudioStatus('error')
   }
 
+  static createAsCancelled(): TextBlockAudioStatus {
+    return new TextBlockAudioStatus('cancelled')
+  }
+
   get isIdle(): boolean {
     return this.value === 'idle'
   }
@@ -49,11 +58,15 @@ export class TextBlockAudioStatus {
     return this.value === 'error'
   }
 
+  get isCancelled(): boolean {
+    return this.value === 'cancelled'
+  }
+
   private static isTextBlockAudioStatusValue(
     value: string,
   ): value is TextBlockAudioStatusValue {
     new StringValidation(value, 'Text block audio status value')
-      .oneOf(['idle', 'pending', 'error', 'done'])
+      .oneOf(['idle', 'pending', 'error', 'done', 'cancelled'])
       .validate()
     return true
   }
