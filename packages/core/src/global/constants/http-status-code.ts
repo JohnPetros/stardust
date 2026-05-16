@@ -1,5 +1,6 @@
 export const HTTP_STATUS_CODE = {
   ok: 200,
+  accepted: 202,
   created: 201,
   noContent: 204,
   redirect: 301,
