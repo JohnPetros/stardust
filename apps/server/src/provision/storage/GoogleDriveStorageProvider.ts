@@ -2,7 +2,7 @@ import { createReadStream, existsSync, unlinkSync } from 'node:fs'
 import { type drive_v3, google } from 'googleapis'
 
 import { AppError } from '@stardust/core/global/errors'
-import type { StorageProvider } from '@stardust/core/storage/interfaces'
+import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
 import type { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import type {
   FileStorageFolderPathValue,
@@ -12,7 +12,7 @@ import type { Text } from '@stardust/core/global/structures'
 import { MethodNotImplementedError } from '@stardust/core/global/errors'
 import type { ManyItems } from '@stardust/core/global/types'
 
-export class GoogleDriveStorageProvider implements StorageProvider {
+export class GoogleDriveStorageProvider implements FileStorageProvider {
   private static readonly KEY_FILE_PATH = './certificates/google-key-file.json'
   private static readonly SCOPES = ['https://www.googleapis.com/auth/drive']
   private static readonly DRIVE_VERSION = 'v3'
