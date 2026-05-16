@@ -1,11 +1,10 @@
 ---
 description: Criar um plano de implementacao estruturado em fases e tarefas a partir de uma spec tecnica.
-status: closed
 ---
 
 ## Pendencias (quando aplicavel)
 
-- Testes de rotas de `achievements` no workspace `@stardust/server` dependem do Supabase local em `127.0.0.1:54321`; execucao atual falhou com `ECONNREFUSED` durante `npm run test -w @stardust/server`.
+- [x] O conflito da spec sobre `KokoroTtsProvider` foi resolvido pela propria definicao dos artefatos obrigatorios nas secoes `5`, `6` e `8`, que foram implementados no `server`.
 
 ---
 
@@ -13,155 +12,265 @@ status: closed
 
 | Fase | Objetivo | Depende de | Pode rodar em paralelo com |
 | --- | --- | --- | --- |
-| F1 | Ajustar o contrato compartilhado de validacao de notes para aceitar content vazio | - | - |
-| F2 | Garantir compatibilidade do server com o contrato atualizado sem criar novos endpoints | F1 | F3 |
-| F3 | Implementar rota /notes e pagina dedicada com fluxo responsivo de lista e editor na web | F1 | F2 |
+| F1 | Definir o contrato do fluxo de geracao e cancelamento de audio no core do modulo `lesson` | - | - |
+| F2 | Implementar persistencia parcial, provider TTS, jobs Inngest e endpoints REST no `server` | F1 | - |
 
-> **Estrategia de paralelismo:** sempre comece pelo core (dominio, structures e use cases). Assim que o core estiver concluido, as fases de `server` e `web` podem ser executadas em paralelo, pois ambas dependem apenas do contrato definido no core.
+> **Estratégia de paralelismo:** sempre comece pelo core (dominio, structures e use cases). Como esta spec impacta apenas o app `server`, toda a implementacao fora do core fica concentrada em F2 e so deve iniciar apos F1 concluir.
 
 ---
 
-## F1 — Core: Dominio, Structures e Use Cases
+## F1 — Core: Domínio, Structures e Use Cases
 
-**Objetivo:** Ajustar o contrato compartilhado de validacao para que create/update de notas aceitem `content` vazio, preservando titulo obrigatorio e sem alterar contratos de dominio ja existentes.
+**Objetivo:** Definir o contrato do domínio — entidades, structures, interfaces de repositório/provider e use cases — sem nenhuma dependência de infraestrutura. Essa fase desbloqueia F2.
 
 ### Tarefas
 
-- [x] **F1-T1** — Atualizar `noteSchema` para aceitar `content` vazio
-  - Artefatos: `packages/validation/src/modules/profile/noteSchema.ts` *(alterado)*
-  - Concluido em: 2026-05-08
+- [x] **F1-T1** — Suportar status `cancelled` em `TextBlockAudio`
   - **Depende de:** -
-  - **Resultado observavel:** `noteSchema` valida `{ title: "Minha nota", content: "" }` como sucesso e continua rejeitando `title` vazio.
+  - **Resultado observavel:** `TextBlockAudio.create(dto)` aceita `status = 'cancelled'`, `markAsCancelled()` retorna uma nova instancia com esse estado, `isCancelled` fica disponivel e `dto.status` preserva o valor cancelado.
   - **Camada:** `core`
 
-- [x] **F1-T2** — Cobrir o novo contrato de `noteSchema` com teste automatizado
-  - Artefatos: `packages/validation/src/modules/profile/tests/noteSchema.test.ts` *(novo)*
-  - Artefatos: `packages/validation/jest.config.ts` *(novo)*
-  - Artefatos: `packages/validation/package.json` *(alterado)*
-  - Concluido em: 2026-05-08
+- [x] **F1-T2** — Preservar `audio` na structure `TextBlock`
   - **Depende de:** F1-T1
-  - **Resultado observavel:** existe teste automatizado comprovando `content` vazio valido e `title` vazio invalido.
+  - **Resultado observavel:** `TextBlock.create(dto)` hidrata `audio`, `textBlock.dto` devolve `audio` quando existir, `clone()` nao perde o estado e `setAudio()` atualiza apenas o audio do bloco.
+  - **Camada:** `core`
+
+- [x] **F1-T3** — Exportar `TextBlock`, `TextBlockAudio` e `AudioVoice` no barrel de structures de `lesson`
+  - **Depende de:** F1-T2
+  - **Resultado observavel:** `@stardust/core/lesson/structures` passa a expor as tres structures usadas pelo fluxo de audio.
+  - **Camada:** `core`
+
+- [x] **F1-T4** — Adicionar `updateAudio` ao contrato `TextBlocksRepository`
+  - **Depende de:** F1-T2
+  - **Resultado observavel:** a interface do repositorio aceita persistencia parcial de `audio` por `starId` e `blockIndex`, usando objetos de dominio do core.
+  - **Camada:** `core`
+
+- [x] **F1-T5** — Corrigir o contrato `TtsProvider` para usar a structure global `Text`
+  - **Depende de:** F1-T3
+  - **Resultado observavel:** `TtsProvider.generate(text, voice)` passa a depender de `#global/domain/structures/Text`, alinhando o contrato ao uso real do provider.
+  - **Camada:** `core`
+
+- [x] **F1-T6** — Exportar `TtsProvider` no barrel de interfaces de `lesson`
+  - **Depende de:** F1-T5
+  - **Resultado observavel:** `@stardust/core/lesson/interfaces` expoe o contrato `TtsProvider` para os adapters do `server`.
+  - **Camada:** `core`
+
+- [x] **F1-T7** — Criar `TextBlockNotFoundError`
+  - **Depende de:** -
+  - **Resultado observavel:** o dominio passa a ter um erro explicito para `blockIndex` inexistente na estrela.
+  - **Camada:** `core`
+
+- [x] **F1-T8** — Criar `TextBlockAudioNotAllowedError`
+  - **Depende de:** F1-T2
+  - **Resultado observavel:** o dominio passa a ter um erro explicito para tentativa de gerar audio em bloco nao elegivel.
+  - **Camada:** `core`
+
+- [x] **F1-T9** — Criar `TextBlockAudioGenerationNotPendingError`
+  - **Depende de:** F1-T1
+  - **Resultado observavel:** o dominio passa a ter um erro explicito para operacoes que exigem `audio.status = 'pending'`.
+  - **Camada:** `core`
+
+- [x] **F1-T10** — Exportar os novos erros de `lesson` no barrel do modulo
+  - **Depende de:** F1-T7, F1-T8, F1-T9
+  - **Resultado observavel:** `@stardust/core/lesson/errors` passa a expor os tres erros novos do fluxo de audio.
+  - **Camada:** `core`
+
+- [x] **F1-T11** — Criar `TextBlockAudioGenerationRequestedEvent`
+  - **Depende de:** -
+  - **Resultado observavel:** existe um evento tipado com `_NAME = 'lesson/text-block.audio.generation.requested'` e payload individual de geracao.
+  - **Camada:** `core`
+
+- [x] **F1-T12** — Criar `TextBlocksAudioGenerationInBatchRequestedEvent`
+  - **Depende de:** -
+  - **Resultado observavel:** existe um evento tipado com `_NAME = 'lesson/text-blocks.audio-generation-in-batch.requested'` e payload de fan-out em lote.
+  - **Camada:** `core`
+
+- [x] **F1-T13** — Criar `TextBlockAudioGeneratedEvent`
+  - **Depende de:** -
+  - **Resultado observavel:** existe um evento tipado com `_NAME = 'lesson/text-block.audio.generated'` e payload com `voice` e `fileName`.
+  - **Camada:** `core`
+
+- [x] **F1-T14** — Criar `TextBlockAudioGenerationCancelledEvent`
+  - **Depende de:** -
+  - **Resultado observavel:** existe um evento tipado com `_NAME = 'lesson/text-block.audio.generation.cancelled'` e payload de cancelamento por bloco.
+  - **Camada:** `core`
+
+- [x] **F1-T15** — Criar o barrel `packages/core/src/lesson/domain/events/index.ts`
+  - **Depende de:** F1-T11, F1-T12, F1-T13, F1-T14
+  - **Resultado observavel:** os quatro eventos de audio podem ser importados por um unico ponto publico do modulo `lesson`.
+  - **Camada:** `core`
+
+- [x] **F1-T16** — Implementar `RequestTextBlockAudioUseCase`
+  - **Depende de:** F1-T2, F1-T4, F1-T7, F1-T8, F1-T11
+  - **Resultado observavel:** ao executar o caso de uso para um bloco elegivel e nao-pending, o bloco alvo fica `pending`, a atualizacao parcial e persistida e o evento individual de geracao e publicado com `content` e `voice`.
+  - **Camada:** `core`
+
+- [x] **F1-T17** — Implementar `RequestTextBlocksAudioGenerationInBatchUseCase`
+  - **Depende de:** F1-T2, F1-T4, F1-T12
+  - **Resultado observavel:** ao executar o caso de uso em lote, apenas blocos `default`, `alert` e `quote` que nao estao `pending` sao marcados como `pending`, com voz persistida ou default, e um evento de lote e publicado com os blocos selecionados.
+  - **Camada:** `core`
+
+- [x] **F1-T18** — Implementar `CancelTextBlockAudioGenerationUseCase`
+  - **Depende de:** F1-T2, F1-T4, F1-T7, F1-T9, F1-T14
+  - **Resultado observavel:** ao cancelar um bloco `pending`, o caso de uso publica o evento individual de cancelamento e retorna os blocos atuais sem antecipar a persistencia de `cancelled`.
+  - **Camada:** `core`
+
+- [x] **F1-T19** — Implementar `CancelTextBlocksAudioGenerationInBatchUseCase`
+  - **Depende de:** F1-T2, F1-T4, F1-T14
+  - **Resultado observavel:** ao cancelar em lote, o caso de uso publica um evento de cancelamento por `blockIndex` pendente e retorna o estado atual da estrela.
+  - **Camada:** `core`
+
+- [x] **F1-T20** — Exportar os novos use cases de `lesson` no barrel do modulo
+  - **Depende de:** F1-T16, F1-T17, F1-T18, F1-T19
+  - **Resultado observavel:** `@stardust/core/lesson/use-cases` passa a expor os quatro casos de uso do fluxo de audio.
+  - **Camada:** `core`
+
+- [x] **F1-T21** — Publicar `./lesson/events` em `packages/core/package.json`
+  - **Depende de:** F1-T15
+  - **Resultado observavel:** o subpath `@stardust/core/lesson/events` fica disponivel para `server` importar os eventos no runtime do Inngest.
   - **Camada:** `core`
 
 ---
 
-## F2 — Server: Infra, Repositorios e Handlers
+## F2 — Server: Infra, Repositórios e Handlers
 
-> ⚡ Pode rodar em paralelo com F3 apos F1 estar concluida.
+> ⚡ So pode iniciar apos F1 estar concluida.
 
-**Objetivo:** Assegurar que a borda HTTP existente de notes no server continue aderente ao contrato compartilhado atualizado, sem criar router/controller/repository novos.
+**Objetivo:** Implementar a camada de infraestrutura e exposição — repositórios, providers, jobs e handlers REST/queue — consumindo os contratos definidos no core.
 
 ### Tarefas
 
-- [x] **F2-T1** — Ajustar teste do fluxo `POST /profile/notes` para aceitar `content` vazio
-  - Artefatos: `apps/server/src/rest/controllers/profile/notes/tests/CreateNoteController.test.ts` *(alterado)*
-  - Concluido em: 2026-05-08
-  - **Depende de:** F1-T2
-  - **Resultado observavel:** cobertura automatizada valida resposta de sucesso para criacao autenticada com body contendo `title` valido e `content` vazio.
-  - **Camada:** `rest`
+- [x] **F2-T1** — Criar a migration `create_update_text_block_audio_function.sql`
+  - **Depende de:** F1-T4
+  - **Resultado observavel:** o banco passa a ter a funcao `public.update_text_block_audio(...)`, com `jsonb_set`, validacao de indice e erro quando o bloco/estrela nao puder ser atualizado.
+  - **Camada:** `database`
 
-- [x] **F2-T2** — Ajustar teste do fluxo `PUT /profile/notes/:noteId` para aceitar `content` vazio
-  - Artefatos: `apps/server/src/rest/controllers/profile/notes/tests/UpdateNoteController.test.ts` *(alterado)*
-  - Concluido em: 2026-05-08
+- [x] **F2-T2** — Regenerar `apps/server/src/database/supabase/types/Database.ts`
   - **Depende de:** F2-T1
-  - **Resultado observavel:** cobertura automatizada valida resposta de sucesso para atualizacao autenticada com `title` valido e `content` vazio.
+  - **Resultado observavel:** `Database['public']['Functions']` passa a incluir `update_text_block_audio` com argumentos tipados.
+  - **Camada:** `database`
+
+- [x] **F2-T3** — Implementar `updateAudio` em `SupabaseTextBlocksRepository`
+  - **Depende de:** F1-T4, F2-T2
+  - **Resultado observavel:** o repositorio concreto passa a persistir somente `stars.texts[blockIndex].audio` via `.rpc('update_text_block_audio', ...)`, mantendo a traducao de erro com `SupabasePostgreError`.
+  - **Camada:** `database`
+
+- [x] **F2-T4** — Ajustar `SupabaseTextBlockMapper` para round-trip de `audio`
+  - **Depende de:** F1-T2
+  - **Resultado observavel:** o mapeamento DB -> dominio -> DTO preserva `audio` quando o bloco ja possui esse estado salvo.
+  - **Camada:** `database`
+
+- [x] **F2-T5** — Criar `audioVoiceSchema`
+  - **Depende de:** F1-T3
+  - **Resultado observavel:** existe um schema compartilhado que aceita apenas `panda`, `shark` e `princess`, com mensagem de erro em PT-BR.
   - **Camada:** `rest`
 
----
+- [x] **F2-T6** — Criar `requestTextBlockAudioGenerationSchema`
+  - **Depende de:** F2-T5
+  - **Resultado observavel:** existe um schema compartilhado que valida `blockIndex` inteiro nao negativo e `voice` valido para o endpoint individual.
+  - **Camada:** `rest`
 
-## F3 — Web: UI e Integracao
+- [x] **F2-T7** — Exportar os novos schemas no barrel de `lesson`
+  - **Depende de:** F2-T5, F2-T6
+  - **Resultado observavel:** `@stardust/validation/lesson/schemas` passa a expor `audioVoiceSchema` e `requestTextBlockAudioGenerationSchema`.
+  - **Camada:** `rest`
 
-> ⚡ Pode rodar em paralelo com F2 apos F1 estar concluida.
+- [x] **F2-T8** — Adicionar `kokoro-js` em `apps/server/package.json`
+  - **Depende de:** -
+  - **Resultado observavel:** o workspace `@stardust/server` passa a declarar a dependencia necessaria para o provider TTS concreto.
+  - **Camada:** `provision`
 
-**Objetivo:** Entregar a experiencia completa da rota privada `/notes` no app web, com navegacao via sidenav, lista paginada com busca debounced, editor no mesmo fluxo, confirmacoes com AlertDialog e reconciliacao local apos mutacoes.
+- [x] **F2-T9** — Criar `KokoroTtsProvider`
+  - **Depende de:** F1-T5, F2-T8
+  - **Resultado observavel:** existe um adapter TTS que recebe `Text` e `AudioVoice`, gera um `File` de audio e mapeia as vozes do dominio para vozes concretas do Kokoro.
+  - **Camada:** `provision`
 
-### Tarefas
+- [x] **F2-T10** — Criar o barrel `apps/server/src/provision/tts/index.ts`
+  - **Depende de:** F2-T9
+  - **Resultado observavel:** `@/provision/tts` passa a exportar `KokoroTtsProvider` para composicao dos jobs.
+  - **Camada:** `provision`
 
-- [x] **F3-T1** — Adicionar `ROUTES.notes` em `apps/web/src/constants/routes.ts`
-  - Artefatos: `apps/web/src/constants/routes.ts` *(alterado)*
-  - Concluido em: 2026-05-08
-  - **Depende de:** F1-T2
-  - **Resultado observavel:** existe constante de rota canonica para `/notes` reutilizavel pela navegacao da web.
-  - **Camada:** `web`
+- [x] **F2-T11** — Criar `GenerateTextBlocksAudioBatchJob`
+  - **Depende de:** F1-T11, F1-T12
+  - **Resultado observavel:** ao consumir o evento de lote, o job publica um `TextBlockAudioGenerationRequestedEvent` para cada bloco do payload.
+  - **Camada:** `queue`
 
-- [x] **F3-T2** — Criar rota `apps/web/src/app/(home)/notes/page.tsx`
-  - Artefatos: `apps/web/src/app/(home)/notes/page.tsx` *(novo)*
-  - Concluido em: 2026-05-08
-  - **Depende de:** F3-T1
-  - **Resultado observavel:** a rota privada `/notes` renderiza o widget `NotesPage` dentro do grupo `(home)`.
-  - **Camada:** `web`
+- [x] **F2-T12** — Criar `UpdateTextBlockAudioJob`
+  - **Depende de:** F1-T1, F1-T2, F1-T13, F2-T3
+  - **Resultado observavel:** ao consumir `TextBlockAudioGeneratedEvent`, o job rele o bloco, ignora estado `cancelled` e persiste `status = done`, `fileName` e `voice` no `blockIndex` correto.
+  - **Camada:** `queue`
 
-- [x] **F3-T3** — Adicionar entrada `Notas` na `Sidenav` via `SidenavButton`
-  - Artefatos: `apps/web/src/ui/profile/widgets/layouts/Home/home-links.ts` *(alterado)*
-  - Artefatos: `apps/web/public/icons/notes.svg` *(novo)*
-  - Concluido em: 2026-05-08
-  - **Depende de:** F3-T1
-  - **Resultado observavel:** usuarios autenticados veem botao `Notas` na sidebar e a acao navega para `/notes`.
-  - **Camada:** `ui`
+- [x] **F2-T13** — Criar `CancelTextBlockAudioGenerationJob`
+  - **Depende de:** F1-T1, F1-T14, F2-T3
+  - **Resultado observavel:** ao consumir o evento de cancelamento, o job marca o bloco como `cancelled` apenas quando ele ainda estiver `pending`.
+  - **Camada:** `queue`
 
-- [x] **F3-T4** — Criar widget `NotesPage` (entry point + view + hook)
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/index.tsx` *(novo)*
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/NotesPageView.tsx` *(novo)*
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/useNotesPage.ts` *(novo)*
-  - Concluido em: 2026-05-08
-  - **Depende de:** F3-T2
-  - **Resultado observavel:** pagina carrega lista paginada via `profileService.fetchNotes`, controla loading/error/empty/content e orquestra handlers de busca, selecao, create, update e delete.
-  - **Camada:** `ui`
+- [x] **F2-T14** — Criar o barrel `apps/server/src/queue/jobs/lesson/index.ts`
+  - **Depende de:** F2-T11, F2-T12, F2-T13
+  - **Resultado observavel:** os jobs de `lesson` envolvidos no fluxo de audio ficam acessiveis por um unico ponto de importacao.
+  - **Camada:** `queue`
 
-- [x] **F3-T5** — Criar widget `NotesSidebar` (entry point + view)
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/NotesSidebar/index.tsx` *(novo)*
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/NotesSidebar/NotesSidebarView.tsx` *(novo)*
-  - Concluido em: 2026-05-08
-  - **Depende de:** F3-T4
-  - **Resultado observavel:** sidebar renderiza busca por titulo, lista de notas, botoes de pagina e estado expandido/recolhido com `aria-label`.
-  - **Camada:** `ui`
+- [x] **F2-T15** — Criar `GenerateTextBlockAudioJob`
+  - **Depende de:** F1-T1, F1-T11, F1-T13, F2-T3, F2-T9
+  - **Resultado observavel:** ao consumir o evento individual, o job rele o estado antes e depois dos `step.run`, gera o audio, faz upload em `audios/story` e so publica `TextBlockAudioGeneratedEvent` se o bloco nao tiver sido cancelado.
+  - **Camada:** `queue`
 
-- [x] **F3-T6** — Criar widget `NoteEditor` (entry point + view)
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/NoteEditor/index.tsx` *(novo)*
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/NoteEditor/NoteEditorView.tsx` *(novo)*
-  - Concluido em: 2026-05-08
-  - **Depende de:** F3-T4
-  - **Resultado observavel:** editor renderiza cabecalho e integra formulario da nota mantendo estado persistente da nota ativa no desktop.
-  - **Camada:** `ui`
+- [x] **F2-T16** — Exportar `GenerateTextBlockAudioJob` no barrel de `storage`
+  - **Depende de:** F2-T15
+  - **Resultado observavel:** `apps/server/src/queue/jobs/storage/index.ts` passa a expor o job individual de geracao de audio.
+  - **Camada:** `queue`
 
-- [x] **F3-T7** — Criar widget `NoteEditorForm` com `react-hook-form` e `noteSchema`
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/NoteEditorForm/index.tsx` *(novo)*
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/NoteEditorForm/NoteEditorFormView.tsx` *(novo)*
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/NoteEditorForm/useNoteEditorForm.ts` *(novo)*
-  - Concluido em: 2026-05-08
-  - **Depende de:** F3-T6
-  - **Resultado observavel:** formulario valida titulo, aceita `content` vazio, expoe dirty state e envia submit para create/update sem incluir campos controlados pelo servidor.
-  - **Camada:** `ui`
+- [x] **F2-T17** — Registrar os quatro eventos de audio em `apps/server/src/queue/inngest/inngest.ts`
+  - **Depende de:** F1-T15
+  - **Resultado observavel:** `eventsSchema` do Inngest passa a validar os payloads dos eventos `requested`, `batch requested`, `generated` e `cancelled`.
+  - **Camada:** `queue`
 
-- [x] **F3-T8** — Criar widgets `EmptyNotesState`, `DeleteNoteDialog` e `DiscardChangesDialog`
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/states/EmptyNotesState/index.tsx` *(novo)*
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/states/EmptyNotesState/EmptyNotesStateView.tsx` *(novo)*
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/dialogs/DeleteNoteDialog/index.tsx` *(novo)*
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/dialogs/DeleteNoteDialog/DeleteNoteDialogView.tsx` *(novo)*
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/dialogs/DiscardChangesDialog/index.tsx` *(novo)*
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/dialogs/DiscardChangesDialog/DiscardChangesDialogView.tsx` *(novo)*
-  - Concluido em: 2026-05-08
-  - **Depende de:** F3-T4
-  - **Resultado observavel:** fluxo usa `AlertDialog` para confirmar exclusao/descarte e renderiza estado vazio reutilizavel para lista sem itens/editor sem selecao.
-  - **Camada:** `ui`
+- [x] **F2-T18** — Criar `LessonFunctions.ts`
+  - **Depende de:** F2-T11, F2-T12, F2-T13, F2-T17
+  - **Resultado observavel:** existe uma composition root que expoe as funcoes de fan-out em lote, cancelamento, atualizacao para `done` e marcacao de `error` apos falha.
+  - **Camada:** `queue`
 
-- [x] **F3-T9** — Implementar fluxo responsivo desktop/mobile sem trocar rota
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/NotesPageView.tsx` *(novo)*
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/useNotesPage.ts` *(novo)*
-  - Concluido em: 2026-05-08
-  - **Depende de:** F3-T5, F3-T6, F3-T7, F3-T8
-  - **Resultado observavel:** desktop mostra lista+editor em duas colunas; mobile alterna entre lista e editor, com confirmacao ao voltar quando houver alteracoes nao salvas.
-  - **Camada:** `ui`
+- [x] **F2-T19** — Estender `StorageFunctions.ts` com a funcao individual de geracao
+  - **Depende de:** F2-T15, F2-T17, F2-T10
+  - **Resultado observavel:** `StorageFunctions.getFunctions()` passa a incluir a funcao que consome `TextBlockAudioGenerationRequestedEvent` com `retries: 2`, concorrencia por `starId` e `cancelOn` vinculado ao evento de cancelamento.
+  - **Camada:** `queue`
 
-- [x] **F3-T10** — Cobrir `useNotesPage` com testes de interacao critica
-  - Artefatos: `apps/web/src/ui/profile/widgets/pages/Notes/tests/useNotesPage.test.ts` *(novo)*
-  - Concluido em: 2026-05-08
-  - **Depende de:** F3-T9
-  - **Resultado observavel:** testes automatizados cobrem busca debounced, confirmacao de descarte e reconciliacao local de create/update/delete.
-  - **Camada:** `ui`
+- [x] **F2-T20** — Exportar `LessonFunctions` no barrel `apps/server/src/queue/inngest/functions/index.ts`
+  - **Depende de:** F2-T18
+  - **Resultado observavel:** o barrel de funcoes do Inngest passa a expor `LessonFunctions`.
+  - **Camada:** `queue`
 
----
+- [x] **F2-T21** — Registrar as funcoes de `lesson` em `HonoApp.ts`
+  - **Depende de:** F2-T18, F2-T19, F2-T20
+  - **Resultado observavel:** a rota `/inngest` passa a servir tambem as funcoes de audio do modulo `lesson`.
+  - **Camada:** `queue`
 
-## Divergencias em relacao a Spec
+- [x] **F2-T22** — Criar `RequestTextBlockAudioController`
+  - **Depende de:** F1-T16
+  - **Resultado observavel:** o controller le `starId`, `blockIndex` e `voice`, executa o caso de uso e devolve `202 Accepted` com `TextBlockDto[]`.
+  - **Camada:** `rest`
 
-Nenhuma ate o momento.
+- [x] **F2-T23** — Criar `RequestTextBlocksAudioGenerationInBatchController`
+  - **Depende de:** F1-T17
+  - **Resultado observavel:** o controller le `starId`, executa o caso de uso em lote e devolve `202 Accepted` com os blocos atualizados.
+  - **Camada:** `rest`
+
+- [x] **F2-T24** — Criar `CancelTextBlockAudioGenerationController`
+  - **Depende de:** F1-T18
+  - **Resultado observavel:** o controller le `starId` e `blockIndex`, executa o cancelamento individual e devolve `202 Accepted` com os blocos atuais.
+  - **Camada:** `rest`
+
+- [x] **F2-T25** — Criar `CancelTextBlocksAudioGenerationInBatchController`
+  - **Depende de:** F1-T19
+  - **Resultado observavel:** o controller le `starId`, executa o cancelamento em lote e devolve `202 Accepted` com os blocos atuais.
+  - **Camada:** `rest`
+
+- [x] **F2-T26** — Exportar os novos controllers no barrel de `lesson`
+  - **Depende de:** F2-T22, F2-T23, F2-T24, F2-T25
+  - **Resultado observavel:** `apps/server/src/rest/controllers/lesson/index.ts` passa a expor os quatro controllers de audio.
+  - **Camada:** `rest`
+
+- [x] **F2-T27** — Expor as quatro novas rotas em `TextBlocksRouter.ts`
+  - **Depende de:** F2-T3, F2-T7, F2-T26
+  - **Resultado observavel:** o router passa a registrar `POST /star/:starId/audio`, `POST /star/:starId/audio/batch`, `DELETE /star/:starId/audio` e `DELETE /star/:starId/audio/batch` com `verifyAuthentication`, `verifyGodAccount`, validacao de entrada e `verifyStarExists`.
+  - **Camada:** `rest`
