@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { createRef, type ComponentProps } from 'react'
 
 import { TextBlocksFaker } from '@stardust/core/lesson/entities/fakers'
+import type { AudioVoiceDto } from '@stardust/core/lesson/structures/dtos'
 
 import { LessonStoryPageView } from '../LessonStoryPageView'
 
@@ -57,6 +58,11 @@ describe('LessonStoryPageView', () => {
     id: textBlock.id,
     data: textBlock,
   }))
+  const audioVoices: AudioVoiceDto[] = [
+    { value: 'panda', label: 'Panda' },
+    { value: 'shark', label: 'Tubarão' },
+    { value: 'princess', label: 'Princesa' },
+  ]
 
   const defaultProps: Props = {
     textBlocks,
@@ -78,6 +84,15 @@ describe('LessonStoryPageView', () => {
     onContentChange: jest.fn(),
     onPictureChange: jest.fn(),
     onRunnableChange: jest.fn(),
+    audioVoices,
+    hasAudioPending: false,
+    isAudioPolling: false,
+    isGeneratingAudiosInBatch: false,
+    isGeneratingAudioByBlockId: jest.fn().mockReturnValue(false),
+    onAudioVoiceChange: jest.fn(),
+    onGenerateAudio: jest.fn(),
+    onCancelAudio: jest.fn(),
+    onGenerateAudiosInBatch: jest.fn(),
     onReorder: jest.fn(),
     onSave: jest.fn(),
     onTextBlocksScrollToTop: jest.fn(),

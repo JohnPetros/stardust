@@ -4,7 +4,7 @@ import type { Http } from '@stardust/core/global/interfaces'
 import { PaginationResponse, type RestResponse } from '@stardust/core/global/responses'
 import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
 
-import { FetchImagesListController } from '../FetchImagesListController'
+import { FetchFilesListController } from '../FetchFilesListController'
 
 describe('Fetch Images List Controller', () => {
   type Schema = {
@@ -20,12 +20,12 @@ describe('Fetch Images List Controller', () => {
 
   let http: Mock<Http<Schema>>
   let storageProvider: Mock<FileStorageProvider>
-  let controller: FetchImagesListController
+  let controller: FetchFilesListController
 
   beforeEach(() => {
     http = mock()
     storageProvider = mock()
-    controller = new FetchImagesListController(storageProvider)
+    controller = new FetchFilesListController(storageProvider)
     http.statusOk.mockReturnValue(http)
   })
 

@@ -51,6 +51,7 @@ describe('Generate TextBlock Audio Job', () => {
       blockIndex: 1,
       content: 'Conteudo do bloco',
       voice: 'shark',
+      currentAudioFileName: null,
     })
   })
 
@@ -84,6 +85,7 @@ describe('Generate TextBlock Audio Job', () => {
       expect.objectContaining({ value: 'audios/story' }),
       generatedFile,
     )
+    expect(storageProvider.removeFile).not.toHaveBeenCalled()
     expect(broker.publish).toHaveBeenCalledWith(
       expect.objectContaining<TextBlockAudioGeneratedEvent>({
         name: TextBlockAudioGeneratedEvent._NAME,
@@ -109,6 +111,7 @@ describe('Generate TextBlock Audio Job', () => {
 
     expect(ttsProvider.generate).not.toHaveBeenCalled()
     expect(storageProvider.upload).not.toHaveBeenCalled()
+    expect(storageProvider.removeFile).not.toHaveBeenCalled()
     expect(broker.publish).not.toHaveBeenCalled()
   })
 
@@ -136,7 +139,44 @@ describe('Generate TextBlock Audio Job', () => {
 
     expect(ttsProvider.generate).toHaveBeenCalled()
     expect(storageProvider.upload).toHaveBeenCalled()
+    expect(storageProvider.removeFile).not.toHaveBeenCalled()
     expect(broker.publish).not.toHaveBeenCalled()
+  })
+
+  it('should delete previous audio file when payload has currentAudioFileName', async () => {
+    const generatedFile = new File(['audio'], 'generated.wav', { type: 'audio/wav' })
+    const uploadedFile = new File(['audio'], 'uploaded.wav', { type: 'audio/wav' })
+
+    amqp.getPayload.mockReturnValue({
+      starId,
+      blockIndex: 1,
+      content: 'Conteudo do bloco',
+      voice: 'shark',
+      currentAudioFileName: 'previous.wav',
+    })
+
+    repository.findAllByStar
+      .mockResolvedValueOnce([
+        makeTextBlock(),
+        makeTextBlock({
+          audio: { fileName: '', voice: 'shark', status: 'pending' },
+        }),
+      ])
+      .mockResolvedValueOnce([
+        makeTextBlock(),
+        makeTextBlock({
+          audio: { fileName: '', voice: 'shark', status: 'pending' },
+        }),
+      ])
+    ttsProvider.generate.mockResolvedValue(generatedFile)
+    storageProvider.upload.mockResolvedValue(uploadedFile)
+
+    await job.handle(amqp)
+
+    expect(storageProvider.removeFile).toHaveBeenCalledWith(
+      expect.objectContaining({ value: 'audios/story' }),
+      expect.objectContaining({ value: 'previous.wav' }),
+    )
   })
 
   it('should throw when the target block does not exist', async () => {
