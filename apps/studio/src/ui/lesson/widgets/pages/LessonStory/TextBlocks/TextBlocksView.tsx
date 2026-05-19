@@ -91,9 +91,6 @@ export const TextBlocksView = ({
             <p className='text-sm text-zinc-400'>
               {textBlocks.length} bloco(s) na narrativa
             </p>
-            {isAudioPolling ? (
-              <p className='text-xs text-amber-300'>Atualizando audio...</p>
-            ) : null}
           </div>
         </div>
 

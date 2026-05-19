@@ -51,11 +51,12 @@ export const TextBlockCardView = ({
   onGenerateAudio,
   onCancelAudio,
 }: Props) => {
+  const cardClassName = isGeneratingAudio
+    ? 'w-full rounded-2xl border border-amber-400/70 bg-zinc-950/60 pl-10'
+    : 'w-full rounded-2xl border border-zinc-800 bg-zinc-950/60 pl-10'
+
   return (
-    <Collapsible
-      open={isExpanded}
-      className='w-full rounded-2xl border border-zinc-800 bg-zinc-950/60 pl-10'
-    >
+    <Collapsible open={isExpanded} className={cardClassName}>
       <div className='flex items-start justify-between gap-4 p-4'>
         <button
           type='button'
