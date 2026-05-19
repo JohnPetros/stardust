@@ -46,6 +46,7 @@ export class LessonFunctions extends InngestFunctions {
                   blockIndex: z.number().int().min(0),
                   content: stringSchema,
                   voice: audioVoiceSchema,
+                  currentAudioFileName: stringSchema.nullable(),
                 }),
               ),
             }),

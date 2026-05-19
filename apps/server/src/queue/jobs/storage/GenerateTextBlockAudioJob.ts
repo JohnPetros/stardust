@@ -61,6 +61,15 @@ export class GenerateTextBlockAudioJob implements Job<Payload> {
 
     if (updatedTextBlock.audio?.isCancelled) return
 
+    await amqp.run(async () => {
+      if (payload.currentAudioFileName) {
+        await this.storageProvider.removeFile(
+          FileStorageFolderPath.createAsAudiosStory(),
+          Text.create(payload.currentAudioFileName, 'Nome do arquivo de audio atual'),
+        )
+      }
+    }, 'Delete Current Text Block Audio')
+
     await amqp.run(
       async () =>
         await this.broker.publish(
