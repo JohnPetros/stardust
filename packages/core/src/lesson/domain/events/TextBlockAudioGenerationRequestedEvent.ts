@@ -5,6 +5,7 @@ type Payload = {
   blockIndex: number
   content: string
   voice: string
+  currentAudioFileName: string | null
 }
 
 export class TextBlockAudioGenerationRequestedEvent extends Event<Payload> {

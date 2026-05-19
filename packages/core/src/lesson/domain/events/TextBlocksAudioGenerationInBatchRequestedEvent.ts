@@ -6,6 +6,7 @@ type Payload = {
     blockIndex: number
     content: string
     voice: string
+    currentAudioFileName: string | null
   }>
 }
 

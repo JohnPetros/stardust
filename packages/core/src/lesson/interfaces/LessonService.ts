@@ -22,12 +22,16 @@ export interface LessonService {
     blockIndex: Integer,
     voice: AudioVoice,
   ): Promise<RestResponse<TextBlockDto[]>>
-  triggerTextBlocksAudioGenerationInBatch(starId: Id): Promise<RestResponse<TextBlockDto[]>>
+  triggerTextBlocksAudioGenerationInBatch(
+    starId: Id,
+  ): Promise<RestResponse<TextBlockDto[]>>
   cancelTextBlockAudioGeneration(
     starId: Id,
     blockIndex: Integer,
   ): Promise<RestResponse<TextBlockDto[]>>
-  cancelTextBlocksAudioGenerationInBatch(starId: Id): Promise<RestResponse<TextBlockDto[]>>
+  cancelTextBlocksAudioGenerationInBatch(
+    starId: Id,
+  ): Promise<RestResponse<TextBlockDto[]>>
   updateStory(starId: Id, story: Text): Promise<RestResponse<void>>
   updateQuestions(starId: Id, questions: Question[]): Promise<RestResponse<void>>
 }

@@ -92,11 +92,13 @@ describe('Trigger TextBlocks Audio Generation In Batch Use Case', () => {
               blockIndex: 0,
               content: 'Default sem voz',
               voice: 'panda',
+              currentAudioFileName: null,
             },
             {
               blockIndex: 1,
               content: 'Alerta com voz salva',
               voice: 'princess',
+              currentAudioFileName: 'previous.wav',
             },
           ],
         },
