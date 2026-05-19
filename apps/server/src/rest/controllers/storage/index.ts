@@ -1,4 +1,4 @@
-export { FetchImagesListController } from './FetchImagesListController'
+export { FetchFilesListController } from './FetchFilesListController'
 export { RemoveFileController } from './RemoveFileController'
 export { UploadFileController } from './UploadFileController'
 export { VerifyFileExistsController } from './VerifyFileExistsController'

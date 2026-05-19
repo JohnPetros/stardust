@@ -12,15 +12,15 @@ type Schema = {
     page: number
     itemsPerPage: number
     search: string
+    folder: string
   }
 }
 
-export class FetchImagesListController implements Controller {
+export class FetchFilesListController implements Controller {
   constructor(private readonly storageProvider: FileStorageProvider) {}
 
   async handle(http: Http<Schema>) {
-    const { folder } = http.getRouteParams()
-    const { page, itemsPerPage, search } = http.getQueryParams()
+    const { page, itemsPerPage, search, folder } = http.getQueryParams()
     const { items, count } = await this.storageProvider.listFiles({
       folder: FileStorageFolderPath.create(folder),
       page: OrdinalNumber.create(page),

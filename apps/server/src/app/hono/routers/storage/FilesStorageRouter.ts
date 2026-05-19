@@ -10,7 +10,7 @@ import {
 } from '@stardust/validation/global/schemas'
 
 import {
-  FetchImagesListController,
+  FetchFilesListController,
   RemoveFileController,
   UploadFileController,
 } from '@/rest/controllers/storage'
@@ -44,24 +44,21 @@ export class FilesStorageRouter extends HonoRouter {
 
   private registerlistFilesRoute(): void {
     this.router.get(
-      '/:folder',
+      '/',
       this.authMiddleware.verifyAuthentication,
-      this.validationMiddleware.validate(
-        'param',
-        z.object({ folder: fileStorageFolderPathSchema }),
-      ),
       this.validationMiddleware.validate(
         'query',
         z.object({
           page: pageSchema,
           itemsPerPage: itemsPerPageSchema,
           search: searchSchema,
+          folder: fileStorageFolderPathSchema,
         }),
       ),
       async (context) => {
         const http = new HonoHttp(context)
         const storageProvider = new SupabaseFileStorageProvider(http.getSupabase())
-        const controller = new FetchImagesListController(storageProvider)
+        const controller = new FetchFilesListController(storageProvider)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },

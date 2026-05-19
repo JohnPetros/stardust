@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 
 import { HonoRouter } from '../../HonoRouter'
+import { AudioVoicesRouter } from './AudioVoicesRouter'
 import { CodeExplanationRouter } from './CodeExplanationRouter'
 import { QuestionsRouter } from './QuestionsRouter'
 import { StoriesRouter } from './StoriesRouter'
@@ -11,10 +12,12 @@ export class LessonRouter extends HonoRouter {
 
   registerRoutes(): Hono {
     const questionsRouter = new QuestionsRouter(this.app)
+    const audioVoicesRouter = new AudioVoicesRouter(this.app)
     const storiesRouter = new StoriesRouter(this.app)
     const textBlocksRouter = new TextBlocksRouter(this.app)
     const codeExplanationRouter = new CodeExplanationRouter(this.app)
     this.router.route('/', questionsRouter.registerRoutes())
+    this.router.route('/', audioVoicesRouter.registerRoutes())
     this.router.route('/', storiesRouter.registerRoutes())
     this.router.route('/', textBlocksRouter.registerRoutes())
     this.router.route('/', codeExplanationRouter.registerRoutes())
