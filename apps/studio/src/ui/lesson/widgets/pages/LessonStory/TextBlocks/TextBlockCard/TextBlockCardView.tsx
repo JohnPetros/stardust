@@ -1,6 +1,9 @@
+import type { AudioVoiceDto } from '@stardust/core/lesson/structures/dtos'
+
 import { Collapsible, CollapsibleContent } from '@/ui/shadcn/components/collapsible'
 import type { TextBlockEditorItem } from '../../types'
 import { BlockActions } from './BlockActions'
+import { BlockAudioControls } from './BlockAudioControls'
 import { BlockContentField } from './BlockContentField'
 import { BlockPictureField } from './BlockPictureField'
 import { BlockPreview } from './BlockPreview'
@@ -13,12 +16,19 @@ type Props = {
   previewContent: string
   canShowPictureField: boolean
   canShowRunnableField: boolean
+  canHaveAudio: boolean
+  isGenerateAudioDisabled: boolean
+  audioVoices: AudioVoiceDto[]
+  isGeneratingAudio: boolean
   contentLabel: string
   onExpand: (blockId: string) => void
   onRemove: (blockId: string) => void
   onContentChange: (blockId: string, content: string) => void
   onPictureChange: (blockId: string, picture?: string) => void
   onRunnableChange: (blockId: string, isRunnable: boolean) => void
+  onAudioVoiceChange: (blockId: string, voice: AudioVoiceDto['value']) => void
+  onGenerateAudio: (blockId: string) => void
+  onCancelAudio: (blockId: string) => void
 }
 
 export const TextBlockCardView = ({
@@ -27,12 +37,19 @@ export const TextBlockCardView = ({
   previewContent,
   canShowPictureField,
   canShowRunnableField,
+  canHaveAudio,
+  isGenerateAudioDisabled,
+  audioVoices,
+  isGeneratingAudio,
   contentLabel,
   onExpand,
   onRemove,
   onContentChange,
   onPictureChange,
   onRunnableChange,
+  onAudioVoiceChange,
+  onGenerateAudio,
+  onCancelAudio,
 }: Props) => {
   return (
     <Collapsible
@@ -65,6 +82,17 @@ export const TextBlockCardView = ({
             value={item.content}
             onChange={(content) => onContentChange(item.id, content)}
           />
+          {item.audio && (
+            <BlockAudioControls
+              item={item}
+              voices={audioVoices}
+              isGenerating={isGeneratingAudio}
+              isGenerateDisabled={isGenerateAudioDisabled}
+              onVoiceChange={(voice) => onAudioVoiceChange(item.id, voice)}
+              onGenerate={() => onGenerateAudio(item.id)}
+              onCancel={() => onCancelAudio(item.id)}
+            />
+          )}
           {canShowPictureField && (
             <BlockPictureField
               picture={item.picture}

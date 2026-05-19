@@ -1,3 +1,9 @@
+import type { ComponentProps } from 'react'
+
 import { TextBlocksView } from './TextBlocksView'
 
-export const TextBlocks = TextBlocksView
+type Props = ComponentProps<typeof TextBlocksView>
+
+export const TextBlocks = (props: Props) => {
+  return <TextBlocksView {...props} />
+}

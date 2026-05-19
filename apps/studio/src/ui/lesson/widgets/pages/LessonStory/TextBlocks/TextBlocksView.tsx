@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
+import type { AudioVoiceDto } from '@stardust/core/lesson/structures/dtos'
 
 import { SortableList } from '@/ui/global/widgets/components/SortableList'
 import type { SortableItem } from '@/ui/global/widgets/components/SortableList/types'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Button } from '@/ui/shadcn/components/button'
 import { Input } from '@/ui/shadcn/components/input'
 import type { TextBlockEditorItem, SupportedTextBlockType } from '../types'
@@ -17,6 +19,14 @@ type Props = {
   onContentChange: (blockId: string, content: string) => void
   onPictureChange: (blockId: string, picture?: string) => void
   onRunnableChange: (blockId: string, isRunnable: boolean) => void
+  audioVoices: AudioVoiceDto[]
+  isAudioPolling: boolean
+  isGeneratingAudiosInBatch: boolean
+  isGeneratingAudioByBlockId: (blockId: string) => boolean
+  onAudioVoiceChange: (blockId: string, voice: AudioVoiceDto['value']) => void
+  onGenerateAudio: (blockId: string) => void
+  onCancelAudio: (blockId: string) => void
+  onGenerateAudiosInBatch: () => void
   onReorder: (reorderedTextBlocks: TextBlockEditorItem[]) => void
 }
 
@@ -39,6 +49,14 @@ export const TextBlocksView = ({
   onContentChange,
   onPictureChange,
   onRunnableChange,
+  audioVoices,
+  isAudioPolling,
+  isGeneratingAudiosInBatch,
+  isGeneratingAudioByBlockId,
+  onAudioVoiceChange,
+  onGenerateAudio,
+  onCancelAudio,
+  onGenerateAudiosInBatch,
   onReorder,
 }: Props) => {
   const [isSearchVisible, setIsSearchVisible] = useState(false)
@@ -73,12 +91,24 @@ export const TextBlocksView = ({
             <p className='text-sm text-zinc-400'>
               {textBlocks.length} bloco(s) na narrativa
             </p>
+            {isAudioPolling ? (
+              <p className='text-xs text-amber-300'>Atualizando audio...</p>
+            ) : null}
           </div>
         </div>
 
         <div className='flex flex-wrap gap-2'>
           <Button type='button' variant='ghost' onClick={handleSearchToggle}>
             {isSearchVisible ? 'Ocultar busca' : 'Buscar bloco'}
+          </Button>
+          <Button
+            type='button'
+            variant='outline'
+            disabled={isGeneratingAudiosInBatch}
+            onClick={onGenerateAudiosInBatch}
+          >
+            <Icon name='audio' className='h-4 w-4' />
+            {isGeneratingAudiosInBatch ? 'Gerando áudios...' : 'Gerar áudios'}
           </Button>
           {BLOCK_TYPES.map(({ type, label }) => (
             <Button
@@ -129,6 +159,14 @@ export const TextBlocksView = ({
                         onContentChange={onContentChange}
                         onPictureChange={onPictureChange}
                         onRunnableChange={onRunnableChange}
+                        audioVoices={audioVoices}
+                        isGeneratingAudio={
+                          isGeneratingAudioByBlockId(item.data.id) ||
+                          item.data.audio?.status === 'pending'
+                        }
+                        onAudioVoiceChange={onAudioVoiceChange}
+                        onGenerateAudio={onGenerateAudio}
+                        onCancelAudio={onCancelAudio}
                       />
                     </SortableList.Item>
                   </li>

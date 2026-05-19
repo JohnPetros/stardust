@@ -1,3 +1,5 @@
+import type { AudioVoiceDto } from '@stardust/core/lesson/structures/dtos'
+
 import type { TextBlockEditorItem } from '../../types'
 
 import { TextBlockCardView } from './TextBlockCardView'
@@ -11,6 +13,11 @@ type Props = {
   onContentChange: (blockId: string, content: string) => void
   onPictureChange: (blockId: string, picture?: string) => void
   onRunnableChange: (blockId: string, isRunnable: boolean) => void
+  audioVoices: AudioVoiceDto[]
+  isGeneratingAudio: boolean
+  onAudioVoiceChange: (blockId: string, voice: AudioVoiceDto['value']) => void
+  onGenerateAudio: (blockId: string) => void
+  onCancelAudio: (blockId: string) => void
 }
 
 export const TextBlockCard = ({ item, ...props }: Props) => {
