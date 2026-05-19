@@ -141,13 +141,19 @@ export const AxiosRestClient = (): RestClient => {
       }
     },
 
-    async delete(route: string) {
+    async delete<Body>(route: string, body?: unknown): Promise<RestResponse<Body>> {
       try {
-        const response = await axios.delete(buildUrl(route, baseUrl, queryParams))
+        const response = await axios.delete(buildUrl(route, baseUrl, queryParams), {
+          data: body,
+        })
         const headers = normalizeHeaders(response.headers)
-        return new RestResponse({ statusCode: response.status, headers })
+        return new RestResponse({
+          body: response.data,
+          statusCode: response.status,
+          headers,
+        })
       } catch (error) {
-        return await handleError<void>(error)
+        return await handleError<Body>(error)
       }
     },
 

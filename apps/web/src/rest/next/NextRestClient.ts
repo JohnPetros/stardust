@@ -185,17 +185,19 @@ export const NextRestClient = ({
       return new RestResponse({ body: data, statusCode: response.status })
     },
 
-    async delete(route: string) {
+    async delete<Body>(route: string, body?: unknown): Promise<RestResponse<Body>> {
       const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
         ...requestInit,
         method: 'DELETE',
+        body: body ? JSON.stringify(body) : undefined,
       })
 
       if (!response.ok) {
-        return await handleRestError(response, async () => await this.delete(route))
+        return await handleRestError(response, async () => await this.delete(route, body))
       }
 
-      return new RestResponse({ statusCode: response.status })
+      const data = await parseResponseJson(response)
+      return new RestResponse({ body: data, statusCode: response.status })
     },
 
     setBaseUrl(url: string): void {
