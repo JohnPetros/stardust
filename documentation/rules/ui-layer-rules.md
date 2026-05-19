@@ -114,6 +114,25 @@ export const EmptyStateView = ({ title }: EmptyStateViewProps) => {
 }
 ```
 
+### Anti-padrão: Usar prop `icon` no componente `Icon` do Studio
+
+**O que foi feito:**
+Foi usado o componente `Icon` da UI do Studio com a prop errada `icon`, por exemplo:
+
+```tsx
+<Icon icon='audio' className='mr-2 h-4 w-4' />
+```
+
+**Por que está errado:**
+No Studio, o contrato de `Icon` (`LucideIconView`) recebe `name` (tipo `IconName`), nao `icon`. Usar `icon` quebra a tipagem, gera erro de compilacao e despadroniza o uso dos componentes globais da UI.
+
+**O que deve ser feito:**
+Usar sempre a prop `name` com um valor existente em `IconName`:
+
+```tsx
+<Icon name='audio' className='mr-2 h-4 w-4' />
+```
+
 ## Exemplo
 
 ```tsx
