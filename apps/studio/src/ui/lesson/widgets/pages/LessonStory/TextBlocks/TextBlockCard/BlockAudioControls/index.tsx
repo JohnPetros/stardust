@@ -9,6 +9,7 @@ import { useBlockAudioControls } from './useBlockAudioControls'
 type Props = {
   item: TextBlockEditorItem
   voices: AudioVoiceDto[]
+  hasStoredAudioFile: boolean
   isGenerateDisabled: boolean
   isGenerating: boolean
   onVoiceChange: (voice: AudioVoiceDto['value']) => void
@@ -19,13 +20,14 @@ type Props = {
 export const BlockAudioControls = ({
   item,
   voices,
+  hasStoredAudioFile,
   isGenerateDisabled,
   isGenerating,
   onVoiceChange,
   onGenerate,
   onCancel,
 }: Props) => {
-  const controls = useBlockAudioControls({ item })
+  const controls = useBlockAudioControls({ item, hasStoredAudioFile })
 
   return (
     <BlockAudioControlsView

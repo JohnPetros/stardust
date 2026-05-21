@@ -83,6 +83,7 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
   const [fetchErrorMessage, setFetchErrorMessage] = useState('')
   const [audioVoices, setAudioVoices] = useState<AudioVoiceDto[]>([])
   const [isGeneratingAudiosInBatch, setIsGeneratingAudiosInBatch] = useState(false)
+  const [isCancellingAudiosInBatch, setIsCancellingAudiosInBatch] = useState(false)
   const [generatingAudioBlockIds, setGeneratingAudioBlockIds] = useState<string[]>([])
   const textBlocksScrollRef = useRef<HTMLDivElement>(null)
   const previewScrollRef = useRef<HTMLDivElement>(null)
@@ -466,6 +467,23 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
     )
   }
 
+  async function handleCancelAllTextBlocksAudios() {
+    setIsCancellingAudiosInBatch(true)
+
+    const response = await lessonService.cancelTextBlocksAudioGenerationInBatch(starId)
+
+    setIsCancellingAudiosInBatch(false)
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+
+    setBaselineTextBlocks(response.body)
+    setTextBlocks((currentTextBlocks) =>
+      toEditorItemsFromPersisted(currentTextBlocks, response.body),
+    )
+  }
+
   function isGeneratingAudioByBlockId(blockId: string) {
     return generatingAudioBlockIds.includes(blockId)
   }
@@ -549,11 +567,13 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
     hasAudioPending,
     isAudioPolling,
     isGeneratingAudiosInBatch,
+    isCancellingAudiosInBatch,
     isGeneratingAudioByBlockId,
     onAudioVoiceChange: handleAudioVoiceChange,
     onGenerateAudio: handleGenerateTextBlockAudio,
     onCancelAudio: handleCancelTextBlockAudio,
     onGenerateAudiosInBatch: handleGenerateAllTextBlocksAudios,
+    onCancelAudiosInBatch: handleCancelAllTextBlocksAudios,
     onReorder: handleReorder,
     onSave: handleSaveButtonClick,
     onTextBlocksScrollToTop: handleTextBlocksScrollToTop,

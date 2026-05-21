@@ -27,7 +27,6 @@ export const BlockAudioControlsView = ({
   selector,
   player,
 }: Props) => {
-  console.log({ isGenerating })
   return (
     <div className='space-y-3 rounded-lg border border-zinc-800 bg-zinc-950/70 p-3'>
       <div className='flex flex-wrap items-end gap-3'>

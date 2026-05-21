@@ -1,9 +1,6 @@
-import { useStorageAudio } from '@/ui/global/hooks/useStorageAudio'
-
 import { BlockAudioPlayerView } from './BlockAudioPlayerView'
 import { useBlockAudioPlayer } from './useBlockAudioPlayer'
-import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
-import { FileStorageFolderPath } from '@stardust/core/storage/structures'
+import { useStorageAudio } from '@/ui/global/hooks/useStorageAudio'
 
 type Props = {
   fileName: string
@@ -31,7 +28,7 @@ function BlockAudioPlayerContent({ url }: ContentProps) {
 }
 
 export const BlockAudioPlayer = ({ fileName }: Props) => {
-  const url = useFileStorage(FileStorageFolderPath.createAsAudiosStory(), fileName)
+  const { url } = useStorageAudio(fileName)
 
   if (!fileName) return null
 

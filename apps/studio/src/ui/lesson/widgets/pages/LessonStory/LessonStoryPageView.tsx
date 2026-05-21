@@ -39,13 +39,16 @@ export const LessonStoryPageView = ({
   onPictureChange,
   onRunnableChange,
   audioVoices,
+  hasAudioPending,
   isAudioPolling,
   isGeneratingAudiosInBatch,
+  isCancellingAudiosInBatch,
   isGeneratingAudioByBlockId,
   onAudioVoiceChange,
   onGenerateAudio,
   onCancelAudio,
   onGenerateAudiosInBatch,
+  onCancelAudiosInBatch,
   onReorder,
   onSave,
   onTextBlocksScrollToTop,
@@ -127,13 +130,16 @@ export const LessonStoryPageView = ({
                   onPictureChange={onPictureChange}
                   onRunnableChange={onRunnableChange}
                   audioVoices={audioVoices}
+                  hasAudioPending={hasAudioPending}
                   isAudioPolling={isAudioPolling}
                   isGeneratingAudiosInBatch={isGeneratingAudiosInBatch}
+                  isCancellingAudiosInBatch={isCancellingAudiosInBatch}
                   isGeneratingAudioByBlockId={isGeneratingAudioByBlockId}
                   onAudioVoiceChange={onAudioVoiceChange}
                   onGenerateAudio={onGenerateAudio}
                   onCancelAudio={onCancelAudio}
                   onGenerateAudiosInBatch={onGenerateAudiosInBatch}
+                  onCancelAudiosInBatch={onCancelAudiosInBatch}
                   onReorder={onReorder}
                 />
               </div>

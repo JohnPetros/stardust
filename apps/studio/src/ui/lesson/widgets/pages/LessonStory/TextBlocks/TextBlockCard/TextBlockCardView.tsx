@@ -17,6 +17,7 @@ type Props = {
   canShowPictureField: boolean
   canShowRunnableField: boolean
   canHaveAudio: boolean
+  hasStoredAudioFile: boolean
   isGenerateAudioDisabled: boolean
   audioVoices: AudioVoiceDto[]
   isGeneratingAudio: boolean
@@ -38,6 +39,7 @@ export const TextBlockCardView = ({
   canShowPictureField,
   canShowRunnableField,
   canHaveAudio,
+  hasStoredAudioFile,
   isGenerateAudioDisabled,
   audioVoices,
   isGeneratingAudio,
@@ -87,6 +89,7 @@ export const TextBlockCardView = ({
             <BlockAudioControls
               item={item}
               voices={audioVoices}
+              hasStoredAudioFile={hasStoredAudioFile}
               isGenerating={isGeneratingAudio}
               isGenerateDisabled={isGenerateAudioDisabled}
               onVoiceChange={(voice) => onAudioVoiceChange(item.id, voice)}

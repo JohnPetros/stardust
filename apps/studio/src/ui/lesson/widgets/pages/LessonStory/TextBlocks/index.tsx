@@ -1,9 +1,36 @@
 import type { ComponentProps } from 'react'
 
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { TextBlocksView } from './TextBlocksView'
+import { useTextBlocks } from './useTextBlocks'
 
-type Props = ComponentProps<typeof TextBlocksView>
+type Props = Omit<
+  ComponentProps<typeof TextBlocksView>,
+  | 'search'
+  | 'isSearchVisible'
+  | 'filteredSortableItems'
+  | 'hasAudioGenerationInProgress'
+  | 'hasStoredAudioFile'
+  | 'onSearchChange'
+  | 'onSearchToggle'
+>
 
 export const TextBlocks = (props: Props) => {
-  return <TextBlocksView {...props} />
+  const { storageService } = useRestContext()
+  const textBlocks = useTextBlocks({
+    textBlocks: props.textBlocks,
+    sortableItems: props.sortableItems,
+    isGeneratingAudiosInBatch: props.isGeneratingAudiosInBatch,
+    isGeneratingAudioByBlockId: props.isGeneratingAudioByBlockId,
+    storageService,
+  })
+
+  return (
+    <TextBlocksView
+      {...props}
+      {...textBlocks}
+      onSearchChange={textBlocks.setSearch}
+      onSearchToggle={textBlocks.handleSearchToggle}
+    />
+  )
 }
