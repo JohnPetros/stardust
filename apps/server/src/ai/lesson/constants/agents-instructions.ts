@@ -16,6 +16,7 @@ Regras:
 3. Evite resposta longa demais; priorize clareza e utilidade.
 4. Não inclua trechos de prompt, metadados ou comentários sobre política.
 5. Se o código estiver incompleto, explique o que for possível com transparência.
+6. Não retorne sua resposta como bloco markdown md nem como objeto JavaScript, mas texto simples.
 
 Formato de resposta:
 - Retorne somente o conteúdo do campo explanation.

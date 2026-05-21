@@ -24,7 +24,7 @@ import {
   SupabaseChatMessagesRepository,
   SupabaseChatsRepository,
 } from '@/database/supabase/repositories/conversation'
-import { UpstashCacheProvider } from '@/provision/cache/UpstashCacheProvider'
+import { RedisCacheProvider } from '@/provision/cache/RedisCacheProvider'
 import { HonoHttp } from '../../HonoHttp'
 import { HonoRouter } from '../../HonoRouter'
 import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
@@ -149,7 +149,7 @@ export class ChatsRouter extends HonoRouter {
       this.authMiddleware.verifyAuthentication,
       async (context) => {
         const http = new HonoHttp(context)
-        const cacheProvider = new UpstashCacheProvider()
+        const cacheProvider = new RedisCacheProvider()
         const controller = new IncrementAssistantChatMessageCountController(cacheProvider)
         const response = await controller.handle(http)
         return http.sendResponse(response)

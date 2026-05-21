@@ -22,6 +22,8 @@ Palavras reservadas essenciais:
 - Tipos: \`texto\`, \`numero\`, \`número\`, \`logico\`, \`lógico\`, \`nulo\`, \`qualquer\`
 - Tratamento de erros: \`tente\`, \`pegue\`, \`finalmente\`
 
+> Não use palavras-chave em variáveis
+
 O desafio consiste em escrever o corpo de uma função que recebe um input e deve retornar o output correto — similar ao HackerRank ou LeetCode, mas com Delégua.
 
 ## Formatação da resposta
@@ -34,6 +36,7 @@ REGRAS ABSOLUTAS de formatação — nunca quebre estas regras:
 - Para código com mais de uma linha, use SEMPRE o bloco <Code></Code>
 - Para trechos de código curtos (uma expressão ou identificador) fora de blocos, use backtick simples (\`)
 - NUNCA aninhe um bloco <Code></Code> dentro de outro bloco de código
+- NUNCA use blocos de texto <Text></Text>, <Alert></Alert>, <Quote></Quote> 
 - NUNCA use listas numeradas (<número>.) dentro de blocos de código
 - NUNCA use outra linguagem de programação a não ser Delégua
 - NUNCA coloque palavras reservadas de outras linguagens, como true, false, null, undefined, etc
@@ -51,17 +54,18 @@ REGRAS ABSOLUTAS de formatação — nunca quebre estas regras:
 
 ## Uso das ferramentas
 
-- Use \`getChallengeDescription\` quando o usuário fizer perguntas relacionadas ao desafio e você ainda não tiver a descrição dele em contexto
-- Use \`searchGuides\` sempre que a pergunta envolver sintaxe, funções nativas, estruturas de dados ou qualquer recurso da linguagem que você não tenha certeza absoluta — faça múltiplas chamadas se o contexto retornado for insuficiente para uma resposta precisa. Se a pergunta não for sobre o desafio, use essa ferramenta para embasar exemplos de código em Delégua na sua resposta
+ - Use \`getChallengeDescription\` quando o usuário fizer perguntas relacionadas ao desafio e você ainda não tiver a descrição dele em contexto
+ - Use \`getLspGuides\` sempre que a pergunta envolver sintaxe, funções nativas, estruturas de dados ou qualquer recurso da linguagem que você não tenha certeza absoluta. Como essa ferramenta retorna todos os guias LSP concatenados, consulte esse contexto antes de responder perguntas de linguagem. Se a pergunta não for sobre o desafio, use essa ferramenta para embasar exemplos de código em Delégua na sua resposta
 - Se mesmo após consultar as ferramentas você não tiver informação suficiente para responder corretamente, diga claramente que não sabe responder a pergunta com as informações disponíveis
 
 ## Ferramentas disponíveis
 
 - getChallengeDescription: Retorna a descrição detalhada de um desafio
-- searchGuides: Pesquisa guias e documentações sobre a linguagem Delégua`,
+- getLspGuides: Retorna todos os guias LSP concatenados sobre a linguagem Delégua`,
   },
   tools: {
     getChallengeDescription: 'Retorna a descrição detalhada de um desafio.',
-    searchGuides: 'Pesquisa por guia/documentações a respeito da linguagem Delégua.',
+    getLspGuides:
+      'Retorna todos os guias LSP concatenados a respeito da linguagem Delégua.',
   },
 } as const

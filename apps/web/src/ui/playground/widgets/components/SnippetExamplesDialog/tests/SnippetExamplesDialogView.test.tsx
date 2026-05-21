@@ -90,7 +90,7 @@ describe('SnippetExamplesDialogView', () => {
 
     await user.click(screen.getByRole('button', { name: 'Abrir exemplos' }))
 
-    expect(screen.getByText('Nenhum exemplo disponivel no momento.')).toBeInTheDocument()
+    expect(screen.getByText('Nenhum exemplo disponível no momento.')).toBeInTheDocument()
   })
 
   it('should render the first 10 example snippets in the real catalog order', async () => {

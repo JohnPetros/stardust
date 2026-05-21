@@ -1,2 +1,2 @@
 export { GetMdxGuideTool } from './GetMdxGuideTool'
-export { SearchGuidesTool } from './SearchGuidesTool'
+export { GetLspGuidesTool } from './GetLspGuidesTool'

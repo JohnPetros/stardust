@@ -20,7 +20,7 @@ import {
   UpdateChallengeTool,
 } from '@/ai/challenging/tools'
 import { MastraMcp } from '../MastraMcp'
-import { UpstashCacheProvider } from '@/provision/cache/UpstashCacheProvider'
+import { RedisCacheProvider } from '@/provision/cache/RedisCacheProvider'
 import {
   idSchema,
   idsListSchema,
@@ -144,7 +144,7 @@ export class ChallengingToolkit {
       outputSchema: z.object({ problem: z.string() }),
       execute: async (input) => {
         const mcp = new MastraMcp(input)
-        const cacheProvider = new UpstashCacheProvider()
+        const cacheProvider = new RedisCacheProvider()
         const tool = new GetChallengeProblemTool(cacheProvider)
         return await tool.handle(mcp)
       },

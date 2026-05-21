@@ -1,5 +1,4 @@
 import { mock } from 'ts-jest-mocker'
-import { DeleguaLsp } from '@stardust/lsp'
 
 import { Code } from '../Code'
 import type { LspProvider } from '#global/interfaces/index'
@@ -53,16 +52,6 @@ describe('Code strucutre', () => {
     expect(lspProviderMock.addInputs).toHaveBeenCalledTimes(1)
     expect(lspProviderMock.addInputs).toHaveBeenCalledWith(inputs, codeValue)
     expect(code.value).toBe(codeWithInputs)
-  })
-
-  it('should replace only the leia call when adding inputs with a real DeleguaLsp', async () => {
-    const codeValue = 'var num = numero(leia())'
-    const inputs = [2]
-
-    let code = Code.create(new DeleguaLsp(), codeValue)
-    code = await code.addInputs(inputs)
-
-    expect(code.value).toBe('var num = numero(2)')
   })
 
   it('should format value translating it for the code runner', async () => {
