@@ -3498,6 +3498,10 @@ export type Database = {
       teste: { Args: never; Returns: string }
       unaccent: { Args: { '': string }; Returns: string }
       update_last_week_ranking_positions: { Args: never; Returns: undefined }
+      update_text_block_audio: {
+        Args: { p_audio: Json; p_block_index: number; p_star_id: string }
+        Returns: undefined
+      }
       update_user_email: {
         Args: { new_email: string; user_id: string }
         Returns: undefined

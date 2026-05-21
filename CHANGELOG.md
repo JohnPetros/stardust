@@ -1501,7 +1501,7 @@
 * 📶 rest(studio): enhance ChallengingService and ProfileService with new methods and logging (2769d051)
 * 🌐 domain: add new date formats DateFormat type (fa24debc)
 * 📦 deps(studio): add Tabs component and related subcomponents; update package dependencies (6592d4e4)
-* ♻️ refactor(server): update FetchImagesListController to align with new listFiles return structure for pagination (ee889b6c)
+* ♻️ refactor(server): update FetchFilesListController to align with new listFiles return structure for pagination (ee889b6c)
 * ♻️ refactor(server): update listFiles method signatures in storage providers to return ManyItems type for consistency (d65d9194)
 * ♻️ refactor(server): standardize repository methods to return ManyItems type for consistency in pagination across various repositories (22edd06d)
 * ♻️ refactor: update repository methods to return ManyItems type for improved pagination handling (dff49c0f)
@@ -3205,7 +3205,7 @@
   SupabaseFileStorageProvider (6beb6c49)
 - ⚙️ config(server): make hono http implementation return file (aa60064d)
 - ⚙️ config(server): register router for storage module (f99e9e16)
-- 📶 rest(server): add FetchImagesListController (58259a3a)
+- 📶 rest(server): add FetchFilesListController (58259a3a)
 - 🧰 provision(server): implement listFiles method in SupabaseFileStorageProvider
   (fbbf99e2)
 - 📑 interface: add listFiles method to StorageProvider (d40d619c)

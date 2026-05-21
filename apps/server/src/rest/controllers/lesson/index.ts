@@ -1,4 +1,5 @@
 export { FetchQuestionsController } from './FetchQuestionsController'
+export { FetchAudioVoicesController } from './FetchAudioVoicesController'
 export { FetchTextBlocksController } from './FetchTextBlocksController'
 export { FetchStoryController } from './FetchStoryController'
 export { FetchRemainingCodeExplanationUsesController } from './FetchRemainingCodeExplanationUsesController'

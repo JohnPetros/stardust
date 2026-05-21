@@ -1,7 +1,6 @@
-import { AlertTriangle, ArrowDown, ArrowUp, FileText, RefreshCcw } from 'lucide-react'
-
 import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
 import type { ActionButtonTitles } from '@/ui/global/widgets/components/ActionButton/types/ActionButtonTitles'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Loading } from '@/ui/global/widgets/components/Loading'
 import { Mdx } from '@/ui/global/widgets/components/Mdx'
 import { Button } from '@/ui/shadcn/components/button'
@@ -39,6 +38,17 @@ export const LessonStoryPageView = ({
   onContentChange,
   onPictureChange,
   onRunnableChange,
+  audioVoices,
+  hasAudioPending,
+  isAudioPolling,
+  isGeneratingAudiosInBatch,
+  isCancellingAudiosInBatch,
+  isGeneratingAudioByBlockId,
+  onAudioVoiceChange,
+  onGenerateAudio,
+  onCancelAudio,
+  onGenerateAudiosInBatch,
+  onCancelAudiosInBatch,
   onReorder,
   onSave,
   onTextBlocksScrollToTop,
@@ -67,19 +77,19 @@ export const LessonStoryPageView = ({
           </div>
         ) : errorMessage ? (
           <div className='grid min-h-[60vh] place-content-center gap-4 rounded-2xl border border-red-900/60 bg-red-950/20 p-8 text-center'>
-            <AlertTriangle className='mx-auto h-10 w-10 text-red-400' />
+            <Icon name='alert' className='mx-auto h-10 w-10 text-red-400' />
             <div className='space-y-2'>
               <h2 className='text-xl font-semibold'>Não foi possível carregar a aba</h2>
               <p className='max-w-xl text-sm text-zinc-300'>{errorMessage}</p>
             </div>
             <Button type='button' variant='outline' onClick={onRetry} className='mx-auto'>
-              <RefreshCcw className='mr-2 h-4 w-4' />
+              <Icon name='reload' className='mr-2 h-4 w-4' />
               Tentar novamente
             </Button>
           </div>
         ) : isBlocked ? (
           <div className='grid min-h-[60vh] place-content-center gap-4 rounded-2xl border border-amber-700/40 bg-amber-950/20 p-8 text-center'>
-            <AlertTriangle className='mx-auto h-10 w-10 text-amber-400' />
+            <Icon name='alert' className='mx-auto h-10 w-10 text-amber-400' />
             <div className='space-y-2'>
               <h2 className='text-xl font-semibold'>Edição bloqueada</h2>
               <p className='max-w-2xl text-sm text-zinc-300'>{blockingReason}</p>
@@ -95,7 +105,7 @@ export const LessonStoryPageView = ({
                   size='sm'
                   onClick={onTextBlocksScrollToTop}
                 >
-                  <ArrowUp className='mr-1 h-4 w-4' />
+                  <Icon name='arrow-up' className='mr-1 h-4 w-4' />
                   Topo
                 </Button>
                 <Button
@@ -104,7 +114,7 @@ export const LessonStoryPageView = ({
                   size='sm'
                   onClick={onTextBlocksScrollToBottom}
                 >
-                  <ArrowDown className='mr-1 h-4 w-4' />
+                  <Icon name='arrow-down' className='mr-1 h-4 w-4' />
                   Fim
                 </Button>
               </div>
@@ -119,6 +129,17 @@ export const LessonStoryPageView = ({
                   onContentChange={onContentChange}
                   onPictureChange={onPictureChange}
                   onRunnableChange={onRunnableChange}
+                  audioVoices={audioVoices}
+                  hasAudioPending={hasAudioPending}
+                  isAudioPolling={isAudioPolling}
+                  isGeneratingAudiosInBatch={isGeneratingAudiosInBatch}
+                  isCancellingAudiosInBatch={isCancellingAudiosInBatch}
+                  isGeneratingAudioByBlockId={isGeneratingAudioByBlockId}
+                  onAudioVoiceChange={onAudioVoiceChange}
+                  onGenerateAudio={onGenerateAudio}
+                  onCancelAudio={onCancelAudio}
+                  onGenerateAudiosInBatch={onGenerateAudiosInBatch}
+                  onCancelAudiosInBatch={onCancelAudiosInBatch}
                   onReorder={onReorder}
                 />
               </div>
@@ -139,7 +160,7 @@ export const LessonStoryPageView = ({
                     size='sm'
                     onClick={onPreviewScrollToTop}
                   >
-                    <ArrowUp className='mr-1 h-4 w-4' />
+                    <Icon name='arrow-up' className='mr-1 h-4 w-4' />
                     Topo
                   </Button>
                   <Button
@@ -148,7 +169,7 @@ export const LessonStoryPageView = ({
                     size='sm'
                     onClick={onPreviewScrollToBottom}
                   >
-                    <ArrowDown className='mr-1 h-4 w-4' />
+                    <Icon name='arrow-down' className='mr-1 h-4 w-4' />
                     Fim
                   </Button>
                 </div>
@@ -156,7 +177,7 @@ export const LessonStoryPageView = ({
 
               {isEmpty ? (
                 <div className='grid min-h-[60vh] place-content-center gap-4 text-center'>
-                  <FileText className='mx-auto h-10 w-10 text-zinc-600' />
+                  <Icon name='file-text' className='mx-auto h-10 w-10 text-zinc-600' />
                   <div className='space-y-1'>
                     <h3 className='text-lg font-medium'>Nenhum bloco criado</h3>
                     <p className='text-sm text-zinc-400'>

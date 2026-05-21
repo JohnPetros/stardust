@@ -29,8 +29,18 @@ describe('Generate TextBlocks Audio Batch Job', () => {
     amqp.getPayload.mockReturnValue({
       starId: 'star-id',
       blocks: [
-        { blockIndex: 0, content: 'Primeiro bloco', voice: 'panda' },
-        { blockIndex: 3, content: 'Segundo bloco', voice: 'shark' },
+        {
+          blockIndex: 0,
+          content: 'Primeiro bloco',
+          voice: 'panda',
+          currentAudioFileName: null,
+        },
+        {
+          blockIndex: 3,
+          content: 'Segundo bloco',
+          voice: 'shark',
+          currentAudioFileName: 'old.wav',
+        },
       ],
     })
 
@@ -50,6 +60,7 @@ describe('Generate TextBlocks Audio Batch Job', () => {
           blockIndex: 0,
           content: 'Primeiro bloco',
           voice: 'panda',
+          currentAudioFileName: null,
         },
       }),
     )
@@ -62,6 +73,7 @@ describe('Generate TextBlocks Audio Batch Job', () => {
           blockIndex: 3,
           content: 'Segundo bloco',
           voice: 'shark',
+          currentAudioFileName: 'old.wav',
         },
       }),
     )

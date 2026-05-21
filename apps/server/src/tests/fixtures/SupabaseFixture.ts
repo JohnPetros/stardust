@@ -1,5 +1,6 @@
 import { ENV } from '@/constants'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import { LocalSupabaseProxy } from './LocalSupabaseProxy'
 
 export class SupabaseFixture {
   readonly supabase: SupabaseClient
@@ -14,6 +15,7 @@ export class SupabaseFixture {
   }
 
   async clearDatabase() {
+    await LocalSupabaseProxy.ensureRunning()
     await this.supabase.from('users').delete()
     await this.supabase.from('achievements').delete()
   }

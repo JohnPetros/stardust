@@ -3,10 +3,11 @@
 @FOLDER = story
 
 ### Get files
-GET {{URL}}/{{FOLDER}}
+GET {{URL}}
 ?page=1
 &itemsPerPage=25
 &search=
+&folder=images%2Fstory
 Authorization: Bearer {{JWT}}
 
 ### Remove file

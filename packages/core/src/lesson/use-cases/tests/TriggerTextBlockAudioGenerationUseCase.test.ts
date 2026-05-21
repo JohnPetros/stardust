@@ -73,6 +73,7 @@ describe('Trigger TextBlock Audio Generation Use Case', () => {
           blockIndex: 0,
           content: 'Texto do bloco',
           voice: 'shark',
+          currentAudioFileName: 'previous.wav',
         },
       }),
     )

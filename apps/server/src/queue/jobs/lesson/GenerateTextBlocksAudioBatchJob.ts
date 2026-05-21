@@ -23,6 +23,7 @@ export class GenerateTextBlocksAudioBatchJob implements Job<Payload> {
             blockIndex: block.blockIndex,
             content: block.content,
             voice: block.voice,
+            currentAudioFileName: block.currentAudioFileName,
           }),
         )
       }

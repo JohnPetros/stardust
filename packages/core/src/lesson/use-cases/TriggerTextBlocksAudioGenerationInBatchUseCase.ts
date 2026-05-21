@@ -55,6 +55,7 @@ export class TriggerTextBlocksAudioGenerationInBatchUseCase
           blockIndex: block.index,
           content: block.textBlock.content,
           voice: block.audio.voice.value,
+          currentAudioFileName: block.textBlock.audio?.fileName.value || null,
         })),
       }),
     )

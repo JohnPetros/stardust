@@ -6,6 +6,7 @@ create or replace function public.update_text_block_audio(
 returns void
 language plpgsql
 security definer
+set search_path = public
 as $$
 begin
   if p_block_index < 0 then

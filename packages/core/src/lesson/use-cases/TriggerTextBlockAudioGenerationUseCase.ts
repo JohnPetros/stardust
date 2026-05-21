@@ -55,6 +55,7 @@ export class TriggerTextBlockAudioGenerationUseCase
         blockIndex: parsedBlockIndex.value,
         content: textBlock.content,
         voice: pendingAudio.voice.value,
+        currentAudioFileName: textBlock.audio?.fileName.value || null,
       }),
     )
 

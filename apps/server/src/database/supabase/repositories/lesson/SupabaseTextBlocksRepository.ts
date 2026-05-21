@@ -44,7 +44,7 @@ export class SupabaseTextBlocksRepository
     blockIndex: Integer,
     audio: TextBlockAudio,
   ): Promise<void> {
-    const { error } = await (this.supabase as any).rpc('update_text_block_audio', {
+    const { error } = await this.supabase.rpc('update_text_block_audio', {
       p_star_id: starId.value,
       p_block_index: blockIndex.value,
       p_audio: audio.dto as Json,
