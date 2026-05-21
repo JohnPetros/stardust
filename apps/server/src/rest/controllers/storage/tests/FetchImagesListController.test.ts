@@ -15,6 +15,7 @@ describe('Fetch Images List Controller', () => {
       page: number
       itemsPerPage: number
       search: string
+      folder: string
     }
   }
 
@@ -31,7 +32,12 @@ describe('Fetch Images List Controller', () => {
 
   it('should extract route and query params, call provider and send paginated file names', async () => {
     const routeParams = { folder: 'avatars' }
-    const queryParams = { page: 2, itemsPerPage: 3, search: 'profile' }
+    const queryParams = {
+      page: 2,
+      itemsPerPage: 3,
+      search: 'profile',
+      folder: 'images/avatars',
+    }
     const listedFiles = [
       { name: 'img-1.png' } as File,
       { name: 'img-2.jpg' } as File,
@@ -71,7 +77,12 @@ describe('Fetch Images List Controller', () => {
 
   it('should send empty pagination when provider returns no files', async () => {
     const routeParams = { folder: 'planets' }
-    const queryParams = { page: 1, itemsPerPage: 10, search: '' }
+    const queryParams = {
+      page: 1,
+      itemsPerPage: 10,
+      search: '',
+      folder: 'images/planets',
+    }
 
     http.getRouteParams.mockReturnValue(routeParams)
     http.getQueryParams.mockReturnValue(queryParams)
