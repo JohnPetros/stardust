@@ -85,7 +85,7 @@ export const TextBlockCardView = ({
             value={item.content}
             onChange={(content) => onContentChange(item.id, content)}
           />
-          {item.audio && (
+          {canHaveAudio ? (
             <BlockAudioControls
               item={item}
               voices={audioVoices}
@@ -96,7 +96,7 @@ export const TextBlockCardView = ({
               onGenerate={() => onGenerateAudio(item.id)}
               onCancel={() => onCancelAudio(item.id)}
             />
-          )}
+          ) : null}
           {canShowPictureField && (
             <BlockPictureField
               picture={item.picture}

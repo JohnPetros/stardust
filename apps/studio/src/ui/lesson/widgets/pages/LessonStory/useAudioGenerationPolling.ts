@@ -39,6 +39,8 @@ export function useAudioGenerationPolling({
       const response = await lessonService.fetchTextsBlocks(starId)
 
       if (response.isFailure) {
+        clearInterval(interval)
+        setIsPolling(false)
         onError(response.errorMessage)
         return
       }

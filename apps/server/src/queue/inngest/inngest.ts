@@ -1,5 +1,4 @@
 import { Inngest } from 'inngest'
-import { z } from 'zod'
 
 import { ENV } from '../../constants'
 

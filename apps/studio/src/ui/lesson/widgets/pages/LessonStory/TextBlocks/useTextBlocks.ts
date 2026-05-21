@@ -15,7 +15,7 @@ type Params = {
   storageService: StorageService
 }
 
-const STORAGE_ITEMS_PER_PAGE = OrdinalNumber.create(10)
+const STORAGE_ITEMS_PER_PAGE = OrdinalNumber.create(1000)
 
 export function useTextBlocks({
   textBlocks,
@@ -70,24 +70,25 @@ export function useTextBlocks({
     let isMounted = true
 
     async function checkAudioFilesInStorage() {
-      const filesEntries = await Promise.all(
-        audioFileNames.map(async (fileName) => {
-          const response = await storageService.listFiles({
-            folder: FileStorageFolderPath.createAsAudiosStory(),
-            search: Text.create(fileName),
-            page: OrdinalNumber.create(1),
-            itemsPerPage: STORAGE_ITEMS_PER_PAGE,
-          })
-
-          if (response.isFailure) return [fileName, false] as const
-
-          return [fileName, response.body.items.includes(fileName)] as const
-        }),
-      )
+      const response = await storageService.listFiles({
+        folder: FileStorageFolderPath.createAsAudiosStory(),
+        search: Text.create(''),
+        page: OrdinalNumber.create(1),
+        itemsPerPage: STORAGE_ITEMS_PER_PAGE,
+      })
 
       if (!isMounted) return
 
-      console.log(Object.fromEntries(filesEntries))
+      if (response.isFailure) {
+        setAudioFilesInStorage({})
+        return
+      }
+
+      const storedAudioFiles = new Set(response.body.items)
+      const filesEntries = audioFileNames.map((fileName) => [
+        fileName,
+        storedAudioFiles.has(fileName),
+      ])
 
       setAudioFilesInStorage(Object.fromEntries(filesEntries) as Record<string, boolean>)
     }

@@ -31,7 +31,6 @@ describe('Fetch Images List Controller', () => {
   })
 
   it('should extract route and query params, call provider and send paginated file names', async () => {
-    const routeParams = { folder: 'avatars' }
     const queryParams = {
       page: 2,
       itemsPerPage: 3,
@@ -45,7 +44,6 @@ describe('Fetch Images List Controller', () => {
     ]
     const restResponse = mock<RestResponse>()
 
-    http.getRouteParams.mockReturnValue(routeParams)
     http.getQueryParams.mockReturnValue(queryParams)
     http.sendPagination.mockReturnValue(restResponse)
     storageProvider.listFiles.mockResolvedValue({
@@ -56,7 +54,6 @@ describe('Fetch Images List Controller', () => {
     const result = await controller.handle(http)
     const [params] = storageProvider.listFiles.mock.calls[0]
 
-    expect(http.getRouteParams).toHaveBeenCalledTimes(1)
     expect(http.getQueryParams).toHaveBeenCalledTimes(1)
     expect(storageProvider.listFiles).toHaveBeenCalledTimes(1)
     expect(params.folder.value).toBe('images/avatars')
@@ -76,7 +73,6 @@ describe('Fetch Images List Controller', () => {
   })
 
   it('should send empty pagination when provider returns no files', async () => {
-    const routeParams = { folder: 'planets' }
     const queryParams = {
       page: 1,
       itemsPerPage: 10,
@@ -84,7 +80,6 @@ describe('Fetch Images List Controller', () => {
       folder: 'images/planets',
     }
 
-    http.getRouteParams.mockReturnValue(routeParams)
     http.getQueryParams.mockReturnValue(queryParams)
     http.sendPagination.mockReturnValue(mock<RestResponse>())
     storageProvider.listFiles.mockResolvedValue({ items: [], count: 0 })

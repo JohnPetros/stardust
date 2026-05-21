@@ -45,6 +45,7 @@ describe('Generate TextBlock Audio Job', () => {
     repository.findAllByStar.mockImplementation()
     ttsProvider.generate.mockImplementation()
     storageProvider.upload.mockImplementation()
+    storageProvider.removeFile.mockImplementation()
     broker.publish.mockImplementation()
     amqp.getPayload.mockReturnValue({
       starId,
