@@ -4,7 +4,7 @@ prd: https://github.com/JohnPetros/stardust/milestone/31
 issue: https://github.com/JohnPetros/stardust/issues/410
 apps: server, studio
 status: open
-last_updated_at: 2026-05-18
+last_updated_at: 2026-05-19
 ---
 
 # 1. Objetivo
@@ -18,7 +18,9 @@ Adicionar ao editor de história do Studio o controle de geração, acompanhamen
 * Exibir seletor de voz por bloco elegível (`default`, `alert`, `quote`) no card expandido.
 * Permitir geração individual para blocos elegíveis com conteúdo preenchido.
 * Permitir geração em lote para todos os blocos elegíveis e não pendentes.
+* Permitir cancelamento em lote para todos os blocos com `audio.status = 'pending'`.
 * Exibir estado visual por bloco para `idle`, `pending`, `done`, `error` e `cancelled`.
+* Destacar visualmente o `TextBlockCard` com borda de atenção enquanto o bloco estiver gerando áudio.
 * Exibir player compacto quando `audio.status = 'done'` e `audio.fileName` existir.
 * Fazer polling a cada 3s enquanto houver bloco com `audio.status = 'pending'`.
 * Permitir drag-and-drop mesmo enquanto houver geração pendente.
@@ -31,7 +33,7 @@ Adicionar ao editor de história do Studio o controle de geração, acompanhamen
 * Reprodução de áudio na Lesson Page do aluno no app `web`.
 * Realtime para atualização de status de áudio.
 * Cadastro, edição ou remoção de vozes pelo operador.
-* Remoção manual de arquivos de áudio antigos.
+* Remoção manual de arquivos de áudio antigos via operação explícita do operador.
 * Geração automática de áudio ao salvar os blocos.
 * Alteração dos jobs Inngest de geração, cancelamento ou upload de áudio já implementados.
 * Nova migration de banco.
@@ -53,6 +55,8 @@ Adicionar ao editor de história do Studio o controle de geração, acompanhamen
 * O polling deve iniciar quando houver pelo menos um bloco `pending` e encerrar automaticamente quando nenhum bloco estiver `pending`.
 * O drag-and-drop deve permanecer disponível mesmo quando houver bloco `pending`.
 * A regeneração deve permanecer disponível para blocos com `audio.status = 'done'`, `error`, `cancelled` ou `idle`.
+* O operador deve conseguir cancelar em lote os áudios pendentes pelo botão "Cancelar áudios" no header dos blocos.
+* O botão "Cancelar áudios" deve ficar desabilitado quando não houver nenhum bloco `pending` ou quando outra ação em lote estiver em execução.
 
 ## 3.2 Não funcionais
 
@@ -62,6 +66,7 @@ Adicionar ao editor de história do Studio o controle de geração, acompanhamen
 * Resiliência: falhas nas chamadas de geração, lote, cancelamento ou polling devem exibir toast e preservar o estado local anterior.
 * Latência: o polling deve usar intervalo fixo de 3000ms apenas enquanto houver `pending`.
 * Consistência operacional: ações de geração devem sincronizar mudanças locais antes de chamar endpoints que operam por `blockIndex`, evitando áudio gerado a partir de conteúdo/voz obsoletos.
+* Feedback visual: cards com geração em andamento devem aplicar borda destacada para facilitar varredura rápida da lista.
 
 # 4. O que já existe?
 
@@ -72,10 +77,10 @@ Adicionar ao editor de história do Studio o controle de geração, acompanhamen
 * **`useLessonStoryPage`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`) - Carrega blocos, mantém estado local, serializa blocos para salvar, controla preview, reordenação e action button.
 * **`LessonStoryPageView`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx`) - Renderiza editor, preview MDX, loading, erro e bloqueios da aba.
 * **`TextBlocks`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/index.tsx`) - Exporta `TextBlocksView` diretamente.
-* **`TextBlocksView`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx`) - Renderiza header, busca, botões de criação de bloco e lista reordenável com `SortableList`.
+* **`TextBlocksView`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx`) - Renderiza header, busca, botões de criação, geração/cancelamento em lote e lista reordenável com `SortableList`.
 * **`TextBlockCard`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/index.tsx`) - Entry point do card; conecta `useTextBlockCard` e `TextBlockCardView`.
 * **`useTextBlockCard`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/useTextBlockCard.ts`) - Calcula preview, visibilidade de imagem/runnable e label de conteúdo.
-* **`TextBlockCardView`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx`) - Renderiza card expansível com campos de conteúdo, imagem e runnable.
+* **`TextBlockCardView`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx`) - Renderiza card expansível com campos de conteúdo, imagem e runnable, aplicando borda destacada durante geração de áudio.
 * **`useFetch`** (`apps/studio/src/ui/global/hooks/useFetch.ts`) - Hook baseado em TanStack Query; já suporta `refreshInterval`, `refetch` e `updateData`.
 * **`useFileStorage`** (`apps/studio/src/ui/global/hooks/useFileStorage.ts`) - Monta URL pública usando `ENV.supabaseCdnUrl` e `FileStorageFolderPath.value`.
 * **`SortableList`** (`apps/studio/src/ui/global/widgets/components/SortableList/index.tsx`) - Wrapper de DnD usado para reordenar blocos.
@@ -103,7 +108,7 @@ Adicionar ao editor de história do Studio o controle de geração, acompanhamen
 
 ## Pacote Core
 
-* **`LessonService`** (`packages/core/src/lesson/interfaces/LessonService.ts`) - Contrato REST compartilhado; ainda não possui métodos de áudio.
+* **`LessonService`** (`packages/core/src/lesson/interfaces/LessonService.ts`) - Contrato REST compartilhado já inclui `fetchAudioVoices`, geração/cancelamento individual e geração/cancelamento em lote.
 * **`TextBlockDto`** (`packages/core/src/global/domain/entities/dtos/TextBlockDto.ts`) - DTO de bloco; já possui `audio?: TextBlockAudioDto`.
 * **`TextBlockAudioDto`** (`packages/core/src/global/domain/entities/dtos/TextBlockAudioDto.ts`) - DTO de áudio com `fileName`, `voice` e `status`.
 * **`TextBlock`** (`packages/core/src/lesson/domain/structures/TextBlock.ts`) - Structure do bloco; já possui `canHaveAudio`, `audio` e `setAudio`.
@@ -113,7 +118,7 @@ Adicionar ao editor de história do Studio o controle de geração, acompanhamen
 
 ## Pacote Validation
 
-* **`textBlockSchema`** (`packages/validation/src/modules/lesson/schemas/textBlockSchema.ts`) - Valida blocos no `PUT /lesson/text-blocks`, mas ainda não aceita `audio`.
+* **`textBlockSchema`** (`packages/validation/src/modules/lesson/schemas/textBlockSchema.ts`) - Valida blocos no `PUT /lesson/text-blocks` incluindo `audio` opcional.
 * **`audioVoiceSchema`** (`packages/validation/src/modules/lesson/schemas/audioVoiceSchema.ts`) - Valida `panda`, `shark` e `princess`.
 * **`requestTextBlockAudioGenerationSchema`** (`packages/validation/src/modules/lesson/schemas/requestTextBlockAudioGenerationSchema.ts`) - Valida `{ blockIndex, voice }` para geração individual.
 
@@ -271,8 +276,8 @@ BlockAudioControls/
 * **Camada:** `ui`
 
 * **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx`
-* **Mudança:** Adicionar botão de geração em lote no header e exibir indicador discreto de polling quando `isAudioPolling` for `true`, mantendo `SortableList` ativo durante todo o ciclo de geração.
-* **Justificativa:** Cumprir ação em lote e preservar drag-and-drop mesmo com blocos `pending`.
+* **Mudança:** Adicionar botão de geração em lote e botão de cancelamento em lote no header; exibir indicador discreto de polling quando `isAudioPolling` for `true`; manter `SortableList` ativo durante todo o ciclo de geração.
+* **Justificativa:** Cumprir ações em lote (gerar/cancelar) e preservar drag-and-drop mesmo com blocos `pending`.
 * **Camada:** `ui`
 
 * **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/index.tsx`
@@ -286,8 +291,8 @@ BlockAudioControls/
 * **Camada:** `ui`
 
 * **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx`
-* **Mudança:** Renderizar `BlockAudioControls` dentro do `CollapsibleContent`, abaixo de `BlockContentField` e antes dos campos de imagem/runnable, apenas quando `canHaveAudio` for verdadeiro.
-* **Justificativa:** Colocar seletor, geração e player dentro do card expandido, conforme PRD.
+* **Mudança:** Renderizar `BlockAudioControls` dentro do `CollapsibleContent`, abaixo de `BlockContentField` e antes dos campos de imagem/runnable, apenas quando `canHaveAudio` for verdadeiro e `item.audio` existir; destacar a borda do card enquanto `isGeneratingAudio` for `true`.
+* **Justificativa:** Colocar seletor, geração e player dentro do card expandido, evitar controles quando não há `audio` inicializado e tornar o estado de geração identificável na lista.
 * **Camada:** `ui`
 
 # 7. O que deve ser removido?
@@ -373,6 +378,14 @@ Geração em lote
   -> POST /lesson/text-blocks/star/:starId/audio/batch
   -> response 202 TextBlockDto[] com blocos elegíveis pending
   -> polling acompanha conclusão individual
+
+Cancelamento em lote
+  -> TextBlocksView botão "Cancelar áudios"
+  -> useLessonStoryPage.handleCancelAllTextBlocksAudios()
+  -> LessonService.cancelTextBlocksAudioGenerationInBatch(starId)
+  -> DELETE /lesson/text-blocks/star/:starId/audio/batch
+  -> response 202 TextBlockDto[] com blocos pending marcados como cancelled
+  -> polling encerra quando não houver mais pending
 ```
 
 * **Fluxo Cross-app:**
@@ -412,9 +425,10 @@ LessonStoryPage
 │       │   ├── badge/label "atualizando áudio" quando polling
 │       │   ├── botão Buscar bloco
 │       │   ├── botão Gerar áudios
+│       │   ├── botão Cancelar áudios
 │       │   └── botões de criação por tipo
 │       └── TextBlockCard[]
-│           └── expanded content
+│           └── expanded content (borda destacada quando gerando)
 │               ├── BlockContentField
 │               ├── BlockAudioControls
 │               │   ├── BlockVoiceSelector
