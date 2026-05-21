@@ -9,5 +9,6 @@ export const fileStorageFolderPathSchema = z.enum([
   'images/rankings',
   'images/insignias',
   'images/feedback-reports',
+  'audios/story',
   'database-backups',
 ])
