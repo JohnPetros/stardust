@@ -1,5 +1,5 @@
 import type { Controller, Http } from '@stardust/core/global/interfaces'
-import type { StorageProvider } from '@stardust/core/storage/interfaces'
+import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
 import { OrdinalNumber, Text } from '@stardust/core/global/structures'
 import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { PaginationResponse } from '@stardust/core/global/responses'
@@ -16,7 +16,7 @@ type Schema = {
 }
 
 export class FetchImagesListController implements Controller {
-  constructor(private readonly storageProvider: StorageProvider) {}
+  constructor(private readonly storageProvider: FileStorageProvider) {}
 
   async handle(http: Http<Schema>) {
     const { folder } = http.getRouteParams()

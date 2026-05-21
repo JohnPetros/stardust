@@ -480,9 +480,9 @@
 
 ## 1.1.1 (2026-02-27)
 
-* 🐛 fix(server): enhance error handling in SupabaseStorageProvider with detailed messages for upload, list, find, and remove operations (8a66c0ab8)
-* ♻️ refactor(server): update SupabaseStorageProvider initialization to accept SupabaseClient instance (e2a82e094)
-* 🧰 prov(server): add logging for folder and file during upload in SupabaseStorageProvider (e4317caf2)
+* 🐛 fix(server): enhance error handling in SupabaseFileStorageProvider with detailed messages for upload, list, find, and remove operations (8a66c0ab8)
+* ♻️ refactor(server): update SupabaseFileStorageProvider initialization to accept SupabaseClient instance (e2a82e094)
+* 🧰 prov(server): add logging for folder and file during upload in SupabaseFileStorageProvider (e4317caf2)
 * ⚙️ config: update pre-commit hook to run codecheck instead of lint (62faa7af7)
 * 🖥️ ui(web): improve logging in useFeedbackDialog and update insigniaRoleSchema to include 'god' role (3611bf315)
 * 📦 deps: update package.json files to refine linting and formatting commands (fb872458d)
@@ -2172,7 +2172,7 @@
 - 🌐 domain: add FileNotFoundError class for handling file not found errors
   (086645ec)
 - 🧰 provision(server): add findFile method to StorageProvider interface and
-  implement in SupabaseStorageProvider (4de56d7b)
+  implement in SupabaseFileStorageProvider (4de56d7b)
 - ⚙️ config: ignore AGENTS.md (f14d8f7b)
 - ♻️ refactor: remove findById method from PlanetsRepository interface
   (355fbd0e)
@@ -3202,11 +3202,11 @@
 - 📶 rest(server): add RemoveFileController (a0ff2eb9)
 - 📶 rest(server): add UploadFileController (89b9bf0e)
 - 🧰 provision(server): implement upload and removeFile methods in
-  SupabaseStorageProvider (6beb6c49)
+  SupabaseFileStorageProvider (6beb6c49)
 - ⚙️ config(server): make hono http implementation return file (aa60064d)
 - ⚙️ config(server): register router for storage module (f99e9e16)
 - 📶 rest(server): add FetchImagesListController (58259a3a)
-- 🧰 provision(server): implement listFiles method in SupabaseStorageProvider
+- 🧰 provision(server): implement listFiles method in SupabaseFileStorageProvider
   (fbbf99e2)
 - 📑 interface: add listFiles method to StorageProvider (d40d619c)
 - 📮 validation: add fileStorageFolderPathSchema (36ae5c4b)

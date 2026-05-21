@@ -2,7 +2,7 @@ import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Http } from '@stardust/core/global/interfaces'
 import { PaginationResponse, type RestResponse } from '@stardust/core/global/responses'
-import type { StorageProvider } from '@stardust/core/storage/interfaces'
+import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
 
 import { FetchImagesListController } from '../FetchImagesListController'
 
@@ -19,7 +19,7 @@ describe('Fetch Images List Controller', () => {
   }
 
   let http: Mock<Http<Schema>>
-  let storageProvider: Mock<StorageProvider>
+  let storageProvider: Mock<FileStorageProvider>
   let controller: FetchImagesListController
 
   beforeEach(() => {

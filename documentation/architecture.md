@@ -24,6 +24,8 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 
 **Queue**: Event Dispatcher → Inngest → Job.handle(amqp) → Use Case
 
+**Lesson audio generation**: REST `/lesson/text-blocks` → use cases do modulo `lesson` → eventos Inngest (`requested`, `batch requested`, `generated`, `cancelled`) → jobs de fan-out, TTS/upload e persistencia final do `audio` em `stars.texts[blockIndex].audio`
+
 ## Padrões Principais
 
 - **Widget** na UI para separar View (renderização), Hook (lógica/estado) e Index (integração).

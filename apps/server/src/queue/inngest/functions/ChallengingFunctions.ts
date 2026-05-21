@@ -13,8 +13,10 @@ export class ChallengingFunctions extends InngestFunctions {
         id: CreateChallengeJob.KEY,
         onFailure: (context) => this.handleFailure(context, CreateChallengeJob.name),
         retries: 0,
+        triggers: {
+          cron: CreateChallengeJob.CRON_EXPRESSION,
+        },
       },
-      { cron: CreateChallengeJob.CRON_EXPRESSION },
       async (context) => {
         const workflow = new MastraCreateChallengeWorkflow()
         const amqp = new InngestAmqp(context)
@@ -30,8 +32,10 @@ export class ChallengingFunctions extends InngestFunctions {
         id: ExpireNewChallengesJob.KEY,
         onFailure: (context) => this.handleFailure(context, ExpireNewChallengesJob.name),
         retries: 0,
+        triggers: {
+          cron: ExpireNewChallengesJob.CRON_EXPRESSION,
+        },
       },
-      { cron: ExpireNewChallengesJob.CRON_EXPRESSION },
       async (context) => {
         const repository = new SupabaseChallengesRepository(supabase)
         const amqp = new InngestAmqp(context)

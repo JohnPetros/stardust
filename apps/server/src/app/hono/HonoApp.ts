@@ -27,6 +27,7 @@ import {
   NotificationFunctions,
   StorageFunctions,
   ChallengingFunctions,
+  LessonFunctions,
   ManualFunctions,
 } from '@/queue/inngest/functions'
 import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
@@ -69,13 +70,12 @@ export class HonoApp {
     new AxiosRestClient(ENV.discordWebhookUrl),
   )
 
-  startServer(port = ENV.port) {
+  async startServer(port = ENV.port) {
     this.setUpCors()
     this.registerMiddlewares()
     this.registerRoutes()
     this.registerInngestRoute()
     this.setUpErrorHandler()
-
     const server = serve(
       {
         fetch: this.hono.fetch,
@@ -205,6 +205,7 @@ export class HonoApp {
       const notificationFunctions = new NotificationFunctions(inngest)
       const challengingFunctions = new ChallengingFunctions(inngest)
       const manualFunctions = new ManualFunctions(inngest)
+      const lessonFunctions = new LessonFunctions(inngest)
 
       return serveInngest({
         client: inngest,
@@ -213,10 +214,11 @@ export class HonoApp {
           ...spaceFunctions.getFunctions(supabase),
           ...shopFunctions.getFunctions(supabase),
           ...rankingFunctions.getFunctions(supabase),
-          ...storageFunctions.getFunctions(),
+          ...storageFunctions.getFunctions(supabase),
           ...notificationFunctions.getFunctions(),
           ...challengingFunctions.getFunctions(supabase),
           ...manualFunctions.getFunctions(supabase),
+          ...lessonFunctions.getFunctions(supabase),
         ],
       })(context)
     })
@@ -237,13 +239,15 @@ export class HonoApp {
     return async (context: Context, next: Next) => {
       const accessToken = context.req.header('Authorization')?.split(' ')[1]
       const isMcpRoute = context.req.path.startsWith('/mcp')
-      const supabase = createClient(ENV.supabaseUrl, ENV.supabaseKey, {
-        global: {
-          headers: {
-            Authorization: accessToken ? `Bearer ${accessToken}` : '',
-          },
-        },
-      })
+      const supabase = accessToken
+        ? createClient(ENV.supabaseUrl, ENV.supabaseKey, {
+            global: {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            },
+          })
+        : createClient(ENV.supabaseUrl, ENV.supabaseKey)
       context.set('supabase', supabase)
       if (accessToken && !isMcpRoute) this.setAccount(accessToken, context)
       await next()

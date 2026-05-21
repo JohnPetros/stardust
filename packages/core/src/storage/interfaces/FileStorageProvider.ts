@@ -3,11 +3,9 @@ import type { ManyItems } from '../../global/domain/types'
 import type { FileStorageFolderPath } from '../domain/structures'
 import type { FilesListingParams } from '../types'
 
-export interface StorageProvider {
+export interface FileStorageProvider {
   upload(folder: FileStorageFolderPath, file: File): Promise<File>
   findFile(folder: FileStorageFolderPath, fileName: Text): Promise<File | null>
   listFiles(params: FilesListingParams): Promise<ManyItems<File>>
   removeFile(folder: FileStorageFolderPath, fileName: Text): Promise<void>
 }
-
-export type FileStorageProvider = StorageProvider

@@ -1,4 +1,4 @@
-import type { Text } from '#global/domain/entities/Text'
+import type { Text } from '#global/domain/structures/Text'
 import type { AudioVoice } from '#lesson/domain/structures/AudioVoice'
 
 export interface TtsProvider {

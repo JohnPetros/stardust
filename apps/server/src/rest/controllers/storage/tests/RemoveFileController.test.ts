@@ -3,7 +3,7 @@ import { mock, type Mock } from 'ts-jest-mocker'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
 import type { Text } from '@stardust/core/global/structures'
-import type { StorageProvider } from '@stardust/core/storage/interfaces'
+import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
 import type { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 import { RemoveFileController } from '../RemoveFileController'
@@ -14,7 +14,7 @@ describe('Remove File Controller', () => {
   } as const
 
   let http: Mock<Http<{ routeParams: { fileName: string; folder: string } }>>
-  let storageProvider: Mock<StorageProvider>
+  let storageProvider: Mock<FileStorageProvider>
   let controller: RemoveFileController
 
   beforeEach(() => {

@@ -1,24 +1,29 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { randomUUID } from 'node:crypto'
 
 import { AppError } from '@stardust/core/global/errors'
-import type { StorageProvider } from '@stardust/core/storage/interfaces'
+import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
 import type { FilesListingParams } from '@stardust/core/storage/types'
 import type { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { Text } from '@stardust/core/global/structures'
 import type { ManyItems } from '@stardust/core/global/types'
 
-export class SupabaseStorageProvider implements StorageProvider {
-  private static readonly BUCKET_NAME = 'images'
+export class SupabaseFileStorageProvider implements FileStorageProvider {
+  private static readonly BUCKET_NAME = 'stardust-bucket'
 
   constructor(private readonly supabase: SupabaseClient) {}
 
   async upload(folder: FileStorageFolderPath, file: File): Promise<File> {
-    const filePath = `${folder.value}/${file.name}`
-    const contentType = file.type || 'application/octet-stream'
+    console.log(folder.value)
+    console.log(file)
+    const fileName = this.resolveFileName(file)
+    const filePath = `${folder.value}/${fileName}`
+    const contentType = this.resolveContentType(file, fileName)
+    const fileToUpload = this.normalizeFile(file, fileName, contentType)
 
     const { data, error } = await this.supabase.storage
-      .from(SupabaseStorageProvider.BUCKET_NAME)
-      .upload(filePath, file, {
+      .from(SupabaseFileStorageProvider.BUCKET_NAME)
+      .upload(filePath, fileToUpload, {
         cacheControl: '3600',
         contentType,
         upsert: false,
@@ -32,7 +37,7 @@ export class SupabaseStorageProvider implements StorageProvider {
       throw new AppError('Failed to upload file: No file path returned')
     }
 
-    return file
+    return fileToUpload
   }
 
   async listFiles({
@@ -42,7 +47,7 @@ export class SupabaseStorageProvider implements StorageProvider {
     search,
   }: FilesListingParams): Promise<ManyItems<File>> {
     const { data, error } = await this.supabase.storage
-      .from(SupabaseStorageProvider.BUCKET_NAME)
+      .from(SupabaseFileStorageProvider.BUCKET_NAME)
       .list(folder.value, {
         limit: itemsPerPage.value,
         offset: (page.value - 1) * itemsPerPage.value,
@@ -54,7 +59,7 @@ export class SupabaseStorageProvider implements StorageProvider {
     }
 
     const response = await this.supabase.storage
-      .from(SupabaseStorageProvider.BUCKET_NAME)
+      .from(SupabaseFileStorageProvider.BUCKET_NAME)
       .list(folder.value, {
         offset: 0,
         search: search.value,
@@ -74,7 +79,7 @@ export class SupabaseStorageProvider implements StorageProvider {
 
   async findFile(folder: FileStorageFolderPath, fileName: Text): Promise<File | null> {
     const { data, error } = await this.supabase.storage
-      .from(SupabaseStorageProvider.BUCKET_NAME)
+      .from(SupabaseFileStorageProvider.BUCKET_NAME)
       .list(folder.value, {
         offset: 0,
         search: fileName.value,
@@ -96,7 +101,7 @@ export class SupabaseStorageProvider implements StorageProvider {
     fileName: Text,
   ): Promise<File | null> {
     const { data: urlData } = this.supabase.storage
-      .from(SupabaseStorageProvider.BUCKET_NAME)
+      .from(SupabaseFileStorageProvider.BUCKET_NAME)
       .getPublicUrl(`${folder.value}/${fileName.value}`)
 
     const response = await fetch(urlData.publicUrl)
@@ -109,7 +114,7 @@ export class SupabaseStorageProvider implements StorageProvider {
 
   async removeFile(folder: FileStorageFolderPath, fileName: Text): Promise<void> {
     const { error } = await this.supabase.storage
-      .from(SupabaseStorageProvider.BUCKET_NAME)
+      .from(SupabaseFileStorageProvider.BUCKET_NAME)
       .remove([`${folder.value}/${fileName.value}`])
 
     if (error) {
@@ -221,9 +226,54 @@ export class SupabaseStorageProvider implements StorageProvider {
 
     return messageParts.join(' | ')
   }
-}
 
-export { SupabaseStorageProvider as SupabaseFileStorageProvider }
+  private resolveFileName(file: File): string {
+    const trimmedName = file.name?.trim()
+
+    if (trimmedName) {
+      return trimmedName
+    }
+
+    const extension = this.extensionFromType(file.type)
+    return `${randomUUID()}.${extension}`
+  }
+
+  private resolveContentType(file: File, fileName: string): string {
+    const trimmedType = file.type?.trim()
+
+    if (trimmedType) {
+      return trimmedType
+    }
+
+    const extension = fileName.split('.').pop()?.toLowerCase()
+    if (extension === 'wav') return 'audio/wav'
+    if (extension === 'mp3') return 'audio/mpeg'
+    if (extension === 'ogg') return 'audio/ogg'
+
+    return 'application/octet-stream'
+  }
+
+  private normalizeFile(file: File, fileName: string, contentType: string): File {
+    if (file.name === fileName && file.type === contentType) {
+      return file
+    }
+
+    return new File([file], fileName, {
+      type: contentType,
+      lastModified: Date.now(),
+    })
+  }
+
+  private extensionFromType(type: string): string {
+    const normalizedType = type.trim().toLowerCase()
+
+    if (normalizedType === 'audio/wav') return 'wav'
+    if (normalizedType === 'audio/mpeg') return 'mp3'
+    if (normalizedType === 'audio/ogg') return 'ogg'
+
+    return 'bin'
+  }
+}
 
 type ErrorWithOriginalError = Error & {
   originalError?: unknown

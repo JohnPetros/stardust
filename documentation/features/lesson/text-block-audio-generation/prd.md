@@ -6,6 +6,14 @@
 * Ela resolve o problema de criar arquivos de áudio manualmente e de forma desacoplada do fluxo editorial, tornando a produção de conteúdo narrado mais rápida e centralizada.
 * O objetivo principal é integrar geração de áudio diretamente no editor de blocos do Studio, com preview de escuta após processamento e geração em background — tanto individual quanto em lote — para que o operador continue navegando livremente enquanto os áudios são produzidos. A Lesson Page não é alterada nesta entrega.
 
+### 1.1 Status da entrega atual
+
+- [x] O backend já aceita disparo assíncrono de geração de áudio por bloco e em lote, permitindo que o Studio solicite processamento sem bloquear a operação editorial.
+- [x] O sistema já persiste voz, status e arquivo de áudio por bloco, incluindo transições de `pending`, `done`, `error` e `cancelled` durante o processamento em background.
+- [x] O backend já oferece cancelamento cooperativo individual e em lote para evitar retrabalho e manter o estado dos blocos consistente.
+
+> Nesta entrega, foi concluída a fundação backend do recurso. A experiência completa do Studio descrita nos requisitos abaixo — incluindo polling, preview inline e controles visuais — continua pendente em specs de UI.
+
 ---
 
 ### 2. Requisitos

@@ -5,14 +5,14 @@ import { Dropbox } from 'dropbox'
 import { AppError } from '@stardust/core/global/errors'
 import { MethodNotImplementedError } from '@stardust/core/global/errors'
 import type { FileStorageFolderPath } from '@stardust/core/storage/structures'
-import type { StorageProvider } from '@stardust/core/storage/interfaces'
+import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
 import type { ManyItems } from '@stardust/core/global/types'
 import type { FilesListingParams } from '@stardust/core/storage/types'
 
 import { ENV } from '@/constants'
 
-export class DropboxStorageProvider implements StorageProvider {
+export class DropboxStorageProvider implements FileStorageProvider {
   private dropbox: Dropbox
   private readonly restClient: RestClient
   private static readonly BASE_URL = 'https://api.dropbox.com'

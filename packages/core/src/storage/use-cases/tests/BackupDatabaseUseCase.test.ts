@@ -1,18 +1,18 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { DatabaseProvider } from '#global/interfaces/provision/DatabaseProvider'
-import type { StorageProvider } from '#storage/interfaces/FileStorageProvider'
+import type { FileStorageProvider } from '#storage/interfaces/FileStorageProvider'
 import { FileStorageFolderPath } from '#storage/domain/structures/FileStorageFolderPath'
 import { BackupDatabaseUseCase } from '../BackupDatabaseUseCase'
 
 describe('Backup Database Use Case', () => {
   let databaseProvider: Mock<DatabaseProvider>
-  let storageProvider: Mock<StorageProvider>
+  let storageProvider: Mock<FileStorageProvider>
   let useCase: BackupDatabaseUseCase
 
   beforeEach(() => {
     databaseProvider = mock<DatabaseProvider>()
-    storageProvider = mock<StorageProvider>()
+    storageProvider = mock<FileStorageProvider>()
     databaseProvider.backup.mockImplementation()
     storageProvider.upload.mockImplementation()
     useCase = new BackupDatabaseUseCase(databaseProvider, storageProvider)
