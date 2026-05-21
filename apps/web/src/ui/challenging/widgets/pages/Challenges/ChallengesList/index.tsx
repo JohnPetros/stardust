@@ -9,16 +9,18 @@ import { Logical } from '@stardust/core/global/structures'
 export const ChallengesList = () => {
   const { user } = useAuthContext()
   const { challengingService } = useRestContext()
-  const { challenges, isLoading, isReachedEnd, handleShowMore } = useChallengesList({
-    challengingService,
-    userId: user ? user.id : null,
-    isUserGod: user?.isGod ?? Logical.createAsFalse(),
-  })
+  const { challenges, isInitialLoading, isLoadingMore, isReachedEnd, handleShowMore } =
+    useChallengesList({
+      challengingService,
+      userId: user ? user.id : null,
+      isUserGod: user?.isGod ?? Logical.createAsFalse(),
+    })
 
   return (
     <ChallengesListView
       challenges={challenges}
-      isLoading={isLoading}
+      isInitialLoading={isInitialLoading}
+      isLoadingMore={isLoadingMore}
       isReachedEnd={isReachedEnd}
       onShowMore={handleShowMore}
     />
