@@ -10,7 +10,8 @@ export const StorageService = (restClient: RestClient): IStorageService => {
       if (params.page) restClient.setQueryParam('page', String(params.page.value))
       restClient.setQueryParam('itemsPerPage', String(params.itemsPerPage.value))
       restClient.setQueryParam('search', params.search.value)
-      return await restClient.get(`/storage/files/${params.folder.value}`)
+      restClient.setQueryParam('folder', params.folder.value)
+      return await restClient.get('/storage/files')
     },
 
     async uploadFile(folder: FileStorageFolderPath, file: File) {
@@ -19,8 +20,17 @@ export const StorageService = (restClient: RestClient): IStorageService => {
       return await restClient.postFormData(`/storage/files/${folder.value}`, formData)
     },
 
+    async createSignedUploadUrl(folderPath: FileStorageFolderPath, fileName: Text) {
+      return await restClient.post('/storage/signed-upload-url', {
+        folderPath: folderPath.value,
+        fileName: fileName.value,
+      })
+    },
+
     async removeFile(folder: FileStorageFolderPath, fileName: Text) {
-      return await restClient.delete(`/storage/files/${folder.value}/${fileName.value}`)
+      restClient.setQueryParam('folder', folder.value)
+      restClient.setQueryParam('fileName', fileName.value)
+      return await restClient.delete('/storage/files')
     },
 
     async searchEmbeddings(query, topK, namespace) {
