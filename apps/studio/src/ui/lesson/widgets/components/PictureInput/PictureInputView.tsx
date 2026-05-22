@@ -29,8 +29,8 @@ type Props = {
   onPictureCardClick: (imageName: string) => void
   onSearchInputChange: (search: string) => void
   onLoadMoreButtonClick: () => void
-  onPictureCardRemove: () => void
-  onSubmitImage: () => void
+  onPictureCardRemove: (imageName: string) => void
+  onSubmitImage: (imageName: string) => void
   onClearSelection: () => void
 }
 

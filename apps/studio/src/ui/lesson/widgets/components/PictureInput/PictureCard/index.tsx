@@ -6,7 +6,7 @@ type Props = {
   imageName: string
   isSelected: boolean
   onClick: (imageName: string) => void
-  onRemove: () => void
+  onRemove: (imageName: string) => void
 }
 
 export const PictureCard = ({ imageName, isSelected, onClick, onRemove }: Props) => {

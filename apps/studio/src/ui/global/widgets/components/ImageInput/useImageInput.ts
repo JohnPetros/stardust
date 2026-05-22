@@ -31,7 +31,7 @@ export function useImageInput({ storageService, folder, dialogRef, onSubmit }: P
     setImageNameError('')
 
     if (imageFile) {
-      setImageFile(new File([imageFile], imageName, { type: imageFile.type }))
+      setImageFile(new File([imageFile], name, { type: imageFile.type }))
     }
   }
 
@@ -46,20 +46,22 @@ export function useImageInput({ storageService, folder, dialogRef, onSubmit }: P
     }
 
     setIsSubmitting(true)
-    const response = await storageService.uploadFile(folder, imageFile)
+    try {
+      const response = await storageService.uploadFile(folder, imageFile)
 
-    if (response.isSuccessful) {
+      if (response.isFailure) {
+        toast.showError(response.errorMessage)
+        return
+      }
+
       dialogRef.current?.close()
-      onSubmit(imageName)
+      onSubmit(response.body.filename)
+      setImageFile(null)
+      setImageName('')
+      setImageNameError('')
+    } finally {
+      setIsSubmitting(false)
     }
-    if (response.isFailure) {
-      toast.showError(response.errorMessage)
-    }
-
-    setIsSubmitting(false)
-    setImageFile(null)
-    setImageName('')
-    setImageNameError('')
   }
 
   return {
