@@ -4,10 +4,7 @@ import { InngestFunctions } from './InngestFunctions'
 import type { EventPayload } from '@stardust/core/global/types'
 
 import { GuideContentEditedEvent, GuideDeletedEvent } from '@stardust/core/manual/events'
-import {
-  TextBlockAudioGenerationCancelledEvent,
-  TextBlockAudioGenerationRequestedEvent,
-} from '@stardust/core/lesson/events'
+import type { TextBlockAudioGenerationRequestedEvent } from '@stardust/core/lesson/events'
 
 import {
   BackupDatabaseJob,
@@ -25,6 +22,10 @@ import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 import { SupabaseTextBlocksRepository } from '@/database'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestBroker } from '../InngestBroker'
+import {
+  TEXT_BLOCK_AUDIO_GENERATION_CANCELLED_EVENT_NAME,
+  TEXT_BLOCK_AUDIO_GENERATION_REQUESTED_EVENT_NAME,
+} from '../constants/lesson-event-names'
 import { eventType } from 'inngest'
 import z from 'zod'
 import { idSchema, stringSchema } from '@stardust/validation/global/schemas'
@@ -113,7 +114,7 @@ export class StorageFunctions extends InngestFunctions {
         concurrency: { limit: 3, key: 'event.data.starId' },
         cancelOn: [
           {
-            event: TextBlockAudioGenerationCancelledEvent._NAME,
+            event: TEXT_BLOCK_AUDIO_GENERATION_CANCELLED_EVENT_NAME,
             if: 'async.data.starId == event.data.starId && async.data.blockIndex == event.data.blockIndex',
           },
         ],
@@ -122,7 +123,7 @@ export class StorageFunctions extends InngestFunctions {
           async (context, jobName) => await this.handleFailure(context, jobName),
         ),
         triggers: {
-          event: eventType(TextBlockAudioGenerationRequestedEvent._NAME, {
+          event: eventType(TEXT_BLOCK_AUDIO_GENERATION_REQUESTED_EVENT_NAME, {
             schema: z.object({
               starId: idSchema,
               blockIndex: z.number().int().min(0),

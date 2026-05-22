@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 import type { EventPayload } from '@stardust/core/global/types'
-import {
+import type {
   TextBlockAudioGeneratedEvent,
   TextBlockAudioGenerationCancelledEvent,
   TextBlocksAudioGenerationInBatchRequestedEvent,
@@ -16,6 +16,11 @@ import {
 } from '@/queue/jobs/lesson'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestBroker } from '../InngestBroker'
+import {
+  TEXT_BLOCKS_AUDIO_GENERATION_IN_BATCH_REQUESTED_EVENT_NAME,
+  TEXT_BLOCK_AUDIO_GENERATED_EVENT_NAME,
+  TEXT_BLOCK_AUDIO_GENERATION_CANCELLED_EVENT_NAME,
+} from '../constants/lesson-event-names'
 import { InngestFunctions } from './InngestFunctions'
 import { eventType } from 'inngest'
 import z from 'zod'
@@ -38,7 +43,7 @@ export class LessonFunctions extends InngestFunctions {
         onFailure: (context) =>
           this.handleFailure(context, GenerateTextBlocksAudioBatchJob.name),
         triggers: {
-          event: eventType(TextBlocksAudioGenerationInBatchRequestedEvent._NAME, {
+          event: eventType(TEXT_BLOCKS_AUDIO_GENERATION_IN_BATCH_REQUESTED_EVENT_NAME, {
             schema: z.object({
               starId: idSchema,
               blocks: z.array(
@@ -71,7 +76,7 @@ export class LessonFunctions extends InngestFunctions {
         onFailure: (context) =>
           this.handleFailure(context, CancelTextBlockAudioGenerationJob.name),
         triggers: {
-          event: eventType(TextBlockAudioGenerationCancelledEvent._NAME, {
+          event: eventType(TEXT_BLOCK_AUDIO_GENERATION_CANCELLED_EVENT_NAME, {
             schema: z.object({
               starId: idSchema,
               blockIndex: z.number().int().min(0),
@@ -94,7 +99,7 @@ export class LessonFunctions extends InngestFunctions {
         id: UpdateTextBlockAudioJob.KEY,
         onFailure: (context) => this.handleFailure(context, UpdateTextBlockAudioJob.name),
         triggers: {
-          event: eventType(TextBlockAudioGeneratedEvent._NAME, {
+          event: eventType(TEXT_BLOCK_AUDIO_GENERATED_EVENT_NAME, {
             schema: z.object({
               starId: idSchema,
               blockIndex: z.number().int().min(0),

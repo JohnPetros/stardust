@@ -2,7 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { FailureEventArgs } from 'inngest'
 
 import type { EventPayload } from '@stardust/core/global/types'
-import { TextBlockAudioGenerationRequestedEvent } from '@stardust/core/lesson/events'
+import type { TextBlockAudioGenerationRequestedEvent } from '@stardust/core/lesson/events'
 
 import { SupabaseTextBlocksRepository } from '@/database'
 import type { Database } from '@/database/supabase/types/Database'
@@ -10,13 +10,14 @@ import { MarkTextBlockAudioAsErrorJob } from '@/queue/jobs/lesson'
 import { GenerateTextBlockAudioJob } from '@/queue/jobs/storage'
 
 import { NoStepAmqp } from './NoStepAmqp'
+import { TEXT_BLOCK_AUDIO_GENERATION_REQUESTED_EVENT_NAME } from './constants/lesson-event-names'
 
 type TextBlockAudioGenerationRequestedPayload = EventPayload<
   typeof TextBlockAudioGenerationRequestedEvent
 >
 
 type GenerateTextBlockAudioFailureContext = FailureEventArgs<{
-  name: typeof TextBlockAudioGenerationRequestedEvent._NAME
+  name: typeof TEXT_BLOCK_AUDIO_GENERATION_REQUESTED_EVENT_NAME
   data: TextBlockAudioGenerationRequestedPayload
 }>
 
