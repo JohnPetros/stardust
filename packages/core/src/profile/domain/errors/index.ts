@@ -9,3 +9,4 @@ export { UserSocialAccountAlreadyInUseError } from './UserSocialAccountAlreadyIn
 export { InsigniaAlreadyAcquiredError } from './InsigniaAlreadyAcquiredError'
 export { NotEnoughCoinsError } from './NotEnoughCoinsError'
 export { InsigniaNotIncludedError } from './InsigniaNotIncludedError'
+export { NoteNotFoundError } from './NoteNotFoundError'

@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { z } from 'zod'
 
-import { storageFolderSchema } from '@stardust/validation/storage/schemas'
+import { fileStorageFolderPathSchema } from '@stardust/validation/storage/schemas'
 import {
   itemsPerPageSchema,
   pageSchema,
@@ -10,11 +10,11 @@ import {
 } from '@stardust/validation/global/schemas'
 
 import {
-  FetchImagesListController,
+  FetchFilesListController,
   RemoveFileController,
   UploadFileController,
 } from '@/rest/controllers/storage'
-import { SupabaseStorageProvider } from '@/provision/storage'
+import { SupabaseFileStorageProvider } from '@/provision/storage'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
@@ -30,11 +30,11 @@ export class FilesStorageRouter extends HonoRouter {
       this.authMiddleware.verifyAuthentication,
       this.validationMiddleware.validate(
         'param',
-        z.object({ folder: storageFolderSchema }),
+        z.object({ folder: fileStorageFolderPathSchema }),
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const storageProvider = new SupabaseStorageProvider(http.getSupabase())
+        const storageProvider = new SupabaseFileStorageProvider(http.getSupabase())
         const controller = new UploadFileController(storageProvider)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -44,24 +44,21 @@ export class FilesStorageRouter extends HonoRouter {
 
   private registerlistFilesRoute(): void {
     this.router.get(
-      '/:folder',
+      '/',
       this.authMiddleware.verifyAuthentication,
-      this.validationMiddleware.validate(
-        'param',
-        z.object({ folder: storageFolderSchema }),
-      ),
       this.validationMiddleware.validate(
         'query',
         z.object({
           page: pageSchema,
           itemsPerPage: itemsPerPageSchema,
           search: searchSchema,
+          folder: fileStorageFolderPathSchema,
         }),
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const storageProvider = new SupabaseStorageProvider(http.getSupabase())
-        const controller = new FetchImagesListController(storageProvider)
+        const storageProvider = new SupabaseFileStorageProvider(http.getSupabase())
+        const controller = new FetchFilesListController(storageProvider)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -76,12 +73,12 @@ export class FilesStorageRouter extends HonoRouter {
         'param',
         z.object({
           fileName: stringSchema,
-          folder: storageFolderSchema,
+          folder: fileStorageFolderPathSchema,
         }),
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const storageProvider = new SupabaseStorageProvider(http.getSupabase())
+        const storageProvider = new SupabaseFileStorageProvider(http.getSupabase())
         const controller = new RemoveFileController(storageProvider)
         const response = await controller.handle(http)
         return http.sendResponse(response)

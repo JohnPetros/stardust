@@ -86,7 +86,7 @@ jobs:
         working-directory: apps/server
         run: supabase start
 
-      - name: Reset local database
+      - name: Rebuild local database from migrations
         working-directory: apps/server
         run: supabase db reset --local --yes
 

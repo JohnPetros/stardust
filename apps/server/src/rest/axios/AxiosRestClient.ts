@@ -215,13 +215,17 @@ export class AxiosRestClient implements RestClient {
     }
   }
 
-  async delete(route: string) {
+  async delete<Body>(route: string, body?: unknown): Promise<RestResponse<Body>> {
     try {
-      const response = await this.axios.delete(this.buildUrl(route))
+      const response = await this.axios.delete(this.buildUrl(route), { data: body })
       const headers = this.normalizeHeaders(response.headers)
-      return new RestResponse({ statusCode: response.status, headers })
+      return new RestResponse({
+        body: response.data,
+        statusCode: response.status,
+        headers,
+      })
     } catch (error) {
-      return await this.handleError<void>(error)
+      return await this.handleError<Body>(error)
     }
   }
 

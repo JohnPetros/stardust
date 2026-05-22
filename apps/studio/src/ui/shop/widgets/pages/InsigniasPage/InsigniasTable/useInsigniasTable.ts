@@ -5,7 +5,7 @@ import type { ToastProvider } from '@stardust/core/global/interfaces'
 import type { InsigniaDto } from '@stardust/core/shop/entities/dtos'
 import type { StorageService } from '@stardust/core/storage/interfaces'
 import { Insignia } from '@stardust/core/shop/entities'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { Text } from '@stardust/core/global/structures'
 
 import { CACHE } from '@/constants'
@@ -32,7 +32,7 @@ export function useInsigniasTable({
 
   async function removeImageFile(imageName: string) {
     const response = await storageService.removeFile(
-      StorageFolder.createAsInsignias(),
+      FileStorageFolderPath.createAsInsignias(),
       Text.create(imageName),
     )
     if (response.isFailure) {

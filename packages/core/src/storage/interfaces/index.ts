@@ -1,4 +1,4 @@
 export type { StorageService } from './StorageService'
-export type { StorageProvider } from './StorageProvider'
+export type { FileStorageProvider } from './FileStorageProvider'
 export type { EmbeddingsStorageProvider } from './EmbeddingStorageProvider'
 export type { EmbeddingsGeneratorProvider } from './EmbeddingsGeneratorProvider'

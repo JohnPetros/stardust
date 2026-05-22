@@ -1,5 +1,5 @@
 import type { DatabaseProvider, Job } from '@stardust/core/global/interfaces'
-import type { StorageProvider } from '@stardust/core/storage/interfaces'
+import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
 import { BackupDatabaseUseCase } from '@stardust/core/storage/use-cases'
 
 export class BackupDatabaseJob implements Job {
@@ -8,7 +8,7 @@ export class BackupDatabaseJob implements Job {
 
   constructor(
     private readonly databaseProvider: DatabaseProvider,
-    private readonly storageProvider: StorageProvider,
+    private readonly storageProvider: FileStorageProvider,
   ) {}
 
   async handle(): Promise<void> {

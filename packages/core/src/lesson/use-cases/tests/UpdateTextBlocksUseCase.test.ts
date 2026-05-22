@@ -3,7 +3,7 @@ import { mock, type Mock } from 'ts-jest-mocker'
 import type { TextBlocksRepository } from '../../interfaces/TextBlocksRepository'
 import { UpdateTextBlocksUseCase } from '../UpdateTextBlocksUseCase'
 import { IdFaker } from '#global/domain/structures/fakers/IdFaker'
-import { TextBlock } from '#global/domain/structures/TextBlock'
+import { TextBlock } from '#lesson/domain/structures/TextBlock'
 
 describe('Update Text Blocks Use Case', () => {
   let repositoryMock: Mock<TextBlocksRepository>

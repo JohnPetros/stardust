@@ -47,6 +47,8 @@ import {
   UserRoundCog,
   UserCheck,
   MessageSquare,
+  AudioLines,
+  FileText,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -101,4 +103,6 @@ export const ICONS: Record<IconName, LucideIcon> = {
   'sort-asc': ArrowUp,
   'sort-desc': ArrowDown,
   feedback: MessageSquare,
+  audio: AudioLines,
+  'file-text': FileText,
 }

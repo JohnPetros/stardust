@@ -130,6 +130,16 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 - Ao implementar Casos de Uso (Use Cases) e DTOs.
 - Ao escrever testes unitários, Fakers ou Mocks para o domínio.
 
+## Regras da Camada de Validation
+
+**Arquivo:** `/documentation/rules/validation-layer-rules.md`
+**Quando consultar:**
+
+- Ao criar ou modificar schemas Zod no pacote `packages/validation`.
+- Para entender como organizar validacoes globais e por modulo.
+- Para padronizar mensagens de erro em PT-BR dentro do proprio schema.
+- Ao expor novos schemas nos barrel files do pacote.
+
 ## Regras de Testes de Handlers
 
 **Arquivo:** `/documentation/rules/handlers-testing-rules.md`

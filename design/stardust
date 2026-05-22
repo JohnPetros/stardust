@@ -376,7 +376,7 @@
                       "fill": "#B79219",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Voce esta gerenciando este desafio como administrador. Alteracoes e remocoes impactam o conteudo original do autor. Este desafio esta privado para outros usuarios.",
+                      "content": "Voce esta gerenciando este desafio como administrador. Alteracoes e remocoes impactam o conteúdo original do autor. Este desafio esta privado para outros usuarios.",
                       "fontFamily": "Inter",
                       "fontSize": 14,
                       "fontWeight": "700"
@@ -1261,7 +1261,7 @@
                       "fill": "#B79219",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Voce esta gerenciando este desafio como administrador. Alteracoes e remocoes impactam o conteudo original do autor. Este desafio esta privado para outros usuarios.",
+                      "content": "Voce esta gerenciando este desafio como administrador. Alteracoes e remocoes impactam o conteúdo original do autor. Este desafio esta privado para outros usuarios.",
                       "fontFamily": "Inter",
                       "fontSize": 14,
                       "fontWeight": "700"

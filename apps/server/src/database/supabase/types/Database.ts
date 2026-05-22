@@ -1943,6 +1943,55 @@ export type Database = {
         }
         Relationships: []
       }
+      notes: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content?: string
+          created_at?: string
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'notes_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'notes_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_completed_planets_view'
+            referencedColumns: ['user_id']
+          },
+          {
+            foreignKeyName: 'notes_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users_view'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       planets: {
         Row: {
           icon: string
@@ -3449,6 +3498,10 @@ export type Database = {
       teste: { Args: never; Returns: string }
       unaccent: { Args: { '': string }; Returns: string }
       update_last_week_ranking_positions: { Args: never; Returns: undefined }
+      update_text_block_audio: {
+        Args: { p_audio: Json; p_block_index: number; p_star_id: string }
+        Returns: undefined
+      }
       update_user_email: {
         Args: { new_email: string; user_id: string }
         Returns: undefined

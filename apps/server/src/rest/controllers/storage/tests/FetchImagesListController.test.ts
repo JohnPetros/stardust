@@ -2,9 +2,9 @@ import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Http } from '@stardust/core/global/interfaces'
 import { PaginationResponse, type RestResponse } from '@stardust/core/global/responses'
-import type { StorageProvider } from '@stardust/core/storage/interfaces'
+import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
 
-import { FetchImagesListController } from '../FetchImagesListController'
+import { FetchFilesListController } from '../FetchFilesListController'
 
 describe('Fetch Images List Controller', () => {
   type Schema = {
@@ -15,23 +15,28 @@ describe('Fetch Images List Controller', () => {
       page: number
       itemsPerPage: number
       search: string
+      folder: string
     }
   }
 
   let http: Mock<Http<Schema>>
-  let storageProvider: Mock<StorageProvider>
-  let controller: FetchImagesListController
+  let storageProvider: Mock<FileStorageProvider>
+  let controller: FetchFilesListController
 
   beforeEach(() => {
     http = mock()
     storageProvider = mock()
-    controller = new FetchImagesListController(storageProvider)
+    controller = new FetchFilesListController(storageProvider)
     http.statusOk.mockReturnValue(http)
   })
 
   it('should extract route and query params, call provider and send paginated file names', async () => {
-    const routeParams = { folder: 'avatars' }
-    const queryParams = { page: 2, itemsPerPage: 3, search: 'profile' }
+    const queryParams = {
+      page: 2,
+      itemsPerPage: 3,
+      search: 'profile',
+      folder: 'images/avatars',
+    }
     const listedFiles = [
       { name: 'img-1.png' } as File,
       { name: 'img-2.jpg' } as File,
@@ -39,7 +44,6 @@ describe('Fetch Images List Controller', () => {
     ]
     const restResponse = mock<RestResponse>()
 
-    http.getRouteParams.mockReturnValue(routeParams)
     http.getQueryParams.mockReturnValue(queryParams)
     http.sendPagination.mockReturnValue(restResponse)
     storageProvider.listFiles.mockResolvedValue({
@@ -48,17 +52,14 @@ describe('Fetch Images List Controller', () => {
     })
 
     const result = await controller.handle(http)
+    const [params] = storageProvider.listFiles.mock.calls[0]
 
-    expect(http.getRouteParams).toHaveBeenCalledTimes(1)
     expect(http.getQueryParams).toHaveBeenCalledTimes(1)
-    expect(storageProvider.listFiles).toHaveBeenCalledWith(
-      expect.objectContaining({
-        folder: expect.objectContaining({ name: routeParams.folder }),
-        page: expect.objectContaining({ value: queryParams.page }),
-        itemsPerPage: expect.objectContaining({ value: queryParams.itemsPerPage }),
-        search: expect.objectContaining({ value: queryParams.search }),
-      }),
-    )
+    expect(storageProvider.listFiles).toHaveBeenCalledTimes(1)
+    expect(params.folder.value).toBe('images/avatars')
+    expect(params.page.value).toBe(queryParams.page)
+    expect(params.itemsPerPage.value).toBe(queryParams.itemsPerPage)
+    expect(params.search.value).toBe(queryParams.search)
     expect(http.statusOk).toHaveBeenCalledTimes(1)
     expect(http.sendPagination).toHaveBeenCalledWith(
       new PaginationResponse({
@@ -72,24 +73,25 @@ describe('Fetch Images List Controller', () => {
   })
 
   it('should send empty pagination when provider returns no files', async () => {
-    const routeParams = { folder: 'planets' }
-    const queryParams = { page: 1, itemsPerPage: 10, search: '' }
+    const queryParams = {
+      page: 1,
+      itemsPerPage: 10,
+      search: '',
+      folder: 'images/planets',
+    }
 
-    http.getRouteParams.mockReturnValue(routeParams)
     http.getQueryParams.mockReturnValue(queryParams)
     http.sendPagination.mockReturnValue(mock<RestResponse>())
     storageProvider.listFiles.mockResolvedValue({ items: [], count: 0 })
 
     await controller.handle(http)
+    const [params] = storageProvider.listFiles.mock.calls[0]
 
-    expect(storageProvider.listFiles).toHaveBeenCalledWith(
-      expect.objectContaining({
-        folder: expect.objectContaining({ name: routeParams.folder }),
-        page: expect.objectContaining({ value: queryParams.page }),
-        itemsPerPage: expect.objectContaining({ value: queryParams.itemsPerPage }),
-        search: expect.objectContaining({ value: queryParams.search }),
-      }),
-    )
+    expect(storageProvider.listFiles).toHaveBeenCalledTimes(1)
+    expect(params.folder.value).toBe('images/planets')
+    expect(params.page.value).toBe(queryParams.page)
+    expect(params.itemsPerPage.value).toBe(queryParams.itemsPerPage)
+    expect(params.search.value).toBe(queryParams.search)
     expect(http.sendPagination).toHaveBeenCalledWith(
       new PaginationResponse({
         items: [],

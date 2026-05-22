@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type RefObject } from 'react'
 
 import type { StorageService } from '@stardust/core/storage/interfaces'
 import type { DialogRef } from '@/ui/shadcn/components/dialog'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 import { CACHE } from '@/constants'
 import { usePaginatedFetch } from '@/ui/global/hooks/usePaginatedFetch'
@@ -38,7 +38,7 @@ export function usePictureInput({
       fetcher: async (page: number) =>
         await storageService.listFiles({
           search: search,
-          folder: StorageFolder.createAsStory(),
+          folder: FileStorageFolderPath.createAsStory(),
           page: OrdinalNumber.create(page),
           itemsPerPage: ITEMS_PER_PAGE,
         }),

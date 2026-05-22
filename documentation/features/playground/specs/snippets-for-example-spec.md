@@ -9,7 +9,7 @@ last_updated_at: 2026-04-29
 
 # 1. Objetivo
 
-Adicionar ao editor de snippets do Playground uma acao manual `Exemplos`, fechada por padrao, que abre um dialog com exatamente 10 exemplos iniciais em Delegua, permite aplicar um exemplo no titulo e no codigo do editor localmente, solicita confirmacao antes de substituir conteudo ja alterado e preserva o fluxo atual de executar e salvar manualmente sem persistencia automatica.
+Adicionar ao editor de snippets do Playground uma acao manual `Exemplos`, fechada por padrao, que abre um dialog com exatamente 10 exemplos iniciais em Delegua, permite aplicar um exemplo no titulo e no codigo do editor localmente, solicita confirmacao antes de substituir conteúdo ja alterado e preserva o fluxo atual de executar e salvar manualmente sem persistencia automatica.
 
 ---
 
@@ -56,7 +56,7 @@ Adicionar ao editor de snippets do Playground uma acao manual `Exemplos`, fechad
 ## 3.2 Não funcionais
 
 * **Acessibilidade:** a acao `Exemplos`, os itens do dialog, o cancelamento e a confirmacao de substituicao devem ser acionaveis por teclado usando os componentes `Dialog`, `AlertDialog`, `Toolbar.Button` e `Button` existentes.
-* **Confiabilidade:** falha ou cancelamento na confirmacao nao deve apagar o conteudo atual do editor.
+* **Confiabilidade:** falha ou cancelamento na confirmacao nao deve apagar o conteúdo atual do editor.
 * **Compatibilidade retroativa:** `DELEGUA_SNIPPETS` deve continuar representando apenas snippets de autocomplete para evitar alterar sugestoes do Monaco em `web` e `studio`.
 * **Performance:** abrir o catalogo deve ser local, sem requisicao REST/RPC, usando a constante exportada pelo pacote `@stardust/lsp`.
 
@@ -245,7 +245,7 @@ apps/web/src/ui/playground/widgets/components/SnippetExamplesDialog/
 
 * **Arquivo:** `apps/web/src/ui/playground/widgets/pages/Snippet/useSnippetPage.ts`
 * **Mudança:** Adicionar metodo `handleExampleSnippetSelect(snippet: LspSnippet): void`.
-* **Justificativa:** Ao receber um exemplo, deve verificar se `dirtyFields.snippetTitle` ou `dirtyFields.snippetCode` indicam conteudo alterado; se houver alteracao, armazenar o exemplo como pendente e abrir `replaceSnippetAlertDialogRef.current?.open()`; caso contrario, aplicar imediatamente.
+* **Justificativa:** Ao receber um exemplo, deve verificar se `dirtyFields.snippetTitle` ou `dirtyFields.snippetCode` indicam conteúdo alterado; se houver alteracao, armazenar o exemplo como pendente e abrir `replaceSnippetAlertDialogRef.current?.open()`; caso contrario, aplicar imediatamente.
 * **Camada:** `ui`
 
 ## Camada UI
@@ -272,7 +272,7 @@ apps/web/src/ui/playground/widgets/components/SnippetExamplesDialog/
 ## Pacote LSP
 
 * **Arquivo:** `packages/lsp/src/constants/delegua-regex.ts`
-* **Mudança:** Ajustar `conteudoDeFuncaoLeia` para casar apenas a chamada `leia(...)` (`/leia\([^)]*\)/`) em vez de capturar de forma gulosa o restante da linha.
+* **Mudança:** Ajustar `conteúdoDeFuncaoLeia` para casar apenas a chamada `leia(...)` (`/leia\([^)]*\)/`) em vez de capturar de forma gulosa o restante da linha.
 * **Justificativa:** Evitar substituicoes incorretas em `DeleguaLsp.addInputs` quando `leia()` estiver dentro de expressoes maiores (ex.: `numero(leia())`), preservando parenteses e o codigo subsequente.
 * **Camada:** `provision`
 
@@ -289,7 +289,7 @@ Não aplicável.
 * **Decisão:** Criar `DELEGUA_EXAMPLE_SNIPPETS` separado de `DELEGUA_SNIPPETS`.
 * **Alternativas consideradas:** Adicionar os 10 exemplos diretamente em `DELEGUA_SNIPPETS`; hardcodar exemplos no app `web`.
 * **Motivo da escolha:** `DELEGUA_SNIPPETS` hoje alimenta autocomplete do Monaco em `web` e `studio`; exemplos completos apareceriam como sugestoes globais e poderiam afetar fluxos fora do Playground. O pacote `lsp` ja centraliza constantes da linguagem, entao e o local mais consistente para o catalogo.
-* **Impactos / trade-offs:** Exige um novo export publico no pacote `lsp`, mas preserva compatibilidade de autocomplete e evita duplicar conteudo no app.
+* **Impactos / trade-offs:** Exige um novo export publico no pacote `lsp`, mas preserva compatibilidade de autocomplete e evita duplicar conteúdo no app.
 
 * **Decisão:** Proteger `/playground/snippets` via action autenticada (`accessSnippetsPage`) em vez de mover toda a regra para middleware de rota publica.
 * **Alternativas consideradas:** Remover `/playground/snippets/` de `PUBLIC_ROUTE_GROUPS`; validar autenticacao apenas no cliente; deixar rota sem gating explicito.
@@ -318,7 +318,7 @@ Não aplicável.
 
 * **Decisão:** Confirmar substituicao quando `snippetTitle` ou `snippetCode` estiverem dirty.
 * **Alternativas consideradas:** Confirmar sempre; confirmar apenas quando `snippetCode.trim() !== ''`; confirmar com base em `formState.isDirty` geral.
-* **Motivo da escolha:** O requisito fala em conteudo alterado; titulo e codigo sao os campos substituidos pelo exemplo. Usar `formState.isDirty` geral incluiria visibilidade, que nao sera sobrescrita.
+* **Motivo da escolha:** O requisito fala em conteúdo alterado; titulo e codigo sao os campos substituidos pelo exemplo. Usar `formState.isDirty` geral incluiria visibilidade, que nao sera sobrescrita.
 * **Impactos / trade-offs:** Se o usuario alterou apenas visibilidade, selecionar exemplo nao pede confirmacao porque a visibilidade sera preservada.
 
 ---
@@ -394,7 +394,7 @@ SnippetPage
 │   ├── ShareSnippetDialog (apenas autor + publico)
 │   └── Switch Publico (apenas autor)
 ├── AlertDialog: login obrigatorio
-├── AlertDialog: substituir conteudo atual
+├── AlertDialog: substituir conteúdo atual
 └── CodeEditorToolbar
     ├── Executar
     ├── Voltar para codigo inicial
@@ -422,7 +422,7 @@ SnippetPage
 * `apps/web/src/ui/global/hooks/useLsp.ts` - ponto central de acesso ao LSP no app `web`.
 * `packages/lsp/src/constants/delegua-snippets.ts` - padrao atual de constantes de snippets.
 * `packages/lsp/src/constants/delegua-regex.ts` - regex usadas no pre-processamento de `leia(...)`.
-* `packages/lsp/src/DeleguaLsp.ts` - implementacao de `addInputs` consumindo `DELEGUA_REGEX.conteudoDeFuncaoLeia`.
+* `packages/lsp/src/DeleguaLsp.ts` - implementacao de `addInputs` consumindo `DELEGUA_REGEX.conteúdoDeFuncaoLeia`.
 * `packages/lsp/src/constants/index.ts` - barrel publico das constantes do pacote.
 * `packages/core/src/global/domain/types/LspSnippet.ts` - contrato reutilizado para `{ label, code }`.
 

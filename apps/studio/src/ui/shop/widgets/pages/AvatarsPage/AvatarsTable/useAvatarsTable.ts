@@ -10,7 +10,7 @@ import type { AvatarDto } from '@stardust/core/shop/entities/dtos'
 import { CACHE } from '@/constants'
 import { usePaginatedFetch } from '@/ui/global/hooks/usePaginatedFetch'
 import { Avatar } from '@stardust/core/shop/entities'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useQueryNumberParam } from '@/ui/global/hooks/useQueryNumberParam'
 
@@ -58,7 +58,7 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
 
   async function removeImageFile(imageName: string) {
     const response = await storageService.removeFile(
-      StorageFolder.createAsAvatars(),
+      FileStorageFolderPath.createAsImagesAvatars(),
       Text.create(imageName),
     )
     if (response.isFailure) {
@@ -143,7 +143,7 @@ export function useAvatarsTable({ shopService, toastProvider, storageService }: 
 
   async function handleDeleteAvatar(id: string, imageName: string) {
     const storageResponse = await storageService.removeFile(
-      StorageFolder.createAsAvatars(),
+      FileStorageFolderPath.createAsImagesAvatars(),
       Text.create(imageName),
     )
     if (storageResponse.isFailure) {

@@ -1,11 +1,10 @@
 ---
 description: Criar um plano de implementacao estruturado em fases e tarefas a partir de uma spec tecnica.
-status: closed
 ---
 
 ## Pendencias (quando aplicavel)
 
-Sem pendencias bloqueantes no documento de entrada.
+- [ ] Confirmar se havera CTA de cancelamento em lote visivel no header (a spec pede handler e contrato, mas o layout detalha apenas CTA de geracao em lote).
 
 ---
 
@@ -13,74 +12,136 @@ Sem pendencias bloqueantes no documento de entrada.
 
 | Fase | Objetivo | Depende de | Pode rodar em paralelo com |
 | --- | --- | --- | --- |
-| F1 | Definir o contrato compartilhado dos exemplos de Playground no catalogo da linguagem, preservando o contrato atual de autocomplete | - | - |
-| F3 | Integrar o catalogo de exemplos ao editor de snippets da web com dialog, confirmacao e toolbar contextual | F1 | - |
+| F1 | Definir contratos compartilhados de audio/vozes no core | - | - |
+| F2 | Expor endpoint de vozes e ajustar validacao REST no server | F1 | F4 |
+| F4 | Integrar UI e fluxo de audio no studio | F1 | F2 |
 
-> **Estratégia de paralelismo:** sempre comece pelo core (domínio, structures e use cases). Assim que o core estiver concluído, as fases de `server`, `web` e `studio` podem ser executadas em paralelo, pois todas dependem apenas do contrato definido no core.
+> **Estratégia de paralelismo:** sempre comece pelo core (domínio, structures e use cases). Assim que o core estiver concluído, as fases de `server` e `studio` podem ser executadas em paralelo, pois ambas dependem apenas do contrato definido no core.
 
 ---
 
 ## F1 — Core: Domínio, Structures e Use Cases
 
-**Objetivo:** Definir o contrato do domínio — entidades, structures, interfaces de repositório/provider e use cases — sem nenhuma dependência de infraestrutura. Essa fase desbloqueia F2, F3 e F4 para rodarem em paralelo.
+**Objetivo:** Definir o contrato compartilhado de audio e vozes no core — DTOs e interface REST consumida pelos adapters — sem depender de infraestrutura. Essa fase desbloqueia F2 e F4 para rodarem em paralelo.
 
 ### Tarefas
 
-- [x] **T1.1** — Declarar o catalogo compartilhado `DELEGUA_EXAMPLE_SNIPPETS` com 10 exemplos completos reutilizando `LspSnippet`
+- [x] **F1-T1** — Criar `AudioVoiceDto`
   - **Depende de:** -
-  - **Resultado observavel:** existe o arquivo `packages/lsp/src/constants/delegua-example-snippets.ts` exportando `DELEGUA_EXAMPLE_SNIPPETS: LspSnippet[]` com exatamente 10 itens, na ordem da spec, usando apenas `{ label, code }` sem placeholders do Monaco.
+  - **Resultado observavel:** existe `packages/core/src/lesson/domain/structures/dtos/AudioVoiceDto.ts` com `value: AudioVoiceValue` e `label: string`.
   - **Camada:** `core`
-  - **Artefatos:** `packages/lsp/src/constants/delegua-example-snippets.ts`
-  - **Concluido em:** 2026-04-29
 
-- [x] **T1.2** — Publicar o catalogo novo sem alterar o contrato atual de autocomplete
-  - **Depende de:** T1.1
-  - **Resultado observavel:** `packages/lsp/src/constants/index.ts` e o export publico do pacote continuam expondo `DELEGUA_SNIPPETS` inalterado e passam a expor `DELEGUA_EXAMPLE_SNIPPETS` como constante distinta para consumo externo.
+- [x] **F1-T2** — Exportar `AudioVoiceDto` no barrel do modulo
+  - **Depende de:** F1-T1
+  - **Resultado observavel:** `packages/core/src/lesson/domain/structures/dtos/index.ts` expoe `AudioVoiceDto`.
   - **Camada:** `core`
-  - **Artefatos:** `packages/lsp/src/constants/index.ts`
-  - **Concluido em:** 2026-04-29
+
+- [x] **F1-T3** — Estender `LessonService` compartilhado com metodos de audio
+  - **Depende de:** F1-T2
+  - **Resultado observavel:** `packages/core/src/lesson/interfaces/LessonService.ts` passa a expor `fetchAudioVoices`, geracao/cancelamento individual e em lote.
+  - **Camada:** `core`
 
 ---
 
-## F3 — Web: UI e Integração
+## F2 — Server: Infra, Repositórios e Handlers
 
-> ⚡ Pode rodar em paralelo com F2 e F4 após F1 estar concluída.
+> ⚡ Pode rodar em paralelo com F4 após F1 estar concluída.
 
-**Objetivo:** Implementar a interface e integração client-side na aplicação web — widgets, actions e chamadas RPC/REST — consumindo os contratos definidos no core.
+**Objetivo:** Implementar a borda REST do `server` para vozes e preservacao do subdocumento `audio` na validacao de update de blocos.
 
 ### Tarefas
 
-- [x] **T3.1** — Expor `exampleSnippets` em `useLsp()` sem mudar o retorno atual de `snippets`
-  - **Depende de:** T1.2
-  - **Resultado observavel:** `apps/web/src/ui/global/hooks/useLsp.ts` retorna `exampleSnippets` com base em `DELEGUA_EXAMPLE_SNIPPETS`, enquanto `snippets` continua alimentando apenas o autocomplete do Monaco.
-  - **Camada:** `ui`
-  - **Artefatos:** `apps/web/src/ui/global/hooks/useLsp.ts`
-  - **Concluido em:** 2026-04-29
+- [x] **F2-T1** — Criar `textBlockAudioSchema`
+  - **Depende de:** F1-T3
+  - **Resultado observavel:** existe `packages/validation/src/modules/lesson/schemas/textBlockAudioSchema.ts` validando `fileName`, `voice` e `status`.
+  - **Camada:** `rest`
 
-- [x] **T3.2** — Criar o widget `SnippetExamplesDialog` para listar e selecionar exemplos
-  - **Depende de:** T1.2
-  - **Resultado observavel:** existem `apps/web/src/ui/playground/widgets/components/SnippetExamplesDialog/index.tsx` e `SnippetExamplesDialogView.tsx`, com trigger fechado por padrao, lista acessivel de exemplos e mensagem de estado vazio quando `snippets.length === 0`.
-  - **Camada:** `ui`
-  - **Artefatos:** `apps/web/src/ui/playground/widgets/components/SnippetExamplesDialog/index.tsx`, `apps/web/src/ui/playground/widgets/components/SnippetExamplesDialog/SnippetExamplesDialogView.tsx`
-  - **Concluido em:** 2026-04-29
+- [x] **F2-T2** — Permitir `audio` em `textBlockSchema`
+  - **Depende de:** F2-T1
+  - **Resultado observavel:** `packages/validation/src/modules/lesson/schemas/textBlockSchema.ts` aceita `audio` opcional.
+  - **Camada:** `rest`
 
-- [x] **T3.3** — Estender `CodeEditorToolbar` para aceitar acao customizada e ocultar o assistente por contexto
-  - **Depende de:** T1.2
-  - **Resultado observavel:** `CodeEditorToolbar` e `CodeEditorToolbarView` aceitam `options.customActions` e `options.shouldHideAssistantButton`; quando a flag estiver ativa, o botao `Assistente de codigo` nao e renderizado e a acao customizada aparece dentro de `Toolbar.Container`.
-  - **Camada:** `ui`
-  - **Artefatos:** `apps/web/src/ui/global/widgets/components/CodeEditorToolbar/index.tsx`, `apps/web/src/ui/global/widgets/components/CodeEditorToolbar/CodeEditorToolbarView.tsx`
-  - **Concluido em:** 2026-04-29
+- [x] **F2-T3** — Exportar `textBlockAudioSchema` no barrel de schemas
+  - **Depende de:** F2-T1
+  - **Resultado observavel:** `packages/validation/src/modules/lesson/schemas/index.ts` expoe `textBlockAudioSchema`.
+  - **Camada:** `rest`
 
-- [x] **T3.4** — Implementar no `useSnippetPage` o fluxo local de aplicar exemplo e confirmar sobrescrita
-  - **Depende de:** T1.2
-  - **Resultado observavel:** `useSnippetPage` passa a expor handlers para selecionar e confirmar exemplo; se `snippetTitle` ou `snippetCode` estiverem dirty, a confirmacao e aberta antes da substituicao; se nao estiverem dirty, titulo e codigo sao atualizados localmente com `setValue(..., { shouldDirty: true, shouldValidate: true })` e `playgroudCodeEditorRef.current?.setValue(...)`, sem chamar `createSnippet` nem `updateSnippet`.
-  - **Camada:** `ui`
-  - **Artefatos:** `apps/web/src/ui/playground/widgets/pages/Snippet/useSnippetPage.ts`
-  - **Concluido em:** 2026-04-29
+- [x] **F2-T4** — Criar `FetchAudioVoicesController`
+  - **Depende de:** F1-T2
+  - **Resultado observavel:** existe controller que responde `200` com as vozes `panda/shark/princess` e labels PT-BR.
+  - **Camada:** `rest`
 
-- [x] **T3.5** — Integrar dialog de exemplos e confirmacao na composicao de `SnippetPage`
-  - **Depende de:** T3.1, T3.2, T3.3, T3.4
-  - **Resultado observavel:** em `/playground/snippets/new` e `/playground/snippets/:snippetId`, a toolbar exibe a acao `Exemplos`, abre o dialog local com os 10 itens, pede confirmacao antes de sobrescrever titulo/codigo alterados, nao salva automaticamente e nao mostra o botao `Assistente de codigo`.
-  - **Camada:** `web`
-  - **Artefatos:** `apps/web/src/ui/playground/widgets/pages/Snippet/index.tsx`
-  - **Concluido em:** 2026-04-29
+- [x] **F2-T5** — Exportar controller de vozes no barrel de controllers
+  - **Depende de:** F2-T4
+  - **Resultado observavel:** `apps/server/src/rest/controllers/lesson/index.ts` expoe `FetchAudioVoicesController`.
+  - **Camada:** `rest`
+
+- [x] **F2-T6** — Criar `AudioVoicesRouter` com `GET /lesson/audio-voices`
+  - **Depende de:** F2-T4
+  - **Resultado observavel:** existe router publico sem auth para a rota de vozes.
+  - **Camada:** `rest`
+
+- [x] **F2-T7** — Registrar `AudioVoicesRouter` no `LessonRouter`
+  - **Depende de:** F2-T6
+  - **Resultado observavel:** `GET /lesson/audio-voices` fica acessivel no modulo `lesson`.
+  - **Camada:** `rest`
+
+---
+
+## F4 — Studio: UI e Integração
+
+> ⚡ Pode rodar em paralelo com F2 após F1 estar concluída.
+
+**Objetivo:** Implementar no `studio` o fluxo de voz/geracao/polling/cancelamento por bloco e player compacto, preservando `audio` no ciclo de edicao.
+
+### Tarefas
+
+- [x] **F4-T1** — Estender `LessonService` REST do studio com metodos de audio
+  - **Depende de:** F1-T3
+  - **Resultado observavel:** `apps/studio/src/rest/services/LessonService.ts` implementa `fetchAudioVoices`, gerar/cancelar individual e em lote.
+  - **Camada:** `rest`
+
+- [x] **F4-T2** — Criar hook `useStorageAudio`
+  - **Depende de:** F1-T3
+  - **Resultado observavel:** existe `apps/studio/src/ui/global/hooks/useStorageAudio.ts` retornando URL publica de `audios/story` ou `null`.
+  - **Camada:** `ui`
+
+- [x] **F4-T3** — Criar hook `useAudioGenerationPolling`
+  - **Depende de:** F4-T1
+  - **Resultado observavel:** existe polling a cada 3000ms enquanto houver bloco `pending`, com callback de update e erro.
+  - **Camada:** `ui`
+
+- [x] **F4-T4** — Criar widget `BlockVoiceSelector`
+  - **Depende de:** F1-T2
+  - **Resultado observavel:** seletor de voz com fallback `panda` quando lista vazia.
+  - **Camada:** `ui`
+
+- [x] **F4-T5** — Criar widget `BlockAudioPlayer` e hook `useBlockAudioPlayer`
+  - **Depende de:** F4-T2
+  - **Resultado observavel:** player compacto com play/pause, seek e progresso.
+  - **Camada:** `ui`
+
+- [x] **F4-T6** — Criar widget `BlockAudioControls`
+  - **Depende de:** F4-T4, F4-T5
+  - **Resultado observavel:** composicao de seletor, botao gerar/regenerar, cancelar, badge/spinner e player por status.
+  - **Camada:** `ui`
+
+- [x] **F4-T7** — Preservar `audio` no hook `useLessonStoryPage`
+  - **Depende de:** F4-T1
+  - **Resultado observavel:** `toEditorItem` e `toPersistedTextBlock` mantem `audio` sem perda no save.
+  - **Camada:** `ui`
+
+- [x] **F4-T8** — Integrar voz/geracao/cancelamento/polling em `useLessonStoryPage`
+  - **Depende de:** F4-T3, F4-T7
+  - **Resultado observavel:** handlers de voz/geracao/cancelamento funcionam, sincronizam alteracoes locais antes de chamar endpoints por `blockIndex`.
+  - **Camada:** `ui`
+
+- [x] **F4-T9** — Integrar controles de audio em `TextBlockCard`
+  - **Depende de:** F4-T6, F4-T8
+  - **Resultado observavel:** card renderiza `BlockAudioControls` para tipos elegiveis no estado expandido.
+  - **Camada:** `ui`
+
+- [x] **F4-T10** — Integrar controle em lote/polling no `TextBlocksView` e `LessonStoryPageView`
+  - **Depende de:** F4-T8, F4-T9
+  - **Resultado observavel:** header exibe CTA de geracao em lote, indicador de polling e mantem drag-and-drop ativo durante `pending`.
+  - **Camada:** `ui`

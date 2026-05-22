@@ -176,7 +176,7 @@ describe('useLessonStoryPage', () => {
   })
 
   it('should save blocks successfully when data changes', async () => {
-    const block = TextBlocksFaker.fakeDto({ type: 'user', content: 'Conteudo inicial' })
+    const block = TextBlocksFaker.fakeDto({ type: 'user', content: 'conteúdo inicial' })
     mockTextBlocksFetch.data = [block]
 
     const { result } = Hook()
@@ -186,7 +186,7 @@ describe('useLessonStoryPage', () => {
     act(() => {
       result.current.onContentChange(
         result.current.textBlocks[0].id,
-        'Conteudo atualizado',
+        'conteúdo atualizado',
       )
     })
 
@@ -198,7 +198,7 @@ describe('useLessonStoryPage', () => {
         body: [
           TextBlocksFaker.fakeDto({
             type: 'user',
-            content: 'Conteudo atualizado',
+            content: 'conteúdo atualizado',
           }),
         ],
       }),
@@ -213,7 +213,7 @@ describe('useLessonStoryPage', () => {
       expect.arrayContaining([
         expect.objectContaining({
           type: 'user',
-          content: 'Conteudo atualizado',
+          content: 'conteúdo atualizado',
         }),
       ]),
     )
@@ -223,7 +223,7 @@ describe('useLessonStoryPage', () => {
   })
 
   it('should show error and set failure state when save fails', async () => {
-    const block = TextBlocksFaker.fakeDto({ type: 'user', content: 'Conteudo inicial' })
+    const block = TextBlocksFaker.fakeDto({ type: 'user', content: 'conteúdo inicial' })
     mockTextBlocksFetch.data = [block]
 
     const { result } = Hook()
@@ -233,7 +233,7 @@ describe('useLessonStoryPage', () => {
     act(() => {
       result.current.onContentChange(
         result.current.textBlocks[0].id,
-        'Conteudo atualizado',
+        'conteúdo atualizado',
       )
     })
 

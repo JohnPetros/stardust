@@ -59,6 +59,7 @@
     "./lesson/factories": "./src/lesson/domain/factories/index.ts",
     "./lesson/types": "./src/lesson/domain/types/index.ts",
     "./lesson/errors": "./src/lesson/domain/errors/index.ts",
+    "./lesson/events": "./src/lesson/domain/events/index.ts",
     "./lesson/use-cases": "./src/lesson/use-cases/index.ts",
     "./lesson/interfaces": "./src/lesson/interfaces/index.ts",
     "./space/entities": "./src/space/domain/entities/index.ts",

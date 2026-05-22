@@ -9,7 +9,7 @@ last_updated_at: 2026-03-25
 
 # 1. Objetivo
 
-Adicionar o campo opcional `additionalInstructions` ao fluxo de gerenciamento de `challenge_sources` no Studio, permitindo que administradores cadastrem e editem instrucoes especificas por fonte, exibam esse conteudo na listagem com truncamento e persistam o valor ponta a ponta entre UI, contratos compartilhados, API server e banco. A entrega deve reutilizar os componentes e contratos ja existentes do recurso, sem criar um fluxo paralelo para create/update.
+Adicionar o campo opcional `additionalInstructions` ao fluxo de gerenciamento de `challenge_sources` no Studio, permitindo que administradores cadastrem e editem instrucoes especificas por fonte, exibam esse conteúdo na listagem com truncamento e persistam o valor ponta a ponta entre UI, contratos compartilhados, API server e banco. A entrega deve reutilizar os componentes e contratos ja existentes do recurso, sem criar um fluxo paralelo para create/update.
 
 ---
 
@@ -222,7 +222,7 @@ Adicionar o campo opcional `additionalInstructions` ao fluxo de gerenciamento de
 
 * **Arquivo:** `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/ChallengeSourceFormView.tsx`
 * **Mudança:** Renderizar textarea opcional para `additionalInstructions` com placeholder orientativo, usando o padrao `FormField` + `Textarea` do Studio.
-* **Justificativa:** O issue exige capturar o conteudo diretamente no dialog e manter consistencia visual com outros formularios do app.
+* **Justificativa:** O issue exige capturar o conteúdo diretamente no dialog e manter consistencia visual com outros formularios do app.
 * **Camada:** `ui`
 
 ## AI

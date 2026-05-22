@@ -8,6 +8,8 @@ import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 import { ChallengeNavigation } from '../../components/ChallengeNavigation'
 import { ChallengesNavigationSidebar } from '../../components/ChallengesNavigationSidebar'
 import { ChallengeNavigationAlertDialog } from '../../components/ChallengeNavigationAlertDialog'
+import { NotesDrawer } from '@/ui/global/widgets/components/NotesDrawer'
+import { Icon } from '@/ui/global/widgets/components/Icon'
 
 type Props = {
   challengeDto: ChallengeDto
@@ -71,6 +73,13 @@ export const ChallengePage = ({
             />
           }
         />
+      }
+      notesSlot={
+        <NotesDrawer>
+          <div className='rounded-md p-1 text-gray-300 transition-colors hover:bg-gray-800 hover:text-gray-100'>
+            <Icon name='book' size={20} />
+          </div>
+        </NotesDrawer>
       }
       challengeNavigationAlertDialogSlot={
         <ChallengeNavigationAlertDialog

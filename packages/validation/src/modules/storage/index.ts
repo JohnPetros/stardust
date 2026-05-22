@@ -1,1 +1,1 @@
-export { storageFolderSchema } from './storageFolderSchema'
+export { fileStorageFolderPathSchema } from './fileStorageFolderPathSchema'

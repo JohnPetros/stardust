@@ -5,10 +5,10 @@ import type { z } from 'zod'
 
 import { rocketSchema } from '@stardust/validation/shop/schemas'
 import type { StorageService } from '@stardust/core/storage/interfaces'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { Text } from '@stardust/core/global/structures'
 
-const ROCKETS_FOLDER = StorageFolder.createAsRockets()
+const ROCKETS_FOLDER = FileStorageFolderPath.createAsImagesRockets()
 
 type FormData = z.infer<typeof rocketSchema>
 

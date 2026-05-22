@@ -159,7 +159,7 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
 
 * **Localizacao:** `packages/validation/src/modules/lesson/schemas/codeExplanationSchema.ts` - **novo arquivo**
   **Atributos:**
-  `explainCodeRequestSchema` valida `code: string` usando a mesma regra minima de conteudo adotada pelo projeto.
+  `explainCodeRequestSchema` valida `code: string` usando a mesma regra minima de conteúdo adotada pelo projeto.
   `remainingCodeExplanationUsesSchema` valida `remainingUses: number` inteiro entre `0` e `10`.
   `codeExplanationResponseSchema` valida `explanation: string`.
 
@@ -212,7 +212,7 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
 
 * **Localizacao:** `apps/web/src/ui/global/widgets/components/CodeSnippet/CodeExplanationDialog/index.tsx` - **novo arquivo**
   **Props:** `isOpen`, `code`, `explanation`, `isLoading`, `onRetry`, `onClose`
-  **Estados (Client Component):** `Loading` mostra painel de explicacao com estado de carregamento; `Error` nao se aplica como estado proprio do widget, pois erros bloqueantes sao tratados no alert dialog; `Empty` nao renderiza conteudo quando fechado; `Content` exibe codigo e explicacao lado a lado.
+  **Estados (Client Component):** `Loading` mostra painel de explicacao com estado de carregamento; `Error` nao se aplica como estado proprio do widget, pois erros bloqueantes sao tratados no alert dialog; `Empty` nao renderiza conteúdo quando fechado; `Content` exibe codigo e explicacao lado a lado.
   **View:** `CodeExplanationDialogView` em `apps/web/src/ui/global/widgets/components/CodeSnippet/CodeExplanationDialog/CodeExplanationDialogView.tsx`
   **Hook:** `useCodeExplanationDialog` em `apps/web/src/ui/global/widgets/components/CodeSnippet/CodeExplanationDialog/useCodeExplanationDialog.ts`
   **Index:** usa `Dialog`, `PlaygroundCodeEditor` ou `CodeEditor` em modo leitura e callbacks recebidos do `CodeSnippet`
@@ -220,7 +220,7 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
 
 * **Localizacao:** `apps/web/src/ui/global/widgets/components/CodeSnippet/CodeExplanationAlertDialog/index.tsx` - **novo arquivo**
   **Props:** `isOpen`, `mode`, `remainingUses`, `isLoading`, `onConfirm`, `onClose`
-  **Estados (Client Component):** `Loading` desabilita a acao principal durante confirmacao; `Error` nao se aplica como estado proprio do widget; `Empty` nao renderiza conteudo quando fechado; `Content` exibe aviso de consumo ou bloqueio conforme `mode`.
+  **Estados (Client Component):** `Loading` desabilita a acao principal durante confirmacao; `Error` nao se aplica como estado proprio do widget; `Empty` nao renderiza conteúdo quando fechado; `Content` exibe aviso de consumo ou bloqueio conforme `mode`.
   **View:** `CodeExplanationAlertDialogView` em `apps/web/src/ui/global/widgets/components/CodeSnippet/CodeExplanationAlertDialog/CodeExplanationAlertDialogView.tsx`
   **Hook:** `useCodeExplanationAlertDialog` em `apps/web/src/ui/global/widgets/components/CodeSnippet/CodeExplanationAlertDialog/useCodeExplanationAlertDialog.ts`
   **Index:** usa `AlertDialog` global e callbacks recebidos do `CodeSnippet`
@@ -394,7 +394,7 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
 
 * **Arquivo:** `apps/web/src/ui/lesson/widgets/pages/Lesson/StoryStage/StoryChunk/StoryChunkView.tsx`
   **Mudanca:** passar a configuracao `lessonCodeExplanation={{ source: 'story', chunkIndex }}` para `Mdx`.
-  **Justificativa:** habilitar cache local apenas na `Story` sem alterar o conteudo MDX persistido.
+  **Justificativa:** habilitar cache local apenas na `Story` sem alterar o conteúdo MDX persistido.
   **Camada:** `ui`
 
 * **Arquivo:** `apps/web/src/ui/lesson/widgets/pages/Lesson/QuizStage/SelectionQuestion/index.tsx`
@@ -459,7 +459,7 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
 
 * **Decisao:** ao clicar em `Retry` com explicacao carregada do cache local da `Story`, remover o cache antes da nova geracao.
   **Alternativas consideradas:** manter o cache ate receber nova resposta; limpar cache apenas apos sucesso da nova geracao.
-  **Motivo da escolha:** evita reaproveitamento acidental de conteudo antigo durante o ciclo de retry e garante que a UI reflita claramente o estado de regeneracao.
+  **Motivo da escolha:** evita reaproveitamento acidental de conteúdo antigo durante o ciclo de retry e garante que a UI reflita claramente o estado de regeneracao.
   **Impactos / trade-offs:** em caso de falha de rede apos limpar cache, o usuario perde temporariamente a explicacao antiga daquele chunk.
 
 * **Decisao:** manter cache no server apenas para controle de cota diaria (`remainingUses`), sem cachear `explanation`.

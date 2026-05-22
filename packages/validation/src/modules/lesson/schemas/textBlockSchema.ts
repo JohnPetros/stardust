@@ -1,6 +1,7 @@
 import z from 'zod'
 
 import { booleanSchema, contentSchema } from '../../global/schemas'
+import { textBlockAudioSchema } from './textBlockAudioSchema'
 
 const TEXT_BLOCK_TYPES = ['default', 'user', 'alert', 'quote', 'code', 'image'] as const
 
@@ -13,6 +14,7 @@ export const textBlockSchema = z
     title: z.string().optional(),
     picture: z.string().optional(),
     isRunnable: booleanSchema.optional(),
+    audio: textBlockAudioSchema.optional(),
   })
   .superRefine((textBlock, context) => {
     const canHavePicture = ['default', 'alert', 'quote', 'image'].includes(textBlock.type)

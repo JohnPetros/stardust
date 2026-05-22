@@ -27,6 +27,7 @@ export const CodeSnippet = ({
 }: CodeSnippetProps) => {
   const { lessonService } = useRestContext()
   const codeEditorRef = useRef<PlaygroundCodeEditorRef>(null)
+  const editorCode = code || (onChange ? '\n' : code)
   const {
     editorHeight,
     handleReloadCodeButtonClick,
@@ -47,7 +48,7 @@ export const CodeSnippet = ({
     handleConfirmCodeExplanationAlertDialog,
   } = useCodeSnippet({
     codeEditorRef,
-    code,
+    code: editorCode,
     isRunnable,
     lessonService: lessonService as LessonService,
     lessonCodeExplanation,
@@ -56,7 +57,7 @@ export const CodeSnippet = ({
   if (editorHeight)
     return (
       <CodeSnippetView
-        code={code}
+        code={editorCode}
         isRunnable={isRunnable}
         editorHeight={editorHeight}
         codeEditorRef={codeEditorRef}

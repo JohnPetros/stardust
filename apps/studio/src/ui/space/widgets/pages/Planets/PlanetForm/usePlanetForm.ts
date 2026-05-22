@@ -5,11 +5,11 @@ import { z } from 'zod'
 import { nameSchema, stringSchema } from '@stardust/validation/global/schemas'
 import type { PlanetDto } from '@stardust/core/space/entities/dtos'
 import type { StorageService } from '@stardust/core/storage/interfaces'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { Text } from '@stardust/core/global/structures'
 import { useState } from 'react'
 
-const PLANETS_FOLDER = StorageFolder.createAsPlanets()
+const PLANETS_FOLDER = FileStorageFolderPath.createAsPlanets()
 
 const formSchema = z.object({
   name: nameSchema,

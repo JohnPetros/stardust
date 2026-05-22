@@ -5,12 +5,12 @@ import type { z } from 'zod'
 
 import { achievementSchema } from '@stardust/validation/profile/schemas'
 import type { StorageService } from '@stardust/core/storage/interfaces'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { Text } from '@stardust/core/global/structures'
 import type { AchievementDto } from '@stardust/core/profile/entities/dtos'
 import type { AchievementMetricValue } from '@stardust/core/profile/types'
 
-const ACHIEVEMENTS_FOLDER = StorageFolder.createAsAchievements()
+const ACHIEVEMENTS_FOLDER = FileStorageFolderPath.createAsAchievements()
 
 const formSchema = achievementSchema.omit({ id: true, position: true })
 

@@ -17,7 +17,7 @@ Diretorio base: `apps/server/src/provision`.
 | Pasta | Finalidade | Exemplo |
 | --- | --- | --- |
 | `cache/` | Implementa `CacheProvider` (core) sem expor Redis/Upstash. | `apps/server/src/provision/cache/UpstashCacheProvider.ts` |
-| `storage/` | Implementa `StorageProvider` (core) sem expor bucket/SDK. | `apps/server/src/provision/storage/SupabaseStorageProvider.ts` |
+| `storage/` | Implementa `FileStorageProvider` (core) sem expor bucket/SDK. | `apps/server/src/provision/storage/SupabaseFileStorageProvider.ts` |
 | `monitor/` | Implementa `TelemetryProvider` (core). | `apps/server/src/provision/monitor/SentryTelemetryProvider.ts` |
 | `database/` | Implementa `DatabaseProvider` (core) para operacoes auxiliares (ex: backup). | `apps/server/src/provision/database/SupabaseDatabaseProvider.ts` |
 
@@ -34,6 +34,7 @@ Diretorio base: `apps/server/src/provision`.
 
 - `provider`: `<Vendor><Capability>Provider` (ex: `UpstashCacheProvider`).
 - `client` do SDK: detalhe interno do `provider` (nao expor por propriedade publica).
+- Quando houver mais de uma implementacao concreta para a mesma capability, cada provider deve viver em sua propria subpasta dentro da capability. Ex.: `apps/server/src/provision/tts/open-ai/OpenAITtsProvider.ts`, `apps/server/src/provision/tts/eleven-labs/ElevenLabsTtsProvider.ts`.
 
 ## Integracao com Outras Camadas
 

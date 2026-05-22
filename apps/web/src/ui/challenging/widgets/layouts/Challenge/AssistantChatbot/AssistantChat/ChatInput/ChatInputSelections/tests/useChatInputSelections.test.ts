@@ -59,7 +59,7 @@ describe('useChatInputSelections', () => {
 
   it('should map code selection with proper label and metadata', () => {
     const codeSelection = CodeSelectionFaker.fake({
-      content: 'conteudo do codigo',
+      content: 'conteúdo do codigo',
       startLine: 3,
       endLine: 8,
     })
@@ -71,7 +71,7 @@ describe('useChatInputSelections', () => {
       expect.objectContaining({
         id: 'code',
         iconName: 'code',
-        tooltipContent: 'conteudo do codigo',
+        tooltipContent: 'conteúdo do codigo',
         label: 'Linha - 3-8',
         removeAriaLabel: 'Remover seleção de código',
       }),

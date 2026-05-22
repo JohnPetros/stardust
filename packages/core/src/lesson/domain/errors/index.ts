@@ -3,3 +3,6 @@ export { TextsBlocksByStarNotFoundError } from './TextsBlocksByStarNotFoundError
 export { InvalidRewardingPayloadError } from './InvalidRewardingPayloadError'
 export { InvalidQuestionTypeError } from './InvalidQuestionTypeError'
 export { CodeExplanationLimitExceededError } from './CodeExplanationLimitExceededError'
+export { TextBlockNotFoundError } from './TextBlockNotFoundError'
+export { TextBlockAudioNotAllowedError } from './TextBlockAudioNotAllowedError'
+export { TextBlockAudioGenerationNotPendingError } from './TextBlockAudioGenerationNotPendingError'
