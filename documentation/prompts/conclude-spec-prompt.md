@@ -196,6 +196,42 @@ Para cada regra violada, reporte:
 
 Corrija todos os desvios encontrados antes de avançar para a Fase 2.
 
+**1.6 Revisão de Qualidade de Código**
+
+Realize uma leitura crítica de cada arquivo introduzido ou modificado pela Spec,
+com foco exclusivo no diff — não revise arquivos fora do escopo da implementação.
+
+Para cada arquivo, verifique:
+
+- **Erros de lógica:** condicionais invertidas, retornos antecipados ausentes,
+  tratamento de erro incompleto, casos de borda não cobertos pelo fluxo principal.
+- **Nomenclatura:** variáveis, funções, classes e tipos com nomes ambíguos,
+  genéricos demais (`data`, `result`, `tmp`) ou inconsistentes com o vocabulário
+  do domínio estabelecido no restante do codebase.
+- **Código morto:** imports não utilizados, variáveis declaradas e nunca lidas,
+  branches inalcançáveis, funções definidas e nunca chamadas.
+- **Duplicação desnecessária:** trechos de lógica repetidos que poderiam ser
+  extraídos para um helper ou método reutilizável sem violar os limites de camada.
+- **Complexidade excessiva:** funções longas demais, aninhamento profundo de
+  condicionais ou callbacks que dificultam a leitura sem ganho real de expressividade.
+- **Comentários desatualizados ou enganosos:** comentários que contradizem o
+  comportamento do código ou que descrevem o "o quê" em vez do "por quê".
+
+Ao final desta etapa, produza um relatório no seguinte formato:
+
+```markdown
+## Revisão de Qualidade de Código
+
+- [x] `caminho/do/arquivo.ts` — sem problemas encontrados
+- [⚠] `caminho/do/arquivo.ts` — <descrição objetiva do problema encontrado e correção aplicada>
+```
+
+Corrija todos os problemas encontrados antes de avançar para a Fase 2.
+
+> Esta etapa é complementar à 1.5: enquanto a 1.5 valida aderência a regras
+> arquiteturais do projeto, a 1.6 avalia a qualidade intrínseca do código
+> produzido, independente de convenções formais.
+
 ---
 
 ## Fase 2 — Consolidação de Documentos
@@ -298,6 +334,7 @@ dados existentes ou disparar efeitos colaterais em produção na primeira execu�
 - [ ] `npm run test` passou sem falhas (ou regressões pré-existentes devidamente sinalizadas)
 - [ ] Cobertura de testes verificada e lacunas críticas endereçadas
 - [ ] Limites arquiteturais validados
+- [ ] Revisão de qualidade de código concluída e problemas corrigidos
 - [ ] Todas as tarefas do `documentation/plan.md` estão `- [x]`
 - [ ] Divergências do `plan.md` classificadas e resolvidas
 - [ ] Spec atualizada com status `closed` e data
@@ -317,6 +354,7 @@ Ao final da execução, devem ter sido produzidos:
 3. **Relatório de cobertura de testes** (Fase 1.1.1)
 4. **Testes criados pelo subagent** para componentes sem cobertura (Fase 1.1.2, quando aplicável)
 5. **Checklist de validação** de requisitos (Fase 1.4)
-6. **Spec atualizada** com status `closed` e data (Fase 2.1)
-7. **PRD atualizado** com itens marcados como concluídos e divergências registradas, se houver (Fase 2.2)
-8. **Resumo de conclusão da spec** com estrutura completa (Fase 3.1)
+6. **Relatório de revisão de qualidade de código** (Fase 1.6)
+7. **Spec atualizada** com status `closed` e data (Fase 2.1)
+8. **PRD atualizado** com itens marcados como concluídos e divergências registradas, se houver (Fase 2.2)
+9. **Resumo de conclusão da spec** com estrutura completa (Fase 3.1)
