@@ -4,11 +4,15 @@ import { Dropbox } from 'dropbox'
 
 import { AppError } from '@stardust/core/global/errors'
 import { MethodNotImplementedError } from '@stardust/core/global/errors'
-import type { FileStorageFolderPath } from '@stardust/core/storage/structures'
+import type {
+  FileStorageFolderPath,
+  SignedUploadUrl,
+} from '@stardust/core/storage/structures'
 import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
 import type { ManyItems } from '@stardust/core/global/types'
 import type { FilesListingParams } from '@stardust/core/storage/types'
+import type { Text } from '@stardust/core/global/structures'
 
 import { ENV } from '@/constants'
 
@@ -49,6 +53,13 @@ export class DropboxStorageProvider implements FileStorageProvider {
       console.log('error', error)
       this.handleError(error)
     }
+  }
+
+  async createSignedUploadUrl(
+    _folderPath: FileStorageFolderPath,
+    _fileName: Text,
+  ): Promise<SignedUploadUrl> {
+    throw new MethodNotImplementedError('createSignedUploadUrl')
   }
 
   async listFiles(_params: FilesListingParams): Promise<ManyItems<File>> {

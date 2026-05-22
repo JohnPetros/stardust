@@ -4,7 +4,10 @@ import { randomUUID } from 'node:crypto'
 import { AppError } from '@stardust/core/global/errors'
 import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
 import type { FilesListingParams } from '@stardust/core/storage/types'
-import type { FileStorageFolderPath } from '@stardust/core/storage/structures'
+import {
+  SignedUploadUrl,
+  type FileStorageFolderPath,
+} from '@stardust/core/storage/structures'
 import { Text } from '@stardust/core/global/structures'
 import type { ManyItems } from '@stardust/core/global/types'
 
@@ -14,8 +17,6 @@ export class SupabaseFileStorageProvider implements FileStorageProvider {
   constructor(private readonly supabase: SupabaseClient) {}
 
   async upload(folder: FileStorageFolderPath, file: File): Promise<File> {
-    console.log(folder.value)
-    console.log(file)
     const fileName = this.resolveFileName(file)
     const filePath = `${folder.value}/${fileName}`
     const contentType = this.resolveContentType(file, fileName)
@@ -38,6 +39,32 @@ export class SupabaseFileStorageProvider implements FileStorageProvider {
     }
 
     return fileToUpload
+  }
+
+  async createSignedUploadUrl(
+    folderPath: FileStorageFolderPath,
+    fileName: Text,
+  ): Promise<SignedUploadUrl> {
+    const filePath = `${folderPath.value}/${fileName.value}`
+    const { data, error } = await this.supabase.storage
+      .from(SupabaseFileStorageProvider.BUCKET_NAME)
+      .createSignedUploadUrl(filePath, {
+        upsert: false,
+      })
+
+    if (error) {
+      await this.handleError(error, `creating signed upload url for ${filePath}`)
+    }
+
+    if (!data?.signedUrl) {
+      throw new AppError('Failed to create signed upload url')
+    }
+
+    return SignedUploadUrl.create({
+      url: data.signedUrl,
+      folderPath: folderPath.value,
+      fileName: fileName.value,
+    })
   }
 
   async listFiles({
@@ -89,7 +116,9 @@ export class SupabaseFileStorageProvider implements FileStorageProvider {
       await this.handleError(error, `finding file ${fileName.value} in ${folder.value}`)
     }
 
-    if (!data?.length) {
+    const matchedFile = data?.find((item) => item.name === fileName.value)
+
+    if (!matchedFile?.name) {
       return null
     }
 
@@ -105,6 +134,10 @@ export class SupabaseFileStorageProvider implements FileStorageProvider {
       .getPublicUrl(`${folder.value}/${fileName.value}`)
 
     const response = await fetch(urlData.publicUrl)
+    if (!response.ok) {
+      return null
+    }
+
     const blob = await response.blob()
     const file = new File([blob], fileName.value, {
       type: 'application/octet-stream',

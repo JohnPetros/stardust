@@ -46,6 +46,7 @@ export class FilesStorageRouter extends HonoRouter {
     this.router.get(
       '/',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'query',
         z.object({
@@ -67,10 +68,11 @@ export class FilesStorageRouter extends HonoRouter {
 
   private registerRemoveFileRoute(): void {
     this.router.delete(
-      '/:folder/:fileName',
+      '/',
       this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
-        'param',
+        'query',
         z.object({
           fileName: stringSchema,
           folder: fileStorageFolderPathSchema,
