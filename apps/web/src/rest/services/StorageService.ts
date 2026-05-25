@@ -28,9 +28,15 @@ export const StorageService = (restClient: RestClient): IStorageService => {
     },
 
     async removeFile(folder: FileStorageFolderPath, fileName: Text) {
+      restClient.clearQueryParams()
       restClient.setQueryParam('folder', folder.value)
       restClient.setQueryParam('fileName', fileName.value)
-      return await restClient.delete('/storage/files')
+
+      try {
+        return await restClient.delete('/storage/files')
+      } finally {
+        restClient.clearQueryParams()
+      }
     },
 
     async searchEmbeddings(query, topK, namespace) {

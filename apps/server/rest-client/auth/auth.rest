@@ -1,6 +1,6 @@
 @URL = {{BASE_URL}}/auth
-@EMAIL = stardust.app.team@gmail.com
-@PASSWORD = Backshift7-Favorite8-Glancing6-Luridness3-Symptom9
+@EMAIL = {{AUTH_EMAIL}}
+@PASSWORD = {{AUTH_PASSWORD}}
 @SOCIAL_ACCOUNT_EMAIL = {{SOCIAL_ACCOUNT_EMAIL}}
 
 ### Sign in
