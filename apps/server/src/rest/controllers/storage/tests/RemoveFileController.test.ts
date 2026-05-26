@@ -13,7 +13,7 @@ describe('Remove File Controller', () => {
     avatars: 'images/avatars',
   } as const
 
-  let http: Mock<Http<{ routeParams: { fileName: string; folder: string } }>>
+  let http: Mock<Http<{ queryParams: { fileName: string; folder: string } }>>
   let storageProvider: Mock<FileStorageProvider>
   let controller: RemoveFileController
 
@@ -23,19 +23,19 @@ describe('Remove File Controller', () => {
     controller = new RemoveFileController(storageProvider)
   })
 
-  it('should extract route params, call provider with domain structures and return no-content', async () => {
+  it('should extract query params, call provider with domain structures and return no-content', async () => {
     const fileName = 'avatar.png'
     const folder = 'avatars'
     const restResponse = mock<RestResponse>()
 
-    http.getRouteParams.mockReturnValue({ fileName, folder })
+    http.getQueryParams.mockReturnValue({ fileName, folder })
     storageProvider.removeFile.mockResolvedValue(undefined)
     http.statusNoContent.mockReturnValue(http)
     http.send.mockReturnValue(restResponse)
 
     const response = await controller.handle(http)
 
-    expect(http.getRouteParams).toHaveBeenCalledTimes(1)
+    expect(http.getQueryParams).toHaveBeenCalledTimes(1)
     expect(storageProvider.removeFile).toHaveBeenCalledTimes(1)
 
     const [FileStorageFolderPath, text] = storageProvider.removeFile.mock.calls[0] as [

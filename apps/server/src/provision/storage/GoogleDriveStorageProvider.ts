@@ -3,7 +3,10 @@ import { type drive_v3, google } from 'googleapis'
 
 import { AppError } from '@stardust/core/global/errors'
 import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
-import type { FileStorageFolderPath } from '@stardust/core/storage/structures'
+import type {
+  FileStorageFolderPath,
+  SignedUploadUrl,
+} from '@stardust/core/storage/structures'
 import type {
   FileStorageFolderPathValue,
   FilesListingParams,
@@ -66,6 +69,13 @@ export class GoogleDriveStorageProvider implements FileStorageProvider {
     }
 
     return file
+  }
+
+  async createSignedUploadUrl(
+    _folderPath: FileStorageFolderPath,
+    _fileName: Text,
+  ): Promise<SignedUploadUrl> {
+    throw new MethodNotImplementedError('createSignedUploadUrl')
   }
 
   async listFiles(_params: FilesListingParams): Promise<ManyItems<File>> {

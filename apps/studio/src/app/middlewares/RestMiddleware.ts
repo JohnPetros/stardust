@@ -4,6 +4,7 @@ import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { Text } from '@stardust/core/global/structures'
 
 import { ENV, ROUTES, SESSION_STORAGE_KEYS } from '@/constants'
+import { SupabaseSignedFileStorageProvider } from '@/provision/storage'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 import {
   AuthService,
@@ -80,7 +81,7 @@ export const RestMiddleware = async ({ context }: Route.ActionArgs) => {
   }
 
   const spaceService = SpaceService(restClient)
-  const storageService = StorageService(restClient)
+  const storageService = StorageService(restClient, SupabaseSignedFileStorageProvider())
   const lessonService = LessonService(restClient)
   const profileService = ProfileService(restClient)
   const challengingService = ChallengingService(restClient)

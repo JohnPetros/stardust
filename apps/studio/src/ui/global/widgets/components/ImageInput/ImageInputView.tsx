@@ -38,12 +38,15 @@ export const ImageInputView = ({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className='p-10'>
         <div className='flex flex-col gap-6'>
-          <FileUpload onFilesChange={(files) => onFileChange(files[0] ?? null)} />
+          <FileUpload
+            maxSize={5 * 1024 * 1024}
+            onFilesChange={(files) => onFileChange(files[0] ?? null)}
+          />
           <InputWithError
             errorMessage={imageNameError ?? ''}
             value={imageName}
             label='Nome da imagem'
-            placeholder='pandinha.png'
+            placeholder='nome-final-da-imagem.png'
             onChange={(event) => onNameChange(event.target.value)}
             onBlur={(event) => onNameChange(event.target.value)}
           />

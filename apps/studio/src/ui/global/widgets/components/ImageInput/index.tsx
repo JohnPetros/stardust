@@ -9,7 +9,7 @@ import { useImageInput } from './useImageInput'
 
 type Props = {
   folder: string
-  onSubmit: () => void
+  onSubmit: (imageName: string) => void
 }
 
 export const ImageInput = ({ children, folder, onSubmit }: PropsWithChildren<Props>) => {

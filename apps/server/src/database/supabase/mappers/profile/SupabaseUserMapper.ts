@@ -71,7 +71,7 @@ export class SupabaseUserMapper {
       insigniaRoles: supabaseUser.insignias?.map(({ role }) => role) ?? [],
       didBreakStreak: supabaseUser.did_break_streak,
       canSeeRankingResult: supabaseUser.can_see_ranking ?? false,
-      hasCompletedSpace: supabaseUser.has_completed_space,
+      hasCompletedSpace: supabaseUser.has_completed_space ?? false,
       lastWeekRankingPosition: supabaseUser.last_week_ranking_position,
       weekStatus: supabaseUser.week_status ?? [],
       createdAt: supabaseUser.created_at ? new Date(supabaseUser.created_at) : new Date(),
@@ -97,7 +97,6 @@ export class SupabaseUserMapper {
       streak: user.streak.value,
       can_see_ranking: user.canSeeRankingResult.value,
       did_break_streak: user.didBreakStreak.value,
-      has_completed_space: user.hasCompletedSpace.value,
     }
 
     return supabaseUser as unknown as SupabaseUser
