@@ -198,10 +198,14 @@ Corrija todos os desvios encontrados antes de avançar para a Fase 2.
 
 **1.6 Revisão de Qualidade de Código**
 
-Realize uma leitura crítica de cada arquivo introduzido ou modificado pela Spec,
-com foco exclusivo no diff — não revise arquivos fora do escopo da implementação.
+Esta etapa opera em dois passos sequenciais: primeiro a leitura completa de
+todos os arquivos do escopo, depois a correção em lote. Não corrija nada
+durante a leitura — registre tudo e só então aplique as correções.
 
-Para cada arquivo, verifique:
+**Passo 1 — Leitura e catalogação**
+
+Leia cada arquivo introduzido ou modificado pela Spec (escopo restrito ao diff).
+Para cada arquivo, inspecione:
 
 - **Erros de lógica:** condicionais invertidas, retornos antecipados ausentes,
   tratamento de erro incompleto, casos de borda não cobertos pelo fluxo principal.
@@ -213,20 +217,35 @@ Para cada arquivo, verifique:
 - **Duplicação desnecessária:** trechos de lógica repetidos que poderiam ser
   extraídos para um helper ou método reutilizável sem violar os limites de camada.
 - **Complexidade excessiva:** funções longas demais, aninhamento profundo de
-  condicionais ou callbacks que dificultam a leitura sem ganho real de expressividade.
+  condicionais ou callbacks que dificultam a leitura sem ganho real de
+  expressividade.
 - **Comentários desatualizados ou enganosos:** comentários que contradizem o
   comportamento do código ou que descrevem o "o quê" em vez do "por quê".
 
-Ao final desta etapa, produza um relatório no seguinte formato:
+Ao concluir a leitura de todos os arquivos, produza o relatório completo antes
+de tocar em qualquer código:
 
 ```markdown
-## Revisão de Qualidade de Código
+## Relatório de Revisão de Qualidade de Código
 
-- [x] `caminho/do/arquivo.ts` — sem problemas encontrados
-- [⚠] `caminho/do/arquivo.ts` — <descrição objetiva do problema encontrado e correção aplicada>
+### `caminho/do/arquivo.ts`
+- ✅ Sem problemas encontrados
+
+### `caminho/do/outro-arquivo.ts`
+- ⚠️ **Nomenclatura:** variável `data` na linha 42 não expressa a intenção —
+  renomear para `userProfile`.
+- ⚠️ **Código morto:** import `formatDate` declarado mas nunca utilizado.
+- ⚠️ **Lógica:** ausência de guard clause para `null` no retorno de
+  `findUserById` antes do acesso a `.email`.
 ```
 
-Corrija todos os problemas encontrados antes de avançar para a Fase 2.
+**Passo 2 — Correção em lote**
+
+Com o relatório completo em mãos, aplique todas as correções de uma vez,
+respeitando a ordem de dependência entre arquivos (corrija primeiro os arquivos
+que são importados por outros para evitar inconsistências intermediárias).
+Após aplicar as correções, execute `npm run test` novamente para garantir que
+nenhuma alteração introduziu regressão.
 
 > Esta etapa é complementar à 1.5: enquanto a 1.5 valida aderência a regras
 > arquiteturais do projeto, a 1.6 avalia a qualidade intrínseca do código
@@ -251,10 +270,15 @@ devem ter sido capturados pelo `update-spec-prompt` durante o desenvolvimento.
 
 **2.2 Atualização do PRD**
 
-Atualize o PRD associado à Spec. Ele está localizado no nível acima do diretório
-da spec — ex.: se a spec está em
-`documentation/features/<modulo>/specs/<nome>-spec.md`, o PRD está em
-`documentation/features/<modulo>/prd.md`.
+Atualize o PRD associado à Spec **sempre no milestone do GitHub** referenciado
+no campo `prd:` da spec.
+
+- No StarDust, o milestone do GitHub é a **única fonte de verdade** do PRD.
+- **Nunca** crie, edite ou assuma a existência de `documentation/features/**/prd.md`.
+- Se a implementação concluir ou refinar requisitos, atualize a **descrição do
+  milestone** com os itens entregues e as divergências de produto relevantes.
+
+> 💡 Regra obrigatória: PRD local não deve existir. PRD vive no milestone.
 
 Marque como concluídos os itens endereçados pela implementação. A audiência aqui
 é de produto — traduza o impacto técnico para linguagem de negócio.
@@ -266,7 +290,8 @@ Marque como concluídos os itens endereçados pela implementação. A audiência
 aspecto que contradiga ou não esteja coberto pelo PRD (ex: regra de negócio
 refinada, escopo ampliado ou reduzido, comportamento diferente do especificado),
 atualize o PRD para refletir a realidade entregue. Registre a divergência no
-campo **"O que mudou em relação à Spec original"** do resumo de conclusão da spec (seção 3.1).
+campo **"O que mudou em relação à Spec original"** do resumo de conclusão da
+spec (seção 3.1).
 
 **2.3 Atualização da Arquitetura (se aplicável)**
 
@@ -334,7 +359,7 @@ dados existentes ou disparar efeitos colaterais em produção na primeira execu�
 - [ ] `npm run test` passou sem falhas (ou regressões pré-existentes devidamente sinalizadas)
 - [ ] Cobertura de testes verificada e lacunas críticas endereçadas
 - [ ] Limites arquiteturais validados
-- [ ] Revisão de qualidade de código concluída e problemas corrigidos
+- [ ] Revisão de qualidade de código concluída e correções aplicadas em lote
 - [ ] Todas as tarefas do `documentation/plan.md` estão `- [x]`
 - [ ] Divergências do `plan.md` classificadas e resolvidas
 - [ ] Spec atualizada com status `closed` e data
@@ -354,7 +379,7 @@ Ao final da execução, devem ter sido produzidos:
 3. **Relatório de cobertura de testes** (Fase 1.1.1)
 4. **Testes criados pelo subagent** para componentes sem cobertura (Fase 1.1.2, quando aplicável)
 5. **Checklist de validação** de requisitos (Fase 1.4)
-6. **Relatório de revisão de qualidade de código** (Fase 1.6)
+6. **Relatório de revisão de qualidade de código** com problemas catalogados e correções aplicadas em lote (Fase 1.6)
 7. **Spec atualizada** com status `closed` e data (Fase 2.1)
-8. **PRD atualizado** com itens marcados como concluídos e divergências registradas, se houver (Fase 2.2)
+8. **PRD atualizado no milestone do GitHub** com itens concluídos e divergências registradas, se houver (Fase 2.2)
 9. **Resumo de conclusão da spec** com estrutura completa (Fase 3.1)

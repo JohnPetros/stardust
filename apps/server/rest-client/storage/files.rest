@@ -1,22 +1,27 @@
 @URL = {{BASE_URL}}/storage/files
+@SIGNED_UPLOAD_URL = {{BASE_URL}}/storage/signed-upload-url
 @FILE_NAME = banana.jpg
 @FOLDER = story
+@FOLDER_PATH = images/story
 
 ### Get files
 GET {{URL}}
 ?page=1
 &itemsPerPage=25
-&search=
-&folder=images%2Fstory
+&search=Wha
+&folder={{FOLDER_PATH}}
 Authorization: Bearer {{JWT}}
+
+### Create signed upload url
+POST {{SIGNED_UPLOAD_URL}}
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "folderPath": "{{FOLDER_PATH}}",
+  "fileName": "{{FILE_NAME}}"
+}
 
 ### Remove file
-DELETE {{URL}}/{{FOLDER}}/{{FILE_NAME}}
-Authorization: Bearer {{JWT}}
-
-### Search guides
-GET {{URL}}/{{FOLDER}}
-?query=Delegua
-&namespace=guides
-&topK=1
+DELETE {{URL}}?folder={{FOLDER_PATH}}&fileName={{FILE_NAME}}
 Authorization: Bearer {{JWT}}

@@ -4,7 +4,7 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
 
 ## Pendencias (quando aplicavel)
 
-- [ ] Confirmar se havera CTA de cancelamento em lote visivel no header (a spec pede handler e contrato, mas o layout detalha apenas CTA de geracao em lote).
+- [x] Rota de emissao da signed URL montada em `StorageRouter` como `POST /storage/signed-upload-url`, preservando `FilesStorageRouter` sob `/storage/files`.
 
 ---
 
@@ -12,136 +12,152 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
 
 | Fase | Objetivo | Depende de | Pode rodar em paralelo com |
 | --- | --- | --- | --- |
-| F1 | Definir contratos compartilhados de audio/vozes no core | - | - |
-| F2 | Expor endpoint de vozes e ajustar validacao REST no server | F1 | F4 |
-| F4 | Integrar UI e fluxo de audio no studio | F1 | F2 |
+| F1 | Definir os contratos, structures, erros e use case do fluxo de signed upload no modulo `storage` | - | - |
+| F2 | Expor a emissao de signed upload URL no `server`, ajustar providers e endurecer autenticacao das rotas de storage | F1 | F3, F4 |
+| F3 | Adaptar o `web` ao novo contrato compartilhado sem remover o upload legado de screenshot | F1 | F2, F4 |
+| F4 | Migrar a `studio` para upload direto ao Supabase via signed URL, preservando os widgets e formularios atuais | F1 | F2, F3 |
 
-> **Estratégia de paralelismo:** sempre comece pelo core (domínio, structures e use cases). Assim que o core estiver concluído, as fases de `server` e `studio` podem ser executadas em paralelo, pois ambas dependem apenas do contrato definido no core.
+> **Estrategia de paralelismo:** sempre comece pelo core (dominio, structures e use cases). Assim que o core estiver concluido, as fases de `server`, `web` e `studio` podem ser executadas em paralelo, pois todas dependem apenas do contrato definido no core.
 
 ---
 
-## F1 — Core: Domínio, Structures e Use Cases
+## F1 — Core: Dominio, Structures e Use Cases
 
-**Objetivo:** Definir o contrato compartilhado de audio e vozes no core — DTOs e interface REST consumida pelos adapters — sem depender de infraestrutura. Essa fase desbloqueia F2 e F4 para rodarem em paralelo.
+**Objetivo:** Definir o contrato do dominio — entidades, structures, interfaces de repositorio/provider e use cases — sem nenhuma dependencia de infraestrutura. Essa fase desbloqueia F2, F3 e F4 para rodarem em paralelo.
 
 ### Tarefas
 
-- [x] **F1-T1** — Criar `AudioVoiceDto`
+- [x] **F1-T1** — Ajustar `packages/core/src/storage/interfaces/FileStorageProvider.ts`
   - **Depende de:** -
-  - **Resultado observavel:** existe `packages/core/src/lesson/domain/structures/dtos/AudioVoiceDto.ts` com `value: AudioVoiceValue` e `label: string`.
+  - **Resultado observavel:** o contrato passa a refletir o uso server-side real de storage com `upload(folder, file)` e expor tambem a emissao de signed upload URL sem quebrar controllers, jobs e providers existentes.
   - **Camada:** `core`
 
-- [x] **F1-T2** — Exportar `AudioVoiceDto` no barrel do modulo
+- [x] **F1-T2** — Criar `packages/core/src/storage/interfaces/SignedFileStorageProvider.ts` e exporta-lo pelo barrel de interfaces
   - **Depende de:** F1-T1
-  - **Resultado observavel:** `packages/core/src/lesson/domain/structures/dtos/index.ts` expoe `AudioVoiceDto`.
+  - **Resultado observavel:** existe um contrato de core especifico para upload direto com `uploadFile(signedUploadUrl: SignedUploadUrl): Promise<void>`, separado do provider server-side.
   - **Camada:** `core`
 
-- [x] **F1-T3** — Estender `LessonService` compartilhado com metodos de audio
+- [x] **F1-T3** — Ampliar `packages/core/src/storage/interfaces/StorageService.ts` e `packages/core/src/storage/interfaces/index.ts`
   - **Depende de:** F1-T2
-  - **Resultado observavel:** `packages/core/src/lesson/interfaces/LessonService.ts` passa a expor `fetchAudioVoices`, geracao/cancelamento individual e em lote.
+  - **Resultado observavel:** o contrato compartilhado de REST expoe `createSignedUploadUrl(folderPath, fileName)` e preserva `uploadFile(folder, file)` como fachada de compatibilidade para `web` e `studio`.
+  - **Camada:** `core`
+
+- [x] **F1-T4** — Endurecer `packages/core/src/storage/domain/structures/SignedUploadUrl.ts` e exportar `SignedUploadUrl`/`SignedUploadUrlDto` pelos barrels publicos
+  - **Depende de:** F1-T1
+  - **Resultado observavel:** `SignedUploadUrl.create(dto)` rejeita combinacoes invalidas de `folderPath` e extensao de `fileName`, e os tipos ficam importaveis pelos paths publicos do modulo `storage`.
+  - **Camada:** `core`
+
+- [x] **F1-T5** — Criar o erro de conflito de nome de arquivo no modulo `storage` e exporta-lo
+  - **Depende de:** -
+  - **Resultado observavel:** existe um erro de dominio explicito para representar conflito quando o `fileName` ja existe no `folderPath` solicitado.
+  - **Camada:** `core`
+
+- [x] **F1-T6** — Criar `packages/core/src/storage/use-cases/CreateSignedUploadUrl.ts` e exporta-lo em `packages/core/src/storage/use-cases/index.ts`
+  - **Depende de:** F1-T1, F1-T4, F1-T5
+  - **Resultado observavel:** `CreateSignedUploadUrl.execute({ folderPath, fileName })` valida os objetos de dominio, consulta existencia pelo provider e retorna `SignedUploadUrlDto` somente quando nao ha conflito de nome.
   - **Camada:** `core`
 
 ---
 
-## F2 — Server: Infra, Repositórios e Handlers
+## F2 — Server: Infra, Repositorios e Handlers
 
-> ⚡ Pode rodar em paralelo com F4 após F1 estar concluída.
+> ⚡ Pode rodar em paralelo com F3 e F4 apos F1 estar concluida.
 
-**Objetivo:** Implementar a borda REST do `server` para vozes e preservacao do subdocumento `audio` na validacao de update de blocos.
+**Objetivo:** Implementar a camada de infraestrutura e exposicao — repositorios, providers, jobs e handlers RPC/REST — consumindo os contratos definidos no core.
 
 ### Tarefas
 
-- [x] **F2-T1** — Criar `textBlockAudioSchema`
-  - **Depende de:** F1-T3
-  - **Resultado observavel:** existe `packages/validation/src/modules/lesson/schemas/textBlockAudioSchema.ts` validando `fileName`, `voice` e `status`.
+- [x] **F2-T1** — Criar `packages/validation/src/modules/storage/signedUploadUrlSchema.ts` e exporta-lo em `packages/validation/src/modules/storage/index.ts`
+  - **Depende de:** F1-T3, F1-T4
+  - **Resultado observavel:** a borda REST consegue rejeitar requests com `folderPath` fora da allowlist, `fileName` vazio ou com `/`, `\\`, `.`, `..` antes de executar controller/use case.
   - **Camada:** `rest`
 
-- [x] **F2-T2** — Permitir `audio` em `textBlockSchema`
-  - **Depende de:** F2-T1
-  - **Resultado observavel:** `packages/validation/src/modules/lesson/schemas/textBlockSchema.ts` aceita `audio` opcional.
+- [x] **F2-T2** — Implementar `createSignedUploadUrl(...)` em `apps/server/src/provision/storage/SupabaseFileStorageProvider.ts`
+  - **Depende de:** F1-T6
+  - **Resultado observavel:** o provider do `server` emite um contrato assinado para `stardust-bucket` com path final `<folderPath>/<fileName>` e `upsert: false`, sem alterar o fluxo legado de `upload(folder, file)`.
+  - **Camada:** `provision`
+
+- [x] **F2-T3** — Adequar `apps/server/src/provision/storage/GoogleDriveStorageProvider.ts` ao novo contrato do core
+  - **Depende de:** F1-T1
+  - **Resultado observavel:** o provider compila contra a interface atualizada e falha explicitamente com `MethodNotImplementedError` para signed upload URL, sem alterar o fluxo de backup que ele ja suporta.
+  - **Camada:** `provision`
+
+- [x] **F2-T4** — Adequar `apps/server/src/provision/storage/DropboxStorageProvider.ts` ao novo contrato do core
+  - **Depende de:** F1-T1
+  - **Resultado observavel:** o provider compila contra a interface atualizada e falha explicitamente com `MethodNotImplementedError` para signed upload URL, preservando o upload server-side usado em backup.
+  - **Camada:** `provision`
+
+- [x] **F2-T5** — Criar `apps/server/src/rest/controllers/storage/CreateSignedUploadUrlController.ts` e exporta-lo no barrel de controllers
+  - **Depende de:** F1-T6
+  - **Resultado observavel:** o controller le `folderPath` e `fileName` do body, delega para `CreateSignedUploadUrl` e retorna `200` com `SignedUploadUrlDto` sem conter regra de storage na borda.
   - **Camada:** `rest`
 
-- [x] **F2-T3** — Exportar `textBlockAudioSchema` no barrel de schemas
-  - **Depende de:** F2-T1
-  - **Resultado observavel:** `packages/validation/src/modules/lesson/schemas/index.ts` expoe `textBlockAudioSchema`.
-  - **Camada:** `rest`
-
-- [x] **F2-T4** — Criar `FetchAudioVoicesController`
-  - **Depende de:** F1-T2
-  - **Resultado observavel:** existe controller que responde `200` com as vozes `panda/shark/princess` e labels PT-BR.
-  - **Camada:** `rest`
-
-- [x] **F2-T5** — Exportar controller de vozes no barrel de controllers
-  - **Depende de:** F2-T4
-  - **Resultado observavel:** `apps/server/src/rest/controllers/lesson/index.ts` expoe `FetchAudioVoicesController`.
-  - **Camada:** `rest`
-
-- [x] **F2-T6** — Criar `AudioVoicesRouter` com `GET /lesson/audio-voices`
-  - **Depende de:** F2-T4
-  - **Resultado observavel:** existe router publico sem auth para a rota de vozes.
-  - **Camada:** `rest`
-
-- [x] **F2-T7** — Registrar `AudioVoicesRouter` no `LessonRouter`
-  - **Depende de:** F2-T6
-  - **Resultado observavel:** `GET /lesson/audio-voices` fica acessivel no modulo `lesson`.
+- [x] **F2-T6** — Atualizar `apps/server/src/app/hono/routers/storage/FilesStorageRouter.ts` e `apps/server/src/app/hono/routers/storage/StorageRouter.ts`
+  - **Depende de:** F2-T1, F2-T2, F2-T5
+  - **Resultado observavel:** a rota de emissao de signed upload URL fica exposta no path acordado com `verifyAuthentication`, `verifyGodAccount` e validacao de JSON, e `GET /storage/files` + `DELETE /storage/files/:folder/:fileName` passam a exigir o mesmo par de middlewares.
   - **Camada:** `rest`
 
 ---
 
-## F4 — Studio: UI e Integração
+## F3 — Web: UI e Integracao
 
-> ⚡ Pode rodar em paralelo com F2 após F1 estar concluída.
+> ⚡ Pode rodar em paralelo com F2 e F4 apos F1 estar concluida.
 
-**Objetivo:** Implementar no `studio` o fluxo de voz/geracao/polling/cancelamento por bloco e player compacto, preservando `audio` no ciclo de edicao.
+**Objetivo:** Implementar a interface e integracao client-side na aplicacao web — widgets, actions e chamadas RPC/REST — consumindo os contratos definidos no core.
 
 ### Tarefas
 
-- [x] **F4-T1** — Estender `LessonService` REST do studio com metodos de audio
+- [x] **F3-T1** — Atualizar `apps/web/src/rest/services/StorageService.ts`
   - **Depende de:** F1-T3
-  - **Resultado observavel:** `apps/studio/src/rest/services/LessonService.ts` implementa `fetchAudioVoices`, gerar/cancelar individual e em lote.
+  - **Resultado observavel:** o adapter REST do `web` implementa `createSignedUploadUrl(folderPath, fileName)` e `uploadFile(folder, file)` passa a enviar screenshots por signed upload sem depender do endpoint legado.
   - **Camada:** `rest`
 
-- [x] **F4-T2** — Criar hook `useStorageAudio`
-  - **Depende de:** F1-T3
-  - **Resultado observavel:** existe `apps/studio/src/ui/global/hooks/useStorageAudio.ts` retornando URL publica de `audios/story` ou `null`.
-  - **Camada:** `ui`
+---
 
-- [x] **F4-T3** — Criar hook `useAudioGenerationPolling`
+## F4 — Studio: UI e Integracao
+
+> ⚡ Pode rodar em paralelo com F2 e F3 apos F1 estar concluida.
+
+**Objetivo:** Implementar a interface e integracao client-side na aplicacao studio — widgets, actions e chamadas RPC/REST — consumindo os contratos definidos no core.
+
+### Tarefas
+
+- [x] **F4-T1** — Criar uma implementacao de `SignedFileStorageProvider` na `studio`
+  - **Depende de:** F1-T2, F1-T4
+  - **Resultado observavel:** a `studio` possui um adapter client-side que recebe `SignedUploadUrl` e executa o upload direto ao Supabase sem trafegar binario pelo `server`.
+  - **Camada:** `provision`
+
+- [x] **F4-T2** — Criar `apps/studio/src/ui/global/contexts/ProvisionContext` e encaixa-lo em `apps/studio/src/app/root.tsx`
   - **Depende de:** F4-T1
-  - **Resultado observavel:** existe polling a cada 3000ms enquanto houver bloco `pending`, com callback de update e erro.
+  - **Resultado observavel:** a UI da `studio` passa a resolver `signedFileStorageProvider` por um contexto proprio de provision, separado do `RestContext`.
   - **Camada:** `ui`
 
-- [x] **F4-T4** — Criar widget `BlockVoiceSelector`
-  - **Depende de:** F1-T2
-  - **Resultado observavel:** seletor de voz com fallback `panda` quando lista vazia.
+- [x] **F4-T3** — Atualizar `apps/studio/src/rest/services/StorageService.ts`
+  - **Depende de:** F1-T3, F4-T1
+  - **Resultado observavel:** `uploadFile(folder, file)` passa a solicitar `POST /storage/signed-upload-url`, montar `SignedUploadUrl` a partir da resposta e delegar o upload direto via `SignedFileStorageProvider`, retornando `RestResponse<{ filename: string }>` com o nome final validado pelo `server`.
+  - **Camada:** `rest`
+
+- [x] **F4-T4** — Atualizar os composition roots de storage da `studio` em `apps/studio/src/ui/global/contexts/RestContext/useRestContextProvider.ts` e `apps/studio/src/app/middlewares/RestMiddleware.ts`
+  - **Depende de:** F4-T2, F4-T3
+  - **Resultado observavel:** tanto a arvore de UI quanto o contexto de rotas da `studio` instanciam `StorageService` com o novo grafo de dependencias, sem recriar providers dentro do service.
+  - **Camada:** `studio`
+
+- [x] **F4-T5** — Atualizar `apps/studio/src/ui/global/widgets/components/ImageInput/index.tsx`
+  - **Depende de:** F4-T4
+  - **Resultado observavel:** o entry point do widget continua preservando a API publica de `ImageInput`, mas passa a resolver as dependencias pelo contexto correto apos a migracao para signed upload.
   - **Camada:** `ui`
 
-- [x] **F4-T5** — Criar widget `BlockAudioPlayer` e hook `useBlockAudioPlayer`
-  - **Depende de:** F4-T2
-  - **Resultado observavel:** player compacto com play/pause, seek e progresso.
+- [x] **F4-T6** — Atualizar `apps/studio/src/ui/global/widgets/components/ImageInput/useImageInput.ts`
+  - **Depende de:** F4-T3, F4-T5
+  - **Resultado observavel:** o hook envia o `fileName` editado pelo usuario para o service, chama `onSubmit(response.body.filename)` no sucesso e trata separadamente erro de emissao da signed URL e erro de upload direto sem perder o estado de loading/toast atual.
   - **Camada:** `ui`
 
-- [x] **F4-T6** — Criar widget `BlockAudioControls`
-  - **Depende de:** F4-T4, F4-T5
-  - **Resultado observavel:** composicao de seletor, botao gerar/regenerar, cancelar, badge/spinner e player por status.
+- [x] **F4-T7** — Atualizar `apps/studio/src/ui/global/widgets/components/ImageInput/ImageInputView.tsx`
+  - **Depende de:** F4-T6
+  - **Resultado observavel:** o dialog continua exibindo preview e input editavel de nome, mas deixa explicito que o campo define o `fileName` validado pelo backend e bloqueia arquivos acima de `5 MB`.
   - **Camada:** `ui`
 
-- [x] **F4-T7** — Preservar `audio` no hook `useLessonStoryPage`
-  - **Depende de:** F4-T1
-  - **Resultado observavel:** `toEditorItem` e `toPersistedTextBlock` mantem `audio` sem perda no save.
-  - **Camada:** `ui`
-
-- [x] **F4-T8** — Integrar voz/geracao/cancelamento/polling em `useLessonStoryPage`
-  - **Depende de:** F4-T3, F4-T7
-  - **Resultado observavel:** handlers de voz/geracao/cancelamento funcionam, sincronizam alteracoes locais antes de chamar endpoints por `blockIndex`.
-  - **Camada:** `ui`
-
-- [x] **F4-T9** — Integrar controles de audio em `TextBlockCard`
-  - **Depende de:** F4-T6, F4-T8
-  - **Resultado observavel:** card renderiza `BlockAudioControls` para tipos elegiveis no estado expandido.
-  - **Camada:** `ui`
-
-- [x] **F4-T10** — Integrar controle em lote/polling no `TextBlocksView` e `LessonStoryPageView`
-  - **Depende de:** F4-T8, F4-T9
-  - **Resultado observavel:** header exibe CTA de geracao em lote, indicador de polling e mantem drag-and-drop ativo durante `pending`.
+- [x] **F4-T8** — Ajustar `apps/studio/src/ui/lesson/widgets/components/PictureInput/usePictureInput.ts` para preservar o refetch do seletor apos upload/remocao
+  - **Depende de:** F4-T6
+  - **Resultado observavel:** o fluxo de `story` continua listando imagens com paginacao, refetchando apos upload/remocao e mantendo preview/selecao sem trafegar binario pelo `server`.
   - **Camada:** `ui`
