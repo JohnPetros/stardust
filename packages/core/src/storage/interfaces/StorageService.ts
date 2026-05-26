@@ -6,10 +6,6 @@ import type { EmbeddingNamespace, FileStorageFolderPath } from '../domain/struct
 
 export interface StorageService {
   listFiles(params: FilesListingParams): Promise<RestResponse<PaginationResponse<string>>>
-  uploadFile(
-    folder: FileStorageFolderPath,
-    file: File,
-  ): Promise<RestResponse<{ filename: string }>>
   createSignedUploadUrl(
     folderPath: FileStorageFolderPath,
     fileName: Text,
