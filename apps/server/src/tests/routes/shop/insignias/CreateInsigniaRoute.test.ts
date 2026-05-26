@@ -78,7 +78,7 @@ describe('[POST] /shop/insignias', () => {
     expect(response.body).toEqual(
       expect.objectContaining({
         ...new ValidationError([
-          { name: 'name', messages: ['Seu nome deve conter pelo menos 3 letras'] },
+          { name: 'name', messages: ['Nome deve conter pelo menos 3 caracteres'] },
         ]),
       }),
     )
@@ -104,22 +104,9 @@ describe('[POST] /shop/insignias', () => {
   it('should create an insignia', async () => {
     ENV.godAccountIds.push(authFixture.getAccountId())
 
-    const currentInsigniasResponse = await supabaseFixture.supabase
-      .from('insignias')
-      .select('role')
+    supabaseFixture.deleteInsigniaByRole('engineer')
 
-    if (currentInsigniasResponse.error) {
-      throw currentInsigniasResponse.error
-    }
-
-    const currentRoles = new Set(
-      currentInsigniasResponse.data.map((insignia) => insignia.role),
-    )
-    const roleToCreate = currentRoles.has('engineer') ? 'engineer' : 'god'
-
-    supabaseFixture.deleteInsigniaByRole(roleToCreate)
-
-    const insignia = InsigniasFaker.fakeDto({ role: roleToCreate })
+    const insignia = InsigniasFaker.fakeDto({ role: 'engineer' })
 
     const response = await request(honoFixture.server)
       .post('/shop/insignias')

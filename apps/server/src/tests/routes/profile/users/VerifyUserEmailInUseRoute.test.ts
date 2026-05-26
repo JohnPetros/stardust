@@ -38,7 +38,7 @@ describe('[GET] /profile/users/verify-email-in-use', () => {
     expect(response.body).toEqual(
       expect.objectContaining({
         ...new ValidationError([
-          { name: 'email', messages: ['Informe um e-mail válido!'] },
+          { name: 'email', messages: ['Informe um e-mail válido'] },
         ]),
       }),
     )

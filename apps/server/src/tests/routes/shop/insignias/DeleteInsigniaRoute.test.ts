@@ -94,9 +94,9 @@ describe('[DELETE] /shop/insignias/:insigniaId', () => {
   it('should delete an existing insignia', async () => {
     ENV.godAccountIds.push(authFixture.getAccountId())
 
-    supabaseFixture.deleteInsigniaByRole('god')
+    supabaseFixture.deleteInsigniaByRole('engineer')
 
-    const insignia = InsigniasFaker.fakeDto({ role: 'god' })
+    const insignia = InsigniasFaker.fakeDto({ role: 'engineer' })
     await shopFixture.createInsignias([insignia])
 
     const response = await request(honoFixture.server)

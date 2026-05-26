@@ -38,7 +38,7 @@ describe('[GET] /profile/users/verify-name-in-use', () => {
     expect(response.body).toEqual(
       expect.objectContaining({
         ...new ValidationError([
-          { name: 'name', messages: ['Seu nome deve conter pelo menos 3 letras'] },
+          { name: 'name', messages: ['Nome deve conter pelo menos 3 caracteres'] },
         ]),
       }),
     )
