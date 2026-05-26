@@ -1,12 +1,10 @@
 ---
-description: Criar um plano de implementacao estruturado em fases e tarefas a partir de uma spec tecnica ou bug report.
+description: Implementar no codebase um plano de implementacao derivado de uma spec tecnica, seguindo a arquitetura e diretrizes do Stardust.
 ---
 
-# Prompt: Criar Plano
+# Prompt: Implementar Plano
 
-**Objetivo:** Transformar uma Spec técnica ou Bug Report em um **plano de implementação estruturado**, dividido em fases e tarefas atômicas, com dependências explícitas e resultados observáveis por tarefa. O plano deve ser diretamente acionável por um desenvolvedor ou agente de implementação.
-
----
+**Objetivo principal:** Implementar no codebase um plano de implementacao derivado de uma spec tecnica, seguindo a arquitetura e diretrizes do Stardust, **respeitando rigorosamente a ordem de fases e tarefas definidas no plano para maximizar a paralelizacao e evitar retrabalho.**
 
 ## Entrada
 
