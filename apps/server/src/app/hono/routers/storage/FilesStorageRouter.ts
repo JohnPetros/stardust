@@ -12,7 +12,6 @@ import {
 import {
   FetchFilesListController,
   RemoveFileController,
-  UploadFileController,
 } from '@/rest/controllers/storage'
 import { SupabaseFileStorageProvider } from '@/provision/storage'
 import { HonoRouter } from '../../HonoRouter'
@@ -23,24 +22,6 @@ export class FilesStorageRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/files')
   private readonly authMiddleware = new AuthMiddleware()
   private readonly validationMiddleware = new ValidationMiddleware()
-
-  private registerUploadFileRoute(): void {
-    this.router.post(
-      '/:folder',
-      this.authMiddleware.verifyAuthentication,
-      this.validationMiddleware.validate(
-        'param',
-        z.object({ folder: fileStorageFolderPathSchema }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const storageProvider = new SupabaseFileStorageProvider(http.getSupabase())
-        const controller = new UploadFileController(storageProvider)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
-    )
-  }
 
   private registerlistFilesRoute(): void {
     this.router.get(
@@ -89,7 +70,6 @@ export class FilesStorageRouter extends HonoRouter {
   }
 
   registerRoutes(): Hono {
-    this.registerUploadFileRoute()
     this.registerRemoveFileRoute()
     this.registerlistFilesRoute()
     return this.router
