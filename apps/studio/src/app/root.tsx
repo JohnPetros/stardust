@@ -14,6 +14,7 @@ import type { Route } from './+types/root'
 import globalStyles from '../ui/global/styles/global.css?url'
 import { Toaster } from 'sonner'
 
+import { ProvisionContextProvider } from '@/ui/global/contexts/ProvisionContext'
 import { RestContextProvider } from '@/ui/global/contexts/RestContext'
 
 export const links: Route.LinksFunction = () => [
@@ -89,10 +90,12 @@ export const App = () => {
     <div className='h-screen w-full'>
       <NuqsAdapter>
         <QueryClientProvider client={queryClient}>
-          <RestContextProvider>
-            <Toaster position='top-right' richColors />
-            <Outlet />
-          </RestContextProvider>
+          <ProvisionContextProvider>
+            <RestContextProvider>
+              <Toaster position='top-right' richColors />
+              <Outlet />
+            </RestContextProvider>
+          </ProvisionContextProvider>
         </QueryClientProvider>
       </NuqsAdapter>
     </div>

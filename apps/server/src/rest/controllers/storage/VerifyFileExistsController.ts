@@ -1,5 +1,5 @@
 import type { Http } from '@stardust/core/global/interfaces'
-import type { StorageProvider } from '@stardust/core/storage/interfaces'
+import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
 import { VerifyFileExistsUseCase } from '@stardust/core/storage/use-cases'
 
 type Schema = {
@@ -11,7 +11,7 @@ type Schema = {
 export class VerifyFileExistsController {
   constructor(
     private readonly folder: string,
-    private readonly storageProvider: StorageProvider,
+    private readonly storageProvider: FileStorageProvider,
   ) {}
 
   async handle(http: Http<Schema>) {

@@ -6,10 +6,10 @@ import type { z } from 'zod'
 import type { StorageService } from '@stardust/core/storage/interfaces'
 import type { InsigniaDto } from '@stardust/core/shop/entities/dtos'
 import { insigniaSchema } from '@stardust/validation/shop/schemas'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { Text } from '@stardust/core/global/structures'
 
-const INSIGNIAS_FOLDER = StorageFolder.createAsInsignias()
+const INSIGNIAS_FOLDER = FileStorageFolderPath.createAsInsignias()
 
 type FormData = z.infer<typeof insigniaSchema>
 

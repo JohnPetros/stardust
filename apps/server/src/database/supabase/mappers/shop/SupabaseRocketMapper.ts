@@ -32,7 +32,6 @@ export class SupabaseRocketMapper {
       name: rocketDto.name,
       price: rocketDto.price,
       image: rocketDto.image,
-      slug: rocket.name.slug.value,
     } as SupabaseRocketPayload
   }
 }

@@ -59,7 +59,7 @@ Antes de iniciar, consulte os documentos de regras de cada camada envolvida no e
 ### 🔑 Segredos e Variáveis de Ambiente
 
 - [ ] Nenhuma credencial hardcoded — todas as configs usam `ENV` (ref: `documentation/rules/provision-layer-rules.md`)
-- [ ] Providers (`SupabaseStorageProvider`, etc.) não expõem chaves ou clients do SDK externamente
+- [ ] Providers (`SupabaseFileStorageProvider`, etc.) não expõem chaves ou clients do SDK externamente
 - [ ] Arquivos `.env.example` não contêm valores reais
 - [ ] Variáveis de ambiente são validadas via Zod no boot (padrão `envSchema`)
 

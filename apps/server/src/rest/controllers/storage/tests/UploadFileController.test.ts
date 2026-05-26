@@ -1,13 +1,13 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
-import type { StorageProvider } from '@stardust/core/storage/interfaces'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { UploadFileController } from '../UploadFileController'
 
 describe('Upload File Controller', () => {
   let http: Mock<Http<{ routeParams: { folder: string } }>>
-  let storageProvider: Mock<StorageProvider>
+  let storageProvider: Mock<FileStorageProvider>
   let controller: UploadFileController
 
   beforeEach(() => {
@@ -34,7 +34,7 @@ describe('Upload File Controller', () => {
     expect(http.getFile).toHaveBeenCalledTimes(1)
     expect(storageProvider.upload).toHaveBeenCalledTimes(1)
     expect(storageProvider.upload).toHaveBeenCalledWith(
-      StorageFolder.create(folder),
+      FileStorageFolderPath.create(folder),
       file,
     )
     expect(http.statusCreated).toHaveBeenCalledTimes(1)

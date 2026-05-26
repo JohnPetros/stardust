@@ -28,6 +28,16 @@ export class SupabaseAuthService implements AuthService {
     session_expired: 'session_expired',
   }
 
+  private isUnauthorizedFetchAccountError(error: AuthError): boolean {
+    return (
+      error.code === this.AUTH_ERROR_CODES.no_authorization ||
+      error.code === this.AUTH_ERROR_CODES.bad_jwt ||
+      error.code === this.AUTH_ERROR_CODES.session_expired ||
+      error.status === HTTP_STATUS_CODE.unauthorized ||
+      error.message === 'Auth session missing!'
+    )
+  }
+
   async signIn(email: Email, password: Password): Promise<RestResponse<SessionDto>> {
     const { data, error } = await this.supabase.auth.signInWithPassword({
       email: email.value,
@@ -422,22 +432,28 @@ export class SupabaseAuthService implements AuthService {
     } = await this.supabase.auth.getUser()
 
     if (error) {
-      switch (error.code) {
-        case this.AUTH_ERROR_CODES.no_authorization:
-          return new RestResponse<AccountDto>({
-            errorMessage: 'Conta não autorizada',
-            statusCode: HTTP_STATUS_CODE.unauthorized,
-          })
-        case this.AUTH_ERROR_CODES.bad_jwt:
+      if (this.isUnauthorizedFetchAccountError(error)) {
+        if (error.code === this.AUTH_ERROR_CODES.bad_jwt) {
           return new RestResponse<AccountDto>({
             errorMessage: 'Token de autenticação inválido',
             statusCode: HTTP_STATUS_CODE.unauthorized,
           })
-        case this.AUTH_ERROR_CODES.session_expired:
+        }
+
+        if (error.code === this.AUTH_ERROR_CODES.session_expired) {
           return new RestResponse<AccountDto>({
             errorMessage: 'Sessão expirada, faça login novamente',
             statusCode: HTTP_STATUS_CODE.unauthorized,
           })
+        }
+
+        return new RestResponse<AccountDto>({
+          errorMessage: 'Conta não autorizada',
+          statusCode: HTTP_STATUS_CODE.unauthorized,
+        })
+      }
+
+      switch (error.code) {
         default:
           return this.supabaseAuthError<AccountDto>(
             error,

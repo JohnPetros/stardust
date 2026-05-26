@@ -24,12 +24,17 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 
 **Queue**: Event Dispatcher → Inngest → Job.handle(amqp) → Use Case
 
+**Lesson audio generation**: REST `/lesson/text-blocks` → use cases do modulo `lesson` → eventos Inngest (`requested`, `batch requested`, `generated`, `cancelled`) → jobs de fan-out, TTS/upload e persistencia final do `audio` em `stars.texts[blockIndex].audio`
+
+**Studio signed upload**: Studio `ImageInput` → `StorageService.createSignedUploadUrl(...)` → Server `POST /storage/signed-upload-url` → `CreateSignedUploadUrl` → `SupabaseFileStorageProvider.createSignedUploadUrl(...)` → upload direto do binario ao Supabase Storage
+
 ## Padrões Principais
 
 - **Widget** na UI para separar View (renderização), Hook (lógica/estado) e Index (integração).
 - **Action/RPC** para conectar rotas ao domínio sem acoplar o framework ao Core.
 - **MCP Toolkit** no server para compor tools com `inputSchema`/`outputSchema` na borda e delegar comportamento ao Core.
 - **RestClient** como adapter sobre Axios/Fetch para chamadas HTTP externas.
+- **ProvisionContext no Studio** para resolver providers client-side de infraestrutura, como o upload direto por URL assinada, sem misturar essa responsabilidade no dominio nem no widget.
 - **Job** para tarefas assíncronas, agendadas ou falháveis (e-mail, relatórios).
 - **Factory Functions** no lugar de `new Class()` para Serviços e Controllers.
 

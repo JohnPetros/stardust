@@ -5,6 +5,13 @@ const sharedConfig: Config = {
   testEnvironment: 'node',
   clearMocks: true,
   coverageProvider: 'v8',
+
+  // Route tests share Supabase-backed fixtures and become flaky under heavy parallelism.
+  maxWorkers: 1,
+  testTimeout: 15000,
+
+  testMatch: ['**/tests/**/*.test.ts'],
+
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
@@ -18,7 +25,9 @@ const sharedConfig: Config = {
     '^.+\\.m?[jc]s$': [
       'babel-jest',
       {
-        presets: [['@babel/preset-env', { targets: { node: 'current' }, modules: 'commonjs' }]],
+        presets: [
+          ['@babel/preset-env', { targets: { node: 'current' }, modules: 'commonjs' }],
+        ],
       },
     ],
   },

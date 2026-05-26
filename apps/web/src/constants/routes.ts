@@ -8,6 +8,7 @@ export const ROUTES = {
     sitemap: '/sitemap.xml',
   },
   ranking: '/ranking',
+  notes: '/notes',
   space: '/space',
   shop: '/shop',
   challenging: {

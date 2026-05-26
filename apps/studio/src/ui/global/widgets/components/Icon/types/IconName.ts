@@ -47,3 +47,5 @@ export type IconName =
   | 'sort-asc'
   | 'sort-desc'
   | 'feedback'
+  | 'audio'
+  | 'file-text'

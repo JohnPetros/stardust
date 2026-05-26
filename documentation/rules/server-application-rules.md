@@ -67,6 +67,12 @@ npm run test
   - Banco (Supabase CLI): `npm run db:local|db:pull|db:push|db:types -w @stardust/server`
 - Referencia geral: `documentation/tooling.md`.
 
+## Supabase CLI
+
+- A configuracao da CLI fica em `apps/server/supabase/config.toml`.
+- Migrations SQL ficam em `apps/server/supabase/migrations`.
+- O deploy de producao deve aplicar migrations no pipeline antes do release da app, nao no boot do servidor.
+
 ## Estruturacao de pastas
 
 ```

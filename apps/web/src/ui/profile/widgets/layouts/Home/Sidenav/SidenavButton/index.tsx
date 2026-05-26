@@ -1,12 +1,9 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { twMerge } from 'tailwind-merge'
 
 import type { IconName } from '@/ui/global/widgets/components/Icon/types'
-import { AnimatedTitle } from './AnimatedTitle'
-import { Icon } from '@/ui/global/widgets/components/Icon'
-import { Tooltip } from '@/ui/global/widgets/components/Tooltip'
+import { SidenavButtonView } from './SidenavButtonView'
 
 type SidenavButtonProps = {
   icon: IconName
@@ -26,21 +23,13 @@ export function SidenavButton({
   onClick,
 }: SidenavButtonProps) {
   return (
-    <Tooltip content={!isExpanded ? title : ''} direction='right'>
-      <button
-        type='button'
-        onClick={onClick}
-        className={twMerge(
-          'relative flex h-auto w-max items-center justify-center rounded-md bg-transparent p-3 text-sm text-gray-100 outline-green-500 transition-colors duration-200 z-20 hover:bg-green-700/30',
-          isActive ? 'bg-green-500/30' : '',
-        )}
-      >
-        <Icon name={icon} size={18} className='text-green-400' />
-
-        <AnimatedTitle isExpanded={isExpanded}>{title}</AnimatedTitle>
-
-        {countBadge && countBadge}
-      </button>
-    </Tooltip>
+    <SidenavButtonView
+      icon={icon}
+      title={title}
+      isExpanded={isExpanded}
+      isActive={isActive}
+      countBadge={countBadge}
+      onClick={onClick}
+    />
   )
 }

@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import type { TextBlockDto } from '@stardust/core/global/entities/dtos'
 import type { ToastProvider } from '@stardust/core/global/interfaces'
-import { type Id, TextBlock } from '@stardust/core/global/structures'
+import { type Id, Integer, TextBlock } from '@stardust/core/global/structures'
 import type { LessonService } from '@stardust/core/lesson/interfaces'
+import { AudioVoice } from '@stardust/core/lesson/structures'
+import type { AudioVoiceDto } from '@stardust/core/lesson/structures/dtos'
 
 import { CACHE } from '@/constants'
 import { useFetch } from '@/ui/global/hooks/useFetch'
@@ -11,6 +13,7 @@ import { useActionButtonStore } from '@/ui/global/stores/ActionButtonStore'
 import { useMdx } from '@/ui/global/widgets/components/Mdx/useMdx'
 import type { SortableItem } from '@/ui/global/widgets/components/SortableList/types'
 import type { SupportedTextBlockType, TextBlockEditorItem } from './types'
+import { useAudioGenerationPolling } from './useAudioGenerationPolling'
 
 const SUPPORTED_TEXT_BLOCK_TYPES: SupportedTextBlockType[] = [
   'default',
@@ -52,6 +55,7 @@ function toEditorItem(textBlock: TextBlockDto): TextBlockEditorItem {
     title: textBlock.title,
     picture: textBlock.picture,
     isRunnable: textBlock.isRunnable,
+    audio: textBlock.audio,
   }
 }
 
@@ -64,6 +68,7 @@ function toPersistedTextBlock(textBlock: TextBlockEditorItem): TextBlockDto {
       ? textBlock.picture
       : undefined,
     isRunnable: textBlock.type === 'code' ? Boolean(textBlock.isRunnable) : undefined,
+    audio: textBlock.audio,
   }
 }
 
@@ -76,6 +81,10 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
   const [baselineTextBlocks, setBaselineTextBlocks] = useState<TextBlockDto[]>([])
   const [expandedBlockId, setExpandedBlockId] = useState<string | null>(null)
   const [fetchErrorMessage, setFetchErrorMessage] = useState('')
+  const [audioVoices, setAudioVoices] = useState<AudioVoiceDto[]>([])
+  const [isGeneratingAudiosInBatch, setIsGeneratingAudiosInBatch] = useState(false)
+  const [isCancellingAudiosInBatch, setIsCancellingAudiosInBatch] = useState(false)
+  const [generatingAudioBlockIds, setGeneratingAudioBlockIds] = useState<string[]>([])
   const textBlocksScrollRef = useRef<HTMLDivElement>(null)
   const previewScrollRef = useRef<HTMLDivElement>(null)
   const previousLengthRef = useRef(textBlocks.length)
@@ -100,6 +109,13 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
     dependencies: [starId.value],
     shouldRefetchOnFocus: false,
     fetcher: async () => await lessonService.fetchStarStory(starId),
+    onError: setFetchErrorMessage,
+  })
+
+  const audioVoicesFetch = useFetch<AudioVoiceDto[]>({
+    key: `${CACHE.lessonStoryTextBlocks.key}-audio-voices`,
+    shouldRefetchOnFocus: false,
+    fetcher: async () => await lessonService.fetchAudioVoices(),
     onError: setFetchErrorMessage,
   })
 
@@ -132,6 +148,11 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
     setIsSuccessful,
   ])
 
+  useEffect(() => {
+    if (!audioVoicesFetch.data) return
+    setAudioVoices(audioVoicesFetch.data)
+  }, [audioVoicesFetch.data])
+
   const persistedTextBlocks = useMemo(() => {
     return textBlocks.map(toPersistedTextBlock)
   }, [textBlocks])
@@ -157,9 +178,18 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
       serializeTextBlocks(persistedTextBlocks) !== serializeTextBlocks(baselineTextBlocks)
     )
   }, [baselineTextBlocks, persistedTextBlocks])
+  const baselineSerializedTextBlocks = useMemo(() => {
+    return serializeTextBlocks(baselineTextBlocks)
+  }, [baselineTextBlocks])
 
-  const isLoading = textBlocksFetch.isLoading || storyFetch.isLoading
-  const fetchError = fetchErrorMessage || textBlocksFetch.error || storyFetch.error || ''
+  const isLoading =
+    textBlocksFetch.isLoading || storyFetch.isLoading || audioVoicesFetch.isLoading
+  const fetchError =
+    fetchErrorMessage ||
+    textBlocksFetch.error ||
+    storyFetch.error ||
+    audioVoicesFetch.error ||
+    ''
   const isBlockedBecauseOfLegacyStory = Boolean(
     legacyStory && loadedTextBlocks.length === 0,
   )
@@ -179,6 +209,9 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
     textBlocks.length === 0 ||
     !areTextBlocksValid ||
     !hasChanges
+  const hasAudioPending = useMemo(() => {
+    return textBlocks.some((textBlock) => textBlock.audio?.status === 'pending')
+  }, [textBlocks])
 
   useEffect(() => {
     setCanExecute(!isSaveDisabled)
@@ -224,6 +257,17 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
   function updateLocalTextBlocks(nextTextBlocks: TextBlockEditorItem[]) {
     setTextBlocks(nextTextBlocks)
     clearActionState()
+  }
+
+  function toEditorItemsFromPersisted(
+    currentTextBlocks: TextBlockEditorItem[],
+    persistedBlocks: TextBlockDto[],
+  ) {
+    return currentTextBlocks.map((textBlock, index) => ({
+      ...textBlock,
+      ...persistedBlocks[index],
+      type: persistedBlocks[index].type as SupportedTextBlockType,
+    }))
   }
 
   function handleAddBlock(type: SupportedTextBlockType) {
@@ -278,6 +322,14 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
   }
 
   function handleReorder(reorderedTextBlocks: TextBlockEditorItem[]) {
+    const isSameOrder =
+      reorderedTextBlocks.length === textBlocks.length &&
+      reorderedTextBlocks.every(
+        (textBlock, index) => textBlock.id === textBlocks[index]?.id,
+      )
+
+    if (isSameOrder) return
+
     updateLocalTextBlocks(reorderedTextBlocks)
   }
 
@@ -297,15 +349,171 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
     const responseTextBlocks = response.body
     setBaselineTextBlocks(responseTextBlocks)
     setTextBlocks((currentTextBlocks) =>
-      currentTextBlocks.map((textBlock, index) => ({
-        ...textBlock,
-        ...responseTextBlocks[index],
-        type: responseTextBlocks[index].type as SupportedTextBlockType,
-      })),
+      toEditorItemsFromPersisted(currentTextBlocks, responseTextBlocks),
     )
     setIsSuccessful(true)
     setIsExecuting(false)
   }
+
+  async function syncTextBlocksBeforeAudioAction(): Promise<boolean> {
+    if (!hasChanges) return true
+
+    const response = await lessonService.updateTextBlocks(starId, persistedTextBlocks)
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return false
+    }
+
+    setBaselineTextBlocks(response.body)
+    setTextBlocks((currentTextBlocks) =>
+      toEditorItemsFromPersisted(currentTextBlocks, response.body),
+    )
+    return true
+  }
+
+  function findBlockIndexById(blockId: string): number {
+    return textBlocks.findIndex((textBlock) => textBlock.id === blockId)
+  }
+
+  function handleAudioVoiceChange(blockId: string, voice: AudioVoiceDto['value']) {
+    updateLocalTextBlocks(
+      textBlocks.map((textBlock) => {
+        if (textBlock.id !== blockId) return textBlock
+
+        return {
+          ...textBlock,
+          audio: {
+            fileName: textBlock.audio?.fileName ?? '',
+            status: textBlock.audio?.status ?? 'idle',
+            voice,
+          },
+        }
+      }),
+    )
+  }
+
+  async function handleGenerateTextBlockAudio(blockId: string) {
+    const blockIndex = findBlockIndexById(blockId)
+    if (blockIndex < 0) return
+
+    setGeneratingAudioBlockIds((current) =>
+      current.includes(blockId) ? current : [...current, blockId],
+    )
+
+    const shouldContinue = await syncTextBlocksBeforeAudioAction()
+    if (!shouldContinue) {
+      setGeneratingAudioBlockIds((current) => current.filter((id) => id !== blockId))
+      return
+    }
+
+    const currentBlock = textBlocks[blockIndex]
+    const response = await lessonService.triggerTextBlockAudioGeneration(
+      starId,
+      Integer.create(blockIndex),
+      AudioVoice.create(currentBlock.audio?.voice ?? 'panda'),
+    )
+
+    setGeneratingAudioBlockIds((current) => current.filter((id) => id !== blockId))
+
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+
+    setBaselineTextBlocks(response.body)
+    setTextBlocks((currentTextBlocks) =>
+      toEditorItemsFromPersisted(currentTextBlocks, response.body),
+    )
+  }
+
+  async function handleGenerateAllTextBlocksAudios() {
+    setIsGeneratingAudiosInBatch(true)
+    const shouldContinue = await syncTextBlocksBeforeAudioAction()
+    if (!shouldContinue) {
+      setIsGeneratingAudiosInBatch(false)
+      return
+    }
+
+    const response = await lessonService.triggerTextBlocksAudioGenerationInBatch(starId)
+    setIsGeneratingAudiosInBatch(false)
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+
+    setBaselineTextBlocks(response.body)
+    setTextBlocks((currentTextBlocks) =>
+      toEditorItemsFromPersisted(currentTextBlocks, response.body),
+    )
+  }
+
+  async function handleCancelTextBlockAudio(blockId: string) {
+    const blockIndex = findBlockIndexById(blockId)
+    if (blockIndex < 0) return
+
+    const response = await lessonService.cancelTextBlockAudioGeneration(
+      starId,
+      Integer.create(blockIndex),
+    )
+
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+
+    setBaselineTextBlocks(response.body)
+    setTextBlocks((currentTextBlocks) =>
+      toEditorItemsFromPersisted(currentTextBlocks, response.body),
+    )
+  }
+
+  async function handleCancelAllTextBlocksAudios() {
+    setIsCancellingAudiosInBatch(true)
+
+    const response = await lessonService.cancelTextBlocksAudioGenerationInBatch(starId)
+
+    setIsCancellingAudiosInBatch(false)
+    if (response.isFailure) {
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+
+    setBaselineTextBlocks(response.body)
+    setTextBlocks((currentTextBlocks) =>
+      toEditorItemsFromPersisted(currentTextBlocks, response.body),
+    )
+  }
+
+  function isGeneratingAudioByBlockId(blockId: string) {
+    return generatingAudioBlockIds.includes(blockId)
+  }
+
+  const handlePollingUpdate = useCallback(
+    (updatedTextBlocks: TextBlockDto[]) => {
+      if (serializeTextBlocks(updatedTextBlocks) === baselineSerializedTextBlocks) return
+
+      setBaselineTextBlocks(updatedTextBlocks)
+      setTextBlocks((currentTextBlocks) =>
+        toEditorItemsFromPersisted(currentTextBlocks, updatedTextBlocks),
+      )
+    },
+    [baselineSerializedTextBlocks, setBaselineTextBlocks, setTextBlocks],
+  )
+
+  const handlePollingError = useCallback(
+    (message: string) => {
+      toastProvider.showError(message)
+    },
+    [toastProvider],
+  )
+
+  const { isPolling: isAudioPolling } = useAudioGenerationPolling({
+    starId,
+    textBlocks,
+    lessonService,
+    onUpdate: handlePollingUpdate,
+    onError: handlePollingError,
+  })
 
   function handleRetry() {
     setFetchErrorMessage('')
@@ -355,6 +563,17 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
     onContentChange: handleContentChange,
     onPictureChange: handlePictureChange,
     onRunnableChange: handleRunnableChange,
+    audioVoices,
+    hasAudioPending,
+    isAudioPolling,
+    isGeneratingAudiosInBatch,
+    isCancellingAudiosInBatch,
+    isGeneratingAudioByBlockId,
+    onAudioVoiceChange: handleAudioVoiceChange,
+    onGenerateAudio: handleGenerateTextBlockAudio,
+    onCancelAudio: handleCancelTextBlockAudio,
+    onGenerateAudiosInBatch: handleGenerateAllTextBlocksAudios,
+    onCancelAudiosInBatch: handleCancelAllTextBlocksAudios,
     onReorder: handleReorder,
     onSave: handleSaveButtonClick,
     onTextBlocksScrollToTop: handleTextBlocksScrollToTop,

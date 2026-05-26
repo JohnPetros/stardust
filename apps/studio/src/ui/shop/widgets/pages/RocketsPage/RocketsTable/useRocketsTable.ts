@@ -7,7 +7,7 @@ import type { StorageService } from '@stardust/core/storage/interfaces'
 import type { RocketDto } from '@stardust/core/shop/entities/dtos'
 import { ListingOrder, OrdinalNumber, Text, Id } from '@stardust/core/global/structures'
 import { Rocket } from '@stardust/core/shop/entities'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 import { CACHE } from '@/constants'
 import { usePaginatedFetch } from '@/ui/global/hooks/usePaginatedFetch'
@@ -64,7 +64,7 @@ export function useRocketsTable({ shopService, toastProvider, storageService }: 
 
   async function removeImageFile(imageName: string) {
     const response = await storageService.removeFile(
-      StorageFolder.createAsRockets(),
+      FileStorageFolderPath.createAsImagesRockets(),
       Text.create(imageName),
     )
     if (response.isFailure) {

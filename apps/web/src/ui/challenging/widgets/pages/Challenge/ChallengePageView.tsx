@@ -10,6 +10,7 @@ type Props = {
   challengeTitle: string | null
   panelsLayout: PanelsLayout
   shouldHaveConfettiAnimation: boolean
+  notesSlot: ReactNode
   challengeNavigationSlot: ReactNode
   challengeNavigationAlertDialogSlot: ReactNode
   handleBackButtonClick: () => void
@@ -19,6 +20,7 @@ type Props = {
 export const ChallengePageView = ({
   challengeTitle,
   shouldHaveConfettiAnimation,
+  notesSlot,
   challengeNavigationSlot,
   challengeNavigationAlertDialogSlot,
   handleBackButtonClick,
@@ -70,7 +72,10 @@ export const ChallengePageView = ({
           <h1 className='text-lg font-semibold text-gray-100'>{challengeTitle}</h1>
         </div>
 
-        {challengeNavigationSlot}
+        <div className='flex items-center gap-2'>
+          {notesSlot}
+          {challengeNavigationSlot}
+        </div>
       </div>
 
       {challengeNavigationAlertDialogSlot}

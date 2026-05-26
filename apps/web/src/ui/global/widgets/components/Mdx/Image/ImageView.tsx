@@ -1,6 +1,7 @@
 import Img from 'next/image'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
-import { useImage } from '@/ui/global/hooks/useImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { REGEX } from '@/constants'
 import { Animation } from '../Animation'
 import { Content } from '../Content'
@@ -12,7 +13,7 @@ type ImageProps = {
 }
 
 export const ImageView = ({ picture, hasAnimation = true, children }: ImageProps) => {
-  const image = useImage('story', picture)
+  const image = useFileStorage(FileStorageFolderPath.createAsStory(), picture)
   const formattedImage = image.replace(REGEX.quotes, '')
 
   return (

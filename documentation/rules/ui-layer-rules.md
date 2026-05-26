@@ -28,6 +28,7 @@ A camada **UI** implementa a interface (Web e Studio) com foco em usabilidade, a
 - **View**: apenas renderizacao.
 - **Hook**: estado, efeitos de UI e handlers.
 - **Entry Point** (`index.tsx`): composicao (conecta Hook + View) e integracoes (RPC/REST/context).
+- **Regra estrutural**: todo widget deve ter um `Entry Point` em `index.tsx` e uma `View` explicita com sufixo `View`. Mesmo widgets simples ou wrappers de dialog/estado vazio nao devem concentrar renderizacao diretamente no `index.tsx`.
 
 > 💡 Regra pratica: integracoes e resolucao de dependencias acontecem no **Entry Point**.
 
@@ -42,13 +43,95 @@ A camada **UI** implementa a interface (Web e Studio) com foco em usabilidade, a
 > - View conter `useEffect` ou chamadas de service.
 > - UI importar `apps/server/**`.
 
+### Anti-padrão: Declarar hook com `const` em vez de `function`
+
+**O que foi feito:**
+Foi criado um hook de widget usando expressao com `const`, por exemplo:
+
+```ts
+export const useTiptapEditorField = ({ value, disabled = false, onChange }: Params) => {
+  // ...
+}
+```
+
+**Por que está errado:**
+Na camada UI do StarDust, hooks devem seguir a convencao de declaracao com `function` para manter consistencia com o Widget Pattern, melhorar legibilidade e padronizar manutencao entre widgets.
+
+**O que deve ser feito:**
+Declarar hooks sempre com `function`, mantendo o prefixo `use`:
+
+```ts
+export function useTiptapEditorField({
+  value,
+  disabled = false,
+  onChange,
+}: Params) {
+  // ...
+}
+```
+
 ## Organizacao e Nomeacao
 
 - Pasta do widget: PascalCase.
 - Entry Point: `index.tsx` (unico ponto de export publico do widget).
 - View: sufixo `View` (ex: `ButtonView.tsx`).
+- Todo widget deve possuir sua propria `View`, inclusive dialogs, empty states e widgets sem hook.
 - Hook: prefixo `use` (ex: `useButton.ts`).
 - Tipos: `types/` quando a tipagem nao for trivial.
+
+### Anti-padrao: renderizar widget inteiro no `index.tsx`
+
+**O que evitar:**
+Criar widgets cuja renderizacao fica toda dentro do `index.tsx`, sem um arquivo `*View.tsx` dedicado.
+
+**Por que esta errado:**
+Isso quebra a consistencia do Widget Pattern, dificulta leitura, reduz previsibilidade estrutural e torna mais custoso evoluir widgets simples para widgets com mais estados ou composicao.
+
+**Como fazer:**
+Mesmo quando o widget nao possui hook proprio, o `index.tsx` deve funcionar como entry point e delegar a renderizacao para uma `View`.
+
+Exemplo correto:
+
+```tsx
+// index.tsx
+import { EmptyStateView } from './EmptyStateView'
+
+type Props = {
+  title: string
+}
+
+export const EmptyState = ({ title }: Props) => {
+  return <EmptyStateView title={title} />
+}
+
+// EmptyStateView.tsx
+type EmptyStateViewProps = {
+  title: string
+}
+
+export const EmptyStateView = ({ title }: EmptyStateViewProps) => {
+  return <div>{title}</div>
+}
+```
+
+### Anti-padrão: Usar prop `icon` no componente `Icon` do Studio
+
+**O que foi feito:**
+Foi usado o componente `Icon` da UI do Studio com a prop errada `icon`, por exemplo:
+
+```tsx
+<Icon icon='audio' className='mr-2 h-4 w-4' />
+```
+
+**Por que está errado:**
+No Studio, o contrato de `Icon` (`LucideIconView`) recebe `name` (tipo `IconName`), nao `icon`. Usar `icon` quebra a tipagem, gera erro de compilacao e despadroniza o uso dos componentes globais da UI.
+
+**O que deve ser feito:**
+Usar sempre a prop `name` com um valor existente em `IconName`:
+
+```tsx
+<Icon name='audio' className='mr-2 h-4 w-4' />
+```
 
 ## Exemplo
 
@@ -87,6 +170,7 @@ export const Button = ({ title, onAction }: { title: string; onAction: () => voi
 ## Checklist (antes do PR)
 
 - Widget segue View/Hook/Entry Point.
+- Todo widget possui `index.tsx` e `*View.tsx`, mesmo sem hook.
 - Hook nao acessa contexts/providers; recebe dependencias via params.
 - Integracao com dados acontece via RPC/REST.
 - Props tipadas; exports sao named.

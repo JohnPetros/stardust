@@ -167,7 +167,11 @@ export class HonoHttp<HonoContext extends Context>
     })
   }
 
-  send(data?: unknown): RestResponse<Response> {
+  send(data?: unknown, statusCode?: number): RestResponse<Response> {
+    if (statusCode) {
+      this.context.status(statusCode as StatusCode)
+    }
+
     const body = this.context.json(data as object)
     const headers = this.getResponseHeaders()
     return new RestResponse({

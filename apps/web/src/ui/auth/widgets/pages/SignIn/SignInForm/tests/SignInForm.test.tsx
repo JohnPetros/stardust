@@ -2,7 +2,9 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { SignInForm } from '..'
-import { GLOBAL_ERROR_MESSAGES } from '@stardust/validation/global/constants'
+
+const INVALID_EMAIL_MESSAGE = 'Informe um e-mail válido'
+const INVALID_PASSWORD_MESSAGE = 'Sua senha deve conter pelo menos 6 caracteres'
 
 describe('SignInForm', () => {
   const onSubmitMock = jest.fn()
@@ -22,14 +24,14 @@ describe('SignInForm', () => {
   it('should render invalid email error message when email is invalid', async () => {
     render(Widget())
 
-    expect(screen.queryByText(GLOBAL_ERROR_MESSAGES.email.regex)).toBeNull()
+    expect(screen.queryByText(INVALID_EMAIL_MESSAGE)).toBeNull()
 
     const { submitButton } = FormFields()
 
     await userEvent.click(submitButton)
 
     await waitFor(() => {
-      expect(screen.getByText(GLOBAL_ERROR_MESSAGES.email.regex)).toBeVisible()
+      expect(screen.getByText(INVALID_EMAIL_MESSAGE)).toBeVisible()
     })
   })
 
@@ -38,13 +40,13 @@ describe('SignInForm', () => {
 
     const { passwordInput, submitButton } = FormFields()
 
-    expect(screen.queryByText(GLOBAL_ERROR_MESSAGES.password.min)).toBeNull()
+    expect(screen.queryByText(INVALID_PASSWORD_MESSAGE)).toBeNull()
 
     await userEvent.type(passwordInput, '12345')
     await userEvent.click(submitButton)
 
     await waitFor(() => {
-      expect(screen.getByText(GLOBAL_ERROR_MESSAGES.password.min)).toBeVisible()
+      expect(screen.getByText(INVALID_PASSWORD_MESSAGE)).toBeVisible()
     })
   })
 

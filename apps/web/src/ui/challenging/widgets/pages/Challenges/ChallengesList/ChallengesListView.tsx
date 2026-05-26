@@ -6,21 +6,23 @@ import { ChallengeCard } from './ChallengeCard'
 
 type Props = {
   challenges: Challenge[]
-  isLoading: boolean
+  isInitialLoading: boolean
+  isLoadingMore: boolean
   isReachedEnd: boolean
   onShowMore: () => void
 }
 
 export const ChallengesListView = ({
   challenges,
-  isLoading,
+  isInitialLoading,
+  isLoadingMore,
   isReachedEnd,
   onShowMore,
 }: Props) => {
   return (
     <div className='mx-auto max-w-2xl pb-40'>
       <div className='space-y-6'>
-        {isLoading ? (
+        {isInitialLoading ? (
           <>
             <ChallengeCardSkeleton />
             <ChallengeCardSkeleton />
@@ -51,7 +53,9 @@ export const ChallengesListView = ({
           </>
         )}
 
-        {!isReachedEnd && <ShowMoreButton isLoading={isLoading} onClick={onShowMore} />}
+        {!isReachedEnd && (
+          <ShowMoreButton isLoading={isLoadingMore} onClick={onShowMore} />
+        )}
       </div>
     </div>
   )

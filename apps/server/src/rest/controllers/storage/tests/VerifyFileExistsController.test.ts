@@ -1,13 +1,13 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
-import type { StorageProvider } from '@stardust/core/storage/interfaces'
+import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
 import { VerifyFileExistsUseCase } from '@stardust/core/storage/use-cases'
 import { VerifyFileExistsController } from '../VerifyFileExistsController'
 
 describe('Verify File Exists Controller', () => {
   let http: Mock<Http<any>>
-  let storageProvider: Mock<StorageProvider>
+  let storageProvider: Mock<FileStorageProvider>
   let controller: VerifyFileExistsController
 
   beforeEach(() => {

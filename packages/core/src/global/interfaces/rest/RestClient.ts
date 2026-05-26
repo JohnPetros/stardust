@@ -10,7 +10,7 @@ export interface RestClient {
   ): Promise<RestResponse<ResponseBody>>
   patch<ResponseBody>(url: string, body?: unknown): Promise<RestResponse<ResponseBody>>
   put<ResponseBody>(url: string, body?: unknown): Promise<RestResponse<ResponseBody>>
-  delete(url: string): Promise<RestResponse>
+  delete<ResponseBody>(url: string, body?: unknown): Promise<RestResponse<ResponseBody>>
   setBaseUrl(url: string): void
   setHeader(key: string, value: string): void
   setAuthorization(token: string): void

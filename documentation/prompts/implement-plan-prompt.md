@@ -10,145 +10,63 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
 
 ## Entrada
 
-Exatamente um dos seguintes documentos deve ser fornecido:
+- Plano ativo em `documentation/plan.md` — esse e o ponto de entrada padrao.
+- Se um caminho alternativo for fornecido explicitamente, use-o no lugar de `documentation/plan.md`.
+- Se nao houver plano, use a spec tecnica como entrada e gere o plano antes de implementar.
 
-- **Spec técnica** (`documentation/features/{dominio}/specs/{nome}-spec.md`) — para features, refatorações ou correções com spec prévia.
-- **Bug Report** (`documentation/features/{dominio}/reports/{nome}-bug-report.md`) — para correções onde a spec foi derivada diretamente do bug report.
-
-> Se nenhum dos dois for fornecido, ou se o documento estiver incompleto, não inicie o plano. Registre a lacuna em **Pendências** e solicite o documento correto.
-
----
-
-## Diretrizes de Execução
-
-### 1. Leitura do Documento de Entrada
-
-- Leia integralmente a Spec ou o Bug Report fornecido.
-- Identifique:
-  - Quais apps serão tocados (`server`, `web`, `studio`)
-  - Quais camadas serão envolvidas por app
-  - Dependências entre os artefatos a serem criados, modificados ou removidos
-  - Pendências ou ambiguidades que impediriam a implementação
-
-### 2. Definição de Fases
-
-- Sempre inicie pelo **core** (F1): domínio, structures e use cases.
-- Crie uma fase por app tocado (F2 para `server`, F3 para `web`, F4 para `studio`).
-- Omita fases de apps que não forem impactados pelo documento de entrada.
-- Fases de app (F2, F3, F4) só podem iniciar após F1 estar concluída e podem rodar em paralelo entre si.
-
-### 3. Definição de Tarefas
-
-- Cada tarefa deve ser **atômica** — uma única responsabilidade, um único artefato.
-- O **resultado observável** deve ser verificável sem ambiguidade (ex: "rota retorna 200 com payload X", "widget renderiza estado de erro quando Y").
-- A **camada** deve usar exclusivamente os valores: `core`, `database`, `rest`, `provision`, `rpc`, `ui`, `ai`, `queue`, `web`, `studio`.
-- As dependências entre tarefas devem refletir a ordem real de implementação.
-
-### 4. Pendências
-
-- Registre qualquer ambiguidade, informação ausente ou decisão não resolvida que possa bloquear a implementação.
-- Cada pendência deve descrever o impacto e a ação necessária para resolvê-la.
+> O `plan.md` pode estar **novo** (nenhuma tarefa iniciada) ou **em andamento** (execucao anterior parcialmente concluida). O prompt deve lidar com ambos os casos — veja Secao 1.1.
 
 ---
 
-## Template de Saída (Estrutura Obrigatória)
+## Diretrizes de execucao
 
-Salve o arquivo em `documentation/plan.md` seguindo **estritamente** o template abaixo.
+### 1. Pre-check (obrigatorio)
 
-```md
----
-description: <descricao do plano derivada da spec ou bug report>
-status: open
----
+**1.1 Leitura do plano e deteccao de estado**
 
-## Pendencias (quando aplicavel)
+Leia o `plan.md` na integra antes de escrever qualquer linha de codigo. Identifique: escopo, fases, mapa de paralelizacao, gargalos, criterios de aceite, riscos e pendencias. Se o documento estiver incompleto, nao invente: crie uma secao `Pendencias` e avance apenas com defaults seguros.
 
-- [ ] <descricao da pendencia ou ambiguidade encontrada na spec>
+**Detecte o estado atual do plano** inspecionando os checkboxes e anotações das tarefas:
 
----
+| Condicao no `plan.md` | Acao |
+|---|---|
+| Todas as tarefas com `- [ ]` sem anotação | Plano novo — inicialize o tracking e comece pela primeira tarefa. |
+| Alguma tarefa com `- [x]` ou `⚠️ bloqueado` | Plano em andamento — **retome a partir da primeira tarefa `- [ ]` nao bloqueada**. |
+| Todas as tarefas com `- [x]` | Plano concluido — informe e nao reexecute. |
 
-## Tabela de Dependencias de Fases
+Ao retomar um plano em andamento:
+- Trate tarefas `- [x]` como **ja concluidas** — nao as reimplemente.
+- Verifique se os artefatos registrados em tarefas `- [x]` realmente existem na codebase antes de prosseguir; se estiverem ausentes, marque a tarefa como reaberta e reimplemente.
+- Tarefas `⚠️ bloqueado` so devem ser retomadas se o bloqueio foi resolvido — confirme antes de avancar.
 
-| Fase | Objetivo | Depende de | Pode rodar em paralelo com |
-| --- | --- | --- | --- |
-| F1 | <definir> | - | - |
-| F2 | <definir> | F1 | F3, F4 |
-| F3 | <definir> | F1 | F2, F4 |
-| F4 | <definir> | F1 | F2, F3 |
+**1.2 Leitura da codebase existente**
 
-> **Estratégia de paralelismo:** sempre comece pelo core (domínio, structures e use cases). Assim que o core estiver concluído, as fases de `server`, `web` e `studio` podem ser executadas em paralelo, pois todas dependem apenas do contrato definido no core.
+Use **Serena** para localizar implementacoes similares nas mesmas camadas impactadas — use-as como referencia de padrao e nomenclatura.
 
----
+> Nao assuma que um arquivo existe ou tem determinada assinatura sem verificar na codebase. Implementar com base em suposicoes gera conflitos e retrabalho.
 
-## F1 — Core: Domínio, Structures e Use Cases
+**1.3 Leitura das regras das camadas impactadas**
 
-**Objetivo:** Definir o contrato do domínio — entidades, structures, interfaces de repositório/provider e use cases — sem nenhuma dependência de infraestrutura. Essa fase desbloqueia F2, F3 e F4 para rodarem em paralelo.
+Antes de implementar qualquer camada, leia as regras correspondentes consultando o indice em `documentation/rules/rules.md`. Em geral, as mais comuns no Stardust sao:
 
-### Tarefas
+- `documentation/rules/core-package-rules.md` — DTOs, Entidades, Interfaces e Use Cases
+- `documentation/rules/database-rules.md` — Repositories, Mappers e persistencia
+- `documentation/rules/rpc-layer-rules.md` — Actions e integracao com use cases
+- `documentation/rules/rest-layer-rules.md` — Services e Controllers REST
+- `documentation/rules/queue-layer-rules.md` — Jobs e processamento assincrono
+- `documentation/rules/provision-layer-rules.md` — Providers e integracoes externas
+- `documentation/rules/ui-layer-rules.md` — Widgets e paginas (padrao Widget: View + Hook + Index)
+- `documentation/rules/web-application-rules.md` — Convencoes especificas do app `web`
+- `documentation/rules/server-application-rules.md` — Convencoes especificas do app `server`
+- `documentation/rules/studio-appllication-rules.md` — Convencoes especificas do app `studio`
+- `documentation/rules/code-conventions-rules.md` — Nomenclatura e organizacao geral
 
-- [ ] **T1.1** — <nome da tarefa>
-  - **Depende de:** -
-  - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
-  - **Camada:** `core`
-
-- [ ] **T1.2** — <nome da tarefa>
-  - **Depende de:** T1.1
-  - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
-  - **Camada:** `core`
-
----
-
-## F2 — Server: Infra, Repositórios e Handlers
-
-> ⚡ Pode rodar em paralelo com F3 e F4 após F1 estar concluída.
-
-**Objetivo:** Implementar a camada de infraestrutura e exposição — repositórios, providers, jobs e handlers RPC/REST — consumindo os contratos definidos no core.
-
-### Tarefas
-
-- [ ] **T2.1** — <nome da tarefa>
-  - **Depende de:** T1.2
-  - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
-  - **Camada:** `core` | `database` | `rpc` | `rest` | `queue` | `provision`
+> Leia apenas as regras das camadas que serao tocadas nesta execucao. Nao pule esta etapa — padroes existentes devem ser preservados.
 
 ---
 
-## F3 — Web: UI e Integração
+### 2. Inicializacao do tracking (obrigatorio)
 
-> ⚡ Pode rodar em paralelo com F2 e F4 após F1 estar concluída.
+O `plan.md` e a fonte de verdade do progresso — os checkboxes das tarefas sao o tracking. Nao existe lista separada.
 
-**Objetivo:** Implementar a interface e integração client-side na aplicação web — widgets, actions e chamadas RPC/REST — consumindo os contratos definidos no core.
-
-### Tarefas
-
-- [ ] **T3.1** — <nome da tarefa>
-  - **Depende de:** T1.2
-  - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
-  - **Camada:** `ui` | `rpc` | `rest` | `web`
-
----
-
-## F4 — Studio: UI e Integração
-
-> ⚡ Pode rodar em paralelo com F2 e F3 após F1 estar concluída.
-
-**Objetivo:** Implementar a interface e integração client-side na aplicação studio — widgets, actions e chamadas RPC/REST — consumindo os contratos definidos no core.
-
-### Tarefas
-
-- [ ] **T4.1** — <nome da tarefa>
-  - **Depende de:** T1.2
-  - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
-  - **Camada:** `ui` | `rpc` | `rest` | `studio`
-```
-
----
-
-## Restrições
-
-- O plano deve ser derivado exclusivamente do documento de entrada — não invente tarefas sem evidência na Spec ou no Bug Report.
-- Omita fases de apps que não forem mencionados no documento de entrada.
-- Use apenas as camadas definidas na seção 3. Definição de Tarefas — não crie camadas arbitrárias.
-- Cada tarefa deve ter exatamente um resultado observável verificável.
-- Não inclua tarefas de teste automatizado no plano.
-- Se o documento de entrada for um Bug Report, as tarefas devem derivar do **Plano de Correção** do bug report, não do relato do problema.
+**Se o plano for novo**, use a todo tool para espelhar todas as tarefas do `plan.md` antes de iniciar, com os identificadores exatos (ex: `F1-T1`). A todo

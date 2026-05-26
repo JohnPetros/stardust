@@ -1,11 +1,11 @@
-Leia os arquivos:
+## Arquivos
 
 - documentation/overview.md
 - documentation/architecture.md
 - documentation/tooling.md
 - documentation/rules/rules.md
 
-MCP's: 
+## MCPS
 
 - Context7 para buscar informações atualizadas
 - Serena para navegar pela codebase de forma otimizada

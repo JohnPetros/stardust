@@ -1,6 +1,6 @@
 # Para que serve?
 
-A aplicação studio serve como um painel administrativo (Admin), atuando como o nucleo operacional para a gestao digital do StarDust. Ela capacita o usuario administrador com uma visao abrangente e controle sobre metricas essenciais (engajamento, comportamento e tendencias). Alem disso, centraliza a criacao, edicao e publicacao de conteudo para disponibilizacao consistente no website e no aplicativo mobile.
+A aplicação studio serve como um painel administrativo (Admin), atuando como o nucleo operacional para a gestao digital do StarDust. Ela capacita o usuario administrador com uma visao abrangente e controle sobre metricas essenciais (engajamento, comportamento e tendencias). Alem disso, centraliza a criacao, edicao e publicacao de conteúdo para disponibilizacao consistente no website e no aplicativo mobile.
 
 # Funcionalidades principais
 

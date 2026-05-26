@@ -93,6 +93,7 @@ describe('useStar', () => {
 
   afterEach(() => {
     jest.useRealTimers()
+    jest.restoreAllMocks()
   })
 
   it('should play audio and restart animation when star is clicked', () => {

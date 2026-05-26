@@ -67,46 +67,44 @@ export const CodeSnippetView = ({
     >
       {(isRunnable || canExplainCode) && (
         <ToolBar.Root className='not-prose flex items-center justify-end gap-2 border-b border-gray-700 p-2'>
-          <>
-            {canExplainCode && (
-              <Tooltip content='Explicar codigo com IA' direction='bottom'>
-                <ToolBar.Button
-                  type='button'
-                  className={TOOLBAR_BUTTON_CLASS_NAME}
-                  onClick={onCodeExplanationButtonClick}
-                >
-                  <Icon name='ai' size={16} className='text-green-900' weight='bold' />
-                </ToolBar.Button>
-              </Tooltip>
-            )}
-            <Tooltip content='Voltar para o código inicial' direction='bottom'>
+          {canExplainCode && (
+            <Tooltip content='Explicar codigo com IA' direction='bottom'>
               <ToolBar.Button
                 type='button'
                 className={TOOLBAR_BUTTON_CLASS_NAME}
-                onClick={onReloadCodeButtonClick}
+                onClick={onCodeExplanationButtonClick}
               >
-                <Icon name='reload' size={16} className='text-green-900' weight='bold' />
+                <Icon name='ai' size={16} className='text-green-900' weight='bold' />
               </ToolBar.Button>
             </Tooltip>
-            <Tooltip content='Copiar código' direction='bottom'>
-              <ToolBar.Button
-                type='button'
-                className={TOOLBAR_BUTTON_CLASS_NAME}
-                onClick={onCopyCodeButtonClick}
-              >
-                <Icon name='copy' size={16} className='text-green-900' weight='bold' />
-              </ToolBar.Button>
-            </Tooltip>
-            {isRunnable && (
-              <ToolBar.Button
-                type='button'
-                className={TOOLBAR_BUTTON_CLASS_NAME}
-                onClick={onRunCode}
-              >
-                Executar
-              </ToolBar.Button>
-            )}
-          </>
+          )}
+          <Tooltip content='Voltar para o código inicial' direction='bottom'>
+            <ToolBar.Button
+              type='button'
+              className={TOOLBAR_BUTTON_CLASS_NAME}
+              onClick={onReloadCodeButtonClick}
+            >
+              <Icon name='reload' size={16} className='text-green-900' weight='bold' />
+            </ToolBar.Button>
+          </Tooltip>
+          <Tooltip content='Copiar código' direction='bottom'>
+            <ToolBar.Button
+              type='button'
+              className={TOOLBAR_BUTTON_CLASS_NAME}
+              onClick={onCopyCodeButtonClick}
+            >
+              <Icon name='copy' size={16} className='text-green-900' weight='bold' />
+            </ToolBar.Button>
+          </Tooltip>
+          {isRunnable && (
+            <ToolBar.Button
+              type='button'
+              className={TOOLBAR_BUTTON_CLASS_NAME}
+              onClick={onRunCode}
+            >
+              Executar
+            </ToolBar.Button>
+          )}
         </ToolBar.Root>
       )}
 

@@ -24,6 +24,42 @@ documentos atualizados e um resumo estruturado para PR.
 Esta fase é analítica e deve ser concluída antes de qualquer atualização de
 documento.
 
+**1.0 Leitura do `documentation/plan.md`**
+
+Leia `documentation/plan.md` na íntegra antes de qualquer outra etapa.
+
+**1.0.1 Completude do plano**
+
+Verifique se todas as tarefas do plano estão marcadas como `- [x]`. Se houver
+qualquer tarefa `- [ ]` ou `⚠️ bloqueado`, **interrompa imediatamente** e
+reporte:
+
+```markdown
+## Plano incompleto — conclusão bloqueada
+
+As seguintes tarefas ainda não foram concluídas:
+
+- [ ] <ID> — <Descrição> (motivo do bloqueio, se houver)
+```
+
+> Não avance para nenhuma outra etapa enquanto o plano não estiver 100% concluído.
+
+**1.0.2 Divergências acumuladas**
+
+Leia a seção `Divergencias` do `plan.md` e classifique cada item registrado:
+
+- **Aceitável** (ex: separação de arquivo por SRP, renomeação por clareza) →
+  liste no campo "O que mudou em relação à Spec original" do resumo (Fase 3.1)
+  e prossiga.
+- **Estrutural** (ex: mudança de contrato de interface, novo campo em DTO,
+  alteração de fluxo de dados) → verifique se o `update-spec-prompt` já foi
+  acionado para essa divergência. Se não foi, acione-o antes de prosseguir.
+
+> Se a seção `Divergencias` não existir ou estiver vazia, registre explicitamente
+> "Nenhuma divergência acumulada no plano" e prossiga.
+
+---
+
 **1.1 Testes**
 
 Execute `npm run test` na raiz do projeto. Todos os testes — novos e
@@ -160,6 +196,61 @@ Para cada regra violada, reporte:
 
 Corrija todos os desvios encontrados antes de avançar para a Fase 2.
 
+**1.6 Revisão de Qualidade de Código**
+
+Esta etapa opera em dois passos sequenciais: primeiro a leitura completa de
+todos os arquivos do escopo, depois a correção em lote. Não corrija nada
+durante a leitura — registre tudo e só então aplique as correções.
+
+**Passo 1 — Leitura e catalogação**
+
+Leia cada arquivo introduzido ou modificado pela Spec (escopo restrito ao diff).
+Para cada arquivo, inspecione:
+
+- **Erros de lógica:** condicionais invertidas, retornos antecipados ausentes,
+  tratamento de erro incompleto, casos de borda não cobertos pelo fluxo principal.
+- **Nomenclatura:** variáveis, funções, classes e tipos com nomes ambíguos,
+  genéricos demais (`data`, `result`, `tmp`) ou inconsistentes com o vocabulário
+  do domínio estabelecido no restante do codebase.
+- **Código morto:** imports não utilizados, variáveis declaradas e nunca lidas,
+  branches inalcançáveis, funções definidas e nunca chamadas.
+- **Duplicação desnecessária:** trechos de lógica repetidos que poderiam ser
+  extraídos para um helper ou método reutilizável sem violar os limites de camada.
+- **Complexidade excessiva:** funções longas demais, aninhamento profundo de
+  condicionais ou callbacks que dificultam a leitura sem ganho real de
+  expressividade.
+- **Comentários desatualizados ou enganosos:** comentários que contradizem o
+  comportamento do código ou que descrevem o "o quê" em vez do "por quê".
+
+Ao concluir a leitura de todos os arquivos, produza o relatório completo antes
+de tocar em qualquer código:
+
+```markdown
+## Relatório de Revisão de Qualidade de Código
+
+### `caminho/do/arquivo.ts`
+- ✅ Sem problemas encontrados
+
+### `caminho/do/outro-arquivo.ts`
+- ⚠️ **Nomenclatura:** variável `data` na linha 42 não expressa a intenção —
+  renomear para `userProfile`.
+- ⚠️ **Código morto:** import `formatDate` declarado mas nunca utilizado.
+- ⚠️ **Lógica:** ausência de guard clause para `null` no retorno de
+  `findUserById` antes do acesso a `.email`.
+```
+
+**Passo 2 — Correção em lote**
+
+Com o relatório completo em mãos, aplique todas as correções de uma vez,
+respeitando a ordem de dependência entre arquivos (corrija primeiro os arquivos
+que são importados por outros para evitar inconsistências intermediárias).
+Após aplicar as correções, execute `npm run test` novamente para garantir que
+nenhuma alteração introduziu regressão.
+
+> Esta etapa é complementar à 1.5: enquanto a 1.5 valida aderência a regras
+> arquiteturais do projeto, a 1.6 avalia a qualidade intrínseca do código
+> produzido, independente de convenções formais.
+
 ---
 
 ## Fase 2 — Consolidação de Documentos
@@ -179,10 +270,15 @@ devem ter sido capturados pelo `update-spec-prompt` durante o desenvolvimento.
 
 **2.2 Atualização do PRD**
 
-Atualize o PRD associado à Spec. Ele está localizado no nível acima do diretório
-da spec — ex.: se a spec está em
-`documentation/features/<modulo>/specs/<nome>-spec.md`, o PRD está em
-`documentation/features/<modulo>/prd.md`.
+Atualize o PRD associado à Spec **sempre no milestone do GitHub** referenciado
+no campo `prd:` da spec.
+
+- No StarDust, o milestone do GitHub é a **única fonte de verdade** do PRD.
+- **Nunca** crie, edite ou assuma a existência de `documentation/features/**/prd.md`.
+- Se a implementação concluir ou refinar requisitos, atualize a **descrição do
+  milestone** com os itens entregues e as divergências de produto relevantes.
+
+> 💡 Regra obrigatória: PRD local não deve existir. PRD vive no milestone.
 
 Marque como concluídos os itens endereçados pela implementação. A audiência aqui
 é de produto — traduza o impacto técnico para linguagem de negócio.
@@ -194,7 +290,8 @@ Marque como concluídos os itens endereçados pela implementação. A audiência
 aspecto que contradiga ou não esteja coberto pelo PRD (ex: regra de negócio
 refinada, escopo ampliado ou reduzido, comportamento diferente do especificado),
 atualize o PRD para refletir a realidade entregue. Registre a divergência no
-campo **"O que mudou em relação à Spec original"** do resumo de conclusão da spec (seção 3.1).
+campo **"O que mudou em relação à Spec original"** do resumo de conclusão da
+spec (seção 3.1).
 
 **2.3 Atualização da Arquitetura (se aplicável)**
 
@@ -229,16 +326,31 @@ Gere um resumo de conclusão com a seguinte estrutura obrigatória:
 ## O que mudou em relação à Spec original
 
 <Desvios ou refinamentos ocorridos durante a implementação, incluindo
-divergências que implicaram atualização do PRD. Se nenhum, declarar
-explicitamente "Nenhum desvio em relação à Spec original.">
+divergências acumuladas no plan.md que implicaram atualização do PRD.
+Se nenhum, declarar explicitamente "Nenhum desvio em relação à Spec original.">
 
 ## Pontos de atenção para o revisor
 
-<Riscos, áreas sensíveis, dependências externas ou decisões que merecem revisão
-cuidadosa. Inclua migrações de banco pendentes, mudanças de contrato REST/RPC,
-DTOs compartilhados, side effects em jobs/eventos ou impactos entre apps do
-monorepo. Se nenhum, declare explicitamente "Nenhum ponto de atenção
-identificado.">
+Verifique cada categoria abaixo e responda explicitamente. Se não se aplicar,
+escreva "Não se aplica" — nunca deixe em branco.
+
+**Migrações de banco**
+<Há migrations pendentes de execução em produção? Liste o arquivo e o impacto
+esperado nos dados existentes. Ex: adição de coluna nullable, backfill necessário.>
+
+**Mudanças de contrato**
+<Algum contrato REST, RPC ou DTO foi alterado de forma que consumidores externos
+ao monorepo (ex: apps mobile, integrações de terceiros) precisem ser notificados
+ou atualizados?>
+
+**Decisões irreversíveis**
+<Alguma decisão tomada durante a implementação é difícil ou impossível de
+reverter? Ex: remoção de coluna, alteração de chave primária, mudança de
+formato de dado persistido.>
+
+**Side effects em jobs/eventos**
+<Algum job Inngest, evento ou processo assíncrono introduzido pode impactar
+dados existentes ou disparar efeitos colaterais em produção na primeira execução?>
 
 ## Checklist
 
@@ -247,6 +359,9 @@ identificado.">
 - [ ] `npm run test` passou sem falhas (ou regressões pré-existentes devidamente sinalizadas)
 - [ ] Cobertura de testes verificada e lacunas críticas endereçadas
 - [ ] Limites arquiteturais validados
+- [ ] Revisão de qualidade de código concluída e correções aplicadas em lote
+- [ ] Todas as tarefas do `documentation/plan.md` estão `- [x]`
+- [ ] Divergências do `plan.md` classificadas e resolvidas
 - [ ] Spec atualizada com status `closed` e data
 - [ ] PRD atualizado com os itens concluídos (e divergências registradas, se houver)
 - [ ] `architecture.md` atualizado (se aplicável)
@@ -259,9 +374,12 @@ identificado.">
 
 Ao final da execução, devem ter sido produzidos:
 
-1. **Relatório de cobertura de testes** (Fase 1.1.1)
-2. **Testes criados pelo subagent** para componentes sem cobertura (Fase 1.1.2, quando aplicável)
-3. **Checklist de validação** de requisitos (Fase 1.4)
-4. **Spec atualizada** com status `closed` e data (Fase 2.1)
-5. **PRD atualizado** com itens marcados como concluídos e divergências registradas, se houver (Fase 2.2)
-6. **Resumo de conclusão da spec** com estrutura completa (Fase 3.1)
+1. **Relatório de completude do plano** (Fase 1.0.1)
+2. **Classificação de divergências acumuladas** (Fase 1.0.2)
+3. **Relatório de cobertura de testes** (Fase 1.1.1)
+4. **Testes criados pelo subagent** para componentes sem cobertura (Fase 1.1.2, quando aplicável)
+5. **Checklist de validação** de requisitos (Fase 1.4)
+6. **Relatório de revisão de qualidade de código** com problemas catalogados e correções aplicadas em lote (Fase 1.6)
+7. **Spec atualizada** com status `closed` e data (Fase 2.1)
+8. **PRD atualizado no milestone do GitHub** com itens concluídos e divergências registradas, se houver (Fase 2.2)
+9. **Resumo de conclusão da spec** com estrutura completa (Fase 3.1)

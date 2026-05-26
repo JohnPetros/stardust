@@ -2,20 +2,7 @@
 
 import type { ReactNode } from 'react'
 
-import { motion, type Variants } from 'motion/react'
-
-const variants: Variants = {
-  shrink: {
-    width: 0,
-  },
-  expand: {
-    width: 'auto',
-    paddingLeft: '8px',
-    transition: {
-      delay: 0.05,
-    },
-  },
-}
+import { AnimatedTitleView } from './AnimatedTitleView'
 
 type AnimatedTitleProps = {
   children: ReactNode
@@ -23,14 +10,5 @@ type AnimatedTitleProps = {
 }
 
 export function AnimatedTitle({ children, isExpanded }: AnimatedTitleProps) {
-  return (
-    <motion.div
-      variants={variants}
-      initial='shrink'
-      animate={isExpanded ? 'expand' : ''}
-      className='block overflow-hidden'
-    >
-      {children}
-    </motion.div>
-  )
+  return <AnimatedTitleView isExpanded={isExpanded}>{children}</AnimatedTitleView>
 }

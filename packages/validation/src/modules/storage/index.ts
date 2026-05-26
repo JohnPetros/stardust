@@ -1,1 +1,2 @@
-export { storageFolderSchema } from './storageFolderSchema'
+export { fileStorageFolderPathSchema } from './fileStorageFolderPathSchema'
+export { signedUploadUrlSchema } from './signedUploadUrlSchema'

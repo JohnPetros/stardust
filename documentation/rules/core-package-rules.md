@@ -23,6 +23,7 @@ Regras obrigatórias:
 - Autenticação, autorização, montagem de contexto HTTP, checks de ownership ligados ao transporte e adaptação de payloads **não devem ser empurrados para o core** quando já forem responsabilidades da borda (`middleware`, `controller`, `router`, `tool`, `job`, `action`).
 - Um `use case` pode depender de interfaces de outro módulo apenas quando essa colaboração fizer parte da regra de negócio do domínio e houver evidência clara desse padrão no projeto.
 - Na dúvida, preserve o módulo dono da responsabilidade. Exemplo: validar API key pertence ao módulo `auth`; validar insignia/papel do usuário pertence ao módulo que já resolve perfil/permissão no fluxo real.
+- Quando uma regra depende apenas do estado e do significado do próprio objeto de domínio, prefira implementá-la no próprio objeto (`entity`, `structure` ou `aggregate`) em vez de duplicá-la no `use case`. O `use case` deve orquestrar o fluxo; o objeto de domínio deve saber responder sobre suas próprias capacidades, restrições e comportamentos.
 
 Sinais de alerta:
 
@@ -64,6 +65,12 @@ Uma estrutura deve seguir o padrão:
 - Não deve ser uma classe anêmica, mas conter métodos com lógica de negócio relevante.
 - Para alterar uma propriedade de um `object`, deve-se criar uma nova instância da classe. Assim, quase todos os métodos de um `object` retornam uma nova instância dele mesmo.
 - Pode conter outros `objects` e `entities` como atributos. No caso de associação com entidades via agregação, devem ser usados `aggregates`.
+
+Exemplo de preferência arquitetural:
+
+- Se a regra puder ser respondida apenas olhando para o próprio objeto, como `canHaveAudio`, `isLocked`, `canBePublished` ou `hasReachedLimit`, ela deve viver no objeto de domínio.
+- Evite espalhar no `use case` condicionais baseadas em detalhes internos do objeto, como comparar `type`, `status` ou flags manualmente em vários fluxos.
+- Use o `use case` para decidir **quando** executar uma ação; use o objeto de domínio para responder **se** aquela ação faz sentido para o seu estado atual.
 
 ---
 
@@ -180,6 +187,7 @@ Um Use Case segue o padrão:
 - Um método principal, geralmente chamado `do()`. Todos os demais métodos do `use case` devem ser privados.
 - Um `use case` não deve receber ou retornar qualquer elemento de domínio diretamente, mas apenas `dtos`.
 - Todas as dependências do `use cases` devem ser constantes e interfaces.
+- Um `use case` não deve reimplementar regra que já pode viver legitimamente em um objeto de domínio. Se a decisão depende apenas do estado do próprio objeto, a regra deve ser exposta pelo objeto e apenas consumida/orquestrada pelo `use case`.
 
 ## 🥸 Falsificadores de objetos de domínio (fakers)
 

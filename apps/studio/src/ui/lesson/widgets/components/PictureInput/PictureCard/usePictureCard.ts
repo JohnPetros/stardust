@@ -1,15 +1,18 @@
 import type { StorageService } from '@stardust/core/storage/interfaces'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 import { Text } from '@stardust/core/global/structures'
 
-export function usePictureCard(storageService: StorageService, onRemove: () => void) {
+export function usePictureCard(
+  storageService: StorageService,
+  onRemove: (imageName: string) => void,
+) {
   const toast = useToastProvider()
 
   async function handleRemoveButtonClick(imageName: string) {
     const response = await storageService.removeFile(
-      StorageFolder.createAsStory(),
+      FileStorageFolderPath.createAsStory(),
       Text.create(imageName),
     )
 
@@ -18,7 +21,7 @@ export function usePictureCard(storageService: StorageService, onRemove: () => v
     }
 
     if (response.isSuccessful) {
-      onRemove()
+      onRemove(imageName)
     }
   }
 

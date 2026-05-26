@@ -4,6 +4,7 @@ import { SessionDto } from '@stardust/core/auth/structures/dtos'
 import { AccountDto } from '@stardust/core/auth/entities/dtos'
 import { AppError } from '@stardust/core/global/errors'
 import { SupabaseClient } from '@supabase/supabase-js'
+import { LocalSupabaseProxy } from './LocalSupabaseProxy'
 
 type CreateAccountInput = {
   email?: string
@@ -18,6 +19,8 @@ export class AuthFixture {
   constructor(private readonly supabase: SupabaseClient) {}
 
   async createAccount(input?: CreateAccountInput): Promise<void> {
+    await LocalSupabaseProxy.ensureRunning()
+
     const email = input?.email ?? `test-${randomUUID()}@stardust.dev`
     const password = input?.password ?? 'password123'
     const name = input?.name ?? `Test User ${randomUUID().slice(0, 8)}`

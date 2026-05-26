@@ -1,0 +1,36 @@
+'use client'
+
+import type { ReactNode } from 'react'
+
+import { motion, type Variants } from 'motion/react'
+
+const variants: Variants = {
+  shrink: {
+    width: 0,
+  },
+  expand: {
+    width: 'auto',
+    paddingLeft: '8px',
+    transition: {
+      delay: 0.05,
+    },
+  },
+}
+
+type AnimatedTitleViewProps = {
+  children: ReactNode
+  isExpanded: boolean
+}
+
+export function AnimatedTitleView({ children, isExpanded }: AnimatedTitleViewProps) {
+  return (
+    <motion.div
+      variants={variants}
+      initial='shrink'
+      animate={isExpanded ? 'expand' : ''}
+      className='block overflow-hidden'
+    >
+      {children}
+    </motion.div>
+  )
+}

@@ -4,15 +4,19 @@ import { Dropbox } from 'dropbox'
 
 import { AppError } from '@stardust/core/global/errors'
 import { MethodNotImplementedError } from '@stardust/core/global/errors'
-import type { StorageFolder } from '@stardust/core/storage/structures'
-import type { StorageProvider } from '@stardust/core/storage/interfaces'
+import type {
+  FileStorageFolderPath,
+  SignedUploadUrl,
+} from '@stardust/core/storage/structures'
+import type { FileStorageProvider } from '@stardust/core/storage/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
 import type { ManyItems } from '@stardust/core/global/types'
 import type { FilesListingParams } from '@stardust/core/storage/types'
+import type { Text } from '@stardust/core/global/structures'
 
 import { ENV } from '@/constants'
 
-export class DropboxStorageProvider implements StorageProvider {
+export class DropboxStorageProvider implements FileStorageProvider {
   private dropbox: Dropbox
   private readonly restClient: RestClient
   private static readonly BASE_URL = 'https://api.dropbox.com'
@@ -25,12 +29,12 @@ export class DropboxStorageProvider implements StorageProvider {
     this.restClient.setBaseUrl(DropboxStorageProvider.BASE_URL)
   }
 
-  async upload(folder: StorageFolder, file: File): Promise<File> {
+  async upload(folder: FileStorageFolderPath, file: File): Promise<File> {
     try {
       const accessToken = await this.fetchAccessToken()
       this.dropbox = new Dropbox({ accessToken })
 
-      const fullPath = `/${folder.name}/${DropboxStorageProvider.INTERNAL_FOLDER_NAME}/${file.name}`
+      const fullPath = `/${folder.value}/${DropboxStorageProvider.INTERNAL_FOLDER_NAME}/${file.name}`
 
       const fileBuffer = await this.fileToBuffer(file)
 
@@ -49,6 +53,13 @@ export class DropboxStorageProvider implements StorageProvider {
       console.log('error', error)
       this.handleError(error)
     }
+  }
+
+  async createSignedUploadUrl(
+    _folderPath: FileStorageFolderPath,
+    _fileName: Text,
+  ): Promise<SignedUploadUrl> {
+    throw new MethodNotImplementedError('createSignedUploadUrl')
   }
 
   async listFiles(_params: FilesListingParams): Promise<ManyItems<File>> {

@@ -1,19 +1,8 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { motion, type Variants } from 'motion/react'
 
-const variants: Variants = {
-  hidden: {
-    y: -64,
-  },
-  visible: {
-    y: 0,
-    transition: {
-      delay: 2,
-    },
-  },
-}
+import { AnimatedContainerView } from './AnimatedContainerView'
 
 type AnimatedContainerProps = {
   children: ReactNode
@@ -27,14 +16,8 @@ export function AnimatedContainer({
   onClick,
 }: AnimatedContainerProps) {
   return (
-    <motion.main
-      variants={variants}
-      initial='shrink'
-      animate={isSidenavExpanded ? 'expand' : 'shrink'}
-      className='h-full pt-16'
-      onClick={onClick}
-    >
+    <AnimatedContainerView isSidenavExpanded={isSidenavExpanded} onClick={onClick}>
       {children}
-    </motion.main>
+    </AnimatedContainerView>
   )
 }

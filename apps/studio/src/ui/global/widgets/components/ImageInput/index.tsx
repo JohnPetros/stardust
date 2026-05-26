@@ -1,6 +1,6 @@
 import { type PropsWithChildren, useRef } from 'react'
 
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 import type { DialogRef } from '@/ui/shadcn/components/dialog'
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
@@ -9,7 +9,7 @@ import { useImageInput } from './useImageInput'
 
 type Props = {
   folder: string
-  onSubmit: () => void
+  onSubmit: (imageName: string) => void
 }
 
 export const ImageInput = ({ children, folder, onSubmit }: PropsWithChildren<Props>) => {
@@ -25,7 +25,7 @@ export const ImageInput = ({ children, folder, onSubmit }: PropsWithChildren<Pro
     handleSubmit,
   } = useImageInput({
     storageService,
-    folder: StorageFolder.create(folder),
+    folder: FileStorageFolderPath.create(folder),
     dialogRef,
     onSubmit,
   })

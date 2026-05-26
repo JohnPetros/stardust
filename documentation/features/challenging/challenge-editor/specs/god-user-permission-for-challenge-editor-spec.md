@@ -87,7 +87,7 @@ Implementar o controle de permissao de gerenciamento de desafios para que o flux
 - **Arquivo:** `apps/web/src/ui/challenging/widgets/pages/ChallengeEditor/useChallengeEditorPage.ts`
 - **Mudanca:** Preservar `author.id` original do desafio durante update (evitar transferencia de autoria para admin/editor).
 - **Arquivo:** `apps/web/src/ui/challenging/widgets/pages/ChallengeEditor/ChallengeEditorPageView.tsx`
-- **Mudanca:** Exibir aviso de contexto administrativo quando admin editar desafio de terceiros e reforcar copy do dialogo de exclusao para conteudo de terceiro.
+- **Mudanca:** Exibir aviso de contexto administrativo quando admin editar desafio de terceiros e reforcar copy do dialogo de exclusao para conteúdo de terceiro.
 - **Arquivo:** `apps/web/src/ui/challenging/widgets/slots/ChallengeDescription/useChallengeDescriptionSlot.ts`
 - **Mudanca:** Expor estado `canManageChallenge` (`autor || god`) e `isManagingAsAdmin` (`god && !autor`).
 - **Arquivo:** `apps/web/src/ui/challenging/widgets/slots/ChallengeDescription/ChallengeDescriptionSlotView.tsx`

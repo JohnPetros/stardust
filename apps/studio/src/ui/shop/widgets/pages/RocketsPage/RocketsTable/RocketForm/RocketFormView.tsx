@@ -21,13 +21,13 @@ import { Button } from '@/ui/shadcn/components/button'
 import { useRocketForm } from './useRocketForm'
 import type { PropsWithChildren } from 'react'
 import { ImageInput } from '@/ui/global/widgets/components/ImageInput'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import type { StorageService } from '@stardust/core/storage/interfaces'
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { useStorageImage } from '@/ui/global/hooks/useStorageImage'
+import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
 import { Checkbox } from '@/ui/shadcn/components/checkbox'
 
-const ROCKETS_FOLDER = StorageFolder.createAsRockets()
+const ROCKETS_FOLDER = FileStorageFolderPath.createAsImagesRockets()
 
 type Props = {
   storageService: StorageService
@@ -55,7 +55,7 @@ export const RocketFormView = ({
     handleSubmit,
     handleDialogChange,
   } = useRocketForm({ storageService, onSubmit, initialValues })
-  const imageUrl = useStorageImage(ROCKETS_FOLDER, rocketImage)
+  const imageUrl = useFileStorage(ROCKETS_FOLDER, rocketImage)
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
@@ -87,7 +87,7 @@ export const RocketFormView = ({
                 <FormItem>
                   <FormLabel>Imagem do foguete</FormLabel>
                   <FormControl>
-                    <ImageInput folder={ROCKETS_FOLDER.name} onSubmit={field.onChange}>
+                    <ImageInput folder={ROCKETS_FOLDER.value} onSubmit={field.onChange}>
                       <Button
                         variant='ghost'
                         className='rounded-full border border-dashed mt-2 w-20 h-20'

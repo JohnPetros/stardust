@@ -2,13 +2,15 @@ import { useEffect, useRef, useState, type RefObject } from 'react'
 
 import type { StorageService } from '@stardust/core/storage/interfaces'
 import type { DialogRef } from '@/ui/shadcn/components/dialog'
-import { StorageFolder } from '@stardust/core/storage/structures'
+import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 import { CACHE } from '@/constants'
+import { ENV } from '@/constants/env'
 import { usePaginatedFetch } from '@/ui/global/hooks/usePaginatedFetch'
 import { Image, OrdinalNumber, Text } from '@stardust/core/global/structures'
 
-const ITEMS_PER_PAGE = OrdinalNumber.create(30)
+const ITEMS_PER_PAGE = OrdinalNumber.create(12)
+const DEFAULT_IMAGE = Image.create('panda.jpg')
 
 type Props = {
   defaultPicture?: Image
@@ -28,7 +30,7 @@ export function usePictureInput({
   onClear,
 }: Props) {
   const [selectedImage, setSelectedImage] = useState<Image | null>(
-    defaultPicture ?? (isOptional ? null : Image.create('panda.jpg')),
+    defaultPicture ?? (isOptional ? null : DEFAULT_IMAGE),
   )
   const [search, setSearch] = useState<Text>(Text.create(''))
   const containerRef = useRef<HTMLDivElement>(null)
@@ -38,7 +40,7 @@ export function usePictureInput({
       fetcher: async (page: number) =>
         await storageService.listFiles({
           search: search,
-          folder: StorageFolder.createAsStory(),
+          folder: FileStorageFolderPath.createAsStory(),
           page: OrdinalNumber.create(page),
           itemsPerPage: ITEMS_PER_PAGE,
         }),
@@ -71,14 +73,22 @@ export function usePictureInput({
     nextPage()
   }
 
-  function handleImageSubmit() {
+  function handleImageSubmit(imageName: string) {
+    const image = Image.create(imageName)
+
+    setSelectedImage(image)
+    onChange(image)
     refetch()
     dialogRef.current?.close()
   }
 
-  function handlePictureCardRemove() {
+  function handlePictureCardRemove(imageName: string) {
+    if (selectedImage?.value === imageName) {
+      setSelectedImage(DEFAULT_IMAGE)
+      onChange(DEFAULT_IMAGE)
+    }
+
     refetch()
-    dialogRef.current?.close()
   }
 
   useEffect(() => {
@@ -87,8 +97,17 @@ export function usePictureInput({
       return
     }
 
-    setSelectedImage(isOptional ? null : Image.create('panda.jpg'))
+    setSelectedImage(isOptional ? null : DEFAULT_IMAGE)
   }, [defaultPicture, isOptional])
+
+  useEffect(() => {
+    if (!data?.length) return
+
+    for (const imageName of data) {
+      const image = new window.Image()
+      image.src = `${ENV.supabaseCdnUrl}/${FileStorageFolderPath.createAsStory().value}/${imageName}`
+    }
+  }, [data])
 
   return {
     images: data ? data.map((image) => Image.create(image)) : [],

@@ -16,9 +16,10 @@ type Props = {
   }
   isOpen: boolean
   toggle: () => void
+  onNotesClick: () => void
 }
 
-export const SidebarView = ({ isOpen, toggle, user }: Props) => {
+export const SidebarView = ({ isOpen, toggle, user, onNotesClick }: Props) => {
   return (
     <AnimatedBar isOpen={isOpen} className='md:hidden z-50'>
       <div className='relative'>
@@ -40,6 +41,13 @@ export const SidebarView = ({ isOpen, toggle, user }: Props) => {
                 Sair
               </Button>
             </SignOutAlertDialog>
+
+            <Button
+              className='mt-2 h-8 w-48 border border-green-400/30 bg-green-900/20 px-3 py-2 text-green-200'
+              onClick={onNotesClick}
+            >
+              Notas
+            </Button>
           </div>
         )}
       </div>
