@@ -2,6 +2,7 @@ import { execFileSync } from 'node:child_process'
 
 import { ENV } from '@/constants'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import { LocalSupabaseProxy } from './LocalSupabaseProxy'
 
 export class SupabaseFixture {
   readonly supabase: SupabaseClient
@@ -32,6 +33,8 @@ export class SupabaseFixture {
   }
 
   async clearDatabase() {
+    await LocalSupabaseProxy.ensureRunning()
+
     this.clearInsigniasTables()
 
     await this.supabase.from('users_acquired_avatars').delete()

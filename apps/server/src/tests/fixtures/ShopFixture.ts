@@ -63,7 +63,6 @@ export class ShopFixture {
         name: rocket.name,
         image: rocket.image,
         price: rocket.price,
-        slug: rocket.name.toLowerCase().replaceAll(' ', '-'),
         is_acquired_by_default: rocket.isAcquiredByDefault ?? false,
         is_selected_by_default: rocket.isSelectedByDefault ?? false,
       })),
