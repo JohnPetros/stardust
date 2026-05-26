@@ -11,7 +11,7 @@ import { AvatarsFaker, RocketsFaker } from '@stardust/core/shop/entities/fakers'
 import { Achievement, User } from '@stardust/core/profile/entities'
 
 import { SupabaseAchievementsRepository, SupabaseUsersRepository } from '@/database'
-import { Id, Name } from '@stardust/core/global/structures'
+import { Id } from '@stardust/core/global/structures'
 
 export class ProfileFixture {
   private readonly supabase: SupabaseClient
@@ -64,7 +64,6 @@ export class ProfileFixture {
         id: rocket.id,
         name: rocket.name,
         image: rocket.image,
-        slug: Name.create(rocket.name).slug.value,
         price: rocket.price,
         is_acquired_by_default: rocket.isAcquiredByDefault ?? false,
         is_selected_by_default: rocket.isSelectedByDefault ?? false,

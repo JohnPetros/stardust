@@ -63,9 +63,9 @@ create table public.rockets (
   name character varying not null,
   price integer not null,
   image character varying not null,
-  slug text not null,
   is_selected_by_default boolean not null default false,
   is_acquired_by_default boolean not null default false,
+  is_purchasable boolean not null default true,
   constraint rockets_pkey primary key (id),
   constraint rockets_image_key unique (image),
   constraint rockets_name_key unique (name)

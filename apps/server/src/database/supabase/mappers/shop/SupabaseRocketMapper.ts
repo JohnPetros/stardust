@@ -1,6 +1,5 @@
 import type { RocketDto } from '@stardust/core/shop/entities/dtos'
 import { Rocket } from '@stardust/core/shop/entities'
-import { Name } from '@stardust/core/global/structures'
 
 import type { Database, SupabaseRocket } from '../../types'
 
@@ -33,7 +32,6 @@ export class SupabaseRocketMapper {
       name: rocketDto.name,
       price: rocketDto.price,
       image: rocketDto.image,
-      slug: Name.create(rocketDto.name).slug.value,
       is_purchasable: rocketDto.isPurchasable ?? true,
     }
 

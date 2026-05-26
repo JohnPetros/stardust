@@ -2117,7 +2117,6 @@ export type Database = {
           is_selected_by_default: boolean
           name: string
           price: number
-          slug: string
         }
         Insert: {
           id?: string
@@ -2127,7 +2126,6 @@ export type Database = {
           is_selected_by_default?: boolean
           name: string
           price: number
-          slug: string
         }
         Update: {
           id?: string
@@ -2137,7 +2135,6 @@ export type Database = {
           is_selected_by_default?: boolean
           name?: string
           price?: number
-          slug?: string
         }
         Relationships: []
       }
