@@ -13,6 +13,7 @@ import type {
   ReportingService,
   StorageService,
 } from '@/rest/services'
+import type { SignedFileStorageProvider } from '@stardust/core/storage/interfaces'
 
 export type RestContextValue = {
   authService: ReturnType<typeof AuthService>
@@ -27,5 +28,6 @@ export type RestContextValue = {
   conversationService: ReturnType<typeof ConversationService>
   reportingService: ReturnType<typeof ReportingService>
   storageService: ReturnType<typeof StorageService>
+  signedFileStorageProvider: SignedFileStorageProvider
   notificationService: ReturnType<typeof NotificationService>
 }

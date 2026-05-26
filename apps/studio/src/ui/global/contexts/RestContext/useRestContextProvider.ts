@@ -15,12 +15,9 @@ import {
   ReportingService,
 } from '@/rest/services'
 import { ENV, SESSION_STORAGE_KEYS } from '@/constants'
-import type { SignedFileStorageProvider } from '@stardust/core/storage/interfaces'
 import type { RestContextValue } from './types/RestContextValue'
 
-export function useRestContextProvider(
-  signedFileStorageProvider: SignedFileStorageProvider,
-): RestContextValue {
+export function useRestContextProvider(): RestContextValue {
   const [accessToken] = useSessionStorage(SESSION_STORAGE_KEYS.accessToken, '')
 
   const restClient = useMemo(() => {
@@ -38,7 +35,7 @@ export function useRestContextProvider(
     () => ({
       spaceService: SpaceService(restClient),
       authService: AuthService(restClient),
-      storageService: StorageService(restClient, signedFileStorageProvider),
+      storageService: StorageService(restClient),
       lessonService: LessonService(restClient),
       profileService: ProfileService(restClient),
       challengingService: ChallengingService(restClient),
@@ -46,6 +43,6 @@ export function useRestContextProvider(
       manualService: ManualService(restClient),
       reportingService: ReportingService(restClient),
     }),
-    [restClient, signedFileStorageProvider],
+    [restClient],
   )
 }

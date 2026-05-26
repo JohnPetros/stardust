@@ -2,9 +2,13 @@ import { useRef, useState } from 'react'
 
 import { FeedbackReport } from '@stardust/core/reporting/entities'
 import { AuthorAggregate } from '@stardust/core/global/aggregates'
+import { Text } from '@stardust/core/global/structures'
 import type { ReportingService } from '@stardust/core/reporting/interfaces'
-import type { StorageService } from '@stardust/core/storage/interfaces'
-import { FileStorageFolderPath } from '@stardust/core/storage/structures'
+import type {
+  SignedFileStorageProvider,
+  StorageService,
+} from '@stardust/core/storage/interfaces'
+import { FileStorageFolderPath, SignedUploadUrl } from '@stardust/core/storage/structures'
 import type { User } from '@stardust/core/global/entities'
 
 import type { ToastContextValue } from '@/ui/global/contexts/ToastContext/types'
@@ -14,6 +18,7 @@ export type FeedbackStep = 'initial' | 'form' | 'success'
 type Params = {
   reportingService: ReportingService
   storageService: StorageService
+  signedFileStorageProvider: SignedFileStorageProvider
   user: User | null
   toast: ToastContextValue
 }
@@ -21,6 +26,7 @@ type Params = {
 export function useFeedbackDialog({
   reportingService,
   storageService,
+  signedFileStorageProvider,
   user,
   toast,
 }: Params) {
@@ -222,19 +228,26 @@ export function useFeedbackDialog({
             type: 'image/png',
           })
 
-          const uploadResponse = await storageService.uploadFile(
+          const fileName = Text.create(file.name)
+          const signedUploadUrlResponse = await storageService.createSignedUploadUrl(
             FileStorageFolderPath.createAsFeedbackReports(),
-            file,
+            fileName,
           )
 
-          if (uploadResponse.isSuccessful) {
-            screenshotUrl = uploadResponse.body.filename
-          } else {
-            toast.showError('Falha ao enviar feedback.')
+          if (signedUploadUrlResponse.isFailure) {
+            toast.showError(
+              signedUploadUrlResponse.errorMessage || 'Falha ao enviar feedback.',
+            )
+            return
           }
+
+          const signedUploadUrl = SignedUploadUrl.create(signedUploadUrlResponse.body)
+          await signedFileStorageProvider.uploadFile(signedUploadUrl, file)
+          screenshotUrl = signedUploadUrl.fileName.value
         } catch (error) {
           console.error('Error uploading screenshot', error)
           toast.showError('Falha ao enviar feedback.')
+          return
         }
       }
 

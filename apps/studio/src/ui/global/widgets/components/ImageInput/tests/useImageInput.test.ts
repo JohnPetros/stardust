@@ -3,7 +3,11 @@ import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { ToastProvider } from '@stardust/core/global/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
-import type { StorageService } from '@stardust/core/storage/interfaces'
+import type {
+  SignedFileStorageProvider,
+  StorageService,
+} from '@stardust/core/storage/interfaces'
+import type { SignedUploadUrlDto } from '@stardust/core/storage/structures/dtos'
 import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 import { useImageInput } from '../useImageInput'
@@ -14,6 +18,7 @@ jest.mock('@/ui/global/hooks/useToastProvider', () => ({
 
 describe('useImageInput', () => {
   let storageService: Mock<StorageService>
+  let signedFileStorageProvider: Mock<SignedFileStorageProvider>
   let toastProvider: Mock<ToastProvider>
   let dialogRef: { current: { close: jest.Mock } | null }
   let onSubmit: jest.Mock
@@ -22,6 +27,7 @@ describe('useImageInput', () => {
     renderHook(() =>
       useImageInput({
         storageService,
+        signedFileStorageProvider,
         folder: FileStorageFolderPath.createAsStory(),
         dialogRef: dialogRef as never,
         onSubmit,
@@ -32,6 +38,7 @@ describe('useImageInput', () => {
     jest.clearAllMocks()
 
     storageService = mock<StorageService>()
+    signedFileStorageProvider = mock<SignedFileStorageProvider>()
     toastProvider = mock<ToastProvider>()
     dialogRef = { current: { close: jest.fn() } }
     onSubmit = jest.fn()
@@ -46,12 +53,17 @@ describe('useImageInput', () => {
   it('should upload the file successfully and call onSubmit with the stored filename', async () => {
     const file = new File(['image'], 'cover.png', { type: 'image/png' })
 
-    storageService.uploadFile.mockResolvedValue(
+    storageService.createSignedUploadUrl.mockResolvedValue(
       new RestResponse({
         statusCode: 200,
-        body: { filename: 'stored-cover.png' },
+        body: {
+          url: 'https://storage.example/signed-url',
+          folderPath: 'images/story',
+          fileName: 'stored-cover.png',
+        },
       }),
     )
+    signedFileStorageProvider.uploadFile.mockResolvedValue()
 
     const { result } = Hook()
 
@@ -63,8 +75,14 @@ describe('useImageInput', () => {
       await result.current.handleSubmit()
     })
 
-    expect(storageService.uploadFile).toHaveBeenCalledWith(
+    expect(storageService.createSignedUploadUrl).toHaveBeenCalledWith(
       FileStorageFolderPath.createAsStory(),
+      expect.objectContaining({ value: 'cover.png' }),
+    )
+    expect(signedFileStorageProvider.uploadFile).toHaveBeenCalledWith(
+      expect.objectContaining({
+        fileName: expect.objectContaining({ value: 'stored-cover.png' }),
+      }),
       file,
     )
     expect(dialogRef.current?.close).toHaveBeenCalledTimes(1)
@@ -88,16 +106,17 @@ describe('useImageInput', () => {
       await result.current.handleSubmit()
     })
 
-    expect(storageService.uploadFile).not.toHaveBeenCalled()
+    expect(storageService.createSignedUploadUrl).not.toHaveBeenCalled()
+    expect(signedFileStorageProvider.uploadFile).not.toHaveBeenCalled()
     expect(result.current.imageNameError).toBeTruthy()
     expect(onSubmit).not.toHaveBeenCalled()
   })
 
   it('should show toast when upload fails and keep the current input state', async () => {
     const file = new File(['image'], 'cover.png', { type: 'image/png' })
-    let resolveUpload: (value: RestResponse<{ filename: string }>) => void = () => {}
+    let resolveUpload: (value: RestResponse<SignedUploadUrlDto>) => void = () => {}
 
-    storageService.uploadFile.mockReturnValue(
+    storageService.createSignedUploadUrl.mockReturnValue(
       new Promise((resolve) => {
         resolveUpload = resolve
       }),
@@ -127,6 +146,7 @@ describe('useImageInput', () => {
     })
 
     expect(toastProvider.showError).toHaveBeenCalledWith('Upload falhou')
+    expect(signedFileStorageProvider.uploadFile).not.toHaveBeenCalled()
     expect(result.current.isSubmitting).toBe(false)
     expect(result.current.imageFile).toBe(file)
     expect(result.current.imageName).toBe('cover.png')

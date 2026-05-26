@@ -4,6 +4,7 @@ import { useMemo, useEffect } from 'react'
 import { HTTP_HEADERS } from '@stardust/core/global/constants'
 
 import { CLIENT_ENV } from '@/constants'
+import { SupabaseSignedFileStorageProvider } from '@/provision/storage'
 import { NextRestClient } from '@/rest/next/NextRestClient'
 import {
   AuthService,
@@ -39,6 +40,7 @@ export function useRestContextProvider(): RestContextValue {
 
   return useMemo(
     () => ({
+      signedFileStorageProvider: SupabaseSignedFileStorageProvider(),
       authService: AuthService(restClient),
       profileService: ProfileService(restClient),
       spaceService: SpaceService(restClient),

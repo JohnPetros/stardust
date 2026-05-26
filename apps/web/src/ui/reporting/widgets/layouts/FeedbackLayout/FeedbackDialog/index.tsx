@@ -7,7 +7,7 @@ import { useFeedbackDialog } from './useFeedbackDialog'
 import { FeedbackDialogView } from './FeedbackDialogView'
 
 export function FeedbackDialog() {
-  const { reportingService, storageService } = useRestContext()
+  const { reportingService, storageService, signedFileStorageProvider } = useRestContext()
   const { user } = useAuthContext()
   const toast = useToastContext()
   const {
@@ -33,6 +33,7 @@ export function FeedbackDialog() {
   } = useFeedbackDialog({
     reportingService,
     storageService,
+    signedFileStorageProvider,
     user,
     toast,
   })
