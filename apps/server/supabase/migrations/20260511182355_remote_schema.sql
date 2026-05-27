@@ -8,8 +8,6 @@ create type "public"."feedback_intent" as enum ('bug', 'idea', 'other');
 
 create type "public"."guide_category" as enum ('lsp', 'mdx');
 
-create type "public"."insignia_role" as enum ('engineer', 'god');
-
 create type "public"."platform" as enum ('web', 'mobile');
 
 revoke delete on table "public"."docs" from "anon";
@@ -128,17 +126,6 @@ drop table "public"."docs";
 
 
 
-  create table "public"."insignias" (
-    "id" uuid not null default gen_random_uuid(),
-    "name" text not null,
-    "price" integer not null,
-    "image" text not null,
-    "role" public.insignia_role not null,
-    "is_purchasable" boolean not null default false
-      );
-
-
-
   create table "public"."questions" (
     "content" jsonb not null,
     "star_id" uuid not null,
@@ -156,13 +143,6 @@ alter table "public"."questions" enable row level security;
     "xp" bigint not null default '0'::bigint,
     "status" public.ranking_status not null default 'winner'::public.ranking_status,
     "position" integer not null
-      );
-
-
-
-  create table "public"."users_acquired_insignias" (
-    "user_id" character varying not null,
-    "insignia_id" uuid not null
       );
 
 
@@ -220,13 +200,7 @@ CREATE UNIQUE INDEX chats_pkey ON public.chats USING btree (id);
 
 CREATE UNIQUE INDEX feedback_reports_pkey ON public.feedback_reports USING btree (id);
 
-CREATE UNIQUE INDEX insignias_pkey ON public.insignias USING btree (id);
-
-CREATE UNIQUE INDEX insignias_role_key ON public.insignias USING btree (role);
-
 CREATE UNIQUE INDEX questions_pkey ON public.questions USING btree (id);
-
-CREATE UNIQUE INDEX users_acquired_insignias_pkey ON public.users_acquired_insignias USING btree (user_id, insignia_id);
 
 CREATE UNIQUE INDEX users_recently_unlocked_stars_pkey ON public.users_recently_unlocked_stars USING btree (user_id, star_id);
 
@@ -248,13 +222,9 @@ alter table "public"."feedback_reports" add constraint "feedback_reports_pkey" P
 
 alter table "public"."guides" add constraint "topics_pkey" PRIMARY KEY using index "topics_pkey";
 
-alter table "public"."insignias" add constraint "insignias_pkey" PRIMARY KEY using index "insignias_pkey";
-
 alter table "public"."questions" add constraint "questions_pkey" PRIMARY KEY using index "questions_pkey";
 
 alter table "public"."ranking_users" add constraint "winners_pkey" PRIMARY KEY using index "winners_pkey";
-
-alter table "public"."users_acquired_insignias" add constraint "users_acquired_insignias_pkey" PRIMARY KEY using index "users_acquired_insignias_pkey";
 
 alter table "public"."users_recently_unlocked_stars" add constraint "users_recently_unlocked_stars_pkey" PRIMARY KEY using index "users_recently_unlocked_stars_pkey";
 
@@ -286,8 +256,6 @@ alter table "public"."feedback_reports" add constraint "feedback_reports_user_id
 
 alter table "public"."feedback_reports" validate constraint "feedback_reports_user_id_fkey";
 
-alter table "public"."insignias" add constraint "insignias_role_key" UNIQUE using index "insignias_role_key";
-
 alter table "public"."questions" add constraint "questions_star_id_fkey" FOREIGN KEY (star_id) REFERENCES public.stars(id) ON DELETE CASCADE not valid;
 
 alter table "public"."questions" validate constraint "questions_star_id_fkey";
@@ -299,14 +267,6 @@ alter table "public"."ranking_users" validate constraint "winners_id_fkey";
 alter table "public"."ranking_users" add constraint "winners_tier_id_fkey" FOREIGN KEY (tier_id) REFERENCES public.tiers(id) ON DELETE CASCADE not valid;
 
 alter table "public"."ranking_users" validate constraint "winners_tier_id_fkey";
-
-alter table "public"."users_acquired_insignias" add constraint "users_acquired_insignias_insignia_id_fkey" FOREIGN KEY (insignia_id) REFERENCES public.insignias(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
-
-alter table "public"."users_acquired_insignias" validate constraint "users_acquired_insignias_insignia_id_fkey";
-
-alter table "public"."users_acquired_insignias" add constraint "users_acquired_insignias_user_id_fkey" FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
-
-alter table "public"."users_acquired_insignias" validate constraint "users_acquired_insignias_user_id_fkey";
 
 alter table "public"."users_recently_unlocked_stars" add constraint "users_recently_unlocked_stars_star_id_fkey" FOREIGN KEY (star_id) REFERENCES public.stars(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
 

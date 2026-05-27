@@ -32,7 +32,6 @@ export class SupabaseAvatarMapper {
       name: avatarDto.name,
       image: avatarDto.image,
       price: avatarDto.price,
-      is_purchasable: avatarDto.isPurchasable ?? true,
       is_acquired_by_default: avatarDto.isAcquiredByDefault ?? false,
       is_selected_by_default: avatarDto.isSelectedByDefault ?? false,
     }

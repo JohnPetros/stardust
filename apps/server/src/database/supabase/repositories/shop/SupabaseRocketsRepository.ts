@@ -20,7 +20,7 @@ export class SupabaseRocketsRepository
       .single()
 
     if (error) {
-      throw new SupabasePostgreError(error)
+      return this.handleQueryPostgresError(error)
     }
 
     return SupabaseRocketMapper.toEntity(data)

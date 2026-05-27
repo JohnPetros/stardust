@@ -1,0 +1,1 @@
+export { CommentsFaker } from './CommentsFaker'
