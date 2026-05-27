@@ -3,7 +3,7 @@ title: Migracao do upload de screenshots de feedback para URL assinada
 prd: https://github.com/JohnPetros/stardust/milestone/32
 issue: https://github.com/JohnPetros/stardust/issues/414
 apps: server, web, studio
-status: open
+status: closed
 last_updated_at: 2026-05-26
 ---
 

@@ -28,6 +28,8 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 
 **Studio signed upload**: Studio `ImageInput` → `StorageService.createSignedUploadUrl(...)` → Server `POST /storage/signed-upload-url` → `CreateSignedUploadUrl` → `SupabaseFileStorageProvider.createSignedUploadUrl(...)` → upload direto do binario ao Supabase Storage
 
+**Feedback screenshot signed upload**: Web `FeedbackDialog` → `StorageService.createSignedUploadUrl(...)` → Server `POST /storage/signed-upload-url` → `CreateSignedUploadUrl` → `SupabaseFileStorageProvider.createSignedUploadUrl(...)` → upload direto do binario ao Supabase Storage → `ReportingService.sendFeedbackReport(...)`
+
 ## Padrões Principais
 
 - **Widget** na UI para separar View (renderização), Hook (lógica/estado) e Index (integração).
