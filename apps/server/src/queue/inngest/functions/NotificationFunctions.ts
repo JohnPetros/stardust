@@ -23,6 +23,7 @@ import {
   idSchema,
   nameSchema,
   stringSchema,
+  authorAggregateSchema,
 } from '@stardust/validation/global/schemas'
 
 type PlanetCompletedPayload = EventPayload<typeof PlanetCompletedEvent>
@@ -96,11 +97,7 @@ export class NotificationFunctions extends InngestFunctions {
               feedbackReportContent: stringSchema,
               feedbackReportIntent: stringSchema,
               feedbackReportSentAt: stringSchema,
-              author: z.object({
-                id: idSchema,
-                name: nameSchema,
-                email: emailSchema,
-              }),
+              author: authorAggregateSchema,
             }),
           }),
         },
