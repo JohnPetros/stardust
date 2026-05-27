@@ -13,8 +13,11 @@ export class StorageMiddleware {
   }
 
   async verifySignedUploadUrlAccess(context: Context, next: Next): Promise<void> {
-    // @ts-ignore
-    const request = context.req.valid('json') as { folderPath: string }
+    const request = (
+      context.req as typeof context.req & {
+        valid(target: 'json'): { folderPath: string }
+      }
+    ).valid('json')
 
     if (request.folderPath === 'images/feedback-reports') {
       await next()

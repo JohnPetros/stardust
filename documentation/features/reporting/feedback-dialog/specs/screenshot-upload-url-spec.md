@@ -4,7 +4,7 @@ prd: https://github.com/JohnPetros/stardust/milestone/32
 issue: https://github.com/JohnPetros/stardust/issues/414
 apps: server, web, studio
 status: closed
-last_updated_at: 2026-05-26
+last_updated_at: 2026-05-27
 ---
 
 # 1. Objetivo (Obrigatorio)
@@ -331,8 +331,8 @@ apps/studio (consome signedUrl via SupabaseSignedFileStorageProvider)
 * `packages/core/src/storage/domain/structures/SignedUploadUrl.ts` - Validacao de extensoes por folder.
 * `packages/core/src/storage/domain/structures/FileStorageFolderPath.ts` - Factory `createAsFeedbackReports()` para `images/feedback-reports`.
 * `packages/validation/src/modules/storage/signedUploadUrlSchema.ts` - Schema do contrato de emissao da signed upload URL.
-* `https://github.com/JohnPetros/stardust/blob/main/documentation/features/reporting/feedback/prd.md` - PRD remoto usado como fonte de requisitos de produto para o widget de feedback.
-* `documentation/features/storage/picture-files-upload/specs/signed-upload-url-migraation-spec.md` - Spec anterior que manteve o upload legado temporariamente para o `web` e serve de contexto para esta remocao.
+* `https://github.com/JohnPetros/stardust/milestone/32` - Milestone/PRD associado usado como fonte de requisitos de produto para o widget de feedback.
+* `documentation/features/storage/picture-files-upload/specs/signed-upload-url-migration-spec.md` - Spec anterior que manteve o upload legado temporariamente para o `web` e serve de contexto para esta remocao.
 
 ---
 

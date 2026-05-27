@@ -13,7 +13,7 @@ export const authorAggregateSchema = z.object({
       slug: slugSchema,
       avatar: z.object({
         image: stringSchema,
-        name: stringSchema,
+        name: nameSchema,
       }),
     })
     .optional(),

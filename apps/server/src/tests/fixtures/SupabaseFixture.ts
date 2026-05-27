@@ -1,5 +1,10 @@
+import { execFileSync } from 'node:child_process'
+
 import { ENV } from '@/constants'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+
+import type { InsigniaRole } from '@stardust/core/global/structures'
+
 import { LocalSupabaseProxy } from './LocalSupabaseProxy'
 
 export class SupabaseFixture {
@@ -22,5 +27,15 @@ export class SupabaseFixture {
     await this.supabase.from('avatars').delete()
     await this.supabase.from('rockets').delete()
     await this.supabase.from('tiers').delete()
+  }
+
+  deleteInsigniaByRole(role: string | InsigniaRole) {
+    const roleValue = typeof role === 'string' ? role : role.value
+
+    execFileSync('psql', [
+      ENV.databaseUrl,
+      '-c',
+      `delete from public.insignias where role = '${roleValue}';`,
+    ])
   }
 }

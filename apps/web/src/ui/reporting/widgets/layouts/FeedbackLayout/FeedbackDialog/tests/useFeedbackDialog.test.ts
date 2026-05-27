@@ -28,6 +28,7 @@ describe('useFeedbackDialog', () => {
   let toast: ToastContextValue
   let fetchMock: jest.MockedFunction<typeof fetch>
   let consoleErrorSpy: jest.SpyInstance
+  let originalFetch: typeof fetch
 
   const user = UsersFaker.fake()
   const screenshotPreview = 'data:image/png;base64,ZmFrZQ=='
@@ -58,6 +59,7 @@ describe('useFeedbackDialog', () => {
       show: jest.fn(),
     }
     consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()
+    originalFetch = global.fetch
     fetchMock = jest.fn() as jest.MockedFunction<typeof fetch>
     global.fetch = fetchMock
 
@@ -83,6 +85,7 @@ describe('useFeedbackDialog', () => {
   })
 
   afterEach(() => {
+    global.fetch = originalFetch
     consoleErrorSpy.mockRestore()
     jest.restoreAllMocks()
   })
