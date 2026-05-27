@@ -1,13 +1,17 @@
 import { mkdir, rm } from 'node:fs/promises'
 
+const LOCKS_DIRECTORY = '/tmp'
+
 export class TestLockFixture {
   private readonly lockPath: string
 
   constructor(name: string) {
-    this.lockPath = `/tmp/opencode/${name}.lock`
+    this.lockPath = `${LOCKS_DIRECTORY}/${name}.lock`
   }
 
   async acquire(): Promise<void> {
+    await mkdir(LOCKS_DIRECTORY, { recursive: true })
+
     while (true) {
       try {
         await mkdir(this.lockPath)
