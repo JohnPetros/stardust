@@ -102,6 +102,7 @@ export * from './profile/use-cases/index'
 
 // Forum
 export * from './forum/domain/entities/index'
+export * from './forum/domain/entities/fakers/index'
 export * from './forum/domain/structures/index'
 export * from './forum/domain/entities/dtos/index'
 export * from './forum/domain/types/index'

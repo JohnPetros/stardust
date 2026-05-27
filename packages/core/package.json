@@ -130,6 +130,7 @@
     "./profile/interfaces": "./src/profile/interfaces/index.ts",
     "./profile/use-cases": "./src/profile/use-cases/index.ts",
     "./forum/entities": "./src/forum/domain/entities/index.ts",
+    "./forum/entities/fakers": "./src/forum/domain/entities/fakers/index.ts",
     "./forum/structures": "./src/forum/domain/structures/index.ts",
     "./forum/entities/dtos": "./src/forum/domain/entities/dtos/index.ts",
     "./forum/structures/dtos": "./src/forum/domain/structures/dtos/index.ts",

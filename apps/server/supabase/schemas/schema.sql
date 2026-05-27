@@ -28,6 +28,12 @@ CREATE TYPE public.ranking_status AS ENUM (
     'loser'
 );
 
+-- 4. Cria o tipo 'insignia_role'
+CREATE TYPE public.insignia_role AS ENUM (
+    'engineer',
+    'god'
+);
+
 -- Categories table
 create table public.categories (
   id uuid not null default extensions.uuid_generate_v4 (),
@@ -69,6 +75,18 @@ create table public.rockets (
   constraint rockets_pkey primary key (id),
   constraint rockets_image_key unique (image),
   constraint rockets_name_key unique (name)
+) TABLESPACE pg_default;
+
+-- Insignias table
+create table public.insignias (
+  id uuid not null default gen_random_uuid (),
+  name text not null,
+  price integer not null,
+  image text not null,
+  role public.insignia_role not null,
+  is_purchasable boolean not null default false,
+  constraint insignias_pkey primary key (id),
+  constraint insignias_role_key unique (role)
 ) TABLESPACE pg_default;
 
 -- Planets table
@@ -284,6 +302,15 @@ create table public.users_acquired_rockets (
   constraint users_acquired_rockets_pkey primary key (id),
   constraint users_acquired_rockets_rocket_id_fkey foreign KEY (rocket_id) references rockets (id),
   constraint users_acquired_rockets_user_id_fkey foreign KEY (user_id) references users (id) on update CASCADE on delete CASCADE
+) TABLESPACE pg_default;
+
+-- Users Acquired Insignias junction table
+create table public.users_acquired_insignias (
+  user_id character varying not null,
+  insignia_id uuid not null,
+  constraint users_acquired_insignias_pkey primary key (user_id, insignia_id),
+  constraint users_acquired_insignias_insignia_id_fkey foreign KEY (insignia_id) references insignias (id) on delete CASCADE,
+  constraint users_acquired_insignias_user_id_fkey foreign KEY (user_id) references users (id) on update CASCADE on delete CASCADE
 ) TABLESPACE pg_default;
 
 -- Users Challenge Votes junction table
