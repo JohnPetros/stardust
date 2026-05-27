@@ -1,6 +1,5 @@
 export { CreateSignedUploadUrlController } from './CreateSignedUploadUrlController'
 export { FetchFilesListController } from './FetchFilesListController'
 export { RemoveFileController } from './RemoveFileController'
-export { UploadFileController } from './UploadFileController'
 export { VerifyFileExistsController } from './VerifyFileExistsController'
 export { SearchEmbeddingsController } from './SearchEmbeddingsController'

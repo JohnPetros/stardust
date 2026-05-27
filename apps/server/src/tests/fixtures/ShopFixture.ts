@@ -100,6 +100,8 @@ export class ShopFixture {
   }
 
   async createInsignias(insignias: InsigniaDto[]): Promise<void> {
+    const ids = insignias.map((insignia) => `'${insignia.id}'`).join(', ')
+    const roles = insignias.map((insignia) => `'${insignia.role}'`).join(', ')
     const values = insignias
       .map((insignia) => {
         const name = insignia.name.replaceAll("'", "''")
@@ -112,7 +114,7 @@ export class ShopFixture {
     execFileSync('psql', [
       ENV.databaseUrl,
       '-c',
-      `insert into public.insignias (id, name, price, image, role, is_purchasable) values ${values};`,
+      `delete from public.insignias where id in (${ids}) or role in (${roles}); insert into public.insignias (id, name, price, image, role, is_purchasable) values ${values};`,
     ])
   }
 

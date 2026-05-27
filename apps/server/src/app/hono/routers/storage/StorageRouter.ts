@@ -7,21 +7,26 @@ import { SupabaseFileStorageProvider } from '@/provision/storage'
 import { CreateSignedUploadUrlController } from '@/rest/controllers/storage'
 import { EmbeddingsStorageRouter } from './EmbeddingsStorageRouter'
 import { FilesStorageRouter } from './FilesStorageRouter'
-import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
+import {
+  AuthMiddleware,
+  StorageMiddleware,
+  ValidationMiddleware,
+} from '../../middlewares'
 import { HonoHttp } from '../../HonoHttp'
 import { HonoRouter } from '../../HonoRouter'
 
 export class StorageRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/storage')
   private readonly authMiddleware = new AuthMiddleware()
+  private readonly storageMiddleware = new StorageMiddleware()
   private readonly validationMiddleware = new ValidationMiddleware()
 
   private registerCreateSignedUploadUrlRoute(): void {
     this.router.post(
       '/signed-upload-url',
       this.authMiddleware.verifyAuthentication,
-      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate('json', signedUploadUrlSchema),
+      this.storageMiddleware.verifySignedUploadUrlAccess,
       async (context) => {
         const http = new HonoHttp(context)
         const storageProvider = new SupabaseFileStorageProvider(http.getSupabase())

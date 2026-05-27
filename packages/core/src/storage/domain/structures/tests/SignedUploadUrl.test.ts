@@ -1,6 +1,24 @@
 import { SignedUploadUrl } from '../SignedUploadUrl'
 
 describe('SignedUploadUrl', () => {
+  it('should allow feedback report screenshots with supported extensions', () => {
+    expect(() =>
+      SignedUploadUrl.create({
+        url: 'https://storage.stardust.dev/upload',
+        folderPath: 'images/feedback-reports',
+        fileName: 'feedback.webp',
+      }),
+    ).not.toThrow()
+
+    expect(() =>
+      SignedUploadUrl.create({
+        url: 'https://storage.stardust.dev/upload',
+        folderPath: 'images/feedback-reports',
+        fileName: 'feedback.gif',
+      }),
+    ).toThrow('Invalid file extension for folder path: images/feedback-reports')
+  })
+
   it('should throw when file extension is not allowed for the folder path', () => {
     expect(() =>
       SignedUploadUrl.create({
