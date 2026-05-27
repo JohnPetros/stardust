@@ -18,5 +18,9 @@ export class SupabaseFixture {
     await LocalSupabaseProxy.ensureRunning()
     await this.supabase.from('users').delete()
     await this.supabase.from('achievements').delete()
+    await this.supabase.from('insignias').delete()
+    await this.supabase.from('avatars').delete()
+    await this.supabase.from('rockets').delete()
+    await this.supabase.from('tiers').delete()
   }
 }
