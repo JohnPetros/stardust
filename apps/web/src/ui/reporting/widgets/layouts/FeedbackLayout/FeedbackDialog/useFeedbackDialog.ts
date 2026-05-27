@@ -47,6 +47,18 @@ export function useFeedbackDialog({
     return toPng
   }
 
+  function shouldCaptureNode(node: Node) {
+    if (!(node instanceof HTMLElement)) return true
+
+    if (node.dataset.feedbackIgnoreCapture === 'true') return false
+
+    if (node instanceof HTMLImageElement && node.complete && node.naturalWidth === 0) {
+      return false
+    }
+
+    return true
+  }
+
   async function warmupCaptureEngine() {
     if (isCaptureWarmRef.current) return
 
@@ -71,6 +83,7 @@ export function useFeedbackDialog({
             width: 16,
             height: 16,
             pixelRatio: 1,
+            filter: shouldCaptureNode,
           })
 
           isCaptureWarmRef.current = true
@@ -152,10 +165,7 @@ export function useFeedbackDialog({
         width: window.innerWidth,
         height: window.innerHeight,
         pixelRatio: 1,
-        filter: (node) => {
-          if (!(node instanceof HTMLElement)) return true
-          return node.dataset.feedbackIgnoreCapture !== 'true'
-        },
+        filter: shouldCaptureNode,
         style: {
           marginTop: `-${scrollY}px`,
           marginLeft: `-${scrollX}px`,
