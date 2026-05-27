@@ -24,8 +24,7 @@ export class SupabaseUsersRepository
   extends SupabaseRepository
   implements UsersRepository
 {
-  async findById(userId: Id): Promise<User | null> {
-    const fallbackSelect = `*,
+  private static readonly FALLBACK_USER_SELECT = `*,
       avatar:avatars(*), 
       rocket:rockets(*), 
       tier:tiers(*),
@@ -37,28 +36,43 @@ export class SupabaseUsersRepository
       users_completed_challenges(challenge_id),
       users_upvoted_solutions(solution_id),
       users_upvoted_comments(comment_id)`
-    const fullSelect = `${fallbackSelect}, insignias(role), users_recently_unlocked_stars(star_id)`
 
+  private static readonly FULL_USER_SELECT =
+    `${SupabaseUsersRepository.FALLBACK_USER_SELECT}, insignias(role), users_recently_unlocked_stars(star_id)`
+
+  private shouldFallbackUserSelect(error: { message: string } | null) {
+    return Boolean(
+      error?.message.includes(
+        "Could not find a relationship between 'users' and 'insignias'",
+      ) ||
+        error?.message.includes(
+          "Could not find a relationship between 'users' and 'users_recently_unlocked_stars'",
+        ),
+    )
+  }
+
+  private normalizeSupabaseUser(data: SupabaseUser): SupabaseUser {
+    return {
+      ...data,
+      insignias: data.insignias ?? [],
+      users_recently_unlocked_stars: data.users_recently_unlocked_stars ?? [],
+    }
+  }
+
+  async findById(userId: Id): Promise<User | null> {
     const primaryResponse = await this.supabase
       .from('users')
-      .select(fullSelect)
+      .select(SupabaseUsersRepository.FULL_USER_SELECT)
       .eq('id', userId.value)
       .single()
 
     let data: SupabaseUser | null = primaryResponse.data as SupabaseUser | null
     let error = primaryResponse.error
 
-    if (
-      error?.message.includes(
-        "Could not find a relationship between 'users' and 'insignias'",
-      ) ||
-      error?.message.includes(
-        "Could not find a relationship between 'users' and 'users_recently_unlocked_stars'",
-      )
-    ) {
+    if (this.shouldFallbackUserSelect(error)) {
       const fallbackResponse = await this.supabase
         .from('users')
-        .select(fallbackSelect)
+        .select(SupabaseUsersRepository.FALLBACK_USER_SELECT)
         .eq('id', userId.value)
         .single()
 
@@ -75,9 +89,7 @@ export class SupabaseUsersRepository
     }
 
     const supabaseUser: SupabaseUser = {
-      ...(data as SupabaseUser),
-      insignias: data.insignias ?? [],
-      users_recently_unlocked_stars: data.users_recently_unlocked_stars ?? [],
+      ...this.normalizeSupabaseUser(data as SupabaseUser),
       users_completed_planets: await this.findUserCompletedPlanets(data.id),
     }
 
@@ -111,26 +123,25 @@ export class SupabaseUsersRepository
   }
 
   async findBySlug(slug: Slug): Promise<User | null> {
-    const { data, error } = await this.supabase
+    const primaryResponse = await this.supabase
       .from('users')
-      .select(
-        `*, 
-          avatar:avatars(*), 
-          rocket:rockets(*), 
-          tier:tiers(*),
-          insignias(role),
-          users_unlocked_stars(star_id),
-          users_recently_unlocked_stars(star_id),
-          users_unlocked_achievements(achievement_id),
-          users_rescuable_achievements(achievement_id),
-          users_acquired_rockets(rocket_id),
-          users_acquired_avatars(avatar_id),
-          users_completed_challenges(challenge_id),
-          users_upvoted_solutions(solution_id),
-          users_upvoted_comments(comment_id)`,
-      )
+      .select(SupabaseUsersRepository.FULL_USER_SELECT)
       .eq('slug', slug.value)
       .single()
+
+    let data: SupabaseUser | null = primaryResponse.data as SupabaseUser | null
+    let error = primaryResponse.error
+
+    if (this.shouldFallbackUserSelect(error)) {
+      const fallbackResponse = await this.supabase
+        .from('users')
+        .select(SupabaseUsersRepository.FALLBACK_USER_SELECT)
+        .eq('slug', slug.value)
+        .single()
+
+      data = fallbackResponse.data as SupabaseUser | null
+      error = fallbackResponse.error
+    }
 
     if (error && error.code === this.POSTGRES_ERROR_CODES.PGRST116) {
       return null
@@ -140,8 +151,12 @@ export class SupabaseUsersRepository
       throw new SupabasePostgreError(error)
     }
 
+    if (!data) {
+      return null
+    }
+
     const supabaseUser: SupabaseUser = {
-      ...data,
+      ...this.normalizeSupabaseUser(data),
       users_completed_planets: await this.findUserCompletedPlanets(data.id),
     }
 
@@ -176,61 +191,59 @@ export class SupabaseUsersRepository
   }
 
   async findByName(name: Name): Promise<User | null> {
-    const { data, error } = await this.supabase
+    const primaryResponse = await this.supabase
       .from('users')
-      .select(
-        `*,
-        avatar:avatars(*), 
-        rocket:rockets(*), 
-        tier:tiers(*),
-        insignias(role),
-        users_unlocked_stars(star_id),
-        users_recently_unlocked_stars(star_id),
-        users_unlocked_achievements(achievement_id),
-        users_rescuable_achievements(achievement_id),
-        users_acquired_rockets(rocket_id),
-        users_acquired_avatars(avatar_id),
-        users_completed_challenges(challenge_id),
-        users_upvoted_solutions(solution_id),
-        users_upvoted_comments(comment_id)`,
-      )
+      .select(SupabaseUsersRepository.FULL_USER_SELECT)
       .eq('name', name.value)
       .single()
 
+    let data: SupabaseUser | null = primaryResponse.data as SupabaseUser | null
+    let error = primaryResponse.error
+
+    if (this.shouldFallbackUserSelect(error)) {
+      const fallbackResponse = await this.supabase
+        .from('users')
+        .select(SupabaseUsersRepository.FALLBACK_USER_SELECT)
+        .eq('name', name.value)
+        .single()
+
+      data = fallbackResponse.data as SupabaseUser | null
+      error = fallbackResponse.error
+    }
+
     if (error) {
       return this.handleQueryPostgresError(error)
     }
 
-    return SupabaseUserMapper.toEntity(data)
+    return data ? SupabaseUserMapper.toEntity(this.normalizeSupabaseUser(data)) : null
   }
 
   async findByEmail(email: Email): Promise<User | null> {
-    const { data, error } = await this.supabase
+    const primaryResponse = await this.supabase
       .from('users')
-      .select(
-        `*,
-        avatar:avatars(*), 
-        rocket:rockets(*), 
-        tier:tiers(*),
-        insignias(role),
-        users_unlocked_stars(star_id),
-        users_recently_unlocked_stars(star_id),
-        users_unlocked_achievements(achievement_id),
-        users_rescuable_achievements(achievement_id),
-        users_acquired_rockets(rocket_id),
-        users_acquired_avatars(avatar_id),
-        users_completed_challenges(challenge_id),
-        users_upvoted_solutions(solution_id),
-        users_upvoted_comments(comment_id)`,
-      )
+      .select(SupabaseUsersRepository.FULL_USER_SELECT)
       .eq('email', email.value)
       .single()
+
+    let data: SupabaseUser | null = primaryResponse.data as SupabaseUser | null
+    let error = primaryResponse.error
+
+    if (this.shouldFallbackUserSelect(error)) {
+      const fallbackResponse = await this.supabase
+        .from('users')
+        .select(SupabaseUsersRepository.FALLBACK_USER_SELECT)
+        .eq('email', email.value)
+        .single()
+
+      data = fallbackResponse.data as SupabaseUser | null
+      error = fallbackResponse.error
+    }
 
     if (error) {
       return this.handleQueryPostgresError(error)
     }
 
-    return SupabaseUserMapper.toEntity(data)
+    return data ? SupabaseUserMapper.toEntity(this.normalizeSupabaseUser(data)) : null
   }
 
   async findByGoogleAccountId(googleAccountId: Id): Promise<User | null> {
@@ -305,31 +318,93 @@ export class SupabaseUsersRepository
   }
 
   async findAll(): Promise<User[]> {
-    const { data, error } = await this.supabase.from('users').select(
-      `*,
-        avatar:avatars(*), 
-        rocket:rockets(*), 
-        tier:tiers(*),
-        insignias(role),
-        users_unlocked_stars(star_id),
-        users_recently_unlocked_stars(star_id),
-        users_unlocked_achievements(achievement_id),
-        users_rescuable_achievements(achievement_id),
-        users_acquired_rockets(rocket_id),
-        users_acquired_avatars(avatar_id),
-        users_completed_challenges(challenge_id),
-        users_upvoted_solutions(solution_id),
-        users_upvoted_comments(comment_id)`,
-    )
+    const primaryResponse = await this.supabase
+      .from('users')
+      .select(SupabaseUsersRepository.FULL_USER_SELECT)
+
+    let data = primaryResponse.data as SupabaseUser[] | null
+    let error = primaryResponse.error
+
+    if (this.shouldFallbackUserSelect(error)) {
+      const fallbackResponse = await this.supabase
+        .from('users')
+        .select(SupabaseUsersRepository.FALLBACK_USER_SELECT)
+
+      data = fallbackResponse.data as SupabaseUser[] | null
+      error = fallbackResponse.error
+    }
 
     if (error) throw new SupabasePostgreError(error)
 
-    return data.map(SupabaseUserMapper.toEntity)
+    return (data ?? []).map((user) =>
+      SupabaseUserMapper.toEntity(this.normalizeSupabaseUser(user)),
+    )
   }
 
   async findMany(params: UsersListingParams): Promise<ManyItems<User>> {
-    let query = this.supabase.from('users').select(
-      `*,
+    const buildQuery = (select: string) => {
+      let query = this.supabase.from('users').select(select, {
+        count: 'exact',
+        head: false,
+      })
+
+      if (params.search && params.search.value.length > 1) {
+        query = query.ilike('name', `%${params.search.value}%`)
+      }
+
+      if (params.levelOrder.isAscending.isTrue) {
+        query = query.order('level', { ascending: true })
+      } else if (params.levelOrder.isDescending.isTrue) {
+        query = query.order('level', { ascending: false })
+      }
+
+      if (params.weeklyXpOrder.isAscending.isTrue) {
+        query = query.order('weekly_xp', { ascending: true })
+      } else if (params.weeklyXpOrder.isDescending.isTrue) {
+        query = query.order('weekly_xp', { ascending: false })
+      }
+
+      if (params.unlockedStarCountOrder.isAscending.isTrue) {
+        query = query.order('count_user_unlocked_stars', { ascending: true })
+      } else if (params.unlockedStarCountOrder.isDescending.isTrue) {
+        query = query.order('count_user_unlocked_stars', { ascending: false })
+      }
+
+      if (params.unlockedAchievementCountOrder.isAscending.isTrue) {
+        query = query.order('count_user_unlocked_achievements', { ascending: true })
+      } else if (params.unlockedAchievementCountOrder.isDescending.isTrue) {
+        query = query.order('count_user_unlocked_achievements', { ascending: false })
+      }
+
+      if (params.completedChallengeCountOrder.isAscending.isTrue) {
+        query = query.order('count_user_completed_challenges', { ascending: true })
+      } else if (params.completedChallengeCountOrder.isDescending.isTrue) {
+        query = query.order('count_user_completed_challenges', { ascending: false })
+      }
+
+      if (params.spaceCompletionStatus.isCompleted.isTrue) {
+        query = query.eq('verify_user_space_completion', true)
+      } else if (params.spaceCompletionStatus.isNotCompleted.isTrue) {
+        query = query.eq('verify_user_space_completion', false)
+      }
+
+      if (params.insigniaRoles.length) {
+        const insigniaRoleValues = params.insigniaRoles.map((role) => role.value)
+        query = query.in('insignias.role', insigniaRoleValues)
+      }
+
+      if (params.creationPeriod) {
+        query = query
+          .gte('created_at', params.creationPeriod.startDate.toISOString())
+          .lte('created_at', params.creationPeriod.endDate.toISOString())
+      }
+
+      const range = this.calculateQueryRange(params.page.value, params.itemsPerPage.value)
+
+      return query.order('created_at', { ascending: false }).range(range.from, range.to)
+    }
+
+    const fullSelect = `*,
       avatar:avatars(*), 
       rocket:rockets(*), 
       tier:tiers(*),
@@ -342,75 +417,39 @@ export class SupabaseUsersRepository
       users_acquired_avatars(avatar_id),
       users_completed_challenges(challenge_id),
       users_upvoted_solutions(solution_id),
-      users_upvoted_comments(comment_id)`,
-      {
-        count: 'exact',
-        head: false,
-      },
-    )
+      users_upvoted_comments(comment_id)`
 
-    if (params.search && params.search.value.length > 1) {
-      query = query.ilike('name', `%${params.search.value}%`)
+    const fallbackSelect = `*,
+      avatar:avatars(*), 
+      rocket:rockets(*), 
+      tier:tiers(*),
+      users_unlocked_stars(star_id),
+      users_unlocked_achievements(achievement_id),
+      users_rescuable_achievements(achievement_id),
+      users_acquired_rockets(rocket_id),
+      users_acquired_avatars(avatar_id),
+      users_completed_challenges(challenge_id),
+      users_upvoted_solutions(solution_id),
+      users_upvoted_comments(comment_id)`
+
+    let { data, count, error } = await buildQuery(fullSelect)
+
+    if (this.shouldFallbackUserSelect(error) && params.insigniaRoles.length === 0) {
+      const fallbackResponse = await buildQuery(fallbackSelect)
+      data = fallbackResponse.data
+      count = fallbackResponse.count
+      error = fallbackResponse.error
     }
-
-    if (params.levelOrder.isAscending.isTrue) {
-      query = query.order('level', { ascending: true })
-    } else if (params.levelOrder.isDescending.isTrue) {
-      query = query.order('level', { ascending: false })
-    }
-
-    if (params.weeklyXpOrder.isAscending.isTrue) {
-      query = query.order('weekly_xp', { ascending: true })
-    } else if (params.weeklyXpOrder.isDescending.isTrue) {
-      query = query.order('weekly_xp', { ascending: false })
-    }
-
-    if (params.unlockedStarCountOrder.isAscending.isTrue) {
-      query = query.order('count_user_unlocked_stars', { ascending: true })
-    } else if (params.unlockedStarCountOrder.isDescending.isTrue) {
-      query = query.order('count_user_unlocked_stars', { ascending: false })
-    }
-
-    if (params.unlockedAchievementCountOrder.isAscending.isTrue) {
-      query = query.order('count_user_unlocked_achievements', { ascending: true })
-    } else if (params.unlockedAchievementCountOrder.isDescending.isTrue) {
-      query = query.order('count_user_unlocked_achievements', { ascending: false })
-    }
-
-    if (params.completedChallengeCountOrder.isAscending.isTrue) {
-      query = query.order('count_user_completed_challenges', { ascending: true })
-    } else if (params.completedChallengeCountOrder.isDescending.isTrue) {
-      query = query.order('count_user_completed_challenges', { ascending: false })
-    }
-
-    if (params.spaceCompletionStatus.isCompleted.isTrue) {
-      query = query.eq('verify_user_space_completion', true)
-    } else if (params.spaceCompletionStatus.isNotCompleted.isTrue) {
-      query = query.eq('verify_user_space_completion', false)
-    }
-
-    if (params.insigniaRoles.length) {
-      const insigniaRoleValues = params.insigniaRoles.map((role) => role.value)
-      query = query.in('insignias.role', insigniaRoleValues)
-    }
-
-    if (params.creationPeriod) {
-      query = query
-        .gte('created_at', params.creationPeriod.startDate.toISOString())
-        .lte('created_at', params.creationPeriod.endDate.toISOString())
-    }
-
-    const range = this.calculateQueryRange(params.page.value, params.itemsPerPage.value)
-
-    query = query.order('created_at', { ascending: false }).range(range.from, range.to)
-
-    const { data, count, error } = await query
 
     if (error) {
       throw new SupabasePostgreError(error)
     }
 
-    const users = data.map(SupabaseUserMapper.toEntity)
+    const supabaseUsers = (data ?? []) as unknown as SupabaseUser[]
+
+    const users = supabaseUsers.map((user) =>
+      SupabaseUserMapper.toEntity(this.normalizeSupabaseUser(user)),
+    )
 
     return {
       items: users,
