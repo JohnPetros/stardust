@@ -17,14 +17,6 @@ export class SendFeedbackReportUseCase implements UseCase<Request, Response> {
   async execute(request: Request): Response {
     const report = FeedbackReport.create(request)
     await this.repository.add(report)
-    console.log({
-      feedbackReportId: report.id.value,
-      feedbackReportContent: report.content.value,
-      feedbackReportIntent: report.intent.value,
-      feedbackReportSentAt: report.sentAt.toISOString(),
-      screenshot: report.screenshot?.value,
-      author: report.author.dto,
-    })
     const event = new FeedbackReportSentEvent({
       feedbackReportId: report.id.value,
       feedbackReportContent: report.content.value,
