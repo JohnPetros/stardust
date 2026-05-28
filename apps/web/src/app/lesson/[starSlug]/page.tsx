@@ -21,7 +21,6 @@ const Page = async ({ params }: NextParams<'starSlug'>) => {
       starName={starDto.name}
       starNumber={starDto.number}
       questionsDto={lessonResponse.data.questions}
-      storyContent={lessonResponse.data.story}
       textsBlocksDto={lessonResponse.data.textsBlocks}
     />
   )
