@@ -26,8 +26,6 @@ export class FilesStorageRouter extends HonoRouter {
   private registerlistFilesRoute(): void {
     this.router.get(
       '/',
-      this.authMiddleware.verifyAuthentication,
-      this.authMiddleware.verifyGodAccount,
       this.validationMiddleware.validate(
         'query',
         z.object({
