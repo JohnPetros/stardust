@@ -53,4 +53,12 @@ describe('TextBlock Structure', () => {
     expect(updatedTextBlock.dto.audio).toEqual(audio.dto)
     expect(textBlock.audio).toBeUndefined()
   })
+
+  it('should allow audio for image blocks and keep non eligible blocks disabled', () => {
+    const imageBlock = TextBlock.create(makeDto({ type: 'image' }))
+    const userBlock = TextBlock.create(makeDto({ type: 'user', picture: undefined }))
+
+    expect(imageBlock.canHaveAudio.value).toBe(true)
+    expect(userBlock.canHaveAudio.value).toBe(false)
+  })
 })

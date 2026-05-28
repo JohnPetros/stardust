@@ -88,7 +88,10 @@ export class TextBlock {
 
   get canHaveAudio(): Logical {
     return Logical.create(
-      this.type === 'default' || this.type === 'alert' || this.type === 'quote',
+      this.type === 'default' ||
+        this.type === 'alert' ||
+        this.type === 'quote' ||
+        this.type === 'image',
     )
   }
 

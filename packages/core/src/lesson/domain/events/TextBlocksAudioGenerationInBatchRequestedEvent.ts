@@ -11,7 +11,7 @@ type Payload = {
 }
 
 export class TextBlocksAudioGenerationInBatchRequestedEvent extends Event<Payload> {
-  static readonly _NAME = 'lesson/text-blocks.audio-generation-in-batch.requested'
+  static readonly _NAME = 'lesson/text-blocks.audio.generation.in-batch.requested'
 
   constructor(readonly payload: Payload) {
     super(TextBlocksAudioGenerationInBatchRequestedEvent._NAME, payload)
