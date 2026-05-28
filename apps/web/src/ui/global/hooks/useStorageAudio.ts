@@ -3,9 +3,13 @@ import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { useFileStorage } from './useFileStorage'
 
 export function useStorageAudio(fileName?: string): { url: string | null } {
-  if (!fileName) return { url: null }
+  const resolvedFileName = fileName ?? ''
+  const url = useFileStorage(
+    FileStorageFolderPath.createAsAudiosStory(),
+    resolvedFileName,
+  )
 
   return {
-    url: useFileStorage(FileStorageFolderPath.createAsAudiosStory(), fileName),
+    url: fileName ? url : null,
   }
 }

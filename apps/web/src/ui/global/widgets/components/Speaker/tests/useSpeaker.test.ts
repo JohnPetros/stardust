@@ -3,6 +3,14 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 import { useSpeaker } from '../useSpeaker'
 
 describe('useSpeaker', () => {
+  type Props = {
+    url: string | null
+    volume: number
+    rate: number
+    shouldAutoPlay: boolean
+    isActive: boolean
+  }
+
   const playMock = jest
     .spyOn(HTMLMediaElement.prototype, 'play')
     .mockImplementation(async () => undefined)
@@ -10,7 +18,7 @@ describe('useSpeaker', () => {
     .spyOn(HTMLMediaElement.prototype, 'pause')
     .mockImplementation(() => undefined)
 
-  const defaultProps = {
+  const defaultProps: Props = {
     url: 'https://cdn.stardust/audio.wav',
     volume: 0.7,
     rate: 1.1,
@@ -27,7 +35,7 @@ describe('useSpeaker', () => {
     pauseMock.mockRestore()
   })
 
-  function Hook(props = defaultProps) {
+  function Hook(props: Props = defaultProps) {
     return renderHook((currentProps) => useSpeaker(currentProps), {
       initialProps: props,
     })
@@ -36,7 +44,7 @@ describe('useSpeaker', () => {
   function attachAudioElement(
     result: ReturnType<typeof Hook>['result'],
     rerender: ReturnType<typeof Hook>['rerender'],
-    props = defaultProps,
+    props: Props = defaultProps,
   ) {
     act(() => {
       result.current.audioRef.current = document.createElement('audio')
@@ -106,5 +114,38 @@ describe('useSpeaker', () => {
     attachAudioElement(result, rerender, props)
 
     await waitFor(() => expect(playMock).toHaveBeenCalled())
+  })
+
+  it('should keep playing when volume changes', async () => {
+    const { result, rerender } = Hook()
+
+    attachAudioElement(result, rerender)
+    const currentUrl = `${defaultProps.url}?attached=1`
+
+    await act(async () => {
+      await result.current.handleTogglePlay()
+    })
+
+    jest.clearAllMocks()
+
+    rerender({ ...defaultProps, url: currentUrl, volume: 0.4 })
+
+    expect(pauseMock).not.toHaveBeenCalled()
+    expect(result.current.isPlaying).toBe(true)
+  })
+
+  it('should pause when url becomes unavailable', async () => {
+    const { result, rerender } = Hook()
+
+    attachAudioElement(result, rerender)
+
+    await act(async () => {
+      await result.current.handleTogglePlay()
+    })
+
+    rerender({ ...defaultProps, url: null })
+
+    expect(pauseMock).toHaveBeenCalled()
+    expect(result.current.isPlaying).toBe(false)
   })
 })

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 type Params = {
-  url: string
+  url: string | null
   volume: number
   rate: number
   shouldAutoPlay: boolean
@@ -37,10 +37,10 @@ export function useSpeaker({ url, volume, rate, shouldAutoPlay, isActive }: Para
 
   useEffect(() => {
     const audioElement = audioRef.current
-    if (!audioElement) return
-
-    audioElement.volume = volume
-    audioElement.playbackRate = rate
+    if (!audioElement || !url) {
+      handlePause()
+      return
+    }
 
     function handleEnded() {
       setIsPlaying(false)
@@ -53,7 +53,14 @@ export function useSpeaker({ url, volume, rate, shouldAutoPlay, isActive }: Para
       audioElement.pause()
       setIsPlaying(false)
     }
-  }, [rate, url, volume])
+  }, [handlePause, url])
+
+  useEffect(() => {
+    if (!audioRef.current) return
+
+    audioRef.current.volume = volume
+    audioRef.current.playbackRate = rate
+  }, [rate, volume])
 
   useEffect(() => {
     if (isActive) return
@@ -62,7 +69,7 @@ export function useSpeaker({ url, volume, rate, shouldAutoPlay, isActive }: Para
   }, [handlePause, isActive])
 
   useEffect(() => {
-    if (!shouldAutoPlay || !isActive || !audioRef.current) return
+    if (!url || !shouldAutoPlay || !isActive || !audioRef.current) return
 
     async function tryPlay() {
       try {

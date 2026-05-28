@@ -10,6 +10,7 @@ type Props = {
 
 export const Speaker = ({ fileName, isActive = false }: Props) => {
   const { url } = useStorageAudio(fileName)
+  const hasAudio = Boolean(fileName && url)
   const {
     volume,
     rate,
@@ -19,8 +20,6 @@ export const Speaker = ({ fileName, isActive = false }: Props) => {
     handleAutoPlayToggle,
   } = useSpeakerSettings()
 
-  if (!fileName || !url) return null
-
   const { audioRef, isPlaying, handleTogglePlay } = useSpeaker({
     url,
     volume,
@@ -28,6 +27,8 @@ export const Speaker = ({ fileName, isActive = false }: Props) => {
     shouldAutoPlay,
     isActive,
   })
+
+  if (!hasAudio || !url) return null
 
   return (
     <SpeakerView
