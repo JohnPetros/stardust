@@ -34,6 +34,21 @@ export class OpenRouterElevenLabsTtsProvider implements TtsProvider {
       instructions:
         'Fale em português do Brasil com voz feminina doce, alegre, encantadora e mágica. Soe como uma princesa de desenho infantil, com tom delicado, expressivo e acolhedor.',
     },
+    alien: {
+      voice: 'RGbeQtiShYRDVCrd9b9w',
+      instructions:
+        'Fale em português do Brasil com voz alienígena cartunesca, curiosa, simpática e levemente estranha. Soe como um alien pequeno de desenho animado: fofo, empolgado, divertido e um pouco robótico, mas claro e fácil de entender.',
+    },
+    robot: {
+      voice: 'RGbeQtiShYRDVCrd9b9w',
+      instructions:
+        'Fale em português do Brasil com voz de robô amigável, analítica, precisa e um pouco mecânica. Soe como um assistente analisador de desenho animado: inteligente, curioso, calmo e levemente engraçado. Use uma cadência organizada, com pequenas pausas naturais.',
+    },
+    salmonense: {
+      voice: 'RGbeQtiShYRDVCrd9b9w',
+      instructions:
+        'Fale em português do Brasil com voz masculina jovem, energética, brincalhona e esperta. Soe como um macaquinho de desenho animado: rápido, curioso, travesso, expressivo e animado. Use ritmo acelerado e tom divertido.',
+    },
   }
 
   async generate(text: Text, voice: AudioVoice): Promise<File> {

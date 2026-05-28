@@ -7,6 +7,9 @@ export class FetchAudioVoicesController implements Controller {
       { value: 'panda', label: 'Panda' },
       { value: 'shark', label: 'Tubarão' },
       { value: 'princess', label: 'Princesa' },
+      { value: 'alien', label: 'Alien' },
+      { value: 'robot', label: 'Robô' },
+      { value: 'salmonense', label: 'Salmonense' },
     ]
 
     return http.send(voices)
