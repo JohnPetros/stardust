@@ -6,6 +6,8 @@ import { Title } from '../Title'
 type TextProps = {
   title: string
   picture: string
+  audioFileName?: string
+  audioStatus?: string
   children: string | string[]
   hasAnimation?: boolean
 }
@@ -13,6 +15,8 @@ type TextProps = {
 export const TextView = ({
   title,
   picture,
+  audioFileName,
+  audioStatus,
   children,
   hasAnimation = false,
 }: TextProps) => {
@@ -26,7 +30,12 @@ export const TextView = ({
         )}
         <div className='flex w-full flex-col gap-4 md:gap-2 md:items-center md:justify-center md:flex-row'>
           {picture && <Picture url={picture} />}
-          <Content type='default' hasAnimation={hasAnimation}>
+          <Content
+            type='default'
+            hasAnimation={hasAnimation}
+            audioFileName={audioFileName}
+            audioStatus={audioStatus}
+          >
             {children}
           </Content>
         </div>

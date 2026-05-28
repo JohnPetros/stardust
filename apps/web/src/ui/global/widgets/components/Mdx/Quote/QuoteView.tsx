@@ -6,6 +6,8 @@ import { Title } from '../Title'
 type QuoteProps = {
   title: string
   picture: string
+  audioFileName?: string
+  audioStatus?: string
   children: string | string[]
   hasAnimation?: boolean
 }
@@ -13,6 +15,8 @@ type QuoteProps = {
 export const QuoteView = ({
   title,
   picture,
+  audioFileName,
+  audioStatus,
   children,
   hasAnimation = false,
 }: QuoteProps) => {
@@ -26,7 +30,12 @@ export const QuoteView = ({
         )}
         <div className='flex w-full items-center'>
           {picture && <Picture url={picture} />}
-          <Content type='quote' hasAnimation={hasAnimation}>
+          <Content
+            type='quote'
+            hasAnimation={hasAnimation}
+            audioFileName={audioFileName}
+            audioStatus={audioStatus}
+          >
             {children}
           </Content>
         </div>
