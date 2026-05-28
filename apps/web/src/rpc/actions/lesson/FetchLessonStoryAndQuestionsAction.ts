@@ -11,7 +11,6 @@ type Request = {
 type Response = {
   questions: QuestionDto[]
   textsBlocks: TextBlockDto[]
-  story: string
 }
 
 export const FetchLessonStoryAndQuestionsAction = (
@@ -22,10 +21,9 @@ export const FetchLessonStoryAndQuestionsAction = (
       const { starId: starIdValue } = call.getRequest()
       const starId = Id.create(starIdValue)
 
-      const [questionsResponse, textsBlocksResponse, storyResponse] = await Promise.all([
+      const [questionsResponse, textsBlocksResponse] = await Promise.all([
         service.fetchQuestions(starId),
         service.fetchTextsBlocks(starId),
-        service.fetchStarStory(starId),
       ])
 
       if (questionsResponse.isFailure) questionsResponse.throwError()
@@ -34,13 +32,9 @@ export const FetchLessonStoryAndQuestionsAction = (
       if (textsBlocksResponse.isFailure) textsBlocksResponse.throwError()
       const textsBlocks = textsBlocksResponse.body
 
-      if (storyResponse.isFailure) storyResponse.throwError()
-      const story = storyResponse.body.story
-
       return {
         questions,
         textsBlocks,
-        story,
       }
     },
   }

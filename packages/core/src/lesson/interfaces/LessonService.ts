@@ -10,7 +10,6 @@ export interface LessonService {
   fetchQuestions(starId: Id): Promise<RestResponse<QuestionDto[]>>
   fetchAudioVoices(): Promise<RestResponse<AudioVoiceDto[]>>
   fetchTextsBlocks(starId: Id): Promise<RestResponse<TextBlockDto[]>>
-  fetchStarStory(starId: Id): Promise<RestResponse<{ story: string }>>
   fetchRemainingCodeExplanationUses(): Promise<RestResponse<{ remainingUses: number }>>
   explainCode(code: string): Promise<RestResponse<{ explanation: string }>>
   updateTextBlocks(

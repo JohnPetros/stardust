@@ -22,13 +22,6 @@ const mockTextBlocksFetch = {
   refetch: jest.fn(),
 }
 
-const mockStoryFetch = {
-  data: null as { story?: string } | null,
-  error: '',
-  isLoading: false,
-  refetch: jest.fn(),
-}
-
 jest.mock('@/ui/global/widgets/components/Mdx/useMdx', () => ({
   useMdx: () => ({
     parseTextBlocksToMdx: mockParseTextBlocksToMdx,
@@ -45,13 +38,7 @@ jest.mock('@/ui/global/stores/ActionButtonStore', () => ({
 }))
 
 jest.mock('@/ui/global/hooks/useFetch', () => ({
-  useFetch: jest.fn(({ key }: { key: string }) => {
-    if (key.includes('legacy-story')) {
-      return mockStoryFetch
-    }
-
-    return mockTextBlocksFetch
-  }),
+  useFetch: jest.fn(() => mockTextBlocksFetch),
 }))
 
 describe('useLessonStoryPage', () => {
@@ -87,11 +74,6 @@ describe('useLessonStoryPage', () => {
     mockTextBlocksFetch.error = ''
     mockTextBlocksFetch.isLoading = false
     mockTextBlocksFetch.refetch = jest.fn()
-
-    mockStoryFetch.data = { story: '' }
-    mockStoryFetch.error = ''
-    mockStoryFetch.isLoading = false
-    mockStoryFetch.refetch = jest.fn()
 
     lessonService.updateTextBlocks.mockResolvedValue(
       new RestResponse({
@@ -132,15 +114,14 @@ describe('useLessonStoryPage', () => {
     expect(result.current.isSaveDisabled).toBe(true)
   })
 
-  it('should block editing when there is only legacy story content', async () => {
+  it('should show empty state when there are no text blocks', async () => {
     mockTextBlocksFetch.data = []
-    mockStoryFetch.data = { story: 'story legado' }
 
     const { result } = Hook()
 
-    await waitFor(() => expect(result.current.isBlocked).toBe(true))
+    await waitFor(() => expect(result.current.isEmpty).toBe(true))
 
-    expect(result.current.blockingReason).toContain('story legado')
+    expect(result.current.isBlocked).toBe(false)
     expect(result.current.isSaveDisabled).toBe(true)
   })
 
@@ -255,7 +236,7 @@ describe('useLessonStoryPage', () => {
     expect(mockSetIsExecuting).toHaveBeenLastCalledWith(false)
   })
 
-  it('should refetch both requests when retry is triggered', async () => {
+  it('should refetch text blocks when retry is triggered', async () => {
     const { result } = Hook()
 
     await waitFor(() => expect(result.current.textBlocks).toHaveLength(2))
@@ -265,6 +246,5 @@ describe('useLessonStoryPage', () => {
     })
 
     expect(mockTextBlocksFetch.refetch).toHaveBeenCalled()
-    expect(mockStoryFetch.refetch).toHaveBeenCalled()
   })
 })
