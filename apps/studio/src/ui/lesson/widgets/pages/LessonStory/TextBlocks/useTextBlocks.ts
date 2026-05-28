@@ -68,35 +68,50 @@ export function useTextBlocks({
     }
 
     let isMounted = true
+    let retryTimeout: ReturnType<typeof setTimeout> | undefined
 
     async function checkAudioFilesInStorage() {
-      const response = await storageService.listFiles({
-        folder: FileStorageFolderPath.createAsAudiosStory(),
-        search: Text.create(''),
-        page: OrdinalNumber.create(1),
-        itemsPerPage: STORAGE_ITEMS_PER_PAGE,
-      })
+      const responses = await Promise.all(
+        audioFileNames.map(async (fileName) => ({
+          fileName,
+          response: await storageService.listFiles({
+            folder: FileStorageFolderPath.createAsAudiosStory(),
+            search: Text.create(fileName),
+            page: OrdinalNumber.create(1),
+            itemsPerPage: STORAGE_ITEMS_PER_PAGE,
+          }),
+        })),
+      )
 
       if (!isMounted) return
 
-      if (response.isFailure) {
-        setAudioFilesInStorage({})
-        return
+      const filesEntries = responses.map(({ fileName, response }) => {
+        if (response.isFailure) return [fileName, false]
+
+        return [fileName, response.body.items.includes(fileName)]
+      })
+
+      const nextAudioFilesInStorage = Object.fromEntries(filesEntries) as Record<
+        string,
+        boolean
+      >
+
+      setAudioFilesInStorage(nextAudioFilesInStorage)
+
+      const hasMissingAudioFiles = audioFileNames.some(
+        (fileName) => !nextAudioFilesInStorage[fileName],
+      )
+
+      if (hasMissingAudioFiles) {
+        retryTimeout = setTimeout(checkAudioFilesInStorage, 3000)
       }
-
-      const storedAudioFiles = new Set(response.body.items)
-      const filesEntries = audioFileNames.map((fileName) => [
-        fileName,
-        storedAudioFiles.has(fileName),
-      ])
-
-      setAudioFilesInStorage(Object.fromEntries(filesEntries) as Record<string, boolean>)
     }
 
     checkAudioFilesInStorage()
 
     return () => {
       isMounted = false
+      if (retryTimeout) clearTimeout(retryTimeout)
     }
   }, [storageService, textBlocks])
 
