@@ -4,11 +4,11 @@
 @FOLDER = story
 @FOLDER_PATH = images/story
 
-### Get files
+### List files
 GET {{URL}}
 ?page=1
 &itemsPerPage=25
-&search=Wha
+&search=
 &folder={{FOLDER_PATH}}
 Authorization: Bearer {{JWT}}
 

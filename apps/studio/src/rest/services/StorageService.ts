@@ -3,7 +3,7 @@ import type { Text } from '@stardust/core/global/structures'
 import type { FilesListingParams } from '@stardust/core/storage/types'
 import type { StorageService as IStorageService } from '@stardust/core/storage/interfaces'
 import type { SignedUploadUrlDto } from '@stardust/core/storage/structures/dtos'
-import { type FileStorageFolderPath } from '@stardust/core/storage/structures'
+import type { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
 export const StorageService = (restClient: RestClient): IStorageService => {
   async function createSignedUploadUrl(

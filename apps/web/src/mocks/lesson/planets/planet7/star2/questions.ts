@@ -15,12 +15,12 @@ type Questions = [
 export const questions: Questions = [
   {
     type: 'checkbox',
-    stem: 'Por algum motivo, aparentemente há um robô passando perto de nós, mas não tenho certeza. Quais os possíveis valores que o parâmetro *robo* poderia ter para que fosse escrito "Isso é um robô"?',
-    code: `funcao verificarRobo(robo) {
-    retorna robo.inclui("Robô")
+    stem: 'Por algum motivo, aparentemente há um robô passando perto de nós, mas não tenho certeza. Quais os possíveis valores que o parâmetro *robot* poderia ter para que fosse escrito "Isso é um robô"?',
+    code: `funcao verificarRobo(robot) {
+    retorna robot.inclui("Robô")
 }
 
-se (verificarRobo(robo)) {
+se (verificarRobo(robot)) {
     escreva("Isso é um robô")
 }`,
     options: ['AstroRobô', 'RobôCop', 'Blitz', 'Wall-E'],
