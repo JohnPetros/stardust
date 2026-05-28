@@ -4,7 +4,7 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
 
 ## Pendencias (quando aplicavel)
 
-Sem pendencias.
+Sem pendencias bloqueantes identificadas na spec de entrada.
 
 ---
 
@@ -12,60 +12,28 @@ Sem pendencias.
 
 | Fase | Objetivo | Depende de | Pode rodar em paralelo com |
 | --- | --- | --- | --- |
-| F1 | Alinhar o contrato compartilhado de storage ao fluxo explicito de signed upload para apps clientes | - | - |
-| F2 | Ajustar autorizacao HTTP de signed upload e remover o endpoint multipart legado no `server` | F1 | F3, F4 |
-| F3 | Migrar o fluxo de screenshot do feedback no `web` para signed upload direto ao Supabase | F1 | F2, F4 |
-| F4 | Padronizar o upload de imagens do `studio` para signed URL + provider client-side | F1 | F2, F3 |
+| F1 | Validar e consolidar o contrato existente de narrativa em blocos com audio persistido no core, sem alterar estruturas compartilhadas | - | - |
+| F3 | Migrar a Lesson Page do `web` para consumir apenas `TextBlock[]` e reativar o `Speaker` com audio persistido | F1 | - |
 
-> **Estrategia de paralelismo:** sempre comece pelo core (dominio, structures e use cases). Assim que o core estiver concluido, as fases de `server`, `web` e `studio` podem ser executadas em paralelo, pois todas dependem apenas do contrato definido no core.
+> **Estratégia de paralelismo:** sempre comece pelo core (dominio, structures e use cases). Nesta entrega, a spec impacta apenas o app `web` e declara explicitamente que `server`, `studio`, `core` e banco nao devem receber novos contratos. Por isso, F1 serve para ancorar o contrato canonico ja existente; concluida essa validacao, apenas F3 segue para implementacao.
 
 ---
 
 ## F1 — Core: Dominio, Structures e Use Cases
 
-**Objetivo:** Definir o contrato do dominio — entidades, structures, interfaces de repositorio/provider e use cases — sem nenhuma dependencia de infraestrutura. Essa fase desbloqueia F2, F3 e F4 para rodarem em paralelo.
+**Objetivo:** Confirmar que os contratos existentes do dominio ja suportam a feature sem extensoes no `core`, definindo com clareza quais regras o `web` pode consumir na implementacao.
 
 ### Tarefas
 
-- [x] **T1.1** — Remover `uploadFile(...)` da interface compartilhada `StorageService`
+- [x] **T1.1** — Validar os contratos de audio ja existentes em `TextBlockDto`, `TextBlockAudioDto` e `TextBlock`
   - **Depende de:** -
-  - **Resultado observavel:** `packages/core/src/storage/interfaces/StorageService.ts` passa a expor para apps clientes apenas `createSignedUploadUrl(...)` como operacao de upload publico, e qualquer consumidor remanescente de `uploadFile(...)` passa a falhar em compilacao ate ser migrado.
+  - **Resultado observavel:** fica estabelecido que `TextBlockDto.audio`, `TextBlockAudio.status`, `TextBlock.canHaveAudio` e os tipos `default`, `alert` e `quote` cobrem a regra de elegibilidade do speaker sem criacao de novos DTOs, structures ou use cases.
   - **Camada:** `core`
 
----
-
-## F2 — Server: Infra, Repositorios e Handlers
-
-> ⚡ Pode rodar em paralelo com F3 e F4 apos F1 estar concluida.
-
-**Objetivo:** Implementar a camada de infraestrutura e exposicao — repositorios, providers, jobs e handlers RPC/REST — consumindo os contratos definidos no core.
-
-### Tarefas
-
-- [x] **T2.1** — Adicionar `verifySignedUploadUrlAccess(...)` em `apps/server/src/app/hono/middlewares/StorageMiddleware.ts`
+- [x] **T1.2** — Consolidar o contrato canonico de arquivo de audio persistido para consumo do `web`
   - **Depende de:** T1.1
-  - **Resultado observavel:** o middleware libera `POST /storage/signed-upload-url` para usuario autenticado comum apenas quando `folderPath` for `images/feedback-reports`, e continua exigindo verificacao de `god account` para qualquer outra pasta.
-  - **Camada:** `rest`
-
-- [x] **T2.2** — Atualizar `apps/server/src/app/hono/routers/storage/StorageRouter.ts`
-  - **Depende de:** T2.1
-  - **Resultado observavel:** a rota `POST /storage/signed-upload-url` passa a executar `verifyAuthentication`, validacao `signedUploadUrlSchema`, `verifySignedUploadUrlAccess` e handler nessa ordem, preservando o retorno `200` com `SignedUploadUrlDto`.
-  - **Camada:** `rest`
-
-- [x] **T2.3** — Remover o registro da rota `POST /storage/files/:folder` em `apps/server/src/app/hono/routers/storage/FilesStorageRouter.ts`
-  - **Depende de:** T3.7, T4.6
-  - **Resultado observavel:** `FilesStorageRouter` deixa de registrar upload multipart publico, enquanto `GET /storage/files` e `DELETE /storage/files` permanecem expostos e inalterados.
-  - **Camada:** `rest`
-
-- [x] **T2.4** — Remover `UploadFileController` do barrel `apps/server/src/rest/controllers/storage/index.ts`
-  - **Depende de:** T2.3
-  - **Resultado observavel:** o barrel de controllers de storage deixa de exportar `UploadFileController`, sem afetar os demais controllers do modulo.
-  - **Camada:** `rest`
-
-- [x] **T2.5** — Remover `apps/server/src/rest/controllers/storage/UploadFileController.ts`
-  - **Depende de:** T2.4
-  - **Resultado observavel:** o adapter HTTP legado de upload multipart deixa de existir no `server`, sem remover `FileStorageProvider.upload(...)` nem os fluxos internos server-side que ainda dependem dele.
-  - **Camada:** `rest`
+  - **Resultado observavel:** fica estabelecido que o `web` deve usar `FileStorageFolderPath.createAsAudiosStory()` como pasta fixa, aceitar apenas `audio.status === 'done'` com `fileName` preenchido e nao depender mais de `storyContent` textual para montar a narrativa.
+  - **Camada:** `core`
 
 ---
 
@@ -73,81 +41,131 @@ Sem pendencias.
 
 > ⚡ Pode rodar em paralelo com F2 e F4 apos F1 estar concluida.
 
-**Objetivo:** Implementar a interface e integracao client-side na aplicacao web — widgets, actions e chamadas RPC/REST — consumindo os contratos definidos no core.
+**Objetivo:** Implementar a migracao da Lesson Page no app `web` para narrativa baseada exclusivamente em `TextBlock[]`, validar existencia de arquivos em `audios/story` e reproduzir audio persistido nos blocos elegiveis via `<audio>` nativo.
 
 ### Tarefas
 
-- [x] **T3.1** — Criar `apps/web/src/provision/storage/SupabaseSignedFileStorageProvider.ts`
-  - **Depende de:** T1.1
-  - **Resultado observavel:** o `web` passa a ter um provider client-side que recebe `SignedUploadUrl`, renomeia o `File` para o nome assinado e executa `PUT` direto no Supabase Storage com `x-upsert: false`.
-  - **Camada:** `provision`
+- [x] **T3.1** — Remover `story` do retorno de `FetchLessonStoryAndQuestionsAction`
+  - **Depende de:** T1.2
+  - **Resultado observavel:** a action deixa de chamar `service.fetchStarStory(starId)` e retorna apenas `{ questions, textsBlocks }` para a Lesson Page.
+  - **Camada:** `rpc`
 
-- [x] **T3.2** — Criar `apps/web/src/provision/storage/index.ts`
+- [x] **T3.2** — Ajustar `apps/web/src/app/lesson/[starSlug]/page.tsx` para consumir apenas `questions` e `textsBlocks`
   - **Depende de:** T3.1
-  - **Resultado observavel:** `SupabaseSignedFileStorageProvider` fica exportavel pelo barrel de provision do `web`.
-  - **Camada:** `provision`
+  - **Resultado observavel:** a pagina deixa de repassar `storyContent` para `LessonPage` e o fluxo server component continua renderizando a Lesson Page com os dados restantes da action.
+  - **Camada:** `rpc`
 
-- [x] **T3.3** — Atualizar `apps/web/src/ui/global/contexts/RestContext/types/RestContextValue.ts`
-  - **Depende de:** T3.2
-  - **Resultado observavel:** o contrato do `RestContext` passa a incluir o provider client-side necessario para upload direto, junto dos services REST ja expostos.
+- [x] **T3.3** — Criar `apps/web/src/ui/global/hooks/useStorageAudio.ts`
+  - **Depende de:** T1.2
+  - **Resultado observavel:** o hook `useStorageAudio(fileName?)` retorna `{ url: null }` sem arquivo e monta a URL publica em `audios/story` quando `fileName` existir.
   - **Camada:** `ui`
 
-- [x] **T3.4** — Atualizar `apps/web/src/ui/global/contexts/RestContext/useRestContextProvider.ts`
-  - **Depende de:** T3.2, T3.3
-  - **Resultado observavel:** o `RestContext` do `web` passa a instanciar e disponibilizar `signedFileStorageProvider` sem acoplar o upload binario ao `StorageService`.
+- [x] **T3.4** — Criar `apps/web/src/ui/lesson/widgets/pages/Lesson/useStoryAudioFiles.ts`
+  - **Depende de:** T1.2
+  - **Resultado observavel:** o hook lista em `audios/story` apenas os `fileName` referenciados por blocos com audio `done` e expõe um mapa `audioFiles[fileName] = true | false` com fallback seguro em erro.
+  - **Camada:** `web`
+
+- [x] **T3.5** — Atualizar `apps/web/src/ui/lesson/widgets/pages/Lesson/index.tsx` para remover `storyContent` e injetar `storageService`
+  - **Depende de:** T3.2, T3.4
+  - **Resultado observavel:** `LessonPage` passa a receber apenas `questionsDto` e `textsBlocksDto`, resolve `storageService` via `useRestContext()` e encaminha esse service para `useLessonPage`.
   - **Camada:** `ui`
 
-- [x] **T3.5** — Atualizar `apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackDialog/index.tsx`
-  - **Depende de:** T3.4
-  - **Resultado observavel:** `FeedbackDialog` passa a repassar `signedFileStorageProvider` para o hook junto com `storageService` e `reportingService`.
+- [x] **T3.6** — Atualizar `apps/web/src/ui/lesson/widgets/pages/Lesson/useLessonPage.ts` para montar a Story exclusivamente por `TextBlock[]`
+  - **Depende de:** T3.4, T3.5
+  - **Resultado observavel:** o hook deixa de aceitar `storyContent`, usa `useStoryAudioFiles(...)`, cria `TextBlock[]` a partir de `textsBlocksDto` e chama sempre `Story.create(parseTextBlocksToMdx(textBlocks, audioFiles))`.
   - **Camada:** `ui`
 
-- [x] **T3.6** — Migrar `apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackDialog/useFeedbackDialog.ts` para signed upload explicito
-  - **Depende de:** T3.5
-  - **Resultado observavel:** quando houver screenshot em `data:` URL, o hook converte para `File`, solicita `createSignedUploadUrl(...)`, executa o PUT direto via provider e so envia `POST /reporting/feedback` em caso de sucesso; em falha, o texto do formulario permanece preservado e nenhum feedback e enviado com screenshot invalida.
+- [x] **T3.7** — Atualizar `apps/web/src/ui/global/widgets/components/Mdx/hooks/useMdx.ts` para serializar metadados de audio no MDX
+  - **Depende de:** T3.4, T3.6
+  - **Resultado observavel:** `parseTextBlocksToMdx(textBlocks, audioFiles)` passa a incluir `audioFileName` e `audioStatus` apenas para `Text`, `Alert` e `Quote` com audio elegivel e arquivo confirmado no storage.
   - **Camada:** `ui`
 
-- [x] **T3.7** — Atualizar `apps/web/src/rest/services/StorageService.ts`
-  - **Depende de:** T1.1, T3.6
-  - **Resultado observavel:** o service REST do `web` deixa de implementar `uploadFile(...)` multipart e passa a expor apenas `createSignedUploadUrl(...)` para o fluxo de upload de screenshots.
+- [x] **T3.8** — Atualizar `apps/web/src/ui/global/widgets/components/Mdx/Text/TextView.tsx`
+  - **Depende de:** T3.7
+  - **Resultado observavel:** `TextView` aceita props opcionais `audioFileName` e `audioStatus` e as repassa para `Content` sem alterar os usos que nao informam audio.
+  - **Camada:** `ui`
+
+- [x] **T3.9** — Atualizar `apps/web/src/ui/global/widgets/components/Mdx/Alert/AlertView.tsx`
+  - **Depende de:** T3.7
+  - **Resultado observavel:** `AlertView` aceita props opcionais `audioFileName` e `audioStatus` e as repassa para `Content` sem regressao para alertas sem audio.
+  - **Camada:** `ui`
+
+- [x] **T3.10** — Atualizar `apps/web/src/ui/global/widgets/components/Mdx/Quote/QuoteView.tsx`
+  - **Depende de:** T3.7
+  - **Resultado observavel:** `QuoteView` aceita props opcionais `audioFileName` e `audioStatus` e as repassa para `Content` sem regressao para quotes sem audio.
+  - **Camada:** `ui`
+
+- [x] **T3.11** — Atualizar `apps/web/src/ui/global/widgets/components/Mdx/Content/ContentView.tsx` para decidir a exibicao do speaker
+  - **Depende de:** T3.8, T3.9, T3.10
+  - **Resultado observavel:** `Content` renderiza `<Speaker fileName={audioFileName} />` antes do texto somente quando `audioStatus === 'done'` e `audioFileName` estiver preenchido; nos demais casos, o texto segue renderizado sem player.
+  - **Camada:** `ui`
+
+- [x] **T3.12** — Atualizar `apps/web/src/ui/global/widgets/components/Speaker/useSpeaker.ts` para controle nativo de `<audio>`
+  - **Depende de:** T3.3
+  - **Resultado observavel:** o hook expõe `audioRef`, `isPlaying`, `handleTogglePlay` e `handlePause`, alterna `play/pause`, volta ao estado parado em `ended` e falha de `audio.play()`, e nao depende mais de `react-text-to-speech`.
+  - **Camada:** `ui`
+
+- [x] **T3.13** — Atualizar `apps/web/src/ui/global/widgets/components/Speaker/SpeakerView.tsx` para reproduzir arquivo persistido
+  - **Depende de:** T3.12
+  - **Resultado observavel:** a view renderiza `<audio preload='metadata'>` com `src` recebido por prop e um `<button type='button'>` com `aria-label` alternando entre reproduzir e pausar audio do bloco.
+  - **Camada:** `ui`
+
+- [x] **T3.14** — Atualizar `apps/web/src/ui/global/widgets/components/Speaker/index.tsx` para usar `fileName` e `useStorageAudio`
+  - **Depende de:** T3.3, T3.12, T3.13
+  - **Resultado observavel:** `Speaker` passa a aceitar `fileName?: string`, retorna `null` quando `fileName` ou `url` estiverem ausentes e renderiza o player persistido quando houver URL publica valida.
+  - **Camada:** `ui`
+
+- [x] **T3.15** — Remover `SpeakerContextProvider` de `apps/web/src/ui/lesson/widgets/pages/Lesson/StoryStage/StoryStageView.tsx`
+  - **Depende de:** T3.14
+  - **Resultado observavel:** a Story Stage mantem a mesma hierarquia visual, mas deixa de envolver os chunks com o provider do speaker TTS.
+  - **Camada:** `ui`
+
+- [x] **T3.16** — Remover `apps/web/src/ui/global/widgets/components/SpeakerSettingsDialog/index.tsx`
+  - **Depende de:** T3.13, T3.14
+  - **Resultado observavel:** o entrypoint do dialog de configuracoes de sintetizador deixa de existir no app `web`.
+  - **Camada:** `ui`
+
+- [x] **T3.17** — Remover `apps/web/src/ui/global/widgets/components/SpeakerSettingsDialog/SpeakerSettingsDialogView.tsx`
+  - **Depende de:** T3.16
+  - **Resultado observavel:** a view exclusiva do dialog de configuracoes do speaker TTS e eliminada da codebase.
+  - **Camada:** `ui`
+
+- [x] **T3.18** — Remover `apps/web/src/ui/lesson/contexts/Speaker/index.tsx`
+  - **Depende de:** T3.15
+  - **Resultado observavel:** o provider do speaker TTS deixa de existir apos a remocao do ultimo uso em `StoryStageView`.
+  - **Camada:** `ui`
+
+- [x] **T3.19** — Remover `apps/web/src/ui/lesson/contexts/Speaker/useSpeakerContextProvider.ts`
+  - **Depende de:** T3.18
+  - **Resultado observavel:** o hook de estado/configuracao do speaker TTS e removido da codebase do `web`.
+  - **Camada:** `ui`
+
+- [x] **T3.20** — Remover `apps/web/src/ui/lesson/contexts/Speaker/SpeakerContextValue.ts`
+  - **Depende de:** T3.18
+  - **Resultado observavel:** o contrato tipado do contexto TTS deixa de existir apos a retirada do provider.
+  - **Camada:** `ui`
+
+- [x] **T3.21** — Remover `apps/web/src/ui/global/hooks/useSpeakerContext.ts`
+  - **Depende de:** T3.18
+  - **Resultado observavel:** o hook global que consumia `SpeakerContext` deixa de existir e nao sobra import cruzado do contexto removido.
+  - **Camada:** `ui`
+
+- [x] **T3.22** — Limpar chaves obsoletas de speaker em `apps/web/src/constants/storage.ts`
+  - **Depende de:** T3.18, T3.21
+  - **Resultado observavel:** as chaves de localStorage usadas apenas por volume, rate, pitch e enabled do TTS sao removidas se nao houver mais referencias no app `web`.
+  - **Camada:** `web`
+
+- [x] **T3.23** — Remover `fetchStarStory(starId)` de `apps/web/src/rest/services/LessonService.ts` se ficar sem consumidores
+  - **Depende de:** T3.1
+  - **Resultado observavel:** o service deixa de expor a busca da story textual caso a busca por referencias confirme que nenhum fluxo do `web` ainda usa esse metodo.
   - **Camada:** `rest`
 
----
-
-## F4 — Studio: UI e Integracao
-
-> ⚡ Pode rodar em paralelo com F2 e F3 apos F1 estar concluida.
-
-**Objetivo:** Implementar a interface e integracao client-side na aplicacao studio — widgets, actions e chamadas RPC/REST — consumindo os contratos definidos no core.
-
-### Tarefas
-
-- [x] **T4.1** — Atualizar `apps/studio/src/rest/services/StorageService.ts`
-  - **Depende de:** T1.1
-  - **Resultado observavel:** o `StorageService` do `studio` deixa de receber `signedFileStorageProvider` e deixa de orquestrar upload binario, permanecendo responsavel apenas por chamadas REST como `createSignedUploadUrl(...)`, listagem e remocao.
-  - **Camada:** `rest`
-
-- [x] **T4.2** — Atualizar `apps/studio/src/ui/global/contexts/RestContext/useRestContextProvider.ts`
-  - **Depende de:** T4.1
-  - **Resultado observavel:** o composition root de `RestContext` do `studio` passa a instanciar `StorageService(restClient)` sem dependencia de provider client-side.
+- [x] **T3.24** — Remover `react-text-to-speech` de `apps/web/package.json`
+  - **Depende de:** T3.12, T3.13, T3.14
+  - **Resultado observavel:** o manifesto do app `web` deixa de declarar a biblioteca de TTS apos a migracao completa do `Speaker` para `<audio>`.
   - **Camada:** `ui`
 
-- [x] **T4.3** — Atualizar `apps/studio/src/ui/global/contexts/RestContext/index.tsx`
-  - **Depende de:** T4.2
-  - **Resultado observavel:** `RestContextProvider` deixa de ler `signedFileStorageProvider` apenas para montar `storageService`, mantendo o provider disponivel exclusivamente pelo `ProvisionContext`.
-  - **Camada:** `ui`
-
-- [x] **T4.4** — Atualizar `apps/studio/src/app/middlewares/RestMiddleware.ts`
-  - **Depende de:** T4.1
-  - **Resultado observavel:** o contexto de rotas do `studio` passa a publicar `storageService` sem injetar `SupabaseSignedFileStorageProvider()` no service REST.
-  - **Camada:** `studio`
-
-- [x] **T4.5** — Atualizar `apps/studio/src/ui/global/widgets/components/ImageInput/index.tsx`
-  - **Depende de:** T4.3
-  - **Resultado observavel:** `ImageInput` passa a obter `signedFileStorageProvider` via `useProvisionContext()` e repassa essa dependencia ao hook sem alterar a API publica do widget.
-  - **Camada:** `ui`
-
-- [x] **T4.6** — Migrar `apps/studio/src/ui/global/widgets/components/ImageInput/useImageInput.ts` para signed upload explicito
-  - **Depende de:** T4.1, T4.5
-  - **Resultado observavel:** o hook passa a solicitar `createSignedUploadUrl(...)`, montar `SignedUploadUrl`, executar upload direto via provider e chamar `onSubmit(signedUploadUrl.fileName.value)` apenas em sucesso; em falha, exibe erro e nao fecha o dialog.
+- [x] **T3.25** — Atualizar `package-lock.json` para refletir a remocao da dependencia de TTS
+  - **Depende de:** T3.24
+  - **Resultado observavel:** o lockfile do workspace deixa de registrar `react-text-to-speech` como dependencia do `@stardust/web`.
   - **Camada:** `ui`
