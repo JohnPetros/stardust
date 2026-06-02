@@ -21,9 +21,17 @@ const contentStyles = tv({
 type Props = {
   hasAnimation: boolean
   children: string | ReactNode
+  audioFileName?: string
+  audioStatus?: string
 } & VariantProps<typeof contentStyles>
 
-export const ContentView = ({ type, children, hasAnimation = false }: Props) => {
+export const ContentView = ({
+  type,
+  children,
+  hasAnimation = false,
+  audioFileName,
+  audioStatus,
+}: Props) => {
   const content = Array.isArray(children)
     ? children
         .map((child) =>
@@ -37,16 +45,15 @@ export const ContentView = ({ type, children, hasAnimation = false }: Props) => 
     : children
 
   const formattedContent = formatSpecialCharacters(String(content), 'decode')
+  const shouldRenderSpeaker = audioStatus === 'done'
 
   return (
     <div className={contentStyles({ type })}>
       {typeof content === 'string' ? (
         <div>
-          {/* <Speaker
-            text={formattedContent
-              .replaceAll('<strong class="strong">', '')
-              .replaceAll('</strong>', '')}
-          /> */}
+          {shouldRenderSpeaker && audioFileName && (
+            <Speaker fileName={audioFileName} isActive={hasAnimation} />
+          )}
           <div className='py-3'>
             {hasAnimation ? (
               <TypeWriter content={content} isEnable={hasAnimation} />

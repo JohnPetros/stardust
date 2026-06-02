@@ -104,14 +104,6 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
     onError: setFetchErrorMessage,
   })
 
-  const storyFetch = useFetch<{ story?: string }>({
-    key: `${CACHE.lessonStoryTextBlocks.key}-legacy-story`,
-    dependencies: [starId.value],
-    shouldRefetchOnFocus: false,
-    fetcher: async () => await lessonService.fetchStarStory(starId),
-    onError: setFetchErrorMessage,
-  })
-
   const audioVoicesFetch = useFetch<AudioVoiceDto[]>({
     key: `${CACHE.lessonStoryTextBlocks.key}-audio-voices`,
     shouldRefetchOnFocus: false,
@@ -120,13 +112,12 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
   })
 
   const loadedTextBlocks = textBlocksFetch.data ?? []
-  const legacyStory = storyFetch.data?.story ?? ''
   const unsupportedTextBlocks = useMemo(() => {
     return loadedTextBlocks.filter((textBlock) => !isSupportedType(textBlock.type))
   }, [loadedTextBlocks])
 
   useEffect(() => {
-    if (!textBlocksFetch.data || !storyFetch.data) return
+    if (!textBlocksFetch.data) return
 
     const supportedTextBlocks = textBlocksFetch.data.filter((textBlock) =>
       isSupportedType(textBlock.type),
@@ -140,13 +131,7 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
     setIsSuccessful(false)
     setIsFailure(false)
     setCanExecute(false)
-  }, [
-    textBlocksFetch.data,
-    storyFetch.data,
-    setCanExecute,
-    setIsFailure,
-    setIsSuccessful,
-  ])
+  }, [textBlocksFetch.data, setCanExecute, setIsFailure, setIsSuccessful])
 
   useEffect(() => {
     if (!audioVoicesFetch.data) return
@@ -182,26 +167,16 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
     return serializeTextBlocks(baselineTextBlocks)
   }, [baselineTextBlocks])
 
-  const isLoading =
-    textBlocksFetch.isLoading || storyFetch.isLoading || audioVoicesFetch.isLoading
+  const isLoading = textBlocksFetch.isLoading || audioVoicesFetch.isLoading
   const fetchError =
-    fetchErrorMessage ||
-    textBlocksFetch.error ||
-    storyFetch.error ||
-    audioVoicesFetch.error ||
-    ''
-  const isBlockedBecauseOfLegacyStory = Boolean(
-    legacyStory && loadedTextBlocks.length === 0,
-  )
+    fetchErrorMessage || textBlocksFetch.error || audioVoicesFetch.error || ''
   const isBlockedBecauseOfUnsupportedBlocks = unsupportedTextBlocks.length > 0
-  const isBlocked = isBlockedBecauseOfLegacyStory || isBlockedBecauseOfUnsupportedBlocks
-  const blockingReason = isBlockedBecauseOfLegacyStory
-    ? 'Esta estrela ainda usa story legado sem texts migrados. Faça a migração antes de usar esta aba.'
-    : isBlockedBecauseOfUnsupportedBlocks
-      ? `Esta estrela possui blocos legados incompatíveis com a aba (${unsupportedTextBlocks
-          .map((textBlock) => textBlock.type)
-          .join(', ')}).`
-      : ''
+  const isBlocked = isBlockedBecauseOfUnsupportedBlocks
+  const blockingReason = isBlockedBecauseOfUnsupportedBlocks
+    ? `Esta estrela possui blocos legados incompatíveis com a aba (${unsupportedTextBlocks
+        .map((textBlock) => textBlock.type)
+        .join(', ')}).`
+    : ''
   const isSaveDisabled =
     isLoading ||
     Boolean(fetchError) ||
@@ -518,7 +493,6 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
   function handleRetry() {
     setFetchErrorMessage('')
     textBlocksFetch.refetch()
-    storyFetch.refetch()
   }
 
   function handleTextBlocksScrollToTop() {

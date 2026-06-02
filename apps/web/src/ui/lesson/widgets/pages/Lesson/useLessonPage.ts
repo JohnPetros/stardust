@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import type { TextBlockDto } from '@stardust/core/global/entities/dtos'
+import type { StorageService } from '@stardust/core/storage/interfaces'
 import type { QuestionDto } from '@stardust/core/lesson/entities/dtos'
 import type { StarRewardingPayload } from '@stardust/core/profile/types'
 import { TextBlock } from '@stardust/core/global/structures'
@@ -13,12 +14,13 @@ import { useSecondsCounter } from '@/ui/global/hooks/useSecondsCounter'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 import { useMdx } from '@/ui/global/widgets/components/Mdx/hooks/useMdx'
+import { useStoryAudioFiles } from './useStoryAudioFiles'
 
 export function useLessonPage(
   starId: string,
   questionsDto: QuestionDto[],
   textsBlocksDto: TextBlockDto[],
-  storyContent: string,
+  storageService: StorageService,
 ) {
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const { getStageSlice, getQuizSlice, getStorySlice, resetStore } = useLessonStore()
@@ -27,6 +29,10 @@ export function useLessonPage(
   const { setStory } = getStorySlice()
   const { setCookie } = useCookieActions()
   const { parseTextBlocksToMdx } = useMdx()
+  const { audioFiles, isLoading: isLoadingStoryAudioFiles } = useStoryAudioFiles({
+    storageService,
+    textBlocksDto: textsBlocksDto,
+  })
   const router = useNavigationProvider()
   const secondsCounter = useLocalStorage(STORAGE.keys.secondsCounter)
   useSecondsCounter(stage === 'quiz')
@@ -39,13 +45,6 @@ export function useLessonPage(
 
   useEffect(() => {
     const timeout = setTimeout(() => setIsTransitionVisible(false), 1000)
-
-    const textBlocks = textsBlocksDto.map(TextBlock.create)
-    setStory(
-      Story.create(
-        storyContent ? storyContent.split('----') : parseTextBlocksToMdx(textBlocks),
-      ),
-    )
     setQuiz(Quiz.create(questionsDto))
 
     localStorage.removeItem(STORAGE.keys.secondsCounter)
@@ -53,13 +52,19 @@ export function useLessonPage(
     return () => {
       clearTimeout(timeout)
     }
+  }, [questionsDto, setQuiz])
+
+  useEffect(() => {
+    if (isLoadingStoryAudioFiles) return
+
+    const textBlocks = textsBlocksDto.map(TextBlock.create)
+    setStory(Story.create(parseTextBlocksToMdx(textBlocks, audioFiles)))
   }, [
     textsBlocksDto,
-    storyContent,
-    questionsDto,
-    setStory,
-    setQuiz,
+    audioFiles,
+    isLoadingStoryAudioFiles,
     parseTextBlocksToMdx,
+    setStory,
   ])
 
   useEffect(() => {

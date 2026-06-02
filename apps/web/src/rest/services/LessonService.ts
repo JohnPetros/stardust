@@ -19,10 +19,6 @@ export const LessonService = (restClient: RestClient): ILessonService => {
       return await restClient.get(`/lesson/text-blocks/star/${starId.value}`)
     },
 
-    async fetchStarStory(starId: Id) {
-      return await restClient.get(`/lesson/stories/star/${starId.value}`)
-    },
-
     async fetchRemainingCodeExplanationUses() {
       return await restClient.get('/lesson/code-explanation/remaining-uses')
     },

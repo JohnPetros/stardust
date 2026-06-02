@@ -8,11 +8,19 @@ import { Content } from '../Content'
 
 type ImageProps = {
   picture: string
+  audioFileName?: string
+  audioStatus?: string
   children: string | string[]
   hasAnimation?: boolean
 }
 
-export const ImageView = ({ picture, hasAnimation = true, children }: ImageProps) => {
+export const ImageView = ({
+  picture,
+  audioFileName,
+  audioStatus,
+  hasAnimation = true,
+  children,
+}: ImageProps) => {
   const image = useFileStorage(FileStorageFolderPath.createAsStory(), picture)
   const formattedImage = image.replace(REGEX.quotes, '')
 
@@ -28,7 +36,13 @@ export const ImageView = ({ picture, hasAnimation = true, children }: ImageProps
           alt=''
         />
         <div>
-          <Content hasAnimation={hasAnimation}>{children}</Content>
+          <Content
+            hasAnimation={hasAnimation}
+            audioFileName={audioFileName}
+            audioStatus={audioStatus}
+          >
+            {children}
+          </Content>
         </div>
       </div>
     </Animation>

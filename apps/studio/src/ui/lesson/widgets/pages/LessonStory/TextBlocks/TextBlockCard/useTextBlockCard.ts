@@ -8,7 +8,7 @@ type Params = {
 export function useTextBlockCard({ item, hasStoredAudioFile }: Params) {
   const previewContent =
     item.content.length > 110 ? `${item.content.slice(0, 107)}...` : item.content
-  const canHaveAudio = ['default', 'alert', 'quote'].includes(item.type)
+  const canHaveAudio = ['default', 'alert', 'quote', 'image'].includes(item.type)
   const audioStatus = item.audio?.status ?? 'idle'
   const isAudioPending = audioStatus === 'pending'
   const isAudioDone = audioStatus === 'done'

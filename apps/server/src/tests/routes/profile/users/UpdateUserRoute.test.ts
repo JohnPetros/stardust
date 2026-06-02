@@ -75,11 +75,11 @@ describe('[PUT] /profile/users/:userId', () => {
       throw new Error('Expected a profile user to exist for the authenticated account')
     }
 
-    const updatedFields = UsersFaker.fakeDto()
+    const uniqueSuffix = Id.create().value.slice(0, 8)
     const payload = {
       ...existingUser.dto,
-      name: updatedFields.name,
-      email: updatedFields.email,
+      name: `updated-user-${uniqueSuffix}`,
+      email: `updated-user-${uniqueSuffix}@stardust.dev`,
     }
 
     const response = await request(honoFixture.server)

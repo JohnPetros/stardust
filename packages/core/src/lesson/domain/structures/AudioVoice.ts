@@ -1,7 +1,13 @@
 import { ValidationError } from '#global/domain/errors/ValidationError'
 import { StringValidation } from '#global/libs/index'
 
-export type AudioVoiceValue = 'panda' | 'shark' | 'princess'
+export type AudioVoiceValue =
+  | 'panda'
+  | 'shark'
+  | 'princess'
+  | 'alien'
+  | 'robot'
+  | 'salmonense'
 
 export class AudioVoice {
   private constructor(readonly value: AudioVoiceValue) {}
@@ -18,7 +24,9 @@ export class AudioVoice {
   }
 
   private static isAudioVoiceValue(name: string): name is AudioVoiceValue {
-    new StringValidation(name).oneOf(['panda', 'shark', 'princess']).validate()
+    new StringValidation(name)
+      .oneOf(['panda', 'shark', 'princess', 'alien', 'robot', 'salmonense'])
+      .validate()
     return true
   }
 }

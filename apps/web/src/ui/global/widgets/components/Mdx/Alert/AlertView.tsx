@@ -8,6 +8,8 @@ import { Title } from '../Title'
 type AlertProps = {
   title: string
   picture: string
+  audioFileName?: string
+  audioStatus?: string
   children: string | string[]
   hasAnimation?: boolean
 }
@@ -15,6 +17,8 @@ type AlertProps = {
 export const AlertView = ({
   title,
   picture,
+  audioFileName,
+  audioStatus,
   children,
   hasAnimation = false,
 }: AlertProps) => {
@@ -40,7 +44,12 @@ export const AlertView = ({
                   onLoadingComplete={(image) => image.classList.remove('skeleton')}
                 />
               </span>
-              <Content type='alert' hasAnimation={hasAnimation}>
+              <Content
+                type='alert'
+                hasAnimation={hasAnimation}
+                audioFileName={audioFileName}
+                audioStatus={audioStatus}
+              >
                 {children}
               </Content>
             </div>

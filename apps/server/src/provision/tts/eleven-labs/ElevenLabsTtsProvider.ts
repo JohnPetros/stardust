@@ -51,6 +51,33 @@ export class ElevenLabsTtsProvider implements TtsProvider {
         use_speaker_boost: true,
       },
     },
+    alien: {
+      voice: 'RGbeQtiShYRDVCrd9b9w',
+      voiceSettings: {
+        stability: 0.45,
+        similarity_boost: 0.7,
+        style: 0.75,
+        use_speaker_boost: true,
+      },
+    },
+    robot: {
+      voice: 'RGbeQtiShYRDVCrd9b9w',
+      voiceSettings: {
+        stability: 0.55,
+        similarity_boost: 0.65,
+        style: 0.4,
+        use_speaker_boost: true,
+      },
+    },
+    salmonense: {
+      voice: 'RGbeQtiShYRDVCrd9b9w',
+      voiceSettings: {
+        stability: 0.3,
+        similarity_boost: 0.75,
+        style: 0.85,
+        use_speaker_boost: true,
+      },
+    },
   }
 
   async generate(text: Text, voice: AudioVoice): Promise<File> {

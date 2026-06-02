@@ -9,8 +9,7 @@ export const STORAGE = {
     challengeLayout: `${APP_PREFIX}:challenge-layout`,
     speakerVolume: `${APP_PREFIX}:speaker-volume`,
     speakerRate: `${APP_PREFIX}:speaker-rate`,
-    speakerPitch: `${APP_PREFIX}:speaker-pitch`,
-    speakerEnabled: `${APP_PREFIX}:speaker-enabled`,
+    speakerAutoPlay: `${APP_PREFIX}:speaker-auto-play`,
     challengeCode: (challengeId: string) => `${APP_PREFIX}:challenge-code.${challengeId}`,
     lessonCodeExplanation: (chunkIndex: number) =>
       `${APP_PREFIX}:lesson:code-explanation:${chunkIndex}`,
