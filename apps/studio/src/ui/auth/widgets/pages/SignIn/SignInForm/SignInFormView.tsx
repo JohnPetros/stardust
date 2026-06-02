@@ -45,7 +45,9 @@ export const SignInFormView = ({
     <div className={cn('flex flex-col gap-6 text-zinc-100', className)} {...props}>
       <Card className='bg-zinc-900 border-none'>
         <CardHeader className='text-center'>
-          <CardTitle className='text-xl text-zinc-100'>Bem-vindo de volta.</CardTitle>
+          <CardTitle className='text-xl text-zinc-100'>
+            Bem-vindo de volta. (teste)
+          </CardTitle>
           <CardDescription className='text-zinc-400'>
             Faça login com seu email e senha para continuar.
           </CardDescription>
