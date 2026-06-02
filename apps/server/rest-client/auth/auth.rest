@@ -1,6 +1,6 @@
 @URL = {{BASE_URL}}/auth
-@EMAIL = ctrlaltdel.cursor@gmail.com
-@PASSWORD = 123456
+@EMAIL = {{AUTH_EMAIL}}
+@PASSWORD = {{AUTH_PASSWORD}}
 @SOCIAL_ACCOUNT_EMAIL = {{SOCIAL_ACCOUNT_EMAIL}}
 
 ### Sign in

@@ -11,7 +11,7 @@ export class ChallengeCategoriesFaker {
   static fakeDto(baseDto?: Partial<ChallengeCategoryDto>): ChallengeCategoryDto {
     return {
       id: faker.string.uuid(),
-      name: faker.lorem.word(),
+      name: faker.commerce.department(),
       ...baseDto,
     }
   }
