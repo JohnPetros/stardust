@@ -12,7 +12,7 @@ import { Text } from '@stardust/core/global/structures'
 import type { ManyItems } from '@stardust/core/global/types'
 
 export class SupabaseFileStorageProvider implements FileStorageProvider {
-  private static readonly BUCKET_NAME = 'supabase-bucket'
+  private static readonly BUCKET_NAME = 'stardust-bucket'
 
   constructor(private readonly supabase: SupabaseClient) {}
 
