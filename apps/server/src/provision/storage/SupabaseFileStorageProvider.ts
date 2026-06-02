@@ -297,8 +297,12 @@ export class SupabaseFileStorageProvider implements FileStorageProvider {
     })
   }
 
-  private extensionFromType(type: string): string {
-    const normalizedType = type.trim().toLowerCase()
+  private extensionFromType(type?: string | null): string {
+    const normalizedType = type?.trim().toLowerCase()
+
+    if (!normalizedType) {
+      return 'bin'
+    }
 
     if (normalizedType === 'audio/wav') return 'wav'
     if (normalizedType === 'audio/mpeg') return 'mp3'
