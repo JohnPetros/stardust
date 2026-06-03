@@ -122,6 +122,7 @@ export class TextBlocksRouter extends HonoRouter {
       ),
       this.spaceMiddleware.verifyStarExists,
       async (context) => {
+        console.log('requestTextBlocksAudioGenerationInBatchRoute')
         const http = new HonoHttp(context)
         const repository = new SupabaseTextBlocksRepository(http.getSupabase())
         const broker = new InngestBroker()

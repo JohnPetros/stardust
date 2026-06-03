@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { booleanSchema, contentSchema } from '../../global/schemas'
+import { booleanSchema, stringSchema } from '../../global/schemas'
 import { textBlockAudioSchema } from './textBlockAudioSchema'
 
 const TEXT_BLOCK_TYPES = ['default', 'user', 'alert', 'quote', 'code', 'image'] as const
@@ -10,7 +10,7 @@ const textBlockTypeSchema = z.enum(TEXT_BLOCK_TYPES)
 export const textBlockSchema = z
   .object({
     type: textBlockTypeSchema,
-    content: contentSchema,
+    content: stringSchema,
     title: z.string().optional(),
     picture: z.string().optional(),
     isRunnable: booleanSchema.optional(),
