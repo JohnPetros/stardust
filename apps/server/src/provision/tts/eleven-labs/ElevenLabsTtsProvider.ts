@@ -34,7 +34,7 @@ export class ElevenLabsTtsProvider implements TtsProvider {
       },
     },
     shark: {
-      voice: 'RGbeQtiShYRDVCrd9b9w',
+      voice: '2ajXGJNYBR0iNHpS4VZb',
       voiceSettings: {
         stability: 0.4,
         similarity_boost: 0.7,
@@ -43,7 +43,7 @@ export class ElevenLabsTtsProvider implements TtsProvider {
       },
     },
     princess: {
-      voice: 'RGbeQtiShYRDVCrd9b9w',
+      voice: 'WtA85syCrJwasGeHGH2p',
       voiceSettings: {
         stability: 0.3,
         similarity_boost: 0.65,
@@ -52,7 +52,7 @@ export class ElevenLabsTtsProvider implements TtsProvider {
       },
     },
     alien: {
-      voice: 'RGbeQtiShYRDVCrd9b9w',
+      voice: '7NsaqHdLuKNFvEfjpUno',
       voiceSettings: {
         stability: 0.45,
         similarity_boost: 0.7,
@@ -61,7 +61,7 @@ export class ElevenLabsTtsProvider implements TtsProvider {
       },
     },
     robot: {
-      voice: 'RGbeQtiShYRDVCrd9b9w',
+      voice: 'ee2pDOfqzj2pBerZvUCH',
       voiceSettings: {
         stability: 0.55,
         similarity_boost: 0.65,
@@ -70,7 +70,7 @@ export class ElevenLabsTtsProvider implements TtsProvider {
       },
     },
     salmonense: {
-      voice: 'RGbeQtiShYRDVCrd9b9w',
+      voice: 'PSkrmGGNwoOIKXqzUWs9',
       voiceSettings: {
         stability: 0.3,
         similarity_boost: 0.75,

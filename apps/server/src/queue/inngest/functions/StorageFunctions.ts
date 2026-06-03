@@ -15,7 +15,7 @@ import {
 import type { Database } from '@/database/supabase/types/Database'
 import { SupabaseDatabaseProvider } from '@/provision/database'
 import { DropboxStorageProvider, SupabaseFileStorageProvider } from '@/provision/storage'
-import { OpenAITtsProvider } from '@/provision/tts'
+import { ElevenLabsTtsProvider } from '@/provision/tts'
 import { MastraMarkdownEmbeddingsGeneratorProvider } from '@/provision/storage/MastraMarkdownEmbeddingsGeneratorProvider'
 import { UpstashEmbeddingsStorageProvider } from '@/provision/storage/UpstashEmbeddingsStorageProvider'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
@@ -136,7 +136,7 @@ export class StorageFunctions extends InngestFunctions {
       },
       async (context) => {
         const repository = new SupabaseTextBlocksRepository(supabase)
-        const ttsProvider = new OpenAITtsProvider()
+        const ttsProvider = new ElevenLabsTtsProvider()
         const fileStorageProvider = new SupabaseFileStorageProvider(supabase)
         const broker = new InngestBroker()
         const job = new GenerateTextBlockAudioJob(
