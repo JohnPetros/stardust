@@ -1117,248 +1117,6 @@ export type Database = {
       [_ in never]: never
     }
   }
-  cron: {
-    Tables: {
-      job: {
-        Row: {
-          active: boolean
-          command: string
-          database: string
-          jobid: number
-          jobname: string | null
-          nodename: string
-          nodeport: number
-          schedule: string
-          username: string
-        }
-        Insert: {
-          active?: boolean
-          command: string
-          database?: string
-          jobid?: number
-          jobname?: string | null
-          nodename?: string
-          nodeport?: number
-          schedule: string
-          username?: string
-        }
-        Update: {
-          active?: boolean
-          command?: string
-          database?: string
-          jobid?: number
-          jobname?: string | null
-          nodename?: string
-          nodeport?: number
-          schedule?: string
-          username?: string
-        }
-        Relationships: []
-      }
-      job_run_details: {
-        Row: {
-          command: string | null
-          database: string | null
-          end_time: string | null
-          job_pid: number | null
-          jobid: number | null
-          return_message: string | null
-          runid: number
-          start_time: string | null
-          status: string | null
-          username: string | null
-        }
-        Insert: {
-          command?: string | null
-          database?: string | null
-          end_time?: string | null
-          job_pid?: number | null
-          jobid?: number | null
-          return_message?: string | null
-          runid?: number
-          start_time?: string | null
-          status?: string | null
-          username?: string | null
-        }
-        Update: {
-          command?: string | null
-          database?: string | null
-          end_time?: string | null
-          job_pid?: number | null
-          jobid?: number | null
-          return_message?: string | null
-          runid?: number
-          start_time?: string | null
-          status?: string | null
-          username?: string | null
-        }
-        Relationships: []
-      }
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      alter_job: {
-        Args: {
-          active?: boolean
-          command?: string
-          database?: string
-          job_id: number
-          schedule?: string
-          username?: string
-        }
-        Returns: undefined
-      }
-      schedule:
-        | {
-            Args: { command: string; job_name: string; schedule: string }
-            Returns: number
-          }
-        | { Args: { command: string; schedule: string }; Returns: number }
-      schedule_in_database: {
-        Args: {
-          active?: boolean
-          command: string
-          database: string
-          job_name: string
-          schedule: string
-          username?: string
-        }
-        Returns: number
-      }
-      unschedule:
-        | { Args: { job_id: number }; Returns: boolean }
-        | { Args: { job_name: string }; Returns: boolean }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-  extensions: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      pg_stat_statements: {
-        Row: {
-          blk_read_time: number | null
-          blk_write_time: number | null
-          calls: number | null
-          dbid: unknown
-          jit_emission_count: number | null
-          jit_emission_time: number | null
-          jit_functions: number | null
-          jit_generation_time: number | null
-          jit_inlining_count: number | null
-          jit_inlining_time: number | null
-          jit_optimization_count: number | null
-          jit_optimization_time: number | null
-          local_blks_dirtied: number | null
-          local_blks_hit: number | null
-          local_blks_read: number | null
-          local_blks_written: number | null
-          max_exec_time: number | null
-          max_plan_time: number | null
-          mean_exec_time: number | null
-          mean_plan_time: number | null
-          min_exec_time: number | null
-          min_plan_time: number | null
-          plans: number | null
-          query: string | null
-          queryid: number | null
-          rows: number | null
-          shared_blks_dirtied: number | null
-          shared_blks_hit: number | null
-          shared_blks_read: number | null
-          shared_blks_written: number | null
-          stddev_exec_time: number | null
-          stddev_plan_time: number | null
-          temp_blk_read_time: number | null
-          temp_blk_write_time: number | null
-          temp_blks_read: number | null
-          temp_blks_written: number | null
-          toplevel: boolean | null
-          total_exec_time: number | null
-          total_plan_time: number | null
-          userid: unknown
-          wal_bytes: number | null
-          wal_fpi: number | null
-          wal_records: number | null
-        }
-        Relationships: []
-      }
-      pg_stat_statements_info: {
-        Row: {
-          dealloc: number | null
-          stats_reset: string | null
-        }
-        Relationships: []
-      }
-    }
-    Functions: {
-      algorithm_sign: {
-        Args: { algorithm: string; secret: string; signables: string }
-        Returns: string
-      }
-      dearmor: { Args: { '': string }; Returns: string }
-      gen_random_uuid: { Args: never; Returns: string }
-      gen_salt: { Args: { '': string }; Returns: string }
-      pg_stat_statements: {
-        Args: { showtext: boolean }
-        Returns: Record<string, unknown>[]
-      }
-      pg_stat_statements_info: { Args: never; Returns: Record<string, unknown> }
-      pg_stat_statements_reset: {
-        Args: { dbid?: unknown; queryid?: number; userid?: unknown }
-        Returns: undefined
-      }
-      pgp_armor_headers: {
-        Args: { '': string }
-        Returns: Record<string, unknown>[]
-      }
-      sign: {
-        Args: { algorithm?: string; payload: Json; secret: string }
-        Returns: string
-      }
-      try_cast_double: { Args: { inp: string }; Returns: number }
-      url_decode: { Args: { data: string }; Returns: string }
-      url_encode: { Args: { data: string }; Returns: string }
-      uuid_generate_v1: { Args: never; Returns: string }
-      uuid_generate_v1mc: { Args: never; Returns: string }
-      uuid_generate_v3: {
-        Args: { name: string; namespace: string }
-        Returns: string
-      }
-      uuid_generate_v4: { Args: never; Returns: string }
-      uuid_generate_v5: {
-        Args: { name: string; namespace: string }
-        Returns: string
-      }
-      uuid_nil: { Args: never; Returns: string }
-      uuid_ns_dns: { Args: never; Returns: string }
-      uuid_ns_oid: { Args: never; Returns: string }
-      uuid_ns_url: { Args: never; Returns: string }
-      uuid_ns_x500: { Args: never; Returns: string }
-      verify: {
-        Args: { algorithm?: string; secret: string; token: string }
-        Returns: {
-          header: Json
-          payload: Json
-          valid: boolean
-        }[]
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       achievements: {
@@ -1583,13 +1341,6 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: 'challenges_star_id_fkey'
-            columns: ['star_id']
-            isOneToOne: false
-            referencedRelation: 'next_star_from_next_planet'
-            referencedColumns: ['id']
-          },
           {
             foreignKeyName: 'challenges_star_id_fkey'
             columns: ['star_id']
@@ -2039,13 +1790,6 @@ export type Database = {
           star_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: 'questions_star_id_fkey'
-            columns: ['star_id']
-            isOneToOne: false
-            referencedRelation: 'next_star_from_next_planet'
-            referencedColumns: ['id']
-          },
           {
             foreignKeyName: 'questions_star_id_fkey'
             columns: ['star_id']
@@ -2743,13 +2487,6 @@ export type Database = {
             foreignKeyName: 'users_recently_unlocked_stars_star_id_fkey'
             columns: ['star_id']
             isOneToOne: false
-            referencedRelation: 'next_star_from_next_planet'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'users_recently_unlocked_stars_star_id_fkey'
-            columns: ['star_id']
-            isOneToOne: false
             referencedRelation: 'stars'
             referencedColumns: ['id']
           },
@@ -2884,13 +2621,6 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: 'users_unlocked_stars_star_id_fkey'
-            columns: ['star_id']
-            isOneToOne: false
-            referencedRelation: 'next_star_from_next_planet'
-            referencedColumns: ['id']
-          },
           {
             foreignKeyName: 'users_unlocked_stars_star_id_fkey'
             columns: ['star_id']
@@ -3099,13 +2829,6 @@ export type Database = {
             foreignKeyName: 'challenges_star_id_fkey'
             columns: ['star_id']
             isOneToOne: false
-            referencedRelation: 'next_star_from_next_planet'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'challenges_star_id_fkey'
-            columns: ['star_id']
-            isOneToOne: false
             referencedRelation: 'stars'
             referencedColumns: ['id']
           },
@@ -3204,13 +2927,6 @@ export type Database = {
             referencedColumns: ['id']
           },
         ]
-      }
-      next_star_from_next_planet: {
-        Row: {
-          id: string | null
-          is_unlocked: boolean | null
-        }
-        Relationships: []
       }
       planets_view: {
         Row: {
@@ -3431,19 +3147,6 @@ export type Database = {
         Args: { user_row: Database['public']['Tables']['users']['Row'] }
         Returns: string
       }
-      get_next_star_from_next_planet: {
-        Args: { _current_planet_id: string; _user_id: string }
-        Returns: {
-          id: string | null
-          is_unlocked: boolean | null
-        }[]
-        SetofOptions: {
-          from: '*'
-          to: 'next_star_from_next_planet'
-          isOneToOne: false
-          isSetofReturn: true
-        }
-      }
       install_available_extensions_and_test: { Args: never; Returns: boolean }
       list_challenges: {
         Args: {
@@ -3497,6 +3200,10 @@ export type Database = {
       slugify: { Args: { name: string }; Returns: string }
       teste: { Args: never; Returns: string }
       unaccent: { Args: { '': string }; Returns: string }
+      clear_text_block_audio: {
+        Args: { p_block_index: number; p_star_id: string }
+        Returns: undefined
+      }
       update_last_week_ranking_positions: { Args: never; Returns: undefined }
       update_text_block_audio: {
         Args: { p_audio: Json; p_block_index: number; p_star_id: string }
@@ -3848,13 +3555,13 @@ export type Database = {
           publication: unknown
           slot_name: unknown
         }
-        Returns: Database['realtime']['CompositeTypes']['wal_rls'][]
-        SetofOptions: {
-          from: '*'
-          to: 'wal_rls'
-          isOneToOne: false
-          isSetofReturn: true
-        }
+        Returns: {
+          errors: string[]
+          is_rls_enabled: boolean
+          slot_changes_count: number
+          subscription_ids: string[]
+          wal: Json
+        }[]
       }
       quote_wal2json: { Args: { entity: unknown }; Returns: string }
       send: {
@@ -4221,10 +3928,6 @@ export type Database = {
         Args: { bucketid: string; metadata: Json; name: string; owner: string }
         Returns: undefined
       }
-      delete_leaf_prefixes: {
-        Args: { bucket_ids: string[]; names: string[] }
-        Returns: undefined
-      }
       extension: { Args: { name: string }; Returns: string }
       filename: { Args: { name: string }; Returns: string }
       foldername: { Args: { name: string }; Returns: string[] }
@@ -4232,9 +3935,6 @@ export type Database = {
         Args: { p_delimiter: string; p_key: string; p_prefix: string }
         Returns: string
       }
-      get_level: { Args: { name: string }; Returns: number }
-      get_prefix: { Args: { name: string }; Returns: string }
-      get_prefixes: { Args: { name: string }; Returns: string[] }
       get_size_by_bucket: {
         Args: never
         Returns: {
@@ -4312,26 +4012,6 @@ export type Database = {
           created_at: string
           id: string
           key: string
-          last_accessed_at: string
-          metadata: Json
-          name: string
-          updated_at: string
-        }[]
-      }
-      search_legacy_v1: {
-        Args: {
-          bucketname: string
-          levels?: number
-          limits?: number
-          offsets?: number
-          prefix: string
-          search?: string
-          sortcolumn?: string
-          sortorder?: string
-        }
-        Returns: {
-          created_at: string
-          id: string
           last_accessed_at: string
           metadata: Json
           name: string
@@ -4506,12 +4186,6 @@ export const Constants = {
         'phone_change_token',
       ],
     },
-  },
-  cron: {
-    Enums: {},
-  },
-  extensions: {
-    Enums: {},
   },
   public: {
     Enums: {
