@@ -11,3 +11,4 @@ export { TriggerTextBlockAudioGenerationController } from './TriggerTextBlockAud
 export { TriggerTextBlocksAudioGenerationInBatchController } from './TriggerTextBlocksAudioGenerationInBatchController'
 export { CancelTextBlockAudioGenerationController } from './CancelTextBlockAudioGenerationController'
 export { CancelTextBlocksAudioGenerationInBatchController } from './CancelTextBlocksAudioGenerationInBatchController'
+export { RemoveTextBlockAudioController } from './RemoveTextBlockAudioController'

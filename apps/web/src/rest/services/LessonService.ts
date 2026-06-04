@@ -57,6 +57,15 @@ export const LessonService = (restClient: RestClient): ILessonService => {
       )
     },
 
+    async removeTextBlockAudio(starId: Id, blockIndex: Integer) {
+      return await restClient.delete<TextBlockDto[]>(
+        `/lesson/text-blocks/star/${starId.value}/audio/file`,
+        {
+          blockIndex: blockIndex.value,
+        },
+      )
+    },
+
     async cancelTextBlocksAudioGenerationInBatch(starId: Id) {
       return await restClient.delete<TextBlockDto[]>(
         `/lesson/text-blocks/star/${starId.value}/audio/batch`,
