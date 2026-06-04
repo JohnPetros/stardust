@@ -9,6 +9,16 @@ import type { LessonService } from '@stardust/core/lesson/interfaces'
 
 import { useLessonStoryPage } from '../useLessonStoryPage'
 
+function createDeferred<T>() {
+  let resolve!: (value: T) => void
+
+  const promise = new Promise<T>((resolver) => {
+    resolve = resolver
+  })
+
+  return { promise, resolve }
+}
+
 const mockSetIsExecuting = jest.fn()
 const mockSetIsSuccessful = jest.fn()
 const mockSetIsFailure = jest.fn()
@@ -246,5 +256,142 @@ describe('useLessonStoryPage', () => {
     })
 
     expect(mockTextBlocksFetch.refetch).toHaveBeenCalled()
+  })
+
+  it('should sync local changes before removing audio and stop loading after audio disappears locally', async () => {
+    const initialBlock = TextBlocksFaker.fakeDto({
+      type: 'default',
+      content: 'conteúdo original',
+      audio: {
+        fileName: 'audio-original.mp3',
+        status: 'done',
+        voice: 'panda',
+      },
+    })
+    mockTextBlocksFetch.data = [initialBlock]
+
+    const syncResponse = [
+      {
+        ...initialBlock,
+        content: 'conteúdo sincronizado',
+      },
+    ]
+    const removedAudioResponse = [
+      {
+        ...syncResponse[0],
+        audio: undefined,
+      },
+    ]
+    const syncDeferred = createDeferred<RestResponse<typeof syncResponse>>()
+    const removeDeferred = createDeferred<RestResponse<typeof removedAudioResponse>>()
+
+    lessonService.updateTextBlocks.mockReturnValueOnce(syncDeferred.promise)
+    lessonService.removeTextBlockAudio.mockReturnValueOnce(removeDeferred.promise)
+
+    const { result } = Hook()
+
+    await waitFor(() => expect(result.current.textBlocks).toHaveLength(1))
+
+    const blockId = result.current.textBlocks[0].id
+
+    act(() => {
+      result.current.onContentChange(blockId, 'conteúdo sincronizado')
+    })
+
+    await waitFor(() => expect(result.current.isSaveDisabled).toBe(false))
+
+    act(() => {
+      void result.current.onRemoveAudio(blockId)
+    })
+
+    await waitFor(() =>
+      expect(result.current.isRemovingAudioByBlockId(blockId)).toBe(true),
+    )
+
+    expect(lessonService.updateTextBlocks).toHaveBeenCalledWith(starId, [
+      expect.objectContaining({
+        content: 'conteúdo sincronizado',
+        audio: initialBlock.audio,
+      }),
+    ])
+
+    await act(async () => {
+      syncDeferred.resolve(
+        new RestResponse({
+          statusCode: 200,
+          body: syncResponse,
+        }),
+      )
+    })
+
+    await waitFor(() => {
+      expect(lessonService.removeTextBlockAudio).toHaveBeenCalledWith(
+        starId,
+        expect.objectContaining({ value: 0 }),
+      )
+    })
+
+    await act(async () => {
+      removeDeferred.resolve(
+        new RestResponse({
+          statusCode: 200,
+          body: removedAudioResponse,
+        }),
+      )
+    })
+
+    await waitFor(() => {
+      expect(result.current.textBlocks[0]).toEqual(
+        expect.objectContaining({
+          content: 'conteúdo sincronizado',
+          audio: undefined,
+        }),
+      )
+      expect(result.current.isRemovingAudioByBlockId(blockId)).toBe(false)
+    })
+
+    expect(result.current.isSaveDisabled).toBe(true)
+  })
+
+  it('should preserve local state and show error when removing audio fails', async () => {
+    const initialBlock = TextBlocksFaker.fakeDto({
+      type: 'default',
+      content: 'conteúdo com áudio',
+      audio: {
+        fileName: 'audio-original.mp3',
+        status: 'done',
+        voice: 'panda',
+      },
+    })
+    mockTextBlocksFetch.data = [initialBlock]
+    lessonService.removeTextBlockAudio.mockResolvedValueOnce(
+      new RestResponse({
+        statusCode: 400,
+        errorMessage: 'Erro ao remover áudio',
+      }),
+    )
+
+    const { result } = Hook()
+
+    await waitFor(() => expect(result.current.textBlocks).toHaveLength(1))
+
+    const blockId = result.current.textBlocks[0].id
+
+    await act(async () => {
+      await result.current.onRemoveAudio(blockId)
+    })
+
+    expect(lessonService.removeTextBlockAudio).toHaveBeenCalledWith(
+      starId,
+      expect.objectContaining({ value: 0 }),
+    )
+    expect(result.current.textBlocks[0]).toEqual(
+      expect.objectContaining({
+        content: 'conteúdo com áudio',
+        audio: initialBlock.audio,
+      }),
+    )
+    expect(result.current.isRemovingAudioByBlockId(blockId)).toBe(false)
+    expect(toastProvider.showError).toHaveBeenCalledWith('Erro ao remover áudio')
   })
 })

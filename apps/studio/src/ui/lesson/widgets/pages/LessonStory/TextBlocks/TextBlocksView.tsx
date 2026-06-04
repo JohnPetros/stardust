@@ -29,9 +29,11 @@ type Props = {
   isGeneratingAudiosInBatch: boolean
   isCancellingAudiosInBatch: boolean
   isGeneratingAudioByBlockId: (blockId: string) => boolean
+  isRemovingAudioByBlockId: (blockId: string) => boolean
   onAudioVoiceChange: (blockId: string, voice: AudioVoiceDto['value']) => void
   onGenerateAudio: (blockId: string) => void
   onCancelAudio: (blockId: string) => void
+  onRemoveAudio: (blockId: string) => void
   onGenerateAudiosInBatch: () => void
   onCancelAudiosInBatch: () => void
   onSearchChange: (search: string) => void
@@ -67,10 +69,12 @@ export const TextBlocksView = ({
   onPictureChange,
   onRunnableChange,
   isGeneratingAudioByBlockId,
+  isRemovingAudioByBlockId,
   hasStoredAudioFile,
   onAudioVoiceChange,
   onGenerateAudio,
   onCancelAudio,
+  onRemoveAudio,
   onGenerateAudiosInBatch,
   onCancelAudiosInBatch,
   onSearchChange,
@@ -175,9 +179,11 @@ export const TextBlocksView = ({
                           isGeneratingAudioByBlockId(item.data.id) ||
                           item.data.audio?.status === 'pending'
                         }
+                        isRemovingAudio={isRemovingAudioByBlockId(item.data.id)}
                         onAudioVoiceChange={onAudioVoiceChange}
                         onGenerateAudio={onGenerateAudio}
                         onCancelAudio={onCancelAudio}
+                        onRemoveAudio={onRemoveAudio}
                       />
                     </SortableList.Item>
                   </li>

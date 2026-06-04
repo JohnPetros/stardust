@@ -12,9 +12,11 @@ type Props = {
   hasStoredAudioFile: boolean
   isGenerateDisabled: boolean
   isGenerating: boolean
+  isRemoving: boolean
   onVoiceChange: (voice: AudioVoiceDto['value']) => void
   onGenerate: () => void
   onCancel: () => void
+  onRemove: () => void
 }
 
 export const BlockAudioControls = ({
@@ -23,26 +25,31 @@ export const BlockAudioControls = ({
   hasStoredAudioFile,
   isGenerateDisabled,
   isGenerating,
+  isRemoving,
   onVoiceChange,
   onGenerate,
   onCancel,
+  onRemove,
 }: Props) => {
   const controls = useBlockAudioControls({ item, hasStoredAudioFile })
 
   return (
     <BlockAudioControlsView
       isGenerating={isGenerating}
+      isRemoving={isRemoving}
       isGenerateDisabled={isGenerateDisabled}
       canCancel={controls.canCancel}
+      canRemove={controls.canRemove}
       statusLabel={controls.statusLabel}
       statusVariant={controls.statusVariant}
       onGenerate={onGenerate}
       onCancel={onCancel}
+      onRemove={onRemove}
       selector={
         <BlockVoiceSelector
           voices={voices}
           value={controls.voice}
-          isDisabled={isGenerating}
+          isDisabled={isGenerating || isRemoving}
           onChange={onVoiceChange}
         />
       }
