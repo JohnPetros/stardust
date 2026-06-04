@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.7.2 (2026-06-04)
+
+* 🧰 prov(server): update voice identifiers for ElevenLabs TTS provider (692a8018a)
+* 🐛 fix(server): add logging for validation and request handling; update content schema to use stringSchema (a70bd8bc6)
+* 🐛 fix(server): change bucket name in SupabaseFileStorageProvider to 'stardust-bucket' (d4743cd18)
+* 🐛 fix(server): update bucket name in SupabaseFileStorageProvider to 'supabase-bucket' (dc4cce392)
+* 🐛 fix(server): handle null or undefined file type in extensionFromType method (166a4c1b0)
+* 🐛 fix(core): add event exports to main module for improved event handling (997084931)
+* 🖥️ ui(studio): modify welcome message in SignInFormView component (4122d5017)
+* 🐛 fix: update hardcoded authentication credentials in auth.rest (510a6635d)
+* ⚙️ config: replace hardcoded credentials with environment variables for authentication (7fd4bfdeb)
+* 🧪 test: harden server route test fixtures (edaac8b72)
+* 🐛 fix: stabilize speaker audio hooks (d7d899240)
+* ♻️ refactor: fix import type in studio storage service (ac837a9de)
+* ⚙️ config: remove react-text-to-speech dependency and update storage keys (9b8c6274f)
+* 📚 docs: update implementation plan for speaker revival and add specification (4a1831a6e)
+* ♻️ refactor: remove auth requirement from files list endpoint (02f032b39)
+* 🖥️ ui: migrate lesson page to text-block-based audio story (65816f3a4)
+* 🖥️ ui: wire audio metadata through MDX component tree (09a9591fc)
+* 🖥️ ui: rewrite speaker with native audio player and remove legacy TTS context (42382ef6f)
+* ✨ use case: improve audio file polling with per-file retry in studio (3ca8dc6f9)
+* ♻️ refactor: remove legacy fetchStarStory from all layers (d81b7bb85)
+* ♻️ refactor: enable audio for image text blocks and rename event (1b684e328)
+* 🌐 domain: add alien, robot, salmonense audio voices (808d11cd7)
+
 ## 1.7.1 (2026-05-27)
 
 * 🧪 test: update ShopFixture to delete existing insignias before insertion and remove debug logging from SendFeedbackReportUseCase (6be5043c6)
