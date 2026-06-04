@@ -4,18 +4,22 @@ import { InngestFunctions } from './InngestFunctions'
 import type { EventPayload } from '@stardust/core/global/types'
 
 import { GuideContentEditedEvent, GuideDeletedEvent } from '@stardust/core/manual/events'
-import type { TextBlockAudioGenerationRequestedEvent } from '@stardust/core/lesson/events'
+import type {
+  TextBlockAudioFileRemovedEvent,
+  TextBlockAudioGenerationRequestedEvent,
+} from '@stardust/core/lesson/events'
 
 import {
   BackupDatabaseJob,
   DeleteGuideEmbeddingsJob,
   GenerateGuideEmbeddingsJob,
   GenerateTextBlockAudioJob,
+  RemoveTextBlockAudioFileJob,
 } from '@/queue/jobs/storage'
 import type { Database } from '@/database/supabase/types/Database'
 import { SupabaseDatabaseProvider } from '@/provision/database'
 import { DropboxStorageProvider, SupabaseFileStorageProvider } from '@/provision/storage'
-import { ElevenLabsTtsProvider } from '@/provision/tts'
+import { OpenAITtsProvider } from '@/provision/tts'
 import { MastraMarkdownEmbeddingsGeneratorProvider } from '@/provision/storage/MastraMarkdownEmbeddingsGeneratorProvider'
 import { UpstashEmbeddingsStorageProvider } from '@/provision/storage/UpstashEmbeddingsStorageProvider'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
@@ -23,6 +27,7 @@ import { SupabaseTextBlocksRepository } from '@/database'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestBroker } from '../InngestBroker'
 import {
+  TEXT_BLOCK_AUDIO_FILE_REMOVED_EVENT_NAME,
   TEXT_BLOCK_AUDIO_GENERATION_CANCELLED_EVENT_NAME,
   TEXT_BLOCK_AUDIO_GENERATION_REQUESTED_EVENT_NAME,
 } from '../constants/lesson-event-names'
@@ -36,6 +41,9 @@ type GuideContentEditedPayload = EventPayload<typeof GuideContentEditedEvent>
 type GuideDeletedPayload = EventPayload<typeof GuideDeletedEvent>
 type TextBlockAudioGenerationRequestedPayload = EventPayload<
   typeof TextBlockAudioGenerationRequestedEvent
+>
+type TextBlockAudioFileRemovedPayload = EventPayload<
+  typeof TextBlockAudioFileRemovedEvent
 >
 
 export class StorageFunctions extends InngestFunctions {
@@ -136,7 +144,7 @@ export class StorageFunctions extends InngestFunctions {
       },
       async (context) => {
         const repository = new SupabaseTextBlocksRepository(supabase)
-        const ttsProvider = new ElevenLabsTtsProvider()
+        const ttsProvider = new OpenAITtsProvider()
         const fileStorageProvider = new SupabaseFileStorageProvider(supabase)
         const broker = new InngestBroker()
         const job = new GenerateTextBlockAudioJob(
@@ -151,12 +159,37 @@ export class StorageFunctions extends InngestFunctions {
     )
   }
 
+  private createRemoveTextBlockAudioFileJob(supabase: SupabaseClient<Database>) {
+    return this.inngest.createFunction(
+      {
+        id: RemoveTextBlockAudioFileJob.KEY,
+        retries: 2,
+        onFailure: (context) =>
+          this.handleFailure(context, RemoveTextBlockAudioFileJob.name),
+        triggers: {
+          event: eventType(TEXT_BLOCK_AUDIO_FILE_REMOVED_EVENT_NAME, {
+            schema: z.object({
+              fileName: stringSchema,
+            }),
+          }),
+        },
+      },
+      async (context) => {
+        const fileStorageProvider = new SupabaseFileStorageProvider(supabase)
+        const job = new RemoveTextBlockAudioFileJob(fileStorageProvider)
+        const amqp = new InngestAmqp<TextBlockAudioFileRemovedPayload>(context)
+        return await job.handle(amqp)
+      },
+    )
+  }
+
   getFunctions(supabase: SupabaseClient<Database>) {
     return [
       this.createGenerateGuideEmbeddingsJob(),
       this.createDeleteGuideEmbeddingsJob(),
       this.createBackupDatabaseJob(),
       this.createGenerateTextBlockAudioJob(supabase),
+      this.createRemoveTextBlockAudioFileJob(supabase),
     ]
   }
 }
