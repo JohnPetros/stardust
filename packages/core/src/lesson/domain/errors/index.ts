@@ -6,3 +6,4 @@ export { CodeExplanationLimitExceededError } from './CodeExplanationLimitExceede
 export { TextBlockNotFoundError } from './TextBlockNotFoundError'
 export { TextBlockAudioNotAllowedError } from './TextBlockAudioNotAllowedError'
 export { TextBlockAudioGenerationNotPendingError } from './TextBlockAudioGenerationNotPendingError'
+export { TextBlockAudioRemovalNotAllowedError } from './TextBlockAudioRemovalNotAllowedError'

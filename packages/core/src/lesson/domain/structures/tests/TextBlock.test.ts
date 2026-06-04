@@ -54,6 +54,24 @@ describe('TextBlock Structure', () => {
     expect(textBlock.audio).toBeUndefined()
   })
 
+  it('should remove audio preserving the other fields and serialize dto without audio', () => {
+    const dto = makeDto({ audio: makeAudioDto() })
+
+    const textBlock = TextBlock.create(dto)
+    const updatedTextBlock = textBlock.removeAudio()
+
+    expect(updatedTextBlock).not.toBe(textBlock)
+    expect(updatedTextBlock.audio).toBeUndefined()
+    expect(updatedTextBlock.type).toBe(textBlock.type)
+    expect(updatedTextBlock.content).toBe(textBlock.content)
+    expect(updatedTextBlock.title?.value).toBe(textBlock.title?.value)
+    expect(updatedTextBlock.picture?.value).toBe(textBlock.picture?.value)
+    expect(updatedTextBlock.isRunnable.value).toBe(textBlock.isRunnable.value)
+    expect(updatedTextBlock.dto).toEqual(makeDto())
+    expect(updatedTextBlock.dto).not.toHaveProperty('audio')
+    expect(textBlock.audio?.dto).toEqual(makeAudioDto())
+  })
+
   it('should allow audio for image blocks and keep non eligible blocks disabled', () => {
     const imageBlock = TextBlock.create(makeDto({ type: 'image' }))
     const userBlock = TextBlock.create(makeDto({ type: 'user', picture: undefined }))

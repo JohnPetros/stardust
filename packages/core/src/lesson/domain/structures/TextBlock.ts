@@ -75,6 +75,10 @@ export class TextBlock {
     return this.clone({ audio })
   }
 
+  removeAudio() {
+    return this.clone({ audio: undefined })
+  }
+
   get dto(): TextBlockDto {
     return {
       type: this.type,
@@ -82,7 +86,7 @@ export class TextBlock {
       isRunnable: this.isRunnable.value,
       picture: this.picture?.value,
       title: this.title?.value,
-      audio: this.audio?.dto,
+      ...(this.audio ? { audio: this.audio.dto } : {}),
     }
   }
 
