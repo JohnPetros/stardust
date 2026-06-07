@@ -1,7 +1,7 @@
 name: Server app CD
 
 on:
-  push:
+  pull_request:
     branches:
       - main
     paths:
