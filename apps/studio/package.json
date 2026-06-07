@@ -48,6 +48,7 @@
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.525.0",
     "markdown-to-jsx": "^7.7.12",
+    "motion": "^12.40.0",
     "next-themes": "^0.4.6",
     "nuqs": "^2.8.6",
     "radix-ui": "^1.4.3",
