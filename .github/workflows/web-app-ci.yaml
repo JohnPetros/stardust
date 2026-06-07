@@ -11,7 +11,6 @@ on:
       - "packages/lsp/**"
 
 permissions:
-  id-token: write
   contents: read
 
 env:
@@ -68,25 +67,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - uses: Infisical/secrets-action@v1.0.9
-        with:
-          method: "oidc"
-          identity-id: ${{ secrets.INFISICAL_IDENTITY_ID }}
-          domain: ${{ secrets.INFISICAL_DOMAIN }}
-          env-slug: "dev"
-          project-slug: "stardust-web-app"
-          export-type: "file"
-          file-output-path: "/apps/web/.env"
-
-      - uses: Infisical/secrets-action@v1.0.9
-        with:
-          method: "oidc"
-          identity-id: ${{ secrets.INFISICAL_IDENTITY_ID }}
-          domain: ${{ secrets.INFISICAL_DOMAIN }}
-          env-slug: "dev"
-          project-slug: "stardust-web-app"
-          export-type: "file"
-          file-output-path: "/apps/web/.env.test"
+      - name: Create environment files
+        run: |
+          echo "${{ secrets.WEB_ENV_TEST }}" > apps/web/.env.test
 
       - name: Setup Node.js
         uses: actions/setup-node@v5
@@ -113,25 +96,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - uses: Infisical/secrets-action@v1.0.9
-        with:
-          method: "oidc"
-          identity-id: ${{ secrets.INFISICAL_IDENTITY_ID }}
-          domain: ${{ secrets.INFISICAL_DOMAIN }}
-          env-slug: "dev"
-          project-slug: "stardust-web-app"
-          export-type: "file"
-          file-output-path: "/apps/web/.env"
-
-      - uses: Infisical/secrets-action@v1.0.9
-        with:
-          method: "oidc"
-          identity-id: ${{ secrets.INFISICAL_IDENTITY_ID }}
-          domain: ${{ secrets.INFISICAL_DOMAIN }}
-          env-slug: "dev"
-          project-slug: "stardust-web-app"
-          export-type: "file"
-          file-output-path: "/apps/web/.env.test"
+      - name: Create environment files
+        run: |
+          echo "${{ secrets.WEB_ENV_TEST }}" > apps/web/.env.test
 
       - name: Setup Node.js
         uses: actions/setup-node@v5

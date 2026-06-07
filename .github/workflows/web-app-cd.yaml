@@ -16,7 +16,7 @@ jobs:
       - name: Trigger Coolify deploy
         run: |
           curl -X GET "${{ secrets.COOLIFY_WEBHOOK_WEB_PROD }}" \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
             --fail --silent --show-error
 
       - name: Send Discord notification

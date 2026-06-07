@@ -4,7 +4,7 @@ import { TextEncoder, TextDecoder } from 'node:util'
 
 process.env.NEXT_IGNORE_INCORRECT_LOCKFILE = '1'
 
-config({ path: '.env.test' })
+config({ path: '.env.testing' })
 
 /** @type {import('jest').Config} */
 const jestConfig = {

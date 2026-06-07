@@ -1,4 +1,4 @@
-name: Server app CD to Coolify
+name: Server app CD
 
 on:
   push:
@@ -52,5 +52,5 @@ jobs:
       - name: Trigger Coolify deploy
         run: |
           curl -X GET "${{ secrets.COOLIFY_WEBHOOK_SERVER_PROD }}" \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
             --fail --silent --show-error

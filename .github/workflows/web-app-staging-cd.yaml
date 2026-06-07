@@ -1,0 +1,69 @@
+name: Web app staging CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/web/**"
+      - "packages/core/**"
+      - "packages/validation/**"
+      - "packages/lsp/**"
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy to Coolify
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Coolify deploy
+        run: |
+          curl -X GET "${{ secrets.COOLIFY_WEBHOOK_WEB_STG }}" \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
+            --fail --silent --show-error
+
+      - name: Send Discord notification
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          COMMIT_URL="https://github.com/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}"
+          SHA_SHORT=$(echo "$GITHUB_SHA" | cut -c1-7)
+
+          EMBED=$(jq -n \
+            --arg ts "$TIMESTAMP" \
+            --arg url "$COMMIT_URL" \
+            --arg sha "$SHA_SHORT" \
+            '{
+              embeds: [{
+                title: "✅ Stardust Web - Staging Deploy (Coolify)",
+                description: "Uma nova versão de staging do Stardust Web foi implantada com sucesso.",
+                url: $url,
+                color: 3066993,
+                fields: [
+                  {
+                    "name": "🌐 Preview URL",
+                    "value": "https://staging.stardust-app.com.br",
+                    "inline": false
+                  },
+                  {
+                    name: "🔗 Commit",
+                    value: ("[" + $sha + "](" + $url + ")"),
+                    inline: true
+                  }
+                ],
+                footer: { text: "GitHub Actions • Stardust" },
+                timestamp: $ts
+              }]
+            }')
+
+          curl -H "Content-Type: application/json" \
+            -d "$EMBED" \
+            "$DISCORD_WEBHOOK_URL"
