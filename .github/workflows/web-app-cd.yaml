@@ -1,11 +1,9 @@
 name: Web app CD to Coolify
 
 on:
-  # release:
-  #   types: [published]
-  pull_request:
-    branches:
-      - main
+  release:
+    types: [published]
+
 permissions:
   contents: read
 
