@@ -1,57 +1,23 @@
-name: Web app CD to Heroku
+name: Web app CD to Coolify
 
 on:
   release:
     types: [published]
 
 permissions:
-  id-token: write
   contents: read
 
 jobs:
-  build-and-deploy:
-    name: Build and Deploy
+  deploy:
+    name: Deploy to Coolify
     runs-on: ubuntu-latest
-    env:
-      HEROKU_APP_NAME: stardust-web-app
-      IMAGE_NAME: registry.heroku.com/stardust-web-app/web
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - uses: Infisical/secrets-action@v1.0.9
-        with:
-          method: "oidc"
-          identity-id: ${{ secrets.INFISICAL_IDENTITY_ID }}
-          domain: ${{ secrets.INFISICAL_DOMAIN}}
-          env-slug: "prod"
-          project-slug: "stardust-web-app"
-          export-type: "file"
-          file-output-path: "/apps/web/.env"
-
-      - name: Install Heroku CLI
-        run: curl https://cli-assets.heroku.com/install.sh | sh
-
-      - name: Login to Heroku Container Registry
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:login
-
-      - name: Set Heroku stack to container
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku stack:set container --app ${{ env.HEROKU_APP_NAME }}
-
-      - name: Build and push Docker image to Heroku
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:push web -a ${{ env.HEROKU_APP_NAME }} --recursive
-
-      - name: Release to Heroku
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:release -a ${{ env.HEROKU_APP_NAME }} web
+      - name: Trigger Coolify deploy
+        run: |
+          curl -X GET "${{ secrets.COOLIFY_WEBHOOK_WEB_PROD }}" \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}" \
+            --fail --silent --show-error
 
       - name: Send Discord notification
         env:
