@@ -35,21 +35,7 @@ export class DeleguaProvedorLsp implements LspProvider {
       funcaoDeSaida,
       funcaoDeSaida,
     )
-    const resultadoLexador = this.lexador.mapear(
-      `
-  tente {
-    funcao desafio() {
-      retorna 4
-    }
-
-    assercao desafio() == 2
-  } pegue {
-      escreva("Esta mensagem não deve ser escrita na saída.");
-  }
-;
-`.split('\n'),
-      -1,
-    )
+    const resultadoLexador = this.lexador.mapear(code.split('\n'), -1)
     if (resultadoLexador.erros.length) {
       return this.trateErro(resultadoLexador.erros[0])
     }
