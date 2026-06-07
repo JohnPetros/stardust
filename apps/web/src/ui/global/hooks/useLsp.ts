@@ -4,13 +4,13 @@ import {
   DELEGUA_DOCUMENTACOES,
   DELEGUA_EXAMPLE_SNIPPETS,
   DELEGUA_SNIPPETS,
-  DeleguaLsp,
+  DeleguaProvedorLsp,
 } from '@stardust/lsp'
 
 export function useLsp() {
   return useMemo(() => {
     return {
-      lspProvider: new DeleguaLsp(),
+      lspProvider: new DeleguaProvedorLsp(),
       documentations: [...DELEGUA_DOCUMENTACOES],
       snippets: [...DELEGUA_SNIPPETS],
       exampleSnippets: [...DELEGUA_EXAMPLE_SNIPPETS],

@@ -1,11 +1,15 @@
 import { useMemo } from 'react'
 
-import { DELEGUA_DOCUMENTACOES, DELEGUA_SNIPPETS, DeleguaLsp } from '@stardust/lsp'
+import {
+  DELEGUA_DOCUMENTACOES,
+  DELEGUA_SNIPPETS,
+  DeleguaProvedorLsp,
+} from '@stardust/lsp'
 
 export function useLsp() {
   return useMemo(() => {
     return {
-      lspProvider: new DeleguaLsp(),
+      lspProvider: new DeleguaProvedorLsp(),
       documentations: [...DELEGUA_DOCUMENTACOES],
       snippets: [...DELEGUA_SNIPPETS],
     }
