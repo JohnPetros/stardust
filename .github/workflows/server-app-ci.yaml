@@ -88,7 +88,9 @@ jobs:
 
       - name: Rebuild local database from migrations
         working-directory: apps/server
-        run: supabase db reset --local --yes
+        run: |
+          supabase db reset --local --yes || \
+          (sleep 10 && supabase db reset --local --yes)
 
       - uses: Infisical/secrets-action@v1.0.9
         with:
