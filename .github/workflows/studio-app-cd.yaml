@@ -1,4 +1,4 @@
-name: Studio app CD to Coolify
+name: Studio app CD
 
 on:
   pull_request:
