@@ -1,9 +1,9 @@
 import { randomUUID } from 'node:crypto'
 
-import { SessionDto } from '@stardust/core/auth/structures/dtos'
-import { AccountDto } from '@stardust/core/auth/entities/dtos'
+import type { SessionDto } from '@stardust/core/auth/structures/dtos'
+import type { AccountDto } from '@stardust/core/auth/entities/dtos'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { AppError } from '@stardust/core/global/errors'
-import { SupabaseClient } from '@supabase/supabase-js'
 import { LocalSupabaseProxy } from './LocalSupabaseProxy'
 
 type CreateAccountInput = {
