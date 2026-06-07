@@ -90,15 +90,15 @@ Adicionar ao editor de snippets do Playground uma acao manual `Exemplos`, fechad
 * **`AlertDialogRef`** (`apps/web/src/ui/global/widgets/components/AlertDialog/types/AlertDialogRef.ts`) - contrato imperativo `{ open: VoidFunction; close: VoidFunction }` ja usado em `SnippetPage` para login obrigatorio.
 * **`PlaygroundCodeEditorRef`** (`apps/web/src/ui/global/widgets/components/PlaygroundCodeEditor/types/PlaygroundCodeEditorRef.ts`) - estende `CodeEditorRef` e adiciona `runCode(): void`.
 * **`CodeEditorRef`** (`apps/web/src/ui/global/widgets/components/CodeEditor/types/CodeEditorRef.ts`) - expoe `getValue(): string`, `setValue(value: string): void`, `reloadValue(): void` e demais operacoes imperativas do editor.
-* **`useLsp`** (`apps/web/src/ui/global/hooks/useLsp.ts`) - instancia `DeleguaLsp` e expoe `documentations` e `snippets` de `@stardust/lsp` para os editores.
+* **`useLsp`** (`apps/web/src/ui/global/hooks/useLsp.ts`) - instancia `DeleguaProvedorLsp` e expoe `documentations` e `snippets` de `@stardust/lsp` para os editores.
 
 ## Pacote LSP
 
 * **`DELEGUA_SNIPPETS`** (`packages/lsp/src/constants/delegua-snippets.ts`) - agrega snippets curtos de autocomplete de metodos de listas, dicionarios, globais e texto.
 * **`DELEGUA_REGEX`** (`packages/lsp/src/constants/delegua-regex.ts`) - centraliza regex utilitarias, incluindo os padroes usados para localizar chamadas `leia(...)` no pre-processamento de entradas.
-* **`DeleguaLsp.addInputs`** (`packages/lsp/src/DeleguaLsp.ts`) - substitui ocorrencias de `leia(...)` por entradas tipadas em tempo de execucao.
+* **`DeleguaProvedorLsp.addInputs`** (`packages/lsp/src/DeleguaProvedorLsp.ts`) - substitui ocorrencias de `leia(...)` por entradas tipadas em tempo de execucao.
 * **`constants barrel`** (`packages/lsp/src/constants/index.ts`) - exporta constantes publicas do pacote, incluindo `DELEGUA_SNIPPETS`.
-* **`main export`** (`packages/lsp/src/main.ts`) - exporta `./constants`, `DeleguaLsp`, `DeleguaConfiguracaoParaEditorMonaco` e documentacoes.
+* **`main export`** (`packages/lsp/src/main.ts`) - exporta `./constants`, `DeleguaProvedorLsp`, `DeleguaConfiguracaoParaEditorMonaco` e documentacoes.
 
 ## Core Contracts
 
@@ -273,7 +273,7 @@ apps/web/src/ui/playground/widgets/components/SnippetExamplesDialog/
 
 * **Arquivo:** `packages/lsp/src/constants/delegua-regex.ts`
 * **Mudança:** Ajustar `conteúdoDeFuncaoLeia` para casar apenas a chamada `leia(...)` (`/leia\([^)]*\)/`) em vez de capturar de forma gulosa o restante da linha.
-* **Justificativa:** Evitar substituicoes incorretas em `DeleguaLsp.addInputs` quando `leia()` estiver dentro de expressoes maiores (ex.: `numero(leia())`), preservando parenteses e o codigo subsequente.
+* **Justificativa:** Evitar substituicoes incorretas em `DeleguaProvedorLsp.addInputs` quando `leia()` estiver dentro de expressoes maiores (ex.: `numero(leia())`), preservando parenteses e o codigo subsequente.
 * **Camada:** `provision`
 
 ---
@@ -422,7 +422,7 @@ SnippetPage
 * `apps/web/src/ui/global/hooks/useLsp.ts` - ponto central de acesso ao LSP no app `web`.
 * `packages/lsp/src/constants/delegua-snippets.ts` - padrao atual de constantes de snippets.
 * `packages/lsp/src/constants/delegua-regex.ts` - regex usadas no pre-processamento de `leia(...)`.
-* `packages/lsp/src/DeleguaLsp.ts` - implementacao de `addInputs` consumindo `DELEGUA_REGEX.conteúdoDeFuncaoLeia`.
+* `packages/lsp/src/DeleguaProvedorLsp.ts` - implementacao de `addInputs` consumindo `DELEGUA_REGEX.conteúdoDeFuncaoLeia`.
 * `packages/lsp/src/constants/index.ts` - barrel publico das constantes do pacote.
 * `packages/core/src/global/domain/types/LspSnippet.ts` - contrato reutilizado para `{ label, code }`.
 

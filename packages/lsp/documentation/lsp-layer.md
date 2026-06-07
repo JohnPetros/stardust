@@ -12,29 +12,29 @@ packages/lsp/
     ├── constants/
     ├── DeleguaConfiguracaoParaEditorMonaco.ts
     ├── DeleguaInterpretador.ts
-    ├── DeleguaLsp.ts
+    ├── DeleguaProvedorLsp.ts
     └── main.ts
 ```
 
-- **`DeleguaLsp.ts`**: O núcleo da implementação do LSP para a linguagem Delegua.
+- **`DeleguaProvedorLsp.ts`**: O núcleo da implementação do LSP para a linguagem Delegua.
 - **`DeleguaInterpretador.ts`**: Um interpretador para a linguagem Delegua.
 - **`DeleguaConfiguracaoParaEditorMonaco.ts`**: Configuração para o Editor Monaco para integrar com o LSP do Delegua.
 - **`constants/`**: Constantes relacionadas à implementação do LSP.
 - **`main.ts`**: O ponto de entrada do pacote.
 
-## DeleguaLsp
+## DeleguaProvedorLsp
 
-A classe `DeleguaLsp` é o coração da camada LSP. Ela implementa a interface `LspProvider` do pacote `core` e fornece os seguintes recursos:
+A classe `DeleguaProvedorLsp` é o coração da camada LSP. Ela implementa a interface `LspProvider` do pacote `core` e fornece os seguintes recursos:
 
 - **Execução de Código**: O método `run` executa um bloco de código Delegua e retorna o resultado.
 - **Análise Sintática e Semântica**: Os métodos `performSyntaxAnalysis` e `performSemanticAnalysis` analisam o código em busca de erros e retornam diagnósticos.
 - **Manipulação de Código**: Métodos como `addInputs`, `addFunctionCall` e `buildFunction` permitem a manipulação programática do código Delegua.
 - **Tradução**: Os métodos `translateToLsp` e `translateToJs` traduzem o código entre Delegua e JavaScript.
 
-**Exemplo: `DeleguaLsp.ts`**
+**Exemplo: `DeleguaProvedorLsp.ts`**
 
 ```typescript
-export class DeleguaLsp implements LspProvider {
+export class DeleguaProvedorLsp implements LspProvider {
   private readonly lexador: Lexador = new Lexador();
   private readonly avaliadorSintatico: AvaliadorSintatico =
     new AvaliadorSintatico();
@@ -63,4 +63,4 @@ O arquivo `DeleguaConfiguracaoParaEditorMonaco.ts` fornece a configuração nece
 
 ## Interpretador
 
-O arquivo `DeleguaInterpretador.ts` contém um interpretador para a linguagem Delegua. Isso é usado pelo método `run` na classe `DeleguaLsp` para executar o código.
+O arquivo `DeleguaInterpretador.ts` contém um interpretador para a linguagem Delegua. Isso é usado pelo método `run` na classe `DeleguaProvedorLsp` para executar o código.
