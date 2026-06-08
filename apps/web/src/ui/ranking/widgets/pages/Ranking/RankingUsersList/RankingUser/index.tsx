@@ -68,7 +68,7 @@ export function RankingUser({
     >
       <div className='mr-2 flex items-center gap-2 text-lg'>
         <span className={positionStyles({ color })}>
-          {rankingPosition.isInPodiumArea ? (
+          {rankingPosition.isInPodiumArea.isTrue ? (
             <Image src={`/icons/${icon}`} width={32} height={32} alt='' />
           ) : (
             position
