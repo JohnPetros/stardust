@@ -6,24 +6,30 @@ import { Icon } from '@/ui/global/widgets/components/Icon'
 
 type Props = {
   isGenerating: boolean
+  isRemoving: boolean
   isGenerateDisabled: boolean
   canCancel: boolean
+  canRemove: boolean
   statusLabel: string | null
   statusVariant: 'secondary' | 'destructive'
   selector: ReactNode
   player: ReactNode
   onGenerate: () => void
   onCancel: () => void
+  onRemove: () => void
 }
 
 export const BlockAudioControlsView = ({
   isGenerating,
+  isRemoving,
   isGenerateDisabled,
   canCancel,
+  canRemove,
   statusLabel,
   statusVariant,
   onGenerate,
   onCancel,
+  onRemove,
   selector,
   player,
 }: Props) => {
@@ -36,7 +42,7 @@ export const BlockAudioControlsView = ({
             type='button'
             variant='outline'
             size='sm'
-            disabled={isGenerateDisabled}
+            disabled={isGenerateDisabled || isRemoving}
             onClick={onGenerate}
           >
             {isGenerating ? (
@@ -48,6 +54,20 @@ export const BlockAudioControlsView = ({
           {canCancel ? (
             <Button type='button' variant='destructive' size='sm' onClick={onCancel}>
               Cancelar
+            </Button>
+          ) : null}
+          {canRemove ? (
+            <Button
+              type='button'
+              variant='outline'
+              size='sm'
+              disabled={isRemoving}
+              onClick={onRemove}
+            >
+              {isRemoving ? (
+                <Icon name='loading' className='h-4 w-4 animate-spin' />
+              ) : null}
+              {isRemoving ? 'Removendo...' : 'Remover audio'}
             </Button>
           ) : null}
         </div>

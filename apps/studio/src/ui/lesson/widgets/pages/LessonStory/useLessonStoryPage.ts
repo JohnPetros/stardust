@@ -85,6 +85,7 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
   const [isGeneratingAudiosInBatch, setIsGeneratingAudiosInBatch] = useState(false)
   const [isCancellingAudiosInBatch, setIsCancellingAudiosInBatch] = useState(false)
   const [generatingAudioBlockIds, setGeneratingAudioBlockIds] = useState<string[]>([])
+  const [removingAudioBlockIds, setRemovingAudioBlockIds] = useState<string[]>([])
   const textBlocksScrollRef = useRef<HTMLDivElement>(null)
   const previewScrollRef = useRef<HTMLDivElement>(null)
   const previousLengthRef = useRef(textBlocks.length)
@@ -214,6 +215,15 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
     previousLengthRef.current = textBlocks.length
   }, [textBlocks.length])
 
+  useEffect(() => {
+    setRemovingAudioBlockIds((current) =>
+      current.filter((blockId) => {
+        const textBlock = textBlocks.find((item) => item.id === blockId)
+        return Boolean(textBlock?.audio?.fileName)
+      }),
+    )
+  }, [textBlocks])
+
   const sortableItems = useMemo<SortableItem<TextBlockEditorItem>[]>(() => {
     return textBlocks.map((textBlock) => ({ id: textBlock.id, data: textBlock }))
   }, [textBlocks])
@@ -242,6 +252,7 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
       ...textBlock,
       ...persistedBlocks[index],
       type: persistedBlocks[index].type as SupportedTextBlockType,
+      audio: persistedBlocks[index].audio,
     }))
   }
 
@@ -442,6 +453,37 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
     )
   }
 
+  async function handleRemoveTextBlockAudio(blockId: string) {
+    const blockIndex = findBlockIndexById(blockId)
+    if (blockIndex < 0) return
+
+    setRemovingAudioBlockIds((current) =>
+      current.includes(blockId) ? current : [...current, blockId],
+    )
+
+    const shouldContinue = await syncTextBlocksBeforeAudioAction()
+    if (!shouldContinue) {
+      setRemovingAudioBlockIds((current) => current.filter((id) => id !== blockId))
+      return
+    }
+
+    const response = await lessonService.removeTextBlockAudio(
+      starId,
+      Integer.create(blockIndex),
+    )
+
+    if (response.isFailure) {
+      setRemovingAudioBlockIds((current) => current.filter((id) => id !== blockId))
+      toastProvider.showError(response.errorMessage)
+      return
+    }
+
+    setBaselineTextBlocks(response.body)
+    setTextBlocks((currentTextBlocks) =>
+      toEditorItemsFromPersisted(currentTextBlocks, response.body),
+    )
+  }
+
   async function handleCancelAllTextBlocksAudios() {
     setIsCancellingAudiosInBatch(true)
 
@@ -461,6 +503,10 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
 
   function isGeneratingAudioByBlockId(blockId: string) {
     return generatingAudioBlockIds.includes(blockId)
+  }
+
+  function isRemovingAudioByBlockId(blockId: string) {
+    return removingAudioBlockIds.includes(blockId)
   }
 
   const handlePollingUpdate = useCallback(
@@ -543,9 +589,11 @@ export function useLessonStoryPage({ lessonService, toastProvider, starId }: Par
     isGeneratingAudiosInBatch,
     isCancellingAudiosInBatch,
     isGeneratingAudioByBlockId,
+    isRemovingAudioByBlockId,
     onAudioVoiceChange: handleAudioVoiceChange,
     onGenerateAudio: handleGenerateTextBlockAudio,
     onCancelAudio: handleCancelTextBlockAudio,
+    onRemoveAudio: handleRemoveTextBlockAudio,
     onGenerateAudiosInBatch: handleGenerateAllTextBlocksAudios,
     onCancelAudiosInBatch: handleCancelAllTextBlocksAudios,
     onReorder: handleReorder,

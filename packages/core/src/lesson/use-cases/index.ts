@@ -7,3 +7,4 @@ export { TriggerTextBlockAudioGenerationUseCase } from './TriggerTextBlockAudioG
 export { TriggerTextBlocksAudioGenerationInBatchUseCase } from './TriggerTextBlocksAudioGenerationInBatchUseCase'
 export { CancelTextBlockAudioGenerationUseCase } from './CancelTextBlockAudioGenerationUseCase'
 export { CancelTextBlocksAudioGenerationInBatchUseCase } from './CancelTextBlocksAudioGenerationInBatchUseCase'
+export { RemoveTextBlockAudioUseCase } from './RemoveTextBlockAudioUseCase'

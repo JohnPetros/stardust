@@ -11,6 +11,7 @@ type Props = {
   audioVoices: AudioVoiceDto[]
   hasStoredAudioFile: boolean
   isGeneratingAudio: boolean
+  isRemovingAudio: boolean
   onExpand: (blockId: string) => void
   onRemove: (blockId: string) => void
   onContentChange: (blockId: string, content: string) => void
@@ -19,6 +20,7 @@ type Props = {
   onAudioVoiceChange: (blockId: string, voice: AudioVoiceDto['value']) => void
   onGenerateAudio: (blockId: string) => void
   onCancelAudio: (blockId: string) => void
+  onRemoveAudio: (blockId: string) => void
 }
 
 export const TextBlockCard = ({ item, ...props }: Props) => {

@@ -9,3 +9,6 @@ export const TEXT_BLOCK_AUDIO_GENERATION_REQUESTED_EVENT_NAME =
 
 export const TEXT_BLOCK_AUDIO_GENERATED_EVENT_NAME =
   'lesson/text-block.audio.generated' as const
+
+export const TEXT_BLOCK_AUDIO_FILE_REMOVED_EVENT_NAME =
+  'lesson/text-block.audio-file.removed' as const

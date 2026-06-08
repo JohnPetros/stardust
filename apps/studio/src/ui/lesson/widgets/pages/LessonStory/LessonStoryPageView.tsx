@@ -44,9 +44,11 @@ export const LessonStoryPageView = ({
   isGeneratingAudiosInBatch,
   isCancellingAudiosInBatch,
   isGeneratingAudioByBlockId,
+  isRemovingAudioByBlockId,
   onAudioVoiceChange,
   onGenerateAudio,
   onCancelAudio,
+  onRemoveAudio,
   onGenerateAudiosInBatch,
   onCancelAudiosInBatch,
   onReorder,
@@ -135,9 +137,11 @@ export const LessonStoryPageView = ({
                   isGeneratingAudiosInBatch={isGeneratingAudiosInBatch}
                   isCancellingAudiosInBatch={isCancellingAudiosInBatch}
                   isGeneratingAudioByBlockId={isGeneratingAudioByBlockId}
+                  isRemovingAudioByBlockId={isRemovingAudioByBlockId}
                   onAudioVoiceChange={onAudioVoiceChange}
                   onGenerateAudio={onGenerateAudio}
                   onCancelAudio={onCancelAudio}
+                  onRemoveAudio={onRemoveAudio}
                   onGenerateAudiosInBatch={onGenerateAudiosInBatch}
                   onCancelAudiosInBatch={onCancelAudiosInBatch}
                   onReorder={onReorder}

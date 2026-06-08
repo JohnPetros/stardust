@@ -1,8 +1,11 @@
 import { Hono } from 'hono'
 import z from 'zod'
 
-import { textBlockSchema } from '@stardust/validation/lesson/schemas'
-import { requestTextBlockAudioGenerationSchema } from '@stardust/validation/lesson/schemas'
+import {
+  requestTextBlockAudioGenerationSchema,
+  removeTextBlockAudioSchema,
+  textBlockSchema,
+} from '@stardust/validation/lesson/schemas'
 import { idSchema } from '@stardust/validation/global/schemas'
 
 import { HonoRouter } from '../../HonoRouter'
@@ -12,6 +15,7 @@ import {
   CancelTextBlockAudioGenerationController,
   CancelTextBlocksAudioGenerationInBatchController,
   FetchTextBlocksController,
+  RemoveTextBlockAudioController,
   TriggerTextBlockAudioGenerationController,
   TriggerTextBlocksAudioGenerationInBatchController,
   UpdateTextBlocksController,
@@ -122,7 +126,6 @@ export class TextBlocksRouter extends HonoRouter {
       ),
       this.spaceMiddleware.verifyStarExists,
       async (context) => {
-        console.log('requestTextBlocksAudioGenerationInBatchRoute')
         const http = new HonoHttp(context)
         const repository = new SupabaseTextBlocksRepository(http.getSupabase())
         const broker = new InngestBroker()
@@ -157,6 +160,25 @@ export class TextBlocksRouter extends HonoRouter {
     )
   }
 
+  private removeTextBlockAudioRoute(): void {
+    this.router.delete(
+      '/star/:starId/audio/file',
+      this.authMiddleware.verifyAuthentication,
+      this.authMiddleware.verifyGodAccount,
+      this.validationMiddleware.validate('param', z.object({ starId: idSchema })),
+      this.validationMiddleware.validate('json', removeTextBlockAudioSchema),
+      this.spaceMiddleware.verifyStarExists,
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new SupabaseTextBlocksRepository(http.getSupabase())
+        const broker = new InngestBroker()
+        const controller = new RemoveTextBlockAudioController(repository, broker)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   registerRoutes(): Hono {
     this.fetchTextBlocksRoute()
     this.updateTextBlocksRoute()
@@ -164,6 +186,7 @@ export class TextBlocksRouter extends HonoRouter {
     this.requestTextBlocksAudioGenerationInBatchRoute()
     this.cancelTextBlockAudioGenerationRoute()
     this.cancelTextBlocksAudioGenerationInBatchRoute()
+    this.removeTextBlockAudioRoute()
     return this.router
   }
 }

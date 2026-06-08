@@ -14,6 +14,7 @@ export function useBlockAudioControls({ item, hasStoredAudioFile }: Params) {
   const canShowPlayer =
     status === 'done' && Boolean(item.audio?.fileName) && hasStoredAudioFile
   const canCancel = status === 'pending'
+  const canRemove = Boolean(item.audio?.fileName) && status !== 'pending'
   const statusLabel =
     status === 'pending'
       ? 'Gerando audio...'
@@ -30,6 +31,7 @@ export function useBlockAudioControls({ item, hasStoredAudioFile }: Params) {
     status,
     canShowPlayer,
     canCancel,
+    canRemove,
     statusLabel,
     statusVariant,
   }

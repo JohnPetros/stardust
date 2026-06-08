@@ -2,3 +2,4 @@ export { TextBlockAudioGenerationRequestedEvent } from './TextBlockAudioGenerati
 export { TextBlocksAudioGenerationInBatchRequestedEvent } from './TextBlocksAudioGenerationInBatchRequestedEvent'
 export { TextBlockAudioGeneratedEvent } from './TextBlockAudioGeneratedEvent'
 export { TextBlockAudioGenerationCancelledEvent } from './TextBlockAudioGenerationCancelledEvent'
+export { TextBlockAudioFileRemovedEvent } from './TextBlockAudioFileRemovedEvent'

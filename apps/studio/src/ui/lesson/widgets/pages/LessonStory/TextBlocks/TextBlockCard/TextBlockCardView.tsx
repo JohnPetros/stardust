@@ -21,6 +21,7 @@ type Props = {
   isGenerateAudioDisabled: boolean
   audioVoices: AudioVoiceDto[]
   isGeneratingAudio: boolean
+  isRemovingAudio: boolean
   contentLabel: string
   onExpand: (blockId: string) => void
   onRemove: (blockId: string) => void
@@ -30,6 +31,7 @@ type Props = {
   onAudioVoiceChange: (blockId: string, voice: AudioVoiceDto['value']) => void
   onGenerateAudio: (blockId: string) => void
   onCancelAudio: (blockId: string) => void
+  onRemoveAudio: (blockId: string) => void
 }
 
 export const TextBlockCardView = ({
@@ -43,6 +45,7 @@ export const TextBlockCardView = ({
   isGenerateAudioDisabled,
   audioVoices,
   isGeneratingAudio,
+  isRemovingAudio,
   contentLabel,
   onExpand,
   onRemove,
@@ -52,6 +55,7 @@ export const TextBlockCardView = ({
   onAudioVoiceChange,
   onGenerateAudio,
   onCancelAudio,
+  onRemoveAudio,
 }: Props) => {
   const cardClassName = isGeneratingAudio
     ? 'w-full rounded-2xl border border-amber-400/70 bg-zinc-950/60 pl-10'
@@ -91,10 +95,12 @@ export const TextBlockCardView = ({
               voices={audioVoices}
               hasStoredAudioFile={hasStoredAudioFile}
               isGenerating={isGeneratingAudio}
+              isRemoving={isRemovingAudio}
               isGenerateDisabled={isGenerateAudioDisabled}
               onVoiceChange={(voice) => onAudioVoiceChange(item.id, voice)}
               onGenerate={() => onGenerateAudio(item.id)}
               onCancel={() => onCancelAudio(item.id)}
+              onRemove={() => onRemoveAudio(item.id)}
             />
           ) : null}
           {canShowPictureField && (
