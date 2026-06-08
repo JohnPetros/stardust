@@ -28,6 +28,10 @@ export interface LessonService {
     starId: Id,
     blockIndex: Integer,
   ): Promise<RestResponse<TextBlockDto[]>>
+  removeTextBlockAudio(
+    starId: Id,
+    blockIndex: Integer,
+  ): Promise<RestResponse<TextBlockDto[]>>
   cancelTextBlocksAudioGenerationInBatch(
     starId: Id,
   ): Promise<RestResponse<TextBlockDto[]>>

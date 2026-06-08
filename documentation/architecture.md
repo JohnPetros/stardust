@@ -24,7 +24,7 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 
 **Queue**: Event Dispatcher → Inngest → Job.handle(amqp) → Use Case
 
-**Lesson audio generation**: REST `/lesson/text-blocks` → use cases do modulo `lesson` → eventos Inngest (`requested`, `batch requested`, `generated`, `cancelled`) → jobs de fan-out, TTS/upload e persistencia final do `audio` em `stars.texts[blockIndex].audio`
+**Lesson audio generation/removal**: REST `/lesson/text-blocks` → use cases do modulo `lesson` → eventos Inngest (`requested`, `batch requested`, `generated`, `cancelled`, `audio-file.removed`) → jobs de fan-out, TTS/upload, limpeza fisica de arquivo e persistencia final do `audio` em `stars.texts[blockIndex].audio`
 
 **Studio signed upload**: Studio `ImageInput` → `StorageService.createSignedUploadUrl(...)` → Server `POST /storage/signed-upload-url` → `CreateSignedUploadUrl` → `SupabaseFileStorageProvider.createSignedUploadUrl(...)` → upload direto do binario ao Supabase Storage
 

@@ -54,4 +54,15 @@ export class SupabaseTextBlocksRepository
       throw new SupabasePostgreError(error)
     }
   }
+
+  async clearAudio(starId: Id, blockIndex: Integer): Promise<void> {
+    const { error } = await this.supabase.rpc('clear_text_block_audio', {
+      p_star_id: starId.value,
+      p_block_index: blockIndex.value,
+    })
+
+    if (error) {
+      throw new SupabasePostgreError(error)
+    }
+  }
 }

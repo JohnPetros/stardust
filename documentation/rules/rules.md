@@ -50,6 +50,17 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
   requisições/redirecionamentos.
 - Ao organizar actions por domínio.
 
+## Regras da Camada LSP
+
+**Arquivo:** `/documentation/rules/lsp-layer-rules.md`
+**Quando consultar:**
+
+- Ao criar ou modificar um documento relacionado a camada LSP.
+- Ao alterar o pacote `packages/lsp`.
+- Para entender as responsabilidades de `DeleguaLsp`, `DeleguaInterpretador` e `DeleguaConfiguracaoParaEditorMonaco`.
+- Ao adicionar snippets, documentacoes, regex ou tokens da linguagem Delegua.
+- Ao integrar recursos de edicao, execucao ou analise de codigo com contratos do core.
+
 ## Regras da Camada de Fila (queue)
 
 **Arquivo:** `/documentation/rules/queue-layer-rules.md`
@@ -79,6 +90,16 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 - Ao integrar com ferramentas de terceiros (Armazenamento, Email, Pagamentos,
   etc.).
 - Para implementar novos Providers (Gateways) que encapsulam SDKs externos.
+
+## Regras da Camada AI
+
+**Arquivo:** `/documentation/rules/ai-layer-rules.md`
+**Quando consultar:**
+
+- Ao criar ou modificar um documento relacionado a camada AI.
+- Ao implementar tools, agentes, prompts ou fluxos de IA.
+- Para entender as fronteiras entre adapters de IA e contratos internos do projeto.
+- Ao integrar modelos, provedores ou orchestration de inferencia.
 
 ## Regras da Aplicação Web
 
@@ -149,6 +170,15 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 - Para entender como mockar os objetos de contexto `Http`, `Call`, `Amqp` e `Mcp`.
 - Para seguir os padrões de orquestração e tradução de dados nos testes de
   entrada da aplicação.
+
+## Regras de Testes de Rotas do Server
+
+**Arquivo:** `/documentation/rules/server-routes-testing-rules.md`
+**Quando consultar:**
+
+- Ao escrever testes para rotas HTTP da aplicacao server.
+- Para validar integracao entre handlers, middlewares e contratos de resposta.
+- Ao padronizar testes de endpoints expostos pelo `apps/server`.
 
 ## Regras de Testes de Casos de Uso
 
