@@ -99,7 +99,7 @@ Implementar o console de output do `Challenge Code Editor` na aplicacao `web`, r
 
 ## Camada Provision (Providers)
 
-* **`DeleguaLsp`** (`packages/lsp/src/DeleguaLsp.ts`) - adapter que interpreta o codigo Delegua, captura `outputs` em memoria e retorna `LspResponse`.
+* **`DeleguaProvedorLsp`** (`packages/lsp/src/DeleguaProvedorLsp.ts`) - adapter que interpreta o codigo Delegua, captura `outputs` em memoria e retorna `LspResponse`.
 
 ---
 
@@ -157,7 +157,7 @@ Implementar o console de output do `Challenge Code Editor` na aplicacao `web`, r
 
 ## Camada Provision
 
-* **Arquivo:** `packages/lsp/src/DeleguaLsp.ts`
+* **Arquivo:** `packages/lsp/src/DeleguaProvedorLsp.ts`
 * **Mudanca:** Garantir que `run(code: string)` retorne `new LspResponse({ result: undefined, outputs })` quando o programa nao produzir valor final, mas tiver emitido `escreva()`.
 * **Justificativa:** Hoje o adapter descarta os `outputs` quando `resultadoInterpretadorFiltrado.length === 0`; sem esse ajuste, programas baseados apenas em `escreva()` nao abastecem o console.
 * **Camada:** `provision`
@@ -217,7 +217,7 @@ useChallengeCodeEditorSlot
   |     |     |-- Code.run()
   |     |     |     |
   |     |     |     v
-  |     |     |   DeleguaLsp.run()
+  |     |     |   DeleguaProvedorLsp.run()
   |     |     |     |-- captura outputs de escreva()
   |     |     |     `-- retorna LspResponse(result, outputs)
   |     |     |-- acumula executionOutputs
@@ -273,7 +273,7 @@ Mobile
   - `apps/web/src/ui/challenging/widgets/slots/ChallengeCodeEditor/useChallengeCodeEditorSlot.ts`
   - `apps/web/src/ui/challenging/widgets/layouts/Challenge/ChallengeSlider/ChallengeSliderView.tsx`
   - `packages/core/src/challenging/domain/entities/Challenge.ts`
-  - `packages/lsp/src/DeleguaLsp.ts`
+  - `packages/lsp/src/DeleguaProvedorLsp.ts`
 
 ---
 
@@ -290,7 +290,7 @@ Mobile
 - A `CodeEditorToolbar` ganhou o atalho visual de console, mantendo o fluxo de execução único e sem duplicar a interpretação do código.
 - O widget global `Console` passou a suportar renderização inline no desktop e via portal no mobile, preservando linhas repetidas e mantendo o estado vazio com `Sem saída`.
 - `Challenge.runCode(code)` agora retorna `Promise<List<string>>` com os outputs brutos acumulados de todos os `TestCase`, sem alterar a lógica de correção baseada em `results` e `userOutputs`.
-- `DeleguaLsp.run(code)` passou a preservar `outputs` mesmo quando o programa não produz valor final, cobrindo cenários baseados apenas em `escreva()`.
+- `DeleguaProvedorLsp.run(code)` passou a preservar `outputs` mesmo quando o programa não produz valor final, cobrindo cenários baseados apenas em `escreva()`.
 
 ---
 

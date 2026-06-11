@@ -17,7 +17,7 @@ import { DELEGUA_REGEX } from './constants'
 import type { DeleguaErro } from '../types/DeleguaErro'
 import { DeleguaInterpretador } from './DeleguaInterpretador'
 
-export class DeleguaLsp implements LspProvider {
+export class DeleguaProvedorLsp implements LspProvider {
   private readonly lexador: Lexador = new Lexador()
   private readonly avaliadorSintatico: AvaliadorSintatico = new AvaliadorSintatico()
   private readonly analisadorSemantico: AnalisadorSemantico = new AnalisadorSemantico()
@@ -50,6 +50,7 @@ export class DeleguaLsp implements LspProvider {
       resultadoAvaliacaoSintatica.declaracoes,
       false,
     )
+    console.log('resultadoInterpretador ->', resultadoInterpretador)
     if (resultadoInterpretador.erros.length) {
       return this.trateErro(resultadoInterpretador.erros[0])
     }

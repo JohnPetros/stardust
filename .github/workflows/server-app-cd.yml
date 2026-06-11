@@ -1,0 +1,56 @@
+name: Server app CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/server/**"
+      - "packages/core/**"
+      - "packages/validation/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: server-app-cd-coolify-production
+  cancel-in-progress: true
+
+jobs:
+  migrate-database:
+    name: Migrate database
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      SUPABASE_PROJECT_ID: aukqejqsiqsqowafpppb
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: 2.98.2
+
+      - name: Link production database
+        working-directory: apps/server
+        run: supabase link --project-ref $SUPABASE_PROJECT_ID
+
+      - name: Apply pending migrations
+        working-directory: apps/server
+        run: supabase db push
+
+  deploy:
+    name: Deploy to Coolify
+    runs-on: ubuntu-latest
+    needs:
+      - migrate-database
+
+    steps:
+      - name: Trigger Coolify deploy
+        run: |
+          curl -X GET "${{ secrets.COOLIFY_WEBHOOK_SERVER_PROD }}" \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
+            --fail --silent --show-error

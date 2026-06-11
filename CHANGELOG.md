@@ -471,7 +471,7 @@
 * 📚 docs: clarify optional environment section in bug issue template (51da78db9)
 * 🐛 fix: update bug issue template (e53c1e6c7)
 * 📚 docs: update challenge editor documentation (853d8e7c0)
-* 📟 rpc: update DeleguaLsp (6907e5570)
+* 📟 rpc: update DeleguaProvedorLsp (6907e5570)
 * 🌐 domain: update Challenge entity (a67f570ce)
 * 🖥️ ui: update ChallengeResult slot (4117b46a5)
 * 🖥️ ui: add CodeEditorToolbar and Console components (b8c9b3618)
@@ -649,7 +649,7 @@
 * 📮 validation: add challengeDraftSchema for validating challenge draft submissions (bc60d51f8)
 * 🐛 fix(lsp): change result type in LspResponse to any for improved flexibility (9cd6a1aef)
 * 🪨 constants: update Supabase key to use ANON key in client environment constants (e6f23b5b1)
-* 🐛 fix(lsp): improve result extraction logic in DeleguaLsp to handle nested values and ensure correct response formatting (87b248c50)
+* 🐛 fix(lsp): improve result extraction logic in DeleguaProvedorLsp to handle nested values and ensure correct response formatting (87b248c50)
 * 📚 docs: remove outdated workflow documentation files for bug reports, specs, PRs, and code reviews (688aed268)
 * ⚙️ config: update Supabase key and add Discord channel URL to client environment constants (5ea884d05)
 * ⚙️ config: update .env.example to reflect new Supabase key and add Discord channel URL (057b0af30)
@@ -1047,7 +1047,7 @@
 * 🚚 cd: add GitHub Actions workflow for continuous deployment of Studio app to Vercel (d604d69ba)
 * ⚙️ config: update commit-msg hook to use commitlint for message validation (1bc1f3da1)
 * chore: update Dockerfile to change exposed port (212788ff6)
-* ♻️ refactor(lsp): enhance DeleguaLsp to safely access nested properties for improved error handling (ac45db8fe)
+* ♻️ refactor(lsp): enhance DeleguaProvedorLsp to safely access nested properties for improved error handling (ac45db8fe)
 * ♻️ refactor(core): update Code test cases to support asynchronous operations for improved reliability (09253c672)
 * ♻️ refactor(web): integrate useLsp hook in TestCase component for enhanced asynchronous handling of LSP provider (94d96d1c8)
 * ♻️ refactor(web): update handleChange function in useCodeEditor to support asynchronous syntax analysis (3d41ae6b0)
@@ -1055,7 +1055,7 @@
 * ♻️ refactor(ui): update useTestCase hook to utilize asynchronous translations for inputs and  outputs (4b2841ecf)
 * ♻️ refactor(core): enhance Challenge class methods to support asynchronous operations for improved performance and reliability (cf17c4da5)
 * ♻️ refactor(core): update Code class methods to support asynchronous operations for improved performance (00c2c7004)
-* ♻️ refactor(lsp): update DeleguaLsp methods to support asynchronous operations and improve error handling (31e902472)
+* ♻️ refactor(lsp): update DeleguaProvedorLsp methods to support asynchronous operations and improve error handling (31e902472)
 * ♻️ refactor(core): update LspProvider interface methods to return Promises for improved asynchronous handling (38e077442)
 * 🖥️ ui(web): increase minimum size of assistant panel in ChallengeLayoutView for better usability (9410d8daf)
 * 🖥️ (ui): remove console log statements from various hooks and components for cleaner code (a018d696c)
@@ -1251,7 +1251,7 @@
 * ♻️ refactor(web): enhance type inference for route parameters in conversation and profile API routes (7d2af0064)
 * ♻️ refactor(web): rename solutionSlug to solutionSug in route schema and enhance NextHttpParams type for better type inference (e098ca0d5)
 * ♻️ refactor(web): update NextHttpParams type to support generic parameters for improved type safety (e97c56e30)
-* ♻️ refactor(lsp): comment out unused code in DeleguaLsp class to improve readability and maintainability (86ce96b70)
+* ♻️ refactor(lsp): comment out unused code in DeleguaProvedorLsp class to improve readability and maintainability (86ce96b70)
 * 📦 deps(lsp): update @designliquido/delegua to version 1.0.0 (30bf8f09b)
 * 🐛 fix(web): update TypeScript definitions and improve onMount handling in CodeEditor and TextEditor components (2a1cdae61)
 * 📦 deps(web): update react and react-dom to version 19.2.3 in package.json (0b91b88ef)
@@ -2714,7 +2714,7 @@
   creation messages for clarity (1807f54f)
 - 🐛 fix(web): update input index calculation to correctly parse numeric suffix
   from text (00a7a0cb)
-- 🐛 fix(lsp): ensure error messages are converted to strings in DeleguaLsp for
+- 🐛 fix(lsp): ensure error messages are converted to strings in DeleguaProvedorLsp for
   consistent error handling (ebcda302)
 - ♻️ refactor(lsp): add initial implementation of Delegua language support with
   configuration, documentation, and regex definitions (8a378b34)

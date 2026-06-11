@@ -1,142 +1,66 @@
-# Regras da Camada LSP
+# Camada LSP - Language Server Protocol para Delegua
 
-## Visao Geral
+A camada LSP (Language Server Protocol) é responsável por fornecer recursos específicos da linguagem para a linguagem **Delegua**. Ela habilita recursos como autocompletar, diagnósticos e informações de hover em editores de código que suportam o LSP.
 
-A camada **LSP** concentra os recursos de linguagem de Delegua consumidos por editores e superfices de code editing. No estado atual do projeto, essa camada nao implementa um servidor LSP completo; ela entrega um provider com execucao, analise, traducao de codigo, configuracao do Monaco e catalogos auxiliares de snippets/documentacao.
+## Estrutura
 
-| Item | Definicao |
-| --- | --- |
-| **Objetivo** | Expor capacidades de linguagem de Delegua para ferramentas de edicao e execucao assistida. |
-| **Responsabilidades** | Executar codigo Delegua; gerar diagnosticos sintaticos e semanticos; traduzir entre JavaScript e Delegua; fornecer configuracao de linguagem para Monaco; publicar regex, tokens, snippets e documentacoes. |
-| **Nao faz** | Implementar transporte/protocolo LSP em rede; definir contratos base da plataforma; acoplar UI diretamente ao parser/interpretador da lib externa. |
+A camada LSP está localizada no diretório `./packages/lsp`.
 
-## Estrutura de Diretorios
-
-| Caminho | Finalidade |
-| --- | --- |
-| `packages/lsp/src/DeleguaLsp.ts` | Provider principal que implementa `LspProvider` de `@stardust/core`. |
-| `packages/lsp/src/DeleguaInterpretador.ts` | Extensao do interpretador da Delegua usada para capturar resultados de execucao. |
-| `packages/lsp/src/DeleguaConfiguracaoParaEditorMonaco.ts` | Definicao de tokens Monarch e configuracao de linguagem do Monaco. |
-| `packages/lsp/src/constants/` | Regex, tokens, snippets, exemplos e documentacoes da linguagem. |
-| `packages/lsp/src/main.ts` | API publica do pacote. |
-| `packages/lsp/types/DeleguaErro.ts` | Uniao de tipos de erro retornados pelo lexer, parser e interpretador. |
-
-## API Publica
-
-O arquivo `packages/lsp/src/main.ts` expoe:
-
-- `DeleguaLsp`
-- `DeleguaConfiguracaoParaEditorMonaco`
-- `DELEGUA_DOCUMENTACOES`
-- reexports de `./constants`
-
-`DeleguaInterpretador` e os tipos internos de erro ficam como detalhe de implementacao e nao fazem parte da API publica principal.
-
-## Responsabilidades do `DeleguaLsp`
-
-A classe `DeleguaLsp` e o ponto central do pacote. Ela usa `@designliquido/delegua` para lexer, parser, analise semantica, interpretacao e traducao.
-
-### Capacidades implementadas
-
-- **Execucao**: `run(code)` interpreta codigo Delegua, coleta `outputs` e normaliza o valor final retornado.
-- **Analise sintatica**: `performSyntaxAnalysis(code)` converte erros do parser em `LspError`/`LspResponse`.
-- **Analise semantica**: `performSemanticAnalysis(code)` executa o analisador semantico e retorna diagnosticos padronizados.
-- **Manipulacao de codigo**: `getInput`, `getInputsCount`, `addInputs`, `getFunctionName`, `getFunctionParamsNames`, `buildFunction` e `addFunctionCall` ajudam fluxos de edicao assistida.
-- **Traducao**: `translateToLsp` converte valores/codigo JavaScript para sintaxe Delegua e `translateToJs` faz o caminho inverso.
-- **Tratamento de erro**: `trateErro` adapta erros heterogeneos da lib externa para `LspResponse` consistente.
-
-### Dependencias de contrato
-
-- `LspProvider`, `CodeInput`, `LspResponse` e `LspError` vem de `@stardust/core`.
-- A camada LSP depende do core para contratos; o core nao deve depender de `@stardust/lsp`.
-
-## Monaco
-
-`DeleguaConfiguracaoParaEditorMonaco` encapsula duas responsabilidades:
-
-- `obterDefinicaoDeLinguagem()`: retorna a linguagem Monarch com keywords, operadores, comentarios, numeros, strings e regex de Delegua.
-- `obterConfiguracaoDeLinguagem()`: retorna brackets, pares de fechamento automatico, regras de enter e identacao.
-
-Essa classe deve permanecer focada em definicao de linguagem para editor. Logica de execucao, analise ou regras de negocio nao devem ser adicionadas aqui.
-
-## Constantes e Catalogos
-
-O diretorio `packages/lsp/src/constants/` agrupa dados estaticos usados pela experiencia de edicao:
-
-- `DELEGUA_REGEX`: regex utilitarias para `leia`, `escreva` e assinaturas de funcao.
-- `DELEGUA_TOKENS`: tokens auxiliares da linguagem.
-- `DELEGUA_SNIPPETS`: agregacao de snippets por dominio (`globais`, `texto`, `lista`, `dicionarios`).
-- `DELEGUA_EXAMPLE_SNIPPETS`: exemplos de codigo.
-- `DELEGUA_DOCUMENTACOES`: agregacao de documentacoes usadas em hover/autocomplete.
-
-Quando adicionar novos snippets ou documentacoes, prefira manter a segmentacao por dominio e agregar no arquivo-raiz correspondente.
-
-## Regras
-
-- **Contrato primeiro**: a implementacao concreta deve continuar aderente a `LspProvider` do core.
-- **Adaptacao na borda**: erros da biblioteca `@designliquido/delegua` devem ser convertidos para tipos do core antes de sair da camada.
-- **Sem transporte aqui**: qualquer servidor/protocolo LSP, websocket ou RPC deve viver fora deste pacote e consumir `DeleguaLsp` como dependencia.
-- **Editor separado de runtime**: configuracao do Monaco nao deve importar o interpretador nem executar analises.
-- **Dados estaticos isolados**: snippets, docs, regex e tokens devem ficar em `constants/`, evitando literals espalhados em classes.
-- **Exports nomeados**: manter exports explicitos em `main.ts`; evitar expor implementacoes internas sem necessidade.
-
-## Anti-padroes
-
-### Anti-padrao: misturar detalhes de editor com execucao
-
-**O que evitar:**
-Adicionar em `DeleguaConfiguracaoParaEditorMonaco.ts` codigo de interpretacao, traducao ou analise.
-
-**Por que esta errado:**
-Isso mistura concerns de editor com runtime, dificulta manutencao e aumenta o acoplamento com `@designliquido/delegua` em um ponto que deveria conter apenas configuracao de linguagem.
-
-**Como fazer:**
-Toda logica executavel deve permanecer em `DeleguaLsp` ou em classes auxiliares de runtime, deixando Monaco apenas como adaptador de editor.
-
-### Anti-padrao: vazar erros brutos da biblioteca externa
-
-**O que evitar:**
-Retornar `ErroLexador`, `ErroAvaliadorSintatico` ou erros do interpretador diretamente para consumidores externos.
-
-**Por que esta errado:**
-Isso quebra o contrato estavel da plataforma e acopla as camadas consumidoras aos detalhes de `@designliquido/delegua`.
-
-**Como fazer:**
-Converter sempre para `LspError`/`LspResponse`, como ja acontece nos fluxos de `run`, `performSyntaxAnalysis` e `performSemanticAnalysis`.
-
-## Exemplo
-
-```ts
-import { DeleguaLsp } from '@stardust/lsp'
-
-const lsp = new DeleguaLsp()
-
-const syntax = await lsp.performSyntaxAnalysis('funcao soma(a, b) { retorna a + b }')
-const semantic = await lsp.performSemanticAnalysis('constante x = y')
-const execution = await lsp.run('escreva("Ola")')
+```
+packages/lsp/
+└── src/
+    ├── constants/
+    ├── DeleguaConfiguracaoParaEditorMonaco.ts
+    ├── DeleguaInterpretador.ts
+    ├── DeleguaProvedorLsp.ts
+    └── main.ts
 ```
 
-## Integracao com Outras Camadas
+- **`DeleguaProvedorLsp.ts`**: O núcleo da implementação do LSP para a linguagem Delegua.
+- **`DeleguaInterpretador.ts`**: Um interpretador para a linguagem Delegua.
+- **`DeleguaConfiguracaoParaEditorMonaco.ts`**: Configuração para o Editor Monaco para integrar com o LSP do Delegua.
+- **`constants/`**: Constantes relacionadas à implementação do LSP.
+- **`main.ts`**: O ponto de entrada do pacote.
 
-- **Permitido**
-  - Depender de `@stardust/core` para contratos e responses.
-  - Depender de `@designliquido/delegua` para parsing, interpretacao e traducao.
-  - Ser consumida por UI, RPC, REST ou ferramentas que precisem de recursos de linguagem.
-- **Proibido**
-  - `@stardust/core` importar `@stardust/lsp`.
-  - Adicionar acesso a banco, fila ou transporte HTTP dentro de `packages/lsp`.
-  - Espalhar dados de autocomplete/hover fora de `constants/` sem necessidade real.
+## DeleguaProvedorLsp
 
-## Checklist (antes do PR)
+A classe `DeleguaProvedorLsp` é o coração da camada LSP. Ela implementa a interface `LspProvider` do pacote `core` e fornece os seguintes recursos:
 
-- Mudanca preserva o contrato de `LspProvider`.
-- Novos erros continuam adaptados para `LspError`/`LspResponse`.
-- Alteracoes de editor ficaram em `DeleguaConfiguracaoParaEditorMonaco.ts`.
-- Alteracoes de runtime ficaram em `DeleguaLsp.ts`/`DeleguaInterpretador.ts`.
-- Novos snippets/docs/tokens foram agregados pelos arquivos-raiz de `constants/`.
-- `main.ts` expoe apenas a API publica necessaria.
+- **Execução de Código**: O método `run` executa um bloco de código Delegua e retorna o resultado.
+- **Análise Sintática e Semântica**: Os métodos `performSyntaxAnalysis` e `performSemanticAnalysis` analisam o código em busca de erros e retornam diagnósticos.
+- **Manipulação de Código**: Métodos como `addInputs`, `addFunctionCall` e `buildFunction` permitem a manipulação programática do código Delegua.
+- **Tradução**: Os métodos `translateToLsp` e `translateToJs` traduzem o código entre Delegua e JavaScript.
 
-## Notas
+**Exemplo: `DeleguaProvedorLsp.ts`**
 
-- O pacote publica `build/`, mas o campo `exports` aponta para `./src/main.ts`; mantenha isso em mente ao alterar estrategia de build/publicacao.
-- Scripts locais do pacote: `build`, `typecheck`, `codecheck`, `lint` e `format`.
+```typescript
+export class DeleguaProvedorLsp implements LspProvider {
+  private readonly lexador: Lexador = new Lexador();
+  private readonly avaliadorSintatico: AvaliadorSintatico =
+    new AvaliadorSintatico();
+  private readonly analisadorSemantico: AnalisadorSemantico =
+    new AnalisadorSemantico();
+
+  async run(code: string) {
+    // ... implementação
+  }
+
+  performSyntaxAnalysis(code: string): LspResponse {
+    // ... implementação
+  }
+
+  performSemanticAnalysis(code: string): LspResponse {
+    // ... implementação
+  }
+
+  // ... outros métodos
+}
+```
+
+## Integração com o Editor Monaco
+
+O arquivo `DeleguaConfiguracaoParaEditorMonaco.ts` fornece a configuração necessária para integrar o LSP do Delegua com o Editor Monaco. Isso permite que a aplicação web tenha uma experiência rica de edição de código para a linguagem Delegua.
+
+## Interpretador
+
+O arquivo `DeleguaInterpretador.ts` contém um interpretador para a linguagem Delegua. Isso é usado pelo método `run` na classe `DeleguaProvedorLsp` para executar o código.

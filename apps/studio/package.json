@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
     "@hookform/resolvers": "^5.2.2",
     "@monaco-editor/react": "^4.7.0-rc.0",
     "@radix-ui/react-accordion": "^1.2.11",
@@ -36,6 +37,7 @@
     "@react-router/node": "^7.5.3",
     "@react-router/serve": "^7.5.3",
     "@stardust/core": "*",
+    "@stardust/lsp": "^0.1.0",
     "@stardust/validation": "*",
     "@tanstack/react-query": "^5.83.0",
     "axios": "^1.12.2",
@@ -46,6 +48,7 @@
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.525.0",
     "markdown-to-jsx": "^7.7.12",
+    "motion": "^12.40.0",
     "next-themes": "^0.4.6",
     "nuqs": "^2.8.6",
     "radix-ui": "^1.4.3",
