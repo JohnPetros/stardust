@@ -15,7 +15,7 @@ export class AnalyticsEvent {
       Text.create(dto.name, 'Analytics event name'),
       AnalyticsEvent.createDistinctId(dto.distinctId),
       Text.create(dto.insertId, 'Analytics event insert ID'),
-      dto.properties,
+      dto.properties ?? {},
     )
   }
 

@@ -79,9 +79,7 @@ export class PostHogAnalyticsReportingProvider implements AnalyticsReportingProv
     }
 
     return Array.from({ length: days.value }, (_, index) => {
-      const date = new Date()
-      date.setDate(date.getDate() - (days.value - index - 1))
-      date.setHours(0, 0, 0, 0)
+      const date = this.createUtcDateOffset(days.value - index - 1)
       const key = this.normalizeDateKey(date)
       const dailyCounts = countsByDay.get(key) ?? { web: 0, mobile: 0 }
 
@@ -95,7 +93,14 @@ export class PostHogAnalyticsReportingProvider implements AnalyticsReportingProv
 
   private normalizeDateKey(value: Date | string) {
     const date = new Date(value)
-    date.setHours(0, 0, 0, 0)
+    date.setUTCHours(0, 0, 0, 0)
     return date.toISOString().slice(0, 10)
+  }
+
+  private createUtcDateOffset(daysAgo: number) {
+    const date = new Date()
+    date.setUTCHours(0, 0, 0, 0)
+    date.setUTCDate(date.getUTCDate() - daysAgo)
+    return date
   }
 }

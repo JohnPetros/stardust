@@ -44,7 +44,7 @@ export const ClientProviders = ({ accountDto, children }: ClientProps) => {
         markAnalyticsProviderAsInitialized()
       },
     })
-  }, [accountDto?.email, accountDto?.id])
+  }, [])
 
   return (
     <TooltipProvider>

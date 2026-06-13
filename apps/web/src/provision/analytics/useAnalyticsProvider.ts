@@ -1,6 +1,7 @@
 'use client'
 
 import posthog from 'posthog-js'
+import { useMemo } from 'react'
 
 import type { ClientAnalyticsProvider } from '@stardust/core/analytics/interfaces'
 
@@ -18,31 +19,34 @@ export function markAnalyticsProviderAsInitialized() {
 }
 
 export function useAnalyticsProvider(): ClientAnalyticsProvider {
-  return {
-    trackEvent(eventName, properties) {
-      if (!isPostHogInitialized) return
+  return useMemo(
+    () => ({
+      trackEvent(eventName, properties) {
+        if (!isPostHogInitialized) return
 
-      posthog.capture(eventName, properties)
-    },
-    identifyUser(userId, userEmail) {
-      if (!isPostHogInitialized) {
-        pendingIdentity = {
-          userId: userId.value,
-          userEmail: userEmail.value,
+        posthog.capture(eventName, properties)
+      },
+      identifyUser(userId, userEmail) {
+        if (!isPostHogInitialized) {
+          pendingIdentity = {
+            userId: userId.value,
+            userEmail: userEmail.value,
+          }
+          return
         }
-        return
-      }
 
-      posthog.identify(userId.value, {
-        email: userEmail.value,
-      })
-    },
-    reset() {
-      pendingIdentity = null
-      if (!isPostHogInitialized) return
+        posthog.identify(userId.value, {
+          email: userEmail.value,
+        })
+      },
+      reset() {
+        pendingIdentity = null
+        if (!isPostHogInitialized) return
 
-      posthog.reset()
-      posthog.register({ platform: 'web' })
-    },
-  }
+        posthog.reset()
+        posthog.register({ platform: 'web' })
+      },
+    }),
+    [],
+  )
 }

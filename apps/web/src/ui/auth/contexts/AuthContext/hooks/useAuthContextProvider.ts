@@ -167,7 +167,7 @@ export function useAuthContextProvider({
     if (account?.isAuthenticated.isTrue) {
       analyticsProvider.identifyUser(account.id, account.email)
     }
-  }, [account, updateUserCache])
+  }, [account, analyticsProvider, updateUserCache])
 
   useEffect(() => {
     const currentRoute = navigationProvider.currentRoute
