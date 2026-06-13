@@ -4,7 +4,9 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
 
 ## Pendencias (quando aplicavel)
 
-- [x] O job de storage pode falhar depois que o endpoint ja tiver limpado a referencia `audio` do bloco e retornado sucesso. Impacto: o bloco fica consistente, mas pode sobrar arquivo orfao em `audios/story`. Acao necessaria: usar as retentativas padrao do Inngest e monitorar falhas operacionais; se a recorrencia justificar, abrir spec futura para rotina de limpeza de orfaos.
+- [ ] Confirmar se o historico legado de `users_visits` precisa ser exportado antes da migration; impacto: bloqueia a remocao do schema legado em producao; acao necessaria: validar com produto/operacao antes de executar a migration.
+- [ ] Confirmar o criterio exato de DAU no HogQL (`$pageview` identificado vs qualquer evento identificado) e a propriedade de plataforma a ser segmentada; impacto: altera a implementacao do provider de relatorio e os numeros exibidos no `studio`; acao necessaria: alinhar com produto antes de fechar a query.
+- [ ] Confirmar se `PlanetCompletedEvent` e `SpaceCompletedEvent` devem ganhar `userId` ou se o fallback atual por `userSlug` sera aceito; impacto: afeta a consistencia de identidade dos eventos server-side no PostHog; acao necessaria: decidir antes de consolidar o mapeamento desses eventos em `AnalyticsFunctions`.
 
 ---
 
@@ -12,186 +14,162 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
 
 | Fase | Objetivo | Depende de | Pode rodar em paralelo com |
 | --- | --- | --- | --- |
-| F1 | Definir o contrato de dominio para remocao manual de audio em blocos de texto | - | - |
-| F2 | Implementar persistencia parcial, endpoint REST e remocao fisica assicrona no `server` | F1 | F4 |
-| F4 | Integrar a remocao manual de audio no editor de historia do `studio` | F1 | F2 |
+| F1 | Definir contratos, eventos e use cases de analytics no core e remover o modelo legado de visitas | - | - |
+| F2 | Implementar providers, fila, REST e cleanup de banco no `server` | F1 | F3, F4 |
+| F3 | Implementar bootstrap, identificacao e cleanup de analytics na `web` | F1 | F2, F4 |
+| F4 | Ajustar a semantica do dashboard DAU no `studio` sem mudar o contrato atual | F1 | F2, F3 |
 
-> **Estrategia de paralelismo:** sempre comece pelo core (dominio, structures e use cases). Assim que o core estiver concluido, as fases de `server` e `studio` podem ser executadas em paralelo, pois ambas dependem apenas do contrato definido no core.
+> **Estrategia de paralelismo:** sempre comece pelo core (dominio, structures e use cases). Assim que o core estiver concluido, as fases de `server`, `web` e `studio` podem ser executadas em paralelo, pois todas dependem apenas do contrato definido no core.
 
 ---
 
 ## F1 — Core: Dominio, Structures e Use Cases
 
-**Objetivo:** Definir o contrato do dominio — entidades, structures, interfaces de repositorio/provider e use cases — sem nenhuma dependencia de infraestrutura. Essa fase desbloqueia F2 e F4 para rodarem em paralelo.
+**Objetivo:** Definir o contrato do dominio — entidades, structures, interfaces de repositorio/provider e use cases — sem nenhuma dependencia de infraestrutura. Essa fase desbloqueia F2, F3 e F4 para rodarem em paralelo.
 
 ### Tarefas
 
-- [x] **T1.1** — Criar `TextBlockAudioRemovalNotAllowedError`
+- [x] **T1.1** — Criar o DTO e a structure de evento de analytics
   - **Depende de:** -
-  - **Resultado observavel:** existe um erro de dominio dedicado para tentativa de remocao manual em estado invalido, recebendo o `status` atual do audio.
+  - **Resultado observavel:** `AnalyticsEventDto` e `AnalyticsEvent` existem no `core`, `AnalyticsEvent.create(...)` valida `name`, `distinctId`, `insertId` e `properties`, e `analyticsEvent.dto` devolve o shape primitivo esperado pelos adapters.
   - **Camada:** `core`
 
-- [x] **T1.2** — Criar `TextBlockAudioFileRemovedEvent`
-  - **Depende de:** -
-  - **Resultado observavel:** existe um evento de dominio com nome `lesson/text-block.audio-file.removed` e payload `{ fileName: string }`.
-  - **Camada:** `core`
-
-- [x] **T1.3** — Adicionar `removeAudio()` em `packages/core/src/lesson/domain/structures/TextBlock.ts`
-  - **Depende de:** -
-  - **Resultado observavel:** ao chamar `removeAudio()`, o bloco retornado preserva `content`, `title`, `picture`, `isRunnable`, `type` e ordem logica, mas deixa de serializar `audio` no `dto`.
-  - **Camada:** `core`
-
-- [x] **T1.4** — Adicionar `clearAudio(starId, blockIndex)` em `packages/core/src/lesson/interfaces/TextBlocksRepository.ts`
-  - **Depende de:** -
-  - **Resultado observavel:** o contrato do repositorio passa a expor uma operacao explicita para limpar apenas o `audio` de um bloco por indice.
-  - **Camada:** `core`
-
-- [x] **T1.5** — Adicionar `removeTextBlockAudio(starId, blockIndex)` em `packages/core/src/lesson/interfaces/LessonService.ts`
-  - **Depende de:** -
-  - **Resultado observavel:** o contrato REST compartilhado passa a expor uma operacao tipada de remocao retornando `RestResponse<TextBlockDto[]>`.
-  - **Camada:** `core`
-
-- [x] **T1.6** — Criar `packages/core/src/lesson/use-cases/RemoveTextBlockAudioUseCase.ts`
-  - **Depende de:** T1.1, T1.2, T1.3, T1.4
-  - **Resultado observavel:** `execute({ starId, blockIndex })` valida `Id` e `Integer`, busca o bloco, falha quando o indice nao existe, bloqueia `audio.status = 'pending'`, limpa o audio persistido via `clearAudio`, publica `TextBlockAudioFileRemovedEvent` quando houver `fileName` e retorna `TextBlockDto[]` atualizado.
-  - **Camada:** `core`
-
-- [x] **T1.7** — Exportar `RemoveTextBlockAudioUseCase` em `packages/core/src/lesson/use-cases/index.ts`
-  - **Depende de:** T1.6
-  - **Resultado observavel:** o novo use case pode ser importado pelo barrel do modulo `lesson/use-cases`.
-  - **Camada:** `core`
-
-- [x] **T1.8** — Exportar `TextBlockAudioFileRemovedEvent` em `packages/core/src/lesson/domain/events/index.ts`
-  - **Depende de:** T1.2
-  - **Resultado observavel:** o novo evento pode ser importado pelo barrel do modulo `lesson/events`.
-  - **Camada:** `core`
-
-- [x] **T1.9** — Exportar `TextBlockAudioRemovalNotAllowedError` em `packages/core/src/lesson/domain/errors/index.ts`
+- [x] **T1.2** — Expor os contratos de analytics no pacote `@stardust/core`
   - **Depende de:** T1.1
-  - **Resultado observavel:** o novo erro pode ser importado pelo barrel do modulo `lesson/errors`.
+  - **Resultado observavel:** `ServerAnalyticsProvider`, `ClientAnalyticsProvider` e `AnalyticsReportingProvider` existem com barrel files proprios e podem ser importados via exports publicos de `packages/core/package.json`.
+  - **Camada:** `core`
+
+- [x] **T1.3** — Criar e exportar os eventos de dominio faltantes para analytics
+  - **Depende de:** T1.2
+  - **Resultado observavel:** `StarUnlockedEvent`, `UserRewardedEvent`, `ChallengeCompletedEvent`, `ChallengeDeletedEvent` e `ShopItemPurchasedEvent` existem com payloads definidos e estao expostos nos barrels de `profile` e `challenging`.
+  - **Camada:** `core`
+
+- [x] **T1.4** — Publicar os novos eventos nos use cases que confirmam fatos de negocio
+  - **Depende de:** T1.3
+  - **Resultado observavel:** `UnlockStarUseCase`, `RewardUserUseCase`, `CompleteChallengeUseCase`, `DeleteChallengeUseCase`, `AcquireRocketUseCase`, `AcquireAvatarUseCase` e `AcquireInsigniaUseCase` publicam o evento correto apenas apos a confirmacao do fato e nao emitem duplicatas nas ramificacoes idempotentes.
+  - **Camada:** `core`
+
+- [x] **T1.5** — Migrar o use case de DAU para `AnalyticsReportingProvider`
+  - **Depende de:** T1.2
+  - **Resultado observavel:** `GetDailyActiveUsersReportUseCase.execute({ days })` deixa de consultar `UsersRepository`, delega para `getDailyActiveUsers(...)` e continua retornando `DailyActiveUsersDto` no shape `{ date, web, mobile }[]`.
+  - **Camada:** `core`
+
+- [x] **T1.6** — Remover o modelo legado de visitas do modulo `profile`
+  - **Depende de:** T1.5
+  - **Resultado observavel:** `UsersRepository` nao expoe mais `countVisitsByDateAndPlatform`, `addVisit` ou `hasVisit`; `User.registerVisit`, `Visit`, `VisitDto`, `RegisterUserVisitUseCase` e seus exports associados deixam de existir; e o modulo `profile` nao depende mais do tracking manual de visitas.
   - **Camada:** `core`
 
 ---
 
 ## F2 — Server: Infra, Repositorios e Handlers
 
-> ⚡ Pode rodar em paralelo com F4 apos F1 estar concluida.
+> ⚡ Pode rodar em paralelo com F3 e F4 apos F1 estar concluida.
 
-**Objetivo:** Implementar a camada de infraestrutura e exposicao — repositorios, providers, jobs e handlers REST — consumindo os contratos definidos no core.
+**Objetivo:** Implementar a camada de infraestrutura e exposicao — repositorios, providers, jobs e handlers RPC/REST — consumindo os contratos definidos no core.
 
 ### Tarefas
 
-- [x] **T2.1** — Criar `packages/validation/src/modules/lesson/schemas/removeTextBlockAudioSchema.ts`
-  - **Depende de:** T1.6
-  - **Resultado observavel:** existe um schema que aceita apenas body com `blockIndex` inteiro e maior ou igual a `0`.
-  - **Camada:** `rest`
-
-- [x] **T2.2** — Exportar `removeTextBlockAudioSchema` em `packages/validation/src/modules/lesson/schemas/index.ts`
-  - **Depende de:** T2.1
-  - **Resultado observavel:** o schema de remocao pode ser importado pelo barrel de validacao do modulo `lesson`.
-  - **Camada:** `rest`
-
-- [x] **T2.3** — Criar migration `apps/server/supabase/migrations/<timestamp>_create_clear_text_block_audio_function.sql`
-  - **Depende de:** T1.4
-  - **Resultado observavel:** existe uma RPC `clear_text_block_audio(p_star_id uuid, p_block_index integer)` que remove apenas a chave `audio` de `stars.texts[blockIndex]`, valida indice invalido e falha quando nenhuma linha e atualizada.
-  - **Camada:** `database`
-
-- [x] **T2.4** — Regenerar `apps/server/src/database/supabase/types/Database.ts`
-  - **Depende de:** T2.3
-  - **Resultado observavel:** os tipos gerados do Supabase passam a incluir a RPC `clear_text_block_audio`.
-  - **Camada:** `database`
-
-- [x] **T2.5** — Implementar `clearAudio()` em `apps/server/src/database/supabase/repositories/lesson/SupabaseTextBlocksRepository.ts`
-  - **Depende de:** T1.4, T2.4
-  - **Resultado observavel:** o repositorio chama `clear_text_block_audio` com `p_star_id` e `p_block_index` e traduz erro do Supabase para `SupabasePostgreError`.
-  - **Camada:** `database`
-
-- [x] **T2.6** — Criar `apps/server/src/rest/controllers/lesson/RemoveTextBlockAudioController.ts`
-  - **Depende de:** T1.6
-  - **Resultado observavel:** o controller le `starId` e `blockIndex`, executa `RemoveTextBlockAudioUseCase` e responde `200` com `TextBlockDto[]`.
-  - **Camada:** `rest`
-
-- [x] **T2.7** — Exportar `RemoveTextBlockAudioController` em `apps/server/src/rest/controllers/lesson/index.ts`
-  - **Depende de:** T2.6
-  - **Resultado observavel:** o novo controller pode ser importado pelo barrel de controllers de `lesson`.
-  - **Camada:** `rest`
-
-- [x] **T2.8** — Adicionar o nome do evento de remocao em `apps/server/src/queue/inngest/constants/lesson-event-names.ts`
+- [x] **T2.1** — Configurar dependencias e variaveis de ambiente do PostHog no `server`
   - **Depende de:** T1.2
-  - **Resultado observavel:** existe uma constante para o evento `lesson/text-block.audio-file.removed` reutilizavel nas functions do Inngest.
+  - **Resultado observavel:** `apps/server/package.json`, `apps/server/src/constants/env.ts` e `apps/server/.env.example` passam a declarar e validar `posthog-node`, `POSTHOG_PROJECT_TOKEN`, `POSTHOG_HOST`, `POSTHOG_PERSONAL_API_KEY` e `POSTHOG_PROJECT_ID`.
+  - **Camada:** `provision`
+
+- [x] **T2.2** — Implementar o provider server-side de captura no PostHog
+  - **Depende de:** T2.1
+  - **Resultado observavel:** `PostHogAnalyticsProvider.trackEvent(...)` envia `name`, `distinctId`, `properties` e `$insert_id` para o PostHog e garante flush compativel com a execucao curta de jobs.
+  - **Camada:** `provision`
+
+- [x] **T2.3** — Implementar o provider de relatorio DAU via PostHog Query API
+  - **Depende de:** T1.5, T2.1
+  - **Resultado observavel:** `PostHogAnalyticsReportingProvider.getDailyActiveUsers(days)` consulta a Query API com HogQL, normaliza o retorno por data/plataforma e preenche datas sem dados com `0`, preservando `DailyActiveUsersDto`.
+  - **Camada:** `provision`
+
+- [x] **T2.4** — Implementar o job `TrackAnalyticsEventJob`
+  - **Depende de:** T1.2, T2.2
+  - **Resultado observavel:** o job cria `AnalyticsEvent` a partir de `AnalyticsEventDto` e executa `analyticsProvider.trackEvent(...)` dentro de `amqp.run(...)`.
   - **Camada:** `queue`
 
-- [x] **T2.9** — Criar `apps/server/src/queue/jobs/storage/RemoveTextBlockAudioFileJob.ts`
-  - **Depende de:** T1.8
-  - **Resultado observavel:** o job busca `audios/story/{fileName}`, remove o arquivo quando ele existe e encerra com sucesso quando o arquivo ja esta ausente.
+- [x] **T2.5** — Criar `AnalyticsFunctions` para traduzir eventos de dominio em eventos PostHog
+  - **Depende de:** T1.3, T2.4
+  - **Resultado observavel:** existe uma function Inngest para cada evento previsto na spec, todas geram `AnalyticsEventDto` sanitizado, usam `context.event.id` como `insertId` e omitem payloads sensiveis como conteudo de feedback e screenshot.
   - **Camada:** `queue`
 
-- [x] **T2.10** — Exportar `RemoveTextBlockAudioFileJob` em `apps/server/src/queue/jobs/storage/index.ts`
-  - **Depende de:** T2.9
-  - **Resultado observavel:** o novo job pode ser importado pelo barrel de jobs de storage.
+- [x] **T2.6** — Registrar `AnalyticsFunctions` no runtime Inngest do `server`
+  - **Depende de:** T2.5
+  - **Resultado observavel:** `apps/server/src/queue/inngest/functions/index.ts` exporta `AnalyticsFunctions` e `HonoApp` passa a servi-las em `/inngest` junto das functions existentes.
   - **Camada:** `queue`
 
-- [x] **T2.11** — Registrar a function de remocao em `apps/server/src/queue/inngest/functions/StorageFunctions.ts`
-  - **Depende de:** T2.8, T2.9, T2.10
-  - **Resultado observavel:** o modulo de storage passa a consumir o evento `lesson/text-block.audio-file.removed` e instanciar `RemoveTextBlockAudioFileJob` com `SupabaseFileStorageProvider`.
-  - **Camada:** `queue`
-
-- [x] **T2.12** — Adicionar a rota `DELETE /lesson/text-blocks/star/:starId/audio/file` em `apps/server/src/app/hono/routers/lesson/TextBlocksRouter.ts`
-  - **Depende de:** T2.2, T2.5, T2.7
-  - **Resultado observavel:** a rota exige `verifyAuthentication`, `verifyGodAccount`, validacao de `starId`, validacao do body com `removeTextBlockAudioSchema`, `verifyStarExists` e retorna `200` com o array atualizado.
+- [x] **T2.7** — Migrar o endpoint DAU para a nova fonte de analytics
+  - **Depende de:** T2.3
+  - **Resultado observavel:** `FetchDailyActiveUsersReportController` e `UsersRouter` deixam de instanciar `SupabaseUsersRepository` para DAU, usam `PostHogAnalyticsReportingProvider`, e `GET /profile/users/daily-active-users-report?days=N` continua retornando `200` com `{ date, web, mobile }[]`.
   - **Camada:** `rest`
+
+- [x] **T2.8** — Remover o fluxo legado `RegisterUserVisit` da fila do `server`
+  - **Depende de:** T1.6, T2.6
+  - **Resultado observavel:** `ProfileFunctions` nao registra mais `AccountSignedInEvent` para visita legada, `RegisterUserVisitJob` deixa de ser exportado/consumido e nao existe mais pipeline server-side para gravar `users_visits`.
+  - **Camada:** `queue`
+
+- [x] **T2.9** — Remover suporte a visitas do adapter Supabase de usuarios
+  - **Depende de:** T1.6
+  - **Resultado observavel:** `SupabaseUsersRepository` nao implementa mais `countVisitsByDateAndPlatform`, `addVisit` ou `hasVisit`, e os imports de `Platform`/`Visit` deixam de existir quando exclusivos desse fluxo.
+  - **Camada:** `database`
+
+- [x] **T2.10** — Remover `users_visits` do schema e alinhar tipos gerados do banco
+  - **Depende de:** T2.7, T2.8, T2.9
+  - **Resultado observavel:** a migration canonica remove `public.users_visits`, remove `public.platform` somente se nao houver outras dependencias, e `apps/server/src/database/supabase/types/Database.ts` deixa de expor a tabela e o enum removidos.
+  - **Camada:** `database`
+
+---
+
+## F3 — Web: UI e Integracao
+
+> ⚡ Pode rodar em paralelo com F2 e F4 apos F1 estar concluida.
+
+**Objetivo:** Implementar a interface e integracao client-side na aplicacao web — widgets, actions e chamadas RPC/REST — consumindo os contratos definidos no core.
+
+### Tarefas
+
+- [x] **T3.1** — Configurar SDK e variaveis publicas do PostHog na `web`
+  - **Depende de:** T1.2
+  - **Resultado observavel:** `apps/web/package.json`, `apps/web/src/constants/client-env.ts` e `apps/web/.env.example` passam a declarar e validar `posthog-js`, `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` e `NEXT_PUBLIC_POSTHOG_HOST`.
+  - **Camada:** `provision`
+
+- [x] **T3.2** — Reestruturar os providers raiz para bootstrap autenticado do PostHog
+  - **Depende de:** T3.1
+  - **Resultado observavel:** `RootLayoutView`, `ServerProviders` e `ClientProviders` passam `accountDto` resolvido server-side para a camada client-side, permitindo bootstrap autenticado sem expor secrets do `server`.
+  - **Camada:** `ui`
+
+- [x] **T3.3** — Implementar `useAnalyticsProvider` como adapter de `posthog-js`
+  - **Depende de:** T1.2, T3.1
+  - **Resultado observavel:** `useAnalyticsProvider()` retorna um `ClientAnalyticsProvider` com `trackEvent`, `identifyUser` e `reset`, e esses metodos sao no-op seguro quando o client ainda nao foi inicializado.
+  - **Camada:** `provision`
+
+- [x] **T3.4** — Integrar analytics ao contexto de autenticacao da `web`
+  - **Depende de:** T3.2, T3.3
+  - **Resultado observavel:** `AuthContextProvider` e `useAuthContextProvider` identificam o usuario no primeiro render autenticado, reaplicam `identifyUser` apos login/cadastro social bem-sucedido e executam `reset()` no logout sem bloquear a UI.
+  - **Camada:** `ui`
+
+- [x] **T3.5** — Remover a publicacao legada de `AccountSignedInEvent` das actions de auth
+  - **Depende de:** T3.4
+  - **Resultado observavel:** `SignInAction`, `SignUpWithSocialAccountAction` e `authActions` deixam de instanciar/publicar `Broker` para login e cadastro social, enquanto o fluxo de cookies e sessao permanece funcional.
+  - **Camada:** `rpc`
+
+- [x] **T3.6** — Limpar a infra Inngest da `web` apenas se ficar sem consumidores
+  - **Depende de:** T3.5
+  - **Resultado observavel:** `apps/web/src/queue/inngest/InngestBroker.ts` e `apps/web/src/queue/inngest/inngest.ts` sao removidos somente se nenhuma referencia restar apos a migracao; caso contrario, permanecem com o consumidor remanescente explicitamente identificado.
+  - **Camada:** `web`
 
 ---
 
 ## F4 — Studio: UI e Integracao
 
-> ⚡ Pode rodar em paralelo com F2 apos F1 estar concluida.
+> ⚡ Pode rodar em paralelo com F2 e F3 apos F1 estar concluida.
 
-**Objetivo:** Implementar a interface e integracao client-side na aplicacao studio — widgets, services e chamadas REST — consumindo os contratos definidos no core.
+**Objetivo:** Implementar a interface e integracao client-side na aplicacao studio — widgets, actions e chamadas RPC/REST — consumindo os contratos definidos no core.
 
 ### Tarefas
 
-- [x] **T4.1** — Implementar `removeTextBlockAudio()` em `apps/studio/src/rest/services/LessonService.ts`
+- [x] **T4.1** — Atualizar a copy do grafico DAU para refletir usuarios unicos ativos
   - **Depende de:** T1.5
-  - **Resultado observavel:** o service passa a chamar `DELETE /lesson/text-blocks/star/:starId/audio/file` com body `{ blockIndex }` e retornar `RestResponse<TextBlockDto[]>`.
-  - **Camada:** `rest`
-
-- [x] **T4.2** — Adicionar `handleRemoveTextBlockAudio()` em `apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
-  - **Depende de:** T4.1
-  - **Resultado observavel:** ao remover audio de um bloco, o hook salva alteracoes locais pendentes quando necessario, preserva o estado local em falha com `toastProvider.showError`, e em sucesso sincroniza `baselineTextBlocks` e `textBlocks` com a resposta do server.
-  - **Camada:** `ui`
-
-- [x] **T4.3** — Repassar `onRemoveAudio` em `apps/studio/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx`
-  - **Depende de:** T4.2
-  - **Resultado observavel:** a view da pagina expoe o handler de remocao de audio para o widget `TextBlocks` sem adicionar regra de negocio.
-  - **Camada:** `ui`
-
-- [x] **T4.4** — Repassar `onRemoveAudio(blockId)` em `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx`
-  - **Depende de:** T4.3
-  - **Resultado observavel:** cada `TextBlockCard` recebe o callback de remocao vinculado ao `blockId` correspondente.
-  - **Camada:** `ui`
-
-- [x] **T4.5** — Adicionar a prop `onRemoveAudio(blockId)` em `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/index.tsx`
-  - **Depende de:** T4.4
-  - **Resultado observavel:** o entry point do card repassa o callback de remocao para a view usando o `item.id` atual.
-  - **Camada:** `ui`
-
-- [x] **T4.6** — Repassar `onRemove` em `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx`
-  - **Depende de:** T4.5
-  - **Resultado observavel:** a view do card encaminha a acao de remocao para `BlockAudioControls`.
-  - **Camada:** `ui`
-
-- [x] **T4.7** — Calcular `canRemove` em `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/useBlockAudioControls.ts`
-  - **Depende de:** -
-  - **Resultado observavel:** o hook passa a expor `canRemove = Boolean(item.audio?.fileName) && status !== 'pending'`, mantendo `canCancel` apenas para `pending`.
-  - **Camada:** `ui`
-
-- [x] **T4.8** — Atualizar `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/index.tsx`
-  - **Depende de:** T4.6, T4.7
-  - **Resultado observavel:** o componente composto passa a receber `onRemove`, ler `canRemove` do hook e repassar ambos para a view.
-  - **Camada:** `ui`
-
-- [x] **T4.9** — Renderizar o botao `Remover audio` em `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/BlockAudioControlsView.tsx`
-  - **Depende de:** T4.8
-  - **Resultado observavel:** blocos com audio persistido e status diferente de `pending` exibem o botao `Remover audio`, e apos resposta atualizada sem `audio` o player, badge/status e a propria acao deixam de renderizar.
+  - **Resultado observavel:** `DailyActiveUsersChartView` troca a descricao de "visitas" para "usuarios unicos ativos" e continua renderizando o mesmo `DailyActiveUsersDto` sem alterar o contrato visual ou de integracao do dashboard.
   - **Camada:** `ui`

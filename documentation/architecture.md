@@ -24,6 +24,10 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 
 **Queue**: Event Dispatcher → Inngest → Job.handle(amqp) → Use Case
 
+**Product analytics**: Use cases confirmam fatos de negócio → publicam eventos de domínio → Inngest `AnalyticsFunctions` normaliza payloads e usa `context.event.id` como `$insert_id` → `TrackAnalyticsEventJob` executa `ServerAnalyticsProvider.trackEvent(...)` dentro de `amqp.run(...)` → PostHog. No browser, `ClientProviders` inicializa PostHog com bootstrap da conta autenticada, captura pageviews/session recording e `AuthContextProvider` identifica login/cadastro social ou reseta no logout.
+
+**Daily active users report**: Studio `DailyActiveUsersChart` → Server `GET /profile/users/daily-active-users-report?days=N` → `GetDailyActiveUsersReportUseCase` → `AnalyticsReportingProvider` → PostHog Query API → `DailyActiveUsersDto [{ date, web, mobile }]`
+
 **Lesson audio generation/removal**: REST `/lesson/text-blocks` → use cases do modulo `lesson` → eventos Inngest (`requested`, `batch requested`, `generated`, `cancelled`, `audio-file.removed`) → jobs de fan-out, TTS/upload, limpeza fisica de arquivo e persistencia final do `audio` em `stars.texts[blockIndex].audio`
 
 **Studio signed upload**: Studio `ImageInput` → `StorageService.createSignedUploadUrl(...)` → Server `POST /storage/signed-upload-url` → `CreateSignedUploadUrl` → `SupabaseFileStorageProvider.createSignedUploadUrl(...)` → upload direto do binario ao Supabase Storage
@@ -36,6 +40,7 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 - **Action/RPC** para conectar rotas ao domínio sem acoplar o framework ao Core.
 - **MCP Toolkit** no server para compor tools com `inputSchema`/`outputSchema` na borda e delegar comportamento ao Core.
 - **RestClient** como adapter sobre Axios/Fetch para chamadas HTTP externas.
+- **Providers de Analytics** para isolar SDKs/APIs externas como PostHog atrás de contratos do Core (`ServerAnalyticsProvider`, `ClientAnalyticsProvider`, `AnalyticsReportingProvider`).
 - **ProvisionContext no Studio** para resolver providers client-side de infraestrutura, como o upload direto por URL assinada, sem misturar essa responsabilidade no dominio nem no widget.
 - **Job** para tarefas assíncronas, agendadas ou falháveis (e-mail, relatórios).
 - **Factory Functions** no lugar de `new Class()` para Serviços e Controllers.

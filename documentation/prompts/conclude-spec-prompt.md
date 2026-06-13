@@ -24,42 +24,6 @@ documentos atualizados e um resumo estruturado para PR.
 Esta fase é analítica e deve ser concluída antes de qualquer atualização de
 documento.
 
-**1.0 Leitura do `documentation/plan.md`**
-
-Leia `documentation/plan.md` na íntegra antes de qualquer outra etapa.
-
-**1.0.1 Completude do plano**
-
-Verifique se todas as tarefas do plano estão marcadas como `- [x]`. Se houver
-qualquer tarefa `- [ ]` ou `⚠️ bloqueado`, **interrompa imediatamente** e
-reporte:
-
-```markdown
-## Plano incompleto — conclusão bloqueada
-
-As seguintes tarefas ainda não foram concluídas:
-
-- [ ] <ID> — <Descrição> (motivo do bloqueio, se houver)
-```
-
-> Não avance para nenhuma outra etapa enquanto o plano não estiver 100% concluído.
-
-**1.0.2 Divergências acumuladas**
-
-Leia a seção `Divergencias` do `plan.md` e classifique cada item registrado:
-
-- **Aceitável** (ex: separação de arquivo por SRP, renomeação por clareza) →
-  liste no campo "O que mudou em relação à Spec original" do resumo (Fase 3.1)
-  e prossiga.
-- **Estrutural** (ex: mudança de contrato de interface, novo campo em DTO,
-  alteração de fluxo de dados) → verifique se o `update-spec-prompt` já foi
-  acionado para essa divergência. Se não foi, acione-o antes de prosseguir.
-
-> Se a seção `Divergencias` não existir ou estiver vazia, registre explicitamente
-> "Nenhuma divergência acumulada no plano" e prossiga.
-
----
-
 **1.1 Testes**
 
 Execute `npm run test` na raiz do projeto. Todos os testes — novos e
@@ -325,8 +289,7 @@ Gere um resumo de conclusão com a seguinte estrutura obrigatória:
 
 ## O que mudou em relação à Spec original
 
-<Desvios ou refinamentos ocorridos durante a implementação, incluindo
-divergências acumuladas no plan.md que implicaram atualização do PRD.
+<Desvios ou refinamentos ocorridos durante a implementação.
 Se nenhum, declarar explicitamente "Nenhum desvio em relação à Spec original.">
 
 ## Pontos de atenção para o revisor
@@ -360,8 +323,6 @@ dados existentes ou disparar efeitos colaterais em produção na primeira execu�
 - [ ] Cobertura de testes verificada e lacunas críticas endereçadas
 - [ ] Limites arquiteturais validados
 - [ ] Revisão de qualidade de código concluída e correções aplicadas em lote
-- [ ] Todas as tarefas do `documentation/plan.md` estão `- [x]`
-- [ ] Divergências do `plan.md` classificadas e resolvidas
 - [ ] Spec atualizada com status `closed` e data
 - [ ] PRD atualizado com os itens concluídos (e divergências registradas, se houver)
 - [ ] `architecture.md` atualizado (se aplicável)
@@ -374,12 +335,10 @@ dados existentes ou disparar efeitos colaterais em produção na primeira execu�
 
 Ao final da execução, devem ter sido produzidos:
 
-1. **Relatório de completude do plano** (Fase 1.0.1)
-2. **Classificação de divergências acumuladas** (Fase 1.0.2)
-3. **Relatório de cobertura de testes** (Fase 1.1.1)
-4. **Testes criados pelo subagent** para componentes sem cobertura (Fase 1.1.2, quando aplicável)
-5. **Checklist de validação** de requisitos (Fase 1.4)
-6. **Relatório de revisão de qualidade de código** com problemas catalogados e correções aplicadas em lote (Fase 1.6)
-7. **Spec atualizada** com status `closed` e data (Fase 2.1)
-8. **PRD atualizado no milestone do GitHub** com itens concluídos e divergências registradas, se houver (Fase 2.2)
-9. **Resumo de conclusão da spec** com estrutura completa (Fase 3.1)
+1. **Relatório de cobertura de testes** (Fase 1.1.1)
+2. **Testes criados pelo subagent** para componentes sem cobertura (Fase 1.1.2, quando aplicável)
+3. **Checklist de validação** de requisitos (Fase 1.4)
+4. **Relatório de revisão de qualidade de código** com problemas catalogados e correções aplicadas em lote (Fase 1.6)
+5. **Spec atualizada** com status `closed` e data (Fase 2.1)
+6. **PRD atualizado no milestone do GitHub** com itens concluídos e divergências registradas, se houver (Fase 2.2)
+7. **Resumo de conclusão da spec** com estrutura completa (Fase 3.1)
