@@ -552,17 +552,6 @@ describe('User Entity', () => {
     expect(user.didBreakStreak.value).toBeFalsy()
   })
 
-  it('should register a visit', () => {
-    const user = UsersFaker.fake()
-    const platform = Platform.create('web')
-
-    const visit = user.registerVisit(platform)
-
-    expect(visit.userId).toEqual(user.id)
-    expect(visit.platform).toEqual(platform)
-    expect(visit.createdAt).toBeInstanceOf(Date)
-  })
-
   it('should update the tier', () => {
     const newTier = TierAggregatesFaker.fake()
     const user = UsersFaker.fake({

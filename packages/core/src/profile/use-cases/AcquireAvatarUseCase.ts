@@ -1,10 +1,12 @@
 import type { UseCase } from '#global/interfaces/UseCase'
+import type { Broker } from '#global/interfaces/Broker'
 import { Integer } from '#global/domain/structures/Integer'
 import { Id } from '#global/domain/structures/Id'
 import type { UsersRepository } from '../interfaces'
 import { UserNotFoundError } from '../domain/errors'
 import { AvatarAggregate } from '../domain/aggregates'
 import type { UserDto } from '../domain/entities/dtos'
+import { ShopItemPurchasedEvent } from '../domain/events'
 
 type Request = {
   userId: string
@@ -22,7 +24,10 @@ type AvatarAggregateEntity = {
 }
 
 export class AcquireAvatarUseCase implements UseCase<Request, Response> {
-  constructor(private readonly repository: UsersRepository) {}
+  constructor(
+    private readonly repository: UsersRepository,
+    private readonly broker: Broker,
+  ) {}
 
   async execute({ userId, avatarId, avatarName, avatarImage, avatarPrice }: Request) {
     const user = await this.repository.findById(Id.create(userId))
@@ -43,6 +48,17 @@ export class AcquireAvatarUseCase implements UseCase<Request, Response> {
     }
     user.acquireAvatar(avatar, Integer.create(avatarPrice))
     await this.repository.replace(user)
+    if (canAcquireAvatar.isTrue) {
+      await this.broker.publish(
+        new ShopItemPurchasedEvent({
+          userId: user.id.value,
+          itemId: avatar.id.value,
+          itemType: 'avatar',
+          itemName: avatarName,
+          itemPrice: avatarPrice,
+        }),
+      )
+    }
     return user.dto
   }
 }

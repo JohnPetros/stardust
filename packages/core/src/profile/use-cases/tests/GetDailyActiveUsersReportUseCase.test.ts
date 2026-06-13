@@ -1,40 +1,26 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
-import type { UsersRepository } from '#profile/interfaces/UsersRepository'
-import { Integer } from '#global/domain/structures/Integer'
-import type { Platform } from '#profile/domain/structures/Platform'
+import type { AnalyticsReportingProvider } from '../../../analytics/interfaces/AnalyticsReportingProvider'
 import { GetDailyActiveUsersReportUseCase } from '../GetDailyActiveUsersReportUseCase'
 
 describe('Get Daily Active Users Report Use Case', () => {
-  let repository: Mock<UsersRepository>
+  let analyticsReportingProvider: Mock<AnalyticsReportingProvider>
   let useCase: GetDailyActiveUsersReportUseCase
 
   beforeEach(() => {
-    repository = mock<UsersRepository>()
-    repository.countVisitsByDateAndPlatform.mockImplementation()
-    useCase = new GetDailyActiveUsersReportUseCase(repository)
+    analyticsReportingProvider = mock<AnalyticsReportingProvider>()
+    analyticsReportingProvider.getDailyActiveUsers.mockImplementation()
+    useCase = new GetDailyActiveUsersReportUseCase(analyticsReportingProvider)
   })
 
   it('should return the daily active users report with correct structure', async () => {
     const days = 3
 
-    repository.countVisitsByDateAndPlatform.mockImplementation(
-      async (date: Date, platform: Platform) => {
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-        const dateToCompare = new Date(date)
-        dateToCompare.setHours(0, 0, 0, 0)
-        const dayIndex = Math.floor(
-          (today.getTime() - dateToCompare.getTime()) / (1000 * 60 * 60 * 24),
-        )
-        const baseValue = (dayIndex + 1) * 10
-
-        if (platform.name === 'web') {
-          return Integer.create(baseValue)
-        }
-        return Integer.create(baseValue + 5)
-      },
-    )
+    analyticsReportingProvider.getDailyActiveUsers.mockResolvedValue([
+      { date: new Date('2026-06-09T00:00:00.000Z'), web: 10, mobile: 15 },
+      { date: new Date('2026-06-10T00:00:00.000Z'), web: 20, mobile: 25 },
+      { date: new Date('2026-06-11T00:00:00.000Z'), web: 30, mobile: 35 },
+    ])
 
     const response = await useCase.execute({ days })
 
@@ -48,14 +34,10 @@ describe('Get Daily Active Users Report Use Case', () => {
   it('should return visit counts for web and mobile platforms', async () => {
     const days = 2
 
-    repository.countVisitsByDateAndPlatform.mockImplementation(
-      async (_date: Date, platform: Platform) => {
-        if (platform.name === 'web') {
-          return Integer.create(100)
-        }
-        return Integer.create(50)
-      },
-    )
+    analyticsReportingProvider.getDailyActiveUsers.mockResolvedValue([
+      { date: new Date('2026-06-10T00:00:00.000Z'), web: 100, mobile: 50 },
+      { date: new Date('2026-06-11T00:00:00.000Z'), web: 100, mobile: 50 },
+    ])
 
     const response = await useCase.execute({ days })
 
@@ -68,7 +50,11 @@ describe('Get Daily Active Users Report Use Case', () => {
   it('should return dates in chronological order from oldest to newest', async () => {
     const days = 3
 
-    repository.countVisitsByDateAndPlatform.mockResolvedValue(Integer.create(0))
+    analyticsReportingProvider.getDailyActiveUsers.mockResolvedValue([
+      { date: new Date('2026-06-09T00:00:00.000Z'), web: 0, mobile: 0 },
+      { date: new Date('2026-06-10T00:00:00.000Z'), web: 0, mobile: 0 },
+      { date: new Date('2026-06-11T00:00:00.000Z'), web: 0, mobile: 0 },
+    ])
 
     const response = await useCase.execute({ days })
 
@@ -82,33 +68,11 @@ describe('Get Daily Active Users Report Use Case', () => {
   it('should return correct visit counts for different dates', async () => {
     const days = 3
 
-    repository.countVisitsByDateAndPlatform.mockImplementation(
-      async (date: Date, platform: Platform) => {
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-        const dateToCompare = new Date(date)
-        dateToCompare.setHours(0, 0, 0, 0)
-        const dayIndex = Math.floor(
-          (today.getTime() - dateToCompare.getTime()) / (1000 * 60 * 60 * 24),
-        )
-
-        const webValues: Record<number, number> = {
-          0: 30, // today
-          1: 20, // yesterday
-          2: 10, // 2 days ago
-        }
-        const mobileValues: Record<number, number> = {
-          0: 35, // today
-          1: 25, // yesterday
-          2: 15, // 2 days ago
-        }
-
-        if (platform.name === 'web') {
-          return Integer.create(webValues[dayIndex] || 0)
-        }
-        return Integer.create(mobileValues[dayIndex] || 0)
-      },
-    )
+    analyticsReportingProvider.getDailyActiveUsers.mockResolvedValue([
+      { date: new Date('2026-06-09T00:00:00.000Z'), web: 10, mobile: 15 },
+      { date: new Date('2026-06-10T00:00:00.000Z'), web: 20, mobile: 25 },
+      { date: new Date('2026-06-11T00:00:00.000Z'), web: 30, mobile: 35 },
+    ])
 
     const response = await useCase.execute({ days })
 
@@ -121,27 +85,23 @@ describe('Get Daily Active Users Report Use Case', () => {
   })
 
   it('should return empty arrays when days is 0', async () => {
-    repository.countVisitsByDateAndPlatform.mockResolvedValue(Integer.create(0))
+    analyticsReportingProvider.getDailyActiveUsers.mockResolvedValue([])
 
     const response = await useCase.execute({ days: 0 })
 
     expect(response).toHaveLength(0)
   })
 
-  it('should call repository with correct platform for each date', async () => {
+  it('should call provider with the requested number of days', async () => {
     const days = 2
 
-    repository.countVisitsByDateAndPlatform.mockResolvedValue(Integer.create(0))
+    analyticsReportingProvider.getDailyActiveUsers.mockResolvedValue([])
 
     await useCase.execute({ days })
 
-    expect(repository.countVisitsByDateAndPlatform).toHaveBeenCalledTimes(days * 2)
-
-    const calls = repository.countVisitsByDateAndPlatform.mock.calls
-    const webCalls = calls.filter(([, platform]) => platform.name === 'web')
-    const mobileCalls = calls.filter(([, platform]) => platform.name === 'mobile')
-
-    expect(webCalls).toHaveLength(days)
-    expect(mobileCalls).toHaveLength(days)
+    expect(analyticsReportingProvider.getDailyActiveUsers).toHaveBeenCalledTimes(1)
+    expect(analyticsReportingProvider.getDailyActiveUsers).toHaveBeenCalledWith(
+      expect.objectContaining({ value: days }),
+    )
   })
 })

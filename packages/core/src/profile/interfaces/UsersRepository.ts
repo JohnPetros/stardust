@@ -2,14 +2,13 @@ import type { Email } from '#global/domain/structures/Email'
 import type { Id } from '#global/domain/structures/Id'
 import type { InsigniaRole } from '#global/domain/structures/InsigniaRole'
 import type { IdsList } from '#global/domain/structures/IdsList'
+import type { Integer } from '#global/domain/structures/Integer'
 import type { Logical } from '#global/domain/structures/Logical'
 import type { Name } from '#global/domain/structures/Name'
-import type { Slug } from '#global/domain/structures/Slug'
-import type { User } from '../domain/entities'
 import type { Month } from '#global/domain/structures/Month'
-import type { Integer } from '#global/domain/structures/Integer'
-import type { Platform, Visit } from '../domain/structures'
+import type { Slug } from '#global/domain/structures/Slug'
 import type { ManyItems } from '../../global/domain/types'
+import type { User } from '../domain/entities'
 import type { UsersListingParams } from '../domain/types'
 
 export interface UsersRepository {
@@ -24,7 +23,6 @@ export interface UsersRepository {
   findMany(params: UsersListingParams): Promise<ManyItems<User>>
   findUnlockedStars(userId: Id): Promise<IdsList>
   findRecentlyUnlockedStars(userId: Id): Promise<IdsList>
-  countVisitsByDateAndPlatform(date: Date, platform: Platform): Promise<Integer>
   containsWithEmail(email: Email): Promise<Logical>
   containsWithName(name: Name): Promise<Logical>
   findAll(): Promise<User[]>
@@ -42,12 +40,10 @@ export interface UsersRepository {
   addRescuableAchievement(achievementId: Id, userId: Id): Promise<void>
   removeRescuableAchievement(achievementId: Id, userId: Id): Promise<void>
   addCompletedChallenge(challengeId: Id, userId: Id): Promise<void>
-  addVisit(visit: Visit): Promise<void>
   countCompletedChallengesByMonth(month: Month): Promise<Integer>
   countAllCompletedChallenges(): Promise<Integer>
   countAllUnlockedStars(): Promise<Integer>
   countUnlockedStarsByMonth(month: Month): Promise<Integer>
-  hasVisit(visit: Visit): Promise<Logical>
   replace(user: User): Promise<void>
   replaceMany(users: User[]): Promise<void>
   countByMonth(month: Month): Promise<Integer>

@@ -2,7 +2,7 @@ import { Event } from '#global/domain/abstracts/Event'
 
 type Payload = {
   accountId: string
-  platform: string
+  platform: 'web' | 'mobile'
 }
 
 export class AccountSignedInEvent extends Event<Payload> {
