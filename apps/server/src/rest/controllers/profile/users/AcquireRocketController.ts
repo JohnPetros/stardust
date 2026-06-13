@@ -4,6 +4,8 @@ import type { RestResponse } from '@stardust/core/global/responses'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import { AcquireRocketUseCase } from '@stardust/core/profile/use-cases'
 
+import { InngestBroker } from '@/queue/inngest/InngestBroker'
+
 type Schema = {
   body: {
     rocketId: string
@@ -19,7 +21,7 @@ export class AcquireRocketController implements Controller<Schema> {
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const account = await http.getAccount()
     const { rocketId, rocketName, rocketImage, rocketPrice } = await http.getBody()
-    const useCase = new AcquireRocketUseCase(this.usersRepository)
+    const useCase = new AcquireRocketUseCase(this.usersRepository, new InngestBroker())
     const user = await useCase.execute({
       userId: String(account.id),
       rocketId,

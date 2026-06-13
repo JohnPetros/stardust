@@ -20,6 +20,7 @@ import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import { ENV } from '@/constants'
 import { inngest } from '@/queue/inngest/inngest'
 import {
+  AnalyticsFunctions,
   ProfileFunctions,
   SpaceFunctions,
   ShopFunctions,
@@ -198,6 +199,7 @@ export class HonoApp {
     this.hono.on(['GET', 'PUT', 'POST'], '/inngest', (context) => {
       const supabase = context.get('supabase')
       const profileFunctions = new ProfileFunctions(inngest)
+      const analyticsFunctions = new AnalyticsFunctions(inngest)
       const spaceFunctions = new SpaceFunctions(inngest)
       const shopFunctions = new ShopFunctions(inngest)
       const rankingFunctions = new RankingFunctions(inngest)
@@ -211,6 +213,7 @@ export class HonoApp {
         client: inngest,
         functions: [
           ...profileFunctions.getFunctions(supabase),
+          ...analyticsFunctions.getFunctions(),
           ...spaceFunctions.getFunctions(supabase),
           ...shopFunctions.getFunctions(supabase),
           ...rankingFunctions.getFunctions(supabase),

@@ -5,13 +5,12 @@ import {
   type Slug,
   type InsigniaRole,
   type Month,
-  IdsList,
   Logical,
+  IdsList,
   Integer,
 } from '@stardust/core/global/structures'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import type { User } from '@stardust/core/profile/entities'
-import type { Platform, Visit } from '@stardust/core/profile/structures'
 import type { ManyItems } from '@stardust/core/global/types'
 import type { UsersListingParams } from '@stardust/core/profile/types'
 
@@ -780,55 +779,5 @@ export class SupabaseUsersRepository
     if (error) throw new SupabasePostgreError(error)
 
     return Integer.create(count ?? 0)
-  }
-
-  async countVisitsByDateAndPlatform(date: Date, platform: Platform): Promise<Integer> {
-    const startOfDay = new Date(date)
-    startOfDay.setUTCHours(0, 0, 0, 0)
-    const endOfDay = new Date(date)
-    endOfDay.setUTCHours(23, 59, 59, 999)
-
-    const { count, error } = await this.supabase
-      .from('users_visits')
-      .select('*', { count: 'exact', head: true })
-      .gte('created_at', startOfDay.toISOString())
-      .lte('created_at', endOfDay.toISOString())
-      .eq('platform', platform.name)
-
-    if (error) throw new SupabasePostgreError(error)
-
-    return Integer.create(count ?? 0)
-  }
-
-  async addVisit(visit: Visit): Promise<void> {
-    const { error } = await this.supabase.from('users_visits').insert({
-      user_id: visit.userId.value,
-      platform: visit.platform.name,
-      created_at: visit.createdAt.toISOString(),
-    })
-
-    if (error) throw new SupabasePostgreError(error)
-  }
-
-  async hasVisit(visit: Visit): Promise<Logical> {
-    const createdAt = visit.createdAt
-    const startOfDay = new Date(createdAt)
-    startOfDay.setUTCHours(0, 0, 0, 0)
-    const endOfDay = new Date(createdAt)
-    endOfDay.setUTCHours(23, 59, 59, 999)
-
-    const { data, error } = await this.supabase
-      .from('users_visits')
-      .select('*')
-      .eq('user_id', visit.userId.value)
-      .eq('platform', visit.platform.name)
-      .gte('created_at', startOfDay.toISOString())
-      .lte('created_at', endOfDay.toISOString())
-
-    if (error) {
-      throw new SupabasePostgreError(error)
-    }
-
-    return Logical.create(data.length > 0)
   }
 }

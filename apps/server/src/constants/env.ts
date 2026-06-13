@@ -11,6 +11,10 @@ const env = {
   inngestEventKey: process.env.INNGEST_EVENT_KEY,
   inngestSigningKey: process.env.INNGEST_SIGNING_KEY,
   stardustWebUrl: process.env.STARDUST_WEB_URL,
+  posthogProjectToken: process.env.POSTHOG_PROJECT_TOKEN,
+  posthogHost: process.env.POSTHOG_HOST,
+  posthogPersonalApiKey: process.env.POSTHOG_PERSONAL_API_KEY,
+  posthogProjectId: process.env.POSTHOG_PROJECT_ID,
   dropboxRefreshToken: process.env.DROPBOX_REFRESH_TOKEN,
   dropboxAppKey: process.env.DROPBOX_APP_KEY,
   dropboxAppSecret: process.env.DROPBOX_APP_SECRET,
@@ -40,6 +44,10 @@ const envSchema = z.object({
   elevenLabsApiKey: z.string().optional(),
   sentryDsn: z.string().url(),
   stardustWebUrl: z.string().url(),
+  posthogProjectToken: z.string(),
+  posthogHost: z.string().url(),
+  posthogPersonalApiKey: z.string(),
+  posthogProjectId: z.coerce.number().int().positive(),
   godAccountIds: z.array(idSchema),
 })
 

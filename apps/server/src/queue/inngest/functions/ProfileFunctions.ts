@@ -14,23 +14,19 @@ import {
   UpdateTierForRankingLosersJob,
   CreateUserJob,
   UpdateSpaceForAllUsersJob,
-  RegisterUserVisitJob,
 } from '@/queue/jobs/profile'
 import { SupabaseUsersRepository } from '@/database'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestBroker } from '../InngestBroker'
 import { InngestFunctions } from './InngestFunctions'
 import { SpaceOrderChangedEvent } from '@stardust/core/space/events'
-import { AccountSignedInEvent } from '@stardust/core/auth/events'
 import { eventType } from 'inngest'
 import z from 'zod'
 import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/schemas'
-import { platformSchema } from '@stardust/validation/profile/schemas'
 
 type ShopItemsAcquiredByDefaultPayload = EventPayload<
   typeof ShopItemsAcquiredByDefaultEvent
 >
-type AccountSignedInPayload = EventPayload<typeof AccountSignedInEvent>
 
 export class ProfileFunctions extends InngestFunctions {
   private createCreateUserFunction(supabase: SupabaseClient) {
@@ -85,34 +81,10 @@ export class ProfileFunctions extends InngestFunctions {
     )
   }
 
-  private createRegisterUserVisitFunction(supabase: SupabaseClient) {
-    return this.inngest.createFunction(
-      {
-        id: RegisterUserVisitJob.KEY,
-        onFailure: (context) => this.handleFailure(context, RegisterUserVisitJob.name),
-        triggers: {
-          event: eventType(AccountSignedInEvent._NAME, {
-            schema: z.object({
-              accountId: idSchema,
-              platform: platformSchema,
-            }),
-          }),
-        },
-      },
-      async (context) => {
-        const repository = new SupabaseUsersRepository(supabase)
-        const amqp = new InngestAmqp<AccountSignedInPayload>(context)
-        const job = new RegisterUserVisitJob(repository)
-        return await job.handle(amqp)
-      },
-    )
-  }
-
   getFunctions(supabase: SupabaseClient) {
     return [
       this.createCreateUserFunction(supabase),
       this.createObserveStreakBreakFunction(supabase),
-      this.createRegisterUserVisitFunction(supabase),
     ]
   }
 }

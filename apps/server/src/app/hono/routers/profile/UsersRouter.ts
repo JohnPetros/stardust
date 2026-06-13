@@ -19,6 +19,7 @@ import {
 } from '@stardust/validation/profile/schemas'
 
 import { SupabaseUsersRepository } from '@/database'
+import { PostHogAnalyticsReportingProvider } from '@/provision/analytics'
 import {
   FetchUserController,
   AcquireAvatarController,
@@ -39,6 +40,7 @@ import {
   GenerateUsersXlsxFileController,
 } from '@/rest/controllers/profile'
 import { ExcelJsXlsxProvider } from '@/provision/xlsx'
+import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import {
@@ -384,8 +386,12 @@ export class UsersRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
-        const controller = new FetchDailyActiveUsersReportController(repository)
+        const analyticsReportingProvider = new PostHogAnalyticsReportingProvider(
+          new AxiosRestClient(),
+        )
+        const controller = new FetchDailyActiveUsersReportController(
+          analyticsReportingProvider,
+        )
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },

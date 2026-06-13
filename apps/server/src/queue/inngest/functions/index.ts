@@ -1,4 +1,5 @@
 export { ProfileFunctions } from './ProfileFunctions'
+export { AnalyticsFunctions } from './AnalyticsFunctions'
 export { SpaceFunctions } from './SpaceFunctions'
 export { ShopFunctions } from './ShopFunctions'
 export { RankingFunctions } from './RankingFunctions'
