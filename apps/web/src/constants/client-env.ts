@@ -10,6 +10,8 @@ const clientEnv = {
   stardustWebUrl: process.env.NEXT_PUBLIC_STARDUST_WEB_URL,
   stardustServerUrl: process.env.NEXT_PUBLIC_STARDUST_SERVER_URL,
   discordChannelUrl: process.env.NEXT_PUBLIC_DISCORD_CHANNEL_URL,
+  posthogProjectToken: process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN,
+  posthogHost: process.env.NEXT_PUBLIC_POSTHOG_HOST,
 }
 
 const schema = z.object({
@@ -20,6 +22,8 @@ const schema = z.object({
   stardustWebUrl: z.string().url(),
   stardustServerUrl: z.string().url(),
   discordChannelUrl: z.string().url(),
+  posthogProjectToken: z.string(),
+  posthogHost: z.string().url(),
 })
 
 export const CLIENT_ENV = schema.parse(clientEnv)

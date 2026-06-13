@@ -47,7 +47,9 @@ export const DailyActiveUsersChartView = ({
         <div>
           <CardTitle>Usuários Ativos Diários (UAD)</CardTitle>
           <CardDescription>
-            <span>Total de visitas no período selecionado para cada plataforma</span>
+            <span>
+              Usuários únicos ativos no período selecionado para cada plataforma
+            </span>
           </CardDescription>
         </div>
         <ToggleGroup

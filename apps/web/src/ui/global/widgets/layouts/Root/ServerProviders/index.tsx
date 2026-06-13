@@ -8,8 +8,7 @@ import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import { ToastContextProvider } from '@/ui/global/contexts/ToastContext'
 import { AuthContextProvider } from '@/ui/auth/contexts/AuthContext'
 import { AudioContextProvider } from '@/ui/global/contexts/AudioContext'
-
-import { RestContextProvider } from '@/ui/global/contexts/RestContext'
+import { ClientProviders } from '../ClientProviders'
 
 type Props = {
   children: ReactNode
@@ -31,12 +30,14 @@ export const ServerProviders = async ({ children }: Props) => {
     <NuqsAdapter>
       <ToastContextProvider>
         <AudioContextProvider isDefaultAudioDisabled={Boolean(isAudioDisabled?.data)}>
-          <AuthContextProvider
-            accountDto={accountDto}
-            accessToken={accessToken?.data ?? null}
-          >
-            {children}
-          </AuthContextProvider>
+          <ClientProviders accountDto={accountDto}>
+            <AuthContextProvider
+              accountDto={accountDto}
+              accessToken={accessToken?.data ?? null}
+            >
+              {children}
+            </AuthContextProvider>
+          </ClientProviders>
         </AudioContextProvider>
       </ToastContextProvider>
     </NuqsAdapter>
