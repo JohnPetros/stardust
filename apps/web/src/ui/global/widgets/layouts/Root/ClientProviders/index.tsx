@@ -33,7 +33,10 @@ export const ClientProviders = ({ accountDto, children }: ClientProps) => {
         maskAllInputs: true,
       },
       loaded(client: PostHogInterface) {
-        client.register({ platform: 'web' })
+        client.register({
+          platform: 'web',
+          environment: CLIENT_ENV.mode,
+        })
 
         if (accountDto?.id && accountDto.email) {
           client.identify(accountDto.id, {

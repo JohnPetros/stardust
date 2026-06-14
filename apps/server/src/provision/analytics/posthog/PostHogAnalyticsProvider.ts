@@ -19,6 +19,7 @@ export class PostHogAnalyticsProvider implements ServerAnalyticsProvider {
         distinctId: event.distinctId.value,
         event: event.name.value,
         properties: {
+          environment: ENV.mode,
           ...event.properties,
           $insert_id: event.insertId.value,
         },

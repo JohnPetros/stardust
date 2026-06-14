@@ -5,6 +5,8 @@ import { useMemo } from 'react'
 
 import type { ClientAnalyticsProvider } from '@stardust/core/analytics/interfaces'
 
+import { CLIENT_ENV } from '@/constants'
+
 let isPostHogInitialized = false
 let pendingIdentity: { userId: string; userEmail: string } | null = null
 
@@ -44,7 +46,10 @@ export function useAnalyticsProvider(): ClientAnalyticsProvider {
         if (!isPostHogInitialized) return
 
         posthog.reset()
-        posthog.register({ platform: 'web' })
+        posthog.register({
+          platform: 'web',
+          environment: CLIENT_ENV.mode,
+        })
       },
     }),
     [],
