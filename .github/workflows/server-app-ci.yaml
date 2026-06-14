@@ -10,7 +10,6 @@ on:
       - "packages/validation/**"
 
 permissions:
-  id-token: write
   contents: read
 
 env:
@@ -88,19 +87,10 @@ jobs:
 
       - name: Rebuild local database from migrations
         working-directory: apps/server
-        run: |
-          supabase db reset --local --yes || \
-          (sleep 10 && supabase db reset --local --yes)
+        run: supabase db reset --local --yes
 
-      - uses: Infisical/secrets-action@v1.0.9
-        with:
-          method: "oidc"
-          identity-id: ${{ secrets.INFISICAL_IDENTITY_ID }}
-          domain: ${{ secrets.INFISICAL_DOMAIN }}
-          env-slug: "test"
-          project-slug: "stardust-server-app"
-          export-type: "file"
-          file-output-path: "/apps/server/.env.testing"
+      - name: Create test environment file
+        run: echo "${{ secrets.SERVER_TEST_ENV }}" > apps/server/.env.testing
 
       - name: Run tests
         run: npm run test -w @stardust/server
