@@ -2,7 +2,7 @@
 description: Prompt para criar pull requests padronizados via gh com titulo, body e checklist de validacao.
 ---
 
-# Prompt: Criar PRD
+# Prompt: Criar PR
 
 **Objetivo:** Padronizar a criação de Pull Requests (PRs), garantindo descrições
 claras que facilitem a revisão de código e o rastreamento de tarefas. O foco é
@@ -41,12 +41,23 @@ de trabalho.
   - direto
   - em PT-BR
   - refletir a essência da alteração
+  - preferencialmente em formato nominal
+
+- O título do PR não deve começar com verbo.
+- Prefira formulações nominais como:
+
+  - `Configuração de...`
+  - `Cobertura de...`
+  - `Correção de...`
+  - `Ajuste de...`
+  - `Refatoração de...`
 
 Exemplos:
 
-- Implementação da listagem de produtos
+- Configuração da listagem de produtos
 - Correção do erro de carregamento de imagem
-- Correção de navegação para tela de catálogo
+- Correção da navegação para tela de catálogo
+- Cobertura da página de cadastro com testes de integração
 
 ⚠️ Não incluir prefixos no título:
 
