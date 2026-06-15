@@ -1,8 +1,9 @@
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs'
+import { dirname } from 'node:path'
 
 import type { ServerMockRoute } from '../types/ServerMockRoute'
 
-const SERVER_MOCK_ROUTES_FILE_PATH = '/tmp/opencode/stardust-web-server-mock-routes.json'
+const SERVER_MOCK_ROUTES_FILE_PATH = '/tmp/stardust/stardust-web-server-mock-routes.json'
 
 type FindServerMockRouteParams = {
   method: string
@@ -39,6 +40,8 @@ const ServerMockRegistry = (): ServerMockRegistry => {
 
   return {
     registerServerMockRoutes(routes) {
+      mkdirSync(dirname(SERVER_MOCK_ROUTES_FILE_PATH), { recursive: true })
+
       const normalizedRoutes = routes.map((route) => ({
         ...route,
         method: route.method.toUpperCase() as ServerMockRoute['method'],
