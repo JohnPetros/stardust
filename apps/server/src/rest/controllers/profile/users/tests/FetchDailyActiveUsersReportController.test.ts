@@ -1,22 +1,22 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
+import type { AnalyticsReportingProvider } from '@stardust/core/analytics/interfaces'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
-import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import { GetDailyActiveUsersReportUseCase } from '@stardust/core/profile/use-cases'
 
 import { FetchDailyActiveUsersReportController } from '../FetchDailyActiveUsersReportController'
 
 describe('Fetch Daily Active Users Report Controller', () => {
   let http: Mock<Http<{ queryParams: { days: number } }>>
-  let repository: Mock<UsersRepository>
+  let analyticsReportingProvider: Mock<AnalyticsReportingProvider>
   let controller: FetchDailyActiveUsersReportController
 
   beforeEach(() => {
     jest.restoreAllMocks()
     http = mock()
-    repository = mock()
-    controller = new FetchDailyActiveUsersReportController(repository)
+    analyticsReportingProvider = mock()
+    controller = new FetchDailyActiveUsersReportController(analyticsReportingProvider)
   })
 
   it('should execute daily active users report use case using days and return response through http.send', async () => {

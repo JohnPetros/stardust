@@ -8,6 +8,8 @@ import {
 import type { Mcp, Tool } from '@stardust/core/global/interfaces'
 import { Id } from '@stardust/core/global/structures'
 
+import { InngestBroker } from '@/queue/inngest/InngestBroker'
+
 type Input = {
   challengeId: string
   confirmacao: true
@@ -32,7 +34,10 @@ export class DeleteChallengeTool implements Tool<Input> {
       throw new ChallengeNotFoundError()
     }
 
-    const deleteChallengeUseCase = new DeleteChallengeUseCase(this.repository)
+    const deleteChallengeUseCase = new DeleteChallengeUseCase(
+      this.repository,
+      new InngestBroker(),
+    )
 
     await deleteChallengeUseCase.execute({ challengeId })
   }

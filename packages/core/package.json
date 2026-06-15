@@ -25,6 +25,9 @@
   },
   "exports": {
     ".": "./build/main.js",
+    "./analytics/interfaces": "./src/analytics/interfaces/index.ts",
+    "./analytics/entities/dtos": "./src/analytics/domain/entities/dtos/index.ts",
+    "./analytics/structures": "./src/analytics/domain/structures/index.ts",
     "./auth/entities": "./src/auth/domain/entities/index.ts",
     "./auth/entities/dtos": "./src/auth/domain/entities/dtos/index.ts",
     "./auth/entities/fakers": "./src/auth/domain/entities/fakers/index.ts",

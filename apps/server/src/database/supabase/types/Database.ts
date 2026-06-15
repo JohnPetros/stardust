@@ -2753,49 +2753,6 @@ export type Database = {
           },
         ]
       }
-      users_visits: {
-        Row: {
-          created_at: string
-          id: string
-          platform: Database['public']['Enums']['platform']
-          user_id: string
-        }
-        Insert: {
-          created_at: string
-          id?: string
-          platform: Database['public']['Enums']['platform']
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          platform?: Database['public']['Enums']['platform']
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'users_visits_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'users_visits_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'users_completed_planets_view'
-            referencedColumns: ['user_id']
-          },
-          {
-            foreignKeyName: 'users_visits_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'users_view'
-            referencedColumns: ['id']
-          },
-        ]
-      }
     }
     Views: {
       challenges_view: {
@@ -3225,7 +3182,6 @@ export type Database = {
       feedback_intent: 'bug' | 'idea' | 'other'
       guide_category: 'lsp' | 'mdx'
       insignia_role: 'engineer' | 'god'
-      platform: 'web' | 'mobile'
       ranking_status: 'winner' | 'loser'
     }
     CompositeTypes: {
@@ -4195,7 +4151,6 @@ export const Constants = {
       feedback_intent: ['bug', 'idea', 'other'],
       guide_category: ['lsp', 'mdx'],
       insignia_role: ['engineer', 'god'],
-      platform: ['web', 'mobile'],
       ranking_status: ['winner', 'loser'],
     },
   },

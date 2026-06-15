@@ -1,3 +1,8 @@
+// Analytics
+export * from './analytics/domain/entities/dtos/index'
+export * from './analytics/domain/structures/index'
+export * from './analytics/interfaces/index'
+
 // Auth
 export * from './auth/domain/entities/index'
 export * from './auth/domain/entities/dtos/index'

@@ -16,6 +16,9 @@ type Payload = EventPayload<typeof ShopItemsAcquiredByDefaultEvent>
 
 export class CreateUserJob implements Job<Payload> {
   static readonly KEY = 'profile/create.user.job'
+  private readonly noopBroker: Broker = {
+    publish: async () => {},
+  }
 
   constructor(
     private readonly usersRepository: UsersRepository,
@@ -34,9 +37,15 @@ export class CreateUserJob implements Job<Payload> {
     } = amqp.getPayload()
 
     const createUserUseCase = new CreateUserUseCase(this.usersRepository)
-    const unlockStarUseCase = new UnlockStarUseCase(this.usersRepository)
-    const acquireRocketUseCase = new AcquireRocketUseCase(this.usersRepository)
-    const acquireAvatarUseCase = new AcquireAvatarUseCase(this.usersRepository)
+    const unlockStarUseCase = new UnlockStarUseCase(this.usersRepository, this.noopBroker)
+    const acquireRocketUseCase = new AcquireRocketUseCase(
+      this.usersRepository,
+      this.noopBroker,
+    )
+    const acquireAvatarUseCase = new AcquireAvatarUseCase(
+      this.usersRepository,
+      this.noopBroker,
+    )
     const finishUserCreationUseCase = new FinishUserCreationUseCase(this.broker)
 
     await amqp.run(

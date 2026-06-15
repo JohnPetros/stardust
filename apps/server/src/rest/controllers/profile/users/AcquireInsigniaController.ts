@@ -4,6 +4,8 @@ import type { RestResponse } from '@stardust/core/global/responses'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import { AcquireInsigniaUseCase } from '@stardust/core/profile/use-cases'
 
+import { InngestBroker } from '@/queue/inngest/InngestBroker'
+
 type Schema = {
   body: {
     insigniaRole: string
@@ -17,7 +19,7 @@ export class AcquireInsigniaController implements Controller<Schema> {
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const account = await http.getAccount()
     const { insigniaRole, insigniaPrice } = await http.getBody()
-    const useCase = new AcquireInsigniaUseCase(this.repository)
+    const useCase = new AcquireInsigniaUseCase(this.repository, new InngestBroker())
     const user = await useCase.execute({
       userId: String(account.id),
       insigniaRole,

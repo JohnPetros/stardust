@@ -60,7 +60,8 @@ export class AuthRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const service = new SupabaseAuthService(http.getSupabase())
-        const controller = new SignInController(service)
+        const broker = new InngestBroker()
+        const controller = new SignInController(service, broker)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },

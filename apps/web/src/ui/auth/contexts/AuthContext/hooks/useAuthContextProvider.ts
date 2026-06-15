@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { User } from '@stardust/core/global/entities'
+import type { ClientAnalyticsProvider } from '@stardust/core/analytics/interfaces'
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
 import type { ProfileService } from '@stardust/core/profile/interfaces'
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
@@ -20,6 +21,7 @@ import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 
 type Params = {
   profileService: ProfileService
+  analyticsProvider: ClientAnalyticsProvider
   accountDto: AccountDto | null
   signIn: (email: string, password: string) => Promise<ActionResponse<AccountDto>>
   signOut: () => Promise<ActionResponse<void>>
@@ -32,6 +34,7 @@ type Params = {
 
 export function useAuthContextProvider({
   profileService,
+  analyticsProvider,
   accountDto,
   signIn,
   signOut,
@@ -73,14 +76,19 @@ export function useAuthContextProvider({
       const response = await signIn(email, password)
 
       if (response.isSuccessful) {
-        setAccount(Account.create(response.data))
+        const authenticatedAccount = Account.create(response.data)
+        setAccount(authenticatedAccount)
+        analyticsProvider.identifyUser(
+          authenticatedAccount.id,
+          authenticatedAccount.email,
+        )
         return true
       }
 
       toast.showError(response.errorMessage, 10)
       return false
     },
-    [signIn, toast],
+    [analyticsProvider, signIn, toast],
   )
 
   const handleSignUpWithSocialAccount = useCallback(
@@ -88,13 +96,18 @@ export function useAuthContextProvider({
       const response = await signUpWithSocialAccount(accessToken, refreshToken)
 
       if (response.isSuccessful) {
-        setAccount(Account.create(response.data.account))
+        const authenticatedAccount = Account.create(response.data.account)
+        setAccount(authenticatedAccount)
+        analyticsProvider.identifyUser(
+          authenticatedAccount.id,
+          authenticatedAccount.email,
+        )
         return { isNewAccount: response.data.isNewAccount }
       }
 
       return { isNewAccount: false }
     },
-    [signUpWithSocialAccount],
+    [analyticsProvider, signUpWithSocialAccount],
   )
 
   const handleSignOut = useCallback(async () => {
@@ -104,7 +117,9 @@ export function useAuthContextProvider({
       toast.showError(response.errorMessage, 4)
       return
     }
-  }, [signOut, toast])
+
+    analyticsProvider.reset()
+  }, [analyticsProvider, signOut, toast])
 
   const handleRetryUserCreation = useCallback(async () => {
     const response = await retryUserCreation()
@@ -148,7 +163,11 @@ export function useAuthContextProvider({
       updateUserCache(null)
       return
     }
-  }, [account, updateUserCache])
+
+    if (account?.isAuthenticated.isTrue) {
+      analyticsProvider.identifyUser(account.id, account.email)
+    }
+  }, [account, analyticsProvider, updateUserCache])
 
   useEffect(() => {
     const currentRoute = navigationProvider.currentRoute

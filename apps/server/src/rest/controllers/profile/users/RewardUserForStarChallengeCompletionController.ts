@@ -10,6 +10,8 @@ import {
   UnlockStarUseCase,
 } from '@stardust/core/profile/use-cases'
 
+import { InngestBroker } from '@/queue/inngest/InngestBroker'
+
 type Schema = {
   routeParams: {
     userId: string
@@ -96,12 +98,15 @@ export class RewardUserForStarChallengeCompletionController
   }
 
   private async completeChallenge(userId: string, challengeId: string) {
-    const useCase = new CompleteChallengeUseCase(this.usersRepository)
+    const useCase = new CompleteChallengeUseCase(
+      this.usersRepository,
+      new InngestBroker(),
+    )
     await useCase.execute({ userId, challengeId })
   }
 
   private async unlockStar(userId: string, starId: string) {
-    const useCase = new UnlockStarUseCase(this.usersRepository)
+    const useCase = new UnlockStarUseCase(this.usersRepository, new InngestBroker())
     await useCase.execute({ userId, starId })
   }
 
@@ -111,7 +116,7 @@ export class RewardUserForStarChallengeCompletionController
   }
 
   private async rewardUser(userId: string, newCoins: number, newXp: number) {
-    const useCase = new RewardUserUseCase(this.usersRepository)
+    const useCase = new RewardUserUseCase(this.usersRepository, new InngestBroker())
     return await useCase.execute({ userId, newCoins, newXp })
   }
 }

@@ -6,6 +6,7 @@ import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import { HTTP_HEADERS } from '@stardust/core/global/constants'
 
 import { CLIENT_ENV } from '@/constants'
+import { useAnalyticsProvider } from '@/provision/analytics/useAnalyticsProvider'
 import { ProfileService } from '@/rest/services'
 import { NextRestClient } from '@/rest/next/NextRestClient'
 import type { AuthContextValue } from './types'
@@ -35,6 +36,7 @@ export const AuthContextProvider = ({
 }: PropsWithChildren<Props>) => {
   if (accessToken)
     restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken}`)
+  const analyticsProvider = useAnalyticsProvider()
   const profileService = ProfileService(restClient)
   const { signUpWithSocialAccount } = useSignUpWithSocialAccountAction()
   const { retryUserCreation } = useRetryUserCreationAction()
@@ -42,6 +44,7 @@ export const AuthContextProvider = ({
   const { signOut } = useSignOutAction()
   const authContextValue = useAuthContextProvider({
     profileService,
+    analyticsProvider,
     accountDto,
     signIn,
     signOut,

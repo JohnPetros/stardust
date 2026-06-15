@@ -4,6 +4,8 @@ import type { RestResponse } from '@stardust/core/global/responses'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import { AcquireAvatarUseCase } from '@stardust/core/profile/use-cases'
 
+import { InngestBroker } from '@/queue/inngest/InngestBroker'
+
 type Schema = {
   body: {
     avatarId: string
@@ -19,7 +21,7 @@ export class AcquireAvatarController implements Controller<Schema> {
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const account = await http.getAccount()
     const { avatarId, avatarName, avatarImage, avatarPrice } = await http.getBody()
-    const useCase = new AcquireAvatarUseCase(this.usersRepository)
+    const useCase = new AcquireAvatarUseCase(this.usersRepository, new InngestBroker())
     const user = await useCase.execute({
       userId: String(account.id),
       avatarId,
