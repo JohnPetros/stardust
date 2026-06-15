@@ -1,403 +1,287 @@
 ---
-description: Prompt para criar uma especificação técnica detalhada com base no PRD e na arquitetura do projeto.
+description: Prompt para criar especificação técnica a partir de PRD e codebase.
 ---
 
-**Objetivo:** Detalhar a implementação técnica de uma feature, fix ou refatoração, atuando como um Tech Lead Sênior. O documento deve servir como uma ponte estritamente definida entre o PRD (Product Requirements Document) e o código, com nível de detalhe suficiente para que a implementação seja direta e sem ambiguidades.
+# Prompt: Criar Spec
+
+**Objetivo:** Detalhar a implementação técnica de uma feature, fix ou refatoração, servindo como ponte entre o PRD e o código — com nível de detalhe suficiente para implementação direta e sem ambiguidades.
 
 ## Entrada
 
-- **PRD:** deve existir e estar finalizado antes de iniciar a spec.
-- **Esboço da tarefa:** descrição da feature, fix ou refatoração a implementar.
-- **Acesso à codebase:** necessário para pesquisa e validação de padrões.
-
-> Se o PRD estiver ausente ou incompleto, não inicie a spec.
-> Registre a lacuna em **Pendências / Dúvidas** e use a tool `question`.
+- **PRD:** deve existir e estar finalizado (milestone do GitHub). Se ausente, não inicie — registre em Pendências e use `question`.
+- **Esboço da tarefa:** descrição da feature, fix ou refatoração.
+- **Acesso à codebase:** necessário para pesquisa e validação.
 
 ---
 
-## Diretrizes de Execução
+## Princípios Invioláveis
 
-### 1. Pesquisa e Contextualização
+Estas regras aplicam-se a toda a spec. Não as repita nas seções — referencie este bloco.
 
-#### 1.1 PRD
+1. **Caminhos reais.** Todo arquivo citado deve existir no projeto ou estar marcado como **novo arquivo**.
+2. **Sem invenção.** Não invente arquivos, métodos, contratos, schemas ou integrações sem evidência no PRD ou codebase.
+3. **Sem testes.** A spec não inclui testes automatizados.
+4. **Core isolado.** Não proponha acoplamento cross-domain no `core` sem evidência explícita na codebase.
+5. **Borda é borda.** Se autenticação, autorização, ownership, montagem de contexto ou adaptação de transporte já vivem em `controller`, `middleware`, `tool` ou `router`, a spec preserva esse padrão — não empurre para `use case`.
+6. **Schemas estritos.** Campos controlados pelo servidor (ex: `author`, `userId`, `status`) não entram em schemas de entrada; use schemas derivados na borda.
+7. **Authn ≠ Authz ≠ Domínio.** Não funda essas responsabilidades sem evidência de que o projeto já faz isso naquele fluxo.
+8. **Migrations canônicas.** Novas migrations vão em `apps/server/supabase/migrations/**`. Só inclua migration quando houver mudança real de schema. Se não houver, declare explicitamente.
+9. **Dúvida = Pendência.** Ao detectar transgressão arquitetural ou falta de evidência, registre em Pendências e use `question`. Não decida por conta própria quando o impacto for alto.
+10. **Consistência > Criatividade.** Siga os padrões existentes na codebase (nomenclatura, organização, contratos por camada). Se a seção não se aplicar, escreva **Não aplicável**.
 
-Antes de escrever a spec:
-- Leia o PRD associado à spec, sendo que ela é uma milestone do GitHub.
-- Identifique requisitos relevantes para implementação.
-- **Não replique o PRD completo**; resuma apenas o que impacta a execução técnica.
+---
 
-#### 1.2 Identificação de camadas e apps/pacotes
+## Processo de Execução
 
-- Leia `documentation/rules/rules.md` e identifique:
-  - Quais apps serão tocados (`server`, `web`, `studio`)
-  - Quais camadas serão envolvidas por app (ex: `ui`, `rest`, `database`, `ai` etc)
-- Com base nisso, defina:
-  - Quantos subagentes serão criados (um por app tocado + um para pacotes compartilhados, quando aplicável)
-  - O escopo exato de cada subagente antes de delegar
+### 1. Pesquisa
 
-#### 1.3 Delegação para subagentes
+#### 1.1 Leitura do PRD
+Leia o PRD (milestone do GitHub). Resuma apenas o que impacta execução técnica — não replique o PRD.
 
-Distribua estrategicamente a pesquisa da codebase por app/pacote para subagentes especializados, conforme o escopo definido em 1.2.
+#### 1.2 Identificação de escopo
+Leia `documentation/rules/rules.md` e identifique:
+- Quais apps serão tocados (`server`, `web`, `studio`)
+- Quais camadas por app (ex: `ui`, `rest`, `database`, `ai`)
 
-Cada subagente deve **pesquisar e reportar**, sem tomar decisões de implementação. O agente principal é responsável pela síntese e pelas decisões finais.
+#### 1.3 Pesquisa da codebase
 
-Cada subagente deve retornar:
+Se o escopo tocar **múltiplos apps**, use subagentes (um por app + um para pacotes compartilhados). Cada subagente pesquisa e reporta — não toma decisões. Se subagentes não estiverem disponíveis, pesquise sequencialmente por app.
 
-**Mapeamento do que existe:**
-- Arquivos e módulos diretamente relacionados à feature (com caminhos relativos reais)
-- Implementações similares na codebase que devem servir de referência
-- Dependências envolvidas (libs, providers, interfaces do core)
-- Contratos existentes que a feature deve respeitar (interfaces, schemas, tipos)
+**Despacho — o que enviar ao subagente:**
 
-**Fluxo de dados:**
-- Como dados trafegam nas camadas relevantes para essa feature
-- Onde o fluxo atual precisaria ser estendido ou alterado
+```
+App/pacote: <nome do app ou pacote>
+Camadas prováveis: <camadas identificadas em 1.2 para este app>
+Regras da(s) camada(s): <caminhos dos arquivos de regra relevantes em documentation/rules/>
+Resumo do PRD: <apenas os requisitos que impactam este app — não envie o PRD inteiro>
 
-**Pontos de atenção:**
-- Arquivos que provavelmente serão impactados e por quê
-- Padrões que devem ser seguidos com base no que foi encontrado
-- Riscos, acoplamentos ou inconsistências observadas
+Instrução: pesquise a codebase deste app e retorne o relatório abaixo. Não tome decisões de implementação.
+```
 
-**Lacunas:**
-- O que não foi encontrado e seria esperado
-- Dúvidas que dependem de confirmação antes de implementar
+> Não envie o PRD completo, todas as rules, nem o contexto de outros apps ao subagente. Apenas o mínimo necessário para o escopo dele.
+
+**Retorno — o que cada subagente deve devolver (obrigatório):**
+
+| Seção | Detalhe |
+|---|---|
+| **Mapeamento** | Arquivos relacionados (caminhos reais), implementações similares como referência, dependências e contratos existentes |
+| **Fluxo de dados** | Como dados trafegam nas camadas relevantes e onde o fluxo precisa mudar |
+| **Atenção** | Arquivos impactados, padrões a seguir, riscos e acoplamentos |
+| **Lacunas** | O que não foi encontrado e seria esperado |
 
 #### 1.4 Síntese
+Consolide as descobertas e tome as decisões de implementação:
+- Resolva conflitos entre relatórios de diferentes apps
+- Defina o que será criado, modificado e removido — com justificativa baseada em evidência
+- Para features multi-app, mapeie o contrato entre eles: qual app expõe, qual consome e o formato (REST, RPC, evento)
+- Registre em Pendências tudo sem evidência suficiente
 
-O agente principal consolida as descobertas dos subagentes e, com base nelas, toma as decisões de implementação:
+### 2. Roteamento de Ferramentas
 
-- Resolve conflitos ou sobreposições entre os relatórios dos subagentes
-- Define o que será criado, modificado e removido — com justificativa baseada nas evidências coletadas
-- Prioriza consistência com os padrões identificados na codebase
-- Para features que tocam múltiplos apps, mapeia explicitamente o contrato entre eles: qual app expõe, qual consome e qual o formato de comunicação (REST, RPC, evento). Esse contrato deve aparecer na seção 9 (Diagramas) como fluxo de dados cross-app.
-- Registra em **Pendências / Dúvidas** (seção 10) tudo que não teve evidência suficiente para decidir
+| Situação | Ferramenta | Exemplo |
+|---|---|---|
+| Localizar arquivos e implementações similares na codebase | MCP Serena ou busca direta no filesystem | Pesquisar controllers de `challenging` |
+| Dúvida sobre API/uso de biblioteca específica | MCP Context7 | Como configurar `createSignedUploadUrl` no Supabase |
+| Lacuna no PRD, decisão crítica sem evidência | `question` | Confirmar se ownership check deve ficar no middleware |
 
-#### 1.5 Guardrails de arquitetura
-
-Antes de propor criação ou alteração em `core`, valide explicitamente os limites entre domínios e camadas com base na codebase real.
-
-- **Não cruze domínios no core sem evidência forte na codebase.**
-  Exemplo: um use case de `auth` não deve depender de `UsersRepository` do domínio `profile` apenas para resolver autorização/permissão, a menos que já exista um padrão consolidado assim no projeto.
-- **Não mova regra de aplicação para o core quando ela já vive na borda.**
-  Se autenticação, autorização por papel/insígnia, ownership check, montagem de contexto HTTP, ou adaptação de payload já acontecem em `controller`, `middleware`, `tool`, `router` ou outro adapter da app, a spec deve preservar esse padrão em vez de empurrá-lo para `use case` por conveniência.
-- **Diferencie claramente autenticação, autorização e regra de domínio.**
-  - Autenticação: validar credencial e resolver identidade.
-  - Autorização: verificar se a identidade pode acessar/operar o recurso.
-  - Regra de domínio: invariantes e comportamentos do módulo.
-  Essas três responsabilidades não devem ser fundidas na spec sem evidência concreta de que o projeto já faz isso naquele fluxo.
-- **Evite que schemas/boundaries aceitem campos controlados pelo servidor.**
-  Se um campo é definido pelo sistema no fluxo descrito pelo PRD (ex: `author`, `isPublic`, `status`, `userId`), a spec deve preferir schemas derivados/estritos na borda, em vez de aceitar o contrato completo e “sobrescrever depois”.
-- **Ao detectar possível transgressão arquitetural, não decida por conta própria.**
-  Registre em **Pendências / Dúvidas** e use a tool `question` quando o impacto for alto.
+> Decisões de arquitetura seguem `documentation/rules/` — não use Context7 para isso.
 
 ---
 
-### 2. Uso de Ferramentas Auxiliares
+## Estrutura do Documento
 
-- **MCP Serena:** Use para localizar arquivos e implementações similares na codebase. Acione sempre na fase de pesquisa dos subagentes.
-- **MCP Context7:** Use quando houver dúvida sobre uso correto de uma biblioteca específica (ex: `shadcn/ui`, `radix-ui`, `inngest`, `supabase`, `hono`, `zod`). Não use para decisões de arquitetura — essas seguem as regras do projeto.
-- **Tool `question`:** Use quando houver lacunas no PRD, incongruências com a codebase ou decisões críticas sem evidência suficiente. Não avance sem resposta quando o impacto for alto.
-
----
-
-## Estrutura do Documento (Markdown)
-
-Gere o arquivo Markdown da Spec seguindo **estritamente** o modelo de seções abaixo.
-
-### Cabeçalho (Frontmatter)
+### Frontmatter
 
 ```md
 ---
 title: <Título claro>
-prd: <link para o PRD referente à spec, sendo uma milestone do GitHub>
-issue: <link para o issue referente à spec, servindo como esboço para a spec>
-apps: <server|studio|web> lista de apps que serão impactados pela spec, separados por vírgula
+prd: <link da milestone GitHub>
+issue: <link do issue/esboço>
+apps: <server|studio|web> (separados por vírgula)
 status: <open|closed>
 last_updated_at: <YYYY-MM-DD>
 ---
 ```
 
----
-
-# 1. Objetivo (Obrigatório)
-
-[Resumo claro em um parágrafo do que será entregue funcionalmente e tecnicamente.]
+O campo `apps` filtra quais camadas incluir nas seções 4, 5 e 6. Se `apps: web`, exclua Hono Routes, Inngest Functions, etc.
 
 ---
 
-# 2. Escopo (Obrigatório)
+### Seções
 
-## 2.1 In-scope
+#### 1. Objetivo (Obrigatório)
+Resumo em um parágrafo do que será entregue funcional e tecnicamente.
 
-[Liste o que está contemplado por esta spec.]
+#### 2. Escopo (Obrigatório)
+- **2.1 In-scope:** o que está contemplado.
+- **2.2 Out-of-scope:** o que não será tratado.
 
-## 2.2 Out-of-scope
+#### 3. Requisitos (Obrigatório)
+- **3.1 Funcionais:** resumidos do PRD — apenas o que impacta implementação.
+- **3.2 Não funcionais:** apenas critérios verificáveis (performance, segurança, latência etc). Se nenhum se aplicar, omita a subseção.
 
-[Liste explicitamente o que não será tratado nesta spec.]
+#### 4. O que já existe? (Obrigatório)
+Agrupe por camada. Para cada item:
+`**NomeDoModulo** (caminho/relativo) — breve descrição do uso`
 
----
+#### 5. O que deve ser criado? (Depende da tarefa)
 
-# 3. Requisitos (Obrigatório)
+Inclua apenas as camadas tocadas pelo `apps` do frontmatter. Para cada novo arquivo, marque como **(novo arquivo)**. Para métodos, use: `assinatura TypeScript` — responsabilidade em uma linha. Não escreva implementação.
 
-## 3.1 Funcionais
+##### Core (Use Cases)
 
-[Liste os requisitos funcionais relevantes para implementação, resumidos a partir do PRD.]
+- **Localização:** caminho
+- **Dependências:** o que deve ser injetado
+- **Request/Response:** valores de entrada e saída
+- **Métodos:** `assinatura TypeScript` — responsabilidade
 
-## 3.2 Não funcionais
+##### REST (Controllers)
 
-[Liste apenas requisitos técnicos verificáveis/mensuráveis, quando aplicável.]
+- **Localização:** caminho
+- **Dependências:** o que deve ser injetado
+- **Request/Response:** valores de entrada e saída
+- **Métodos:** `assinatura TypeScript` — responsabilidade
 
-Exemplos de categorias (usar apenas se aplicável):
+##### REST (Services)
 
-* Performance
-* Segurança
-* Observabilidade
-* Resiliência
-* Idempotência
-* Compatibilidade retroativa
-* Acessibilidade
-* Latência
+- **Localização:** caminho
+- **Dependências:** o que deve ser injetado
+- **Métodos:** `assinatura TypeScript` — responsabilidade
 
-> Evite requisitos vagos (ex: "ser rápido"). Prefira critérios verificáveis.
+##### Database (Repositories)
 
----
+- **Localização:** caminho
+- **Dependências:** o que deve ser injetado
+- **Métodos:** `assinatura TypeScript` — responsabilidade
 
-# 4. O que já existe? (Obrigatório)
+##### Database (Migrations)
 
-[Liste recursos da codebase que serão utilizados ou impactados.]
+- **Localização:** `apps/server/supabase/migrations/<timestamp>_<descricao>.sql`
+- **Objetivo:** alteração estrutural (tabela, coluna, índice, view, constraint, grants)
+- **Escopo SQL:** o que será criado, alterado ou removido
+- **Segurança:** grants e RLS (diga explicitamente se haverá ou não)
+- **Reflexos em código:** `Database.ts`, types, mappers, repositories impactados
 
-## [Nome da Camada]
+##### Database (Mappers)
 
-* **`NomeDaClasseOuModulo`** (`caminho/relativo/do/arquivo`) - *[Breve descrição do uso (ex: método a chamar, store a consumir, widget base, schema similar).]*
+- **Localização:** caminho
+- **Métodos:** `assinatura TypeScript` — responsabilidade
 
----
+##### Database (Types)
 
-# 5. O que deve ser criado? (Depende da tarefa)
+- **Localização:** caminho
+- **Props:** propriedades do tipo
 
-[Descreva novos componentes dividindo por camadas. Para cada arquivo novo, detalhe e marque explicitamente como **novo arquivo**.]
+##### Provision (Providers)
 
-> **Nível de detalhe esperado em métodos:** descreva a assinatura em TypeScript (nome, parâmetros tipados e retorno) e uma linha de responsabilidade. Não escreva implementação — a spec define contratos, não código.
->
-> Exemplo: `findByUserId(userId: string): Promise<Challenge | null>` — busca um desafio ativo pelo ID do usuário, retorna `null` se não encontrado.
+- **Localização:** caminho
+- **Dependências:** o que deve ser injetado
+- **Biblioteca:** nome da lib usada
+- **Métodos:** `assinatura TypeScript` — responsabilidade
 
-## Camada Core (Use Cases)
+##### Validation (Schemas)
 
-* **Localização:** `caminho/do/arquivo`
-* **Dependências:** O que deve ser injetado
-* **Dados de request:** Liste os valores que devem ser recebidos pelo controller
-* **Dados de response:** Liste os valores que devem ser retornados pelo controller
-* **Métodos:** Assinatura e responsabilidade
+- **Localização:** caminho
+- **Atributos:** dados validados com Zod
 
-## Camada REST (Controllers)
+##### RPC (Actions)
 
-* **Localização:** `caminho/do/arquivo`
-* **Dependências:** O que deve ser injetado
-* **Dados de request:** Liste os valores que devem ser recebidos pelo controller
-* **Dados de response:** Liste os valores que devem ser retornados pelo controller
-* **Métodos:** Assinatura e responsabilidade
+- **Localização:** caminho
+- **Dependências:** o que deve ser injetado
+- **Request/Response:** valores de entrada e saída
+- **Métodos:** `assinatura TypeScript` — responsabilidade
 
-## Camada REST (Services)
+##### UI (Widgets)
 
-* **Localização:** `caminho/do/arquivo`
-* **Dependências:** O que deve ser injetado
-* **Métodos:** Assinatura e responsabilidade
+- **Localização:** caminho
+- **Props:** parâmetros recebidos
+- **Estados:** Loading, Error, Empty, Content
+- **View:** nome e caminho
+- **Hook (se aplicável):** nome e caminho
+- **Index:** hooks, actions e stores usadas
+- **Widgets internos:** filhos a criar
+- **Estrutura de pastas:** se houver filhos, descreva a árvore completa
 
-## Camada Banco de Dados (Repositories)
+##### UI (Stores)
 
-* **Localização:** `caminho/do/arquivo`
-* **Dependências:** O que deve ser injetado
-* **Métodos:** Assinatura e responsabilidade
+- **Localização:** caminho
+- **Props:** parâmetros do construtor
+- **Estados:** estrutura (Loading, Error, Data)
+- **Actions:** métodos de mutação
 
-## Camada Banco de Dados (Migrations)
+##### UI (Contexts)
 
-* **Localização:** `apps/server/supabase/migrations/<timestamp>_<descricao>.sql` ou `Não aplicável`
-* **Objetivo:** Descreva a alteração estrutural no banco (tabela, coluna, índice, view, constraint, grants etc.)
-* **Escopo SQL:** Liste exatamente o que deve ser criado, alterado ou removido
-* **Segurança:** Descreva grants esperados e diga explicitamente se haverá ou não RLS
-* **Dependências de código:** Liste os artefatos que precisarão refletir a migration (`Database.ts`, types, mappers, repositories)
+- **Localização:** caminho da pasta
+- **Props:** parâmetros via props
+- **Hook do provider:** nome e caminho
+- **Responsabilidade:** lista de responsabilidades
+- **Value:** dados e métodos disponibilizados aos filhos
 
-> **Regras para migrations na spec:**
-> - Use `apps/server/supabase/migrations/**` como diretório canônico para novas migrations.
-> - Não trate `apps/server/src/database/supabase/migrations/**` como destino de novas migrations; esse diretório pode existir como snapshot/schema remoto e não deve ser proposto como fonte principal da mudança.
-> - Só inclua a seção de migration quando houver mudança real de schema/grants/view/índice/constraint no banco.
-> - Se a alteração de banco já existir e a entrega apenas propagar tipos/código, escreva explicitamente em escopo ou decisões que **não haverá migration nesta entrega**.
-> - Ao propor migration, detalhe também os reflexos obrigatórios em `apps/server/src/database/supabase/types/Database.ts` e nos adapters da camada database.
+##### AI (Workflows)
 
-## Camada Banco de Dados (Mappers)
+- **Localização:** caminho
+- **Dependências:** o que deve ser injetado
+- **Entrada/Saída:** dados processados
+- **Métodos:** `assinatura TypeScript` — responsabilidade
 
-* **Localização:** `caminho/do/arquivo`
-* **Métodos:** Assinatura e responsabilidade
+##### AI (Tools)
 
-## Camada Banco de Dados (Types)
+- **Localização:** caminho
+- **Dependências:** o que deve ser injetado
+- **Request/Response:** valores de entrada e saída
+- **Métodos:** `assinatura TypeScript` — responsabilidade
 
-* **Localização:** `caminho/do/arquivo`
-* **props:** Propriedades do tipo
+##### Hono App (Routes) — apenas `apps: server`
 
-## Camada Provision (Providers)
+- **Localização:** caminho
+- **Middlewares:** lista
+- **Caminho da rota:** relativo à raiz da API
+- **Dados de schema:** Zod Schema
 
-* **Localização:** `caminho/do/arquivo`
-* **Dependências:** O que deve ser injetado
-* **Biblioteca:** Nome da biblioteca utilizada pelo provider
-* **Métodos:** Assinatura e responsabilidade
+##### Inngest App (Functions) — apenas `apps: server`
 
-## Pacote Validation (Schemas)
+- **Localização:** caminho
+- **Métodos:** `assinatura TypeScript` — responsabilidade
 
-* **Localização:** `caminho/do/arquivo`
-* **Atributos:** Dados que devem ser validados com Zod
+##### Next.js App (Pages, Layouts) — apenas `apps: web`
 
-## Camada RPC (Actions)
+- **Localização:** caminho
+- **Widget principal:** widget da rota
+- **Caminho da rota:** relativo à raiz Next.js
 
-* **Localização:** `caminho/do/arquivo`
-* **Dependências:** O que deve ser injetado
-* **Dados de request:** Liste os valores que devem ser recebidos pela action
-* **Dados de response:** Liste os valores que devem ser retornados pela action
-* **Métodos:** Assinatura e responsabilidade
+##### React Router App (Pages, Layouts) — apenas `apps: studio`
 
-## Camada UI (Widgets)
+- **Localização:** caminho
+- **Widget principal:** widget da rota
+- **Caminho da rota:** relativo à raiz React Router
 
-* **Localização:** `caminho/do/arquivo`
-* **Props:** Parâmetros recebidos
-* **Estados (Client Component):** Como se comporta em Loading, Error, Empty, Content
-* **View:** Nome e caminho da view do widget
-* **Hook (se aplicável):** Nome e caminho do hook do widget
-* **Index:** Hooks, actions e stores usadas no index
-* **Widgets internos:** Widgets filhos a serem criados
-* **Estrutura de pastas:** Caso haja widgets internos, escreva a estrutura completa do widget pai
+> Se uma camada não se aplicar, **não a inclua**. Se precisar de uma camada não listada acima, adicione seguindo o mesmo padrão.
 
-## Camada UI (Stores)
+#### 6. O que deve ser modificado? (Depende da tarefa)
+Para cada alteração:
+- **Arquivo:** caminho
+- **Mudança:** o que muda
+- **Justificativa:** por quê
 
-* **Localização:** `caminho/do/arquivo`
-* **Props:** Parâmetros recebidos no construtor
-* **Estados:** Estrutura do estado (Loading, Error, Data)
-* **Actions:** Métodos de mutação
+Se não houver: **Não aplicável**.
 
-## Camada UI (Contexts)
+#### 7. O que deve ser removido? (Depende da tarefa)
+Para cada remoção:
+- **Arquivo:** caminho
+- **Motivo:** por quê
+- **Impacto:** dependências afetadas
 
-* **Localização:** `caminho/da/pasta`
-* **Props:** Parâmetros recebidos via props
-* **Hook do provider:** Nome e caminho do hook do provider
-* **Responsabilidade:** Lista de responsabilidades do context
-* **Value:** Objeto que contém os dados e métodos disponibilizados aos filhos
+Se não houver: **Não aplicável**.
 
-## Camada AI (Workflows)
+#### 8. Decisões Técnicas (Obrigatório)
+Para cada decisão relevante: decisão, alternativas, motivo, trade-offs.
 
-* **Localização:** `caminho/do/arquivo`
-* **Dependências:** O que deve ser injetado
-* **Entrada/Saída:** Dados processados
-* **Métodos:** Assinatura e responsabilidade
+#### 9. Diagramas e Referências (Obrigatório)
+- **Fluxo de dados:** diagrama Mermaid mostrando interação entre camadas.
+- **Fluxo cross-app (se multi-app):** qual app expõe, qual consome, formato de comunicação.
+- **Layout (se UI):** ASCII da hierarquia visual.
+- **Referências:** caminhos de arquivos similares na codebase.
 
-## Camada AI (Tools)
-
-* **Localização:** `caminho/do/arquivo`
-* **Dependências:** O que deve ser injetado
-* **Dados de request:** Liste os valores que devem ser recebidos pelo controller
-* **Dados de response:** Liste os valores que devem ser retornados pelo controller
-* **Métodos:** Assinatura e responsabilidade
-
-## Camada Hono App (Routes)
-
-* **Localização:** `caminho/do/arquivo`
-* **Middlewares:** Lista de middlewares
-* **Caminho da rota:** Relativo à raiz da API
-* **Dados de schema:** Zod Schema para validação
-
-## Camada Inngest App (Functions)
-
-* **Localização:** `caminho/do/arquivo`
-* **Métodos:** Assinatura e responsabilidade
-
-## Camada Next.js App (Pages, Layouts)
-
-* **Localização:** `caminho/do/arquivo`
-* **Widget principal:** Widget principal da rota
-* **Caminho da rota:** Relativo à raiz da aplicação Next.js
-
-## Camada React Router App (Pages, Layouts)
-
-* **Localização:** `caminho/do/arquivo`
-* **Widget principal:** Widget principal da rota
-* **Caminho da rota:** Relativo à raiz da aplicação React Router
-
-> Se uma camada não se aplicar, **não inclua ela na spec**.
-> Se achar necessário falar sobre um recurso não mapeado na seção acima, sinta-se livre para adicionar uma seção extra seguindo o padrão condizente com os outros recursos mapeados.
-
----
-
-# 6. O que deve ser modificado? (Depende da tarefa)
-
-[Descreva alterações em código existente.]
-
-## [Nome da Camada]
-
-* **Arquivo:** `caminho/do/arquivo`
-* **Mudança:** [Descreva a mudança específica (ex: "Adicionar prop `onTap`", "Injetar novo service")]
-* **Justificativa:** [Explique por que a mudança é necessária]
-* **Camada:** `ui` | `core` | `rest` | `provision` | `queue` | `database` | `ai` | `realtime` | `rpc`
-
-> Se não houver alterações em código existente, escrever: **Não aplicável**.
-
----
-
-# 7. O que deve ser removido? (Depende da tarefa)
-
-[Descreva remoções de código legado, APIs antigas, widgets obsoletos ou limpeza de refatoração.]
-
-## [Nome da Camada]
-
-* **Arquivo:** `caminho/do/arquivo`
-* **Motivo da remoção:** [Explique por que pode ser removido]
-* **Impacto esperado:** [Explique impacto e dependências, se houver]
-
-> Se não houver remoções, escrever: **Não aplicável**.
-
----
-
-# 8. Decisões Técnicas e Trade-offs (Obrigatório)
-
-[Registre decisões relevantes para revisão futura.]
-
-Para cada decisão importante:
-
-* **Decisão**
-* **Alternativas consideradas**
-* **Motivo da escolha**
-* **Impactos / trade-offs**
-
----
-
-# 9. Diagramas e Referências (Obrigatório)
-
-* **Fluxo de Dados:** Gere um diagrama em notação ASCII ou text-based mostrando a interação entre camadas.
-* **Fluxo Cross-app (se aplicável):** Para features que tocam múltiplos apps, inclua um diagrama explicitando qual app expõe, qual consome e o formato de comunicação (REST, RPC, evento).
-* **Layout (se aplicável):** Use ASCII para representar a hierarquia visual de telas e widgets complexos.
-* **Referências:** Liste links/caminhos de arquivos similares na codebase para servir de exemplo.
-
----
-
-# 10. Pendências / Dúvidas (Quando aplicável)
-
-[Liste perguntas em aberto, incongruências e pontos que dependem de confirmação.]
-
-Para cada item:
-
-* **Descrição da pendência**
-* **Impacto na implementação**
-* **Ação sugerida:** (ex: usar tool `question`, validar com produto, validar com arquitetura)
-
-> Se não houver pendências, escrever: **Sem pendências**.
-
----
-
-## Restrições (Obrigatório)
-
-* **Não inclua testes automatizados na spec.**
-* Todos os caminhos citados devem existir no projeto **ou** estar explicitamente marcados como **novo arquivo**.
-* **Não invente** arquivos, métodos, contratos, schemas ou integrações sem evidência no PRD/codebase.
-* **Não invente migrations** quando a alteração de banco não for necessária ou já existir; se houver migration, use como referência apenas `apps/server/supabase/migrations/**`.
-* **Não proponha acoplamento cross-domain no `core` sem evidência explícita na codebase.** Se a necessidade for autenticação, autorização, ownership, montagem de contexto ou adaptação de transporte, prefira manter isso na borda da app quando esse já for o padrão encontrado.
-* **Não use o `core` para resolver conveniências da app.** Se uma responsabilidade pertence a `middleware`, `controller`, `toolset`, `router` ou adapter local, a spec não deve empurrá-la para `use case` apenas para “centralizar”.
-* **Não exponha em schemas de entrada campos controlados pelo servidor** quando o fluxo do PRD exigir que esses valores sejam definidos internamente.
-* Quando faltar informação suficiente, registrar em **Pendências / Dúvidas** e usar a tool `question` se necessário.
-* Toda referência a código existente deve incluir caminho relativo real.
-* Se uma seção não se aplicar, preencher explicitamente com **Não aplicável**.
-* A spec deve ser consistente com os padrões já existentes na codebase (nomenclatura, organização de pastas, contratos e convenções por camada).
+#### 10. Pendências / Dúvidas (Quando aplicável)
+Para cada item: descrição, impacto, ação sugerida.
+Se não houver: **Sem pendências**.
