@@ -11,6 +11,7 @@ Orientar a criacao de testes unitarios e de integracao **padronizados** e **efic
 - integridade da logica de negocio
 - orquestracao correta de `handlers`
 - fidelidade da borda HTTP nas rotas da aplicacao server
+- fidelidade das entradas da app web baseadas em `Next.js App Router`
 - fidelidade funcional de componentes de UI
 
 ## Escopo permitido
@@ -22,6 +23,7 @@ No StarDust, **so e permitido criar testes para**:
 - `View` ou `Hook`
 - `handlers` (`Controller`, `Job`, `Action`, `Tool`)
 - rotas HTTP da app server (`apps/server`) via testes de integracao
+- paginas e fluxos da app web (`apps/web/src/app/**`)
 
 **Nao e permitido criar testes novos** para `repository`, `service`, `provider`,
 `gateway`, `client`, `mapper`, `factory`, `config`, adaptadores de
@@ -58,6 +60,7 @@ Identifique o tipo de codigo e siga a regra correspondente em `documentation/rul
 - **Casos de uso:** [use-cases-testing-rules.md](../rules/use-cases-testing-rules.md)
 - **Handlers** (`REST`, `RPC`, `AI`, `Queue`): [handlers-testing-rules.md](../rules/handlers-testing-rules.md)
 - **Rotas HTTP da app server:** [server-routes-testing-rules.md](../rules/server-routes-testing-rules.md)
+- **Rotas e paginas da app web:** [web-app-routes-testing-rules.md](../rules/web-app-routes-testing-rules.md)
 - **Widgets** (UI): [widget-tests-rules.md](../rules/widget-tests-rules.md)
 
 Se o arquivo nao pertencer a uma dessas categorias permitidas, interrompa a
@@ -68,12 +71,14 @@ receber testes dedicados segundo as regras do projeto.
 
 - **Localizacao padrao:** crie testes **co-localizados** em uma subpasta `tests/` no diretorio do arquivo original.
 - **Excecao para rotas do server:** crie os testes em `apps/server/src/tests/routes/<dominio>/...`, espelhando o dominio e o recurso testado.
+- **Excecao para paginas da app web:** crie testes co-localizados em `tests/page.test.tsx` no diretorio da pagina; para fluxos de navegador, use `apps/web/src/app/tests/<dominio>/...`.
 - **Extensao:**
 
 | Tipo | Extensao |
 | --- | --- |
 | Logica e `handlers` | `.test.ts` |
 | Rotas HTTP do server | `.test.ts` |
+| Paginas e fluxos da app web | `.test.tsx` ou `.test.ts` |
 | Componentes (`Widget`, `Page`) | `.test.tsx` |
 
 - **Exemplo:**
@@ -101,6 +106,7 @@ receber testes dedicados segundo as regras do projeto.
 - **Use cases:** 100% da logica de negocio, cobrindo `happy path` e todas as excecoes de dominio.
 - **Handlers:** extracao de dados do contexto (`Http`, `Call`, `Amqp`, `Mcp`), orquestracao do caso de uso/servico e formatacao da resposta.
 - **Rotas HTTP do server:** exercitar a app Hono real, cobrindo autenticacao, validacao, autorizacao, mapeamento de erros, payload de resposta e efeitos persistidos no banco sem mockar dependencias internas, salvo necessidade excepcional.
+- **Paginas e fluxos da app web:** para `page.tsx`, validar composicao de borda do App Router com mocks da borda web; para fluxos reais do navegador, usar Playwright com `ServerMock(page)` e bridges test-only da propria web.
 - **Widgets:**
   - testar `hooks` e `views` separadamente usando `Hook()` e `View()`
   - para formularios complexos, testar integracao no `Widget` (Index)
