@@ -9,6 +9,10 @@ import { NextServerRestClient } from './rest/next/NextServerRestClient'
 import { PUBLIC_ROUTE_GROUPS, PUBLIC_ROUTES, ROUTES } from './constants'
 
 export const middleware = async (request: NextRequest) => {
+  if (request.nextUrl.pathname.startsWith('/api/tests/server')) {
+    return NextResponse.next()
+  }
+
   const http = await NextHttp({ request })
   const restClient = await NextServerRestClient({ isCacheEnabled: false })
 
