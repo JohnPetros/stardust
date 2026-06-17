@@ -32,11 +32,15 @@
     "./auth/entities/dtos": "./src/auth/domain/entities/dtos/index.ts",
     "./auth/entities/fakers": {
       "types": "./src/auth/domain/entities/fakers/index.ts",
+      "import": "./build/main.js",
+      "require": "./build/main.js",
       "default": "./build/main.js"
     },
     "./auth/structures": "./src/auth/domain/structures/index.ts",
     "./auth/structures/fakers": {
       "types": "./src/auth/domain/structures/fakers/index.ts",
+      "import": "./build/main.js",
+      "require": "./build/main.js",
       "default": "./build/main.js"
     },
     "./auth/structures/dtos": "./src/auth/domain/structures/dtos/index.ts",
@@ -51,6 +55,8 @@
     "./global/structures": "./src/global/domain/structures/index.ts",
     "./global/structures/fakers": {
       "types": "./src/global/domain/structures/fakers/index.ts",
+      "import": "./build/main.js",
+      "require": "./build/main.js",
       "default": "./build/main.js"
     },
     "./global/structures/dtos": "./src/global/domain/structures/dtos/index.ts",
@@ -137,6 +143,8 @@
     "./profile/errors": "./src/profile/domain/errors/index.ts",
     "./profile/entities/fakers": {
       "types": "./src/profile/domain/entities/fakers/index.ts",
+      "import": "./build/main.js",
+      "require": "./build/main.js",
       "default": "./build/main.js"
     },
     "./profile/structures/fakers": "./src/profile/domain/structures/fakers/index.ts",
