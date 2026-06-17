@@ -16,21 +16,6 @@ permissions:
 env:
   NODE_VERSION: "22"
 
-x-install-dependencies: &install-dependencies
-  name: Install dependencies
-  shell: bash
-  run: |
-    for attempt in 1 2 3; do
-      npm ci --prefer-offline --no-audit && exit 0
-
-      if [ "$attempt" -eq 3 ]; then
-        exit 1
-      fi
-
-      echo "npm ci failed on attempt $attempt. Retrying in 15 seconds..."
-      sleep 15
-    done
-
 jobs:
   codecheck:
     name: Codecheck
@@ -47,7 +32,19 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - <<: *install-dependencies
+      - name: Install dependencies
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            npm ci --prefer-offline --no-audit && exit 0
+
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+
+            echo "npm ci failed on attempt $attempt. Retrying in 15 seconds..."
+            sleep 15
+          done
 
       - name: Run codecheck
         run: npm run codecheck -w @stardust/web
@@ -67,7 +64,19 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - <<: *install-dependencies
+      - name: Install dependencies
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            npm ci --prefer-offline --no-audit && exit 0
+
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+
+            echo "npm ci failed on attempt $attempt. Retrying in 15 seconds..."
+            sleep 15
+          done
 
       - name: Run typecheck
         run: npm run typecheck -w @stardust/web
@@ -91,7 +100,19 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - <<: *install-dependencies
+      - name: Install dependencies
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            npm ci --prefer-offline --no-audit && exit 0
+
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+
+            echo "npm ci failed on attempt $attempt. Retrying in 15 seconds..."
+            sleep 15
+          done
 
       - name: Run tests
         run: npm run test -w @stardust/web
@@ -115,7 +136,19 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - <<: *install-dependencies
+      - name: Install dependencies
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            npm ci --prefer-offline --no-audit && exit 0
+
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+
+            echo "npm ci failed on attempt $attempt. Retrying in 15 seconds..."
+            sleep 15
+          done
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
@@ -147,7 +180,19 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - <<: *install-dependencies
+      - name: Install dependencies
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            npm ci --prefer-offline --no-audit && exit 0
+
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+
+            echo "npm ci failed on attempt $attempt. Retrying in 15 seconds..."
+            sleep 15
+          done
 
       - name: Build project
         run: npm run build:web
