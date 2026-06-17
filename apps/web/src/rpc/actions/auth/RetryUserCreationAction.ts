@@ -2,7 +2,12 @@ import type { AuthService } from '@stardust/core/auth/interfaces'
 import { AccountSignedUpEvent } from '@stardust/core/auth/events'
 import { AppError } from '@stardust/core/global/errors'
 import type { Action, Broker, Call } from '@stardust/core/global/interfaces'
-import { AccountsFaker } from '@stardust/core/auth/entities/fakers'
+
+function getFallbackAccountName(email: string) {
+  const [emailLocalPart] = email.split('@')
+
+  return emailLocalPart || 'stardust-user'
+}
 
 export const RetryUserCreationAction = (
   authService: AuthService,
@@ -18,7 +23,8 @@ export const RetryUserCreationAction = (
 
       const event = new AccountSignedUpEvent({
         accountId: account.id,
-        accountName: account.name !== '' ? account.name : AccountsFaker.fake().name.value,
+        accountName:
+          account.name !== '' ? account.name : getFallbackAccountName(account.email),
         accountEmail: account.email,
       })
 

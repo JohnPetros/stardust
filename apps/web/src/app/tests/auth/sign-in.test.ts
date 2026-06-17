@@ -66,12 +66,17 @@ test.describe('/auth/sign-in', () => {
     })
   }
 
-  function createSignInSuccessRoutes(account: AccountDto, session: unknown) {
+  function createSignInSuccessRoutes(
+    account: AccountDto,
+    session: unknown,
+    params: { signInDelayInMs?: number } = {},
+  ) {
     return [
       {
         method: 'POST',
         path: '/auth/sign-in',
         status: 200,
+        delayInMs: params.signInDelayInMs,
         body: session,
       },
       {
@@ -85,7 +90,7 @@ test.describe('/auth/sign-in', () => {
 
   async function registerSignInSuccessDefaults(
     page: Page,
-    routes: ServerMockRoute[] = [],
+    params: { signInDelayInMs?: number; routes?: ServerMockRoute[] } = {},
   ) {
     const account = createAccountDto()
     const session = {
@@ -105,7 +110,9 @@ test.describe('/auth/sign-in', () => {
           message: 'Não autorizado.',
         },
       },
-      ...createSignInSuccessRoutes(account, session),
+      ...createSignInSuccessRoutes(account, session, {
+        signInDelayInMs: params.signInDelayInMs,
+      }),
       {
         method: 'POST',
         path: '/auth/refresh-session',
@@ -115,7 +122,7 @@ test.describe('/auth/sign-in', () => {
           message: 'Não autorizado.',
         },
       },
-      ...routes,
+      ...(params.routes ?? []),
     ])
 
     return { account, session }
@@ -153,10 +160,17 @@ test.describe('/auth/sign-in', () => {
 
   async function gotoSignInPage(
     page: Page,
-    params: { nextRoute?: string; routes?: ServerMockRoute[] } = {},
+    params: {
+      nextRoute?: string
+      signInDelayInMs?: number
+      routes?: ServerMockRoute[]
+    } = {},
   ) {
     await ServerMock(page).reset()
-    const fixtures = await registerSignInSuccessDefaults(page, params.routes)
+    const fixtures = await registerSignInSuccessDefaults(page, {
+      signInDelayInMs: params.signInDelayInMs,
+      routes: params.routes,
+    })
 
     const searchParams = new URLSearchParams()
     if (params.nextRoute) searchParams.set('nextRoute', params.nextRoute)
@@ -200,7 +214,9 @@ test.describe('/auth/sign-in', () => {
   test('posts credentials and redirects to space after successful sign-in', async ({
     page,
   }) => {
-    const { account, session } = await gotoSignInPage(page)
+    const { account, session } = await gotoSignInPage(page, {
+      signInDelayInMs: 750,
+    })
     await fillValidSignInForm(page, validFields)
 
     const signInRequestPromise = page.waitForRequest((request) => {
@@ -211,7 +227,6 @@ test.describe('/auth/sign-in', () => {
     await submitSignInForm(page)
 
     const signInRequest = await signInRequestPromise
-    await signInActionResponsePromise
 
     const signInRequestPayload = decodeURIComponent(signInRequest.postData() ?? '')
 
@@ -219,6 +234,7 @@ test.describe('/auth/sign-in', () => {
     expect(signInRequestPayload).toContain(validFields.password)
 
     await registerAuthenticatedNavigationDefaults(page, account, session)
+    await signInActionResponsePromise
 
     await expect(page).toHaveURL(/\/space$/, {
       timeout: 20000,

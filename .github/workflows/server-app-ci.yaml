@@ -91,8 +91,8 @@ jobs:
 
       - name: Create test environment file
         run: |
-          printf '%s' "${{ secrets.SERVER_TEST_ENV }}" > apps/server/.env
-          printf '%s' "${{ secrets.SERVER_TEST_ENV }}" > apps/server/.env.testing
+          printf '%s' "${{ secrets.SERVER_ENV_TEST }}" > apps/server/.env
+          printf '%s' "${{ secrets.SERVER_ENV_TEST }}" > apps/server/.env.testing
 
       - name: Run tests
         run: npm run test -w @stardust/server
