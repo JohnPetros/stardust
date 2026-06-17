@@ -13,9 +13,9 @@
     "db:types": "supabase gen types typescript --project-id aukqejqsiqsqowafpppb > src/api/supabase/types/Database.ts",
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "test:integration": "playwright test --config=playwright.config.ts",
-    "test:integration:ui": "playwright test --config=playwright.config.ts --ui",
-    "test:integration:debug": "playwright test --config=playwright.config.ts --debug",
+    "test:integration": "node ../../scripts/patch-playwright-loader.js && playwright test --config=playwright.config.ts",
+    "test:integration:ui": "node ../../scripts/patch-playwright-loader.js && playwright test --config=playwright.config.ts --ui",
+    "test:integration:debug": "node ../../scripts/patch-playwright-loader.js && playwright test --config=playwright.config.ts --debug",
     "test:integration:install": "playwright install chromium"
   },
   "dependencies": {
