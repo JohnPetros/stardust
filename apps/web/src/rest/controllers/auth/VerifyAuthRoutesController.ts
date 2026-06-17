@@ -64,7 +64,8 @@ export const VerifyAuthRoutesController = (authService: AuthService): Controller
       }
 
       if (hasSession && isSignInRoute) {
-        return http.redirect(ROUTES.space)
+        const { nextRoute } = http.getQueryParams() as { nextRoute?: string }
+        return http.redirect(nextRoute ?? ROUTES.space)
       }
 
       return http.pass()

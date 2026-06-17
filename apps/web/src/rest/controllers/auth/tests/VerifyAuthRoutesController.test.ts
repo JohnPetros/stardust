@@ -36,6 +36,7 @@ describe('Verify Auth Routes Controller', () => {
     http.redirect.mockImplementation()
     http.setCookie.mockImplementation()
     http.pass.mockImplementation()
+    http.getQueryParams.mockReturnValue({})
     authService.fetchAccount.mockImplementation()
     authService.refreshSession.mockImplementation()
     mockCookieActions.getCookie.mockImplementation()
@@ -211,6 +212,18 @@ describe('Verify Auth Routes Controller', () => {
       await controller.handle(http)
 
       expect(http.redirect).toHaveBeenCalledWith(ROUTES.space)
+    })
+
+    it('should redirect authenticated user from sign in route to next route when provided', async () => {
+      http.getCurrentRoute.mockReturnValue(ROUTES.auth.signIn)
+      http.getQueryParams.mockReturnValue({ nextRoute: ROUTES.ranking })
+      authService.fetchAccount.mockResolvedValue(
+        new RestResponse({ statusCode: HTTP_STATUS_CODE.ok, body: account }),
+      )
+
+      await controller.handle(http)
+
+      expect(http.redirect).toHaveBeenCalledWith(ROUTES.ranking)
     })
   })
 

@@ -103,6 +103,10 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     getQueryParams() {
+      if (!httpSchema?.queryParams && request) {
+        return Object.fromEntries(request.nextUrl.searchParams.entries())
+      }
+
       if (!httpSchema?.queryParams) throw new AppError('Query params are not defined')
       return httpSchema?.queryParams
     },
