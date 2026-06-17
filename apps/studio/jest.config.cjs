@@ -103,8 +103,12 @@ module.exports = {
       '<rootDir>/../../packages/core/src/space/interfaces/index.ts',
     '^@stardust/core/auth/entities$':
       '<rootDir>/../../packages/core/src/auth/domain/entities/index.ts',
+    '^@stardust/core/auth/entities/fakers$':
+      '<rootDir>/../../packages/core/src/auth/domain/entities/fakers/index.ts',
     '^@stardust/core/auth/structures$':
       '<rootDir>/../../packages/core/src/auth/domain/structures/index.ts',
+    '^@stardust/core/auth/structures/fakers$':
+      '<rootDir>/../../packages/core/src/auth/domain/structures/fakers/index.ts',
     '^@stardust/core/auth/interfaces$':
       '<rootDir>/../../packages/core/src/auth/interfaces/index.ts',
     '^@stardust/core/storage/structures$':

@@ -1,16 +1,8 @@
 import { expect, test, type Page } from '@playwright/test'
 
-const SERVER_MOCK_ROUTE = '/api/tests/server'
-
-type ServerMockRoute = {
-  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
-  path: string
-  query?: Record<string, string>
-  status?: number
-  delayInMs?: number
-  body?: unknown
-  headers?: Record<string, string>
-}
+import { IdFaker } from '../../../../../../packages/core/src/global/domain/structures/fakers'
+import { ServerMock } from '../shared/mocks/ServerMock'
+import type { ServerMockRoute } from '../shared/types/ServerMockRoute'
 
 type UserCreatedPayload = {
   userId: string
@@ -28,7 +20,7 @@ test.describe('/auth/sign-up', () => {
 
   function createUserCreatedPayload(email: string, name: string): UserCreatedPayload {
     return {
-      userId: crypto.randomUUID(),
+      userId: IdFaker.fake().value,
       userEmail: email,
       userName: name,
       userSlug: name.toLowerCase().trim().replace(/\s+/g, '-'),
@@ -36,7 +28,7 @@ test.describe('/auth/sign-up', () => {
   }
 
   async function gotoSignUpPage(page: Page, routes: ServerMockRoute[] = []) {
-    const server = createServerMock(page)
+    const server = ServerMock(page)
 
     await server.registerSuccessDefaults(routes)
     await page.goto('/auth/sign-up')
@@ -72,7 +64,7 @@ test.describe('/auth/sign-up', () => {
     await page.evaluate(() => {
       window.__STARDUST_PROFILE_CHANNEL_MOCK__?.reset()
     })
-    await createServerMock(page).reset()
+    await ServerMock(page).reset()
   })
 
   test('progressively reveals sign-up fields', async ({ page }) => {
@@ -280,78 +272,3 @@ test.describe('/auth/sign-up', () => {
     )
   })
 })
-function createServerMock(page: Page) {
-  return {
-    async register(routes: ServerMockRoute[]) {
-      const response = await page.request.put(SERVER_MOCK_ROUTE, {
-        data: { routes },
-      })
-
-      if (!response.ok()) {
-        throw new Error(
-          `ServerMock.register failed: ${response.status()} ${await response.text()}`,
-        )
-      }
-    },
-
-    async reset() {
-      const response = await page.request.delete(SERVER_MOCK_ROUTE)
-
-      if (!response.ok()) {
-        throw new Error(
-          `ServerMock.reset failed: ${response.status()} ${await response.text()}`,
-        )
-      }
-    },
-
-    async registerSuccessDefaults(overrides: ServerMockRoute[] = []) {
-      const defaultRoutes: ServerMockRoute[] = [
-        {
-          method: 'GET',
-          path: '/auth/account',
-          status: 200,
-          body: null,
-        },
-        {
-          method: 'GET',
-          path: '/profile/users/verify-name-in-use',
-          status: 200,
-          body: null,
-        },
-        {
-          method: 'GET',
-          path: '/profile/users/verify-email-in-use',
-          status: 200,
-          body: null,
-        },
-        {
-          method: 'POST',
-          path: '/auth/sign-up',
-          status: 200,
-          body: null,
-        },
-      ]
-
-      const routes = [...defaultRoutes]
-
-      for (const override of overrides) {
-        const routeIndex = routes.findIndex((route) => {
-          return (
-            route.method === override.method &&
-            route.path === override.path &&
-            JSON.stringify(route.query ?? {}) === JSON.stringify(override.query ?? {})
-          )
-        })
-
-        if (routeIndex === -1) {
-          routes.push(override)
-          continue
-        }
-
-        routes[routeIndex] = override
-      }
-
-      await this.register(routes)
-    },
-  }
-}

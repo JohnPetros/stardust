@@ -1,8 +1,8 @@
 ---
-description: Prompt para concluir uma spec com validação final, atualização de documentação e geração de resumo estruturado para PR.
+description: Prompt para revisar e concluir uma spec com validação final, atualização de documentação e geração de resumo estruturado para PR.
 ---
 
-# Prompt: Conclude Spec
+# Prompt: Review Spec
 
 **Objetivo:** Finalizar e consolidar a implementação de uma Spec técnica no
 StarDust, garantindo que o código esteja polido, documentado e validado no
@@ -44,15 +44,19 @@ Com base no diff injetado no contexto e nas regras em
 `documentation/rules/domain-objects-testing-rules.md`,
 `documentation/rules/use-cases-testing-rules.md`,
 `documentation/rules/handlers-testing-rules.md` e
-`documentation/rules/widget-tests-rules.md`, verifique se os novos
+`documentation/rules/widget-tests-rules.md`,
+`documentation/rules/web-app-routes-testing-rules.md` e
+`documentation/rules/server-routes-testing-rules.md`, verifique se os novos
 comportamentos introduzidos pela Spec possuem testes correspondentes.
 No StarDust, **so e permitido criar testes para objetos de dominio, use cases,
-widgets e handlers** (`controller`, `job`, `action`, `tool`).
+widgets, handlers** (`controller`, `job`, `action`, `tool`) **e testes de rota
+quando aplicavel** (`apps/web/src/app/**/tests/**`, `apps/web/src/app/tests/**`
+e `apps/server/src/tests/routes/**`).
 **Nao crie testes novos** para adapters, repositories, providers, services,
 clients, mappers, gateways, configs, factories, arquivos de composicao ou
 qualquer outro tipo fora dessa lista. Quando a Spec alterar essas camadas,
 valide o comportamento indiretamente pelos testes permitidos da camada de
-dominio, handler ou widget que as consome.
+dominio, handler, widget ou rota que as consome.
 Considere como caminhos críticos que exigem cobertura:
 
 - Lógica de negócio nova ou modificada em `packages/core` (Use Cases,
@@ -61,8 +65,13 @@ Considere como caminhos críticos que exigem cobertura:
 - Contratos HTTP/RPC novos ou alterados (payloads, redirects, validações,
   traduções entre camadas)
 - Widgets, hooks e fluxos de UI alterados em `apps/web` ou `apps/studio`
+- Paginas, slots, fluxos reais de navegador e rotas test-only da app web em
+  `apps/web/src/app/**` ou `apps/web/src/app/tests/**`
+- Rotas HTTP da aplicacao server em `apps/server/src/tests/routes/**`, quando a
+  Spec alterar a borda exposta pelo `apps/server`
 - Integracoes novas ou alteradas que impactem objetos de dominio, use cases,
-  handlers ou widgets, sempre validando por meio dos tipos de teste permitidos
+  handlers, widgets ou rotas, sempre validando por meio dos tipos de teste
+  permitidos
 
 Ao final desta etapa, produza um relatório de cobertura no seguinte formato:
 ```markdown
@@ -79,8 +88,10 @@ Caso existam itens sem cobertura no relatório acima, acione um **subagent**
 para criá-los antes de avançar para a Fase 2.
 
 Antes de acionar o subagent, filtre a lista e mantenha **somente** componentes
-permitidos: objetos de dominio, use cases, widgets e handlers
-(`controller`, `job`, `action`, `tool`). Se a lacuna estiver em outro tipo de
+permitidos: objetos de dominio, use cases, widgets, handlers
+(`controller`, `job`, `action`, `tool`) e testes de rota quando aplicavel
+(`apps/web/src/app/**/tests/**`, `apps/web/src/app/tests/**` e
+`apps/server/src/tests/routes/**`). Se a lacuna estiver em outro tipo de
 arquivo, nao crie teste direto para ele; registre a restricao no relatorio e
 enderece a cobertura pelo componente permitido mais proximo.
 
@@ -96,7 +107,8 @@ O subagent deve receber como contexto:
 > nomenclatura e estrutura do projeto, e garantir que `npm run test` passe ao
 > final. Não avance para a Fase 2 enquanto o subagent não concluir sem falhas.
 > Ele tambem deve respeitar estritamente a politica de escopo de testes do
-> projeto: apenas objetos de dominio, use cases, widgets e handlers.
+> projeto: apenas objetos de dominio, use cases, widgets, handlers e testes de
+> rota da app web/server quando aplicavel.
 
 **1.2 Lint e Formatação**
 

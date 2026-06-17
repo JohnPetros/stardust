@@ -13,6 +13,7 @@ node_modules/
 # testing
 /coverage
 issue.md
+apps/web/playwright-report
 
 # next.js
 .next

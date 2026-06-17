@@ -8,10 +8,9 @@ description: Implementar no codebase um plano de implementacao derivado de uma s
 
 ## Entrada
 
-- Plano ativo em `documentation/plan.md` — esse e o ponto de entrada padrao.
-- Se um caminho alternativo for fornecido explicitamente, use-o no lugar de `documentation/plan.md`.
+- Caminho explicito de um arquivo de plano de implementacao fornecido pelo usuario.
 
-> O `plan.md` pode estar **novo** (nenhuma tarefa iniciada) ou **em andamento** (execucao anterior parcialmente concluida). O prompt deve lidar com ambos os casos — veja Secao 1.1.
+> Nao assuma a existencia de um plano global padrao. O arquivo de plano informado pode estar **novo** (nenhuma tarefa iniciada) ou **em andamento** (execucao anterior parcialmente concluida). O prompt deve lidar com ambos os casos — veja Secao 1.1.
 
 ---
 
@@ -21,11 +20,11 @@ description: Implementar no codebase um plano de implementacao derivado de uma s
 
 **1.1 Leitura do plano e deteccao de estado**
 
-Leia o `plan.md` na integra antes de escrever qualquer linha de codigo. Identifique: escopo, fases, mapa de paralelizacao, gargalos, criterios de aceite, riscos e pendencias. Se o documento estiver incompleto, nao invente: crie uma secao `Pendencias` e avance apenas com defaults seguros.
+Leia o arquivo de plano informado na integra antes de escrever qualquer linha de codigo. Identifique: escopo, fases, mapa de paralelizacao, gargalos, criterios de aceite, riscos e pendencias. Se o documento estiver incompleto, nao invente: crie uma secao `Pendencias` e avance apenas com defaults seguros.
 
 **Detecte o estado atual do plano** inspecionando os checkboxes e anotações das tarefas:
 
-| Condicao no `plan.md` | Acao |
+| Condicao no arquivo de plano | Acao |
 |---|---|
 | Todas as tarefas com `- [ ]` sem anotação | Plano novo — inicialize o tracking e comece pela primeira tarefa. |
 | Alguma tarefa com `- [x]` ou `⚠️ bloqueado` | Plano em andamento — **retome a partir da primeira tarefa `- [ ]` nao bloqueada**. |
@@ -64,6 +63,6 @@ Antes de implementar qualquer camada, leia as regras correspondentes consultando
 
 ### 2. Inicializacao do tracking (obrigatorio)
 
-O `plan.md` e a fonte de verdade do progresso — os checkboxes das tarefas sao o tracking. Nao existe lista separada.
+O arquivo de plano informado e a fonte de verdade do progresso — os checkboxes das tarefas sao o tracking. Nao existe lista separada.
 
-**Se o plano for novo**, use a todo tool para espelhar todas as tarefas do `plan.md` antes de iniciar, com os identificadores exatos (ex: `F1-T1`). A todo
+**Se o plano for novo**, use a todo tool para espelhar todas as tarefas do arquivo de plano antes de iniciar, com os identificadores exatos (ex: `F1-T1`). A todo

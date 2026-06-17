@@ -14,6 +14,8 @@ const sharedConfig: Config = {
 
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^@stardust/core/([^/]+)/([^/]+)/fakers$':
+      '<rootDir>/../../packages/core/src/$1/domain/$2/fakers/index.ts',
   },
   transform: {
     '^.+\\.ts$': [

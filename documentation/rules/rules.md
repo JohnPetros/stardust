@@ -171,7 +171,7 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 - Para seguir os padrões de orquestração e tradução de dados nos testes de
   entrada da aplicação.
 
-## Regras de Testes de Rotas do Server
+## Regras de Testes de Rotas da App Server
 
 **Arquivo:** `/documentation/rules/server-routes-testing-rules.md`
 **Quando consultar:**
