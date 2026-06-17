@@ -1,8 +1,8 @@
 ---
-description: Prompt para concluir uma spec com validação final, atualização de documentação e geração de resumo estruturado para PR.
+description: Prompt para revisar e concluir uma spec com validação final, atualização de documentação e geração de resumo estruturado para PR.
 ---
 
-# Prompt: Conclude Spec
+# Prompt: Review Spec
 
 **Objetivo:** Finalizar e consolidar a implementação de uma Spec técnica no
 StarDust, garantindo que o código esteja polido, documentado e validado no
