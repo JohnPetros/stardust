@@ -1,5 +1,5 @@
-import type { SupabaseProfileChannel } from '@/realtime/supabase/channels'
+import type { ProfileChannel } from '@stardust/core/profile/interfaces'
 
 export type RealtimeContextValue = {
-  profileChannel: ReturnType<typeof SupabaseProfileChannel>
+  profileChannel: ProfileChannel
 }

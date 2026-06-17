@@ -180,6 +180,19 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 - Para validar integracao entre handlers, middlewares e contratos de resposta.
 - Ao padronizar testes de endpoints expostos pelo `apps/server`.
 
+## Regras de Testes de Rotas da App Web
+
+**Arquivo:** `/documentation/rules/web-app-routes-testing-rules.md`
+**Quando consultar:**
+
+- Ao escrever testes para paginas, slots e fluxos do `Next.js App Router` em
+  `apps/web/src/app/**`.
+- Para padronizar testes co-localizados de `page.tsx` e entradas do App Router.
+- Para escrever testes de navegador com Playwright em
+  `apps/web/src/app/tests/**`.
+- Ao validar composicao de borda web, requests da rota, redirects, `notFound()`
+  e bridges test-only da app web.
+
 ## Regras de Testes de Casos de Uso
 
 **Arquivo:** `/documentation/rules/use-cases-testing-rules.md`

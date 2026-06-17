@@ -26,6 +26,8 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 
 **Product analytics**: Use cases confirmam fatos de negócio → publicam eventos de domínio → Inngest `AnalyticsFunctions` normaliza payloads e usa `context.event.id` como `$insert_id` → `TrackAnalyticsEventJob` executa `ServerAnalyticsProvider.trackEvent(...)` dentro de `amqp.run(...)` → PostHog. No browser, `ClientProviders` inicializa PostHog com bootstrap da conta autenticada, captura pageviews/session recording e `AuthContextProvider` identifica login/cadastro social ou reseta no logout.
 
+**Web integration tests**: Playwright → app web local em `MODE=testing` → route test-only `/api/tests/server` registra respostas fake HTTP consumidas por SSR e browser → `ClientProviders` injeta `ProfileChannelMock` no `RealtimeContextProvider` → rota real `/auth/sign-up` valida requests, estados de UI e eventos realtime sem depender do backend real nem do Supabase realtime.
+
 **Daily active users report**: Studio `DailyActiveUsersChart` → Server `GET /profile/users/daily-active-users-report?days=N` → `GetDailyActiveUsersReportUseCase` → `AnalyticsReportingProvider` → PostHog Query API → `DailyActiveUsersDto [{ date, web, mobile }]`
 
 **Lesson audio generation/removal**: REST `/lesson/text-blocks` → use cases do modulo `lesson` → eventos Inngest (`requested`, `batch requested`, `generated`, `cancelled`, `audio-file.removed`) → jobs de fan-out, TTS/upload, limpeza fisica de arquivo e persistencia final do `audio` em `stars.texts[blockIndex].audio`
@@ -66,7 +68,7 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 | **Validação** | Zod | Schemas compartilhados entre apps |
 | **Monorepo** | TurboRepo, NPM | Orquestração e gerenciamento de dependências |
 | **Linter/Formatter** | Biome | Qualidade e padronização de código |
-| **Testes** | Jest | Testes unitários e de integração |
+| **Testes** | Jest, Playwright | Testes unitários, de composição e fluxos reais de navegador |
 
 ## Estrutura de Diretórios Geral
 

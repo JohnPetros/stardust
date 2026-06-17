@@ -7,6 +7,10 @@ import { TooltipProvider } from '@radix-ui/react-tooltip'
 import posthog, { type PostHogInterface } from 'posthog-js'
 
 import { CLIENT_ENV } from '@/constants'
+import {
+  exposeProfileChannelMock,
+  profileChannelMock,
+} from '@/app/tests/shared/utils/exposeProfileChannelMock'
 import { markAnalyticsProviderAsInitialized } from '@/provision/analytics/useAnalyticsProvider'
 import { EditorProvider } from '@/ui/global/contexts/EditorContext'
 import { RealtimeContextProvider } from '@/ui/global/contexts/RealtimeContext'
@@ -18,7 +22,15 @@ type ClientProps = {
 }
 
 export const ClientProviders = ({ accountDto, children }: ClientProps) => {
+  const isTestingMode =
+    CLIENT_ENV.mode === 'testing' ||
+    (typeof window !== 'undefined' && window.location.port === '3100')
+
   useEffect(() => {
+    if (isTestingMode) {
+      exposeProfileChannelMock()
+    }
+
     posthog.init(CLIENT_ENV.posthogProjectToken, {
       api_host: CLIENT_ENV.posthogHost,
       autocapture: true,
@@ -47,12 +59,14 @@ export const ClientProviders = ({ accountDto, children }: ClientProps) => {
         markAnalyticsProviderAsInitialized()
       },
     })
-  }, [])
+  }, [isTestingMode])
+
+  const testingProfileChannel = isTestingMode ? profileChannelMock : undefined
 
   return (
     <TooltipProvider>
       <RestContextProvider>
-        <RealtimeContextProvider>
+        <RealtimeContextProvider profileChannel={testingProfileChannel}>
           <EditorProvider>{children}</EditorProvider>
         </RealtimeContextProvider>
       </RestContextProvider>

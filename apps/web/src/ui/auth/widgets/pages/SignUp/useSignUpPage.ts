@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { flushSync } from 'react-dom'
 
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import { Email, Name } from '@stardust/core/global/structures'
@@ -44,7 +45,10 @@ export function useSignUpPage(authService: AuthService, isUserCreated: boolean) 
     if (isUserCreated) {
       toast.showError('Seu cadastro já foi confirmado', 5)
     }
-    setIsResendingEmail(true)
+
+    flushSync(() => {
+      setIsResendingEmail(true)
+    })
 
     if (userEmail) {
       const response = await authService.resendSignUpEmail(userEmail)

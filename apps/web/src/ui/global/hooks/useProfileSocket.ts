@@ -11,5 +11,5 @@ export function useProfileSocket(onCreateUser: (event: UserCreatedEvent) => void
 
   useEffect(() => {
     return profileChannel.onCreateUser(onCreateUser)
-  }, [onCreateUser])
+  }, [onCreateUser, profileChannel])
 }

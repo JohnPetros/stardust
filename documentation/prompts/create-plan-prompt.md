@@ -49,13 +49,6 @@ Exatamente um dos seguintes documentos deve ser fornecido:
 
 ## Saída
 
-Salve o plano final em `documentation/plan.md`, seguindo **estritamente** o template abaixo.
-
-```md
----
-description: Criar um plano de implementacao estruturado em fases e tarefas a partir de uma spec tecnica.
----
-
 ## Pendencias (quando aplicavel)
 
 - [ ] <descricao da pendencia ou ambiguidade encontrada na spec>
