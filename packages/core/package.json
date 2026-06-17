@@ -30,9 +30,15 @@
     "./analytics/structures": "./src/analytics/domain/structures/index.ts",
     "./auth/entities": "./src/auth/domain/entities/index.ts",
     "./auth/entities/dtos": "./src/auth/domain/entities/dtos/index.ts",
-    "./auth/entities/fakers": "./src/auth/domain/entities/fakers/index.ts",
+    "./auth/entities/fakers": {
+      "types": "./src/auth/domain/entities/fakers/index.ts",
+      "default": "./build/main.js"
+    },
     "./auth/structures": "./src/auth/domain/structures/index.ts",
-    "./auth/structures/fakers": "./src/auth/domain/structures/fakers/index.ts",
+    "./auth/structures/fakers": {
+      "types": "./src/auth/domain/structures/fakers/index.ts",
+      "default": "./build/main.js"
+    },
     "./auth/structures/dtos": "./src/auth/domain/structures/dtos/index.ts",
     "./auth/errors": "./src/auth/domain/errors/index.ts",
     "./auth/events": "./src/auth/domain/events/index.ts",
@@ -43,7 +49,10 @@
     "./global/entities/dtos": "./src/global/domain/entities/dtos/index.ts",
     "./global/aggregates": "./src/global/domain/aggregates/index.ts",
     "./global/structures": "./src/global/domain/structures/index.ts",
-    "./global/structures/fakers": "./src/global/domain/structures/fakers/index.ts",
+    "./global/structures/fakers": {
+      "types": "./src/global/domain/structures/fakers/index.ts",
+      "default": "./build/main.js"
+    },
     "./global/structures/dtos": "./src/global/domain/structures/dtos/index.ts",
     "./global/responses": "./src/global/responses/index.ts",
     "./global/types": "./src/global/domain/types/index.ts",
@@ -126,7 +135,10 @@
     "./profile/events": "./src/profile/domain/events/index.ts",
     "./profile/types": "./src/profile/domain/types/index.ts",
     "./profile/errors": "./src/profile/domain/errors/index.ts",
-    "./profile/entities/fakers": "./src/profile/domain/entities/fakers/index.ts",
+    "./profile/entities/fakers": {
+      "types": "./src/profile/domain/entities/fakers/index.ts",
+      "default": "./build/main.js"
+    },
     "./profile/structures/fakers": "./src/profile/domain/structures/fakers/index.ts",
     "./profile/entities/dtos": "./src/profile/domain/entities/dtos/index.ts",
     "./profile/structures/dtos": "./src/profile/domain/structures/dtos/index.ts",
