@@ -90,7 +90,6 @@ jobs:
         run: supabase db reset --local --yes
 
       - name: Create test environment file
-        if: ${{ secrets.SERVER_TEST_ENV != '' }}
         run: |
           printf '%s' "${{ secrets.SERVER_TEST_ENV }}" > apps/server/.env.testing
 
