@@ -1,10 +1,10 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { AccountsFaker } from '@stardust/core/auth/entities/fakers'
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
-import { IdFaker } from '@stardust/core/global/structures/fakers'
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
-import { UsersFaker } from '@stardust/core/profile/entities/fakers'
+import { AccountsFaker } from '../../../../../../packages/core/src/auth/domain/entities/fakers'
+import { IdFaker } from '../../../../../../packages/core/src/global/domain/structures/fakers'
+import { UsersFaker } from '../../../../../../packages/core/src/profile/domain/entities/fakers'
 import { ServerMock } from '../shared/mocks/ServerMock'
 import type { ServerMockRoute } from '../shared/types/ServerMockRoute'
 

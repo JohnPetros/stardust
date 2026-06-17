@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { IdFaker } from '@stardust/core/global/structures/fakers'
+import { IdFaker } from '../../../../../../packages/core/src/global/domain/structures/fakers'
 import { ServerMock } from '../shared/mocks/ServerMock'
 import type { ServerMockRoute } from '../shared/types/ServerMockRoute'
 
