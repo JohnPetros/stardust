@@ -143,6 +143,8 @@ e da interacao entre SSR, hidracao, requests client-side e eventos assincronos.
 - A suite deve subir a app web local via `webServer` do Playwright.
 - Requests da pagina devem apontar para `/api/tests/server` durante a suite.
 - Cada teste deve configurar seu proprio cenario via `ServerMock(page)`.
+- `ServerMock(page)` deve ser tratado como a factory function canonica para o mock server dos testes de integracao da web.
+- Nao duplique helpers locais como `createServerMock(...)` nas suites; extraia ou reutilize a implementacao compartilhada em `apps/web/src/app/tests/shared/mocks/ServerMock.ts`.
 - Eventos realtime fake devem ser disparados por
   `window.__STARDUST_PROFILE_CHANNEL_MOCK__`.
 
@@ -185,6 +187,7 @@ test.describe('/auth/sign-up', () => {
 ## 7. Regras para Infra Test-Only da Web
 
 - Mocks stateful compartilhados devem ficar em `apps/web/src/app/tests/shared/mocks/`.
+- Factories de suporte compartilhadas entre suites de Playwright devem ficar em `apps/web/src/app/tests/shared/mocks/` quando controlarem estado ou contratos HTTP test-only.
 - Utils browser-safe e bridges globais devem ficar em
   `apps/web/src/app/tests/shared/utils/`.
 - Tipos globais e tipos compartilhados de suporte devem ficar em
@@ -203,6 +206,7 @@ test.describe('/auth/sign-up', () => {
 - Nao acoplar o teste a detalhes cosmeticos do layout com seletores CSS
   estruturais.
 - Nao compartilhar estado de rotas fake entre cenarios.
+- Nao criar versoes paralelas de `ServerMock(page)` dentro de arquivos de teste; evolua a factory compartilhada para manter compatibilidade com todas as suites de integracao.
 
 ## 9. Checklist
 
@@ -210,9 +214,10 @@ test.describe('/auth/sign-up', () => {
 2. A localizacao do arquivo segue `tests/page.test.tsx` ou `src/app/tests/**`.
 3. Se for pagina App Router, `params`/`searchParams` foram simulados no shape real.
 4. Se for Playwright, o cenario configurou explicitamente `ServerMock(page)`.
-5. O teste validou comportamento observavel da rota: renderizacao,
+5. Se o teste precisou de mock server, reutilizou a factory compartilhada em vez de duplicar implementacao local.
+6. O teste validou comportamento observavel da rota: renderizacao,
    redirecionamento, request, mensagem, link ou loading.
-6. O teste nao duplicou responsabilidade que ja pertence a `widget` ou
+7. O teste nao duplicou responsabilidade que ja pertence a `widget` ou
    `controller` unitariamente testado em outra camada.
 
 ## Tooling
