@@ -39,6 +39,8 @@ export default async () => {
   const moduleNameMapper = {
     ...finalJestConfig.moduleNameMapper,
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^@stardust/core/([^/]+)/([^/]+)/fakers$':
+      '<rootDir>/../../packages/core/src/$1/domain/$2/fakers/index.ts',
   }
 
   return { ...finalJestConfig, moduleNameMapper }
