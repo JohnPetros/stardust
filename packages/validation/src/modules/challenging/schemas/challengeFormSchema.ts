@@ -19,7 +19,7 @@ export const challengeFormSchema = challengeSchema.extend({
   author: z.object({
     id: idSchema,
   }),
-  code: contentSchema,
+  initialCode: contentSchema,
   function: z.object({
     name: codeVariableNameSchema,
     params: z
