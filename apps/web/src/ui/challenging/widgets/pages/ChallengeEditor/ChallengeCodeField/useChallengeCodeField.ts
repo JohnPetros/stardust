@@ -13,7 +13,7 @@ export function useChallengeCodeField() {
       const functionName = value.function.name
       const functionParamsNames = value.function.params.map((param) => param?.name)
       setValue(
-        'code',
+        'initialCode',
         `funcao ${functionName}(${functionParamsNames.join(', ')}) {
 
 }`,
@@ -24,7 +24,7 @@ export function useChallengeCodeField() {
 
   return {
     formControl: control,
-    errorMessage: formState.errors.code?.message,
+    errorMessage: formState.errors.initialCode?.message,
     registerInput: register,
   }
 }

@@ -7,7 +7,7 @@ export const challenge: Omit<ChallengeDto, 'author'> = {
   difficultyLevel: 'easy',
   description: '',
   categories: [],
-  code: `funcao obtenhaPrimeiroPlaneta(planetas) {
+  initialCode: `funcao obtenhaPrimeiroPlaneta(planetas) {
     
 }`,
   testCases: [

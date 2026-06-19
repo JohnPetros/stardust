@@ -7,7 +7,7 @@ export const challenge: Omit<ChallengeDto, 'author'> = {
   difficultyLevel: 'easy',
   description: '',
   categories: [],
-  code: `funcao calculePerimetro(altura, largura) {
+  initialCode: `funcao calculePerimetro(altura, largura) {
     
 }`,
   function: {

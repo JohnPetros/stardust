@@ -54,7 +54,7 @@ describe('useChallengePage', () => {
     title: 'Find Sum',
     slug: 'find-sum',
     description: 'Current challenge description',
-    code: 'function sum(a, b) { return a + b }',
+    initialCode: 'function sum(a, b) { return a + b }',
     difficultyLevel: 'easy',
     categories: [],
   })
@@ -128,7 +128,7 @@ describe('useChallengePage', () => {
     const staleChallenge = Challenge.create({
       ...challengeDto,
       description: 'Stale description',
-      code: 'function sum() { return 0 }',
+      initialCode: 'function sum() { return 0 }',
     })
     staleChallenge.userVote = ChallengeVote.create('none')
     setupStore(staleChallenge)
@@ -140,7 +140,7 @@ describe('useChallengePage', () => {
     const hydratedChallenge = setChallenge.mock.calls[0][0] as Challenge
 
     expect(hydratedChallenge.description.value).toBe(challengeDto.description)
-    expect(hydratedChallenge.code).toBe(challengeDto.code)
+    expect(hydratedChallenge.code).toBe(challengeDto.initialCode)
     expect(hydratedChallenge.userVote.value).toBe('upvote')
   })
 

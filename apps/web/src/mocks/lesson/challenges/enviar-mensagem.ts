@@ -7,7 +7,7 @@ export const challenge: Omit<ChallengeDto, 'author'> = {
   title: 'Enviar mensagem',
   difficultyLevel: 'easy',
   categories: [],
-  code: `var msg = leia()
+  initialCode: `var msg = leia()
 // Escreva seu código abaixo`,
   testCases: [
     {

@@ -46,7 +46,7 @@ export const challenge: Omit<ChallengeDto, 'author'> = {
       isLocked: false,
     },
   ],
-  code: `funcao acheAPrincesa(castelo) {
+  initialCode: `funcao acheAPrincesa(castelo) {
 
 }`,
 }

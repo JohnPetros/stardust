@@ -17,7 +17,7 @@ export function ChallengeCodeField() {
     >
       <Controller
         control={formControl}
-        name='code'
+        name='initialCode'
         render={({ field: { value, onChange } }) => (
           <div>
             <CodeSnippet code={value} isRunnable={true} onChange={onChange} />

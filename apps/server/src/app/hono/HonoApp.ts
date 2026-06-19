@@ -241,7 +241,6 @@ export class HonoApp {
   private createSupabaseClient() {
     return async (context: Context, next: Next) => {
       const accessToken = context.req.header('Authorization')?.split(' ')[1]
-      console.log({ accessToken })
       const isMcpRoute = context.req.path.startsWith('/mcp')
       const supabase = accessToken
         ? createClient(ENV.supabaseUrl, ENV.supabaseKey, {

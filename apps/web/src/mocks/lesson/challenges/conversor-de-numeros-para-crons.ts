@@ -7,7 +7,7 @@ export const challenge: Omit<ChallengeDto, 'author'> = {
   difficultyLevel: 'easy',
   description: '',
   categories: [],
-  code: `funcao convertaMinutosParaCrons(minutos) {
+  initialCode: `funcao convertaMinutosParaCrons(minutos) {
   
 }`,
   function: {

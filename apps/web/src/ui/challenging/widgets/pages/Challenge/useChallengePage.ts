@@ -52,7 +52,7 @@ function toHydrationComparablePayload(
   return {
     id: challengeDto.id ?? null,
     title: challengeDto.title,
-    code: challengeDto.code,
+    code: challengeDto.initialCode,
     difficultyLevel: challengeDto.difficultyLevel,
     description: challengeDto.description,
     starId: challengeDto.starId ? challengeDto.starId : null,

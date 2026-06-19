@@ -16,7 +16,7 @@ export const challenge: ChallengeDto = {
     { position: 3, inputs: [1], isLocked: false, expectedOutput: 0 },
     { position: 4, inputs: [0], isLocked: false, expectedOutput: 0 },
   ],
-  code: `var totalPlanetas = leia();
+  initialCode: `var totalPlanetas = leia();
 var totalPlanetasSeguros = 0;
   
 // Utilize o escreva abaixo dentro do seu laço

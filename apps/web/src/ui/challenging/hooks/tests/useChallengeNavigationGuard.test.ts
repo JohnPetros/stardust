@@ -38,7 +38,7 @@ describe('useChallengeNavigationGuard', () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
-    challenge = ChallengesFaker.fake({ code: 'escreva("ola")' })
+    challenge = ChallengesFaker.fake({ initialCode: 'escreva("ola")' })
     navigationProvider = mock<NavigationProvider>()
     navigationProvider.goTo.mockImplementation(jest.fn())
     navigationProvider.goBack.mockImplementation(jest.fn())

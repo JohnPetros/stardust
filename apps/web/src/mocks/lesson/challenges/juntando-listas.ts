@@ -7,7 +7,7 @@ export const challenge: Omit<ChallengeDto, 'author'> = {
   difficultyLevel: 'easy',
   description: '',
   categories: [],
-  code: `funcao junteListas(lista1, lista2) {
+  initialCode: `funcao junteListas(lista1, lista2) {
     var naves = [];
   
     para (var i = 0; i < tamanho(lista1); i++) {
