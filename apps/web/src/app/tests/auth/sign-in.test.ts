@@ -209,6 +209,7 @@ test.describe('/auth/sign-in', () => {
     await page.evaluate(() => {
       window.__STARDUST_PROFILE_CHANNEL_MOCK__?.reset()
     })
+    await ServerMock(page).reset()
   })
 
   test('posts credentials and redirects to space after successful sign-in', async ({
