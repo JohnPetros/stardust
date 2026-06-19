@@ -1,4 +1,4 @@
-export { FetchAllGuidesController } from './FetchAllGuidesController'
+export { FetchGuidesController } from './FetchGuidesController'
 export { CreateGuideController } from './CreateGuideController'
 export { FetchGuideController } from './FetchGuideController'
 export { DeleteGuideController } from './DeleteGuideController'

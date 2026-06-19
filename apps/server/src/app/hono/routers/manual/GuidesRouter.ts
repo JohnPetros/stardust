@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { idSchema } from '@stardust/validation/global/schemas'
 import { guideCategorySchema } from '@stardust/validation/manual/schemas'
 import {
-  FetchAllGuidesController,
+  FetchGuidesController,
   FetchGuideController,
   CreateGuideController,
   DeleteGuideController,
@@ -22,7 +22,7 @@ export class GuidesRouter extends HonoRouter {
   private readonly authMiddleware = new AuthMiddleware()
   private readonly validationMiddleware = new ValidationMiddleware()
 
-  private registerFetchAllGuidesRoute(): void {
+  private registerFetchGuidesRoute(): void {
     this.router.get(
       '/',
       this.validationMiddleware.validate(
@@ -34,7 +34,7 @@ export class GuidesRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const repository = new SupabaseGuidesRepository(http.getSupabase())
-        const controller = new FetchAllGuidesController(repository)
+        const controller = new FetchGuidesController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -181,7 +181,7 @@ export class GuidesRouter extends HonoRouter {
   }
 
   registerRoutes(): Hono {
-    this.registerFetchAllGuidesRoute()
+    this.registerFetchGuidesRoute()
     this.registerFetchGuideRoute()
     this.registerCreateGuideRoute()
     this.registerDeleteGuideRoute()
