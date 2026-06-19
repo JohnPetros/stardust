@@ -50,7 +50,6 @@ export class DeleguaProvedorLsp implements LspProvider {
       resultadoAvaliacaoSintatica.declaracoes,
       false,
     )
-    console.log('resultadoInterpretador ->', resultadoInterpretador)
     if (resultadoInterpretador.erros.length) {
       return this.trateErro(resultadoInterpretador.erros[0])
     }
@@ -112,7 +111,7 @@ export class DeleguaProvedorLsp implements LspProvider {
     return codigo
   }
 
-  async addFunctionCall(functionParams: unknown[], code: string) {
+  async addFunctionCall(functionName: string, functionParams: unknown[], code: string) {
     const paramsValues: string[] = await Promise.all(
       functionParams.map(async (param) => {
         if (Array.isArray(param)) {
@@ -126,7 +125,6 @@ export class DeleguaProvedorLsp implements LspProvider {
     )
 
     const params = `(${paramsValues.join(',')})`
-    const functionName = this.getFunctionName(code)
 
     return code.concat(`\n${functionName}${params};`)
   }
@@ -138,6 +136,7 @@ export class DeleguaProvedorLsp implements LspProvider {
   }
 
   getFunctionName(codeValue: string) {
+    if (!codeValue) return ''
     const match = codeValue.match(DELEGUA_REGEX.nomeDeFuncaoQualquer)
     if (match) {
       return match[1] ?? ''

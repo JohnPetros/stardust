@@ -29,7 +29,7 @@ describe('Post Challenge Tool', () => {
     const input = {
       title: 'Binary search',
       description: 'Implemente a busca binaria.',
-      code: 'function binarySearch() {}',
+      initialCode: 'function binarySearch() {}',
       difficultyLevel: 'easy',
       testCases: [],
       categories: [{ name: 'algorithms' }],
@@ -49,7 +49,7 @@ describe('Post Challenge Tool', () => {
       challengeDto: expect.objectContaining({
         title: input.title,
         description: input.description,
-        code: input.code,
+        initialCode: input.initialCode,
         difficultyLevel: input.difficultyLevel,
         testCases: input.testCases,
         categories: input.categories,
@@ -66,7 +66,7 @@ describe('Post Challenge Tool', () => {
     const input = {
       title: 'Two sum',
       description: 'Resolva o problema two sum.',
-      code: 'function twoSum() {}',
+      initialCode: 'function twoSum() {}',
       difficultyLevel: 'easy',
       testCases: [],
       categories: [{ name: 'arrays' }],

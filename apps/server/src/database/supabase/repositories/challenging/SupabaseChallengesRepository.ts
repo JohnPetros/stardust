@@ -301,7 +301,7 @@ export class SupabaseChallengesRepository
     const { error } = await this.supabase.from('challenges').insert({
       id: challenge.id.value,
       title: challenge.title.value,
-      code: challenge.code,
+      initial_code: challenge.code,
       description: challenge.description.value,
       difficulty_level: challenge.difficulty.level,
       user_id: challenge.author.id.value,
@@ -338,7 +338,7 @@ export class SupabaseChallengesRepository
       .from('challenges')
       .update({
         title: challenge.title.value,
-        code: challenge.code,
+        initial_code: challenge.code,
         description: challenge.description.value,
         difficulty_level: challenge.difficulty.level,
         user_id: challenge.author.id.value,

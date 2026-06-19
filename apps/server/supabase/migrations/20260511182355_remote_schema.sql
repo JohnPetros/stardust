@@ -282,7 +282,7 @@ alter table "public"."users_visits" validate constraint "users_visits_user_id_fk
 
 set check_function_bodies = off;
 
-create type "public"."challenges_record" as ("code" text, "created_at" text, "difficulty" text, "downvotes" integer, "function_name" text, "id" text, "star_id" integer, "test_cases" jsonb, "texts" jsonb, "title" text, "topic_id" text, "total_completions" integer, "upvotes" integer, "created_by" text);
+create type "public"."challenges_record" as ("initial_code" text, "created_at" text, "difficulty" text, "downvotes" integer, "function_name" text, "id" text, "star_id" integer, "test_cases" jsonb, "texts" jsonb, "title" text, "topic_id" text, "total_completions" integer, "upvotes" integer, "created_by" text);
 
 CREATE OR REPLACE FUNCTION public.count_comments_upvotes(public.comments)
  RETURNS bigint
@@ -671,7 +671,7 @@ $function$
 ;
 
 CREATE OR REPLACE FUNCTION public.list_challenges(p_title text DEFAULT ''::text, p_difficulty text DEFAULT 'all'::text, p_categories_ids uuid[] DEFAULT '{}'::uuid[], p_completion_status text DEFAULT 'all'::text, p_completed_challenges_ids uuid[] DEFAULT '{}'::uuid[], p_account_id text DEFAULT NULL::text, p_user_id text DEFAULT NULL::text, p_should_include_star_challenges boolean DEFAULT false, p_should_include_private_challenges boolean DEFAULT false, p_should_include_only_author boolean DEFAULT false, p_is_new_status text DEFAULT 'all'::text, p_page integer DEFAULT 1, p_items_per_page integer DEFAULT 10, p_upvotes_count_order text DEFAULT 'all'::text, p_downvote_count_order text DEFAULT 'all'::text, p_completion_count_order text DEFAULT 'all'::text, p_posting_order text DEFAULT 'all'::text)
- RETURNS TABLE(title text, difficulty_level text, created_at timestamp with time zone, id uuid, star_id uuid, code text, texts jsonb, function_name text, test_cases jsonb, slug text, user_id text, description text, is_public boolean, is_new boolean, author_id text, author_name text, author_slug text, author_avatar_name text, author_avatar_image text, upvotes_count bigint, downvotes_count bigint, total_completitions bigint, categories json[], total_count bigint)
+ RETURNS TABLE(title text, difficulty_level text, created_at timestamp with time zone, id uuid, star_id uuid, initial_code text, texts jsonb, function_name text, test_cases jsonb, slug text, user_id text, description text, is_public boolean, is_new boolean, author_id text, author_name text, author_slug text, author_avatar_name text, author_avatar_image text, upvotes_count bigint, downvotes_count bigint, total_completitions bigint, categories json[], total_count bigint)
  LANGUAGE plpgsql
  STABLE
 AS $function$
@@ -684,7 +684,7 @@ BEGIN
       cv.created_at,
       cv.id,
       cv.star_id,
-      cv.code::text,
+      cv.initial_code::text,
       cv.texts,
       cv.function_name::text,
       cv.test_cases,
@@ -784,7 +784,7 @@ BEGIN
     c.created_at,
     c.id,
     c.star_id,
-    c.code,
+    c.initial_code,
     c.texts,
     c.function_name,
     c.test_cases,
@@ -1088,7 +1088,7 @@ create or replace view "public"."challenges_view" as  SELECT c.title,
     c.created_at,
     c.id,
     c.star_id,
-    c.code,
+    c.initial_code,
     c.texts,
     c.function_name,
     c.test_cases,

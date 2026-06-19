@@ -35,7 +35,7 @@ describe('Delete Challenge Tool', () => {
         id: challengeId,
         title: 'Desafio de lista',
         description: 'Descricao valida',
-        code: 'funcao resolver() {}',
+        initialCode: 'funcao resolver() {}',
         difficultyLevel: 'easy',
         testCases: [
           {
@@ -102,7 +102,7 @@ describe('Delete Challenge Tool', () => {
       id: 'f246350e-c2ad-4e6a-b8bd-57e979f1a62e',
       title: 'Desafio de lista',
       description: 'Descricao valida',
-      code: 'funcao resolver() {}',
+      initialCode: 'funcao resolver() {}',
       difficultyLevel: 'easy',
       testCases: [
         {

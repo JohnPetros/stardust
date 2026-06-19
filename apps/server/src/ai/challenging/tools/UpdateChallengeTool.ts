@@ -13,7 +13,7 @@ type Input = {
   challengeId: string
   title: string
   description: string
-  code: string
+  initialCode: string
   isPublic?: boolean
   difficultyLevel: string
   testCases: ChallengeDto['testCases']
@@ -29,7 +29,7 @@ export class UpdateChallengeTool implements Tool<Input, ChallengeDto> {
       challengeId,
       title,
       description,
-      code,
+      initialCode,
       isPublic,
       difficultyLevel,
       testCases,
@@ -52,7 +52,7 @@ export class UpdateChallengeTool implements Tool<Input, ChallengeDto> {
         id: challengeId,
         title,
         description,
-        code,
+        initialCode,
         difficultyLevel,
         testCases,
         categories,

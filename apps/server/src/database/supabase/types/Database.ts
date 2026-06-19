@@ -1293,7 +1293,7 @@ export type Database = {
       }
       challenges: {
         Row: {
-          code: string
+          initial_code: string
           created_at: string
           description: string | null
           difficulty_level: string
@@ -1309,7 +1309,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          code: string
+          initial_code: string
           created_at?: string
           description?: string | null
           difficulty_level?: string
@@ -1325,7 +1325,7 @@ export type Database = {
           user_id: string
         }
         Update: {
-          code?: string
+          initial_code?: string
           created_at?: string
           description?: string | null
           difficulty_level?: string
@@ -2763,7 +2763,7 @@ export type Database = {
           author_name: string | null
           author_slug: string | null
           categories: Json[] | null
-          code: string | null
+          initial_code: string | null
           created_at: string | null
           description: string | null
           difficulty_level: string | null
@@ -3132,7 +3132,7 @@ export type Database = {
           author_name: string
           author_slug: string
           categories: Json[]
-          code: string
+          initial_code: string
           created_at: string
           description: string
           difficulty_level: string
@@ -3186,7 +3186,7 @@ export type Database = {
     }
     CompositeTypes: {
       challenges_record: {
-        code: string | null
+        initial_code: string | null
         created_at: string | null
         difficulty: string | null
         downvotes: number | null
