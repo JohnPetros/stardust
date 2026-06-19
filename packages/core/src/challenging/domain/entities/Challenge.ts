@@ -18,7 +18,7 @@ import { ChallengeWithoutTestCaseError, InsufficientInputsError } from '../error
 import { ChallengeFactory } from '../factories'
 
 export type ChallengeProps = {
-  code: string
+  initialCode: Text
   title: Name
   slug: Slug
   difficulty: ChallengeDifficulty
@@ -50,9 +50,11 @@ export class Challenge extends Entity<ChallengeProps> {
     return new Challenge(ChallengeFactory.produce(dto), dto?.id)
   }
 
-  private async formatCode(code: Code, testCase: TestCase) {
+  private async formatCode(code: Code, initialCode: Code, testCase: TestCase) {
     if (code.hasFunction.isTrue) {
-      return await code.addFunctionCall(testCase.inputs)
+      const functionName = initialCode.firstFunctionName
+      const functionParams = testCase.inputs
+      return await code.addFunctionCall(functionName, functionParams)
     }
 
     if (code.inputsCount !== testCase.inputs.length) {
@@ -73,19 +75,19 @@ export class Challenge extends Entity<ChallengeProps> {
     return isCorrect
   }
 
-  async runCode(code: Code): Promise<List<string>> {
+  async runCode(code: Code, initialCode: Code): Promise<List<string>> {
     this.props.results = this.props.results.becomeEmpty()
     this.props.userOutputs = this.props.userOutputs.becomeEmpty()
     let executionOutputs = List.create<string>([])
 
     for (const testCase of this.testCases) {
-      const formattedCode = await this.formatCode(code, testCase)
+      const formattedCode = await this.formatCode(code, initialCode, testCase)
       const response = await formattedCode.run()
       if (response.isFailure) response.throwError()
 
       let result = ''
 
-      if (code.hasFunction.isTrue) {
+      if (initialCode.hasFunction.isTrue) {
         result = response.result
 
         for (const output of response.outputs) {
@@ -217,8 +219,8 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.title
   }
 
-  get code() {
-    return this.props.code
+  get initialCode(): Text {
+    return this.props.initialCode
   }
 
   get slug() {
@@ -297,7 +299,7 @@ export class Challenge extends Entity<ChallengeProps> {
     return {
       id: this.id.value,
       title: this.title.value,
-      code: this.code,
+      initialCode: this.initialCode.value,
       slug: this.slug.value,
       difficultyLevel: this.difficulty.level,
       author: this.props.author.dto,

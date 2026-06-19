@@ -59,7 +59,7 @@ export class ForumFixture {
       id: challenge.id,
       title: challenge.title,
       difficulty_level: challenge.difficultyLevel,
-      code: challenge.code,
+      initial_code: challenge.initialCode,
       description: challenge.description,
       slug: challenge.slug,
       user_id: challenge.author.id,

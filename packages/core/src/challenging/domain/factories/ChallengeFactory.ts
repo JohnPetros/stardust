@@ -19,7 +19,7 @@ export class ChallengeFactory {
       title: Name.create(dto.title),
       slug: Slug.create(dto.title),
       author: AuthorAggregate.create(dto.author),
-      code: dto.code,
+      initialCode: Text.create(dto.initialCode),
       difficulty: ChallengeDifficulty.create(dto.difficultyLevel),
       starId: dto.starId ? Id.create(dto.starId) : null,
       testCases: dto.testCases.map(TestCase.create),

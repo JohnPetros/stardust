@@ -32,8 +32,10 @@ export class Code {
     return this.changeValue(await this.lsp.addInputs(inputs, this.value))
   }
 
-  async addFunctionCall(functionParams: unknown[]) {
-    return this.changeValue(await this.lsp.addFunctionCall(functionParams, this.value))
+  async addFunctionCall(functionName: string, functionParams: unknown[]) {
+    return this.changeValue(
+      await this.lsp.addFunctionCall(functionName, functionParams, this.value),
+    )
   }
 
   changeValue(value: string) {
@@ -51,6 +53,11 @@ export class Code {
   get hasInput(): Logical {
     const input = this.lsp.getInput(this.value)
     return Logical.create(Boolean(input))
+  }
+
+  get firstFunctionName(): string {
+    console.log(this.value)
+    return this.lsp.getFunctionName(this.value) ?? ''
   }
 
   get hasFunction(): Logical {
