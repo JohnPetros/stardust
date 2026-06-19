@@ -30,7 +30,7 @@ describe('Challenge Entity', () => {
     lspProviderMock.getInputsCount.mockReturnValue(0)
     lspProviderMock.getInput.mockReturnValue(null)
     lspProviderMock.addInputs.mockImplementation(async (_, code) => code)
-    lspProviderMock.addFunctionCall.mockImplementation(async (_, code) => code)
+    lspProviderMock.addFunctionCall.mockImplementation(async (_, __, code) => code)
     lspProviderMock.translateToLsp.mockImplementation(async (value) => String(value))
     lspProviderMock.run
       .mockResolvedValueOnce(
@@ -43,9 +43,9 @@ describe('Challenge Entity', () => {
         new LspResponse({ result: 'third line', outputs: ['third line'] }),
       )
 
-    const code = Code.create(lspProviderMock, challenge.code)
+    const code = Code.create(lspProviderMock, challenge.initialCode.value)
 
-    const executionOutputs = await challenge.runCode(code)
+    const executionOutputs = await challenge.runCode(code, code)
 
     expect(executionOutputs.items).toStrictEqual([
       'first line',
@@ -78,7 +78,7 @@ describe('Challenge Entity', () => {
     lspProviderMock.getInputsCount.mockReturnValue(0)
     lspProviderMock.getInput.mockReturnValue(null)
     lspProviderMock.addInputs.mockImplementation(async (_, code) => code)
-    lspProviderMock.addFunctionCall.mockImplementation(async (_, code) => code)
+    lspProviderMock.addFunctionCall.mockImplementation(async (_, __, code) => code)
     lspProviderMock.translateToLsp.mockImplementation(async (value) => String(value))
     lspProviderMock.run.mockResolvedValue(
       new LspResponse({
@@ -87,9 +87,9 @@ describe('Challenge Entity', () => {
       }),
     )
 
-    const code = Code.create(lspProviderMock, challenge.code)
+    const code = Code.create(lspProviderMock, challenge.initialCode.value)
 
-    const executionOutputs = await challenge.runCode(code)
+    const executionOutputs = await challenge.runCode(code, code)
 
     expect(executionOutputs.items).toStrictEqual(['current output', 'extra output'])
     expect(challenge.results.items).toStrictEqual([true])
