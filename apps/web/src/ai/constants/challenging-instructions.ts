@@ -1,5 +1,5 @@
 export const CHALLENGING_PROMPTS = {
   tools: {
-    getChallengeDescription: 'Retornar a descrição detalhada de um desafio',
+    getChallengeDescription: 'Return the detailed description of a challenge.',
   },
 } as const

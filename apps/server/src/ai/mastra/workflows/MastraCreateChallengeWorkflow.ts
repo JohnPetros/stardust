@@ -21,7 +21,7 @@ export class MastraCreateChallengeWorkflow implements CreateChallengeWorkflow {
     })
       .then(getNextChallengeSourceStep)
       .map(async ({ inputData }) => ({
-        prompt: `URL da fonte: ${inputData.url}. Instruções adicionais: ${inputData.additionalInstructions ?? 'nenhuma'}.`,
+        prompt: `Source URL: ${inputData.url}. Additional instructions: ${inputData.additionalInstructions ?? 'none'}.`,
       }))
       .then(createChallengeStep)
       .then(parseDraftStep)

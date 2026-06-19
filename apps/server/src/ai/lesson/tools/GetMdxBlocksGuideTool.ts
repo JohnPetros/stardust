@@ -1,76 +1,65 @@
 import type { Mcp, Tool } from '@stardust/core/global/interfaces'
 
-const documentationComponentsGuide = `## Guia de Componentes de Documentação
+const documentationComponentsGuide = `## Documentation Components Guide
 
-Este guia descreve os componentes disponíveis para escrever documentações
-na plataforma, com exemplos de uso e boas práticas.
+This guide describes the components available for writing documentation on the platform, including usage examples and best practices.
 
 ---
 
-## ⛔ Regras Globais — Leia antes de escrever qualquer documentação
+## ⛔ Global Rules: Read Before Writing Any Documentation
 
-### 1. Nunca aninhe blocos de texto
-É estritamente proibido colocar um componente de bloco de texto dentro de
-outro. Nunca coloque \`Text\`, \`Alert\`, \`Quote\` ou \`Code\` dentro de
-outro \`Text\`, \`Alert\`, \`Quote\` ou \`Code\`.
+### 1. Never nest text blocks
+It is strictly forbidden to place one text block component inside another. Never place \`Text\`, \`Alert\`, \`Quote\`, or \`Code\` inside another \`Text\`, \`Alert\`, \`Quote\`, or \`Code\`.
 
-### 2. Nunca use negrito com **...**
-É estritamente proibido usar \`**...**\` dentro de qualquer componente de
-bloco de texto (\`Text\`, \`Alert\`, \`Quote\`). Isso inclui qualquer
-tentativa de dar ênfase a termos, títulos ou palavras-chave dentro desses
-blocos. Para destacar um termo dentro de um bloco, use code inline com
-crases simples \`\`.
+### 2. Never use bold with **...**
+It is strictly forbidden to use \`**...**\` inside any text block component such as \`Text\`, \`Alert\`, or \`Quote\`. This includes any attempt to emphasize terms, titles, or keywords inside these blocks. To highlight a term inside a block, use inline code with single backticks.
 
 \`\`\`mdx
 <Text>
-  O valor retornado é sempre do tipo **texto**.  ❌ ERRADO
+  The returned value is always of type **text**.  ❌ WRONG
 </Text>
 
 <Text>
-  O valor retornado é sempre do tipo \`texto\`.   ✅ CORRETO
+  The returned value is always of type \`text\`.   ✅ CORRECT
 </Text>
 \`\`\`
 
-### 3. Nunca use Code para referências curtas
-Para referenciar código dentro de um parágrafo de texto, use a notação de
-code inline com crases simples \`\` em vez do componente \`Code\`.
+### 3. Never use Code for short references
+To reference code inside a text paragraph, use inline code with single backticks instead of the \`Code\` component.
 
 ---
 
 ### Text
 
 <Text>
-  O componente \`Text\` é o bloco principal para escrever parágrafos e
-  descrições. Use-o para introduzir conceitos, explicar comportamentos e
-  contextualizar exemplos.
+  The \`Text\` component is the main block used to write paragraphs and descriptions. Use it to introduce concepts, explain behavior, and provide context for examples.
 </Text>
 
-**Quando usar:**
-- Introduções e explicações gerais
-- Descrições de conceitos e comportamentos
-- Contexto antes ou depois de exemplos de código
+**When to use:**
+- Introductions and general explanations
+- Descriptions of concepts and behaviors
+- Context before or after code examples
 
-**Exemplo:**
+**Example:**
 
 \`\`\`mdx
 <Text>
-  Variáveis são estruturas que armazenam um valor em memória e podem ter
-  esse valor alterado ao longo do programa.
+  Variables are structures that store a value in memory, and that value can change during program execution.
 </Text>
 \`\`\`
 
-**Exemplo do que NÃO fazer:**
+**Example of what NOT to do:**
 
 \`\`\`mdx
 <Text>
-  Explicação sobre variáveis.
+  Explanation about variables.
   <Alert>
-    Isso é inválido!        ❌ bloco dentro de bloco
+    This is invalid!        ❌ block inside block
   </Alert>
 </Text>
 
 <Text>
-  O valor retornado é sempre do tipo **texto**.  ❌ negrito proibido
+  The returned value is always of type **text**.  ❌ bold is forbidden
 </Text>
 \`\`\`
 
@@ -79,21 +68,19 @@ code inline com crases simples \`\` em vez do componente \`Code\`.
 ### Alert
 
 <Text>
-  O componente \`Alert\` é usado para destacar informações importantes,
-  advertências ou observações que o leitor não deve ignorar.
+  The \`Alert\` component is used to highlight important information, warnings, or observations that the reader should not ignore.
 </Text>
 
-**Quando usar:**
-- Avisos sobre comportamentos inesperados
-- Restrições ou limitações de um recurso
-- Observações críticas sobre o uso correto de um recurso
+**When to use:**
+- Warnings about unexpected behavior
+- Restrictions or limitations of a feature
+- Critical observations about proper usage
 
-**Exemplo:**
+**Example:**
 
 \`\`\`mdx
 <Alert>
-  O valor retornado por \`leia()\` é sempre do tipo \`texto\`. Para
-  utilizá-lo como número, use as funções de conversão.
+  The value returned by \`leia()\` is always of type \`text\`. To use it as a number, apply conversion functions.
 </Alert>
 \`\`\`
 
@@ -102,25 +89,24 @@ code inline com crases simples \`\` em vez do componente \`Code\`.
 ### Quote
 
 <Text>
-  O componente \`Quote\` é usado para destacar definições, regras, dicas
-  ou citações relevantes ao conteúdo.
+  The \`Quote\` component is used to highlight definitions, rules, tips, or relevant statements.
 </Text>
 
-**Quando usar:**
-- Definições curtas e diretas
-- Regras e convenções da linguagem
-- Dicas e boas práticas
-- Resumos de comportamento
+**When to use:**
+- Short and direct definitions
+- Language rules and conventions
+- Tips and best practices
+- Behavior summaries
 
-**Exemplo:**
+**Example:**
 
 \`\`\`mdx
 <Quote>
-  \`==\` → Igual a
+  \`==\` → Equal to
 </Quote>
 
 <Quote>
-  \`!=\` → Diferente de
+  \`!=\` → Different from
 </Quote>
 \`\`\`
 
@@ -129,55 +115,52 @@ code inline com crases simples \`\` em vez do componente \`Code\`.
 ### Code
 
 <Text>
-  O componente \`Code\` é usado para exibir blocos de código.
+  The \`Code\` component is used to display code blocks.
 </Text>
 
-**Quando usar:**
-- Exemplos de sintaxe
-- Declarações e expressões da linguagem
-- Ilustração de comportamentos e resultados
+**When to use:**
+- Syntax examples
+- Language declarations and expressions
+- Illustrations of behavior and results
 
-**Exemplo:**
+**Example:**
 
 \`\`\`mdx
 <Code>
 var nome = 'Ítalo'
 escreva("Olá, \${nome}!")
-// Resultado: Olá, Ítalo!
+// Result: Olá, Ítalo!
 </Code>
 \`\`\`
 
 ---
 
-### Combinando os componentes
+### Combining components
 
 <Text>
-  Os componentes devem ser combinados de forma a criar um fluxo de leitura
-  natural: apresente o conceito com \`Text\`, destaque regras com \`Quote\` ou
-  \`Alert\`, e ilustre com \`Code\`.
+  Components should be combined to create a natural reading flow: introduce the concept with \`Text\`, highlight rules with \`Quote\` or \`Alert\`, and illustrate with \`Code\`.
 </Text>
 
-**Exemplo de estrutura recomendada:**
+**Recommended structure example:**
 
 \`\`\`mdx
 <Text>
-  O laço \`para\` percorre uma sequência com base em três expressões:
-  inicializador, condição e passo.
+  The \`para\` loop iterates through a sequence based on three expressions: initializer, condition, and step.
 </Text>
 
 <Alert>
-  Qualquer uma das três partes pode ficar em branco.
+  Any of the three parts may be left blank.
 </Alert>
 
 <Quote>
-  Se a condição for omitida, o laço será infinito.
+  If the condition is omitted, the loop becomes infinite.
 </Quote>
 
 <Code>
 para (var i = 0; i < 3; i++) {
   escreva(i)
 }
-// Resultado:
+// Result:
 // 0
 // 1
 // 2
@@ -186,14 +169,14 @@ para (var i = 0; i < 3; i++) {
 
 ---
 
-### Resumo rápido
+### Quick summary
 
-| Componente | Uso principal                                  |
+| Component | Main usage |
 |---|---|
-| \`Text\`     | Parágrafos, explicações e contexto           |
-| \`Alert\`    | Avisos, restrições e observações importantes |
-| \`Quote\`    | Definições, regras, dicas e boas práticas    |
-| \`Code\`     | Exemplos de código                           |`
+| \`Text\` | Paragraphs, explanations, and context |
+| \`Alert\` | Warnings, restrictions, and important observations |
+| \`Quote\` | Definitions, rules, tips, and best practices |
+| \`Code\` | Code examples |`
 
 export class GetMdxBlocksGuideTool implements Tool {
   async handle(_: Mcp) {
