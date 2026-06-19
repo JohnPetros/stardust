@@ -33,6 +33,7 @@
     "build:web": "turbo build --filter=@stardust/web",
     "build:core": "turbo build --filter=@stardust/core",
     "test": "turbo test",
+    "test:integration": "turbo test:integration --filter=@stardust/server",
     "test:server": "turbo test --filter=@stardust/server",
     "test:studio": "turbo test --filter=@stardust/studio",
     "test:web": "turbo test --filter=@stardust/web",
