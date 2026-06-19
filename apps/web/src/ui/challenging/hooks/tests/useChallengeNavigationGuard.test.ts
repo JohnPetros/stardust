@@ -82,7 +82,7 @@ describe('useChallengeNavigationGuard', () => {
   })
 
   it('should navigate immediately when the saved draft matches the current code', () => {
-    localStorageGet.mockReturnValue(challenge.code)
+    localStorageGet.mockReturnValue(challenge.initialCode.value)
 
     const { result } = Hook()
 

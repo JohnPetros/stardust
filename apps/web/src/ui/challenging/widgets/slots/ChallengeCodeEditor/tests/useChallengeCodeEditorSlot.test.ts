@@ -65,7 +65,7 @@ describe('useChallengeCodeEditorSlot', () => {
   const challenge = {
     id: { value: 'challenge-id' },
     slug: { value: 'challenge-slug' },
-    code: 'escreva("oi")',
+    initialCode: { value: 'escreva("oi")' },
     results: List.create<boolean>([true]),
     runCode: jest.fn(),
   }

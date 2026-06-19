@@ -45,7 +45,7 @@ export function useChallengeEditorPage({
     defaultValues: {
       title: currentChallenge?.title.value,
       description: currentChallenge?.description.value ?? '',
-      initialCode: currentChallenge?.code ?? '',
+      initialCode: currentChallenge?.initialCode.value ?? '',
       difficultyLevel,
       author: {
         id:
@@ -54,12 +54,12 @@ export function useChallengeEditorPage({
             : userId.value,
       },
       function: {
-        name: currentChallenge?.code
-          ? (lspProvider.getFunctionName(currentChallenge.code) ?? '')
+        name: currentChallenge?.initialCode.value
+          ? (lspProvider.getFunctionName(currentChallenge.initialCode.value) ?? '')
           : '',
         params: currentChallenge
           ? lspProvider
-              .getFunctionParamsNames(currentChallenge.code)
+              .getFunctionParamsNames(currentChallenge.initialCode.value)
               .map((paramName: string, paramIndex: number) => ({
                 name: paramName,
                 dataTypeName: DataType.create(

@@ -140,7 +140,7 @@ describe('useChallengePage', () => {
     const hydratedChallenge = setChallenge.mock.calls[0][0] as Challenge
 
     expect(hydratedChallenge.description.value).toBe(challengeDto.description)
-    expect(hydratedChallenge.code).toBe(challengeDto.initialCode)
+    expect(hydratedChallenge.initialCode.value).toBe(challengeDto.initialCode)
     expect(hydratedChallenge.userVote.value).toBe('upvote')
   })
 
