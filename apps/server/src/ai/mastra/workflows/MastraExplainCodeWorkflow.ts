@@ -4,6 +4,7 @@ import z from 'zod'
 import type { ExplainCodeWorkflow } from '@stardust/core/lesson/interfaces'
 
 import { LessonSquad } from '../squads'
+import { AppError } from '@stardust/core/global/errors'
 
 export class MastraExplainCodeWorkflow implements ExplainCodeWorkflow {
   async run(code: string): Promise<string> {
@@ -15,7 +16,7 @@ export class MastraExplainCodeWorkflow implements ExplainCodeWorkflow {
       outputSchema: z.object({ explanation: z.string() }),
     })
       .map(async ({ inputData }) => ({
-        prompt: `Explique o seguinte codigo:\n\n${inputData.code}`,
+        prompt: `Explain the following code in English:\n\n${inputData.code}`,
       }))
       .then(explainCodeStep)
       .map(async ({ inputData }) => ({
@@ -31,7 +32,7 @@ export class MastraExplainCodeWorkflow implements ExplainCodeWorkflow {
       })
 
       if (result.status !== 'success') {
-        throw new Error('Code explanation workflow did not complete successfully')
+        throw new AppError('Code explanation workflow did not complete successfully')
       }
 
       return result.result.explanation
