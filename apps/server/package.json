@@ -37,7 +37,6 @@
     "@stardust/validation": "*",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
-    "@upstash/redis": "^1.36.0",
     "@upstash/vector": "^1.2.2",
     "ai": "^5.0.116",
     "axios": "^1.12.2",
@@ -46,6 +45,7 @@
     "googleapis": "^153.0.0",
     "hono": "^4.7.9",
     "inngest": "^4.4.0",
+    "ioredis": "^5.11.1",
     "jwt-decode": "^4.0.0",
     "posthog-node": "^5.17.2",
     "zod": "^3.24.4"

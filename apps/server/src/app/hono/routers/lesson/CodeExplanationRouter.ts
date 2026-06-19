@@ -4,7 +4,7 @@ import { explainCodeRequestSchema } from '@stardust/validation/lesson/schemas'
 
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
-import { UpstashCacheProvider } from '@/provision/cache/UpstashCacheProvider'
+import { IORedisCacheProvider } from '@/provision/cache/ioredis/IORedisCacheProvider'
 import {
   ExplainCodeController,
   FetchRemainingCodeExplanationUsesController,
@@ -23,7 +23,7 @@ export class CodeExplanationRouter extends HonoRouter {
       this.authMiddleware.verifyAuthentication,
       async (context) => {
         const http = new HonoHttp(context)
-        const cacheProvider = new UpstashCacheProvider()
+        const cacheProvider = new IORedisCacheProvider()
         const controller = new FetchRemainingCodeExplanationUsesController(cacheProvider)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -38,7 +38,7 @@ export class CodeExplanationRouter extends HonoRouter {
       this.validationMiddleware.validate('json', explainCodeRequestSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const cacheProvider = new UpstashCacheProvider()
+        const cacheProvider = new IORedisCacheProvider()
         const explainCodeWorkflow = new MastraExplainCodeWorkflow()
         const controller = new ExplainCodeController(cacheProvider, explainCodeWorkflow)
         const response = await controller.handle(http)
