@@ -8,14 +8,14 @@ type Props = {
 }
 
 type Block = {
-  type: 'normal-text' | 'Text' | 'Code' | 'Alert' | 'Quote'
+  type: 'text' | 'Code'
   content: string
 }
 
 const parseStream = (rawText: string): Block[] => {
   const blocks: Block[] = []
 
-  const regex = /<(Text|Code|Alert|Quote)(?:\s+[^>]*)?>([\s\S]*?)(?:<\/\1>|$)/g
+  const regex = /<(Code)(?:\s+[^>]*)?>([\s\S]*?)(?:<\/\1>|$)/g
 
   let lastIndex = 0
   let match: RegExpExecArray | null
@@ -23,7 +23,7 @@ const parseStream = (rawText: string): Block[] => {
   while ((match = regex.exec(rawText)) !== null) {
     const plainText = rawText.substring(lastIndex, match.index)
     if (plainText.trim()) {
-      blocks.push({ type: 'Text', content: plainText })
+      blocks.push({ type: 'text', content: plainText })
     }
 
     blocks.push({
@@ -36,7 +36,7 @@ const parseStream = (rawText: string): Block[] => {
 
   const remainingText = rawText.substring(lastIndex)
   if (remainingText.trim()) {
-    blocks.push({ type: 'normal-text', content: remainingText })
+    blocks.push({ type: 'text', content: remainingText })
   }
 
   return blocks
@@ -44,6 +44,7 @@ const parseStream = (rawText: string): Block[] => {
 
 export const AssistantMessageView = ({ children, isThinking }: Props) => {
   const blocks = children ? parseStream(children) : []
+
   return (
     <div className='mt-6'>
       <Icon className='text-green-400' name='robot' weight='normal' size={36} />
@@ -54,15 +55,13 @@ export const AssistantMessageView = ({ children, isThinking }: Props) => {
           </div>
         )}
         {!isThinking &&
-          blocks.map((block) => (
-            <Mdx key={block.content}>
-              {block.type !== 'normal-text'
-                ? block.type === 'Code'
-                  ? `<Code exec>${block.content}</Code>`
-                  : `<${block.type}>\n${block.content}\n</${block.type}>`
-                : `\n${block.content}`}
-            </Mdx>
-          ))}
+          blocks.map((block, index) =>
+            block.type === 'Code' ? (
+              <Mdx key={`${block.type}-${index}`}>{`<Code>${block.content}</Code>`}</Mdx>
+            ) : (
+              <Mdx key={`${block.type}-${index}`}>{block.content}</Mdx>
+            ),
+          )}
       </div>
     </div>
   )

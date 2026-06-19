@@ -17,6 +17,7 @@ type Props = {
   chatMessages: ChatMessage[]
   challengeId: Id
   isLoading: boolean
+  onClose: VoidFunction
   onCreateChat: (question?: string) => void
   onSelectChat: (chatDto: ChatDto) => void
   onDeleteChat: (chatId: string) => void
@@ -30,6 +31,7 @@ export const AssistantChatbotView = ({
   challengeId,
   isLoading,
   firstQuestion,
+  onClose,
   onCreateChat,
   onDeleteChat,
   onSelectChat,
@@ -65,6 +67,14 @@ export const AssistantChatbotView = ({
               <Icon name='history' size={20} />
             </button>
           </AssistantChatsHistory>
+          <button
+            type='button'
+            onClick={onClose}
+            className='p-2 rounded-md text-green-400 hover:bg-gray-800'
+            aria-label='Fechar assistente'
+          >
+            <Icon name='close' size={20} />
+          </button>
         </div>
       </div>
       <div className='h-full flex flex-col pt-4'>

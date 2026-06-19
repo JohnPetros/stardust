@@ -194,6 +194,60 @@ describe('useAssistantChatsHistory', () => {
     expect(onDeleteChat).toHaveBeenCalledWith(chat.id.value)
   })
 
+  it('should refetch using the last valid page after deleting chats from the final loaded page', async () => {
+    const chats = Array.from({ length: 11 }, () => ChatFaker.fake())
+
+    service.fetchChats
+      .mockResolvedValueOnce(
+        createRestResponse({
+          body: new PaginationResponse({
+            items: chats.slice(0, 10).map((chat) => chat.dto),
+            totalItemsCount: 11,
+            itemsPerPage: 10,
+          }),
+          statusCode: 200,
+        }),
+      )
+      .mockResolvedValueOnce(
+        createRestResponse({
+          body: new PaginationResponse({
+            items: [chats[10].dto],
+            totalItemsCount: 11,
+            itemsPerPage: 10,
+          }),
+          statusCode: 200,
+        }),
+      )
+      .mockResolvedValueOnce(
+        createRestResponse({
+          body: new PaginationResponse({
+            items: chats.slice(0, 10).map((chat) => chat.dto),
+            totalItemsCount: 10,
+            itemsPerPage: 10,
+          }),
+          statusCode: 200,
+        }),
+      )
+
+    const { result } = Hook()
+
+    await waitFor(() => expect(result.current.chats).toHaveLength(10))
+
+    await act(async () => {
+      result.current.nextPage()
+    })
+
+    await waitFor(() => expect(result.current.chats).toHaveLength(11))
+
+    await act(async () => {
+      await result.current.handleDeleteChat(chats[10].id.value)
+    })
+
+    expect(service.fetchChats).toHaveBeenLastCalledWith(
+      expect.objectContaining({ page: expect.objectContaining({ value: 1 }) }),
+    )
+  })
+
   it('should show error toast when chat name is too short', async () => {
     const chat = ChatFaker.fake()
     const { result } = Hook()

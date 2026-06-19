@@ -24,9 +24,9 @@ type PaginatedCache<CacheItem> = {
   isReachedEnd: boolean
   totalItemsCount: number
   page: number
-  refetch: () => void
+  refetch: () => Promise<void>
   nextPage: () => void
-  setPage: (page: number) => void
+  setPage: (page: number) => Promise<void>
 }
 
 export function usePaginatedCache<CacheItem>({
@@ -77,8 +77,8 @@ export function usePaginatedCache<CacheItem>({
     },
   )
 
-  function setPage(page: number) {
-    setSize(page)
+  async function setPage(page: number) {
+    await setSize(page)
   }
 
   function nextPage() {
@@ -97,7 +97,9 @@ export function usePaginatedCache<CacheItem>({
     isRefetching: isValidating,
     totalItemsCount,
     page: size,
-    refetch: () => mutate(),
+    refetch: async () => {
+      await mutate()
+    },
     nextPage,
     setPage,
   }

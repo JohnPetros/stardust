@@ -1,5 +1,6 @@
 'use client'
 
+import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
@@ -7,8 +8,12 @@ import { AssistantChatbotView } from './AssistantChatbotView'
 import { useAssistantChatbot } from './useAssistantChatbot'
 
 export const AssistantChatbot = () => {
-  const { getChallengeSlice } = useChallengeStore()
+  const { md: isMobile } = useBreakpoint()
+  const { getChallengeSlice, getIsAssistantEnabledSlice, getTabHandlerSlice } =
+    useChallengeStore()
   const { challenge } = getChallengeSlice()
+  const { setIsAssistantEnabled } = getIsAssistantEnabledSlice()
+  const { tabHandler } = getTabHandlerSlice()
   const { conversationService } = useRestContext()
   const toastProvider = useToastContext()
   const {
@@ -26,6 +31,15 @@ export const AssistantChatbot = () => {
     toastProvider,
   })
 
+  function handleClose() {
+    if (isMobile) {
+      tabHandler?.showCodeTab()
+      return
+    }
+
+    setIsAssistantEnabled(false)
+  }
+
   if (!challenge) return null
 
   return (
@@ -35,6 +49,7 @@ export const AssistantChatbot = () => {
       chatMessages={chatMessages}
       isLoading={isLoading}
       firstQuestion={firstQuestion}
+      onClose={handleClose}
       onSelectChat={handleSelectChat}
       onDeleteChat={handleDeleteChat}
       onEditChatName={handleEditChatName}
