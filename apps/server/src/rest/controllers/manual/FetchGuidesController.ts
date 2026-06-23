@@ -1,6 +1,6 @@
 import type { GuidesRepository } from '@stardust/core/manual/interfaces'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
-import { GuideCategory } from '@stardust/core/manual/structures'
+import { GetGuidesUseCase } from '@stardust/core/manual/use-cases'
 
 type Schema = {
   queryParams: {
@@ -8,12 +8,13 @@ type Schema = {
   }
 }
 
-export class FetchAllGuidesController implements Controller<Schema> {
+export class FetchGuidesController implements Controller<Schema> {
   constructor(private readonly repository: GuidesRepository) {}
 
   async handle(http: Http<Schema>) {
     const { category } = http.getQueryParams()
-    const guides = await this.repository.findAllByCategory(GuideCategory.create(category))
-    return http.send(guides.map((guide) => guide.dto))
+    const useCase = new GetGuidesUseCase(this.repository)
+    const response = await useCase.execute({ category })
+    return http.send(response)
   }
 }

@@ -50,6 +50,7 @@ export const NextRestClient = ({
         return await handleRestError<Body>(
           response,
           async () => await this.get<Body>(route),
+          (session) => this.setAuthorization(session.accessToken),
         )
       }
 
@@ -85,6 +86,7 @@ export const NextRestClient = ({
         return await handleRestError<File>(
           response,
           async () => await this.getFile(route),
+          (session) => this.setAuthorization(session.accessToken),
         )
       }
 
@@ -114,6 +116,7 @@ export const NextRestClient = ({
         return await handleRestError<Body>(
           response,
           async () => await this.post<Body>(route, body),
+          (session) => this.setAuthorization(session.accessToken),
         )
       }
 
@@ -138,6 +141,7 @@ export const NextRestClient = ({
         return await handleRestError<Body>(
           response,
           async () => await this.postFormData<Body>(route, body),
+          (session) => this.setAuthorization(session.accessToken),
         )
       }
 
@@ -160,6 +164,7 @@ export const NextRestClient = ({
         return await handleRestError<Body>(
           response,
           async () => await this.put(route, body),
+          (session) => this.setAuthorization(session.accessToken),
         )
       }
 
@@ -178,6 +183,7 @@ export const NextRestClient = ({
         return await handleRestError<Body>(
           response,
           async () => await this.patch<Body>(route, body),
+          (session) => this.setAuthorization(session.accessToken),
         )
       }
 
@@ -193,7 +199,11 @@ export const NextRestClient = ({
       })
 
       if (!response.ok) {
-        return await handleRestError(response, async () => await this.delete(route, body))
+        return await handleRestError(
+          response,
+          async () => await this.delete(route, body),
+          (session) => this.setAuthorization(session.accessToken),
+        )
       }
 
       const data = await parseResponseJson(response)

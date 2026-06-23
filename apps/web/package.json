@@ -28,6 +28,7 @@
     "@hookform/resolvers": "^5.2.1",
     "@monaco-editor/react": "^4.7.0",
     "@next/third-parties": "^16.0.1",
+    "@openrouter/ai-sdk-provider": "^2.9.1",
     "@phosphor-icons/react": "^2.1.10",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-avatar": "^1.1.10",

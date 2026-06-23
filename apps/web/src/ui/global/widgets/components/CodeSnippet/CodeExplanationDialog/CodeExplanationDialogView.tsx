@@ -32,13 +32,15 @@ export const CodeExplanationDialogView = ({
         <Dialog.Header>
           <div className='flex w-full items-center justify-between gap-2'>
             <span>Explicação do código</span>
-            <Button
-              className='h-8 w-max px-3 text-xs text-gray-800'
-              isLoading={isLoading}
-              onClick={onRetry}
-            >
-              Regerar explicação
-            </Button>
+            {!isLoading && (
+              <Button
+                className='h-8 w-max px-3 text-xs text-gray-800'
+                isLoading={isLoading}
+                onClick={onRetry}
+              >
+                Regerar explicação
+              </Button>
+            )}
           </div>
         </Dialog.Header>
 

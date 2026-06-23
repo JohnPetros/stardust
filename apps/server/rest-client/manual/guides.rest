@@ -1,7 +1,7 @@
 @URL = {{BASE_URL}}/manual/guides
 @GUIDE_ID = d14d91d2-9fb5-49d0-a7f7-d3fc3530fd5e
 
-### Fetch all LSP guides
+### Fetch guides by category
 GET {{URL}}?category=lsp
 
 ### Fetch guide by ID
@@ -51,4 +51,3 @@ Authorization: Bearer {{JWT}}
     "c3d4e5f6-g7h8-i9j0-k1l2-m3n4o5p6q7r8"
   ]
 }
-

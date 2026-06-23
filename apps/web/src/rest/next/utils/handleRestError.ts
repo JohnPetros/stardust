@@ -15,12 +15,12 @@ async function refreshAuthSession() {
     return new RestResponse<SessionDto>({ statusCode: HTTP_STATUS_CODE.badRequest })
   }
 
-  console.log('refreshToken', refreshToken.data)
-
   const restClient = NextRestClient()
   restClient.setBaseUrl(CLIENT_ENV.stardustServerUrl)
   const service = AuthService(restClient)
   const response = await service.refreshSession(Text.create(refreshToken.data))
+
+  if (response.isFailure) return response
 
   await Promise.all([
     setCookie({
@@ -38,14 +38,34 @@ async function refreshAuthSession() {
   return response
 }
 
+function isRefreshSessionRoute(url: string): boolean {
+  if (!url) return false
+
+  try {
+    return new URL(url).pathname.endsWith('/auth/refresh-session')
+  } catch {
+    return url.endsWith('/auth/refresh-session')
+  }
+}
+
 export async function handleRestError<Body = unknown>(
   response: globalThis.Response,
   failedRequest: () => Promise<RestResponse<Body>>,
+  onRefreshSuccess?: (session: SessionDto) => void,
 ) {
   const isClientSide = typeof window !== 'undefined'
-  if (isClientSide && response.status === HTTP_STATUS_CODE.unauthorized) {
-    const refresResponse = await refreshAuthSession()
-    if (refresResponse.isSuccessful) return await failedRequest()
+  const shouldRefreshSession =
+    isClientSide &&
+    response.status === HTTP_STATUS_CODE.unauthorized &&
+    !isRefreshSessionRoute(response.url)
+
+  if (shouldRefreshSession) {
+    const refreshResponse = await refreshAuthSession()
+
+    if (refreshResponse.isSuccessful) {
+      onRefreshSuccess?.(refreshResponse.body)
+      return await failedRequest()
+    }
   }
 
   const data = await parseResponseJson(response)

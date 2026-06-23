@@ -34,7 +34,7 @@ export default defineConfig({
     command:
       'cross-env MODE=testing PORT=3100 NEXT_IGNORE_INCORRECT_LOCKFILE=1 NEXT_PUBLIC_STARDUST_WEB_URL=http://127.0.0.1:3100 NEXT_PUBLIC_STARDUST_SERVER_URL=http://127.0.0.1:3100/api/tests/server next dev --hostname 127.0.0.1 --port 3100',
     url: `${baseURL}/api/tests/server`,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 300000,
   },
 })

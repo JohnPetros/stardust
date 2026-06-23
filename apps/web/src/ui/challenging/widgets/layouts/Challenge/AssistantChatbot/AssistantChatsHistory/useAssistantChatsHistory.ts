@@ -41,15 +41,22 @@ export function useAssistantChatsHistory({
     return response.body
   }
 
-  const { data, isLoading, refetch, nextPage, isReachedEnd } = usePaginatedCache<ChatDto>(
-    {
-      key: CACHE.keys.assistantChats,
-      fetcher: fetchChats,
-      itemsPerPage: CHATS_PER_PAGE.value,
-      isInfinity: true,
-      isEnabled: isAccountAuthenticated,
-    },
-  )
+  const {
+    data,
+    isLoading,
+    refetch,
+    nextPage,
+    isReachedEnd,
+    totalItemsCount,
+    page,
+    setPage,
+  } = usePaginatedCache<ChatDto>({
+    key: CACHE.keys.assistantChats,
+    fetcher: fetchChats,
+    itemsPerPage: CHATS_PER_PAGE.value,
+    isInfinity: true,
+    isEnabled: isAccountAuthenticated,
+  })
 
   async function handleDeleteChat(chatId: string) {
     const response = await service.deleteChat(Id.create(chatId))
@@ -57,7 +64,15 @@ export function useAssistantChatsHistory({
       toastProvider.showError(response.errorMessage)
       return
     }
-    refetch()
+
+    const nextTotalItemsCount = Math.max(totalItemsCount - 1, 0)
+    const maxPage = Math.max(Math.ceil(nextTotalItemsCount / CHATS_PER_PAGE.value), 1)
+
+    if (page > maxPage) {
+      await setPage(maxPage)
+    }
+
+    await refetch()
     onDeleteChat(chatId)
   }
 
