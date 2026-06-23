@@ -27,7 +27,7 @@ test.describe('/auth/reset-password', () => {
     confirmation: '123456',
   }
 
-  function createSessionDto(): SessionDto {
+  function fakeSessionDto(): SessionDto {
     return {
       ...SessionFaker.fakeDto(),
       accessToken: IdFaker.fake().value,
@@ -351,13 +351,23 @@ test.describe('/auth/reset-password', () => {
     page,
   }) => {
     const token = 'token-de-reset'
-    const session = createSessionDto()
+    const session = fakeSessionDto()
 
     await registerResetPasswordDefaults(page, [
       createConfirmPasswordResetSuccessRoute(session),
     ])
 
+    const confirmRequestPromise = page.waitForRequest((request) => {
+      return (
+        request.method() === 'GET' && request.url().includes(CONFIRM_PASSWORD_RESET_ROUTE)
+      )
+    })
+
     await page.goto(`${CONFIRM_PASSWORD_RESET_ROUTE}?token=${token}`)
+
+    const confirmRequest = await confirmRequestPromise
+    const confirmRequestUrl = new URL(confirmRequest.url())
+    expect(confirmRequestUrl.searchParams.get('token')).toBe(token)
 
     await expect(page).toHaveURL(new RegExp(`${RESET_PASSWORD_ROUTE}$`))
     await expectTemporaryCookies(page.context(), session)
@@ -367,7 +377,7 @@ test.describe('/auth/reset-password', () => {
     page,
   }) => {
     const token = 'token-expirado'
-    const session = createSessionDto()
+    const session = fakeSessionDto()
 
     await setTemporaryResetCookies(page.context(), session)
     await registerResetPasswordDefaults(page, [
@@ -391,7 +401,7 @@ test.describe('/auth/reset-password', () => {
   test('renders authorized reset state and opens new password dialog', async ({
     page,
   }) => {
-    await gotoAuthorizedResetPasswordPage(page, createSessionDto())
+    await gotoAuthorizedResetPasswordPage(page, fakeSessionDto())
 
     await expect(page.getByText('Você já pode redefinir sua senha 🚀!')).toBeVisible()
 
@@ -402,7 +412,7 @@ test.describe('/auth/reset-password', () => {
   })
 
   test('validates new password policy and matching confirmation', async ({ page }) => {
-    await gotoAuthorizedResetPasswordPage(page, createSessionDto())
+    await gotoAuthorizedResetPasswordPage(page, fakeSessionDto())
     await openNewPasswordDialog(page)
 
     await submitNewPasswordForm(page)
@@ -430,7 +440,7 @@ test.describe('/auth/reset-password', () => {
   test('patches new password with temporary tokens, signs out and returns to sign in from success action', async ({
     page,
   }) => {
-    await submitSuccessfulPasswordReset(page, createSessionDto())
+    await submitSuccessfulPasswordReset(page, fakeSessionDto())
 
     await page.getByRole('button', { name: 'Fazer login' }).click()
 
@@ -441,7 +451,7 @@ test.describe('/auth/reset-password', () => {
   test('returns to sign in when success dialog is closed with Escape', async ({
     page,
   }) => {
-    await submitSuccessfulPasswordReset(page, createSessionDto())
+    await submitSuccessfulPasswordReset(page, fakeSessionDto())
 
     await page.keyboard.press('Escape')
 
@@ -452,7 +462,7 @@ test.describe('/auth/reset-password', () => {
   test('returns to sign in when success dialog is closed by clicking outside', async ({
     page,
   }) => {
-    await submitSuccessfulPasswordReset(page, createSessionDto())
+    await submitSuccessfulPasswordReset(page, fakeSessionDto())
 
     await page.mouse.click(10, 10)
 
@@ -463,7 +473,7 @@ test.describe('/auth/reset-password', () => {
   test('keeps authorized flow and shows error when password reset fails', async ({
     page,
   }) => {
-    await gotoAuthorizedResetPasswordPage(page, createSessionDto(), [
+    await gotoAuthorizedResetPasswordPage(page, fakeSessionDto(), [
       {
         method: 'PATCH',
         path: '/auth/reset-password',
