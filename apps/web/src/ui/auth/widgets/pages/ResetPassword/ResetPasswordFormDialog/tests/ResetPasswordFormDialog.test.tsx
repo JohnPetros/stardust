@@ -61,7 +61,9 @@ describe('ResetPasswordFormDialog', () => {
   it('should expose stable selectors when new password dialog opens', async () => {
     await Widget()
 
-    expect(screen.getByRole('heading', { name: 'Insira sua nova senha' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Insira sua nova senha' }),
+    ).toBeInTheDocument()
     expect(screen.getByTestId('new-password-input')).toBeInTheDocument()
     expect(screen.getByTestId('new-password-confirmation-input')).toBeInTheDocument()
     expect(screen.getByTestId('reset-password-submit-button')).toBeInTheDocument()
