@@ -18,6 +18,7 @@ type AlertDialogProps = {
   children?: ReactNode
   shouldPlayAudio?: boolean
   shouldForceMount?: boolean
+  shouldCloseOnInteractOutside?: boolean
   onOpenChange?: (isOpen: boolean) => void
 }
 
@@ -31,6 +32,7 @@ const AlertDialogComponent = (
     children: trigger,
     shouldPlayAudio = true,
     shouldForceMount = false,
+    shouldCloseOnInteractOutside = false,
     onOpenChange,
   }: AlertDialogProps,
   ref: ForwardedRef<AlertDialogRef>,
@@ -49,7 +51,12 @@ const AlertDialogComponent = (
     <Hydration>
       <AlertDialog.Root open={isOpen} onOpenChange={handleOpenChange}>
         <AlertDialog.Portal container={isRendered ? containerRef.current : null}>
-          <AlertDialog.Overlay className='fixed inset-0 z-[1000] overflow-y-auto bg-black bg-opacity-50' />
+          <AlertDialog.Overlay
+            className='fixed inset-0 z-[1000] overflow-y-auto bg-black bg-opacity-50'
+            onClick={
+              shouldCloseOnInteractOutside ? () => handleOpenChange(false) : undefined
+            }
+          />
           <AlertDialog.Content
             forceMount={shouldForceMount ? true : undefined}
             className='fixed left-1/2 top-1/2 z-[1100] max-h-screen w-full max-w-lg -translate-x-1/2 -translate-y-1/2 p-6'

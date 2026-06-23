@@ -41,33 +41,40 @@ export const ResetPasswordPageView = ({
               onNewPasswordSubmit={onNewPasswordSubmit}
               onPasswordReset={onPasswordReset}
             >
-              <Button className='w-full'>Redefinir senha</Button>
+              <Button className='w-full' testId='open-reset-password-dialog-button'>
+                Redefinir senha
+              </Button>
             </ResetPasswordFormDialog>
           }
         />
       ) : (
         <AnimatedForm>
-          <h1 className='text-2xl font-semibold text-gray-100'>Redefina sua senha</h1>
-          <p className='text-sm text-gray-300'>
-            Digite seu e-mail de cadastro e nós enviaremos um link para você redefinir sua
-            senha.
-          </p>
-          <Input
-            label='E-mail'
-            type='email'
-            icon='mail'
-            value={email}
-            onChange={({ currentTarget }) => onEmailChange(currentTarget.value)}
-            errorMessage={errorMessage}
-            placeholder='seu@email.com'
-            autoFocus
-            className='w-[100rem]'
-          />
-          <Button onClick={onEmailSubmit} isLoading={isLoading}>
-            Enviar e-mail
-          </Button>
-          <div className='w-max self-center'>
-            <Link href={ROUTES.auth.signIn}>Já tem uma conta? Faça login</Link>
+          <div data-testid='reset-password-request-form' className='contents'>
+            <h1 className='text-2xl font-semibold text-gray-100'>Redefina sua senha</h1>
+            <p className='text-sm text-gray-300'>
+              Digite seu e-mail de cadastro e nós enviaremos um link para você redefinir
+              sua senha.
+            </p>
+            <Input
+              testId='email-input'
+              label='E-mail'
+              type='email'
+              icon='mail'
+              value={email}
+              onChange={({ currentTarget }) => onEmailChange(currentTarget.value)}
+              errorMessage={errorMessage}
+              placeholder='seu@email.com'
+              autoFocus
+              className='w-[100rem]'
+            />
+            <Button onClick={onEmailSubmit} isLoading={isLoading} testId='submit-button'>
+              Enviar e-mail
+            </Button>
+            <div className='w-max self-center'>
+              <Link href={ROUTES.auth.signIn} testId='sign-in-link'>
+                Já tem uma conta? Faça login
+              </Link>
+            </div>
           </div>
         </AnimatedForm>
       )}

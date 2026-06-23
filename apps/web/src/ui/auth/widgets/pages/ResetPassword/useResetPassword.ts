@@ -65,7 +65,7 @@ export function useResetPassword(
         10,
       )
     } catch (error) {
-      if (error instanceof ValidationError) setErrorMessage(error.message)
+      if (error instanceof ValidationError) setErrorMessage('Informe um e-mail válido')
     } finally {
       setIsLoading(false)
     }
