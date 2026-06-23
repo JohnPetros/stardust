@@ -26,7 +26,7 @@ Estas regras aplicam-se a toda a spec. Não as repita nas seções — referenci
 6. **Schemas estritos.** Campos controlados pelo servidor (ex: `author`, `userId`, `status`) não entram em schemas de entrada; use schemas derivados na borda.
 7. **Authn ≠ Authz ≠ Domínio.** Não funda essas responsabilidades sem evidência de que o projeto já faz isso naquele fluxo.
 8. **Migrations canônicas.** Novas migrations vão em `apps/server/supabase/migrations/**`. Só inclua migration quando houver mudança real de schema. Se não houver, declare explicitamente.
-9. **Dúvida = Pendência.** Ao detectar transgressão arquitetural ou falta de evidência, registre em Pendências e use `question`. Não decida por conta própria quando o impacto for alto.
+9. **Dúvida = Pergunta.** Ao detectar transgressão arquitetural, lacuna no PRD ou falta de evidência com impacto relevante, **pergunte ao usuário** com `question` antes de finalizar a spec (uma pergunta por decisão, opção recomendada primeiro). Não decida por conta própria quando o impacto for alto. Só permanece em Pendências o que o usuário deixou explicitamente em aberto.
 10. **Consistência > Criatividade.** Siga os padrões existentes na codebase (nomenclatura, organização, contratos por camada). Se a seção não se aplicar, escreva **Não aplicável**.
 
 ---
@@ -74,7 +74,16 @@ Consolide as descobertas e tome as decisões de implementação:
 - Resolva conflitos entre relatórios de diferentes apps
 - Defina o que será criado, modificado e removido — com justificativa baseada em evidência
 - Para features multi-app, mapeie o contrato entre eles: qual app expõe, qual consome e o formato (REST, RPC, evento)
-- Registre em Pendências tudo sem evidência suficiente
+- Liste as decisões em aberto (sem evidência única) para serem perguntadas em 1.5
+
+#### 1.5 Clarificação (perguntar antes de escrever)
+
+Antes de redigir a spec, transforme cada decisão em aberto da síntese em uma **pergunta ao usuário** via `question` — não escreva a pendência direto no documento. Aplica-se a escolhas como path/contrato/transporte, payloads, sequência de entrega, cobertura de testes e qualquer decisão arquitetural sem evidência única na codebase.
+
+- Uma pergunta por decisão; agrupe-as em uma única chamada de `question` quando possível.
+- Cada pergunta com 2–4 opções mutuamente exclusivas; a recomendada primeiro, marcada com `(Recomendado)`.
+- Incorpore cada resposta como **Decisão Técnica** (seção 8) e ajuste as seções afetadas.
+- Só o que o usuário deixar explicitamente em aberto vai para **Pendências** (seção 10).
 
 ### 2. Roteamento de Ferramentas
 
@@ -283,5 +292,6 @@ Para cada decisão relevante: decisão, alternativas, motivo, trade-offs.
 - **Referências:** caminhos de arquivos similares na codebase.
 
 #### 10. Pendências / Dúvidas (Quando aplicável)
+Apenas itens que **permanecem em aberto após a etapa de Clarificação (1.5)** — esta seção não substitui perguntar. Decisões já confirmadas com o usuário via `question` vão para Decisões Técnicas (seção 8), não aqui.
 Para cada item: descrição, impacto, ação sugerida.
 Se não houver: **Sem pendências**.

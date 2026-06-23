@@ -97,7 +97,7 @@ Cada tarefa de teste deve indicar qual arquivo de regras de teste deve ser consu
 
 ## Saída
 
-Salve o plano final em `documentation/plan.md`, seguindo **estritamente** o template abaixo.
+Salve o plano final em `documentation/features/{dominio}/plan.md` (mesmo diretório da spec ou bug report de entrada), seguindo **estritamente** o template abaixo.
 
 ```md
 ---
