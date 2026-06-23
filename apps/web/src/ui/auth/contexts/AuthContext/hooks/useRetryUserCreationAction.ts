@@ -1,20 +1,18 @@
 import { useCallback } from 'react'
-import { useAction } from 'next-safe-action/hooks'
 
+import type { RestClient } from '@stardust/core/global/interfaces'
 import { ActionResponse } from '@stardust/core/global/responses'
 
-import { authActions } from '@/rpc/next-safe-action'
+import { AuthService } from '@/rest/services'
 
-export function useRetryUserCreationAction() {
-  const { executeAsync } = useAction(authActions.retryUserCreation)
-
+export function useRetryUserCreationAction(restClient: RestClient) {
   const retryUserCreation = useCallback(async (): Promise<ActionResponse<void>> => {
-    const response = await executeAsync()
-    console.log(response?.serverError)
-    return response?.serverError
-      ? new ActionResponse({ errorMessage: response.serverError })
+    const service = AuthService(restClient)
+    const response = await service.retryUserCreation()
+    return response.isFailure
+      ? new ActionResponse({ errorMessage: response.errorMessage })
       : new ActionResponse()
-  }, [executeAsync])
+  }, [restClient])
 
   return { retryUserCreation }
 }
