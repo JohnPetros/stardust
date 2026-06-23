@@ -143,6 +143,12 @@ test.describe('/auth/sign-in', () => {
       },
       ...createSignInSuccessRoutes(account, session),
       {
+        method: 'POST',
+        path: '/auth/refresh-session',
+        status: 200,
+        body: session,
+      },
+      {
         method: 'GET',
         path: '/profile/achievements',
         status: 200,
