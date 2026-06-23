@@ -1,11 +1,11 @@
 ---
-description: Prompt para resolver conversas pendentes de um pull request com analise, implementacao e fechamento de threads via gh CLI.
+description: Prompt para resolver conversas pendentes e erros de CI/CD de um pull request com analise, implementacao e fechamento de threads via gh CLI.
 ---
 
-# Prompt: Resolver Conversas de PR
+# Prompt: Resolver Pendências de PR
 
 **Objetivo Principal:**
-Analisar, implementar e resolver todas as conversas **não resolvidas** em um Pull Request (PR) específico do GitHub. O foco é garantir que todos os pontos de melhoria, correções de bugs e sugestões de design levantadas pelos revisores sejam devidamente endereçados no código, respeitando os padrões e a arquitetura do projeto.
+Analisar, implementar e resolver todas as conversas **não resolvidas** e **erros de GitHub Actions** em um Pull Request (PR) específico do GitHub. O foco é garantir que todos os pontos de melhoria, correções de bugs, sugestões de design levantadas pelos revisores e falhas de CI/CD sejam devidamente endereçados no código, respeitando os padrões e a arquitetura do projeto.
 
 **Entrada:**
 - **Link do PR:** URL completa do Pull Request no GitHub (ex: `https://github.com/owner/repo/pull/123`).
@@ -67,23 +67,53 @@ Filtre apenas os nós onde `isResolved: false` e `isOutdated: false`. Esses são
 
 ---
 
-### 3. Triagem das Threads
+### 3. Verificação de Erros do GitHub Actions
 
-Classifique cada thread não resolvida em uma das categorias:
+Verifique o status dos checks (CI/CD) associados ao PR:
+
+```bash
+gh pr checks <pull_number> --repo <owner>/<repo>
+```
+
+Se houver checks com status **fail**, obtenha os logs do workflow com falha:
+
+```bash
+# Listar os runs associados ao PR
+gh run list --repo <owner>/<repo> --branch <head_branch> --status failure --limit 5 --json databaseId,name,conclusion,event
+
+# Obter os logs detalhados do run com falha
+gh run view <run_id> --repo <owner>/<repo> --log-failed
+```
+
+> **Dica:** O `--log-failed` retorna apenas os logs dos steps que falharam, facilitando a análise. Se o output for muito grande, foque nos últimos 100 linhas do step com falha.
+
+Para cada falha identificada, extraia:
+- **Workflow e job** que falhou.
+- **Mensagem de erro** principal.
+- **Arquivo e linha** afetados (quando disponível no log).
+- **Causa raiz** provável.
+
+---
+
+### 4. Triagem das Threads e Erros de CI
+
+Classifique cada thread não resolvida **e cada erro de CI** em uma das categorias:
 
 | Categoria | Critério | Ação |
 |---|---|---|
-| **Implementar** | Correção de código, ajuste de padrão, bug apontado | Implementar autonomamente |
-| **Escalar** | Mudança arquitetural, decisão de design, conflito com Spec/PRD | Consultar o usuário antes de agir |
-| **Ignorar** | Comentário meramente informativo, já endereçado no código | Pular |
+| **Implementar** | Correção de código, ajuste de padrão, bug apontado, erro de lint/type/test no CI | Implementar autonomamente |
+| **Escalar** | Mudança arquitetural, decisão de design, conflito com Spec/PRD, falha de CI relacionada a infra/config de workflow | Consultar o usuário antes de agir |
+| **Ignorar** | Comentário meramente informativo, já endereçado no código, falha de CI transiente (timeout de rede, flaky test já conhecido) | Pular |
 
-> **Regra de escalada:** Qualquer comentário que implique mudança de arquitetura, remoção de funcionalidade ou conflito com o PRD/Spec associado deve ser **escalado** — nunca implementado de forma autônoma.
+> **Regra de escalada:** Qualquer comentário ou erro de CI que implique mudança de arquitetura, remoção de funcionalidade, alteração de configuração de workflow/infra ou conflito com o PRD/Spec associado deve ser **escalado** — nunca implementado de forma autônoma.
+
+> **Erros de CI:** Erros de typecheck, lint, testes unitários/integração e build são tratados como itens **Implementar**. Erros de configuração de workflow (permissões, secrets, versão de runner) são **Escalar**.
 
 Apresente a lista classificada ao usuário antes de avançar caso haja itens na categoria **Escalar**.
 
 ---
 
-### 4. Implementação
+### 5. Implementação
 
 Para cada thread categorizada como **Implementar**:
 
@@ -104,7 +134,7 @@ Para cada thread categorizada como **Escalar**:
 
 ---
 
-### 5. Validação das Alterações
+### 6. Validação das Alterações
 
 Após implementar todas as correções:
 
@@ -118,7 +148,7 @@ Corrija eventuais erros antes de prosseguir. Verifique também se as alteraçõe
 
 ---
 
-### 6. Fechamento das Threads
+### 7. Fechamento das Threads
 
 Resolva cada thread implementada via GraphQL API:
 
@@ -138,7 +168,7 @@ mutation {
 
 ---
 
-### 7. Atualização da Documentação
+### 8. Atualização da Documentação
 
 Localize o documento de Spec ou Bug Report associado à branch do PR (`documentation/features/.../specs/...`) e, se as alterações implementadas afetarem o escopo documentado:
 
@@ -158,13 +188,20 @@ gh pr view <pull_number> --repo <owner>/<repo> --json title,headRefName,body,fil
 
 # Threads de revisão (filtrando não resolvidas e não outdated)
 gh api graphql -f query='{ repository(owner:"<owner>", name:"<repo>") { pullRequest(number:<pull_number>) { reviewThreads(first:50) { nodes { id isResolved isOutdated comments(first:1) { nodes { path body author { login } } } } } } } }'
+
+# Status dos checks de CI/CD
+gh pr checks <pull_number> --repo <owner>/<repo>
+
+# Logs de workflows com falha (se houver)
+gh run list --repo <owner>/<repo> --branch <head_branch> --status failure --limit 5 --json databaseId,name,conclusion
+gh run view <run_id> --repo <owner>/<repo> --log-failed
 ```
 
 ### Passo 2 — Diagnóstico e Triagem
 
-Para cada thread não resolvida, identifique e classifique:
+Para cada thread não resolvida e cada erro de CI, identifique e classifique:
 - Arquivo afetado e linhas envolvidas.
-- Problema descrito pelo revisor.
+- Problema descrito pelo revisor ou mensagem de erro do CI.
 - Solução proposta.
 - Categoria: **Implementar**, **Escalar** ou **Ignorar**.
 
@@ -190,14 +227,17 @@ Relate o progresso com o seguinte formato:
 ```
 ## Resumo de Resolucoes
 
-### Implementadas
+### Conversas Implementadas
 - [x] `caminho/do/arquivo.ts` — [descricao da mudanca realizada]
 
+### Erros de CI Corrigidos
+- [x] `workflow/job` — [descricao do erro e da correcao aplicada]
+
 ### Aguardando decisao
-- [ ] `caminho/do/arquivo.ts` — [comentario do revisor] -> [motivo da escalada]
+- [ ] `caminho/do/arquivo.ts` — [comentario do revisor ou erro de CI] -> [motivo da escalada]
 
 ### Ignoradas
-- `caminho/do/arquivo.ts` — thread meramente informativa / ja enderecada
+- `caminho/do/arquivo.ts` — thread meramente informativa / ja enderecada / falha transiente de CI
 ```
 
 ### Passo 6 — Atualização da Documentação
