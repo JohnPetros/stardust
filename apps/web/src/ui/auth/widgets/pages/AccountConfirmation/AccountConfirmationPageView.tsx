@@ -41,7 +41,11 @@ export function AccountConfirmationPageView({
                 title='Bem-vindo(a) 👋'
                 subtitle='Seu perfil foi criado com sucesso!'
                 footer={
-                  <Button onClick={onLinkClick} className='w-72'>
+                  <Button
+                    onClick={onLinkClick}
+                    testId='go-to-space-button'
+                    className='w-72'
+                  >
                     Ir para a página principal
                   </Button>
                 }
@@ -54,6 +58,7 @@ export function AccountConfirmationPageView({
                   <Button
                     onClick={onRetryUserCreation}
                     isLoading={isRetryingUserCreation}
+                    testId='retry-user-creation-button'
                     className='mt-8 w-72'
                   >
                     Tentar novamente
