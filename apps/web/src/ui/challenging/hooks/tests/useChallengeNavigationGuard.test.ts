@@ -38,7 +38,7 @@ describe('useChallengeNavigationGuard', () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
-    challenge = ChallengesFaker.fake({ code: 'escreva("ola")' })
+    challenge = ChallengesFaker.fake({ initialCode: 'escreva("ola")' })
     navigationProvider = mock<NavigationProvider>()
     navigationProvider.goTo.mockImplementation(jest.fn())
     navigationProvider.goBack.mockImplementation(jest.fn())
@@ -82,7 +82,7 @@ describe('useChallengeNavigationGuard', () => {
   })
 
   it('should navigate immediately when the saved draft matches the current code', () => {
-    localStorageGet.mockReturnValue(challenge.code)
+    localStorageGet.mockReturnValue(challenge.initialCode.value)
 
     const { result } = Hook()
 

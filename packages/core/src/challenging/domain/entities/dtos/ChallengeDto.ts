@@ -6,7 +6,7 @@ import type { TestCaseDto } from './TestCaseDto'
 export type ChallengeDto = {
   id?: string
   title: string
-  code: string
+  initialCode: string
   slug?: string
   difficultyLevel: string
   description: string

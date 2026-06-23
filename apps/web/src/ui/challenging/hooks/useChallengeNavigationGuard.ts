@@ -29,7 +29,7 @@ export function useChallengeNavigationGuard({
     const draftCode = challengeCodeLocalStorage.get()
     if (draftCode === null) return false
 
-    return draftCode !== challenge.code
+    return draftCode !== challenge.initialCode.value
   }
 
   function requestNavigation(route: string): void {

@@ -25,7 +25,7 @@
     "format": "biome format src/**/*.ts --write"
   },
   "dependencies": {
-    "@designliquido/delegua": "^1.24.2",
+    "@designliquido/delegua": "^1.24.4",
     "@stardust/core": "*",
     "monaco-editor": "^0.55.1"
   },

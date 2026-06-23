@@ -44,7 +44,9 @@ export function useChallengeCodeEditorSlot() {
     STORAGE.keys.challengeCode(challenge?.id.value ?? ''),
   )
   const initialCode =
-    typeof window !== 'undefined' ? (localStorage.get() ?? challenge?.code ?? '') : ''
+    typeof window !== 'undefined'
+      ? (localStorage.get() ?? challenge?.initialCode.value ?? '')
+      : ''
 
   const handleLspError = useCallback(
     (message: string, line: number) => {
@@ -67,7 +69,8 @@ export function useChallengeCodeEditorSlot() {
     consoleRef.current?.close()
 
     try {
-      const executionOutputs = await challenge.runCode(userCode.current)
+      const initialCode = Code.create(lspProvider, challenge.initialCode.value)
+      const executionOutputs = await challenge.runCode(userCode.current, initialCode)
 
       setOutputs(executionOutputs.items)
       setResults(challenge.results.items)
@@ -143,7 +146,7 @@ export function useChallengeCodeEditorSlot() {
     codeEditorHeight,
     outputs,
     isMobile,
-    originalCode: Code.create(lspProvider, challenge?.code),
+    originalCode: Code.create(lspProvider, challenge?.initialCode.value),
     initialCode,
     handleRunCode,
     handleOpenConsole,

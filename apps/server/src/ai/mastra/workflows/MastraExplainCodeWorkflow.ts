@@ -16,7 +16,7 @@ export class MastraExplainCodeWorkflow implements ExplainCodeWorkflow {
       outputSchema: z.object({ explanation: z.string() }),
     })
       .map(async ({ inputData }) => ({
-        prompt: `Explain the following code in English:\n\n${inputData.code}`,
+        prompt: `Explique o seguinte código em português:\n\n${inputData.code}`,
       }))
       .then(explainCodeStep)
       .map(async ({ inputData }) => ({

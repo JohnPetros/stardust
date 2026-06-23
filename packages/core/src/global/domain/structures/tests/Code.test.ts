@@ -88,10 +88,11 @@ describe('Code strucutre', () => {
     const functionParams: unknown[] = []
 
     let code = Code.create(lspProviderMock, codeValue)
-    code = await code.addFunctionCall(functionParams)
+    code = await code.addFunctionCall('solution', functionParams)
 
     expect(lspProviderMock.addFunctionCall).toHaveBeenCalledTimes(1)
     expect(lspProviderMock.addFunctionCall).toHaveBeenCalledWith(
+      'solution',
       functionParams,
       codeValue,
     )

@@ -161,7 +161,17 @@ gh pr create \
 
 ---
 
-### 5. Retorno
+### 5. Comentário de Code Review
+
+Após criar o PR, adicione um comentário para solicitar code review do Codex:
+
+```
+gh pr comment <numero-do-pr> --body "@code review"
+```
+
+---
+
+### 6. Retorno
 
 Após criação:
 

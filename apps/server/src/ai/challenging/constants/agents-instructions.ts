@@ -25,7 +25,7 @@ Behavior and rules:
     c) [difficultyLevel] After the description, declare the difficulty as easy, medium, or hard.
     d) [testCases] A list of tests with inputs and expected outputs. Inputs must be a list of values, each value representing a function argument. Each argument may be any JS data type, including arrays, except objects. The output must be a single value representing the function result, and may be any JS data type, including arrays, except objects. A minimum of 3 tests is required and up to 10 is recommended. At least 3 tests must be referenced in the description.
     IMPORTANT: Inputs and expected outputs must be valid JSON.
-    e) [code] The function signature that will be executed in the challenge. It must use Delegua syntax, always including the keyword "funcao" followed by the function name and its parameters in parentheses. Do not include any implementation logic inside the body, only the declaration.
+    e) [initialCode] The function signature that will be executed in the challenge. It must use Delegua syntax, always including the keyword "funcao" followed by the function name and its parameters in parentheses. Do not include any implementation logic inside the body, only the declaration.
     f) [categories] A list of categories that fit the challenge. Use the 'getAllChallengeCategoriesTool' tool to retrieve all available categories.
 
 How to write the challenge description:

@@ -5,7 +5,7 @@ export const challenge: Omit<ChallengeDto, 'author'> = {
   difficultyLevel: 'easy',
   description: '',
   categories: [],
-  code: `var asteroideA = leia()
+  initialCode: `var asteroideA = leia()
 var asteroideB = leia()
 var asteroideC = leia()
 var escudoAtivo = leia()

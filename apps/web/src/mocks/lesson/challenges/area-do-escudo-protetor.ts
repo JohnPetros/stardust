@@ -14,7 +14,7 @@ export const challenge: ChallengeDto = {
   },
   description: '',
   categories: [],
-  code: `funcao calculeAreaDoEscudo(base, altura) {
+  initialCode: `funcao calculeAreaDoEscudo(base, altura) {
   
 }`,
   testCases: [

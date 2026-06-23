@@ -8,7 +8,7 @@ export const challenge: Omit<ChallengeDto, 'author'> = {
   difficultyLevel: 'easy',
   categories: [],
   title: 'Análise do ambiente',
-  code: `var nome = "Datahon"
+  initialCode: `var nome = "Datahon"
 var temperatura = 53.5
 var temOxigenio = falso
 

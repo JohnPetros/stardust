@@ -4,7 +4,11 @@ import type { LspResponse } from '../../responses'
 export interface LspProvider {
   run(code: string): Promise<LspResponse>
   addInputs(codeInput: CodeInput, code: string): Promise<string>
-  addFunctionCall(functionParams: unknown[], code: string): Promise<string>
+  addFunctionCall(
+    functionName: string,
+    functionParams: unknown[],
+    code: string,
+  ): Promise<string>
   buildFunction(functionName: string, functionParamsNames: string[]): string
   getFunctionName(code: string): string | null
   getFunctionParamsNames(code: string): string[]

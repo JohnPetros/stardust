@@ -2,7 +2,7 @@
 description: Prompt para identificar e corrigir efeitos colaterais apos alteracoes manuais, incluindo validacoes e testes.
 ---
 
-# Fix Side Effect Skill
+# Implement Change
 
 **Objetivo:**
 Identificar e corrigir regressões ou erros de compilação (efeitos colaterais) resultantes de alterações manuais no código-fonte. O foco é restabelecer a integridade do projeto, atualizando dependências e validando testes.

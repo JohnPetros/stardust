@@ -19,3 +19,8 @@ Após fazer qualquer alteração no código, execute os comandos:
 
 - typecheck
 - codecheck
+- tests
+
+# Instruções para revisão de pull request
+
+Leia o arquivo `documentation/prompts/review-pr-prompt.md` antes de começar a revisão.

@@ -35,6 +35,10 @@
     "test": {
       "persistent": true,
       "cache": false
+    },
+    "test:integration": {
+      "persistent": true,
+      "cache": false
     }
   }
 }

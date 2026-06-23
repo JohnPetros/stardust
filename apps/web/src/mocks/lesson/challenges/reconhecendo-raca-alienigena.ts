@@ -8,7 +8,7 @@ export const challenge: Omit<ChallengeDto, 'author'> = {
   categories: [],
   title: 'Reconhecendo raça alienígena',
   difficultyLevel: 'easy',
-  code: `// Lembre-se:
+  initialCode: `// Lembre-se:
 // Trox: se tiver 3 olhos e cor verde
 // Blonk: se tiver 2 olhos e cor laranja
 // Plimp: se tiver 6 olhos e cor marrom

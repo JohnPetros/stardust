@@ -9,7 +9,7 @@ export const challenge: ChallengeDto = {
   author: {
     id: '',
   },
-  code: `var alimentos = leia()
+  initialCode: `var alimentos = leia()
 
 var macacos = {
   "Joe": 0,

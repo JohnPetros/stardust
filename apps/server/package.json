@@ -22,7 +22,8 @@
     "update": "ncu -u -f $npm_config_dep_name",
     "check-updates": "ncu",
     "typecheck": "tsc --noEmit",
-    "test": "jest"
+    "test": "jest --selectProjects server",
+    "test:integration": "jest --selectProjects server-integration"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.52",

@@ -6,7 +6,9 @@ import type {
 import { Challenge } from '@stardust/core/challenging/entities'
 import { Datetime } from '@stardust/core/global/libs'
 
-import type { SupabaseChallenge } from '../../types'
+import type { Database, SupabaseChallenge } from '../../types'
+
+type SupabaseChallengePayload = Database['public']['Tables']['challenges']['Insert']
 
 export class SupabaseChallengeMapper {
   static toEntity(supabaseChallenge: SupabaseChallenge): Challenge {
@@ -17,7 +19,7 @@ export class SupabaseChallengeMapper {
     const challengeDto: ChallengeDto = {
       id: supabaseChallenge.id ?? '',
       title: supabaseChallenge.title ?? '',
-      code: supabaseChallenge.code ?? '',
+      initialCode: supabaseChallenge.initial_code ?? '',
       slug: supabaseChallenge.slug ?? '',
       difficultyLevel: supabaseChallenge.difficulty_level ?? '',
       author: {
@@ -64,15 +66,14 @@ export class SupabaseChallengeMapper {
     return challengeDto
   }
 
-  static toSupabase(challenge: Challenge): SupabaseChallenge {
+  static toSupabase(challenge: Challenge): SupabaseChallengePayload {
     const challengeDto = challenge.dto
 
-    // @ts-expect-error
-    const supabaseChallenge: SupabaseChallenge = {
+    const supabaseChallenge: SupabaseChallengePayload = {
       id: challenge.id.value,
       slug: challenge.slug.value,
       title: challengeDto.title,
-      code: challengeDto.code,
+      initial_code: challengeDto.initialCode,
       difficulty_level: challengeDto.difficultyLevel,
       test_cases: JSON.stringify(challengeDto.testCases),
       description: challengeDto.description,
@@ -80,7 +81,6 @@ export class SupabaseChallengeMapper {
       is_public: challenge.isPublic.value,
       is_new: challenge.isNew.value,
       created_at: challenge.postedAt.toDateString(),
-      categories: [],
       star_id: '',
     }
 

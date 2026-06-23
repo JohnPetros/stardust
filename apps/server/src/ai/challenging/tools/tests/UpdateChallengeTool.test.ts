@@ -28,7 +28,7 @@ describe('Update Challenge Tool', () => {
       challengeId: 'f246350e-c2ad-4e6a-b8bd-57e979f1a62e',
       title: 'Novo titulo',
       description: 'Nova descricao',
-      code: 'funcao resolver() {}',
+      initialCode: 'funcao resolver() {}',
       difficultyLevel: 'easy',
       testCases: [
         {
@@ -45,7 +45,7 @@ describe('Update Challenge Tool', () => {
       id: 'f246350e-c2ad-4e6a-b8bd-57e979f1a62e',
       title: 'Titulo atual',
       description: 'Descricao atual',
-      code: 'funcao resolver() {}',
+      initialCode: 'funcao resolver() {}',
       difficultyLevel: 'easy',
       testCases: [
         {
@@ -77,7 +77,7 @@ describe('Update Challenge Tool', () => {
       challengeId,
       title: 'Novo titulo',
       description: 'Nova descricao',
-      code: 'funcao resolver() {}',
+      initialCode: 'funcao resolver() {}',
       isPublic: true,
       difficultyLevel: 'easy',
       testCases: [
@@ -95,7 +95,7 @@ describe('Update Challenge Tool', () => {
       id: challengeId,
       title: 'Titulo atual',
       description: 'Descricao atual',
-      code: 'funcao resolver() {}',
+      initialCode: 'funcao resolver() {}',
       difficultyLevel: 'easy',
       testCases: [
         {

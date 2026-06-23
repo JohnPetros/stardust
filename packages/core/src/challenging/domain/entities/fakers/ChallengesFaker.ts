@@ -16,7 +16,7 @@ export class ChallengesFaker {
       title: faker.person.firstName(),
       difficultyLevel: faker.helpers.arrayElement(['easy', 'medium', 'hard']),
       slug: faker.lorem.slug(),
-      code: '',
+      initialCode: '',
       categories: [],
       author: {
         id: faker.string.uuid(),

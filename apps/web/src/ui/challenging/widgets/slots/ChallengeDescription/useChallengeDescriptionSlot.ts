@@ -25,7 +25,7 @@ export function useChallengeDescriptionSlot(user: User | null) {
 
     if (!challenge) return
 
-    const hasFunction = lspProvider.getFunctionName(challenge.code)
+    const hasFunction = lspProvider.getFunctionName(challenge.initialCode.value)
 
     const alertText = hasFunction
       ? '<Alert>Você deve `retornar` a resposta utilizando a função que já existe no código ao lado. Então por favor não altere o nome da função nem os seus parâmetros, senão não será possível validar seu desafio!</Alert>'

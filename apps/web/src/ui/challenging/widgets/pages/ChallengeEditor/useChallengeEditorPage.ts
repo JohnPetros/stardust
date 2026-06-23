@@ -45,7 +45,7 @@ export function useChallengeEditorPage({
     defaultValues: {
       title: currentChallenge?.title.value,
       description: currentChallenge?.description.value ?? '',
-      code: currentChallenge?.code ?? '',
+      initialCode: currentChallenge?.initialCode.value ?? '',
       difficultyLevel,
       author: {
         id:
@@ -54,12 +54,12 @@ export function useChallengeEditorPage({
             : userId.value,
       },
       function: {
-        name: currentChallenge?.code
-          ? (lspProvider.getFunctionName(currentChallenge.code) ?? '')
+        name: currentChallenge?.initialCode.value
+          ? (lspProvider.getFunctionName(currentChallenge.initialCode.value) ?? '')
           : '',
         params: currentChallenge
           ? lspProvider
-              .getFunctionParamsNames(currentChallenge.code)
+              .getFunctionParamsNames(currentChallenge.initialCode.value)
               .map((paramName: string, paramIndex: number) => ({
                 name: paramName,
                 dataTypeName: DataType.create(
@@ -108,7 +108,7 @@ export function useChallengeEditorPage({
   async function handleSubmit(formData: ChallengeForm) {
     const challenge = Challenge.create({
       title: formData.title,
-      code: formData.code,
+      initialCode: formData.initialCode,
       description: formData.description,
       difficultyLevel: formData.difficultyLevel,
       author: {
@@ -194,7 +194,7 @@ export function useChallengeEditorPage({
       const functionName = value.function.name
       const functionParamsNames = value.function.params.map((param) => param?.name)
       form.setValue(
-        'code',
+        'initialCode',
         `funcao ${functionName}(${functionParamsNames.join(', ')}) {
 
 }`,

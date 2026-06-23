@@ -13,7 +13,7 @@ import { PostChallengeUseCase } from '@stardust/core/challenging/use-cases'
 type Input = {
   title: string
   description: string
-  code: string
+  initialCode: string
   difficultyLevel: string
   testCases: TestCaseDto[]
   categories: ChallengeCategoryDto[]
@@ -31,7 +31,7 @@ export class PostChallengeTool implements Tool<Input, ChallengeDto> {
     const {
       title,
       description,
-      code,
+      initialCode,
       difficultyLevel,
       testCases,
       categories,
@@ -48,7 +48,7 @@ export class PostChallengeTool implements Tool<Input, ChallengeDto> {
       challengeDto: {
         title: title,
         description: description,
-        code: code,
+        initialCode,
         difficultyLevel: difficultyLevel,
         testCases: testCases,
         categories: categories,

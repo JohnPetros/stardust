@@ -18,7 +18,7 @@ export const challengeSchema = z.object({
   author: z.object({
     id: idSchema,
   }),
-  code: contentSchema,
+  initialCode: contentSchema,
   testCases: z
     .array(
       z.object({

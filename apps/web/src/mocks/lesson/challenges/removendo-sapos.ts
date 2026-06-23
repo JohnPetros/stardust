@@ -7,7 +7,7 @@ export const challenge: Omit<ChallengeDto, 'author'> = {
   difficultyLevel: 'easy',
   description: '',
   categories: [],
-  code: `var alimentos = leia()
+  initialCode: `var alimentos = leia()
 
 var alimentosSaudaveis = []
 

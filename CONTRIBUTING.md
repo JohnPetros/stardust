@@ -230,9 +230,6 @@ A descrição de um pull request deve conter as seções:
 > [PR's já criadas no projeto](https://github.com/JohnPetros/stardust/pulls)
 > como um exemplo.
 
-> O emojis nos títulos das seções não são obrigatórios, mas é sempre legal
-> enfeitar 😙.
-
 ## Releases
 
 Uma release é uma versão específica de um software ou produto que é
