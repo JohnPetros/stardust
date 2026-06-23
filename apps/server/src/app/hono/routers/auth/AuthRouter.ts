@@ -412,6 +412,7 @@ export class AuthRouter extends HonoRouter {
     this.router.post(
       '/sign-up/retry',
       this.authMiddleware.verifyAuthentication,
+      this.profileMiddleware.verifyUserAbsence,
       async (context) => {
         const http = new HonoHttp(context)
         const service = new SupabaseAuthService(http.getSupabase())
