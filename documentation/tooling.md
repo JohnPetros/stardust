@@ -15,18 +15,28 @@ Este documento consolida comandos e rotinas de desenvolvimento no monorepo.
 
 Catraca que congela metricas de qualidade por workspace e falha o PR se alguma piorar. So permite empatar ou melhorar — nunca regredir.
 
-Metricas congeladas (Fase 1, `@stardust/core`):
+Metricas congeladas:
 
 - **Biome warnings**: diagnostics `warn` que o `lint` (com `--diagnostic-level=error`) nao mostra.
 - **Escape hatches de tipo**: ocorrencias de `any`, `as any`, `@ts-ignore`, `@ts-expect-error` em codigo de producao.
 - **Tamanho de arquivo**: arquivos acima de 300 linhas (offenders congelados; nenhum novo pode cruzar o limite nem crescer).
-- **Cobertura por camada**: `lines`/`branches` por camada DDD (`domain`, `use-cases`, `factories`, `other`), via `coverage-summary.json` do Jest.
+- **Cobertura por camada** (so onde `measureCoverage` esta ativo): `lines`/`branches` por camada arquitetural, via `coverage-summary.json` do Jest.
+
+Workspaces cobertos (`scripts/quality-gate/config.ts`):
+
+- **`@stardust/core`** (Fase 1): todas as metricas, com cobertura por camada DDD (`domain`, `use-cases`, `factories`, `other`).
+- **`@stardust/server`** (Fase 2): metricas estaticas + cobertura. A cobertura roda so a suite unitaria (mocks, sem Supabase) via `coverageJestArgs`, ignorando os testes de rota (`src/tests/routes`) e de integracao (routers). Por isso so ratcheia as camadas que os testes unitarios exercem — `ai`, `queue`, `rest` (e `other`); `app`, `database` e `provision` ficam fora (so cobertas por integracao). O `Database.ts` gerado pelo `db:types` e excluido via `isIgnored`.
+- **`@stardust/web`** (Fase 3): so metricas estaticas. Cobertura desabilitada (suite unitaria roda em jsdom e depende de env de teste). O `isIgnored` exclui o `Database.ts` gerado e o `src/mocks/` (conteudo/seed de licoes, dado autoral e nao logica).
+- **`@stardust/studio`** (Fase 4): so metricas estaticas. Cobertura desabilitada (poucos testes, so de UI — baixo sinal). O `isIgnored` exclui `src/ui/shadcn/` (primitivos de UI vendorizados).
 
 Comandos:
 
 ```bash
 # Verificar o PR contra o baseline (usado no CI; sai com codigo 1 se piorar)
 npm run quality-gate -- --workspace=core
+npm run quality-gate -- --workspace=server
+npm run quality-gate -- --workspace=web
+npm run quality-gate -- --workspace=studio
 
 # Recongelar o baseline (apos refatoracao que melhora as metricas)
 npm run quality-gate -- --workspace=core --update-baseline
