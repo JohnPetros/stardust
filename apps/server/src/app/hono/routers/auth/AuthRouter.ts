@@ -31,6 +31,7 @@ import {
   DisconnectGoogleAccountController,
   FetchGithubAccountConnectionController,
   FetchGoogleAccountConnectionController,
+  RetryUserCreationController,
 } from '@/rest/controllers/auth'
 import { SupabaseAuthService } from '@/rest/services'
 import { InngestBroker } from '@/queue/inngest/InngestBroker'
@@ -407,6 +408,22 @@ export class AuthRouter extends HonoRouter {
     })
   }
 
+  private registerRetryUserCreationRoute(): void {
+    this.router.post(
+      '/sign-up/retry',
+      this.authMiddleware.verifyAuthentication,
+      this.profileMiddleware.verifyUserAbsence,
+      async (context) => {
+        const http = new HonoHttp(context)
+        const service = new SupabaseAuthService(http.getSupabase())
+        const broker = new InngestBroker()
+        const controller = new RetryUserCreationController(service, broker)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   registerRoutes(): Hono {
     const apiKeysRouter = new ApiKeysRouter(this.app)
 
@@ -431,6 +448,7 @@ export class AuthRouter extends HonoRouter {
     this.registerResetPasswordRoute()
     this.registerFetchAccountRoute()
     this.registerFetchSocialAccountRoute()
+    this.registerRetryUserCreationRoute()
     this.router.route('/', apiKeysRouter.registerRoutes())
     return this.router
   }

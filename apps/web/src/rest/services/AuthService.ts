@@ -136,5 +136,9 @@ export const AuthService = (restClient: RestClient): IAuthService => {
     async revokeApiKey(apiKeyId: Id) {
       return await restClient.delete(`/auth/api-keys/${apiKeyId.value}`)
     },
+
+    async retryUserCreation() {
+      return await restClient.post('/auth/sign-up/retry')
+    },
   }
 }

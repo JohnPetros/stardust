@@ -510,6 +510,10 @@ export class SupabaseAuthService implements AuthService {
     throw new MethodNotImplementedError('revokeApiKey')
   }
 
+  async retryUserCreation(): Promise<RestResponse> {
+    throw new MethodNotImplementedError('retryUserCreation')
+  }
+
   async deleteAccount(accountId: Id): Promise<RestResponse> {
     const { error } = await this.supabase.auth.admin.deleteUser(accountId.value)
     if (error) return this.supabaseAuthError(error, 'Error inesperado ao deletar conta')

@@ -15,12 +15,10 @@ import {
   SignUpWithSocialAccountAction,
   ConnectSocialAccountAction,
   DisconnectSocialAccountAction,
-  RetryUserCreationAction,
 } from '../actions/auth'
 import { actionClient } from './clients/actionClient'
 import { NextCall } from '../next/NextCall'
 import { authActionClient } from './clients/authActionClient'
-import { InngestBroker } from '@/queue/inngest/InngestBroker'
 
 export const signIn = actionClient
   .schema(
@@ -92,12 +90,3 @@ export const disconnectSocialAccount = authActionClient
     const action = DisconnectSocialAccountAction(service)
     return await action.handle(call)
   })
-
-export const retryUserCreation = actionClient.action(async () => {
-  const call = NextCall()
-  const restClient = await NextServerRestClient()
-  const service = AuthService(restClient)
-  const broker = InngestBroker()
-  const action = RetryUserCreationAction(service, broker)
-  return await action.handle(call)
-})

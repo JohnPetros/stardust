@@ -201,17 +201,29 @@ atualize o PRD para refletir a realidade entregue. Registre a divergência no
 campo **"O que mudou em relação à Spec original"** do resumo de conclusão da
 spec (seção 3.1).
 
-**2.3 Atualização da Arquitetura (se aplicável)**
+**2.3 Verificação da Arquitetura (se aplicável)**
 
-Caso a implementação tenha introduzido novo fluxo de dados, nova camada, novo
-padrão de integração ou mudança relevante na estrutura de diretórios, atualize
-`documentation/architecture.md` para refletir a realidade atual do projeto.
+A atualização de `documentation/architecture.md` é responsabilidade do
+`implement-plan` (etapa 9.1), que a executa com o contexto fresco da
+implementação. Aqui, apenas **verifique** que a atualização foi feita quando
+necessário:
 
-**2.4 Atualização de Rules (se aplicável)**
+- Se a implementação introduziu novo fluxo de dados, nova camada, novo padrão
+  de integração ou mudança na estrutura de diretórios, confirme que
+  `documentation/architecture.md` reflete a realidade atual.
+- Se a atualização estiver ausente, aplique-a agora.
+- Se não se aplicar, registre: `Arquitetura: sem alterações necessárias.`
 
-Caso a implementação tenha introduzido um padrão de projeto novo, não mapeado
-nas rules existentes, atualize o arquivo de regras correspondente com o novo
-padrão e exemplos práticos.
+**2.4 Verificação de Rules (se aplicável)**
+
+A atualização de rules é responsabilidade do `implement-plan` (etapa 9.2).
+Aqui, apenas **verifique** que a atualização foi feita quando necessário:
+
+- Se a implementação introduziu padrão de projeto novo não mapeado nas rules
+  existentes, confirme que o arquivo de regras correspondente foi atualizado
+  com exemplos práticos.
+- Se a atualização estiver ausente, aplique-a agora.
+- Se não se aplicar, registre: `Rules: sem alterações necessárias.`
 
 ---
 
@@ -254,8 +266,8 @@ dependências externas — tudo que o revisor precisa saber antes de aprovar>
 - [ ] Sem erros de tipo (`npm run typecheck`)
 - [ ] Spec atualizada para `status: closed`
 - [ ] PRD atualizado na milestone do GitHub
-- [ ] Architecture atualizado (se aplicável)
-- [ ] Rules atualizadas (se aplicável)
+- [ ] Architecture verificado (se aplicável)
+- [ ] Rules verificadas (se aplicável)
 ```
 
 ---

@@ -6,8 +6,10 @@ import {
   AppendIsSolutionUpvotedToBodyController,
   AppendUserInfoToBodyController,
   VerifyUserSocialAccountController,
+  VerifyUserAbsenceController,
   CompleteSpaceController,
 } from '@/rest/controllers/profile/users'
+import { SupabaseAuthService } from '@/rest/services'
 import { HonoHttp } from '../HonoHttp'
 import { InngestBroker } from '@/queue/inngest/InngestBroker'
 import { VerifyUserInsigniaController } from '@/rest/controllers/profile/users/VerifyUserInsigniaController'
@@ -61,6 +63,14 @@ export class ProfileMiddleware {
     const http = new HonoHttp(context, next)
     const usersRepository = new SupabaseUsersRepository(http.getSupabase())
     const controller = new AppendUserInfoToBodyController(usersRepository)
+    await controller.handle(http)
+  }
+
+  async verifyUserAbsence(context: Context, next: Next) {
+    const http = new HonoHttp(context, next)
+    const authService = new SupabaseAuthService(http.getSupabase())
+    const usersRepository = new SupabaseUsersRepository(http.getSupabase())
+    const controller = new VerifyUserAbsenceController(authService, usersRepository)
     await controller.handle(http)
   }
 

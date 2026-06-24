@@ -47,4 +47,5 @@ export interface AuthService {
   createApiKey(name: Name): Promise<RestResponse<ApiKeyData & { key: string }>>
   renameApiKey(apiKeyId: Id, name: Name): Promise<RestResponse<ApiKeyData>>
   revokeApiKey(apiKeyId: Id): Promise<RestResponse>
+  retryUserCreation(): Promise<RestResponse>
 }

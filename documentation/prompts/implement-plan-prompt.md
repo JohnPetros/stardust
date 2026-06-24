@@ -182,6 +182,36 @@ Instrucoes:
 - Ao final de cada fase, reporte: o que foi implementado, testes criados, arquivos tocados e pendencias.
 - Ao final do plano completo, entregue o reporte final (veja Saida esperada).
 
+### 9. Atualizacao de Arquitetura e Rules (ao final da implementacao)
+
+Apos concluir todas as fases do plano e antes de reportar a saida final,
+verifique se a implementacao introduziu mudancas que exigem atualizacao de
+documentacao estrutural. Execute esta etapa enquanto o contexto esta fresco —
+nao adie para o conclude-spec.
+
+**9.1 Arquitetura (`documentation/architecture.md`)**
+
+Atualize se a implementacao introduziu:
+- Novo fluxo de dados entre apps ou camadas
+- Nova camada ou modulo estrutural
+- Novo padrao de integracao (ex: transporte REST substituindo RPC)
+- Mudanca relevante na estrutura de diretorios
+
+Se nenhuma dessas condicoes se aplicar, registre na saida:
+`Arquitetura: sem alteracoes necessarias.`
+
+**9.2 Rules (`documentation/rules/`)**
+
+Atualize o arquivo de regras correspondente se a implementacao introduziu:
+- Padrao de projeto novo nao mapeado nas rules existentes
+- Convencao de nomenclatura ou organizacao nova
+- Restricao ou permissao de camada que diverge do documentado
+
+Inclua exemplos praticos baseados no codigo recem-implementado.
+
+Se nenhuma dessas condicoes se aplicar, registre na saida:
+`Rules: sem alteracoes necessarias.`
+
 ## Saida esperada
 
 - Implementacao completa (ou parcial, se bloqueada) do plano/spec no codebase.
