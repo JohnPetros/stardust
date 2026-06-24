@@ -42,7 +42,9 @@ npm run quality-gate -- --workspace=studio
 npm run quality-gate -- --workspace=core --update-baseline
 ```
 
-O baseline fica em `scripts/quality-gate/baselines/<workspace>.json` e e versionado. Cada CI roda o gate apenas para o seu workspace, comenta o sumario no `GITHUB_STEP_SUMMARY` e bloqueia o `build` se houver regressao.
+O baseline fica em `scripts/quality-gate/baselines/<workspace>.json` e e versionado. Cada CI roda o gate apenas para o seu workspace, escreve o sumario no `GITHUB_STEP_SUMMARY` e bloqueia o `build` se houver regressao.
+
+Em PRs, o relatorio tambem e publicado como um comentario "sticky" (um por workspace, atualizado a cada run em vez de empilhar) via `scripts/quality-gate/comment-pr.sh`. O job exporta `QUALITY_GATE_REPORT_FILE` para o gate gravar o markdown, e usa permissao `pull-requests: write`; o passo roda com `if: always()` para comentar tambem quando ha regressao.
 
 ## Comandos Globais (na raiz)
 
