@@ -10,9 +10,7 @@ import { Password } from '@stardust/core/auth/structures'
 import { Text } from '@stardust/core/global/structures'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 
-import { ROUTES } from '@/constants'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
-import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 
 const resetPasswordFormSchema = z
@@ -34,6 +32,7 @@ export function useResetPasswordFormDialog(
     accessToken: string | null
     refreshToken: string | null
   }>,
+  onPasswordReset: () => Promise<void>,
 ) {
   const {
     register,
@@ -44,10 +43,9 @@ export function useResetPasswordFormDialog(
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const toast = useToastContext()
-  const router = useNavigationProvider()
 
-  function handleOpenChange(isOpen: boolean) {
-    if (!isOpen) router.goTo(ROUTES.auth.signIn)
+  async function handleOpenChange(isOpen: boolean) {
+    if (!isOpen) await onPasswordReset()
   }
 
   async function handleFormSubmit({ password }: ResetPasswordFormFields) {

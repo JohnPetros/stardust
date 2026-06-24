@@ -257,3 +257,19 @@ dependências externas — tudo que o revisor precisa saber antes de aprovar>
 - [ ] Architecture atualizado (se aplicável)
 - [ ] Rules atualizadas (se aplicável)
 ```
+
+---
+
+## Fase 4 — Commit e Pull Request
+
+Esta fase só deve ser executada após a Fase 3 estar completa e o checklist final sem pendências.
+
+**4.1 Commit das alterações**
+
+Execute o skill `/commit-code` para commitar todas as alterações da implementação. O skill agrupa os arquivos por responsabilidade semântica e cria os commits com mensagens padronizadas.
+
+> Atenção: apenas arquivos relacionados à spec atual devem ser commitados. Alterações pré-existentes de outras features não devem entrar neste PR.
+
+**4.2 Criação do Pull Request**
+
+Após os commits, execute o skill `/create-pr` para abrir o PR com título e descrição padronizados, usando o resumo de conclusão gerado na Fase 3 como base para o body.

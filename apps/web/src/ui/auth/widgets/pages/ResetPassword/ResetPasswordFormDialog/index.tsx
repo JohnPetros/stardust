@@ -27,7 +27,12 @@ export const ResetPasswordFormDialog = ({
   const alertDialogRef = useRef<AlertDialogRef | null>(null)
   const { authService } = useRestContext()
   const { errors, isSubmitting, register, handleSubmit, handleOpenChange } =
-    useResetPasswordFormDialog(authService, alertDialogRef, onNewPasswordSubmit)
+    useResetPasswordFormDialog(
+      authService,
+      alertDialogRef,
+      onNewPasswordSubmit,
+      onPasswordReset,
+    )
 
   return (
     <>
@@ -41,8 +46,9 @@ export const ResetPasswordFormDialog = ({
           </p>
         }
         shouldPlayAudio={false}
+        shouldCloseOnInteractOutside
         onOpenChange={handleOpenChange}
-        action={<Button onClick={onPasswordReset}>Fazer login</Button>}
+        action={<Button>Fazer login</Button>}
       />
       <Dialog.Container>
         <Dialog.Content>
@@ -51,6 +57,7 @@ export const ResetPasswordFormDialog = ({
           <form className='mt-3'>
             <div>
               <Input
+                testId='new-password-input'
                 label='Nova senha'
                 type='password'
                 icon='lock'
@@ -62,6 +69,7 @@ export const ResetPasswordFormDialog = ({
             </div>
             <div className='mt-6'>
               <Input
+                testId='new-password-confirmation-input'
                 label='Confirme sua nova senha'
                 type='password'
                 icon='lock'
@@ -70,7 +78,12 @@ export const ResetPasswordFormDialog = ({
                 placeholder='********'
               />
             </div>
-            <Button onClick={handleSubmit} isLoading={isSubmitting} className='mt-8'>
+            <Button
+              onClick={handleSubmit}
+              isLoading={isSubmitting}
+              className='mt-8'
+              testId='reset-password-submit-button'
+            >
               Redefinir senha
             </Button>
           </form>
