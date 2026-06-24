@@ -22,6 +22,10 @@ function round2(value: number): number {
  * o percentual atual de cada camada — ele só pode subir.
  */
 export function collectCoverage(workspace: WorkspaceConfig): Metrics['coverage'] {
+  const { resolveLayer } = workspace
+  if (!resolveLayer) {
+    throw new Error(`Workspace "${workspace.name}" mede cobertura mas não define resolveLayer.`)
+  }
   const workspaceRoot = fromRepoRoot(workspace.dir)
 
   execFileSync(
@@ -33,6 +37,7 @@ export function collectCoverage(workspace: WorkspaceConfig): Metrics['coverage']
       `--collectCoverageFrom=${workspace.srcDir}/**/*.ts`,
       `--collectCoverageFrom=!${workspace.srcDir}/**/*.test.ts`,
       '--silent',
+      ...(workspace.coverageJestArgs ?? []),
     ],
     { cwd: workspaceRoot, encoding: 'utf8', stdio: ['ignore', 'ignore', 'inherit'] },
   )
@@ -46,7 +51,7 @@ export function collectCoverage(workspace: WorkspaceConfig): Metrics['coverage']
   for (const [absolutePath, fileSummary] of Object.entries(summary)) {
     if (absolutePath === 'total') continue
     const relativePath = path.relative(workspaceRoot, absolutePath).split(path.sep).join('/')
-    const layer = workspace.resolveLayer(relativePath)
+    const layer = resolveLayer(relativePath)
     if (!layer) continue
 
     const acc = layers.get(layer) ?? { lc: 0, lt: 0, bc: 0, bt: 0 }

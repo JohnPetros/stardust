@@ -16,8 +16,13 @@ export function collectMetrics(workspace: WorkspaceConfig): Metrics {
   console.log('→ Tamanho de arquivos...')
   const fileSize = collectFileSize(workspace)
 
-  console.log('→ Cobertura por camada (rodando Jest)...')
-  const coverage = collectCoverage(workspace)
+  let coverage: Metrics['coverage'] = {}
+  if (workspace.measureCoverage === false) {
+    console.log('→ Cobertura desabilitada para este workspace (pulando Jest).')
+  } else {
+    console.log('→ Cobertura por camada (rodando Jest)...')
+    coverage = collectCoverage(workspace)
+  }
 
   return { biomeWarnings, typeEscapes, fileSize, coverage }
 }

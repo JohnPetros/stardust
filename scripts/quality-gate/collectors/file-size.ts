@@ -18,10 +18,11 @@ export function collectFileSize(workspace: WorkspaceConfig): Metrics['fileSize']
 
   const offenders: Record<string, number> = {}
   for (const file of files) {
+    const relativeFromWorkspace = path.relative(workspaceRoot, file)
+    if (workspace.isIgnored?.(relativeFromWorkspace)) continue
     const lines = fs.readFileSync(file, 'utf8').split('\n').length
     if (lines > workspace.fileSizeLimit) {
-      const relativePath = path.relative(workspaceRoot, file).split(path.sep).join('/')
-      offenders[relativePath] = lines
+      offenders[relativeFromWorkspace.split(path.sep).join('/')] = lines
     }
   }
 

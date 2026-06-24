@@ -1,0 +1,21 @@
+{
+  "workspace": "@stardust/studio",
+  "generatedAt": "2026-06-24",
+  "metrics": {
+    "biomeWarnings": 25,
+    "typeEscapes": {
+      "any": 2,
+      "tsIgnore": 0,
+      "total": 2
+    },
+    "fileSize": {
+      "limit": 300,
+      "offenders": {
+        "src/ui/global/contexts/TextEditorContext/useTextEditorContextProvider.ts": 320,
+        "src/ui/global/widgets/components/TextEditor/useTextEditor.ts": 397,
+        "src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts": 607
+      }
+    },
+    "coverage": {}
+  }
+}
