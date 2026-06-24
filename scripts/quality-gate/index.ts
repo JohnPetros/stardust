@@ -38,6 +38,15 @@ function writeStepSummary(markdown: string): void {
   if (summaryFile) fs.appendFileSync(summaryFile, `${markdown}\n`)
 }
 
+/**
+ * Quando `QUALITY_GATE_REPORT_FILE` está setado, grava o relatório nesse arquivo
+ * para o CI publicá-lo como comentário no PR (ver scripts/quality-gate/comment-pr.sh).
+ */
+function writeReportFile(markdown: string): void {
+  const reportFile = process.env.QUALITY_GATE_REPORT_FILE
+  if (reportFile) fs.writeFileSync(reportFile, `${markdown}\n`)
+}
+
 function main(): void {
   const { workspace: workspaceKey, updateBaseline } = parseArgs(process.argv.slice(2))
   const workspace = getWorkspace(workspaceKey)
@@ -68,6 +77,7 @@ function main(): void {
   const report = buildReport(metrics, baseline, violations)
   console.log(`\n${report}`)
   writeStepSummary(report)
+  writeReportFile(report)
 
   if (violations.length > 0) {
     console.error(`\n❌ Quality gate falhou: ${violations.length} regressão(ões).`)

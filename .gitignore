@@ -15,6 +15,9 @@ node_modules/
 coverage/
 issue.md
 apps/web/playwright-report
+
+# quality gate (relatório gerado no CI para comentar no PR)
+quality-gate-report.md
 apps/web/test-results
 
 # next.js
