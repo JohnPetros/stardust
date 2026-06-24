@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "packages/core/**"
+      - "scripts/quality-gate/**"
 
 env:
   NODE_VERSION: "22"

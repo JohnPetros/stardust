@@ -9,6 +9,7 @@ on:
       - "packages/core/**"
       - "packages/validation/**"
       - "packages/lsp/**"
+      - "scripts/quality-gate/**"
 
 permissions:
   contents: read

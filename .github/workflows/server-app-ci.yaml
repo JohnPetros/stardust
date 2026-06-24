@@ -8,6 +8,7 @@ on:
       - "apps/server/**"
       - "packages/core/**"
       - "packages/validation/**"
+      - "scripts/quality-gate/**"
 
 permissions:
   contents: read

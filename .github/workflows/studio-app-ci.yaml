@@ -9,6 +9,7 @@ on:
       - "packages/core/**"
       - "packages/validation/**"
       - "package-lock.json"
+      - "scripts/quality-gate/**"
 
 permissions:
   contents: read
