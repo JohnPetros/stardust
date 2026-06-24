@@ -129,8 +129,11 @@ export function useAuthContextProvider({
       return false
     }
 
+    // A criação acontece de forma síncrona no retry (REST), então revalidamos o
+    // usuário em vez de depender só do evento realtime — que pode ter sido perdido.
+    await refetch()
     return true
-  }, [retryUserCreation, toast])
+  }, [retryUserCreation, refetch, toast])
 
   const updateUserCache = useCallback(
     (userData: UserDto | null, shouldRevalidate = true) => {
