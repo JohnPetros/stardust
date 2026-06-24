@@ -156,6 +156,38 @@ jobs:
       - name: Run integration tests
         run: npm run test:integration -w @stardust/web
 
+  quality-gate:
+    name: Quality gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            npm ci --prefer-offline --no-audit && exit 0
+
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+
+            echo "npm ci failed on attempt $attempt. Retrying in 15 seconds..."
+            sleep 15
+          done
+
+      - name: Run quality gate
+        run: npm run quality-gate -- --workspace=web
+
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -164,6 +196,7 @@ jobs:
       - typecheck
       - tests
       - integration-tests
+      - quality-gate
 
     steps:
       - name: Checkout code

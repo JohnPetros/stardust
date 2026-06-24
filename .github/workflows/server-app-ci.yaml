@@ -97,6 +97,32 @@ jobs:
       - name: Run tests
         run: npm run test:unit -w @stardust/server
 
+  quality-gate:
+    name: Quality gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # A catraca roda a suíte unitária (mocks) para medir cobertura. Não sobe
+      # Supabase, mas alguns testes (ai tools) leem env no import.
+      - name: Create test environment file
+        run: printf '%s' "${{ secrets.SERVER_ENV_TEST }}" > apps/server/.env.testing
+
+      - name: Run quality gate
+        run: npm run quality-gate -- --workspace=server
+
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -104,6 +130,7 @@ jobs:
       - codecheck
       - typecheck
       - tests
+      - quality-gate
 
     steps:
       - name: Checkout code
