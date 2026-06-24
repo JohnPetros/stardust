@@ -39,6 +39,7 @@ tsconfig.tsbuildinfo
 **/public/workbox-*
 **/public/fallback*
 **/html/**
+*.tsbuildinfo
 
 # environment
 .env.*
@@ -100,7 +101,6 @@ documentation/issue.md
 # Serena MCP
 .serena
 
-*.tsbuildinfo
 
 # Terminal Paste Image folder
 .cp-images/
