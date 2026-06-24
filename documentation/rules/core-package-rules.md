@@ -290,6 +290,6 @@ Os arquivos de teste para `entities`, `structures` e `use-cases` são colocados 
   - Build: `npm run build -w @stardust/core` (tsup)
   - Tipos: `npm run typecheck -w @stardust/core`
   - Qualidade: `npm run codecheck -w @stardust/core` (`lint` + `format`)
-  - Testes: `npm run test -w @stardust/core`
+  - Testes: `npm run test:unit -w @stardust/core`
 - Orquestracao (raiz): `npm run test`, `npm run typecheck`, `npm run codecheck` (Turbo) para rodar em todos os workspaces.
 - Referencia geral: `documentation/tooling.md`.

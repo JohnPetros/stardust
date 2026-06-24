@@ -13,4 +13,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   preset: 'ts-jest',
+  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.test.ts', '!src/**/tests/**', '!src/**/fakers/**'],
+  coverageReporters: ['json-summary', 'text-summary'],
+  coverageDirectory: 'coverage',
 }

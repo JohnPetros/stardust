@@ -1,0 +1,37 @@
+{
+  "workspace": "@stardust/core",
+  "generatedAt": "2026-06-23",
+  "metrics": {
+    "biomeWarnings": 12,
+    "typeEscapes": {
+      "any": 3,
+      "tsIgnore": 0,
+      "total": 3
+    },
+    "fileSize": {
+      "limit": 300,
+      "offenders": {
+        "src/challenging/domain/entities/Challenge.ts": 321,
+        "src/profile/domain/entities/User.ts": 500
+      }
+    },
+    "coverage": {
+      "domain": {
+        "lines": 73.56,
+        "branches": 46.69
+      },
+      "factories": {
+        "lines": 100,
+        "branches": 95.83
+      },
+      "other": {
+        "lines": 71.15,
+        "branches": 45.45
+      },
+      "use-cases": {
+        "lines": 90.32,
+        "branches": 81.06
+      }
+    }
+  }
+}

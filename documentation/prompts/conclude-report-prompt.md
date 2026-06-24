@@ -62,7 +62,7 @@ Para cada issue `resolved`:
 Execute para cada app afetado e registre o resultado:
 
 ```bash
-npm run test -w @stardust/{APP}
+npm run test:unit -w @stardust/{APP}
 npm run typecheck -w @stardust/{APP}
 npm run codecheck -w @stardust/{APP}
 ```
@@ -143,7 +143,7 @@ Leia a seção **Plano de Correção** do documento (subseções "O que deve ser
 Execute para cada app afetado e registre o resultado:
 
 ```bash
-npm run test -w @stardust/{APP}
+npm run test:unit -w @stardust/{APP}
 npm run typecheck -w @stardust/{APP}
 npm run codecheck -w @stardust/{APP}
 ```
@@ -199,7 +199,7 @@ Faça as seguintes edições no arquivo:
 
 - [ ] Comportamento incorreto nao ocorre mais
 - [ ] Teste unitario cobre o cenario especifico do bug
-- [ ] `npm run test -w @stardust/{APP}` — passou | falhou
+- [ ] `npm run test:unit -w @stardust/{APP}` — passou | falhou
 - [ ] `npm run typecheck -w @stardust/{APP}` — passou | falhou
 - [ ] `npm run codecheck -w @stardust/{APP}` — passou | falhou
 

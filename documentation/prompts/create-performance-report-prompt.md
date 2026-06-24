@@ -313,7 +313,7 @@ Todas as evidencias abaixo foram verificadas diretamente no codigo fonte.
 
 ## Checklist de Verificacao
 
-- [ ] Nao mudou comportamento funcional (testes passam: `npm run test -w @stardust/{APP}`)
+- [ ] Nao mudou comportamento funcional (testes passam: `npm run test:unit -w @stardust/{APP}`)
 - [ ] Build completa com sucesso (`npm run build -w @stardust/{APP}`)
 - [ ] Typecheck passa (`npm run typecheck -w @stardust/{APP}`)
 - [ ] Qualidade passa (`npm run codecheck -w @stardust/{APP}`)

@@ -113,7 +113,7 @@ Ao finalizar cada tarefa — seja de implementacao ou de teste — execute **ant
 
 - **Lint e formatacao:** `npm run codecheck` no diretorio do pacote/app correspondente.
 - **Typecheck:** `npm run typecheck` no diretorio do pacote/app correspondente.
-- **Testes:** `npm run test` no diretorio do pacote/app correspondente.
+- **Testes:** `npm run test:unit` no diretorio do pacote/app correspondente.
 
 > ⚠️ **Criterio de aceite:** Nao avance com codigo que apresente erros de lint, typecheck ou testes falhando. Corrija imediatamente antes de seguir.
 
@@ -147,7 +147,7 @@ Cada subagente deve receber **somente o contexto minimo necessario** para sua ta
 - Apos recepcao dos resultados de todos os subagentes, executar a **verificacao obrigatoria**:
   - `npm run codecheck` — lint e formatacao.
   - `npm run typecheck` — tipagem.
-  - `npm run test` — testes.
+  - `npm run test:unit` — testes.
 - Se houver falha, identificar qual tarefa/subagente gerou o problema e corrigir antes de avancar.
 - Registrar no checklist quais tarefas foram executadas por subagentes e o status de cada uma.
 

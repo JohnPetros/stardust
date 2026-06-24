@@ -12,6 +12,7 @@ node_modules/
 
 # testing
 /coverage
+coverage/
 issue.md
 apps/web/playwright-report
 apps/web/test-results

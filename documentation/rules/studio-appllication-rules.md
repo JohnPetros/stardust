@@ -81,7 +81,7 @@ npm run test
   - Start (static): `npm run start -w @stardust/studio`
   - Qualidade: `npm run codecheck -w @stardust/studio` (`lint` + `format`)
   - Tipos: `npm run typecheck -w @stardust/studio` (inclui `react-router typegen && tsc`)
-  - Testes: `npm run test -w @stardust/studio` / `npm run test:watch -w @stardust/studio`
+  - Testes: `npm run test:unit -w @stardust/studio` / `npm run test:unit:watch -w @stardust/studio`
 - Referencia geral: `documentation/tooling.md`.
 
 ## Estruturação do projeto

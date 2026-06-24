@@ -10,8 +10,8 @@
     "format": "biome format src --write",
     "codecheck": "npm run lint && npm run format",
     "typecheck": "react-router typegen && tsc",
-    "test": "jest",
-    "test:watch": "jest --watchAll"
+    "test:unit": "jest",
+    "test:unit:watch": "jest --watchAll"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

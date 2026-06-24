@@ -61,7 +61,7 @@ npm run test
   - Start (standalone): `npm run start -w @stardust/web`
   - Qualidade: `npm run codecheck -w @stardust/web` (`lint` + `format`)
   - Tipos: `npm run typecheck -w @stardust/web`
-  - Testes: `npm run test -w @stardust/web` / `npm run test:watch -w @stardust/web`
+  - Testes: `npm run test:unit -w @stardust/web` / `npm run test:unit:watch -w @stardust/web`
   - Tipos do banco (Supabase): `npm run db:types -w @stardust/web`
 - Referencia geral: `documentation/tooling.md`.
 

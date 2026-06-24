@@ -115,7 +115,7 @@ jobs:
           done
 
       - name: Run tests
-        run: npm run test -w @stardust/web
+        run: npm run test:unit -w @stardust/web
 
   integration-tests:
     name: Integration tests

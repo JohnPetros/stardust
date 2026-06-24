@@ -9,14 +9,40 @@ Este documento consolida comandos e rotinas de desenvolvimento no monorepo.
 - Lint/format: Biome (via scripts `lint`, `format`, `codecheck`).
 - Typecheck: TypeScript (`tsc`).
 - Testes: Jest para suites unitarias/composicao e Playwright para fluxos reais de navegador quando a app web expuser suites em `apps/web/src/app/tests/**`.
+- Quality gate: catraca de metricas em `scripts/quality-gate/` (ver secao abaixo).
+
+## Quality Gate (catraca de metricas)
+
+Catraca que congela metricas de qualidade por workspace e falha o PR se alguma piorar. So permite empatar ou melhorar — nunca regredir.
+
+Metricas congeladas (Fase 1, `@stardust/core`):
+
+- **Biome warnings**: diagnostics `warn` que o `lint` (com `--diagnostic-level=error`) nao mostra.
+- **Escape hatches de tipo**: ocorrencias de `any`, `as any`, `@ts-ignore`, `@ts-expect-error` em codigo de producao.
+- **Tamanho de arquivo**: arquivos acima de 300 linhas (offenders congelados; nenhum novo pode cruzar o limite nem crescer).
+- **Cobertura por camada**: `lines`/`branches` por camada DDD (`domain`, `use-cases`, `factories`, `other`), via `coverage-summary.json` do Jest.
+
+Comandos:
+
+```bash
+# Verificar o PR contra o baseline (usado no CI; sai com codigo 1 se piorar)
+npm run quality-gate -- --workspace=core
+
+# Recongelar o baseline (apos refatoracao que melhora as metricas)
+npm run quality-gate -- --workspace=core --update-baseline
+```
+
+O baseline fica em `scripts/quality-gate/baselines/<workspace>.json` e e versionado. Cada CI roda o gate apenas para o seu workspace, comenta o sumario no `GITHUB_STEP_SUMMARY` e bloqueia o `build` se houver regressao.
 
 ## Comandos Globais (na raiz)
 
 ```bash
 npm run codecheck
 npm run typecheck
-npm run test
+npm run test:unit
 ```
+
+> `npm run test` na raiz e um alias de `test:unit` (roda apenas os testes unitarios via Turbo).
 
 ## Comandos por Workspace
 
@@ -25,8 +51,11 @@ npm run dev -w <workspace>
 npm run build -w <workspace>
 npm run codecheck -w <workspace>
 npm run typecheck -w <workspace>
-npm run test -w <workspace>
+npm run test:unit -w <workspace>
 ```
+
+> Cada workspace expoe `test:unit` (Jest) e, quando aplicavel, `test:integration`.
+> Nos workspaces nao existe mais um script `test` generico — use `test:unit`.
 
 Para a app web, a suite de integracao com navegador fica disponivel separadamente:
 
