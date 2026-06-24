@@ -89,6 +89,9 @@ jobs:
   quality-gate:
     name: Quality gate
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout code
@@ -105,4 +108,15 @@ jobs:
         run: npm ci
 
       - name: Run quality gate
+        env:
+          QUALITY_GATE_REPORT_FILE: quality-gate-report.md
         run: npm run quality-gate -- --workspace=studio
+
+      - name: Comment report on PR
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: bash scripts/quality-gate/comment-pr.sh studio quality-gate-report.md
