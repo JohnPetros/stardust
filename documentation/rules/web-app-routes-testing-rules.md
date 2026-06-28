@@ -222,7 +222,7 @@ test.describe('/auth/sign-up', () => {
 
 ## Tooling
 
-- Workspace web: `npm run test -w @stardust/web`
+- Workspace web: `npm run test:unit -w @stardust/web`
 - Suite Playwright web: `npm run test:integration -w @stardust/web`
 - Qualidade local: `npm run typecheck -w @stardust/web` e
   `npm run codecheck -w @stardust/web`

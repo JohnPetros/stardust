@@ -9,6 +9,7 @@ on:
       - "packages/core/**"
       - "packages/validation/**"
       - "packages/lsp/**"
+      - "scripts/quality-gate/**"
 
 permissions:
   contents: read
@@ -115,7 +116,7 @@ jobs:
           done
 
       - name: Run tests
-        run: npm run test -w @stardust/web
+        run: npm run test:unit -w @stardust/web
 
   integration-tests:
     name: Integration tests
@@ -156,6 +157,52 @@ jobs:
       - name: Run integration tests
         run: npm run test:integration -w @stardust/web
 
+  quality-gate:
+    name: Quality gate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            npm ci --prefer-offline --no-audit && exit 0
+
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+
+            echo "npm ci failed on attempt $attempt. Retrying in 15 seconds..."
+            sleep 15
+          done
+
+      - name: Run quality gate
+        env:
+          QUALITY_GATE_REPORT_FILE: quality-gate-report.md
+        run: npm run quality-gate -- --workspace=web
+
+      - name: Comment report on PR
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: bash scripts/quality-gate/comment-pr.sh web quality-gate-report.md
+
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -164,6 +211,7 @@ jobs:
       - typecheck
       - tests
       - integration-tests
+      - quality-gate
 
     steps:
       - name: Checkout code

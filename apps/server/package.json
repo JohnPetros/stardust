@@ -22,7 +22,7 @@
     "update": "ncu -u -f $npm_config_dep_name",
     "check-updates": "ncu",
     "typecheck": "tsc --noEmit",
-    "test": "jest --selectProjects server",
+    "test:unit": "jest --selectProjects server",
     "test:integration": "jest --selectProjects server-integration"
   },
   "dependencies": {

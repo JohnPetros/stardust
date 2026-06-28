@@ -63,7 +63,7 @@ npm run test
   - Producao: `npm run prod -w @stardust/server`
   - Qualidade: `npm run codecheck -w @stardust/server` (`lint` + `format`)
   - Tipos: `npm run typecheck -w @stardust/server`
-  - Testes: `npm run test -w @stardust/server`
+  - Testes: `npm run test:unit -w @stardust/server`
   - Banco (Supabase CLI): `npm run db:local|db:pull|db:push|db:types -w @stardust/server`
 - Referencia geral: `documentation/tooling.md`.
 

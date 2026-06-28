@@ -298,7 +298,7 @@ Antes de considerar um teste de rota completo, confirme:
 
 ## Tooling
 
-- Workspace server: `npm run test -w @stardust/server`
+- Workspace server: `npm run test:unit -w @stardust/server`
 - Global (Turbo): `npm run test`
 - Qualidade antes de abrir PR: `npm run typecheck -w @stardust/server` e
   `npm run codecheck -w @stardust/server`

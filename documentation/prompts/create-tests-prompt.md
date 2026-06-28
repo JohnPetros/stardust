@@ -132,15 +132,15 @@ npm run test
 npm run typecheck
 npm run codecheck
 
-npm run test -w @stardust/web
-npm run test -w @stardust/server
-npm run test -w @stardust/studio
-npm run test -w @stardust/core
+npm run test:unit -w @stardust/web
+npm run test:unit -w @stardust/server
+npm run test:unit -w @stardust/studio
+npm run test:unit -w @stardust/core
 
-npm run test -w @stardust/web -- caminho/do/arquivo
-npm run test -w @stardust/server -- caminho/do/arquivo
-npm run test -w @stardust/studio -- caminho/do/arquivo
-npm run test -w @stardust/core -- caminho/do/arquivo
+npm run test:unit -w @stardust/web -- caminho/do/arquivo
+npm run test:unit -w @stardust/server -- caminho/do/arquivo
+npm run test:unit -w @stardust/studio -- caminho/do/arquivo
+npm run test:unit -w @stardust/core -- caminho/do/arquivo
 
 npm run typecheck -w @stardust/web
 npm run codecheck -w @stardust/web

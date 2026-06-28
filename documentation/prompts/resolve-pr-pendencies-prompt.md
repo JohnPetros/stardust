@@ -1,11 +1,17 @@
 ---
-description: Prompt para resolver conversas pendentes e erros de CI/CD de um pull request com analise, implementacao e fechamento de threads via gh CLI.
+description: Prompt para resolver pendencias (erros de CI, regressoes do quality gate e conversas nao resolvidas) de um pull request via gh CLI, em loop ate o PR ficar mergeable.
 ---
 
 # Prompt: Resolver Pendências de PR
 
 **Objetivo Principal:**
-Analisar, implementar e resolver todas as conversas **não resolvidas** e **erros de GitHub Actions** em um Pull Request (PR) específico do GitHub. O foco é garantir que todos os pontos de melhoria, correções de bugs, sugestões de design levantadas pelos revisores e falhas de CI/CD sejam devidamente endereçados no código, respeitando os padrões e a arquitetura do projeto.
+Atuar como _babysitter_ de um Pull Request: monitorar, diagnosticar e resolver **todas as pendências que impedem o merge**, em loop, até o PR ficar verde e sem conversas pendentes. As pendências são de três tipos:
+
+1. **Erros de CI** — jobs falhando (`codecheck`, `typecheck`, `tests`, `integration-tests`, `build`).
+2. **Regressões do quality gate** — métricas que pioraram em relação ao baseline (job `quality-gate`).
+3. **Conversas de revisão não resolvidas** — comentários de revisores (humanos ou bots como o Copilot).
+
+Tudo deve ser endereçado respeitando os padrões e a arquitetura do projeto.
 
 **Entrada:**
 - **Link do PR:** URL completa do Pull Request no GitHub (ex: `https://github.com/owner/repo/pull/123`).
@@ -21,23 +27,57 @@ Analisar, implementar e resolver todas as conversas **não resolvidas** e **erro
 Identifique `owner`, `repo` e `pull_number` a partir da URL fornecida. Em seguida, obtenha os metadados do PR:
 
 ```bash
-gh pr view <pull_number> --repo <owner>/<repo> --json title,headRefName,body,files
+gh pr view <pull_number> --repo <owner>/<repo> --json title,headRefName,body,files,mergeable,statusCheckRollup
+```
+
+Faça checkout da branch do PR localmente para poder corrigir e dar push:
+
+```bash
+gh pr checkout <pull_number> --repo <owner>/<repo>
 ```
 
 ---
 
-### 2. Listagem de Conversas Não Resolvidas
+### 2. Diagnóstico de Pendências
 
-Liste **somente** os comentários de revisão não resolvidos via GitHub API:
+Levante as pendências das **três** fontes antes de corrigir qualquer coisa.
+
+#### 2.1 Erros de CI
+
+**Primeiro, garanta que o CI terminou.** Não diagnostique com checks ainda em andamento — `--watch` bloqueia até todos concluírem:
 
 ```bash
-gh api repos/<owner>/<repo>/pulls/<pull_number>/comments \
-  --jq '[.[] | select(.in_reply_to_id == null) | {id: .id, path: .path, line: .line, body: .body, user: .user.login}]'
+# Espera todos os checks do PR concluírem (sai != 0 se algum falhar)
+gh pr checks <pull_number> --repo <owner>/<repo> --watch
 ```
 
-> A flag `select(.in_reply_to_id == null)` garante que apenas comentários raiz (início de thread) sejam listados, evitando duplicatas de replies.
+Em seguida, leia **apenas** os logs do que falhou:
 
-Para verificar quais threads já estão resolvidas, use a GraphQL API:
+```bash
+# Identifique o run que falhou e leia só as etapas com falha
+gh run view <run_id> --repo <owner>/<repo> --log-failed
+```
+
+Mapeie cada job falho para a causa raiz (lint, tipo, teste unitário, teste de integração, build).
+
+#### 2.2 Regressões do quality gate
+
+Quando o job `quality-gate` falhar, ele publica a tabela de regressões no resumo do job e sobe o `summary.md` como artefato. Baixe e leia:
+
+```bash
+# Veja qual job quality-gate falhou
+gh run view <run_id> --repo <owner>/<repo> --json jobs \
+  --jq '.jobs[] | select(.name | test("[Qq]uality")) | {name, conclusion}'
+
+# Baixe os artefatos (inclui o summary.md com a tabela métrica | baseline | atual)
+gh run download <run_id> --repo <owner>/<repo>
+```
+
+A tabela diz exatamente **qual métrica piorou, o baseline e o valor atual** — use-a como lista de correções.
+
+#### 2.3 Conversas de revisão não resolvidas
+
+Liste **somente** as threads não resolvidas e não desatualizadas via GraphQL API:
 
 ```bash
 gh api graphql -f query='
@@ -50,11 +90,7 @@ gh api graphql -f query='
           isResolved
           isOutdated
           comments(first: 1) {
-            nodes {
-              path
-              body
-              author { login }
-            }
+            nodes { path body author { login } }
           }
         }
       }
@@ -63,183 +99,171 @@ gh api graphql -f query='
 }'
 ```
 
-Filtre apenas os nós onde `isResolved: false` e `isOutdated: false`. Esses são os alvos deste prompt.
+Filtre apenas os nós onde `isResolved: false` e `isOutdated: false`. Esses são os alvos.
 
 ---
 
-### 3. Verificação de Erros do GitHub Actions
+### 3. Triagem
 
-Verifique o status dos checks (CI/CD) associados ao PR:
-
-```bash
-gh pr checks <pull_number> --repo <owner>/<repo>
-```
-
-Se houver checks com status **fail**, obtenha os logs do workflow com falha:
-
-```bash
-# Listar os runs associados ao PR
-gh run list --repo <owner>/<repo> --branch <head_branch> --status failure --limit 5 --json databaseId,name,conclusion,event
-
-# Obter os logs detalhados do run com falha
-gh run view <run_id> --repo <owner>/<repo> --log-failed
-```
-
-> **Dica:** O `--log-failed` retorna apenas os logs dos steps que falharam, facilitando a análise. Se o output for muito grande, foque nos últimos 100 linhas do step com falha.
-
-Para cada falha identificada, extraia:
-- **Workflow e job** que falhou.
-- **Mensagem de erro** principal.
-- **Arquivo e linha** afetados (quando disponível no log).
-- **Causa raiz** provável.
-
----
-
-### 4. Triagem das Threads e Erros de CI
-
-Classifique cada thread não resolvida **e cada erro de CI** em uma das categorias:
+Classifique **cada pendência** (de qualquer fonte) em uma categoria:
 
 | Categoria | Critério | Ação |
 |---|---|---|
-| **Implementar** | Correção de código, ajuste de padrão, bug apontado, erro de lint/type/test no CI | Implementar autonomamente |
-| **Escalar** | Mudança arquitetural, decisão de design, conflito com Spec/PRD, falha de CI relacionada a infra/config de workflow | Consultar o usuário antes de agir |
-| **Ignorar** | Comentário meramente informativo, já endereçado no código, falha de CI transiente (timeout de rede, flaky test já conhecido) | Pular |
+| **Corrigir** | Erro de CI, regressão de métrica, correção de código apontada por revisor | Resolver autonomamente |
+| **Escalar** | Mudança arquitetural, decisão de design, conflito com Spec/PRD, baseline que precisaria ser afrouxado | Consultar o usuário antes de agir |
+| **Ignorar** | Comentário meramente informativo, já endereçado no código | Pular |
 
-> **Regra de escalada:** Qualquer comentário ou erro de CI que implique mudança de arquitetura, remoção de funcionalidade, alteração de configuração de workflow/infra ou conflito com o PRD/Spec associado deve ser **escalado** — nunca implementado de forma autônoma.
+> **Regra de escalada:** Qualquer item que implique mudança de arquitetura, remoção de funcionalidade, conflito com o PRD/Spec, ou **afrouxar o baseline do quality gate**, deve ser **escalado** — nunca resolvido de forma autônoma. Afrouxar o baseline (`--update-baseline` para piorar uma métrica) anula o propósito da catraca.
 
-> **Erros de CI:** Erros de typecheck, lint, testes unitários/integração e build são tratados como itens **Implementar**. Erros de configuração de workflow (permissões, secrets, versão de runner) são **Escalar**.
-
-Apresente a lista classificada ao usuário antes de avançar caso haja itens na categoria **Escalar**.
+Apresente a triagem ao usuário antes de avançar caso haja itens **Escalar**.
 
 ---
 
-### 5. Implementação
+### 4. Correção
 
-Para cada thread categorizada como **Implementar**:
+#### 4.1 Erros de CI
+
+Reproduza localmente, no diretório do workspace afetado, e corrija até passar:
+
+```bash
+npm run codecheck -w @stardust/<workspace>
+npm run typecheck -w @stardust/<workspace>
+npm run test:unit -w @stardust/<workspace>
+# se o job de integração falhou:
+npm run test:integration -w @stardust/<workspace>
+```
+
+#### 4.2 Regressões do quality gate
+
+Para cada linha da tabela de regressões, aplique a correção correspondente:
+
+| Regressão no `summary.md` | Ação |
+|---|---|
+| **Biome warnings** aumentou | Rode `npm run codecheck`, leia os diagnostics `warn` e corrija o código que os introduziu |
+| **Escape hatches de tipo** aumentou (`any`, `@ts-ignore`) | Substitua `any` por tipo concreto/genérico; remova `@ts-ignore`/`@ts-expect-error` |
+| **Arquivo cruzou o limite de linhas** | Modularize o arquivo extraindo responsabilidades, respeitando as regras da camada em `documentation/rules/` |
+| **Cobertura caiu** numa camada | Escreva os testes faltantes para o código novo (siga `documentation/prompts/create-tests-prompt.md` e as regras de teste da camada) |
+
+Confirme localmente que zerou as regressões antes de seguir:
+
+```bash
+npm run quality-gate -- --workspace=<workspace>
+```
+
+> Nunca rode `--update-baseline` para "resolver" uma regressão: isso piora o baseline. O baseline só é recongelado em melhorias intencionais, e isso é decisão do usuário (item **Escalar**).
+
+#### 4.3 Conversas de revisão
+
+Para cada thread **Corrigir**:
 
 - Localize o arquivo e as linhas mencionadas no comentário.
-- Analise a sugestão ou problema apontado pelo revisor.
-- Aplique as alterações necessárias respeitando os padrões do projeto:
+- Aplique a alteração respeitando os padrões do projeto:
   - **Convenções de código:** `documentation/rules/code-conventions-rules.md`
   - **Arquitetura geral:** `documentation/architecture.md`
   - **Regras por camada:** conforme `documentation/rules/rules.md`
 
-Para cada thread categorizada como **Escalar**:
-
-- Apresente ao usuário:
-  - O comentário original do revisor.
-  - O impacto identificado e por que é uma decisão não trivial.
-  - As opções disponíveis, se houver.
-- Aguarde a decisão antes de prosseguir.
+Para cada thread **Escalar**, apresente ao usuário o comentário original, o impacto e as opções, e aguarde a decisão.
 
 ---
 
-### 6. Validação das Alterações
+### 5. Validação Local (obrigatória antes do push)
 
-Após implementar todas as correções:
+Rode, no(s) workspace(s) afetado(s):
 
 ```bash
-npm run codecheck
-npm run typecheck
-npm run test
+npm run codecheck -w @stardust/<workspace>
+npm run typecheck -w @stardust/<workspace>
+npm run test:unit -w @stardust/<workspace>
+npm run quality-gate -- --workspace=<workspace>
 ```
 
-Corrija eventuais erros antes de prosseguir. Verifique também se as alterações permanecem aderentes ao PRD e à Spec associada ao PR.
+Corrija qualquer erro antes de prosseguir. Verifique também se as alterações permanecem aderentes ao PRD e à Spec associada ao PR.
 
 ---
 
-### 7. Fechamento das Threads
+### 6. Fechamento das Threads
 
-Resolva cada thread implementada via GraphQL API:
+Resolva cada thread efetivamente corrigida via GraphQL API:
 
 ```bash
 gh api graphql -f query='
 mutation {
   resolveReviewThread(input: { threadId: "<thread_id>" }) {
-    thread {
-      id
-      isResolved
-    }
+    thread { id isResolved }
   }
 }'
 ```
 
-> Threads escaladas que aguardam decisão do usuário **não devem ser resolvidas** até que a implementação seja confirmada.
+> Threads **Escalar** que aguardam decisão do usuário **não devem ser resolvidas** até a implementação ser confirmada.
+
+---
+
+### 7. Push e Re-verificação (o loop)
+
+Depois de corrigir e validar localmente:
+
+```bash
+git add -A
+git commit -m "<mensagem seguindo o padrao do repo>"
+git push
+```
+
+**Aguarde o CI do commit recém-enviado — não reaproveite o resultado do run anterior.** Logo após o push, o GitHub leva alguns segundos para registrar o novo run; se você rodar `--watch` cedo demais, ele pode observar o run antigo (já verde) e retornar um falso "tudo passou". Ancore a espera no SHA do `HEAD`:
+
+```bash
+HEAD_SHA=$(git rev-parse HEAD)
+
+# 1) Espere o run do commit atual ser registrado
+until gh run list --repo <owner>/<repo> --commit "$HEAD_SHA" \
+      --json databaseId --jq '.[0].databaseId' | grep -q .; do
+  sleep 5
+done
+
+# 2) Agora sim, bloqueie até os checks do PR concluírem
+gh pr checks <pull_number> --repo <owner>/<repo> --watch
+```
+
+**Repita o ciclo (etapas 2 → 7)** até que:
+- Todos os checks de CI estejam verdes (incluindo `quality-gate`), **e**
+- Não haja conversas não resolvidas restantes (exceto as **Escalar** aguardando decisão).
+
+Quando ambas as condições forem satisfeitas, o babysit encerra.
 
 ---
 
 ### 8. Atualização da Documentação
 
-Localize o documento de Spec ou Bug Report associado à branch do PR (`documentation/features/.../specs/...`) e, se as alterações implementadas afetarem o escopo documentado:
+Localize o documento de Spec ou Bug Report associado à branch do PR (`documentation/features/.../specs/...`) e, se as alterações afetarem o escopo documentado:
 
 - Ajuste as seções impactadas para refletir as decisões finais.
 - Atualize o campo `last_updated_at` no frontmatter.
-- Se o PRD associado tiver itens de checklist impactados, marque-os como concluídos.
+- Marque itens de checklist do PRD que foram concluídos.
 
 ---
 
-## Fluxo de Trabalho
+## Saída esperada
 
-### Passo 1 — Coleta de Dados
-
-```bash
-# Metadados do PR
-gh pr view <pull_number> --repo <owner>/<repo> --json title,headRefName,body,files
-
-# Threads de revisão (filtrando não resolvidas e não outdated)
-gh api graphql -f query='{ repository(owner:"<owner>", name:"<repo>") { pullRequest(number:<pull_number>) { reviewThreads(first:50) { nodes { id isResolved isOutdated comments(first:1) { nodes { path body author { login } } } } } } } }'
-
-# Status dos checks de CI/CD
-gh pr checks <pull_number> --repo <owner>/<repo>
-
-# Logs de workflows com falha (se houver)
-gh run list --repo <owner>/<repo> --branch <head_branch> --status failure --limit 5 --json databaseId,name,conclusion
-gh run view <run_id> --repo <owner>/<repo> --log-failed
-```
-
-### Passo 2 — Diagnóstico e Triagem
-
-Para cada thread não resolvida e cada erro de CI, identifique e classifique:
-- Arquivo afetado e linhas envolvidas.
-- Problema descrito pelo revisor ou mensagem de erro do CI.
-- Solução proposta.
-- Categoria: **Implementar**, **Escalar** ou **Ignorar**.
-
-Apresente a triagem ao usuário antes de avançar se houver itens **Escalar**.
-
-### Passo 3 — Execução
-
-- Implemente as correções das threads **Implementar**.
-- Para threads **Escalar**, aguarde a decisão do usuário.
-
-### Passo 4 — Validação
-
-```bash
-npm run codecheck
-npm run typecheck
-npm run test
-```
-
-### Passo 5 — Conclusão
-
-Relate o progresso com o seguinte formato:
+Relate o progresso no formato:
 
 ```
-## Resumo de Resolucoes
+## Resumo de Resolucoes de PR
 
-### Conversas Implementadas
-- [x] `caminho/do/arquivo.ts` — [descricao da mudanca realizada]
+### CI corrigido
+- [x] <job> — <causa raiz e correcao>
 
-### Erros de CI Corrigidos
-- [x] `workflow/job` — [descricao do erro e da correcao aplicada]
+### Quality gate
+- [x] <metrica> — baseline <x> / antes <y> / agora <z> — <correcao>
 
-### Aguardando decisao
-- [ ] `caminho/do/arquivo.ts` — [comentario do revisor ou erro de CI] -> [motivo da escalada]
+### Conversas implementadas
+- [x] `caminho/do/arquivo.ts` — <descricao da mudanca>
+
+### Aguardando decisao (escaladas)
+- [ ] <item> — <motivo da escalada>
 
 ### Ignoradas
-- `caminho/do/arquivo.ts` — thread meramente informativa / ja enderecada / falha transiente de CI
+- <item> — informativa / ja enderecada
+
+### Status final
+- CI: <verde | pendente>
+- Conversas: <N resolvidas, M aguardando>
 ```
-
-### Passo 6 — Atualização da Documentação
-
-Analise o documento de Spec ou Bug Report relacionado e atualize-o caso as alterações implementadas impactem o escopo ou as decisões de design documentadas.

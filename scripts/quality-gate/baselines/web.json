@@ -1,0 +1,25 @@
+{
+  "workspace": "@stardust/web",
+  "generatedAt": "2026-06-24",
+  "metrics": {
+    "biomeWarnings": 163,
+    "typeEscapes": {
+      "any": 13,
+      "tsIgnore": 3,
+      "total": 16
+    },
+    "fileSize": {
+      "limit": 300,
+      "offenders": {
+        "src/ui/challenging/contexts/TextEditorContext/useTextEditorContextProvider.ts": 321,
+        "src/ui/challenging/widgets/pages/Challenges/TextEditor/useTextEditor.ts": 398,
+        "src/ui/global/widgets/components/NotesDrawer/useNotesDrawer.ts": 397,
+        "src/ui/global/widgets/components/old_TextEditor/useTextEditor.ts": 470,
+        "src/ui/profile/widgets/pages/Notes/useNotesPage.ts": 317,
+        "src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackDialog/useFeedbackDialog.ts": 309,
+        "src/ui/space/widgets/pages/Space/Particles/options.ts": 515
+      }
+    },
+    "coverage": {}
+  }
+}

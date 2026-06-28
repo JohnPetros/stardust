@@ -8,6 +8,7 @@ on:
       - "apps/server/**"
       - "packages/core/**"
       - "packages/validation/**"
+      - "scripts/quality-gate/**"
 
 permissions:
   contents: read
@@ -95,7 +96,47 @@ jobs:
           printf '%s' "${{ secrets.SERVER_ENV_TEST }}" > apps/server/.env.testing
 
       - name: Run tests
-        run: npm run test -w @stardust/server
+        run: npm run test:unit -w @stardust/server
+
+  quality-gate:
+    name: Quality gate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # A catraca roda a suíte unitária (mocks) para medir cobertura. Não sobe
+      # Supabase, mas alguns testes (ai tools) leem env no import.
+      - name: Create test environment file
+        run: printf '%s' "${{ secrets.SERVER_ENV_TEST }}" > apps/server/.env.testing
+
+      - name: Run quality gate
+        env:
+          QUALITY_GATE_REPORT_FILE: quality-gate-report.md
+        run: npm run quality-gate -- --workspace=server
+
+      - name: Comment report on PR
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: bash scripts/quality-gate/comment-pr.sh server quality-gate-report.md
 
   build:
     name: Build
@@ -104,6 +145,7 @@ jobs:
       - codecheck
       - typecheck
       - tests
+      - quality-gate
 
     steps:
       - name: Checkout code

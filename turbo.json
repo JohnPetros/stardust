@@ -32,7 +32,7 @@
       "persistent": true,
       "cache": false
     },
-    "test": {
+    "test:unit": {
       "persistent": true,
       "cache": false
     },

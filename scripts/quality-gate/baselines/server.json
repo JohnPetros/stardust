@@ -1,0 +1,44 @@
+{
+  "workspace": "@stardust/server",
+  "generatedAt": "2026-06-24",
+  "metrics": {
+    "biomeWarnings": 52,
+    "typeEscapes": {
+      "any": 6,
+      "tsIgnore": 13,
+      "total": 19
+    },
+    "fileSize": {
+      "limit": 300,
+      "offenders": {
+        "src/app/hono/routers/auth/AuthRouter.ts": 456,
+        "src/app/hono/routers/challenging/ChallengesRouter.ts": 426,
+        "src/app/hono/routers/profile/UsersRouter.ts": 470,
+        "src/database/supabase/repositories/challenging/SupabaseChallengesRepository.ts": 474,
+        "src/database/supabase/repositories/profile/SupabaseUsersRepository.ts": 784,
+        "src/database/supabase/repositories/space/SupabasePlanetsRepository.ts": 397,
+        "src/provision/storage/SupabaseFileStorageProvider.ts": 327,
+        "src/queue/inngest/functions/AnalyticsFunctions.ts": 558,
+        "src/rest/services/SupabaseAuthService.ts": 535
+      }
+    },
+    "coverage": {
+      "ai": {
+        "lines": 37.5,
+        "branches": 57.14
+      },
+      "other": {
+        "lines": 88.89,
+        "branches": 100
+      },
+      "queue": {
+        "lines": 20.5,
+        "branches": 49.09
+      },
+      "rest": {
+        "lines": 64.34,
+        "branches": 22.69
+      }
+    }
+  }
+}

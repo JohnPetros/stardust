@@ -19,7 +19,7 @@ Após fazer qualquer alteração no código, execute os comandos:
 
 - typecheck
 - codecheck
-- tests
+- unit tests
 
 # Instruções para revisão de pull request
 

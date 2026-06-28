@@ -12,8 +12,12 @@ node_modules/
 
 # testing
 /coverage
+coverage/
 issue.md
 apps/web/playwright-report
+
+# quality gate (relatório gerado no CI para comentar no PR)
+quality-gate-report.md
 apps/web/test-results
 
 # next.js
@@ -35,6 +39,7 @@ tsconfig.tsbuildinfo
 **/public/workbox-*
 **/public/fallback*
 **/html/**
+*.tsbuildinfo
 
 # environment
 .env.*
@@ -96,7 +101,6 @@ documentation/issue.md
 # Serena MCP
 .serena
 
-*.tsbuildinfo
 
 # Terminal Paste Image folder
 .cp-images/
