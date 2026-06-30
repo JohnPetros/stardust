@@ -65,6 +65,7 @@ lerna-debug.log*
 .DS_Store
 *.pem
 .vercel
+.worktree/
 .branches
 .temp
 dist
