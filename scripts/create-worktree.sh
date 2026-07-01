@@ -100,14 +100,21 @@ copy_env_files() {
   local target_root="$2"
   local worktree_parent="$3"
   local copied_count=0
+  local skipped_tracked_count=0
 
-  log "Copiando arquivos .env* do projeto original..."
+  log "Copiando arquivos .env* locais do projeto original..."
 
   while IFS= read -r -d '' env_file; do
     local relative_path
     local target_file
 
     relative_path="${env_file#"$source_root"/}"
+
+    if git -C "$source_root" ls-files --error-unmatch -- "$relative_path" >/dev/null 2>&1; then
+      skipped_tracked_count=$((skipped_tracked_count + 1))
+      continue
+    fi
+
     target_file="$target_root/$relative_path"
 
     mkdir -p "$(dirname "$target_file")"
@@ -123,9 +130,13 @@ copy_env_files() {
   )
 
   if [[ "$copied_count" -eq 0 ]]; then
-    warn "nenhum arquivo .env* foi encontrado. Continuando sem copiar envs."
+    warn "nenhum arquivo .env* local foi encontrado. Continuando sem copiar envs."
   else
     log "$copied_count arquivo(s) .env* copiado(s)."
+  fi
+
+  if [[ "$skipped_tracked_count" -gt 0 ]]; then
+    log "$skipped_tracked_count arquivo(s) .env* rastreado(s) pelo Git foram ignorado(s)."
   fi
 }
 
