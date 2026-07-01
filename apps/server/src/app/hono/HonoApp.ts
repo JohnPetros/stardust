@@ -50,6 +50,7 @@ import {
   ConversationRouter,
   ReportingRouter,
   McpRouter,
+  HealthRouter,
 } from './routers'
 import { ForumRouter } from './routers/forum'
 import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
@@ -168,11 +169,13 @@ export class HonoApp {
     const conversationRouter = new ConversationRouter(this)
     const reportingRouter = new ReportingRouter(this)
     const mcpRouter = new McpRouter(this)
+    const healthRouter = new HealthRouter(this)
 
     this.hono.get('/', (context) => {
-      return context.json({ message: 'Everything is working!' })
+      return context.redirect('/health', HTTP_STATUS_CODE.redirect)
     })
     this.registerInngestRoute()
+    this.hono.route('/', healthRouter.registerRoutes())
     this.hono.route('/', authRouter.registerRoutes())
     this.hono.route('/', profileRouter.registerRoutes())
     this.hono.route('/', spaceRouter.registerRoutes())
