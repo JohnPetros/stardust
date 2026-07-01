@@ -108,7 +108,10 @@ export class CheckHealthController implements Controller {
     headers?: Record<string, string>,
   ): Promise<HealthStatus> {
     const abortController = new AbortController()
-    const timeout = setTimeout(() => abortController.abort(), CheckHealthController.HEALTH_CHECK_TIMEOUT_IN_MS)
+    const timeout = setTimeout(
+      () => abortController.abort(),
+      CheckHealthController.HEALTH_CHECK_TIMEOUT_IN_MS,
+    )
 
     try {
       const response = await fetch(url, {
