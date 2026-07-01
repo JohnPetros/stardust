@@ -153,7 +153,8 @@ describe('Check Health Controller', () => {
     )
 
     const previousDatabaseUrl = ENV.databaseUrl
-    ENV.databaseUrl = 'postgresql://postgres:postgres@aws-0-sa-east-1.pooler.supabase.com:6543/postgres'
+    ENV.databaseUrl =
+      'postgresql://postgres:postgres@aws-0-sa-east-1.pooler.supabase.com:6543/postgres'
 
     let status: HealthStatus
 
