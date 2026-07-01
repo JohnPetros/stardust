@@ -10,6 +10,7 @@ description: Prompt para criar especificação técnica a partir de PRD e codeba
 
 - **PRD:** deve existir e estar finalizado (milestone do GitHub). Se ausente, não inicie — registre em Pendências e use `question`.
 - **Esboço da tarefa:** descrição da feature, fix ou refatoração.
+- **Bug Report (quando aplicável):** `documentation/features/{dominio}/reports/{nome}-bug-report.md` como insumo para specs de correção. O bug report complementa o PRD, mas não o substitui.
 - **Acesso à codebase:** necessário para pesquisa e validação.
 
 ---

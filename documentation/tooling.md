@@ -84,6 +84,16 @@ Notas para a suite Playwright da web:
 - Nunca versione segredos reais no arquivo `.env.testing`.
 - Durante a suite, `NEXT_PUBLIC_STARDUST_SERVER_URL` deve apontar para o backend fake test-only da propria app web (`/api/tests/server`).
 
+Para a app server, prepare o Supabase local antes da suite de integracao:
+
+```bash
+npm run db:test -w @stardust/server
+npm run test:integration -w @stardust/server
+```
+
+O `db:test` sobe o stack local da Supabase CLI e reconstrói o banco a partir das
+migrations com `supabase db reset --local --yes`.
+
 Workspaces comuns:
 
 - `@stardust/web`
@@ -101,6 +111,7 @@ npm run dev:queue -w @stardust/server
 
 ```bash
 npm run db:local -w @stardust/server
+npm run db:test -w @stardust/server
 npm run db:dev -w @stardust/server
 npm run db:prod -w @stardust/server
 npm run db:sync -w @stardust/server

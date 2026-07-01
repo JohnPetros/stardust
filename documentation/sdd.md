@@ -46,7 +46,7 @@ O pipeline é orquestrado por prompts dedicados em `documentation/prompts/`. Cad
 
 ### 3. Plano de Implementação — `create-plan-prompt.md`
 
-**Entrada:** spec técnica ou bug report com spec embutida.
+**Entrada:** spec técnica.
 **Saída:** `documentation/plan.md`
 
 - Transforma a spec em fases e tarefas atômicas com dependências explícitas.
@@ -59,7 +59,7 @@ O pipeline é orquestrado por prompts dedicados em `documentation/prompts/`. Cad
   - Resultado observável verificável sem ambiguidade
 - Apps não impactados são omitidos do plano.
 
-### 4. Implementação — `implement-spec-prompt.md` / `implement-plan-prompt.md`
+### 4. Implementação — `implement-plan-prompt.md`
 
 **Entrada:** `documentation/plan.md` (ou caminho alternativo).
 **Saída:** código implementado na codebase, checkboxes atualizados no `plan.md`.
@@ -74,7 +74,7 @@ O pipeline é orquestrado por prompts dedicados em `documentation/prompts/`. Cad
 - O progresso é rastreado nos checkboxes do próprio `plan.md`.
 - Planos parcialmente concluídos são retomados a partir da primeira tarefa pendente.
 
-### 5. Revisão — `review-spec-prompt.md`
+### 5. Revisão — `conclude-spec-prompt.md`
 
 **Entrada:** spec técnica que guiou a implementação.
 **Saída:** spec fechada, PRD atualizado, resumo estruturado para PR.
@@ -106,7 +106,15 @@ Executa três fases sequenciais:
 
 ## Fluxo para Bugs — `create-bug-report-prompt.md`
 
-Bugs seguem um caminho ligeiramente diferente: o bug report e a spec de correção coexistem no mesmo arquivo `.md`. A partir daí, o fluxo é idêntico — plano → implementação → revisão.
+Bugs seguem um caminho em duas etapas documentais antes de entrar no pipeline principal:
+
+```
+relato do problema → bug report → spec de correção separada → plano → implementação → revisão
+```
+
+- O bug report documenta sintoma, impacto, evidências, diagnóstico e plano inicial de correção.
+- A spec de correção é criada depois, em **arquivo próprio** dentro de `documentation/features/<domínio>/specs/`, usando o bug report como insumo.
+- Bug report e spec **não** coexistem no mesmo `.md`.
 
 ---
 
@@ -116,7 +124,8 @@ Bugs seguem um caminho ligeiramente diferente: o bug report e a spec de correç�
 |---|---|
 | PRD | Milestone do GitHub (nunca arquivo local) |
 | Spec técnica | `documentation/features/<domínio>/specs/<nome>-spec.md` |
-| Bug report + spec de correção | `documentation/features/<domínio>/reports/<nome>-bug-report.md` |
+| Bug report | `documentation/features/<domínio>/reports/<nome>-bug-report.md` |
+| Spec de correção derivada de bug | `documentation/features/<domínio>/specs/<nome>-fix-spec.md` |
 | Plano de implementação | `documentation/plan.md` |
 | Regras por camada | `documentation/rules/` (índice em `rules.md`) |
 | Prompts do pipeline | `documentation/prompts/` |
