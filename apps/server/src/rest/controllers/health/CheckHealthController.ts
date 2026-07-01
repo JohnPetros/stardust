@@ -76,7 +76,6 @@ export class CheckHealthController implements Controller {
       maxRetriesPerRequest: 0,
       enableOfflineQueue: false,
     })
-
     try {
       await this.withTimeout(redis.connect())
       const response = await this.withTimeout(redis.ping())
