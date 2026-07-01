@@ -1,8 +1,10 @@
-import { buildRedisOptions } from '../buildRedisOptions'
+import { IORedisCacheProvider } from '../IORedisCacheProvider'
 
 describe('buildRedisOptions', () => {
   it('should build TLS options for rediss hosts', () => {
-    const options = buildRedisOptions('rediss://user:pass@cache.example.com:6380/2')
+    const options = IORedisCacheProvider.buildRedisOptions(
+      'rediss://user:pass@cache.example.com:6380/2',
+    )
 
     expect(options).toMatchObject({
       host: 'cache.example.com',
@@ -24,7 +26,7 @@ describe('buildRedisOptions', () => {
   })
 
   it('should omit servername for IP-based TLS hosts', () => {
-    const options = buildRedisOptions('rediss://127.0.0.1:6380/0')
+    const options = IORedisCacheProvider.buildRedisOptions('rediss://127.0.0.1:6380/0')
 
     expect(options.tls).toMatchObject({
       rejectUnauthorized: true,

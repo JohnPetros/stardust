@@ -1,9 +1,9 @@
 import net from 'node:net'
+
 import IORedis, { type RedisOptions } from 'ioredis'
 
 import type { CacheProvider, CacheOptions } from '@stardust/core/global/interfaces'
 import { ENV } from '@/constants/env'
-
 export class IORedisCacheProvider implements CacheProvider {
   private static redis: IORedis | null = null
   private static connectPromise: Promise<IORedis> | null = null
