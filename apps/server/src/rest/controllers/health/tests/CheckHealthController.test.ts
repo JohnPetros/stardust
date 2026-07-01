@@ -67,7 +67,13 @@ class CheckPostgresControllerStub extends CheckHealthController {
 }
 
 class CheckHttpControllerStub extends CheckHealthController {
-  request: { headers?: Record<string, string>; url: string } | undefined
+  request:
+    | {
+        headers?: Record<string, string>
+        init?: RequestInit
+        url: string
+      }
+    | undefined
 
   constructor(private readonly status: HealthStatus) {
     super()
@@ -76,8 +82,9 @@ class CheckHttpControllerStub extends CheckHealthController {
   protected override async checkHttpEndpoint(
     url: string,
     headers?: Record<string, string>,
+    init?: RequestInit,
   ): Promise<HealthStatus> {
-    this.request = { url, headers }
+    this.request = { url, headers, init }
     return this.status
   }
 
@@ -168,19 +175,82 @@ describe('Check Health Controller', () => {
     expect(controller.connectionCalls).toEqual([true, false])
   })
 
-  it('should check Inngest health endpoint', async () => {
+  it('should check local Inngest health endpoint in development mode', async () => {
     const controller = new CheckHttpControllerStub('UP')
+    const previousMode = ENV.mode
 
-    const status = await controller.runCheckInngest()
+    ENV.mode = 'development'
+
+    let status: HealthStatus
+
+    try {
+      status = await controller.runCheckInngest()
+    } finally {
+      ENV.mode = previousMode
+    }
 
     expect(status).toBe('UP')
     expect(controller.request).toEqual({
-      url:
-        ENV.mode === 'development'
-          ? 'http://127.0.0.1:8288/health'
-          : 'https://api.inngest.com/health',
+      url: 'http://127.0.0.1:8288/health',
       headers: undefined,
+      init: undefined,
     })
+  })
+
+  it('should check Inngest event API with event key outside development', async () => {
+    const controller = new CheckHttpControllerStub('UP')
+    const previousMode = ENV.mode
+    const previousInngestEventKey = ENV.inngestEventKey
+
+    ENV.mode = 'production'
+    ENV.inngestEventKey = 'event-key'
+
+    let status: HealthStatus
+
+    try {
+      status = await controller.runCheckInngest()
+    } finally {
+      ENV.mode = previousMode
+      ENV.inngestEventKey = previousInngestEventKey
+    }
+
+    expect(status).toBe('UP')
+    expect(controller.request).toEqual({
+      url: 'https://inn.gs/e/event-key',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      init: {
+        method: 'POST',
+        body: JSON.stringify({
+          name: 'health.check',
+          data: {
+            source: 'stardust-healthcheck',
+          },
+        }),
+      },
+    })
+  })
+
+  it('should return DOWN when inngest event key is missing outside development', async () => {
+    const controller = new CheckHttpControllerStub('UP')
+    const previousMode = ENV.mode
+    const previousInngestEventKey = ENV.inngestEventKey
+
+    ENV.mode = 'production'
+    ENV.inngestEventKey = undefined
+
+    let status: HealthStatus
+
+    try {
+      status = await controller.runCheckInngest()
+    } finally {
+      ENV.mode = previousMode
+      ENV.inngestEventKey = previousInngestEventKey
+    }
+
+    expect(status).toBe('DOWN')
+    expect(controller.request).toBeUndefined()
   })
 
   it('should check Supabase auth health endpoint with auth headers', async () => {
@@ -195,6 +265,7 @@ describe('Check Health Controller', () => {
         apikey: ENV.supabaseKey,
         Authorization: `Bearer ${ENV.supabaseKey}`,
       },
+      init: undefined,
     })
   })
 })

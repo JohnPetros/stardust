@@ -62,9 +62,7 @@ export class CheckHealthController implements Controller {
       try {
         await this.checkSocketConnection(databaseUrl, shouldUseTls)
         return 'UP'
-      } catch {
-        continue
-      }
+      } catch {}
     }
 
     return 'DOWN'
@@ -89,12 +87,29 @@ export class CheckHealthController implements Controller {
   }
 
   protected async checkInngest(): Promise<HealthStatus> {
-    const url =
-      ENV.mode === 'development'
-        ? 'http://127.0.0.1:8288/health'
-        : 'https://api.inngest.com/health'
+    if (ENV.mode === 'development') {
+      return this.checkHttpEndpoint('http://127.0.0.1:8288/health')
+    }
 
-    return this.checkHttpEndpoint(url)
+    if (!ENV.inngestEventKey) {
+      return 'DOWN'
+    }
+
+    return this.checkHttpEndpoint(
+      `https://inn.gs/e/${ENV.inngestEventKey}`,
+      {
+        'Content-Type': 'application/json',
+      },
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          name: 'health.check',
+          data: {
+            source: 'stardust-healthcheck',
+          },
+        }),
+      },
+    )
   }
 
   protected async checkSupabase(): Promise<HealthStatus> {
@@ -107,6 +122,7 @@ export class CheckHealthController implements Controller {
   protected async checkHttpEndpoint(
     url: string,
     headers?: Record<string, string>,
+    init?: RequestInit,
   ): Promise<HealthStatus> {
     const abortController = new AbortController()
     const timeout = setTimeout(
@@ -116,6 +132,7 @@ export class CheckHealthController implements Controller {
 
     try {
       const response = await fetch(url, {
+        ...init,
         headers,
         signal: abortController.signal,
       })
