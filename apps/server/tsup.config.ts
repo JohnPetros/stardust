@@ -7,6 +7,13 @@ export default defineConfig((options: Options) => {
     clean: true,
     sourcemap: false,
     outDir: 'build',
+    noExternal: [
+      'ai',
+      '@ai-sdk/google',
+      '@ai-sdk/openai',
+      '@ai-sdk/provider',
+      '@ai-sdk/provider-utils',
+    ],
     esbuildOptions(options) {
       options.loader = {
         ...options.loader,
