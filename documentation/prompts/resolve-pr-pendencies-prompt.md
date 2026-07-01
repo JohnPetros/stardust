@@ -30,6 +30,8 @@ Identifique `owner`, `repo` e `pull_number` a partir da URL fornecida. Em seguid
 gh pr view <pull_number> --repo <owner>/<repo> --json title,headRefName,body,files,mergeable,statusCheckRollup
 ```
 
+> **Princípio operacional:** antes de tentar qualquer modo "watch", polling por SHA ou inspeção detalhada de runs, leia primeiro o estado **atual** do PR. Se `statusCheckRollup` já mostrar tudo `COMPLETED` com `SUCCESS`/`SKIPPED`, `mergeable` estiver favorável e não houver threads abertas, encerre sem etapas extras.
+
 Faça checkout da branch do PR localmente para poder corrigir e dar push:
 
 ```bash
@@ -44,14 +46,25 @@ Levante as pendências das **três** fontes antes de corrigir qualquer coisa.
 
 #### 2.1 Erros de CI
 
-**Primeiro, garanta que o CI terminou.** Não diagnostique com checks ainda em andamento — `--watch` bloqueia até todos concluírem:
+**Primeiro, leia o estado atual do PR.** Use `gh pr checks` sem assumir suporte a `--watch`:
 
 ```bash
-# Espera todos os checks do PR concluírem (sai != 0 se algum falhar)
-gh pr checks <pull_number> --repo <owner>/<repo> --watch
+# Lista o estado atual dos checks do PR
+gh pr checks <pull_number> --repo <owner>/<repo>
 ```
 
-Em seguida, leia **apenas** os logs do que falhou:
+Se todos os checks já estiverem concluídos, use esse resultado como fonte de verdade e **não** tente observar runs em loop.
+
+**Só se ainda houver checks em andamento**, aguarde a conclusão. Prefira um polling simples e compatível com versões antigas do `gh`:
+
+```bash
+# Releia os checks até nenhum status ficar pendente
+while gh pr checks <pull_number> --repo <owner>/<repo> | grep -Eq '\b(pending|in_progress)\b'; do
+  sleep 10
+done
+```
+
+Em seguida, leia **apenas** os logs do que falhou, usando o `detailsUrl`/run visível no próprio PR ou em `gh pr checks`:
 
 ```bash
 # Identifique o run que falhou e leia só as etapas com falha
@@ -62,18 +75,31 @@ Mapeie cada job falho para a causa raiz (lint, tipo, teste unitário, teste de i
 
 #### 2.2 Regressões do quality gate
 
-Quando o job `quality-gate` falhar, ele publica a tabela de regressões no resumo do job e sobe o `summary.md` como artefato. Baixe e leia:
+Quando o job `quality-gate` falhar, tente primeiro obter a regressão pelo próprio resumo/log do run. Nem toda versão do `gh` suporta `--json jobs`, e nem todo run expõe artefatos baixáveis.
+
+Fluxo preferencial:
 
 ```bash
-# Veja qual job quality-gate falhou
-gh run view <run_id> --repo <owner>/<repo> --json jobs \
-  --jq '.jobs[] | select(.name | test("[Qq]uality")) | {name, conclusion}'
+# 1) Leia o resumo textual do run
+gh run view <run_id> --repo <owner>/<repo>
 
-# Baixe os artefatos (inclui o summary.md com a tabela métrica | baseline | atual)
+# 2) Leia os logs das etapas com falha
+gh run view <run_id> --repo <owner>/<repo> --log-failed
+```
+
+Se o run expuser artefatos úteis, baixe-os:
+
+```bash
 gh run download <run_id> --repo <owner>/<repo>
 ```
 
-A tabela diz exatamente **qual métrica piorou, o baseline e o valor atual** — use-a como lista de correções.
+Se nem o resumo nem os artefatos trouxerem a tabela, **reproduza localmente** o quality gate do workspace afetado para obter a métrica exata:
+
+```bash
+npm run quality-gate -- --workspace=<workspace>
+```
+
+Use a tabela ou a saída local como lista de correções.
 
 #### 2.3 Conversas de revisão não resolvidas
 
@@ -116,6 +142,8 @@ Classifique **cada pendência** (de qualquer fonte) em uma categoria:
 > **Regra de escalada:** Qualquer item que implique mudança de arquitetura, remoção de funcionalidade, conflito com o PRD/Spec, ou **afrouxar o baseline do quality gate**, deve ser **escalado** — nunca resolvido de forma autônoma. Afrouxar o baseline (`--update-baseline` para piorar uma métrica) anula o propósito da catraca.
 
 Apresente a triagem ao usuário antes de avançar caso haja itens **Escalar**.
+
+> **Regra de eficiência:** se, após a triagem inicial, o PR já estiver com CI verde, sem threads não resolvidas e `mergeable`, pare. Não continue investigando runs antigos nem tentando provar novamente um estado que o PR já mostra.
 
 ---
 
@@ -179,6 +207,8 @@ npm run quality-gate -- --workspace=<workspace>
 
 Corrija qualquer erro antes de prosseguir. Verifique também se as alterações permanecem aderentes ao PRD e à Spec associada ao PR.
 
+Se `npm run test:unit` falhar por problema **preexistente ou ambiental** não relacionado à alteração (por exemplo, infraestrutura local instável), registre isso explicitamente, valide o escopo alterado com testes focados e siga apenas se o CI remoto do PR continuar sendo a fonte de verdade para esse trecho.
+
 ---
 
 ### 6. Fechamento das Threads
@@ -208,20 +238,27 @@ git commit -m "<mensagem seguindo o padrao do repo>"
 git push
 ```
 
-**Aguarde o CI do commit recém-enviado — não reaproveite o resultado do run anterior.** Logo após o push, o GitHub leva alguns segundos para registrar o novo run; se você rodar `--watch` cedo demais, ele pode observar o run antigo (já verde) e retornar um falso "tudo passou". Ancore a espera no SHA do `HEAD`:
+**Após o push, releia primeiro o estado atual do PR.** Não assuma suporte a flags como `gh pr checks --watch` ou `gh run list --commit`; o prompt deve funcionar mesmo em versões mais limitadas do `gh`.
+
+Fluxo padrão após o push:
 
 ```bash
-HEAD_SHA=$(git rev-parse HEAD)
+# 1) Leia os checks atuais do PR
+gh pr checks <pull_number> --repo <owner>/<repo>
 
-# 1) Espere o run do commit atual ser registrado
-until gh run list --repo <owner>/<repo> --commit "$HEAD_SHA" \
-      --json databaseId --jq '.[0].databaseId' | grep -q .; do
-  sleep 5
-done
-
-# 2) Agora sim, bloqueie até os checks do PR concluírem
-gh pr checks <pull_number> --repo <owner>/<repo> --watch
+# 2) Releia os metadados consolidados do PR
+gh pr view <pull_number> --repo <owner>/<repo> --json mergeable,statusCheckRollup
 ```
+
+Se houver checks pendentes, faça polling simples no PR:
+
+```bash
+while gh pr checks <pull_number> --repo <owner>/<repo> | grep -Eq '\b(pending|in_progress)\b'; do
+  sleep 10
+done
+```
+
+**Só tente ancorar em run ou SHA** se houver evidência concreta de que `gh pr checks` está mostrando um estado stale ou inconsistente. Mesmo nesse caso, use apenas comandos comprovadamente suportados pela versão local do `gh`.
 
 **Repita o ciclo (etapas 2 → 7)** até que:
 - Todos os checks de CI estejam verdes (incluindo `quality-gate`), **e**
