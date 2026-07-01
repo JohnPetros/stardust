@@ -5,6 +5,7 @@ import IORedis from 'ioredis'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
 
 import { APP_VERSION, ENV } from '@/constants'
+import { buildRedisOptions } from '@/provision/cache/ioredis/buildRedisOptions'
 
 type HealthStatus = 'UP' | 'DOWN'
 
@@ -70,11 +71,10 @@ export class CheckHealthController implements Controller {
   }
 
   protected async checkRedis(): Promise<HealthStatus> {
-    const redis = new IORedis(ENV.redisUrl, {
-      lazyConnect: true,
+    const redis = new IORedis({
+      ...buildRedisOptions(ENV.redisUrl),
       connectTimeout: CheckHealthController.HEALTH_CHECK_TIMEOUT_IN_MS,
       maxRetriesPerRequest: 0,
-      enableOfflineQueue: false,
     })
 
     try {
