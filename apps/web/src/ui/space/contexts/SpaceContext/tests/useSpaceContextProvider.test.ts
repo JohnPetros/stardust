@@ -217,9 +217,12 @@ describe('useSpaceContextProvider', () => {
     const user = UsersFaker.fake()
     const starElement = document.createElement('div')
     const scrollContainer = document.createElement('section')
+    let isRecentering = false
+    let recenterLayoutReads = 0
     const containerScrollTo = jest.fn(({ top }: { top: number }) => {
       scrollContainer.scrollTop = top
     })
+    jest.spyOn(window, 'requestAnimationFrame').mockReturnValue(1)
 
     scrollContainer.style.overflowY = 'auto'
     Object.defineProperty(scrollContainer, 'clientHeight', {
@@ -246,16 +249,29 @@ describe('useSpaceContextProvider', () => {
     jest
       .spyOn(scrollContainer, 'getBoundingClientRect')
       .mockReturnValue(createRect({ top: 100, bottom: 300, height: 200 }))
-    jest
-      .spyOn(starElement, 'getBoundingClientRect')
-      .mockReturnValueOnce(createRect({ top: 320, bottom: 360, height: 40 }))
-      .mockReturnValueOnce(createRect({ top: 260, bottom: 300, height: 40 }))
-      .mockReturnValueOnce(createRect({ top: 260, bottom: 300, height: 40 }))
-      .mockReturnValue(createRect({ top: 180, bottom: 220, height: 40 }))
+    jest.spyOn(starElement, 'getBoundingClientRect').mockImplementation(() => {
+      if (!isRecentering) {
+        return createRect({ top: 180, bottom: 220, height: 40 })
+      }
+
+      recenterLayoutReads += 1
+
+      if (recenterLayoutReads === 1) {
+        return createRect({ top: 320, bottom: 360, height: 40 })
+      }
+
+      if (recenterLayoutReads === 2) {
+        return createRect({ top: 260, bottom: 300, height: 40 })
+      }
+
+      return createRect({ top: 180, bottom: 220, height: 40 })
+    })
 
     const { result } = renderHook(() => useSpaceContextProvider(planets, user))
 
     setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
+    containerScrollTo.mockClear()
+    isRecentering = true
 
     act(() => {
       result.current.scrollIntoLastUnlockedStar()

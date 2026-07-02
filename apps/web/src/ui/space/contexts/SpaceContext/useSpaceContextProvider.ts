@@ -3,20 +3,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { User } from '@stardust/core/profile/entities'
 import type { Planet } from '@stardust/core/space/entities'
 
+import {
+  createLastUnlockedStarLayoutMetrics,
+  getLastUnlockedStarLayoutSnapshot,
+  getLastUnlockedStarScrollTarget,
+  isLastUnlockedStarCentered,
+} from './lastUnlockedStarLayout'
 import type { LastUnlockedStarViewPortPosition } from './types'
-
-type LastUnlockedStarLayoutMetrics = {
-  starRect: DOMRect
-  scrollContainer: HTMLElement | null
-  scrollTop: number
-  scrollHeight: number
-  clientHeight: number
-  containerRect: DOMRect | null
-}
 
 const MAX_SCROLL_RECENTER_ATTEMPTS = 6
 const SCROLL_RECENTER_DELAY_IN_MS = 150
-const SCROLL_CENTER_TOLERANCE_IN_PX = 4
 
 export function useSpaceContextProvider(planets: Planet[], user: User | null) {
   const [lastUnlockedStarPosition, setLastUnlockedStarPosition] =
@@ -97,83 +93,18 @@ export function useSpaceContextProvider(planets: Planet[], user: User | null) {
       return null
     }
 
-    const starRect = starElement.getBoundingClientRect()
-    const scrollContainer = resolveScrollContainer()
-
-    if (scrollContainer) {
-      return {
-        starRect,
-        scrollContainer,
-        scrollTop: scrollContainer.scrollTop,
-        scrollHeight: scrollContainer.scrollHeight,
-        clientHeight: scrollContainer.clientHeight,
-        containerRect: scrollContainer.getBoundingClientRect(),
-      }
-    }
-
-    return {
-      starRect,
-      scrollContainer: null,
-      scrollTop: window.scrollY,
-      scrollHeight: document.documentElement.scrollHeight,
-      clientHeight: window.innerHeight,
-      containerRect: null,
-    }
+    return createLastUnlockedStarLayoutMetrics(starElement, resolveScrollContainer())
   }, [resolveScrollContainer])
 
-  const getLastUnlockedStarLayoutSnapshot = useCallback(() => {
+  const handleGetLastUnlockedStarLayoutSnapshot = useCallback(() => {
     const layoutMetrics = getLastUnlockedStarLayoutMetrics()
 
     if (!layoutMetrics) {
       return null
     }
 
-    const { starRect, scrollTop, scrollHeight, clientHeight, containerRect } =
-      layoutMetrics
-
-    return [
-      Math.round(starRect.top),
-      Math.round(starRect.bottom),
-      Math.round(starRect.height),
-      Math.round(scrollTop),
-      Math.round(scrollHeight),
-      Math.round(clientHeight),
-      Math.round(containerRect?.top ?? 0),
-      Math.round(containerRect?.bottom ?? 0),
-      Math.round(containerRect?.height ?? 0),
-    ].join(':')
+    return getLastUnlockedStarLayoutSnapshot(layoutMetrics)
   }, [getLastUnlockedStarLayoutMetrics])
-
-  const isLastUnlockedStarCentered = useCallback(
-    (layoutMetrics: LastUnlockedStarLayoutMetrics) => {
-      const { starRect, containerRect, scrollContainer } = layoutMetrics
-      const starCenter = starRect.top + starRect.height / 2
-      const viewportCenter = scrollContainer
-        ? containerRect!.top + containerRect!.height / 2
-        : window.innerHeight / 2
-
-      return Math.abs(starCenter - viewportCenter) <= SCROLL_CENTER_TOLERANCE_IN_PX
-    },
-    [],
-  )
-
-  const getLastUnlockedStarScrollTarget = useCallback(
-    (layoutMetrics: LastUnlockedStarLayoutMetrics) => {
-      const { starRect, scrollContainer, containerRect } = layoutMetrics
-
-      if (scrollContainer && containerRect) {
-        return (
-          scrollContainer.scrollTop +
-          (starRect.top - containerRect.top) -
-          (scrollContainer.clientHeight - starRect.height) / 2
-        )
-      }
-
-      const starTopPosition = starRect.top + window.scrollY
-      return starTopPosition - (window.innerHeight - starRect.height) / 2
-    },
-    [],
-  )
 
   const handleScroll = useCallback(() => {
     const starRect = lastUnlockedStarRef.current?.getBoundingClientRect()
@@ -248,11 +179,7 @@ export function useSpaceContextProvider(planets: Planet[], user: User | null) {
     }
 
     recenterLastUnlockedStar(MAX_SCROLL_RECENTER_ATTEMPTS)
-  }, [
-    getLastUnlockedStarLayoutMetrics,
-    getLastUnlockedStarScrollTarget,
-    isLastUnlockedStarCentered,
-  ])
+  }, [getLastUnlockedStarLayoutMetrics])
 
   useEffect(() => {
     const targets: Array<HTMLElement | Window> = []
@@ -301,7 +228,7 @@ export function useSpaceContextProvider(planets: Planet[], user: User | null) {
       lastUnlockedStarId,
       lastUnlockedStarRef,
       lastUnlockedStarPosition,
-      getLastUnlockedStarLayoutSnapshot,
+      getLastUnlockedStarLayoutSnapshot: handleGetLastUnlockedStarLayoutSnapshot,
       scrollIntoLastUnlockedStar,
       setLastUnlockedStarPosition,
     }
@@ -309,7 +236,7 @@ export function useSpaceContextProvider(planets: Planet[], user: User | null) {
     planets,
     lastUnlockedStarId,
     lastUnlockedStarPosition,
-    getLastUnlockedStarLayoutSnapshot,
+    handleGetLastUnlockedStarLayoutSnapshot,
     scrollIntoLastUnlockedStar,
   ])
 
