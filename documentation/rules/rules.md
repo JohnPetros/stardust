@@ -16,6 +16,16 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 - Para regras sobre Barrel files (index.ts).
 - Ao criar classes de Evento ou Erro.
 
+## Regras de Commit
+
+**Arquivo:** `/documentation/rules/commit-rules.md`
+**Quando consultar:**
+
+- Antes de criar commits no repositório.
+- Para escolher o prefixo, emoji e formato da mensagem de commit.
+- Para agrupar alterações por responsabilidade semântica.
+- Para substituir o uso de prompts específicos de commit como fonte principal de decisão.
+
 ## Regras da Camada UI
 
 **Arquivo:** `/documentation/rules/ui-layer-rules.md`
