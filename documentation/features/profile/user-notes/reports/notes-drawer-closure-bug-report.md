@@ -1,8 +1,10 @@
+---
 title: Drawer de Notas nao fecha no primeiro clique apos selecao
 issue: https://github.com/JohnPetros/stardust/issues/444
 apps: web
 status: closed
-last_updated: 2026-07-01
+last_updated_at: 2026-07-02
+---
 
 # Bug Report: Drawer de Notas nao fecha no primeiro clique apos selecao
 
