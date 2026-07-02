@@ -29,7 +29,7 @@ const env = {
 
 const envSchema = z.object({
   mode: z.enum(['development', 'production', 'test']),
-  port: z.coerce.number().default(3333),
+  port: z.coerce.number().default(3331),
   baseUrl: z.string().url().default('http://localhost'),
   supabaseUrl: z.string().url(),
   supabaseKey: z.string(),
