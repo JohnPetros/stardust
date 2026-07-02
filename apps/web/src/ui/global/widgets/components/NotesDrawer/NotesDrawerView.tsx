@@ -24,6 +24,7 @@ type Props = {
   totalPagesCount: number
   notes: NoteDto[]
   onDrawerOpenChange: (isOpen: boolean) => void
+  onManualDrawerClose: () => void
   onDialogOpenChange: (isOpen: boolean) => void
   onOpenNotesDialog: () => void
   onTitleChange: (value: string) => void
@@ -55,6 +56,7 @@ export const NotesDrawerView = ({
   totalPagesCount,
   notes,
   onDrawerOpenChange,
+  onManualDrawerClose,
   onDialogOpenChange,
   onOpenNotesDialog,
   onTitleChange,
@@ -102,7 +104,7 @@ export const NotesDrawerView = ({
                     <button
                       type='button'
                       aria-label='Fechar anotações'
-                      onClick={() => onDrawerOpenChange(false)}
+                      onClick={onManualDrawerClose}
                       className='flex h-10 w-10 items-center justify-center rounded-full border border-[#303030] bg-[#1e2626] text-gray-300 transition-colors hover:bg-[#273232]'
                     >
                       <Icon name='close' size={16} />
