@@ -262,7 +262,7 @@ export function useWYSIWYGEditor({ value, disabled = false, onChange }: Params) 
     const currentContent = getMarkdown(editor).trim()
 
     if (nextContent !== currentContent) {
-      setMarkdownContent(editor, value)
+      scheduleSetMarkdownContent(editor, value)
     }
   }, [value, editor])
 
