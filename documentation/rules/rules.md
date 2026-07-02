@@ -101,6 +101,18 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 - Para entender as fronteiras entre adapters de IA e contratos internos do projeto.
 - Ao integrar modelos, provedores ou orchestration de inferencia.
 
+## Regras de Uso de MCPs
+
+**Arquivo:** `/documentation/rules/mcp-rules.md`
+**Quando consultar:**
+
+- Ao decidir qual MCP usar para uma tarefa.
+- Ao validar fluxos reais de browser com Playwright MCP.
+- Ao navegar a codebase com Serena.
+- Ao consultar documentacao atualizada com Context7.
+- Ao interagir com Supabase Dev/Prod.
+- Ao trabalhar com arquivos `.pen` via Pencil.
+
 ## Regras da Aplicação Web
 
 **Arquivo:** `/documentation/rules/web-application-rules.md`
