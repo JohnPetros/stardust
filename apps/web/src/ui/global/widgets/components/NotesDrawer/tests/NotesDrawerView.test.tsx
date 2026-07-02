@@ -141,6 +141,7 @@ describe('NotesDrawerView', () => {
         totalPagesCount={2}
         notes={[makeNote('1'), makeNote('2')]}
         onDrawerOpenChange={jest.fn()}
+        onManualDrawerClose={jest.fn()}
         onDialogOpenChange={jest.fn()}
         onOpenNotesDialog={jest.fn()}
         onTitleChange={jest.fn()}
@@ -180,6 +181,7 @@ describe('NotesDrawerView', () => {
   it('should call the main drawer actions and form handlers', async () => {
     const user = userEvent.setup()
     const onDrawerOpenChange = jest.fn()
+    const onManualDrawerClose = jest.fn()
     const onOpenNotesDialog = jest.fn()
     const onTitleChange = jest.fn()
     const onContentChange = jest.fn()
@@ -189,6 +191,7 @@ describe('NotesDrawerView', () => {
 
     View({
       onDrawerOpenChange,
+      onManualDrawerClose,
       onOpenNotesDialog,
       onTitleChange,
       onContentChange,
@@ -214,7 +217,8 @@ describe('NotesDrawerView', () => {
     expect(onCreateNewClick).toHaveBeenCalledTimes(1)
     expect(onSaveClick).toHaveBeenCalledTimes(1)
     expect(onDeleteClick).toHaveBeenCalledTimes(1)
-    expect(onDrawerOpenChange).toHaveBeenCalledWith(false)
+    expect(onDrawerOpenChange).not.toHaveBeenCalled()
+    expect(onManualDrawerClose).toHaveBeenCalledTimes(1)
   })
 
   it('should pass list state and dialog actions through NotesListDialog', async () => {
