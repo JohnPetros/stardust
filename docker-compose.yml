@@ -2,7 +2,7 @@ services:
   inngest:
     image: inngest/inngest:v1.19.4
     container_name: stardust-inngest
-    command: inngest dev -u http://host.docker.internal:3334/inngest --no-discovery
+    command: inngest dev -u http://host.docker.internal:3331/inngest --no-discovery
     ports:
       - "8288:8288"
       - "8289:8289"

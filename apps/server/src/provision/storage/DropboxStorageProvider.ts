@@ -1,5 +1,3 @@
-import fs from 'node:fs/promises'
-
 import { Dropbox } from 'dropbox'
 
 import { AppError } from '@stardust/core/global/errors'

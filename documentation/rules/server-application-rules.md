@@ -38,11 +38,11 @@ npm install
 **Execute a aplicacao em modo de desenvolvimento**
 
 ```bash
-docker compose up -d redis ingest
+docker compose up -d redis inngest
 npm run dev
 ```
 
-> O servidor HTTP inicia, por padrao, na porta definida em `PORT` (ex.: http://localhost:3333). O runtime local do Inngest deve ser iniciado via `docker compose` e fica disponivel em `http://127.0.0.1:8288`.
+> O servidor HTTP inicia, por padrao, em `http://localhost:3331` quando `PORT` nao esta definida. O runtime local do Inngest deve ser iniciado via `docker compose`, fica disponivel em `http://127.0.0.1:8288` e faz discovery em `http://host.docker.internal:3331/inngest`.
 
 ## Executando os testes
 

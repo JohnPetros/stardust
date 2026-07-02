@@ -103,7 +103,7 @@ Workspaces comuns:
 ## Server (API + Queue)
 
 ```bash
-docker compose up -d redis ingest
+docker compose up -d redis inngest
 npm run dev -w @stardust/server
 ```
 
@@ -123,7 +123,7 @@ npm run db:types -w @stardust/server
 
 Notas:
 - A fonte de verdade da Supabase CLI do server é `apps/server/supabase/`.
-- O runtime local do Inngest sobe via `docker compose` no servico `ingest`, exposto em `http://127.0.0.1:8288`.
+- O runtime local do Inngest sobe via `docker compose` no servico `inngest`, exposto em `http://127.0.0.1:8288`, e deve apontar para `http://host.docker.internal:3331/inngest` quando o server roda com a porta default.
 - Em produção, as migrations devem rodar no workflow de deploy antes do release da aplicação.
 
 ## Hooks
