@@ -33,6 +33,7 @@ export const NotesDrawer = ({ children }: Props) => {
     errorMessage,
     isEmpty,
     handleDrawerOpenChange,
+    handleManualDrawerClose,
     handleNotesDialogOpen,
     handleNotesDialogOpenChange,
     handleSearchChange,
@@ -73,6 +74,7 @@ export const NotesDrawer = ({ children }: Props) => {
       errorMessage={errorMessage}
       isEmpty={isEmpty}
       onDrawerOpenChange={handleDrawerOpenChange}
+      onManualDrawerClose={handleManualDrawerClose}
       onDialogOpenChange={handleNotesDialogOpenChange}
       onOpenNotesDialog={handleNotesDialogOpen}
       onSearchChange={handleSearchChange}

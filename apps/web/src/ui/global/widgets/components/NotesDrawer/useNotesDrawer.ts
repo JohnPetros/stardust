@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { ProfileService } from '@stardust/core/profile/interfaces'
 import { Id, Integer, Text } from '@stardust/core/global/structures'
 import type { NoteDto } from '@stardust/core/profile/entities/dtos'
@@ -41,7 +41,6 @@ export function useNotesDrawer({
   const [content, setContent] = useState('')
   const [isDirty, setIsDirty] = useState(false)
   const [fieldError, setFieldError] = useState<string | null>(null)
-  const shouldIgnoreNextDrawerCloseRef = useRef(false)
 
   const debouncedSearch = useDebounce((value: unknown) => {
     setPage(1)
@@ -157,21 +156,30 @@ export function useNotesDrawer({
     setIsDirty(true)
   }
 
+  function closeDrawer() {
+    if (!confirmDiscardChanges()) {
+      return
+    }
+
+    clearForm()
+    setIsDrawerOpen(false)
+  }
+
   function handleDrawerOpenChange(isOpen: boolean) {
-    if (!isOpen && (isDialogOpen || shouldIgnoreNextDrawerCloseRef.current)) {
-      shouldIgnoreNextDrawerCloseRef.current = false
+    if (!isOpen && isDialogOpen) {
       return
     }
 
     if (!isOpen) {
-      if (!confirmDiscardChanges()) {
-        return
-      }
-
-      clearForm()
+      closeDrawer()
+      return
     }
 
     setIsDrawerOpen(isOpen)
+  }
+
+  function handleManualDrawerClose() {
+    closeDrawer()
   }
 
   function handleNotesDialogOpen() {
@@ -202,7 +210,6 @@ export function useNotesDrawer({
       return
     }
 
-    shouldIgnoreNextDrawerCloseRef.current = true
     setActiveNote(note)
     setTitle(note.title)
     setContent(note.content)
@@ -374,6 +381,7 @@ export function useNotesDrawer({
     errorMessage: getErrorMessage(error),
     isEmpty: notes.length === 0,
     handleDrawerOpenChange,
+    handleManualDrawerClose,
     handleNotesDialogOpen,
     handleNotesDialogOpenChange,
     handleSearchChange,
