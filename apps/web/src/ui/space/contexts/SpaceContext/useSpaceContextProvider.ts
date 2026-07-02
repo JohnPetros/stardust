@@ -3,7 +3,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { User } from '@stardust/core/profile/entities'
 import type { Planet } from '@stardust/core/space/entities'
 
+import {
+  createLastUnlockedStarLayoutMetrics,
+  getLastUnlockedStarLayoutSnapshot,
+  getLastUnlockedStarScrollTarget,
+  isLastUnlockedStarCentered,
+} from './lastUnlockedStarLayout'
 import type { LastUnlockedStarViewPortPosition } from './types'
+
+const MAX_SCROLL_RECENTER_ATTEMPTS = 6
+const SCROLL_RECENTER_DELAY_IN_MS = 150
 
 export function useSpaceContextProvider(planets: Planet[], user: User | null) {
   const [lastUnlockedStarPosition, setLastUnlockedStarPosition] =
@@ -77,6 +86,26 @@ export function useSpaceContextProvider(planets: Planet[], user: User | null) {
     return null
   }, [])
 
+  const getLastUnlockedStarLayoutMetrics = useCallback(() => {
+    const starElement = lastUnlockedStarRef.current
+
+    if (!starElement) {
+      return null
+    }
+
+    return createLastUnlockedStarLayoutMetrics(starElement, resolveScrollContainer())
+  }, [resolveScrollContainer])
+
+  const handleGetLastUnlockedStarLayoutSnapshot = useCallback(() => {
+    const layoutMetrics = getLastUnlockedStarLayoutMetrics()
+
+    if (!layoutMetrics) {
+      return null
+    }
+
+    return getLastUnlockedStarLayoutSnapshot(layoutMetrics)
+  }, [getLastUnlockedStarLayoutMetrics])
+
   const handleScroll = useCallback(() => {
     const starRect = lastUnlockedStarRef.current?.getBoundingClientRect()
 
@@ -115,39 +144,42 @@ export function useSpaceContextProvider(planets: Planet[], user: User | null) {
   }, [resolveScrollContainer])
 
   const scrollIntoLastUnlockedStar = useCallback(() => {
-    const starElement = lastUnlockedStarRef.current
+    function recenterLastUnlockedStar(remainingAttempts: number) {
+      const layoutMetrics = getLastUnlockedStarLayoutMetrics()
 
-    if (!starElement) return
+      if (!layoutMetrics) return
 
-    const starRect = starElement.getBoundingClientRect()
+      const nextScrollTop = getLastUnlockedStarScrollTarget(layoutMetrics)
 
-    if (!starRect) return
+      if (layoutMetrics.scrollContainer) {
+        layoutMetrics.scrollContainer.scrollTo({
+          top: nextScrollTop,
+          behavior: 'smooth',
+        })
+      } else {
+        window.scrollTo({
+          top: nextScrollTop,
+          behavior: 'smooth',
+        })
+      }
 
-    const scrollContainer = resolveScrollContainer()
+      if (remainingAttempts <= 0) {
+        return
+      }
 
-    if (scrollContainer) {
-      const containerRect = scrollContainer.getBoundingClientRect()
-      const starPositionWithinContainer =
-        scrollContainer.scrollTop +
-        (starRect.top - containerRect.top) -
-        (scrollContainer.clientHeight - starRect.height) / 2
+      window.setTimeout(() => {
+        const nextLayoutMetrics = getLastUnlockedStarLayoutMetrics()
 
-      scrollContainer.scrollTo({
-        top: starPositionWithinContainer,
-        behavior: 'smooth',
-      })
+        if (!nextLayoutMetrics || isLastUnlockedStarCentered(nextLayoutMetrics)) {
+          return
+        }
 
-      return
+        recenterLastUnlockedStar(remainingAttempts - 1)
+      }, SCROLL_RECENTER_DELAY_IN_MS)
     }
 
-    const starTopPosition = starRect.top + window.scrollY
-    const starPosition = starTopPosition - (window.innerHeight - starRect.height) / 2
-
-    window.scrollTo({
-      top: starPosition,
-      behavior: 'smooth',
-    })
-  }, [resolveScrollContainer])
+    recenterLastUnlockedStar(MAX_SCROLL_RECENTER_ATTEMPTS)
+  }, [getLastUnlockedStarLayoutMetrics])
 
   useEffect(() => {
     const targets: Array<HTMLElement | Window> = []
@@ -196,10 +228,17 @@ export function useSpaceContextProvider(planets: Planet[], user: User | null) {
       lastUnlockedStarId,
       lastUnlockedStarRef,
       lastUnlockedStarPosition,
+      getLastUnlockedStarLayoutSnapshot: handleGetLastUnlockedStarLayoutSnapshot,
       scrollIntoLastUnlockedStar,
       setLastUnlockedStarPosition,
     }
-  }, [planets, lastUnlockedStarId, lastUnlockedStarPosition, scrollIntoLastUnlockedStar])
+  }, [
+    planets,
+    lastUnlockedStarId,
+    lastUnlockedStarPosition,
+    handleGetLastUnlockedStarLayoutSnapshot,
+    scrollIntoLastUnlockedStar,
+  ])
 
   return spaceContextValue
 }
