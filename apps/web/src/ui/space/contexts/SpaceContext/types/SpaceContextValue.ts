@@ -7,6 +7,7 @@ export type SpaceContextValue = {
   lastUnlockedStarId: string | null
   lastUnlockedStarRef: RefObject<HTMLDivElement | null>
   lastUnlockedStarPosition: LastUnlockedStarViewPortPosition
+  getLastUnlockedStarLayoutSnapshot: () => string | null
   scrollIntoLastUnlockedStar: () => void
   setLastUnlockedStarPosition: (
     viewPortposition: LastUnlockedStarViewPortPosition,

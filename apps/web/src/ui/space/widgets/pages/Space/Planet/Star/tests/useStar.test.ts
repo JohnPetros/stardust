@@ -27,9 +27,9 @@ describe('useStar', () => {
   let goTo: jest.Mock
   let scrollIntoLastUnlockedStar: jest.Mock
   let setLastUnlockedStarPosition: jest.Mock
+  let getLastUnlockedStarLayoutSnapshot: jest.Mock
   let starAnimationRef: React.RefObject<AnimationRef | null>
   let lastUnlockedStarPosition: 'above' | 'in' | 'bellow'
-  let getBoundingClientRectMock: jest.SpyInstance
 
   const star = ChallengesFaker.fake()
   const starId = IdFaker.fake()
@@ -46,6 +46,7 @@ describe('useStar', () => {
         challengingService,
         lastUnlockedStarRef,
         lastUnlockedStarPosition,
+        getLastUnlockedStarLayoutSnapshot,
         scrollIntoLastUnlockedStar,
         setLastUnlockedStarPosition,
       }),
@@ -60,10 +61,10 @@ describe('useStar', () => {
     goTo = jest.fn()
     scrollIntoLastUnlockedStar = jest.fn()
     setLastUnlockedStarPosition = jest.fn()
+    getLastUnlockedStarLayoutSnapshot = jest
+      .fn()
+      .mockReturnValue('300:380:80:0:1200:900:0:0:0')
     lastUnlockedStarPosition = 'in'
-    getBoundingClientRectMock = jest
-      .spyOn(lastUnlockedStarRef.current, 'getBoundingClientRect')
-      .mockReturnValue({ top: 300, height: 80 } as DOMRect)
     starAnimationRef = {
       current: {
         restart: jest.fn(),
@@ -157,10 +158,10 @@ describe('useStar', () => {
   })
 
   it('should wait for layout to stabilize before scrolling into last unlocked star', () => {
-    getBoundingClientRectMock
-      .mockReturnValueOnce({ top: 300, height: 80 } as DOMRect)
-      .mockReturnValueOnce({ top: 420, height: 80 } as DOMRect)
-      .mockReturnValue({ top: 420, height: 80 } as DOMRect)
+    getLastUnlockedStarLayoutSnapshot
+      .mockReturnValueOnce('300:380:80:0:1200:900:0:0:0')
+      .mockReturnValueOnce('420:500:80:0:1200:900:0:0:0')
+      .mockReturnValue('420:500:80:0:1200:900:0:0:0')
 
     Hook(true)
 
@@ -184,6 +185,18 @@ describe('useStar', () => {
 
     act(() => {
       jest.advanceTimersByTime(3000)
+    })
+
+    expect(scrollIntoLastUnlockedStar).not.toHaveBeenCalled()
+  })
+
+  it('should stop waiting when snapshot is unavailable', () => {
+    getLastUnlockedStarLayoutSnapshot.mockReturnValue(null)
+
+    Hook(true)
+
+    act(() => {
+      jest.advanceTimersByTime(500)
     })
 
     expect(scrollIntoLastUnlockedStar).not.toHaveBeenCalled()

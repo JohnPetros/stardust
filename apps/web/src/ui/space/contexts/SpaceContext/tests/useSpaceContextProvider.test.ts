@@ -33,9 +33,14 @@ describe('useSpaceContextProvider', () => {
   }
 
   beforeEach(() => {
+    jest.useFakeTimers()
     jest.clearAllMocks()
     jest.restoreAllMocks()
     document.body.innerHTML = ''
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
   })
 
   it('should return null as last unlocked star id when user is null', () => {
@@ -205,6 +210,109 @@ describe('useSpaceContextProvider', () => {
       top: 240,
       behavior: 'smooth',
     })
+  })
+
+  it('should retry centering when layout keeps shifting after the first scroll', () => {
+    const planets = PlanetsFaker.fakeMany(1)
+    const user = UsersFaker.fake()
+    const starElement = document.createElement('div')
+    const scrollContainer = document.createElement('section')
+    const containerScrollTo = jest.fn(({ top }: { top: number }) => {
+      scrollContainer.scrollTop = top
+    })
+
+    scrollContainer.style.overflowY = 'auto'
+    Object.defineProperty(scrollContainer, 'clientHeight', {
+      value: 200,
+      configurable: true,
+    })
+    Object.defineProperty(scrollContainer, 'scrollHeight', {
+      value: 800,
+      configurable: true,
+    })
+    Object.defineProperty(scrollContainer, 'scrollTop', {
+      value: 120,
+      configurable: true,
+      writable: true,
+    })
+    Object.defineProperty(scrollContainer, 'scrollTo', {
+      value: containerScrollTo,
+      configurable: true,
+    })
+
+    scrollContainer.appendChild(starElement)
+    document.body.appendChild(scrollContainer)
+
+    jest
+      .spyOn(scrollContainer, 'getBoundingClientRect')
+      .mockReturnValue(createRect({ top: 100, bottom: 300, height: 200 }))
+    jest
+      .spyOn(starElement, 'getBoundingClientRect')
+      .mockReturnValueOnce(createRect({ top: 320, bottom: 360, height: 40 }))
+      .mockReturnValueOnce(createRect({ top: 260, bottom: 300, height: 40 }))
+      .mockReturnValueOnce(createRect({ top: 260, bottom: 300, height: 40 }))
+      .mockReturnValue(createRect({ top: 180, bottom: 220, height: 40 }))
+
+    const { result } = renderHook(() => useSpaceContextProvider(planets, user))
+
+    setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
+
+    act(() => {
+      result.current.scrollIntoLastUnlockedStar()
+    })
+
+    expect(containerScrollTo).toHaveBeenNthCalledWith(1, {
+      top: 260,
+      behavior: 'smooth',
+    })
+
+    act(() => {
+      jest.advanceTimersByTime(150)
+    })
+
+    expect(containerScrollTo).toHaveBeenNthCalledWith(2, {
+      top: 260,
+      behavior: 'smooth',
+    })
+  })
+
+  it('should expose a layout snapshot based on the resolved scroll container', () => {
+    const planets = PlanetsFaker.fakeMany(1)
+    const user = UsersFaker.fake()
+    const starElement = document.createElement('div')
+    const scrollContainer = document.createElement('section')
+
+    scrollContainer.style.overflowY = 'auto'
+    Object.defineProperty(scrollContainer, 'scrollHeight', {
+      value: 1800,
+      configurable: true,
+    })
+    Object.defineProperty(scrollContainer, 'clientHeight', {
+      value: 320,
+      configurable: true,
+    })
+    Object.defineProperty(scrollContainer, 'scrollTop', {
+      value: 480,
+      configurable: true,
+    })
+
+    scrollContainer.appendChild(starElement)
+    document.body.appendChild(scrollContainer)
+
+    jest
+      .spyOn(starElement, 'getBoundingClientRect')
+      .mockReturnValue(createRect({ top: 640, bottom: 720, height: 80 }))
+    jest
+      .spyOn(scrollContainer, 'getBoundingClientRect')
+      .mockReturnValue(createRect({ top: 100, bottom: 420, height: 320 }))
+
+    const { result } = renderHook(() => useSpaceContextProvider(planets, user))
+
+    setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
+
+    expect(result.current.getLastUnlockedStarLayoutSnapshot()).toBe(
+      '640:720:80:480:1800:320:100:420:320',
+    )
   })
 
   it('should track scroll position on container after user refetch', () => {
