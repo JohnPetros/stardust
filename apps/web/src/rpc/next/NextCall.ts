@@ -62,7 +62,7 @@ export const NextCall = <Request = unknown>({
     },
 
     resetCache(cacheKey) {
-      revalidateTag(cacheKey)
+      revalidateTag(cacheKey, 'max')
     },
 
     async getUser() {
