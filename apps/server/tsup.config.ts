@@ -9,7 +9,6 @@ export default defineConfig((options: Options) => {
     outDir: 'build',
     noExternal: [
       'ai',
-      '@ai-sdk/google',
       '@ai-sdk/openai',
       '@ai-sdk/provider',
       '@ai-sdk/provider-utils',

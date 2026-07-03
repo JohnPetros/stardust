@@ -22,7 +22,7 @@ import {
   TEXT_BLOCK_AUDIO_GENERATION_CANCELLED_EVENT_NAME,
 } from '../constants/lesson-event-names'
 import { InngestFunctions } from './InngestFunctions'
-import { eventType } from 'inngest'
+import { eventType } from './InngestFunctions'
 import z from 'zod'
 import { idSchema, stringSchema } from '@stardust/validation/global/schemas'
 import { audioVoiceSchema } from '@stardust/validation/lesson/schemas'
@@ -37,7 +37,7 @@ type TextBlockAudioGeneratedPayload = EventPayload<typeof TextBlockAudioGenerate
 
 export class LessonFunctions extends InngestFunctions {
   private createGenerateTextBlocksAudioBatchJob() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: GenerateTextBlocksAudioBatchJob.KEY,
         onFailure: (context) =>
@@ -70,7 +70,7 @@ export class LessonFunctions extends InngestFunctions {
   }
 
   private createCancelTextBlockAudioGenerationJob(supabase: SupabaseClient<Database>) {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: CancelTextBlockAudioGenerationJob.KEY,
         onFailure: (context) =>
@@ -94,7 +94,7 @@ export class LessonFunctions extends InngestFunctions {
   }
 
   private createUpdateTextBlockAudioJob(supabase: SupabaseClient<Database>) {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: UpdateTextBlockAudioJob.KEY,
         onFailure: (context) => this.handleFailure(context, UpdateTextBlockAudioJob.name),

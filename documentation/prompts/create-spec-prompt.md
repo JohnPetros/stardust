@@ -296,3 +296,10 @@ Para cada decisão relevante: decisão, alternativas, motivo, trade-offs.
 Apenas itens que **permanecem em aberto após a etapa de Clarificação (1.5)** — esta seção não substitui perguntar. Decisões já confirmadas com o usuário via `question` vão para Decisões Técnicas (seção 8), não aqui.
 Para cada item: descrição, impacto, ação sugerida.
 Se não houver: **Sem pendências**.
+
+#### 11. Execução Recomendada (Obrigatório)
+Indique qual prompt deve ser usado para implementar a spec:
+- Use **`implement-spec`** quando a spec for diretamente implementável, com escopo delimitado e sem necessidade de decomposição prévia em fases.
+- Use **`implement-plan`** quando a spec exigir execução em múltiplas fases, coordenação entre entregas independentes, alto risco de regressão ou quando for útil quebrar o trabalho por app/pacote antes de alterar código.
+
+Inclua uma justificativa curta. Esta seção é uma recomendação operacional para execução, não uma decisão técnica da solução.

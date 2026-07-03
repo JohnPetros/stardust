@@ -6,8 +6,8 @@ OUT_DIRS=(
   ".cursor/commands"
   ".claude/commands"
   ".opencode/commands"
-  ".claude/commands"
 )
+SKILLS_DIR=".agents/skills"
 
 # Garante que existem prompts
 shopt -s nullglob
@@ -21,6 +21,8 @@ fi
 for dir in "${OUT_DIRS[@]}"; do
   mkdir -p "$dir"
 done
+
+mkdir -p "$SKILLS_DIR"
 
 # Função: tenta criar symlink; se não der, copia
 link_or_copy() {
@@ -48,6 +50,41 @@ link_or_copy() {
   fi
 }
 
+extract_description() {
+  local src="$1"
+  local description
+
+  description="$(sed -n 's/^description:[[:space:]]*//p' "$src" | head -n 1)"
+
+  if [[ -z "$description" ]]; then
+    echo "Missing description in '$src'" >&2
+    exit 1
+  fi
+
+  printf '%s\n' "$description"
+}
+
+sync_skill() {
+  local src="$1"
+  local name="$2"
+  local skill_dir="$SKILLS_DIR/$name"
+  local skill_file="$skill_dir/SKILL.md"
+  local description="$3"
+
+  mkdir -p "$skill_dir"
+
+  {
+    printf '%s\n' '---'
+    printf 'name: %s\n' "$name"
+    printf 'description: %s\n' "$description"
+    printf '%s\n\n' '---'
+    printf '<!-- Auto-generated from %s -->\n\n' "$src"
+    cat "$src"
+  } > "$skill_file"
+
+  echo "synced:  $skill_file <- $src"
+}
+
 for src in "${PROMPTS[@]}"; do
   filename="$(basename "$src")"
   name="${filename%.md}"
@@ -57,8 +94,12 @@ for src in "${PROMPTS[@]}"; do
     name="${name%-prompt}"
   fi
 
+  description="$(extract_description "$src")"
+
   for dir in "${OUT_DIRS[@]}"; do
     dest="$dir/$name.md"
     link_or_copy "$src" "$dest"
   done
+
+  sync_skill "$src" "$name" "$description"
 done

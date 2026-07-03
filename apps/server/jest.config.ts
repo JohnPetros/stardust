@@ -3,12 +3,6 @@ import type { Config } from 'jest'
 const sharedConfig: Config = {
   preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
-  clearMocks: true,
-  coverageProvider: 'v8',
-
-  // Route tests share Supabase-backed fixtures and become flaky under heavy parallelism.
-  maxWorkers: 1,
-  testTimeout: 15000,
 
   testMatch: ['**/tests/**/*.test.ts'],
 
@@ -35,11 +29,15 @@ const sharedConfig: Config = {
   },
   moduleFileExtensions: ['ts', 'js', 'mjs', 'cjs', 'json'],
   extensionsToTreatAsEsm: ['.ts'],
-  transformIgnorePatterns: ['node_modules/(?!((@mastra|tokenx|ai|@ai-sdk)/))'],
+  transformIgnorePatterns: ['node_modules/(?!((@mastra|@workflow|tokenx|ai|@ai-sdk)/))'],
   setupFiles: ['<rootDir>/jest.setup.js'],
 }
 
 const config: Config = {
+  coverageProvider: 'v8',
+  clearMocks: true,
+  maxWorkers: 1,
+  testTimeout: 30000,
   projects: [
     {
       ...sharedConfig,
@@ -51,8 +49,6 @@ const config: Config = {
       ...sharedConfig,
       displayName: 'server-integration',
       testMatch: ['<rootDir>/src/app/hono/routers/**/tests/**/*.test.ts'],
-      maxWorkers: 1,
-      testTimeout: 30000,
     },
   ],
 }
