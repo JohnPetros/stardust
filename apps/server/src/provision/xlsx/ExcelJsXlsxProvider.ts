@@ -4,6 +4,8 @@ import { Datetime } from '@stardust/core/global/libs'
 import type { XlsxProvider } from '@stardust/core/global/interfaces'
 import type { User } from '@stardust/core/profile/entities'
 
+type CellValue = string | number
+
 export class ExcelJsXlsxProvider implements XlsxProvider {
   async generateUsersFile(users: User[]): Promise<File> {
     const usersOrderedByCreationDate = [...users].sort(
@@ -11,7 +13,7 @@ export class ExcelJsXlsxProvider implements XlsxProvider {
         secondUser.createdAt.getTime() - firstUser.createdAt.getTime(),
     )
 
-    const rows = [
+    const rows: CellValue[][] = [
       [
         'userId',
         'Nome',
@@ -32,11 +34,11 @@ export class ExcelJsXlsxProvider implements XlsxProvider {
       rows.push([
         user.id.value,
         user.name.value,
-        String(user.level.value.number.value),
-        String(user.weeklyXp.value),
-        String(user.unlockedStarsCount.value),
-        String(user.unlockedAchievementsCount.value),
-        String(user.completedChallengesCount.value),
+        user.level.value.number.value,
+        user.weeklyXp.value,
+        user.unlockedStarsCount.value,
+        user.unlockedAchievementsCount.value,
+        user.completedChallengesCount.value,
         user.hasCompletedSpace.isTrue ? 'Completo' : 'Em progresso',
         userDto.insigniaRoles?.join(', ') || '-',
         new Datetime(user.createdAt).format('DD/MM/YYYY HH:mm:ss'),
@@ -53,7 +55,7 @@ export class ExcelJsXlsxProvider implements XlsxProvider {
     })
   }
 
-  private async generateWorkbook(rows: string[][]): Promise<Uint8Array> {
+  private async generateWorkbook(rows: CellValue[][]): Promise<Uint8Array> {
     const zip = new JSZip()
 
     zip.file('[Content_Types].xml', this.getContentTypesXml())
@@ -65,12 +67,16 @@ export class ExcelJsXlsxProvider implements XlsxProvider {
     return zip.generateAsync({ type: 'uint8array', compression: 'DEFLATE' })
   }
 
-  private getSheetXml(rows: string[][]) {
+  private getSheetXml(rows: CellValue[][]) {
     const sheetRows = rows
       .map((row, rowIndex) => {
         const cells = row
           .map((value, columnIndex) => {
             const cellReference = `${this.getColumnName(columnIndex)}${rowIndex + 1}`
+            if (typeof value === 'number') {
+              return `<c r="${cellReference}"><v>${value}</v></c>`
+            }
+
             return `<c r="${cellReference}" t="inlineStr"><is><t>${this.escapeXml(value)}</t></is></c>`
           })
           .join('')

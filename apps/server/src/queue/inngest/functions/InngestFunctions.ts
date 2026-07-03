@@ -1,4 +1,4 @@
-import type { Inngest } from 'inngest'
+import type { Context, Inngest } from 'inngest'
 import { AppError } from '@stardust/core/global/errors'
 
 import { ENV } from '@/constants'
@@ -8,6 +8,10 @@ import { SentryTelemetryProvider } from '@/provision/telemetry'
 
 export function eventType(name: string, _options?: unknown) {
   return name
+}
+
+type InngestHandlerContext = Context.Any & {
+  event: Context.Any['event'] & { id: string; data: unknown }
 }
 
 export class InngestFunctions {
@@ -20,13 +24,15 @@ export class InngestFunctions {
     )
   }
 
-  protected createFunction(
+  protected createFunction<
+    TFailureContext extends { error: unknown } = { error: unknown },
+  >(
     options: {
       triggers: unknown
-      onFailure?: (context: any) => Promise<void>
+      onFailure?: (context: TFailureContext) => Promise<void>
       [key: string]: unknown
     },
-    handler: (context: any) => Promise<unknown>,
+    handler: (context: InngestHandlerContext) => Promise<unknown>,
   ) {
     const { triggers, ...functionOptions } = options
 
