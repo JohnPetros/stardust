@@ -26,7 +26,6 @@
     "test:integration": "jest --selectProjects server-integration"
   },
   "dependencies": {
-    "@ai-sdk/google": "^3.0.88",
     "@ai-sdk/openai": "^3.0.80",
     "@ai-sdk/provider-utils-v5": "npm:@ai-sdk/provider-utils@^5.0.5",
     "@ai-sdk/react": "^3.0.221",
@@ -34,13 +33,11 @@
     "@hono/zod-validator": "^0.5.0",
     "@mastra/core": "1.25.0",
     "@mastra/hono": "^1.4.4",
-    "@mastra/rag": "^2.2.0",
     "@sentry/node": "^10.17.0",
     "@stardust/core": "*",
     "@stardust/validation": "*",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
-    "@upstash/vector": "^1.2.2",
     "ai": "^6.0.219",
     "axios": "^1.18.1",
     "dropbox": "^10.34.0",
