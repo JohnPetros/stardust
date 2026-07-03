@@ -222,31 +222,37 @@ validar se a Tool:
 ```ts
 import { type Mock, mock } from "ts-jest-mocker";
 import type { Mcp } from "@stardust/core/global/interfaces";
-import type { StorageService } from "@stardust/core/storage/interfaces";
-import { SearchGuidesTool } from "../SearchGuidesTool";
+import { RestResponse } from "@stardust/core/global/responses";
+import { GuidesFaker } from "@stardust/core/manual/entities/fakers";
+import type { ManualService } from "@stardust/core/manual/interfaces";
+import { GetMdxGuideTool } from "../GetMdxGuideTool";
 
-describe("Search Guides Tool", () => {
-  let storageService: Mock<StorageService>;
-  let mcp: Mock<Mcp>;
-  let tool: ReturnType<typeof SearchGuidesTool>;
+describe("Get Mdx Guide Tool", () => {
+  let service: Mock<ManualService>;
+  let mcp: Mock<Mcp<void>>;
+  let tool: ReturnType<typeof GetMdxGuideTool>;
 
   beforeEach(() => {
-    storageService = mock();
-    mcp = mock();
-    tool = SearchGuidesTool(storageService);
+    service = mock<ManualService>();
+    mcp = mock<Mcp<void>>();
+    tool = GetMdxGuideTool(service);
   });
 
-  it("should search guides based on mcp input", async () => {
-    mcp.getInput.mockReturnValue({ query: "laços de repetição" });
-    storageService.searchEmbeddings.mockResolvedValue({
-      isFailure: false,
-      body: ["Guia de For", "Guia de While"],
-    });
+  it("should fetch mdx guides and join contents", async () => {
+    const guideA = GuidesFaker.fakeDto({ category: "mdx", content: "# Guia A" });
+    const guideB = GuidesFaker.fakeDto({ category: "mdx", content: "# Guia B" });
+
+    service.fetchGuidesByCategory.mockResolvedValue(
+      new RestResponse({ body: [guideA, guideB] }),
+    );
 
     const result = await tool.handle(mcp);
 
-    expect(storageService.searchEmbeddings).toHaveBeenCalled();
-    expect(result).toEqual(["Guia de For", "Guia de While"]);
+    expect(service.fetchGuidesByCategory).toHaveBeenCalledWith(
+      expect.objectContaining({ value: "mdx" }),
+    );
+    expect(result).toBe("# Guia A\n# Guia B");
+    expect(mcp.getInput).not.toHaveBeenCalled();
   });
 });
 ```

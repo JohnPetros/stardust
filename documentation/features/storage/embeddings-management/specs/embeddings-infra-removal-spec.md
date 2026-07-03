@@ -2,7 +2,7 @@
 title: Remocao da infraestrutura de embeddings
 issue: https://github.com/JohnPetros/stardust/issues/452
 apps: server, core, web, studio
-status: open
+status: closed
 last_updated_at: 2026-07-03
 ---
 

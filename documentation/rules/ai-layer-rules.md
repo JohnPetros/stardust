@@ -85,7 +85,7 @@
 ### Tool pattern (core)
 
 - Uma `tool` e um adaptador pequeno e composavel: recebe `Mcp<Input>`, extrai input, chama services/use-cases e retorna output tipado.
-- Exemplo real: `apps/web/src/ai/tools/manual/SearchGuidesTool.ts`.
+- Exemplo real: `apps/web/src/ai/tools/manual/GetMdxGuideTool.ts`.
 
 ### Composition root via toolset
 
