@@ -6,6 +6,10 @@ import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 import { DiscordNotificationService } from '@/rest/services'
 import { SentryTelemetryProvider } from '@/provision/telemetry'
 
+export function eventType(name: string, _options?: unknown) {
+  return name
+}
+
 export class InngestFunctions {
   private telemetryProvider?: SentryTelemetryProvider
   private readonly notificationService: DiscordNotificationService
@@ -13,6 +17,23 @@ export class InngestFunctions {
   constructor(protected readonly inngest: Inngest) {
     this.notificationService = new DiscordNotificationService(
       new AxiosRestClient(ENV.discordWebhookUrl),
+    )
+  }
+
+  protected createFunction(
+    options: {
+      triggers: unknown
+      onFailure?: (context: any) => Promise<void>
+      [key: string]: unknown
+    },
+    handler: (context: any) => Promise<unknown>,
+  ) {
+    const { triggers, ...functionOptions } = options
+
+    return this.inngest.createFunction(
+      functionOptions as never,
+      triggers as never,
+      handler,
     )
   }
 

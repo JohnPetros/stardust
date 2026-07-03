@@ -16,7 +16,7 @@ import {
 import { DiscordNotificationService } from '@/rest/services'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestFunctions } from './InngestFunctions'
-import { eventType } from 'inngest'
+import { eventType } from './InngestFunctions'
 import z from 'zod'
 import {
   emailSchema,
@@ -34,7 +34,7 @@ type UserCreatedPayload = EventPayload<typeof UserCreatedEvent>
 
 export class NotificationFunctions extends InngestFunctions {
   private createCreateUserFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: SendPlanetCompletedNotificationJob.KEY,
         onFailure: (context) =>
@@ -60,7 +60,7 @@ export class NotificationFunctions extends InngestFunctions {
   }
 
   private createSendSpaceCompletedNotificationFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: SendSpaceCompletedNotificationJob.KEY,
         onFailure: (context) =>
@@ -85,7 +85,7 @@ export class NotificationFunctions extends InngestFunctions {
   }
 
   private createSendFeedbackNotificationFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: SendFeedbackNotificationJob.KEY,
         onFailure: (context) =>
@@ -113,7 +113,7 @@ export class NotificationFunctions extends InngestFunctions {
   }
 
   private createSendChallengePostedNotificationFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: SendChallengePostedNotificationJob.KEY,
         onFailure: (context) =>
@@ -152,7 +152,7 @@ export class NotificationFunctions extends InngestFunctions {
   }
 
   private createSendUserCreatedNotificationFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: SendUserCreatedNotificationJob.KEY,
         onFailure: (context) =>

@@ -8,11 +8,11 @@ import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
 import { SupabaseGuidesRepository } from '@/database/supabase/repositories/manual'
 import { MastraMarkdownEmbeddingsGeneratorProvider } from '@/provision/storage/MastraMarkdownEmbeddingsGeneratorProvider'
 import { UpstashEmbeddingsStorageProvider } from '@/provision/storage/UpstashEmbeddingsStorageProvider'
-import { eventType } from 'inngest'
+import { eventType } from './InngestFunctions'
 
 export class ManualFunctions extends InngestFunctions {
   private createReindexGuidesEmbeddingsFunction(supabase: SupabaseClient) {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: ReindexGuidesEmbeddingsJob.KEY,
         onFailure: (context) =>

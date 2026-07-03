@@ -8,7 +8,7 @@ import { SupabaseChallengesRepository } from '@/database/supabase/repositories/c
 
 export class ChallengingFunctions extends InngestFunctions {
   private createCreateChallengeFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: CreateChallengeJob.KEY,
         onFailure: (context) => this.handleFailure(context, CreateChallengeJob.name),
@@ -27,7 +27,7 @@ export class ChallengingFunctions extends InngestFunctions {
   }
 
   private createExpireNewChallengesFunction(supabase: SupabaseClient) {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: ExpireNewChallengesJob.KEY,
         onFailure: (context) => this.handleFailure(context, ExpireNewChallengesJob.name),

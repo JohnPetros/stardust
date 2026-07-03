@@ -6,7 +6,7 @@ import { FirstStarUnlockedEvent } from '@stardust/core/space/events'
 import type { EventPayload } from '@stardust/core/global/types'
 import { SupabaseTiersRepository } from '@/database/supabase/repositories/ranking'
 import { InngestBroker } from '../InngestBroker'
-import { eventType } from 'inngest'
+import { eventType } from './InngestFunctions'
 import z from 'zod'
 import { idSchema, nameSchema, emailSchema } from '@stardust/validation/global/schemas'
 
@@ -14,7 +14,7 @@ type FirstStarUnlockedPayload = EventPayload<typeof FirstStarUnlockedEvent>
 
 export class RankingFunctions extends InngestFunctions {
   private reachFirstTierJob(supabase: SupabaseClient) {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: ReachFirstTierJob.KEY,
         onFailure: (context) => this.handleFailure(context, ReachFirstTierJob.name),

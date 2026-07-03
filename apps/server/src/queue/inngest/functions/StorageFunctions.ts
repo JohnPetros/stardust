@@ -31,7 +31,7 @@ import {
   TEXT_BLOCK_AUDIO_GENERATION_CANCELLED_EVENT_NAME,
   TEXT_BLOCK_AUDIO_GENERATION_REQUESTED_EVENT_NAME,
 } from '../constants/lesson-event-names'
-import { eventType } from 'inngest'
+import { eventType } from './InngestFunctions'
 import z from 'zod'
 import { idSchema, stringSchema } from '@stardust/validation/global/schemas'
 import { audioVoiceSchema } from '@stardust/validation/lesson/schemas'
@@ -48,7 +48,7 @@ type TextBlockAudioFileRemovedPayload = EventPayload<
 
 export class StorageFunctions extends InngestFunctions {
   private createGenerateGuideEmbeddingsJob() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: GenerateGuideEmbeddingsJob.KEY,
         onFailure: (context) =>
@@ -73,7 +73,7 @@ export class StorageFunctions extends InngestFunctions {
   }
 
   private createBackupDatabaseJob() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: BackupDatabaseJob.KEY,
         onFailure: (context) => this.handleFailure(context, BackupDatabaseJob.name),
@@ -92,7 +92,7 @@ export class StorageFunctions extends InngestFunctions {
   }
 
   private createDeleteGuideEmbeddingsJob() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: DeleteGuideEmbeddingsJob.KEY,
         onFailure: (context) =>
@@ -115,7 +115,7 @@ export class StorageFunctions extends InngestFunctions {
   }
 
   private createGenerateTextBlockAudioJob(supabase: SupabaseClient<Database>) {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: GenerateTextBlockAudioJob.KEY,
         retries: 2,
@@ -160,7 +160,7 @@ export class StorageFunctions extends InngestFunctions {
   }
 
   private createRemoveTextBlockAudioFileJob(supabase: SupabaseClient<Database>) {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: RemoveTextBlockAudioFileJob.KEY,
         retries: 2,
