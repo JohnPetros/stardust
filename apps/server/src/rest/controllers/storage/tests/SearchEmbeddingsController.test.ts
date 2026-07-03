@@ -2,7 +2,7 @@ import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
-import { SearchEmbeddingsUseCase } from '@stardust/core/storage/use-cases'
+import type { SearchEmbeddingsUseCase } from '@stardust/core/storage/use-cases'
 
 import { SearchEmbeddingsController } from '../SearchEmbeddingsController'
 
