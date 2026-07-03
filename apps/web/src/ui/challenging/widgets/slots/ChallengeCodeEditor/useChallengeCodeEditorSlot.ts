@@ -100,6 +100,8 @@ export function useChallengeCodeEditorSlot() {
         return
       }
 
+      console.error(error)
+
       toast.showError('Erro interno do interpretador.')
     }
   }
