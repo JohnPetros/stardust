@@ -14,7 +14,7 @@ export interface LspProvider {
   getFunctionParamsNames(code: string): string[]
   getInput(code: string): string | null
   translateToLsp(jsCode: unknown): Promise<string>
-  translateToJs(codeRunnerCode: string): Promise<string>
+  translateToJs(lspCode: string): Promise<string>
   getInputsCount(code: string): number
   performSyntaxAnalysis(code: string): Promise<LspResponse>
   performSemanticAnalysis(code: string): Promise<LspResponse>
