@@ -8,9 +8,10 @@ description: Prompt para criar especificação técnica a partir de PRD e codeba
 
 ## Entrada
 
-- **PRD:** deve existir e estar finalizado (milestone do GitHub). Se ausente, não inicie — registre em Pendências e use `question`.
+- **PRD:** deve existir e estar finalizado (milestone do GitHub). Se ausente, não inicie — registre em Pendências e use `question`. **Exceção:** specs de correção derivadas de Bug Report ou Security Report podem iniciar sem PRD, usando o relatório como insumo primário; nesse caso o campo `prd` do frontmatter aponta para o relatório.
 - **Esboço da tarefa:** descrição da feature, fix ou refatoração.
-- **Bug Report (quando aplicável):** `documentation/features/{dominio}/reports/{nome}-bug-report.md` como insumo para specs de correção. O bug report complementa o PRD, mas não o substitui.
+- **Bug Report (quando aplicável):** `documentation/features/{dominio}/**/reports/{nome}-bug-report.md` como insumo para specs de correção. O bug report complementa o PRD, mas não o substitui.
+- **Security Report (quando aplicável):** `documentation/features/{dominio}/**/specs/reports/security-report-{data}.md` como insumo para specs de correção de segurança. Cada finding (`ISSUE-NN`) já traz camada, arquivo, linha, evidência e recomendação — use-os para alimentar as seções 4 e 6. Gere **uma spec por tema de remediação coeso** (não force findings de camadas/severidades distintas numa única spec); findings marcados como pendência viram `question` na etapa 1.5. O relatório complementa o PRD e, na ausência dele, pode substituí-lo conforme a exceção acima.
 - **Acesso à codebase:** necessário para pesquisa e validação.
 
 ---
@@ -105,7 +106,7 @@ Antes de redigir a spec, transforme cada decisão em aberto da síntese em uma *
 ```md
 ---
 title: <Título claro>
-prd: <link da milestone GitHub>
+prd: <link da milestone GitHub — ou caminho do Bug/Security Report quando a spec de correção não tiver PRD>
 issue: <link do issue/esboço>
 apps: <server|studio|web> (separados por vírgula)
 status: <open|closed>
