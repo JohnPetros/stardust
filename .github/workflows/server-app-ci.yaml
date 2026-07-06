@@ -5,6 +5,9 @@ on:
     branches:
       - main
     paths:
+      - ".github/workflows/**"
+      - "package.json"
+      - "package-lock.json"
       - "apps/server/**"
       - "packages/core/**"
       - "packages/validation/**"
