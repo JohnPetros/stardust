@@ -1,4 +1,4 @@
-import { ServerType } from '@hono/node-server'
+import type { ServerType } from '@hono/node-server'
 import type { Hono } from 'hono'
 
 type Request = {

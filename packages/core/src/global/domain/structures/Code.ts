@@ -56,7 +56,6 @@ export class Code {
   }
 
   get firstFunctionName(): string {
-    console.log(this.value)
     return this.lsp.getFunctionName(this.value) ?? ''
   }
 

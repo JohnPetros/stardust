@@ -217,7 +217,6 @@
   },
   "dependencies": {
     "@designliquido/delegua": "^0.61.0",
-    "@stardust-org/core": "^0.1.17",
     "dayjs": "^1.11.11",
     "uuid": "^11.1.0",
     "zod": "^3.23.8"
@@ -226,10 +225,9 @@
     "@faker-js/faker": "^8.4.1",
     "@stardust/typescript-config": "*",
     "jest": "^29.7.0",
-    "npm": "^10.9.2",
     "ts-jest": "^29.3.2",
     "ts-jest-mocker": "^1.3.0",
-    "tsup": "^8.5.0",
+    "tsup": "^8.4.0",
     "typescript": "5.5.3"
   }
 }

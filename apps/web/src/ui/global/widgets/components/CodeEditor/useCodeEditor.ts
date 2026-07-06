@@ -165,12 +165,23 @@ export function useCodeEditor({
     }, 100)
   }
 
-  function provideCompletionItems() {
+  function provideCompletionItems(
+    model: monaco.editor.ITextModel,
+    position: monaco.Position,
+  ) {
+    const word = model.getWordUntilPosition(position)
+    const range = {
+      startLineNumber: position.lineNumber,
+      endLineNumber: position.lineNumber,
+      startColumn: word.startColumn,
+      endColumn: word.endColumn,
+    }
     const suggestions = lspSnippets.map((snippet) => ({
       label: snippet.label,
       kind: 17, // Monaco keyword,
       insertText: snippet.code,
       insertTextRules: 4,
+      range,
     }))
     return {
       suggestions,

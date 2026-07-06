@@ -16,7 +16,7 @@ export class MastraExplainCodeWorkflow implements ExplainCodeWorkflow {
       outputSchema: z.object({ explanation: z.string() }),
     })
       .map(async ({ inputData }) => ({
-        prompt: `Explique o seguinte código em português:\n\n${inputData.code}`,
+        prompt: `Explique o seguinte código em português:\n\n${(inputData as { code: string }).code}`,
       }))
       .then(explainCodeStep)
       .map(async ({ inputData }) => ({
@@ -35,7 +35,7 @@ export class MastraExplainCodeWorkflow implements ExplainCodeWorkflow {
         throw new AppError('Code explanation workflow did not complete successfully')
       }
 
-      return result.result.explanation
+      return (result.result as { explanation: string }).explanation
     } catch (error) {
       run.cancel()
       throw error

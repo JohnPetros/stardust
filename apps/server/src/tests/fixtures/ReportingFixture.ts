@@ -6,6 +6,8 @@ import { Id } from '@stardust/core/global/structures'
 
 import { SupabaseFeedbackReportsRepository } from '@/database/supabase/repositories/reporting'
 
+import { LocalSupabaseProxy } from './LocalSupabaseProxy'
+
 export class ReportingFixture {
   private readonly repository: SupabaseFeedbackReportsRepository
 
@@ -14,6 +16,8 @@ export class ReportingFixture {
   }
 
   async clearFeedbackReports() {
+    await LocalSupabaseProxy.ensureRunning()
+
     const { error } = await this.supabase
       .from('feedback_reports')
       .delete()

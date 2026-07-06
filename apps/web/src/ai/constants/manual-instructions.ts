@@ -64,7 +64,6 @@ ABSOLUTE formatting rules. Never break these rules:
   },
   tools: {
     getChallengeDescription: 'Retorna a descrição detalhada de um desafio.',
-    searchGuides: 'Pesquisa por guia/documentações a respeito da linguagem Delégua.',
     getLspGuides:
       'Retorna todos os guides da categoria lsp concatenados em uma única string.',
   },

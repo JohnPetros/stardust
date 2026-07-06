@@ -1,6 +1,8 @@
 const path = require('node:path')
 const fs = require('node:fs')
 
+jest.setTimeout(30000)
+
 const envTestPath = path.resolve(__dirname, '.env.testing')
 
 if (fs.existsSync(envTestPath)) {

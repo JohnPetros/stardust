@@ -1,5 +1,3 @@
 export { BackupDatabaseJob } from './BackupDatabaseJob'
-export { GenerateGuideEmbeddingsJob } from './GenerateGuideEmbeddingsJob'
-export { DeleteGuideEmbeddingsJob } from './DeleteGuideEmbeddingsJob'
 export { GenerateTextBlockAudioJob } from './GenerateTextBlockAudioJob'
 export { RemoveTextBlockAudioFileJob } from './RemoveTextBlockAudioFileJob'

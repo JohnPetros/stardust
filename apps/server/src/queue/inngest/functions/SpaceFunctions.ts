@@ -12,7 +12,7 @@ import { HandleStarsNewOrderJob, UnlockFirstStarJob } from '@/queue/jobs/space'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestFunctions } from './InngestFunctions'
 import { InngestBroker } from '../InngestBroker'
-import { eventType } from 'inngest'
+import { eventType } from './InngestFunctions'
 import z from 'zod'
 import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/schemas'
 
@@ -20,7 +20,7 @@ type AccountSignedUpPayload = EventPayload<typeof AccountSignedUpEvent>
 
 export class SpaceFunctions extends InngestFunctions {
   private createUnlockFirstStarFunction(supabase: SupabaseClient) {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: UnlockFirstStarJob.KEY,
         onFailure: (context) => this.handleFailure(context, UnlockFirstStarJob.name),
@@ -45,7 +45,7 @@ export class SpaceFunctions extends InngestFunctions {
   }
 
   private createHandleStarsNewOrderFunction(supabase: SupabaseClient) {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: HandleStarsNewOrderJob.KEY,
         onFailure: (context) => this.handleFailure(context, HandleStarsNewOrderJob.name),

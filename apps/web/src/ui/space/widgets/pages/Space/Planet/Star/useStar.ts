@@ -17,6 +17,7 @@ type Params = {
   challengingService: ChallengingService
   lastUnlockedStarRef: RefObject<HTMLDivElement | null>
   lastUnlockedStarPosition: LastUnlockedStarViewPortPosition
+  getLastUnlockedStarLayoutSnapshot: () => string | null
   scrollIntoLastUnlockedStar: () => void
   setLastUnlockedStarPosition: (position: LastUnlockedStarViewPortPosition) => void
 }
@@ -29,6 +30,7 @@ export function useStar({
   challengingService,
   lastUnlockedStarRef,
   lastUnlockedStarPosition,
+  getLastUnlockedStarLayoutSnapshot,
   scrollIntoLastUnlockedStar,
   setLastUnlockedStarPosition,
 }: Params) {
@@ -37,31 +39,15 @@ export function useStar({
   const navigationProvider = useNavigationProvider()
   const isInView = lastUnlockedStarPosition === 'in'
 
-  function getLayoutSnapshot() {
-    const starElement = lastUnlockedStarRef.current
-
-    if (!starElement) {
-      return null
-    }
-
-    const starRect = starElement.getBoundingClientRect()
-
-    return [
-      Math.round(starRect.top),
-      Math.round(starRect.height),
-      document.documentElement.scrollHeight,
-    ].join(':')
-  }
-
   async function handleStarNavigation() {
-    const reponse = await challengingService.fetchChallengeByStarId(starId)
+    const response = await challengingService.fetchChallengeByStarId(starId)
 
-    if (reponse.isFailure) {
+    if (response.isFailure) {
       navigationProvider.goTo(ROUTES.lesson.star(starSlug.value))
       return
     }
 
-    const challenge = reponse.body
+    const challenge = response.body
     if (challenge.slug)
       navigationProvider.goTo(ROUTES.challenging.challenges.challenge(challenge.slug))
   }
@@ -87,14 +73,14 @@ export function useStar({
     if (isLastUnlockedStar && lastUnlockedStarRef.current && isFirstScroll.current) {
       let attempts = 0
       let stableIterations = 0
-      let previousSnapshot = getLayoutSnapshot()
+      let previousSnapshot = getLastUnlockedStarLayoutSnapshot()
 
       const waitForStableLayout = () => {
         if (!lastUnlockedStarRef.current || !isFirstScroll.current) {
           return
         }
 
-        const currentSnapshot = getLayoutSnapshot()
+        const currentSnapshot = getLastUnlockedStarLayoutSnapshot()
 
         if (!currentSnapshot) {
           return
@@ -122,7 +108,12 @@ export function useStar({
     }
 
     return () => window.clearTimeout(timeout)
-  }, [isLastUnlockedStar, lastUnlockedStarRef, scrollIntoLastUnlockedStar])
+  }, [
+    getLastUnlockedStarLayoutSnapshot,
+    isLastUnlockedStar,
+    lastUnlockedStarRef,
+    scrollIntoLastUnlockedStar,
+  ])
 
   return {
     lastUnlockedStarRef,

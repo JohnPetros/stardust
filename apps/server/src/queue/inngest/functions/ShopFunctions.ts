@@ -11,7 +11,7 @@ import { AcquireDefaultShopItemsJob } from '@/queue/jobs/shop'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestBroker } from '../InngestBroker'
 import { InngestFunctions } from './InngestFunctions'
-import { eventType } from 'inngest'
+import { eventType } from './InngestFunctions'
 import z from 'zod'
 import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/schemas'
 
@@ -19,7 +19,7 @@ type FirstTierReachedPayload = EventPayload<typeof FirstTierReachedEvent>
 
 export class ShopFunctions extends InngestFunctions {
   private acquireDefaultShopItemsJob(supabase: SupabaseClient) {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: AcquireDefaultShopItemsJob.KEY,
         onFailure: (context) =>

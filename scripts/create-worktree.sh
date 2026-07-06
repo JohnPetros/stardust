@@ -191,6 +191,23 @@ install_dependencies() {
   ) || fail "falha ao instalar dependencias com $package_manager."
 }
 
+run_project_setup() {
+  local worktree_path="$1"
+  local setup_script="$worktree_path/setup-project"
+
+  if [[ ! -x "$setup_script" ]]; then
+    warn "script de setup nao encontrado ou sem permissao de execucao: $setup_script"
+    return
+  fi
+
+  log "Executando setup do projeto..."
+
+  (
+    cd "$worktree_path"
+    "$setup_script"
+  ) || fail "falha ao executar o setup do projeto."
+}
+
 main() {
   require_branch_name "$@"
   ensure_git_repository
@@ -234,6 +251,7 @@ main() {
 
   copy_env_files "$source_root" "$worktree_path" "$worktree_parent"
   install_dependencies "$worktree_path"
+  run_project_setup "$worktree_path"
 
   log "Worktree criada com sucesso em: $worktree_path"
 }

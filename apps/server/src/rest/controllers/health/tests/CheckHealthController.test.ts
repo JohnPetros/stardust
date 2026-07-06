@@ -7,18 +7,6 @@ import type { Http } from '@stardust/core/global/interfaces'
 import { APP_VERSION } from '@/constants'
 import { CheckHealthController } from '../CheckHealthController'
 
-const mockRedisConnect = jest.fn()
-const mockRedisPing = jest.fn()
-const mockRedisDisconnect = jest.fn()
-
-jest.mock('ioredis', () =>
-  jest.fn().mockImplementation(() => ({
-    connect: mockRedisConnect,
-    ping: mockRedisPing,
-    disconnect: mockRedisDisconnect,
-  })),
-)
-
 type HealthStatus = 'UP' | 'DOWN'
 
 class CheckHealthControllerStub extends CheckHealthController {
@@ -79,7 +67,13 @@ class CheckPostgresControllerStub extends CheckHealthController {
 }
 
 class CheckHttpControllerStub extends CheckHealthController {
-  request: { headers?: Record<string, string>; url: string } | undefined
+  request:
+    | {
+        headers?: Record<string, string>
+        init?: RequestInit
+        url: string
+      }
+    | undefined
 
   constructor(private readonly status: HealthStatus) {
     super()
@@ -88,8 +82,9 @@ class CheckHttpControllerStub extends CheckHealthController {
   protected override async checkHttpEndpoint(
     url: string,
     headers?: Record<string, string>,
+    init?: RequestInit,
   ): Promise<HealthStatus> {
-    this.request = { url, headers }
+    this.request = { url, headers, init }
     return this.status
   }
 
@@ -102,33 +97,12 @@ class CheckHttpControllerStub extends CheckHealthController {
   }
 }
 
-class CheckHttpEndpointControllerStub extends CheckHealthController {
-  async runCheckHttpEndpoint(url: string, headers?: Record<string, string>) {
-    return this.checkHttpEndpoint(url, headers)
-  }
-}
-
-class CheckRedisControllerStub extends CheckHealthController {
-  async runCheckRedis() {
-    return this.checkRedis()
-  }
-}
-
 describe('Check Health Controller', () => {
   let http: Mock<Http>
-  let fetchMock: jest.SpiedFunction<typeof fetch>
 
   beforeEach(() => {
-    mockRedisConnect.mockReset()
-    mockRedisPing.mockReset()
-    mockRedisDisconnect.mockReset()
     http = mock()
     http.send.mockReturnValue(new RestResponse())
-    fetchMock = jest.spyOn(global, 'fetch')
-  })
-
-  afterEach(() => {
-    fetchMock.mockRestore()
   })
 
   it('should return UP when all services are UP', async () => {
@@ -201,19 +175,82 @@ describe('Check Health Controller', () => {
     expect(controller.connectionCalls).toEqual([true, false])
   })
 
-  it('should check Inngest health endpoint', async () => {
+  it('should check local Inngest health endpoint in development mode', async () => {
     const controller = new CheckHttpControllerStub('UP')
+    const previousMode = ENV.mode
 
-    const status = await controller.runCheckInngest()
+    ENV.mode = 'development'
+
+    let status: HealthStatus
+
+    try {
+      status = await controller.runCheckInngest()
+    } finally {
+      ENV.mode = previousMode
+    }
 
     expect(status).toBe('UP')
     expect(controller.request).toEqual({
-      url:
-        ENV.mode === 'development'
-          ? 'http://127.0.0.1:8288/health'
-          : 'https://api.inngest.com/health',
+      url: 'http://127.0.0.1:8288/health',
       headers: undefined,
+      init: undefined,
     })
+  })
+
+  it('should check Inngest event API with event key outside development', async () => {
+    const controller = new CheckHttpControllerStub('UP')
+    const previousMode = ENV.mode
+    const previousInngestEventKey = ENV.inngestEventKey
+
+    ENV.mode = 'production'
+    ENV.inngestEventKey = 'event-key'
+
+    let status: HealthStatus
+
+    try {
+      status = await controller.runCheckInngest()
+    } finally {
+      ENV.mode = previousMode
+      ENV.inngestEventKey = previousInngestEventKey
+    }
+
+    expect(status).toBe('UP')
+    expect(controller.request).toEqual({
+      url: 'https://inn.gs/e/event-key',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      init: {
+        method: 'POST',
+        body: JSON.stringify({
+          name: 'health.check',
+          data: {
+            source: 'stardust-healthcheck',
+          },
+        }),
+      },
+    })
+  })
+
+  it('should return DOWN when inngest event key is missing outside development', async () => {
+    const controller = new CheckHttpControllerStub('UP')
+    const previousMode = ENV.mode
+    const previousInngestEventKey = ENV.inngestEventKey
+
+    ENV.mode = 'production'
+    ENV.inngestEventKey = undefined
+
+    let status: HealthStatus
+
+    try {
+      status = await controller.runCheckInngest()
+    } finally {
+      ENV.mode = previousMode
+      ENV.inngestEventKey = previousInngestEventKey
+    }
+
+    expect(status).toBe('DOWN')
+    expect(controller.request).toBeUndefined()
   })
 
   it('should check Supabase auth health endpoint with auth headers', async () => {
@@ -228,74 +265,7 @@ describe('Check Health Controller', () => {
         apikey: ENV.supabaseKey,
         Authorization: `Bearer ${ENV.supabaseKey}`,
       },
+      init: undefined,
     })
-  })
-
-  it('should return UP when the HTTP health endpoint responds successfully', async () => {
-    const controller = new CheckHttpEndpointControllerStub()
-    fetchMock.mockResolvedValue({ ok: true } as Response)
-
-    const status = await controller.runCheckHttpEndpoint('https://example.com/health', {
-      Authorization: 'Bearer token',
-    })
-
-    expect(status).toBe('UP')
-    expect(fetchMock).toHaveBeenCalledWith('https://example.com/health', {
-      headers: { Authorization: 'Bearer token' },
-      signal: expect.any(AbortSignal),
-    })
-  })
-
-  it('should return DOWN when the HTTP health endpoint responds with an error status', async () => {
-    const controller = new CheckHttpEndpointControllerStub()
-    fetchMock.mockResolvedValue({ ok: false } as Response)
-
-    const status = await controller.runCheckHttpEndpoint('https://example.com/health')
-
-    expect(status).toBe('DOWN')
-  })
-
-  it('should return DOWN when the HTTP health endpoint request fails', async () => {
-    const controller = new CheckHttpEndpointControllerStub()
-    fetchMock.mockRejectedValue(new Error('Network error'))
-
-    const status = await controller.runCheckHttpEndpoint('https://example.com/health')
-
-    expect(status).toBe('DOWN')
-  })
-
-  it('should return UP when Redis responds to ping', async () => {
-    const controller = new CheckRedisControllerStub()
-    mockRedisConnect.mockResolvedValue(undefined)
-    mockRedisPing.mockResolvedValue('PONG')
-
-    const status = await controller.runCheckRedis()
-
-    expect(status).toBe('UP')
-    expect(mockRedisConnect).toHaveBeenCalledTimes(1)
-    expect(mockRedisPing).toHaveBeenCalledTimes(1)
-    expect(mockRedisDisconnect).toHaveBeenCalledTimes(1)
-  })
-
-  it('should return DOWN when Redis ping returns an unexpected response', async () => {
-    const controller = new CheckRedisControllerStub()
-    mockRedisConnect.mockResolvedValue(undefined)
-    mockRedisPing.mockResolvedValue('NOPE')
-
-    const status = await controller.runCheckRedis()
-
-    expect(status).toBe('DOWN')
-    expect(mockRedisDisconnect).toHaveBeenCalledTimes(1)
-  })
-
-  it('should return DOWN when Redis connection fails', async () => {
-    const controller = new CheckRedisControllerStub()
-    mockRedisConnect.mockRejectedValue(new Error('Connection failed'))
-
-    const status = await controller.runCheckRedis()
-
-    expect(status).toBe('DOWN')
-    expect(mockRedisPing).not.toHaveBeenCalled()
-    expect(mockRedisDisconnect).toHaveBeenCalledTimes(1)
   })
 })

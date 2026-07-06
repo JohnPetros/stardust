@@ -4,18 +4,18 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
 
 # Prompt: Criar Plano
 
-**Objetivo:** Transformar uma Spec técnica ou Bug Report em um **plano de implementação estruturado**, dividido em fases e tarefas atômicas, com dependências explícitas e resultados observáveis por tarefa. O plano deve ser diretamente acionável por um desenvolvedor ou agente de implementação.
+**Objetivo:** Transformar uma Spec técnica em um **plano de implementação estruturado**, dividido em fases e tarefas atômicas, com dependências explícitas e resultados observáveis por tarefa. O plano deve ser diretamente acionável por um desenvolvedor ou agente de implementação.
 
 ---
 
 ## Entrada
 
-Exatamente um dos seguintes documentos deve ser fornecido:
+O seguinte documento deve ser fornecido:
 
-- **Spec técnica** (`documentation/features/{dominio}/specs/{nome}-spec.md`) — para features, refatorações ou correções com spec prévia.
-- **Bug Report** (`documentation/features/{dominio}/reports/{nome}-bug-report.md`) — para correções onde a spec foi derivada diretamente do bug report.
+- **Spec técnica** (`documentation/features/{dominio}/specs/{nome}-spec.md`) — para features, refatorações ou correções.
 
-> Se nenhum dos dois for fornecido, ou se o documento estiver incompleto, não inicie o plano. Registre a lacuna em **Pendências** e solicite o documento correto.
+> Bug reports não são entrada direta deste fluxo. Quando a demanda nascer de um bug, crie antes uma spec separada derivada do bug report e só então inicie o plano.
+> Se a spec não for fornecida, ou se o documento estiver incompleto, não inicie o plano. Registre a lacuna em **Pendências** e solicite a spec correta.
 
 ---
 
@@ -23,7 +23,7 @@ Exatamente um dos seguintes documentos deve ser fornecido:
 
 ### 1. Leitura do Documento de Entrada
 
-- Leia integralmente a Spec ou o Bug Report fornecido.
+- Leia integralmente a Spec fornecida.
 - Identifique:
   - Quais apps serão tocados (`server`, `web`, `studio`)
   - Quais camadas serão envolvidas por app
@@ -97,7 +97,7 @@ Cada tarefa de teste deve indicar qual arquivo de regras de teste deve ser consu
 
 ## Saída
 
-Salve o plano final em `documentation/features/{dominio}/plan.md` (mesmo diretório da spec ou bug report de entrada), seguindo **estritamente** o template abaixo.
+Salve o plano final em `documentation/features/{dominio}/plan.md` (mesmo diretório da spec de entrada), seguindo **estritamente** o template abaixo.
 
 ```md
 ---

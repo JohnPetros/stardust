@@ -12,11 +12,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@react-email/components": "0.0.28"
+    "@react-email/components": "^1.0.12"
   },
   "devDependencies": {
     "@stardust/typescript-config": "*",
-    "react-email": "3.0.2"
+    "react-email": "^6.6.6"
   },
   "exports": {
     "./templates": "./emails/index.tsx"

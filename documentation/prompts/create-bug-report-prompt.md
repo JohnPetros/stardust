@@ -13,15 +13,13 @@ O bug report deve:
 - Indicar **onde e por que provavelmente está quebrado**
 - Sugerir **como corrigir**, respeitando a arquitetura do projeto
 
-O resultado desta tarefa é **sempre um único arquivo Markdown** contendo dois artefatos no mesmo documento:
-- o **Bug Report**
-- a **Spec de correção derivada dele**
+O resultado desta tarefa é **sempre um único arquivo Markdown** contendo apenas o **Bug Report**.
 
-Após a criação do Bug Report, uma **Spec de correção** deve ser gerada automaticamente com base no plano de correção levantado, seguindo o prompt `documentation/prompts/create-spec-prompt.md`, mas deve ser incorporada ao mesmo arquivo `.md` do Bug Report.
+Quando o bug exigir planejamento de correção formal, a **Spec de correção** deve ser criada em **fluxo separado**, consumindo o bug report como insumo e seguindo `documentation/prompts/create-spec-prompt.md`.
 
-> A Spec não é uma etapa opcional, posterior ou separada.
-> Ela faz parte da mesma entrega do Bug Report e deve ser salva na mesma execução, no mesmo arquivo Markdown.
-> Não crie um segundo arquivo em `specs/` para a Spec derivada de Bug Report.
+> A Spec derivada de Bug Report **não faz parte da mesma entrega** e **não deve coexistir no mesmo arquivo**.
+> O papel desta tarefa termina quando o bug report estiver salvo, claro e acionável.
+> A criação da Spec acontece depois, em arquivo próprio dentro de `specs/`.
 
 ---
 
@@ -45,7 +43,7 @@ Após a criação do Bug Report, uma **Spec de correção** deve ser gerada auto
 ### 2. Diagnóstico
 
 - Identifique causas prováveis com base na arquitetura descrita em `documentation/architecture.md`.
-- Se o bug estiver associado a uma funcionalidade existente, consulte o PRD correspondente em `documentation/features/<dominio>/`.
+- Se o bug estiver associado a uma funcionalidade existente, consulte o PRD correspondente na milestone do GitHub que representa a fonte de verdade do produto.
 - Identifique o **ponto de verdade** dos dados afetados: fonte (DB, API, cache), contratos (schemas/DTOs), normalização (mapeamentos entre camadas).
 - Localize os nós críticos no código:
   - Onde a feature é iniciada (page/widget/route)
@@ -76,25 +74,21 @@ Após a criação do Bug Report, uma **Spec de correção** deve ser gerada auto
 - Proponha uma solução técnica **incremental e segura**, separada por camadas.
 - O plano deve ser claro o suficiente para servir como base de implementação.
 
-### 5. Geração da Spec de Correção
+### 5. Encaminhamento para Spec de Correção
 
-Após salvar a seção de Bug Report, gere automaticamente uma Spec de correção no mesmo arquivo Markdown, seguindo `documentation/prompts/create-spec-prompt.md`, com as seguintes adaptações:
+Após salvar o Bug Report, o agente deve deixar explícito se o próximo passo recomendado é criar uma Spec de correção em fluxo separado.
 
-- A geração da Spec deve acontecer **na mesma tarefa**, imediatamente após salvar o Bug Report, sem depender de nova solicitação do usuário.
-- O trabalho **só pode ser considerado concluído quando o arquivo único contiver** o Bug Report e a Spec derivada.
-- A Spec deve ser tratada como **continuação direta do Bug Report no mesmo `.md`**, e não como entregável independente.
-
-- O **esboço da tarefa** é o próprio Bug Report gerado.
-- O **PRD de referência** é o PRD da feature afetada, encontrado em `documentation/features/<dominio>/`.
-- A Spec **não deve ter frontmatter próprio**; o frontmatter único do arquivo deve permanecer no topo do Bug Report.
-- As seções **O que já existe**, **O que deve ser criado**, **O que deve ser modificado** e **O que deve ser removido** devem ser derivadas diretamente do plano de correção do Bug Report, sem retrabalho de pesquisa.
-- Salve a Spec como seção adicional dentro de `documentation/features/{dominio}/reports/{nome-descritivo}-bug-report.md`.
+- A criação da Spec **não acontece nesta tarefa**.
+- O **esboço da tarefa** da futura Spec é o próprio Bug Report gerado.
+- O **PRD de referência** da futura Spec é a milestone do GitHub da feature afetada.
+- As seções **O que já existe**, **O que deve ser criado**, **O que deve ser modificado** e **O que deve ser removido** do bug report devem facilitar a criação posterior da Spec, sem duplicá-la.
+- Quando a correção exigir Spec formal, ela deve ser salva separadamente em `documentation/features/{dominio}/specs/{nome-descritivo}-fix-spec.md`.
 
 ---
 
 ## Template de Saída (Estrutura Obrigatória)
 
-Salve um único arquivo em `documentation/features/{dominio}/reports/{nome-descritivo}-bug-report.md` seguindo **estritamente** o template abaixo. O mesmo arquivo deve conter o Bug Report e, ao final, a seção `# Spec de Correção` derivada dele. Não crie arquivo separado em `specs/`.
+Salve um único arquivo em `documentation/features/{dominio}/reports/{nome-descritivo}-bug-report.md` seguindo **estritamente** o template abaixo. Este arquivo deve conter **apenas o Bug Report**.
 
 ```md
 ---
@@ -227,10 +221,6 @@ Liste código redundante, legado ou incorreto que deve ser eliminado como parte 
 
 - **{Camada}**
   - `{Nome do Recurso}` — {Motivo da remoção}
-
-# Spec de Correção: {Titulo Curto e Descritivo}
-
-<!-- Gerar a spec no mesmo arquivo, seguindo a estrutura de `documentation/prompts/create-spec-prompt.md`, sem frontmatter próprio. -->
 ```
 
 ---
@@ -243,7 +233,6 @@ Liste código redundante, legado ou incorreto que deve ser eliminado como parte 
 - Não proponha correções que violem os contratos entre camadas definidos em `documentation/rules/`.
 - Use apenas as camadas listadas na seção 3. Mapeamento de Camadas — não crie camadas arbitrárias.
 - Omita do template as camadas que não forem aplicáveis ao bug em questão.
-- A Spec de correção deve ser gerada **sempre**, sem necessidade de solicitação explícita.
-- O processo não deve parar após criar apenas o Bug Report; a tarefa permanece incompleta até a Spec ser criada no mesmo arquivo Markdown.
-- A Spec de correção **não pode contradizer** o Bug Report — ela é uma derivação direta dele.
-- A Spec de correção **não deve ser salva em arquivo separado**; Bug Report e Spec devem coexistir em um único `.md`.
+- Não incorpore Spec de correção no arquivo do bug report.
+- Quando houver necessidade de Spec formal, ela deve ser criada em fluxo separado e em arquivo próprio dentro de `specs/`.
+- A futura Spec de correção não pode contradizer o Bug Report; ela deve derivar dele.

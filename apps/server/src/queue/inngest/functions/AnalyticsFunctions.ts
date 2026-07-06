@@ -1,5 +1,5 @@
 import z from 'zod'
-import { eventType } from 'inngest'
+import { eventType } from './InngestFunctions'
 
 import type { AnalyticsEventDto } from '@stardust/core/analytics/entities/dtos'
 import { AccountSignedInEvent, AccountSignedUpEvent } from '@stardust/core/auth/events'
@@ -69,7 +69,7 @@ export class AnalyticsFunctions extends InngestFunctions {
   }
 
   private createTrackAccountSignedUpFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.account.signed.up`,
         onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
@@ -105,7 +105,7 @@ export class AnalyticsFunctions extends InngestFunctions {
   }
 
   private createTrackAccountSignedInFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.account.signed.in`,
         onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
@@ -139,7 +139,7 @@ export class AnalyticsFunctions extends InngestFunctions {
   }
 
   private createTrackUserCreatedFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.user.created`,
         onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
@@ -172,7 +172,7 @@ export class AnalyticsFunctions extends InngestFunctions {
   }
 
   private createTrackStarUnlockedFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.star.unlocked`,
         onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
@@ -201,7 +201,7 @@ export class AnalyticsFunctions extends InngestFunctions {
   }
 
   private createTrackFirstStarUnlockedFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.first.star.unlocked`,
         onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
@@ -241,7 +241,7 @@ export class AnalyticsFunctions extends InngestFunctions {
   }
 
   private createTrackPlanetCompletedFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.planet.completed`,
         onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
@@ -278,7 +278,7 @@ export class AnalyticsFunctions extends InngestFunctions {
   }
 
   private createTrackSpaceCompletedFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.space.completed`,
         onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
@@ -313,7 +313,7 @@ export class AnalyticsFunctions extends InngestFunctions {
   }
 
   private createTrackUserRewardedFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.user.rewarded`,
         onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
@@ -350,7 +350,7 @@ export class AnalyticsFunctions extends InngestFunctions {
   }
 
   private createTrackChallengePostedFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.challenge.posted`,
         onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
@@ -386,7 +386,7 @@ export class AnalyticsFunctions extends InngestFunctions {
   }
 
   private createTrackChallengeCompletedFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.challenge.completed`,
         onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
@@ -420,7 +420,7 @@ export class AnalyticsFunctions extends InngestFunctions {
   }
 
   private createTrackChallengeDeletedFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.challenge.deleted`,
         onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
@@ -458,7 +458,7 @@ export class AnalyticsFunctions extends InngestFunctions {
   }
 
   private createTrackShopItemPurchasedFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.shop.item.purchased`,
         onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
@@ -498,7 +498,7 @@ export class AnalyticsFunctions extends InngestFunctions {
   }
 
   private createTrackFeedbackReportSentFunction() {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.feedback-report.sent`,
         onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),

@@ -24,6 +24,7 @@ export const Star = ({ id, name, number, slug }: StarProps) => {
     lastUnlockedStarId,
     lastUnlockedStarRef,
     lastUnlockedStarPosition,
+    getLastUnlockedStarLayoutSnapshot,
     scrollIntoLastUnlockedStar,
     setLastUnlockedStarPosition,
   } = useSpaceContext()
@@ -37,6 +38,7 @@ export const Star = ({ id, name, number, slug }: StarProps) => {
     challengingService,
     lastUnlockedStarRef,
     lastUnlockedStarPosition,
+    getLastUnlockedStarLayoutSnapshot,
     scrollIntoLastUnlockedStar,
     setLastUnlockedStarPosition,
   })
