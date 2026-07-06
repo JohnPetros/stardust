@@ -110,7 +110,7 @@ export class SupabaseCommentsRepository
     const supabaseComment = SupabaseCommentMapper.toSupabase(comment)
 
     const { error: commentError } = await this.supabase.from('comments').insert({
-      // @ts-ignore
+      // @ts-expect-error Insert payload matches runtime row shape expected by Supabase.
       id: comment.id.value,
       content: supabaseComment.content,
       user_id: supabaseComment.author_id,
@@ -134,7 +134,7 @@ export class SupabaseCommentsRepository
     const supabaseComment = SupabaseCommentMapper.toSupabase(comment)
 
     const { error: commentError } = await this.supabase.from('comments').insert({
-      // @ts-ignore
+      // @ts-expect-error Insert payload matches runtime row shape expected by Supabase.
       id: comment.id.value,
       content: supabaseComment.content,
       user_id: supabaseComment.author_id,
@@ -157,7 +157,7 @@ export class SupabaseCommentsRepository
     const supabaseReply = SupabaseCommentMapper.toSupabase(reply)
 
     const { error } = await this.supabase.from('comments').insert({
-      // @ts-ignore
+      // @ts-expect-error Insert payload matches runtime row shape expected by Supabase.
       id: reply.id.value,
       content: supabaseReply.content,
       user_id: supabaseReply.author_id,

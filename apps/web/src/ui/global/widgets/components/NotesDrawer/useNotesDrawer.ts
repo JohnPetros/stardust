@@ -9,6 +9,13 @@ import { noteSchema } from '@stardust/validation/profile/schemas'
 import { CACHE } from '@/constants'
 import { useCache } from '@/ui/global/hooks/useCache'
 import { useDebounce } from '@/ui/global/hooks/useDebounce'
+import {
+  getErrorMessage,
+  ITEMS_PER_PAGE,
+  matchesCurrentSearch,
+  type NotesListData,
+  sortNotes,
+} from './useNotesDrawer.utils'
 
 type Params = {
   profileService: ProfileService
@@ -16,13 +23,6 @@ type Params = {
   showError: (message: string) => void
   showSuccess: (message: string) => void
 }
-
-type NotesListData = {
-  items: NoteDto[]
-  totalItemsCount: number
-}
-
-const ITEMS_PER_PAGE = 8
 
 export function useNotesDrawer({
   profileService,
@@ -41,7 +41,7 @@ export function useNotesDrawer({
   const [content, setContent] = useState('')
   const [isDirty, setIsDirty] = useState(false)
   const [fieldError, setFieldError] = useState<string | null>(null)
-  const shouldIgnoreNextDrawerCloseRef = useRef(false)
+  const shouldIgnoreTransientDrawerCloseRef = useRef(false)
 
   const debouncedSearch = useDebounce((value: unknown) => {
     setPage(1)
@@ -83,10 +83,10 @@ export function useNotesDrawer({
   })
 
   const notes = useMemo(() => notesData?.items ?? [], [notesData])
-  const totalPagesCount = useMemo(() => {
-    const totalItemsCount = notesData?.totalItemsCount ?? 0
-    return Math.ceil(totalItemsCount / ITEMS_PER_PAGE)
-  }, [notesData])
+  const totalPagesCount = useMemo(
+    () => Math.ceil((notesData?.totalItemsCount ?? 0) / ITEMS_PER_PAGE),
+    [notesData],
+  )
 
   function confirmDiscardChanges() {
     if (!isDirty) return true
@@ -94,7 +94,10 @@ export function useNotesDrawer({
   }
 
   function syncNotesCache(
-    updater: (currentNotes: NoteDto[]) => { notes: NoteDto[]; totalItemsCount: number },
+    updater: (currentNotes: NoteDto[]) => {
+      notes: NoteDto[]
+      totalItemsCount: number
+    },
   ) {
     if (!notesData) return
 
@@ -108,23 +111,6 @@ export function useNotesDrawer({
       },
       { shouldRevalidate: false },
     )
-  }
-
-  function matchesCurrentSearch(note: NoteDto) {
-    if (!search.trim()) return true
-    return note.title.toLowerCase().includes(search.trim().toLowerCase())
-  }
-
-  function sortNotes(notes: NoteDto[]) {
-    return [...notes].sort((firstNote, secondNote) => {
-      const firstUpdatedAt = new Date(
-        firstNote.updatedAt ?? firstNote.createdAt ?? 0,
-      ).getTime()
-      const secondUpdatedAt = new Date(
-        secondNote.updatedAt ?? secondNote.createdAt ?? 0,
-      ).getTime()
-      return secondUpdatedAt - firstUpdatedAt
-    })
   }
 
   function clearForm() {
@@ -157,21 +143,32 @@ export function useNotesDrawer({
     setIsDirty(true)
   }
 
+  function closeDrawer() {
+    if (!confirmDiscardChanges()) return
+    clearForm()
+    setIsDrawerOpen(false)
+  }
+
   function handleDrawerOpenChange(isOpen: boolean) {
-    if (!isOpen && (isDialogOpen || shouldIgnoreNextDrawerCloseRef.current)) {
-      shouldIgnoreNextDrawerCloseRef.current = false
+    if (!isOpen && isDialogOpen) {
+      return
+    }
+
+    if (!isOpen && shouldIgnoreTransientDrawerCloseRef.current) {
+      shouldIgnoreTransientDrawerCloseRef.current = false
       return
     }
 
     if (!isOpen) {
-      if (!confirmDiscardChanges()) {
-        return
-      }
-
-      clearForm()
+      closeDrawer()
+      return
     }
 
     setIsDrawerOpen(isOpen)
+  }
+
+  function handleManualDrawerClose() {
+    closeDrawer()
   }
 
   function handleNotesDialogOpen() {
@@ -198,11 +195,8 @@ export function useNotesDrawer({
   }
 
   function handleSelectNote(note: NoteDto) {
-    if (!confirmDiscardChanges()) {
-      return
-    }
-
-    shouldIgnoreNextDrawerCloseRef.current = true
+    if (!confirmDiscardChanges()) return
+    shouldIgnoreTransientDrawerCloseRef.current = true
     setActiveNote(note)
     setTitle(note.title)
     setContent(note.content)
@@ -241,13 +235,13 @@ export function useNotesDrawer({
           const filteredNotes = currentNotes.filter(
             (note) => note.id !== response.body.id,
           )
-          const nextNotes = matchesCurrentSearch(response.body)
+          const nextNotes = matchesCurrentSearch(response.body, search)
             ? sortNotes([response.body, ...filteredNotes])
             : filteredNotes
 
           return {
             notes: nextNotes,
-            totalItemsCount: matchesCurrentSearch(response.body)
+            totalItemsCount: matchesCurrentSearch(response.body, search)
               ? (notesData?.totalItemsCount ?? nextNotes.length)
               : Math.max((notesData?.totalItemsCount ?? filteredNotes.length) - 1, 0),
           }
@@ -269,7 +263,7 @@ export function useNotesDrawer({
       setActiveNote(response.body)
       setIsDirty(false)
       syncNotesCache((currentNotes) => {
-        if (!matchesCurrentSearch(response.body)) {
+        if (!matchesCurrentSearch(response.body, search)) {
           return {
             notes: currentNotes,
             totalItemsCount: notesData?.totalItemsCount ?? currentNotes.length,
@@ -351,11 +345,9 @@ export function useNotesDrawer({
     }
   }
 
-  function getErrorMessage(errorValue: unknown): string | null {
-    if (!errorValue) return null
-    if (typeof errorValue === 'string') return errorValue
-    if (errorValue instanceof Error) return errorValue.message
-    return 'Nao foi possivel carregar as anotações'
+  function handleCreateNewClick() {
+    if (!confirmDiscardChanges()) return
+    clearForm()
   }
 
   return {
@@ -374,6 +366,7 @@ export function useNotesDrawer({
     errorMessage: getErrorMessage(error),
     isEmpty: notes.length === 0,
     handleDrawerOpenChange,
+    handleManualDrawerClose,
     handleNotesDialogOpen,
     handleNotesDialogOpenChange,
     handleSearchChange,
@@ -384,13 +377,7 @@ export function useNotesDrawer({
     handleContentChange,
     handleSaveClick,
     handleDeleteClick,
-    handleCreateNewClick: () => {
-      if (!confirmDiscardChanges()) {
-        return
-      }
-
-      clearForm()
-    },
+    handleCreateNewClick,
     handleRetryList: refetch,
   }
 }

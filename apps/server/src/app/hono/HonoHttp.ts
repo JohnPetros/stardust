@@ -60,7 +60,7 @@ export class HonoHttp<HonoContext extends Context>
     if (this.next) {
       body = await this.context.req.json()
     } else {
-      // @ts-ignore
+      // @ts-expect-error Hono typing does not propagate validated json payload here.
       body = this.context.req.valid('json')
     }
 
@@ -71,12 +71,12 @@ export class HonoHttp<HonoContext extends Context>
   }
 
   getRouteParams(): HonoHttpSchema<HonoContext>['routeParams'] {
-    // @ts-ignore
+    // @ts-expect-error Hono typing does not propagate validated route params here.
     return this.context.req.valid('param')
   }
 
   getQueryParams(): HonoHttpSchema<HonoContext>['queryParams'] {
-    // @ts-ignore
+    // @ts-expect-error Hono typing does not propagate validated query params here.
     return this.context.req.valid('query')
   }
 

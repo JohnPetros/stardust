@@ -54,7 +54,7 @@ export class SupabaseSnippetsRepository
   async add(snippet: Snippet) {
     const supabaseSnippet = SupabaseSnippetMapper.toSupabase(snippet)
     const { error } = await this.supabase.from('snippets').insert({
-      // @ts-ignore
+      // @ts-expect-error Insert payload matches runtime row shape expected by Supabase.
       id: snippet.id.value,
       code: supabaseSnippet.code,
       title: supabaseSnippet.title,

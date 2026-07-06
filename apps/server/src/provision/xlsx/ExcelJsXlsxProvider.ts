@@ -4,7 +4,7 @@ import { Datetime } from '@stardust/core/global/libs'
 import type { XlsxProvider } from '@stardust/core/global/interfaces'
 import type { User } from '@stardust/core/profile/entities'
 
-type Cell = string | number
+type CellValue = string | number
 
 export class ExcelJsXlsxProvider implements XlsxProvider {
   async generateUsersFile(users: User[]): Promise<File> {
@@ -13,7 +13,7 @@ export class ExcelJsXlsxProvider implements XlsxProvider {
         secondUser.createdAt.getTime() - firstUser.createdAt.getTime(),
     )
 
-    const rows: Cell[][] = [
+    const rows: CellValue[][] = [
       [
         'userId',
         'Nome',
@@ -55,7 +55,7 @@ export class ExcelJsXlsxProvider implements XlsxProvider {
     })
   }
 
-  private async generateWorkbook(rows: Cell[][]): Promise<Uint8Array> {
+  private async generateWorkbook(rows: CellValue[][]): Promise<Uint8Array> {
     const zip = new JSZip()
 
     zip.file('[Content_Types].xml', this.getContentTypesXml())
@@ -67,13 +67,12 @@ export class ExcelJsXlsxProvider implements XlsxProvider {
     return zip.generateAsync({ type: 'uint8array', compression: 'DEFLATE' })
   }
 
-  private getSheetXml(rows: Cell[][]) {
+  private getSheetXml(rows: CellValue[][]) {
     const sheetRows = rows
       .map((row, rowIndex) => {
         const cells = row
           .map((value, columnIndex) => {
             const cellReference = `${this.getColumnName(columnIndex)}${rowIndex + 1}`
-
             if (typeof value === 'number') {
               return `<c r="${cellReference}"><v>${value}</v></c>`
             }

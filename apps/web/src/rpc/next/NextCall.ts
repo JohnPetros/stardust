@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
-import { revalidateTag } from 'next/cache'
+import { updateTag } from 'next/dist/server/web/spec-extension/revalidate'
 
 import type { Call } from '@stardust/core/global/interfaces'
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
@@ -62,7 +62,7 @@ export const NextCall = <Request = unknown>({
     },
 
     resetCache(cacheKey) {
-      revalidateTag(cacheKey, 'max')
+      updateTag(cacheKey)
     },
 
     async getUser() {

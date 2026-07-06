@@ -81,7 +81,7 @@ export class SupabaseUserMapper {
   }
 
   static toSupabase(user: User): SupabaseUser {
-    // @ts-ignore
+    // @ts-expect-error Supabase row typing is stricter than the domain object mapping.
     const supabaseUser: SupabaseUser = {
       avatar_id: user.avatar.id.value,
       rocket_id: user.rocket.id.value,

@@ -10,12 +10,8 @@ export function eventType(name: string, _options?: unknown) {
   return name
 }
 
-export type InngestFunctionContext = {
-  event: NonNullable<Context['event']> & {
-    id: string
-    data: unknown
-  }
-  step?: Context['step']
+type InngestHandlerContext = Context.Any & {
+  event: Context.Any['event'] & { id: string; data: unknown }
 }
 
 export class InngestFunctions {
@@ -29,14 +25,14 @@ export class InngestFunctions {
   }
 
   protected createFunction<
-    FailureContext extends { error: unknown } = { error: unknown },
+    TFailureContext extends { error: unknown } = { error: unknown },
   >(
     options: {
       triggers: unknown
-      onFailure?: (context: FailureContext) => Promise<void>
+      onFailure?: (context: TFailureContext) => Promise<void>
       [key: string]: unknown
     },
-    handler: (context: InngestFunctionContext) => Promise<unknown>,
+    handler: (context: InngestHandlerContext) => Promise<unknown>,
   ) {
     const { triggers, ...functionOptions } = options
 
