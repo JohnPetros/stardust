@@ -233,6 +233,71 @@ describe('useNotesDrawer', () => {
     expect(result.current.isDrawerOpen).toBe(true)
   })
 
+  it('should close the drawer on the first manual click after selecting a note', () => {
+    const selectedNote = makeNote('selected-note', {
+      title: 'Nota salva',
+      content: 'Conteudo salvo',
+    })
+    const { result } = Hook()
+
+    act(() => {
+      result.current.handleNotesDialogOpen()
+      result.current.handleSelectNote(selectedNote)
+    })
+
+    expect(result.current.isDrawerOpen).toBe(true)
+    expect(result.current.isDialogOpen).toBe(false)
+
+    act(() => {
+      result.current.handleManualDrawerClose()
+    })
+
+    expect(result.current.isDrawerOpen).toBe(false)
+    expect(result.current.hasActiveNote).toBe(false)
+    expect(result.current.title).toBe('')
+    expect(result.current.content).toBe('')
+  })
+
+  it('should ignore transient drawer close events while the notes dialog is open', () => {
+    const { result } = Hook()
+
+    act(() => {
+      result.current.handleDrawerOpenChange(true)
+      result.current.handleNotesDialogOpen()
+    })
+
+    act(() => {
+      result.current.handleDrawerOpenChange(false)
+    })
+
+    expect(result.current.isDrawerOpen).toBe(true)
+    expect(result.current.isDialogOpen).toBe(true)
+  })
+
+  it('should ignore only the first transient drawer close after selecting a note', () => {
+    const selectedNote = makeNote('selected-note')
+    const { result } = Hook()
+
+    act(() => {
+      result.current.handleNotesDialogOpen()
+      result.current.handleSelectNote(selectedNote)
+    })
+
+    act(() => {
+      result.current.handleDrawerOpenChange(false)
+    })
+
+    expect(result.current.isDrawerOpen).toBe(true)
+    expect(result.current.hasActiveNote).toBe(true)
+
+    act(() => {
+      result.current.handleDrawerOpenChange(false)
+    })
+
+    expect(result.current.isDrawerOpen).toBe(false)
+    expect(result.current.hasActiveNote).toBe(false)
+  })
+
   it('should update page and search state for notes listing and fetch with the current filters', async () => {
     profileService.fetchNotes.mockResolvedValueOnce(
       createRestResponse({
