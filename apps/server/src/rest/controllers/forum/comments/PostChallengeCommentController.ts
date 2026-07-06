@@ -1,4 +1,3 @@
-import type { CommentDto } from '@stardust/core/forum/entities/dtos'
 import type { CommentsRepository } from '@stardust/core/forum/interfaces'
 import { PostChallengeCommentUseCase } from '@stardust/core/forum/use-cases'
 import type { Controller, Http } from '@stardust/core/global/interfaces'

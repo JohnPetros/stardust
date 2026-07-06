@@ -69,7 +69,97 @@ refactor/
 
 ---
 
-### 3. Estrutura da Descrição (Body)
+### 3. Commits Pendentes na Branch
+
+Se a branch ainda **não** estiver com todas as alterações commitadas, antes de
+criar o PR siga o mesmo padrão do prompt `commit-code`.
+
+#### 3.1 Pré-condições
+
+Execute:
+
+```bash
+git diff --cached --name-only
+git status --porcelain
+```
+
+- Se houver arquivos previamente em stage, **aborte** e informe o problema.
+- Se não houver alterações pendentes, prossiga para a criação do PR.
+- Se houver alterações não commitadas, continue para a etapa de agrupamento.
+
+#### 3.2 Regra de agrupamento
+
+Analise **caminho e diff** de cada arquivo alterado:
+
+```bash
+git diff --stat
+git diff -- <arquivo>
+```
+
+Agrupe por **responsabilidade semântica**, não por pasta:
+
+- arquivos que implementam a mesma funcionalidade → mesmo commit
+- arquivos em camadas diferentes (ex: domain + REST) → commits separados por
+  camada
+
+Se um arquivo for ambíguo, sinalize a ambiguidade, tome a decisão e prossiga.
+
+#### 3.3 Tabela de prefixos para commit
+
+| Type                          | Prefix     | Emoji |
+| :---------------------------- | :--------- | :---- |
+| Domain layer                  | domain     | 🌐    |
+| REST API layer                | rest       | 📶    |
+| UI layer                      | ui         | 🖥️    |
+| Database layer                | db         | 💾    |
+| Work in progress              | wip        | 🚧    |
+| Artificial intelligence layer | ai         | 🤖    |
+| RPC layer                     | rpc        | 📟    |
+| Use cases                     | use case   | ✨    |
+| Interfaces                    | interface  | 📑    |
+| Typings                       | type       | 🏷️    |
+| Documentation                 | docs       | 📚    |
+| Bug fix                       | fix        | 🐛    |
+| Refactoring                   | refactor   | ♻️    |
+| Test                          | test       | 🧪    |
+| Config/Infrastructure         | config     | ⚙️    |
+| Dependencies                  | deps       | 📦    |
+| Folder structure              | ftree      | 🗃️    |
+| Provision layer               | provision  | 🧰    |
+| Response                      | response   | 📤    |
+| Design                        | design     | 🎨    |
+| Certificates/Licensing        | cert       | 📜    |
+| Validation schema             | validation | 📮    |
+| Emergency hotfix              | hotfix     | 🚑    |
+| Continuous delivery           | cd         | 🚚    |
+| Continuous integration        | ci         | 🏎️    |
+| New release                   | release    | 🔖    |
+| Docker files                  | docker     | 🐳    |
+
+#### 3.4 Padrão de mensagem e execução
+
+Formato obrigatório:
+
+```text
+emoji prefix: concise description in English
+```
+
+- mensagem obrigatoriamente em inglês
+- um commit por responsabilidade semântica
+- descrição curta, direta, no imperativo
+
+Para cada grupo identificado, execute:
+
+```bash
+git add <arquivos-do-grupo>
+git commit -m "emoji prefix: concise description in English"
+```
+
+Só avance para a criação do PR quando `git status --porcelain` estiver vazio.
+
+---
+
+### 4. Estrutura da Descrição (Body)
 
 O corpo do PR deve seguir o template abaixo.
 
@@ -134,7 +224,7 @@ Passo a passo claro para o revisor validar:
 
 ---
 
-### 4. Criação via gh CLI
+### 5. Criação via gh CLI
 
 ⚠️ Não usar GitHub MCP. ⚠️ Não usar APIs MCP. Usar exclusivamente **gh**.
 
@@ -161,7 +251,7 @@ gh pr create \
 
 ---
 
-### 5. Comentário de Code Review
+### 6. Comentário de Code Review
 
 Após criar o PR, adicione um comentário para solicitar code review do Codex:
 
@@ -171,7 +261,7 @@ gh pr comment <numero-do-pr> --body "@code review"
 
 ---
 
-### 6. Retorno
+### 7. Retorno
 
 Após criação:
 

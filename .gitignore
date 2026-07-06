@@ -89,7 +89,6 @@ google-key-file.json
 .serena/
 .opencode/
 opencode.json
-.mcp.json
 CLAUDE.md
 GEMINI.md
 prompt.md
@@ -99,9 +98,10 @@ documentation/issue.md
 # Ai Content
 .context/
 
-# Serena MCP
-.serena
-
+# MCPs
+.serena/
+.mcp.json
+.playwright-mcp
 
 # Terminal Paste Image folder
 .cp-images/

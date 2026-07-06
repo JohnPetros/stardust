@@ -16,6 +16,16 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 - Para regras sobre Barrel files (index.ts).
 - Ao criar classes de Evento ou Erro.
 
+## Regras de Commit
+
+**Arquivo:** `/documentation/rules/commit-rules.md`
+**Quando consultar:**
+
+- Antes de criar commits no repositório.
+- Para escolher o prefixo, emoji e formato da mensagem de commit.
+- Para agrupar alterações por responsabilidade semântica.
+- Para substituir o uso de prompts específicos de commit como fonte principal de decisão.
+
 ## Regras da Camada UI
 
 **Arquivo:** `/documentation/rules/ui-layer-rules.md`
@@ -100,6 +110,18 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 - Ao implementar tools, agentes, prompts ou fluxos de IA.
 - Para entender as fronteiras entre adapters de IA e contratos internos do projeto.
 - Ao integrar modelos, provedores ou orchestration de inferencia.
+
+## Regras de Uso de MCPs
+
+**Arquivo:** `/documentation/rules/mcp-rules.md`
+**Quando consultar:**
+
+- Ao decidir qual MCP usar para uma tarefa.
+- Ao validar fluxos reais de browser com Playwright MCP.
+- Ao navegar a codebase com Serena.
+- Ao consultar documentacao atualizada com Context7.
+- Ao interagir com Supabase Dev/Prod.
+- Ao trabalhar com arquivos `.pen` via Pencil.
 
 ## Regras da Aplicação Web
 
