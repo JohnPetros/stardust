@@ -1,6 +1,6 @@
-import {
-  type ApiKeySecretProvider,
-  type ApiKeysRepository,
+import type {
+  ApiKeySecretProvider,
+  ApiKeysRepository,
 } from '@stardust/core/auth/interfaces'
 import { CreateApiKeyUseCase } from '@stardust/core/auth/use-cases'
 import type { Controller, Http } from '@stardust/core/global/interfaces'

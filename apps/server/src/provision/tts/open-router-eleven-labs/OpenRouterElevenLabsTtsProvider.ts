@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto'
 
 import { HTTP_HEADERS } from '@stardust/core/global/constants'
 import { AppError } from '@stardust/core/global/errors'
-import { Text } from '@stardust/core/global/structures'
+import type { Text } from '@stardust/core/global/structures'
 import type { AudioVoice } from '@stardust/core/lesson/structures'
 import type { TtsProvider } from '@stardust/core/lesson/interfaces'
 
