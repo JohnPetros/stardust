@@ -1,4 +1,37 @@
 services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    image: stardust-server
+    container_name: stardust-server
+    depends_on:
+      - redis
+    env_file:
+      - apps/server/.env.development
+    environment:
+      INNGEST_DEV_SERVER_URL: http://inngest:8288
+    ports:
+      - "3334:3334"
+
+  inngest:
+    image: stardust-server
+    container_name: stardust-inngest
+    command:
+      [
+        "npx",
+        "inngest-cli@latest",
+        "dev",
+        "--no-discovery",
+        "-u",
+        "http://server:3334/inngest",
+      ]
+    depends_on:
+      - server
+    ports:
+      - "8288:8288"
+      - "8289:8289"
+
   redis:
     image: redis:7-alpine
     container_name: stardust-redis

@@ -88,7 +88,7 @@ export class CheckHealthController implements Controller {
 
   protected async checkInngest(): Promise<HealthStatus> {
     if (ENV.mode === 'development') {
-      return this.checkHttpEndpoint('http://127.0.0.1:8288/health')
+      return this.checkHttpEndpoint(`${ENV.inngestDevServerUrl}/health`)
     }
 
     if (!ENV.inngestEventKey) {
