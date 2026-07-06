@@ -1,6 +1,3 @@
 export { GoogleDriveStorageProvider } from './GoogleDriveStorageProvider'
 export { SupabaseFileStorageProvider } from './SupabaseFileStorageProvider'
 export { DropboxStorageProvider } from './DropboxStorageProvider'
-export { VercelEmbeddingsGeneratorProvider } from './VercelEmbeddingGeneratorProvider'
-export { MastraMarkdownEmbeddingsGeneratorProvider } from './MastraMarkdownEmbeddingsGeneratorProvider'
-export { UpstashEmbeddingsStorageProvider } from './UpstashEmbeddingsStorageProvider'

@@ -34,12 +34,5 @@ export const StorageService = (restClient: RestClient): IStorageService => {
       restClient.setQueryParam('fileName', fileName.value)
       return await restClient.delete('/storage/files')
     },
-
-    async searchEmbeddings(query, topK, namespace) {
-      restClient.setQueryParam('query', String(query.value))
-      restClient.setQueryParam('topK', String(topK.value))
-      restClient.setQueryParam('namespace', namespace.value)
-      return await restClient.get('/storage/embeddings')
-    },
   }
 }

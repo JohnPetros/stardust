@@ -5,7 +5,6 @@ import { signedUploadUrlSchema } from '@stardust/validation/storage/schemas'
 
 import { SupabaseFileStorageProvider } from '@/provision/storage'
 import { CreateSignedUploadUrlController } from '@/rest/controllers/storage'
-import { EmbeddingsStorageRouter } from './EmbeddingsStorageRouter'
 import { FilesStorageRouter } from './FilesStorageRouter'
 import {
   AuthMiddleware,
@@ -40,11 +39,9 @@ export class StorageRouter extends HonoRouter {
   }
 
   registerRoutes(): Hono {
-    const embeddingsStorageRouter = new EmbeddingsStorageRouter(this.app)
     const filesStorageRouter = new FilesStorageRouter(this.app)
 
     this.registerCreateSignedUploadUrlRoute()
-    this.router.route('/', embeddingsStorageRouter.registerRoutes())
     this.router.route('/', filesStorageRouter.registerRoutes())
     return this.router
   }

@@ -79,7 +79,7 @@ Migrar o upload de imagens iniciado pelo Studio para um fluxo baseado em URLs as
 * **`FileStorageFolderPath`** (`packages/core/src/storage/domain/structures/FileStorageFolderPath.ts`) - Resolve nomes legados como `story` para `images/story` e valida os paths canonicos de storage.
 * **`FileStorageProvider`** (`packages/core/src/storage/interfaces/FileStorageProvider.ts`) - Interface de provider de storage; hoje esta inconsistente com os adapters reais porque declara `upload(signedUploadUrl)` enquanto controllers, jobs e providers usam `upload(folder, file)`.
 * **`SignedFileStorageProvider`** (`packages/core/src/storage/interfaces/SignedFileStorageProvider.ts`) - Novo contrato dedicado ao upload direto por URL assinada, usado pela `studio`.
-* **`StorageService`** (`packages/core/src/storage/interfaces/StorageService.ts`) - Interface compartilhada dos clients REST de storage, com `listFiles`, `uploadFile`, `removeFile` e `searchEmbeddings`.
+* **`StorageService`** (`packages/core/src/storage/interfaces/StorageService.ts`) - Interface compartilhada dos clients REST de storage, com `listFiles`, `createSignedUploadUrl` e `removeFile`.
 * **`BackupDatabaseUseCase`** (`packages/core/src/storage/use-cases/BackupDatabaseUseCase.ts`) - Uso existente de upload server-side via `storageProvider.upload(folder, file)`.
 
 ## Core - Use Cases

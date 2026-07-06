@@ -121,14 +121,30 @@ prosseguir.
 Execute `npm run typecheck` na raiz do projeto. Nenhum erro de tipo deve
 restar. Caso existam, liste-os e corrija.
 
-**1.4 Validação de Requisitos**
+**1.4 Quality Gate**
+
+Execute o `quality-gate` para cada workspace impactado pela Spec:
+
+- `npm run quality-gate -- --workspace=core`
+- `npm run quality-gate -- --workspace=server`
+- `npm run quality-gate -- --workspace=web`
+- `npm run quality-gate -- --workspace=studio`
+
+Rode apenas os workspaces efetivamente tocados pela implementação, mas trate o
+gate como obrigatório para cada um deles. Nenhuma regressão de métrica
+(warnings do Biome, escape hatches de tipo, arquivos acima do limite ou queda
+de cobertura por camada) pode permanecer. Se houver falha, corrija a causa
+raiz; nunca use `--update-baseline` para contornar regressões durante a
+conclusão da spec.
+
+**1.5 Validação de Requisitos**
 
 Releia a Spec técnica e o PRD (milestone do GitHub referenciado no campo `prd:`
 da spec). Verifique que cada requisito mapeado na spec foi implementado
 corretamente. Se houver divergências, registre-as explicitamente — não as
 reconcilie por suposição.
 
-**1.5 Validação de Limites Arquiteturais**
+**1.6 Validação de Limites Arquiteturais**
 
 Com base nas regras em `documentation/rules/`, verifique que a implementação
 respeita os limites de cada camada tocada. Atenção especial a:
@@ -139,9 +155,9 @@ respeita os limites de cada camada tocada. Atenção especial a:
 - UI consumindo contratos, não implementações
 - Jobs com idempotência quando aplicável
 
-Se encontrar violações, corrija-as e execute novamente os passos 1.1 a 1.3.
+Se encontrar violações, corrija-as e execute novamente os passos 1.1 a 1.4.
 
-**1.6 Revisão de Qualidade de Código**
+**1.7 Revisão de Qualidade de Código**
 
 Revise o código produzido buscando:
 
@@ -264,6 +280,7 @@ dependências externas — tudo que o revisor precisa saber antes de aprovar>
 - [ ] Testes passando (`npm run test`)
 - [ ] Sem erros de lint (`npm run codecheck`)
 - [ ] Sem erros de tipo (`npm run typecheck`)
+- [ ] Quality gate dos workspaces afetados passando
 - [ ] Spec atualizada para `status: closed`
 - [ ] PRD atualizado na milestone do GitHub
 - [ ] Architecture verificado (se aplicável)

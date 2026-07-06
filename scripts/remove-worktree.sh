@@ -83,6 +83,24 @@ ensure_worktree_exists() {
     || fail "a pasta existe, mas nao esta registrada como Git worktree: $target_path"
 }
 
+branch_for_worktree() {
+  local target_path="$1"
+
+  git worktree list --porcelain | awk -v target="$target_path" '
+    $1 == "worktree" {
+      current = substr($0, index($0, $2))
+      next
+    }
+
+    $1 == "branch" && current == target {
+      branch = $2
+      sub(/^refs\/heads\//, "", branch)
+      print branch
+      exit
+    }
+  '
+}
+
 remove_worktree() {
   local target_path="$1"
 
@@ -96,11 +114,25 @@ prune_worktree_metadata() {
   git worktree prune
 }
 
+remove_branch() {
+  local branch_name="$1"
+
+  if [[ -z "$branch_name" ]]; then
+    log "Nenhuma branch local associada foi detectada para a worktree."
+    return
+  fi
+
+  log "Removendo branch local: $branch_name"
+  git branch -d "$branch_name" \
+    || fail "falha ao remover a branch local '$branch_name'. Verifique se ela ja foi mesclada."
+}
+
 main() {
   require_worktree_name "$@"
   ensure_git_repository
 
   local worktree_name="$1"
+  local branch_name
   local current_root
   local repo_root
   local worktree_parent
@@ -120,11 +152,13 @@ main() {
 
   ensure_target_is_not_current_worktree "$current_root" "$target_path"
   ensure_worktree_exists "$target_path"
+  branch_name="$(branch_for_worktree "$target_path")"
   remove_worktree "$target_path"
   prune_worktree_metadata
+  remove_branch "$branch_name"
 
   log "Worktree removida com sucesso."
-  log "A branch local nao foi removida automaticamente."
+  log "Branch local removida com sucesso."
 }
 
 main "$@"

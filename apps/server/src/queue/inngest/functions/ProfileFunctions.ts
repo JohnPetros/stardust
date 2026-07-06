@@ -7,8 +7,7 @@ import { ObserveStreakBreakJob, CreateUserJob } from '@/queue/jobs/profile'
 import { SupabaseUsersRepository } from '@/database'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestBroker } from '../InngestBroker'
-import { InngestFunctions } from './InngestFunctions'
-import { eventType } from 'inngest'
+import { InngestFunctions, eventType } from './InngestFunctions'
 import z from 'zod'
 import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/schemas'
 
@@ -18,7 +17,7 @@ type ShopItemsAcquiredByDefaultPayload = EventPayload<
 
 export class ProfileFunctions extends InngestFunctions {
   private createCreateUserFunction(supabase: SupabaseClient) {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: CreateUserJob.KEY,
         onFailure: (context) => this.handleFailure(context, CreateUserJob.name),
@@ -52,7 +51,7 @@ export class ProfileFunctions extends InngestFunctions {
   }
 
   private createObserveStreakBreakFunction(supabase: SupabaseClient) {
-    return this.inngest.createFunction(
+    return this.createFunction(
       {
         id: ObserveStreakBreakJob.KEY,
         onFailure: (context) => this.handleFailure(context, ObserveStreakBreakJob.name),
