@@ -57,7 +57,7 @@
     "@tiptap/pm": "^3.23.1",
     "@tiptap/react": "^3.23.1",
     "@tiptap/starter-kit": "^3.23.1",
-    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/react": "^4.3.1",
     "@tsparticles/slim": "^3.8.1",
     "ai": "^6.0.219",
     "apexcharts": "^4.7.0",
