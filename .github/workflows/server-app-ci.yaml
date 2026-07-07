@@ -97,7 +97,7 @@ jobs:
         working-directory: apps/server
         run: |
           supabase status -o env > /tmp/supabase.env
-          SUPABASE_SECRET_KEY=$(grep '^SECRET_KEY=' /tmp/supabase.env | cut -d= -f2-)
+          . /tmp/supabase.env
 
           cat <<'EOF' > .env.testing
           MODE='test'
@@ -121,7 +121,7 @@ jobs:
           POSTHOG_PERSONAL_API_KEY='test-posthog-personal-api-key'
           POSTHOG_PROJECT_ID='1'
           EOF
-          sed -i "s|__SUPABASE_SECRET_KEY__|${SUPABASE_SECRET_KEY}|g" .env.testing
+          sed -i "s|__SUPABASE_SECRET_KEY__|${SECRET_KEY}|g" .env.testing
           cp .env.testing .env
 
       - name: Run tests
