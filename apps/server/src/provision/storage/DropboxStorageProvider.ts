@@ -1,5 +1,3 @@
-import fs from 'node:fs/promises'
-
 import { Dropbox } from 'dropbox'
 
 import { AppError } from '@stardust/core/global/errors'
@@ -29,12 +27,16 @@ export class DropboxStorageProvider implements FileStorageProvider {
     this.restClient.setBaseUrl(DropboxStorageProvider.BASE_URL)
   }
 
+  async uploadMany(folder: FileStorageFolderPath, files: File[]): Promise<File[]> {
+    return await Promise.all(files.map(async (file) => await this.upload(folder, file)))
+  }
+
   async upload(folder: FileStorageFolderPath, file: File): Promise<File> {
     try {
       const accessToken = await this.fetchAccessToken()
       this.dropbox = new Dropbox({ accessToken })
 
-      const fullPath = `/${folder.value}/${DropboxStorageProvider.INTERNAL_FOLDER_NAME}/${file.name}`
+      const fullPath = `/${DropboxStorageProvider.INTERNAL_FOLDER_NAME}/${folder.value}/${file.name}`
 
       const fileBuffer = await this.fileToBuffer(file)
 
@@ -50,7 +52,6 @@ export class DropboxStorageProvider implements FileStorageProvider {
 
       return file
     } catch (error) {
-      console.log('error', error)
       this.handleError(error)
     }
   }

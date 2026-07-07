@@ -16,6 +16,10 @@ export class SupabaseFileStorageProvider implements FileStorageProvider {
 
   constructor(private readonly supabase: SupabaseClient) {}
 
+  async uploadMany(folder: FileStorageFolderPath, files: File[]): Promise<File[]> {
+    return await Promise.all(files.map(async (file) => await this.upload(folder, file)))
+  }
+
   async upload(folder: FileStorageFolderPath, file: File): Promise<File> {
     const fileName = this.resolveFileName(file)
     const filePath = `${folder.value}/${fileName}`

@@ -37,7 +37,6 @@
     "@supabase/supabase-js": "^2.49.4",
     "axios": "^1.18.1",
     "dropbox": "^10.34.0",
-    "googleapis": "^153.0.0",
     "hono": "^4.12.27",
     "inngest": "^3.19.4",
     "ioredis": "^5.11.1",
