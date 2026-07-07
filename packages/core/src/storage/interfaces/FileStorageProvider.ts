@@ -5,6 +5,7 @@ import type { FilesListingParams } from '../types'
 
 export interface FileStorageProvider {
   upload(folder: FileStorageFolderPath, file: File): Promise<File>
+  uploadMany(folder: FileStorageFolderPath, files: File[]): Promise<File[]>
   createSignedUploadUrl(
     folderPath: FileStorageFolderPath,
     fileName: Text,
