@@ -2,7 +2,7 @@ import type { AnalyticsReportingProvider } from '@stardust/core/analytics/interf
 import type { RestClient } from '@stardust/core/global/interfaces'
 import { HTTP_HEADERS } from '@stardust/core/global/constants'
 import { AppError } from '@stardust/core/global/errors'
-import { Integer } from '@stardust/core/global/structures'
+import type { Integer } from '@stardust/core/global/structures'
 import type { DailyActiveUsersDto } from '@stardust/core/profile/entities/dtos'
 
 import { ENV } from '@/constants'
