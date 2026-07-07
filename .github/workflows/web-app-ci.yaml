@@ -93,9 +93,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Create environment files
-        run: |
-          echo "${{ secrets.WEB_ENV_TEST }}" > apps/web/.env.testing
+      - name: Verify test environment file
+        run: test -f apps/web/.env.testing
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -129,9 +128,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Create environment files
-        run: |
-          echo "${{ secrets.WEB_ENV_TEST }}" > apps/web/.env.testing
+      - name: Verify test environment file
+        run: test -f apps/web/.env.testing
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -220,9 +218,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Create environment files
-        run: |
-          echo "${{ secrets.WEB_ENV_TEST }}" > apps/web/.env
+      - name: Prepare build environment file
+        run: cp apps/web/.env.testing apps/web/.env
 
       - name: Setup Node.js
         uses: actions/setup-node@v6

@@ -93,10 +93,8 @@ jobs:
         working-directory: apps/server
         run: supabase db reset --local --yes
 
-      - name: Create test environment file
-        run: |
-          printf '%s' "${{ secrets.SERVER_ENV_TEST }}" > apps/server/.env
-          printf '%s' "${{ secrets.SERVER_ENV_TEST }}" > apps/server/.env.testing
+      - name: Prepare test environment files
+        run: cp apps/server/.env.testing apps/server/.env
 
       - name: Run tests
         run: npm run test:unit -w @stardust/server
@@ -124,8 +122,8 @@ jobs:
 
       # A catraca roda a suíte unitária (mocks) para medir cobertura. Não sobe
       # Supabase, mas alguns testes (ai tools) leem env no import.
-      - name: Create test environment file
-        run: printf '%s' "${{ secrets.SERVER_ENV_TEST }}" > apps/server/.env.testing
+      - name: Verify test environment file
+        run: test -f apps/server/.env.testing
 
       - name: Run quality gate
         env:
