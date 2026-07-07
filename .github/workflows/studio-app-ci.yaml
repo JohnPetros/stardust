@@ -5,10 +5,12 @@ on:
     branches:
       - main
     paths:
+      - ".github/workflows/**"
+      - "package.json"
+      - "package-lock.json"
       - "apps/studio/**"
       - "packages/core/**"
       - "packages/validation/**"
-      - "package-lock.json"
       - "scripts/quality-gate/**"
 
 permissions:
