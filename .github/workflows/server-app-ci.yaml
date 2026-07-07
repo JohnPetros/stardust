@@ -95,13 +95,16 @@ jobs:
 
       - name: Create test environment files
         run: |
+          supabase status -o env > /tmp/supabase.env
+          SUPABASE_SERVICE_ROLE_KEY=$(grep '^SERVICE_ROLE_KEY=' /tmp/supabase.env | cut -d= -f2-)
+
           cat <<'EOF' > apps/server/.env.testing
           MODE='test'
           PORT='3333'
           BASE_URL='http://localhost'
           GOD_ACCOUNT_IDS=f4442be6-ad3e-415b-b31b-cc49a18e1119,
           SUPABASE_URL='http://127.0.0.1:54321'
-          SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiJ9.test-signature
+          SUPABASE_ANON_KEY='__SUPABASE_SERVICE_ROLE_KEY__'
           SUPABASE_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
           REDIS_URL='redis://127.0.0.1:6379'
           STARDUST_WEB_URL='http://localhost:3000'
@@ -117,6 +120,7 @@ jobs:
           POSTHOG_PERSONAL_API_KEY='test-posthog-personal-api-key'
           POSTHOG_PROJECT_ID='1'
           EOF
+          sed -i "s|__SUPABASE_SERVICE_ROLE_KEY__|${SUPABASE_SERVICE_ROLE_KEY}|g" apps/server/.env.testing
           cp apps/server/.env.testing apps/server/.env
 
       - name: Run tests
@@ -153,7 +157,7 @@ jobs:
           BASE_URL='http://localhost'
           GOD_ACCOUNT_IDS=f4442be6-ad3e-415b-b31b-cc49a18e1119,
           SUPABASE_URL='http://127.0.0.1:54321'
-          SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiJ9.test-signature
+          SUPABASE_ANON_KEY='placeholder-supabase-key'
           SUPABASE_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
           REDIS_URL='redis://127.0.0.1:6379'
           STARDUST_WEB_URL='http://localhost:3000'
