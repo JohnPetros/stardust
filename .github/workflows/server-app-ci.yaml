@@ -94,11 +94,12 @@ jobs:
         run: supabase db reset --local --yes
 
       - name: Create test environment files
+        working-directory: apps/server
         run: |
           supabase status -o env > /tmp/supabase.env
           SUPABASE_SERVICE_ROLE_KEY=$(grep '^SERVICE_ROLE_KEY=' /tmp/supabase.env | cut -d= -f2-)
 
-          cat <<'EOF' > apps/server/.env.testing
+          cat <<'EOF' > .env.testing
           MODE='test'
           PORT='3333'
           BASE_URL='http://localhost'
@@ -120,8 +121,8 @@ jobs:
           POSTHOG_PERSONAL_API_KEY='test-posthog-personal-api-key'
           POSTHOG_PROJECT_ID='1'
           EOF
-          sed -i "s|__SUPABASE_SERVICE_ROLE_KEY__|${SUPABASE_SERVICE_ROLE_KEY}|g" apps/server/.env.testing
-          cp apps/server/.env.testing apps/server/.env
+          sed -i "s|__SUPABASE_SERVICE_ROLE_KEY__|${SUPABASE_SERVICE_ROLE_KEY}|g" .env.testing
+          cp .env.testing .env
 
       - name: Run tests
         run: npm run test:unit -w @stardust/server
