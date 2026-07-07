@@ -1,8 +1,8 @@
-import type { Broker, Amqp, Job } from '@stardust/core/global/interfaces'
+import type { Amqp, Broker, Job } from '@stardust/core/global/interfaces'
 import type { EventPayload } from '@stardust/core/global/types'
 import {
   TextBlockAudioGenerationRequestedEvent,
-  TextBlocksAudioGenerationInBatchRequestedEvent,
+  type TextBlocksAudioGenerationInBatchRequestedEvent,
 } from '@stardust/core/lesson/events'
 
 type Payload = EventPayload<typeof TextBlocksAudioGenerationInBatchRequestedEvent>
