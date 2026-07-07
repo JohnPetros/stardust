@@ -93,8 +93,31 @@ jobs:
         working-directory: apps/server
         run: supabase db reset --local --yes
 
-      - name: Prepare test environment files
-        run: cp apps/server/.env.testing apps/server/.env
+      - name: Create test environment files
+        run: |
+          cat <<'EOF' > apps/server/.env.testing
+          MODE='test'
+          PORT='3333'
+          BASE_URL='http://localhost'
+          GOD_ACCOUNT_IDS=f4442be6-ad3e-415b-b31b-cc49a18e1119,
+          SUPABASE_URL='http://127.0.0.1:54321'
+          SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiJ9.test-signature
+          SUPABASE_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+          REDIS_URL='redis://127.0.0.1:6379'
+          STARDUST_WEB_URL='http://localhost:3000'
+          DROPBOX_REFRESH_TOKEN='test-refresh-token'
+          DROPBOX_APP_KEY='test-app-key'
+          DROPBOX_APP_SECRET='test-app-secret'
+          DISCORD_WEBHOOK_URL='https://discord.com/api/webhooks/test'
+          SENTRY_DSN='https://test@sentry.io/test'
+          INNGEST_EVENT_KEY='test-event-key'
+          INNGEST_SIGNING_KEY='test-signing-key'
+          POSTHOG_PROJECT_TOKEN='test-posthog-project-token'
+          POSTHOG_HOST='https://us.i.posthog.com'
+          POSTHOG_PERSONAL_API_KEY='test-posthog-personal-api-key'
+          POSTHOG_PROJECT_ID='1'
+          EOF
+          cp apps/server/.env.testing apps/server/.env
 
       - name: Run tests
         run: npm run test:unit -w @stardust/server
@@ -122,8 +145,30 @@ jobs:
 
       # A catraca roda a suíte unitária (mocks) para medir cobertura. Não sobe
       # Supabase, mas alguns testes (ai tools) leem env no import.
-      - name: Verify test environment file
-        run: test -f apps/server/.env.testing
+      - name: Create test environment file
+        run: |
+          cat <<'EOF' > apps/server/.env.testing
+          MODE='test'
+          PORT='3333'
+          BASE_URL='http://localhost'
+          GOD_ACCOUNT_IDS=f4442be6-ad3e-415b-b31b-cc49a18e1119,
+          SUPABASE_URL='http://127.0.0.1:54321'
+          SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiJ9.test-signature
+          SUPABASE_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+          REDIS_URL='redis://127.0.0.1:6379'
+          STARDUST_WEB_URL='http://localhost:3000'
+          DROPBOX_REFRESH_TOKEN='test-refresh-token'
+          DROPBOX_APP_KEY='test-app-key'
+          DROPBOX_APP_SECRET='test-app-secret'
+          DISCORD_WEBHOOK_URL='https://discord.com/api/webhooks/test'
+          SENTRY_DSN='https://test@sentry.io/test'
+          INNGEST_EVENT_KEY='test-event-key'
+          INNGEST_SIGNING_KEY='test-signing-key'
+          POSTHOG_PROJECT_TOKEN='test-posthog-project-token'
+          POSTHOG_HOST='https://us.i.posthog.com'
+          POSTHOG_PERSONAL_API_KEY='test-posthog-personal-api-key'
+          POSTHOG_PROJECT_ID='1'
+          EOF
 
       - name: Run quality gate
         env:
