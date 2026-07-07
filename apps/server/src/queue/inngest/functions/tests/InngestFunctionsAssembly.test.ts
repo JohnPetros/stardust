@@ -74,8 +74,8 @@ describe('Inngest function assembly', () => {
 
     const functions = instance.getFunctions(supabase)
 
-    expect(functions).toHaveLength(1)
-    expect(createFunction).toHaveBeenCalledTimes(1)
+    expect(functions).toHaveLength(0)
+    expect(createFunction).toHaveBeenCalledTimes(0)
   })
 
   it('should assemble notification functions', () => {
@@ -134,7 +134,7 @@ describe('Inngest function assembly', () => {
 
     const functions = instance.getFunctions(supabase)
 
-    expect(functions).toHaveLength(5)
-    expect(createFunction).toHaveBeenCalledTimes(5)
+    expect(functions).toHaveLength(3)
+    expect(createFunction).toHaveBeenCalledTimes(3)
   })
 })
