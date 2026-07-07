@@ -1,5 +1,5 @@
 ---
-title: Backup automatico dos arquivos do storage em Dropbox e Google Drive
+title: Backup automatico dos arquivos do storage em Dropbox
 prd: null
 issue: https://github.com/JohnPetros/stardust/issues/451
 apps: server, core
@@ -9,7 +9,7 @@ last_updated_at: 2026-07-06
 
 # 1. Objetivo
 
-Implementar uma rotina recorrente no `server` para copiar os arquivos existentes no Supabase Storage para destinos redundantes no Dropbox e no Google Drive, sem alterar os arquivos de origem nem os fluxos atuais de upload. Tecnicamente, a entrega cria um use case no modulo `storage` do `core`, amplia o contrato `FileStorageProvider` com upload em lote, ajusta os providers concretos de storage, adiciona um job agnostico em `apps/server/src/queue/jobs/storage` e registra a funcao cron em `StorageFunctions`.
+Implementar uma rotina recorrente no `server` para copiar os arquivos existentes no Supabase Storage para um destino redundante no Dropbox, sem alterar os arquivos de origem nem os fluxos atuais de upload. Tecnicamente, a entrega cria um use case no modulo `storage` do `core`, amplia o contrato `FileStorageProvider` com upload em lote, ajusta os providers concretos de storage, adiciona um job agnostico em `apps/server/src/queue/jobs/storage` e registra a funcao cron em `StorageFunctions`.
 
 # 2. Escopo
 
@@ -17,15 +17,13 @@ Implementar uma rotina recorrente no `server` para copiar os arquivos existentes
 
 * Criar o use case `BackupStorageFilesUseCase` para listar, baixar e enviar arquivos das pastas elegiveis.
 * Usar como origem o `SupabaseFileStorageProvider`.
-* Usar como destinos `DropboxStorageProvider` e `GoogleDriveStorageProvider`.
+* Usar como destino `DropboxStorageProvider`.
 * Adicionar `uploadMany(folder: FileStorageFolderPath, files: File[]): Promise<File[]>` ao contrato `FileStorageProvider`.
 * Implementar `uploadMany(...)` nos providers de storage existentes.
 * Garantir paginacao na listagem de arquivos de origem.
 * Criar o job `BackupStorageFilesJob` com `KEY` estavel e cron recorrente.
 * Registrar a funcao Inngest correspondente em `StorageFunctions`.
 * Isolar falhas por pasta e destino quando for possivel continuar o processamento dos demais itens.
-* Corrigir o upload do Google Drive para aceitar `File` em memoria, sem depender de arquivo temporario local.
-* Configurar os IDs de pasta do Google Drive por ambiente.
 
 ## 2.2 Out-of-scope
 
@@ -41,8 +39,8 @@ Implementar uma rotina recorrente no `server` para copiar os arquivos existentes
 
 * O backup deve percorrer explicitamente as pastas `images/story`, `audios/story`, `images/planets`, `images/rockets`, `images/avatars`, `images/achievements`, `images/rankings`, `images/insignias`, `images/feedback-reports` e `database-backups`.
 * Para cada pasta, o backup deve listar os arquivos do Supabase Storage usando `listFiles(...)` com paginacao ate esgotar os itens.
-* Cada arquivo listado deve ser enviado para Dropbox e Google Drive via `uploadMany(...)`, preservando nome, tipo e pasta logica.
-* Falha de um destino em uma pasta nao deve impedir tentativa no outro destino para a mesma pasta.
+* Cada arquivo listado deve ser enviado para o Dropbox via `uploadMany(...)`, preservando nome, tipo e pasta logica.
+* Falha de um destino em uma pasta nao deve impedir tentativa nos demais destinos configurados para a mesma pasta.
 * Falha em uma pasta nao deve impedir tentativa nas demais pastas quando o erro for capturado pelo use case.
 * O job recorrente deve aparecer na lista retornada por `StorageFunctions.getFunctions(...)`.
 
@@ -50,7 +48,7 @@ Implementar uma rotina recorrente no `server` para copiar os arquivos existentes
 
 * Resiliencia: falhas de provider devem ser convertidas para erros de aplicacao ou agregadas sem expor credenciais.
 * Observabilidade: etapas de IO do job devem executar dentro de `amqp.run(...)` para manter rastreabilidade e retries por etapa no Inngest.
-* Segurança: tokens do Dropbox, credenciais do Google Drive e IDs de pastas devem permanecer na camada `provision`/`ENV`, sem vazar para `core`.
+* Segurança: tokens do Dropbox devem permanecer na camada `provision`/`ENV`, sem vazar para `core`.
 * Performance operacional: a listagem deve usar paginas de tamanho fixo para nao depender de uma unica resposta do Supabase Storage.
 
 # 4. O que ja existe?
@@ -77,9 +75,8 @@ Implementar uma rotina recorrente no `server` para copiar os arquivos existentes
 
 * **`SupabaseFileStorageProvider`** (`apps/server/src/provision/storage/SupabaseFileStorageProvider.ts`) - Provider de origem no bucket `stardust-bucket`; implementa upload, signed upload, listagem paginada, busca, download por public URL e remocao.
 * **`DropboxStorageProvider`** (`apps/server/src/provision/storage/DropboxStorageProvider.ts`) - Provider parcial usado pelo backup de database; implementa `upload(...)` e obtem access token por refresh token via `RestClient`.
-* **`GoogleDriveStorageProvider`** (`apps/server/src/provision/storage/GoogleDriveStorageProvider.ts`) - Provider parcial com upload para Google Drive; hoje possui IDs hardcoded/parciais e usa `createReadStream(file.name)`.
 * **`storage providers barrel`** (`apps/server/src/provision/storage/index.ts`) - Exporta os providers de storage.
-* **`ENV`** (`apps/server/src/constants/env.ts`) - Centraliza variaveis de ambiente do server; hoje contem credenciais Dropbox, mas nao contem IDs de pastas do Google Drive.
+* **`ENV`** (`apps/server/src/constants/env.ts`) - Centraliza variaveis de ambiente do server, incluindo as credenciais do Dropbox.
 * **`.env.example`** (`apps/server/.env.example`) - Documenta as variaveis exigidas pelo server.
 
 # 5. O que deve ser criado?
@@ -102,20 +99,6 @@ Implementar uma rotina recorrente no `server` para copiar os arquivos existentes
 * **Metodos:** `handle(amqp: Amqp): Promise<void>` - executa o use case dentro de `amqp.run(...)` com nome de etapa estavel.
 * **Constantes:** `static readonly KEY = 'storage/backup.files'`.
 * **Constantes:** `static readonly CRON_EXPRESSION = 'TZ=America/Sao_Paulo 0 0 * * 0'`.
-
-## Provision (Providers)
-
-* **Localizacao:** `apps/server/src/provision/storage/GoogleDriveStorageProvider.ts`
-* **Dependencias:** Google Auth/Drive SDK e `ENV`.
-* **Biblioteca:** `googleapis`.
-* **Metodos:** `private fileToBuffer(file: File): Promise<Buffer>` - converte o `File` recebido em buffer para upload.
-* **Metodos:** `private resolveParentFolderId(folder: FileStorageFolderPath): string` - le o ID da pasta configurado para `folder.value` e falha com `AppError` se estiver ausente.
-
-## Server - Configuracao
-
-* **Localizacao:** `apps/server/src/constants/env.ts`
-* **Dependencias:** `zod`.
-* **Props:** `googleDriveStorageFolderIds: Record<FileStorageFolderPathValue, string>` derivado de variaveis de ambiente por pasta.
 
 # 6. O que deve ser modificado?
 
@@ -143,26 +126,6 @@ Implementar uma rotina recorrente no `server` para copiar os arquivos existentes
 * **Mudanca:** Ajustar o caminho remoto para preservar ambiente, pasta de origem e nome do arquivo no formato `/<environment>/<folder.value>/<file.name>`.
 * **Justificativa:** O caminho atual `/${folder.value}/${environment}/${file.name}` atende backup de database, mas a issue exige ambiente + pasta de origem + nome para rastreabilidade externa.
 
-* **Arquivo:** `apps/server/src/provision/storage/GoogleDriveStorageProvider.ts`
-* **Mudanca:** Implementar `uploadMany(folder, files)` reutilizando `upload(folder, file)` para cada arquivo.
-* **Justificativa:** Google Drive passa a ser destino de lote com o mesmo contrato dos demais providers.
-
-* **Arquivo:** `apps/server/src/provision/storage/GoogleDriveStorageProvider.ts`
-* **Mudanca:** Substituir `createReadStream(file.name)` por upload a partir do conteudo do `File` recebido em memoria.
-* **Justificativa:** Arquivos baixados do Supabase nao existem como arquivos temporarios locais; depender de `file.name` como path quebra o backup.
-
-* **Arquivo:** `apps/server/src/provision/storage/GoogleDriveStorageProvider.ts`
-* **Mudanca:** Substituir `PARENT_FOLDER_IDS` hardcoded/parcial por valores carregados de `ENV.googleDriveStorageFolderIds`.
-* **Justificativa:** A issue exige configuracao segura para todas as pastas elegiveis.
-
-* **Arquivo:** `apps/server/src/constants/env.ts`
-* **Mudanca:** Adicionar variaveis para IDs de pastas do Google Drive das dez pastas elegiveis.
-* **Justificativa:** IDs de destino sao configuracao de infraestrutura e nao devem ficar hardcoded no provider.
-
-* **Arquivo:** `apps/server/.env.example`
-* **Mudanca:** Documentar as novas variaveis de IDs de pastas do Google Drive.
-* **Justificativa:** O server valida `ENV` no boot; o exemplo precisa refletir as novas chaves obrigatorias.
-
 ## Server - Queue
 
 * **Arquivo:** `apps/server/src/queue/jobs/storage/index.ts`
@@ -170,7 +133,7 @@ Implementar uma rotina recorrente no `server` para copiar os arquivos existentes
 * **Justificativa:** `StorageFunctions` importa jobs de storage via barrel.
 
 * **Arquivo:** `apps/server/src/queue/inngest/functions/StorageFunctions.ts`
-* **Mudanca:** Importar `BackupStorageFilesJob` e `GoogleDriveStorageProvider`; criar `createBackupStorageFilesJob(supabase)` que instancia `SupabaseFileStorageProvider`, `DropboxStorageProvider`, `GoogleDriveStorageProvider`, `InngestAmqp` e registra cron pelo `BackupStorageFilesJob.CRON_EXPRESSION`.
+* **Mudanca:** Importar `BackupStorageFilesJob`; criar `createBackupStorageFilesJob(supabase)` que instancia `SupabaseFileStorageProvider`, `DropboxStorageProvider`, `InngestAmqp` e registra cron pelo `BackupStorageFilesJob.CRON_EXPRESSION`.
 * **Justificativa:** `StorageFunctions` e a composition root existente para jobs de storage e deve concentrar providers concretos.
 
 * **Arquivo:** `apps/server/src/queue/inngest/functions/StorageFunctions.ts`
@@ -189,7 +152,6 @@ Nao aplicavel.
 * **IO dentro de `amqp.run(...)`:** o job executa o use case dentro de um `amqp.run(...)` unico. Alternativas: passar `Amqp` para o use case ou mover loops de IO para o job. Motivo: `Amqp` e contrato de fila, nao regra de storage; passar `Amqp` para o core acoplaria o use case a rastreabilidade de runtime. Trade-off: a granularidade de retry do Inngest fica no backup completo, enquanto o isolamento por pasta/destino acontece dentro do use case.
 * **Isolamento de falhas:** o use case deve capturar erro por destino/pasta, acumular falhas e continuar quando houver outros destinos/pastas a processar; ao final, deve falhar se houver qualquer erro acumulado. Alternativas: falhar imediatamente no primeiro erro, ou nunca falhar quando houver sucesso parcial. Motivo: atende continuidade operacional sem esconder backup parcial. Trade-off: o erro final precisa resumir falhas sem expor credenciais.
 * **Paginacao:** `BackupStorageFilesUseCase` deve usar `OrdinalNumber.create(1)` para pagina inicial e um tamanho fixo interno, como `OrdinalNumber.create(100)`, incrementando ate `items.length === 0` ou ate `page * itemsPerPage >= count`. Alternativas: depender de uma pagina unica do provider. Motivo: a issue exige nao depender de uma pagina fixa unica. Trade-off: mais chamadas ao Supabase Storage em pastas grandes.
-* **Config Google Drive:** IDs de pasta devem vir de `ENV`, um por `FileStorageFolderPathValue`. Alternativas: manter constantes hardcoded ou criar migration/config em banco. Motivo: regra de provision exige configuracao por ambiente sem vazar infraestrutura ao core. Trade-off: aumenta a quantidade de variaveis obrigatorias no server.
 * **Sem migration:** nao ha alteracao de schema, tabela, indice, view, constraint, grant ou RLS. Alternativas: criar tabela de auditoria de backup. Motivo: a issue pede copia recorrente de arquivos, nao persistencia de historico no banco. Trade-off: auditoria detalhada fica limitada a logs/observabilidade do job.
 
 # 9. Diagramas e Referencias
@@ -206,7 +168,6 @@ flowchart TD
   Folders --> Supabase["SupabaseFileStorageProvider.listFiles"]
   Supabase --> Files["File[] por pasta"]
   Files --> Dropbox["DropboxStorageProvider.uploadMany"]
-  Files --> Drive["GoogleDriveStorageProvider.uploadMany"]
 ```
 
 ## Fluxo cross-app
@@ -226,7 +187,6 @@ Nao aplicavel. A entrega toca `core` e `server`, mas nao cria contrato consumido
 * `apps/server/src/queue/inngest/InngestAmqp.ts`
 * `apps/server/src/provision/storage/SupabaseFileStorageProvider.ts`
 * `apps/server/src/provision/storage/DropboxStorageProvider.ts`
-* `apps/server/src/provision/storage/GoogleDriveStorageProvider.ts`
 
 # 10. Pendencias / Duvidas
 
