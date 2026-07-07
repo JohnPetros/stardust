@@ -175,11 +175,13 @@ Instrucoes:
 
 - **MCP Serena:** utilize para buscar arquivos e implementacoes similares no projeto antes de criar algo novo.
 - **MCP Context7:** utilize quando houver duvida sobre como usar uma biblioteca especifica (ex: `shadcn/ui`, `radix-ui`, `inngest`, `supabase`, `hono`, `zod`).
+- **MCP Playwright:** utilize para validar mudancas em UI, paginas Next.js, fluxos browser, layout responsivo, formularios, modais, drawers, canvas ou estados visuais/interativos. A validacao deve abrir a rota impactada, executar o fluxo principal alterado e verificar que nao ha tela em branco, erro no console, overlay quebrado, texto sobreposto ou comportamento divergente da spec.
 
 ### 8. Progresso e reporte
 
 - Atualize o checklist de tarefas conforme implementa (marque `[x]` nas tarefas concluidas, incluindo tarefas de teste).
 - Ao final de cada fase, reporte: o que foi implementado, testes criados, arquivos tocados e pendencias.
+- Para fases que alterem UI/web, reporte tambem a validacao feita com MCP Playwright, incluindo rota validada, fluxo exercitado e screenshots quando relevantes.
 - Ao final do plano completo, entregue o reporte final (veja Saida esperada).
 
 ### 9. Atualizacao de Arquitetura e Rules (ao final da implementacao)
