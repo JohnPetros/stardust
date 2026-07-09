@@ -76,7 +76,6 @@ export class SupabaseRankersRepository
 
   async addWinners(rankers: RankingUser[], tierId: Id): Promise<void> {
     const { error } = await this.supabase.from('ranking_users').insert(
-      // @ts-expect-error Insert payload matches runtime row shape expected by Supabase.
       rankers.map((winner) => ({
         id: winner.id.value,
         xp: winner.xp.value,
@@ -91,7 +90,6 @@ export class SupabaseRankersRepository
 
   async addLosers(rankers: RankingUser[], tierId: Id): Promise<void> {
     const { error } = await this.supabase.from('ranking_users').insert(
-      // @ts-expect-error Insert payload matches runtime row shape expected by Supabase.
       rankers.map((loser) => ({
         id: loser.id.value,
         xp: loser.xp.value,

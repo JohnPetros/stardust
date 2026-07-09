@@ -264,7 +264,7 @@ export class SupabaseUsersRepository
         users_upvoted_solutions(solution_id),
         users_upvoted_comments(comment_id)`,
       )
-      .eq('google_account_id', googleAccountId.value)
+      .filter('google_account_id', 'eq', googleAccountId.value)
       .single()
 
     if (error) {
@@ -293,7 +293,7 @@ export class SupabaseUsersRepository
         users_upvoted_solutions(solution_id),
         users_upvoted_comments(comment_id)`,
       )
-      .eq('github_account_id', githubAccountId.value)
+      .filter('github_account_id', 'eq', githubAccountId.value)
       .single()
 
     if (error) {
@@ -382,9 +382,9 @@ export class SupabaseUsersRepository
       }
 
       if (params.spaceCompletionStatus.isCompleted.isTrue) {
-        query = query.eq('verify_user_space_completion', true)
+        query = query.filter('verify_user_space_completion', 'eq', true)
       } else if (params.spaceCompletionStatus.isNotCompleted.isTrue) {
-        query = query.eq('verify_user_space_completion', false)
+        query = query.filter('verify_user_space_completion', 'eq', false)
       }
 
       if (params.insigniaRoles.length) {
@@ -526,22 +526,20 @@ export class SupabaseUsersRepository
   }
 
   async add(user: User): Promise<void> {
-    const supabaseUser = SupabaseUserMapper.toSupabase(user)
-
     const { error } = await this.supabase.from('users').insert({
       id: user.id.value,
-      name: supabaseUser.name,
-      email: supabaseUser.email,
-      slug: supabaseUser.slug,
-      avatar_id: supabaseUser.avatar_id,
-      rocket_id: supabaseUser.rocket_id,
-      tier_id: supabaseUser.tier_id,
-      coins: supabaseUser.coins,
-      xp: supabaseUser.xp,
-      weekly_xp: supabaseUser.weekly_xp,
-      streak: supabaseUser.streak,
-      level: supabaseUser.level,
-      week_status: supabaseUser.week_status,
+      name: user.name.value,
+      email: user.email.value,
+      slug: user.slug.value,
+      avatar_id: user.avatar.id.value,
+      rocket_id: user.rocket.id.value,
+      tier_id: user.tier.id.value,
+      coins: user.coins.value,
+      xp: user.xp.value,
+      weekly_xp: user.weeklyXp.value,
+      streak: user.streak.value,
+      level: user.level.value.number.value,
+      week_status: user.weekStatus.value,
     })
 
     if (error) throw new SupabasePostgreError(error)
@@ -553,22 +551,20 @@ export class SupabaseUsersRepository
     }
 
     const supabaseUsers = users.map((user) => {
-      const supabaseUser = SupabaseUserMapper.toSupabase(user)
-
       return {
         id: user.id.value,
-        name: supabaseUser.name,
-        email: supabaseUser.email,
-        slug: supabaseUser.slug,
-        avatar_id: supabaseUser.avatar_id,
-        rocket_id: supabaseUser.rocket_id,
-        tier_id: supabaseUser.tier_id,
-        coins: supabaseUser.coins,
-        xp: supabaseUser.xp,
-        weekly_xp: supabaseUser.weekly_xp,
-        streak: supabaseUser.streak,
-        level: supabaseUser.level,
-        week_status: supabaseUser.week_status,
+        name: user.name.value,
+        email: user.email.value,
+        slug: user.slug.value,
+        avatar_id: user.avatar.id.value,
+        rocket_id: user.rocket.id.value,
+        tier_id: user.tier.id.value,
+        coins: user.coins.value,
+        xp: user.xp.value,
+        weekly_xp: user.weeklyXp.value,
+        streak: user.streak.value,
+        level: user.level.value.number.value,
+        week_status: user.weekStatus.value,
       }
     })
 

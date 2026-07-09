@@ -53,15 +53,7 @@ export class SupabaseSnippetsRepository
 
   async add(snippet: Snippet) {
     const supabaseSnippet = SupabaseSnippetMapper.toSupabase(snippet)
-    const { error } = await this.supabase.from('snippets').insert({
-      // @ts-expect-error Insert payload matches runtime row shape expected by Supabase.
-      id: snippet.id.value,
-      code: supabaseSnippet.code,
-      title: supabaseSnippet.title,
-      is_public: supabaseSnippet.is_public,
-      created_at: supabaseSnippet.created_at,
-      user_id: supabaseSnippet.author_id,
-    })
+    const { error } = await this.supabase.from('snippets').insert(supabaseSnippet)
 
     if (error) {
       throw new SupabasePostgreError(error)

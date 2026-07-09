@@ -109,13 +109,9 @@ export class SupabaseCommentsRepository
   async addByChallenge(comment: Comment, challengeId: Id): Promise<void> {
     const supabaseComment = SupabaseCommentMapper.toSupabase(comment)
 
-    const { error: commentError } = await this.supabase.from('comments').insert({
-      // @ts-expect-error Insert payload matches runtime row shape expected by Supabase.
-      id: comment.id.value,
-      content: supabaseComment.content,
-      user_id: supabaseComment.author_id,
-      parent_comment_id: null,
-    })
+    const { error: commentError } = await this.supabase
+      .from('comments')
+      .insert({ ...supabaseComment, parent_comment_id: null })
 
     if (commentError) {
       throw new SupabasePostgreError(commentError)
@@ -133,12 +129,9 @@ export class SupabaseCommentsRepository
   async addBySolution(comment: Comment, solutionId: Id): Promise<void> {
     const supabaseComment = SupabaseCommentMapper.toSupabase(comment)
 
-    const { error: commentError } = await this.supabase.from('comments').insert({
-      // @ts-expect-error Insert payload matches runtime row shape expected by Supabase.
-      id: comment.id.value,
-      content: supabaseComment.content,
-      user_id: supabaseComment.author_id,
-    })
+    const { error: commentError } = await this.supabase
+      .from('comments')
+      .insert(supabaseComment)
 
     if (commentError) {
       throw new SupabasePostgreError(commentError)
@@ -156,13 +149,9 @@ export class SupabaseCommentsRepository
   async addReply(reply: Comment, commentId: Id): Promise<void> {
     const supabaseReply = SupabaseCommentMapper.toSupabase(reply)
 
-    const { error } = await this.supabase.from('comments').insert({
-      // @ts-expect-error Insert payload matches runtime row shape expected by Supabase.
-      id: reply.id.value,
-      content: supabaseReply.content,
-      user_id: supabaseReply.author_id,
-      parent_comment_id: commentId.value,
-    })
+    const { error } = await this.supabase
+      .from('comments')
+      .insert({ ...supabaseReply, parent_comment_id: commentId.value })
 
     if (error) {
       throw new SupabasePostgreError(error)
