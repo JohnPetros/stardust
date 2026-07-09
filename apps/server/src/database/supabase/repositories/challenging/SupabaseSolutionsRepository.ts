@@ -14,16 +14,7 @@ export class SupabaseSolutionsRepository
 {
   async add(solution: Solution): Promise<void> {
     const supabaseSolution = SupabaseSolutionMapper.toSupabase(solution)
-    const { error } = await this.supabase.from('solutions').insert({
-      // @ts-expect-error
-      id: solution.id.value,
-      content: supabaseSolution.content,
-      views_count: supabaseSolution.views_count,
-      slug: supabaseSolution.slug,
-      title: supabaseSolution.title,
-      user_id: supabaseSolution.author_id,
-      challenge_id: supabaseSolution.challenge_id,
-    })
+    const { error } = await this.supabase.from('solutions').insert(supabaseSolution)
 
     if (error) {
       throw new SupabasePostgreError(error)
@@ -62,7 +53,7 @@ export class SupabaseSolutionsRepository
     const { data, error } = await this.supabase
       .from('solutions_view')
       .select('*')
-      .neq('user_id', userId.value)
+      .neq('author_id', userId.value)
 
     if (error) {
       throw new SupabasePostgreError(error)

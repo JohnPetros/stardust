@@ -2,7 +2,7 @@ import { Datetime } from '@stardust/core/global/libs'
 import type { SnippetDto } from '@stardust/core/playground/entities/dtos'
 import { Snippet } from '@stardust/core/playground/entities'
 
-import type { SupabaseSnippet } from '../../types/SupabaseSnippet'
+import type { SupabaseSnippet, SupabaseSnippetPayload } from '../../types'
 
 export class SupabaseSnippetMapper {
   static toEntity(supabaseSnippet: SupabaseSnippet): Snippet {
@@ -32,18 +32,10 @@ export class SupabaseSnippetMapper {
     return snippetDto
   }
 
-  static toSupabase(
-    snippet: Snippet,
-  ): Omit<
-    SupabaseSnippet,
-    'author_name' | 'author_avatar_image' | 'author_avatar_name' | 'author_slug'
-  > {
-    const supabaseSnippet: Omit<
-      SupabaseSnippet,
-      'author_name' | 'author_avatar_image' | 'author_avatar_name' | 'author_slug'
-    > = {
+  static toSupabase(snippet: Snippet): SupabaseSnippetPayload {
+    const supabaseSnippet: SupabaseSnippetPayload = {
       id: snippet.id.value,
-      author_id: snippet.authorId.value,
+      user_id: snippet.authorId.value,
       is_public: snippet.isPublic.value,
       title: snippet.title.value,
       code: snippet.code.value,

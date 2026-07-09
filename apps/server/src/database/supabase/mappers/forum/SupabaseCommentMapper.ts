@@ -1,6 +1,6 @@
 import { Comment } from '@stardust/core/forum/entities'
 import type { CommentDto } from '@stardust/core/forum/entities/dtos'
-import type { SupabaseComment } from '../../types'
+import type { SupabaseComment, SupabaseCommentPayload } from '../../types'
 
 export class SupabaseCommentMapper {
   static toEntity(supabaseComment: SupabaseComment): Comment {
@@ -30,13 +30,13 @@ export class SupabaseCommentMapper {
     return CommentDto
   }
 
-  static toSupabase(comment: Comment): SupabaseComment {
-    const supabaseComment: SupabaseComment = {
+  static toSupabase(comment: Comment): SupabaseCommentPayload {
+    const supabaseComment: SupabaseCommentPayload = {
       id: comment.id.value,
       content: comment.content.value,
-      author_id: comment.author.id.value,
+      user_id: comment.author.id.value,
       created_at: comment.postedAt.toDateString(),
-    } as SupabaseComment
+    }
 
     return supabaseComment
   }
