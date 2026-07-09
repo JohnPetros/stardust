@@ -50,6 +50,10 @@ export class InngestFunctions {
     return this.telemetryProvider
   }
 
+  protected handleJobFailure(jobName: string) {
+    return (context: { error: unknown }) => this.handleFailure(context, jobName)
+  }
+
   protected async handleFailure({ error }: { error: unknown }, jobName: string) {
     if (ENV.mode === 'production') return
 
