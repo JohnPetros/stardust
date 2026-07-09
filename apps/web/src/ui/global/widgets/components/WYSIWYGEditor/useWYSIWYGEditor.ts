@@ -5,7 +5,7 @@ import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Markdown } from 'tiptap-markdown'
 import { useEffect, useRef, type MouseEvent } from 'react'
-import type { Editor, JSONContent } from '@tiptap/core'
+import type { AnyExtension, Editor, JSONContent } from '@tiptap/core'
 import { InteractiveCodeBlock } from './InteractiveCodeBlock'
 
 type Params = {
@@ -174,6 +174,9 @@ function parseMarkdownWithInteractiveCodeBlocks(
 
 export function useWYSIWYGEditor({ value, disabled = false, onChange }: Params) {
   const isSyncingContentRef = useRef(false)
+  const markdownExtension = Markdown.configure({
+    breaks: true,
+  }) as unknown as AnyExtension
 
   function runEditorCommand(command: () => void) {
     return (event: MouseEvent<HTMLButtonElement>) => {
@@ -237,9 +240,7 @@ export function useWYSIWYGEditor({ value, disabled = false, onChange }: Params) 
       }),
       InteractiveCodeBlock,
       Placeholder.configure({ placeholder: 'Escreva sua anotação...' }),
-      Markdown.configure({
-        breaks: true,
-      }),
+      markdownExtension,
     ],
     content: '',
     onCreate: ({ editor: createdEditor }: { editor: Editor }) => {
