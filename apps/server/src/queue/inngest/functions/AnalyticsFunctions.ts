@@ -72,7 +72,7 @@ export class AnalyticsFunctions extends InngestFunctions {
     return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.account.signed.up`,
-        onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
+        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
         triggers: {
           event: eventType(AccountSignedUpEvent._NAME, {
             schema: z.object({
@@ -108,7 +108,7 @@ export class AnalyticsFunctions extends InngestFunctions {
     return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.account.signed.in`,
-        onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
+        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
         triggers: {
           event: eventType(AccountSignedInEvent._NAME, {
             schema: z.object({
@@ -142,7 +142,7 @@ export class AnalyticsFunctions extends InngestFunctions {
     return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.user.created`,
-        onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
+        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
         triggers: {
           event: eventType(UserCreatedEvent._NAME, {
             schema: z.object({
@@ -175,7 +175,7 @@ export class AnalyticsFunctions extends InngestFunctions {
     return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.star.unlocked`,
-        onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
+        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
         triggers: {
           event: eventType(StarUnlockedEvent._NAME, {
             schema: z.object({
@@ -204,7 +204,7 @@ export class AnalyticsFunctions extends InngestFunctions {
     return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.first.star.unlocked`,
-        onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
+        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
         triggers: {
           event: eventType(FirstStarUnlockedEvent._NAME, {
             schema: z.object({
@@ -244,7 +244,7 @@ export class AnalyticsFunctions extends InngestFunctions {
     return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.planet.completed`,
-        onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
+        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
         triggers: {
           event: eventType(PlanetCompletedEvent._NAME, {
             schema: z.object({
@@ -281,7 +281,7 @@ export class AnalyticsFunctions extends InngestFunctions {
     return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.space.completed`,
-        onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
+        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
         triggers: {
           event: eventType(SpaceCompletedEvent._NAME, {
             schema: z.object({
@@ -316,7 +316,7 @@ export class AnalyticsFunctions extends InngestFunctions {
     return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.user.rewarded`,
-        onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
+        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
         triggers: {
           event: eventType(UserRewardedEvent._NAME, {
             schema: z.object({
@@ -353,7 +353,7 @@ export class AnalyticsFunctions extends InngestFunctions {
     return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.challenge.posted`,
-        onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
+        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
         triggers: {
           event: eventType(ChallengePostedEvent._NAME, {
             schema: z.object({
@@ -389,7 +389,7 @@ export class AnalyticsFunctions extends InngestFunctions {
     return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.challenge.completed`,
-        onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
+        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
         triggers: {
           event: eventType(ChallengeCompletedEvent._NAME, {
             schema: z.object({
@@ -423,7 +423,7 @@ export class AnalyticsFunctions extends InngestFunctions {
     return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.challenge.deleted`,
-        onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
+        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
         triggers: {
           event: eventType(ChallengeDeletedEvent._NAME, {
             schema: z.object({
@@ -461,7 +461,7 @@ export class AnalyticsFunctions extends InngestFunctions {
     return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.shop.item.purchased`,
-        onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
+        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
         triggers: {
           event: eventType(ShopItemPurchasedEvent._NAME, {
             schema: z.object({
@@ -501,7 +501,7 @@ export class AnalyticsFunctions extends InngestFunctions {
     return this.createFunction(
       {
         id: `${TrackAnalyticsEventJob.KEY}.feedback-report.sent`,
-        onFailure: (context) => this.handleFailure(context, TrackAnalyticsEventJob.name),
+        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
         triggers: {
           event: eventType(FeedbackReportSentEvent._NAME, {
             schema: z.object({
