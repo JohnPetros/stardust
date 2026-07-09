@@ -101,6 +101,7 @@ copy_env_files() {
   local worktree_parent="$3"
   local copied_count=0
   local skipped_tracked_count=0
+  local skipped_unignored_count=0
 
   log "Copiando arquivos .env* locais do projeto original..."
 
@@ -112,6 +113,11 @@ copy_env_files() {
 
     if git -C "$source_root" ls-files --error-unmatch -- "$relative_path" >/dev/null 2>&1; then
       skipped_tracked_count=$((skipped_tracked_count + 1))
+      continue
+    fi
+
+    if ! git -C "$source_root" check-ignore --quiet -- "$relative_path"; then
+      skipped_unignored_count=$((skipped_unignored_count + 1))
       continue
     fi
 
@@ -137,6 +143,10 @@ copy_env_files() {
 
   if [[ "$skipped_tracked_count" -gt 0 ]]; then
     log "$skipped_tracked_count arquivo(s) .env* rastreado(s) pelo Git foram ignorado(s)."
+  fi
+
+  if [[ "$skipped_unignored_count" -gt 0 ]]; then
+    log "$skipped_unignored_count arquivo(s) .env* nao ignorado(s) pelo Git foram ignorado(s)."
   fi
 }
 

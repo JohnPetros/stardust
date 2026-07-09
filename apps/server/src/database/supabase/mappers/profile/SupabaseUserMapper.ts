@@ -1,6 +1,7 @@
-import type { UserDto } from '@stardust/core/profile/entities/dtos'
-import type { SupabaseUser } from '../../types'
 import { User } from '@stardust/core/profile/entities'
+import type { UserDto } from '@stardust/core/profile/entities/dtos'
+
+import type { SupabaseUser, SupabaseUserPayload } from '../../types'
 
 export class SupabaseUserMapper {
   static toEntity(supabaseUser: SupabaseUser): User {
@@ -80,9 +81,8 @@ export class SupabaseUserMapper {
     return userDto
   }
 
-  static toSupabase(user: User): SupabaseUser {
-    // @ts-expect-error Supabase row typing is stricter than the domain object mapping.
-    const supabaseUser: SupabaseUser = {
+  static toSupabase(user: User): SupabaseUserPayload {
+    const supabaseUser: SupabaseUserPayload = {
       avatar_id: user.avatar.id.value,
       rocket_id: user.rocket.id.value,
       tier_id: user.tier.id.value,
@@ -99,6 +99,6 @@ export class SupabaseUserMapper {
       did_break_streak: user.didBreakStreak.value,
     }
 
-    return supabaseUser as unknown as SupabaseUser
+    return supabaseUser
   }
 }

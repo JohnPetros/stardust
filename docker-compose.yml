@@ -1,6 +1,16 @@
 services:
+  inngest:
+    image: inngest/inngest:v1.34.0
+    container_name: stardust-inngest
+    command: inngest dev -u http://host.docker.internal:3333/inngest --no-discovery
+    ports:
+      - "8288:8288"
+      - "8289:8289"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   redis:
-    image: redis:7-alpine
+    image: redis:8-alpine
     container_name: stardust-redis
     ports:
       - "6379:6379"

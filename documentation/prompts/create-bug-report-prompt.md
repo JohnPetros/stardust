@@ -11,15 +11,14 @@ Transformar um esboço ou relato informal de um erro em um **Bug Report profissi
 O bug report deve:
 - Explicar **o que está quebrado**
 - Indicar **onde e por que provavelmente está quebrado**
-- Sugerir **como corrigir**, respeitando a arquitetura do projeto
+- Indicar um **direcionamento de correção** curto, sem detalhar implementação como Spec
 
 O resultado desta tarefa é **sempre um único arquivo Markdown** contendo apenas o **Bug Report**.
 
-Quando o bug exigir planejamento de correção formal, a **Spec de correção** deve ser criada em **fluxo separado**, consumindo o bug report como insumo e seguindo `documentation/prompts/create-spec-prompt.md`.
+Este prompt **não cria Spec de correção**. Quando uma Spec for necessária, ela deve ser solicitada e executada em outro fluxo, usando `documentation/prompts/create-spec-prompt.md`.
 
-> A Spec derivada de Bug Report **não faz parte da mesma entrega** e **não deve coexistir no mesmo arquivo**.
 > O papel desta tarefa termina quando o bug report estiver salvo, claro e acionável.
-> A criação da Spec acontece depois, em arquivo próprio dentro de `specs/`.
+> Não crie, edite nem antecipe arquivo em `specs/` durante a execução deste prompt.
 
 ---
 
@@ -69,20 +68,21 @@ Quando o bug exigir planejamento de correção formal, a **Spec de correção** 
   - `web` — Pages e Layouts Next.js
   - `studio` — Pages e Layouts React Router
 
-### 4. Plano de Correção
+### 4. Direcionamento de Correção
 
-- Proponha uma solução técnica **incremental e segura**, separada por camadas.
-- O plano deve ser claro o suficiente para servir como base de implementação.
+- Inclua apenas uma orientação técnica breve sobre onde a correção provavelmente deve atuar.
+- Não detalhe fases, tarefas, assinaturas, novos arquivos ou lista estruturada de implementação.
+- Não use seções do tipo **O que já existe**, **O que deve ser criado**, **O que deve ser modificado** ou **O que deve ser removido**; isso pertence à Spec.
+- O direcionamento deve ajudar a próxima etapa, mas não substituir a Spec.
 
-### 5. Encaminhamento para Spec de Correção
+### 5. Encerramento
 
-Após salvar o Bug Report, o agente deve deixar explícito se o próximo passo recomendado é criar uma Spec de correção em fluxo separado.
+Após salvar o Bug Report, encerre a tarefa informando o arquivo criado ou atualizado.
 
-- A criação da Spec **não acontece nesta tarefa**.
-- O **esboço da tarefa** da futura Spec é o próprio Bug Report gerado.
-- O **PRD de referência** da futura Spec é a milestone do GitHub da feature afetada.
-- As seções **O que já existe**, **O que deve ser criado**, **O que deve ser modificado** e **O que deve ser removido** do bug report devem facilitar a criação posterior da Spec, sem duplicá-la.
-- Quando a correção exigir Spec formal, ela deve ser salva separadamente em `documentation/features/{dominio}/specs/{nome-descritivo}-fix-spec.md`.
+- Não crie Spec.
+- Não edite arquivos em `specs/`.
+- Não inclua uma Spec dentro do Bug Report.
+- Se o usuário pedir a Spec depois, trate como uma nova tarefa usando o prompt apropriado.
 
 ---
 
@@ -93,8 +93,8 @@ Salve um único arquivo em `documentation/features/{dominio}/reports/{nome-descr
 ```md
 ---
 title: {Titulo Curto e Descritivo}
-prd: <link para o PRD referente ao bug e à spec, sendo uma milestone do GitHub>
-issue: <link para o issue referente ao bug, servindo como esboço para a spec>
+prd: <link para o PRD ou milestone referente ao bug, se houver>
+issue: <link para o issue referente ao bug>
 apps: {web|server|studio}
 status: {open|closed}
 last_updated_at: {YYYY-MM-DD}
@@ -192,35 +192,9 @@ last_updated_at: {YYYY-MM-DD}
 - **Arquivo:** `{caminho/relativo/do/arquivo}`
 - **Diagnóstico:** {Explique o que está errado neste ponto.}
 
-## Plano de Correção
+## Direcionamento de Correção
 
-### 1. O que já existe?
-
-Liste recursos existentes da codebase que estão envolvidos no bug, serão reutilizados na correção ou podem ser impactados indiretamente.
-
-- **{Camada}**
-  - `{Nome do Recurso}` — {Responsabilidade atual e relação com o bug}
-
-### 2. O que deve ser criado?
-
-Descreva novos recursos necessários **apenas se estritamente necessários**.
-
-- **{Camada}**
-  - `{Nome do Recurso}` — {Nova responsabilidade introduzida}
-
-### 3. O que deve ser modificado?
-
-Liste mudanças pontuais em código existente, explicando o motivo da alteração.
-
-- **{Camada}**
-  - `{Nome do Recurso}` — {Descrição clara da modificação}
-
-### 4. O que deve ser removido?
-
-Liste código redundante, legado ou incorreto que deve ser eliminado como parte da correção.
-
-- **{Camada}**
-  - `{Nome do Recurso}` — {Motivo da remoção}
+{Parágrafo ou lista curta com a direção provável da correção. Deve apontar camada(s) e arquivo(s) relevantes, mas não deve detalhar tarefas de implementação como uma Spec.}
 ```
 
 ---
@@ -234,5 +208,6 @@ Liste código redundante, legado ou incorreto que deve ser eliminado como parte 
 - Use apenas as camadas listadas na seção 3. Mapeamento de Camadas — não crie camadas arbitrárias.
 - Omita do template as camadas que não forem aplicáveis ao bug em questão.
 - Não incorpore Spec de correção no arquivo do bug report.
-- Quando houver necessidade de Spec formal, ela deve ser criada em fluxo separado e em arquivo próprio dentro de `specs/`.
-- A futura Spec de correção não pode contradizer o Bug Report; ela deve derivar dele.
+- Não inclua seções de planejamento de Spec, como **O que já existe**, **O que deve ser criado**, **O que deve ser modificado** ou **O que deve ser removido**.
+- Não crie, edite ou atualize arquivos em `specs/` durante esta tarefa.
+- Não trate a tarefa como incompleta por ausência de Spec; o entregável final é somente o Bug Report.

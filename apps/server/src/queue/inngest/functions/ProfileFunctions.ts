@@ -1,26 +1,13 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 
-import {
-  RankingLosersDefinedEvent,
-  RankingWinnersDefinedEvent,
-} from '@stardust/core/ranking/events'
 import { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
 import type { EventPayload } from '@stardust/core/global/types'
 
-import {
-  ObserveStreakBreakJob,
-  ResetWeekStatusForAllUsersJob,
-  UpdateTierForRankingWinnersJob,
-  UpdateTierForRankingLosersJob,
-  CreateUserJob,
-  UpdateSpaceForAllUsersJob,
-} from '@/queue/jobs/profile'
+import { ObserveStreakBreakJob, CreateUserJob } from '@/queue/jobs/profile'
 import { SupabaseUsersRepository } from '@/database'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestBroker } from '../InngestBroker'
-import { InngestFunctions } from './InngestFunctions'
-import { SpaceOrderChangedEvent } from '@stardust/core/space/events'
-import { eventType } from './InngestFunctions'
+import { InngestFunctions, eventType } from './InngestFunctions'
 import z from 'zod'
 import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/schemas'
 

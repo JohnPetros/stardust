@@ -5,6 +5,9 @@ on:
     branches:
       - main
     paths:
+      - ".github/workflows/**"
+      - "package.json"
+      - "package-lock.json"
       - "apps/web/**"
       - "packages/core/**"
       - "packages/validation/**"
@@ -24,10 +27,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -56,10 +59,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -88,14 +91,29 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
-      - name: Create environment files
+      - name: Create test environment file
         run: |
-          echo "${{ secrets.WEB_ENV_TEST }}" > apps/web/.env.testing
+          cat <<'EOF' > apps/web/.env.testing
+          MODE=testing
+          NEXT_PUBLIC_STARDUST_WEB_URL=http://127.0.0.1:3100
+          NEXT_PUBLIC_STARDUST_SERVER_URL=http://127.0.0.1:3100/api/tests/server
+          NEXT_PUBLIC_SUPABASE_URL=https://testing.supabase.local
+          NEXT_PUBLIC_SUPABASE_ANON_KEY=fake-supabase-anon-key
+          NEXT_PUBLIC_SUPABASE_CDN_URL=https://testing.supabase.local/storage/v1/object/public/images
+          NEXT_PUBLIC_SUPABASE_CDN_HOST=testing.supabase.local
+          NEXT_PUBLIC_SUPABASE_CDN_PATH=/storage/v1/object/public/images/**
+          NEXT_PUBLIC_DISCORD_WEBHOOK_URL=https://discord.local/webhooks/testing
+          NEXT_PUBLIC_SENTRY_DSN=https://public@example.ingest.sentry.io/123456
+          NEXT_PUBLIC_DISCORD_CHANNEL_URL=https://discord.com/channels/987782561252143205/1377325380037509212
+          GOOGLE_ANALYTICS_ID=fake-id
+          NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN=test-posthog-project-token
+          NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+          EOF
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -124,14 +142,29 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
-      - name: Create environment files
+      - name: Create test environment file
         run: |
-          echo "${{ secrets.WEB_ENV_TEST }}" > apps/web/.env.testing
+          cat <<'EOF' > apps/web/.env.testing
+          MODE=testing
+          NEXT_PUBLIC_STARDUST_WEB_URL=http://127.0.0.1:3100
+          NEXT_PUBLIC_STARDUST_SERVER_URL=http://127.0.0.1:3100/api/tests/server
+          NEXT_PUBLIC_SUPABASE_URL=https://testing.supabase.local
+          NEXT_PUBLIC_SUPABASE_ANON_KEY=fake-supabase-anon-key
+          NEXT_PUBLIC_SUPABASE_CDN_URL=https://testing.supabase.local/storage/v1/object/public/images
+          NEXT_PUBLIC_SUPABASE_CDN_HOST=testing.supabase.local
+          NEXT_PUBLIC_SUPABASE_CDN_PATH=/storage/v1/object/public/images/**
+          NEXT_PUBLIC_DISCORD_WEBHOOK_URL=https://discord.local/webhooks/testing
+          NEXT_PUBLIC_SENTRY_DSN=https://public@example.ingest.sentry.io/123456
+          NEXT_PUBLIC_DISCORD_CHANNEL_URL=https://discord.com/channels/987782561252143205/1377325380037509212
+          GOOGLE_ANALYTICS_ID=fake-id
+          NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN=test-posthog-project-token
+          NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+          EOF
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -166,10 +199,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -215,14 +248,29 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
-      - name: Create environment files
+      - name: Create build environment file
         run: |
-          echo "${{ secrets.WEB_ENV_TEST }}" > apps/web/.env
+          cat <<'EOF' > apps/web/.env
+          MODE=testing
+          NEXT_PUBLIC_STARDUST_WEB_URL=http://127.0.0.1:3100
+          NEXT_PUBLIC_STARDUST_SERVER_URL=http://127.0.0.1:3100/api/tests/server
+          NEXT_PUBLIC_SUPABASE_URL=https://testing.supabase.local
+          NEXT_PUBLIC_SUPABASE_ANON_KEY=fake-supabase-anon-key
+          NEXT_PUBLIC_SUPABASE_CDN_URL=https://testing.supabase.local/storage/v1/object/public/images
+          NEXT_PUBLIC_SUPABASE_CDN_HOST=testing.supabase.local
+          NEXT_PUBLIC_SUPABASE_CDN_PATH=/storage/v1/object/public/images/**
+          NEXT_PUBLIC_DISCORD_WEBHOOK_URL=https://discord.local/webhooks/testing
+          NEXT_PUBLIC_SENTRY_DSN=https://public@example.ingest.sentry.io/123456
+          NEXT_PUBLIC_DISCORD_CHANNEL_URL=https://discord.com/channels/987782561252143205/1377325380037509212
+          GOOGLE_ANALYTICS_ID=fake-id
+          NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN=test-posthog-project-token
+          NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+          EOF
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm

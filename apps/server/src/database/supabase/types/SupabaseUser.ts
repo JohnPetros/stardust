@@ -19,3 +19,5 @@ export type SupabaseUser = Database['public']['Tables']['users']['Row'] & {
   users_upvoted_comments?: { comment_id: string }[]
   users_completed_planets?: { planet_id: string | null }[]
 }
+
+export type SupabaseUserPayload = Database['public']['Tables']['users']['Update']

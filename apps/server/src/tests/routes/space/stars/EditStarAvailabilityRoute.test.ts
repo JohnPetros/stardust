@@ -2,7 +2,6 @@ import request from 'supertest'
 
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { AuthError, NotGodAccountError } from '@stardust/core/global/errors'
-import { Id } from '@stardust/core/global/structures'
 
 import { ENV } from '@/constants'
 import { AuthFixture } from '@/tests/fixtures/AuthFixture'

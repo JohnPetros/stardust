@@ -4,3 +4,4 @@ export type SupabaseComment = Omit<
   Database['public']['Views']['comments_view']['Row'],
   'parent_comment_id'
 >
+export type SupabaseCommentPayload = Database['public']['Tables']['comments']['Insert']

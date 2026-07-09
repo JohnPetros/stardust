@@ -38,10 +38,11 @@ npm install
 **Execute a aplicacao em modo de desenvolvimento**
 
 ```bash
+docker compose up -d redis inngest
 npm run dev
 ```
 
-> O servidor HTTP inicia, por padrao, na porta definida em `PORT` (ex.: http://localhost:3333). O dev server do Inngest tambem e iniciado pelo script.
+> O servidor HTTP inicia, por padrao, em `http://localhost:3333` quando `PORT` nao esta definida. O runtime local do Inngest deve ser iniciado via `docker compose`, fica disponivel em `http://127.0.0.1:8288` e faz discovery em `http://host.docker.internal:3333/inngest`.
 
 ## Executando os testes
 
@@ -56,9 +57,9 @@ npm run test
 ## Tooling
 
 - Scripts do workspace `@stardust/server`:
-  - Dev (server + Inngest): `npm run dev -w @stardust/server`
-  - Dev (apenas HTTP): `npm run dev:server -w @stardust/server`
-  - Dev (apenas Inngest local): `npm run dev:queue -w @stardust/server`
+  - Dev (HTTP): `npm run dev -w @stardust/server`
+  - Dev (HTTP, alias explicito): `npm run dev:server -w @stardust/server`
+  - Inngest local: `docker compose up -d ingest`
   - Build: `npm run build -w @stardust/server`
   - Producao: `npm run prod -w @stardust/server`
   - Qualidade: `npm run codecheck -w @stardust/server` (`lint` + `format`)

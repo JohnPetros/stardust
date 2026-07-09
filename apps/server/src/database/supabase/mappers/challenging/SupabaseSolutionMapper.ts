@@ -1,7 +1,7 @@
 import { Solution } from '@stardust/core/challenging/entities'
 import type { SolutionDto } from '@stardust/core/challenging/entities/dtos'
 
-import type { SupabaseSolution } from '../../types'
+import type { SupabaseSolution, SupabaseSolutionPayload } from '../../types'
 
 export class SupabaseSolutionMapper {
   static toEntity(supabaseSolution: SupabaseSolution): Solution {
@@ -34,21 +34,15 @@ export class SupabaseSolutionMapper {
     return solutionDto
   }
 
-  static toSupabase(solution: Solution): SupabaseSolution {
-    const supabaseSolution: SupabaseSolution = {
+  static toSupabase(solution: Solution): SupabaseSolutionPayload {
+    const supabaseSolution: SupabaseSolutionPayload = {
       id: solution.id.value,
       title: solution.title.value,
       content: solution.content.value,
       views_count: solution.viewsCount.value,
-      author_id: solution.author.id.value,
-      comments_count: solution.commentsCount.value,
+      user_id: solution.author.id.value,
       slug: solution.slug.value,
       challenge_id: solution.challengeId.value,
-      author_avatar_image: solution.author.avatar.image.value,
-      author_avatar_name: solution.author.avatar.name.value,
-      author_name: solution.author.name.value,
-      author_slug: solution.author.slug.value,
-      upvotes_count: solution.upvotesCount.value,
       created_at: solution.postedAt.toISOString(),
     }
     return supabaseSolution

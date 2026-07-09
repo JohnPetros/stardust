@@ -5,6 +5,9 @@ on:
     branches:
       - main
     paths:
+      - ".github/workflows/**"
+      - "package.json"
+      - "package-lock.json"
       - "apps/server/**"
       - "packages/core/**"
       - "packages/validation/**"
@@ -23,10 +26,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -44,10 +47,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -65,10 +68,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -78,7 +81,7 @@ jobs:
         run: npm ci
 
       - name: Setup Supabase CLI
-        uses: supabase/setup-cli@v1
+        uses: supabase/setup-cli@v2
         with:
           version: 2.98.2
 
@@ -90,10 +93,36 @@ jobs:
         working-directory: apps/server
         run: supabase db reset --local --yes
 
-      - name: Create test environment file
+      - name: Create test environment files
+        working-directory: apps/server
         run: |
-          printf '%s' "${{ secrets.SERVER_ENV_TEST }}" > apps/server/.env
-          printf '%s' "${{ secrets.SERVER_ENV_TEST }}" > apps/server/.env.testing
+          supabase status -o env > /tmp/supabase.env
+          . /tmp/supabase.env
+
+          cat <<'EOF' > .env.testing
+          MODE='test'
+          PORT='3333'
+          BASE_URL='http://localhost'
+          GOD_ACCOUNT_IDS=f4442be6-ad3e-415b-b31b-cc49a18e1119,
+          SUPABASE_URL='http://127.0.0.1:54321'
+          SUPABASE_ANON_KEY='__SUPABASE_SECRET_KEY__'
+          SUPABASE_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+          REDIS_URL='redis://127.0.0.1:6379'
+          STARDUST_WEB_URL='http://localhost:3000'
+          DROPBOX_REFRESH_TOKEN='test-refresh-token'
+          DROPBOX_APP_KEY='test-app-key'
+          DROPBOX_APP_SECRET='test-app-secret'
+          DISCORD_WEBHOOK_URL='https://discord.com/api/webhooks/test'
+          SENTRY_DSN='https://test@sentry.io/test'
+          INNGEST_EVENT_KEY='test-event-key'
+          INNGEST_SIGNING_KEY='test-signing-key'
+          POSTHOG_PROJECT_TOKEN='test-posthog-project-token'
+          POSTHOG_HOST='https://us.i.posthog.com'
+          POSTHOG_PERSONAL_API_KEY='test-posthog-personal-api-key'
+          POSTHOG_PROJECT_ID='1'
+          EOF
+          sed -i "s|__SUPABASE_SECRET_KEY__|${SECRET_KEY}|g" .env.testing
+          cp .env.testing .env
 
       - name: Run tests
         run: npm run test:unit -w @stardust/server
@@ -107,10 +136,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -122,7 +151,29 @@ jobs:
       # A catraca roda a suíte unitária (mocks) para medir cobertura. Não sobe
       # Supabase, mas alguns testes (ai tools) leem env no import.
       - name: Create test environment file
-        run: printf '%s' "${{ secrets.SERVER_ENV_TEST }}" > apps/server/.env.testing
+        run: |
+          cat <<'EOF' > apps/server/.env.testing
+          MODE='test'
+          PORT='3333'
+          BASE_URL='http://localhost'
+          GOD_ACCOUNT_IDS=f4442be6-ad3e-415b-b31b-cc49a18e1119,
+          SUPABASE_URL='http://127.0.0.1:54321'
+          SUPABASE_ANON_KEY='placeholder-supabase-key'
+          SUPABASE_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+          REDIS_URL='redis://127.0.0.1:6379'
+          STARDUST_WEB_URL='http://localhost:3000'
+          DROPBOX_REFRESH_TOKEN='test-refresh-token'
+          DROPBOX_APP_KEY='test-app-key'
+          DROPBOX_APP_SECRET='test-app-secret'
+          DISCORD_WEBHOOK_URL='https://discord.com/api/webhooks/test'
+          SENTRY_DSN='https://test@sentry.io/test'
+          INNGEST_EVENT_KEY='test-event-key'
+          INNGEST_SIGNING_KEY='test-signing-key'
+          POSTHOG_PROJECT_TOKEN='test-posthog-project-token'
+          POSTHOG_HOST='https://us.i.posthog.com'
+          POSTHOG_PERSONAL_API_KEY='test-posthog-personal-api-key'
+          POSTHOG_PROJECT_ID='1'
+          EOF
 
       - name: Run quality gate
         env:
@@ -149,10 +200,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
