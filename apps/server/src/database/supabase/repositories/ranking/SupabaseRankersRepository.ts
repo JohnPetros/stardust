@@ -9,6 +9,20 @@ export class SupabaseRankersRepository
   extends SupabaseRepository
   implements RankersRepository
 {
+  private buildRankingUserInsert(
+    ranker: RankingUser,
+    tierId: Id,
+    status: 'winner' | 'loser',
+  ) {
+    return {
+      id: ranker.id.value,
+      xp: ranker.xp.value,
+      tier_id: tierId.value,
+      status,
+      position: ranker.rankingPosition.position.value,
+    }
+  }
+
   async findAllByTier(tierId: Id): Promise<RankingUser[]> {
     const { data, error } = await this.supabase
       .from('users')
@@ -75,29 +89,19 @@ export class SupabaseRankersRepository
   }
 
   async addWinners(rankers: RankingUser[], tierId: Id): Promise<void> {
-    const { error } = await this.supabase.from('ranking_users').insert(
-      rankers.map((winner) => ({
-        id: winner.id.value,
-        xp: winner.xp.value,
-        tier_id: tierId.value,
-        status: 'winner',
-        position: winner.rankingPosition.position.value,
-      })),
-    )
+    const { error } = await this.supabase
+      .from('ranking_users')
+      .insert(
+        rankers.map((winner) => this.buildRankingUserInsert(winner, tierId, 'winner')),
+      )
 
     if (error) throw new SupabasePostgreError(error)
   }
 
   async addLosers(rankers: RankingUser[], tierId: Id): Promise<void> {
-    const { error } = await this.supabase.from('ranking_users').insert(
-      rankers.map((loser) => ({
-        id: loser.id.value,
-        xp: loser.xp.value,
-        tier_id: tierId.value,
-        status: 'loser',
-        position: loser.rankingPosition.position.value,
-      })),
-    )
+    const { error } = await this.supabase
+      .from('ranking_users')
+      .insert(rankers.map((loser) => this.buildRankingUserInsert(loser, tierId, 'loser')))
 
     if (error) throw new SupabasePostgreError(error)
   }

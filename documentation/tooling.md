@@ -25,7 +25,7 @@ Metricas congeladas:
 Workspaces cobertos (`scripts/quality-gate/config.ts`):
 
 - **`@stardust/core`** (Fase 1): todas as metricas, com cobertura por camada DDD (`domain`, `use-cases`, `factories`, `other`).
-- **`@stardust/server`** (Fase 2): metricas estaticas + cobertura. A cobertura roda so a suite unitaria (mocks, sem Supabase) via `coverageJestArgs`, ignorando os testes de rota (`src/tests/routes`) e de integracao (routers). Por isso so ratcheia as camadas que os testes unitarios exercem — `ai`, `queue`, `rest` (e `other`); `app`, `database` e `provision` ficam fora (so cobertas por integracao). O `Database.ts` gerado pelo `db:types` e excluido via `isIgnored`.
+- **`@stardust/server`** (Fase 2): metricas estaticas + cobertura. A cobertura roda so a suite unitaria (mocks, sem Supabase) via `coverageJestArgs`, ignorando os testes de rota (`src/tests/routes`) e de integracao (routers). Por isso so ratcheia as camadas que os testes unitarios exercem — `ai`, `queue` e `rest`; `app`, `database`, `provision` e demais arquivos fora dessas camadas ficam fora da instrumentacao. O `Database.ts` gerado pelo `db:types` e excluido via `isIgnored`.
 - **`@stardust/web`** (Fase 3): so metricas estaticas. Cobertura desabilitada (suite unitaria roda em jsdom e depende de env de teste). O `isIgnored` exclui o `Database.ts` gerado e o `src/mocks/` (conteudo/seed de licoes, dado autoral e nao logica).
 - **`@stardust/studio`** (Fase 4): so metricas estaticas. Cobertura desabilitada (poucos testes, so de UI — baixo sinal). O `isIgnored` exclui `src/ui/shadcn/` (primitivos de UI vendorizados).
 
