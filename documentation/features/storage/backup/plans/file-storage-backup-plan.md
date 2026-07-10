@@ -62,7 +62,7 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
 
 - [x] **T2.2** — Implementar `uploadMany(...)` e ajustar o path remoto em `DropboxStorageProvider`
   - **Depende de:** T1.1
-  - **Resultado observavel:** o provider do Dropbox envia lotes reutilizando `upload(...)` e grava os arquivos no formato `/<environment>/<folder.value>/<file.name>`, preservando ambiente, pasta logica e nome para rastreabilidade externa.
+  - **Resultado observavel:** o provider do Dropbox envia lotes para `<ambiente>/file-storage-backups/<data>/<folder.value>/<file.name>`, preservando ambiente, data, pasta logica e nome para rastreabilidade externa sem misturar arquivos com `<ambiente>/database-backups`.
   - **Camada:** `provision`
 
 - [x] **T2.6** — Implementar `BackupStorageFilesJob` em `apps/server/src/queue/jobs/storage/BackupStorageFilesJob.ts`

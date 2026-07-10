@@ -3,8 +3,8 @@ title: Backup automatico dos arquivos do storage em Dropbox
 prd: null
 issue: https://github.com/JohnPetros/stardust/issues/451
 apps: server, core
-status: open
-last_updated_at: 2026-07-06
+status: closed
+last_updated_at: 2026-07-09
 ---
 
 # 1. Objetivo
@@ -37,9 +37,11 @@ Implementar uma rotina recorrente no `server` para copiar os arquivos existentes
 
 ## 3.1 Funcionais
 
-* O backup deve percorrer explicitamente as pastas `images/story`, `audios/story`, `images/planets`, `images/rockets`, `images/avatars`, `images/achievements`, `images/rankings`, `images/insignias`, `images/feedback-reports` e `database-backups`.
+* O backup deve percorrer explicitamente as pastas `images/story`, `audios/story`, `images/planets`, `images/rockets`, `images/avatars`, `images/achievements`, `images/rankings`, `images/insignias` e `images/feedback-reports`.
 * Para cada pasta, o backup deve listar os arquivos do Supabase Storage usando `listFiles(...)` com paginacao ate esgotar os itens.
 * Cada arquivo listado deve ser enviado para o Dropbox via `uploadMany(...)`, preservando nome, tipo e pasta logica.
+* Arquivos do backup de storage devem ser salvos no Dropbox em `<ambiente>/file-storage-backups/<data>/<pasta-logica>/<nome-do-arquivo>`.
+* A pasta `database-backups` pertence apenas ao backup de banco e deve ficar como sibling de `file-storage-backups`, em `<ambiente>/database-backups/<nome-do-arquivo>`.
 * Falha de um destino em uma pasta nao deve impedir tentativa nos demais destinos configurados para a mesma pasta.
 * Falha em uma pasta nao deve impedir tentativa nas demais pastas quando o erro for capturado pelo use case.
 * O job recorrente deve aparecer na lista retornada por `StorageFunctions.getFunctions(...)`.
@@ -119,12 +121,12 @@ Implementar uma rotina recorrente no `server` para copiar os arquivos existentes
 * **Justificativa:** O provider de origem tambem implementa o contrato completo de `FileStorageProvider`; manter a semantica de `upload(...)` evita API parcial.
 
 * **Arquivo:** `apps/server/src/provision/storage/DropboxStorageProvider.ts`
-* **Mudanca:** Implementar `uploadMany(folder, files)` reutilizando `upload(folder, file)` para cada arquivo.
-* **Justificativa:** Dropbox passa a ser destino de lote para as pastas de storage, sem expor SDK ou duplicar autenticacao no job.
+* **Mudanca:** Implementar `uploadMany(folder, files)` enviando cada arquivo para `<ambiente>/file-storage-backups/<data>/<folder.value>/<file.name>`.
+* **Justificativa:** Dropbox passa a ser destino de lote para as pastas de storage, com separacao entre backups de arquivos e backups de banco.
 
 * **Arquivo:** `apps/server/src/provision/storage/DropboxStorageProvider.ts`
-* **Mudanca:** Ajustar o caminho remoto para preservar ambiente, pasta de origem e nome do arquivo no formato `/<environment>/<folder.value>/<file.name>`.
-* **Justificativa:** O caminho atual `/${folder.value}/${environment}/${file.name}` atende backup de database, mas a issue exige ambiente + pasta de origem + nome para rastreabilidade externa.
+* **Mudanca:** Manter `upload(...)` com o caminho direto usado pelo backup de database e isolar o prefixo `file-storage-backups` no fluxo de `uploadMany(...)`.
+* **Justificativa:** `database-backups` nao deve ser armazenado dentro de `file-storage-backups`, enquanto o backup de arquivos precisa de agrupamento por ambiente, data e pasta logica.
 
 ## Server - Queue
 
