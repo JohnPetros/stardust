@@ -116,4 +116,16 @@ describe('Backup Storage Files Use Case', () => {
     expect(dropboxStorageProvider.uploadMany).not.toHaveBeenCalled()
     expect(secondaryStorageProvider.uploadMany).not.toHaveBeenCalled()
   })
+
+  it('should not include database backups folder in file storage backup', async () => {
+    sourceStorageProvider.listFiles.mockResolvedValue({ items: [], count: 0 })
+
+    await useCase.execute()
+
+    expect(sourceStorageProvider.listFiles).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        folder: FileStorageFolderPath.createAsDatabaseBackups(),
+      }),
+    )
+  })
 })

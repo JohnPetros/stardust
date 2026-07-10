@@ -17,7 +17,6 @@ export class BackupStorageFilesUseCase implements UseCase {
     FileStorageFolderPath.createAsImagesRankings(),
     FileStorageFolderPath.createAsImagesInsignias(),
     FileStorageFolderPath.createAsImagesFeedbackReports(),
-    FileStorageFolderPath.createAsDatabaseBackups(),
   ] as const
 
   constructor(
