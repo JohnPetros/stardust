@@ -177,22 +177,18 @@ export class SupabaseFileStorageProvider implements FileStorageProvider {
   private async resolveErrorMessage(error: Error): Promise<string> {
     const fallbackMessage = error.message || 'Unknown storage error'
     const response = this.getErrorResponse(error)
-
     if (!response) {
       return fallbackMessage
     }
-
     const responseMessage = await this.readResponseMessage(response)
     if (!responseMessage) {
       return `Supabase returned ${response.status} ${response.statusText}`
     }
-
     return responseMessage
   }
 
   private getErrorResponse(error: Error): ResponseLike | null {
     const originalError = (error as ErrorWithOriginalError).originalError
-
     if (!originalError || typeof originalError !== 'object') {
       return null
     }

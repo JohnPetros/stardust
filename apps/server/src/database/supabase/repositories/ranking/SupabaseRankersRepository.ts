@@ -80,7 +80,7 @@ export class SupabaseRankersRepository
         id: winner.id.value,
         xp: winner.xp.value,
         tier_id: tierId.value,
-        status: 'winner',
+        status: 'winner' as const,
         position: winner.rankingPosition.position.value,
       })),
     )
@@ -94,7 +94,7 @@ export class SupabaseRankersRepository
         id: loser.id.value,
         xp: loser.xp.value,
         tier_id: tierId.value,
-        status: 'loser',
+        status: 'loser' as const,
         position: loser.rankingPosition.position.value,
       })),
     )
