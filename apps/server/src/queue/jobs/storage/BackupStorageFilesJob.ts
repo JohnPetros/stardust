@@ -7,13 +7,13 @@ export class BackupStorageFilesJob implements Job {
   static readonly CRON_EXPRESSION = 'TZ=America/Sao_Paulo 0 0 * * 0'
 
   constructor(
-    private readonly sourceStorageProvider: FileStorageProvider,
+    private readonly fileStorageProvider: FileStorageProvider,
     private readonly destinationStorageProviders: FileStorageProvider[],
   ) {}
 
   async handle(amqp: Amqp): Promise<void> {
     const useCase = new BackupStorageFilesUseCase(
-      this.sourceStorageProvider,
+      this.fileStorageProvider,
       this.destinationStorageProviders,
     )
 
