@@ -27,6 +27,7 @@ export function collectCoverage(workspace: WorkspaceConfig): Metrics['coverage']
     throw new Error(`Workspace "${workspace.name}" mede cobertura mas não define resolveLayer.`)
   }
   const workspaceRoot = fromRepoRoot(workspace.dir)
+  const coverageSourceGlobs = workspace.coverageSourceGlobs ?? [`${workspace.srcDir}/**/*.ts`]
 
   execFileSync(
     'npx',
@@ -34,7 +35,7 @@ export function collectCoverage(workspace: WorkspaceConfig): Metrics['coverage']
       'jest',
       '--coverage',
       '--coverageReporters=json-summary',
-      `--collectCoverageFrom=${workspace.srcDir}/**/*.ts`,
+      ...coverageSourceGlobs.map((glob) => `--collectCoverageFrom=${glob}`),
       `--collectCoverageFrom=!${workspace.srcDir}/**/*.test.ts`,
       '--silent',
       ...(workspace.coverageJestArgs ?? []),

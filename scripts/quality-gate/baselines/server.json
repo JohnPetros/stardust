@@ -1,6 +1,6 @@
 {
   "workspace": "@stardust/server",
-  "generatedAt": "2026-06-24",
+  "generatedAt": "2026-07-10",
   "metrics": {
     "biomeWarnings": 52,
     "typeEscapes": {
@@ -24,20 +24,16 @@
     },
     "coverage": {
       "ai": {
-        "lines": 37.5,
-        "branches": 57.14
-      },
-      "other": {
-        "lines": 88.89,
-        "branches": 100
+        "lines": 63.35,
+        "branches": 78.43
       },
       "queue": {
-        "lines": 20.5,
-        "branches": 49.09
+        "lines": 84.87,
+        "branches": 94.59
       },
       "rest": {
-        "lines": 64.34,
-        "branches": 22.69
+        "lines": 71.48,
+        "branches": 87.52
       }
     }
   }

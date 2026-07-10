@@ -1,5 +1,7 @@
 import type { Config } from 'jest'
 
+const isCoverageRun = process.argv.includes('--coverage')
+
 const sharedConfig: Config = {
   preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
@@ -36,7 +38,7 @@ const sharedConfig: Config = {
 const config: Config = {
   coverageProvider: 'v8',
   clearMocks: true,
-  maxWorkers: 1,
+  maxWorkers: isCoverageRun ? '50%' : 1,
   testTimeout: 30000,
   projects: [
     {

@@ -39,6 +39,11 @@ export type WorkspaceConfig = {
    */
   resolveLayer?: (relativeFilePath: string) => LayerName | null
   /**
+   * Globs passados ao Jest via `--collectCoverageFrom`. Quando ausente, o gate
+   * coleta todo o `srcDir`.
+   */
+  coverageSourceGlobs?: string[]
+  /**
    * Argumentos extras passados ao Jest na coleta de cobertura. Use para
    * restringir quais testes rodam — ex.: no server, medimos só a suíte unitária
    * (mocks, sem Supabase), ignorando os testes de rota que dependem de banco.
@@ -115,6 +120,7 @@ export const WORKSPACES: Record<string, WorkspaceConfig> = {
     // determinística e roda no job da catraca sem subir banco. Os testes de rota
     // (`src/tests/routes`) e os de integração (routers) ficam de fora.
     resolveLayer: resolveServerLayer,
+    coverageSourceGlobs: ['src/ai/**/*.ts', 'src/queue/**/*.ts', 'src/rest/**/*.ts'],
     coverageJestArgs: [
       '--selectProjects',
       'server',
