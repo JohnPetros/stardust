@@ -4,8 +4,9 @@ description: Prompt para criar pull requests padronizados via gh com titulo, bod
 
 # Prompt: Criar PR
 
-**Objetivo:** Padronizar a criação de Pull Requests (PRs), garantindo descrições
-claras que facilitem a revisão de código e o rastreamento de tarefas. O foco é
+**Objetivo:** Padronizar a criação de Pull Requests (PRs), incluindo a criação
+dos commits pendentes na branch quando necessário, garantindo descrições claras
+que facilitem a revisão de código e o rastreamento de tarefas. O foco é
 utilizar exclusivamente a **GitHub CLI (gh)** para manter a integridade do fluxo
 de trabalho.
 
@@ -16,7 +17,8 @@ de trabalho.
 - Uma Spec (especificação) devidamente implementada e validada.
 - Uma Bug Report (relatório de bug) devidamente implementada e validada.
 - Uma branch de funcionalidade (`feature/`), correção (`fix/`) ou refatoração
-  (`refactor/`) com as alterações comitadas.
+  (`refactor/`) contendo a implementação pronta para revisão, com ou sem
+  alterações ainda não commitadas.
 
 ---
 

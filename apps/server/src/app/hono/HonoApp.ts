@@ -36,6 +36,7 @@ import { SentryTelemetryProvider } from '@/provision/telemetry'
 import { DiscordNotificationService } from '@/rest/services'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 import { HonoServer } from './HonoServer'
+import { startNodeServer } from './startNodeServer'
 import {
   AuthRouter,
   ProfileRouter,
@@ -78,15 +79,13 @@ export class HonoApp {
     this.registerRoutes()
     this.registerInngestRoute()
     this.setUpErrorHandler()
-    const server = serve(
-      {
-        fetch: this.hono.fetch,
-        port,
-      },
-      (info) => {
-        console.log(`🏢 Server is running on ${ENV.baseUrl}:${info.port}`)
-      },
-    )
+    const server = startNodeServer({
+      serve,
+      fetch: this.hono.fetch,
+      port,
+      mode: ENV.mode,
+      baseUrl: ENV.baseUrl,
+    })
 
     return new HonoServer(this.hono, server)
   }

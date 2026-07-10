@@ -13,6 +13,10 @@ import { ShopFunctions } from '../ShopFunctions'
 import { SpaceFunctions } from '../SpaceFunctions'
 import { StorageFunctions } from '../StorageFunctions'
 
+jest.mock('@/ai/mastra/workflows/MastraCreateChallengeWorkflow', () => ({
+  MastraCreateChallengeWorkflow: jest.fn().mockImplementation(() => ({})),
+}))
+
 function createInngestMock() {
   return {
     createFunction: jest.fn(),
@@ -134,7 +138,7 @@ describe('Inngest function assembly', () => {
 
     const functions = instance.getFunctions(supabase)
 
-    expect(functions).toHaveLength(3)
-    expect(createFunction).toHaveBeenCalledTimes(3)
+    expect(functions).toHaveLength(4)
+    expect(createFunction).toHaveBeenCalledTimes(4)
   })
 })

@@ -6,6 +6,9 @@ import { InngestAmqp } from '../../InngestAmqp'
 import { StorageFunctions } from '../StorageFunctions'
 
 jest.mock('@/queue/jobs/storage', () => ({
+  BackupStorageFilesJob: jest.fn().mockImplementation(() => ({
+    handle: jest.fn().mockResolvedValue('storage-backup-result'),
+  })),
   BackupDatabaseJob: jest.fn().mockImplementation(() => ({
     handle: jest.fn().mockResolvedValue('backup-result'),
   })),
@@ -68,16 +71,16 @@ describe('StorageFunctions', () => {
     createFunction.mockRestore()
   })
 
-  it('should register backup and audio jobs only', async () => {
+  it('should register storage backup, database backup and audio jobs', async () => {
     const functions = new StorageFunctions({} as never)
 
     const registered = functions.getFunctions(supabase)
 
-    expect(registered).toHaveLength(3)
-    expect(createFunction).toHaveBeenCalledTimes(3)
+    expect(registered).toHaveLength(4)
+    expect(createFunction).toHaveBeenCalledTimes(4)
   })
 
-  it('should execute the backup handler with concrete providers', async () => {
+  it('should execute the database backup handler with concrete providers', async () => {
     const functions = new StorageFunctions({} as never)
     const [backupFunction] = functions.getFunctions(supabase) as unknown as Array<{
       handler: () => Promise<unknown>
@@ -86,9 +89,24 @@ describe('StorageFunctions', () => {
     await expect(backupFunction.handler()).resolves.toBe('backup-result')
   })
 
+  it('should execute the storage files backup handler with an amqp context', async () => {
+    const functions = new StorageFunctions({} as never)
+    const [, backupStorageFilesFunction] = functions.getFunctions(
+      supabase,
+    ) as unknown as Array<{
+      handler: (context: unknown) => Promise<unknown>
+    }>
+    const context = { event: { data: null } }
+
+    await expect(backupStorageFilesFunction.handler(context)).resolves.toBe(
+      'storage-backup-result',
+    )
+    expect(InngestAmqp).toHaveBeenCalledWith(context)
+  })
+
   it('should execute the text block audio handler with an amqp context', async () => {
     const functions = new StorageFunctions({} as never)
-    const [, generateAudioFunction] = functions.getFunctions(
+    const [, , generateAudioFunction] = functions.getFunctions(
       supabase,
     ) as unknown as Array<{
       handler: (context: unknown) => Promise<unknown>
@@ -101,7 +119,7 @@ describe('StorageFunctions', () => {
 
   it('should execute the remove file handler with an amqp context', async () => {
     const functions = new StorageFunctions({} as never)
-    const [, , removeFileFunction] = functions.getFunctions(
+    const [, , , removeFileFunction] = functions.getFunctions(
       supabase,
     ) as unknown as Array<{
       handler: (context: unknown) => Promise<unknown>

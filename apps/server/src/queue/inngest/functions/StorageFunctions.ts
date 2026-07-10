@@ -8,6 +8,7 @@ import type {
 } from '@stardust/core/lesson/events'
 
 import {
+  BackupStorageFilesJob,
   BackupDatabaseJob,
   GenerateTextBlockAudioJob,
   RemoveTextBlockAudioFileJob,
@@ -54,6 +55,29 @@ export class StorageFunctions extends InngestFunctions {
         const storageProvider = new DropboxStorageProvider(restClient)
         const job = new BackupDatabaseJob(databaseProvider, storageProvider)
         return await job.handle()
+      },
+    )
+  }
+
+  private createBackupStorageFilesJob(supabase: SupabaseClient<Database>) {
+    return this.createFunction(
+      {
+        id: BackupStorageFilesJob.KEY,
+        onFailure: (context) => this.handleFailure(context, BackupStorageFilesJob.name),
+        triggers: {
+          cron: BackupStorageFilesJob.CRON_EXPRESSION,
+        },
+      },
+      async (context) => {
+        const restClient = new AxiosRestClient()
+        const sourceStorageProvider = new SupabaseFileStorageProvider(supabase)
+        const destinationStorageProviders = [new DropboxStorageProvider(restClient)]
+        const job = new BackupStorageFilesJob(
+          sourceStorageProvider,
+          destinationStorageProviders,
+        )
+        const amqp = new InngestAmqp(context)
+        return await job.handle(amqp)
       },
     )
   }
@@ -130,6 +154,7 @@ export class StorageFunctions extends InngestFunctions {
   getFunctions(supabase: SupabaseClient<Database>) {
     return [
       this.createBackupDatabaseJob(),
+      this.createBackupStorageFilesJob(supabase),
       this.createGenerateTextBlockAudioJob(supabase),
       this.createRemoveTextBlockAudioFileJob(supabase),
     ]
