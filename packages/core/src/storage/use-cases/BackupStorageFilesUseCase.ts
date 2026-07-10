@@ -55,8 +55,7 @@ export class BackupStorageFilesUseCase implements UseCase {
       files.push(...response.items)
 
       const hasReachedLastPage =
-        response.items.length === 0 ||
-        page.value * BackupStorageFilesUseCase.ITEMS_PER_PAGE.value >= response.count
+        response.items.length < BackupStorageFilesUseCase.ITEMS_PER_PAGE.value
 
       if (hasReachedLastPage) {
         return files
