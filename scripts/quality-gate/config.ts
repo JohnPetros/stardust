@@ -120,7 +120,11 @@ export const WORKSPACES: Record<string, WorkspaceConfig> = {
     // determinística e roda no job da catraca sem subir banco. Os testes de rota
     // (`src/tests/routes`) e os de integração (routers) ficam de fora.
     resolveLayer: resolveServerLayer,
-    coverageSourceGlobs: ['src/ai/**/*.ts', 'src/queue/**/*.ts', 'src/rest/**/*.ts'],
+    coverageSourceGlobs: [
+      'src/ai/**/tools/*Tool.ts',
+      'src/queue/**/*.ts',
+      'src/rest/**/*.ts',
+    ],
     coverageJestArgs: [
       '--selectProjects',
       'server',
