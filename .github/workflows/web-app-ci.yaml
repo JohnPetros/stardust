@@ -101,9 +101,7 @@ jobs:
           NEXT_PUBLIC_STARDUST_SERVER_URL=http://127.0.0.1:3100/api/tests/server
           NEXT_PUBLIC_SUPABASE_URL=https://testing.supabase.local
           NEXT_PUBLIC_SUPABASE_ANON_KEY=fake-supabase-anon-key
-          NEXT_PUBLIC_SUPABASE_CDN_URL=https://testing.supabase.local/storage/v1/object/public/images
-          NEXT_PUBLIC_SUPABASE_CDN_HOST=testing.supabase.local
-          NEXT_PUBLIC_SUPABASE_CDN_PATH=/storage/v1/object/public/images/**
+          NEXT_PUBLIC_CDN_URL=https://testing-cdn.local
           NEXT_PUBLIC_DISCORD_WEBHOOK_URL=https://discord.local/webhooks/testing
           NEXT_PUBLIC_SENTRY_DSN=https://public@example.ingest.sentry.io/123456
           NEXT_PUBLIC_DISCORD_CHANNEL_URL=https://discord.com/channels/987782561252143205/1377325380037509212
@@ -152,9 +150,7 @@ jobs:
           NEXT_PUBLIC_STARDUST_SERVER_URL=http://127.0.0.1:3100/api/tests/server
           NEXT_PUBLIC_SUPABASE_URL=https://testing.supabase.local
           NEXT_PUBLIC_SUPABASE_ANON_KEY=fake-supabase-anon-key
-          NEXT_PUBLIC_SUPABASE_CDN_URL=https://testing.supabase.local/storage/v1/object/public/images
-          NEXT_PUBLIC_SUPABASE_CDN_HOST=testing.supabase.local
-          NEXT_PUBLIC_SUPABASE_CDN_PATH=/storage/v1/object/public/images/**
+          NEXT_PUBLIC_CDN_URL=https://testing-cdn.local
           NEXT_PUBLIC_DISCORD_WEBHOOK_URL=https://discord.local/webhooks/testing
           NEXT_PUBLIC_SENTRY_DSN=https://public@example.ingest.sentry.io/123456
           NEXT_PUBLIC_DISCORD_CHANNEL_URL=https://discord.com/channels/987782561252143205/1377325380037509212
@@ -258,9 +254,7 @@ jobs:
           NEXT_PUBLIC_STARDUST_SERVER_URL=http://127.0.0.1:3100/api/tests/server
           NEXT_PUBLIC_SUPABASE_URL=https://testing.supabase.local
           NEXT_PUBLIC_SUPABASE_ANON_KEY=fake-supabase-anon-key
-          NEXT_PUBLIC_SUPABASE_CDN_URL=https://testing.supabase.local/storage/v1/object/public/images
-          NEXT_PUBLIC_SUPABASE_CDN_HOST=testing.supabase.local
-          NEXT_PUBLIC_SUPABASE_CDN_PATH=/storage/v1/object/public/images/**
+          NEXT_PUBLIC_CDN_URL=https://testing-cdn.local
           NEXT_PUBLIC_DISCORD_WEBHOOK_URL=https://discord.local/webhooks/testing
           NEXT_PUBLIC_SENTRY_DSN=https://public@example.ingest.sentry.io/123456
           NEXT_PUBLIC_DISCORD_CHANNEL_URL=https://discord.com/channels/987782561252143205/1377325380037509212

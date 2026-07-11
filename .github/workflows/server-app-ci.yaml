@@ -108,6 +108,9 @@ jobs:
           SUPABASE_ANON_KEY='__SUPABASE_SECRET_KEY__'
           SUPABASE_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
           REDIS_URL='redis://127.0.0.1:6379'
+          S3_ACCOUNT_ID='test-account-id'
+          S3_ACCESS_KEY_ID='test-access-key-id'
+          S3_SECRET_ACCESS_KEY='test-secret-access-key'
           STARDUST_WEB_URL='http://localhost:3000'
           DROPBOX_REFRESH_TOKEN='test-refresh-token'
           DROPBOX_APP_KEY='test-app-key'
@@ -161,6 +164,9 @@ jobs:
           SUPABASE_ANON_KEY='placeholder-supabase-key'
           SUPABASE_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
           REDIS_URL='redis://127.0.0.1:6379'
+          S3_ACCOUNT_ID='test-account-id'
+          S3_ACCESS_KEY_ID='test-access-key-id'
+          S3_SECRET_ACCESS_KEY='test-secret-access-key'
           STARDUST_WEB_URL='http://localhost:3000'
           DROPBOX_REFRESH_TOKEN='test-refresh-token'
           DROPBOX_APP_KEY='test-app-key'
