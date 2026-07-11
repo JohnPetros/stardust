@@ -56,13 +56,13 @@ Cada serviço usa **Build Pack: Dockerfile** com os seguintes Dockerfiles na rai
 
 As variáveis são configuradas diretamente no Coolify, separadas por escopo:
 
-**Web (Build + Runtime):** `NEXT_PUBLIC_WEB_APP_URL`, `NEXT_PUBLIC_SERVER_APP_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_KEY`, `NEXT_PUBLIC_SUPABASE_CDN_URL`, `NEXT_PUBLIC_SUPABASE_CDN_HOST`, `NEXT_PUBLIC_SUPABASE_CDN_PATH`, `NEXT_PUBLIC_DISCORD_CHANNEL_URL`, `GOOGLE_ANALYTICS_ID`
+**Web (Build + Runtime):** `NEXT_PUBLIC_WEB_APP_URL`, `NEXT_PUBLIC_SERVER_APP_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_KEY`, `NEXT_PUBLIC_CDN_URL`, `NEXT_PUBLIC_DISCORD_CHANNEL_URL`, `GOOGLE_ANALYTICS_ID`
 
 **Web (só Runtime):** `INNGEST_SIGNING_KEY`, `INNGEST_EVENT_KEY`
 
-**Server (só Runtime):** `MODE`, `PORT`, `BASE_URL`, `STARDUST_WEB_URL`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE`, `SUPABASE_DATABASE_URL`, `SUPABASE_DATABASE_PASSWORD`, `DROPBOX_REFRESH_TOKEN`, `DROPBOX_APP_KEY`, `DROPBOX_APP_SECRET`, `DISCORD_WEBHOOK_URL`, `SENTRY_DSN`
+**Server (só Runtime):** `MODE`, `PORT`, `BASE_URL`, `STARDUST_WEB_URL`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE`, `SUPABASE_DATABASE_URL`, `SUPABASE_DATABASE_PASSWORD`, `S3_ACCOUNT_ID`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `DROPBOX_REFRESH_TOKEN`, `DROPBOX_APP_KEY`, `DROPBOX_APP_SECRET`, `DISCORD_WEBHOOK_URL`, `SENTRY_DSN`
 
-**Studio:** variáveis `VITE_*` como Build Variables (se aplicável).
+**Studio:** variáveis `VITE_*`, incluindo `VITE_CDN_URL`, como Build Variables (se aplicável).
 
 > As variáveis `NEXT_PUBLIC_*` e `VITE_*` precisam estar marcadas como **Available at Buildtime** no Coolify, pois são embutidas no bundle durante o build.
 
