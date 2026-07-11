@@ -26,7 +26,7 @@ jest.mock('@/provision/database', () => ({
 
 jest.mock('@/provision/storage', () => ({
   DropboxStorageProvider: jest.fn().mockImplementation(() => ({})),
-  SupabaseFileStorageProvider: jest.fn().mockImplementation(() => ({})),
+  S3FileStorageProvider: jest.fn().mockImplementation(() => ({})),
 }))
 
 jest.mock('@/provision/tts', () => ({

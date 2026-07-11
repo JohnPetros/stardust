@@ -3,7 +3,7 @@ import { Hono } from 'hono'
 import { CreateSignedUploadUrl } from '@stardust/core/storage/use-cases'
 import { signedUploadUrlSchema } from '@stardust/validation/storage/schemas'
 
-import { SupabaseFileStorageProvider } from '@/provision/storage'
+import { S3FileStorageProvider } from '@/provision/storage'
 import { CreateSignedUploadUrlController } from '@/rest/controllers/storage'
 import { FilesStorageRouter } from './FilesStorageRouter'
 import {
@@ -28,7 +28,7 @@ export class StorageRouter extends HonoRouter {
       this.storageMiddleware.verifySignedUploadUrlAccess,
       async (context) => {
         const http = new HonoHttp(context)
-        const storageProvider = new SupabaseFileStorageProvider(http.getSupabase())
+        const storageProvider = new S3FileStorageProvider()
         const createSignedUploadUrl = new CreateSignedUploadUrl(storageProvider)
         const controller = new CreateSignedUploadUrlController(createSignedUploadUrl)
         const response = await controller.handle(http)

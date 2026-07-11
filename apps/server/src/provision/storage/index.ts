@@ -1,2 +1,2 @@
-export { SupabaseFileStorageProvider } from './SupabaseFileStorageProvider'
+export { S3FileStorageProvider } from './S3FileStorageProvider'
 export { DropboxStorageProvider } from './DropboxStorageProvider'

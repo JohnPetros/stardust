@@ -15,7 +15,7 @@ import {
 } from '@/queue/jobs/storage'
 import type { Database } from '@/database/supabase/types/Database'
 import { SupabaseDatabaseProvider } from '@/provision/database'
-import { DropboxStorageProvider, SupabaseFileStorageProvider } from '@/provision/storage'
+import { DropboxStorageProvider, S3FileStorageProvider } from '@/provision/storage'
 import { OpenAITtsProvider } from '@/provision/tts'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 import { SupabaseTextBlocksRepository } from '@/database'
@@ -70,7 +70,7 @@ export class StorageFunctions extends InngestFunctions {
       },
       async (context) => {
         const restClient = new AxiosRestClient()
-        const sourceStorageProvider = new SupabaseFileStorageProvider(supabase)
+        const sourceStorageProvider = new S3FileStorageProvider()
         const destinationStorageProviders = [new DropboxStorageProvider(restClient)]
         const job = new BackupStorageFilesJob(
           sourceStorageProvider,
@@ -113,7 +113,7 @@ export class StorageFunctions extends InngestFunctions {
       async (context) => {
         const repository = new SupabaseTextBlocksRepository(supabase)
         const ttsProvider = new OpenAITtsProvider()
-        const fileStorageProvider = new SupabaseFileStorageProvider(supabase)
+        const fileStorageProvider = new S3FileStorageProvider()
         const broker = new InngestBroker()
         const job = new GenerateTextBlockAudioJob(
           repository,
@@ -143,7 +143,7 @@ export class StorageFunctions extends InngestFunctions {
         },
       },
       async (context) => {
-        const fileStorageProvider = new SupabaseFileStorageProvider(supabase)
+        const fileStorageProvider = new S3FileStorageProvider()
         const job = new RemoveTextBlockAudioFileJob(fileStorageProvider)
         const amqp = new InngestAmqp<TextBlockAudioFileRemovedPayload>(context)
         return await job.handle(amqp)

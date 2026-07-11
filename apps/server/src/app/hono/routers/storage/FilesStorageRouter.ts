@@ -13,7 +13,7 @@ import {
   FetchFilesListController,
   RemoveFileController,
 } from '@/rest/controllers/storage'
-import { SupabaseFileStorageProvider } from '@/provision/storage'
+import { S3FileStorageProvider } from '@/provision/storage'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
@@ -37,7 +37,7 @@ export class FilesStorageRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const storageProvider = new SupabaseFileStorageProvider(http.getSupabase())
+        const storageProvider = new S3FileStorageProvider()
         const controller = new FetchFilesListController(storageProvider)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -59,7 +59,7 @@ export class FilesStorageRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const storageProvider = new SupabaseFileStorageProvider(http.getSupabase())
+        const storageProvider = new S3FileStorageProvider()
         const controller = new RemoveFileController(storageProvider)
         const response = await controller.handle(http)
         return http.sendResponse(response)

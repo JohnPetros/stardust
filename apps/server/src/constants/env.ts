@@ -25,6 +25,9 @@ const env = {
   elevenLabsApiKey: process.env.ELEVEN_LABS_API_KEY,
   godAccountIds: process.env.GOD_ACCOUNT_IDS?.split(',').filter(Boolean),
   sentryDsn: process.env.SENTRY_DSN,
+  s3AccountId: process.env.S3_ACCOUNT_ID,
+  s3AccessKeyId: process.env.S3_ACCESS_KEY_ID,
+  s3SecretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
 }
 
 const envSchema = z.object({
@@ -45,6 +48,9 @@ const envSchema = z.object({
   openrouterApiKey: z.string().optional(),
   elevenLabsApiKey: z.string().optional(),
   sentryDsn: z.string().url(),
+  s3AccountId: z.string(),
+  s3AccessKeyId: z.string(),
+  s3SecretAccessKey: z.string(),
   stardustWebUrl: z.string().url(),
   posthogProjectToken: z.string(),
   posthogHost: z.string().url(),
