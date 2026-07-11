@@ -105,7 +105,7 @@ export function usePictureInput({
 
     for (const imageName of data) {
       const image = new window.Image()
-      image.src = `${ENV.supabaseCdnUrl}/${FileStorageFolderPath.createAsStory().value}/${imageName}`
+      image.src = `${ENV.cdnUrl}/${FileStorageFolderPath.createAsStory().value}/${imageName}`
     }
   }, [data])
 

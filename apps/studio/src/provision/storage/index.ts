@@ -1,1 +1,1 @@
-export { SupabaseSignedFileStorageProvider } from './SupabaseSignedFileStorageProvider'
+export { S3SignedFileStorageProvider } from './S3SignedFileStorageProvider'
