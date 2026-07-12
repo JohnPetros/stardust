@@ -6,7 +6,6 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-import { randomUUID } from 'node:crypto'
 
 import { AppError } from '@stardust/core/global/errors'
 import { Text } from '@stardust/core/global/structures'
@@ -19,6 +18,7 @@ import {
 import type { FilesListingParams } from '@stardust/core/storage/types'
 
 import { ENV } from '@/constants'
+import { S3FileObject } from './S3FileObject'
 
 export class S3FileStorageProvider implements FileStorageProvider {
   private static readonly BUCKET_NAME_BY_MODE = {
@@ -47,10 +47,10 @@ export class S3FileStorageProvider implements FileStorageProvider {
   }
 
   async upload(folder: FileStorageFolderPath, file: File): Promise<File> {
-    const fileName = this.resolveFileName(file)
+    const fileName = S3FileObject.resolveFileName(file)
     const key = this.buildKey(folder, Text.create(fileName))
-    const contentType = this.resolveContentType(file, fileName)
-    const fileToUpload = this.normalizeFile(file, fileName, contentType)
+    const contentType = S3FileObject.resolveContentType(file, fileName)
+    const fileToUpload = S3FileObject.normalizeFile(file, fileName, contentType)
 
     try {
       await this.client.send(
@@ -292,56 +292,5 @@ export class S3FileStorageProvider implements FileStorageProvider {
       'httpStatusCode' in error.$metadata &&
       error.$metadata.httpStatusCode === 404
     )
-  }
-
-  private resolveFileName(file: File): string {
-    const trimmedName = file.name?.trim()
-
-    if (trimmedName) {
-      return trimmedName
-    }
-
-    const extension = this.extensionFromType(file.type)
-    return `${randomUUID()}.${extension}`
-  }
-
-  private resolveContentType(file: File, fileName: string): string {
-    const trimmedType = file.type?.trim()
-
-    if (trimmedType) {
-      return trimmedType
-    }
-
-    const extension = fileName.split('.').pop()?.toLowerCase()
-    if (extension === 'wav') return 'audio/wav'
-    if (extension === 'mp3') return 'audio/mpeg'
-    if (extension === 'ogg') return 'audio/ogg'
-
-    return 'application/octet-stream'
-  }
-
-  private normalizeFile(file: File, fileName: string, contentType: string): File {
-    if (file.name === fileName && file.type === contentType) {
-      return file
-    }
-
-    return new File([file], fileName, {
-      type: contentType,
-      lastModified: Date.now(),
-    })
-  }
-
-  private extensionFromType(type?: string | null): string {
-    const normalizedType = type?.trim().toLowerCase()
-
-    if (!normalizedType) {
-      return 'bin'
-    }
-
-    if (normalizedType === 'audio/wav') return 'wav'
-    if (normalizedType === 'audio/mpeg') return 'mp3'
-    if (normalizedType === 'audio/ogg') return 'ogg'
-
-    return 'bin'
   }
 }
