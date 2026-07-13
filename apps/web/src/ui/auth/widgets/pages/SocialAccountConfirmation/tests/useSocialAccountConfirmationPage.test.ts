@@ -123,6 +123,28 @@ describe('useSocialAccountConfirmationPage', () => {
     expect(result.current.isRetryVisible).toBe(false)
   })
 
+  it('should show retry when the user refetch fails after the visibility delay', async () => {
+    onSignUpWithSocialAccount.mockResolvedValueOnce({ isNewAccount: true })
+    onRefetchUser.mockRejectedValueOnce(new Error('User not found'))
+
+    const { result } = renderHook(Hook)
+
+    await waitFor(() => {
+      expect(onSignUpWithSocialAccount).toHaveBeenCalledWith(
+        'access-token',
+        'refresh-token',
+      )
+    })
+
+    await act(async () => {
+      jest.advanceTimersByTime(7000)
+      await Promise.resolve()
+    })
+
+    expect(result.current.isUserCreated).toBe(false)
+    expect(result.current.isRetryVisible).toBe(true)
+  })
+
   it('should mark user as created immediately when social sign in returns an existing account', async () => {
     onSignUpWithSocialAccount.mockResolvedValueOnce({ isNewAccount: false })
 

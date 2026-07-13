@@ -100,7 +100,7 @@ export function useSocialAccountConfirmationPage({
     }
 
     const timeoutId = window.setTimeout(async () => {
-      const refetchedUser = await onRefetchUser()
+      const refetchedUser = await onRefetchUser().catch(() => null)
       if (refetchedUser) {
         setIsUserCreated(true)
         return
