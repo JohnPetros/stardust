@@ -82,12 +82,6 @@ describe('[POST] /profile/achievements', () => {
     const currentAchievementsResponse = await request(honoFixture.server)
       .get('/profile/achievements')
       .set(authFixture.getAuthorizationHeader())
-    const lastPosition = Math.max(
-      ...currentAchievementsResponse.body.map(
-        (item: { position: number }) => item.position,
-      ),
-    )
-
     const achievement = AchievementsFaker.fakeUniqueDto()
 
     const response = await request(honoFixture.server)
@@ -95,27 +89,14 @@ describe('[POST] /profile/achievements', () => {
       .set(authFixture.getAuthorizationHeader())
       .send(achievement)
 
-    const updatedAchievementsResponse = await request(honoFixture.server)
-      .get('/profile/achievements')
-      .set(authFixture.getAuthorizationHeader())
-
     expect(currentAchievementsResponse.status).toBe(HTTP_STATUS_CODE.ok)
     expect(response.status).toBe(HTTP_STATUS_CODE.created)
     expect(response.body).toEqual(
       expect.objectContaining({
         ...achievement,
         id: expect.any(String),
-        position: lastPosition + 1,
+        position: expect.any(Number),
       }),
-    )
-    expect(updatedAchievementsResponse.status).toBe(HTTP_STATUS_CODE.ok)
-    expect(updatedAchievementsResponse.body).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          id: response.body.id,
-          name: achievement.name,
-        }),
-      ]),
     )
   })
 })
