@@ -32,6 +32,7 @@ export class CheckHealthController implements Controller {
       services,
       eventKey: ENV.mode === 'production' ? ENV.inngestEventKey : undefined,
       signingKey: ENV.mode === 'production' ? ENV.inngestSigningKey : undefined,
+      isDev: ENV.mode === 'development',
     })
   }
 
