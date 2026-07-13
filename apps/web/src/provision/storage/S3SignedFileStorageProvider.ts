@@ -2,7 +2,7 @@ import { AppError } from '@stardust/core/global/errors'
 import type { SignedFileStorageProvider } from '@stardust/core/storage/interfaces'
 import type { SignedUploadUrl } from '@stardust/core/storage/structures'
 
-export const SupabaseSignedFileStorageProvider = (): SignedFileStorageProvider => {
+export const S3SignedFileStorageProvider = (): SignedFileStorageProvider => {
   async function uploadFile(signedUploadUrl: SignedUploadUrl, file: File): Promise<void> {
     const fileToUpload = new File([file], signedUploadUrl.fileName.value, {
       type: file.type,
@@ -14,7 +14,6 @@ export const SupabaseSignedFileStorageProvider = (): SignedFileStorageProvider =
       body: fileToUpload,
       headers: {
         'Content-Type': fileToUpload.type || 'application/octet-stream',
-        'x-upsert': 'false',
       },
     })
 

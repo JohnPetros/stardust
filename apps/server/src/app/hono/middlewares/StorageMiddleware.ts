@@ -1,4 +1,4 @@
-import { SupabaseFileStorageProvider } from '@/provision/storage/SupabaseFileStorageProvider'
+import { S3FileStorageProvider } from '@/provision/storage/S3FileStorageProvider'
 import { HonoHttp } from '../HonoHttp'
 import type { Context, Next } from 'hono'
 import { VerifyFileExistsController } from '@/rest/controllers/storage'
@@ -7,7 +7,7 @@ import { VerifyGodAccountController } from '@/rest/controllers/auth'
 export class StorageMiddleware {
   async verifyFileExists(context: Context, next: Next) {
     const http = new HonoHttp(context, next)
-    const storageProvider = new SupabaseFileStorageProvider(http.getSupabase())
+    const storageProvider = new S3FileStorageProvider()
     const controller = new VerifyFileExistsController('images', storageProvider)
     await controller.handle(http)
   }

@@ -20,7 +20,7 @@ global.IntersectionObserver = jest.fn().mockImplementation(() => ({
   meta: {
     env: {
       VITE_SERVER_APP_URL: 'http://localhost:3333',
-      VITE_SUPABASE_CDN_URL: 'https://example.com/cdn',
+      VITE_CDN_URL: 'https://example.com/cdn',
       VITE_WEB_APP_URL: 'http://localhost:3000',
     },
   },

@@ -1,3 +1,18 @@
+const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL
+const cdnRemotePattern = cdnUrl
+  ? {
+      protocol: new URL(cdnUrl).protocol.replace(':', ''),
+      hostname: new URL(cdnUrl).hostname,
+      port: new URL(cdnUrl).port,
+      pathname: `${new URL(cdnUrl).pathname.replace(/\/$/, '')}/**`,
+    }
+  : {
+      protocol: 'https',
+      hostname: 'localhost',
+      port: '',
+      pathname: '/',
+    }
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
@@ -8,14 +23,10 @@ const nextConfig = {
   },
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: process.env.NEXT_PUBLIC_SUPABASE_CDN_HOST || 'localhost',
-        port: '',
-        pathname: process.env.NEXT_PUBLIC_SUPABASE_CDN_PATH || '/',
-      },
-    ],
+    remotePatterns: [cdnRemotePattern],
+  },
+  env: {
+    NEXT_PUBLIC_CDN_URL: process.env.NEXT_PUBLIC_CDN_URL,
   },
   output: 'standalone',
   headers: async () => {
