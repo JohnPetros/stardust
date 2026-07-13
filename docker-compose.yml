@@ -1,6 +1,6 @@
 services:
   inngest:
-    image: inngest/inngest:v1.34.0
+    image: inngest/inngest:v1.36.0
     container_name: stardust-inngest
     command: inngest dev -u http://host.docker.internal:3334/inngest --no-discovery
     ports:
