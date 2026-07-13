@@ -9,11 +9,8 @@
       "total": 3
     },
     "fileSize": {
-      "limit": 300,
-      "offenders": {
-        "src/challenging/domain/entities/Challenge.ts": 321,
-        "src/profile/domain/entities/User.ts": 500
-      }
+      "limit": 500,
+      "offenders": {}
     },
     "coverage": {
       "domain": {

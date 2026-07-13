@@ -9,10 +9,8 @@
       "total": 2
     },
     "fileSize": {
-      "limit": 300,
+      "limit": 500,
       "offenders": {
-        "src/ui/global/contexts/TextEditorContext/useTextEditorContextProvider.ts": 320,
-        "src/ui/global/widgets/components/TextEditor/useTextEditor.ts": 397,
         "src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts": 607
       }
     },

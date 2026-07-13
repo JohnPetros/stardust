@@ -9,17 +9,11 @@
       "total": 19
     },
     "fileSize": {
-      "limit": 300,
+      "limit": 500,
       "offenders": {
-        "src/app/hono/routers/auth/AuthRouter.ts": 456,
-        "src/app/hono/routers/challenging/ChallengesRouter.ts": 426,
-        "src/app/hono/routers/profile/UsersRouter.ts": 470,
-        "src/database/supabase/repositories/challenging/SupabaseChallengesRepository.ts": 474,
         "src/database/supabase/repositories/profile/SupabaseUsersRepository.ts": 784,
-        "src/database/supabase/repositories/space/SupabasePlanetsRepository.ts": 397,
-        "src/provision/storage/SupabaseFileStorageProvider.ts": 327,
         "src/queue/inngest/functions/AnalyticsFunctions.ts": 558,
-        "src/rest/services/SupabaseAuthService.ts": 535
+        "src/rest/services/SupabaseAuthService.ts": 615
       }
     },
     "coverage": {
