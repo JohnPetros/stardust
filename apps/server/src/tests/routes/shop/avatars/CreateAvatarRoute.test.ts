@@ -80,6 +80,7 @@ describe('[POST] /shop/avatars', () => {
     ENV.godAccountIds.push(authFixture.getAccountId())
 
     const avatar = AvatarsFaker.fakeDto({
+      name: 'Avatar Test',
       isSelectedByDefault: true,
     })
 

@@ -21,7 +21,7 @@ type Cache<CacheData> = {
   error: string
   isLoading: boolean
   isRefetching: boolean
-  refetch: () => void
+  refetch: () => Promise<CacheData | undefined>
   updateCache: (newCacheData: CacheData | null, consig: MudateConfig) => void
 }
 

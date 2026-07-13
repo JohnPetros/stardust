@@ -10,8 +10,13 @@ import { useRealtimeContext } from '@/ui/global/hooks/useRealtimeContext'
 
 export const SocialAccountConfirmationPage = () => {
   const rocketAnimationRef = useRef<AnimationRef | null>(null)
-  const { account, handleRetryUserCreation, handleSignUpWithSocialAccount } =
-    useAuthContext()
+  const {
+    account,
+    user,
+    refetchUser,
+    handleRetryUserCreation,
+    handleSignUpWithSocialAccount,
+  } = useAuthContext()
   const { profileChannel } = useRealtimeContext()
   const {
     isNewAccount,
@@ -24,7 +29,9 @@ export const SocialAccountConfirmationPage = () => {
   } = useSocialAccountConfirmationPage({
     rocketAnimationRef,
     account,
+    user,
     profileChannel,
+    onRefetchUser: refetchUser,
     onRetryUserCreation: handleRetryUserCreation,
     onSignUpWithSocialAccount: handleSignUpWithSocialAccount,
   })

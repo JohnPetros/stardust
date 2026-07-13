@@ -26,8 +26,10 @@ jest.mock('@/ui/global/hooks/useSleep', () => ({
 describe('useSocialAccountConfirmationPage', () => {
   const onRetryUserCreation = jest.fn()
   const onSignUpWithSocialAccount = jest.fn()
+  const onRefetchUser = jest.fn()
   const unsubscribe = jest.fn()
   const onCreateUser = jest.fn()
+  let user: never | null = null
 
   const account = {
     email: { value: 'john@example.com' },
@@ -44,7 +46,9 @@ describe('useSocialAccountConfirmationPage', () => {
     useSocialAccountConfirmationPage({
       rocketAnimationRef: animationRefMock,
       account,
+      user,
       profileChannel,
+      onRefetchUser,
       onRetryUserCreation,
       onSignUpWithSocialAccount,
     })
@@ -52,6 +56,8 @@ describe('useSocialAccountConfirmationPage', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     jest.useFakeTimers()
+    user = null
+    onRefetchUser.mockResolvedValue(undefined)
     useRouterMock()
   })
 
@@ -74,11 +80,13 @@ describe('useSocialAccountConfirmationPage', () => {
     expect(result.current.isNewAccount).toBe(true)
     expect(result.current.isUserCreated).toBe(false)
 
-    act(() => {
+    await act(async () => {
       jest.advanceTimersByTime(7000)
+      await Promise.resolve()
     })
 
     expect(result.current.isRetryVisible).toBe(true)
+    expect(onRefetchUser).toHaveBeenCalledTimes(1)
 
     act(() => {
       onCreateUser(
@@ -93,6 +101,48 @@ describe('useSocialAccountConfirmationPage', () => {
 
     expect(result.current.isUserCreated).toBe(true)
     expect(result.current.isRetryVisible).toBe(false)
+  })
+
+  it('should mark user as created when the authenticated profile is already available', async () => {
+    user = {
+      email: { value: 'john@example.com' },
+    } as never
+    onSignUpWithSocialAccount.mockResolvedValueOnce({ isNewAccount: true })
+
+    const { result } = renderHook(Hook)
+
+    await waitFor(() => {
+      expect(onSignUpWithSocialAccount).toHaveBeenCalledWith(
+        'access-token',
+        'refresh-token',
+      )
+    })
+
+    expect(result.current.isNewAccount).toBe(true)
+    expect(result.current.isUserCreated).toBe(true)
+    expect(result.current.isRetryVisible).toBe(false)
+  })
+
+  it('should show retry when the user refetch fails after the visibility delay', async () => {
+    onSignUpWithSocialAccount.mockResolvedValueOnce({ isNewAccount: true })
+    onRefetchUser.mockRejectedValueOnce(new Error('User not found'))
+
+    const { result } = renderHook(Hook)
+
+    await waitFor(() => {
+      expect(onSignUpWithSocialAccount).toHaveBeenCalledWith(
+        'access-token',
+        'refresh-token',
+      )
+    })
+
+    await act(async () => {
+      jest.advanceTimersByTime(7000)
+      await Promise.resolve()
+    })
+
+    expect(result.current.isUserCreated).toBe(false)
+    expect(result.current.isRetryVisible).toBe(true)
   })
 
   it('should mark user as created immediately when social sign in returns an existing account', async () => {

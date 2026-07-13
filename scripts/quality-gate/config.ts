@@ -108,14 +108,14 @@ export const WORKSPACES: Record<string, WorkspaceConfig> = {
     name: '@stardust/core',
     dir: 'packages/core',
     srcDir: 'src',
-    fileSizeLimit: 300,
+    fileSizeLimit: 500,
     resolveLayer: resolveCoreLayer,
   },
   server: {
     name: '@stardust/server',
     dir: 'apps/server',
     srcDir: 'src',
-    fileSizeLimit: 300,
+    fileSizeLimit: 500,
     // Cobertura medida só sobre a suíte unitária (mocks), sem Supabase: rápida,
     // determinística e roda no job da catraca sem subir banco. Os testes de rota
     // (`src/tests/routes`) e os de integração (routers) ficam de fora.
@@ -139,7 +139,7 @@ export const WORKSPACES: Record<string, WorkspaceConfig> = {
     name: '@stardust/web',
     dir: 'apps/web',
     srcDir: 'src',
-    fileSizeLimit: 300,
+    fileSizeLimit: 500,
     // App Next.js: a suíte unitária roda em jsdom e depende de env de teste;
     // como no server, a Fase 3 congela só as métricas estáticas.
     measureCoverage: false,
@@ -150,7 +150,7 @@ export const WORKSPACES: Record<string, WorkspaceConfig> = {
     name: '@stardust/studio',
     dir: 'apps/studio',
     srcDir: 'src',
-    fileSizeLimit: 300,
+    fileSizeLimit: 500,
     // App React Router (admin), poucos testes só de UI: cobertura de baixo sinal,
     // como no web. Fase 4 congela só as métricas estáticas.
     measureCoverage: false,

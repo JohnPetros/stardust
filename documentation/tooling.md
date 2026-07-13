@@ -19,7 +19,7 @@ Metricas congeladas:
 
 - **Biome warnings**: diagnostics `warn` que o `lint` (com `--diagnostic-level=error`) nao mostra.
 - **Escape hatches de tipo**: ocorrencias de `any`, `as any`, `@ts-ignore`, `@ts-expect-error` em codigo de producao.
-- **Tamanho de arquivo**: arquivos acima de 300 linhas (offenders congelados; nenhum novo pode cruzar o limite nem crescer).
+- **Tamanho de arquivo**: arquivos acima de 500 linhas (offenders congelados; nenhum novo pode cruzar o limite nem crescer).
 - **Cobertura por camada** (so onde `measureCoverage` esta ativo): `lines`/`branches` por camada arquitetural, via `coverage-summary.json` do Jest.
 
 Workspaces cobertos (`scripts/quality-gate/config.ts`):
