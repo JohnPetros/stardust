@@ -1,12 +1,19 @@
 # Docker
 .dockerignore
 Dockerfile
+Dockerfile.*
 
 # dependencies
 node_modules
+**/node_modules
 
 # testing
-/coverage
+coverage
+**/coverage
+.turbo
+**/.turbo
+playwright-report
+test-results
 
 # documentation
 documentation
@@ -14,13 +21,29 @@ documentation
 # misc
 .DS_Store
 *.pem
+.git
+.vercel
+.cursor
+.serena
 
 # debug
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Supabase
 .branches
 .temp
 
 # Environment
-.env.example
+.env
+.env.*
+!.env.example
+
+# build artifacts
+build
+dist
+.next
+**/build
+**/dist
+**/.next
