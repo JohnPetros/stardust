@@ -1,4 +1,4 @@
-import type { AuthError, UserIdentity } from '@supabase/supabase-js'
+import type { AuthError, User, UserIdentity } from '@supabase/supabase-js'
 
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import type { ApiKeyData } from '@stardust/core/auth/interfaces'
@@ -38,6 +38,87 @@ export class SupabaseAuthService implements AuthService {
     )
   }
 
+  private getUserName(user?: User | null): string {
+    const identity = this.getLastSignedInIdentity(user)
+    const identityData = identity?.identity_data
+
+    if (identity?.provider === 'github') {
+      return (
+        this.getFirstFilledMetadataField(identityData, [
+          'user_name',
+          'preferred_username',
+          'full_name',
+          'name',
+        ]) ||
+        this.getFirstFilledMetadataField(user?.user_metadata, [
+          'user_name',
+          'preferred_username',
+          'full_name',
+          'name',
+        ])
+      )
+    }
+
+    if (identity?.provider === 'google') {
+      return (
+        this.getFirstFilledMetadataField(identityData, [
+          'full_name',
+          'name',
+          'preferred_username',
+          'user_name',
+        ]) ||
+        this.getFirstFilledMetadataField(user?.user_metadata, [
+          'full_name',
+          'name',
+          'preferred_username',
+          'user_name',
+        ])
+      )
+    }
+
+    return this.getFirstFilledMetadataField(user?.user_metadata, [
+      'full_name',
+      'name',
+      'preferred_username',
+      'user_name',
+    ])
+  }
+
+  private getLastSignedInIdentity(user?: User | null): UserIdentity | null {
+    const identities = user?.identities ?? []
+
+    if (identities.length === 0) return null
+
+    return identities.reduce((lastSignedInIdentity, identity) => {
+      const lastSignedInTime = this.getIdentityTimestamp(lastSignedInIdentity)
+      const currentSignInTime = this.getIdentityTimestamp(identity)
+
+      return currentSignInTime > lastSignedInTime ? identity : lastSignedInIdentity
+    })
+  }
+
+  private getIdentityTimestamp(identity: UserIdentity): number {
+    const timestamp = identity.last_sign_in_at ?? identity.created_at
+    if (!timestamp) return 0
+
+    return new Date(timestamp).getTime()
+  }
+
+  private getFirstFilledMetadataField(
+    metadata: Record<string, unknown> | undefined,
+    fields: string[],
+  ): string {
+    if (!metadata) return ''
+
+    for (const field of fields) {
+      const value = metadata[field]
+
+      if (typeof value === 'string' && value.trim()) return value
+    }
+
+    return ''
+  }
+
   async signIn(email: Email, password: Password): Promise<RestResponse<SessionDto>> {
     const { data, error } = await this.supabase.auth.signInWithPassword({
       email: email.value,
@@ -55,7 +136,7 @@ export class SupabaseAuthService implements AuthService {
       account: {
         id: data.user.id,
         email: data.user.email ?? '',
-        name: data.user.user_metadata.full_name ?? '',
+        name: this.getUserName(data.user),
         isAuthenticated: true,
       },
       accessToken: data.session.access_token,
@@ -128,7 +209,6 @@ export class SupabaseAuthService implements AuthService {
   async signInWithGoogleAccount(
     returnUrl: Text,
   ): Promise<RestResponse<{ signInUrl: string }>> {
-    console.log('returnUrl', returnUrl.value)
     const { data, error } = await this.supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -349,7 +429,7 @@ export class SupabaseAuthService implements AuthService {
       account: {
         id: data?.user?.id ?? '',
         email: data?.user?.email ?? '',
-        name: data?.user?.user_metadata.full_name ?? '',
+        name: this.getUserName(data?.user),
         isAuthenticated: true,
       },
       accessToken: data?.session?.access_token ?? '',
@@ -385,7 +465,7 @@ export class SupabaseAuthService implements AuthService {
       account: {
         id: data?.user?.id ?? '',
         email: data?.user?.email ?? '',
-        name: data?.user?.user_metadata.full_name ?? '',
+        name: this.getUserName(data?.user),
         isAuthenticated: true,
       },
       accessToken: data?.session?.access_token ?? '',
@@ -414,7 +494,7 @@ export class SupabaseAuthService implements AuthService {
       account: {
         id: data?.user?.id ?? '',
         email: data?.user?.email ?? '',
-        name: data?.user?.user_metadata.full_name ?? '',
+        name: this.getUserName(data?.user),
         isAuthenticated: true,
       },
       accessToken: data?.session?.access_token ?? '',
@@ -465,7 +545,7 @@ export class SupabaseAuthService implements AuthService {
     const account: AccountDto = {
       id: user?.id ?? '',
       email: user?.email ?? '',
-      name: user?.user_metadata.full_name ?? '',
+      name: this.getUserName(user),
       isAuthenticated: true,
     }
 
@@ -487,7 +567,7 @@ export class SupabaseAuthService implements AuthService {
     const account: AccountDto = {
       id: user?.id ?? '',
       email: user?.email ?? '',
-      name: user?.user_metadata.full_name ?? '',
+      name: this.getUserName(user),
       isAuthenticated: true,
     }
 
