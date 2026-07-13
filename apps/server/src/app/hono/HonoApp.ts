@@ -170,6 +170,9 @@ export class HonoApp {
     const mcpRouter = new McpRouter(this)
     const healthRouter = new HealthRouter(this)
 
+    this.hono.get('/live', (context) => {
+      return context.json({ status: 'UP' })
+    })
     this.hono.get('/', (context) => {
       return context.redirect('/health', HTTP_STATUS_CODE.redirect)
     })

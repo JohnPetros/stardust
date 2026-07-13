@@ -48,6 +48,13 @@ describe('[GET] /health', () => {
     expect(new Date(response.body.timestamp).toISOString()).toBe(response.body.timestamp)
   })
 
+  it('should return liveness status without checking dependencies', async () => {
+    const response = await request(honoFixture.server).get('/live')
+
+    expect(response.status).toBe(HTTP_STATUS_CODE.ok)
+    expect(response.body).toEqual({ status: 'UP' })
+  })
+
   it('should redirect root route to health route', async () => {
     const response = await request(honoFixture.server).get('/')
 
