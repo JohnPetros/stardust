@@ -10,7 +10,7 @@ const env = {
   databaseUrl: process.env.SUPABASE_DATABASE_URL,
   redisUrl: process.env.REDIS_URL,
   inngestEventKey: process.env.INNGEST_EVENT_KEY,
-  inngestSigningKey: process.env.INNGEST_SIGNING_KEY,
+  inngestSigningKey: process.env.INNGEST_SIGNING_KEY ?? process.env.inngestSigningKey,
   stardustWebUrl: process.env.STARDUST_WEB_URL,
   posthogProjectToken: process.env.POSTHOG_PROJECT_TOKEN,
   posthogHost: process.env.POSTHOG_HOST,

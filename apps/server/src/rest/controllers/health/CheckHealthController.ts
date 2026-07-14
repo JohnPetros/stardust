@@ -30,9 +30,6 @@ export class CheckHealthController implements Controller {
       version: APP_VERSION,
       timestamp: new Date().toISOString(),
       services,
-      eventKey: ENV.mode === 'production' ? ENV.inngestEventKey : undefined,
-      signingKey: ENV.mode === 'production' ? ENV.inngestSigningKey : undefined,
-      isDev: ENV.mode === 'development',
     })
   }
 
