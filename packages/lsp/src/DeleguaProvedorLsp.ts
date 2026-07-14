@@ -140,6 +140,7 @@ export class DeleguaProvedorLsp implements LspProvider {
   }
 
   getFunctionName(codeValue: string) {
+    console.log({ codeValue })
     if (!codeValue) return ''
     const match = codeValue.match(DELEGUA_REGEX.nomeDeFuncaoQualquer)
     if (match) {
