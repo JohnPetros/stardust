@@ -1,6 +1,6 @@
 import type { User, UserIdentity } from '@supabase/supabase-js'
 
-import { SupabaseAuthService } from '../SupabaseAuthService'
+import { SupabaseAuthService } from '../../../rest/services/SupabaseAuthService'
 import type { Supabase } from '@/database/supabase/types'
 
 function makeIdentity(
