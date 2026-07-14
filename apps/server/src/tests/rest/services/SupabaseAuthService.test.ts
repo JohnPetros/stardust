@@ -3,7 +3,7 @@ import type { User, UserIdentity } from '@supabase/supabase-js'
 import { SupabaseAuthService } from '../../../rest/services/SupabaseAuthService'
 import type { Supabase } from '@/database/supabase/types'
 
-function makeIdentity(
+function fakeIdentity(
   provider: 'github' | 'google',
   identityData: Record<string, unknown>,
   lastSignInAt: string,
@@ -21,7 +21,7 @@ function makeIdentity(
   } as UserIdentity
 }
 
-function makeUser(user: Partial<User>): User {
+function fakeUser(user: Partial<User>): User {
   return {
     id: 'account-id',
     email: 'account@stardust.dev',
@@ -33,7 +33,7 @@ function makeUser(user: Partial<User>): User {
   } as User
 }
 
-function makeSupabase(user: User | null): Supabase {
+function fakeSupabase(user: User | null): Supabase {
   return {
     auth: {
       getUser: jest.fn().mockResolvedValue({
@@ -46,26 +46,26 @@ function makeSupabase(user: User | null): Supabase {
 
 describe('SupabaseAuthService', () => {
   it('should retrieve the account name from the latest Google identity', async () => {
-    const user = makeUser({
+    const user = fakeUser({
       app_metadata: { provider: 'github', providers: ['github', 'google'] },
       user_metadata: {
         full_name: 'Metadata Name',
         user_name: 'metadata-login',
       },
       identities: [
-        makeIdentity(
+        fakeIdentity(
           'github',
           { user_name: 'github-login', full_name: 'Github Name' },
           '2026-07-13T20:11:54.221Z',
         ),
-        makeIdentity(
+        fakeIdentity(
           'google',
           { full_name: 'Google Name', user_name: 'google-login' },
           '2026-07-13T20:21:46.888Z',
         ),
       ],
     })
-    const service = new SupabaseAuthService(makeSupabase(user))
+    const service = new SupabaseAuthService(fakeSupabase(user))
 
     const response = await service.fetchAccount()
 
@@ -73,13 +73,13 @@ describe('SupabaseAuthService', () => {
   })
 
   it('should fall back to user metadata when the latest Google identity has no name', async () => {
-    const user = makeUser({
+    const user = fakeUser({
       user_metadata: {
         full_name: 'Metadata Name',
       },
-      identities: [makeIdentity('google', {}, '2026-07-13T20:21:46.888Z')],
+      identities: [fakeIdentity('google', {}, '2026-07-13T20:21:46.888Z')],
     })
-    const service = new SupabaseAuthService(makeSupabase(user))
+    const service = new SupabaseAuthService(fakeSupabase(user))
 
     const response = await service.fetchAccount()
 
@@ -87,25 +87,25 @@ describe('SupabaseAuthService', () => {
   })
 
   it('should retrieve the account name from the latest Github identity', async () => {
-    const user = makeUser({
+    const user = fakeUser({
       app_metadata: { provider: 'google', providers: ['google', 'github'] },
       user_metadata: {
         full_name: 'Metadata Name',
       },
       identities: [
-        makeIdentity(
+        fakeIdentity(
           'google',
           { full_name: 'Google Name', user_name: 'google-login' },
           '2026-07-13T20:11:54.221Z',
         ),
-        makeIdentity(
+        fakeIdentity(
           'github',
           { user_name: 'github-login', full_name: 'Github Name' },
           '2026-07-13T20:21:46.888Z',
         ),
       ],
     })
-    const service = new SupabaseAuthService(makeSupabase(user))
+    const service = new SupabaseAuthService(fakeSupabase(user))
 
     const response = await service.fetchAccount()
 
@@ -113,13 +113,13 @@ describe('SupabaseAuthService', () => {
   })
 
   it('should fall back to user metadata when the latest Github identity has no name', async () => {
-    const user = makeUser({
+    const user = fakeUser({
       user_metadata: {
         user_name: 'metadata-login',
       },
-      identities: [makeIdentity('github', {}, '2026-07-13T20:21:46.888Z')],
+      identities: [fakeIdentity('github', {}, '2026-07-13T20:21:46.888Z')],
     })
-    const service = new SupabaseAuthService(makeSupabase(user))
+    const service = new SupabaseAuthService(fakeSupabase(user))
 
     const response = await service.fetchAccount()
 
@@ -127,21 +127,21 @@ describe('SupabaseAuthService', () => {
   })
 
   it('should keep the first identity when it is newer than the next identity', async () => {
-    const user = makeUser({
+    const user = fakeUser({
       identities: [
-        makeIdentity(
+        fakeIdentity(
           'google',
           { full_name: 'Latest Google Name' },
           '2026-07-13T20:21:46.888Z',
         ),
-        makeIdentity(
+        fakeIdentity(
           'github',
           { user_name: 'older-github-login' },
           '2026-07-13T20:11:54.221Z',
         ),
       ],
     })
-    const service = new SupabaseAuthService(makeSupabase(user))
+    const service = new SupabaseAuthService(fakeSupabase(user))
 
     const response = await service.fetchAccount()
 
@@ -149,10 +149,10 @@ describe('SupabaseAuthService', () => {
   })
 
   it('should use the identity creation timestamp when last sign in is missing', async () => {
-    const user = makeUser({
+    const user = fakeUser({
       identities: [
         {
-          ...makeIdentity(
+          ...fakeIdentity(
             'github',
             { user_name: 'github-login' },
             '2026-07-13T20:21:46.888Z',
@@ -161,7 +161,7 @@ describe('SupabaseAuthService', () => {
         } as UserIdentity,
       ],
     })
-    const service = new SupabaseAuthService(makeSupabase(user))
+    const service = new SupabaseAuthService(fakeSupabase(user))
 
     const response = await service.fetchAccount()
 
@@ -169,13 +169,13 @@ describe('SupabaseAuthService', () => {
   })
 
   it('should fall back to user metadata when the provider is unknown', async () => {
-    const user = makeUser({
+    const user = fakeUser({
       user_metadata: {
         full_name: 'Metadata Name',
       },
       identities: [],
     })
-    const service = new SupabaseAuthService(makeSupabase(user))
+    const service = new SupabaseAuthService(fakeSupabase(user))
 
     const response = await service.fetchAccount()
 
@@ -183,7 +183,7 @@ describe('SupabaseAuthService', () => {
   })
 
   it('should return an empty account when Supabase has no authenticated user', async () => {
-    const service = new SupabaseAuthService(makeSupabase(null))
+    const service = new SupabaseAuthService(fakeSupabase(null))
 
     const response = await service.fetchAccount()
 
