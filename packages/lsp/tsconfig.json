@@ -3,7 +3,8 @@
   "_version": "22.0.0",
   "compilerOptions": {
     "lib": [
-      "es2023"
+      "es2023",
+      "dom"
     ],
     "module": "nodenext",
     "target": "es2022",
