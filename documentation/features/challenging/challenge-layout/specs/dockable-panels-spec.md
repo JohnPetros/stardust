@@ -242,12 +242,12 @@ apps/web/src/ui/challenging/widgets/layouts/Challenge/DockablePanel/
 - **Justificativa:** Evita duplicação de valores mágicos e mantém reset/store/layout alinhados.
 
 - **Arquivo:** `apps/web/src/ui/challenging/stores/zustand/useZustandChallengeStore.ts`
-- **Mudança:** Implementar `setPanelOrder`, `setPanelsOffset` e `resetPanelsLayout`.
-- **Justificativa:** Centralizar mutações de layout no mesmo store já usado pela página de desafio.
+- **Mudança:** Implementar `setPanelOrder`, `setPanelsOffset` e `resetPanelsLayout`; manter `panelOrder` e `panelsOffset` intactos em `resetStore()`.
+- **Justificativa:** Centralizar mutações de layout no mesmo store já usado pela página de desafio sem permitir que o cleanup da página sobrescreva o cookie persistente com os defaults.
 
 - **Arquivo:** `apps/web/src/ui/challenging/stores/ChallengeStore/index.ts`
-- **Mudança:** Expor `getPanelOrderSlice()`, `getPanelsOffsetSlice()` e incluir `resetPanelsLayout` no retorno público de `useChallengeStore()`.
-- **Justificativa:** `ChallengeLayout`, `ChallengePage` e `ChallengeCodeEditorSlot` precisam reagir a mudanças de layout por slices explícitos.
+- **Mudança:** Expor `getPanelOrderSlice()`, `getPanelsOffsetSlice()` e incluir `resetPanelsLayout` no retorno público de `useChallengeStore()`; preservar o estado acoplável em `resetStore()`.
+- **Justificativa:** `ChallengeLayout`, `ChallengePage` e `ChallengeCodeEditorSlot` precisam reagir a mudanças de layout por slices explícitos, e apenas mudanças deliberadas de layout devem atualizar a preferência persistida.
 
 ## UI (Widgets)
 

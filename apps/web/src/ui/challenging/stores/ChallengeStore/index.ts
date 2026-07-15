@@ -161,7 +161,15 @@ export function useChallengeStore() {
     },
 
     resetStore() {
-      return useZustandChallengeStore.setState({ state: INITIAL_CHALLENGE_STORE_STATE })
+      const { state } = useZustandChallengeStore.getState()
+
+      return useZustandChallengeStore.setState({
+        state: {
+          ...INITIAL_CHALLENGE_STORE_STATE,
+          panelOrder: state.panelOrder,
+          panelsOffset: state.panelsOffset,
+        },
+      })
     },
   }
 }

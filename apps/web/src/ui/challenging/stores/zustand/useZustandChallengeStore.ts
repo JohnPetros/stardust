@@ -125,8 +125,12 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
         },
 
         resetStore() {
-          return set(({ actions }) => ({
-            state: INITIAL_CHALLENGE_STORE_STATE,
+          return set(({ state, actions }) => ({
+            state: {
+              ...INITIAL_CHALLENGE_STORE_STATE,
+              panelOrder: state.panelOrder,
+              panelsOffset: state.panelsOffset,
+            },
             actions,
           }))
         },
