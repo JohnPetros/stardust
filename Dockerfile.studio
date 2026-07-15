@@ -4,7 +4,7 @@ FROM base AS builder
 RUN apk add --no-cache libc6-compat
 RUN apk update
 WORKDIR /stardust
-RUN npm install -g turbo
+RUN npm install -g turbo@2.10.2
 COPY . .
 RUN turbo prune --scope=@stardust/studio --docker
 
