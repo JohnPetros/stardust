@@ -23,6 +23,30 @@ Conduzir um diagnóstico de performance orientado à arquitetura do StarDust, id
 
 ---
 
+## Regras Aplicáveis
+
+Antes de classificar uma recomendação como segura, leia:
+
+- `documentation/rules/rules.md` — índice das rules por camada.
+- `documentation/rules/code-conventions-rules.md` — convenções gerais que afetam refactors recomendados.
+- Rules das camadas tocadas por cada issue de performance:
+  - `documentation/rules/web-application-rules.md`
+  - `documentation/rules/studio-appllication-rules.md`
+  - `documentation/rules/server-application-rules.md`
+  - `documentation/rules/ui-layer-rules.md`
+  - `documentation/rules/rpc-layer-rules.md`
+  - `documentation/rules/rest-layer-rules.md`
+  - `documentation/rules/database-rules.md`
+  - `documentation/rules/queue-layer-rules.md`
+  - `documentation/rules/provision-layer-rules.md`
+  - `documentation/rules/realtime-rules.md`
+  - `documentation/rules/ai-layer-rules.md`
+  - `documentation/rules/validation-layer-rules.md`
+
+Recomendações de performance não podem romper contratos de camada. Quando uma otimização exigir novo padrão arquitetural, registre como recomendação estrutural e cite a rule que precisará ser atualizada.
+
+---
+
 ## Mapa de Áreas para Diagnóstico
 
 Antes de iniciar, identifique quais áreas estão no escopo e os arquivos de regra relevantes:
@@ -326,10 +350,19 @@ Todas as evidencias abaixo foram verificadas diretamente no codigo fonte.
 ## Referencias
 
 - `documentation/architecture.md`
+- `documentation/rules/rules.md`
+- `documentation/rules/web-application-rules.md`
+- `documentation/rules/studio-appllication-rules.md`
+- `documentation/rules/ui-layer-rules.md`
+- `documentation/rules/rpc-layer-rules.md`
+- `documentation/rules/rest-layer-rules.md`
 - `documentation/rules/server-application-rules.md`
 - `documentation/rules/database-rules.md`
 - `documentation/rules/queue-layer-rules.md`
 - `documentation/rules/provision-layer-rules.md`
+- `documentation/rules/realtime-rules.md`
+- `documentation/rules/ai-layer-rules.md`
+- `documentation/rules/validation-layer-rules.md`
 - `documentation/reports/web-app-performance-report.md`
 - `{OUTROS_ARQUIVOS_CONSULTADOS}`
 ```

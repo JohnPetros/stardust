@@ -33,6 +33,20 @@ Se o usuário pedir um PRD prospectivo para uma feature que deve ser orientada p
 
 ---
 
+## Regras Aplicáveis
+
+PRD é documento de produto; portanto, não há rule de camada obrigatória para todo caso.
+
+Use rules apenas nestas situações:
+
+- `documentation/rules/rules.md` — quando o PRD retrospectivo precisar validar se o comportamento implementado respeita camadas existentes.
+- `documentation/rules/web-application-rules.md`, `documentation/rules/studio-appllication-rules.md` ou `documentation/rules/server-application-rules.md` — quando uma limitação técnica de app afetar diretamente o comportamento de produto.
+- `documentation/rules/ui-layer-rules.md` — quando requisitos de UI/UX dependerem de widgets, estados ou composição já existentes.
+
+Não transforme o PRD em spec técnica. Use as rules apenas para não documentar comportamento impossível ou desalinhado com a arquitetura atual.
+
+---
+
 ## INSTRUÇÕES DE EXECUÇÃO
 
 **Você deve seguir rigorosamente este processo de três etapas:**

@@ -41,6 +41,17 @@ Se qualquer condicao falhar, interrompa antes de editar e recomende `create-plan
 
 ---
 
+## Regras Aplicáveis
+
+Antes de editar código, leia:
+
+- `documentation/rules/rules.md` — índice para selecionar rules das camadas tocadas pela spec.
+- `documentation/rules/code-conventions-rules.md` — quando houver nomes, factories, erros, eventos, barrel files ou estrutura de arquivos.
+- Rules específicas das camadas alteradas.
+- Rules de teste correspondentes quando a mudança exigir cobertura.
+
+---
+
 ## Diretrizes de Execucao
 
 ### 1. Leitura Obrigatoria
@@ -51,6 +62,7 @@ Antes de editar codigo:
 - Leia `documentation/rules/rules.md`.
 - Identifique os apps e camadas tocados pela spec.
 - Leia apenas os arquivos de rules correspondentes as camadas que serao alteradas.
+- Leia `documentation/rules/code-conventions-rules.md` quando a mudança criar ou alterar nomes, factories, erros, eventos, barrel files ou estrutura de arquivos.
 - Localize no codigo os arquivos citados pela spec e implementacoes similares.
 
 Nao implemente com base em caminhos, metodos ou contratos sem confirmar que existem na codebase, exceto quando a spec marcar explicitamente como novo arquivo.
@@ -82,6 +94,7 @@ Uma tarefa deixa de ser direta se envolver:
   - UI nao acessa banco, providers externos ou infraestrutura diretamente.
   - Auth, ownership e adaptacao de transporte ficam na borda quando esse ja for o padrao do fluxo.
 - Se encontrar divergencia factual na spec durante a implementacao, corrija a spec de forma cirurgica ou registre a pendencia quando a decisao nao for segura.
+- Se a implementacao introduzir qualquer alteracao relevante de comportamento, contrato, arquitetura, decisao tecnica, fluxo de UI ou criterio de validacao que nao esteja refletido na spec, atualize a spec de forma cirurgica no mesmo ciclo de trabalho.
 
 ### 4. Testes
 
@@ -128,6 +141,7 @@ Ao final, responda com:
 
 - resumo curto do que foi implementado;
 - arquivos principais alterados;
+- spec atualizada quando houve alteracao relevante de comportamento, contrato, arquitetura, decisao tecnica, fluxo de UI ou criterio de validacao;
 - comandos de validacao executados e resultado;
 - validacao Playwright/browser executada quando aplicavel;
 - pendencias, se houver.
@@ -140,6 +154,6 @@ Ao final, responda com:
 - Nao use subagentes.
 - Nao implemente alem do escopo da spec.
 - Nao invente arquivos, metodos, contratos ou schemas sem evidencia.
-- Nao reescreva specs inteiras; se precisar ajustar documento, faca edicao cirurgica.
+- Nao reescreva specs inteiras; se precisar ajustar documento por mudanca relevante na implementacao, faca edicao cirurgica.
 - Nao avance quando a spec exigir decisao arquitetural relevante sem confirmacao.
 - Nao substitua `implement-plan` em tarefas grandes; este prompt existe para tarefas menores.

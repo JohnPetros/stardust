@@ -19,6 +19,25 @@ documentos atualizados e um resumo estruturado para PR.
 
 ---
 
+## Regras Aplicáveis
+
+Antes da verificação final, leia:
+
+- `documentation/rules/rules.md` — índice para localizar as rules das camadas tocadas pela spec.
+- `documentation/rules/code-conventions-rules.md` — revisão geral de nomes, organização, factories, erros, eventos e barrel files.
+- Rules específicas de cada camada alterada, conforme `rules.md`.
+- Rules de teste correspondentes às tarefas de teste do plano:
+  - `documentation/rules/domain-objects-testing-rules.md`
+  - `documentation/rules/use-cases-testing-rules.md`
+  - `documentation/rules/handlers-testing-rules.md`
+  - `documentation/rules/server-routes-testing-rules.md`
+  - `documentation/rules/web-app-routes-testing-rules.md`
+  - `documentation/rules/widget-tests-rules.md`
+
+Se a implementação introduziu ou alterou um padrão de camada, confira se o arquivo de rules correspondente foi atualizado antes de fechar a spec.
+
+---
+
 ## Fase 1 — Verificação
 
 Esta fase é analítica e deve ser concluída antes de qualquer atualização de
@@ -210,6 +229,12 @@ Marque como concluídos os itens endereçados pela implementação. A audiência
 > 💡 Não copie conteúdo técnico de baixo nível para o PRD — sintetize o valor
 > entregue.
 
+Atualize o PRD sempre que a implementação introduzir mudança relevante de
+produto, escopo, comportamento observável, requisito funcional, requisito não
+funcional, critério de aceite ou limitação conhecida. Se a implementação apenas
+cumpriu o PRD sem alterar ou refinar nada, registre:
+`PRD: sem alterações além da marcação de conclusão.`
+
 **Divergência spec → PRD:** Caso a implementação concluída introduza algum
 aspecto que contradiga ou não esteja coberto pelo PRD (ex: regra de negócio
 refinada, escopo ampliado ou reduzido, comportamento diferente do especificado),
@@ -224,20 +249,26 @@ A atualização de `documentation/architecture.md` é responsabilidade do
 implementação. Aqui, apenas **verifique** que a atualização foi feita quando
 necessário:
 
-- Se a implementação introduziu novo fluxo de dados, nova camada, novo padrão
-  de integração ou mudança na estrutura de diretórios, confirme que
+- Se a implementação introduziu mudança relevante de arquitetura — novo fluxo
+  de dados, nova camada, novo módulo estrutural, novo padrão de integração,
+  mudança na estrutura de diretórios, mudança de fronteira entre camadas ou
+  alteração de responsabilidade entre apps/pacotes — confirme que
   `documentation/architecture.md` reflete a realidade atual.
 - Se a atualização estiver ausente, aplique-a agora.
 - Se não se aplicar, registre: `Arquitetura: sem alterações necessárias.`
 
 **2.4 Verificação de Rules (se aplicável)**
 
-A atualização de rules é responsabilidade do `implement-plan` (etapa 9.2).
+A atualização de rules é responsabilidade do `implement-plan` (etapa 9.3).
 Aqui, apenas **verifique** que a atualização foi feita quando necessário:
 
-- Se a implementação introduziu padrão de projeto novo não mapeado nas rules
-  existentes, confirme que o arquivo de regras correspondente foi atualizado
-  com exemplos práticos.
+- Se a implementação introduziu mudança relevante de regra — novo padrão de
+  projeto, nova convenção, nova restrição/permissão de camada, novo anti-padrão
+  observado, exceção recorrente ou decisão que deve orientar futuras
+  implementações — confirme que `documentation/rules/rules.md` e o arquivo de
+  regra específico correspondente foram atualizados.
+- Se surgir um novo arquivo de regra, atualize também `documentation/rules/rules.md`
+  para indexá-lo com a condição de uso correta.
 - Se a atualização estiver ausente, aplique-a agora.
 - Se não se aplicar, registre: `Rules: sem alterações necessárias.`
 
@@ -282,9 +313,9 @@ dependências externas — tudo que o revisor precisa saber antes de aprovar>
 - [ ] Sem erros de tipo (`npm run typecheck`)
 - [ ] Quality gate dos workspaces afetados passando
 - [ ] Spec atualizada para `status: closed`
-- [ ] PRD atualizado na milestone do GitHub
+- [ ] PRD atualizado na milestone do GitHub ou registrado como sem alterações necessárias
 - [ ] Architecture verificado (se aplicável)
-- [ ] Rules verificadas (se aplicável)
+- [ ] Rules verificadas, incluindo `documentation/rules/rules.md` quando aplicável
 ```
 
 ---

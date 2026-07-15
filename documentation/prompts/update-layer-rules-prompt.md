@@ -22,8 +22,18 @@ description: Atualizar um documento de regras de uma camada existente, corrigind
 - Corrigir hierarquia de cabecalhos (H1 unico, H2/H3 sem pular niveis)
 - Transformar blocos longos em tabelas e listas
 - Validar e corrigir paths citados
-- Incorporar novas convencoes de nomeacao definidas em {FONTES}
+  - Incorporar novas convencoes de nomeacao definidas em {FONTES}
 ```
+
+**Regras Aplicáveis:**
+
+Antes de atualizar `{ARQUIVO_ALVO}`, leia:
+
+- `documentation/rules/rules.md` — para manter o índice consistente com a rule atualizada.
+- `documentation/rules/code-conventions-rules.md` — quando a atualização envolver nomes, factories, erros, eventos ou organização geral.
+- Rules de camadas vizinhas quando a atualização mexer em fronteiras, dependências ou integração entre camadas.
+
+Se a atualização mudar o escopo da rule, atualize também `documentation/rules/rules.md`.
 
 **Diretrizes de Execucao:**
 

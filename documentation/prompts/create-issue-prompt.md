@@ -2,6 +2,8 @@
 description: Criar uma issue do GitHub para o projeto baseado em um PRD ou contexto técnico
 ---
 
+# Prompt: Criar Issue
+
 ## Objetivo
 
 Ler a milestone do projeto (que funciona como PRD na prática) ou um contexto técnico e propor uma issue clara, acionável e alinhada ao contexto, arquitetura e regras da codebase. A issue é **sempre mostrada ao usuário para validação antes de ser criada**.
@@ -26,6 +28,16 @@ de produto fora das fontes confirmadas.
 - Tipo da issue: `task`, `bug` ou `chore`.
 - Link ou número da milestone do projeto, quando houver.
 - Link da issue existente no GitHub, quando houver.
+
+## Regras Aplicáveis
+
+Antes de redigir requisitos técnicos, leia:
+
+- `documentation/rules/rules.md` — índice para selecionar rules das camadas impactadas pela issue.
+- `documentation/rules/code-conventions-rules.md` — referência geral para nomenclatura e organização quando a issue incluir contratos, classes, erros, eventos ou novos arquivos.
+- Rules específicas das camadas citadas em **Requisitos Técnicos** e **Referências na Codebase**.
+
+Para issues puramente de produto, não force rules de camada; registre apenas as regras de produto da milestone. Para `bug` e `chore`, use as rules para evitar escopo que viole arquitetura.
 
 ### Tipos de issue disponíveis
 

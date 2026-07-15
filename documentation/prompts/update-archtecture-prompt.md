@@ -1,5 +1,5 @@
 ---
-description: Prompt para atualizar o documento de arquitetura com base em PRDs, specs, guidelines e mudancas no codigo.
+description: Prompt para atualizar o documento de arquitetura com base em PRDs, specs, rules e mudancas no codigo.
 ---
 
 # Prompt: Atualizar documento de arquitetura
@@ -10,16 +10,26 @@ Manter atualizado o documento de arquitetura do projeto (`documentation/architec
 **Entradas:**
 1.  Documentos de Requisitos de Produto (PRDs) e Especificações Técnicas (Specs).
     *   *Nota:* todos os arquivos de Spec possuem a extensão `-spec.md`.
-2.  Documentos de Diretrizes (Guidelines).
-    *   Exemplo: `documentation/*-guidelines.md` (como `ui-layer-guidelines.md`, `core-layer-guidelines.md`, etc.).
+2.  Documentos de regras de arquitetura e camada.
+    *   Exemplo: `documentation/rules/rules.md`, `documentation/rules/ui-layer-rules.md`, `documentation/rules/core-package-rules.md`.
 3.  Alterações significativas no código fonte (novas camadas, refatorações, introdução de pacotes).
 4.  O arquivo atual `documentation/architecture.md`.
+
+**Regras Aplicáveis:**
+
+Antes de editar a arquitetura, leia:
+
+- `documentation/rules/rules.md` — índice de regras por camada.
+- Rules das camadas impactadas pela mudança arquitetural.
+- `documentation/rules/code-conventions-rules.md` — quando a atualização mencionar padrões de nomeação, factories, eventos, erros ou organização.
+
+Se a arquitetura e uma rule específica divergirem, registre a divergência e atualize ambos os documentos no mesmo fluxo.
 
 **Diretrizes de Execução:**
 
 1.  **Análise de Impacto:**
     *   **PRDs/Specs:** Avalie se introduzem novos domínios, componentes ou necessidades tecnológicas.
-    *   **Guidelines:** Verifique se novas diretrizes alteram padrões arquiteturais existentes (ex: nova forma de tratar erros, nova estrutura de pastas obrigatória).
+    *   **Rules:** Verifique se novas regras alteram padrões arquiteturais existentes (ex: nova forma de tratar erros, nova estrutura de pastas obrigatória).
     *   **Código:** Verifique se as mudanças no código respeitam os limites definidos na arquitetura atual ou se exigem uma atualização da documentação (evolução da arquitetura).
 
 2.  **Atualização de Seções Críticas:**

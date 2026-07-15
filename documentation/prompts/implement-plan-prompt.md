@@ -13,15 +13,24 @@ description: Implementar no codebase um plano de implementacao derivado de uma s
 
 ---
 
+## Regras Aplicáveis
+
+Antes de implementar qualquer tarefa, leia:
+
+- `documentation/rules/rules.md` — índice obrigatório para selecionar a rule da camada.
+- `documentation/rules/code-conventions-rules.md` — convenções gerais de nomes, factories, erros, eventos, barrel files e organização.
+- Rule específica da camada da tarefa, conforme o plano e o índice.
+- Rule de teste indicada no campo **Rules** da tarefa quando o ID tiver sufixo `t`.
+
+---
+
 ## REGRA MESTRA (NAO IGNORE)
 
 Antes de implementar qualquer camada, execute este algoritmo:
 
 1. **Classificar:** Qual e a natureza da tarefa? (ex: `core`, `ui`, `rpc`, `rest`, `queue`, `database`, `provision`).
 2. **Consultar o indice:** Leia `documentation/rules/rules.md` para identificar qual arquivo de regra corresponde a camada.
-3. **Verificar contexto:** O arquivo de regra especifico esta carregado no contexto atual?
-   - **[SIM]** → Prossiga e cite explicitamente qual regra esta aplicando.
-   - **[NAO]** → PARE IMEDIATAMENTE. Solicite ao usuario: *"Por favor, adicione o arquivo `[caminho]` ao contexto para que eu possa seguir as regras de `[Camada]`."*
+3. **Carregar a rule específica:** Leia o arquivo de regra completo antes de editar a camada e cite explicitamente qual rule está aplicando.
 
 Para **tarefas de teste** (sufixo `t`), aplique o mesmo algoritmo, mas consultando o arquivo de regras de teste indicado no campo **Rules** da tarefa no plano:
 
@@ -31,6 +40,7 @@ Para **tarefas de teste** (sufixo `t`), aplique o mesmo algoritmo, mas consultan
 | Use cases | `documentation/rules/use-cases-testing-rules.md` |
 | Handlers | `documentation/rules/handlers-testing-rules.md` |
 | Rotas HTTP do server | `documentation/rules/server-routes-testing-rules.md` |
+| Rotas e pages da web | `documentation/rules/web-app-routes-testing-rules.md` |
 | Widgets | `documentation/rules/widget-tests-rules.md` |
 
 > ⚠️ **Proibicoes**
@@ -66,6 +76,10 @@ Antes de implementar qualquer camada, leia as regras correspondentes consultando
 - `documentation/rules/queue-layer-rules.md` — Jobs e processamento assincrono
 - `documentation/rules/provision-layer-rules.md` — Providers e integracoes externas
 - `documentation/rules/ui-layer-rules.md` — Widgets e paginas (padrao Widget: View + Hook + Index)
+- `documentation/rules/realtime-rules.md` — Canais, adapters e clients realtime
+- `documentation/rules/ai-layer-rules.md` — Tools, prompts, workflows e adapters de IA
+- `documentation/rules/validation-layer-rules.md` — Schemas Zod compartilhados
+- `documentation/rules/lsp-layer-rules.md` — Pacote LSP e linguagem Delegua
 - `documentation/rules/web-application-rules.md` — Convencoes especificas do app `web`
 - `documentation/rules/server-application-rules.md` — Convencoes especificas do app `server`
 - `documentation/rules/studio-appllication-rules.md` — Convencoes especificas do app `studio`
@@ -96,6 +110,7 @@ Para cada tarefa do plano:
 - Localize codigo existente semelhante antes de criar algo novo.
 - Implemente a mudanca minima que entrega o **resultado observavel** definido na tarefa do plano.
 - Evite acoplamento entre camadas e chamadas de API na UI.
+- Se a tarefa implementada introduzir qualquer alteracao relevante de comportamento, contrato, arquitetura, decisao tecnica, fluxo de UI ou criterio de validacao que nao esteja refletido na spec de origem, atualize a spec de forma cirurgica antes de considerar a tarefa concluida.
 
 ### 4. Ciclo de teste por tarefa
 
@@ -181,17 +196,32 @@ Instrucoes:
 
 - Atualize o checklist de tarefas conforme implementa (marque `[x]` nas tarefas concluidas, incluindo tarefas de teste).
 - Ao final de cada fase, reporte: o que foi implementado, testes criados, arquivos tocados e pendencias.
+- Ao final de cada fase, reporte tambem se a spec de origem foi atualizada ou se nao houve alteracoes relevantes que exigissem atualizacao.
 - Para fases que alterem UI/web, reporte tambem a validacao feita com MCP Playwright, incluindo rota validada, fluxo exercitado e screenshots quando relevantes.
 - Ao final do plano completo, entregue o reporte final (veja Saida esperada).
 
-### 9. Atualizacao de Arquitetura e Rules (ao final da implementacao)
+### 9. Atualizacao de Spec, Arquitetura e Rules (ao final da implementacao)
 
 Apos concluir todas as fases do plano e antes de reportar a saida final,
 verifique se a implementacao introduziu mudancas que exigem atualizacao de
 documentacao estrutural. Execute esta etapa enquanto o contexto esta fresco —
 nao adie para o conclude-spec.
 
-**9.1 Arquitetura (`documentation/architecture.md`)**
+**9.1 Spec de origem (`documentation/features/**/specs/*-spec.md`)**
+
+Atualize se a implementacao introduziu qualquer alteracao relevante em:
+- Comportamento observavel
+- Contratos, tipos, schemas, payloads ou persistencia
+- Decisoes tecnicas ou trade-offs
+- Fluxos de UI, estados visuais, interacoes ou criterios de acessibilidade
+- Criterios de validacao, testes ou browser checks
+
+Use edicoes cirurgicas. Nao reescreva a spec inteira.
+
+Se nenhuma dessas condicoes se aplicar, registre na saida:
+`Spec: sem alteracoes necessarias.`
+
+**9.2 Arquitetura (`documentation/architecture.md`)**
 
 Atualize se a implementacao introduziu:
 - Novo fluxo de dados entre apps ou camadas
@@ -202,7 +232,7 @@ Atualize se a implementacao introduziu:
 Se nenhuma dessas condicoes se aplicar, registre na saida:
 `Arquitetura: sem alteracoes necessarias.`
 
-**9.2 Rules (`documentation/rules/`)**
+**9.3 Rules (`documentation/rules/`)**
 
 Atualize o arquivo de regras correspondente se a implementacao introduziu:
 - Padrao de projeto novo nao mapeado nas rules existentes
@@ -219,4 +249,5 @@ Se nenhuma dessas condicoes se aplicar, registre na saida:
 - Implementacao completa (ou parcial, se bloqueada) do plano/spec no codebase.
 - Checklist atualizado com tarefas `[x] concluida` e `[ ] pendente`, com justificativa para bloqueios.
 - Referencias a paths reais de arquivos alterados/criados (incluindo arquivos de teste).
+- Status da spec de origem: atualizada com paths/secoes alteradas ou `sem alteracoes necessarias`.
 - Lista de pendencias e proximos passos, se houver.
