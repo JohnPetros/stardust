@@ -221,7 +221,7 @@
 * 🖥️ ui: integrate PostHog analytics into web client providers and auth context (8259f7129)
 * 📶 rest: wire analytics providers, REST controllers, queue, and database cleanup (8e9c814c1)
 * 🌐 domain: add analytics contracts, domain events, use cases, and remove legacy visits (372bfb290)
-* docs: remove plan.md creation section from implement-spec-prompt (d6b0f160f)
+* 📚 docs: remove plan.md creation section from implement-spec-prompt (d6b0f160f)
 
 ## 1.7.3 (2026-06-11)
 
