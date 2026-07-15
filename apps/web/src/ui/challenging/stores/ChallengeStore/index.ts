@@ -52,6 +52,38 @@ export function useChallengeStore() {
       }
     },
 
+    getPanelOrderSlice() {
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const panelOrder = useZustandChallengeStore((store) => store.state.panelOrder)
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const setPanelOrder = useZustandChallengeStore(
+        (store) => store.actions.setPanelOrder,
+      )
+
+      return {
+        panelOrder,
+        setPanelOrder,
+      }
+    },
+
+    getPanelsOffsetSlice() {
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const panelsOffset = useZustandChallengeStore((store) => store.state.panelsOffset)
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const setPanelsOffset = useZustandChallengeStore(
+        (store) => store.actions.setPanelsOffset,
+      )
+
+      return {
+        panelsOffset,
+        setPanelsOffset,
+      }
+    },
+
+    resetPanelsLayout() {
+      return useZustandChallengeStore.getState().actions.resetPanelsLayout()
+    },
+
     getResultsSlice() {
       const results = useZustandChallengeStore((store) => store.state.results)
       const setResults = useZustandChallengeStore((store) => store.actions.setResults)

@@ -10,10 +10,7 @@ import {
 import { ROUTES, STORAGE } from '@/constants'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import type {
-  ChallengeContent,
-  PanelsLayout,
-} from '@/ui/challenging/stores/ChallengeStore/types'
+import type { ChallengeContent } from '@/ui/challenging/stores/ChallengeStore/types'
 import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import type { User } from '@stardust/core/profile/entities'
@@ -95,12 +92,13 @@ export function useChallengePage({
     getChallengeSlice,
     getCraftsVisibilitySlice,
     getActiveContentSlice,
-    getPanelsLayoutSlice,
+    getPanelOrderSlice,
+    resetPanelsLayout,
     resetStore,
   } = useChallengeStore()
   const { setActiveContent } = getActiveContentSlice()
   const { challenge, setChallenge } = getChallengeSlice()
-  const { panelsLayout, setPanelsLayout } = getPanelsLayoutSlice()
+  const { panelOrder } = getPanelOrderSlice()
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { currentRoute, goTo } = useNavigationProvider()
   const navigationProvider = useNavigationProvider()
@@ -123,8 +121,8 @@ export function useChallengePage({
     goTo(challenge.isFromStar.isTrue ? ROUTES.space : ROUTES.challenging.challenges.list)
   }
 
-  function handlePanelsLayoutButtonClick(panelsLayout: PanelsLayout) {
-    setPanelsLayout(panelsLayout)
+  function handleResetLayoutButtonClick() {
+    resetPanelsLayout()
   }
 
   function handlePreviousChallengeClick() {
@@ -216,7 +214,7 @@ export function useChallengePage({
 
   return {
     challengeTitle: challenge?.title.value ?? null,
-    panelsLayout,
+    panelOrder,
     shouldHaveConfettiAnimation:
       challenge && user && isNew ? challenge?.author.isEqualTo(user).isTrue : false,
     previousChallengeSlug,
@@ -227,7 +225,7 @@ export function useChallengePage({
     confirmNavigation,
     cancelNavigation,
     handleBackButtonClick,
-    handlePanelsLayoutButtonClick,
+    handleResetLayoutButtonClick,
     handlePreviousChallengeClick,
     handleNextChallengeClick,
     handleOpenSidebar,

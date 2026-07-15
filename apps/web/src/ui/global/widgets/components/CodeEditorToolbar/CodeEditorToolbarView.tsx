@@ -1,6 +1,8 @@
 'use client'
 
 import type { KeyboardEvent, ReactNode, RefObject } from 'react'
+import type { DraggableAttributes, DraggableSyntheticListeners } from '@dnd-kit/core'
+import { twMerge } from 'tailwind-merge'
 
 import * as Toolbar from '@/ui/global/widgets/components/Toolbar'
 import { Button } from '../Button'
@@ -22,6 +24,11 @@ type CodeEditorToolbarProps = {
   onAssistantEnabledChange: () => void
   customActions?: ReactNode
   shouldHideAssistantButton?: boolean
+  dragHandle?: {
+    attributes: DraggableAttributes
+    listeners?: DraggableSyntheticListeners
+    setRef: (element: HTMLDivElement | null) => void
+  }
 }
 
 export const CodeEditorToolbarView = ({
@@ -36,10 +43,34 @@ export const CodeEditorToolbarView = ({
   onKeyDown,
   customActions,
   shouldHideAssistantButton,
+  dragHandle,
 }: CodeEditorToolbarProps) => {
+  const dragHandleProps = (() => {
+    if (!dragHandle) return {}
+
+    const { role, tabIndex, ...attributes } = dragHandle.attributes
+
+    return {
+      ref: dragHandle.setRef,
+      role,
+      tabIndex,
+      'aria-label': 'Arrastar painel Editor',
+      ...dragHandle.listeners,
+      ...attributes,
+    }
+  })()
+
   return (
     <div onKeyUp={onKeyDown}>
-      <div className='flex items-center justify-between rounded-t-md bg-gray-700 px-3 py-2'>
+      <div
+        {...dragHandleProps}
+        className={twMerge(
+          'flex items-center justify-between rounded-t-md bg-gray-700 px-3 py-2',
+          dragHandle && 'cursor-grab active:cursor-grabbing',
+        )}
+        {...dragHandle?.listeners}
+        {...dragHandle?.attributes}
+      >
         <div className='flex items-center gap-4'>
           <Button
             ref={runCodeButtonRef}

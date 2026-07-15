@@ -18,14 +18,16 @@ import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 export function useChallengeCodeEditorSlot() {
   const {
     getChallengeSlice,
-    getPanelsLayoutSlice,
+    getPanelOrderSlice,
+    getPanelsOffsetSlice,
     getResultsSlice,
     getTabHandlerSlice,
     getActiveContentSlice,
   } = useChallengeStore()
   const { setResults } = getResultsSlice()
   const { challenge } = getChallengeSlice()
-  const { panelsLayout } = getPanelsLayoutSlice()
+  const { panelOrder } = getPanelOrderSlice()
+  const { panelsOffset } = getPanelsOffsetSlice()
   const { tabHandler } = getTabHandlerSlice()
   const { setActiveContent } = getActiveContentSlice()
   const { md: isMobile } = useBreakpoint()
@@ -126,10 +128,8 @@ export function useChallengeCodeEditorSlot() {
   }, [challenge, lspProvider, initialCode])
 
   useEffect(() => {
-    if (panelsLayout) {
-      handleCodeEditorHeight()
-    }
-  }, [panelsLayout, handleCodeEditorHeight])
+    handleCodeEditorHeight()
+  }, [panelOrder, panelsOffset, handleCodeEditorHeight])
 
   useEffect(() => {
     window.addEventListener('resize', handleCodeEditorHeight)

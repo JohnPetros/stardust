@@ -4,6 +4,7 @@ import { CodeEditorToolbar } from '@/ui/global/widgets/components/CodeEditorTool
 import { Console } from '@/ui/global/widgets/components/Console'
 import type { ConsoleRef } from '@/ui/global/widgets/components/Console/types'
 import { SelectionActionButtonView } from '@/ui/challenging/widgets/components/SelectionActionButton/SelectionActionButtonView'
+import type { DockablePanelDragHandle } from '@/ui/challenging/widgets/layouts/Challenge/DockablePanel/DockablePanelDragHandleContext'
 
 type Position = {
   top: number
@@ -27,6 +28,7 @@ type Props = {
   isSelectionButtonVisible: boolean
   selectionButtonPosition: Position
   onAddCodeSelection: () => void
+  dragHandle?: DockablePanelDragHandle | null
 }
 
 export const ChallengeCodeEditorSlotView = ({
@@ -46,6 +48,7 @@ export const ChallengeCodeEditorSlotView = ({
   isSelectionButtonVisible,
   selectionButtonPosition,
   onAddCodeSelection,
+  dragHandle,
 }: Props) => {
   return (
     <div ref={editorContainerRef} className='relative h-full w-full'>
@@ -54,6 +57,7 @@ export const ChallengeCodeEditorSlotView = ({
         codeEditorRef={codeEditorRef}
         onRunCode={onRunCode}
         onOpenConsole={onOpenConsole}
+        dragHandle={dragHandle}
       >
         <CodeEditor
           ref={codeEditorRef}

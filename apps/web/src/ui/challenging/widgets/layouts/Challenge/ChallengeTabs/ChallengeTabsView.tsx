@@ -3,10 +3,12 @@
 import type { ReactNode } from 'react'
 import { List, Root } from '@radix-ui/react-tabs'
 import { Trigger as TabButton } from '@radix-ui/react-tabs'
+import { twMerge } from 'tailwind-merge'
 
 import type { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
 
 import type { ChallengeContent } from '@/ui/challenging/stores/ChallengeStore/types'
+import type { DockablePanelDragHandle } from '../DockablePanel/DockablePanelDragHandleContext'
 import { AccountRequirementAlertDialog } from '@/ui/global/widgets/components/AccountRequirementAlertDialog'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { ChallengeTabContent } from './ChallengeTabContent'
@@ -20,6 +22,7 @@ type TabsProps = {
   isAccountAuthenticated: boolean
   children: ReactNode
   onShowSolutions: () => void
+  dragHandle?: DockablePanelDragHandle | null
 }
 
 export const ChallengeTabsView = ({
@@ -28,11 +31,21 @@ export const ChallengeTabsView = ({
   craftsVislibility,
   isAccountAuthenticated,
   onShowSolutions,
+  dragHandle,
 }: TabsProps) => {
   return (
     <div className='max-h-screen w-full rounded-md border-4 border-gray-700'>
       <Root defaultValue='description' orientation='horizontal'>
-        <List className='flex items-center bg-gray-700 px-2'>
+        <List
+          ref={dragHandle?.setRef}
+          aria-label={dragHandle ? 'Arrastar painel Conteúdo' : undefined}
+          className={twMerge(
+            'flex items-center bg-gray-700 px-2',
+            dragHandle && 'cursor-grab active:cursor-grabbing',
+          )}
+          {...dragHandle?.listeners}
+          {...dragHandle?.attributes}
+        >
           <TabButton value='description'>
             <ChallengeContentLink
               title='Descrição'

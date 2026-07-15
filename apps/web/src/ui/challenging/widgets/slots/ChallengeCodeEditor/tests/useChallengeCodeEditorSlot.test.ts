@@ -75,7 +75,14 @@ describe('useChallengeCodeEditorSlot', () => {
 
     jest.mocked(useChallengeStore).mockReturnValue({
       getChallengeSlice: () => ({ challenge }),
-      getPanelsLayoutSlice: () => ({ panelsLayout: null }),
+      getPanelOrderSlice: () => ({ panelOrder: ['tabs', 'code_editor', 'assistant'] }),
+      getPanelsOffsetSlice: () => ({
+        panelsOffset: {
+          tabsPanelSize: 38,
+          codeEditorPanelSize: 38,
+          assistantPanelSize: 24,
+        },
+      }),
       getResultsSlice: () => ({ setResults }),
       getTabHandlerSlice: () => ({
         tabHandler: {

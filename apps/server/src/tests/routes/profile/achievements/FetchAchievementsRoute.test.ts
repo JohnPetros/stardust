@@ -33,6 +33,9 @@ describe('[GET] /profile/achievements', () => {
   })
 
   it('should return a list of achievements when authenticated', async () => {
+    const achievements = AchievementsFaker.fakeManyUniqueDto()
+    await profileFixture.createAchievements(achievements)
+
     const response = await request(honoFixture.server)
       .get('/profile/achievements')
       .set(authFixture.getAuthorizationHeader())

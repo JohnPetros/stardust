@@ -1,23 +1,35 @@
+import { EventEmitter } from 'node:events'
+import type { ServerType } from '@hono/node-server'
+
 import { startNodeServer } from '@/app/hono/startNodeServer'
 
+type ServeFn = typeof import('@hono/node-server').serve
+
 describe('startNodeServer', () => {
-  it('should retry with the next port in development mode', () => {
+  it('should retry with the next port in development mode', async () => {
     const listenCallback = jest.fn()
+    const busyServer = createServer()
+    const availableServer = createServer()
     const serve = jest
       .fn()
       .mockImplementationOnce(() => {
         const error = new Error('Port in use') as NodeJS.ErrnoException
         error.code = 'EADDRINUSE'
-        throw error
+
+        process.nextTick(() => busyServer.emit('error', error))
+
+        return busyServer
       })
       .mockImplementationOnce((options, callback) => {
-        callback?.({ port: Number(options.port), family: 'IPv6', address: '::' })
+        process.nextTick(() =>
+          callback?.({ port: Number(options.port), family: 'IPv6', address: '::' }),
+        )
 
-        return { close: jest.fn() }
+        return availableServer
       })
 
-    const server = startNodeServer({
-      serve,
+    const server = await startNodeServer({
+      serve: serve as unknown as ServeFn,
       fetch: listenCallback,
       port: 3333,
       mode: 'development',
@@ -37,22 +49,31 @@ describe('startNodeServer', () => {
     expect(server).toEqual(expect.objectContaining({ close: expect.any(Function) }))
   })
 
-  it('should rethrow the same error outside development mode', () => {
+  it('should rethrow the same error outside development mode', async () => {
     const error = new Error('Port in use') as NodeJS.ErrnoException
     error.code = 'EADDRINUSE'
+    const busyServer = createServer()
 
     const serve = jest.fn(() => {
-      throw error
+      process.nextTick(() => busyServer.emit('error', error))
+
+      return busyServer
     })
 
-    expect(() =>
+    await expect(
       startNodeServer({
-        serve,
+        serve: serve as unknown as ServeFn,
         fetch: jest.fn(),
         port: 3333,
         mode: 'production',
         baseUrl: 'http://localhost',
       }),
-    ).toThrow(error)
+    ).rejects.toThrow(error)
   })
 })
+
+function createServer() {
+  return Object.assign(new EventEmitter(), {
+    close: jest.fn(),
+  }) as unknown as ServerType & EventEmitter
+}
