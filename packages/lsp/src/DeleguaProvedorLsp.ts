@@ -181,12 +181,10 @@ export class DeleguaProvedorLsp implements LspProvider {
     try {
       const lexador = new LexadorJavaScript()
       const avaliadorSintatico = new AvaliadorSintaticoJavaScript()
-      console.log('codigo', codigo)
       const resultadoLexico = lexador.mapear(codigo.split('\n'), -1)
       const resultadoSintatico = await avaliadorSintatico.analisar(resultadoLexico, -1)
       const tradutor = new TradutorReversoJavaScript()
       const traducao = tradutor.traduzir(resultadoSintatico.declaracoes)
-      console.log('traducao', traducao.trim().replace(' \n', '').replaceAll('\\"', ''))
       return traducao.trim().replace(' \n', '').replaceAll('\\"', '')
     } catch {
       return codigo
