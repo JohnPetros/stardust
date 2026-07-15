@@ -5,13 +5,17 @@ import tailwindcss from '@tailwindcss/vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
+      process: 'rollup-plugin-node-polyfills/polyfills/process-es6',
+    },
+  },
   plugins: [
     tailwindcss(),
     reactRouter(),
     tsconfigPaths(),
-    nodePolyfills({
-      include: ['process'],
-    }),
+    nodePolyfills(),
   ],
   build: {
     rollupOptions: {
