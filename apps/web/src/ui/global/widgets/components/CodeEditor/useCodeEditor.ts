@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import type { Monaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
 
@@ -6,12 +6,30 @@ import { Backup } from '@stardust/core/global/structures'
 import { DeleguaConfiguracaoParaEditorMonaco } from '@stardust/lsp'
 import type { LspProvider } from '@stardust/core/global/interfaces'
 import type { LspResponse } from '@stardust/core/global/responses'
-import type { LspDocumentation, LspSnippet } from '@stardust/core/global/types'
+import type { LspCompletion, LspDocumentation } from '@stardust/core/global/types'
 
 import { COLORS } from '@/constants'
 import { CODE_EDITOR_THEMES } from './code-editor-themes'
 import type { CodeEditorTheme, CursorPosition } from './types'
 import { LANGUAGE } from './language'
+
+type MonacoProvidersRegistry = {
+  owner: symbol | null
+  providers: monaco.IDisposable[]
+}
+
+declare global {
+  var stardustCodeEditorMonacoProvidersRegistry: MonacoProvidersRegistry | undefined
+}
+
+function getMonacoProvidersRegistry() {
+  globalThis.stardustCodeEditorMonacoProvidersRegistry ??= {
+    owner: null,
+    providers: [],
+  }
+
+  return globalThis.stardustCodeEditorMonacoProvidersRegistry
+}
 
 type Params = {
   initialValue: string
@@ -19,7 +37,6 @@ type Params = {
   isCodeCheckerEnabled: boolean
   lspProvider: LspProvider
   lspDocumentations: LspDocumentation[]
-  lspSnippets: LspSnippet[]
   onChange?: (value: string) => void
 }
 
@@ -29,12 +46,27 @@ export function useCodeEditor({
   isCodeCheckerEnabled,
   lspProvider,
   lspDocumentations,
-  lspSnippets,
   onChange,
 }: Params) {
   const monacoEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const monacoRef = useRef<Monaco | null>(null)
+  const monacoProvidersOwnerRef = useRef(Symbol('CodeEditorMonacoProviders'))
   const codeBackup = useRef<Backup<string>>(Backup.create([initialValue]))
+
+  const disposeMonacoProviders = useCallback((owner?: symbol) => {
+    const registry = getMonacoProvidersRegistry()
+
+    if (owner && owner !== registry.owner) {
+      return
+    }
+
+    for (const provider of registry.providers) {
+      provider.dispose()
+    }
+
+    registry.providers = []
+    registry.owner = null
+  }, [])
 
   const getEditorRules = useCallback(() => {
     const tokens = Object.keys(CODE_EDITOR_THEMES.darkSpace).slice(0, -2)
@@ -165,10 +197,33 @@ export function useCodeEditor({
     }, 100)
   }
 
+  function getCompletionKind(completion: LspCompletion, monaco: Monaco) {
+    const kinds = monaco.languages.CompletionItemKind
+
+    const completionKindByLspKind = {
+      keyword: kinds.Keyword,
+      snippet: kinds.Snippet,
+      function: kinds.Function,
+      variable: kinds.Variable,
+      parameter: kinds.Variable,
+      literal: kinds.Value,
+      'control-flow': kinds.Keyword,
+    } satisfies Record<LspCompletion['kind'], monaco.languages.CompletionItemKind>
+
+    return completionKindByLspKind[completion.kind]
+  }
+
+  function shouldInsertAsSnippet(completion: LspCompletion) {
+    return completion.kind === 'snippet' || completion.code.includes('${')
+  }
+
   function provideCompletionItems(
     model: monaco.editor.ITextModel,
     position: monaco.Position,
   ) {
+    const monaco = monacoRef.current
+    if (!monaco) return { suggestions: [] }
+
     const word = model.getWordUntilPosition(position)
     const range = {
       startLineNumber: position.lineNumber,
@@ -176,13 +231,21 @@ export function useCodeEditor({
       startColumn: word.startColumn,
       endColumn: word.endColumn,
     }
-    const suggestions = lspSnippets.map((snippet) => ({
-      label: snippet.label,
-      kind: 17, // Monaco keyword,
-      insertText: snippet.code,
-      insertTextRules: 4,
-      range,
-    }))
+    const suggestions = lspProvider.getCompletions(model.getValue()).map((completion) => {
+      const suggestion: monaco.languages.CompletionItem = {
+        label: completion.label,
+        kind: getCompletionKind(completion, monaco),
+        insertText: completion.code,
+        range,
+      }
+
+      if (shouldInsertAsSnippet(completion)) {
+        suggestion.insertTextRules =
+          monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+      }
+
+      return suggestion
+    })
     return {
       suggestions,
     }
@@ -216,11 +279,23 @@ export function useCodeEditor({
     const monacoLanguageConfiguration =
       monacoEditorConfiguration.obterConfiguracaoDeLinguagem()
 
-    monaco.languages.register({ id: LANGUAGE })
+    disposeMonacoProviders()
+
+    const monacoProvidersRegistry = getMonacoProvidersRegistry()
+    monacoProvidersRegistry.owner = monacoProvidersOwnerRef.current
+
+    if (!monaco.languages.getLanguages().some((language) => language.id === LANGUAGE)) {
+      monaco.languages.register({ id: LANGUAGE })
+    }
+
     monaco.languages.setMonarchTokensProvider(LANGUAGE, monacoTokensProvider)
     monaco.languages.setLanguageConfiguration(LANGUAGE, monacoLanguageConfiguration)
-    monaco.languages.registerHoverProvider(LANGUAGE, { provideHover })
-    monaco.languages.registerCompletionItemProvider(LANGUAGE, { provideCompletionItems })
+    monacoProvidersRegistry.providers = [
+      monaco.languages.registerHoverProvider(LANGUAGE, { provideHover }),
+      monaco.languages.registerCompletionItemProvider(LANGUAGE, {
+        provideCompletionItems,
+      }),
+    ]
 
     const rules = getEditorRules()
     monaco.editor.defineTheme('dark-space', {
@@ -234,6 +309,10 @@ export function useCodeEditor({
     monaco.editor.setTheme(theme)
     monacoRef.current = monaco
   }
+
+  useEffect(() => {
+    return () => disposeMonacoProviders(monacoProvidersOwnerRef.current)
+  }, [disposeMonacoProviders])
 
   return {
     getValue,

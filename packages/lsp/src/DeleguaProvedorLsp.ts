@@ -10,10 +10,23 @@ import { LexadorJavaScript } from '@designliquido/delegua/lexador/traducao/lexad
 
 import { LspResponse } from '@stardust/core/global/responses'
 import { LspError } from '@stardust/core/global/errors'
-import type { CodeInput } from '@stardust/core/global/types'
+import type {
+  CodeInput,
+  LspCompletion,
+  LspCompletionKind,
+  LspSnippet,
+} from '@stardust/core/global/types'
 import type { LspProvider } from '@stardust/core/global/interfaces'
 
-import { DELEGUA_REGEX } from './constants'
+import {
+  DELEGUA_IDENTIFICADOR,
+  DELEGUA_REGEX,
+  DELEGUA_SNIPPETS,
+  LABELS_DE_CONTROLE_DE_FLUXO,
+  LABELS_DE_LITERAIS,
+  LABELS_DE_PALAVRAS_CHAVE,
+  LABELS_DE_SNIPPETS_ESTRUTURAIS,
+} from './constants'
 import type { DeleguaErro } from '../types/DeleguaErro'
 import { DeleguaInterpretador } from './DeleguaInterpretador'
 
@@ -104,6 +117,25 @@ export class DeleguaProvedorLsp implements LspProvider {
     return entrada ? entrada[0] : null
   }
 
+  getCompletions(code: string): LspCompletion[] {
+    const labelsExistentes = new Set<string>()
+    const completions: LspCompletion[] = []
+
+    for (const snippet of DELEGUA_SNIPPETS) {
+      this.adicioneCompletion(completions, labelsExistentes, {
+        label: snippet.label,
+        code: snippet.code,
+        kind: this.classifiqueSnippet(snippet),
+      })
+    }
+
+    for (const completion of this.extraiaCompletionsDinamicas(code)) {
+      this.adicioneCompletion(completions, labelsExistentes, completion)
+    }
+
+    return completions
+  }
+
   async addInputs(codeInputs: CodeInput[], codeValue: string) {
     let codigo = codeValue
 
@@ -140,7 +172,6 @@ export class DeleguaProvedorLsp implements LspProvider {
   }
 
   getFunctionName(codeValue: string) {
-    console.log({ codeValue })
     if (!codeValue) return ''
     const match = codeValue.match(DELEGUA_REGEX.nomeDeFuncaoQualquer)
     if (match) {
@@ -165,6 +196,94 @@ export class DeleguaProvedorLsp implements LspProvider {
     const regex = new RegExp(DELEGUA_REGEX.funcaoLeia, 'g')
     const comandosLeia = codeValue.match(regex)
     return comandosLeia?.length ?? 0
+  }
+
+  private classifiqueSnippet(snippet: LspSnippet): LspCompletionKind {
+    if (LABELS_DE_LITERAIS.has(snippet.label)) {
+      return 'literal'
+    }
+
+    if (LABELS_DE_PALAVRAS_CHAVE.has(snippet.label)) {
+      return 'keyword'
+    }
+
+    if (LABELS_DE_CONTROLE_DE_FLUXO.has(snippet.label)) {
+      return 'control-flow'
+    }
+
+    if (LABELS_DE_SNIPPETS_ESTRUTURAIS.has(snippet.label)) {
+      return 'snippet'
+    }
+
+    return 'function'
+  }
+
+  private extraiaCompletionsDinamicas(code: string): LspCompletion[] {
+    const completions: LspCompletion[] = []
+    const labelsExistentes = new Set<string>()
+    const regexDeDeclaracaoDeVariavel = new RegExp(
+      `\\b(?:variavel|variável|var|const|constante|fixo)\\s+(${DELEGUA_IDENTIFICADOR})`,
+      'giu',
+    )
+    const regexDeDeclaracaoDeFuncao = new RegExp(
+      `\\b(?:funcao|função)\\s+(${DELEGUA_IDENTIFICADOR})\\s*\\(([^)]*)\\)`,
+      'giu',
+    )
+
+    for (const match of code.matchAll(regexDeDeclaracaoDeVariavel)) {
+      this.adicioneCompletion(completions, labelsExistentes, {
+        label: match[1] ?? '',
+        code: match[1] ?? '',
+        kind: 'variable',
+      })
+    }
+
+    for (const match of code.matchAll(regexDeDeclaracaoDeFuncao)) {
+      const nomeDaFuncao = match[1] ?? ''
+      this.adicioneCompletion(completions, labelsExistentes, {
+        label: nomeDaFuncao,
+        code: `${nomeDaFuncao}(${this.criePlaceholdersDeParametros(match[2] ?? '')})`,
+        kind: 'function',
+      })
+
+      for (const parametro of this.extraiaParametros(match[2] ?? '')) {
+        this.adicioneCompletion(completions, labelsExistentes, {
+          label: parametro,
+          code: parametro,
+          kind: 'parameter',
+        })
+      }
+    }
+
+    return completions
+  }
+
+  private extraiaParametros(parametros: string): string[] {
+    return parametros
+      .split(',')
+      .map((parametro) => parametro.trim().match(DELEGUA_IDENTIFICADOR)?.[0] ?? '')
+      .filter(Boolean)
+  }
+
+  private criePlaceholdersDeParametros(parametros: string): string {
+    return this.extraiaParametros(parametros)
+      .map((parametro, indice) => `\${${indice + 1}:${parametro}}`)
+      .join(', ')
+  }
+
+  private adicioneCompletion(
+    completions: LspCompletion[],
+    labelsExistentes: Set<string>,
+    completion: LspCompletion,
+  ) {
+    const labelNormalizado = completion.label.trim().toLocaleLowerCase('pt-BR')
+
+    if (!labelNormalizado || labelsExistentes.has(labelNormalizado)) {
+      return
+    }
+
+    labelsExistentes.add(labelNormalizado)
+    completions.push(completion)
   }
 
   async translateToLsp(jsCode: unknown) {
@@ -224,8 +343,6 @@ export class DeleguaProvedorLsp implements LspProvider {
 
   private trateErro(erro: DeleguaErro) {
     const linhaDoErro = erro.linha ?? 0 // TODO: erro.linha pode ser undefined
-
-    console.log('erro ->', erro)
 
     if ('erroInterno' in erro && erro.erroInterno instanceof Error) {
       return new LspResponse({

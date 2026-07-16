@@ -4,8 +4,10 @@ import { DELEGUA_SNIPPETS_METODOS_DICIONARIOS } from './delegua-snippets-metodos
 import { DELEGUA_SNIPPETS_METODOS_LISTA } from './delegua-snippets-metodos-lista'
 import { DELEGUA_SNIPPETS_METODOS_GLOBAIS } from './delegua-snippets-metodos-globais'
 import { DELEGUA_SNIPPETS_METODOS_TEXTO } from './delegua-snippets-metodos-texto'
+import { DELEGUA_SNIPPETS_ESTRUTURAS } from './delegua-snippets-estruturas'
 
 export const DELEGUA_SNIPPETS = [
+  ...DELEGUA_SNIPPETS_ESTRUTURAS,
   ...DELEGUA_SNIPPETS_METODOS_LISTA,
   ...DELEGUA_SNIPPETS_METODOS_DICIONARIOS,
   ...DELEGUA_SNIPPETS_METODOS_GLOBAIS,
