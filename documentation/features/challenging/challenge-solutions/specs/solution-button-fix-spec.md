@@ -3,7 +3,7 @@ title: Correcao do clique na aba Solucoes bloqueada
 prd: https://github.com/JohnPetros/stardust/milestone/40
 issue: https://github.com/JohnPetros/stardust/issues/491
 apps: web
-status: open
+status: closed
 last_updated_at: 2026-07-16
 ---
 
