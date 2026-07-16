@@ -14,6 +14,17 @@ Você **deve executar comandos git**, não apenas sugerir mensagens.
 
 ---
 
+## Regras Aplicáveis
+
+Antes de agrupar ou criar commits, leia:
+
+- `documentation/rules/commit-rules.md` — fonte normativa para agrupamento, prefixos, emojis e formato da mensagem.
+- `documentation/rules/code-conventions-rules.md` — usar apenas quando o diff exigir entender convenções gerais de nomenclatura ou organização.
+
+Se houver divergência entre este prompt e `commit-rules.md`, siga `commit-rules.md` e atualize este prompt depois.
+
+---
+
 ## 🚨 PRÉ-CONDIÇÕES OBRIGATÓRIAS
 
 Execute estas verificações **antes de qualquer outra coisa**. Se qualquer

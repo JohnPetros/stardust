@@ -2,13 +2,21 @@
 description: Prompt para identificar e corrigir efeitos colaterais apos alteracoes manuais, incluindo validacoes e testes.
 ---
 
-# Implement Change
+# Prompt: Implement Change
 
 **Objetivo:**
 Identificar e corrigir regressões ou erros de compilação (efeitos colaterais) resultantes de alterações manuais no código-fonte. O foco é restabelecer a integridade do projeto, atualizando dependências e validando testes.
 
 **Entrada:**
 *   Caminho do arquivo ou diretório onde ocorreram as edições manuais.
+
+**Regras Aplicáveis:**
+
+Antes de corrigir efeitos colaterais, leia:
+
+- `documentation/rules/rules.md` — para identificar rules das camadas afetadas pelos arquivos alterados.
+- `documentation/rules/code-conventions-rules.md` — para validar nomenclatura, imports, factories, erros, eventos e organização.
+- Rules de teste correspondentes quando os efeitos colaterais exigirem ajustar cobertura.
 
 **Diretrizes de Execução:**
 

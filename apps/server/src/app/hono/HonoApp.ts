@@ -79,7 +79,7 @@ export class HonoApp {
     this.registerRoutes()
     this.registerInngestRoute()
     this.setUpErrorHandler()
-    const server = startNodeServer({
+    const server = await startNodeServer({
       serve,
       fetch: this.hono.fetch,
       port,

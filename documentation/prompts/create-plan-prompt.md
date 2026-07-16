@@ -19,6 +19,25 @@ O seguinte documento deve ser fornecido:
 
 ---
 
+## Regras Aplicáveis
+
+Antes de criar fases e tarefas, leia:
+
+- `documentation/rules/rules.md` — índice para identificar rules por camada.
+- `documentation/rules/code-conventions-rules.md` — convenções gerais que devem aparecer nos critérios das tarefas quando relevantes.
+- Rules específicas das camadas citadas pela spec.
+- Rules de teste usadas nas tarefas com sufixo `t`:
+  - `documentation/rules/domain-objects-testing-rules.md`
+  - `documentation/rules/use-cases-testing-rules.md`
+  - `documentation/rules/handlers-testing-rules.md`
+  - `documentation/rules/server-routes-testing-rules.md`
+  - `documentation/rules/web-app-routes-testing-rules.md`
+  - `documentation/rules/widget-tests-rules.md`
+
+Cada tarefa de implementação deve declarar a camada correta; cada tarefa de teste deve declarar o arquivo de rule de teste correspondente.
+
+---
+
 ## Diretrizes de Execução
 
 ### 1. Leitura do Documento de Entrada
@@ -86,6 +105,7 @@ Cada tarefa de teste deve indicar qual arquivo de regras de teste deve ser consu
 | Use cases | `documentation/rules/use-cases-testing-rules.md` |
 | Handlers | `documentation/rules/handlers-testing-rules.md` |
 | Rotas HTTP do server | `documentation/rules/server-routes-testing-rules.md` |
+| Rotas e pages da web | `documentation/rules/web-app-routes-testing-rules.md` |
 | Widgets | `documentation/rules/widget-tests-rules.md` |
 
 ### 5. Pendências

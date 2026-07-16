@@ -15,13 +15,24 @@ mesmo anti-padrão não se repita em sessões futuras.
 
 ---
 
+## Regras Aplicáveis
+
+Este prompt sempre altera `documentation/rules/`, portanto leia:
+
+- `documentation/rules/rules.md` — índice para selecionar o arquivo de destino.
+- Rule específica da camada afetada pelo anti-padrão.
+- `documentation/rules/code-conventions-rules.md` — quando o anti-padrão envolver nomes, factories, erros, eventos ou organização geral.
+
+---
+
 ## Entrada
 
 - **Descrição do anti-padrão:** o que foi feito de errado e em qual contexto
   (texto livre, trecho de código, descrição do comportamento incorreto).
 - **Camada afetada** (opcional): se já souber, informe a camada
   (`core`, `database`, `rest`, `rpc`, `queue`, `ui`, `realtime`,
-  `provision`, `testing`, `code-conventions`, `web`, `server`, `studio`). Se
+  `provision`, `ai`, `validation`, `lsp`, `testing`, `code-conventions`,
+  `web`, `server`, `studio`). Se
   não souber, o prompt identifica automaticamente.
 
 ---
@@ -43,14 +54,22 @@ identifique o arquivo de regras da camada afetada:
 | Widgets / hooks / views / stores | `documentation/rules/ui-layer-rules.md` |
 | Canais em tempo real / listeners | `documentation/rules/realtime-rules.md` |
 | Providers / gateways de terceiros | `documentation/rules/provision-layer-rules.md` |
+| Tools / workflows / prompts de IA | `documentation/rules/ai-layer-rules.md` |
+| Schemas e validações compartilhadas | `documentation/rules/validation-layer-rules.md` |
+| Linguagem Delegua / pacote LSP | `documentation/rules/lsp-layer-rules.md` |
 | Convenções de código / nomeação / factories | `documentation/rules/code-conventions-rules.md` |
 | Regras da app web | `documentation/rules/web-application-rules.md` |
 | Regras da app server | `documentation/rules/server-application-rules.md` |
 | Regras da app studio | `documentation/rules/studio-appllication-rules.md` |
 | Testes de handlers | `documentation/rules/handlers-testing-rules.md` |
+| Testes de rotas HTTP do server | `documentation/rules/server-routes-testing-rules.md` |
+| Testes de rotas e pages da web | `documentation/rules/web-app-routes-testing-rules.md` |
 | Testes de use cases | `documentation/rules/use-cases-testing-rules.md` |
 | Testes de widgets | `documentation/rules/widget-tests-rules.md` |
 | Testes de objetos de domínio | `documentation/rules/domain-objects-testing-rules.md` |
+| Uso de MCPs | `documentation/rules/mcp-rules.md` |
+| Revisao de PR | `documentation/rules/pr-review-rules.md` |
+| Commits | `documentation/rules/commit-rules.md` |
 
 Se o anti-padrão cruzar mais de uma camada, registre em todos os docs
 relevantes.

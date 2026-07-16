@@ -34,9 +34,9 @@ type Params = Parameters<typeof useChallengePage>[0]
 
 describe('useChallengePage', () => {
   const setChallenge = jest.fn()
-  const setPanelsLayout = jest.fn()
   const setActiveContent = jest.fn()
   const setCraftsVislibility = jest.fn()
+  const resetPanelsLayout = jest.fn()
   const resetStore = jest.fn()
   const goTo = jest.fn()
   const requestNavigation = jest.fn()
@@ -86,10 +86,10 @@ describe('useChallengePage', () => {
         activeContent: 'description',
         setActiveContent,
       }),
-      getPanelsLayoutSlice: () => ({
-        panelsLayout: 'tabs-left;code_editor-right',
-        setPanelsLayout,
+      getPanelOrderSlice: () => ({
+        panelOrder: ['tabs', 'code_editor', 'assistant'],
       }),
+      resetPanelsLayout,
       resetStore,
     } as unknown as ReturnType<typeof useChallengeStore>)
   }

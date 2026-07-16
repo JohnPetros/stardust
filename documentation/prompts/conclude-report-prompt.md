@@ -38,6 +38,24 @@ O fluxo de execução diverge conforme o tipo identificado.
 
 ---
 
+## Regras Aplicáveis
+
+Antes de verificar ou fechar qualquer report, leia:
+
+- `documentation/rules/rules.md` — índice para descobrir as rules das camadas afetadas pelos itens resolvidos.
+- `documentation/rules/code-conventions-rules.md` — validação geral de nomenclatura, organização, factories, erros e eventos.
+- Rules de teste correspondentes aos artefatos corrigidos, quando houver cobertura criada ou alterada:
+  - `documentation/rules/domain-objects-testing-rules.md`
+  - `documentation/rules/use-cases-testing-rules.md`
+  - `documentation/rules/handlers-testing-rules.md`
+  - `documentation/rules/server-routes-testing-rules.md`
+  - `documentation/rules/web-app-routes-testing-rules.md`
+  - `documentation/rules/widget-tests-rules.md`
+
+Para reports de performance ou segurança, também consulte as rules das camadas citadas em cada issue antes de marcar o item como `resolved`.
+
+---
+
 ## Fluxo A — Diagnóstico (performance, security)
 
 ### A1: Classificar os Issues

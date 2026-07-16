@@ -35,7 +35,7 @@ export const Widget = (
     state: { fontSize, tabSize, isCodeCheckerEnabled },
   } = useEditorContext()
   const { md: isMobile } = useBreakpoint()
-  const { lspProvider, documentations, snippets } = useLsp()
+  const { lspProvider, documentations } = useLsp()
   const {
     getValue,
     setValue,
@@ -53,7 +53,6 @@ export const Widget = (
     isCodeCheckerEnabled: isCodeCheckerDisabled ? false : isCodeCheckerEnabled,
     lspProvider,
     lspDocumentations: documentations,
-    lspSnippets: snippets,
     onChange,
   })
 

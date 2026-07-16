@@ -1,6 +1,7 @@
 type ServeFn = typeof import('@hono/node-server').serve
 type ServeOptions = Parameters<ServeFn>[0]
 type ListeningListener = Parameters<ServeFn>[1]
+type ServerType = ReturnType<ServeFn>
 
 type StartNodeServerParams = {
   serve: ServeFn
@@ -12,7 +13,7 @@ type StartNodeServerParams = {
 
 const MAX_PORT_ATTEMPTS = 10
 
-export function startNodeServer({
+export async function startNodeServer({
   serve,
   fetch,
   port,
@@ -23,15 +24,7 @@ export function startNodeServer({
     const nextPort = port + portOffset
 
     try {
-      return serve(
-        {
-          fetch,
-          port: nextPort,
-        },
-        ((info) => {
-          console.log(`🏢 Server is running on ${baseUrl}:${info.port}`)
-        }) satisfies ListeningListener,
-      )
+      return await listenOnPort({ serve, fetch, port: nextPort, baseUrl })
     } catch (error) {
       if (!isAddressInUseError(error) || mode !== 'development') throw error
 
@@ -44,4 +37,49 @@ export function startNodeServer({
 
 function isAddressInUseError(error: unknown): error is NodeJS.ErrnoException {
   return error instanceof Error && 'code' in error && error.code === 'EADDRINUSE'
+}
+
+function listenOnPort({
+  serve,
+  fetch,
+  port,
+  baseUrl,
+}: Omit<StartNodeServerParams, 'mode'>): Promise<ServerType> {
+  return new Promise((resolve, reject) => {
+    let server: ServerType | null = null
+    let settled = false
+
+    const stopListeningForStartupError = () => {
+      server?.off('error', handleStartupError)
+    }
+
+    const settle = (callback: () => void) => {
+      if (settled) return
+
+      settled = true
+      stopListeningForStartupError()
+      callback()
+    }
+
+    const handleStartupError = (error: Error) => {
+      settle(() => {
+        server?.close()
+        reject(error)
+      })
+    }
+
+    const handleListening = ((info) => {
+      settle(() => {
+        console.log(`🏢 Server is running on ${baseUrl}:${info.port}`)
+        resolve(server as ServerType)
+      })
+    }) satisfies ListeningListener
+
+    try {
+      server = serve({ fetch, port }, handleListening)
+      server.once('error', handleStartupError)
+    } catch (error) {
+      reject(error)
+    }
+  })
 }

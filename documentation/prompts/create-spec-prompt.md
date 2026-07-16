@@ -15,6 +15,19 @@ description: Prompt para criar especificação técnica a partir de PRD e codeba
 
 ---
 
+## Regras Aplicáveis
+
+Antes de tomar decisões técnicas, leia:
+
+- `documentation/rules/rules.md` — índice para selecionar rules por app e camada.
+- `documentation/rules/code-conventions-rules.md` — convenções gerais de nomeação, factories, erros, eventos e barrel files.
+- Rules específicas das camadas mapeadas na seção 1.2.
+- Rules de teste apenas para decidir cobertura esperada e execução recomendada; a spec não deve incluir implementação de testes.
+
+Quando uma decisão da spec contrariar uma rule existente, pergunte ao usuário antes de finalizar. Quando a spec introduzir padrão novo, registre que a implementação deverá atualizar a rule correspondente.
+
+---
+
 ## Princípios Invioláveis
 
 Estas regras aplicam-se a toda a spec. Não as repita nas seções — referencie este bloco.

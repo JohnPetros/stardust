@@ -22,6 +22,19 @@ de trabalho.
 
 ---
 
+## Regras Aplicáveis
+
+Antes de criar commits ou abrir o PR, leia:
+
+- `documentation/rules/commit-rules.md` — regras oficiais de agrupamento e mensagem de commit.
+- `documentation/rules/pr-review-rules.md` — critérios que o PR deve facilitar para revisão.
+- `documentation/rules/code-conventions-rules.md` — convenções gerais a checar no changelog e riscos.
+- `documentation/rules/rules.md` — para citar rules de camada quando o PR introduzir padrão novo, decisão arquitetural ou risco relevante.
+
+Se houver commits pendentes, `commit-rules.md` prevalece sobre a tabela duplicada neste prompt. Atualize este prompt quando a tabela divergir da rule.
+
+---
+
 ## Diretrizes de Execução
 
 ### 1. Análise do Contexto

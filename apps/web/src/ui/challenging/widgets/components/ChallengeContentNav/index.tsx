@@ -1,6 +1,7 @@
 'use client'
 
 import type { ChallengeContent } from '@/ui/challenging/stores/ChallengeStore/types'
+import { useDockablePanelDragHandle } from '../../layouts/Challenge/DockablePanel/DockablePanelDragHandleContext'
 import { ChallengeContentNavView } from './ChallengeContentNavView'
 import { useChallengeContentNav } from './useChallengeContentNav'
 
@@ -9,6 +10,7 @@ type Props = {
 }
 
 export const ChallengeContentNav = ({ contents }: Props) => {
+  const dragHandle = useDockablePanelDragHandle()
   const { craftsVislibility, handleShowSolutions } = useChallengeContentNav()
 
   return (
@@ -16,6 +18,7 @@ export const ChallengeContentNav = ({ contents }: Props) => {
       contents={contents}
       craftsVislibility={craftsVislibility}
       onShowSolutions={handleShowSolutions}
+      dragHandle={dragHandle}
     />
   )
 }

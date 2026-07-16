@@ -1,5 +1,7 @@
 import type { ChallengeContent } from '@/ui/challenging/stores/ChallengeStore/types'
 import type { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
+import { twMerge } from 'tailwind-merge'
+import type { DockablePanelDragHandle } from '../../layouts/Challenge/DockablePanel/DockablePanelDragHandleContext'
 
 import { BlockedCommentsAlertDialog } from '../BlockedCommentsAlertDialog'
 import { BlockedSolutionsAlertDialog } from '../BlockedSolutionsAlertDialog'
@@ -9,15 +11,25 @@ type Props = {
   contents: ChallengeContent[]
   craftsVislibility: ChallengeCraftsVisibility | null
   onShowSolutions: () => void
+  dragHandle?: DockablePanelDragHandle | null
 }
 
 export const ChallengeContentNavView = ({
   contents,
   craftsVislibility,
   onShowSolutions,
+  dragHandle,
 }: Props) => {
   return (
-    <nav className='flex items-center gap-2 md:hidden'>
+    <nav
+      aria-label={dragHandle ? 'Arrastar painel Conteúdo' : undefined}
+      className={twMerge(
+        'flex items-center gap-2 md:hidden',
+        dragHandle && 'cursor-grab active:cursor-grabbing',
+      )}
+      {...dragHandle?.listeners}
+      {...dragHandle?.attributes}
+    >
       {contents.includes('description') && (
         <ChallengeContentLink
           title='Descrição'

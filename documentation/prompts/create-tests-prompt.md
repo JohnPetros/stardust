@@ -14,6 +14,19 @@ Orientar a criacao de testes unitarios e de integracao **padronizados** e **efic
 - fidelidade das entradas da app web baseadas em `Next.js App Router`
 - fidelidade funcional de componentes de UI
 
+## Regras Aplicáveis
+
+Antes de criar qualquer teste, identifique o tipo de artefato e leia a rule correspondente:
+
+- `documentation/rules/domain-objects-testing-rules.md`
+- `documentation/rules/use-cases-testing-rules.md`
+- `documentation/rules/handlers-testing-rules.md`
+- `documentation/rules/server-routes-testing-rules.md`
+- `documentation/rules/web-app-routes-testing-rules.md`
+- `documentation/rules/widget-tests-rules.md`
+
+Leia também `documentation/rules/code-conventions-rules.md` quando precisar criar fakers, mocks, nomes de arquivos ou novos helpers de teste.
+
 ## Escopo permitido
 
 No StarDust, **so e permitido criar testes para**:

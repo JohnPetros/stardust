@@ -7,6 +7,7 @@ import { useChallengeTabs } from './useChallengeTabs'
 
 import { ChallengeTabsView } from './ChallengeTabsView'
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
+import { useDockablePanelDragHandle } from '../DockablePanel/DockablePanelDragHandleContext'
 
 type TabsProps = {
   children: ReactNode
@@ -14,6 +15,7 @@ type TabsProps = {
 
 export const ChallengeTabs = ({ children }: TabsProps) => {
   const { isAccountAuthenticated } = useAuthContext()
+  const dragHandle = useDockablePanelDragHandle()
   const { activeContent, handleShowSolutions } = useChallengeTabs()
   const { getCraftsVisibilitySlice } = useChallengeStore()
   const { craftsVislibility } = getCraftsVisibilitySlice()
@@ -24,6 +26,7 @@ export const ChallengeTabs = ({ children }: TabsProps) => {
       activeContent={activeContent}
       craftsVislibility={craftsVislibility}
       onShowSolutions={handleShowSolutions}
+      dragHandle={dragHandle}
     >
       {children}
     </ChallengeTabsView>
