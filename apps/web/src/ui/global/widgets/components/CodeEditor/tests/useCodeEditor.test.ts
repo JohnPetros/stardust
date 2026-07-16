@@ -5,12 +5,14 @@ import { type Mock, mock } from 'ts-jest-mocker'
 
 import type { LspProvider } from '@stardust/core/global/interfaces'
 import type { LspCompletion } from '@stardust/core/global/types'
+import { DeleguaProvedorLsp } from '@stardust/lsp'
 
 import { useCodeEditor } from '../useCodeEditor'
 
-let lspProvider: Mock<LspProvider>
+let lspProvider: LspProvider
 
 const snippetCode = 'retorna $' + '{1:valor}'
+const dynamicFunctionSnippetCode = 'soma($' + '{1:valor}, $' + '{2:incremento})'
 
 type CompletionProvider = {
   provideCompletionItems: (
@@ -116,7 +118,8 @@ describe('useCodeEditor', () => {
         kind: 'variable',
       },
     ]
-    lspProvider.getCompletions.mockReturnValue(completions)
+    const lspProviderMock = lspProvider as Mock<LspProvider>
+    lspProviderMock.getCompletions.mockReturnValue(completions)
     const { result } = renderCodeEditorHook()
     const monaco = crieMonacoMock()
     const editor = {} as monaco.editor.IStandaloneCodeEditor
@@ -168,6 +171,62 @@ describe('useCodeEditor', () => {
       }),
     ])
     expect(completionList.suggestions[1]?.insertTextRules).toBeUndefined()
+  })
+
+  it('should include dynamic completions from the current model code', () => {
+    lspProvider = new DeleguaProvedorLsp()
+    const { result } = renderCodeEditorHook()
+    const monaco = crieMonacoMock()
+    const editor = {} as monaco.editor.IStandaloneCodeEditor
+
+    act(() => {
+      result.current.handleEditorDidMount(editor, monaco.monacoMock)
+    })
+
+    const model = {
+      getValue: jest.fn(
+        () => 'variavel precoFinal = 10\nfuncao soma(valor, incremento) {\n\tretorna valor + incremento\n}',
+      ),
+      getWordUntilPosition: jest.fn(() => ({
+        word: 'pre',
+        startColumn: 1,
+        endColumn: 4,
+      })),
+    } as unknown as monaco.editor.ITextModel
+    const position = {
+      lineNumber: 2,
+      column: 4,
+    } as monaco.Position
+
+    const completionList = monaco.completionProvider?.provideCompletionItems(
+      model,
+      position,
+    )
+
+    if (!completionList || 'then' in completionList) {
+      throw new Error('Completion list should be synchronous')
+    }
+
+    const labels = completionList.suggestions.map((suggestion) => suggestion.label)
+    const somaSuggestion = completionList.suggestions.find(
+      (suggestion) => suggestion.label === 'soma',
+    )
+
+    expect(labels).toEqual(
+      expect.arrayContaining([
+        'retorna',
+        'precoFinal',
+        'soma',
+        'valor',
+        'incremento',
+      ]),
+    )
+    expect(somaSuggestion).toEqual(
+      expect.objectContaining({
+        insertText: dynamicFunctionSnippetCode,
+        insertTextRules: 4,
+      }),
+    )
   })
 
   it('should dispose registered Monaco providers on remount and unmount', () => {
