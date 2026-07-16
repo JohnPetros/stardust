@@ -185,7 +185,8 @@ describe('useCodeEditor', () => {
 
     const model = {
       getValue: jest.fn(
-        () => 'variavel precoFinal = 10\nfuncao soma(valor, incremento) {\n\tretorna valor + incremento\n}',
+        () =>
+          'variavel precoFinal = 10\nfuncao soma(valor, incremento) {\n\tretorna valor + incremento\n}',
       ),
       getWordUntilPosition: jest.fn(() => ({
         word: 'pre',
@@ -213,13 +214,7 @@ describe('useCodeEditor', () => {
     )
 
     expect(labels).toEqual(
-      expect.arrayContaining([
-        'retorna',
-        'precoFinal',
-        'soma',
-        'valor',
-        'incremento',
-      ]),
+      expect.arrayContaining(['retorna', 'precoFinal', 'soma', 'valor', 'incremento']),
     )
     expect(somaSuggestion).toEqual(
       expect.objectContaining({
