@@ -35,7 +35,7 @@ export const ChallengeTabsView = ({
 }: TabsProps) => {
   return (
     <div className='max-h-screen w-full rounded-md border-4 border-gray-700'>
-      <Root defaultValue='description' orientation='horizontal'>
+      <Root value={activeContent} orientation='horizontal'>
         <List
           ref={dragHandle?.setRef}
           aria-label={dragHandle ? 'Arrastar painel Conteúdo' : undefined}
@@ -118,7 +118,7 @@ export const ChallengeTabsView = ({
             </TabButton>
           )}
         </List>
-        <ChallengeTabContent value='description'>{children}</ChallengeTabContent>
+        <ChallengeTabContent value={activeContent}>{children}</ChallengeTabContent>
       </Root>
     </div>
   )

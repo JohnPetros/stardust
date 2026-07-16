@@ -13,6 +13,8 @@ import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useChallengeLayout } from './useChallengeLayout'
 import type { PanelsOffset } from './types'
 import { ChallengeLayoutView } from './ChallengeLayoutView'
+import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
+import { ChallengeResultSlot } from '../../slots/ChallengeResult'
 
 type LayoutProps = {
   header: ReactNode
@@ -34,6 +36,7 @@ export const ChallengeLayout = ({
   const codeEditorPanelRef = useRef<ImperativePanelHandle>(null)
   const assistantPanelRef = useRef<ImperativePanelHandle>(null)
   const { md: isMobile } = useBreakpoint()
+  const { activeContent } = useChallengeStore().getActiveContentSlice()
   const {
     activePanelId,
     isTransitionPageVisible,
@@ -50,10 +53,13 @@ export const ChallengeLayout = ({
     initialPanelOrder,
     initialPanelsOffset: panelsOffset,
   })
+  const activeTabContent =
+    activeContent === 'result' ? <ChallengeResultSlot /> : tabContent
+
   return (
     <ChallengeLayoutView
       header={header}
-      tabContent={tabContent}
+      tabContent={activeTabContent}
       codeEditor={codeEditor}
       activePanelId={activePanelId}
       panelGroupRef={panelGroupRef}

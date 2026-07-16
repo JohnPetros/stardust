@@ -12,7 +12,7 @@ type Props = {
   isOpen: boolean
   translatedInputs: string
   translatedExpectedOutput: string
-  userOutput: unknown | null
+  userOutput: string
   handleButtonClick: () => void
 }
 
@@ -69,7 +69,7 @@ export const TestCaseView = ({
         <Field label='Entrada' value={translatedInputs} />
         <Field
           label='Seu resultado'
-          value={userOutput ? (userOutput as string) : 'sem resultado'}
+          value={userOutput || 'sem resultado'}
           isFromUser={true}
         />
         <Field label='Resultado esperado' value={translatedExpectedOutput} />
