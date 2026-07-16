@@ -1,4 +1,4 @@
-export const DELEGUA_IDENTIFICADOR = '[A-Za-zÀ-ÿ*][A-Za-zÀ-ÿ0-9*]*'
+export const DELEGUA_IDENTIFICADOR = '[A-Za-zÀ-ÿ_*][A-Za-zÀ-ÿ0-9_*]*'
 
 export const LABELS_DE_PALAVRAS_CHAVE = new Set(['var', 'const'])
 

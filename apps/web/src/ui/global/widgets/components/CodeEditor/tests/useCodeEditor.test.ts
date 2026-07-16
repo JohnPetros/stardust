@@ -12,7 +12,8 @@ import { useCodeEditor } from '../useCodeEditor'
 let lspProvider: LspProvider
 
 const snippetCode = 'retorna $' + '{1:valor}'
-const dynamicFunctionSnippetCode = 'soma($' + '{1:valor}, $' + '{2:incremento})'
+const dynamicFunctionSnippetCode =
+  'calcular_total($' + '{1:valor_base}, $' + '{2:incremento_extra})'
 
 type CompletionProvider = {
   provideCompletionItems: (
@@ -186,7 +187,7 @@ describe('useCodeEditor', () => {
     const model = {
       getValue: jest.fn(
         () =>
-          'variavel precoFinal = 10\nfuncao soma(valor, incremento) {\n\tretorna valor + incremento\n}',
+          'variavel minha_variavel = 10\nfuncao calcular_total(valor_base, incremento_extra) {\n\tretorna valor_base + incremento_extra\n}',
       ),
       getWordUntilPosition: jest.fn(() => ({
         word: 'pre',
@@ -209,14 +210,20 @@ describe('useCodeEditor', () => {
     }
 
     const labels = completionList.suggestions.map((suggestion) => suggestion.label)
-    const somaSuggestion = completionList.suggestions.find(
-      (suggestion) => suggestion.label === 'soma',
+    const functionSuggestion = completionList.suggestions.find(
+      (suggestion) => suggestion.label === 'calcular_total',
     )
 
     expect(labels).toEqual(
-      expect.arrayContaining(['retorna', 'precoFinal', 'soma', 'valor', 'incremento']),
+      expect.arrayContaining([
+        'retorna',
+        'minha_variavel',
+        'calcular_total',
+        'valor_base',
+        'incremento_extra',
+      ]),
     )
-    expect(somaSuggestion).toEqual(
+    expect(functionSuggestion).toEqual(
       expect.objectContaining({
         insertText: dynamicFunctionSnippetCode,
         insertTextRules: 4,
