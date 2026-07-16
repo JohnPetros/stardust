@@ -23,6 +23,16 @@ description: Criar um prompt genérico para gerar documento de regras de uma cam
   - Caminhos de arquivo como `documentation/...`.
   - Trechos de regras e exemplos reais quando existirem.
 
+**Regras Aplicáveis:**
+
+Antes de criar um novo documento de regras, leia:
+
+- `documentation/rules/rules.md` — para verificar se já existe rule aplicável e evitar duplicação.
+- `documentation/rules/code-conventions-rules.md` — para manter nomenclatura, factories, erros, eventos e organização consistentes.
+- Rules de camadas vizinhas ou análogas à `{CAMADA}` — para preservar fronteiras e direção de dependência.
+
+Se a nova camada não estiver coberta por `rules.md`, o entregável deve incluir também a atualização do índice `documentation/rules/rules.md`.
+
 **Diretrizes de Execucao:**
 
 1. **Entendimento e validacao de contexto**

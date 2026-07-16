@@ -6,9 +6,11 @@ import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { AssistantChatbotView } from './AssistantChatbotView'
 import { useAssistantChatbot } from './useAssistantChatbot'
+import { useDockablePanelDragHandle } from '../DockablePanel/DockablePanelDragHandleContext'
 
 export const AssistantChatbot = () => {
   const { md: isMobile } = useBreakpoint()
+  const dragHandle = useDockablePanelDragHandle()
   const { getChallengeSlice, getIsAssistantEnabledSlice, getTabHandlerSlice } =
     useChallengeStore()
   const { challenge } = getChallengeSlice()
@@ -55,6 +57,7 @@ export const AssistantChatbot = () => {
       onEditChatName={handleEditChatName}
       onCreateChat={handleCreateChatButtonClick}
       onSendFirstQuestion={handleSendFirstMessage}
+      dragHandle={dragHandle}
     />
   )
 }

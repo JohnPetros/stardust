@@ -8,14 +8,24 @@ description: Prompt para atualizar o overview do projeto com funcionalidades, st
 Manter atualizado o documento de visão geral do projeto (`documentation/overview.md`), garantindo que ele reflita com precisão o estado atual do software, incluindo funcionalidades planejadas, em desenvolvimento e concluídas.
 
 **Entradas:**
-1.  Documentos de Requisitos de Produto (PRDs) existentes ou recém-criados.
+1.  Milestones do GitHub usadas como PRDs e documentos técnicos relacionados.
 2.  O arquivo atual `documentation/overview.md`.
 3.  Estado atual da implementação (código fonte), se necessário para verificação de status.
+
+**Regras Aplicáveis:**
+
+Antes de atualizar o overview, leia:
+
+- `documentation/rules/rules.md` — quando a visão geral mencionar camadas, apps ou responsabilidades técnicas.
+- `documentation/rules/web-application-rules.md`, `documentation/rules/server-application-rules.md` e `documentation/rules/studio-appllication-rules.md` — quando a atualização descrever capacidades específicas desses apps.
+- `documentation/rules/code-conventions-rules.md` — quando o overview mencionar padrões gerais de organização ou nomenclatura.
+
+Não transforme o overview em documento de rules; use as rules apenas para evitar descrição técnica incorreta.
 
 **Diretrizes de Execução:**
 
 1.  **Análise de PRDs e Funcionalidades:**
-    *   Examine todos os PRDs e Specs disponíveis para identificar novas funcionalidades, módulos ou alterações de escopo. os arquivos de PRD possuem o nome `prd.md` e os de spec terminam com a extensão `-spec.md`.
+    *   Examine milestones do GitHub usadas como PRDs e Specs disponíveis para identificar novas funcionalidades, módulos ou alterações de escopo. Os arquivos de spec terminam com a extensão `-spec.md`.
     *   Identifique funcionalidades que já foram implementadas mas não constam no overview.
 
 2.  **Atualização do Documento:**

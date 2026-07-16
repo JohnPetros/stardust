@@ -12,6 +12,16 @@ description: Criar um prompt genérico (meta-prompt) para gerar prompts consiste
 - Restrições e preferências (ex: “não incluir testes”, “usar markdown”, “seguir arquitetura em camadas”).
 - Fontes disponíveis (ex: PRDs, guidelines, codebase, links, docs internas).
 
+**Regras Aplicáveis:**
+
+Não há rule de camada obrigatória para todo meta-prompt.
+
+Quando o prompt gerado for específico do StarDust, inclua no próprio prompt uma seção de rules que aponte para:
+
+- `documentation/rules/rules.md` — índice geral.
+- `documentation/rules/code-conventions-rules.md` — quando envolver código, nomenclatura, classes, factories, erros ou eventos.
+- Rules específicas das camadas ou tipos de teste que o prompt pretende operar.
+
 **Diretrizes de Execução:**
 
 1. **Pesquisa e Contextualização (Chain of Thought):**

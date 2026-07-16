@@ -14,6 +14,18 @@ para consumo tanto por humanos quanto por LLMs.
 - Documento ou trecho em Markdown a ser refinado.
 - Contexto adicional (opcional).
 
+**Regras Aplicáveis:**
+
+Não há rule de camada obrigatória para todo documento.
+
+Use rules quando o documento refinado tocar o projeto StarDust:
+
+- `documentation/rules/rules.md` — para validar links e citações de rules por camada.
+- `documentation/rules/code-conventions-rules.md` — quando o documento padronizar nomes, exemplos de código, factories, erros ou eventos.
+- Rule específica da camada quando o documento for PRD, spec, report ou guideline técnico sobre uma camada.
+
+Se o documento refinado for uma rule, use também `documentation/prompts/update-layer-rules-prompt.md`.
+
 **Diretrizes de Execução:**
 
 1. **Análise de Estrutura e Hierarquia:**

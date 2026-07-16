@@ -77,7 +77,7 @@ describe('TestCaseView', () => {
   })
 
   it('should render the locked state with fallback user output', () => {
-    View({ isLocked: true, isCorrect: false, isOpen: false, userOutput: null })
+    View({ isLocked: true, isCorrect: false, isOpen: false, userOutput: '' })
 
     expect(screen.getByTestId('icon-close')).toBeInTheDocument()
     expect(screen.getByTestId('icon-lock')).toBeInTheDocument()

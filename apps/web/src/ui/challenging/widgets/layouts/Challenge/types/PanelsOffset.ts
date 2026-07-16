@@ -1,4 +1,1 @@
-export type PanelsOffset = {
-  tabsPanelSize: number // percentage
-  codeEditorPanelSize: number // percentage
-}
+export type { PanelsOffset } from '@/ui/challenging/stores/ChallengeStore/types'

@@ -10,6 +10,7 @@ import { ChallengesNavigationSidebar } from '../../components/ChallengesNavigati
 import { ChallengeNavigationAlertDialog } from '../../components/ChallengeNavigationAlertDialog'
 import { NotesDrawer } from '@/ui/global/widgets/components/NotesDrawer'
 import { Icon } from '@/ui/global/widgets/components/Icon'
+import { ChallengeLayoutControls } from './ChallengeLayoutControls'
 
 type Props = {
   challengeDto: ChallengeDto
@@ -27,7 +28,7 @@ export const ChallengePage = ({
   const { user, isAccountAuthenticated } = useAuthContext()
   const {
     challengeTitle,
-    panelsLayout,
+    panelOrder,
     shouldHaveConfettiAnimation,
     previousChallengeSlug: pagePreviousChallengeSlug,
     nextChallengeSlug: pageNextChallengeSlug,
@@ -37,7 +38,7 @@ export const ChallengePage = ({
     confirmNavigation,
     cancelNavigation,
     handleBackButtonClick,
-    handlePanelsLayoutButtonClick,
+    handleResetLayoutButtonClick,
     handlePreviousChallengeClick,
     handleNextChallengeClick,
     handleOpenSidebar,
@@ -55,8 +56,13 @@ export const ChallengePage = ({
   return (
     <ChallengePageView
       challengeTitle={challengeTitle}
-      panelsLayout={panelsLayout}
       shouldHaveConfettiAnimation={shouldHaveConfettiAnimation}
+      layoutControlsSlot={
+        <ChallengeLayoutControls
+          panelOrder={panelOrder}
+          onResetLayout={handleResetLayoutButtonClick}
+        />
+      }
       challengeNavigationSlot={
         <ChallengeNavigation
           previousChallengeSlug={pagePreviousChallengeSlug}
@@ -89,7 +95,6 @@ export const ChallengePage = ({
         />
       }
       handleBackButtonClick={handleBackButtonClick}
-      handlePanelsLayoutButtonClick={handlePanelsLayoutButtonClick}
     />
   )
 }

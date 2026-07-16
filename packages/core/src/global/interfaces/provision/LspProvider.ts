@@ -1,4 +1,4 @@
-import type { CodeInput } from '../../domain/types'
+import type { CodeInput, LspCompletion } from '../../domain/types'
 import type { LspResponse } from '../../responses'
 
 export interface LspProvider {
@@ -13,6 +13,7 @@ export interface LspProvider {
   getFunctionName(code: string): string | null
   getFunctionParamsNames(code: string): string[]
   getInput(code: string): string | null
+  getCompletions(code: string): LspCompletion[]
   translateToLsp(jsCode: unknown): Promise<string>
   translateToJs(lspCode: string): Promise<string>
   getInputsCount(code: string): number

@@ -20,6 +20,18 @@ Conduzir uma revisão de segurança orientada à arquitetura do StarDust, identi
 
 ---
 
+## Regras Aplicáveis
+
+Antes da revisão, leia:
+
+- `documentation/rules/rules.md` — índice para selecionar rules por camada.
+- `documentation/rules/code-conventions-rules.md` — convenções gerais que influenciam segurança, como nomes, erros e factories.
+- Rules das camadas incluídas no escopo, conforme a tabela abaixo.
+
+Findings e recomendações devem citar a rule mais específica possível. Se a correção exigir novo padrão de segurança, registre a necessidade de atualizar a rule correspondente.
+
+---
+
 ## Mapa de Camadas para Revisão
 
 Antes de iniciar, consulte os documentos de regras de cada camada envolvida no escopo:
@@ -33,6 +45,12 @@ Antes de iniciar, consulte os documentos de regras de cada camada envolvida no e
 | **Database / Repositories** | `documentation/rules/database-rules.md` | Queries sem escopo de `accountId`, mappers que não normalizam tipos antes do domínio |
 | **Provision / Providers** | `documentation/rules/provision-layer-rules.md` | Segredos hardcoded, erros do SDK expostos sem tratamento, tipos do SDK vazando |
 | **Queue / Jobs** | `documentation/rules/queue-layer-rules.md` | Jobs sem idempotência, ausência de validação de payload de entrada |
+| **Validation / Schemas** | `documentation/rules/validation-layer-rules.md` | Schemas permissivos, mensagens inconsistentes, entrada externa sem normalização explícita |
+| **Realtime / Channels** | `documentation/rules/realtime-rules.md` | Eventos externos expostos diretamente à UI, listeners sem limpeza, payload sem tradução para domínio |
+| **AI / Tools** | `documentation/rules/ai-layer-rules.md` | Tool sem contrato interno, prompt vazando regra de negócio, output externo sem validação |
+| **Web App** | `documentation/rules/web-application-rules.md` | Rotas públicas/protegidas inconsistentes, dados sensíveis em server/client boundary |
+| **Server App** | `documentation/rules/server-application-rules.md` | Middlewares ausentes, composição Hono insegura, integração sem validação |
+| **Studio App** | `documentation/rules/studio-appllication-rules.md` | Fluxos administrativos sem autorização ou estados de erro insuficientes |
 
 ---
 

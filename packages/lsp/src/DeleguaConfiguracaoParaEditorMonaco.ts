@@ -330,6 +330,9 @@ export class DeleguaConfiguracaoParaEditorMonaco {
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
+        { open: "'", close: "'" },
+        { open: '"', close: '"' },
+        { open: '`', close: '`' },
       ],
       autoClosingPairs: [
         { open: '{', close: '}' },
@@ -337,6 +340,7 @@ export class DeleguaConfiguracaoParaEditorMonaco {
         { open: '(', close: ')' },
         { open: "'", close: "'", notIn: ['string', 'comment'] },
         { open: '"', close: '"', notIn: ['string', 'comment'] },
+        { open: '`', close: '`', notIn: ['string', 'comment'] },
       ],
       onEnterRules: [
         {

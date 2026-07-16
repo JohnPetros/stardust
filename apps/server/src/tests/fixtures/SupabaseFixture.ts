@@ -21,12 +21,12 @@ export class SupabaseFixture {
 
   async clearDatabase() {
     await LocalSupabaseProxy.ensureRunning()
-    await this.supabase.from('users').delete()
-    await this.supabase.from('achievements').delete()
-    await this.supabase.from('insignias').delete()
-    await this.supabase.from('avatars').delete()
-    await this.supabase.from('rockets').delete()
-    await this.supabase.from('tiers').delete()
+    await this.deleteAllRowsFrom('users')
+    await this.deleteAllRowsFrom('achievements')
+    await this.deleteAllRowsFrom('insignias')
+    await this.deleteAllRowsFrom('avatars')
+    await this.deleteAllRowsFrom('rockets')
+    await this.deleteAllRowsFrom('tiers')
   }
 
   deleteInsigniaByRole(role: string | InsigniaRole) {
@@ -37,5 +37,13 @@ export class SupabaseFixture {
       '-c',
       `delete from public.insignias where role = '${roleValue}';`,
     ])
+  }
+
+  private async deleteAllRowsFrom(tableName: string) {
+    const { error } = await this.supabase.from(tableName).delete().not('id', 'is', null)
+
+    if (error) {
+      throw error
+    }
   }
 }

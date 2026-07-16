@@ -28,6 +28,7 @@ A classe `DeleguaProvedorLsp` é o coração da camada LSP. Ela implementa a int
 
 - **Execução de Código**: O método `run` executa um bloco de código Delegua e retorna o resultado.
 - **Análise Sintática e Semântica**: Os métodos `performSyntaxAnalysis` e `performSemanticAnalysis` analisam o código em busca de erros e retornam diagnósticos.
+- **Autocomplete**: O método `getCompletions` expõe sugestões agnósticas de editor via contrato do `core`, combinando catálogos estáticos com símbolos extraídos do código aberto.
 - **Manipulação de Código**: Métodos como `addInputs`, `addFunctionCall` e `buildFunction` permitem a manipulação programática do código Delegua.
 - **Tradução**: Os métodos `translateToLsp` e `translateToJs` traduzem o código entre Delegua e JavaScript.
 
@@ -53,6 +54,10 @@ export class DeleguaProvedorLsp implements LspProvider {
     // ... implementação
   }
 
+  getCompletions(code: string): LspCompletion[] {
+    // ... implementação
+  }
+
   // ... outros métodos
 }
 ```
@@ -60,6 +65,10 @@ export class DeleguaProvedorLsp implements LspProvider {
 ## Integração com o Editor Monaco
 
 O arquivo `DeleguaConfiguracaoParaEditorMonaco.ts` fornece a configuração necessária para integrar o LSP do Delegua com o Editor Monaco. Isso permite que a aplicação web tenha uma experiência rica de edição de código para a linguagem Delegua.
+
+Sugestões de autocomplete devem permanecer no contrato agnóstico `LspCompletion`
+do `core`; a UI faz apenas a adaptação final para `CompletionItem` do Monaco
+com `range`, `kind` e regras de snippet.
 
 ## Interpretador
 

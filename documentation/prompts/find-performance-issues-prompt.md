@@ -30,6 +30,16 @@ Formato esperado para `{FONTES}`:
 - Links (bullets) e/ou caminhos de arquivo.
 - Trechos relevantes (copiados/colados) se voce nao tiver acesso ao repositorio.
 
+**Regras Aplicáveis:**
+
+Antes de propor correções, leia:
+
+- `documentation/rules/rules.md` — índice para selecionar rules por camada.
+- `documentation/rules/code-conventions-rules.md` — quando a recomendação envolver refactor, nomenclatura ou organização de código.
+- Rules específicas das camadas afetadas pelo gargalo (`ui`, `web`, `server`, `rest`, `rpc`, `database`, `queue`, `provision`, `realtime`, `ai`, `validation`, etc.).
+
+Não recomende otimizações que violem as rules de camada. Se a melhor otimização exigir mudar uma rule, marque como decisão arquitetural e não como correção automática.
+
 **Diretrizes de Execucao:**
 
 1. **Entendimento e validacao de entradas**

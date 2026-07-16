@@ -24,6 +24,19 @@ determinado automaticamente pelo tipo de mudança.
 
 ---
 
+## Regras Aplicáveis
+
+Antes de alterar código ou spec, leia:
+
+- `documentation/rules/rules.md` — índice para selecionar rules por app e camada.
+- `documentation/rules/code-conventions-rules.md` — quando a mudança tocar nomes, factories, eventos, erros, barrel files ou estrutura de arquivos.
+- Rules específicas das camadas afetadas pela mudança.
+- Rules de teste correspondentes quando a mudança exigir criar ou ajustar cobertura.
+
+Se a mudança criar ou alterar padrão de camada, atualize a rule correspondente em `documentation/rules/` antes de concluir.
+
+---
+
 ## Passo 1 — Classificar a mudança
 
 | Categoria | Exemplos | Modo |

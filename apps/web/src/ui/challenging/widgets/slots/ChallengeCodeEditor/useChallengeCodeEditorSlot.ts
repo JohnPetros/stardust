@@ -18,21 +18,23 @@ import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 export function useChallengeCodeEditorSlot() {
   const {
     getChallengeSlice,
-    getPanelsLayoutSlice,
+    getPanelOrderSlice,
+    getPanelsOffsetSlice,
     getResultsSlice,
     getTabHandlerSlice,
     getActiveContentSlice,
   } = useChallengeStore()
   const { setResults } = getResultsSlice()
   const { challenge } = getChallengeSlice()
-  const { panelsLayout } = getPanelsLayoutSlice()
+  const { panelOrder } = getPanelOrderSlice()
+  const { panelsOffset } = getPanelsOffsetSlice()
   const { tabHandler } = getTabHandlerSlice()
   const { setActiveContent } = getActiveContentSlice()
   const { md: isMobile } = useBreakpoint()
   const { playAudio } = useAudioContext()
   const { lspProvider } = useLsp()
   const toast = useToastContext()
-  const router = useNavigationProvider()
+  const { currentRoute } = useNavigationProvider()
   const userCode = useRef<Code>(Code.create(lspProvider))
   const editorContainerRef = useRef<HTMLDivElement>(null)
   const codeEditorRef = useRef<CodeEditorRef>(null)
@@ -47,6 +49,7 @@ export function useChallengeCodeEditorSlot() {
     typeof window !== 'undefined'
       ? (localStorage.get() ?? challenge?.initialCode.value ?? '')
       : ''
+  const panelsLayoutVersion = `${panelOrder}:${panelsOffset}`
 
   const handleLspError = useCallback(
     (message: string, line: number) => {
@@ -79,12 +82,19 @@ export function useChallengeCodeEditorSlot() {
         consoleRef.current?.open()
       }
 
+      setActiveContent('result')
+
       if (isMobile) {
-        setActiveContent('result')
         tabHandler?.showResultTab()
       }
 
-      router.goTo(ROUTES.challenging.challenges.challengeResult(challenge.slug.value))
+      const resultRoute = ROUTES.challenging.challenges.challengeResult(
+        challenge.slug.value,
+      )
+
+      if (currentRoute !== resultRoute) {
+        window.history.pushState(null, '', resultRoute)
+      }
     } catch (error) {
       playAudio('fail-code-result.wav')
 
@@ -126,10 +136,10 @@ export function useChallengeCodeEditorSlot() {
   }, [challenge, lspProvider, initialCode])
 
   useEffect(() => {
-    if (panelsLayout) {
-      handleCodeEditorHeight()
-    }
-  }, [panelsLayout, handleCodeEditorHeight])
+    if (!panelsLayoutVersion) return
+
+    handleCodeEditorHeight()
+  }, [panelsLayoutVersion, handleCodeEditorHeight])
 
   useEffect(() => {
     window.addEventListener('resize', handleCodeEditorHeight)

@@ -2,8 +2,10 @@ import type { ChatMessage } from '@stardust/core/conversation/structures'
 import type { Chat } from '@stardust/core/conversation/entities'
 import type { Id } from '@stardust/core/global/structures'
 import type { ChatDto } from '@stardust/core/conversation/entities/dtos'
+import { twMerge } from 'tailwind-merge'
 
 import { Icon } from '@/ui/global/widgets/components/Icon'
+import type { DockablePanelDragHandle } from '../DockablePanel/DockablePanelDragHandleContext'
 import { AssistantChatsHistory } from './AssistantChatsHistory'
 import { StarBorder } from '@/ui/global/widgets/components/StarBorder'
 import { Button } from '@/ui/global/widgets/components/Button'
@@ -23,6 +25,7 @@ type Props = {
   onDeleteChat: (chatId: string) => void
   onEditChatName?: (chatId: string, chatName: string) => Promise<void>
   onSendFirstQuestion: () => void
+  dragHandle?: DockablePanelDragHandle | null
 }
 
 export const AssistantChatbotView = ({
@@ -37,10 +40,34 @@ export const AssistantChatbotView = ({
   onSelectChat,
   onEditChatName,
   onSendFirstQuestion,
+  dragHandle,
 }: Props) => {
+  const dragHandleProps = (() => {
+    if (!dragHandle) return {}
+
+    const { role, tabIndex, ...attributes } = dragHandle.attributes
+
+    return {
+      ref: dragHandle.setRef,
+      role,
+      tabIndex,
+      'aria-label': 'Arrastar painel Assistente',
+      ...dragHandle.listeners,
+      ...attributes,
+    }
+  })()
+
   return (
     <div className='flex flex-col h-[calc(100vh-8rem)]'>
-      <div className='flex items-center justify-between bg-gray-700 p-1 rounded-t-md border border-gray-700'>
+      <div
+        {...dragHandleProps}
+        className={twMerge(
+          'flex items-center justify-between rounded-t-md border border-gray-700 bg-gray-700 p-1',
+          dragHandle && 'cursor-grab active:cursor-grabbing',
+        )}
+        {...dragHandle?.listeners}
+        {...dragHandle?.attributes}
+      >
         <StarBorder className='px-4 py-1'>
           <div className='flex items-center gap-2 text-green-400'>
             <span className='text-sm'>Assistente de código</span>

@@ -1,6 +1,7 @@
 'use client'
 
 import { type PropsWithChildren, type ReactNode, type RefObject, useRef } from 'react'
+import type { DraggableAttributes, DraggableSyntheticListeners } from '@dnd-kit/core'
 
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
@@ -17,6 +18,13 @@ type Props = {
     customActions?: ReactNode
     shouldHideAssistantButton?: boolean
   }
+  dragHandle?: DockablePanelDragHandle | null
+}
+
+type DockablePanelDragHandle = {
+  attributes: DraggableAttributes
+  listeners?: DraggableSyntheticListeners
+  setRef: (element: HTMLElement | null) => void
 }
 
 export const CodeEditorToolbar = ({
@@ -26,6 +34,7 @@ export const CodeEditorToolbar = ({
   onRunCode,
   onOpenConsole,
   options,
+  dragHandle,
 }: PropsWithChildren<Props>) => {
   const runCodeButtonRef = useRef<HTMLButtonElement | null>(null)
   const guidesDialogButtonRef = useRef<HTMLButtonElement | null>(null)
@@ -51,6 +60,7 @@ export const CodeEditorToolbar = ({
       isAssistantAllowed={isAccountAuthenticated}
       customActions={options?.customActions}
       shouldHideAssistantButton={options?.shouldHideAssistantButton}
+      dragHandle={dragHandle ?? undefined}
     >
       {children}
     </CodeEditorToolbarView>

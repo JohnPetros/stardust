@@ -20,6 +20,20 @@ Tudo deve ser endereçado respeitando os padrões e a arquitetura do projeto.
 
 ---
 
+## Regras Aplicáveis
+
+Antes de corrigir pendências, leia:
+
+- `documentation/rules/pr-review-rules.md` — critérios de revisão e severidade de problemas.
+- `documentation/rules/commit-rules.md` — commits criados durante a resolução.
+- `documentation/rules/code-conventions-rules.md` — convenções gerais para correções.
+- `documentation/rules/rules.md` — índice para selecionar rules das camadas alteradas por cada correção.
+- Rules de teste correspondentes quando a pendência envolver cobertura ou regressão.
+
+Ao responder comentários de revisão, cite a rule específica quando ela justificar a decisão.
+
+---
+
 ## Diretrizes de Execução
 
 ### 1. Extração de Contexto

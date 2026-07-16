@@ -9,9 +9,15 @@ import { INITIAL_CHALLENGE_STORE_STATE } from '../ChallengeStore/constants'
 import type {
   ChallengeStore,
   ChallengeContent,
+  DockablePanelId,
   PanelsLayout,
+  PanelsOffset,
   TabHandler,
 } from '../ChallengeStore/types'
+import {
+  DEFAULT_PANEL_ORDER,
+  DEFAULT_PANELS_OFFSET,
+} from '../../widgets/layouts/Challenge/constants/panel-layout'
 
 export const useZustandChallengeStore = create<ChallengeStore>()(
   immer((set) => {
@@ -33,6 +39,25 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
         setPanelsLayout(panelsLayout: PanelsLayout) {
           return set(({ state }) => {
             state.panelsLayout = panelsLayout
+          })
+        },
+
+        setPanelOrder(panelOrder: DockablePanelId[]) {
+          return set(({ state }) => {
+            state.panelOrder = panelOrder
+          })
+        },
+
+        setPanelsOffset(panelsOffset: PanelsOffset) {
+          return set(({ state }) => {
+            state.panelsOffset = panelsOffset
+          })
+        },
+
+        resetPanelsLayout() {
+          return set(({ state }) => {
+            state.panelOrder = DEFAULT_PANEL_ORDER
+            state.panelsOffset = DEFAULT_PANELS_OFFSET
           })
         },
 
@@ -100,8 +125,12 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
         },
 
         resetStore() {
-          return set(({ actions }) => ({
-            state: INITIAL_CHALLENGE_STORE_STATE,
+          return set(({ state, actions }) => ({
+            state: {
+              ...INITIAL_CHALLENGE_STORE_STATE,
+              panelOrder: state.panelOrder,
+              panelsOffset: state.panelsOffset,
+            },
             actions,
           }))
         },

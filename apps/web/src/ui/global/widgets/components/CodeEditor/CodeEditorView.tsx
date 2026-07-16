@@ -47,6 +47,7 @@ export const CodeEditorView = ({
         fontFamily: 'Menlo',
         cursorStyle: 'line',
         wordWrap: 'off',
+        wordBasedSuggestions: 'off',
         autoIndent: 'brackets',
         formatOnPaste: true,
         formatOnType: true,

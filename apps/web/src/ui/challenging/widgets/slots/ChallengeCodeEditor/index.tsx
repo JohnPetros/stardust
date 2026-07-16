@@ -4,8 +4,10 @@ import { useChallengeCodeEditorSlot } from './useChallengeCodeEditorSlot'
 import { ChallengeCodeEditorSlotView } from './ChallengeCodeEditorSlotView'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useCodeSelection } from './useCodeSelection'
+import { useDockablePanelDragHandle } from '../../layouts/Challenge/DockablePanel/DockablePanelDragHandleContext'
 
 export const ChallengeCodeEditorSlot = () => {
+  const dragHandle = useDockablePanelDragHandle()
   const {
     initialCode,
     originalCode,
@@ -47,6 +49,7 @@ export const ChallengeCodeEditorSlot = () => {
       isSelectionButtonVisible={isButtonVisible}
       selectionButtonPosition={buttonPosition}
       onAddCodeSelection={handleAddSelection}
+      dragHandle={dragHandle}
     />
   )
 }

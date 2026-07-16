@@ -22,7 +22,8 @@
     "typecheck": "tsc --noEmit",
     "codecheck": "npm run lint && npm run format",
     "lint": "biome lint src/**/*.ts --diagnostic-level=error",
-    "format": "biome format src/**/*.ts --write"
+    "format": "biome format src/**/*.ts --write",
+    "test:unit": "node --import tsx --test \"src/**/*.test.ts\""
   },
   "dependencies": {
     "@designliquido/delegua": "^1.25.1",

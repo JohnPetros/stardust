@@ -16,7 +16,12 @@ export function collectBiomeWarnings(workspace: WorkspaceConfig): number {
     raw = execFileSync(
       'npx',
       ['biome', 'lint', workspace.srcDir, '--reporter=json', '--max-diagnostics=none'],
-      { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] },
+      {
+        cwd,
+        encoding: 'utf8',
+        maxBuffer: 50 * 1024 * 1024,
+        stdio: ['ignore', 'pipe', 'ignore'],
+      },
     )
   } catch (error) {
     // Biome sai com código != 0 quando há diagnostics; o JSON ainda vem no stdout.

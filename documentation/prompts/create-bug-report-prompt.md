@@ -32,6 +32,30 @@ Este prompt **não cria Spec de correção**. Quando uma Spec for necessária, e
 
 ---
 
+## Regras Aplicáveis
+
+Antes de diagnosticar o bug, leia:
+
+- `documentation/rules/rules.md` — índice para selecionar as rules das camadas envolvidas.
+- `documentation/rules/code-conventions-rules.md` — referência geral para nomeação, factories, erros e eventos.
+- Rules específicas das camadas citadas no diagnóstico, por exemplo:
+  - `documentation/rules/core-package-rules.md`
+  - `documentation/rules/database-rules.md`
+  - `documentation/rules/rest-layer-rules.md`
+  - `documentation/rules/rpc-layer-rules.md`
+  - `documentation/rules/ui-layer-rules.md`
+  - `documentation/rules/web-application-rules.md`
+  - `documentation/rules/server-application-rules.md`
+  - `documentation/rules/studio-appllication-rules.md`
+  - `documentation/rules/ai-layer-rules.md`
+  - `documentation/rules/queue-layer-rules.md`
+  - `documentation/rules/realtime-rules.md`
+  - `documentation/rules/validation-layer-rules.md`
+
+Use as rules apenas para validar fronteiras e padrões técnicos; o bug report não deve virar uma spec de implementação.
+
+---
+
 ## Diretrizes de Execução
 
 ### 1. Análise do Relato

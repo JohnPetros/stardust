@@ -3,23 +3,22 @@ import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Loading } from '@/ui/global/widgets/components/Loading'
-import type { PanelsLayout } from '@/ui/challenging/stores/ChallengeStore/types'
 import { ConfettiAnimation } from '../../components/ConfettiAnimation'
 
 type Props = {
   challengeTitle: string | null
-  panelsLayout: PanelsLayout
   shouldHaveConfettiAnimation: boolean
+  layoutControlsSlot: ReactNode
   notesSlot: ReactNode
   challengeNavigationSlot: ReactNode
   challengeNavigationAlertDialogSlot: ReactNode
   handleBackButtonClick: () => void
-  handlePanelsLayoutButtonClick: (layout: PanelsLayout) => void
 }
 
 export const ChallengePageView = ({
   challengeTitle,
   shouldHaveConfettiAnimation,
+  layoutControlsSlot,
   notesSlot,
   challengeNavigationSlot,
   challengeNavigationAlertDialogSlot,
@@ -32,8 +31,8 @@ export const ChallengePageView = ({
   return (
     <header className='flex h-12 flex-col justify-center md:border-b md:border-green-700'>
       {shouldHaveConfettiAnimation && <ConfettiAnimation delay={3} />}
-      <div className='flex items-center justify-between px-6'>
-        <div className='flex items-center gap-3'>
+      <div className='flex items-center justify-between gap-3 px-6'>
+        <div className='flex min-w-0 items-center gap-3'>
           <AlertDialog
             type='crying'
             title='Você está saindo do desafio!'
@@ -69,10 +68,13 @@ export const ChallengePageView = ({
               />
             </button>
           </AlertDialog>
-          <h1 className='text-lg font-semibold text-gray-100'>{challengeTitle}</h1>
+          <h1 className='truncate text-lg font-semibold text-gray-100'>
+            {challengeTitle}
+          </h1>
         </div>
 
-        <div className='flex items-center gap-2'>
+        <div className='flex shrink-0 items-center gap-2'>
+          {layoutControlsSlot}
           {notesSlot}
           {challengeNavigationSlot}
         </div>

@@ -5,7 +5,11 @@ import type { ComponentProps } from 'react'
 import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
 
 jest.mock('@radix-ui/react-tabs', () => ({
-  Root: ({ children }: any) => <div data-testid='tabs-root'>{children}</div>,
+  Root: ({ children, value }: any) => (
+    <div data-testid='tabs-root' data-value={value}>
+      {children}
+    </div>
+  ),
   List: ({ children }: any) => <div data-testid='tabs-list'>{children}</div>,
   Trigger: ({ children, asChild, ...props }: any) => (
     <button type='button' {...props}>
@@ -15,8 +19,10 @@ jest.mock('@radix-ui/react-tabs', () => ({
 }))
 
 jest.mock('../ChallengeTabContent', () => ({
-  ChallengeTabContent: ({ children }: any) => (
-    <div data-testid='tab-content'>{children}</div>
+  ChallengeTabContent: ({ children, value }: any) => (
+    <div data-testid='tab-content' data-value={value}>
+      {children}
+    </div>
   ),
 }))
 
@@ -92,6 +98,17 @@ describe('ChallengeTabsView', () => {
     const commentsLink = screen.getByTestId('content-link-comments')
     expect(commentsLink).toHaveAttribute('data-blocked', 'true')
     expect(screen.getByTestId('blocked-comments')).toBeInTheDocument()
+  })
+
+  it('should keep the Radix tab value and content value synced with active content', () => {
+    View({ activeContent: 'result' })
+
+    expect(screen.getByTestId('tabs-root')).toHaveAttribute('data-value', 'result')
+    expect(screen.getByTestId('tab-content')).toHaveAttribute('data-value', 'result')
+    expect(screen.getByTestId('content-link-result')).toHaveAttribute(
+      'data-active',
+      'true',
+    )
   })
 
   it('should render account requirement button when user is not authenticated', () => {

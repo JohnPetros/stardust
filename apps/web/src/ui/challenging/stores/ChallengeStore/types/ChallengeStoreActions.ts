@@ -1,5 +1,7 @@
 import type { Challenge } from '@stardust/core/challenging/entities'
+import type { DockablePanelId } from './DockablePanelId'
 import type { PanelsLayout } from './PanelsLayout'
+import type { PanelsOffset } from './PanelsOffset'
 import type { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
 import type { TabHandler } from './TabHandler'
 import type { ChallengeContent } from './ChallengeContent'
@@ -9,6 +11,9 @@ export type ChallengeStoreActions = {
   setChallenge: (challenge: Challenge | null) => void
   setActiveContent: (challengeContent: ChallengeContent) => void
   setPanelsLayout: (panelsLayout: PanelsLayout) => void
+  setPanelOrder: (panelOrder: DockablePanelId[]) => void
+  setPanelsOffset: (panelsOffset: PanelsOffset) => void
+  resetPanelsLayout: () => void
   setCraftsVisibility: (craftsVislibility: ChallengeCraftsVisibility) => void
   setTabHandler: (tabHandler: TabHandler) => void
   setResults: (results: boolean[]) => void

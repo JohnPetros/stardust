@@ -46,6 +46,8 @@ describe('useChallengeCodeEditorSlot', () => {
   const playAudio = jest.fn()
   const localStorageGet = jest.fn()
   const localStorageSet = jest.fn()
+  const pushState = jest.fn()
+  let currentRoute = '/challenge'
 
   const lspProvider = {
     run: jest.fn(),
@@ -55,6 +57,7 @@ describe('useChallengeCodeEditorSlot', () => {
     getFunctionName: jest.fn(() => null),
     getFunctionParamsNames: jest.fn(() => []),
     getInput: jest.fn(() => null),
+    getCompletions: jest.fn(() => []),
     translateToLsp: jest.fn(async (value) => String(value ?? '')),
     translateToJs: jest.fn(),
     getInputsCount: jest.fn(() => 0),
@@ -72,10 +75,19 @@ describe('useChallengeCodeEditorSlot', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    jest.spyOn(window.history, 'pushState').mockImplementation(pushState)
+    currentRoute = '/challenge'
 
     jest.mocked(useChallengeStore).mockReturnValue({
       getChallengeSlice: () => ({ challenge }),
-      getPanelsLayoutSlice: () => ({ panelsLayout: null }),
+      getPanelOrderSlice: () => ({ panelOrder: ['tabs', 'code_editor', 'assistant'] }),
+      getPanelsOffsetSlice: () => ({
+        panelsOffset: {
+          tabsPanelSize: 38,
+          codeEditorPanelSize: 38,
+          assistantPanelSize: 24,
+        },
+      }),
       getResultsSlice: () => ({ setResults }),
       getTabHandlerSlice: () => ({
         tabHandler: {
@@ -114,7 +126,7 @@ describe('useChallengeCodeEditorSlot', () => {
       goBack: jest.fn(),
       refresh: jest.fn(),
       openExternal: jest.fn(),
-      currentRoute: '',
+      currentRoute,
     } as ReturnType<typeof useNavigationProvider>)
 
     jest.mocked(useAudioContext).mockReturnValue({
@@ -130,6 +142,10 @@ describe('useChallengeCodeEditorSlot', () => {
     } as ReturnType<typeof useAudioContext>)
 
     localStorageGet.mockReturnValue(null)
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
   })
 
   it('should open console and redirect when execution succeeds with outputs', async () => {
@@ -153,9 +169,61 @@ describe('useChallengeCodeEditorSlot', () => {
     expect(setResults).toHaveBeenCalledWith([true])
     expect(setActiveContent).toHaveBeenCalledWith('result')
     expect(showResultTab).toHaveBeenCalledTimes(1)
-    expect(goTo).toHaveBeenCalledWith(
+    expect(pushState).toHaveBeenCalledWith(
+      null,
+      '',
       ROUTES.challenging.challenges.challengeResult(challenge.slug.value),
     )
+    expect(goTo).not.toHaveBeenCalled()
+  })
+
+  it('should activate result content on desktop when execution succeeds', async () => {
+    jest.mocked(useBreakpoint).mockReturnValue({
+      xs: false,
+      sm: false,
+      md: false,
+      lg: true,
+      xl: true,
+    })
+    challenge.runCode.mockResolvedValue(List.create([]))
+
+    const { result } = renderHook(() => useChallengeCodeEditorSlot())
+
+    await act(async () => {
+      await result.current.handleRunCode()
+    })
+
+    expect(setResults).toHaveBeenCalledWith([true])
+    expect(setActiveContent).toHaveBeenCalledWith('result')
+    expect(showResultTab).not.toHaveBeenCalled()
+    expect(pushState).toHaveBeenCalledWith(
+      null,
+      '',
+      ROUTES.challenging.challenges.challengeResult(challenge.slug.value),
+    )
+    expect(goTo).not.toHaveBeenCalled()
+  })
+
+  it('should not push a new history entry when already on the result route', async () => {
+    currentRoute = ROUTES.challenging.challenges.challengeResult(challenge.slug.value)
+    jest.mocked(useNavigationProvider).mockReturnValue({
+      goTo,
+      goBack: jest.fn(),
+      refresh: jest.fn(),
+      openExternal: jest.fn(),
+      currentRoute,
+    } as ReturnType<typeof useNavigationProvider>)
+    challenge.runCode.mockResolvedValue(List.create([]))
+
+    const { result } = renderHook(() => useChallengeCodeEditorSlot())
+
+    await act(async () => {
+      await result.current.handleRunCode()
+    })
+
+    expect(setActiveContent).toHaveBeenCalledWith('result')
+    expect(pushState).not.toHaveBeenCalled()
+    expect(goTo).not.toHaveBeenCalled()
   })
 
   it('should not open console when execution fails', async () => {
