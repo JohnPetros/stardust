@@ -12,7 +12,7 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 - **Core (`packages/core/`)**: Regras de negócio puras com DDD tático. Sem dependência de frameworks. Contém Entities, Structures, Aggregates, Use Cases e Interfaces.
 - **Validation (`packages/validation/`)**: Schemas de validação com Zod, compartilhados entre as apps.
 - **Email (`packages/email/`)**: Templates de e-mail construidos com React Email para envio de e-mails.
-- **LSP (`packages/lsp/`)**: Implementação da Linguagem de Programação Delegua para análise e execução de código.
+- **LSP (`packages/lsp/`)**: Implementação da Linguagem de Programação Delegua para análise, execução, autocomplete e configuração de editor.
 
 ## Fluxo de Dados (resumo)
 
