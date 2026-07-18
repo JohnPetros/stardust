@@ -1291,6 +1291,64 @@ export type Database = {
           },
         ]
       }
+      challenge_code_executions: {
+        Row: {
+          challenge_id: string
+          code: string
+          created_at: string
+          error: Json | null
+          id: string
+          outputs: Json
+          status: string
+          test_results: Json
+          user_id: string
+        }
+        Insert: {
+          challenge_id: string
+          code: string
+          created_at?: string
+          error?: Json | null
+          id?: string
+          outputs?: Json
+          status: string
+          test_results?: Json
+          user_id: string
+        }
+        Update: {
+          challenge_id?: string
+          code?: string
+          created_at?: string
+          error?: Json | null
+          id?: string
+          outputs?: Json
+          status?: string
+          test_results?: Json
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'challenge_code_executions_challenge_id_fkey'
+            columns: ['challenge_id']
+            isOneToOne: false
+            referencedRelation: 'challenges'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'challenge_code_executions_challenge_id_fkey'
+            columns: ['challenge_id']
+            isOneToOne: false
+            referencedRelation: 'challenges_view'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'challenge_code_executions_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       challenges: {
         Row: {
           initial_code: string
@@ -1299,6 +1357,7 @@ export type Database = {
           difficulty_level: string
           function_name: string | null
           id: string
+          is_evaluated_by_function: boolean
           is_new: boolean
           is_public: boolean
           slug: string
@@ -1315,6 +1374,7 @@ export type Database = {
           difficulty_level?: string
           function_name?: string | null
           id?: string
+          is_evaluated_by_function?: boolean
           is_new?: boolean
           is_public?: boolean
           slug: string
@@ -1331,6 +1391,7 @@ export type Database = {
           difficulty_level?: string
           function_name?: string | null
           id?: string
+          is_evaluated_by_function?: boolean
           is_new?: boolean
           is_public?: boolean
           slug?: string
@@ -2770,6 +2831,7 @@ export type Database = {
           downvotes_count: number | null
           function_name: string | null
           id: string | null
+          is_evaluated_by_function: boolean | null
           is_new: boolean | null
           is_public: boolean | null
           slug: string | null
@@ -3139,6 +3201,7 @@ export type Database = {
           downvotes_count: number
           function_name: string
           id: string
+          is_evaluated_by_function: boolean
           is_new: boolean
           is_public: boolean
           slug: string
