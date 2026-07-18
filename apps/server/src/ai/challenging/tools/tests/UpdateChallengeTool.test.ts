@@ -60,6 +60,7 @@ describe('Update Challenge Tool', () => {
         id: '16a8d130-18f7-455c-8f37-f1f90f648428',
       },
       isPublic: false,
+      isEvaluatedByFunction: true,
     })
 
     const executeSpy = jest.spyOn(UpdateChallengeUseCase.prototype, 'execute')
@@ -110,6 +111,7 @@ describe('Update Challenge Tool', () => {
         id: accountId,
       },
       isPublic: false,
+      isEvaluatedByFunction: true,
     })
 
     const executeSpy = jest
@@ -122,6 +124,125 @@ describe('Update Challenge Tool', () => {
       expect.objectContaining({
         challengeDto: expect.objectContaining({
           isPublic: true,
+        }),
+      }),
+    )
+  })
+
+  it('should preserve current evaluation mode when omitted', async () => {
+    const accountId = '34de8db6-c4c6-41fe-af7c-59f5099ce377'
+    const challengeId = 'f246350e-c2ad-4e6a-b8bd-57e979f1a62e'
+
+    mcp.getAccountId.mockReturnValue(accountId)
+    mcp.getInput.mockReturnValue({
+      challengeId,
+      title: 'Novo titulo',
+      description: 'Nova descricao',
+      initialCode: 'escreva("ok")',
+      difficultyLevel: 'easy',
+      testCases: [
+        {
+          inputs: [1],
+          expectedOutput: 1,
+          isLocked: false,
+          position: 1,
+        },
+      ],
+      categories: [{ id: '6e1df5cb-ad7d-42b7-9178-93566276564a', name: 'listas' }],
+    })
+
+    jest.spyOn(GetChallengeUseCase.prototype, 'execute').mockResolvedValue({
+      id: challengeId,
+      title: 'Titulo atual',
+      description: 'Descricao atual',
+      initialCode: 'escreva("ok")',
+      difficultyLevel: 'easy',
+      testCases: [
+        {
+          inputs: [1],
+          expectedOutput: 1,
+          isLocked: false,
+          position: 1,
+        },
+      ],
+      categories: [{ id: '6e1df5cb-ad7d-42b7-9178-93566276564a', name: 'listas' }],
+      author: {
+        id: accountId,
+      },
+      isPublic: false,
+      isEvaluatedByFunction: false,
+    })
+
+    const executeSpy = jest
+      .spyOn(UpdateChallengeUseCase.prototype, 'execute')
+      .mockResolvedValue({} as never)
+
+    await tool.handle(mcp)
+
+    expect(executeSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        challengeDto: expect.objectContaining({
+          isEvaluatedByFunction: false,
+        }),
+      }),
+    )
+  })
+
+  it('should update evaluation mode when informed', async () => {
+    const accountId = '34de8db6-c4c6-41fe-af7c-59f5099ce377'
+    const challengeId = 'f246350e-c2ad-4e6a-b8bd-57e979f1a62e'
+
+    mcp.getAccountId.mockReturnValue(accountId)
+    mcp.getInput.mockReturnValue({
+      challengeId,
+      title: 'Novo titulo',
+      description: 'Nova descricao',
+      initialCode: 'escreva("ok")',
+      difficultyLevel: 'easy',
+      testCases: [
+        {
+          inputs: [1],
+          expectedOutput: 1,
+          isLocked: false,
+          position: 1,
+        },
+      ],
+      categories: [{ id: '6e1df5cb-ad7d-42b7-9178-93566276564a', name: 'listas' }],
+      isEvaluatedByFunction: false,
+    })
+
+    jest.spyOn(GetChallengeUseCase.prototype, 'execute').mockResolvedValue({
+      id: challengeId,
+      title: 'Titulo atual',
+      description: 'Descricao atual',
+      initialCode: 'funcao resolver() {}',
+      difficultyLevel: 'easy',
+      testCases: [
+        {
+          inputs: [1],
+          expectedOutput: 1,
+          isLocked: false,
+          position: 1,
+        },
+      ],
+      categories: [{ id: '6e1df5cb-ad7d-42b7-9178-93566276564a', name: 'listas' }],
+      author: {
+        id: accountId,
+      },
+      isPublic: false,
+      isEvaluatedByFunction: true,
+    })
+
+    const executeSpy = jest
+      .spyOn(UpdateChallengeUseCase.prototype, 'execute')
+      .mockResolvedValue({} as never)
+
+    await tool.handle(mcp)
+
+    expect(executeSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        challengeDto: expect.objectContaining({
+          isEvaluatedByFunction: false,
         }),
       }),
     )

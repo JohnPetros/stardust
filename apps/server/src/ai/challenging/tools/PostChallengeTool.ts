@@ -18,6 +18,7 @@ type Input = {
   testCases: TestCaseDto[]
   categories: ChallengeCategoryDto[]
   challengeSourceId?: string | null
+  isEvaluatedByFunction?: boolean
 }
 
 export class PostChallengeTool implements Tool<Input, ChallengeDto> {
@@ -36,6 +37,7 @@ export class PostChallengeTool implements Tool<Input, ChallengeDto> {
       testCases,
       categories,
       challengeSourceId,
+      isEvaluatedByFunction,
     } = mcp.getInput()
     const accountId = mcp.getAccountId()
     const useCase = new PostChallengeUseCase(
@@ -56,6 +58,7 @@ export class PostChallengeTool implements Tool<Input, ChallengeDto> {
           id: accountId,
         },
         isPublic: false,
+        isEvaluatedByFunction: isEvaluatedByFunction ?? true,
         isNew: true,
       },
       challengeSourceId: challengeSourceId ?? null,

@@ -19,8 +19,6 @@ describe('[PUT] /profile/users/:userId/reward/star-challenge', () => {
       .send({
         challengeId: Id.create().value,
         starId: Id.create().value,
-        maximumIncorrectAnswersCount: 3,
-        incorrectAnswersCount: 1,
       })
 
     expect(response.status).toBe(HTTP_STATUS_CODE.unauthorized)

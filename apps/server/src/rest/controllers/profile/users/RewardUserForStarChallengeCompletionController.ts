@@ -2,6 +2,13 @@ import type { Controller } from '@stardust/core/global/interfaces'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
+import type {
+  ChallengeCodeExecutionsRepository,
+  ChallengesRepository,
+} from '@stardust/core/challenging/interfaces'
+import { Id } from '@stardust/core/global/structures'
+import { NotAllowedError } from '@stardust/core/global/errors'
+import { ChallengeNotFoundError } from '@stardust/core/challenging/errors'
 import {
   CalculateRewardForChallengeCompletionUseCase,
   CompleteChallengeUseCase,
@@ -22,8 +29,6 @@ type Schema = {
       xp: number
       coins: number
     }
-    maximumIncorrectAnswersCount: number
-    incorrectAnswersCount: number
     nextStarId?: string
     starId: string
   }
@@ -32,18 +37,17 @@ type Schema = {
 export class RewardUserForStarChallengeCompletionController
   implements Controller<Schema>
 {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly challengesRepository: ChallengesRepository,
+    private readonly executionsRepository: ChallengeCodeExecutionsRepository,
+  ) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { userId } = http.getRouteParams()
-    const {
-      starId,
-      nextStarId,
-      challengeId,
-      challengeReward,
-      maximumIncorrectAnswersCount,
-      incorrectAnswersCount,
-    } = await http.getBody()
+    const { starId, nextStarId, challengeId, challengeReward } = await http.getBody()
+    const { maximumIncorrectAnswersCount, incorrectAnswersCount } =
+      await this.getTrustedExecutionCounts(userId, challengeId)
 
     const { newCoins, newXp, accuracyPercentage } = await this.calculateReward(
       userId,
@@ -76,6 +80,38 @@ export class RewardUserForStarChallengeCompletionController
       newWeekStatus,
       accuracyPercentage,
     })
+  }
+
+  private async getTrustedExecutionCounts(userId: string, challengeId: string) {
+    const userIdObject = Id.create(userId)
+    const challengeIdObject = Id.create(challengeId)
+
+    const [challenge, latestExecution, incorrectAnswersCount] = await Promise.all([
+      this.challengesRepository.findById(challengeIdObject),
+      this.executionsRepository.findLatestByUserAndChallenge(
+        userIdObject,
+        challengeIdObject,
+      ),
+      this.executionsRepository.countIncorrectByUserAndChallenge(
+        userIdObject,
+        challengeIdObject,
+      ),
+    ])
+
+    if (!challenge) {
+      throw new ChallengeNotFoundError()
+    }
+
+    if (!latestExecution?.isAccepted) {
+      throw new NotAllowedError(
+        'É necessário executar o código com sucesso antes da recompensa',
+      )
+    }
+
+    return {
+      maximumIncorrectAnswersCount: challenge.maximumIncorrectAnswersCount.value,
+      incorrectAnswersCount: incorrectAnswersCount.value,
+    }
   }
 
   private async calculateReward(

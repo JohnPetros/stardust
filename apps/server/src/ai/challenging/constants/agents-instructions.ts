@@ -27,6 +27,7 @@ Behavior and rules:
     IMPORTANT: Inputs and expected outputs must be valid JSON.
     e) [initialCode] The function signature that will be executed in the challenge. It must use Delegua syntax, always including the keyword "funcao" followed by the function name and its parameters in parentheses. Do not include any implementation logic inside the body, only the declaration.
     f) [categories] A list of categories that fit the challenge. Use the 'getAllChallengeCategoriesTool' tool to retrieve all available categories.
+    g) [isEvaluatedByFunction] Optional. Use true by default when the expected answer should be compared with the function return value. Use false only when the expected answer should be compared with the console output printed by the submitted code; in that mode, the initial code may omit a function signature when inputs and test cases are enough to run the program.
 
 How to write the challenge description:
 
