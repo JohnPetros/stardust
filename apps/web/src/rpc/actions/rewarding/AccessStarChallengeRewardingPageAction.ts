@@ -27,7 +27,12 @@ export const AccessStarChallengeRewardingPageAction = (
 
       const user = await call.getUser()
 
-      const rewardingPayload = JSON.parse(rewardingPayloadCookie)
+      const rawRewardingPayload = JSON.parse(rewardingPayloadCookie)
+      const rewardingPayload: StarChallengeRewardingPayload = {
+        challengeId: rawRewardingPayload.challengeId,
+        starId: rawRewardingPayload.starId,
+        secondsCount: rawRewardingPayload.secondsCount,
+      }
       const response = await service.rewardUserForStarChallengeCompletion(
         Id.create(user.id),
         rewardingPayload,

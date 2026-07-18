@@ -1,1 +1,6 @@
-export type ChallengeContent = 'description' | 'result' | 'comments' | 'solutions'
+export type ChallengeContent =
+  | 'description'
+  | 'result'
+  | 'comments'
+  | 'solutions'
+  | 'executions'

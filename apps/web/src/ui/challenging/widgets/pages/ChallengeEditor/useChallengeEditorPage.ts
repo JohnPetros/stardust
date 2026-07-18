@@ -86,6 +86,7 @@ export function useChallengeEditorPage({
           id: category.id.value,
           name: category.name.value,
         })) ?? [],
+      isEvaluatedByFunction: currentChallenge?.isEvaluatedByFunction.value ?? true,
       isPublic:
         typeof currentChallenge?.isPublic === 'undefined'
           ? false
@@ -96,14 +97,16 @@ export function useChallengeEditorPage({
   const [isActionFailure, setIsActionFailure] = useState(false)
 
   const allFields = form.watch()
-  const areAllFieldsFilled = [
+  const requiredFields = [
     allFields.title,
     allFields.difficultyLevel,
-    allFields.function.name,
     allFields.description,
-    allFields.function.params.length,
     allFields.categories.length,
-  ].every(Boolean)
+  ]
+  if (allFields.isEvaluatedByFunction) {
+    requiredFields.push(allFields.function.name, allFields.function.params.length)
+  }
+  const areAllFieldsFilled = requiredFields.every(Boolean)
 
   async function handleSubmit(formData: ChallengeForm) {
     const challenge = Challenge.create({
@@ -125,6 +128,7 @@ export function useChallengeEditorPage({
       })),
       categories: formData.categories,
       isPublic: formData.isPublic ?? false,
+      isEvaluatedByFunction: formData.isEvaluatedByFunction,
     })
 
     if (currentChallenge) {
@@ -190,7 +194,12 @@ export function useChallengeEditorPage({
 
   useEffect(() => {
     const subscription = form.watch((value, { name }) => {
-      if (!name?.includes('function') || !value.function?.params?.length) return
+      if (
+        !value.isEvaluatedByFunction ||
+        !name?.includes('function') ||
+        !value.function?.params?.length
+      )
+        return
       const functionName = value.function.name
       const functionParamsNames = value.function.params.map((param) => param?.name)
       form.setValue(

@@ -114,8 +114,18 @@ describe('ChallengeTabsView', () => {
   it('should render account requirement button when user is not authenticated', () => {
     View({ isAccountAuthenticated: false })
 
-    expect(screen.getByTestId('account-required')).toBeInTheDocument()
+    expect(screen.getAllByTestId('account-required')).toHaveLength(2)
+    expect(screen.getByRole('button', { name: 'Execuções' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Soluções' })).toBeInTheDocument()
+  })
+
+  it('should render executions link for authenticated users', () => {
+    View({ activeContent: 'executions', isAccountAuthenticated: true })
+
+    expect(screen.getByTestId('content-link-executions')).toHaveAttribute(
+      'data-active',
+      'true',
+    )
   })
 
   it('should call onShowSolutions when blocked solutions dialog action is triggered', async () => {

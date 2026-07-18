@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { Code } from '@stardust/core/global/structures'
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
+import { ChallengeCodeExecution } from '@stardust/core/challenging/structures'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import { Code, Text } from '@stardust/core/global/structures'
 import { InsufficientInputsError } from '@stardust/core/challenging/errors'
 import { LspError } from '@stardust/core/global/errors'
 
@@ -15,7 +18,18 @@ import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 
-export function useChallengeCodeEditorSlot() {
+type Params = {
+  challengingService?: ChallengingService
+  isAccountAuthenticated?: boolean
+  onUnauthorized?: () => void
+}
+
+export function useChallengeCodeEditorSlot({
+  challengingService,
+  isAccountAuthenticated = false,
+  onUnauthorized,
+}: Params = {}) {
+  const challengeStore = useChallengeStore()
   const {
     getChallengeSlice,
     getPanelOrderSlice,
@@ -23,17 +37,33 @@ export function useChallengeCodeEditorSlot() {
     getResultsSlice,
     getTabHandlerSlice,
     getActiveContentSlice,
-  } = useChallengeStore()
+  } = challengeStore
   const { setResults } = getResultsSlice()
   const { challenge } = getChallengeSlice()
   const { panelOrder } = getPanelOrderSlice()
   const { panelsOffset } = getPanelsOffsetSlice()
   const { tabHandler } = getTabHandlerSlice()
   const { setActiveContent } = getActiveContentSlice()
+  const codeExecutionSlice = challengeStore.getCodeExecutionSlice?.() ?? {
+    isCodeRunning: false,
+    currentCode: '',
+    setCurrentCode: () => {},
+    startCodeExecution: () => {},
+    finishCodeExecution: () => {},
+    failCodeExecution: () => {},
+  }
+  const {
+    isCodeRunning,
+    currentCode,
+    setCurrentCode,
+    startCodeExecution,
+    finishCodeExecution,
+    failCodeExecution,
+  } = codeExecutionSlice
   const { md: isMobile } = useBreakpoint()
   const { playAudio } = useAudioContext()
   const { lspProvider } = useLsp()
-  const toast = useToastContext()
+  const { show: showToast, showError } = useToastContext()
   const { currentRoute } = useNavigationProvider()
   const userCode = useRef<Code>(Code.create(lspProvider))
   const editorContainerRef = useRef<HTMLDivElement>(null)
@@ -57,45 +87,105 @@ export function useChallengeCodeEditorSlot() {
         return errorLine > 0 ? `</br>Linha: ${errorLine}` : ''
       }
 
-      toast.show(`${message} ${formatErrorLine(line)}`, {
+      showToast(`${message} ${formatErrorLine(line)}`, {
         type: 'error',
         seconds: 5,
       })
     },
-    [toast],
+    [showToast],
   )
 
   async function handleRunCode() {
-    if (!challenge) return
+    if (!challenge || isCodeRunning) return
 
     setOutputs([])
     consoleRef.current?.close()
+    const currentCode = userCode.current.value
+    startCodeExecution(currentCode)
 
     try {
-      const initialCode = Code.create(lspProvider, challenge.initialCode.value)
-      const executionOutputs = await challenge.runCode(userCode.current, initialCode)
+      const runCodeLocally = async () => {
+        const initialCode = Code.create(lspProvider, challenge.initialCode.value)
+        const executionOutputs = await challenge.runCode(userCode.current, initialCode)
 
-      setOutputs(executionOutputs.items)
-      setResults(challenge.results.items)
+        setOutputs(executionOutputs.items)
+        setResults(challenge.results.items)
+        failCodeExecution()
 
-      if (executionOutputs.length > 0) {
-        consoleRef.current?.open()
+        if (executionOutputs.length > 0) {
+          consoleRef.current?.open()
+        }
+
+        setActiveContent('result')
+
+        if (isMobile) {
+          tabHandler?.showResultTab()
+        }
+
+        const resultRoute = ROUTES.challenging.challenges.challengeResult(
+          challenge.slug.value,
+        )
+
+        if (currentRoute !== resultRoute) {
+          window.history.pushState(null, '', resultRoute)
+        }
       }
 
-      setActiveContent('result')
+      if (isAccountAuthenticated && challengingService) {
+        const response = await challengingService.runChallengeCode(
+          challenge.id,
+          Text.create(currentCode, 'Código do desafio'),
+        )
 
-      if (isMobile) {
-        tabHandler?.showResultTab()
+        if (userCode.current.value !== currentCode) {
+          failCodeExecution()
+          return
+        }
+
+        if (response.statusCode === HTTP_STATUS_CODE.unauthorized) {
+          onUnauthorized?.()
+          await runCodeLocally()
+          return
+        }
+
+        if (response.isFailure) response.throwError()
+
+        const execution = ChallengeCodeExecution.create(response.body)
+        setOutputs(execution.outputs.items.map((output) => output.value))
+
+        if (execution.error) {
+          showError(execution.error.message.value, 5)
+        }
+
+        finishCodeExecution(execution)
+
+        if (execution.outputs.length > 0 && challenge.isEvaluatedByFunction.isFalse) {
+          consoleRef.current?.open()
+        }
+
+        setActiveContent('result')
+
+        if (isMobile) {
+          tabHandler?.showResultTab()
+        }
+
+        const resultRoute = ROUTES.challenging.challenges.challengeResult(
+          challenge.slug.value,
+        )
+
+        if (currentRoute !== resultRoute) {
+          window.history.pushState(null, '', resultRoute)
+        }
+
+        return
       }
 
-      const resultRoute = ROUTES.challenging.challenges.challengeResult(
-        challenge.slug.value,
-      )
-
-      if (currentRoute !== resultRoute) {
-        window.history.pushState(null, '', resultRoute)
-      }
+      await runCodeLocally()
     } catch (error) {
+      failCodeExecution()
+
+      if (userCode.current.value !== currentCode) return
+
       playAudio('fail-code-result.wav')
 
       if (error instanceof LspError) {
@@ -104,15 +194,15 @@ export function useChallengeCodeEditorSlot() {
       }
 
       if (error instanceof InsufficientInputsError) {
-        toast.showError(
+        showError(
           'Para a aceitação do exercício, nenhum comando leia() deve ser alterado.',
         )
         return
       }
 
-      console.error(error)
+      console.error('useChallengeCodeEditorSlot', error)
 
-      toast.showError('Erro interno do interpretador.')
+      showError('Erro interno do interpretador.')
     }
   }
 
@@ -123,6 +213,7 @@ export function useChallengeCodeEditorSlot() {
   function handleCodeChange(value: string) {
     localStorage.set(value)
     userCode.current = userCode.current.changeValue(value)
+    setCurrentCode(value)
   }
 
   const handleCodeEditorHeight = useCallback(() => {
@@ -132,8 +223,17 @@ export function useChallengeCodeEditorSlot() {
   useEffect(() => {
     if (!userCode?.current.value && challenge) {
       userCode.current = Code.create(lspProvider, initialCode)
+      setCurrentCode(initialCode)
     }
-  }, [challenge, lspProvider, initialCode])
+  }, [challenge, lspProvider, initialCode, setCurrentCode])
+
+  useEffect(() => {
+    if (!currentCode || userCode.current.value === currentCode) return
+
+    localStorage.set(currentCode)
+    userCode.current = userCode.current.changeValue(currentCode)
+    codeEditorRef.current?.setValue(currentCode)
+  }, [currentCode, localStorage])
 
   useEffect(() => {
     if (!panelsLayoutVersion) return
@@ -157,6 +257,7 @@ export function useChallengeCodeEditorSlot() {
     codeEditorRef,
     codeEditorHeight,
     outputs,
+    isCodeRunning,
     isMobile,
     originalCode: Code.create(lspProvider, challenge?.initialCode.value),
     initialCode,

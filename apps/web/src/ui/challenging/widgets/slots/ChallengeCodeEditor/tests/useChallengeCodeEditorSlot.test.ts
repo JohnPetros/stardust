@@ -1,6 +1,8 @@
 import { act, renderHook } from '@testing-library/react'
 
 import { List } from '@stardust/core/global/structures'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import { RestResponse } from '@stardust/core/global/responses'
 import { LspError } from '@stardust/core/global/errors'
 
 import { ROUTES } from '@/constants'
@@ -69,6 +71,7 @@ describe('useChallengeCodeEditorSlot', () => {
     id: { value: 'challenge-id' },
     slug: { value: 'challenge-slug' },
     initialCode: { value: 'escreva("oi")' },
+    isEvaluatedByFunction: { isFalse: true },
     results: List.create<boolean>([true]),
     runCode: jest.fn(),
   }
@@ -177,6 +180,61 @@ describe('useChallengeCodeEditorSlot', () => {
     expect(goTo).not.toHaveBeenCalled()
   })
 
+  it('should execute code locally and update results when unauthenticated', async () => {
+    const challengingService = {
+      runChallengeCode: jest.fn(),
+    }
+    challenge.runCode.mockResolvedValue(List.create([]))
+
+    const { result } = renderHook(() =>
+      useChallengeCodeEditorSlot({
+        challengingService,
+        isAccountAuthenticated: false,
+      }),
+    )
+
+    await act(async () => {
+      await result.current.handleRunCode()
+    })
+
+    expect(challengingService.runChallengeCode).not.toHaveBeenCalled()
+    expect(challenge.runCode).toHaveBeenCalledTimes(1)
+    expect(setResults).toHaveBeenCalledWith([true])
+    expect(setActiveContent).toHaveBeenCalledWith('result')
+  })
+
+  it('should invalidate the session and execute locally when the API is unauthorized', async () => {
+    const onUnauthorized = jest.fn()
+    const challengingService = {
+      runChallengeCode: jest.fn().mockResolvedValue(
+        new RestResponse({
+          errorMessage: 'Conta não autorizada',
+          statusCode: HTTP_STATUS_CODE.unauthorized,
+        }),
+      ),
+    }
+    challenge.runCode.mockResolvedValue(List.create([]))
+
+    const { result } = renderHook(() =>
+      useChallengeCodeEditorSlot({
+        challengingService,
+        isAccountAuthenticated: true,
+        onUnauthorized,
+      }),
+    )
+
+    await act(async () => {
+      await result.current.handleRunCode()
+    })
+
+    expect(onUnauthorized).toHaveBeenCalledTimes(1)
+    expect(challenge.runCode).toHaveBeenCalledTimes(1)
+    expect(setResults).toHaveBeenCalledWith([true])
+    expect(setActiveContent).toHaveBeenCalledWith('result')
+    expect(showError).not.toHaveBeenCalled()
+    expect(playAudio).not.toHaveBeenCalled()
+  })
+
   it('should activate result content on desktop when execution succeeds', async () => {
     jest.mocked(useBreakpoint).mockReturnValue({
       xs: false,
@@ -261,6 +319,89 @@ describe('useChallengeCodeEditorSlot', () => {
     })
 
     expect(open).toHaveBeenCalledTimes(1)
+  })
+
+  it('should show execution error message as a toast', async () => {
+    const challengingService = {
+      runChallengeCode: jest.fn().mockResolvedValue({
+        isFailure: false,
+        body: {
+          code: 'codigo invalido',
+          status: 'runtime_error',
+          testResults: [],
+          outputs: [],
+          error: {
+            message: 'Variável não definida',
+            line: 2,
+            isInternal: false,
+          },
+          createdAt: '2026-07-17T12:00:00.000Z',
+        },
+      }),
+    }
+
+    const { result } = renderHook(() =>
+      useChallengeCodeEditorSlot({
+        challengingService,
+        isAccountAuthenticated: true,
+      }),
+    )
+
+    await act(async () => {
+      await result.current.handleRunCode()
+    })
+
+    expect(showError).toHaveBeenCalledWith('Variável não definida', 5)
+  })
+
+  it('should ignore an execution response after the code changes', async () => {
+    let resolveExecution: (response: unknown) => void = () => {}
+    const challengingService = {
+      runChallengeCode: jest.fn().mockReturnValue(
+        new Promise((resolve) => {
+          resolveExecution = resolve
+        }),
+      ),
+    }
+    const { result } = renderHook(() =>
+      useChallengeCodeEditorSlot({
+        challengingService,
+        isAccountAuthenticated: true,
+      }),
+    )
+
+    let executionPromise: Promise<void>
+    act(() => {
+      executionPromise = result.current.handleRunCode()
+    })
+
+    act(() => {
+      result.current.handleCodeChange('codigo atualizado')
+    })
+
+    resolveExecution({
+      isFailure: false,
+      body: {
+        code: 'escreva("oi")',
+        status: 'runtime_error',
+        testResults: [],
+        outputs: [],
+        error: {
+          message: 'Erro do código antigo',
+          line: 1,
+          isInternal: false,
+        },
+        createdAt: '2026-07-17T12:00:00.000Z',
+      },
+    })
+
+    await act(async () => {
+      await executionPromise
+    })
+
+    expect(showError).not.toHaveBeenCalled()
+    expect(setActiveContent).not.toHaveBeenCalled()
+    expect(result.current.outputs).toEqual([])
   })
 
   it('should show the corrected interpreter error message on unexpected failures', async () => {

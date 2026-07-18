@@ -14,6 +14,8 @@ type Props = {
   codeEditorRef: RefObject<CodeEditorRef | null>
   onRunCode: () => void
   onOpenConsole?: () => void
+  isRunCodeLoading?: boolean
+  canOpenConsole?: boolean
   options?: {
     customActions?: ReactNode
     shouldHideAssistantButton?: boolean
@@ -33,6 +35,8 @@ export const CodeEditorToolbar = ({
   codeEditorRef,
   onRunCode,
   onOpenConsole,
+  isRunCodeLoading,
+  canOpenConsole = true,
   options,
   dragHandle,
 }: PropsWithChildren<Props>) => {
@@ -53,7 +57,8 @@ export const CodeEditorToolbar = ({
       runCodeButtonRef={runCodeButtonRef}
       guidesDialogButtonRef={guidesDialogButtonRef}
       onRunCode={onRunCode}
-      onOpenConsole={onOpenConsole}
+      onOpenConsole={canOpenConsole ? onOpenConsole : undefined}
+      isRunCodeLoading={isRunCodeLoading}
       onKeyDown={handleKeyDown}
       onResetCodeButtonClick={handleAssistantButtonClick}
       onAssistantEnabledChange={() => setIsAssistantEnabled(!isAssistantEnabled)}

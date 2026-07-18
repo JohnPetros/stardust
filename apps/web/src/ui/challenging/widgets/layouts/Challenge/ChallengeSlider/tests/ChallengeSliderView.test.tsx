@@ -94,11 +94,23 @@ describe('ChallengeSliderView', () => {
     expect(screen.queryByTestId('description-slot')).not.toBeInTheDocument()
   })
 
-  it('should render description slot when active content is result', () => {
+  it('should keep result as the primary content label', () => {
     View({ activeContent: 'result' })
 
+    expect(screen.getByRole('button', { name: 'Resultado' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Descrição' })).toBeInTheDocument()
+    expect(screen.getByTestId('result-slot')).toBeInTheDocument()
     expect(screen.getByTestId('description-slot')).toBeInTheDocument()
     expect(screen.queryByTestId('child-slot')).not.toBeInTheDocument()
+  })
+
+  it('should render executions as the primary label and content', () => {
+    View({ activeContent: 'executions' })
+
+    expect(screen.getByRole('button', { name: 'Execuções' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Resultado' })).toBeInTheDocument()
+    expect(screen.getByTestId('child-slot')).toBeInTheDocument()
+    expect(screen.queryByTestId('description-slot')).not.toBeInTheDocument()
   })
 
   it('should pass swiper instance to handleSlideChange', () => {

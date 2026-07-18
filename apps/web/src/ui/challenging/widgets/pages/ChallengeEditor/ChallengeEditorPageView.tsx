@@ -12,6 +12,7 @@ import { ActionButton } from '@/ui/global/widgets/components/ActionButton'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { Button } from '@/ui/global/widgets/components/Button'
 import { AlertDialog } from '@/ui/global/widgets/components/AlertDialog'
+import { Switch } from '@/ui/global/widgets/components/Switch'
 import { ChallengeTitleField } from './ChallengeTitleField'
 import { useChallengeEditorPage } from './useChallengeEditorPage'
 import { ChallengeFunctionField } from './ChallengeFunctionField'
@@ -65,6 +66,7 @@ export const ChallengeEditorPageView = ({
     success: shouldEditChallenge ? 'atualizado' : 'postado',
     failure: 'erro',
   }
+  const isEvaluatedByFunction = form.watch('isEvaluatedByFunction')
 
   return (
     <FormProvider {...form}>
@@ -146,7 +148,23 @@ export const ChallengeEditorPageView = ({
           Certifique-se de preencher todos os campos adequadamente.
         </p>
         <ChallengeTitleField />
-        <ChallengeFunctionField />
+        <div className='rounded border border-gray-700 bg-gray-900/40 p-4'>
+          <Switch
+            label={
+              isEvaluatedByFunction
+                ? 'Avaliar pelo retorno da função'
+                : 'Avaliar pela saída do console'
+            }
+            defaultCheck={isEvaluatedByFunction}
+            onCheck={(isChecked) =>
+              form.setValue('isEvaluatedByFunction', isChecked, {
+                shouldDirty: true,
+                shouldValidate: true,
+              })
+            }
+          />
+        </div>
+        {isEvaluatedByFunction && <ChallengeFunctionField />}
         <ChallengeTestCasesField />
         <ChallengeDescriptionField />
         <ChallengeCategoriesField categories={challengeCategories} />

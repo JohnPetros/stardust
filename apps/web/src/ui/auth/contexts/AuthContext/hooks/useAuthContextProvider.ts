@@ -144,6 +144,12 @@ export function useAuthContextProvider({
     [updateCache],
   )
 
+  const invalidateSession = useCallback(() => {
+    setAccount(null)
+    updateUserCache(null, false)
+    analyticsProvider.reset()
+  }, [analyticsProvider, updateUserCache])
+
   const updateUser = useCallback(
     async (user: User) => {
       if (user?.id) {
@@ -208,6 +214,7 @@ export function useAuthContextProvider({
       handleSignOut,
       handleSignUpWithSocialAccount,
       handleRetryUserCreation,
+      invalidateSession,
       updateUser,
       refetchUser: refetch,
       updateUserCache,
@@ -221,6 +228,7 @@ export function useAuthContextProvider({
       handleSignOut,
       handleSignUpWithSocialAccount,
       handleRetryUserCreation,
+      invalidateSession,
       updateUser,
       refetch,
       updateUserCache,

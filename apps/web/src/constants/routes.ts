@@ -22,6 +22,8 @@ export const ROUTES = {
         `/challenging/challenges/${challengeSlug}/challenge/result`,
       challengeComments: (challengeSlug: string) =>
         `/challenging/challenges/${challengeSlug}/challenge/comments`,
+      challengeExecutions: (challengeSlug: string) =>
+        `/challenging/challenges/${challengeSlug}/challenge/executions`,
       challengeSolutions: {
         list: (challengeSlug: string) =>
           `/challenging/challenges/${challengeSlug}/challenge/solutions`,

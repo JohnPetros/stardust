@@ -7,7 +7,10 @@ import type {
   SolutionsListingParams,
 } from '@stardust/core/challenging/types'
 import type { ChallengeVote } from '@stardust/core/challenging/structures'
-import type { ChallengeNavigationDto } from '@stardust/core/challenging/structures/dtos'
+import type {
+  ChallengeCodeExecutionDto,
+  ChallengeNavigationDto,
+} from '@stardust/core/challenging/structures/dtos'
 import type { Challenge } from '@stardust/core/challenging/entities'
 import type { PaginationResponse } from '@stardust/core/global/responses'
 import type {
@@ -139,6 +142,32 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
 
     async fetchPostedChallengesKpi() {
       return await restClient.get('/challenging/challenges/posted-challenges-kpi')
+    },
+
+    async runChallengeCode(challengeId: Id, code: Text) {
+      return await restClient.post(
+        `/challenging/challenges/${challengeId.value}/code-executions`,
+        {
+          code: code.value,
+        },
+      )
+    },
+
+    async fetchChallengeCodeExecutions({ challengeId, page, itemsPerPage }) {
+      restClient.clearQueryParams()
+      restClient.setQueryParam('page', page.value.toString())
+      restClient.setQueryParam('itemsPerPage', itemsPerPage.value.toString())
+      const response = await restClient.get<
+        PaginationResponse<ChallengeCodeExecutionDto>
+      >(`/challenging/challenges/${challengeId.value}/code-executions`)
+      restClient.clearQueryParams()
+      return response
+    },
+
+    async fetchChallengeCodeExecutionErrorsCount(challengeId: Id) {
+      return await restClient.get(
+        `/challenging/challenges/${challengeId.value}/code-executions/errors-count`,
+      )
     },
 
     async fetchChallengeSourcesList({

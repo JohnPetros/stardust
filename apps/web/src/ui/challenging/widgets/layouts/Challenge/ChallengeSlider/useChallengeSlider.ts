@@ -65,7 +65,9 @@ export function useChallengeSlider({
     }
 
     if (activeContent === 'result') {
-      showResultTab()
+      swiperRef.current?.swiper.slideTo(0)
+    } else {
+      swiperRef.current?.swiper.slideTo(0)
     }
   }, [onSetTabHandler, tabHandler, isMobile, activeContent])
 

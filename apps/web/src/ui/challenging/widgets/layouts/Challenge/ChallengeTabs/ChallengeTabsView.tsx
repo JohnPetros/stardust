@@ -86,6 +86,27 @@ export const ChallengeTabsView = ({
           )}
           <span className='text-gray-600'>|</span>
           {!isAccountAuthenticated && (
+            <AccountRequirementAlertDialog description='Acesse a sua conta para ver suas execuções deste desafio'>
+              <button
+                type='button'
+                className='flex items-center gap-2 rounded-md bg-gray-700 p-2 text-gray-500 text-sm'
+              >
+                Execuções
+                <Icon name='lock' size={16} className='text-gray-500' />
+              </button>
+            </AccountRequirementAlertDialog>
+          )}
+          {isAccountAuthenticated && (
+            <TabButton value='executions' asChild>
+              <ChallengeContentLink
+                title='Execuções'
+                contentType='executions'
+                isActive={activeContent === 'executions'}
+              />
+            </TabButton>
+          )}
+          <span className='text-gray-600'>|</span>
+          {!isAccountAuthenticated && (
             <AccountRequirementAlertDialog description='Acesse a sua conta para ver as soluções de outros usuários para este desafio'>
               <button
                 type='button'

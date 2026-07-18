@@ -2,7 +2,10 @@ import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
 import type { Challenge } from '@stardust/core/challenging/entities'
-import type { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
+import type {
+  ChallengeCodeExecution,
+  ChallengeCraftsVisibility,
+} from '@stardust/core/challenging/structures'
 import type { TextSelection, CodeSelection } from '@stardust/core/global/structures'
 
 import { INITIAL_CHALLENGE_STORE_STATE } from '../ChallengeStore/constants'
@@ -64,6 +67,67 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
         setResults(results: boolean[]) {
           return set(({ state }) => {
             state.results = results
+          })
+        },
+
+        setCurrentCode(code: string) {
+          return set(({ state }) => {
+            state.currentCode = code
+
+            if (state.acceptedCodeExecution?.code.value !== code) {
+              state.acceptedCodeExecution = null
+            }
+          })
+        },
+
+        setCodeExecutionErrorsCount(count: number) {
+          return set(({ state }) => {
+            state.codeExecutionErrorsCount = count
+          })
+        },
+
+        replaceCurrentCodeWithExecution(execution: ChallengeCodeExecution) {
+          return set(({ state }) => {
+            state.currentCode = execution.code.value
+            state.latestCodeExecution = execution
+            state.results = execution.testResults.items.map((result) => result.isCorrect)
+
+            if (execution.isAccepted) {
+              state.acceptedCodeExecution = execution
+            }
+          })
+        },
+
+        startCodeExecution(code: string) {
+          return set(({ state }) => {
+            state.isCodeRunning = true
+            state.pendingExecutionCode = code
+          })
+        },
+
+        finishCodeExecution(execution: ChallengeCodeExecution) {
+          return set(({ state }) => {
+            state.isCodeRunning = false
+            state.pendingExecutionCode = null
+            state.latestCodeExecution = execution
+            state.results = execution.testResults.items.map((result) => result.isCorrect)
+
+            if (execution.isAccepted) {
+              state.acceptedCodeExecution = execution
+            }
+          })
+        },
+
+        failCodeExecution() {
+          return set(({ state }) => {
+            state.isCodeRunning = false
+            state.pendingExecutionCode = null
+          })
+        },
+
+        invalidateAcceptedCodeExecution() {
+          return set(({ state }) => {
+            state.acceptedCodeExecution = null
           })
         },
 

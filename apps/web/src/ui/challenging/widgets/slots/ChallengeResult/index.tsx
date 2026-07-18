@@ -11,8 +11,18 @@ import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 export const ChallengeResultSlot = () => {
   const alertDialogRef = useRef<AlertDialogRef | null>(null)
   const { isAccountAuthenticated } = useAuthContext()
-  const { challenge, results, userAnswer, isLeavingPage, handleUserAnswer } =
-    useChallengeResultSlot({ alertDialogRef, isAccountAuthenticated })
+  const {
+    challenge,
+    results,
+    userOutputs,
+    isAnswered,
+    userAnswer,
+    isLeavingPage,
+    codeExecutionErrorsCount,
+    isBlocked,
+    blockedReason,
+    handleUserAnswer,
+  } = useChallengeResultSlot({ alertDialogRef, isAccountAuthenticated })
 
   if (challenge)
     return (
@@ -20,8 +30,13 @@ export const ChallengeResultSlot = () => {
         alertDialogRef={alertDialogRef}
         challenge={challenge}
         results={results}
+        userOutputs={userOutputs}
+        isAnswered={isAnswered}
         userAnswer={userAnswer}
         isLeavingPage={isLeavingPage}
+        codeExecutionErrorsCount={codeExecutionErrorsCount}
+        isBlocked={isBlocked}
+        blockedReason={blockedReason}
         handleUserAnswer={handleUserAnswer}
       />
     )

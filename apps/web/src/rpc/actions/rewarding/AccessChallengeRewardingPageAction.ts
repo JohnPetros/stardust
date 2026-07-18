@@ -27,7 +27,11 @@ export const AccessChallengeRewardingPageAction = (
       if (!rewardingPayloadCookie) call.notFound()
       const user = await call.getUser()
 
-      const rewardingPayload = JSON.parse(rewardingPayloadCookie)
+      const rawRewardingPayload = JSON.parse(rewardingPayloadCookie)
+      const rewardingPayload: ChallengeRewardingPayload = {
+        challengeId: rawRewardingPayload.challengeId,
+        secondsCount: rawRewardingPayload.secondsCount,
+      }
       const response = await service.rewardUserForChallengeCompletion(
         Id.create(user.id),
         rewardingPayload,

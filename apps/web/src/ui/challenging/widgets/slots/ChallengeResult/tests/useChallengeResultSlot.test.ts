@@ -1,7 +1,10 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
 
 import { ChallengesFaker } from '@stardust/core/challenging/entities/fakers'
-import { ChallengeCraftsVisibility } from '@stardust/core/challenging/structures'
+import {
+  ChallengeCodeExecution,
+  ChallengeCraftsVisibility,
+} from '@stardust/core/challenging/structures'
 import { List } from '@stardust/core/global/structures'
 import { UsersFaker } from '@stardust/core/profile/entities/fakers'
 
@@ -59,7 +62,14 @@ describe('useChallengeResultSlot', () => {
     },
   }
 
-  const setupStore = () => {
+  const setupStore = (
+    executionState: Partial<{
+      latestCodeExecution: ChallengeCodeExecution | null
+      acceptedCodeExecution: ChallengeCodeExecution | null
+      currentCode: string
+      results: boolean[]
+    }> = {},
+  ) => {
     jest.mocked(useChallengeStore).mockReturnValue({
       getChallengeSlice: () => ({ challenge, setChallenge }),
       getCraftsVisibilitySlice: () => ({
@@ -73,7 +83,16 @@ describe('useChallengeResultSlot', () => {
           showAssistantTab: jest.fn(),
         },
       }),
-      getResultsSlice: () => ({ results: challenge.results.items }),
+      getResultsSlice: () => ({
+        results: executionState.results ?? challenge.results.items,
+      }),
+      getCodeExecutionSlice: () => ({
+        isCodeRunning: false,
+        latestCodeExecution: executionState.latestCodeExecution ?? null,
+        acceptedCodeExecution: executionState.acceptedCodeExecution ?? null,
+        codeExecutionErrorsCount: challenge.incorrectAnswersCount.value,
+        currentCode: executionState.currentCode ?? '',
+      }),
     } as unknown as ReturnType<typeof useChallengeStore>)
   }
 
@@ -88,6 +107,7 @@ describe('useChallengeResultSlot', () => {
       handleSignOut: jest.fn(),
       handleSignUpWithSocialAccount: jest.fn(),
       handleRetryUserCreation: jest.fn(),
+      invalidateSession: jest.fn(),
       updateUser: jest.fn(),
       updateUserCache: jest.fn(),
       refetchUser: jest.fn(),
@@ -176,6 +196,32 @@ describe('useChallengeResultSlot', () => {
     expect(result.current.userAnswer.isCorrect.isTrue).toBe(true)
   })
 
+  it('should complete the challenge from an accepted execution for the current code', () => {
+    const currentCode = 'funcao desafio() { retorne verdadeiro }'
+    const acceptedExecution = ChallengeCodeExecution.create({
+      code: currentCode,
+      status: 'accepted',
+      testResults: [],
+      outputs: [],
+      error: null,
+    })
+    setupStore({
+      acceptedCodeExecution: acceptedExecution,
+      latestCodeExecution: acceptedExecution,
+      currentCode,
+    })
+
+    const { result } = Hook()
+
+    act(() => {
+      result.current.handleUserAnswer()
+    })
+
+    expect(challenge.isCompleted.isTrue).toBe(true)
+    expect(result.current.userAnswer.isVerified.isTrue).toBe(true)
+    expect(result.current.userAnswer.isCorrect.isTrue).toBe(true)
+  })
+
   it('should still show star challenge rewards when a star challenge is already completed by the user', async () => {
     challenge = ChallengesFaker.fake({ starId: UsersFaker.fake().id.value })
     challenge.becomeCompleted()
@@ -194,8 +240,6 @@ describe('useChallengeResultSlot', () => {
         key: COOKIES.keys.rewardingPayload,
         value: JSON.stringify({
           secondsCount: 42,
-          incorrectAnswersCount: challenge.incorrectAnswersCount.value,
-          maximumIncorrectAnswersCount: challenge.maximumIncorrectAnswersCount.value,
           challengeId: challenge.id.value,
           starId: challenge.starId?.value,
         }),
@@ -257,8 +301,6 @@ describe('useChallengeResultSlot', () => {
         key: COOKIES.keys.rewardingPayload,
         value: JSON.stringify({
           secondsCount: 42,
-          incorrectAnswersCount: challenge.incorrectAnswersCount.value,
-          maximumIncorrectAnswersCount: challenge.maximumIncorrectAnswersCount.value,
           challengeId: challenge.id.value,
         }),
       })
@@ -288,8 +330,6 @@ describe('useChallengeResultSlot', () => {
         key: COOKIES.keys.rewardingPayload,
         value: JSON.stringify({
           secondsCount: 42,
-          incorrectAnswersCount: challenge.incorrectAnswersCount.value,
-          maximumIncorrectAnswersCount: challenge.maximumIncorrectAnswersCount.value,
           challengeId: challenge.id.value,
           starId: challenge.starId?.value,
         }),
@@ -347,5 +387,69 @@ describe('useChallengeResultSlot', () => {
     expect(showCodeTab).toHaveBeenCalledTimes(1)
     expect(challenge.verifyUserAnswer).toHaveBeenCalled()
     expect(result.current.userAnswer).toBe(incorrectAnswer)
+  })
+
+  it('should show test results from the latest wrong execution', () => {
+    const execution = ChallengeCodeExecution.create({
+      code: 'escreva("resposta")',
+      status: 'wrong_answer',
+      testResults: [
+        {
+          position: 1,
+          isCorrect: true,
+          userOutput: 'correto',
+          expectedOutput: 'correto',
+        },
+        {
+          position: 2,
+          isCorrect: false,
+          userOutput: 'incorreto',
+          expectedOutput: 'esperado',
+        },
+      ],
+      outputs: [],
+      error: null,
+    })
+    setupStore({
+      latestCodeExecution: execution,
+      currentCode: execution.code.value,
+      results: challenge.results.items,
+    })
+
+    const { result } = Hook()
+
+    expect(result.current.results).toEqual([true, false])
+    expect(result.current.userOutputs).toEqual(['correto', 'incorreto'])
+  })
+
+  it('should show local results instead of persisted execution when unauthenticated', () => {
+    const execution = ChallengeCodeExecution.create({
+      code: 'escreva("resposta antiga")',
+      status: 'wrong_answer',
+      testResults: [
+        {
+          position: 1,
+          isCorrect: false,
+          userOutput: 'remoto',
+          expectedOutput: 'esperado',
+        },
+      ],
+      outputs: [],
+      error: null,
+    })
+    const localResults = challenge.testCases.map(() => true)
+    const localOutputs = challenge.testCases.map(() => 'local')
+    setChallengeResults(localResults, localOutputs)
+    setupStore({
+      latestCodeExecution: execution,
+      acceptedCodeExecution: execution,
+      currentCode: execution.code.value,
+      results: localResults,
+    })
+
+    const { result } = Hook(false)
+
+    expect(result.current.results).toEqual(localResults)
+    expect(result.current.userOutputs).toEqual(localOutputs)
   })
 })

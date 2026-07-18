@@ -37,8 +37,6 @@ export const accessRewardForStarCompletionPage = authActionClient
 export const accessRewardForStarChallengeCompletionPage = authActionClient
   .schema(
     z.object({
-      incorrectAnswersCount: integerSchema,
-      maximumIncorrectAnswersCount: integerSchema,
       secondsCount: integerSchema,
       starId: idSchema,
       challengeId: idSchema,
@@ -58,8 +56,6 @@ export const accessRewardForStarChallengeCompletionPage = authActionClient
 export const accessRewardForChallengeCompletionPage = authActionClient
   .schema(
     z.object({
-      incorrectAnswersCount: integerSchema,
-      maximumIncorrectAnswersCount: integerSchema,
       secondsCount: integerSchema,
       challengeId: idSchema,
     }),

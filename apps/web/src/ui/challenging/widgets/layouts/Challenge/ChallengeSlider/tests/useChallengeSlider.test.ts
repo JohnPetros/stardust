@@ -52,7 +52,7 @@ describe('useChallengeSlider', () => {
     )
   })
 
-  it('should navigate to result tab when activeContent is result', () => {
+  it('should navigate to the primary tab when activeContent is result', () => {
     const tabHandler = {
       showResultTab: jest.fn(),
       showCodeTab: jest.fn(),
@@ -73,7 +73,31 @@ describe('useChallengeSlider', () => {
       onSetTabHandler: jest.fn(),
     } as Params)
 
-    expect(slideTo).toHaveBeenCalledWith(2)
+    expect(slideTo).toHaveBeenCalledWith(0)
+  })
+
+  it('should navigate to the primary tab when active content changes to executions', () => {
+    const tabHandler = {
+      showResultTab: jest.fn(),
+      showCodeTab: jest.fn(),
+      showAssistantTab: jest.fn(),
+    }
+    const { result, rerender } = Hook({ tabHandler, activeContent: 'result' })
+    const slideTo = jest.fn()
+
+    act(() => {
+      result.current.swiperRef.current = { swiper: { slideTo } } as any
+    })
+
+    rerender({
+      tabHandler,
+      activeContent: 'executions',
+      isMobile: true,
+      slidesCount: 4,
+      onSetTabHandler: jest.fn(),
+    } as Params)
+
+    expect(slideTo).toHaveBeenCalledWith(0)
   })
 
   it('should navigate when nav button is clicked', () => {

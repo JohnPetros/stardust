@@ -8,6 +8,7 @@ type Props = {
   isAnswered: boolean
   isAnswerVerified: boolean
   isAnswerCorrect: boolean
+  isBlocked?: boolean
   onClick: () => void
 }
 
@@ -15,6 +16,7 @@ export function useVerificationButton({
   isAnswerCorrect,
   isAnswerVerified,
   isAnswered,
+  isBlocked = false,
   onClick,
 }: Props) {
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -35,23 +37,25 @@ export function useVerificationButton({
   }, [isAnswerVerified, isAnswerCorrect])
 
   function handleButtonClick() {
+    if (isBlocked) return
+
     onClick()
   }
 
   const handleGlobalKeyDown = useCallback(
     ({ key }: KeyboardEvent) => {
-      if (key === 'Enter' && isAnswered && pathname.includes('/lesson')) {
+      if (key === 'Enter' && isAnswered && !isBlocked && pathname.includes('/lesson')) {
         onClick()
       }
     },
-    [onClick, isAnswered, pathname],
+    [onClick, isAnswered, isBlocked, pathname],
   )
 
   useEffect(() => {
     if (isAnswerVerified) {
       playAudio(isAnswerCorrect ? 'success.wav' : 'fail.wav')
     }
-  }, [isAnswerVerified, isAnswerCorrect])
+  }, [isAnswerVerified, isAnswerCorrect, playAudio])
 
   useEventListener('keydown', handleGlobalKeyDown)
 

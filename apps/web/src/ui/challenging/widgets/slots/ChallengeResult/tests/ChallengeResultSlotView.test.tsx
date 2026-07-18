@@ -57,8 +57,13 @@ describe('ChallengeResultSlotView', () => {
       <ChallengeResultSlotView
         challenge={challenge}
         results={[true, false, true]}
+        userOutputs={['1', '2', '3']}
+        isAnswered={true}
         userAnswer={UserAnswer.create('answer')}
         isLeavingPage={false}
+        codeExecutionErrorsCount={2}
+        isBlocked={false}
+        blockedReason=''
         alertDialogRef={alertDialogRef}
         handleUserAnswer={handleUserAnswer}
         {...props}
@@ -86,7 +91,7 @@ describe('ChallengeResultSlotView', () => {
         isLocked: challenge.testCases[0].isLocked.isTrue,
         isCorrect: true,
         inputs: challenge.testCases[0].inputs,
-        userOutput: challenge.userOutputs.getByIndex(0, null),
+        userOutput: '1',
         expectedOutput: challenge.testCases[0].expectedOutput,
       }),
       undefined,
@@ -95,7 +100,7 @@ describe('ChallengeResultSlotView', () => {
       2,
       expect.objectContaining({
         isCorrect: false,
-        userOutput: challenge.userOutputs.getByIndex(1, null),
+        userOutput: '2',
       }),
       undefined,
     )
@@ -121,6 +126,22 @@ describe('ChallengeResultSlotView', () => {
     expect(screen.getByTestId('verification-button')).toHaveAttribute(
       'data-correct',
       'true',
+    )
+  })
+
+  it('should render execution errors count', () => {
+    View({ codeExecutionErrorsCount: 4 })
+
+    expect(screen.getByText('Erros de execução:')).toBeInTheDocument()
+    expect(screen.getByText('4')).toBeInTheDocument()
+  })
+
+  it('should provide access to executions from the result', () => {
+    View()
+
+    expect(screen.getByRole('link', { name: 'Execuções' })).toHaveAttribute(
+      'href',
+      `/challenging/challenges/${challenge.slug.value}/challenge/executions`,
     )
   })
 
