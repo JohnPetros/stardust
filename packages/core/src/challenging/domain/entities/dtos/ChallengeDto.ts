@@ -16,6 +16,7 @@ export type ChallengeDto = {
   categories: ChallengeCategoryDto[]
   isPublic?: boolean
   isNew?: boolean
+  isEvaluatedByFunction?: boolean
   downvotesCount?: number
   upvotesCount?: number
   completionCount?: number

@@ -37,6 +37,7 @@ export type ChallengeProps = {
   isCompleted: Logical
   isPublic: Logical
   isNew: Logical
+  isEvaluatedByFunction: Logical
   author: AuthorAggregate
 }
 
@@ -87,12 +88,12 @@ export class Challenge extends Entity<ChallengeProps> {
 
       let result = ''
 
-      if (initialCode.hasFunction.isTrue) {
-        result = response.result
+      for (const output of response.outputs) {
+        executionOutputs = executionOutputs.add(output)
+      }
 
-        for (const output of response.outputs) {
-          executionOutputs = executionOutputs.add(output)
-        }
+      if (this.isEvaluatedByFunction.isTrue) {
+        result = response.result
       } else if (response.outputs[0]) {
         const formattedCode = await code.format(response.outputs[0])
         result = formattedCode.value
@@ -251,6 +252,10 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.isNew
   }
 
+  get isEvaluatedByFunction(): Logical {
+    return this.props.isEvaluatedByFunction
+  }
+
   get author() {
     return this.props.author
   }
@@ -309,6 +314,7 @@ export class Challenge extends Entity<ChallengeProps> {
       completionCount: this.completionCount.value,
       isPublic: this.isPublic.value,
       isNew: this.isNew.value,
+      isEvaluatedByFunction: this.isEvaluatedByFunction.value,
       userOutputs: this.props.userOutputs.items,
       results: this.props.results.items,
       description: this.description.value,

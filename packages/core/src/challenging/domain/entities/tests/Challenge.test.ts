@@ -95,4 +95,70 @@ describe('Challenge Entity', () => {
     expect(challenge.results.items).toStrictEqual([true])
     expect(challenge.userOutputs.items).toStrictEqual(['current output'])
   })
+
+  it('should compare lsp result when evaluated by function', async () => {
+    const lspProviderMock = mock<LspProvider>()
+    const challenge = ChallengesFaker.fake({
+      isEvaluatedByFunction: true,
+      testCases: [
+        {
+          position: 1,
+          inputs: [1, 2],
+          expectedOutput: 3,
+          isLocked: false,
+        },
+      ],
+    })
+
+    lspProviderMock.getFunctionName.mockReturnValue('solution')
+    lspProviderMock.addFunctionCall.mockImplementation(async (_, __, code) => code)
+    lspProviderMock.translateToLsp.mockImplementation(async (value) => String(value))
+    lspProviderMock.run.mockResolvedValue(
+      new LspResponse({
+        result: 3,
+        outputs: ['wrong console output'],
+      }),
+    )
+
+    const code = Code.create(lspProviderMock, 'funcao solution() {}')
+
+    await challenge.runCode(code, code)
+
+    expect(challenge.results.items).toStrictEqual([true])
+    expect(challenge.userOutputs.items).toStrictEqual([3])
+  })
+
+  it('should compare applicable output when not evaluated by function', async () => {
+    const lspProviderMock = mock<LspProvider>()
+    const challenge = ChallengesFaker.fake({
+      isEvaluatedByFunction: false,
+      testCases: [
+        {
+          position: 1,
+          inputs: [1, 2],
+          expectedOutput: 3,
+          isLocked: false,
+        },
+      ],
+    })
+
+    lspProviderMock.getFunctionName.mockReturnValue('solution')
+    lspProviderMock.addFunctionCall.mockImplementation(async (_, __, code) => code)
+    lspProviderMock.translateToLsp.mockImplementation(async (value) => String(value))
+    lspProviderMock.run.mockResolvedValue(
+      new LspResponse({
+        result: 'wrong function result',
+        outputs: ['3'],
+      }),
+    )
+
+    const code = Code.create(lspProviderMock, 'funcao solution() {}')
+
+    const executionOutputs = await challenge.runCode(code, code)
+
+    expect(challenge.results.items).toStrictEqual([true])
+    expect(challenge.userOutputs.items).toStrictEqual(['3'])
+    expect(executionOutputs.items).toStrictEqual(['3'])
+    expect(lspProviderMock.addFunctionCall).toHaveBeenCalled()
+  })
 })

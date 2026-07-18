@@ -106,6 +106,24 @@ describe('Calculate Reward For Challenge Completion Use Case', () => {
     expect(response.newCoins).toBe(50) // 50% of 100 coins
   })
 
+  it('should not grant a negative reward when incorrect answers exceed the maximum', async () => {
+    const user = UsersFaker.fake({ completedChallengesIds: [] })
+    repository.findById.mockResolvedValue(user)
+
+    const response = await useCase.execute({
+      maximumIncorrectAnswersCount: 10,
+      incorrectAnswersCount: 14,
+      userId: user.id.value,
+      challengeId: Id.create().value,
+      challengeXp: 100,
+      challengeCoins: 40,
+    })
+
+    expect(response.accuracyPercentage).toBe(0)
+    expect(response.newXp).toBe(0)
+    expect(response.newCoins).toBe(0)
+  })
+
   it('should divide the new calculated xp by 2 if the user has completed the challenge', async () => {
     const challengeId = Id.create().value
     const user = UsersFaker.fake({
@@ -144,5 +162,26 @@ describe('Calculate Reward For Challenge Completion Use Case', () => {
     })
 
     expect(response.newCoins).toBe(50) // 50% of 100 coins
+  })
+
+  it('should return whole rewards when a completed challenge has an odd base reward', async () => {
+    const challengeId = Id.create().value
+    const user = UsersFaker.fake({
+      completedChallengesIds: [challengeId],
+      hasCompletedSpace: false,
+    })
+    repository.findById.mockResolvedValue(user)
+
+    const response = await useCase.execute({
+      maximumIncorrectAnswersCount: 10,
+      incorrectAnswersCount: 0,
+      userId: user.id.value,
+      challengeId,
+      challengeXp: 101,
+      challengeCoins: 41,
+    })
+
+    expect(response.newXp).toBe(50)
+    expect(response.newCoins).toBe(20)
   })
 })

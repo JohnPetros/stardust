@@ -77,6 +77,8 @@ export class DeleguaProvedorLsp implements LspProvider {
     let resultadoFinal = null
     let resultadoRetornado = resultadoInterpretadorFiltrado?.at(-1)
 
+    console.log('resultadoRetornado', resultadoRetornado)
+
     if (typeof resultadoRetornado === 'string') {
       resultadoRetornado = JSON.parse(resultadoRetornado)
     }
