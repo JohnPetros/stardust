@@ -32,6 +32,8 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 
 **Lesson audio generation/removal**: REST `/lesson/text-blocks` → use cases do modulo `lesson` → eventos Inngest (`requested`, `batch requested`, `generated`, `cancelled`, `audio-file.removed`) → jobs de fan-out, TTS/upload, limpeza fisica de arquivo e persistencia final do `audio` em `stars.texts[blockIndex].audio`
 
+**Challenge code executions**: Web `ChallengeCodeEditorSlot` → Server `POST /challenging/challenges/:challengeId/code-executions` autenticado → `RunChallengeCodeUseCase` executa Delegua via `LspProvider`, classifica o status e persiste `challenge_code_executions` no Supabase → aba `Execucoes` lista historico paginado por usuario/desafio → recompensa de challenge/star challenge valida ultima execucao aceita e contagem de erros no server, sem confiar em contadores do browser.
+
 **Studio signed upload**: Studio `ImageInput` → `StorageService.createSignedUploadUrl(...)` → Server `POST /storage/signed-upload-url` → `CreateSignedUploadUrl` → `SupabaseFileStorageProvider.createSignedUploadUrl(...)` → upload direto do binario ao Supabase Storage
 
 **Feedback screenshot signed upload**: Web `FeedbackDialog` → `StorageService.createSignedUploadUrl(...)` → Server `POST /storage/signed-upload-url` → `CreateSignedUploadUrl` → `SupabaseFileStorageProvider.createSignedUploadUrl(...)` → upload direto do binario ao Supabase Storage → `ReportingService.sendFeedbackReport(...)`

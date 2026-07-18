@@ -12,7 +12,7 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
 
 O seguinte documento deve ser fornecido:
 
-- **Spec técnica** (`documentation/features/{dominio}/specs/{nome}-spec.md`) — para features, refatorações ou correções.
+- **Spec técnica** (`documentation/features/{dominio}/{feature}/specs/{nome}-spec.md`) — para features, refatorações ou correções. Quando houver subdiretórios adicionais entre domínio e feature, preserve a estrutura existente.
 
 > Bug reports não são entrada direta deste fluxo. Quando a demanda nascer de um bug, crie antes uma spec separada derivada do bug report e só então inicie o plano.
 > Se a spec não for fornecida, ou se o documento estiver incompleto, não inicie o plano. Registre a lacuna em **Pendências** e solicite a spec correta.
@@ -117,7 +117,17 @@ Cada tarefa de teste deve indicar qual arquivo de regras de teste deve ser consu
 
 ## Saída
 
-Salve o plano final em `documentation/features/{dominio}/plan.md` (mesmo diretório da spec de entrada), seguindo **estritamente** o template abaixo.
+Salve o plano final no diretório `plans` da mesma feature da spec de entrada.
+Derive o nome do arquivo a partir da spec:
+
+- Spec: `documentation/features/{dominio}/{feature}/specs/{nome}-spec.md`
+- Plano: `documentation/features/{dominio}/{feature}/plans/{nome}-plan.md`
+
+Se a spec estiver em uma estrutura mais profunda, preserve todos os segmentos
+entre `documentation/features/` e `specs/`, substituindo apenas `specs` por
+`plans` e o sufixo `-spec.md` por `-plan.md`.
+
+Siga **estritamente** o template abaixo.
 
 ```md
 ---
