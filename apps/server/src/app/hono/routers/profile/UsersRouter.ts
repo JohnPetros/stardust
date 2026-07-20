@@ -169,7 +169,6 @@ export class UsersRouter extends HonoRouter {
           starId: idSchema,
         }),
       ),
-      this.profileMiddleware.completeSpace,
       async (context) => {
         const http = new HonoHttp(context)
         const usersRepository = new SupabaseUsersRepository(http.getSupabase())

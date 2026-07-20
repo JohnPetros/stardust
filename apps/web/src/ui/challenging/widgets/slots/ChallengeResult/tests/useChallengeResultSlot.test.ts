@@ -1,11 +1,14 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
+import { mock, type Mock } from 'ts-jest-mocker'
 
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import { ChallengesFaker } from '@stardust/core/challenging/entities/fakers'
 import {
   ChallengeCodeExecution,
   ChallengeCraftsVisibility,
 } from '@stardust/core/challenging/structures'
 import { List } from '@stardust/core/global/structures'
+import { RestResponse } from '@stardust/core/global/responses'
 import { UsersFaker } from '@stardust/core/profile/entities/fakers'
 
 import { COOKIES, ROUTES } from '@/constants'
@@ -46,9 +49,11 @@ describe('useChallengeResultSlot', () => {
   const localStorageRemove = jest.fn()
   const goTo = jest.fn()
   const openAlertDialog = jest.fn()
+  const setCodeExecutionErrorsCount = jest.fn()
 
   let challenge = ChallengesFaker.fake()
   let user = UsersFaker.fake()
+  let challengingService: Mock<ChallengingService>
   let craftsVislibility = ChallengeCraftsVisibility.create({
     canShowComments: false,
     canShowSolutions: false,
@@ -92,6 +97,7 @@ describe('useChallengeResultSlot', () => {
         acceptedCodeExecution: executionState.acceptedCodeExecution ?? null,
         codeExecutionErrorsCount: challenge.incorrectAnswersCount.value,
         currentCode: executionState.currentCode ?? '',
+        setCodeExecutionErrorsCount,
       }),
     } as unknown as ReturnType<typeof useChallengeStore>)
   }
@@ -119,6 +125,7 @@ describe('useChallengeResultSlot', () => {
     renderHook(() =>
       useChallengeResultSlot({
         alertDialogRef,
+        challengingService,
         isAccountAuthenticated,
       }),
     )
@@ -135,6 +142,13 @@ describe('useChallengeResultSlot', () => {
 
     challenge = ChallengesFaker.fake()
     user = UsersFaker.fake()
+    challengingService = mock<ChallengingService>()
+    challengingService.fetchChallengeCodeExecutionErrorsCount.mockResolvedValue(
+      new RestResponse({
+        body: { errorsCount: 0 },
+        statusCode: 200,
+      }),
+    )
     craftsVislibility = ChallengeCraftsVisibility.create({
       canShowComments: false,
       canShowSolutions: false,
@@ -451,5 +465,23 @@ describe('useChallengeResultSlot', () => {
 
     expect(result.current.results).toEqual(localResults)
     expect(result.current.userOutputs).toEqual(localOutputs)
+  })
+
+  it('should load persisted code execution errors count for authenticated users', async () => {
+    challengingService.fetchChallengeCodeExecutionErrorsCount.mockResolvedValue(
+      new RestResponse({
+        body: { errorsCount: 3 },
+        statusCode: 200,
+      }),
+    )
+
+    Hook()
+
+    await waitFor(() => {
+      expect(
+        challengingService.fetchChallengeCodeExecutionErrorsCount,
+      ).toHaveBeenCalledWith(challenge.id)
+      expect(setCodeExecutionErrorsCount).toHaveBeenCalledWith(3)
+    })
   })
 })

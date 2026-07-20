@@ -16,6 +16,7 @@ import { ChallengeCodeExecution } from '@stardust/core/challenging/structures'
 import {
   CalculateRewardForChallengeCompletionUseCase,
   CompleteChallengeUseCase,
+  CompleteSpaceUseCase,
   RemoveRecentlyUnlockedStarUseCase,
   RewardUserUseCase,
   UnlockStarUseCase,
@@ -101,6 +102,9 @@ describe('Reward User For Star Challenge Completion Controller', () => {
     const calculateRewardSpy = jest
       .spyOn(CalculateRewardForChallengeCompletionUseCase.prototype, 'execute')
       .mockResolvedValue(reward)
+    const completeSpaceSpy = jest
+      .spyOn(CompleteSpaceUseCase.prototype, 'execute')
+      .mockResolvedValue()
     const unlockStarSpy = jest
       .spyOn(UnlockStarUseCase.prototype, 'execute')
       .mockResolvedValue(UsersFaker.fakeDto({ id: routeParams.userId }))
@@ -123,6 +127,10 @@ describe('Reward User For Star Challenge Completion Controller', () => {
       challengeCoins: body.challengeReward.coins,
       maximumIncorrectAnswersCount: challenge.maximumIncorrectAnswersCount.value,
       incorrectAnswersCount: 2,
+    })
+    expect(completeSpaceSpy).toHaveBeenCalledWith({
+      userId: routeParams.userId,
+      nextStarId: body.nextStarId,
     })
     expect(unlockStarSpy).toHaveBeenCalledWith({
       userId: routeParams.userId,
@@ -192,6 +200,9 @@ describe('Reward User For Star Challenge Completion Controller', () => {
     const calculateRewardSpy = jest
       .spyOn(CalculateRewardForChallengeCompletionUseCase.prototype, 'execute')
       .mockResolvedValue(reward)
+    const completeSpaceSpy = jest
+      .spyOn(CompleteSpaceUseCase.prototype, 'execute')
+      .mockResolvedValue()
     const unlockStarSpy = jest
       .spyOn(UnlockStarUseCase.prototype, 'execute')
       .mockResolvedValue(UsersFaker.fakeDto({ id: routeParams.userId }))
@@ -214,6 +225,10 @@ describe('Reward User For Star Challenge Completion Controller', () => {
       challengeCoins: body.challengeReward.coins,
       maximumIncorrectAnswersCount: challenge.maximumIncorrectAnswersCount.value,
       incorrectAnswersCount: 2,
+    })
+    expect(completeSpaceSpy).toHaveBeenCalledWith({
+      userId: routeParams.userId,
+      nextStarId: null,
     })
     expect(unlockStarSpy).not.toHaveBeenCalled()
     expect(removeRecentlyUnlockedStarSpy).toHaveBeenCalledWith({
@@ -254,7 +269,9 @@ describe('Reward User For Star Challenge Completion Controller', () => {
     executionsRepository.countIncorrectByUserAndChallenge.mockResolvedValue(
       Integer.create(1),
     )
+    const completeSpaceSpy = jest.spyOn(CompleteSpaceUseCase.prototype, 'execute')
 
     await expect(controller.handle(http)).rejects.toThrow(NotAllowedError)
+    expect(completeSpaceSpy).not.toHaveBeenCalled()
   })
 })

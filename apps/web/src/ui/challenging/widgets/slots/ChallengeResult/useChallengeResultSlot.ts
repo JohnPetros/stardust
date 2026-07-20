@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import { UserAnswer } from '@stardust/core/global/structures'
 import type {
   ChallengeRewardingPayload,
@@ -17,11 +18,13 @@ import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 
 type Params = {
   alertDialogRef: React.RefObject<AlertDialogRef | null>
+  challengingService?: ChallengingService
   isAccountAuthenticated: boolean
 }
 
 export function useChallengeResultSlot({
   alertDialogRef,
+  challengingService,
   isAccountAuthenticated,
 }: Params) {
   const {
@@ -39,6 +42,7 @@ export function useChallengeResultSlot({
     acceptedCodeExecution: null,
     codeExecutionErrorsCount: challenge?.incorrectAnswersCount.value ?? 0,
     currentCode: '',
+    setCodeExecutionErrorsCount: () => {},
   }
   const {
     isCodeRunning,
@@ -46,6 +50,7 @@ export function useChallengeResultSlot({
     acceptedCodeExecution,
     codeExecutionErrorsCount,
     currentCode,
+    setCodeExecutionErrorsCount,
   } = codeExecutionSlice
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { tabHandler } = getTabHandlerSlice()
@@ -175,6 +180,30 @@ export function useChallengeResultSlot({
       setUserAnswer(userAnswer.becomeCorrect().becomeVerified())
     }
   }, [challenge, userAnswer, isLeavingPage, currentRoute])
+
+  useEffect(() => {
+    if (!challenge || !challengingService || !isAccountAuthenticated) return
+
+    let isMounted = true
+    const currentChallenge = challenge
+    const service = challengingService
+
+    async function fetchCodeExecutionErrorsCount() {
+      const response = await service.fetchChallengeCodeExecutionErrorsCount(
+        currentChallenge.id,
+      )
+
+      if (isMounted && response.isSuccessful) {
+        setCodeExecutionErrorsCount(response.body.errorsCount)
+      }
+    }
+
+    fetchCodeExecutionErrorsCount()
+
+    return () => {
+      isMounted = false
+    }
+  }, [challenge, challengingService, isAccountAuthenticated, setCodeExecutionErrorsCount])
 
   return {
     challenge,

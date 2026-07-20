@@ -7,10 +7,12 @@ import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/
 import { useChallengeResultSlot } from './useChallengeResultSlot'
 import { ChallengeResultSlotView } from './ChallengeResultSlotView'
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
 
 export const ChallengeResultSlot = () => {
   const alertDialogRef = useRef<AlertDialogRef | null>(null)
   const { isAccountAuthenticated } = useAuthContext()
+  const { challengingService } = useRestContext()
   const {
     challenge,
     results,
@@ -22,7 +24,11 @@ export const ChallengeResultSlot = () => {
     isBlocked,
     blockedReason,
     handleUserAnswer,
-  } = useChallengeResultSlot({ alertDialogRef, isAccountAuthenticated })
+  } = useChallengeResultSlot({
+    alertDialogRef,
+    challengingService,
+    isAccountAuthenticated,
+  })
 
   if (challenge)
     return (
