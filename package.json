@@ -46,7 +46,7 @@
     "changelog": "./scripts/update-changelog.sh"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.5",
+    "@biomejs/biome": "2.3.15",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "commitlint-config-git-commit-emoji": "^1.0.0",
@@ -62,6 +62,7 @@
     "@faker-js/faker": "8.4.1"
   },
   "overrides": {
+    "@types/react": "19.2.17",
     "@ai-sdk/provider-utils": "5.0.5",
     "@ai-sdk/ui-utils": {
       "@ai-sdk/provider-utils": "5.0.5"
@@ -75,10 +76,14 @@
     },
     "@mastra/server": "1.25.0",
     "esbuild": "0.28.1",
+    "hono": "4.12.31",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
     "tsup": {
       "esbuild": "0.28.1"
     },
     "uuid": "11.1.1",
-    "vite": "6.4.3"
+    "vite": "6.4.3",
+    "monaco-editor": "0.55.1"
   }
 }
