@@ -14,7 +14,7 @@ permissions:
 
 concurrency:
   group: server-app-cd-coolify-production
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   migrate-database:

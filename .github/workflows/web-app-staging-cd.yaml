@@ -13,6 +13,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: web-app-staging-cd-coolify
+  cancel-in-progress: true
+
 jobs:
   deploy:
     name: Deploy to Coolify
