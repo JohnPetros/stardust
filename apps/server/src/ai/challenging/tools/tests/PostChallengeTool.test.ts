@@ -85,4 +85,57 @@ describe('Post Challenge Tool', () => {
       expect.objectContaining({ challengeSourceId: null }),
     )
   })
+
+  it('should default isEvaluatedByFunction to true', async () => {
+    mcp.getInput.mockReturnValue({
+      title: 'Two sum',
+      description: 'Resolva o problema two sum.',
+      initialCode: 'funcao twoSum() {}',
+      difficultyLevel: 'easy',
+      testCases: [],
+      categories: [{ name: 'arrays' }],
+    })
+    mcp.getAccountId.mockReturnValue('99968fac-8a67-46c6-90e5-63ae175961b5')
+
+    const executeSpy = jest
+      .spyOn(PostChallengeUseCase.prototype, 'execute')
+      .mockResolvedValue(undefined as never)
+
+    await tool.handle(mcp)
+
+    expect(executeSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        challengeDto: expect.objectContaining({
+          isEvaluatedByFunction: true,
+        }),
+      }),
+    )
+  })
+
+  it('should post a challenge evaluated by console output', async () => {
+    mcp.getInput.mockReturnValue({
+      title: 'Console mission',
+      description: 'Imprima a rota.',
+      initialCode: 'escreva("rota")',
+      difficultyLevel: 'easy',
+      testCases: [],
+      categories: [{ name: 'strings' }],
+      isEvaluatedByFunction: false,
+    })
+    mcp.getAccountId.mockReturnValue('99968fac-8a67-46c6-90e5-63ae175961b5')
+
+    const executeSpy = jest
+      .spyOn(PostChallengeUseCase.prototype, 'execute')
+      .mockResolvedValue(undefined as never)
+
+    await tool.handle(mcp)
+
+    expect(executeSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        challengeDto: expect.objectContaining({
+          isEvaluatedByFunction: false,
+        }),
+      }),
+    )
+  })
 })

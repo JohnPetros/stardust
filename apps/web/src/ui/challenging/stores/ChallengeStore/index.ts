@@ -94,6 +94,73 @@ export function useChallengeStore() {
       }
     },
 
+    getCodeExecutionSlice() {
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const isCodeRunning = useZustandChallengeStore((store) => store.state.isCodeRunning)
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const latestCodeExecution = useZustandChallengeStore(
+        (store) => store.state.latestCodeExecution,
+      )
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const acceptedCodeExecution = useZustandChallengeStore(
+        (store) => store.state.acceptedCodeExecution,
+      )
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const codeExecutionErrorsCount = useZustandChallengeStore(
+        (store) => store.state.codeExecutionErrorsCount,
+      )
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const currentCode = useZustandChallengeStore((store) => store.state.currentCode)
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const pendingExecutionCode = useZustandChallengeStore(
+        (store) => store.state.pendingExecutionCode,
+      )
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const setCurrentCode = useZustandChallengeStore(
+        (store) => store.actions.setCurrentCode,
+      )
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const setCodeExecutionErrorsCount = useZustandChallengeStore(
+        (store) => store.actions.setCodeExecutionErrorsCount,
+      )
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const replaceCurrentCodeWithExecution = useZustandChallengeStore(
+        (store) => store.actions.replaceCurrentCodeWithExecution,
+      )
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const startCodeExecution = useZustandChallengeStore(
+        (store) => store.actions.startCodeExecution,
+      )
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const finishCodeExecution = useZustandChallengeStore(
+        (store) => store.actions.finishCodeExecution,
+      )
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const failCodeExecution = useZustandChallengeStore(
+        (store) => store.actions.failCodeExecution,
+      )
+      // biome-ignore lint/correctness/useHookAtTopLevel: ChallengeStore exposes slice getters using the existing store API pattern.
+      const invalidateAcceptedCodeExecution = useZustandChallengeStore(
+        (store) => store.actions.invalidateAcceptedCodeExecution,
+      )
+
+      return {
+        isCodeRunning,
+        latestCodeExecution,
+        acceptedCodeExecution,
+        codeExecutionErrorsCount,
+        currentCode,
+        pendingExecutionCode,
+        setCurrentCode,
+        setCodeExecutionErrorsCount,
+        replaceCurrentCodeWithExecution,
+        startCodeExecution,
+        finishCodeExecution,
+        failCodeExecution,
+        invalidateAcceptedCodeExecution,
+      }
+    },
+
     getMdxSlice() {
       const mdx = useZustandChallengeStore((store) => store.state.mdx)
       const setMdx = useZustandChallengeStore((store) => store.actions.setMdx)

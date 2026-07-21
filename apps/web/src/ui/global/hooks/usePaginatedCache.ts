@@ -1,6 +1,7 @@
 import useSWRInfinite from 'swr/infinite'
 import { useMemo, useState } from 'react'
 
+import { AuthError } from '@stardust/core/global/errors'
 import type { PaginationResponse } from '@stardust/core/global/responses'
 
 import { useToastContext } from '../contexts/ToastContext'
@@ -71,8 +72,11 @@ export function usePaginatedCache<CacheItem>({
       refreshInterval,
       revalidateOnFocus: shouldRefetchOnFocus,
       fallbackData: initialData ? [initialData.items] : [],
+      shouldRetryOnError: false,
       onError: (error) => {
-        toast.show(error)
+        if (error instanceof AuthError) return
+
+        toast.showError(error instanceof Error ? error.message : String(error))
       },
     },
   )

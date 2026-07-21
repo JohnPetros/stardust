@@ -39,6 +39,7 @@ export class SupabaseChallengeMapper {
       description: supabaseChallenge.description ?? '',
       isPublic: Boolean(supabaseChallenge.is_public),
       isNew: Boolean(supabaseChallenge.is_new ?? false),
+      isEvaluatedByFunction: Boolean(supabaseChallenge.is_evaluated_by_function ?? true),
       testCases: (
         (typeof supabaseChallenge.test_cases === 'string'
           ? JSON.parse(supabaseChallenge.test_cases)
@@ -80,6 +81,7 @@ export class SupabaseChallengeMapper {
       user_id: challengeDto.author.id,
       is_public: challenge.isPublic.value,
       is_new: challenge.isNew.value,
+      is_evaluated_by_function: challenge.isEvaluatedByFunction.value,
       created_at: challenge.postedAt.toDateString(),
       star_id: '',
     }

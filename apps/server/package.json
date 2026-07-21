@@ -32,6 +32,7 @@
     "@mastra/hono": "^1.4.4",
     "@sentry/node": "^10.17.0",
     "@stardust/core": "*",
+    "@stardust/lsp": "*",
     "@stardust/validation": "*",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",

@@ -9,5 +9,11 @@ export { DataType } from './DataType'
 export { TestCase } from './TestCase'
 export { ChallengeNavigation } from './ChallengeNavigation'
 export { ChallengesCompletion } from './ChallengesCompletion'
+export { ChallengeCodeExecution } from './ChallengeCodeExecution'
+export { ChallengeCodeExecutionError } from './ChallengeCodeExecutionError'
+export {
+  ChallengeCodeExecutionStatus,
+  type ChallengeCodeExecutionStatusValue,
+} from './ChallengeCodeExecutionStatus'
 export type { ChallengeNavigationDto } from './dtos'
 export type { ChallengesCompletionDto } from './dtos'

@@ -13,48 +13,83 @@ import { dataTypeNameSchema } from './dataTypeNameSchema'
 import { challengeCategoriesSchema } from './challengeCategoriesSchema'
 import { challengeDifficultyLevelSchema } from './challengeDifficultyLevelSchema'
 
-export const challengeFormSchema = challengeSchema.extend({
-  title: titleSchema,
-  description: contentSchema,
-  author: z.object({
-    id: idSchema,
-  }),
-  initialCode: contentSchema,
-  function: z.object({
-    name: codeVariableNameSchema,
-    params: z
+export const challengeFormSchema = challengeSchema
+  .extend({
+    title: titleSchema,
+    description: contentSchema,
+    author: z.object({
+      id: idSchema,
+    }),
+    initialCode: contentSchema,
+    function: z.object({
+      name: z.string(),
+      params: z.array(
+        z.object({
+          name: z.string(),
+          dataTypeName: dataTypeNameSchema,
+        }),
+      ),
+    }),
+    testCases: z
       .array(
         z.object({
-          name: codeVariableNameSchema,
-          dataTypeName: dataTypeNameSchema,
+          inputs: z.array(
+            z
+              .object({
+                value: z.unknown(),
+              })
+              .transform((input) => {
+                if (Array.isArray(input?.value))
+                  return {
+                    value: input.value.filter((item) => typeof item !== 'undefined'),
+                  }
+                return input
+              }),
+          ),
+          expectedOutput: z.object({
+            dataTypeName: dataTypeNameSchema,
+            value: z.unknown(),
+          }),
+          isLocked: booleanSchema,
         }),
       )
-      .min(1),
-  }),
-  testCases: z
-    .array(
-      z.object({
-        inputs: z.array(
-          z
-            .object({
-              value: z.unknown(),
-            })
-            .transform((input) => {
-              if (Array.isArray(input?.value))
-                return {
-                  value: input.value.filter((item) => typeof item !== 'undefined'),
-                }
-              return input
-            }),
-        ),
-        expectedOutput: z.object({
-          dataTypeName: dataTypeNameSchema,
-          value: z.unknown(),
-        }),
-        isLocked: booleanSchema,
-      }),
-    )
-    .min(3, 'Deve haver pelo menos 3 testes casos'),
-  categories: challengeCategoriesSchema,
-  difficultyLevel: challengeDifficultyLevelSchema,
-})
+      .min(3, 'Deve haver pelo menos 3 testes casos'),
+    categories: challengeCategoriesSchema,
+    difficultyLevel: challengeDifficultyLevelSchema,
+  })
+  .superRefine((challenge, context) => {
+    if (!challenge.isEvaluatedByFunction) return
+
+    const functionNameResult = codeVariableNameSchema.safeParse(challenge.function.name)
+    if (!functionNameResult.success) {
+      for (const issue of functionNameResult.error.issues) {
+        context.addIssue({
+          ...issue,
+          path: ['function', 'name', ...issue.path],
+        })
+      }
+    }
+
+    if (challenge.function.params.length === 0) {
+      context.addIssue({
+        code: z.ZodIssueCode.too_small,
+        minimum: 1,
+        inclusive: true,
+        type: 'array',
+        message: 'Array must contain at least 1 element(s)',
+        path: ['function', 'params'],
+      })
+    }
+
+    challenge.function.params.forEach((param, index) => {
+      const paramNameResult = codeVariableNameSchema.safeParse(param.name)
+      if (!paramNameResult.success) {
+        for (const issue of paramNameResult.error.issues) {
+          context.addIssue({
+            ...issue,
+            path: ['function', 'params', index, 'name', ...issue.path],
+          })
+        }
+      }
+    })
+  })

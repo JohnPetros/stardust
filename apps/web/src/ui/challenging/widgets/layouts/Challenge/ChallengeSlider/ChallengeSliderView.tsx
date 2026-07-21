@@ -16,6 +16,7 @@ const CHALLENGE_CONTENT_LABELS: Record<ChallengeContent, string> = {
   comments: 'Comentários',
   solutions: 'Soluções',
   description: 'Descrição',
+  executions: 'Execuções',
   result: 'Resultado',
 }
 
@@ -37,76 +38,82 @@ export const ChallengeSliderView = ({
   activeContent,
   handleNavButtonClick,
   handleSlideChange,
-}: ChallengeSliderViewProps) => (
-  <div>
-    <nav className='bg-gray-900'>
-      <ul className='relative grid grid-cols-4'>
-        <li>
-          <NavButton
-            isActive={activeSlideIndex === 0}
-            onClick={() => handleNavButtonClick(0)}
-          >
-            {CHALLENGE_CONTENT_LABELS[activeContent] ?? 'Descrição'}
-          </NavButton>
-        </li>
-        <li>
-          <NavButton
-            isActive={activeSlideIndex === 1}
-            onClick={() => handleNavButtonClick(1)}
-          >
-            Código
-          </NavButton>
-        </li>
-        <li>
-          <NavButton
-            isActive={activeSlideIndex === 2}
-            onClick={() => handleNavButtonClick(2)}
-          >
-            Resultado
-          </NavButton>
-        </li>
-        <li>
-          <NavButton
-            isActive={activeSlideIndex === 3}
-            onClick={() => handleNavButtonClick(3)}
-          >
-            Assistente
-          </NavButton>
-        </li>
-        <motion.span
-          ref={motionScope}
-          animate='swipe'
-          className='col-span-1 block h-[2px] rounded-full bg-green-600'
-        />
-      </ul>
-    </nav>
+}: ChallengeSliderViewProps) => {
+  const isResultContext = activeContent === 'result'
 
-    <Swiper
-      ref={swiperRef}
-      onSlideChange={handleSlideChange}
-      onSwiper={handleSlideChange}
-      direction='horizontal'
-      centeredSlides={true}
-      longSwipesRatio={0.9}
-      className='h-[calc(100vh-5.2rem)] w-full'
-      simulateTouch={false}
-      allowTouchMove={false}
-    >
-      <SwiperSlide className='h-full overflow-y-auto'>
-        {activeContent === 'result' ? <ChallengeDescriptionSlot /> : (children as null)}
-      </SwiperSlide>
+  return (
+    <div>
+      <nav className='bg-gray-900'>
+        <ul className='relative grid grid-cols-4'>
+          <li>
+            <NavButton
+              isActive={activeSlideIndex === 0}
+              onClick={() => handleNavButtonClick(0)}
+            >
+              {isResultContext
+                ? 'Resultado'
+                : (CHALLENGE_CONTENT_LABELS[activeContent] ?? 'Descrição')}
+            </NavButton>
+          </li>
+          <li>
+            <NavButton
+              isActive={activeSlideIndex === 1}
+              onClick={() => handleNavButtonClick(1)}
+            >
+              Código
+            </NavButton>
+          </li>
+          <li>
+            <NavButton
+              isActive={activeSlideIndex === 2}
+              onClick={() => handleNavButtonClick(2)}
+            >
+              {isResultContext ? 'Descrição' : 'Resultado'}
+            </NavButton>
+          </li>
+          <li>
+            <NavButton
+              isActive={activeSlideIndex === 3}
+              onClick={() => handleNavButtonClick(3)}
+            >
+              Assistente
+            </NavButton>
+          </li>
+          <motion.span
+            ref={motionScope}
+            animate='swipe'
+            className='col-span-1 block h-[2px] rounded-full bg-green-600'
+          />
+        </ul>
+      </nav>
 
-      <SwiperSlide>
-        <ChallengeCodeEditorSlot />
-      </SwiperSlide>
+      <Swiper
+        ref={swiperRef}
+        onSlideChange={handleSlideChange}
+        onSwiper={handleSlideChange}
+        direction='horizontal'
+        centeredSlides={true}
+        longSwipesRatio={0.9}
+        className='h-[calc(100vh-5.2rem)] w-full'
+        simulateTouch={false}
+        allowTouchMove={false}
+      >
+        <SwiperSlide className='h-full overflow-y-auto'>
+          {activeContent === 'result' ? <ChallengeResultSlot /> : (children as null)}
+        </SwiperSlide>
 
-      <SwiperSlide className='h-full overflow-y-auto'>
-        <ChallengeResultSlot />
-      </SwiperSlide>
+        <SwiperSlide>
+          <ChallengeCodeEditorSlot />
+        </SwiperSlide>
 
-      <SwiperSlide className='h-full overflow-y-auto'>
-        <AssistantChatbot />
-      </SwiperSlide>
-    </Swiper>
-  </div>
-)
+        <SwiperSlide className='h-full overflow-y-auto'>
+          {isResultContext ? <ChallengeDescriptionSlot /> : <ChallengeResultSlot />}
+        </SwiperSlide>
+
+        <SwiperSlide className='h-full overflow-y-auto'>
+          <AssistantChatbot />
+        </SwiperSlide>
+      </Swiper>
+    </div>
+  )
+}

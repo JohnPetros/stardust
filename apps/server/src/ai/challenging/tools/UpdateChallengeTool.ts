@@ -18,6 +18,7 @@ type Input = {
   difficultyLevel: string
   testCases: ChallengeDto['testCases']
   categories: ChallengeDto['categories']
+  isEvaluatedByFunction?: boolean
 }
 
 export class UpdateChallengeTool implements Tool<Input, ChallengeDto> {
@@ -34,6 +35,7 @@ export class UpdateChallengeTool implements Tool<Input, ChallengeDto> {
       difficultyLevel,
       testCases,
       categories,
+      isEvaluatedByFunction,
     } = mcp.getInput()
 
     const getChallengeUseCase = new GetChallengeUseCase(this.repository)
@@ -58,6 +60,8 @@ export class UpdateChallengeTool implements Tool<Input, ChallengeDto> {
         categories,
         author: currentChallenge.author.dto,
         isPublic: isPublic ?? currentChallenge.isPublic.value,
+        isEvaluatedByFunction:
+          isEvaluatedByFunction ?? currentChallenge.isEvaluatedByFunction.value,
       },
     })
   }

@@ -12,10 +12,12 @@ import type { Challenge } from '../domain/entities'
 import type { SolutionsListingParams } from '../domain/types'
 import type { PaginationResponse, RestResponse } from '#global/responses/index'
 import type { Id, IdsList, Slug, Text, Url } from '#global/domain/structures/index'
+import type { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 import type { ChallengeVote } from '../domain/structures'
 import type { KpiDto } from '#global/domain/structures/dtos/KpiDto'
 import type { ChallengeSourceDto } from '../domain/entities/dtos'
 import type {
+  ChallengeCodeExecutionDto,
   ChallengeNavigationDto,
   ChallengesCompletionDto,
 } from '../domain/structures/dtos'
@@ -47,6 +49,18 @@ export interface ChallengingService {
   fetchChallengeSourcesList(
     params: ChallengeSourcesListParams,
   ): Promise<RestResponse<PaginationResponse<ChallengeSourceDto>>>
+  runChallengeCode(
+    challengeId: Id,
+    code: Text,
+  ): Promise<RestResponse<ChallengeCodeExecutionDto>>
+  fetchChallengeCodeExecutions(params: {
+    challengeId: Id
+    page: OrdinalNumber
+    itemsPerPage: OrdinalNumber
+  }): Promise<RestResponse<PaginationResponse<ChallengeCodeExecutionDto>>>
+  fetchChallengeCodeExecutionErrorsCount(
+    challengeId: Id,
+  ): Promise<RestResponse<{ errorsCount: number }>>
   voteChallenge(
     challengeId: Id,
     challengeVote: ChallengeVote,

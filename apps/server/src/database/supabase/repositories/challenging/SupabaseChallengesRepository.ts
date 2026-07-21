@@ -308,6 +308,7 @@ export class SupabaseChallengesRepository
       star_id: challenge.starId?.value,
       is_public: challenge.isPublic.value,
       is_new: challenge.isNew.value,
+      is_evaluated_by_function: challenge.isEvaluatedByFunction.value,
       slug: challenge.slug.value,
       test_cases: challenge.testCases.map((testCase) => testCase.dto) as Json,
     })
@@ -345,6 +346,7 @@ export class SupabaseChallengesRepository
         star_id: challenge.starId ? challenge.starId.value : null,
         is_public: challenge.isPublic.value,
         is_new: challenge.isNew.value,
+        is_evaluated_by_function: challenge.isEvaluatedByFunction.value,
         slug: challenge.slug.value,
         test_cases: challenge.testCases.map((testCase) => testCase.dto) as Json,
       })

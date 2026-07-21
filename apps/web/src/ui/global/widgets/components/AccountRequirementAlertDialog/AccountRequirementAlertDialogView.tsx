@@ -1,7 +1,5 @@
 import type { PropsWithChildren, RefObject } from 'react'
-import Link from 'next/link'
 
-import { ROUTES } from '@/constants'
 import type { AlertDialogRef } from '../AlertDialog/types'
 import { AlertDialog } from '../AlertDialog'
 import { Button } from '../Button'
@@ -9,12 +7,12 @@ import { Button } from '../Button'
 type Props = {
   ref?: RefObject<AlertDialogRef | null>
   description: string
-  nextRoute: string
+  onConfirm: () => void
 }
 
 export const AccountRequirementAlertDialogView = ({
   description,
-  nextRoute,
+  onConfirm,
   children,
   ref,
 }: PropsWithChildren<Props>) => {
@@ -24,11 +22,7 @@ export const AccountRequirementAlertDialogView = ({
       type='denying'
       title='Negado!'
       body={<p className='text-center leading-8 text-gray-100'>{description}</p>}
-      action={
-        <Button asChild autoFocus>
-          <Link href={`${ROUTES.auth.signIn}?nextRoute=${nextRoute}`}>Fazer login</Link>
-        </Button>
-      }
+      action={<Button onClick={onConfirm}>Fazer login</Button>}
       cancel={<Button className='bg-gray-900 text-gray-100'>Cancelar</Button>}
     >
       {children}

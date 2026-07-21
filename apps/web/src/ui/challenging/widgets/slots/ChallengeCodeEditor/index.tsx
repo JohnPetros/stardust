@@ -5,9 +5,13 @@ import { ChallengeCodeEditorSlotView } from './ChallengeCodeEditorSlotView'
 import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
 import { useCodeSelection } from './useCodeSelection'
 import { useDockablePanelDragHandle } from '../../layouts/Challenge/DockablePanel/DockablePanelDragHandleContext'
+import { useRestContext } from '@/ui/global/hooks/useRestContext'
+import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 
 export const ChallengeCodeEditorSlot = () => {
   const dragHandle = useDockablePanelDragHandle()
+  const { challengingService } = useRestContext()
+  const { isAccountAuthenticated, invalidateSession } = useAuthContext()
   const {
     initialCode,
     originalCode,
@@ -16,14 +20,21 @@ export const ChallengeCodeEditorSlot = () => {
     codeEditorHeight,
     consoleRef,
     outputs,
+    isCodeRunning,
     isMobile,
     handleCodeChange,
     handleRunCode,
     handleOpenConsole,
-  } = useChallengeCodeEditorSlot()
+  } = useChallengeCodeEditorSlot({
+    challengingService,
+    isAccountAuthenticated,
+    onUnauthorized: invalidateSession,
+  })
 
-  const { isAssistantEnabled } = useChallengeStore().getIsAssistantEnabledSlice()
-  const { setCodeSelection } = useChallengeStore().getAssistantSelectionsSlice()
+  const challengeStore = useChallengeStore()
+  const { isAssistantEnabled } = challengeStore.getIsAssistantEnabledSlice()
+  const { setCodeSelection } = challengeStore.getAssistantSelectionsSlice()
+  const { challenge } = challengeStore.getChallengeSlice()
 
   const { isButtonVisible, buttonPosition, handleAddSelection } = useCodeSelection({
     codeEditorRef,
@@ -45,6 +56,8 @@ export const ChallengeCodeEditorSlot = () => {
       onCodeChange={handleCodeChange}
       onRunCode={handleRunCode}
       onOpenConsole={handleOpenConsole}
+      isRunCodeLoading={isCodeRunning}
+      shouldShowConsole={challenge?.isEvaluatedByFunction.isFalse ?? true}
       isAssistantEnabled={isAssistantEnabled}
       isSelectionButtonVisible={isButtonVisible}
       selectionButtonPosition={buttonPosition}

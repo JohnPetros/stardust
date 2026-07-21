@@ -37,12 +37,12 @@ export class CalculateRewardForChallengeCompletionUseCase
       maximumIncorrectAnswersCount,
       incorrectAnswersCount,
     )
-    const newCoins = this.calculateCoins(
-      challengeCoins,
+    const rewardMultiplier = this.calculateRewardMultiplier(
       accuracyPercentage,
       isChallengeCompleted,
     )
-    const newXp = this.calculateXp(challengeXp, accuracyPercentage, isChallengeCompleted)
+    const newCoins = this.calculateReward(challengeCoins, rewardMultiplier)
+    const newXp = this.calculateReward(challengeXp, rewardMultiplier)
 
     return {
       newCoins,
@@ -51,34 +51,28 @@ export class CalculateRewardForChallengeCompletionUseCase
     }
   }
 
-  private calculateCoins(
-    rewardCoins: number,
-    accuracyPercentage: number,
-    isChallengeCompleted: Logical,
-  ) {
-    return (
-      Math.floor(rewardCoins * (accuracyPercentage / 100)) /
-      (isChallengeCompleted.isTrue ? 2 : 1)
-    )
+  private calculateReward(baseReward: number, rewardMultiplier: number) {
+    return Math.max(0, Math.floor(baseReward * rewardMultiplier))
   }
 
-  private calculateXp(
-    rewardXp: number,
+  private calculateRewardMultiplier(
     accuracyPercentage: number,
     isChallengeCompleted: Logical,
   ) {
-    return (
-      Math.floor(rewardXp * (accuracyPercentage / 100)) /
-      (isChallengeCompleted.isTrue ? 2 : 1)
-    )
+    const completionMultiplier = isChallengeCompleted.isTrue ? 0.5 : 1
+    return (accuracyPercentage / 100) * completionMultiplier
   }
 
   private calculateAccuracyPercentage(
     maximumIncorrectAnswersCount: number,
     incorrectUserAnswersCount: number,
   ) {
+    const boundedIncorrectAnswersCount = Math.min(
+      Math.max(incorrectUserAnswersCount, 0),
+      maximumIncorrectAnswersCount,
+    )
     const percentage = Percentage.create(
-      incorrectUserAnswersCount,
+      boundedIncorrectAnswersCount,
       maximumIncorrectAnswersCount,
     )
     return 100 - percentage.value

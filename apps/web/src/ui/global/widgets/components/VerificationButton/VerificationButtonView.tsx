@@ -11,6 +11,8 @@ export type Props = {
   isAnswerVerified: boolean
   isAnswerCorrect: boolean
   isLoading?: boolean
+  isBlocked?: boolean
+  blockedReason?: string
   className?: ClassNameValue
   title: string
   onClick: () => void
@@ -23,6 +25,8 @@ export const VerificationButtonView = ({
   isAnswerCorrect,
   isAnswerVerified,
   isLoading,
+  isBlocked = false,
+  blockedReason,
   isAnswered,
   className,
   title,
@@ -64,17 +68,22 @@ export const VerificationButtonView = ({
         </AnimatedPanel>
       </div>
 
-      <StyledButton
-        ref={buttonRef}
-        disabled={!isAnswered}
-        isLoading={isLoading}
-        color={isAnswerVerified && !isAnswerCorrect ? 'red' : 'green'}
-        onClick={onClick}
-        onFocus={onFocus}
-        onBlur={onBlur}
-      >
-        {title}
-      </StyledButton>
+      <div className='flex w-full flex-col items-center gap-2'>
+        <StyledButton
+          ref={buttonRef}
+          disabled={!isAnswered || isBlocked}
+          isLoading={isLoading}
+          color={isAnswerVerified && !isAnswerCorrect ? 'red' : 'green'}
+          onClick={onClick}
+          onFocus={onFocus}
+          onBlur={onBlur}
+        >
+          {title}
+        </StyledButton>
+        {isBlocked && blockedReason && (
+          <span className='text-center text-gray-300 text-xs'>{blockedReason}</span>
+        )}
+      </div>
     </div>
   )
 }

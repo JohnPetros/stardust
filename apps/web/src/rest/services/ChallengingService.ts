@@ -14,6 +14,7 @@ import type {
   ChallengeDto,
   ChallengeSourceDto,
 } from '@stardust/core/challenging/entities/dtos'
+import type { ChallengeCodeExecutionDto } from '@stardust/core/challenging/structures/dtos'
 
 export const ChallengingService = (restClient: RestClient): IChallengingService => {
   return {
@@ -156,6 +157,29 @@ export const ChallengingService = (restClient: RestClient): IChallengingService 
       )
       restClient.clearQueryParams()
       return response
+    },
+
+    async runChallengeCode(challengeId: Id, code: Text) {
+      return await restClient.post<ChallengeCodeExecutionDto>(
+        `/challenging/challenges/${challengeId.value}/code-executions`,
+        { code: code.value },
+      )
+    },
+
+    async fetchChallengeCodeExecutions({ challengeId, page, itemsPerPage }) {
+      restClient.setQueryParam('page', page.value.toString())
+      restClient.setQueryParam('itemsPerPage', itemsPerPage.value.toString())
+      const response = await restClient.get<
+        PaginationResponse<ChallengeCodeExecutionDto>
+      >(`/challenging/challenges/${challengeId.value}/code-executions`)
+      restClient.clearQueryParams()
+      return response
+    },
+
+    async fetchChallengeCodeExecutionErrorsCount(challengeId: Id) {
+      return await restClient.get<{ errorsCount: number }>(
+        `/challenging/challenges/${challengeId.value}/code-executions/errors-count`,
+      )
     },
 
     async fetchSolutionsList({

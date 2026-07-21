@@ -17,6 +17,7 @@ type CodeEditorToolbarProps = {
   runCodeButtonRef: RefObject<HTMLButtonElement | null>
   guidesDialogButtonRef: RefObject<HTMLButtonElement | null>
   isAssistantAllowed: boolean
+  isRunCodeLoading?: boolean
   onRunCode: () => void
   onOpenConsole?: () => void
   onKeyDown: (event: KeyboardEvent) => void
@@ -36,6 +37,7 @@ export const CodeEditorToolbarView = ({
   runCodeButtonRef,
   guidesDialogButtonRef,
   isAssistantAllowed,
+  isRunCodeLoading = false,
   onAssistantEnabledChange,
   onResetCodeButtonClick,
   onRunCode,
@@ -61,6 +63,7 @@ export const CodeEditorToolbarView = ({
   })()
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: The toolbar wrapper captures editor shortcuts while children keep semantic controls.
     <div onKeyUp={onKeyDown}>
       <div
         {...dragHandleProps}
@@ -76,6 +79,7 @@ export const CodeEditorToolbarView = ({
             ref={runCodeButtonRef}
             className='h-6 w-max px-3 text-xs'
             onClick={onRunCode}
+            isLoading={isRunCodeLoading}
           >
             Executar
           </Button>

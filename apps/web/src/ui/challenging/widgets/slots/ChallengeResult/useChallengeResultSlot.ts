@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import type { ChallengingService } from '@stardust/core/challenging/interfaces'
 import { UserAnswer } from '@stardust/core/global/structures'
 import type {
   ChallengeRewardingPayload,
@@ -17,11 +18,13 @@ import { useCookieActions } from '@/ui/global/hooks/useCookieActions'
 
 type Params = {
   alertDialogRef: React.RefObject<AlertDialogRef | null>
+  challengingService?: ChallengingService
   isAccountAuthenticated: boolean
 }
 
 export function useChallengeResultSlot({
   alertDialogRef,
+  challengingService,
   isAccountAuthenticated,
 }: Params) {
   const {
@@ -29,9 +32,26 @@ export function useChallengeResultSlot({
     getCraftsVisibilitySlice,
     getTabHandlerSlice,
     getResultsSlice,
+    getCodeExecutionSlice,
   } = useChallengeStore()
   const { results } = getResultsSlice()
   const { challenge, setChallenge } = getChallengeSlice()
+  const codeExecutionSlice = getCodeExecutionSlice?.() ?? {
+    isCodeRunning: false,
+    latestCodeExecution: null,
+    acceptedCodeExecution: null,
+    codeExecutionErrorsCount: challenge?.incorrectAnswersCount.value ?? 0,
+    currentCode: '',
+    setCodeExecutionErrorsCount: () => {},
+  }
+  const {
+    isCodeRunning,
+    latestCodeExecution,
+    acceptedCodeExecution,
+    codeExecutionErrorsCount,
+    currentCode,
+    setCodeExecutionErrorsCount,
+  } = codeExecutionSlice
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { tabHandler } = getTabHandlerSlice()
   const { setCookie } = useCookieActions()
@@ -41,6 +61,32 @@ export function useChallengeResultSlot({
   const { md: isMobile } = useBreakpoint()
   const { user } = useAuthContext()
   const { goTo, currentRoute } = useNavigationProvider()
+  const hasAcceptedExecutionForCurrentCode =
+    isAccountAuthenticated && acceptedCodeExecution?.code.value === currentCode
+  const latestExecutionForCurrentCode =
+    isAccountAuthenticated && latestCodeExecution?.code.value === currentCode
+      ? latestCodeExecution
+      : null
+  const displayedResults =
+    latestExecutionForCurrentCode?.testResults.items.map(
+      (testResult) => testResult.isCorrect,
+    ) ?? results
+  const isBlocked =
+    isAccountAuthenticated &&
+    !challenge?.isCompleted.isTrue &&
+    (isCodeRunning || !hasAcceptedExecutionForCurrentCode)
+  const blockedReason = isCodeRunning
+    ? 'Aguarde a execução terminar.'
+    : 'Execute o código com sucesso antes de verificar.'
+  const userOutputs =
+    latestExecutionForCurrentCode?.testResults.items.map(
+      (testResult) => testResult.userOutput,
+    ) ??
+    challenge?.userOutputs.items ??
+    []
+  const isAnswered =
+    (isAccountAuthenticated && Boolean(acceptedCodeExecution)) ||
+    Boolean(challenge?.hasAnswer.isTrue)
 
   function leavePage(route: string) {
     secondsCounterStorage.remove()
@@ -55,8 +101,6 @@ export function useChallengeResultSlot({
     if (challenge.starId?.value) {
       const rewardingPayload: StarChallengeRewardingPayload = {
         secondsCount: currentSeconds,
-        incorrectAnswersCount: challenge.incorrectAnswersCount.value,
-        maximumIncorrectAnswersCount: challenge.maximumIncorrectAnswersCount.value,
         challengeId: challenge?.id.value,
         starId: challenge?.starId?.value,
       }
@@ -71,8 +115,6 @@ export function useChallengeResultSlot({
 
     const rewardingPayload: ChallengeRewardingPayload = {
       secondsCount: currentSeconds,
-      incorrectAnswersCount: challenge.incorrectAnswersCount.value,
-      maximumIncorrectAnswersCount: challenge.maximumIncorrectAnswersCount.value,
       challengeId: challenge?.id.value,
     }
 
@@ -108,7 +150,9 @@ export function useChallengeResultSlot({
       return
     }
 
-    const newUserAnswer = challenge.verifyUserAnswer(userAnswer)
+    const newUserAnswer = hasAcceptedExecutionForCurrentCode
+      ? userAnswer.becomeVerified().becomeCorrect()
+      : challenge.verifyUserAnswer(userAnswer)
 
     if (newUserAnswer.isCorrect.isTrue) {
       challenge.becomeCompleted()
@@ -137,11 +181,40 @@ export function useChallengeResultSlot({
     }
   }, [challenge, userAnswer, isLeavingPage, currentRoute])
 
+  useEffect(() => {
+    if (!challenge || !challengingService || !isAccountAuthenticated) return
+
+    let isMounted = true
+    const currentChallenge = challenge
+    const service = challengingService
+
+    async function fetchCodeExecutionErrorsCount() {
+      const response = await service.fetchChallengeCodeExecutionErrorsCount(
+        currentChallenge.id,
+      )
+
+      if (isMounted && response.isSuccessful) {
+        setCodeExecutionErrorsCount(response.body.errorsCount)
+      }
+    }
+
+    fetchCodeExecutionErrorsCount()
+
+    return () => {
+      isMounted = false
+    }
+  }, [challenge, challengingService, isAccountAuthenticated, setCodeExecutionErrorsCount])
+
   return {
     challenge,
-    results,
+    results: displayedResults,
+    userOutputs,
+    isAnswered,
     userAnswer,
     isLeavingPage,
+    codeExecutionErrorsCount,
+    isBlocked,
+    blockedReason,
     handleUserAnswer,
   }
 }

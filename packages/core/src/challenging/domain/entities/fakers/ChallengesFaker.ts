@@ -31,6 +31,7 @@ export class ChallengesFaker {
       completionCount: 0,
       downvotesCount: 0,
       upvotesCount: 0,
+      isEvaluatedByFunction: true,
       starId: '',
       ...baseDto,
     }

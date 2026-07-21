@@ -8,6 +8,8 @@ type Props = {
   isAnswerVerified: boolean
   isAnswerCorrect: boolean
   isLoading?: boolean
+  isBlocked?: boolean
+  blockedReason?: string
   className?: ClassNameValue
   onClick: () => void
 }
@@ -16,6 +18,8 @@ export const VerificationButton = ({
   isAnswerCorrect,
   isAnswerVerified,
   isLoading,
+  isBlocked = false,
+  blockedReason,
   isAnswered,
   className,
   onClick,
@@ -26,6 +30,7 @@ export const VerificationButton = ({
       isAnswerCorrect,
       isAnswerVerified,
       isAnswered,
+      isBlocked,
     })
 
   return (
@@ -35,6 +40,8 @@ export const VerificationButton = ({
       isAnswerCorrect={isAnswerCorrect}
       isAnswerVerified={isAnswerVerified}
       isLoading={isLoading}
+      isBlocked={isBlocked}
+      blockedReason={blockedReason}
       isAnswered={isAnswered}
       className={className}
       onFocus={() => (buttonHasFocus.current = true)}

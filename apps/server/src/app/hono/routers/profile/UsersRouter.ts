@@ -19,6 +19,10 @@ import {
 } from '@stardust/validation/profile/schemas'
 
 import { SupabaseUsersRepository } from '@/database'
+import {
+  SupabaseChallengeCodeExecutionsRepository,
+  SupabaseChallengesRepository,
+} from '@/database/supabase/repositories/challenging'
 import { PostHogAnalyticsReportingProvider } from '@/provision/analytics'
 import {
   FetchUserController,
@@ -163,15 +167,20 @@ export class UsersRouter extends HonoRouter {
         z.object({
           challengeId: idSchema,
           starId: idSchema,
-          maximumIncorrectAnswersCount: integerSchema,
-          incorrectAnswersCount: integerSchema,
         }),
       ),
-      this.profileMiddleware.completeSpace,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
-        const controller = new RewardUserForStarChallengeCompletionController(repository)
+        const usersRepository = new SupabaseUsersRepository(http.getSupabase())
+        const challengesRepository = new SupabaseChallengesRepository(http.getSupabase())
+        const executionsRepository = new SupabaseChallengeCodeExecutionsRepository(
+          http.getSupabase(),
+        )
+        const controller = new RewardUserForStarChallengeCompletionController(
+          usersRepository,
+          challengesRepository,
+          executionsRepository,
+        )
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -193,14 +202,20 @@ export class UsersRouter extends HonoRouter {
         'json',
         z.object({
           challengeId: idSchema,
-          maximumIncorrectAnswersCount: integerSchema,
-          incorrectAnswersCount: integerSchema,
         }),
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
-        const controller = new RewardUserForChallengeCompletionController(repository)
+        const usersRepository = new SupabaseUsersRepository(http.getSupabase())
+        const challengesRepository = new SupabaseChallengesRepository(http.getSupabase())
+        const executionsRepository = new SupabaseChallengeCodeExecutionsRepository(
+          http.getSupabase(),
+        )
+        const controller = new RewardUserForChallengeCompletionController(
+          usersRepository,
+          challengesRepository,
+          executionsRepository,
+        )
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },

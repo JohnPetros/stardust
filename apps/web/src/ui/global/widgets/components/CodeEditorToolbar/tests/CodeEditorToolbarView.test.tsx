@@ -12,9 +12,9 @@ jest.mock('@/ui/global/widgets/components/Toolbar', () => ({
 }))
 
 jest.mock('../../Button', () => ({
-  Button: ({ children, onClick }: any) => (
-    <button type='button' onClick={onClick}>
-      {children}
+  Button: ({ children, disabled, isLoading, onClick }: any) => (
+    <button type='button' disabled={disabled || isLoading} onClick={onClick}>
+      {isLoading ? 'Carregando' : children}
     </button>
   ),
 }))
@@ -71,6 +71,20 @@ describe('CodeEditorToolbarView', () => {
     View({ onOpenConsole: undefined })
 
     expect(screen.queryByText('Console')).not.toBeInTheDocument()
+  })
+
+  it('should block run action while code is running', async () => {
+    const user = userEvent.setup()
+    const onRunCode = jest.fn()
+
+    View({ onRunCode, isRunCodeLoading: true })
+
+    const runButton = screen.getByRole('button', { name: 'Carregando' })
+    expect(runButton).toBeDisabled()
+
+    await user.click(runButton)
+
+    expect(onRunCode).not.toHaveBeenCalled()
   })
 
   it('should render custom actions inside the toolbar when provided', () => {

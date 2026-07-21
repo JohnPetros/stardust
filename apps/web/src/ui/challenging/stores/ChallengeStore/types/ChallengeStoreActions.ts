@@ -1,4 +1,5 @@
 import type { Challenge } from '@stardust/core/challenging/entities'
+import type { ChallengeCodeExecution } from '@stardust/core/challenging/structures'
 import type { DockablePanelId } from './DockablePanelId'
 import type { PanelsLayout } from './PanelsLayout'
 import type { PanelsOffset } from './PanelsOffset'
@@ -17,6 +18,13 @@ export type ChallengeStoreActions = {
   setCraftsVisibility: (craftsVislibility: ChallengeCraftsVisibility) => void
   setTabHandler: (tabHandler: TabHandler) => void
   setResults: (results: boolean[]) => void
+  setCurrentCode: (code: string) => void
+  setCodeExecutionErrorsCount: (count: number) => void
+  replaceCurrentCodeWithExecution: (execution: ChallengeCodeExecution) => void
+  startCodeExecution: (code: string) => void
+  finishCodeExecution: (execution: ChallengeCodeExecution) => void
+  failCodeExecution: () => void
+  invalidateAcceptedCodeExecution: () => void
   setIsAssistantEnabled: (isAssistantEnabled: boolean) => void
   setMdx: (mdx: string) => void
   setTextSelection: (textSelection: TextSelection | null) => void

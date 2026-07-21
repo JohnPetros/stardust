@@ -26,5 +26,6 @@ export const challengeDraftSchema = z
     categories: challengeCategoriesSchema,
     difficultyLevel: challengeDifficultyLevelSchema,
     isPublic: z.boolean().optional().default(false),
+    isEvaluatedByFunction: z.boolean().optional().default(true),
   })
   .omit({ author: true })

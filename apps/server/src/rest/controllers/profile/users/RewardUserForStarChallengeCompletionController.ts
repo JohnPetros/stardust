@@ -1,9 +1,17 @@
-import type { Controller } from '@stardust/core/global/interfaces'
+import type { Broker, Controller } from '@stardust/core/global/interfaces'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
+import type {
+  ChallengeCodeExecutionsRepository,
+  ChallengesRepository,
+} from '@stardust/core/challenging/interfaces'
+import { Id } from '@stardust/core/global/structures'
+import { NotAllowedError } from '@stardust/core/global/errors'
+import { ChallengeNotFoundError } from '@stardust/core/challenging/errors'
 import {
   CalculateRewardForChallengeCompletionUseCase,
+  CompleteSpaceUseCase,
   CompleteChallengeUseCase,
   RemoveRecentlyUnlockedStarUseCase,
   RewardUserUseCase,
@@ -22,8 +30,6 @@ type Schema = {
       xp: number
       coins: number
     }
-    maximumIncorrectAnswersCount: number
-    incorrectAnswersCount: number
     nextStarId?: string
     starId: string
   }
@@ -32,18 +38,20 @@ type Schema = {
 export class RewardUserForStarChallengeCompletionController
   implements Controller<Schema>
 {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly challengesRepository: ChallengesRepository,
+    private readonly executionsRepository: ChallengeCodeExecutionsRepository,
+    private readonly broker: Broker = new InngestBroker(),
+  ) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { userId } = http.getRouteParams()
-    const {
-      starId,
-      nextStarId,
-      challengeId,
-      challengeReward,
-      maximumIncorrectAnswersCount,
-      incorrectAnswersCount,
-    } = await http.getBody()
+    const { starId, nextStarId, challengeId, challengeReward } = await http.getBody()
+    const { maximumIncorrectAnswersCount, incorrectAnswersCount } =
+      await this.getTrustedExecutionCounts(userId, challengeId)
+
+    await this.completeSpace(userId, nextStarId ?? null)
 
     const { newCoins, newXp, accuracyPercentage } = await this.calculateReward(
       userId,
@@ -78,6 +86,38 @@ export class RewardUserForStarChallengeCompletionController
     })
   }
 
+  private async getTrustedExecutionCounts(userId: string, challengeId: string) {
+    const userIdObject = Id.create(userId)
+    const challengeIdObject = Id.create(challengeId)
+
+    const [challenge, latestExecution, incorrectAnswersCount] = await Promise.all([
+      this.challengesRepository.findById(challengeIdObject),
+      this.executionsRepository.findLatestByUserAndChallenge(
+        userIdObject,
+        challengeIdObject,
+      ),
+      this.executionsRepository.countIncorrectByUserAndChallenge(
+        userIdObject,
+        challengeIdObject,
+      ),
+    ])
+
+    if (!challenge) {
+      throw new ChallengeNotFoundError()
+    }
+
+    if (!latestExecution?.isAccepted) {
+      throw new NotAllowedError(
+        'É necessário executar o código com sucesso antes da recompensa',
+      )
+    }
+
+    return {
+      maximumIncorrectAnswersCount: challenge.maximumIncorrectAnswersCount.value,
+      incorrectAnswersCount: incorrectAnswersCount.value,
+    }
+  }
+
   private async calculateReward(
     userId: string,
     challengeId: string,
@@ -98,15 +138,12 @@ export class RewardUserForStarChallengeCompletionController
   }
 
   private async completeChallenge(userId: string, challengeId: string) {
-    const useCase = new CompleteChallengeUseCase(
-      this.usersRepository,
-      new InngestBroker(),
-    )
+    const useCase = new CompleteChallengeUseCase(this.usersRepository, this.broker)
     await useCase.execute({ userId, challengeId })
   }
 
   private async unlockStar(userId: string, starId: string) {
-    const useCase = new UnlockStarUseCase(this.usersRepository, new InngestBroker())
+    const useCase = new UnlockStarUseCase(this.usersRepository, this.broker)
     await useCase.execute({ userId, starId })
   }
 
@@ -116,7 +153,12 @@ export class RewardUserForStarChallengeCompletionController
   }
 
   private async rewardUser(userId: string, newCoins: number, newXp: number) {
-    const useCase = new RewardUserUseCase(this.usersRepository, new InngestBroker())
+    const useCase = new RewardUserUseCase(this.usersRepository, this.broker)
     return await useCase.execute({ userId, newCoins, newXp })
+  }
+
+  private async completeSpace(userId: string, nextStarId: string | null) {
+    const useCase = new CompleteSpaceUseCase(this.usersRepository, this.broker)
+    await useCase.execute({ userId, nextStarId })
   }
 }

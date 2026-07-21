@@ -24,6 +24,8 @@ type Props = {
   onCodeChange: (value: string) => void
   onRunCode: () => void
   onOpenConsole: () => void
+  isRunCodeLoading?: boolean
+  shouldShowConsole?: boolean
   isAssistantEnabled: boolean
   isSelectionButtonVisible: boolean
   selectionButtonPosition: Position
@@ -44,6 +46,8 @@ export const ChallengeCodeEditorSlotView = ({
   onCodeChange,
   onRunCode,
   onOpenConsole,
+  isRunCodeLoading = false,
+  shouldShowConsole = true,
   isAssistantEnabled,
   isSelectionButtonVisible,
   selectionButtonPosition,
@@ -57,6 +61,8 @@ export const ChallengeCodeEditorSlotView = ({
         codeEditorRef={codeEditorRef}
         onRunCode={onRunCode}
         onOpenConsole={onOpenConsole}
+        isRunCodeLoading={isRunCodeLoading}
+        canOpenConsole={shouldShowConsole}
         dragHandle={dragHandle}
       >
         <CodeEditor
@@ -68,12 +74,14 @@ export const ChallengeCodeEditorSlotView = ({
           isCodeCheckerDisabled={isCodeCheckerDisabled}
         />
       </CodeEditorToolbar>
-      <Console
-        ref={consoleRef}
-        outputs={outputs}
-        height={codeEditorHeight}
-        shouldRenderInPortal={isMobile}
-      />
+      {shouldShowConsole && (
+        <Console
+          ref={consoleRef}
+          outputs={outputs}
+          height={codeEditorHeight}
+          shouldRenderInPortal={isMobile}
+        />
+      )}
       {isAssistantEnabled && isSelectionButtonVisible && (
         <SelectionActionButtonView
           label='Adicionar'

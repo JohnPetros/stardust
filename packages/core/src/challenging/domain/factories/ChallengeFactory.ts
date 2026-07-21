@@ -36,6 +36,10 @@ export class ChallengeFactory {
         typeof dto.isPublic !== 'undefined' ? dto.isPublic : false,
         'O desafio é público?',
       ),
+      isEvaluatedByFunction: Logical.create(
+        dto.isEvaluatedByFunction ?? true,
+        'O desafio é avaliado pelo retorno da função?',
+      ),
       isNew: Logical.create(dto.isNew ?? true, 'O desafio é novo?'),
       isCompleted: Logical.create(false, 'A resposta do desafio está completada?'),
       incorrectAnswersCount: Integer.create(0, 'Contagem de respostas incorretas'),

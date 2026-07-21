@@ -59,7 +59,7 @@
   "dependencies": {
     "@ai-sdk/provider-utils-v5": "npm:@ai-sdk/provider-utils@^5.0.5",
     "@designliquido/delegua": "^1.25.1",
-    "@faker-js/faker": "^10.0.0"
+    "@faker-js/faker": "8.4.1"
   },
   "overrides": {
     "@ai-sdk/provider-utils": "5.0.5",
