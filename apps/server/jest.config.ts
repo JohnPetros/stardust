@@ -31,7 +31,9 @@ const sharedConfig: Config = {
   },
   moduleFileExtensions: ['ts', 'js', 'mjs', 'cjs', 'json'],
   extensionsToTreatAsEsm: ['.ts'],
-  transformIgnorePatterns: ['node_modules/(?!((@mastra|@workflow|tokenx|ai|@ai-sdk)/))'],
+  transformIgnorePatterns: [
+    'node_modules/(?!((@mastra|@workflow|tokenx|ai|@ai-sdk|@sindresorhus|escape-string-regexp|p-map)/))',
+  ],
   setupFiles: ['<rootDir>/jest.setup.js'],
 }
 
