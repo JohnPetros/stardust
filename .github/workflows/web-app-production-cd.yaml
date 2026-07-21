@@ -9,7 +9,7 @@ permissions:
 
 concurrency:
   group: web-app-cd-coolify-production
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -18,7 +18,58 @@ jobs:
 
     steps:
       - name: Trigger Coolify deploy
+        id: trigger
+        env:
+          COOLIFY_WEBHOOK_URL: ${{ secrets.COOLIFY_WEBHOOK_WEB_PROD }}
+          COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
         run: |
-          curl -X GET "${{ secrets.COOLIFY_WEBHOOK_WEB_PROD }}" \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
-            --fail --silent --show-error
+          response="$(curl -X GET "$COOLIFY_WEBHOOK_URL" \
+            -H "Authorization: Bearer $COOLIFY_API_TOKEN" \
+            --fail --silent --show-error)"
+
+          deployment_uuid="$(jq -er '.deployments[0].deployment_uuid' <<< "$response")"
+          echo "deployment_uuid=$deployment_uuid" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for Coolify deploy
+        env:
+          COOLIFY_WEBHOOK_URL: ${{ secrets.COOLIFY_WEBHOOK_WEB_PROD }}
+          COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
+          DEPLOYMENT_UUID: ${{ steps.trigger.outputs.deployment_uuid }}
+        run: |
+          coolify_api_url="${COOLIFY_WEBHOOK_URL%%/deploy*}"
+
+          while true; do
+            if ! deployment="$(curl "$coolify_api_url/deployments/$DEPLOYMENT_UUID" \
+              -H "Authorization: Bearer $COOLIFY_API_TOKEN" \
+              --fail --silent --show-error --max-time 30)"; then
+              echo "Unable to read Coolify deployment status; retrying..."
+              sleep 10
+              continue
+            fi
+
+            if ! status="$(jq -er '.status' <<< "$deployment")"; then
+              echo "Coolify returned an invalid deployment status; retrying..."
+              sleep 10
+              continue
+            fi
+
+            echo "Coolify deployment status: $status"
+
+            case "$status" in
+              finished)
+                echo "Coolify deployment finished successfully."
+                exit 0
+                ;;
+              failed|cancelled-by-user)
+                echo "Coolify deployment ended with status: $status"
+                exit 1
+                ;;
+              queued|in_progress)
+                sleep 10
+                ;;
+              *)
+                echo "Unexpected Coolify deployment status: $status; retrying..."
+                sleep 10
+                ;;
+            esac
+          done
