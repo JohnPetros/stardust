@@ -31,7 +31,13 @@ jobs:
         run: |
           response="$(curl -X GET "$COOLIFY_WEBHOOK_URL" \
             -H "Authorization: Bearer $COOLIFY_API_TOKEN" \
-            --fail --silent --show-error)"
+            --fail --silent --show-error \
+            --connect-timeout 15 \
+            --max-time 60 \
+            --retry 5 \
+            --retry-delay 10 \
+            --retry-max-time 180 \
+            --retry-connrefused)"
 
           deployment_uuid="$(jq -er '.deployments[0].deployment_uuid' <<< "$response")"
           echo "deployment_uuid=$deployment_uuid" >> "$GITHUB_OUTPUT"
