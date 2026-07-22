@@ -213,6 +213,7 @@ export class HonoApp {
       const challengingFunctions = new ChallengingFunctions(inngest)
       const manualFunctions = new ManualFunctions(inngest)
       const lessonFunctions = new LessonFunctions(inngest)
+
       return serveInngest({
         client: inngest,
         signingKey: ENV.mode === 'production' ? ENV.inngestSigningKey : undefined,
