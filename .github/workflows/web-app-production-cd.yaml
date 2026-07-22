@@ -7,10 +7,6 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: web-app-cd-coolify-production
-  cancel-in-progress: true
-
 jobs:
   deploy:
     name: Deploy to Coolify
@@ -18,16 +14,7 @@ jobs:
 
     steps:
       - name: Trigger Coolify deploy
-        env:
-          COOLIFY_WEBHOOK_URL: ${{ secrets.COOLIFY_WEBHOOK_WEB_PROD }}
-          COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
         run: |
-          curl -X GET "$COOLIFY_WEBHOOK_URL" \
-            -H "Authorization: Bearer $COOLIFY_API_TOKEN" \
-            --fail --silent --show-error \
-            --connect-timeout 15 \
-            --max-time 60 \
-            --retry 5 \
-            --retry-delay 10 \
-            --retry-max-time 180 \
-            --retry-connrefused
+          curl -X GET "${{ secrets.COOLIFY_WEBHOOK_WEB_PROD }}" \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
+            --fail --silent --show-error

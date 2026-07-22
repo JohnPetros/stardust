@@ -14,7 +14,7 @@ permissions:
 
 concurrency:
   group: server-app-cd-coolify-production
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   migrate-database:
@@ -27,10 +27,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
       - name: Setup Supabase CLI
-        uses: supabase/setup-cli@v3
+        uses: supabase/setup-cli@v1
         with:
           version: 2.98.2
 
@@ -50,16 +50,7 @@ jobs:
 
     steps:
       - name: Trigger Coolify deploy
-        env:
-          COOLIFY_WEBHOOK_URL: ${{ secrets.COOLIFY_WEBHOOK_SERVER_PROD }}
-          COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
         run: |
-          curl -X GET "$COOLIFY_WEBHOOK_URL" \
-            -H "Authorization: Bearer $COOLIFY_API_TOKEN" \
-            --fail --silent --show-error \
-            --connect-timeout 15 \
-            --max-time 60 \
-            --retry 5 \
-            --retry-delay 10 \
-            --retry-max-time 180 \
-            --retry-connrefused
+          curl -X GET "${{ secrets.COOLIFY_WEBHOOK_SERVER_PROD }}" \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
+            --fail --silent --show-error
