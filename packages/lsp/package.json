@@ -15,7 +15,11 @@
     "access": "public"
   },
   "exports": {
-    ".": "./src/main.ts"
+    ".": {
+      "types": "./src/main.ts",
+      "require": "./build/main.js",
+      "default": "./src/main.ts"
+    }
   },
   "scripts": {
     "build": "tsup",

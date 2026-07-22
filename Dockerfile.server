@@ -36,6 +36,10 @@ COPY --from=installer --chown=stardust:server /stardust/packages/validation/node
 COPY --from=installer --chown=stardust:server /stardust/packages/validation/package.json ./packages/validation/package.json
 COPY --from=installer --chown=stardust:server /stardust/packages/validation/build ./packages/validation/build
 
+COPY --from=installer --chown=stardust:server /stardust/packages/lsp/node_modules ./packages/lsp/node_modules
+COPY --from=installer --chown=stardust:server /stardust/packages/lsp/package.json ./packages/lsp/package.json
+COPY --from=installer --chown=stardust:server /stardust/packages/lsp/build ./packages/lsp/build
+
 COPY --from=installer --chown=stardust:server /stardust/apps/server/package.json ./apps/server/package.json
 COPY --from=installer --chown=stardust:server /stardust/apps/server/node_modules ./apps/server/node_modules
 COPY --from=installer --chown=stardust:server /stardust/apps/server/build ./apps/server/build
