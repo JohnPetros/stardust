@@ -1,11 +1,11 @@
-name: Web app staging CD
+name: Studio app CD
 
 on:
   push:
     branches:
       - main
     paths:
-      - "apps/web/**"
+      - "apps/studio/**"
       - "packages/core/**"
       - "packages/validation/**"
       - "packages/lsp/**"
@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: web-app-staging-cd-coolify
+  group: studio-app-cd-coolify-production
   cancel-in-progress: false
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
       - name: Trigger Coolify deploy
         id: trigger
         env:
-          COOLIFY_WEBHOOK_URL: ${{ secrets.COOLIFY_WEBHOOK_WEB_STG }}
+          COOLIFY_WEBHOOK_URL: ${{ secrets.COOLIFY_WEBHOOK_STUDIO }}
           COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
         run: |
           response="$(curl -X GET "$COOLIFY_WEBHOOK_URL" \
@@ -38,7 +38,7 @@ jobs:
 
       - name: Wait for Coolify deploy
         env:
-          COOLIFY_WEBHOOK_URL: ${{ secrets.COOLIFY_WEBHOOK_WEB_STG }}
+          COOLIFY_WEBHOOK_URL: ${{ secrets.COOLIFY_WEBHOOK_STUDIO }}
           COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
           DEPLOYMENT_UUID: ${{ steps.trigger.outputs.deployment_uuid }}
         run: |
