@@ -1360,6 +1360,7 @@ export type Database = {
           is_evaluated_by_function: boolean
           is_new: boolean
           is_public: boolean
+          official_solution: Json | null
           slug: string
           star_id: string | null
           test_cases: Json
@@ -1377,6 +1378,7 @@ export type Database = {
           is_evaluated_by_function?: boolean
           is_new?: boolean
           is_public?: boolean
+          official_solution?: Json | null
           slug: string
           star_id?: string | null
           test_cases: Json
@@ -1394,6 +1396,7 @@ export type Database = {
           is_evaluated_by_function?: boolean
           is_new?: boolean
           is_public?: boolean
+          official_solution?: Json | null
           slug?: string
           star_id?: string | null
           test_cases?: Json
@@ -2834,6 +2837,7 @@ export type Database = {
           is_evaluated_by_function: boolean | null
           is_new: boolean | null
           is_public: boolean | null
+          official_solution: Json | null
           slug: string | null
           star_id: string | null
           test_cases: Json | null
