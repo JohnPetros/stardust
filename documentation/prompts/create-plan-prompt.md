@@ -1,251 +1,206 @@
 ---
-description: Criar um plano de implementacao estruturado em fases e tarefas a partir de uma spec tecnica ou bug report.
+description: Criar um plano de implementação que também funciona como ledger de progresso, handoff e findings ativos.
 ---
 
 # Prompt: Criar Plano
 
-**Objetivo:** Transformar uma Spec técnica em um **plano de implementação estruturado**, dividido em fases e tarefas atômicas, com dependências explícitas e resultados observáveis por tarefa. O plano deve ser diretamente acionável por um desenvolvedor ou agente de implementação.
+## Objetivo
 
----
+Transformar uma Spec aceita em fases e tarefas atômicas, com dependências,
+critérios rastreáveis e estado operacional suficiente para execução por agentes
+separados. O Plan é a única fonte de verdade de progresso da implementação.
 
 ## Entrada
 
-O seguinte documento deve ser fornecido:
+- Spec em `documentation/features/**/specs/*-spec.md`.
+- Veredito `accepted` do `judge-spec-agent`.
 
-- **Spec técnica** (`documentation/features/{dominio}/{feature}/specs/{nome}-spec.md`) — para features, refatorações ou correções. Quando houver subdiretórios adicionais entre domínio e feature, preserve a estrutura existente.
-
-> Bug reports não são entrada direta deste fluxo. Quando a demanda nascer de um bug, crie antes uma spec separada derivada do bug report e só então inicie o plano.
-> Se a spec não for fornecida, ou se o documento estiver incompleto, não inicie o plano. Registre a lacuna em **Pendências** e solicite a spec correta.
-
----
+Bug report não é entrada direta: crie primeiro uma Spec de correção. Se a Spec
+estiver incompleta, não tiver sido aceita ou contiver pendência bloqueante, não
+crie o Plan.
 
 ## Regras Aplicáveis
 
-Antes de criar fases e tarefas, leia:
+Leia integralmente:
 
-- `documentation/rules/rules.md` — índice para identificar rules por camada.
-- `documentation/rules/code-conventions-rules.md` — convenções gerais que devem aparecer nos critérios das tarefas quando relevantes.
-- Rules específicas das camadas citadas pela spec.
-- Rules de teste usadas nas tarefas com sufixo `t`:
-  - `documentation/rules/domain-objects-testing-rules.md`
-  - `documentation/rules/use-cases-testing-rules.md`
-  - `documentation/rules/handlers-testing-rules.md`
-  - `documentation/rules/server-routes-testing-rules.md`
-  - `documentation/rules/web-app-routes-testing-rules.md`
-  - `documentation/rules/widget-tests-rules.md`
+- `documentation/rules/harness-rules.md`.
+- `documentation/agents/orchestrator-agent.md`.
+- `documentation/rules/rules.md`.
+- `documentation/rules/code-conventions-rules.md`.
+- Rules das camadas e dos tipos de teste citados pela Spec.
 
-Cada tarefa de implementação deve declarar a camada correta; cada tarefa de teste deve declarar o arquivo de rule de teste correspondente.
+## Construção do Plan
 
----
+### 1. Fixar o contrato
 
-## Diretrizes de Execução
+- Registre o caminho da Spec.
+- Calcule a revisão com `git hash-object <spec>`; não use apenas a data.
+- Inicie o Plan como `pending`, sem commit-base até a implementação começar.
+- Copie somente os IDs dos requisitos e critérios; não replique o conteúdo da
+  Spec.
 
-### 1. Leitura do Documento de Entrada
+### 2. Definir fases
 
-- Leia integralmente a Spec fornecida.
-- Identifique:
-  - Quais apps serão tocados (`server`, `web`, `studio`)
-  - Quais camadas serão envolvidas por app
-  - Dependências entre os artefatos a serem criados, modificados ou removidos
-  - Pendências ou ambiguidades que impediriam a implementação
+- F1 é `core` quando houver impacto de domínio, structures ou use cases.
+- Crie fases apenas para apps realmente tocados: F2 `server`, F3 `web`, F4
+  `studio`.
+- Fases consumidoras dependem dos contratos que consomem.
+- Fases independentes podem rodar em paralelo somente depois das dependências
+  comuns.
+- Não crie fase vazia apenas para preservar numeração; quando a ausência de
+  impacto for importante, registre-a na estratégia.
 
-### 2. Definição de Fases
+### 3. Definir tarefas
 
-- Sempre inicie pelo **core** (F1): domínio, structures e use cases.
-- Crie uma fase por app tocado (F2 para `server`, F3 para `web`, F4 para `studio`).
-- Omita fases de apps que não forem impactados pelo documento de entrada.
-- Fases de app (F2, F3, F4) só podem iniciar após F1 estar concluída e podem rodar em paralelo entre si.
+Cada tarefa deve ter:
 
-### 3. Definição de Tarefas de Implementação
+- Uma responsabilidade atômica.
+- Dependências reais.
+- Resultado observável.
+- IDs `REQ-*`, `AC-*` e `AR-*` associados.
+- Camada.
+- Paths permitidos.
+- Rules obrigatórias.
+- Estado inicial `pending`.
+- Próxima ação inequívoca.
 
-- Cada tarefa deve ser **atômica** — uma única responsabilidade, um único artefato.
-- O **resultado observável** deve ser verificável sem ambiguidade (ex: "rota retorna 200 com payload X", "widget renderiza estado de erro quando Y").
-- A **camada** deve usar exclusivamente os valores: `core`, `database`, `rest`, `provision`, `rpc`, `ui`, `ai`, `queue`, `web`, `studio`.
-- As dependências entre tarefas devem refletir a ordem real de implementação.
+Reserve mudanças em arquivos compartilhados, como barrel files e composição,
+para tarefas de integração. Tarefas que escrevem no mesmo arquivo não são
+paralelas.
 
-### 4. Definição de Tarefas de Teste
+### 4. Implementação e teste como unidade de avaliação
 
-Cada artefato testável implementado em uma tarefa de implementação deve ser imediatamente seguido por uma **tarefa de teste dedicada**. Isso garante validação incremental da spec e cria uma rede de segurança antes que camadas consumidoras sejam implementadas.
+Inclua a implementação e seus testes na mesma tarefa sempre que o artefato for
+testável:
 
-#### 4.1 Escopo permitido
+- Objetos de domínio.
+- Use cases.
+- Handlers (`controller`, `job`, `action`, `tool`).
+- Widgets (`view`, `hook`).
+- Rotas HTTP do server e rotas/pages web conforme as Rules.
 
-No StarDust, **só é permitido criar testes para**:
+Uma tarefa testável só pode receber `accepted` quando implementação e testes
+estiverem completos e passarem pelo Implementation Gate e pelo Judge. Não crie uma tarefa
+de teste dependente da implementação: isso permitiria avaliar um contrato
+parcial e bloquearia a própria dependência necessária para concluí-lo.
 
-- Objetos de domínio (`Entity`, `Structure`, `Aggregate`)
-- `Use Case`
-- `Handler` (`Controller`, `Job`, `Action`, `Tool`)
-- `Widget` (`View`, `Hook`)
-- Rotas HTTP da app server (`apps/server`) via testes de integração
+Não crie teste direto para repository, service, provider, gateway, client,
+mapper, factory, config, adapter ou composição. Cubra-os indiretamente pelo
+artefato permitido mais próximo e registre essa cobertura na tarefa que testa o
+comportamento público.
 
-**Não crie tarefas de teste** para `repository`, `service`, `provider`, `gateway`, `client`, `mapper`, `factory`, `config`, adaptadores de infraestrutura ou arquivos de composição.
+Toda tarefa com cobertura obrigatória declara a Rule de teste aplicável:
 
-#### 4.2 Regras de inclusão
+| Tipo | Rule |
+| --- | --- |
+| Domínio | `documentation/rules/domain-objects-testing-rules.md` |
+| Use case | `documentation/rules/use-cases-testing-rules.md` |
+| Handler | `documentation/rules/handlers-testing-rules.md` |
+| Rota server | `documentation/rules/server-routes-testing-rules.md` |
+| Rota/page web | `documentation/rules/web-app-routes-testing-rules.md` |
+| Widget | `documentation/rules/widget-tests-rules.md` |
 
-- Toda tarefa que cria ou modifica um artefato testável (conforme escopo acima) **deve** ser seguida por uma tarefa de teste.
-- Tarefas que criam artefatos fora do escopo testável (ex: `repository`, `provider`, `mapper`) **não** geram tarefa de teste — a cobertura será indireta, via testes do handler, use case ou widget que os consome.
-- A tarefa de teste **depende** da tarefa de implementação correspondente.
-- O prefixo da tarefa de teste usa o mesmo ID base com sufixo `t` (ex: `T1.1` implementa → `T1.1t` testa).
+### 5. Tarefas documentais
 
-#### 4.3 Resultado observável de tarefas de teste
+Quando a Spec introduzir mudança aprovada de Architecture ou Rule, crie tarefa
+documental explícita no mesmo Plan. Não adie novo padrão para `conclude-spec`.
 
-O resultado observável de uma tarefa de teste deve descrever os cenários cobertos, derivados da spec. Exemplo:
+## Localização
 
-```
-Resultado observável: testes de `AudioVoice` passando, cobrindo criação com
-valor válido, criação com default `panda`, e rejeição de valor fora do enum.
-```
-
-#### 4.4 Rules de referência
-
-Cada tarefa de teste deve indicar qual arquivo de regras de teste deve ser consultado antes da execução:
-
-| Tipo de artefato | Arquivo de regras |
-|---|---|
-| Objetos de domínio | `documentation/rules/domain-objects-testing-rules.md` |
-| Use cases | `documentation/rules/use-cases-testing-rules.md` |
-| Handlers | `documentation/rules/handlers-testing-rules.md` |
-| Rotas HTTP do server | `documentation/rules/server-routes-testing-rules.md` |
-| Rotas e pages da web | `documentation/rules/web-app-routes-testing-rules.md` |
-| Widgets | `documentation/rules/widget-tests-rules.md` |
-
-### 5. Pendências
-
-- Registre qualquer ambiguidade, informação ausente ou decisão não resolvida que possa bloquear a implementação.
-- Cada pendência deve descrever o impacto e a ação necessária para resolvê-la.
-
----
-
-## Saída
-
-Salve o plano final no diretório `plans` da mesma feature da spec de entrada.
-Derive o nome do arquivo a partir da spec:
+Salve ao lado da feature:
 
 - Spec: `documentation/features/{dominio}/{feature}/specs/{nome}-spec.md`
-- Plano: `documentation/features/{dominio}/{feature}/plans/{nome}-plan.md`
+- Plan: `documentation/features/{dominio}/{feature}/plans/{nome}-plan.md`
 
-Se a spec estiver em uma estrutura mais profunda, preserve todos os segmentos
-entre `documentation/features/` e `specs/`, substituindo apenas `specs` por
-`plans` e o sufixo `-spec.md` por `-plan.md`.
+Preserve subdiretórios intermediários, substitua apenas `specs` por `plans` e
+`-spec.md` por `-plan.md`.
 
-Siga **estritamente** o template abaixo.
+## Template
 
 ```md
 ---
-description: Criar um plano de implementacao estruturado em fases e tarefas a partir de uma spec tecnica.
+title: <título do plano>
+spec: <caminho relativo da spec>
+spec_revision: <hash de git hash-object>
+status: pending
+current_task: null
+base_commit: null
+last_updated_at: <YYYY-MM-DD>
 ---
 
-## Pendencias (quando aplicavel)
+# Plano — <nome>
 
-- [ ] <descricao da pendencia ou ambiguidade encontrada na spec>
+## Estado Atual
 
----
+- **Tarefa ativa:** nenhuma
+- **Estado:** `pending`
+- **Última ação:** Plan criado a partir da Spec aceita.
+- **Próxima ação:** iniciar a primeira tarefa sem dependências.
+- **Bloqueios:** nenhum
+- **Workspaces afetados:** <lista>
 
-## Tabela de Dependencias de Fases
+## Pendências
+
+Sem pendências.
+
+## Dependências de Fases
 
 | Fase | Objetivo | Depende de | Pode rodar em paralelo com |
 | --- | --- | --- | --- |
-| F1 | <definir> | - | - |
-| F2 | <definir> | F1 | F3, F4 |
-| F3 | <definir> | F1 | F2, F4 |
-| F4 | <definir> | F1 | F2, F3 |
+| F1 | <objetivo> | - | - |
+| F2 | <objetivo> | F1 | F3 |
 
-> **Estratégia de paralelismo:** sempre comece pelo core (domínio, structures e use cases). Assim que o core estiver concluído, as fases de `server`, `web` e `studio` podem ser executadas em paralelo, pois todas dependem apenas do contrato definido no core.
+**Estratégia de paralelismo:** <explicação baseada em dependências e ownership de paths>.
 
----
+## F1 — <nome>
 
-## F1 — Core: Domínio, Structures e Use Cases
-
-**Objetivo:** Definir o contrato do domínio — entidades, structures, interfaces de repositório/provider e use cases — sem nenhuma dependência de infraestrutura. Essa fase desbloqueia F2, F3 e F4 para rodarem em paralelo. Os testes do core funcionam como contrato executável: quando as fases de app iniciarem, quebras de contrato serão detectadas imediatamente.
+**Objetivo:** <resultado da fase>.
 
 ### Tarefas
 
-- [ ] **T1.1** — <implementar artefato de domínio>
+- [ ] **T1.1** — <responsabilidade atômica>
+  - **Estado:** `pending`
   - **Depende de:** -
-  - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
+  - **Critérios da Spec:** REQ-01, AC-01, AR-01
+  - **Resultado observável:** <condição verificável>
   - **Camada:** `core`
+  - **Paths permitidos:**
+    - `<path ou diretório>`
+    - `<path de testes>`
+  - **Rules:**
+    - `documentation/rules/<rule>.md`
+    - `documentation/rules/domain-objects-testing-rules.md`
+  - **Cobertura obrigatória:** <cenários que devem ser testados, ou `não se aplica` com justificativa>
+  - **Tentativas:** 0
+  - **Sensores:** pending
+  - **Avaliação:** pending
+  - **Findings bloqueantes:** nenhum
+  - **Próxima ação:** implementar e testar pelo Builder
 
-- [ ] **T1.1t** — <testar artefato de domínio>
-  - **Depende de:** T1.1
-  - **Resultado observavel:** <cenários cobertos, derivados da spec>
-  - **Camada:** `core`
-  - **Rules:** `documentation/rules/domain-objects-testing-rules.md`
+## Amendments da Spec
 
-- [ ] **T1.2** — <implementar use case>
-  - **Depende de:** T1.1
-  - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
-  - **Camada:** `core`
+Nenhum.
 
-- [ ] **T1.2t** — <testar use case>
-  - **Depende de:** T1.2
-  - **Resultado observavel:** <cenários cobertos, derivados da spec>
-  - **Camada:** `core`
-  - **Rules:** `documentation/rules/use-cases-testing-rules.md`
+## Histórico de Execução
 
----
+Nenhuma execução registrada.
 
-## F2 — Server: Infra, Repositórios e Handlers
+## Conclusão
 
-> ⚡ Pode rodar em paralelo com F3 e F4 após F1 estar concluída.
-
-**Objetivo:** Implementar a camada de infraestrutura e exposição — repositórios, providers, jobs e handlers RPC/REST — consumindo os contratos definidos no core. Tarefas de repositório e provider não geram tarefa de teste direta; a cobertura é garantida pelos testes dos handlers que os consomem.
-
-### Tarefas
-
-- [ ] **T2.1** — <implementar repositório ou provider>
-  - **Depende de:** T1.2
-  - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
-  - **Camada:** `database` | `provision`
-
-- [ ] **T2.2** — <implementar handler>
-  - **Depende de:** T2.1
-  - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
-  - **Camada:** `rest` | `rpc` | `queue`
-
-- [ ] **T2.2t** — <testar handler>
-  - **Depende de:** T2.2
-  - **Resultado observavel:** <cenários cobertos, derivados da spec>
-  - **Camada:** `rest` | `rpc` | `queue`
-  - **Rules:** `documentation/rules/handlers-testing-rules.md`
-
----
-
-## F3 — Web: UI e Integração
-
-> ⚡ Pode rodar em paralelo com F2 e F4 após F1 estar concluída.
-
-**Objetivo:** Implementar a interface e integração client-side na aplicação web — widgets, actions e chamadas RPC/REST — consumindo os contratos definidos no core.
-
-### Tarefas
-
-- [ ] **T3.1** — <implementar widget>
-  - **Depende de:** T1.2
-  - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
-  - **Camada:** `ui`
-
-- [ ] **T3.1t** — <testar widget>
-  - **Depende de:** T3.1
-  - **Resultado observavel:** <cenários cobertos, derivados da spec>
-  - **Camada:** `ui`
-  - **Rules:** `documentation/rules/widget-tests-rules.md`
-
----
-
-## F4 — Studio: UI e Integração
-
-> ⚡ Pode rodar em paralelo com F2 e F3 após F1 estar concluída.
-
-**Objetivo:** Implementar a interface e integração client-side na aplicação studio — widgets, actions e chamadas RPC/REST — consumindo os contratos definidos no core.
-
-### Tarefas
-
-- [ ] **T4.1** — <implementar widget>
-  - **Depende de:** T1.2
-  - **Resultado observavel:** <o que deve ser verdadeiro ao concluir>
-  - **Camada:** `ui`
-
-- [ ] **T4.1t** — <testar widget>
-  - **Depende de:** T4.1
-  - **Resultado observavel:** <cenários cobertos, derivados da spec>
-  - **Camada:** `ui`
-  - **Rules:** `documentation/rules/widget-tests-rules.md`
+- **Estado:** pending
+- **Tarefas aceitas:** 0/<total>
+- **Findings bloqueantes:** 0
+- **Sensores finais:** pending
+- **Judge da conclusão:** pending
 ```
+
+## Regras de Mutação
+
+- Somente o Orchestrator atualiza estado, tentativas, gates, findings ativos,
+  histórico e checkboxes.
+- Pareceres completos dos Judges permanecem no chat; o Plan registra apenas
+  veredito resumido, finding ativo e próxima ação.
+- `[x]` significa `accepted` pelo `judge-implementation-agent`.
+- Builder e Worker não editam o Plan.
+- Não apague tentativas anteriores; resuma-as no histórico.
+- Saída bruta de comandos não entra no documento.

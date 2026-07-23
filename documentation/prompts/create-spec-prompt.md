@@ -4,7 +4,10 @@ description: Prompt para criar especificação técnica a partir de PRD e codeba
 
 # Prompt: Criar Spec
 
-**Objetivo:** Detalhar a implementação técnica de uma feature, fix ou refatoração, servindo como ponte entre o PRD e o código — com nível de detalhe suficiente para implementação direta e sem ambiguidades.
+**Objetivo:** Criar a definição normativa de uma feature, fix ou refatoração em
+um único documento com duas partes: Contract observável e solução técnica. A
+Spec só é considerada pronta depois do Definition Gate e de um
+`judge-spec-agent` independente.
 
 ## Entrada
 
@@ -19,6 +22,9 @@ description: Prompt para criar especificação técnica a partir de PRD e codeba
 
 Antes de tomar decisões técnicas, leia:
 
+- `documentation/rules/harness-rules.md` — protocolo de autoria, julgamento e congelamento da Spec.
+- `documentation/agents/orchestrator-agent.md` — responsabilidades do agente que conduz o workflow.
+- `documentation/agents/judge-spec-agent.md` — contrato do avaliador independente da Spec.
 - `documentation/rules/rules.md` — índice para selecionar rules por app e camada.
 - `documentation/rules/code-conventions-rules.md` — convenções gerais de nomeação, factories, erros, eventos e barrel files.
 - Rules específicas das camadas mapeadas na seção 1.2.
@@ -34,7 +40,9 @@ Estas regras aplicam-se a toda a spec. Não as repita nas seções — referenci
 
 1. **Caminhos reais.** Todo arquivo citado deve existir no projeto ou estar marcado como **novo arquivo**.
 2. **Sem invenção.** Não invente arquivos, métodos, contratos, schemas ou integrações sem evidência no PRD ou codebase.
-3. **Sem testes.** A spec não inclui testes automatizados.
+3. **Sem implementação de testes.** A Spec não descreve código de teste, mas
+   define critérios e evidências verificáveis que orientarão Plan, sensores e
+   Judges.
 4. **Core isolado.** Não proponha acoplamento cross-domain no `core` sem evidência explícita na codebase.
 5. **Borda é borda.** Se autenticação, autorização, ownership, montagem de contexto ou adaptação de transporte já vivem em `controller`, `middleware`, `tool` ou `router`, a spec preserva esse padrão — não empurre para `use case`.
 6. **Schemas estritos.** Campos controlados pelo servidor (ex: `author`, `userId`, `status`) não entram em schemas de entrada; use schemas derivados na borda.
@@ -96,8 +104,8 @@ Antes de redigir a spec, transforme cada decisão em aberto da síntese em uma *
 
 - Uma pergunta por decisão; agrupe-as em uma única chamada de `question` quando possível.
 - Cada pergunta com 2–4 opções mutuamente exclusivas; a recomendada primeiro, marcada com `(Recomendado)`.
-- Incorpore cada resposta como **Decisão Técnica** (seção 8) e ajuste as seções afetadas.
-- Só o que o usuário deixar explicitamente em aberto vai para **Pendências** (seção 10).
+- Incorpore cada resposta como **Decisão Técnica** (seção 9) e ajuste as seções afetadas.
+- Só o que o usuário deixar explicitamente em aberto vai para **Pendências** (seção 12).
 
 ### 2. Roteamento de Ferramentas
 
@@ -121,16 +129,23 @@ title: <Título claro>
 prd: <link da milestone GitHub>
 issue: <link do issue/esboço>
 apps: <server|studio|web> (separados por vírgula)
-status: <open|closed>
+status: <draft|open|closed>
 last_updated_at: <YYYY-MM-DD>
 ---
 ```
 
-O campo `apps` filtra quais camadas incluir nas seções 4, 5 e 6. Se `apps: web`, exclua Hono Routes, Inngest Functions, etc.
+Use `draft` durante a autoria e o julgamento. Somente depois do Definition Gate
+e de `judge-spec-agent: accepted`, altere para `open`. O campo `apps` filtra
+quais camadas incluir nas seções técnicas. Se `apps: web`, exclua Hono Routes,
+Inngest Functions, etc.
 
 ---
 
 ### Seções
+
+## Parte I — Contract
+
+Esta parte define o que deve ser comprovado sem prescrever a implementação.
 
 #### 1. Objetivo (Obrigatório)
 Resumo em um parágrafo do que será entregue funcional e tecnicamente.
@@ -140,14 +155,52 @@ Resumo em um parágrafo do que será entregue funcional e tecnicamente.
 - **2.2 Out-of-scope:** o que não será tratado.
 
 #### 3. Requisitos (Obrigatório)
-- **3.1 Funcionais:** resumidos do PRD — apenas o que impacta implementação.
-- **3.2 Não funcionais:** apenas critérios verificáveis (performance, segurança, latência etc). Se nenhum se aplicar, omita a subseção.
+- **3.1 Funcionais:** resumidos do PRD e identificados como `REQ-01`, `REQ-02`,
+  etc. — apenas o que impacta implementação.
+- **3.2 Não funcionais:** identificados e verificáveis (performance, segurança,
+  latência etc). Se nenhum se aplicar, omita a subseção.
 
-#### 4. O que já existe? (Obrigatório)
+#### 4. Contract de Aceitação (Obrigatório)
+
+Defina:
+
+- **Pré-condições e fixtures:** serviços, usuários, permissões, dados e
+  configurações necessários.
+- **Interfaces observáveis:** entradas, saídas, erros, eventos e limites.
+- **Critérios:** `AC-*` para comportamento e `AR-*` para atributos não
+  funcionais ou limites arquiteturais observáveis.
+
+```md
+| ID | Requisito | Dado | Quando | Então | Evidência esperada |
+| --- | --- | --- | --- | --- | --- |
+| AC-01 | REQ-01 | <pré-condição> | <ação> | <resultado observável> | <teste, comando ou browser> |
+| AR-01 | REQ-01 | <contexto> | <ação> | <limite mensurável> | <sensor ou inspeção> |
+```
+
+Todo `AC-*` e `AR-*` referencia um `REQ-*` na mesma linha. Critérios devem ser
+objetivos, suficientes para reprovar uma implementação incorreta e
+independentes da abordagem interna.
+
+Escreva os cenários integralmente em pt-BR, usando sempre `Dado`, `Quando` e
+`Então` nos títulos e na descrição dos critérios.
+
+Quando houver evidência automatizada estável, declare-a de forma executável:
+
+```md
+<!-- harness:evidence {"criterion":"AC-01","command":["npm","run","test:integration","-w","@stardust/server"]} -->
+```
+
+Não declare comandos destrutivos, interativos ou dependentes de segredo.
+
+## Parte II — Especificação Técnica
+
+Esta parte define como o projeto cumprirá o Contract.
+
+#### 5. O que já existe? (Obrigatório)
 Agrupe por camada. Para cada item:
 `**NomeDoModulo** (caminho/relativo) — breve descrição do uso`
 
-#### 5. O que deve ser criado? (Depende da tarefa)
+#### 6. O que deve ser criado? (Depende da tarefa)
 
 Inclua apenas as camadas tocadas pelo `apps` do frontmatter. Para cada novo arquivo, marque como **(novo arquivo)**. Para métodos, use: `assinatura TypeScript` — responsabilidade em uma linha. Não escreva implementação.
 
@@ -280,7 +333,7 @@ Inclua apenas as camadas tocadas pelo `apps` do frontmatter. Para cada novo arqu
 
 > Se uma camada não se aplicar, **não a inclua**. Se precisar de uma camada não listada acima, adicione seguindo o mesmo padrão.
 
-#### 6. O que deve ser modificado? (Depende da tarefa)
+#### 7. O que deve ser modificado? (Depende da tarefa)
 Para cada alteração:
 - **Arquivo:** caminho
 - **Mudança:** o que muda
@@ -288,7 +341,7 @@ Para cada alteração:
 
 Se não houver: **Não aplicável**.
 
-#### 7. O que deve ser removido? (Depende da tarefa)
+#### 8. O que deve ser removido? (Depende da tarefa)
 Para cada remoção:
 - **Arquivo:** caminho
 - **Motivo:** por quê
@@ -296,23 +349,71 @@ Para cada remoção:
 
 Se não houver: **Não aplicável**.
 
-#### 8. Decisões Técnicas (Obrigatório)
+#### 9. Decisões Técnicas (Obrigatório)
 Para cada decisão relevante: decisão, alternativas, motivo, trade-offs.
 
-#### 9. Diagramas e Referências (Obrigatório)
+#### 10. Diagramas e Referências (Obrigatório)
 - **Fluxo de dados:** diagrama Mermaid mostrando interação entre camadas.
 - **Fluxo cross-app (se multi-app):** qual app expõe, qual consome, formato de comunicação.
 - **Layout (se UI):** ASCII da hierarquia visual.
 - **Referências:** caminhos de arquivos similares na codebase.
 
-#### 10. Pendências / Dúvidas (Quando aplicável)
-Apenas itens que **permanecem em aberto após a etapa de Clarificação (1.5)** — esta seção não substitui perguntar. Decisões já confirmadas com o usuário via `question` vão para Decisões Técnicas (seção 8), não aqui.
+#### 11. Gates Aplicáveis (Obrigatório)
+
+Declare os workspaces e sensores condicionais da implementação:
+
+```md
+| Sensor | Escopo | Obrigatório | Comando ou configuração |
+| --- | --- | --- | --- |
+| `quality-ratchet` | server | sim | `npm run quality-ratchet -- --workspace=server` |
+| Integração | server | sim | `npm run test:integration -w @stardust/server` |
+| Runtime smoke | não aplicável | não | - |
+| Dead code | server | sim | `<config ou comando explícito>` |
+```
+
+`codecheck`, `typecheck`, `test:unit`, `scope-check`, `architecture-check`,
+`migration-check` estático e `contract-check` são padrões do Implementation e
+Conclusion Gate. Não os omita por conveniência.
+
+#### 12. Pendências / Dúvidas (Quando aplicável)
+Apenas itens que **permanecem em aberto após a etapa de Clarificação (1.5)** — esta seção não substitui perguntar. Decisões já confirmadas com o usuário via `question` vão para Decisões Técnicas (seção 9), não aqui.
 Para cada item: descrição, impacto, ação sugerida.
 Se não houver: **Sem pendências**.
 
-#### 11. Execução Recomendada (Obrigatório)
+#### 13. Execução Recomendada (Obrigatório)
 Indique qual prompt deve ser usado para implementar a spec:
 - Use **`implement-spec`** quando a spec for diretamente implementável, com escopo delimitado e sem necessidade de decomposição prévia em fases.
-- Use **`implement-plan`** quando a spec exigir execução em múltiplas fases, coordenação entre entregas independentes, alto risco de regressão ou quando for útil quebrar o trabalho por app/pacote antes de alterar código.
+- Use **`create-plan` + `implement-plan`** quando a spec exigir execução em múltiplas fases, coordenação entre entregas independentes, Workers, alto risco de regressão ou quando for útil quebrar o trabalho por app/pacote antes de alterar código.
 
 Inclua uma justificativa curta. Esta seção é uma recomendação operacional para execução, não uma decisão técnica da solução.
+
+---
+
+## Julgamento Obrigatório da Spec
+
+Não finalize a Spec no mesmo agente que a escreveu.
+
+1. Salve o documento completo com `status: draft`.
+2. Execute:
+   `npm run harness -- gate definition --spec=<path>`.
+3. Corrija findings determinísticos antes de acionar um Judge.
+4. Registre o estado do worktree.
+5. Inicie um subagente novo, com contexto limpo, e instrua-o a usar
+   `judge-spec-agent`, definido em
+   `documentation/agents/judge-spec-agent.md`.
+6. Envie PRD, draft, bug report quando aplicável, síntese da pesquisa,
+   Architecture e Rules relevantes.
+7. Não envie justificativas persuasivas do autor além das evidências já
+   registradas na Spec.
+8. Compare o worktree após o Judge; qualquer edição feita por ele invalida o
+   parecer.
+9. Se `failed`, corrija somente os findings sustentados por evidência. Decisões
+   de produto ou arquitetura retornam ao usuário.
+10. Repita Definition Gate e julgamento até `accepted`, respeitando no máximo três tentativas
+   pelo mesmo motivo.
+11. Após `accepted`, altere o status para `open`, atualize `last_updated_at` e
+   calcule a revisão com `git hash-object <spec>`.
+
+Na resposta final, informe o veredito, a revisão congelada e eventuais
+observações não bloqueantes. Sem `judge-spec-agent: accepted`, a Spec permanece draft
+e não pode seguir para `create-plan` ou implementação.

@@ -1,253 +1,204 @@
 ---
-description: Implementar no codebase um plano de implementacao derivado de uma spec tecnica, seguindo a arquitetura e diretrizes do Stardust.
+description: Orquestrar um Plan com Builder, Workers, gates determinísticos e Judge independente, mantendo progresso e handoff no próprio documento.
 ---
 
 # Prompt: Implementar Plano
 
-**Objetivo principal:** Implementar no codebase um plano de implementacao derivado de uma spec tecnica, seguindo a arquitetura e diretrizes do Stardust, **respeitando rigorosamente a ordem de fases e tarefas definidas no plano para maximizar a paralelizacao e evitar retrabalho.**
+## Objetivo
+
+Executar um Plan derivado de Spec respeitando dependências, ownership de paths e
+avaliação independente por tarefa. O agente que usa este prompt atua como
+Orchestrator: coordena, registra e decide transições, mas não substitui Builder
+ou Judge.
 
 ## Entrada
 
-- Plano ativo em `documentation/plan.md` — esse e o ponto de entrada padrao.
-- Se um caminho alternativo for fornecido explicitamente, use-o no lugar de `documentation/plan.md`.
+- Caminho de `documentation/features/**/plans/*-plan.md`.
 
----
+Se não for informado, descubra o Plan relacionado à Spec ou feature da conversa.
+Não use `documentation/plan.md`. Havendo mais de um candidato plausível, peça
+confirmação.
 
 ## Regras Aplicáveis
 
-Antes de implementar qualquer tarefa, leia:
+Leia integralmente:
 
-- `documentation/rules/rules.md` — índice obrigatório para selecionar a rule da camada.
-- `documentation/rules/code-conventions-rules.md` — convenções gerais de nomes, factories, erros, eventos, barrel files e organização.
-- Rule específica da camada da tarefa, conforme o plano e o índice.
-- Rule de teste indicada no campo **Rules** da tarefa quando o ID tiver sufixo `t`.
+- O Plan.
+- A Spec referenciada no frontmatter.
+- `documentation/rules/harness-rules.md`.
+- `documentation/agents/orchestrator-agent.md`.
+- `documentation/agents/builder-agent.md`.
+- `documentation/agents/worker-agent.md`.
+- `documentation/agents/judge-implementation-agent.md`.
+- `documentation/rules/rules.md`.
+- Rules das camadas afetadas.
+- Rule de teste indicada em cada tarefa testável.
 
----
+## Pre-check
 
-## REGRA MESTRA (NAO IGNORE)
+1. Recalcule `git hash-object <spec>` e compare com `spec_revision`.
+2. Se divergir, classifique a mudança e atualize o Plan antes de implementar.
+3. Registre `base_commit` e o estado inicial do worktree sem sobrescrever
+   mudanças preexistentes.
+4. Leia todas as fases, dependências, paths e pendências.
+5. Retome da primeira tarefa não aceita cujas dependências estejam satisfeitas.
+6. Se houver tarefa `implementing`, `validating`, `evaluation_failed` ou
+   `changes_requested`, use o Estado Atual e o Histórico para retomar.
 
-Antes de implementar qualquer camada, execute este algoritmo:
+## Ordem
 
-1. **Classificar:** Qual e a natureza da tarefa? (ex: `core`, `ui`, `rpc`, `rest`, `queue`, `database`, `provision`).
-2. **Consultar o indice:** Leia `documentation/rules/rules.md` para identificar qual arquivo de regra corresponde a camada.
-3. **Carregar a rule específica:** Leia o arquivo de regra completo antes de editar a camada e cite explicitamente qual rule está aplicando.
+Implemente bottom-up:
 
-Para **tarefas de teste** (sufixo `t`), aplique o mesmo algoritmo, mas consultando o arquivo de regras de teste indicado no campo **Rules** da tarefa no plano:
+1. Core e contratos.
+2. Drivers e infraestrutura.
+3. REST/RPC/queue e demais bordas.
+4. UI e composição.
 
-| Tipo de artefato | Arquivo de regras de teste |
-|---|---|
-| Objetos de dominio | `documentation/rules/domain-objects-testing-rules.md` |
-| Use cases | `documentation/rules/use-cases-testing-rules.md` |
-| Handlers | `documentation/rules/handlers-testing-rules.md` |
-| Rotas HTTP do server | `documentation/rules/server-routes-testing-rules.md` |
-| Rotas e pages da web | `documentation/rules/web-app-routes-testing-rules.md` |
-| Widgets | `documentation/rules/widget-tests-rules.md` |
+Nunca implemente consumidor antes do contrato consumido. Implementação e testes
+do mesmo artefato formam uma única unidade de trabalho e de avaliação; uma
+tarefa testável não pode ser julgada nem aceita com cobertura pendente.
 
-> ⚠️ **Proibicoes**
-> - NUNCA assuma padroes genericos (ex: Clean Arch padrao, MVC padrao) sem ler o arquivo de regra especifico.
-> - NUNCA gere codigo baseado apenas no resumo do indice — leia o arquivo completo da camada.
-> - NUNCA implemente uma camada consumidora (ex: UI) antes de implementar a camada que ela consome (ex: RPC/Core).
-> - NUNCA execute uma tarefa de teste antes de concluir a tarefa de implementacao da qual ela depende.
+## Ciclo por Tarefa
 
----
+### 1. Preparar
 
-## Diretrizes de execucao
+O Orchestrator atualiza:
 
-### 1. Pre-check (obrigatorio)
+- `status: in_progress` no Plan.
+- `current_task`.
+- Estado da tarefa para `implementing`.
+- Tentativa e próxima ação.
+- Estado Atual e Histórico.
 
-**1.1 Leitura do plano**
+### 2. Readiness Gate
 
-Leia o plano na integra antes de escrever qualquer linha de codigo. Identifique: escopo, fases, mapa de paralelizacao, gargalos, criterios de aceite, riscos e pendencias. Se o documento estiver incompleto, nao invente: crie uma secao `Pendencias` e avance apenas com defaults seguros.
+Execute:
 
-**1.2 Leitura da codebase existente**
-
-Use **Serena** para localizar implementacoes similares nas mesmas camadas impactadas — use-as como referencia de padrao e nomenclatura.
-
-> Nao assuma que um arquivo existe ou tem determinada assinatura sem verificar na codebase. Implementar com base em suposicoes gera conflitos e retrabalho.
-
-**1.3 Leitura das regras das camadas impactadas**
-
-Antes de implementar qualquer camada, leia as regras correspondentes consultando o indice em `documentation/rules/rules.md`. Em geral, as mais comuns no Stardust sao:
-
-- `documentation/rules/core-package-rules.md` — DTOs, Entidades, Interfaces e Use Cases
-- `documentation/rules/database-rules.md` — Repositories, Mappers e persistencia
-- `documentation/rules/rpc-layer-rules.md` — Actions e integracao com use cases
-- `documentation/rules/rest-layer-rules.md` — Services e Controllers REST
-- `documentation/rules/queue-layer-rules.md` — Jobs e processamento assincrono
-- `documentation/rules/provision-layer-rules.md` — Providers e integracoes externas
-- `documentation/rules/ui-layer-rules.md` — Widgets e paginas (padrao Widget: View + Hook + Index)
-- `documentation/rules/realtime-rules.md` — Canais, adapters e clients realtime
-- `documentation/rules/ai-layer-rules.md` — Tools, prompts, workflows e adapters de IA
-- `documentation/rules/validation-layer-rules.md` — Schemas Zod compartilhados
-- `documentation/rules/lsp-layer-rules.md` — Pacote LSP e linguagem Delegua
-- `documentation/rules/web-application-rules.md` — Convencoes especificas do app `web`
-- `documentation/rules/server-application-rules.md` — Convencoes especificas do app `server`
-- `documentation/rules/studio-appllication-rules.md` — Convencoes especificas do app `studio`
-- `documentation/rules/code-conventions-rules.md` — Nomenclatura e organizacao geral
-
-> Leia apenas as regras das camadas que serao tocadas nesta execucao. Nao pule esta etapa — padroes existentes devem ser preservados.
-
----
-
-### 2. Ordem de execucao (bottom-up, obrigatoria)
-
-Implemente as tarefas seguindo rigorosamente esta hierarquia:
-
-1. **Core** — DTOs, Entidades e Interfaces.
-2. **Drivers/Infra** — implementacoes de Repositories e Gateways (ex: `Supabase`, `Inngest`).
-3. **API layer** — Actions (`RPC`) ou Controllers (`REST`).
-4. **UI** — Widgets e Paginas.
-
-Dentro de cada grupo, respeite a intercalacao implementacao → teste definida no plano: sempre execute a tarefa de implementacao (`T1.1`) antes da tarefa de teste correspondente (`T1.1t`).
-
-> ⚠️ **Regra** Nunca implemente um componente consumidor antes de implementar a logica/dados que ele consome.
-
-### 3. Ciclo de implementacao por tarefa
-
-Para cada tarefa do plano:
-
-- Consulte a Regra Mestra antes de escrever codigo (etapa obrigatoria acima).
-- Localize codigo existente semelhante antes de criar algo novo.
-- Implemente a mudanca minima que entrega o **resultado observavel** definido na tarefa do plano.
-- Evite acoplamento entre camadas e chamadas de API na UI.
-- Se a tarefa implementada introduzir qualquer alteracao relevante de comportamento, contrato, arquitetura, decisao tecnica, fluxo de UI ou criterio de validacao que nao esteja refletido na spec de origem, atualize a spec de forma cirurgica antes de considerar a tarefa concluida.
-
-### 4. Ciclo de teste por tarefa
-
-Para cada tarefa de teste (sufixo `t`) do plano:
-
-- Consulte a Regra Mestra usando o arquivo de **regras de teste** indicado no campo `Rules` da tarefa.
-- Localize testes existentes no mesmo modulo para referencia de padrao e nomenclatura.
-- Crie os testes que cobrem os **cenarios derivados da spec** descritos no resultado observavel da tarefa.
-- Respeite estritamente o escopo de testes permitido no StarDust: apenas objetos de dominio, use cases, handlers (`controller`, `job`, `action`, `tool`) e widgets (`view`, `hook`).
-- Use **Fakers** para gerar dados de teste em vez de instanciar manualmente.
-
-### 5. Verificacao (obrigatoria) apos cada tarefa
-
-Ao finalizar cada tarefa — seja de implementacao ou de teste — execute **antes de avancar para a proxima**:
-
-- **Lint e formatacao:** `npm run codecheck` no diretorio do pacote/app correspondente.
-- **Typecheck:** `npm run typecheck` no diretorio do pacote/app correspondente.
-- **Testes:** `npm run test:unit` no diretorio do pacote/app correspondente.
-
-> ⚠️ **Criterio de aceite:** Nao avance com codigo que apresente erros de lint, typecheck ou testes falhando. Corrija imediatamente antes de seguir.
-
-> 💡 **Contexto de monorepo:** Execute os comandos dentro do diretorio da aplicacao ou pacote especifico (onde reside o `package.json`, ex: `apps/web`, `apps/server`, `packages/core`), nao na raiz do workspace.
-
-### 6. Execucao paralela com subagentes (quando aplicavel)
-
-Quando o plano indicar tarefas que **podem rodar em paralelo** (coluna "Pode rodar em paralelo com" da tabela de dependencias), utilize subagentes para executa-las simultaneamente.
-
-#### Quando acionar subagentes
-
-- Apenas quando duas ou mais tarefas nao tiverem dependencia entre si dentro da mesma fase ou entre fases distintas.
-- Nao acione subagentes para tarefas sequenciais — o custo de orquestracao nao compensa.
-- Tarefas de teste podem ser despachadas para subagentes junto com suas tarefas de implementacao correspondentes, desde que o subagente execute na ordem correta (implementacao primeiro, teste depois).
-
-#### Como despachar cada subagente
-
-Cada subagente deve receber **somente o contexto minimo necessario** para sua tarefa:
-
-1. A tarefa especifica a executar (ID, nome, camada e resultado observavel esperado).
-2. Os arquivos de regra da camada correspondente (`documentation/rules/`).
-3. Para tarefas de teste: o arquivo de regras de teste indicado no campo `Rules` da tarefa.
-4. Trechos de codigo relevantes da codebase (implementacoes similares, interfaces que a tarefa depende).
-5. As convencoes do projeto (`documentation/rules/code-conventions-rules.md`).
-
-> ⚠️ **Nao envie o plano completo para o subagente.** Contexto excessivo aumenta o risco de o subagente implementar alem do escopo da tarefa.
-
-#### Responsabilidade do orquestrador
-
-- Despachar os subagentes e **aguardar todos concluirem** antes de avancar para a proxima fase.
-- Apos recepcao dos resultados de todos os subagentes, executar a **verificacao obrigatoria**:
-  - `npm run codecheck` — lint e formatacao.
-  - `npm run typecheck` — tipagem.
-  - `npm run test:unit` — testes.
-- Se houver falha, identificar qual tarefa/subagente gerou o problema e corrigir antes de avancar.
-- Registrar no checklist quais tarefas foram executadas por subagentes e o status de cada uma.
-
-#### Formato de despacho (instrucao ao subagente)
-
-```
-Tarefa: <ID e nome da tarefa>
-Camada: <camada>
-Resultado esperado: <resultado observavel definido no plano>
-
-Contexto necessario:
-- Regras da camada: <caminho do arquivo de regras>
-- Regras de teste (se tarefa de teste): <caminho do arquivo de regras de teste>
-- Interfaces/contratos que esta tarefa consome: <paths relevantes>
-- Implementacoes similares para referencia: <paths relevantes>
-
-Instrucoes:
-1. Siga rigorosamente as regras da camada indicada.
-2. Para tarefas de teste, siga as regras de teste indicadas.
-3. Implemente apenas o escopo desta tarefa — nada alem.
-4. Ao concluir, reporte: arquivos criados/alterados e o resultado observavel atingido.
+```bash
+npm run harness -- \
+  gate readiness \
+  --spec=<path> \
+  --revision=<hash> \
+  --plan=<path> \
+  --task=<ID>
 ```
 
-### 7. Ferramentas auxiliares
+Não acione o Builder enquanto o gate falhar.
 
-- **MCP Serena:** utilize para buscar arquivos e implementacoes similares no projeto antes de criar algo novo.
-- **MCP Context7:** utilize quando houver duvida sobre como usar uma biblioteca especifica (ex: `shadcn/ui`, `radix-ui`, `inngest`, `supabase`, `hono`, `zod`).
-- **MCP Playwright:** utilize para validar mudancas em UI, paginas Next.js, fluxos browser, layout responsivo, formularios, modais, drawers, canvas ou estados visuais/interativos. A validacao deve abrir a rota impactada, executar o fluxo principal alterado e verificar que nao ha tela em branco, erro no console, overlay quebrado, texto sobreposto ou comportamento divergente da spec.
+### 3. Acionar Builder
 
-### 8. Progresso e reporte
+Inicie um subagente separado usando `builder-agent`, definido em
+`documentation/agents/builder-agent.md`. Forneça apenas:
 
-- Atualize o checklist de tarefas conforme implementa (marque `[x]` nas tarefas concluidas, incluindo tarefas de teste).
-- Ao final de cada fase, reporte: o que foi implementado, testes criados, arquivos tocados e pendencias.
-- Ao final de cada fase, reporte tambem se a spec de origem foi atualizada ou se nao houve alteracoes relevantes que exigissem atualizacao.
-- Para fases que alterem UI/web, reporte tambem a validacao feita com MCP Playwright, incluindo rota validada, fluxo exercitado e screenshots quando relevantes.
-- Ao final do plano completo, entregue o reporte final (veja Saida esperada).
+- Tarefa, camada e resultado observável.
+- Spec/revisão e critérios associados.
+- Paths permitidos.
+- Contratos consumidos.
+- Rules da camada e de teste.
+- Cobertura obrigatória da mesma unidade de avaliação.
+- Findings bloqueantes da tentativa anterior.
 
-### 9. Atualizacao de Spec, Arquitetura e Rules (ao final da implementacao)
+O Builder pode acionar no máximo dois `worker-agent` para unidades realmente
+independentes. Workers não podem escrever nos mesmos paths nem criar outros
+subagentes. Aguarde toda a árvore de implementação encerrar.
 
-Apos concluir todas as fases do plano e antes de reportar a saida final,
-verifique se a implementacao introduziu mudancas que exigem atualizacao de
-documentacao estrutural. Execute esta etapa enquanto o contexto esta fresco —
-nao adie para o conclude-spec.
+### 4. Integrar e inspecionar
 
-**9.1 Spec de origem (`documentation/features/**/specs/*-spec.md`)**
+- Confirme o diff combinado.
+- Rejeite paths fora do escopo.
+- Verifique se Builder/Workers alteraram Plan ou fontes normativas sem
+  autorização.
+- Atualize a tarefa para `validating`.
+- Trate divergências documentais conforme `harness-rules.md`.
 
-Atualize se a implementacao introduziu qualquer alteracao relevante em:
-- Comportamento observavel
-- Contratos, tipos, schemas, payloads ou persistencia
-- Decisoes tecnicas ou trade-offs
-- Fluxos de UI, estados visuais, interacoes ou criterios de acessibilidade
-- Criterios de validacao, testes ou browser checks
+### 5. Implementation Gate
 
-Use edicoes cirurgicas. Nao reescreva a spec inteira.
+Execute com os paths e workspaces da tarefa:
 
-Se nenhuma dessas condicoes se aplicar, registre na saida:
-`Spec: sem alteracoes necessarias.`
+```bash
+npm run harness -- \
+  gate implementation \
+  --spec=<path> \
+  --base=<commit-base> \
+  --allowed-path=<path-ou-glob> \
+  --workspace=<workspace>
+```
 
-**9.2 Arquitetura (`documentation/architecture.md`)**
+Adicione integração, Playwright, build, runtime, dead code e migrations conforme
+a Spec. Não avance com falha causada pela implementação. Devolva a evidência ao
+Builder, corrija e execute novamente. Registre apenas o resumo no Plan.
 
-Atualize se a implementacao introduziu:
-- Novo fluxo de dados entre apps ou camadas
-- Nova camada ou modulo estrutural
-- Novo padrao de integracao (ex: transporte REST substituindo RPC)
-- Mudanca relevante na estrutura de diretorios
+### 6. Acionar Judge da implementação
 
-Se nenhuma dessas condicoes se aplicar, registre na saida:
-`Arquitetura: sem alteracoes necessarias.`
+Depois do Implementation Gate passar:
 
-**9.3 Rules (`documentation/rules/`)**
+1. Registre o estado do worktree.
+2. Inicie subagente novo, com contexto limpo, usando
+   `judge-implementation-agent`, definido em
+   `documentation/agents/judge-implementation-agent.md`.
+3. Envie Spec/revisão, tarefa, critérios, commit-base, diff, paths, Rules,
+   sensores e findings anteriores.
+4. Não envie a narrativa do Builder.
+5. Compare o worktree após o Judge; qualquer edição invalida o parecer.
 
-Atualize o arquivo de regras correspondente se a implementacao introduziu:
-- Padrao de projeto novo nao mapeado nas rules existentes
-- Convencao de nomenclatura ou organizacao nova
-- Restricao ou permissao de camada que diverge do documentado
+O Judge avalia implementação e testes como uma única unidade. Não solicite
+veredito enquanto algum cenário obrigatório da tarefa estiver pendente.
 
-Inclua exemplos praticos baseados no codigo recem-implementado.
+### 7. Registrar o veredito
 
-Se nenhuma dessas condicoes se aplicar, registre na saida:
-`Rules: sem alteracoes necessarias.`
+Se `accepted`:
 
-## Saida esperada
+- Marque `[x]`.
+- Defina estado `accepted`.
+- Registre critérios e evidências resumidas.
+- Zere findings bloqueantes.
+- Atualize Histórico, contagem e próxima tarefa.
 
-- Implementacao completa (ou parcial, se bloqueada) do plano/spec no codebase.
-- Checklist atualizado com tarefas `[x] concluida` e `[ ] pendente`, com justificativa para bloqueios.
-- Referencias a paths reais de arquivos alterados/criados (incluindo arquivos de teste).
-- Status da spec de origem: atualizada com paths/secoes alteradas ou `sem alteracoes necessarias`.
-- Lista de pendencias e proximos passos, se houver.
+Se `failed`:
+
+- Mantenha `[ ]`.
+- Defina `evaluation_failed`.
+- Registre findings e próxima ação.
+- Reative o Builder com apenas os findings bloqueantes.
+- Limite a três tentativas pelo mesmo motivo; depois escale ao usuário.
+
+## Paralelismo
+
+O Orchestrator pode executar Builders em paralelo somente para tarefas que o
+Plan declare independentes e que não compartilhem paths. Dentro de cada Builder,
+Workers seguem a mesma regra. Aguarde todos antes de integrar ou iniciar um
+Judge. O Judge nunca é filho do Builder.
+
+## Mudanças Durante a Implementação
+
+Não use `update-spec`. Quando Builder, Worker, Judge ou usuário identificar
+divergência:
+
+- Correção factual: Orchestrator ajusta cirurgicamente, recalcula revisão e
+  registra no Plan.
+- Amendment: pausa, atualiza Spec e Plan, invalida avaliações afetadas e retoma.
+- PRD, Architecture ou Rule: crie tarefa documental e obtenha a decisão exigida
+  por `harness-rules.md`.
+- Feedback humano contra tarefa aceita: estado `changes_requested`, finding
+  `HR-*` e reabertura.
+
+## Conclusão da Execução
+
+Quando todas as tarefas estiverem `accepted`:
+
+- Atualize Estado Atual informando que o Plan aguarda `conclude-spec`.
+- Não marque `status: completed` ainda.
+- Não feche a Spec.
+- Não faça commit ou PR por este prompt.
+
+`completed` é reservado ao fluxo aceito por `judge-conclusion-agent`.
+
+## Saída
+
+- Tarefas aceitas nesta execução.
+- Builders e Workers acionados.
+- Sensores executados.
+- Avaliações e tentativas.
+- Amendments e documentos atualizados.
+- Próxima tarefa ou indicação para `conclude-spec`.
+- Pendências e findings abertos.

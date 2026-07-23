@@ -3,6 +3,19 @@
 Este arquivo serve como índice para as regras de documentação do projeto.
 Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 
+## Regras do Harness de Agentes
+
+**Arquivo:** `/documentation/rules/harness-rules.md`
+**Quando consultar:**
+
+- Ao criar ou julgar uma Spec técnica.
+- Ao criar ou executar um Plan.
+- Ao implementar uma Spec diretamente.
+- Ao delegar implementação para Builder ou Workers.
+- Ao avaliar implementação ou conclusão com Judges.
+- Ao atualizar Spec, PRD, Architecture ou Rules durante a implementação.
+- Ao registrar revisão humana, handoff, tentativa ou finding no Plan.
+
 ## Regras de Convenções de Código
 
 **Arquivo:** `/documentation/rules/code-conventions-rules.md`

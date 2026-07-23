@@ -1,159 +1,161 @@
 ---
-description: Implementar diretamente uma spec pequena no codebase, sem criar plano formal, seguindo arquitetura e regras do Stardust.
+description: Orquestrar a implementação direta de uma Spec pequena com Builder, gates determinísticos e Judge independente, sem criar Plan.
 ---
 
 # Prompt: Implementar Spec
 
-**Objetivo:** Implementar no codebase uma spec tecnica pequena ou um fix pontual descrito em spec, sem criar `plan.md` nem seguir o fluxo pesado de `implement-plan`. Este prompt serve para tarefas com baixo acoplamento, poucos arquivos impactados e ordem de execucao evidente.
+## Objetivo
 
-Use este prompt quando a spec ja estiver clara o suficiente para implementacao direta.
+Executar uma Spec pequena em uma única sessão pelo fluxo:
 
-Nao use este prompt quando a tarefa exigir fases, paralelizacao, dependencias entre apps/camadas, migrations complexas, contratos novos em multiplas bordas ou coordenacao de subagentes. Nesses casos, use `create-plan` + `implement-plan`.
+```text
+Orchestrator → Readiness Gate → Builder → Implementation Gate → Judge da implementação
+```
 
----
+Este é o modo leve do harness. A ausência de Plan não elimina separação de
+papéis nem avaliação independente.
 
 ## Entrada
 
-- **Spec:** caminho do arquivo em `documentation/features/**/specs/*-spec.md`.
-- **Escopo opcional:** trecho, requisito, secao ou issue especifica dentro da spec.
-- **Contexto opcional:** observacoes do usuario sobre prioridade, limite de escopo ou arquivos ja alterados.
+- Spec aceita em `documentation/features/**/specs/*-spec.md`.
+- Escopo opcional dentro da Spec.
+- Restrições adicionais do usuário.
 
-Se o caminho da spec nao for fornecido, tente descobrir automaticamente usando esta ordem:
-1. spec citada ou alterada na conversa atual;
-2. unico arquivo `documentation/features/**/specs/*-spec.md` relacionado ao dominio/feature mencionados;
-3. spec mais recentemente modificada.
+Se o caminho não for informado, descubra pela conversa, por candidato único da
+feature ou pela Spec relacionada mais recente. Havendo ambiguidade, peça o
+caminho.
 
-Se houver mais de um candidato plausivel, pare e peca confirmacao do caminho correto.
+## Elegibilidade
 
----
+Use este fluxo somente quando:
 
-## Quando Usar
+- Existe uma única entrega observável.
+- A sequência de edições é curta e evidente.
+- Poucos arquivos e um fluxo simples são afetados.
+- Não há migration relevante ou contrato novo entre apps.
+- Não há mudança de PRD, Architecture ou Rule.
+- Não é necessário handoff entre sessões.
 
-Use `implement-spec` apenas se todas as condicoes abaixo forem verdadeiras:
+Promova para `create-plan` + `implement-plan` antes de continuar quando surgir:
 
-- A spec ja define claramente o comportamento esperado.
-- A implementacao cabe em uma sequencia curta de edicoes.
-- Nao ha necessidade de criar um plano por fases.
-- As dependencias entre camadas sao simples e evidentes.
-- A validacao pode ser feita com comandos locais de `codecheck`, `typecheck` e testes unitarios.
-
-Se qualquer condicao falhar, interrompa antes de editar e recomende `create-plan` + `implement-plan`.
-
----
+- Múltiplas tarefas ou dependências relevantes.
+- Paralelismo que justifique Workers.
+- Amendment contratual amplo.
+- Mais de uma reprovação material.
+- Mudança de PRD, Architecture ou Rule.
+- Necessidade de retomar em outra sessão.
 
 ## Regras Aplicáveis
 
-Antes de editar código, leia:
+Leia:
 
-- `documentation/rules/rules.md` — índice para selecionar rules das camadas tocadas pela spec.
-- `documentation/rules/code-conventions-rules.md` — quando houver nomes, factories, erros, eventos, barrel files ou estrutura de arquivos.
-- Rules específicas das camadas alteradas.
-- Rules de teste correspondentes quando a mudança exigir cobertura.
+- A Spec inteira.
+- `documentation/rules/harness-rules.md`.
+- `documentation/agents/orchestrator-agent.md`.
+- `documentation/agents/builder-agent.md`.
+- `documentation/agents/judge-implementation-agent.md`.
+- `documentation/rules/rules.md`.
+- `documentation/rules/code-conventions-rules.md`, quando aplicável.
+- Rules das camadas e testes afetados.
 
----
+Calcule a revisão da Spec com `git hash-object <spec>` e registre o commit-base e
+o estado inicial do worktree. Preserve mudanças preexistentes do usuário.
 
-## Diretrizes de Execucao
+## Execução
 
-### 1. Leitura Obrigatoria
+### 1. Readiness Gate
 
-Antes de editar codigo:
+Execute antes do Builder:
 
-- Leia a spec inteira.
-- Leia `documentation/rules/rules.md`.
-- Identifique os apps e camadas tocados pela spec.
-- Leia apenas os arquivos de rules correspondentes as camadas que serao alteradas.
-- Leia `documentation/rules/code-conventions-rules.md` quando a mudança criar ou alterar nomes, factories, erros, eventos, barrel files ou estrutura de arquivos.
-- Localize no codigo os arquivos citados pela spec e implementacoes similares.
+```bash
+npm run harness -- \
+  gate readiness \
+  --spec=<path> \
+  --revision=<hash>
+```
 
-Nao implemente com base em caminhos, metodos ou contratos sem confirmar que existem na codebase, exceto quando a spec marcar explicitamente como novo arquivo.
+Não prossiga com drift de revisão ou finding determinístico.
 
-### 2. Checagem de Escopo
+### 2. Acionar Builder
 
-Classifique a tarefa antes de editar:
+Inicie um subagente separado e instrua-o a usar `builder-agent`, definido em
+`documentation/agents/builder-agent.md`. Envie somente:
 
-- **Direta:** pode ser implementada agora com este prompt.
-- **Ampla:** exige plano formal; pare e recomende `implement-plan`.
-- **Ambigua:** falta decisao de produto ou arquitetura; pergunte ao usuario antes de editar.
+- Spec e revisão.
+- Escopo direto.
+- Critérios associados.
+- Resultado observável.
+- Paths permitidos.
+- Rules aplicáveis.
+- Findings de tentativa anterior, se houver.
 
-Uma tarefa deixa de ser direta se envolver:
+No modo direto, o Builder implementa sem Workers. Se identificar paralelismo
+material, ele deve reportar e a execução deve ser promovida para Plan.
 
-- duas ou mais apps com contrato novo entre elas;
-- migration com impacto de dados ou permissao;
-- nova entidade/use case/repository + UI consumidora no mesmo fluxo;
-- fila, provider externo, AI tool ou realtime;
-- alteracao de rules/arquitetura;
-- mais de uma decisao tecnica relevante ainda em aberto.
+### 3. Inspecionar o resultado
 
-### 3. Implementacao
+Após o Builder encerrar:
 
-- Siga a spec como fonte de verdade.
-- Prefira a menor mudanca que entrega o comportamento especificado.
-- Siga os padroes dos arquivos vizinhos antes de criar abstracoes novas.
-- Preserve limites de camada:
-  - `core` nao importa frameworks, SDKs ou codigo de apps.
-  - UI nao acessa banco, providers externos ou infraestrutura diretamente.
-  - Auth, ownership e adaptacao de transporte ficam na borda quando esse ja for o padrao do fluxo.
-- Se encontrar divergencia factual na spec durante a implementacao, corrija a spec de forma cirurgica ou registre a pendencia quando a decisao nao for segura.
-- Se a implementacao introduzir qualquer alteracao relevante de comportamento, contrato, arquitetura, decisao tecnica, fluxo de UI ou criterio de validacao que nao esteja refletido na spec, atualize a spec de forma cirurgica no mesmo ciclo de trabalho.
+- Confirme arquivos alterados e diff contra o estado inicial.
+- Rejeite mudanças fora dos paths permitidos.
+- Confirme que Spec e documentos normativos não foram alterados sem protocolo.
+- Trate divergências conforme `harness-rules.md`.
 
-### 4. Testes
+### 4. Implementation Gate
 
-Adicione ou atualize testes quando a mudanca afetar regra de negocio, contrato, estado de UI, handler ou comportamento com regressao conhecida.
+Execute com todos os paths e workspaces autorizados:
 
-Use as regras de teste correspondentes:
+```bash
+npm run harness -- \
+  gate implementation \
+  --spec=<path> \
+  --base=<commit-base> \
+  --allowed-path=<path-ou-glob> \
+  --workspace=<workspace>
+```
 
-| Tipo de artefato | Arquivo de regras |
-|---|---|
-| Objetos de dominio | `documentation/rules/domain-objects-testing-rules.md` |
-| Use cases | `documentation/rules/use-cases-testing-rules.md` |
-| Handlers | `documentation/rules/handlers-testing-rules.md` |
-| Rotas HTTP do server | `documentation/rules/server-routes-testing-rules.md` |
-| Rotas e pages da web | `documentation/rules/web-app-routes-testing-rules.md` |
-| Widgets | `documentation/rules/widget-tests-rules.md` |
+Inclua `--extra-command-json`, runtime, dead code ou configuração de migration
+conforme a seção Gates Aplicáveis da Spec. Se o gate falhar pela implementação,
+devolva a evidência ao Builder antes de acionar o Judge.
 
-Nao crie testes fora dos padroes existentes do projeto.
+### 5. Acionar Judge da implementação
 
-### 5. Validacao
+Com o Implementation Gate aprovado, registre o estado do worktree e inicie um novo subagente
+com contexto limpo usando `judge-implementation-agent`, definido em
+`documentation/agents/judge-implementation-agent.md`. Envie Spec/revisão, critérios,
+commit-base, diff, paths, Rules e sensores.
 
-Apos alterar codigo, execute os comandos no workspace afetado:
+O Judge não recebe a narrativa do Builder. Compare o worktree antes e depois;
+qualquer alteração feita pelo Judge invalida o parecer.
 
-- `npm run typecheck`
-- `npm run codecheck`
-- `npm run test`
+### 6. Processar o veredito
 
-Se a mudanca tocar UI, pagina Next.js, fluxo browser, layout responsivo, formulario, modal, drawer, canvas ou estado visual/interativo, valide tambem com **MCP Playwright**:
+- `accepted`: a implementação direta está apta para `conclude-spec`.
+- `failed`: envie somente findings bloqueantes ao Builder e repita.
+- Segunda reprovação material ou expansão de escopo: promova para Plan.
+- Decisão humana pendente: pare e pergunte ao usuário.
 
-- iniciar ou reutilizar o dev server do app afetado;
-- abrir a rota impactada no browser;
-- executar o fluxo principal alterado;
-- verificar visualmente/interativamente que nao ha tela em branco, erro no console, overlay quebrado, texto sobreposto ou comportamento divergente da spec;
-- capturar screenshot quando a validacao visual for relevante.
+## Atualizações da Spec
 
-Se o MCP Playwright nao estiver disponivel, rode os testes Playwright existentes ou registre claramente que a validacao browser ficou pendente.
+Não use `update-spec`. Correções factuais e amendments ocorrem neste workflow
+segundo `harness-rules.md`. Atualize `last_updated_at`, recalcule a revisão e
+invalide avaliações anteriores afetadas. Amendment amplo promove para Plan.
 
-Se a mudanca tocar multiplos workspaces, valide cada workspace afetado ou rode os comandos equivalentes na raiz quando isso for mais adequado.
+## Saída
 
-Se algum comando falhar por causa da mudanca, corrija antes de encerrar. Se houver falha pre-existente fora do escopo, reporte com evidencia.
+- Resumo do que foi implementado.
+- Spec e revisão avaliadas.
+- Arquivos principais alterados.
+- Sensores oficiais e resultados.
+- Veredito do `judge-implementation-agent`.
+- Tentativas e findings resolvidos.
+- Atualizações documentais ou promoção para Plan.
+- Pendências.
 
-### 6. Encerramento
+## Restrições
 
-Ao final, responda com:
-
-- resumo curto do que foi implementado;
-- arquivos principais alterados;
-- spec atualizada quando houve alteracao relevante de comportamento, contrato, arquitetura, decisao tecnica, fluxo de UI ou criterio de validacao;
-- comandos de validacao executados e resultado;
-- validacao Playwright/browser executada quando aplicavel;
-- pendencias, se houver.
-
----
-
-## Restricoes
-
-- Nao crie plano formal.
-- Nao use subagentes.
-- Nao implemente alem do escopo da spec.
-- Nao invente arquivos, metodos, contratos ou schemas sem evidencia.
-- Nao reescreva specs inteiras; se precisar ajustar documento por mudanca relevante na implementacao, faca edicao cirurgica.
-- Nao avance quando a spec exigir decisao arquitetural relevante sem confirmacao.
-- Nao substitua `implement-plan` em tarefas grandes; este prompt existe para tarefas menores.
+- Não crie Plan retroativo após concluir; promova assim que a complexidade for
+  descoberta.
+- Não permita que Builder avalie o próprio trabalho.
+- Não simule Judge no agente principal.
+- Não encerre com gate ou finding bloqueante aberto.

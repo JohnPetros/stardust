@@ -1,5 +1,5 @@
 ---
-description: Prompt para resolver pendencias (erros de CI, regressoes do quality gate e conversas nao resolvidas) de um pull request via gh CLI, em loop ate o PR ficar mergeable.
+description: Prompt para resolver pendencias (erros de CI, regressoes do quality ratchet e conversas nao resolvidas) de um pull request via gh CLI, em loop ate o PR ficar mergeable.
 ---
 
 # Prompt: Resolver Pendências de PR
@@ -8,7 +8,7 @@ description: Prompt para resolver pendencias (erros de CI, regressoes do quality
 Atuar como _babysitter_ de um Pull Request: monitorar, diagnosticar e resolver **todas as pendências que impedem o merge**, em loop, até o PR ficar verde e sem conversas pendentes. As pendências são de três tipos:
 
 1. **Erros de CI** — jobs falhando (`codecheck`, `typecheck`, `tests`, `integration-tests`, `build`).
-2. **Regressões do quality gate** — métricas que pioraram em relação ao baseline (job `quality-gate`).
+2. **Regressões do quality ratchet** — métricas que pioraram em relação ao baseline (job legado `quality-gate`).
 3. **Conversas de revisão não resolvidas** — comentários de revisores (humanos ou bots como o Copilot).
 
 Tudo deve ser endereçado respeitando os padrões e a arquitetura do projeto.
@@ -87,9 +87,12 @@ gh run view <run_id> --repo <owner>/<repo> --log-failed
 
 Mapeie cada job falho para a causa raiz (lint, tipo, teste unitário, teste de integração, build).
 
-#### 2.2 Regressões do quality gate
+#### 2.2 Regressões do quality ratchet
 
-Quando o job `quality-gate` falhar, tente primeiro obter a regressão pelo próprio resumo/log do run. Nem toda versão do `gh` suporta `--json jobs`, e nem todo run expõe artefatos baixáveis.
+Quando o job `quality-gate` (nome estável para compatibilidade com branch
+protection) falhar, tente primeiro obter a regressão pelo próprio resumo/log do
+run. Nem toda versão do `gh` suporta `--json jobs`, e nem todo run expõe
+artefatos baixáveis.
 
 Fluxo preferencial:
 
@@ -107,10 +110,10 @@ Se o run expuser artefatos úteis, baixe-os:
 gh run download <run_id> --repo <owner>/<repo>
 ```
 
-Se nem o resumo nem os artefatos trouxerem a tabela, **reproduza localmente** o quality gate do workspace afetado para obter a métrica exata:
+Se nem o resumo nem os artefatos trouxerem a tabela, **reproduza localmente** o quality ratchet do workspace afetado para obter a métrica exata:
 
 ```bash
-npm run quality-gate -- --workspace=<workspace>
+npm run quality-ratchet -- --workspace=<workspace>
 ```
 
 Use a tabela ou a saída local como lista de correções.
@@ -153,7 +156,7 @@ Classifique **cada pendência** (de qualquer fonte) em uma categoria:
 | **Escalar** | Mudança arquitetural, decisão de design, conflito com Spec/PRD, baseline que precisaria ser afrouxado | Consultar o usuário antes de agir |
 | **Ignorar** | Comentário meramente informativo, já endereçado no código | Pular |
 
-> **Regra de escalada:** Qualquer item que implique mudança de arquitetura, remoção de funcionalidade, conflito com o PRD/Spec, ou **afrouxar o baseline do quality gate**, deve ser **escalado** — nunca resolvido de forma autônoma. Afrouxar o baseline (`--update-baseline` para piorar uma métrica) anula o propósito da catraca.
+> **Regra de escalada:** Qualquer item que implique mudança de arquitetura, remoção de funcionalidade, conflito com o PRD/Spec, ou **afrouxar o baseline do quality ratchet**, deve ser **escalado** — nunca resolvido de forma autônoma. Afrouxar o baseline (`--update-baseline` para piorar uma métrica) anula o propósito da catraca.
 
 Apresente a triagem ao usuário antes de avançar caso haja itens **Escalar**.
 
@@ -175,7 +178,7 @@ npm run test:unit -w @stardust/<workspace>
 npm run test:integration -w @stardust/<workspace>
 ```
 
-#### 4.2 Regressões do quality gate
+#### 4.2 Regressões do quality ratchet
 
 Para cada linha da tabela de regressões, aplique a correção correspondente:
 
@@ -189,7 +192,7 @@ Para cada linha da tabela de regressões, aplique a correção correspondente:
 Confirme localmente que zerou as regressões antes de seguir:
 
 ```bash
-npm run quality-gate -- --workspace=<workspace>
+npm run quality-ratchet -- --workspace=<workspace>
 ```
 
 > Nunca rode `--update-baseline` para "resolver" uma regressão: isso piora o baseline. O baseline só é recongelado em melhorias intencionais, e isso é decisão do usuário (item **Escalar**).
@@ -216,7 +219,7 @@ Rode, no(s) workspace(s) afetado(s):
 npm run codecheck -w @stardust/<workspace>
 npm run typecheck -w @stardust/<workspace>
 npm run test:unit -w @stardust/<workspace>
-npm run quality-gate -- --workspace=<workspace>
+npm run quality-ratchet -- --workspace=<workspace>
 ```
 
 Corrija qualquer erro antes de prosseguir. Verifique também se as alterações permanecem aderentes ao PRD e à Spec associada ao PR.
@@ -275,7 +278,8 @@ done
 **Só tente ancorar em run ou SHA** se houver evidência concreta de que `gh pr checks` está mostrando um estado stale ou inconsistente. Mesmo nesse caso, use apenas comandos comprovadamente suportados pela versão local do `gh`.
 
 **Repita o ciclo (etapas 2 → 7)** até que:
-- Todos os checks de CI estejam verdes (incluindo `quality-gate`), **e**
+- Todos os checks de CI estejam verdes (incluindo o job legado
+  `quality-gate`, que executa o quality ratchet), **e**
 - Não haja conversas não resolvidas restantes (exceto as **Escalar** aguardando decisão).
 
 Quando ambas as condições forem satisfeitas, o babysit encerra.
@@ -302,7 +306,7 @@ Relate o progresso no formato:
 ### CI corrigido
 - [x] <job> — <causa raiz e correcao>
 
-### Quality gate
+### Quality ratchet
 - [x] <metrica> — baseline <x> / antes <y> / agora <z> — <correcao>
 
 ### Conversas implementadas

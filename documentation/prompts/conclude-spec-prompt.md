@@ -1,335 +1,189 @@
 ---
-description: Prompt para concluir uma spec com validação final, atualização de documentação e geração de resumo estruturado para PR.
+description: Concluir uma Spec após verificação integrada independente, consolidando Plan, PRD, Architecture, Rules, commit e PR.
 ---
 
-# Prompt: Conclude Spec
+# Prompt: Concluir Spec
 
-**Objetivo:** Finalizar e consolidar a implementação de uma Spec técnica no
-StarDust, garantindo que o código esteja polido, documentado e validado no
-contexto do monorepo — produzindo ao final um checklist de validação, os
-documentos atualizados e um resumo estruturado para PR.
+## Objetivo
 
----
+Formalizar o encerramento de uma implementação já aceita por tarefa ou pelo modo
+direto. Este prompt é um release gate documental e operacional; não é um fluxo
+de implementação ou correção.
 
-## Entradas Esperadas
+## Entrada
 
-- **Spec Técnica:** O documento que guiou a implementação
-  (`documentation/features/<modulo>/specs/<nome>-spec.md`), injetado
-  como caminho para o arquivo no contexto.
-
----
+- Spec implementada.
+- Plan associado, quando a execução foi planejada.
+- Evidência de `judge-implementation-agent: accepted` para execução direta.
 
 ## Regras Aplicáveis
 
-Antes da verificação final, leia:
+Leia:
 
-- `documentation/rules/rules.md` — índice para localizar as rules das camadas tocadas pela spec.
-- `documentation/rules/code-conventions-rules.md` — revisão geral de nomes, organização, factories, erros, eventos e barrel files.
-- Rules específicas de cada camada alterada, conforme `rules.md`.
-- Rules de teste correspondentes às tarefas de teste do plano:
-  - `documentation/rules/domain-objects-testing-rules.md`
-  - `documentation/rules/use-cases-testing-rules.md`
-  - `documentation/rules/handlers-testing-rules.md`
-  - `documentation/rules/server-routes-testing-rules.md`
-  - `documentation/rules/web-app-routes-testing-rules.md`
-  - `documentation/rules/widget-tests-rules.md`
+- `documentation/rules/harness-rules.md`.
+- `documentation/agents/orchestrator-agent.md`.
+- `documentation/agents/judge-conclusion-agent.md`.
+- Spec e Plan completos.
+- PRD referenciado pela Spec.
+- `documentation/architecture.md`.
+- `documentation/rules/rules.md` e Rules das camadas afetadas.
 
-Se a implementação introduziu ou alterou um padrão de camada, confira se o arquivo de rules correspondente foi atualizado antes de fechar a spec.
+## Fase 1 — Pré-condições
 
----
+### Execução planejada
 
-## Fase 1 — Verificação
+Confirme:
 
-Esta fase é analítica e deve ser concluída antes de qualquer atualização de
-documento.
+- Todas as tarefas estão `[x]` e `accepted`.
+- Não existe `pending`, `implementing`, `validating`, `evaluation_failed`,
+  `changes_requested` ou `blocked`.
+- Não há finding bloqueante.
+- A `spec_revision` do Plan corresponde ao hash atual da Spec.
+- Cada tarefa possui sensores e avaliação registrados.
 
-**1.1 Testes**
+### Execução direta
 
-Execute `npm run test` na raiz do projeto. Todos os testes — novos e
-existentes — devem estar passando. Caso algum falhe, interrompa e reporte.
+Confirme:
 
-Se a Spec impactar apenas uma parte do monorepo, você pode executar primeiro o
-escopo mais específico para feedback rápido (`npm run test:core`,
-`npm run test:server`, `npm run test:web` ou `npm run test:studio`), mas a
-validação final deve considerar o comando raiz.
+- Revisão da Spec avaliada.
+- Sensores oficiais aprovados.
+- `judge-implementation-agent: accepted`.
+- Nenhum finding humano ou automático aberto.
 
-> Falhas pré-existentes fora do escopo da Spec devem ser sinalizadas
-> explicitamente, indicando que são regressões anteriores e não introduzidas
-> pela implementação atual.
+Se qualquer pré-condição falhar, interrompa a conclusão e devolva o trabalho ao
+workflow de implementação correto.
 
-**1.1.1 Verificação de Cobertura de Testes**
+## Fase 2 — Conclusion Gate
 
-O plano de implementação (`documentation/plan.md`) inclui tarefas de teste
-(sufixo `t`) intercaladas com tarefas de implementação. Nesta etapa, verifique
-que essas tarefas foram concluídas:
+Execute sobre o diff integrado, informando todos os paths e workspaces afetados:
 
-1. Inspecione o `plan.md` e confirme que todas as tarefas de teste estão
-   marcadas como `[x]`.
-2. Para cada tarefa de teste concluída, confirme que o arquivo de teste existe
-   na codebase e que os cenários descritos no resultado observável estão
-   cobertos.
-3. Produza o relatório de cobertura no formato abaixo.
-
-```markdown
-## Cobertura de Testes
-
-### Tarefas de teste do plano
-- [x] T1.1t — <descrição> — coberto em `packages/core/.../tests/NomeArtefato.test.ts`
-- [x] T1.2t — <descrição> — coberto em `packages/core/.../tests/NomeUseCase.test.ts`
-- [x] T2.2t — <descrição> — coberto em `apps/server/.../tests/NomeController.test.ts`
-
-### Cobertura adicional (se aplicável)
-- [ ] <Comportamento Y> — **sem cobertura** (detalhe o que está faltando)
+```bash
+npm run harness -- \
+  gate conclusion \
+  --spec=<path> \
+  --base=<commit-base> \
+  --allowed-path=<path-ou-glob> \
+  --workspace=<workspace>
 ```
 
-No StarDust, **só é permitido criar testes para objetos de domínio, use cases,
-widgets e handlers** (`controller`, `job`, `action`, `tool`).
-**Não crie testes novos** para adapters, repositories, providers, services,
-clients, mappers, gateways, configs, factories, arquivos de composição ou
-qualquer outro tipo fora dessa lista. Quando a Spec alterar essas camadas,
-valide o comportamento indiretamente pelos testes permitidos da camada de
-domínio, handler ou widget que as consome.
+Inclua testes de integração, builds, Playwright/browser, runtime, dead code e
+migrations pelas opções explícitas do runner conforme a Spec.
 
-Considere como caminhos críticos que exigem cobertura:
+Nenhuma regressão pode permanecer. Não use `--update-baseline` para contornar o
+quality ratchet. Falha de código reabre tarefa; `conclude-spec` não implementa a
+correção.
 
-- Lógica de negócio nova ou modificada em `packages/core` (Use Cases,
-  Entidades, Structures, Aggregates, erros de domínio)
-- Casos de erro e edge cases relevantes (exceções de domínio, validações)
-- Contratos HTTP/RPC novos ou alterados (payloads, redirects, validações,
-  traduções entre camadas)
-- Widgets, hooks e fluxos de UI alterados em `apps/web` ou `apps/studio`
-- Integrações novas ou alteradas que impactem objetos de domínio, use cases,
-  handlers ou widgets, sempre validando por meio dos tipos de teste permitidos
+## Fase 3 — Consolidação Antes do Julgamento
 
-**1.1.2 Criação de Testes para Lacunas Residuais**
+### Spec
 
-Se o relatório acima identificar comportamentos sem cobertura que **não estavam
-previstos como tarefas de teste no plano** (ex: a spec foi atualizada durante a
-implementação via `update-spec-prompt` e introduziu artefatos novos), acione um
-**subagent** para criá-los antes de avançar para a Fase 2.
+- Confirme que todo comportamento entregue está refletido na Spec.
+- Não altere conteúdo técnico tardiamente; divergência material reabre a
+  implementação.
+- Mantenha `status: open` até o Judge da conclusão aprovar.
 
-Antes de acionar o subagent, filtre a lista e mantenha **somente** componentes
-permitidos: objetos de domínio, use cases, widgets e handlers
-(`controller`, `job`, `action`, `tool`). Se a lacuna estiver em outro tipo de
-arquivo, não crie teste direto para ele; registre a restrição no relatório e
-endereçe a cobertura pelo componente permitido mais próximo.
+### PRD
 
-O subagent deve receber como contexto:
+- A milestone do GitHub é a única fonte de verdade.
+- Atualize comportamento, escopo, limitação ou critério de produto refinado.
+- Não crie ou edite `documentation/features/**/prd.md`.
+- Ainda não marque a entrega como concluída antes do veredito final.
 
-- O prompt `documentation/prompts/create-tests-prompt.md` como instrução base.
-- A lista de componentes sem cobertura identificados no relatório (1.1.1),
-  com os caminhos reais dos arquivos fonte (`apps/...` ou `packages/...`).
-- O caminho da Spec técnica, para referência de contratos e comportamentos
-  esperados.
+### Architecture
 
-> O subagent é responsável por criar os arquivos de teste, seguir as regras de
-> nomenclatura e estrutura do projeto, e garantir que `npm run test` passe ao
-> final. Não avance para a Fase 2 enquanto o subagent não concluir sem falhas.
-> Ele também deve respeitar estritamente a política de escopo de testes do
-> projeto: apenas objetos de domínio, use cases, widgets e handlers.
+Confirme ou atualize novos fluxos, módulos, padrões de integração, fronteiras ou
+responsabilidades estruturais. Se não se aplicar, registre no resumo.
 
-**1.2 Lint e Formatação**
+### Rules
 
-Execute `npm run codecheck` na raiz do projeto. O comando roda os checks do
-monorepo (Biome e validações configuradas por app/pacote). Nenhum warning ou
-erro deve restar. Caso existam, liste-os explicitamente e corrija antes de
-prosseguir.
+Confirme que novos padrões aprovados foram documentados e indexados em
+`documentation/rules/rules.md`. Não altere Rule para legitimar violação de
+código. Se não se aplicar, registre no resumo.
 
-**1.3 Typecheck**
+## Fase 4 — Judge da Conclusão
 
-Execute `npm run typecheck` na raiz do projeto. Nenhum erro de tipo deve
-restar. Caso existam, liste-os e corrija.
+1. Registre o estado do worktree.
+2. Inicie subagente novo com contexto limpo usando `judge-conclusion-agent`,
+   definido em `documentation/agents/judge-conclusion-agent.md`.
+3. Envie Spec/revisão, Plan, commit-base, diff integral, sensores finais, PRD,
+   Architecture, Rules e histórico de findings.
+4. Não envie narrativa do Builder.
+5. Compare o worktree depois; qualquer edição feita pelo Judge invalida o
+   parecer.
 
-**1.4 Quality Gate**
+Se o veredito for `failed`:
 
-Execute o `quality-gate` para cada workspace impactado pela Spec:
+- Não feche Spec ou Plan.
+- Registre findings no Plan quando existir.
+- Reabra ou crie as tarefas indicadas.
+- Retorne a `implement-plan` ou `implement-spec`.
 
-- `npm run quality-gate -- --workspace=core`
-- `npm run quality-gate -- --workspace=server`
-- `npm run quality-gate -- --workspace=web`
-- `npm run quality-gate -- --workspace=studio`
+Se for `accepted`, prossiga.
 
-Rode apenas os workspaces efetivamente tocados pela implementação, mas trate o
-gate como obrigatório para cada um deles. Nenhuma regressão de métrica
-(warnings do Biome, escape hatches de tipo, arquivos acima do limite ou queda
-de cobertura por camada) pode permanecer. Se houver falha, corrija a causa
-raiz; nunca use `--update-baseline` para contornar regressões durante a
-conclusão da spec.
+## Fase 5 — Fechamento
 
-**1.5 Validação de Requisitos**
+- Atualize a Spec para `status: closed` e a data final.
+- No Plan, defina `status: completed`, `current_task: null`, atualize Conclusão,
+  Estado Atual e Histórico.
+- Marque no PRD os requisitos entregues.
+- Registre zero findings bloqueantes e o veredito do Judge.
 
-Releia a Spec técnica e o PRD (milestone do GitHub referenciado no campo `prd:`
-da spec). Verifique que cada requisito mapeado na spec foi implementado
-corretamente. Se houver divergências, registre-as explicitamente — não as
-reconcilie por suposição.
+## Fase 6 — Comunicação
 
-**1.6 Validação de Limites Arquiteturais**
+Produza:
 
-Com base nas regras em `documentation/rules/`, verifique que a implementação
-respeita os limites de cada camada tocada. Atenção especial a:
-
-- Core agnóstico a framework
-- Repositories não vazando tipos do Supabase
-- Controllers sem lógica de negócio
-- UI consumindo contratos, não implementações
-- Jobs com idempotência quando aplicável
-
-Se encontrar violações, corrija-as e execute novamente os passos 1.1 a 1.4.
-
-**1.7 Revisão de Qualidade de Código**
-
-Revise o código produzido buscando:
-
-- Nomeação inconsistente com padrões existentes
-- Duplicação de lógica
-- Imports desnecessários ou circulares
-- `any` em pontos de entrada
-- `console.log` residual
-- Tratamento de erro ausente
-
-Após aplicar as correções, execute `npm run test` novamente para garantir que
-nenhuma alteração introduziu regressão.
-
-> Esta etapa é complementar à 1.5: enquanto a 1.5 valida aderência a regras
-> arquiteturais do projeto, a 1.6 avalia a qualidade intrínseca do código
-> produzido, independente de convenções formais.
-
----
-
-## Fase 2 — Consolidação de Documentos
-
-Esta fase é de síntese. Execute-a somente após a Fase 1 estar completa e sem
-pendências.
-
-**2.1 Atualização da Spec Técnica**
-
-Atualize apenas os metadados da Spec para refletir a conclusão da implementação:
-
-- **Status:** `closed`
-- **Última atualização:** `{{ today }}`
-
-Não altere o conteúdo técnico da spec nesta fase — desvios de implementação
-devem ter sido capturados pelo `update-spec-prompt` durante o desenvolvimento.
-
-**2.2 Atualização do PRD**
-
-Atualize o PRD associado à Spec **sempre no milestone do GitHub** referenciado
-no campo `prd:` da spec.
-
-- No StarDust, o milestone do GitHub é a **única fonte de verdade** do PRD.
-- **Nunca** crie, edite ou assuma a existência de `documentation/features/**/prd.md`.
-- Se a implementação concluir ou refinar requisitos, atualize a **descrição do
-  milestone** com os itens entregues e as divergências de produto relevantes.
-
-> 💡 Regra obrigatória: PRD local não deve existir. PRD vive no milestone.
-
-Marque como concluídos os itens endereçados pela implementação. A audiência aqui
-é de produto — traduza o impacto técnico para linguagem de negócio.
-
-> 💡 Não copie conteúdo técnico de baixo nível para o PRD — sintetize o valor
-> entregue.
-
-Atualize o PRD sempre que a implementação introduzir mudança relevante de
-produto, escopo, comportamento observável, requisito funcional, requisito não
-funcional, critério de aceite ou limitação conhecida. Se a implementação apenas
-cumpriu o PRD sem alterar ou refinar nada, registre:
-`PRD: sem alterações além da marcação de conclusão.`
-
-**Divergência spec → PRD:** Caso a implementação concluída introduza algum
-aspecto que contradiga ou não esteja coberto pelo PRD (ex: regra de negócio
-refinada, escopo ampliado ou reduzido, comportamento diferente do especificado),
-atualize o PRD para refletir a realidade entregue. Registre a divergência no
-campo **"O que mudou em relação à Spec original"** do resumo de conclusão da
-spec (seção 3.1).
-
-**2.3 Verificação da Arquitetura (se aplicável)**
-
-A atualização de `documentation/architecture.md` é responsabilidade do
-`implement-plan` (etapa 9.1), que a executa com o contexto fresco da
-implementação. Aqui, apenas **verifique** que a atualização foi feita quando
-necessário:
-
-- Se a implementação introduziu mudança relevante de arquitetura — novo fluxo
-  de dados, nova camada, novo módulo estrutural, novo padrão de integração,
-  mudança na estrutura de diretórios, mudança de fronteira entre camadas ou
-  alteração de responsabilidade entre apps/pacotes — confirme que
-  `documentation/architecture.md` reflete a realidade atual.
-- Se a atualização estiver ausente, aplique-a agora.
-- Se não se aplicar, registre: `Arquitetura: sem alterações necessárias.`
-
-**2.4 Verificação de Rules (se aplicável)**
-
-A atualização de rules é responsabilidade do `implement-plan` (etapa 9.3).
-Aqui, apenas **verifique** que a atualização foi feita quando necessário:
-
-- Se a implementação introduziu mudança relevante de regra — novo padrão de
-  projeto, nova convenção, nova restrição/permissão de camada, novo anti-padrão
-  observado, exceção recorrente ou decisão que deve orientar futuras
-  implementações — confirme que `documentation/rules/rules.md` e o arquivo de
-  regra específico correspondente foram atualizados.
-- Se surgir um novo arquivo de regra, atualize também `documentation/rules/rules.md`
-  para indexá-lo com a condição de uso correta.
-- Se a atualização estiver ausente, aplique-a agora.
-- Se não se aplicar, registre: `Rules: sem alterações necessárias.`
-
----
-
-## Fase 3 — Comunicação
-
-Esta fase produz o artefato final para facilitar a abertura do Pull Request.
-
-**3.1 Resumo de conclusão da spec**
-
-Gere um resumo de conclusão com a seguinte estrutura obrigatória:
-
-```markdown
+```md
 ## O que foi feito
 
-<Descrição objetiva das mudanças implementadas, em linguagem técnica>
+<resumo técnico>
 
 ## Por que foi feito assim
 
-<Decisões de design relevantes e tradeoffs considerados>
+<decisões e trade-offs>
 
 ## O que mudou em relação à Spec original
 
-<Desvios ou refinamentos ocorridos durante a implementação.
-Se nenhum desvio ocorreu, registre "Nenhum desvio em relação à spec original.">
+<amendments ou "Nenhum desvio">
 
-## Cobertura de testes
+## Execução do harness
 
-<Resumo das tarefas de teste concluídas e eventuais lacunas residuais
-identificadas e endereçadas durante a revisão>
+- Tarefas aceitas: <n>/<n>
+- Tentativas relevantes: <resumo>
+- Findings resolvidos: <resumo>
+- Judge da conclusão: accepted
+
+## Cobertura e validação
+
+<sensores, testes, quality ratchets e browser>
 
 ## Pontos de atenção para o revisor
 
-<Migrations, contratos novos, decisões irreversíveis, side effects,
-dependências externas — tudo que o revisor precisa saber antes de aprovar>
+<migrations, contratos, side effects e dependências externas>
 
 ## Checklist final
 
-- [ ] Testes passando (`npm run test`)
-- [ ] Sem erros de lint (`npm run codecheck`)
-- [ ] Sem erros de tipo (`npm run typecheck`)
-- [ ] Quality gate dos workspaces afetados passando
-- [ ] Spec atualizada para `status: closed`
-- [ ] PRD atualizado na milestone do GitHub ou registrado como sem alterações necessárias
-- [ ] Architecture verificado (se aplicável)
-- [ ] Rules verificadas, incluindo `documentation/rules/rules.md` quando aplicável
+- [ ] Sensores finais passando
+- [ ] Quality gates passando
+- [ ] Judge da conclusão: accepted
+- [ ] Spec fechada
+- [ ] Plan concluído, quando aplicável
+- [ ] PRD atualizado
+- [ ] Architecture verificada
+- [ ] Rules verificadas
 ```
 
----
+## Fase 7 — Commit e Pull Request
 
-## Fase 4 — Commit e Pull Request
+Somente depois do checklist completo:
 
-Esta fase só deve ser executada após a Fase 3 estar completa e o checklist final sem pendências.
+1. Execute `commit-code` incluindo apenas alterações da Spec atual.
+2. Execute `create-pr` usando o resumo de conclusão.
 
-**4.1 Commit das alterações**
+Alterações preexistentes ou de outras features não entram nos commits.
 
-Execute o skill `/commit-code` para commitar todas as alterações da implementação. O skill agrupa os arquivos por responsabilidade semântica e cria os commits com mensagens padronizadas.
+## Restrições
 
-> Atenção: apenas arquivos relacionados à spec atual devem ser commitados. Alterações pré-existentes de outras features não devem entrar neste PR.
-
-**4.2 Criação do Pull Request**
-
-Após os commits, execute o skill `/create-pr` para abrir o PR com título e descrição padronizados, usando o resumo de conclusão gerado na Fase 3 como base para o body.
+- Não crie testes, não corrija código e não implemente findings neste prompt.
+- Não simule `judge-conclusion-agent` no Orchestrator.
+- Não feche documentos antes do veredito `accepted`.
+- Não reescreva histórico de tentativas ou revisões humanas.

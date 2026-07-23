@@ -9,9 +9,10 @@ Este documento consolida comandos e rotinas de desenvolvimento no monorepo.
 - Lint/format: Biome (via scripts `lint`, `format`, `codecheck`).
 - Typecheck: TypeScript (`tsc`).
 - Testes: Jest para suites unitarias/composicao e Playwright para fluxos reais de navegador quando a app web expuser suites em `apps/web/src/app/tests/**`.
-- Quality gate: catraca de metricas em `scripts/quality-gate/` (ver secao abaixo).
+- Quality ratchet: catraca de metricas em
+  `packages/harness/src/commands/quality-ratchet/` (ver secao abaixo).
 
-## Quality Gate (catraca de metricas)
+## Quality Ratchet (catraca de metricas)
 
 Catraca que congela metricas de qualidade por workspace e falha o PR se alguma piorar. So permite empatar ou melhorar — nunca regredir.
 
@@ -22,7 +23,8 @@ Metricas congeladas:
 - **Tamanho de arquivo**: arquivos acima de 500 linhas (offenders congelados; nenhum novo pode cruzar o limite nem crescer).
 - **Cobertura por camada** (so onde `measureCoverage` esta ativo): `lines`/`branches` por camada arquitetural, via `coverage-summary.json` do Jest.
 
-Workspaces cobertos (`scripts/quality-gate/config.ts`):
+Workspaces cobertos
+(`packages/harness/src/commands/quality-ratchet/get-workspace.ts`):
 
 - **`@stardust/core`** (Fase 1): todas as metricas, com cobertura por camada DDD (`domain`, `use-cases`, `factories`, `other`).
 - **`@stardust/server`** (Fase 2): metricas estaticas + cobertura. A cobertura roda so a suite unitaria (mocks, sem Supabase) via `coverageJestArgs`, ignorando os testes de rota (`src/tests/routes`) e de integracao (routers). Por isso so ratcheia as camadas que os testes unitarios exercem — `ai`, `queue` e `rest`; `app`, `database`, `provision` e demais arquivos fora dessas camadas ficam fora da instrumentacao. O `Database.ts` gerado pelo `db:types` e excluido via `isIgnored`.
@@ -33,18 +35,110 @@ Comandos:
 
 ```bash
 # Verificar o PR contra o baseline (usado no CI; sai com codigo 1 se piorar)
-npm run quality-gate -- --workspace=core
-npm run quality-gate -- --workspace=server
-npm run quality-gate -- --workspace=web
-npm run quality-gate -- --workspace=studio
+npm run quality-ratchet -- --workspace=core
+npm run quality-ratchet -- --workspace=server
+npm run quality-ratchet -- --workspace=web
+npm run quality-ratchet -- --workspace=studio
 
 # Recongelar o baseline (apos refatoracao que melhora as metricas)
-npm run quality-gate -- --workspace=core --update-baseline
+npm run quality-ratchet -- --workspace=core --update-baseline
 ```
 
-O baseline fica em `scripts/quality-gate/baselines/<workspace>.json` e e versionado. Cada CI roda o gate apenas para o seu workspace, escreve o sumario no `GITHUB_STEP_SUMMARY` e bloqueia o `build` se houver regressao.
+O baseline fica em `packages/harness/baselines/<workspace>.json` e e versionado.
+Cada CI roda a catraca apenas para o seu workspace, escreve o sumario no
+`GITHUB_STEP_SUMMARY` e bloqueia o `build` se houver regressao.
 
-Em PRs, o relatorio tambem e publicado como um comentario "sticky" (um por workspace, atualizado a cada run em vez de empilhar) via `scripts/quality-gate/comment-pr.sh`. O job exporta `QUALITY_GATE_REPORT_FILE` para o gate gravar o markdown, e usa permissao `pull-requests: write`; o passo roda com `if: always()` para comentar tambem quando ha regressao.
+Em PRs, o relatorio tambem e publicado como um comentario "sticky" (um por
+workspace, atualizado a cada run em vez de empilhar) via
+`scripts/comment-pull-request.sh`. O job exporta
+`QUALITY_RATCHET_REPORT_FILE` para a catraca gravar o markdown, e usa permissao
+`pull-requests: write`; o passo roda com `if: always()` para comentar tambem
+quando ha regressao.
+
+## Harness determinístico
+
+Os sensores do harness ficam em `packages/harness/` e retornam JSON com exit code
+`0` para sucesso e `1` para finding bloqueante.
+
+A CLI usa Commander e segue o fluxo `CommanderApp -> Router -> Command`. Os
+routers registram apenas a árvore de comandos; cada classe `*Command` concentra
+opções, execução e resultado da operação correspondente. Funções em `utils/`
+permanecem restritas a mecanismos genéricos compartilhados.
+
+### Checks individuais
+
+```bash
+npm run spec-check -- --spec=<path>
+npm run readiness-check -- --spec=<path> --revision=<hash> [--plan=<path> --task=<ID>]
+npm run scope-check -- --base=<commit> --allowed-path=<path-ou-glob>
+npm run architecture-check -- [--config=<json>]
+npm run runtime-smoke -- --url=<url> [--command-json='["npm","run","dev"]']
+npm run dead-code-check -- --config=<json>
+npm run migration-check -- [--config=<json> --run]
+npm run contract-check -- --spec=<path> [--run]
+```
+
+- `spec-check`: frontmatter, Partes Contract/técnica, IDs, rastreabilidade e
+  paths.
+- `readiness-check`: status, revisão, Plan/tarefa e dependências.
+- `scope-check`: diff tracked e untracked contra paths permitidos.
+- `architecture-check`: imports proibidos por fronteira; aceita configuração
+  versionada.
+- `runtime-smoke`: polling HTTP com processo opcional, timeout e cleanup.
+- `dead-code-check`: reachability com entrypoints explícitos ou ferramenta
+  externa declarada sem shell.
+- `migration-check`: paths, nomes, timestamps e conteúdo; comandos só rodam com
+  `--run` e configuração explícita.
+- `contract-check`: rastreabilidade `AC/AR -> REQ` e evidências declaradas como
+  `harness:evidence`; comandos só rodam com `--run`.
+
+### Runner dos gates
+
+```bash
+npm run harness -- gate definition --spec=<path>
+
+npm run harness -- \
+  gate readiness \
+  --spec=<path> \
+  --revision=<hash> \
+  [--plan=<path> --task=<ID>]
+
+npm run harness -- \
+  gate implementation \
+  --spec=<path> \
+  --base=<commit> \
+  --allowed-path=<path-ou-glob> \
+  --workspace=<core|server|web|studio>
+
+npm run harness -- \
+  gate conclusion \
+  --spec=<path> \
+  --base=<commit> \
+  --allowed-path=<path-ou-glob> \
+  --workspace=<core|server|web|studio>
+```
+
+Repita `--allowed-path` e `--workspace` quando necessário. Checks condicionais:
+
+```bash
+--extra-command-json='["npm","run","test:integration","-w","@stardust/server"]'
+--dead-code-config=<json>
+--dead-code-command-json='["npx","knip"]'
+--runtime-url=<url>
+--runtime-command-json='["npm","run","dev","-w","@stardust/server"]'
+--runtime-cwd=<path>
+--migration-config=<json>
+--run-migrations=true
+```
+
+O runner para no primeiro check obrigatório que falhar. Ele nunca corrige
+código, atualiza baseline ou interpreta findings semanticamente.
+
+### Testes do harness
+
+```bash
+npm run test:harness
+```
 
 ## Comandos Globais (na raiz)
 
@@ -129,3 +223,17 @@ Notas:
 ## Hooks
 
 - Husky e commitlint sao usados na raiz (ver `package.json`).
+
+## Sincronização de Agentes
+
+As definições canônicas ficam em `documentation/agents/*-agent.md`. Para gerar
+as configurações nativas de Codex, OpenCode e Claude Code, execute:
+
+```bash
+./scripts/sync-agents.sh
+```
+
+O script gera roles TOML em `.codex/agents/`, registra os roles em
+`.codex/config.toml` e cria agentes Markdown em `.opencode/agents/` e
+`.claude/agents/`. Arquivos gerados são locais e ignorados pelo Git; altere
+sempre a definição canônica e execute a sincronização novamente.
