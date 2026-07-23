@@ -28,9 +28,9 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
       state: INITIAL_CHALLENGE_STORE_STATE,
       actions: {
         setChallenge(challenge: Challenge | null) {
-          return set(({ state }) => {
-            state.challenge = challenge
-          })
+          return set(({ state }) => ({
+            state: { ...state, challenge },
+          }))
         },
 
         setActiveContent(activeContent: ChallengeContent) {
