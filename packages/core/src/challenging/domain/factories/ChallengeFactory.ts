@@ -6,6 +6,7 @@ import {
   Name,
   Slug,
   Text,
+  CodePlayback,
 } from '#global/domain/structures/index'
 import { AuthorAggregate } from '#global/domain/aggregates/index'
 import { Datetime } from '#global/libs/index'
@@ -46,6 +47,8 @@ export class ChallengeFactory {
       results: List.create([]),
       userOutputs: List.create([]),
       postedAt: dto.postedAt ?? new Datetime().date(),
+      officialSolution:
+        dto.officialSolution == null ? null : CodePlayback.create(dto.officialSolution),
     }
   }
 }

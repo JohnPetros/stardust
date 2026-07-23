@@ -1,4 +1,5 @@
 import type { AuthorAggregateDto } from '#global/domain/aggregates/dtos/AuthorAggregateDto'
+import type { CodePlaybackDto } from '#global/domain/structures/dtos/CodePlaybackDto'
 import type { ChallengeCategoryDto } from './ChallengeCategoryDto'
 import type { ChallengeFunctionDto } from './ChallengeFunctionDto'
 import type { TestCaseDto } from './TestCaseDto'
@@ -24,4 +25,5 @@ export type ChallengeDto = {
   function?: ChallengeFunctionDto
   userOutputs?: unknown[]
   results?: boolean[]
+  officialSolution?: CodePlaybackDto | null
 }

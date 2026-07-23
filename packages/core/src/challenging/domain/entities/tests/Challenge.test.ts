@@ -5,6 +5,7 @@ import { ChallengesFaker } from '../fakers/ChallengesFaker'
 import { Code } from '#global/domain/structures/Code'
 import type { LspProvider } from '#global/interfaces/index'
 import { LspResponse } from '#global/responses/LspResponse'
+import { CodePlaybacksFaker } from '#global/domain/structures/fakers/CodePlaybacksFaker'
 
 describe('Challenge Entity', () => {
   it('should return execution outputs without changing challenge evaluation flow', async () => {
@@ -160,5 +161,53 @@ describe('Challenge Entity', () => {
     expect(challenge.userOutputs.items).toStrictEqual(['3'])
     expect(executionOutputs.items).toStrictEqual(['3'])
     expect(lspProviderMock.addFunctionCall).toHaveBeenCalled()
+  })
+
+  it('should preserve the official solution through the dto round-trip', () => {
+    const officialSolution = CodePlaybacksFaker.fakeDto()
+    const challenge = Challenge.create(ChallengesFaker.fakeDto({ officialSolution }))
+
+    expect(challenge.officialSolution).not.toBeNull()
+    expect(challenge.dto.officialSolution).toEqual(officialSolution)
+  })
+
+  it('should normalize a legacy dto without an official solution to null', () => {
+    const { officialSolution, ...legacyDto } = ChallengesFaker.fakeDto()
+    expect(officialSolution).toBeNull()
+
+    const challenge = Challenge.create(legacyDto)
+
+    expect(challenge.officialSolution).toBeNull()
+    expect(challenge.dto.officialSolution).toBeNull()
+  })
+
+  it('should preserve null official solutions', () => {
+    const challenge = Challenge.create(
+      ChallengesFaker.fakeDto({ officialSolution: null }),
+    )
+
+    expect(challenge.officialSolution).toBeNull()
+    expect(challenge.dto.officialSolution).toBeNull()
+  })
+
+  it('should defensively copy the official solution through the entity', () => {
+    const officialSolution = CodePlaybacksFaker.fakeDto()
+    const challenge = Challenge.create(ChallengesFaker.fakeDto({ officialSolution }))
+
+    officialSolution.steps[0].panels[0].title = 'mutated input'
+    const firstSnapshot = challenge.dto.officialSolution
+    if (!firstSnapshot) throw new Error('Expected an official solution')
+    firstSnapshot.steps[0].panels[0].title = 'mutated output'
+
+    expect(challenge.dto.officialSolution).toEqual(CodePlaybacksFaker.fakeDto())
+  })
+
+  it('should default the challenge faker to null and accept a valid override', () => {
+    expect(ChallengesFaker.fakeDto().officialSolution).toBeNull()
+
+    const officialSolution = CodePlaybacksFaker.fakeDto()
+    const challenge = ChallengesFaker.fake({ officialSolution })
+
+    expect(challenge.dto.officialSolution).toEqual(officialSolution)
   })
 })

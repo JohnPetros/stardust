@@ -5,6 +5,7 @@ import {
   type Slug,
   type UserAnswer,
   type Text,
+  type CodePlayback,
   Integer,
   List,
   Logical,
@@ -16,6 +17,9 @@ import type { ChallengeCategory } from './ChallengeCategory'
 import type { ChallengeDto } from './dtos'
 import { ChallengeWithoutTestCaseError, InsufficientInputsError } from '../errors'
 import { ChallengeFactory } from '../factories'
+
+// Keep the recursive playback contract opaque to Immer's Draft mapped type.
+type OfficialSolution = CodePlayback extends infer Playback ? Playback : never
 
 export type ChallengeProps = {
   initialCode: Text
@@ -39,6 +43,7 @@ export type ChallengeProps = {
   isNew: Logical
   isEvaluatedByFunction: Logical
   author: AuthorAggregate
+  officialSolution: unknown
 }
 
 export class Challenge extends Entity<ChallengeProps> {
@@ -260,6 +265,10 @@ export class Challenge extends Entity<ChallengeProps> {
     return this.props.author
   }
 
+  get officialSolution(): OfficialSolution | null {
+    return this.props.officialSolution as CodePlayback | null
+  }
+
   get upvotesCount() {
     return this.props.upvotesCount
   }
@@ -321,6 +330,7 @@ export class Challenge extends Entity<ChallengeProps> {
       postedAt: this.postedAt,
       categories: this.categories.map((category) => category.dto),
       testCases: this.testCases.map((testCase) => testCase.dto),
+      officialSolution: this.officialSolution?.dto ?? null,
     }
   }
 }

@@ -1,5 +1,6 @@
 export { Code } from './Code'
 export { CodeSelection } from './CodeSelection'
+export { CodePlayback } from './CodePlayback'
 export { Email } from './Email'
 export { Id } from './Id'
 export { Integer } from './Integer'

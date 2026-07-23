@@ -33,6 +33,7 @@ export class ChallengesFaker {
       upvotesCount: 0,
       isEvaluatedByFunction: true,
       starId: '',
+      officialSolution: null,
       ...baseDto,
     }
   }
