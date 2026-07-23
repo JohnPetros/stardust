@@ -21,6 +21,10 @@ Após fazer qualquer alteração no código, execute os comandos:
 - codecheck
 - unit tests
 
+Em workflows SDD, execute também os gates definidos em
+`documentation/rules/harness-rules.md`. Para alterações em `packages/harness/**`,
+execute `npm run test:harness`.
+
 # Instruções para revisão de pull request
 
 Leia o arquivo `documentation/prompts/review-pr-prompt.md` antes de começar a revisão.

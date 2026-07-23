@@ -1,0 +1,66 @@
+name: Harness CI
+
+on:
+  pull_request:
+    paths:
+      - "packages/harness/**"
+      - "documentation/agents/**"
+      - "documentation/prompts/**"
+      - "documentation/rules/harness-rules.md"
+      - "documentation/sdd.md"
+      - "documentation/tooling.md"
+      - "AGENTS.md"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/harness-ci.yaml"
+  push:
+    branches:
+      - main
+    paths:
+      - "packages/harness/**"
+      - "documentation/agents/**"
+      - "documentation/prompts/**"
+      - "documentation/rules/harness-rules.md"
+      - "documentation/sdd.md"
+      - "documentation/tooling.md"
+      - "AGENTS.md"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/harness-ci.yaml"
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-gates:
+    name: Deterministic gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check harness formatting
+        run: npm run codecheck:harness
+
+      - name: Typecheck harness
+        run: npm run typecheck:harness
+
+      - name: Test deterministic checks
+        run: npm run test:harness
+
+      - name: Check architecture boundaries
+        run: npm run architecture-check
+
+      - name: Check migration history
+        run: npm run migration-check

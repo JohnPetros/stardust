@@ -11,7 +11,7 @@ on:
       - "apps/studio/**"
       - "packages/core/**"
       - "packages/validation/**"
-      - "scripts/quality-gate/**"
+      - "packages/harness/**"
 
 permissions:
   contents: read
@@ -89,7 +89,7 @@ jobs:
         run: npm run test:unit -w @stardust/studio
 
   quality-gate:
-    name: Quality gate
+    name: Quality ratchet
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -109,10 +109,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run quality gate
+      - name: Run quality ratchet
         env:
-          QUALITY_GATE_REPORT_FILE: quality-gate-report.md
-        run: npm run quality-gate -- --workspace=studio
+          QUALITY_RATCHET_REPORT_FILE: quality-ratchet-report.md
+        run: npm run quality-ratchet -- --workspace=studio
 
       - name: Comment report on PR
         if: ${{ always() && github.event_name == 'pull_request' }}
@@ -121,4 +121,4 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: bash scripts/quality-gate/comment-pr.sh studio quality-gate-report.md
+        run: bash scripts/comment-pull-request.sh studio quality-ratchet-report.md
