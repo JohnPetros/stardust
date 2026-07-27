@@ -151,8 +151,18 @@ export class ScopeCheckCommand implements CliCommand {
       const character = pattern[index]
       const next = pattern[index + 1]
       if (character === '*' && next === '*') {
-        expression += '.*'
-        index += 1
+        if (pattern[index + 2] === '/') {
+          if (expression.endsWith('/')) {
+            expression = expression.slice(0, -1)
+            expression += '(?:/[^/]+)*/'
+          } else {
+            expression += '(?:[^/]+/)*'
+          }
+          index += 2
+        } else {
+          expression += '.*'
+          index += 1
+        }
       } else if (character === '*') {
         expression += '[^/]*'
       } else if (character === '?') {

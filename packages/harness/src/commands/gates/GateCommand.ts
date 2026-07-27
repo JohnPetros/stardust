@@ -44,6 +44,8 @@ export type CodeValidationOptions = {
   extraCommandJson: string[]
 }
 
+const NODE_TEST_RUNNER_PACKAGES = new Set(['@stardust/harness', '@stardust/lsp'])
+
 const MAX_OUTPUT_CHARS = 8_000
 
 export abstract class GateCommand<Options> implements CliCommand {
@@ -164,14 +166,14 @@ export abstract class GateCommand<Options> implements CliCommand {
       )
     } else {
       for (const packageName of options.package) {
+        const testArgs =
+          options.testPath.length > 0 && !NODE_TEST_RUNNER_PACKAGES.has(packageName)
+            ? ['--runTestsByPath', ...options.testPath]
+            : []
         steps.push(
           this.npmWorkspaceStep('codecheck', packageName),
           this.npmWorkspaceStep('typecheck', packageName),
-          this.npmWorkspaceStep('test:unit', packageName, [
-            ...(options.testPath.length > 0
-              ? ['--runTestsByPath', ...options.testPath]
-              : []),
-          ]),
+          this.npmWorkspaceStep('test:unit', packageName, testArgs),
         )
       }
     }
@@ -206,7 +208,7 @@ export abstract class GateCommand<Options> implements CliCommand {
       steps.push(
         this.checkStep('migration-check', 'migration', [
           `--config=${options.migrationConfig}`,
-          ...(this.stage === 'conclusion' || options.runMigrations ? ['--run'] : []),
+          ...(options.runMigrations === true ? ['--run'] : []),
         ]),
       )
     } else {

@@ -30,6 +30,11 @@ test('matches directories and simple glob patterns', () => {
   const command = new ScopeCheckCommand()
   assert.equal(command.isAllowedPath('apps/web/a.ts', 'apps/web'), true)
   assert.equal(command.isAllowedPath('apps/web/a.ts', 'apps/*/*.ts'), true)
+  assert.equal(command.isAllowedPath('apps/web/page.ts', 'apps/web/**/*.ts'), true)
+  assert.equal(
+    command.isAllowedPath('apps/web/components/page.ts', 'apps/web/**/*.ts'),
+    true,
+  )
   assert.equal(command.isAllowedPath('apps/server/a.ts', 'apps/web'), false)
 })
 
