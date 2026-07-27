@@ -33,7 +33,7 @@ jest.mock('@/ui/challenging/stores/ChallengeStore', () => ({
       panelOrder: [],
     }),
     resetPanelsLayout: jest.fn(),
-    resetStore,
+    resetStore: jest.fn(() => resetStore()),
   })),
 }))
 
@@ -169,5 +169,48 @@ describe('useChallengePage', () => {
     )
 
     expect(setChallenge).not.toHaveBeenCalled()
+  })
+
+  it('resets only when the page unmounts, not when it rerenders', () => {
+    const { rerender, unmount } = renderHook(() =>
+      useChallengePage({
+        challengeDto,
+        userChallengeVote: 'none',
+        previousChallengeSlug: null,
+        nextChallengeSlug: null,
+        user: null,
+        isAccountAuthenticated: false,
+      }),
+    )
+
+    rerender()
+
+    expect(resetStore).not.toHaveBeenCalled()
+
+    unmount()
+
+    expect(resetStore).toHaveBeenCalledTimes(1)
+  })
+
+  it('keeps resetting when the user leaves through the back button', () => {
+    mockChallenge = Challenge.create(challengeDto)
+
+    const { result, unmount } = renderHook(() =>
+      useChallengePage({
+        challengeDto,
+        userChallengeVote: 'none',
+        previousChallengeSlug: null,
+        nextChallengeSlug: null,
+        user: null,
+        isAccountAuthenticated: false,
+      }),
+    )
+
+    result.current.handleBackButtonClick()
+
+    expect(resetStore).toHaveBeenCalledTimes(1)
+    expect(goTo).toHaveBeenCalledTimes(1)
+
+    unmount()
   })
 })

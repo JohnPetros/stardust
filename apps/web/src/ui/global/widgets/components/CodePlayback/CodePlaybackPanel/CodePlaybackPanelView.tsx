@@ -77,14 +77,14 @@ function ValueView({
 
 function EmptyState({ label }: { label: string }) {
   return (
-    <p
+    <output
       aria-label={`Estado vazio: ${label}`}
-      className='rounded border border-dashed border-gray-600 px-3 py-4 text-sm italic text-gray-300'
+      className='block rounded border border-dashed border-gray-600 px-3 py-4 text-sm italic text-gray-300'
       data-testid='code-playback-empty'
-      role='status'
+      aria-live='polite'
     >
       {label}
-    </p>
+    </output>
   )
 }
 
@@ -142,12 +142,12 @@ function SequencePanel({ panel }: { panel: CodePlaybackSequencePanelDto }) {
           {getSequenceKindLabel(panel.kind)}
         </span>
         {panel.pointers && panel.pointers.length > 0 && (
-          <div
+          <fieldset
             aria-label='Ponteiros da sequência'
-            className='flex flex-wrap gap-2'
+            className='m-0 flex flex-wrap gap-2 border-0 p-0'
             data-testid='code-playback-pointers'
-            role='group'
           >
+            <legend className='sr-only'>Ponteiros da sequência</legend>
             {panel.pointers.map((pointer) => (
               <span
                 key={`${pointer.label}-${pointer.index}`}
@@ -158,27 +158,26 @@ function SequencePanel({ panel }: { panel: CodePlaybackSequencePanelDto }) {
                 {pointer.label} → índice {pointer.index}
               </span>
             ))}
-          </div>
+          </fieldset>
         )}
       </div>
 
       {panel.items.length === 0 ? (
         <EmptyState label={getEmptyLabel(panel)} />
       ) : (
-        <div
+        <ul
           aria-label={`Itens da sequência ${panel.title}`}
-          className={`flex min-w-0 gap-2 ${overflow === 'scroll' ? 'max-w-full overflow-x-auto pb-2' : 'flex-wrap'}`}
+          className={`m-0 flex min-w-0 list-none gap-2 p-0 ${overflow === 'scroll' ? 'max-w-full overflow-x-auto pb-2' : 'flex-wrap'}`}
           data-overflow={overflow}
           data-testid='code-playback-sequence-items'
-          role='list'
         >
           {panel.items.map((item, index) => {
             const highlight = getHighlight(panel, index)
             const pointers = getPointersAtIndex(panel, index)
 
             return (
-              <div
-                key={index}
+              <li
+                key={`${formatValue(item)}-${index}`}
                 aria-label={`Item ${index}`}
                 className={`flex min-w-16 max-w-full flex-col gap-1 rounded border p-2 ${highlight ? stateClassNames[highlight.state] : 'border-gray-700 bg-gray-800'}`}
                 data-highlight={highlight ? 'true' : 'false'}
@@ -190,7 +189,6 @@ function SequencePanel({ panel }: { panel: CodePlaybackSequencePanelDto }) {
                   pointers.map((pointer) => pointer.label).join(',') || undefined
                 }
                 data-state={highlight?.state}
-                role='listitem'
               >
                 {panel.showIndices && (
                   <span className='text-xs font-semibold text-gray-400'>[{index}]</span>
@@ -211,10 +209,10 @@ function SequencePanel({ panel }: { panel: CodePlaybackSequencePanelDto }) {
                     ))}
                   </div>
                 )}
-              </div>
+              </li>
             )
           })}
-        </div>
+        </ul>
       )}
     </PanelFrame>
   )
@@ -250,13 +248,13 @@ function MapPanel({ panel }: { panel: CodePlaybackMapPanelDto }) {
       {panel.entries.length === 0 ? (
         <EmptyState label={getEmptyLabel(panel)} />
       ) : (
-        <div
+        <fieldset
           aria-label={`Entradas do mapa ${panel.title}`}
-          className={`min-w-0 ${overflow === 'scroll' ? 'max-w-full overflow-x-auto' : 'overflow-x-hidden'}`}
+          className={`m-0 min-w-0 border-0 p-0 ${overflow === 'scroll' ? 'max-w-full overflow-x-auto' : 'overflow-x-hidden'}`}
           data-overflow={overflow}
           data-testid='code-playback-map-entries'
-          role='group'
         >
+          <legend className='sr-only'>Entradas do mapa {panel.title}</legend>
           <dl className='min-w-0 divide-y divide-gray-700 rounded border border-gray-700'>
             {panel.entries.map((entry, index) => (
               <div
@@ -276,7 +274,7 @@ function MapPanel({ panel }: { panel: CodePlaybackMapPanelDto }) {
               </div>
             ))}
           </dl>
-        </div>
+        </fieldset>
       )}
     </PanelFrame>
   )
@@ -290,25 +288,23 @@ function SetPanel({ panel }: { panel: Extract<CodePlaybackPanelDto, { type: 'set
       {panel.items.length === 0 ? (
         <EmptyState label={getEmptyLabel(panel)} />
       ) : (
-        <div
+        <ul
           aria-label={`Itens do conjunto ${panel.title}`}
-          className={`flex min-w-0 gap-2 ${overflow === 'scroll' ? 'max-w-full overflow-x-auto pb-2' : 'flex-wrap'}`}
+          className={`m-0 flex min-w-0 list-none gap-2 p-0 ${overflow === 'scroll' ? 'max-w-full overflow-x-auto pb-2' : 'flex-wrap'}`}
           data-overflow={overflow}
           data-testid='code-playback-set-items'
-          role='list'
         >
           {panel.items.map((item, index) => (
-            <div
-              key={index}
+            <li
+              key={`${formatValue(item.value)}-${index}`}
               className={`flex min-w-20 max-w-full items-center gap-2 rounded border p-2 ${item.state ? stateClassNames[item.state] : 'border-gray-700 bg-gray-800'}`}
               data-index={index}
               data-state={item.state}
-              role='listitem'
             >
               <ValueView value={item.value} state={item.state} overflow={overflow} />
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </PanelFrame>
   )
@@ -320,19 +316,24 @@ function GridPanel({
   panel: Extract<CodePlaybackPanelDto, { type: 'grid' }>
 }) {
   const overflow = getOverflow(panel)
+  const columnKeys = panel.rows[0]?.map((_, columnIndex) => `column-${columnIndex}`) ?? []
+  const rowKeys = panel.rows.map((_, rowIndex) => `row-${rowIndex}`)
+  const cellKeys = panel.rows.map((row, rowIndex) =>
+    row.map((_, columnIndex) => `cell-${rowIndex}-${columnIndex}`),
+  )
 
   return (
     <PanelFrame panel={panel}>
       {panel.rows.length === 0 ? (
         <EmptyState label={getEmptyLabel(panel)} />
       ) : (
-        <div
+        <fieldset
           aria-label={`Linhas da grade ${panel.title}`}
-          className={`min-w-0 ${overflow === 'scroll' ? 'max-w-full overflow-auto' : 'overflow-x-auto'}`}
+          className={`m-0 min-w-0 border-0 p-0 ${overflow === 'scroll' ? 'max-w-full overflow-auto' : 'overflow-x-auto'}`}
           data-overflow={overflow}
           data-testid='code-playback-grid'
-          role='group'
         >
+          <legend className='sr-only'>Linhas da grade {panel.title}</legend>
           <table className='min-w-full border-collapse text-left'>
             {panel.showIndices && (
               <thead>
@@ -345,7 +346,7 @@ function GridPanel({
                   </th>
                   {panel.rows[0].map((_, columnIndex) => (
                     <th
-                      key={columnIndex}
+                      key={columnKeys[columnIndex]}
                       scope='col'
                       className='border border-gray-700 px-2 py-1 text-xs text-gray-400'
                     >
@@ -357,7 +358,7 @@ function GridPanel({
             )}
             <tbody>
               {panel.rows.map((row, rowIndex) => (
-                <tr key={rowIndex} data-row-index={rowIndex}>
+                <tr key={rowKeys[rowIndex]} data-row-index={rowIndex}>
                   {panel.showIndices && (
                     <th
                       scope='row'
@@ -368,7 +369,7 @@ function GridPanel({
                   )}
                   {row.map((item, columnIndex) => (
                     <td
-                      key={columnIndex}
+                      key={cellKeys[rowIndex][columnIndex]}
                       className={`min-w-20 max-w-xs border px-2 py-2 ${item.state ? stateClassNames[item.state] : 'border-gray-700 bg-gray-800'}`}
                       data-column-index={columnIndex}
                       data-state={item.state}
@@ -384,7 +385,7 @@ function GridPanel({
               ))}
             </tbody>
           </table>
-        </div>
+        </fieldset>
       )}
     </PanelFrame>
   )
@@ -399,16 +400,15 @@ function ResultPanel({
 
   return (
     <PanelFrame panel={panel}>
-      <div
+      <output
         aria-label={`Resultado ${panel.status}`}
-        className={`min-w-0 rounded border p-3 ${stateClassNames[panel.status]} ${overflow === 'scroll' ? 'max-w-full overflow-x-auto' : ''}`}
+        className={`block min-w-0 rounded border p-3 ${stateClassNames[panel.status]} ${overflow === 'scroll' ? 'max-w-full overflow-x-auto' : ''}`}
         data-overflow={overflow}
         data-status={panel.status}
         data-testid='code-playback-result'
-        role='status'
       >
         <ValueView value={panel.value} overflow={overflow} />
-      </div>
+      </output>
     </PanelFrame>
   )
 }

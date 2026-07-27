@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { cloneElement, isValidElement, useState, type ComponentProps } from 'react'
+import { cloneElement, isValidElement, type ComponentProps } from 'react'
 
 import { DELEGUA_EXAMPLE_SNIPPETS } from '@stardust/lsp'
 

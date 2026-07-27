@@ -110,22 +110,20 @@ export function CodePlaybackView({
               </pre>
             </section>
 
-            <div
+            <ul
               aria-label='Estado da etapa'
-              className='flex min-w-0 flex-col gap-3'
+              className='m-0 flex min-w-0 list-none flex-col gap-3 p-0'
               data-testid='code-playback-panels'
-              role='list'
             >
               {currentStep.panels.map((panel, panelIndex) => (
-                <div
+                <li
                   key={`${panel.type}-${panel.title}-${panelIndex}`}
                   className='min-w-0'
-                  role='listitem'
                 >
                   <CodePlaybackPanel panel={panel} />
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
           <section

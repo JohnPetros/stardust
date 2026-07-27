@@ -51,11 +51,11 @@ export function CodePlaybackControlsView({
       data-state={isPlaying ? 'playing' : 'paused'}
       className='flex flex-col gap-3 border-b border-gray-700 bg-gray-900 p-3 text-gray-100 sm:gap-4 sm:px-4 sm:py-3'
     >
-      <div
-        role='group'
+      <fieldset
         aria-label='Navegação da reprodução'
-        className='flex flex-wrap items-center justify-center gap-2'
+        className='m-0 flex flex-wrap items-center justify-center gap-2 border-0 p-0'
       >
+        <legend className='sr-only'>Navegação da reprodução</legend>
         <button
           type='button'
           aria-label='Etapa anterior'
@@ -101,7 +101,7 @@ export function CodePlaybackControlsView({
             <Icon name='simple-arrow-right' size={18} />
           </span>
         </button>
-      </div>
+      </fieldset>
 
       <div className='order-first flex min-w-0 items-center justify-between gap-3 border-b border-gray-800 pb-3'>
         <div className='flex min-w-0 items-center gap-3'>
