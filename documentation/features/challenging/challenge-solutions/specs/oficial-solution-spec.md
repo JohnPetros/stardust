@@ -3,8 +3,7 @@ title: Solução oficial de desafio com Code Playback
 prd: https://github.com/JohnPetros/stardust/milestone/40
 issue: https://github.com/JohnPetros/stardust/issues/495
 apps: server, web
-status: closed
-closed_at: 2026-07-27
+status: open
 last_updated_at: 2026-07-27
 ---
 

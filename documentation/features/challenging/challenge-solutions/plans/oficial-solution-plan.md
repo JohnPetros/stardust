@@ -1,10 +1,10 @@
 ---
 title: Plano da solução oficial de desafio com Code Playback
 spec: documentation/features/challenging/challenge-solutions/specs/oficial-solution-spec.md
-spec_revision: f4c34650f802fcb26b40d840ca72427da8e1a830
-status: completed
-current_task: null
-current_phase: null
+spec_revision: 32326b3f850f8c288461d9872f6b0a3fa12b1580
+status: in_progress
+current_task: RV-01
+current_phase: F3
 base_commit: d0970aeffb15f6783acafbd4e27d682e123144f4
 last_updated_at: 2026-07-27
 ---
@@ -13,13 +13,23 @@ last_updated_at: 2026-07-27
 
 ## Estado Atual
 
-- **Tarefa ativa:** CI-05 — preparar LSP nos jobs de testes e quality ratchet do server
-- **Estado:** `completed`
-- **Última ação:** Builder adicionou o build de `@stardust/lsp` aos jobs Tests e Quality ratchet do server.
-- **Próxima ação:** nenhuma no escopo da Spec; aguardar CI remoto e merge do PR.
-- **Estado das fases:** F1 `accepted`; F2 `accepted`; F3 `accepted` após CI-05.
-- **Bloqueios:** nenhum.
+- **Tarefa ativa:** RV-01 — resolver conversas bloqueantes do Codex Review
+- **Estado:** `implementing`
+- **Última ação:** CI remoto ficou verde após CI-05, mas o review abriu quatro conversas bloqueantes de Harness/Compose.
+- **Próxima ação:** corrigir os quatro findings, repetir gates/Judges e solicitar nova revisão.
+- **Estado das fases:** F1 `accepted`; F2 `accepted`; F3 `in_progress` por pendências de review.
+- **Bloqueios:** RV-01 — quatro conversas inline ainda não resolvidas no PR.
 - **Workspaces afetados:** `@stardust/core`, `@stardust/server`, `@stardust/web`
+
+- [ ] **RV-01** — Resolver conversas bloqueantes do Codex Review
+  - **Estado:** `implementing`
+  - **Depende de:** CI-05
+  - **Critérios da Spec:** AR-01, AR-02, AR-03
+  - **Resultado observável:** gates respeitam o opt-in de migrations e o runner de testes de cada workspace; globs recursivos aceitam arquivos na raiz; Compose inicializa o banco a partir das migrations vigentes.
+  - **Camada:** Harness/infraestrutura
+  - **Paths permitidos:** `packages/harness/src/commands/gates/GateCommand.ts`; `packages/harness/src/commands/gates/GateCommand.test.ts`; `packages/harness/src/commands/checks/scope/ScopeCheckCommand.ts`; `packages/harness/src/commands/checks/scope/ScopeCheckCommand.test.ts`; `docker-compose.yml`
+  - **Findings bloqueantes:** review Codex P1/P2 sobre migrations, runner Node, glob `**/` e schema obsoleto no Compose.
+  - **Próxima ação:** Builder deve implementar e validar os quatro fixes sem alterar baselines.
 
 ## Pendências
 
@@ -1062,6 +1072,13 @@ last_updated_at: 2026-07-27
 - **Sensores:** REQ-01–REQ-11, AC-01–AC-16 e AR-01–AR-05 aprovados; Conclusion Gate passou; core 171/611, server 161/300, web 102/428; quality-ratchets core/server/web passaram sem atualização de baseline; integração server 61/183; Playwright 5/5.
 - **Avaliação:** `accepted` — 18/18 tarefas verificadas, F1/F2/F3 aceitas, CI-05 integrada e nenhum finding bloqueante.
 - **Próxima ação:** nenhuma; Spec e Plan fechados documentalmente. O CI remoto deve passar após o push antes do merge.
+
+### 2026-07-27 — Review Codex — conversas bloqueantes
+
+- **Estado:** `open`
+- **Ação:** o Codex Review do HEAD `0a791f9231` apontou quatro correções bloqueantes em Harness e Compose.
+- **Findings:** opt-in de migrations ignorado; filtro Jest incompatível com os runners Node de harness/LSP; glob `**/` não aceita arquivo na raiz; Compose monta schema obsoleto em vez das migrations atuais.
+- **Próxima ação:** implementar RV-01, repetir sensores e resolver as conversas no PR.
 
 ### 2026-07-27 — Conclusão — Judge Conclusion após CI-04
 
