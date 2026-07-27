@@ -5,6 +5,7 @@ import { type Mock, mock } from 'ts-jest-mocker'
 
 import type { LspProvider } from '@stardust/core/global/interfaces'
 import type { LspCompletion } from '@stardust/core/global/types'
+import type { CodePlaybackLineRangeDto } from '@stardust/core/global/structures/dtos'
 import { DeleguaProvedorLsp } from '@stardust/lsp'
 
 import { useCodeEditor } from '../useCodeEditor'
@@ -81,19 +82,47 @@ function crieMonacoMock(languages: monaco.languages.ILanguageExtensionPoint[] = 
   }
 }
 
-function useTestCodeEditor() {
+type TestHookProps = {
+  highlightedLineRanges?: CodePlaybackLineRangeDto[]
+}
+
+function useTestCodeEditor({ highlightedLineRanges }: TestHookProps = {}) {
   return useCodeEditor({
     initialValue: '',
     theme: 'dark-space',
     isCodeCheckerEnabled: false,
     lspProvider,
     lspDocumentations: [],
+    highlightedLineRanges,
     onChange: jest.fn(),
   })
 }
 
-function renderCodeEditorHook() {
-  return renderHook(useTestCodeEditor)
+function renderCodeEditorHook(highlightedLineRanges?: CodePlaybackLineRangeDto[]) {
+  return renderHook(
+    ({ highlightedLineRanges: ranges }: TestHookProps) =>
+      useTestCodeEditor({ highlightedLineRanges: ranges }),
+    { initialProps: { highlightedLineRanges } },
+  )
+}
+
+function crieEditorMock(visibleRanges: monaco.Range[] = []) {
+  let nextDecorationId = 0
+  const model = {
+    getLineCount: jest.fn(() => 20),
+  }
+  const deltaDecorations = jest.fn(
+    (_oldDecorations: string[], newDecorations: monaco.editor.IModelDeltaDecoration[]) =>
+      newDecorations.map(() => `decoration-${++nextDecorationId}`),
+  )
+  const editor = {
+    getModel: jest.fn(() => model),
+    deltaDecorations,
+    getVisibleRanges: jest.fn(() => visibleRanges),
+    revealLinesInCenterIfOutsideViewport: jest.fn(),
+  } as unknown as monaco.editor.IStandaloneCodeEditor
+
+  return { editor, model, deltaDecorations }
 }
 
 describe('useCodeEditor', () => {
@@ -296,5 +325,101 @@ describe('useCodeEditor', () => {
 
     expect(oldHoverProvider.dispose).toHaveBeenCalledTimes(1)
     expect(oldCompletionProvider.dispose).toHaveBeenCalledTimes(1)
+  })
+
+  it('should remain inert when no highlighted ranges are provided', () => {
+    const { result } = renderCodeEditorHook()
+    const monaco = crieMonacoMock()
+    const { editor, deltaDecorations } = crieEditorMock()
+
+    act(() => {
+      result.current.handleEditorDidMount(editor, monaco.monacoMock)
+    })
+
+    expect(deltaDecorations).not.toHaveBeenCalled()
+    expect(editor.getVisibleRanges).not.toHaveBeenCalled()
+    expect(lspProvider.performSyntaxAnalysis).not.toHaveBeenCalled()
+    expect(lspProvider.getCompletions).not.toHaveBeenCalled()
+  })
+
+  it('should apply all highlighted ranges and reveal the first range outside with context', () => {
+    const highlightedLineRanges = [
+      { startLine: 2, endLine: 3 },
+      { startLine: 8, endLine: 9 },
+      { startLine: 15, endLine: 15 },
+    ]
+    const { result } = renderCodeEditorHook(highlightedLineRanges)
+    const monaco = crieMonacoMock()
+    const { editor, deltaDecorations } = crieEditorMock([
+      { startLineNumber: 1, endLineNumber: 4 } as monaco.Range,
+    ])
+
+    act(() => {
+      result.current.handleEditorDidMount(editor, monaco.monacoMock)
+    })
+
+    expect(deltaDecorations).toHaveBeenCalledWith(
+      [],
+      [
+        expect.objectContaining({
+          range: {
+            startLineNumber: 2,
+            startColumn: 1,
+            endLineNumber: 3,
+            endColumn: 1,
+          },
+          options: {
+            className: 'code-editor-active-line',
+            isWholeLine: true,
+          },
+        }),
+        expect.objectContaining({
+          range: {
+            startLineNumber: 8,
+            startColumn: 1,
+            endLineNumber: 9,
+            endColumn: 1,
+          },
+        }),
+        expect.objectContaining({
+          range: {
+            startLineNumber: 15,
+            startColumn: 1,
+            endLineNumber: 15,
+            endColumn: 1,
+          },
+        }),
+      ],
+    )
+    expect(editor.revealLinesInCenterIfOutsideViewport).toHaveBeenCalledWith(7, 10)
+  })
+
+  it('should replace previous decorations, reveal only when needed, and clean up on unmount', () => {
+    const initialRanges = [{ startLine: 2, endLine: 2 }]
+    const updatedRanges = [{ startLine: 5, endLine: 6 }]
+    const hook = renderCodeEditorHook(initialRanges)
+    const monaco = crieMonacoMock()
+    const { editor, deltaDecorations } = crieEditorMock([
+      { startLineNumber: 1, endLineNumber: 20 } as monaco.Range,
+    ])
+
+    act(() => {
+      hook.result.current.handleEditorDidMount(editor, monaco.monacoMock)
+    })
+    expect(editor.revealLinesInCenterIfOutsideViewport).not.toHaveBeenCalled()
+
+    hook.rerender({ highlightedLineRanges: updatedRanges })
+    expect(deltaDecorations).toHaveBeenCalledTimes(2)
+    expect(deltaDecorations.mock.calls[1]?.[0]).toEqual(['decoration-1'])
+    expect(deltaDecorations.mock.calls[1]?.[1]).toEqual([
+      expect.objectContaining({
+        range: expect.objectContaining({
+          startLineNumber: 5,
+        }),
+      }),
+    ])
+
+    hook.unmount()
+    expect(deltaDecorations).toHaveBeenCalledWith(['decoration-2'], [])
   })
 })

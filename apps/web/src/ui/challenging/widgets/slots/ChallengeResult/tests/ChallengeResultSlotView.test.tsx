@@ -132,7 +132,7 @@ describe('ChallengeResultSlotView', () => {
   it('should render execution errors count', () => {
     View({ codeExecutionErrorsCount: 4 })
 
-    expect(screen.getByText('Erros de execução:')).toBeInTheDocument()
+    expect(screen.getByText('Erros em casos de teste:')).toBeInTheDocument()
     expect(screen.getByText('4')).toBeInTheDocument()
   })
 

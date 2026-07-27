@@ -5,24 +5,31 @@ import { Solution } from '@stardust/core/challenging/entities'
 import { CACHE } from '@/constants'
 import { usePaginatedCache } from '@/ui/global/hooks/usePaginatedCache'
 import type { PopoverMenuButton } from '@/ui/global/widgets/components/PopoverMenu/types'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { Id, OrdinalNumber, Text } from '@stardust/core/global/structures'
 import { SolutionsListingSorter } from '@stardust/core/challenging/structures'
 import type { ChallengingService } from '@stardust/core/challenging/interfaces'
-import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
+import type { Challenge } from '@stardust/core/challenging/entities'
+import type { User } from '@stardust/core/profile/entities'
+import type { CodePlaybackDto } from '@stardust/core/global/structures/dtos'
+
+type Params = {
+  challengingService: ChallengingService
+  user: User | null
+  challenge: Challenge | null
+}
 
 const SOLUTIONS_PER_PAGE = OrdinalNumber.create(15)
 
-export function useChallengeSolutionsSlot(challengingService: ChallengingService) {
+export function useChallengeSolutionsSlot({
+  challengingService,
+  user,
+  challenge,
+}: Params) {
   const [sorter, setSorter] = useState<SolutionsListingSorter>(
     SolutionsListingSorter.create('date'),
   )
   const [solutionTitle, setSolutionTitle] = useState('')
   const [isFromUser, setIsFromUser] = useState(false)
-  const { getChallengeSlice } = useChallengeStore()
-  const { challenge } = getChallengeSlice()
-  const { user } = useAuthContext()
-
   async function fetchSolutionsList(page: number) {
     const response = await challengingService.fetchSolutionsList({
       page: OrdinalNumber.create(page),
@@ -81,15 +88,37 @@ export function useChallengeSolutionsSlot(challengingService: ChallengingService
 
   return {
     sorter,
-    solutions: data.map(Solution.create),
+    solutions: data.map((solution) => {
+      const entity = Solution.create(solution)
+      return {
+        id: entity.id.value,
+        title: entity.title.value,
+        slug: entity.slug.value,
+        upvotesCount: entity.upvotesCount.value,
+        viewsCount: entity.viewsCount.value,
+        commentsCount: entity.commentsCount.value,
+        postedAt: entity.postedAt,
+        author: {
+          name: entity.author.name.value,
+          slug: entity.author.slug.value,
+          avatar: {
+            name: entity.author.avatar.name.value,
+            image: entity.author.avatar.image.value,
+          },
+        },
+      }
+    }),
+    officialSolution: (challenge?.officialSolution?.dto ??
+      null) as CodePlaybackDto | null,
     solutionTitle,
     isFromUser,
     isLoading,
     isReachedEnd,
     popoverMenuButtons,
     challengeSlug: challenge?.slug.value ?? '',
-    isChallengeCompleted:
+    isChallengeCompleted: Boolean(
       challenge && user && user.hasCompletedChallenge(challenge.id).isTrue,
+    ),
     nextPage,
     handleIsFromUserChange,
     handleSolutionTitleChange,

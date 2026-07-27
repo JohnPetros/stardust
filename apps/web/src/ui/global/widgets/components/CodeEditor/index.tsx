@@ -1,6 +1,7 @@
 'use client'
 
 import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
+import type { CodePlaybackLineRangeDto } from '@stardust/core/global/structures/dtos'
 
 import type { CodeEditorRef, CodeEditorTheme } from './types'
 import { useCodeEditor } from './useCodeEditor'
@@ -16,6 +17,7 @@ type CodeEditorProps = {
   height: number | string
   isReadOnly?: boolean
   isCodeCheckerDisabled?: boolean
+  highlightedLineRanges?: CodePlaybackLineRangeDto[]
   onChange?: (value: string) => void
 }
 
@@ -27,6 +29,7 @@ export const Widget = (
     theme = 'dark-space',
     isReadOnly = false,
     isCodeCheckerDisabled = true,
+    highlightedLineRanges,
     onChange = () => {},
   }: CodeEditorProps,
   ref: ForwardedRef<CodeEditorRef>,
@@ -53,6 +56,7 @@ export const Widget = (
     isCodeCheckerEnabled: isCodeCheckerDisabled ? false : isCodeCheckerEnabled,
     lspProvider,
     lspDocumentations: documentations,
+    highlightedLineRanges,
     onChange,
   })
 

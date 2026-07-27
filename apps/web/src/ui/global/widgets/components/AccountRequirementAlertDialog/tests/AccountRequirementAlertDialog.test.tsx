@@ -1,23 +1,21 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 
-import { ROUTES } from '@/constants'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import { AccountRequirementAlertDialog } from '..'
 
 jest.mock('@/ui/global/hooks/useNavigationProvider')
 jest.mock('../AccountRequirementAlertDialogView', () => ({
-  AccountRequirementAlertDialogView: ({ onConfirm }: { onConfirm: () => void }) => (
-    <button onClick={onConfirm}>Fazer login</button>
+  AccountRequirementAlertDialogView: ({ nextRoute }: { nextRoute: string }) => (
+    <span data-testid='next-route'>{nextRoute}</span>
   ),
 }))
 
 describe('AccountRequirementAlertDialog', () => {
-  it('should navigate to sign-in with the current route', () => {
-    const goTo = jest.fn()
+  it('should pass the current route as the sign-in destination', () => {
     const currentRoute = '/challenging/challenges/desafio/challenge/executions'
     jest.mocked(useNavigationProvider).mockReturnValue({
       currentRoute,
-      goTo,
+      goTo: jest.fn(),
       goBack: jest.fn(),
       refresh: jest.fn(),
       openExternal: jest.fn(),
@@ -25,10 +23,6 @@ describe('AccountRequirementAlertDialog', () => {
 
     render(<AccountRequirementAlertDialog description='Acesse a sua conta' />)
 
-    fireEvent.click(screen.getByRole('button', { name: 'Fazer login' }))
-
-    expect(goTo).toHaveBeenCalledWith(
-      `${ROUTES.auth.signIn}?nextRoute=${encodeURIComponent(currentRoute)}`,
-    )
+    expect(screen.getByTestId('next-route')).toHaveTextContent(currentRoute)
   })
 })

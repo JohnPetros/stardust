@@ -46,7 +46,7 @@ export const ChallengeResultSlotView = ({
       <div className='h-auto space-y-6 p-6'>
         <div className='flex items-center justify-between gap-4'>
           <p className='text-gray-300 text-sm'>
-            Erros de execução: <strong>{codeExecutionErrorsCount}</strong>
+            Erros em casos de teste: <strong>{codeExecutionErrorsCount}</strong>
           </p>
           <Button
             asChild

@@ -27,6 +27,8 @@ export const ROUTES = {
       challengeSolutions: {
         list: (challengeSlug: string) =>
           `/challenging/challenges/${challengeSlug}/challenge/solutions`,
+        official: (challengeSlug: string) =>
+          `/challenging/challenges/${challengeSlug}/challenge/solutions/official`,
         solution: (challengeSlug: string, solutionSlug: string) =>
           `/challenging/challenges/${challengeSlug}/challenge/solutions/${solutionSlug}`,
       },

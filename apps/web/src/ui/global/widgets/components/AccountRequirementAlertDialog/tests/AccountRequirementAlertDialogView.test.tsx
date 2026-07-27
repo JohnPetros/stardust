@@ -1,24 +1,23 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 
 import { AccountRequirementAlertDialogView } from '../AccountRequirementAlertDialogView'
 
 jest.mock('../../AlertDialog', () => ({
-  AlertDialog: ({ action }: { action: React.ReactNode }) => action,
+  AlertDialog: ({ action }: { action: React.ReactNode }) => <div>{action}</div>,
 }))
 
 describe('AccountRequirementAlertDialogView', () => {
-  it('should run the sign-in action', () => {
-    const onConfirm = jest.fn()
-
+  it('should render a sign-in link with the current route', () => {
     render(
       <AccountRequirementAlertDialogView
         description='Acesse a sua conta'
-        onConfirm={onConfirm}
+        nextRoute='/challenging/challenges/desafio/challenge/executions'
       />,
     )
 
-    fireEvent.click(screen.getByRole('button', { name: 'Fazer login' }))
-
-    expect(onConfirm).toHaveBeenCalledTimes(1)
+    expect(screen.getByRole('link', { name: 'Fazer login' })).toHaveAttribute(
+      'href',
+      '/auth/sign-in?nextRoute=%2Fchallenging%2Fchallenges%2Fdesafio%2Fchallenge%2Fexecutions',
+    )
   })
 })

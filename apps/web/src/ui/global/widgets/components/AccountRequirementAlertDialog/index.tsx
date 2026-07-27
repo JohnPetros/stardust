@@ -1,6 +1,5 @@
 import type { PropsWithChildren, RefObject } from 'react'
 
-import { ROUTES } from '@/constants'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
 import type { AlertDialogRef } from '../AlertDialog/types'
 import { AccountRequirementAlertDialogView } from './AccountRequirementAlertDialogView'
@@ -15,18 +14,13 @@ export const AccountRequirementAlertDialog = ({
   children,
   ref,
 }: PropsWithChildren<Props>) => {
-  const { currentRoute, goTo } = useNavigationProvider()
-
-  function handleConfirm() {
-    const query = new URLSearchParams({ nextRoute: currentRoute })
-    goTo(`${ROUTES.auth.signIn}?${query.toString()}`)
-  }
+  const { currentRoute } = useNavigationProvider()
 
   return (
     <AccountRequirementAlertDialogView
       ref={ref}
       description={description}
-      onConfirm={handleConfirm}
+      nextRoute={currentRoute}
     >
       {children}
     </AccountRequirementAlertDialogView>
