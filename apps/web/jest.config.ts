@@ -43,5 +43,5 @@ export default async () => {
       '<rootDir>/../../packages/core/src/$1/domain/$2/fakers/index.ts',
   }
 
-  return { ...finalJestConfig, moduleNameMapper }
+  return { ...finalJestConfig, moduleNameMapper, maxWorkers: 1 }
 }

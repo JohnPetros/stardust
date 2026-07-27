@@ -1,6 +1,7 @@
 import type { ChallengeStoreState } from './types'
 import { useZustandChallengeStore } from '../zustand/useZustandChallengeStore'
-import { INITIAL_CHALLENGE_STORE_STATE } from './constants'
+
+const resetStore = () => useZustandChallengeStore.getState().actions.resetStore()
 
 export function useChallengeStore() {
   return {
@@ -227,17 +228,7 @@ export function useChallengeStore() {
       }
     },
 
-    resetStore() {
-      const { state } = useZustandChallengeStore.getState()
-
-      return useZustandChallengeStore.setState({
-        state: {
-          ...INITIAL_CHALLENGE_STORE_STATE,
-          panelOrder: state.panelOrder,
-          panelsOffset: state.panelsOffset,
-        },
-      })
-    },
+    resetStore,
   }
 }
 

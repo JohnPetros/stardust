@@ -63,12 +63,12 @@ export function useChallengeResultSlot({
   const { goTo, currentRoute } = useNavigationProvider()
   const hasAcceptedExecutionForCurrentCode =
     isAccountAuthenticated && acceptedCodeExecution?.code.value === currentCode
-  const latestExecutionForCurrentCode =
-    isAccountAuthenticated && latestCodeExecution?.code.value === currentCode
-      ? latestCodeExecution
-      : null
+  // Keep the last execution visible while the user edits the next version of
+  // the code. The verification guard below still requires an accepted
+  // execution for the current code before allowing completion.
+  const latestExecutionForDisplay = isAccountAuthenticated ? latestCodeExecution : null
   const displayedResults =
-    latestExecutionForCurrentCode?.testResults.items.map(
+    latestExecutionForDisplay?.testResults.items.map(
       (testResult) => testResult.isCorrect,
     ) ?? results
   const isBlocked =
@@ -79,7 +79,7 @@ export function useChallengeResultSlot({
     ? 'Aguarde a execução terminar.'
     : 'Execute o código com sucesso antes de verificar.'
   const userOutputs =
-    latestExecutionForCurrentCode?.testResults.items.map(
+    latestExecutionForDisplay?.testResults.items.map(
       (testResult) => testResult.userOutput,
     ) ??
     challenge?.userOutputs.items ??

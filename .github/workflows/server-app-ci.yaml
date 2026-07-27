@@ -11,7 +11,7 @@ on:
       - "apps/server/**"
       - "packages/core/**"
       - "packages/validation/**"
-      - "scripts/quality-gate/**"
+      - "packages/harness/**"
 
 permissions:
   contents: read
@@ -80,6 +80,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build LSP package
+        run: npm run build -w @stardust/lsp
+
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v3
         with:
@@ -131,7 +134,7 @@ jobs:
         run: npm run test:unit -w @stardust/server
 
   quality-gate:
-    name: Quality gate
+    name: Quality ratchet
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -150,6 +153,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Build LSP package
+        run: npm run build -w @stardust/lsp
 
       # A catraca roda a suíte unitária (mocks) para medir cobertura. Não sobe
       # Supabase, mas alguns testes (ai tools) leem env no import.
@@ -181,10 +187,10 @@ jobs:
           POSTHOG_PROJECT_ID='1'
           EOF
 
-      - name: Run quality gate
+      - name: Run quality ratchet
         env:
-          QUALITY_GATE_REPORT_FILE: quality-gate-report.md
-        run: npm run quality-gate -- --workspace=server
+          QUALITY_RATCHET_REPORT_FILE: quality-ratchet-report.md
+        run: npm run quality-ratchet -- --workspace=server
 
       - name: Comment report on PR
         if: ${{ always() && github.event_name == 'pull_request' }}
@@ -193,7 +199,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: bash scripts/quality-gate/comment-pr.sh server quality-gate-report.md
+        run: bash scripts/comment-pull-request.sh server quality-ratchet-report.md
 
   build:
     name: Build

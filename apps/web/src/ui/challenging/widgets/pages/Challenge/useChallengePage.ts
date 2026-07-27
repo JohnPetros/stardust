@@ -39,6 +39,7 @@ type HydrationComparablePayload = {
   completionCount: number
   categories: ChallengeDto['categories']
   testCases: ChallengeDto['testCases']
+  officialSolution: ChallengeDto['officialSolution']
   userChallengeVote: string
 }
 
@@ -59,6 +60,7 @@ function toHydrationComparablePayload(
     completionCount: challengeDto.completionCount ?? 0,
     categories: challengeDto.categories,
     testCases: challengeDto.testCases,
+    officialSolution: challengeDto.officialSolution ?? null,
     userChallengeVote,
   }
 }
@@ -105,6 +107,8 @@ export function useChallengePage({
   const [isNew] = useQueryStringParam('isNew')
   const secondCounterLocalstorage = useLocalStorage(STORAGE.keys.secondsCounter)
   const challengeNavigationAlertDialogRef = useRef<AlertDialogRef | null>(null)
+  const resetStoreRef = useRef(resetStore)
+  resetStoreRef.current = resetStore
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const { requestNavigation, confirmNavigation, cancelNavigation } =
     useChallengeNavigationGuard({
@@ -194,7 +198,15 @@ export function useChallengePage({
   useEffect(() => {
     if (!challenge) return
 
-    const activeContent = currentRoute.split('/').pop()
+    const routeSegments = currentRoute.split('/').filter(Boolean)
+    const solutionsSegmentIndex = routeSegments.lastIndexOf('solutions')
+
+    if (solutionsSegmentIndex !== -1) {
+      setActiveContent('solutions')
+      return
+    }
+
+    const activeContent = routeSegments.at(-1)
     if (!activeContent) return
 
     if (activeContent === 'challenge') {
@@ -208,7 +220,7 @@ export function useChallengePage({
 
   useEffect(() => {
     return () => {
-      resetStore()
+      resetStoreRef.current()
     }
   }, [])
 

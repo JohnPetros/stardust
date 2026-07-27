@@ -3,6 +3,7 @@ import type {
   ChallengeDto,
   TestCaseDto,
 } from '@stardust/core/challenging/entities/dtos'
+import type { CodePlaybackDto } from '@stardust/core/global/structures/dtos'
 import { Challenge } from '@stardust/core/challenging/entities'
 import { Datetime } from '@stardust/core/global/libs'
 
@@ -10,12 +11,23 @@ import type { Database, SupabaseChallenge } from '../../types'
 
 type SupabaseChallengePayload = Database['public']['Tables']['challenges']['Insert']
 
+/**
+ * The paginated RPC intentionally omits the potentially large playback JSON.
+ * Keep that projection explicit while allowing the same mapper to hydrate both
+ * detail rows and list rows.
+ */
+export type SupabaseChallengeListRow = Omit<SupabaseChallenge, 'official_solution'> & {
+  total_count: number
+}
+
+export type SupabaseChallengeRow = SupabaseChallenge | SupabaseChallengeListRow
+
 export class SupabaseChallengeMapper {
-  static toEntity(supabaseChallenge: SupabaseChallenge): Challenge {
+  static toEntity(supabaseChallenge: SupabaseChallengeRow): Challenge {
     return Challenge.create(SupabaseChallengeMapper.toDto(supabaseChallenge))
   }
 
-  static toDto(supabaseChallenge: SupabaseChallenge): ChallengeDto {
+  static toDto(supabaseChallenge: SupabaseChallengeRow): ChallengeDto {
     const challengeDto: ChallengeDto = {
       id: supabaseChallenge.id ?? '',
       title: supabaseChallenge.title ?? '',
@@ -62,6 +74,11 @@ export class SupabaseChallengeMapper {
       ),
       starId: supabaseChallenge.star_id,
       postedAt: new Datetime(supabaseChallenge.created_at).date(),
+      officialSolution:
+        'official_solution' in supabaseChallenge &&
+        supabaseChallenge.official_solution !== null
+          ? (supabaseChallenge.official_solution as CodePlaybackDto)
+          : null,
     }
 
     return challengeDto

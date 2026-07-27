@@ -8,7 +8,10 @@ import type { ManyItems } from '@stardust/core/global/types'
 import type { SupabaseChallenge } from '../../types'
 import type { Json } from '../../types/Database'
 import { SupabaseRepository } from '../SupabaseRepository'
-import { SupabaseChallengeMapper } from '../../mappers/challenging'
+import {
+  SupabaseChallengeMapper,
+  type SupabaseChallengeListRow,
+} from '../../mappers/challenging/SupabaseChallengeMapper'
 import { SupabasePostgreError } from '../../errors'
 
 export class SupabaseChallengesRepository
@@ -83,7 +86,7 @@ export class SupabaseChallengesRepository
   }
 
   async findBySlug(challengeSlug: Slug): Promise<Challenge | null> {
-    const { error } = await this.supabase
+    const { data, error } = await this.supabase
       .from('challenges_view')
       .select('*')
       .eq('slug', challengeSlug.value)
@@ -93,17 +96,7 @@ export class SupabaseChallengesRepository
       return this.handleQueryPostgresError(error)
     }
 
-    const { data: challenge, error: challengeError } = await this.supabase
-      .from('challenges_view')
-      .select('*')
-      .eq('slug', challengeSlug.value)
-      .single()
-
-    if (challengeError) {
-      return null
-    }
-
-    return SupabaseChallengeMapper.toEntity(challenge)
+    return SupabaseChallengeMapper.toEntity(data)
   }
 
   async findByStar(starId: Id): Promise<Challenge | null> {
@@ -172,14 +165,16 @@ export class SupabaseChallengesRepository
         p_posting_order: postingOrder.value,
         p_page: page.value,
       })
-      .overrideTypes<(SupabaseChallenge & { total_count: number })[]>()
+      .overrideTypes<SupabaseChallengeListRow[]>()
 
     if (error) {
       throw new SupabasePostgreError(error)
     }
 
     const totalCount = data[0]?.total_count ?? 0
-    const challenges = data.map(SupabaseChallengeMapper.toEntity)
+    const challenges = data.map((challenge) =>
+      SupabaseChallengeMapper.toEntity(challenge as SupabaseChallengeListRow),
+    )
 
     return { items: challenges, count: Number(totalCount) }
   }

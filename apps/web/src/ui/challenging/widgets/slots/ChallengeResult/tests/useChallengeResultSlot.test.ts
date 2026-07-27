@@ -436,6 +436,33 @@ describe('useChallengeResultSlot', () => {
     expect(result.current.userOutputs).toEqual(['correto', 'incorreto'])
   })
 
+  it('should keep the latest execution output visible while the code is edited', () => {
+    const execution = ChallengeCodeExecution.create({
+      code: 'escreva("resposta anterior")',
+      status: 'wrong_answer',
+      testResults: [
+        {
+          position: 1,
+          isCorrect: true,
+          userOutput: 'verdadeiro',
+          expectedOutput: true,
+        },
+      ],
+      outputs: [],
+      error: null,
+    })
+    setupStore({
+      latestCodeExecution: execution,
+      currentCode: 'escreva("resposta editada")',
+      results: challenge.results.items,
+    })
+
+    const { result } = Hook()
+
+    expect(result.current.results).toEqual([true])
+    expect(result.current.userOutputs).toEqual(['verdadeiro'])
+  })
+
   it('should show local results instead of persisted execution when unauthenticated', () => {
     const execution = ChallengeCodeExecution.create({
       code: 'escreva("resposta antiga")',

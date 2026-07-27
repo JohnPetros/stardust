@@ -3,6 +3,19 @@
 Este arquivo serve como índice para as regras de documentação do projeto.
 Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 
+## Regras do Harness de Agentes
+
+**Arquivo:** `/documentation/rules/harness-rules.md`
+**Quando consultar:**
+
+- Ao criar ou julgar uma Spec técnica.
+- Ao criar ou executar um Plan.
+- Ao implementar uma Spec diretamente.
+- Ao delegar implementação para Builder ou Workers.
+- Ao avaliar implementação ou conclusão com Judges.
+- Ao atualizar Spec, PRD, Architecture ou Rules durante a implementação.
+- Ao registrar revisão humana, handoff, tentativa ou finding no Plan.
+
 ## Regras de Convenções de Código
 
 **Arquivo:** `/documentation/rules/code-conventions-rules.md`
@@ -70,6 +83,20 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 - Para entender as responsabilidades de `DeleguaLsp`, `DeleguaInterpretador` e `DeleguaConfiguracaoParaEditorMonaco`.
 - Ao adicionar snippets, documentacoes, regex ou tokens da linguagem Delegua.
 - Ao integrar recursos de edicao, execucao ou analise de codigo com contratos do core.
+
+## Regras da Linguagem Delegua
+
+**Arquivo:** `/documentation/rules/delegua-rules.md`
+**Quando consultar:**
+
+- Ao criar ou modificar código executável em Delégua.
+- Ao escrever desafios, soluções oficiais, fixtures, mocks ou snippets de
+  Delégua.
+- Ao definir entradas, saídas ou resultados esperados de programas Delégua.
+- Para garantir que booleanos, palavras reservadas, tipos e funções nativas
+  estejam em português.
+- Ao escolher a solução mais simples, legível e didática para um desafio.
+- Ao integrar código Delégua com o editor, o LSP, o servidor ou o playback.
 
 ## Regras da Camada de Fila (queue)
 

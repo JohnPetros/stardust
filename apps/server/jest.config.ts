@@ -45,12 +45,18 @@ const config: Config = {
       ...sharedConfig,
       displayName: 'server',
       testMatch: ['**/tests/**/*.test.ts'],
-      testPathIgnorePatterns: ['<rootDir>/src/app/hono/routers/'],
+      testPathIgnorePatterns: [
+        '<rootDir>/src/app/hono/routers/',
+        '<rootDir>/src/tests/routes/',
+      ],
     },
     {
       ...sharedConfig,
       displayName: 'server-integration',
-      testMatch: ['<rootDir>/src/app/hono/routers/**/tests/**/*.test.ts'],
+      testMatch: [
+        '<rootDir>/src/tests/routes/**/*.test.ts',
+        '<rootDir>/src/app/hono/routers/**/tests/**/*.test.ts',
+      ],
     },
   ],
 }

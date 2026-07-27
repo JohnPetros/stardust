@@ -1,0 +1,162 @@
+### 1. Visão Geral
+
+O **Challenge Code Editor** é o ambiente de escrita e execução de código dentro da página de desafios da plataforma StarDust. Ele permite que o estudante escreva, edite e execute código na linguagem Delegua diretamente no navegador, recebendo feedback imediato sobre a correção da sua solução.
+
+**Objetivo:** Oferecer uma experiência de codificação integrada, fluida e acessível para que o usuário resolva desafios de lógica de programação sem sair da plataforma.
+
+**Problema resolvido:** Sem um editor embutido, o usuário precisaria de ferramentas externas para escrever e testar código, quebrando o fluxo de aprendizado e a imersão na jornada gamificada.
+
+---
+
+### 2. Requisitos
+
+#### Escrita de Código
+- [ ] **Escrita de Código**
+
+**Descrição:** O editor oferece recursos de edição avançados para a linguagem Delegua.
+
+##### Regras de Negócio
+- **Syntax highlighting:** O editor exibe coloração sintática para a linguagem Delegua.
+- **Auto-complete:** Sugestões de completação são exibidas conforme o usuário digita.
+- **Documentação contextual:** Exibida ao passar o mouse sobre palavras-chave da linguagem.
+- **Detector de erros em tempo real:** Erros de sintaxe são destacados inline. Controlado exclusivamente pelo toggle nas configurações do editor.
+- **Salvamento automático:** O código digitado é salvo localmente por desafio, independente de autenticação ou conexão. Ao abrir um desafio, carrega o último código salvo ou o código inicial se não houver salvo.
+
+---
+
+#### Toolbar
+- [ ] **Toolbar**
+
+**Descrição:** Barra de ações do editor com botões de execução, manipulação de código e acesso a recursos auxiliares.
+
+##### Regras de Negócio
+- **Executar:** Roda o código do usuário contra os casos de teste do desafio. Atalho: `Alt + Enter` / `Option + Enter`.
+- **Resetar código:** Reverte o editor ao código original do desafio, com confirmação prévia para evitar perda acidental.
+- **Desfazer:** Restaura o código ao estado anterior à última edição. Atalho: `Ctrl + Z` / `Cmd + Z`.
+- **Arrumar código:** Formata e organiza o código do editor de acordo com as configurações de estilização definidas pelo usuário. Atalho: `Ctrl + M` / `Cmd + M`. Não possui condição de bloqueio.
+- **Consultar guias:** Abre a documentação da linguagem Delegua organizada por categorias. Atalho: `Ctrl + K` / `Cmd + K`.
+- **Ver atalhos:** Lista todos os atalhos de teclado disponíveis.
+- **Configurações:** Abre o dialog de configurações do editor.
+- **Ativar assistente IA:** Disponível apenas para usuários autenticados. Alterna a visibilidade do painel do assistente de IA.
+
+---
+
+#### Atalhos de Teclado
+- [ ] **Atalhos de Teclado**
+
+**Descrição:** Atalhos disponíveis para ações rápidas no editor.
+
+##### Regras de Negócio
+- `Alt + Enter` / `Option + Enter` — Executar código
+- `Ctrl + K` / `Cmd + K` — Abrir guias da linguagem
+- `Ctrl + Z` / `Cmd + Z` — Desfazer última edição
+- `Ctrl + M` / `Cmd + M` — Arrumar código
+- `Ctrl + .` / `Cmd + .` — Comentar/descomentar linhas selecionadas
+- `Ctrl + X` / `Cmd + X` — Recortar/copiar linha
+- `Ctrl + L` / `Cmd + L` — Selecionar linha
+
+##### Regras de UI/UX
+- **Compatibilidade de atalhos:** Os atalhos exibidos na interface devem se adaptar ao sistema operacional do usuário — usando `Cmd` e `Option` no macOS, e `Ctrl` e `Alt` no Windows/Linux. A detecção deve ser feita via `navigator.platform` ou `navigator.userAgentData`.
+
+---
+
+#### Execução e Feedback
+- [ ] **Execução e Feedback**
+
+**Descrição:** Comportamento do editor ao executar o código contra os casos de teste.
+
+##### Regras de Negócio
+- Ao executar, o código é validado contra os casos de teste e o usuário é redirecionado para a tela de resultados.
+- Se o código contiver erro de sintaxe ou execução, o usuário recebe um aviso com a mensagem de erro e o número da linha problemática.
+- Em desafios de estrela: se o usuário remover comandos `Leia()`, recebe o aviso: *"Não mexa em nenhum comando Leia()!"* e a execução é bloqueada.
+- Um som de falha é reproduzido quando a execução resulta em erro.
+
+---
+
+#### Configurações do Editor
+- [ ] **Configurações do Editor**
+
+**Descrição:** Dialog de configurações que permite ao usuário personalizar o comportamento e aparência do editor. Organizado em três seções: Aparência, Formatação e Estilizador.
+
+##### Regras de Negócio
+
+**Seção Aparência**
+- **Tamanho da fonte:** Ajuste em px via slider.
+- **Detector de erros:** Toggle para ativar/desativar a detecção de erros em tempo real.
+
+**Seção Formatação**
+- **Tamanho do tab:** Ajuste via slider.
+- **Máximo de caracteres por linha:** Ajuste via slider.
+- **Delimitador de texto:** Select com opções `Preservar`, `Aspas simples`, `Aspas duplas`.
+
+**Seção Estilizador**
+- **Estilizador (master toggle):** Ativa ou desativa todas as regras do estilizador. Quando desativado, as regras ficam desabilitadas.
+- **Regra: Convenção de nomenclatura:** Quando marcada, exibe sub-selects para configurar:
+  - Convenção de variável: `caixaCamelo`, `caixa_cobra`, `CaixaPascal`
+  - Convenção de constante: `CAIXA_ALTA`, `caixaCamelo`, `caixa_cobra`
+  - Convenção de função: `caixaCamelo`, `caixa_cobra`, `CaixaPascal`
+- **Regra: Paradigma consistente:** Quando marcada, exibe sub-select para configurar:
+  - Paradigma: `ambos`, `imperativo`, `infinitivo`
+
+##### Regras de UI/UX
+- **Botões do footer:** `Restaurar padrão` (reseta todos os campos aos valores default) e `Salvar` (persiste as configurações localmente).
+- **Responsividade:** Dialog centralizado, largura fixa de ~420px, com scroll interno quando o conteúdo exceder a altura disponível.
+
+---
+
+#### Seleção de Código para Assistente IA
+- [ ] **Seleção de Código para Assistente IA**
+
+**Descrição:** Integração entre o editor e o painel do assistente IA.
+
+##### Regras de Negócio
+- Disponível apenas quando o assistente IA está ativo (requer autenticação).
+- O usuário pode selecionar trechos de código no editor.
+- Ao selecionar, um botão flutuante "Adicionar" aparece sobre o editor.
+- Ao clicar, o trecho é enviado como contexto para o assistente IA.
+- O botão desaparece ao clicar fora do editor ou ao realizar uma nova ação.
+
+---
+
+### 3. Fluxo de Usuário
+
+**Fluxo A — Desafio de estrela**
+
+1. O usuário acessa a página de um desafio vinculado a uma estrela.
+2. O editor carrega o último código salvo. Se não houver, carrega o código inicial do desafio.
+3. O usuário escreve ou edita o código. A entrada de dados é feita via comandos `Leia()`.
+4. O usuário pode, a qualquer momento:
+   - Acionar **Arrumar código** (`Ctrl + M` / `Cmd + M`) para formatar o código conforme suas configurações.
+   - Acionar **Desfazer** (`Ctrl + Z` / `Cmd + Z`) para reverter a última edição.
+   - Abrir **Configurações** para ajustar aparência, formatação e regras do estilizador.
+5. O usuário aciona **Executar** (`Alt + Enter` / `Option + Enter`).
+6. O sistema valida o código contra os casos de teste:
+   - **Sucesso:** Usuário é redirecionado para a tela de resultados.
+   - **Erro de execução/sintaxe:** Aviso com mensagem e número da linha.
+   - **`Leia()` removido:** Aviso específico e execução bloqueada.
+
+---
+
+**Fluxo B — Desafio livre**
+
+1. O usuário acessa a página de um desafio livre (sem associação com estrela).
+2. O editor carrega o último código salvo. Se não houver, carrega o código inicial do desafio.
+3. O usuário escreve ou edita o código. A entrada de dados é feita exclusivamente via funções.
+4. O usuário pode, a qualquer momento:
+   - Acionar **Arrumar código** (`Ctrl + M` / `Cmd + M`) para formatar o código conforme suas configurações.
+   - Acionar **Desfazer** (`Ctrl + Z` / `Cmd + Z`) para reverter a última edição.
+   - Abrir **Configurações** para ajustar aparência, formatação e regras do estilizador.
+5. O usuário aciona **Executar** (`Alt + Enter` / `Option + Enter`).
+6. O sistema valida o código contra os casos de teste:
+   - **Sucesso:** Usuário é redirecionado para a tela de resultados.
+   - **Erro de execução/sintaxe:** Aviso com mensagem e número da linha.
+
+---
+
+### 4. Fora do Escopo
+
+- Suporte a linguagens além de Delegua.
+- Sincronização do código salvo com servidor/nuvem.
+- Histórico de versões do código.
+- Colaboração em tempo real.
+- Configuração de tema visual do editor (claro/escuro).

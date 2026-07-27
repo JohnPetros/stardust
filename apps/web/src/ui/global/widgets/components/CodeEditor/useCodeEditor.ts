@@ -3,6 +3,7 @@ import type { Monaco } from '@monaco-editor/react'
 import type monaco from 'monaco-editor'
 
 import { Backup } from '@stardust/core/global/structures'
+import type { CodePlaybackLineRangeDto } from '@stardust/core/global/structures/dtos'
 import { DeleguaConfiguracaoParaEditorMonaco } from '@stardust/lsp'
 import type { LspProvider } from '@stardust/core/global/interfaces'
 import type { LspResponse } from '@stardust/core/global/responses'
@@ -37,6 +38,7 @@ type Params = {
   isCodeCheckerEnabled: boolean
   lspProvider: LspProvider
   lspDocumentations: LspDocumentation[]
+  highlightedLineRanges?: CodePlaybackLineRangeDto[]
   onChange?: (value: string) => void
 }
 
@@ -46,12 +48,74 @@ export function useCodeEditor({
   isCodeCheckerEnabled,
   lspProvider,
   lspDocumentations,
+  highlightedLineRanges,
   onChange,
 }: Params) {
   const monacoEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const monacoRef = useRef<Monaco | null>(null)
   const monacoProvidersOwnerRef = useRef(Symbol('CodeEditorMonacoProviders'))
+  const lineDecorationsRef = useRef<string[]>([])
+  const isInitialHighlightEffectRef = useRef(true)
   const codeBackup = useRef<Backup<string>>(Backup.create([initialValue]))
+
+  const clearLineDecorations = useCallback(() => {
+    const editor = monacoEditorRef.current
+    if (!editor || lineDecorationsRef.current.length === 0) return
+
+    editor.deltaDecorations(lineDecorationsRef.current, [])
+    lineDecorationsRef.current = []
+  }, [])
+
+  const applyLineDecorations = useCallback(() => {
+    const editor = monacoEditorRef.current
+    const ranges = highlightedLineRanges ?? []
+
+    if (ranges.length === 0) {
+      clearLineDecorations()
+      return
+    }
+
+    const model = editor?.getModel()
+    if (!editor || !model) {
+      clearLineDecorations()
+      return
+    }
+
+    const decorations = ranges.map((range) => ({
+      range: {
+        startLineNumber: range.startLine,
+        startColumn: 1,
+        endLineNumber: range.endLine,
+        endColumn: 1,
+      },
+      options: {
+        className: 'code-editor-active-line',
+        isWholeLine: true,
+      },
+    }))
+
+    lineDecorationsRef.current = editor.deltaDecorations(
+      lineDecorationsRef.current,
+      decorations,
+    )
+
+    const visibleRanges = editor.getVisibleRanges()
+    const firstOutsideRange = ranges.find(
+      (range) =>
+        !visibleRanges.some(
+          (visibleRange) =>
+            visibleRange.startLineNumber <= range.endLine &&
+            visibleRange.endLineNumber >= range.startLine,
+        ),
+    )
+
+    if (!firstOutsideRange) return
+
+    const contextStartLine = Math.max(1, firstOutsideRange.startLine - 1)
+    const contextEndLine = Math.min(model.getLineCount(), firstOutsideRange.endLine + 1)
+
+    editor.revealLinesInCenterIfOutsideViewport(contextStartLine, contextEndLine)
+  }, [clearLineDecorations, highlightedLineRanges])
 
   const disposeMonacoProviders = useCallback((owner?: symbol) => {
     const registry = getMonacoProvidersRegistry()
@@ -272,6 +336,7 @@ export function useCodeEditor({
     editor: monaco.editor.IStandaloneCodeEditor,
     monaco: Monaco,
   ) {
+    clearLineDecorations()
     monacoEditorRef.current = editor
 
     const monacoEditorConfiguration = new DeleguaConfiguracaoParaEditorMonaco()
@@ -308,11 +373,24 @@ export function useCodeEditor({
     })
     monaco.editor.setTheme(theme)
     monacoRef.current = monaco
+    applyLineDecorations()
   }
 
   useEffect(() => {
-    return () => disposeMonacoProviders(monacoProvidersOwnerRef.current)
-  }, [disposeMonacoProviders])
+    if (isInitialHighlightEffectRef.current) {
+      isInitialHighlightEffectRef.current = false
+      return
+    }
+
+    applyLineDecorations()
+  }, [applyLineDecorations])
+
+  useEffect(() => {
+    return () => {
+      clearLineDecorations()
+      disposeMonacoProviders(monacoProvidersOwnerRef.current)
+    }
+  }, [clearLineDecorations, disposeMonacoProviders])
 
   return {
     getValue,

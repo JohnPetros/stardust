@@ -1,5 +1,5 @@
 ---
-description: Prompt para resolver pendencias (erros de CI, regressoes do quality gate e conversas nao resolvidas) de um pull request via gh CLI, em loop ate o PR ficar mergeable.
+description: Prompt para resolver pendencias (erros de CI, regressoes do quality ratchet e conversas nao resolvidas) de um pull request via gh CLI, em loop ate o PR ficar mergeable.
 ---
 
 # Prompt: Resolver Pendências de PR
@@ -8,8 +8,9 @@ description: Prompt para resolver pendencias (erros de CI, regressoes do quality
 Atuar como _babysitter_ de um Pull Request: monitorar, diagnosticar e resolver **todas as pendências que impedem o merge**, em loop, até o PR ficar verde e sem conversas pendentes. As pendências são de três tipos:
 
 1. **Erros de CI** — jobs falhando (`codecheck`, `typecheck`, `tests`, `integration-tests`, `build`).
-2. **Regressões do quality gate** — métricas que pioraram em relação ao baseline (job `quality-gate`).
-3. **Conversas de revisão não resolvidas** — comentários de revisores (humanos ou bots como o Copilot).
+2. **Regressões do quality ratchet** — métricas que pioraram em relação ao baseline (job legado `quality-gate`).
+3. **Codex Review e conversas não resolvidas** — ausência de review do Codex
+   para o `HEAD` atual ou comentários bloqueantes de revisores humanos e bots.
 
 Tudo deve ser endereçado respeitando os padrões e a arquitetura do projeto.
 
@@ -44,7 +45,16 @@ Identifique `owner`, `repo` e `pull_number` a partir da URL fornecida. Em seguid
 gh pr view <pull_number> --repo <owner>/<repo> --json title,headRefName,body,files,mergeable,statusCheckRollup
 ```
 
-> **Princípio operacional:** antes de tentar qualquer modo "watch", polling por SHA ou inspeção detalhada de runs, leia primeiro o estado **atual** do PR. Se `statusCheckRollup` já mostrar tudo `COMPLETED` com `SUCCESS`/`SKIPPED`, `mergeable` estiver favorável e não houver threads abertas, encerre sem etapas extras.
+> **Princípio operacional:** antes de tentar qualquer modo "watch", polling por
+> SHA ou inspeção detalhada de runs, leia primeiro o estado **atual** do PR. Só
+> encerre imediatamente quando o CI estiver verde, o PR estiver mergeable, não
+> houver threads abertas e existir Codex Review para o `HEAD` atual.
+
+Registre também o `HEAD` atual:
+
+```bash
+gh pr view <pull_number> --repo <owner>/<repo> --json headRefOid
+```
 
 Faça checkout da branch do PR localmente para poder corrigir e dar push:
 
@@ -87,9 +97,12 @@ gh run view <run_id> --repo <owner>/<repo> --log-failed
 
 Mapeie cada job falho para a causa raiz (lint, tipo, teste unitário, teste de integração, build).
 
-#### 2.2 Regressões do quality gate
+#### 2.2 Regressões do quality ratchet
 
-Quando o job `quality-gate` falhar, tente primeiro obter a regressão pelo próprio resumo/log do run. Nem toda versão do `gh` suporta `--json jobs`, e nem todo run expõe artefatos baixáveis.
+Quando o job `quality-gate` (nome estável para compatibilidade com branch
+protection) falhar, tente primeiro obter a regressão pelo próprio resumo/log do
+run. Nem toda versão do `gh` suporta `--json jobs`, e nem todo run expõe
+artefatos baixáveis.
 
 Fluxo preferencial:
 
@@ -107,15 +120,34 @@ Se o run expuser artefatos úteis, baixe-os:
 gh run download <run_id> --repo <owner>/<repo>
 ```
 
-Se nem o resumo nem os artefatos trouxerem a tabela, **reproduza localmente** o quality gate do workspace afetado para obter a métrica exata:
+Se nem o resumo nem os artefatos trouxerem a tabela, **reproduza localmente** o quality ratchet do workspace afetado para obter a métrica exata:
 
 ```bash
-npm run quality-gate -- --workspace=<workspace>
+npm run quality-ratchet -- --workspace=<workspace>
 ```
 
 Use a tabela ou a saída local como lista de correções.
 
-#### 2.3 Conversas de revisão não resolvidas
+#### 2.3 Codex Review do HEAD atual
+
+Liste os reviews e confirme que existe review do Codex cujo `commit_id`
+corresponde ao `headRefOid` atual:
+
+```bash
+gh api repos/<owner>/<repo>/pulls/<pull_number>/reviews
+```
+
+Se ainda não existir, confirme ou crie o comentário:
+
+```bash
+gh pr comment <pull_number> --repo <owner>/<repo> --body "@codex review"
+```
+
+Aguarde o Codex publicar o review. Não aceite review associado a commit
+anterior e não duplique o comentário enquanto a solicitação atual estiver em
+andamento.
+
+#### 2.4 Conversas de revisão não resolvidas
 
 Liste **somente** as threads não resolvidas e não desatualizadas via GraphQL API:
 
@@ -153,11 +185,14 @@ Classifique **cada pendência** (de qualquer fonte) em uma categoria:
 | **Escalar** | Mudança arquitetural, decisão de design, conflito com Spec/PRD, baseline que precisaria ser afrouxado | Consultar o usuário antes de agir |
 | **Ignorar** | Comentário meramente informativo, já endereçado no código | Pular |
 
-> **Regra de escalada:** Qualquer item que implique mudança de arquitetura, remoção de funcionalidade, conflito com o PRD/Spec, ou **afrouxar o baseline do quality gate**, deve ser **escalado** — nunca resolvido de forma autônoma. Afrouxar o baseline (`--update-baseline` para piorar uma métrica) anula o propósito da catraca.
+> **Regra de escalada:** Qualquer item que implique mudança de arquitetura, remoção de funcionalidade, conflito com o PRD/Spec, ou **afrouxar o baseline do quality ratchet**, deve ser **escalado** — nunca resolvido de forma autônoma. Afrouxar o baseline (`--update-baseline` para piorar uma métrica) anula o propósito da catraca.
 
 Apresente a triagem ao usuário antes de avançar caso haja itens **Escalar**.
 
-> **Regra de eficiência:** se, após a triagem inicial, o PR já estiver com CI verde, sem threads não resolvidas e `mergeable`, pare. Não continue investigando runs antigos nem tentando provar novamente um estado que o PR já mostra.
+> **Regra de eficiência:** se, após a triagem inicial, o PR já estiver com CI
+> verde, Codex Review no `HEAD` atual, sem threads não resolvidas e `mergeable`,
+> pare. Não continue investigando runs antigos nem tentando provar novamente um
+> estado que o PR já mostra.
 
 ---
 
@@ -175,7 +210,7 @@ npm run test:unit -w @stardust/<workspace>
 npm run test:integration -w @stardust/<workspace>
 ```
 
-#### 4.2 Regressões do quality gate
+#### 4.2 Regressões do quality ratchet
 
 Para cada linha da tabela de regressões, aplique a correção correspondente:
 
@@ -189,7 +224,7 @@ Para cada linha da tabela de regressões, aplique a correção correspondente:
 Confirme localmente que zerou as regressões antes de seguir:
 
 ```bash
-npm run quality-gate -- --workspace=<workspace>
+npm run quality-ratchet -- --workspace=<workspace>
 ```
 
 > Nunca rode `--update-baseline` para "resolver" uma regressão: isso piora o baseline. O baseline só é recongelado em melhorias intencionais, e isso é decisão do usuário (item **Escalar**).
@@ -206,6 +241,12 @@ Para cada thread **Corrigir**:
 
 Para cada thread **Escalar**, apresente ao usuário o comentário original, o impacto e as opções, e aguarde a decisão.
 
+Quando o PR estiver associado a uma Spec do SDD, correções que alterem código,
+Contract ou documentação normativa devem reabrir a fase afetada e voltar a
+`implement-plan` ou `implement-spec`. Depois da correção, reexecute os gates e
+Judges invalidados antes de fazer `push`. O fluxo de pendências coordena essa
+reabertura; não substitui Builder ou Judge.
+
 ---
 
 ### 5. Validação Local (obrigatória antes do push)
@@ -216,10 +257,12 @@ Rode, no(s) workspace(s) afetado(s):
 npm run codecheck -w @stardust/<workspace>
 npm run typecheck -w @stardust/<workspace>
 npm run test:unit -w @stardust/<workspace>
-npm run quality-gate -- --workspace=<workspace>
 ```
 
-Corrija qualquer erro antes de prosseguir. Verifique também se as alterações permanecem aderentes ao PRD e à Spec associada ao PR.
+Execute `quality-ratchet` localmente apenas para reproduzir e diagnosticar uma
+falha do job correspondente no CI. Ele não faz parte da validação local padrão.
+Corrija qualquer erro antes de prosseguir. Verifique também se as alterações
+permanecem aderentes ao PRD e à Spec associada ao PR.
 
 Se `npm run test:unit` falhar por problema **preexistente ou ambiental** não relacionado à alteração (por exemplo, infraestrutura local instável), registre isso explicitamente, valide o escopo alterado com testes focados e siga apenas se o CI remoto do PR continuar sendo a fonte de verdade para esse trecho.
 
@@ -252,6 +295,9 @@ git commit -m "<mensagem seguindo o padrao do repo>"
 git push
 ```
 
+Todo `push` invalida a comprovação do Codex Review anterior. Solicite
+`@codex review` para o novo `HEAD` e aguarde o novo parecer.
+
 **Após o push, releia primeiro o estado atual do PR.** Não assuma suporte a flags como `gh pr checks --watch` ou `gh run list --commit`; o prompt deve funcionar mesmo em versões mais limitadas do `gh`.
 
 Fluxo padrão após o push:
@@ -275,10 +321,12 @@ done
 **Só tente ancorar em run ou SHA** se houver evidência concreta de que `gh pr checks` está mostrando um estado stale ou inconsistente. Mesmo nesse caso, use apenas comandos comprovadamente suportados pela versão local do `gh`.
 
 **Repita o ciclo (etapas 2 → 7)** até que:
-- Todos os checks de CI estejam verdes (incluindo `quality-gate`), **e**
+- Todos os checks de CI estejam verdes (incluindo o job legado
+  `quality-gate`, que executa o quality ratchet), **e**
+- Exista Codex Review concluído para o `HEAD` atual, **e**
 - Não haja conversas não resolvidas restantes (exceto as **Escalar** aguardando decisão).
 
-Quando ambas as condições forem satisfeitas, o babysit encerra.
+Quando todas as condições forem satisfeitas, o babysit encerra.
 
 ---
 
@@ -302,7 +350,7 @@ Relate o progresso no formato:
 ### CI corrigido
 - [x] <job> — <causa raiz e correcao>
 
-### Quality gate
+### Quality ratchet
 - [x] <metrica> — baseline <x> / antes <y> / agora <z> — <correcao>
 
 ### Conversas implementadas

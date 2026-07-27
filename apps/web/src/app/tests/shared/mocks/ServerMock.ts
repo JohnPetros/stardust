@@ -43,7 +43,15 @@ export function ServerMock(page: Page): ServerMockController {
   return {
     async register(routes) {
       const response = await page.request.put(SERVER_MOCK_ROUTE, {
-        data: { routes },
+        data: {
+          routes: routes.map((route) => ({
+            ...route,
+            headers: {
+              ...route.headers,
+              'Cache-Control': 'no-store',
+            },
+          })),
+        },
       })
 
       await assertResponseOk(response, 'ServerMock.register')

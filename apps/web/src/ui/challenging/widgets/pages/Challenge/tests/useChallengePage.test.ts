@@ -2,64 +2,136 @@ import { renderHook, waitFor } from '@testing-library/react'
 
 import { Challenge } from '@stardust/core/challenging/entities'
 import { ChallengesFaker } from '@stardust/core/challenging/entities/fakers'
-import {
-  ChallengeCraftsVisibility,
-  ChallengeVote,
-} from '@stardust/core/challenging/structures'
+import { CodePlaybacksFaker } from '@stardust/core/global/structures/fakers'
+import { ChallengeVote } from '@stardust/core/challenging/structures'
+import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 
-import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import { useChallengeNavigationGuard } from '@/ui/challenging/hooks/useChallengeNavigationGuard'
-import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
-import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
-import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
 import { useChallengePage } from '../useChallengePage'
 
+const setActiveContent = jest.fn()
+const setChallenge = jest.fn()
+const setCraftsVislibility = jest.fn()
+const resetStore = jest.fn()
+const goTo = jest.fn()
+let mockCurrentRoute = '/challenging/challenges/example/challenge/solutions/official'
+let mockChallenge: Challenge | null = null
+
 jest.mock('@/ui/challenging/stores/ChallengeStore', () => ({
-  useChallengeStore: jest.fn(),
-}))
-jest.mock('@/ui/challenging/hooks/useChallengeNavigationGuard', () => ({
-  useChallengeNavigationGuard: jest.fn(),
-}))
-jest.mock('@/ui/global/hooks/useNavigationProvider', () => ({
-  useNavigationProvider: jest.fn(),
-}))
-jest.mock('@/ui/global/hooks/useQueryStringParam', () => ({
-  useQueryStringParam: jest.fn(),
-}))
-jest.mock('@/ui/global/hooks/useLocalStorage', () => ({
-  useLocalStorage: jest.fn(),
+  useChallengeStore: jest.fn(() => ({
+    getChallengeSlice: () => ({
+      challenge: mockChallenge,
+      setChallenge,
+    }),
+    getCraftsVisibilitySlice: () => ({
+      craftsVislibility: null,
+      setCraftsVislibility,
+    }),
+    getActiveContentSlice: () => ({
+      setActiveContent,
+    }),
+    getPanelOrderSlice: () => ({
+      panelOrder: [],
+    }),
+    resetPanelsLayout: jest.fn(),
+    resetStore: jest.fn(() => resetStore()),
+  })),
 }))
 
-type Params = Parameters<typeof useChallengePage>[0]
+jest.mock('@/ui/global/hooks/useNavigationProvider', () => ({
+  useNavigationProvider: jest.fn(() => ({
+    currentRoute: mockCurrentRoute,
+    goTo,
+  })),
+}))
+
+jest.mock('@/ui/global/hooks/useQueryStringParam', () => ({
+  useQueryStringParam: jest.fn(() => [null]),
+}))
+
+jest.mock('@/ui/global/hooks/useLocalStorage', () => ({
+  useLocalStorage: jest.fn(() => ({
+    remove: jest.fn(),
+    get: jest.fn(),
+  })),
+}))
+
+jest.mock('@/ui/challenging/hooks/useChallengeNavigationGuard', () => ({
+  useChallengeNavigationGuard: jest.fn(() => ({
+    requestNavigation: jest.fn(),
+    confirmNavigation: jest.fn(),
+    cancelNavigation: jest.fn(),
+  })),
+}))
 
 describe('useChallengePage', () => {
-  const setChallenge = jest.fn()
-  const setActiveContent = jest.fn()
-  const setCraftsVislibility = jest.fn()
-  const resetPanelsLayout = jest.fn()
-  const resetStore = jest.fn()
-  const goTo = jest.fn()
-  const requestNavigation = jest.fn()
-  const confirmNavigation = jest.fn()
-  const cancelNavigation = jest.fn()
-  const removeLocalStorageItem = jest.fn()
-
-  const craftsVislibility = ChallengeCraftsVisibility.create({
-    canShowComments: true,
-    canShowSolutions: false,
-  })
-
   const challengeDto = ChallengesFaker.fakeDto({
-    id: 'c07445ed-ee93-48dc-a84f-7d4f5e2f6f4d',
-    title: 'Find Sum',
-    slug: 'find-sum',
-    description: 'Current challenge description',
-    initialCode: 'function sum(a, b) { return a + b }',
-    difficultyLevel: 'easy',
-    categories: [],
+    slug: 'example',
+    officialSolution: null,
   })
 
-  const Hook = (params?: Partial<Params>) =>
+  beforeEach(() => {
+    jest.clearAllMocks()
+    mockCurrentRoute = '/challenging/challenges/example/challenge/solutions/official'
+    mockChallenge = null
+  })
+
+  it('hydrates again when only officialSolution changes', () => {
+    mockChallenge = null
+    const { rerender } = renderHook(
+      ({ officialSolution }: { officialSolution: ChallengeDto['officialSolution'] }) =>
+        useChallengePage({
+          challengeDto: { ...challengeDto, officialSolution },
+          userChallengeVote: 'none',
+          previousChallengeSlug: null,
+          nextChallengeSlug: null,
+          user: null,
+          isAccountAuthenticated: false,
+        }),
+      {
+        initialProps: {
+          officialSolution: null as ChallengeDto['officialSolution'],
+        },
+      },
+    )
+
+    expect(setChallenge).toHaveBeenCalledTimes(1)
+
+    rerender({ officialSolution: CodePlaybacksFaker.fakeDto() })
+
+    expect(setChallenge).toHaveBeenCalledTimes(2)
+  })
+
+  it('keeps the solutions tab active for the official and user solution URLs', () => {
+    mockChallenge = Challenge.create(challengeDto)
+
+    const { rerender } = renderHook(() =>
+      useChallengePage({
+        challengeDto,
+        userChallengeVote: 'none',
+        previousChallengeSlug: null,
+        nextChallengeSlug: null,
+        user: null,
+        isAccountAuthenticated: false,
+      }),
+    )
+
+    expect(setActiveContent).toHaveBeenCalledWith('solutions')
+
+    mockCurrentRoute = '/challenging/challenges/example/challenge/solutions/my-solution'
+    rerender()
+
+    expect(setActiveContent).toHaveBeenCalledWith('solutions')
+  })
+
+  it('rehydrates challenge store when payload is stale, including same slug updates', async () => {
+    const staleChallenge = Challenge.create({
+      ...challengeDto,
+      description: 'Stale description',
+      initialCode: 'function sum() { return 0 }',
+    })
+    staleChallenge.userVote = ChallengeVote.create('none')
+    mockChallenge = staleChallenge
+
     renderHook(() =>
       useChallengePage({
         challengeDto,
@@ -68,72 +140,8 @@ describe('useChallengePage', () => {
         nextChallengeSlug: null,
         user: null,
         isAccountAuthenticated: false,
-        ...params,
       }),
     )
-
-  function setupStore(challenge: Challenge | null) {
-    jest.mocked(useChallengeStore).mockReturnValue({
-      getChallengeSlice: () => ({
-        challenge,
-        setChallenge,
-      }),
-      getCraftsVisibilitySlice: () => ({
-        craftsVislibility,
-        setCraftsVislibility,
-      }),
-      getActiveContentSlice: () => ({
-        activeContent: 'description',
-        setActiveContent,
-      }),
-      getPanelOrderSlice: () => ({
-        panelOrder: ['tabs', 'code_editor', 'assistant'],
-      }),
-      resetPanelsLayout,
-      resetStore,
-    } as unknown as ReturnType<typeof useChallengeStore>)
-  }
-
-  beforeEach(() => {
-    jest.clearAllMocks()
-
-    setupStore(null)
-
-    jest.mocked(useNavigationProvider).mockReturnValue({
-      goTo,
-      goBack: jest.fn(),
-      refresh: jest.fn(),
-      openExternal: jest.fn(),
-      currentRoute: '/challenging/challenges/find-sum',
-    } as ReturnType<typeof useNavigationProvider>)
-
-    jest.mocked(useQueryStringParam).mockReturnValue(['', jest.fn()])
-
-    jest.mocked(useLocalStorage).mockReturnValue({
-      get: jest.fn(),
-      set: jest.fn(),
-      has: jest.fn(),
-      remove: removeLocalStorageItem,
-    } as ReturnType<typeof useLocalStorage>)
-
-    jest.mocked(useChallengeNavigationGuard).mockReturnValue({
-      requestNavigation,
-      confirmNavigation,
-      cancelNavigation,
-      isDirty: jest.fn().mockReturnValue(false),
-    })
-  })
-
-  it('should rehydrate challenge store when payload is stale, including same slug updates', async () => {
-    const staleChallenge = Challenge.create({
-      ...challengeDto,
-      description: 'Stale description',
-      initialCode: 'function sum() { return 0 }',
-    })
-    staleChallenge.userVote = ChallengeVote.create('none')
-    setupStore(staleChallenge)
-
-    Hook()
 
     await waitFor(() => expect(setChallenge).toHaveBeenCalledTimes(1))
 
@@ -144,13 +152,65 @@ describe('useChallengePage', () => {
     expect(hydratedChallenge.userVote.value).toBe('upvote')
   })
 
-  it('should preserve client-side challenge state when payload is stable', () => {
+  it('preserves client-side challenge state when payload is stable', () => {
     const stableChallenge = Challenge.create(challengeDto)
     stableChallenge.userVote = ChallengeVote.create('upvote')
-    setupStore(stableChallenge)
+    mockChallenge = stableChallenge
 
-    Hook()
+    renderHook(() =>
+      useChallengePage({
+        challengeDto,
+        userChallengeVote: 'upvote',
+        previousChallengeSlug: null,
+        nextChallengeSlug: null,
+        user: null,
+        isAccountAuthenticated: false,
+      }),
+    )
 
     expect(setChallenge).not.toHaveBeenCalled()
+  })
+
+  it('resets only when the page unmounts, not when it rerenders', () => {
+    const { rerender, unmount } = renderHook(() =>
+      useChallengePage({
+        challengeDto,
+        userChallengeVote: 'none',
+        previousChallengeSlug: null,
+        nextChallengeSlug: null,
+        user: null,
+        isAccountAuthenticated: false,
+      }),
+    )
+
+    rerender()
+
+    expect(resetStore).not.toHaveBeenCalled()
+
+    unmount()
+
+    expect(resetStore).toHaveBeenCalledTimes(1)
+  })
+
+  it('keeps resetting when the user leaves through the back button', () => {
+    mockChallenge = Challenge.create(challengeDto)
+
+    const { result, unmount } = renderHook(() =>
+      useChallengePage({
+        challengeDto,
+        userChallengeVote: 'none',
+        previousChallengeSlug: null,
+        nextChallengeSlug: null,
+        user: null,
+        isAccountAuthenticated: false,
+      }),
+    )
+
+    result.current.handleBackButtonClick()
+
+    expect(resetStore).toHaveBeenCalledTimes(1)
+    expect(goTo).toHaveBeenCalledTimes(1)
+
+    unmount()
   })
 })

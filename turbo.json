@@ -33,7 +33,7 @@
       "cache": false
     },
     "test:unit": {
-      "persistent": true,
+      "persistent": false,
       "cache": false
     },
     "test:integration": {

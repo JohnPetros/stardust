@@ -271,8 +271,11 @@ gh pr create \
 Após criar o PR, adicione um comentário para solicitar code review do Codex:
 
 ```
-gh pr comment <numero-do-pr> --body "@code review"
+gh pr comment <numero-do-pr> --body "@codex review"
 ```
+
+Registre o SHA atual do PR. O review só é válido para a entrega quando houver
+uma revisão do Codex associada a esse `HEAD`.
 
 ---
 
