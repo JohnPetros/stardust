@@ -1,7 +1,7 @@
 ---
 title: Plano da solução oficial de desafio com Code Playback
 spec: documentation/features/challenging/challenge-solutions/specs/oficial-solution-spec.md
-spec_revision: bc510ea554fe929dc3f7056564fdaefa755a129b
+spec_revision: f4c34650f802fcb26b40d840ca72427da8e1a830
 status: completed
 current_task: null
 current_phase: null
@@ -13,12 +13,12 @@ last_updated_at: 2026-07-27
 
 ## Estado Atual
 
-- **Tarefa ativa:** nenhuma — CI-03 corrigida e F3 aceita pelo Judge independente.
-- **Estado:** `awaiting_judgment`
-- **Última ação:** o segundo Judge F3 aceitou a fase, confirmou JI-F3-01 resolvido e validou Playwright 5/5.
-- **Próxima ação:** o Conclusion Gate passou; acionar o Judge de conclusão independente antes do fechamento.
-- **Estado das fases:** F1 `accepted`; F2 `accepted`; F3 `accepted` após a reavaliação de JI-F3-01.
-- **Bloqueios:** nenhum ativo.
+- **Tarefa ativa:** nenhuma; CI-04 concluída.
+- **Estado:** `completed`
+- **Última ação:** Judge de conclusão aceitou a integração após os quality-ratchets de core/web passarem com o build do LSP.
+- **Próxima ação:** nenhuma no escopo da Spec; aguardar apenas CI remoto e merge do PR.
+- **Estado das fases:** F1 `accepted`; F2 `accepted`; F3 `accepted` após a correção do CI.
+- **Bloqueios:** nenhum.
 - **Workspaces afetados:** `@stardust/core`, `@stardust/server`, `@stardust/web`
 
 ## Pendências
@@ -484,7 +484,7 @@ last_updated_at: 2026-07-27
   - **Camada:** CI/workflows
   - **Paths permitidos:** `.github/workflows/core-package-ci.yaml`; `.github/workflows/web-app-ci.yaml`
   - **Sensores:** build LSP, core unit 171/611, web unit 102/426 e Implementation Gates core/web passaram.
-  - **Avaliação:** pending — Judge integrado da F3 necessário para confirmar a integração alterada.
+  - **Avaliação:** `accepted` — Judge independente da F3 confirmou a integração dos quality gates e a ausência de regressões.
   - **Findings bloqueantes:** nenhum.
 
 - [x] **CI-03** — Estabilizar a action de reset no ciclo de vida da página
@@ -498,12 +498,33 @@ last_updated_at: 2026-07-27
   - **Avaliação:** pending — novo Judge integrado da F3 necessário após JI-F3-01.
   - **Findings bloqueantes:** nenhum; JI-F3-01 corrigido.
 
+- [x] **CI-04** — Preparar LSP nos quality gates de core e web
+  - **Estado:** `verified`
+  - **Depende de:** CI-02
+  - **Critérios da Spec:** AR-01, AR-02
+  - **Resultado observável:** os jobs de quality-ratchet de core e web constroem `@stardust/lsp` após `npm ci` e antes do Jest com cobertura.
+  - **Camada:** CI/workflows
+  - **Paths permitidos:** `.github/workflows/core-package-ci.yaml`; `.github/workflows/web-app-ci.yaml`
+  - **Finding histórico:** quality-ratchet core falhou em checkout limpo com `Cannot find module '@stardust/lsp'`.
+  - **Sensores:** build LSP; quality-ratchet core 12 warnings e cobertura acima do baseline; quality-ratchet web 156 warnings contra baseline 163; Implementation Gates core/web passaram.
+  - **Avaliação:** pending — Judge integrado da F3 necessário para confirmar a integração alterada.
+  - **Findings bloqueantes:** nenhum; nenhum baseline foi atualizado.
+
 ### 2026-07-27 — F3 — Judge integrado após JI-F3-01
 
 - **Estado:** `accepted`
 - **Ação:** Judge independente reavaliou F3 após a estabilização de `resetStore` e a repetição dos sensores afetados.
 - **Sensores:** typecheck/codecheck web, hook 6/6, web unit 102/428, quality-ratchet 156 contra baseline 163, Implementation Gate web e Playwright 5/5 passaram.
 - **Avaliação:** accepted — AC-02–AC-16, AR-01, AR-02 e AR-04 confirmados; JI-F3-01 resolvido; F1/F2 não afetadas.
+- **Findings bloqueantes:** nenhum.
+- **Próxima ação:** executar o Conclusion Gate e o Judge de conclusão.
+
+### 2026-07-27 — F3 — Judge integrado após CI-04
+
+- **Estado:** `accepted`
+- **Ação:** Judge independente reavaliou F3 após a preparação do LSP nos quality-ratchets de core e web.
+- **Sensores:** build LSP, quality-ratchets core/web, typecheck/codecheck core/web e Implementation Gates independentes passaram; Playwright 5/5 e baselines inalterados.
+- **Avaliação:** accepted — AC-02–AC-16, AR-01, AR-02 e AR-04 confirmados; CI-04 verificada; nenhum finding bloqueante.
 - **Findings bloqueantes:** nenhum.
 - **Próxima ação:** executar o Conclusion Gate e o Judge de conclusão.
 
@@ -514,6 +535,14 @@ last_updated_at: 2026-07-27
 - **Sensores:** scope-check, codecheck global, typecheck global, unit global (core 171/611, server 161/300, web 102/428, harness conforme evidência), architecture-check, migration-check e contract-check passaram; integrações foram registradas como `skipped` pelo contract-check conforme a regra vigente.
 - **Avaliação:** nenhum finding bloqueante; a evidência oficial de quality-ratchet permanece no CI do PR.
 - **Próxima ação:** acionar o Judge de conclusão independente.
+
+### 2026-07-27 — CI-04 — Implementation Gates após correção dos quality-ratchets
+
+- **Estado:** `passed`
+- **Ação:** os jobs de quality-ratchet de core e web passaram a construir `@stardust/lsp` após `npm ci` e antes do Jest com cobertura.
+- **Sensores:** build LSP, quality-ratchet core/web, typecheck/codecheck e Implementation Gates independentes de core/web passaram; baselines permaneceram inalterados.
+- **Avaliação:** pending — executar o Conclusion Gate e o Judge de conclusão.
+- **Findings bloqueantes:** nenhum.
 
 ## Amendments da Spec
 
@@ -983,11 +1012,11 @@ last_updated_at: 2026-07-27
 ## Conclusão atual
 
 - **Estado:** completed
-- **Tarefas verificadas:** 16/16 — 13 funcionais e 3 corretivas do CI.
+- **Tarefas verificadas:** 17/17 — 13 funcionais e 4 corretivas do CI.
 - **Findings bloqueantes:** nenhum; JC-01–JC-04 e JI-F3-01 resolvidos.
-- **Sensores finais:** Conclusion Gate, typecheck/codecheck/unit globais, integração server 61/183, Playwright 5/5, builds core/server/web, quality-ratchet server sem atualização e quality-ratchet web 156 contra baseline 163.
+- **Sensores finais:** Implementation Gates core/web, typecheck/codecheck/unit globais, integração server 61/183, Playwright 5/5, builds core/server/web, quality-ratchet core/web sem atualização de baseline; core manteve warnings/cobertura dentro do ratchet e web ficou em 156 contra baseline 163.
 - **Judge das fases:** F1, F2 e F3 `accepted`.
-- **Judge da conclusão:** `accepted` em 2026-07-27.
+- **Judge da conclusão:** `accepted` em 2026-07-27 após CI-04.
 - **Advisories:** `.tmp/stardust.wiki` permanece como deleção preexistente fora do escopo funcional; `.env.production` local não possui `NEXT_PUBLIC_DISCORD_CHANNEL_URL`, pendência ambiental preexistente.
 
 ### 2026-07-27 — Conclusão — Judge Conclusion após correções de CI
@@ -996,4 +1025,12 @@ last_updated_at: 2026-07-27
 - **Ação:** Judge independente avaliou novamente a integração completa após a correção do CI e de JI-F3-01.
 - **Sensores:** REQ-01–REQ-11, AC-01–AC-16 e AR-01–AR-05 aprovados; Conclusion Gate passou; F1/F2/F3 aceitas; baselines inalterados; nenhum finding bloqueante.
 - **Avaliação:** `accepted` — Spec e Plan autorizados para fechamento documental; o novo HEAD ainda precisa passar CI remoto antes do merge.
-- **Próxima ação:** commitar, fazer push, solicitar novo Codex Review e aguardar CI completo/mergeable.
+- **Próxima ação:** nenhuma documental; commitar, fazer push, solicitar novo Codex Review e aguardar CI completo/mergeable.
+
+### 2026-07-27 — Conclusão — Judge Conclusion após CI-04
+
+- **Estado:** `accepted`
+- **Ação:** Judge independente reavaliou a integração completa após a correção dos quality-ratchets de core e web.
+- **Sensores:** REQ-01–REQ-11, AC-01–AC-16 e AR-01–AR-05 aprovados; Conclusion Gate passou; core 171/611, server 161/300, web 102/428, integração server 61/183, Playwright 5/5 e quality-ratchets core/web aprovados sem atualizar baseline.
+- **Avaliação:** `accepted` — 17/17 tarefas verificadas, F1/F2/F3 aceitas, CI-04 integrada corretamente e nenhum finding bloqueante.
+- **Próxima ação:** nenhuma; Spec e Plan fechados documentalmente. O CI remoto deve ser reexecutado após o push antes do merge.

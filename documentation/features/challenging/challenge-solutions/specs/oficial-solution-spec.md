@@ -4,8 +4,8 @@ prd: https://github.com/JohnPetros/stardust/milestone/40
 issue: https://github.com/JohnPetros/stardust/issues/495
 apps: server, web
 status: closed
-last_updated_at: 2026-07-27
 closed_at: 2026-07-27
+last_updated_at: 2026-07-27
 ---
 
 # Parte I — Contract
