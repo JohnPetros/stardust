@@ -15,10 +15,14 @@ type ContractCriterion = {
   requirements: string[]
 }
 
-type ContractEvidence = {
+export type ContractEvidence = {
   criterion: string
   command: string[]
   cwd?: string
+}
+
+export function isIntegrationEvidence(evidence: ContractEvidence): boolean {
+  return evidence.command.includes('test:integration')
 }
 
 type ContractOptions = {
@@ -55,7 +59,16 @@ export class ContractCheckCommand implements CliCommand {
 
       const findings: CheckFinding[] = []
       const executed = []
+      const skipped = []
       for (const evidence of inspection.evidence) {
+        if (isIntegrationEvidence(evidence)) {
+          skipped.push({
+            criterion: evidence.criterion,
+            command: evidence.command,
+            reason: 'integration fora do contract-check',
+          })
+          continue
+        }
         const result = await runCommand(evidence.command, { cwd: evidence.cwd })
         executed.push({
           criterion: evidence.criterion,
@@ -75,7 +88,7 @@ export class ContractCheckCommand implements CliCommand {
         ...inspection.result,
         passed: findings.length === 0,
         findings,
-        evidence: { ...inspection.result.evidence, executed },
+        evidence: { ...inspection.result.evidence, executed, skipped },
       })
     } catch (error) {
       printResult(errorResult('contract-check', error))

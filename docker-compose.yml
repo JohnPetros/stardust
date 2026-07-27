@@ -1,4 +1,151 @@
 services:
+  # The application-facing Supabase services used by server integration tests.
+  # Postgres and the gateway below are infrastructure required by these services.
+  supabase-db:
+    image: public.ecr.aws/supabase/postgres:15.8.1.085
+    container_name: stardust-supabase-db
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "54322:5432"
+    volumes:
+      - stardust-supabase-db-data:/var/lib/postgresql/data
+      - ./apps/server/supabase/schemas/schema.sql:/docker-entrypoint-initdb.d/zz-stardust-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  supabase-auth:
+    image: public.ecr.aws/supabase/gotrue:v2.193.0
+    container_name: stardust-supabase-auth
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    environment:
+      API_EXTERNAL_URL: http://127.0.0.1:54321/auth/v1
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:postgres@supabase-db:5432/postgres
+      GOTRUE_SITE_URL: http://127.0.0.1:3000
+      GOTRUE_URI_ALLOW_LIST: https://127.0.0.1:3000
+      GOTRUE_DISABLE_SIGNUP: "false"
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: 3600
+      GOTRUE_JWT_SECRET: stardust-local-supabase-jwt-secret-32
+      GOTRUE_JWT_ISSUER: http://127.0.0.1:54321/auth/v1
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
+      GOTRUE_MAILER_AUTOCONFIRM: "true"
+      GOTRUE_EXTERNAL_PHONE_ENABLED: "false"
+      GOTRUE_SMTP_HOST: supabase-mailpit
+      GOTRUE_SMTP_PORT: 1025
+      GOTRUE_PASSWORD_MIN_LENGTH: 6
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--tries=1", "http://localhost:9999/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  supabase-public:
+    image: public.ecr.aws/supabase/postgrest:v12.2.3
+    container_name: stardust-supabase-public
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    environment:
+      PGRST_DB_URI: postgres://authenticator:postgres@supabase-db:5432/postgres
+      PGRST_DB_SCHEMAS: public,graphql_public
+      PGRST_DB_EXTRA_SEARCH_PATH: public,extensions
+      PGRST_DB_MAX_ROWS: 1000
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: stardust-local-supabase-jwt-secret-32
+      PGRST_ADMIN_SERVER_PORT: 3001
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider --tries=1 http://localhost:3000/" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  supabase-storage:
+    image: public.ecr.aws/supabase/storage-api:v1.65.1
+    container_name: stardust-supabase-storage
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+      supabase-public:
+        condition: service_healthy
+    environment:
+      ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzAwMDAwMDAwLCJleHAiOjQxMDI0NDQ4MDB9.LvKXfaeuhDUV4hmIBNQfWmTdU8ZeziGlTCYXb3XFsxo
+      SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaXNzIjoic3VwYWJhc2UiLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6NDEwMjQ0NDgwMH0.l4Lja49wVSUfM84X5Bd-uBNu6JKc5D_CPejiS62CXP4
+      AUTH_JWT_SECRET: stardust-local-supabase-jwt-secret-32
+      DATABASE_URL: postgres://supabase_storage_admin:postgres@supabase-db:5432/postgres
+      POSTGREST_URL: http://supabase-public:3000
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /mnt
+      FILE_SIZE_LIMIT: 52428800
+      TENANT_ID: stub
+      GLOBAL_S3_BUCKET: stub
+      ENABLE_IMAGE_TRANSFORMATION: "false"
+      S3_PROTOCOL_ENABLED: "false"
+    volumes:
+      - stardust-supabase-storage-data:/mnt
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--tries=1", "http://localhost:5000/status"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  supabase-realtime:
+    image: public.ecr.aws/supabase/realtime:v2.112.1
+    container_name: stardust-supabase-realtime
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    environment:
+      PORT: 4000
+      DB_HOST: supabase-db
+      DB_PORT: 5432
+      DB_USER: supabase_admin
+      DB_PASSWORD: postgres
+      DB_NAME: postgres
+      DB_AFTER_CONNECT_QUERY: SET search_path TO _realtime
+      DB_ENC_KEY: stardust-local-realtime-key
+      API_JWT_SECRET: stardust-local-supabase-jwt-secret-32
+      SECRET_KEY_BASE: stardust-local-realtime-secret-base
+      METRICS_JWT_SECRET: stardust-local-supabase-jwt-secret-32
+      APP_NAME: realtime
+      SEED_SELF_HOST: "true"
+      RUN_JANITOR: "true"
+
+  # Supabase exposes Auth, PostgREST, Storage and Realtime behind one API URL.
+  supabase-gateway:
+    image: public.ecr.aws/supabase/kong:2.8.1
+    container_name: stardust-supabase-gateway
+    depends_on:
+      supabase-auth:
+        condition: service_healthy
+      supabase-public:
+        condition: service_healthy
+      supabase-storage:
+        condition: service_healthy
+      supabase-realtime:
+        condition: service_started
+    ports:
+      - "54321:8000"
+    configs:
+      - source: stardust-supabase-kong
+        target: /home/kong/kong.yml
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
+      KONG_DNS_ORDER: LAST,A,CNAME
+      KONG_PLUGINS: request-transformer,cors
+
   inngest:
     image: inngest/inngest:v1.37.0
     container_name: stardust-inngest
@@ -19,3 +166,46 @@ services:
 
 volumes:
   stardust-redis-data:
+  stardust-supabase-db-data:
+  stardust-supabase-storage-data:
+
+configs:
+  stardust-supabase-kong:
+    content: |
+      _format_version: "1.1"
+      services:
+        - name: auth
+          url: http://supabase-auth:9999/
+          routes:
+            - name: auth
+              paths:
+                - /auth/v1/
+              strip_path: true
+          plugins:
+            - name: cors
+        - name: public
+          url: http://supabase-public:3000/
+          routes:
+            - name: public
+              paths:
+                - /rest/v1/
+              strip_path: true
+          plugins:
+            - name: cors
+        - name: storage
+          url: http://supabase-storage:5000/
+          routes:
+            - name: storage
+              paths:
+                - /storage/v1/
+              strip_path: true
+          plugins:
+            - name: cors
+        - name: realtime
+          url: http://supabase-realtime:4000/socket/
+          protocol: ws
+          routes:
+            - name: realtime
+              paths:
+                - /realtime/v1/
+              strip_path: true

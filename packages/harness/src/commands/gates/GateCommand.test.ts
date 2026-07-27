@@ -22,7 +22,8 @@ describe('harness gate runner', () => {
       spec: 'documentation/features/example/specs/example-spec.md',
       base: 'HEAD',
       allowedPath: ['apps/server/**'],
-      workspace: ['server'],
+      package: ['@stardust/server'],
+      testPath: [],
       runtimeTimeoutMs: '30000',
       extraCommandJson: [],
     })
@@ -31,14 +32,75 @@ describe('harness gate runner', () => {
       steps.map((step) => step.name),
       [
         'scope-check',
-        'codecheck',
-        'typecheck',
-        'test:unit',
-        'quality-ratchet:server',
+        'codecheck:@stardust/server',
+        'typecheck:@stardust/server',
+        'test:unit:@stardust/server',
         'architecture-check',
         'migration-check',
         'contract-check',
       ],
+    )
+  })
+
+  it('direciona codecheck, typecheck e testes para o pacote informado', () => {
+    const steps = new ImplementationGateCommand().buildSteps({
+      spec: 'documentation/features/example/specs/example-spec.md',
+      base: 'HEAD',
+      allowedPath: ['apps/web/**'],
+      package: ['@stardust/web'],
+      testPath: ['src/example/tests/example.test.ts'],
+      runtimeTimeoutMs: '30000',
+      extraCommandJson: [],
+    })
+
+    assert.deepEqual(
+      steps.slice(1, 4).map((step) => step.command),
+      [
+        ['npm', 'run', 'codecheck', '--workspace', '@stardust/web'],
+        ['npm', 'run', 'typecheck', '--workspace', '@stardust/web'],
+        [
+          'npm',
+          'run',
+          'test:unit',
+          '--workspace',
+          '@stardust/web',
+          '--',
+          '--runTestsByPath',
+          'src/example/tests/example.test.ts',
+        ],
+      ],
+    )
+  })
+
+  it('exige pacote quando recebe teste direcionado', () => {
+    assert.throws(
+      () =>
+        new ImplementationGateCommand().buildSteps({
+          spec: 'documentation/features/example/specs/example-spec.md',
+          base: 'HEAD',
+          allowedPath: ['apps/web/**'],
+          package: [],
+          testPath: ['src/example.test.ts'],
+          runtimeTimeoutMs: '30000',
+          extraCommandJson: [],
+        }),
+      /--package/,
+    )
+  })
+
+  it('exige pacote em qualquer Implementation Gate', () => {
+    assert.throws(
+      () =>
+        new ImplementationGateCommand().buildSteps({
+          spec: 'documentation/features/example/specs/example-spec.md',
+          base: 'HEAD',
+          allowedPath: ['apps/server/**'],
+          package: [],
+          testPath: [],
+          runtimeTimeoutMs: '30000',
+          extraCommandJson: [],
+        }),
+      /Implementation Gate exige ao menos um --package/,
     )
   })
 
@@ -49,7 +111,8 @@ describe('harness gate runner', () => {
           spec: 'documentation/features/example/specs/example-spec.md',
           base: 'HEAD',
           allowedPath: [],
-          workspace: [],
+          package: [],
+          testPath: [],
           runtimeTimeoutMs: '30000',
           extraCommandJson: [],
         }),

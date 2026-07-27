@@ -9,7 +9,7 @@ export class ImplementationGateCommand extends GateCommand<CodeValidationOptions
     const command = parent
       .command('implementation')
       .description('Executa sensores obrigatórios durante a implementação')
-    this.registerCodeValidationOptions(command)
+    this.registerCodeValidationOptions(command, true)
     command.action((options: CodeValidationOptions) => this.run(options))
   }
 

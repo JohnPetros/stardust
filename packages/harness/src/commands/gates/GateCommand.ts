@@ -31,7 +31,8 @@ export type CodeValidationOptions = {
   spec: string
   base: string
   allowedPath: string[]
-  workspace: string[]
+  package: string[]
+  testPath: string[]
   deadCodeConfig?: string
   deadCodeCommandJson?: string
   runtimeUrl?: string
@@ -88,8 +89,24 @@ export abstract class GateCommand<Options> implements CliCommand {
     }
   }
 
-  protected registerCodeValidationOptions(command: CommanderCommand): void {
-    command
+  protected registerCodeValidationOptions(
+    command: CommanderCommand,
+    requirePackage = false,
+  ): void {
+    const packageOption = requirePackage
+      ? command.requiredOption(
+          '--package <name>',
+          'Pacote npm alvo dos sensores; pode ser repetido',
+          collectOptionValues,
+        )
+      : command.option(
+          '--package <name>',
+          'Pacote npm alvo dos sensores; pode ser repetido',
+          collectOptionValues,
+          [],
+        )
+
+    packageOption
       .requiredOption('--spec <path>', 'Caminho da Spec')
       .requiredOption('--base <ref>', 'Commit ou referência base')
       .option(
@@ -99,8 +116,8 @@ export abstract class GateCommand<Options> implements CliCommand {
         [],
       )
       .option(
-        '--workspace <name>',
-        'Workspace do quality ratchet; pode ser repetido',
+        '--test-path <path>',
+        'Teste relativo ao pacote alvo; pode ser repetido',
         collectOptionValues,
         [],
       )
@@ -124,6 +141,12 @@ export abstract class GateCommand<Options> implements CliCommand {
     if (options.allowedPath.length === 0) {
       throw new Error('Implementation/Conclusion Gate exige ao menos um --allowed-path')
     }
+    if (this.stage === 'implementation' && options.package.length === 0) {
+      throw new Error('Implementation Gate exige ao menos um --package')
+    }
+    if (options.testPath.length > 0 && options.package.length === 0) {
+      throw new Error('Informe ao menos um --package ao usar --test-path')
+    }
 
     const steps: GateStep[] = [
       this.checkStep('scope-check', 'scope', [
@@ -131,16 +154,26 @@ export abstract class GateCommand<Options> implements CliCommand {
         options.base,
         ...options.allowedPath.flatMap((allowedPath) => ['--allowed-path', allowedPath]),
       ]),
-      this.npmStep('codecheck'),
-      this.npmStep('typecheck'),
-      this.npmStep('test:unit'),
     ]
 
-    for (const workspace of options.workspace) {
-      steps.push({
-        ...this.npmStep('quality-ratchet', [`--workspace=${workspace}`]),
-        name: `quality-ratchet:${workspace}`,
-      })
+    if (options.package.length === 0) {
+      steps.push(
+        this.npmStep('codecheck'),
+        this.npmStep('typecheck'),
+        this.npmStep('test:unit'),
+      )
+    } else {
+      for (const packageName of options.package) {
+        steps.push(
+          this.npmWorkspaceStep('codecheck', packageName),
+          this.npmWorkspaceStep('typecheck', packageName),
+          this.npmWorkspaceStep('test:unit', packageName, [
+            ...(options.testPath.length > 0
+              ? ['--runTestsByPath', ...options.testPath]
+              : []),
+          ]),
+        )
+      }
     }
 
     steps.push(this.checkStep('architecture-check', 'architecture'))
@@ -216,6 +249,25 @@ export abstract class GateCommand<Options> implements CliCommand {
     return {
       name: script,
       command: ['npm', 'run', script, ...(args.length > 0 ? ['--', ...args] : [])],
+      required: true,
+    }
+  }
+
+  protected npmWorkspaceStep(
+    script: string,
+    packageName: string,
+    args: string[] = [],
+  ): GateStep {
+    return {
+      name: `${script}:${packageName}`,
+      command: [
+        'npm',
+        'run',
+        script,
+        '--workspace',
+        packageName,
+        ...(args.length > 0 ? ['--', ...args] : []),
+      ],
       required: true,
     }
   }

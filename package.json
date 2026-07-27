@@ -33,7 +33,7 @@
     "build:web": "turbo build --filter=@stardust/web",
     "build:core": "turbo build --filter=@stardust/core",
     "test": "npm run test:unit",
-    "test:unit": "turbo test:unit --concurrency=1",
+    "test:unit": "turbo test:unit",
     "test:integration": "turbo test:integration --filter=@stardust/server",
     "test:server": "turbo test:unit --filter=@stardust/server",
     "test:studio": "turbo test:unit --filter=@stardust/studio",

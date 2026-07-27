@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { ContractCheckCommand } from './ContractCheckCommand'
+import { ContractCheckCommand, isIntegrationEvidence } from './ContractCheckCommand'
 
 test('contract-check validates traceability and explicit command evidence', () => {
   const content = `# Spec
@@ -22,4 +22,21 @@ A implementação referencia AC-01 e pode mencionar AC-99 sem redefinir o Contra
 
   assert.equal(inspection.result.passed, true)
   assert.deepEqual(inspection.evidence[0]?.command, ['node', '--version'])
+})
+
+test('contract-check não executa evidências de integração', () => {
+  assert.equal(
+    isIntegrationEvidence({
+      criterion: 'AR-03',
+      command: ['npm', 'run', 'test:integration', '-w', '@stardust/server'],
+    }),
+    true,
+  )
+  assert.equal(
+    isIntegrationEvidence({
+      criterion: 'AC-01',
+      command: ['npm', 'run', 'test:unit', '-w', '@stardust/core'],
+    }),
+    false,
+  )
 })
