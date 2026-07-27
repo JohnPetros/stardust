@@ -80,6 +80,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build LSP package
+        run: npm run build -w @stardust/lsp
+
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v3
         with:
@@ -150,6 +153,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Build LSP package
+        run: npm run build -w @stardust/lsp
 
       # A catraca roda a suíte unitária (mocks) para medir cobertura. Não sobe
       # Supabase, mas alguns testes (ai tools) leem env no import.
