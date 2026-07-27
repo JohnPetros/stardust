@@ -102,6 +102,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build LSP package
+        run: npm run build -w @stardust/lsp
+
       - name: Run quality ratchet
         env:
           QUALITY_RATCHET_REPORT_FILE: quality-ratchet-report.md
