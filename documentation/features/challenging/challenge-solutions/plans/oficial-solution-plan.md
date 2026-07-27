@@ -13,11 +13,11 @@ last_updated_at: 2026-07-27
 
 ## Estado Atual
 
-- **Tarefa ativa:** nenhuma; CI-04 concluída.
+- **Tarefa ativa:** CI-05 — preparar LSP nos jobs de testes e quality ratchet do server
 - **Estado:** `completed`
-- **Última ação:** Judge de conclusão aceitou a integração após os quality-ratchets de core/web passarem com o build do LSP.
-- **Próxima ação:** nenhuma no escopo da Spec; aguardar apenas CI remoto e merge do PR.
-- **Estado das fases:** F1 `accepted`; F2 `accepted`; F3 `accepted` após a correção do CI.
+- **Última ação:** Builder adicionou o build de `@stardust/lsp` aos jobs Tests e Quality ratchet do server.
+- **Próxima ação:** nenhuma no escopo da Spec; aguardar CI remoto e merge do PR.
+- **Estado das fases:** F1 `accepted`; F2 `accepted`; F3 `accepted` após CI-05.
 - **Bloqueios:** nenhum.
 - **Workspaces afetados:** `@stardust/core`, `@stardust/server`, `@stardust/web`
 
@@ -507,7 +507,19 @@ last_updated_at: 2026-07-27
   - **Paths permitidos:** `.github/workflows/core-package-ci.yaml`; `.github/workflows/web-app-ci.yaml`
   - **Finding histórico:** quality-ratchet core falhou em checkout limpo com `Cannot find module '@stardust/lsp'`.
   - **Sensores:** build LSP; quality-ratchet core 12 warnings e cobertura acima do baseline; quality-ratchet web 156 warnings contra baseline 163; Implementation Gates core/web passaram.
-  - **Avaliação:** pending — Judge integrado da F3 necessário para confirmar a integração alterada.
+  - **Avaliação:** `accepted` — Judge independente da F3 confirmou a integração dos quality gates.
+  - **Findings bloqueantes:** nenhum; nenhum baseline foi atualizado.
+
+- [x] **CI-05** — Preparar LSP nos jobs de testes e quality ratchet do server
+  - **Estado:** `verified`
+  - **Depende de:** CI-04
+  - **Critérios da Spec:** AR-01, AR-02
+  - **Resultado observável:** os jobs Tests e Quality ratchet do server constroem `@stardust/lsp` após `npm ci` e antes de executar Jest.
+  - **Camada:** CI/workflows
+  - **Paths permitidos:** `.github/workflows/server-app-ci.yaml`
+  - **Finding histórico:** server Tests falhou em checkout limpo com `Cannot find module '@stardust/lsp'` em `HonoApp.test.ts`.
+  - **Sensores:** Builder confirmou typecheck, codecheck, unit tests e build LSP locais; o diff contém somente as duas etapas de build no workflow do server.
+  - **Avaliação:** `accepted` — Judge independente da F3 confirmou CI-05 e a ausência de regressões.
   - **Findings bloqueantes:** nenhum; nenhum baseline foi atualizado.
 
 ### 2026-07-27 — F3 — Judge integrado após JI-F3-01
@@ -1012,11 +1024,11 @@ last_updated_at: 2026-07-27
 ## Conclusão atual
 
 - **Estado:** completed
-- **Tarefas verificadas:** 17/17 — 13 funcionais e 4 corretivas do CI.
+- **Tarefas verificadas:** 18/18 — 13 funcionais e 5 corretivas do CI.
 - **Findings bloqueantes:** nenhum; JC-01–JC-04 e JI-F3-01 resolvidos.
 - **Sensores finais:** Implementation Gates core/web, typecheck/codecheck/unit globais, integração server 61/183, Playwright 5/5, builds core/server/web, quality-ratchet core/web sem atualização de baseline; core manteve warnings/cobertura dentro do ratchet e web ficou em 156 contra baseline 163.
 - **Judge das fases:** F1, F2 e F3 `accepted`.
-- **Judge da conclusão:** `accepted` em 2026-07-27 após CI-04.
+- **Judge da conclusão:** `accepted` em 2026-07-27 após CI-05.
 - **Advisories:** `.tmp/stardust.wiki` permanece como deleção preexistente fora do escopo funcional; `.env.production` local não possui `NEXT_PUBLIC_DISCORD_CHANNEL_URL`, pendência ambiental preexistente.
 
 ### 2026-07-27 — Conclusão — Judge Conclusion após correções de CI
@@ -1026,6 +1038,30 @@ last_updated_at: 2026-07-27
 - **Sensores:** REQ-01–REQ-11, AC-01–AC-16 e AR-01–AR-05 aprovados; Conclusion Gate passou; F1/F2/F3 aceitas; baselines inalterados; nenhum finding bloqueante.
 - **Avaliação:** `accepted` — Spec e Plan autorizados para fechamento documental; o novo HEAD ainda precisa passar CI remoto antes do merge.
 - **Próxima ação:** nenhuma documental; commitar, fazer push, solicitar novo Codex Review e aguardar CI completo/mergeable.
+
+### 2026-07-27 — CI-05 — falha remota e correção do workflow do server
+
+- **Estado:** `accepted`
+- **Ação:** o CI remoto falhou em `HonoApp.test.ts` por ausência de `@stardust/lsp`; o Builder adicionou o build do LSP aos jobs Tests e Quality ratchet do server.
+- **Sensores:** falha remota reproduzida por resolução de módulo; typecheck, codecheck, unit tests e build LSP locais passaram; nenhum baseline foi alterado.
+- **Avaliação:** accepted — sensores locais, Implementation Gate, Judge F3 e Conclusion Gate/Judge passaram após CI-05.
+- **Findings bloqueantes:** nenhum; o CI remoto deve confirmar o novo workflow após o push.
+
+### 2026-07-27 — F3 — Judge integrado após CI-05
+
+- **Estado:** `accepted`
+- **Ação:** Judge independente reavaliou F3 após o build do LSP ser adicionado aos jobs Tests e Quality ratchet do server.
+- **Sensores:** build LSP, server unit 161/300, quality-ratchet server, typecheck/codecheck server e Implementation Gate server passaram; CI-04 core/web e baselines inalterados.
+- **Avaliação:** accepted — AC-02–AC-16, AR-01, AR-02 e AR-04 confirmados; CI-05 verificada; nenhum finding bloqueante.
+- **Próxima ação:** executar o Conclusion Gate e o Judge de conclusão.
+
+### 2026-07-27 — Conclusão — Judge Conclusion após CI-05
+
+- **Estado:** `accepted`
+- **Ação:** Judge independente reavaliou a integração completa após a correção do workflow do server.
+- **Sensores:** REQ-01–REQ-11, AC-01–AC-16 e AR-01–AR-05 aprovados; Conclusion Gate passou; core 171/611, server 161/300, web 102/428; quality-ratchets core/server/web passaram sem atualização de baseline; integração server 61/183; Playwright 5/5.
+- **Avaliação:** `accepted` — 18/18 tarefas verificadas, F1/F2/F3 aceitas, CI-05 integrada e nenhum finding bloqueante.
+- **Próxima ação:** nenhuma; Spec e Plan fechados documentalmente. O CI remoto deve passar após o push antes do merge.
 
 ### 2026-07-27 — Conclusão — Judge Conclusion após CI-04
 
