@@ -41,6 +41,9 @@ consumidos, paths permitidos e Rules aplicáveis. Não delegue tarefas sequencia
 ou que alterem os mesmos arquivos. Reserve arquivos compartilhados de composição
 e barrel files para uma etapa de integração.
 
+Nomeie cada subagente como `Worker F<n> T<m>`. No Codex, use o identificador
+técnico `worker_f<n>_t<m>` como `task_name`. No modo direto não existem Workers.
+
 ## Divergências
 
 - Correção factual da Spec: reporte evidência e trecho afetado ao Orchestrator.

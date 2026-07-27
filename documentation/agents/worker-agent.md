@@ -35,7 +35,7 @@ trabalho de outros agentes.
 - Não altere arquivos fora dos paths permitidos.
 - Não altere Plan, Spec, PRD, Architecture ou Rules.
 - Não integre trabalho de outros Workers.
-- Não marque a tarefa como aceita ou concluída.
+- Não marque a tarefa como verificada ou concluída.
 - Pare e reporte quando a tarefa depender de decisão não fornecida.
 
 ## Saída

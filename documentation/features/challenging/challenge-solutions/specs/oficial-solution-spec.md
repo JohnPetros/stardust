@@ -3,8 +3,9 @@ title: Solução oficial de desafio com Code Playback
 prd: https://github.com/JohnPetros/stardust/milestone/40
 issue: https://github.com/JohnPetros/stardust/issues/495
 apps: server, web
-status: open
-last_updated_at: 2026-07-23
+status: closed
+last_updated_at: 2026-07-27
+closed_at: 2026-07-27
 ---
 
 # Parte I — Contract
@@ -1013,11 +1014,11 @@ Modo expandido estreito
 | Sensor | Escopo | Obrigatório | Comando ou configuração |
 | --- | --- | --- | --- |
 | `scope-check` | core, server, web | sim | executado pelo Harness com os paths permitidos acima |
-| `architecture-check` | core, server, web | sim | `npm run harness -- gate implementation --spec=documentation/features/challenging/challenge-solutions/specs/oficial-solution-spec.md` |
+| `architecture-check` | core, server, web | sim | `npm run harness -- gate implementation --spec=documentation/features/challenging/challenge-solutions/specs/oficial-solution-spec.md --package=@stardust/core --package=@stardust/server --package=@stardust/web` |
 | `migration-check` estático | server | sim | executado pelo Harness sobre a migration canônica |
-| `codecheck` | global | sim | executado pelo Implementation e Conclusion Gate |
-| `typecheck` | global | sim | executado pelo Implementation e Conclusion Gate |
-| `test:unit` | global | sim | executado pelo Implementation e Conclusion Gate |
+| `codecheck` | pacotes afetados | sim | executado por pacote no Implementation Gate e globalmente no Conclusion Gate |
+| `typecheck` | pacotes afetados | sim | executado por pacote no Implementation Gate e globalmente no Conclusion Gate |
+| `test:unit` | pacotes afetados | sim | executado por pacote no Implementation Gate e globalmente no Conclusion Gate |
 | `quality-ratchet` | core | sim | `npm run quality-ratchet -- --workspace=core` |
 | `quality-ratchet` | server | sim | `npm run quality-ratchet -- --workspace=server` |
 | `quality-ratchet` | web | sim | `npm run quality-ratchet -- --workspace=web` |
@@ -1028,7 +1029,8 @@ Modo expandido estreito
 | Dead code | core, server, web | não | não há sensor versionado dedicado; inspeção do Judge e `architecture-check` cobrem exports/entry points novos |
 
 O Conclusion Gate deve repetir o Harness com `gate conclusion` e os mesmos
-workspaces e paths efetivamente alterados.
+paths efetivamente alterados. O `quality-ratchet` permanece no job específico
+do CI de cada workspace.
 
 ## 12. Pendências / Dúvidas
 
@@ -1043,4 +1045,3 @@ hidratação, rota paralela, componente global com timer/Monaco e experiência
 responsiva no web. A decomposição por pacote e por gate reduz risco de perda do
 campo no round-trip, regressão no CodeEditor e divergência entre proteção visual,
 rota e listagem.
-

@@ -41,6 +41,7 @@ Leia integralmente:
 
 ### 2. Definir fases
 
+- Trate cada fase como um incremento integrado e objetivamente avaliável.
 - F1 é `core` quando houver impacto de domínio, structures ou use cases.
 - Crie fases apenas para apps realmente tocados: F2 `server`, F3 `web`, F4
   `studio`.
@@ -49,6 +50,8 @@ Leia integralmente:
   comuns.
 - Não crie fase vazia apenas para preservar numeração; quando a ausência de
   impacto for importante, registre-a na estratégia.
+- Declare critérios da Spec cobertos pela fase, paths agregados e condições
+  objetivas para submetê-la ao Judge.
 
 ### 3. Definir tarefas
 
@@ -59,6 +62,7 @@ Cada tarefa deve ter:
 - Resultado observável.
 - IDs `REQ-*`, `AC-*` e `AR-*` associados.
 - Camada.
+- Pacote npm alvo, quando a tarefa for restrita a um workspace.
 - Paths permitidos.
 - Rules obrigatórias.
 - Estado inicial `pending`.
@@ -68,7 +72,7 @@ Reserve mudanças em arquivos compartilhados, como barrel files e composição,
 para tarefas de integração. Tarefas que escrevem no mesmo arquivo não são
 paralelas.
 
-### 4. Implementação e teste como unidade de avaliação
+### 4. Implementação e teste como unidade de execução
 
 Inclua a implementação e seus testes na mesma tarefa sempre que o artefato for
 testável:
@@ -79,10 +83,13 @@ testável:
 - Widgets (`view`, `hook`).
 - Rotas HTTP do server e rotas/pages web conforme as Rules.
 
-Uma tarefa testável só pode receber `accepted` quando implementação e testes
-estiverem completos e passarem pelo Implementation Gate e pelo Judge. Não crie uma tarefa
-de teste dependente da implementação: isso permitiria avaliar um contrato
-parcial e bloquearia a própria dependência necessária para concluí-lo.
+Uma tarefa testável só pode receber `verified` quando implementação e testes
+estiverem completos e passarem pelo Implementation Gate. A fase é a unidade de
+avaliação independente: só recebe `accepted` depois que todas as suas tarefas
+estiverem `verified`, o gate integrado da fase passar e o Judge aprovar o
+conjunto. Não crie uma tarefa de teste dependente da implementação: isso
+permitiria verificar um contrato parcial e bloquearia a própria dependência
+necessária para concluí-lo.
 
 Não crie teste direto para repository, service, provider, gateway, client,
 mapper, factory, config, adapter ou composição. Cubra-os indiretamente pelo
@@ -123,6 +130,7 @@ title: <título do plano>
 spec: <caminho relativo da spec>
 spec_revision: <hash de git hash-object>
 status: pending
+current_phase: null
 current_task: null
 base_commit: null
 last_updated_at: <YYYY-MM-DD>
@@ -133,6 +141,7 @@ last_updated_at: <YYYY-MM-DD>
 ## Estado Atual
 
 - **Tarefa ativa:** nenhuma
+- **Fase ativa:** nenhuma
 - **Estado:** `pending`
 - **Última ação:** Plan criado a partir da Spec aceita.
 - **Próxima ação:** iniciar a primeira tarefa sem dependências.
@@ -145,16 +154,23 @@ Sem pendências.
 
 ## Dependências de Fases
 
-| Fase | Objetivo | Depende de | Pode rodar em paralelo com |
-| --- | --- | --- | --- |
-| F1 | <objetivo> | - | - |
-| F2 | <objetivo> | F1 | F3 |
+| Fase | Objetivo | Estado | Depende de | Pode rodar em paralelo com |
+| --- | --- | --- | --- | --- |
+| F1 | <objetivo> | `pending` | - | - |
+| F2 | <objetivo> | `pending` | F1 | F3 |
 
 **Estratégia de paralelismo:** <explicação baseada em dependências e ownership de paths>.
 
 ## F1 — <nome>
 
-**Objetivo:** <resultado da fase>.
+- **Objetivo:** <resultado da fase>.
+- **Estado:** `pending`.
+- **Critérios da Spec:** <REQ-*, AC-* e AR-*>.
+- **Base da fase:** `null`.
+- **Implementation Gate da fase:** `pending`.
+- **Judge da implementação:** `pending`.
+- **Tentativas de avaliação:** 0.
+- **Findings bloqueantes:** nenhum.
 
 ### Tarefas
 
@@ -164,6 +180,7 @@ Sem pendências.
   - **Critérios da Spec:** REQ-01, AC-01, AR-01
   - **Resultado observável:** <condição verificável>
   - **Camada:** `core`
+  - **Pacote npm:** `@stardust/<pacote>`
   - **Paths permitidos:**
     - `<path ou diretório>`
     - `<path de testes>`
@@ -173,7 +190,7 @@ Sem pendências.
   - **Cobertura obrigatória:** <cenários que devem ser testados, ou `não se aplica` com justificativa>
   - **Tentativas:** 0
   - **Sensores:** pending
-  - **Avaliação:** pending
+  - **Implementation Gate:** pending
   - **Findings bloqueantes:** nenhum
   - **Próxima ação:** implementar e testar pelo Builder
 
@@ -188,7 +205,8 @@ Nenhuma execução registrada.
 ## Conclusão
 
 - **Estado:** pending
-- **Tarefas aceitas:** 0/<total>
+- **Tarefas verificadas:** 0/<total>
+- **Fases aceitas:** 0/<total>
 - **Findings bloqueantes:** 0
 - **Sensores finais:** pending
 - **Judge da conclusão:** pending
@@ -200,7 +218,9 @@ Nenhuma execução registrada.
   histórico e checkboxes.
 - Pareceres completos dos Judges permanecem no chat; o Plan registra apenas
   veredito resumido, finding ativo e próxima ação.
-- `[x]` significa `accepted` pelo `judge-implementation-agent`.
+- `[x]` em tarefa significa `verified` pelo Implementation Gate.
+- `accepted` é reservado à fase aprovada pelo
+  `judge-implementation-agent` ou à implementação direta sem Plan.
 - Builder e Worker não editam o Plan.
 - Não apague tentativas anteriores; resuma-as no histórico.
 - Saída bruta de comandos não entra no documento.

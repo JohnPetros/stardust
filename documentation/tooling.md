@@ -108,17 +108,21 @@ npm run harness -- \
   --spec=<path> \
   --base=<commit> \
   --allowed-path=<path-ou-glob> \
-  --workspace=<core|server|web|studio>
+  --package=<npm-package> \
+  --test-path=<path-relativo-ao-pacote>
 
 npm run harness -- \
   gate conclusion \
   --spec=<path> \
   --base=<commit> \
-  --allowed-path=<path-ou-glob> \
-  --workspace=<core|server|web|studio>
+  --allowed-path=<path-ou-glob>
 ```
 
-Repita `--allowed-path` e `--workspace` quando necessário. Checks condicionais:
+Repita `--allowed-path` e `--package` quando necessário. O Implementation Gate
+exige ao menos um `--package`; use `--test-path` somente para testes diretamente
+relacionados e relativos ao pacote informado. O Conclusion Gate pode omitir
+`--package` para validar a integração completa. O `quality-ratchet` é executado
+pelo job específico do CI, não pelos gates locais. Checks condicionais:
 
 ```bash
 --extra-command-json='["npm","run","test:integration","-w","@stardust/server"]'

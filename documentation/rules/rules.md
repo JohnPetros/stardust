@@ -84,6 +84,20 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 - Ao adicionar snippets, documentacoes, regex ou tokens da linguagem Delegua.
 - Ao integrar recursos de edicao, execucao ou analise de codigo com contratos do core.
 
+## Regras da Linguagem Delegua
+
+**Arquivo:** `/documentation/rules/delegua-rules.md`
+**Quando consultar:**
+
+- Ao criar ou modificar código executável em Delégua.
+- Ao escrever desafios, soluções oficiais, fixtures, mocks ou snippets de
+  Delégua.
+- Ao definir entradas, saídas ou resultados esperados de programas Delégua.
+- Para garantir que booleanos, palavras reservadas, tipos e funções nativas
+  estejam em português.
+- Ao escolher a solução mais simples, legível e didática para um desafio.
+- Ao integrar código Delégua com o editor, o LSP, o servidor ou o playback.
+
 ## Regras da Camada de Fila (queue)
 
 **Arquivo:** `/documentation/rules/queue-layer-rules.md`

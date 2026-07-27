@@ -51,8 +51,8 @@ independente.
 Existem três etapas independentes de julgamento:
 
 - `judge-spec-agent`: avalia se a Spec está correta, completa e implementável.
-- `judge-implementation-agent`: avalia uma tarefa ou implementação direta contra a
-  Spec.
+- `judge-implementation-agent`: avalia uma fase integrada do Plan ou uma
+  implementação direta contra a Spec.
 - `judge-conclusion-agent`: avalia a entrega integrada antes do fechamento.
 
 ## Fontes de Verdade
@@ -80,14 +80,51 @@ Conflitos entre essas fontes não podem ser reconciliados por suposição.
 - O Judge nunca é filho do Builder. Ele é acionado pelo Orchestrator depois que
   a árvore de implementação terminar.
 
+## Nomenclatura dos Subagentes
+
+Todo despacho deve usar um nome que identifique papel e escopo. Quando a
+plataforma aceitar título de exibição, use a coluna **Nome visível**. Para
+identificadores técnicos do Codex, use apenas letras minúsculas, números e
+underscore.
+
+| Contexto | Nome visível | Identificador técnico |
+| --- | --- | --- |
+| Builder de fase | `Builder F<n>` | `builder_f<n>` |
+| Worker de tarefa | `Worker F<n> T<m>` | `worker_f<n>_t<m>` |
+| Judge de fase | `Judge F<n>` | `judge_f<n>` |
+| Implementação direta | `Builder Direct` | `builder_direct` |
+| Judge direto | `Judge Direct` | `judge_direct` |
+| Judge da Spec | `Judge Spec` | `judge_spec` |
+| Judge da conclusão | `Judge Conclusion` | `judge_conclusion` |
+| Pesquisa por app na criação da Spec | `Research <app>` | `research_<app>` |
+
+Não use nomes aleatórios quando a ferramenta permitir fornecer um identificador.
+Reutilize o mesmo nome lógico nas novas tentativas do mesmo escopo; tentativas
+continuam diferenciadas pelo histórico do Plan, não pelo nome do agente.
+
 ## Estados
 
 ### Plan
 
 - `pending`: ainda não iniciado.
-- `in_progress`: possui execução ativa ou tarefas aceitas parcialmente.
+- `in_progress`: possui execução ativa ou fases aceitas parcialmente.
 - `blocked`: depende de decisão humana ou mudança externa indispensável.
-- `completed`: todas as tarefas foram aceitas e o Judge de conclusão aprovou.
+- `completed`: todas as fases foram aceitas e o Judge de conclusão aprovou.
+
+### Fase
+
+```text
+pending
+→ in_progress
+→ awaiting_judgment
+→ evaluation_failed
+→ in_progress
+→ accepted
+```
+
+Uma revisão humana pode mover `accepted → changes_requested → in_progress`.
+Dependências consumidoras só são liberadas quando a fase antecedente estiver
+`accepted`.
 
 ### Tarefa
 
@@ -95,15 +132,18 @@ Conflitos entre essas fontes não podem ser reconciliados por suposição.
 pending
 → implementing
 → validating
-→ evaluation_failed
+→ verified
+
+validating
 → implementing
-→ accepted
 ```
 
-Uma revisão humana pode mover `accepted → changes_requested → implementing`.
+Uma revisão humana pode mover `verified → changes_requested → implementing`.
 
-O checkbox `[x]` significa exclusivamente `accepted`. Builder e Worker nunca
-marcam o próprio trabalho como concluído.
+O checkbox `[x]` de tarefa significa exclusivamente `verified` pelo
+Implementation Gate. `accepted` é reservado à fase aprovada pelo Judge ou à
+implementação direta sem Plan. Builder e Worker nunca marcam o próprio trabalho
+como concluído.
 
 ## Gates e Sensores
 
@@ -144,7 +184,9 @@ documental. Falha impede o Builder de iniciar.
 
 ### Implementation Gate
 
-Execute depois do Builder e antes de aceitar a tarefa ou implementação direta:
+Execute depois do Builder para verificar cada tarefa e novamente sobre o escopo
+agregado antes de julgar a fase. No modo direto, execute antes de julgar a
+implementação:
 
 ```bash
 npm run harness -- \
@@ -152,14 +194,25 @@ npm run harness -- \
   --spec=<path> \
   --base=<commit> \
   --allowed-path=<path-ou-glob> \
-  --workspace=<core|server|web|studio>
+  --package=<npm-package> \
+  --test-path=<path-relativo-ao-pacote>
 ```
 
 O runner combina `scope-check`, `codecheck`, `typecheck`, `test:unit`,
-`quality-ratchet`, `architecture-check`, `migration-check` e `contract-check`.
+`architecture-check`, `migration-check` e `contract-check`.
+O `contract-check` não executa comandos `test:integration`; ele valida a
+rastreabilidade das evidências e executa somente comandos não integrados.
 Integração, build, Playwright, runtime, código morto e migrations executáveis
-entram por opções explícitas declaradas na Spec. Somente depois da parte
-determinística passar acione `judge-implementation-agent`.
+entram por comandos explícitos do Builder ou do Conclusion Gate. A aprovação do gate da tarefa
+permite marcá-la `verified`, sem acionar o Judge. Quando `--package` é informado,
+os sensores de código e teste são executados somente nesse pacote; `--test-path`
+restringe o teste unitário aos arquivos indicados. Sem `--package`, o runner
+preserva o modo monorepo completo apenas no Conclusion Gate; o Implementation
+Gate exige ao menos um pacote. Quando todas as tarefas estiverem verificadas,
+execute o gate agregado da fase; somente depois dele passar acione
+`judge-implementation-agent`. No modo direto, acione o Judge após o único gate
+da implementação. O `quality-ratchet` não pertence aos Implementation Gates
+locais.
 
 ### Conclusion Gate
 
@@ -170,13 +223,13 @@ npm run harness -- \
   gate conclusion \
   --spec=<path> \
   --base=<commit> \
-  --allowed-path=<path-ou-glob> \
-  --workspace=<workspace>
+  --allowed-path=<path-ou-glob>
 ```
 
-Adicione todos os workspaces e comandos condicionais aplicáveis. Depois do
-runner passar, acione `judge-conclusion-agent`. Falha reabre a implementação;
-sucesso autoriza fechamento, commit e PR.
+Adicione os comandos condicionais aplicáveis. O `quality-ratchet` não roda
+localmente; sua evidência oficial vem do CI do PR. Depois do runner passar,
+acione `judge-conclusion-agent`. Falha reabre a implementação; sucesso autoriza
+fechamento, commit e criação do PR.
 
 Quando existir Plan, registre apenas gate, estado resumido, finding ativo e
 próxima ação. Saída completa, stack traces, traces de browser e pareceres dos
@@ -185,7 +238,8 @@ Judges não pertencem ao Plan.
 ## Avaliação
 
 O Orchestrator só aciona `judge-implementation-agent` depois do Implementation
-Gate passar. O veredito no chat do Judge deve ser:
+Gate agregado da fase, ou do modo direto, passar. O veredito no chat do Judge
+deve ser:
 
 - `accepted`: todos os critérios aplicáveis possuem evidência e não há finding
   bloqueante.
@@ -193,8 +247,14 @@ Gate passar. O veredito no chat do Judge deve ser:
 
 Observações fora do contrato são não bloqueantes. Em caso de reprovação, o
 Orchestrator registra apenas findings ativos e próxima ação no Plan, quando
-existir, e devolve os findings bloqueantes ao Builder. Não existe arquivo
-`evaluation.md`.
+existir, reabre a tarefa responsável ou cria tarefa corretiva na fase e devolve
+os findings bloqueantes ao Builder. Não existe arquivo `evaluation.md`.
+
+O julgamento por tarefa não faz parte do modo planejado. O Judge avalia a fase
+como incremento integrado, incluindo a interação entre suas tarefas. Um parecer
+antecipado é permitido apenas para risco crítico de contrato, migration,
+segurança ou fronteira arquitetural; ele é consultivo e não substitui o
+veredito final da fase.
 
 Use no máximo três tentativas pelo mesmo motivo. Depois disso, escale ao usuário
 com histórico e evidências.
@@ -215,12 +275,12 @@ comportamento, escopo, contrato, arquitetura ou critérios de avaliação. Atual
 Mudanças de requisito, escopo, payload, regra de negócio, decisão arquitetural
 ou critério de aceite exigem:
 
-1. Pausar a tarefa.
+1. Pausar a fase e a tarefa ativa.
 2. Identificar requisitos, critérios e documentos afetados.
 3. Consultar o usuário quando houver conflito com PRD, Architecture ou Rules.
 4. Atualizar a Spec de forma cirúrgica.
 5. Registrar revisão anterior, nova revisão, motivo e tarefas afetadas no Plan.
-6. Invalidar avaliações baseadas no contrato anterior.
+6. Invalidar avaliações de fases baseadas no contrato anterior.
 7. Atualizar ou criar tarefas.
 8. Retomar pelo Builder e reavaliar pelo Judge.
 
@@ -242,9 +302,11 @@ arquitetural, Rule ou PRD promove a execução para `create-plan` +
 
 ## Revisão Humana
 
-Feedback humano explícito prevalece sobre qualquer `accepted` anterior.
+Feedback humano explícito prevalece sobre qualquer `verified` ou `accepted`
+anterior.
 
-- Se o código viola a Spec, registre finding `HR-*` e reabra a tarefa.
+- Se o código viola a Spec, registre finding `HR-*`, reabra a fase e a tarefa
+  responsável.
 - Se o comportamento desejado muda o contrato, aplique amendment antes do
   código.
 - Se amplia materialmente o escopo, crie nova Spec.
@@ -267,8 +329,14 @@ modo direto adquirir essas características, interrompa e promova a execução.
 
 ## Conclusão
 
-`conclude-spec` só inicia quando todas as tarefas estiverem `accepted` ou a
-implementação direta tiver sido aceita. O Orchestrator executa sensores finais
-e aciona `judge-conclusion-agent`. Se houver reprovação, reabre a execução; se houver
-aprovação, fecha Spec e Plan, consolida PRD/Architecture/Rules e prepara commit e
-PR.
+`conclude-spec` só inicia quando todas as tarefas estiverem `verified`, todas as
+fases estiverem `accepted` ou a implementação direta tiver sido aceita. O
+Orchestrator executa sensores finais e aciona `judge-conclusion-agent`, que
+avalia integração entre fases, critérios globais e coerência documental sem
+repetir a avaliação detalhada de cada fase. Se houver reprovação, reabre a
+execução. Se houver aprovação, fecha Spec e Plan, consolida
+PRD/Architecture/Rules, cria commits e PR, solicita `@codex review` e aguarda o
+CI. O workflow só termina quando o `HEAD` atual possuir Codex Review concluído,
+todos os checks — incluindo o `quality-ratchet` — estiverem verdes, não houver
+conversas bloqueantes e o PR estiver mergeable. Mudança feita durante esse ciclo
+reabre e revalida as fases afetadas.

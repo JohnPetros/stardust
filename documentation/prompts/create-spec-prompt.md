@@ -67,7 +67,11 @@ Leia `documentation/rules/rules.md` e identifique:
 
 #### 1.3 Pesquisa da codebase
 
-Se o escopo tocar **múltiplos apps**, use subagentes (um por app + um para pacotes compartilhados). Cada subagente pesquisa e reporta — não toma decisões. Se subagentes não estiverem disponíveis, pesquise sequencialmente por app.
+Se o escopo tocar **múltiplos apps**, use subagentes (um por app + um para
+pacotes compartilhados). Nomeie-os `Research <app>`; no Codex, use
+`research_<app>` como `task_name`. Cada subagente pesquisa e reporta — não toma
+decisões. Se subagentes não estiverem disponíveis, pesquise sequencialmente por
+app.
 
 **Despacho — o que enviar ao subagente:**
 
@@ -365,7 +369,7 @@ Declare os workspaces e sensores condicionais da implementação:
 ```md
 | Sensor | Escopo | Obrigatório | Comando ou configuração |
 | --- | --- | --- | --- |
-| `quality-ratchet` | server | sim | `npm run quality-ratchet -- --workspace=server` |
+| `quality-ratchet` no CI do PR | server | sim | job `quality-gate` |
 | Integração | server | sim | `npm run test:integration -w @stardust/server` |
 | Runtime smoke | não aplicável | não | - |
 | Dead code | server | sim | `<config ou comando explícito>` |
@@ -373,7 +377,8 @@ Declare os workspaces e sensores condicionais da implementação:
 
 `codecheck`, `typecheck`, `test:unit`, `scope-check`, `architecture-check`,
 `migration-check` estático e `contract-check` são padrões do Implementation e
-Conclusion Gate. Não os omita por conveniência.
+Conclusion Gate. Não os omita por conveniência. O `quality-ratchet` é declarado
+por workspace, mas sua evidência oficial é produzida apenas pelo CI do PR.
 
 #### 12. Pendências / Dúvidas (Quando aplicável)
 Apenas itens que **permanecem em aberto após a etapa de Clarificação (1.5)** — esta seção não substitui perguntar. Decisões já confirmadas com o usuário via `question` vão para Decisões Técnicas (seção 9), não aqui.
@@ -400,7 +405,8 @@ Não finalize a Spec no mesmo agente que a escreveu.
 4. Registre o estado do worktree.
 5. Inicie um subagente novo, com contexto limpo, e instrua-o a usar
    `judge-spec-agent`, definido em
-   `documentation/agents/judge-spec-agent.md`.
+   `documentation/agents/judge-spec-agent.md`. Nomeie-o `Judge Spec`; no Codex,
+   use `judge_spec` como `task_name`.
 6. Envie PRD, draft, bug report quando aplicável, síntese da pesquisa,
    Architecture e Rules relevantes.
 7. Não envie justificativas persuasivas do autor além das evidências já

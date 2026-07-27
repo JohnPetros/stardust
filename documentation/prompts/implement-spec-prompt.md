@@ -61,6 +61,32 @@ Leia:
 Calcule a revisão da Spec com `git hash-object <spec>` e registre o commit-base e
 o estado inicial do worktree. Preserve mudanças preexistentes do usuário.
 
+## Registro de Bloqueios
+
+Como este fluxo não cria Plan, registre bloqueios no log da execução e devolva-os
+na saída final. A primeira ocorrência deve criar um identificador estável
+(`BLK-001`, `BLK-002`...) com este formato:
+
+```md
+### BLK-001 — <resumo>
+
+- Gate/comando: `<gate ou comando>`
+- Tipo: `ambiental`, `implementação` ou `documental`
+- Erro: <mensagem observada>
+- Impacto: <o que ficou impedido>
+- Evidência: <saída, arquivo ou timestamp>
+- Workaround: <validações alternativas, se houver>
+- Próxima ação: <condição objetiva para retomar>
+- Status: `open`, `blocked`, `mitigated` ou `closed`
+```
+
+Não repita automaticamente uma tentativa idêntica. Só retome quando a condição
+externa tiver mudado ou quando existir uma correção concreta. Não encaminhe um
+bloqueio ambiental ao Builder como finding de implementação e não altere o
+Harness para mascarar a falha. Se houver trabalho independente, continue; se o
+bloqueio impedir a única entrega, pare com o bloqueio documentado e peça a
+intervenção necessária.
+
 ## Execução
 
 ### 1. Readiness Gate
@@ -79,7 +105,8 @@ Não prossiga com drift de revisão ou finding determinístico.
 ### 2. Acionar Builder
 
 Inicie um subagente separado e instrua-o a usar `builder-agent`, definido em
-`documentation/agents/builder-agent.md`. Envie somente:
+`documentation/agents/builder-agent.md`. Nomeie-o `Builder Direct`; no Codex,
+use `builder_direct` como `task_name`. Envie somente:
 
 - Spec e revisão.
 - Escopo direto.
@@ -92,6 +119,26 @@ Inicie um subagente separado e instrua-o a usar `builder-agent`, definido em
 No modo direto, o Builder implementa sem Workers. Se identificar paralelismo
 material, ele deve reportar e a execução deve ser promovida para Plan.
 
+### Fluxo de testes durante a implementação
+
+O Builder deve manter o ciclo local curto enquanto ainda estiver alterando o
+artefato:
+
+1. Após cada ajuste relevante, execute `codecheck`, `typecheck` e os testes
+   direcionados da entrega.
+2. Quando os testes da borda estiverem coerentes, execute somente a integração
+   afetada, usando `--runTestsByPath` quando o runner suportar seleção de
+   arquivos.
+3. Não execute a suíte completa de integração a cada alteração. O
+   `contract-check --run` valida somente evidências não integradas; comandos
+   `test:integration` declarados na Spec são ignorados por ele.
+
+O resultado local não substitui o gate. O Implementation Gate executa uma vez
+os sensores completos e o `contract-check` sem integração. A integração
+afetada pode ser executada de forma direcionada durante o Builder, e a suíte
+completa fica reservada ao Conclusion Gate. Uma integração completa adicional
+fica reservada ao fluxo final de conclusão.
+
 ### 3. Inspecionar o resultado
 
 Após o Builder encerrar:
@@ -103,7 +150,7 @@ Após o Builder encerrar:
 
 ### 4. Implementation Gate
 
-Execute com todos os paths e workspaces autorizados:
+Execute com todos os paths autorizados:
 
 ```bash
 npm run harness -- \
@@ -111,8 +158,13 @@ npm run harness -- \
   --spec=<path> \
   --base=<commit-base> \
   --allowed-path=<path-ou-glob> \
-  --workspace=<workspace>
+  --package=<npm-package> \
+  --test-path=<path-relativo-ao-pacote>
 ```
+
+Informe o pacote e os testes diretamente relacionados à implementação. O
+Implementation Gate exige `--package`; a suíte monorepo completa fica reservada
+para a validação integrada final.
 
 Inclua `--extra-command-json`, runtime, dead code ou configuração de migration
 conforme a seção Gates Aplicáveis da Spec. Se o gate falhar pela implementação,
@@ -122,7 +174,8 @@ devolva a evidência ao Builder antes de acionar o Judge.
 
 Com o Implementation Gate aprovado, registre o estado do worktree e inicie um novo subagente
 com contexto limpo usando `judge-implementation-agent`, definido em
-`documentation/agents/judge-implementation-agent.md`. Envie Spec/revisão, critérios,
+`documentation/agents/judge-implementation-agent.md`. Nomeie-o `Judge Direct`;
+no Codex, use `judge_direct` como `task_name`. Envie Spec/revisão, critérios,
 commit-base, diff, paths, Rules e sensores.
 
 O Judge não recebe a narrativa do Builder. Compare o worktree antes e depois;
