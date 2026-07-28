@@ -98,6 +98,13 @@ describe('useAssistantChatsHistory', () => {
     await waitFor(() => expect(result.current.chats).toHaveLength(1))
 
     expect(result.current.chats[0].dto).toEqual(chat.dto)
+    expect(service.fetchChats).toHaveBeenCalledWith(
+      expect.objectContaining({
+        page: expect.objectContaining({ value: 1 }),
+        itemsPerPage: expect.objectContaining({ value: 10 }),
+        search: expect.objectContaining({ value: '' }),
+      }),
+    )
   })
 
   it('should not fetch chats on mount when account is not authenticated', async () => {

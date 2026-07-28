@@ -30,6 +30,8 @@ type PaginatedCache<CacheItem> = {
   setPage: (page: number) => Promise<void>
 }
 
+type PaginatedCacheKey = readonly [identity: string, page: number]
+
 export function usePaginatedCache<CacheItem>({
   key,
   fetcher,
@@ -43,23 +45,32 @@ export function usePaginatedCache<CacheItem>({
 }: PaginatedCacheConfig<CacheItem>): PaginatedCache<CacheItem> {
   const [totalItemsCount, setTotalItemsCount] = useState(0)
   const toast = useToastContext()
-  const dependenciesQuery = dependencies
-    ? dependencies.map((dependency, index) => `dep_${index + 1}=${dependency}`).join(',')
-    : ''
+  const cacheIdentity = JSON.stringify({
+    key,
+    dependencies: dependencies ?? [],
+    itemsPerPage,
+  })
 
-  function getKey(pageIndex: number, previousPageData: CacheItem[]) {
+  function getKey(
+    pageIndex: number,
+    previousPageData: CacheItem[] | null | undefined,
+  ): PaginatedCacheKey | null {
     if (!isEnabled) {
       return null
     }
 
-    if (isEnabled && previousPageData && !previousPageData.length) {
+    if (previousPageData != null && !previousPageData.length) {
       return null
     }
-    return `${key}?${dependenciesQuery}&itemsPerPage=${itemsPerPage}&page=${pageIndex + 1}`
+
+    return [cacheIdentity, pageIndex + 1]
   }
 
-  async function infiniteFetcher(key: string) {
-    const page = Number(key.split('&page=').at(-1))
+  async function infiniteFetcher([, page]: PaginatedCacheKey) {
+    if (!Number.isInteger(page) || page < 1) {
+      throw new Error(`Invalid pagination page: ${page}`)
+    }
+
     const response = await fetcher(page)
     setTotalItemsCount(response.totalItemsCount)
     return response.items
