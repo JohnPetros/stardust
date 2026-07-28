@@ -11,7 +11,8 @@ on:
       - "apps/studio/**"
       - "packages/core/**"
       - "packages/validation/**"
-      - "packages/harness/**"
+      - ".dependency-cruiser.cjs"
+      - "knip.json"
 
 permissions:
   contents: read
@@ -20,8 +21,8 @@ env:
   NODE_VERSION: "22"
 
 jobs:
-  codecheck:
-    name: Codecheck
+  check-code:
+    name: Check code
     runs-on: ubuntu-latest
 
     steps:
@@ -38,14 +39,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run codecheck
-        run: npm run codecheck -w @stardust/studio
+      - name: Check code
+        run: npm run check:code -w @stardust/studio
 
-  typecheck:
-    name: Typecheck
+  check-types:
+    name: Check types
     runs-on: ubuntu-latest
     needs:
-      - codecheck
+      - check-code
 
     steps:
       - name: Checkout code
@@ -61,15 +62,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run typecheck
-        run: npm run typecheck -w @stardust/studio
+      - name: Check types
+        run: npm run check:types -w @stardust/studio
 
   tests:
     name: Tests
     runs-on: ubuntu-latest
     needs:
-      - codecheck
-      - typecheck
+      - check-code
+      - check-types
 
     steps:
       - name: Checkout code
@@ -88,12 +89,13 @@ jobs:
       - name: Run tests
         run: npm run test:unit -w @stardust/studio
 
-  quality-gate:
-    name: Quality ratchet
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
+    needs:
+      - check-code
+      - check-types
+      - tests
 
     steps:
       - name: Checkout code
@@ -109,16 +111,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run quality ratchet
-        env:
-          QUALITY_RATCHET_REPORT_FILE: quality-ratchet-report.md
-        run: npm run quality-ratchet -- --workspace=studio
-
-      - name: Comment report on PR
-        if: ${{ always() && github.event_name == 'pull_request' }}
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: bash scripts/comment-pull-request.sh studio quality-ratchet-report.md
+      - name: Build project
+        run: npm run build:studio
