@@ -1,0 +1,43 @@
+{
+  "$schema": "./node_modules/knip/schema.json",
+  "ignore": [
+    "**/build/**",
+    "**/coverage/**",
+    "**/.next/**",
+    "**/.react-router/**",
+    "apps/server/src/database/supabase/types/Database.ts",
+    "apps/web/src/api/supabase/types/Database.ts",
+    "apps/web/src/mocks/**",
+    "apps/studio/src/ui/shadcn/**"
+  ],
+  "workspaces": {
+    "apps/server": {
+      "entry": ["src/main.ts!"],
+      "project": ["src/**/*.{ts,tsx}!", "!src/tests/**!", "!src/**/*.test.{ts,tsx}!"],
+      "jest": false
+    },
+    "apps/web": {
+      "project": ["src/**/*.{ts,tsx}!", "!src/**/*.test.{ts,tsx}!", "!src/**/tests/**!"],
+      "jest": false
+    },
+    "apps/studio": {
+      "entry": ["src/app/{root,routes}.tsx!", "src/app/routes.ts!"],
+      "project": ["src/**/*.{ts,tsx}!", "!src/**/*.test.{ts,tsx}!", "!src/**/tests/**!"],
+      "jest": false
+    },
+    "packages/core": {
+      "project": ["src/**/*.ts!", "!src/**/*.test.ts!", "!src/**/tests/**!"]
+    },
+    "packages/email": {
+      "entry": ["emails/index.tsx!"],
+      "project": ["emails/**/*.tsx!", "components/**/*.tsx!"]
+    },
+    "packages/lsp": {
+      "entry": ["src/main.ts!"],
+      "project": ["src/**/*.ts!", "!src/**/*.test.ts!"]
+    },
+    "packages/validation": {
+      "project": ["src/**/*.ts!"]
+    }
+  }
+}

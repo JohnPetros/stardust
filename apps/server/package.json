@@ -3,7 +3,7 @@
   "main": "dist/main.js",
   "scripts": {
     "dev": "tsx watch --env-file .env.development src/main.ts",
-    "codecheck": "npm run lint && npm run format",
+    "check:code": "biome check src",
     "lint": "biome lint src --diagnostic-level=error",
     "format": "biome format src --write",
     "build": "tsup",
@@ -18,7 +18,7 @@
     "db:types": "supabase gen types typescript --project-id rveubqzvfbqbcpmuevnm --schema auth,public,storage,realtime > src/database/supabase/types/Database.ts",
     "update": "ncu -u -f $npm_config_dep_name",
     "check-updates": "ncu",
-    "typecheck": "tsc --noEmit",
+    "check:types": "tsc --noEmit",
     "test:unit": "jest --selectProjects server",
     "test:integration": "jest --selectProjects server-integration"
   },

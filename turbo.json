@@ -12,11 +12,15 @@
         "packages/**/build/**"
       ]
     },
-    "codecheck": {
+    "format": {
       "persistent": false,
       "cache": false
     },
-    "typecheck": {
+    "check:code": {
+      "persistent": false,
+      "cache": false
+    },
+    "check:types": {
       "persistent": false,
       "cache": false
     },
@@ -37,7 +41,7 @@
       "cache": false
     },
     "test:integration": {
-      "persistent": true,
+      "persistent": false,
       "cache": false
     }
   }
