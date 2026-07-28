@@ -4,8 +4,8 @@ report: ../reports/assistant-history-bug-report.md
 prd: https://github.com/JohnPetros/stardust/milestone/2
 issue: https://github.com/JohnPetros/stardust/issues/492
 apps: web
-status: open
-last_updated_at: 2026-07-27
+status: completed
+last_updated_at: 2026-07-28
 ---
 
 # Spec: Integridade da paginacao do historico do assistente
@@ -460,6 +460,34 @@ contratos frageis confirmados — pagina reconstruida de string e retry
 reconstruido de query params mutaveis — sao removidos e cobertos por evidencias
 independentes e por regressao de browser.
 
-A Spec foi aprovada pelo Judge e promovida a `open` pelo Orchestrator. A entrega
-e pequena, coesa, restrita ao app web e sem migration; recomenda-se executar
-com `implement-spec`, sem Plan separado.
+A Spec foi aprovada pelo Judge. A entrega e pequena, coesa, restrita ao app web
+e sem migration; foi executada com `implement-spec`, sem Plan separado.
+
+### 21. Evidencias da implementacao
+
+- **Judge Direct:** `accepted`; RF-01..RF-04, CA-01..CA-09, RN-01..RN-05 e
+  DT-01..DT-04 passaram, sem findings bloqueantes.
+- **Judge Conclusion:** `accepted`; integracao, contratos, arquitetura,
+  documentacao e seguranca proporcionais ao risco passaram.
+- **Revisao de seguranca dedicada:** `accepted`; nenhum finding bloqueante no
+  snapshot de URL, retry apos refresh, headers, tokens ou isolamento entre
+  requests.
+- **Formatacao:** `npm run format` passou.
+- **Lint:** `npm run check:code` passou com warnings preexistentes fora do
+  escopo, sem erro de processo.
+- **Tipos:** `npm run check:types` passou.
+- **Testes unitarios:** `npm run test:unit` passou com 103 suites/435 testes na
+  web e 161 suites/300 testes no server; os testes especificos da entrega
+  passaram.
+- **Integracao web:** `npm run test:integration -w @stardust/web` executou 40
+  testes: 34 passaram e 6 falharam exclusivamente em
+  `src/app/tests/auth/reset-password.test.ts`, por alteracoes preexistentes de
+  autenticacao fora do escopo. O novo
+  `src/app/tests/challenging/assistant-history.test.ts` passou na suite e
+  isoladamente (1 teste).
+- **Arquitetura:** `npm run check:architecture` passou sem violacoes.
+- **Dead-code:** `npm run check:dead-code` encontrou 70 arquivos preexistentes
+  fora dos paths da entrega; nenhum path da Spec foi reportado.
+
+A Spec foi concluida pelo Orchestrator em 2026-07-28. O worktree permanece
+dirty por alteracoes preexistentes do usuario fora do escopo desta entrega.
