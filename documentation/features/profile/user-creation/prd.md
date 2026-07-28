@@ -12,7 +12,7 @@
 
 ### 2. Requisitos
 
-#### REQ-01 [Criar perfil base do usuário]
+#### RF-01 [Criar perfil base do usuário]
 
 - **Criar perfil base do usuário**
 
@@ -25,7 +25,7 @@
 - **Estado inicial do perfil:** O perfil deve nascer já associado ao tier inicial, ao avatar padrão selecionado e ao foguete padrão selecionado.
 - **Persistência do perfil:** O perfil deve ser salvo como a referência principal do usuário dentro do módulo `profile`.
 
-#### REQ-02 [Validar unicidade do perfil]
+#### RF-02 [Validar unicidade do perfil]
 
 - **Validar unicidade do perfil**
 
@@ -37,7 +37,7 @@
 - **Email único:** O sistema não deve criar o perfil se já existir outro usuário com o mesmo email.
 - **Bloqueio da criação:** Em caso de conflito de nome ou email, a criação do perfil deve ser interrompida.
 
-#### REQ-03 [Liberar progresso inicial]
+#### RF-03 [Liberar progresso inicial]
 
 - **Liberar progresso inicial**
 
@@ -49,7 +49,7 @@
 - **Associação ao usuário:** O desbloqueio deve ser registrado no perfil do usuário recém-criado.
 - **Sem duplicidade:** Se a primeira estrela já estiver desbloqueada para o usuário, o sistema não deve duplicar esse vínculo.
 
-#### REQ-04 [Conceder itens padrão iniciais]
+#### RF-04 [Conceder itens padrão iniciais]
 
 - **Conceder itens padrão iniciais**
 
@@ -61,7 +61,7 @@
 - **Custo inicial:** Os itens padrão devem ser concedidos sem custo para o usuário.
 - **Item equipado no nascimento do perfil:** O avatar padrão selecionado e o foguete padrão selecionado devem permanecer como itens ativos do perfil inicial.
 
-#### REQ-05 [Aplicar o mesmo onboarding a todo novo cadastro]
+#### RF-05 [Aplicar o mesmo onboarding a todo novo cadastro]
 
 - **Aplicar o mesmo onboarding a todo novo cadastro**
 

@@ -217,5 +217,5 @@ Challenge Editor Page
 - [x] Atualizada UI do editor/challenge control com contexto administrativo para desafio de terceiros.
 
 ## Validacoes executadas
-- [x] `npm run codecheck` (raiz do monorepo)
+- [x] `npm run check:code` (raiz do monorepo)
 - [x] `npm run test` (raiz do monorepo)

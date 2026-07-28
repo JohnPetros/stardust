@@ -36,8 +36,8 @@ Referencia de produto: https://github.com/JohnPetros/stardust/milestone/26
 - A criacao continua privada por padrao para reduzir risco de publicacao acidental durante fluxos assistidos por IA.
 
 ## Validacao final
-- [x] `npm run codecheck` na raiz.
-- [x] `npm run typecheck` na raiz.
+- [x] `npm run check:code` na raiz.
+- [x] `npm run check:types` na raiz.
 - [x] `npm run test` na raiz.
 
 ## Status

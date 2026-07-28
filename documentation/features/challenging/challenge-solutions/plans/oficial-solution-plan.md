@@ -146,7 +146,7 @@ last_updated_at: 2026-07-27
 - [x] **T1.1** — Implementar o DTO, a structure e o faker de Code Playback com validação e cópia defensiva
   - **Estado:** `accepted`
   - **Depende de:** -
-  - **Critérios da Spec:** REQ-01, REQ-05, REQ-06, REQ-09, AC-01, AC-10, AC-11, AC-16, AR-02
+  - **Critérios da Spec:** RF-01, RF-05, RF-06, RF-09, CA-01, CA-10, CA-11, CA-16, RN-02
   - **Resultado observável:** `CodePlayback.create()` aceita a fixture normativa válida, rejeita todas as invariantes inválidas do contrato e seu getter `dto` preserva ordem e conteúdo sem compartilhar referências mutáveis; o faker produz um DTO determinístico válido.
   - **Camada:** `core`
   - **Paths permitidos:**
@@ -169,14 +169,14 @@ last_updated_at: 2026-07-27
   - **Cobertura obrigatória:** criação e round-trip da fixture normativa; steps e ranges inválidos; números não finitos, referências cíclicas e valores não serializáveis; títulos e labels vazios; ponteiros e highlights fora dos limites ou sobrepostos; grids não retangulares; coleções vazias; preservação de ordem; ausência de mutação por entrada, saída ou navegação sobre snapshots.
   - **Tentativas:** 9
   - **Sensores:** codecheck/typecheck globais passaram; unit serial passou em todos os workspaces (core 171/171 suites, 606/606 testes; web 90/90 suites, 379/379 testes; demais workspaces sem falhas); quality-ratchet core passou (Biome warnings 12, sem regressão); architecture e migration passaram; contract-check isolado falhou apenas por manifesto `.next` ausente no worktree sintético; contrato no worktree principal passou (Web 34 cenários, Server/Core contract evidence).
-  - **Avaliação:** `accepted` — Judge independente confirmou REQ-01/05/06/09, AC-01/10/11/16 e AR-02.
+  - **Avaliação:** `accepted` — Judge independente confirmou RF-01/05/06/09, CA-01/10/11/16 e RN-02.
   - **Findings bloqueantes:** nenhum; JI-01, JI-02 e JI-03 resolvidos.
   - **Próxima ação:** prosseguir para T1.2 após readiness gate.
 
 - [x] **T1.2** — Publicar o Code Playback nos barrels globais do core
   - **Estado:** `accepted`
   - **Depende de:** T1.1
-  - **Critérios da Spec:** REQ-01, AC-01
+  - **Critérios da Spec:** RF-01, CA-01
   - **Resultado observável:** DTOs, structure e faker do Code Playback são importáveis pelas entradas públicas previstas do `@stardust/core`, sem alterar barrels de widgets ou criar dependência cross-domain.
   - **Camada:** `core`
   - **Paths permitidos:**
@@ -189,14 +189,14 @@ last_updated_at: 2026-07-27
   - **Cobertura obrigatória:** não se aplica; barrels não recebem teste direto, e a resolução pública é coberta pelos sensores de typecheck/build e pelo consumo nas tarefas dependentes.
   - **Tentativas:** 3
   - **Sensores:** Builder e gate: codecheck/typecheck/build do core, resolução pública de `@stardust/core/global/structures/{dtos,fakers}` e structures, scope/codecheck/typecheck/unit/quality determinísticos passaram; contract-check sintético interrompido pela limitação Next/Turbopack, contrato principal aprovado.
-  - **Avaliação:** `accepted` — Judge independente confirmou REQ-01 e AC-01.
+  - **Avaliação:** `accepted` — Judge independente confirmou RF-01 e CA-01.
   - **Findings bloqueantes:** nenhum
   - **Próxima ação:** prosseguir para T1.3 após readiness gate.
 
 - [x] **T1.3** — Integrar a solução oficial ao domínio do desafio com round-trip compatível
   - **Estado:** `accepted`
   - **Depende de:** T1.2
-  - **Critérios da Spec:** REQ-01, REQ-10, AC-01, AC-02, AR-03, AR-04
+  - **Critérios da Spec:** RF-01, RF-10, CA-01, CA-02, RN-03, RN-04
   - **Resultado observável:** `ChallengeDto`, `Challenge`, `ChallengeFactory` e `ChallengesFaker` preservam uma solução oficial válida e normalizam campo ausente ou nulo para `null`, sem acoplar o recurso a `SolutionDto` ou a fluxos públicos de escrita.
   - **Camada:** `core`
   - **Paths permitidos:**
@@ -213,7 +213,7 @@ last_updated_at: 2026-07-27
   - **Cobertura obrigatória:** round-trip com solução válida; compatibilidade com DTO legado sem o campo; preservação de `null`; cópia defensiva do Playback através da entidade; faker com default nulo e override válido.
   - **Tentativas:** 3
   - **Sensores:** core codecheck/typecheck/build e Challenge 9/9 passaram; core unit 171 suites/611 testes; Web typecheck/codecheck/unit 90 suites/379 testes; global typecheck 8/8; quality-ratchet core passou (Biome warnings 12). Ação Zustand imutável e getter opaco condicional corrigiram TS2589; gate scope/codecheck passou e typecheck sintético foi revalidado após sincronizar os arquivos atuais; contract sintético segue limitado por Next/Turbopack, contrato principal aprovado.
-  - **Avaliação:** `accepted` — Judge independente confirmou REQ-01/REQ-10/AC-01/AC-02/AR-03/AR-04.
+  - **Avaliação:** `accepted` — Judge independente confirmou RF-01/RF-10/CA-01/CA-02/RN-03/RN-04.
   - **Findings bloqueantes:** nenhum
   - **Próxima ação:** prosseguir para T2.1 após readiness gate.
 
@@ -226,7 +226,7 @@ last_updated_at: 2026-07-27
 - [x] **T2.1** — Criar a migration canônica e refletir o schema nos tipos Supabase
   - **Estado:** `verified`
   - **Depende de:** T1.3
-  - **Critérios da Spec:** REQ-01, REQ-10, REQ-11, AC-01, AC-02, AR-03, AR-04, AR-05
+  - **Critérios da Spec:** RF-01, RF-10, RF-11, CA-01, CA-02, RN-03, RN-04, RN-05
   - **Resultado observável:** a migration adiciona `official_solution`, recria a view de detalhe com o campo, preserva a RPC paginada sem o JSON e não altera policies, RLS, grants ou dados existentes; `Database.ts` representa tabela e view regeneradas.
   - **Camada:** `server/database`
   - **Paths permitidos:**
@@ -246,7 +246,7 @@ last_updated_at: 2026-07-27
 - [x] **T2.2** — Adaptar mapper e repository e provar os contratos HTTP de detalhe e listagem
   - **Estado:** `verified`
   - **Depende de:** T2.1
-  - **Critérios da Spec:** REQ-01, REQ-10, REQ-11, AC-01, AC-02, AR-03, AR-04, AR-05
+  - **Critérios da Spec:** RF-01, RF-10, RF-11, CA-01, CA-02, RN-03, RN-04, RN-05
   - **Resultado observável:** uma única consulta por slug devolve o Playback persistido ou `null`; linhas da listagem sem `official_solution` continuam mapeáveis; `add` e `replace` não escrevem o campo; os endpoints reais comprovam o detalhe completo e a projeção paginada sem o JSON.
   - **Camada:** `server/database` e rota HTTP de integração
   - **Paths permitidos:**
@@ -278,7 +278,7 @@ last_updated_at: 2026-07-27
 - [x] **T3.1** — Estender o CodeEditor para múltiplos intervalos destacados
   - **Estado:** `accepted`
   - **Depende de:** T1.3
-  - **Critérios da Spec:** REQ-05, REQ-08, REQ-09, AC-14, AR-01, AR-02
+  - **Critérios da Spec:** RF-05, RF-08, RF-09, CA-14, RN-01, RN-02
   - **Resultado observável:** o CodeEditor aplica e substitui uma decoration por intervalo, revela o primeiro range fora da viewport com contexto, limpa decorations no unmount e permanece inerte para consumidores que não enviam ranges.
   - **Camada:** `web/ui`
   - **Paths permitidos:**
@@ -294,14 +294,14 @@ last_updated_at: 2026-07-27
   - **Cobertura obrigatória:** montagem sem ranges; aplicação simultânea de múltiplos ranges; atualização e limpeza de decorations anteriores; reveal somente quando necessário; contexto de linhas próximas; cleanup no unmount; ausência de execução, LSP adicional ou efeito externo causado pela nova prop.
   - **Tentativas:** 1
   - **Sensores:** readiness passou; Builder: codecheck, typecheck, testes direcionados 8/8 e diff check passaram; Implementation Gate sem quality-ratchet passou em todos os sensores, incluindo contract-check com integração server/web.
-  - **Avaliação:** accepted — Judge independente confirmou REQ-05, REQ-08, REQ-09, AC-14, AR-01 e AR-02.
+  - **Avaliação:** accepted — Judge independente confirmou RF-05, RF-08, RF-09, CA-14, RN-01 e RN-02.
   - **Findings bloqueantes:** nenhum; quality-ratchet não executado por decisão do usuário.
   - **Próxima ação:** prosseguir para T3.2 após readiness gate
 
 - [x] **T3.2** — Implementar o estado e a temporização do hook de Code Playback
   - **Estado:** `verified`
   - **Depende de:** T1.3
-  - **Critérios da Spec:** REQ-04, REQ-05, REQ-07, REQ-09, AC-08, AC-09, AC-10, AC-12, AR-02
+  - **Critérios da Spec:** RF-04, RF-05, RF-07, RF-09, CA-08, CA-09, CA-10, CA-12, RN-02
   - **Resultado observável:** o hook controla etapa, reprodução, velocidade e expansão com um único timer, mantém autoplay durante navegação manual, pausa no fim e limpa efeitos na troca de payload e no unmount sem mutar o DTO.
   - **Camada:** `web/ui`
   - **Paths permitidos:**
@@ -316,14 +316,14 @@ last_updated_at: 2026-07-27
   - **Cobertura obrigatória:** estado inicial; play/pause; anterior, próxima e seek nos limites e durante autoplay; intervalos de `0.5x`, `1x` e `2x` com relógio controlado; troca de velocidade sem timers concorrentes; pausa ao final; preservação de estado ao expandir/recolher; `Escape`; troca de payload e unmount; spies negativos de request, LSP e execução; fixture congelada.
   - **Tentativas:** 2
   - **Sensores:** readiness passou; após JI-01, Builder corrigiu a troca de payload e passou codecheck, typecheck e teste direcionado 12/12; Implementation Gate escopado para `@stardust/web` passou.
-  - **Avaliação:** accepted — Judge independente confirmou AC-08, AC-09, AC-10, AC-12 e AR-02; JI-01 resolvido.
+  - **Avaliação:** accepted — Judge independente confirmou CA-08, CA-09, CA-10, CA-12 e RN-02; JI-01 resolvido.
   - **Findings bloqueantes:** nenhum; quality-ratchet dispensado por decisão do usuário.
   - **Próxima ação:** prosseguir para T2.2, que permanece pendente por estar em uma fase independente.
 
 - [x] **T3.3** — Implementar os controles acessíveis do Code Playback
   - **Estado:** `verified`
   - **Depende de:** T1.3
-  - **Critérios da Spec:** REQ-04, REQ-08, AC-08, AC-09, AR-01
+  - **Critérios da Spec:** RF-04, RF-08, CA-08, CA-09, RN-01
   - **Resultado observável:** o widget de controles expõe anterior, play/pause, próxima, timeline, velocidade, posição e expansão com nomes, estados e valores acessíveis, preservando a disponibilidade manual durante autoplay e os limites da sequência.
   - **Camada:** `web/ui`
   - **Paths permitidos:**
@@ -338,14 +338,14 @@ last_updated_at: 2026-07-27
   - **Cobertura obrigatória:** labels e foco por teclado; `aria-pressed`, `aria-valuetext` e disabled nos limites; callbacks de todos os controles; seleção das três velocidades; estado visual perceptível sem depender somente de cor.
   - **Tentativas:** 1
   - **Sensores:** readiness passou; Builder: codecheck, typecheck, teste direcionado 5/5 e `git diff --check` passaram; Implementation Gate escopado para `@stardust/web` passou.
-  - **Avaliação:** accepted — Judge independente confirmou REQ-04, REQ-08, AC-08, AC-09 e AR-01.
+  - **Avaliação:** accepted — Judge independente confirmou RF-04, RF-08, CA-08, CA-09 e RN-01.
   - **Findings bloqueantes:** nenhum; warning advisory sobre `fieldset` não bloqueante.
   - **Próxima ação:** prosseguir para T3.4 após readiness gate.
 
 - [x] **T3.4** — Implementar a renderização discriminada dos painéis do Code Playback
   - **Estado:** `verified`
   - **Depende de:** T1.3
-  - **Critérios da Spec:** REQ-05, REQ-06, REQ-08, AC-10, AC-11, AC-15, AC-16, AR-01
+  - **Critérios da Spec:** RF-05, RF-06, RF-08, CA-10, CA-11, CA-15, CA-16, RN-01
   - **Resultado observável:** o widget de painel renderiza as seis variantes na ordem recebida, incluindo índices, ponteiros, estados, ranges, empty labels e overflow, sem alterar o DTO.
   - **Camada:** `web/ui`
   - **Paths permitidos:**
@@ -360,14 +360,14 @@ last_updated_at: 2026-07-27
   - **Cobertura obrigatória:** sequence, scalar, map, set, grid e result; coleções vazias com label customizada e fallback; índices e múltiplos ponteiros; destaques simples, múltiplos e por intervalo; valores extensos em wrap e scroll; múltiplos estados visuais com sinal além de cor; preservação de ordem.
   - **Tentativas:** 1
   - **Sensores:** readiness passou; Builder: codecheck, typecheck, teste direcionado 5/5 e `git diff --check` passaram; Implementation Gate escopado para `@stardust/web` passou.
-  - **Avaliação:** accepted — Judge independente confirmou REQ-05, REQ-06, REQ-08, AC-10, AC-11, AC-15, AC-16 e AR-01.
+  - **Avaliação:** accepted — Judge independente confirmou RF-05, RF-06, RF-08, CA-10, CA-11, CA-15, CA-16 e RN-01.
   - **Findings bloqueantes:** nenhum.
   - **Próxima ação:** prosseguir para T3.5 após readiness gate.
 
 - [x] **T3.5** — Compor o widget global Code Playback e seus layouts
   - **Estado:** `verified`
   - **Depende de:** T3.1, T3.2, T3.3, T3.4
-  - **Critérios da Spec:** REQ-04, REQ-05, REQ-06, REQ-07, REQ-08, REQ-09, AC-08, AC-09, AC-10, AC-11, AC-12, AC-13, AC-14, AC-15, AC-16, AR-01, AR-02
+  - **Critérios da Spec:** RF-04, RF-05, RF-06, RF-07, RF-08, RF-09, CA-08, CA-09, CA-10, CA-11, CA-12, CA-13, CA-14, CA-15, CA-16, RN-01, RN-02
   - **Resultado observável:** o Entry Point conecta hook e Views; cada etapa atualiza atomicamente editor, input, painéis e explicação; layouts padrão e expandido preservam estado e se adaptam à viewport; a posição e a explicação são anunciadas sem efeitos externos.
   - **Camada:** `web/ui`
   - **Paths permitidos:**
@@ -389,7 +389,7 @@ last_updated_at: 2026-07-27
 - [x] **T3.6** — Corrigir hidratação e semântica de navegação para URLs de soluções
   - **Estado:** `verified`
   - **Depende de:** T1.3
-  - **Critérios da Spec:** REQ-01, REQ-03, REQ-10, AC-02, AC-05, AC-06, AR-04
+  - **Critérios da Spec:** RF-01, RF-03, RF-10, CA-02, CA-05, CA-06, RN-04
   - **Resultado observável:** a hidratação detecta mudanças em `officialSolution`, qualquer URL sob `/solutions` mantém `activeContent = 'solutions'` e a factory de rotas gera o caminho estático oficial sem colisão com slugs de usuários.
   - **Camada:** `web/ui` e navegação
   - **Paths permitidos:**
@@ -412,7 +412,7 @@ last_updated_at: 2026-07-27
 - [x] **T3.7** — Refatorar a listagem de soluções e inserir a chamada oficial condicional
   - **Estado:** `verified`
   - **Depende de:** T3.6
-  - **Critérios da Spec:** REQ-02, REQ-03, REQ-08, AC-03, AC-04, AC-05, AR-01
+  - **Critérios da Spec:** RF-02, RF-03, RF-08, CA-03, CA-04, CA-05, RN-01
   - **Resultado observável:** contexts, service e store são resolvidos no Entry Point; o hook recebe dependências; a View mostra o card oficial antes das soluções de usuários apenas quando o conteúdo existe; a chamada é acessível e aponta à rota estática.
   - **Camada:** `web/ui`
   - **Paths permitidos:**
@@ -439,7 +439,7 @@ last_updated_at: 2026-07-27
 - [x] **T3.8** — Integrar slot, App Router e jornada real da solução oficial
   - **Estado:** `verified`
   - **Depende de:** T2.2, T3.5, T3.7
-  - **Critérios da Spec:** REQ-01, REQ-02, REQ-03, REQ-04, REQ-05, REQ-06, REQ-07, REQ-08, REQ-09, REQ-10, AC-02, AC-03, AC-05, AC-06, AC-07, AC-08, AC-09, AC-10, AC-11, AC-12, AC-13, AC-14, AC-15, AC-16, AR-01, AR-02, AR-04
+  - **Critérios da Spec:** RF-01, RF-02, RF-03, RF-04, RF-05, RF-06, RF-07, RF-08, RF-09, RF-10, CA-02, CA-03, CA-05, CA-06, CA-07, CA-08, CA-09, CA-10, CA-11, CA-12, CA-13, CA-14, CA-15, CA-16, RN-01, RN-02, RN-04
   - **Resultado observável:** `page.tsx` e `default.tsx` renderizam o slot oficial; o Entry Point aplica o bloqueio visual antes do Playback e a View cobre Empty e Content; a jornada Playwright comprova chamada, navegação, bloqueio, indisponibilidade, controles, snapshots e responsividade sobre a rota publicada.
   - **Camada:** `web/ui`, App Router e integração de browser
   - **Paths permitidos:**
@@ -468,7 +468,7 @@ last_updated_at: 2026-07-27
 - [x] **CI-01** — Corrigir regressão do quality ratchet web no CI do PR
   - **Estado:** `verified`
   - **Depende de:** T3.5
-  - **Critérios da Spec:** AR-01, AR-02
+  - **Critérios da Spec:** RN-01, RN-02
   - **Resultado observável:** os avisos introduzidos pelo Code Playback e pela navegação são corrigidos sem reduzir ou atualizar o baseline vigente.
   - **Camada:** `web/ui`
   - **Paths permitidos:** `apps/web/src/ui/challenging/widgets/pages/Challenge/useChallengePage.ts`; `apps/web/src/ui/global/widgets/components/CodePlayback/**`
@@ -479,7 +479,7 @@ last_updated_at: 2026-07-27
 - [x] **CI-02** — Garantir dependência compilada do LSP no teste de checkout limpo
   - **Estado:** `verified`
   - **Depende de:** T3.1
-  - **Critérios da Spec:** AR-01, AR-02
+  - **Critérios da Spec:** RN-01, RN-02
   - **Resultado observável:** os workflows de core e web constroem `@stardust/lsp` após `npm ci` e antes das suítes que importam o pacote, eliminando a falha de resolução sem remover cobertura.
   - **Camada:** CI/workflows
   - **Paths permitidos:** `.github/workflows/core-package-ci.yaml`; `.github/workflows/web-app-ci.yaml`
@@ -490,7 +490,7 @@ last_updated_at: 2026-07-27
 - [x] **CI-03** — Estabilizar a action de reset no ciclo de vida da página
   - **Estado:** `verified`
   - **Depende de:** T3.6
-  - **Critérios da Spec:** REQ-01, REQ-03, AC-02, AC-05, AC-06, AC-07, AR-04
+  - **Critérios da Spec:** RF-01, RF-03, CA-02, CA-05, CA-06, CA-07, RN-04
   - **Resultado observável:** a limpeza do store ocorre no unmount e nas ações explícitas de saída, sem ser reexecutada por rerenders causados pela hidratação ou navegação.
   - **Camada:** `web/ui`
   - **Finding bloqueante:** JI-F3-01 — `resetStore` instável na dependência do efeito.
@@ -501,7 +501,7 @@ last_updated_at: 2026-07-27
 - [x] **CI-04** — Preparar LSP nos quality gates de core e web
   - **Estado:** `verified`
   - **Depende de:** CI-02
-  - **Critérios da Spec:** AR-01, AR-02
+  - **Critérios da Spec:** RN-01, RN-02
   - **Resultado observável:** os jobs de quality-ratchet de core e web constroem `@stardust/lsp` após `npm ci` e antes do Jest com cobertura.
   - **Camada:** CI/workflows
   - **Paths permitidos:** `.github/workflows/core-package-ci.yaml`; `.github/workflows/web-app-ci.yaml`
@@ -513,7 +513,7 @@ last_updated_at: 2026-07-27
 - [x] **CI-05** — Preparar LSP nos jobs de testes e quality ratchet do server
   - **Estado:** `verified`
   - **Depende de:** CI-04
-  - **Critérios da Spec:** AR-01, AR-02
+  - **Critérios da Spec:** RN-01, RN-02
   - **Resultado observável:** os jobs Tests e Quality ratchet do server constroem `@stardust/lsp` após `npm ci` e antes de executar Jest.
   - **Camada:** CI/workflows
   - **Paths permitidos:** `.github/workflows/server-app-ci.yaml`
@@ -527,7 +527,7 @@ last_updated_at: 2026-07-27
 - **Estado:** `accepted`
 - **Ação:** Judge independente reavaliou F3 após a estabilização de `resetStore` e a repetição dos sensores afetados.
 - **Sensores:** typecheck/codecheck web, hook 6/6, web unit 102/428, quality-ratchet 156 contra baseline 163, Implementation Gate web e Playwright 5/5 passaram.
-- **Avaliação:** accepted — AC-02–AC-16, AR-01, AR-02 e AR-04 confirmados; JI-F3-01 resolvido; F1/F2 não afetadas.
+- **Avaliação:** accepted — CA-02–CA-16, RN-01, RN-02 e RN-04 confirmados; JI-F3-01 resolvido; F1/F2 não afetadas.
 - **Findings bloqueantes:** nenhum.
 - **Próxima ação:** executar o Conclusion Gate e o Judge de conclusão.
 
@@ -536,7 +536,7 @@ last_updated_at: 2026-07-27
 - **Estado:** `accepted`
 - **Ação:** Judge independente reavaliou F3 após a preparação do LSP nos quality-ratchets de core e web.
 - **Sensores:** build LSP, quality-ratchets core/web, typecheck/codecheck core/web e Implementation Gates independentes passaram; Playwright 5/5 e baselines inalterados.
-- **Avaliação:** accepted — AC-02–AC-16, AR-01, AR-02 e AR-04 confirmados; CI-04 verificada; nenhum finding bloqueante.
+- **Avaliação:** accepted — CA-02–CA-16, RN-01, RN-02 e RN-04 confirmados; CI-04 verificada; nenhum finding bloqueante.
 - **Findings bloqueantes:** nenhum.
 - **Próxima ação:** executar o Conclusion Gate e o Judge de conclusão.
 
@@ -593,7 +593,7 @@ last_updated_at: 2026-07-27
 - **Ação:** Judge independente reavaliou T1.1 após JI-01 e inspecionou o round-trip de estruturas e coleções.
 - **Sensores:** teste específico 7/7, typecheck e codecheck passaram; probes adicionais reproduziram holes em arrays estruturais e propriedades extras/símbolos preservados por cópias estruturais.
 - **Avaliação:** changes_requested — correção necessária antes da aceitação.
-- **Findings bloqueantes:** `JI-02` em REQ-01, REQ-06, REQ-09, AC-01 e AR-02.
+- **Findings bloqueantes:** `JI-02` em RF-01, RF-06, RF-09, CA-01 e RN-02.
 
 ### 2026-07-23 — T1.1 — correção JI-03 e Judge final
 
@@ -609,7 +609,7 @@ last_updated_at: 2026-07-27
 - **Ação:** revisão pós-JI-02 identificou propriedade opcional estrutural explicitamente `undefined` sendo aceita e omitida pelo getter.
 - **Sensores:** probes reproduziram a perda silenciosa; campo opcional ausente continua válido.
 - **Avaliação:** correção necessária antes da aceitação.
-- **Findings bloqueantes:** `JI-03` em REQ-01, REQ-09, AC-01 e AR-02.
+- **Findings bloqueantes:** `JI-03` em RF-01, RF-09, CA-01 e RN-02.
 
 ### 2026-07-23 — readiness gate T1.2
 
@@ -624,7 +624,7 @@ last_updated_at: 2026-07-27
 - **Estado:** `accepted`
 - **Ação:** Judge independente inspecionou exclusivamente os três barrels permitidos e a resolução dos subpaths públicos.
 - **Sensores:** diff restrito aos três arquivos; `git diff --check`, build/typecheck/codecheck core e imports públicos passaram.
-- **Avaliação:** accepted — REQ-01 e AC-01 atendidos.
+- **Avaliação:** accepted — RF-01 e CA-01 atendidos.
 - **Findings bloqueantes:** nenhum.
 
 ### 2026-07-23 — readiness gate T1.3
@@ -640,7 +640,7 @@ last_updated_at: 2026-07-27
 - **Estado:** `accepted`
 - **Ação:** Judge independente confirmou a integração de `officialSolution`; a ação Zustand foi ajustada para evitar Draft recursivo do Immer.
 - **Sensores:** typecheck global e sintético 8/8 passaram após a estabilização; Web codecheck/unit 90/90 suites e 379/379 testes; core codecheck/build, Challenge 9/9, unit 171/171 suites e 611/611 testes; quality-ratchet passou.
-- **Avaliação:** accepted — REQ-01, REQ-10, AC-01, AC-02, AR-03 e AR-04 atendidos.
+- **Avaliação:** accepted — RF-01, RF-10, CA-01, CA-02, RN-03 e RN-04 atendidos.
 - **Findings bloqueantes:** nenhum.
 
 ### 2026-07-23 — readiness gate T2.1
@@ -656,7 +656,7 @@ last_updated_at: 2026-07-27
 - **Estado:** `accepted`
 - **Ação:** Judge independente inspecionou a migration e os tipos Supabase sem editar o worktree.
 - **Sensores:** migration-check passou em 15 migrations; server typecheck, codecheck, unit e quality-ratchet passaram. Reset integrado do Supabase permanece bloqueado por BLK-001.
-- **Avaliação:** accepted — REQ-01, REQ-10, REQ-11, AC-01, AC-02, AR-03, AR-04 e AR-05 atendidos.
+- **Avaliação:** accepted — RF-01, RF-10, RF-11, CA-01, CA-02, RN-03, RN-04 e RN-05 atendidos.
 - **Findings bloqueantes:** nenhum.
 
 ### 2026-07-23 — readiness gate T2.2
@@ -711,7 +711,7 @@ last_updated_at: 2026-07-27
 
 - **Estado:** `verified`
 - **Ação:** Judge independente reavaliou mapper, repository, fixture e testes HTTP sem editar o worktree.
-- **Sensores:** REQ-01, REQ-10, REQ-11, AC-01, AC-02, AR-03, AR-04 e AR-05 passaram; a evidência HTTP direcionada anterior confirmou 4/4 cenários com Docker/Supabase disponível.
+- **Sensores:** RF-01, RF-10, RF-11, CA-01, CA-02, RN-03, RN-04 e RN-05 passaram; a evidência HTTP direcionada anterior confirmou 4/4 cenários com Docker/Supabase disponível.
 - **Avaliação:** accepted — nenhum finding bloqueante; JI-01 e JI-02 resolvidos.
 - **Findings bloqueantes:** nenhum.
 
@@ -751,7 +751,7 @@ last_updated_at: 2026-07-27
 
 - **Estado:** `accepted`
 - **Ação:** Judge independente avaliou a implementação e os testes sem editar o worktree.
-- **Sensores:** REQ-05, REQ-08, REQ-09, AC-14, AR-01 e AR-02 passaram; scope-check, codecheck, typecheck, test:unit, architecture-check, migration-check e contract-check passaram; quality-ratchet dispensado por decisão do usuário.
+- **Sensores:** RF-05, RF-08, RF-09, CA-14, RN-01 e RN-02 passaram; scope-check, codecheck, typecheck, test:unit, architecture-check, migration-check e contract-check passaram; quality-ratchet dispensado por decisão do usuário.
 - **Avaliação:** accepted — nenhum finding bloqueante.
 - **Findings bloqueantes:** nenhum.
 
@@ -783,7 +783,7 @@ last_updated_at: 2026-07-27
 
 - **Estado:** `evaluation_failed`
 - **Ação:** Judge independente inspecionou a implementação sem editar o worktree e executou probe de troca de payload.
-- **Sensores:** critérios REQ-04, REQ-07, REQ-09, AC-08, AC-09, AC-10, AC-12 e AR-02 passaram; REQ-05 falhou porque payload menor produz um render transitório com `currentStep === undefined`.
+- **Sensores:** critérios RF-04, RF-07, RF-09, CA-08, CA-09, CA-10, CA-12 e RN-02 passaram; RF-05 falhou porque payload menor produz um render transitório com `currentStep === undefined`.
 - **Avaliação:** changes_requested — corrigir antes da aceitação.
 - **Findings bloqueantes:** JI-01; a correção deve garantir snapshot válido já no render e adicionar regressão em consumidor real.
 
@@ -807,7 +807,7 @@ last_updated_at: 2026-07-27
 
 - **Estado:** `verified`
 - **Ação:** Judge independente reavaliou o hook sem editar o worktree.
-- **Sensores:** AC-08, AC-09, AC-10, AC-12 e AR-02 passaram; o probe de troca para payload menor não reproduziu `currentStep === undefined`.
+- **Sensores:** CA-08, CA-09, CA-10, CA-12 e RN-02 passaram; o probe de troca para payload menor não reproduziu `currentStep === undefined`.
 - **Avaliação:** accepted — nenhum finding bloqueante; JI-01 resolvido.
 - **Findings bloqueantes:** nenhum.
 
@@ -823,7 +823,7 @@ last_updated_at: 2026-07-27
 
 - **Estado:** `verified`
 - **Ação:** Judge independente reavaliou os controles sem editar o worktree.
-- **Sensores:** REQ-04, REQ-08, AC-08, AC-09 e AR-01 passaram; acessibilidade, callbacks, limites, velocidades e estados visuais confirmados.
+- **Sensores:** RF-04, RF-08, CA-08, CA-09 e RN-01 passaram; acessibilidade, callbacks, limites, velocidades e estados visuais confirmados.
 - **Avaliação:** accepted — nenhum finding bloqueante.
 - **Findings bloqueantes:** nenhum; warning advisory sobre `fieldset` não bloqueante.
 
@@ -839,7 +839,7 @@ last_updated_at: 2026-07-27
 
 - **Estado:** `verified`
 - **Ação:** Judge independente reavaliou os seis painéis sem editar o worktree.
-- **Sensores:** REQ-05, REQ-06, REQ-08, AC-10, AC-11, AC-15, AC-16 e AR-01 passaram; ordem, variantes, vazios, highlights, overflow e imutabilidade confirmados.
+- **Sensores:** RF-05, RF-06, RF-08, CA-10, CA-11, CA-15, CA-16 e RN-01 passaram; ordem, variantes, vazios, highlights, overflow e imutabilidade confirmados.
 - **Avaliação:** accepted — nenhum finding bloqueante.
 - **Findings bloqueantes:** nenhum.
 
@@ -888,7 +888,7 @@ last_updated_at: 2026-07-27
 - **Estado:** `rejected`
 - **Ação:** avaliação independente da fase F3 contra a Spec vigente, o Plan, o diff e as evidências do gate agregado.
 - **Finding bloqueante:** os testes co-localizados de `page.tsx`/`default.tsx` e a jornada Playwright `apps/web/src/app/tests/challenging/official-solution.test.ts` não existiam; `test:integration` não exercitava a solução oficial.
-- **Critérios afetados:** AC-02, AC-03, AC-05, AC-06, AC-07, AC-12, AC-13, AC-14, AC-15, AR-01 e AR-04.
+- **Critérios afetados:** CA-02, CA-03, CA-05, CA-06, CA-07, CA-12, CA-13, CA-14, CA-15, RN-01 e RN-04.
 - **Próxima ação:** criar os três testes obrigatórios, cobrir card/rota/bloqueio/responsividade/acessibilidade e executar a suíte de integração da web.
 
 ### 2026-07-25 — F3 — Implementation Gate agregado
@@ -919,7 +919,7 @@ last_updated_at: 2026-07-27
 
 - **Estado:** `accepted`
 - **Ação:** Judge independente reavaliou a fase F3 contra a Spec vigente, o diff integrado, os sensores e a jornada Playwright real.
-- **Sensores:** critérios AC-02–AC-16 e AR-01, AR-02 e AR-04 aprovados; Playwright 5/5, testes App Router 2/2 e Implementation Gate web aprovados.
+- **Sensores:** critérios CA-02–CA-16 e RN-01, RN-02 e RN-04 aprovados; Playwright 5/5, testes App Router 2/2 e Implementation Gate web aprovados.
 - **Avaliação:** accepted — JI-01 resolvido e nenhum finding bloqueante.
 - **Findings bloqueantes:** nenhum; quality-ratchet permanece dispensado por decisão explícita do usuário.
 - **Próxima ação:** executar `conclude-spec` e o Judge de conclusão.
@@ -964,7 +964,7 @@ last_updated_at: 2026-07-27
 
 - **Estado:** `evaluation_failed`
 - **Ação:** Judge independente validou a resolução de BLK-001 e a dispensa explícita de JC-02, confrontando-a com o diff, as Rules e as pré-condições do Harness.
-- **Sensores:** requisitos REQ-01–REQ-11 aprovados; Conclusion Gate e integrações registradas como aprovados.
+- **Sensores:** requisitos RF-01–RF-11 aprovados; Conclusion Gate e integrações registradas como aprovados.
 - **Avaliação:** `failed` — JC-03 e JC-04 permanecem bloqueantes; a dispensa de JC-02 foi aceita.
 - **Findings bloqueantes:** JC-03 e JC-04.
 - **Próxima ação:** reabrir o fluxo de implementação para restaurar o baseline e reconciliar o Plan; não fechar Spec ou Plan.
@@ -1010,7 +1010,7 @@ last_updated_at: 2026-07-27
 - **Estado:** `accepted`
 - **Ação:** Judge independente avaliou a integração completa contra a Spec vigente, Plan, diff, arquitetura, Rules e histórico de findings.
 - **Sensores:** Conclusion Gate passou; typecheck global passou; unit passou em core (171/611), server (161/300), web (102/426) e harness (18/18); integração server 61/183; Playwright oficial 5/5; builds core/server/web passaram; quality-ratchet server passou sem `--update-baseline`.
-- **Avaliação:** `accepted` — REQ-01–REQ-11, fases F1/F2/F3 e findings JC-01–JC-04 confirmados; nenhum finding bloqueante ativo.
+- **Avaliação:** `accepted` — RF-01–RF-11, fases F1/F2/F3 e findings JC-01–JC-04 confirmados; nenhum finding bloqueante ativo.
 - **Próxima ação:** nenhuma; Spec e Plan fechados documentalmente.
 
 ### 2026-07-27 — CI-01/CI-02 — regressões encontradas após abertura do PR
@@ -1035,7 +1035,7 @@ last_updated_at: 2026-07-27
 
 - **Estado:** `accepted`
 - **Ação:** Judge independente avaliou novamente a integração completa após a correção do CI e de JI-F3-01.
-- **Sensores:** REQ-01–REQ-11, AC-01–AC-16 e AR-01–AR-05 aprovados; Conclusion Gate passou; F1/F2/F3 aceitas; baselines inalterados; nenhum finding bloqueante.
+- **Sensores:** RF-01–RF-11, CA-01–CA-16 e RN-01–RN-05 aprovados; Conclusion Gate passou; F1/F2/F3 aceitas; baselines inalterados; nenhum finding bloqueante.
 - **Avaliação:** `accepted` — Spec e Plan autorizados para fechamento documental; o novo HEAD ainda precisa passar CI remoto antes do merge.
 - **Próxima ação:** nenhuma documental; commitar, fazer push, solicitar novo Codex Review e aguardar CI completo/mergeable.
 
@@ -1052,14 +1052,14 @@ last_updated_at: 2026-07-27
 - **Estado:** `accepted`
 - **Ação:** Judge independente reavaliou F3 após o build do LSP ser adicionado aos jobs Tests e Quality ratchet do server.
 - **Sensores:** build LSP, server unit 161/300, quality-ratchet server, typecheck/codecheck server e Implementation Gate server passaram; CI-04 core/web e baselines inalterados.
-- **Avaliação:** accepted — AC-02–AC-16, AR-01, AR-02 e AR-04 confirmados; CI-05 verificada; nenhum finding bloqueante.
+- **Avaliação:** accepted — CA-02–CA-16, RN-01, RN-02 e RN-04 confirmados; CI-05 verificada; nenhum finding bloqueante.
 - **Próxima ação:** executar o Conclusion Gate e o Judge de conclusão.
 
 ### 2026-07-27 — Conclusão — Judge Conclusion após CI-05
 
 - **Estado:** `accepted`
 - **Ação:** Judge independente reavaliou a integração completa após a correção do workflow do server.
-- **Sensores:** REQ-01–REQ-11, AC-01–AC-16 e AR-01–AR-05 aprovados; Conclusion Gate passou; core 171/611, server 161/300, web 102/428; quality-ratchets core/server/web passaram sem atualização de baseline; integração server 61/183; Playwright 5/5.
+- **Sensores:** RF-01–RF-11, CA-01–CA-16 e RN-01–RN-05 aprovados; Conclusion Gate passou; core 171/611, server 161/300, web 102/428; quality-ratchets core/server/web passaram sem atualização de baseline; integração server 61/183; Playwright 5/5.
 - **Avaliação:** `accepted` — 18/18 tarefas verificadas, F1/F2/F3 aceitas, CI-05 integrada e nenhum finding bloqueante.
 - **Próxima ação:** nenhuma; Spec e Plan fechados documentalmente. O CI remoto deve passar após o push antes do merge.
 
@@ -1067,6 +1067,6 @@ last_updated_at: 2026-07-27
 
 - **Estado:** `accepted`
 - **Ação:** Judge independente reavaliou a integração completa após a correção dos quality-ratchets de core e web.
-- **Sensores:** REQ-01–REQ-11, AC-01–AC-16 e AR-01–AR-05 aprovados; Conclusion Gate passou; core 171/611, server 161/300, web 102/428, integração server 61/183, Playwright 5/5 e quality-ratchets core/web aprovados sem atualizar baseline.
+- **Sensores:** RF-01–RF-11, CA-01–CA-16 e RN-01–RN-05 aprovados; Conclusion Gate passou; core 171/611, server 161/300, web 102/428, integração server 61/183, Playwright 5/5 e quality-ratchets core/web aprovados sem atualizar baseline.
 - **Avaliação:** `accepted` — 17/17 tarefas verificadas, F1/F2/F3 aceitas, CI-04 integrada corretamente e nenhum finding bloqueante.
 - **Próxima ação:** nenhuma; Spec e Plan fechados documentalmente. O CI remoto deve ser reexecutado após o push antes do merge.

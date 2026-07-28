@@ -4,8 +4,8 @@ description: Criar um plano de implementacao estruturado em fases e tarefas a pa
 
 ## Pendencias
 
-- [ ] **Acesso direto sem conta (REQ-06):** o PRD marca como em construcao; sem comportamento confirmado para usuario nao autenticado em `/auth/account-confirmation`. Manter fora de escopo ate definicao do produto.
-- [ ] **Protecao de rota privada (REQ-05):** a rota privada escolhida para o cenario de redirect pode exigir defaults adicionais de dados no `ServerMock`. Escolher a rota com menor dependencia durante a implementacao e registrar os mocks minimos necessarios.
+- [ ] **Acesso direto sem conta (RF-06):** o PRD marca como em construcao; sem comportamento confirmado para usuario nao autenticado em `/auth/account-confirmation`. Manter fora de escopo ate definicao do produto.
+- [ ] **Protecao de rota privada (RF-05):** a rota privada escolhida para o cenario de redirect pode exigir defaults adicionais de dados no `ServerMock`. Escolher a rota com menor dependencia durante a implementacao e registrar os mocks minimos necessarios.
 - [ ] **Remocao do Inngest do web:** antes de remover `InngestBroker.ts` e `inngest.ts` do `apps/web`, confirmar via grep que nao ha outros consumidores alem do retry e `server-env`.
 
 ---

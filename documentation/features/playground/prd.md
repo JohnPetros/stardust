@@ -10,7 +10,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 
 ### 2. Requisitos
 
-#### REQ-01 Acessar o hub de snippets
+#### RF-01 Acessar o hub de snippets
 
 - [x] **Acessar o hub de snippets**
 
@@ -37,7 +37,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Confiabilidade:** Falhas de autenticacao devem impedir a exibicao da colecao protegida.
 - **Compatibilidade:** A experiencia deve funcionar nos navegadores suportados pela aplicacao web.
 
-#### REQ-02 Criar e editar um snippet no playground
+#### RF-02 Criar e editar um snippet no playground
 
 - [x] **Criar e editar um snippet no playground**
 
@@ -67,7 +67,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Confiabilidade:** Cancelar a substituicao de um exemplo nao deve apagar o conteúdo atual.
 - **Compatibilidade:** O fluxo deve funcionar em mobile e desktop.
 
-#### REQ-03 Salvar e atualizar snippets
+#### RF-03 Salvar e atualizar snippets
 
 - [x] **Salvar e atualizar snippets**
 
@@ -93,7 +93,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Confiabilidade:** Falhas nao devem apagar automaticamente o conteúdo digitado.
 - **Compatibilidade:** O mesmo fluxo deve valer para criacao e edicao.
 
-#### REQ-04 Gerenciar snippets salvos
+#### RF-04 Gerenciar snippets salvos
 
 - [x] **Gerenciar snippets salvos**
 
@@ -117,7 +117,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Confiabilidade:** A exclusao nao deve ocorrer sem confirmacao do usuario.
 - **Compatibilidade:** O comportamento de gerenciamento deve ser consistente em toda a colecao.
 
-#### REQ-05 Controlar visibilidade e compartilhamento
+#### RF-05 Controlar visibilidade e compartilhamento
 
 - [x] **Controlar visibilidade e compartilhamento**
 
@@ -143,7 +143,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Confiabilidade:** O sistema deve evitar expor acoes de share para itens privados.
 - **Compatibilidade:** O comportamento de visibilidade deve ser consistente entre listagem e editor.
 
-#### REQ-06 Visualizar snippets publicos de terceiros
+#### RF-06 Visualizar snippets publicos de terceiros
 
 - [x] **Visualizar snippets publicos de terceiros**
 

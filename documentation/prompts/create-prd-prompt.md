@@ -139,10 +139,10 @@ _Descreva de forma clara e concisa:_
 
 ### 2. Requisitos
 
-_Liste as funcionalidades. Use IDs curtos (`REQ-01`, `REQ-02`...) para
+_Liste as funcionalidades. Use IDs curtos (`RF-01`, `RF-02`...) para
 permitir rastreabilidade com issues e tickets. Use checkboxes para acompanhamento._
 
-#### REQ-01 [Nome do Requisito]
+#### RF-01 [Nome do Requisito]
 
 - [ ] **[Nome do Requisito]**
 
@@ -168,7 +168,7 @@ _Especifique aspectos visuais e de interação (Frontend)._
 - **Confiabilidade:** Tratamento de erros, fallbacks.
 - **Compatibilidade:** Navegadores, dispositivos.
 
-_(Repita o bloco `REQ-XX` para todos os requisitos)_
+_(Repita o bloco `RF-XX` para todos os requisitos)_
 
 ---
 

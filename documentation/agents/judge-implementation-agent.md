@@ -19,8 +19,8 @@ transgressões arquiteturais.
 - Base da fase e diff integrado, ou commit-base da implementação direta.
 - Paths agregados permitidos.
 - Rules aplicáveis.
-- Resultados oficiais dos Implementation Gates das tarefas e da fase, ou do
-  gate da implementação direta.
+- Resultados oficiais dos sensores das tarefas e da fase, ou da implementação
+  direta.
 - Findings humanos ou de tentativas anteriores ainda aplicáveis.
 
 ## Avaliação
@@ -59,13 +59,13 @@ Verifique:
 
 | ID | Estado | Evidência |
 | --- | --- | --- |
-| AC-01 | passed | ... |
+| CA-01 | passed | ... |
 
-### Implementation Gate
+### Sensores
 
 | Comando | Estado | Evidência |
 | --- | --- | --- |
-| `npm run typecheck` | passed | ... |
+| `npm run check:types` | passed | ... |
 
 ### Cobertura das tarefas
 

@@ -585,5 +585,5 @@ Dialog "Adicionar source"
 
 # 11. Validacao Final
 
-* `npm run codecheck` executado na raiz do monorepo, sem erros.
+* `npm run check:code` executado na raiz do monorepo, sem erros.
 * `npm run test` executado na raiz do monorepo, com suites passando em todos os pacotes.

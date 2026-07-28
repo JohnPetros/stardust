@@ -17,13 +17,12 @@
 
 Após fazer qualquer alteração no código, execute os comandos:
 
-- typecheck
-- codecheck
-- unit tests
+- `npm run check:code`
+- `npm run check:types`
+- `npm run test:unit`
 
-Em workflows SDD, execute também os gates definidos em
-`documentation/rules/harness-rules.md`. Para alterações em `packages/harness/**`,
-execute `npm run test:harness`.
+Em workflows SDD, execute também os sensores aplicáveis definidos em
+`documentation/rules/sdd-rules.md`.
 
 # Instruções para revisão de pull request
 

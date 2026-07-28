@@ -111,5 +111,5 @@ const dto = UsersFaker.fakeDto(); // Retorna um DTO
 - Comandos:
   - Pacote core: `npm run test:unit -w @stardust/core`.
   - Global (Turbo): `npm run test`.
-- Tipos e qualidade (antes de abrir PR): `npm run typecheck -w @stardust/core` e `npm run codecheck -w @stardust/core`.
+- Tipos e qualidade (antes de abrir PR): `npm run check:types -w @stardust/core` e `npm run check:code -w @stardust/core`.
 - Referencia geral: `documentation/tooling.md`.

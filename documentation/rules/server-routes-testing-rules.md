@@ -320,6 +320,6 @@ Antes de considerar um teste de rota completo, confirme:
 - Integração server: `npm run db:test -w @stardust/server` antes de
   `npm run test:integration -w @stardust/server`
 - Global (Turbo): `npm run test`
-- Qualidade antes de abrir PR: `npm run typecheck -w @stardust/server` e
-  `npm run codecheck -w @stardust/server`
+- Qualidade antes de abrir PR: `npm run check:types -w @stardust/server` e
+  `npm run check:code -w @stardust/server`
 - Referência geral: `documentation/tooling.md`

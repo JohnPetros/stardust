@@ -3,18 +3,17 @@
 Este arquivo serve como índice para as regras de documentação do projeto.
 Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 
-## Regras do Harness de Agentes
+## Regras de execução do SDD
 
-**Arquivo:** `/documentation/rules/harness-rules.md`
+**Arquivo:** `/documentation/rules/sdd-rules.md`
 **Quando consultar:**
 
-- Ao criar ou julgar uma Spec técnica.
+- Ao criar ou revisar uma Spec técnica.
 - Ao criar ou executar um Plan.
 - Ao implementar uma Spec diretamente.
-- Ao delegar implementação para Builder ou Workers.
-- Ao avaliar implementação ou conclusão com Judges.
+- Ao executar sensores e concluir uma implementação.
 - Ao atualizar Spec, PRD, Architecture ou Rules durante a implementação.
-- Ao registrar revisão humana, handoff, tentativa ou finding no Plan.
+- Ao registrar revisão humana, progresso ou finding no Plan.
 
 ## Regras de Convenções de Código
 

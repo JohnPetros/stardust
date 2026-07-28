@@ -181,8 +181,8 @@ last_updated_at: {DATA}
 
 ## Checklist de Verificação Pós-Correção
 
-- [ ] `npm run codecheck` passa (raiz do monorepo)
-- [ ] `npm run typecheck` passa no workspace afetado
+- [ ] `npm run check:code` passa (raiz do monorepo)
+- [ ] `npm run check:types` passa no workspace afetado
 - [ ] `npm run test` passa no workspace afetado
 - [ ] Nenhuma variável de ambiente real exposta
 - [ ] Nenhum `console.log` de debug em código de produção

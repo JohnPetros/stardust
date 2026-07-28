@@ -1,226 +1,29 @@
 ---
-description: Criar um plano de implementação que também funciona como ledger de progresso, handoff e findings ativos.
+name: create-plan
+description: Criar um Plan SDD como ledger de fases, progresso, evidências e handoff para execução orquestrada.
 ---
 
-# Prompt: Criar Plano
+# Criar Plan
 
-## Objetivo
+O Orchestrator cria o Plan na task atual quando a Spec `open` exigir fases
+dependentes, coordenação entre apps, migration relevante, risco alto ou retomada
+futura. Para escopo pequeno, use `implement-spec` sem Plan.
 
-Transformar uma Spec aceita em fases e tarefas atômicas, com dependências,
-critérios rastreáveis e estado operacional suficiente para execução por agentes
-separados. O Plan é a única fonte de verdade de progresso da implementação.
+Leia Spec, Architecture, Rules e `documentation/rules/sdd-rules.md`. Crie
+`documentation/features/<domínio>/<feature>/plans/<nome>-plan.md` com:
 
-## Entrada
+- `status: pending`, revisão da Spec e commit-base;
+- objetivo, escopo e fora de escopo;
+- fases ordenadas e dependências;
+- tarefas com paths, resultado observável e IDs `RF-*`, `CA-*` e `RN-*`;
+- sensores/evidências esperados por fase;
+- riscos, findings ativos, tentativas, estado atual e próxima ação;
+- espaço para veredito do Judge de cada fase e da conclusão.
 
-- Spec em `documentation/features/**/specs/*-spec.md`.
-- Veredito `accepted` do `judge-spec-agent`.
+Estados de tarefa: `pending`, `implementing`, `validating`, `verified`. Marque
+`[x]` somente depois que o Orchestrator executar os sensores aplicáveis.
+Estados de fase: `pending`, `in_progress`, `awaiting_judgment`, `failed`,
+`accepted`.
 
-Bug report não é entrada direta: crie primeiro uma Spec de correção. Se a Spec
-estiver incompleta, não tiver sido aceita ou contiver pendência bloqueante, não
-crie o Plan.
-
-## Regras Aplicáveis
-
-Leia integralmente:
-
-- `documentation/rules/harness-rules.md`.
-- `documentation/agents/orchestrator-agent.md`.
-- `documentation/rules/rules.md`.
-- `documentation/rules/code-conventions-rules.md`.
-- Rules das camadas e dos tipos de teste citados pela Spec.
-
-## Construção do Plan
-
-### 1. Fixar o contrato
-
-- Registre o caminho da Spec.
-- Calcule a revisão com `git hash-object <spec>`; não use apenas a data.
-- Inicie o Plan como `pending`, sem commit-base até a implementação começar.
-- Copie somente os IDs dos requisitos e critérios; não replique o conteúdo da
-  Spec.
-
-### 2. Definir fases
-
-- Trate cada fase como um incremento integrado e objetivamente avaliável.
-- F1 é `core` quando houver impacto de domínio, structures ou use cases.
-- Crie fases apenas para apps realmente tocados: F2 `server`, F3 `web`, F4
-  `studio`.
-- Fases consumidoras dependem dos contratos que consomem.
-- Fases independentes podem rodar em paralelo somente depois das dependências
-  comuns.
-- Não crie fase vazia apenas para preservar numeração; quando a ausência de
-  impacto for importante, registre-a na estratégia.
-- Declare critérios da Spec cobertos pela fase, paths agregados e condições
-  objetivas para submetê-la ao Judge.
-
-### 3. Definir tarefas
-
-Cada tarefa deve ter:
-
-- Uma responsabilidade atômica.
-- Dependências reais.
-- Resultado observável.
-- IDs `REQ-*`, `AC-*` e `AR-*` associados.
-- Camada.
-- Pacote npm alvo, quando a tarefa for restrita a um workspace.
-- Paths permitidos.
-- Rules obrigatórias.
-- Estado inicial `pending`.
-- Próxima ação inequívoca.
-
-Reserve mudanças em arquivos compartilhados, como barrel files e composição,
-para tarefas de integração. Tarefas que escrevem no mesmo arquivo não são
-paralelas.
-
-### 4. Implementação e teste como unidade de execução
-
-Inclua a implementação e seus testes na mesma tarefa sempre que o artefato for
-testável:
-
-- Objetos de domínio.
-- Use cases.
-- Handlers (`controller`, `job`, `action`, `tool`).
-- Widgets (`view`, `hook`).
-- Rotas HTTP do server e rotas/pages web conforme as Rules.
-
-Uma tarefa testável só pode receber `verified` quando implementação e testes
-estiverem completos e passarem pelo Implementation Gate. A fase é a unidade de
-avaliação independente: só recebe `accepted` depois que todas as suas tarefas
-estiverem `verified`, o gate integrado da fase passar e o Judge aprovar o
-conjunto. Não crie uma tarefa de teste dependente da implementação: isso
-permitiria verificar um contrato parcial e bloquearia a própria dependência
-necessária para concluí-lo.
-
-Não crie teste direto para repository, service, provider, gateway, client,
-mapper, factory, config, adapter ou composição. Cubra-os indiretamente pelo
-artefato permitido mais próximo e registre essa cobertura na tarefa que testa o
-comportamento público.
-
-Toda tarefa com cobertura obrigatória declara a Rule de teste aplicável:
-
-| Tipo | Rule |
-| --- | --- |
-| Domínio | `documentation/rules/domain-objects-testing-rules.md` |
-| Use case | `documentation/rules/use-cases-testing-rules.md` |
-| Handler | `documentation/rules/handlers-testing-rules.md` |
-| Rota server | `documentation/rules/server-routes-testing-rules.md` |
-| Rota/page web | `documentation/rules/web-app-routes-testing-rules.md` |
-| Widget | `documentation/rules/widget-tests-rules.md` |
-
-### 5. Tarefas documentais
-
-Quando a Spec introduzir mudança aprovada de Architecture ou Rule, crie tarefa
-documental explícita no mesmo Plan. Não adie novo padrão para `conclude-spec`.
-
-## Localização
-
-Salve ao lado da feature:
-
-- Spec: `documentation/features/{dominio}/{feature}/specs/{nome}-spec.md`
-- Plan: `documentation/features/{dominio}/{feature}/plans/{nome}-plan.md`
-
-Preserve subdiretórios intermediários, substitua apenas `specs` por `plans` e
-`-spec.md` por `-plan.md`.
-
-## Template
-
-```md
----
-title: <título do plano>
-spec: <caminho relativo da spec>
-spec_revision: <hash de git hash-object>
-status: pending
-current_phase: null
-current_task: null
-base_commit: null
-last_updated_at: <YYYY-MM-DD>
----
-
-# Plano — <nome>
-
-## Estado Atual
-
-- **Tarefa ativa:** nenhuma
-- **Fase ativa:** nenhuma
-- **Estado:** `pending`
-- **Última ação:** Plan criado a partir da Spec aceita.
-- **Próxima ação:** iniciar a primeira tarefa sem dependências.
-- **Bloqueios:** nenhum
-- **Workspaces afetados:** <lista>
-
-## Pendências
-
-Sem pendências.
-
-## Dependências de Fases
-
-| Fase | Objetivo | Estado | Depende de | Pode rodar em paralelo com |
-| --- | --- | --- | --- | --- |
-| F1 | <objetivo> | `pending` | - | - |
-| F2 | <objetivo> | `pending` | F1 | F3 |
-
-**Estratégia de paralelismo:** <explicação baseada em dependências e ownership de paths>.
-
-## F1 — <nome>
-
-- **Objetivo:** <resultado da fase>.
-- **Estado:** `pending`.
-- **Critérios da Spec:** <REQ-*, AC-* e AR-*>.
-- **Base da fase:** `null`.
-- **Implementation Gate da fase:** `pending`.
-- **Judge da implementação:** `pending`.
-- **Tentativas de avaliação:** 0.
-- **Findings bloqueantes:** nenhum.
-
-### Tarefas
-
-- [ ] **T1.1** — <responsabilidade atômica>
-  - **Estado:** `pending`
-  - **Depende de:** -
-  - **Critérios da Spec:** REQ-01, AC-01, AR-01
-  - **Resultado observável:** <condição verificável>
-  - **Camada:** `core`
-  - **Pacote npm:** `@stardust/<pacote>`
-  - **Paths permitidos:**
-    - `<path ou diretório>`
-    - `<path de testes>`
-  - **Rules:**
-    - `documentation/rules/<rule>.md`
-    - `documentation/rules/domain-objects-testing-rules.md`
-  - **Cobertura obrigatória:** <cenários que devem ser testados, ou `não se aplica` com justificativa>
-  - **Tentativas:** 0
-  - **Sensores:** pending
-  - **Implementation Gate:** pending
-  - **Findings bloqueantes:** nenhum
-  - **Próxima ação:** implementar e testar pelo Builder
-
-## Amendments da Spec
-
-Nenhum.
-
-## Histórico de Execução
-
-Nenhuma execução registrada.
-
-## Conclusão
-
-- **Estado:** pending
-- **Tarefas verificadas:** 0/<total>
-- **Fases aceitas:** 0/<total>
-- **Findings bloqueantes:** 0
-- **Sensores finais:** pending
-- **Judge da conclusão:** pending
-```
-
-## Regras de Mutação
-
-- Somente o Orchestrator atualiza estado, tentativas, gates, findings ativos,
-  histórico e checkboxes.
-- Pareceres completos dos Judges permanecem no chat; o Plan registra apenas
-  veredito resumido, finding ativo e próxima ação.
-- `[x]` em tarefa significa `verified` pelo Implementation Gate.
-- `accepted` é reservado à fase aprovada pelo
-  `judge-implementation-agent` ou à implementação direta sem Plan.
-- Builder e Worker não editam o Plan.
-- Não apague tentativas anteriores; resuma-as no histórico.
-- Saída bruta de comandos não entra no documento.
+Builders e Workers não editam o Plan. Judges avaliam read-only. Todos serão
+subagentes da mesma task durante `implement-plan`; nunca crie outra thread.

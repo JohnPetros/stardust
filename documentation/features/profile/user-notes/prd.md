@@ -12,7 +12,7 @@
 
 ### 2. Requisitos
 
-#### REQ-01 [Acessar notas privadas a partir da navegacao e do estudo]
+#### RF-01 [Acessar notas privadas a partir da navegacao e do estudo]
 
 - [x] **Acessar notas privadas a partir da navegacao e do estudo**
 
@@ -30,7 +30,7 @@
 - **Navegacao dedicada:** A navegacao autenticada deve expor uma entrada `Notas` para acesso rapido ao workspace completo.
 - **Responsividade:** O acesso dedicado precisa funcionar bem em desktop e mobile sem quebrar a navegacao principal.
 
-#### REQ-02 [Criar e editar notas privadas]
+#### RF-02 [Criar e editar notas privadas]
 
 - [x] **Criar e editar notas privadas**
 
@@ -49,7 +49,7 @@
 - **Feedback de formulario:** Erros de validacao e estados de salvamento devem ser visiveis durante a interacao.
 - **Continuidade do estudo:** O usuario pode continuar na pagina principal enquanto salva a nota.
 
-#### REQ-03 [Consultar e reencontrar notas]
+#### RF-03 [Consultar e reencontrar notas]
 
 - [x] **Consultar e reencontrar notas**
 
@@ -68,7 +68,7 @@
 - **Busca sob demanda:** A listagem deve ser carregada quando o usuario abrir o modal de notas.
 - **Estado vazio e erro:** A interface deve informar ausencia de notas e falhas de carregamento com acao de recuperacao.
 
-#### REQ-04 [Excluir notas com seguranca]
+#### RF-04 [Excluir notas com seguranca]
 
 - [x] **Excluir notas com seguranca**
 
@@ -86,7 +86,7 @@
 - **Atualizacao imediata:** A lista local deve refletir create, update e delete sem exigir recarregamento completo.
 - **Feedback:** O usuario deve receber retorno claro em caso de sucesso ou erro.
 
-#### REQ-05 [Gerenciar notas em uma pagina dedicada]
+#### RF-05 [Gerenciar notas em uma pagina dedicada]
 
 - [x] **Gerenciar notas em uma pagina dedicada**
 
