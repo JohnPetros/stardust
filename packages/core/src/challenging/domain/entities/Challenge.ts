@@ -57,7 +57,7 @@ export class Challenge extends Entity<ChallengeProps> {
   }
 
   private async formatCode(code: Code, initialCode: Code, testCase: TestCase) {
-    if (code.hasFunction.isTrue) {
+    if (initialCode.hasFunction.isTrue) {
       const functionName = initialCode.firstFunctionName
       const functionParams = testCase.inputs
       return await code.addFunctionCall(functionName, functionParams)
@@ -68,6 +68,10 @@ export class Challenge extends Entity<ChallengeProps> {
     }
 
     return await code.addInputs(testCase.inputs)
+  }
+
+  shouldUseFunctionResult(initialCode: Code): Logical {
+    return this.isEvaluatedByFunction.and(initialCode.hasFunction)
   }
 
   private async verifyResult(result: unknown, testCase: TestCase, code: Code) {
@@ -85,6 +89,7 @@ export class Challenge extends Entity<ChallengeProps> {
     this.props.results = this.props.results.becomeEmpty()
     this.props.userOutputs = this.props.userOutputs.becomeEmpty()
     let executionOutputs = List.create<string>([])
+    const shouldUseFunctionResult = this.shouldUseFunctionResult(initialCode)
 
     for (const testCase of this.testCases) {
       const formattedCode = await this.formatCode(code, initialCode, testCase)
@@ -97,10 +102,10 @@ export class Challenge extends Entity<ChallengeProps> {
         executionOutputs = executionOutputs.add(output)
       }
 
-      if (this.isEvaluatedByFunction.isTrue) {
+      if (shouldUseFunctionResult.isTrue) {
         result = response.result
-      } else if (response.outputs[0]) {
-        const formattedCode = await code.format(response.outputs[0])
+      } else {
+        const formattedCode = await code.format(response.outputs[0] ?? '')
         result = formattedCode.value
       }
 
