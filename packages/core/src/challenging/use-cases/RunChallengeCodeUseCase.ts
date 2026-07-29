@@ -56,10 +56,10 @@ export class RunChallengeCodeUseCase implements UseCase<Request, Response> {
     try {
       const code = Code.create(this.lspProvider, request.code)
       const initialCode = Code.create(this.lspProvider, challenge.initialCode.value)
+      const shouldUseFunctionResult = challenge.shouldUseFunctionResult(initialCode)
 
       if (
-        challenge.isEvaluatedByFunction.isTrue &&
-        initialCode.hasFunction.isTrue &&
+        shouldUseFunctionResult.isTrue &&
         code.firstFunctionName !== initialCode.firstFunctionName
       ) {
         return await this.persistExecution({
@@ -91,7 +91,7 @@ export class RunChallengeCodeUseCase implements UseCase<Request, Response> {
         const userOutput = await this.getUserOutput({
           response,
           code,
-          shouldUseFunctionResult: challenge.isEvaluatedByFunction.value,
+          shouldUseFunctionResult: shouldUseFunctionResult.isTrue,
         })
         const isCorrect = await this.verifyResult(code, userOutput, testCase)
 

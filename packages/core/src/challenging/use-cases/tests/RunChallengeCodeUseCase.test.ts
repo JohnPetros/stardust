@@ -214,4 +214,149 @@ describe('RunChallengeCodeUseCase', () => {
     expect(response.status).toBe('accepted')
     expect(response.testResults[0]?.userOutput).toBe('3')
   })
+
+  it.each([
+    { isEvaluatedByFunction: undefined, initialCode: 'escreva(leia())' },
+    { isEvaluatedByFunction: true, initialCode: 'escreva(leia())' },
+  ])(
+    'should compare the first console output when the initial code has no function',
+    async ({ isEvaluatedByFunction, initialCode }) => {
+      const challenge = ChallengesFaker.fake({
+        initialCode,
+        isEvaluatedByFunction,
+        testCases: [
+          {
+            position: 1,
+            inputs: ['Datahon'],
+            expectedOutput: 'Datahon: texto, 53.5: número, falso: lógico',
+            isLocked: false,
+          },
+        ],
+      })
+      challengesRepository.findById.mockResolvedValue(challenge)
+      lspProvider.getFunctionName.mockImplementation((code) =>
+        code.includes('funcao') ? 'solution' : null,
+      )
+      lspProvider.getInputsCount.mockReturnValue(1)
+      lspProvider.run.mockResolvedValue(
+        new LspResponse({
+          result: { tipo: 'vazio', tipoExplicito: false },
+          outputs: ['Datahon: texto, 53.5: número, falso: lógico'],
+        }),
+      )
+
+      const response = await useCase.execute({
+        userId: challenge.author.id.value,
+        challengeId: challenge.id.value,
+        code: initialCode,
+      })
+
+      expect(response.status).toBe('accepted')
+      expect(response.testResults).toEqual([
+        {
+          position: 1,
+          isCorrect: true,
+          userOutput: 'Datahon: texto, 53.5: número, falso: lógico',
+          expectedOutput: 'Datahon: texto, 53.5: número, falso: lógico',
+        },
+      ])
+      expect(response.outputs).toEqual(['Datahon: texto, 53.5: número, falso: lógico'])
+      expect(lspProvider.addFunctionCall).not.toHaveBeenCalled()
+    },
+  )
+
+  it('should persist an empty serializable user output when console execution has no outputs', async () => {
+    const challenge = ChallengesFaker.fake({
+      initialCode: 'escreva(leia())',
+      isEvaluatedByFunction: true,
+      testCases: [{ position: 1, inputs: [1], expectedOutput: '', isLocked: false }],
+    })
+    challengesRepository.findById.mockResolvedValue(challenge)
+    lspProvider.getFunctionName.mockReturnValue(null)
+    lspProvider.getInputsCount.mockReturnValue(1)
+    lspProvider.run.mockResolvedValue(
+      new LspResponse({ result: { tipo: 'vazio' }, outputs: [] }),
+    )
+
+    const response = await useCase.execute({
+      userId: challenge.author.id.value,
+      challengeId: challenge.id.value,
+      code: challenge.initialCode.value,
+    })
+
+    expect(response.testResults[0]?.userOutput).toBe('')
+    expect(() => JSON.stringify(response)).not.toThrow()
+  })
+
+  it('should preserve all raw console outputs while storing only the normalized first output', async () => {
+    const challenge = ChallengesFaker.fake({
+      initialCode: 'escreva(leia())',
+      isEvaluatedByFunction: false,
+      testCases: [
+        {
+          position: 1,
+          inputs: [1],
+          expectedOutput: 'primeira saída',
+          isLocked: false,
+        },
+      ],
+    })
+    challengesRepository.findById.mockResolvedValue(challenge)
+    lspProvider.getFunctionName.mockReturnValue(null)
+    lspProvider.getInputsCount.mockReturnValue(1)
+    lspProvider.translateToLsp.mockImplementation(async (value) =>
+      String(value).replace(' bruta', ''),
+    )
+    lspProvider.run.mockResolvedValue(
+      new LspResponse({
+        result: 'resultado da função',
+        outputs: ['primeira saída bruta', 'segunda saída bruta'],
+      }),
+    )
+
+    const response = await useCase.execute({
+      userId: challenge.author.id.value,
+      challengeId: challenge.id.value,
+      code: challenge.initialCode.value,
+    })
+
+    expect(response.testResults).toEqual([
+      {
+        position: 1,
+        isCorrect: true,
+        userOutput: 'primeira saída',
+        expectedOutput: 'primeira saída',
+      },
+    ])
+    expect(response.outputs).toEqual(['primeira saída bruta', 'segunda saída bruta'])
+    expect(() => JSON.stringify(response)).not.toThrow()
+  })
+
+  it('should keep console evaluation when a submitted function is introduced', async () => {
+    const challenge = ChallengesFaker.fake({
+      initialCode: 'escreva(leia())',
+      isEvaluatedByFunction: true,
+      testCases: [
+        { position: 1, inputs: [], expectedOutput: 'console', isLocked: false },
+      ],
+    })
+    challengesRepository.findById.mockResolvedValue(challenge)
+    lspProvider.getFunctionName.mockImplementation((code) =>
+      code.includes('funcao') ? 'alheia' : null,
+    )
+    lspProvider.getInputsCount.mockReturnValue(0)
+    lspProvider.run.mockResolvedValue(
+      new LspResponse({ result: 'resultado indevido', outputs: ['console'] }),
+    )
+
+    const response = await useCase.execute({
+      userId: challenge.author.id.value,
+      challengeId: challenge.id.value,
+      code: 'funcao alheia() {}',
+    })
+
+    expect(response.status).toBe('accepted')
+    expect(response.testResults[0]?.userOutput).toBe('console')
+    expect(lspProvider.addFunctionCall).not.toHaveBeenCalled()
+  })
 })
