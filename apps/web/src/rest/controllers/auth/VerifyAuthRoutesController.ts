@@ -42,6 +42,17 @@ export const VerifyAuthRoutesController = (authService: AuthService): Controller
         PUBLIC_ROUTE_GROUPS.some((group) => currentRoute.startsWith(group))
       const isRootRoute = currentRoute === ROUTES.landing
       const isSignInRoute = currentRoute === ROUTES.auth.signIn
+      const isPasswordResetRoute =
+        currentRoute === ROUTES.auth.resetPassword ||
+        currentRoute === ROUTES.api.auth.confirmPasswordReset
+
+      if (isPasswordResetRoute) {
+        const shouldResetPassword = await cookieActions.getCookie(
+          COOKIES.shouldResetPassword.key,
+        )
+
+        if (shouldResetPassword?.data) return http.pass()
+      }
 
       if (isPublicRoute && !isRootRoute && !isSignInRoute) {
         const accessToken = await cookieActions.getCookie(COOKIES.accessToken.key)

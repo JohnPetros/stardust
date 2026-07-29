@@ -50,6 +50,18 @@ describe('Verify Auth Routes Controller', () => {
   })
 
   describe('Public Routes', () => {
+    it('should preserve temporary reset session during password reset flow', async () => {
+      http.getCurrentRoute.mockReturnValue(ROUTES.auth.resetPassword)
+      mockCookieActions.getCookie.mockResolvedValue({ data: 'temporary-reset' })
+
+      await controller.handle(http)
+
+      expect(http.pass).toHaveBeenCalled()
+      expect(authService.fetchAccount).not.toHaveBeenCalled()
+      expect(http.deleteCookie).not.toHaveBeenCalled()
+      expect(http.redirect).not.toHaveBeenCalled()
+    })
+
     it('should allow access to public routes without authentication', async () => {
       http.getCurrentRoute.mockReturnValue(ROUTES.auth.signIn)
       authService.fetchAccount.mockResolvedValue(
