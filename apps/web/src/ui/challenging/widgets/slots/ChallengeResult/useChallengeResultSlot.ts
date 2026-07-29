@@ -54,7 +54,7 @@ export function useChallengeResultSlot({
   } = codeExecutionSlice
   const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
   const { tabHandler } = getTabHandlerSlice()
-  const { setCookie } = useCookieActions()
+  const { setCookieAndRedirect } = useCookieActions()
   const [isLeavingPage, setIsLeavingPage] = useState(false)
   const [userAnswer, setUserAnswer] = useState<UserAnswer>(UserAnswer.create())
   const secondsCounterStorage = useLocalStorage(STORAGE.keys.secondsCounter)
@@ -63,9 +63,6 @@ export function useChallengeResultSlot({
   const { goTo, currentRoute } = useNavigationProvider()
   const hasAcceptedExecutionForCurrentCode =
     isAccountAuthenticated && acceptedCodeExecution?.code.value === currentCode
-  // Keep the last execution visible while the user edits the next version of
-  // the code. The verification guard below still requires an accepted
-  // execution for the current code before allowing completion.
   const latestExecutionForDisplay = isAccountAuthenticated ? latestCodeExecution : null
   const displayedResults =
     latestExecutionForDisplay?.testResults.items.map(
@@ -93,8 +90,8 @@ export function useChallengeResultSlot({
     goTo(route)
   }
 
-  async function showRewards() {
-    if (!challenge || !user) return
+  function showRewards() {
+    if (!challenge) return
     setIsLeavingPage(true)
     const currentSeconds = Number(secondsCounterStorage.get())
 
@@ -105,11 +102,12 @@ export function useChallengeResultSlot({
         starId: challenge?.starId?.value,
       }
 
-      await setCookie({
+      secondsCounterStorage.remove()
+      setCookieAndRedirect({
         key: COOKIES.keys.rewardingPayload,
         value: JSON.stringify(rewardingPayload),
+        route: ROUTES.rewarding.starChallenge,
       })
-      leavePage(ROUTES.rewarding.starChallenge)
       return
     }
 
@@ -118,22 +116,26 @@ export function useChallengeResultSlot({
       challengeId: challenge?.id.value,
     }
 
-    await setCookie({
+    secondsCounterStorage.remove()
+    setCookieAndRedirect({
       key: COOKIES.keys.rewardingPayload,
       value: JSON.stringify(rewardingPayload),
+      route: ROUTES.rewarding.challenge,
     })
-    leavePage(ROUTES.rewarding.challenge)
   }
 
   function handleUserAnswer() {
     if (!challenge) return
 
-    if (challenge.isCompleted.and(challenge.isStarChallenge).isTrue) {
+    const isContinuingAfterCorrectAnswer = userAnswer.isVerified.and(userAnswer.isCorrect)
+    const isChallengeCompleted = challenge.isCompleted.or(isContinuingAfterCorrectAnswer)
+
+    if (isChallengeCompleted.and(challenge.isStarChallenge).isTrue) {
       showRewards()
       return
     }
 
-    if (challenge.isCompleted.andNot(challenge.isStarChallenge).isTrue) {
+    if (isChallengeCompleted.andNot(challenge.isStarChallenge).isTrue) {
       if (!isAccountAuthenticated) {
         alertDialogRef.current?.open()
         return

@@ -48,6 +48,21 @@ describe('useTestCase', () => {
     expect(lspProvider.translateToLsp).toHaveBeenCalledWith('expected-result')
   })
 
+  it('should present the selected console output without exposing interpreter internals', async () => {
+    const output = 'Datahon: texto, 53.5: número, falso: lógico'
+    lspProvider.translateToLsp.mockImplementation(async (value) => String(value))
+
+    const { result } = Hook({ userOutput: output, expectedOutput: output })
+
+    await waitFor(() => {
+      expect(result.current.translatedUserOutput).toBe(output)
+      expect(result.current.translatedExpectedOutput).toBe(output)
+    })
+
+    expect(result.current.translatedUserOutput).not.toContain('tipoExplicito')
+    expect(result.current.translatedUserOutput).not.toContain('vazio')
+  })
+
   it('should keep inputs as sem entrada and user output empty when data is missing', async () => {
     const { result } = Hook({
       inputs: [],
