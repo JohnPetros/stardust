@@ -57,8 +57,10 @@ describe('InngestFunctions', () => {
     )
 
     expect(createFunction).toHaveBeenCalledWith(
-      { id: 'job-id' },
-      { event: 'event.name' },
+      {
+        id: 'job-id',
+        triggers: { event: 'event.name' },
+      },
       handler,
     )
     expect(created).toBe('created-function')

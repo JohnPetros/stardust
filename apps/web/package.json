@@ -64,7 +64,7 @@
     "autoprefixer": "10.5.4",
     "html-to-image": "^1.11.13",
     "immer": "^10.1.1",
-    "inngest": "^3.19.4",
+    "inngest": "^4.13.0",
     "jsonwebtoken": "^9.0.2",
     "lottie-react": "^2.4.1",
     "markdown-to-jsx": "^9.9.0",
