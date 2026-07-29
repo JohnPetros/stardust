@@ -112,4 +112,8 @@ jobs:
         run: npm ci
 
       - name: Build project
+        env:
+          VITE_SERVER_APP_URL: https://stardust-server.test
+          VITE_CDN_URL: https://stardust-cdn.test
+          VITE_WEB_APP_URL: https://stardust-web.test
         run: npm run build:studio
