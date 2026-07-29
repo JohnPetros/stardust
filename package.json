@@ -51,6 +51,7 @@
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@tiptap/core": "3.29.2",
+    "@tiptap/pm": "3.29.2",
     "commitlint-config-git-commit-emoji": "^1.0.0",
     "dependency-cruiser": "^18.1.0",
     "hono": "4.12.32",
