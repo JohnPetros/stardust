@@ -10,7 +10,10 @@ export const AuthMiddleware = async ({
   request: Request
   context: any
 }) => {
-  const accessToken = sessionStorage.getItem(SESSION_STORAGE_KEYS.accessToken)
+  const accessToken =
+    typeof sessionStorage === 'undefined'
+      ? null
+      : sessionStorage.getItem(SESSION_STORAGE_KEYS.accessToken)
   const requestPathname = new URL(request.url).pathname
   const isSignInRoute = requestPathname === ROUTES.index
   const normalizedAccessToken = accessToken?.replaceAll('"', '').trim() ?? ''
