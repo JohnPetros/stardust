@@ -35,6 +35,7 @@ describe('Verify Auth Routes Controller', () => {
     http.getCurrentRoute.mockImplementation()
     http.redirect.mockImplementation()
     http.setCookie.mockImplementation()
+    http.deleteCookie.mockImplementation()
     http.pass.mockImplementation()
     http.getQueryParams.mockReturnValue({})
     authService.fetchAccount.mockImplementation()
@@ -72,6 +73,25 @@ describe('Verify Auth Routes Controller', () => {
 
       expect(http.pass).toHaveBeenCalled()
       expect(http.redirect).not.toHaveBeenCalled()
+    })
+
+    it('should clear an invalid session before allowing access to public pages', async () => {
+      const publicRoute = `${ROUTES.challenging.challenges.list}/some-challenge/challenge`
+      http.getCurrentRoute.mockReturnValue(publicRoute)
+      mockCookieActions.getCookie.mockImplementation(async (key) => {
+        if (key === COOKIES.accessToken.key) return { data: 'invalid-access-token' }
+        return { data: null }
+      })
+      authService.fetchAccount.mockResolvedValue(
+        new RestResponse({ statusCode: HTTP_STATUS_CODE.unauthorized }),
+      )
+
+      await controller.handle(http)
+
+      expect(http.deleteCookie).toHaveBeenNthCalledWith(1, COOKIES.accessToken.key)
+      expect(http.deleteCookie).toHaveBeenNthCalledWith(2, COOKIES.refreshToken.key)
+      expect(http.redirect).toHaveBeenCalledWith(publicRoute)
+      expect(http.pass).not.toHaveBeenCalled()
     })
   })
 

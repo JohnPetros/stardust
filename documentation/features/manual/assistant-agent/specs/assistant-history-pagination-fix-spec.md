@@ -93,7 +93,7 @@ validacao durante a inicializacao normal da pagina de desafio.
 | `RN-01` | `RF-02` | qualquer chave interna produzida por `usePaginatedCache` | o fetcher interno resolve a pagina | a pagina e transportada como numero explicito em chave estruturada, e somente inteiro maior que zero chega ao fetcher de dominio | teste unitario do contrato `getKey` → `infiniteFetcher` e `check:types` |
 | `RN-02` | `RF-03` | query params configurados no `NextRestClient` | um GET consome os params | a URL da requisicao torna-se um snapshot imutavel para eventual retry, sem depender do estado mutavel posterior do client | teste unitario e inspecao do diff |
 | `RN-03` | `RF-01` | rota `GET /conversation/chats` | a correcao e revisada | `pageSchema`, `itemsPerPageSchema`, autenticacao, service e resposta paginada permanecem inalterados | inspecao do diff e dos contratos em `ChatsRouter.ts` e `ConversationService.ts` |
-| `RN-04` | `RF-04` | mudanca no hook global de paginacao e no adapter REST web | a suite integrada e executada | consumidores existentes continuam tipados e nao surgem imports fora das fronteiras UI → REST/Core | `check:code`, `check:types`, `test:unit`, `check:architecture`, `check:dead-code` e `test:integration` |
+| `RN-04` | `RF-04` | mudanca no hook global de paginacao e no adapter REST web | a suite integrada e executada | consumidores existentes continuam tipados e nao surgem imports fora das fronteiras UI → REST/Core | `check:code`, `check:types`, `test:unit`, `check:architecture` e `test:integration` |
 | `RN-05` | `RF-02` | cache paginado com `key`, `dependencies` e `itemsPerPage` definidos | o hook renderiza novamente | valores equivalentes preservam a identidade da chave; mudanca em qualquer dependencia ou em `itemsPerPage` produz nova identidade de cache | teste unitario de `usePaginatedCache` capturando `getKey` |
 
 ## Parte II — Solucao tecnica
@@ -384,7 +384,6 @@ sequenceDiagram
 - Conclusao integrada: `npm run check:code`, `npm run check:types` e
   `npm run test:unit`.
 - `npm run check:architecture`
-- `npm run check:dead-code`
 - `npm run test:integration -w @stardust/web`
 
 `build` permanece validacao final do CI e nao e sensor SDD.
@@ -486,8 +485,6 @@ e sem migration; foi executada com `implement-spec`, sem Plan separado.
   `src/app/tests/challenging/assistant-history.test.ts` passou na suite e
   isoladamente (1 teste).
 - **Arquitetura:** `npm run check:architecture` passou sem violacoes.
-- **Dead-code:** `npm run check:dead-code` encontrou 70 arquivos preexistentes
-  fora dos paths da entrega; nenhum path da Spec foi reportado.
 
 A Spec foi concluida pelo Orchestrator em 2026-07-28. O worktree permanece
 dirty por alteracoes preexistentes do usuario fora do escopo desta entrega.

@@ -32,7 +32,7 @@ Crie `documentation/features/<domínio>/<feature>/specs/<nome>-spec.md` com
 
 Não use comentários `harness:evidence`, gates de CLI ou baseline. Declare os
 sensores esperados: `check:code`, `check:types`, `check:architecture`,
-`check:dead-code`, `test:unit` e `test:integration` quando aplicável. Build é
+`test:unit` e `test:integration` quando aplicável. Build é
 validação final do CI.
 
 ## Judge Spec

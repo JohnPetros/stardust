@@ -59,16 +59,18 @@ export class InngestFunctions {
 
     const telemetryProvider = this.getTelemetryProvider()
 
-    if (error instanceof AppError) {
-      await this.notificationService.sendErrorNotification(
-        'server',
-        `Erro capturado na fila.Job: ${jobName}.\nTítulo: ${error.title}.\nMensagem de erro: ${error.message}`,
-      )
-    } else if (error instanceof Error) {
-      await this.notificationService.sendErrorNotification(
-        'server',
-        `Erro desconhecido capturado na fila.\nJob: ${jobName}.\nTítulo: ${error.name}.\nMensagem de erro: ${error.message}`,
-      )
+    if (ENV.mode !== 'development') {
+      if (error instanceof AppError) {
+        await this.notificationService.sendErrorNotification(
+          'server',
+          `Erro capturado na fila.Job: ${jobName}.\nTítulo: ${error.title}.\nMensagem de erro: ${error.message}`,
+        )
+      } else if (error instanceof Error) {
+        await this.notificationService.sendErrorNotification(
+          'server',
+          `Erro desconhecido capturado na fila.\nJob: ${jobName}.\nTítulo: ${error.name}.\nMensagem de erro: ${error.message}`,
+        )
+      }
     }
 
     const normalizedError = error instanceof Error ? error : new Error(String(error))

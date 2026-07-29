@@ -44,6 +44,24 @@ export const VerifyAuthRoutesController = (authService: AuthService): Controller
       const isSignInRoute = currentRoute === ROUTES.auth.signIn
 
       if (isPublicRoute && !isRootRoute && !isSignInRoute) {
+        const accessToken = await cookieActions.getCookie(COOKIES.accessToken.key)
+
+        if (accessToken?.data) {
+          const response = await authService.fetchAccount()
+
+          if (response.isFailure) {
+            const refreshResponse = await refreshAuthSession(http)
+
+            if (refreshResponse.isSuccessful) {
+              return http.redirect(currentRoute)
+            }
+
+            await http.deleteCookie(COOKIES.accessToken.key)
+            await http.deleteCookie(COOKIES.refreshToken.key)
+            return http.redirect(currentRoute)
+          }
+        }
+
         return http.pass()
       }
 

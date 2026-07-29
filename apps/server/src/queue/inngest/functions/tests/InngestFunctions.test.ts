@@ -65,6 +65,7 @@ describe('InngestFunctions', () => {
   })
 
   it('should notify and track app errors', async () => {
+    ENV.mode = 'test'
     const functions = new TestInngestFunctions({ createFunction: jest.fn() } as never)
     const error = new AppError('Failure message')
 
@@ -83,6 +84,7 @@ describe('InngestFunctions', () => {
   })
 
   it('should notify and track generic errors', async () => {
+    ENV.mode = 'test'
     const functions = new TestInngestFunctions({ createFunction: jest.fn() } as never)
     const error = new Error('Unknown failure')
 
@@ -97,6 +99,21 @@ describe('InngestFunctions', () => {
       'server',
       expect.stringContaining('Unknown failure'),
     )
+    expect(telemetryProvider.trackError).toHaveBeenCalledWith(error)
+  })
+
+  it('should track app errors without notifying Discord in development', async () => {
+    const functions = new TestInngestFunctions({ createFunction: jest.fn() } as never)
+    const error = new Error('development failure')
+
+    await functions.handleFailurePublic({ error }, 'StorageJob')
+
+    const notificationService = (DiscordNotificationService as jest.Mock).mock.results[0]
+      ?.value
+    const telemetryProvider = (SentryTelemetryProvider as jest.Mock).mock.results[0]
+      ?.value
+
+    expect(notificationService.sendErrorNotification).not.toHaveBeenCalled()
     expect(telemetryProvider.trackError).toHaveBeenCalledWith(error)
   })
 

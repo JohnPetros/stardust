@@ -1,20 +1,29 @@
 import type { RestClient } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
+import { RestResponse as RestResponseClass } from '@stardust/core/global/responses'
 import type { NotificationService } from '@stardust/core/notification/interfaces'
 import type { EventPayload } from '@stardust/core/global/types'
 import type { FeedbackReportSentEvent } from '@stardust/core/reporting/events'
 import type { ChallengePostedEvent } from '@stardust/core/challenging/events'
 import type { UserCreatedEvent } from '@stardust/core/profile/events'
 
+import { ENV } from '@/constants'
+
 export class DiscordNotificationService implements NotificationService {
   constructor(private readonly restClient: RestClient) {}
+
+  private async post(body: unknown): Promise<RestResponse> {
+    if (ENV.mode === 'development') return new RestResponseClass()
+
+    return await this.restClient.post('/', body)
+  }
 
   async sendPlanetCompletedNotification(
     userSlug: string,
     userName: string,
     planetName: string,
   ): Promise<RestResponse> {
-    return await this.restClient.post('/', {
+    return await this.post({
       embeds: [
         {
           title: '🪐 Planeta Concluído!',
@@ -42,7 +51,7 @@ export class DiscordNotificationService implements NotificationService {
     userSlug: string,
     userName: string,
   ): Promise<RestResponse> {
-    return await this.restClient.post('/', {
+    return await this.post({
       embeds: [
         {
           title: '🌌 Espaço Concluído!',
@@ -70,7 +79,7 @@ export class DiscordNotificationService implements NotificationService {
     app: 'server' | 'web',
     errorMessage: string,
   ): Promise<RestResponse> {
-    return await this.restClient.post('/', {
+    return await this.post({
       embeds: [
         {
           title: '🚨 Erro Interno Detectado',
@@ -104,7 +113,7 @@ export class DiscordNotificationService implements NotificationService {
     }
     const color = colors[payload.feedbackReportIntent as keyof typeof colors] || 0x3498db
 
-    return await this.restClient.post('/', {
+    return await this.post({
       embeds: [
         {
           title: `Novo Feedback de ${intents[payload.feedbackReportIntent as keyof typeof intents]}`,
@@ -141,7 +150,7 @@ export class DiscordNotificationService implements NotificationService {
   async sendChallengePostedNotification(
     payload: EventPayload<typeof ChallengePostedEvent>,
   ): Promise<RestResponse> {
-    return await this.restClient.post('/', {
+    return await this.post({
       embeds: [
         {
           title: '🎯 Novo Desafio Criado!',
@@ -173,7 +182,7 @@ export class DiscordNotificationService implements NotificationService {
   async sendUserCreatedNotification(
     payload: EventPayload<typeof UserCreatedEvent>,
   ): Promise<RestResponse> {
-    return await this.restClient.post('/', {
+    return await this.post({
       embeds: [
         {
           title: 'Usuário criado',

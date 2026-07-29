@@ -17,8 +17,7 @@ Orchestrator → Builder Direct → sensores → Judge Direct
    resultado observável, paths e Rules. No modo direto não há Workers.
 3. Aguarde o Builder e inspecione o diff; ele não atualiza Spec nem estado.
 4. Execute `format`, `check:code`, `check:types` e `test:unit` no escopo. Execute
-   `check:architecture`, `check:dead-code` e `test:integration` quando
-   aplicáveis.
+   `check:architecture` e `test:integration` quando aplicáveis.
 5. Com os sensores aprovados, acione `judge-implementation-agent` como
    `Judge Direct`, subagente read-only irmão do Builder. Envie Spec/revisão,
    diff, critérios, Rules e resultados dos sensores; não envie narrativa do

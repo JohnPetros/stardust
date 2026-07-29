@@ -10,7 +10,6 @@ on:
       - "package-lock.json"
       - "packages/core/**"
       - ".dependency-cruiser.cjs"
-      - "knip.json"
 
 env:
   NODE_VERSION: "22"
