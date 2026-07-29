@@ -63,7 +63,8 @@
     "react-dom": "19.2.8",
     "ts-jest-mocker": "^1.3.0",
     "tsx": "^4.21.0",
-    "turbo": "2.10.7"
+    "turbo": "2.10.7",
+    "vite": "7.0.0"
   },
   "dependencies": {
     "@ai-sdk/provider-utils-v5": "npm:@ai-sdk/provider-utils@^5.0.5",
