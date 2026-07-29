@@ -10,6 +10,7 @@
 - Context7 para buscar informações atualizadas
 - Serena para navegar pela codebase de forma otimizada
 - Pencil para editar ou saber o contexto de frames de design estilo Figma
+- Playwright para inspecionar e validar fluxos reais no navegador
 - Supabase Dev para interagir com o projeto Supabase de desenvolvimento 
 - Supabase Prod para interagir com o projeto Supabase de produção
 
