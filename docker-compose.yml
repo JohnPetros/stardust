@@ -19,7 +19,7 @@ services:
       retries: 10
 
   supabase-auth:
-    image: public.ecr.aws/supabase/gotrue:v2.193.0
+    image: public.ecr.aws/supabase/gotrue:v2.194.0
     container_name: stardust-supabase-auth
     depends_on:
       supabase-db:
@@ -72,7 +72,7 @@ services:
       retries: 10
 
   supabase-storage:
-    image: public.ecr.aws/supabase/storage-api:v1.65.1
+    image: public.ecr.aws/supabase/storage-api:v1.67.20
     container_name: stardust-supabase-storage
     depends_on:
       supabase-db:
@@ -101,7 +101,7 @@ services:
       retries: 10
 
   supabase-realtime:
-    image: public.ecr.aws/supabase/realtime:v2.112.1
+    image: public.ecr.aws/supabase/realtime:v2.120.3
     container_name: stardust-supabase-realtime
     depends_on:
       supabase-db:
@@ -147,7 +147,7 @@ services:
       KONG_PLUGINS: request-transformer,cors
 
   inngest:
-    image: inngest/inngest:v1.37.0
+    image: inngest/inngest:v1.38.1
     container_name: stardust-inngest
     command: inngest dev -u http://host.docker.internal:3334/inngest --no-discovery
     ports:
