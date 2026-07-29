@@ -1,4 +1,5 @@
 import { RestResponse } from '@stardust/core/global/responses'
+import type { RestClient } from '@stardust/core/global/interfaces'
 
 import { ENV } from '@/constants'
 import { DiscordNotificationService } from '../DiscordNotificationService'
@@ -6,7 +7,7 @@ import { DiscordNotificationService } from '../DiscordNotificationService'
 describe('DiscordNotificationService', () => {
   const restClient = {
     post: jest.fn().mockResolvedValue(new RestResponse()),
-  }
+  } as unknown as RestClient
   const originalMode = ENV.mode
 
   afterEach(() => {
