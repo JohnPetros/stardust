@@ -9,7 +9,6 @@ on:
       - "apps/**"
       - "packages/**"
       - ".dependency-cruiser.cjs"
-      - "knip.json"
       - "package.json"
       - "package-lock.json"
       - "turbo.json"

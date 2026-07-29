@@ -13,7 +13,6 @@ on:
       - "packages/validation/**"
       - "packages/lsp/**"
       - ".dependency-cruiser.cjs"
-      - "knip.json"
 
 permissions:
   contents: read

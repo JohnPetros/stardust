@@ -12,7 +12,6 @@ on:
       - "packages/core/**"
       - "packages/validation/**"
       - ".dependency-cruiser.cjs"
-      - "knip.json"
 
 permissions:
   contents: read
