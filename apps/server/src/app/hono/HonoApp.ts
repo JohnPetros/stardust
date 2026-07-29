@@ -216,7 +216,6 @@ export class HonoApp {
 
       return serveInngest({
         client: inngest,
-        signingKey: ENV.mode === 'production' ? ENV.inngestSigningKey : undefined,
         functions: [
           ...profileFunctions.getFunctions(supabase),
           ...analyticsFunctions.getFunctions(),
