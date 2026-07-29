@@ -184,7 +184,7 @@ jobs:
           done
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: npm exec --workspace=@stardust/web -- playwright install --with-deps chromium
 
       - name: Run integration tests
         run: npm run test:integration -w @stardust/web

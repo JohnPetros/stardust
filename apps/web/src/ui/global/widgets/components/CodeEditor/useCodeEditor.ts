@@ -349,7 +349,14 @@ export function useCodeEditor({
     const monacoProvidersRegistry = getMonacoProvidersRegistry()
     monacoProvidersRegistry.owner = monacoProvidersOwnerRef.current
 
-    if (!monaco.languages.getLanguages().some((language) => language.id === LANGUAGE)) {
+    if (
+      !monaco.languages
+        .getLanguages()
+        .some(
+          (language: monaco.languages.ILanguageExtensionPoint) =>
+            language.id === LANGUAGE,
+        )
+    ) {
       monaco.languages.register({ id: LANGUAGE })
     }
 

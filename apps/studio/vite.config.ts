@@ -18,6 +18,7 @@ export default defineConfig({
     nodePolyfills(),
   ],
   build: {
+    target: 'es2022',
     rollupOptions: {
       onwarn(warning, warn) {
         if (

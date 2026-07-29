@@ -229,7 +229,7 @@ export class HonoApp {
           ...manualFunctions.getFunctions(supabase),
           ...lessonFunctions.getFunctions(supabase),
         ],
-      })(context)
+      })(context as Context<any, any, {}>)
     })
   }
 
