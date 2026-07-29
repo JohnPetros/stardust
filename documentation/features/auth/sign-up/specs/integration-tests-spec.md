@@ -86,7 +86,7 @@ Configurar Playwright na aplicacao `web` para executar testes de integracao com 
 * **`apps/web/jest.config.ts`** (`apps/web/jest.config.ts`) - configuracao atual de Jest com `.env.testing`, `next/jest` e alias `@/*`.
 * **`apps/web/jest.setup.ts`** (`apps/web/jest.setup.ts`) - setup atual de Jest com `@testing-library/jest-dom`, canvas, `ResizeObserver` e `IntersectionObserver`.
 * **`apps/web/tsconfig.json`** (`apps/web/tsconfig.json`) - inclui `**/*.ts`, `**/*.tsx` e `**/*.d.ts`, portanto novos arquivos Playwright dentro de `apps/web` entram no typecheck.
-* **`documentation/tooling.md`** (`documentation/tooling.md`) - fonte dos comandos globais `npm run codecheck`, `npm run typecheck` e scripts por workspace.
+* **`documentation/tooling.md`** (`documentation/tooling.md`) - fonte dos comandos globais `npm run check:code`, `npm run check:types` e scripts por workspace.
 
 ## Next.js App
 

@@ -8,8 +8,8 @@
     "start": "serve -s ./build/client/index.html",
     "lint": "biome lint src --diagnostic-level=error",
     "format": "biome format src --write",
-    "codecheck": "npm run lint && npm run format",
-    "typecheck": "react-router typegen && tsc",
+    "check:code": "biome check src",
+    "check:types": "react-router typegen && tsc",
     "test:unit": "jest",
     "test:unit:watch": "jest --watchAll"
   },

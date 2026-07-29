@@ -181,8 +181,8 @@ last_updated_at: 2026-03-11
 
 ## Checklist de Verificacao Pós-Correção
 
-- [x] `npm run codecheck -w @stardust/web` passa
-- [x] `npm run typecheck -w @stardust/web` passa
+- [x] `npm run check:code -w @stardust/web` passa
+- [x] `npm run check:types -w @stardust/web` passa
 - [x] `npm run test -w @stardust/web` passa
 - [x] Nenhuma variavel de ambiente real exposta
 - [x] Nenhum `console.log` de debug em codigo de producao

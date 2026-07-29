@@ -6,8 +6,8 @@
   "types": "build/main.d.ts",
   "scripts": {
     "build": "tsup",
-    "typecheck": "tsc --noEmit",
-    "codecheck": "npm run lint && npm run format",
+    "check:types": "tsc --noEmit",
+    "check:code": "biome check src",
     "lint": "biome lint src --diagnostic-level=error",
     "format": "biome format src --write"
   },

@@ -12,7 +12,7 @@ O fluxo de **Challenges Navigation** organiza como o estudante navega entre desa
 
 ## 2. Requisitos
 
-### REQ-01 Navegacao sequencial entre desafios livres
+### RF-01 Navegacao sequencial entre desafios livres
 
 - [x] **Controles Anterior e Proximo**
 
@@ -32,7 +32,7 @@ O fluxo de **Challenges Navigation** organiza como o estudante navega entre desa
 
 ---
 
-### REQ-02 Sidebar lateral de navegacao de desafios
+### RF-02 Sidebar lateral de navegacao de desafios
 
 - [x] **Sidebar lateral de desafios**
 

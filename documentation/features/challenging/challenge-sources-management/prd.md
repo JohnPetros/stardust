@@ -50,7 +50,7 @@ Referencia de produto: https://github.com/JohnPetros/stardust/milestone/12
 - As instrucoes adicionais passaram a ser consumidas imediatamente no fluxo de IA de criacao de desafios, reduzindo trabalho manual de adaptacao.
 
 ## Validacao final
-- [x] `npm run codecheck` na raiz.
+- [x] `npm run check:code` na raiz.
 - [x] `npm run test` na raiz.
 
 ## Status

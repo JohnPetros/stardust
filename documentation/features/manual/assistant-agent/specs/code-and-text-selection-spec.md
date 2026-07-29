@@ -167,5 +167,5 @@ Challenge Description         Code Editor
 - Testes adicionados para o hook/view de selecoes e fakers de selecao no core.
 
 # 8. Verificacoes executadas
-- `npm run codecheck`
+- `npm run check:code`
 - `npm run test`

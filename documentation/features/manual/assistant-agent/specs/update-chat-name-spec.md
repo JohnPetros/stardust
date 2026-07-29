@@ -119,5 +119,5 @@ Histórico de conversas
 *   Testes (`AssistantChatsHistoryView.test.tsx`, `useAssistantChatsHistory.test.ts`): cobrem renderização condicional dos botões, interação com o prompt e todos os fluxos de edição e exclusão do chat.
 
 ### 8. Verificações executadas
-*   `npm run codecheck`
+*   `npm run check:code`
 *   `npm run test`

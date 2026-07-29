@@ -142,8 +142,8 @@ receber testes dedicados segundo as regras do projeto.
 
 ```bash
 npm run test
-npm run typecheck
-npm run codecheck
+npm run check:types
+npm run check:code
 
 npm run test:unit -w @stardust/web
 npm run test:unit -w @stardust/server
@@ -155,14 +155,14 @@ npm run test:unit -w @stardust/server -- caminho/do/arquivo
 npm run test:unit -w @stardust/studio -- caminho/do/arquivo
 npm run test:unit -w @stardust/core -- caminho/do/arquivo
 
-npm run typecheck -w @stardust/web
-npm run codecheck -w @stardust/web
-npm run typecheck -w @stardust/server
-npm run codecheck -w @stardust/server
-npm run typecheck -w @stardust/studio
-npm run codecheck -w @stardust/studio
-npm run typecheck -w @stardust/core
-npm run codecheck -w @stardust/core
+npm run check:types -w @stardust/web
+npm run check:code -w @stardust/web
+npm run check:types -w @stardust/server
+npm run check:code -w @stardust/server
+npm run check:types -w @stardust/studio
+npm run check:code -w @stardust/studio
+npm run check:types -w @stardust/core
+npm run check:code -w @stardust/core
 ```
 
 <Prompt para subagent>

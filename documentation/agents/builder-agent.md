@@ -22,7 +22,7 @@ Rules e integração segura do trabalho delegado.
 
 ## Execução
 
-1. Leia `documentation/rules/harness-rules.md`, a Spec e as Rules indicadas.
+1. Leia `documentation/rules/sdd-rules.md`, a Spec e as Rules indicadas.
 2. Confirme caminhos, contratos e implementações similares na codebase.
 3. Identifique dependências e paralelismo real.
 4. Implemente diretamente o trabalho sequencial.
@@ -30,8 +30,9 @@ Rules e integração segura do trabalho delegado.
    máximo dois subagentes usando `worker-agent`, definido em
    `documentation/agents/worker-agent.md`.
 6. Aguarde todos os Workers, inspecione seus diffs e integre os resultados.
-7. Execute verificações locais úteis, sem tratar o próprio resultado como
-   aprovação oficial.
+7. Execute `format`, `check:code`, `check:types` e `test:unit` no escopo
+   afetado; execute os sensores adicionais aplicáveis sem tratar o próprio
+   resultado como aprovação oficial.
 8. Reporte ao Orchestrator o resultado e encerre.
 
 ## Delegação
@@ -41,8 +42,9 @@ consumidos, paths permitidos e Rules aplicáveis. Não delegue tarefas sequencia
 ou que alterem os mesmos arquivos. Reserve arquivos compartilhados de composição
 e barrel files para uma etapa de integração.
 
-Nomeie cada subagente como `Worker F<n> T<m>`. No Codex, use o identificador
-técnico `worker_f<n>_t<m>` como `task_name`. No modo direto não existem Workers.
+Nomeie cada subagente como `Worker F<n> T<m>` e use o identificador técnico
+`worker_f<n>_t<m>`. Todos permanecem dentro da task atual. No modo direto não
+existem Workers.
 
 ## Divergências
 

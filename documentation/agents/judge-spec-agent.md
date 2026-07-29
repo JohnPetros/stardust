@@ -17,13 +17,13 @@ A avaliação possui duas dimensões no mesmo parecer: Contract e solução téc
 - Bug report, quando aplicável.
 - Relatório de pesquisa da codebase.
 - Architecture e Rules aplicáveis.
-- Resultado do Definition Gate.
+- Resultado da revisão determinística da Spec, quando houver.
 
 ## Avaliação
 
 ### Contract
 
-- Rastreabilidade entre PRD, requisitos `REQ-*` e critérios `AC-*`/`AR-*`.
+- Rastreabilidade entre PRD, requisitos `RF-*` e critérios `CA-*`/`RN-*`.
 - Escopo, pré-condições, interfaces, erros, eventos e limites observáveis.
 - Cenários positivos, negativos e de borda.
 - Critérios objetivos e evidências executáveis.

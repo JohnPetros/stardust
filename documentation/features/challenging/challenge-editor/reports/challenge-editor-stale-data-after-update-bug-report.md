@@ -119,9 +119,9 @@ Liste codigo redundante, legado ou incorreto que deve ser eliminado como parte d
 
 ## Validacao
 
-- `npm run codecheck -w @stardust/web` ✅
-- `npm run typecheck -w @stardust/web` ✅
+- `npm run check:code -w @stardust/web` ✅
+- `npm run check:types -w @stardust/web` ✅
 - `npm run test -w @stardust/web` ✅
-- `npm run codecheck -w @stardust/core` ✅
-- `npm run typecheck -w @stardust/core` ✅
+- `npm run check:code -w @stardust/core` ✅
+- `npm run check:types -w @stardust/core` ✅
 - `npm run test -w @stardust/core` ✅

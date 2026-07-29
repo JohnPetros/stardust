@@ -21,12 +21,12 @@ trabalho de outros agentes.
 
 ## Execução
 
-1. Leia `documentation/rules/harness-rules.md` e todas as Rules recebidas.
+1. Leia `documentation/rules/sdd-rules.md` e todas as Rules recebidas.
 2. Confirme na codebase os arquivos e contratos citados.
 3. Implemente somente a tarefa delegada.
 4. Adicione ou ajuste testes somente quando a tarefa os exigir e dentro dos
    tipos de teste permitidos pelo projeto.
-5. Rode verificações locais proporcionais ao escopo.
+5. Rode `format`, `check:code`, `check:types` e testes proporcionais ao escopo.
 6. Reporte o resultado ao Builder.
 
 ## Restrições

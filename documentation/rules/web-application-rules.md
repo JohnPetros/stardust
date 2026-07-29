@@ -59,8 +59,8 @@ npm run test
   - Queue (Inngest local): `npm run queue -w @stardust/web`
   - Build: `npm run build -w @stardust/web`
   - Start (standalone): `npm run start -w @stardust/web`
-  - Qualidade: `npm run codecheck -w @stardust/web` (`lint` + `format`)
-  - Tipos: `npm run typecheck -w @stardust/web`
+  - Qualidade: `npm run check:code -w @stardust/web` (`lint` + `format`)
+  - Tipos: `npm run check:types -w @stardust/web`
   - Testes: `npm run test:unit -w @stardust/web` / `npm run test:unit:watch -w @stardust/web`
   - Tipos do banco (Supabase): `npm run db:types -w @stardust/web`
 - Referencia geral: `documentation/tooling.md`.

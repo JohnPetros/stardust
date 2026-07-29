@@ -125,5 +125,5 @@ Como agregados apenas encapsulam uma relação entre entidades, seus testes gera
 - Geracao de dados: fakers do core + `@faker-js/faker` (quando aplicavel).
 - Comandos:
   - `npm run test:unit -w @stardust/core`
-  - `npm run typecheck -w @stardust/core`
+  - `npm run check:types -w @stardust/core`
 - Referencia geral: `documentation/tooling.md`.

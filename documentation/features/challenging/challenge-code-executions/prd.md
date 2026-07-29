@@ -20,7 +20,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ### 2. Requisitos
 
-#### REQ-01 Histórico de Execuções
+#### RF-01 Histórico de Execuções
 
 - [ ] **Histórico de Execuções**
 
@@ -36,7 +36,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ---
 
-#### REQ-02 Status da Tentativa
+#### RF-02 Status da Tentativa
 
 - [ ] **Status da Tentativa**
 
@@ -58,7 +58,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ---
 
-#### REQ-03 Nova Aba de Execuções
+#### RF-03 Nova Aba de Execuções
 
 - [ ] **Aba de Execuções**
 
@@ -81,7 +81,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ---
 
-#### REQ-04 Visualização do Código
+#### RF-04 Visualização do Código
 
 - [ ] **Visualização do Código da Tentativa**
 
@@ -101,7 +101,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ---
 
-#### REQ-05 Visualização de Erro
+#### RF-05 Visualização de Erro
 
 - [ ] **Visualização do Erro da Tentativa**
 
@@ -122,7 +122,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ---
 
-#### REQ-06 Botão de Executar
+#### RF-06 Botão de Executar
 
 - [ ] **Estado de Loading ao Executar**
 
@@ -141,7 +141,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ---
 
-#### REQ-07 Botão de Verificar
+#### RF-07 Botão de Verificar
 
 - [ ] **Bloqueio do Botão de Verificar**
 
@@ -162,7 +162,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ---
 
-#### REQ-08 Acurácia e Recompensa
+#### RF-08 Acurácia e Recompensa
 
 - [ ] **Acurácia Coerente com as Tentativas**
 

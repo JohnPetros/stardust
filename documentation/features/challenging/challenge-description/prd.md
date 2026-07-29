@@ -12,7 +12,7 @@ O **Challenge Description** é o painel principal de apresentação de um desafi
 
 ## 2. Requisitos
 
-### REQ-01 Exibição da Descrição do Desafio
+### RF-01 Exibição da Descrição do Desafio
 
 - [x] **Exibição da Descrição do Desafio**
 
@@ -37,7 +37,7 @@ O **Challenge Description** é o painel principal de apresentação de um desafi
 
 ---
 
-### REQ-02 Metadados e Estatísticas do Desafio
+### RF-02 Metadados e Estatísticas do Desafio
 
 - [x] **Metadados e Estatísticas do Desafio**
 
@@ -58,7 +58,7 @@ O **Challenge Description** é o painel principal de apresentação de um desafi
 
 ---
 
-### REQ-03 Votação do Desafio
+### RF-03 Votação do Desafio
 
 - [x] **Votação do Desafio**
 
@@ -84,7 +84,7 @@ O **Challenge Description** é o painel principal de apresentação de um desafi
 
 ---
 
-### REQ-04 Controle Administrativo do Desafio
+### RF-04 Controle Administrativo do Desafio
 
 - [x] **Controle Administrativo do Desafio**
 
@@ -107,7 +107,7 @@ O **Challenge Description** é o painel principal de apresentação de um desafi
 
 ---
 
-### REQ-05 Seleção de Texto para Assistente IA
+### RF-05 Seleção de Texto para Assistente IA
 
 - [x] **Seleção de Texto para Assistente IA**
 
@@ -128,7 +128,7 @@ O **Challenge Description** é o painel principal de apresentação de um desafi
 
 ---
 
-### REQ-06 Navegação de Conteúdo
+### RF-06 Navegação de Conteúdo
 
 - [x] **Navegação de Conteúdo**
 

@@ -64,48 +64,48 @@ preservado pelo domínio antes de ser consumido pela interface.
 
 ### 3.1 Funcionais
 
-- **REQ-01 — Contrato e entrega:** o detalhe de um desafio deve aceitar e devolver
+- **RF-01 — Contrato e entrega:** o detalhe de um desafio deve aceitar e devolver
   uma solução oficial opcional contendo código, input e uma sequência não vazia de
   snapshots, sem perder o conteúdo durante mapeamento, hidratação ou serialização.
-- **REQ-02 — Chamada condicional:** a listagem liberada de soluções deve exibir uma
+- **RF-02 — Chamada condicional:** a listagem liberada de soluções deve exibir uma
   chamada destacada para a solução oficial somente quando esse conteúdo existir.
-- **REQ-03 — Rota e ocultação:** a chamada deve abrir uma rota estática própria; o
+- **RF-03 — Rota e ocultação:** a chamada deve abrir uma rota estática própria; o
   acesso direto deve usar a mesma ocultação client-side da aba `Soluções`, e a rota
   deve oferecer retorno seguro à listagem quando não houver solução oficial.
-- **REQ-04 — Controles do Playback:** o componente deve oferecer play/pause, etapa
+- **RF-04 — Controles do Playback:** o componente deve oferecer play/pause, etapa
   anterior, próxima etapa, timeline, velocidades `0.5x`, `1x` e `2x`, e alternância
   de layout, respeitando os limites da sequência e parando ao final. Pausa, avanço,
   retorno e seek devem permanecer habilitados durante autoplay; avanço, retorno e
   seek manuais não pausam a reprodução, enquanto play/pause é a ação explícita que
   muda esse estado.
-- **REQ-05 — Snapshot sincronizado:** cada etapa deve trocar atomicamente linhas
+- **RF-05 — Snapshot sincronizado:** cada etapa deve trocar atomicamente linhas
   ativas, explicação e painéis de estado ordenados, preservando o input; voltar a uma
   etapa deve restaurar exatamente o mesmo snapshot. Uma etapa pode destacar
   múltiplas linhas ou intervalos de linhas, e o editor deve rolar para o primeiro
   intervalo fora da área visível sem esconder o contexto próximo.
-- **REQ-06 — Visualização de estado:** o Playback deve renderizar sequências,
+- **RF-06 — Visualização de estado:** o Playback deve renderizar sequências,
   escalares, mapas, conjuntos, grades e resultados, incluindo índices, ponteiros e
   destaques simples, múltiplos ou por intervalo quando declarados no payload.
   Coleções vazias devem possuir estado vazio explícito; o input textual deve
   preservar quebras de linha e espaços; inputs e valores extensos devem usar wrap ou
   scroll conforme o contrato sem quebrar o layout.
-- **REQ-07 — Layouts:** o modo padrão deve empilhar controles, estado, explicação e
+- **RF-07 — Layouts:** o modo padrão deve empilhar controles, estado, explicação e
   código; o modo expandido deve usar estado e código lado a lado quando houver
   largura e cair para disposição vertical em viewport estreita, sem perder a etapa
   ou o estado de reprodução.
 
 ### 3.2 Não funcionais
 
-- **REQ-08 — Acessibilidade e responsividade:** todos os controles devem ser
+- **RF-08 — Acessibilidade e responsividade:** todos os controles devem ser
   operáveis por teclado, possuir nome acessível e estado perceptível sem depender
   apenas de cor; conteúdo e controles não podem se sobrepor e devem manter scroll
   previsível.
-- **REQ-09 — Determinismo e segurança de execução:** navegar ou reproduzir snapshots
+- **RF-09 — Determinismo e segurança de execução:** navegar ou reproduzir snapshots
   não deve executar código, chamar LSP, mutar o payload recebido ou disparar requests.
-- **REQ-10 — Limite arquitetural:** a solução oficial é um campo controlado pelo
+- **RF-10 — Limite arquitetural:** a solução oficial é um campo controlado pelo
   server para leitura, não integra schemas de criação/edição de desafios e não cria
   um segundo modelo de `Solution`; a proteção desta entrega é somente visual.
-- **REQ-11 — Eficiência do transporte:** o JSON potencialmente volumoso deve ser
+- **RF-11 — Eficiência do transporte:** o JSON potencialmente volumoso deve ser
   carregado no detalhe do desafio, mas não deve ser acrescentado à projeção da
   listagem paginada de desafios.
 
@@ -259,34 +259,27 @@ permitidos são definidos integralmente na seção técnica:
 
 | ID | Requisito | Dado | Quando | Então | Evidência esperada |
 | --- | --- | --- | --- | --- | --- |
-| AC-01 | REQ-01 | Dado um desafio persistido com solução oficial válida | Quando seu detalhe é buscado pela API | Então a resposta contém o mesmo código, input, ordem de etapas, linhas, explicações e painéis persistidos | Integração server e round-trip do domínio |
-| AC-02 | REQ-01 | Dado um desafio persistido com `official_solution = null` | Quando seu detalhe é buscado pela API | Então `officialSolution` é `null` e a página continua carregando normalmente | Integração server e browser |
-| AC-03 | REQ-02 | Dado um usuário com a aba `Soluções` liberada e um desafio com solução oficial | Quando a listagem de soluções é renderizada | Então uma chamada destacada e identificada como solução oficial da plataforma é exibida antes das soluções de usuários | Teste de widget e browser |
-| AC-04 | REQ-02 | Dado um usuário com a aba `Soluções` liberada e um desafio sem solução oficial | Quando a listagem de soluções é renderizada | Então nenhuma chamada de solução oficial é exibida | Teste de widget |
-| AC-05 | REQ-03 | Dado que a chamada oficial está visível | Quando o usuário a aciona | Então a URL termina em `/solutions/official`, a aba ativa continua sendo `Soluções` e o Code Playback é exibido | Teste de rota e browser |
-| AC-06 | REQ-03 | Dado um visitante ou usuário sem acesso à aba `Soluções` | Quando acessa diretamente `/solutions/official` | Então o diálogo de conteúdo bloqueado atual é exibido e nenhum conteúdo do Playback é renderizado na interface | Teste de rota e browser |
-| AC-07 | REQ-03 | Dado um desafio sem solução oficial | Quando sua rota `/solutions/official` é acessada com a aba liberada | Então a interface informa indisponibilidade e oferece retorno à listagem de soluções sem lançar erro | Teste de widget e rota |
-| AC-08 | REQ-04 | Dado um Playback em autoplay numa etapa intermediária | Quando o usuário aciona anterior, próxima, uma posição da timeline ou pause | Então todos os controles respondem imediatamente; anterior, próxima e seek preservam autoplay, pause o interrompe, e os limites continuam desabilitados ou ignorados | Teste do hook e da View |
-| AC-09 | REQ-04 | Dado um Playback com três ou mais etapas | Quando o usuário inicia a reprodução em `0.5x`, `1x` ou `2x` | Então a progressão usa o intervalo correspondente, não cria timers concorrentes e para pausada na última etapa | Teste do hook com relógio controlado |
-| AC-10 | REQ-05 | Dado um payload com snapshots distintos | Quando o usuário avança e depois retorna | Então linhas ativas, explicação e todos os painéis voltam exatamente aos valores e à ordem da etapa anterior, enquanto o input permanece inalterado | Teste do hook e da View |
-| AC-11 | REQ-06 | Dado um snapshot com todos os tipos de painel e metadados visuais | Quando a etapa é renderizada | Então sequências, escalares, mapas, conjuntos, grades e resultados aparecem na ordem declarada, com índices, ponteiros e destaques aplicáveis | Teste da View |
-| AC-12 | REQ-07 | Dado um Playback em reprodução numa etapa intermediária | Quando o usuário expande e recolhe o layout | Então etapa, velocidade e estado play/pause são preservados; em desktop estado e código ficam lado a lado | Teste da View e browser |
-| AC-13 | REQ-07 | Dado o modo expandido em viewport estreita | Quando o conteúdo ultrapassa a área visível | Então estado e código ficam em disposição vertical, com scroll interno e sem sobreposição de controles | Browser em viewport móvel |
-| AC-14 | REQ-05 | Dado um passo com dois intervalos de linhas ativas, incluindo um fora da área visível | Quando o passo é exibido, avançado ou restaurado | Então todos os intervalos são destacados juntos, o primeiro intervalo externo é revelado e linhas próximas permanecem visíveis | Teste do CodeEditor e browser |
-| AC-15 | REQ-06 | Dado input com espaços e quebras de linha e painéis com valores extensos | Quando a etapa é renderizada com overflow `wrap` ou `scroll` | Então a formatação textual é preservada e o conteúdo usa o tratamento declarado sem ampliar ou sobrepor o layout | Teste da View e browser em viewport estreita |
-| AC-16 | REQ-06 | Dado sequências, mapas, sets ou grids vazios, múltiplos ponteiros e destaques simples ou por intervalo | Quando os painéis são renderizados | Então cada coleção vazia mostra `emptyLabel` ou `Vazio`, cada ponteiro aponta para o índice declarado e todos os destaques aparecem no estado visual declarado | Teste da View com a fixture normativa |
-| AR-01 | REQ-08 | Dado um usuário que navega somente por teclado | Quando percorre e aciona todos os controles | Então foco visível, nomes acessíveis, valores da timeline e estados pressionado/desabilitado são anunciáveis, e `Escape` recolhe o modo expandido | Inspeção de acessibilidade e browser |
-| AR-02 | REQ-09 | Dado qualquer sequência de play, pause, seek, avanço e retorno | Quando o Playback muda de etapa | Então não ocorre request, chamada LSP, execução de código nem mutação do DTO de entrada | Teste do hook com spies e congelamento da fixture |
-| AR-03 | REQ-10 | Dado um payload de criação ou edição de desafio contendo `officialSolution` | Quando ele passa pelos schemas públicos existentes | Então o campo não participa do input persistido; somente a coluna administrada fora desse fluxo é lida no detalhe | Inspeção dos schemas e integração server |
-| AR-04 | REQ-10 | Dado um visitante ou usuário bloqueado que abre o detalhe do desafio | Quando a resposta REST é inspecionada | Então o JSON pode conter `officialSolution`, mas a interface não o renderiza; esta exposição é aceita como limite explícito desta entrega | Integração server e browser |
-| AR-05 | REQ-11 | Dado desafios com soluções oficiais volumosas | Quando a listagem paginada de desafios é consultada | Então a projeção da listagem não contém `official_solution`, enquanto a consulta por slug continua retornando o campo | Integração server |
-
-<!-- harness:evidence {"criterion":"AC-01","command":["npm","run","test:unit","-w","@stardust/core"]} -->
-<!-- harness:evidence {"criterion":"AC-01","command":["npm","run","test:integration","-w","@stardust/server"]} -->
-<!-- harness:evidence {"criterion":"AC-05","command":["npm","run","test:integration","-w","@stardust/web"]} -->
-<!-- harness:evidence {"criterion":"AC-09","command":["npm","run","test:unit","-w","@stardust/web"]} -->
-<!-- harness:evidence {"criterion":"AR-03","command":["npm","run","test:integration","-w","@stardust/server"]} -->
-<!-- harness:evidence {"criterion":"AR-05","command":["npm","run","test:integration","-w","@stardust/server"]} -->
+| CA-01 | RF-01 | Dado um desafio persistido com solução oficial válida | Quando seu detalhe é buscado pela API | Então a resposta contém o mesmo código, input, ordem de etapas, linhas, explicações e painéis persistidos | Integração server e round-trip do domínio |
+| CA-02 | RF-01 | Dado um desafio persistido com `official_solution = null` | Quando seu detalhe é buscado pela API | Então `officialSolution` é `null` e a página continua carregando normalmente | Integração server e browser |
+| CA-03 | RF-02 | Dado um usuário com a aba `Soluções` liberada e um desafio com solução oficial | Quando a listagem de soluções é renderizada | Então uma chamada destacada e identificada como solução oficial da plataforma é exibida antes das soluções de usuários | Teste de widget e browser |
+| CA-04 | RF-02 | Dado um usuário com a aba `Soluções` liberada e um desafio sem solução oficial | Quando a listagem de soluções é renderizada | Então nenhuma chamada de solução oficial é exibida | Teste de widget |
+| CA-05 | RF-03 | Dado que a chamada oficial está visível | Quando o usuário a aciona | Então a URL termina em `/solutions/official`, a aba ativa continua sendo `Soluções` e o Code Playback é exibido | Teste de rota e browser |
+| CA-06 | RF-03 | Dado um visitante ou usuário sem acesso à aba `Soluções` | Quando acessa diretamente `/solutions/official` | Então o diálogo de conteúdo bloqueado atual é exibido e nenhum conteúdo do Playback é renderizado na interface | Teste de rota e browser |
+| CA-07 | RF-03 | Dado um desafio sem solução oficial | Quando sua rota `/solutions/official` é acessada com a aba liberada | Então a interface informa indisponibilidade e oferece retorno à listagem de soluções sem lançar erro | Teste de widget e rota |
+| CA-08 | RF-04 | Dado um Playback em autoplay numa etapa intermediária | Quando o usuário aciona anterior, próxima, uma posição da timeline ou pause | Então todos os controles respondem imediatamente; anterior, próxima e seek preservam autoplay, pause o interrompe, e os limites continuam desabilitados ou ignorados | Teste do hook e da View |
+| CA-09 | RF-04 | Dado um Playback com três ou mais etapas | Quando o usuário inicia a reprodução em `0.5x`, `1x` ou `2x` | Então a progressão usa o intervalo correspondente, não cria timers concorrentes e para pausada na última etapa | Teste do hook com relógio controlado |
+| CA-10 | RF-05 | Dado um payload com snapshots distintos | Quando o usuário avança e depois retorna | Então linhas ativas, explicação e todos os painéis voltam exatamente aos valores e à ordem da etapa anterior, enquanto o input permanece inalterado | Teste do hook e da View |
+| CA-11 | RF-06 | Dado um snapshot com todos os tipos de painel e metadados visuais | Quando a etapa é renderizada | Então sequências, escalares, mapas, conjuntos, grades e resultados aparecem na ordem declarada, com índices, ponteiros e destaques aplicáveis | Teste da View |
+| CA-12 | RF-07 | Dado um Playback em reprodução numa etapa intermediária | Quando o usuário expande e recolhe o layout | Então etapa, velocidade e estado play/pause são preservados; em desktop estado e código ficam lado a lado | Teste da View e browser |
+| CA-13 | RF-07 | Dado o modo expandido em viewport estreita | Quando o conteúdo ultrapassa a área visível | Então estado e código ficam em disposição vertical, com scroll interno e sem sobreposição de controles | Browser em viewport móvel |
+| CA-14 | RF-05 | Dado um passo com dois intervalos de linhas ativas, incluindo um fora da área visível | Quando o passo é exibido, avançado ou restaurado | Então todos os intervalos são destacados juntos, o primeiro intervalo externo é revelado e linhas próximas permanecem visíveis | Teste do CodeEditor e browser |
+| CA-15 | RF-06 | Dado input com espaços e quebras de linha e painéis com valores extensos | Quando a etapa é renderizada com overflow `wrap` ou `scroll` | Então a formatação textual é preservada e o conteúdo usa o tratamento declarado sem ampliar ou sobrepor o layout | Teste da View e browser em viewport estreita |
+| CA-16 | RF-06 | Dado sequências, mapas, sets ou grids vazios, múltiplos ponteiros e destaques simples ou por intervalo | Quando os painéis são renderizados | Então cada coleção vazia mostra `emptyLabel` ou `Vazio`, cada ponteiro aponta para o índice declarado e todos os destaques aparecem no estado visual declarado | Teste da View com a fixture normativa |
+| RN-01 | RF-08 | Dado um usuário que navega somente por teclado | Quando percorre e aciona todos os controles | Então foco visível, nomes acessíveis, valores da timeline e estados pressionado/desabilitado são anunciáveis, e `Escape` recolhe o modo expandido | Inspeção de acessibilidade e browser |
+| RN-02 | RF-09 | Dado qualquer sequência de play, pause, seek, avanço e retorno | Quando o Playback muda de etapa | Então não ocorre request, chamada LSP, execução de código nem mutação do DTO de entrada | Teste do hook com spies e congelamento da fixture |
+| RN-03 | RF-10 | Dado um payload de criação ou edição de desafio contendo `officialSolution` | Quando ele passa pelos schemas públicos existentes | Então o campo não participa do input persistido; somente a coluna administrada fora desse fluxo é lida no detalhe | Inspeção dos schemas e integração server |
+| RN-04 | RF-10 | Dado um visitante ou usuário bloqueado que abre o detalhe do desafio | Quando a resposta REST é inspecionada | Então o JSON pode conter `officialSolution`, mas a interface não o renderiza; esta exposição é aceita como limite explícito desta entrega | Integração server e browser |
+| RN-05 | RF-11 | Dado desafios com soluções oficiais volumosas | Quando a listagem paginada de desafios é consultada | Então a projeção da listagem não contém `official_solution`, enquanto a consulta por slug continua retornando o campo | Integração server |
 
 # Parte II — Especificação Técnica
 
@@ -997,7 +990,7 @@ Modo expandido estreito
 - `apps/web/src/ui/challenging/widgets/slots/ChallengeSolutions/SolutionCard/index.tsx`
 - `apps/web/src/ui/challenging/widgets/components/BlockedContentMessage/index.tsx`
 
-## 11. Gates Aplicáveis
+## 11. Sensores aplicáveis
 
 ### Workspaces e escopo permitido
 
@@ -1013,24 +1006,17 @@ Modo expandido estreito
 
 | Sensor | Escopo | Obrigatório | Comando ou configuração |
 | --- | --- | --- | --- |
-| `scope-check` | core, server, web | sim | executado pelo Harness com os paths permitidos acima |
-| `architecture-check` | core, server, web | sim | `npm run harness -- gate implementation --spec=documentation/features/challenging/challenge-solutions/specs/oficial-solution-spec.md --package=@stardust/core --package=@stardust/server --package=@stardust/web` |
-| `migration-check` estático | server | sim | executado pelo Harness sobre a migration canônica |
-| `codecheck` | pacotes afetados | sim | executado por pacote no Implementation Gate e globalmente no Conclusion Gate |
-| `typecheck` | pacotes afetados | sim | executado por pacote no Implementation Gate e globalmente no Conclusion Gate |
-| `test:unit` | pacotes afetados | sim | executado por pacote no Implementation Gate e globalmente no Conclusion Gate |
-| `quality-ratchet` | core | sim | `npm run quality-ratchet -- --workspace=core` |
-| `quality-ratchet` | server | sim | `npm run quality-ratchet -- --workspace=server` |
-| `quality-ratchet` | web | sim | `npm run quality-ratchet -- --workspace=web` |
-| Integração | server | sim | `npm run test:integration -w @stardust/server` |
-| Integração | web | sim | `npm run test:integration -w @stardust/web` |
-| `contract-check` | Contract | sim | `npm run contract-check -- --spec=documentation/features/challenging/challenge-solutions/specs/oficial-solution-spec.md --run` |
+| `check:code` | pacotes afetados | sim | `npm run check:code -w <workspace>` |
+| `check:types` | pacotes afetados | sim | `npm run check:types -w <workspace>` |
+| `check:architecture` | monorepo | sim | `npm run check:architecture` |
+| `check:dead-code` | monorepo | sim | `npm run check:dead-code` |
+| `test:unit` | pacotes afetados | sim | `npm run test:unit -w <workspace>` |
+| `test:integration` | server | sim | `npm run test:integration -w @stardust/server` |
+| `test:integration` | web | sim | `npm run test:integration -w @stardust/web` |
 | Runtime smoke | web | sim | coberto pelo Playwright da integração web na rota oficial |
-| Dead code | core, server, web | não | não há sensor versionado dedicado; inspeção do Judge e `architecture-check` cobrem exports/entry points novos |
 
-O Conclusion Gate deve repetir o Harness com `gate conclusion` e os mesmos
-paths efetivamente alterados. O `quality-ratchet` permanece no job específico
-do CI de cada workspace.
+Na conclusão, os critérios são confrontados com as evidências acima na mesma
+sessão. O build permanece como validação final do CI.
 
 ## 12. Pendências / Dúvidas
 
@@ -1042,6 +1028,6 @@ Use **`create-plan` + `implement-plan`**.
 
 A implementação cruza contrato e structure de core, migration e mapper do server,
 hidratação, rota paralela, componente global com timer/Monaco e experiência
-responsiva no web. A decomposição por pacote e por gate reduz risco de perda do
+responsiva no web. A decomposição por pacote reduz risco de perda do
 campo no round-trip, regressão no CodeEditor e divergência entre proteção visual,
 rota e listagem.

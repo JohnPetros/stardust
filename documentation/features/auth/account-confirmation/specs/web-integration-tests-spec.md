@@ -38,7 +38,7 @@ Criar a cobertura Playwright da jornada publicada de confirmacao de conta no `we
 - Testar envio real de e-mail ou token real do provedor de autenticacao.
 - Testar a criacao do perfil em si: a funcao/job do Inngest que cria o perfil e emite o realtime pertence ao `apps/server` e nao e exercitada por estes testes; a suite Playwright do `web` valida a chamada `AuthService.retryUserCreation()` + feedback de UI, e os testes do server validam ate a publicacao do `AccountSignedUpEvent`.
 - Cobrir o fluxo `/auth/social-account-confirmation` (ja possui cobertura unitaria em `useSocialAccountConfirmationPage.test.ts`).
-- Validar acesso direto a `/auth/account-confirmation` sem conta autenticada (comportamento marcado como em construcao no PRD, REQ-06).
+- Validar acesso direto a `/auth/account-confirmation` sem conta autenticada (comportamento marcado como em construcao no PRD, RF-06).
 - Criar testes unitarios adicionais para widgets/controllers que ja possuem cobertura equivalente, salvo lacuna necessaria descoberta durante a implementacao.
 
 ---
@@ -290,7 +290,7 @@ Estas mudancas habilitam o cenario de retry e a rota especificada na secao 5. De
   - **Motivo:** `verifyAuthentication` valida a sessao mas nao seta `account` no contexto (apenas o middleware de API key seta); logo o controller resolve a conta via `fetchAccount()`, como faz a antiga action.
   - **Trade-offs:** uma chamada extra a `fetchAccount` no server, ja paga pelo middleware; sem impacto relevante.
 
-- **Decisao:** nao cobrir acesso direto sem conta autenticada (REQ-06).
+- **Decisao:** nao cobrir acesso direto sem conta autenticada (RF-06).
   - **Alternativas:** assumir um comportamento e testa-lo.
   - **Motivo:** o PRD marca o caso como em construcao, sem comportamento confirmado.
   - **Trade-offs:** lacuna registrada em Pendencias.
@@ -411,5 +411,5 @@ Decisoes ja confirmadas com o autor (nao sao mais duvidas):
 
 Duvidas em aberto:
 
-- **Acesso direto sem conta (REQ-06):** o PRD marca como em construcao. **Impacto:** sem comportamento confirmado para usuario nao autenticado em `/auth/account-confirmation`. **Acao sugerida:** manter fora de escopo ate definicao do produto.
-- **Protecao de rota privada (REQ-05):** o redirecionamento ocorre no `useAuthContextProvider` apos `fetchUser` resolver sem perfil; a rota privada escolhida para o teste pode exigir defaults adicionais de dados. **Impacto:** o cenario pode precisar registrar rotas extras para nao falhar antes do redirect. **Acao sugerida:** escolher a rota privada com menor dependencia de dados durante a implementacao e registrar os mocks minimos necessarios.
+- **Acesso direto sem conta (RF-06):** o PRD marca como em construcao. **Impacto:** sem comportamento confirmado para usuario nao autenticado em `/auth/account-confirmation`. **Acao sugerida:** manter fora de escopo ate definicao do produto.
+- **Protecao de rota privada (RF-05):** o redirecionamento ocorre no `useAuthContextProvider` apos `fetchUser` resolver sem perfil; a rota privada escolhida para o teste pode exigir defaults adicionais de dados. **Impacto:** o cenario pode precisar registrar rotas extras para nao falhar antes do redirect. **Acao sugerida:** escolher a rota privada com menor dependencia de dados durante a implementacao e registrar os mocks minimos necessarios.

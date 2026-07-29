@@ -15,9 +15,7 @@ das fases da implementação, ou da implementação direta.
 - Revisão final da Spec.
 - Plan completo, quando existir.
 - Commit-base e diff integral.
-- Resultado do Conclusion Gate e sensores locais finais dos workspaces
-  afetados. O `quality-ratchet` ainda pode estar pendente porque sua evidência
-  oficial será produzida pelo CI do PR.
+- Resultados locais finais dos sensores dos workspaces afetados.
 - PRD associado.
 - Architecture e Rules aplicáveis ou atualizadas.
 - Findings humanos e avaliações anteriores.
@@ -31,9 +29,7 @@ Verifique:
 - Integração entre fases previamente aceitas.
 - Ausência de fases, tarefas, findings ou pendências abertas.
 - Diff completo dentro do escopo.
-- Conclusion Gate e sensores locais finais.
-- Se o `quality-ratchet` está corretamente declarado para execução obrigatória
-  no CI dos workspaces afetados.
+- Sensores locais finais e Quality Gate do PR corretamente declarado.
 - Testes removidos, enfraquecidos ou lacunas críticas.
 - Consistência entre implementação, Spec, PRD, Architecture e Rules.
 - Se o Plan contém handoff e histórico suficientes para justificar conclusão.
@@ -61,7 +57,7 @@ Verifique:
 
 | ID | Estado | Evidência |
 | --- | --- | --- |
-| REQ-01 | passed | ... |
+| RF-01 | passed | ... |
 
 ### Fases
 

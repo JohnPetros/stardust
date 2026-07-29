@@ -31,6 +31,49 @@ export const NextRestClient = ({
   }
   let queryParams: Record<string, string> = {}
 
+  function setAuthorizationToken(token: string) {
+    requestInit.headers = {
+      ...requestInit.headers,
+      [HTTP_HEADERS.authorization]: `Bearer ${token}`,
+    }
+  }
+
+  async function getFromUrl<Body>(url: string): Promise<RestResponse<Body>> {
+    const response = await fetch(url, {
+      ...requestInit,
+      method: 'GET',
+    })
+
+    if (!response.ok) {
+      return await handleRestError<Body>(
+        response,
+        async () => await getFromUrl<Body>(url),
+        (session) => setAuthorizationToken(session.accessToken),
+      )
+    }
+
+    const data = await parseResponseJson(response)
+
+    if (response.headers.get(HTTP_HEADERS.xPaginationResponse)) {
+      const totalItemsCount =
+        Number(response.headers.get(HTTP_HEADERS.xTotalItemsCount)) || 0
+      const itemsPerPage = Number(response.headers.get(HTTP_HEADERS.xItemsPerPage)) || 0
+      const page = Number(response.headers.get(HTTP_HEADERS.xPage)) || 1
+
+      return new RestResponse<Body>({
+        body: new PaginationResponse({
+          items: data,
+          totalItemsCount,
+          itemsPerPage,
+          page,
+        }) as Body,
+        statusCode: response.status,
+      })
+    }
+
+    return new RestResponse({ body: data, statusCode: response.status })
+  }
+
   function getFileName(headers: Headers, fallbackName: string): string {
     const contentDisposition = headers.get('content-disposition')
     if (!contentDisposition) return fallbackName
@@ -41,39 +84,9 @@ export const NextRestClient = ({
 
   return {
     async get<Body>(route: string): Promise<RestResponse<Body>> {
-      const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
-        ...requestInit,
-        method: 'GET',
-      })
-
-      if (!response.ok) {
-        return await handleRestError<Body>(
-          response,
-          async () => await this.get<Body>(route),
-          (session) => this.setAuthorization(session.accessToken),
-        )
-      }
-
-      const data = await parseResponseJson(response)
-
-      if (response.headers.get(HTTP_HEADERS.xPaginationResponse)) {
-        const totalItemsCount =
-          Number(response.headers.get(HTTP_HEADERS.xTotalItemsCount)) || 0
-        const itemsPerPage = Number(response.headers.get(HTTP_HEADERS.xItemsPerPage)) || 0
-        const page = Number(response.headers.get(HTTP_HEADERS.xPage)) || 1
-
-        return new RestResponse<Body>({
-          body: new PaginationResponse({
-            items: data,
-            totalItemsCount,
-            itemsPerPage,
-            page,
-          }) as Body,
-        })
-      }
-
+      const url = `${baseUrl}${addQueryParams(route, queryParams)}`
       this.clearQueryParams()
-      return new RestResponse({ body: data, statusCode: response.status })
+      return await getFromUrl<Body>(url)
     },
 
     async getFile(route: string): Promise<RestResponse<File>> {
@@ -215,10 +228,7 @@ export const NextRestClient = ({
     },
 
     setAuthorization(token: string): void {
-      requestInit.headers = {
-        ...requestInit.headers,
-        [HTTP_HEADERS.authorization]: `Bearer ${token}`,
-      }
+      setAuthorizationToken(token)
     },
 
     setHeader(key: string, value: string): void {

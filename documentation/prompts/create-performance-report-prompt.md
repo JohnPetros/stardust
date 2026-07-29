@@ -339,8 +339,8 @@ Todas as evidencias abaixo foram verificadas diretamente no codigo fonte.
 
 - [ ] Nao mudou comportamento funcional (testes passam: `npm run test:unit -w @stardust/{APP}`)
 - [ ] Build completa com sucesso (`npm run build -w @stardust/{APP}`)
-- [ ] Typecheck passa (`npm run typecheck -w @stardust/{APP}`)
-- [ ] Qualidade passa (`npm run codecheck -w @stardust/{APP}`)
+- [ ] Typecheck passa (`npm run check:types -w @stardust/{APP}`)
+- [ ] Qualidade passa (`npm run check:code -w @stardust/{APP}`)
 - [ ] Metricas comparadas antes/depois (bundle size, latencia, query count)
 - [ ] Jobs idempotentes validados com reprocessamento manual no Inngest dashboard _(se aplicavel)_
 - [ ] {VALIDACAO_ESPECIFICA_DO_ESCOPO}
