@@ -1,5 +1,5 @@
 {
-  "extends": "@stardust/typescript-config/nextjs.json",
+  "extends": "../../packages/typescript-config/nextjs.json",
   "compilerOptions": {
     "lib": [
       "dom",

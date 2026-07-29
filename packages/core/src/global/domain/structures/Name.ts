@@ -38,7 +38,7 @@ export class Name {
   deduplicate() {
     if (this.isDuplicated.isTrue) {
       const newValue = this.value.replace(this.DUPLICATION_REGEX, (_, numero) => {
-        return `(${parseInt(numero) + 1})`
+        return `(${parseInt(numero, 10) + 1})`
       })
       return Name.create(newValue)
     }

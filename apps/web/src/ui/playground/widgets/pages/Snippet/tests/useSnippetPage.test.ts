@@ -140,8 +140,8 @@ describe('useSnippetPage', () => {
       expect(result.current.canExecuteAction).toBe(true)
     })
 
-    ;(playgroudCodeEditorRef.current?.setValue as jest.Mock).mockClear()
-    ;(replaceSnippetAlertDialogRef.current?.open as jest.Mock).mockClear()
+    ;(playgroudCodeEditorRef.current?.setValue as jest.Mock | undefined)?.mockClear()
+    ;(replaceSnippetAlertDialogRef.current?.open as jest.Mock | undefined)?.mockClear()
 
     act(() => {
       result.current.handleExampleSnippetSelect(secondExampleSnippet)
@@ -168,7 +168,7 @@ describe('useSnippetPage', () => {
       expect(result.current.canExecuteAction).toBe(true)
     })
 
-    ;(playgroudCodeEditorRef.current?.setValue as jest.Mock).mockClear()
+    ;(playgroudCodeEditorRef.current?.setValue as jest.Mock | undefined)?.mockClear()
 
     act(() => {
       result.current.handleExampleSnippetSelect(secondExampleSnippet)
