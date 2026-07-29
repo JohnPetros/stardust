@@ -64,7 +64,6 @@ aplicáveis:
 - `npm run check:architecture` quando imports ou fronteiras mudarem;
 - `npm run test:integration` quando contratos entre componentes, persistência,
   rotas ou fluxos reais mudarem;
-- `npm run check:dead-code` depois que a estrutura estiver estável.
 
 Antes da entrega, execute todos os sensores no escopo integrado. `format` é uma
 ação de escrita, não um gate. `build` não é sensor SDD: permanece como validação

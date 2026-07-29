@@ -14,8 +14,8 @@ conclusion.
 - Plan, quando existir, sem tarefa ou finding pendente.
 - revisão da Spec correspondente ao diff.
 
-Execute `check:code`, `check:types`, `test:unit`, `check:architecture` e
-`check:dead-code` no escopo integrado. Execute `test:integration` quando
+Execute `check:code`, `check:types`, `test:unit` e `check:architecture` no
+escopo integrado. Execute `test:integration` quando
 declarado pela Spec ou aplicável. `format` deve ocorrer antes dos checks; build
 permanece como job final do CI.
 

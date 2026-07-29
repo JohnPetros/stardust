@@ -1009,7 +1009,6 @@ Modo expandido estreito
 | `check:code` | pacotes afetados | sim | `npm run check:code -w <workspace>` |
 | `check:types` | pacotes afetados | sim | `npm run check:types -w <workspace>` |
 | `check:architecture` | monorepo | sim | `npm run check:architecture` |
-| `check:dead-code` | monorepo | sim | `npm run check:dead-code` |
 | `test:unit` | pacotes afetados | sim | `npm run test:unit -w <workspace>` |
 | `test:integration` | server | sim | `npm run test:integration -w @stardust/server` |
 | `test:integration` | web | sim | `npm run test:integration -w @stardust/web` |

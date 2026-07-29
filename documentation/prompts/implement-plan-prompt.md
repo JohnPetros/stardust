@@ -17,8 +17,7 @@ Para cada fase:
    paths sem sobreposição; Workers não criam subagentes;
 5. aguarde toda a árvore do Builder, inspecione e integre o diff;
 6. execute `format`, `check:code`, `check:types` e `test:unit` no escopo;
-   execute `check:architecture`, `check:dead-code` e `test:integration` conforme
-   a fase;
+   execute `check:architecture` e `test:integration` conforme a fase;
 7. marque tarefas `verified` somente após os sensores;
 8. acione `judge-implementation-agent` como `Judge F<n>`, irmão read-only do
    Builder. Envie Contract, diff agregado, Rules e evidências, sem narrativa;

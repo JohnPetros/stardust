@@ -40,7 +40,6 @@ Os sensores são package scripts da raiz:
 | `check:code` | lint e consistência estática, sem escrever | ciclo curto e conclusão |
 | `check:types` | validar contratos TypeScript | ciclo curto e conclusão |
 | `check:architecture` | validar fronteiras de dependência | fase e conclusão |
-| `check:dead-code` | detectar código/dependências sem uso | fim da fase e conclusão |
 | `test:unit` | validar unidades e comportamento isolado | ciclo curto e conclusão |
 | `test:integration` | validar integrações e fluxos reais | quando aplicável e conclusão |
 
