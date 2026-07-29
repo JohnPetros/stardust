@@ -32,11 +32,11 @@
   "dependencies": {
     "@designliquido/delegua": "^1.25.1",
     "@stardust/core": "*",
-    "monaco-editor": "^0.53.0"
+    "monaco-editor": "^0.56.0"
   },
   "devDependencies": {
     "@stardust/typescript-config": "*",
-    "tsup": "^8.4.0",
+    "tsup": "^8.5.1",
     "typescript": "5.5.3"
   }
 }
