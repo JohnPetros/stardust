@@ -120,11 +120,15 @@ export const NextHttp = async <NextSchema extends HttpSchema>({
     },
 
     async getCookie(key: string) {
+      if (request) return request.cookies.get(key)?.value ?? null
+
       const response = await cookieActions.getCookie(key)
       return response?.data ?? null
     },
 
     async hasCookie(key: string) {
+      if (request) return request.cookies.has(key)
+
       const response = await cookieActions.hasCookie(key)
       return Boolean(response?.data)
     },
