@@ -1,39 +1,50 @@
 ---
 name: conclude-spec
-description: Concluir uma Spec com sensores integrados e Judge Conclusion na task atual, até o PR ficar mergeable.
+description: Fechar uma Spec de feature com evidências finais, CI Quality Gate e build, usando Judge Implementation final quando necessário.
 ---
 
 # Concluir Spec
 
-O Orchestrator conduz a conclusão na task atual. Não crie uma thread/task de
-conclusion.
+O Orchestrator conduz o fechamento na task atual. Não crie nova thread.
 
-## Pré-condições e sensores
+## Pré-condições
 
-- Spec `open`, implementação direta aceita ou todas as fases aceitas.
-- Plan, quando existir, sem tarefa ou finding pendente.
-- revisão da Spec correspondente ao diff.
+- Spec `in_progress`;
+- implementação direta aceita ou todas as fases aceitas;
+- nenhuma tarefa ou finding bloqueante pendente;
+- revisão da Spec correspondente ao diff atual.
 
-Execute `check:code`, `check:types`, `test:unit` e `check:architecture` no
-escopo integrado. Execute `test:integration` quando
-declarado pela Spec ou aplicável. `format` deve ocorrer antes dos checks; build
-permanece como job final do CI.
+## Validação final
 
-## Judge Conclusion
+1. Execute `format` se ainda houver alterações.
+2. Execute `check:code`, `check:types` e `test:unit` no escopo integrado.
+3. Execute `check:architecture` quando fronteiras ou dependências mudaram.
+4. Execute `test:integration` quando declarado pela Spec ou aplicável.
+5. Atualize a matriz de evidências na Spec.
+6. Crie `Judge Implementation Final` quando houver Plan, múltiplas fases, alto
+   risco ou mudança após o último veredito.
+7. Registre o veredito e o commit avaliado na Spec.
 
-Acione `judge-conclusion-agent` como subagente `Judge Conclusion` read-only na
-task atual. Envie Spec/revisão, Plan, PRD, diff integral, Architecture, Rules,
-vereditos anteriores e evidências dos sensores. Não envie narrativa do Builder.
+Em uma Spec pequena, o `Judge Implementation Direct` pode ser o veredito final
+e não há segundo Judge.
 
-O Judge verifica integração global, matriz `RF-*`/`CA-*`/`RN-*`, regressões,
-documentação e segurança proporcional ao risco. Para autenticação, autorização,
-dados sensíveis, upload, execução de código, pagamentos ou integrações externas,
-exija revisão de segurança dedicada.
+## Documentação e entrega
 
-Se `failed`, reabra fases/tarefas e encaminhe findings ao Builder; depois
-reexecute sensores e Judges invalidados. Se `accepted`, atualize e feche Spec,
-Plan, PRD, Architecture, Rules e overview conforme os fatos.
+Alinhe PRD, Rules, Architecture, modules, tooling e overview conforme os fatos.
+Atualizações normativas que alteram produto, Contract, Rules globais ou
+fronteiras arquiteturais exigem decisão do usuário.
 
-Crie commits e PR, solicite Codex Review e aguarde Quality Gate, testes e build
-do `HEAD` atual. Encerre somente com CI verde, conversas bloqueantes resolvidas
-e PR mergeable. Nenhuma dessas etapas cria nova thread.
+Crie o commit e PR, solicite Codex Review e aguarde Quality Gate e build do
+`HEAD` atual. O Quality Gate repete os sensores oficiais; build é a validação
+final do artefato no CI.
+
+Se Quality Gate ou build falhar, mantenha a Spec `in_progress`, registre a
+falha na Spec, crie `Builder Fix QG-<n>` quando a correção estiver no escopo,
+reexecute sensores invalidados e reavalie se o diff mudar.
+
+Somente depois de CI verde, conversas bloqueantes resolvidas e PR mergeable:
+
+- preencha evidências finais;
+- registre alinhamento documental;
+- altere a Spec para `completed`;
+- conclua o Plan, quando existir.

@@ -2,7 +2,7 @@
 
 Execute os scripts na raiz para aproveitar o Turbo e o cache. Durante a
 implementação, use `--filter` ou `-w` para limitar o feedback ao workspace
-alterado; antes da entrega, valide o escopo integrado.
+alterado; antes do PR, valide o escopo integrado.
 
 ## Scripts de qualidade
 
@@ -34,7 +34,12 @@ regressão.
 2. `check:architecture` quando a estrutura/imports estabilizarem.
 3. `test:integration` para mudanças de integração ou antes da conclusão quando
    declarado na Spec.
-4. build apenas no CI, depois dos checks e testes do app/pacote.
+4. Preflight local com todos os sensores aplicáveis antes do PR.
+5. Quality Gate no CI, repetindo os checks do preflight.
+6. build apenas no CI, depois do Quality Gate.
 
 O Quality Gate do PR é a composição dos checks normais. Não existe baseline ou
 quality ratchet próprio.
+
+`check:dead-code` não faz parte dos sensores oficiais. Playwright MCP pode
+inspecionar fluxos reais, mas não substitui `test:integration` automatizado.

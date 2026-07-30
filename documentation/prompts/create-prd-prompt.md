@@ -139,14 +139,25 @@ _Descreva de forma clara e concisa:_
 
 ### 2. Requisitos
 
-_Liste as funcionalidades. Use IDs curtos (`RF-01`, `RF-02`...) para
-permitir rastreabilidade com issues e tickets. Use checkboxes para acompanhamento._
+_Liste as funcionalidades. Use IDs curtos (`RF-01`, `RF-02`...) e critérios de
+aceitação (`CA-01`, `CA-02`...) para permitir rastreabilidade até a Spec e as
+evidências. Use checkboxes para acompanhamento._
 
 #### RF-01 [Nome do Requisito]
 
 - [ ] **[Nome do Requisito]**
 
 **Descrição:** Breve contexto do requisito.
+
+##### Critérios de Aceitação
+
+_Defina os comportamentos observáveis que determinam se o requisito foi
+atendido. A Spec deve preservar o significado destes critérios e acrescentar
+as evidências técnicas._
+
+| ID | Critério observável |
+|---|---|
+| `CA-01` | Dado [contexto], quando [ação], então [resultado] |
 
 ##### Regras de Negócio
 

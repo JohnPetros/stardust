@@ -1,48 +1,77 @@
 ---
 name: create-spec
-description: Criar e julgar uma Spec técnica rastreável a partir do PRD e da codebase, usando subagentes na task atual.
+description: Criar e julgar uma Spec de feature, compacta ou completa, a partir de PRD, Issue, Report ou demanda direta.
 ---
 
 # Criar Spec
 
-O Orchestrator conduz toda a autoria na task/thread atual. Não crie outra
-thread. Quando o escopo tocar múltiplos apps, pode usar subagentes de pesquisa
-`Research <app>` com contexto mínimo e sem poder de decisão.
+O Orchestrator conduz a autoria na task atual. Não crie nova thread. Use Spec
+somente para uma entrega relacionada a uma feature. Para manutenção transversal
+sem Contract de feature, use fluxo direto.
+
+## Classificação
+
+Identifique a origem: `prd`, `issue`, `report` ou `direct-request`. Defina
+`scope` com workspaces, diretórios ou arquivos. Use modo compacto para uma
+mudança pequena e coesa; use modo completo quando houver múltiplos fluxos,
+risco, integrações ou fases.
 
 ## Fontes
 
-Leia o PRD ou demanda, `documentation/architecture.md`, Rules aplicáveis,
+Leia a origem da demanda, `documentation/architecture.md`, Rules aplicáveis,
 `documentation/sdd.md`, `documentation/rules/sdd-rules.md` e os paths reais da
-codebase. Resolva ambiguidades materiais antes da solução técnica.
+codebase. Use Serena, Context7, Pencil, Playwright ou Supabase quando
+aplicáveis.
+
+Resolva ambiguidades materiais antes da solução técnica. Registre premissas e
+questões pendentes; antes de `open`, questões pendentes devem estar resolvidas
+e premissas críticas confirmadas ou explicitamente aceitas com risco.
 
 ## Arquivo e Contract
 
-Crie `documentation/features/<domínio>/<feature>/specs/<nome>-spec.md` com
-`status: draft` e duas partes:
+Crie `documentation/features/<domínio>/<feature>/specs/<nome>-spec.md` com:
 
-1. **Contract:** contexto, objetivo, fora de escopo, requisitos `RF-*` e matriz
-   de critérios `CA-*`/`RN-*` com evidência esperada.
-2. **Solução técnica:** estado atual confirmado, decisões, paths, contratos,
-   persistência, erros, segurança, observabilidade e testes.
+```yaml
+---
+title: <título>
+status: draft
+revision: 1
+source:
+  type: <prd|issue|report|direct-request>
+  ref: <url>
+scope:
+  - <workspace|diretório|arquivo>
+last_updated_at: YYYY-MM-DD
+---
+```
 
-| ID | Requisito | Dado | Quando | Então | Evidência esperada |
-| --- | --- | --- | --- | --- | --- |
-| `CA-01` | `RF-01` | pré-condição | ação | resultado observável | teste/comando/browser |
-| `RN-01` | `RF-01` | contexto | ação | limite arquitetural ou não funcional | sensor/inspeção |
+O corpo deve conter contexto, escopo, Contract, estado atual, solução técnica,
+plano de validação, avaliações, evidências finais, alinhamento documental e
+amendments.
 
-Não use comentários `harness:evidence`, gates de CLI ou baseline. Declare os
-sensores esperados: `check:code`, `check:types`, `check:architecture`,
-`test:unit` e `test:integration` quando aplicável. Build é
-validação final do CI.
+Use somente `RF-*` e `CA-*` como IDs obrigatórios:
+
+```md
+| CA | RF | Dado | Quando | Então | Evidência esperada |
+|---|---|---|---|---|---|
+| CA-01 | RF-01 | pré-condição | ação | resultado | teste/browser/sensor |
+```
+
+Segurança, performance e arquitetura entram como critérios de aceitação ou
+restrições técnicas. Não use `RN-*`, `RNF-*`, `RA-*`, comentários
+`harness:evidence`, gates próprios ou baselines.
+
+Declare sensores aplicáveis: `check:code`, `check:types`, `test:unit`,
+`check:architecture` e `test:integration`. `check:dead-code` não é oficial.
+Build é validação final do CI.
 
 ## Judge Spec
 
-Depois da revisão determinística, acione `judge-spec-agent` como subagente
-`Judge Spec` dentro da task atual. Envie PRD, Spec, pesquisa, Architecture e
-Rules; não envie narrativa persuasiva. O Judge é read-only.
+Acione `judge-spec-agent` como subagente read-only `Judge Spec` na task atual.
+Envie a origem, Spec, pesquisa, Architecture e Rules, sem narrativa persuasiva.
 
-- `failed`: corrija findings e acione novamente, até três tentativas iguais.
-- `accepted`: altere a Spec para `status: open` e recomende `implement-spec` ou
-  `create-plan` conforme a complexidade.
+- `failed`: encaminhe findings ao Orchestrator, corrija e avalie novamente;
+- `accepted`: altere a Spec para `status: open` e roteie para `implement-spec`
+  ou `create-plan`.
 
-Nunca crie uma nova thread para pesquisa ou julgamento.
+Não crie nova thread para pesquisa ou julgamento.

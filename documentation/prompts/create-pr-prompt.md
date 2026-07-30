@@ -33,6 +33,17 @@ Antes de criar commits ou abrir o PR, leia:
 
 Se houver commits pendentes, `commit-rules.md` prevalece sobre a tabela duplicada neste prompt. Atualize este prompt quando a tabela divergir da rule.
 
+Antes de criar o PR, confirme o preflight local da Spec:
+
+- `npm run check:code`;
+- `npm run check:types`;
+- `npm run test:unit`;
+- `npm run check:architecture`, quando aplicável;
+- `npm run test:integration`, quando aplicável.
+
+O Quality Gate repete esses checks no CI. O build é executado no CI depois do
+Quality Gate e não precisa ser tratado como sensor SDD local obrigatório.
+
 ---
 
 ## Diretrizes de Execução
