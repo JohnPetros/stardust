@@ -154,7 +154,7 @@ for name, description, body, source in agents:
     elif is_judge(name):
         opencode_mode = "subagent"
         opencode_permissions = "  edit: deny\n  bash: deny\n  task: deny"
-    elif name == "worker-agent":
+    elif name == "builder-agent":
         opencode_mode = "subagent"
         opencode_permissions = "  edit: allow\n  bash: allow\n  task: deny"
     else:
@@ -184,7 +184,7 @@ for name, description, body, source in agents:
     ]
     if is_judge(name):
         claude_fields.extend(["tools: Read, Glob, Grep", "permissionMode: plan"])
-    elif name == "worker-agent":
+    elif name == "builder-agent":
         claude_fields.append("disallowedTools: Agent")
     claude_fields.extend(["---", "", generated_marker(source), "", body.rstrip(), ""])
     write_if_changed(
