@@ -109,6 +109,7 @@ export const useZustandChallengeStore = create<ChallengeStore>()(
           return set(({ state }) => {
             state.isCodeRunning = false
             state.pendingExecutionCode = null
+            state.currentCode = execution.code.value
             state.latestCodeExecution = execution
             state.results = execution.testResults.items.map((result) => result.isCorrect)
 
