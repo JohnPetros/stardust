@@ -21,7 +21,7 @@ import { NextCall } from '../next/NextCall'
 import { authActionClient } from './clients/authActionClient'
 
 export const signIn = actionClient
-  .schema(
+  .inputSchema(
     z.object({
       email: emailSchema,
       password: passwordSchema,
@@ -47,7 +47,7 @@ export const signOut = actionClient.action(async () => {
 })
 
 export const signUpWithSocialAccount = actionClient
-  .schema(
+  .inputSchema(
     z.object({
       accessToken: z.string(),
       refreshToken: z.string(),
@@ -64,7 +64,7 @@ export const signUpWithSocialAccount = actionClient
   })
 
 export const connectSocialAccount = authActionClient
-  .schema(
+  .inputSchema(
     z.object({
       socialAccountProvider: accountProviderSchema,
     }),
@@ -78,7 +78,7 @@ export const connectSocialAccount = authActionClient
   })
 
 export const disconnectSocialAccount = authActionClient
-  .schema(
+  .inputSchema(
     z.object({
       socialAccountProvider: accountProviderSchema,
     }),

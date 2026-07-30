@@ -17,7 +17,7 @@ import {
 } from '../actions/challenging'
 
 export const accessAuthenticatedChallengePage = authActionClient
-  .schema(z.object({ challengeSlug: z.string() }))
+  .inputSchema(z.object({ challengeSlug: z.string() }))
   .action(async ({ clientInput, ctx }) => {
     const call = NextCall({
       request: clientInput,
@@ -37,7 +37,7 @@ export const accessAuthenticatedChallengePage = authActionClient
   })
 
 export const accessChallengePage = actionClient
-  .schema(z.object({ challengeSlug: z.string() }))
+  .inputSchema(z.object({ challengeSlug: z.string() }))
   .action(async ({ clientInput }) => {
     const call = NextCall({
       request: clientInput,
@@ -56,7 +56,7 @@ export const accessChallengePage = actionClient
   })
 
 export const accessChallengeEditorPage = authActionClient
-  .schema(z.object({ challengeSlug: z.string() }))
+  .inputSchema(z.object({ challengeSlug: z.string() }))
   .action(async ({ clientInput, ctx }) => {
     const call = NextCall({
       request: clientInput,
@@ -71,7 +71,7 @@ export const accessChallengeEditorPage = authActionClient
   })
 
 export const accessChallengeCommentsSlot = actionClient
-  .schema(
+  .inputSchema(
     z.object({
       challengeSlug: z.string(),
     }),
@@ -91,7 +91,7 @@ export const accessChallengeCommentsSlot = actionClient
   })
 
 export const accessSolutionPage = authActionClient
-  .schema(
+  .inputSchema(
     z.object({
       challengeSlug: z.string(),
       solutionSlug: z.string().optional(),
@@ -113,7 +113,7 @@ export const accessSolutionPage = authActionClient
   })
 
 export const viewSolution = authActionClient
-  .schema(z.object({ solutionSlug: z.string() }))
+  .inputSchema(z.object({ solutionSlug: z.string() }))
   .action(async ({ clientInput }) => {
     const call = NextCall({
       request: clientInput,

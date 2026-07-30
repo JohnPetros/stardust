@@ -9,7 +9,7 @@ import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import { SpaceService } from '@/rest/services'
 
 export const accessStarPage = authActionClient
-  .schema(
+  .inputSchema(
     z.object({
       starSlug: z.string(),
     }),

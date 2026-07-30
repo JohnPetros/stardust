@@ -10,7 +10,7 @@ import { ProfileService } from '@/rest/services'
 import { stringSchema } from '@stardust/validation/global/schemas'
 
 const accessProfilePage = authActionClient
-  .schema(
+  .inputSchema(
     z.object({
       userSlug: stringSchema,
     }),

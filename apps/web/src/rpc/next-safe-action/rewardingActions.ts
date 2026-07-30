@@ -15,7 +15,7 @@ import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import { ProfileService } from '@/rest/services'
 
 export const accessRewardForStarCompletionPage = authActionClient
-  .schema(
+  .inputSchema(
     z.object({
       questionsCount: integerSchema,
       incorrectAnswersCount: integerSchema,
@@ -35,7 +35,7 @@ export const accessRewardForStarCompletionPage = authActionClient
   })
 
 export const accessRewardForStarChallengeCompletionPage = authActionClient
-  .schema(
+  .inputSchema(
     z.object({
       secondsCount: integerSchema,
       starId: idSchema,
@@ -54,7 +54,7 @@ export const accessRewardForStarChallengeCompletionPage = authActionClient
   })
 
 export const accessRewardForChallengeCompletionPage = authActionClient
-  .schema(
+  .inputSchema(
     z.object({
       secondsCount: integerSchema,
       challengeId: idSchema,
