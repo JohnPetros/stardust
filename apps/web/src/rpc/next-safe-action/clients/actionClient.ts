@@ -6,6 +6,7 @@ import { AppError } from '@stardust/core/global/errors'
 export const actionClient = createSafeActionClient({
   handleServerError(error) {
     if (error instanceof Error && error.message === 'NEXT_NOT_FOUND') {
+      console.error('Action error: not found')
       notFound()
     }
 
