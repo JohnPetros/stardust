@@ -6,7 +6,13 @@ import {
   accessChallengeEditorPage,
   viewSolution,
 } from './challengingActions'
-import { setCookie, getCookie, deleteCookie, hasCookie } from './cookieActions'
+import {
+  setCookie,
+  setCookieAndRedirect,
+  getCookie,
+  deleteCookie,
+  hasCookie,
+} from './cookieActions'
 import { accessEndingPage, fetchLessonStoryAndQuestions } from './lessonActions'
 import { accessStarPage } from './spaceActions'
 import { accessProfilePage } from './profileActions'
@@ -32,7 +38,13 @@ export const authActions = {
   disconnectSocialAccount,
 }
 
-export const cookieActions = { setCookie, getCookie, deleteCookie, hasCookie }
+export const cookieActions = {
+  setCookie,
+  setCookieAndRedirect,
+  getCookie,
+  deleteCookie,
+  hasCookie,
+}
 
 export const challengingActions = {
   accessChallengePage,

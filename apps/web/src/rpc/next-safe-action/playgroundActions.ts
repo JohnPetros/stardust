@@ -21,7 +21,7 @@ export const accessSnippetsPage = authActionClient.action(async ({ ctx }) => {
 })
 
 export const accessSnippetPage = authActionClient
-  .schema(
+  .inputSchema(
     z.object({
       snippetId: idSchema,
     }),

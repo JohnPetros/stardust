@@ -14,7 +14,7 @@ import {
 import { authActionClient } from './clients/authActionClient'
 
 export const fetchLessonStoryAndQuestions = authActionClient
-  .schema(
+  .inputSchema(
     z.object({
       starId: idSchema,
     }),

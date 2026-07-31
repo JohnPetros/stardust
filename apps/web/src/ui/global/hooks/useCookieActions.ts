@@ -4,11 +4,17 @@ import { useAction } from 'next-safe-action/hooks'
 import { useCallback } from 'react'
 
 import { cookieActions } from '@/rpc/next-safe-action'
+import { ROUTES } from '@/constants'
 import { ActionResponse } from '@stardust/core/global/responses'
+
+type RewardingRoute = (typeof ROUTES.rewarding)[keyof typeof ROUTES.rewarding]
 
 export function useCookieActions() {
   const { executeAsync: executeGetCookie } = useAction(cookieActions.getCookie)
   const { executeAsync: executeSetCookie } = useAction(cookieActions.setCookie)
+  const { execute: executeSetCookieAndRedirect } = useAction(
+    cookieActions.setCookieAndRedirect,
+  )
   const { executeAsync: executeDeleteCookie } = useAction(cookieActions.deleteCookie)
   const { executeAsync: executeHasCookie } = useAction(cookieActions.hasCookie)
 
@@ -41,6 +47,18 @@ export function useCookieActions() {
     [executeSetCookie],
   )
 
+  const setCookieAndRedirect = useCallback(
+    (input: {
+      value: string
+      key: string
+      route: RewardingRoute
+      durationInSeconds?: number | undefined
+    }) => {
+      executeSetCookieAndRedirect(input)
+    },
+    [executeSetCookieAndRedirect],
+  )
+
   const deleteCookie = useCallback(
     async (key: string) => {
       const result = await executeDeleteCookie(key)
@@ -62,6 +80,7 @@ export function useCookieActions() {
   return {
     getCookie,
     setCookie,
+    setCookieAndRedirect,
     deleteCookie,
     hasCookie,
   }

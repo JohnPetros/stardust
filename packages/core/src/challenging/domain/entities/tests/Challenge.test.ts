@@ -163,6 +163,99 @@ describe('Challenge Entity', () => {
     expect(lspProviderMock.addFunctionCall).toHaveBeenCalled()
   })
 
+  it.each([
+    { isEvaluatedByFunction: true, initialCode: 'escreva("resultado")', expected: false },
+    { isEvaluatedByFunction: true, initialCode: 'funcao solution() {}', expected: true },
+    {
+      isEvaluatedByFunction: false,
+      initialCode: 'funcao solution() {}',
+      expected: false,
+    },
+  ])(
+    'should expose the effective function result mode',
+    ({ isEvaluatedByFunction, initialCode, expected }) => {
+      const lspProviderMock = mock<LspProvider>()
+      lspProviderMock.getFunctionName.mockImplementation((code) =>
+        code.includes('funcao') ? 'solution' : null,
+      )
+      const challenge = ChallengesFaker.fake({ isEvaluatedByFunction, initialCode })
+      const code = Code.create(lspProviderMock, initialCode)
+
+      expect(challenge.shouldUseFunctionResult(code).value).toBe(expected)
+    },
+  )
+
+  it('should use the normalized first console output when the legacy flag has no function', async () => {
+    const lspProviderMock = mock<LspProvider>()
+    const challenge = Challenge.create({
+      ...ChallengesFaker.fakeDto({
+        initialCode: 'escreva(leia())',
+        isEvaluatedByFunction: undefined,
+        testCases: [
+          {
+            position: 1,
+            inputs: ['Datahon'],
+            expectedOutput: 'Datahon: texto, 53.5: número, falso: lógico',
+            isLocked: false,
+          },
+        ],
+      }),
+    })
+
+    lspProviderMock.getFunctionName.mockImplementation((code) =>
+      code.includes('funcao') ? 'solution' : null,
+    )
+    lspProviderMock.getInputsCount.mockReturnValue(1)
+    lspProviderMock.addInputs.mockImplementation(async (_, code) => code)
+    lspProviderMock.translateToLsp.mockImplementation(async (value) => {
+      if (typeof value === 'string') return value.replace(' bruto', '')
+      return JSON.stringify(value)
+    })
+    lspProviderMock.run.mockResolvedValue(
+      new LspResponse({
+        result: { tipo: 'vazio', tipoExplicito: false },
+        outputs: ['Datahon: texto, 53.5: número, falso: lógico bruto'],
+      }),
+    )
+
+    const code = Code.create(lspProviderMock, 'escreva(leia())')
+    const executionOutputs = await challenge.runCode(code, code)
+
+    expect(challenge.results.items).toStrictEqual([true])
+    expect(challenge.userOutputs.items).toStrictEqual([
+      'Datahon: texto, 53.5: número, falso: lógico',
+    ])
+    expect(executionOutputs.items).toStrictEqual([
+      'Datahon: texto, 53.5: número, falso: lógico bruto',
+    ])
+    expect(lspProviderMock.addFunctionCall).not.toHaveBeenCalled()
+  })
+
+  it('should use an empty string when console execution has no outputs', async () => {
+    const lspProviderMock = mock<LspProvider>()
+    const challenge = ChallengesFaker.fake({
+      initialCode: 'escreva(leia())',
+      isEvaluatedByFunction: true,
+      testCases: [{ position: 1, inputs: [1], expectedOutput: '', isLocked: false }],
+    })
+
+    lspProviderMock.getFunctionName.mockReturnValue(null)
+    lspProviderMock.getInputsCount.mockReturnValue(1)
+    lspProviderMock.addInputs.mockImplementation(async (_, code) => code)
+    lspProviderMock.translateToLsp.mockImplementation(async (value) => String(value))
+    lspProviderMock.run.mockResolvedValue(
+      new LspResponse({ result: { tipo: 'vazio' }, outputs: [] }),
+    )
+
+    const code = Code.create(lspProviderMock, challenge.initialCode.value)
+
+    await expect(challenge.runCode(code, code)).resolves.toEqual(
+      expect.objectContaining({ items: [] }),
+    )
+    expect(challenge.results.items).toStrictEqual([true])
+    expect(challenge.userOutputs.items).toStrictEqual([''])
+  })
+
   it('should preserve the official solution through the dto round-trip', () => {
     const officialSolution = CodePlaybacksFaker.fakeDto()
     const challenge = Challenge.create(ChallengesFaker.fakeDto({ officialSolution }))

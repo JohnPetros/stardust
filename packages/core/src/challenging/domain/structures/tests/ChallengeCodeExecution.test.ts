@@ -96,5 +96,6 @@ describe('ChallengeCodeExecution', () => {
     const execution = ChallengeCodeExecution.create(dto)
 
     expect(execution.dto).toEqual(dto)
+    expect(() => JSON.stringify(execution.dto)).not.toThrow()
   })
 })

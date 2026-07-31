@@ -7,9 +7,10 @@ import {
   ChallengeCodeExecution,
   ChallengeCraftsVisibility,
 } from '@stardust/core/challenging/structures'
-import { List } from '@stardust/core/global/structures'
+import { List, Logical } from '@stardust/core/global/structures'
 import { RestResponse } from '@stardust/core/global/responses'
 import { UsersFaker } from '@stardust/core/profile/entities/fakers'
+import type { User } from '@stardust/core/profile/entities'
 
 import { COOKIES, ROUTES } from '@/constants'
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
@@ -45,6 +46,7 @@ describe('useChallengeResultSlot', () => {
   const setCraftsVislibility = jest.fn()
   const showCodeTab = jest.fn()
   const setCookie = jest.fn()
+  const setCookieAndRedirect = jest.fn()
   const localStorageGet = jest.fn()
   const localStorageRemove = jest.fn()
   const goTo = jest.fn()
@@ -52,7 +54,7 @@ describe('useChallengeResultSlot', () => {
   const setCodeExecutionErrorsCount = jest.fn()
 
   let challenge = ChallengesFaker.fake()
-  let user = UsersFaker.fake()
+  let user: User | null = UsersFaker.fake()
   let challengingService: Mock<ChallengingService>
   let craftsVislibility = ChallengeCraftsVisibility.create({
     canShowComments: false,
@@ -167,6 +169,7 @@ describe('useChallengeResultSlot', () => {
     })
     jest.mocked(useCookieActions).mockReturnValue({
       setCookie,
+      setCookieAndRedirect,
       deleteCookie: jest.fn(),
       getCookie: jest.fn(),
       hasCookie: jest.fn(),
@@ -236,6 +239,41 @@ describe('useChallengeResultSlot', () => {
     expect(result.current.userAnswer.isCorrect.isTrue).toBe(true)
   })
 
+  it('should continue to star rewards from a verified answer when completion state is stale', async () => {
+    challenge = ChallengesFaker.fake({ starId: UsersFaker.fake().id.value })
+    const currentCode = 'funcao desafio() { retorne verdadeiro }'
+    const acceptedExecution = ChallengeCodeExecution.create({
+      code: currentCode,
+      status: 'accepted',
+      testResults: [],
+      outputs: [],
+      error: null,
+    })
+    setupStore({
+      acceptedCodeExecution: acceptedExecution,
+      latestCodeExecution: acceptedExecution,
+      currentCode,
+    })
+
+    const { result } = Hook()
+
+    act(() => {
+      result.current.handleUserAnswer()
+    })
+
+    challenge['props'].isCompleted = Logical.create(false)
+
+    act(() => {
+      result.current.handleUserAnswer()
+    })
+
+    await waitFor(() => {
+      expect(setCookieAndRedirect).toHaveBeenCalledWith(
+        expect.objectContaining({ route: ROUTES.rewarding.starChallenge }),
+      )
+    })
+  })
+
   it('should still show star challenge rewards when a star challenge is already completed by the user', async () => {
     challenge = ChallengesFaker.fake({ starId: UsersFaker.fake().id.value })
     challenge.becomeCompleted()
@@ -250,19 +288,38 @@ describe('useChallengeResultSlot', () => {
     })
 
     await waitFor(() => {
-      expect(setCookie).toHaveBeenCalledWith({
+      expect(setCookieAndRedirect).toHaveBeenCalledWith({
         key: COOKIES.keys.rewardingPayload,
         value: JSON.stringify({
           secondsCount: 42,
           challengeId: challenge.id.value,
           starId: challenge.starId?.value,
         }),
+        route: ROUTES.rewarding.starChallenge,
       })
     })
 
+    expect(localStorageRemove).toHaveBeenCalledTimes(1)
+    expect(goTo).not.toHaveBeenCalled()
+  })
+
+  it('should navigate to star challenge rewards while the authenticated user is hydrating', async () => {
+    challenge = ChallengesFaker.fake({ starId: UsersFaker.fake().id.value })
+    challenge.becomeCompleted()
+    user = null
+    setupStore()
+    setupAuth()
+
+    const { result } = Hook()
+
+    act(() => {
+      result.current.handleUserAnswer()
+    })
+
     await waitFor(() => {
-      expect(localStorageRemove).toHaveBeenCalledTimes(1)
-      expect(goTo).toHaveBeenCalledWith(ROUTES.rewarding.starChallenge)
+      expect(setCookieAndRedirect).toHaveBeenCalledWith(
+        expect.objectContaining({ route: ROUTES.rewarding.starChallenge }),
+      )
     })
   })
 
@@ -278,7 +335,7 @@ describe('useChallengeResultSlot', () => {
 
     expect(openAlertDialog).toHaveBeenCalledTimes(1)
     expect(goTo).not.toHaveBeenCalled()
-    expect(setCookie).not.toHaveBeenCalled()
+    expect(setCookieAndRedirect).not.toHaveBeenCalled()
   })
 
   it('should go back to the challenge list when the user already completed the challenge', () => {
@@ -295,7 +352,7 @@ describe('useChallengeResultSlot', () => {
 
     expect(localStorageRemove).toHaveBeenCalledTimes(1)
     expect(goTo).toHaveBeenCalledWith(ROUTES.challenging.challenges.list)
-    expect(setCookie).not.toHaveBeenCalled()
+    expect(setCookieAndRedirect).not.toHaveBeenCalled()
   })
 
   it('should store the rewarding payload and navigate to the challenge rewarding page', async () => {
@@ -311,19 +368,17 @@ describe('useChallengeResultSlot', () => {
     })
 
     await waitFor(() => {
-      expect(setCookie).toHaveBeenCalledWith({
+      expect(setCookieAndRedirect).toHaveBeenCalledWith({
         key: COOKIES.keys.rewardingPayload,
         value: JSON.stringify({
           secondsCount: 42,
           challengeId: challenge.id.value,
         }),
+        route: ROUTES.rewarding.challenge,
       })
     })
 
-    await waitFor(() => {
-      expect(goTo).toHaveBeenCalledWith(ROUTES.rewarding.challenge)
-    })
-
+    expect(goTo).not.toHaveBeenCalled()
     expect(localStorageRemove).toHaveBeenCalledTimes(1)
     expect(result.current.isLeavingPage).toBe(true)
   })
@@ -340,19 +395,18 @@ describe('useChallengeResultSlot', () => {
     })
 
     await waitFor(() => {
-      expect(setCookie).toHaveBeenCalledWith({
+      expect(setCookieAndRedirect).toHaveBeenCalledWith({
         key: COOKIES.keys.rewardingPayload,
         value: JSON.stringify({
           secondsCount: 42,
           challengeId: challenge.id.value,
           starId: challenge.starId?.value,
         }),
+        route: ROUTES.rewarding.starChallenge,
       })
     })
 
-    await waitFor(() => {
-      expect(goTo).toHaveBeenCalledWith(ROUTES.rewarding.starChallenge)
-    })
+    expect(goTo).not.toHaveBeenCalled()
   })
 
   it('should mark the answer as correct on the result route for completed challenges', async () => {

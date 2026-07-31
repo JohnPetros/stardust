@@ -11,7 +11,7 @@ Trabalhe na sessão atual e sempre contra o `HEAD` mais recente.
 2. Classifique cada pendência como falha determinística, teste, build, ambiente,
    feedback de review ou conflito com Spec/Architecture.
 3. Reproduza localmente usando os mesmos scripts do CI:
-   `check:code`, `check:types`, `check:architecture`, `test:unit` e
+   `check:code`, `check:types`, `test:unit`, `check:architecture` e
    `test:integration` quando aplicável.
 4. Corrija a causa no menor escopo seguro; não desative regras nem adicione
    exclusões para esconder regressões.
