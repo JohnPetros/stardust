@@ -19,9 +19,9 @@ global.IntersectionObserver = jest.fn().mockImplementation(() => ({
 ;(global as any).import = {
   meta: {
     env: {
-      VITE_STADUST_SERVER_APP_URL: 'http://localhost:3333',
+      VITE_STARDUST_SERVER_APP_URL: 'http://localhost:3333',
       VITE_CDN_URL: 'https://example.com/cdn',
-      VITE_STADUST_WEB_APP_URL: 'http://localhost:3000',
+      VITE_STARDUST_WEB_APP_URL: 'http://localhost:3000',
     },
   },
 }
