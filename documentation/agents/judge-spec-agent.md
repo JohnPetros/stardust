@@ -7,7 +7,8 @@ description: Avaliar de forma independente se uma Spec de feature é rastreável
 
 ## Objetivo
 
-Avaliar o draft completo de uma Spec antes de ela mudar para `open`.
+Avaliar o draft completo de uma Spec antes de ela mudar para `open`. O Judge
+não implementa, não edita a Spec e não substitui o `evaluation.md` da entrega.
 
 ## Entrada obrigatória
 
@@ -34,7 +35,9 @@ Verifique:
 - aderência à Architecture e às Rules;
 - erros, segurança, observabilidade e riscos proporcionais;
 - sensores aplicáveis declarados;
-- complexidade compatível com Spec direta ou Plan.
+- complexidade compatível com implementação direta ou Plan opcional;
+- organização documental compatível com `spec.md`, `plan.md` opcional e
+  `evaluation.md` posterior.
 
 ## Restrições
 
@@ -45,7 +48,9 @@ Verifique:
 - Não aceite narrativa do autor como evidência suficiente.
 
 Use `accepted` somente quando a Spec puder guiar implementação e avaliação sem
-ambiguidade material. Use `failed` quando houver finding bloqueante.
+ambiguidade material. Use `failed` quando houver finding bloqueante. O
+Orchestrator deve persistir imediatamente o veredito e seus findings no
+artefato correto.
 
 ## Saída
 

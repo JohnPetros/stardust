@@ -33,13 +33,18 @@ Antes de criar commits ou abrir o PR, leia:
 
 Se houver commits pendentes, `commit-rules.md` prevalece sobre a tabela duplicada neste prompt. Atualize este prompt quando a tabela divergir da rule.
 
-Antes de criar o PR, confirme o preflight local da Spec:
+Antes de criar o PR, confirme o preflight local da Spec e a existência de
+`evaluation.md`:
 
 - `npm run check:code`;
 - `npm run check:types`;
 - `npm run test:unit`;
 - `npm run check:architecture`, quando aplicável;
 - `npm run test:integration`, quando aplicável.
+
+O `evaluation.md` deve conter as evidências reais do preflight, o resultado do
+Judge Implementation, warnings, findings, decisões e lições. Quality Gate e
+build ficam pendentes até o CI; não exija que estejam verdes para abrir o PR.
 
 O Quality Gate repete esses checks no CI. O build é executado no CI depois do
 Quality Gate e não precisa ser tratado como sensor SDD local obrigatório.
@@ -50,7 +55,7 @@ Quality Gate e não precisa ser tratado como sensor SDD local obrigatório.
 
 ### 1. Análise do Contexto
 
-- Revise a Spec implementada e o changelog das alterações realizadas.
+- Revise `spec.md`, `evaluation.md` e o changelog das alterações realizadas.
 - Identifique:
 
   - impactos técnicos
@@ -248,6 +253,9 @@ Passo a passo claro para o revisor validar:
 - tradeoffs
 - próximos passos
 
+Inclua, quando pertinente, o link ou a referência ao `evaluation.md` e indique
+que Quality Gate e build serão confirmados pelo CI.
+
 ---
 
 ### 5. Criação via gh CLI
@@ -277,7 +285,26 @@ gh pr create \
 
 ---
 
-### 6. Comentário de Code Review
+### 6. Monitoramento do CI e loop de correção
+
+Depois de criar o PR, mantenha o workflow aberto até o Quality Gate e o build
+do CI passarem para o HEAD atual.
+
+Para cada falha:
+
+1. registre imediatamente a falha no `evaluation.md`;
+2. classifique o problema e identifique o sensor ou job afetado;
+3. crie `Builder Fix QG-<n>` quando a correção estiver no escopo;
+4. aplique a correção, atualize a branch e repita os sensores afetados;
+5. repita o Judge somente se o diff ou a evidência tiver sido invalidada;
+6. aguarde novamente o CI no novo HEAD.
+
+Repita esse loop até o Quality Gate e o build ficarem verdes. Não encaminhe
+para `conclude-spec` enquanto houver check falhando, finding bloqueante ou CI
+pendente. Após três falhas consecutivas pelo mesmo motivo, apresente o
+histórico e solicite decisão ao usuário.
+
+### 7. Comentário de Code Review
 
 Após criar o PR, adicione um comentário para solicitar code review do Codex:
 
@@ -290,7 +317,7 @@ uma revisão do Codex associada a esse `HEAD`.
 
 ---
 
-### 7. Retorno
+### 8. Retorno
 
 Após criação:
 
@@ -304,7 +331,7 @@ ou
 gh pr view --json url
 ```
 
-Retornar:
+Retornar somente após o CI verde:
 
 - link do PR criado
 - título final

@@ -5,12 +5,12 @@ description: Criar um Plan SDD como ledger de fases, progresso, evidências e ha
 
 # Criar Plan
 
-Crie Plan somente quando a Spec `open` possuir fases dependentes, múltiplos
+Crie `plan.md` somente quando a Spec `open` possuir fases dependentes, múltiplos
 workspaces, migration relevante, risco elevado ou necessidade real de ledger.
 Para Spec pequena, use `implement-spec` diretamente.
 
-O Orchestrator cria o Plan na task atual e mantém a relação com a revisão da
-Spec:
+O Orchestrator cria `documentation/features/<domínio>/<feature>/plan.md` na
+task atual e mantém a relação com a revisão da Spec:
 
 ```yaml
 spec: ../specs/<nome>-spec.md
@@ -33,4 +33,7 @@ Estados de fase: `pending`, `in_progress`, `awaiting_judgment`, `failed`,
 `accepted`.
 
 Somente o Orchestrator atualiza o Plan. Builders implementam; Judges avaliam
-read-only. Todos são subagentes da task atual. Não use nova thread.
+read-only. Tarefas, dependências e findings operacionais devem ser persistidos
+imediatamente no Plan. Evidências, decisões e lições da feature pertencem ao
+`evaluation.md`, criado após implementação ou julgamento. Todos são
+subagentes da task atual. Não use nova thread.

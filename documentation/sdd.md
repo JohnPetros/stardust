@@ -2,31 +2,81 @@
 
 ## Objetivo
 
-O SDD transforma uma demanda de feature em uma entrega verificável. Todo o
-fluxo ocorre na mesma task/thread. O Orchestrator coordena Builders, Judges e
-sensores como subagentes da task atual; nenhuma fase cria nova thread.
+O SDD transforma uma demanda em uma entrega verificável. O fluxo ocorre na
+mesma task e o Orchestrator coordena Builders, Judges, sensores e os artefatos
+documentais.
 
 ```text
-PRD, Issue, Report ou demanda direta
-→ Spec (Contract + solução técnica)
+Demanda
+→ Spec
 → Judge Spec
 → Plan opcional
-→ Builders
-→ sensores aplicáveis
+→ Implementação
+→ sensores locais
 → Judge Implementation
-→ preflight local
-→ PR + Quality Gate + build no CI
-→ Spec completed
+→ preflight
+→ evaluation.md
+→ PR / Quality Gate / build no CI
+→ Spec concluída
 ```
 
-Specs são usadas para entregas relacionadas a uma feature: novas features,
-alterações de comportamento, correções e mudanças técnicas necessárias para
-uma feature. Manutenções transversais sem Contract de feature seguem fluxo
-direto.
+O Plan não é obrigatório:
 
-## Origem e estrutura da Spec
+- Specs pequenas e coesas usam `implement-spec`.
+- Implementações grandes, com fases dependentes ou risco que exija um ledger
+  operacional usam `create-plan` + `implement-plan`.
 
-Uma Spec pode ter PRD, Issue, Report ou demanda direta como origem. O PRD não é
+## Artefatos e fontes de verdade
+
+Para novas entregas, a organização é:
+
+```text
+documentation/features/<domínio>/<feature>/
+├── spec.md
+├── plan.md          # opcional
+└── evaluation.md    # obrigatório após implementação ou julgamento
+```
+
+Para uma mudança posterior, correção ou evolução de uma feature já concluída:
+
+```text
+changes/<nome-da-mudanca>/
+├── spec.md
+└── evaluation.md
+```
+
+Artefatos históricos que ainda estejam em `specs/`, `plans/` ou `reports/` não
+precisam ser migrados incidentalmente. Toda nova entrega deve usar a
+organização atual.
+
+Cada descoberta deve ser persistida imediatamente pelo Orchestrator no artefato
+correto:
+
+| Descoberta | Artefato | Registro esperado |
+| --- | --- | --- |
+| Mudança de requisito, Contract ou escopo | `spec.md` | amendment, revisão e novo Judge Spec quando necessário |
+| Tarefa, dependência ou finding operacional | `plan.md` | tarefa, estado, tentativa, dependência ou próxima ação |
+| Evidência, decisão ou lição específica da feature | `evaluation.md` | evidência, decisão, warning, finding ou lição |
+| Regra reutilizável para o projeto | `documentation/rules/` | atualização da Rule aplicável |
+
+Se uma implementação direta produzir um finding operacional que exija tarefas
+ou fases, o Orchestrator cria `plan.md` antes de continuar. Sem Plan, findings
+curtos e sua resolução ficam registrados em `evaluation.md`.
+
+A precedência é:
+
+1. revisão humana explícita;
+2. origem declarada da demanda;
+3. Contract da Spec;
+4. Architecture e Rules;
+5. solução técnica da Spec;
+6. Plan, quando existir;
+7. implementação atual;
+8. evidências registradas em `evaluation.md`.
+
+## Spec
+
+Uma Spec pode nascer de PRD, Issue, Report ou demanda direta. O PRD não é
 obrigatório para correções ou tarefas técnicas, mas toda Spec possui Contract.
 
 ```yaml
@@ -34,27 +84,19 @@ obrigatório para correções ou tarefas técnicas, mas toda Spec possui Contrac
 title: <título>
 status: draft
 revision: 1
-
 source:
   type: <prd|issue|report|direct-request>
   ref: <path|url|codex-task>
-
-prd: <opcional>
-issue: <opcional>
-plan: <opcional>
-
 scope:
   - <workspace|diretório|arquivo>
-
 last_updated_at: YYYY-MM-DD
 ---
 ```
 
-Valores de `status`: `draft`, `open`, `in_progress`, `completed` e
-`cancelled`. O arquivo da Spec é a sua identidade; não é necessário um campo
-`id` separado.
+Estados válidos: `draft`, `open`, `in_progress`, `completed` e `cancelled`.
+`failed` é veredito de Judge; `blocked` é estado operacional de tarefa ou fase.
 
-A estrutura do corpo é:
+O corpo deve conter:
 
 1. contexto e objetivo;
 2. escopo e fora de escopo;
@@ -62,60 +104,40 @@ A estrutura do corpo é:
 4. estado atual;
 5. solução técnica;
 6. plano de validação;
-7. avaliações;
-8. evidências finais;
-9. alinhamento documental;
-10. amendments.
+7. avaliações previstas;
+8. alinhamento documental;
+9. amendments.
 
-O Contract vem antes da solução técnica. Use somente `RF-*` e `CA-*` como IDs
-obrigatórios:
+Use somente `RF-*` e `CA-*` como IDs obrigatórios. A matriz deve relacionar
+cada `CA-*` à evidência esperada e, depois, à evidência real em
+`evaluation.md`.
 
-- `RF-*`: requisito funcional;
-- `CA-*`: critério de aceitação verificável.
+Uma alteração de Contract, requisito ou escopo depois de `open` exige pausa,
+revisão da Spec, amendment, incremento de `revision` e novo Judge Spec. Uma
+alteração puramente técnica pode atualizar a solução e exigir nova avaliação de
+implementação apenas quando invalidar evidências ou critérios.
 
-Segurança, performance e arquitetura entram como critérios de aceitação ou
-restrições técnicas específicas. Não use `RN-*`, `RNF-*` ou `RA-*` como IDs
-obrigatórios.
+## Plan opcional
 
-Cada Spec deve declarar premissas e questões pendentes. Antes de `open`, toda
-questão pendente deve estar resolvida e toda premissa crítica deve estar
-confirmada ou explicitamente aceita com risco e validação.
+O Plan só é criado quando houver fases dependentes, múltiplos workspaces,
+migração relevante, risco elevado ou necessidade real de ledger operacional.
 
-## Rastreabilidade
+Ele registra:
 
-```text
-PRD/Issue/Report
-→ RF
-→ CA
-→ tarefa do Plan, quando existir
-→ código e testes
-→ evidência
-→ Judge
-```
+- objetivo, escopo e fora de escopo;
+- fases ordenadas e dependências;
+- tarefas com paths, resultado observável e IDs `RF-*`/`CA-*`;
+- paralelismo e sua justificativa;
+- sensores e evidências esperados por fase;
+- riscos, findings, tentativas, estado e próxima ação;
+- vereditos do Judge Implementation por fase.
 
-A matriz de validação deve relacionar cada `CA-*` à evidência esperada e, na
-conclusão, à evidência real. A avaliação formal fica na Spec. O Plan registra
-fases, tarefas, tentativas, findings e próxima ação.
+Estados de tarefa: `pending`, `implementing`, `validating` e `verified`.
+Estados de fase: `pending`, `in_progress`, `awaiting_judgment`, `failed` e
+`accepted`.
 
-## Ciclo de vida
-
-```text
-draft
-  → Judge Spec: accepted
-open
-  → implementação iniciada
-in_progress
-  → sensores + Judge Implementation + CI/build
-completed
-```
-
-`cancelled` encerra uma Spec abandonada com motivo registrado. `failed` é
-veredito de Judge; `blocked` é estado operacional de Plan ou tarefa.
-
-Se o Contract mudar depois de `open`, pause, atualize PRD quando aplicável,
-incremente `revision`, registre amendment e execute novamente o Judge Spec.
-Uma alteração técnica pode atualizar a solução e revalidar apenas os critérios
-afetados. Uma alteração editorial não exige nova avaliação.
+Somente o Orchestrator atualiza o Plan. Tarefas e findings operacionais devem
+ser registrados nele imediatamente.
 
 ## Orquestração de agentes
 
@@ -123,112 +145,132 @@ Todos os subagentes são criados diretamente pelo Orchestrator e são irmãos:
 
 ```text
 Orchestrator
-├── Builder Direct | Builder F<n>
-├── Builder F<n>-T<m>, quando houver paralelismo real
-├── Builder Fix QG-<n>, para correções
-└── Judge Spec ou Judge Implementation
+├── Builder Direct
+├── Builder F<n> / Builder F<n>-T<m>
+├── Builder Fix QG-<n>
+└── Judge Spec / Judge Implementation
 ```
 
-Builder é o único papel de implementação. O contexto do nome indica o escopo:
+O Builder é o único papel de implementação. O Judge é read-only e não corrige
+o próprio objeto de avaliação.
 
-- `Builder Direct`: Spec pequena;
-- `Builder F<n>`: escopo principal de uma fase;
-- `Builder F<n>-T<m>`: tarefa atômica independente;
-- `Builder Fix QG-<n>`: correção de finding ou Quality Gate.
+O Orchestrator deve:
 
-O Orchestrator decide se há paralelismo real, garante paths sem sobreposição e
-integra o diff. Nenhum Builder cria subagentes. Judges são read-only e irmãos
-dos Builders.
+- classificar a demanda e escolher Spec direta ou Plan;
+- congelar a revisão da Spec e o commit-base antes da implementação;
+- garantir paths sem sobreposição entre Builders;
+- executar ou delegar sensores determinísticos aplicáveis;
+- persistir descobertas imediatamente no artefato correto;
+- criar o `evaluation.md` antes do PR, com evidências reais e vereditos;
+- encaminhar a entrega para `create-pr` e, depois, `conclude-spec`.
 
-Para uma Spec pequena, use `implement-spec` com um `Builder Direct`. Para uma
-Spec com fases dependentes, use `create-plan` e `implement-plan`. O Plan é
-opcional.
+O fechamento não cria um novo papel de julgamento. O `conclude-spec` executa o
+fechamento formal depois do CI e usa o Judge Implementation final quando a
+complexidade ou o risco exigirem.
 
-## Sensores e execução
+## Sensores, preflight e CI
 
-Sensores oficiais:
+Sensores locais:
 
-| Script | Uso |
+| Comando | Uso |
 | --- | --- |
-| `format` | aplicar formatação; não é gate |
-| `check:code` | lint e consistência estática |
-| `check:types` | contratos TypeScript |
-| `test:unit` | comportamento isolado |
-| `check:architecture` | fronteiras e dependências, quando aplicável |
-| `test:integration` | APIs, banco, rotas e fluxos integrados, quando aplicável |
+| `npm run format` | aplicar formatação; não é gate |
+| `npm run check:code` | lint e consistência estática |
+| `npm run check:types` | contratos TypeScript |
+| `npm run test:unit` | comportamento isolado |
+| `npm run check:architecture` | fronteiras, quando aplicável |
+| `npm run test:integration` | APIs, banco e fluxos integrados, quando aplicável |
 
-`check:dead-code` não faz parte dos sensores oficiais. Build não é sensor SDD;
-é validação final do artefato no CI.
+O ciclo curto usa `format`, `check:code`, `check:types` e `test:unit`. O
+preflight executa todos os sensores aplicáveis no escopo integrado antes da
+criação do PR.
 
-Durante o ciclo curto:
+Quality Gate e build final pertencem ao CI:
 
-```text
-format → check:code → check:types → test:unit
-```
+- o Quality Gate repete os checks aplicáveis;
+- o build roda depois do Quality Gate;
+- o build não precisa rodar a cada fase ou retry;
+- `check:dead-code` não é sensor oficial;
+- Playwright MCP pode fornecer evidência de browser, mas não substitui um
+  `test:integration` automatizado quando o comportamento precisa ser protegido.
 
-Antes do Judge e do PR, execute os sensores aplicáveis no escopo integrado.
-Execute `check:architecture` quando imports, módulos ou fronteiras mudarem e
-`test:integration` quando contratos ou fluxos reais mudarem.
+## Evaluation
 
-Antes do PR, faça um preflight local. O Quality Gate do CI repete os checks e
-permanece a fonte oficial. O build roda depois do Quality Gate no CI. Build
-local é recomendado quando houver mudanças em bundler, rotas, exports,
-ambiente, Docker, workflows ou artefatos gerados.
+`evaluation.md` é obrigatório depois da implementação ou do primeiro
+julgamento relevante e deve existir antes do PR. Ele é o registro de fatos da
+entrega, não uma cópia da Spec.
 
-Se o Quality Gate falhar, a Spec permanece `in_progress`. O Orchestrator
-aciona `Builder Fix QG-<n>` quando a correção estiver no escopo, reexecuta os
-sensores afetados e aciona novo Judge quando a evidência for invalidada.
+Deve registrar:
 
-## Avaliação
+- revisão da Spec, commit-base e commit avaliado;
+- matriz de `CA-*` com evidências reais;
+- resultado do Judge Spec e do Judge Implementation;
+- sensores locais e preflight;
+- Quality Gate e build do CI, inicialmente `pending` quando o PR ainda não
+  existe;
+- warnings e findings, com estado e resolução;
+- decisões tomadas e lições aprendidas;
+- alinhamento documental e alterações posteriores.
 
-O `Judge Spec` avalia se o Contract e a solução são claros, rastreáveis e
-implementáveis. O `Judge Implementation` avalia o diff contra o Contract,
-Rules, Architecture, testes, sensores e segurança proporcional ao risco.
+Toda evidência nova, decisão ou lição deve ser acrescentada imediatamente ao
+`evaluation.md`. O documento acompanha a entrega até o CI ficar verde.
 
-Não existe um papel separado obrigatório de `Judge Conclusion`. O workflow
-`conclude-spec` executa o fechamento; em Specs pequenas, o Judge Implementation
-final já é o veredito de conclusão. Em Plans ou mudanças de alto risco, o
-Orchestrator pode acionar um novo `Judge Implementation` para avaliar a
-integração completa.
+## Falhas e retries
 
-As avaliações e evidências finais são registradas na Spec. Pareceres extensos
-permanecem no contexto da task; o Plan conserva apenas o histórico operacional
-necessário.
+Se um Judge falhar, a Spec continua `in_progress`. O Orchestrator registra o
+finding no Plan, quando existir, ou no `evaluation.md`, cria `Builder Fix` e
+repete os sensores afetados. O Judge é repetido quando o diff ou a evidência
+for invalidada.
 
-## Atualização documental
+Se o Quality Gate ou o build do CI falhar:
 
-Qualquer agente pode identificar uma lacuna documental e reportar documento,
-evidência, tipo e ação sugerida. Em workflows SDD, o Orchestrator controla as
-fontes de verdade; fora deles, essa responsabilidade pertence ao agente
-principal da task.
+1. registrar a falha imediatamente em `evaluation.md`;
+2. manter a Spec `in_progress`;
+3. criar `Builder Fix QG-<n>` quando a correção estiver no escopo;
+4. repetir os sensores afetados;
+5. repetir o Judge somente se a evidência tiver sido invalidada;
+6. atualizar `evaluation.md` com a nova evidência e decisão.
 
-Atualizações normativas necessárias para orientar a implementação acontecem
-antes do Builder. Sincronizações factuais e aprendizados generalizáveis são
-resolvidos em `conclude-spec`. Mudanças em PRD, novas Rules globais, fronteiras
-arquiteturais ou expansão de escopo exigem decisão do usuário.
+Depois de três falhas consecutivas pelo mesmo motivo, o Orchestrator apresenta
+o histórico e pede decisão ao usuário.
+
+## Entrega e conclusão
+
+`create-pr` só atua depois do preflight e da criação do `evaluation.md`. Ele
+organiza commits pendentes, cria o PR, inclui o resumo da Spec e da avaliação,
+solicita review e permanece aberto acompanhando o CI até o Quality Gate e o
+build passarem no HEAD atual.
+
+Se o CI falhar, `create-pr` registra a falha em `evaluation.md`, cria ou
+encaminha um `Builder Fix QG-*`, repete os sensores afetados, atualiza a branch
+e aguarda o CI novamente. O loop continua até o CI verde; após três falhas
+consecutivas pelo mesmo motivo, a decisão é escalada ao usuário.
+
+`conclude-spec` só fecha a entrega quando:
+
+- a implementação ou todas as fases foram aceitas;
+- não há findings bloqueantes;
+- `evaluation.md` está completo;
+- Quality Gate e build do CI estão verdes;
+- review e conversas bloqueantes foram resolvidos;
+- o HEAD avaliado é o HEAD final.
+
+Então o Orchestrator atualiza `evaluation.md`, alinha a documentação aplicável,
+altera a Spec para `completed` e conclui o Plan, se existir.
 
 ## MCPs
 
-MCPs são ferramentas de contexto, não sensores. Use-os conforme o escopo:
+MCPs são ferramentas de contexto, não sensores:
 
 - Serena: navegar pela codebase;
 - Context7: consultar documentação atualizada;
 - Pencil: consultar e validar design;
 - Playwright: inspecionar fluxos reais no navegador;
-- Supabase Dev: verificar schema, migrations e integrações de desenvolvimento;
-- Supabase Prod: diagnóstico ou verificação autorizada em produção.
+- Supabase Dev/Prod: verificar schema e integrações autorizadas.
 
-Playwright MCP não substitui `test:integration` quando o comportamento precisa
-ser protegido por teste automatizado.
+## Regras de documentação
 
-## Fontes de verdade
-
-1. revisão humana explícita;
-2. PRD ou origem declarada da demanda;
-3. Contract da Spec;
-4. Architecture e Rules;
-5. solução técnica da Spec;
-6. Plan;
-7. implementação atual.
-
-Conflitos materiais devem ser resolvidos antes de continuar.
+Atualizações normativas necessárias para orientar a implementação acontecem
+antes do Builder. Alinhamentos factuais e lições generalizáveis são resolvidos
+na conclusão; mudanças de produto, novas Rules globais, fronteiras
+arquiteturais ou expansão material de escopo exigem decisão do usuário.

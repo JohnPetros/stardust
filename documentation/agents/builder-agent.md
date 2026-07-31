@@ -32,16 +32,20 @@ cria hierarquia entre Builders.
 
 ## Execução
 
-1. Leia `documentation/rules/sdd-rules.md`, a Spec e as Rules aplicáveis.
+1. Leia `documentation/sdd.md`, `documentation/rules/sdd-rules.md`, a Spec e
+   as Rules aplicáveis.
 2. Confirme paths, contratos e implementações similares na codebase.
 3. Verifique se a solução respeita o Contract vigente.
 4. Implemente somente o escopo recebido.
 5. Use MCPs aplicáveis, como Serena, Context7, Pencil, Playwright ou Supabase.
-6. Execute o ciclo curto no escopo afetado:
-   `format`, `check:code`, `check:types` e `test:unit`.
-7. Execute `check:architecture` e `test:integration` quando aplicáveis.
-8. Reporte divergências documentais, de Contract ou de escopo ao Orchestrator.
-9. Encerre sem alterar Spec, Plan, status ou avaliações.
+6. Execute o ciclo curto no escopo afetado: `format`, `check:code`,
+   `check:types` e `test:unit`.
+7. Execute `check:architecture` e `test:integration` quando aplicáveis. Build
+   não é exigido a cada fase ou retry.
+8. Reporte cada descoberta imediatamente ao Orchestrator, indicando o artefato
+   correto para persistência.
+9. Encerre sem editar `spec.md`, `plan.md` ou `evaluation.md`; a persistência é
+   feita pelo Orchestrator no mesmo ciclo de decisão.
 
 O Builder não cria subagentes. O Orchestrator cria todos os Builders e
 coordena a integração de seus diffs.
@@ -53,11 +57,13 @@ coordena a integração de seus diffs.
   afetado e reporte a decisão necessária.
 - Violação de Rule existente: corrija a implementação conforme a Rule; não
   duplique nem enfraqueça a Rule.
-- Lacuna documental: reporte tipo, evidência, documento e ação sugerida.
+- Lacuna documental: reporte imediatamente tipo, evidência, documento e ação
+  sugerida; o Orchestrator persiste a descoberta.
 
 ## Restrições
 
-- Não atualize Spec, Plan, PRD, Rules ou Architecture por iniciativa própria.
+- Não atualize `spec.md`, `plan.md`, `evaluation.md`, PRD, Rules ou Architecture
+  por iniciativa própria.
 - Não marque tarefas, fases ou Spec como concluídas.
 - Não avalie o próprio trabalho.
 - Não implemente além dos critérios recebidos.

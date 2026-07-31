@@ -29,7 +29,7 @@ e premissas críticas confirmadas ou explicitamente aceitas com risco.
 
 ## Arquivo e Contract
 
-Crie `documentation/features/<domínio>/<feature>/specs/<nome>-spec.md` com:
+Crie `documentation/features/<domínio>/<feature>/spec.md` com:
 
 ```yaml
 ---
@@ -46,8 +46,9 @@ last_updated_at: YYYY-MM-DD
 ```
 
 O corpo deve conter contexto, escopo, Contract, estado atual, solução técnica,
-plano de validação, avaliações, evidências finais, alinhamento documental e
-amendments.
+plano de validação, avaliações previstas, alinhamento documental e amendments.
+Não crie um `evaluation.md` vazio nesta etapa; ele será criado após a
+implementação ou o primeiro julgamento relevante e deverá existir antes do PR.
 
 Use somente `RF-*` e `CA-*` como IDs obrigatórios:
 
@@ -61,9 +62,9 @@ Segurança, performance e arquitetura entram como critérios de aceitação ou
 restrições técnicas. Não use `RN-*`, `RNF-*`, `RA-*`, comentários
 `harness:evidence`, gates próprios ou baselines.
 
-Declare sensores aplicáveis: `check:code`, `check:types`, `test:unit`,
+Declare sensores aplicáveis: `format`, `check:code`, `check:types`, `test:unit`,
 `check:architecture` e `test:integration`. `check:dead-code` não é oficial.
-Build é validação final do CI.
+Quality Gate e build são validações finais do CI.
 
 ## Judge Spec
 
@@ -72,6 +73,6 @@ Envie a origem, Spec, pesquisa, Architecture e Rules, sem narrativa persuasiva.
 
 - `failed`: encaminhe findings ao Orchestrator, corrija e avalie novamente;
 - `accepted`: altere a Spec para `status: open` e roteie para `implement-spec`
-  ou `create-plan`.
+  ou `create-plan` conforme tamanho e risco.
 
 Não crie nova thread para pesquisa ou julgamento.

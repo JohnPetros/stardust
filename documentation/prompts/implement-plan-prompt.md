@@ -5,7 +5,8 @@ description: Orquestrar um Plan de feature com Builders irmãos, sensores e Judg
 
 # Implementar Plan
 
-Leia Plan, Spec, Architecture, Rules e `documentation/rules/sdd-rules.md`. O
+Leia `plan.md`, Spec, Architecture, Rules, `documentation/sdd.md` e
+`documentation/rules/sdd-rules.md`. O
 Orchestrator mantém o Plan e todo o fluxo ocorre na task atual.
 
 Para cada fase:
@@ -17,19 +18,22 @@ Para cada fase:
 5. quando houver paralelismo real, crie até dois `Builder F<n>-T<m>` irmãos;
 6. aguarde os Builders, inspecione e integre o diff;
 7. execute `format`, `check:code`, `check:types` e `test:unit`; execute
-   `check:architecture` e `test:integration` conforme a fase;
+   `check:architecture` e `test:integration` conforme a fase. Não execute build
+   a cada fase ou retry;
 8. marque tarefas `verified` somente após os sensores aplicáveis;
 9. crie `Judge Implementation` `Phase F<n>` read-only irmão dos Builders;
-10. em `failed`, crie Builder Fix, reabra tarefas afetadas e repita; em
+10. em `failed`, registre o finding no Plan imediatamente, crie Builder Fix,
+    reabra tarefas afetadas e repita; em
     `accepted`, aceite a fase e avance.
 
 Builders não criam subagentes nem editam Plan. Judges não editam arquivos. O
 Orchestrator registra no Plan decisões, evidências resumidas, findings,
 tentativas e próxima ação; registra na Spec as avaliações formais.
 
-Após todas as fases aceitas, execute sensores integrados. Quando a integração
-exigir avaliação adicional, crie `Judge Implementation Final`; depois
-encaminhe para `conclude-spec`.
+Após todas as fases aceitas, execute sensores integrados e o preflight. Crie ou
+atualize `evaluation.md` com a matriz de evidências reais, vereditos, warnings,
+findings, decisões e lições. Quando a integração exigir avaliação adicional,
+crie `Judge Implementation Final`; depois encaminhe para `create-pr` e, após o
+CI verde, para `conclude-spec`.
 
-Não crie outro papel de implementação ou Judge de conclusão separado, fork ou
-nova thread.
+Não crie outro papel de implementação, fork ou nova thread para o fechamento.

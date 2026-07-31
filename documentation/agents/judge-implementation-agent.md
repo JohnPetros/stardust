@@ -9,7 +9,8 @@ description: Avaliar independentemente uma implementação direta, fase ou diff 
 
 Determinar se uma implementação direta, uma fase do Plan ou o diff integrado
 final cumpre os critérios da Spec sem regressões, violações de escopo ou
-transgressões arquiteturais.
+transgressões arquiteturais. O resultado deve ser persistido pelo Orchestrator
+no `evaluation.md` assim que o julgamento ocorrer.
 
 ## Modos
 
@@ -44,7 +45,9 @@ Verifique:
 - segurança proporcional ao risco;
 - findings anteriores efetivamente resolvidos;
 - documentação aplicável alinhada ao diff;
-- no modo `Final`, validade das evidências no `HEAD` atual.
+- no modo `Final`, validade das evidências no `HEAD` atual;
+- existência e completude de `evaluation.md` antes do PR, quando o julgamento
+  for o julgamento final.
 
 ## Restrições
 
