@@ -276,6 +276,55 @@ existente após confirmação explícita da ação destrutiva.
   desafio.
 - **Feedback de falha:** Erros de exclusão são apresentados por notificação.
 
+#### RF-08 Proteger alterações não salvas ao sair do editor
+
+- [ ] **Solicitar confirmação antes de descartar alterações pendentes**
+
+**Descrição:** O editor deve detectar divergências entre os dados exibidos e o
+último estado persistido. Quando o usuário tentar sair com alterações
+pendentes, a interface deve impedir a navegação imediata e informar que os
+dados não salvos serão perdidos.
+
+##### Critérios de Aceitação
+
+| ID | Critério observável |
+|---|---|
+| `CA-38` | Dado um desafio carregado sem alterações, quando o usuário sai do editor, então a navegação ocorre sem aviso. |
+| `CA-39` | Dado que qualquer campo editável foi alterado, quando o usuário navega para outra rota, aciona “Voltar” ou usa o histórico do navegador, então o diálogo “Sair sem salvar?” é exibido antes da navegação. |
+| `CA-40` | Dado o diálogo de alterações não salvas, quando o usuário escolhe “continuar editando” ou fecha o diálogo, então permanece no editor com todos os valores preenchidos preservados. |
+| `CA-41` | Dado o diálogo de alterações não salvas, quando o usuário escolhe “sair sem salvar”, então a navegação solicitada é concluída e as alterações locais são descartadas. |
+| `CA-42` | Dado que existem alterações não salvas, quando o usuário tenta recarregar ou fechar a aba, então o navegador apresenta sua confirmação nativa de saída. |
+| `CA-43` | Dada uma criação ou atualização bem-sucedida, quando o sistema redireciona o usuário, então a navegação ocorre sem o aviso de alterações não salvas. |
+| `CA-44` | Dada uma falha ao criar ou atualizar o desafio, quando o usuário tenta sair, então as alterações continuam marcadas como pendentes e o aviso permanece ativo. |
+
+##### Regras de Negócio
+
+- **Referência persistida:** O estado é considerado alterado quando diverge do
+  último conjunto de dados carregado ou salvo com sucesso.
+- **Escopo integral:** A detecção inclui todos os campos editáveis do desafio,
+  inclusive categorias, casos de teste, solução oficial e playback.
+- **Carregamento inicial:** O preenchimento do formulário com dados persistidos
+  não deve ser interpretado como alteração do usuário.
+- **Persistência bem-sucedida:** Uma criação ou atualização concluída redefine
+  a referência persistida e desativa a proteção de saída.
+- **Falha de persistência:** Uma tentativa de salvar que falha não descarta os
+  dados locais nem desativa a proteção.
+- **Saída confirmada:** A confirmação para sair sem salvar libera somente a
+  navegação que originou o aviso, sem desativar permanentemente a proteção.
+
+##### Regras de UI/UX
+
+- **Diálogo de navegação:** Nas navegações controladas pelo Studio, o diálogo
+  usa o título “Sair sem salvar?” e informa que as alterações feitas no desafio
+  serão perdidas.
+- **Ação segura:** “Continuar editando” é a ação principal e mantém o usuário no
+  editor.
+- **Ação destrutiva:** “Sair sem salvar” é apresentada como ação destrutiva e
+  conclui a navegação solicitada.
+- **Fechamento seguro:** Fechar o diálogo equivale a continuar editando.
+- **Limitação do navegador:** Recarregar ou fechar a aba utiliza o aviso nativo
+  do navegador, cujo texto pode variar conforme o ambiente.
+
 ---
 
 ### 3. Fluxo de Usuário (User Flow)
@@ -319,6 +368,23 @@ outro autor.
 3. A tela informa que o desafio pertence a outro autor.
 4. O administrador altera e salva os dados.
 5. O sistema preserva a autoria original e a visibilidade existente.
+
+**Tentar sair com alterações não salvas:** Um autor ou administrador inicia
+uma navegação antes de persistir as mudanças.
+
+1. O usuário altera qualquer campo do desafio.
+2. O usuário tenta sair pela navegação do Studio, pelo controle “Voltar” ou
+   pelo histórico do navegador.
+3. O sistema apresenta o diálogo “Sair sem salvar?”.
+4. O usuário decide:
+   - **Continuar editando:** O diálogo é fechado, a navegação é cancelada e os
+     dados locais permanecem no formulário.
+   - **Sair sem salvar:** O sistema conclui a navegação solicitada e descarta as
+     alterações locais.
+5. Se a tentativa de saída ocorrer ao recarregar ou fechar a aba, o navegador
+   apresenta sua confirmação nativa.
+6. Depois de uma criação ou atualização bem-sucedida, o redirecionamento ocorre
+   sem apresentar o aviso.
 
 **Excluir desafio:** O autor ou administrador remove um desafio existente.
 
