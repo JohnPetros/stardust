@@ -66,6 +66,12 @@ last_updated_at: YYYY-MM-DD
 - Revisão: `<revisão>`
 - Findings: nenhum | `<IDs e estado>`
 
+### Judge Plan
+
+- Veredito: `accepted` | `failed` | não aplicável
+- Plan: `./plan.md` | não aplicável
+- Findings: nenhum | `<IDs e estado>`
+
 ### Judge Implementation
 
 - Modo: `direct` | `phase` | `final`

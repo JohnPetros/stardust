@@ -11,6 +11,7 @@ Demanda
 → Spec
 → Judge Spec
 → Plan opcional
+→ Judge Plan
 → Implementação
 → sensores locais
 → Judge Implementation
@@ -130,6 +131,7 @@ Ele registra:
 - paralelismo e sua justificativa;
 - sensores e evidências esperados por fase;
 - riscos, findings, tentativas, estado e próxima ação;
+- veredito do Judge Plan antes da implementação;
 - vereditos do Judge Implementation por fase.
 
 Estados de tarefa: `pending`, `implementing`, `validating` e `verified`.
@@ -148,7 +150,7 @@ Orchestrator
 ├── Builder Direct
 ├── Builder F<n> / Builder F<n>-T<m>
 ├── Builder Fix QG-<n>
-└── Judge Spec / Judge Implementation
+└── Judge Spec / Judge Plan / Judge Implementation
 ```
 
 O Builder é o único papel de implementação. O Judge é read-only e não corrige

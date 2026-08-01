@@ -6,7 +6,7 @@ Este arquivo é um índice curto para a fonte normativa completa em
 ## Fluxo
 
 ```text
-Demanda → Spec → Judge Spec → Plan opcional → Implementação
+Demanda → Spec → Judge Spec → Plan opcional → Judge Plan → Implementação
 → sensores → Judge Implementation → preflight → evaluation.md
 → PR / Quality Gate / build no CI → Spec concluída
 ```

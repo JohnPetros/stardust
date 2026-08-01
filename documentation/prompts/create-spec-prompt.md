@@ -18,7 +18,15 @@ risco, integrações ou fases.
 
 ## Fontes
 
-Leia a origem da demanda, `documentation/architecture.md`, Rules aplicáveis,
+`source` é uma lista e pode conter múltiplas referências associadas à mesma
+Spec. É permitido associar Issue e PRD simultaneamente, além de Report ou
+demanda direta quando aplicável. Detecte todas as fontes informadas ou
+associadas, busque e leia cada uma delas. Se um PRD estiver associado à Issue,
+sua leitura é obrigatória; a ausência de PRD não bloqueia uma Spec originada
+de Issue. Em caso de conflito, registre a divergência e resolva a ambiguidade
+antes de abrir a Spec.
+
+Leia todas as fontes da demanda, `documentation/architecture.md`, Rules aplicáveis,
 `documentation/sdd.md`, `documentation/rules/sdd-rules.md` e os paths reais da
 codebase. Use Serena, Context7, Pencil, Playwright ou Supabase quando
 aplicáveis.
@@ -37,8 +45,8 @@ title: <título>
 status: draft
 revision: 1
 source:
-  type: <prd|issue|report|direct-request>
-  ref: <url>
+  - type: <prd|issue|report|direct-request>
+    ref: <url>
 scope:
   - <workspace|diretório|arquivo>
 last_updated_at: YYYY-MM-DD
