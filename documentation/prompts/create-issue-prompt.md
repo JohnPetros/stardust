@@ -68,7 +68,7 @@ Para issues puramente de produto, não force rules de camada; registre apenas as
 10. Quando a funcionalidade couber em uma única entrega coerente, proponha uma única issue.
 11. Quando o escopo for grande, com dependências ou etapas bem separadas, quebre em múltiplas issues menores.
 12. **Apresente o rascunho completo ao usuário antes de criar qualquer issue. Aguarde aprovação explícita.**
-13. O rascunho deve ser escrito em `documentation/issue.md` antes da criação da issue no GitHub.
+13. Cada rascunho deve ser escrito em `documentation/issues/<slug-da-issue>.md` antes da criação da issue no GitHub. Use um arquivo por issue, com nome descritivo em kebab-case, e nunca sobrescreva o rascunho de outra issue.
 14. Após aprovação, crie as issues usando `gh` conforme as regras abaixo.
 
 ## Critérios para quebrar issues

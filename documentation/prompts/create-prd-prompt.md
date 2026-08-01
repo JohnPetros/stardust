@@ -1,237 +1,392 @@
 ---
-description: Prompt para criar um PRD com detecção de modo (prospectivo/retrospectivo), discovery, clarificação e estrutura padronizada de requisitos e fluxos.
+description: Prompt para pesquisar, entrevistar e criar PRDs completos com análise competitiva, público-alvo e validação interativa.
 ---
 
 # Prompt: Criar PRD
 
-**Objetivo:** Padronizar a criação de Product Requirements Documents (PRDs),
-garantindo clareza de produto e alinhamento entre as equipes — tanto para
-features novas quanto para features já implementadas.
+## Objetivo Principal
 
-## Fonte de Verdade do Produto
+Criar um PRD completo e implementável a partir do texto recebido pelo comando:
 
-Neste projeto, **milestones do GitHub funcionam como PRDs na prática**.
+```bash
+create-prd "<texto do produto ou funcionalidade>"
+```
 
-Use a seguinte ordem de precedência como fonte de verdade:
+O PRD deve ser salvo em:
 
-1. Milestone do GitHub informada pelo usuário.
-2. Confirmações explícitas do usuário durante a conversa.
-3. Comportamento observável da codebase.
-4. Screenshots e descrições complementares fornecidas no contexto.
+```text
+documentation/prds/<slug-do-produto>.md
+```
 
-Se houver conflito entre comportamento implementado e milestone, **não invente
-uma reconciliação**: registre a divergência de forma explícita.
+Se for informado um caminho de saída, use-o:
 
-**Entradas possíveis (Inputs):**
-
-- URL ou número da milestone no GitHub — obtenha os dados por ferramenta estruturada (`gh`/API), não por scraping HTML.
-- Esboço, rascunho ou descrição da funcionalidade.
-- Informações de contexto, código relevante ou screenshots.
-- Parte da codebase que já implementa a feature.
-
-Se o usuário pedir um PRD prospectivo para uma feature que deve ser orientada por produto e nenhuma milestone for informada, interrompa o fluxo e solicite a milestone antes de redigir.
+```bash
+create-prd "<texto>" --output documentation/prds/meu-prd.md
+```
 
 ---
 
-## Regras Aplicáveis
+## Regra Principal
 
-PRD é documento de produto; portanto, não há rule de camada obrigatória para todo caso.
+Não escreva o PRD imediatamente.
 
-Use rules apenas nestas situações:
+Primeiro:
 
-- `documentation/rules/rules.md` — quando o PRD retrospectivo precisar validar se o comportamento implementado respeita camadas existentes.
-- `documentation/rules/web-application-rules.md`, `documentation/rules/studio-appllication-rules.md` ou `documentation/rules/server-application-rules.md` — quando uma limitação técnica de app afetar diretamente o comportamento de produto.
-- `documentation/rules/ui-layer-rules.md` — quando requisitos de UI/UX dependerem de widgets, estados ou composição já existentes.
+1. Pesquise os materiais disponíveis.
+2. Analise arquivos, código, designs e documentos relacionados.
+3. Faça uma entrevista rigorosa com o usuário.
+4. Resolva dependências e contradições.
+5. Apresente um resumo do entendimento.
+6. Aguarde confirmação explícita.
 
-Não transforme o PRD em spec técnica. Use as rules apenas para não documentar comportamento impossível ou desalinhado com a arquitetura atual.
-
----
-
-## INSTRUÇÕES DE EXECUÇÃO
-
-**Você deve seguir rigorosamente este processo de três etapas:**
+Só depois da confirmação o arquivo poderá ser criado ou atualizado.
 
 ---
 
-### ETAPA 0: DETECÇÃO DE MODO (OBRIGATÓRIO)
+## Skill Obrigatória: Grilling
 
-Antes de qualquer coisa, identifique em qual modo operar com base nos inputs
-fornecidos:
+Entreviste o usuário rigorosamente sobre todos os aspectos do produto até
+alcançar entendimento compartilhado.
 
-| Modo | Quando usar | Foco do processo |
-|---|---|---|
-| **Prospectivo** | Feature ainda não implementada ou milestone ainda sem implementação consolidada | Discovery de requisitos futuros |
-| **Retrospectivo** | Feature já implementada (codebase, screenshots ou comportamento descrito) | Auditoria do que foi construído em relação a milestone/comportamento real |
+Para cada pergunta:
 
-> Se houver ambiguidade, pergunte explicitamente ao usuário antes de continuar.
+- faça somente uma pergunta por vez;
+- explique por que a decisão é necessária;
+- apresente uma recomendação;
+- aguarde a resposta antes de continuar;
+- registre a decisão;
+- identifique dependências com decisões futuras;
+- conteste contradições ou riscos.
 
----
+Nunca faça várias perguntas na mesma mensagem.
 
-### ETAPA 1A — MODO PROSPECTIVO: DISCOVERY E CLARIFICAÇÃO
+Se uma informação puder ser encontrada em arquivos, código, designs, ferramentas
+ou internet, pesquise antes de perguntar.
 
-**NÃO GERE O PRD IMEDIATAMENTE.** Analise o pedido e faça perguntas para
-preencher lacunas. Organize em:
+As decisões pertencem ao usuário. Não assuma decisões importantes sem
+confirmação.
 
-1. **Negócio:** Objetivos, métricas de sucesso, prioridade.
-2. **UX/Design:** Público-alvo, jornada, dores atuais.
-3. **Técnico:** Plataformas, integrações, performance, dados.
-
-**→ Use a tool `question` para gerar as perguntas.**  
-**→ Pare e aguarde as respostas antes de continuar.**  
-**→ Se necessário, faça rodadas adicionais de perguntas.**
-
----
-
-### ETAPA 1B — MODO RETROSPECTIVO: AUDITORIA DA IMPLEMENTAÇÃO
-
-**NÃO GERE O PRD IMEDIATAMENTE.** Analise os inputs disponíveis (milestone,
-código, screenshots, descrições de comportamento) e use-os conforme a ordem de
-precedência definida neste prompt.
-
-Em seguida, faça perguntas para validar e preencher lacunas. Organize em:
-
-1. **Milestone vs. Implementação:** O comportamento atual reflete a milestone,
-   ou representa uma limitação/adaptação técnica?
-2. **Casos não cobertos:** Existem cenários de uso que a implementação atual
-   não cobre mas deveria?
-3. **Decisões descartadas:** Houve comportamentos ou requisitos considerados
-   durante o desenvolvimento mas deixados de fora? Por quê?
-4. **Restrições conhecidas:** Existem bugs, débitos técnicos ou limitações
-   conhecidas que afetam o comportamento documentado?
-
-**→ Use a tool `question` para gerar as perguntas.**  
-**→ Pare e aguarde as respostas antes de continuar.**  
-**→ Se necessário, faça rodadas adicionais de perguntas.**
-
-Quando não houver milestone no modo retrospectivo, a codebase passa a ser a principal evidência de comportamento implementado. Nesse caso, o documento gerado descreve a feature observada, mas não substitui a necessidade de uma milestone oficial posterior quando o projeto precisar de uma referência formal de produto.
+Não execute a criação do PRD até o usuário confirmar que o entendimento está
+correto.
 
 ---
 
-### ETAPA 2: ESCRITA DO PRD
+## Entrada do Comando
 
-Após receber as respostas, gere o documento completo seguindo estritamente o
-template abaixo.
+O texto recebido após `create-prd` representa o contexto inicial do produto ou
+funcionalidade.
 
-No **Modo Retrospectivo**, a seção "Fora do Escopo" deve incluir também os
-itens descartados durante a implementação (ver template). Quando houver
-milestone, o documento gerado deve tratá-la como **referência oficial de
-produto**.
+Extraia dele:
+
+- problema;
+- oportunidade;
+- módulo;
+- público mencionado;
+- funcionalidades;
+- restrições;
+- materiais referenciados;
+- decisões já tomadas.
+
+Se o texto estiver vazio ou insuficiente, faça uma pergunta inicial solicitando
+contexto.
 
 ---
 
-## TEMPLATE DO PRD (Estrutura de Saída)
+## Pesquisa do Ambiente
 
-# PRD — {Nome da Funcionalidade}
+Antes da entrevista:
 
-**Referência de produto:** {URL ou número da milestone no GitHub, quando houver}
+1. Leia os PRDs relacionados.
+2. Leia documentação e regras do projeto.
+3. Inspecione código relevante.
+4. Inspecione designs e protótipos.
+5. Identifique entidades, fluxos e regras existentes.
+6. Procure contradições entre documentação, design e implementação.
+7. Diferencie fatos encontrados, decisões confirmadas, hipóteses e decisões
+   pendentes.
+
+Não pergunte ao usuário algo que possa ser descoberto no ambiente.
 
 ---
+
+## Pesquisa de Mercado Obrigatória
+
+Faça pesquisa atualizada na internet sobre o cenário competitivo.
+
+Analise:
+
+- concorrentes diretos;
+- concorrentes indiretos;
+- alternativas manuais;
+- público atendido;
+- proposta de valor;
+- funcionalidades relevantes;
+- preços públicos, quando disponíveis;
+- pontos fortes;
+- limitações;
+- lacunas de mercado;
+- oportunidades de diferenciação.
+
+Use prioritariamente fontes oficiais e primárias.
+
+Não invente informações. Toda informação factual sobre concorrentes deve conter
+fonte em Markdown.
+
+Diferencie fatos de inferências usando expressões como:
+
+- `Segundo a fonte...`
+- `A página oficial informa...`
+- `Inferência baseada nas fontes...`
+- `Não identificado publicamente...`
+
+A pesquisa deve orientar recomendações, mas não substituir decisões do usuário.
+
+---
+
+## Árvore de Decisão
+
+Investigue, uma decisão por vez:
+
+1. Problema e oportunidade.
+2. Objetivo do produto.
+3. Público-alvo principal.
+4. Públicos secundários.
+5. Não público.
+6. Jobs to Be Done.
+7. Proposta de valor.
+8. Diferenciação competitiva.
+9. Escopo da primeira versão.
+10. Funcionalidades obrigatórias.
+11. Regras de negócio.
+12. Entidades e relacionamentos.
+13. Fluxos principais.
+14. Estados vazios e erros.
+15. Permissões e responsabilidades.
+16. Integrações e dependências.
+17. Dados e snapshots.
+18. Exclusões e efeitos colaterais.
+19. Critérios de sucesso.
+20. Requisitos de UI/UX.
+21. Responsividade e acessibilidade.
+22. Requisitos não funcionais.
+23. Fora do escopo.
+24. Decisões descartadas.
+
+Não faça perguntas sobre itens já resolvidos nos materiais ou pelo usuário.
+
+---
+
+## Formato das Perguntas
+
+Use exatamente este formato:
+
+```text
+Pergunta [número] — [tema]
+
+Contexto:
+[Explique por que essa decisão é necessária.]
+
+Minha recomendação:
+[Apresente uma recomendação objetiva e justificada.]
+
+Pergunta:
+[Faça somente uma pergunta.]
+```
+
+---
+
+## Confirmação Obrigatória
+
+Quando todas as decisões relevantes estiverem resolvidas, apresente um resumo
+com:
+
+- problema;
+- objetivo;
+- público-alvo;
+- proposta de valor;
+- cenário competitivo;
+- diferenciais;
+- escopo;
+- regras críticas;
+- fluxos principais;
+- fora do escopo;
+- riscos e hipóteses restantes.
+
+Depois faça somente esta pergunta:
+
+```text
+Este entendimento está correto e posso escrever o PRD?
+```
+
+Não escreva o arquivo até receber confirmação explícita.
+
+---
+
+## Formato Obrigatório do PRD
+
+Após a confirmação, escreva o documento nesta estrutura:
 
 ### 1. Visão Geral
 
-_Descreva de forma clara e concisa:_
+Inclua descrição do produto, objetivo, problema resolvido e valor entregue.
 
-- O que é a funcionalidade/produto.
-- Qual problema resolve.
-- Qual o objetivo principal e valor entregue.
+### 2. Público-alvo
 
----
+Inclua público principal, públicos secundários, não público, contexto de uso,
+dores, necessidades e Jobs to Be Done.
 
-### 2. Requisitos
+Use o formato:
 
-_Liste as funcionalidades. Use IDs curtos (`RF-01`, `RF-02`...) e critérios de
-aceitação (`CA-01`, `CA-02`...) para permitir rastreabilidade até a Spec e as
-evidências. Use checkboxes para acompanhamento._
+```text
+Quando [contexto], quero [ação], para [resultado].
+```
 
-#### RF-01 [Nome do Requisito]
+### 3. Análise do Cenário Competitivo
 
-- [ ] **[Nome do Requisito]**
+Inclua resumo do mercado, concorrentes diretos e indiretos, alternativas
+manuais, matriz competitiva, oportunidades, diferenciais recomendados, fontes e
+distinção entre fatos e inferências.
 
-**Descrição:** Breve contexto do requisito.
+Use a tabela:
 
-##### Critérios de Aceitação
+| Solução | Público | Proposta de valor | Funcionalidades | Preço público | Limitações |
+|---|---|---|---|---|---|
 
-_Defina os comportamentos observáveis que determinam se o requisito foi
-atendido. A Spec deve preservar o significado destes critérios e acrescentar
-as evidências técnicas._
+Não preencha células com suposições. Use `Não identificado publicamente` quando
+necessário.
 
-| ID | Critério observável |
-|---|---|
-| `CA-01` | Dado [contexto], quando [ação], então [resultado] |
+### 4. Requisitos
+
+Cada requisito deve seguir este formato:
+
+#### REQ-01 Nome do Requisito
+
+- [ ] **Nome do Requisito**
+
+**Descrição:** descreva o comportamento esperado.
 
 ##### Regras de Negócio
 
-_Liste as regras lógicas e comportamentais (Backend/Lógica)._
+- **Regra:** comportamento obrigatório.
+- **Validação:** condição e resultado.
+- **Exceção:** comportamento alternativo.
+- **Dependência:** módulo ou entidade relacionada.
 
-- **[Nome da Regra]:** Descrição detalhada do comportamento, validações,
-  condições, gatilhos e cálculos.
-- **[Nome da Regra]:** Descrição detalhada...
+##### Regras de UI/UX
 
-##### Regras de UI/UX (se houver)
+- **Interface:** apresentação da funcionalidade.
+- **Feedback:** estados de sucesso, erro e carregamento.
+- **Estado vazio:** comportamento sem dados.
+- **Ação bloqueada:** motivo e correção.
+- **Responsividade:** comportamento em telas menores.
+- **Acessibilidade:** requisitos relevantes.
 
-_Especifique aspectos visuais e de interação (Frontend)._
+Use requisitos sequenciais: `REQ-01`, `REQ-02`, `REQ-03`.
 
-- **[Elemento Visual]:** Especificação (Cores, Tipografia, Estados).
-- **Responsividade:** Comportamento em mobile/desktop.
-- **Acessibilidade:** Regras de contraste e navegação por teclado.
-- **Feedback:** Mensagens de erro, sucesso e estados de loading.
-- **Performance:** Tempo de carregamento, resposta.
-- **Confiabilidade:** Tratamento de erros, fallbacks.
-- **Compatibilidade:** Navegadores, dispositivos.
+Use `[ ]` por padrão. Use `[x]` somente quando a implementação tiver sido
+verificada.
 
-_(Repita o bloco `RF-XX` para todos os requisitos)_
+Separe os requisitos com `---`.
 
----
+### 5. Fluxo de Usuário (User Flow)
 
-### 3. Fluxo de Usuário (User Flow)
+Use fluxos identificados por letras:
 
-_Descreva o caminho passo a passo que o usuário percorre. Divida em fluxos
-menores se necessário._
+```text
+Fluxo A - Nome do fluxo
 
-**[Nome do fluxo]:** Breve contexto do fluxo.
+1. O usuário inicia a ação.
+2. O sistema apresenta o estado.
+3. O usuário toma uma decisão.
+4. O sistema valida:
+   - Sucesso: comportamento esperado.
+   - Falha: mensagem e estado preservado.
+5. O fluxo termina.
+```
 
-1. O usuário acessa [Tela/Local].
-2. O usuário realiza [Ação].
-3. O sistema valida [Condição]:
-   - **Sucesso:** Ocorre X.
-   - **Falha:** Ocorre Y.
+Inclua fluxos principais, alternativos, erros, estados vazios e confirmações
+destrutivas.
 
----
+### 6. Fora do Escopo (Out of Scope)
 
-### 4. Fora do Escopo (Out of Scope)
+Liste funcionalidades explicitamente excluídas da versão.
 
-_O que NÃO faz parte desta versão, para evitar scope creep._
+#### Descartado durante a definição
 
-- [Item fora do escopo]
-- [Item fora do escopo]
+Registre decisões consideradas e rejeitadas:
 
-#### Descartado durante a implementação _(somente Modo Retrospectivo)_
+- **Alternativa:** motivo da rejeição.
+- **Regra anterior:** regra que a substituiu.
 
-_Comportamentos ou requisitos considerados mas não entregues, com justificativa._
+Se nada tiver sido descartado, escreva:
 
-- **[Item descartado]:** Motivo pelo qual foi deixado de fora.
-- **[Item descartado]:** Motivo...
-
----
-
-### 5. Divergências entre Milestone e Implementação _(somente quando houver)_
-
-_Registre de forma objetiva os pontos em que a implementação atual diverge da
-milestone ou ainda não cobre integralmente o comportamento esperado._
-
-- **[Ponto de divergência]:** O que a milestone define, o que a implementação faz hoje e impacto percebido.
-- **[Ponto de divergência]:** O que falta ou foi adaptado.
+- **Não identificado:** nenhuma alternativa foi formalmente descartada durante a
+  definição.
 
 ---
 
-## Restrições para o PRD
+## Regras de Qualidade
 
-- Foco exclusivo em **funcionalidades e comportamento de produto** — sem entrar
-  em arquitetura de software ou decisões detalhadas de código, exceto quando uma
-  limitação técnica afetar diretamente o comportamento documentado.
-- Não invente detalhes: marque como `🚧 Em construção` ou sinalize como
-  "Assunção" quando uma informação não foi confirmada.
-- A seção "Descartado durante a implementação" só deve aparecer no
-  **Modo Retrospectivo**.
-- A seção "Divergências entre Milestone e Implementação" só deve aparecer
-  quando houver milestone informada ou inferida com segurança.
+O PRD deve:
+
+- ser escrito em português claro;
+- usar linguagem normativa;
+- manter requisitos testáveis;
+- separar regras de negócio de UI/UX;
+- preservar decisões confirmadas;
+- apontar dependências;
+- evitar duplicidade;
+- manter nomenclatura consistente;
+- não inventar fatos;
+- incluir fontes nas afirmações de mercado;
+- diferenciar fatos de inferências;
+- registrar decisões descartadas;
+- não incluir funcionalidades fora do escopo.
+
+Antes de salvar, valide:
+
+- todos os requisitos possuem descrição, regras de negócio e UI/UX;
+- os fluxos cobrem os requisitos;
+- o público-alvo está refletido no produto;
+- a análise competitiva influencia o posicionamento;
+- não existem contradições;
+- não há decisões relevantes pendentes.
+
+Se houver uma decisão relevante pendente, volte à entrevista e faça uma pergunta
+por vez. Não finalize o PRD até alcançar entendimento compartilhado.
+
+---
+
+## Execução do Arquivo
+
+Depois de gerar o PRD:
+
+1. Crie o diretório de saída se necessário.
+2. Gere um slug legível para o nome do arquivo.
+3. Salve em `documentation/prds/`.
+4. Se o arquivo já existir, informe que será atualizado antes de sobrescrevê-lo.
+5. Verifique se o arquivo foi criado.
+6. Exiba o caminho final e um resumo do conteúdo gerado.
+
+Formato final:
+
+```text
+[RESEARCH] Environment analyzed ✅
+[RESEARCH] Competitive analysis completed ✅
+[INTERVIEW] Shared understanding confirmed ✅
+[PRD] Generated: documentation/prds/<arquivo>.md ✅
+```
+
+---
+
+## Comportamentos Proibidos
+
+- Criar o PRD antes da confirmação do usuário.
+- Fazer múltiplas perguntas na mesma mensagem.
+- Perguntar fatos que podem ser pesquisados.
+- Inventar dados de concorrentes ou preços.
+- Apresentar inferências como fatos.
+- Ignorar contradições.
+- Alterar decisões confirmadas sem avisar.
+- Criar requisitos sem critérios verificáveis.
+- Salvar o arquivo fora de `documentation/prds/` sem instrução explícita.
