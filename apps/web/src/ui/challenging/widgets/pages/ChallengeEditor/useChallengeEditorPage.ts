@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -12,6 +12,7 @@ import type { NavigationProvider, ToastProvider } from '@stardust/core/global/in
 
 import { ROUTES } from '@/constants'
 import { useLsp } from '@/ui/global/hooks/useLsp'
+import { useChallengeEditorBrowserNavigation } from './useChallengeEditorBrowserNavigation'
 
 type ChallengeFormInput = z.input<typeof challengeFormSchema>
 type ChallengeForm = z.output<typeof challengeFormSchema>
@@ -54,10 +55,12 @@ export function useChallengeEditorPage({
             : userId.value,
       },
       function: {
-        name: currentChallenge?.initialCode.value
-          ? (lspProvider.getFunctionName(currentChallenge.initialCode.value) ?? '')
-          : '',
-        params: currentChallenge
+        name:
+          currentChallenge?.isEvaluatedByFunction.value &&
+          currentChallenge.initialCode.value
+            ? (lspProvider.getFunctionName(currentChallenge.initialCode.value) ?? '')
+            : '',
+        params: currentChallenge?.isEvaluatedByFunction.value
           ? lspProvider
               .getFunctionParamsNames(currentChallenge.initialCode.value)
               .map((paramName: string, paramIndex: number) => ({
@@ -95,6 +98,8 @@ export function useChallengeEditorPage({
   })
   const [isActionSuccess, setIsActionSuccess] = useState(false)
   const [isActionFailure, setIsActionFailure] = useState(false)
+  const [isNavigationDialogOpen, setIsNavigationDialogOpen] = useState(false)
+  const pendingNavigationRef = useRef<(() => void) | null>(null)
 
   const allFields = form.watch()
   const requiredFields = [
@@ -157,11 +162,12 @@ export function useChallengeEditorPage({
   }
 
   function handleActionSuccess(challengeSlug: string, isNew: boolean) {
+    form.reset(form.getValues())
     setIsActionSuccess(true)
     const route = ROUTES.challenging.challenges
       .challenge(challengeSlug)
       .concat(isNew ? '?isNew=true' : '')
-    setTimeout(() => navigationProvider.goTo(route), 1000)
+    setTimeout(() => runWithNavigationBypass(() => navigationProvider.goTo(route)), 1000)
   }
 
   async function handleDeleteChallengeButtonClick() {
@@ -172,11 +178,45 @@ export function useChallengeEditorPage({
       toastProvider.showError(response.errorMessage)
       return
     }
-    navigationProvider.goTo(ROUTES.challenging.challenges.list)
+    form.reset(form.getValues())
+    runWithNavigationBypass(() =>
+      navigationProvider.goTo(ROUTES.challenging.challenges.list),
+    )
   }
 
+  const requestNavigation = useCallback(
+    (navigation: () => void) => {
+      if (!form.formState.isDirty) {
+        navigation()
+        return
+      }
+
+      if (pendingNavigationRef.current) return
+      pendingNavigationRef.current = navigation
+      setIsNavigationDialogOpen(true)
+    },
+    [form.formState.isDirty],
+  )
+
+  const { runWithNavigationBypass } = useChallengeEditorBrowserNavigation({
+    isDirty: form.formState.isDirty,
+    onNavigationRequest: ({ navigate }) => requestNavigation(navigate),
+  })
+
+  const confirmNavigation = useCallback(() => {
+    const navigation = pendingNavigationRef.current
+    pendingNavigationRef.current = null
+    setIsNavigationDialogOpen(false)
+    if (navigation) runWithNavigationBypass(navigation)
+  }, [runWithNavigationBypass])
+
+  const cancelNavigation = useCallback(() => {
+    pendingNavigationRef.current = null
+    setIsNavigationDialogOpen(false)
+  }, [])
+
   function handleBackButtonClick() {
-    navigationProvider.goBack()
+    requestNavigation(() => navigationProvider.goBack())
   }
 
   useEffect(() => {
@@ -242,7 +282,7 @@ export function useChallengeEditorPage({
     }
 
     return messages
-  }, [allFields, form.formState.errors])
+  }, [form.formState.errors])
 
   return {
     form,
@@ -255,5 +295,10 @@ export function useChallengeEditorPage({
     handleFormSubmit: form.handleSubmit(handleSubmit),
     handleBackButtonClick,
     handleDeleteChallengeButtonClick,
+    hasUnsavedChanges: form.formState.isDirty,
+    isNavigationDialogOpen,
+    requestNavigation,
+    confirmNavigation,
+    cancelNavigation,
   }
 }
