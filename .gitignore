@@ -92,8 +92,10 @@ opencode.json
 CLAUDE.md
 GEMINI.md
 prompt.md
+documentation/issues
 documentation/plan.md
 documentation/issue.md
+prd.md
 
 # Ai Content
 .context/
