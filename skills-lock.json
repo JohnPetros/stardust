@@ -11,6 +11,12 @@
       "sourceType": "github",
       "computedHash": "cbe644b0c6760ae2a1eaafa39133920d889331327065d92a131675a665273e56"
     },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "b7d30ffdad766a585c40314b1e82a3fdb4a3917817eb58f6f4ec903d753c7c54"
+    },
     "pencil-design": {
       "source": "chiroro-jr/pencil-design-skill",
       "sourceType": "github",
