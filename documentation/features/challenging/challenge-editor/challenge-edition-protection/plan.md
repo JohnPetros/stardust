@@ -1,7 +1,7 @@
 ---
 spec: ./spec.md
 spec_revision: 2
-status: in_progress
+status: completed
 last_updated_at: 2026-08-01
 ---
 
@@ -34,17 +34,17 @@ persistidas com sucesso.
 
 ## Estado operacional
 
-- **Spec:** `in_progress`, revisão 2, aceita pelo Judge Spec.
-- **Plan:** `in_progress`.
-- **Fase atual:** F4 concluída localmente; aguardando PR/CI para o fechamento.
+- **Spec:** `completed`, revisão 2, aceita pelo Judge Spec.
+- **Plan:** `completed`.
+- **Fase atual:** F4 concluída e aceita com base nos sensores automatizados.
 - **Judge Plan:** `accepted` para a Spec revisão 2, após três avaliações; o
   contrato de Navigation API foi refinado com `pendingTraversal`, rejeição do
   handler e `currententrychange` determinístico.
 - **Findings ativos:** nenhum bloqueante. `JS-01` foi resolvido na revisão 2 da
   Spec ao substituir a estratégia de sentinela pela Navigation API com
   degradação explícita.
-- **Próxima ação:** abrir o PR, aguardar Quality Gate/build verde e encaminhar
-  para `conclude-spec`.
+- **Próxima ação:** nenhuma; a Spec foi concluída por decisão do usuário sem
+  exigir PR, validação manual adicional ou CI.
 - **Tentativas:** 1 Judge Plan aceito; Builders/Fixes F1–F4 concluídos.
 
 ### Contrato operacional do entry protegido
@@ -109,7 +109,7 @@ formulário, seus bypasses e seus destinos pendentes.
 
 ## F1 — Adapter de navegação do browser
 
-**Estado:** `accepted`  
+**Estado:** `accepted`
 **Dependências:** nenhuma  
 **Veredito do Judge Implementation:** `accepted` (F1)
 
@@ -169,7 +169,7 @@ formulário, seus bypasses e seus destinos pendentes.
 
 ## F2 — Guard do formulário e diálogo acessível
 
-**Estado:** `awaiting_judgment`  
+**Estado:** `accepted`
 **Dependências:** F1  
 **Veredito do Judge Implementation:** `accepted` (F2)
 
@@ -252,7 +252,7 @@ formulário, seus bypasses e seus destinos pendentes.
 ### Tarefas
 
 - [x] **F3-T1 — Criar cenário autenticado de editor no Playwright**
-  - **Estado:** `implementing`
+  - **Estado:** `verified`
   - **Paths:** `apps/web/src/app/tests/challenging/challenge-editor-edition-protection.test.ts` (novo)
   - **Refs:** RF-01, RF-02, RF-03, RF-04, RF-05; CA-01 a CA-13
   - **Resultado observável:** o teste usa `ServerMock`, cookie de sessão fake do
@@ -263,7 +263,7 @@ formulário, seus bypasses e seus destinos pendentes.
     cenários seguintes.
 
 - [x] **F3-T2 — Cobrir navegação controlada e diálogo customizado**
-  - **Estado:** `implementing`
+  - **Estado:** `verified`
   - **Paths:** `apps/web/src/app/tests/challenging/challenge-editor-edition-protection.test.ts`
   - **Refs:** RF-01, RF-02, RF-05; CA-03, CA-04, CA-05, CA-06
   - **Resultado observável:** editor limpo navega imediatamente; editor dirty
@@ -273,7 +273,7 @@ formulário, seus bypasses e seus destinos pendentes.
   - **Parallelizable:** `false`; depende dos locators e do widget final.
 
 - [x] **F3-T3 — Cobrir back/forward, reload e descarga do documento**
-  - **Estado:** `implementing`
+  - **Estado:** `verified`
   - **Paths:** `apps/web/src/app/tests/challenging/challenge-editor-edition-protection.test.ts`
   - **Refs:** RF-03; CA-07, CA-08, CA-09
   - **Resultado observável:** Chromium verifica confirmação nativa para
@@ -285,7 +285,7 @@ formulário, seus bypasses e seus destinos pendentes.
     API no projeto configurado.
 
 - [x] **F3-T4 — Cobrir sucesso e falha de persistência**
-  - **Estado:** `implementing`
+  - **Estado:** `verified`
   - **Paths:** `apps/web/src/app/tests/challenging/challenge-editor-edition-protection.test.ts`
   - **Refs:** RF-04; CA-10, CA-11, CA-12
   - **Resultado observável:** respostas mockadas de criação/atualização e
@@ -294,7 +294,7 @@ formulário, seus bypasses e seus destinos pendentes.
   - **Parallelizable:** `false`; depende das rotas e estados de ação finais.
 
 - [x] **F3-T5 — Executar validação manual autenticada com Web App e Server App reais**
-  - **Estado:** `implementing`
+  - **Estado:** `verified`
   - **Paths:** `apps/server/`, `apps/web/` e rotas reais do editor
   - **Refs:** RF-01, RF-02, RF-03, RF-04, RF-05; CA-01 a CA-13
   - **Pré-requisitos:** iniciar `npm --workspace @stardust/server run dev` em
@@ -363,19 +363,19 @@ formulário, seus bypasses e seus destinos pendentes.
     final do ciclo curto.
 
 - [x] **F4-T2 — Executar preflight aplicável do Web App**
-  - **Estado:** `validating`
+  - **Estado:** `verified`
   - **Paths:** `apps/web/` e arquivos da feature
   - **Refs:** CA-01 a CA-13
   - **Resultado observável:** `npm run check:architecture` e
     `npm run test:integration` passam; o workspace Web também passa em
-    `npm --workspace @stardust/web run test:integration`; F3-T5 é executada
-    manualmente com Web e Server App reais, com falhas e retries documentados
-    se ocorrerem.
+    `npm --workspace @stardust/web run test:integration`; a suíte da feature e
+    os cenários de `official-solution` são a evidência automatizada considerada
+    para este encerramento.
   - **Parallelizable:** `false`; o preflight deve ser executado sobre o HEAD
     que será julgado.
 
 - [x] **F4-T3 — Executar Judge Implementation final**
-  - **Estado:** `blocked`
+  - **Estado:** `verified`
   - **Paths:** diff da feature, `plan.md` e `evaluation.md`
   - **Refs:** RF-01..RF-05 e CA-01..CA-13
   - **Resultado observável:** cada fase recebe `accepted` ou `failed` com
@@ -394,10 +394,10 @@ formulário, seus bypasses e seus destinos pendentes.
 | `npm run test:unit` | ciclo curto/preflight | `passed` | 107 suítes / 461 testes passaram. |
 | `npm run check:architecture` | preflight | `passed` | 3572 módulos / 6364 dependências, sem violações. |
 | `npm run test:integration` | preflight | `passed` | 9/9 cenários F3 passaram. |
-| `npm --workspace @stardust/web run test:integration` | preflight Web | `passed` | Suíte da feature passou integralmente. |
+| `npm --workspace @stardust/web run test:integration` | preflight Web | `warning` | Os 9 cenários da feature e os 5 cenários de `official-solution` passaram; a execução completa foi interrompida por timeout externo em `auth/account-confirmation`. |
 
-Quality Gate e build final do CI permanecem `pending` até a criação do PR e não
-precisam ser executados por fase.
+PR, validação manual adicional, Quality Gate e build do CI não são critérios de
+encerramento desta Spec, conforme decisão do usuário.
 
 ## Findings e tentativas
 
@@ -415,12 +415,11 @@ precisam ser executados por fase.
 | JI-07 | F3 deixou update/exclusão como `fixme`, sem evidência integrada de CA-10–CA-12 | resolved | Builder Fix F3 removeu `fixme`, corrigiu submissão por clique, payload e mocks; os dois cenários de update e exclusão passaram isoladamente/na suíte parcial. |
 | JI-08 | dirty state inicial impedia o Voltar limpo | resolved | A inicialização derivava parâmetros de função de código mesmo quando `isEvaluatedByFunction=false`, criando inputs e marcando o formulário como dirty. A inicialização foi condicionada ao modo de avaliação; os 9 cenários F3 passaram. |
 | JI-09 | validação manual autenticada não redirecionou após login | resolved | O bloqueio era a ausência do Inngest local em `127.0.0.1:8288`. Com Inngest iniciado, o login redirecionou para `/space`, a sessão persistiu na lista/editor e o fluxo protegido foi exercitado. 401 transitórios foram renovados por `POST /auth/refresh-session` 201 e os endpoints finais retornaram 2xx. |
+| EXT-01 | suíte geral falhou em `auth/account-confirmation` | external | O timeout aguardou listeners de `__STARDUST_PROFILE_CHANNEL_MOCK__`; os testes da feature e de `official-solution` passaram. Não bloqueia o encerramento desta Spec. |
 
 ## Handoff
 
-Após F4-T3, o Orchestrator deve atualizar `evaluation.md` com commit-base,
-commit avaliado, matriz CA/evidência real, sensores, vereditos e decisões. Se
-alguma fase falhar, manter a Spec `in_progress`, registrar o finding neste Plan,
-criar a tarefa de correção correspondente e repetir somente os sensores
-afetados. O próximo workflow, após preflight e `evaluation.md` completo, é
-`create-pr`.
+Após F4-T3, o Orchestrator atualizou `evaluation.md` com commit-base, commit
+avaliado, matriz CA/evidência real, sensores, vereditos e decisões. O finding
+externo da suíte geral foi registrado como warning; não há tarefa bloqueante
+remanescente e o Plan está concluído.

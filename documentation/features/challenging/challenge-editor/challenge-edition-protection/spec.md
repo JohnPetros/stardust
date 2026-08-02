@@ -1,6 +1,6 @@
 ---
 title: Proteção contra perda de alterações no editor de desafios
-status: in_progress
+status: completed
 revision: 2
 source:
   - type: issue
