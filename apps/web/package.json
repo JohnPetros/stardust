@@ -120,7 +120,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.6.1",
     "encoding": "^0.1.13",
-    "jest": "^30.0.5",
+    "jest": "^30.4.2",
     "jest-canvas-mock": "^2.5.8",
     "jest-environment-jsdom": "^30.4.1",
     "ts-jest": "^29.4.12",
