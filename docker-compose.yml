@@ -101,7 +101,7 @@ services:
       retries: 10
 
   supabase-realtime:
-    image: public.ecr.aws/supabase/realtime:v2.120.3
+    image: public.ecr.aws/supabase/realtime:v2.121.3
     container_name: stardust-supabase-realtime
     depends_on:
       supabase-db:
@@ -147,7 +147,7 @@ services:
       KONG_PLUGINS: request-transformer,cors
 
   inngest:
-    image: inngest/inngest:v1.38.1
+    image: inngest/inngest:v1.40.0
     container_name: stardust-inngest
     command: inngest dev -u http://host.docker.internal:3334/inngest --no-discovery
     ports:
