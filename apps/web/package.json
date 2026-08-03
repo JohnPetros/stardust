@@ -90,7 +90,7 @@
     "swiper": "^14.0.7",
     "swr": "^2.3.4",
     "tailwind-merge": "^1.14.0",
-    "tailwind-variants": "^0.3.1",
+    "tailwind-variants": "^3.3.0",
     "tailwindcss": "3.4.17",
     "three": "^0.185.1",
     "throttleit": "^2.1.0",
