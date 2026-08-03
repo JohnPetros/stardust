@@ -26,11 +26,17 @@ Inclua:
 - campo `parallelizable` e motivo quando aplicável;
 - sensores e evidências esperados por fase;
 - riscos, findings ativos, tentativas, estado e próxima ação;
+- veredito do `Judge Plan` antes da implementação;
 - vereditos do Judge Implementation por fase.
 
 Estados de tarefa: `pending`, `implementing`, `validating`, `verified`.
 Estados de fase: `pending`, `in_progress`, `awaiting_judgment`, `failed`,
 `accepted`.
+
+Depois de criar o Plan, acione `judge-plan-agent` como `Judge Plan` read-only.
+Somente após `accepted` o Orchestrator deve encaminhar para `implement-plan`.
+Em `failed`, persista os findings, corrija o Plan e repita o julgamento antes de
+criar Builders.
 
 Somente o Orchestrator atualiza o Plan. Builders implementam; Judges avaliam
 read-only. Tarefas, dependências e findings operacionais devem ser persistidos

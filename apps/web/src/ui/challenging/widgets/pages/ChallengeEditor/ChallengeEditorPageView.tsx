@@ -20,6 +20,8 @@ import { ChallengeTestCasesField } from './ChallengeTestCasesField'
 import { ChallengeDescriptionField } from './ChallengeDescriptionField'
 import { ChallengeDifficultyLevelField } from './ChallengeDifficultyLevelField'
 import { ChallengeCategoriesField } from './ChallengeCategoriesField'
+import { ChallengeField } from './ChallengeField'
+import { UnsavedChangesDialog } from '../../components/UnsavedChangesDialog'
 
 type Props = {
   currentChallenge: Challenge | null
@@ -51,6 +53,9 @@ export const ChallengeEditorPageView = ({
     handleFormSubmit,
     handleBackButtonClick,
     handleDeleteChallengeButtonClick,
+    isNavigationDialogOpen,
+    confirmNavigation,
+    cancelNavigation,
   } = useChallengeEditorPage({
     currentChallenge,
     userId,
@@ -70,6 +75,11 @@ export const ChallengeEditorPageView = ({
 
   return (
     <FormProvider {...form}>
+      <UnsavedChangesDialog
+        isOpen={isNavigationDialogOpen}
+        onContinueEditing={cancelNavigation}
+        onLeaveWithoutSaving={confirmNavigation}
+      />
       <form
         onSubmit={handleFormSubmit}
         className='mx-auto max-w-6xl px-6 md:px-0 py-6 space-y-12'
@@ -148,7 +158,11 @@ export const ChallengeEditorPageView = ({
           Certifique-se de preencher todos os campos adequadamente.
         </p>
         <ChallengeTitleField />
-        <div className='rounded border border-gray-700 bg-gray-900/40 p-4'>
+        <ChallengeField
+          title='Avaliação'
+          icon='test'
+          subtitle='Escolha como os testes validarão a solução do desafio'
+        >
           <Switch
             label={
               isEvaluatedByFunction
@@ -163,7 +177,7 @@ export const ChallengeEditorPageView = ({
               })
             }
           />
-        </div>
+        </ChallengeField>
         {isEvaluatedByFunction && <ChallengeFunctionField />}
         <ChallengeTestCasesField />
         <ChallengeDescriptionField />

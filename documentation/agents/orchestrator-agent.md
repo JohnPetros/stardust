@@ -37,7 +37,7 @@ sem origem ou produto indefinido → create-prd
 origem de feature sem Spec      → create-spec
 Spec draft                      → Judge Spec
 Spec open pequena               → implement-spec / Builder Direct
-Spec open grande ou faseada     → create-plan → implement-plan
+Spec open grande ou faseada     → create-plan → Judge Plan → implement-plan
 implementação concluída         → sensores + Judge Implementation
 preflight concluído             → evaluation.md → create-pr
 CI verde e entrega aceita       → conclude-spec
@@ -55,7 +55,7 @@ Orchestrator
 ├── Builder Direct | Builder F<n>
 ├── Builder F<n>-T<m>
 ├── Builder Fix QG-<n>
-└── Judge Spec | Judge Implementation
+└── Judge Spec | Judge Plan | Judge Implementation
 ```
 
 Builders e Judges são irmãos. Nenhum subagente cria outro subagente. O Builder
@@ -65,6 +65,8 @@ Spec, diff e evidências oficiais, nunca a narrativa do Builder.
 ## Evaluations e evidências
 
 - O `Judge Spec` avalia Contract, rastreabilidade e solução técnica.
+- O `Judge Plan` avalia se o Plan está pronto para implementação antes de
+  qualquer Builder.
 - O `Judge Implementation` avalia implementação direta, fase integrada ou
   diff final de integração.
 - Um novo Judge Implementation é criado quando uma correção invalida o

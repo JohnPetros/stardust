@@ -259,6 +259,28 @@ O script falha se alguma variável estiver ausente e não imprime os valores das
 credenciais. Não reutilize `STUDIO_APP_E2E_*`: as contas do Studio e da Web App
 são independentes.
 
+## Regra obrigatória de validação manual do Frontend
+
+Toda implementação que envolva frontend, UI, rotas client-side ou interação
+com o navegador deve passar por validação manual em um navegador real, além dos
+testes automatizados.
+
+- Inicie o frontend e os serviços locais dos quais a tela depende em terminais
+  separados. Para a Web App, use `apps/server` em `http://localhost:3334` e
+  `apps/web` em `http://localhost:3000`; para o Studio, use o servidor local e
+  o Studio conforme a seção específica acima.
+- Use Playwright para autenticar quando a rota for protegida, acessar a tela
+  implementada e exercitar o fluxo completo observável, incluindo estados de
+  sucesso, erro, carregamento e navegação relevantes.
+- Não considere a tela de login, uma renderização isolada ou uma suíte baseada
+  somente em mocks suficiente para declarar a implementação funcional.
+- Registre `console`, `pageerror`, `requestfailed` e `response` durante a
+  inspeção; confirme respostas `2xx` nos endpoints de autenticação e da tela.
+- Use credenciais somente por variáveis de ambiente e nunca as escreva em
+  testes, documentação versionada ou logs.
+- Depois de qualquer correção, repita a validação manual completa no mesmo
+  fluxo autenticado.
+
 Se o login redirecionar novamente para `/auth/sign-in`, registre `console`,
 `pageerror`, `requestfailed` e `response` antes de tentar outra rota. Isso
 separa falha visual da página de falha de autenticação, CORS ou API.

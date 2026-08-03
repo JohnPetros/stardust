@@ -273,11 +273,12 @@ test.describe(OFFICIAL_SOLUTION_ROUTE, () => {
     const contentPanel = getContentPanel(page)
     const officialCard = contentPanel.getByTestId('official-solution-card')
     await expect(officialCard).toBeVisible()
-    await officialCard
-      .getByRole('link', { name: 'Abrir solução oficial do desafio' })
-      .click()
+    const officialLink = officialCard.getByRole('link', {
+      name: 'Abrir solução oficial do desafio',
+    })
+    await expect(officialLink).toHaveAttribute('href', OFFICIAL_SOLUTION_ROUTE)
+    await Promise.all([page.waitForURL(OFFICIAL_SOLUTION_ROUTE), officialLink.click()])
 
-    await expect(page).toHaveURL(OFFICIAL_SOLUTION_ROUTE)
     await waitForChallengeTransition(page)
     const officialContentPanel = getContentPanel(page)
     const playback = officialContentPanel.getByTestId('code-playback')
