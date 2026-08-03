@@ -52,7 +52,7 @@ services:
       retries: 10
 
   supabase-public:
-    image: public.ecr.aws/supabase/postgrest:v12.2.3
+    image: public.ecr.aws/supabase/postgrest:v14.15
     container_name: stardust-supabase-public
     depends_on:
       supabase-db:
