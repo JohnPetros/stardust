@@ -43,7 +43,7 @@
     "jszip": "^3.10.1",
     "jwt-decode": "^4.0.0",
     "posthog-node": "^5.17.2",
-    "zod": "^3.24.4"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",

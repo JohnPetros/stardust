@@ -219,7 +219,7 @@
     "@designliquido/delegua": "^0.61.0",
     "dayjs": "^1.11.21",
     "uuid": "^11.1.0",
-    "zod": "^3.23.8"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@faker-js/faker": "8.4.1",
