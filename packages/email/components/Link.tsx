@@ -10,7 +10,7 @@ type LinkProps = {
 export const Link = ({ children, className, href }: LinkProps) => {
   return (
     <Button
-      className={`w-full rounded-md bg-green-400 py-3 text-center text-base font-semibold text-gray-900 transition-opacity duration-200 hover:opacity-40 ${className}`}
+      className={`w-full rounded-md bg-green-400 py-3 text-center text-base font-semibold text-gray-900 ${className}`}
       href={href}
     >
       {children}
