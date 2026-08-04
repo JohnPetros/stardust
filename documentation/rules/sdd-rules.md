@@ -13,6 +13,8 @@ Demanda → Spec → Judge Spec → Plan opcional → Judge Plan → Implementa�
 
 - Plan é opcional: `implement-spec` atende Specs pequenas; `create-plan` +
   `implement-plan` atendem implementações grandes ou faseadas.
+- Interfaces, ports, repositories e services criados ou alterados pela solução
+  devem declarar na Spec os métodos, entradas e retornos esperados.
 - `evaluation.md` é obrigatório após implementação ou julgamento e deve existir
   antes do PR.
 - O fechamento não cria um novo papel de julgamento; `conclude-spec` fecha o
