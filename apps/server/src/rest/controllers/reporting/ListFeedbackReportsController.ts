@@ -6,8 +6,12 @@ type Schema = {
   queryParams: {
     page?: number
     itemsPerPage?: number
+    search?: string
+    status?: 'open' | 'closed'
     authorName?: string
     intent?: 'bug' | 'idea' | 'other'
+    createdAtStartDate?: string
+    createdAtEndDate?: string
     startDate?: string
     endDate?: string
   }
@@ -20,8 +24,12 @@ export class ListFeedbackReportsController implements Controller<Schema> {
     const {
       page = 1,
       itemsPerPage = 10,
+      search,
+      status,
       authorName,
       intent,
+      createdAtStartDate,
+      createdAtEndDate,
       startDate,
       endDate,
     } = http.getQueryParams()
@@ -29,12 +37,13 @@ export class ListFeedbackReportsController implements Controller<Schema> {
     const response = await this.useCase.execute({
       page,
       itemsPerPage,
-      authorName,
+      search: search ?? authorName,
       intent,
-      sentAtStartDate: startDate,
-      sentAtEndDate: endDate,
+      status,
+      sentAtStartDate: createdAtStartDate ?? startDate,
+      sentAtEndDate: createdAtEndDate ?? endDate,
     })
 
-    return http.sendPagination(response)
+    return http.send(response)
   }
 }

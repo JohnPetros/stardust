@@ -1,7 +1,10 @@
 import type { RestClient } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
 import { RestResponse as RestResponseClass } from '@stardust/core/global/responses'
-import type { NotificationService } from '@stardust/core/notification/interfaces'
+import type {
+  FeedbackReplyDiscordPayload,
+  NotificationService,
+} from '@stardust/core/notification/interfaces'
 import type { EventPayload } from '@stardust/core/global/types'
 import type { FeedbackReportSentEvent } from '@stardust/core/reporting/events'
 import type { ChallengePostedEvent } from '@stardust/core/challenging/events'
@@ -142,6 +145,34 @@ export class DiscordNotificationService implements NotificationService {
           ],
           image: payload.screenshot ? { url: payload.screenshot } : undefined,
           timestamp: payload.feedbackReportSentAt,
+        },
+      ],
+    })
+  }
+
+  async sendFeedbackReplyNotification(
+    payload: FeedbackReplyDiscordPayload,
+  ): Promise<RestResponse> {
+    return await this.post({
+      embeds: [
+        {
+          title: 'Nova resposta em feedback',
+          description: payload.preview || 'O usuário enviou uma nova mensagem.',
+          color: 3447003,
+          fields: [
+            { name: 'Reporte', value: payload.reportId, inline: true },
+            { name: 'Mensagem', value: payload.messageId, inline: true },
+            { name: 'Usuário', value: payload.userName ?? 'Usuário', inline: true },
+            {
+              name: 'Anexos',
+              value: payload.hasAttachments ? 'Sim' : 'Não',
+              inline: true,
+            },
+            ...(payload.conversationUrl
+              ? [{ name: 'Ver conversa', value: payload.conversationUrl, inline: false }]
+              : []),
+          ],
+          timestamp: new Date().toISOString(),
         },
       ],
     })
