@@ -48,7 +48,7 @@ export const FeedbackReportsPageView = (props: FeedbackReportsPageViewProps) => 
   const noResults = !isLoading && !error && reports.length === 0
   return (
     <main className='min-h-full bg-zinc-950 px-4 py-6 text-zinc-100 sm:px-6 lg:px-10'>
-      <div className='mx-auto flex max-w-350 flex-col gap-7'>
+      <div className='mx-auto flex flex-col gap-7'>
         <header className='flex flex-col gap-2'>
           <p className='text-xs font-semibold uppercase tracking-[0.22em] text-cyan-400'>
             Central administrativa
