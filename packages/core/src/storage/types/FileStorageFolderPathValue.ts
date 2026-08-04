@@ -8,6 +8,7 @@ export type FileStorageFolderPathValue =
   | 'images/rankings'
   | 'images/insignias'
   | 'images/feedback-reports'
+  | `images/feedback-messages/${string}/${string}`
   | 'database-backups'
 
 export type FileStorageFolderPathName =

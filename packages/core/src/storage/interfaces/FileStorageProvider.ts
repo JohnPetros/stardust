@@ -3,6 +3,11 @@ import type { ManyItems } from '../../global/domain/types'
 import type { FileStorageFolderPath, SignedUploadUrl } from '../domain/structures'
 import type { FilesListingParams } from '../types'
 
+export type StoredFileMetadata = {
+  mimeType: string
+  size: number
+}
+
 export interface FileStorageProvider {
   upload(folder: FileStorageFolderPath, file: File): Promise<File>
   uploadMany(folder: FileStorageFolderPath, files: File[]): Promise<File[]>
@@ -13,4 +18,8 @@ export interface FileStorageProvider {
   findFile(folder: FileStorageFolderPath, fileName: Text): Promise<File | null>
   listFiles(params: FilesListingParams): Promise<ManyItems<File>>
   removeFile(folder: FileStorageFolderPath, fileName: Text): Promise<void>
+  getFileMetadata(
+    folderPath: FileStorageFolderPath,
+    fileName: Text,
+  ): Promise<StoredFileMetadata | null>
 }
