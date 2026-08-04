@@ -1,0 +1,93 @@
+import { FeedbackReportsFaker } from '../../domain/entities/fakers/FeedbackReportsFaker'
+import { SendFeedbackMessageUseCase } from '../SendFeedbackMessageUseCase'
+import type { FeedbackReportsRepository } from '../../interfaces/FeedbackReportsRepository'
+import type { FeedbackMessagesRepository } from '../../interfaces/FeedbackMessagesRepository'
+import type { Broker } from '#global/interfaces/Broker'
+import type { FileStorageProvider } from '#storage/interfaces/FileStorageProvider'
+
+describe('SendFeedbackMessageUseCase fixes', () => {
+  const userId = '11111111-1111-4111-8111-111111111111'
+  const report = FeedbackReportsFaker.fake({
+    author: { id: userId },
+    adminMessageCount: 1,
+  })
+
+  it('looks up attachment metadata using the UUID filename, not originalName', async () => {
+    const getFileMetadata = jest.fn().mockResolvedValue({
+      mimeType: 'image/png',
+      size: 10,
+    })
+    const repository = {
+      findById: jest.fn().mockResolvedValue(report),
+      findAuthorEmail: jest.fn().mockResolvedValue({ value: 'user@example.com' }),
+      save: jest.fn().mockResolvedValue(undefined),
+    } as unknown as FeedbackReportsRepository
+    const add = jest.fn().mockImplementation((message) => message)
+    const addAttachments = jest.fn().mockResolvedValue(undefined)
+    const messages = {
+      findById: jest.fn().mockResolvedValue(null),
+      add,
+      addAttachments,
+    } as unknown as FeedbackMessagesRepository
+    const publish = jest.fn()
+    const broker = { publish } as unknown as Broker
+    const storage = { getFileMetadata } as unknown as FileStorageProvider
+    const useCase = new SendFeedbackMessageUseCase(repository, messages, broker, storage)
+    const reportId = report.id.value
+    const messageId = crypto.randomUUID()
+    const fileId = crypto.randomUUID()
+
+    await useCase.execute({
+      feedbackReportId: reportId,
+      actor: { accountId: userId, role: 'admin' },
+      messageId,
+      content: 'Resposta',
+      attachments: [
+        {
+          id: crypto.randomUUID(),
+          storageKey: `images/feedback-messages/${reportId}/${messageId}/${fileId}.png`,
+          originalName: 'evidence from user.png',
+          mimeType: 'image/png',
+          size: 10,
+        },
+      ],
+    })
+
+    expect(getFileMetadata).toHaveBeenCalledWith(
+      expect.objectContaining({
+        value: `images/feedback-messages/${reportId}/${messageId}`,
+      }),
+      expect.objectContaining({ value: `${fileId}.png` }),
+    )
+    expect(add.mock.invocationCallOrder[0]).toBeLessThan(
+      publish.mock.invocationCallOrder[0],
+    )
+    expect(addAttachments).toHaveBeenCalled()
+  })
+
+  it('does not let a regular user request a status change', async () => {
+    const repository = {
+      findById: jest.fn().mockResolvedValue(report),
+      save: jest.fn(),
+    } as unknown as FeedbackReportsRepository
+    const messages = {
+      findById: jest.fn(),
+      add: jest.fn(),
+      addAttachments: jest.fn(),
+    } as unknown as FeedbackMessagesRepository
+    const broker = { publish: jest.fn() } as unknown as Broker
+    const useCase = new SendFeedbackMessageUseCase(repository, messages, broker)
+
+    await expect(
+      useCase.execute({
+        feedbackReportId: report.id.value,
+        actor: { accountId: userId, role: 'user' },
+        messageId: crypto.randomUUID(),
+        content: 'Resposta do usuário',
+        attachments: [],
+        targetStatus: 'closed',
+      }),
+    ).rejects.toThrow('Somente administradores')
+    expect(messages.add).not.toHaveBeenCalled()
+  })
+})
