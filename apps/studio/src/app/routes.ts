@@ -12,6 +12,7 @@ export default [
     route(ROUTES.challenging.challenges, 'routes/ChallengesRoute.tsx'),
     route(ROUTES.challenging.sources, 'routes/ChallengeSourcesRoute.tsx'),
     route(ROUTES.reporting.feedback, 'routes/FeedbackReportsRoute.tsx'),
+    route(ROUTES.reporting.feedbackDetail(), 'routes/FeedbackReportDetailRoute.tsx'),
     route(ROUTES.lesson.questions(), 'routes/LessonQuestionsRoute.tsx'),
     route(ROUTES.lesson.story(), 'routes/LessonStoryRoute.tsx'),
     route(ROUTES.shop.insignias, 'routes/InsigniasRoute.tsx'),

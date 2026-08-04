@@ -3,7 +3,7 @@ import { Icon } from '../../../components/Icon'
 import { NavigationLink } from '../NavigationLink'
 import { NavigationTitle } from './NavigationTitle'
 
-export const SidebarView = () => {
+export const SidebarView = ({ unreadCount = 0 }: { unreadCount?: number }) => {
   return (
     <aside className='w-48 bg-zinc-950 border-r border-zinc-800 flex flex-col py-6 px-4 gap-6 text-zinc-200'>
       <nav className='flex flex-col gap-2'>
@@ -93,7 +93,17 @@ export const SidebarView = () => {
           href={ROUTES.reporting.feedback}
           icon={<Icon name='feedback' size={15} />}
         >
-          Feedbacks
+          <span className='flex w-full items-center justify-between gap-2'>
+            Feedbacks
+            {unreadCount > 0 && (
+              <span
+                title={`${unreadCount} não lidos`}
+                className='rounded-full bg-amber-400 px-1.5 py-0.5 text-[10px] font-bold text-zinc-950'
+              >
+                {unreadCount}
+              </span>
+            )}
+          </span>
         </NavigationLink>
       </div>
     </aside>
