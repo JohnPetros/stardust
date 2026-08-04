@@ -8,12 +8,18 @@ import { ENV } from '@/constants'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 import {
   SendFeedbackNotificationJob,
+  SendFeedbackReplyDiscordJob,
   SendPlanetCompletedNotificationJob,
   SendSpaceCompletedNotificationJob,
   SendChallengePostedNotificationJob,
   SendUserCreatedNotificationJob,
 } from '@/queue/jobs/notification'
 import { DiscordNotificationService } from '@/rest/services'
+import { ResendEmailProvider } from '@/provision/email/resend'
+import {
+  SendFeedbackReportReplyEmailJob,
+  type FeedbackReplyEmailEventPayload,
+} from '@/queue/jobs/notification'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestFunctions } from './InngestFunctions'
 import { eventType } from './InngestFunctions'
@@ -31,6 +37,25 @@ type SpaceCompletedPayload = EventPayload<typeof SpaceCompletedEvent>
 type FeedbackReportSentPayload = EventPayload<typeof FeedbackReportSentEvent>
 type ChallengePostedPayload = EventPayload<typeof ChallengePostedEvent>
 type UserCreatedPayload = EventPayload<typeof UserCreatedEvent>
+
+const feedbackReplyEmailSchema = z.object({
+  recipientEmail: emailSchema,
+  subject: stringSchema.optional(),
+  preview: stringSchema,
+  reply: stringSchema,
+  conversationUrl: stringSchema,
+  isClosed: z.boolean().optional(),
+  idempotencyKey: stringSchema,
+})
+
+const feedbackReplyDiscordSchema = z.object({
+  reportId: idSchema,
+  messageId: idSchema,
+  userName: stringSchema.optional(),
+  preview: stringSchema.optional(),
+  hasAttachments: z.boolean().optional(),
+  conversationUrl: stringSchema.optional(),
+})
 
 export class NotificationFunctions extends InngestFunctions {
   private createCreateUserFunction() {
@@ -178,6 +203,47 @@ export class NotificationFunctions extends InngestFunctions {
     )
   }
 
+  private createSendFeedbackReplyEmailFunction() {
+    return this.createFunction(
+      {
+        id: SendFeedbackReportReplyEmailJob.KEY,
+        onFailure: this.handleJobFailure(SendFeedbackReportReplyEmailJob.name),
+        triggers: {
+          event: eventType('feedback.message.created', {
+            schema: feedbackReplyEmailSchema,
+          }),
+        },
+      },
+      async (context) => {
+        const amqp = new InngestAmqp<FeedbackReplyEmailEventPayload>(context)
+        const job = new SendFeedbackReportReplyEmailJob(
+          new ResendEmailProvider(new AxiosRestClient()),
+        )
+        return await job.handle(amqp)
+      },
+    )
+  }
+
+  private createSendFeedbackReplyDiscordFunction() {
+    return this.createFunction(
+      {
+        id: SendFeedbackReplyDiscordJob.KEY,
+        onFailure: this.handleJobFailure(SendFeedbackReplyDiscordJob.name),
+        triggers: {
+          event: eventType('feedback.user.message.created', {
+            schema: feedbackReplyDiscordSchema,
+          }),
+        },
+      },
+      async (context) => {
+        const job = new SendFeedbackReplyDiscordJob(
+          new DiscordNotificationService(new AxiosRestClient(ENV.discordWebhookUrl)),
+        )
+        return await job.handle(new InngestAmqp(context))
+      },
+    )
+  }
+
   getFunctions() {
     return [
       this.createCreateUserFunction(),
@@ -185,6 +251,8 @@ export class NotificationFunctions extends InngestFunctions {
       this.createSendFeedbackNotificationFunction(),
       this.createSendChallengePostedNotificationFunction(),
       this.createSendUserCreatedNotificationFunction(),
+      this.createSendFeedbackReplyEmailFunction(),
+      this.createSendFeedbackReplyDiscordFunction(),
     ]
   }
 }

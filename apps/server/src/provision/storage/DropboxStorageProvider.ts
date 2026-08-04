@@ -41,9 +41,38 @@ export class DropboxStorageProvider implements FileStorageProvider {
   }
 
   async upload(folder: FileStorageFolderPath, file: File): Promise<File> {
-    const fullPath = this.buildStoragePath(folder, file)
+    const fullPath = this.buildStoragePath(folder, file.name)
 
     return await this.uploadFile(fullPath, file)
+  }
+
+  async getFileMetadata(
+    folderPath: FileStorageFolderPath,
+    fileName: Text,
+  ): Promise<{ mimeType: string; size: number } | null> {
+    const path = this.buildStoragePath(folderPath, fileName.value)
+
+    try {
+      const accessToken = await this.fetchAccessToken()
+      this.dropbox = new Dropbox({ accessToken })
+
+      const response = await this.dropbox.filesGetMetadata({ path })
+
+      if (response.result['.tag'] !== 'file') {
+        return null
+      }
+
+      return {
+        mimeType: 'application/octet-stream',
+        size: response.result.size,
+      }
+    } catch (error) {
+      if (this.isFileNotFoundError(error)) {
+        return null
+      }
+
+      this.handleError(error)
+    }
   }
 
   private async uploadFile(fullPath: string, file: File): Promise<File> {
@@ -61,8 +90,8 @@ export class DropboxStorageProvider implements FileStorageProvider {
     }
   }
 
-  private buildStoragePath(folder: FileStorageFolderPath, file: File): string {
-    return `/${DropboxStorageProvider.INTERNAL_FOLDER_NAME}/${folder.value}/${file.name}`
+  private buildStoragePath(folder: FileStorageFolderPath, fileName: string): string {
+    return `/${DropboxStorageProvider.INTERNAL_FOLDER_NAME}/${folder.value}/${fileName}`
   }
 
   private buildFileStorageBackupPath(
@@ -164,6 +193,38 @@ export class DropboxStorageProvider implements FileStorageProvider {
       error !== null &&
       'status' in error &&
       error.status === 429
+    )
+  }
+
+  private isFileNotFoundError(error: unknown): boolean {
+    if (typeof error !== 'object' || error === null || !('error' in error)) {
+      return (
+        typeof error === 'object' &&
+        error !== null &&
+        'status' in error &&
+        error.status === 404
+      )
+    }
+
+    const responseError = error.error
+
+    if (
+      typeof responseError !== 'object' ||
+      responseError === null ||
+      !('error' in responseError)
+    ) {
+      return false
+    }
+
+    const pathError = responseError.error
+
+    return (
+      typeof pathError === 'object' &&
+      pathError !== null &&
+      '.tag' in responseError &&
+      responseError['.tag'] === 'path' &&
+      '.tag' in pathError &&
+      pathError['.tag'] === 'not_found'
     )
   }
 

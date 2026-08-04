@@ -1,6 +1,7 @@
 import {
   DeleteObjectCommand,
   GetObjectCommand,
+  HeadObjectCommand,
   ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
@@ -144,6 +145,29 @@ export class S3FileStorageProvider implements FileStorageProvider {
       return await this.getFile(folder, fileName)
     } catch (error) {
       this.handleError(error, `finding file ${fileName.value} in ${folder.value}`)
+    }
+  }
+
+  async getFileMetadata(
+    folderPath: FileStorageFolderPath,
+    fileName: Text,
+  ): Promise<{ mimeType: string; size: number } | null> {
+    const key = this.buildKey(folderPath, fileName)
+
+    try {
+      const response = await this.client.send(
+        new HeadObjectCommand({ Bucket: this.bucketName, Key: key }),
+      )
+
+      if (response.ContentLength === undefined) return null
+
+      return {
+        mimeType: response.ContentType ?? 'application/octet-stream',
+        size: response.ContentLength,
+      }
+    } catch (error) {
+      if (this.isNotFoundError(error)) return null
+      this.handleError(error, `reading metadata for ${key}`)
     }
   }
 

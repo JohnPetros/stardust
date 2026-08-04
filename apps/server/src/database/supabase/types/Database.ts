@@ -1664,7 +1664,12 @@ export type Database = {
           created_at: string
           id: string
           intent: Database['public']['Enums']['feedback_intent']
+          last_activity_at: string
+          last_user_message_at: string | null
           screenshot: string | null
+          status: string
+          studio_read_at: string | null
+          title: string
           user_id: string
         }
         Insert: {
@@ -1672,7 +1677,12 @@ export type Database = {
           created_at?: string
           id?: string
           intent: Database['public']['Enums']['feedback_intent']
+          last_activity_at?: string
+          last_user_message_at?: string | null
           screenshot?: string | null
+          status?: string
+          studio_read_at?: string | null
+          title?: string
           user_id: string
         }
         Update: {
@@ -1680,7 +1690,12 @@ export type Database = {
           created_at?: string
           id?: string
           intent?: Database['public']['Enums']['feedback_intent']
+          last_activity_at?: string
+          last_user_message_at?: string | null
           screenshot?: string | null
+          status?: string
+          studio_read_at?: string | null
+          title?: string
           user_id?: string
         }
         Relationships: [
@@ -1703,6 +1718,79 @@ export type Database = {
             columns: ['user_id']
             isOneToOne: false
             referencedRelation: 'users_view'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      feedback_messages: {
+        Row: {
+          author_id: string
+          author_role: string
+          content: string
+          created_at: string
+          id: string
+          report_id: string
+        }
+        Insert: {
+          author_id: string
+          author_role: string
+          content: string
+          created_at?: string
+          id: string
+          report_id: string
+        }
+        Update: {
+          author_id?: string
+          author_role?: string
+          content?: string
+          created_at?: string
+          id?: string
+          report_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'feedback_messages_report_id_fkey'
+            columns: ['report_id']
+            isOneToOne: false
+            referencedRelation: 'feedback_reports'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      feedback_message_attachments: {
+        Row: {
+          id: string
+          message_id: string
+          mime_type: string
+          original_name: string
+          position: number
+          size: number
+          storage_key: string
+        }
+        Insert: {
+          id: string
+          message_id: string
+          mime_type: string
+          original_name: string
+          position: number
+          size: number
+          storage_key: string
+        }
+        Update: {
+          id?: string
+          message_id?: string
+          mime_type?: string
+          original_name?: string
+          position?: number
+          size?: number
+          storage_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'feedback_message_attachments_message_id_fkey'
+            columns: ['message_id']
+            isOneToOne: false
+            referencedRelation: 'feedback_messages'
             referencedColumns: ['id']
           },
         ]
@@ -3120,6 +3208,47 @@ export type Database = {
       }
     }
     Functions: {
+      change_feedback_report_status: {
+        Args: { p_request: Json }
+        Returns: Json
+      }
+      list_feedback_reports: {
+        Args: {
+          p_created_at_end?: string | null
+          p_created_at_start?: string | null
+          p_intent?: Database['public']['Enums']['feedback_intent'] | null
+          p_items_per_page?: number
+          p_page?: number
+          p_search?: string | null
+          p_status?: string | null
+        }
+        Returns: {
+          admin_message_count: number
+          author_email: string
+          author_name: string
+          author_slug: string
+          avatar_image: string | null
+          avatar_name: string | null
+          content: string
+          created_at: string
+          id: string
+          intent: Database['public']['Enums']['feedback_intent']
+          is_unread: boolean
+          last_activity_at: string
+          last_user_message_at: string | null
+          screenshot: string | null
+          summary_closed: number
+          summary_open: number
+          summary_total: number
+          summary_unread: number
+          status: string
+          studio_read_at: string | null
+          title: string
+          total_count: number
+          preview: string
+          user_id: string
+        }[]
+      }
       count_comments_upvotes: {
         Args: { '': Database['public']['Tables']['comments']['Row'] }
         Returns: {

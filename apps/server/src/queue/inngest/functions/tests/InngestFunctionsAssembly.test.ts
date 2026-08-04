@@ -48,8 +48,8 @@ describe('Inngest function assembly', () => {
 
     const functions = instance.getFunctions()
 
-    expect(functions).toHaveLength(13)
-    expect(createFunction).toHaveBeenCalledTimes(13)
+    expect(functions).toHaveLength(16)
+    expect(createFunction).toHaveBeenCalledTimes(16)
   })
 
   it('should assemble challenging functions', () => {
@@ -88,8 +88,8 @@ describe('Inngest function assembly', () => {
 
     const functions = instance.getFunctions()
 
-    expect(functions).toHaveLength(5)
-    expect(createFunction).toHaveBeenCalledTimes(5)
+    expect(functions).toHaveLength(7)
+    expect(createFunction).toHaveBeenCalledTimes(7)
   })
 
   it('should assemble profile functions', () => {
