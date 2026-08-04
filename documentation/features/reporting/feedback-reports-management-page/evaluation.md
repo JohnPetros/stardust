@@ -4,7 +4,7 @@ spec: ./spec.md
 spec_revision: 4
 status: in_progress
 base_commit: cd927d32bcbc10811c222bc0e1fa22744dd1d60e
-evaluated_commit: cd927d32bcbc10811c222bc0e1fa22744dd1d60e
+evaluated_commit: 8ed1e7be8
 last_updated_at: 2026-08-04
 ---
 
@@ -40,6 +40,21 @@ legada em bancos que já a tenham criado.
   feedback. Este bloqueio permanece explícito e não é tratado como sucesso.
 - Evidências automatizadas, de runtime e visuais permanecem separadas; a
   validação manual autenticada não é substituída por testes unitários ou mocks.
+
+## Preflight local antes do PR
+
+- `npm run check:code`: passou com warnings preexistentes nos workspaces.
+- `npm run check:types`: passou; o Studio emitiu somente o aviso de versão do
+  Node exigida pelo react-router.
+- `npm run check:architecture`: passou sem violações (3.617 módulos e 6.465
+  dependências).
+- `npm run test:unit`: a execução global inicial falhou em uma expectativa
+  obsoleta de `family: 4` no teste de opções Redis; essa expectativa foi alinhada
+  ao provider IPv4/IPv6 no commit `🧪 test(server): align Redis option expectations`.
+  A suíte completa não foi repetida após o ajuste.
+- Teste focado `buildRedisOptions.test.ts`: 2/2 passou após a correção.
+- A validação manual autenticada do Studio continua bloqueada pelo encerramento
+  do transporte Playwright, conforme F6-T3; nenhum sucesso foi declarado.
 
 ## Escopo avaliado
 
