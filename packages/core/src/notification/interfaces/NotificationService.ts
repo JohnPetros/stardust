@@ -4,6 +4,15 @@ import type { FeedbackReportSentEvent } from '../../reporting/domain/events/Feed
 import type { ChallengePostedEvent } from '#challenging/domain/events/ChallengePostedEvent'
 import type { UserCreatedEvent } from '#profile/domain/events/UserCreatedEvent'
 
+export type FeedbackReplyDiscordPayload = {
+  reportId: string
+  messageId: string
+  userName?: string
+  preview?: string
+  hasAttachments?: boolean
+  conversationUrl?: string
+}
+
 export interface NotificationService {
   sendPlanetCompletedNotification(
     userSlug: string,
@@ -20,6 +29,9 @@ export interface NotificationService {
   ): Promise<RestResponse>
   sendFeedbackReportNotification(
     payload: EventPayload<typeof FeedbackReportSentEvent>,
+  ): Promise<RestResponse>
+  sendFeedbackReplyNotification?(
+    payload: FeedbackReplyDiscordPayload,
   ): Promise<RestResponse>
   sendChallengePostedNotification(
     payload: EventPayload<typeof ChallengePostedEvent>,

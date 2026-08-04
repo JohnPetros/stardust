@@ -74,6 +74,15 @@ export class FileStorageFolderPath {
     return FileStorageFolderPath.createAsImagesFeedbackReports()
   }
 
+  static createAsFeedbackMessages(
+    feedbackReportId: string,
+    feedbackMessageId: string,
+  ): FileStorageFolderPath {
+    return FileStorageFolderPath.create(
+      `images/feedback-messages/${feedbackReportId}/${feedbackMessageId}`,
+    )
+  }
+
   get isStory(): Logical {
     return Logical.create(this.value === 'images/story' || this.value === 'audios/story')
   }
@@ -85,6 +94,20 @@ export class FileStorageFolderPath {
   private static isFileStorageFolderPathValue(
     value: string,
   ): value is FileStorageFolderPathValue {
+    if (value.startsWith('images/feedback-messages/')) {
+      const [, , reportId, messageId] = value.split('/')
+      const uuidPattern =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+      if (
+        reportId &&
+        messageId &&
+        uuidPattern.test(reportId) &&
+        uuidPattern.test(messageId)
+      ) {
+        return true
+      }
+    }
+
     new StringValidation(value)
       .oneOf([
         'images/story',

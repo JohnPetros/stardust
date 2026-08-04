@@ -1,4 +1,5 @@
 import { Logical } from '#global/domain/structures/Logical'
+import { AppError } from '#global/domain/errors/AppError'
 
 export type FeedbackIntentValue = 'bug' | 'idea' | 'other'
 
@@ -7,7 +8,7 @@ export class FeedbackIntent {
 
   static create(value: string): FeedbackIntent {
     if (!FeedbackIntent.isValid(value)) {
-      throw new Error(`Invalid feedback intent: ${value}`)
+      throw new AppError(`Invalid feedback intent: ${value}`)
     }
 
     return new FeedbackIntent(value as FeedbackIntentValue)
