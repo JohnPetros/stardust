@@ -14,7 +14,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@react-email/components": "^1.0.12"
+    "@react-email/components": "^1.0.12",
+    "@react-email/render": "^2.1.0"
   },
   "devDependencies": {
     "@stardust/typescript-config": "*",
