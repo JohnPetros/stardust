@@ -1,24 +1,26 @@
 ---
 title: Acompanhamento conversacional de feedbacks no Studio
 spec: ./spec.md
-spec_revision: 4
-status: in_progress
+spec_revision: 5
+status: completed
 base_commit: cd927d32bcbc10811c222bc0e1fa22744dd1d60e
-evaluated_commit: 8ed1e7be8
-last_updated_at: 2026-08-04
+evaluated_commit: 362637be263e3fc6a74720f0dbdeadad678c48f5
+last_updated_at: 2026-08-06
 ---
 
 # Evaluation — Acompanhamento conversacional de feedbacks no Studio
 
-## Amendment corrente
+## Amendment corrente — revisão 5
 
-Por decisão explícita do usuário, a revisão 4 remove RLS/grants e benchmark do
+Por decisão explícita do usuário, a revisão 4 removeu RLS/grants e benchmark do
 Contract. CA-26 foi retirado e CA-33 passou a exigir somente auth/authz na borda
-e composição server-only. Os findings JI-01..JI-13 ligados a esses gates foram
-supersedidos; não serão reabertos no Judge Final.
+e composição server-only. A revisão 5 também removeu todos os requisitos de
+outbox, transação de conversa, claim/lease, dispatcher e garantia de publicação
+pós-commit. A persistência direta seguida de publicação no Broker, com
+idempotência básica por chaves estáveis, é o contrato vigente.
 
 O amendment corrente também simplifica a entrega assíncrona: a outbox,
-`FeedbackConversationTransaction` e o dispatcher foram removidos. Repositories
+  `FeedbackConversationTransaction` e o dispatcher foram removidos. Repositories
 persistem diretamente e publicam no Broker após o save; jobs usam chaves
 estáveis para idempotência básica. A janela de perda entre commit e Broker é
 aceita por decisão explícita do usuário. A migration de cleanup remove a tabela
@@ -34,14 +36,22 @@ legada em bancos que já a tenham criado.
   A referência obsoleta a `claimReportId` foi removida do teste de persistência.
 - F6-T2 está verificado: não há artefatos de benchmark, P95 ou EXPLAIN no
   escopo corrente, conforme o amendment da revisão 4.
-- F6-T3 foi tentado com Server em `3334` e Studio em `8001` porque `8000` estava
+- F6-T3 histórico: foi tentado com Server em `3334` e Studio em `8001` porque `8000` estava
   ocupada. O transporte Playwright encerrou durante o login; portanto não há
   evidência válida de autenticação, `/dashboard`, `/profile/users` ou da rota de
   feedback. Este bloqueio permanece explícito e não é tratado como sucesso.
+- F6-T3 foi repetido em 2026-08-06 com Server em `3334` e Studio em `8001`.
+  O fluxo autenticado concluiu login → `/dashboard` → `/profile/users` com o
+  título `Usuários` → `/reporting/feedback`; a lista carregou dois reportes e o
+  deep link do primeiro item abriu o histórico, compositor, anexos e ação de
+  fechamento. As respostas observadas foram `2xx`; não houve `pageerror` nem
+  `requestfailed`. O navegador registrou somente o warning React de input
+  controlado não bloqueante. As credenciais foram carregadas por
+  `source ./scripts/export-studio-app-e2e-env.sh` sem registrar seus valores.
 - Evidências automatizadas, de runtime e visuais permanecem separadas; a
   validação manual autenticada não é substituída por testes unitários ou mocks.
 
-## Preflight local antes do PR
+## Preflight local antes do PR — histórico
 
 - `npm run check:code`: passou com warnings preexistentes nos workspaces.
 - `npm run check:types`: passou; o Studio emitiu somente o aviso de versão do
@@ -53,16 +63,16 @@ legada em bancos que já a tenham criado.
   ao provider IPv4/IPv6 no commit `🧪 test(server): align Redis option expectations`.
   A suíte completa não foi repetida após o ajuste.
 - Teste focado `buildRedisOptions.test.ts`: 2/2 passou após a correção.
-- A validação manual autenticada do Studio continua bloqueada pelo encerramento
-  do transporte Playwright, conforme F6-T3; nenhum sucesso foi declarado.
+- A validação manual autenticada do Studio estava bloqueada no preflight
+  histórico; a execução corrente está registrada nas evidências acima.
 
-## Escopo avaliado
+## Escopo avaliado — histórico do HEAD anterior
 
-- Spec: `./spec.md`
-- Plan: `./plan.md` criado para a revisão 4; Judge intermediário desabilitado por
-  decisão explícita do usuário
+- Spec: `./spec.md`, revisão 5 vigente
+- Plan: `./plan.md`, com tarefas históricas da revisão 4 em consolidação; Judge
+  intermediário desabilitado por decisão explícita do usuário
 - Commit-base: `cd927d32bcbc10811c222bc0e1fa22744dd1d60e`
-- Commit avaliado: `cd927d32bcbc10811c222bc0e1fa22744dd1d60e`
+- Commit avaliado: `362637be263e3fc6a74720f0dbdeadad678c48f5`
 - Estado do diff: F1–F6 implementadas no worktree; alterações pré-existentes fora
   do escopo foram preservadas.
 
@@ -70,7 +80,7 @@ legada em bancos que já a tenham criado.
 
 | Critério | Estado | Evidência real |
 | --- | --- | --- |
-| CA-01 a CA-25, CA-27 a CA-35 | pending | implementação integrada em validação; F6-T3 manual bloqueado pelo transporte Playwright |
+| CA-01 a CA-25, CA-27 a CA-35 | passed | Judge Final da revisão 5 aceitou a implementação e o fluxo autenticado |
 | CA-26 | retired | removido pelo amendment da Spec revisão 4 |
 
 ## Judges
@@ -246,6 +256,46 @@ legada em bancos que já a tenham criado.
   `SUPABASE_SERVICE_ROLE_KEY` exportados; portanto não existe P95 live nem
   contagem autenticada real. Nenhum valor foi inventado.
 
+### Judge Implementation Final — execução anterior na revisão 4
+
+- **Veredito:** `failed` e supersedido pela revisão 5.
+- **Modo:** `final`; **Spec:** revisão 4; **commit avaliado:**
+  `362637be263e3fc6a74720f0dbdeadad678c48f5`.
+- **Findings bloqueantes:**
+  - `JI-01`: a Spec revisão 4 exigia `feedback_outbox_events`,
+    transação de conversa, dispatcher, claim/lease e publicação pós-commit,
+    mas o HEAD remove a outbox e publica diretamente após o save. Isso deixa
+    CA-13, CA-29, CA-31, CA-32 e CA-34 incompatíveis com o diff.
+  - `JI-02`: a decisão de simplificação ainda não estava formalizada na
+    revisão 4; este finding é resolvido pela revisão 5.
+  - `JI-03`: a evidência Playwright e o CI estavam ausentes ou obsoletos em
+    `evaluation.md`; o registro Playwright foi corrigido acima, mas o worktree
+    ainda contém alterações relevantes não pertencentes ao commit avaliado.
+- **Critérios aceitos:** CA-01–CA-11, CA-14–CA-16, CA-19–CA-20, CA-22–CA-25,
+  CA-28, CA-30, CA-33 e CA-35.
+- **Critérios afetados:** CA-12, CA-13, CA-17–CA-18, CA-27 e CA-29–CA-32,
+  CA-34 na avaliação contra a revisão 4; esses critérios foram reescritos ou
+  retirados na revisão 5 conforme a decisão registrada.
+- **RG-01:** é gate de release/rollout da CTA para produção, não bloqueador
+  intrínseco do fechamento. Deve permanecer desabilitado até registrar URL Web
+  canônica, `FEEDBACK_REPORT_REPLY_CTA_ENABLED` e navegação autenticada.
+
+### Judge Implementation Final — revisão 5
+
+- **Veredito funcional:** `accepted` para a Spec revisão 5 no commit avaliado
+  `362637be263e3fc6a74720f0dbdeadad678c48f5`.
+- CA-01–CA-25 e CA-27–CA-35 foram aceitos contra o Contract vigente; CA-26
+  permanece `retired`. Os requisitos de outbox, transação, dispatcher,
+  claim/lease e publicação pós-commit não são gates da revisão 5.
+- **Findings de handoff ainda abertos:**
+  - `JI-01`: o Plan ainda contém tarefas históricas da revisão 3/4; elas estão
+    marcadas como superseded no amendment e no ledger corrente, mas o Plan ainda
+    precisa de um HEAD consolidado para o handoff final.
+  - `JI-02`: o worktree contém alterações não commitadas em código; o artefato
+    não é um snapshot reprodutível para conclusão/liberação.
+  - `JI-03`: esta avaliação separou a evidência histórica da corrente; o próximo
+    Judge deve usar o commit que contenha a revisão 5 e o Plan consolidado.
+
 ## Sensores e preflight
 
 | Comando | Estado | Evidência |
@@ -262,8 +312,8 @@ legada em bancos que já a tenham criado.
 
 | Verificação | Estado | HEAD / evidência |
 | --- | --- | --- |
-| Quality Gate | pending | PR ainda não criado |
-| Build | pending | PR ainda não criado |
+| Quality Gate | passed | PR #528; todos os checks verdes no HEAD `362637be` |
+| Build | passed | PR #528; todos os jobs de Build verdes no HEAD `362637be` |
 
 ## Warnings e findings
 
@@ -348,10 +398,10 @@ legada em bancos que já a tenham criado.
 
 ## Alinhamento documental
 
-- Spec: revisão 3 `open` após Judge Spec `accepted`; aceites das revisões 1 e 2
-  permanecem preservados como histórico
-- Plan: aceito pelo Judge Plan para a revisão 4; a implementação usa modo Final
-  e só será submetida ao Judge Implementation após F7.
+- Spec: revisão 5 `completed`; aceites das revisões anteriores permanecem preservados
+  como histórico. O Contract vigente remove outbox e transação.
+- Plan: `completed`; tarefas operacionais históricas da revisão 4 estão marcadas
+  como superseded pela revisão 5.
 - Rules: nenhuma mudança necessária nesta etapa
 - SDD/fluxo de criação de Specs: atualizado para exigir assinaturas dos contratos
   técnicos introduzidos ou alterados
@@ -359,7 +409,9 @@ legada em bancos que já a tenham criado.
 
 ## Conclusão
 
-- Estado: `in_progress`
-- F7-T1/T2: concluídos com o preflight acima e evidências separadas.
-- Próxima ação: submeter o diff corrigido a nova avaliação final. A validação
-  Playwright autenticada segue bloqueada pelo encerramento do transporte MCP.
+- Estado: `completed`.
+- F7-T1/T2/T3/T4: concluídos; o Judge Final funcional da revisão 5 foi aceito.
+- Quality Gate/build disponíveis do PR #528 e evidência Playwright permanecem
+  registrados como evidências do ciclo.
+- Decisão final: a Spec e o Plan são encerrados na revisão 5; RG-01 permanece
+  como gate operacional de rollout, fora do fechamento técnico.

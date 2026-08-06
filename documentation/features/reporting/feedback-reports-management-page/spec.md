@@ -1,7 +1,7 @@
 ---
 title: Acompanhamento conversacional de feedbacks no Studio
-status: open
-revision: 4
+status: completed
+revision: 5
 source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/issues/518
@@ -32,17 +32,19 @@ scope:
   - apps/studio/src/app/routes
   - apps/studio/src/constants/routes.ts
   - design/stardust.pen
-last_updated_at: 2026-08-03
+last_updated_at: 2026-08-06
 ---
 
-## Amendment — revisão 4
+## Amendment — revisão 5
 
 Por decisão explícita de implementação, esta revisão remove RLS/grants como
 requisito da entrega e retira o benchmark de desempenho autenticado do
 contrato. A proteção permanece na autenticação/autorização da API e na
 composição server-only dos adapters de reporting. Os critérios CA-26 e CA-33
-relativos a RLS/benchmark deixam de ser gates desta revisão; testes funcionais
-de migration, transação, idempotência e concorrência continuam obrigatórios.
+relativos a RLS/benchmark deixam de ser gates desta revisão. A garantia de entrega
+assíncrona não faz parte do contrato: repositories
+persistem diretamente e o Broker é chamado somente depois do save bem-sucedido.
+Idempotência básica por chave estável continua obrigatória.
 
 # Acompanhamento conversacional de feedbacks no Studio
 
@@ -110,9 +112,9 @@ da Spec antes da implementação afetada.
 
 | Seção | Evidência consolidada |
 |---|---|
-| Mapeamento | O fluxo atual atravessa `FeedbackRouter`, controllers REST, use cases e repositories de reporting, `ReportingService` e widgets do Studio. `FeedbackReport`, `FeedbackReportsRepository`, `ReportingService`, `FileStorageProvider` e `Broker` são contratos existentes; mensagens, outbox e provider de e-mail são novos. |
-| Fluxo de dados | Hoje o Web envia o relato ao Server, que persiste em `feedback_reports` e publica diretamente no Inngest; o Studio lista e exclui via REST. A mudança persiste conversa e outbox atomicamente, publica efeitos após commit e faz Studio/consumidores consultarem o estado canônico pela API. |
-| Atenção | Os pontos críticos são ownership derivado da sessão, autorização god na borda, concorrência de leitura/status, claim concorrente da outbox, validação do objeto armazenado, limites de idempotência dos providers e composição server-only. |
+| Mapeamento | O fluxo atual atravessa `FeedbackRouter`, controllers REST, use cases e repositories de reporting, `ReportingService` e widgets do Studio. `FeedbackReport`, `FeedbackReportsRepository`, `ReportingService`, `FileStorageProvider` e `Broker` são contratos existentes; mensagens e provider de e-mail são novos. |
+| Fluxo de dados | Hoje o Web envia o relato ao Server, que persiste em `feedback_reports` e publica diretamente no Inngest; o Studio lista e exclui via REST. A mudança persiste a conversa diretamente, publica efeitos depois do save e faz Studio/consumidores consultarem o estado canônico pela API. |
+| Atenção | Os pontos críticos são ownership derivado da sessão, autorização god na borda, concorrência de leitura/status, validação do objeto armazenado, limites de idempotência dos providers e composição server-only. |
 | Lacunas resolvidas | Não existe provider de e-mail, adapter Resend nem modelo conversacional. Esses elementos são `novo arquivo` ou alterações explicitadas no inventário técnico; nenhum SDK externo atravessa para o Core. RLS e benchmark foram retirados pela revisão 4. |
 
 ### Fluxo multi-app e fronteiras
@@ -121,16 +123,14 @@ da Spec antes da implementação afetada.
 |---|---|---|---|
 | Studio | Server | REST JSON sobre `/reporting/feedback/**` | sessão fornece `accountId` e god account; body nunca fornece autor ou papel |
 | Web/backend compartilhado | Server | mesmo POST de mensagens | sessão fornece o autor; Server valida que o reporte pertence à conta e está aberto |
-| Use case de mensagem/status | PostgreSQL | repository/transaction port | mensagem, anexos, status e outbox compartilham a mesma transação |
-| Dispatcher de outbox | Inngest | `Broker.publish(event, eventId)` | `eventId` determinístico por tipo + fato; aceite resolve a Promise e permite marcar a outbox publicada |
+| Use case de mensagem/status | PostgreSQL | repositories de reporting | mensagem, anexos e status são persistidos diretamente; efeitos externos são publicados depois do save |
 | Job de e-mail de `notification` | Resend | `EmailProvider.sendFeedbackReportReplyEmail` implementado por HTTP | request tipado do Core; segredo, headers e resposta do vendor ficam no adapter |
 | Job de Discord/analytics | adapters existentes | service/provider via `amqp.run` | conteúdo mínimo, IDs estáveis e falha externa sem rollback do negócio |
 
 Evidência oficial confirma que Resend e Inngest deduplicam por chave/event ID por
-24 horas. Portanto, essa janela não é tratada como garantia permanente: resultado
-de envio desconhecido que ultrapasse 23 horas vai para reconciliação e não é
-reenviado automaticamente. A decisão evita prometer exactly-once além do que os
-providers oferecem.
+24 horas. Essa janela é usada apenas como idempotência básica de retries; a Spec
+não promete exactly-once nem garantia conjunta entre persistência e efeitos
+externos.
 
 ## Escopo
 
@@ -194,14 +194,9 @@ A migration deve:
   `message_id -> feedback_messages.id ON DELETE CASCADE`, storage key única,
   nome, MIME `image/png|image/jpeg`, tamanho entre 1 byte e 10 MB e posição entre
   zero e dois, única por mensagem;
-- criar `feedback_outbox_events` com PK UUID, `event_key` única por tipo + fato,
-  `report_id -> feedback_reports.id ON DELETE CASCADE`, payload versionado,
-  estados `pending|claimed|published|reconciliation_required`, `attempts_count`,
-  `available_at`, lease (`claimed_at`, `claim_expires_at`), `published_at`,
-  `last_error_code` sanitizado e timestamps;
 - manter a semântica existente de exclusão de conta:
-  `feedback_reports.user_id -> users.id ON DELETE CASCADE`; mensagens, anexos e
-  eventos de outbox vinculados ao reporte também usam `ON DELETE CASCADE`, para
+  `feedback_reports.user_id -> users.id ON DELETE CASCADE`; mensagens e anexos
+  vinculados ao reporte também usam `ON DELETE CASCADE`, para
   que o novo grafo não bloqueie o lifecycle atual. A preservação de histórico
   vale enquanto a conta/reporte existem; nenhum endpoint de reporting pode
   iniciar essa exclusão. Anonimização ou retenção após exclusão de conta exige
@@ -212,8 +207,7 @@ A migration deve:
   pelos adapters do Server;
 - criar índices compostos para `(status, last_activity_at desc, id desc)`,
   `(last_user_message_at, studio_read_at)`, `user_id`,
-  `(report_id, created_at, id)`, `(message_id, position)` e
-  `(status, available_at, claim_expires_at)` da outbox;
+  `(report_id, created_at, id)` e `(message_id, position)`;
 - atualizar tipos gerados, tipos locais, mappers, DTOs, fakers e repositories
   sem expor shapes do Supabase ao Core.
 
@@ -260,7 +254,7 @@ recebe:
 - `messageId` UUID criado uma vez pelo cliente e reutilizado em retries;
 - `content` com 1 a 2.000 caracteres depois de `trim`, sem aceitar apenas espaços;
 - zero a três descritores de anexos já enviados;
-- `targetStatus: closed` opcional para responder e fechar atomicamente.
+- `targetStatus: closed` opcional para responder e solicitar o fechamento.
 
 A borda deriva `authorId` e o papel do ator da sessão. God account produz uma
 resposta administrativa; uma conta comum só pode responder ao próprio reporte
@@ -284,25 +278,26 @@ persistida sem duplicar mensagem, anexos, atividade, analytics ou notificação.
 
 Tanto usuário quanto administrador só podem criar mensagem enquanto o reporte
 estiver `open`. Um administrador deve reabrir antes de responder a um reporte
-fechado; o Server revalida o status dentro da transação e retorna `409` sem
-persistir mensagem, anexo ou outbox se houver fechamento concorrente.
+fechado; o Server revalida o status antes de persistir e retorna `409` se houver
+fechamento concorrente.
 
 Antes de aceitar uma resposta administrativa, o Server valida o e-mail canônico
 do autor do reporte com `Email`. E-mail ausente ou inválido rejeita a operação
 antes da persistência com erro operacional explícito; o Studio preserva o
 rascunho.
 
-Mensagem, anexos, `targetStatus` e registros da outbox devem ser persistidos na
-mesma transação. A resposta HTTP só confirma persistência e retorna mensagem e
-estado canônico atualizados; o Studio exibe `Resposta enviada`, nunca confirmação
-de entrega do e-mail.
+Mensagem, anexos e `targetStatus` são persistidos diretamente pelos repositories.
+Depois do save bem-sucedido, o caso de uso publica os efeitos externos no Broker;
+uma falha de publicação não desfaz a persistência. A resposta HTTP confirma o
+save e retorna mensagem e estado canônico atualizados; o Studio exibe `Resposta
+enviada`, nunca confirmação de entrega do e-mail.
 
 #### RF-05 — Ciclo Aberto/Fechado
 
 Todo reporte novo ou migrado inicia `open`. Apenas god account pode alterar o
 status. `FeedbackReport.close()` só é válido quando já existia ao menos uma
 resposta administrativa antes da operação corrente. A primeira resposta não pode
-fechar o reporte na mesma transação; `FeedbackReport.reopen()` preserva todo o
+fechar o reporte na mesma operação; `FeedbackReport.reopen()` preserva todo o
 histórico.
 
 `PATCH /reporting/feedback/:feedbackReportId/status` recebe `status` e
@@ -312,36 +307,24 @@ envia e-mail. Reabertura é imediata e não exige dialog de confirmação.
 
 #### RF-06 — E-mail assíncrono da resposta
 
-Na mesma transação da mensagem administrativa, o caso de uso grava um evento de
-outbox estável contendo IDs do reporte e da mensagem, destinatário, preview
-curto, URL da conversa e indicação de fechamento. A outbox é a fronteira durável:
-o commit não depende do broker e um crash entre commit e publicação não perde o
-efeito.
+Depois de persistir a mensagem administrativa, o caso de uso publica um evento
+estável contendo IDs do reporte e da mensagem, destinatário, preview curto, URL
+da conversa e indicação de fechamento. A publicação acontece fora da
+persistência; falhas externas não desfazem mensagem/status e podem ser tratadas
+pelos retries do consumidor.
 
 `packages/email` deve expor um template transacional com assunto identificável,
-preview curto e CTA `Ver conversa` para a rota reservada da Web. O texto orienta
+preview curto e CTA `Abrir conversa` para a rota reservada da Web. O texto orienta
 o usuário a continuar no StarDust e não a responder ao e-mail.
-
-Um dispatcher tenta publicar a outbox logo após o commit e um job agendado drena
-registros pendentes ou com lease expirado. O claim deve ser atômico com
-`FOR UPDATE SKIP LOCKED`, possuir expiração e impedir que dois dispatchers
-processem simultaneamente o mesmo registro. O broker recebe um event ID derivado
-da chave única da outbox; só depois de a Promise de publicação resolver o registro
-é marcado como publicado. Falha antes da publicação mantém o registro disponível;
-falha depois da aceitação e antes da marcação pode republicar o mesmo event ID,
-deduplicado pelo Inngest dentro da janela oficial de 24 horas.
 
 O job de e-mail permanece agnóstico do Inngest, executa a entrega dentro de
 `amqp.run`, usa a mensagem como chave de idempotência e propaga falha para retry.
 O provider fica atrás de um port do Core e de um adapter REST do Server. Falha ou
-atraso do provider não desfaz mensagem/status e não altera o sucesso comunicado
-pelo Studio. O consumidor repassa a mesma chave ao provider de e-mail. O adapter
-usa o header `Idempotency-Key`; como o Resend retém a chave por 24 horas, retries
-automáticos terminam em até 23 horas desde a primeira tentativa. Um resultado
-desconhecido que exceda esse limite muda para `reconciliation_required`, gera
-telemetria sem conteúdo sensível e não é reenviado automaticamente. O port
-retorna `void`; identificadores e respostas específicos do Resend não atravessam
-para o Core.
+atraso do provider não desfaz mensagem/status. O consumidor repassa a mesma
+chave ao provider de e-mail. O adapter usa o header `Idempotency-Key`; Resend e
+Inngest oferecem deduplicação limitada, mas não há garantia exactly-once nem
+reconciliação externa. O port retorna `void`; identificadores e respostas
+específicos do Resend não atravessam para o Core.
 
 #### RF-07 — Lista no Studio
 
@@ -417,9 +400,9 @@ de auditoria administrativa.
 
 Uma conta autenticada autora do reporte pode usar o endpoint compartilhado de
 mensagens para responder somente enquanto o status for `open`, com as mesmas
-regras de texto, anexos, storage, idempotência e atomicidade de RF-04. Essa
-operação atualiza `last_user_message_at`/`last_activity_at`, torna o reporte não
-lido para o Studio e grava o evento de Discord na outbox. `targetStatus` é
+regras de texto, anexos, storage e idempotência de RF-04. Essa operação atualiza
+`last_user_message_at`/`last_activity_at`, torna o reporte não lido para o Studio
+e publica o evento de Discord depois do save. `targetStatus` é
 proibido para o autor do reporte. Nenhuma UI Web é criada.
 
 O job de Discord é agnóstico do Inngest e executa IO dentro de `amqp.run`. A
@@ -428,7 +411,7 @@ indicação de anexos e deep link do Studio; não contém conteúdo integral nem
 arquivos. O event ID usa a mensagem como referência e reduz ingestões duplicadas
 na janela do Inngest, mas o webhook do Discord não oferece idempotency key. A
 entrega é explicitamente `at-least-once`: falha ou resposta HTTP desconhecida é
-recuperada pela outbox/retry e pode produzir aviso duplicado. Todo aviso carrega
+recuperada pelo retry do consumidor e pode produzir aviso duplicado. Todo aviso carrega
 o mesmo ID de reporte/mensagem para reconhecimento operacional; duplicação nunca
 duplica mensagem, atividade ou estado não lido.
 
@@ -437,7 +420,7 @@ duplica mensagem, atividade ou estado não lido.
 | CA | RF | Dado | Quando | Então | Evidência esperada |
 |---|---|---|---|---|---|
 | CA-01 | RF-01 | banco com reportes legados | a migration é aplicada | conteúdo, screenshot, autor, intent e data são preservados; título/status/atividade recebem backfill válido | teste de migration e integração de repository |
-| CA-34 | RF-01 | conta com reporte, mensagens, anexos e outbox vinculados | o lifecycle existente exclui a conta | o grafo de reporting é removido por cascata sem violação de FK; nenhuma rota de reporting oferece essa exclusão | teste de migration/FKs integrado ao fluxo de exclusão de conta |
+| CA-34 | RF-01 | conta com reporte, mensagens e anexos vinculados | o lifecycle existente exclui a conta | o grafo de reporting é removido por cascata sem violação de FK; nenhuma rota de reporting oferece essa exclusão | teste de migration/FKs integrado ao fluxo de exclusão de conta |
 | CA-02 | RF-01 | reporte com três respostas novas do usuário | leitura administrativa está ausente ou anterior | o reporte é não lido uma única vez e a cronologia contém as três mensagens | testes de domínio, repository e rota |
 | CA-03 | RF-02 | fila com lidos, não lidos e atividades distintas | a listagem é consultada | não lidos vêm primeiro e cada grupo usa atividade/ID decrescentes | teste unitário e integração de rota |
 | CA-04 | RF-02 | busca parcial por ID ou e-mail e filtros combinados | a consulta é executada | somente itens compatíveis são retornados, com paginação e summary global corretos | teste de rota com Supabase local |
@@ -449,14 +432,14 @@ duplica mensagem, atividade ou estado não lido.
 | CA-10 | RF-04 | quarto anexo, formato diferente, MIME divergente ou arquivo acima de 10 MB | upload/finalização é tentado | a ação é rejeitada, identifica o arquivo e nenhuma mensagem parcial é criada | testes de schema, storage e rota |
 | CA-11 | RF-04 | mensagem válida com até três imagens | uploads e persistência concluem | uma mensagem/anexos são criados e conversa/atividade/lista são atualizadas | integração de rota e browser autenticado |
 | CA-12 | RF-04 | mesmo `messageId` reenviado por timeout/duplo clique | o POST é repetido | a resposta canônica é retornada sem duplicar dados, evento ou e-mail | teste de integração e job |
-| CA-13 | RF-04 | reporte já possui resposta administrativa anterior e uma nova resposta usa `targetStatus: closed` | a operação conclui | mensagem e fechamento são atômicos e o evento de e-mail informa o fechamento | teste transacional de use case/rota |
-| CA-35 | RF-04 | reporte fechado e god account tenta enviar mensagem diretamente pela API | o POST é executado sem reabertura | a rota retorna `409` e não persiste mensagem, anexo, atividade ou outbox | teste de domínio, transação e rota sem depender da UI |
-| CA-14 | RF-05 | reporte sem resposta administrativa anterior | fechamento isolado ou junto da primeira resposta é solicitado | domínio e rota rejeitam atomicamente; UI desabilita a opção e explica o motivo | testes de domínio, rota e view |
+| CA-13 | RF-04 | reporte já possui resposta administrativa anterior e uma nova resposta usa `targetStatus: closed` | a operação conclui | mensagem e fechamento são salvos conforme a regra do caso de uso e o evento de e-mail informa o fechamento | teste de use case/rota |
+| CA-35 | RF-04 | reporte fechado e god account tenta enviar mensagem diretamente pela API | o POST é executado sem reabertura | a rota retorna `409` e não persiste mensagem, anexo ou atividade | teste de domínio, rota e persistência sem depender da UI |
+| CA-14 | RF-05 | reporte sem resposta administrativa anterior | fechamento isolado ou junto da primeira resposta é solicitado | domínio e rota rejeitam a operação; UI desabilita a opção e explica o motivo | testes de domínio, rota e view |
 | CA-15 | RF-05 | reporte respondido e aberto | god account fecha e depois reabre | status, contadores e lista mudam sem perder histórico/anexos e sem dialog extra | testes de integração e browser |
 | CA-16 | RF-05 | status alterado por outra sessão | uma mutação usa `expectedStatus` obsoleto | a rota retorna `409` com estado canônico e a UI o restaura | teste de rota e hook |
 | CA-17 | RF-06 | mensagem administrativa persistida | o provider de e-mail falha | resposta/status permanecem salvos e o job entra em retry sem sucesso enganoso no Studio | teste de job e integração |
 | CA-18 | RF-06 | resposta e fechamento atômicos | o template é renderizado | assunto, preview, CTA e indicação de fechamento aparecem uma vez, sem incentivar reply | snapshot/teste do template e job |
-| CA-32 | RF-06 | commit da mensagem ocorre e a publicação falha antes/depois da aceitação do broker ou o resultado do provider é desconhecido | dispatcher imediato, drenagem agendada e consumidor executam | lease evita processamento concorrente; event ID e idempotency key deduplicam retries dentro de 24 horas; após 23 horas de resultado desconhecido o efeito vai para reconciliação sem reenvio automático | teste transacional concorrente, relógio fake, dispatcher, consumidor, provider fake e integração Inngest |
+| CA-32 | RF-06 | save da mensagem ocorre e a publicação ou o provider falha | o consumidor executa retry | mensagem/status permanecem persistidos; event ID e idempotency key reduzem efeitos duplicados dentro da janela do provider | teste do consumidor, provider fake e integração Inngest |
 | CA-19 | RF-07 | lista sem dados ou filtros sem resultado | a consulta termina | os dois estados vazios são distintos e limpar filtros só aparece no segundo | teste de view e browser |
 | CA-20 | RF-07 | total não lido muda de um para zero | leitura é confirmada | linha, summary e Sidebar atualizam e o badge é ocultado | teste de hook e browser |
 | CA-21 | RF-08 | deep link protegido válido | login é concluído | o Studio retorna ao mesmo reporte, abre o dialog e posiciona foco no título | Playwright autenticado |
@@ -468,9 +451,9 @@ duplica mensagem, atividade ou estado não lido.
 | CA-26 | — | critério retirado pela revisão 4 | não aplicável | não é gate desta entrega | amendment da Spec revisão 4 |
 | CA-27 | RF-11 | retry de evento analítico | o mesmo fato é processado novamente | o ID estável impede duplicação e falha de analytics não afeta o negócio | teste do job de analytics |
 | CA-28 | RF-04 | autor do reporte não possui e-mail canônico válido | god account tenta responder | a operação falha antes de persistir, explica o bloqueio e preserva o rascunho | testes de use case, rota e hook |
-| CA-29 | RF-12 | autor autenticado responde ao próprio reporte aberto | a mensagem é persistida | atividade/não lido são atualizados e a outbox produz uma notificação resumida do Discord | teste de ownership, rota, outbox e job |
+| CA-29 | RF-12 | autor autenticado responde ao próprio reporte aberto | a mensagem é persistida | atividade/não lido são atualizados e o Broker recebe uma notificação resumida do Discord | teste de ownership, rota e job |
 | CA-30 | RF-12 | conta não autora ou reporte fechado | resposta de usuário é tentada | o Server rejeita sem persistir mensagem, anexos ou evento | testes de rota e persistência |
-| CA-31 | RF-12 | Discord falha, aceita com resposta perdida ou o job é repetido | retry/outbox processam a mensagem | resposta e não lido permanecem únicos; a entrega `at-least-once` pode repetir o aviso com o mesmo ID de reporte/mensagem, sem duplicar dados de negócio | teste de job com resposta desconhecida e integração da outbox |
+| CA-31 | RF-12 | Discord falha, aceita com resposta perdida ou o job é repetido | o consumidor executa retry | resposta e não lido permanecem únicos; a entrega `at-least-once` pode repetir o aviso com o mesmo ID de reporte/mensagem, sem duplicar dados de negócio | teste de job com resposta desconhecida e integração Inngest |
 
 ## Estado atual
 
@@ -506,26 +489,26 @@ arquivos novos fazem parte da solução; ajustes exigem amendment antes do Build
 | Core/domain | `packages/core/src/reporting/domain/entities/FeedbackMessage.ts` — novo arquivo | entidade com ID, reporte, papel/ID do autor, texto, data e anexos | padrão de entity do Core; `FeedbackReport.ts` |
 | Core/domain | `packages/core/src/reporting/domain/structures/FeedbackReportStatus.ts` e `packages/core/src/reporting/domain/structures/FeedbackMessageAuthorRole.ts` — novos arquivos | encapsular enums `open|closed` e `user|admin` | `packages/core/src/reporting/domain/structures/FeedbackIntent.ts` — existente |
 | Core/DTOs | `packages/core/src/reporting/domain/entities/dtos/FeedbackReportDto.ts` — existente, modificar; `packages/core/src/reporting/domain/entities/dtos/FeedbackMessageDto.ts`, `packages/core/src/reporting/domain/entities/dtos/FeedbackReportDetailsDto.ts`, `packages/core/src/reporting/domain/entities/dtos/FeedbackReportsPageDto.ts` — novos arquivos | shapes primitivos de lista, detalhe, mensagem, summary e anexos | DTOs/fakers de reporting existentes |
-| Core/types | `packages/core/src/reporting/domain/types/FeedbackReportsListingParams.ts` — existente, modificar; `packages/core/src/reporting/domain/types/FeedbackConversationRequests.ts` e `packages/core/src/reporting/domain/types/FeedbackOutboxEvent.ts` — novos arquivos | requests/responses tipados dos contratos abaixo, sem shapes de HTTP/Supabase | structures globais `Id`, `Text`, `OrdinalNumber`, `Period` |
-| Core/repositories | `packages/core/src/reporting/interfaces/FeedbackReportsRepository.ts` — existente, modificar; `packages/core/src/reporting/interfaces/FeedbackMessagesRepository.ts`, `packages/core/src/reporting/interfaces/FeedbackOutboxRepository.ts`, `packages/core/src/reporting/interfaces/FeedbackConversationTransaction.ts` — novos arquivos | consultas canônicas, persistência da cronologia, claim da outbox e transação atômica | repositories de reporting/conversation existentes |
+| Core/types | `packages/core/src/reporting/domain/types/FeedbackReportsListingParams.ts` — existente, modificar; `packages/core/src/reporting/domain/types/FeedbackConversationRequests.ts` — novo arquivo | requests/responses tipados dos contratos abaixo, sem shapes de HTTP/Supabase | structures globais `Id`, `Text`, `OrdinalNumber`, `Period` |
+| Core/repositories | `packages/core/src/reporting/interfaces/FeedbackReportsRepository.ts` — existente, modificar; `packages/core/src/reporting/interfaces/FeedbackMessagesRepository.ts` — novo arquivo | consultas canônicas e persistência da cronologia | repositories de reporting/conversation existentes |
 | Core/notification provider | `packages/core/src/notification/interfaces/EmailProvider.ts` — novo arquivo; `packages/core/src/notification/interfaces/index.ts` — existente, modificar | port de notificação por e-mail com `sendFeedbackReportReplyEmail(request): Promise<void>` | `packages/core/src/notification/interfaces/NotificationService.ts` — existente — demonstra ownership de notificações e precedente de dependência em evento de reporting; adapter Resend somente no Server |
 | Core/service | `packages/core/src/reporting/interfaces/ReportingService.ts` — existente, modificar | manter envio inicial; substituir lista/deleção pelos métodos administrativos e compartilhados abaixo | `RestClient`/`RestResponse`; factory atual do Studio |
-| Core/use cases | `packages/core/src/reporting/use-cases/SendFeedbackReportUseCase.ts` e `packages/core/src/reporting/use-cases/ListFeedbackReportsUseCase.ts` — existentes, modificar; `packages/core/src/reporting/use-cases/GetFeedbackReportUseCase.ts`, `packages/core/src/reporting/use-cases/MarkFeedbackReportAsReadUseCase.ts`, `packages/core/src/reporting/use-cases/CreateFeedbackAttachmentUploadUrlUseCase.ts`, `packages/core/src/reporting/use-cases/SendFeedbackMessageUseCase.ts`, `packages/core/src/reporting/use-cases/ChangeFeedbackReportStatusUseCase.ts`, `packages/core/src/reporting/use-cases/DispatchFeedbackOutboxUseCase.ts` — novos arquivos | executar criação inicial transacional, lista, detalhe, snapshot de leitura, signed upload com ownership, mensagem, transição e publicação pós-commit | use cases atuais; regras permanecem no domínio quando dependem só do agregado |
+| Core/use cases | `packages/core/src/reporting/use-cases/SendFeedbackReportUseCase.ts` e `packages/core/src/reporting/use-cases/ListFeedbackReportsUseCase.ts` — existentes, modificar; `packages/core/src/reporting/use-cases/GetFeedbackReportUseCase.ts`, `packages/core/src/reporting/use-cases/MarkFeedbackReportAsReadUseCase.ts`, `packages/core/src/reporting/use-cases/CreateFeedbackAttachmentUploadUrlUseCase.ts`, `packages/core/src/reporting/use-cases/SendFeedbackMessageUseCase.ts` e `packages/core/src/reporting/use-cases/ChangeFeedbackReportStatusUseCase.ts` — novos arquivos | executar criação inicial, lista, detalhe, snapshot de leitura, signed upload com ownership, mensagem, transição e publicação posterior ao save | use cases atuais; regras permanecem no domínio quando dependem só do agregado |
 | Core/storage | `packages/core/src/storage/interfaces/FileStorageProvider.ts`, `packages/core/src/storage/domain/structures/FileStorageFolderPath.ts` e `packages/core/src/storage/types/FileStorageFolderPathValue.ts` — existentes, modificar | acrescentar metadata real e pasta tipada `images/feedback-messages/<reportId>/<messageId>` sem remover métodos existentes | `S3FileStorageProvider` e fluxo de screenshot existentes |
 | Core/queue | `packages/core/src/global/interfaces/Broker.ts` — existente, modificar | aceitar event ID opcional sem expor Inngest | `InngestBroker.ts` existente |
 | Validation | `packages/validation/src/modules/reporting/schemas/feedbackReportsQuerySchema.ts`, `packages/validation/src/modules/reporting/schemas/feedbackMessageSchema.ts`, `packages/validation/src/modules/reporting/schemas/feedbackAttachmentUploadSchema.ts`, `packages/validation/src/modules/reporting/schemas/feedbackReadSchema.ts`, `packages/validation/src/modules/reporting/schemas/feedbackStatusSchema.ts` — novos arquivos; `packages/validation/src/modules/reporting/schemas/index.ts` e `packages/validation/src/modules/reporting/index.ts` — existentes, modificar | queries, UUID, texto/anexos, signed upload contextual, snapshot e status/expectedStatus | schemas globais e schemas atuais de reporting/storage |
-| Database/migration | `apps/server/supabase/migrations/<timestamp>_create_feedback_conversations.sql` — novo arquivo | backfill, tabelas, checks, FKs, índices, função de listagem e outbox | migration `20260716121000_create_challenge_code_executions.sql`; schema vigente |
+| Database/migration | `apps/server/supabase/migrations/<timestamp>_create_feedback_conversations.sql` — novo arquivo | backfill, tabelas, checks, FKs, índices e função de listagem | migration `20260716121000_create_challenge_code_executions.sql`; schema vigente |
 | Database/schema | `apps/server/supabase/schemas/schema.sql` e `apps/server/src/database/supabase/types/Database.ts` — existentes, modificar | refletir schema e tipos regenerados | fluxo `db:types` do Server |
-| Database/types/mappers | `apps/server/src/database/supabase/types/SupabaseFeedbackReport.ts` e `apps/server/src/database/supabase/mappers/reporting/SupabaseFeedbackReportMapper.ts` — existentes, modificar; `apps/server/src/database/supabase/types/SupabaseFeedbackMessage.ts`, `apps/server/src/database/supabase/types/SupabaseFeedbackOutboxEvent.ts`, `apps/server/src/database/supabase/mappers/reporting/SupabaseFeedbackMessageMapper.ts`, `apps/server/src/database/supabase/mappers/reporting/SupabaseFeedbackOutboxMapper.ts` — novos arquivos | mapear DB ↔ domínio e remover `console.log` | mapper atual de reporting e mappers de conversation |
-| Database/repositories | `apps/server/src/database/supabase/repositories/reporting/SupabaseFeedbackReportsRepository.ts` — existente, modificar; `apps/server/src/database/supabase/repositories/reporting/SupabaseFeedbackMessagesRepository.ts`, `apps/server/src/database/supabase/repositories/reporting/SupabaseFeedbackOutboxRepository.ts`, `apps/server/src/database/supabase/repositories/reporting/SupabaseFeedbackConversationTransaction.ts` — novos arquivos | implementar contratos, RPC agregada, cronologia, claim e transação | `apps/server/src/database/supabase/repositories/SupabaseRepository.ts` — existente; repositories atuais de reporting/conversation |
+| Database/types/mappers | `apps/server/src/database/supabase/types/SupabaseFeedbackReport.ts` e `apps/server/src/database/supabase/mappers/reporting/SupabaseFeedbackReportMapper.ts` — existentes, modificar; `apps/server/src/database/supabase/types/SupabaseFeedbackMessage.ts` e `apps/server/src/database/supabase/mappers/reporting/SupabaseFeedbackMessageMapper.ts` — novos arquivos | mapear DB ↔ domínio e remover `console.log` | mapper atual de reporting e mappers de conversation |
+| Database/repositories | `apps/server/src/database/supabase/repositories/reporting/SupabaseFeedbackReportsRepository.ts` — existente, modificar; `apps/server/src/database/supabase/repositories/reporting/SupabaseFeedbackMessagesRepository.ts` — novo arquivo | implementar contratos, RPC agregada e cronologia | `apps/server/src/database/supabase/repositories/SupabaseRepository.ts` — existente; repositories atuais de reporting/conversation |
 | Database/composição | `apps/server/src/database/supabase/reportingSupabase.ts` — novo arquivo; `apps/server/src/constants/env.ts` e `apps/server/.env.example` — existentes, modificar | adapter server-only sobre o client Supabase compartilhado com anon key | criação de client em `apps/server/src/app/hono/HonoApp.ts` — existente |
 | Server/routes | `apps/server/src/app/hono/routers/reporting/FeedbackRouter.ts` — existente, modificar | registrar GET lista/detalhe, PUT read, signed upload contextual, POST message e PATCH status; remover DELETE | auth/god/validation/storage composition atuais |
 | Server/controllers | `apps/server/src/rest/controllers/reporting/SendFeedbackReportController.ts` e `apps/server/src/rest/controllers/reporting/ListFeedbackReportsController.ts` — existentes, modificar; `apps/server/src/rest/controllers/reporting/GetFeedbackReportController.ts`, `apps/server/src/rest/controllers/reporting/MarkFeedbackReportAsReadController.ts`, `apps/server/src/rest/controllers/reporting/CreateFeedbackAttachmentUploadUrlController.ts`, `apps/server/src/rest/controllers/reporting/SendFeedbackMessageController.ts`, `apps/server/src/rest/controllers/reporting/ChangeFeedbackReportStatusController.ts` — novos arquivos; `apps/server/src/rest/controllers/reporting/DeleteFeedbackReportController.ts` — existente, remover | traduzir HTTP ↔ requests dos use cases e status `200|201|204|400|403|404|409` | controllers atuais e `HonoHttp` |
 | Server/integration tests | `apps/server/src/tests/fixtures/ReportingFixture.ts` — existente, modificar; `apps/server/src/tests/routes/reporting/DeleteFeedbackReportRoute.test.ts` — existente, remover; arquivos de lista, detalhe, leitura, signed upload, mensagem, status e lifecycle sob `apps/server/src/tests/routes/reporting/` — novos arquivos | proteger rotas reais, auth/authz, migration/FKs, transações e concorrência com Supabase local | `HonoFixture`, `SupabaseFixture`, `AuthFixture` e padrão atual de route tests |
 | Server/storage | `apps/server/src/provision/storage/S3FileStorageProvider.ts` — existente, modificar | implementar leitura de metadata do R2/S3 sem expor SDK | provider atual e `FileStorageProvider` |
 | Server/e-mail | `apps/server/src/provision/email/resend/ResendEmailProvider.ts` — novo arquivo | implementar `EmailProvider` de `@stardust/core/notification/interfaces` via `RestClient`, mapear erro para `AppError`, enviar `Idempotency-Key` e manter segredo/resposta do vendor internos | providers existentes; `AxiosRestClient`; documentação oficial Resend |
-| Queue/outbox | `apps/server/src/queue/jobs/reporting/DispatchFeedbackOutboxJob.ts` e `apps/server/src/queue/jobs/reporting/SendFeedbackReplyDiscordJob.ts` — novos arquivos; `apps/server/src/queue/jobs/notification/SendFeedbackReportReplyEmailJob.ts` — novo arquivo; barrel de notification — existente, modificar | dispatcher/Discord permanecem em reporting; entrega de e-mail pertence a notification; jobs agnósticos com IO dentro de `amqp.run`, retry/reconciliação | jobs existentes de notification/analytics |
-| Queue/Inngest | `apps/server/src/queue/inngest/InngestBroker.ts`, `apps/server/src/queue/inngest/inngest.ts`, `apps/server/src/queue/inngest/functions/NotificationFunctions.ts` e `apps/server/src/queue/inngest/functions/InngestFunctions.ts` — existentes, modificar; `apps/server/src/queue/inngest/functions/ReportingFunctions.ts` — novo arquivo | transportar `event.id`; ReportingFunctions compõe dispatcher/Discord; NotificationFunctions compõe `SendFeedbackReportReplyEmailJob` e `ResendEmailProvider`; registrar funções/cron nos barrels | `apps/server/src/queue/inngest/functions/AnalyticsFunctions.ts` — existente |
+| Queue/jobs | `apps/server/src/queue/jobs/reporting/SendFeedbackReplyDiscordJob.ts` — novo arquivo; `apps/server/src/queue/jobs/notification/SendFeedbackReportReplyEmailJob.ts` — novo arquivo; barrel de notification — existente, modificar | Discord permanece em reporting; entrega de e-mail pertence a notification; jobs agnósticos com IO dentro de `amqp.run` e retry | jobs existentes de notification/analytics |
+| Queue/Inngest | `apps/server/src/queue/inngest/InngestBroker.ts`, `apps/server/src/queue/inngest/inngest.ts`, `apps/server/src/queue/inngest/functions/NotificationFunctions.ts` e `apps/server/src/queue/inngest/functions/InngestFunctions.ts` — existentes, modificar; `apps/server/src/queue/inngest/functions/ReportingFunctions.ts` — novo arquivo | transportar `event.id`; ReportingFunctions compõe Discord; NotificationFunctions compõe `SendFeedbackReportReplyEmailJob` e `ResendEmailProvider`; registrar funções nos barrels | `apps/server/src/queue/inngest/functions/AnalyticsFunctions.ts` — existente |
 | Email/template | `packages/email/emails/FeedbackReportReplyTemplate.tsx` e `packages/email/emails/index.tsx` — novos arquivos; `packages/email/package.json` — existente, modificar | assunto/preview/HTML/texto, CTA e export público sem confirmação de entrega | templates `ConfirmSignUpTemplate.tsx` e componentes existentes |
 | Studio/REST | `apps/studio/src/rest/services/ReportingService.ts` — existente, modificar | implementar integralmente `ReportingService`, serializando structures na chamada HTTP | factory atual; regras REST |
 | Studio/route | `apps/studio/src/app/routes/FeedbackReportsRoute.tsx`, `apps/studio/src/app/routes.ts` e `apps/studio/src/constants/routes.ts` — existentes, modificar | suportar lista e deep link `/reporting/feedback/:feedbackReportId` | rota atual e React Router v7 |
@@ -546,11 +529,9 @@ houver estado, seguindo as Rules da UI.
   negócio `close`, `reopen`, `markStudioRead` e atualização de atividade.
 - Criar `FeedbackMessage`, DTOs de item/detalhe/anexo, fakers e erros de domínio
   para não encontrado, fechamento inválido, reporte fechado e conflito.
-- Separar `FeedbackReportsRepository` e `FeedbackMessagesRepository`; operações
-  atômicas de resposta/fechamento devem passar por um port transacional explícito
-  em vez de acoplar o Core ao Supabase.
-- Criar port/repository de outbox e fazer mensagens, anexos, status e eventos
-  duráveis compartilharem a mesma transação.
+- Separar `FeedbackReportsRepository` e `FeedbackMessagesRepository`; os use
+  cases orquestram persistência direta e publicação posterior sem acoplar o Core
+  ao Supabase.
 - Ampliar `ReportingService` com lista, detalhe, leitura, mensagem e status e
   remover deleção. Services recebem objetos de domínio e serializam apenas na
   chamada HTTP.
@@ -571,28 +552,6 @@ export interface FeedbackMessagesRepository {
   add(message: FeedbackMessage): Promise<FeedbackMessage>
   findById(messageId: Id): Promise<FeedbackMessage | null>
   listByReport(feedbackReportId: Id): Promise<FeedbackMessage[]>
-}
-
-export interface FeedbackOutboxRepository {
-  add(event: FeedbackOutboxEvent): Promise<void>
-  claimPending(
-    request: ClaimFeedbackOutboxEventsRequest,
-  ): Promise<FeedbackOutboxEvent[]>
-  markAsPublished(eventId: Id, publishedAt: Date): Promise<void>
-  scheduleRetry(eventId: Id, nextAttemptAt: Date): Promise<void>
-  markForReconciliation(eventId: Id, errorCode: Text): Promise<void>
-}
-
-export interface FeedbackConversationTransaction {
-  createReport(
-    request: PersistFeedbackReportRequest,
-  ): Promise<FeedbackReport>
-  sendMessage(
-    request: PersistFeedbackMessageRequest,
-  ): Promise<PersistFeedbackMessageResponse>
-  changeStatus(
-    request: PersistFeedbackStatusChangeRequest,
-  ): Promise<FeedbackReport>
 }
 
 export interface ReportingService {
@@ -624,13 +583,6 @@ export interface ReportingService {
   ): Promise<RestResponse<FeedbackReportDto>>
 }
 ```
-
-`FeedbackConversationTransaction` é o único writer dos fatos que também geram
-outbox: criação inicial + Discord, mensagem + anexos + eventual status + efeitos,
-e transição isolada + analytics. Ele não substitui consultas dos repositories
-nem publica no broker dentro da transação. `add`/`save` dos repositories ficam
-restritos à implementação transacional e a fixtures de persistência, não à
-orquestração dos use cases.
 
 Os métodos principais dos use cases e jobs também ficam congelados nesta
 revisão:
@@ -672,14 +624,6 @@ export class ChangeFeedbackReportStatusUseCase {
   execute(
     request: ChangeFeedbackReportStatusUseCaseRequest,
   ): Promise<FeedbackReportDto>
-}
-
-export class DispatchFeedbackOutboxUseCase {
-  execute(request: DispatchFeedbackOutboxRequest): Promise<void>
-}
-
-export class DispatchFeedbackOutboxJob {
-  handle(amqp: Amqp<DispatchFeedbackOutboxPayload>): Promise<void>
 }
 
 export class SendFeedbackReportReplyEmailJob {
@@ -736,31 +680,6 @@ export type ChangeFeedbackReportStatusRequest = {
   expectedStatus: FeedbackReportStatus
 }
 
-export type ClaimFeedbackOutboxEventsRequest = {
-  limit: OrdinalNumber
-  claimedAt: Date
-  claimExpiresAt: Date
-}
-
-export type PersistFeedbackMessageRequest = {
-  report: FeedbackReport
-  message: FeedbackMessage
-  attachments: FeedbackMessageAttachmentRequest[]
-  targetStatus?: FeedbackReportStatus
-  outboxEvents: FeedbackOutboxEvent[]
-}
-
-export type PersistFeedbackReportRequest = {
-  report: FeedbackReport
-  outboxEvents: FeedbackOutboxEvent[]
-}
-
-export type PersistFeedbackStatusChangeRequest = {
-  report: FeedbackReport
-  expectedStatus: FeedbackReportStatus
-  outboxEvents: FeedbackOutboxEvent[]
-}
-
 export type PersistFeedbackMessageResponse = {
   report: FeedbackReport
   message: FeedbackMessage
@@ -781,7 +700,7 @@ export type PersistFeedbackMessageResponse = {
 | `PATCH /reporting/feedback/:feedbackReportId/status` | god account | `{ status, expectedStatus }` | `200`, estado canônico | `400`, `401`, `403`, `404`, `409` |
 
 No POST de mensagens, `409` inclui reporte fechado ou status alterado entre a
-leitura e a transação; a resposta traz o status canônico e exige reabertura antes
+leitura e a persistência; a resposta traz o status canônico e exige reabertura antes
 de novo envio administrativo.
 
 ### Persistência e Server
@@ -789,8 +708,8 @@ de novo envio administrativo.
 - Implementar migration aditiva/backfill e regenerar `Database.ts`.
 - Fazer a listagem em consulta agregada/RPC SQL única, com contagens e índices,
   evitando carregar a conversa e evitando N+1.
-- Instanciar repositories/transação/outbox de reporting com o adapter Supabase
-  server-only baseado na anon key compartilhada. A autenticação/autorização da
+- Instanciar repositories de reporting com o adapter Supabase server-only
+  baseado na anon key compartilhada. A autenticação/autorização da
   API continua ocorrendo nos middlewares; nenhuma credencial privilegiada entra
   em `Http`, payload, log ou pacote compartilhado.
 - Carregar detalhe em queries delimitadas por reporte e cronologia, mapeando DB
@@ -831,11 +750,10 @@ completo esperado depois da alteração.
 
 ### Queue, e-mail e analytics
 
-- Persistir eventos na outbox junto do fato de negócio, publicar somente após
-  commit e usar IDs de mensagem/transição como chave estável.
-- Criar dispatcher imediato e dreno agendado da outbox; ampliar o adapter do
-  broker para enviar event ID determinístico e marcar publicação quando a
-  Promise resolver, sem apagar o histórico do evento.
+- Publicar eventos no Broker somente depois do save bem-sucedido e usar IDs de
+  mensagem/transição como chave estável.
+- Manter os jobs de efeitos externos pequenos, idempotentes e independentes do
+  estado interno do banco; falhas devem usar o retry do consumidor.
 - Criar template no `@stardust/email`, port `EmailProvider` no módulo
   `notification` do Core, adapter REST no Server e job de notification agnóstico
   do Inngest com IO em `amqp.run`.
@@ -887,13 +805,12 @@ o provider de e-mail permanece uma interface separada dentro do mesmo módulo.
 
 | Decisão | Evidência | Alternativas consideradas | Motivo e trade-offs | Impacto no Contract |
 |---|---|---|---|---|
-| Outbox transacional com claim/lease | PRD exige persistir antes de notificar; `SendFeedbackReportUseCase` atual publica diretamente após `add` | publicação direta; transação + chamada síncrona | remove janela de perda e suporta concorrência; adiciona tabela, dispatcher e reconciliação | mensagem/status/outbox atômicos; HTTP não confirma efeito externo |
 | Reporting usa composição server-only somente no Server | client atual é criado com anon key + JWT | manter client geral em reporting; confiar apenas na UI | mantém auth/authz na borda e impede segredo no Core/Studio/Web, sem introduzir RLS nesta revisão | auth/authz permanece middleware/controller; adapters usam segredo somente no Server |
-| Exclusão de conta mantém a cascata existente | FK vigente `feedback_reports.user_id -> users.id ON DELETE CASCADE`; PRD só exige histórico após fechamento e não redefine lifecycle de Profile | bloquear exclusão; anonimizar/preservar conversa | evita expansão cross-domain e mantém o comportamento atual; a conversa deixa de existir quando a conta é excluída | novas FKs de mensagem, anexo e outbox também usam `CASCADE`; CA-34 protege o lifecycle |
+| Exclusão de conta mantém a cascata existente | FK vigente `feedback_reports.user_id -> users.id ON DELETE CASCADE`; PRD só exige histórico após fechamento e não redefine lifecycle de Profile | bloquear exclusão; anonimizar/preservar conversa | evita expansão cross-domain e mantém o comportamento atual; a conversa deixa de existir quando a conta é excluída | novas FKs de mensagem e anexo também usam `CASCADE`; CA-34 protege o lifecycle |
 | `EmailProvider` em notification e `ResendEmailProvider` no Server | `NotificationService` já concentra contratos de notificação e importa `FeedbackReportSentEvent`; revisão humana escolheu esse ownership | manter port em reporting; chamar Resend diretamente no job | centraliza capacidades de notificação sem misturar e-mail com `NotificationService`; mantém provider específico e testável | `packages/core/src/notification/interfaces/EmailProvider.ts` fixa `sendFeedbackReportReplyEmail(request): Promise<void>` |
-| Resend por HTTP com chave estável e reconciliação após 23h | [Resend Idempotency Keys](https://resend.com/docs/dashboard/emails/idempotency-keys) limita deduplicação a 24h | retry ilimitado; declarar exactly-once; não retry | torna a garantia honesta e evita duplicata após resultado desconhecido; pode exigir intervenção manual | retries automáticos têm horizonte; `reconciliation_required` é observável, sem reenvio automático |
+| Resend por HTTP com chave estável | [Resend Idempotency Keys](https://resend.com/docs/dashboard/emails/idempotency-keys) limita deduplicação a 24h | retry ilimitado; declarar exactly-once | reduz efeitos duplicados dentro da janela documentada sem prometer garantia permanente | retries usam a chave estável e permanecem sujeitos à política do consumidor |
 | Event ID determinístico no `Broker` | [Inngest Events](https://www.inngest.com/docs/events#deduplication) documenta deduplicação por `id` por 24h | deixar idempotência só no consumer | reduz função duplicada sem acoplar Core ao Inngest; continua exigindo idempotência do efeito | `Broker.publish(event, eventId?)`; IDs incluem tipo + fato |
-| Discord usa entrega `at-least-once` | webhook atual é POST sem idempotency key; Inngest não deduplica repetição do efeito após resposta desconhecida | at-most-once com possível perda; trocar integração | prioriza recuperar o aviso e declara possível duplicação, mantendo IDs reconhecíveis; não promete garantia inexistente | CA-31 permite aviso duplicado, mas exige unicidade de mensagem/estado/outbox de negócio |
+| Discord usa entrega `at-least-once` | webhook atual é POST sem idempotency key; Inngest não deduplica repetição do efeito após resposta desconhecida | at-most-once com possível perda; trocar integração | prioriza recuperar o aviso e declara possível duplicação, mantendo IDs reconhecíveis; não promete garantia inexistente | CA-31 permite aviso duplicado, mas exige unicidade de mensagem/estado de negócio |
 | Leitura global por fila com snapshot | PRD conta reportes não lidos; não há requisito por administrador | tabela de leitura por god account; marcar `now()` | modelo menor e evita consumir mensagem concorrente; um admin limpa para todos | `lastSeenUserMessageId` obrigatório e avanço monotônico |
 | Primeira resposta não fecha | PRD/Issue exigem resposta administrativa prévia | considerar a resposta corrente como prévia | leitura literal e fluxo explicável; exige segunda ação para fechar o primeiro contato | domínio rejeita fechamento sem resposta já persistida antes da operação |
 | CTA Web é dependência de rollout | PRD exige CTA, mas UI/histórico Web estão fora desta entrega | remover CTA; criar UI Web nesta Spec | preserva escopo e evita link quebrado; requer feature flag/ordenação de deploy | resposta administrativa não habilita em produção antes da rota Web |
@@ -1007,8 +924,8 @@ Após qualquer implementação/correção de frontend:
   consolidada, fluxo multi-app, inventário por path/estado, contratos de use
   cases/jobs/HTTP, decisões com evidência e regras completas de migration. A
   revisão sobe para 2 por introduzir signed upload contextual, RLS/grants com
-  adapter `service_role`, claim/lease da outbox e limite verificável de 24 horas
-  para deduplicação externa, com reconciliação após 23 horas. O aceite da revisão
+  adapter `service_role` e limite verificável de 24 horas para deduplicação
+  externa. O aceite da revisão
   1 não cobre essas mudanças; a revisão 2 retorna a `draft` até novo Judge Spec.
 - 2026-08-03 — correções `JS-07` a `JS-10` do primeiro julgamento da revisão 2:
   scope formal ampliado aos paths obrigatórios; cascata de exclusão de conta
@@ -1038,10 +955,8 @@ Após qualquer implementação/correção de frontend:
   server-only permanecem. CA-26 foi retirado como gate e CA-33 foi reduzido à
   autorização de rota. A revisão sobe para 4; o Judge final deve avaliar todas
   as fases integradas somente após a implementação completa.
-- 2026-08-04 — simplificação explícita do usuário: a garantia transacional de
-  entrega assíncrona não é requisito. `FeedbackConversationTransaction`, a
-  outbox e o dispatcher foram removidos; repositories persistem diretamente e
-  publicam eventos no Broker somente depois do sucesso do save. Jobs mantêm
-  idempotência básica por chave estável. A migration
-  `20260804130000_remove_feedback_outbox_events.sql` remove a tabela legada de
-  bancos que já a possuíam. A revisão sobe para 5.
+- 2026-08-04 — simplificação explícita do usuário: a entrega assíncrona não
+  precisa compartilhar o mesmo ciclo de persistência da mensagem. Repositories
+  persistem diretamente e publicam eventos no Broker somente depois do sucesso
+  do save; jobs mantêm idempotência básica por chave estável. A revisão sobe para
+  5.

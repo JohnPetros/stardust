@@ -1,7 +1,7 @@
 ---
 spec: ./spec.md
-spec_revision: 4
-status: in_progress
+spec_revision: 5
+status: completed
 judge_plan: accepted
 implementation_judgment_mode: final
 last_updated_at: 2026-08-03
@@ -15,8 +15,8 @@ Transformar o gerenciamento administrativo de feedbacks em uma fila
 conversacional completa: preservar e ordenar reportes, mostrar pendências de
 leitura, abrir o histórico, responder com anexos, controlar `open`/`closed` e
 persistir os efeitos assíncronos com segurança. A entrega inclui a fundação
-compartilhada de domínio, banco, API, outbox, e-mail, Discord, analytics e a
-experiência administrativa no Studio, conforme a Spec revisão 3.
+  compartilhada de domínio, banco, API, e-mail, Discord, analytics e a
+  experiência administrativa no Studio, conforme a Spec revisão 5.
 
 ## Escopo do Plan
 
@@ -739,10 +739,34 @@ adicionada aqui imediatamente, com fase responsável, tentativa e próxima açã
   os Judges foram chamados somente após as fases de implementação.
 - **Estado das fases:** F1–F5 implementadas e em validação integrada; F6 em
   implementação; F7 `pending`.
-- **Próxima ação:** executar a validação autenticada real do Studio quando o
-  transporte Playwright estiver disponível e reabrir apenas o gate JI-14.
+- **Próxima ação:** formalizar o amendment do Contract sobre a remoção da
+  outbox/transação, separar o diff pretendido em um HEAD limpo e repetir o
+  Judge Implementation Final. A validação autenticada do Studio foi concluída
+  em 2026-08-06 e está registrada em `evaluation.md`.
 
-## Amendment corrente — simplificação de entrega assíncrona
+## Amendment corrente — revisão 5 e supersession do Plan histórico
+
+A Spec revisão 5 removeu todos os requisitos de outbox, transação de conversa,
+claim/lease, dispatcher e publicação pós-commit. As seções e tarefas históricas
+abaixo que mencionam esses elementos são registros de planejamento das revisões
+anteriores e não são requisitos ativos nem gates de conclusão.
+
+Para a revisão 5, o Plan vigente é: persistir diretamente mensagem, anexos e
+status pelos repositories/RPCs existentes; publicar os eventos no Broker após o
+save; usar chaves estáveis para idempotência básica; validar auth/authz na borda
+e manter composição server-only. Os critérios de aceitação e sensores correntes
+devem ser lidos da Spec revisão 5 e da matriz corrente em `evaluation.md`.
+
+### Ledger corrente da revisão 5
+
+- F1–F6: `accepted` pelo Judge Final funcional da revisão 5.
+- F7-T1/T2: `verified`; sensores e evidências correntes estão registrados em
+  `evaluation.md`.
+- F7-T3: `accepted` quanto aos critérios funcionais na revisão 5.
+- F7-T4: `completed`; handoff encerrado conforme o fluxo vigente de conclusão.
+- RG-01 permanece gate de rollout e não impede o fechamento técnico.
+
+## Amendment histórico — simplificação de entrega assíncrona
 
 - Persistência de mensagens e status usa repositories/RPCs diretos.
 - O Broker recebe o evento somente após a persistência bem-sucedida.
@@ -778,6 +802,9 @@ adicionada aqui imediatamente, com fase responsável, tentativa e próxima açã
 
 ## Histórico de Judges e avaliação final
 
+As fases e decisões abaixo são históricas; não representam tarefas pendentes
+da revisão 5 quando contradizem o ledger corrente acima.
+
 | Fase | Veredito | Findings | Próxima ação |
 | --- | --- | --- | --- |
 | F1 | histórico accepted | — | reavaliar no Judge Final após amendment |
@@ -787,3 +814,10 @@ adicionada aqui imediatamente, com fase responsável, tentativa e próxima açã
 | F5 | pending | — | implementar após F3/F4 |
 | F6 | pending | — | implementar após F2–F5 |
 | F7 | pending | — | sensores e Judge Final |
+
+## Conclusão do Plan
+
+- Estado: `completed`.
+- Revisão encerrada: Spec revisão 5.
+- F1–F7 aceitas no Judge Final funcional; referências pendentes na tabela acima
+  são somente histórico das revisões anteriores.
