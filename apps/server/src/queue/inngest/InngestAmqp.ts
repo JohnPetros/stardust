@@ -35,7 +35,7 @@ export class InngestAmqp<Payload> implements Amqp<Payload> {
       event: eventName,
       timeout: timeOutExpression,
     })
-    if (!event) throw new AppError('Event not defined')
+    if (!event) throw new AppError('O evento não foi definido')
 
     return event.data as EventPayload
   }

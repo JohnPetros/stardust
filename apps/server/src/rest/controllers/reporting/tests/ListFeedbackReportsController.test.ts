@@ -1,6 +1,6 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 import type { Http } from '@stardust/core/global/interfaces'
-import { PaginationResponse, RestResponse } from '@stardust/core/global/responses'
+import { RestResponse } from '@stardust/core/global/responses'
 import { ListFeedbackReportsUseCase } from '@stardust/core/reporting/use-cases'
 import { FeedbackReportsFaker } from '@stardust/core/reporting/entities/fakers'
 import { ListFeedbackReportsController } from '../ListFeedbackReportsController'
@@ -18,15 +18,18 @@ describe('List Feedback Reports Controller', () => {
 
   it('should call the use case with default parameters', async () => {
     const dtos = [FeedbackReportsFaker.fakeDto()]
-    const paginationResponse = new PaginationResponse({
+    const paginationResponse = {
       items: dtos,
-      totalItemsCount: 1,
-    })
+      page: 1,
+      itemsPerPage: 10,
+      total: 1,
+      summary: { total: 1, open: 1, closed: 0, unread: 0 },
+    }
     const restResponse = mock<RestResponse>()
 
     http.getQueryParams.mockReturnValue({})
     useCase.execute.mockResolvedValue(paginationResponse)
-    http.sendPagination.mockReturnValue(restResponse)
+    http.send.mockReturnValue(restResponse)
 
     const result = await controller.handle(http)
 
@@ -38,7 +41,7 @@ describe('List Feedback Reports Controller', () => {
       sentAtStartDate: undefined,
       sentAtEndDate: undefined,
     })
-    expect(http.sendPagination).toHaveBeenCalledWith(paginationResponse)
+    expect(http.send).toHaveBeenCalledWith(paginationResponse)
     expect(result).toBe(restResponse)
   })
 
@@ -52,27 +55,31 @@ describe('List Feedback Reports Controller', () => {
       endDate: '2023-01-31',
     }
     const dtos = [FeedbackReportsFaker.fakeDto()]
-    const paginationResponse = new PaginationResponse({
+    const paginationResponse = {
       items: dtos,
-      totalItemsCount: 1,
-    })
+      page: 2,
+      itemsPerPage: 20,
+      total: 1,
+      summary: { total: 1, open: 1, closed: 0, unread: 0 },
+    }
     const restResponse = mock<RestResponse>()
 
     http.getQueryParams.mockReturnValue(params)
     useCase.execute.mockResolvedValue(paginationResponse)
-    http.sendPagination.mockReturnValue(restResponse)
+    http.send.mockReturnValue(restResponse)
 
     const result = await controller.handle(http)
 
     expect(useCase.execute).toHaveBeenCalledWith({
       page: params.page,
       itemsPerPage: params.itemsPerPage,
-      authorName: params.authorName,
+      search: params.authorName,
       intent: params.intent,
+      status: undefined,
       sentAtStartDate: params.startDate,
       sentAtEndDate: params.endDate,
     })
-    expect(http.sendPagination).toHaveBeenCalledWith(paginationResponse)
+    expect(http.send).toHaveBeenCalledWith(paginationResponse)
     expect(result).toBe(restResponse)
   })
 })

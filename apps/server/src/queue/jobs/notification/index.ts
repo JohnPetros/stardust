@@ -3,3 +3,6 @@ export { SendSpaceCompletedNotificationJob } from './SendSpaceCompletedNotificat
 export { SendFeedbackNotificationJob } from './SendFeedbackNotificationJob'
 export { SendChallengePostedNotificationJob } from './SendChallengePostedNotificationJob'
 export { SendUserCreatedNotificationJob } from './SendUserCreatedNotificationJob'
+export { SendFeedbackReportReplyEmailJob } from './SendFeedbackReportReplyEmailJob'
+export { SendFeedbackReplyDiscordJob } from '../reporting/SendFeedbackReplyDiscordJob'
+export type { FeedbackReplyEmailEventPayload } from './SendFeedbackReportReplyEmailJob'

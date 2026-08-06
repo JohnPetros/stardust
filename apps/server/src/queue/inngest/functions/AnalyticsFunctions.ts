@@ -537,6 +537,37 @@ export class AnalyticsFunctions extends InngestFunctions {
     )
   }
 
+  private createTrackFeedbackProductEventFunction(
+    eventName: string,
+    triggerName: string,
+  ) {
+    return this.createFunction(
+      {
+        id: `${TrackAnalyticsEventJob.KEY}.${triggerName}`,
+        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
+        triggers: {
+          event: eventType(eventName, {
+            schema: z.object({ reportId: idSchema, messageId: idSchema.optional() }),
+          }),
+        },
+      },
+      async (context) => {
+        const payload = context.event.data as { reportId: string; messageId?: string }
+        const amqp = new InngestAmqp(context)
+        const job = new TrackAnalyticsEventJob(
+          new PostHogAnalyticsProvider(),
+          this.toAnalyticsEventDto(
+            triggerName.replaceAll('.', ' '),
+            payload.reportId,
+            context.event.id,
+            { reportId: payload.reportId, messageId: payload.messageId },
+          ),
+        )
+        return await job.handle(amqp)
+      },
+    )
+  }
+
   getFunctions() {
     return [
       this.createTrackAccountSignedUpFunction(),
@@ -552,6 +583,18 @@ export class AnalyticsFunctions extends InngestFunctions {
       this.createTrackChallengeDeletedFunction(),
       this.createTrackShopItemPurchasedFunction(),
       this.createTrackFeedbackReportSentFunction(),
+      this.createTrackFeedbackProductEventFunction(
+        'feedback.admin.message.sent',
+        'feedback.admin.message.sent',
+      ),
+      this.createTrackFeedbackProductEventFunction(
+        'feedback.report.closed',
+        'feedback.report.closed',
+      ),
+      this.createTrackFeedbackProductEventFunction(
+        'feedback.report.reopened',
+        'feedback.report.reopened',
+      ),
     ]
   }
 }

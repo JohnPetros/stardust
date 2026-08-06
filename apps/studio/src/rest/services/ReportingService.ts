@@ -1,9 +1,18 @@
 import type { ReportingService as IReportingService } from '@stardust/core/reporting/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
-import type { FeedbackReportsListingParams } from '@stardust/core/reporting/types'
-import type { FeedbackReportDto } from '@stardust/core/reporting/entities/dtos'
+import type {
+  ChangeFeedbackReportStatusRequest,
+  CreateFeedbackAttachmentUploadRequest,
+  FeedbackReportsListingParams,
+  SendFeedbackMessageRequest,
+} from '@stardust/core/reporting/types'
+import type {
+  FeedbackReportDetailsDto,
+  FeedbackReportDto,
+  FeedbackReportsPageDto,
+} from '@stardust/core/reporting/entities/dtos'
 import type { Id } from '@stardust/core/global/structures'
-import type { PaginationResponse } from '@stardust/core/global/responses'
+import type { SignedUploadUrlDto } from '@stardust/core/storage/structures/dtos'
 import type { FeedbackReport } from '@stardust/core/reporting/entities'
 import { Datetime } from '@stardust/core/global/libs'
 
@@ -20,11 +29,24 @@ export const ReportingService = (restClient: RestClient): IReportingService => {
       if (params.itemsPerPage) {
         restClient.setQueryParam('itemsPerPage', params.itemsPerPage.value.toString())
       }
-      if (params.authorName) {
+      if (params.search) restClient.setQueryParam('search', params.search.value)
+      if (params.authorName)
         restClient.setQueryParam('authorName', params.authorName.value)
-      }
       if (params.intent) {
         restClient.setQueryParam('intent', params.intent.value)
+      }
+      if (params.status) restClient.setQueryParam('status', params.status.value)
+      if (params.createdAtPeriod?.startDate) {
+        restClient.setQueryParam(
+          'createdAtStartDate',
+          new Datetime(params.createdAtPeriod.startDate).format('YYYY-MM-DD'),
+        )
+      }
+      if (params.createdAtPeriod?.endDate) {
+        restClient.setQueryParam(
+          'createdAtEndDate',
+          new Datetime(params.createdAtPeriod.endDate).format('YYYY-MM-DD'),
+        )
       }
       if (params.sentAtPeriod?.startDate) {
         restClient.setQueryParam(
@@ -39,12 +61,57 @@ export const ReportingService = (restClient: RestClient): IReportingService => {
         )
       }
 
-      return await restClient.get<PaginationResponse<FeedbackReportDto>>(
-        '/reporting/feedback',
+      return await restClient.get<FeedbackReportsPageDto>('/reporting/feedback')
+    },
+    async getFeedbackReport(feedbackReportId: Id) {
+      return await restClient.get<FeedbackReportDetailsDto>(
+        `/reporting/feedback/${feedbackReportId.value}`,
       )
     },
-    async deleteFeedbackReport(feedbackId: Id) {
-      return await restClient.delete(`/reporting/feedback/${feedbackId.value}`)
+    async markFeedbackReportAsRead(feedbackReportId: Id, lastSeenUserMessageId: Id) {
+      return await restClient.put<void>(
+        `/reporting/feedback/${feedbackReportId.value}/read`,
+        {
+          lastSeenUserMessageId: lastSeenUserMessageId.value,
+        },
+      )
+    },
+    async createFeedbackAttachmentUploadUrl(
+      feedbackReportId: Id,
+      messageId: Id,
+      request: CreateFeedbackAttachmentUploadRequest,
+    ) {
+      return await restClient.post<SignedUploadUrlDto>(
+        `/reporting/feedback/${feedbackReportId.value}/messages/${messageId.value}/attachments/signed-upload-url`,
+        {
+          fileName: request.fileName.value,
+          mimeType: request.mimeType.value,
+          size: request.size.value,
+        },
+      )
+    },
+    async sendFeedbackMessage(feedbackReportId: Id, request: SendFeedbackMessageRequest) {
+      return await restClient.post(
+        `/reporting/feedback/${feedbackReportId.value}/messages`,
+        {
+          messageId: request.messageId.value,
+          content: request.content.value,
+          attachments: request.attachments,
+          targetStatus: request.targetStatus?.value,
+        },
+      )
+    },
+    async changeFeedbackReportStatus(
+      feedbackReportId: Id,
+      request: ChangeFeedbackReportStatusRequest,
+    ) {
+      return await restClient.patch<FeedbackReportDto>(
+        `/reporting/feedback/${feedbackReportId.value}/status`,
+        {
+          status: request.status.value,
+          expectedStatus: request.expectedStatus.value,
+        },
+      )
     },
   }
 }

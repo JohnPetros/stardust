@@ -14,6 +14,19 @@
 - Supabase Dev para interagir com o projeto Supabase de desenvolvimento 
 - Supabase Prod para interagir com o projeto Supabase de produção
 
+### Supabase Dev como padrão
+
+- Use o MCP **Supabase Dev** para consultar, diagnosticar e alterar o banco de
+  desenvolvimento remoto.
+- Não use a instância Supabase local, `psql` local ou `supabase db reset` como
+  fonte de verdade para validar a aplicação, salvo quando a tarefa solicitar
+  explicitamente um teste local de infraestrutura.
+- Para alterações de schema, aplique migrations pelo MCP Supabase Dev e valide
+  a assinatura, grants e comportamento no mesmo projeto remoto usado pelo
+  Server.
+- Se o MCP estiver desconectado, informe o bloqueio e não conclua a validação
+  dizendo que o banco local representa o ambiente Dev.
+
 ## Playwright no Studio
 
 Use o Playwright para validar o Studio em um navegador real, incluindo o login

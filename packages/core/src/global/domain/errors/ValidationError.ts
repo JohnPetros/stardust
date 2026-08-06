@@ -11,7 +11,7 @@ export class ValidationError extends AppError {
       .map((field) => `${field.name} -> ${field.messages.join(', ')}`)
       .join('; ')
 
-    super(message, 'Validation Error')
+    super(message, 'Erro de validação')
   }
 
   getErrorsMap<ErrorsMap>() {

@@ -29,7 +29,7 @@ const sharedConfig: Config = {
       },
     ],
   },
-  moduleFileExtensions: ['ts', 'js', 'mjs', 'cjs', 'json'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'mjs', 'cjs', 'json'],
   extensionsToTreatAsEsm: ['.ts'],
   transformIgnorePatterns: [
     'node_modules/(?!((@mastra|@sindresorhus|escape-string-regexp|p-map|@workflow|tokenx|ai|@ai-sdk)/))',

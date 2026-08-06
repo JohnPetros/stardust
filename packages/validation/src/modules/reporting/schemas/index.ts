@@ -1,2 +1,7 @@
 export * from './feedbackReportSchema'
 export * from './feedbackReportIntentSchema'
+export * from './feedbackReportsQuerySchema'
+export * from './feedbackMessageSchema'
+export * from './feedbackAttachmentUploadSchema'
+export * from './feedbackReadSchema'
+export * from './feedbackStatusSchema'

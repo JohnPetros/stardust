@@ -10,6 +10,7 @@ on:
       - "package-lock.json"
       - "apps/server/**"
       - "packages/core/**"
+      - "packages/email/**"
       - "packages/validation/**"
       - ".dependency-cruiser.cjs"
 

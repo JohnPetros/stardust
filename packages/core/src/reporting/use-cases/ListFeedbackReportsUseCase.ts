@@ -1,11 +1,11 @@
 import type { UseCase } from '#global/interfaces/UseCase'
-import { PaginationResponse } from '#global/responses/PaginationResponse'
-import type { FeedbackReportDto } from '../domain/entities/dtos'
+import type { FeedbackReportsPageDto } from '../domain/entities/dtos'
 import type { FeedbackReportsRepository } from '../interfaces'
 import { Text } from '#global/domain/structures/Text'
 import { Period } from '#global/domain/structures/Period'
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 import { FeedbackIntent } from '../domain/structures/FeedbackIntent'
+import { FeedbackReportStatus } from '../domain/structures/FeedbackReportStatus'
 
 type Request = {
   authorName?: string
@@ -14,18 +14,26 @@ type Request = {
   sentAtEndDate?: string
   page?: number
   itemsPerPage?: number
+  search?: string
+  status?: 'open' | 'closed'
+  createdAtStartDate?: string
+  createdAtEndDate?: string
 }
 
-type Response = Promise<PaginationResponse<FeedbackReportDto>>
+type Response = Promise<FeedbackReportsPageDto>
 
 export class ListFeedbackReportsUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: FeedbackReportsRepository) {}
 
   async execute(request: Request): Response {
-    const { items, count } = await this.repository.findMany({
-      authorName: request.authorName ? Text.create(request.authorName) : undefined,
+    return this.repository.list({
+      search:
+        request.search || request.authorName
+          ? Text.create(request.search ?? request.authorName!)
+          : undefined,
       intent: request.intent ? FeedbackIntent.create(request.intent) : undefined,
-      sentAtPeriod:
+      status: request.status ? FeedbackReportStatus.create(request.status) : undefined,
+      createdAtPeriod:
         request.sentAtStartDate && request.sentAtEndDate
           ? Period.create(request.sentAtStartDate, request.sentAtEndDate)
           : undefined,
@@ -33,13 +41,6 @@ export class ListFeedbackReportsUseCase implements UseCase<Request, Response> {
       itemsPerPage: request.itemsPerPage
         ? OrdinalNumber.create(request.itemsPerPage, 'Itens por página')
         : undefined,
-    })
-
-    return new PaginationResponse({
-      items: items.map((report) => report.dto),
-      totalItemsCount: count,
-      itemsPerPage: request.itemsPerPage,
-      page: request.page,
     })
   }
 }

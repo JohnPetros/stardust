@@ -16,7 +16,7 @@ export class RetryUserCreationController implements Controller {
     if (response.isFailure) response.throwError()
 
     const account = response.body
-    if (!account.id) throw new AppError('Account ID is required')
+    if (!account.id) throw new AppError('O identificador da conta é obrigatório')
 
     const accountName =
       account.name !== '' ? account.name : this.getFallbackAccountName(account.email)

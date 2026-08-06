@@ -32,7 +32,9 @@ export class MastraExplainCodeWorkflow implements ExplainCodeWorkflow {
       })
 
       if (result.status !== 'success') {
-        throw new AppError('Code explanation workflow did not complete successfully')
+        throw new AppError(
+          'O fluxo de explicação de código não foi concluído com sucesso',
+        )
       }
 
       return (result.result as { explanation: string }).explanation

@@ -1,1 +1,6 @@
 export { FeedbackReportSentEvent } from './FeedbackReportSentEvent'
+export { FeedbackMessageCreatedEvent } from './FeedbackMessageCreatedEvent'
+export { FeedbackAdminMessageSentEvent } from './FeedbackAdminMessageSentEvent'
+export { FeedbackUserMessageCreatedEvent } from './FeedbackUserMessageCreatedEvent'
+export { FeedbackReportClosedEvent } from './FeedbackReportClosedEvent'
+export { FeedbackReportReopenedEvent } from './FeedbackReportReopenedEvent'

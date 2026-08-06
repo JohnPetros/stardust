@@ -16,36 +16,42 @@ describe('ListFeedbackReportsUseCase', () => {
   })
 
   it('should list feedback reports successfully with empty filters', async () => {
-    const fakeReports = FeedbackReportsFaker.fakeMany(3)
+    const fakeReports = FeedbackReportsFaker.fakeMany(3).map((report) => report.dto)
     const fakeCount = 10
 
-    repository.findMany.mockResolvedValue({
+    repository.list.mockResolvedValue({
       items: fakeReports,
-      count: fakeCount,
+      page: 1,
+      itemsPerPage: 20,
+      total: fakeCount,
+      summary: { total: 10, open: 8, closed: 2, unread: 3 },
     })
 
     const request = {}
     const response = await useCase.execute(request)
 
-    expect(repository.findMany).toHaveBeenCalledTimes(1)
-    expect(repository.findMany).toHaveBeenCalledWith({
-      authorName: undefined,
+    expect(repository.list).toHaveBeenCalledTimes(1)
+    expect(repository.list).toHaveBeenCalledWith({
+      search: undefined,
       intent: undefined,
-      sentAtPeriod: undefined,
+      status: undefined,
+      createdAtPeriod: undefined,
       page: undefined,
       itemsPerPage: undefined,
     })
 
     expect(response.items).toHaveLength(3)
-    expect(response.totalItemsCount).toBe(fakeCount)
-    expect(response.items[0]).toEqual(fakeReports[0].dto)
+    expect(response.total).toBe(fakeCount)
+    expect(response.summary).toEqual({ total: 10, open: 8, closed: 2, unread: 3 })
   })
 
   it('should list feedback reports with filters', async () => {
-    const fakeReports = FeedbackReportsFaker.fakeMany(1)
-    repository.findMany.mockResolvedValue({
-      items: fakeReports,
-      count: 1,
+    repository.list.mockResolvedValue({
+      items: [],
+      page: 1,
+      itemsPerPage: 20,
+      total: 1,
+      summary: { total: 1, open: 1, closed: 0, unread: 1 },
     })
 
     const request = {
@@ -57,28 +63,31 @@ describe('ListFeedbackReportsUseCase', () => {
 
     await useCase.execute(request)
 
-    expect(repository.findMany).toHaveBeenCalledWith(
+    expect(repository.list).toHaveBeenCalledWith(
       expect.objectContaining({
-        authorName: expect.objectContaining({ value: request.authorName }),
+        search: expect.objectContaining({ value: request.authorName }),
         intent: expect.objectContaining({ value: request.intent }),
-        sentAtPeriod: expect.objectContaining({
+        createdAtPeriod: expect.objectContaining({
           startDate: expect.any(Date),
           endDate: expect.any(Date),
         }),
       }),
     )
 
-    const callArgs = repository.findMany.mock.calls[0][0]
-    expect(callArgs.authorName?.value).toBe(request.authorName)
+    const callArgs = repository.list.mock.calls[0][0]
+    expect(callArgs.search?.value).toBe(request.authorName)
     expect(callArgs.intent?.value).toBe(request.intent)
-    expect(callArgs.sentAtPeriod?.startDate.toISOString()).toContain('2024-01-01')
-    expect(callArgs.sentAtPeriod?.endDate.toISOString()).toContain('2024-01-31')
+    expect(callArgs.createdAtPeriod?.startDate.toISOString()).toContain('2024-01-01')
+    expect(callArgs.createdAtPeriod?.endDate.toISOString()).toContain('2024-01-31')
   })
 
   it('should list feedback reports with pagination', async () => {
-    repository.findMany.mockResolvedValue({
+    repository.list.mockResolvedValue({
       items: [],
-      count: 0,
+      page: 2,
+      itemsPerPage: 20,
+      total: 0,
+      summary: { total: 0, open: 0, closed: 0, unread: 0 },
     })
 
     const request = {
@@ -88,14 +97,14 @@ describe('ListFeedbackReportsUseCase', () => {
 
     await useCase.execute(request)
 
-    expect(repository.findMany).toHaveBeenCalledWith(
+    expect(repository.list).toHaveBeenCalledWith(
       expect.objectContaining({
         page: expect.any(OrdinalNumber),
         itemsPerPage: expect.any(OrdinalNumber),
       }),
     )
 
-    const callArgs = repository.findMany.mock.calls[0][0]
+    const callArgs = repository.list.mock.calls[0][0]
     expect(callArgs.page?.value).toBe(request.page)
     expect(callArgs.itemsPerPage?.value).toBe(request.itemsPerPage)
   })
@@ -116,7 +125,7 @@ describe('ListFeedbackReportsUseCase', () => {
     // Let's assume Text throws for empty string.
 
     // Actually, let's test a simpler failure case: Repository failure.
-    repository.findMany.mockRejectedValue(new Error('DB Error'))
+    repository.list.mockRejectedValue(new Error('DB Error'))
 
     await expect(useCase.execute(request)).rejects.toThrow('DB Error')
   })

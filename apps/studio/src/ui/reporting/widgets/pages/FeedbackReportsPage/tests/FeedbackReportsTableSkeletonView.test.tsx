@@ -8,9 +8,10 @@ describe('FeedbackReportsTableSkeletonView', () => {
     expect(screen.getByText('ID')).toBeInTheDocument()
     expect(screen.getByText('Autor')).toBeInTheDocument()
     expect(screen.getByText('Tipo')).toBeInTheDocument()
-    expect(screen.getByText('Data')).toBeInTheDocument()
+    expect(screen.getByText('Status')).toBeInTheDocument()
+    expect(screen.getByText('Atividade')).toBeInTheDocument()
     expect(screen.getByText('Preview')).toBeInTheDocument()
-    expect(screen.getByText('Ações')).toBeInTheDocument()
+    expect(screen.getByText('Ação')).toBeInTheDocument()
   })
 
   it('should render 5 skeleton rows', () => {

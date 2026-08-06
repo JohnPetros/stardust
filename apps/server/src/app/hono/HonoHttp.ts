@@ -133,7 +133,8 @@ export class HonoHttp<HonoContext extends Context>
   }
 
   async pass(): Promise<RestResponse<Response>> {
-    if (!this.next) throw new AppError('HonoHttp next is not defined')
+    if (!this.next)
+      throw new AppError('O próximo middleware do HonoHttp não foi definido')
 
     await this.next()
     return new RestResponse()

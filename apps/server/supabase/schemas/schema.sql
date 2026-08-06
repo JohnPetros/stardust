@@ -9,6 +9,16 @@
 -- INDEPENDENT TABLES (No foreign key dependencies)
 -- =====================================================
 
+-- Feedback conversation tables are also represented in the additive
+-- migration. IF NOT EXISTS keeps this schema safe for local resets that
+-- already include the legacy remote-schema migration.
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'feedback_intent') THEN
+    CREATE TYPE public.feedback_intent AS ENUM ('bug', 'idea', 'other');
+  END IF;
+END $$;
+
 -- 1. Cria o tipo 'challenge_difficulty_level'
 CREATE TYPE public.challenge_difficulty_level AS ENUM (
     'easy',
@@ -159,6 +169,56 @@ create table public.users (
   constraint users_rocket_id_fkey foreign KEY (rocket_id) references rockets (id)
 ) TABLESPACE pg_default;
 
+create table if not exists public.feedback_reports (
+  id uuid not null default gen_random_uuid(),
+  content text not null,
+  screenshot text,
+  created_at timestamptz not null default now(),
+  intent public.feedback_intent not null,
+  user_id character varying not null,
+  title varchar(60) not null default '',
+  status text not null default 'open' check (status in ('open', 'closed')),
+  last_activity_at timestamptz not null default now(),
+  last_user_message_at timestamptz,
+  studio_read_at timestamptz,
+  constraint feedback_reports_pkey primary key (id),
+  constraint feedback_reports_user_id_fkey foreign key (user_id)
+    references public.users(id) on update cascade on delete cascade,
+  constraint feedback_reports_title_length_check check (char_length(title) between 1 and 60)
+) TABLESPACE pg_default;
+
+create table if not exists public.feedback_messages (
+  id uuid not null,
+  report_id uuid not null references public.feedback_reports(id) on delete cascade,
+  author_role text not null check (author_role in ('user', 'admin')),
+  author_id character varying not null,
+  content text not null check (char_length(trim(content)) between 1 and 2000),
+  created_at timestamptz not null default now(),
+  constraint feedback_messages_pkey primary key (id)
+) TABLESPACE pg_default;
+
+create table if not exists public.feedback_message_attachments (
+  id uuid not null,
+  message_id uuid not null references public.feedback_messages(id) on delete cascade,
+  storage_key text not null unique,
+  original_name text not null,
+  mime_type text not null check (mime_type in ('image/png', 'image/jpeg')),
+  size bigint not null check (size between 1 and 10485760),
+  position smallint not null check (position between 0 and 2),
+  constraint feedback_message_attachments_pkey primary key (id),
+  constraint feedback_message_attachments_message_position_key unique (message_id, position)
+) TABLESPACE pg_default;
+
+create index if not exists feedback_reports_queue_idx
+  on public.feedback_reports (status, last_activity_at desc, id desc);
+create index if not exists feedback_reports_unread_idx
+  on public.feedback_reports (last_user_message_at, studio_read_at);
+create index if not exists feedback_reports_user_idx
+  on public.feedback_reports (user_id);
+create index if not exists feedback_messages_report_idx
+  on public.feedback_messages (report_id, created_at, id);
+create index if not exists feedback_message_attachments_message_idx
+  on public.feedback_message_attachments (message_id, position);
 -- =====================================================
 -- STARS TABLE (References planets)
 -- =====================================================

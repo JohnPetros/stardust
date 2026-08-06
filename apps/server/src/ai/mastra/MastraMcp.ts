@@ -30,6 +30,8 @@ export class MastraMcp<Input = unknown> implements Mcp<Input> {
       return accountIdFromExtra
     }
 
-    throw new Error('MCP accountId is required in auth context')
+    throw new Error(
+      'O identificador da conta do MCP é obrigatório no contexto de autenticação',
+    )
   }
 }

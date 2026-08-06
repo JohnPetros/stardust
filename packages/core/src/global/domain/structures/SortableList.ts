@@ -55,7 +55,7 @@ export class SortableList {
       (item) => item.originalPosition.isEqualTo(position).isTrue,
     )
 
-    if (!item) throw new AppError('No item found at the given position')
+    if (!item) throw new AppError('Nenhum item encontrado na posição informada')
 
     return item
   }

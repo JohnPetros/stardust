@@ -87,7 +87,9 @@ describe('Explain Code Controller', () => {
     expect(http.send).not.toHaveBeenCalled()
     expect(result).toBeInstanceOf(RestResponse)
     expect(result.statusCode).toBe(HTTP_STATUS_CODE.forbidden)
-    expect(result.errorMessage).toBe('Code explanation daily limit exceeded')
+    expect(result.errorMessage).toBe(
+      'O limite diário de explicações de código foi excedido',
+    )
   })
 
   it('should return forbidden when usage registration exceeds the limit after workflow success', async () => {
@@ -113,6 +115,8 @@ describe('Explain Code Controller', () => {
     expect(http.send).not.toHaveBeenCalled()
     expect(result).toBeInstanceOf(RestResponse)
     expect(result.statusCode).toBe(HTTP_STATUS_CODE.forbidden)
-    expect(result.errorMessage).toBe('Code explanation daily limit exceeded')
+    expect(result.errorMessage).toBe(
+      'O limite diário de explicações de código foi excedido',
+    )
   })
 })

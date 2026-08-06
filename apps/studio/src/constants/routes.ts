@@ -29,6 +29,7 @@ export const ROUTES = {
   },
   reporting: {
     feedback: '/reporting/feedback',
+    feedbackDetail: () => '/reporting/feedback/:feedbackReportId',
   },
   manual: {
     guide: (guide: Guide) => `/manual/guides/${guide.category.value}/${guide.id.value}`,

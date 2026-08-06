@@ -32,7 +32,7 @@ export class AuthMiddleware {
     const apiKey = http.getHeader('X-Api-Key')
 
     if (!apiKey) {
-      throw new AuthError('API key not provided')
+      throw new AuthError('A chave de API não foi informada')
     }
 
     const repository = new SupabaseApiKeysRepository(http.getSupabase())

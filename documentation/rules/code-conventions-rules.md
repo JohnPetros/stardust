@@ -113,6 +113,19 @@ userSchema.ts // objeto de validação
 
 # Barrel files
 
+## Erros internos da aplicação
+
+Erros internos da aplicação devem ser representados por `AppError` ou por uma
+classe de erro de domínio que herde de `AppError`. Não use `new Error()` nem
+`throw Error()` em código de produção; isso perde o contrato de tratamento e a
+classificação usada pela aplicação. Erros de SDK/infraestrutura devem ser
+convertidos para `AppError` na fronteira do provider ou adapter.
+
+Exceções permitidas: tipos `Error` exigidos por APIs externas (por exemplo,
+error boundaries do React) e `new Error` usado somente para fazer uma fixture
+ou matcher de teste falhar. Essas exceções não representam erros internos da
+aplicação.
+
 Um Barrel File é um arquivo (geralmente nomeado index.ts ou index.tsx) que tem a
 função de exportar múltiplos módulos de uma pasta centralizada. Em vez de
 importar cada módulo individualmente de sua respectiva localização, é possível

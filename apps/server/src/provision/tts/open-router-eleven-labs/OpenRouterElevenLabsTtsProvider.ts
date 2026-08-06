@@ -83,8 +83,7 @@ export class OpenRouterElevenLabsTtsProvider implements TtsProvider {
         lastModified: Date.now(),
       })
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error'
-      throw new AppError(`Falha ao gerar áudio com OpenRouter ElevenLabs: ${message}`)
+      throw new AppError('Falha ao gerar áudio com OpenRouter ElevenLabs')
     }
   }
 
@@ -118,7 +117,7 @@ export class OpenRouterElevenLabsTtsProvider implements TtsProvider {
   }
 
   private async buildErrorMessage(response: Response): Promise<string> {
-    const statusMessage = `OpenRouter returned ${response.status} ${response.statusText}`
+    const statusMessage = `O OpenRouter retornou o status ${response.status}`
 
     try {
       const data = (await response.clone().json()) as Record<string, unknown>
@@ -127,7 +126,7 @@ export class OpenRouterElevenLabsTtsProvider implements TtsProvider {
       if (error && typeof error === 'object' && 'message' in error) {
         const message = error.message
         if (typeof message === 'string' && message.length > 0) {
-          return `${statusMessage}. ${message}`
+          return `${statusMessage}. Não foi possível gerar o áudio.`
         }
       }
     } catch {}
@@ -135,7 +134,7 @@ export class OpenRouterElevenLabsTtsProvider implements TtsProvider {
     try {
       const text = await response.clone().text()
       if (text) {
-        return `${statusMessage}. ${text}`
+        return `${statusMessage}. Não foi possível gerar o áudio.`
       }
     } catch {}
 

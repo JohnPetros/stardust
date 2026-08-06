@@ -33,7 +33,7 @@ export class ExplainCodeController implements Controller<Schema> {
     if (remainingUses <= 0) {
       return new RestResponse({
         statusCode: HTTP_STATUS_CODE.forbidden,
-        errorMessage: 'Code explanation daily limit exceeded',
+        errorMessage: 'O limite diário de explicações de código foi excedido',
       })
     }
 
@@ -50,7 +50,7 @@ export class ExplainCodeController implements Controller<Schema> {
       if (error instanceof CodeExplanationLimitExceededError) {
         return new RestResponse({
           statusCode: HTTP_STATUS_CODE.forbidden,
-          errorMessage: 'Code explanation daily limit exceeded',
+          errorMessage: 'O limite diário de explicações de código foi excedido',
         })
       }
 

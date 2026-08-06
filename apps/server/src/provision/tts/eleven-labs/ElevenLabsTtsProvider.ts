@@ -114,8 +114,7 @@ export class ElevenLabsTtsProvider implements TtsProvider {
         lastModified: Date.now(),
       })
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error'
-      throw new AppError(`Falha ao gerar áudio com ElevenLabs: ${message}`)
+      throw new AppError('Falha ao gerar áudio com ElevenLabs')
     }
   }
 
@@ -138,7 +137,7 @@ export class ElevenLabsTtsProvider implements TtsProvider {
   }
 
   private async buildErrorMessage(response: Response): Promise<string> {
-    const statusMessage = `ElevenLabs returned ${response.status} ${response.statusText}`
+    const statusMessage = `O ElevenLabs retornou o status ${response.status}`
 
     try {
       const data = (await response.clone().json()) as Record<string, unknown>
@@ -148,7 +147,7 @@ export class ElevenLabsTtsProvider implements TtsProvider {
         const message = error.message
 
         if (typeof message === 'string' && message.length > 0) {
-          return `${statusMessage}. ${message}`
+          return `${statusMessage}. Não foi possível gerar o áudio.`
         }
       }
     } catch {}

@@ -9,11 +9,11 @@ export class NoStepAmqp<Payload> implements Amqp<Payload> {
   }
 
   async waitFor<EventPayload>(): Promise<EventPayload> {
-    throw new AppError('waitFor nao esta disponivel sem step do Inngest')
+    throw new AppError('waitFor não está disponível sem um step do Inngest')
   }
 
   async sleepFor(): Promise<void> {
-    throw new AppError('sleepFor nao esta disponivel sem step do Inngest')
+    throw new AppError('sleepFor não está disponível sem um step do Inngest')
   }
 
   getPayload(): Payload {

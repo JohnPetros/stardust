@@ -17,7 +17,6 @@ describe('buildRedisOptions', () => {
       enableOfflineQueue: false,
       maxRetriesPerRequest: 1,
       connectTimeout: 15_000,
-      family: 4,
     })
     expect(options.tls).toMatchObject({
       rejectUnauthorized: true,

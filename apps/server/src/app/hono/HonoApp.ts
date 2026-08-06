@@ -123,7 +123,7 @@ export class HonoApp {
 
       if (error instanceof ZodError)
         return context.json(
-          { title: 'Validation Error', message: error.issues },
+          { title: 'Erro de validação', message: error.issues },
           HTTP_STATUS_CODE.badRequest,
         )
 
@@ -134,8 +134,8 @@ export class HonoApp {
 
       return context.json(
         {
-          title: 'Unexpected Server Error',
-          message: error.message,
+          title: 'Erro interno do servidor',
+          message: 'Ocorreu um erro interno. Tente novamente mais tarde.',
         },
         HTTP_STATUS_CODE.serverError,
       )

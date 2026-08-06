@@ -23,7 +23,7 @@ export class ConfirmEmailController implements Controller<Schema> {
 
     if (response.isSuccessful) {
       const accountId = response.body.account.id
-      if (!accountId) throw new AppError('Account ID is required')
+      if (!accountId) throw new AppError('O identificador da conta é obrigatório')
       const event = new AccountSignedInEvent({
         accountId,
         platform: 'web',

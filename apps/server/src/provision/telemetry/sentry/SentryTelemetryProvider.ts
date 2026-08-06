@@ -12,7 +12,7 @@ export class SentryTelemetryProvider implements TelemetryProvider {
     const sentry = Sentry.init({
       dsn: ENV.sentryDsn,
     })
-    if (!sentry) throw new AppError('Failed to initialize Sentry')
+    if (!sentry) throw new AppError('Falha ao inicializar o Sentry')
 
     this.sentry = sentry
   }

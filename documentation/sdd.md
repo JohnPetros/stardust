@@ -113,6 +113,11 @@ Use somente `RF-*` e `CA-*` como IDs obrigatórios. A matriz deve relacionar
 cada `CA-*` à evidência esperada e, depois, à evidência real em
 `evaluation.md`.
 
+Toda interface, port, repository ou service criado ou alterado pela solução deve
+ter seus métodos especificados com nome, entrada e retorno. Não deixe assinaturas
+de contratos para decisão do Builder ou apenas para o Plan; detalhes internos de
+implementação continuam fora do Contract quando não afetam comportamento.
+
 Uma alteração de Contract, requisito ou escopo depois de `open` exige pausa,
 revisão da Spec, amendment, incremento de `revision` e novo Judge Spec. Uma
 alteração puramente técnica pode atualizar a solução e exigir nova avaliação de
