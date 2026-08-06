@@ -7,6 +7,7 @@ export default defineConfig((options: Options) => {
     clean: true,
     sourcemap: false,
     outDir: 'build',
+    noExternal: ['@stardust/email'],
     esbuildOptions(options) {
       options.loader = {
         ...options.loader,
