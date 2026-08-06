@@ -8,7 +8,7 @@ export class FeedbackIntent {
 
   static create(value: string): FeedbackIntent {
     if (!FeedbackIntent.isValid(value)) {
-      throw new AppError(`Invalid feedback intent: ${value}`)
+      throw new AppError(`Intenção de feedback inválida: ${value}`)
     }
 
     return new FeedbackIntent(value as FeedbackIntentValue)

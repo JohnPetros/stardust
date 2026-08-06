@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 import type { ReportingService } from '@stardust/core/reporting/interfaces'
 import type {
   FeedbackReportDto,
@@ -23,14 +23,9 @@ type Params = { reportingService: ReportingService }
 export function useFeedbackReportsPage({ reportingService }: Params) {
   const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
-  const location = useLocation()
-  const { feedbackReportId } = useParams()
   const [result, setResult] = useState<FeedbackReportsPageDto | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedReportId, setSelectedReportId] = useState<string | null>(
-    feedbackReportId ?? null,
-  )
 
   const filters = useMemo<FeedbackReportsFilters>(() => {
     const safeNumber = (value: string | null, fallback: number) => {
@@ -80,9 +75,6 @@ export function useFeedbackReportsPage({ reportingService }: Params) {
   useEffect(() => {
     void fetchReports()
   }, [fetchReports])
-  useEffect(() => {
-    if (feedbackReportId) setSelectedReportId(feedbackReportId)
-  }, [feedbackReportId])
 
   const setFilter = (key: string, value: string) => {
     const next = new URLSearchParams(searchParams)
@@ -90,13 +82,7 @@ export function useFeedbackReportsPage({ reportingService }: Params) {
     next.set('page', '1')
     setSearchParams(next)
   }
-  const closeDialog = () => {
-    setSelectedReportId(null)
-    if (location.pathname.includes('/reporting/feedback/'))
-      navigate('/reporting/feedback')
-  }
-  const openDialog = (id: string) => {
-    setSelectedReportId(id)
+  const openReport = (id: string) => {
     navigate(`/reporting/feedback/${id}`)
   }
   const clearFilters = () => setSearchParams(new URLSearchParams())
@@ -113,7 +99,6 @@ export function useFeedbackReportsPage({ reportingService }: Params) {
     filters,
     totalItemsCount: total,
     totalPages,
-    selectedReportId,
     refetch: fetchReports,
     setSearch: (value: string) => setFilter('search', value),
     setIntent: (value: string) => setFilter('intent', value),
@@ -140,8 +125,7 @@ export function useFeedbackReportsPage({ reportingService }: Params) {
       next.set('page', '1')
       setSearchParams(next)
     },
-    openDialog,
-    closeDialog,
+    openReport,
     clearFilters,
   }
 }

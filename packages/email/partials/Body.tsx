@@ -1,6 +1,9 @@
 import type { ReactNode } from 'react'
+import * as React from 'react'
 import { Body as Container, Tailwind } from '@react-email/components'
 import { Html } from '@react-email/html'
+
+void React
 
 type BodyProps = {
   children: ReactNode

@@ -32,7 +32,9 @@ export async function startNodeServer({
     }
   }
 
-  throw new Error(`Could not find an available port after ${MAX_PORT_ATTEMPTS} attempts.`)
+  throw new Error(
+    `Não foi possível encontrar uma porta disponível após ${MAX_PORT_ATTEMPTS} tentativas.`,
+  )
 }
 
 function isAddressInUseError(error: unknown): error is NodeJS.ErrnoException {

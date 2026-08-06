@@ -19,20 +19,18 @@ export class FeedbackMessage extends Entity<FeedbackMessageProps> {
   static create(dto: FeedbackMessageDto) {
     const content = dto.content.trim()
     if (content.length < 1 || content.length > 2000) {
-      throw new AppError('Feedback message content must contain 1 to 2,000 characters')
+      throw new AppError('O conteúdo da mensagem deve conter entre 1 e 2.000 caracteres')
     }
     if (dto.attachments.length > 3) {
-      throw new AppError('A feedback message accepts at most three attachments')
+      throw new AppError('Uma mensagem aceita no máximo três anexos')
     }
 
     for (const attachment of dto.attachments) {
       if (!['image/png', 'image/jpeg'].includes(attachment.mimeType)) {
-        throw new AppError('Feedback message attachments must be PNG or JPEG images')
+        throw new AppError('Os anexos da mensagem devem ser imagens PNG ou JPEG')
       }
       if (attachment.size < 1 || attachment.size > 10 * 1024 * 1024) {
-        throw new AppError(
-          'Feedback message attachments must be between 1 byte and 10 MB',
-        )
+        throw new AppError('Os anexos da mensagem devem ter entre 1 byte e 10 MB')
       }
     }
 

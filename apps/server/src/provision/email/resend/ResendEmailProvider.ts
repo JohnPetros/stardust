@@ -12,7 +12,7 @@ export class ResendEmailProvider implements EmailProvider {
     request: SendFeedbackReportReplyEmailRequest,
   ): Promise<void> {
     if (!ENV.resendApiKey || !ENV.resendFromEmail) {
-      throw new AppError('Resend email provider is not configured')
+      throw new AppError('O provider de e-mail Resend não está configurado')
     }
 
     this.restClient.setBaseUrl('https://api.resend.com')
@@ -23,13 +23,13 @@ export class ResendEmailProvider implements EmailProvider {
       from: ENV.resendFromEmail,
       to: [request.recipientEmail.value],
       subject: request.subject.value,
-      html: request.html,
-      text: request.text,
+      html: request.html.value,
+      text: request.text.value,
     })
 
     if (response.isFailure)
       throw new AppError(
-        `Resend request failed with status ${response.statusCode}: ${response.errorMessage}`,
+        `A requisição ao Resend falhou com status ${response.statusCode}`,
       )
   }
 }

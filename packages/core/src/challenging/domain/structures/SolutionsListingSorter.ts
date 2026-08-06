@@ -8,7 +8,7 @@ export class SolutionsListingSorter {
 
   static create(value: string) {
     if (!SolutionsListingSorter.isListingSorter(value)) {
-      throw new Error('Invalid listing sorter')
+      throw new Error('Ordenador de listagem inválido')
     }
     return new SolutionsListingSorter(value)
   }

@@ -283,15 +283,15 @@ export class S3FileStorageProvider implements FileStorageProvider {
   }
 
   private handleError(error: unknown, operation: string): never {
-    const message = this.resolveErrorMessage(error)
-    const errorMessage = `Error while ${operation}: ${message}`
+    const errorMessage = 'Ocorreu um erro ao acessar o armazenamento de arquivos'
 
     console.error('S3 Storage Provider error:', {
-      message: errorMessage,
+      operation,
+      message: this.resolveErrorMessage(error),
       originalError: error,
     })
 
-    throw new AppError(errorMessage, 'S3 Storage ProviderError')
+    throw new AppError(errorMessage, 'Erro do armazenamento de arquivos')
   }
 
   private resolveErrorMessage(error: unknown): string {

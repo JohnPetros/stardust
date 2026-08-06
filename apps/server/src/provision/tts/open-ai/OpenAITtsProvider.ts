@@ -90,8 +90,7 @@ export class OpenAITtsProvider implements TtsProvider {
         lastModified: Date.now(),
       })
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error'
-      throw new AppError(`Falha ao gerar audio com OpenAI TTS: ${message}`)
+      throw new AppError('Falha ao gerar áudio com OpenAI TTS')
     }
   }
 
@@ -108,7 +107,7 @@ export class OpenAITtsProvider implements TtsProvider {
   }
 
   private async buildErrorMessage(response: Response): Promise<string> {
-    const statusMessage = `OpenAI returned ${response.status} ${response.statusText}`
+    const statusMessage = `O OpenAI TTS retornou o status ${response.status}`
 
     try {
       const data = (await response.clone().json()) as Record<string, unknown>
@@ -117,7 +116,7 @@ export class OpenAITtsProvider implements TtsProvider {
       if (error && typeof error === 'object' && 'message' in error) {
         const message = error.message
         if (typeof message === 'string' && message.length > 0) {
-          return `${statusMessage}. ${message}`
+          return `${statusMessage}. Não foi possível gerar o áudio.`
         }
       }
     } catch {}
@@ -125,7 +124,7 @@ export class OpenAITtsProvider implements TtsProvider {
     try {
       const text = await response.clone().text()
       if (text) {
-        return `${statusMessage}. ${text}`
+        return `${statusMessage}. Não foi possível gerar o áudio.`
       }
     } catch {}
 

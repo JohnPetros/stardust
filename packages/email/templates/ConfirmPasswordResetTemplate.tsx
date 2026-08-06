@@ -1,10 +1,12 @@
-import { Body } from '../components/Body'
-import { Box } from '../components/Box'
-import { Header } from '../components/Header'
-import { Link } from '../components/Link'
-import { Paragraph } from '../components/Paragraph'
+import { Body } from '../partials/Body'
+import { Box } from '../partials/Box'
+import { Header } from '../partials/Header'
+import { Link } from '../partials/Link'
+import { Paragraph } from '../partials/Paragraph'
+import { render } from '@react-email/render'
+import * as React from 'react'
 
-export default function ConfirmPasswordResetTemplate() {
+export const ConfirmPasswordResetTemplateView = () => {
   return (
     <Body>
       <Header>Pedido de redefinição de senha.</Header>
@@ -29,3 +31,11 @@ export default function ConfirmPasswordResetTemplate() {
     </Body>
   )
 }
+
+export const ConfirmPasswordResetTemplateRender = () => ({
+  generateHtml() {
+    return render(React.createElement(ConfirmPasswordResetTemplateView))
+  },
+})
+
+export default ConfirmPasswordResetTemplateView

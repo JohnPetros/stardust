@@ -51,7 +51,9 @@ export class SignedUploadUrl {
     )
 
     if (!isAllowed) {
-      throw new Error(`Invalid file extension for folder path: ${folderPath}`)
+      throw new Error(
+        `Extensão de arquivo inválida para o caminho da pasta: ${folderPath}`,
+      )
     }
   }
 }

@@ -14,7 +14,7 @@ export class Backup<State> {
 
   get lastState() {
     if (this.isEmpty.isTrue) {
-      throw new AppError('Backup is empty', 'Backup error')
+      throw new AppError('O backup está vazio', 'Erro de backup')
     }
 
     const lastState = this.states.pop()

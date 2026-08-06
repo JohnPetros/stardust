@@ -1,10 +1,12 @@
-import { Body } from '../components/Body'
-import { Box } from '../components/Box'
-import { Header } from '../components/Header'
-import { Link } from '../components/Link'
-import { Paragraph } from '../components/Paragraph'
+import { Body } from '../partials/Body'
+import { Box } from '../partials/Box'
+import { Header } from '../partials/Header'
+import { Link } from '../partials/Link'
+import { Paragraph } from '../partials/Paragraph'
+import { render } from '@react-email/render'
+import * as React from 'react'
 
-const ConfirmSignUpTemplate = () => {
+export const ConfirmSignUpTemplateView = () => {
   return (
     <Body>
       <Header>Confirmação de cadastro.</Header>
@@ -35,4 +37,10 @@ const ConfirmSignUpTemplate = () => {
   )
 }
 
-export default ConfirmSignUpTemplate
+export const ConfirmSignUpTemplateRender = () => ({
+  generateHtml() {
+    return render(React.createElement(ConfirmSignUpTemplateView))
+  },
+})
+
+export default ConfirmSignUpTemplateView

@@ -1,4 +1,7 @@
 import { Container, Img, Text } from '@react-email/components'
+import * as React from 'react'
+
+void React
 
 type HeaderProps = {
   children: string

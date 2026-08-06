@@ -2,10 +2,11 @@ import { Email, Text } from '@stardust/core/global/structures'
 import type { Amqp, Job } from '@stardust/core/global/interfaces'
 import type { EmailProvider } from '@stardust/core/notification/interfaces'
 import {
-  feedbackReportReplyText,
-  renderFeedbackReportReplyEmail,
+  FeedbackReportReplyTemplateRender,
+  feedbackReportReplySubject,
   type FeedbackReportReplyTemplateProps,
 } from '@stardust/email/templates'
+import { FeedbackReportReplyEmailService } from '@/queue/services/FeedbackReportReplyEmailService'
 
 export type FeedbackReplyEmailEventPayload = FeedbackReportReplyTemplateProps & {
   recipientEmail: string
@@ -18,7 +19,10 @@ export class SendFeedbackReportReplyEmailJob
 {
   static readonly KEY = 'notification/send.feedback.report.reply.email.job'
 
-  constructor(private readonly provider: EmailProvider) {}
+  constructor(
+    private readonly provider: EmailProvider,
+    private readonly service = new FeedbackReportReplyEmailService(),
+  ) {}
 
   async handle(amqp: Amqp<FeedbackReplyEmailEventPayload>): Promise<void> {
     const payload = amqp.getPayload()
@@ -28,14 +32,14 @@ export class SendFeedbackReportReplyEmailJob
       conversationUrl: payload.conversationUrl,
       isClosed: payload.isClosed,
     }
-    const html = await renderFeedbackReportReplyEmail(templateProps)
+    const html = await FeedbackReportReplyTemplateRender(templateProps).generateHtml()
     await amqp.run(
       async () =>
         this.provider.sendFeedbackReportReplyEmail({
           recipientEmail: Email.create(payload.recipientEmail),
-          subject: Text.create(payload.subject ?? 'Resposta enviada — StarDust'),
+          subject: Text.create(payload.subject ?? feedbackReportReplySubject),
           html: Text.create(html),
-          text: Text.create(feedbackReportReplyText(templateProps)),
+          text: Text.create(this.service.createText(templateProps)),
           idempotencyKey: Text.create(payload.idempotencyKey),
         }),
       SendFeedbackReportReplyEmailJob.name,

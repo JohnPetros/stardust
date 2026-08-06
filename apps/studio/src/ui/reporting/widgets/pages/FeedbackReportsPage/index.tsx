@@ -12,13 +12,11 @@ export const FeedbackReportsPage = () => {
     totalItemsCount,
     totalPages,
     filters,
-    selectedReportId,
     setSearch,
     setIntent,
     setStatus,
     setPeriod,
-    openDialog,
-    closeDialog,
+    openReport,
     refetch,
     clearFilters,
     setPage,
@@ -34,13 +32,11 @@ export const FeedbackReportsPage = () => {
       totalItemsCount={totalItemsCount}
       totalPages={totalPages}
       filters={filters}
-      selectedReportId={selectedReportId}
       onSearch={setSearch}
       onIntent={setIntent}
       onStatus={setStatus}
       onPeriod={setPeriod}
-      onView={(report) => openDialog(report.id.value)}
-      onClose={closeDialog}
+      onView={(report) => openReport(report.id.value)}
       onClearFilters={clearFilters}
       onRetry={refetch}
       onPage={setPage}

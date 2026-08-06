@@ -9,7 +9,6 @@ import {
   SelectValue,
 } from '@/ui/shadcn/components/select'
 import { FeedbackReportsTable } from './FeedbackReportsTable'
-import { FeedbackReportDialog } from './FeedbackReportDialog'
 import type { FeedbackReportsFilters } from './useFeedbackReportsPage'
 import type { FeedbackReport } from '@stardust/core/reporting/entities'
 
@@ -21,13 +20,11 @@ export type FeedbackReportsPageViewProps = {
   totalItemsCount: number
   totalPages: number
   filters: FeedbackReportsFilters
-  selectedReportId: string | null
   onSearch: (value: string) => void
   onIntent: (value: string) => void
   onStatus: (value: string) => void
   onPeriod: (period: { startDate?: Date; endDate?: Date }) => void
   onView: (report: FeedbackReport) => void
-  onClose: () => void
   onClearFilters: () => void
   onRetry: () => void
   onPage: (page: number) => void
@@ -35,16 +32,8 @@ export type FeedbackReportsPageViewProps = {
 }
 
 export const FeedbackReportsPageView = (props: FeedbackReportsPageViewProps) => {
-  const {
-    reports,
-    summary,
-    filters,
-    isLoading,
-    error,
-    totalItemsCount,
-    totalPages,
-    selectedReportId,
-  } = props
+  const { reports, summary, filters, isLoading, error, totalItemsCount, totalPages } =
+    props
   const noResults = !isLoading && !error && reports.length === 0
   return (
     <main className='min-h-full bg-zinc-950 px-4 py-6 text-zinc-100 sm:px-6 lg:px-10'>
@@ -189,11 +178,6 @@ export const FeedbackReportsPageView = (props: FeedbackReportsPageViewProps) => 
             </Select>
           </div>
         </div>
-        <FeedbackReportDialog
-          reportId={selectedReportId}
-          isOpen={Boolean(selectedReportId)}
-          onClose={props.onClose}
-        />
       </div>
     </main>
   )

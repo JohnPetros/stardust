@@ -24,7 +24,7 @@ export class ActionResponse<Data = void> {
 
   get data(): Data {
     if (this._errorMessage) {
-      throw new AppError('Action Response failed')
+      throw new AppError('A resposta da ação falhou')
     }
 
     return this._data as Data
@@ -32,7 +32,7 @@ export class ActionResponse<Data = void> {
 
   get errorMessage() {
     if (!this._errorMessage) {
-      throw new AppError('Action Response has no error message')
+      throw new AppError('A resposta da ação não possui uma mensagem de erro')
     }
 
     return this._errorMessage

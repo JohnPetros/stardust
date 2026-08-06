@@ -1,32 +1,29 @@
 import { useEffect, useState } from 'react'
-import { Id, Integer, Text } from '@stardust/core/global/structures'
+import { useNavigate, useParams } from 'react-router'
+import type { FeedbackReportDetailsDto } from '@stardust/core/reporting/entities/dtos'
 import { FeedbackReportStatus } from '@stardust/core/reporting/structures'
+import { AppError } from '@stardust/core/global/errors'
+import { Id, Integer, Text } from '@stardust/core/global/structures'
 import { SignedUploadUrl } from '@stardust/core/storage/structures'
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
 import { useToastProvider } from '@/ui/global/hooks/useToastProvider'
 import { S3SignedFileStorageProvider } from '@/provision/storage/S3SignedFileStorageProvider'
-import { FeedbackReportDialogView } from './FeedbackReportDialogView'
 
-export const FeedbackReportDialog = ({
-  reportId,
-  isOpen,
-  onClose,
-}: {
-  reportId: string | null
-  isOpen: boolean
-  onClose: () => void
-}) => {
+export function useFeedbackReportDetailPage() {
+  const navigate = useNavigate()
+  const { feedbackReportId: reportId } = useParams()
   const { reportingService } = useRestContext()
   const toast = useToastProvider()
-  const [detail, setDetail] = useState<any>(null)
+  const [detail, setDetail] = useState<FeedbackReportDetailsDto | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [content, setContent] = useState('')
   const [files, setFiles] = useState<File[]>([])
   const [isLoading, setLoading] = useState(false)
   const [isSending, setSending] = useState(false)
   const [isMutatingStatus, setMutatingStatus] = useState(false)
+
   useEffect(() => {
-    if (!isOpen || !reportId) return
+    if (!reportId) return
     setLoading(true)
     setError(null)
     void reportingService
@@ -37,15 +34,17 @@ export const FeedbackReportDialog = ({
           return
         }
         setDetail(response.body)
-        if (response.body.latestUserMessageId)
+        if (response.body.latestUserMessageId) {
           await reportingService.markFeedbackReportAsRead(
             Id.create(reportId),
             Id.create(response.body.latestUserMessageId),
           )
+        }
       })
       .finally(() => setLoading(false))
-  }, [isOpen, reportId, reportingService])
-  const onSend = async () => {
+  }, [reportId, reportingService])
+
+  async function send() {
     if (!reportId || !detail || !content.trim()) return
     setSending(true)
     const messageId = Id.create(crypto.randomUUID())
@@ -55,14 +54,13 @@ export const FeedbackReportDialog = ({
         if (
           !['image/png', 'image/jpeg'].includes(file.type) ||
           file.size > 10 * 1024 * 1024
-        )
-          throw new Error('Use imagens PNG ou JPG de até 10 MB')
+        ) {
+          throw new AppError('Use imagens PNG ou JPG de até 10 MB')
+        }
         const upload = await reportingService.createFeedbackAttachmentUploadUrl(
           Id.create(reportId),
           messageId,
           {
-            // The storage contract accepts only a UUID filename. Keep the
-            // user's name as metadata on the message attachment instead.
             fileName: Text.create(
               `${crypto.randomUUID()}.${file.type === 'image/png' ? 'png' : 'jpg'}`,
             ),
@@ -70,7 +68,7 @@ export const FeedbackReportDialog = ({
             size: Integer.create(file.size),
           },
         )
-        if (upload.isFailure) throw new Error(upload.errorMessage)
+        if (upload.isFailure) throw new AppError(upload.errorMessage)
         await S3SignedFileStorageProvider().uploadFile(
           SignedUploadUrl.create(upload.body),
           file,
@@ -88,11 +86,11 @@ export const FeedbackReportDialog = ({
         content: Text.create(content),
         attachments,
       })
-      if (response.isFailure) throw new Error(response.errorMessage)
+      if (response.isFailure) throw new AppError(response.errorMessage)
       setContent('')
       setFiles([])
       toast.showSuccess('Resposta enviada')
-      setDetail((current: any) =>
+      setDetail((current) =>
         current
           ? {
               ...current,
@@ -102,41 +100,46 @@ export const FeedbackReportDialog = ({
           : current,
       )
     } catch (failure) {
-      toast.showError(failure instanceof Error ? failure.message : String(failure))
+      toast.showError(failure instanceof AppError ? failure.message : String(failure))
     } finally {
       setSending(false)
     }
   }
-  const onStatusChange = async () => {
+
+  async function changeStatus() {
     if (!reportId || !detail) return
     setMutatingStatus(true)
-    const status = detail.status === 'open' ? 'closed' : 'open'
+    const currentStatus = detail.status ?? 'open'
+    const status = currentStatus === 'open' ? 'closed' : 'open'
     const response = await reportingService.changeFeedbackReportStatus(
       Id.create(reportId),
       {
         status: FeedbackReportStatus.create(status),
-        expectedStatus: FeedbackReportStatus.create(detail.status),
+        expectedStatus: FeedbackReportStatus.create(currentStatus),
       },
     )
     if (response.isFailure) toast.showError(response.errorMessage)
-    else setDetail((current: any) => (current ? { ...current, status } : current))
+    else setDetail((current) => (current ? { ...current, status } : current))
     setMutatingStatus(false)
   }
-  return (
-    <FeedbackReportDialogView
-      detail={detail}
-      isOpen={isOpen}
-      isLoading={isLoading}
-      error={error}
-      content={content}
-      files={files}
-      isSending={isSending}
-      isMutatingStatus={isMutatingStatus}
-      onContentChange={setContent}
-      onFilesChange={setFiles}
-      onSend={onSend}
-      onStatusChange={onStatusChange}
-      onClose={onClose}
-    />
-  )
+
+  function goBack() {
+    navigate('/reporting/feedback')
+  }
+
+  return {
+    reportId,
+    detail,
+    error,
+    content,
+    files,
+    isLoading,
+    isSending,
+    isMutatingStatus,
+    setContent,
+    setFiles,
+    send,
+    changeStatus,
+    goBack,
+  }
 }

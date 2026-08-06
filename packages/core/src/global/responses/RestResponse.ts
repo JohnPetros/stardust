@@ -71,14 +71,14 @@ export class RestResponse<Body = unknown> {
 
   getValidationFieldErrors(fieldName: string) {
     if (!this.isValidationFailure)
-      throw new AppError('Rest Response is not a validation failure')
+      throw new AppError('A resposta REST não representa uma falha de validação')
 
     const validationError = this.body as ValidationError
     const fieldError = validationError.fieldErrors.find(
       (error) => error.name === fieldName,
     )
 
-    if (!fieldError) throw new AppError(`Field error not found for field ${fieldName}`)
+    if (!fieldError) throw new AppError(`Erro de campo não encontrado para ${fieldName}`)
 
     return fieldError.messages
   }
@@ -89,7 +89,7 @@ export class RestResponse<Body = unknown> {
 
   get body(): Body {
     if (this._errorMessage) {
-      throw new AppError('Rest Response failed')
+      throw new AppError('A resposta REST falhou')
     }
 
     return this._body as Body
@@ -97,7 +97,7 @@ export class RestResponse<Body = unknown> {
 
   get errorMessage(): string {
     if (!this._errorMessage) {
-      throw new AppError('Rest Response has no error message')
+      throw new AppError('A resposta REST não possui uma mensagem de erro')
     }
 
     return this._errorMessage

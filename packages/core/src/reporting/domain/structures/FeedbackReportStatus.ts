@@ -8,7 +8,7 @@ export class FeedbackReportStatus {
 
   static create(value: string): FeedbackReportStatus {
     if (!FeedbackReportStatus.isValid(value)) {
-      throw new AppError(`Invalid feedback report status: ${value}`)
+      throw new AppError(`Status do relatório de feedback inválido: ${value}`)
     }
 
     return new FeedbackReportStatus(value as FeedbackReportStatusValue)

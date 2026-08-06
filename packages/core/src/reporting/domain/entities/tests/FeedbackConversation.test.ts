@@ -18,7 +18,7 @@ describe('feedback conversation domain', () => {
     expect(report.isUnread).toBe(true)
     expect(report.studioReadAt).toEqual(firstUserMessageAt)
     expect(() => report.markStudioRead(new Date('2026-01-01T12:00:00.000Z'))).toThrow(
-      'Read snapshot must reference a known user message',
+      'O registro de leitura deve referenciar uma mensagem de usuário conhecida',
     )
   })
 
@@ -26,12 +26,14 @@ describe('feedback conversation domain', () => {
     const report = FeedbackReportsFaker.fake()
 
     expect(() => report.close()).toThrow(
-      'Feedback report cannot be closed without an admin reply',
+      'O relatório de feedback não pode ser fechado sem uma resposta do administrador',
     )
     report.registerMessage('admin')
     report.close()
     expect(report.status.value).toBe('closed')
-    expect(() => report.registerMessage('user')).toThrow('Feedback report is closed')
+    expect(() => report.registerMessage('user')).toThrow(
+      'O relatório de feedback está fechado',
+    )
     report.reopen()
     expect(report.status.value).toBe('open')
   })
@@ -50,7 +52,7 @@ describe('feedback conversation domain', () => {
           size: 1,
         })),
       }),
-    ).toThrow('A feedback message accepts at most three attachments')
+    ).toThrow('Uma mensagem aceita no máximo três anexos')
   })
 
   it('rejects attachments outside the image contract', () => {
@@ -69,6 +71,6 @@ describe('feedback conversation domain', () => {
           },
         ],
       }),
-    ).toThrow('Feedback message attachments must be PNG or JPEG images')
+    ).toThrow('Os anexos da mensagem devem ser imagens PNG ou JPEG')
   })
 })

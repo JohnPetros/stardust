@@ -8,7 +8,7 @@ export class FeedbackMessageAuthorRole {
 
   static create(value: string): FeedbackMessageAuthorRole {
     if (value !== 'user' && value !== 'admin') {
-      throw new AppError(`Invalid feedback message author role: ${value}`)
+      throw new AppError(`Papel de autor da mensagem de feedback inválido: ${value}`)
     }
 
     return new FeedbackMessageAuthorRole(value as FeedbackMessageAuthorRoleValue)

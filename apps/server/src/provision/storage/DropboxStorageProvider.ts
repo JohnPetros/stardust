@@ -282,7 +282,9 @@ export class DropboxStorageProvider implements FileStorageProvider {
 
   private handleError(error: unknown): never {
     console.error(error)
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-    throw new AppError(errorMessage, 'Dropbox Storage Provider Error')
+    throw new AppError(
+      'Ocorreu um erro ao acessar o armazenamento de arquivos',
+      'Erro do armazenamento de arquivos',
+    )
   }
 }

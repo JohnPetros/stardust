@@ -31,7 +31,7 @@ export class FeedbackReport extends Entity<FeedbackReportProps> {
 
     if (!Number.isInteger(adminMessageCount) || adminMessageCount < 0) {
       throw new AppError(
-        'Feedback report admin message count must be a non-negative integer',
+        'A quantidade de mensagens administrativas deve ser um número inteiro não negativo',
       )
     }
 
@@ -126,7 +126,9 @@ export class FeedbackReport extends Entity<FeedbackReportProps> {
 
   close(): void {
     if (this.adminMessageCount === 0) {
-      throw new AppError('Feedback report cannot be closed without an admin reply')
+      throw new AppError(
+        'O relatório de feedback não pode ser fechado sem uma resposta do administrador',
+      )
     }
     if (this.status.isClosed.isTrue) return
     this.props.status = FeedbackReportStatus.createAsClosed()
@@ -141,7 +143,9 @@ export class FeedbackReport extends Entity<FeedbackReportProps> {
 
   markStudioRead(lastSeenUserMessageAt: Date): void {
     if (!this.lastUserMessageAt || lastSeenUserMessageAt > this.lastUserMessageAt) {
-      throw new AppError('Read snapshot must reference a known user message')
+      throw new AppError(
+        'O registro de leitura deve referenciar uma mensagem de usuário conhecida',
+      )
     }
     if (!this.studioReadAt || lastSeenUserMessageAt > this.studioReadAt) {
       this.props.studioReadAt = lastSeenUserMessageAt
@@ -161,7 +165,7 @@ export class FeedbackReport extends Entity<FeedbackReportProps> {
 
   registerMessage(authorRole: 'user' | 'admin', createdAt = new Date()): void {
     if (this.status.isClosed.isTrue) {
-      throw new AppError('Feedback report is closed')
+      throw new AppError('O relatório de feedback está fechado')
     }
     this.registerActivity(createdAt, authorRole)
   }
