@@ -30,7 +30,9 @@ export class SupabaseFeedbackMessagesRepository
 
     const { error } = await this.supabase
       .from('feedback_message_attachments')
-      .insert(SupabaseFeedbackMessageMapper.attachmentsToSupabase(message))
+      .upsert(SupabaseFeedbackMessageMapper.attachmentsToSupabase(message), {
+        onConflict: 'id',
+      })
 
     if (error) this.handleQueryPostgresError(error)
   }

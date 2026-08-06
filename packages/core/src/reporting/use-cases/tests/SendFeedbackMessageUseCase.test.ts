@@ -1,4 +1,5 @@
 import { FeedbackReportsFaker } from '../../domain/entities/fakers/FeedbackReportsFaker'
+import { FeedbackMessage } from '../../domain/entities/FeedbackMessage'
 import { SendFeedbackMessageUseCase } from '../SendFeedbackMessageUseCase'
 import type { FeedbackReportsRepository } from '../../interfaces/FeedbackReportsRepository'
 import type { FeedbackMessagesRepository } from '../../interfaces/FeedbackMessagesRepository'
@@ -89,5 +90,52 @@ describe('SendFeedbackMessageUseCase fixes', () => {
       }),
     ).rejects.toThrow('Somente administradores')
     expect(messages.add).not.toHaveBeenCalled()
+  })
+
+  it('reconciles duplicate messages and republishes the remaining side effects', async () => {
+    const duplicateReport = FeedbackReportsFaker.fake({
+      author: { id: userId },
+      adminMessageCount: 0,
+    })
+    const messageId = crypto.randomUUID()
+    const existing = FeedbackMessage.create({
+      id: messageId,
+      reportId: duplicateReport.id.value,
+      authorRole: 'admin',
+      authorId: userId,
+      content: 'Resposta duplicada',
+      attachments: [],
+    })
+    const repository = {
+      findById: jest.fn().mockResolvedValue(duplicateReport),
+      findAuthorEmail: jest.fn().mockResolvedValue({ value: 'user@example.com' }),
+      save: jest.fn().mockResolvedValue(undefined),
+    } as unknown as FeedbackReportsRepository
+    const messages = {
+      findById: jest.fn().mockResolvedValue(existing),
+      add: jest.fn(),
+      addAttachments: jest.fn().mockResolvedValue(undefined),
+    } as unknown as FeedbackMessagesRepository
+    const broker = {
+      publish: jest.fn().mockResolvedValue(undefined),
+    } as unknown as Broker
+
+    const response = await new SendFeedbackMessageUseCase(
+      repository,
+      messages,
+      broker,
+    ).execute({
+      feedbackReportId: duplicateReport.id.value,
+      actor: { accountId: userId, role: 'admin' },
+      messageId,
+      content: 'Resposta duplicada',
+      attachments: [],
+    })
+
+    expect(response.isDuplicate.isTrue).toBe(true)
+    expect(messages.add).not.toHaveBeenCalled()
+    expect(messages.addAttachments).toHaveBeenCalledWith(existing)
+    expect(repository.save).toHaveBeenCalled()
+    expect(broker.publish).toHaveBeenCalled()
   })
 })

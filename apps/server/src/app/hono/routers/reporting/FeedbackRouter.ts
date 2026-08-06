@@ -16,6 +16,7 @@ import {
   SupabaseFeedbackReportsRepository,
 } from '@/database/supabase/repositories/reporting'
 import { supabase } from '@/database/supabase/supabase'
+import { ENV } from '@/constants'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import {
@@ -158,6 +159,7 @@ export class FeedbackRouter extends HonoRouter {
           this.messages(),
           new InngestBroker(),
           new S3FileStorageProvider(),
+          ENV.stardustWebUrl,
         )
         const response = await new SendFeedbackMessageController(useCase).handle(http)
         return http.sendResponse(response)

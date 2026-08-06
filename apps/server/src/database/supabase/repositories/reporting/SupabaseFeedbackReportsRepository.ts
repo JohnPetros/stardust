@@ -197,9 +197,18 @@ export class SupabaseFeedbackReportsRepository
       this.handleQueryPostgresError(error)
     }
 
-    return SupabaseFeedbackReportMapper.toEntity(
-      data as unknown as SupabaseFeedbackReport,
-    )
+    const { count: adminMessageCount, error: countError } = await this.supabase
+      .from('feedback_messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('report_id', feedbackId.value)
+      .eq('author_role', 'admin')
+
+    if (countError) this.handleQueryPostgresError(countError)
+
+    return SupabaseFeedbackReportMapper.toEntity({
+      ...(data as unknown as SupabaseFeedbackReport),
+      admin_message_count: adminMessageCount ?? 0,
+    })
   }
 
   async markAsRead(feedbackReportId: Id, lastSeenUserMessageAt: Date): Promise<void> {
