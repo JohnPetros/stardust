@@ -1,5 +1,6 @@
 import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
+import type { SessionDto } from '@stardust/core/auth/structures/dtos'
 
 import { handleRestError } from './handleRestError'
 import { parseResponseJson } from './parseResponseJson'
@@ -112,5 +113,54 @@ describe('handleRestError', () => {
     expect(failedRequest).not.toHaveBeenCalled()
     expect(mockSetCookie).not.toHaveBeenCalled()
     expect(result.statusCode).toBe(HTTP_STATUS_CODE.unauthorized)
+  })
+
+  it('should share a concurrent refresh between unauthorized requests', async () => {
+    let resolveRefresh!: (response: RestResponse<SessionDto>) => void
+    refreshSession.mockReturnValue(
+      new Promise<RestResponse<SessionDto>>((resolve) => {
+        resolveRefresh = resolve
+      }),
+    )
+    mockGetCookie.mockResolvedValue({ data: 'refresh-token' })
+
+    const session = {
+      account: {
+        id: '00000000-0000-4000-8000-000000000001',
+        email: 'test@stardust.dev',
+        name: 'Test User',
+        isAuthenticated: true,
+      },
+      accessToken: 'shared-access-token',
+      refreshToken: 'shared-refresh-token',
+      durationInSeconds: 3600,
+    }
+    const firstRequest = jest.fn().mockResolvedValue(new RestResponse({ body: 1 }))
+    const secondRequest = jest.fn().mockResolvedValue(new RestResponse({ body: 2 }))
+
+    const first = handleRestError(
+      {
+        status: HTTP_STATUS_CODE.unauthorized,
+        url: 'https://api.stardust.dev/first',
+      } as Response,
+      firstRequest,
+    )
+    const second = handleRestError(
+      {
+        status: HTTP_STATUS_CODE.unauthorized,
+        url: 'https://api.stardust.dev/second',
+      } as Response,
+      secondRequest,
+    )
+
+    await Promise.resolve()
+    expect(refreshSession).toHaveBeenCalledTimes(1)
+
+    resolveRefresh(new RestResponse({ body: session, statusCode: HTTP_STATUS_CODE.ok }))
+    await Promise.all([first, second])
+
+    expect(firstRequest).toHaveBeenCalledTimes(1)
+    expect(secondRequest).toHaveBeenCalledTimes(1)
+    expect(mockSetCookie).toHaveBeenCalledTimes(2)
   })
 })
