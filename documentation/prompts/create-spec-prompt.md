@@ -90,6 +90,15 @@ Pencil quanto o exercício do fluxo real no Playwright, cobrindo os estados e
 viewports especificados. Pencil valida a referência visual; Playwright valida o
 comportamento em runtime. Nenhum deles substitui os testes automatizados.
 
+Quando a validação visual em runtime for obrigatória, escreva isso
+explicitamente no Contract em um ou mais `CA-*`: declare os viewports, estados,
+interações e a evidência exigida (por exemplo, screenshot do dialog aberto,
+loading, erro, vazio, conteúdo e fechado, ou comparação visual equivalente).
+Não use apenas expressões ambíguas como “verificar visualmente”. Diferencie
+sempre a evidência da referência Pencil da evidência do browser real: a primeira
+confirma alinhamento com o design canônico; a segunda confirma renderização,
+responsividade e comportamento observável em runtime.
+
 ## Arquivo e Contract
 
 Crie `documentation/features/<domínio>/<feature>/spec.md` com:
@@ -128,6 +137,14 @@ restrições técnicas. Não use `RN-*`, `RNF-*`, `RA-*`, comentários
 Especifique os métodos de toda interface, port, repository ou service criado ou
 alterado pela solução, incluindo nome, entrada e retorno. Não delegue ao Builder
 ou ao Plan a definição dessas assinaturas.
+
+O `Contract` da Spec é a fonte de verdade para o Builder. Cada requisito,
+restrição e critério de aceitação deve ser implementável e verificável sem que o
+Builder precise inferir comportamento ausente. O Plan apenas decompõe o
+Contract em fases, tarefas, dependências e sensores; não pode criar, remover ou
+enfraquecer requisitos. Para cada `CA-*`, o Plan deve apontar a tarefa
+responsável e a evidência correspondente. O `evaluation.md` registra o resultado
+real dessa evidência, mas não substitui o requisito do Contract.
 
 ## Detalhamento técnico por camada afetada
 
@@ -190,6 +207,13 @@ explicitamente aberto; uma pendência material impede `open`.
 A Spec não contém código de teste, fixtures detalhadas ou implementação de mocks,
 mas deve declarar cenários, camada de cobertura, sensores e evidência esperada
 para cada `CA-*`.
+
+Antes de `open`, faça uma checagem de rastreabilidade: todo `RF-*` relevante
+possui `CA-*`; cada `CA-*` possui resultado observável, método de validação,
+viewport/estado quando aplicável e path ou camada responsável; e cada exigência
+visual possui evidência separada para Pencil e Playwright quando ambas forem
+necessárias. Se uma exigência só aparecer no Plan ou no evaluation, mova-a para
+o Contract antes do julgamento.
 
 ## Judge Spec
 

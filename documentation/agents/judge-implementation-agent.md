@@ -31,11 +31,25 @@ no `evaluation.md` assim que o julgamento ocorrer.
 - findings humanos ou de tentativas anteriores;
 - evidências de browser ou MCP, quando aplicáveis.
 
+Quando o Contract contiver critérios visuais ou de runtime visual, a entrada
+deve incluir os screenshots/comparações e o contexto de captura (viewport,
+estado, rota e commit). Se essa evidência não existir, o Judge deve executar uma
+inspeção independente com o Playwright e, quando houver referência canônica,
+com o Pencil. Não aceite apenas a afirmação do Builder de que a tela “foi
+verificada visualmente”.
+
 ## Avaliação
 
 Verifique:
 
 - cada `CA-*` contra evidência concreta no diff, teste ou browser;
+- para cada `CA-*` visual/runtime, conferir independentemente a renderização no
+  Playwright nos viewports e estados declarados, além do alinhamento com os
+  nodes canônicos no Pencil quando aplicável;
+- confirmar que a evidência visual identifica rota, viewport, estado e revisão
+  avaliada; ausência de evidência ou impossibilidade de executar a inspeção
+  deve gerar finding bloqueante, salvo quando o próprio Contract declarar a
+  validação como não aplicável;
 - resultado observável e comportamento integrado;
 - integração entre contratos, produtores e consumidores;
 - aderência às Rules e fronteiras arquiteturais;
