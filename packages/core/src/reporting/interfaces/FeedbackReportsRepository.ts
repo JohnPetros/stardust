@@ -7,6 +7,7 @@ import type { FeedbackReportStatus } from '../domain/structures/FeedbackReportSt
 export interface FeedbackReportsRepository {
   add(report: FeedbackReport): Promise<void>
   findById(feedbackReportId: Id): Promise<FeedbackReport | null>
+  findByIdAndAuthor(feedbackReportId: Id, authorId: Id): Promise<FeedbackReport | null>
   findAuthorEmail(feedbackReportId: Id): Promise<Email | null>
   list(params: FeedbackReportsListingParams): Promise<FeedbackReportsPageDto>
   findMany(params: FeedbackReportsListingParams): Promise<{
@@ -18,5 +19,17 @@ export interface FeedbackReportsRepository {
     report: FeedbackReport,
     expectedStatus: FeedbackReportStatus,
   ): Promise<FeedbackReport>
-  markAsRead(feedbackReportId: Id, lastSeenUserMessageAt: Date): Promise<void>
+  listByAuthor(input: {
+    authorId: Id
+    status?: FeedbackReportStatus
+    page: import('../../global/domain/structures/OrdinalNumber').OrdinalNumber
+    itemsPerPage: import('../../global/domain/structures/OrdinalNumber').OrdinalNumber
+  }): Promise<{ items: FeedbackReport[]; total: number }>
+  countUnreadByAuthor(authorId: Id): Promise<number>
+  markAsRead(input: {
+    feedbackReportId: Id
+    participant: 'author' | 'studio'
+    lastSeenMessageAt: Date
+    authorId?: Id
+  }): Promise<void>
 }
