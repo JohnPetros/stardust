@@ -9,14 +9,12 @@ import { AccountsFaker } from '@stardust/core/auth/entities/fakers'
 import { Text } from '@stardust/core/global/structures'
 
 import { COOKIES, ROUTES } from '@/constants'
-import { cookieActions } from '@/rpc/next-safe-action'
+import * as cookieActions from '@/rpc/next-safe-action/cookieActions'
 import { VerifyAuthRoutesController } from '../VerifyAuthRoutesController'
 
 // Mock the cookieActions module
-jest.mock('@/rpc/next-safe-action', () => ({
-  cookieActions: {
-    getCookie: jest.fn(),
-  },
+jest.mock('@/rpc/next-safe-action/cookieActions', () => ({
+  getCookie: jest.fn(),
 }))
 
 describe('Verify Auth Routes Controller', () => {

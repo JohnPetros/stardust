@@ -8,7 +8,7 @@ import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import { CLIENT_ENV } from '@/constants'
 import type { NextParams } from '@/rpc/next/types'
-import { cookieActions } from '@/rpc/next-safe-action'
+import * as cookieActions from '@/rpc/next-safe-action/cookieActions'
 
 type Cookie = {
   key: string
