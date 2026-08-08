@@ -2,7 +2,7 @@
 title: Otimizacao de memoria do Next Server da Web App
 source: ../../documentation/reports/web-app-performance-report-2026-03-05.md
 spec: not_applicable
-status: in_progress
+status: accepted
 base_commit: 46830574d9b8d9f515ff8a0758ff54d5c9e571bf
 evaluated_commit: 2228c03e6734fea2cc616433026b10dda1f8d162
 last_updated_at: 2026-08-08
@@ -66,8 +66,8 @@ last_updated_at: 2026-08-08
 
 | Verificação | Estado | HEAD / evidência |
 | --- | --- | --- |
-| Quality Gate | pending | PR ainda não criada. |
-| Build | pending | PR ainda não criada. |
+| Quality Gate | passed | PR #529, HEAD `6008e3db97d5ba02b9f5062cbd84992c236b5215`: checks de arquitetura, código, tipos, testes e integração concluídos com sucesso. |
+| Build | passed | PR #529, HEAD `6008e3db97d5ba02b9f5062cbd84992c236b5215`: todos os jobs de build concluídos com sucesso. |
 
 ## Warnings e findings
 
@@ -96,5 +96,5 @@ last_updated_at: 2026-08-08
 
 ## Conclusão
 
-- Estado: `in_progress`.
-- Próxima ação: incorporar o Judge Implementation, publicar o PR e confirmar Quality Gate e build no CI.
+- Estado: `accepted`.
+- Próxima ação: revisão e merge do PR #529.
