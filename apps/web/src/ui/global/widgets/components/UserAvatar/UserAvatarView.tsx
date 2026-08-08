@@ -10,10 +10,14 @@ type Props = {
 }
 
 export const UserAvatarView = ({ avatarImage, avatarName, size }: Props) => {
-  const avatarImageSrc = useFileStorage(
+  const storageAvatarImageSrc = useFileStorage(
     FileStorageFolderPath.createAsImagesAvatars(),
     avatarImage,
   )
+  const avatarImageSrc =
+    /^https?:\/\//.test(avatarImage) || avatarImage.startsWith('/')
+      ? avatarImage
+      : storageAvatarImageSrc
 
   return (
     <Avatar.Root>

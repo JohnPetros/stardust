@@ -2,10 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import { RestResponse } from '@stardust/core/global/responses'
 import { UsersFaker } from '@stardust/core/profile/entities/fakers'
 import type { ReportingService } from '@stardust/core/reporting/interfaces'
-import type {
-  SignedFileStorageProvider,
-  StorageService,
-} from '@stardust/core/storage/interfaces'
+import type { SignedFileStorageProvider } from '@stardust/core/storage/interfaces'
 import { type Mock, mock } from 'ts-jest-mocker'
 
 import type { ToastContextValue } from '@/ui/global/contexts/ToastContext/types'
@@ -23,7 +20,6 @@ function createRestResponse<T>(props: {
 
 describe('useFeedbackDialog', () => {
   let reportingService: Mock<ReportingService>
-  let storageService: Mock<StorageService>
   let signedFileStorageProvider: Mock<SignedFileStorageProvider>
   let toast: ToastContextValue
   let fetchMock: jest.MockedFunction<typeof fetch>
@@ -38,7 +34,6 @@ describe('useFeedbackDialog', () => {
     renderHook(() =>
       useFeedbackDialog({
         reportingService,
-        storageService,
         signedFileStorageProvider,
         user,
         toast,
@@ -51,7 +46,6 @@ describe('useFeedbackDialog', () => {
     jest.spyOn(Date, 'now').mockReturnValue(1710000000000)
 
     reportingService = mock<ReportingService>()
-    storageService = mock<StorageService>()
     signedFileStorageProvider = mock<SignedFileStorageProvider>()
     toast = {
       showError: jest.fn(),
@@ -67,7 +61,7 @@ describe('useFeedbackDialog', () => {
       blob: async () => new Blob(['fake-image'], { type: 'image/png' }),
     } as Response)
 
-    storageService.createSignedUploadUrl.mockResolvedValue(
+    reportingService.createFeedbackReportAttachmentUploadUrl.mockResolvedValue(
       createRestResponse({
         body: {
           url: 'https://storage.example.com/upload',
@@ -102,16 +96,24 @@ describe('useFeedbackDialog', () => {
       await result.current.handleSubmit()
     })
 
-    expect(storageService.createSignedUploadUrl).toHaveBeenCalledWith(
-      expect.objectContaining({ value: 'images/feedback-reports' }),
-      expect.objectContaining({ value: uploadedFileName }),
+    expect(reportingService.createFeedbackReportAttachmentUploadUrl).toHaveBeenCalledWith(
+      expect.objectContaining({
+        fileName: expect.objectContaining({
+          value: expect.stringMatching(
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\.png$/i,
+          ),
+        }),
+        mimeType: expect.objectContaining({ value: 'image/png' }),
+      }),
     )
     expect(signedFileStorageProvider.uploadFile).toHaveBeenCalledWith(
       expect.objectContaining({
         fileName: expect.objectContaining({ value: uploadedFileName }),
       }),
       expect.objectContaining({
-        name: uploadedFileName,
+        name: expect.stringMatching(
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\.png$/i,
+        ),
         type: 'image/png',
       }),
     )
@@ -119,18 +121,94 @@ describe('useFeedbackDialog', () => {
     const feedbackReport = reportingService.sendFeedbackReport.mock.calls[0]?.[0]
 
     expect(reportingService.sendFeedbackReport).toHaveBeenCalledTimes(1)
-    expect(feedbackReport?.dto).toEqual(
+    expect(feedbackReport).toEqual(
       expect.objectContaining({
-        content: 'O dialog perde o foco apos screenshot',
-        intent: 'idea',
-        screenshot: uploadedFileName,
+        content: expect.objectContaining({
+          value: 'O dialog perde o foco apos screenshot',
+        }),
+        intent: expect.objectContaining({ value: 'idea' }),
+        initialAttachment: expect.objectContaining({ storageKey: uploadedFileName }),
       }),
     )
     expect(result.current.step).toBe('success')
   })
 
+  it('should upload a selected jpeg with its original metadata', async () => {
+    const originalCreateObjectURL = URL.createObjectURL
+    const originalRevokeObjectURL = URL.revokeObjectURL
+    const createObjectURLMock = jest.fn().mockReturnValue('blob:feedback-preview')
+    const revokeObjectURLMock = jest.fn()
+    Object.defineProperty(URL, 'createObjectURL', {
+      configurable: true,
+      value: createObjectURLMock,
+    })
+    Object.defineProperty(URL, 'revokeObjectURL', {
+      configurable: true,
+      value: revokeObjectURLMock,
+    })
+
+    try {
+      const { result } = Hook()
+      const file = new File(['fake-jpeg'], 'evidence.jpg', { type: 'image/jpeg' })
+
+      act(() => {
+        result.current.setContent('Feedback com imagem selecionada')
+        result.current.handleSelectScreenshot(file)
+      })
+
+      await act(async () => {
+        await result.current.handleSubmit()
+      })
+
+      expect(createObjectURLMock).toHaveBeenCalledWith(file)
+      expect(
+        reportingService.createFeedbackReportAttachmentUploadUrl,
+      ).toHaveBeenCalledWith(
+        expect.objectContaining({
+          fileName: expect.objectContaining({
+            value: expect.stringMatching(
+              /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\.jpg$/i,
+            ),
+          }),
+          mimeType: expect.objectContaining({ value: 'image/jpeg' }),
+          size: expect.objectContaining({ value: file.size }),
+        }),
+      )
+      expect(signedFileStorageProvider.uploadFile).toHaveBeenCalledWith(
+        expect.objectContaining({
+          fileName: expect.objectContaining({ value: uploadedFileName }),
+        }),
+        expect.objectContaining({
+          name: expect.stringMatching(
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\.jpg$/i,
+          ),
+          type: 'image/jpeg',
+        }),
+      )
+      const feedbackReport = reportingService.sendFeedbackReport.mock.calls[0]?.[0]
+      expect(feedbackReport).toEqual(
+        expect.objectContaining({
+          initialAttachment: expect.objectContaining({
+            originalName: 'evidence.jpg',
+            mimeType: 'image/jpeg',
+          }),
+        }),
+      )
+      expect(result.current.step).toBe('success')
+    } finally {
+      Object.defineProperty(URL, 'createObjectURL', {
+        configurable: true,
+        value: originalCreateObjectURL,
+      })
+      Object.defineProperty(URL, 'revokeObjectURL', {
+        configurable: true,
+        value: originalRevokeObjectURL,
+      })
+    }
+  })
+
   it('should keep form state and stop submission when signed url creation fails', async () => {
-    storageService.createSignedUploadUrl.mockResolvedValueOnce(
+    reportingService.createFeedbackReportAttachmentUploadUrl.mockResolvedValueOnce(
       createRestResponse({
         statusCode: 400,
         errorMessage: 'Falha ao gerar signed url',
@@ -187,7 +265,9 @@ describe('useFeedbackDialog', () => {
       await result.current.handleSubmit()
     })
 
-    expect(storageService.createSignedUploadUrl).not.toHaveBeenCalled()
+    expect(
+      reportingService.createFeedbackReportAttachmentUploadUrl,
+    ).not.toHaveBeenCalled()
     expect(signedFileStorageProvider.uploadFile).not.toHaveBeenCalled()
 
     const feedbackReport = reportingService.sendFeedbackReport.mock.calls[0]?.[0]
@@ -201,5 +281,18 @@ describe('useFeedbackDialog', () => {
       }),
     )
     expect(result.current.step).toBe('success')
+  })
+
+  it('should preserve the creation draft when the dialog is closed', () => {
+    const { result } = Hook()
+
+    act(() => {
+      result.current.setContent('Rascunho que deve permanecer')
+      result.current.handleSelectIntent('bug')
+      result.current.handleOpenChange(false)
+    })
+
+    expect(result.current.content).toBe('Rascunho que deve permanecer')
+    expect(result.current.step).toBe('form')
   })
 })

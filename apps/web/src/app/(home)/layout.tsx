@@ -7,7 +7,6 @@ import { HomeLayout } from '@/ui/profile/widgets/layouts/Home'
 import { AchivementsProvider } from '@/ui/profile/contexts/AchievementsContext'
 import { ProfileService } from '@/rest/services/ProfileService'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
-import { FeedbackLayout } from '@/ui/reporting/widgets/layouts/FeedbackLayout'
 
 export const metadata: Metadata = {
   ...STARDUST_METADATA,
@@ -29,13 +28,11 @@ const Layout = async ({ children }: PropsWithChildren) => {
   if (response.isFailure) response.throwError()
 
   return (
-    <FeedbackLayout>
-      <AchivementsProvider achievementsDto={response.body}>
-        <SidebarProvider>
-          <HomeLayout>{children}</HomeLayout>
-        </SidebarProvider>
-      </AchivementsProvider>
-    </FeedbackLayout>
+    <AchivementsProvider achievementsDto={response.body}>
+      <SidebarProvider>
+        <HomeLayout>{children}</HomeLayout>
+      </SidebarProvider>
+    </AchivementsProvider>
   )
 }
 

@@ -2,6 +2,9 @@ import { CLIENT_ENV } from './client-env'
 
 export const ROUTES = {
   landing: '/',
+  feedback: {
+    report: (feedbackReportId: string) => `/feedback/${feedbackReportId}`,
+  },
   seo: {
     llmsTxt: '/llms.txt',
     robotsTxt: '/robots.txt',

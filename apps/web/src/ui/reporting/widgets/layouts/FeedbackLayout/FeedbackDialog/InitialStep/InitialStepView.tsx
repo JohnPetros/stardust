@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge'
 
 type Props = {
   onSelectIntent: (intent: string) => void
+  onOpenHistory?: () => void
 }
 
 const INTENTS = [
@@ -29,7 +30,7 @@ const INTENTS = [
   },
 ]
 
-export const InitialStepView = ({ onSelectIntent }: Props) => {
+export const InitialStepView = ({ onSelectIntent, onOpenHistory }: Props) => {
   return (
     <div className='flex flex-col items-center gap-6 py-4'>
       <div className='grid grid-cols-3 gap-3 w-full'>
@@ -47,6 +48,15 @@ export const InitialStepView = ({ onSelectIntent }: Props) => {
           </button>
         ))}
       </div>
+      {onOpenHistory && (
+        <button
+          type='button'
+          onClick={onOpenHistory}
+          className='text-xs font-semibold text-green-400 underline underline-offset-4 hover:text-green-300'
+        >
+          Ver meus reportes
+        </button>
+      )}
     </div>
   )
 }

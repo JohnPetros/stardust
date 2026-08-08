@@ -9,6 +9,7 @@ type Props = {
   screenshotPreview?: string
   isLoading: boolean
   onCapture: () => void
+  onSelectFile: (file: File) => void
   onDeleteScreenshot: () => void
   onSubmit: () => void
 }
@@ -45,6 +46,7 @@ export const FormStepView = ({
   screenshotPreview,
   isLoading,
   onCapture,
+  onSelectFile,
   onDeleteScreenshot,
   onSubmit,
 }: Props) => {
@@ -55,6 +57,9 @@ export const FormStepView = ({
       <textarea
         value={content}
         onChange={(e) => onContentChange(e.target.value)}
+        maxLength={1000}
+        minLength={10}
+        aria-label='Descrição do feedback'
         placeholder={metadata.placeholder}
         className='h-40 w-full resize-none rounded-lg border border-gray-800 bg-gray-950 p-4 text-sm text-gray-100 outline-none transition-all placeholder:text-gray-500 focus:border-green-500'
         autoFocus
@@ -64,10 +69,27 @@ export const FormStepView = ({
         <button
           onClick={onCapture}
           type='button'
+          aria-label='Adicionar captura de tela'
           className='flex h-12 w-12 items-center justify-center rounded-lg border border-gray-800 bg-gray-900/50 text-gray-500 hover:bg-gray-800 hover:text-gray-400'
         >
           <Icon name='camera' size={24} />
         </button>
+
+        <label className='flex h-12 w-12 cursor-pointer items-center justify-center rounded-lg border border-gray-800 bg-gray-900/50 text-gray-500 hover:bg-gray-800 hover:text-gray-400'>
+          <Icon name='file' size={24} />
+          <span className='sr-only'>Selecionar imagem PNG ou JPEG</span>
+          <input
+            type='file'
+            accept='image/png,image/jpeg'
+            aria-label='Selecionar imagem PNG ou JPEG'
+            className='sr-only'
+            onChange={(event) => {
+              const file = event.currentTarget.files?.[0]
+              if (file) onSelectFile(file)
+              event.currentTarget.value = ''
+            }}
+          />
+        </label>
 
         <Button
           onClick={onSubmit}
@@ -77,6 +99,9 @@ export const FormStepView = ({
           Enviar feedback
         </Button>
       </div>
+      <p className='text-right text-[11px] text-gray-600'>
+        {content.length}/1.000 · mínimo de 10 caracteres
+      </p>
 
       {screenshotPreview && (
         <div className='group relative mt-2 overflow-hidden rounded-lg border border-gray-800'>

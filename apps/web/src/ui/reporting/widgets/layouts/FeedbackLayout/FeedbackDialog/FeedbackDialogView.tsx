@@ -9,6 +9,19 @@ import { SuccessStep } from './SuccessStep'
 import { ScreenCropper } from './ScreenCropper'
 import type { FeedbackStep } from './useFeedbackDialog'
 import type { IconName } from '@/ui/global/widgets/components/Icon/types'
+import { FeedbackReportsHistory } from '@/ui/reporting/widgets/components/FeedbackReportsHistory'
+import { FeedbackReportConversation } from '@/ui/reporting/widgets/components/FeedbackReportConversation'
+import { FeedbackMessageComposer } from '@/ui/reporting/widgets/components/FeedbackMessageComposer'
+import { FeedbackUnreadBadge } from '@/ui/reporting/widgets/components/FeedbackUnreadBadge'
+import type {
+  FeedbackConversationDraft,
+  FeedbackFilter,
+  FeedbackRequestState,
+} from '@/ui/reporting/types'
+import type {
+  FeedbackReportDetailsDto,
+  FeedbackReportDto,
+} from '@stardust/core/reporting/entities/dtos'
 
 type Props = {
   isOpen: boolean
@@ -24,6 +37,7 @@ type Props = {
   onOpenChange: (open: boolean) => void
   onContentChange: (content: string) => void
   handleSelectIntent: (intent: string) => void
+  handleSelectScreenshot: (file: File) => void
   handleBack: () => void
   handleReset: () => void
   handleCapture: () => void
@@ -31,6 +45,24 @@ type Props = {
   handleCancelCrop: () => void
   handleDeleteScreenshot: () => void
   handleSubmit: () => void
+  view: 'dialog' | 'history' | 'detail'
+  reports: FeedbackReportDto[]
+  detail: FeedbackReportDetailsDto | null
+  filter: FeedbackFilter
+  listState: FeedbackRequestState
+  unreadCount: number
+  hasMore: boolean
+  draft: FeedbackConversationDraft
+  replyLoading: boolean
+  detailState: FeedbackRequestState
+  onOpenHistory: () => void
+  onFilterChange: (filter: FeedbackFilter) => void
+  onSelectReport: (id: string) => void
+  onLoadMore: () => void
+  onRetry: () => void
+  onBackToHome: () => void
+  onDraftChange: (draft: FeedbackConversationDraft) => void
+  onSendReply: () => void
 }
 
 const INTENT_HEADER_METADATA: Record<
@@ -54,6 +86,7 @@ export function FeedbackDialogView({
   isLoading,
   triggerClassName = 'bottom-6 left-24',
   handleSelectIntent,
+  handleSelectScreenshot,
   handleBack,
   handleReset,
   handleCapture,
@@ -63,6 +96,24 @@ export function FeedbackDialogView({
   handleSubmit,
   onOpenChange,
   onContentChange,
+  view,
+  reports,
+  detail,
+  filter,
+  listState,
+  unreadCount,
+  hasMore,
+  draft,
+  replyLoading,
+  detailState,
+  onOpenHistory,
+  onFilterChange,
+  onSelectReport,
+  onLoadMore,
+  onRetry,
+  onBackToHome,
+  onDraftChange,
+  onSendReply,
 }: Props) {
   const currentIntent = INTENT_HEADER_METADATA[intent] || INTENT_HEADER_METADATA.other
 
@@ -73,10 +124,18 @@ export function FeedbackDialogView({
     >
       <Dialog.Content
         data-feedback-ignore-capture='true'
-        className='sm:max-w-[400px] md:max-w-[620px] rounded-3xl border-gray-800 bg-[#121214] p-6 text-gray-100 overflow-hidden'
+        className='w-[calc(100vw-1rem)] max-h-[calc(100dvh-1rem)] overflow-y-auto rounded-3xl border-gray-800 bg-[#121214] p-6 text-gray-100 sm:max-w-[400px] md:max-w-[620px]'
       >
         <div className='flex items-center justify-between mb-2'>
-          {step === 'form' ? (
+          {view !== 'dialog' ? (
+            <button
+              onClick={onBackToHome}
+              type='button'
+              className='text-gray-500 hover:text-gray-300 transition-colors'
+            >
+              <Icon name='arrow-left' size={20} />
+            </button>
+          ) : step === 'form' ? (
             <button
               onClick={handleBack}
               type='button'
@@ -89,7 +148,11 @@ export function FeedbackDialogView({
           )}
 
           <Dialog.Title className='flex items-center gap-2'>
-            {step === 'form' ? (
+            {view === 'history' ? (
+              <span className='text-lg font-bold'>Meus reportes</span>
+            ) : view === 'detail' ? (
+              <span className='text-lg font-bold'>Conversa</span>
+            ) : step === 'form' ? (
               <>
                 <Icon
                   name={currentIntent.icon}
@@ -110,13 +173,69 @@ export function FeedbackDialogView({
           </Dialog.Close>
         </div>
 
-        {step === 'initial' && <InitialStep onSelectIntent={handleSelectIntent} />}
+        {view === 'history' && (
+          <FeedbackReportsHistory
+            reports={reports}
+            filter={filter}
+            state={listState}
+            unreadCount={unreadCount}
+            onFilterChange={onFilterChange}
+            onSelect={onSelectReport}
+            onLoadMore={onLoadMore}
+            hasMore={hasMore}
+            onRetry={onRetry}
+          />
+        )}
+        {view === 'detail' && detailState === 'loading' && (
+          <div role='status' className='py-12 text-center text-sm text-gray-500'>
+            Carregando conversa…
+          </div>
+        )}
+        {view === 'detail' && detailState === 'error' && (
+          <div role='alert' className='py-12 text-center'>
+            <p className='text-sm text-gray-300'>Não foi possível abrir este reporte.</p>
+            <button
+              type='button'
+              onClick={onBackToHome}
+              className='mt-4 text-xs font-bold text-green-400 underline'
+            >
+              Voltar
+            </button>
+          </div>
+        )}
+        {view === 'detail' && detailState === 'content' && detail && (
+          <div className='flex min-h-0 flex-1 flex-col'>
+            <div className='mb-2'>
+              <p className='text-xs uppercase tracking-[0.16em] text-gray-500'>
+                {detail.title ?? 'Reporte'}
+              </p>
+              <p className='text-xs text-gray-600'>
+                {detail.status === 'closed' ? 'Fechado' : 'Aberto'}
+              </p>
+            </div>
+            <FeedbackReportConversation detail={detail} cdnUrl={CLIENT_ENV.cdnUrl} />
+            <FeedbackMessageComposer
+              draft={draft}
+              onChange={onDraftChange}
+              onSubmit={onSendReply}
+              isLoading={replyLoading}
+              isClosed={detail.status === 'closed'}
+            />
+          </div>
+        )}
+        {view === 'dialog' && step === 'initial' && (
+          <InitialStep
+            onSelectIntent={handleSelectIntent}
+            onOpenHistory={onOpenHistory}
+          />
+        )}
 
         {step === 'form' && (
           <FormStep
             intent={intent}
             content={content}
             onContentChange={onContentChange}
+            onSelectFile={handleSelectScreenshot}
             screenshotPreview={screenshotPreview}
             isLoading={isLoading}
             onCapture={handleCapture}
@@ -127,38 +246,46 @@ export function FeedbackDialogView({
 
         {step === 'success' && <SuccessStep onReset={handleReset} />}
 
-        {(step === 'initial' || step === 'form' || step === 'success') && (
-          <div className='mt-4 flex justify-center'>
-            <a
-              href={CLIENT_ENV.discordChannelUrl}
-              target='_blank'
-              rel='noreferrer'
-              className='text-xs text-gray-400 underline underline-offset-4 hover:text-gray-300'
-            >
-              Nosso servidor do Discord
-            </a>
-          </div>
-        )}
+        {view === 'dialog' &&
+          (step === 'initial' || step === 'form' || step === 'success') && (
+            <div className='mt-4 flex justify-center'>
+              <a
+                href={CLIENT_ENV.discordChannelUrl}
+                target='_blank'
+                rel='noreferrer'
+                className='text-xs text-gray-400 underline underline-offset-4 hover:text-gray-300'
+              >
+                Nosso servidor do Discord
+              </a>
+            </div>
+          )}
       </Dialog.Content>
 
       {!isCapturing && (
         <Dialog.Trigger
           data-feedback-ignore-capture='true'
-          className={`hidden md:flex group fixed w-auto h-12 z-50 items-center justify-center rounded-full bg-green-500 text-black opacity-25 transition-all duration-300 hover:opacity-100 hover:scale-[1.02] active:scale-95 px-3 ${triggerClassName}`}
+          className={`group fixed bottom-4 right-4 md:bottom-6 md:left-24 md:right-auto w-auto h-12 z-50 flex items-center justify-center rounded-full bg-transparent px-3 text-black transition-transform duration-300 hover:scale-[1.02] active:scale-95 ${triggerClassName}`}
         >
           <button
             type='button'
             aria-label='Feedback'
-            className='flex items-center gap-0 hover:gap-2 transition-all duration-300'
+            className='relative z-10 flex items-center gap-0 transition-all duration-300 hover:gap-2'
           >
-            <Icon
-              name='comment'
-              size={24}
-              className='transition-transform group-hover:rotate-12'
+            <span
+              aria-hidden='true'
+              className='absolute inset-0 rounded-full bg-green-500 opacity-25 transition-opacity duration-300 group-hover:opacity-100'
             />
-            <span className='max-w-0 overflow-hidden whitespace-nowrap text-md font-semibold transition-all duration-300 group-hover:max-w-[124px]'>
-              Fazer feedback
+            <span className='flex items-center gap-0 opacity-25 transition-opacity duration-300 group-hover:opacity-100'>
+              <Icon
+                name='comment'
+                size={24}
+                className='transition-transform group-hover:rotate-12'
+              />
+              <span className='max-w-0 overflow-hidden whitespace-nowrap text-md font-semibold transition-all duration-300 group-hover:max-w-[124px]'>
+                Fazer feedback
+              </span>
             </span>
+            <FeedbackUnreadBadge count={unreadCount} />
           </button>
         </Dialog.Trigger>
       )}
