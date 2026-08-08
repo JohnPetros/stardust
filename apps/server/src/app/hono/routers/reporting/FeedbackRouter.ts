@@ -6,6 +6,7 @@ import {
   feedbackReadSchema,
   feedbackReportSchema,
   feedbackReportsQuerySchema,
+  userFeedbackReportsQuerySchema,
   feedbackStatusSchema,
 } from '@stardust/validation/reporting/schemas'
 import { idSchema } from '@stardust/validation/global/schemas'
@@ -15,7 +16,7 @@ import {
   SupabaseFeedbackMessagesRepository,
   SupabaseFeedbackReportsRepository,
 } from '@/database/supabase/repositories/reporting'
-import { supabase } from '@/database/supabase/supabase'
+import { supabase, supabaseAdmin } from '@/database/supabase/supabase'
 import { ENV } from '@/constants'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
@@ -26,18 +27,27 @@ import {
 } from '../../middlewares'
 import {
   ChangeFeedbackReportStatusController,
+  CountUnreadFeedbackReportsController,
   CreateFeedbackAttachmentUploadUrlController,
+  CreateFeedbackReportAttachmentUploadUrlController,
   GetFeedbackReportController,
+  GetUserFeedbackReportController,
   ListFeedbackReportsController,
+  ListUserFeedbackReportsController,
   MarkFeedbackReportAsReadController,
+  MarkUserFeedbackReportAsReadController,
   SendFeedbackMessageController,
   SendFeedbackReportController,
 } from '@/rest/controllers/reporting'
 import {
   ChangeFeedbackReportStatusUseCase,
+  CountUnreadFeedbackReportsUseCase,
   CreateFeedbackAttachmentUploadUrlUseCase,
+  CreateFeedbackReportAttachmentUploadUrlUseCase,
   GetFeedbackReportUseCase,
+  GetUserFeedbackReportUseCase,
   ListFeedbackReportsUseCase,
+  ListUserFeedbackReportsUseCase,
   MarkFeedbackReportAsReadUseCase,
   SendFeedbackMessageUseCase,
   SendFeedbackReportUseCase,
@@ -49,11 +59,11 @@ export class FeedbackRouter extends HonoRouter {
   private readonly validation = new ValidationMiddleware()
   private readonly profile = new ProfileMiddleware()
   private readonly params = z.object({ feedbackReportId: idSchema })
-  private reports() {
-    return new SupabaseFeedbackReportsRepository(supabase)
+  private reports(client = supabase) {
+    return new SupabaseFeedbackReportsRepository(client)
   }
-  private messages() {
-    return new SupabaseFeedbackMessagesRepository(supabase)
+  private messages(client = supabase) {
+    return new SupabaseFeedbackMessagesRepository(client)
   }
 
   private registerList() {
@@ -66,7 +76,7 @@ export class FeedbackRouter extends HonoRouter {
         const http = new HonoHttp(context)
         return http.sendResponse(
           await new ListFeedbackReportsController(
-            new ListFeedbackReportsUseCase(this.reports()),
+            new ListFeedbackReportsUseCase(this.reports(supabaseAdmin)),
           ).handle(http),
         )
       },
@@ -82,9 +92,102 @@ export class FeedbackRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const controller = new SendFeedbackReportController(
-          new SendFeedbackReportUseCase(this.reports(), new InngestBroker()),
+          new SendFeedbackReportUseCase(
+            this.reports(context.get('supabase')),
+            new InngestBroker(),
+            new S3FileStorageProvider(),
+          ),
         )
         return http.sendResponse(await controller.handle(http))
+      },
+    )
+  }
+
+  private registerUserAttachmentUpload() {
+    this.router.post(
+      '/attachments/signed-upload-url',
+      this.auth.verifyAuthentication,
+      this.validation.validate('json', feedbackAttachmentUploadSchema),
+      async (context) => {
+        const http = new HonoHttp(context)
+        const useCase = new CreateFeedbackReportAttachmentUploadUrlUseCase(
+          new S3FileStorageProvider(),
+        )
+        return http.sendResponse(
+          await new CreateFeedbackReportAttachmentUploadUrlController(useCase).handle(
+            http,
+          ),
+        )
+      },
+    )
+  }
+
+  private registerUserList() {
+    this.router.get(
+      '/mine',
+      this.auth.verifyAuthentication,
+      this.validation.validate('query', userFeedbackReportsQuerySchema),
+      async (context) => {
+        const http = new HonoHttp(context)
+        return http.sendResponse(
+          await new ListUserFeedbackReportsController(
+            new ListUserFeedbackReportsUseCase(this.reports(context.get('supabase'))),
+          ).handle(http),
+        )
+      },
+    )
+  }
+
+  private registerUserUnreadCount() {
+    this.router.get(
+      '/mine/unread-count',
+      this.auth.verifyAuthentication,
+      async (context) => {
+        const http = new HonoHttp(context)
+        return http.sendResponse(
+          await new CountUnreadFeedbackReportsController(
+            new CountUnreadFeedbackReportsUseCase(this.reports(context.get('supabase'))),
+          ).handle(http),
+        )
+      },
+    )
+  }
+
+  private registerUserDetail() {
+    this.router.get(
+      '/mine/:feedbackReportId',
+      this.auth.verifyAuthentication,
+      this.validation.validate('param', this.params),
+      async (context) => {
+        const http = new HonoHttp(context)
+        return http.sendResponse(
+          await new GetUserFeedbackReportController(
+            new GetUserFeedbackReportUseCase(
+              this.reports(context.get('supabase')),
+              this.messages(context.get('supabase')),
+            ),
+          ).handle(http),
+        )
+      },
+    )
+  }
+
+  private registerUserRead() {
+    this.router.put(
+      '/mine/:feedbackReportId/read',
+      this.auth.verifyAuthentication,
+      this.validation.validate('param', this.params),
+      this.validation.validate('json', feedbackReadSchema),
+      async (context) => {
+        const http = new HonoHttp(context)
+        return http.sendResponse(
+          await new MarkUserFeedbackReportAsReadController(
+            new MarkFeedbackReportAsReadUseCase(
+              this.reports(context.get('supabase')),
+              this.messages(context.get('supabase')),
+            ),
+          ).handle(http),
+        )
       },
     )
   }
@@ -99,7 +202,10 @@ export class FeedbackRouter extends HonoRouter {
         const http = new HonoHttp(context)
         return http.sendResponse(
           await new GetFeedbackReportController(
-            new GetFeedbackReportUseCase(this.reports(), this.messages()),
+            new GetFeedbackReportUseCase(
+              this.reports(supabaseAdmin),
+              this.messages(supabaseAdmin),
+            ),
           ).handle(http),
         )
       },
@@ -117,7 +223,10 @@ export class FeedbackRouter extends HonoRouter {
         const http = new HonoHttp(context)
         return http.sendResponse(
           await new MarkFeedbackReportAsReadController(
-            new MarkFeedbackReportAsReadUseCase(this.reports(), this.messages()),
+            new MarkFeedbackReportAsReadUseCase(
+              this.reports(supabaseAdmin),
+              this.messages(supabaseAdmin),
+            ),
           ).handle(http),
         )
       },
@@ -136,7 +245,7 @@ export class FeedbackRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const useCase = new CreateFeedbackAttachmentUploadUrlUseCase(
-          this.reports(),
+          this.reports(context.get('supabase')),
           new S3FileStorageProvider(),
         )
         return http.sendResponse(
@@ -155,8 +264,8 @@ export class FeedbackRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const useCase = new SendFeedbackMessageUseCase(
-          this.reports(),
-          this.messages(),
+          this.reports(context.get('supabase')),
+          this.messages(context.get('supabase')),
           new InngestBroker(),
           new S3FileStorageProvider(),
           ENV.stardustWebUrl,
@@ -177,7 +286,7 @@ export class FeedbackRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         const useCase = new ChangeFeedbackReportStatusUseCase(
-          this.reports(),
+          this.reports(supabaseAdmin),
           new InngestBroker(),
         )
         return http.sendResponse(
@@ -188,6 +297,11 @@ export class FeedbackRouter extends HonoRouter {
   }
 
   registerRoutes(): Hono {
+    this.registerUserAttachmentUpload()
+    this.registerUserList()
+    this.registerUserUnreadCount()
+    this.registerUserRead()
+    this.registerUserDetail()
     this.registerList()
     this.registerCreate()
     this.registerDetail()
