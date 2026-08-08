@@ -211,15 +211,97 @@ export class SupabaseFeedbackReportsRepository
     })
   }
 
-  async markAsRead(feedbackReportId: Id, lastSeenUserMessageAt: Date): Promise<void> {
+  async findByIdAndAuthor(
+    feedbackReportId: Id,
+    authorId: Id,
+  ): Promise<FeedbackReport | null> {
+    const { data, error } = await this.supabase
+      .from('feedback_reports')
+      .select('*, feedback_messages!feedback_messages_report_id_fkey(count)')
+      .eq('id', feedbackReportId.value)
+      .eq('user_id', authorId.value)
+      .maybeSingle()
+
+    if (error) this.handleQueryPostgresError(error)
+    if (!data) return null
+
+    return SupabaseFeedbackReportMapper.toEntity(
+      data as unknown as SupabaseFeedbackReport,
+    )
+  }
+
+  async listByAuthor(input: {
+    authorId: Id
+    status?: FeedbackReportStatus
+    page: import('@stardust/core/global/structures').OrdinalNumber
+    itemsPerPage: import('@stardust/core/global/structures').OrdinalNumber
+  }): Promise<{ items: FeedbackReport[]; total: number }> {
+    const { data, error } = await this.supabase.rpc('list_user_feedback_reports', {
+      p_author_id: input.authorId.value,
+      p_status: input.status?.value ?? null,
+      p_page: input.page.value,
+      p_items_per_page: input.itemsPerPage.value,
+    })
+    if (error) this.handleQueryPostgresError(error)
+
+    const rows = (data ?? []) as unknown as Array<
+      SupabaseFeedbackReport & { total_count: number; is_unread: boolean }
+    >
+    return {
+      items: rows.map((row) => SupabaseFeedbackReportMapper.toEntity(row)),
+      total: rows[0]?.total_count ?? 0,
+    }
+  }
+
+  async countUnreadByAuthor(authorId: Id): Promise<number> {
+    const { data, error } = await this.supabase.rpc(
+      'count_unread_user_feedback_reports',
+      {
+        p_author_id: authorId.value,
+      },
+    )
+    if (error) this.handleQueryPostgresError(error)
+    return Number(data ?? 0)
+  }
+
+  async markAsRead(
+    inputOrReportId:
+      | Id
+      | {
+          feedbackReportId: Id
+          participant: 'author' | 'studio'
+          lastSeenMessageAt: Date
+          authorId?: Id
+        },
+    legacyLastSeenMessageAt?: Date,
+  ): Promise<void> {
+    if (inputOrReportId instanceof Object && 'participant' in inputOrReportId) {
+      const input = inputOrReportId
+      if (input.participant === 'author') {
+        if (!input.authorId) throw new Error('A leitura do autor exige o actorId')
+        const { error } = await this.supabase.rpc('mark_user_feedback_report_read', {
+          p_report_id: input.feedbackReportId.value,
+          p_author_id: input.authorId.value,
+          p_last_seen_admin_message_at: input.lastSeenMessageAt.toISOString(),
+        })
+        if (error) this.handleQueryPostgresError(error)
+        return
+      }
+      const { error } = await this.supabase
+        .from('feedback_reports')
+        .update({ studio_read_at: input.lastSeenMessageAt.toISOString() })
+        .eq('id', input.feedbackReportId.value)
+        .or(
+          `studio_read_at.is.null,studio_read_at.lt.${input.lastSeenMessageAt.toISOString()}`,
+        )
+      if (error) this.handleQueryPostgresError(error)
+      return
+    }
+
     const { error } = await this.supabase
       .from('feedback_reports')
-      .update({ studio_read_at: lastSeenUserMessageAt.toISOString() })
-      .eq('id', feedbackReportId.value)
-      .or(
-        `studio_read_at.is.null,studio_read_at.lt.${lastSeenUserMessageAt.toISOString()}`,
-      )
-
+      .update({ studio_read_at: legacyLastSeenMessageAt?.toISOString() ?? null })
+      .eq('id', (inputOrReportId as Id).value)
     if (error) this.handleQueryPostgresError(error)
   }
 }

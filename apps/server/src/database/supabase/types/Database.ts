@@ -1660,11 +1660,13 @@ export type Database = {
       }
       feedback_reports: {
         Row: {
+          author_read_at: string | null
           content: string
           created_at: string
           id: string
           intent: Database['public']['Enums']['feedback_intent']
           last_activity_at: string
+          last_admin_message_at: string | null
           last_user_message_at: string | null
           screenshot: string | null
           status: string
@@ -1673,11 +1675,13 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          author_read_at?: string | null
           content: string
           created_at?: string
           id?: string
           intent: Database['public']['Enums']['feedback_intent']
           last_activity_at?: string
+          last_admin_message_at?: string | null
           last_user_message_at?: string | null
           screenshot?: string | null
           status?: string
@@ -1686,11 +1690,13 @@ export type Database = {
           user_id: string
         }
         Update: {
+          author_read_at?: string | null
           content?: string
           created_at?: string
           id?: string
           intent?: Database['public']['Enums']['feedback_intent']
           last_activity_at?: string
+          last_admin_message_at?: string | null
           last_user_message_at?: string | null
           screenshot?: string | null
           status?: string
@@ -3208,9 +3214,49 @@ export type Database = {
       }
     }
     Functions: {
+      count_unread_user_feedback_reports: {
+        Args: { p_author_id: string }
+        Returns: number
+      }
       change_feedback_report_status: {
         Args: { p_request: Json }
         Returns: Json
+      }
+      list_user_feedback_reports: {
+        Args: {
+          p_author_id: string
+          p_items_per_page?: number
+          p_page?: number
+          p_status?: string | null
+        }
+        Returns: {
+          author_read_at: string | null
+          author_email: string | null
+          content: string
+          created_at: string
+          id: string
+          intent: Database['public']['Enums']['feedback_intent']
+          is_unread: boolean
+          last_activity_at: string
+          last_admin_message_at: string | null
+          last_user_message_at: string | null
+          preview: string
+          screenshot: string | null
+          status: string
+          studio_read_at: string | null
+          title: string
+          total_count: number
+          user_id: string
+          admin_message_count: number
+        }[]
+      }
+      mark_user_feedback_report_read: {
+        Args: {
+          p_author_id: string
+          p_last_seen_admin_message_at: string
+          p_report_id: string
+        }
+        Returns: undefined
       }
       list_feedback_reports: {
         Args: {

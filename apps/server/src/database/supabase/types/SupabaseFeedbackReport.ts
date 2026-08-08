@@ -16,4 +16,5 @@ export type SupabaseFeedbackReport =
     preview?: string
     is_unread?: boolean
     author_email?: string
+    author_read_at?: string | null
   }
