@@ -7,11 +7,13 @@ import type { AnimationRef } from '@/ui/global/widgets/components/Animation/type
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 import { useSignInPage } from './useSignInPage'
 import { SignInPageView } from './SignInPageView'
+import { isSafeNextRoute } from '@/utils/is-safe-next-route'
 
 export const SignInPage = () => {
   const rocketAnimationRef = useRef<AnimationRef>(null)
   const searchParams = useSearchParams()
-  const nextRoute = searchParams.get('nextRoute') ?? ''
+  const requestedNextRoute = searchParams.get('nextRoute') ?? ''
+  const nextRoute = isSafeNextRoute(requestedNextRoute) ? requestedNextRoute : ''
   const error = searchParams.get('error') ?? ''
   const { handleSignIn } = useAuthContext()
   const { isRocketVisible, handleFormSubmit } = useSignInPage({

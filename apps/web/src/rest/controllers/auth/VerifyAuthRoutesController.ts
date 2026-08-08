@@ -7,6 +7,7 @@ import { cookieActions } from '@/rpc/next-safe-action'
 import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { Text } from '@stardust/core/global/structures'
+import { isSafeNextRoute } from '@/utils/is-safe-next-route'
 
 export const VerifyAuthRoutesController = (authService: AuthService): Controller => {
   async function refreshAuthSession(http: Http) {
@@ -94,7 +95,7 @@ export const VerifyAuthRoutesController = (authService: AuthService): Controller
 
       if (hasSession && isSignInRoute) {
         const { nextRoute } = http.getQueryParams() as { nextRoute?: string }
-        return http.redirect(nextRoute ?? ROUTES.space)
+        return http.redirect(isSafeNextRoute(nextRoute) ? nextRoute : ROUTES.space)
       }
 
       return http.pass()
