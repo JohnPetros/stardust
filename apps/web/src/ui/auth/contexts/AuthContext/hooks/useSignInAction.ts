@@ -1,6 +1,6 @@
 import { useAction } from 'next-safe-action/hooks'
 
-import { authActions } from '@/rpc/next-safe-action'
+import * as authActions from '@/rpc/next-safe-action/authActions'
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import { ActionResponse } from '@stardust/core/global/responses'
 

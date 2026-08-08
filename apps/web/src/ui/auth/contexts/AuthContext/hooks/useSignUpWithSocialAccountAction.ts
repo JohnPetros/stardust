@@ -4,7 +4,7 @@ import { useAction } from 'next-safe-action/hooks'
 import { ActionResponse } from '@stardust/core/global/responses'
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 
-import { authActions } from '@/rpc/next-safe-action'
+import * as authActions from '@/rpc/next-safe-action/authActions'
 
 export function useSignUpWithSocialAccountAction() {
   const { executeAsync } = useAction(authActions.signUpWithSocialAccount)

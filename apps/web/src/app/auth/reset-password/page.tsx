@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 import { COOKIES } from '@/constants'
 import { STARDUST_METADATA } from '@/constants/stardust-metadata'
-import { cookieActions } from '@/rpc/next-safe-action'
+import * as cookieActions from '@/rpc/next-safe-action/cookieActions'
 import { ResetPasswordPage } from '@/ui/auth/widgets/pages/ResetPassword'
 
 export const metadata: Metadata = {

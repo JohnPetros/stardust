@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { ChallengeLayout } from '@/ui/challenging/widgets/layouts/Challenge'
 import { parsePanelsLayoutCookie } from '@/ui/challenging/widgets/layouts/Challenge/utils/parsePanelsLayoutCookie'
 import { FeedbackLayout } from '@/ui/reporting/widgets/layouts/FeedbackLayout'
-import { cookieActions } from '@/rpc/next-safe-action'
+import * as cookieActions from '@/rpc/next-safe-action/cookieActions'
 import { COOKIES } from '@/constants'
 
 type ChallengeLayoutProps = {

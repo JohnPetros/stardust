@@ -1,6 +1,6 @@
 import type { NextParams } from '@/rpc/next/types'
 import { SolutionPage } from '@/ui/challenging/widgets/pages/Solution'
-import { challengingActions } from '@/rpc/next-safe-action'
+import * as challengingActions from '@/rpc/next-safe-action/challengingActions'
 
 const Slot = async ({ params }: NextParams<'challengeSlug'>) => {
   const { challengeSlug } = await params

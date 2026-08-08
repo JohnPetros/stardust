@@ -1,6 +1,6 @@
 import type { NextParams } from '@/rpc/next/types'
 import { ProfilePage } from '@/ui/profile/widgets/pages/Profile'
-import { profileActions } from '@/rpc/next-safe-action'
+import * as profileActions from '@/rpc/next-safe-action/profileActions'
 
 const Page = async ({ params }: NextParams<'userSlug'>) => {
   const { userSlug } = await params

@@ -1,5 +1,5 @@
 import type { NextParams } from '@/rpc/next/types'
-import { playgroundActions } from '@/rpc/next-safe-action'
+import * as playgroundActions from '@/rpc/next-safe-action/playgroundActions'
 import { SnippetPage } from '@/ui/playground/widgets/pages/Snippet'
 import { NotPublicSnippetPage } from '@/ui/playground/widgets/pages/NotPublicPlayground'
 
