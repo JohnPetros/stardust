@@ -84,6 +84,12 @@ export function ServerMock(page: Page): ServerMockController {
           body: null,
         },
         {
+          method: 'GET',
+          path: '/reporting/feedback/mine/unread-count',
+          status: 200,
+          body: { count: 0 },
+        },
+        {
           method: 'POST',
           path: '/auth/sign-up',
           status: 200,

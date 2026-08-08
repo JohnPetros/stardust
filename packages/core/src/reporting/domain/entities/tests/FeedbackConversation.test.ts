@@ -22,6 +22,38 @@ describe('feedback conversation domain', () => {
     )
   })
 
+  it('tracks administrative novelty independently and reads it monotonically', () => {
+    const report = FeedbackReportsFaker.fake({
+      content: `${'word '.repeat(20)}tail`,
+    })
+    const firstAdminMessageAt = new Date('2026-01-01T10:00:00.000Z')
+    const secondAdminMessageAt = new Date('2026-01-01T11:00:00.000Z')
+
+    report.registerActivity(firstAdminMessageAt, 'admin')
+    expect(report.hasUnreadAdminReply).toBe(true)
+    report.markAuthorRead(firstAdminMessageAt)
+    expect(report.hasUnreadAdminReply).toBe(false)
+
+    report.registerActivity(secondAdminMessageAt, 'admin')
+    report.markAuthorRead(firstAdminMessageAt)
+    expect(report.authorReadAt).toEqual(firstAdminMessageAt)
+    expect(report.hasUnreadAdminReply).toBe(true)
+    report.markAuthorRead(secondAdminMessageAt)
+    expect(report.authorReadAt).toEqual(secondAdminMessageAt)
+    expect(report.title.value.length).toBeLessThanOrEqual(60)
+    expect(report.content.value).toContain('tail')
+  })
+
+  it('does not accept an administrative message beyond the known activity', () => {
+    const report = FeedbackReportsFaker.fake()
+    const knownMessageAt = new Date('2026-01-01T10:00:00.000Z')
+    report.registerActivity(knownMessageAt, 'admin')
+
+    expect(() => report.markAuthorRead(new Date('2026-01-01T10:00:01.000Z'))).toThrow(
+      'mensagem administrativa conhecida',
+    )
+  })
+
   it('requires an existing administrative reply before closing', () => {
     const report = FeedbackReportsFaker.fake()
 

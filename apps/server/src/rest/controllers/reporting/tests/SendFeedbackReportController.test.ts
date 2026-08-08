@@ -22,7 +22,15 @@ describe('Send Feedback Report Controller', () => {
     const body = {
       content: 'Great app!',
       intent: 'idea' as const,
-      screenshot: 'http://example.com/screenshot.png',
+      initialAttachment: {
+        storageKey: 'images/feedback-reports/11111111-1111-4111-8111-111111111111.png',
+        originalName: 'screenshot.png',
+        mimeType: 'image/png' as const,
+        size: 128,
+      },
+      userId: 'attacker-id',
+      title: 'Untrusted title',
+      status: 'closed',
       userName: 'John Doe',
       userSlug: 'john-doe',
       userAvatar: {
@@ -47,7 +55,7 @@ describe('Send Feedback Report Controller', () => {
     expect(useCase.execute).toHaveBeenCalledWith({
       content: body.content,
       intent: body.intent,
-      screenshot: body.screenshot,
+      initialAttachment: body.initialAttachment,
       author: {
         id: accountId,
         entity: {
@@ -87,7 +95,7 @@ describe('Send Feedback Report Controller', () => {
     expect(useCase.execute).toHaveBeenCalledWith({
       content: body.content,
       intent: body.intent,
-      screenshot: undefined,
+      initialAttachment: undefined,
       author: {
         id: accountId,
         entity: {
