@@ -8,13 +8,38 @@ import type { FeedbackMessage } from '../entities/FeedbackMessage'
 import type { FeedbackReport } from '../entities/FeedbackReport'
 import type { FeedbackMessageAttachmentDto } from '../entities/dtos/FeedbackMessageDto'
 import type { FeedbackReportStatus } from '../structures/FeedbackReportStatus'
+import type { AuthorAggregateDto } from '#global/domain/aggregates/dtos/AuthorAggregateDto'
+import type { FeedbackIntent } from '../structures/FeedbackIntent'
 
 export type ListFeedbackReportsRequest = FeedbackReportsListingRequest
+export type GetUserFeedbackReportRequest = {
+  feedbackReportId: string
+  authorId: string
+}
+export type ListUserFeedbackReportsRequest = {
+  authorId: string
+  status?: 'open' | 'closed'
+  page?: number
+  itemsPerPage?: number
+}
+export type CountUnreadFeedbackReportsRequest = { authorId: string }
+export type MarkUserFeedbackReportAsReadRequest = {
+  feedbackReportId: string
+  actor: { accountId: string; role: 'user' | 'admin' }
+  lastSeenMessageId: string
+}
+
+/** @deprecated Use GetUserFeedbackReportRequest for the author-facing flow. */
 export type GetFeedbackReportRequest = { feedbackReportId: string }
-export type MarkFeedbackReportAsReadRequest = {
+
+export type LegacyMarkFeedbackReportAsReadRequest = {
   feedbackReportId: string
   lastSeenUserMessageId: string
 }
+
+export type MarkFeedbackReportAsReadRequest =
+  | MarkUserFeedbackReportAsReadRequest
+  | LegacyMarkFeedbackReportAsReadRequest
 
 export type FeedbackReportsListingRequest = {
   search?: string
@@ -27,6 +52,26 @@ export type FeedbackReportsListingRequest = {
 }
 
 export type FeedbackMessageAttachmentRequest = FeedbackMessageAttachmentDto
+
+export type FeedbackInitialAttachmentRequest = {
+  storageKey: string
+  originalName: string
+  mimeType: 'image/png' | 'image/jpeg'
+  size: number
+}
+
+export type CreateFeedbackReportRequest = {
+  content: Text
+  intent: FeedbackIntent
+  initialAttachment?: FeedbackInitialAttachmentRequest
+}
+
+export type SendFeedbackReportRequest = {
+  content: string
+  intent: 'bug' | 'idea' | 'other'
+  author: AuthorAggregateDto
+  initialAttachment?: FeedbackInitialAttachmentRequest
+}
 
 export type CreateFeedbackAttachmentUploadRequest = {
   fileName: Text
@@ -83,3 +128,10 @@ export type SendFeedbackReportReplyEmailRequest = {
 export type FeedbackReplyEmailRequest = SendFeedbackReportReplyEmailRequest
 
 export type CreateFeedbackAttachmentUploadResponse = SignedUploadUrlDto
+
+export type CreateFeedbackReportAttachmentUploadRequest = {
+  actorId: string
+  fileName: Text
+  mimeType: Text
+  size: Integer
+}
