@@ -6,9 +6,14 @@ const attachmentSchema = z
   .object({
     id: idSchema,
     storageKey: stringSchema.min(1),
-    originalName: stringSchema.min(1),
+    originalName: stringSchema
+      .min(1)
+      .regex(/\.(png|jpg|jpeg)$/i, 'nome original deve ser PNG ou JPEG'),
     mimeType: z.enum(['image/png', 'image/jpeg']),
-    size: integerSchema.min(1).max(10 * 1024 * 1024),
+    size: integerSchema
+      .int('tamanho deve ser um número inteiro')
+      .min(1, 'tamanho deve ser maior que zero')
+      .max(10 * 1024 * 1024, 'tamanho deve ser no máximo 10 MB'),
   })
   .superRefine(({ originalName, mimeType }, context) => {
     const normalizedName = originalName.toLowerCase()
