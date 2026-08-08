@@ -5,3 +5,7 @@ export { MarkFeedbackReportAsReadUseCase } from './MarkFeedbackReportAsReadUseCa
 export { CreateFeedbackAttachmentUploadUrlUseCase } from './CreateFeedbackAttachmentUploadUrlUseCase'
 export { SendFeedbackMessageUseCase } from './SendFeedbackMessageUseCase'
 export { ChangeFeedbackReportStatusUseCase } from './ChangeFeedbackReportStatusUseCase'
+export { ListUserFeedbackReportsUseCase } from './ListUserFeedbackReportsUseCase'
+export { GetUserFeedbackReportUseCase } from './GetUserFeedbackReportUseCase'
+export { CountUnreadFeedbackReportsUseCase } from './CountUnreadFeedbackReportsUseCase'
+export { CreateFeedbackReportAttachmentUploadUrlUseCase } from './CreateFeedbackReportAttachmentUploadUrlUseCase'

@@ -24,6 +24,7 @@ import {
   FeedbackReportClosedEvent,
   FeedbackUserMessageCreatedEvent,
 } from '../domain/events'
+import { validateFeedbackImageMetadata } from './feedbackAttachmentValidation'
 
 export class SendFeedbackMessageUseCase
   implements
@@ -82,6 +83,14 @@ export class SendFeedbackMessageUseCase
         content: request.content,
         attachments: request.attachments,
       })
+    for (const attachment of message.attachments) {
+      validateFeedbackImageMetadata(
+        attachment.originalName,
+        attachment.mimeType,
+        attachment.size,
+        false,
+      )
+    }
     if (this.storage) {
       const folder = FileStorageFolderPath.createAsFeedbackMessages(
         report.id.value,
