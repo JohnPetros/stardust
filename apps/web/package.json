@@ -60,7 +60,7 @@
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.8.1",
     "ai": "^6.0.219",
-    "apexcharts": "^4.7.0",
+    "apexcharts": "^6.7.0",
     "autoprefixer": "10.5.4",
     "html-to-image": "^1.11.13",
     "immer": "^10.1.1",
