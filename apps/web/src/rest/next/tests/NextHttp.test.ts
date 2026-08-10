@@ -1,14 +1,12 @@
 import type { NextRequest } from 'next/server'
 
 import { COOKIES } from '@/constants'
-import { cookieActions } from '@/rpc/next-safe-action'
+import * as cookieActions from '@/rpc/next-safe-action/cookieActions'
 import { NextHttp } from '../NextHttp'
 
-jest.mock('@/rpc/next-safe-action', () => ({
-  cookieActions: {
-    getCookie: jest.fn(),
-    hasCookie: jest.fn(),
-  },
+jest.mock('@/rpc/next-safe-action/cookieActions', () => ({
+  getCookie: jest.fn(),
+  hasCookie: jest.fn(),
 }))
 
 jest.mock('next/server', () => ({

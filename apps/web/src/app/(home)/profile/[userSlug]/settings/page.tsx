@@ -1,5 +1,5 @@
 import type { NextParams } from '@/rpc/next/types'
-import { profileActions } from '@/rpc/next-safe-action'
+import * as profileActions from '@/rpc/next-safe-action/profileActions'
 import { SettingsPage } from '@/ui/profile/widgets/pages/Settings'
 
 const Page = async ({ params }: NextParams<'userSlug'>) => {

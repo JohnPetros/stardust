@@ -1,6 +1,6 @@
 import type { NextParams, NextSearchParams } from '@/rpc/next/types'
 import { ChallengeSolutionSlot } from '@/ui/challenging/widgets/slots/ChallengeSolution'
-import { challengingActions } from '@/rpc/next-safe-action'
+import * as challengingActions from '@/rpc/next-safe-action/challengingActions'
 
 export const dynamic = 'force-dynamic'
 

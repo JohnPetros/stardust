@@ -17,7 +17,7 @@ import {
   PanelGroup,
 } from 'react-resizable-panels'
 
-import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
+import { PageTransitionAnimationWithTips } from '@/ui/global/widgets/components/PageTransitionAnimationWithTips'
 import type { DockablePanelId } from '@/ui/challenging/stores/ChallengeStore/types'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { ChallengeSlider } from './ChallengeSlider'
@@ -102,7 +102,7 @@ export const ChallengeLayoutView = ({
 
   return (
     <>
-      <PageTransitionAnimation isVisible={isTransitionPageVisible} hasTips />
+      <PageTransitionAnimationWithTips isVisible={isTransitionPageVisible} />
       <div className='relative md:overflow-hidden'>
         {header}
         <main className='w-full'>

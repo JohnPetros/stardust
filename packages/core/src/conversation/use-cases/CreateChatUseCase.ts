@@ -2,7 +2,7 @@ import type { UseCase } from '#global/interfaces/UseCase'
 import type { ChatDto } from '../domain/entities/dtos'
 import type { ChatsRepository } from '../interfaces'
 import { Chat } from '../domain/entities'
-import { Id } from '../../main'
+import { Id } from '#global/domain/structures/Id'
 
 type Request = {
   userId: string

@@ -1,4 +1,4 @@
-import { playgroundActions } from '@/rpc/next-safe-action'
+import * as playgroundActions from '@/rpc/next-safe-action/playgroundActions'
 import { SnippetsPage } from '@/ui/playground/widgets/pages/Snippets'
 
 const Page = async () => {

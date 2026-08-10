@@ -3,7 +3,7 @@
 import { useAction } from 'next-safe-action/hooks'
 import { useCallback } from 'react'
 
-import { cookieActions } from '@/rpc/next-safe-action'
+import * as cookieActions from '@/rpc/next-safe-action/cookieActions'
 import { ROUTES } from '@/constants'
 import { ActionResponse } from '@stardust/core/global/responses'
 

@@ -1,6 +1,6 @@
-import { CodeSnippet } from '../../../components/CodeSnippet'
 import { SectionTitle } from '../SectionTitle'
 import { AnimatedFeature } from './AnimatedFeature'
+import { DeferredCodeSnippet } from './DeferredCodeSnippet'
 
 export function CodeSection() {
   return (
@@ -15,7 +15,7 @@ export function CodeSection() {
             title='Linguagem de programação em português'
             paragraph='Domine a arte da programação com uma linguagem desenvolvida especialmente para falantes de português. Simples, intuitiva e projetada para facilitar seu aprendizado desde o primeiro comando.'
           >
-            <CodeSnippet
+            <DeferredCodeSnippet
               isRunnable={true}
               code={`funcao fala(mensagem) {
   escreva(mensagem)
@@ -35,7 +35,7 @@ escreva('A soma de 5 e 3 é \${soma(5, 3)}.') // Saída: A soma de 5 e 3 é 8.`}
             title='Do básico ao avançado'
             paragraph='Comece com os conceitos mais básicos, como declarar variáveis, e evolua para a criação de programas complexos que resolvem problemas reais. Tudo em uma jornada contínua e estruturada.'
           >
-            <CodeSnippet
+            <DeferredCodeSnippet
               isRunnable={true}
               code={` funcao fibonacci(maximo) {
     var a, b = 0, 1
@@ -59,7 +59,7 @@ fibonacci(100)
             title='Desafios de código'
             paragraph='Teste suas habilidades com desafios de código práticos. Além de consolidar seu conhecimento, você pode criar e compartilhar desafios para outros viajantes, tornando-se parte de uma comunidade colaborativa.'
           >
-            <CodeSnippet
+            <DeferredCodeSnippet
               isRunnable={true}
               code={`// Desafio: Verificar se uma palavra é um palíndromo
 funcao verifiquePalindromo(frase) {
