@@ -21,8 +21,18 @@
 - Serena para navegar pela codebase de forma otimizada
 - Pencil para editar ou saber o contexto de frames de design estilo Figma
 - Playwright para inspecionar e validar fluxos reais no navegador
+- browser-use para exploração interativa e tarefas pontuais no navegador real
 - Supabase Dev para interagir com o projeto Supabase de desenvolvimento 
 - Supabase Prod para interagir com o projeto Supabase de produção
+
+### browser-use e Playwright
+
+- Use `browser-use` para exploração manual assistida, inspeção visual e tarefas
+  pontuais em uma sessão real do navegador conectada via CDP.
+- Use Playwright para validações formais, testes automatizados repetíveis,
+  asserções, mocks, traces, execução cross-browser e CI.
+- `browser-use` não substitui o Playwright nas validações obrigatórias de
+  frontend nem na suíte de testes versionada.
 
 ### Supabase Dev como padrão
 
