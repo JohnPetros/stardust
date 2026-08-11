@@ -29,6 +29,16 @@ type FeedbackReportsRpcRow = Omit<SupabaseFeedbackReport, 'id'> & {
   preview: string
 }
 
+type FeedbackReportsHistoryRpcRow = SupabaseFeedbackReport & {
+  total_count: number
+  is_unread: boolean
+  author_name: string
+  author_email: string
+  author_slug: string
+  avatar_name: string | null
+  avatar_image: string | null
+}
+
 export class SupabaseFeedbackReportsRepository
   extends SupabaseRepository
   implements FeedbackReportsRepository
@@ -185,7 +195,7 @@ export class SupabaseFeedbackReportsRepository
     const { data, error } = await this.supabase
       .from('feedback_reports')
       .select(
-        '*, users(name, slug, avatar:avatar_id(name, image)), feedback_messages!feedback_messages_report_id_fkey(count)',
+        '*, users!inner(name, email, slug, avatar:avatar_id(name, image)), feedback_messages!feedback_messages_report_id_fkey(count)',
       )
       .eq('id', feedbackId.value)
       .single()
@@ -217,7 +227,9 @@ export class SupabaseFeedbackReportsRepository
   ): Promise<FeedbackReport | null> {
     const { data, error } = await this.supabase
       .from('feedback_reports')
-      .select('*, feedback_messages!feedback_messages_report_id_fkey(count)')
+      .select(
+        '*, users!inner(name, email, slug, avatar:avatar_id(name, image)), feedback_messages!feedback_messages_report_id_fkey(count)',
+      )
       .eq('id', feedbackReportId.value)
       .eq('user_id', authorId.value)
       .maybeSingle()
@@ -244,11 +256,23 @@ export class SupabaseFeedbackReportsRepository
     })
     if (error) this.handleQueryPostgresError(error)
 
-    const rows = (data ?? []) as unknown as Array<
-      SupabaseFeedbackReport & { total_count: number; is_unread: boolean }
-    >
+    const rows = (data ?? []) as unknown as FeedbackReportsHistoryRpcRow[]
     return {
-      items: rows.map((row) => SupabaseFeedbackReportMapper.toEntity(row)),
+      items: rows.map((row) =>
+        SupabaseFeedbackReportMapper.toEntity({
+          ...row,
+          users: {
+            name: row.author_name,
+            email: row.author_email,
+            slug: row.author_slug,
+            avatar: row.avatar_name
+              ? { name: row.avatar_name, image: row.avatar_image ?? '' }
+              : null,
+          },
+          author_email: row.author_email,
+          is_unread: row.is_unread,
+        }),
+      ),
       total: rows[0]?.total_count ?? 0,
     }
   }

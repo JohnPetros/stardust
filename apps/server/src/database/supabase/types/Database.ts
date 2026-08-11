@@ -3232,6 +3232,10 @@ export type Database = {
         Returns: {
           author_read_at: string | null
           author_email: string | null
+          author_name: string
+          author_slug: string
+          avatar_image: string | null
+          avatar_name: string | null
           content: string
           created_at: string
           id: string
