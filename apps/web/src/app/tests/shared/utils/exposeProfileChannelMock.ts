@@ -22,5 +22,3 @@ export function exposeProfileChannelMock() {
     },
   }
 }
-
-exposeProfileChannelMock()

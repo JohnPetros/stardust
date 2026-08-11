@@ -3,7 +3,7 @@ import type { AuthService } from '@stardust/core/auth/interfaces'
 import type { SessionDto } from '@stardust/core/auth/structures/dtos'
 
 import { COOKIES, PUBLIC_ROUTE_GROUPS, PUBLIC_ROUTES, ROUTES } from '@/constants'
-import { cookieActions } from '@/rpc/next-safe-action'
+import * as cookieActions from '@/rpc/next-safe-action/cookieActions'
 import { RestResponse } from '@stardust/core/global/responses'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { Text } from '@stardust/core/global/structures'

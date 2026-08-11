@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 import { COOKIES } from '@/constants'
-import { cookieActions } from '@/rpc/next-safe-action'
+import * as cookieActions from '@/rpc/next-safe-action/cookieActions'
 import { AuthService } from '@/rest/services'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import { ToastContextProvider } from '@/ui/global/contexts/ToastContext'

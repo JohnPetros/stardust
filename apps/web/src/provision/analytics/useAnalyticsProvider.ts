@@ -1,6 +1,6 @@
 'use client'
 
-import posthog from 'posthog-js'
+import type { PostHogInterface } from 'posthog-js'
 import { useMemo } from 'react'
 
 import type { ClientAnalyticsProvider } from '@stardust/core/analytics/interfaces'
@@ -8,13 +8,15 @@ import type { ClientAnalyticsProvider } from '@stardust/core/analytics/interface
 import { CLIENT_ENV } from '@/constants'
 
 let isPostHogInitialized = false
+let postHogClient: PostHogInterface | null = null
 let pendingIdentity: { userId: string; userEmail: string } | null = null
 
-export function markAnalyticsProviderAsInitialized() {
+export function markAnalyticsProviderAsInitialized(client: PostHogInterface) {
+  postHogClient = client
   isPostHogInitialized = true
   if (!pendingIdentity) return
 
-  posthog.identify(pendingIdentity.userId, {
+  postHogClient.identify(pendingIdentity.userId, {
     email: pendingIdentity.userEmail,
   })
   pendingIdentity = null
@@ -24,9 +26,9 @@ export function useAnalyticsProvider(): ClientAnalyticsProvider {
   return useMemo(
     () => ({
       trackEvent(eventName, properties) {
-        if (!isPostHogInitialized) return
+        if (!isPostHogInitialized || !postHogClient) return
 
-        posthog.capture(eventName, properties)
+        postHogClient.capture(eventName, properties)
       },
       identifyUser(userId, userEmail) {
         if (!isPostHogInitialized) {
@@ -37,16 +39,16 @@ export function useAnalyticsProvider(): ClientAnalyticsProvider {
           return
         }
 
-        posthog.identify(userId.value, {
+        postHogClient?.identify(userId.value, {
           email: userEmail.value,
         })
       },
       reset() {
         pendingIdentity = null
-        if (!isPostHogInitialized) return
+        if (!isPostHogInitialized || !postHogClient) return
 
-        posthog.reset()
-        posthog.register({
+        postHogClient.reset()
+        postHogClient.register({
           platform: 'web',
           environment: CLIENT_ENV.mode,
         })

@@ -1,5 +1,5 @@
 import type { UseCase } from '#global/interfaces/UseCase'
-import { Id } from '../../main'
+import { Id } from '#global/domain/structures/Id'
 import { ChatNotFoundError } from '../domain/errors'
 import { ChatMessage } from '../domain/structures'
 import type { ChatMessageDto } from '../domain/structures/dtos'

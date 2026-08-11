@@ -2,7 +2,7 @@ services:
   # The application-facing Supabase services used by server integration tests.
   # Postgres and the gateway below are infrastructure required by these services.
   supabase-db:
-    image: supabase/postgres:17.6.1.136
+    image: public.ecr.aws/supabase/postgres:17.6.1.160
     container_name: stardust-supabase-db
     environment:
       POSTGRES_DB: postgres
@@ -19,7 +19,7 @@ services:
       retries: 10
 
   supabase-auth:
-    image: supabase/gotrue:v2.189.0
+    image: public.ecr.aws/supabase/gotrue:v2.195.0
     container_name: stardust-supabase-auth
     depends_on:
       supabase-db:
@@ -147,7 +147,7 @@ services:
       KONG_PLUGINS: request-transformer,cors
 
   inngest:
-    image: inngest/inngest:v1.38.1
+    image: inngest/inngest:v1.41.1
     container_name: stardust-inngest
     command: inngest dev -u http://host.docker.internal:3334/inngest --no-discovery
     ports:

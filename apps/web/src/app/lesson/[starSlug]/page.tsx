@@ -1,6 +1,7 @@
 import type { NextParams } from '@/rpc/next/types'
 import { LessonPage } from '@/ui/lesson/widgets/pages/Lesson'
-import { lessonActions, spaceActions } from '@/rpc/next-safe-action'
+import * as lessonActions from '@/rpc/next-safe-action/lessonActions'
+import * as spaceActions from '@/rpc/next-safe-action/spaceActions'
 
 const Page = async ({ params }: NextParams<'starSlug'>) => {
   const { starSlug } = await params

@@ -1,6 +1,6 @@
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { ChatsRepository } from '../interfaces'
-import { Id } from '../../main'
+import { Id } from '#global/domain/structures/Id'
 import { ChatNotFoundError } from '../domain/errors'
 
 type Request = {

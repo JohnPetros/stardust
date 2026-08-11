@@ -1,4 +1,4 @@
-import { lessonActions } from '@/rpc/next-safe-action'
+import * as lessonActions from '@/rpc/next-safe-action/lessonActions'
 import { EndingPage } from '@/ui/lesson/widgets/pages/Ending'
 
 export default async function Ending() {

@@ -1,5 +1,5 @@
 import type { NextParams } from '@/rpc/next/types'
-import { challengingActions } from '@/rpc/next-safe-action'
+import * as challengingActions from '@/rpc/next-safe-action/challengingActions'
 import { ChallengeEditorPage } from '@/ui/challenging/widgets/pages/ChallengeEditor'
 
 const Page = async ({ params }: NextParams<'challengeSlug'>) => {

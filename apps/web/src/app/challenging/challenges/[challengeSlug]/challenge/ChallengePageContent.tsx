@@ -3,7 +3,8 @@ import type { JSX } from 'react'
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 
 import { COOKIES } from '@/constants'
-import { challengingActions, cookieActions } from '@/rpc/next-safe-action'
+import * as challengingActions from '@/rpc/next-safe-action/challengingActions'
+import * as cookieActions from '@/rpc/next-safe-action/cookieActions'
 import type { NextParams } from '@/rpc/next/types'
 import { ChallengePage } from '@/ui/challenging/widgets/pages/Challenge'
 

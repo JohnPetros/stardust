@@ -2,7 +2,8 @@ import type { ReactNode } from 'react'
 
 import { ChallengeLayout } from '@/ui/challenging/widgets/layouts/Challenge'
 import { parsePanelsLayoutCookie } from '@/ui/challenging/widgets/layouts/Challenge/utils/parsePanelsLayoutCookie'
-import { cookieActions } from '@/rpc/next-safe-action'
+import { FeedbackLayout } from '@/ui/reporting/widgets/layouts/FeedbackLayout'
+import * as cookieActions from '@/rpc/next-safe-action/cookieActions'
 import { COOKIES } from '@/constants'
 
 type ChallengeLayoutProps = {
@@ -22,13 +23,15 @@ const Layout = async ({
   const { panelOrder, panelsOffset } = parsePanelsLayoutCookie(storagedPanelsOffset?.data)
 
   return (
-    <ChallengeLayout
-      header={header}
-      tabContent={tabContent}
-      codeEditor={codeEditor}
-      panelOrder={panelOrder}
-      panelsOffset={panelsOffset}
-    />
+    <FeedbackLayout>
+      <ChallengeLayout
+        header={header}
+        tabContent={tabContent}
+        codeEditor={codeEditor}
+        panelOrder={panelOrder}
+        panelsOffset={panelsOffset}
+      />
+    </FeedbackLayout>
   )
 }
 

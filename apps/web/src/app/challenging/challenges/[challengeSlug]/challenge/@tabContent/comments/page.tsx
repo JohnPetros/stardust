@@ -1,4 +1,4 @@
-import { challengingActions } from '@/rpc/next-safe-action'
+import * as challengingActions from '@/rpc/next-safe-action/challengingActions'
 import type { NextParams } from '@/rpc/next/types'
 import { ChallengeCommentsSlot } from '@/ui/challenging/widgets/slots/ChallengeComments'
 

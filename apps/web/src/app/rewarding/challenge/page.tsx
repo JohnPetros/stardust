@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation'
 
 import { COOKIES } from '@/constants'
-import { cookieActions, rewardingActions } from '@/rpc/next-safe-action'
+import * as cookieActions from '@/rpc/next-safe-action/cookieActions'
+import * as rewardingActions from '@/rpc/next-safe-action/rewardingActions'
 import { RewardingPage } from '@/ui/lesson/widgets/pages/Rewarding'
 
 const Page = async () => {
