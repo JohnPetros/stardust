@@ -1,8 +1,6 @@
 import { useRef, useState } from 'react'
 
-import { FeedbackReport } from '@stardust/core/reporting/entities'
 import { FeedbackIntent } from '@stardust/core/reporting/structures'
-import { AuthorAggregate } from '@stardust/core/global/aggregates'
 import { Id, Integer, Text } from '@stardust/core/global/structures'
 import type { ReportingService } from '@stardust/core/reporting/interfaces'
 import type { SignedFileStorageProvider } from '@stardust/core/storage/interfaces'
@@ -256,19 +254,6 @@ export function useFeedbackDialog({
 
     setIsLoading(true)
     try {
-      const author = AuthorAggregate.create({
-        id: user.id.value,
-        entity: {
-          name: user.name.value,
-          slug: user.slug.value,
-          avatar: {
-            name: user.avatar.name.value,
-            image: user.avatar.image.value,
-          },
-        },
-      })
-
-      let screenshotUrl = screenshotPreview
       let initialAttachment:
         | {
             storageKey: string
@@ -325,9 +310,9 @@ export function useFeedbackDialog({
 
           const signedUploadUrl = SignedUploadUrl.create(signedUploadUrlResponse.body)
           await signedFileStorageProvider.uploadFile(signedUploadUrl, storageFile)
-          screenshotUrl = signedUploadUrl.fileName.value
+          const storageKey = `${signedUploadUrl.folderPath.value}/${signedUploadUrl.fileName.value}`
           initialAttachment = {
-            storageKey: screenshotUrl,
+            storageKey,
             originalName,
             mimeType,
             size: fileToUpload.size,
@@ -339,21 +324,11 @@ export function useFeedbackDialog({
         }
       }
 
-      const response = initialAttachment
-        ? await reportingService.sendFeedbackReport({
-            content: Text.create(content),
-            intent: FeedbackIntent.create(intent),
-            initialAttachment,
-          })
-        : await reportingService.sendFeedbackReport(
-            FeedbackReport.create({
-              content,
-              intent,
-              author: author.dto,
-              screenshot: screenshotUrl,
-              sentAt: new Date().toISOString(),
-            }),
-          )
+      const response = await reportingService.sendFeedbackReport({
+        content: Text.create(content),
+        intent: FeedbackIntent.create(intent),
+        initialAttachment,
+      })
       if (response.isSuccessful) {
         setStep('success')
         await onSubmitted?.()

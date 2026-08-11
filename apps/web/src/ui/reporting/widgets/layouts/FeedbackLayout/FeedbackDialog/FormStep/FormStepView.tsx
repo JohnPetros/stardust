@@ -1,57 +1,32 @@
 import { Button } from '@/ui/global/widgets/components/Button'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import Image from 'next/image'
+import type { ChangeEventHandler } from 'react'
+import type { FeedbackFormMetadata } from './useFeedbackFormStep'
 
-type Props = {
-  intent: string
+export type FormStepViewProps = {
   content: string
   onContentChange: (content: string) => void
   screenshotPreview?: string
   isLoading: boolean
   onCapture: () => void
-  onSelectFile: (file: File) => void
+  metadata: FeedbackFormMetadata
+  onFileInputChange: ChangeEventHandler<HTMLInputElement>
   onDeleteScreenshot: () => void
   onSubmit: () => void
 }
 
-const INTENT_METADATA: Record<
-  string,
-  { label: string; icon: string; color: string; placeholder: string }
-> = {
-  bug: {
-    label: 'Problema',
-    icon: 'bug',
-    color: 'text-green-500',
-    placeholder:
-      'Algo não está funcionando bem? Queremos corrigir. Conte com detalhes o que está acontecendo...',
-  },
-  idea: {
-    label: 'Ideia',
-    icon: 'lightbulb',
-    color: 'text-yellow-400',
-    placeholder: 'Teve uma ideia de melhoria ou de nova funcionalidade? Conta pra gente!',
-  },
-  other: {
-    label: 'Outro',
-    icon: 'comment',
-    color: 'text-blue-400',
-    placeholder: 'Queremos te ouvir. O que você gostaria de nos dizer?',
-  },
-}
-
 export const FormStepView = ({
-  intent,
   content,
   onContentChange,
   screenshotPreview,
   isLoading,
   onCapture,
-  onSelectFile,
+  metadata,
+  onFileInputChange,
   onDeleteScreenshot,
   onSubmit,
-}: Props) => {
-  const metadata = INTENT_METADATA[intent] || INTENT_METADATA.other
-
+}: FormStepViewProps) => {
   return (
     <div className='flex flex-col gap-4 py-2'>
       <textarea
@@ -83,11 +58,7 @@ export const FormStepView = ({
             accept='image/png,image/jpeg'
             aria-label='Selecionar imagem PNG ou JPEG'
             className='sr-only'
-            onChange={(event) => {
-              const file = event.currentTarget.files?.[0]
-              if (file) onSelectFile(file)
-              event.currentTarget.value = ''
-            }}
+            onChange={onFileInputChange}
           />
         </label>
 

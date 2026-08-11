@@ -4,18 +4,22 @@ import type { FeedbackConversationDraft } from '@/ui/reporting/types'
 
 type Props = {
   draft: FeedbackConversationDraft
-  onChange: (draft: FeedbackConversationDraft) => void
   onSubmit: () => void
   isLoading: boolean
   isClosed: boolean
+  canSubmit: boolean
+  onContentChange: (content: string) => void
+  onAttachmentsChange: (attachments: FeedbackConversationDraft['attachments']) => void
 }
 
 export function FeedbackMessageComposerView({
   draft,
-  onChange,
   onSubmit,
   isLoading,
   isClosed,
+  canSubmit,
+  onContentChange,
+  onAttachmentsChange,
 }: Props) {
   if (isClosed) {
     return (
@@ -27,8 +31,6 @@ export function FeedbackMessageComposerView({
       </div>
     )
   }
-  const canSubmit =
-    draft.content.trim().length > 0 && draft.content.trim().length <= 2000 && !isLoading
   return (
     <div className='space-y-3 border-t border-gray-800/80 pt-4'>
       <label
@@ -40,7 +42,7 @@ export function FeedbackMessageComposerView({
       <textarea
         id='feedback-reply'
         value={draft.content}
-        onChange={(event) => onChange({ ...draft, content: event.target.value })}
+        onChange={(event) => onContentChange(event.target.value)}
         placeholder='Escreva uma resposta para a equipe…'
         maxLength={2000}
         disabled={isLoading}
@@ -64,7 +66,7 @@ export function FeedbackMessageComposerView({
         attachments={draft.attachments}
         max={3}
         disabled={isLoading}
-        onChange={(attachments) => onChange({ ...draft, attachments })}
+        onChange={onAttachmentsChange}
         label='Imagens da resposta'
       />
     </div>

@@ -1,9 +1,11 @@
 import { Icon } from '@/ui/global/widgets/components/Icon'
+import { FeedbackUnreadBadge } from '@/ui/reporting/widgets/components/FeedbackUnreadBadge'
 import { twMerge } from 'tailwind-merge'
 
 type Props = {
   onSelectIntent: (intent: string) => void
   onOpenHistory?: () => void
+  unreadCount: number
 }
 
 const INTENTS = [
@@ -30,16 +32,20 @@ const INTENTS = [
   },
 ]
 
-export const InitialStepView = ({ onSelectIntent, onOpenHistory }: Props) => {
+export const InitialStepView = ({
+  onSelectIntent,
+  onOpenHistory,
+  unreadCount,
+}: Props) => {
   return (
-    <div className='flex flex-col items-center gap-6 py-4'>
-      <div className='grid grid-cols-3 gap-3 w-full'>
+    <div className='flex flex-col items-center gap-5 py-2'>
+      <div className='grid w-full grid-cols-3 gap-3'>
         {INTENTS.map((intent) => (
           <button
             key={intent.value}
             type='button'
             onClick={() => onSelectIntent(intent.value)}
-            className='flex flex-col items-center gap-4 rounded-xl border border-gray-800 bg-gray-900/50 p-6 transition-all hover:border-gray-700 hover:bg-gray-800'
+            className='flex flex-col items-center gap-4 rounded-lg border-0 bg-[#1f2728] p-5 transition-all hover:bg-[#263031]'
           >
             <div className={twMerge('rounded-full p-2', intent.bgColor)}>
               <Icon name={intent.icon as any} className={intent.color} size={48} />
@@ -52,9 +58,11 @@ export const InitialStepView = ({ onSelectIntent, onOpenHistory }: Props) => {
         <button
           type='button'
           onClick={onOpenHistory}
-          className='text-xs font-semibold text-green-400 underline underline-offset-4 hover:text-green-300'
+          className='flex h-9 w-full items-center justify-center gap-2 rounded-lg border border-gray-600 text-xs font-semibold text-gray-200 transition-colors hover:border-gray-400 hover:bg-[#1f2728]'
         >
+          <Icon name='history' size={15} className='text-gray-300' />
           Ver meus reportes
+          <FeedbackUnreadBadge count={unreadCount} />
         </button>
       )}
     </div>

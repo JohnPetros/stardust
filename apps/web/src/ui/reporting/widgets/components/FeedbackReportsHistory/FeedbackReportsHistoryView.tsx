@@ -1,13 +1,12 @@
 import { Icon } from '@/ui/global/widgets/components/Icon'
-import { FeedbackUnreadBadge } from '../FeedbackUnreadBadge'
 import type { FeedbackFilter, FeedbackRequestState } from '@/ui/reporting/types'
-import type { FeedbackReportDto } from '@stardust/core/reporting/entities/dtos'
+import type { FeedbackReportHistoryItem } from './useFeedbackReportsHistory'
 
 type Props = {
-  reports: FeedbackReportDto[]
+  items: FeedbackReportHistoryItem[]
+  filters: Array<{ value: FeedbackFilter; label: string }>
   filter: FeedbackFilter
   state: FeedbackRequestState
-  unreadCount: number
   onFilterChange: (filter: FeedbackFilter) => void
   onSelect: (id: string) => void
   onLoadMore: () => void
@@ -15,45 +14,11 @@ type Props = {
   onRetry: () => void
 }
 
-const filters: Array<{ value: FeedbackFilter; label: string }> = [
-  { value: 'all', label: 'Todos' },
-  { value: 'open', label: 'Abertos' },
-  { value: 'closed', label: 'Fechados' },
-]
-
-const intentMeta = {
-  bug: {
-    label: 'Problema',
-    icon: 'bug' as const,
-    color: 'text-green-400',
-    bg: 'bg-green-500/10',
-  },
-  idea: {
-    label: 'Ideia',
-    icon: 'lightbulb' as const,
-    color: 'text-yellow-300',
-    bg: 'bg-yellow-400/10',
-  },
-  other: {
-    label: 'Outro',
-    icon: 'comment' as const,
-    color: 'text-blue-300',
-    bg: 'bg-blue-400/10',
-  },
-}
-
-function formatDate(value?: string) {
-  if (!value) return 'sem data'
-  return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short' }).format(
-    new Date(value),
-  )
-}
-
 export function FeedbackReportsHistoryView({
-  reports,
+  items,
+  filters,
   filter,
   state,
-  unreadCount,
   onFilterChange,
   onSelect,
   onLoadMore,
@@ -65,40 +30,24 @@ export function FeedbackReportsHistoryView({
       aria-labelledby='feedback-history-title'
       className='flex min-h-0 flex-1 flex-col'
     >
-      <div className='mb-5 flex items-end justify-between gap-3'>
-        <div>
-          <p className='mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-green-400'>
-            Canal privado
-          </p>
-          <h2
-            id='feedback-history-title'
-            className='text-2xl font-black tracking-tight text-gray-100'
-          >
-            Meus reportes
-          </h2>
-          <p className='mt-1 text-xs text-gray-500'>
-            Acompanhe o que acontece depois do envio.
-          </p>
-        </div>
-        <FeedbackUnreadBadge count={unreadCount} />
-      </div>
-      <div
-        role='tablist'
-        aria-label='Filtrar reportes'
-        className='mb-4 flex gap-1 rounded-xl border border-gray-800 bg-gray-950/70 p-1'
-      >
-        {filters.map((item) => (
-          <button
-            key={item.value}
-            type='button'
-            role='tab'
-            aria-selected={filter === item.value}
-            onClick={() => onFilterChange(item.value)}
-            className={`flex-1 rounded-lg px-3 py-2 text-xs font-bold transition ${filter === item.value ? 'bg-gray-800 text-gray-100 shadow-sm' : 'text-gray-600 hover:text-gray-300'}`}
-          >
-            {item.label}
-          </button>
-        ))}
+      <div className='mb-4 flex items-center justify-between gap-3'>
+        <p className='text-[10px] text-gray-300'>{items.length} reportes</p>
+        <label className='sr-only' htmlFor='feedback-history-filter'>
+          Filtrar reportes
+        </label>
+        <select
+          id='feedback-history-filter'
+          aria-label='Filtrar reportes'
+          value={filter}
+          onChange={(event) => onFilterChange(event.target.value as FeedbackFilter)}
+          className='rounded-full border-0 bg-[#263031] px-4 py-1 text-[10px] text-gray-300 outline-none'
+        >
+          {filters.map((item) => (
+            <option key={item.value} value={item.value}>
+              {item.label}
+            </option>
+          ))}
+        </select>
       </div>
       <div className='min-h-0 flex-1 overflow-y-auto pr-1'>
         {state === 'loading' && (
@@ -143,16 +92,14 @@ export function FeedbackReportsHistoryView({
           </div>
         )}
         {state === 'content' && (
-          <div className='space-y-2'>
-            {reports.map((report) => {
-              const meta =
-                intentMeta[report.intent as keyof typeof intentMeta] ?? intentMeta.other
+          <div className='space-y-2.5'>
+            {items.map(({ report, meta, dateLabel }) => {
               return (
                 <button
                   key={report.id}
                   type='button'
                   onClick={() => report.id && onSelect(report.id)}
-                  className='group flex w-full items-center gap-3 rounded-xl border border-gray-800 bg-gray-900/70 p-3 text-left transition hover:-translate-y-0.5 hover:border-gray-700 hover:bg-gray-800/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-400'
+                  className='group flex min-h-24 w-full items-center gap-3 rounded-lg border border-transparent bg-[#1f2728] p-4 text-left transition hover:-translate-y-0.5 hover:border-gray-700 hover:bg-[#263031] focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-400'
                 >
                   <span
                     className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${meta.bg} ${meta.color}`}
@@ -165,24 +112,22 @@ export function FeedbackReportsHistoryView({
                         {report.title ?? meta.label}
                       </span>
                       {report.hasUnreadAdminReply && (
-                        <span className='rounded-full bg-green-400 px-2 py-0.5 text-[9px] font-black uppercase text-gray-950'>
+                        <span className='rounded-full bg-green-400 px-1.5 py-0.5 text-[8px] font-black uppercase text-gray-950'>
                           Nova resposta
                         </span>
                       )}
                     </span>
-                    <span className='mt-1 block truncate text-xs text-gray-500'>
+                    <span className='mt-1 block truncate text-[11px] text-gray-500'>
                       {report.preview ?? report.content}
                     </span>
                   </span>
                   <span className='flex shrink-0 flex-col items-end gap-1'>
                     <span
-                      className={`rounded-full px-2 py-0.5 text-[9px] font-bold uppercase ${report.status === 'closed' ? 'bg-gray-800 text-gray-500' : 'bg-green-950 text-green-400'}`}
+                      className={`rounded-full px-2 py-1 text-[9px] font-bold uppercase ${report.status === 'closed' ? 'bg-gray-800 text-gray-500' : 'bg-green-950 text-green-400'}`}
                     >
                       {report.status === 'closed' ? 'Fechado' : 'Aberto'}
                     </span>
-                    <span className='text-[10px] text-gray-600'>
-                      {formatDate(report.lastActivityAt ?? report.createdAt)}
-                    </span>
+                    <span className='text-[10px] text-gray-600'>{dateLabel}</span>
                   </span>
                   <Icon
                     name='arrow-right'
@@ -204,6 +149,11 @@ export function FeedbackReportsHistoryView({
           </div>
         )}
       </div>
+      {state === 'content' && (
+        <p className='mt-auto pt-5 text-center text-[10px] text-gray-500'>
+          Selecione um reporte para abrir a conversa
+        </p>
+      )}
     </section>
   )
 }

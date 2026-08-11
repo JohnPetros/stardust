@@ -8,7 +8,7 @@ import { FormStep } from './FormStep'
 import { SuccessStep } from './SuccessStep'
 import { ScreenCropper } from './ScreenCropper'
 import type { FeedbackStep } from './useFeedbackDialog'
-import type { IconName } from '@/ui/global/widgets/components/Icon/types'
+import type { FeedbackDialogHeaderMetadata } from './useFeedbackDialogHeader'
 import { FeedbackReportsHistory } from '@/ui/reporting/widgets/components/FeedbackReportsHistory'
 import { FeedbackReportConversation } from '@/ui/reporting/widgets/components/FeedbackReportConversation'
 import { FeedbackMessageComposer } from '@/ui/reporting/widgets/components/FeedbackMessageComposer'
@@ -63,18 +63,10 @@ type Props = {
   onBackToHome: () => void
   onDraftChange: (draft: FeedbackConversationDraft) => void
   onSendReply: () => void
+  currentIntent: FeedbackDialogHeaderMetadata
 }
 
-const INTENT_HEADER_METADATA: Record<
-  string,
-  { label: string; icon: IconName; color: string }
-> = {
-  bug: { label: 'Problema', icon: 'bug', color: 'text-green-500' },
-  idea: { label: 'Ideia', icon: 'lightbulb', color: 'text-yellow-400' },
-  other: { label: 'Outro', icon: 'comment', color: 'text-blue-400' },
-}
-
-export function FeedbackDialogView({
+export const FeedbackDialogView = ({
   isOpen,
   step,
   content,
@@ -114,9 +106,8 @@ export function FeedbackDialogView({
   onBackToHome,
   onDraftChange,
   onSendReply,
-}: Props) {
-  const currentIntent = INTENT_HEADER_METADATA[intent] || INTENT_HEADER_METADATA.other
-
+  currentIntent,
+}: Props) => {
   return (
     <Dialog.Container
       open={!isCapturing && !isCropping && isOpen}
@@ -124,14 +115,17 @@ export function FeedbackDialogView({
     >
       <Dialog.Content
         data-feedback-ignore-capture='true'
-        className='w-[calc(100vw-1rem)] max-h-[calc(100dvh-1rem)] overflow-y-auto rounded-3xl border-gray-800 bg-[#121214] p-6 text-gray-100 sm:max-w-[400px] md:max-w-[620px]'
+        animationClassName={`flex h-full w-full flex-col ${view === 'history' ? 'sm:min-h-[604px]' : view === 'detail' ? 'sm:min-h-[480px]' : step === 'initial' ? 'sm:min-h-[394px]' : ''}`}
+        className='w-[calc(100vw-1rem)] max-h-[calc(100dvh-1rem)] overflow-y-auto rounded-3xl border-gray-800 bg-[#121214] p-0 text-gray-100 sm:max-w-[665px]'
       >
-        <div className='flex items-center justify-between mb-2'>
+        <div
+          className={`mb-2 flex items-center ${view === 'dialog' ? 'justify-between' : 'gap-4'}`}
+        >
           {view !== 'dialog' ? (
             <button
               onClick={onBackToHome}
               type='button'
-              className='text-gray-500 hover:text-gray-300 transition-colors'
+              className='text-gray-500 hover:text-gray-900 transition-colors'
             >
               <Icon name='arrow-left' size={20} />
             </button>
@@ -139,7 +133,7 @@ export function FeedbackDialogView({
             <button
               onClick={handleBack}
               type='button'
-              className='text-gray-500 hover:text-gray-300 transition-colors'
+              className='text-gray-500 hover:text-gray-900 transition-colors'
             >
               <Icon name='arrow-left' size={20} />
             </button>
@@ -147,11 +141,14 @@ export function FeedbackDialogView({
             <div className='w-5' />
           )}
 
-          <Dialog.Title className='flex items-center gap-2'>
+          <Dialog.Title
+            id={view === 'history' ? 'feedback-history-title' : undefined}
+            className='flex items-center gap-2'
+          >
             {view === 'history' ? (
-              <span className='text-lg font-bold'>Meus reportes</span>
+              <span className='text-xl font-semibold text-gray-100'>Meus reportes</span>
             ) : view === 'detail' ? (
-              <span className='text-lg font-bold'>Conversa</span>
+              <span className='text-lg font-bold'>{detail?.title ?? 'Conversa'}</span>
             ) : step === 'form' ? (
               <>
                 <Icon
@@ -168,7 +165,9 @@ export function FeedbackDialogView({
             )}
           </Dialog.Title>
 
-          <Dialog.Close className='text-gray-500 hover:text-gray-300 transition-colors'>
+          <Dialog.Close
+            className={`text-gray-500 transition-colors hover:text-gray-300 ${view !== 'dialog' ? 'ml-auto' : ''}`}
+          >
             <Icon name='close' size={20} />
           </Dialog.Close>
         </div>
@@ -178,7 +177,6 @@ export function FeedbackDialogView({
             reports={reports}
             filter={filter}
             state={listState}
-            unreadCount={unreadCount}
             onFilterChange={onFilterChange}
             onSelect={onSelectReport}
             onLoadMore={onLoadMore}
@@ -205,12 +203,11 @@ export function FeedbackDialogView({
         )}
         {view === 'detail' && detailState === 'content' && detail && (
           <div className='flex min-h-0 flex-1 flex-col'>
-            <div className='mb-2'>
-              <p className='text-xs uppercase tracking-[0.16em] text-gray-500'>
-                {detail.title ?? 'Reporte'}
-              </p>
-              <p className='text-xs text-gray-600'>
-                {detail.status === 'closed' ? 'Fechado' : 'Aberto'}
+            <div className='mb-4 flex items-center justify-between gap-3'>
+              <p className='text-[10px] uppercase tracking-[0.16em] text-gray-500'>
+                REPORTE #{detail.id?.slice(0, 5).toUpperCase()} ·{' '}
+                <span>{detail.status === 'closed' ? 'Fechado' : 'Aberto'}</span> ·{' '}
+                {detail.messages.length + 1} MENSAGENS
               </p>
             </div>
             <FeedbackReportConversation detail={detail} cdnUrl={CLIENT_ENV.cdnUrl} />
@@ -227,6 +224,7 @@ export function FeedbackDialogView({
           <InitialStep
             onSelectIntent={handleSelectIntent}
             onOpenHistory={onOpenHistory}
+            unreadCount={unreadCount}
           />
         )}
 
@@ -269,19 +267,19 @@ export function FeedbackDialogView({
           <button
             type='button'
             aria-label='Feedback'
-            className='relative z-10 flex items-center gap-0 transition-all duration-300 hover:gap-2'
+            className='z-10 flex items-center gap-0 transition-all duration-300 hover:gap-2'
           >
             <span
               aria-hidden='true'
               className='absolute inset-0 rounded-full bg-green-500 opacity-25 transition-opacity duration-300 group-hover:opacity-100'
             />
-            <span className='flex items-center gap-0 opacity-25 transition-opacity duration-300 group-hover:opacity-100'>
+            <span className='relative z-10 flex items-center gap-0 text-black opacity-25 transition-opacity duration-300 group-hover:opacity-100'>
               <Icon
                 name='comment'
                 size={24}
                 className='transition-transform group-hover:rotate-12'
               />
-              <span className='max-w-0 overflow-hidden whitespace-nowrap text-md font-semibold transition-all duration-300 group-hover:max-w-[124px]'>
+              <span className='inline-block w-0 shrink-0 overflow-hidden whitespace-nowrap text-md font-semibold text-gray-950 transition-[width] duration-300 group-hover:w-[124px]'>
                 Fazer feedback
               </span>
             </span>

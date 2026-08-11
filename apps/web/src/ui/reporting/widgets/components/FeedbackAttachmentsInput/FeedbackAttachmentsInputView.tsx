@@ -1,11 +1,13 @@
 import Image from 'next/image'
+import type { ChangeEventHandler } from 'react'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import type { FeedbackDraftAttachment } from '@/ui/reporting/types'
 
 type Props = {
   attachments: FeedbackDraftAttachment[]
   max: number
-  onChange: (attachments: FeedbackDraftAttachment[]) => void
+  onInputChange: ChangeEventHandler<HTMLInputElement>
+  onRemove: (id: string) => void
   disabled?: boolean
   label?: string
 }
@@ -13,35 +15,11 @@ type Props = {
 export function FeedbackAttachmentsInputView({
   attachments,
   max,
-  onChange,
+  onInputChange,
+  onRemove,
   disabled = false,
   label = 'Anexar imagens',
 }: Props) {
-  function handleFiles(files: FileList | null) {
-    if (!files) return
-    const next = [...attachments]
-    for (const file of Array.from(files)) {
-      if (next.length >= max) break
-      if (
-        !['image/png', 'image/jpeg'].includes(file.type) ||
-        file.size > 10 * 1024 * 1024
-      )
-        continue
-      next.push({
-        id: `${file.name}-${file.lastModified}-${next.length}`,
-        file,
-        previewUrl: URL.createObjectURL(file),
-      })
-    }
-    onChange(next)
-  }
-
-  function remove(id: string) {
-    const attachment = attachments.find((item) => item.id === id)
-    if (attachment) URL.revokeObjectURL(attachment.previewUrl)
-    onChange(attachments.filter((item) => item.id !== id))
-  }
-
   return (
     <div className='space-y-3'>
       <div className='flex items-center justify-between'>
@@ -68,7 +46,7 @@ export function FeedbackAttachmentsInputView({
             <button
               type='button'
               aria-label={`Remover ${attachment.file.name}`}
-              onClick={() => remove(attachment.id)}
+              onClick={() => onRemove(attachment.id)}
               className='absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-gray-950/90 text-gray-200 opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100'
             >
               <Icon name='close' size={12} />
@@ -84,10 +62,7 @@ export function FeedbackAttachmentsInputView({
               accept='image/png,image/jpeg'
               multiple={max > 1}
               disabled={disabled}
-              onChange={(event) => {
-                handleFiles(event.target.files)
-                event.currentTarget.value = ''
-              }}
+              onChange={onInputChange}
               className='sr-only'
             />
           </label>

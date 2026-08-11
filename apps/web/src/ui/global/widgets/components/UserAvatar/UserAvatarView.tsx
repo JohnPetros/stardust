@@ -10,24 +10,29 @@ type Props = {
 }
 
 export const UserAvatarView = ({ avatarImage, avatarName, size }: Props) => {
+  const normalizedAvatarImage =
+    avatarImage === '/images/profile.svg' ? '/icons/profile.svg' : avatarImage
   const storageAvatarImageSrc = useFileStorage(
     FileStorageFolderPath.createAsImagesAvatars(),
-    avatarImage,
+    normalizedAvatarImage,
   )
   const avatarImageSrc =
-    /^https?:\/\//.test(avatarImage) || avatarImage.startsWith('/')
-      ? avatarImage
+    /^https?:\/\//.test(normalizedAvatarImage) || normalizedAvatarImage.startsWith('/')
+      ? normalizedAvatarImage
       : storageAvatarImageSrc
 
   return (
-    <Avatar.Root>
+    <Avatar.Root
+      style={{ width: size, height: size }}
+      className='relative grid shrink-0 place-content-center overflow-hidden rounded-full border border-green-700 bg-gray-800'
+    >
       <Avatar.Image
         src={avatarImageSrc}
         style={{ width: size, height: size, borderRadius: '50%' }}
         onLoad={(element) => element.currentTarget.classList.remove('skeleton')}
         alt={`Avatar ${avatarName}`}
         loading='eager'
-        className='skeleton relative grid place-content-center overflow-hidden border border-green-700 bg-gray-300 shrink-0 rounded-full'
+        className='skeleton relative grid place-content-center overflow-hidden rounded-full border border-green-700 bg-gray-300'
       />
     </Avatar.Root>
   )
