@@ -6,7 +6,7 @@ import { FileStorageFolderPath } from '#storage/domain/structures/FileStorageFol
 import type { SignedUploadUrlDto } from '#storage/domain/structures/dtos/SignedUploadUrlDto'
 import type { FileStorageProvider } from '#storage/interfaces/FileStorageProvider'
 import type { CreateFeedbackReportAttachmentUploadRequest } from '../domain/types'
-import { validateFeedbackImageMetadata } from './feedbackAttachmentValidation'
+import { FeedbackImage } from '../domain/structures'
 
 export class CreateFeedbackReportAttachmentUploadUrlUseCase
   implements
@@ -21,7 +21,7 @@ export class CreateFeedbackReportAttachmentUploadUrlUseCase
     const fileName = request.fileName.value
     const mimeType = request.mimeType.value
     const size = request.size.value
-    validateFeedbackImageMetadata(fileName, mimeType, size)
+    FeedbackImage.createAsStored(fileName, mimeType, size)
     Integer.create(size)
 
     return (

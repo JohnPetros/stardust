@@ -4,7 +4,6 @@ import { SendFeedbackMessageUseCase } from '../SendFeedbackMessageUseCase'
 import type { FeedbackReportsRepository } from '../../interfaces/FeedbackReportsRepository'
 import type { FeedbackMessagesRepository } from '../../interfaces/FeedbackMessagesRepository'
 import type { Broker } from '#global/interfaces/Broker'
-import type { FileStorageProvider } from '#storage/interfaces/FileStorageProvider'
 
 describe('SendFeedbackMessageUseCase fixes', () => {
   const userId = '11111111-1111-4111-8111-111111111111'
@@ -13,11 +12,7 @@ describe('SendFeedbackMessageUseCase fixes', () => {
     adminMessageCount: 1,
   })
 
-  it('looks up attachment metadata using the UUID filename, not originalName', async () => {
-    const getFileMetadata = jest.fn().mockResolvedValue({
-      mimeType: 'image/png',
-      size: 10,
-    })
+  it('persists a message with its attachment metadata', async () => {
     const repository = {
       findById: jest.fn().mockResolvedValue(report),
       findAuthorEmail: jest.fn().mockResolvedValue({ value: 'user@example.com' }),
@@ -32,8 +27,7 @@ describe('SendFeedbackMessageUseCase fixes', () => {
     } as unknown as FeedbackMessagesRepository
     const publish = jest.fn()
     const broker = { publish } as unknown as Broker
-    const storage = { getFileMetadata } as unknown as FileStorageProvider
-    const useCase = new SendFeedbackMessageUseCase(repository, messages, broker, storage)
+    const useCase = new SendFeedbackMessageUseCase(repository, messages, broker)
     const reportId = report.id.value
     const messageId = crypto.randomUUID()
     const fileId = crypto.randomUUID()
@@ -54,12 +48,6 @@ describe('SendFeedbackMessageUseCase fixes', () => {
       ],
     })
 
-    expect(getFileMetadata).toHaveBeenCalledWith(
-      expect.objectContaining({
-        value: `images/feedback-messages/${reportId}/${messageId}`,
-      }),
-      expect.objectContaining({ value: `${fileId}.png` }),
-    )
     expect(add.mock.invocationCallOrder[0]).toBeLessThan(
       publish.mock.invocationCallOrder[0],
     )
