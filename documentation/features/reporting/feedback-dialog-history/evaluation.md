@@ -1,9 +1,9 @@
 ---
 spec: ./spec.md
-spec_revision: 2
+spec_revision: 3
 base_commit: 46830574d9b8d9f515ff8a0758ff54d5c9e571bf
-evaluated_commit: 410b1a5d5163f54c3fe4afa8c735eeea173e748c
-evaluated_scope: HEAD plus uncommitted worktree diff
+evaluated_commit: 005abd473
+evaluated_scope: HEAD
 status: completed
 judge_plan_verdict: accepted
 last_updated_at: 2026-08-11
@@ -409,3 +409,12 @@ commit para o handoff desta task.
 
 - **Estado:** `completed`.
 - **Próxima ação:** nenhuma; entrega pronta para handoff/revisão de PR.
+
+## Correções do review do PR — 2026-08-11
+
+| Finding | Correção | Evidência no HEAD |
+| --- | --- | --- |
+| Admin reply/upload usava client JWT | contas god selecionam `supabaseAdmin`; contas comuns mantêm o client da requisição | teste `selectFeedbackClient`, typecheck e unit Server passaram |
+| service-role tinha fallback silencioso | `SUPABASE_SERVICE_ROLE` é obrigatório fora de `MODE=test`; fallback só existe no setup explícito de testes | `check:types`, `check:code` e unit passaram |
+| deep link era perdido após login | rotas privadas seguras são codificadas em `nextRoute` ao redirecionar para login | 15 testes do `VerifyAuthRoutesController` e integração Web passaram |
+| nome original era tratado como storage key | `originalName` aceita metadata de exibição; chave gerada, MIME, tamanho e metadados do storage continuam validados | testes Core/Validation e integração Web 55/55 passaram |

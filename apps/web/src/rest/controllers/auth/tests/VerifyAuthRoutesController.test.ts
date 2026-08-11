@@ -116,7 +116,9 @@ describe('Verify Auth Routes Controller', () => {
 
       await controller.handle(http)
 
-      expect(http.redirect).toHaveBeenCalledWith(ROUTES.auth.signIn)
+      expect(http.redirect).toHaveBeenCalledWith(
+        `${ROUTES.auth.signIn}?nextRoute=%2Fsome-private-route`,
+      )
     })
   })
 
@@ -202,7 +204,9 @@ describe('Verify Auth Routes Controller', () => {
 
       await controller.handle(http)
 
-      expect(http.redirect).toHaveBeenCalledWith(ROUTES.auth.signIn)
+      expect(http.redirect).toHaveBeenCalledWith(
+        `${ROUTES.auth.signIn}?nextRoute=%2Fsome-private-route`,
+      )
     })
 
     it('should not attempt refresh when no refresh token is available', async () => {
@@ -217,7 +221,9 @@ describe('Verify Auth Routes Controller', () => {
       await controller.handle(http)
 
       expect(authService.refreshSession).not.toHaveBeenCalled()
-      expect(http.redirect).toHaveBeenCalledWith(ROUTES.auth.signIn)
+      expect(http.redirect).toHaveBeenCalledWith(
+        `${ROUTES.auth.signIn}?nextRoute=%2Fsome-private-route`,
+      )
     })
   })
 

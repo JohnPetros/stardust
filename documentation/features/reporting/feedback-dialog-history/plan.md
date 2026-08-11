@@ -1,6 +1,6 @@
 ---
 spec: ./spec.md
-spec_revision: 2
+spec_revision: 3
 status: completed
 judge_plan: accepted
 implementation_judgment_mode: final
@@ -575,7 +575,7 @@ implementação inteira:
 | F5 | verified | accepted pelo Judge Final | widget tests, upload inicial por captura/arquivo com chave UUID, integração Web, auditoria estrutural e comparação dos três nodes Pencil/Web registradas |
 | F6 | verified | accepted pelo Judge Final | browser autenticado confirmou histórico, detalhe, leitura e resposta; sensores e builds finais passaram; upload R2 real fica registrado como warning externo quando aplicável |
 
-**Judge Implementation Final — 2026-08-11:** `accepted`, Spec revisão 2,
+**Judge Implementation Final — 2026-08-11:** `accepted`, Spec revisão 3,
 nenhum finding bloqueante; integração direcionada 6/6, sensores e builds finais
 passaram. O Plan fica `completed` e pronto para handoff.
 

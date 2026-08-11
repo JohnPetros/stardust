@@ -53,6 +53,7 @@ import {
   SendFeedbackMessageUseCase,
   SendFeedbackReportUseCase,
 } from '@stardust/core/reporting/use-cases'
+import { selectFeedbackClient } from './selectFeedbackClient'
 
 export class FeedbackRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/feedback')
@@ -246,8 +247,14 @@ export class FeedbackRouter extends HonoRouter {
       this.validation.validate('json', feedbackAttachmentUploadSchema),
       async (context) => {
         const http = new HonoHttp(context)
+        const accountId = await http.getAccountId()
+        const client = selectFeedbackClient(
+          ENV.godAccountIds.includes(accountId),
+          context.get('supabase'),
+          supabaseAdmin,
+        )
         const useCase = new CreateFeedbackAttachmentUploadUrlUseCase(
-          this.reports(context.get('supabase')),
+          this.reports(client),
           new S3FileStorageProvider(),
         )
         return http.sendResponse(
@@ -266,9 +273,15 @@ export class FeedbackRouter extends HonoRouter {
       this.storage.verifyFeedbackMessageAttachments,
       async (context) => {
         const http = new HonoHttp(context)
+        const accountId = await http.getAccountId()
+        const client = selectFeedbackClient(
+          ENV.godAccountIds.includes(accountId),
+          context.get('supabase'),
+          supabaseAdmin,
+        )
         const useCase = new SendFeedbackMessageUseCase(
-          this.reports(context.get('supabase')),
-          this.messages(context.get('supabase')),
+          this.reports(client),
+          this.messages(client),
           new InngestBroker(),
           ENV.stardustWebUrl,
         )

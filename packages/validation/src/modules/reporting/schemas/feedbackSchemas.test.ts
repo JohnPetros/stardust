@@ -25,6 +25,21 @@ describe('feedback reporting schemas', () => {
         content: ' '.repeat(2001),
       }).success,
     ).toBe(false)
+
+    expect(
+      feedbackMessageSchema.safeParse({
+        ...valid,
+        attachments: [
+          {
+            id: '00000000-0000-4000-8000-000000000002',
+            storageKey: 'images/feedback-messages/report/message/file.jpg',
+            originalName: 'scan.JFIF',
+            mimeType: 'image/jpeg',
+            size: 1,
+          },
+        ],
+      }).success,
+    ).toBe(true)
   })
 
   it('validates contextual uploads, snapshots, status and query dates', () => {
@@ -91,7 +106,7 @@ describe('feedback reporting schemas', () => {
   it('validates initial attachment metadata and the user query boundary', () => {
     const attachment = {
       storageKey: 'images/feedback-reports/55555555-5555-4555-8555-555555555555.png',
-      originalName: 'capture.png',
+      originalName: 'capture without extension',
       mimeType: 'image/png' as const,
       size: 10 * 1024 * 1024,
     }

@@ -9,6 +9,13 @@ import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { Text } from '@stardust/core/global/structures'
 import { isSafeNextRoute } from '@/utils/is-safe-next-route'
 
+const signInRouteWithNext = (currentRoute: string): string => {
+  if (!isSafeNextRoute(currentRoute)) return ROUTES.auth.signIn
+
+  const params = new URLSearchParams({ nextRoute: currentRoute })
+  return `${ROUTES.auth.signIn}?${params.toString()}`
+}
+
 export const VerifyAuthRoutesController = (authService: AuthService): Controller => {
   async function refreshAuthSession(http: Http) {
     const refreshToken = await cookieActions.getCookie(COOKIES.refreshToken.key)
@@ -86,7 +93,7 @@ export const VerifyAuthRoutesController = (authService: AuthService): Controller
       }
 
       if (!hasSession && !isPublicRoute) {
-        return http.redirect(ROUTES.auth.signIn)
+        return http.redirect(signInRouteWithNext(currentRoute))
       }
 
       if (hasSession && isRootRoute) {

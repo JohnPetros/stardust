@@ -14,17 +14,15 @@ export const feedbackInitialAttachmentSchema = z
       /^images\/feedback-reports\/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\.(png|jpg|jpeg)$/i,
       'chave de storage deve apontar para uma imagem UUID em feedback-reports',
     ),
-    originalName: stringSchema
-      .min(1, 'nome original é obrigatório')
-      .regex(/\.(png|jpg|jpeg)$/i, 'nome original deve ser PNG ou JPEG'),
+    originalName: stringSchema.min(1, 'nome original é obrigatório'),
     mimeType: z.enum(['image/png', 'image/jpeg']),
     size: imageSizeSchema,
   })
-  .superRefine(({ originalName, mimeType }, context) => {
-    const isPng = originalName.toLowerCase().endsWith('.png')
+  .superRefine(({ storageKey, mimeType }, context) => {
+    const isPng = storageKey.toLowerCase().endsWith('.png')
     const isJpeg =
-      originalName.toLowerCase().endsWith('.jpg') ||
-      originalName.toLowerCase().endsWith('.jpeg')
+      storageKey.toLowerCase().endsWith('.jpg') ||
+      storageKey.toLowerCase().endsWith('.jpeg')
 
     if ((isPng && mimeType !== 'image/png') || (isJpeg && mimeType !== 'image/jpeg')) {
       context.addIssue({

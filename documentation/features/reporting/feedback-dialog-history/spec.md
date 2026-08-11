@@ -1,7 +1,7 @@
 ---
 title: Histórico e conversas no diálogo de feedback
 status: completed
-revision: 2
+revision: 3
 source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/issues/519
@@ -110,7 +110,8 @@ registrada em Alinhamento documental.
 - **RF-04 — Imagem inicial:** permitir zero ou uma imagem PNG/JPEG de até 10 MB
   por captura/recorte no desktop ou seleção de arquivo no desktop/mobile. O
   servidor deve validar extensão, MIME, tamanho, storage key e metadados reais
-  do objeto antes de persistir o reporte.
+  do objeto antes de persistir o reporte. A extensão do nome original é apenas
+  metadata de exibição; a chave gerada e o MIME são a fonte de verdade do tipo.
 - **RF-05 — Atomicidade de criação:** concluir o upload antes da criação,
   bloquear submits concorrentes e só limpar o rascunho após `201`. Falha no
   upload mantém texto/tipo e oferece remover a imagem e enviar novamente.
@@ -821,3 +822,9 @@ Após implementação e sensores:
   Spec antes de retomar a implementação e invalida o aceite de implementação
   anterior, pois houve alterações posteriores e as evidências visual/UI eram
   insuficientes.
+- **Revisão 3 — 2026-08-11:** esclarece que `originalName` é metadata de
+  exibição e não deve impor extensão nem validar o binário; a extensão da chave
+  gerada, o MIME, o tamanho e os metadados reais permanecem obrigatórios. A
+  revisão também registra a preservação do deep link `/feedback/:id` durante
+  a autenticação e o uso explícito do client service-role para mutações de
+  administradores.
