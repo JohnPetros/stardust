@@ -23,6 +23,7 @@ import { HonoHttp } from '../../HonoHttp'
 import {
   AuthMiddleware,
   ProfileMiddleware,
+  StorageMiddleware,
   ValidationMiddleware,
 } from '../../middlewares'
 import {
@@ -58,6 +59,7 @@ export class FeedbackRouter extends HonoRouter {
   private readonly auth = new AuthMiddleware()
   private readonly validation = new ValidationMiddleware()
   private readonly profile = new ProfileMiddleware()
+  private readonly storage = new StorageMiddleware()
   private readonly params = z.object({ feedbackReportId: idSchema })
   private reports(client = supabase) {
     return new SupabaseFeedbackReportsRepository(client)
@@ -89,13 +91,13 @@ export class FeedbackRouter extends HonoRouter {
       this.auth.verifyAuthentication,
       this.validation.validate('json', feedbackReportSchema),
       this.profile.appendUserInfoToBody,
+      this.storage.verifyFeedbackInitialAttachment,
       async (context) => {
         const http = new HonoHttp(context)
         const controller = new SendFeedbackReportController(
           new SendFeedbackReportUseCase(
             this.reports(context.get('supabase')),
             new InngestBroker(),
-            new S3FileStorageProvider(),
           ),
         )
         return http.sendResponse(await controller.handle(http))
@@ -261,13 +263,13 @@ export class FeedbackRouter extends HonoRouter {
       this.auth.verifyAuthentication,
       this.validation.validate('param', this.params),
       this.validation.validate('json', feedbackMessageSchema),
+      this.storage.verifyFeedbackMessageAttachments,
       async (context) => {
         const http = new HonoHttp(context)
         const useCase = new SendFeedbackMessageUseCase(
           this.reports(context.get('supabase')),
           this.messages(context.get('supabase')),
           new InngestBroker(),
-          new S3FileStorageProvider(),
           ENV.stardustWebUrl,
         )
         const response = await new SendFeedbackMessageController(useCase).handle(http)
