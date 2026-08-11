@@ -42,9 +42,20 @@ Antes de criar o PR, confirme o preflight local da Spec e a existência de
 - `npm run check:architecture`, quando aplicável;
 - `npm run test:integration`, quando aplicável.
 
+Para frontend, confirme também a auditoria de `documentation/rules/ui-layer-rules.md`
+por widget e a matriz independente de comparação Pencil/Web para todos os nodes
+canônicos do Contract.
+
 O `evaluation.md` deve conter as evidências reais do preflight, o resultado do
-Judge Implementation, warnings, findings, decisões e lições. Quality Gate e
-build ficam pendentes até o CI; não exija que estejam verdes para abrir o PR.
+único Judge Implementation da implementação inteira, warnings, findings,
+decisões e lições. O Judge precisa avaliar o HEAD que será publicado; qualquer
+mudança posterior deve invalidar o aceite e exigir nova avaliação. Quality Gate
+e build ficam pendentes até o CI; não exija que estejam verdes para abrir o PR.
+
+Preserve a worktree e os processos existentes do usuário. Não descarte,
+sobrescreva ou encerre processos/alterações fora do escopo do PR para resolver
+conflitos locais; escolha uma porta/ambiente alternativo e registre a limitação
+quando necessário.
 
 O Quality Gate repete esses checks no CI. O build é executado no CI depois do
 Quality Gate e não precisa ser tratado como sensor SDD local obrigatório.
@@ -296,7 +307,8 @@ Para cada falha:
 2. classifique o problema e identifique o sensor ou job afetado;
 3. crie `Builder Fix QG-<n>` quando a correção estiver no escopo;
 4. aplique a correção, atualize a branch e repita os sensores afetados;
-5. repita o Judge somente se o diff ou a evidência tiver sido invalidada;
+5. repita o único Judge Implementation quando o diff ou a evidência tiver sido
+   invalidada;
 6. aguarde novamente o CI no novo HEAD.
 
 Repita esse loop até o Quality Gate e o build ficarem verdes. Não encaminhe

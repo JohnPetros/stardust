@@ -29,6 +29,17 @@ A camada **UI** implementa a interface (Web e Studio) com foco em usabilidade, a
 - **Hook**: estado, efeitos de UI e handlers.
 - **Entry Point** (`index.tsx`): composicao (conecta Hook + View) e integracoes (RPC/REST/context).
 - **Regra estrutural**: todo widget deve ter um `Entry Point` em `index.tsx` e uma `View` explicita com sufixo `View`. Mesmo widgets simples ou wrappers de dialog/estado vazio nao devem concentrar renderizacao diretamente no `index.tsx`.
+- **Regra de diretório**: componente interno, widget e subwidget com lógica própria
+  devem possuir diretório próprio, com `index.tsx` como único export público.
+- **Regra do Entry Point**: `index.tsx` conecta dependências, chama o hook e
+  delega a renderização para a View. Não deve declarar estado, efeitos ou
+  handlers de interface, nem reproduzir a árvore visual do widget.
+- **Regra da View**: `*View.tsx` recebe props prontas e renderiza. Não acessa
+  context/provider, não chama service/RPC e não possui `useEffect` ou lógica de
+  orquestração.
+- **Regra do Hook**: hooks de widget concentram estado, efeitos e handlers de
+  UI, recebem dependências por parâmetros e não acessam contexts/providers
+  diretamente.
 
 > 💡 Regra pratica: integracoes e resolucao de dependencias acontecem no **Entry Point**.
 
@@ -37,11 +48,18 @@ A camada **UI** implementa a interface (Web e Studio) com foco em usabilidade, a
 - **Tipagem**: props e retornos explicitamente tipados.
 - **Exports**: preferir named exports (`export const`); evitar `export default`.
 - **Integracao na borda**: dependencies (services, providers, contexts) resolvidas no Entry Point e passadas via props/params.
+- **Componentes base**: no Studio, priorizar os componentes shadcn existentes;
+  criar primitives novas somente quando o catálogo não atender ao contrato.
+- **Navegação**: usar `useNavigation` para navegação imperativa; não acessar
+  `window.history`, `window.location` ou wrappers ad hoc em widgets.
 
 > ⚠️ Proibido:
 > - Hook chamar hooks de context/service diretamente.
 > - View conter `useEffect` ou chamadas de service.
 > - UI importar `apps/server/**`.
+> - Entry Point concentrar estado, efeitos ou a árvore visual inteira do widget.
+> - Componente interno espalhado diretamente em um `index.tsx` de outro widget
+>   quando ele possui lógica, estado ou contrato reutilizável próprio.
 
 ### Anti-padrão: Declarar hook com `const` em vez de `function`
 
@@ -174,6 +192,32 @@ export const Button = ({ title, onAction }: { title: string; onAction: () => voi
 - Hook nao acessa contexts/providers; recebe dependencias via params.
 - Integracao com dados acontece via RPC/REST.
 - Props tipadas; exports sao named.
+- Componentes internos com lógica estão em diretórios próprios.
+- Navegação imperativa usa `useNavigation`.
+- Componentes Studio reutilizam primitives shadcn quando disponíveis.
+
+## Auditoria obrigatória de UI
+
+Toda mudança frontend deve registrar uma auditoria da Rule no Plan ou no
+`evaluation.md`. A auditoria precisa enumerar cada widget alterado e informar:
+
+| Widget | Entry Point | View | Hook | Resultado | Evidência |
+| --- | --- | --- | --- | --- | --- |
+| `ExampleWidget` | `index.tsx:10-18` | `ExampleWidgetView.tsx:5-30` | `useExampleWidget.ts:8-42` | passed | diff/test |
+
+Para cada widget, confirme explicitamente:
+
+1. `index.tsx` apenas resolve dependências, conecta Hook + View e compõe o
+   contrato;
+2. `*View.tsx` apenas renderiza e não contém effects, services ou contexts;
+3. o Hook usa declaração `function`, recebe dependências por parâmetros e
+   concentra a lógica de UI;
+4. o widget e seus componentes internos estão em diretórios próprios;
+5. a navegação usa `useNavigation` e os componentes base disponíveis foram
+   reutilizados.
+
+`npm run check:architecture` não substitui esta auditoria: o sensor valida
+fronteiras de dependência e não detecta violações do Widget Pattern.
 
 ## Notas
 

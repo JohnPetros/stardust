@@ -14,7 +14,7 @@ Demanda
 → Judge Plan
 → Implementação
 → sensores locais
-→ Judge Implementation
+→ Judge Implementation único da implementação integrada
 → preflight
 → evaluation.md
 → PR / Quality Gate / build no CI
@@ -137,7 +137,7 @@ Ele registra:
 - sensores e evidências esperados por fase;
 - riscos, findings, tentativas, estado e próxima ação;
 - veredito do Judge Plan antes da implementação;
-- vereditos do Judge Implementation por fase.
+- escopo, evidências e veredito do único Judge Implementation Final.
 
 Estados de tarefa: `pending`, `implementing`, `validating` e `verified`.
 Estados de fase: `pending`, `in_progress`, `awaiting_judgment`, `failed` e
@@ -171,9 +171,11 @@ O Orchestrator deve:
 - criar o `evaluation.md` antes do PR, com evidências reais e vereditos;
 - encaminhar a entrega para `create-pr` e, depois, `conclude-spec`.
 
-O fechamento não cria um novo papel de julgamento. O `conclude-spec` executa o
-fechamento formal depois do CI e usa o Judge Implementation final quando a
-complexidade ou o risco exigirem.
+Para um Plan, o único Judge Implementation ocorre depois da integração de todas
+as fases. As fases passam por sensores, mas não recebem aceite independente de
+Judge. O `conclude-spec` não cria um segundo Judge: usa o veredito final já
+registrado e só pode concluir se nenhuma alteração posterior tiver invalidado o
+diff ou as evidências avaliadas.
 
 ## Sensores, preflight e CI
 
@@ -187,6 +189,12 @@ Sensores locais:
 | `npm run test:unit` | comportamento isolado |
 | `npm run check:architecture` | fronteiras, quando aplicável |
 | `npm run test:integration` | APIs, banco e fluxos integrados, quando aplicável |
+
+Para frontend, a validação de `ui-layer-rules.md` é um gate separado. O
+`check:architecture` verifica dependências e fronteiras de módulos, mas não
+verifica o Widget Pattern, a separação Entry Point/View/Hook ou a fidelidade ao
+Pencil. O Orchestrator deve registrar uma auditoria determinística da UI com
+paths e linhas dos widgets alterados.
 
 O ciclo curto usa `format`, `check:code`, `check:types` e `test:unit`. O
 preflight executa todos os sensores aplicáveis no escopo integrado antes da
@@ -212,6 +220,10 @@ Deve registrar:
 - revisão da Spec, commit-base e commit avaliado;
 - matriz de `CA-*` com evidências reais;
 - resultado do Judge Spec e do Judge Implementation;
+- auditoria das Rules aplicáveis, incluindo Entry Point/View/Hook quando houver
+  UI;
+- matriz visual separada para Pencil e Playwright, com node, viewport, estado,
+  rota, commit e screenshot/comparação;
 - sensores locais e preflight;
 - Quality Gate e build do CI, inicialmente `pending` quando o PR ainda não
   existe;
@@ -226,8 +238,10 @@ Toda evidência nova, decisão ou lição deve ser acrescentada imediatamente ao
 
 Se um Judge falhar, a Spec continua `in_progress`. O Orchestrator registra o
 finding no Plan, quando existir, ou no `evaluation.md`, cria `Builder Fix` e
-repete os sensores afetados. O Judge é repetido quando o diff ou a evidência
-for invalidada.
+repete os sensores afetados. O único Judge Implementation Final é repetido
+quando o diff ou qualquer evidência de Contract, Rule, Pencil ou Playwright for
+invalidada. Qualquer alteração depois do veredito final invalida o aceite
+anterior, mesmo que a alteração seja uma correção técnica.
 
 Se o Quality Gate ou o build do CI falhar:
 
@@ -235,7 +249,7 @@ Se o Quality Gate ou o build do CI falhar:
 2. manter a Spec `in_progress`;
 3. criar `Builder Fix QG-<n>` quando a correção estiver no escopo;
 4. repetir os sensores afetados;
-5. repetir o Judge somente se a evidência tiver sido invalidada;
+5. repetir o Judge Final sempre que o diff ou a evidência tiver sido invalidada;
 6. atualizar `evaluation.md` com a nova evidência e decisão.
 
 Depois de três falhas consecutivas pelo mesmo motivo, o Orchestrator apresenta
@@ -260,7 +274,11 @@ consecutivas pelo mesmo motivo, a decisão é escalada ao usuário.
 - `evaluation.md` está completo;
 - Quality Gate e build do CI estão verdes;
 - review e conversas bloqueantes foram resolvidos;
-- o HEAD avaliado é o HEAD final.
+- o HEAD avaliado é o HEAD final;
+- o Judge Final permanece válido para esse HEAD, sem alterações posteriores não
+  julgadas;
+- toda validação visual aplicável possui evidência independente de Pencil e
+  Playwright.
 
 Então o Orchestrator atualiza `evaluation.md`, alinha a documentação aplicável,
 altera a Spec para `completed` e conclui o Plan, se existir.

@@ -92,8 +92,10 @@ comportamento em runtime. Nenhum deles substitui os testes automatizados.
 
 Quando a validação visual em runtime for obrigatória, escreva isso
 explicitamente no Contract em um ou mais `CA-*`: declare os viewports, estados,
-interações e a evidência exigida (por exemplo, screenshot do dialog aberto,
-loading, erro, vazio, conteúdo e fechado, ou comparação visual equivalente).
+interações, rota e a evidência exigida (por exemplo, screenshot do dialog
+aberto, loading, erro, vazio, conteúdo e fechado, ou comparação visual
+equivalente). Para cada node Pencil, declare também a dimensão de referência,
+o estado, a variante e a comparação esperada com a Web.
 Não use apenas expressões ambíguas como “verificar visualmente”. Diferencie
 sempre a evidência da referência Pencil da evidência do browser real: a primeira
 confirma alinhamento com o design canônico; a segunda confirma renderização,
@@ -210,10 +212,17 @@ para cada `CA-*`.
 
 Antes de `open`, faça uma checagem de rastreabilidade: todo `RF-*` relevante
 possui `CA-*`; cada `CA-*` possui resultado observável, método de validação,
-viewport/estado quando aplicável e path ou camada responsável; e cada exigência
+viewport/estado quando aplicável e path ou camada responsável; cada exigência
 visual possui evidência separada para Pencil e Playwright quando ambas forem
-necessárias. Se uma exigência só aparecer no Plan ou no evaluation, mova-a para
-o Contract antes do julgamento.
+necessárias; cada mudança UI declara a estrutura Entry Point/View/Hook; e todos
+os sensores aplicáveis estão nomeados. Se uma exigência só aparecer no Plan ou
+no evaluation, mova-a para o Contract antes do julgamento.
+
+Para UI, o Contract deve conter uma matriz de referências visuais e uma matriz
+de auditoria estrutural. A primeira relaciona node, viewport, estado, rota e
+evidência Pencil/Web. A segunda relaciona cada widget alterado a
+`index.tsx`, `*View.tsx`, Hook e regra aplicável. A ausência de qualquer uma
+dessas matrizes impede o estado `open` quando frontend estiver no escopo.
 
 ## Judge Spec
 

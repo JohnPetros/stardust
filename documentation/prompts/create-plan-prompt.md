@@ -27,7 +27,8 @@ Inclua:
 - sensores e evidências esperados por fase;
 - riscos, findings ativos, tentativas, estado e próxima ação;
 - veredito do `Judge Plan` antes da implementação;
-- vereditos do Judge Implementation por fase.
+- modo `Final` e escopo do único `Judge Implementation Final` após a
+  integração de todas as fases.
 
 ## Design e Pencil
 
@@ -48,6 +49,8 @@ A fase de validação de frontend deve incluir:
   loading, error, empty e content quando aplicáveis;
 - evidências separadas da inspeção visual, do comportamento em runtime e dos
   testes automatizados.
+- auditoria de `ui-layer-rules.md` por widget, com `index.tsx`, `*View.tsx`,
+  Hook, paths e linhas avaliadas.
 
 Pencil não substitui a validação no navegador, e Playwright não redefine a
 fonte visual especificada.
@@ -62,7 +65,8 @@ Em `failed`, persista os findings, corrija o Plan e repita o julgamento antes de
 criar Builders.
 
 Somente o Orchestrator atualiza o Plan. Builders implementam; Judges avaliam
-read-only. Tarefas, dependências e findings operacionais devem ser persistidos
-imediatamente no Plan. Evidências, decisões e lições da feature pertencem ao
-`evaluation.md`, criado após implementação ou julgamento. Todos são
-subagentes da task atual. Não use nova thread.
+read-only. Não crie Judges de implementação por fase: fases passam por sensores
+e aguardam o julgamento integrado final. Tarefas, dependências e findings
+operacionais devem ser persistidos imediatamente no Plan. Evidências, decisões
+e lições da feature pertencem ao `evaluation.md`, criado após implementação ou
+julgamento. Todos são subagentes da task atual. Não use nova thread.

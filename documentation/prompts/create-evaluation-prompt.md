@@ -74,10 +74,17 @@ last_updated_at: YYYY-MM-DD
 
 ### Judge Implementation
 
-- Modo: `direct` | `phase` | `final`
+- Modo: `direct` | `final`
 - Veredito: `accepted` | `failed`
 - Commit: `<sha>`
 - Findings: nenhum | `<IDs e estado>`
+
+Para frontend, registre também:
+
+| Gate | Estado | Evidência |
+| --- | --- | --- |
+| UI Layer Audit | passed | widget, paths e linhas de Entry Point/View/Hook |
+| Pencil/Web comparison | passed | node, viewport, estado, rota, HEAD e screenshot/diff |
 
 ## Sensores e preflight
 
@@ -118,4 +125,6 @@ last_updated_at: YYYY-MM-DD
 
 Quality Gate ou build com falha devem ser registrados imediatamente aqui. A
 Spec permanece `in_progress`; correções de escopo usam `Builder Fix QG-*`, com
-novo sensor e novo Judge apenas quando a evidência for invalidada.
+novo sensor e novo Judge sempre que o diff ou qualquer evidência de Contract,
+Rule, Pencil ou Playwright for invalidada. Qualquer alteração posterior ao
+Judge invalida o commit avaliado anterior.
