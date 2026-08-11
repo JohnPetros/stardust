@@ -2,7 +2,7 @@ import { SupabaseFeedbackReportMapper } from '../SupabaseFeedbackReportMapper'
 import type { SupabaseFeedbackReport } from '../../../types/SupabaseFeedbackReport'
 
 describe('SupabaseFeedbackReportMapper', () => {
-  it('maps author-owned RPC rows without administrative user metadata', () => {
+  it('maps rows with the owning user metadata', () => {
     const row = {
       id: '00000000-0000-4000-8000-000000000001',
       content: 'Feedback content',
@@ -20,15 +20,22 @@ describe('SupabaseFeedbackReportMapper', () => {
       admin_message_count: 0,
       is_unread: false,
       preview: 'Feedback content',
-      users: { name: 'A', slug: 'a', avatar: null },
+      users: {
+        name: 'Petros',
+        email: 'petros@example.com',
+        slug: 'petros',
+        avatar: { name: 'Astronaut', image: '/images/astronaut.svg' },
+      },
     } as unknown as SupabaseFeedbackReport
 
     const dto = SupabaseFeedbackReportMapper.toEntity(row).dto
 
     expect(dto.author.entity).toEqual(
-      expect.objectContaining({ name: 'Você', slug: 'voce' }),
+      expect.objectContaining({ name: 'Petros', slug: 'petros' }),
     )
-    expect(dto.author.entity?.avatar.name).toBe('Você')
-    expect(dto.author.entity?.avatar.image).toBe('/images/profile.svg')
+    expect(dto.author.entity?.avatar).toEqual({
+      name: 'Astronaut',
+      image: '/images/astronaut.svg',
+    })
   })
 })
