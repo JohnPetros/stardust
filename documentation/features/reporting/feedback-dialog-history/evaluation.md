@@ -2,7 +2,7 @@
 spec: ./spec.md
 spec_revision: 3
 base_commit: 46830574d9b8d9f515ff8a0758ff54d5c9e571bf
-evaluated_commit: 005abd473
+evaluated_commit: a0fc56d77
 evaluated_scope: HEAD
 status: completed
 judge_plan_verdict: accepted
