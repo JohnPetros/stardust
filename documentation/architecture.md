@@ -36,7 +36,7 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 
 **Studio signed upload**: Studio `ImageInput` → `StorageService.createSignedUploadUrl(...)` → Server `POST /storage/signed-upload-url` → `CreateSignedUploadUrl` → `SupabaseFileStorageProvider.createSignedUploadUrl(...)` → upload direto do binario ao Supabase Storage
 
-**Feedback screenshot signed upload**: Web `FeedbackDialog` → `StorageService.createSignedUploadUrl(...)` → Server `POST /storage/signed-upload-url` → `CreateSignedUploadUrl` → `SupabaseFileStorageProvider.createSignedUploadUrl(...)` → upload direto do binario ao Supabase Storage → `ReportingService.sendFeedbackReport(...)`
+**Feedback history and conversations**: authenticated Web `FeedbackLayout` → `ReportingService` → Server `mine` controllers with the request JWT → Core user-history use cases → Supabase repositories/RLS filtered by `auth.uid()`; initial and message attachments use contextual signed-upload endpoints and upload directly to storage before report/message persistence. User replies publish the existing idempotent feedback event for the Inngest Discord job, while the UI re-queries history, detail and unread count instead of opening a realtime channel.
 
 ## Padrões Principais
 

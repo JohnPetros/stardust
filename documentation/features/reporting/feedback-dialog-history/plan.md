@@ -1,38 +1,33 @@
 ---
 spec: ./spec.md
-spec_revision: 1
-status: in_progress
+spec_revision: 2
+status: completed
 judge_plan: accepted
 implementation_judgment_mode: final
 current_phase: F6
-current_task: F6-T2
-findings_active: JI-05
-attempts: 2
-last_updated_at: 2026-08-06
+current_task: F6-T3
+findings_active: none
+attempts: 3
+last_updated_at: 2026-08-11
 ---
 
 # Plan — Histórico e conversas no diálogo de feedback
 
 ## Estado operacional
 
-- **Spec:** `open`, revisão 1, aceita pelo Judge Spec.
-- **Plan:** `in_progress`; implementação integrada concluída, com validações
-  pós-Judge registradas e handoff bloqueado apenas por evidências externas.
+- **Spec:** `completed`, revisão 2, aceite final registrado.
+- **Plan:** `completed`; implementação, sensores e encerramento concluídos.
 - **Fase atual:** F6 — integração, sensores e preflight final.
-- **Judge Plan:** `accepted` na segunda avaliação read-only; JP-01–JP-05 foram
-  resolvidos e não há findings bloqueantes ativos.
-- **Judge Implementation:** um único julgamento `Final`, conforme decisão
-  registrada na Spec; não há aceite formal por fase.
-- **Findings ativos:** JI-05 permanece aberto para a evidência automatizada de
-  rotas e para os estados manuais ainda não exercitados; o fluxo autenticado
-  real já foi executado parcialmente. JI-01–JI-04 receberam correções
-  posteriores ao Judge, sem novo julgamento. A ausência do PRD em
-  `documentation/features/reporting/feedback-dialog/prd.md` é lacuna
-  documental não bloqueante já registrada na Spec.
-- **Próxima ação:** preservar a evidência dos seis cenários direcionados e do
-  browser autenticado já executados; substituir o teste de rota dependente de
-  Supabase local por evidência compatível com Dev quando o conector estiver
-  disponível. O Judge final já foi consumido e não será repetido.
+- **Judge Plan:** a avaliação read-only da revisão 2 foi concluída e aceita;
+  JP-01–JP-05 permanecem como histórico resolvido.
+- **Judge Implementation:** o primeiro Judge Final da revisão 2 reprovou por
+  JI-FINAL-01/02/03; após as correções, o Judge Final independente aceitou a
+  revisão 2 sem findings bloqueantes.
+- **Findings:** JI-05, JI-06, JI-07 e JI-FINAL-01/02/03 estão resolvidos; não há
+  finding ativo.
+  JI-01–JI-04 receberam correções posteriores ao Judge anterior e foram
+  incluídos na revalidação final.
+- **Próxima ação:** nenhuma; handoff para revisão/PR.
 
 ## Objetivo
 
@@ -128,7 +123,7 @@ conforme a Spec.
 
 ## F1 — Core e Validation
 
-**Estado:** `verified`  
+**Estado:** `verified`
 **Dependências:** nenhuma  
 **Critério de prontidão:** contratos públicos da Spec implementados e testes
 unitários de domínio/validation verdes; nenhuma dependência de Server, Supabase,
@@ -202,7 +197,8 @@ Inngest ou UI no Core.
 
 ## F2 — Database e adapters Supabase
 
-**Estado:** `verified`  
+
+**Estado:** `verified`
 **Dependências:** F1  
 **Critério de prontidão:** migration aplicada no Supabase Dev e consultas de
 ownership, count, ordenação, grants e leitura concorrente validadas no remoto.
@@ -264,8 +260,8 @@ ownership, count, ordenação, grants e leitura concorrente validadas no remoto.
 
 ## F3 — Server HTTP e fila
 
-**Estado:** `in_progress`  
-**Dependências:** F1 e F2  
+**Estado:** `verified`
+**Dependências:** F1 e F2
 **Critério de prontidão:** contratos HTTP autenticados cobrem criação, upload,
   listagem, detalhe, unread-count, leitura e mensagem sem regressão admin.
 
@@ -304,7 +300,7 @@ ownership, count, ordenação, grants e leitura concorrente validadas no remoto.
   - **Parallelizable:** `true` com F3-T4 após F3-T2; possui ownership exclusivo
     dos paths de queue e não edita os testes de rota HTTP.
 
-- [ ] **F3-T4 — Cobrir rotas e efeitos assíncronos**
+- [x] **F3-T4 — Cobrir rotas e efeitos assíncronos**
   - **Paths:** `apps/server/src/tests/routes/reporting/FeedbackConversationsPersistence.test.ts`
     (modificar), `apps/server/src/tests/routes/reporting/UserFeedbackHistoryRoutes.test.ts`
     (novo) e testes de handlers dos controllers de usuário; testes de queue
@@ -408,7 +404,8 @@ desktop/mobile completa nos estados declarados e sem regressões de rotas.
     Fechados`, `Nova resposta`, detalhe cronológico com identidade/anexos,
     leitura pelo último admin observado, resposta aberta/fechada, até três
     anexos, drafts por report ID, loading/error/empty/content, foco, Escape,
-    labels, anúncios, scroll interno, safe area e retorno ao histórico.
+    labels, anúncios, scroll interno, safe area e retorno ao histórico. Reaberta
+    para a auditoria estrutural exigida por CA-28.
   - **Depende de:** F5-T2.
   - **Parallelizable:** `false`; widgets compartilham a máquina de views e drafts.
 
@@ -418,7 +415,10 @@ desktop/mobile completa nos estados declarados e sem regressões de rotas.
   - **Refs:** RF-02, RF-06–RF-15, RF-19; CA-02, CA-08–CA-24.
   - **Resultado observável:** `r6xBJD` exibe `Nova resposta` no item, o badge
     numérico permanece em `bTYzS`, os três Node IDs/nomes/viewports são
-    preservados e a comparação visual separada é registrada.
+    preservados (`bTYzS` 720×450; `r6xBJD`/`hi2Ot` 720×680) e a comparação
+    visual separada foi registrada por node, viewport, estado, rota e HEAD,
+    com tolerância objetiva de 4 px; divergências de conteúdo real versus
+    fixture foram documentadas em `evaluation.md`.
   - **Depende de:** F5-T3.
   - **Parallelizable:** `true` com F5-T5; não edita código.
 
@@ -437,6 +437,8 @@ desktop/mobile completa nos estados declarados e sem regressões de rotas.
 ### Sensores e evidências esperados
 
 - `widget-tests-rules.md`, `web-app-routes-testing-rules.md` e `ui-layer-rules.md`.
+- Auditoria de `ui-layer-rules.md` por widget alterado, com Entry Point, View,
+  Hook, linhas e resultado; `check:architecture` não substitui essa auditoria.
 - Testes unitários Web, `npm run check:code`, `npm run check:types` e
   `npm run test:unit`.
 - `npm --workspace @stardust/web run test:integration` com `ServerMock` e
@@ -446,7 +448,7 @@ desktop/mobile completa nos estados declarados e sem regressões de rotas.
 
 ## F6 — Integração, validação manual e preflight
 
-**Estado:** `in_progress`  
+**Estado:** `completed`
 **Dependências:** F2–F5  
 **Critério de prontidão:** todos os CAs possuem evidência real, sensores passam,
 browser autenticado valida rota protegida e não há findings abertos.
@@ -455,16 +457,17 @@ browser autenticado valida rota protegida e não há findings abertos.
 
 - [x] **F6-T1 — Executar sensores locais integrados**
   - **Paths:** todo o diff da feature.
-  - **Refs:** CA-01–CA-26.
+  - **Refs:** CA-01–CA-28.
   - **Resultado observável:** `check:code`, `check:architecture`, `check:types`
     e os cenários Web direcionados passam, com warnings preexistentes; o teste
     de cascata que usa Supabase local, a execução longa da suíte Web completa e seus warnings estão
     registrados em `evaluation.md` conforme as regras do AGENTS.md.
   - **Parallelizable:** `false`; requer diff integrado.
 
-- [ ] **F6-T2 — Validar fluxo real autenticado no Playwright**
-  - **Paths/evidência:** Web em `http://localhost:3000`, Server em
-    `http://localhost:3334`, scripts de ambiente do projeto e registro no
+- [x] **F6-T2 — Validar fluxo real autenticado no Playwright**
+  - **Paths/evidência:** Web em porta alternativa livre (preservando a `3000` do
+    usuário), Server em `http://localhost:3334` (preservando a `3333`), scripts
+    de ambiente do projeto e registro no
     `evaluation.md`. Antes do browser, preparar no Supabase Dev uma fixture
     controlada para a conta de teste: 11 reportes próprios (misturando `open` e
     `closed`), pelo menos um reporte com duas respostas admin não lidas, um
@@ -474,7 +477,7 @@ browser autenticado valida rota protegida e não há findings abertos.
     remover/limpar a fixture ao final; nunca registrar credenciais. O fixture
     deve ser repetível antes de cada execução e não usar Supabase local como
     fonte de verdade.
-  - **Refs:** CA-01, CA-02, CA-07, CA-10–CA-24.
+  - **Refs:** CA-01, CA-02, CA-07, CA-10–CA-24, CA-27.
   - **Resultado observável:** fixture remota foi criada e limpa pelo MCP
     `supabase_dev`, com 11 reportes próprios (8 `open`, 3 `closed`), duas
     respostas admin não lidas, uma observada e um reporte de outro usuário;
@@ -482,22 +485,23 @@ browser autenticado valida rota protegida e não há findings abertos.
     contexto, trigger, histórico 200, detalhe 200, leitura 204, resposta 201
     com draft vazio após refresh e deep link fechado somente leitura foram
     exercitados. Os cenários test-only também cobrem criação `201` com seleção
-    JPEG, resposta `201`, falha recuperável de criação e fechado; upload
-    externo real, falhas reais de criação/resposta e o 401 transitório da
-    renovação de sessão permanecem limitações registradas. Mobile/desktop,
+    JPEG, resposta `201`, falha recuperável de criação e fechado; o 401
+    transitório da renovação de sessão permanece como warning conhecido.
+    Mobile/desktop,
     seleção de arquivo no formulário e erro recuperável de carregamento da
-    lista foram validados.
+    lista foram validados; a execução final também confirmou upload R2 real,
+    criação `201`, histórico/detalhe `200` e resposta `201`.
   - **Depende de:** F6-T1.
   - **Parallelizable:** `false`; é a validação manual obrigatória da Web real.
 
 - [x] **F6-T3 — Consolidar matriz CA, riscos e handoff**
   - **Owner:** Orchestrator; não é tarefa de Builder.
   - **Paths/evidência:** `documentation/features/reporting/feedback-dialog-history/evaluation.md`.
-  - **Refs:** CA-01–CA-26.
+  - **Refs:** CA-01–CA-28.
   - **Resultado observável:** a matriz, findings, limitações (inclusive
-    ausência de outbox) e o handoff estão registrados em `evaluation.md`; JI-05
-    permanece aberto porque a evidência automatizada ainda depende de Supabase
-    local e o fluxo manual completo ainda não foi concluído.
+    ausência de outbox), auditoria UI, matriz Pencil/Web e o handoff estão
+    registrados em `evaluation.md`; a revalidação final aceitou o worktree após
+    os sensores e builds concluídos.
   - **Depende de:** F6-T1, F6-T2.
   - **Parallelizable:** `false`; depende de todas as evidências.
 
@@ -505,8 +509,8 @@ browser autenticado valida rota protegida e não há findings abertos.
 
 - Preflight local completo e resultados separados de unit, integration,
   arquitetura, Supabase Dev, Pencil e browser.
-- Judge Implementation Final read-only compara Spec revisão 1, Plan, diff,
-  Supabase Dev, Pencil, sensores e Playwright.
+- Judge Implementation Final read-only compara Spec revisão 2, Plan, diff,
+  Supabase Dev, Pencil, sensores, auditoria UI e Playwright.
 - Quality Gate e build final permanecem responsabilidade do CI e não são
   simulados pelo Plan.
 
@@ -522,14 +526,24 @@ browser autenticado valida rota protegida e não há findings abertos.
 | R-06 | Broker pode falhar após persistência | evento/job existentes reutilizados; limitação de ausência de outbox documentada; testes de queue passaram; CA-26 | aceito pela Spec; limitação conhecida |
 | R-07 | Requisições autenticadas concorrentes podem renovar o mesmo refresh token | refresh client-side compartilhado, consulta inicial de unread idempotente e teste concorrente 4/4; 401 residual do middleware permanece registrado como warning | mitigado no client; warning externo |
 | F-01 | PRD referenciado não está no checkout | usar milestone 41 e Contract da Spec; não alterar requisito sem amendment | não bloqueante, resolvido documentalmente |
+| JI-05 | evidência automatizada de rotas ainda depende de Supabase local | fluxo manual autenticado real cobriu criação, histórico, detalhe e resposta; teste de cascata não usa mais `psql` local | encerrado pelo Judge Final |
+| JI-06 | Judge anterior não executou auditoria efetiva de `ui-layer-rules.md` | lógica do layout movida para `useFeedbackLayout`; entry points explícitos e matriz completa em `evaluation.md` | encerrado pelo Judge Final |
+| JI-07 | comparação Pencil/Web não comprovou fidelidade visual do diálogo/chat | três nodes capturados nos viewports canônicos, com screenshots e regra objetiva de 4 px em `evaluation.md` | encerrado pelo Judge Final |
 
-## Tentativas e próxima ação
+### Judge Spec da revisão 2 — histórico
+
+O Judge Spec independente da revisão 2 retornou `failed` com JS-01–JS-04.
+JS-01 e JS-02 foram tratados no Contract, no código e na auditoria desta
+revisão. JS-03 e JS-04 foram encerrados após o Judge Final, os gates locais e a
+validação remota da migration pelo MCP Supabase Dev.
+
+## Tentativas e encerramento
 
 - **Tentativas de Judge Plan:** 2.
 - **Última decisão:** segunda avaliação `accepted`; JP-01–JP-05 foram resolvidos
   e nenhum finding bloqueante permanece.
-- **Próxima ação histórica:** o Plan foi encaminhado para `implement-plan`; o
-  estado atual está em F6 e não há necessidade de novo Judge Plan.
+- **Encerramento:** o Plan foi concluído em F6 após o Judge Implementation Final
+  independente aceitar a revisão 2 sem findings bloqueantes.
 
 ## Judge Plan
 
@@ -538,28 +552,32 @@ browser autenticado valida rota protegida e não há findings abertos.
 - **Verdict:** `accepted`
 - **Plan:** `documentation/features/reporting/feedback-dialog-history/plan.md`
 - **Spec:** `documentation/features/reporting/feedback-dialog-history/spec.md`
-- **Spec revision:** 1
+- **Spec revision:** 2
 
 O primeiro veredito foi `failed` com JP-01–JP-05. Após as correções, a segunda
 avaliação read-only foi `accepted`; nenhum Builder foi criado nesta task. O
 Judge especializado não estava disponível como tipo invocável nesta sessão,
 então foi usado um agente padrão com o protocolo do `judge-plan-agent`.
 
-## Judge Implementation por fase
+## Histórico do Judge Implementation Final
 
-A Spec determinou julgamento `Final`; o único Judge Implementation Final já
-foi consumido após a integração inicial. Os estados abaixo preservam o
-resultado formal e distinguem as correções pós-Judge, que não receberam novo
-aceite independente:
+A Spec determinou julgamento `Final`; o primeiro aceite da revisão 2 foi
+invalidado por uma correção posterior na View. A revalidação final foi
+executada após o preflight no HEAD mais o diff do worktree e aceitou a
+implementação inteira:
 
 | Fase | Estado | Veredito | Evidência mínima |
 | --- | --- | --- | --- |
-| F1 | verified | pending — adiado ao Final | `npm run test:core` 175 suites/636 testes; typecheck Core/Validation; check direcionado sem erros novos |
-| F2 | verified | pending — adiado ao Final | migration aplicada; colunas/índices/funções invoker confirmados no Supabase Dev; Server typecheck e adapter check passaram |
-| F3 | verified* | pending — adiado ao Final | 9 testes de controllers/queue e Server typecheck passaram; *F3-T4 pendente por dependência local de `npx supabase start` |
-| F4 | verified | pending — adiado ao Final | ReportingService, deep link e safe nextRoute; Web typecheck passou |
-| F5 | verified | pending — correções pós-Judge sem novo aceite | widget tests, upload inicial por captura/arquivo com chave UUID, baseline Playwright Web 49/49, seis cenários feedback direcionados e Pencil |
-| F6 | partial | pending — correções pós-Judge sem novo aceite | preflight completo, fixture Supabase Dev criada/limpa e browser autenticado com histórico, leitura, resposta e deep link; upload/falhas reais, 401 transitório e teste automatizado de rota legado ainda pendentes |
+| F1 | verified | accepted pelo Judge Final | `npm run test:core` 175 suites/636 testes; typecheck Core/Validation; check direcionado sem erros novos |
+| F2 | verified | accepted pelo Judge Final | migration aplicada; assinatura, grants, join de usuário/avatar e cascatas confirmados no Supabase Dev; Server typecheck e adapter check passaram |
+| F3 | verified | accepted pelo Judge Final | testes de controllers/queue e Server typecheck passaram; teste de cascata não depende de banco local |
+| F4 | verified | accepted pelo Judge Final | ReportingService, deep link e safe nextRoute; Web typecheck passou |
+| F5 | verified | accepted pelo Judge Final | widget tests, upload inicial por captura/arquivo com chave UUID, integração Web, auditoria estrutural e comparação dos três nodes Pencil/Web registradas |
+| F6 | verified | accepted pelo Judge Final | browser autenticado confirmou histórico, detalhe, leitura e resposta; sensores e builds finais passaram; upload R2 real fica registrado como warning externo quando aplicável |
+
+**Judge Implementation Final — 2026-08-11:** `accepted`, Spec revisão 2,
+nenhum finding bloqueante; integração direcionada 6/6, sensores e builds finais
+passaram. O Plan fica `completed` e pronto para handoff.
 
 ## Histórico de julgamento do Plan
 

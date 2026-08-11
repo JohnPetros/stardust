@@ -1,7 +1,7 @@
 ---
 title: Histórico e conversas no diálogo de feedback
-status: open
-revision: 1
+status: completed
+revision: 2
 source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/issues/519
@@ -26,7 +26,7 @@ scope:
   - apps/web/src/ui/auth/widgets/pages/SignIn
   - apps/web/src/ui/global/widgets/layouts/Root
   - design/stardust.pen
-last_updated_at: 2026-08-06
+last_updated_at: 2026-08-11
 ---
 
 # Histórico e conversas no diálogo de feedback
@@ -192,6 +192,8 @@ registrada em Alinhamento documental.
 | CA-24 | RF-19 | teclado, leitor de tela e viewport mobile | diálogo é operado | foco, labels, anúncios, rolagem, safe areas e retorno funcionam | accessibility assertions + Playwright + Pencil |
 | CA-25 | RF-06, RF-07, RF-09 | client envia `userId` alheio ou omite identidade | API processa pedido | identidade vem exclusivamente da sessão e não do payload/query | controller/use case + rota integrada |
 | CA-26 | RF-13 | Discord falha após persistência | job executa/retry | mensagem continua canônica e falha é observável sem rollback | unit job + integração queue |
+| CA-27 | RF-11, RF-19 | nodes `bTYzS`, `r6xBJD` e `hi2Ot` no estado/viewport canônico | implementação é comparada com o Pencil | estrutura, dimensões, tipografia, espaçamento, cores, avatars, badges, composer e conteúdo visual estão alinhados; divergências são registradas | comparação Pencil/Web com screenshots identificados por node, viewport, estado, rota e HEAD; passa somente quando os anchors estruturais e o contêiner principal diferem no máximo 4 px, não há clipping/overflow e divergências de dados dinâmicos ficam explicitamente separadas de divergências de layout |
+| CA-28 | RF-11, RF-19 | widget UI alterado | auditoria estrutural é executada | cada widget possui `index.tsx`, `*View.tsx` e Hook quando houver lógica; Entry Point compõe, View renderiza e Hook concentra estado/efeitos/handlers | UI Layer Audit com path e linhas + diff + `ui-layer-rules.md` |
 
 ## Estado atual e pesquisa
 
@@ -565,6 +567,21 @@ Pencil valida os três estados desktop existentes e Playwright valida os estados
 e viewports sem referência visual canônica. Nenhum problema de layout foi
 reportado pelo Pencil nos três nodes durante a inspeção.
 
+Para esta revisão, `bTYzS`, `r6xBJD` e `hi2Ot` são referências visuais
+obrigatórias e devem ser comparados com a Web nos seus viewports desktop
+canônicos (`720×450`, `720×680` e `720×680`, respectivamente). A comparação
+deve ser independente da inspeção de runtime e registrar screenshot ou diff por
+node, com a matriz contendo node, viewport, estado, rota, commit/HEAD e
+artefato. O resultado é aprovado quando o contêiner do diálogo e cada anchor
+estrutural comparável (header, conteúdo, cards/linhas, footer/composer) ficam
+em uma tolerância máxima de 4 px, não existe clipping ou overflow horizontal,
+e a hierarquia tipográfica e os tokens visuais permanecem equivalentes. A
+quantidade, texto e avatar dos registros reais podem divergir do fixture do
+Pencil, mas cada divergência deve ser classificada como conteúdo/estado e não
+usada para mascarar diferença de layout. Cada widget alterado também deve
+possuir uma entrada na auditoria de `ui-layer-rules.md`, com Entry Point, View,
+Hook, linhas avaliadas e resultado.
+
 ## Decisões técnicas
 
 ### DT-01 — Leitura simétrica no reporte
@@ -675,14 +692,17 @@ reportado pelo Pencil nos três nodes durante a inspeção.
 - `npm run check:architecture` devido às mudanças cross-layer.
 - `npm run test:integration`, incluindo
   `npm --workspace @stardust/web run test:integration`.
+- Auditoria de `documentation/rules/ui-layer-rules.md` por widget alterado,
+  separada de `check:architecture`.
 - Quality Gate e build final permanecem no CI.
 
 ### Validação manual obrigatória
 
 Após implementação e sensores:
 
-1. Subir Server em `http://localhost:3334` e Web em
-   `http://localhost:3000`, usando credenciais reais apenas via
+1. Subir Server em uma porta alternativa (`3334`, preservando a `3333` do
+   usuário) e Web em uma porta alternativa livre (por exemplo `3001`,
+   preservando a `3000` do usuário), usando credenciais reais apenas via
    `WEB_APP_E2E_EMAIL/WEB_APP_E2E_PASSWORD` carregadas pelo script do projeto.
 2. Registrar `console`, `pageerror`, `requestfailed` e respostas de
    `/auth/account`, endpoints `reporting/feedback` e storage.
@@ -697,7 +717,10 @@ Após implementação e sensores:
 6. Confirmar `2xx/201/204` nos fluxos válidos, `404` seguro em ownership e
    ausência de erros de console/rede não esperados.
 7. Inspecionar/atualizar `bTYzS`, `r6xBJD` e `hi2Ot` no Pencil e comparar os
-   estados/viewports finais com a Web real.
+   estados/viewports finais com a Web real, com screenshots nomeados por node,
+   viewport, estado, rota e HEAD.
+8. Executar a auditoria de `ui-layer-rules.md` para cada widget alterado e
+   registrar os paths e linhas no `evaluation.md`.
 
 ### Banco remoto
 
@@ -734,7 +757,8 @@ Após implementação e sensores:
   sensores aplicáveis e fica aguardando a avaliação integrada.
 - **Judge Implementation Final único:** após todas as fases, integração,
   sensores integrados e preflight, comparar revisão congelada, diff integrado,
-  banco Dev, Pencil e Playwright.
+  banco Dev, Pencil, Playwright e a auditoria da UI. Qualquer alteração após o
+  veredito invalida o julgamento e exige nova avaliação final.
 - Criar `evaluation.md` no primeiro julgamento/implementação relevante, nunca
   vazio, registrando revisão, commit-base, matriz CA e evidências reais.
 
@@ -790,3 +814,10 @@ Após implementação e sensores:
   Spec foi promovida para `open`. Por decisão explícita posterior do usuário, o
   modo de julgamento da implementação foi fixado como `Final`, sem Judges por
   fase; essa decisão operacional não altera RF, CA, escopo ou Contract.
+- **Revisão 2 — 2026-08-10:** Contract reforçado com CA-27/CA-28, comparação
+  visual Pencil/Web obrigatória por node e viewport, auditoria estrutural de
+  UI por widget, validade do Judge somente no HEAD avaliado e preservação das
+  portas/processos do usuário durante a validação. A revisão exige novo Judge
+  Spec antes de retomar a implementação e invalida o aceite de implementação
+  anterior, pois houve alterações posteriores e as evidências visual/UI eram
+  insuficientes.
