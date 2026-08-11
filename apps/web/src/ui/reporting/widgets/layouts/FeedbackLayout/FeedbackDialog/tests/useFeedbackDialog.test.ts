@@ -127,7 +127,9 @@ describe('useFeedbackDialog', () => {
           value: 'O dialog perde o foco apos screenshot',
         }),
         intent: expect.objectContaining({ value: 'idea' }),
-        initialAttachment: expect.objectContaining({ storageKey: uploadedFileName }),
+        initialAttachment: expect.objectContaining({
+          storageKey: `images/feedback-reports/${uploadedFileName}`,
+        }),
       }),
     )
     expect(result.current.step).toBe('success')
@@ -273,11 +275,11 @@ describe('useFeedbackDialog', () => {
     const feedbackReport = reportingService.sendFeedbackReport.mock.calls[0]?.[0]
 
     expect(reportingService.sendFeedbackReport).toHaveBeenCalledTimes(1)
-    expect(feedbackReport?.dto).toEqual(
+    expect(feedbackReport).toEqual(
       expect.objectContaining({
-        content: 'Feedback sem upload direto',
-        intent: 'idea',
-        screenshot: 'https://cdn.stardust.dev/feedback.png',
+        content: expect.objectContaining({ value: 'Feedback sem upload direto' }),
+        intent: expect.objectContaining({ value: 'idea' }),
+        initialAttachment: undefined,
       }),
     )
     expect(result.current.step).toBe('success')
