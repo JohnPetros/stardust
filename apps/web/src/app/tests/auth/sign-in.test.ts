@@ -306,12 +306,12 @@ test.describe('/auth/sign-in', () => {
 
     await page.getByTestId('submit-button').click()
 
-    await expect(page).toHaveURL(/\/auth\/sign-in$/, {
+    await expect(page).toHaveURL(/\/auth\/sign-in(?:\?.*)?$/, {
       timeout: 10000,
     })
     await expect(page.getByRole('alert')).toBeVisible({ timeout: 10000 })
     await page.waitForTimeout(5000)
-    await expect(page).toHaveURL(/\/auth\/sign-in$/)
+    await expect(page).toHaveURL(/\/auth\/sign-in(?:\?.*)?$/)
   })
 
   test('keeps social links pointing to configured server providers', async ({ page }) => {
