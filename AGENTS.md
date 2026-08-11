@@ -5,6 +5,16 @@
 - documentation/tooling.md
 - documentation/rules/rules.md
 
+### Ambiente local e credenciais
+
+- Para desenvolvimento local e validações reais no navegador, use sempre o
+  `.env.development` da raiz como fonte das variáveis de ambiente e credenciais.
+- Carregue essas variáveis com o script de exportação correspondente antes de
+  executar comandos ou ferramentas; nunca escreva valores de credenciais em
+  testes, documentação versionada, comandos persistentes ou logs.
+- O `.env.development` é ignorado pelo Git e deve permanecer apenas na máquina
+  local.
+
 ## MCPS
 
 - Context7 para buscar informações atualizadas
