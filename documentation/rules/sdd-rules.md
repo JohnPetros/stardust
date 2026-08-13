@@ -19,6 +19,10 @@ Demanda → Spec → Judge Spec → Plan opcional → Judge Plan → Implementa�
   antes do PR.
 - O fechamento não cria um novo papel de julgamento; `conclude-spec` fecha o
   fluxo.
+- Quando existir referência Pencil, ela é a fonte visual canônica: o código deve
+  preservar os nodes, estados e viewports declarados; qualquer divergência exige
+  decisão/amendment rastreável e aprovação. A comparação Pencil/Web independente
+  é obrigatória para frontend e desvio não aprovado bloqueia o fluxo.
 
 ## Persistência imediata
 

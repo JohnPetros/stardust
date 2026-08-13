@@ -247,6 +247,8 @@ prevalece.
   `apps/web/src/app/tests/**`.
 - Ao validar composicao de borda web, requests da rota, redirects, `notFound()`
   e bridges test-only da app web.
+- Ao definir a cobertura obrigatoria de navegacao autenticada e de
+  redirecionamento para login em fluxos da Web.
 
 ## Regras de Testes de Casos de Uso
 

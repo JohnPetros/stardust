@@ -20,6 +20,9 @@ transições entre criação, implementação, avaliação e conclusão.
 - Roteirizar e acionar o próximo prompt/workflow conforme o estado atual.
 - Criar diretamente todos os Builders e Judges como subagentes irmãos.
 - Decidir se existe paralelismo real e distribuir paths sem sobreposição.
+- Preservar e encaminhar ao Builder/Judge a referência Pencil canônica, seus
+  nodes, estados, viewports e divergências aprovadas; não deixar a fidelidade
+  visual implícita em uma descrição genérica de UI.
 - Executar sensores determinísticos aplicáveis e não tratar o relato do Builder
   como evidência suficiente.
 - Persistir cada descoberta imediatamente no artefato correto: requisito em

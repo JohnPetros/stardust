@@ -44,7 +44,10 @@ Antes de criar o PR, confirme o preflight local da Spec e a existência de
 
 Para frontend, confirme também a auditoria de `documentation/rules/ui-layer-rules.md`
 por widget e a matriz independente de comparação Pencil/Web para todos os nodes
-canônicos do Contract.
+canônicos do Contract. A matriz deve demonstrar fidelidade de composição,
+hierarquia, dimensões/anchors, espaçamento, tipografia, cores, assets, estados
+e variantes; só divergências explicitamente aprovadas podem permanecer.
+Qualquer node ausente, contradito ou adicionado sem aprovação bloqueia o PR.
 
 O `evaluation.md` deve conter as evidências reais do preflight, o resultado do
 único Judge Implementation da implementação inteira, warnings, findings,

@@ -79,6 +79,22 @@ de design e declare:
 - divergências entre design, requisitos, Architecture, Rules e comportamento
   atual, indicando a precedência adotada e o alinhamento esperado.
 
+### Regra Pencil-to-code
+
+Os nodes declarados são a fonte visual canônica para o código. A Spec deve
+tratar como parte do Contract a preservação da composição, hierarquia,
+dimensões, espaçamento, tipografia, cores, bordas, elevação, ícones/assets,
+densidade, variantes e estados observáveis de cada node. HTML semântico,
+acessibilidade, interação, dados e reflow responsivo podem adaptar a
+implementação, mas não autorizam substituir, simplificar ou reinterpretar o
+design.
+
+Toda divergência precisa ser vinculada ao node e ao `CA-*`, ter motivo
+verificável e ser aprovada como decisão ou amendment antes de `open`. Node
+ausente, contradito ou adicionado sem aprovação é bloqueante. Não aceite CSS
+genérico como aproximação, nem invente arquivo, Node ID ou detalhe visual quando
+não existir uma fonte canônica; registre a ausência explicitamente.
+
 Inspecione as referências com Pencil; não deduza detalhes visuais somente de
 screenshots ou descrições. Se a solução exigir alteração no design, inclua o
 arquivo `.pen` no escopo e especifique os nodes afetados. Se não existir fonte
@@ -219,8 +235,9 @@ os sensores aplicáveis estão nomeados. Se uma exigência só aparecer no Plan 
 no evaluation, mova-a para o Contract antes do julgamento.
 
 Para UI, o Contract deve conter uma matriz de referências visuais e uma matriz
-de auditoria estrutural. A primeira relaciona node, viewport, estado, rota e
-evidência Pencil/Web. A segunda relaciona cada widget alterado a
+de auditoria estrutural. A primeira relaciona node, viewport, estado, rota,
+evidência Pencil/Web, dimensões/anchors relevantes e divergências aprovadas. A
+segunda relaciona cada widget alterado a
 `index.tsx`, `*View.tsx`, Hook e regra aplicável. A ausência de qualquer uma
 dessas matrizes impede o estado `open` quando frontend estiver no escopo.
 

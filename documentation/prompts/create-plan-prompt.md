@@ -37,6 +37,13 @@ do arquivo `.pen`, os Node IDs, os nomes, os estados, as variantes e os
 viewports declarados. Cada tarefa de UI deve citar as referências relevantes,
 os respectivos `RF-*`/`CA-*` e o resultado observável esperado.
 
+Os nodes e estados da Spec continuam sendo a fonte visual canônica durante o
+Plan. As tarefas devem carregar para o Builder o path do `.pen`, Node IDs,
+viewports, dimensões/anchors e a expectativa de comparação. Não crie uma
+interpretação alternativa no Plan: simplificação, substituição ou adição
+visual só pode entrar como divergência explicitamente aprovada e vinculada ao
+`CA-*` correspondente.
+
 Separe, quando aplicável, tarefas para atualizar o design no Pencil, implementar
 a UI e validar o resultado. Não substitua ou crie Node IDs no Plan; uma
 referência ausente, divergente ou inválida deve ser registrada como finding e
@@ -51,9 +58,12 @@ A fase de validação de frontend deve incluir:
   testes automatizados.
 - auditoria de `ui-layer-rules.md` por widget, com `index.tsx`, `*View.tsx`,
   Hook, paths e linhas avaliadas.
+- matriz de fidelidade Pencil-to-code com node, viewport, estado, anchors,
+  captura Web, divergência e aprovação, quando houver exceção.
 
 Pencil não substitui a validação no navegador, e Playwright não redefine a
-fonte visual especificada.
+fonte visual especificada. A ausência de comparação independente ou um desvio
+não aprovado mantém a tarefa fora de `verified` e deve virar finding.
 
 Estados de tarefa: `pending`, `implementing`, `validating`, `verified`.
 Estados de fase: `pending`, `in_progress`, `awaiting_judgment`, `failed`,

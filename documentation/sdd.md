@@ -75,6 +75,26 @@ A precedência é:
 7. implementação atual;
 8. evidências registradas em `evaluation.md`.
 
+### Regra transversal: fidelidade Pencil-to-code
+
+Quando o escopo possuir uma referência `.pen`, os nodes declarados na Spec são
+a fonte visual canônica do código. A implementação deve preservar, para cada
+node e estado aplicável, a composição, hierarquia, dimensões, espaçamento,
+tipografia, cores, bordas, elevação, ícones/assets, densidade e variantes
+observáveis. A tradução para HTML semântico, acessibilidade, interação, dados e
+reflow responsivo é permitida quando necessária, mas não pode substituir,
+simplificar ou reinterpretar a referência visual.
+
+Toda divergência deve ser registrada como decisão ou amendment, vinculada ao
+node e ao `CA-*` afetado, com motivo verificável e aprovação antes da
+implementação. Um node ausente, contradito ou alterado sem aprovação é finding
+bloqueante. A validação exige comparação independente Pencil/Web no mesmo
+viewport e estado, além do fluxo real no Playwright; screenshot isolado ou a
+afirmação de que a tela foi “verificada visualmente” não é evidência suficiente.
+
+Quando não houver fonte visual canônica, isso deve ser declarado na Spec. Não
+invente arquivo, Node ID ou detalhe visual para preencher a lacuna.
+
 ## Spec
 
 Uma Spec pode nascer de PRD, Issue, Report ou demanda direta. O PRD não é
@@ -224,6 +244,7 @@ Deve registrar:
   UI;
 - matriz visual separada para Pencil e Playwright, com node, viewport, estado,
   rota, commit e screenshot/comparação;
+- divergências Pencil-to-code aprovadas, com node, motivo, impacto e decisão;
 - sensores locais e preflight;
 - Quality Gate e build do CI, inicialmente `pending` quando o PR ainda não
   existe;

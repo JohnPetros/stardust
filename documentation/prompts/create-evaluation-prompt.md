@@ -84,7 +84,14 @@ Para frontend, registre também:
 | Gate | Estado | Evidência |
 | --- | --- | --- |
 | UI Layer Audit | passed | widget, paths e linhas de Entry Point/View/Hook |
-| Pencil/Web comparison | passed | node, viewport, estado, rota, HEAD e screenshot/diff |
+| Pencil/Web comparison | passed | node, viewport, estado, rota, HEAD, anchors, divergência/aprovação e screenshot/diff |
+
+Quando houver referência Pencil, registre uma matriz por node. Ela deve
+identificar o `.pen`, Node ID, viewport, estado/variante, rota, dimensão e
+anchors da referência, captura Web no mesmo contexto, HEAD avaliado e qualquer
+divergência aprovada. `match` e `approved adaptation` são os únicos estados
+aceitáveis; node ausente, contradito ou adicionado sem aprovação mantém a
+avaliação bloqueada.
 
 ## Sensores e preflight
 
@@ -127,4 +134,5 @@ Quality Gate ou build com falha devem ser registrados imediatamente aqui. A
 Spec permanece `in_progress`; correções de escopo usam `Builder Fix QG-*`, com
 novo sensor e novo Judge sempre que o diff ou qualquer evidência de Contract,
 Rule, Pencil ou Playwright for invalidada. Qualquer alteração posterior ao
-Judge invalida o commit avaliado anterior.
+Judge invalida o commit avaliado anterior, inclusive quando afetar a fidelidade
+Pencil-to-code.

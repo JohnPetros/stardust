@@ -16,15 +16,20 @@ Orchestrator → Builder Direct → sensores → Judge Implementation Direct
    `documentation/rules/sdd-rules.md`.
 2. Congele a revisão e o commit-base.
 3. Crie `Builder Direct` como subagente e envie Contract, resultado observável,
-   paths, Rules, Architecture e MCPs aplicáveis.
+   paths, Rules, Architecture, os paths/Node IDs Pencil canônicos, estados,
+   viewports e MCPs aplicáveis.
 4. Inspecione o diff; o Builder não atualiza Spec, Plan ou estado.
 5. Execute `format`, `check:code`, `check:types` e `test:unit`; execute
    `check:architecture` e `test:integration` quando aplicáveis. Para frontend,
-   faça também a auditoria de `ui-layer-rules.md` e a comparação dos nodes
-   Pencil aplicáveis com a Web real. Build não é necessário neste ciclo.
+   faça também a auditoria de `ui-layer-rules.md` e a comparação independente
+   dos nodes Pencil aplicáveis com a Web real, no mesmo viewport e estado.
+   Preserve o design canônico; qualquer simplificação, substituição, adição ou
+   divergência não aprovada é finding bloqueante. Build não é necessário neste
+   ciclo.
 6. Crie o único `Judge Implementation Direct` read-only irmão do Builder. Envie
    Spec, revisão, Contract, diff, critérios, Rules, Architecture, auditoria UI,
-   evidências Pencil/Playwright e resultados oficiais dos sensores.
+   evidências Pencil/Playwright, matriz de divergências aprovadas e resultados
+   oficiais dos sensores.
 7. Se `failed`, registre o finding no `evaluation.md` (ou crie um Plan se ele
    exigir tarefas), crie `Builder Fix QG-<n>`, reexecute sensores invalidados e
    repita o Judge quando o diff ou qualquer evidência tiver sido invalidada.

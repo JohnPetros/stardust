@@ -31,7 +31,9 @@ O Orchestrator conduz o fechamento na task atual. Não crie nova thread.
 
 Para frontend, confirme no `evaluation.md` a auditoria de
 `ui-layer-rules.md` e a matriz independente Pencil/Web antes de marcar a Spec
-como concluída.
+como concluída. A matriz deve comprovar fidelidade Pencil-to-code no HEAD atual;
+node ausente, contradito, adicionado sem aprovação ou divergência sem decisão
+rastreável mantém a Spec `in_progress` e exige correção ou amendment.
 
 ## Documentação e entrega
 
