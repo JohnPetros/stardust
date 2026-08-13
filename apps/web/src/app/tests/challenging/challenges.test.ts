@@ -180,24 +180,27 @@ test.describe(CHALLENGES_ROUTE, () => {
       page.getByRole('combobox').filter({ hasText: 'Dificuldade' }),
     ).toBeVisible()
 
-    const difficultyRequest = page.waitForRequest((request) => {
-      const url = new URL(request.url())
+    const difficultyResponse = page.waitForResponse((response) => {
+      const url = new URL(response.url())
       return (
-        isChallengesListRequest(request) &&
+        isChallengesListRequest(response.request()) &&
+        response.status() === 200 &&
         url.searchParams.get('difficulty') === 'medium' &&
         url.searchParams.get('title') === 'soma'
       )
     })
     await page.getByRole('combobox').filter({ hasText: 'Dificuldade' }).click()
     await page.getByRole('option', { name: 'Médio' }).click()
-    await difficultyRequest
+    await difficultyResponse
     await expect(page).toHaveURL(/title=soma/)
     await expect(page).toHaveURL(/difficultyLevel=medium/)
+    await expect(page.getByText('Soma complementar', { exact: true })).toBeVisible()
 
-    const categoryRequest = page.waitForRequest((request) => {
-      const url = new URL(request.url())
+    const categoryResponse = page.waitForResponse((response) => {
+      const url = new URL(response.url())
       return (
-        isChallengesListRequest(request) &&
+        isChallengesListRequest(response.request()) &&
+        response.status() === 200 &&
         url.searchParams.get('categoriesIds') === CATEGORY_ID &&
         url.searchParams.get('difficulty') === 'medium'
       )
@@ -206,7 +209,7 @@ test.describe(CHALLENGES_ROUTE, () => {
     const categoryButton = page.getByRole('button', { name: 'laços', exact: true })
     await expect(categoryButton).toBeVisible()
     await categoryButton.click()
-    await categoryRequest
+    await categoryResponse
 
     await expect(page).toHaveURL(new RegExp(`categoriesIds=${CATEGORY_ID}`))
     await expect(page.getByText('Laços', { exact: true }).first()).toBeVisible()
