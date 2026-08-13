@@ -9,6 +9,7 @@ import { ToastContextProvider } from '@/ui/global/contexts/ToastContext'
 import { AuthContextProvider } from '@/ui/auth/contexts/AuthContext'
 import { AudioContextProvider } from '@/ui/global/contexts/AudioContext'
 import { ClientProviders } from '../ClientProviders'
+import { FeedbackLayout } from '@/ui/reporting/widgets/layouts/FeedbackLayout'
 
 type Props = {
   children: ReactNode
@@ -35,7 +36,7 @@ export const ServerProviders = async ({ children }: Props) => {
               accountDto={accountDto}
               accessToken={accessToken?.data ?? null}
             >
-              {children}
+              {accountDto ? <FeedbackLayout>{children}</FeedbackLayout> : children}
             </AuthContextProvider>
           </ClientProviders>
         </AudioContextProvider>

@@ -10,6 +10,7 @@ import { FeedbackReportNotFoundError } from '../domain/errors'
 import { NotAllowedError } from '#global/domain/errors/NotAllowedError'
 import type { FeedbackReportsRepository } from '../interfaces'
 import type { CreateFeedbackAttachmentUploadUseCaseRequest } from '../domain/types'
+import { FeedbackImage } from '../domain/structures'
 
 export class CreateFeedbackAttachmentUploadUrlUseCase
   implements
@@ -37,6 +38,7 @@ export class CreateFeedbackAttachmentUploadUrlUseCase
     if (!/^[0-9a-f-]{36}\.(png|jpg|jpeg)$/i.test(fileName)) {
       throw new AppError('O nome do anexo deve ser um UUID com extensão PNG ou JPG')
     }
+    FeedbackImage.createAsStored(fileName, request.mimeType.value, request.size.value)
     Integer.create(request.size.value)
     const folder = FileStorageFolderPath.createAsFeedbackMessages(
       reportId.value,

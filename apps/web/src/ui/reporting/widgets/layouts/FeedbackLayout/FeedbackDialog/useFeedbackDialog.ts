@@ -1,40 +1,45 @@
 import { useRef, useState } from 'react'
 
-import { FeedbackReport } from '@stardust/core/reporting/entities'
-import { AuthorAggregate } from '@stardust/core/global/aggregates'
-import { Text } from '@stardust/core/global/structures'
+import { FeedbackIntent } from '@stardust/core/reporting/structures'
+import { Id, Integer, Text } from '@stardust/core/global/structures'
 import type { ReportingService } from '@stardust/core/reporting/interfaces'
-import type {
-  SignedFileStorageProvider,
-  StorageService,
-} from '@stardust/core/storage/interfaces'
-import { FileStorageFolderPath, SignedUploadUrl } from '@stardust/core/storage/structures'
+import type { SignedFileStorageProvider } from '@stardust/core/storage/interfaces'
+import { SignedUploadUrl } from '@stardust/core/storage/structures'
 import type { User } from '@stardust/core/global/entities'
 
 import type { ToastContextValue } from '@/ui/global/contexts/ToastContext/types'
 
 export type FeedbackStep = 'initial' | 'form' | 'success'
 
+function getResponseErrorMessage(response: { errorMessage: string }, fallback: string) {
+  try {
+    return response.errorMessage
+  } catch {
+    return fallback
+  }
+}
+
 type Params = {
   reportingService: ReportingService
-  storageService: StorageService
   signedFileStorageProvider: SignedFileStorageProvider
   user: User | null
   toast: ToastContextValue
+  onSubmitted?: () => void | Promise<void>
 }
 
 export function useFeedbackDialog({
   reportingService,
-  storageService,
   signedFileStorageProvider,
   user,
   toast,
+  onSubmitted,
 }: Params) {
   const [isOpen, setIsOpen] = useState(false)
   const [step, setStep] = useState<FeedbackStep>('initial')
   const [content, setContent] = useState('')
   const [intent, setIntent] = useState<string>('idea')
   const [screenshotPreview, setScreenshotPreview] = useState<string | undefined>()
+  const [screenshotFile, setScreenshotFile] = useState<File | undefined>()
   const [rawScreenshot, setRawScreenshot] = useState<string | undefined>()
   const [isCapturing, setIsCapturing] = useState(false)
   const [isCropping, setIsCropping] = useState(false)
@@ -91,7 +96,7 @@ export function useFeedbackDialog({
           console.error('Failed to warm up capture engine', error)
           return
         } finally {
-          if (warmupNode && warmupNode.parentNode) {
+          if (warmupNode?.parentNode) {
             warmupNode.parentNode.removeChild(warmupNode)
           }
           captureWarmupPromiseRef.current = null
@@ -102,16 +107,27 @@ export function useFeedbackDialog({
     await captureWarmupPromiseRef.current
   }
 
+  function revokeScreenshotPreview() {
+    if (screenshotPreview?.startsWith('blob:')) {
+      URL.revokeObjectURL(screenshotPreview)
+    }
+  }
+
   function handleOpenChange(open: boolean) {
     setIsOpen(open)
     if (open) void warmupCaptureEngine()
 
-    if (!open && !isCapturing && !isCropping) {
+    // Keep an unfinished form draft while the page remains mounted. A
+    // successful submission has no draft to preserve and can safely return to
+    // the initial step when the dialog is dismissed.
+    if (!open && !isCapturing && !isCropping && step === 'success') {
       setTimeout(() => {
         setStep('initial')
         setContent('')
         setIntent('idea')
+        revokeScreenshotPreview()
         setScreenshotPreview(undefined)
+        setScreenshotFile(undefined)
         setRawScreenshot(undefined)
         setIsCropping(false)
       }, 300)
@@ -132,9 +148,27 @@ export function useFeedbackDialog({
     setStep('initial')
     setContent('')
     setIntent('idea')
+    revokeScreenshotPreview()
     setScreenshotPreview(undefined)
+    setScreenshotFile(undefined)
     setRawScreenshot(undefined)
     setIsCropping(false)
+  }
+
+  function handleSelectScreenshot(file: File) {
+    if (!['image/png', 'image/jpeg'].includes(file.type)) {
+      toast.showError('A imagem deve ser PNG ou JPEG.')
+      return
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      toast.showError('A imagem deve ter no máximo 10 MB.')
+      return
+    }
+
+    revokeScreenshotPreview()
+    setScreenshotFile(file)
+    setScreenshotPreview(URL.createObjectURL(file))
   }
 
   async function handleCapture() {
@@ -189,6 +223,8 @@ export function useFeedbackDialog({
   }
 
   function handleCropComplete(croppedImage: string) {
+    revokeScreenshotPreview()
+    setScreenshotFile(undefined)
     setScreenshotPreview(croppedImage)
     setIsCropping(false)
     setRawScreenshot(undefined)
@@ -200,12 +236,14 @@ export function useFeedbackDialog({
   }
 
   function handleDeleteScreenshot() {
+    revokeScreenshotPreview()
+    setScreenshotFile(undefined)
     setScreenshotPreview(undefined)
   }
 
   async function handleSubmit() {
-    if (!content.trim()) {
-      toast.showError('Por favor, descreva seu feedback.')
+    if (content.trim().length < 10 || content.trim().length > 1000) {
+      toast.showError('O feedback deve ter entre 10 e 1.000 caracteres.')
       return
     }
 
@@ -216,44 +254,69 @@ export function useFeedbackDialog({
 
     setIsLoading(true)
     try {
-      const author = AuthorAggregate.create({
-        id: user.id.value,
-        entity: {
-          name: user.name.value,
-          slug: user.slug.value,
-          avatar: {
-            name: user.avatar.name.value,
-            image: user.avatar.image.value,
-          },
-        },
-      })
+      let initialAttachment:
+        | {
+            storageKey: string
+            originalName: string
+            mimeType: 'image/png' | 'image/jpeg'
+            size: number
+          }
+        | undefined
 
-      let screenshotUrl = screenshotPreview
-
-      if (screenshotPreview?.startsWith('data:')) {
+      let fileToUpload = screenshotFile
+      if (!fileToUpload && screenshotPreview?.startsWith('data:')) {
         try {
           const res = await fetch(screenshotPreview)
           const blob = await res.blob()
-          const file = new File([blob], `feedback-screenshot-${Date.now()}.png`, {
-            type: 'image/png',
+          const mimeType = blob.type === 'image/jpeg' ? 'image/jpeg' : 'image/png'
+          const extension = mimeType === 'image/jpeg' ? 'jpg' : 'png'
+          fileToUpload = new File([blob], `${Id.create().value}.${extension}`, {
+            type: mimeType,
           })
+        } catch (error) {
+          console.error('Error preparing screenshot upload', error)
+          toast.showError('Falha ao enviar feedback.')
+          return
+        }
+      }
 
-          const fileName = Text.create(file.name)
-          const signedUploadUrlResponse = await storageService.createSignedUploadUrl(
-            FileStorageFolderPath.createAsFeedbackReports(),
-            fileName,
+      if (fileToUpload) {
+        try {
+          const originalName = fileToUpload.name
+          const mimeType = fileToUpload.type as 'image/png' | 'image/jpeg'
+          const extension = mimeType === 'image/png' ? 'png' : 'jpg'
+          const storageFile = new File(
+            [fileToUpload],
+            `${Id.create().value}.${extension}`,
+            { type: mimeType, lastModified: fileToUpload.lastModified },
           )
+          const fileName = Text.create(storageFile.name)
+          const signedUploadUrlResponse =
+            await reportingService.createFeedbackReportAttachmentUploadUrl({
+              fileName,
+              mimeType: Text.create(mimeType),
+              size: Integer.create(fileToUpload.size),
+            })
 
           if (signedUploadUrlResponse.isFailure) {
             toast.showError(
-              signedUploadUrlResponse.errorMessage || 'Falha ao enviar feedback.',
+              getResponseErrorMessage(
+                signedUploadUrlResponse,
+                'Falha ao enviar feedback.',
+              ),
             )
             return
           }
 
           const signedUploadUrl = SignedUploadUrl.create(signedUploadUrlResponse.body)
-          await signedFileStorageProvider.uploadFile(signedUploadUrl, file)
-          screenshotUrl = signedUploadUrl.fileName.value
+          await signedFileStorageProvider.uploadFile(signedUploadUrl, storageFile)
+          const storageKey = `${signedUploadUrl.folderPath.value}/${signedUploadUrl.fileName.value}`
+          initialAttachment = {
+            storageKey,
+            originalName,
+            mimeType,
+            size: fileToUpload.size,
+          }
         } catch (error) {
           console.error('Error uploading screenshot', error)
           toast.showError('Falha ao enviar feedback.')
@@ -261,20 +324,17 @@ export function useFeedbackDialog({
         }
       }
 
-      const feedbackReport = FeedbackReport.create({
-        content,
-        intent,
-        author: author.dto,
-        screenshot: screenshotUrl,
-        sentAt: new Date().toISOString(),
+      const response = await reportingService.sendFeedbackReport({
+        content: Text.create(content),
+        intent: FeedbackIntent.create(intent),
+        initialAttachment,
       })
-
-      const response = await reportingService.sendFeedbackReport(feedbackReport)
       if (response.isSuccessful) {
         setStep('success')
+        await onSubmitted?.()
         toast.showSuccess('Feedback enviado com sucesso! Obrigado.')
       } else {
-        toast.showError(response.errorMessage || 'Falha ao enviar feedback.')
+        toast.showError(getResponseErrorMessage(response, 'Falha ao enviar feedback.'))
       }
     } catch (error) {
       console.error('Error sending feedback', error)
@@ -296,6 +356,7 @@ export function useFeedbackDialog({
     isLoading,
     setContent,
     handleSelectIntent,
+    handleSelectScreenshot,
     handleOpenChange,
     handleBack,
     handleReset,

@@ -8,12 +8,15 @@ const attachmentSchema = z
     storageKey: stringSchema.min(1),
     originalName: stringSchema.min(1),
     mimeType: z.enum(['image/png', 'image/jpeg']),
-    size: integerSchema.min(1).max(10 * 1024 * 1024),
+    size: integerSchema
+      .int('tamanho deve ser um número inteiro')
+      .min(1, 'tamanho deve ser maior que zero')
+      .max(10 * 1024 * 1024, 'tamanho deve ser no máximo 10 MB'),
   })
-  .superRefine(({ originalName, mimeType }, context) => {
-    const normalizedName = originalName.toLowerCase()
-    const isPng = normalizedName.endsWith('.png')
-    const isJpeg = normalizedName.endsWith('.jpg') || normalizedName.endsWith('.jpeg')
+  .superRefine(({ storageKey, mimeType }, context) => {
+    const normalizedKey = storageKey.toLowerCase()
+    const isPng = normalizedKey.endsWith('.png')
+    const isJpeg = normalizedKey.endsWith('.jpg') || normalizedKey.endsWith('.jpeg')
 
     if ((isPng && mimeType !== 'image/png') || (isJpeg && mimeType !== 'image/jpeg')) {
       context.addIssue({

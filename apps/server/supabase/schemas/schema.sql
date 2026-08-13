@@ -181,6 +181,8 @@ create table if not exists public.feedback_reports (
   last_activity_at timestamptz not null default now(),
   last_user_message_at timestamptz,
   studio_read_at timestamptz,
+  last_admin_message_at timestamptz,
+  author_read_at timestamptz,
   constraint feedback_reports_pkey primary key (id),
   constraint feedback_reports_user_id_fkey foreign key (user_id)
     references public.users(id) on update cascade on delete cascade,
@@ -215,6 +217,12 @@ create index if not exists feedback_reports_unread_idx
   on public.feedback_reports (last_user_message_at, studio_read_at);
 create index if not exists feedback_reports_user_idx
   on public.feedback_reports (user_id);
+create index if not exists feedback_reports_author_history_idx
+  on public.feedback_reports (user_id, last_activity_at desc, id desc);
+create index if not exists feedback_reports_author_unread_idx
+  on public.feedback_reports (user_id, last_admin_message_at desc)
+  where last_admin_message_at is not null
+    and (author_read_at is null or last_admin_message_at > author_read_at);
 create index if not exists feedback_messages_report_idx
   on public.feedback_messages (report_id, created_at, id);
 create index if not exists feedback_message_attachments_message_idx

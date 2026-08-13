@@ -57,6 +57,13 @@ async function buildRouteResponse(request: NextRequest, context: RouteContext) {
 
   await waitRouteDelay(route.delayInMs)
 
+  if (route.status === 204 || route.status === 205) {
+    return new Response(null, {
+      status: route.status,
+      headers: route.headers,
+    })
+  }
+
   return Response.json(route.body ?? null, {
     status: route.status ?? 200,
     headers: route.headers,

@@ -9,7 +9,20 @@ import { NextRestClient } from '../NextRestClient'
 import { AuthService } from '@/rest/services'
 import { Text } from '@stardust/core/global/structures'
 
+let refreshSessionPromise: Promise<RestResponse<SessionDto>> | null = null
+
 async function refreshAuthSession() {
+  if (refreshSessionPromise) return refreshSessionPromise
+
+  refreshSessionPromise = refreshAuthSessionOnce()
+  try {
+    return await refreshSessionPromise
+  } finally {
+    refreshSessionPromise = null
+  }
+}
+
+async function refreshAuthSessionOnce() {
   const refreshToken = await getCookie(COOKIES.refreshToken.key)
   if (!refreshToken?.data) {
     return new RestResponse<SessionDto>({ statusCode: HTTP_STATUS_CODE.badRequest })

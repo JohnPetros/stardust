@@ -34,3 +34,11 @@ export const feedbackReportsQuerySchema = z
       message: 'busca deve ser um UUID ou conter no máximo 100 caracteres',
     },
   )
+
+export const userFeedbackReportsQuerySchema = z
+  .object({
+    status: z.enum(['open', 'closed']).optional(),
+    page: pageSchema.optional(),
+    itemsPerPage: itemsPerPageSchema.optional(),
+  })
+  .strict()

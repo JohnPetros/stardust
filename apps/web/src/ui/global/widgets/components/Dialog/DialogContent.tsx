@@ -7,9 +7,10 @@ import { DialogAnimation } from './DialogAnimation'
 type DialogProps = {
   children: ReactNode
   className?: ClassNameValue
+  animationClassName?: ClassNameValue
 }
 
-export function DialogContent({ children, className }: DialogProps) {
+export function DialogContent({ children, className, animationClassName }: DialogProps) {
   return (
     <Container.Portal>
       <Container.Content
@@ -19,7 +20,7 @@ export function DialogContent({ children, className }: DialogProps) {
           className,
         )}
       >
-        <DialogAnimation>{children}</DialogAnimation>
+        <DialogAnimation className={animationClassName}>{children}</DialogAnimation>
       </Container.Content>
     </Container.Portal>
   )

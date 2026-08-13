@@ -1,3 +1,11 @@
-import { FeedbackLayoutView } from './FeedbackLayoutView'
+import { FeedbackLayoutClient } from './FeedbackLayoutClient'
 
-export const FeedbackLayout = FeedbackLayoutView
+import type { ReactNode } from 'react'
+
+type Props = {
+  children: ReactNode
+}
+
+export function FeedbackLayout({ children }: Props) {
+  return <FeedbackLayoutClient>{children}</FeedbackLayoutClient>
+}

@@ -1,5 +1,5 @@
 {
-  "version": "2.15",
+  "version": "2.17",
   "children": [
     {
       "type": "frame",
@@ -27655,7 +27655,7 @@
                                   "id": "zSm9F",
                                   "name": "Problema Report Unread Count",
                                   "fill": "$gray-950",
-                                  "content": "2",
+                                  "content": "Nova resposta",
                                   "fontFamily": "Nunito Sans",
                                   "fontSize": 10,
                                   "fontWeight": "700"

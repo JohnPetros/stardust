@@ -52,7 +52,7 @@ services:
       retries: 10
 
   supabase-public:
-    image: public.ecr.aws/supabase/postgrest:v12.2.3
+    image: postgrest/postgrest:v14.12
     container_name: stardust-supabase-public
     depends_on:
       supabase-db:
@@ -72,7 +72,7 @@ services:
       retries: 10
 
   supabase-storage:
-    image: public.ecr.aws/supabase/storage-api:v1.67.20
+    image: supabase/storage-api:v1.60.4
     container_name: stardust-supabase-storage
     depends_on:
       supabase-db:
@@ -124,7 +124,7 @@ services:
 
   # Supabase exposes Auth, PostgREST, Storage and Realtime behind one API URL.
   supabase-gateway:
-    image: public.ecr.aws/supabase/kong:2.8.1
+    image: kong/kong:3.9.1
     container_name: stardust-supabase-gateway
     depends_on:
       supabase-auth:

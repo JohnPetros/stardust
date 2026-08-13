@@ -3,6 +3,7 @@ import type { RestClient } from '@stardust/core/global/interfaces'
 import type {
   ChangeFeedbackReportStatusRequest,
   CreateFeedbackAttachmentUploadRequest,
+  CreateFeedbackReportRequest,
   FeedbackReportsListingParams,
   SendFeedbackMessageRequest,
 } from '@stardust/core/reporting/types'
@@ -10,6 +11,7 @@ import type {
   FeedbackReportDetailsDto,
   FeedbackReportDto,
   FeedbackReportsPageDto,
+  UserFeedbackReportsPageDto,
 } from '@stardust/core/reporting/entities/dtos'
 import type { Id } from '@stardust/core/global/structures'
 import type { SignedUploadUrlDto } from '@stardust/core/storage/structures/dtos'
@@ -18,8 +20,18 @@ import { Datetime } from '@stardust/core/global/libs'
 
 export const ReportingService = (restClient: RestClient): IReportingService => {
   return {
-    async sendFeedbackReport(feedbackReport: FeedbackReport) {
-      return await restClient.post('/reporting/feedback', feedbackReport.dto)
+    async sendFeedbackReport(
+      feedbackReportOrRequest: FeedbackReport | CreateFeedbackReportRequest,
+    ) {
+      const payload =
+        'dto' in feedbackReportOrRequest
+          ? feedbackReportOrRequest.dto
+          : {
+              content: feedbackReportOrRequest.content.value,
+              intent: feedbackReportOrRequest.intent.value,
+              initialAttachment: feedbackReportOrRequest.initialAttachment,
+            }
+      return await restClient.post('/reporting/feedback', payload)
     },
     async listFeedbackReports(params: FeedbackReportsListingParams) {
       restClient.clearQueryParams()
@@ -73,6 +85,45 @@ export const ReportingService = (restClient: RestClient): IReportingService => {
         `/reporting/feedback/${feedbackReportId.value}/read`,
         {
           lastSeenUserMessageId: lastSeenUserMessageId.value,
+        },
+      )
+    },
+    async listMyFeedbackReports(params) {
+      restClient.clearQueryParams()
+      if (params.status) restClient.setQueryParam('status', params.status)
+      restClient.setQueryParam('page', params.page.value.toString())
+      restClient.setQueryParam('itemsPerPage', params.itemsPerPage.value.toString())
+      try {
+        return await restClient.get<UserFeedbackReportsPageDto>(
+          '/reporting/feedback/mine',
+        )
+      } finally {
+        restClient.clearQueryParams()
+      }
+    },
+    async countMyUnreadFeedbackReports() {
+      return await restClient.get<{ count: number }>(
+        '/reporting/feedback/mine/unread-count',
+      )
+    },
+    async getMyFeedbackReport(feedbackReportId: Id) {
+      return await restClient.get<FeedbackReportDetailsDto>(
+        `/reporting/feedback/mine/${feedbackReportId.value}`,
+      )
+    },
+    async markMyFeedbackReportAsRead(feedbackReportId: Id, lastSeenAdminMessageId: Id) {
+      return await restClient.put<void>(
+        `/reporting/feedback/mine/${feedbackReportId.value}/read`,
+        { lastSeenMessageId: lastSeenAdminMessageId.value },
+      )
+    },
+    async createFeedbackReportAttachmentUploadUrl(request) {
+      return await restClient.post<SignedUploadUrlDto>(
+        '/reporting/feedback/attachments/signed-upload-url',
+        {
+          fileName: request.fileName.value,
+          mimeType: request.mimeType.value,
+          size: request.size.value,
         },
       )
     },

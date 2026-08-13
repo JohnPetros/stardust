@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { motion, type Variants } from 'motion/react'
+import { type ClassNameValue, twMerge } from 'tailwind-merge'
 
 const dialogAnimations: Variants = {
   close: {
@@ -14,16 +15,17 @@ const dialogAnimations: Variants = {
 
 interface DialogAnimationProps {
   children: ReactNode
+  className?: ClassNameValue
 }
 
-export function DialogAnimation({ children }: DialogAnimationProps) {
+export function DialogAnimation({ children, className }: DialogAnimationProps) {
   return (
     <motion.div
       variants={dialogAnimations}
       initial='close'
       animate='open'
       exit='close'
-      className='rounded-lg border border-gray-700 bg-gray-800 p-6'
+      className={twMerge('rounded-lg border border-gray-700 bg-[#121819] p-6', className)}
     >
       {children}
     </motion.div>

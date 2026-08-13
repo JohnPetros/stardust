@@ -1,6 +1,6 @@
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { Broker } from '#global/interfaces/Broker'
-import { Event } from '#global/domain/abstracts/Event'
+import type { Event } from '#global/domain/abstracts/Event'
 import { ConflictError } from '#global/domain/errors/ConflictError'
 import { AppError } from '#global/domain/errors/AppError'
 import { NotAllowedError } from '#global/domain/errors/NotAllowedError'
@@ -15,8 +15,6 @@ import type {
   SendFeedbackMessageUseCaseRequest,
 } from '../domain/types/FeedbackConversationRequests'
 import { FeedbackReportStatus } from '../domain/structures/FeedbackReportStatus'
-import type { FileStorageProvider } from '#storage/interfaces/FileStorageProvider'
-import { FileStorageFolderPath } from '#storage/domain/structures/FileStorageFolderPath'
 import { Logical } from '#global/domain/structures/Logical'
 import {
   FeedbackAdminMessageSentEvent,
@@ -24,6 +22,7 @@ import {
   FeedbackReportClosedEvent,
   FeedbackUserMessageCreatedEvent,
 } from '../domain/events'
+import { FeedbackImage } from '../domain/structures'
 
 export class SendFeedbackMessageUseCase
   implements
@@ -33,7 +32,6 @@ export class SendFeedbackMessageUseCase
     private readonly reports: FeedbackReportsRepository,
     private readonly messages: FeedbackMessagesRepository,
     private readonly broker: Broker,
-    private readonly storage?: FileStorageProvider,
     private readonly conversationBaseUrl?: string,
   ) {}
 
@@ -82,37 +80,12 @@ export class SendFeedbackMessageUseCase
         content: request.content,
         attachments: request.attachments,
       })
-    if (this.storage) {
-      const folder = FileStorageFolderPath.createAsFeedbackMessages(
-        report.id.value,
-        message.id.value,
+    for (const attachment of message.attachments) {
+      FeedbackImage.createAsOriginal(
+        attachment.originalName,
+        attachment.mimeType,
+        attachment.size,
       )
-      for (const attachment of message.attachments) {
-        const storageKeyPrefix = `${folder.value}/`
-        if (
-          !attachment.storageKey.startsWith(storageKeyPrefix) ||
-          attachment.storageKey.includes('/', storageKeyPrefix.length)
-        ) {
-          throw new ConflictError('Anexo fora da pasta do relatório')
-        }
-        const storageFileName = attachment.storageKey.slice(storageKeyPrefix.length)
-        if (!/^[0-9a-f-]{36}\.(png|jpg|jpeg)$/i.test(storageFileName)) {
-          throw new ConflictError('Chave de storage do anexo inválida')
-        }
-        const metadata = await this.storage.getFileMetadata(
-          folder,
-          Text.create(storageFileName),
-        )
-        if (
-          !metadata ||
-          metadata.mimeType !== attachment.mimeType ||
-          metadata.size !== attachment.size
-        ) {
-          throw new ConflictError(
-            'Metadados do anexo não correspondem ao objeto armazenado',
-          )
-        }
-      }
     }
     const hadAdminReply =
       report.adminMessageCount > 0 || message.authorRole.value === 'admin'

@@ -13,20 +13,10 @@ Inicie somente com um `Judge Plan` `accepted` para a revisão vigente da Spec e
 do Plan. Se o Plan mudou materialmente depois do julgamento, repita o Judge
 antes de criar Builders.
 
-Depois do `Judge Plan`, escolha e registre no Plan o modo de julgamento da
-implementação:
-
-- `Final` (padrão) para Plans coesos e lineares, de risco baixo ou médio, sem
-  contratos intermediários que precisem ser aceitos antes da fase seguinte,
-  sem Builders realmente paralelos e sem fases independentemente liberáveis;
-  nesse modo há um único `Judge Implementation Final` após a integração.
-- `Por fase` quando houver contratos de fase consumidos por fases posteriores,
-  risco alto e independente, migração/infraestrutura, Builders em paths
-  disjuntos ou fases que possam ser aceitas e reabertas isoladamente.
-
-Não escolha o modo apenas pela quantidade de fases. Registre a justificativa,
-os riscos e o custo de coordenação no Plan. Se o escopo mudar materialmente,
-reavalie o modo antes de continuar.
+Depois do `Judge Plan`, registre no Plan que o julgamento da implementação será
+`Final`. O Judge Implementation é único e avalia o diff integrado de todas as
+fases; não existem Judges de implementação por fase. Fases podem ser paralelas
+e podem aguardar sensores, mas não recebem aceite independente.
 
 Para cada fase, em qualquer modo:
 
@@ -40,22 +30,21 @@ Para cada fase, em qualquer modo:
    `check:architecture` e `test:integration` conforme a fase. Não execute build
    a cada fase ou retry;
 8. marque tarefas `verified` somente após os sensores aplicáveis;
-9. no modo `Por fase`, crie `Judge Implementation` `Phase F<n>` read-only
-   irmão dos Builders; no modo `Final`, registre a fase como aguardando a
-   avaliação integrada e avance após os sensores;
-10. em qualquer modo, registre findings imediatamente, crie Builder Fix,
-    reabra as tarefas afetadas e repita os sensores e julgamentos aplicáveis;
-    no modo `Por fase`, somente avance após `accepted` da fase.
+9. registre a fase como aguardando a avaliação integrada e avance somente após
+   os sensores aplicáveis;
+10. registre findings imediatamente, crie Builder Fix, reabra as tarefas
+    afetadas e repita os sensores aplicáveis. Não crie um Judge por fase.
 
 Builders não criam subagentes nem editam Plan. Judges não editam arquivos. O
 Orchestrator registra no Plan decisões, evidências resumidas, findings,
 tentativas e próxima ação; registra na Spec as avaliações formais.
 
-Após todas as fases, execute sensores integrados e o preflight. No modo `Final`,
-crie o único `Judge Implementation Final`; no modo `Por fase`, crie-o somente
-quando a integração exigir avaliação adicional. Crie ou atualize
-`evaluation.md` com a matriz de evidências reais, vereditos, warnings, findings,
-decisões e lições.
+Após todas as fases, execute sensores integrados e o preflight. Crie o único
+`Judge Implementation Final` read-only e envie a revisão congelada da Spec, o
+Contract, Rules, Architecture, diff integrado, resultados dos sensores,
+auditoria UI e evidências Pencil/Playwright. Crie ou atualize `evaluation.md`
+com a matriz de evidências reais, veredito, warnings, findings, decisões e
+lições.
 
 Antes de encaminhar para `create-pr` ou `conclude-spec`, faça um gate explícito.
 Não conclua nem encaminhe enquanto qualquer pré-condição estiver pendente:
@@ -71,6 +60,10 @@ Não conclua nem encaminhe enquanto qualquer pré-condição estiver pendente:
   pageerror, requestfailed e respostas `2xx`;
 - `evaluation.md` deve registrar as evidências atuais, o Judge final, o
   preflight e o SHA avaliado.
+- para frontend, deve existir auditoria de `ui-layer-rules.md` por widget e
+  comparação independente dos nodes Pencil aplicáveis com a Web real;
+- o SHA avaliado pelo Judge deve ser o HEAD final do diff; qualquer alteração
+  posterior invalida o veredito e exige novo Judge Implementation Final.
 
 Se o gate falhar, registre a pendência no Plan/evaluation, crie o Builder Fix ou
 a ação de validação apropriada e permaneça no workflow de implementação. Só

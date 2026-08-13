@@ -18,6 +18,8 @@ type FeedbackReportProps = {
   lastActivityAt: Date
   lastUserMessageAt?: Date
   studioReadAt?: Date
+  lastAdminMessageAt?: Date
+  authorReadAt?: Date
   adminMessageCount: number
   authorEmail?: string
   preview: Text
@@ -26,7 +28,8 @@ type FeedbackReportProps = {
 
 export class FeedbackReport extends Entity<FeedbackReportProps> {
   static create(dto: FeedbackReportDto) {
-    const title = (dto.title ?? dto.content).trim().replace(/\s+/g, ' ').slice(0, 60)
+    const normalizedTitle = (dto.title ?? dto.content).trim().replace(/\s+/g, ' ')
+    const title = FeedbackReport.deriveTitle(normalizedTitle)
     const adminMessageCount = dto.adminMessageCount ?? 0
 
     if (!Number.isInteger(adminMessageCount) || adminMessageCount < 0) {
@@ -51,6 +54,10 @@ export class FeedbackReport extends Entity<FeedbackReportProps> {
           ? new Date(dto.lastUserMessageAt)
           : undefined,
         studioReadAt: dto.studioReadAt ? new Date(dto.studioReadAt) : undefined,
+        lastAdminMessageAt: dto.lastAdminMessageAt
+          ? new Date(dto.lastAdminMessageAt)
+          : undefined,
+        authorReadAt: dto.authorReadAt ? new Date(dto.authorReadAt) : undefined,
         adminMessageCount,
         authorEmail: dto.authorEmail,
         preview: Text.create(dto.preview ?? dto.content),
@@ -104,12 +111,31 @@ export class FeedbackReport extends Entity<FeedbackReportProps> {
     return this.props.studioReadAt
   }
 
-  get isUnread(): boolean {
+  get lastAdminMessageAt(): Date | undefined {
+    return this.props.lastAdminMessageAt
+  }
+
+  get authorReadAt(): Date | undefined {
+    return this.props.authorReadAt
+  }
+
+  get hasUnreadAdminReply(): boolean {
+    return Boolean(
+      this.lastAdminMessageAt &&
+        (!this.authorReadAt || this.lastAdminMessageAt > this.authorReadAt),
+    )
+  }
+
+  get isUnreadForStudio(): boolean {
     const derived = Boolean(
       this.lastUserMessageAt &&
         (!this.studioReadAt || this.lastUserMessageAt > this.studioReadAt),
     )
     return this.props.isUnread ?? derived
+  }
+
+  get isUnread(): boolean {
+    return this.isUnreadForStudio
   }
 
   get adminMessageCount(): number {
@@ -152,8 +178,25 @@ export class FeedbackReport extends Entity<FeedbackReportProps> {
     }
   }
 
+  markAuthorRead(lastSeenAdminMessageAt: Date): void {
+    if (!this.lastAdminMessageAt || lastSeenAdminMessageAt > this.lastAdminMessageAt) {
+      throw new AppError(
+        'O registro de leitura deve referenciar uma mensagem administrativa conhecida',
+      )
+    }
+    if (!this.authorReadAt || lastSeenAdminMessageAt > this.authorReadAt) {
+      this.props.authorReadAt = lastSeenAdminMessageAt
+    }
+  }
+
   registerActivity(createdAt: Date, authorRole: 'user' | 'admin'): void {
     if (authorRole === 'admin') this.props.adminMessageCount += 1
+    if (
+      authorRole === 'admin' &&
+      (!this.lastAdminMessageAt || createdAt > this.lastAdminMessageAt)
+    ) {
+      this.props.lastAdminMessageAt = createdAt
+    }
     if (
       authorRole === 'user' &&
       (!this.lastUserMessageAt || createdAt > this.lastUserMessageAt)
@@ -189,10 +232,21 @@ export class FeedbackReport extends Entity<FeedbackReportProps> {
       lastActivityAt: this.lastActivityAt.toISOString(),
       lastUserMessageAt: this.lastUserMessageAt?.toISOString(),
       studioReadAt: this.studioReadAt?.toISOString(),
+      lastAdminMessageAt: this.lastAdminMessageAt?.toISOString(),
+      authorReadAt: this.authorReadAt?.toISOString(),
       adminMessageCount: this.adminMessageCount,
       authorEmail: this.authorEmail,
       preview: this.preview.value,
       isUnread: this.isUnread,
+      hasUnreadAdminReply: this.hasUnreadAdminReply,
     }
+  }
+
+  private static deriveTitle(normalizedTitle: string): string {
+    if (normalizedTitle.length <= 60) return normalizedTitle
+
+    const candidate = normalizedTitle.slice(0, 60)
+    const lastSpace = candidate.lastIndexOf(' ')
+    return (lastSpace > 0 ? candidate.slice(0, lastSpace) : candidate).trim()
   }
 }

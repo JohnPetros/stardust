@@ -21,11 +21,15 @@ export class GetFeedbackReportUseCase
     const messages = await this.messages.listByReport(id)
     const latestUserMessage = [...messages]
       .reverse()
-      .find((message) => message.authorRole.isUser)
+      .find((message) => message.authorRole.isUser.value)
+    const latestAdminMessage = [...messages]
+      .reverse()
+      .find((message) => message.authorRole.isAdmin.value)
     return {
       ...report.dto,
       messages: messages.map((message) => message.dto),
       latestUserMessageId: latestUserMessage?.id.value,
+      latestAdminMessageId: latestAdminMessage?.id.value,
     }
   }
 }

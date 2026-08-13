@@ -13,8 +13,11 @@ export type FeedbackReportDto = {
   lastActivityAt?: string
   lastUserMessageAt?: string
   studioReadAt?: string
+  lastAdminMessageAt?: string
+  authorReadAt?: string
   adminMessageCount?: number
   authorEmail?: string
   preview?: string
   isUnread?: boolean
+  hasUnreadAdminReply?: boolean
 }
