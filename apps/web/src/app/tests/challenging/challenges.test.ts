@@ -203,7 +203,9 @@ test.describe(CHALLENGES_ROUTE, () => {
       )
     })
     await page.getByRole('button', { name: 'Categorias' }).click()
-    await page.getByRole('button', { name: 'laços' }).click()
+    const categoryButton = page.getByRole('button', { name: 'laços', exact: true })
+    await expect(categoryButton).toBeVisible()
+    await categoryButton.click()
     await categoryRequest
 
     await expect(page).toHaveURL(new RegExp(`categoriesIds=${CATEGORY_ID}`))

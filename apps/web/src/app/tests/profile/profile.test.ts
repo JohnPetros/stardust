@@ -101,10 +101,11 @@ function createProfileRoutes(account: AccountDto, profile: UserDto): ServerMockR
           id: ACHIEVEMENT_ID,
           name: 'Primeira conquista',
           description: 'Conquista de teste',
-          icon: 'flag',
+          icon: 'flag.svg',
           reward: 50,
           requiredCount: 1,
           position: 1,
+          metric: 'xp',
         },
       ],
     },
@@ -184,7 +185,9 @@ test.describe('/profile/[userSlug]', () => {
     await expect(page.getByText('Nível 7 - 420 xp', { exact: true })).toBeVisible()
     await expect(page.getByText('Estrelas completadas', { exact: true })).toBeVisible()
     await expect(page.getByText('Planetas concluídos', { exact: true })).toBeVisible()
-    await expect(page.getByText('Conquistas adquiridas', { exact: true })).toBeVisible()
+    await expect(
+      page.getByRole('heading', { name: 'Conquistas adquiridas', exact: true }),
+    ).toBeVisible()
     await expect(page.getByText('Desafios concluídos', { exact: true })).toBeVisible()
     await expect(page.getByText('Primeira conquista', { exact: true })).toBeVisible()
     await expect(page.getByText('Desafio estelar', { exact: true })).toBeVisible()

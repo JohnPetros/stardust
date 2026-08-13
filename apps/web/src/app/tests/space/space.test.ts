@@ -205,7 +205,7 @@ test.describe('/space', () => {
 
     const lessonNavigation = page.waitForURL(`/lesson/${star.slug}`)
 
-    await page.getByRole('button', { name: STAR_NAMES.lastUnlocked }).click()
+    await page.locator('button').filter({ hasText: STAR_NAMES.lastUnlocked }).click()
     await challengeResponse
     await lessonNavigation
   })
