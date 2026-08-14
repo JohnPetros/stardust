@@ -43,6 +43,37 @@ Builders não criam subagentes nem editam Plan. Judges não editam arquivos. O
 Orchestrator registra no Plan decisões, evidências resumidas, findings,
 tentativas e próxima ação; registra na Spec as avaliações formais.
 
+## Persistência obrigatória após cada mudança
+
+Depois de **cada mudança de implementação**, o Orchestrator deve atualizar
+imediatamente o `plan.md` e o `evaluation.md`, antes de iniciar outra mudança,
+executar o próximo sensor ou avançar a tarefa/fase. Isso vale individualmente
+para:
+
+- implementação inicial e qualquer `Builder Fix`;
+- alterações de seed, fixture, configuração ou ambiente, inclusive mudanças
+  remotas e variáveis usadas localmente (sem registrar segredos);
+- artefatos gerados, snapshots, migrations, arquivos derivados ou saídas de
+  geradores;
+- testes novos ou alterados, incluindo testes adicionados apenas para cobrir
+  um finding;
+- correções após review, falhas de sensor, Quality Gate ou Judge.
+
+No `plan.md`, registre a tarefa/fase, tentativa, motivo, paths e artefatos
+afetados, RF/CA relacionados, estado, dependências e próxima ação. No
+`evaluation.md`, registre a mudança como evidência factual, seu impacto nos
+critérios, sensores/evidências invalidados ou ainda pendentes, commit/HEAD e
+eventuais decisões, warnings e findings. Para seeds/ambiente, registre também
+escopo, comando ou procedimento reproduzível e cleanup; para artefatos
+gerados, registre a fonte, o gerador e o output; para testes, registre o
+comportamento protegido e o comando de execução.
+
+Não agrupe várias mudanças em um único registro retrospectivo. Se a mudança
+alterar o diff ou qualquer evidência de Contract, Rule, Pencil ou Playwright,
+marque o veredito anterior como invalidado e registre a necessidade de novo
+sensor/Judge. Uma tarefa não pode ser marcada `verified` enquanto os dois
+artefatos não refletirem a mudança mais recente.
+
 Após todas as fases, execute sensores integrados e o preflight. Crie o único
 `Judge Implementation Final` read-only e envie a revisão congelada da Spec, o
 Contract, Rules, Architecture, diff integrado, resultados dos sensores,
