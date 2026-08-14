@@ -138,6 +138,37 @@ e da interacao entre SSR, hidracao, requests client-side e eventos assincronos.
 4. Efeitos client-side baseados em eventos ou bridges test-only.
 5. Contratos publicos observaveis, como links, loading e mensagens de sucesso.
 
+### 6.1.1 Navegacao obrigatoria
+
+Toda suite de fluxo real de navegador deve conter pelo menos um teste de
+navegacao observavel. O teste nao pode validar a tela apenas por meio de
+`page.goto()` direto na rota sob teste.
+
+Para rotas protegidas, a cobertura minima obrigatoria e:
+
+1. preparar uma sessao autenticada com `ServerMock(page)`;
+2. abrir uma rota protegida de origem, como `/space`;
+3. acionar um link ou controle visivel da aplicacao para chegar à rota sob
+   teste;
+4. confirmar a URL final com `expect(page).toHaveURL(...)` e validar o
+   conteúdo principal da rota;
+5. abrir a rota sob teste sem sessao e confirmar o redirecionamento para login,
+   incluindo a rota de retorno quando esse contrato existir.
+
+Quando a rota for publica, o teste deve cobrir a navegacao de entrada ou de
+saida mais relevante do fluxo, como um link para a rota, retorno após uma
+acao concluida ou redirecionamento de erro.
+
+Use `page.waitForURL(...)` ou `expect(page).toHaveURL(...)` para sincronizar a
+navegacao. Nao considere a existencia estatica de um link suficiente: o teste
+deve clicar no controle e observar a mudanca de rota. Requests disparadas
+durante a transicao devem ser aguardadas com `page.waitForRequest(...)` ou
+`page.waitForResponse(...)` quando fizerem parte do contrato validado.
+
+Testes co-localizados de composicao de `page.tsx` com Jest nao precisam abrir
+um navegador nem duplicar este fluxo; a exigencia se aplica às suites em
+`apps/web/src/app/tests/**`.
+
 ### 6.2 Infra padrao
 
 - A suite deve subir a app web local via `webServer` do Playwright.
@@ -217,7 +248,11 @@ test.describe('/auth/sign-up', () => {
 5. Se o teste precisou de mock server, reutilizou a factory compartilhada em vez de duplicar implementacao local.
 6. O teste validou comportamento observavel da rota: renderizacao,
    redirecionamento, request, mensagem, link ou loading.
-7. O teste nao duplicou responsabilidade que ja pertence a `widget` ou
+7. A suite possui pelo menos um teste que navega de uma rota/estado de origem
+   para a rota sob teste por meio de um controle visivel.
+8. Para rotas protegidas, a suite cobre tanto a navegacao autenticada quanto o
+   redirecionamento de acesso sem sessao.
+9. O teste nao duplicou responsabilidade que ja pertence a `widget` ou
    `controller` unitariamente testado em outra camada.
 
 ## Tooling

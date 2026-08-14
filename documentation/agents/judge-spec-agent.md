@@ -32,6 +32,10 @@ Verifique:
   Contract;
 - estado atual baseado em evidência real da codebase;
 - cobertura do Contract pela solução técnica;
+- quando houver UI, fonte visual canônica válida, Node IDs, estados, variantes
+  e viewports declarados, com matriz Pencil/Web e divergências aprovadas;
+- quando houver UI, ausência de simplificação, substituição ou adição visual
+  não rastreada a uma decisão/amendment e a um `CA-*`;
 - aderência à Architecture e às Rules;
 - erros, segurança, observabilidade e riscos proporcionais;
 - sensores aplicáveis declarados;
@@ -68,6 +72,7 @@ artefato correto.
 | Origem e escopo | passed | ... |
 | Rastreabilidade RF/CA | passed | ... |
 | Evidência esperada | passed | ... |
+| Fidelidade Pencil-to-code, quando aplicável | passed | nodes, estados, viewports e divergências aprovadas ... |
 
 ### Solução técnica
 

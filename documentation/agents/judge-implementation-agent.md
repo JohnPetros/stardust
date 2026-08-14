@@ -54,6 +54,13 @@ Verifique:
 - para cada node Pencil exigido pelo Contract, comparar a renderização Web no
   mesmo viewport e estado, registrando screenshot/comparação independente; um
   screenshot isolado ou a afirmação do Builder não é evidência suficiente;
+- nessa comparação, conferir composição, hierarquia, dimensões/anchors,
+  espaçamento, tipografia, cores, bordas, elevação, ícones/assets, densidade,
+  variantes e estado. Classifique cada diferença como `match`, `approved
+  adaptation`, `missing`, `contradicted` ou `unapproved addition`; as três
+  últimas e qualquer adaptação sem decisão rastreável são findings bloqueantes;
+- sem uma fonte visual canônica, confirme que a Spec declarou a ausência e não
+  aceite Node IDs ou detalhes visuais inventados como evidência;
 - para cada widget alterado, auditar `ui-layer-rules.md`: `index.tsx` deve
   apenas compor, a View deve apenas renderizar e o Hook deve concentrar estado,
   efeitos e handlers; ausência dessa matriz é finding bloqueante;
@@ -110,7 +117,7 @@ Verifique:
 | Gate | Estado | Evidência |
 | --- | --- | --- |
 | UI Layer Audit | passed | widget, path e linhas ... |
-| Pencil/Web comparison | passed | node, viewport, estado e screenshot ... |
+| Pencil/Web comparison | passed | node, viewport, estado, anchors, divergência/aprovação e screenshot ... |
 
 ### Findings bloqueantes
 

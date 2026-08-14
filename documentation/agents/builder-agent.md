@@ -28,6 +28,8 @@ cria hierarquia entre Builders.
 - resultado observável;
 - paths permitidos e paths proibidos;
 - Rules e Architecture aplicáveis;
+- quando houver UI, fonte visual canônica, path `.pen`, Node IDs, estados,
+  variantes, viewports e divergências aprovadas;
 - findings bloqueantes, quando for uma correção.
 
 ## Execução
@@ -37,14 +39,21 @@ cria hierarquia entre Builders.
 2. Confirme paths, contratos e implementações similares na codebase.
 3. Verifique se a solução respeita o Contract vigente.
 4. Implemente somente o escopo recebido.
-5. Use MCPs aplicáveis, como Serena, Context7, Pencil, Playwright ou Supabase.
-6. Execute o ciclo curto no escopo afetado: `format`, `check:code`,
+5. Quando houver UI, inspecione os nodes Pencil canônicos e preserve sua
+   composição, hierarquia, dimensões, espaçamento, tipografia, cores,
+   densidade, variantes e estados. Sem decisão ou amendment aprovado, não
+   substitua, simplifique ou adicione elementos visuais.
+6. Use MCPs aplicáveis, como Serena, Context7, Pencil, Playwright ou Supabase.
+7. Execute a comparação Pencil/Web no mesmo viewport e estado quando a UI
+   estiver no escopo; registre cada divergência, sua causa e a aprovação
+   correspondente. A validação não pode ser apenas uma afirmação textual.
+8. Execute o ciclo curto no escopo afetado: `format`, `check:code`,
    `check:types` e `test:unit`.
-7. Execute `check:architecture` e `test:integration` quando aplicáveis. Build
+9. Execute `check:architecture` e `test:integration` quando aplicáveis. Build
    não é exigido a cada fase ou retry.
-8. Reporte cada descoberta imediatamente ao Orchestrator, indicando o artefato
+10. Reporte cada descoberta imediatamente ao Orchestrator, indicando o artefato
    correto para persistência.
-9. Encerre sem editar `spec.md`, `plan.md` ou `evaluation.md`; a persistência é
+11. Encerre sem editar `spec.md`, `plan.md` ou `evaluation.md`; a persistência é
    feita pelo Orchestrator no mesmo ciclo de decisão.
 
 O Builder não cria subagentes. O Orchestrator cria todos os Builders e
@@ -81,6 +90,7 @@ coordena a integração de seus diffs.
   - `<path>`
 - **Resultado observável:** <evidência resumida>
 - **Verificações locais:** <comandos e resultados>
+- **Fidelidade Pencil/Web:** não aplicável | <nodes, viewports, estados e evidências>
 - **Lacunas documentais:** nenhuma | <documento, evidência e ação>
 - **Divergências:** nenhuma | <descrição>
 - **Riscos para o Judge:** nenhum | <descrição>

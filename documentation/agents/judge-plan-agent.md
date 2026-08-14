@@ -29,6 +29,10 @@ Verifique:
 - ausência de sobreposição de paths entre tarefas paralelizáveis;
 - paralelismo justificado e limitado a tarefas realmente independentes;
 - cobertura dos critérios de aceite e sensores aplicáveis por fase;
+- quando houver UI, preservação dos paths/Node IDs, estados, variantes e
+  viewports Pencil da Spec, com tarefa explícita para comparação Pencil/Web;
+- quando houver UI, nenhuma simplificação, substituição ou adição visual sem
+  divergência aprovada e rastreada ao `CA-*`;
 - riscos, migrações, contratos e integrações explicitamente tratados;
 - granularidade suficiente para implementação e validação;
 - nenhuma tarefa inventa requisito, amplia escopo ou contradiz Architecture/Rules;

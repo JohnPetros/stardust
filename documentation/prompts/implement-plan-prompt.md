@@ -20,12 +20,16 @@ e podem aguardar sensores, mas não recebem aceite independente.
 
 Para cada fase, em qualquer modo:
 
-1. confirme revisão da Spec, dependências, critérios, paths e evidências;
+1. confirme revisão da Spec, dependências, critérios, paths e evidências; em UI,
+   confirme também os paths/Node IDs Pencil, estados, viewports e divergências
+   aprovadas;
 2. marque fase/tarefa como `in_progress`/`implementing`;
 3. crie `Builder F<n>` para o escopo principal;
 4. identifique tarefas prontas, independentes e sem paths sobrepostos;
 5. quando houver paralelismo real, crie até dois `Builder F<n>-T<m>` irmãos;
-6. aguarde os Builders, inspecione e integre o diff;
+6. aguarde os Builders, inspecione e integre o diff; para UI, compare cada node
+   canônico com a Web no mesmo viewport/estado antes de considerar a tarefa
+   `verified`;
 7. execute `format`, `check:code`, `check:types` e `test:unit`; execute
    `check:architecture` e `test:integration` conforme a fase. Não execute build
    a cada fase ou retry;
@@ -61,7 +65,9 @@ Não conclua nem encaminhe enquanto qualquer pré-condição estiver pendente:
 - `evaluation.md` deve registrar as evidências atuais, o Judge final, o
   preflight e o SHA avaliado.
 - para frontend, deve existir auditoria de `ui-layer-rules.md` por widget e
-  comparação independente dos nodes Pencil aplicáveis com a Web real;
+  comparação independente dos nodes Pencil aplicáveis com a Web real, com
+  dimensões/anchors, divergências aprovadas e evidência no HEAD avaliado; node
+  ausente, contradito ou desvio não aprovado bloqueia o encaminhamento;
 - o SHA avaliado pelo Judge deve ser o HEAD final do diff; qualquer alteração
   posterior invalida o veredito e exige novo Judge Implementation Final.
 

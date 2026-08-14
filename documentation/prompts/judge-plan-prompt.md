@@ -9,8 +9,10 @@ O Orchestrator aciona `judge-plan-agent` como subagente read-only irmão na task
 atual, depois de criar o `plan.md` e antes do primeiro Builder.
 
 Envie a Spec `open`, sua revisão, o Plan, Architecture, Rules, pesquisa dos
-paths envolvidos, riscos e decisões registradas. O Judge não edita arquivos,
-não cria tarefas e não resolve decisões de produto ou arquitetura.
+paths envolvidos, riscos e decisões registradas. Quando houver UI, inclua os
+paths/Node IDs Pencil, estados, variantes, viewports e a matriz de divergências
+aprovadas. O Judge não edita arquivos, não cria tarefas e não resolve decisões
+de produto ou arquitetura.
 
 - `accepted`: persista o veredito no Plan e encaminhe para `implement-plan`;
 - `failed`: persista cada finding bloqueante no Plan, corrija o Plan sob

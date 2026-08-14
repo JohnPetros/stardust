@@ -3,8 +3,10 @@ import { NextRestClient } from '@/rest/next/NextRestClient'
 import { ChallengingService } from '@/rest/services/ChallengingService'
 import { ChallengesPage } from '@/ui/challenging/widgets/pages/Challenges'
 
+export const dynamic = 'force-dynamic'
+
 const Page = async () => {
-  const restClient = NextRestClient()
+  const restClient = NextRestClient({ isCacheEnabled: false })
   restClient.setBaseUrl(CLIENT_ENV.stardustServerUrl)
   const challengingService = ChallengingService(restClient)
   const response = await challengingService.fetchAllChallengeCategories()

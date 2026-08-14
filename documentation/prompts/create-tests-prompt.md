@@ -119,7 +119,7 @@ receber testes dedicados segundo as regras do projeto.
 - **Use cases:** 100% da logica de negocio, cobrindo `happy path` e todas as excecoes de dominio.
 - **Handlers:** extracao de dados do contexto (`Http`, `Call`, `Amqp`, `Mcp`), orquestracao do caso de uso/servico e formatacao da resposta.
 - **Rotas HTTP do server:** exercitar a app Hono real, cobrindo autenticacao, validacao, autorizacao, mapeamento de erros, payload de resposta e efeitos persistidos no banco sem mockar dependencias internas, salvo necessidade excepcional.
-- **Paginas e fluxos da app web:** para `page.tsx`, validar composicao de borda do App Router com mocks da borda web; para fluxos reais do navegador, usar Playwright com `ServerMock(page)` e bridges test-only da propria web.
+- **Paginas e fluxos da app web:** para `page.tsx`, validar composicao de borda do App Router com mocks da borda web; para fluxos reais do navegador, usar Playwright com `ServerMock(page)` e bridges test-only da propria web. Toda suite de navegador deve obrigatoriamente cobrir navegacao observavel por um controle da aplicacao; para rotas protegidas, deve cobrir navegacao autenticada a partir de outra rota e redirecionamento para login sem sessao.
 - **Widgets:**
   - testar `hooks` e `views` separadamente usando `Hook()` e `View()`
   - para formularios complexos, testar integracao no `Widget` (Index)
@@ -137,8 +137,9 @@ receber testes dedicados segundo as regras do projeto.
 2. Mocking: identificar interfaces de dependencia e instanciar `mocks`.
    Para rotas do server, preparar fixtures reais em vez de mockar a stack interna.
 3. Implementacao: comecar pelo caminho de sucesso e depois cobrir cenarios de erro/excecao.
-4. Validacao de testes: executar no escopo correto do monorepo.
-5. Validacao de qualidade: executar `typecheck` e `codecheck` antes de concluir.
+4. Para fluxos reais da Web, adicionar a navegacao obrigatoria definida em `documentation/rules/web-app-routes-testing-rules.md` antes de considerar a suite completa.
+5. Validacao de testes: executar no escopo correto do monorepo.
+6. Validacao de qualidade: executar `typecheck` e `codecheck` antes de concluir.
 
 ```bash
 npm run test
