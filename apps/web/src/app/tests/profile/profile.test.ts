@@ -115,6 +115,7 @@ function createProfileRoutes(account: AccountDto, profile: UserDto): ServerMockR
       status: 200,
       body: [],
     },
+    { method: 'GET', path: '/space/planets', status: 200, body: [] },
     {
       method: 'GET',
       path: '/challenging/challenges/completed-by-difficulty-level',
@@ -181,7 +182,9 @@ test.describe('/profile/[userSlug]', () => {
 
     await page.goto(`/profile/${VISITOR_SLUG}`)
 
-    await expect(page.getByText('Visitante Estelar', { exact: true })).toBeVisible()
+    await expect(
+      page.getByRole('main').getByText('Visitante Estelar', { exact: true }).first(),
+    ).toBeVisible()
     await expect(page.getByText('Nível 7 - 420 xp', { exact: true })).toBeVisible()
     await expect(page.getByText('Estrelas completadas', { exact: true })).toBeVisible()
     await expect(page.getByText('Planetas concluídos', { exact: true })).toBeVisible()
@@ -245,5 +248,43 @@ test.describe('/profile/[userSlug]', () => {
       page.waitForURL(`**/profile/${VISITOR_SLUG}/api-keys`),
       page.locator(`a[href="/profile/${VISITOR_SLUG}/api-keys"]`).click(),
     ])
+  })
+
+  test('navigates to the profile from the protected space and redirects guests to sign-in', async ({
+    page,
+    context,
+  }) => {
+    await registerProfileScenario(page, context, {
+      id: VISITOR_ID,
+      slug: VISITOR_SLUG,
+      name: 'Visitante Estelar',
+    })
+
+    await page.goto('/space')
+    const profileLink = page.getByRole('link', { name: 'Perfil' }).first()
+    await expect(profileLink).toHaveAttribute('href', `/profile/${VISITOR_SLUG}`)
+
+    await Promise.all([
+      page.waitForURL(`**/profile/${VISITOR_SLUG}`),
+      profileLink.click(),
+    ])
+    await expect(page.getByText('Primeira conquista', { exact: true })).toBeVisible()
+
+    await context.clearCookies()
+    await ServerMock(page).register([
+      {
+        method: 'GET',
+        path: '/auth/account',
+        status: 401,
+        body: { title: 'Unauthorized', message: 'Não autorizado.' },
+      },
+    ])
+
+    await page.goto(`/profile/${VISITOR_SLUG}`)
+
+    await expect(page).toHaveURL(
+      new RegExp(`/auth/sign-in\\?nextRoute=%2Fprofile%2F${VISITOR_SLUG}$`),
+    )
+    await expect(page.getByTestId('email-input')).toBeVisible()
   })
 })

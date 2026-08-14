@@ -104,6 +104,19 @@ function createAuthenticatedRoutes(
       body: [],
     },
     { method: 'GET', path: '/space/planets', status: 200, body: [fixtures.planet] },
+    { method: 'GET', path: '/shop/insignias', status: 200, body: [] },
+    {
+      method: 'GET',
+      path: '/shop/rockets',
+      status: 200,
+      body: { items: [], totalItemsCount: 0 },
+    },
+    {
+      method: 'GET',
+      path: '/shop/avatars',
+      status: 200,
+      body: { items: [], totalItemsCount: 0 },
+    },
   ]
 }
 
@@ -221,5 +234,34 @@ test.describe('/space', () => {
       'href',
       '/lesson/ending',
     )
+  })
+
+  test('navigates to space from the protected shop and redirects guests to sign-in', async ({
+    page,
+    context,
+  }) => {
+    const fixtures = await registerSpaceScenario(page, context)
+
+    await page.goto('/shop')
+    const learnLink = page.getByRole('link', { name: 'Aprender' }).first()
+    await expect(learnLink).toHaveAttribute('href', '/space')
+
+    await Promise.all([page.waitForURL('**/space'), learnLink.click()])
+    await expect(page.getByText(fixtures.planet.name, { exact: true })).toBeVisible()
+
+    await context.clearCookies()
+    await ServerMock(page).register([
+      {
+        method: 'GET',
+        path: '/auth/account',
+        status: 401,
+        body: { title: 'Unauthorized', message: 'Não autorizado.' },
+      },
+    ])
+
+    await page.goto('/space')
+
+    await expect(page).toHaveURL(/\/auth\/sign-in\?nextRoute=%2Fspace$/)
+    await expect(page.getByTestId('email-input')).toBeVisible()
   })
 })
