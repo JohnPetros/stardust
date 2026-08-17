@@ -52,7 +52,7 @@ services:
       retries: 10
 
   supabase-public:
-    image: postgrest/postgrest:v14.12
+    image: postgrest/postgrest:v16.1
     container_name: stardust-supabase-public
     depends_on:
       supabase-db:
