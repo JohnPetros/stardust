@@ -72,7 +72,7 @@ services:
       retries: 10
 
   supabase-storage:
-    image: supabase/storage-api:v1.60.4
+    image: supabase/storage-api:v1.69.3
     container_name: stardust-supabase-storage
     depends_on:
       supabase-db:
@@ -124,7 +124,7 @@ services:
 
   # Supabase exposes Auth, PostgREST, Storage and Realtime behind one API URL.
   supabase-gateway:
-    image: kong/kong:3.9.1
+    image: kong/kong:3.9.3
     container_name: stardust-supabase-gateway
     depends_on:
       supabase-auth:
