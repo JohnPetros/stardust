@@ -2,7 +2,7 @@ services:
   # The application-facing Supabase services used by server integration tests.
   # Postgres and the gateway below are infrastructure required by these services.
   supabase-db:
-    image: public.ecr.aws/supabase/postgres:17.6.1.160
+    image: public.ecr.aws/supabase/postgres:17.6.1.162
     container_name: stardust-supabase-db
     environment:
       POSTGRES_DB: postgres
