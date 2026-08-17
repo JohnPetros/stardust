@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@stardust/typescript-config": "*",
-    "@swc/core": "^1.15.47",
+    "@swc/core": "^1.16.0",
     "tsup": "^8.5.1",
     "typescript": "5.5.3"
   }
