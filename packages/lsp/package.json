@@ -37,6 +37,6 @@
   "devDependencies": {
     "@stardust/typescript-config": "*",
     "tsup": "^8.5.1",
-    "typescript": "5.5.3"
+    "typescript": "7.0.2"
   }
 }
