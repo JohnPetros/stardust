@@ -1,3 +1,5 @@
+import { randomUUID } from 'node:crypto'
+
 import { HonoApp } from '@/app/hono/HonoApp'
 import { AcquireDefaultShopItemsJob } from '@/queue/jobs/shop'
 import { FirstTierReachedEvent } from '@stardust/core/ranking/events'
@@ -6,11 +8,20 @@ import { InngestFixture } from '../fixtures/InngestFixture'
 
 const mockJobHandle = jest.fn().mockResolvedValue(undefined)
 
-jest.mock('@/queue/jobs/shop', () => ({
-  AcquireDefaultShopItemsJob: jest.fn().mockImplementation(() => ({
-    handle: mockJobHandle,
-  })),
-}))
+jest.mock('@/queue/jobs/shop', () => {
+  const actual = jest.requireActual('@/queue/jobs/shop')
+  const acquireJob = Object.assign(
+    jest.fn().mockImplementation(() => ({
+      handle: mockJobHandle,
+    })),
+    { KEY: actual.AcquireDefaultShopItemsJob.KEY },
+  )
+
+  return {
+    ...actual,
+    AcquireDefaultShopItemsJob: acquireJob,
+  }
+})
 
 describe('ShopFunctions with Inngest', () => {
   let inngest: InngestFixture
@@ -22,7 +33,7 @@ describe('ShopFunctions with Inngest', () => {
     app.setUpErrorHandler()
 
     inngest = new InngestFixture()
-    await inngest.setup(app.hono)
+    await inngest.setup(app.hono, [AcquireDefaultShopItemsJob.KEY])
   })
 
   afterAll(async () => {
@@ -35,9 +46,8 @@ describe('ShopFunctions with Inngest', () => {
   })
 
   it('executes the default shop items job when Inngest receives a first-tier event', async () => {
-    const eventId = 'shop-functions-integration-event'
     const response = await inngest.send({
-      id: eventId,
+      id: randomUUID(),
       name: FirstTierReachedEvent._NAME,
       data: {
         user: {
