@@ -1,11 +1,6 @@
-import {
-  expect,
-  test,
-  type BrowserContext,
-  type Page,
-  type Request,
-} from '@playwright/test'
+import { expect, test, type BrowserContext, type Page, type Request } from '../playwright'
 
+import type { ChallengingFixture } from '../fixtures/ChallengingFixture'
 import { AccountsFaker } from '../../../../../../packages/core/src/auth/domain/entities/fakers/AccountsFaker'
 import { ChallengesFaker } from '../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengesFaker'
 import { CodePlaybacksFaker } from '../../../../../../packages/core/src/global/domain/structures/fakers/CodePlaybacksFaker'
@@ -208,18 +203,18 @@ function createScenarioRoutes({
   ]
 }
 
-async function registerScenario(page: Page, context: BrowserContext, scenario: Scenario) {
+async function registerScenario(
+  page: Page,
+  context: BrowserContext,
+  challenging: ChallengingFixture,
+  scenario: Scenario,
+) {
   await context.clearCookies()
 
   if (scenario.isAuthenticated) {
-    await context.addCookies([
-      {
-        name: '@stardust:access-token',
-        value: `official-solution-token-${scenario.hasSolutionsAccess ? 'allowed' : 'blocked'}`,
-        domain: '127.0.0.1',
-        path: '/',
-      },
-    ])
+    await challenging.authenticate(
+      `official-solution-token-${scenario.hasSolutionsAccess ? 'allowed' : 'blocked'}`,
+    )
   }
 
   await ServerMock(page).register(createScenarioRoutes(scenario))
@@ -245,15 +240,12 @@ function getContentPanel(page: Page) {
 test.describe(OFFICIAL_SOLUTION_ROUTE, () => {
   test.setTimeout(90000)
 
-  test.afterEach(async ({ page }) => {
-    await ServerMock(page).reset()
-  })
-
   test('navigates from the solutions list and keeps the official playback in the Solutions tab', async ({
     page,
     context,
+    challenging,
   }) => {
-    await registerScenario(page, context, {
+    await registerScenario(page, context, challenging, {
       isAuthenticated: true,
       hasSolutionsAccess: true,
     })
@@ -331,8 +323,9 @@ test.describe(OFFICIAL_SOLUTION_ROUTE, () => {
   test('renders the empty state and omits the official card without an official solution', async ({
     page,
     context,
+    challenging,
   }) => {
-    await registerScenario(page, context, {
+    await registerScenario(page, context, challenging, {
       isAuthenticated: true,
       hasSolutionsAccess: true,
       hasOfficialSolution: false,
@@ -359,8 +352,12 @@ test.describe(OFFICIAL_SOLUTION_ROUTE, () => {
     ).toHaveAttribute('href', SOLUTIONS_ROUTE)
   })
 
-  test('does not expose the playback to a visitor', async ({ page, context }) => {
-    await registerScenario(page, context, {
+  test('does not expose the playback to a visitor', async ({
+    page,
+    context,
+    challenging,
+  }) => {
+    await registerScenario(page, context, challenging, {
       isAuthenticated: false,
       hasOfficialSolution: true,
     })
@@ -380,8 +377,9 @@ test.describe(OFFICIAL_SOLUTION_ROUTE, () => {
   test('does not expose the playback to an authenticated blocked user', async ({
     page,
     context,
+    challenging,
   }) => {
-    await registerScenario(page, context, {
+    await registerScenario(page, context, challenging, {
       isAuthenticated: true,
       hasSolutionsAccess: false,
       hasOfficialSolution: true,
@@ -399,9 +397,10 @@ test.describe(OFFICIAL_SOLUTION_ROUTE, () => {
   test('keeps expanded content scrollable and non-overlapping in a narrow viewport', async ({
     page,
     context,
+    challenging,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 })
-    await registerScenario(page, context, {
+    await registerScenario(page, context, challenging, {
       isAuthenticated: true,
       hasSolutionsAccess: true,
       hasOfficialSolution: true,
