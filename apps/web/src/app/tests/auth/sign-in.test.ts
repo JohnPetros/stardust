@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Page } from '../playwright'
 
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
@@ -210,13 +210,6 @@ test.describe('/auth/sign-in', () => {
       )
     })
   }
-
-  test.afterEach(async ({ page }) => {
-    await page.evaluate(() => {
-      window.__STARDUST_PROFILE_CHANNEL_MOCK__?.reset()
-    })
-    await ServerMock(page).reset()
-  })
 
   test('posts credentials and redirects to space after successful sign-in', async ({
     page,

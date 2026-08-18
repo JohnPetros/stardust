@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Page } from '../playwright'
 
 import { IdFaker } from '../../../../../../packages/core/src/global/domain/structures/fakers'
 import { ServerMock } from '../shared/mocks/ServerMock'
@@ -59,13 +59,6 @@ test.describe('/auth/sign-up', () => {
       window.__STARDUST_PROFILE_CHANNEL_MOCK__?.emitUserCreated(userCreatedPayload)
     }, payload)
   }
-
-  test.afterEach(async ({ page }) => {
-    await page.evaluate(() => {
-      window.__STARDUST_PROFILE_CHANNEL_MOCK__?.reset()
-    })
-    await ServerMock(page).reset()
-  })
 
   test('progressively reveals sign-up fields', async ({ page }) => {
     await gotoSignUpPage(page)
