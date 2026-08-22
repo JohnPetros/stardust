@@ -1,0 +1,299 @@
+name: Hermes code review
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hermes-code-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  detect-scopes:
+    name: Detect changed scopes
+    if: >-
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    outputs:
+      scopes: ${{ steps.scopes.outputs.scopes }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Detect scopes
+        id: scopes
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          declare -a detected_scopes=()
+
+          while IFS= read -r changed_file; do
+            case "$changed_file" in
+              apps/web/*)
+                detected_scopes+=("apps/web")
+                ;;
+              apps/server/*)
+                detected_scopes+=("apps/server")
+                ;;
+              apps/studio/*)
+                detected_scopes+=("apps/studio")
+                ;;
+              packages/core/*)
+                detected_scopes+=("packages/core")
+                ;;
+              packages/email/*)
+                detected_scopes+=("packages/email")
+                ;;
+              packages/lsp/*)
+                detected_scopes+=("packages/lsp")
+                ;;
+              packages/typescript-config/*)
+                detected_scopes+=("packages/typescript-config")
+                ;;
+              packages/validation/*)
+                detected_scopes+=("packages/validation")
+                ;;
+              documentation/*)
+                detected_scopes+=("documentation")
+                ;;
+              *)
+                detected_scopes+=("repository")
+                ;;
+            esac
+          done < <(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
+
+          if [ "${#detected_scopes[@]}" -eq 0 ]; then
+            scopes='[]'
+          else
+            scopes="$(
+              printf '%s\n' "${detected_scopes[@]}" |
+                sort -u |
+                jq --raw-input . |
+                jq --slurp --compact-output .
+            )"
+          fi
+
+          echo "scopes=$scopes" >> "$GITHUB_OUTPUT"
+          echo "Detected scopes: $scopes"
+
+  review:
+    name: Review ${{ matrix.scope }}
+    needs: detect-scopes
+    if: needs.detect-scopes.outputs.scopes != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        scope: ${{ fromJSON(needs.detect-scopes.outputs.scopes) }}
+
+    steps:
+      - name: Dispatch scoped review
+        shell: bash
+        env:
+          HERMES_API_URL: ${{ secrets.HERMES_API_URL }}
+          HERMES_API_KEY: ${{ secrets.HERMES_CODE_REVIEWER_API_KEY }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          SCOPE: ${{ matrix.scope }}
+        run: |
+          set -euo pipefail
+
+          hermes_url="${HERMES_API_URL%/}/p/code-reviewer/v1/runs"
+          session_scope="${SCOPE//\//-}"
+          session_id="${REPOSITORY//\//-}-pr-${PR_NUMBER}-${HEAD_SHA}-${session_scope}"
+          idempotency_key="${REPOSITORY}:pr:${PR_NUMBER}:${HEAD_SHA}:${SCOPE}:scoped-review"
+
+          payload="$(
+            jq --null-input \
+              --arg repository "$REPOSITORY" \
+              --arg pr_number "$PR_NUMBER" \
+              --arg base_sha "$BASE_SHA" \
+              --arg head_sha "$HEAD_SHA" \
+              --arg scope "$SCOPE" \
+              --arg session_id "$session_id" \
+              '{
+                input: (
+                  "Execute a Stardust pull request review with the following trusted workflow context:\n" +
+                  "Mode: scoped_review\n" +
+                  "Repository: " + $repository + "\n" +
+                  "Pull request: " + $pr_number + "\n" +
+                  "Base SHA: " + $base_sha + "\n" +
+                  "Expected head SHA: " + $head_sha + "\n" +
+                  "Assigned scope: " + $scope
+                ),
+                session_id: $session_id
+              }'
+          )"
+
+          response="$(
+            curl --fail-with-body \
+              --silent \
+              --show-error \
+              --request POST \
+              --header "Authorization: Bearer $HERMES_API_KEY" \
+              --header "Content-Type: application/json" \
+              --header "Idempotency-Key: $idempotency_key" \
+              --data "$payload" \
+              "$hermes_url"
+          )"
+
+          run_id="$(jq --exit-status --raw-output '.run_id' <<< "$response")"
+          echo "Hermes run started: $run_id"
+
+          for attempt in $(seq 1 120); do
+            run="$(
+              curl --fail-with-body \
+                --silent \
+                --show-error \
+                --header "Authorization: Bearer $HERMES_API_KEY" \
+                "$hermes_url/$run_id"
+            )"
+            status="$(jq --exit-status --raw-output '.status' <<< "$run")"
+
+            case "$status" in
+              completed)
+                echo "Hermes completed the $SCOPE review."
+                exit 0
+                ;;
+              failed|cancelled)
+                jq '{run_id, status, error, output}' <<< "$run"
+                exit 1
+                ;;
+              started|running|stopping)
+                echo "Hermes review status: $status (attempt $attempt/120)"
+                sleep 10
+                ;;
+              *)
+                echo "Unexpected Hermes run status: $status"
+                jq . <<< "$run"
+                exit 1
+                ;;
+            esac
+          done
+
+          echo "Hermes review timed out."
+          exit 1
+
+  conclusion:
+    name: Publish review conclusion
+    needs:
+      - detect-scopes
+      - review
+    if: >-
+      always() &&
+      needs.detect-scopes.result == 'success' &&
+      needs.detect-scopes.outputs.scopes != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Dispatch conclusion
+        shell: bash
+        env:
+          HERMES_API_URL: ${{ secrets.HERMES_API_URL }}
+          HERMES_API_KEY: ${{ secrets.HERMES_CODE_REVIEWER_API_KEY }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          SCOPES: ${{ needs.detect-scopes.outputs.scopes }}
+          SCOPED_REVIEW_RESULT: ${{ needs.review.result }}
+        run: |
+          set -euo pipefail
+
+          hermes_url="${HERMES_API_URL%/}/p/code-reviewer/v1/runs"
+          session_id="${REPOSITORY//\//-}-pr-${PR_NUMBER}-${HEAD_SHA}-conclusion"
+          idempotency_key="${REPOSITORY}:pr:${PR_NUMBER}:${HEAD_SHA}:conclusion"
+
+          payload="$(
+            jq --null-input \
+              --arg repository "$REPOSITORY" \
+              --arg pr_number "$PR_NUMBER" \
+              --arg base_sha "$BASE_SHA" \
+              --arg head_sha "$HEAD_SHA" \
+              --arg scopes "$SCOPES" \
+              --arg scoped_review_result "$SCOPED_REVIEW_RESULT" \
+              --arg session_id "$session_id" \
+              '{
+                input: (
+                  "Publish the final Stardust pull request review conclusion using the following trusted workflow context:\n" +
+                  "Mode: conclusion\n" +
+                  "Repository: " + $repository + "\n" +
+                  "Pull request: " + $pr_number + "\n" +
+                  "Base SHA: " + $base_sha + "\n" +
+                  "Expected head SHA: " + $head_sha + "\n" +
+                  "Reviewed scopes: " + $scopes + "\n" +
+                  "Scoped review workflow result: " + $scoped_review_result
+                ),
+                session_id: $session_id
+              }'
+          )"
+
+          response="$(
+            curl --fail-with-body \
+              --silent \
+              --show-error \
+              --request POST \
+              --header "Authorization: Bearer $HERMES_API_KEY" \
+              --header "Content-Type: application/json" \
+              --header "Idempotency-Key: $idempotency_key" \
+              --data "$payload" \
+              "$hermes_url"
+          )"
+
+          run_id="$(jq --exit-status --raw-output '.run_id' <<< "$response")"
+          echo "Hermes conclusion run started: $run_id"
+
+          for attempt in $(seq 1 60); do
+            run="$(
+              curl --fail-with-body \
+                --silent \
+                --show-error \
+                --header "Authorization: Bearer $HERMES_API_KEY" \
+                "$hermes_url/$run_id"
+            )"
+            status="$(jq --exit-status --raw-output '.status' <<< "$run")"
+
+            case "$status" in
+              completed)
+                echo "Hermes published the final conclusion."
+                exit 0
+                ;;
+              failed|cancelled)
+                jq '{run_id, status, error, output}' <<< "$run"
+                exit 1
+                ;;
+              started|running|stopping)
+                echo "Hermes conclusion status: $status (attempt $attempt/60)"
+                sleep 10
+                ;;
+              *)
+                echo "Unexpected Hermes run status: $status"
+                jq . <<< "$run"
+                exit 1
+                ;;
+            esac
+          done
+
+          echo "Hermes conclusion timed out."
+          exit 1
