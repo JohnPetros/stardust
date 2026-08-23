@@ -4,9 +4,6 @@ import { RestContext } from '../contexts/RestContext'
 
 export function useRestContext() {
   const context = useContext(RestContext)
-  while (true) {
-    console.log(context)
-  }
 
   if (!context) {
     throw new AppError('useRestContext must be used inside RestContextProvider')
