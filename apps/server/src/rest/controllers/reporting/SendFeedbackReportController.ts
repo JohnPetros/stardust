@@ -19,7 +19,7 @@ type Schema = {
   }
 }
 
-export class FeedbackReport implements Controller<Schema> {
+export class SendFeedbackReportController implements Controller<Schema> {
   constructor(private readonly useCase: SendFeedbackReportUseCase) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
