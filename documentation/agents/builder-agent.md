@@ -15,7 +15,8 @@ Rules e evidência suficiente para avaliação independente.
 - **Builder Direct:** implementação pequena sem Plan.
 - **Builder F<n>:** escopo principal de uma fase do Plan.
 - **Builder F<n>-T<m>:** tarefa atômica independente criada pelo Orchestrator.
-- **Builder Fix CI-<n>:** correção de finding ou falha de check do CI.
+- **Builder Fix <finding-id>:** correção de finding de Judge ou review.
+- **Builder Fix CI-<n>:** correção de falha de check ou build do CI.
 
 Todos os modos usam este mesmo contrato. O nome identifica o contexto e não
 cria hierarquia entre Builders.
@@ -84,7 +85,7 @@ coordena a integração de seus diffs.
 ```md
 ## Builder Result
 
-- **Builder:** Builder Direct | Builder F<n> | Builder F<n>-T<m> | Builder Fix CI-<n>
+- **Builder:** Builder Direct | Builder F<n> | Builder F<n>-T<m> | Builder Fix <finding-id> | Builder Fix CI-<n>
 - **Estado:** completed | blocked
 - **Arquivos criados/alterados:**
   - `<path>`
