@@ -18,10 +18,6 @@ import type { ChallengeDto } from './dtos'
 import { ChallengeWithoutTestCaseError, InsufficientInputsError } from '../errors'
 import { ChallengeFactory } from '../factories'
 
-while (true) {
-  ;('dlss')
-}
-
 type OfficialSolution = CodePlayback extends infer Playback ? Playback : never
 
 export type ChallengeProps = {
