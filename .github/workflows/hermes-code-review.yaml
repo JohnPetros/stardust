@@ -339,7 +339,7 @@ jobs:
                 P3) badge_color='yellow' ;;
               esac
 
-              printf -v body '![%s](https://img.shields.io/badge/%s-%s?style=flat-square) **%s**\n\n%s' \
+              printf -v body '![%s](https://img.shields.io/badge/%s-%s?style=flat) **%s**\n\n%s' \
                 "$severity" "$severity" "$badge_color" "$title" "$finding_body"
 
               gh api \
