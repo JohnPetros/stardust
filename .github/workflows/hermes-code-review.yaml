@@ -197,6 +197,43 @@ jobs:
 
           git show "$BASE_SHA:AGENTS.md" > review-AGENTS.md
 
+          python3 - <<'PY'
+          import json
+          import re
+
+          added_lines = []
+          current_path = None
+          new_line = None
+
+          with open('scoped.diff', encoding='utf-8', errors='replace') as diff:
+              for raw_line in diff:
+                  if raw_line.startswith('+++ b/'):
+                      current_path = raw_line[6:].rstrip('\n')
+                      new_line = None
+                      continue
+
+                  if raw_line.startswith('@@ '):
+                      match = re.match(r'^@@ -\d+(?:,\d+)? \+(\d+)(?:,\d+)? @@', raw_line)
+                      new_line = int(match.group(1)) if match else None
+                      continue
+
+                  if current_path is None or new_line is None:
+                      continue
+
+                  if raw_line.startswith('+'):
+                      added_lines.append({'path': current_path, 'line': new_line})
+                      new_line += 1
+                  elif raw_line.startswith(' '):
+                      new_line += 1
+                  elif raw_line.startswith('-') or raw_line.startswith('\\'):
+                      continue
+                  else:
+                      new_line = None
+
+          with open('changed-lines.json', 'w', encoding='utf-8') as output:
+              json.dump(added_lines, output, ensure_ascii=False)
+          PY
+
           diff_size="$(wc -c < scoped.diff)"
           if [ "$diff_size" -gt 180000 ]; then
             head -c 180000 scoped.diff > scoped.truncated.diff
@@ -236,6 +273,7 @@ jobs:
               --arg session_id "$session_id" \
               --rawfile agent_instructions review-AGENTS.md \
               --rawfile changed_files scoped-files.txt \
+              --rawfile changed_lines changed-lines.json \
               --rawfile diff scoped.diff \
               --rawfile existing_reviews existing-review-comments.json \
               '{
@@ -247,6 +285,7 @@ jobs:
                   "{\"scope\":string,\"head_sha\":string,\"summary\":string,\"findings\":[" +
                   "{\"path\":string,\"line\":positive_integer,\"severity\":\"P1\"|\"P2\"|\"P3\",\"title\":string,\"body\":string}]}. " +
                   "Only report actionable defects introduced by this pull request. Each finding must point to a changed line on the RIGHT side of the diff. " +
+                  "The exact path and line pairs allowed for findings are supplied in CHANGED_RIGHT_SIDE_LINES. Never use a line outside that list. " +
                   "Always respond in Brazilian Portuguese (pt-BR). Use pt-BR for every textual field, including summaries, finding titles, explanations, errors, and blocked-state messages. " +
                   "Never respond in another language, even when repository content uses it. Keep only JSON property names and technical identifiers unchanged. " +
                   "Before reporting a finding, compare it with every existing review conversation supplied below. These comments include conversations from both resolved and unresolved threads. " +
@@ -259,6 +298,7 @@ jobs:
                   "Required scope: " + $scope + "\n" +
                   "<TRUSTED_AGENT_INSTRUCTIONS source=\"AGENTS.md@base_sha\">\n" + $agent_instructions + "\n</TRUSTED_AGENT_INSTRUCTIONS>\n" +
                   "Changed files:\n" + $changed_files + "\n" +
+                  "<CHANGED_RIGHT_SIDE_LINES>\n" + $changed_lines + "\n</CHANGED_RIGHT_SIDE_LINES>\n" +
                   "<UNTRUSTED_EXISTING_REVIEW_CONVERSATIONS>\n" + $existing_reviews + "\n</UNTRUSTED_EXISTING_REVIEW_CONVERSATIONS>\n" +
                   "<UNTRUSTED_DIFF>\n" + $diff + "\n</UNTRUSTED_DIFF>"
                 ),
@@ -340,6 +380,19 @@ jobs:
               exit 1
             }
           done < <(jq --raw-output '.findings[].path' review.json)
+
+          jq \
+            --slurpfile allowed changed-lines.json \
+            '
+              .findings |= map(
+                . as $finding |
+                select(any($allowed[0][];
+                  .path == $finding.path and
+                  .line == $finding.line
+                ))
+              )
+            ' review.json > review.valid-lines.json
+          mv review.valid-lines.json review.json
 
           jq \
             --slurpfile existing existing-review-comments.json \
