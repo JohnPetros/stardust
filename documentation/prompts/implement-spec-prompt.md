@@ -33,14 +33,14 @@ Orchestrator → Builder Direct → sensores → Judge Implementation Direct
    Spec, revisão, Contract, diff, critérios, Rules, Architecture, auditoria UI,
    evidências Pencil/Playwright, matriz de divergências aprovadas e resultados
    oficiais dos sensores.
-7. Se `failed`, registre o finding no `evaluation.md` (ou crie um Plan se ele
+8. Se `failed`, registre o finding no `evaluation.md` (ou crie um Plan se ele
    exigir tarefas), crie `Builder Fix CI-<n>`, reexecute sensores invalidados e
    repita o Judge quando o diff ou qualquer evidência tiver sido invalidada.
    Qualquer mudança após o veredito invalida o aceite anterior. Após três
    falhas iguais, escale ao usuário.
-8. Execute o preflight integrado e crie/atualize `evaluation.md` com evidências
+9. Execute o preflight integrado e crie/atualize `evaluation.md` com evidências
    reais, resultado do Judge, warnings, findings, decisões e lições.
-9. Encaminhe para `create-pr` somente com o Judge aceito e o `evaluation.md`
+10. Encaminhe para `create-pr` somente com o Judge aceito e o `evaluation.md`
    completo; depois do CI verde, use `conclude-spec`.
 
 ## Persistência obrigatória após cada mudança
