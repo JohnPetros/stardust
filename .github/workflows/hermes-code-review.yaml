@@ -206,8 +206,9 @@ jobs:
                   "{\"scope\":string,\"head_sha\":string,\"summary\":string,\"findings\":[" +
                   "{\"path\":string,\"line\":positive_integer,\"severity\":\"P1\"|\"P2\"|\"P3\",\"title\":string,\"body\":string}]}. " +
                   "Only report actionable defects introduced by this pull request. Each finding must point to a changed line on the RIGHT side of the diff. " +
-                  "Always respond in English. Use English for every field, including summaries, finding titles, explanations, errors, and blocked-state messages. " +
-                  "Never respond in another language, even when repository content uses it. Return an empty findings array when there are no actionable defects.\n\n" +
+                  "Always respond in Brazilian Portuguese (pt-BR). Use pt-BR for every textual field, including summaries, finding titles, explanations, errors, and blocked-state messages. " +
+                  "Never respond in another language, even when repository content uses it. Keep only JSON property names and technical identifiers unchanged. " +
+                  "Return an empty findings array when there are no actionable defects.\n\n" +
                   "Repository: " + $repository + "\n" +
                   "Pull request: " + $pr_number + "\n" +
                   "Base SHA: " + $base_sha + "\n" +
@@ -400,14 +401,14 @@ jobs:
 
           total_findings="$(jq --slurp '[.[].findings | length] | add' "${review_files[@]}")"
           printf -v body \
-            '## Hermes code review conclusion\n\nReviewed commit: `%s`\nTotal findings: **%s**\n\n### Scoped reviews' \
+            '## Conclusão da revisão de código do Hermes\n\nCommit revisado: `%s`\nTotal de apontamentos: **%s**\n\n### Revisões por escopo' \
             "$HEAD_SHA" "$total_findings"
 
           for review_file in "${review_files[@]}"; do
             scope="$(jq --raw-output '.scope' "$review_file")"
             summary="$(jq --raw-output '.summary' "$review_file")"
             count="$(jq '.findings | length' "$review_file")"
-            printf -v body '%s\n\n- **%s** — %s (%s finding(s))' \
+            printf -v body '%s\n\n- **%s** — %s (%s apontamento(s))' \
               "$body" "$scope" "$summary" "$count"
           done
 
