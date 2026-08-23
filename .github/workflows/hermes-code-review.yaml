@@ -11,6 +11,7 @@ on:
       - ready_for_review
 
 permissions:
+  actions: read
   contents: read
 
 concurrency:
@@ -24,6 +25,7 @@ jobs:
       github.event.pull_request.draft == false &&
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    timeout-minutes: 35
     outputs:
       scopes: ${{ steps.scopes.outputs.scopes }}
 
@@ -34,6 +36,117 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
           persist-credentials: false
+
+      - name: Wait for applicable CI workflows
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          declare -a expected_workflows=()
+
+          add_workflow() {
+            expected_workflows+=("$1")
+          }
+
+          while IFS= read -r changed_file; do
+            case "$changed_file" in
+              .github/workflows/*|package.json|package-lock.json|.dependency-cruiser.cjs)
+                add_workflow 'Core package CI'
+                add_workflow 'Server app CI'
+                add_workflow 'Studio app CI'
+                add_workflow 'Web app CI'
+                ;;
+              packages/core/*)
+                add_workflow 'Core package CI'
+                add_workflow 'Server app CI'
+                add_workflow 'Studio app CI'
+                add_workflow 'Web app CI'
+                ;;
+              apps/server/*|packages/email/*)
+                add_workflow 'Server app CI'
+                ;;
+              apps/studio/*)
+                add_workflow 'Studio app CI'
+                ;;
+              apps/web/*|packages/lsp/*)
+                add_workflow 'Web app CI'
+                ;;
+              packages/validation/*)
+                add_workflow 'Server app CI'
+                add_workflow 'Studio app CI'
+                add_workflow 'Web app CI'
+                ;;
+            esac
+          done < <(git diff --name-only "$BASE_SHA...$HEAD_SHA")
+
+          if [ "${#expected_workflows[@]}" -eq 0 ]; then
+            echo 'No CI workflow applies to this pull request. Continuing to Hermes review.'
+            exit 0
+          fi
+
+          mapfile -t expected_workflows < <(
+            printf '%s\n' "${expected_workflows[@]}" | sort -u
+          )
+          printf 'Waiting for CI workflows: %s\n' "${expected_workflows[*]}"
+
+          for attempt in $(seq 1 180); do
+            runs="$(
+              gh api \
+                "repos/$REPOSITORY/actions/runs?head_sha=$HEAD_SHA&event=pull_request&per_page=100"
+            )"
+            all_succeeded=true
+
+            for workflow_name in "${expected_workflows[@]}"; do
+              workflow_run="$(
+                jq --compact-output \
+                  --arg workflow_name "$workflow_name" \
+                  '[
+                    .workflow_runs[] |
+                    select(.name == $workflow_name)
+                  ] | sort_by([.created_at, .run_attempt]) | last // empty' \
+                  <<< "$runs"
+              )"
+
+              if [ -z "$workflow_run" ]; then
+                echo "$workflow_name: waiting for workflow run to be created"
+                all_succeeded=false
+                continue
+              fi
+
+              status="$(jq --raw-output '.status' <<< "$workflow_run")"
+              conclusion="$(jq --raw-output '.conclusion // ""' <<< "$workflow_run")"
+
+              if [ "$status" != 'completed' ]; then
+                echo "$workflow_name: $status"
+                all_succeeded=false
+                continue
+              fi
+
+              if [ "$conclusion" != 'success' ]; then
+                echo "$workflow_name failed with conclusion: $conclusion"
+                jq '{html_url, status, conclusion, run_attempt}' <<< "$workflow_run"
+                exit 1
+              fi
+
+              echo "$workflow_name: success"
+            done
+
+            if [ "$all_succeeded" = 'true' ]; then
+              echo 'All applicable CI workflows passed. Starting Hermes review.'
+              exit 0
+            fi
+
+            echo "CI gate pending (attempt $attempt/180)."
+            sleep 10
+          done
+
+          echo 'Timed out waiting for applicable CI workflows.'
+          exit 1
 
       - name: Detect scopes
         id: scopes
