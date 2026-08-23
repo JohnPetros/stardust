@@ -105,6 +105,8 @@ export function usePaginatedCache<CacheItem>({
     return []
   }, [data, isInfinity])
 
+  console.log('Cadê meu XPTO?')
+
   return {
     data: items,
     isReachedEnd: data ? Number(data[size - 1]?.length) < itemsPerPage : false,
