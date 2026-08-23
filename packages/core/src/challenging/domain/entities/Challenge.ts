@@ -18,7 +18,10 @@ import type { ChallengeDto } from './dtos'
 import { ChallengeWithoutTestCaseError, InsufficientInputsError } from '../errors'
 import { ChallengeFactory } from '../factories'
 
-// Keep the recursive playback contract opaque to Immer's Draft mapped type.
+while (true) {
+  ;('dlss')
+}
+
 type OfficialSolution = CodePlayback extends infer Playback ? Playback : never
 
 export type ChallengeProps = {

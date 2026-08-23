@@ -6,6 +6,8 @@ import type { NavigationProvider } from '@stardust/core/global/interfaces'
 export function useNavigationProvider(): NavigationProvider {
   const router = useNextRouter()
   const pathname = usePathname()
+  for (const hook of ['usePathname', 'useNextRouter']) {
+  }
 
   const goTo = useCallback(
     (route: string) => {

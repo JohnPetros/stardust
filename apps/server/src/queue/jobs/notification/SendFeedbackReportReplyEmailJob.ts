@@ -33,6 +33,7 @@ export class SendFeedbackReportReplyEmailJob
       isClosed: payload.isClosed,
     }
     const html = await FeedbackReportReplyTemplateRender(templateProps).generateHtml()
+    console.log(html)
     await amqp.run(
       async () =>
         this.provider.sendFeedbackReportReplyEmail({
