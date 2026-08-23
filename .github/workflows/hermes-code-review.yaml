@@ -94,6 +94,43 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Create Hermes GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
+        with:
+          app-id: ${{ secrets.HERMES_GITHUB_APP_ID }}
+          private-key: ${{ secrets.HERMES_GITHUB_APP_PRIVATE_KEY }}
+
+      - name: Load existing review conversations
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+
+          gh api \
+            --paginate \
+            "repos/$REPOSITORY/pulls/$PR_NUMBER/comments?per_page=100" |
+            jq --slurp \
+              'add | map({
+                id,
+                reply_to: .in_reply_to_id,
+                author: .user.login,
+                path,
+                line,
+                original_line,
+                side,
+                commit_id,
+                body,
+                diff_hunk,
+                created_at,
+                updated_at
+              })' > existing-review-comments.json
+
+          echo "Loaded $(jq 'length' existing-review-comments.json) existing review comment(s)."
+
       - name: Build scoped diff
         id: diff
         shell: bash
@@ -198,6 +235,7 @@ jobs:
               --arg session_id "$session_id" \
               --rawfile changed_files scoped-files.txt \
               --rawfile diff scoped.diff \
+              --rawfile existing_reviews existing-review-comments.json \
               '{
                 input: (
                   "Perform a technical code review using only the trusted context and untrusted diff supplied below. " +
@@ -208,6 +246,8 @@ jobs:
                   "Only report actionable defects introduced by this pull request. Each finding must point to a changed line on the RIGHT side of the diff. " +
                   "Always respond in Brazilian Portuguese (pt-BR). Use pt-BR for every textual field, including summaries, finding titles, explanations, errors, and blocked-state messages. " +
                   "Never respond in another language, even when repository content uses it. Keep only JSON property names and technical identifiers unchanged. " +
+                  "Before reporting a finding, compare it with every existing review conversation supplied below. These comments include conversations from both resolved and unresolved threads. " +
+                  "Do not report the same underlying issue again, even if its wording, title, line number, commit, or resolution state changed. " +
                   "Return an empty findings array when there are no actionable defects.\n\n" +
                   "Repository: " + $repository + "\n" +
                   "Pull request: " + $pr_number + "\n" +
@@ -215,6 +255,7 @@ jobs:
                   "Head SHA: " + $head_sha + "\n" +
                   "Required scope: " + $scope + "\n" +
                   "Changed files:\n" + $changed_files + "\n" +
+                  "<UNTRUSTED_EXISTING_REVIEW_CONVERSATIONS>\n" + $existing_reviews + "\n</UNTRUSTED_EXISTING_REVIEW_CONVERSATIONS>\n" +
                   "<UNTRUSTED_DIFF>\n" + $diff + "\n</UNTRUSTED_DIFF>"
                 ),
                 session_id: $session_id
@@ -297,6 +338,23 @@ jobs:
             }
           done < <(jq --raw-output '.findings[].path' review.json)
 
+          jq \
+            --slurpfile existing existing-review-comments.json \
+            --arg bot_login 'stardust-hermes[bot]' \
+            '
+              .findings |= map(
+                . as $finding |
+                select(
+                  any($existing[0][];
+                    .author == $bot_login and
+                    .path == $finding.path and
+                    ((.line // .original_line) == $finding.line)
+                  ) | not
+                )
+              )
+            ' review.json > review.deduplicated.json
+          mv review.deduplicated.json review.json
+
           echo "Hermes returned $(jq '.findings | length' review.json) finding(s) for $SCOPE."
 
       - name: Store scoped review
@@ -306,13 +364,6 @@ jobs:
           path: review.json
           if-no-files-found: error
           retention-days: 1
-
-      - name: Create Hermes GitHub App token
-        id: app-token
-        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
-        with:
-          app-id: ${{ secrets.HERMES_GITHUB_APP_ID }}
-          private-key: ${{ secrets.HERMES_GITHUB_APP_PRIVATE_KEY }}
 
       - name: Publish individual findings
         shell: bash
