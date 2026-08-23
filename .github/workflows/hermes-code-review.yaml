@@ -225,8 +225,7 @@ jobs:
           session_id="${REPOSITORY//\//-}-pr-${PR_NUMBER}-${HEAD_SHA}-${session_scope}-attempt-${RUN_ATTEMPT}"
           idempotency_key="${REPOSITORY}:pr:${PR_NUMBER}:${HEAD_SHA}:${SCOPE}:attempt:${RUN_ATTEMPT}"
 
-          payload="$(
-            jq --null-input \
+          jq --null-input \
               --arg repository "$REPOSITORY" \
               --arg pr_number "$PR_NUMBER" \
               --arg base_sha "$BASE_SHA" \
@@ -259,8 +258,7 @@ jobs:
                   "<UNTRUSTED_DIFF>\n" + $diff + "\n</UNTRUSTED_DIFF>"
                 ),
                 session_id: $session_id
-              }'
-          )"
+              }' > hermes-payload.json
 
           response="$(
             curl --fail-with-body \
@@ -270,7 +268,7 @@ jobs:
               --header "Authorization: Bearer $HERMES_API_KEY" \
               --header "Content-Type: application/json" \
               --header "Idempotency-Key: $idempotency_key" \
-              --data "$payload" \
+              --data-binary @hermes-payload.json \
               "$hermes_url"
           )"
 
