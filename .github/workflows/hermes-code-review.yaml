@@ -331,8 +331,15 @@ jobs:
               severity="$(jq --raw-output ".findings[$index].severity" review.json)"
               title="$(jq --raw-output ".findings[$index].title" review.json)"
               finding_body="$(jq --raw-output ".findings[$index].body" review.json)"
-              printf -v body '[%s] %s\n\n%s' \
-                "$severity" "$title" "$finding_body"
+
+              case "$severity" in
+                P1) badge_color='red' ;;
+                P2) badge_color='orange' ;;
+                P3) badge_color='yellow' ;;
+              esac
+
+              printf -v body '![%s](https://img.shields.io/badge/%s-%s?style=flat-square) **%s**\n\n%s' \
+                "$severity" "$severity" "$badge_color" "$title" "$finding_body"
 
               gh api \
                 --method POST \
