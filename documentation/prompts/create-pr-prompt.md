@@ -52,16 +52,17 @@ Qualquer node ausente, contradito ou adicionado sem aprovação bloqueia o PR.
 O `evaluation.md` deve conter as evidências reais do preflight, o resultado do
 único Judge Implementation da implementação inteira, warnings, findings,
 decisões e lições. O Judge precisa avaliar o HEAD que será publicado; qualquer
-mudança posterior deve invalidar o aceite e exigir nova avaliação. Quality Gate
-e build ficam pendentes até o CI; não exija que estejam verdes para abrir o PR.
+mudança posterior deve invalidar o aceite e exigir nova avaliação. Os checks e o
+build ficam pendentes até o CI; não exija que estejam verdes para abrir o PR.
 
 Preserve a worktree e os processos existentes do usuário. Não descarte,
 sobrescreva ou encerre processos/alterações fora do escopo do PR para resolver
 conflitos locais; escolha uma porta/ambiente alternativo e registre a limitação
 quando necessário.
 
-O Quality Gate repete esses checks no CI. O build é executado no CI depois do
-Quality Gate e não precisa ser tratado como sensor SDD local obrigatório.
+O CI repete esses checks, incluindo `check:architecture`, conforme os
+workflows aplicáveis. O build é executado no CI depois dos checks e não precisa
+ser tratado como sensor SDD local obrigatório.
 
 ---
 
@@ -268,7 +269,7 @@ Passo a passo claro para o revisor validar:
 - próximos passos
 
 Inclua, quando pertinente, o link ou a referência ao `evaluation.md` e indique
-que Quality Gate e build serão confirmados pelo CI.
+que os checks e o build serão confirmados pelo CI.
 
 ---
 
@@ -301,20 +302,20 @@ gh pr create \
 
 ### 6. Monitoramento do CI e loop de correção
 
-Depois de criar o PR, mantenha o workflow aberto até o Quality Gate e o build
-do CI passarem para o HEAD atual.
+Depois de criar o PR, mantenha o workflow aberto até os checks e o build do CI
+passarem para o HEAD atual.
 
 Para cada falha:
 
 1. registre imediatamente a falha no `evaluation.md`;
 2. classifique o problema e identifique o sensor ou job afetado;
-3. crie `Builder Fix QG-<n>` quando a correção estiver no escopo;
+3. crie `Builder Fix CI-<n>` quando a correção estiver no escopo;
 4. aplique a correção, atualize a branch e repita os sensores afetados;
 5. repita o único Judge Implementation quando o diff ou a evidência tiver sido
    invalidada;
 6. aguarde novamente o CI no novo HEAD.
 
-Repita esse loop até o Quality Gate e o build ficarem verdes. Não encaminhe
+Repita esse loop até os checks e o build ficarem verdes. Não encaminhe
 para `conclude-spec` enquanto houver check falhando, finding bloqueante ou CI
 pendente. Após três falhas consecutivas pelo mesmo motivo, apresente o
 histórico e solicite decisão ao usuário.

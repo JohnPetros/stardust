@@ -17,7 +17,7 @@ Demanda
 → Judge Implementation único da implementação integrada
 → preflight
 → evaluation.md
-→ PR / Quality Gate / build no CI
+→ PR / checks e build no CI
 → Spec concluída
 ```
 
@@ -174,7 +174,7 @@ Todos os subagentes são criados diretamente pelo Orchestrator e são irmãos:
 Orchestrator
 ├── Builder Direct
 ├── Builder F<n> / Builder F<n>-T<m>
-├── Builder Fix QG-<n>
+├── Builder Fix CI-<n>
 └── Judge Spec / Judge Plan / Judge Implementation
 ```
 
@@ -220,10 +220,10 @@ O ciclo curto usa `format`, `check:code`, `check:types` e `test:unit`. O
 preflight executa todos os sensores aplicáveis no escopo integrado antes da
 criação do PR.
 
-Quality Gate e build final pertencem ao CI:
+Os checks e o build final pertencem ao CI:
 
-- o Quality Gate repete os checks aplicáveis;
-- o build roda depois do Quality Gate;
+- o CI executa os checks aplicáveis, incluindo `check:architecture`;
+- o build roda depois dos checks aplicáveis;
 - o build não precisa rodar a cada fase ou retry;
 - `check:dead-code` não é sensor oficial;
 - Playwright MCP pode fornecer evidência de browser, mas não substitui um
@@ -246,8 +246,7 @@ Deve registrar:
   rota, commit e screenshot/comparação;
 - divergências Pencil-to-code aprovadas, com node, motivo, impacto e decisão;
 - sensores locais e preflight;
-- Quality Gate e build do CI, inicialmente `pending` quando o PR ainda não
-  existe;
+- checks e build do CI, inicialmente `pending` quando o PR ainda não existe;
 - warnings e findings, com estado e resolução;
 - decisões tomadas e lições aprendidas;
 - alinhamento documental e alterações posteriores.
@@ -264,11 +263,11 @@ quando o diff ou qualquer evidência de Contract, Rule, Pencil ou Playwright for
 invalidada. Qualquer alteração depois do veredito final invalida o aceite
 anterior, mesmo que a alteração seja uma correção técnica.
 
-Se o Quality Gate ou o build do CI falhar:
+Se um check ou o build do CI falhar:
 
 1. registrar a falha imediatamente em `evaluation.md`;
 2. manter a Spec `in_progress`;
-3. criar `Builder Fix QG-<n>` quando a correção estiver no escopo;
+3. criar `Builder Fix CI-<n>` quando a correção estiver no escopo;
 4. repetir os sensores afetados;
 5. repetir o Judge Final sempre que o diff ou a evidência tiver sido invalidada;
 6. atualizar `evaluation.md` com a nova evidência e decisão.
@@ -280,20 +279,21 @@ o histórico e pede decisão ao usuário.
 
 `create-pr` só atua depois do preflight e da criação do `evaluation.md`. Ele
 organiza commits pendentes, cria o PR, inclui o resumo da Spec e da avaliação,
-solicita review e permanece aberto acompanhando o CI até o Quality Gate e o
-build passarem no HEAD atual.
+solicita review e permanece aberto acompanhando os checks e o build do CI até
+passarem no HEAD atual.
 
-Se o CI falhar, `create-pr` registra a falha em `evaluation.md`, cria ou
-encaminha um `Builder Fix QG-*`, repete os sensores afetados, atualiza a branch
-e aguarda o CI novamente. O loop continua até o CI verde; após três falhas
-consecutivas pelo mesmo motivo, a decisão é escalada ao usuário.
+Se um check ou o build do CI falhar, `create-pr` registra a falha em
+`evaluation.md`, cria ou encaminha um `Builder Fix CI-*`, repete os sensores
+afetados, atualiza a branch e aguarda o CI novamente. O loop continua até o CI
+verde; após três falhas consecutivas pelo mesmo motivo, a decisão é escalada ao
+usuário.
 
 `conclude-spec` só fecha a entrega quando:
 
 - a implementação ou todas as fases foram aceitas;
 - não há findings bloqueantes;
 - `evaluation.md` está completo;
-- Quality Gate e build do CI estão verdes;
+- todos os checks obrigatórios e o build do CI estão verdes;
 - review e conversas bloqueantes foram resolvidos;
 - o HEAD avaliado é o HEAD final;
 - o Judge Final permanece válido para esse HEAD, sem alterações posteriores não

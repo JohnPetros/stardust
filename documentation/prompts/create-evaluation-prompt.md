@@ -99,11 +99,11 @@ avaliação bloqueada.
 | --- | --- | --- |
 | `npm run check:code` | passed | saída resumida |
 
-## Quality Gate e build do CI
+## Checks e build do CI
 
 | Verificação | Estado | HEAD / evidência |
 | --- | --- | --- |
-| Quality Gate | pending | PR e workflow |
+| Checks do CI | pending | PR e workflows aplicáveis |
 | Build | pending | workflow |
 
 ## Warnings e findings
@@ -130,8 +130,8 @@ avaliação bloqueada.
 - Próxima ação: `<ação>`
 ```
 
-Quality Gate ou build com falha devem ser registrados imediatamente aqui. A
-Spec permanece `in_progress`; correções de escopo usam `Builder Fix QG-*`, com
+Checks ou build com falha devem ser registrados imediatamente aqui. A Spec
+permanece `in_progress`; correções de escopo usam `Builder Fix CI-*`, com
 novo sensor e novo Judge sempre que o diff ou qualquer evidência de Contract,
 Rule, Pencil ou Playwright for invalidada. Qualquer alteração posterior ao
 Judge invalida o commit avaliado anterior, inclusive quando afetar a fidelidade

@@ -57,7 +57,7 @@ task atual:
 Orchestrator
 ├── Builder Direct | Builder F<n>
 ├── Builder F<n>-T<m>
-├── Builder Fix QG-<n>
+├── Builder Fix CI-<n>
 └── Judge Spec | Judge Plan | Judge Implementation
 ```
 
@@ -76,10 +76,10 @@ Spec, diff e evidências oficiais, nunca a narrativa do Builder.
   veredito anterior ou quando o Plan/risco exige avaliação integrada.
 - O fechamento não cria um novo papel de julgamento; `conclude-spec` executa o
   fechamento.
-- `evaluation.md` registra evidências reais, Judges, Quality Gate, build,
+- `evaluation.md` registra evidências reais, Judges, checks do CI, build,
   warnings, findings, decisões e lições.
-- `create-pr` permanece ativo até Quality Gate e build verdes; falhas entram no
-  loop `evaluation.md` → `Builder Fix QG-*` → sensores → CI.
+- `create-pr` permanece ativo até os checks e o build do CI ficarem verdes;
+  falhas entram no loop `evaluation.md` → `Builder Fix CI-*` → sensores → CI.
 - `conclude-spec` é o workflow de fechamento; atualiza a Spec e o
   `evaluation.md` após o CI.
 
@@ -96,10 +96,10 @@ Builder. Alinhamentos factuais e aprendizados generalizáveis são registrados n
 produto, Rules globais, fronteiras arquiteturais, conflitos normativos e
 expansão material de escopo exigem decisão do usuário.
 
-## Quality Gate
+## Falha de check ou build no CI
 
-Se o Quality Gate ou o build falhar, mantenha a Spec `in_progress`, registre a
-falha imediatamente em `evaluation.md` e crie `Builder Fix QG-<n>` quando a
+Se um check ou o build falhar, mantenha a Spec `in_progress`, registre a falha
+imediatamente em `evaluation.md` e crie `Builder Fix CI-<n>` quando a
 correção estiver no escopo. Reexecute os sensores afetados e acione novo Judge
 somente se a evidência tiver sido invalidada.
 

@@ -1,6 +1,6 @@
 ---
 name: conclude-spec
-description: Fechar uma Spec de feature após o único Judge Implementation, CI Quality Gate e build, atualizando evaluation.md.
+description: Fechar uma Spec de feature após o único Judge Implementation, checks e build do CI, atualizando evaluation.md.
 ---
 
 # Concluir Spec
@@ -42,9 +42,9 @@ Atualizações normativas que alteram produto, Contract, Rules globais ou
 fronteiras arquiteturais exigem decisão do usuário.
 
 `create-pr` cria o commit/PR e solicita Codex Review. O Plan, `evaluation.md`, o
-worktree, o Judge e o CI devem apontar para o mesmo HEAD final. Quality Gate e
-build verdes são pré-condições para concluir a Spec; enquanto o PR estiver
-aberto, ficam `pending` no `evaluation.md`.
+worktree, o Judge e o CI devem apontar para o mesmo HEAD final. Todos os checks
+obrigatórios e o build verdes são pré-condições para concluir a Spec; enquanto
+o PR estiver aberto, ficam `pending` no `evaluation.md`.
 
 ### Referência para `create-pr`
 
@@ -55,8 +55,8 @@ não abre PR automaticamente. O workflow responsável por agrupar commits,
 abrir o PR, solicitar Codex Review e acompanhar o CI é
 `.agents/skills/create-pr/SKILL.md`.
 
-Se Quality Gate ou build falhar, mantenha a Spec `in_progress`, registre a
-falha imediatamente em `evaluation.md`, crie `Builder Fix QG-<n>` quando a
+Se um check ou o build falhar, mantenha a Spec `in_progress`, registre a falha
+imediatamente em `evaluation.md`, crie `Builder Fix CI-<n>` quando a
 correção estiver no escopo, reexecute sensores afetados e repita o único Judge
 quando o diff ou a evidência tiver sido invalidada.
 

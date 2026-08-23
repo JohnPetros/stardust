@@ -8,7 +8,7 @@ Este arquivo é um índice curto para a fonte normativa completa em
 ```text
 Demanda → Spec → Judge Spec → Plan opcional → Judge Plan → Implementação
 → sensores → Judge Implementation → preflight → evaluation.md
-→ PR / Quality Gate / build no CI → Spec concluída
+→ PR / checks e build no CI → Spec concluída
 ```
 
 - Plan é opcional: `implement-spec` atende Specs pequenas; `create-plan` +
@@ -41,16 +41,16 @@ continuar. Sem Plan, findings curtos ficam no `evaluation.md`.
 ## Sensores e CI
 
 Sensores locais: `format`, `check:code`, `check:types`, `test:unit` e os testes
-de arquitetura/integração aplicáveis. Quality Gate e build final são do CI.
-Build não precisa rodar a cada fase ou retry.
+de arquitetura/integração aplicáveis. Os checks e o build final são executados
+no CI. Build não precisa rodar a cada fase ou retry.
 
-## Falha do Quality Gate
+## Falha de check ou build no CI
 
 Manter a Spec `in_progress`, registrar a falha em `evaluation.md`, criar
-`Builder Fix QG-*`, repetir os sensores afetados e repetir o Judge apenas se a
+`Builder Fix CI-*`, repetir os sensores afetados e repetir o Judge apenas se a
 evidência tiver sido invalidada. O `create-pr` permanece aberto e repete esse
-loop até Quality Gate e build passarem no HEAD atual; somente então o fluxo
-segue para `conclude-spec`.
+loop até os checks e o build passarem no HEAD atual; somente então o fluxo segue
+para `conclude-spec`.
 
 Consulte `documentation/sdd.md` para contratos, estados, papéis, estrutura dos
 artefatos e critérios de conclusão.

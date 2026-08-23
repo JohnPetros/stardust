@@ -34,7 +34,7 @@ Orchestrator → Builder Direct → sensores → Judge Implementation Direct
    evidências Pencil/Playwright, matriz de divergências aprovadas e resultados
    oficiais dos sensores.
 7. Se `failed`, registre o finding no `evaluation.md` (ou crie um Plan se ele
-   exigir tarefas), crie `Builder Fix QG-<n>`, reexecute sensores invalidados e
+   exigir tarefas), crie `Builder Fix CI-<n>`, reexecute sensores invalidados e
    repita o Judge quando o diff ou qualquer evidência tiver sido invalidada.
    Qualquer mudança após o veredito invalida o aceite anterior. Após três
    falhas iguais, escale ao usuário.
@@ -50,7 +50,7 @@ imediatamente o `plan.md` e o `evaluation.md`, antes de iniciar outra mudança,
 executar o próximo sensor ou criar o Judge. Isso vale individualmente para a
 implementação inicial, `Builder Fix`, alterações de seed/fixture/configuração/
 ambiente, artefatos gerados ou derivados e testes novos ou alterados — inclusive
-mudanças feitas para corrigir review, sensores, Quality Gate ou Judge.
+mudanças feitas para corrigir review, sensores, CI ou Judge.
 
 No `plan.md`, registre a tarefa, tentativa, motivo, paths/artefatos afetados,
 RF/CA, estado e próxima ação. No `evaluation.md`, registre a mudança como

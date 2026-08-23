@@ -57,7 +57,7 @@ para:
   geradores;
 - testes novos ou alterados, incluindo testes adicionados apenas para cobrir
   um finding;
-- correções após review, falhas de sensor, Quality Gate ou Judge.
+- correções após review, falhas de sensor, CI ou Judge.
 
 No `plan.md`, registre a tarefa/fase, tentativa, motivo, paths e artefatos
 afetados, RF/CA relacionados, estado, dependências e próxima ação. No

@@ -17,7 +17,7 @@ Trabalhe na sessão atual e sempre contra o `HEAD` mais recente.
    exclusões para esconder regressões.
 5. Aplique `format`, reexecute os sensores invalidados e faça revisão do diff.
 6. Responda/resolva conversas apenas após a correção existir no branch.
-7. Faça push e aguarde novamente Quality Gate, testes e build do novo `HEAD`.
+7. Faça push e aguarde novamente os checks, testes e build do novo `HEAD`.
 
 Mudança de produto, Contract, arquitetura ou segurança precisa atualizar as
 fontes normativas antes de prosseguir. Encerre somente com checks verdes,

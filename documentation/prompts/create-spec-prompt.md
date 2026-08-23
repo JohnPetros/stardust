@@ -209,7 +209,7 @@ os contratos da Spec e mantenha a sintaxe renderizável em Markdown.
 
 Declare sensores aplicáveis: `format`, `check:code`, `check:types`, `test:unit`,
 `check:architecture` e `test:integration`. `check:dead-code` não é oficial.
-Quality Gate e build são validações finais do CI.
+Checks e build são validações finais do CI.
 
 ## Decisões técnicas e clarificação
 
