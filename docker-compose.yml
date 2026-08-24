@@ -19,7 +19,7 @@ services:
       retries: 10
 
   supabase-auth:
-    image: public.ecr.aws/supabase/gotrue:v2.195.0
+    image: public.ecr.aws/supabase/gotrue:v2.196.0
     container_name: stardust-supabase-auth
     depends_on:
       supabase-db:
@@ -72,7 +72,7 @@ services:
       retries: 10
 
   supabase-storage:
-    image: supabase/storage-api:v1.60.4
+    image: supabase/storage-api:v1.70.6
     container_name: stardust-supabase-storage
     depends_on:
       supabase-db:
@@ -124,7 +124,7 @@ services:
 
   # Supabase exposes Auth, PostgREST, Storage and Realtime behind one API URL.
   supabase-gateway:
-    image: kong/kong:3.9.1
+    image: kong/kong:3.9.3
     container_name: stardust-supabase-gateway
     depends_on:
       supabase-auth:
@@ -147,7 +147,7 @@ services:
       KONG_PLUGINS: request-transformer,cors
 
   inngest:
-    image: inngest/inngest:v1.41.1
+    image: inngest/inngest:v1.43.0
     container_name: stardust-inngest
     command: inngest dev -u http://host.docker.internal:3334/inngest --no-discovery
     ports:
