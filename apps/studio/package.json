@@ -45,7 +45,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "isbot": "^5.2.1",
-    "lottie-react": "^2.4.1",
+    "lottie-react": "^3.1.0",
     "lucide-react": "^0.525.0",
     "markdown-to-jsx": "^9.9.0",
     "monaco-editor": "^0.56.0",
