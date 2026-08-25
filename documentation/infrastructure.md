@@ -110,6 +110,7 @@ As variáveis são configuradas diretamente no Coolify, separadas por escopo:
 | `web-app-ci.yaml` | PR → `main` (paths web) | Codecheck, typecheck, testes, build |
 | `web-app-cd-coolify.yaml` | Release published | Aciona webhook Coolify → notifica Discord |
 | `web-app-staging-cd-coolify.yaml` | Push → `main` (paths web) | Aciona webhook Coolify → notifica Discord |
+| `dependencies-update.yaml` | Toda segunda-feira às 09:00 BRT ou execução manual | Atualiza dependências patch/minor, valida o monorepo e cria ou atualiza um PR semanal |
 
 ### GitHub Secrets necessários
 
