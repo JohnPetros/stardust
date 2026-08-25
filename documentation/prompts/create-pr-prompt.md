@@ -1,354 +1,390 @@
 ---
-description: Prompt para criar pull requests padronizados via gh com titulo, body e checklist de validacao.
+name: create-pr
+description: Publicar ou atualizar um Pull Request do Stardust com rastreabilidade de Issue, PRD e SDD, além de evidências atuais de validação.
 ---
 
-# Prompt: Criar PR
+# Prompt: Criar ou Atualizar Pull Request
 
-**Objetivo:** Padronizar a criação de Pull Requests (PRs), incluindo a criação
-dos commits pendentes na branch quando necessário, garantindo descrições claras
-que facilitem a revisão de código e o rastreamento de tarefas. O foco é
-utilizar exclusivamente a **GitHub CLI (gh)** para manter a integridade do fluxo
-de trabalho.
+## Objetivo
 
----
+Publicar uma entrega coerente do Stardust no GitHub. Use `gh`, preserve a
+worktree do usuário e atualize um PR existente da mesma entrega em vez de criar
+uma duplicata.
 
-## Entrada
+Esta tarefa não cria Spec, PRD, Plan, Issue ou Report. Apenas consome os
+documentos que já existirem e a demanda direta quando a entrega não tiver
+documentação SDD.
 
-- Uma Spec (especificação) devidamente implementada e validada.
-- Uma Bug Report (relatório de bug) devidamente implementada e validada.
-- Uma branch de funcionalidade (`feature/`), correção (`fix/`) ou refatoração
-  (`refactor/`) contendo a implementação pronta para revisão, com ou sem
-  alterações ainda não commitadas.
+## Entradas e fontes de autoridade
 
----
+Leia, quando existirem e forem aplicáveis:
 
-## Regras Aplicáveis
+- Spec ou Bug Report implementado;
+- Plan;
+- `evaluation.md`;
+- diff real da entrega;
+- `documentation/rules/sdd-rules.md`;
+- `documentation/tooling.md`;
+- rules aplicáveis;
+- `documentation/rules/commit-rules.md`;
+- Issue e milestone do GitHub usadas como rastreabilidade.
 
-Antes de criar commits ou abrir o PR, leia:
+Quando a entrega vier de uma Spec, confirme que o `evaluation.md` usa a
+estrutura canônica de `documentation/templates/evaluation.md` e possui
+evidências atuais para a revisão exata da Spec.
 
-- `documentation/rules/commit-rules.md` — regras oficiais de agrupamento e mensagem de commit.
-- `documentation/rules/pr-review-rules.md` — critérios que o PR deve facilitar para revisão.
-- `documentation/rules/code-conventions-rules.md` — convenções gerais a checar no changelog e riscos.
-- `documentation/rules/rules.md` — para citar rules de camada quando o PR introduzir padrão novo, decisão arquitetural ou risco relevante.
+Quando a entrega vier de uma demanda direta, não invente Spec, PRD, Issue,
+requisitos ou registros externos para preencher o PR.
 
-Se houver commits pendentes, `commit-rules.md` prevalece sobre a tabela duplicada neste prompt. Atualize este prompt quando a tabela divergir da rule.
+Exija autorização explícita antes de fazer commit, `push` e criar ou atualizar
+o PR. No uso independente, invoque `commit-code` para alterações pendentes do
+escopo. Quando chamado por `conclude-spec`, reutilize os commits já preparados.
 
-Antes de criar o PR, confirme o preflight local da Spec e a existência de
-`evaluation.md`:
+## Inspeção da entrega
 
-- `npm run check:code`;
-- `npm run check:types`;
-- `npm run test:unit`;
-- `npm run check:architecture`, quando aplicável;
-- `npm run test:integration`, quando aplicável.
+Antes da publicação, inspecione a worktree completa e o histórico da entrega:
 
-Para frontend, confirme também a auditoria de `documentation/rules/ui-layer-rules.md`
-por widget e a matriz independente de comparação Pencil/Web para todos os nodes
-canônicos do Contract. A matriz deve demonstrar fidelidade de composição,
-hierarquia, dimensões/anchors, espaçamento, tipografia, cores, assets, estados
-e variantes; só divergências explicitamente aprovadas podem permanecer.
-Qualquer node ausente, contradito ou adicionado sem aprovação bloqueia o PR.
+```bash
+git status --short
+git diff --stat
+git diff
+git diff --cached --stat
+git diff --cached
+git log -10 --format='%h %s'
+```
 
-O `evaluation.md` deve conter as evidências reais do preflight, o resultado do
-único Judge Implementation da implementação inteira, warnings, findings,
-decisões e lições. O Judge precisa avaliar o HEAD que será publicado; qualquer
-mudança posterior deve invalidar o aceite e exigir nova avaliação. Os checks e o
-build ficam pendentes até o CI; não exija que estejam verdes para abrir o PR.
+Identifique:
 
-Preserve a worktree e os processos existentes do usuário. Não descarte,
-sobrescreva ou encerre processos/alterações fora do escopo do PR para resolver
-conflitos locais; escolha uma porta/ambiente alternativo e registre a limitação
-quando necessário.
+- arquivos em `stage`, modificados e não rastreados;
+- artifacts gerados, migrations, seeds e configurações;
+- aplicações e packages afetados;
+- alterações do usuário sem relação com a entrega;
+- segredos ou dados locais que não podem entrar no PR.
 
-O CI repete esses checks, incluindo `check:architecture`, conforme os
-workflows aplicáveis. O build é executado no CI depois dos checks e não precisa
-ser tratado como sensor SDD local obrigatório.
+Preserve alterações alheias e mantenha-as fora dos commits. Se a relação entre
+um arquivo e a entrega for ambígua, interrompa e informe a ambiguidade em vez
+de incluir o arquivo por suposição.
 
----
+## Preparação da branch e do PR
 
-## Diretrizes de Execução
+1. Inspecione as alterações em `stage` e fora dele.
+2. Conclua os commits autorizados da entrega e confirme que a worktree está
+   limpa antes de iniciar o merge com `main`.
+3. Busque a branch real de integração sem trocar a worktree:
 
-### 1. Análise do Contexto
+   ```bash
+   git fetch origin main --prune
+   ```
 
-- Revise `spec.md`, `evaluation.md` e o changelog das alterações realizadas.
-- Identifique:
+4. Consulte PRs abertos e fechados relacionados à entrega:
 
-  - impactos técnicos
-  - decisões de design tomadas
-  - riscos e efeitos colaterais
+   ```bash
+   gh pr list --state all --search "<termos da Spec, Issue ou entrega>"
+   ```
 
----
+5. Verifique base, head, SHA e ancestralidade. O nome da branch não comprova
+   incorporação.
+6. Use `main`/`origin/main` como base de integração, salvo instrução explícita
+   diferente.
+7. Incorpore obrigatoriamente o `origin/main` mais recente na branch da entrega
+   conforme a seção seguinte.
+8. Calcule e revise o diff completo contra a base do PR após o merge.
+9. Se já existir um PR da mesma entrega, atualize seu head e body. Caso
+   contrário, crie um único PR para a entrega coerente.
 
-### 2. Definição do Título
+Não use operações Git destrutivas, não ignore hooks, não crie branches
+dependentes acidentalmente e não misture alterações sem relação. Entregas
+separadas exigem fronteiras semânticas reais e ordem explícita de dependência.
 
-- Deve ser:
+## Sincronização obrigatória com `main`
 
-  - curto
-  - direto
-  - em PT-BR
-  - refletir a essência da alteração
-  - preferencialmente em formato nominal
+Antes de criar ou atualizar o PR, faça merge do `origin/main` mais recente na
+branch da entrega. Não substitua essa etapa por `rebase` e não publique uma
+branch que ainda não contenha o SHA remoto de `main` observado imediatamente
+antes da publicação.
 
-- O título do PR não deve começar com verbo.
-- Prefira formulações nominais como:
+Com a worktree limpa, execute:
 
-  - `Configuração de...`
-  - `Cobertura de...`
-  - `Correção de...`
-  - `Ajuste de...`
-  - `Refatoração de...`
+```bash
+git fetch origin main --prune
+git merge --no-edit origin/main
+```
+
+Quando o merge for concluído sem conflitos, revise o novo diff e repita as
+validações afetadas pelo conteúdo incorporado.
+
+### Conflitos menores e inequívocos
+
+Resolva automaticamente somente conflitos mecânicos cujo resultado correto
+possa ser determinado sem escolher entre comportamentos concorrentes. Exemplos:
+
+- ordenação de imports ou formatação;
+- alterações independentes em documentação;
+- adições independentes que devem coexistir;
+- artifacts gerados que podem ser recriados por um comando oficial e
+  determinístico do repositório.
+
+Antes de resolver, inspecione os três lados do conflito e confirme que a
+solução preserva integralmente a intenção de `main` e da entrega. Depois:
+
+1. edite apenas os arquivos em conflito;
+2. execute `git add -- <arquivos-resolvidos>` com paths explícitos;
+3. conclua o merge sem alterar a mensagem padrão;
+4. revise o diff resultante;
+5. execute novamente os checks afetados.
+
+Não classifique um conflito como menor apenas pela quantidade de arquivos ou
+linhas envolvidas.
+
+### Conflitos complexos ou ambíguos
+
+Interrompa o fluxo e solicite orientação ao usuário quando a resolução exigir
+decidir qual comportamento deve prevalecer. Isso inclui, entre outros:
+
+- lógica de domínio ou regras de negócio concorrentes;
+- contratos de API, tipos públicos ou schemas incompatíveis;
+- migrations, seeds ou mudanças de persistência conflitantes;
+- autenticação, autorização ou segurança;
+- versões de dependências ou lockfiles cuja intenção não possa ser inferida;
+- arquivo removido de um lado e modificado do outro;
+- workflows, infraestrutura ou variáveis de ambiente com estratégias
+  divergentes;
+- testes que expressem expectativas funcionais incompatíveis.
+
+Ao solicitar orientação:
+
+1. liste os arquivos e hunks em conflito;
+2. explique a intenção observável de `main` e da branch da entrega;
+3. apresente o impacto de cada resolução possível;
+4. não escolha silenciosamente uma alternativa;
+5. não faça `git add`, commit, `push` ou publicação do PR;
+6. preserve o merge pausado, salvo quando o usuário solicitar explicitamente
+   `git merge --abort`.
+
+### Verificação antes da publicação
+
+Imediatamente antes do `push` e da criação ou atualização do PR, atualize
+novamente a referência e confirme a ancestralidade:
+
+```bash
+git fetch origin main --prune
+git merge-base --is-ancestor origin/main HEAD
+```
+
+Se a verificação falhar, incorpore novamente `origin/main`, trate conflitos
+pelas mesmas regras e repita as validações afetadas. Não publique enquanto
+`origin/main` não for ancestral do `HEAD`.
+
+## Evidências de validação
+
+Use as evidências atuais da entrega e execute somente os checks adicionais
+aprovados pelo repositório que forem necessários para validar o estado de
+publicação. Não substitua comandos exatos de `documentation/tooling.md` por
+comandos genéricos presumidos.
+
+Quando houver Spec, confirme antes da publicação:
+
+- revisão exata da Spec congelada;
+- todos os caminhos alterados dentro do escopo registrado;
+- árvore obrigatória de arquivos e widgets preservada;
+- contratos atendidos;
+- nenhuma evidência afetada está obsoleta.
+
+Se essa conformidade falhar, interrompa a publicação e encaminhe a correção por
+`implement-spec`. Não corrija a implementação diretamente dentro do fluxo de
+criação do PR.
+
+Para UI baseada em design, use o bundle de design salvo pela Spec, não o Pencil
+ao vivo. Confirme no `evaluation.md` a comparação independente de cada estado e
+viewport obrigatório, incluindo:
+
+- rota, estado e referência salva ou source node ID;
+- viewport alvo;
+- resultado da validação manual em navegador;
+- captura da implementação ou identificador do artifact;
+- comparação de estrutura, conteúdo, hierarquia, espaçamento, dimensões,
+  tokens, interações e responsividade;
+- observações de acessibilidade e DOM;
+- findings visuais resolvidos.
+
+Não crie uma seção separada de evidências visuais no body do PR. Quando houver
+alteração de UI, resuma o resultado em `## Testes manuais` e referencie o
+`evaluation.md` em `## Validações automatizadas` ou `## Limitações conhecidas`.
+
+Revise migrations, artifacts gerados e lockfiles quando afetados. Não declare
+como executado um check, fluxo manual, review ou deploy que não foi observado.
+Registre limitações de ambiente, tentativas com falha e comandos omitidos sem
+convertê-los em evidência de sucesso.
+
+## Artifacts gerados e migrations
+
+Quando a entrega alterar persistência ou conteúdo gerado:
+
+- compare migrations, snapshots e journals com `origin/main`;
+- resolva colisões de numeração preservando entradas anteriores;
+- execute uma vez o comando documentado de geração ou verificação;
+- revise SQL e metadados gerados contra a fonte da entrega;
+- confirme que seeds, rotas geradas, lockfiles e demais derivados estão
+  atuais e incluídos somente quando necessários.
+
+Nunca edite manualmente artifacts gerados para ocultar divergências. Nunca
+trate falha de geração ou ambiente indisponível como check aprovado.
+
+## Contrato do PR
+
+O body deve usar exatamente as seções abaixo e na mesma ordem.
+
+### Objetivo
+
+Use o heading:
+
+```markdown
+## Objetivo
+```
+
+Descreva o problema, o resultado esperado, o escopo e as exclusões relevantes.
+
+### PRD
+
+Use sempre o heading:
+
+```markdown
+## PRD
+```
+
+Quando houver PRD, informe uma ou mais URLs completas das milestones do
+Stardust, uma por linha:
+
+```markdown
+## PRD
+
+https://github.com/JohnPetros/stardust/milestone/40
+```
+
+Quando não houver PRD, use:
+
+```markdown
+## PRD
+
+Não aplicável — alteração exclusivamente técnica.
+```
+
+Não omita esta seção. Ela é a fonte principal usada pelo processo de release
+para selecionar quais PRDs terão E2E.
+
+### Requisitos afetados
+
+Inclua esta seção somente quando houver PRD:
+
+```markdown
+## Requisitos afetados
+
+- `REQ-01` — descrição resumida.
+- `REQ-03` — descrição resumida.
+```
+
+Use somente identificadores que existam no PRD. Para PRDs legados, preserve o
+identificador original, como `RF-*`, sem convertê-lo artificialmente.
+
+### Issues relacionadas
+
+Use o heading:
+
+```markdown
+## Issues relacionadas
+```
+
+Liste somente Issues reais. Use `resolve #123` apenas quando o merge deste PR
+deve encerrar a Issue. Quando não houver Issue, escreva `Nenhuma.`
+
+### Implementação técnica
+
+Use o heading:
+
+```markdown
+## Implementação técnica
+```
+
+Resuma os recortes coerentes de frontend, backend, domínio, persistência e
+testes, citando apenas os caminhos mais relevantes.
+
+### Alterações de regras de negócio
+
+Inclua esta seção somente quando comportamento, validação, autorização ou
+workflow de produto forem alterados. Registre comportamento anterior, novo
+comportamento, motivo e evidência.
+
+### Testes manuais
+
+Use o heading:
+
+```markdown
+## Testes manuais
+```
+
+Informe pré-requisitos, passos reproduzíveis, resultado esperado e fluxos de
+erro ou recuperação. Para mudanças de UI, inclua aqui um resumo da validação
+visual, sem criar uma seção própria de evidências visuais.
+
+### Validações automatizadas
+
+Use o heading:
+
+```markdown
+## Validações automatizadas
+```
+
+Liste comandos exatos e resultados observados, incluindo falhas, limitações e
+checks omitidos.
+
+### Limitações conhecidas
+
+Use o heading:
+
+```markdown
+## Limitações conhecidas
+```
+
+Registre lacunas não bloqueantes ou escreva `Nenhuma.`
+
+Não adicione seções genéricas como `Changelog`, `Impacto e compatibilidade`,
+`Observações` ou `Evidências visuais`. Não copie o diff inteiro. Não invente
+Issues, requisitos, resultados de testes ou aprovações humanas.
+
+## Título
+
+Use uma frase nominal curta em PT-BR, sem prefixo de Conventional Commit ou
+chave de Issue inventada. Não comece o título com verbo.
 
 Exemplos:
 
-- Configuração da listagem de produtos
-- Correção do erro de carregamento de imagem
-- Correção da navegação para tela de catálogo
-- Cobertura da página de cadastro com testes de integração
+- `Configuração da listagem de produtos`
+- `Correção da navegação para a tela de catálogo`
+- `Cobertura do cadastro com testes de integração`
 
-⚠️ Não incluir prefixos no título:
+Para correções, inclua no body a causa comprovada e a solução aplicada.
 
-```
-feat/
-fix/
-refactor/
-```
+## Publicação e retorno
 
----
+Faça `push` da branch preparada e crie ou atualize o PR com `gh`. Não solicite
+manualmente `@codex review`: o workflow do Hermes inicia automaticamente depois
+que os checks aplicáveis passam para o head SHA atual.
 
-### 3. Commits Pendentes na Branch
-
-Se a branch ainda **não** estiver com todas as alterações commitadas, antes de
-criar o PR siga o mesmo padrão do prompt `commit-code`.
-
-#### 3.1 Pré-condições
-
-Execute:
+Depois, obtenha os metadados reais:
 
 ```bash
-git diff --cached --name-only
-git status --porcelain
+gh pr view <numero> \
+  --json number,url,headRefName,baseRefName,headRefOid,commits,statusCheckRollup
 ```
 
-- Se houver arquivos previamente em stage, **aborte** e informe o problema.
-- Se não houver alterações pendentes, prossiga para a criação do PR.
-- Se houver alterações não commitadas, continue para a etapa de agrupamento.
-
-#### 3.2 Regra de agrupamento
-
-Analise **caminho e diff** de cada arquivo alterado:
-
-```bash
-git diff --stat
-git diff -- <arquivo>
-```
-
-Agrupe por **responsabilidade semântica**, não por pasta:
-
-- arquivos que implementam a mesma funcionalidade → mesmo commit
-- arquivos em camadas diferentes (ex: domain + REST) → commits separados por
-  camada
-
-Se um arquivo for ambíguo, sinalize a ambiguidade, tome a decisão e prossiga.
-
-#### 3.3 Tabela de prefixos para commit
-
-| Type                          | Prefix     | Emoji |
-| :---------------------------- | :--------- | :---- |
-| Domain layer                  | domain     | 🌐    |
-| REST API layer                | rest       | 📶    |
-| UI layer                      | ui         | 🖥️    |
-| Database layer                | db         | 💾    |
-| Work in progress              | wip        | 🚧    |
-| Artificial intelligence layer | ai         | 🤖    |
-| RPC layer                     | rpc        | 📟    |
-| Use cases                     | use case   | ✨    |
-| Interfaces                    | interface  | 📑    |
-| Typings                       | type       | 🏷️    |
-| Documentation                 | docs       | 📚    |
-| Bug fix                       | fix        | 🐛    |
-| Refactoring                   | refactor   | ♻️    |
-| Test                          | test       | 🧪    |
-| Config/Infrastructure         | config     | ⚙️    |
-| Dependencies                  | deps       | 📦    |
-| Folder structure              | ftree      | 🗃️    |
-| Provision layer               | provision  | 🧰    |
-| Response                      | response   | 📤    |
-| Design                        | design     | 🎨    |
-| Certificates/Licensing        | cert       | 📜    |
-| Validation schema             | validation | 📮    |
-| Emergency hotfix              | hotfix     | 🚑    |
-| Continuous delivery           | cd         | 🚚    |
-| Continuous integration        | ci         | 🏎️    |
-| New release                   | release    | 🔖    |
-| Docker files                  | docker     | 🐳    |
-
-#### 3.4 Padrão de mensagem e execução
-
-Formato obrigatório:
-
-```text
-emoji prefix: concise description in English
-```
-
-- mensagem obrigatoriamente em inglês
-- um commit por responsabilidade semântica
-- descrição curta, direta, no imperativo
-
-Para cada grupo identificado, execute:
-
-```bash
-git add <arquivos-do-grupo>
-git commit -m "emoji prefix: concise description in English"
-```
-
-Só avance para a criação do PR quando `git status --porcelain` estiver vazio.
-
----
-
-### 4. Estrutura da Descrição (Body)
-
-O corpo do PR deve seguir o template abaixo.
-
-**Regras de formatação:**
-
-- usar Markdown
-- não usar título principal `#`
-- usar `##` e níveis abaixo
-
----
-
-## Objetivo (obrigatório)
-
-Explique por que este PR foi criado e qual seu propósito central.
-
-## Issues relacionadas (opcional)
-
-Vincule tarefas/bugs usando **exclusivamente** a palavra-chave `resolve`:
-
-```
-resolve #123
-resolve #456
-```
-
-⚠️ Não usar `resolves`, `closes`, `fixes` ou qualquer outra variação. Apenas `resolve`.
-
----
-
-## Causa do bug (opcional — apenas fix)
-
-Descreva a causa técnica raiz.
-
----
-
-## Changelog (obrigatório)
-
-Lista técnica das mudanças:
-
-- arquivos alterados
-- comportamento modificado
-- regras adicionadas
-- refatorações feitas
-
----
-
-## Como testar (obrigatório)
-
-Passo a passo claro para o revisor validar:
-
-1. …
-2. …
-3. …
-
----
-
-## Observações (opcional)
-
-- decisões de arquitetura
-- limitações conhecidas
-- tradeoffs
-- próximos passos
-
-Inclua, quando pertinente, o link ou a referência ao `evaluation.md` e indique
-que os checks e o build serão confirmados pelo CI.
-
----
-
-### 5. Criação via gh CLI
-
-⚠️ Não usar GitHub MCP. ⚠️ Não usar APIs MCP. Usar exclusivamente **gh**.
-
-Comando padrão:
-
-```
-gh pr create \
-  --repo owner/repo \
-  --base main \
-  --head <nome-da-branch> \
-  --title "<Titulo do PR>" \
-  --body-file pr_body.md
-```
-
-Ou inline:
-
-```
-gh pr create \
-  --base main \
-  --head <branch> \
-  --title "<Titulo>" \
-  --body "<Descrição formatada>"
-```
-
----
-
-### 6. Monitoramento do CI e loop de correção
-
-Depois de criar o PR, mantenha o workflow aberto até os checks e o build do CI
-passarem para o HEAD atual.
-
-Para cada falha:
-
-1. registre imediatamente a falha no `evaluation.md`;
-2. classifique o problema e identifique o sensor ou job afetado;
-3. crie `Builder Fix CI-<n>` quando a correção estiver no escopo;
-4. aplique a correção, atualize a branch e repita os sensores afetados;
-5. repita o único Judge Implementation quando o diff ou a evidência tiver sido
-   invalidada;
-6. aguarde novamente o CI no novo HEAD.
-
-Repita esse loop até os checks e o build ficarem verdes. Não encaminhe
-para `conclude-spec` enquanto houver check falhando, finding bloqueante ou CI
-pendente. Após três falhas consecutivas pelo mesmo motivo, apresente o
-histórico e solicite decisão ao usuário.
-
-### 7. Comentário de Code Review
-
-Após criar o PR, adicione um comentário para solicitar code review do Codex:
-
-```
-gh pr comment <numero-do-pr> --body "@codex review"
-```
-
-Registre o SHA atual do PR. O review só é válido para a entrega quando houver
-uma revisão do Codex associada a esse `HEAD`.
-
----
-
-### 8. Retorno
-
-Após criação:
-
-```
-gh pr view --web
-```
-
-ou
-
-```
-gh pr view --json url
-```
-
-Retornar somente após o CI verde:
-
-- link do PR criado
-- título final
-- resumo do body gerado
+Retorne:
+
+- URL e número do PR;
+- base, head e head SHA;
+- resumo dos caminhos alterados;
+- PRD ou `Não aplicável`;
+- requisitos afetados;
+- estado atual dos checks e reviews.
+
+Não faça merge nem deploy. Comentários de review posteriores são tratados por
+`resolve-pr-pendencies`.
