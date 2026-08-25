@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@stardust/typescript-config": "*",
-    "react-email": "^6.9.1"
+    "react-email": "^6.9.2"
   },
   "exports": {
     "./templates": "./templates/index.tsx"
