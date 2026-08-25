@@ -84,7 +84,7 @@
     "react-dom": "^19.2.8",
     "react-easy-crop": "^6.2.2",
     "react-hook-form": "^7.83.0",
-    "react-resizable-panels": "^3.0.3",
+    "react-resizable-panels": "^4.12.3",
     "react-responsive": "^10.0.1",
     "react-simple-typewriter": "^5.0.1",
     "swiper": "^14.0.7",
