@@ -63,7 +63,7 @@
     "apexcharts": "^6.7.0",
     "autoprefixer": "10.5.4",
     "html-to-image": "^1.11.13",
-    "immer": "^10.1.1",
+    "immer": "^11.1.18",
     "inngest": "^4.16.0",
     "jsonwebtoken": "^9.0.2",
     "lottie-react": "^2.4.1",
