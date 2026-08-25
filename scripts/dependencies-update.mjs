@@ -7,6 +7,7 @@ const REPORT_PATH =
   process.env.DEPENDENCIES_UPDATE_REPORT ?? 'dependencies-update-report.json'
 const MARKDOWN_PATH =
   process.env.DEPENDENCIES_UPDATE_MARKDOWN ?? 'dependencies-update-pr.md'
+const BASE_REF = process.env.DEPENDENCIES_UPDATE_BASE_REF
 const isDryRun = process.env.DEPENDENCIES_UPDATE_DRY_RUN === '1'
 
 const dependencySections = [
@@ -18,6 +19,20 @@ const dependencySections = [
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, 'utf8'))
+}
+
+function readJsonAtRef(ref, path) {
+  try {
+    return JSON.parse(
+      execFileSync('git', ['show', `${ref}:${path}`], {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'ignore'],
+      }),
+    )
+  } catch {
+    return null
+  }
 }
 
 function listWorkspaceManifests() {
@@ -91,6 +106,34 @@ function findEligibleUpdates(manifestPaths, before) {
           package: name,
           from: current.version,
           to: target,
+        })
+      }
+    }
+  }
+
+  return updates
+}
+
+function findCommittedUpdates(baseRef, manifestPaths, current) {
+  const updates = []
+
+  for (const manifestPath of manifestPaths) {
+    const baseManifest = readJsonAtRef(baseRef, manifestPath)
+    if (!baseManifest) continue
+
+    const baseRanges = dependencyRanges(baseManifest)
+    const currentRanges = dependencyRanges(current.get(manifestPath))
+
+    for (const [key, currentDependency] of currentRanges) {
+      const baseDependency = baseRanges.get(key)
+      if (baseDependency && baseDependency.version !== currentDependency.version) {
+        updates.push({
+          workspace: relative(process.cwd(), manifestPath),
+          section: currentDependency.section,
+          package: currentDependency.name,
+          from: baseDependency.version,
+          to: currentDependency.version,
+          final: currentDependency.version,
         })
       }
     }
@@ -201,15 +244,22 @@ if (isDryRun) {
 }
 
 if (eligibleUpdates.length === 0) {
+  const committedUpdates = BASE_REF
+    ? findCommittedUpdates(BASE_REF, manifestPaths, before)
+    : []
   const report = {
     ncuVersion: NCU_VERSION,
-    eligible: [],
-    applied: [],
+    eligible: committedUpdates,
+    applied: committedUpdates,
     rejected: [],
   }
   writeFileSync(REPORT_PATH, `${JSON.stringify(report, null, 2)}\n`)
   writeFileSync(MARKDOWN_PATH, renderMarkdown(report))
-  process.stdout.write('No eligible patch or minor updates were found.\n')
+  process.stdout.write(
+    committedUpdates.length > 0
+      ? `Recovered ${committedUpdates.length} committed update(s) from ${BASE_REF}.\n`
+      : 'No eligible patch or minor updates were found.\n',
+  )
   process.exit(0)
 }
 
