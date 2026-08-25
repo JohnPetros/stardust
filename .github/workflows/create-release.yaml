@@ -1,0 +1,272 @@
+name: Create release
+
+on:
+  pull_request:
+    branches:
+      - production
+    types:
+      - closed
+
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: create-release-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Create tag and GitHub Release
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'main' &&
+      github.event.pull_request.base.ref == 'production'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout merged production commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate release metadata and Git trees
+        id: metadata
+        shell: bash
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! "$PR_TITLE" =~ ^Release\ v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid release pull request title: $PR_TITLE"
+            exit 1
+          fi
+          version="${PR_TITLE#Release }"
+
+          git cat-file -e "$HEAD_SHA^{commit}"
+          git cat-file -e "$MERGE_SHA^{commit}"
+          head_tree="$(git show --no-patch --format='%T' "$HEAD_SHA")"
+          merge_tree="$(git show --no-patch --format='%T' "$MERGE_SHA")"
+
+          if [ "$head_tree" != "$merge_tree" ]; then
+            echo "The merged production tree differs from the staging-validated head tree."
+            echo "Head tree:  $head_tree"
+            echo "Merge tree: $merge_tree"
+            exit 1
+          fi
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "head-tree=$head_tree" >> "$GITHUB_OUTPUT"
+          echo "merge-tree=$merge_tree" >> "$GITHUB_OUTPUT"
+          echo "Validated release $version for PR #$PR_NUMBER."
+
+      - name: Verify Hermes release E2E workflow
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          runs="$(
+            gh api \
+              "repos/$REPOSITORY/actions/runs?head_sha=$HEAD_SHA&event=pull_request&per_page=100"
+          )"
+          e2e_run="$(
+            jq --compact-output \
+              --argjson pr_number "$PR_NUMBER" \
+              '[
+                .workflow_runs[] |
+                select(.name == "Hermes release E2E testing") |
+                select(any(.pull_requests[]?; .number == $pr_number))
+              ] | sort_by([.created_at, .run_attempt]) | last // empty' \
+              <<< "$runs"
+          )"
+
+          if [ -z "$e2e_run" ]; then
+            echo "No Hermes release E2E workflow run was found for PR #$PR_NUMBER at $HEAD_SHA."
+            exit 1
+          fi
+
+          status="$(jq --raw-output '.status' <<< "$e2e_run")"
+          conclusion="$(jq --raw-output '.conclusion // empty' <<< "$e2e_run")"
+          if [ "$status" != 'completed' ] || [ "$conclusion" != 'success' ]; then
+            echo "Hermes release E2E is not successful: status=$status conclusion=$conclusion"
+            jq '{html_url, status, conclusion, run_attempt}' <<< "$e2e_run"
+            exit 1
+          fi
+
+          echo "Hermes release E2E passed: $(jq --raw-output '.html_url' <<< "$e2e_run")"
+
+      - name: Create or validate annotated tag
+        id: tag
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          VERSION: ${{ steps.metadata.outputs.version }}
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+
+          tag_ref=''
+          if tag_ref="$(gh api "repos/$REPOSITORY/git/ref/tags/$VERSION" 2>/dev/null)"; then
+            object_type="$(jq --exit-status --raw-output '.object.type' <<< "$tag_ref")"
+            object_sha="$(jq --exit-status --raw-output '.object.sha' <<< "$tag_ref")"
+
+            if [ "$object_type" != 'tag' ]; then
+              echo "Existing tag $VERSION is not annotated."
+              exit 1
+            fi
+
+            target_sha="$(
+              gh api "repos/$REPOSITORY/git/tags/$object_sha" \
+                --jq '.object.sha'
+            )"
+            if [ "$target_sha" != "$MERGE_SHA" ]; then
+              echo "Existing tag $VERSION points to $target_sha instead of $MERGE_SHA."
+              exit 1
+            fi
+
+            echo "Validated existing annotated tag $VERSION."
+          else
+            tag_object_sha="$(
+              gh api \
+                --method POST \
+                "repos/$REPOSITORY/git/tags" \
+                -f tag="$VERSION" \
+                -f message="Release $VERSION from pull request #$PR_NUMBER" \
+                -f object="$MERGE_SHA" \
+                -f type='commit' \
+                --jq '.sha'
+            )"
+
+            gh api \
+              --method POST \
+              "repos/$REPOSITORY/git/refs" \
+              -f ref="refs/tags/$VERSION" \
+              -f sha="$tag_object_sha" > /dev/null
+            echo "Created annotated tag $VERSION."
+          fi
+
+          echo "url=https://github.com/$REPOSITORY/tree/$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Create or validate GitHub Release
+        id: github-release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          VERSION: ${{ steps.metadata.outputs.version }}
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          jq --raw-output '.pull_request.body // ""' "$GITHUB_EVENT_PATH" > release-notes.md
+          {
+            printf '\n\n---\n\n'
+            printf -- '- Release PR: #%s\n' "$PR_NUMBER"
+            printf -- '- Head SHA validado em staging: `%s`\n' "$HEAD_SHA"
+            printf -- '- Commit incorporado em production: `%s`\n' "$MERGE_SHA"
+          } >> release-notes.md
+
+          release=''
+          if release="$(gh api "repos/$REPOSITORY/releases/tags/$VERSION" 2>/dev/null)"; then
+            existing_tag="$(jq --exit-status --raw-output '.tag_name' <<< "$release")"
+            if [ "$existing_tag" != "$VERSION" ]; then
+              echo "Existing GitHub Release uses unexpected tag $existing_tag."
+              exit 1
+            fi
+            echo "Validated existing GitHub Release $VERSION."
+          else
+            jq --null-input \
+              --arg tag_name "$VERSION" \
+              --arg target "$MERGE_SHA" \
+              --arg name "Release $VERSION" \
+              --rawfile body release-notes.md \
+              '{
+                tag_name: $tag_name,
+                target_commitish: $target,
+                name: $name,
+                body: $body,
+                draft: false,
+                prerelease: false
+              }' > release-payload.json
+
+            release="$(
+              gh api \
+                --method POST \
+                "repos/$REPOSITORY/releases" \
+                --input release-payload.json
+            )"
+            echo "Created GitHub Release $VERSION."
+          fi
+
+          release_url="$(jq --exit-status --raw-output '.html_url' <<< "$release")"
+          echo "url=$release_url" >> "$GITHUB_OUTPUT"
+
+      - name: Publish release links on the pull request
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          VERSION: ${{ steps.metadata.outputs.version }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+          TAG_URL: ${{ steps.tag.outputs.url }}
+          RELEASE_URL: ${{ steps.github-release.outputs.url }}
+        run: |
+          set -euo pipefail
+
+          marker='<!-- stardust-create-release -->'
+          actions_url="https://github.com/$REPOSITORY/actions"
+          cat > release-comment.md <<EOF
+          $marker
+          ## Release $VERSION criada
+
+          - Head SHA validado em staging: \`$HEAD_SHA\`
+          - Commit em \`production\`: \`$MERGE_SHA\`
+          - Tag: [$VERSION]($TAG_URL)
+          - GitHub Release: [Release $VERSION]($RELEASE_URL)
+          - Deploys de produção: [acompanhar workflows]($actions_url)
+
+          A publicação da GitHub Release aciona o workflow Web de produção configurado para o evento \`release.published\`.
+          EOF
+
+          existing_comment_id="$(
+            gh api \
+              --paginate \
+              "repos/$REPOSITORY/issues/$PR_NUMBER/comments?per_page=100" |
+              jq --slurp --raw-output \
+                --arg marker "$marker" \
+                'add | map(select(.body | contains($marker))) | first.id // empty'
+          )"
+
+          if [ -n "$existing_comment_id" ]; then
+            gh api \
+              --method PATCH \
+              "repos/$REPOSITORY/issues/comments/$existing_comment_id" \
+              -F body=@release-comment.md > /dev/null
+            echo 'Updated existing release publication comment.'
+          else
+            gh api \
+              --method POST \
+              "repos/$REPOSITORY/issues/$PR_NUMBER/comments" \
+              -F body=@release-comment.md > /dev/null
+            echo 'Published release links on the pull request.'
+          fi
