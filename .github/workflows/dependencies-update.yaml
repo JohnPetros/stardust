@@ -17,6 +17,9 @@ concurrency:
 env:
   NODE_VERSION: "22"
   NPM_VERSION: "10.9.3"
+  VITE_SERVER_APP_URL: https://stardust-server.test
+  VITE_CDN_URL: https://stardust-cdn.test
+  VITE_WEB_APP_URL: https://stardust-web.test
 
 jobs:
   update:
