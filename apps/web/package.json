@@ -116,7 +116,7 @@
     "@types/react-dom": "^19.2.4",
     "@types/uuid": "^10.0.0",
     "babel-jest": "^29.7.0",
-    "babel-preset-jest": "^29.6.3",
+    "babel-preset-jest": "^30.4.0",
     "cross-env": "^10.1.0",
     "dotenv": "^16.6.1",
     "encoding": "^0.1.13",
