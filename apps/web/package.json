@@ -93,7 +93,7 @@
     "tailwind-variants": "^3.3.1",
     "tailwindcss": "3.4.17",
     "three": "^0.185.1",
-    "throttleit": "^2.1.0",
+    "throttleit": "^3.0.0",
     "tiptap-markdown": "^0.9.0",
     "typewriter-effect": "^2.22.0",
     "uuid": "^11.1.1",
