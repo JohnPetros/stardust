@@ -8,8 +8,7 @@
       "outputs": [
         ".next/**",
         "!.next/cache/**",
-        "apps/**/build/**",
-        "packages/**/build/**"
+        "build/**"
       ]
     },
     "format": {
