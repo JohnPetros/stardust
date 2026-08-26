@@ -26,6 +26,7 @@
     "packages/*"
   ],
   "scripts": {
+    "prepare": "husky",
     "prod": "turbo prod",
     "dev": "turbo dev",
     "build": "turbo build && /bin/sh ./scripts/replace-packages-imports.sh",
