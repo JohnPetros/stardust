@@ -1,6 +1,6 @@
 ---
 name: create-spec
-description: Criar e julgar uma Spec de feature, compacta ou completa, a partir de PRD, Issue, Report ou demanda direta.
+description: Criar ou revisar uma Spec implementável, compacta ou completa, a partir de PRD, Issue, Report ou demanda direta.
 ---
 
 # Criar Spec
@@ -27,13 +27,14 @@ de Issue. Em caso de conflito, registre a divergência e resolva a ambiguidade
 antes de abrir a Spec.
 
 Leia todas as fontes da demanda, `documentation/architecture.md`, Rules aplicáveis,
-`documentation/sdd.md`, `documentation/rules/sdd-rules.md` e os paths reais da
-codebase. Use Serena, Context7, Pencil, Playwright ou Supabase quando
+`documentation/sdd.md` e os paths reais da codebase. Use Serena, Context7, Pencil, Playwright ou Supabase quando
 aplicáveis.
 
-Resolva ambiguidades materiais antes da solução técnica. Registre premissas e
-questões pendentes; antes de `open`, questões pendentes devem estar resolvidas
-e premissas críticas confirmadas ou explicitamente aceitas com risco.
+Resolva ambiguidades materiais antes de escrever ou modificar `spec.md`. O gate de
+clarificação é um hard stop: não codifique uma decisão material em draft para só depois
+perguntar ao usuário. Perguntas devem trazer evidência, recomendação, alternativa e impacto.
+Escreva somente quando todas as escolhas estiverem resolvidas pela autoridade ou aceitas
+explicitamente como premissa documentada.
 
 ## Princípios de evidência e fronteiras
 
@@ -53,18 +54,23 @@ e premissas críticas confirmadas ou explicitamente aceitas com risco.
 Pesquise somente apps, pacotes e camadas alcançados pelo escopo. Antes de redigir
 a solução, consolide:
 
-| Seção | Conteúdo |
-|---|---|
-| Mapeamento | paths reais, contratos, dependências e implementações similares |
-| Fluxo de dados | estado atual, produtores, consumidores, transporte e mudança necessária |
-| Atenção | riscos, autorização, concorrência, segurança, performance e acoplamentos |
-| Lacunas | elementos esperados não encontrados e decisões sem evidência suficiente |
+| Seção          | Conteúdo                                                                 |
+| -------------- | ------------------------------------------------------------------------ |
+| Mapeamento     | paths reais, contratos, dependências e implementações similares          |
+| Fluxo de dados | estado atual, produtores, consumidores, transporte e mudança necessária  |
+| Atenção        | riscos, autorização, concorrência, segurança, performance e acoplamentos |
+| Lacunas        | elementos esperados não encontrados e decisões sem evidência suficiente  |
 
 Em fluxos multi-app, declare quem expõe, quem consome, o transporte e o formato
 do contrato. Use ferramentas de codebase para evidência local, documentação
 oficial para APIs externas, Pencil para design, Playwright para comportamento de
 browser e Supabase para schema/dados quando aplicável. Architecture e Rules do
 projeto prevalecem sobre recomendações genéricas de ferramentas externas.
+
+Quando existirem duas ou mais lanes independentes, ative Searchers read-only em paralelo com
+perguntas, paths, limites e formato de saída delimitados. O Orchestrator lê as autoridades,
+une os relatórios, resolve conflitos por inspeção direta e verifica afirmações consequenciais.
+Searcher não escreve a Spec, não decide Contract e não cria agentes.
 
 ## Referências de design e Pencil
 
@@ -96,7 +102,9 @@ genérico como aproximação, nem invente arquivo, Node ID ou detalhe visual qua
 não existir uma fonte canônica; registre a ausência explicitamente.
 
 Inspecione as referências com Pencil; não deduza detalhes visuais somente de
-screenshots ou descrições. Se a solução exigir alteração no design, inclua o
+screenshots ou descrições. Salve referências necessárias sob `design/` e crie
+`design/manifest.md` com node, estado, viewport, surface e comparação esperada, para que a
+implementação normal não dependa de uma sessão Pencil viva. Se a solução exigir alteração no design, inclua o
 arquivo `.pen` no escopo e especifique os nodes afetados. Se não existir fonte
 visual canônica, registre isso explicitamente e não invente arquivo ou Node ID.
 Uma divergência material deve ser resolvida antes de a Spec chegar a `open`.
@@ -135,17 +143,24 @@ last_updated_at: YYYY-MM-DD
 ---
 ```
 
-O corpo deve conter contexto, escopo, Contract, estado atual, solução técnica,
-plano de validação, avaliações previstas, alinhamento documental e amendments.
-Não crie um `evaluation.md` vazio nesta etapa; ele será criado após a
-implementação ou o primeiro julgamento relevante e deverá existir antes do PR.
+O corpo deve conter exatamente cinco seções de primeiro nível:
+
+1. `Context and scope`;
+2. `Implementation Contract`;
+3. `Technical Contract`;
+4. `Validation Contract`;
+5. `Documentation alignment and revision history`.
+
+Não crie `evaluation.md` nesta etapa; `implement-spec` o materializa no kickoff, antes da
+primeira edição de feature. A Spec possui comportamento esperado; o Plan possui execução; a
+Evaluation possui resultados reais.
 
 Use somente `RF-*` e `CA-*` como IDs obrigatórios:
 
 ```md
-| CA | RF | Dado | Quando | Então | Evidência esperada |
-|---|---|---|---|---|---|
-| CA-01 | RF-01 | pré-condição | ação | resultado | teste/browser/sensor |
+| CA    | RF    | Dado         | Quando | Então     | Evidência esperada   |
+| ----- | ----- | ------------ | ------ | --------- | -------------------- |
+| CA-01 | RF-01 | pré-condição | ação   | resultado | teste/browser/sensor |
 ```
 
 Segurança, performance e arquitetura entram como critérios de aceitação ou
@@ -226,13 +241,13 @@ A Spec não contém código de teste, fixtures detalhadas ou implementação de 
 mas deve declarar cenários, camada de cobertura, sensores e evidência esperada
 para cada `CA-*`.
 
-Antes de `open`, faça uma checagem de rastreabilidade: todo `RF-*` relevante
+Antes de `open`, faça uma checagem de integridade: todo `RF-*` relevante
 possui `CA-*`; cada `CA-*` possui resultado observável, método de validação,
 viewport/estado quando aplicável e path ou camada responsável; cada exigência
 visual possui evidência separada para Pencil e Playwright quando ambas forem
 necessárias; cada mudança UI declara a estrutura Entry Point/View/Hook; e todos
 os sensores aplicáveis estão nomeados. Se uma exigência só aparecer no Plan ou
-no evaluation, mova-a para o Contract antes do julgamento.
+na Evaluation, mova-a para o Contract antes da revisão.
 
 Para UI, o Contract deve conter uma matriz de referências visuais e uma matriz
 de auditoria estrutural. A primeira relaciona node, viewport, estado, rota,
@@ -241,13 +256,14 @@ segunda relaciona cada widget alterado a
 `index.tsx`, `*View.tsx`, Hook e regra aplicável. A ausência de qualquer uma
 dessas matrizes impede o estado `open` quando frontend estiver no escopo.
 
-## Judge Spec
+Após o integrity gate, ative exatamente um `spec-reviewer-agent` read-only com a revisão exata,
+fontes, Architecture, Rule Pack, pesquisa verificada, paths e Design bundle. O relatório não é
+veredito oficial: verifique cada finding diretamente, corrija a mesma Spec e retome o mesmo
+Reviewer até não restar finding bloqueante verificado. Qualquer amendment posterior invalida o
+resultado e exige nova revisão. Registre na revision history a revisão avaliada, o resultado
+`clear` e a resolução concisa dos findings verificados; não cole o relatório bruto na Spec.
 
-Acione `judge-spec-agent` como subagente read-only `Judge Spec` na task atual.
-Envie a origem, Spec, pesquisa, Architecture e Rules, sem narrativa persuasiva.
-
-- `failed`: encaminhe findings ao Orchestrator, corrija e avalie novamente;
-- `accepted`: altere a Spec para `status: open` e roteie para `implement-spec`
-  ou `create-plan` conforme tamanho e risco.
-
-Não crie nova thread para pesquisa ou julgamento.
+Somente então altere para `open` e recomende `implement-spec` direto para entrega pequena/coesa
+ou `create-plan` seguido do mesmo `implement-spec` para dependências, ownership múltiplo,
+paralelismo, migrations, integrações, segurança, concorrência, múltiplas surfaces ou recovery
+ledger.

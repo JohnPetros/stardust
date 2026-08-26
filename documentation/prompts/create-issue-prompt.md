@@ -1,286 +1,51 @@
 ---
-description: Criar uma issue do GitHub para o projeto baseado em um PRD ou contexto técnico
+name: create-issue
+description: Router compatível para encaminhar feature e bug issues aos workflows dedicados e criar chore issues técnicas com approval.
 ---
 
-# Prompt: Criar Issue
+# Criar Issue — router
 
+Classifique o pedido e encaminhe imediatamente:
+
+- feature/task de produto → `create-feat-issue`;
+- falha observada → `create-bug-issue`;
+- manutenção sem mudança de comportamento → continue como chore abaixo.
+
+## Chore
+
+Leia `AGENTS.md`, Architecture, Tooling, `documentation/rules/rules.md`, Rules afetadas e paths
+reais. Antes do draft, pesquise `documentation/**/prd.md`, `documentation/prds/*.md` e milestones
+abertas/fechadas; identifique o PRD mais próximo pelo módulo, lifecycle e comportamento
+preservado. Para chore, essa referência é contexto e não transforma manutenção em feature. Se
+nenhum PRD for relevante, registre `None — <busca executada e motivo>`.
+
+Crie uma issue técnica com título nominal, labels existentes (`refactor`, `infra` ou
+`documentation`, mais `web`/`server`/`studio`) e sem milestone de produto por inferência.
+
+```md
 ## Objetivo
 
-Ler a milestone do projeto (que funciona como PRD na prática) ou um contexto técnico e propor uma issue clara, acionável e alinhada ao contexto, arquitetura e regras da codebase. A issue é **sempre mostrada ao usuário para validação antes de ser criada**.
+<resultado técnico e risco mitigado>
 
-## Fonte de Verdade do Produto
+## Escopo técnico
 
-Neste projeto, **milestones do GitHub funcionam como PRDs na prática**.
+- <mudança incluída>
+- **Fora do escopo:** <limite>
 
-Use a seguinte ordem de precedência como fonte de verdade:
+## Critérios de verificação
 
-1. Milestone do GitHub informada pelo usuário.
-2. Confirmações explícitas do usuário durante a conversa.
-3. Comportamento observável da codebase.
-4. Contexto técnico complementar fornecido no pedido.
+- [ ] <resultado verificável>
 
-Se houver conflito entre milestone e implementação atual, a issue deve registrar
-o que precisa ser entregue/corrigido com base na milestone, sem inventar regras
-de produto fora das fontes confirmadas.
+## Contexto de produto
 
-## Entrada
+- **PRD mais relevante:** <URL/path ou None com motivo>
+- **Requisito do PRD:** <anchor/ID, documento completo ou Não aplicável>
 
-- Tipo da issue: `task`, `bug` ou `chore`.
-- Link ou número da milestone do projeto, quando houver.
-- Link da issue existente no GitHub, quando houver.
+## Referências na codebase
 
-## Regras Aplicáveis
-
-Antes de redigir requisitos técnicos, leia:
-
-- `documentation/rules/rules.md` — índice para selecionar rules das camadas impactadas pela issue.
-- `documentation/rules/code-conventions-rules.md` — referência geral para nomenclatura e organização quando a issue incluir contratos, classes, erros, eventos ou novos arquivos.
-- Rules específicas das camadas citadas em **Requisitos Técnicos** e **Referências na Codebase**.
-
-Para issues puramente de produto, não force rules de camada; registre apenas as regras de produto da milestone. Para `bug` e `chore`, use as rules para evitar escopo que viole arquitetura.
-
-### Tipos de issue disponíveis
-
-- `task` - para nova funcionalidade, melhoria ou entrega orientada por PRD.
-- `bug` - para correção de comportamento incorreto.
-- `chore` - para refactor, infraestrutura, configuração, cobertura de testes ou manutenção técnica sem regra de negócio nova.
-
-### Regras da entrada
-
-- Quando o input indicar `tipo = task`, a issue deve ser orientada pela milestone publicada no GitHub.
-- Quando o input indicar `tipo = bug`, a issue pode não ter PRD associado.
-- Quando o input indicar `tipo = chore`, a issue não deve ser orientada por PRD nem por regra de negócio; use como base o contexto técnico e a codebase.
-- Para issues do tipo `bug`, a seção `Requisitos de Produto` pode ser omitida completamente quando não houver milestone relevante.
-- Para issues do tipo `chore`, a seção `Requisitos de Produto` deve ser omitida.
-- Se nenhuma milestone for informada para uma issue do tipo `task`, interrompa o fluxo e solicite a milestone ao usuário antes de redigir ou publicar.
-
-## Instruções
-
-1. Identifique o tipo da issue informado no input: `task`, `bug` ou `chore`.
-2. Quando o tipo for `task`, obtenha a milestone informada.
-3. Quando o tipo for `task`, antes de propor qualquer issue, carregue a milestone publicada relacionada ao escopo.
-4. Quando o tipo for `task`, liste explicitamente o link da milestone carregada e use esse link como referência principal do trabalho.
-5. Quando o tipo for `task`, leia a milestone e identifique funcionalidades, restrições, regras de negócio, dependências e riscos.
-6. Quando o tipo for `bug`, use como base o contexto técnico fornecido, o link da issue original quando houver, a codebase e a documentação do projeto.
-7. Quando o tipo for `chore`, use como base o contexto técnico fornecido, a codebase e a documentação do projeto para definir o escopo de manutenção técnica.
-8. Considere o contexto da codebase desse projeto, sua arquitetura e os padrões documentados.
-9. Sugira as issues necessárias para implementar o escopo descrito.
-10. Quando a funcionalidade couber em uma única entrega coerente, proponha uma única issue.
-11. Quando o escopo for grande, com dependências ou etapas bem separadas, quebre em múltiplas issues menores.
-12. **Apresente o rascunho completo ao usuário antes de criar qualquer issue. Aguarde aprovação explícita.**
-13. Cada rascunho deve ser escrito em `documentation/issues/<slug-da-issue>.md` antes da criação da issue no GitHub. Use um arquivo por issue, com nome descritivo em kebab-case, e nunca sobrescreva o rascunho de outra issue.
-14. Após aprovação, crie as issues usando `gh` conforme as regras abaixo.
-
-## Critérios para quebrar issues
-
-- Separar backend, mobile, web ou infraestrutura quando houver dependências independentes.
-- Separar integrações externas, migrações, contratos de API e ajustes de UX quando fizer sentido.
-- Evitar issues grandes demais ou vagas.
-- Garantir que cada issue tenha escopo verificável.
-
-## Formato de saída (rascunho para validação)
-
-Para cada issue, apresente um rascunho com o título separado do corpo. O corpo da issue deve seguir exatamente esta estrutura:
-
-Título: <!-- Título curto e objetivo. NUNCA usar prefixos como feat:, feat(...):, fix:, chore:, etc. O título não deve começar com verbo; prefira formulações nominais como "Configuração de...", "Cobertura de...", "Correção de...". -->
-
-## Objetivo
-
-<!-- Descreva o que será implementado, o resultado esperado e o contexto funcional. -->
-
-## Requisitos de Produto
-
-PRD: <!-- URL completa da milestone do GitHub usada como referência de produto -->
-
-- Requisito funcional 1
-- Requisito funcional 2
-- Requisito funcional 3
-
-<!-- Esta seção é obrigatória apenas para issues do tipo `task`. Para issues `bug`, omita completamente esta seção quando não houver milestone associada. Para issues `chore`, omita sempre. -->
-
-## Requisitos Técnicos
-
-Camadas impactadas: <!-- repetir apenas as camadas reais -->
-
-Fluxo - <!-- nome do endpoint, caso de uso ou fluxo -->:
-
-1. <!-- Descrever o fluxo técnico passo a passo -->
-2. <!-- Proximo passo -->
-
-Fluxo - <!-- próximo endpoint, caso de uso ou fluxo -->:
-
-1. <!-- Descrever o fluxo técnico passo a passo -->
-2. <!-- Proximo passo -->
-
-Contratos esperados:
-
-- `UseCase.execute(...) -> ReturnType` - <!-- responsabilidade -->
-- `Repository.method(...) -> ReturnType` - <!-- responsabilidade -->
-
-## Referências na Codebase
-
-- `path/to/file` - <!-- motivo da referência -->
-- `path/to/other_file` - <!-- motivo da referência -->
-
-- Nunca incluir no corpo publicado da issue cabeçalhos/meta como `### Título`, `**Labels:**` ou `**Milestone:**`; esses dados devem ser usados apenas nos argumentos do comando `gh issue create`.
-- Nunca incluir blocos ```text no corpo final da issue; os fluxos devem ser descritos como listas numeradas Markdown normais.
-
-## Criação via `gh` (somente após aprovação do usuário)
-
-**Nunca criar a issue sem aprovação explícita do usuário.**
-
-### Regras obrigatórias de publicação
-
-- O corpo publicado da issue no GitHub deve conter obrigatoriamente as seções `## Objetivo` e `## Referências na Codebase`.
-- A seção `## Requisitos de Produto` deve estar no corpo final para issues do tipo `task` e pode aparecer em `bug` apenas quando houver milestone relevante. Para `chore`, omita sempre.
-- A seção `## Requisitos Técnicos` deve estar no corpo final para issues do tipo `task` e `chore`. Para `bug`, inclua quando ajudar a orientar a correção.
-- Para issues do tipo `bug` sem milestone relevante, a seção `## Requisitos de Produto` pode ser omitida.
-- Para issues do tipo `chore`, nunca associar milestone como referência principal do trabalho.
-- Cada issue deve estar vinculada a **apenas uma milestone principal**. Não publicar issues com múltiplas milestones associadas no corpo final.
-- Toda issue do tipo `task` publicada deve ser adicionada ao project `2` e ter o campo `Status` definido como `Todo`.
-
-Após aprovação, usar os comandos abaixo conforme o tipo:
-
-### Issues do tipo `task`
-
-Issues do tipo `task` devem ser vinculadas ao project:
-**https://github.com/users/JohnPetros/projects/2**
-
-```bash
-# 1. Criar a issue e capturar a URL retornada
-ISSUE_URL=$(gh issue create \
-  --repo JohnPetros/stardust \
-  --title "<título da issue>" \
-  --body "<corpo em markdown>" \
-  --label "feature" \
-  --milestone "<nome da milestone>")
-
-# 2. Extrair o número da issue da URL
-ISSUE_NUMBER=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
-
-# 3. Obter o node ID da issue (necessário para adicionar ao project)
-ISSUE_NODE_ID=$(gh api graphql -f query='
-  query($owner:String!, $repo:String!, $number:Int!) {
-    repository(owner:$owner, name:$repo) {
-      issue(number:$number) { id }
-    }
-  }' \
-  -f owner="JohnPetros" \
-  -f repo="stardust" \
-  -F number=$ISSUE_NUMBER \
-  --jq '.data.repository.issue.id')
-
-# 4. Obter o ID do project
-PROJECT_ID=$(gh api graphql -f query='
-  query($login:String!, $number:Int!) {
-    user(login:$login) {
-      projectV2(number:$number) { id }
-    }
-  }' \
-  -f login="JohnPetros" \
-  -F number=2 \
-  --jq '.data.user.projectV2.id')
-
-# 5. Adicionar a issue ao project
-gh api graphql -f query='
-  mutation($project:ID!, $contentId:ID!) {
-    addProjectV2ItemById(input:{projectId:$project, contentId:$contentId}) {
-      item { id }
-    }
-  }' \
-  -f project="$PROJECT_ID" \
-  -f contentId="$ISSUE_NODE_ID"
-
-# 6. Definir status como Todo no project
-gh api graphql -f query='
-  mutation($project:ID!, $item:ID!, $field:ID!, $option:String!) {
-    updateProjectV2ItemFieldValue(input:{
-      projectId:$project,
-      itemId:$item,
-      fieldId:$field,
-      value:{ singleSelectOptionId:$option }
-    }) {
-      projectV2Item { id }
-    }
-  }'
+- `<path real>` — <relevância>
 ```
 
-### Issues do tipo `bug`
-
-```bash
-gh issue create \
-  --repo JohnPetros/stardust \
-  --title "<título da issue>" \
-  --body "<corpo em markdown>" \
-  --label "bug" \
-  --milestone "<nome da milestone, se aplicável>"
-```
-
-### Issues do tipo `chore`
-
-```bash
-gh issue create \
-  --repo JohnPetros/stardust \
-  --title "<título da issue>" \
-  --body "<corpo em markdown>" \
-  --label "refactor" \
-  --milestone "<nome da milestone, se aplicável>"
-```
-
-### Labels disponíveis (usar conforme contexto)
-
-Labels atualmente disponíveis no repositório `JohnPetros/stardust`:
-
-- `bug`
-- `documentation`
-- `feature`
-- `infra`
-- `refactor`
-- `server`
-- `studio`
-- `web`
-
-**Tipo de trabalho** (sempre incluir ao menos uma):
-
-| Label | Quando usar |
-|---|---|
-| `feature` | Nova funcionalidade (task) |
-| `bug` | Correção de comportamento incorreto |
-| `documentation` | Atualização de docs |
-| `refactor` | Melhoria sem mudança de comportamento |
-| `infra` | Manutenção, configuração e setup de infra |
-
-**Aplicação impactada** (incluir todas as que se aplicam):
-
-| Label | Quando usar |
-|---|---|
-| `web` | Impacta a aplicação web (`apps/web/`) |
-| `server` | Impacta a API REST (`apps/server/`) |
-| `studio` | Impacta a aplicação administrativa (`apps/studio/`) |
-
-## Regras para preenchimento
-
-- O conteúdo deve sair pronto para colar no GitHub Issues.
-- O corpo publicado da issue no GitHub deve conter `## Objetivo` e `## Referências na Codebase`.
-- A seção `## Requisitos de Produto` deve existir apenas quando fizer sentido para o tipo da issue.
-- A seção `## Requisitos Técnicos` deve existir no corpo final em issues do tipo `task` e `chore`, e em `bug` quando ajudar a orientar a correção.
-- A seção `Objetivo` não deve conter a linha `Camadas impactadas`.
-- O título da issue NUNCA deve conter prefixos de commit (ex: `feat:`, `feat(...):`, `fix:`, `chore:`, `refactor:`). O título deve ser direto e descritivo.
-- O título da issue não deve começar com verbo; use formulações nominais compatíveis com o padrão do projeto.
-- Sempre incluir as labels de aplicação (`web`, `server`, `studio`) correspondentes às camadas impactadas pela issue, além das labels de tipo de trabalho.
-- Issues do tipo `task` devem sempre ser vinculadas ao project **https://github.com/users/JohnPetros/projects/2** via GraphQL após a criação.
-- Issues do tipo `task` devem sempre ter o campo `Status` definido como `Todo` no project `2` após a criação.
-- Antes de criar qualquer issue do tipo `task`, perguntar ao usuário o nível de prioridade (`HIGH`, `MEDIUM` ou `LOW`) caso não tenha sido informado. Após criação e vínculo ao project, definir a prioridade via GraphQL.
-- Não resuma em excesso; detalhe o suficiente para orientar implementação.
-- Para issues do tipo `task`, sempre carregue e considere primeiro a milestone publicada antes de redigir.
-- Para issues do tipo `task`, sempre inclua o link real da milestone usada como referência.
-- Cada issue deve ficar vinculada a apenas uma milestone principal no corpo publicado.
-- Para issues do tipo `bug`, não invente milestone nem mantenha a seção `Requisitos de Produto` por padrão; omita essa seção quando não houver referência funcional associada.
-- Para issues do tipo `chore`, não invente milestone nem mantenha a seção `Requisitos de Produto`; o foco deve ser técnico.
-- Para issues do tipo `chore`, usar labels técnicas compatíveis com o escopo, como `refactor`, `infra` e `documentation`, evitando `feature`.
-- Em issues técnicas, inclua fluxos, contratos esperados e referências reais da codebase sempre que possível.
-- Quando houver endpoints, descreva cada fluxo separadamente.
-- Quando houver lacunas arquiteturais, explicite o que ainda não existe e precisa ser criado.
-- Ajuste as camadas impactadas conforme a issue; não mantenha exemplos genéricos.
-- Para issues do tipo `chore`, descreva explicitamente o objetivo técnico da manutenção, o risco mitigado e os critérios de verificação.
-- Vincule cada issue à milestone fornecida quando aplicável.
+Apresente título, body, labels, milestone (`None` por padrão), PRD/requisito selecionado e
+justificativa antes de publicar. Crie no GitHub somente após aprovação explícita. Este router não
+implementa, cria branch, commit ou PR.

@@ -1,138 +1,69 @@
 ---
 name: create-evaluation
-description: Criar e manter o evaluation.md obrigatório de uma entrega SDD com evidências reais, Judges, preflight, CI, findings, decisões e lições.
+description: Criar e manter o evaluation.md canônico como ledger vivo de critérios, evidências, findings, CI e lições de uma entrega SDD.
 ---
 
 # Criar Evaluation
 
-O `evaluation.md` é o registro factual da entrega. Ele é criado após a
-implementação ou o primeiro julgamento relevante e deve existir antes do PR.
-Não substitui `spec.md`, `plan.md` ou os pareceres dos Judges; consolida as
-evidências necessárias para fechar a feature.
-
-## Localização
-
-Para uma feature:
-
-```text
-documentation/features/<domínio>/<feature>/evaluation.md
-```
-
-Para uma mudança posterior:
-
-```text
-changes/<nome-da-mudanca>/evaluation.md
-```
-
-## Persistência imediata
-
-O Orchestrator atualiza este documento assim que uma evidência, decisão, warning,
-finding ou lição for descoberta. Requisitos pertencem à `spec.md`; tarefas e
-findings operacionais pertencem ao `plan.md`, quando houver Plan.
-
-## Template
+Materialize `evaluation.md` ao lado da Spec no kickoff de `implement-spec`, antes de qualquer
+edição de feature, usando a estrutura canônica abaixo. Atualize após cada mudança, sensor,
+browser, migration, artifact, finding ou correção. Evidência anterior afetada vira `stale`.
 
 ```md
 ---
-title: <título da avaliação>
+feature: "<domínio>/<feature>"
 spec: ./spec.md
-spec_revision: <revisão ou sha>
+plan: ./plan.md # omitir no direto
+spec_revision: 1
 status: in_progress
-base_commit: <sha>
-evaluated_commit: <sha>
-last_updated_at: YYYY-MM-DD
+updated_at: YYYY-MM-DD
 ---
 
-# Evaluation — <título>
+# Evaluation
 
-## Escopo avaliado
+Current result: <resultado atual>
 
-- Spec: `./spec.md`
-- Plan: `./plan.md` | não aplicável
-- Commit-base: `<sha>`
-- Commit avaliado: `<sha>`
+## Acceptance matrix
 
-## Evidências dos critérios
+| Criterion | Evidence | Status |
 
-| Critério | Estado | Evidência real |
-| --- | --- | --- |
-| CA-01 | passed | teste, browser, sensor ou diff |
+## Automated and runtime evidence
 
-## Judges
+| ID | Layer | Command or scenario | Result | Status |
 
-### Judge Spec
+## Manual evidence
 
-- Veredito: `accepted` | `failed`
-- Revisão: `<revisão>`
-- Findings: nenhum | `<IDs e estado>`
+| ID | Scenario | Criteria | Expected | Observed | Status |
 
-### Judge Plan
+## Visual evidence
 
-- Veredito: `accepted` | `failed` | não aplicável
-- Plan: `./plan.md` | não aplicável
-- Findings: nenhum | `<IDs e estado>`
+| ID | Surface and state | Viewport | Reference | Implementation | Differences | Status |
 
-### Judge Implementation
+## Rule and documentation compliance
 
-- Modo: `direct` | `final`
-- Veredito: `accepted` | `failed`
-- Commit: `<sha>`
-- Findings: nenhum | `<IDs e estado>`
+| Authority | Reference | Result | Notes |
 
-Para frontend, registre também:
+## Findings
 
-| Gate | Estado | Evidência |
-| --- | --- | --- |
-| UI Layer Audit | passed | widget, paths e linhas de Entry Point/View/Hook |
-| Pencil/Web comparison | passed | node, viewport, estado, rota, HEAD, anchors, divergência/aprovação e screenshot/diff |
+| ID | Classification | Source | Affected evidence | Status | Resolution |
 
-Quando houver referência Pencil, registre uma matriz por node. Ela deve
-identificar o `.pen`, Node ID, viewport, estado/variante, rota, dimensão e
-anchors da referência, captura Web no mesmo contexto, HEAD avaliado e qualquer
-divergência aprovada. `match` e `approved adaptation` são os únicos estados
-aceitáveis; node ausente, contradito ou adicionado sem aprovação mantém a
-avaliação bloqueada.
+## PR CI quality gate
 
-## Sensores e preflight
+| ID | Workflow | Head SHA | Result | Run |
 
-| Comando | Estado | Evidência |
-| --- | --- | --- |
-| `npm run check:code` | passed | saída resumida |
+## Lessons learned
 
-## Quality Gate e build do CI
+| Lesson | Source finding | Authority disposition |
 
-| Verificação | Estado | HEAD / evidência |
-| --- | --- | --- |
-| Quality Gate | pending | PR e workflow |
-| Build | pending | workflow |
+## History
 
-## Warnings e findings
-
-- Nenhum | `<ID> — descrição, impacto, estado e resolução>`
-
-## Decisões
-
-- `<decisão>` — motivo e impacto.
-
-## Lições aprendidas
-
-- `<lição reutilizável ou confirmação de que não houve>`.
-
-## Alinhamento documental
-
-- Spec: alinhada | `<ação pendente>`
-- Plan: alinhado | não aplicável | `<ação pendente>`
-- Rules/Architecture/Overview: alinhados | não aplicáveis | `<ação pendente>`
-
-## Conclusão
-
-- Estado: `in_progress` | `accepted` | `completed` | `blocked`
-- Próxima ação: `<ação>`
+| Date/Time | Event |
 ```
 
-Quality Gate ou build com falha devem ser registrados imediatamente aqui. A
-Spec permanece `in_progress`; correções de escopo usam `Builder Fix QG-*`, com
-novo sensor e novo Judge sempre que o diff ou qualquer evidência de Contract,
-Rule, Pencil ou Playwright for invalidada. Qualquer alteração posterior ao
-Judge invalida o commit avaliado anterior, inclusive quando afetar a fidelidade
-Pencil-to-code.
+Use IDs estáveis `EV-*`, `MV-*`, `VIS-*`, `FND-*` e `CI-*`. Status de evidência:
+`pending`, `passed`, `failed`, `stale`, `not_applicable`; finding: `active`, `resolved`,
+`accepted_non_blocking`, `superseded`; Evaluation: `in_progress`, `ready`, `completed`.
+
+Relatos de Builder/Reviewer não são evidência oficial. Registre comandos realmente executados,
+expected e observed, ambiente sem segredos, artifact IDs, respostas HTTP/persistência e freshness.
+A tabela de CI só é preenchida por `conclude-spec` para o HEAD do PR.

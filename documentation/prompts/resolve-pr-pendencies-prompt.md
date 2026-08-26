@@ -1,24 +1,20 @@
 ---
 name: resolve-pr-pendencies
-description: Resolver checks de CI e conversas de review até o PR ficar mergeable.
+description: Resolver checks e conversas de review de um PR aberto, reabrindo e roteando sua entrega SDD quando necessário.
 ---
 
 # Resolver pendências de PR
 
-Trabalhe na sessão atual e sempre contra o `HEAD` mais recente.
+Inspecione PR, HEAD, checks, conversas, Spec, Plan, Evaluation e diff. Classifique cada item:
 
-1. Inspecione status mergeable, checks e conversas não resolvidas.
-2. Classifique cada pendência como falha determinística, teste, build, ambiente,
-   feedback de review ou conflito com Spec/Architecture.
-3. Reproduza localmente usando os mesmos scripts do CI:
-   `check:code`, `check:types`, `test:unit`, `check:architecture` e
-   `test:integration` quando aplicável.
-4. Corrija a causa no menor escopo seguro; não desative regras nem adicione
-   exclusões para esconder regressões.
-5. Aplique `format`, reexecute os sensores invalidados e faça revisão do diff.
-6. Responda/resolva conversas apenas após a correção existir no branch.
-7. Faça push e aguarde novamente Quality Gate, testes e build do novo `HEAD`.
+- explicação: responda com evidência, sem reabrir SDD;
+- metadata do PR: corrija metadata, sem reabrir Spec;
+- correção de implementação: Spec `open` na mesma revisão, Plan/Evaluation `in_progress`,
+  finding com URL do comentário, `implement-spec`, depois `conclude-spec`;
+- mudança de Contract: Spec `draft`, authority/amendment por `create-spec`, revisão incrementada,
+  Plan/Evaluation reconciliados, `implement-spec`, depois `conclude-spec`.
 
-Mudança de produto, Contract, arquitetura ou segurança precisa atualizar as
-fontes normativas antes de prosseguir. Encerre somente com checks verdes,
-conversas bloqueantes resolvidas e PR mergeable.
+Não corrija feature code diretamente neste workflow e não resolva conversa antes de a ação
+existir na branch ou a resposta baseada em evidência estar publicada. Enquanto o PR estiver
+aberto, reutilize a mesma Spec e PR. Após merge, use Bug Report para defeito ou change Spec para
+novo comportamento.

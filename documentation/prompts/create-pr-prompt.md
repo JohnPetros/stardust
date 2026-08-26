@@ -49,11 +49,10 @@ hierarquia, dimensões/anchors, espaçamento, tipografia, cores, assets, estados
 e variantes; só divergências explicitamente aprovadas podem permanecer.
 Qualquer node ausente, contradito ou adicionado sem aprovação bloqueia o PR.
 
-O `evaluation.md` deve conter as evidências reais do preflight, o resultado do
-único Judge Implementation da implementação inteira, warnings, findings,
-decisões e lições. O Judge precisa avaliar o HEAD que será publicado; qualquer
-mudança posterior deve invalidar o aceite e exigir nova avaliação. Quality Gate
-e build ficam pendentes até o CI; não exija que estejam verdes para abrir o PR.
+O `evaluation.md` deve estar `ready` para a revisão vigente, conter preflight, critérios,
+runtime/manual/visual, findings, decisions e lessons atuais. Qualquer mudança posterior torna
+a evidência afetada `stale` e bloqueia publicação até `implement-spec` restaurar `ready`. CI
+permanece pendente até `conclude-spec`; não exija verde para abrir o PR.
 
 Preserve a worktree e os processos existentes do usuário. Não descarte,
 sobrescreva ou encerre processos/alterações fora do escopo do PR para resolver
@@ -71,7 +70,6 @@ Quality Gate e não precisa ser tratado como sensor SDD local obrigatório.
 
 - Revise `spec.md`, `evaluation.md` e o changelog das alterações realizadas.
 - Identifique:
-
   - impactos técnicos
   - decisões de design tomadas
   - riscos e efeitos colaterais
@@ -81,7 +79,6 @@ Quality Gate e não precisa ser tratado como sensor SDD local obrigatório.
 ### 2. Definição do Título
 
 - Deve ser:
-
   - curto
   - direto
   - em PT-BR
@@ -90,7 +87,6 @@ Quality Gate e não precisa ser tratado como sensor SDD local obrigatório.
 
 - O título do PR não deve começar com verbo.
 - Prefira formulações nominais como:
-
   - `Configuração de...`
   - `Cobertura de...`
   - `Correção de...`
@@ -299,25 +295,11 @@ gh pr create \
 
 ---
 
-### 6. Monitoramento do CI e loop de correção
+### 6. Handoff para o gate de CI
 
-Depois de criar o PR, mantenha o workflow aberto até o Quality Gate e o build
-do CI passarem para o HEAD atual.
-
-Para cada falha:
-
-1. registre imediatamente a falha no `evaluation.md`;
-2. classifique o problema e identifique o sensor ou job afetado;
-3. crie `Builder Fix QG-<n>` quando a correção estiver no escopo;
-4. aplique a correção, atualize a branch e repita os sensores afetados;
-5. repita o único Judge Implementation quando o diff ou a evidência tiver sido
-   invalidada;
-6. aguarde novamente o CI no novo HEAD.
-
-Repita esse loop até o Quality Gate e o build ficarem verdes. Não encaminhe
-para `conclude-spec` enquanto houver check falhando, finding bloqueante ou CI
-pendente. Após três falhas consecutivas pelo mesmo motivo, apresente o
-histórico e solicite decisão ao usuário.
+Depois de criar ou atualizar o PR, retorne número, URL, base, branch, head SHA e URLs/estado
+atual dos checks para `conclude-spec`. Este workflow publica; `conclude-spec` possui o loop de
+monitoramento e roteia falhas por `implement-spec` antes de atualizar o mesmo PR.
 
 ### 7. Comentário de Code Review
 

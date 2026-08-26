@@ -22,7 +22,7 @@
 - Pencil para editar ou saber o contexto de frames de design estilo Figma
 - Playwright para inspecionar e validar fluxos reais no navegador
 - browser-use para exploração interativa e tarefas pontuais no navegador real
-- Supabase Dev para interagir com o projeto Supabase de desenvolvimento 
+- Supabase Dev para interagir com o projeto Supabase de desenvolvimento
 - Supabase Prod para interagir com o projeto Supabase de produção
 
 ### browser-use e Playwright
@@ -109,28 +109,30 @@ declarar a aplicação funcional.
 Exemplo mínimo:
 
 ```ts
-const studioUrl = 'http://localhost:8000'
-const page = await browser.newPage()
-const consoleErrors: string[] = []
-const failedRequests: string[] = []
+const studioUrl = "http://localhost:8000";
+const page = await browser.newPage();
+const consoleErrors: string[] = [];
+const failedRequests: string[] = [];
 
-page.on('console', (message) => {
-  if (message.type() === 'error') consoleErrors.push(message.text())
-})
-page.on('pageerror', (error) => consoleErrors.push(error.message))
-page.on('requestfailed', (request) => failedRequests.push(request.url()))
+page.on("console", (message) => {
+  if (message.type() === "error") consoleErrors.push(message.text());
+});
+page.on("pageerror", (error) => consoleErrors.push(error.message));
+page.on("requestfailed", (request) => failedRequests.push(request.url()));
 
-await page.goto(`${studioUrl}/`)
-await page.getByLabel(/email/i).fill(process.env.STUDIO_APP_E2E_EMAIL!)
-await page.getByLabel(/senha|password/i).fill(process.env.STUDIO_APP_E2E_PASSWORD!)
-await page.getByRole('button', { name: 'Login' }).click()
-await page.waitForURL('**/dashboard')
+await page.goto(`${studioUrl}/`);
+await page.getByLabel(/email/i).fill(process.env.STUDIO_APP_E2E_EMAIL!);
+await page
+  .getByLabel(/senha|password/i)
+  .fill(process.env.STUDIO_APP_E2E_PASSWORD!);
+await page.getByRole("button", { name: "Login" }).click();
+await page.waitForURL("**/dashboard");
 
-await page.goto(`${studioUrl}/profile/users`)
-await page.getByRole('heading', { name: 'Usuários' }).waitFor()
+await page.goto(`${studioUrl}/profile/users`);
+await page.getByRole("heading", { name: "Usuários" }).waitFor();
 
-expect(consoleErrors).toEqual([])
-expect(failedRequests).toEqual([])
+expect(consoleErrors).toEqual([]);
+expect(failedRequests).toEqual([]);
 ```
 
 ### Diagnóstico de falhas
@@ -209,33 +211,33 @@ faça isso simulando a sessão, sem depender de uma conta real:
 Exemplo de rota autenticada:
 
 ```ts
-await context.clearCookies()
+await context.clearCookies();
 await context.addCookies([
   {
-    name: '@stardust:access-token',
-    value: 'web-e2e-test-token',
-    domain: '127.0.0.1',
-    path: '/',
+    name: "@stardust:access-token",
+    value: "web-e2e-test-token",
+    domain: "127.0.0.1",
+    path: "/",
   },
-])
+]);
 
 await ServerMock(page).register([
   {
-    method: 'GET',
-    path: '/auth/account',
+    method: "GET",
+    path: "/auth/account",
     status: 200,
     body: { isAuthenticated: true },
   },
   {
-    method: 'GET',
-    path: '/space/planets',
+    method: "GET",
+    path: "/space/planets",
     status: 200,
     body: [],
   },
-])
+]);
 
-await page.goto('/space')
-await expect(page).toHaveURL(/\/space$/)
+await page.goto("/space");
+await expect(page).toHaveURL(/\/space$/);
 ```
 
 O teste `apps/web/src/app/tests/challenging/assistant-history.test.ts` contém
@@ -339,7 +341,7 @@ Após fazer qualquer alteração no código, execute os comandos:
 - `npm run test:unit`
 
 Em workflows SDD, execute também os sensores aplicáveis definidos em
-`documentation/rules/sdd-rules.md`.
+`documentation/sdd.md`.
 
 # Instruções para revisão de pull request
 
