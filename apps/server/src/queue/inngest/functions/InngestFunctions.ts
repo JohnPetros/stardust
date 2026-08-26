@@ -34,7 +34,13 @@ export class InngestFunctions {
     },
     handler: (context: InngestHandlerContext) => Promise<unknown>,
   ) {
-    return this.inngest.createFunction(options as never, handler as never)
+    return this.inngest.createFunction(
+      {
+        ...options,
+        name: options.name ?? options.id,
+      } as never,
+      handler as never,
+    )
   }
 
   private getTelemetryProvider(): SentryTelemetryProvider {

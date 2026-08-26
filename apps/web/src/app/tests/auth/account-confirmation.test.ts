@@ -1,4 +1,4 @@
-import { expect, test, type BrowserContext, type Page } from '@playwright/test'
+import { expect, test, type BrowserContext, type Page } from '../playwright'
 
 import type { AccountDto } from '../../../../../../packages/core/src/auth/domain/entities/dtos/AccountDto'
 import type { UserDto } from '../../../../../../packages/core/src/profile/domain/entities/dtos/UserDto'
@@ -205,21 +205,6 @@ async function gotoAccountConfirmationPage(
   await page.goto('/auth/account-confirmation')
 }
 
-async function registerRetryRoute(
-  page: Page,
-  status: number,
-  body?: unknown,
-): Promise<void> {
-  await ServerMock(page).register([
-    {
-      method: 'POST',
-      path: '/auth/sign-up/retry',
-      status,
-      body: body ?? null,
-    },
-  ])
-}
-
 async function emitUserCreated(page: Page, payload: UserCreatedPayload): Promise<void> {
   await page.waitForFunction(() => {
     return (window.__STARDUST_PROFILE_CHANNEL_MOCK__?.getListenersCount() ?? 0) > 0
@@ -231,13 +216,6 @@ async function emitUserCreated(page: Page, payload: UserCreatedPayload): Promise
 }
 
 test.describe('/auth/account-confirmation', () => {
-  test.afterEach(async ({ page }) => {
-    await page.evaluate(() => {
-      window.__STARDUST_PROFILE_CHANNEL_MOCK__?.reset()
-    })
-    await ServerMock(page).reset()
-  })
-
   test('confirms email, stores session cookies and redirects to account confirmation', async ({
     page,
     context,
