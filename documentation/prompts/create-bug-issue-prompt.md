@@ -31,6 +31,12 @@ Antes do draft, identifique o PRD mais relevante:
 6. quando nenhum PRD governar o comportamento, registre explicitamente
    `None — <evidência da busca e motivo>` em vez de omitir ou inventar associação.
 
+Se a busca não encontrar um PRD candidato, antes de preparar o draft pergunte ao usuário:
+“Qual PRD você considera mais relevante para este comportamento? Se nenhum se aplicar, confirme
+que não há PRD.” Use a indicação do usuário somente após conferir que ela corresponde ao módulo,
+ator, outcome e fluxo relatados. Se o usuário confirmar que não há PRD, registre
+`None — usuário confirmou que não há PRD aplicável após a busca`.
+
 Se milestone e PRD versionado divergirem, resolva a autoridade antes do draft. A busca e a
 seleção são obrigatórias mesmo quando o usuário não fornece PRD ou milestone.
 
@@ -47,6 +53,10 @@ seleção são obrigatórias mesmo quando o usuário não fornece PRD ou milesto
 
 Use título nominal, sem prefixo de commit, descrevendo o sintoma, por exemplo
 `Correção do redirecionamento após login`.
+
+As seções `Contexto` e `Evidência` são opcionais: inclua cada uma somente quando houver dados
+úteis fornecidos pelo usuário ou encontrados na investigação permitida. Nunca invente valores
+para preencher uma seção opcional.
 
 ```md
 ## Problema
@@ -73,7 +83,10 @@ Use título nominal, sem prefixo de commit, descrevendo o sintoma, por exemplo
 - **PRD mais relevante:** <URL/path ou None com motivo>
 - **Requisito do PRD:** <anchor/ID ou documento completo>
 - **Milestone:** <URL ou None>
-- **Evidência:** <links ou Não fornecida>
+
+## Evidência
+
+- <links, screenshots, gravações ou outra evidência fornecida>
 ```
 
 Quando não houver reprodução, escreva `Ainda não reproduzível`; mantenha desconhecidos

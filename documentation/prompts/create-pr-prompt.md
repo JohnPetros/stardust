@@ -218,14 +218,23 @@ Explique por que este PR foi criado e qual seu propósito central.
 
 ## Issues relacionadas (opcional)
 
-Vincule tarefas/bugs usando **exclusivamente** a palavra-chave `resolve`:
+Quando o PR listar issues relacionadas, cada issue deve usar obrigatoriamente a palavra-chave
+`Closes`, com uma linha por issue:
 
 ```
-resolve #123
-resolve #456
+Closes #123
+Closes #456
 ```
 
-⚠️ Não usar `resolves`, `closes`, `fixes` ou qualquer outra variação. Apenas `resolve`.
+Regras obrigatórias:
+
+- toda issue mencionada no PR deve ter uma linha correspondente `Closes #<number>`;
+- use exatamente `Closes` com C maiúsculo e o número da issue;
+- não usar `resolve`, `resolves`, `close`, `closes`, `fix` ou `fixes`;
+- se não houver issue relacionada, omita a seção.
+
+Se alguma issue estiver listada sem `Closes #<number>`, bloqueie a criação do PR até corrigir o
+body.
 
 ---
 
