@@ -42,7 +42,12 @@ export const LottieAnimationView = ({
     <Lottie
       lottieRef={lottieRef}
       animationData={data}
-      style={{ width: size, height: size }}
+      style={{
+        width: `min(${size}px, 100vw, 100vh)`,
+        height: `min(${size}px, 100vw, 100vh)`,
+        maxWidth: '100vw',
+        maxHeight: '100vh',
+      }}
       loop={hasLoop}
     />
   )

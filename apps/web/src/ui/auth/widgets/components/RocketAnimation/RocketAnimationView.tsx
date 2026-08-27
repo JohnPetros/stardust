@@ -31,7 +31,7 @@ export const RocketAnimationView = ({ animationRef, isVisible }: Props) => {
       variants={rocketVariants}
       initial='hidden'
       animate={isVisible ? 'visible' : ''}
-      className='fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -z-20'
+      className='fixed left-1/2 top-1/2 z-[60] -translate-x-1/2 -translate-y-1/2 overflow-hidden'
       aria-live='polite'
       data-testid='rocket-animation'
     >
