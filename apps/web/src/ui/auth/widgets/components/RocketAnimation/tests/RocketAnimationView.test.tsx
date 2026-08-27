@@ -28,6 +28,9 @@ describe('RocketAnimationView', () => {
 
     const rocketAnimation = screen.getByTestId('rocket-animation')
 
+    expect(rocketAnimation).toHaveClass('z-[60]')
+    expect(rocketAnimation).toHaveClass('overflow-hidden')
+
     await waitFor(() => {
       expect(rocketAnimation).toHaveStyle({
         opacity: 0,
