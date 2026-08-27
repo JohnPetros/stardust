@@ -6,8 +6,8 @@ description: Diagnosticar uma GitHub bug issue aprovada em um Bug Report factual
 # Criar Bug Report
 
 Transforme uma GitHub bug issue aprovada em um diagnóstico técnico durável. O Bug Report é
-input de correção, não Spec: não inclua `CA-*`, validação manual, fases, tasks, assinaturas,
-inventário proposto de arquivos ou implementação detalhada.
+input de correção, não Spec: não inclua `CA-*`, um roteiro de validação manual, fases, tasks,
+assinaturas, inventário proposto de arquivos ou implementação detalhada.
 
 ## Entrada
 
@@ -40,15 +40,48 @@ Use `documentation/agents/searcher-agent.md` para lanes read-only delimitadas:
 A task principal une os relatórios, resolve conflitos por inspeção direta e separa fato de
 hipótese. Searchers não editam, não escolhem delivery route e não criam agentes.
 
+## Diagnóstico com Playwright
+
+Playwright pode e deve ser usado para diagnosticar bugs de frontend, UI, rotas client-side,
+autenticação ou qualquer falha que dependa do navegador real. Ele não é reservado à validação
+final da correção.
+
+Quando o sintoma envolver navegador:
+
+- reproduza a rota e o fluxo observável com Playwright antes de concluir a causa;
+- para rotas protegidas, autentique usando as variáveis locais previstas em `AGENTS.md`, nunca
+  credenciais literais, e acesse pelo menos uma rota protegida no mesmo contexto;
+- registre `console`, `pageerror`, `requestfailed` e `response`, incluindo método, path e status
+  dos endpoints relevantes, sem registrar headers ou corpos que contenham tokens, cookies ou
+  dados pessoais;
+- use `waitForURL`, `waitForRequest`, `waitForResponse` ou `waitForFunction` para sincronizar
+  estados; não use `waitForTimeout` como única evidência;
+- inspecione o estado efetivamente observado: DOM, estilos computados, atributos, loading,
+  navegação, remounts, timing e respostas HTTP; em falhas visuais, capture screenshot quando isso
+  ajudar a distinguir composição, stacking context, asset ou hidratação;
+- se o fluxo falhar por autenticação, separe falha de credencial/API, propagação de sessão,
+  CORS, middleware, refresh e carregamento da tela. Confirme o endpoint de login e as chamadas
+  subsequentes sem expor os valores sensíveis;
+- trate a execução Playwright como evidência diagnóstica do relatório. O documento final não deve
+  ganhar uma seção de manual validation, acceptance, tasks ou implementação por causa dessa
+  investigação.
+
+Para Web App e Studio, siga os ambientes, scripts de exportação de credenciais, portas e fluxo
+autenticado descritos em `AGENTS.md`. Use o Playwright CLI tanto para a reprodução formal quanto
+para a exploração visual pontual; não use outra ferramenta de automação de navegador neste
+projeto.
+
 ## Workflow
 
 1. confira a issue real e a reprodução informada;
 2. separe falha observada de comportamento esperado;
 3. associe milestone, PRD e requisito real quando aplicáveis, sem alterar seu estado;
 4. inspecione entry point, estado, transporte, use case, persistência e integração implicados;
-5. salve ou atualize
+5. quando aplicável, reproduza e instrumente o fluxo real com Playwright conforme a seção de
+   diagnóstico no navegador;
+6. salve ou atualize
    `documentation/features/<domínio>/<feature>/reports/<slug>-bug-report.md`;
-6. recomende no resumo final:
+7. recomende no resumo final:
    - **Correção direta:** narrow, bem compreendida, baixo risco e sem Contract durável; ou
    - **Correction Spec:** ambígua, cross-layer, coordenada ou de risco material, exigindo
      `RF-*`, `CA-*`, `MV-*` ou Plan.
@@ -102,7 +135,8 @@ last_updated_at: YYYY-MM-DD
 
 - use GitHub Issues e paths relativos reais;
 - não invente execução, causa, método, contrato ou arquivo;
-- não inclua acceptance, manual validation, tasks, fases ou file plan;
+- não inclua acceptance, uma seção de manual validation, tasks, fases ou file plan; evidências
+  Playwright podem fundamentar a causa, mas devem ser sintetizadas nas seções factuais do report;
 - não edite Spec, Plan, Evaluation, PRD ou Rule;
 - não exponha credenciais, dados privados ou logs sensíveis;
 - no fim, reporte issue, path e route recomendada.
