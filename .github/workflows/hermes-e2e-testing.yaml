@@ -17,8 +17,6 @@ permissions:
   pull-requests: read
 
 concurrency:
-  # Staging is a shared mutable environment. Keep this group aligned with the
-  # staging CD workflow so no deployment can replace the tested SHA mid-run.
   group: stardust-web-staging
   cancel-in-progress: false
 
@@ -416,7 +414,7 @@ jobs:
         shell: bash
         env:
           HERMES_API_URL: ${{ secrets.HERMES_API_URL }}
-          HERMES_API_KEY: ${{ secrets.HERMES_API_KEY }}
+          HERMES_E2E_TESTER_API_KEY: ${{ secrets.HERMES_E2E_TESTER_API_KEY }}
           REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
@@ -431,8 +429,8 @@ jobs:
             echo 'HERMES_API_URL is not configured.'
             exit 1
           }
-          test -n "$HERMES_API_KEY" || {
-            echo 'HERMES_API_KEY is not configured.'
+          test -n "$HERMES_E2E_TESTER_API_KEY" || {
+            echo 'HERMES_E2E_TESTER_API_KEY is not configured.'
             exit 1
           }
 
@@ -494,7 +492,7 @@ jobs:
               --connect-timeout 10 \
               --max-time 60 \
               --request POST \
-              --header "Authorization: Bearer $HERMES_API_KEY" \
+              --header "Authorization: Bearer $HERMES_E2E_TESTER_API_KEY" \
               --header 'Content-Type: application/json' \
               --header "Idempotency-Key: $idempotency_key" \
               --data-binary @hermes-payload.json \
@@ -510,7 +508,7 @@ jobs:
             if [ -n "${run_id:-}" ] && [ "$run_finished" != 'true' ]; then
               echo "Requesting cancellation of unfinished Hermes run $run_id."
               curl --request POST \
-                --header "Authorization: Bearer $HERMES_API_KEY" \
+                --header "Authorization: Bearer $HERMES_E2E_TESTER_API_KEY" \
                 --fail \
                 --silent \
                 --show-error \
@@ -533,7 +531,7 @@ jobs:
                 --retry-all-errors \
                 --connect-timeout 10 \
                 --max-time 30 \
-                --header "Authorization: Bearer $HERMES_API_KEY" \
+                --header "Authorization: Bearer $HERMES_E2E_TESTER_API_KEY" \
                 "$hermes_url/$run_id"
             )"
             status="$(jq --exit-status --raw-output '.status' <<< "$run")"

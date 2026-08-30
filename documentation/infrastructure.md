@@ -3,6 +3,7 @@
 O Stardust é hospedado em uma VPS Hostinger (KVM 2 — 2 vCPU, 8 GB RAM, 100 GB NVMe) com **Coolify v4** como plataforma de deploy. O Coolify gerencia o build, deploy e certificados SSL de todas as aplicações via Docker.
 
 **Decisões-chave:**
+
 - Variáveis de ambiente centralizadas no Coolify (sem Infisical)
 - Deploy via Dockerfiles multi-stage com `turbo prune`
 - CI no GitHub Actions, CD via webhook do Coolify
@@ -13,12 +14,12 @@ O Stardust é hospedado em uma VPS Hostinger (KVM 2 — 2 vCPU, 8 GB RAM, 100 GB
 
 ## Serviços
 
-| Serviço | App | Tipo | Porta | Domínio |
-|---|---|---|---|---|
-| `stardust-web` | `apps/web` | Next.js SSR (standalone) | 3000 | `stardust-app.com.br`, `www.stardust-app.com.br` |
-| `stardust-web-staging` | `apps/web` | Next.js SSR (standalone) | 3000 | `staging.stardust-app.com.br` |
-| `stardust-server` | `apps/server` | Hono API (Node.js) | 3333 | `api.stardust-app.com.br` |
-| `stardust-studio` | `apps/studio` | React Router v7 SPA (Nginx) | 80 | `studio.stardust-app.com.br` |
+| Serviço                | App           | Tipo                        | Porta | Domínio                                          |
+| ---------------------- | ------------- | --------------------------- | ----- | ------------------------------------------------ |
+| `stardust-web`         | `apps/web`    | Next.js SSR (standalone)    | 3000  | `stardust-app.com.br`, `www.stardust-app.com.br` |
+| `stardust-web-staging` | `apps/web`    | Next.js SSR (standalone)    | 3000  | `staging.stardust-app.com.br`                    |
+| `stardust-server`      | `apps/server` | Hono API (Node.js)          | 3333  | `api.stardust-app.com.br`                        |
+| `stardust-studio`      | `apps/studio` | React Router v7 SPA (Nginx) | 80    | `studio.stardust-app.com.br`                     |
 
 ---
 
@@ -46,11 +47,11 @@ O Stardust é hospedado em uma VPS Hostinger (KVM 2 — 2 vCPU, 8 GB RAM, 100 GB
 
 Cada serviço usa **Build Pack: Dockerfile** com os seguintes Dockerfiles na raiz do repositório:
 
-| Serviço | Dockerfile | Base Directory |
-|---|---|---|
-| web / web-staging | `Dockerfile.web` | `/` |
-| server | `Dockerfile.server` | `/` |
-| studio | `Dockerfile.studio` | `/` |
+| Serviço           | Dockerfile          | Base Directory |
+| ----------------- | ------------------- | -------------- |
+| web / web-staging | `Dockerfile.web`    | `/`            |
+| server            | `Dockerfile.server` | `/`            |
+| studio            | `Dockerfile.studio` | `/`            |
 
 ### Variáveis de ambiente
 
@@ -68,12 +69,12 @@ As variáveis são configuradas diretamente no Coolify, separadas por escopo:
 
 ### Auto-deploy
 
-| Serviço | Auto-deploy | Trigger real |
-|---|---|---|
-| web prod | Desabilitado | GitHub Actions workflow em `release: published` aciona webhook do Coolify |
-| web staging | Habilitado | Push em `main` (paths: `apps/web/**`, `packages/core/**`, `packages/validation/**`, `packages/lsp/**`) |
-| server | Depende da preferência | Push em `main` (paths: `apps/server/**`, `packages/core/**`, `packages/validation/**`) via workflow |
-| studio | Habilitado | Push em `main` (paths: `apps/studio/**`) |
+| Serviço     | Auto-deploy            | Trigger real                                                                                           |
+| ----------- | ---------------------- | ------------------------------------------------------------------------------------------------------ |
+| web prod    | Desabilitado           | GitHub Actions workflow em `release: published` aciona webhook do Coolify                              |
+| web staging | Habilitado             | Push em `main` (paths: `apps/web/**`, `packages/core/**`, `packages/validation/**`, `packages/lsp/**`) |
+| server      | Depende da preferência | Push em `main` (paths: `apps/server/**`, `packages/core/**`, `packages/validation/**`) via workflow    |
+| studio      | Habilitado             | Push em `main` (paths: `apps/studio/**`)                                                               |
 
 ---
 
@@ -81,19 +82,19 @@ As variáveis são configuradas diretamente no Coolify, separadas por escopo:
 
 **Nameservers:** `gabe.ns.cloudflare.com`, `sneh.ns.cloudflare.com`
 
-| Tipo | Nome | Conteúdo | Proxy |
-|---|---|---|---|
-| A | `@` | `2.25.181.108` | DNS only |
-| A | `www` | `2.25.181.108` | DNS only |
-| A | `api` | `2.25.181.108` | DNS only |
-| A | `staging` | `2.25.181.108` | DNS only |
-| A | `studio` | `2.25.181.108` | DNS only |
-| A | `coolify` | `2.25.181.108` | DNS only |
-| MX | `send` | `feedback-smtp.us-east-1.amazonses.com` | DNS only |
-| TXT | `_dmarc` | `v=DMARC1; p=none;` | DNS only |
-| TXT | `resend._domainkey` | (chave DKIM do Resend) | DNS only |
-| TXT | `send` | `v=spf1 include:amazonses.com ~all` | DNS only |
-| TXT | `@` | Google Site Verification (×2) | DNS only |
+| Tipo | Nome                | Conteúdo                                | Proxy    |
+| ---- | ------------------- | --------------------------------------- | -------- |
+| A    | `@`                 | `2.25.181.108`                          | DNS only |
+| A    | `www`               | `2.25.181.108`                          | DNS only |
+| A    | `api`               | `2.25.181.108`                          | DNS only |
+| A    | `staging`           | `2.25.181.108`                          | DNS only |
+| A    | `studio`            | `2.25.181.108`                          | DNS only |
+| A    | `coolify`           | `2.25.181.108`                          | DNS only |
+| MX   | `send`              | `feedback-smtp.us-east-1.amazonses.com` | DNS only |
+| TXT  | `_dmarc`            | `v=DMARC1; p=none;`                     | DNS only |
+| TXT  | `resend._domainkey` | (chave DKIM do Resend)                  | DNS only |
+| TXT  | `send`              | `v=spf1 include:amazonses.com ~all`     | DNS only |
+| TXT  | `@`                 | Google Site Verification (×2)           | DNS only |
 
 > O proxy do Cloudflare (nuvem laranja) está **desligado** para permitir que o Let's Encrypt valide os domínios via HTTP challenge. Pode ser habilitado depois com SSL mode **Full (Strict)** no Cloudflare.
 
@@ -103,16 +104,16 @@ As variáveis são configuradas diretamente no Coolify, separadas por escopo:
 
 ### Workflows
 
-| Workflow | Trigger | O que faz |
-|---|---|---|
-| `server-app-ci.yaml` | PR → `main` (paths server) | Codecheck, typecheck, testes, build |
-| `server-app-cd-coolify.yml` | Push → `main` (paths server) | Migra banco (Supabase CLI) → aciona webhook Coolify |
-| `web-app-ci.yaml` | PR → `main` (paths web) | Codecheck, typecheck, testes, build |
-| `web-app-cd-coolify.yaml` | Release published | Aciona webhook Coolify → notifica Discord |
-| `web-app-staging-cd-coolify.yaml` | Push → `main` (paths web) | Aciona webhook Coolify → notifica Discord |
-| `hermes-code-review.yaml` | PR → `main` | Aguarda os CIs aplicáveis, executa revisões técnicas paralelas e publica os resultados no PR |
-| `hermes-e2e-testing.yaml` | PR de `main` → `production` | Implanta o SHA em staging e valida os PRDs/milestones afetados com Playwright MCP |
-| `create-release.yaml` | Merge do PR de release | Confirma o E2E do Hermes, cria a tag e publica a GitHub Release |
+| Workflow                          | Trigger                      | O que faz                                                                                    |
+| --------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------- |
+| `server-app-ci.yaml`              | PR → `main` (paths server)   | Codecheck, typecheck, testes, build                                                          |
+| `server-app-cd-coolify.yml`       | Push → `main` (paths server) | Migra banco (Supabase CLI) → aciona webhook Coolify                                          |
+| `web-app-ci.yaml`                 | PR → `main` (paths web)      | Codecheck, typecheck, testes, build                                                          |
+| `web-app-cd-coolify.yaml`         | Release published            | Aciona webhook Coolify → notifica Discord                                                    |
+| `web-app-staging-cd-coolify.yaml` | Push → `main` (paths web)    | Aciona webhook Coolify → notifica Discord                                                    |
+| `hermes-code-review.yaml`         | PR → `main`                  | Aguarda os CIs aplicáveis, executa revisões técnicas paralelas e publica os resultados no PR |
+| `hermes-e2e-testing.yaml`         | PR de `main` → `production`  | Implanta o SHA em staging e valida os PRDs/milestones afetados com Playwright MCP            |
+| `create-release.yaml`             | Merge do PR de release       | Confirma o E2E do Hermes, cria a tag e publica a GitHub Release                              |
 
 ### Workflows E2E do GitHub Actions
 
@@ -225,22 +226,22 @@ workflows do GitHub Actions e pelo painel do Coolify.
 
 ### GitHub Secrets necessários
 
-| Secret | Uso |
-|---|---|
-| `COOLIFY_API_TOKEN` | Autenticação na API do Coolify |
-| `COOLIFY_WEBHOOK_SERVER_PROD` | Webhook do serviço stardust-server |
-| `COOLIFY_WEBHOOK_WEB_PROD` | Webhook do serviço stardust-web |
-| `COOLIFY_WEBHOOK_WEB_STG` | Webhook do serviço stardust-web-staging |
-| `SERVER_TEST_ENV` | Conteúdo do `.env.testing` do server (para CI) |
-| `WEB_DEV_ENV` | Conteúdo do `.env` de dev do web (para CI) |
-| `WEB_TEST_ENV` | Conteúdo do `.env.test` do web (para CI) |
-| `SUPABASE_ACCESS_TOKEN` | Token de acesso Supabase CLI (para migrations) |
-| `SUPABASE_DB_PASSWORD` | Senha do banco Supabase (para migrations) |
-| `DISCORD_WEBHOOK_URL` | Notificações de deploy no Discord |
-| `HERMES_API_URL` | Endpoint da Runs API do Hermes |
-| `HERMES_API_KEY` | Autenticação do perfil E2E do Hermes |
-| `HERMES_CODE_REVIEWER_API_KEY` | Chave alternativa usada pelo E2E quando `HERMES_API_KEY` não está definida |
-| `HERMES_GITHUB_APP_ID` | ID da GitHub App usada para publicar a conclusão do E2E |
+| Secret                          | Uso                                                                |
+| ------------------------------- | ------------------------------------------------------------------ |
+| `COOLIFY_API_TOKEN`             | Autenticação na API do Coolify                                     |
+| `COOLIFY_WEBHOOK_SERVER_PROD`   | Webhook do serviço stardust-server                                 |
+| `COOLIFY_WEBHOOK_WEB_PROD`      | Webhook do serviço stardust-web                                    |
+| `COOLIFY_WEBHOOK_WEB_STG`       | Webhook do serviço stardust-web-staging                            |
+| `SERVER_TEST_ENV`               | Conteúdo do `.env.testing` do server (para CI)                     |
+| `WEB_DEV_ENV`                   | Conteúdo do `.env` de dev do web (para CI)                         |
+| `WEB_TEST_ENV`                  | Conteúdo do `.env.test` do web (para CI)                           |
+| `SUPABASE_ACCESS_TOKEN`         | Token de acesso Supabase CLI (para migrations)                     |
+| `SUPABASE_DB_PASSWORD`          | Senha do banco Supabase (para migrations)                          |
+| `DISCORD_WEBHOOK_URL`           | Notificações de deploy no Discord                                  |
+| `HERMES_API_URL`                | Endpoint da Runs API do Hermes                                     |
+| `HERMES_E2E_TESTER_API_KEY`     | Autenticação do perfil `e2e-tester` do Hermes                      |
+| `HERMES_CODE_REVIEWER_API_KEY`  | Autenticação do perfil `code-reviewer` do Hermes                   |
+| `HERMES_GITHUB_APP_ID`          | ID da GitHub App usada para publicar a conclusão do E2E            |
 | `HERMES_GITHUB_APP_PRIVATE_KEY` | Chave privada da GitHub App usada para publicar a conclusão do E2E |
 
 ---
@@ -276,15 +277,15 @@ O container do server **não** contém a Supabase CLI nem o `postgresql-client`.
 
 ## Serviços externos
 
-| Serviço | Uso | Gerenciado por |
-|---|---|---|
-| Supabase | Banco de dados, autenticação, storage | Supabase Cloud |
-| Inngest | Filas e jobs assíncronos | Inngest Cloud |
-| Resend / Amazon SES | Envio de emails transacionais | SaaS |
-| Dropbox | Armazenamento de backups | Dropbox API |
-| Sentry | Monitoramento de erros | Sentry Cloud |
-| Discord | Notificações de deploy | Discord Webhooks |
-| Cloudflare | DNS e (futuro) CDN/DDoS protection | Cloudflare |
+| Serviço             | Uso                                   | Gerenciado por   |
+| ------------------- | ------------------------------------- | ---------------- |
+| Supabase            | Banco de dados, autenticação, storage | Supabase Cloud   |
+| Inngest             | Filas e jobs assíncronos              | Inngest Cloud    |
+| Resend / Amazon SES | Envio de emails transacionais         | SaaS             |
+| Dropbox             | Armazenamento de backups              | Dropbox API      |
+| Sentry              | Monitoramento de erros                | Sentry Cloud     |
+| Discord             | Notificações de deploy                | Discord Webhooks |
+| Cloudflare          | DNS e (futuro) CDN/DDoS protection    | Cloudflare       |
 
 ---
 
