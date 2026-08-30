@@ -106,8 +106,8 @@ jobs:
       - name: Check types
         run: npm run check:types -w @stardust/web
 
-  tests:
-    name: Tests
+  unit-tests:
+    name: Unit Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -216,7 +216,7 @@ jobs:
     needs:
       - check-code
       - check-types
-      - tests
+      - unit-tests
       - integration-tests
       - architecture
 

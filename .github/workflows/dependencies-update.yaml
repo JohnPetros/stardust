@@ -3,8 +3,6 @@ name: Dependencies update
 on:
   workflow_dispatch:
   schedule:
-    # GitHub Actions cron uses UTC. 12:00 UTC is 09:00 America/Sao_Paulo
-    # while Sao Paulo remains at UTC-03:00.
     - cron: "0 12 * * 1"
 
 permissions:

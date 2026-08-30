@@ -89,8 +89,8 @@ jobs:
           VITE_WEB_APP_URL: https://stardust-web.test
         run: npm run check:types -w @stardust/studio
 
-  tests:
-    name: Tests
+  unit-tests:
+    name: Unit Tests
     runs-on: ubuntu-latest
     needs:
       - check-code
@@ -119,7 +119,7 @@ jobs:
     needs:
       - check-code
       - check-types
-      - tests
+      - unit-tests
       - architecture
 
     steps:
