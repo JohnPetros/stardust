@@ -17,8 +17,10 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: hermes-release-e2e-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  # Staging is a shared mutable environment. Keep this group aligned with the
+  # staging CD workflow so no deployment can replace the tested SHA mid-run.
+  group: stardust-web-staging
+  cancel-in-progress: false
 
 jobs:
   prepare:
@@ -34,13 +36,6 @@ jobs:
       version: ${{ steps.manifest.outputs.version }}
 
     steps:
-      - name: Checkout release head without credentials
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 1
-          persist-credentials: false
-
       - name: Build release E2E manifest
         id: manifest
         shell: bash
@@ -53,6 +48,7 @@ jobs:
           PR_TITLE: ${{ github.event.pull_request.title }}
           HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
           BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+          SERVER_URL: ${{ github.server_url }}
         run: |
           set -euo pipefail
 
@@ -67,6 +63,53 @@ jobs:
           fi
           version="${PR_TITLE#Release }"
 
+          compare="$(gh api "repos/$REPOSITORY/compare/$BASE_SHA...$HEAD_SHA")"
+          ahead_by="$(jq --exit-status --raw-output '.ahead_by' <<< "$compare")"
+          if [ "$ahead_by" -le 0 ]; then
+            echo 'The release range contains no commits from main that are absent from production.'
+            exit 1
+          fi
+
+          total_commits="$(jq --exit-status --raw-output '.total_commits' <<< "$compare")"
+          returned_commits="$(jq '.commits | length' <<< "$compare")"
+          if [ "$returned_commits" -ne "$total_commits" ]; then
+            echo "The compare API returned $returned_commits of $total_commits commits; refusing an incomplete manifest."
+            exit 1
+          fi
+
+          : > associated-pull-requests.jsonl
+          : > unassociated-commits.txt
+          while IFS= read -r commit_sha; do
+            commit_pull_requests="$(gh api \
+              --header 'Accept: application/vnd.github+json' \
+              "repos/$REPOSITORY/commits/$commit_sha/pulls")"
+            matching_count="$(
+              jq '[.[] | select(.merged_at != null and .base.ref == "main")] | length' \
+                <<< "$commit_pull_requests"
+            )"
+            if [ "$matching_count" -eq 0 ]; then
+              printf '%s\n' "$commit_sha" >> unassociated-commits.txt
+              continue
+            fi
+            jq --compact-output \
+              '.[] | select(.merged_at != null and .base.ref == "main") | {number, html_url, title, body}' \
+              <<< "$commit_pull_requests" >> associated-pull-requests.jsonl
+          done < <(jq --raw-output '.commits[].sha' <<< "$compare")
+
+          if [ -s unassociated-commits.txt ]; then
+            echo 'Every release commit must be associated with a pull request merged into main.'
+            sed 's/^/- /' unassociated-commits.txt
+            exit 1
+          fi
+
+          if [ ! -s associated-pull-requests.jsonl ]; then
+            echo 'No merged pull requests could be associated with the release commits.'
+            exit 1
+          fi
+
+          jq --slurp 'unique_by(.number) | sort_by(.number)' \
+            associated-pull-requests.jsonl > included-pull-requests.json
+
           python3 - <<'PY'
           import json
           import os
@@ -75,36 +118,121 @@ jobs:
           with open(os.environ['GITHUB_EVENT_PATH'], encoding='utf-8') as event_file:
               event = json.load(event_file)
 
-          body = event['pull_request'].get('body') or ''
-          section = re.search(
+          release_body = event['pull_request'].get('body') or ''
+          repository = os.environ['REPOSITORY']
+          server_url = os.environ['SERVER_URL'].rstrip('/')
+          milestone_prefix = f'{server_url}/{repository}/milestone/'
+          milestone_pattern = re.compile(re.escape(milestone_prefix) + r'(\d+)')
+
+          with open('included-pull-requests.json', encoding='utf-8') as input_file:
+              included_pull_requests = json.load(input_file)
+
+          affected_prds = {}
+          pull_requests_without_prd = []
+          classification_errors = []
+
+          for pull_request in included_pull_requests:
+              body = pull_request.get('body') or ''
+              section = re.search(
+                  r'^## PRD\s*$([\s\S]*?)(?=^## |\Z)',
+                  body,
+                  flags=re.MULTILINE,
+              )
+              section_body = section.group(1) if section else ''
+              milestone_numbers = sorted({
+                  int(value) for value in milestone_pattern.findall(section_body)
+              })
+              not_applicable = bool(re.search(
+                  r'^\s*(?:[-*]\s*)?N[aã]o aplic[aá]vel\b',
+                  section_body,
+                  flags=re.IGNORECASE | re.MULTILINE,
+              ))
+
+              if milestone_numbers and not_applicable:
+                  classification_errors.append(
+                      f"PR #{pull_request['number']} mixes milestone URLs with Não aplicável."
+                  )
+              elif not milestone_numbers and not not_applicable:
+                  classification_errors.append(
+                      f"PR #{pull_request['number']} has no unambiguous ## PRD classification."
+                  )
+              elif not_applicable:
+                  pull_requests_without_prd.append(pull_request['number'])
+              else:
+                  for number in milestone_numbers:
+                      affected_prds.setdefault(number, set()).add(pull_request['number'])
+
+          if classification_errors:
+              raise SystemExit('\n'.join(classification_errors))
+
+          declared_prd_section = re.search(
               r'^## PRDs afetados\s*$([\s\S]*?)(?=^## |\Z)',
-              body,
+              release_body,
               flags=re.MULTILINE,
           )
-          section_body = section.group(1) if section else ''
-          numbers = sorted({
+          declared_prd_body = declared_prd_section.group(1) if declared_prd_section else ''
+          declared_milestones = {
+              int(value) for value in milestone_pattern.findall(declared_prd_body)
+          }
+
+          declared_without_prd_section = re.search(
+              r'^## PRs sem PRD\s*$([\s\S]*?)(?=^## |\Z)',
+              release_body,
+              flags=re.MULTILINE,
+          )
+          declared_without_prd_body = (
+              declared_without_prd_section.group(1)
+              if declared_without_prd_section else ''
+          )
+          declared_without_prd = {
               int(value)
-              for value in re.findall(
-                  r'https://github\.com/JohnPetros/stardust/milestone/(\d+)',
-                  section_body,
+              for value in re.findall(r'(?<![\w/])#(\d+)\b', declared_without_prd_body)
+          }
+
+          derived_milestones = set(affected_prds)
+          if declared_milestones != derived_milestones:
+              raise SystemExit(
+                  'Release PRD declaration does not match included PRs: '
+                  f'declared={sorted(declared_milestones)}, '
+                  f'derived={sorted(derived_milestones)}.'
               )
-          })
+
+          derived_without_prd = set(pull_requests_without_prd)
+          if declared_without_prd != derived_without_prd:
+              raise SystemExit(
+                  'Release PRs sem PRD declaration does not match included PRs: '
+                  f'declared={sorted(declared_without_prd)}, '
+                  f'derived={sorted(derived_without_prd)}.'
+              )
+
+          if len(affected_prds) > 10:
+              raise SystemExit(
+                  f'Release declares {len(affected_prds)} PRDs; the safe limit is 10.'
+              )
 
           milestones = [
               {
                   'number': number,
-                  'url': f'https://github.com/JohnPetros/stardust/milestone/{number}',
+                  'url': f'{milestone_prefix}{number}',
+                  'source_pull_requests': sorted(affected_prds[number]),
               }
-              for number in numbers
+              for number in sorted(affected_prds)
           ]
 
           with open('milestones.json', 'w', encoding='utf-8') as output:
               json.dump(milestones, output, ensure_ascii=False, separators=(',', ':'))
+
+          with open('pull-requests-without-prd.json', 'w', encoding='utf-8') as output:
+              json.dump(sorted(pull_requests_without_prd), output, separators=(',', ':'))
           PY
 
           while IFS= read -r milestone_number; do
-            gh api "repos/$REPOSITORY/milestones/$milestone_number" \
-              --jq '{number, title, state, html_url}'
+            expected_url="$(jq --argjson number "$milestone_number" --raw-output '.[] | select(.number == $number) | .url' milestones.json)"
+            actual_url="$(gh api "repos/$REPOSITORY/milestones/$milestone_number" --jq '.html_url')"
+            if [ "$actual_url" != "$expected_url" ]; then
+              echo "Milestone $milestone_number resolved to unexpected URL: $actual_url"
+              exit 1
+            fi
           done < <(jq --raw-output '.[].number' milestones.json)
 
           has_prds=false
@@ -119,6 +247,8 @@ jobs:
             --arg head_sha "$HEAD_SHA" \
             --arg base_sha "$BASE_SHA" \
             --slurpfile milestones milestones.json \
+            --slurpfile pull_requests included-pull-requests.json \
+            --slurpfile pull_requests_without_prd pull-requests-without-prd.json \
             '{
               repository: $repository,
               pull_request: $pull_request,
@@ -127,12 +257,16 @@ jobs:
               base_sha: $base_sha,
               head_branch: "main",
               base_branch: "production",
-              affected_prds: $milestones[0]
+              pull_requests: ($pull_requests[0] | map({number, html_url, title})),
+              affected_prds: $milestones[0],
+              pull_requests_without_prd: $pull_requests_without_prd[0]
             }' > release-e2e-manifest.json
 
-          echo "has-prds=$has_prds" >> "$GITHUB_OUTPUT"
-          echo "milestones=$(jq --compact-output . milestones.json)" >> "$GITHUB_OUTPUT"
-          echo "version=$version" >> "$GITHUB_OUTPUT"
+          {
+            echo "has-prds=$has_prds"
+            echo "milestones=$(jq --compact-output . milestones.json)"
+            echo "version=$version"
+          } >> "$GITHUB_OUTPUT"
           echo "Prepared $(jq 'length' milestones.json) affected PRD(s)."
 
       - name: Store release E2E manifest
@@ -163,6 +297,10 @@ jobs:
             curl --fail-with-body \
               --silent \
               --show-error \
+              --retry 5 \
+              --retry-all-errors \
+              --connect-timeout 10 \
+              --max-time 60 \
               --request GET \
               --header "Authorization: Bearer $COOLIFY_API_TOKEN" \
               "$COOLIFY_DEPLOY_WEBHOOK"
@@ -181,6 +319,10 @@ jobs:
               curl --fail-with-body \
                 --silent \
                 --show-error \
+                --retry 5 \
+                --retry-all-errors \
+                --connect-timeout 10 \
+                --max-time 30 \
                 --header "Authorization: Bearer $COOLIFY_API_TOKEN" \
                 "$deployment_url"
             )"
@@ -257,14 +399,15 @@ jobs:
     timeout-minutes: 75
     strategy:
       fail-fast: false
+      max-parallel: 2
       matrix:
         milestone: ${{ fromJSON(needs.prepare.outputs.milestones) }}
 
     steps:
-      - name: Checkout release head without credentials
+      - name: Checkout trusted release base policy without credentials
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.base.sha }}
           fetch-depth: 1
           persist-credentials: false
 
@@ -273,10 +416,11 @@ jobs:
         shell: bash
         env:
           HERMES_API_URL: ${{ secrets.HERMES_API_URL }}
-          HERMES_API_KEY: ${{ secrets.HERMES_API_KEY || secrets.HERMES_CODE_REVIEWER_API_KEY }}
+          HERMES_API_KEY: ${{ secrets.HERMES_API_KEY }}
           REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
           RUN_ATTEMPT: ${{ github.run_attempt }}
           MILESTONE_NUMBER: ${{ matrix.milestone.number }}
           MILESTONE_URL: ${{ matrix.milestone.url }}
@@ -292,7 +436,6 @@ jobs:
             exit 1
           }
 
-          cp AGENTS.md trusted-AGENTS.md
           hermes_url="${HERMES_API_URL%/}/p/e2e-tester/v1/runs"
           session_id="${REPOSITORY//\//-}-release-pr-${PR_NUMBER}-${HEAD_SHA}-milestone-${MILESTONE_NUMBER}-attempt-${RUN_ATTEMPT}"
           idempotency_key="${REPOSITORY}:release:${PR_NUMBER}:${HEAD_SHA}:milestone:${MILESTONE_NUMBER}:attempt:${RUN_ATTEMPT}"
@@ -301,13 +444,14 @@ jobs:
             --arg repository "$REPOSITORY" \
             --arg pr_number "$PR_NUMBER" \
             --arg head_sha "$HEAD_SHA" \
+            --arg base_sha "$BASE_SHA" \
             --arg milestone_number "$MILESTONE_NUMBER" \
             --arg milestone_url "$MILESTONE_URL" \
             --arg session_id "$session_id" \
-            --rawfile agent_instructions trusted-AGENTS.md \
+            --rawfile agent_instructions AGENTS.md \
             '{
               input: (
-                "Before doing anything else, read the complete AGENTS.md content supplied in TRUSTED_AGENT_INSTRUCTIONS and follow every applicable Web App rule. " +
+                "Before doing anything else, read the complete production-base AGENTS.md content supplied in TRUSTED_AGENT_INSTRUCTIONS and follow every applicable Web App rule. " +
                 "Validate exactly one affected Stardust PRD in the authorized Web App staging environment. " +
                 "Use the github-app MCP server only for read operations needed to inspect the supplied milestone, its description, and associated issues. " +
                 "Identify only explicit REQ-* requirements belonging to that milestone. Do not infer additional requirements. " +
@@ -330,10 +474,11 @@ jobs:
                 "Repository: " + $repository + "\n" +
                 "Release pull request: " + $pr_number + "\n" +
                 "Expected head SHA: " + $head_sha + "\n" +
+                "Trusted policy base SHA: " + $base_sha + "\n" +
                 "Assigned milestone: " + $milestone_number + "\n" +
                 "Milestone URL: " + $milestone_url + "\n" +
                 "Authorized environment: https://web-staging.stardust-app.com.br\n" +
-                "<TRUSTED_AGENT_INSTRUCTIONS source=\"AGENTS.md@head_sha\">\n" +
+                "<TRUSTED_AGENT_INSTRUCTIONS source=\"AGENTS.md@base_sha\">\n" +
                 $agent_instructions +
                 "\n</TRUSTED_AGENT_INSTRUCTIONS>"
               ),
@@ -344,6 +489,10 @@ jobs:
             curl --fail-with-body \
               --silent \
               --show-error \
+              --retry 5 \
+              --retry-all-errors \
+              --connect-timeout 10 \
+              --max-time 60 \
               --request POST \
               --header "Authorization: Bearer $HERMES_API_KEY" \
               --header 'Content-Type: application/json' \
@@ -354,11 +503,36 @@ jobs:
           run_id="$(jq --exit-status --raw-output '.run_id' <<< "$response")"
           echo "Hermes E2E run started: $run_id"
 
+          run_finished=false
+          stop_unfinished_run() {
+            local exit_code=$?
+            trap - EXIT INT TERM
+            if [ -n "${run_id:-}" ] && [ "$run_finished" != 'true' ]; then
+              echo "Requesting cancellation of unfinished Hermes run $run_id."
+              curl --request POST \
+                --header "Authorization: Bearer $HERMES_API_KEY" \
+                --fail \
+                --silent \
+                --show-error \
+                --connect-timeout 5 \
+                --max-time 15 \
+                "$hermes_url/$run_id/stop" > /dev/null || true
+            fi
+            exit "$exit_code"
+          }
+          trap stop_unfinished_run EXIT
+          trap 'exit 130' INT
+          trap 'exit 143' TERM
+
           for attempt in $(seq 1 360); do
             run="$(
               curl --fail-with-body \
                 --silent \
                 --show-error \
+                --retry 5 \
+                --retry-all-errors \
+                --connect-timeout 10 \
+                --max-time 30 \
                 --header "Authorization: Bearer $HERMES_API_KEY" \
                 "$hermes_url/$run_id"
             )"
@@ -367,13 +541,15 @@ jobs:
             case "$status" in
               completed)
                 jq --exit-status --raw-output '.output // empty' <<< "$run" > e2e-result.json
+                run_finished=true
                 break
                 ;;
               failed|cancelled)
-                jq '{run_id, status, error, output}' <<< "$run"
+                run_finished=true
+                jq '{run_id, status, error}' <<< "$run"
                 exit 1
                 ;;
-              started|running|stopping)
+              queued|pending|started|running|stopping)
                 echo "Hermes E2E status: $status (attempt $attempt/360)"
                 sleep 10
                 ;;
@@ -401,23 +577,39 @@ jobs:
               .head_sha == $head_sha and
               .environment == "https://web-staging.stardust-app.com.br" and
               (.status == "passou" or .status == "falhou" or .status == "bloqueado" or .status == "não_aplicável") and
-              (.summary | type == "string" and length > 0) and
-              (.requirements | type == "array") and
+              (.summary | type == "string" and length > 0 and length <= 2000) and
+              (.requirements | type == "array" and length <= 100) and
+              (([.requirements[].id] | length) == ([.requirements[].id] | unique | length)) and
               all(.requirements[];
                 (.id | type == "string" and test("^REQ-[A-Za-z0-9._-]+$")) and
                 (.result == "passou" or .result == "falhou" or .result == "bloqueado" or .result == "não_aplicável") and
-                (.expected | type == "string" and length > 0) and
-                (.observed | type == "string" and length > 0) and
-                (.summary | type == "string" and length > 0) and
-                (.evidence | type == "array") and
+                (.expected | type == "string" and length > 0 and length <= 4000) and
+                (.observed | type == "string" and length > 0 and length <= 4000) and
+                (.summary | type == "string" and length > 0 and length <= 2000) and
+                (.evidence | type == "array" and length <= 20) and
+                (if .result == "passou" or .result == "falhou" then (.evidence | length > 0) else true end) and
                 all(.evidence[];
                   (.type == "screenshot" or .type == "console" or .type == "page_error" or .type == "network" or .type == "other") and
-                  (.path | type == "string") and
-                  (.description | type == "string" and length > 0)
+                  (.path | type == "string" and length > 0 and length <= 2000) and
+                  (.description | type == "string" and length > 0 and length <= 2000)
                 )
               ) and
-              (.limitations | type == "array") and
-              all(.limitations[]; type == "string")
+              (.limitations | type == "array" and length <= 50) and
+              all(.limitations[]; type == "string" and length <= 2000) and
+              (
+                if .status == "passou" then
+                  any(.requirements[]; .result == "passou") and
+                  all(.requirements[]; .result == "passou" or .result == "não_aplicável")
+                elif .status == "falhou" then
+                  any(.requirements[]; .result == "falhou")
+                elif .status == "bloqueado" then
+                  all(.requirements[]; .result != "falhou") and
+                  ((.requirements | length) == 0 or any(.requirements[]; .result == "bloqueado"))
+                else
+                  (.requirements | length > 0) and
+                  all(.requirements[]; .result == "não_aplicável")
+                end
+              )
             ' e2e-result.json > /dev/null
 
           echo "Hermes completed milestone $MILESTONE_NUMBER with status $(jq --raw-output '.status' e2e-result.json)."
@@ -475,6 +667,7 @@ jobs:
         with:
           app-id: ${{ secrets.HERMES_GITHUB_APP_ID }}
           private-key: ${{ secrets.HERMES_GITHUB_APP_PRIVATE_KEY }}
+          permission-pull-requests: write
 
       - name: Publish consolidated E2E matrix
         shell: bash
@@ -493,14 +686,15 @@ jobs:
           marker='<!-- hermes-release-e2e-conclusion -->'
           overall_failed=false
           expected_count="$(jq 'length' <<< "$EXPECTED_MILESTONES")"
+          expected_numbers="$(jq --compact-output '[.[].number] | sort' <<< "$EXPECTED_MILESTONES")"
 
           {
             printf '%s\n\n' "$marker"
             printf '## Validação E2E da release pelo Hermes\n\n'
-            printf -- '- Head SHA: `%s`\n' "$HEAD_SHA"
-            printf -- '- Ambiente: `https://web-staging.stardust-app.com.br`\n'
+            printf -- "- Head SHA: \`%s\`\n" "$HEAD_SHA"
+            printf -- "- Ambiente: \`https://web-staging.stardust-app.com.br\`\n"
             printf -- '- Deploy em staging: **%s**\n' "$DEPLOY_RESULT"
-            printf -- '- Executor: `e2e-tester` com Playwright MCP\n'
+            printf -- "- Executor: \`e2e-tester\` com Playwright MCP\n"
             printf -- '- Evidências binárias: armazenadas localmente no Hermes; a Runs API ainda não permite transferi-las ao GitHub Actions\n\n'
 
             if [ "$DEPLOY_RESULT" != 'success' ]; then
@@ -519,12 +713,24 @@ jobs:
                 overall_failed=true
               fi
 
+              actual_numbers='[]'
+              if [ "${#result_files[@]}" -gt 0 ]; then
+                actual_numbers="$(jq --slurp --compact-output 'map(.milestone) | sort' "${result_files[@]}")"
+              fi
+              if [ "$actual_numbers" != "$expected_numbers" ]; then
+                printf '| — | bloqueado | — | O conjunto de milestones recebido não corresponde ao manifesto esperado. |\n'
+                overall_failed=true
+              fi
+
               for result_file in "${result_files[@]}"; do
                 milestone="$(jq --raw-output '.milestone' "$result_file")"
                 prd_url="$(jq --raw-output '.prd_url' "$result_file")"
                 status="$(jq --raw-output '.status' "$result_file")"
                 requirement_count="$(jq '.requirements | length' "$result_file")"
-                summary="$(jq --raw-output '.summary' "$result_file" | tr '\n|' '  ')"
+                summary="$(
+                  jq --raw-output '.summary' "$result_file" |
+                    python3 -c 'import re, sys; text = sys.stdin.read().replace("@", "@\u200b"); text = re.sub(r"[\r\n|`\[\]<>]", " ", text); print(re.sub(r"\s+", " ", text).strip()[:500])'
+                )"
 
                 printf '| [Milestone %s](%s) | %s | %s | %s |\n' \
                   "$milestone" "$prd_url" "$status" "$requirement_count" "$summary"

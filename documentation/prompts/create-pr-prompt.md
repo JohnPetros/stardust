@@ -366,9 +366,9 @@ Para correções, inclua no body a causa comprovada e a solução aplicada.
 
 ## Publicação e retorno
 
-Faça `push` da branch preparada e crie ou atualize o PR com `gh`. Não solicite
-manualmente `@codex review`: o workflow do Hermes inicia automaticamente depois
-que os checks aplicáveis passam para o head SHA atual.
+Faça `push` da branch preparada e crie ou atualize o PR com `gh`. O workflow do
+Hermes inicia automaticamente depois que os checks aplicáveis passam para o
+head SHA atual.
 
 Depois, obtenha os metadados reais:
 

@@ -60,6 +60,8 @@ Os workflows `*-production-cd.yaml` são responsáveis por:
 - Não abra mais de um PR de release para o mesmo `head SHA`.
 - Use o SHA exato de `origin/main` durante todo o processo.
 - Não trate caminhos alterados como fonte de verdade para associação de PRD.
+- Exija uma classificação inequívoca em `## PRD` no corpo de cada PR incluído.
+- Não inclua mais de dez PRDs afetados em uma única release.
 - Não invente PRDs, requisitos, evidências, resultados de CI ou validações.
 - Não inclua segredos, credenciais ou URLs internas no PR.
 - A aprovação final da release continua sendo humana.
@@ -105,9 +107,9 @@ intervalo comparado.
 
 ### 3. Identificar os PRDs afetados
 
-A seção `## PRD` dos PRs normais é a fonte principal de rastreabilidade. Ela
-deve conter uma ou mais URLs de milestones do repositório ou o valor
-`Não aplicável`.
+A seção `## PRD` dos PRs normais é a única fonte de rastreabilidade aceita pelo
+workflow da release. Ela deve conter uma ou mais URLs de milestones do
+repositório ou o valor `Não aplicável`, sem combinar as duas classificações.
 
 Para cada PR incluído:
 
@@ -117,13 +119,14 @@ Para cada PR incluído:
 4. registre quais PRs originaram cada associação;
 5. registre separadamente os PRs marcados como `Não aplicável`.
 
-Quando um PR histórico não tiver a seção `## PRD`, use apenas como fallback:
+Interrompa quando um PR não possuir `## PRD`, não contiver uma classificação
+inequívoca ou combinar URLs de milestones com `Não aplicável`. Solicite a
+classificação humana e atualize o corpo do PR original antes de criar ou
+atualizar o release PR. Não derive a classificação de issues, arquivos
+alterados, Specs ou reports, pois essas fontes não são aceitas pelo workflow.
 
-1. milestones das issues relacionadas;
-2. campo `prd:` de Specs ou reports alterados pelo PR.
-
-Se o fallback não produzir uma associação inequívoca, interrompa e solicite
-classificação humana. Não assuma que um PR técnico possui ou não possui PRD.
+Interrompa também quando a release afetar mais de dez PRDs. Divida o conteúdo
+em releases menores em vez de omitir associações.
 
 ### 4. Montar o manifesto da release
 
@@ -131,14 +134,28 @@ Monte um manifesto lógico associado ao `head SHA`, contendo no mínimo:
 
 ```json
 {
+  "repository": "JohnPetros/stardust",
+  "pull_request": 999,
+  "version": "vX.Y.Z",
   "head_sha": "<sha de origin/main>",
   "base_sha": "<sha de origin/production>",
   "head_branch": "main",
   "base_branch": "production",
-  "pull_requests": [123, 124],
+  "pull_requests": [
+    {
+      "number": 123,
+      "html_url": "https://github.com/JohnPetros/stardust/pull/123",
+      "title": "Título do PR"
+    },
+    {
+      "number": 124,
+      "html_url": "https://github.com/JohnPetros/stardust/pull/124",
+      "title": "Alteração técnica"
+    }
+  ],
   "affected_prds": [
     {
-      "milestone": 40,
+      "number": 40,
       "url": "https://github.com/JohnPetros/stardust/milestone/40",
       "source_pull_requests": [123]
     }
@@ -223,18 +240,23 @@ Explique o resultado entregue pela versão.
 ## Principais mudanças
 
 ### Web
+
 - Mudanças relevantes de frontend.
 
 ### Server
+
 - Mudanças relevantes de API, persistência e jobs.
 
 ### Studio
+
 - Mudanças relevantes da aplicação administrativa.
 
 ### Core e packages
+
 - Mudanças relevantes em domínio e packages compartilhados.
 
 ### Infraestrutura
+
 - Mudanças relevantes de Docker, Coolify, CI/CD ou tooling.
 
 ## Correções
@@ -248,9 +270,9 @@ Explique o resultado entregue pela versão.
 
 ## PRDs afetados
 
-| PRD | PRs de origem | Status E2E |
-| --- | --- | --- |
-| [Milestone 40](https://github.com/JohnPetros/stardust/milestone/40) | #123 | Pendente |
+| PRD                                                                 | PRs de origem | Status E2E |
+| ------------------------------------------------------------------- | ------------- | ---------- |
+| [Milestone 40](https://github.com/JohnPetros/stardust/milestone/40) | #123          | Pendente   |
 
 ## PRs sem PRD
 
@@ -279,12 +301,14 @@ possuírem PRD.
 Depois da abertura ou atualização do PR, o workflow de release deve:
 
 1. validar que o PR usa `main` como `head` e `production` como `base`;
-2. implantar exatamente o `head SHA` da Web App em staging;
+2. solicitar o deploy da Web App em staging e confirmar que o ambiente reporta
+   exatamente o `head SHA` esperado;
 3. aguardar o health check da Web App em staging;
-4. criar uma execução paralela do perfil `e2e-tester` do Hermes para cada PRD
-   afetado;
-5. fornecer a cada execução o conteúdo completo de `AGENTS.md`, o release PR,
-   o `head SHA`, a milestone e os requisitos atribuídos;
+4. criar uma execução do perfil `e2e-tester` do Hermes para cada PRD afetado,
+   com no máximo duas execuções simultâneas;
+5. fornecer a cada execução o conteúdo completo de `AGENTS.md` obtido do
+   `base SHA` confiável de `production`, o número do release PR, o `head SHA` e
+   a milestone atribuída;
 6. usar exclusivamente o servidor MCP `playwright`, conectado ao Chromium
    isolado via CDP, para exercitar a Web App em staging em um navegador real;
 7. reutilizar o bootstrap seguro de autenticação do Playwright MCP, sem expor
@@ -324,29 +348,36 @@ Server ou outro ambiente devem ser classificados como `não aplicável ao escopo
 Web staging`, com justificativa. Essa classificação não pode ser apresentada
 como requisito validado.
 
-Cada requisito deve receber exatamente um resultado:
+Cada requisito deve receber exatamente um dos valores do contrato JSON:
 
 - `passou`;
 - `falhou`;
 - `bloqueado`;
-- `não aplicável`.
+- `não_aplicável`.
 
 Resultados `falhou` ou `bloqueado` devem falhar o check da release. A decisão
 de merge permanece humana mesmo quando todos os requisitos passarem.
 
-Quando nenhum PRD for afetado, o workflow deve concluir com sucesso, registrar
-que não há E2E de produto aplicável e não iniciar sessões de navegador.
+Quando todos os PRs incluídos estiverem explicitamente marcados como `Não
+aplicável`, o workflow deve concluir com sucesso, registrar que não há E2E de
+produto aplicável e não iniciar sessões de navegador.
 
 ## Atualizações e reexecuções
 
 Ao receber um novo commit em `main`:
 
-1. cancele execuções anteriores do mesmo release PR;
-2. recalcule os PRs e PRDs afetados;
-3. gere um novo manifesto para o novo `head SHA`;
-4. faça um novo deploy em staging;
-5. execute novamente os E2E aplicáveis;
-6. atualize a conclusão existente em vez de publicar comentários duplicados.
+1. preserve a execução ativa que compartilha o ambiente de staging;
+2. mantenha a nova execução na fila compartilhada, permitindo que o GitHub
+   substitua uma execução ainda pendente pela revisão mais recente;
+3. recalcule os PRs e PRDs afetados;
+4. gere um novo manifesto para o novo `head SHA`;
+5. faça um novo deploy em staging;
+6. execute novamente os E2E aplicáveis;
+7. atualize a conclusão existente em vez de publicar comentários duplicados.
+
+Os workflows de deploy em staging e E2E da release devem compartilhar o grupo
+de concorrência `stardust-web-staging` com `cancel-in-progress: false`. Assim, o
+ambiente não muda durante uma validação ativa.
 
 Nunca reutilize evidências produzidas para outro SHA.
 
@@ -365,7 +396,8 @@ Após o merge do release PR em `production`, o workflow pós-merge deve:
    `production`;
 7. criar a GitHub Release com título `Release vX.Y.Z` e notas derivadas do
    corpo do PR;
-8. disparar o deploy de produção;
+8. publicar a GitHub Release, cujo evento dispara separadamente os workflows
+   `*-production-cd.yaml` responsáveis pelo deploy de produção;
 9. publicar no PR os links da tag, da GitHub Release e do deploy.
 
 O processo deve ser idempotente. Se a tag ou a release já existirem, confirme

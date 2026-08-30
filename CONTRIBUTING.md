@@ -247,5 +247,8 @@ Exemplos:
 v1.0.0 -> uma grande refatoração que torna incompativel com versões anteriores
 v0.1.0 -> nova funcionalidade v0.0.1 -> correção de bug
 
-As releases são criada de forma programática utilizando a ferramenta
-**[release it](https://github.com/release-it/release-it)**
+As releases são criadas por meio de um Pull Request de `main` para
+`production`, com o título `Release vX.Y.Z`. Após a validação E2E e o merge,
+o GitHub Actions cria a tag e a GitHub Release automaticamente. Consulte o
+[workflow de criação de releases](/.github/workflows/create-release.yaml) e o
+[prompt de PR de release](/documentation/prompts/create-release-pr-prompt.md).

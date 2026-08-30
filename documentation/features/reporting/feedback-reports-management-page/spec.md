@@ -872,7 +872,7 @@ Após qualquer implementação/correção de frontend:
 
 1. iniciar Server em `http://localhost:3334` e Studio em
    `http://localhost:8000` (ou porta alternativa do Studio);
-2. carregar as credenciais por `source ./scripts/export-studio-app-e2e-env.sh`;
+2. carregar as credenciais por `eval "$(node ./scripts/export-studio-app-e2e-env.mjs)"`;
 3. autenticar com variáveis de ambiente, aguardar `/dashboard` e confirmar a
    sessão em `/profile/users`;
 4. acessar `/reporting/feedback`, exercitar lista, busca, filtros, paginação,
