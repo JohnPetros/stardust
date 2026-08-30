@@ -24,6 +24,16 @@ export const middleware = async (request: NextRequest) => {
 
   const currentRoute = request.nextUrl.pathname
 
+  // Server Actions submitted from the sign-in page set the session cookies
+  // before Next.js completes the action response. Let that action finish on
+  // the sign-in route so the client can show the authenticated transition;
+  // otherwise auth verification redirects the action request to /space and
+  // unmounts the animation immediately.
+  const isSignInServerAction =
+    currentRoute === ROUTES.auth.signIn && request.headers.has('next-action')
+
+  if (isSignInServerAction) return NextResponse.next()
+
   const isPublicRoute =
     PUBLIC_ROUTES.map(String).includes(currentRoute) ||
     PUBLIC_ROUTE_GROUPS.some((group) => currentRoute.startsWith(group))

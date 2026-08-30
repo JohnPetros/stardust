@@ -2,7 +2,7 @@
   "name": "@stardust/web",
   "private": true,
   "scripts": {
-    "dev": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=1 next dev -p 5000",
+    "dev": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=1 next dev --port 3000",
     "queue": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/serverless",
     "build": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=1 next build",
     "start": "node .next/standalone/apps/web/server.js -p $PORT",
@@ -63,7 +63,7 @@
     "apexcharts": "^6.7.0",
     "autoprefixer": "10.5.4",
     "html-to-image": "^1.11.13",
-    "immer": "^10.1.1",
+    "immer": "^11.1.18",
     "inngest": "^4.16.0",
     "jsonwebtoken": "^9.0.2",
     "lottie-react": "^2.4.1",

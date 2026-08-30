@@ -23,6 +23,7 @@ type Params = {
   profileService: ProfileService
   analyticsProvider: ClientAnalyticsProvider
   accountDto: AccountDto | null
+  accessToken: string | null
   signIn: (email: string, password: string) => Promise<ActionResponse<AccountDto>>
   signOut: () => Promise<ActionResponse<void>>
   retryUserCreation: () => Promise<ActionResponse<void>>
@@ -36,6 +37,7 @@ export function useAuthContextProvider({
   profileService,
   analyticsProvider,
   accountDto,
+  accessToken,
   signIn,
   signOut,
   retryUserCreation,
@@ -61,7 +63,11 @@ export function useAuthContextProvider({
   } = useCache({
     key: CACHE.keys.authUser,
     fetcher: fetchUser,
-    isEnabled: Boolean(account),
+    // After a client-side sign-in, the account state updates before the
+    // server-provided access token reaches this provider again. Waiting for
+    // that token prevents the initial profile request from being sent without
+    // authorization and starting an unnecessary refresh cycle.
+    isEnabled: Boolean(account) && Boolean(accessToken),
     dependencies: [account?.id],
     shouldRefetchOnFocus: false,
   })

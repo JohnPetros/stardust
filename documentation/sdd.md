@@ -2,321 +2,269 @@
 
 ## Objetivo
 
-O SDD transforma uma demanda em uma entrega verificável. O fluxo ocorre na
-mesma task e o Orchestrator coordena Builders, Judges, sensores e os artefatos
-documentais.
+O SDD transforma uma demanda de feature em um Contract implementável, uma execução
+rastreável e uma entrega fechada por evidência no PR. Todo o fluxo ocorre na mesma task:
 
 ```text
-Demanda
-→ Spec
-→ Judge Spec
-→ Plan opcional
-→ Judge Plan
-→ Implementação
-→ sensores locais
-→ Judge Implementation único da implementação integrada
-→ preflight
-→ evaluation.md
-→ PR / checks e build no CI
-→ Spec concluída
+PRD, Issue, Report ou demanda direta
+→ create-spec
+→ Spec Reviewer
+→ implement-spec direto | create-plan → implement-spec Plan-backed
+→ sensores integrados + validação manual real
+→ Implementation Reviewer único quando houver Plan
+→ evaluation.md ready
+→ conclude-spec → commit-code → create-pr → CI do HEAD do PR
+→ Spec, Plan e Evaluation completed
 ```
 
-O Plan não é obrigatório:
+SDD não é obrigatório para manutenção que não precise de Contract de feature. O
+Orchestrator classifica a demanda e usa manutenção direta quando uma Spec não acrescenta
+autoridade, risco controlado ou rastreabilidade útil.
 
-- Specs pequenas e coesas usam `implement-spec`.
-- Implementações grandes, com fases dependentes ou risco que exija um ledger
-  operacional usam `create-plan` + `implement-plan`.
+## Autoridades
 
-## Artefatos e fontes de verdade
+Antes de iniciar ou retomar SDD, leia `AGENTS.md`, `documentation/architecture.md`,
+`documentation/overview.md`, `documentation/tooling.md`, `documentation/rules/rules.md` e
+todas as Rules selecionadas pelos paths e comportamentos afetados. Leia também PRD, Issue,
+Report, Design e código real aplicáveis.
 
-Para novas entregas, a organização é:
+| Autoridade                  | Governa                                                     |
+| --------------------------- | ----------------------------------------------------------- |
+| `AGENTS.md`                 | segurança, ferramentas, ambientes e validações obrigatórias |
+| Architecture e Overview     | fronteiras, dependências e responsabilidades do sistema     |
+| Rules selecionadas          | convenções reutilizáveis de implementação e teste           |
+| PRD                         | resultado de produto, atores, capacidades e experiência     |
+| Design e referências salvas | intenção visual e estados de UI                             |
+| Tooling                     | comandos e ambientes reais                                  |
+| Spec                        | Contract específico da entrega                              |
+
+Uma mudança normativa de produto, Architecture, Rule global ou ownership exige aprovação
+explícita do usuário e atualização da autoridade antes da Spec. A implementação atual nunca
+substitui silenciosamente uma autoridade.
+
+## Papéis
+
+| Papel                   | Responsabilidade                                                                                                    | Restrição                                                            |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Orchestrator            | seleciona workflows, mantém artefatos, integra diffs, executa sensores, registra evidência, publica e roteia falhas | não delega o veredito oficial nem usa relato de subagente como prova |
+| Spec Reviewer           | revisa a Spec draft completa antes de `open`                                                                        | read-only; não edita a Spec nem decide o status oficial              |
+| Builder                 | implementa um escopo de paths contra uma revisão exata                                                              | não edita Spec, Plan, Evaluation, PRD ou Rules                       |
+| Implementation Reviewer | revisa o candidato Plan-backed integrado                                                                            | read-only; não corrige nem produz o veredito oficial                 |
+
+Subagentes são irmãos criados pelo Orchestrator na task atual. Nenhum subagente cria outro
+agente ou task. `create-spec`, `implement-spec` e `conclude-spec` são workflows, não papéis.
+
+## Artefatos duráveis
 
 ```text
 documentation/features/<domínio>/<feature>/
 ├── spec.md
-├── plan.md          # opcional
-└── evaluation.md    # obrigatório após implementação ou julgamento
+├── plan.md                 # opcional
+├── evaluation.md           # criado no kickoff da implementação
+└── design/                 # quando houver Design Contract
+    ├── manifest.md
+    └── <referências>.png
 ```
 
-Para uma mudança posterior, correção ou evolução de uma feature já concluída:
+Uma mudança de comportamento após conclusão usa
+`documentation/features/<domínio>/<feature>/changes/<mudança>/`.
 
-```text
-changes/<nome-da-mudanca>/
-├── spec.md
-└── evaluation.md
+| Artefato             | Possui                                                      | Não possui                              |
+| -------------------- | ----------------------------------------------------------- | --------------------------------------- |
+| `spec.md`            | comportamento, Design, Technical e Validation Contracts     | tentativas e resultados executados      |
+| `plan.md`            | waves, dependências, ownership, status e próxima ação       | segundo Contract técnico                |
+| `evaluation.md`      | comandos, evidências, findings, histórico, comparações e CI | autoridade de produto ou arquitetura    |
+| `design/manifest.md` | inventário de referência, estado, viewport e surface        | screenshot produzido pela implementação |
+
+Screenshots de implementação ficam em `test-results/` ignorado ou em artifacts de CI; o
+identificador e a comparação ficam em `evaluation.md`.
+
+## Estados
+
+| Artefato    | Estados                                                     |
+| ----------- | ----------------------------------------------------------- |
+| Spec        | `draft`, `open`, `in_progress`, `completed`                 |
+| Plan        | `pending`, `in_progress`, `completed`, `superseded`         |
+| Fase/tarefa | `pending`, `in_progress`, `completed`                       |
+| Evaluation  | `in_progress`, `ready`, `completed`                         |
+| Evidência   | `pending`, `passed`, `failed`, `stale`, `not_applicable`    |
+| Finding     | `active`, `resolved`, `accepted_non_blocking`, `superseded` |
+
+Falhas não criam estados extras: o item permanece `in_progress`, com finding e próxima ação.
+
+## Protocolo de Grilling
+
+Os workflows de criação de issues, PRDs, Specs e Plans entrevistam o usuário rigorosamente antes
+de escrever o artefato. As decisões formam uma **design tree**: cada decisão se ramifica nas
+decisões que dependem dela. A **frontier** de um round contém todas as decisões cujos
+pré-requisitos já estão resolvidos e que podem ser perguntadas sem adivinhar respostas pendentes.
+
+Em cada round, recompute a árvore, pergunte toda a frontier, numere as perguntas e inclua uma
+resposta recomendada para cada uma. Uma pergunta que dependa de outra decisão ainda aberta no
+round atual pertence a um round posterior. Depois das respostas, registre decisões, alternativas
+descartadas, dependências e contradições e recompute a frontier.
+
+Use este formato:
+
+```yaml
+❓ **Q1** - **<título da pergunta>**: <pergunta e alternativas relevantes>
+
+➡️ <resposta recomendada e justificativa concisa>
+
+---
+
+❓ **Q2** - **<título da pergunta>**: <pergunta e alternativas relevantes>
+
+➡️ <resposta recomendada e justificativa concisa>
 ```
 
-Artefatos históricos que ainda estejam em `specs/`, `plans/` ou `reports/` não
-precisam ser migrados incidentalmente. Toda nova entrega deve usar a
-organização atual.
+Encontrar fatos é responsabilidade da task, nunca do usuário. A task principal consulta
+diretamente filesystem, documentação, codebase, GitHub, design, banco e ferramentas aplicáveis
+antes de perguntar. Uma investigação factual ainda aberta adia apenas as perguntas descendentes
+dela; o restante da frontier deve ser perguntado. Não crie agentes de pesquisa.
 
-Cada descoberta deve ser persistida imediatamente pelo Orchestrator no artefato
-correto:
+As decisões pertencem ao usuário. Conteste contradições, exponha impactos e recomende uma resposta,
+mas não transforme ausência de evidência em escolha implícita. O gate termina apenas quando a
+frontier estiver vazia, todos os ramos relevantes tiverem sido visitados e o usuário confirmar o
+entendimento compartilhado. Nenhum artefato é criado, alterado ou publicado antes dessa
+confirmação. Em workflows com approval de publicação separado, a confirmação do Grilling não
+substitui a aprovação da versão exata.
 
-| Descoberta | Artefato | Registro esperado |
-| --- | --- | --- |
-| Mudança de requisito, Contract ou escopo | `spec.md` | amendment, revisão e novo Judge Spec quando necessário |
-| Tarefa, dependência ou finding operacional | `plan.md` | tarefa, estado, tentativa, dependência ou próxima ação |
-| Evidência, decisão ou lição específica da feature | `evaluation.md` | evidência, decisão, warning, finding ou lição |
-| Regra reutilizável para o projeto | `documentation/rules/` | atualização da Rule aplicável |
+## Intake opcional
 
-Se uma implementação direta produzir um finding operacional que exija tarefas
-ou fases, o Orchestrator cria `plan.md` antes de continuar. Sem Plan, findings
-curtos e sua resolução ficam registrados em `evaluation.md`.
+GitHub Issue é tracking, não Contract técnico:
 
-A precedência é:
+- `create-feat-issue` transforma milestone/PRD ou pedido aprovado em outcome, escopo e critérios
+  observáveis; depois da aprovação/publicação, `create-spec` cria o Contract;
+- `create-bug-issue` registra sintoma, expectativa, reprodução e contexto sem diagnóstico;
+- `create-bug-report` exige a bug issue aprovada, produz diagnóstico durável e recomenda correção
+  direta ou Correction Spec conforme risco e coordenação.
 
-1. revisão humana explícita;
-2. origem declarada da demanda;
-3. Contract da Spec;
-4. Architecture e Rules;
-5. solução técnica da Spec;
-6. Plan, quando existir;
-7. implementação atual;
-8. evidências registradas em `evaluation.md`.
+Feature e bug issue exigem approval explícito antes de escrita no GitHub. Aprovar issue não
+autoriza implementação, branch, commit, PR ou alteração de produto.
 
-### Regra transversal: fidelidade Pencil-to-code
+Todo workflow de criação de issue executa descoberta de PRD antes do draft. Feature issue exige
+um PRD principal; bug e chore registram o PRD/requisito mais relevante ou `None` com evidência da
+busca. A associação nunca é inferida apenas por título, label, path ou milestone.
 
-Quando o escopo possuir uma referência `.pen`, os nodes declarados na Spec são
-a fonte visual canônica do código. A implementação deve preservar, para cada
-node e estado aplicável, a composição, hierarquia, dimensões, espaçamento,
-tipografia, cores, bordas, elevação, ícones/assets, densidade e variantes
-observáveis. A tradução para HTML semântico, acessibilidade, interação, dados e
-reflow responsivo é permitida quando necessária, mas não pode substituir,
-simplificar ou reinterpretar a referência visual.
+Antes do draft, os workflows de issue executam o Grilling: fatos são pesquisados e decisões são
+percorridas em rounds pela frontier da design tree. A confirmação de entendimento compartilhado
+encerra a entrevista, mas não substitui o approval explícito da versão exata publicada.
 
-Toda divergência deve ser registrada como decisão ou amendment, vinculada ao
-node e ao `CA-*` afetado, com motivo verificável e aprovação antes da
-implementação. Um node ausente, contradito ou alterado sem aprovação é finding
-bloqueante. A validação exige comparação independente Pencil/Web no mesmo
-viewport e estado, além do fluxo real no Playwright; screenshot isolado ou a
-afirmação de que a tela foi “verificada visualmente” não é evidência suficiente.
-
-Quando não houver fonte visual canônica, isso deve ser declarado na Spec. Não
-invente arquivo, Node ID ou detalhe visual para preencher a lacuna.
+Os dois workflows de PRD, prospectivo ou retrospectivo, também executam o Grilling depois da
+pesquisa e antes da escrita. O PRD só é criado ou atualizado após a frontier ficar vazia e o
+usuário confirmar o entendimento compartilhado.
 
 ## Spec
 
-Uma Spec pode nascer de PRD, Issue, Report ou demanda direta. O PRD não é
-obrigatório para correções ou tarefas técnicas, mas toda Spec possui Contract.
+`create-spec` pesquisa diretamente a codebase antes de escrever. Organize boundaries independentes
+como lanes de investigação da própria task, confira as autoridades e resolva conflitos por
+inspeção direta, sem criar agentes de pesquisa.
 
-```yaml
----
-title: <título>
-status: draft
-revision: 1
-source:
-  type: <prd|issue|report|direct-request>
-  ref: <path|url|codex-task>
-scope:
-  - <workspace|diretório|arquivo>
-last_updated_at: YYYY-MM-DD
----
-```
+A Spec não é escrita enquanto existir escolha material de produto, técnica, Design ou
+validação. Perguntas devem trazer evidência, recomendação, alternativa e impacto. A Spec
+possui exatamente:
 
-Estados válidos: `draft`, `open`, `in_progress`, `completed` e `cancelled`.
-`failed` é veredito de Judge; `blocked` é estado operacional de tarefa ou fase.
+1. Contexto e escopo;
+2. Implementation Contract com `RF-*` e critérios Given/When/Then `CA-*`;
+3. Technical Contract com baseline, runtime flow e paths/declarations por camada;
+4. Validation Contract com testes reais, comandos e cenários manuais `MV-*`;
+5. alinhamento documental, Rule Pack e histórico de revisões.
 
-O corpo deve conter:
+Depois da pesquisa e antes da escrita, `create-spec` executa o Grilling até esvaziar a frontier e
+obter confirmação explícita. Fatos pertencem à pesquisa; somente decisões não resolvidas pelas
+autoridades são levadas ao usuário.
 
-1. contexto e objetivo;
-2. escopo e fora de escopo;
-3. Contract;
-4. estado atual;
-5. solução técnica;
-6. plano de validação;
-7. avaliações previstas;
-8. alinhamento documental;
-9. amendments.
+Todo `RF-*` mapeia para pelo menos um `CA-*` e vice-versa. Paths são exatos e classificados
+como Create, Modify, Generate ou Remove. A Spec não é um Plan e não contém resultados.
 
-Use somente `RF-*` e `CA-*` como IDs obrigatórios. A matriz deve relacionar
-cada `CA-*` à evidência esperada e, depois, à evidência real em
-`evaluation.md`.
+Para UI, a Spec registra o widget tree exato, estados loading/empty/success/error/recovery,
+teclado, foco, responsividade, referências Pencil/screenshot e viewports. Comportamento
+inferido apenas de imagem precisa de clarificação. Uma Spec íntegra passa diretamente de
+`draft` para a revisão independente do Spec Reviewer.
 
-Toda interface, port, repository ou service criado ou alterado pela solução deve
-ter seus métodos especificados com nome, entrada e retorno. Não deixe assinaturas
-de contratos para decisão do Builder ou apenas para o Plan; detalhes internos de
-implementação continuam fora do Contract quando não afetam comportamento.
-
-Uma alteração de Contract, requisito ou escopo depois de `open` exige pausa,
-revisão da Spec, amendment, incremento de `revision` e novo Judge Spec. Uma
-alteração puramente técnica pode atualizar a solução e exigir nova avaliação de
-implementação apenas quando invalidar evidências ou critérios.
+Depois do integrity gate, o Orchestrator ativa exatamente um Spec Reviewer read-only com a
+revisão, fontes, Rule Pack, pesquisa verificada, paths e Design bundle. O Orchestrator verifica
+cada finding, corrige a mesma Spec e retoma o mesmo Reviewer. A Spec só passa para `open` quando
+a revisão exata estiver `clear` e nenhum finding bloqueante verificado permanecer. Amendment
+posterior invalida o resultado e exige nova revisão. A revision history registra a revisão
+avaliada, o resultado e as resoluções verificadas, sem incorporar o relatório bruto.
 
 ## Plan opcional
 
-O Plan só é criado quando houver fases dependentes, múltiplos workspaces,
-migração relevante, risco elevado ou necessidade real de ledger operacional.
+`create-plan` só é usado para fases dependentes, múltiplos boundaries, migração/integração,
+risco de segurança ou concorrência, paralelismo útil, UI complexa ou necessidade real de
+recovery ledger. O Plan deriva dependências do Technical Contract e dos paths, nunca de um
+grafo de dependência de produto.
 
-Ele registra:
+O Plan contém snapshot de execução, ledger de waves/fases/tarefas, agenda de validação e log
+condicional. Builders têm ownership estável (`Builder Core`, `Builder Server`, `Builder Web`
+ou boundary equivalente), podem executar várias fases e nunca compartilham paths ativos. O
+padrão é no máximo três Builders concorrentes. A integridade do Plan é verificada pela task
+principal antes de salvar e antes de cada wave; não há agente separado para esse gate.
 
-- objetivo, escopo e fora de escopo;
-- fases ordenadas e dependências;
-- tarefas com paths, resultado observável e IDs `RF-*`/`CA-*`;
-- paralelismo e sua justificativa;
-- sensores e evidências esperados por fase;
-- riscos, findings, tentativas, estado e próxima ação;
-- veredito do Judge Plan antes da implementação;
-- escopo, evidências e veredito do único Judge Implementation Final.
+Antes de salvar, `create-plan` executa o Grilling sobre decisões de execução ainda abertas. O
+interview não pode redefinir a Spec; qualquer ambiguidade de Contract retorna para amendment.
 
-Estados de tarefa: `pending`, `implementing`, `validating` e `verified`.
-Estados de fase: `pending`, `in_progress`, `awaiting_judgment`, `failed` e
-`accepted`.
+## Implementação e evidência viva
 
-Somente o Orchestrator atualiza o Plan. Tarefas e findings operacionais devem
-ser registrados nele imediatamente.
+`implement-spec` é a única entrada de implementação:
 
-## Orquestração de agentes
+- sem Plan atual: Builder Direct no contexto principal;
+- com Plan da revisão atual: Builders de ownership por wave;
+- Plan ausente mas necessário: invoca `create-plan` e continua automaticamente;
+- Plan obsoleto: reconcilia ou marca `superseded` antes de editar.
 
-Todos os subagentes são criados diretamente pelo Orchestrator e são irmãos:
+Antes de alterar source ou testes, materialize `evaluation.md` pelo Contract canônico definido
+em `implement-spec`, registre revisão, assignment, paths, Rules, critérios e exits, e mude a Spec para
+`in_progress`. O Orchestrator inspeciona cada diff, executa os sensores oficiais e atualiza
+Evaluation após cada mudança. Relatos de Builder e Reviewer são input, não evidência.
 
-```text
-Orchestrator
-├── Builder Direct
-├── Builder F<n> / Builder F<n>-T<m>
-├── Builder Fix CI-<n>
-└── Judge Spec / Judge Plan / Judge Implementation
-```
+Para frontend, testes automatizados não substituem a validação manual obrigatória definida em
+`AGENTS.md`: serviço real, login quando aplicável, rota protegida, estados relevantes,
+console, `pageerror`, `requestfailed`, respostas HTTP e screenshots atuais. Para Server e
+banco, mocks não substituem request/response real, autorização, tenant e persistência no
+Supabase Dev quando aplicável.
 
-O Builder é o único papel de implementação. O Judge é read-only e não corrige
-o próprio objeto de avaliação.
+Após integrar um Plan, um único Implementation Reviewer revisa o candidato completo e repete
+interações de alto risco. O Orchestrator verifica cada finding e retoma o mesmo Builder e o
+mesmo Reviewer. Implementação direta não exige Reviewer separado salvo autoridade explícita.
 
-O Orchestrator deve:
+Evidence anterior à última mudança afetada vira `stale`. Evaluation só muda para `ready`
+quando todos os `CA-*`, sensores, `MV-*`, comparações visuais e findings bloqueantes estão
+atuais e resolvidos.
 
-- classificar a demanda e escolher Spec direta ou Plan;
-- congelar a revisão da Spec e o commit-base antes da implementação;
-- garantir paths sem sobreposição entre Builders;
-- executar ou delegar sensores determinísticos aplicáveis;
-- persistir descobertas imediatamente no artefato correto;
-- criar o `evaluation.md` antes do PR, com evidências reais e vereditos;
-- encaminhar a entrega para `create-pr` e, depois, `conclude-spec`.
+## Correção versus mudança de Contract
 
-Para um Plan, o único Judge Implementation ocorre depois da integração de todas
-as fases. As fases passam por sensores, mas não recebem aceite independente de
-Judge. O `conclude-spec` não cria um segundo Judge: usa o veredito final já
-registrado e só pode concluir se nenhuma alteração posterior tiver invalidado o
-diff ou as evidências avaliadas.
+| Classe                    | Ação                                                                                                                                |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Correção de implementação | mantém revisão; registra finding; reabre trabalho/evidência; retoma Builder; reexecuta somente exits invalidados                    |
+| Mudança de Contract       | pausa; Spec volta a `draft`; atualiza autoridade; incrementa revisão; reconcilia Design, Plan e Evaluation; retoma `implement-spec` |
 
-## Sensores, preflight e CI
+Erro de teste, browser, console, runtime, migration, CI ou comparação visual dentro do Contract
+é correção automática. Não se pede autorização para tornar a implementação aderente. Pergunte
+somente quando faltar decisão de produto, autoridade, ambiente, segurança ou escopo.
 
-Sensores locais:
+## Conclusão, PR e CI
 
-| Comando | Uso |
-| --- | --- |
-| `npm run format` | aplicar formatação; não é gate |
-| `npm run check:code` | lint e consistência estática |
-| `npm run check:types` | contratos TypeScript |
-| `npm run test:unit` | comportamento isolado |
-| `npm run check:architecture` | fronteiras, quando aplicável |
-| `npm run test:integration` | APIs, banco e fluxos integrados, quando aplicável |
+`conclude-spec` exige Spec `in_progress`, Evaluation `ready`, Plan completo quando houver,
+conformance atual e nenhuma evidência bloqueante. Com autorização para commit/push/PR:
 
-Para frontend, a validação de `ui-layer-rules.md` é um gate separado. O
-`check:architecture` verifica dependências e fronteiras de módulos, mas não
-verifica o Widget Pattern, a separação Entry Point/View/Hook ou a fidelidade ao
-Pencil. O Orchestrator deve registrar uma auditoria determinística da UI com
-paths e linhas dos widgets alterados.
+1. repete preflight e conformance no candidato atual;
+2. invoca `commit-code` para commits intencionais;
+3. invoca `create-pr` para criar ou atualizar um PR ready-for-review;
+4. aguarda cada workflow aplicável no HEAD atual do PR;
+5. registra nome, resultado, URL e SHA em Evaluation;
+6. em falha, roteia imediatamente para `implement-spec` ou amendment, republica e repete CI;
+7. após CI verde, marca Spec, Plan e Evaluation como `completed`.
 
-O ciclo curto usa `format`, `check:code`, `check:types` e `test:unit`. O
-preflight executa todos os sensores aplicáveis no escopo integrado antes da
-criação do PR.
+Não use run de push, SHA antigo, check ausente ou build local como substituto do CI do PR.
+Não faça merge ou deploy sem pedido explícito. Feedback posterior em PR aberto pode reabrir a
+mesma Spec; após merge, defeito usa Bug Report e comportamento novo usa uma change Spec.
 
-Os checks e o build final pertencem ao CI:
+## Sensores oficiais
 
-- o CI executa os checks aplicáveis, incluindo `check:architecture`;
-- o build roda depois dos checks aplicáveis;
-- o build não precisa rodar a cada fase ou retry;
-- `check:dead-code` não é sensor oficial;
-- Playwright MCP pode fornecer evidência de browser, mas não substitui um
-  `test:integration` automatizado quando o comportamento precisa ser protegido.
-
-## Evaluation
-
-`evaluation.md` é obrigatório depois da implementação ou do primeiro
-julgamento relevante e deve existir antes do PR. Ele é o registro de fatos da
-entrega, não uma cópia da Spec.
-
-Deve registrar:
-
-- revisão da Spec, commit-base e commit avaliado;
-- matriz de `CA-*` com evidências reais;
-- resultado do Judge Spec e do Judge Implementation;
-- auditoria das Rules aplicáveis, incluindo Entry Point/View/Hook quando houver
-  UI;
-- matriz visual separada para Pencil e Playwright, com node, viewport, estado,
-  rota, commit e screenshot/comparação;
-- divergências Pencil-to-code aprovadas, com node, motivo, impacto e decisão;
-- sensores locais e preflight;
-- checks e build do CI, inicialmente `pending` quando o PR ainda não existe;
-- warnings e findings, com estado e resolução;
-- decisões tomadas e lições aprendidas;
-- alinhamento documental e alterações posteriores.
-
-Toda evidência nova, decisão ou lição deve ser acrescentada imediatamente ao
-`evaluation.md`. O documento acompanha a entrega até o CI ficar verde.
-
-## Falhas e retries
-
-Se um Judge falhar, a Spec continua `in_progress`. O Orchestrator registra o
-finding no Plan, quando existir, ou no `evaluation.md`, cria `Builder Fix` e
-repete os sensores afetados. O único Judge Implementation Final é repetido
-quando o diff ou qualquer evidência de Contract, Rule, Pencil ou Playwright for
-invalidada. Qualquer alteração depois do veredito final invalida o aceite
-anterior, mesmo que a alteração seja uma correção técnica.
-
-Se um check ou o build do CI falhar:
-
-1. registrar a falha imediatamente em `evaluation.md`;
-2. manter a Spec `in_progress`;
-3. criar `Builder Fix CI-<n>` quando a correção estiver no escopo;
-4. repetir os sensores afetados;
-5. repetir o Judge Final sempre que o diff ou a evidência tiver sido invalidada;
-6. atualizar `evaluation.md` com a nova evidência e decisão.
-
-Depois de três falhas consecutivas pelo mesmo motivo, o Orchestrator apresenta
-o histórico e pede decisão ao usuário.
-
-## Entrega e conclusão
-
-`create-pr` só atua depois do preflight e da criação do `evaluation.md`. Ele
-organiza commits pendentes, cria o PR, inclui o resumo da Spec e da avaliação,
-solicita review e permanece aberto acompanhando os checks e o build do CI até
-passarem no HEAD atual.
-
-Se um check ou o build do CI falhar, `create-pr` registra a falha em
-`evaluation.md`, cria ou encaminha um `Builder Fix CI-*`, repete os sensores
-afetados, atualiza a branch e aguarda o CI novamente. O loop continua até o CI
-verde; após três falhas consecutivas pelo mesmo motivo, a decisão é escalada ao
-usuário.
-
-`conclude-spec` só fecha a entrega quando:
-
-- a implementação ou todas as fases foram aceitas;
-- não há findings bloqueantes;
-- `evaluation.md` está completo;
-- todos os checks obrigatórios e o build do CI estão verdes;
-- review e conversas bloqueantes foram resolvidos;
-- o HEAD avaliado é o HEAD final;
-- o Judge Final permanece válido para esse HEAD, sem alterações posteriores não
-  julgadas;
-- toda validação visual aplicável possui evidência independente de Pencil e
-  Playwright.
-
-Então o Orchestrator atualiza `evaluation.md`, alinha a documentação aplicável,
-altera a Spec para `completed` e conclui o Plan, se existir.
-
-## MCPs
-
-MCPs são ferramentas de contexto, não sensores:
-
-- Serena: navegar pela codebase;
-- Context7: consultar documentação atualizada;
-- Pencil: consultar e validar design;
-- Playwright: inspecionar fluxos reais no navegador;
-- Supabase Dev/Prod: verificar schema e integrações autorizadas.
-
-## Regras de documentação
-
-Atualizações normativas necessárias para orientar a implementação acontecem
-antes do Builder. Alinhamentos factuais e lições generalizáveis são resolvidos
-na conclusão; mudanças de produto, novas Rules globais, fronteiras
-arquiteturais ou expansão material de escopo exigem decisão do usuário.
+Após alteração de código, execute os detectores obrigatórios de `AGENTS.md`:
+`npm run check:code`, `npm run check:types` e `npm run test:unit`. Acrescente
+`check:architecture`, testes de integração, geração, browser, Supabase Dev e build conforme
+Rules, Spec, paths e risco. `format` aplica formatação, mas não prova comportamento.

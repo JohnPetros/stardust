@@ -1,237 +1,142 @@
 ---
-description: Prompt para transformar relatos informais em bug reports técnicos claros, acionáveis e orientados a correção.
+name: create-bug-report
+description: Diagnosticar uma GitHub bug issue aprovada em um Bug Report factual do Stardust e recomendar correção direta ou Correction Spec.
 ---
 
-# Prompt: Criar Bug Report
+# Criar Bug Report
 
-## Objetivo
-
-Transformar um esboço ou relato informal de um erro em um **Bug Report profissional**, claro, acionável e tecnicamente orientado, pronto para ser consumido pela equipe de desenvolvimento sem necessidade de interpretação adicional.
-
-O bug report deve:
-- Explicar **o que está quebrado**
-- Indicar **onde e por que provavelmente está quebrado**
-- Indicar um **direcionamento de correção** curto, sem detalhar implementação como Spec
-
-O resultado desta tarefa é **sempre um único arquivo Markdown** contendo apenas o **Bug Report**.
-
-Este prompt **não cria Spec de correção**. Quando uma Spec for necessária, ela deve ser solicitada e executada em outro fluxo, usando `documentation/prompts/create-spec-prompt.md`.
-
-> O papel desta tarefa termina quando o bug report estiver salvo, claro e acionável.
-> Não crie, edite nem antecipe arquivo em `specs/` durante a execução deste prompt.
-
----
+Transforme uma GitHub bug issue aprovada em um diagnóstico técnico durável. O Bug Report é
+input de correção, não Spec: não inclua `CA-*`, um roteiro de validação manual, fases, tasks,
+assinaturas, inventário proposto de arquivos ou implementação detalhada.
 
 ## Entrada
 
-- **Esboço do Problema:** relato livre descrevendo o erro observado (sintoma)
-- **Contexto Técnico (opcional):**
-  - Dispositivo / OS / Browser
-  - Ambiente (local, staging, produção)
-  - Feature ou fluxo afetado
+- GitHub bug issue com problema, comportamento esperado, reprodução e contexto;
+- contexto técnico opcional: ambiente, browser/dispositivo, frequência e evidências.
 
----
+Sem issue existente, pare e encaminhe para `create-bug-issue`; este workflow não cria nem
+atualiza a issue.
 
-## Regras Aplicáveis
+## Autoridade e Rules
 
-Antes de diagnosticar o bug, leia:
+Leia `AGENTS.md`, `documentation/sdd.md`, `documentation/rules/rules.md`,
+`documentation/architecture.md`, `documentation/modules.md`, a milestone associada e o PRD
+versionado vinculado quando existir. Selecione e leia por inteiro as Rules das camadas e tipos de
+teste afetados. Use-as para validar fronteiras, sem transformar o relatório em Spec.
 
-- `documentation/rules/rules.md` — índice para selecionar as rules das camadas envolvidas.
-- `documentation/rules/code-conventions-rules.md` — referência geral para nomeação, factories, erros e eventos.
-- Rules específicas das camadas citadas no diagnóstico, por exemplo:
-  - `documentation/rules/core-package-rules.md`
-  - `documentation/rules/database-rules.md`
-  - `documentation/rules/rest-layer-rules.md`
-  - `documentation/rules/rpc-layer-rules.md`
-  - `documentation/rules/ui-layer-rules.md`
-  - `documentation/rules/web-application-rules.md`
-  - `documentation/rules/server-application-rules.md`
-  - `documentation/rules/studio-appllication-rules.md`
-  - `documentation/rules/ai-layer-rules.md`
-  - `documentation/rules/queue-layer-rules.md`
-  - `documentation/rules/realtime-rules.md`
-  - `documentation/rules/validation-layer-rules.md`
+Milestone e PRD definem comportamento esperado. Se a expectativa solicitada mudar o produto,
+pare e encaminhe para amendment/feature; não classifique mudança de comportamento como bug.
 
-Use as rules apenas para validar fronteiras e padrões técnicos; o bug report não deve virar uma spec de implementação.
+## Pesquisa diagnóstica
 
----
+Organize a pesquisa direta da task em lanes delimitadas:
 
-## Diretrizes de Execução
+- uma lane para boundary estreito;
+- lanes independentes quando dois ou mais boundaries forem afetados;
+- escolha apenas lanes reais, como Core, Server, Web, Studio, Database ou Integration;
+- defina sintoma, expectativa, paths iniciais, Rule Pack e pergunta diagnóstica;
+- registre paths/declarations exatos, evidência, causa provável, risco e incerteza.
 
-### 1. Análise do Relato
+A task principal pesquisa cada lane, resolve conflitos por inspeção direta e separa fato de
+hipótese. Não crie agentes de pesquisa.
 
-- Interprete o problema focando em **comportamento observado vs comportamento esperado**.
-- Elimine ambiguidades do relato original.
+## Diagnóstico com Playwright
 
-### 2. Diagnóstico
+Playwright pode e deve ser usado para diagnosticar bugs de frontend, UI, rotas client-side,
+autenticação ou qualquer falha que dependa do navegador real. Ele não é reservado à validação
+final da correção.
 
-- Identifique causas prováveis com base na arquitetura descrita em `documentation/architecture.md`.
-- Se o bug estiver associado a uma funcionalidade existente, consulte o PRD correspondente na milestone do GitHub que representa a fonte de verdade do produto.
-- Identifique o **ponto de verdade** dos dados afetados: fonte (DB, API, cache), contratos (schemas/DTOs), normalização (mapeamentos entre camadas).
-- Localize os nós críticos no código:
-  - Onde a feature é iniciada (page/widget/route)
-  - Onde o estado é controlado (store/context)
-  - Onde a chamada remota acontece (action/service)
-  - Onde regras são aplicadas (use case)
-  - Onde persistência/integração é feita (driver/repo)
-- Procure implementações similares na codebase para identificar padrões de validação, erro e loading já estabelecidos.
+Quando o sintoma envolver navegador:
 
-### 3. Mapeamento de Camadas
+- reproduza a rota e o fluxo observável com Playwright antes de concluir a causa;
+- para rotas protegidas, autentique usando as variáveis locais previstas em `AGENTS.md`, nunca
+  credenciais literais, e acesse pelo menos uma rota protegida no mesmo contexto;
+- registre `console`, `pageerror`, `requestfailed` e `response`, incluindo método, path e status
+  dos endpoints relevantes, sem registrar headers ou corpos que contenham tokens, cookies ou
+  dados pessoais;
+- use `waitForURL`, `waitForRequest`, `waitForResponse` ou `waitForFunction` para sincronizar
+  estados; não use `waitForTimeout` como única evidência;
+- inspecione o estado efetivamente observado: DOM, estilos computados, atributos, loading,
+  navegação, remounts, timing e respostas HTTP; em falhas visuais, capture screenshot quando isso
+  ajudar a distinguir composição, stacking context, asset ou hidratação;
+- se o fluxo falhar por autenticação, separe falha de credencial/API, propagação de sessão,
+  CORS, middleware, refresh e carregamento da tela. Confirme o endpoint de login e as chamadas
+  subsequentes sem expor os valores sensíveis;
+- trate a execução Playwright como evidência diagnóstica do relatório. O documento final não deve
+  ganhar uma seção de manual validation, acceptance, tasks ou implementação por causa dessa
+  investigação.
 
-- Determine quais camadas estão envolvidas direta ou indiretamente.
-- Sempre que possível, associe o problema a **arquivos reais** da codebase.
-- Use exclusivamente as camadas definidas abaixo:
-  - `core` — Use Cases
-  - `rest` — Controllers e Services HTTP
-  - `database` — Repositories, Mappers e Types
-  - `provision` — Providers e integrações externas
-  - `rpc` — Actions
-  - `ui` — Widgets, Stores e Contexts
-  - `ai` — Workflows e Tools
-  - `queue` — Inngest Functions
-  - `web` — Pages e Layouts Next.js
-  - `studio` — Pages e Layouts React Router
+Para Web App e Studio, siga os ambientes, scripts de exportação de credenciais, portas e fluxo
+autenticado descritos em `AGENTS.md`. Use o Playwright CLI tanto para a reprodução formal quanto
+para a exploração visual pontual; não use outra ferramenta de automação de navegador neste
+projeto.
 
-### 4. Direcionamento de Correção
+## Workflow
 
-- Inclua apenas uma orientação técnica breve sobre onde a correção provavelmente deve atuar.
-- Não detalhe fases, tarefas, assinaturas, novos arquivos ou lista estruturada de implementação.
-- Não use seções do tipo **O que já existe**, **O que deve ser criado**, **O que deve ser modificado** ou **O que deve ser removido**; isso pertence à Spec.
-- O direcionamento deve ajudar a próxima etapa, mas não substituir a Spec.
+1. confira a issue real e a reprodução informada;
+2. separe falha observada de comportamento esperado;
+3. associe milestone, PRD e requisito real quando aplicáveis, sem alterar seu estado;
+4. inspecione entry point, estado, transporte, use case, persistência e integração implicados;
+5. quando aplicável, reproduza e instrumente o fluxo real com Playwright conforme a seção de
+   diagnóstico no navegador;
+6. salve ou atualize
+   `documentation/features/<domínio>/<feature>/reports/<slug>-bug-report.md`;
+7. recomende no resumo final:
+   - **Correção direta:** narrow, bem compreendida, baixo risco e sem Contract durável; ou
+   - **Correction Spec:** ambígua, cross-layer, coordenada ou de risco material, exigindo
+     `RF-*`, `CA-*`, `MV-*` ou Plan.
 
-### 5. Encerramento
+Não escreva a delivery route dentro do Bug Report e não crie a Spec neste workflow.
 
-Após salvar o Bug Report, encerre a tarefa informando o arquivo criado ou atualizado.
-
-- Não crie Spec.
-- Não edite arquivos em `specs/`.
-- Não inclua uma Spec dentro do Bug Report.
-- Se o usuário pedir a Spec depois, trate como uma nova tarefa usando o prompt apropriado.
-
----
-
-## Template de Saída (Estrutura Obrigatória)
-
-Salve um único arquivo em `documentation/features/{dominio}/reports/{nome-descritivo}-bug-report.md` seguindo **estritamente** o template abaixo. Este arquivo deve conter **apenas o Bug Report**.
+## Estrutura obrigatória
 
 ```md
 ---
-title: {Titulo Curto e Descritivo}
-prd: <link para o PRD ou milestone referente ao bug, se houver>
-issue: <link para o issue referente ao bug>
-apps: {web|server|studio}
-status: {open|closed}
-last_updated_at: {YYYY-MM-DD}
+title: <título curto>
+issue: <GitHub issue URL>
+milestone: <URL ou null>
+prd: <path/requisito ou null>
+apps:
+  - <web|server|studio>
+status: open
+last_updated_at: YYYY-MM-DD
 ---
 
-# Bug Report: {Titulo Curto e Descritivo}
+# Bug Report: <título>
 
-## Problema Identificado
+## Diagnóstico
 
-{Descrição objetiva do comportamento incorreto observado. Evite suposições técnicas nesta seção.}
+### Falha observada
 
-## Causas
+<comportamento confirmado e condições>
 
-{Lista concisa das causas técnicas prováveis. Exemplo: validação ausente, estado inconsistente, contrato quebrado, erro de mapeamento.}
+### Comportamento esperado
 
-## Contexto e Análise
+<contrato de produto, Spec, Design ou comportamento estabelecido>
 
-### Camada Core (Use Cases)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
+### Causa raiz
 
-### Camada REST (Controllers)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
+<explicação sustentada por evidência; hipóteses restantes explicitamente marcadas>
 
-### Camada REST (Services)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
+### Áreas afetadas
 
-### Camada Banco de Dados (Repositories)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
+- `<path relativo>` — <responsabilidade no defeito>
 
-### Camada Banco de Dados (Mappers)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
+### Risco de regressão
 
-### Camada Banco de Dados (Types)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
+<comportamentos relacionados que a correção deve preservar>
 
-### Camada Provision (Providers)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
+## Limite da correção
 
-### Camada RPC (Actions)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
-
-### Camada UI (Widgets)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
-
-### Camada UI (Stores)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
-
-### Camada UI (Contexts)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
-
-### Camada AI (Workflows)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
-
-### Camada AI (Tools)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
-
-### Camada Inngest App (Functions)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
-
-### Camada Next.js App (Pages, Layouts)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
-
-### Camada React Router App (Pages, Layouts)
-<!-- Incluir apenas se aplicável -->
-- **Arquivo:** `{caminho/relativo/do/arquivo}`
-- **Diagnóstico:** {Explique o que está errado neste ponto.}
-
-## Direcionamento de Correção
-
-{Parágrafo ou lista curta com a direção provável da correção. Deve apontar camada(s) e arquivo(s) relevantes, mas não deve detalhar tarefas de implementação como uma Spec.}
+<o que deve ser corrigido e o que deve permanecer inalterado>
 ```
-
----
 
 ## Restrições
 
-- Não invente caminhos de arquivo, métodos ou contratos sem evidência na codebase.
-- Cite sempre o arquivo do problema — sem diagnósticos genéricos sem localização.
-- Separe fato (evidência encontrada no código) de hipótese (suspeita sem confirmação).
-- Não proponha correções que violem os contratos entre camadas definidos em `documentation/rules/`.
-- Use apenas as camadas listadas na seção 3. Mapeamento de Camadas — não crie camadas arbitrárias.
-- Omita do template as camadas que não forem aplicáveis ao bug em questão.
-- Não incorpore Spec de correção no arquivo do bug report.
-- Não inclua seções de planejamento de Spec, como **O que já existe**, **O que deve ser criado**, **O que deve ser modificado** ou **O que deve ser removido**.
-- Não crie, edite ou atualize arquivos em `specs/` durante esta tarefa.
-- Não trate a tarefa como incompleta por ausência de Spec; o entregável final é somente o Bug Report.
+- use GitHub Issues e paths relativos reais;
+- não invente execução, causa, método, contrato ou arquivo;
+- não inclua acceptance, uma seção de manual validation, tasks, fases ou file plan; evidências
+  Playwright podem fundamentar a causa, mas devem ser sintetizadas nas seções factuais do report;
+- não edite Spec, Plan, Evaluation, PRD ou Rule;
+- não exponha credenciais, dados privados ou logs sensíveis;
+- no fim, reporte issue, path e route recomendada.

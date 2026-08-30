@@ -20,19 +20,19 @@
 - Context7 para buscar informações atualizadas
 - Serena para navegar pela codebase de forma otimizada
 - Pencil para editar ou saber o contexto de frames de design estilo Figma
-- Playwright para inspecionar e validar fluxos reais no navegador
-- browser-use para exploração interativa e tarefas pontuais no navegador real
-- Supabase Dev para interagir com o projeto Supabase de desenvolvimento 
+- Playwright CLI para inspecionar e validar fluxos reais no navegador
+- Supabase Dev para interagir com o projeto Supabase de desenvolvimento
 - Supabase Prod para interagir com o projeto Supabase de produção
 
-### browser-use e Playwright
+### Playwright CLI
 
-- Use `browser-use` para exploração manual assistida, inspeção visual e tarefas
-  pontuais em uma sessão real do navegador conectada via CDP.
-- Use Playwright para validações formais, testes automatizados repetíveis,
-  asserções, mocks, traces, execução cross-browser e CI.
-- `browser-use` não substitui o Playwright nas validações obrigatórias de
-  frontend nem na suíte de testes versionada.
+- Use o Playwright CLI para exploração, inspeção visual, diagnóstico e tarefas
+  pontuais em um navegador real, além de validações formais e testes repetíveis.
+- Para testes versionados, use `npm --workspace @stardust/web run test:integration -- <arquivo>`
+  ou `npm exec playwright -- test ...` a partir de `apps/web`.
+- Para uma sessão interativa, use `npm exec playwright -- codegen <url>` a partir de
+  `apps/web` quando isso ajudar a descobrir locators ou reproduzir um fluxo. Não use
+  ferramentas alternativas de browser automation neste projeto.
 
 ### Supabase Dev como padrão
 
@@ -109,28 +109,30 @@ declarar a aplicação funcional.
 Exemplo mínimo:
 
 ```ts
-const studioUrl = 'http://localhost:8000'
-const page = await browser.newPage()
-const consoleErrors: string[] = []
-const failedRequests: string[] = []
+const studioUrl = "http://localhost:8000";
+const page = await browser.newPage();
+const consoleErrors: string[] = [];
+const failedRequests: string[] = [];
 
-page.on('console', (message) => {
-  if (message.type() === 'error') consoleErrors.push(message.text())
-})
-page.on('pageerror', (error) => consoleErrors.push(error.message))
-page.on('requestfailed', (request) => failedRequests.push(request.url()))
+page.on("console", (message) => {
+  if (message.type() === "error") consoleErrors.push(message.text());
+});
+page.on("pageerror", (error) => consoleErrors.push(error.message));
+page.on("requestfailed", (request) => failedRequests.push(request.url()));
 
-await page.goto(`${studioUrl}/`)
-await page.getByLabel(/email/i).fill(process.env.STUDIO_APP_E2E_EMAIL!)
-await page.getByLabel(/senha|password/i).fill(process.env.STUDIO_APP_E2E_PASSWORD!)
-await page.getByRole('button', { name: 'Login' }).click()
-await page.waitForURL('**/dashboard')
+await page.goto(`${studioUrl}/`);
+await page.getByLabel(/email/i).fill(process.env.STUDIO_APP_E2E_EMAIL!);
+await page
+  .getByLabel(/senha|password/i)
+  .fill(process.env.STUDIO_APP_E2E_PASSWORD!);
+await page.getByRole("button", { name: "Login" }).click();
+await page.waitForURL("**/dashboard");
 
-await page.goto(`${studioUrl}/profile/users`)
-await page.getByRole('heading', { name: 'Usuários' }).waitFor()
+await page.goto(`${studioUrl}/profile/users`);
+await page.getByRole("heading", { name: "Usuários" }).waitFor();
 
-expect(consoleErrors).toEqual([])
-expect(failedRequests).toEqual([])
+expect(consoleErrors).toEqual([]);
+expect(failedRequests).toEqual([]);
 ```
 
 ### Diagnóstico de falhas
@@ -209,33 +211,33 @@ faça isso simulando a sessão, sem depender de uma conta real:
 Exemplo de rota autenticada:
 
 ```ts
-await context.clearCookies()
+await context.clearCookies();
 await context.addCookies([
   {
-    name: '@stardust:access-token',
-    value: 'web-e2e-test-token',
-    domain: '127.0.0.1',
-    path: '/',
+    name: "@stardust:access-token",
+    value: "web-e2e-test-token",
+    domain: "127.0.0.1",
+    path: "/",
   },
-])
+]);
 
 await ServerMock(page).register([
   {
-    method: 'GET',
-    path: '/auth/account',
+    method: "GET",
+    path: "/auth/account",
     status: 200,
     body: { isAuthenticated: true },
   },
   {
-    method: 'GET',
-    path: '/space/planets',
+    method: "GET",
+    path: "/space/planets",
     status: 200,
     body: [],
   },
-])
+]);
 
-await page.goto('/space')
-await expect(page).toHaveURL(/\/space$/)
+await page.goto("/space");
+await expect(page).toHaveURL(/\/space$/);
 ```
 
 O teste `apps/web/src/app/tests/challenging/assistant-history.test.ts` contém
@@ -318,6 +320,28 @@ Se o login redirecionar novamente para `/auth/sign-in`, registre `console`,
 `pageerror`, `requestfailed` e `response` antes de tentar outra rota. Isso
 separa falha visual da página de falha de autenticação, CORS ou API.
 
+### Diagnóstico de autenticação no Playwright
+
+- Um `2xx`/`201` no endpoint de login não prova que a sessão foi propagada para
+  a aplicação. Depois do login, confirme `/auth/account` com `200`, a rota
+  protegida e os endpoints consumidos por ela com `2xx`.
+- Se a API de login retornar sucesso, mas uma chamada posterior mostrar
+  `Conta não autorizada`/`401`, não classifique isso automaticamente como
+  credencial inválida. Separe login, cookies, header `Authorization`, refresh,
+  middleware e o endpoint posterior; registre método, path e status de cada
+  etapa sem registrar valores de tokens ou cookies.
+- Em fluxos que usam Server Actions, o `POST` observado pelo navegador pode
+  usar a URL da página e os headers `next-action`/RSC. Verifique se a action
+  concluiu sem `3xx` prematuro e se a página não foi desmontada antes do estado
+  autenticado ou da transição visual ser observado.
+- Para estados visuais assíncronos, valide a propriedade observável — por
+  exemplo, estilo computado, atributo ou texto — com `waitForFunction` ou uma
+  asserção equivalente; `locator.toBeVisible()` isolado pode passar enquanto
+  o elemento ainda está com `opacity: 0`.
+- Se for necessário confirmar o contrato da API diretamente, use as variáveis
+  locais e mantenha tokens apenas em memória do processo. Não imprima o token,
+  a senha, o conteúdo de `.env.development` ou corpos de resposta sensíveis.
+
 ### Diagnóstico
 
 - Valide que as requisições estão indo para `/api/tests/server`, não para uma
@@ -339,7 +363,7 @@ Após fazer qualquer alteração no código, execute os comandos:
 - `npm run test:unit`
 
 Em workflows SDD, execute também os sensores aplicáveis definidos em
-`documentation/rules/sdd-rules.md`.
+`documentation/sdd.md`.
 
 # Instruções para revisão de pull request
 

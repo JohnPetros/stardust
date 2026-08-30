@@ -1,82 +1,84 @@
 ---
 name: create-plan
-description: Criar um Plan SDD como ledger de fases, progresso, evidências e handoff para uma Spec de feature.
+description: Criar um Plan SDD opcional como ledger de waves, ownership, progresso, evidência e handoff de uma Spec open.
 ---
 
 # Criar Plan
 
-Crie `plan.md` somente quando a Spec `open` possuir fases dependentes, múltiplos
-workspaces, migration relevante, risco elevado ou necessidade real de ledger.
-Para Spec pequena, use `implement-spec` diretamente.
+Crie `plan.md` ao lado de uma Spec `open` somente quando houver fases dependentes,
+múltiplos boundaries, paralelismo útil, migration/integração, risco de segurança ou
+concorrência, UI/validação complexa ou necessidade real de recovery ledger.
 
-O Orchestrator cria `documentation/features/<domínio>/<feature>/plan.md` na
-task atual e mantém a relação com a revisão da Spec:
+Leia `AGENTS.md`, `documentation/sdd.md`, Architecture, Tooling, Rule Pack, Spec e Design
+Contract. O Plan não redefine comportamento, paths, schemas ou decisões. Ambiguidade material
+retorna para amendment via `create-spec`.
+
+## Gate obrigatório de Grilling
+
+Execute o protocolo de Grilling definido em `documentation/sdd.md` antes de criar ou atualizar o
+Plan. Monte uma design tree apenas para decisões de execução que a Spec não tenha determinado,
+como decomposição em waves, ownership, paralelismo, ordem de migrations/integrações, gates de
+ambiente, riscos, recovery e handoff.
+
+Fatos sobre paths, dependências, ferramentas e runtime devem ser pesquisados, não perguntados. Em
+cada round, pergunte toda a frontier disponível com uma recomendação; mantenha decisões
+dependentes para rounds posteriores. Se a entrevista revelar ambiguidade de produto, Contract,
+schema ou arquitetura, interrompa o Plan e encaminhe para amendment via `create-spec`.
+
+Somente salve o Plan quando a frontier estiver vazia e o usuário confirmar o entendimento
+compartilhado. Essa confirmação não autoriza implementação.
+
+## Metadata
 
 ```yaml
-spec: ../specs/<nome>-spec.md
-spec_revision: 1
+---
+title: <feature> — implementation plan
 status: pending
+spec: ./spec.md
+spec_revision: 1
+evaluation: ./evaluation.md
+updated_at: YYYY-MM-DD
+---
 ```
 
-Inclua:
+## Estrutura obrigatória
 
-- objetivo, escopo e fora de escopo;
-- fases ordenadas e dependências;
-- tarefas com paths, resultado observável e IDs `RF-*`/`CA-*`;
-- campo `parallelizable` e motivo quando aplicável;
-- sensores e evidências esperados por fase;
-- riscos, findings ativos, tentativas, estado e próxima ação;
-- veredito do `Judge Plan` antes da implementação;
-- modo `Final` e escopo do único `Judge Implementation Final` após a
-  integração de todas as fases.
+### 1. Execution status
 
-## Design e Pencil
+Registre revisão/status da Spec, motivo do Plan, fase atual, próxima ação, blockers, Builders
+ativos/próximos e ownership compartilhado que o Orchestrator deve coordenar.
 
-Quando a Spec possuir referências de design, preserve no Plan exatamente o path
-do arquivo `.pen`, os Node IDs, os nomes, os estados, as variantes e os
-viewports declarados. Cada tarefa de UI deve citar as referências relevantes,
-os respectivos `RF-*`/`CA-*` e o resultado observável esperado.
+### 2. Execution ledger
 
-Os nodes e estados da Spec continuam sendo a fonte visual canônica durante o
-Plan. As tarefas devem carregar para o Builder o path do `.pen`, Node IDs,
-viewports, dimensões/anchors e a expectativa de comparação. Não crie uma
-interpretação alternativa no Plan: simplificação, substituição ou adição
-visual só pode entrar como divergência explicitamente aprovada e vinculada ao
-`CA-*` correspondente.
+```md
+| Wave | Builder | Phase | Name | Depends on | Parallel with | Status | Exit condition |
+| ---- | ------- | ----- | ---- | ---------- | ------------- | ------ | -------------- |
+```
 
-Separe, quando aplicável, tarefas para atualizar o design no Pencil, implementar
-a UI e validar o resultado. Não substitua ou crie Node IDs no Plan; uma
-referência ausente, divergente ou inválida deve ser registrada como finding e
-resolvida por amendment da Spec antes da implementação afetada.
+Derive dependências apenas do Technical Contract, runtime e paths. Use Builders de ownership
+estável, reutilizados entre fases; não crie Builder por tarefa/pacote. Padrão máximo: três
+Builders simultâneos, apenas com paths não sobrepostos e contracts estáveis.
 
-A fase de validação de frontend deve incluir:
+Cada task card contém exatamente: status/owner, dependências/paralelismo, paths, RF/CA,
+resultado observável, Rules e exit. UI inclui widget-tree, estados, teclado, viewport, console,
+requests e screenshot Playwright. Server/banco inclui request/response real, autorização,
+tenant e persistência no Supabase Dev quando aplicável.
 
-- comparação dos nodes finais no Pencil com a fonte visual canônica;
-- fluxo real no Playwright para os estados e viewports previstos, incluindo
-  loading, error, empty e content quando aplicáveis;
-- evidências separadas da inspeção visual, do comportamento em runtime e dos
-  testes automatizados.
-- auditoria de `ui-layer-rules.md` por widget, com `index.tsx`, `*View.tsx`,
-  Hook, paths e linhas avaliadas.
-- matriz de fidelidade Pencil-to-code com node, viewport, estado, anchors,
-  captura Web, divergência e aprovação, quando houver exceção.
+### 3. Validation and handoff
 
-Pencil não substitui a validação no navegador, e Playwright não redefine a
-fonte visual especificada. A ausência de comparação independente ou um desvio
-não aprovado mantém a tarefa fora de `verified` e deve virar finding.
+```md
+| Type | Scenario/surface | Criteria | Reference | Evidence target | Status |
+| ---- | ---------------- | -------- | --------- | --------------- | ------ |
+```
 
-Estados de tarefa: `pending`, `implementing`, `validating`, `verified`.
-Estados de fase: `pending`, `in_progress`, `awaiting_judgment`, `failed`,
-`accepted`.
+Agende todos os `MV-*`, sensores, runtime e referências visuais separadamente por estado e
+viewport. Agende exatamente um `implementation-reviewer-agent` após a integração dos Builders.
 
-Depois de criar o Plan, acione `judge-plan-agent` como `Judge Plan` read-only.
-Somente após `accepted` o Orchestrator deve encaminhar para `implement-plan`.
-Em `failed`, persista os findings, corrija o Plan e repita o julgamento antes de
-criar Builders.
+### 4. Execution log
 
-Somente o Orchestrator atualiza o Plan. Builders implementam; Judges avaliam
-read-only. Não crie Judges de implementação por fase: fases passam por sensores
-e aguardam o julgamento integrado final. Tarefas, dependências e findings
-operacionais devem ser persistidos imediatamente no Plan. Evidências, decisões
-e lições da feature pertencem ao `evaluation.md`, criado após implementação ou
-julgamento. Todos são subagentes da task atual. Não use nova thread.
+Inclua somente depois de finding, retry, blocker ou evento material. O Plan possui status e
+próxima ação; detalhes de comandos e resultados pertencem a `evaluation.md`.
+
+Antes de salvar, verifique revisão, DAG acíclico, RF/CA completos, paths não sobrepostos,
+Rules válidas, exits executáveis e handoff para `implement-spec`. A task principal executa esse
+gate sem ativar um agente separado.
