@@ -36,6 +36,19 @@ perguntar ao usuário. Perguntas devem trazer evidência, recomendação, altern
 Escreva somente quando todas as escolhas estiverem resolvidas pela autoridade ou aceitas
 explicitamente como premissa documentada.
 
+## Gate obrigatório de Grilling
+
+Execute o protocolo de Grilling definido em `documentation/sdd.md` depois da pesquisa factual e
+antes de escrever ou alterar a Spec. Modele como design tree somente decisões ainda não resolvidas
+pelas fontes, Architecture, Rules, Design ou codebase. Pergunte em cada round toda a frontier
+disponível, com evidência, alternativas, impacto e resposta recomendada; decisões dependentes
+ficam para rounds posteriores.
+
+Quando investigações independentes ainda estiverem em andamento, adie apenas as perguntas que
+dependem delas e conduza o restante da frontier. A frontier vazia e a confirmação explícita de
+entendimento compartilhado são pré-requisitos para redigir. Se uma nova lacuna material surgir
+durante o integrity gate ou a revisão, reabra o Grilling antes de continuar.
+
 ## Princípios de evidência e fronteiras
 
 - Todo path citado deve existir ou estar marcado como `novo arquivo`.
@@ -67,10 +80,10 @@ oficial para APIs externas, Pencil para design, Playwright para comportamento de
 browser e Supabase para schema/dados quando aplicável. Architecture e Rules do
 projeto prevalecem sobre recomendações genéricas de ferramentas externas.
 
-Quando existirem duas ou mais lanes independentes, ative Searchers read-only em paralelo com
-perguntas, paths, limites e formato de saída delimitados. O Orchestrator lê as autoridades,
-une os relatórios, resolve conflitos por inspeção direta e verifica afirmações consequenciais.
-Searcher não escreve a Spec, não decide Contract e não cria agentes.
+Quando existirem duas ou mais lanes independentes, organize-as como investigações delimitadas da
+própria task, com perguntas, paths, limites e formato de síntese explícitos. Pesquise cada boundary
+diretamente, resolva conflitos por inspeção direta e verifique afirmações consequenciais. Não crie
+agentes de pesquisa.
 
 ## Referências de design e Pencil
 

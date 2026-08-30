@@ -46,6 +46,7 @@ export const AuthContextProvider = ({
     profileService,
     analyticsProvider,
     accountDto,
+    accessToken,
     signIn,
     signOut,
     retryUserCreation,

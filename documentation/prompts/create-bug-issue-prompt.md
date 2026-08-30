@@ -40,6 +40,17 @@ ator, outcome e fluxo relatados. Se o usuário confirmar que não há PRD, regis
 Se milestone e PRD versionado divergirem, resolva a autoridade antes do draft. A busca e a
 seleção são obrigatórias mesmo quando o usuário não fornece PRD ou milestone.
 
+## Gate obrigatório de Grilling
+
+Execute o protocolo de Grilling definido em `documentation/sdd.md` depois da pesquisa factual e
+antes do draft. Modele como design tree somente decisões necessárias para delimitar o sintoma, o
+comportamento esperado, a reprodução e o contexto da issue; não transforme o round em diagnóstico
+técnico.
+
+Pergunte toda a frontier disponível com recomendação e deixe decisões dependentes para rounds
+posteriores. A frontier vazia e a confirmação de entendimento compartilhado permitem preparar o
+draft, mas não substituem o approval gate da versão exata a publicar.
+
 ## Metadata GitHub
 
 - repository: `JohnPetros/stardust`;

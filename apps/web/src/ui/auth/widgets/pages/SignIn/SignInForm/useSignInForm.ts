@@ -7,12 +7,18 @@ import { z } from 'zod'
 
 import { emailSchema, passwordSchema } from '@stardust/validation/global/schemas'
 
+import { CLIENT_ENV } from '@/constants'
 import type { SignInFormFields } from './types/SignInFormFields'
 
 const signInFormSchema = z.object({
   password: passwordSchema,
   email: emailSchema,
 })
+
+const developmentDefaultValues: SignInFormFields | undefined =
+  CLIENT_ENV.mode === 'development'
+    ? { email: 'ctrlaltdel.cursor@gmail.com', password: '123456' }
+    : undefined
 
 export function useSignInForm(onFormSubmit: (fields: SignInFormFields) => Promise<void>) {
   const [isLoading, setIsloading] = useState(false)
@@ -22,6 +28,7 @@ export function useSignInForm(onFormSubmit: (fields: SignInFormFields) => Promis
     formState: { errors },
   } = useForm<SignInFormFields>({
     resolver: zodResolver(signInFormSchema),
+    defaultValues: developmentDefaultValues,
   })
 
   async function handleFormSubmit(fields: SignInFormFields) {

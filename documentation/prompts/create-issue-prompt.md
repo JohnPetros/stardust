@@ -19,6 +19,13 @@ abertas/fechadas; identifique o PRD mais próximo pelo módulo, lifecycle e comp
 preservado. Para chore, essa referência é contexto e não transforma manutenção em feature. Se
 nenhum PRD for relevante, registre `None — <busca executada e motivo>`.
 
+Antes do draft do chore, execute o protocolo de Grilling definido em `documentation/sdd.md`.
+Modele como design tree as decisões ainda abertas sobre resultado técnico, risco mitigado, limites,
+critérios de verificação e metadata. Pergunte toda a frontier disponível com recomendação,
+mantenha decisões dependentes para rounds posteriores e não pergunte fatos pesquisáveis. Só
+prepare o draft depois de a frontier ficar vazia e o usuário confirmar o entendimento
+compartilhado; essa confirmação não substitui o approval gate da versão exata a publicar.
+
 Crie uma issue técnica com título nominal, labels existentes (`refactor`, `infra` ou
 `documentation`, mais `web`/`server`/`studio`) e sem milestone de produto por inferência.
 

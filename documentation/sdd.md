@@ -47,7 +47,6 @@ substitui silenciosamente uma autoridade.
 | Papel                   | Responsabilidade                                                                                                    | Restrição                                                            |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
 | Orchestrator            | seleciona workflows, mantém artefatos, integra diffs, executa sensores, registra evidência, publica e roteia falhas | não delega o veredito oficial nem usa relato de subagente como prova |
-| Searcher                | pesquisa um boundary delimitado para autoria da Spec                                                                | read-only; não decide Contract nem cria agentes                      |
 | Spec Reviewer           | revisa a Spec draft completa antes de `open`                                                                        | read-only; não edita a Spec nem decide o status oficial              |
 | Builder                 | implementa um escopo de paths contra uma revisão exata                                                              | não edita Spec, Plan, Evaluation, PRD ou Rules                       |
 | Implementation Reviewer | revisa o candidato Plan-backed integrado                                                                            | read-only; não corrige nem produz o veredito oficial                 |
@@ -93,6 +92,44 @@ identificador e a comparação ficam em `evaluation.md`.
 
 Falhas não criam estados extras: o item permanece `in_progress`, com finding e próxima ação.
 
+## Protocolo de Grilling
+
+Os workflows de criação de issues, PRDs, Specs e Plans entrevistam o usuário rigorosamente antes
+de escrever o artefato. As decisões formam uma **design tree**: cada decisão se ramifica nas
+decisões que dependem dela. A **frontier** de um round contém todas as decisões cujos
+pré-requisitos já estão resolvidos e que podem ser perguntadas sem adivinhar respostas pendentes.
+
+Em cada round, recompute a árvore, pergunte toda a frontier, numere as perguntas e inclua uma
+resposta recomendada para cada uma. Uma pergunta que dependa de outra decisão ainda aberta no
+round atual pertence a um round posterior. Depois das respostas, registre decisões, alternativas
+descartadas, dependências e contradições e recompute a frontier.
+
+Use este formato:
+
+```yaml
+❓ **Q1** - **<título da pergunta>**: <pergunta e alternativas relevantes>
+
+➡️ <resposta recomendada e justificativa concisa>
+
+---
+
+❓ **Q2** - **<título da pergunta>**: <pergunta e alternativas relevantes>
+
+➡️ <resposta recomendada e justificativa concisa>
+```
+
+Encontrar fatos é responsabilidade da task, nunca do usuário. A task principal consulta
+diretamente filesystem, documentação, codebase, GitHub, design, banco e ferramentas aplicáveis
+antes de perguntar. Uma investigação factual ainda aberta adia apenas as perguntas descendentes
+dela; o restante da frontier deve ser perguntado. Não crie agentes de pesquisa.
+
+As decisões pertencem ao usuário. Conteste contradições, exponha impactos e recomende uma resposta,
+mas não transforme ausência de evidência em escolha implícita. O gate termina apenas quando a
+frontier estiver vazia, todos os ramos relevantes tiverem sido visitados e o usuário confirmar o
+entendimento compartilhado. Nenhum artefato é criado, alterado ou publicado antes dessa
+confirmação. Em workflows com approval de publicação separado, a confirmação do Grilling não
+substitui a aprovação da versão exata.
+
 ## Intake opcional
 
 GitHub Issue é tracking, não Contract técnico:
@@ -110,11 +147,19 @@ Todo workflow de criação de issue executa descoberta de PRD antes do draft. Fe
 um PRD principal; bug e chore registram o PRD/requisito mais relevante ou `None` com evidência da
 busca. A associação nunca é inferida apenas por título, label, path ou milestone.
 
+Antes do draft, os workflows de issue executam o Grilling: fatos são pesquisados e decisões são
+percorridas em rounds pela frontier da design tree. A confirmação de entendimento compartilhado
+encerra a entrevista, mas não substitui o approval explícito da versão exata publicada.
+
+Os dois workflows de PRD, prospectivo ou retrospectivo, também executam o Grilling depois da
+pesquisa e antes da escrita. O PRD só é criado ou atualizado após a frontier ficar vazia e o
+usuário confirmar o entendimento compartilhado.
+
 ## Spec
 
-`create-spec` pesquisa a codebase antes de escrever. Duas ou mais lanes independentes devem
-ser pesquisadas em paralelo por Searchers delimitados; o Orchestrator lê as autoridades,
-confere os relatos e resolve conflitos por inspeção direta.
+`create-spec` pesquisa diretamente a codebase antes de escrever. Organize boundaries independentes
+como lanes de investigação da própria task, confira as autoridades e resolva conflitos por
+inspeção direta, sem criar agentes de pesquisa.
 
 A Spec não é escrita enquanto existir escolha material de produto, técnica, Design ou
 validação. Perguntas devem trazer evidência, recomendação, alternativa e impacto. A Spec
@@ -125,6 +170,10 @@ possui exatamente:
 3. Technical Contract com baseline, runtime flow e paths/declarations por camada;
 4. Validation Contract com testes reais, comandos e cenários manuais `MV-*`;
 5. alinhamento documental, Rule Pack e histórico de revisões.
+
+Depois da pesquisa e antes da escrita, `create-spec` executa o Grilling até esvaziar a frontier e
+obter confirmação explícita. Fatos pertencem à pesquisa; somente decisões não resolvidas pelas
+autoridades são levadas ao usuário.
 
 Todo `RF-*` mapeia para pelo menos um `CA-*` e vice-versa. Paths são exatos e classificados
 como Create, Modify, Generate ou Remove. A Spec não é um Plan e não contém resultados.
@@ -153,6 +202,9 @@ condicional. Builders têm ownership estável (`Builder Core`, `Builder Server`,
 ou boundary equivalente), podem executar várias fases e nunca compartilham paths ativos. O
 padrão é no máximo três Builders concorrentes. A integridade do Plan é verificada pela task
 principal antes de salvar e antes de cada wave; não há agente separado para esse gate.
+
+Antes de salvar, `create-plan` executa o Grilling sobre decisões de execução ainda abertas. O
+interview não pode redefinir a Spec; qualquer ambiguidade de Contract retorna para amendment.
 
 ## Implementação e evidência viva
 

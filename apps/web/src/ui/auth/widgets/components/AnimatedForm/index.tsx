@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { AnimatePresence, type Variants, motion } from 'motion/react'
+import { type Variants, motion } from 'motion/react'
 
 const formVariants: Variants = {
   initial: {
@@ -16,9 +16,9 @@ const formVariants: Variants = {
   },
   hidden: {
     opacity: 0,
-    x: -750,
+    x: -250,
     transition: {
-      duration: 2,
+      duration: 1.5,
     },
   },
 }
@@ -30,18 +30,15 @@ type AnimatedFormProps = {
 
 export function AnimatedForm({ isVisible, children }: AnimatedFormProps) {
   return (
-    <AnimatePresence>
-      {!isVisible && (
-        <motion.div
-          variants={formVariants}
-          initial='initial'
-          animate='visible'
-          exit='hidden'
-          className='w-full max-w-[320px]'
-        >
-          {children}
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <motion.div
+      variants={formVariants}
+      initial={false}
+      animate={isVisible ? 'hidden' : 'visible'}
+      className={`w-full max-w-[320px] ${isVisible ? 'pointer-events-none' : ''}`}
+      aria-hidden={isVisible}
+      data-testid='animated-form'
+    >
+      {children}
+    </motion.div>
   )
 }

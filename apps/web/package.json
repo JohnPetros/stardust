@@ -2,7 +2,7 @@
   "name": "@stardust/web",
   "private": true,
   "scripts": {
-    "dev": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=1 next dev",
+    "dev": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=1 next dev --port 3000",
     "queue": "npx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/serverless",
     "build": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=1 next build",
     "start": "node .next/standalone/apps/web/server.js -p $PORT",

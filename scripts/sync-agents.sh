@@ -78,7 +78,6 @@ def parse_agent(path: Path) -> tuple[str, str, str]:
 
 def is_read_only(name: str) -> bool:
     return name.startswith("judge-") or name in {
-        "searcher-agent",
         "spec-reviewer-agent",
         "implementation-reviewer-agent",
     }

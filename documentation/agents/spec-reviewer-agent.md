@@ -13,7 +13,7 @@ Revise uma única revisão completa de `spec.md` depois do integrity check do au
 - origem real da demanda e decisões aprovadas;
 - Spec `draft` e revisão exata;
 - Architecture, Overview, Tooling e Rule Pack;
-- relatórios Searcher já verificados e evidência direta relevante;
+- pesquisa factual já verificada e evidência direta relevante;
 - Design manifest/referências quando houver UI;
 - paths e declarações reais afetados.
 

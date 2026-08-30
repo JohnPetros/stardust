@@ -43,31 +43,16 @@ Só depois da confirmação o arquivo poderá ser criado ou atualizado.
 
 ---
 
-## Skill Obrigatória: Grilling
+## Gate obrigatório de Grilling
 
-Entreviste o usuário rigorosamente sobre todos os aspectos do produto até
-alcançar entendimento compartilhado.
+Execute obrigatoriamente o protocolo de Grilling definido em `documentation/sdd.md` antes de
+escrever ou atualizar o PRD. Modele os itens da Árvore de Decisão como uma design tree, pesquise
+os fatos e pergunte em cada round toda a frontier cujos pré-requisitos já estiverem resolvidos.
+Cada pergunta deve incluir a resposta recomendada no formato canônico do protocolo.
 
-Para cada pergunta:
-
-- faça somente uma pergunta por vez;
-- explique por que a decisão é necessária;
-- apresente uma recomendação;
-- aguarde a resposta antes de continuar;
-- registre a decisão;
-- identifique dependências com decisões futuras;
-- conteste contradições ou riscos.
-
-Nunca faça várias perguntas na mesma mensagem.
-
-Se uma informação puder ser encontrada em arquivos, código, designs, ferramentas
-ou internet, pesquise antes de perguntar.
-
-As decisões pertencem ao usuário. Não assuma decisões importantes sem
-confirmação.
-
-Não execute a criação do PRD até o usuário confirmar que o entendimento está
-correto.
+Não misture no mesmo round perguntas que dependam umas das outras. Recompute a frontier após cada
+resposta, conteste contradições ou riscos e não execute a criação do PRD até a frontier ficar
+vazia e o usuário confirmar o entendimento compartilhado.
 
 ---
 
@@ -145,7 +130,7 @@ A pesquisa deve orientar recomendações, mas não substituir decisões do usuá
 
 ## Árvore de Decisão
 
-Investigue, uma decisão por vez:
+Investigue em rounds, respeitando as dependências entre estas decisões:
 
 1. Problema e oportunidade.
 2. Objetivo do produto.
@@ -178,20 +163,8 @@ Não faça perguntas sobre itens já resolvidos nos materiais ou pelo usuário.
 
 ## Formato das Perguntas
 
-Use exatamente este formato:
-
-```text
-Pergunta [número] — [tema]
-
-Contexto:
-[Explique por que essa decisão é necessária.]
-
-Minha recomendação:
-[Apresente uma recomendação objetiva e justificada.]
-
-Pergunta:
-[Faça somente uma pergunta.]
-```
+Use o formato obrigatório de rounds do protocolo de Grilling em `documentation/sdd.md`. Numere
+toda a frontier atual e inclua uma recomendação objetiva e justificada para cada pergunta.
 
 ---
 
@@ -250,7 +223,7 @@ distinção entre fatos e inferências.
 Use a tabela:
 
 | Solução | Público | Proposta de valor | Funcionalidades | Preço público | Limitações |
-|---|---|---|---|---|---|
+| ------- | ------- | ----------------- | --------------- | ------------- | ---------- |
 
 Não preencha células com suposições. Use `Não identificado publicamente` quando
 necessário.
@@ -352,8 +325,8 @@ Antes de salvar, valide:
 - não existem contradições;
 - não há decisões relevantes pendentes.
 
-Se houver uma decisão relevante pendente, volte à entrevista e faça uma pergunta
-por vez. Não finalize o PRD até alcançar entendimento compartilhado.
+Se houver uma decisão relevante pendente, volte ao Grilling, recompute a frontier e conduza os
+rounds restantes. Não finalize o PRD até alcançar entendimento compartilhado.
 
 ---
 
@@ -382,7 +355,7 @@ Formato final:
 ## Comportamentos Proibidos
 
 - Criar o PRD antes da confirmação do usuário.
-- Fazer múltiplas perguntas na mesma mensagem.
+- Perguntar no mesmo round decisões que dependam umas das outras.
 - Perguntar fatos que podem ser pesquisados.
 - Inventar dados de concorrentes ou preços.
 - Apresentar inferências como fatos.
