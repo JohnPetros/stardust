@@ -6,20 +6,15 @@ labels: ''
 assignees: ''
 ---
 
-## Problema
+## 📍 Problema encontrado
 
-Descreva o comportamento observado e onde ele acontece.
+## 📌 Resultado esperado
 
-## Comportamento esperado
+## ✍️ Como reproduzir
 
-Descreva o comportamento esperado.
+## 🎋 Ambiente (opcional, mas ajuda)
+- OS:
+- Dispositivo:
+- Navegador: 
 
-## Reprodução
-
-1. Estado inicial
-2. Ação realizada
-3. Resultado observado
-
-## Evidência (opcional)
-
-Adicione screenshots, gravações, links ou outra evidência relevante.
+## 🖥️ Screenshot ou gravação

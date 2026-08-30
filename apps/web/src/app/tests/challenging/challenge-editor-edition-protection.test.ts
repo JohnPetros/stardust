@@ -1,6 +1,5 @@
-import { expect, test, type Page } from '../playwright'
+import { expect, test, type BrowserContext, type Page } from '@playwright/test'
 
-import type { ChallengingFixture } from '../fixtures/ChallengingFixture'
 import { AccountsFaker } from '../../../../../../packages/core/src/auth/domain/entities/fakers/AccountsFaker'
 import { ChallengeCategoriesFaker } from '../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengeCategoriesFaker'
 import { ChallengesFaker } from '../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengesFaker'
@@ -126,11 +125,19 @@ function updatedChallengeNavigationRoute(): ServerMockRoute {
 
 async function registerEditor(
   page: Page,
-  challenging: ChallengingFixture,
+  context: BrowserContext,
   challenge = persistedChallenge,
   overrides: ServerMockRoute[] = [],
 ) {
-  await challenging.authenticate('challenge-editor-testing-token')
+  await context.clearCookies()
+  await context.addCookies([
+    {
+      name: '@stardust:access-token',
+      value: 'challenge-editor-testing-token',
+      domain: '127.0.0.1',
+      path: '/',
+    },
+  ])
   await ServerMock(page).register([...editorRoutes(challenge), ...overrides])
 }
 
@@ -150,11 +157,15 @@ async function makeDirty(page: Page) {
 }
 
 test.describe('proteção de edição do editor de desafios', () => {
+  test.afterEach(async ({ page }) => {
+    await ServerMock(page).reset()
+  })
+
   test('mantém edição dirty ao cancelar Voltar e descarta somente após confirmação', async ({
     page,
-    challenging,
+    context,
   }) => {
-    await registerEditor(page, challenging)
+    await registerEditor(page, context)
     await loadEditor(page)
     await makeDirty(page)
 
@@ -174,9 +185,9 @@ test.describe('proteção de edição do editor de desafios', () => {
 
   test('fecha o diálogo com Escape e protege uma nova tentativa', async ({
     page,
-    challenging,
+    context,
   }) => {
-    await registerEditor(page, challenging)
+    await registerEditor(page, context)
     await loadEditor(page)
     await makeDirty(page)
 
@@ -188,11 +199,8 @@ test.describe('proteção de edição do editor de desafios', () => {
     await expect(page.getByRole('heading', { name: 'Sair sem salvar?' })).toBeVisible()
   })
 
-  test('navega imediatamente quando o editor está limpo', async ({
-    page,
-    challenging,
-  }) => {
-    await registerEditor(page, challenging)
+  test('navega imediatamente quando o editor está limpo', async ({ page, context }) => {
+    await registerEditor(page, context)
     await loadEditor(page)
     await page.getByRole('button', { name: 'Voltar' }).click()
     await expect(page).toHaveURL(new RegExp(`${CREATE_ROUTE}$`))
@@ -201,9 +209,9 @@ test.describe('proteção de edição do editor de desafios', () => {
 
   test('preserva o formulário e reabre a proteção quando a atualização falha', async ({
     page,
-    challenging,
+    context,
   }) => {
-    await registerEditor(page, challenging, persistedChallenge, [
+    await registerEditor(page, context, persistedChallenge, [
       {
         method: 'PUT',
         path: `/challenging/challenges/${CHALLENGE_ID}`,
@@ -246,9 +254,9 @@ test.describe('proteção de edição do editor de desafios', () => {
 
   test('desarma a proteção após atualização bem-sucedida e observa o redirect', async ({
     page,
-    challenging,
+    context,
   }) => {
-    await registerEditor(page, challenging, persistedChallenge, [
+    await registerEditor(page, context, persistedChallenge, [
       {
         method: 'PUT',
         path: `/challenging/challenges/${CHALLENGE_ID}`,
@@ -289,9 +297,9 @@ test.describe('proteção de edição do editor de desafios', () => {
 
   test('confirma antes de descarregar o documento quando beforeunload é suportado', async ({
     page,
-    challenging,
+    context,
   }) => {
-    await registerEditor(page, challenging)
+    await registerEditor(page, context)
     await loadEditor(page)
     await makeDirty(page)
 
@@ -305,8 +313,8 @@ test.describe('proteção de edição do editor de desafios', () => {
     // Playwright/Chromium does not expose a stable assertion for custom native text.
   })
 
-  test('preserva a proteção quando a exclusão falha', async ({ page, challenging }) => {
-    await registerEditor(page, challenging, persistedChallenge, [
+  test('preserva a proteção quando a exclusão falha', async ({ page, context }) => {
+    await registerEditor(page, context, persistedChallenge, [
       {
         method: 'DELETE',
         path: `/challenging/challenges/${CHALLENGE_ID}`,
@@ -340,9 +348,9 @@ test.describe('proteção de edição do editor de desafios', () => {
 
   test('desarma a proteção e navega após exclusão bem-sucedida', async ({
     page,
-    challenging,
+    context,
   }) => {
-    await registerEditor(page, challenging, persistedChallenge, [
+    await registerEditor(page, context, persistedChallenge, [
       {
         method: 'DELETE',
         path: `/challenging/challenges/${CHALLENGE_ID}`,
@@ -372,9 +380,9 @@ test.describe('proteção de edição do editor de desafios', () => {
 
   test('não inventa cobertura de link interno ou Navigation API quando o editor não os expõe', async ({
     page,
-    challenging,
+    context,
   }) => {
-    await registerEditor(page, challenging)
+    await registerEditor(page, context)
     await loadEditor(page)
     await expect(page.locator('a')).toHaveCount(0)
     // O editor integrado só renderiza Voltar; não há link controlado para exercitar.

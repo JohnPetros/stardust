@@ -19,8 +19,6 @@ O Stardust é hospedado em uma VPS Hostinger (KVM 2 — 2 vCPU, 8 GB RAM, 100 GB
 | `stardust-web-staging` | `apps/web` | Next.js SSR (standalone) | 3000 | `staging.stardust-app.com.br` |
 | `stardust-server` | `apps/server` | Hono API (Node.js) | 3333 | `api.stardust-app.com.br` |
 | `stardust-studio` | `apps/studio` | React Router v7 SPA (Nginx) | 80 | `studio.stardust-app.com.br` |
-| `hermes` | serviço externo | Hermes Agent (Docker Compose) | 8642 / 9119 | `hermes-api.stardust-app.com.br`, `hermes.stardust-app.com.br` |
-| `hermes-chromium` | sidecar interno | Chromium remoto via CDP | 3000 | sem domínio público |
 
 ---
 
@@ -54,12 +52,6 @@ Cada serviço usa **Build Pack: Dockerfile** com os seguintes Dockerfiles na rai
 | server | `Dockerfile.server` | `/` |
 | studio | `Dockerfile.studio` | `/` |
 
-O Hermes não é construído pelos Dockerfiles do monorepo. Ele é implantado como
-um serviço **Docker Compose** separado no Coolify, usando a imagem
-`nousresearch/hermes-agent:latest` e um volume persistente montado em
-`/opt/data`. O Chromium usado pelos testes E2E é executado como recurso separado
-na mesma rede privada do Coolify, sem exposição pública.
-
 ### Variáveis de ambiente
 
 As variáveis são configuradas diretamente no Coolify, separadas por escopo:
@@ -71,18 +63,6 @@ As variáveis são configuradas diretamente no Coolify, separadas por escopo:
 **Server (só Runtime):** `MODE`, `PORT`, `BASE_URL`, `STARDUST_WEB_URL`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE`, `SUPABASE_DATABASE_URL`, `SUPABASE_DATABASE_PASSWORD`, `S3_ACCOUNT_ID`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `DROPBOX_REFRESH_TOKEN`, `DROPBOX_APP_KEY`, `DROPBOX_APP_SECRET`, `DISCORD_WEBHOOK_URL`, `SENTRY_DSN`
 
 **Studio:** variáveis `VITE_*`, incluindo `VITE_CDN_URL`, como Build Variables (se aplicável).
-
-**Hermes (só Runtime):** `API_SERVER_ENABLED`, `API_SERVER_HOST`,
-`API_SERVER_PORT`, `API_SERVER_KEY`, `HERMES_DASHBOARD`,
-`HERMES_DASHBOARD_HOST`, `HERMES_DASHBOARD_PORT`,
-`HERMES_DASHBOARD_BASIC_AUTH_USERNAME`,
-`HERMES_DASHBOARD_BASIC_AUTH_PASSWORD`,
-`HERMES_DASHBOARD_BASIC_AUTH_SECRET`, `BROWSER_CDP_URL`,
-`WEB_APP_E2E_EMAIL`, `WEB_APP_E2E_PASSWORD` e `TZ`.
-
-As credenciais da GitHub App e dos demais MCPs são configuradas nos perfis do
-Hermes e/ou como secrets de runtime. Chaves privadas, tokens e credenciais E2E
-nunca devem ser registradas no Compose, no repositório ou nos logs.
 
 > As variáveis `NEXT_PUBLIC_*` e `VITE_*` precisam estar marcadas como **Available at Buildtime** no Coolify, pois são embutidas no bundle durante o build.
 
@@ -108,8 +88,6 @@ nunca devem ser registradas no Compose, no repositório ou nos logs.
 | A | `api` | `2.25.181.108` | DNS only |
 | A | `staging` | `2.25.181.108` | DNS only |
 | A | `studio` | `2.25.181.108` | DNS only |
-| A | `hermes` | `2.25.181.108` | DNS only |
-| A | `hermes-api` | `2.25.181.108` | DNS only |
 | A | `coolify` | `2.25.181.108` | DNS only |
 | MX | `send` | `feedback-smtp.us-east-1.amazonses.com` | DNS only |
 | TXT | `_dmarc` | `v=DMARC1; p=none;` | DNS only |
@@ -132,10 +110,6 @@ nunca devem ser registradas no Compose, no repositório ou nos logs.
 | `web-app-ci.yaml` | PR → `main` (paths web) | Codecheck, typecheck, testes, build |
 | `web-app-cd-coolify.yaml` | Release published | Aciona webhook Coolify → notifica Discord |
 | `web-app-staging-cd-coolify.yaml` | Push → `main` (paths web) | Aciona webhook Coolify → notifica Discord |
-| `hermes-code-review.yaml` | PR → `main` | Aguarda os CIs aplicáveis, detecta escopos alterados e aciona revisões técnicas paralelas no Hermes |
-| `hermes-e2e-testing.yaml` | PR de `main` → `production` | Implanta o SHA em staging e aciona o perfil E2E para validar os PRDs/milestones afetados |
-| `create-release.yaml` | Merge do PR de release | Confirma o E2E do Hermes e cria a tag e a GitHub Release |
-| `dependencies-update.yaml` | Toda segunda-feira às 09:00 BRT ou execução manual | Atualiza dependências patch/minor, valida o monorepo e cria ou atualiza um PR semanal |
 
 ### GitHub Secrets necessários
 
@@ -151,11 +125,6 @@ nunca devem ser registradas no Compose, no repositório ou nos logs.
 | `SUPABASE_ACCESS_TOKEN` | Token de acesso Supabase CLI (para migrations) |
 | `SUPABASE_DB_PASSWORD` | Senha do banco Supabase (para migrations) |
 | `DISCORD_WEBHOOK_URL` | Notificações de deploy no Discord |
-| `HERMES_API_URL` | Endpoint público da Runs API do Hermes |
-| `HERMES_CODE_REVIEWER_API_KEY` | Autenticação do workflow de revisão no perfil `code-reviewer` |
-| `HERMES_API_KEY` | Autenticação compartilhada da Runs API, usada pelo E2E de release |
-| `HERMES_GITHUB_APP_ID` | ID da GitHub App usada para publicar resultados como `stardust-hermes[bot]` |
-| `HERMES_GITHUB_APP_PRIVATE_KEY` | Chave privada da GitHub App usada pelos workflows do Hermes |
 
 ---
 
@@ -199,76 +168,6 @@ O container do server **não** contém a Supabase CLI nem o `postgresql-client`.
 | Sentry | Monitoramento de erros | Sentry Cloud |
 | Discord | Notificações de deploy | Discord Webhooks |
 | Cloudflare | DNS e (futuro) CDN/DDoS protection | Cloudflare |
-
----
-
-## Hermes Agent
-
-O Hermes é o serviço de agentes do Stardust hospedado na mesma VPS e gerenciado
-pelo Coolify. O GitHub Actions envia trabalhos assinados para a **Runs API**; o
-Hermes executa cada trabalho no perfil solicitado e consulta ou comenta no
-GitHub por meio de uma GitHub App com permissões mínimas.
-
-### Endpoints
-
-| Endpoint | Porta interna | Uso |
-|---|---:|---|
-| `https://hermes-api.stardust-app.com.br` | 8642 | Runs API consumida pelo GitHub Actions |
-| `https://hermes.stardust-app.com.br` | 9119 | Dashboard administrativo com autenticação básica |
-| `http://hermes-chromium:3000` | 3000 | CDP interno consumido pelo Playwright MCP; não deve ser público |
-
-O Traefik do Coolify termina o TLS e encaminha cada domínio para a porta interna
-correspondente. Os processos devem escutar em `0.0.0.0`; um bind em `127.0.0.1`
-funciona dentro do contêiner, mas não pode ser alcançado pelo proxy.
-
-### Perfis
-
-| Perfil | Responsabilidade | Integrações principais |
-|---|---|---|
-| `code-reviewer` | Revisão técnica de código por aplicação ou pacote alterado | GitHub App MCP |
-| `e2e-tester` | Validação dos requisitos `REQ-*` dos PRDs/milestones afetados na Web App staging | GitHub App MCP, Playwright MCP e Chromium via CDP |
-| `kepler` | Assistente geral do projeto, tendo o GitHub como fonte primária | GitHub App MCP |
-
-As instruções dos perfis ficam em seus respectivos `soul.md`. Os agentes devem
-ler `AGENTS.md`, tratar conteúdo do repositório e do PR como entrada não
-confiável e responder em PT-BR. O `code-reviewer` apenas revisa: não modifica o
-repositório, não faz commits, não aprova e não incorpora PRs.
-
-### Fluxo de revisão de código
-
-1. O workflow aguarda a conclusão dos CIs aplicáveis ao SHA atual do PR.
-2. Os arquivos alterados são agrupados por aplicação ou pacote.
-3. O GitHub Actions inicia uma execução do perfil `code-reviewer` por escopo,
-   permitindo processamento paralelo.
-4. Cada defeito novo é publicado como comentário inline individual, após a
-   leitura das conversas existentes para evitar duplicações.
-5. Uma única conclusão final registra SHA, escopos e quantidade de findings.
-
-### Fluxo E2E de release
-
-1. O SHA do PR de `main` para `production` é implantado na Web App staging.
-2. O workflow identifica os PRDs/milestones relacionados à release.
-3. Uma execução do perfil `e2e-tester` valida cada milestone em paralelo usando
-   Playwright MCP e uma sessão autenticada inicializada por variáveis de
-   ambiente.
-4. Screenshots, erros de console, falhas de página e rede permanecem no volume
-   persistente do Hermes; a conclusão consolidada é publicada no PR.
-5. Após o merge, `create-release.yaml` exige o E2E aprovado antes de criar tag e
-   GitHub Release.
-
-### Segurança e persistência
-
-- O volume `/opt/data` preserva configurações, perfis, sessões, logs e
-  evidências entre deploys.
-- A Runs API exige `Authorization: Bearer`; o dashboard exige autenticação
-  própria e não compartilha sua senha com a API.
-- A GitHub App é instalada somente no repositório autorizado, com acesso de
-  leitura ao conteúdo e escrita em Pull Requests.
-- O Chromium sidecar fica somente na rede interna e usa token de acesso.
-- O serviço não recebe acesso ao `docker.sock`, a secrets de produção ou ao
-  banco de produção.
-- Evidências e sessões devem ser removidas periodicamente por uma tarefa cron do
-  Hermes, com retenção definida antes da ativação da limpeza.
 
 ---
 

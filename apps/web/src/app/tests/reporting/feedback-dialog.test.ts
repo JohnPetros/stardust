@@ -1,13 +1,164 @@
-import { expect, test } from '../playwright'
+import { expect, test, type BrowserContext, type Page } from '@playwright/test'
 
-import { REPORT_ID } from '../fixtures/ReportingFixture'
+import { AccountsFaker } from '../../../../../../packages/core/src/auth/domain/entities/fakers'
+import { UsersFaker } from '../../../../../../packages/core/src/profile/domain/entities/fakers'
+import { ServerMock } from '../shared/mocks/ServerMock'
+import type { ServerMockRoute } from '../shared/types/ServerMockRoute'
+
+const USER_ID = '00000000-0000-4000-8000-000000000201'
+const REPORT_ID = '00000000-0000-4000-8000-000000000202'
+const ADMIN_MESSAGE_ID = '00000000-0000-4000-8000-000000000203'
+
+function createFeedbackFixtures() {
+  const account = AccountsFaker.fakeDto({
+    id: USER_ID,
+    name: 'Explorador de feedback',
+    email: 'feedback@stardust.dev',
+    isAuthenticated: true,
+  })
+  const user = UsersFaker.fakeDto({
+    id: USER_ID,
+    name: account.name,
+    email: account.email,
+    slug: 'explorador-de-feedback',
+    lastWeekRankingPosition: null,
+  })
+  const author = {
+    id: USER_ID,
+    entity: {
+      name: account.name,
+      slug: 'explorador-de-feedback',
+      avatar: { name: 'Avatar', image: '/images/profile.svg' },
+    },
+  }
+  const report = {
+    id: REPORT_ID,
+    content: 'Um relato de teste com conteúdo suficiente.',
+    title: 'Um relato de teste',
+    intent: 'bug',
+    author,
+    status: 'open' as const,
+    createdAt: '2026-08-06T12:00:00.000Z',
+    lastActivityAt: '2026-08-06T12:05:00.000Z',
+    hasUnreadAdminReply: true,
+    preview: 'Resposta administrativa disponível.',
+  }
+  const detail = {
+    ...report,
+    latestAdminMessageId: ADMIN_MESSAGE_ID,
+    messages: [
+      {
+        id: ADMIN_MESSAGE_ID,
+        reportId: REPORT_ID,
+        authorRole: 'admin' as const,
+        authorId: '00000000-0000-4000-8000-000000000299',
+        content: 'Resposta administrativa de teste.',
+        createdAt: '2026-08-06T12:05:00.000Z',
+        attachments: [],
+      },
+    ],
+  }
+
+  return { account, user, report, detail }
+}
+
+function authenticatedRoutes(): ServerMockRoute[] {
+  const { account, user, report, detail } = createFeedbackFixtures()
+
+  return [
+    { method: 'GET', path: '/auth/account', status: 200, body: account },
+    { method: 'GET', path: `/profile/users/id/${USER_ID}`, status: 200, body: user },
+    { method: 'GET', path: '/profile/achievements', status: 200, body: [] },
+    {
+      method: 'POST',
+      path: `/profile/achievements/${USER_ID}/observe`,
+      status: 200,
+      body: [],
+    },
+    { method: 'GET', path: '/space/planets', status: 200, body: [] },
+    {
+      method: 'GET',
+      path: '/reporting/feedback/mine/unread-count',
+      status: 200,
+      body: { count: 1 },
+    },
+    {
+      method: 'GET',
+      path: '/reporting/feedback/mine',
+      status: 200,
+      body: { page: 1, itemsPerPage: 10, total: 1, items: [report] },
+    },
+    {
+      method: 'GET',
+      path: `/reporting/feedback/mine/${REPORT_ID}`,
+      status: 200,
+      body: detail,
+    },
+    {
+      method: 'PUT',
+      path: `/reporting/feedback/mine/${REPORT_ID}/read`,
+      status: 204,
+      body: null,
+    },
+    {
+      method: 'POST',
+      path: '/reporting/feedback',
+      status: 201,
+      body: { ...report, id: '00000000-0000-4000-8000-000000000204' },
+    },
+    {
+      method: 'POST',
+      path: '/reporting/feedback/attachments/signed-upload-url',
+      status: 200,
+      body: {
+        url: 'https://storage.example.com/feedback-upload',
+        folderPath: 'images/feedback-reports',
+        fileName: 'feedback-upload.jpg',
+      },
+    },
+    {
+      method: 'POST',
+      path: `/reporting/feedback/${REPORT_ID}/messages`,
+      status: 201,
+      body: {
+        report,
+        message: {
+          id: '00000000-0000-4000-8000-000000000205',
+          reportId: REPORT_ID,
+          authorRole: 'user',
+          authorId: USER_ID,
+          content: 'Resposta criada pelo teste autenticado.',
+          attachments: [],
+        },
+        isDuplicate: false,
+      },
+    },
+  ]
+}
+
+async function registerAuthenticatedScenario(page: Page, context: BrowserContext) {
+  await context.clearCookies()
+  await context.addCookies([
+    {
+      name: '@stardust:access-token',
+      value: 'feedback-dialog-test-token',
+      domain: '127.0.0.1',
+      path: '/',
+    },
+  ])
+  await ServerMock(page).register(authenticatedRoutes())
+}
 
 test.describe('feedback dialog authenticated flow', () => {
+  test.afterEach(async ({ page }) => {
+    await ServerMock(page).reset()
+  })
+
   test('opens history, detail and marks the observed admin reply as read', async ({
     page,
-    reporting,
+    context,
   }) => {
-    await reporting.register()
+    await registerAuthenticatedScenario(page, context)
     await page.goto('/space')
 
     await expect(page.getByRole('button', { name: 'Feedback' })).toBeVisible()
@@ -28,9 +179,9 @@ test.describe('feedback dialog authenticated flow', () => {
 
   test('submits a valid initial report and shows the success step', async ({
     page,
-    reporting,
+    context,
   }) => {
-    await reporting.register()
+    await registerAuthenticatedScenario(page, context)
     await page.goto('/space')
     await page.getByRole('button', { name: 'Feedback' }).click()
     await page.getByRole('button', { name: 'Problema' }).click()
@@ -49,11 +200,8 @@ test.describe('feedback dialog authenticated flow', () => {
     await expect(page.getByText('Agradecemos o feedback!')).toBeVisible()
   })
 
-  test('accepts a selected jpeg as the initial attachment', async ({
-    page,
-    reporting,
-  }) => {
-    await reporting.register()
+  test('accepts a selected jpeg as the initial attachment', async ({ page, context }) => {
+    await registerAuthenticatedScenario(page, context)
     await page.route('https://storage.example.com/feedback-upload', (route) =>
       route.fulfill({ status: 200 }),
     )
@@ -83,9 +231,9 @@ test.describe('feedback dialog authenticated flow', () => {
 
   test('sends a reply in an open report and refreshes the detail', async ({
     page,
-    reporting,
+    context,
   }) => {
-    await reporting.register()
+    await registerAuthenticatedScenario(page, context)
     await page.goto('/space')
     await page.getByRole('button', { name: 'Feedback' }).click()
     await page.getByRole('button', { name: 'Ver meus reportes' }).click()
@@ -109,18 +257,15 @@ test.describe('feedback dialog authenticated flow', () => {
 
   test('keeps the initial draft after a recoverable creation failure', async ({
     page,
-    reporting,
-    serverApp,
+    context,
   }) => {
-    await reporting.register()
-    await serverApp.register(
-      reporting
-        .routes()
-        .map((route) =>
-          route.method === 'POST' && route.path === '/reporting/feedback'
-            ? { ...route, status: 500, body: { message: 'creation failed' } }
-            : route,
-        ),
+    await registerAuthenticatedScenario(page, context)
+    await ServerMock(page).register(
+      authenticatedRoutes().map((route) =>
+        route.method === 'POST' && route.path === '/reporting/feedback'
+          ? { ...route, status: 500, body: { message: 'creation failed' } }
+          : route,
+      ),
     )
     await page.goto('/space')
     await page.getByRole('button', { name: 'Feedback' }).click()
@@ -141,9 +286,9 @@ test.describe('feedback dialog authenticated flow', () => {
     await expect(page.getByRole('button', { name: 'Enviar feedback' })).toBeEnabled()
   })
 
-  test('renders a closed report as read-only', async ({ page, reporting, serverApp }) => {
-    await reporting.register()
-    const closedRoutes = reporting.routes().map((route) => {
+  test('renders a closed report as read-only', async ({ page, context }) => {
+    await registerAuthenticatedScenario(page, context)
+    const closedRoutes = authenticatedRoutes().map((route) => {
       if (route.path === '/reporting/feedback/mine' && route.method === 'GET') {
         const body = route.body as { items: Array<Record<string, unknown>> }
         return {
@@ -166,7 +311,7 @@ test.describe('feedback dialog authenticated flow', () => {
       }
       return route
     })
-    await serverApp.register(closedRoutes)
+    await ServerMock(page).register(closedRoutes)
     await page.goto('/space')
     await page.getByRole('button', { name: 'Feedback' }).click()
     await page.getByRole('button', { name: 'Ver meus reportes' }).click()

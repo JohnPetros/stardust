@@ -1,6 +1,11 @@
-import { expect, test, type Page, type Request } from '../playwright'
+import {
+  expect,
+  test,
+  type BrowserContext,
+  type Page,
+  type Request,
+} from '@playwright/test'
 
-import type { ChallengingFixture } from '../fixtures/ChallengingFixture'
 import { AccountsFaker } from '../../../../../../packages/core/src/auth/domain/entities/fakers/AccountsFaker'
 import { ChallengeCategoriesFaker } from '../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengeCategoriesFaker'
 import { ChallengesFaker } from '../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengesFaker'
@@ -108,8 +113,16 @@ function createAuthenticatedRoutes(): ServerMockRoute[] {
   ]
 }
 
-async function registerScenario(page: Page, challenging: ChallengingFixture) {
-  await challenging.authenticate('challenges-page-test-token')
+async function registerScenario(page: Page, context: BrowserContext) {
+  await context.clearCookies()
+  await context.addCookies([
+    {
+      name: '@stardust:access-token',
+      value: 'challenges-page-test-token',
+      domain: '127.0.0.1',
+      path: '/',
+    },
+  ])
 
   await ServerMock(page).registerSuccessDefaults(createAuthenticatedRoutes())
 }
@@ -122,11 +135,15 @@ function isChallengesListRequest(request: Request) {
 }
 
 test.describe(CHALLENGES_ROUTE, () => {
+  test.afterEach(async ({ page }) => {
+    await ServerMock(page).reset()
+  })
+
   test('loads the challenge listing with categories and challenge cards', async ({
     page,
-    challenging,
+    context,
   }) => {
-    await registerScenario(page, challenging)
+    await registerScenario(page, context)
 
     const listResponse = page.waitForResponse(
       (response) =>
@@ -148,9 +165,9 @@ test.describe(CHALLENGES_ROUTE, () => {
 
   test('applies title, difficulty and category filters to the URL and request', async ({
     page,
-    challenging,
+    context,
   }) => {
-    await registerScenario(page, challenging)
+    await registerScenario(page, context)
     const searchRequest = page.waitForRequest((request) => {
       const url = new URL(request.url())
       return isChallengesListRequest(request) && url.searchParams.get('title') === 'soma'
@@ -200,9 +217,9 @@ test.describe(CHALLENGES_ROUTE, () => {
 
   test('requests the next page when showing more challenges', async ({
     page,
-    challenging,
+    context,
   }) => {
-    await registerScenario(page, challenging)
+    await registerScenario(page, context)
     await page.goto(CHALLENGES_ROUTE)
     await expect(page.getByText('Soma complementar', { exact: true })).toBeVisible()
 
@@ -219,8 +236,8 @@ test.describe(CHALLENGES_ROUTE, () => {
     expect(requestUrl.searchParams.get('itemsPerPage')).toBe('20')
   })
 
-  test('navigates to the selected challenge page', async ({ page, challenging }) => {
-    await registerScenario(page, challenging)
+  test('navigates to the selected challenge page', async ({ page, context }) => {
+    await registerScenario(page, context)
     await page.goto(CHALLENGES_ROUTE)
     await expect(page.getByText('Soma complementar', { exact: true })).toBeVisible()
 

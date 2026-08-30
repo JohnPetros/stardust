@@ -4,6 +4,8 @@ export function useOutsideClick<Element extends HTMLElement = HTMLElement>(
   ref: RefObject<Element | null>,
   handler: () => void,
 ) {
+  for (const event of ['click', 'touchstart']) {
+  }
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const element = event.target as Node

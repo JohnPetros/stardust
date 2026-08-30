@@ -35,10 +35,11 @@ regressão.
 3. `test:integration` para mudanças de integração ou antes da conclusão quando
    declarado na Spec.
 4. Preflight local com todos os sensores aplicáveis antes do PR.
-5. Quality Gate no CI, repetindo os checks do preflight.
-6. build apenas no CI, depois do Quality Gate.
+5. Checks no CI, incluindo `check:architecture` e os checks aplicáveis do
+   preflight.
+6. build apenas no CI, depois dos checks aplicáveis.
 
-O Quality Gate do PR é a composição dos checks normais. Não existe baseline ou
+Os checks do PR são a composição dos checks normais. Não existe baseline ou
 quality ratchet próprio.
 
 `check:dead-code` não faz parte dos sensores oficiais. Playwright MCP pode

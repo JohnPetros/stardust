@@ -21,6 +21,27 @@ env:
   NODE_VERSION: "22"
 
 jobs:
+  architecture:
+    name: Check architecture
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check architecture
+        run: npm run check:architecture
+
   check-code:
     name: Check code
     runs-on: ubuntu-latest
@@ -131,20 +152,6 @@ jobs:
           sed -i "s|__SUPABASE_SECRET_KEY__|${SECRET_KEY}|g" .env.testing
           cp .env.testing .env
 
-      - name: Start Inngest and Redis
-        run: docker compose up -d inngest redis
-
-      - name: Wait for Inngest
-        run: |
-          for attempt in {1..30}; do
-            if curl --fail --silent http://127.0.0.1:8288/health > /dev/null; then
-              exit 0
-            fi
-            sleep 2
-          done
-          docker compose logs inngest
-          exit 1
-
       - name: Run tests
         run: npm run test:unit -w @stardust/server
 
@@ -155,6 +162,7 @@ jobs:
       - check-code
       - check-types
       - tests
+      - architecture
 
     steps:
       - name: Checkout code

@@ -6,6 +6,7 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 ## Regras de execução do SDD
 
 **Arquivo principal:** `/documentation/sdd.md`
+**Índice operacional:** `/documentation/rules/sdd-rules.md`
 **Quando consultar:**
 
 - Ao criar ou revisar uma Spec técnica.
@@ -15,10 +16,11 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 - Ao atualizar Spec, PRD, Architecture ou Rules durante a implementação.
 - Ao registrar revisão humana, progresso ou finding no Plan.
 - Ao criar ou atualizar `evaluation.md`.
-- Ao separar sensores locais de Quality Gate e build do CI.
+- Ao separar sensores locais dos checks e do build do CI.
 
-`documentation/sdd.md` é a única fonte normativa do workflow SDD. Não mantenha
-um índice operacional paralelo.
+O `sdd-rules.md` contém o resumo operacional e aponta para a fonte normativa
+completa em `documentation/sdd.md`. Em caso de conflito, `documentation/sdd.md`
+prevalece.
 
 ## Regras de Convenções de Código
 
