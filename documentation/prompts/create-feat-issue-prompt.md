@@ -41,6 +41,17 @@ Uma feature issue não pode chegar ao approval gate com PRD desconhecido. Se nen
 governar o outcome, encaminhe primeiro para `create-prd` ou amendment. Se dois candidatos forem
 materialmente equivalentes ou conflitantes, peça decisão antes de redigir.
 
+## Gate obrigatório de Grilling
+
+Execute o protocolo de Grilling definido em `documentation/sdd.md` depois da pesquisa factual e
+antes do draft. Modele como design tree as decisões ainda abertas sobre outcome, atores, escopo,
+critérios observáveis, fora do escopo, milestone e prioridade, sem antecipar o Technical Contract
+da Spec.
+
+Pergunte toda a frontier disponível com recomendação e deixe decisões dependentes para rounds
+posteriores. A frontier vazia e a confirmação de entendimento compartilhado permitem preparar o
+draft, mas não substituem o approval gate da versão exata a publicar.
+
 ## Metadata GitHub
 
 - repository: `JohnPetros/stardust`;

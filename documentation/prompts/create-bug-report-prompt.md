@@ -29,16 +29,16 @@ pare e encaminhe para amendment/feature; não classifique mudança de comportame
 
 ## Pesquisa diagnóstica
 
-Use `documentation/agents/searcher-agent.md` para lanes read-only delimitadas:
+Organize a pesquisa direta da task em lanes delimitadas:
 
 - uma lane para boundary estreito;
-- Searchers paralelos quando dois ou mais boundaries independentes forem afetados;
+- lanes independentes quando dois ou mais boundaries forem afetados;
 - escolha apenas lanes reais, como Core, Server, Web, Studio, Database ou Integration;
-- envie sintoma, expectativa, paths iniciais, Rule Pack e pergunta diagnóstica;
-- exija paths/declarations exatos, evidência, causa provável, risco e incerteza.
+- defina sintoma, expectativa, paths iniciais, Rule Pack e pergunta diagnóstica;
+- registre paths/declarations exatos, evidência, causa provável, risco e incerteza.
 
-A task principal une os relatórios, resolve conflitos por inspeção direta e separa fato de
-hipótese. Searchers não editam, não escolhem delivery route e não criam agentes.
+A task principal pesquisa cada lane, resolve conflitos por inspeção direta e separa fato de
+hipótese. Não crie agentes de pesquisa.
 
 ## Diagnóstico com Playwright
 

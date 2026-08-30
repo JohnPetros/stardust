@@ -13,6 +13,21 @@ Leia `AGENTS.md`, `documentation/sdd.md`, Architecture, Tooling, Rule Pack, Spec
 Contract. O Plan não redefine comportamento, paths, schemas ou decisões. Ambiguidade material
 retorna para amendment via `create-spec`.
 
+## Gate obrigatório de Grilling
+
+Execute o protocolo de Grilling definido em `documentation/sdd.md` antes de criar ou atualizar o
+Plan. Monte uma design tree apenas para decisões de execução que a Spec não tenha determinado,
+como decomposição em waves, ownership, paralelismo, ordem de migrations/integrações, gates de
+ambiente, riscos, recovery e handoff.
+
+Fatos sobre paths, dependências, ferramentas e runtime devem ser pesquisados, não perguntados. Em
+cada round, pergunte toda a frontier disponível com uma recomendação; mantenha decisões
+dependentes para rounds posteriores. Se a entrevista revelar ambiguidade de produto, Contract,
+schema ou arquitetura, interrompa o Plan e encaminhe para amendment via `create-spec`.
+
+Somente salve o Plan quando a frontier estiver vazia e o usuário confirmar o entendimento
+compartilhado. Essa confirmação não autoriza implementação.
+
 ## Metadata
 
 ```yaml
