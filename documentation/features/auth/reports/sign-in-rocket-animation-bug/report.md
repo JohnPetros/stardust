@@ -5,7 +5,7 @@ milestone: https://github.com/JohnPetros/stardust/milestone/20
 prd: null
 apps:
   - web
-status: open
+status: closed
 last_updated_at: 2026-08-30
 ---
 
@@ -61,4 +61,4 @@ Corrigir o fluxo Web de sign-in para que a Server Action conclua sem redireciona
 
 A correção foi aplicada no middleware, no provider de autenticação, no estado de transição do sign-in, no `AnimatedForm`, no atraso da animação, na camada visual do foguete e no dimensionamento responsivo do Lottie. O `AnimatedForm` agora permanece montado e anima explicitamente para o estado `hidden`, com `aria-hidden` e `pointer-events-none` durante a saída. O wrapper do `RocketAnimation` mantém a camada visível, mas ignora eventos de ponteiro para preservar os controles dos consumidores compartilhados.
 
-A inspeção autenticada com Playwright confirmou login com resposta `200`, permanência do formulário no DOM e progressão gradual de `opacity` e `transform` durante a saída. A suíte direcionada do `AnimatedForm` e do sign-in passou; os detectores de código e tipos passaram. A execução global de testes unitários ficou limitada a quatro testes do servidor que não conseguiram iniciar porque a porta `3334` já estava ocupada por um processo existente. O CI posterior revelou a captura de ponteiros nos testes de confirmação; o status permanece aberto até a nova validação confirmar a correção complementar.
+A inspeção autenticada com Playwright confirmou login com resposta `200`, permanência do formulário no DOM e progressão gradual de `opacity` e `transform` durante a saída. A suíte direcionada do `AnimatedForm` e do sign-in passou; os detectores de código e tipos passaram. A execução global de testes unitários ficou limitada a quatro testes do servidor que não conseguiram iniciar porque a porta `3334` já estava ocupada por um processo existente. Após a correção complementar, o Web app CI #573 passou integralmente no SHA `89eaeb944`, incluindo Integration tests, Check code, Check types, Tests e Build; os três cenários de `account-confirmation` também passaram sem interceptação de ponteiros.
