@@ -13,14 +13,31 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  # Shared with the release E2E workflow: staging must not change while a
+  # release candidate is being exercised in the browser.
+  group: stardust-web-staging
+  cancel-in-progress: false
+
 jobs:
   deploy:
     name: Deploy to Coolify
     runs-on: ubuntu-latest
+    timeout-minutes: 40
 
     steps:
       - name: Trigger Coolify deploy
+        env:
+          COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
+          COOLIFY_DEPLOY_WEBHOOK: ${{ secrets.COOLIFY_WEBHOOK_WEB_STG }}
         run: |
-          curl -X GET "${{ secrets.COOLIFY_WEBHOOK_WEB_STG }}" \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
-            --fail --silent --show-error
+          curl --request GET \
+            --header "Authorization: Bearer $COOLIFY_API_TOKEN" \
+            --fail-with-body \
+            --silent \
+            --show-error \
+            --retry 5 \
+            --retry-all-errors \
+            --connect-timeout 10 \
+            --max-time 60 \
+            "$COOLIFY_DEPLOY_WEBHOOK"

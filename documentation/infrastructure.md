@@ -146,13 +146,19 @@ O `hermes-e2e-testing.yaml` é acionado quando o PR é aberto, atualizado,
 reaberto, marcado como pronto para revisão ou editado. O job `prepare`:
 
 - confirma a direção `main` → `production` e valida o título da release;
-- lê a seção `## PRDs afetados` do corpo do PR;
-- extrai os links de milestones do Stardust e consulta seus metadados no GitHub;
-- gera o manifesto da release com o SHA esperado e os milestones afetados;
+- compara os SHAs de `production` e `main`, associa cada commit a um PR merged em
+  `main` e bloqueia commits sem PR;
+- deriva os milestones da seção `## PRD` de cada PR incluído e exige uma
+  classificação inequívoca por milestone ou `Não aplicável`;
+- compara a classificação derivada com `## PRDs afetados` e `## PRs sem PRD`
+  do release PR, impedindo que a edição do corpo omita cobertura;
+- consulta os milestones no GitHub, limita a matriz a 10 PRDs e gera o
+  manifesto com PRs de origem, SHAs e classificações;
 - publica o manifesto como artefato por 14 dias.
 
-Se nenhum milestone for declarado, o deploy em staging ainda é validado, mas
-nenhuma sessão de navegador é iniciada.
+Se todos os PRs incluídos estiverem explicitamente classificados como
+`Não aplicável`, o deploy em staging ainda é validado, mas nenhuma sessão de
+navegador é iniciada.
 
 #### 2. Deploy e validação em staging
 
@@ -161,28 +167,40 @@ aguarda o término do deployment. Em seguida, verifica que o commit implantado
 corresponde ao SHA do head do PR e aguarda o health check de
 `https://web-staging.stardust-app.com.br/`.
 
-Depois do deploy, o job `e2e` cria uma execução por milestone em uma matriz
-paralela. Cada execução do perfil `e2e-tester` do Hermes:
+O release E2E e o CD normal de staging compartilham o grupo de concorrência
+`stardust-web-staging`. Os workflows são serializados sem cancelamento para que
+nenhum push substitua o SHA enquanto o navegador valida a release.
 
-1. recebe o milestone, o SHA esperado e o manifesto de instruções confiáveis;
+Depois do deploy, o job `e2e` cria uma execução por milestone em uma matriz
+com no máximo duas execuções simultâneas. Cada execução do perfil `e2e-tester`
+do Hermes:
+
+1. recebe o milestone e o SHA esperado, enquanto as instruções confiáveis são
+   carregadas de `AGENTS.md` no base SHA de `production`, não do release head;
 2. consulta somente os requisitos `REQ-*` explicitamente associados ao
    milestone;
 3. usa Playwright MCP na Web App de staging com a sessão autenticada fornecida
    pelo bootstrap;
 4. valida o fluxo observável completo e coleta screenshots, erros de console,
    erros de página e falhas de rede;
-5. retorna um JSON em pt-BR com o resultado de cada requisito.
+5. retorna um JSON em pt-BR com o resultado de cada requisito;
+6. recebe uma solicitação de cancelamento pela Runs API se o job terminar antes
+   de a execução chegar a um estado terminal.
 
 O workflow aceita somente os estados `passou` e `não_aplicável`. Estados
 `falhou` ou `bloqueado`, resposta inválida, timeout ou falha do Hermes tornam o
-job malsucedido. Cada resultado válido é publicado como artefato por 14 dias.
+job malsucedido. A validação exige IDs únicos, evidência para requisitos
+exercitados e consistência entre os resultados individuais e o status geral.
+Cada resultado válido é publicado como artefato por 14 dias.
 
 #### 3. Conclusão do E2E
 
 O job `conclusion` consolida os resultados da matriz em um comentário no PR,
 incluindo o SHA, o ambiente, o estado do deploy, a quantidade de requisitos e o
 resumo por milestone. O comentário é atualizado em execuções repetidas usando
-um marcador estável, evitando duplicação.
+um marcador estável, evitando duplicação. O conjunto de milestones recebido é
+comparado com o manifesto, e os resumos produzidos pelo agente são limitados e
+sanitizados antes da publicação.
 
 #### 4. Merge e criação da release
 
