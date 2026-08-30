@@ -1,11 +1,6 @@
-import {
-  expect,
-  test,
-  type BrowserContext,
-  type Page,
-  type Request,
-} from '@playwright/test'
+import { expect, test, type Page, type Request } from '../playwright'
 
+import type { ChallengingFixture } from '../fixtures/ChallengingFixture'
 import { AccountsFaker } from '../../../../../../packages/core/src/auth/domain/entities/fakers/AccountsFaker'
 import { ChallengesFaker } from '../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengesFaker'
 import { UsersFaker } from '../../../../../../packages/core/src/profile/domain/entities/fakers/UsersFaker'
@@ -46,16 +41,8 @@ function createAuthenticatedRoutes(): ServerMockRoute[] {
   ]
 }
 
-async function registerScenario(page: Page, context: BrowserContext) {
-  await context.clearCookies()
-  await context.addCookies([
-    {
-      name: '@stardust:access-token',
-      value: 'assistant-history-test-token',
-      domain: '127.0.0.1',
-      path: '/',
-    },
-  ])
+async function registerScenario(page: Page, challenging: ChallengingFixture) {
+  await challenging.authenticate('assistant-history-test-token')
 
   await ServerMock(page).register([
     ...createAuthenticatedRoutes(),
@@ -113,15 +100,11 @@ function isChatsRequest(request: Request) {
 }
 
 test.describe(CHALLENGE_ROUTE, () => {
-  test.afterEach(async ({ page }) => {
-    await ServerMock(page).reset()
-  })
-
   test('loads the authenticated assistant history with valid pagination params', async ({
     page,
-    context,
+    challenging,
   }) => {
-    await registerScenario(page, context)
+    await registerScenario(page, challenging)
 
     const chatsRequestPromise = page.waitForRequest(isChatsRequest)
     const chatsResponsePromise = page.waitForResponse(

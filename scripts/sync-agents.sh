@@ -76,8 +76,11 @@ def parse_agent(path: Path) -> tuple[str, str, str]:
     return name, description, body
 
 
-def is_judge(name: str) -> bool:
-    return name.startswith("judge-")
+def is_read_only(name: str) -> bool:
+    return name.startswith("judge-") or name in {
+        "spec-reviewer-agent",
+        "implementation-reviewer-agent",
+    }
 
 
 def generated_marker(source: Path) -> str:
@@ -126,7 +129,7 @@ codex_roles: list[str] = [begin_marker]
 for name, description, body, source in agents:
     source_relative = source.relative_to(root).as_posix()
     codex_prompt_relative = Path("../..") / source_relative
-    sandbox_mode = "read-only" if is_judge(name) else "workspace-write"
+    sandbox_mode = "read-only" if is_read_only(name) else "workspace-write"
 
     codex_role = (
         f"# Auto-generated from {source_relative}\n"
@@ -148,10 +151,7 @@ for name, description, body, source in agents:
         ]
     )
 
-    if name == "orchestrator-agent":
-        opencode_mode = "primary"
-        opencode_permissions = "  edit: allow\n  bash: allow\n  task: allow"
-    elif is_judge(name):
+    if is_read_only(name):
         opencode_mode = "subagent"
         opencode_permissions = "  edit: deny\n  bash: deny\n  task: deny"
     elif name == "builder-agent":
@@ -182,7 +182,7 @@ for name, description, body, source in agents:
         f"name: {name}",
         f"description: {json.dumps(description, ensure_ascii=False)}",
     ]
-    if is_judge(name):
+    if is_read_only(name):
         claude_fields.extend(["tools: Read, Glob, Grep", "permissionMode: plan"])
     elif name == "builder-agent":
         claude_fields.append("disallowedTools: Agent")

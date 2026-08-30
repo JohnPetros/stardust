@@ -51,6 +51,17 @@ Não transforme o PRD em spec técnica. Use as rules apenas para não documentar
 
 **Você deve seguir rigorosamente este processo de três etapas:**
 
+### Skill obrigatória: Grilling
+
+Execute o protocolo de Grilling definido em `documentation/sdd.md` nos modos prospectivo e
+retrospectivo depois de pesquisar milestone, documentação, codebase, design e demais fatos
+disponíveis. Modele as decisões pendentes como uma design tree e pergunte, em cada round, toda a
+frontier cujos pré-requisitos já estiverem resolvidos. Cada pergunta deve trazer a resposta
+recomendada no formato canônico do protocolo; decisões dependentes pertencem a rounds posteriores.
+
+Não pergunte fatos pesquisáveis. Somente avance para a escrita quando a frontier estiver vazia e
+o usuário confirmar explicitamente o entendimento compartilhado.
+
 ---
 
 ### ETAPA 0: DETECÇÃO DE MODO (OBRIGATÓRIO)
@@ -58,10 +69,10 @@ Não transforme o PRD em spec técnica. Use as rules apenas para não documentar
 Antes de qualquer coisa, identifique em qual modo operar com base nos inputs
 fornecidos:
 
-| Modo | Quando usar | Foco do processo |
-|---|---|---|
-| **Prospectivo** | Feature ainda não implementada ou milestone ainda sem implementação consolidada | Discovery de requisitos futuros |
-| **Retrospectivo** | Feature já implementada (codebase, screenshots ou comportamento descrito) | Auditoria do que foi construído em relação a milestone/comportamento real |
+| Modo              | Quando usar                                                                     | Foco do processo                                                          |
+| ----------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| **Prospectivo**   | Feature ainda não implementada ou milestone ainda sem implementação consolidada | Discovery de requisitos futuros                                           |
+| **Retrospectivo** | Feature já implementada (codebase, screenshots ou comportamento descrito)       | Auditoria do que foi construído em relação a milestone/comportamento real |
 
 > Se houver ambiguidade, pergunte explicitamente ao usuário antes de continuar.
 
@@ -76,9 +87,11 @@ preencher lacunas. Organize em:
 2. **UX/Design:** Público-alvo, jornada, dores atuais.
 3. **Técnico:** Plataformas, integrações, performance, dados.
 
-**→ Use a tool `question` para gerar as perguntas.**  
-**→ Pare e aguarde as respostas antes de continuar.**  
-**→ Se necessário, faça rodadas adicionais de perguntas.**
+**→ Use os rounds e o formato obrigatório do protocolo de Grilling.**
+
+**→ Pergunte toda a frontier atual e aguarde as respostas antes de continuar.**
+
+**→ Recompute a design tree e faça rounds adicionais até esvaziar a frontier.**
 
 ---
 
@@ -99,9 +112,11 @@ Em seguida, faça perguntas para validar e preencher lacunas. Organize em:
 4. **Restrições conhecidas:** Existem bugs, débitos técnicos ou limitações
    conhecidas que afetam o comportamento documentado?
 
-**→ Use a tool `question` para gerar as perguntas.**  
-**→ Pare e aguarde as respostas antes de continuar.**  
-**→ Se necessário, faça rodadas adicionais de perguntas.**
+**→ Use os rounds e o formato obrigatório do protocolo de Grilling.**
+
+**→ Pergunte toda a frontier atual e aguarde as respostas antes de continuar.**
+
+**→ Recompute a design tree e faça rounds adicionais até esvaziar a frontier.**
 
 Quando não houver milestone no modo retrospectivo, a codebase passa a ser a principal evidência de comportamento implementado. Nesse caso, o documento gerado descreve a feature observada, mas não substitui a necessidade de uma milestone oficial posterior quando o projeto precisar de uma referência formal de produto.
 
@@ -109,8 +124,8 @@ Quando não houver milestone no modo retrospectivo, a codebase passa a ser a pri
 
 ### ETAPA 2: ESCRITA DO PRD
 
-Após receber as respostas, gere o documento completo seguindo estritamente o
-template abaixo.
+Após receber as respostas, esvaziar a frontier e obter confirmação explícita do entendimento
+compartilhado, gere o documento completo seguindo estritamente o template abaixo.
 
 No **Modo Retrospectivo**, a seção "Fora do Escopo" deve incluir também os
 itens descartados durante a implementação (ver template). Quando houver
@@ -155,8 +170,8 @@ _Defina os comportamentos observáveis que determinam se o requisito foi
 atendido. A Spec deve preservar o significado destes critérios e acrescentar
 as evidências técnicas._
 
-| ID | Critério observável |
-|---|---|
+| ID      | Critério observável                               |
+| ------- | ------------------------------------------------- |
 | `CA-01` | Dado [contexto], quando [ação], então [resultado] |
 
 ##### Regras de Negócio

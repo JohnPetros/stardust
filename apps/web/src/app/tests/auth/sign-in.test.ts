@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Page } from '../playwright'
 
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
@@ -211,13 +211,6 @@ test.describe('/auth/sign-in', () => {
     })
   }
 
-  test.afterEach(async ({ page }) => {
-    await page.evaluate(() => {
-      window.__STARDUST_PROFILE_CHANNEL_MOCK__?.reset()
-    })
-    await ServerMock(page).reset()
-  })
-
   test('posts credentials and redirects to space after successful sign-in', async ({
     page,
   }) => {
@@ -242,6 +235,39 @@ test.describe('/auth/sign-in', () => {
 
     await registerAuthenticatedNavigationDefaults(page, account, session)
     await signInActionResponsePromise
+
+    const animationStartedAt = Date.now()
+
+    await page.waitForFunction(
+      () => {
+        const element = document.querySelector('[data-testid="rocket-animation"]')
+        return element !== null && Number(getComputedStyle(element).opacity) > 0
+      },
+      null,
+      {
+        timeout: 2000,
+      },
+    )
+
+    expect(Date.now() - animationStartedAt).toBeLessThan(1000)
+
+    const viewport = await page.evaluate(() => ({
+      innerWidth: window.innerWidth,
+      documentScrollWidth: document.documentElement.scrollWidth,
+      bodyScrollWidth: document.body.scrollWidth,
+      animationOverflow: getComputedStyle(
+        document.querySelector('[data-testid="rocket-animation"]') as HTMLElement,
+      ).overflow,
+      animationWidth:
+        document
+          .querySelector('[data-testid="rocket-animation"]')
+          ?.getBoundingClientRect().width ?? 0,
+    }))
+
+    expect(viewport.documentScrollWidth).toBeLessThanOrEqual(viewport.innerWidth)
+    expect(viewport.bodyScrollWidth).toBeLessThanOrEqual(viewport.innerWidth)
+    expect(viewport.animationWidth).toBeLessThanOrEqual(viewport.innerWidth)
+    expect(viewport.animationOverflow).toBe('hidden')
 
     await expect(page).toHaveURL(/\/space$/, {
       timeout: 20000,

@@ -17,6 +17,9 @@ concurrency:
 env:
   NODE_VERSION: "22"
   NPM_VERSION: "10.9.3"
+  VITE_SERVER_APP_URL: https://stardust-server.test
+  VITE_CDN_URL: https://stardust-cdn.test
+  VITE_WEB_APP_URL: https://stardust-web.test
 
 jobs:
   update:
@@ -152,21 +155,55 @@ jobs:
 
       - name: Apply and diagnose dependency updates
         env:
+          DEPENDENCIES_UPDATE_BASE_REF: origin/main
           DEPENDENCIES_UPDATE_REPORT: ${{ runner.temp }}/dependencies-update-report.json
           DEPENDENCIES_UPDATE_MARKDOWN: ${{ runner.temp }}/dependencies-update-pr.md
         run: node ./scripts/dependencies-update.mjs
 
-      - name: Detect dependency changes
+      - name: Detect update and PR reconciliation state
         id: changes
         shell: bash
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          BRANCH: ${{ steps.branch.outputs.name }}
         run: |
           set -euo pipefail
+
+          changed=false
+          branch_has_updates=false
+          open_pr=false
+
           if git diff --quiet -- package.json package-lock.json 'apps/*/package.json' 'packages/*/package.json'; then
-            echo 'changed=false' >> "$GITHUB_OUTPUT"
             echo 'No eligible dependency updates are available.'
           else
-            echo 'changed=true' >> "$GITHUB_OUTPUT"
+            changed=true
           fi
+
+          if ! git diff --quiet origin/main...HEAD; then
+            branch_has_updates=true
+          fi
+
+          pr_number="$(
+            gh pr list \
+              --base main \
+              --head "$BRANCH" \
+              --state open \
+              --json number \
+              --jq '.[0].number // empty'
+          )"
+          if [ -n "$pr_number" ]; then
+            open_pr=true
+          fi
+
+          reconcile_pr=false
+          if [ "$changed" = true ] || [ "$branch_has_updates" = true ] || [ "$open_pr" = true ]; then
+            reconcile_pr=true
+          fi
+
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+          echo "branch_has_updates=$branch_has_updates" >> "$GITHUB_OUTPUT"
+          echo "open_pr=$open_pr" >> "$GITHUB_OUTPUT"
+          echo "reconcile_pr=$reconcile_pr" >> "$GITHUB_OUTPUT"
 
       - name: Validate final dependency state
         if: steps.changes.outputs.changed == 'true'
@@ -188,7 +225,7 @@ jobs:
           git push origin "HEAD:$BRANCH"
 
       - name: Create or update weekly pull request
-        if: steps.changes.outputs.changed == 'true'
+        if: steps.changes.outputs.reconcile_pr == 'true'
         shell: bash
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}

@@ -4,7 +4,7 @@ import type { ServerMockRoute } from '../types/ServerMockRoute'
 
 const SERVER_MOCK_ROUTE = '/api/tests/server'
 
-type ServerMockController = {
+export type ServerMockController = {
   register: (routes: ServerMockRoute[]) => Promise<void>
   reset: () => Promise<void>
   registerSuccessDefaults: (overrides?: ServerMockRoute[]) => Promise<void>

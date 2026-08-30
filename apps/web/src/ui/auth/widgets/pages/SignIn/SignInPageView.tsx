@@ -26,7 +26,7 @@ export const SignInPageView = ({
     <>
       <RocketAnimation animationRef={rocketAnimationRef} isVisible={isRocketVisible} />
 
-      <div className='h-screen lg:grid lg:grid-cols-[1fr_1.5fr] z-50'>
+      <div className='h-screen lg:grid lg:grid-cols-[1fr_1.5fr] z-50 overflow-x-hidden'>
         <main className='flex h-full flex-col items-center justify-center'>
           <AnimatedForm isVisible={isRocketVisible}>
             <div>
