@@ -5,8 +5,8 @@ milestone: https://github.com/JohnPetros/stardust/milestone/20
 prd: null
 apps:
   - web
-status: closed
-last_updated_at: 2026-08-27
+status: open
+last_updated_at: 2026-08-30
 ---
 
 # Bug Report: Animação de foguete não aparece após login
@@ -29,6 +29,8 @@ Há três condições que compunham a falha: (1) `RocketAnimationView` montava o
 
 O diagnóstico é sustentado pela inspeção do fluxo real: a API de login retorna `201`, `/auth/account` autenticado retorna `200`, mas a requisição da Server Action podia ser redirecionada antes da animação. A inspeção também identificou o atraso de 1500 ms usado tanto no fade quanto no reinício do Lottie. Os testes anteriores verificavam somente a opacidade do wrapper (`RocketAnimationView.test.tsx`) e a navegação final (`sign-in.test.ts`), sem verificar a visibilidade efetiva no navegador, o overflow do viewport nem o comportamento durante o remount.
 
+Após o primeiro push da correção, o CI identificou uma regressão nos consumidores compartilhados: com `z-[60]`, o SVG do foguete passou a interceptar eventos de ponteiro. A execução `Web app CI #573` falhou nos três cenários de `account-confirmation` que clicam em `retry-user-creation-button`; o Playwright registrou que o SVG dentro de `rocket-animation` interceptava o clique. Esse achado não invalida a correção de visibilidade, mas exige que a camada visual seja não interativa.
+
 Não há evidência de erro de nomenclatura do asset: `rocket-lauching` é o nome interno usado pelo componente e está mapeado para `/lotties/rocket-launching.json`, que existe em `apps/web/public/lotties`. A falha de carregamento desse asset permanece um risco independente, pois `LottieAnimation` retorna `null` e suprime o erro quando o fetch falha, mas não é a causa sustentada pela issue.
 
 ### Áreas afetadas
@@ -43,13 +45,13 @@ Não há evidência de erro de nomenclatura do asset: `rocket-lauching` é o nom
 - `apps/web/src/ui/global/widgets/components/Animation/LottieAnimation/LottieAnimationView.tsx` — limita dimensões numéricas do Lottie ao viewport.
 - `apps/web/src/ui/global/widgets/layouts/Root/RootLayoutView.tsx` — fornece o fundo `bg-gray-900` do `body`, relevante para a camada negativa do foguete.
 - `apps/web/src/app/tests/auth/sign-in.test.ts` — cobre autenticação, requests, visibilidade da animação durante a transição e destino final.
-- `apps/web/src/ui/auth/widgets/components/RocketAnimation/tests/RocketAnimationView.test.tsx` — cobre a opacidade inicial e a camada visual do wrapper.
+- `apps/web/src/ui/auth/widgets/components/RocketAnimation/tests/RocketAnimationView.test.tsx` — cobre a opacidade inicial, a camada visual e a ausência de captura de eventos do wrapper.
 - `apps/web/src/ui/auth/widgets/components/AnimatedForm/index.tsx` — mantém o formulário montado e alterna explicitamente entre os estados visível e oculto para que a saída não seja interrompida por remount.
 - `apps/web/src/ui/auth/widgets/components/AnimatedForm/tests/AnimatedForm.test.tsx` — cobre a permanência do formulário no DOM e o estado oculto durante a transição.
 
 ### Risco de regressão
 
-A correção deve manter o estado inicial oculto, o atraso e o reinício da animação, o redirecionamento para `nextRoute` ou `/space` e o comportamento de erro do formulário. O fluxo autenticado não deve iniciar chamadas de perfil sem token nem submeter a Server Action de login a um redirecionamento prematuro. O formulário deve permanecer montado enquanto oculta, sem aceitar interação por baixo da transição. `RocketAnimation` também é reutilizado nos fluxos de confirmação de conta e confirmação de conta social; uma alteração de camada compartilhada não deve encobrir ou bloquear os controles desses fluxos nem alterar seus estados de carregamento.
+A correção deve manter o estado inicial oculto, o atraso e o reinício da animação, o redirecionamento para `nextRoute` ou `/space` e o comportamento de erro do formulário. O fluxo autenticado não deve iniciar chamadas de perfil sem token nem submeter a Server Action de login a um redirecionamento prematuro. O formulário deve permanecer montado enquanto oculta, sem aceitar interação por baixo da transição. O wrapper visual do `RocketAnimation` deve ignorar eventos de ponteiro para não bloquear os controles dos fluxos de confirmação de conta e confirmação de conta social, nos quais o componente também é reutilizado.
 
 ### Limite da correção
 
@@ -57,6 +59,6 @@ Corrigir o fluxo Web de sign-in para que a Server Action conclua sem redireciona
 
 ## Encerramento
 
-A correção foi aplicada no middleware, no provider de autenticação, no estado de transição do sign-in, no `AnimatedForm`, no atraso da animação, na camada visual do foguete e no dimensionamento responsivo do Lottie. O `AnimatedForm` agora permanece montado e anima explicitamente para o estado `hidden`, com `aria-hidden` e `pointer-events-none` durante a saída.
+A correção foi aplicada no middleware, no provider de autenticação, no estado de transição do sign-in, no `AnimatedForm`, no atraso da animação, na camada visual do foguete e no dimensionamento responsivo do Lottie. O `AnimatedForm` agora permanece montado e anima explicitamente para o estado `hidden`, com `aria-hidden` e `pointer-events-none` durante a saída. O wrapper do `RocketAnimation` mantém a camada visível, mas ignora eventos de ponteiro para preservar os controles dos consumidores compartilhados.
 
-A inspeção autenticada com Playwright confirmou login com resposta `200`, permanência do formulário no DOM e progressão gradual de `opacity` e `transform` durante a saída. A suíte direcionada do `AnimatedForm` e do sign-in passou; os detectores de código e tipos passaram. A execução global de testes unitários ficou limitada a quatro testes do servidor que não conseguiram iniciar porque a porta `3334` já estava ocupada por um processo existente.
+A inspeção autenticada com Playwright confirmou login com resposta `200`, permanência do formulário no DOM e progressão gradual de `opacity` e `transform` durante a saída. A suíte direcionada do `AnimatedForm` e do sign-in passou; os detectores de código e tipos passaram. A execução global de testes unitários ficou limitada a quatro testes do servidor que não conseguiram iniciar porque a porta `3334` já estava ocupada por um processo existente. O CI posterior revelou a captura de ponteiros nos testes de confirmação; o status permanece aberto até a nova validação confirmar a correção complementar.
