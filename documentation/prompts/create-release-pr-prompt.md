@@ -29,12 +29,13 @@ mudanças desde a última release publicada.
 
 Este prompt é responsável por:
 
-1. preparar e criar o PR de release;
-2. identificar e registrar os PRDs afetados;
-3. registrar o `head SHA` que deve ser implantado e validado em staging;
-4. acompanhar os checks da release sem executar diretamente o deploy ou os
+1. preparar e apresentar o draft completo do PR de release para aprovação;
+2. criar ou atualizar o PR somente depois da aprovação explícita do usuário;
+3. identificar e registrar os PRDs afetados;
+4. registrar o `head SHA` que deve ser implantado e validado em staging;
+5. acompanhar os checks da release sem executar diretamente o deploy ou os
    testes E2E;
-5. fornecer notas compatíveis com a criação posterior da tag e da GitHub
+6. fornecer notas compatíveis com a criação posterior da tag e da GitHub
    Release.
 
 O workflow `.github/workflows/hermes-e2e-testing.yaml` é responsável por:
@@ -58,6 +59,8 @@ Os workflows `*-production-cd.yaml` são responsáveis por:
 - Não crie uma branch intermediária de release.
 - Não faça commit de alterações locais pendentes.
 - Não abra mais de um PR de release para o mesmo `head SHA`.
+- Não crie nem atualize o PR no GitHub antes de apresentar o título e o corpo
+  completos e receber aprovação explícita do usuário.
 - Use o SHA exato de `origin/main` durante todo o processo.
 - Não trate caminhos alterados como fonte de verdade para associação de PRD.
 - Exija uma classificação inequívoca em `## PRD` no corpo de cada PR incluído.
@@ -200,9 +203,26 @@ Registre separadamente:
 
 Os três últimos itens permanecem pendentes até os workflows do release PR.
 
-### 7. Criar o PR
+### 7. Apresentar o draft para aprovação
 
-Crie o PR diretamente de `main` para `production`:
+Antes de qualquer comando `gh pr create` ou `gh pr edit`:
+
+1. apresente o título proposto;
+2. apresente o corpo completo do PR exatamente como será publicado;
+3. destaque a versão, o `base SHA`, o `head SHA`, os PRs incluídos, os PRDs
+   afetados e os checks que permanecerão pendentes;
+4. solicite aprovação explícita para publicar o draft no GitHub.
+
+Interrompa e aguarde a resposta do usuário. Não interprete silêncio, uma
+aprovação anterior de outro draft ou a solicitação inicial de criação da
+release como aprovação para publicar este draft. Se o usuário solicitar
+ajustes, gere e apresente novamente o draft completo revisado antes de pedir
+uma nova aprovação.
+
+### 8. Criar ou atualizar o PR
+
+Somente depois da aprovação explícita do draft, crie o PR diretamente de
+`main` para `production`:
 
 ```bash
 gh pr create \
@@ -220,6 +240,9 @@ Release vX.Y.Z
 
 A versão declarada no título será usada pelo workflow pós-merge para criar a
 tag e a GitHub Release.
+
+Se um PR de release compatível já existir e precisar ser atualizado, apresente
+e aprove o novo draft pelo mesmo processo antes de executar `gh pr edit`.
 
 ## Corpo do PR
 
