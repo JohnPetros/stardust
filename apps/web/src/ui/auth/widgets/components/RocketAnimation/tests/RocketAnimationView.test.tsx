@@ -30,6 +30,7 @@ describe('RocketAnimationView', () => {
 
     expect(rocketAnimation).toHaveClass('z-[60]')
     expect(rocketAnimation).toHaveClass('overflow-hidden')
+    expect(rocketAnimation).toHaveClass('pointer-events-none')
 
     await waitFor(() => {
       expect(rocketAnimation).toHaveStyle({
