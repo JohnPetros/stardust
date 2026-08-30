@@ -47,7 +47,7 @@ legada em bancos que já a tenham criado.
   fechamento. As respostas observadas foram `2xx`; não houve `pageerror` nem
   `requestfailed`. O navegador registrou somente o warning React de input
   controlado não bloqueante. As credenciais foram carregadas por
-  `source ./scripts/export-studio-app-e2e-env.sh` sem registrar seus valores.
+  `eval "$(node ./scripts/export-studio-app-e2e-env.mjs)"` sem registrar seus valores.
 - Evidências automatizadas, de runtime e visuais permanecem separadas; a
   validação manual autenticada não é substituída por testes unitários ou mocks.
 

@@ -89,7 +89,7 @@ declarar a aplicação funcional.
   `source` para que os `export`s permaneçam no shell atual:
 
   ```bash
-  source ./scripts/export-studio-app-e2e-env.sh
+  eval "$(node ./scripts/export-studio-app-e2e-env.mjs)"
   ```
 
   O arquivo `.env.development` é ignorado pelo Git; nunca coloque essas
@@ -287,7 +287,7 @@ WEB_APP_E2E_PASSWORD=<senha-da-conta-da-web-app>
 Carregue-as no mesmo terminal que inicia o navegador Playwright:
 
 ```bash
-source ./scripts/export-web-app-e2e-env.sh
+eval "$(node ./scripts/export-web-app-e2e-env.mjs)"
 ```
 
 O script falha se alguma variável estiver ausente e não imprime os valores das

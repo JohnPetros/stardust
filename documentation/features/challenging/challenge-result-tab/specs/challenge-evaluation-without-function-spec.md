@@ -325,7 +325,7 @@ navegação continua funcionando sem atualizar manualmente o navegador.
 - **Critérios:** `CA-01` a `CA-09` passed.
 - **Findings bloqueantes:** nenhum.
 - **Observação:** alterações preexistentes em `package.json` e
-  `scripts/sync-agents.sh` foram excluídas da avaliação do diff da implementação.
+  `scripts/sync-agents.mjs` foram excluídas da avaliação do diff da implementação.
 
 ## Judge Implementation Final
 

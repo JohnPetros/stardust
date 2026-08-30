@@ -300,7 +300,7 @@ formulário, seus bypasses e seus destinos pendentes.
   - **Pré-requisitos:** iniciar `npm --workspace @stardust/server run dev` em
     `http://localhost:3334` e `npm --workspace @stardust/web run dev` em
     `http://localhost:3000`; carregar as credenciais reais por
-    `source ./scripts/export-web-app-e2e-env.sh`, sem registrar valores em
+    `eval "$(node ./scripts/export-web-app-e2e-env.mjs)"`, sem registrar valores em
     código, documentação ou logs.
   - **Resultado observável:** em uma sessão Playwright real, autenticar pela
     Web App, aguardar a navegação para `/space`, acessar o editor protegido e
