@@ -1,4 +1,4 @@
-import { expect, test, type BrowserContext, type Page } from '../playwright'
+import { expect, test, type BrowserContext, type Page } from '@playwright/test'
 
 import type { SessionDto } from '@stardust/core/auth/structures/dtos'
 import { SessionFaker } from '../../../../../../packages/core/src/auth/domain/structures/fakers'
@@ -259,6 +259,10 @@ test.describe('/auth/reset-password', () => {
       }),
     ).toBeVisible()
   }
+
+  test.afterEach(async ({ page }) => {
+    await ServerMock(page).reset()
+  })
 
   test('renders reset request form without temporary permission', async ({ page }) => {
     await gotoResetPasswordPage(page)

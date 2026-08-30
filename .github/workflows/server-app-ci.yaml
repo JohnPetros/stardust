@@ -152,20 +152,6 @@ jobs:
           sed -i "s|__SUPABASE_SECRET_KEY__|${SECRET_KEY}|g" .env.testing
           cp .env.testing .env
 
-      - name: Start Inngest and Redis
-        run: docker compose up -d inngest redis
-
-      - name: Wait for Inngest
-        run: |
-          for attempt in {1..30}; do
-            if curl --fail --silent http://127.0.0.1:8288/health > /dev/null; then
-              exit 0
-            fi
-            sleep 2
-          done
-          docker compose logs inngest
-          exit 1
-
       - name: Run tests
         run: npm run test:unit -w @stardust/server
 

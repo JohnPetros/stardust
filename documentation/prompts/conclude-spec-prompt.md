@@ -1,58 +1,66 @@
 ---
 name: conclude-spec
-description: Publicar uma implementação SDD ready, executar o gate final de CI do PR e fechar Spec, Plan e Evaluation.
+description: Fechar uma Spec de feature após o único Judge Implementation, checks e build do CI, atualizando evaluation.md.
 ---
 
 # Concluir Spec
 
-Este workflow possui publicação, CI final e closure. Não implementa correções diretamente.
+O Orchestrator conduz o fechamento na task atual. Não crie nova thread.
 
 ## Pré-condições
 
-- Spec `in_progress` e revisão igual à Evaluation;
-- Evaluation `ready`, com CA/MV/runtime/visual atuais;
-- Plan completo quando presente;
-- conformance de paths, widget tree, contracts, exclusões e estados atuais;
-- validação manual obrigatória de `AGENTS.md` registrada;
-- nenhum finding bloqueante.
+- Spec `in_progress`;
+- implementação direta aceita ou todas as fases aceitas;
+- nenhuma tarefa ou finding bloqueante pendente;
+- revisão da Spec correspondente ao diff atual;
+- `evaluation.md` criado e atualizado até o preflight;
+- Judge Implementation único aceito para o HEAD atual.
 
-Commit, push e criação/atualização de PR exigem autorização explícita ou já concedida no escopo.
-Não faça merge ou deploy sem pedido explícito.
+## Validação final
 
-## Publicação
+1. Confirme que os sensores locais e o preflight estão registrados em
+   `evaluation.md`.
+2. Atualize `evaluation.md` com a matriz de evidências reais, status de warnings
+   e findings, decisões, lições e o SHA final.
+3. Não crie um segundo Judge no fechamento. Use o único `Judge Implementation`
+   já executado para a implementação inteira; em uma Spec direta, ele é o
+   `Judge Implementation Direct`, e em um Plan, o `Judge Implementation Final`.
+4. Se houver qualquer alteração depois do veredito, interrompa o fechamento,
+   atualize o diff/evidências e repita o Judge único antes de continuar.
+5. Registre o veredito e o commit/HEAD avaliado em `evaluation.md`.
 
-1. releia Spec, Rule Pack, Tooling, Plan e Evaluation;
-2. execute preflight e conformance no candidato atual;
-3. revise migrations, generated artifacts, Design e documentação factual;
-4. invoque `commit-code` para commits intencionais;
-5. invoque obrigatoriamente `create-pr` quando o PR não existir ou metadata/HEAD estiver stale;
-6. garanta PR ready-for-review e registre número, URL, base e head SHA.
+Para frontend, confirme no `evaluation.md` a auditoria de
+`ui-layer-rules.md` e a matriz independente Pencil/Web antes de marcar a Spec
+como concluída. A matriz deve comprovar fidelidade Pencil-to-code no HEAD atual;
+node ausente, contradito, adicionado sem aprovação ou divergência sem decisão
+rastreável mantém a Spec `in_progress` e exige correção ou amendment.
 
-Discrepância dentro do Contract cria finding, torna evidência `stale`, muda Evaluation para
-`in_progress` e invoca imediatamente `implement-spec`. Mudança de Contract volta a Spec para
-`draft` e invoca `create-spec`. Retome a conclusão automaticamente quando Evaluation voltar a
-`ready`.
+## Documentação e entrega
 
-## Gate final de CI
+Alinhe PRD, Rules, Architecture, modules, tooling e overview conforme os fatos.
+Atualizações normativas que alteram produto, Contract, Rules globais ou
+fronteiras arquiteturais exigem decisão do usuário.
 
-Monitore todos os checks aplicáveis anexados ao HEAD atual do PR até estado terminal. Registre
-workflow, resultado, URL e SHA em Evaluation. Run de push, SHA anterior, check cancelado ou
-workflow esperado ausente não passam o gate.
+`create-pr` cria o commit/PR e solicita Codex Review. O Plan, `evaluation.md`, o
+worktree, o Judge e o CI devem apontar para o mesmo HEAD final. Todos os checks
+obrigatórios e o build verdes são pré-condições para concluir a Spec; enquanto
+o PR estiver aberto, ficam `pending` no `evaluation.md`.
 
-Em falha determinística: `implement-spec`/amendment → `commit-code` → atualizar o mesmo PR por
-`create-pr` → aguardar CI do novo HEAD. Só repita o mesmo SHA quando houver evidência concreta
-de falha transitória. Após três falhas materialmente idênticas, escale apenas se faltar decisão
-ou mudança externa.
+### Referência para `create-pr`
 
-## Closure
+Ao concluir a Spec, registre o handoff para a skill `create-pr` quando a entrega
+ainda não tiver um PR associado. Esta integração é somente por referência:
+`conclude-spec` não executa `create-pr`, não cria commit, não faz stage/push e
+não abre PR automaticamente. O workflow responsável por agrupar commits,
+abrir o PR, solicitar Codex Review e acompanhar o CI é
+`.agents/skills/create-pr/SKILL.md`.
 
-Depois de CI verde e sem finding bloqueante:
+Se um check ou o build falhar, mantenha a Spec `in_progress`, registre a falha
+imediatamente em `evaluation.md`, crie `Builder Fix CI-<n>` quando a
+correção estiver no escopo, reexecute sensores afetados e repita o único Judge
+quando o diff ou a evidência tiver sido invalidada.
 
-- confira que cada lição reutilizável possui disposition para PRD, Architecture, Rule, Tooling,
-  Overview ou `No change` justificado;
-- marque Evaluation `completed`;
-- marque Plan `completed` quando presente;
-- marque Spec `completed` e mantenha link para Evaluation.
-
-Não crie commit exclusivo apenas para estados operacionais de SDD. Feedback posterior em PR
-aberto pode reabrir a mesma Spec; após merge, use Bug Report ou change Spec.
+- preencha evidências finais em `evaluation.md`;
+- registre alinhamento documental, decisões e lições;
+- altere a Spec para `completed`;
+- conclua o Plan, quando existir.
