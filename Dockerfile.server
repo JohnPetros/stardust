@@ -13,7 +13,7 @@ RUN apk update
 RUN apk add --no-cache libc6-compat
 WORKDIR /stardust
 COPY .gitignore .gitignore
-COPY ./scripts/replace-packages-imports.sh ./scripts/replace-packages-imports.sh
+COPY ./scripts/replace-packages-imports.mjs ./scripts/replace-packages-imports.mjs
 COPY --from=builder /stardust/out/json/ .
 RUN npm install
 COPY --from=builder /stardust/out/full/ .
