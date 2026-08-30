@@ -24,6 +24,8 @@ describe('SignInForm', () => {
   it('should render invalid email error message when email is invalid', async () => {
     render(Widget())
 
+    expect(screen.getByTestId('email-input')).toHaveValue('')
+
     expect(screen.queryByText(INVALID_EMAIL_MESSAGE)).toBeNull()
 
     const { submitButton } = FormFields()
