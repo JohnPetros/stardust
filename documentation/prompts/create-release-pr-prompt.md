@@ -95,7 +95,9 @@ Interrompa quando:
 
 Liste os commits presentes em `origin/main` e ausentes em
 `origin/production`. Para cada commit, identifique o PR incorporado que o
-introduziu.
+introduziu quando essa associação existir no GitHub. Registre separadamente os
+commits diretos sem PR associado; eles fazem parte da release, mas não originam
+classificações de PRD nem execuções E2E.
 
 Produza uma lista deduplicada contendo:
 
@@ -104,6 +106,10 @@ Produza uma lista deduplicada contendo:
 - merge commit ou commits associados;
 - issues relacionadas;
 - valor declarado na seção `## PRD`.
+
+Produza também uma lista de commits sem PR contendo SHA, URL e mensagem. Não
+omita nem bloqueie a release apenas pela ausência de associação retrospectiva,
+mas não derive PRDs desses commits.
 
 Não considere como parte da release um PR que não introduziu commits no
 intervalo comparado.
@@ -163,7 +169,14 @@ Monte um manifesto lógico associado ao `head SHA`, contendo no mínimo:
       "source_pull_requests": [123]
     }
   ],
-  "pull_requests_without_prd": [124]
+  "pull_requests_without_prd": [124],
+  "unassociated_commits": [
+    {
+      "sha": "<sha>",
+      "html_url": "https://github.com/JohnPetros/stardust/commit/<sha>",
+      "message": "Mensagem do commit"
+    }
+  ]
 }
 ```
 

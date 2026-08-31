@@ -76,8 +76,9 @@ jobs:
           fi
 
           : > associated-pull-requests.jsonl
-          : > unassociated-commits.txt
-          while IFS= read -r commit_sha; do
+          : > unassociated-commits.jsonl
+          while IFS= read -r commit; do
+            commit_sha="$(jq --exit-status --raw-output '.sha' <<< "$commit")"
             commit_pull_requests="$(gh api \
               --header 'Accept: application/vnd.github+json' \
               "repos/$REPOSITORY/commits/$commit_sha/pulls")"
@@ -86,19 +87,15 @@ jobs:
                 <<< "$commit_pull_requests"
             )"
             if [ "$matching_count" -eq 0 ]; then
-              printf '%s\n' "$commit_sha" >> unassociated-commits.txt
+              jq --compact-output \
+                '{sha, html_url, message: .commit.message}' \
+                <<< "$commit" >> unassociated-commits.jsonl
               continue
             fi
             jq --compact-output \
               '.[] | select(.merged_at != null and .base.ref == "main") | {number, html_url, title, body}' \
               <<< "$commit_pull_requests" >> associated-pull-requests.jsonl
-          done < <(jq --raw-output '.commits[].sha' <<< "$compare")
-
-          if [ -s unassociated-commits.txt ]; then
-            echo 'Every release commit must be associated with a pull request merged into main.'
-            sed 's/^/- /' unassociated-commits.txt
-            exit 1
-          fi
+          done < <(jq --compact-output '.commits[]' <<< "$compare")
 
           if [ ! -s associated-pull-requests.jsonl ]; then
             echo 'No merged pull requests could be associated with the release commits.'
@@ -107,6 +104,13 @@ jobs:
 
           jq --slurp 'unique_by(.number) | sort_by(.number)' \
             associated-pull-requests.jsonl > included-pull-requests.json
+          jq --slurp 'unique_by(.sha)' \
+            unassociated-commits.jsonl > unassociated-commits.json
+
+          unassociated_count="$(jq 'length' unassociated-commits.json)"
+          if [ "$unassociated_count" -gt 0 ]; then
+            echo "::notice::The release contains $unassociated_count commit(s) without an associated pull request; they will be recorded in the manifest without producing PRD associations."
+          fi
 
           python3 - <<'PY'
           import json
@@ -247,6 +251,7 @@ jobs:
             --slurpfile milestones milestones.json \
             --slurpfile pull_requests included-pull-requests.json \
             --slurpfile pull_requests_without_prd pull-requests-without-prd.json \
+            --slurpfile unassociated_commits unassociated-commits.json \
             '{
               repository: $repository,
               pull_request: $pull_request,
@@ -257,7 +262,8 @@ jobs:
               base_branch: "production",
               pull_requests: ($pull_requests[0] | map({number, html_url, title})),
               affected_prds: $milestones[0],
-              pull_requests_without_prd: $pull_requests_without_prd[0]
+              pull_requests_without_prd: $pull_requests_without_prd[0],
+              unassociated_commits: $unassociated_commits[0]
             }' > release-e2e-manifest.json
 
           {
