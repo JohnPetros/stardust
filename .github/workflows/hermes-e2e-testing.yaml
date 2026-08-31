@@ -305,7 +305,7 @@ jobs:
               --retry-all-errors \
               --connect-timeout 10 \
               --max-time 60 \
-              --request GET \
+              --request POST \
               --header "Authorization: Bearer $COOLIFY_API_TOKEN" \
               "$COOLIFY_DEPLOY_WEBHOOK"
           )"
