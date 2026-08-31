@@ -127,7 +127,7 @@ describe('authenticated user feedback routes', () => {
       .eq('id', reportId)
       .single()
     if (error) throw error
-    expect(data.author_read_at).toBe(message.createdAt)
+    expect(new Date(data.author_read_at).toISOString()).toBe(message.createdAt)
   })
 
   it('uses the same safe 404 response for absent and non-owned details', async () => {
