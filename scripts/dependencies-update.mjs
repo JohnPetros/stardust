@@ -85,9 +85,7 @@ function findEligibleUpdates(manifestPaths, before) {
         'minor',
         '--cooldown',
         '7d',
-        '--enginesNode',
         '--jsonUpgraded',
-        '--silent',
       ],
       { capture: true },
     ).trim()
@@ -271,7 +269,6 @@ runNcu([
   'minor',
   '--cooldown',
   '7d',
-  '--enginesNode',
   '--doctorInstall',
   'npm install --ignore-scripts --no-audit --no-fund',
   '--doctorTest',
