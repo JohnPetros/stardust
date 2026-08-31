@@ -263,7 +263,7 @@ if (eligibleUpdates.length === 0) {
 
 const repositoryRoot = process.cwd()
 const doctorInstall = `npm --prefix "${repositoryRoot}" install --ignore-scripts --no-audit --no-fund`
-const doctorTest = `npm --prefix "${repositoryRoot}" run check:dependencies-update`
+const doctorTest = `env TURBO_CONCURRENCY=1 npm --prefix "${repositoryRoot}" run check:dependencies-update`
 
 for (const manifestPath of manifestPaths) {
   runNcu([
