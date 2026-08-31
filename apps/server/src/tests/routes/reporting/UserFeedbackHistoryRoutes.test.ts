@@ -1,13 +1,20 @@
-import request from 'supertest'
+import { execFileSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
+import request from 'supertest'
 
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { AuthError, ConflictError } from '@stardust/core/global/errors'
 
 import { AuthFixture } from '@/tests/fixtures/AuthFixture'
+import { ENV } from '@/constants'
 import { HonoFixture } from '@/tests/fixtures/HonoFixture'
 import { ProfileFixture } from '@/tests/fixtures/ProfileFixture'
 import { SupabaseFixture } from '@/tests/fixtures/SupabaseFixture'
+
+const sql = (query: string) =>
+  execFileSync('psql', [ENV.databaseUrl, '-At', '-v', 'ON_ERROR_STOP=1', '-c', query], {
+    encoding: 'utf8',
+  }).trim()
 
 describe('authenticated user feedback routes', () => {
   const honoFixture = new HonoFixture()
@@ -48,19 +55,13 @@ describe('authenticated user feedback routes', () => {
   async function createAdminMessage(reportId: string) {
     const id = randomUUID()
     const createdAt = new Date(Date.now() - 1000).toISOString()
-    const { error } = await supabaseFixture.supabase.from('feedback_messages').insert({
-      id,
-      report_id: reportId,
-      author_role: 'admin',
-      author_id: authFixture.getAccountId(),
-      content: 'A canonical administrative reply',
-      created_at: createdAt,
-    })
-    if (error) throw error
-    await supabaseFixture.supabase
-      .from('feedback_reports')
-      .update({ last_admin_message_at: createdAt })
-      .eq('id', reportId)
+    sql(
+      `insert into public.feedback_messages (id, report_id, author_role, author_id, content, created_at)
+       values ('${id}', '${reportId}', 'admin', '${authFixture.getAccountId()}', 'A canonical administrative reply', '${createdAt}')`,
+    )
+    sql(
+      `update public.feedback_reports set last_admin_message_at = '${createdAt}' where id = '${reportId}'`,
+    )
     return { id, createdAt }
   }
 

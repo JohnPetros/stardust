@@ -77,6 +77,16 @@ describe('feedback conversation persistence', () => {
           `select count(*) from public.feedback_message_attachments where id = '${attachmentId}' and message_id = '${messageId}' and size = 128`,
         ),
       ).toBe('1')
+      const closeRequest = JSON.stringify({
+        reportId,
+        expectedStatus: 'open',
+        status: 'closed',
+      }).replaceAll("'", "''")
+      expect(
+        sql(
+          `select (public.change_feedback_report_status('${closeRequest}'::jsonb)->>'status')`,
+        ),
+      ).toBe('closed')
       expect(
         sql(`select status from public.feedback_reports where id = '${reportId}'`),
       ).toBe('closed')
