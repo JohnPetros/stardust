@@ -207,7 +207,7 @@ jobs:
         if: steps.changes.outputs.changed == 'true'
         run: |
           npm ci --ignore-scripts --no-audit --no-fund
-          npm run check:dependencies-update
+          NODE_OPTIONS=--max-old-space-size=8192 TURBO_CONCURRENCY=1 npm run check:dependencies-update
 
       - name: Commit and push weekly update
         if: steps.changes.outputs.changed == 'true'
