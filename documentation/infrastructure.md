@@ -176,11 +176,11 @@ Depois do deploy, o job `e2e` cria uma execução por milestone em uma matriz
 com no máximo duas execuções simultâneas. Cada execução do perfil `e2e-tester`
 do Hermes:
 
-1. recebe o milestone e o SHA esperado, enquanto as instruções confiáveis são
+1. recebe o milestone, seus issues e o SHA esperado, enquanto as instruções confiáveis são
    carregadas de `AGENTS.md` no base SHA de `production`, não do release head;
 2. consulta somente os requisitos `REQ-*` explicitamente associados ao
-   milestone;
-3. usa Playwright MCP na Web App de staging com a sessão autenticada fornecida
+   milestone no contexto fornecido pelo workflow;
+3. usa somente Playwright MCP na Web App de staging com a sessão autenticada fornecida
    pelo bootstrap;
 4. valida o fluxo observável completo e coleta screenshots, erros de console,
    erros de página e falhas de rede;

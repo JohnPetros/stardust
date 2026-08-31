@@ -349,8 +349,8 @@ Depois da abertura ou atualização do PR, o workflow de release deve:
    isolado via CDP, para exercitar a Web App em staging em um navegador real;
 7. reutilizar o bootstrap seguro de autenticação do Playwright MCP, sem expor
    credenciais ao modelo ou enviá-las em prompts e argumentos de ferramentas;
-8. carregar a milestone pelo GitHub MCP e identificar seus requisitos
-   `REQ-*`;
+8. usar o contexto read-only do milestone e seus issues carregado pelo
+   workflow para identificar seus requisitos `REQ-*`;
 9. validar os requisitos daquele PRD que forem aplicáveis à Web App e puderem
    ser exercitados pelo ambiente de staging disponível;
 10. coletar screenshots, estado visível final, console, falhas de página,
