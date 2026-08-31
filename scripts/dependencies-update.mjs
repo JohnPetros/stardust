@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process'
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { join, relative } from 'node:path'
+import { dirname, join, relative } from 'node:path'
 
 const NCU_VERSION = '19.1.1'
 const REPORT_PATH =
@@ -63,7 +63,7 @@ function dependencyRanges(manifest) {
 
 function runNcu(args, options = {}) {
   return execFileSync('npx', ['--yes', `npm-check-updates@${NCU_VERSION}`, ...args], {
-    cwd: process.cwd(),
+    cwd: options.cwd ?? process.cwd(),
     encoding: 'utf8',
     stdio: options.capture ? ['ignore', 'pipe', 'inherit'] : 'inherit',
     env: {
@@ -261,19 +261,24 @@ if (eligibleUpdates.length === 0) {
   process.exit(0)
 }
 
-runNcu([
-  '--doctor',
-  '--upgrade',
-  '--workspaces',
-  '--target',
-  'minor',
-  '--cooldown',
-  '7d',
-  '--doctorInstall',
-  'npm install --ignore-scripts --no-audit --no-fund',
-  '--doctorTest',
-  'npm run check:dependencies-update',
-])
+const repositoryRoot = process.cwd()
+const doctorInstall = `npm --prefix "${repositoryRoot}" install --ignore-scripts --no-audit --no-fund`
+const doctorTest = `npm --prefix "${repositoryRoot}" run check:dependencies-update`
+
+for (const manifestPath of manifestPaths) {
+  runNcu([
+    '--doctor',
+    '--upgrade',
+    '--target',
+    'minor',
+    '--cooldown',
+    '7d',
+    '--doctorInstall',
+    doctorInstall,
+    '--doctorTest',
+    doctorTest,
+  ], { cwd: dirname(manifestPath) })
+}
 
 const after = new Map(
   manifestPaths.map((manifestPath) => [manifestPath, readJson(manifestPath)]),
