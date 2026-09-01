@@ -19,6 +19,10 @@ Demanda → Spec → Judge Spec → Plan opcional → Judge Plan → Implementa�
   antes do PR.
 - O fechamento não cria um novo papel de julgamento; `conclude-spec` fecha o
   fluxo.
+- PRDs canônicos ficam em `documentation/prds/<module>/<english-slug>.md`; cada
+  milestone deve conter somente o link correspondente na branch `main`.
+- Antes de criar uma Spec, siga o único link do milestone, registre o caminho e
+  a revisão do PRD consultado e não derive o PRD apenas do título, label ou path.
 - Quando existir referência Pencil, ela é a fonte visual canônica: o código deve
   preservar os nodes, estados e viewports declarados; qualquer divergência exige
   decisão/amendment rastreável e aprovação. A comparação Pencil/Web independente

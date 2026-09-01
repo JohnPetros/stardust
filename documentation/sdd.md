@@ -24,9 +24,9 @@ autoridade, risco controlado ou rastreabilidade útil.
 ## Autoridades
 
 Antes de iniciar ou retomar SDD, leia `AGENTS.md`, `documentation/architecture.md`,
-`documentation/overview.md`, `documentation/tooling.md`, `documentation/rules/rules.md` e
-todas as Rules selecionadas pelos paths e comportamentos afetados. Leia também PRD, Issue,
-Report, Design e código real aplicáveis.
+`documentation/modules.md`, `documentation/tooling.md`, `documentation/rules/rules.md` e
+todas as Rules selecionadas pelos paths e comportamentos afetados. Leia também o PRD canônico,
+Issue, Report, Design e código real aplicáveis.
 
 | Autoridade                  | Governa                                                     |
 | --------------------------- | ----------------------------------------------------------- |
@@ -37,6 +37,21 @@ Report, Design e código real aplicáveis.
 | Design e referências salvas | intenção visual e estados de UI                             |
 | Tooling                     | comandos e ambientes reais                                  |
 | Spec                        | Contract específico da entrega                              |
+
+### PRD canônico e milestone
+
+Os PRDs de produto ficam em `documentation/prds/<module>/<english-slug>.md`. Cada milestone
+de produto no GitHub deve conter somente o link absoluto para o PRD correspondente na branch
+`main`. Esse link é o índice oficial entre produto e SDD:
+
+1. descubra o milestone associado à demanda;
+2. siga sua descrição e abra o único link para o PRD na `main`;
+3. use o conteúdo desse arquivo como autoridade de produto antes de criar a Spec.
+
+Não reconstrua o caminho do PRD a partir do título, label ou path da Issue. Se o milestone não
+tiver exatamente um link válido para `documentation/prds/` na `main`, registre a lacuna e resolva
+a rastreabilidade antes de iniciar o Contract. O caminho da branch `main` representa a versão
+canônica atual; Specs abertas devem registrar o link e a revisão do PRD consultado.
 
 Uma mudança normativa de produto, Architecture, Rule global ou ownership exige aprovação
 explícita do usuário e atualização da autoridade antes da Spec. A implementação atual nunca
@@ -57,6 +72,7 @@ agente ou task. `create-spec`, `implement-spec` e `conclude-spec` são workflows
 ## Artefatos duráveis
 
 ```text
+documentation/prds/<module>/<english-slug>.md   # autoridade de produto, indexada pelo milestone
 documentation/features/<domínio>/<feature>/
 ├── spec.md
 ├── plan.md                 # opcional
@@ -132,7 +148,8 @@ substitui a aprovação da versão exata.
 
 ## Intake opcional
 
-GitHub Issue é tracking, não Contract técnico:
+GitHub Issue é tracking, não Contract técnico. A Issue pode apontar para um milestone, mas o
+PRD só é identificado depois que o link canônico da descrição do milestone for resolvido:
 
 - `create-feat-issue` transforma milestone/PRD ou pedido aprovado em outcome, escopo e critérios
   observáveis; depois da aprovação/publicação, `create-spec` cria o Contract;
@@ -145,7 +162,8 @@ autoriza implementação, branch, commit, PR ou alteração de produto.
 
 Todo workflow de criação de issue executa descoberta de PRD antes do draft. Feature issue exige
 um PRD principal; bug e chore registram o PRD/requisito mais relevante ou `None` com evidência da
-busca. A associação nunca é inferida apenas por título, label, path ou milestone.
+busca. A associação nunca é inferida apenas por título, label ou path; um milestone só serve como
+ponte depois que seu único link para `documentation/prds/` na `main` for validado.
 
 Antes do draft, os workflows de issue executam o Grilling: fatos são pesquisados e decisões são
 percorridas em rounds pela frontier da design tree. A confirmação de entendimento compartilhado

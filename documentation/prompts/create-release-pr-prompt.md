@@ -8,8 +8,8 @@ description: Criar Pull Requests de release de main para production, com SemVer,
 
 Padronizar a criação de Pull Requests de release de `main` para `production`.
 O PR deve identificar exatamente as mudanças e os PRDs incluídos na versão,
-permitir a validação do `head SHA` em staging e fornecer as notas usadas na
-GitHub Release após o merge.
+registrar o `head SHA` alvo da validação no staging existente e fornecer as
+notas usadas na GitHub Release após o merge.
 
 Use exclusivamente a GitHub CLI (`gh`) para interações com o GitHub. Esta
 tarefa não exige nem deve criar uma Spec.
@@ -32,7 +32,7 @@ Este prompt é responsável por:
 1. preparar e apresentar o draft completo do PR de release para aprovação;
 2. criar ou atualizar o PR somente depois da aprovação explícita do usuário;
 3. identificar e registrar os PRDs afetados;
-4. registrar o `head SHA` que deve ser implantado e validado em staging;
+4. registrar o `head SHA` alvo da validação E2E no staging existente;
 5. acompanhar os checks da release sem executar diretamente o deploy ou os
    testes E2E;
 6. fornecer notas compatíveis com a criação posterior da tag e da GitHub
@@ -40,7 +40,7 @@ Este prompt é responsável por:
 
 O workflow `.github/workflows/hermes-e2e-testing.yaml` é responsável por:
 
-- implantar o `head SHA` da Web App em staging;
+- verificar a disponibilidade da Web App de staging, sem iniciar um deploy;
 - executar na Web App em staging os testes E2E dos PRDs afetados com o perfil
   `e2e-tester` do Hermes e o servidor MCP `playwright`;
 - publicar a matriz de requisitos e as referências das evidências no PR;
@@ -210,11 +210,10 @@ release e não declare como aprovado um check ausente ou pendente.
 Registre separadamente:
 
 - CI dos PRs normais;
-- deploy do `head SHA` da Web App em staging;
 - health check da Web App em staging;
 - validação E2E da release.
 
-Os três últimos itens permanecem pendentes até os workflows do release PR.
+Os dois últimos itens permanecem pendentes até os workflows do release PR.
 
 ### 7. Apresentar o draft para aprovação
 
@@ -337,30 +336,29 @@ possuírem PRD.
 Depois da abertura ou atualização do PR, o workflow de release deve:
 
 1. validar que o PR usa `main` como `head` e `production` como `base`;
-2. solicitar o deploy da Web App em staging e confirmar que o ambiente reporta
-   exatamente o `head SHA` esperado;
-3. aguardar o health check da Web App em staging;
-4. criar uma execução do perfil `e2e-tester` do Hermes para cada PRD afetado,
+2. aguardar o health check da Web App no staging existente; o workflow não
+   inicia deploy nem confirma que o ambiente executa o `head SHA`;
+3. criar uma execução do perfil `e2e-tester` do Hermes para cada PRD afetado,
    com no máximo duas execuções simultâneas;
-5. fornecer a cada execução o conteúdo completo de `AGENTS.md` obtido do
+4. fornecer a cada execução o conteúdo completo de `AGENTS.md` obtido do
    `base SHA` confiável de `production`, o número do release PR, o `head SHA` e
    a milestone atribuída;
-6. usar exclusivamente o servidor MCP `playwright`, conectado ao Chromium
+5. usar exclusivamente o servidor MCP `playwright`, conectado ao Chromium
    isolado via CDP, para exercitar a Web App em staging em um navegador real;
-7. reutilizar o bootstrap seguro de autenticação do Playwright MCP, sem expor
+6. reutilizar o bootstrap seguro de autenticação do Playwright MCP, sem expor
    credenciais ao modelo ou enviá-las em prompts e argumentos de ferramentas;
-8. usar o contexto read-only do milestone e seus issues carregado pelo
+7. usar o contexto read-only do milestone e seus issues carregado pelo
    workflow para identificar seus requisitos `REQ-*`;
-9. validar os requisitos daquele PRD que forem aplicáveis à Web App e puderem
+8. validar os requisitos daquele PRD que forem aplicáveis à Web App e puderem
    ser exercitados pelo ambiente de staging disponível;
-10. coletar screenshots, estado visível final, console, falhas de página,
+9. coletar screenshots, estado visível final, console, falhas de página,
     requisições de rede e demais evidências disponibilizadas pelo Playwright;
-11. armazenar screenshots e demais arquivos no volume persistente do Hermes,
+10. armazenar screenshots e demais arquivos no volume persistente do Hermes,
     organizados por PR, SHA, milestone e requisito;
-12. retornar no JSON os paths locais das evidências sem afirmar que foram
+11. retornar no JSON os paths locais das evidências sem afirmar que foram
     transferidas ao GitHub;
-13. armazenar o manifesto e os resultados JSON em GitHub Actions Artifacts;
-14. publicar ou atualizar uma única matriz consolidada no release PR.
+12. armazenar o manifesto e os resultados JSON em GitHub Actions Artifacts;
+13. publicar ou atualizar uma única matriz consolidada no release PR.
 
 O Playwright MCP do perfil `e2e-tester` é o executor dos E2E agentic de
 aceitação da release. Ele deve usar somente a Web App em staging, manter a
@@ -407,7 +405,7 @@ Ao receber um novo commit em `main`:
    substitua uma execução ainda pendente pela revisão mais recente;
 3. recalcule os PRs e PRDs afetados;
 4. gere um novo manifesto para o novo `head SHA`;
-5. faça um novo deploy em staging;
+5. aguarde a disponibilidade do staging existente;
 6. execute novamente os E2E aplicáveis;
 7. atualize a conclusão existente em vez de publicar comentários duplicados.
 
@@ -424,7 +422,7 @@ Após o merge do release PR em `production`, o workflow pós-merge deve:
 1. confirmar que o PR incorporado tinha `main` como `head` e `production` como
    `base`;
 2. extrair e validar `vX.Y.Z` do título `Release vX.Y.Z`;
-3. registrar o `head SHA` validado em staging e o merge commit SHA;
+3. registrar o `head SHA` alvo da validação E2E e o merge commit SHA;
 4. confirmar que o merge commit possui a mesma árvore Git do `head SHA`
    validado;
 5. verificar se a tag ou a GitHub Release já existem;

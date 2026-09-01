@@ -112,7 +112,7 @@ As variáveis são configuradas diretamente no Coolify, separadas por escopo:
 | `web-app-cd-coolify.yaml`         | Release published            | Aciona webhook Coolify → notifica Discord                                                    |
 | `web-app-staging-cd-coolify.yaml` | Push → `main` (paths web)    | Aciona webhook Coolify → notifica Discord                                                    |
 | `hermes-code-review.yaml`         | PR → `main`                  | Aguarda os CIs aplicáveis, executa revisões técnicas paralelas e publica os resultados no PR |
-| `hermes-e2e-testing.yaml`         | PR de `main` → `production`  | Implanta o SHA em staging e valida os PRDs/milestones afetados com Playwright MCP            |
+| `hermes-e2e-testing.yaml`         | PR de `main` → `production`  | Verifica staging e valida os PRDs/milestones afetados com Playwright MCP                   |
 | `create-release.yaml`             | Merge do PR de release       | Confirma o E2E do Hermes, cria a tag e publica a GitHub Release                              |
 
 ### Workflows E2E do GitHub Actions
@@ -121,7 +121,7 @@ O `hermes-e2e-testing.yaml` é executado para PRs de release de `main` para
 `production`. O fluxo:
 
 1. identifica os PRDs e milestones afetados pelo PR;
-2. implanta o SHA do PR na Web App de staging;
+2. verifica a disponibilidade da Web App de staging existente;
 3. inicia uma execução do perfil E2E do Hermes para cada milestone, em paralelo;
 4. usa Playwright MCP para validar o comportamento observável da aplicação;
 5. publica uma conclusão consolidada no PR.
@@ -158,21 +158,22 @@ reaberto, marcado como pronto para revisão ou editado. O job `prepare`:
 - publica o manifesto como artefato por 14 dias.
 
 Se todos os PRs incluídos estiverem explicitamente classificados como
-`Não aplicável`, o deploy em staging ainda é validado, mas nenhuma sessão de
-navegador é iniciada.
+`Não aplicável`, a disponibilidade do staging ainda é validada, mas nenhuma
+sessão de navegador é iniciada.
 
-#### 2. Deploy e validação em staging
+#### 2. Validação no staging existente
 
-O job `deploy-staging` aciona o webhook do Coolify para a Web App de staging e
-aguarda o término do deployment. Em seguida, verifica que o commit implantado
-corresponde ao SHA do head do PR e aguarda o health check de
-`https://web-staging.stardust-app.com.br/`.
+O job `verify-staging` não aciona o Coolify nem exige os secrets de deploy. Ele
+aguarda o health check de `https://web-staging.stardust-app.com.br/` e usa a
+versão já disponível nesse ambiente. O release workflow registra o SHA do head
+como alvo da validação, mas não afirma que esse SHA foi implantado pelo próprio
+workflow.
 
 O release E2E e o CD normal de staging compartilham o grupo de concorrência
-`stardust-web-staging`. Os workflows são serializados sem cancelamento para que
-nenhum push substitua o SHA enquanto o navegador valida a release.
+`stardust-web-staging`. Os workflows são serializados sem cancelamento para
+evitar que um deploy concorrente altere o ambiente durante a validação.
 
-Depois do deploy, o job `e2e` cria uma execução por milestone em uma matriz
+Depois do health check, o job `e2e` cria uma execução por milestone em uma matriz
 com no máximo duas execuções simultâneas. Cada execução do perfil `e2e-tester`
 do Hermes:
 
@@ -197,8 +198,8 @@ Cada resultado válido é publicado como artefato por 14 dias.
 #### 3. Conclusão do E2E
 
 O job `conclusion` consolida os resultados da matriz em um comentário no PR,
-incluindo o SHA, o ambiente, o estado do deploy, a quantidade de requisitos e o
-resumo por milestone. O comentário é atualizado em execuções repetidas usando
+incluindo o SHA-alvo, o ambiente, o estado do health check, a quantidade de
+requisitos e o resumo por milestone. O comentário é atualizado em execuções repetidas usando
 um marcador estável, evitando duplicação. O conjunto de milestones recebido é
 comparado com o manifesto, e os resumos produzidos pelo agente são limitados e
 sanitizados antes da publicação.
@@ -211,8 +212,8 @@ pertence ao mesmo repositório e tem `production` como destino. Ele então:
 
 1. faz checkout do commit de merge com histórico completo;
 2. valida novamente o título `Release vX.Y.Z`;
-3. compara as árvores Git do SHA validado em staging e do commit incorporado em
-   `production`, bloqueando a release se forem diferentes;
+3. compara as árvores Git do SHA alvo da validação E2E e do commit incorporado
+   em `production`, bloqueando a release se forem diferentes;
 4. procura a execução mais recente de `Hermes release E2E testing` para o SHA e
    PR exatos e exige status `completed` com conclusão `success`;
 5. cria ou valida uma tag anotada `vX.Y.Z` apontando para o commit de merge;
@@ -231,7 +232,7 @@ workflows do GitHub Actions e pelo painel do Coolify.
 | `COOLIFY_API_TOKEN`             | Autenticação na API do Coolify                                     |
 | `COOLIFY_WEBHOOK_SERVER_PROD`   | Webhook do serviço stardust-server                                 |
 | `COOLIFY_WEBHOOK_WEB_PROD`      | Webhook do serviço stardust-web                                    |
-| `COOLIFY_WEBHOOK_WEB_STG`       | Webhook do serviço stardust-web-staging                            |
+| `COOLIFY_WEBHOOK_WEB_STG`       | Webhook do CD normal de `stardust-web-staging` (não usado pelo release E2E) |
 | `SERVER_TEST_ENV`               | Conteúdo do `.env.testing` do server (para CI)                     |
 | `WEB_DEV_ENV`                   | Conteúdo do `.env` de dev do web (para CI)                         |
 | `WEB_TEST_ENV`                  | Conteúdo do `.env.test` do web (para CI)                           |
