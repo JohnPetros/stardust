@@ -281,95 +281,13 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-  deploy-staging:
-    name: Deploy release head to Web staging
+  verify-staging:
+    name: Verify Web staging availability
     needs: prepare
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 10
 
     steps:
-      - name: Trigger and verify Coolify deployment
-        shell: bash
-        env:
-          COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
-          COOLIFY_DEPLOY_WEBHOOK: ${{ secrets.COOLIFY_WEBHOOK_WEB_STG }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: |
-          set -euo pipefail
-
-          deploy_response="$(
-            curl --fail-with-body \
-              --silent \
-              --show-error \
-              --retry 5 \
-              --retry-all-errors \
-              --connect-timeout 10 \
-              --max-time 60 \
-              --request POST \
-              --header "Authorization: Bearer $COOLIFY_API_TOKEN" \
-              "$COOLIFY_DEPLOY_WEBHOOK"
-          )"
-          deployment_uuid="$(
-            jq --exit-status --raw-output \
-              '.deployments[0].deployment_uuid // .deployment_uuid' \
-              <<< "$deploy_response"
-          )"
-          coolify_base="${COOLIFY_DEPLOY_WEBHOOK%%/api/v1/*}"
-          deployment_url="$coolify_base/api/v1/deployments/$deployment_uuid"
-
-          deployment=''
-          for attempt in $(seq 1 150); do
-            deployment="$(
-              curl --fail-with-body \
-                --silent \
-                --show-error \
-                --retry 5 \
-                --retry-all-errors \
-                --connect-timeout 10 \
-                --max-time 30 \
-                --header "Authorization: Bearer $COOLIFY_API_TOKEN" \
-                "$deployment_url"
-            )"
-            status="$(jq --exit-status --raw-output '.status' <<< "$deployment")"
-
-            case "$status" in
-              finished|completed)
-                echo "Coolify deployment completed."
-                break
-                ;;
-              failed|cancelled|cancelled-by-user)
-                echo "Coolify deployment failed with status: $status"
-                exit 1
-                ;;
-              *)
-                echo "Coolify deployment status: $status (attempt $attempt/150)"
-                sleep 10
-                ;;
-            esac
-          done
-
-          final_status="$(jq --exit-status --raw-output '.status' <<< "$deployment")"
-          case "$final_status" in
-            finished|completed) ;;
-            *)
-              echo "Timed out waiting for the Coolify deployment."
-              exit 1
-              ;;
-          esac
-
-          deployed_commit="$(jq --exit-status --raw-output '.commit // empty' <<< "$deployment")"
-          if [ -z "$deployed_commit" ]; then
-            echo 'Coolify did not report the deployed commit.'
-            exit 1
-          fi
-          case "$HEAD_SHA" in
-            "$deployed_commit"*) ;;
-            *)
-              echo "Coolify deployed commit $deployed_commit instead of $HEAD_SHA."
-              exit 1
-              ;;
-          esac
-
       - name: Wait for Web staging health
         shell: bash
         run: |
@@ -397,7 +315,7 @@ jobs:
     name: Test milestone ${{ matrix.milestone.number }}
     needs:
       - prepare
-      - deploy-staging
+      - verify-staging
     if: needs.prepare.outputs.has-prds == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 75
@@ -664,7 +582,7 @@ jobs:
     name: Publish release E2E conclusion
     needs:
       - prepare
-      - deploy-staging
+      - verify-staging
       - e2e
     if: always() && needs.prepare.result == 'success'
     runs-on: ubuntu-latest
@@ -697,7 +615,7 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           HAS_PRDS: ${{ needs.prepare.outputs.has-prds }}
           EXPECTED_MILESTONES: ${{ needs.prepare.outputs.milestones }}
-          DEPLOY_RESULT: ${{ needs.deploy-staging.result }}
+          STAGING_RESULT: ${{ needs.verify-staging.result }}
           E2E_RESULT: ${{ needs.e2e.result }}
         run: |
           set -euo pipefail
@@ -712,12 +630,12 @@ jobs:
             printf '## Validação E2E da release pelo Hermes\n\n'
             printf -- "- Head SHA: \`%s\`\n" "$HEAD_SHA"
             printf -- "- Ambiente: \`https://web-staging.stardust-app.com.br\`\n"
-            printf -- '- Deploy em staging: **%s**\n' "$DEPLOY_RESULT"
+            printf -- '- Health check do staging: **%s**\n' "$STAGING_RESULT"
             printf -- "- Executor: \`e2e-tester\` com Playwright MCP\n"
             printf -- '- Evidências binárias: armazenadas localmente no Hermes; a Runs API ainda não permite transferi-las ao GitHub Actions\n\n'
 
-            if [ "$DEPLOY_RESULT" != 'success' ]; then
-              printf '> A validação foi bloqueada porque o deploy ou health check de staging falhou.\n'
+            if [ "$STAGING_RESULT" != 'success' ]; then
+              printf '> A validação foi bloqueada porque o health check de staging falhou.\n'
               overall_failed=true
             elif [ "$HAS_PRDS" != 'true' ]; then
               printf 'Nenhum PRD afetado foi declarado no release PR. Nenhuma sessão de navegador foi iniciada.\n'

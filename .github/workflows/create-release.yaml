@@ -58,7 +58,7 @@ jobs:
           merge_tree="$(git show --no-patch --format='%T' "$MERGE_SHA")"
 
           if [ "$head_tree" != "$merge_tree" ]; then
-            echo "The merged production tree differs from the staging-validated head tree."
+            echo "The merged production tree differs from the release-E2E head tree."
             echo "Head tree:  $head_tree"
             echo "Merge tree: $merge_tree"
             exit 1
@@ -180,7 +180,7 @@ jobs:
           {
             printf '\n\n---\n\n'
             printf -- '- Release PR: #%s\n' "$PR_NUMBER"
-            printf -- '- Head SHA validado em staging: `%s`\n' "$HEAD_SHA"
+            printf -- '- Head SHA alvo da validação E2E: `%s`\n' "$HEAD_SHA"
             printf -- '- Commit incorporado em production: `%s`\n' "$MERGE_SHA"
           } >> release-notes.md
 
@@ -239,7 +239,7 @@ jobs:
           $marker
           ## Release $VERSION criada
 
-          - Head SHA validado em staging: \`$HEAD_SHA\`
+          - Head SHA alvo da validação E2E: \`$HEAD_SHA\`
           - Commit em \`production\`: \`$MERGE_SHA\`
           - Tag: [$VERSION]($TAG_URL)
           - GitHub Release: [Release $VERSION]($RELEASE_URL)
