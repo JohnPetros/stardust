@@ -43,6 +43,8 @@
     "check:architecture": "depcruise --config .dependency-cruiser.cjs packages/core/src apps/server/src apps/web/src apps/studio/src",
     "check:dependencies-update": "npm run check:code && npm run check:types && npm run check:architecture && npm run build:lsp && npm run test:unit && npm run test:integration && npm run build",
     "test:unit": "turbo test:unit",
+    "test:coverage": "turbo test:coverage",
+    "check:coverage": "node ./scripts/check-coverage-baseline.mjs",
     "test:integration": "turbo test:integration",
     "test:server": "turbo test:unit --filter=@stardust/server",
     "test:studio": "turbo test:unit --filter=@stardust/studio",

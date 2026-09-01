@@ -3,6 +3,12 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   testEnvironment: 'jest-environment-jsdom',
   testMatch: ['**/*.test.ts', '**/*.test.tsx'],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.test.{ts,tsx}',
+    '!src/**/tests/**',
+    '!src/**/__mocks__/**',
+  ],
   moduleNameMapper: {
     // More specific patterns must come first
     '^@/constants$': '<rootDir>/src/constants/__mocks__/index.ts',

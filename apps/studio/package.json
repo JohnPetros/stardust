@@ -11,6 +11,7 @@
     "check:code": "biome check src",
     "check:types": "react-router typegen && tsc",
     "test:unit": "jest",
+    "test:coverage": "jest --coverage --coverageReporters=json-summary --coverageReporters=text-summary",
     "test:unit:watch": "jest --watchAll"
   },
   "dependencies": {

@@ -19,6 +19,12 @@ const jestConfig = {
   transform: {
     '^.+\\.js$': 'babel-jest',
   },
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.test.{ts,tsx}',
+    '!src/**/tests/**',
+    '!src/**/__mocks__/**',
+  ],
   globals: {
     'ts-jest': {
       tsConfigFile: 'tsconfig.json',

@@ -12,6 +12,7 @@
     "format": "biome format src --write",
     "db:types": "supabase gen types typescript --project-id aukqejqsiqsqowafpppb > src/api/supabase/types/Database.ts",
     "test:unit": "jest",
+    "test:coverage": "jest --coverage --coverageReporters=json-summary --coverageReporters=text-summary",
     "test:unit:watch": "jest --watchAll",
     "test:integration": "playwright test --config=playwright.config.ts",
     "test:integration:ui": "playwright test --config=playwright.config.ts --ui",
