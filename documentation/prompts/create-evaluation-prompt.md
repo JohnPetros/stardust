@@ -54,9 +54,9 @@ last_updated_at: YYYY-MM-DD
 
 ## Evidências dos critérios
 
-| Critério | Estado | Evidência real |
-| --- | --- | --- |
-| CA-01 | passed | teste, browser, sensor ou diff |
+| Critério | Estado | Evidência real                 |
+| -------- | ------ | ------------------------------ |
+| CA-01    | passed | teste, browser, sensor ou diff |
 
 ## Judges
 
@@ -81,9 +81,9 @@ last_updated_at: YYYY-MM-DD
 
 Para frontend, registre também:
 
-| Gate | Estado | Evidência |
-| --- | --- | --- |
-| UI Layer Audit | passed | widget, paths e linhas de Entry Point/View/Hook |
+| Gate                  | Estado | Evidência                                                                            |
+| --------------------- | ------ | ------------------------------------------------------------------------------------ |
+| UI Layer Audit        | passed | widget, paths e linhas de Entry Point/View/Hook                                      |
 | Pencil/Web comparison | passed | node, viewport, estado, rota, HEAD, anchors, divergência/aprovação e screenshot/diff |
 
 Quando houver referência Pencil, registre uma matriz por node. Ela deve
@@ -95,16 +95,18 @@ avaliação bloqueada.
 
 ## Sensores e preflight
 
-| Comando | Estado | Evidência |
-| --- | --- | --- |
-| `npm run check:code` | passed | saída resumida |
+| Comando                                 | Estado | Evidência                                 |
+| --------------------------------------- | ------ | ----------------------------------------- |
+| `npm run check:code`                    | passed | saída resumida                            |
+| `npm run test:coverage -w <workspace>`  | passed | resumo por métrica e workspace            |
+| `npm run check:coverage -- <workspace>` | passed | baseline comparado e resultado do ratchet |
 
 ## Checks e build do CI
 
-| Verificação | Estado | HEAD / evidência |
-| --- | --- | --- |
+| Verificação  | Estado  | HEAD / evidência          |
+| ------------ | ------- | ------------------------- |
 | Checks do CI | pending | PR e workflows aplicáveis |
-| Build | pending | workflow |
+| Build        | pending | workflow                  |
 
 ## Warnings e findings
 

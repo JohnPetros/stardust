@@ -236,7 +236,9 @@ aceitação, decisões técnicas ou comportamento de erro. Use nomes coerentes c
 os contratos da Spec e mantenha a sintaxe renderizável em Markdown.
 
 Declare sensores aplicáveis: `format`, `check:code`, `check:types`, `test:unit`,
-`check:architecture` e `test:integration`. `check:dead-code` não é oficial.
+`check:architecture` e `test:integration`. Para Core, Server, Studio e Web, declare também
+`test:coverage` e `check:coverage`; ambos devem respeitar `coverage-baseline.json`. `check:dead-code`
+não é oficial.
 Checks e build são validações finais do CI.
 
 ## Decisões técnicas e clarificação

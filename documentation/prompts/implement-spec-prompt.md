@@ -22,7 +22,8 @@ Orchestrator → Builder Direct → sensores → Judge Implementation Direct
    paths, Rules, Architecture, os paths/Node IDs Pencil canônicos, estados,
    viewports e MCPs aplicáveis.
 5. Inspecione o diff; o Builder não atualiza Spec, Plan ou estado.
-6. Execute `format`, `check:code`, `check:types` e `test:unit`; execute
+6. Execute `format`, `check:code`, `check:types` e `test:unit`; para Core, Server, Studio e Web,
+   execute também `test:coverage` e `check:coverage`; execute
    `check:architecture` e `test:integration` quando aplicáveis. Para frontend,
    faça também a auditoria de `ui-layer-rules.md` e a comparação independente
    dos nodes Pencil aplicáveis com a Web real, no mesmo viewport e estado.
@@ -41,7 +42,7 @@ Orchestrator → Builder Direct → sensores → Judge Implementation Direct
 9. Execute o preflight integrado e crie/atualize `evaluation.md` com evidências
    reais, resultado do Judge, warnings, findings, decisões e lições.
 10. Encaminhe para `create-pr` somente com o Judge aceito e o `evaluation.md`
-   completo; depois do CI verde, use `conclude-spec`.
+    completo; depois do CI verde, use `conclude-spec`.
 
 ## Persistência obrigatória após cada mudança
 

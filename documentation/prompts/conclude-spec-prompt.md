@@ -19,7 +19,8 @@ O Orchestrator conduz o fechamento na task atual. Não crie nova thread.
 ## Validação final
 
 1. Confirme que os sensores locais e o preflight estão registrados em
-   `evaluation.md`.
+   `evaluation.md`, incluindo `test:coverage` e `check:coverage` para Core,
+   Server, Studio ou Web quando aplicável.
 2. Atualize `evaluation.md` com a matriz de evidências reais, status de warnings
    e findings, decisões, lições e o SHA final.
 3. Não crie um segundo Judge no fechamento. Use o único `Judge Implementation`

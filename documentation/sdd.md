@@ -285,4 +285,9 @@ mesma Spec; após merge, defeito usa Bug Report e comportamento novo usa uma cha
 Após alteração de código, execute os detectores obrigatórios de `AGENTS.md`:
 `npm run check:code`, `npm run check:types` e `npm run test:unit`. Acrescente
 `check:architecture`, testes de integração, geração, browser, Supabase Dev e build conforme
-Rules, Spec, paths e risco. `format` aplica formatação, mas não prova comportamento.
+Rules, Spec, paths e risco. Para `@stardust/core`, `@stardust/server`, `@stardust/studio` e
+`@stardust/web`, execute também `npm run test:coverage -w <workspace>` e
+`npm run check:coverage -- <workspace>`; o check falha se qualquer métrica ficar abaixo do
+baseline versionado em `coverage-baseline.json`. `@stardust/lsp`, `@stardust/validation`,
+`@stardust/typescript-config` e `@stardust/email` estão fora desse quality ratchet. `format`
+aplica formatação, mas não prova comportamento.
