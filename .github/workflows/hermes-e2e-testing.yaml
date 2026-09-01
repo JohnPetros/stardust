@@ -50,8 +50,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [ "$HEAD_BRANCH" != 'main' ] || [ "$BASE_BRANCH" != 'production' ]; then
-            echo "Release E2E requires main -> production, received $HEAD_BRANCH -> $BASE_BRANCH."
+          if [ "$BASE_BRANCH" != 'production' ]; then
+            echo "Release E2E requires a release branch -> production, received $HEAD_BRANCH -> $BASE_BRANCH."
             exit 1
           fi
 
@@ -60,6 +60,11 @@ jobs:
             exit 1
           fi
           version="${PR_TITLE#Release }"
+          expected_head_branch="release/$version"
+          if [ "$HEAD_BRANCH" != "$expected_head_branch" ]; then
+            echo "Release E2E requires $expected_head_branch -> production, received $HEAD_BRANCH -> $BASE_BRANCH."
+            exit 1
+          fi
 
           compare="$(gh api "repos/$REPOSITORY/compare/$BASE_SHA...$HEAD_SHA")"
           ahead_by="$(jq --exit-status --raw-output '.ahead_by' <<< "$compare")"
@@ -248,6 +253,7 @@ jobs:
             --arg version "$version" \
             --arg head_sha "$HEAD_SHA" \
             --arg base_sha "$BASE_SHA" \
+            --arg head_branch "$HEAD_BRANCH" \
             --slurpfile milestones milestones.json \
             --slurpfile pull_requests included-pull-requests.json \
             --slurpfile pull_requests_without_prd pull-requests-without-prd.json \
@@ -258,7 +264,7 @@ jobs:
               version: $version,
               head_sha: $head_sha,
               base_sha: $base_sha,
-              head_branch: "main",
+              head_branch: $head_branch,
               base_branch: "production",
               pull_requests: ($pull_requests[0] | map({number, html_url, title})),
               affected_prds: $milestones[0],

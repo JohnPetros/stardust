@@ -22,7 +22,7 @@ jobs:
     if: >-
       github.event.pull_request.merged == true &&
       github.event.pull_request.head.repo.full_name == github.repository &&
-      github.event.pull_request.head.ref == 'main' &&
+      startsWith(github.event.pull_request.head.ref, 'release/') &&
       github.event.pull_request.base.ref == 'production'
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -42,6 +42,7 @@ jobs:
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
           MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
         run: |
           set -euo pipefail
@@ -51,6 +52,11 @@ jobs:
             exit 1
           fi
           version="${PR_TITLE#Release }"
+          expected_head_branch="release/$version"
+          if [ "$HEAD_BRANCH" != "$expected_head_branch" ]; then
+            echo "Release pull request must use $expected_head_branch as head, received $HEAD_BRANCH."
+            exit 1
+          fi
 
           git cat-file -e "$HEAD_SHA^{commit}"
           git cat-file -e "$MERGE_SHA^{commit}"
