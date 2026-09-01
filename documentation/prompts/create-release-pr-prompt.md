@@ -1,13 +1,14 @@
 ---
-description: Criar Pull Requests de release de main para production, com SemVer, PRDs afetados, validação E2E da Web App em staging e publicação pós-merge.
+description: Criar Pull Requests de release de uma release branch para production, com SemVer, PRDs afetados, validação E2E da Web App em staging e publicação pós-merge.
 ---
 
 # Prompt: Criar PR de Release
 
 ## Objetivo
 
-Padronizar a criação de Pull Requests de release de `main` para `production`.
-O PR deve identificar exatamente as mudanças e os PRDs incluídos na versão,
+Padronizar a criação de Pull Requests de release de `release/vX.Y.Z` para
+`production`, sempre a partir de um snapshot de `main`. O PR deve identificar
+exatamente as mudanças e os PRDs incluídos na versão,
 registrar o `head SHA` alvo da validação no staging existente e fornecer as
 notas usadas na GitHub Release após o merge.
 
@@ -18,6 +19,7 @@ tarefa não exige nem deve criar uma Spec.
 
 - Versão alvo opcional no formato `vX.Y.Z`.
 - Branch `main` contendo as mudanças candidatas à produção.
+- Branch `release/vX.Y.Z` criada exatamente a partir do SHA de `origin/main`.
 - Branch `production` representando a versão atualmente publicada.
 - PRs normais incorporados em `main`, cada um com um PRD explicitamente
   relacionado ou marcado como `Não aplicável`.
@@ -55,13 +57,16 @@ Os workflows `*-production-cd.yaml` são responsáveis por:
 
 ## Regras obrigatórias
 
-- O PR de release deve usar `main` como `head` e `production` como `base`.
-- Não crie uma branch intermediária de release.
+- O PR de release deve usar `release/vX.Y.Z` como `head` e `production` como
+  `base`, com o nome da branch correspondendo exatamente à versão do título.
+- A release branch deve ser criada a partir do SHA exato de `origin/main` e não
+  deve receber commits adicionais antes da abertura do PR.
 - Não faça commit de alterações locais pendentes.
 - Não abra mais de um PR de release para o mesmo `head SHA`.
 - Não crie nem atualize o PR no GitHub antes de apresentar o título e o corpo
   completos e receber aprovação explícita do usuário.
-- Use o SHA exato de `origin/main` durante todo o processo.
+- Use o SHA exato de `origin/main` para criar a release branch e preserve-o como
+  o `head SHA` durante todo o processo.
 - Não trate caminhos alterados como fonte de verdade para associação de PRD.
 - Exija uma classificação inequívoca em `## PRD` no corpo de cada PR incluído.
 - Não inclua mais de dez PRDs afetados em uma única release.
@@ -81,7 +86,7 @@ Os workflows `*-production-cd.yaml` são responsáveis por:
    - o SHA atual de `origin/production` como `base SHA`;
    - a árvore Git correspondente a cada SHA.
 5. Confirme que `main` contém mudanças ainda não presentes em `production`.
-6. Verifique se existe PR de release aberto com `main` como `head` e
+6. Verifique se existe PR de release aberto com `release/vX.Y.Z` como `head` e
    `production` como `base`.
 
 Interrompa quando:
@@ -148,7 +153,7 @@ Monte um manifesto lógico associado ao `head SHA`, contendo no mínimo:
   "version": "vX.Y.Z",
   "head_sha": "<sha de origin/main>",
   "base_sha": "<sha de origin/production>",
-  "head_branch": "main",
+  "head_branch": "release/vX.Y.Z",
   "base_branch": "production",
   "pull_requests": [
     {
@@ -233,16 +238,28 @@ uma nova aprovação.
 
 ### 8. Criar ou atualizar o PR
 
-Somente depois da aprovação explícita do draft, crie o PR diretamente de
-`main` para `production`:
+Somente depois da aprovação explícita do draft, crie a release branch apontando
+para o `head SHA` de `origin/main` e então abra o PR de `release/vX.Y.Z` para
+`production`:
 
 ```bash
+release_branch="release/vX.Y.Z"
+gh api \
+  --method POST \
+  "repos/JohnPetros/stardust/git/refs" \
+  -f ref="refs/heads/$release_branch" \
+  -f sha="$head_sha"
+
 gh pr create \
   --base production \
-  --head main \
+  --head "$release_branch" \
   --title "Release vX.Y.Z" \
   --body-file <arquivo-temporario>
 ```
+
+Confirme que a branch aponta para o mesmo `head SHA` e que não possui commits
+adicionais. Se ela já existir, interrompa quando apontar para outro SHA ou
+contiver commits fora do snapshot de `origin/main`.
 
 O título deve seguir exatamente:
 
@@ -335,7 +352,8 @@ possuírem PRD.
 
 Depois da abertura ou atualização do PR, o workflow de release deve:
 
-1. validar que o PR usa `main` como `head` e `production` como `base`;
+1. validar que o PR usa `release/vX.Y.Z` como `head` e `production` como
+   `base`;
 2. aguardar o health check da Web App no staging existente; o workflow não
    inicia deploy nem confirma que o ambiente executa o `head SHA`;
 3. criar uma execução do perfil `e2e-tester` do Hermes para cada PRD afetado,
@@ -398,7 +416,7 @@ produto aplicável e não iniciar sessões de navegador.
 
 ## Atualizações e reexecuções
 
-Ao receber um novo commit em `main`:
+Ao receber um novo commit na release branch:
 
 1. preserve a execução ativa que compartilha o ambiente de staging;
 2. mantenha a nova execução na fila compartilhada, permitindo que o GitHub
@@ -419,8 +437,8 @@ Nunca reutilize evidências produzidas para outro SHA.
 
 Após o merge do release PR em `production`, o workflow pós-merge deve:
 
-1. confirmar que o PR incorporado tinha `main` como `head` e `production` como
-   `base`;
+1. confirmar que o PR incorporado tinha `release/vX.Y.Z` como `head` e
+   `production` como `base`;
 2. extrair e validar `vX.Y.Z` do título `Release vX.Y.Z`;
 3. registrar o `head SHA` alvo da validação E2E e o merge commit SHA;
 4. confirmar que o merge commit possui a mesma árvore Git do `head SHA`

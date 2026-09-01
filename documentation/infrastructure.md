@@ -112,13 +112,13 @@ As variáveis são configuradas diretamente no Coolify, separadas por escopo:
 | `web-app-cd-coolify.yaml`         | Release published            | Aciona webhook Coolify → notifica Discord                                                    |
 | `web-app-staging-cd-coolify.yaml` | Push → `main` (paths web)    | Aciona webhook Coolify → notifica Discord                                                    |
 | `hermes-code-review.yaml`         | PR → `main`                  | Aguarda os CIs aplicáveis, executa revisões técnicas paralelas e publica os resultados no PR |
-| `hermes-e2e-testing.yaml`         | PR de `main` → `production`  | Verifica staging e valida os PRDs/milestones afetados com Playwright MCP                   |
+| `hermes-e2e-testing.yaml`         | PR de `release/vX.Y.Z` → `production` | Verifica staging e valida os PRDs/milestones afetados com Playwright MCP             |
 | `create-release.yaml`             | Merge do PR de release       | Confirma o E2E do Hermes, cria a tag e publica a GitHub Release                              |
 
 ### Workflows E2E do GitHub Actions
 
-O `hermes-e2e-testing.yaml` é executado para PRs de release de `main` para
-`production`. O fluxo:
+O `hermes-e2e-testing.yaml` é executado para PRs de release de uma branch
+`release/vX.Y.Z` para `production`. O fluxo:
 
 1. identifica os PRDs e milestones afetados pelo PR;
 2. verifica a disponibilidade da Web App de staging existente;
@@ -136,19 +136,21 @@ oferece transferência para o GitHub Actions.
 
 ### Fluxo de release
 
-Uma release é promovida por um Pull Request da branch `main` para
-`production`. O PR deve ser aberto no próprio repositório, não pode ser draft e
-deve usar o título exato `Release vX.Y.Z`, seguindo o formato de versão
-semântica.
+Uma release é promovida por um Pull Request da branch `release/vX.Y.Z` para
+`production`. Essa branch deve ser criada apontando exatamente para o SHA de
+`main` que será publicado. O PR deve ser aberto no próprio repositório, não
+pode ser draft e deve usar o título exato `Release vX.Y.Z`, seguindo o formato
+de versão semântica.
 
 #### 1. Preparação do E2E
 
 O `hermes-e2e-testing.yaml` é acionado quando o PR é aberto, atualizado,
 reaberto, marcado como pronto para revisão ou editado. O job `prepare`:
 
-- confirma a direção `main` → `production` e valida o título da release;
-- compara os SHAs de `production` e `main`, associa cada commit a um PR merged em
-  `main` e bloqueia commits sem PR;
+- confirma a direção `release/vX.Y.Z` → `production` e valida a correspondência
+  entre a branch e o título da release;
+- compara os SHAs de `production` e a release branch, associa cada commit a um
+  PR merged em `main` e registra commits sem PR;
 - deriva os milestones da seção `## PRD` de cada PR incluído e exige uma
   classificação inequívoca por milestone ou `Não aplicável`;
 - compara a classificação derivada com `## PRDs afetados` e `## PRs sem PRD`
@@ -207,8 +209,9 @@ sanitizados antes da publicação.
 #### 4. Merge e criação da release
 
 Após a aprovação e o merge do PR em `production`, o `create-release.yaml` é
-acionado. O job só continua quando o PR foi realmente merged, veio de `main`,
-pertence ao mesmo repositório e tem `production` como destino. Ele então:
+acionado. O job só continua quando o PR foi realmente merged, veio de uma
+release branch com nome correspondente à versão, pertence ao mesmo repositório
+e tem `production` como destino. Ele então:
 
 1. faz checkout do commit de merge com histórico completo;
 2. valida novamente o título `Release vX.Y.Z`;
