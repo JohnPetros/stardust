@@ -1,5 +1,5 @@
-- Repository: `JohnPetros/stardust`
-- Audit date: 2026-09-02
-- Tested commit SHA: `593ad466a4ed0cc4c041d7bb5131290de5a805dd`
-- Scope: full
-- Private report folder: https://drive.google.com/drive/folders/1WHnQZS6xrYtFdZQJbLPlNnTW5G_wONz-
+- Repositório: `JohnPetros/stardust`
+- Data da auditoria: 2026-09-02
+- SHA do commit testado: `593ad466a4ed0cc4c041d7bb5131290de5a805dd`
+- Escopo: full
+- Pasta do relatório: https://drive.google.com/drive/folders/1WHnQZS6xrYtFdZQJbLPlNnTW5G_wONz-
