@@ -468,8 +468,9 @@ jobs:
           trap 'exit 143' TERM
 
           for attempt in $(seq 1 360); do
-            run="$(
-              curl --fail-with-body \
+            poll_error_file="$(mktemp)"
+            if ! run="$(
+              curl --fail \
                 --silent \
                 --show-error \
                 --retry 5 \
@@ -477,9 +478,20 @@ jobs:
                 --connect-timeout 10 \
                 --max-time 30 \
                 --header "Authorization: Bearer $HERMES_E2E_TESTER_API_KEY" \
-                "$hermes_url/$run_id"
-            )"
-            status="$(jq --exit-status --raw-output '.status' <<< "$run")"
+                "$hermes_url/$run_id" 2>"$poll_error_file"
+            )"; then
+              echo "::warning::Hermes run status polling failed (attempt $attempt/360): $(<"$poll_error_file")"
+              rm -f "$poll_error_file"
+              sleep 10
+              continue
+            fi
+            rm -f "$poll_error_file"
+
+            if ! status="$(jq --exit-status --raw-output '.status' <<< "$run")"; then
+              echo "::warning::Hermes returned an invalid run status payload (attempt $attempt/360)."
+              sleep 10
+              continue
+            fi
 
             case "$status" in
               completed)
