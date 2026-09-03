@@ -8,6 +8,7 @@
     "start": "node .next/standalone/apps/web/server.js -p $PORT",
     "check:code": "biome check src",
     "check:types": "tsc --noEmit",
+    "check:architecture": "depcruise --config .dependency-cruiser.cjs src",
     "lint": "biome lint src --diagnostic-level=error",
     "format": "biome format src --write",
     "db:types": "supabase gen types typescript --project-id aukqejqsiqsqowafpppb > src/api/supabase/types/Database.ts",

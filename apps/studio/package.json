@@ -10,6 +10,7 @@
     "format": "biome format src --write",
     "check:code": "biome check src",
     "check:types": "react-router typegen && tsc",
+    "check:architecture": "depcruise --config .dependency-cruiser.cjs src",
     "test:unit": "jest",
     "test:coverage": "jest --coverage --coverageReporters=json-summary --coverageReporters=text-summary",
     "test:unit:watch": "jest --watchAll"

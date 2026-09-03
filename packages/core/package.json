@@ -19,6 +19,7 @@
     "build": "tsup",
     "check:types": "tsc --noEmit",
     "check:code": "biome check src",
+    "check:architecture": "depcruise --config .dependency-cruiser.cjs src",
     "lint": "biome lint src --diagnostic-level=error",
     "format": "biome format src --write",
     "test:unit": "jest",
