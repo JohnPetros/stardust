@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process'
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, relative } from 'node:path'
+import { tmpdir } from 'node:os'
 
 const NCU_VERSION = '19.1.1'
 const REPORT_PATH =
@@ -9,6 +10,10 @@ const MARKDOWN_PATH =
   process.env.DEPENDENCIES_UPDATE_MARKDOWN ?? 'dependencies-update-pr.md'
 const BASE_REF = process.env.DEPENDENCIES_UPDATE_BASE_REF
 const isDryRun = process.env.DEPENDENCIES_UPDATE_DRY_RUN === '1'
+const NCU_CACHE_FILE = join(
+  process.env.DEPENDENCIES_UPDATE_CACHE_DIR ?? process.env.RUNNER_TEMP ?? tmpdir(),
+  'npm-check-updates-cache.json',
+)
 
 const dependencySections = [
   'dependencies',
@@ -62,15 +67,26 @@ function dependencyRanges(manifest) {
 }
 
 function runNcu(args, options = {}) {
-  return execFileSync('npx', ['--yes', `npm-check-updates@${NCU_VERSION}`, ...args], {
-    cwd: options.cwd ?? process.cwd(),
-    encoding: 'utf8',
-    stdio: options.capture ? ['ignore', 'pipe', 'inherit'] : 'inherit',
-    env: {
-      ...process.env,
-      NO_COLOR: '1',
+  return execFileSync(
+    'npx',
+    [
+      '--yes',
+      `npm-check-updates@${NCU_VERSION}`,
+      '--cache',
+      '--cacheFile',
+      NCU_CACHE_FILE,
+      ...args,
+    ],
+    {
+      cwd: options.cwd ?? process.cwd(),
+      encoding: 'utf8',
+      stdio: options.capture ? ['ignore', 'pipe', 'inherit'] : 'inherit',
+      env: {
+        ...process.env,
+        NO_COLOR: '1',
+      },
     },
-  })
+  )
 }
 
 function findEligibleUpdates(manifestPaths, before) {
@@ -262,22 +278,37 @@ if (eligibleUpdates.length === 0) {
 }
 
 const repositoryRoot = process.cwd()
-const doctorInstall = `npm --prefix "${repositoryRoot}" install --ignore-scripts --no-audit --no-fund`
-const doctorTest = `env NODE_OPTIONS=--max-old-space-size=8192 TURBO_CONCURRENCY=1 npm --prefix "${repositoryRoot}" run check:dependencies-update`
+const doctorInstall = `npm --prefix "${repositoryRoot}" install --ignore-scripts --prefer-offline --no-audit --no-fund`
+
+function doctorTestFor(manifestPath) {
+  const workspace = before.get(manifestPath)?.name
+  const command = workspace
+    ? [
+        `npm --prefix "${repositoryRoot}" run check:code --workspace="${workspace}"`,
+        `npm --prefix "${repositoryRoot}" run check:types --workspace="${workspace}"`,
+        `npm --prefix "${repositoryRoot}" run test:unit --workspace="${workspace}"`,
+      ].join(' && ')
+    : `npm --prefix "${repositoryRoot}" run check:dependencies-update:doctor`
+
+  return `env NODE_OPTIONS=--max-old-space-size=8192 TURBO_CONCURRENCY=1 ${command}`
+}
 
 for (const manifestPath of manifestPaths) {
-  runNcu([
-    '--doctor',
-    '--upgrade',
-    '--target',
-    'minor',
-    '--cooldown',
-    '7d',
-    '--doctorInstall',
-    doctorInstall,
-    '--doctorTest',
-    doctorTest,
-  ], { cwd: dirname(manifestPath) })
+  runNcu(
+    [
+      '--doctor',
+      '--upgrade',
+      '--target',
+      'minor',
+      '--cooldown',
+      '7d',
+      '--doctorInstall',
+      doctorInstall,
+      '--doctorTest',
+      doctorTestFor(manifestPath),
+    ],
+    { cwd: dirname(manifestPath) },
+  )
 }
 
 const after = new Map(
