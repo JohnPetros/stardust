@@ -42,6 +42,7 @@
     "check:types": "turbo check:types",
     "check:architecture": "depcruise --config .dependency-cruiser.cjs packages/core/src apps/server/src apps/web/src apps/studio/src",
     "check:dependencies-update": "npm run check:code && npm run check:types && npm run check:architecture && npm run build:lsp && npm run test:unit && npm run test:integration && npm run build",
+    "check:dependencies-update:doctor": "npm run check:code && npm run check:types && npm run check:architecture && npm run build:lsp && npm run test:unit",
     "test:unit": "turbo test:unit",
     "test:coverage": "turbo test:coverage",
     "check:coverage": "node ./scripts/check-coverage-baseline.mjs",
