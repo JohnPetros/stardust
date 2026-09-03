@@ -13,6 +13,10 @@ Leia `AGENTS.md`, `documentation/sdd.md`, Architecture, Tooling, Rule Pack, Spec
 Contract. O Plan não redefine comportamento, paths, schemas ou decisões. Ambiguidade material
 retorna para amendment via `create-spec`.
 
+O Plan só pode ser criado para a revisão exata da Spec após o `Spec Reviewer` registrar `clear`
+para compatibilidade com Architecture e Rules. O Reviewer não é executado durante ou depois do
+planejamento; dúvidas de execução pertencem ao Plan e à task principal.
+
 ## Gate obrigatório de Grilling
 
 Execute o protocolo de Grilling definido em `documentation/sdd.md` antes de criar ou atualizar o
@@ -46,7 +50,7 @@ updated_at: YYYY-MM-DD
 ### 1. Execution status
 
 Registre revisão/status da Spec, motivo do Plan, fase atual, próxima ação, blockers, Builders
-ativos/próximos e ownership compartilhado que o Orchestrator deve coordenar.
+ativos/próximos e ownership compartilhado que a task principal deve coordenar.
 
 ### 2. Execution ledger
 
@@ -72,13 +76,16 @@ tenant e persistência no Supabase Dev quando aplicável.
 ```
 
 Agende todos os `MV-*`, sensores, runtime e referências visuais separadamente por estado e
-viewport. Agende exatamente um `implementation-reviewer-agent` após a integração dos Builders.
+viewport. Agende um `implementation-reviewer-agent` pareado para cada Builder após seu diff;
+uma revisão integrada adicional é opcional apenas para interações cross-boundary sem Builder
+responsável.
 
 ### 4. Execution log
 
 Inclua somente depois de finding, retry, blocker ou evento material. O Plan possui status e
 próxima ação; detalhes de comandos e resultados pertencem a `evaluation.md`.
 
-Antes de salvar, verifique revisão, DAG acíclico, RF/CA completos, paths não sobrepostos,
+Antes de salvar, execute `npm run check:plan-definition -- <plan.md>` e corrija todos os
+erros estruturais. Em seguida, verifique revisão, DAG acíclico, RF/CA completos, paths não sobrepostos,
 Rules válidas, exits executáveis e handoff para `implement-spec`. A task principal executa esse
 gate sem ativar um agente separado.

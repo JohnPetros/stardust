@@ -23,7 +23,7 @@ Leia, quando existirem e forem aplicáveis:
 - Plan;
 - `evaluation.md`;
 - diff real da entrega;
-- `documentation/rules/sdd-rules.md`;
+- `documentation/sdd.md`;
 - `documentation/tooling.md`;
 - rules aplicáveis;
 - `documentation/rules/commit-rules.md`;

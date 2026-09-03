@@ -32,6 +32,7 @@ eval "$(node ./scripts/export-web-app-e2e-env.mjs)"
 | `npm run check:architecture` | dependency-cruiser | valida dependências entre camadas/apps             |
 | `npm run test:unit`          | Jest/Vitest        | executa testes unitários por workspace             |
 | `npm run test:integration`   | Jest/Playwright    | executa as integrações declaradas pelos workspaces |
+| `npm run check:spec-implementation` | Node.js       | valida o mapa `Path | Change | ...` da Spec contra Git e filesystem |
 
 Exemplos de ciclo curto:
 
@@ -73,11 +74,31 @@ partir da raiz.
 | `test:unit`          | Executa os testes unitários dos workspaces via Turbo.                                               |
 | `test:coverage`      | Executa cobertura dos workspaces com ratchet habilitado.                                            |
 | `check:coverage`     | Compara os relatórios de cobertura com `coverage-baseline.json` e falha quando um baseline diminui. |
+| `check:test-integrity` | Falha quando testes são enfraquecidos ou código testável alterado não tem teste correspondente. |
+| `check:spec-definition` | Valida a estrutura, rastreabilidade e mapa de paths de uma Spec. |
+| `check:plan-definition` | Valida a estrutura, ownership, DAG e estado de execução de um Plan. |
+| `check:spec-implementation` | Valida o mapa canônico de paths da Spec contra o diff Git e o filesystem. |
+| `test:spec-implementation` | Executa os testes do checker de conformidade de Spec.                                               |
+| `test:scripts`       | Executa os testes de todos os scripts auxiliares em `scripts/tests/`.                               |
 | `test:integration`   | Executa os testes de integração declarados pelos workspaces via Turbo.                              |
 | `test:server`        | Executa os testes unitários do `@stardust/server`.                                                  |
 | `test:studio`        | Executa os testes unitários do `@stardust/studio`.                                                  |
 | `test:web`           | Executa os testes unitários do `@stardust/web`.                                                     |
 | `test:core`          | Executa os testes unitários do `@stardust/core`.                                                    |
+
+`check:test-integrity` exige um teste alterado no mesmo workspace somente para
+source executável em alvos testáveis: controllers, jobs, use-cases, objetos de
+domínio (`entities`, `structures`, `aggregates`), hooks, views/widgets, rotas
+Web (`app/page`, `app/layout`, `app/route`), rotas Server (`tests/routes`),
+RPC actions e AI tools.
+Barrels (`index.*`), services/repositories genéricos, constantes, interfaces,
+tipos e código gerado, fixtures, mocks e a própria infraestrutura de testes
+ficam fora desse pareamento; o resultado JSON lista esses caminhos em
+`excludedSourcePaths`. Arquivos de teste permitidos ficam em `scripts/tests/**`
+ou no diretório `tests/` da própria camada: objetos de domínio
+(`domain/entities|structures|aggregates`), use-cases, controllers REST,
+jobs, hooks, widgets/views, páginas/rotas Web, rotas Server, RPC actions e AI
+tools. Um teste fora desses locais aparece em `forbiddenTestPaths` e falha o CI.
 
 ### `apps/server`
 
@@ -88,6 +109,7 @@ partir da raiz.
 | `format`           | Formata `src` e grava as alterações.                                                     |
 | `check:code`       | Verifica `src` com Biome, sem aplicar correções.                                         |
 | `check:types`      | Executa o TypeScript sem emitir arquivos.                                                |
+| `check:architecture` | Verifica as dependências arquiteturais do Server com dependency-cruiser.               |
 | `check:updates`    | Lista atualizações de dependências com npm-check-updates.                                |
 | `build`            | Compila o Server com tsup.                                                               |
 | `prod`             | Inicia o build do Server usando `.env`.                                                  |
@@ -128,6 +150,7 @@ los.
 | `format`          | Formata `src` e grava as alterações.                                   |
 | `check:code`      | Verifica `src` com Biome, sem aplicar correções.                       |
 | `check:types`     | Gera os tipos do React Router e executa o TypeScript.                  |
+| `check:architecture` | Verifica as dependências arquiteturais do Studio com dependency-cruiser. |
 | `test:unit`       | Executa os testes unitários do Studio.                                 |
 | `test:coverage`   | Executa os testes unitários do Studio com relatório JSON de cobertura. |
 | `test:unit:watch` | Executa os testes unitários do Studio em modo watch.                   |
@@ -142,6 +165,7 @@ los.
 | `start`                    | Inicia o build standalone usando a porta definida em `PORT`.            |
 | `check:code`               | Verifica `src` com Biome, sem aplicar correções.                        |
 | `check:types`              | Executa o TypeScript sem emitir arquivos.                               |
+| `check:architecture`       | Verifica as dependências arquiteturais da Web App com dependency-cruiser. |
 | `lint`                     | Executa o lint de `src` com nível de diagnóstico de erro.               |
 | `format`                   | Formata `src` e grava as alterações.                                    |
 | `db:types`                 | Gera os tipos TypeScript do banco usado pela Web App.                   |
@@ -160,6 +184,7 @@ los.
 | `build`         | Compila o pacote Core com tsup.                                      |
 | `check:types`   | Executa o TypeScript sem emitir arquivos.                            |
 | `check:code`    | Verifica `src` com Biome, sem aplicar correções.                     |
+| `check:architecture` | Verifica as dependências arquiteturais do Core com dependency-cruiser. |
 | `lint`          | Executa o lint de `src` com nível de diagnóstico de erro.            |
 | `format`        | Formata `src` e grava as alterações.                                 |
 | `test:unit`     | Executa os testes unitários do Core.                                 |
