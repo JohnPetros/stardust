@@ -43,8 +43,6 @@ jobs:
       - name: Prepare weekly branch
         id: branch
         shell: bash
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           set -euo pipefail
 
@@ -158,11 +156,18 @@ jobs:
           DEPENDENCIES_UPDATE_MARKDOWN: ${{ runner.temp }}/dependencies-update-pr.md
         run: node ./scripts/dependencies-update.mjs
 
+      - name: Refresh Stardust Hermes GitHub App token for reconciliation
+        id: reconciliation-token
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
+        with:
+          app-id: ${{ secrets.HERMES_GITHUB_APP_ID }}
+          private-key: ${{ secrets.HERMES_GITHUB_APP_PRIVATE_KEY }}
+
       - name: Detect update and PR reconciliation state
         id: changes
         shell: bash
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ steps.reconciliation-token.outputs.token }}
           BRANCH: ${{ steps.branch.outputs.name }}
         run: |
           set -euo pipefail
@@ -209,10 +214,28 @@ jobs:
           npm ci --ignore-scripts --no-audit --no-fund
           NODE_OPTIONS=--max-old-space-size=8192 TURBO_CONCURRENCY=1 npm run check:dependencies-update
 
+      - name: Refresh Stardust Hermes GitHub App token for publishing
+        id: publishing-token
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
+        with:
+          app-id: ${{ secrets.HERMES_GITHUB_APP_ID }}
+          private-key: ${{ secrets.HERMES_GITHUB_APP_PRIVATE_KEY }}
+
+      - name: Configure GitHub authentication for publishing
+        if: steps.changes.outputs.reconcile_pr == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.publishing-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          gh auth setup-git
+
       - name: Commit and push weekly update
         if: steps.changes.outputs.changed == 'true'
         shell: bash
         env:
+          GH_TOKEN: ${{ steps.publishing-token.outputs.token }}
           BRANCH: ${{ steps.branch.outputs.name }}
         run: |
           set -euo pipefail
@@ -226,7 +249,7 @@ jobs:
         if: steps.changes.outputs.reconcile_pr == 'true'
         shell: bash
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ steps.publishing-token.outputs.token }}
           BRANCH: ${{ steps.branch.outputs.name }}
           BODY_PATH: ${{ runner.temp }}/dependencies-update-pr.md
         run: |
