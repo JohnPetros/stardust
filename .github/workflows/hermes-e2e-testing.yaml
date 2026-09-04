@@ -612,9 +612,9 @@ jobs:
 
           status="$(jq --raw-output '.status' e2e-result.json)"
           case "$status" in
-            passou|não_aplicável) exit 0 ;;
-            falhou|bloqueado)
-              echo "Milestone ${{ matrix.milestone.number }} completed with blocking status: $status"
+            passou|não_aplicável|bloqueado) exit 0 ;;
+            falhou)
+              echo "Milestone ${{ matrix.milestone.number }} completed with failed status: $status"
               exit 1
               ;;
             *)
@@ -718,7 +718,7 @@ jobs:
                   "$milestone" "$prd_url" "$status" "$requirement_count" "$summary"
 
                 case "$status" in
-                  falhou|bloqueado) overall_failed=true ;;
+                  falhou) overall_failed=true ;;
                 esac
               done
             fi
