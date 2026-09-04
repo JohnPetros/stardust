@@ -281,6 +281,25 @@ test.describe('/auth/sign-in', () => {
     })
   })
 
+  test('redirects to the requested safe route after successful sign-in', async ({
+    page,
+  }) => {
+    const { account, session } = await gotoSignInPage(page, {
+      nextRoute: '/auth/reset-password',
+    })
+    await fillValidSignInForm(page, validFields)
+
+    const signInActionResponsePromise = waitForSignInPageAction(page)
+    await submitSignInForm(page)
+
+    await registerAuthenticatedNavigationDefaults(page, account, session)
+    await signInActionResponsePromise
+
+    await expect(page).toHaveURL(/\/auth\/reset-password$/, {
+      timeout: 20000,
+    })
+  })
+
   test('renders sign-in form, social links and auxiliary links', async ({ page }) => {
     await gotoSignInPage(page)
 
