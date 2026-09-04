@@ -12,6 +12,7 @@ type Props = {
   type: ToastType
   message: string
   seconds: number
+  animationKey: number
   isOpen: boolean
   scope: Ref<HTMLDivElement>
   onClose: () => void
@@ -43,6 +44,7 @@ export const ToastView = ({
   type,
   message,
   seconds,
+  animationKey,
   isOpen,
   scope,
   onClose,
@@ -111,6 +113,7 @@ export const ToastView = ({
             </div>
 
             <motion.div
+              key={animationKey}
               variants={barAnimations}
               initial='full'
               animate='empty'

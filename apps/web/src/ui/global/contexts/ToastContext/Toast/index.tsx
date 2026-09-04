@@ -8,7 +8,17 @@ import { useToast } from './useToast'
 import { ToastView } from './ToastView'
 
 export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
-  const { type, message, seconds, isOpen, scope, open, close, handleDragEnd } = useToast()
+  const {
+    type,
+    message,
+    seconds,
+    animationKey,
+    isOpen,
+    scope,
+    open,
+    close,
+    handleDragEnd,
+  } = useToast()
 
   useImperativeHandle(ref, () => {
     return {
@@ -21,6 +31,7 @@ export const ToastComponent = (_: unknown, ref: ForwardedRef<ToastRef>) => {
       type={type}
       message={message}
       seconds={seconds}
+      animationKey={animationKey}
       isOpen={isOpen}
       scope={scope}
       onClose={close}
