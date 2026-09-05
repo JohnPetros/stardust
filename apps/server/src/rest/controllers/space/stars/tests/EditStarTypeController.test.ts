@@ -60,4 +60,20 @@ describe('Edit Star Type Controller', () => {
     expect(http.send).toHaveBeenCalledWith(starDto)
     expect(response).toBe(restResponse)
   })
+
+  it('should propagate use case errors without sending a response', async () => {
+    const routeParams = { starId: IdFaker.fake().value }
+    const body = { isChallenge: false }
+    const error = new Error('Could not update star type')
+
+    http.getRouteParams.mockReturnValue(routeParams)
+    http.getBody.mockResolvedValue(body)
+    http.statusOk.mockReturnValue(http)
+    jest.spyOn(EditStarTypeUseCase.prototype, 'execute').mockRejectedValue(error)
+
+    await expect(controller.handle(http)).rejects.toThrow(error)
+
+    expect(http.statusOk).not.toHaveBeenCalled()
+    expect(http.send).not.toHaveBeenCalled()
+  })
 })
