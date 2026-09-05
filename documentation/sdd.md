@@ -11,14 +11,14 @@ PRD, Issue, Report ou demanda direta
 → Spec Reviewer
 → implement-spec direto | create-plan → implement-spec Plan-backed
 → sensores integrados + validação manual real
-→ Implementation Reviewer único quando houver Plan
-→ evaluation.md ready
+→ Implementation Reviewer por Builder (Direct sem Plan ou pareado por fase/tarefa)
+→ check:spec-definition + check:plan-definition + check-spec-implementation + check:test-integrity + evaluation.md ready
 → conclude-spec → commit-code → create-pr → CI do HEAD do PR
 → Spec, Plan e Evaluation completed
 ```
 
 SDD não é obrigatório para manutenção que não precise de Contract de feature. O
-Orchestrator classifica a demanda e usa manutenção direta quando uma Spec não acrescenta
+A task principal classifica a demanda e usa manutenção direta quando uma Spec não acrescenta
 autoridade, risco controlado ou rastreabilidade útil.
 
 ## Autoridades
@@ -61,12 +61,12 @@ substitui silenciosamente uma autoridade.
 
 | Papel                   | Responsabilidade                                                                                                    | Restrição                                                            |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Orchestrator            | seleciona workflows, mantém artefatos, integra diffs, executa sensores, registra evidência, publica e roteia falhas | não delega o veredito oficial nem usa relato de subagente como prova |
-| Spec Reviewer           | revisa a Spec draft completa antes de `open`                                                                        | read-only; não edita a Spec nem decide o status oficial              |
+| Task principal          | seleciona workflows, mantém artefatos, integra diffs, executa sensores, registra evidência, publica e roteia falhas | não delega o veredito oficial nem usa relato de subagente como prova |
+| Spec Reviewer           | executa um único gate antes do planejamento, com retries da mesma revisão quando necessário                  | read-only; só avalia Architecture e Rules                              |
 | Builder                 | implementa um escopo de paths contra uma revisão exata                                                              | não edita Spec, Plan, Evaluation, PRD ou Rules                       |
-| Implementation Reviewer | revisa o candidato Plan-backed integrado                                                                            | read-only; não corrige nem produz o veredito oficial                 |
+| Implementation Reviewer | revisa o diff e o escopo do Builder pareado, contra Architecture e layer rules                                 | read-only; não corrige nem produz o veredito oficial                 |
 
-Subagentes são irmãos criados pelo Orchestrator na task atual. Nenhum subagente cria outro
+Subagentes são irmãos criados pela task principal na task atual. Nenhum subagente cria outro
 agente ou task. `create-spec`, `implement-spec` e `conclude-spec` são workflows, não papéis.
 
 ## Artefatos duráveis
@@ -199,14 +199,21 @@ como Create, Modify, Generate ou Remove. A Spec não é um Plan e não contém r
 Para UI, a Spec registra o widget tree exato, estados loading/empty/success/error/recovery,
 teclado, foco, responsividade, referências Pencil/screenshot e viewports. Comportamento
 inferido apenas de imagem precisa de clarificação. Uma Spec íntegra passa diretamente de
-`draft` para a revisão independente do Spec Reviewer.
+`draft` para a revisão independente do Spec Reviewer, antes de qualquer planejamento.
 
-Depois do integrity gate, o Orchestrator ativa exatamente um Spec Reviewer read-only com a
-revisão, fontes, Rule Pack, pesquisa verificada, paths e Design bundle. O Orchestrator verifica
-cada finding, corrige a mesma Spec e retoma o mesmo Reviewer. A Spec só passa para `open` quando
-a revisão exata estiver `clear` e nenhum finding bloqueante verificado permanecer. Amendment
-posterior invalida o resultado e exige nova revisão. A revision history registra a revisão
-avaliada, o resultado e as resoluções verificadas, sem incorporar o relatório bruto.
+Antes da revisão, `create-spec` executa `npm run check:spec-definition -- <spec>`.
+Esse gate valida estrutura, IDs, rastreabilidade e o mapa canônico de paths;
+não substitui o Spec Reviewer.
+
+Depois do integrity gate, e antes de decidir entre execução Direct e `create-plan`, a task
+principal ativa exatamente um Spec Reviewer read-only com a revisão exata, `architecture.md` e o
+Rule Pack das camadas afetadas. O Reviewer verifica somente fronteiras, dependências, ownership
+e aderência às Rules; não avalia produto, Design, critérios ou validação. A task principal verifica
+cada finding, corrige a mesma Spec e retoma o Reviewer antes do planejamento. A Spec só passa para
+`open` quando essa revisão estiver `clear` e nenhum finding bloqueante verificado permanecer;
+então o fluxo segue para Direct ou planejamento. Amendment posterior invalida o resultado e exige
+nova revisão antes de planejar. A revision history registra a revisão, o resultado e as resoluções
+verificadas, sem incorporar o relatório bruto.
 
 ## Plan opcional
 
@@ -219,7 +226,8 @@ O Plan contém snapshot de execução, ledger de waves/fases/tarefas, agenda de 
 condicional. Builders têm ownership estável (`Builder Core`, `Builder Server`, `Builder Web`
 ou boundary equivalente), podem executar várias fases e nunca compartilham paths ativos. O
 padrão é no máximo três Builders concorrentes. A integridade do Plan é verificada pela task
-principal antes de salvar e antes de cada wave; não há agente separado para esse gate.
+principal antes de salvar e antes de cada wave com `check:plan-definition`; esse mesmo gate
+confere o estado do ledger e os exits. Não há agente separado para esses gates.
 
 Antes de salvar, `create-plan` executa o Grilling sobre decisões de execução ainda abertas. O
 interview não pode redefinir a Spec; qualquer ambiguidade de Contract retorna para amendment.
@@ -233,10 +241,30 @@ interview não pode redefinir a Spec; qualquer ambiguidade de Contract retorna p
 - Plan ausente mas necessário: invoca `create-plan` e continua automaticamente;
 - Plan obsoleto: reconcilia ou marca `superseded` antes de editar.
 
+Nenhum source, teste, migration ou artefato gerado é alterado antes de uma assignment delimitada
+ser registrada no Plan/Evaluation com revisão, RF/CA, paths, Rules, ownership e exits. A Spec é
+comparada com a árvore de arquivos, contratos, estados e exclusões antes de cada handoff e após
+cada correção. Falha de conformance, cenário manual/runtime indisponível ou evidência stale mantém
+o trabalho `in_progress` e bloqueia o avanço para `ready`.
+
+Antes dos sensores e do Reviewer, execute `npm run check:spec-definition -- <spec>` e,
+quando houver Plan, `npm run check:plan-definition -- <plan>`.
+Em seguida, execute `npm run check:spec-implementation -- <spec> --base <commit-base>`.
+Esse preflight exige o mapa canônico `Path | Change | ...` do `Technical Contract` e
+confirma que cada `Create`, `Modify`, `Generate` ou `Remove` corresponde ao diff e ao
+filesystem. Ele é estrutural e não substitui testes, sensores, Reviewer ou Evaluation.
+
 Antes de alterar source ou testes, materialize `evaluation.md` pelo Contract canônico definido
 em `implement-spec`, registre revisão, assignment, paths, Rules, critérios e exits, e mude a Spec para
-`in_progress`. O Orchestrator inspeciona cada diff, executa os sensores oficiais e atualiza
-Evaluation após cada mudança. Relatos de Builder e Reviewer são input, não evidência.
+`in_progress`. A task principal inspeciona cada diff, executa os sensores oficiais e atualiza
+Evaluation após cada mudança de código, teste, browser, migration, artefato ou documentação.
+Relatos de Builder e Reviewer são input, não evidência; a task principal verifica o candidato
+integrado e registra os comandos, resultados, freshness e IDs de evidência.
+
+Para cada grupo de rotas HTTP afetado, o arquivo `.rest` correspondente em `apps/server/rest-client/`
+faz parte do escopo e deve conter exemplos atuais para todas as rotas do controller, sem segredos.
+Hooks de comportamento `use-*.ts` sob o escopo devem ter testes colocados em `tests/use-*.test.ts`,
+salvo exceção explícita da Rule Pack registrada no Evaluation.
 
 Para frontend, testes automatizados não substituem a validação manual obrigatória definida em
 `AGENTS.md`: serviço real, login quando aplicável, rota protegida, estados relevantes,
@@ -244,9 +272,11 @@ console, `pageerror`, `requestfailed`, respostas HTTP e screenshots atuais. Para
 banco, mocks não substituem request/response real, autorização, tenant e persistência no
 Supabase Dev quando aplicável.
 
-Após integrar um Plan, um único Implementation Reviewer revisa o candidato completo e repete
-interações de alto risco. O Orchestrator verifica cada finding e retoma o mesmo Builder e o
-mesmo Reviewer. Implementação direta não exige Reviewer separado salvo autoridade explícita.
+Após a implementação direta, um Implementation Reviewer Direct revisa o diff do Builder Direct.
+Em um Plan, cada Builder de fase/tarefa recebe seu próprio Implementation Reviewer pareado. O
+Reviewer verifica Contract, Architecture e layer rules do escopo atribuído; a task principal
+consolida os vereditos, findings e evidências no `evaluation.md`. Uma revisão integrada adicional
+é opcional somente para uma interação cross-boundary que não pertença a um Builder específico.
 
 Evidence anterior à última mudança afetada vira `stale`. Evaluation só muda para `ready`
 quando todos os `CA-*`, sensores, `MV-*`, comparações visuais e findings bloqueantes estão
@@ -276,6 +306,14 @@ conformance atual e nenhuma evidência bloqueante. Com autorização para commit
 6. em falha, roteia imediatamente para `implement-spec` ou amendment, republica e repete CI;
 7. após CI verde, marca Spec, Plan e Evaluation como `completed`.
 
+Antes de marcar os artefatos como `completed`, `conclude-spec` analisa todos os findings,
+warnings e falhas da entrega e identifica causas que possam se repetir. Lacunas de processo,
+Architecture, tooling ou Rules devem atualizar a documentação normativa correspondente; erros de
+implementação reutilizáveis devem ser registrados como anti-padrões na Rule da camada. Cada ação
+preventiva, documento alterado ou justificativa de não aplicabilidade fica registrada em
+`evaluation.md`. Mudanças normativas que exigem decisão do usuário mantêm a Spec aberta até a
+aprovação.
+
 Não use run de push, SHA antigo, check ausente ou build local como substituto do CI do PR.
 Não faça merge ou deploy sem pedido explícito. Feedback posterior em PR aberto pode reabrir a
 mesma Spec; após merge, defeito usa Bug Report e comportamento novo usa uma change Spec.
@@ -285,4 +323,17 @@ mesma Spec; após merge, defeito usa Bug Report e comportamento novo usa uma cha
 Após alteração de código, execute os detectores obrigatórios de `AGENTS.md`:
 `npm run check:code`, `npm run check:types` e `npm run test:unit`. Acrescente
 `check:architecture`, testes de integração, geração, browser, Supabase Dev e build conforme
-Rules, Spec, paths e risco. `format` aplica formatação, mas não prova comportamento.
+Rules, Spec, paths e risco. Para `@stardust/core`, `@stardust/server`, `@stardust/studio` e
+`@stardust/web`, execute também `npm run test:coverage -w <workspace>` e
+`npm run check:coverage -- <workspace>` e `npm run check:test-integrity`; os checks falham se qualquer métrica ficar abaixo do
+baseline versionado em `coverage-baseline.json`. O `check:test-integrity` exige pareamento
+somente para controllers, jobs, use-cases, entidades/structures/aggregates,
+hooks, views/widgets, Web routes (`app/page|layout|route`) e Server routes
+(`tests/routes`), RPC actions e AI tools; barrels, services/repositories genéricos,
+tipos/código gerado, fixtures, mocks e infraestrutura de testes são excluídos e
+listados no resultado JSON. Testes devem ficar em `scripts/tests/**` ou em
+`tests/` co-localizado com o alvo permitido (domínio, use-case, controller,
+job, hook, widget/view, rota Web/Server, RPC action ou AI tool); os demais
+falham com `forbiddenTestPaths`. `@stardust/lsp`, `@stardust/validation`,
+`@stardust/typescript-config` e `@stardust/email` estão fora desse quality ratchet. `format`
+aplica formatação, mas não prova comportamento.

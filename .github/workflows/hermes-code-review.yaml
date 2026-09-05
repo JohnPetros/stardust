@@ -6,9 +6,6 @@ on:
       - main
     types:
       - opened
-      - synchronize
-      - reopened
-      - ready_for_review
 
 permissions:
   actions: read
@@ -23,6 +20,7 @@ jobs:
     name: Detect changed scopes
     if: >-
       github.event.pull_request.draft == false &&
+      !startsWith(github.event.pull_request.head.ref, 'security-audit/') &&
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 35

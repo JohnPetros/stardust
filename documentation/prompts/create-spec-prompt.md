@@ -5,7 +5,7 @@ description: Criar ou revisar uma Spec implementável, compacta ou completa, a p
 
 # Criar Spec
 
-O Orchestrator conduz a autoria na task atual. Não crie nova thread. Use Spec
+A task principal conduz a autoria na task atual. Não crie nova thread. Use Spec
 somente para uma entrega relacionada a uma feature. Para manutenção transversal
 sem Contract de feature, use fluxo direto.
 
@@ -51,7 +51,8 @@ durante o integrity gate ou a revisão, reabra o Grilling antes de continuar.
 
 ## Princípios de evidência e fronteiras
 
-- Todo path citado deve existir ou estar marcado como `novo arquivo`.
+- Todo path citado deve existir; uma criação deve ser declarada como `Create` no
+  mapa canônico de paths.
 - Toda criação ou alteração deve estar apoiada em fonte, Architecture, Rule,
   implementação similar ou decisão técnica explicitamente registrada.
 - Preserve as fronteiras existentes entre autenticação, autorização, ownership,
@@ -192,11 +193,39 @@ enfraquecer requisitos. Para cada `CA-*`, o Plan deve apontar a tarefa
 responsável e a evidência correspondente. O `evaluation.md` registra o resultado
 real dessa evidência, mas não substitui o requisito do Contract.
 
+## Mapa canônico de paths afetados
+
+O `Technical Contract` deve conter um mapa de paths afetados, agrupado por
+aplicação e camada. Use uma tabela por combinação de aplicação/camada afetada,
+seguindo sempre esta ordem nas duas primeiras colunas:
+
+```md
+| Path | Change | Declaration | Contract | Dependencies | Tests |
+| --- | --- | --- | --- | --- | --- |
+| `packages/core/src/...` | `Modify` | `<símbolo exato>` | `<garantia de runtime>` | `<colaboradores>` | `<fronteira de teste>` |
+```
+
+As colunas depois de `Change` podem variar conforme a camada, mas `Path` deve
+ser o primeiro campo e `Change` o segundo. Cada path afetado aparece exatamente
+uma vez em todo o `Technical Contract` e usa somente `Create`, `Modify`,
+`Generate` ou `Remove`. Use `Create` para arquivo novo, nunca `novo arquivo` na
+coluna de estado. Para `Generate`, declare fonte, comando/entrada e saída; não
+contrate edição manual de artefato gerado.
+
+Os paths devem ser relativos à raiz do repositório, exatos, normalizados e
+verificados no filesystem. Dependências inalteradas são evidência ou
+consumidores, não linhas do mapa. O checker
+`npm run check:spec-implementation -- <spec>` valida esse mapa contra o diff
+Git e falha em duplicidade, classificação inconsistente, path ausente ou
+mudança não entregue. Specs legadas com inventário em prosa ou no formato
+`Camada | Path e estado` devem ser normalizadas antes de serem implementadas;
+o checker não interpreta formatos ambíguos.
+
 ## Detalhamento técnico por camada afetada
 
-Inclua apenas camadas realmente afetadas. Para cada criação, modificação ou
-remoção, informe path, estado (`existente` ou `novo arquivo`), responsabilidade,
-dependências, assinatura/shape e referência similar. Não escreva implementação.
+Inclua apenas camadas realmente afetadas. Para cada linha do mapa canônico,
+informe responsabilidade, dependências, assinatura/shape, referência similar e
+evidência de teste. Não escreva implementação.
 
 - Core/handlers/services/repositories/providers/jobs: dependências injetadas,
   métodos, request/response, erros e efeitos.
@@ -236,7 +265,9 @@ aceitação, decisões técnicas ou comportamento de erro. Use nomes coerentes c
 os contratos da Spec e mantenha a sintaxe renderizável em Markdown.
 
 Declare sensores aplicáveis: `format`, `check:code`, `check:types`, `test:unit`,
-`check:architecture` e `test:integration`. `check:dead-code` não é oficial.
+`check:architecture` e `test:integration`. Para Core, Server, Studio e Web, declare também
+`test:coverage` e `check:coverage`; ambos devem respeitar `coverage-baseline.json`. `check:dead-code`
+não é oficial.
 Checks e build são validações finais do CI.
 
 ## Decisões técnicas e clarificação
@@ -262,6 +293,10 @@ necessárias; cada mudança UI declara a estrutura Entry Point/View/Hook; e todo
 os sensores aplicáveis estão nomeados. Se uma exigência só aparecer no Plan ou
 na Evaluation, mova-a para o Contract antes da revisão.
 
+Execute `npm run check:spec-definition -- <spec.md>` antes de alterar o status
+para `open`; corrija todos os erros estruturais reportados antes de ativar o
+Reviewer.
+
 Para UI, o Contract deve conter uma matriz de referências visuais e uma matriz
 de auditoria estrutural. A primeira relaciona node, viewport, estado, rota,
 evidência Pencil/Web, dimensões/anchors relevantes e divergências aprovadas. A
@@ -269,11 +304,13 @@ segunda relaciona cada widget alterado a
 `index.tsx`, `*View.tsx`, Hook e regra aplicável. A ausência de qualquer uma
 dessas matrizes impede o estado `open` quando frontend estiver no escopo.
 
-Após o integrity gate, ative exatamente um `spec-reviewer-agent` read-only com a revisão exata,
-fontes, Architecture, Rule Pack, pesquisa verificada, paths e Design bundle. O relatório não é
-veredito oficial: verifique cada finding diretamente, corrija a mesma Spec e retome o mesmo
-Reviewer até não restar finding bloqueante verificado. Qualquer amendment posterior invalida o
-resultado e exige nova revisão. Registre na revision history a revisão avaliada, o resultado
+Após o integrity gate, e antes de qualquer planejamento, ative exatamente um
+`spec-reviewer-agent` read-only com a revisão exata, `architecture.md` e o Rule Pack das camadas
+afetadas. O Reviewer verifica somente compatibilidade de fronteiras, dependências, ownership e
+Rules; não avalia produto, Design, critérios ou validação. O relatório não é veredito oficial:
+verifique cada finding diretamente, corrija a mesma Spec e retome o mesmo Reviewer até não restar
+finding arquitetural ou de Rule bloqueante. Qualquer amendment posterior invalida o resultado e
+exige nova revisão antes de planejar. Registre na revision history a revisão avaliada, o resultado
 `clear` e a resolução concisa dos findings verificados; não cole o relatório bruto na Spec.
 
 Somente então altere para `open` e recomende `implement-spec` direto para entrega pequena/coesa

@@ -37,4 +37,16 @@ describe('Verify Star Exists Controller', () => {
     expect(http.pass).toHaveBeenCalledTimes(1)
     expect(result).toBe(restResponse)
   })
+
+  it('should propagate use case errors without passing the request', async () => {
+    const starId = 'missing-star'
+    const error = new Error('Star not found')
+
+    http.getRouteParams.mockReturnValue({ starId })
+    jest.spyOn(GetStarUseCase.prototype, 'execute').mockRejectedValue(error)
+
+    await expect(controller.handle(http)).rejects.toThrow(error)
+
+    expect(http.pass).not.toHaveBeenCalled()
+  })
 })

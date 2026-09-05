@@ -23,7 +23,7 @@ Leia, quando existirem e forem aplicáveis:
 - Plan;
 - `evaluation.md`;
 - diff real da entrega;
-- `documentation/rules/sdd-rules.md`;
+- `documentation/sdd.md`;
 - `documentation/tooling.md`;
 - rules aplicáveis;
 - `documentation/rules/commit-rules.md`;
@@ -349,7 +349,9 @@ Registre lacunas não bloqueantes ou escreva `Nenhuma.`
 
 Não adicione seções genéricas como `Changelog`, `Impacto e compatibilidade`,
 `Observações` ou `Evidências visuais`. Não copie o diff inteiro. Não invente
-Issues, requisitos, resultados de testes ou aprovações humanas.
+Issues, requisitos, resultados de testes ou aprovações humanas. Não inclua uma
+seção `Codex Review Summary` nem qualquer resumo automatizado de revisão no
+body do PR.
 
 ## Título
 

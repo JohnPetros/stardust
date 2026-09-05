@@ -10,6 +10,8 @@ on:
       - "package-lock.json"
       - "packages/core/**"
       - ".dependency-cruiser.cjs"
+      - "coverage-baseline.json"
+      - "scripts/check-coverage-baseline.mjs"
 
 env:
   NODE_VERSION: "22"
@@ -100,7 +102,10 @@ jobs:
         run: npm run build -w @stardust/lsp
 
       - name: Run tests
-        run: npm run test:unit -w @stardust/core
+        run: npm run test:coverage -w @stardust/core
+
+      - name: Check coverage baseline
+        run: npm run check:coverage -- @stardust/core
 
   build:
     name: Build
