@@ -17,6 +17,21 @@ const dependencySections = [
   'peerDependencies',
 ]
 
+const dependencyGroups = [
+  {
+    packages: [
+      'react-router',
+      '@react-router/dev',
+      '@react-router/express',
+      '@react-router/node',
+      '@react-router/serve',
+    ],
+    representative: 'react-router',
+  },
+]
+
+const groupedPackageNames = dependencyGroups.flatMap((group) => group.packages)
+
 function readJson(path) {
   return JSON.parse(readFileSync(path, 'utf8'))
 }
@@ -59,6 +74,64 @@ function dependencyRanges(manifest) {
   }
 
   return ranges
+}
+
+function versionNumber(version) {
+  return version.match(/\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?/)?.[0] ?? null
+}
+
+function versionWithExistingRange(current, target) {
+  const targetNumber = versionNumber(target)
+  if (!targetNumber) return current
+
+  if (current.startsWith('^')) return `^${targetNumber}`
+  if (current.startsWith('~')) return `~${targetNumber}`
+  return targetNumber
+}
+
+function synchronizeDependencyGroups(manifestPaths, eligibleUpdates) {
+  for (const group of dependencyGroups) {
+    const groupUpdates = eligibleUpdates.filter((update) =>
+      group.packages.includes(update.package),
+    )
+    const representativeUpdate =
+      groupUpdates.find((update) => update.package === group.representative) ??
+      groupUpdates[0]
+    if (!representativeUpdate) continue
+
+    for (const manifestPath of manifestPaths) {
+      const manifest = readJson(manifestPath)
+      let changed = false
+
+      for (const section of dependencySections) {
+        for (const packageName of group.packages) {
+          const current = manifest[section]?.[packageName]
+          if (typeof current !== 'string') continue
+
+          const next = versionWithExistingRange(current, representativeUpdate.to)
+          if (next !== current) {
+            manifest[section][packageName] = next
+            changed = true
+          }
+        }
+      }
+
+      for (const packageName of group.packages) {
+        const current = manifest.overrides?.[packageName]
+        if (typeof current !== 'string') continue
+
+        const next = versionWithExistingRange(current, representativeUpdate.to)
+        if (next !== current) {
+          manifest.overrides[packageName] = next
+          changed = true
+        }
+      }
+
+      if (changed) {
+        writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`)
+      }
+    }
+  }
 }
 
 function runNcu(args, options = {}) {
@@ -265,6 +338,8 @@ const repositoryRoot = process.cwd()
 const doctorInstall = `npm --prefix "${repositoryRoot}" install --ignore-scripts --no-audit --no-fund`
 const doctorTest = `env NODE_OPTIONS=--max-old-space-size=8192 TURBO_CONCURRENCY=1 npm --prefix "${repositoryRoot}" run check:dependencies-update`
 
+synchronizeDependencyGroups(manifestPaths, eligibleUpdates)
+
 for (const manifestPath of manifestPaths) {
   runNcu([
     '--doctor',
@@ -273,6 +348,8 @@ for (const manifestPath of manifestPaths) {
     'minor',
     '--cooldown',
     '7d',
+    '--reject',
+    groupedPackageNames.join(','),
     '--doctorInstall',
     doctorInstall,
     '--doctorTest',
