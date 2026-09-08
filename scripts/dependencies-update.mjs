@@ -335,8 +335,20 @@ if (eligibleUpdates.length === 0) {
 }
 
 const repositoryRoot = process.cwd()
-const doctorInstall = `npm --prefix "${repositoryRoot}" install --ignore-scripts --no-audit --no-fund`
-const doctorTest = `env NODE_OPTIONS=--max-old-space-size=8192 TURBO_CONCURRENCY=1 npm --prefix "${repositoryRoot}" run check:dependencies-update`
+const doctorInstall = `npm --prefix "${repositoryRoot}" install --ignore-scripts --prefer-offline --no-audit --no-fund`
+
+function doctorTestFor(manifestPath) {
+  const workspace = manifestPath === 'package.json' ? null : before.get(manifestPath)?.name
+  const command = workspace
+    ? [
+        `npm --prefix "${repositoryRoot}" run check:code --workspace="${workspace}"`,
+        `npm --prefix "${repositoryRoot}" run check:types --workspace="${workspace}"`,
+        `npm --prefix "${repositoryRoot}" run test:unit --workspace="${workspace}"`,
+      ].join(' && ')
+    : `npm --prefix "${repositoryRoot}" run check:dependencies-update:doctor`
+
+  return `env NODE_OPTIONS=--max-old-space-size=8192 TURBO_CONCURRENCY=1 ${command}`
+}
 
 synchronizeDependencyGroups(manifestPaths, eligibleUpdates)
 
@@ -353,7 +365,7 @@ for (const manifestPath of manifestPaths) {
     '--doctorInstall',
     doctorInstall,
     '--doctorTest',
-    doctorTest,
+    doctorTestFor(manifestPath),
   ], { cwd: dirname(manifestPath) })
 }
 
