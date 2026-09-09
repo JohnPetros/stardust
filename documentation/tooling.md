@@ -30,6 +30,7 @@ eval "$(node ./scripts/export-web-app-e2e-env.mjs)"
 | `npm run check:code`         | Biome              | lint/check read-only                               |
 | `npm run check:types`        | TypeScript         | typecheck sem emissão                              |
 | `npm run check:architecture` | dependency-cruiser | valida dependências entre camadas/apps             |
+| `npm run check:complexity`   | CodeMultiVitals    | falha quando a complexidade ou a qualidade piora em relação ao baseline |
 | `npm run test:unit`          | Jest/Vitest        | executa testes unitários por workspace             |
 | `npm run test:integration`   | Jest/Playwright    | executa as integrações declaradas pelos workspaces |
 | `npm run check:spec-implementation` | Node.js       | valida o mapa `Path | Change | ...` da Spec contra Git e filesystem |
@@ -46,6 +47,21 @@ npm run test:unit -- --filter=@stardust/core
 Os limites do dependency-cruiser ficam em `.dependency-cruiser.cjs`. Altere essa
 configuração somente para representar limites legítimos, nunca para ocultar uma
 regressão.
+
+O check de complexidade usa `.code-multivitals.json` para os limites e um
+baseline compartilhado em `.code-multivitals-baseline.json`. O CI executa o
+check no escopo principal de cada app ou pacote (`apps/server`, `apps/web`,
+`apps/studio` e `packages/core`), tolerando a dívida existente e bloqueando
+novas violações. Para atualizar o baseline, execute:
+
+```bash
+npm run update:complexity-baseline
+```
+
+A atualização deve ser feita somente quando a mudança de complexidade for
+intencional e estiver revisada. A detecção de clones fica desabilitada no
+ratchet atual para evitar ruído e custo desproporcional no monorepo; o gate é
+centrado nas métricas por função.
 
 ## Scripts por workspace
 
@@ -70,6 +86,8 @@ partir da raiz.
 | `check:code`         | Executa as verificações Biome dos workspaces via Turbo.                                             |
 | `check:types`        | Executa os typechecks dos workspaces via Turbo.                                                     |
 | `check:architecture` | Verifica as dependências entre camadas com dependency-cruiser.                                      |
+| `check:complexity` | Verifica complexidade e manutenibilidade contra `.code-multivitals-baseline.json`. |
+| `update:complexity-baseline` | Atualiza o baseline compartilhado após uma revisão explícita das alterações de complexidade. |
 | `test`               | Alias para `test:unit`.                                                                             |
 | `test:unit`          | Executa os testes unitários dos workspaces via Turbo.                                               |
 | `test:coverage`      | Executa cobertura dos workspaces com ratchet habilitado.                                            |
@@ -109,6 +127,7 @@ tools. Um teste fora desses locais aparece em `forbiddenTestPaths` e falha o CI.
 | `format`           | Formata `src` e grava as alterações.                                                     |
 | `check:code`       | Verifica `src` com Biome, sem aplicar correções.                                         |
 | `check:types`      | Executa o TypeScript sem emitir arquivos.                                                |
+| `check:complexity` | Verifica o escopo `apps/server` contra o baseline compartilhado.                          |
 | `check:architecture` | Verifica as dependências arquiteturais do Server com dependency-cruiser.               |
 | `check:updates`    | Lista atualizações de dependências com npm-check-updates.                                |
 | `build`            | Compila o Server com tsup.                                                               |
@@ -150,6 +169,7 @@ los.
 | `format`          | Formata `src` e grava as alterações.                                   |
 | `check:code`      | Verifica `src` com Biome, sem aplicar correções.                       |
 | `check:types`     | Gera os tipos do React Router e executa o TypeScript.                  |
+| `check:complexity` | Verifica o escopo `apps/studio` contra o baseline compartilhado.       |
 | `check:architecture` | Verifica as dependências arquiteturais do Studio com dependency-cruiser. |
 | `test:unit`       | Executa os testes unitários do Studio.                                 |
 | `test:coverage`   | Executa os testes unitários do Studio com relatório JSON de cobertura. |
@@ -165,6 +185,7 @@ los.
 | `start`                    | Inicia o build standalone usando a porta definida em `PORT`.            |
 | `check:code`               | Verifica `src` com Biome, sem aplicar correções.                        |
 | `check:types`              | Executa o TypeScript sem emitir arquivos.                               |
+| `check:complexity`         | Verifica o escopo `apps/web` contra o baseline compartilhado.           |
 | `check:architecture`       | Verifica as dependências arquiteturais da Web App com dependency-cruiser. |
 | `lint`                     | Executa o lint de `src` com nível de diagnóstico de erro.               |
 | `format`                   | Formata `src` e grava as alterações.                                    |
@@ -184,6 +205,7 @@ los.
 | `build`         | Compila o pacote Core com tsup.                                      |
 | `check:types`   | Executa o TypeScript sem emitir arquivos.                            |
 | `check:code`    | Verifica `src` com Biome, sem aplicar correções.                     |
+| `check:complexity` | Verifica o escopo `packages/core` contra o baseline compartilhado. |
 | `check:architecture` | Verifica as dependências arquiteturais do Core com dependency-cruiser. |
 | `lint`          | Executa o lint de `src` com nível de diagnóstico de erro.            |
 | `format`        | Formata `src` e grava as alterações.                                 |
@@ -199,6 +221,7 @@ los.
 | `format`      | Formata os templates e partials.            |
 | `check:code`  | Verifica templates e partials com Biome.    |
 | `check:types` | Executa o TypeScript sem emitir arquivos.   |
+| `check:complexity` | Verifica os templates de email contra o baseline compartilhado. |
 
 ### `packages/lsp`
 
@@ -207,6 +230,7 @@ los.
 | `build`       | Compila o pacote LSP com tsup.                      |
 | `check:types` | Executa o TypeScript sem emitir arquivos.           |
 | `check:code`  | Verifica `src` com Biome, sem aplicar correções.    |
+| `check:complexity` | Verifica o escopo `packages/lsp` contra o baseline compartilhado. |
 | `lint`        | Executa o lint dos arquivos TypeScript de `src`.    |
 | `format`      | Formata os arquivos TypeScript de `src`.            |
 | `test:unit`   | Executa os testes Node do LSP com o carregador tsx. |
@@ -218,13 +242,9 @@ los.
 | `build`       | Compila o pacote Validation com tsup.                     |
 | `check:types` | Executa o TypeScript sem emitir arquivos.                 |
 | `check:code`  | Verifica `src` com Biome, sem aplicar correções.          |
+| `check:complexity` | Verifica o escopo `packages/validation` contra o baseline compartilhado. |
 | `lint`        | Executa o lint de `src` com nível de diagnóstico de erro. |
 | `format`      | Formata `src` e grava as alterações.                      |
-
-### `packages/typescript-config`
-
-Este pacote não declara scripts próprios; ele fornece configurações TypeScript
-compartilhadas para os demais workspaces.
 
 ## Testes de integração
 
