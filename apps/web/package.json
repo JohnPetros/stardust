@@ -8,6 +8,7 @@
     "start": "node .next/standalone/apps/web/server.js -p $PORT",
     "check:code": "biome check src",
     "check:types": "tsc --noEmit",
+    "check:complexity": "node ../../scripts/check-complexity.mjs --scope apps/web",
     "check:architecture": "depcruise --config .dependency-cruiser.cjs src",
     "lint": "biome lint src --diagnostic-level=error",
     "format": "biome format src --write",
@@ -105,7 +106,6 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.62.0",
-    "@stardust/typescript-config": "*",
     "@tailwindcss/typography": "^0.5.20",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",

@@ -7,6 +7,7 @@
     "format": "biome format src --write",
     "check:code": "biome check src",
     "check:types": "tsc --noEmit",
+    "check:complexity": "node ../../scripts/check-complexity.mjs --scope apps/server",
     "check:architecture": "depcruise --config .dependency-cruiser.cjs src",
     "check:updates": "ncu",
     "build": "tsup",

@@ -19,6 +19,7 @@
     "build": "tsup",
     "check:types": "tsc --noEmit",
     "check:code": "biome check src",
+    "check:complexity": "node ../../scripts/check-complexity.mjs --scope packages/core",
     "check:architecture": "depcruise --config .dependency-cruiser.cjs src",
     "lint": "biome lint src --diagnostic-level=error",
     "format": "biome format src --write",
@@ -225,7 +226,6 @@
   },
   "devDependencies": {
     "@faker-js/faker": "8.4.1",
-    "@stardust/typescript-config": "*",
     "jest": "^29.7.0",
     "ts-jest": "^29.4.12",
     "ts-jest-mocker": "^1.3.0",

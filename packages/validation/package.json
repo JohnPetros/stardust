@@ -8,6 +8,7 @@
     "build": "tsup",
     "check:types": "tsc --noEmit",
     "check:code": "biome check src",
+    "check:complexity": "node ../../scripts/check-complexity.mjs --scope packages/validation",
     "lint": "biome lint src --diagnostic-level=error",
     "format": "biome format src --write"
   },
@@ -37,7 +38,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@stardust/typescript-config": "*",
     "@swc/core": "^1.15.47",
     "tsup": "^8.5.1",
     "typescript": "5.5.3"
