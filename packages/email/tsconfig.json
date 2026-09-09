@@ -1,5 +1,5 @@
 {
-  "extends": "@stardust/typescript-config/base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",

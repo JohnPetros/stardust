@@ -335,5 +335,5 @@ listados no resultado JSON. Testes devem ficar em `scripts/tests/**` ou em
 `tests/` co-localizado com o alvo permitido (domínio, use-case, controller,
 job, hook, widget/view, rota Web/Server, RPC action ou AI tool); os demais
 falham com `forbiddenTestPaths`. `@stardust/lsp`, `@stardust/validation`,
-`@stardust/typescript-config` e `@stardust/email` estão fora desse quality ratchet. `format`
+`@stardust/email` está fora desse quality ratchet. `format`
 aplica formatação, mas não prova comportamento.

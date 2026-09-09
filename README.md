@@ -47,8 +47,7 @@ stardust/
 │   ├── core/              # Regras de Negócio e Domínio (DDD)
 │   ├── validation/        # Schemas de validação (Zod)
 │   ├── email/             # Serviços de Email
-│   ├── lsp/               # Language Server Protocol (Lógica)
-│   └── typescript-config/ # Configurações base de TS
+│   └── lsp/               # Language Server Protocol (Lógica)
 └── documentation/         # Documentação centralizada
 ```
 

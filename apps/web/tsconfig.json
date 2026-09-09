@@ -1,5 +1,5 @@
 {
-  "extends": "../../packages/typescript-config/nextjs.json",
+  "extends": "../../tsconfig.nextjs.json",
   "compilerOptions": {
     "lib": [
       "dom",
