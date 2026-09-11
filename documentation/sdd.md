@@ -160,10 +160,13 @@ PRD só é identificado depois que o link canônico da descrição do milestone 
 Feature e bug issue exigem approval explícito antes de escrita no GitHub. Aprovar issue não
 autoriza implementação, branch, commit, PR ou alteração de produto.
 
-Todo workflow de criação de issue executa descoberta de PRD antes do draft. Feature issue exige
-um PRD principal; bug e chore registram o PRD/requisito mais relevante ou `None` com evidência da
-busca. A associação nunca é inferida apenas por título, label ou path; um milestone só serve como
-ponte depois que seu único link para `documentation/prds/` na `main` for validado.
+Workflows de feature e bug issue executam descoberta de PRD antes do draft; feature issue exige um
+PRD principal, enquanto bug issue registra o PRD/requisito mais relevante ou `None` com evidência
+da busca. Chore issue é manutenção técnica independente de produto e não pesquisa, menciona ou
+associa PRD, requisito de PRD ou milestone de produto. Refactor issue só consulta um PRD quando
+precisa definir a fronteira de comportamento que deve ser preservada. A associação nunca é
+inferida apenas por título, label ou path; um milestone só serve como ponte depois que seu único
+link para `documentation/prds/` na `main` for validado.
 
 Antes do draft, os workflows de issue executam o Grilling: fatos são pesquisados e decisões são
 percorridas em rounds pela frontier da design tree. A confirmação de entendimento compartilhado
