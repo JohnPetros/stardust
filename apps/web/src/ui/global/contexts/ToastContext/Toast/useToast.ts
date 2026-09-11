@@ -13,10 +13,12 @@ export function useToast() {
   const [type, setType] = useState<ToastType>('error')
   const [message, setMessage] = useState('')
   const [seconds, setSeconds] = useState(DEFAULT_TOAST_DURATION)
+  const [animationKey, setAnimationKey] = useState(0)
   const [scope, animate] = useAnimate<HTMLDivElement>()
   const scrollPosition = useRef(0)
 
   function open({ type, message, seconds = 2.5 }: OpenToastParams) {
+    setAnimationKey((key) => key + 1)
     setType(type)
     setMessage(message)
     setSeconds(seconds)
@@ -40,7 +42,7 @@ export function useToast() {
     }, seconds * 1000)
 
     return () => clearTimeout(timer)
-  }, [isOpen, seconds])
+  }, [animationKey, isOpen, seconds])
 
   useEffect(() => {
     const handleScroll = throttle(() => {
@@ -65,6 +67,7 @@ export function useToast() {
     type,
     message,
     seconds,
+    animationKey,
     scope,
     open,
     close,
