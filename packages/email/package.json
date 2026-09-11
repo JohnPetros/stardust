@@ -7,7 +7,8 @@
     "build": "email export --dir ./templates --outDir ./build",
     "format": "biome format templates partials --write",
     "check:code": "biome check templates partials",
-    "check:types": "tsc --noEmit"
+    "check:types": "tsc --noEmit",
+    "check:complexity": "node ../../scripts/check-complexity.mjs --scope packages/email"
   },
   "keywords": [],
   "author": "",
@@ -18,7 +19,6 @@
     "@react-email/render": "^2.1.0"
   },
   "devDependencies": {
-    "@stardust/typescript-config": "*",
     "react-email": "^6.9.1"
   },
   "exports": {

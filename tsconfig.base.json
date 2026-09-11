@@ -2,11 +2,6 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Default",
   "compilerOptions": {
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "target": "ESNext",

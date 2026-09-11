@@ -85,4 +85,21 @@ describe('Append Next Star To Body Controller', () => {
     expect(http.extendBody).toHaveBeenCalledWith({ nextStarId: null })
     expect(http.pass).toHaveBeenCalledTimes(1)
   })
+
+  it('should propagate use case errors without mutating or passing the request', async () => {
+    const body = {
+      starId: IdFaker.fake().value,
+      userName: 'ana',
+      userSlug: 'ana-codes',
+    }
+    const error = new Error('Could not find next star')
+
+    http.getBody.mockResolvedValue(body)
+    jest.spyOn(GetNextStarUseCase.prototype, 'execute').mockRejectedValue(error)
+
+    await expect(controller.handle(http)).rejects.toThrow(error)
+
+    expect(http.extendBody).not.toHaveBeenCalled()
+    expect(http.pass).not.toHaveBeenCalled()
+  })
 })

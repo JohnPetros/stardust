@@ -40,6 +40,10 @@
       "persistent": false,
       "cache": false
     },
+    "test:coverage": {
+      "persistent": false,
+      "cache": false
+    },
     "test:integration": {
       "persistent": false,
       "cache": false

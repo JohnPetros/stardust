@@ -779,7 +779,7 @@ devem ser lidos da Spec revisão 5 e da matriz corrente em `evaluation.md`.
 
 - **Veredito:** `accepted` na terceira avaliação, após correção de JP-08 a
   JP-11.
-- **Judge:** `judge-plan-agent`
+- **Revisão de Plan:** protocolo legado de integridade do Plan
 - **Escopo do julgamento:** rastreabilidade RF/CA, dependências entre Core,
   Validation, Database, Server, Queue, Email e Studio; completude de paths,
   design/Pencil, sensores, Playwright autenticado, riscos e handoff.

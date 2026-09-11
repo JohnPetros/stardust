@@ -1,13 +1,29 @@
 ---
-name: Backlog Item Issue
-about: Descreva um item para adicionar no bakcklog do projeto
+name: Technical Chore Issue
+about: Registre uma manutenção técnica sem mudança de comportamento
 title: ''
 labels: ''
 assignees: ''
 ---
 
-## 📍 Motivação
+## Objetivo
 
-## 🔍 Detalhes
+<!-- Resultado técnico e risco mitigado. -->
 
-## 💡 Sugestão de implementação
+## Escopo técnico
+
+- <!-- Mudança incluída -->
+- **Fora do escopo:** <!-- Limite explícito -->
+
+## Critérios de verificação
+
+- [ ] <!-- Resultado verificável -->
+
+## Contexto de produto
+
+- **PRD mais relevante:** <!-- URL/path ou None — busca executada e motivo -->
+- **Requisito do PRD:** <!-- anchor/ID, documento completo ou Não aplicável -->
+
+## Referências na codebase
+
+- `<!-- path real -->` — <!-- relevância -->

@@ -25,6 +25,7 @@
     "build": "tsup",
     "check:types": "tsc --noEmit",
     "check:code": "biome check src",
+    "check:complexity": "node ../../scripts/check-complexity.mjs --scope packages/lsp",
     "lint": "biome lint src/**/*.ts --diagnostic-level=error",
     "format": "biome format src/**/*.ts --write",
     "test:unit": "node --import tsx --test \"src/**/*.test.ts\""
@@ -35,7 +36,6 @@
     "monaco-editor": "^0.56.0"
   },
   "devDependencies": {
-    "@stardust/typescript-config": "*",
     "tsup": "^8.5.1",
     "typescript": "5.5.3"
   }

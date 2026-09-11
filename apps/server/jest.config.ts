@@ -35,6 +35,12 @@ const sharedConfig: Config = {
     'node_modules/(?!((@mastra|@sindresorhus|escape-string-regexp|p-map|@workflow|tokenx|ai|@ai-sdk)/))',
   ],
   setupFiles: ['<rootDir>/jest.setup.js'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/**/*.test.ts',
+    '!src/**/tests/**',
+    '!src/**/fakers/**',
+  ],
 }
 
 const config: Config = {

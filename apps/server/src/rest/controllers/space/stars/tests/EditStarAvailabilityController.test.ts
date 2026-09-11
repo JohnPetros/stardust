@@ -44,4 +44,19 @@ describe('Edit Star Availability Controller', () => {
     expect(http.send).toHaveBeenCalledWith(starDto)
     expect(response).toBe(restResponse)
   })
+
+  it('should propagate use case errors without sending a response', async () => {
+    const routeParams = { starId: 'star-1' }
+    const body = { isAvailable: false }
+    const error = new Error('Could not update star availability')
+
+    http.getRouteParams.mockReturnValue(routeParams)
+    http.getBody.mockResolvedValue(body)
+    jest.spyOn(EditStarAvailabilityUseCase.prototype, 'execute').mockRejectedValue(error)
+
+    await expect(controller.handle(http)).rejects.toThrow(error)
+
+    expect(http.statusOk).not.toHaveBeenCalled()
+    expect(http.send).not.toHaveBeenCalled()
+  })
 })

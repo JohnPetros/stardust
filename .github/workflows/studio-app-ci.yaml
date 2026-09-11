@@ -12,6 +12,12 @@ on:
       - "packages/core/**"
       - "packages/validation/**"
       - ".dependency-cruiser.cjs"
+      - "coverage-baseline.json"
+      - "scripts/check-coverage-baseline.mjs"
+      - ".code-multivitals-baseline.json"
+      - ".code-multivitals.json"
+      - "scripts/check-complexity.mjs"
+      - "scripts/tests/check-complexity.test.mjs"
 
 permissions:
   contents: read
@@ -62,6 +68,27 @@ jobs:
       - name: Check code
         run: npm run check:code -w @stardust/studio
 
+  check-code-complexity:
+    name: check-code-complexity
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check complexity
+        run: npm run check:complexity -w @stardust/studio
+
   check-types:
     name: Check types
     runs-on: ubuntu-latest
@@ -111,13 +138,17 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: npm run test:unit -w @stardust/studio
+        run: npm run test:coverage -w @stardust/studio
+
+      - name: Check coverage baseline
+        run: npm run check:coverage -- @stardust/studio
 
   build:
     name: Build
     runs-on: ubuntu-latest
     needs:
       - check-code
+      - check-code-complexity
       - check-types
       - unit-tests
       - architecture
