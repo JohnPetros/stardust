@@ -14,8 +14,8 @@ Rules e evidência suficiente para avaliação independente.
 
 - **Builder Direct:** implementação pequena sem Plan.
 - **Builder F<n>:** escopo principal de uma fase do Plan.
-- **Builder F<n>-T<m>:** tarefa atômica independente criada pelo Orchestrator.
-- **Builder Fix <finding-id>:** correção de finding de Judge ou review.
+- **Builder F<n>-T<m>:** tarefa atômica independente criada pela task principal.
+- **Builder Fix <finding-id>:** correção de finding de Reviewer ou review.
 - **Builder Fix CI-<n>:** correção de falha de check ou build do CI.
 
 Todos os modos usam este mesmo contrato. O nome identifica o contexto e não
@@ -35,7 +35,7 @@ cria hierarquia entre Builders.
 
 ## Execução
 
-1. Leia `documentation/sdd.md`, `documentation/rules/sdd-rules.md`, a Spec e
+1. Leia `documentation/sdd.md`, a Spec e
    as Rules aplicáveis.
 2. Confirme paths, contratos e implementações similares na codebase.
 3. Verifique se a solução respeita o Contract vigente.
@@ -52,12 +52,17 @@ cria hierarquia entre Builders.
    `check:types` e `test:unit`.
 9. Execute `check:architecture` e `test:integration` quando aplicáveis. Build
    não é exigido a cada fase ou retry.
-10. Reporte cada descoberta imediatamente ao Orchestrator, indicando o artefato
+10. Quando alterar um grupo de rotas HTTP, confirme o `.rest` correspondente em
+   `apps/server/rest-client/` com uma requisição rotulada por rota, parâmetros,
+   headers e body atuais, sem segredos.
+11. Quando alterar hooks de comportamento `use-*.ts`, crie ou confirme o teste
+   colocalizado `tests/use-*.test.ts`, salvo exceção explícita da Rule Pack.
+12. Reporte cada descoberta imediatamente à task principal, indicando o artefato
    correto para persistência.
-11. Encerre sem editar `spec.md`, `plan.md` ou `evaluation.md`; a persistência é
-   feita pelo Orchestrator no mesmo ciclo de decisão.
+13. Encerre sem editar `spec.md`, `plan.md` ou `evaluation.md`; a persistência é
+   feita pela task principal no mesmo ciclo de decisão.
 
-O Builder não cria subagentes. O Orchestrator cria todos os Builders e
+O Builder não cria subagentes. A task principal cria todos os Builders e
 coordena a integração de seus diffs.
 
 ## Divergências
@@ -68,7 +73,7 @@ coordena a integração de seus diffs.
 - Violação de Rule existente: corrija a implementação conforme a Rule; não
   duplique nem enfraqueça a Rule.
 - Lacuna documental: reporte imediatamente tipo, evidência, documento e ação
-  sugerida; o Orchestrator persiste a descoberta.
+  sugerida; a task principal persiste a descoberta.
 
 ## Restrições
 
@@ -77,7 +82,8 @@ coordena a integração de seus diffs.
 - Não marque tarefas, fases ou Spec como concluídas.
 - Não avalie o próprio trabalho.
 - Não implemente além dos critérios recebidos.
-- Não remova ou enfraqueça testes para fazer sensores passarem.
+- Não enfraqueça testes nem remova cobertura apenas para fazer sensores
+  passarem; remoções legítimas devem estar declaradas no escopo vigente.
 - Não use narrativa de execução como substituto de evidência.
 
 ## Saída
@@ -94,5 +100,5 @@ coordena a integração de seus diffs.
 - **Fidelidade Pencil/Web:** não aplicável | <nodes, viewports, estados e evidências>
 - **Lacunas documentais:** nenhuma | <documento, evidência e ação>
 - **Divergências:** nenhuma | <descrição>
-- **Riscos para o Judge:** nenhum | <descrição>
+- **Riscos para o Reviewer:** nenhum | <descrição>
 ```

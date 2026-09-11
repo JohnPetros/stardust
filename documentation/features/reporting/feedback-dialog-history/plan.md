@@ -557,7 +557,7 @@ validação remota da migration pelo MCP Supabase Dev.
 O primeiro veredito foi `failed` com JP-01–JP-05. Após as correções, a segunda
 avaliação read-only foi `accepted`; nenhum Builder foi criado nesta task. O
 Judge especializado não estava disponível como tipo invocável nesta sessão,
-então foi usado um agente padrão com o protocolo do `judge-plan-agent`.
+então foi usado um agente padrão com o protocolo legado de integridade do Plan.
 
 ## Histórico do Judge Implementation Final
 

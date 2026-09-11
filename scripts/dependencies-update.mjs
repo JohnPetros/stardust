@@ -1,6 +1,8 @@
 import { execFileSync } from 'node:child_process'
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, relative } from 'node:path'
+import { tmpdir } from 'node:os'
+import { pathToFileURL } from 'node:url'
 
 const NCU_VERSION = '19.1.1'
 const REPORT_PATH =
@@ -9,6 +11,10 @@ const MARKDOWN_PATH =
   process.env.DEPENDENCIES_UPDATE_MARKDOWN ?? 'dependencies-update-pr.md'
 const BASE_REF = process.env.DEPENDENCIES_UPDATE_BASE_REF
 const isDryRun = process.env.DEPENDENCIES_UPDATE_DRY_RUN === '1'
+const NCU_CACHE_FILE = join(
+  process.env.DEPENDENCIES_UPDATE_CACHE_DIR ?? process.env.RUNNER_TEMP ?? tmpdir(),
+  'npm-check-updates-cache.json',
+)
 
 const dependencySections = [
   'dependencies',
@@ -16,21 +22,6 @@ const dependencySections = [
   'optionalDependencies',
   'peerDependencies',
 ]
-
-const dependencyGroups = [
-  {
-    packages: [
-      'react-router',
-      '@react-router/dev',
-      '@react-router/express',
-      '@react-router/node',
-      '@react-router/serve',
-    ],
-    representative: 'react-router',
-  },
-]
-
-const groupedPackageNames = dependencyGroups.flatMap((group) => group.packages)
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, 'utf8'))
@@ -76,74 +67,27 @@ function dependencyRanges(manifest) {
   return ranges
 }
 
-function versionNumber(version) {
-  return version.match(/\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?/)?.[0] ?? null
-}
-
-function versionWithExistingRange(current, target) {
-  const targetNumber = versionNumber(target)
-  if (!targetNumber) return current
-
-  if (current.startsWith('^')) return `^${targetNumber}`
-  if (current.startsWith('~')) return `~${targetNumber}`
-  return targetNumber
-}
-
-function synchronizeDependencyGroups(manifestPaths, eligibleUpdates) {
-  for (const group of dependencyGroups) {
-    const groupUpdates = eligibleUpdates.filter((update) =>
-      group.packages.includes(update.package),
-    )
-    const representativeUpdate =
-      groupUpdates.find((update) => update.package === group.representative) ??
-      groupUpdates[0]
-    if (!representativeUpdate) continue
-
-    for (const manifestPath of manifestPaths) {
-      const manifest = readJson(manifestPath)
-      let changed = false
-
-      for (const section of dependencySections) {
-        for (const packageName of group.packages) {
-          const current = manifest[section]?.[packageName]
-          if (typeof current !== 'string') continue
-
-          const next = versionWithExistingRange(current, representativeUpdate.to)
-          if (next !== current) {
-            manifest[section][packageName] = next
-            changed = true
-          }
-        }
-      }
-
-      for (const packageName of group.packages) {
-        const current = manifest.overrides?.[packageName]
-        if (typeof current !== 'string') continue
-
-        const next = versionWithExistingRange(current, representativeUpdate.to)
-        if (next !== current) {
-          manifest.overrides[packageName] = next
-          changed = true
-        }
-      }
-
-      if (changed) {
-        writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`)
-      }
-    }
-  }
-}
-
 function runNcu(args, options = {}) {
-  return execFileSync('npx', ['--yes', `npm-check-updates@${NCU_VERSION}`, ...args], {
-    cwd: options.cwd ?? process.cwd(),
-    encoding: 'utf8',
-    stdio: options.capture ? ['ignore', 'pipe', 'inherit'] : 'inherit',
-    env: {
-      ...process.env,
-      NO_COLOR: '1',
+  return execFileSync(
+    'npx',
+    [
+      '--yes',
+      `npm-check-updates@${NCU_VERSION}`,
+      '--cache',
+      '--cacheFile',
+      NCU_CACHE_FILE,
+      ...args,
+    ],
+    {
+      cwd: options.cwd ?? process.cwd(),
+      encoding: 'utf8',
+      stdio: options.capture ? ['ignore', 'pipe', 'inherit'] : 'inherit',
+      env: {
+        ...process.env,
+        NO_COLOR: '1',
+      },
     },
-  })
+  )
 }
 
 function findEligibleUpdates(manifestPaths, before) {
@@ -296,92 +240,103 @@ Todas as validações obrigatórias passaram para o estado publicado nesta branc
 `
 }
 
-const manifestPaths = listWorkspaceManifests()
-const before = new Map(
-  manifestPaths.map((manifestPath) => [manifestPath, readJson(manifestPath)]),
-)
-const eligibleUpdates = findEligibleUpdates(manifestPaths, before)
+export function doctorTestFor(manifestPath, manifest, repositoryRoot) {
+  let command
 
-if (isDryRun) {
-  const report = {
-    ncuVersion: NCU_VERSION,
-    eligible: eligibleUpdates,
-    applied: [],
-    rejected: [],
+  if (manifestPath === 'package.json') {
+    command = `npm --prefix "${repositoryRoot}" run check:dependencies-update:doctor`
+  } else {
+    const workspaceRoot = join(repositoryRoot, dirname(manifestPath))
+    const scripts = ['check:code', 'check:types', 'test:unit'].filter(
+      (script) => manifest.scripts?.[script],
+    )
+    command =
+      scripts
+        .map((script) => `npm --prefix "${workspaceRoot}" run ${script}`)
+        .join(' && ') || 'node --eval ""'
   }
-  writeFileSync(REPORT_PATH, `${JSON.stringify(report, null, 2)}\n`)
-  process.stdout.write(`Dry run found ${eligibleUpdates.length} eligible update(s).\n`)
-  process.exit(0)
-}
-
-if (eligibleUpdates.length === 0) {
-  const committedUpdates = BASE_REF
-    ? findCommittedUpdates(BASE_REF, manifestPaths, before)
-    : []
-  const report = {
-    ncuVersion: NCU_VERSION,
-    eligible: committedUpdates,
-    applied: committedUpdates,
-    rejected: [],
-  }
-  writeFileSync(REPORT_PATH, `${JSON.stringify(report, null, 2)}\n`)
-  writeFileSync(MARKDOWN_PATH, renderMarkdown(report))
-  process.stdout.write(
-    committedUpdates.length > 0
-      ? `Recovered ${committedUpdates.length} committed update(s) from ${BASE_REF}.\n`
-      : 'No eligible patch or minor updates were found.\n',
-  )
-  process.exit(0)
-}
-
-const repositoryRoot = process.cwd()
-const doctorInstall = `npm --prefix "${repositoryRoot}" install --ignore-scripts --prefer-offline --no-audit --no-fund`
-
-function doctorTestFor(manifestPath) {
-  const workspace = manifestPath === 'package.json' ? null : before.get(manifestPath)?.name
-  const command = workspace
-    ? [
-        `npm --prefix "${repositoryRoot}" run check:code --workspace="${workspace}"`,
-        `npm --prefix "${repositoryRoot}" run check:types --workspace="${workspace}"`,
-        `npm --prefix "${repositoryRoot}" run test:unit --workspace="${workspace}"`,
-      ].join(' && ')
-    : `npm --prefix "${repositoryRoot}" run check:dependencies-update:doctor`
 
   return `env NODE_OPTIONS=--max-old-space-size=8192 TURBO_CONCURRENCY=1 ${command}`
 }
 
-synchronizeDependencyGroups(manifestPaths, eligibleUpdates)
+function main() {
+  const manifestPaths = listWorkspaceManifests()
+  const before = new Map(
+    manifestPaths.map((manifestPath) => [manifestPath, readJson(manifestPath)]),
+  )
+  const eligibleUpdates = findEligibleUpdates(manifestPaths, before)
 
-for (const manifestPath of manifestPaths) {
-  runNcu([
-    '--doctor',
-    '--upgrade',
-    '--target',
-    'minor',
-    '--cooldown',
-    '7d',
-    '--reject',
-    groupedPackageNames.join(','),
-    '--doctorInstall',
-    doctorInstall,
-    '--doctorTest',
-    doctorTestFor(manifestPath),
-  ], { cwd: dirname(manifestPath) })
+  if (isDryRun) {
+    const report = {
+      ncuVersion: NCU_VERSION,
+      eligible: eligibleUpdates,
+      applied: [],
+      rejected: [],
+    }
+    writeFileSync(REPORT_PATH, `${JSON.stringify(report, null, 2)}\n`)
+    process.stdout.write(`Dry run found ${eligibleUpdates.length} eligible update(s).\n`)
+    return
+  }
+
+  if (eligibleUpdates.length === 0) {
+    const committedUpdates = BASE_REF
+      ? findCommittedUpdates(BASE_REF, manifestPaths, before)
+      : []
+    const report = {
+      ncuVersion: NCU_VERSION,
+      eligible: committedUpdates,
+      applied: committedUpdates,
+      rejected: [],
+    }
+    writeFileSync(REPORT_PATH, `${JSON.stringify(report, null, 2)}\n`)
+    writeFileSync(MARKDOWN_PATH, renderMarkdown(report))
+    process.stdout.write(
+      committedUpdates.length > 0
+        ? `Recovered ${committedUpdates.length} committed update(s) from ${BASE_REF}.\n`
+        : 'No eligible patch or minor updates were found.\n',
+    )
+    return
+  }
+
+  const repositoryRoot = process.cwd()
+  const doctorInstall = `npm --prefix "${repositoryRoot}" install --ignore-scripts --prefer-offline --no-audit --no-fund`
+
+  for (const manifestPath of manifestPaths) {
+    runNcu(
+      [
+        '--doctor',
+        '--upgrade',
+        '--target',
+        'minor',
+        '--cooldown',
+        '7d',
+        '--doctorInstall',
+        doctorInstall,
+        '--doctorTest',
+        doctorTestFor(manifestPath, before.get(manifestPath), repositoryRoot),
+      ],
+      { cwd: dirname(manifestPath) },
+    )
+  }
+
+  const after = new Map(
+    manifestPaths.map((manifestPath) => [manifestPath, readJson(manifestPath)]),
+  )
+  const { applied, rejected } = classifyUpdates(eligibleUpdates, after)
+  const report = {
+    ncuVersion: NCU_VERSION,
+    eligible: eligibleUpdates,
+    applied,
+    rejected,
+  }
+
+  writeFileSync(REPORT_PATH, `${JSON.stringify(report, null, 2)}\n`)
+  writeFileSync(MARKDOWN_PATH, renderMarkdown(report))
+  process.stdout.write(
+    `Applied ${applied.length} update(s); deferred ${rejected.length} update(s).\n`,
+  )
 }
 
-const after = new Map(
-  manifestPaths.map((manifestPath) => [manifestPath, readJson(manifestPath)]),
-)
-const { applied, rejected } = classifyUpdates(eligibleUpdates, after)
-const report = {
-  ncuVersion: NCU_VERSION,
-  eligible: eligibleUpdates,
-  applied,
-  rejected,
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main()
 }
-
-writeFileSync(REPORT_PATH, `${JSON.stringify(report, null, 2)}\n`)
-writeFileSync(MARKDOWN_PATH, renderMarkdown(report))
-process.stdout.write(
-  `Applied ${applied.length} update(s); deferred ${rejected.length} update(s).\n`,
-)

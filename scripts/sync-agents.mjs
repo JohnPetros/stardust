@@ -69,7 +69,7 @@ function parseAgent(file) {
 function readOnly(name) {
   return (
     name.startsWith('judge-') ||
-    ['searcher-agent', 'spec-reviewer-agent', 'implementation-reviewer-agent'].includes(
+    ['spec-reviewer-agent', 'implementation-reviewer-agent'].includes(
       name,
     )
   )

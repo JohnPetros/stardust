@@ -5,11 +5,13 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 
 ## Regras de execução do SDD
 
-**Arquivo principal:** `/documentation/sdd.md`
-**Índice operacional:** `/documentation/rules/sdd-rules.md`
+**Arquivo principal e única fonte normativa:** `/documentation/sdd.md`
 **Quando consultar:**
 
 - Ao criar ou revisar uma Spec técnica.
+- O Spec Reviewer executa um único gate antes do planejamento (com retries da
+  mesma revisão quando houver findings) e avalia somente compatibilidade com
+  Architecture e Rules.
 - Ao criar ou executar um Plan.
 - Ao implementar uma Spec diretamente.
 - Ao executar sensores e concluir uma implementação.
@@ -18,9 +20,8 @@ Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 - Ao criar ou atualizar `evaluation.md`.
 - Ao separar sensores locais dos checks e do build do CI.
 
-O `sdd-rules.md` contém o resumo operacional e aponta para a fonte normativa
-completa em `documentation/sdd.md`. Em caso de conflito, `documentation/sdd.md`
-prevalece.
+Consulte `documentation/sdd.md` para o fluxo completo, contratos, estados,
+papéis, artefatos, sensores e critérios de conclusão.
 
 ## Regras de Convenções de Código
 

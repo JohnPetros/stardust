@@ -105,7 +105,7 @@ Pencil não atendiam ao novo gate obrigatório.
 ## Judge Plan — primeira avaliação
 
 - **Veredito:** `failed`.
-- **Agente:** avaliação read-only com o protocolo do `judge-plan-agent`; o tipo
+- **Agente:** avaliação read-only com o protocolo legado de integridade do Plan; o tipo
   especializado não estava disponível como ferramenta nesta sessão.
 - **Escopo:** alinhamento, fases/dependências, RF/CA, paths, paralelismo,
   sensores, migration, ownership e estados.

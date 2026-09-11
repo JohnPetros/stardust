@@ -54,4 +54,35 @@ describe('Fetch Star Controller', () => {
     expect(http.send).toHaveBeenCalledWith(starDto)
     expect(response).toBe(restResponse)
   })
+
+  it('should forward a route that identifies the star only by id', async () => {
+    const routeParams = { starId: 'star-id-123' }
+    const starDto = StarsFaker.fakeDto({ id: routeParams.starId })
+    const restResponse = mock<RestResponse>()
+
+    http.getRouteParams.mockReturnValue(routeParams)
+    http.send.mockReturnValue(restResponse)
+    const executeSpy = jest
+      .spyOn(GetStarUseCase.prototype, 'execute')
+      .mockResolvedValue(starDto)
+
+    const response = await controller.handle(http)
+
+    expect(executeSpy).toHaveBeenCalledWith(routeParams)
+    expect(http.send).toHaveBeenCalledWith(starDto)
+    expect(response).toBe(restResponse)
+  })
+
+  it('should propagate use case errors without sending a response', async () => {
+    const routeParams = { starSlug: 'missing-star' }
+    const error = new Error('Star not found')
+
+    http.getRouteParams.mockReturnValue(routeParams)
+    jest.spyOn(GetStarUseCase.prototype, 'execute').mockRejectedValue(error)
+
+    await expect(controller.handle(http)).rejects.toThrow(error)
+
+    expect(http.statusOk).not.toHaveBeenCalled()
+    expect(http.send).not.toHaveBeenCalled()
+  })
 })

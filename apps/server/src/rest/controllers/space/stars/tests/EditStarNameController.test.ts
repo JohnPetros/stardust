@@ -55,4 +55,20 @@ describe('Edit Star Name Controller', () => {
     expect(http.send).toHaveBeenCalledWith(starDto)
     expect(response).toBe(restResponse)
   })
+
+  it('should propagate use case errors without sending a response', async () => {
+    const routeParams = { starId: IdFaker.fake().value }
+    const body = { name: 'Updated Star Name' }
+    const error = new Error('Could not update star name')
+
+    http.getRouteParams.mockReturnValue(routeParams)
+    http.getBody.mockResolvedValue(body)
+    http.statusOk.mockReturnValue(http)
+    jest.spyOn(EditStarNameUseCase.prototype, 'execute').mockRejectedValue(error)
+
+    await expect(controller.handle(http)).rejects.toThrow(error)
+
+    expect(http.statusOk).not.toHaveBeenCalled()
+    expect(http.send).not.toHaveBeenCalled()
+  })
 })

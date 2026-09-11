@@ -7,7 +7,7 @@ export class InsigniasFaker {
   static fake(baseDto?: Partial<InsigniaDto>): Insignia {
     return Insignia.create({
       id: faker.string.uuid(),
-      name: faker.person.firstName(),
+      name: faker.person.fullName(),
       image: `${faker.image.avatar()}.jpg`,
       price: faker.number.int({ max: 100 }),
       role: 'engineer',
