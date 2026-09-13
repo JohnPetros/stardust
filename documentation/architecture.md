@@ -22,6 +22,8 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 
 **MCP**: Hono `/mcp` → API key auth + verificação de insignia → Toolkit/Tool → Use Case
 
+**Rate limiting transversal**: CORS → limite por IP → Supabase/autenticação → limite por conta → rota REST ou MCP. O Core expõe somente o port `RateLimiterProvider`; o Server usa um adapter ioredis dedicado com janela fixa, política geral/sensível, fail-open e circuit breaker local. O IP e a conta são dimensões independentes e a identidade usada nas chaves é SHA-256 opaca.
+
 **Queue**: Event Dispatcher → Inngest → Job.handle(amqp) → Use Case
 
 **Product analytics**: Use cases confirmam fatos de negócio → publicam eventos de domínio → Inngest `AnalyticsFunctions` normaliza payloads e usa `context.event.id` como `$insert_id` → `TrackAnalyticsEventJob` executa `ServerAnalyticsProvider.trackEvent(...)` dentro de `amqp.run(...)` → PostHog. No browser, `ClientProviders` inicializa PostHog com bootstrap da conta autenticada, captura pageviews/session recording e `AuthContextProvider` identifica login/cadastro social ou reseta no logout.
@@ -45,6 +47,7 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 - **MCP Toolkit** no server para compor tools com `inputSchema`/`outputSchema` na borda e delegar comportamento ao Core.
 - **RestClient** como adapter sobre Axios/Fetch para chamadas HTTP externas.
 - **Providers de Analytics** para isolar SDKs/APIs externas como PostHog atrás de contratos do Core (`ServerAnalyticsProvider`, `ClientAnalyticsProvider`, `AnalyticsReportingProvider`).
+- **RateLimiterProvider** no Core, implementado por `IORedisRateLimiterProvider` no Server; o middleware Hono aplica IP antes da autenticação e conta após identidade REST/API key verificada.
 - **ProvisionContext no Studio** para resolver providers client-side de infraestrutura, como o upload direto por URL assinada, sem misturar essa responsabilidade no dominio nem no widget.
 - **Job** para tarefas assíncronas, agendadas ou falháveis (e-mail, relatórios).
 - **Factory Functions** no lugar de `new Class()` para Serviços e Controllers.
