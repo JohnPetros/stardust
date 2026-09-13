@@ -12,13 +12,20 @@ import {
 } from '@/rest/controllers/auth'
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import { HonoHttp } from '../HonoHttp'
+import type { RateLimitMiddleware } from './RateLimitMiddleware'
 
 export class AuthMiddleware {
   async verifyAuthentication(context: Context, next: Next) {
     const authService = new SupabaseAuthService(context.get('supabase'))
     const controller = new VerifyAuthenticationController(authService)
     const http = new HonoHttp(context, next)
-    await controller.handle(http)
+    const response = await controller.handle(http)
+    context.set('account', response.body)
+    const rateLimiter = (context as Context<any>).get('rateLimiter') as
+      | RateLimitMiddleware
+      | undefined
+    if (rateLimiter) return rateLimiter.limitByAccount(context, next)
+    return next()
   }
 
   async verifyGodAccount(context: Context, next: Next) {
@@ -49,6 +56,10 @@ export class AuthMiddleware {
     }
 
     context.set('account', accountDto)
-    await next()
+    const rateLimiter = (context as Context<any>).get('rateLimiter') as
+      | RateLimitMiddleware
+      | undefined
+    if (rateLimiter) return rateLimiter.limitByAccount(context, next)
+    return next()
   }
 }
