@@ -4,7 +4,7 @@ spec: ./spec.md
 spec_revision: 1
 status: completed
 base_commit: 08cf4fe33e91becf68bc07dc2818c0af1d34b6c2
-evaluated_commit: working tree
+evaluated_commit: b8f933905ac281125705df578b0d650301578610
 last_updated_at: 2026-09-12
 ---
 
@@ -98,8 +98,13 @@ last_updated_at: 2026-09-12
 ## Conclusão
 
 - Estado: `completed`
-- Próxima ação: handoff para `create-pr`; a integração completa foi executada
-  com Supabase local e permanece warning por OOM do Jest.
+- Commits da implementação: `09cb600e3`, `8aab90e04`, `28fd472eb`,
+  `175daf2df` e `b8f933905`.
+- Pull Request: [#592](https://github.com/JohnPetros/stardust/pull/592).
+- CI do PR: todos os checks passaram, incluindo Core, Server, Studio, Web,
+  integração, builds, complexidade e as quatro revisões Hermes.
+- A integração completa foi executada com Supabase local e passou no CI; a
+  execução local permanece registrada como warning por OOM do Jest.
 
 ## Registro final
 
@@ -111,3 +116,6 @@ last_updated_at: 2026-09-12
   arquitetura, integridade, complexidade e builds Core/Server passaram. A suíte
   integral do Server continua warning por OOM; as três suítes canônicas passaram
   com 10 testes.
+- **2026-09-12 — Commit e PR:** `commit-code` criou cinco commits semânticos;
+  `create-pr` publicou o [PR #592](https://github.com/JohnPetros/stardust/pull/592),
+  e todos os checks obrigatórios do CI passaram.
