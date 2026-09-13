@@ -7,4 +7,5 @@ export const HTTP_HEADERS = {
   xItemsPerPage: 'X-Items-Per-Page',
   xPage: 'X-Page',
   location: 'Location',
+  retryAfter: 'Retry-After',
 } as const
