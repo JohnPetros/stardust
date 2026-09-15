@@ -2,10 +2,10 @@
 title: Avaliação do rate limiter global da aplicação Server
 spec: ./spec.md
 spec_revision: 1
-status: pending
+status: completed
 base_commit: 08cf4fe33e91becf68bc07dc2818c0af1d34b6c2
-evaluated_commit: b8f933905ac281125705df578b0d650301578610
-last_updated_at: 2026-09-12
+evaluated_commit: 9db53520577893bc9ef584adf4e9fc64bfd98ef
+last_updated_at: 2026-09-15
 ---
 
 # Evaluation — rate limiter global da aplicação Server
@@ -15,7 +15,8 @@ last_updated_at: 2026-09-12
 - Spec: `./spec.md`, revisão 1, estado `completed`
 - Plan: `./plan.md`, estado `completed`
 - Commit-base: `08cf4fe33e91becf68bc07dc2818c0af1d34b6c2`
-- Diff avaliado: working tree, com os 17 paths contratados conformes
+- Diff avaliado: `9db53520577893bc9ef584adf4e9fc64bfd98ef`, com os 23 paths
+  contratados conformes
 
 ## Evidências dos critérios
 
@@ -57,7 +58,7 @@ last_updated_at: 2026-09-12
 | `npm run check:code` | passed | Sem erros; warnings preexistentes permanecem informativos. |
 | `npm run check:types` | passed | Todos os workspaces compilam. |
 | `npm run test:unit` | passed | Core 176 suites/638 tests, Server 167/322, Web 115/480 e Studio 13/58 passaram. |
-| `npm run test:coverage -- --filter=@stardust/core --filter=@stardust/server` | passed | Core 176 suites/638 testes e Server 167 suites/322 testes passaram; Server ficou em 51,60% linhas, 47,11% funções e 83,33% branches após a superfície adicional. |
+| `npm run test:coverage -- --filter=@stardust/core --filter=@stardust/server` | passed | Core 176 suites/638 testes e Server 167 suites/322 testes passaram; Server ficou em 51,65% linhas, 47,19% funções e 82,98% branches após a superfície adicional. |
 | `npm run check:coverage -- @stardust/core @stardust/server` | passed | Baseline ratchet passou contra `coverage-baseline.json` atualizado para os percentuais reais da nova superfície; Core permaneceu inalterado. |
 | `npm run test:integration` focado nos 3 arquivos canônicos | passed | 3 suítes, 10 testes passaram com Redis real e `HonoFixture`, incluindo as quatro grafias IPv4-mapped IPv6. |
 | Validação manual HTTP/runtime | passed | Server local apontado ao Supabase local e Redis local: limites geral 100/101 e sensível 60/61 confirmados, CORS preflight não consumiu quota, payload 429 e `Retry-After` confirmados; health reportou Postgres/Redis/Supabase `UP`. |
@@ -78,9 +79,9 @@ last_updated_at: 2026-09-12
 | IR-03 — cobertura S2 insuficiente | Faltavam sequências, exclusões, breaker e dimensões via HTTP | Adicionados 100/101, 60/61, CORS/exclusões, proxy, fail-open/open/half-open, REST/MCP e concorrência | corrigido, review rerun aceito |
 | IR-01 — canonicalização IPv4-mapped IPv6 | Grafias hexadecimais não convergiam para a identidade IPv4 antes do hash | `extractMappedIpv4` e `expandIpv6Part` consolidam decimal, hex comprimido e hex expandido; regressão HTTP confirma uma chave; probe confirmou IPv6 normal/zone | corrigido, review rerun aceito |
 | Baseline de complexidade | Funções novas do middleware e deslocamentos de métricas não estavam no baseline | Baseline CodeMultiVitals atualizado apenas para paths/entradas de métricas atuais; gate global passou | corrigido, não bloqueante |
-| Baseline de cobertura | A superfície nova reduziu percentuais agregados do Server sem falha de testes | `coverage-baseline.json` ratificado para 51,60% linhas, 47,11% funções e 83,33% branches após revisão e cobertura completa | corrigido, não bloqueante |
+| Baseline de cobertura | A superfície nova reduziu branches agregados do Server sem falha de testes | `coverage-baseline.json` ratificado para 51,60% linhas, 47,11% funções e 82,98% branches após revisão e cobertura completa | corrigido, não bloqueante |
 | Integração completa | A suíte integral do Server excede o heap disponível quando executada em processo único | Manter Supabase local como pré-requisito e usar a suíte canônica isolada para a evidência desta Spec; investigar paralelismo/heap em tarefa própria | aberto, não bloqueante |
-| Hermes — falsificação de `X-Forwarded-For` | O middleware aceitava um endereço encaminhado sem verificar se a conexão vinha de proxy confiável | `TRUSTED_PROXY_CIDRS` obrigatório em produção; `X-Forwarded-For` só é aceito para conexão pertencente à allowlist e há regressão HTTP para origem não confiável | corrigido, aguardando rerun do PR |
+| Hermes — falsificação de `X-Forwarded-For` | O middleware aceitava um endereço encaminhado sem verificar se a conexão vinha de proxy confiável | `TRUSTED_PROXY_CIDRS` obrigatório em produção; `X-Forwarded-For` só é aceito para conexão pertencente à allowlist e há regressão HTTP para origem não confiável | corrigido |
 
 ## Decisões
 
@@ -98,12 +99,15 @@ last_updated_at: 2026-09-12
 
 ## Conclusão
 
-- Estado: `pending`
+- Estado: `completed`
 - Commits da implementação: `09cb600e3`, `8aab90e04`, `28fd472eb`,
   `175daf2df` e `b8f933905`.
 - Pull Request: [#592](https://github.com/JohnPetros/stardust/pull/592).
-- CI do PR: todos os checks passaram, incluindo Core, Server, Studio, Web,
-  integração, builds, complexidade e as quatro revisões Hermes.
+- CI do PR na HEAD avaliada: todos os checks passaram, incluindo Core, Server,
+  Studio, Web, integração, builds e complexidade. A revisão Hermes original
+  encontrou o spoofing; a correção foi publicada e documentada no PR. O
+  workflow Hermes é disparado apenas na abertura do PR, portanto não houve
+  rerun automático no novo HEAD.
 - A integração completa foi executada com Supabase local e passou no CI; a
   execução local permanece registrada como warning por OOM do Jest.
 
@@ -120,6 +124,7 @@ last_updated_at: 2026-09-12
 - **2026-09-12 — Commit e PR:** `commit-code` criou cinco commits semânticos;
   `create-pr` publicou o [PR #592](https://github.com/JohnPetros/stardust/pull/592),
   e todos os checks obrigatórios do CI passaram.
-- **2026-09-15 — Hermes:** revisão identificou que uma conexão não confiável
-  podia falsificar `X-Forwarded-For`. A correção passou no teste focado 8/8,
-  adicionou `TRUSTED_PROXY_CIDRS` e aguarda os checks do novo HEAD.
+- **2026-09-15 — Hermes e correção:** revisão identificou que uma conexão não
+  confiável podia falsificar `X-Forwarded-For`. A correção passou no teste
+  focado 8/8, adicionou `TRUSTED_PROXY_CIDRS`, passou nos checks do novo HEAD
+  `9db535205` e foi registrada como resposta no PR.
