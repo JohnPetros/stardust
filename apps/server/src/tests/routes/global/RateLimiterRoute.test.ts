@@ -144,6 +144,26 @@ describe('global rate limiter HTTP contract', () => {
     )
   })
 
+  it('ignores a forwarded address received from an untrusted connection', async () => {
+    const provider = new CountingRateLimiter()
+    const fixture = new HonoFixture(provider, createTelemetry(), undefined, [
+      '192.0.2.0/24',
+    ])
+    await fixture.setup()
+    fixture.hono.get('/rate-limit-untrusted-forwarded-for', (context) =>
+      context.text('handler'),
+    )
+
+    await request(fixture.server)
+      .get('/rate-limit-untrusted-forwarded-for')
+      .set('X-Forwarded-For', '198.51.100.10')
+    await request(fixture.server)
+      .get('/rate-limit-untrusted-forwarded-for')
+      .set('X-Forwarded-For', '198.51.100.11')
+
+    expect(provider.calls[0]?.key).toBe(provider.calls[1]?.key)
+  })
+
   it('fails open, reports one telemetry event per outage and probes recovery', async () => {
     const provider = new FailingRateLimiter()
     const telemetry = createTelemetry()

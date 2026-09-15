@@ -31,8 +31,14 @@ export class HonoFixture {
     rateLimiterProvider: RateLimiterProvider = new AllowAllRateLimiterProvider(),
     telemetryProvider: TelemetryProvider = noopTelemetryProvider,
     rateLimitClock?: RateLimitClock,
+    trustedProxyCidrs?: readonly string[],
   ) {
-    this.app = new HonoApp(rateLimiterProvider, telemetryProvider, rateLimitClock)
+    this.app = new HonoApp(
+      rateLimiterProvider,
+      telemetryProvider,
+      rateLimitClock,
+      trustedProxyCidrs,
+    )
     this.server = createAdaptorServer({ fetch: this.app.hono.fetch })
   }
 

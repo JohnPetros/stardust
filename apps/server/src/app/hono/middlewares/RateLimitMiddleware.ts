@@ -32,28 +32,84 @@ type RateLimitPolicy = typeof GENERAL_POLICY | typeof SENSITIVE_POLICY
 export type RateLimitClock = () => number
 type ConnectionResolver = (context: Context) => string | null | undefined
 
+const DEFAULT_TRUSTED_PROXY_CIDRS = [
+  '127.0.0.1/32',
+  '::1/128',
+  '::ffff:127.0.0.1/128',
+] as const
+
 export type RateLimitMiddlewareOptions = {
   rateLimiterProvider: RateLimiterProvider
   telemetryProvider: TelemetryProvider
   clock?: RateLimitClock
   connectionResolver?: ConnectionResolver
+  trustedProxyCidrs?: readonly string[]
 }
 
 type BreakerState = 'closed' | 'open' | 'half-open'
 
-const defaultConnectionResolver: ConnectionResolver = (context) => {
-  const forwardedFor = context.req.header('X-Forwarded-For')
-  const forwardedIps = forwardedFor
-    ?.split(',')
-    .map((value) => value.trim())
-    .filter((value) => net.isIP(value) !== 0)
-  if (forwardedIps?.length) return forwardedIps.at(-1)
+const createConnectionResolver = (
+  trustedProxyCidrs: readonly string[],
+): ConnectionResolver => {
+  const trustedProxyBlockList = createTrustedProxyBlockList(trustedProxyCidrs)
 
-  try {
-    return getConnInfo(context).remote.address
-  } catch {
-    return undefined
+  return (context) => {
+    let remoteAddress: string | undefined
+    try {
+      remoteAddress = getConnInfo(context).remote.address
+    } catch {
+      return undefined
+    }
+
+    if (!remoteAddress || !isTrustedProxy(remoteAddress, trustedProxyBlockList))
+      return remoteAddress
+
+    const forwardedFor = context.req.header('X-Forwarded-For')
+    const forwardedIps = forwardedFor
+      ?.split(',')
+      .map((value) => value.trim())
+      .filter((value) => net.isIP(value) !== 0)
+    if (forwardedIps?.length) return forwardedIps.at(-1)
+
+    return remoteAddress
   }
+}
+
+const createTrustedProxyBlockList = (trustedProxyCidrs: readonly string[]) => {
+  const blockList = new net.BlockList()
+  const cidrs = trustedProxyCidrs.length ? trustedProxyCidrs : DEFAULT_TRUSTED_PROXY_CIDRS
+
+  for (const cidr of cidrs) {
+    const [address, prefix = ''] = cidr.split('/')
+    const family = net.isIP(address)
+    const prefixLength = prefix ? Number(prefix) : family === 4 ? 32 : 128
+    const maxPrefixLength = family === 4 ? 32 : 128
+
+    if (
+      family === 0 ||
+      !Number.isInteger(prefixLength) ||
+      prefixLength < 0 ||
+      prefixLength > maxPrefixLength
+    )
+      continue
+
+    if (family === 4) {
+      blockList.addSubnet(address, prefixLength, 'ipv4')
+      blockList.addSubnet(`::ffff:${address}`, prefixLength + 96, 'ipv6')
+    } else {
+      blockList.addSubnet(address, prefixLength, 'ipv6')
+    }
+  }
+
+  return blockList
+}
+
+const isTrustedProxy = (remoteAddress: string, blockList: net.BlockList): boolean => {
+  const address = remoteAddress.replace(/^\[|\]$/g, '').split('%')[0]
+  const family = net.isIP(address)
+  if (family === 0) return false
+
+  return blockList.check(address, family === 4 ? 'ipv4' : 'ipv6')
 }
 
 export class RateLimitMiddleware {
@@ -92,7 +148,9 @@ export class RateLimitMiddleware {
     }
 
     this.clock = this.options.clock ?? (() => Date.now())
-    this.connectionResolver = this.options.connectionResolver ?? defaultConnectionResolver
+    this.connectionResolver =
+      this.options.connectionResolver ??
+      createConnectionResolver(this.options.trustedProxyCidrs ?? [])
   }
 
   readonly limitByIp = async (

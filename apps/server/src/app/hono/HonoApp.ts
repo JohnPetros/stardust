@@ -86,13 +86,15 @@ export class HonoApp {
     rateLimiterProvider: RateLimiterProvider = new IORedisRateLimiterProvider(),
     telemetryProvider: TelemetryProvider = new SentryTelemetryProvider(),
     rateLimitClock?: RateLimitClock,
+    trustedProxyCidrs: readonly string[] = ENV.trustedProxyCidrs,
   ) {
     this.telemetryProvider = telemetryProvider
-    this.rateLimiterMiddleware = new RateLimitMiddleware(
+    this.rateLimiterMiddleware = new RateLimitMiddleware({
       rateLimiterProvider,
       telemetryProvider,
-      rateLimitClock,
-    )
+      clock: rateLimitClock,
+      trustedProxyCidrs,
+    })
   }
 
   async startServer(port = ENV.port) {

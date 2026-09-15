@@ -2,7 +2,7 @@
 title: Avaliação do rate limiter global da aplicação Server
 spec: ./spec.md
 spec_revision: 1
-status: completed
+status: pending
 base_commit: 08cf4fe33e91becf68bc07dc2818c0af1d34b6c2
 evaluated_commit: b8f933905ac281125705df578b0d650301578610
 last_updated_at: 2026-09-12
@@ -80,6 +80,7 @@ last_updated_at: 2026-09-12
 | Baseline de complexidade | Funções novas do middleware e deslocamentos de métricas não estavam no baseline | Baseline CodeMultiVitals atualizado apenas para paths/entradas de métricas atuais; gate global passou | corrigido, não bloqueante |
 | Baseline de cobertura | A superfície nova reduziu percentuais agregados do Server sem falha de testes | `coverage-baseline.json` ratificado para 51,60% linhas, 47,11% funções e 83,33% branches após revisão e cobertura completa | corrigido, não bloqueante |
 | Integração completa | A suíte integral do Server excede o heap disponível quando executada em processo único | Manter Supabase local como pré-requisito e usar a suíte canônica isolada para a evidência desta Spec; investigar paralelismo/heap em tarefa própria | aberto, não bloqueante |
+| Hermes — falsificação de `X-Forwarded-For` | O middleware aceitava um endereço encaminhado sem verificar se a conexão vinha de proxy confiável | `TRUSTED_PROXY_CIDRS` obrigatório em produção; `X-Forwarded-For` só é aceito para conexão pertencente à allowlist e há regressão HTTP para origem não confiável | corrigido, aguardando rerun do PR |
 
 ## Decisões
 
@@ -97,7 +98,7 @@ last_updated_at: 2026-09-12
 
 ## Conclusão
 
-- Estado: `completed`
+- Estado: `pending`
 - Commits da implementação: `09cb600e3`, `8aab90e04`, `28fd472eb`,
   `175daf2df` e `b8f933905`.
 - Pull Request: [#592](https://github.com/JohnPetros/stardust/pull/592).
@@ -119,3 +120,6 @@ last_updated_at: 2026-09-12
 - **2026-09-12 — Commit e PR:** `commit-code` criou cinco commits semânticos;
   `create-pr` publicou o [PR #592](https://github.com/JohnPetros/stardust/pull/592),
   e todos os checks obrigatórios do CI passaram.
+- **2026-09-15 — Hermes:** revisão identificou que uma conexão não confiável
+  podia falsificar `X-Forwarded-For`. A correção passou no teste focado 8/8,
+  adicionou `TRUSTED_PROXY_CIDRS` e aguarda os checks do novo HEAD.

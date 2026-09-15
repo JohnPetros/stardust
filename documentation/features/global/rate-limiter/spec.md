@@ -82,9 +82,10 @@ a própria Issue acrescida das decisões confirmadas no Grilling de 2026-09-11.
 ## Premissas operacionais aprovadas
 
 - O Traefik é o único ponto de entrada público do container Server e sanitiza a
-  cadeia encaminhada. O middleware usa a entrada mais à direita de
-  `X-Forwarded-For`, acrescentada pelo último proxy, e cai para
-  `getConnInfo(context).remote.address` quando o header estiver ausente ou inválido.
+  cadeia encaminhada. O middleware só aceita a entrada mais à direita de
+  `X-Forwarded-For`, acrescentada pelo último proxy, quando o endereço da conexão
+  pertence a `TRUSTED_PROXY_CIDRS`; em qualquer outra origem, ignora o header e usa
+  `getConnInfo(context).remote.address`.
 - Se nenhum IP válido puder ser obtido, a identidade conservadora `unknown` é usada;
   a requisição não ignora o limitador.
 - IPv4, IPv6 e IPv4 mapeado em IPv6 são normalizados antes da derivação da chave.
@@ -284,6 +285,7 @@ URL Redis, chave, IP, account ID, token ou API key.
 | `apps/server/src/app/hono/middlewares/index.ts` | Modify | export de `RateLimitMiddleware` | Disponibiliza o middleware ao composition root | `RateLimitMiddleware.ts` | typecheck do Server |
 | `apps/server/src/app/hono/middlewares/AuthMiddleware.ts` | Modify | `verifyAuthentication`, `verifyApiKeyAuthentication` | Aplica o limite por conta somente após autenticação válida e antes do handler | `VerifyAuthenticationController`, rate limiter do contexto | `AuthRateLimitMiddleware.test.ts` e `McpRateLimitMiddleware.test.ts` |
 | `apps/server/src/app/hono/HonoApp.ts` | Modify | construtor, `ContextVariableMap`, `registerMiddlewares` | Compõe provider/middleware, preserva CORS e registra IP antes de Supabase/Inngest | provider Redis, Sentry, `RateLimitMiddleware` | `HonoApp.test.ts` e testes de rota existentes |
+| `apps/server/src/constants/env.ts` | Modify | `TRUSTED_PROXY_CIDRS` | Exige uma allowlist de CIDRs de proxy em produção para impedir falsificação de `X-Forwarded-For` | configuração de runtime, `RateLimitMiddleware` | teste HTTP com conexão não confiável |
 | `apps/server/src/tests/fixtures/HonoFixture.ts` | Modify | construtor e setup | Injeta provider determinístico para que testes de rota não dependam do Redis nem compartilhem quota acidental | `HonoApp`, fake inline do port | toda suíte `server-integration` |
 | `apps/server/src/tests/routes/global/RateLimiterRoute.test.ts` | Create | suíte HTTP transversal | Exercita middleware e provider por requests Hono, cobrindo políticas, dimensões, exclusões, IP, 429, Lua/TTL, breaker, concorrência, telemetria e Redis real | `HonoFixture`, Redis local e doubles dos ports/relógio | sensor `test:integration` do Server |
 | `apps/server/src/app/hono/routers/auth/tests/AuthRateLimitMiddleware.test.ts` | Create | suíte de composição REST autenticada | Prova autenticação → conta → handler e ausência de consumo de conta em falha auth | Hono, mocks dos adapters de autenticação e rate limiter | projeto Jest `server-integration` |
