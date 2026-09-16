@@ -17,8 +17,8 @@ PRD, Issue, Report ou demanda direta
 → Spec, Plan e Evaluation completed
 ```
 
-SDD não é obrigatório para manutenção que não precise de Contract de feature. O
-A task principal classifica a demanda e usa manutenção direta quando uma Spec não acrescenta
+SDD não é obrigatório para manutenção que não precise de Contract de feature. A
+task principal classifica a demanda e usa manutenção direta quando uma Spec não acrescenta
 autoridade, risco controlado ou rastreabilidade útil.
 
 ## Convenção de abreviações

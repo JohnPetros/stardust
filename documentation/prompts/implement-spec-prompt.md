@@ -43,6 +43,11 @@ O grafo de dependências do PRD é autoridade de produto, não ordem de execuç�
 Derive ownership, waves e paralelismo somente do Technical Contract da Spec,
 paths afetados, dependências de runtime e limites das camadas.
 
+O `Spec Reviewer` já deve estar `clear` antes desta entrada, no gate
+pré-planejamento de compatibilidade com Architecture e Rules. Não invoque nem
+recrie esse Reviewer durante a implementação; use os Reviewers de implementação
+para avaliar o candidato e seus diffs.
+
 As etapas numeradas abaixo descrevem a execução Direct. Para uma Spec com Plan,
 aplique o gate e a sequência de waves descritos em **Execução Plan-backed** e
 use os mesmos sensores, persistência e critérios de prontidão.
@@ -87,10 +92,11 @@ testes, migrations ou artefatos gerados e registre o blocker:
 3. Crie ou atualize um `plan.md` operacional mínimo para a implementação direta
    (mesmo sem fases), contendo a tarefa, paths, critérios, estado e próxima ação.
    O Plan será mantido durante todo o fluxo para registrar cada mudança.
-4. Crie `Builder Direct` como subagente e envie Contract, resultado observável,
-   paths, Rules, Architecture, o `design/handoff.md` e seus Node IDs canônicos,
-   estados, viewports, receitas, extensões e MCPs aplicáveis. O Builder deve conseguir
-   implementar usando o bundle salvo mesmo sem Pencil; use Pencil novamente apenas quando o
+4. Execute `Builder Direct` no contexto principal e envie Contract, resultado
+   observável, paths, Rules, Architecture, o `design/handoff.md` e seus Node IDs
+   canônicos, estados, viewports, receitas, extensões e MCPs aplicáveis. Não crie
+   um Builder separado para execução Direct. O Builder deve conseguir implementar
+   usando o bundle salvo mesmo sem Pencil; use Pencil novamente apenas quando o
    Design Contract mudar ou a validação final exigir a fonte canônica.
 5. Inspecione o diff; o Builder não atualiza Spec, Plan ou estado.
 6. Execute `npm run check:spec-implementation -- <spec> --base <commit-base>` antes dos sensores.
@@ -106,8 +112,8 @@ testes, migrations ou artefatos gerados e registre o blocker:
    Preserve o design canônico; qualquer simplificação, substituição, adição ou
    divergência não aprovada é finding bloqueante. Build não é necessário neste
    ciclo.
-7. Crie um `Implementation Reviewer Direct` read-only irmão do Builder, pareado
-   exclusivamente com esse Builder. Envie
+7. Ative um `Implementation Reviewer Direct` read-only, pareado exclusivamente
+   com o Builder Direct. Envie
    Spec, revisão, Contract, diff, critérios, Rules, Architecture, auditoria UI,
    evidências Pencil/Playwright, matriz de divergências aprovadas e resultados
    oficiais dos sensores.
@@ -166,6 +172,36 @@ escopo. Não crie Reviewer por aplicação adicional, nem aceite relatório de
 Builder como evidência oficial. Uma revisão integrada extra só é permitida
 quando existir uma interação cross-boundary sem Builder responsável.
 
+### Validação focada por Builder
+
+- `Builder Core`, `Builder Server`, `Builder Studio` e `Builder Web` executam
+  os sensores aplicáveis de código, tipos e testes do próprio escopo;
+- alterações de comportamento no Server incluem cenários focados contra o
+  servidor real quando exigido pela Spec, cobrindo status/body, validação,
+  autenticação, autorização, persistência e efeitos colaterais;
+- cada grupo de rotas HTTP alterado mantém o `.rest` correspondente em
+  `apps/server/rest-client/`, com uma requisição rotulada por rota e contrato
+  atual, sem credenciais;
+- cada hook de comportamento `use-*.ts` sob o escopo possui teste
+  `tests/use-*.test.ts`, salvo exceção explícita da Rule Pack;
+- `Builder Web` usa Playwright para interações/estados afetados, incluindo
+  teclado, foco, viewport estreito, console, falhas de request e screenshots
+  atuais quando houver Design Contract.
+
+Os Builders reportam comandos e resultados exatos, mas o relatório não é
+evidência oficial. A task principal verifica os exits no candidato integrado e
+registra comandos, resultados, freshness e lessons no `evaluation.md`.
+
+### Contrato do Evaluation
+
+Use a estrutura canônica definida em `documentation/prompts/create-evaluation-prompt.md`;
+não invente um formato paralelo nem edite um template compartilhado. Ao iniciar
+ou retomar uma implementação, reconcilie as seções existentes sem apagar
+evidências históricas. Registre uma linha por `RF/CA`, sensor, cenário `VM-*`,
+comparação visual, finding e check de CI, usando IDs estáveis `EV-*`, `VM-*`,
+`ACH-*` e `CI-*`. Toda evidência afetada por uma mudança deve ser marcada como
+`stale` antes de nova captura.
+
 ## Reinforcement de Rules e findings
 
 Quando um finding revelar guidance ausente, ambígua ou repetidamente violada:
@@ -211,6 +247,27 @@ Após integrar o candidato final:
 
 Após três falhas materialmente idênticas, peça decisão do usuário somente se a
 resolução não puder ser obtida nas autoridades, codebase ou ambiente.
+
+## Correções solicitadas durante a implementação
+
+Classifique qualquer pedido ou discrepância contra a revisão vigente antes de
+alterar código ou artefatos:
+
+- **Correção de implementação:** mantenha a revisão, registre um `ACH-*`, mude
+  Evaluation e o trabalho afetado para `in_progress`, marque somente a
+  evidência afetada como `stale`, retome o Builder responsável e rerode seus
+  exits. Crie Builder Fix apenas quando o Builder original não puder ser
+  retomado ou a correção for independente.
+- **Mudança de Contract:** pause, retorne a Spec para `draft`, invoque
+  `create-spec` para obter autoridade e atualizar PRD, Architecture, Modules,
+  Design, Tooling ou Rules quando necessário; incremente a revisão, reconcilie
+  Plan/Evaluation e só então retome este workflow.
+
+Não solicite autorização para corrigir uma discrepância dentro do Contract.
+Pergunte somente quando a classificação, o resultado de produto, uma autoridade,
+segurança ou o ambiente não puderem ser resolvidos pelas fontes do projeto.
+Alterações fora da Spec permanecem fora do candidato e da Evaluation, salvo se
+afetarem os paths avaliados, contaminarem a evidência ou causarem regressão.
 
 ## Persistência obrigatória após cada mudança
 
