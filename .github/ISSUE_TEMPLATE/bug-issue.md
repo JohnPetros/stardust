@@ -1,5 +1,5 @@
 ---
-name: Bug Issue
+name: Issue de bug
 about: Relate uma falha observada sem diagnóstico técnico
 title: ''
 labels: 'bug'
@@ -27,8 +27,10 @@ assignees: ''
 - **Ambiente:** <!-- local | staging | production | Não identificado -->
 - **Frequência:** <!-- sempre | intermitente | observado uma vez | Não identificada -->
 - **Perfil afetado:** <!-- perfil ou Não identificado -->
-- **PRD mais relevante:** <!-- URL/path ou None — motivo -->
-- **Requisito do PRD:** <!-- anchor/ID ou documento completo -->
+- **PRD mais relevante:** <!-- Path do PRD canônico em documentation/prds/ ou None — motivo -->
+- **Requisito do PRD:** <!-- RP-* ou None -->
+- **Jornada:** <!-- JN-* ou Não aplicável -->
+- **Jira Shifu:** <!-- SHI-* ou Não aplicável -->
 - **Milestone:** <!-- URL ou None -->
 
 ## Evidência

@@ -1,5 +1,5 @@
 ---
-name: Refactor Issue
+name: Issue de refatoração
 about: Registre uma melhoria estrutural que preserva o comportamento
 title: ''
 labels: 'refactor'
@@ -19,15 +19,15 @@ assignees: ''
 
 ## Critérios de aceite
 
-- [ ] <!-- Resultado estrutural observável -->
-- [ ] <!-- Arquitetura, ownership ou dependências preservados -->
-- [ ] <!-- Compatibilidade, migração ou rollback, quando aplicável -->
-- [ ] <!-- Evidência de preservação de comportamento e regressão -->
-- [ ] <!-- Validação estática, automatizada e runtime aplicável -->
+- <!-- Resultado estrutural observável -->
+- <!-- Arquitetura, ownership ou dependências preservados -->
+- <!-- Compatibilidade, migração ou rollback, quando aplicável -->
+- <!-- Evidência de preservação de comportamento e regressão -->
+- <!-- Validação estática, automatizada e runtime aplicável -->
 
 ## Referências
 
-- **Evidência:** <!-- path, issue, report ou documentação -->
+- **Evidência:** <!-- EV-* ou path, issue, report ou documentação -->
 - **Architecture/Rule:** <!-- link quando aplicável -->
-- **Requisito do PRD:** <!-- link ou Não aplicável -->
+- **Requisito do PRD:** <!-- RP-* ou Não aplicável -->
 - **Dependência:** <!-- issue ou link externo quando aplicável -->
