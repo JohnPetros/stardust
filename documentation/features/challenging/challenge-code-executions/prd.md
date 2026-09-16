@@ -1,12 +1,19 @@
-# PRD — Execuções de Código em Desafios
-
-**Referência de produto:** Conversa atual, screenshot da aba de execuções/submissions e exemplo de milestone fornecido pelo usuário: https://github.com/JohnPetros/stardust/milestone/38
-**Modo:** Prospectivo.
-**Assunção:** O estudante deve conseguir acompanhar o histórico das tentativas feitas em um desafio.
-
+---
+title: Execuções de Código em Desafios
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/38
+last_updated_at: 2026-09-15
 ---
 
-### 1. Visão Geral
+# PRD — Execuções de Código em Desafios
+
+Disponibiliza para: challenging; consumidores adicionais não explicitados no documento legado.
+
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
+
+## 1. Resumo Executivo
 
 A feature **Execuções de Código em Desafios** adiciona uma nova aba na página de desafio para listar as tentativas de execução feitas pelo estudante. Cada tentativa deve mostrar quando aconteceu, qual foi o resultado, permitir revisar o código enviado e, quando houver erro, permitir consultar a mensagem de erro.
 
@@ -18,11 +25,51 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ---
 
-### 2. Requisitos
+## 2. Problema e Oportunidade
 
-#### RF-01 Histórico de Execuções
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-- [ ] **Histórico de Execuções**
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/38 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Histórico de Execuções
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Histórico de Execuções.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descrição:** A página de desafio deve manter uma lista das tentativas de execução feitas pelo estudante no desafio atual.
 
@@ -34,11 +81,25 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 - **Contexto correto:** o histórico deve exibir apenas tentativas do estudante no desafio atual.
 - **Estado vazio:** quando ainda não houver tentativas, a aba deve informar isso de forma simples.
 
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
 ---
 
-#### RF-02 Status da Tentativa
+#### RP-02 — Status da Tentativa
 
-- [ ] **Status da Tentativa**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Status da Tentativa.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descrição:** Cada tentativa deve ter um status que explique rapidamente o que aconteceu.
 
@@ -50,7 +111,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 - **Falha da plataforma:** quando a tentativa falhar por um problema da plataforma, isso deve ser diferenciado de erro do estudante.
 - **Resumo dos testes:** quando aplicável, a tentativa deve mostrar quantos testes passaram.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Leitura rápida:** o status deve ser fácil de identificar visualmente.
 - **Texto claro:** os textos devem ser compreensíveis para estudantes, evitando linguagem interna.
@@ -58,9 +119,19 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ---
 
-#### RF-03 Nova Aba de Execuções
+#### RP-03 — Nova Aba de Execuções
 
-- [ ] **Aba de Execuções**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Nova Aba de Execuções.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descrição:** A navegação da página de desafio deve incluir uma nova aba chamada `Execuções`.
 
@@ -73,7 +144,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 - **Carregamento:** a aba deve ter estado de carregamento.
 - **Falha ao carregar:** se não for possível carregar o histórico, a aba deve permitir tentar novamente.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Escaneabilidade:** a lista deve facilitar comparação entre tentativas recentes.
 - **Responsividade:** a aba deve funcionar bem em desktop e mobile.
@@ -81,9 +152,19 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ---
 
-#### RF-04 Visualização do Código
+#### RP-04 — Visualização do Código
 
-- [ ] **Visualização do Código da Tentativa**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Visualização do Código.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descrição:** O estudante deve conseguir abrir o código usado em uma tentativa específica.
 
@@ -93,7 +174,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 - **Somente leitura:** o código histórico não deve ser editável nessa visualização.
 - **Sem nova execução:** a visualização do histórico não deve executar o código novamente.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Abertura em dialog:** o código deve abrir em uma janela sobre a página atual.
 - **Leitura confortável:** códigos maiores devem ser fáceis de navegar.
@@ -101,9 +182,19 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ---
 
-#### RF-05 Visualização de Erro
+#### RP-05 — Visualização de Erro
 
-- [ ] **Visualização do Erro da Tentativa**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Visualização de Erro.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descrição:** Tentativas com erro devem permitir que o estudante consulte os detalhes do erro.
 
@@ -114,7 +205,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 - **Localização do erro:** quando disponível, a visualização deve informar onde o erro ocorreu.
 - **Tipo de erro:** a visualização deve deixar claro se o problema foi no código ou na plataforma.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Abertura em dialog:** o erro deve abrir em uma janela sobre a página atual.
 - **Separação visual:** mensagem, localização e tipo de erro devem ser fáceis de distinguir.
@@ -122,9 +213,19 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ---
 
-#### RF-06 Botão de Executar
+#### RP-06 — Botão de Executar
 
-- [ ] **Estado de Loading ao Executar**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Botão de Executar.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descrição:** O botão de executar deve comunicar claramente quando uma tentativa está em andamento.
 
@@ -134,16 +235,26 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 - **Evitar duplicidade:** enquanto uma tentativa estiver em andamento, o estudante não deve iniciar outra execução acidentalmente.
 - **Fim da execução:** quando a tentativa terminar, o botão deve voltar ao estado normal.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Feedback imediato:** o estudante deve perceber rapidamente que a ação foi recebida.
 - **Bloqueio temporário:** o botão pode ficar indisponível enquanto a tentativa está em andamento.
 
 ---
 
-#### RF-07 Botão de Verificar
+#### RP-07 — Botão de Verificar
 
-- [ ] **Bloqueio do Botão de Verificar**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Botão de Verificar.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descrição:** O estudante só deve conseguir verificar/concluir o desafio quando a tentativa atual estiver correta.
 
@@ -154,7 +265,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 - **Código alterado:** se o estudante alterar o código depois de uma tentativa correta, deve executar novamente antes de verificar.
 - **Conclusão liberada:** quando todos os testes passarem para o código atual, o botão de verificar deve ficar disponível.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Motivo claro:** quando o botão estiver bloqueado, a interface deve deixar claro o que falta para prosseguir.
 - **Fluxo natural:** após uma tentativa correta, o estudante deve conseguir avançar sem passos desnecessários.
@@ -162,9 +273,19 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ---
 
-#### RF-08 Acurácia e Recompensa
+#### RP-08 — Acurácia e Recompensa
 
-- [ ] **Acurácia Coerente com as Tentativas**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Acurácia e Recompensa.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descrição:** A acurácia exibida na recompensa deve refletir as tentativas feitas pelo estudante no desafio.
 
@@ -174,16 +295,22 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 - **Falhas da plataforma:** problemas da plataforma não devem prejudicar o estudante.
 - **Consistência:** a acurácia exibida na recompensa deve ser compatível com o histórico de execuções.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Transparência:** a recompensa deve continuar explicando a acurácia de forma simples.
 - **Previsibilidade:** o estudante não deve ver uma acurácia que contradiz o histórico da aba de execuções.
 
----
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| challenging | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
 
 ### 3. Fluxo de Usuário
 
-**Fluxo A — Tentativa correta**
+#### JN-01 — Tentativa correta
 
 1. O estudante acessa um desafio.
 2. O estudante escreve ou ajusta o código.
@@ -195,7 +322,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 8. O botão `Verificar` fica disponível.
 9. O estudante conclui o desafio.
 
-**Fluxo B — Tentativa com testes falhando**
+#### JN-02 — Tentativa com testes falhando
 
 1. O estudante executa o código.
 2. Um ou mais testes falham.
@@ -204,7 +331,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 5. O botão `Verificar` permanece bloqueado.
 6. O estudante corrige o código e executa novamente.
 
-**Fluxo C — Consulta ao histórico**
+#### JN-03 — Consulta ao histórico
 
 1. O estudante abre a aba `Execuções`.
 2. O estudante vê a lista de tentativas do desafio atual.
@@ -212,7 +339,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 4. O estudante abre o código de uma tentativa.
 5. O sistema mostra o código em modo de leitura.
 
-**Fluxo D — Consulta a erro**
+#### JN-04 — Consulta a erro
 
 1. O estudante abre a aba `Execuções`.
 2. Uma tentativa com erro exibe uma ação para ver detalhes.
@@ -220,7 +347,7 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 4. O sistema mostra a mensagem e, quando disponível, onde o problema ocorreu.
 5. O estudante fecha a janela e volta ao editor.
 
-**Fluxo E — Código alterado após tentativa correta**
+#### JN-05 — Código alterado após tentativa correta
 
 1. O estudante executa um código que passa em todos os testes.
 2. O botão `Verificar` fica disponível.
@@ -230,14 +357,20 @@ A feature **Execuções de Código em Desafios** adiciona uma nova aba na págin
 
 ---
 
-### 4. Fora do Escopo
+## 8. Fora do Escopo
 
-- Suporte a múltiplas linguagens.
-- Análise automática de complexidade.
-- Ranking por performance ou tempo de execução.
-- Comparação visual entre duas tentativas.
-- Edição do código pela visualização de histórico.
-- Exclusão manual de tentativas pelo estudante.
-- Compartilhamento público de uma tentativa.
-- Execução passo a passo ou debugger visual.
-- Histórico global fora da página do desafio.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Suporte a múltiplas linguagens. |
+| Escopo | Análise automática de complexidade. |
+| Escopo | Ranking por performance ou tempo de execução. |
+| Escopo | Comparação visual entre duas tentativas. |
+| Escopo | Edição do código pela visualização de histórico. |
+| Escopo | Exclusão manual de tentativas pelo estudante. |
+| Escopo | Compartilhamento público de uma tentativa. |
+| Escopo | Execução passo a passo ou debugger visual. |
+| Escopo | Histórico global fora da página do desafio. |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

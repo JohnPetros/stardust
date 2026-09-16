@@ -1,15 +1,19 @@
 ---
 title: Acompanhamento de Relatórios de Feedback no Studio
-milestone: https://github.com/JohnPetros/stardust/milestone/1
-apps: studio
-dependencies: server, web, email, discord
 status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/1
 last_updated_at: 2026-08-01
 ---
 
-# PRD: Acompanhamento de Relatórios de Feedback no Studio
+# PRD — Acompanhamento de Relatórios de Feedback no Studio
 
-## 1. Visão Geral
+Disponibiliza para: studio; consumidores adicionais não explicitados no documento legado.
+
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
+
+## 1. Resumo Executivo
 
 ### 1.1 Descrição
 
@@ -94,7 +98,44 @@ devem ser revistas após o primeiro ciclo de 60 dias.
 - Discord e e-mail são canais de aviso, não fontes canônicas da conversa.
 - A conversa persistida no StarDust é a fonte canônica.
 
-## 2. Público-alvo
+## 2. Problema e Oportunidade
+
+A implementação vinculada ao [milestone 1](https://github.com/JohnPetros/stardust/milestone/1)
+centraliza a listagem e a consulta de feedbacks, mas o fluxo documentado termina
+na visualização ou exclusão definitiva do relato. Isso impede o administrador de:
+
+- pedir esclarecimentos e preservar a resposta junto ao relato original;
+- saber quais conversas receberam novas mensagens do usuário;
+- comunicar uma resposta ou resolução de forma consistente;
+- distinguir relatórios em andamento de relatórios concluídos;
+- preservar um histórico útil para produto, suporte e QA.
+
+O resultado atual é uma combinação de consulta no Studio, comunicação por canais
+paralelos e acompanhamento manual, com risco de perda de contexto e de relatos
+sem retorno.
+
+**Inferência baseada nas fontes:** comentários, estado de leitura, status e
+notificações são padrões maduros. O diferencial do StarDust não deve ser a
+quantidade de recursos, mas a integração com a identidade, o avatar e o contexto
+do usuário já existentes.
+
+Diferenciais recomendados:
+
+- fluxo disponível no Studio e no diálogo de feedback já conhecidos, sem um
+  portal ou conta adicional;
+- apenas `Aberto` e `Fechado`, reduzindo esforço operacional;
+- conversa privada entre usuário e administração, sem votação ou exposição
+  pública;
+- Discord usado para chamar atenção e Studio usado para preservar o estado;
+- resposta salva antes do e-mail, protegendo a integridade da conversa.
+
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/1 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
 
 ### 2.1 Público principal
 
@@ -145,78 +186,48 @@ parte do escopo deste PRD.
 - comunidades que procuram votação pública, roadmap ou discussão aberta entre
   usuários.
 
-## 3. Análise do Cenário Competitivo
+## 4. Objetivos e Métricas de Sucesso
 
-### 3.1 Resumo do mercado
+As métricas devem ser avaliadas nos primeiros 60 dias após a disponibilização:
 
-O problema está entre duas categorias consolidadas:
+| Métrica | Meta inicial |
+|---|---:|
+| Relatórios que recebem ao menos uma resposta administrativa | >= 90% |
+| Mediana do tempo até a primeira resposta administrativa | < 3 dias |
+| Relatórios fechados após interação administrativa | >= 70% |
+| Respostas ou mudanças de status perdidas por erro da interface | 0 |
 
-1. **Gestão de feedback de produto**, representada por Canny e UserVoice, com
-   portais, comentários, status, votação e comunicação com autores.
-2. **Atendimento e ticketing**, representado por Intercom e Jira Service
-   Management, com inbox, histórico, estados, anexos e notificações.
+As metas são iniciais porque ainda não existe uma linha de base confiável. Elas
+devem ser revistas após o primeiro ciclo de 60 dias.
 
-O StarDust não precisa reproduzir integralmente nenhuma dessas categorias. A
-oportunidade é incorporar apenas o ciclo essencial de acompanhamento no produto
-e no Studio existentes.
+### Limites de validação e premissas declaradas
 
-### 3.2 Matriz competitiva
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
 
-| Solução | Público | Proposta de valor | Funcionalidades | Preço público | Limitações |
-|---|---|---|---|---|---|
-| [Canny](https://canny.io/pricing) | Times de produto e SaaS | Centralizar e priorizar feedback ligado a decisões de produto | Portal, comentários, status, boards, integrações e automações | Free; Pro a partir de US$ 79/mês com cobrança anual; Business sob consulta | O preço escala por usuários associados a feedback e a solução inclui recursos de priorização e roadmap além do necessário para o MVP |
-| [UserVoice](https://uservoice.com/pricing) | Times de produto e customer success | Capturar, organizar e comunicar decisões sobre ideias | Portal, comentários, status públicos e internos, segmentação e notificações | Não identificado publicamente | Fluxo orientado a ideias, votação e descoberta de produto; maior complexidade que uma fila administrativa interna |
-| [Intercom](https://www.intercom.com/pricing) | Suporte, vendas e atendimento | Unificar conversas, tickets e automação em uma caixa de entrada | Messenger, inbox compartilhada, tickets, histórico, e-mail e relatórios | Plano Essential listado a US$ 29 por assento/mês, com preço promocional exibido; Fin a partir de US$ 0,99 por resultado | Plataforma ampla, com custo por assento e recursos de atendimento além do escopo do StarDust |
-| [Jira Service Management](https://www.atlassian.com/software/jira/service-management/pricing) | Times de suporte, operações e TI | Gerenciar solicitações por portal, e-mail e filas configuráveis | Portal, formulários, workflows, filas, anexos e notificações | Free para até 3 agentes; Standard a US$ 20 por agente/mês; Premium a US$ 51,42 por agente/mês | Workflows e configuração orientados a service management, excessivos para o ciclo simples de feedback |
-| Discord + consulta manual ao banco | Equipe interna pequena | Avisar rapidamente e investigar sob demanda | Webhook, mensagens e links manuais | Sem custo incremental identificado | Não mantém estado de leitura confiável, ciclo de vida, filtros nem histórico canônico de acompanhamento |
+## 5. Requisitos de Produto
 
-### 3.3 Evidências relevantes
+### Conceitos e responsabilidades
 
-- A página oficial do Canny informa que comentários públicos de administradores
-  notificam autores por e-mail; a central de notificações também cobre novos
-  comentários e mudanças de status. Fontes: [Comments](https://help.canny.io/en/articles/5795311-comments)
-  e [Notifications](https://help.canny.io/en/articles/5380265-notifications).
-- Segundo a documentação do UserVoice, usuários podem receber e-mails sobre
-  comentários e mudanças de status. O Notification Center administrativo usa
-  contador, estado de leitura e agrupamento de atividades relacionadas. Fontes:
-  [Email Notifications for Users](https://help.uservoice.com/hc/en-us/articles/32833899285779-Email-Notifications-for-Users)
-  e [Notification Center](https://help.uservoice.com/hc/en-us/articles/360035475133-Notification-Center).
-- A documentação do Intercom descreve tickets visíveis no Messenger, badge,
-  histórico e e-mails quando um administrador responde ou o estado muda. Fonte:
-  [How customers get notified about tickets](https://www.intercom.com/help/en/articles/8300308-how-customers-get-notified-about-tickets).
-- A Atlassian diferencia notificações internas e do cliente e oferece controles
-  de segurança para anexos enviados por e-mail. Fontes:
-  [Customer and team notifications](https://support.atlassian.com/jira-service-management-cloud/docs/what-notifications-do-my-customers-and-service-desk-team-receive/)
-  e [Customer access to attachments](https://support.atlassian.com/jira-service-management-cloud/docs/set-up-how-your-customers-access-attachments/).
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
 
-### 3.4 Oportunidade e diferenciação recomendada
+#### RP-01 — Listagem e localização de relatórios
 
-**Inferência baseada nas fontes:** comentários, estado de leitura, status e
-notificações são padrões maduros. O diferencial do StarDust não deve ser a
-quantidade de recursos, mas a integração com a identidade, o avatar e o contexto
-do usuário já existentes.
+Necessidades do usuário:
 
-Diferenciais recomendados:
+- 🚧 Em construção — necessidade não explicitada no documento legado.
 
-- fluxo disponível no Studio e no diálogo de feedback já conhecidos, sem um
-  portal ou conta adicional;
-- apenas `Aberto` e `Fechado`, reduzindo esforço operacional;
-- conversa privada entre usuário e administração, sem votação ou exposição
-  pública;
-- Discord usado para chamar atenção e Studio usado para preservar o estado;
-- resposta salva antes do e-mail, protegendo a integridade da conversa.
+Resultado: Listagem e localização de relatórios.
 
-## 4. Requisitos
-
-### REQ-01 Listagem e localização de relatórios
-
-- [ ] **Listagem e localização de relatórios**
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** o Studio deve apresentar uma visão paginada dos relatórios de
 feedback e permitir localizar um item por seus principais atributos.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Regra:** cada linha deve apresentar ID, avatar e e-mail do autor, tipo,
   status, data da atividade mais recente, prévia textual, quantidade de respostas
   e ação `Ver`.
@@ -233,7 +244,7 @@ feedback e permitir localizar um item por seus principais atributos.
 - **Dependência:** serviço paginado de relatórios e dados públicos de perfil do
   autor.
 
-#### Regras de UI/UX
+##### Regras de Experiência
 
 - **Interface:** utilizar tabela e controles do design system do Studio; badges
   de tipo e status não podem depender apenas de cor.
@@ -250,15 +261,20 @@ feedback e permitir localizar um item por seus principais atributos.
 
 ---
 
-### REQ-02 Priorização e estado de leitura
+#### RP-02 — Priorização e estado de leitura
 
-- [ ] **Priorização e estado de leitura**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Priorização e estado de leitura.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** respostas novas do usuário devem tornar o relatório visivelmente
 pendente de leitura até que um administrador abra a conversa.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Regra:** o badge no item `Feedbacks` deve contar relatórios não lidos, não a
   quantidade de mensagens.
 - **Regra:** a tabela deve ordenar primeiro os relatórios não lidos e, dentro de
@@ -274,7 +290,7 @@ pendente de leitura até que um administrador abra a conversa.
 - **Dependência:** marcador persistente de leitura administrativa e evento de
   resposta do usuário.
 
-#### Regras de UI/UX
+##### Regras de Experiência
 
 - **Interface:** destacar linhas não lidas com peso tipográfico e indicador
   visual discreto; o destaque deve desaparecer após a abertura bem-sucedida.
@@ -290,15 +306,20 @@ pendente de leitura até que um administrador abra a conversa.
 
 ---
 
-### REQ-03 Consulta do relato e da conversa
+#### RP-03 — Consulta do relato e da conversa
 
-- [ ] **Consulta do relato e da conversa**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Consulta do relato e da conversa.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** o diálogo de detalhes deve reunir a identificação do relatório,
 o relato original e todas as mensagens em ordem cronológica.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Regra:** exibir ID do relatório, e-mail e avatar do usuário, tipo, status e
   datas relevantes.
 - **Regra:** diferenciar visualmente o relato original das respostas posteriores.
@@ -312,7 +333,7 @@ o relato original e todas as mensagens em ordem cronológica.
 - **Dependência:** entidade de relatório, mensagens, autor e armazenamento de
   anexos.
 
-#### Regras de UI/UX
+##### Regras de Experiência
 
 - **Interface:** usar composição semelhante a fórum, com avatar à esquerda,
   metadados no cabeçalho da mensagem e conteúdo em bloco compacto; usar ícone
@@ -330,15 +351,20 @@ o relato original e todas as mensagens em ordem cronológica.
 
 ---
 
-### REQ-04 Envio de resposta administrativa
+#### RP-04 — Envio de resposta administrativa
 
-- [ ] **Envio de resposta administrativa**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Envio de resposta administrativa.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** o administrador deve responder ao usuário sem sair do diálogo e
 ver a mensagem persistida imediatamente após o sucesso.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Regra:** a resposta administrativa deve conter entre 1 e 2.000 caracteres.
 - **Regra:** texto composto apenas por espaços é inválido.
 - **Regra:** toda resposta administrativa exige texto, mesmo quando contém
@@ -352,7 +378,7 @@ ver a mensagem persistida imediatamente após o sucesso.
 - **Dependência:** conta administrativa autenticada, endpoint de mensagens e
   processamento assíncrono de e-mail.
 
-#### Regras de UI/UX
+##### Regras de Experiência
 
 - **Interface:** posicionar o compositor após a conversa, com separação espacial
   clara entre mensagens existentes e nova resposta.
@@ -370,15 +396,20 @@ ver a mensagem persistida imediatamente após o sucesso.
 
 ---
 
-### REQ-05 Anexos em respostas
+#### RP-05 — Anexos em respostas
 
-- [ ] **Anexos em respostas**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Anexos em respostas.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** o administrador deve poder anexar evidências visuais à resposta e
 consultar anexos enviados pelo usuário.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Regra:** permitir no máximo 3 anexos por mensagem.
 - **Regra:** aceitar somente arquivos PNG (`.png`) e JPG (`.jpg`).
 - **Regra:** cada arquivo deve possuir no máximo 10 MB.
@@ -391,7 +422,7 @@ consultar anexos enviados pelo usuário.
 - **Dependência:** fluxo autenticado de URL assinada e armazenamento de arquivos
   de feedback.
 
-#### Regras de UI/UX
+##### Regras de Experiência
 
 - **Interface:** apresentar anexos selecionados com nome, tamanho, miniatura e
   ação de remoção; anexos persistidos devem abrir uma visualização ampliada ou
@@ -409,15 +440,20 @@ consultar anexos enviados pelo usuário.
 
 ---
 
-### REQ-06 Ciclo de vida aberto e fechado
+#### RP-06 — Ciclo de vida aberto e fechado
 
-- [ ] **Ciclo de vida aberto e fechado**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Ciclo de vida aberto e fechado.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** o administrador deve controlar o estado do relatório diretamente
 no diálogo, preservando um ciclo simples e reversível.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Regra:** todo novo relatório inicia como `Aberto`.
 - **Regra:** apenas administradores podem fechar ou reabrir relatórios.
 - **Regra:** um relatório só pode ser fechado depois de existir ao menos uma
@@ -431,7 +467,7 @@ no diálogo, preservando um ciclo simples e reversível.
   solicitar que o administrador revise antes de repetir a ação.
 - **Dependência:** status do relatório e existência de resposta administrativa.
 
-#### Regras de UI/UX
+##### Regras de Experiência
 
 - **Interface:** usar seletor de status com somente `Aberto` e `Fechado`.
 - **Feedback:** atualizar badge, contadores e tabela após a transição; falha deve
@@ -445,15 +481,20 @@ no diálogo, preservando um ciclo simples e reversível.
 
 ---
 
-### REQ-07 Notificação do usuário por e-mail
+#### RP-07 — Notificação do usuário por e-mail
 
-- [ ] **Notificação do usuário por e-mail**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Notificação do usuário por e-mail.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** cada resposta administrativa deve iniciar uma notificação por
 e-mail sem tornar a persistência da conversa dependente do provedor de entrega.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Regra:** persistir a resposta antes de enfileirar o e-mail.
 - **Regra:** o e-mail deve conter assunto identificável, trecho curto da
   resposta e CTA `Ver conversa` para a aplicação Web.
@@ -470,7 +511,7 @@ e-mail sem tornar a persistência da conversa dependente do provedor de entrega.
 - **Dependência:** pacote de e-mail, fila assíncrona, e-mail do usuário e URL
   pública da conversa.
 
-#### Regras de UI/UX
+##### Regras de Experiência
 
 - **Interface:** não apresentar controles de entrega de e-mail no compositor.
 - **Feedback:** confirmar `Resposta enviada` após persistência; não afirmar que o
@@ -483,15 +524,20 @@ e-mail sem tornar a persistência da conversa dependente do provedor de entrega.
 
 ---
 
-### REQ-08 Notificação de resposta do usuário no Discord
+#### RP-08 — Notificação de resposta do usuário no Discord
 
-- [ ] **Notificação de resposta do usuário no Discord**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Notificação de resposta do usuário no Discord.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** cada nova resposta do usuário deve chamar a atenção da equipe no
 Discord e direcioná-la ao registro canônico no Studio.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Regra:** enviar uma notificação para o canal administrativo configurado após
   persistir a resposta do usuário.
 - **Regra:** incluir ID do relatório, identificação do usuário, trecho curto da
@@ -505,7 +551,7 @@ Discord e direcioná-la ao registro canônico no Studio.
 - **Dependência:** evento de resposta do usuário, webhook do Discord, URL do
   Studio e rota capaz de abrir o relatório indicado.
 
-#### Regras de UI/UX
+##### Regras de Experiência
 
 - **Interface:** o link recebido deve abrir o Studio e, após autenticação quando
   necessária, direcionar ao relatório correspondente.
@@ -521,15 +567,20 @@ Discord e direcioná-la ao registro canônico no Studio.
 
 ---
 
-### REQ-09 Confiabilidade, segurança e desempenho
+#### RP-09 — Confiabilidade, segurança e desempenho
 
-- [ ] **Confiabilidade, segurança e desempenho**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Confiabilidade, segurança e desempenho.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** a experiência deve preservar dados e permissões em carregamentos,
 concorrência, falhas de rede e integrações assíncronas.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Regra:** somente contas administrativas autorizadas podem listar, consultar,
   responder e alterar status.
 - **Regra:** nenhuma operação desta versão pode excluir ou arquivar relatórios,
@@ -546,7 +597,7 @@ concorrência, falhas de rede e integrações assíncronas.
 - **Dependência:** autorização do Studio, contratos do Server, persistência no
   Supabase, fila assíncrona e storage autenticado.
 
-#### Regras de UI/UX
+##### Regras de Experiência
 
 - **Interface:** todas as mutações devem possuir estados distintos de repouso,
   carregamento, sucesso e erro.
@@ -562,15 +613,20 @@ concorrência, falhas de rede e integrações assíncronas.
 
 ---
 
-### REQ-10 Medição do resultado
+#### RP-10 — Medição do resultado
 
-- [ ] **Medição do resultado**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Medição do resultado.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** o produto deve registrar fatos agregáveis para calcular as metas
 da primeira versão sem criar um histórico administrativo de auditoria.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Regra:** disponibilizar dados ou eventos para relatório criado, primeira
   resposta administrativa, resposta administrativa, resposta do usuário,
   fechamento e reabertura.
@@ -584,7 +640,7 @@ da primeira versão sem criar um histórico administrativo de auditoria.
 - **Dependência:** infraestrutura existente de eventos de domínio, Inngest e
   PostHog ou consulta agregada equivalente.
 
-#### Regras de UI/UX
+##### Regras de Experiência
 
 - **Interface:** nenhuma nova tela analítica é exigida nesta versão.
 - **Feedback:** instrumentação deve ser invisível ao administrador.
@@ -593,9 +649,17 @@ da primeira versão sem criar um histórico administrativo de auditoria.
 - **Responsividade:** não aplicável.
 - **Acessibilidade:** não aplicável.
 
-## 5. Fluxo de Usuário (User Flow)
+## 6. Grafo de Dependências do Produto
 
-### Fluxo A - Localizar e abrir um relatório
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| reporting | server, web, email, discord | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+### 5. Fluxo de Usuário (User Flow)
+
+#### JN-01 — Localizar e abrir um relatório
 
 1. O administrador acessa `Feedbacks` no Studio.
 2. O sistema apresenta contadores, filtros e a lista paginada, priorizando não
@@ -609,7 +673,7 @@ da primeira versão sem criar um histórico administrativo de auditoria.
 6. O sistema abre o diálogo, carrega o relato e a conversa e marca o relatório
    como lido para o Studio.
 
-### Fluxo B - Responder ao usuário
+#### JN-02 — Responder ao usuário
 
 1. O administrador abre um relatório.
 2. O sistema apresenta o relato original, o histórico e o compositor.
@@ -625,7 +689,7 @@ da primeira versão sem criar um histórico administrativo de auditoria.
 5. O Studio apresenta `Resposta enviada`.
 6. O job de e-mail processa a notificação independentemente da interface.
 
-### Fluxo C - Fechar um relatório
+#### JN-03 — Fechar um relatório
 
 1. O administrador abre um relatório `Aberto`.
 2. O sistema verifica se existe resposta administrativa.
@@ -639,7 +703,7 @@ da primeira versão sem criar um histórico administrativo de auditoria.
    histórico.
 6. Em falha, o Studio restaura o estado confirmado e permite nova tentativa.
 
-### Fluxo D - Responder e fechar na mesma interação
+#### JN-04 — Responder e fechar na mesma interação
 
 1. O relatório já possui ao menos uma resposta administrativa persistida.
 2. O administrador prepara uma nova resposta e define o estado final como
@@ -650,7 +714,7 @@ da primeira versão sem criar um histórico administrativo de auditoria.
    parcial como conclusão total; deve apresentar o estado efetivamente
    persistido.
 
-### Fluxo E - Reabrir um relatório
+#### JN-05 — Reabrir um relatório
 
 1. O administrador abre um relatório `Fechado`.
 2. O histórico permanece visível.
@@ -660,7 +724,7 @@ da primeira versão sem criar um histórico administrativo de auditoria.
    - **Falha:** mantém `Fechado` e oferece nova tentativa.
 5. Nenhum diálogo adicional ou e-mail é apresentado.
 
-### Fluxo F - Receber resposta do usuário
+#### JN-06 — Receber resposta do usuário
 
 1. O usuário responde por meio da experiência externa da aplicação Web.
 2. O servidor persiste a mensagem.
@@ -674,7 +738,7 @@ da primeira versão sem criar um histórico administrativo de auditoria.
 6. O administrador abre o deep link ou a listagem e continua a conversa no
    Studio.
 
-### Fluxo G - Abrir um deep link do Discord
+#### JN-07 — Abrir um deep link do Discord
 
 1. O administrador seleciona o link de um relatório no Discord.
 2. O Studio verifica a sessão:
@@ -684,90 +748,33 @@ da primeira versão sem criar um histórico administrativo de auditoria.
    - **Relatório indisponível:** informa o erro e oferece retorno à listagem.
 3. Ao abrir o relatório, o sistema aplica a regra de leitura administrativa.
 
-## 6. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-- implementar ou redesenhar o diálogo de feedback da aplicação Web;
-- excluir ou arquivar relatórios;
-- excluir, editar ou ocultar mensagens e anexos já enviados;
-- registrar um log separado de auditoria administrativa;
-- adicionar estados além de `Aberto` e `Fechado`;
-- permitir que o usuário feche ou reabra relatórios;
-- responder à conversa diretamente pelo e-mail ou Discord;
-- enviar ao Discord o conteúdo integral ou os arquivos anexados;
-- enviar e-mail por mudança isolada de status, reabertura ou resposta do usuário;
-- criar notas internas invisíveis ao usuário;
-- atribuir relatórios a administradores, equipes ou responsáveis;
-- adicionar prioridade, SLA, tags, categorias customizáveis ou automações de
-  triagem;
-- votação pública, roadmap, deduplicação de ideias ou comunidade de feedback;
-- exclusão definitiva como mecanismo de retenção ou moderação;
-- painel analítico novo no Studio;
-- acompanhamento visual de entrega de e-mail ou Discord no MVP.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | implementar ou redesenhar o diálogo de feedback da aplicação Web; |
+| Escopo | excluir ou arquivar relatórios; |
+| Escopo | excluir, editar ou ocultar mensagens e anexos já enviados; |
+| Escopo | registrar um log separado de auditoria administrativa; |
+| Escopo | adicionar estados além de `Aberto` e `Fechado`; |
+| Escopo | permitir que o usuário feche ou reabra relatórios; |
+| Escopo | responder à conversa diretamente pelo e-mail ou Discord; |
+| Escopo | enviar ao Discord o conteúdo integral ou os arquivos anexados; |
+| Escopo | enviar e-mail por mudança isolada de status, reabertura ou resposta do usuário; |
+| Escopo | criar notas internas invisíveis ao usuário; |
+| Escopo | atribuir relatórios a administradores, equipes ou responsáveis; |
+| Escopo | adicionar prioridade, SLA, tags, categorias customizáveis ou automações de |
+| Escopo | votação pública, roadmap, deduplicação de ideias ou comunidade de feedback; |
+| Escopo | exclusão definitiva como mecanismo de retenção ou moderação; |
+| Escopo | painel analítico novo no Studio; |
+| Escopo | acompanhamento visual de entrega de e-mail ou Discord no MVP. |
+| Escopo | **Exclusão definitiva:** removida do produto para preservar o histórico e |
+| Escopo | **Arquivamento:** descartado para o MVP; `Fechado` já atende à organização da |
+| Escopo | **Mais estados:** opções como `Em análise`, `Pendente` e `Aguardando usuário` |
+| Escopo | **Diálogo de confirmação para status:** descartado; a proteção ocorre pela |
+| Escopo | **Auditoria administrativa separada:** descartada; mensagens mantêm autor e |
+| Escopo | **Somente notificação interna:** descartada. Respostas do usuário combinam |
 
-### 6.1 Decisões descartadas nesta revisão
+### Decisões descartadas durante a definição
 
-- **Exclusão definitiva:** removida do produto para preservar o histórico e
-  evitar perda irreversível de contexto.
-- **Arquivamento:** descartado para o MVP; `Fechado` já atende à organização da
-  fila sem introduzir um terceiro conceito.
-- **Mais estados:** opções como `Em análise`, `Pendente` e `Aguardando usuário`
-  foram substituídas pelo ciclo mínimo `Aberto`/`Fechado`.
-- **Diálogo de confirmação para status:** descartado; a proteção ocorre pela
-  exigência de resposta administrativa e pela validação do servidor.
-- **Auditoria administrativa separada:** descartada; mensagens mantêm autor e
-  data, mas não haverá trilha adicional de ações nesta versão.
-- **Somente notificação interna:** descartada. Respostas do usuário combinam
-  estado de não lido no Studio com aviso resumido no Discord.
-
-## 7. Dependências, Riscos e Hipóteses
-
-### 7.1 Dependências
-
-- o Server deve expor listagem ampliada, detalhe, mensagens, leitura e mudança de
-  status com autorização administrativa;
-- a experiência Web deve fornecer respostas do usuário e respeitar o bloqueio de
-  resposta quando o relatório estiver fechado;
-- o armazenamento deve emitir URLs assinadas e preservar vínculo entre anexo e
-  mensagem;
-- o pacote de e-mail e a fila devem processar notificações com idempotência;
-- o webhook do Discord deve estar configurado por ambiente;
-- o Studio deve possuir rota endereçável por ID para os deep links.
-
-### 7.2 Riscos
-
-- **Concorrência:** duas sessões administrativas podem responder ou alterar o
-  estado simultaneamente. O servidor deve retornar o estado canônico e impedir
-  efeitos duplicados.
-- **Notificação atrasada:** e-mail ou Discord podem falhar depois da persistência.
-  A conversa continua válida; jobs devem aplicar retry e observabilidade técnica.
-- **Anexos maliciosos:** extensão isolada não é suficiente. Cliente, servidor e
-  storage devem validar tipo, tamanho e autorização de acesso.
-- **Badge inconsistente:** leitura mantida somente no cliente pode divergir entre
-  sessões. O marcador precisa ser persistente.
-- **Deep link quebrado:** autenticação ou roteamento pode perder o destino. O
-  retorno pós-login deve preservar o ID solicitado.
-
-### 7.3 Hipóteses restantes
-
-- o volume inicial permite uma única fila administrativa, sem atribuição por
-  agente;
-- uma resposta administrativa é condição suficiente para permitir fechamento,
-  sem exigir aceite explícito do usuário;
-- retries e observabilidade técnica existentes são suficientes sem uma tela de
-  entrega no Studio;
-- a política de retenção atual do StarDust permite manter indefinidamente o
-  histórico de feedback enquanto exclusão e arquivamento estiverem fora do
-  escopo.
-
-## 8. Referências Internas
-
-- [Milestone 1 — Gerenciador de Relatórios de Feedback no StarDust Studio](https://github.com/JohnPetros/stardust/milestone/1)
-- `documentation/features/reporting/feedback-reports-management/specs/feedback-reports-page-spec.md`
-- `documentation/features/reporting/feedback-reports-management/specs/list-feedback-reports-endpoint-spec.md`
-- `documentation/features/reporting/feedback-reports-management/specs/delete-feedback-report-endpoint-spec.md`
-  (legada; deve ser supersedida porque exclusão saiu do produto)
-- `documentation/features/reporting/feedback-dialog/specs/feedback-dialog-widget-spec.md`
-- `documentation/features/reporting/feedback-dialog/specs/send-feedback-endpoint-spec.md`
-- `documentation/features/reporting/feedback-dialog/specs/screenshot-upload-url-spec.md`
-- Design Pencil: lista `MVWsz`, relatório aberto `nbV72` e relatório fechado
-  `aHFPL`.
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.
