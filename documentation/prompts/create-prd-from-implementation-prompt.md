@@ -10,26 +10,30 @@ features novas quanto para features já implementadas.
 
 ## Fonte de Verdade do Produto
 
-Neste projeto, **milestones do GitHub funcionam como PRDs na prática**.
+Neste projeto, o PRD canônico de produto é mantido no repositório, em
+`documentation/prds/<module>/<slug>.md`. O arquivo versionado é a fonte de
+verdade do produto; não há dependência de Confluence.
 
 Use a seguinte ordem de precedência como fonte de verdade:
 
-1. Milestone do GitHub informada pelo usuário.
+1. PRD canônico local em `documentation/prds/` informado pelo usuário.
 2. Confirmações explícitas do usuário durante a conversa.
-3. Comportamento observável da codebase.
-4. Screenshots e descrições complementares fornecidas no contexto.
+3. Milestone e Issues do GitHub associadas.
+4. Comportamento observável da codebase.
+5. Screenshots e descrições complementares fornecidas no contexto.
 
 Se houver conflito entre comportamento implementado e milestone, **não invente
 uma reconciliação**: registre a divergência de forma explícita.
 
 **Entradas possíveis (Inputs):**
 
+- Path ou referência do PRD canônico em `documentation/prds/`, quando disponível.
 - URL ou número da milestone no GitHub — obtenha os dados por ferramenta estruturada (`gh`/API), não por scraping HTML.
 - Esboço, rascunho ou descrição da funcionalidade.
 - Informações de contexto, código relevante ou screenshots.
 - Parte da codebase que já implementa a feature.
 
-Se o usuário pedir um PRD prospectivo para uma feature que deve ser orientada por produto e nenhuma milestone for informada, interrompa o fluxo e solicite a milestone antes de redigir.
+Se o usuário pedir um PRD prospectivo para uma feature que deve ser orientada por produto e nenhuma fonte de produto for informada, interrompa o fluxo e solicite a referência do PRD canônico em `documentation/prds/` ou a confirmação explícita de que se trata de um pedido direto ainda não publicado.
 
 ---
 
@@ -53,7 +57,7 @@ Não transforme o PRD em spec técnica. Use as rules apenas para não documentar
 
 ### Skill obrigatória: Grilling
 
-Execute o protocolo de Grilling definido em `documentation/sdd.md` nos modos prospectivo e
+Execute o **Grilling gate** definido em [`sdd.md#grilling-gate`](../sdd.md#grilling-gate) nos modos prospectivo e
 retrospectivo depois de pesquisar milestone, documentação, codebase, design e demais fatos
 disponíveis. Modele as decisões pendentes como uma design tree e pergunte, em cada round, toda a
 frontier cujos pré-requisitos já estiverem resolvidos. Cada pergunta deve trazer a resposta
@@ -118,7 +122,10 @@ Em seguida, faça perguntas para validar e preencher lacunas. Organize em:
 
 **→ Recompute a design tree e faça rounds adicionais até esvaziar a frontier.**
 
-Quando não houver milestone no modo retrospectivo, a codebase passa a ser a principal evidência de comportamento implementado. Nesse caso, o documento gerado descreve a feature observada, mas não substitui a necessidade de uma milestone oficial posterior quando o projeto precisar de uma referência formal de produto.
+Quando não houver PRD canônico no modo retrospectivo, a codebase passa a ser a
+principal evidência do comportamento implementado. Nesse caso, o documento
+gerado descreve a feature observada, mas permanece um rascunho local até ser
+validado e publicado no Confluence.
 
 ---
 
@@ -127,117 +134,32 @@ Quando não houver milestone no modo retrospectivo, a codebase passa a ser a pri
 Após receber as respostas, esvaziar a frontier e obter confirmação explícita do entendimento
 compartilhado, gere o documento completo seguindo estritamente o template abaixo.
 
-No **Modo Retrospectivo**, a seção "Fora do Escopo" deve incluir também os
-itens descartados durante a implementação (ver template). Quando houver
-milestone, o documento gerado deve tratá-la como **referência oficial de
-produto**.
+No **Modo Retrospectivo**, a seção "Decisões descartadas durante a definição"
+deve incluir também os itens descartados durante a implementação. Divergências
+observadas devem ser registradas em "Problema e Oportunidade" ou nas
+premissas, sem criar uma seção fora da estrutura canônica.
 
 ---
 
 ## TEMPLATE DO PRD (Estrutura de Saída)
 
-# PRD — {Nome da Funcionalidade}
+Use exatamente a estrutura canônica definida em
+`documentation/prompts/create-prd-prompt.md`:
 
-**Referência de produto:** {URL ou número da milestone no GitHub, quando houver}
+1. Cabeçalho com título, `Disponibiliza para` e `Navegação`;
+2. `Resumo Executivo`;
+3. `Problema e Oportunidade`, com `Base de fontes e autoridade`;
+4. `Público-alvo`, contexto de uso e Jobs to Be Done;
+5. `Objetivos e Métricas de Sucesso`, com limites e premissas;
+6. `Requisitos de Produto`, com conceitos/responsabilidades e blocos `RP-*`;
+7. `Grafo de Dependências do Produto`;
+8. `Jornadas`, com blocos `JN-*`;
+9. `Fora do Escopo`, com decisões descartadas.
 
----
-
-### 1. Visão Geral
-
-_Descreva de forma clara e concisa:_
-
-- O que é a funcionalidade/produto.
-- Qual problema resolve.
-- Qual o objetivo principal e valor entregue.
-
----
-
-### 2. Requisitos
-
-_Liste as funcionalidades. Use IDs curtos (`RF-01`, `RF-02`...) e critérios de
-aceitação (`CA-01`, `CA-02`...) para permitir rastreabilidade até a Spec e as
-evidências. Use checkboxes para acompanhamento._
-
-#### RF-01 [Nome do Requisito]
-
-- [ ] **[Nome do Requisito]**
-
-**Descrição:** Breve contexto do requisito.
-
-##### Critérios de Aceitação
-
-_Defina os comportamentos observáveis que determinam se o requisito foi
-atendido. A Spec deve preservar o significado destes critérios e acrescentar
-as evidências técnicas._
-
-| ID      | Critério observável                               |
-| ------- | ------------------------------------------------- |
-| `CA-01` | Dado [contexto], quando [ação], então [resultado] |
-
-##### Regras de Negócio
-
-_Liste as regras lógicas e comportamentais (Backend/Lógica)._
-
-- **[Nome da Regra]:** Descrição detalhada do comportamento, validações,
-  condições, gatilhos e cálculos.
-- **[Nome da Regra]:** Descrição detalhada...
-
-##### Regras de UI/UX (se houver)
-
-_Especifique aspectos visuais e de interação (Frontend)._
-
-- **[Elemento Visual]:** Especificação (Cores, Tipografia, Estados).
-- **Responsividade:** Comportamento em mobile/desktop.
-- **Acessibilidade:** Regras de contraste e navegação por teclado.
-- **Feedback:** Mensagens de erro, sucesso e estados de loading.
-- **Performance:** Tempo de carregamento, resposta.
-- **Confiabilidade:** Tratamento de erros, fallbacks.
-- **Compatibilidade:** Navegadores, dispositivos.
-
-_(Repita o bloco `RF-XX` para todos os requisitos)_
-
----
-
-### 3. Fluxo de Usuário (User Flow)
-
-_Descreva o caminho passo a passo que o usuário percorre. Divida em fluxos
-menores se necessário._
-
-**[Nome do fluxo]:** Breve contexto do fluxo.
-
-1. O usuário acessa [Tela/Local].
-2. O usuário realiza [Ação].
-3. O sistema valida [Condição]:
-   - **Sucesso:** Ocorre X.
-   - **Falha:** Ocorre Y.
-
----
-
-### 4. Fora do Escopo (Out of Scope)
-
-_O que NÃO faz parte desta versão, para evitar scope creep._
-
-- [Item fora do escopo]
-- [Item fora do escopo]
-
-#### Descartado durante a implementação _(somente Modo Retrospectivo)_
-
-_Comportamentos ou requisitos considerados mas não entregues, com justificativa._
-
-- **[Item descartado]:** Motivo pelo qual foi deixado de fora.
-- **[Item descartado]:** Motivo...
-
----
-
-### 5. Divergências entre Milestone e Implementação _(somente quando houver)_
-
-_Registre de forma objetiva os pontos em que a implementação atual diverge da
-milestone ou ainda não cobre integralmente o comportamento esperado._
-
-- **[Ponto de divergência]:** O que a milestone define, o que a implementação faz hoje e impacto percebido.
-- **[Ponto de divergência]:** O que falta ou foi adaptado.
-
----
+O cabeçalho deve registrar o PRD canônico, sua revisão, as fontes auxiliares,
+os `RP-*` e os `JN-*`. Cada `RP-*` deve conter necessidades do usuário,
+resultado, atores, regras de negócio e regras de experiência. Não use `RF-*`,
+`CA-*`, `VM-*` ou `EV-*` no PRD; esses IDs pertencem à Spec/Evaluation.
 
 ## Restrições para o PRD
 
@@ -248,5 +170,3 @@ milestone ou ainda não cobre integralmente o comportamento esperado._
   "Assunção" quando uma informação não foi confirmada.
 - A seção "Descartado durante a implementação" só deve aparecer no
   **Modo Retrospectivo**.
-- A seção "Divergências entre Milestone e Implementação" só deve aparecer
-  quando houver milestone informada ou inferida com segurança.

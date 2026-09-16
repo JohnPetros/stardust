@@ -9,6 +9,9 @@ Transforme uma tarefa de manutenção técnica em uma única issue coerente de t
 produto: não possui PRD, requisito de PRD ou milestone de produto. Não implemente, crie branch,
 commit, PR, Spec ou Plan.
 
+Escreva o título, o body, as perguntas do Grilling e as justificativas em português do Brasil.
+Preserve identificadores técnicos, paths, URLs e nomes oficiais de labels.
+
 ## Classificação
 
 Use este workflow somente quando o resultado não alterar comportamento de usuário, regras de
@@ -35,8 +38,8 @@ do repositório para evitar duplicação e verifique labels existentes antes do 
 
 ## Gate obrigatório de Grilling
 
-Depois da pesquisa factual e antes do draft, execute o protocolo de Grilling definido em
-`documentation/sdd.md`. Modele como design tree as decisões ainda abertas sobre resultado técnico,
+Depois da pesquisa factual e antes do draft, execute o **Grilling gate** definido em
+[`sdd.md#grilling-gate`](../sdd.md#grilling-gate). Modele como design tree as decisões ainda abertas sobre resultado técnico,
 risco mitigado, limites, contratos preservados, critérios de verificação, aplicação afetada e
 metadata.
 
@@ -73,9 +76,9 @@ issue, salvo decomposição explicitamente solicitada.
 
 ## Critérios de verificação
 
-- [ ] <resultado técnico observável>
-- [ ] <contrato ou comportamento preservado>
-- [ ] <validação automatizada, estática ou manual aplicável>
+- <resultado técnico observável>
+- <contrato ou comportamento preservado>
+- <validação automatizada, estática ou manual aplicável>
 
 ## Referências na codebase
 

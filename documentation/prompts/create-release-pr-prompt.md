@@ -366,7 +366,7 @@ Depois da abertura ou atualização do PR, o workflow de release deve:
 6. reutilizar o bootstrap seguro de autenticação do Playwright MCP, sem expor
    credenciais ao modelo ou enviá-las em prompts e argumentos de ferramentas;
 7. usar o contexto read-only do milestone e seus issues carregado pelo
-   workflow para identificar seus requisitos `REQ-*`;
+   workflow para identificar seus requisitos `RP-*` e jornadas `JN-*`;
 8. validar os requisitos daquele PRD que forem aplicáveis à Web App e puderem
    ser exercitados pelo ambiente de staging disponível;
 9. coletar screenshots, estado visível final, console, falhas de página,

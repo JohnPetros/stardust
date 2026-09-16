@@ -37,9 +37,10 @@ ledger vivo, não um relatório escrito apenas no encerramento: preserve a ordem
 das seções e atualize-o após cada mudança de implementação, teste, browser,
 migration, artefato, documentação ou validação.
 
-Use IDs estáveis e uma linha por evidência: `EV-*` para sensores/runtime,
-`MV-*` para cenários manuais, `VIS-*` para comparações visuais, `FND-*` para
-findings e `CI-*` para checks do PR. Marque evidências afetadas como `stale`;
+Use IDs estáveis: `EV-*` para cada evidência, `VM-*` para cenários manuais,
+`ACH-*` para achados e `CI-*` para checks automatizados do PR. Comparações
+visuais também são evidências `EV-*`, com viewport, estado e referência
+registrados. Marque evidências afetadas como `stale`;
 não reutilize uma captura ou resultado anterior à última alteração relevante.
 Para cada finding material, mantenha a entrada concreta em `Warnings e findings`
 e uma lição/disposição em `Lições aprendidas` ou `Análise preventiva dos findings`.
@@ -68,7 +69,7 @@ last_updated_at: YYYY-MM-DD
 
 | Critério | Estado | Evidência real                 |
 | -------- | ------ | ------------------------------ |
-| CA-01    | passed | teste, browser, sensor ou diff |
+| CA-01    | passed | EV-01 — teste, browser, sensor ou diff |
 
 ## Revisões
 
@@ -93,12 +94,18 @@ Para frontend, registre também:
 | UI Layer Audit        | passed | widget, paths e linhas de Entry Point/View/Hook                                      |
 | Pencil/Web comparison | passed | node, viewport, estado, rota, HEAD, anchors, divergência/aprovação e screenshot/diff |
 
-Quando houver referência Pencil, registre uma matriz por node. Ela deve
+Quando houver `design/handoff.md`, trate-o como referência de implementação e registre uma matriz por node. Ela deve
 identificar o `.pen`, Node ID, viewport, estado/variante, rota, dimensão e
 anchors da referência, captura Web no mesmo contexto, HEAD avaliado e qualquer
 divergência aprovada. `match` e `approved adaptation` são os únicos estados
 aceitáveis; node ausente, contradito ou adicionado sem aprovação mantém a
 avaliação bloqueada.
+
+O handoff e suas imagens são entradas de design, não evidências de runtime. A Evaluation deve
+registrar separadamente a captura da implementação, comparação visual, observações de
+responsividade/acessibilidade e o `EV-*` correspondente. Se o handoff declarar estado,
+viewport ou extensão suplementar, a ausência da evidência exigida mantém a Evaluation
+`in_progress`.
 
 ## Sensores e preflight
 
@@ -110,10 +117,10 @@ avaliação bloqueada.
 
 ## Checks e build do CI
 
-| Verificação  | Estado  | HEAD / evidência          |
-| ------------ | ------- | ------------------------- |
-| Checks do CI | pending | PR e workflows aplicáveis |
-| Build        | pending | workflow                  |
+| ID | Verificação | Estado | HEAD / evidência |
+| --- | --- | --- | --- |
+| CI-01 | Checks automatizados | pending | PR e workflows aplicáveis; EV-... |
+| CI-02 | Build | pending | workflow; EV-... |
 
 ## Warnings e findings
 
@@ -152,8 +159,9 @@ aprovação do usuário nesta matriz.
 - Próxima ação: `<ação>`
 ```
 
-Checks ou build com falha devem ser registrados imediatamente aqui. A Spec
-permanece `in_progress`; correções de escopo usam `Builder Fix CI-*`, com
+Checks ou build com falha devem ser registrados imediatamente aqui como `CI-*`
+e, quando houver um problema a corrigir, como `ACH-*`. A Spec permanece
+`in_progress`; correções de escopo usam `Builder Fix ACH-*`, com
 novo sensor e novo Reviewer sempre que o diff ou qualquer evidência de Contract,
 Rule, Pencil ou Playwright for invalidada. Qualquer alteração posterior ao
 Reviewer invalida o commit avaliado anterior, inclusive quando afetar a fidelidade

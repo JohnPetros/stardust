@@ -14,6 +14,9 @@ The issue describes why the current structure should change, which behavior and 
 remain stable, and what observable evidence proves the refactor complete. Do not implement code,
 create or edit a Spec, create a branch, commit changes or open a pull request.
 
+Write the title, body, Grilling questions and justifications in Brazilian Portuguese. Preserve
+technical identifiers, paths, URLs and official label names.
+
 ## Input
 
 - **Refactor request:** the structure, boundary, dependency or technical debt to improve.

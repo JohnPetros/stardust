@@ -71,6 +71,9 @@ testes, migrations ou artefatos gerados e registre o blocker:
   como substituto;
 - UI exige comportamento automatizado, screenshot Playwright atual e comparação
   inspecionada por viewport/estado; testes passando sozinhos não bastam;
+- quando houver `design/handoff.md`, ele é o bundle visual offline: use sua ordem de autoridade,
+  crosswalk de tokens, componentes, receitas de layout/estado e extensões aprovadas; não copie
+  valores brutos do Pencil nem invente detalhes ausentes;
 - para Server, confirme comportamento real, autorização, persistência e efeitos
   colaterais conforme AGENTS.md e Supabase Dev quando aplicável;
 - os workspaces Core, Server, Studio e Web executam cobertura e o ratchet; LSP,
@@ -85,8 +88,10 @@ testes, migrations ou artefatos gerados e registre o blocker:
    (mesmo sem fases), contendo a tarefa, paths, critérios, estado e próxima ação.
    O Plan será mantido durante todo o fluxo para registrar cada mudança.
 4. Crie `Builder Direct` como subagente e envie Contract, resultado observável,
-   paths, Rules, Architecture, os paths/Node IDs Pencil canônicos, estados,
-   viewports e MCPs aplicáveis.
+   paths, Rules, Architecture, o `design/handoff.md` e seus Node IDs canônicos,
+   estados, viewports, receitas, extensões e MCPs aplicáveis. O Builder deve conseguir
+   implementar usando o bundle salvo mesmo sem Pencil; use Pencil novamente apenas quando o
+   Design Contract mudar ou a validação final exigir a fonte canônica.
 5. Inspecione o diff; o Builder não atualiza Spec, Plan ou estado.
 6. Execute `npm run check:spec-implementation -- <spec> --base <commit-base>` antes dos sensores.
    Execute também `npm run check:spec-definition -- <spec>` e
@@ -119,7 +124,7 @@ testes, migrations ou artefatos gerados e registre o blocker:
 ## Builder activation gate
 
 Antes de qualquer alteração de feature, ative uma assignment delimitada contendo
-a revisão exata da Spec, RF/CA e REQ-* mapeados, paths permitidos e proibidos,
+a revisão exata da Spec, RP/JN, RF/CA e SHI-* mapeados, paths permitidos e proibidos,
 Rule Pack, referências de Design, ownership e exits de validação. Registre a
 assignment no `plan.md` e no `evaluation.md`. A task principal coordena,
 inspeciona e integra; não substitui um Builder de ownership por edição direta

@@ -19,7 +19,7 @@ planejamento; dúvidas de execução pertencem ao Plan e à task principal.
 
 ## Gate obrigatório de Grilling
 
-Execute o protocolo de Grilling definido em `documentation/sdd.md` antes de criar ou atualizar o
+Execute o **Grilling gate** definido em [`sdd.md#grilling-gate`](../sdd.md#grilling-gate) antes de criar ou atualizar o
 Plan. Monte uma design tree apenas para decisões de execução que a Spec não tenha determinado,
 como decomposição em waves, ownership, paralelismo, ordem de migrations/integrações, gates de
 ambiente, riscos, recovery e handoff.
@@ -75,10 +75,13 @@ tenant e persistência no Supabase Dev quando aplicável.
 | ---- | ---------------- | -------- | --------- | --------------- | ------ |
 ```
 
-Agende todos os `MV-*`, sensores, runtime e referências visuais separadamente por estado e
+Agende todos os `VM-*`, sensores, runtime e referências visuais separadamente por estado e
 viewport. Agende um `implementation-reviewer-agent` pareado para cada Builder após seu diff;
 uma revisão integrada adicional é opcional apenas para interações cross-boundary sem Builder
 responsável.
+
+Cada cenário deve apontar para a `EV-*` esperada. Achados de execução devem
+usar `ACH-*`; checks automatizados devem usar `CI-*`.
 
 ### 4. Execution log
 

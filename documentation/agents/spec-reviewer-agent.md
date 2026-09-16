@@ -54,7 +54,7 @@ inspecionável. Preferência pessoal não é finding.
 
 | ID    | Severity | Contract/authority | Evidence   | Required resolution      |
 | ----- | -------- | ------------------ | ---------- | ------------------------ |
-| SR-01 | blocking | <section/path>     | <evidence> | <correction or decision> |
+| ACH-01 | blocking | <section/path>     | <evidence> | <correction or decision> |
 
 ### Non-blocking observations
 

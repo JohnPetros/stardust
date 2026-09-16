@@ -20,8 +20,8 @@ aguardar seus sensores aplicáveis.
 Para cada fase, em qualquer modo:
 
 1. confirme revisão da Spec, dependências, critérios, paths e evidências; em UI,
-   confirme também os paths/Node IDs Pencil, estados, viewports e divergências
-   aprovadas;
+   confirme também o `design/handoff.md`, sua fonte/Node IDs, estados, variantes,
+   viewports, receitas, extensões e divergências aprovadas;
 2. marque fase/tarefa como `in_progress`/`implementing`;
 3. crie `Builder F<n>` para o escopo principal;
 4. identifique tarefas prontas, independentes e sem paths sobrepostos;
@@ -29,9 +29,8 @@ Para cada fase, em qualquer modo:
 6. após cada Builder, crie imediatamente seu `Implementation Reviewer F<n>`
    (ou `Implementation Reviewer F<n>-T<m>`), envie somente o diff/paths desse
    Builder e aguarde o veredito antes de marcar a tarefa `verified`;
-7. inspecione e integre o diff; para UI, compare cada node
-   canônico com a Web no mesmo viewport/estado antes de considerar a tarefa
-   `verified`;
+7. inspecione e integre o diff; para UI, use o handoff como contrato offline e compare cada
+   node canônico com a Web no mesmo viewport/estado antes de considerar a tarefa `verified`;
 8. execute `npm run check:spec-implementation -- <spec> --base <commit-base>`
    antes dos sensores e novamente após qualquer correção de path contratado;
    execute `npm run check:spec-definition -- <spec>` e

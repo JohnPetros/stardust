@@ -84,7 +84,7 @@ projeto.
 7. recomende no resumo final:
    - **Correção direta:** narrow, bem compreendida, baixo risco e sem Contract durável; ou
    - **Correction Spec:** ambígua, cross-layer, coordenada ou de risco material, exigindo
-     `RF-*`, `CA-*`, `MV-*` ou Plan.
+     `RF-*`, `CA-*`, `VM-*` ou Plan.
 
 Não escreva a delivery route dentro do Bug Report e não crie a Spec neste workflow.
 

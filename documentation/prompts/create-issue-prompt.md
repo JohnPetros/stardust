@@ -14,3 +14,6 @@ Classifique o pedido e encaminhe imediatamente:
 
 Este router apenas classifica e encaminha. Os workflows dedicados definem sua própria pesquisa,
 Grilling, template, metadata e approval gate. Não implemente, crie branch, commit, PR, Spec ou Plan.
+
+Todos os títulos, corpos, perguntas do Grilling e justificativas de issues devem ser escritos em
+português do Brasil. Preserve identificadores técnicos, paths, URLs e nomes oficiais de labels.
