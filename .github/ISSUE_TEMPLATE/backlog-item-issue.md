@@ -1,6 +1,6 @@
 ---
-name: Technical Chore Issue
-about: Registre uma manutenção técnica sem mudança de comportamento
+name: Chore técnico
+about: Registre uma manutenção técnica sem mudança de comportamento ou relação com produto
 title: ''
 labels: ''
 assignees: ''
@@ -10,19 +10,14 @@ assignees: ''
 
 <!-- Resultado técnico e risco mitigado. -->
 
-## Escopo técnico
+## Escopo
 
 - <!-- Mudança incluída -->
 - **Fora do escopo:** <!-- Limite explícito -->
 
 ## Critérios de verificação
 
-- [ ] <!-- Resultado verificável -->
-
-## Contexto de produto
-
-- **PRD mais relevante:** <!-- URL/path ou None — busca executada e motivo -->
-- **Requisito do PRD:** <!-- anchor/ID, documento completo ou Não aplicável -->
+- <!-- Resultado verificável -->
 
 ## Referências na codebase
 

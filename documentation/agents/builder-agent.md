@@ -16,7 +16,8 @@ Rules e evidência suficiente para avaliação independente.
 - **Builder F<n>:** escopo principal de uma fase do Plan.
 - **Builder F<n>-T<m>:** tarefa atômica independente criada pela task principal.
 - **Builder Fix <finding-id>:** correção de finding de Reviewer ou review.
-- **Builder Fix CI-<n>:** correção de falha de check ou build do CI.
+- **Builder Fix ACH-<n>:** correção de um achado, inclusive um achado originado
+  por falha de `CI-<n>`.
 
 Todos os modos usam este mesmo contrato. O nome identifica o contexto e não
 cria hierarquia entre Builders.
@@ -29,8 +30,8 @@ cria hierarquia entre Builders.
 - resultado observável;
 - paths permitidos e paths proibidos;
 - Rules e Architecture aplicáveis;
-- quando houver UI, fonte visual canônica, path `.pen`, Node IDs, estados,
-  variantes, viewports e divergências aprovadas;
+- quando houver UI, `design/handoff.md`, fonte visual canônica, path `.pen`, Node IDs,
+  estados, variantes, viewports, receitas de implementação e divergências aprovadas;
 - findings bloqueantes, quando for uma correção.
 
 ## Execução
@@ -40,10 +41,11 @@ cria hierarquia entre Builders.
 2. Confirme paths, contratos e implementações similares na codebase.
 3. Verifique se a solução respeita o Contract vigente.
 4. Implemente somente o escopo recebido.
-5. Quando houver UI, inspecione os nodes Pencil canônicos e preserve sua
-   composição, hierarquia, dimensões, espaçamento, tipografia, cores,
-   densidade, variantes e estados. Sem decisão ou amendment aprovado, não
-   substitua, simplifique ou adicione elementos visuais.
+5. Quando houver UI, use primeiro o `design/handoff.md` como contrato offline e preserve a
+   composição, hierarquia, dimensões, espaçamento, tipografia, tokens, densidade, variantes,
+   estados, responsividade e acessibilidade declarados. Consulte os nodes Pencil canônicos
+   quando disponíveis para inspeção e comparação; não copie valores brutos nem substitua,
+   simplifique ou adicione elementos visuais sem decisão ou amendment aprovado.
 6. Use MCPs aplicáveis, como Serena, Context7, Pencil, Playwright ou Supabase.
 7. Execute a comparação Pencil/Web no mesmo viewport e estado quando a UI
    estiver no escopo; registre cada divergência, sua causa e a aprovação
@@ -91,13 +93,13 @@ coordena a integração de seus diffs.
 ```md
 ## Builder Result
 
-- **Builder:** Builder Direct | Builder F<n> | Builder F<n>-T<m> | Builder Fix <finding-id> | Builder Fix CI-<n>
+- **Builder:** Builder Direct | Builder F<n> | Builder F<n>-T<m> | Builder Fix ACH-<n>
 - **Estado:** completed | blocked
 - **Arquivos criados/alterados:**
   - `<path>`
 - **Resultado observável:** <evidência resumida>
 - **Verificações locais:** <comandos e resultados>
-- **Fidelidade Pencil/Web:** não aplicável | <nodes, viewports, estados e evidências>
+- **Fidelidade Pencil/Web:** não aplicável | <handoff, nodes, viewports, estados e evidências>
 - **Lacunas documentais:** nenhuma | <documento, evidência e ação>
 - **Divergências:** nenhuma | <descrição>
 - **Riscos para o Reviewer:** nenhum | <descrição>

@@ -27,6 +27,9 @@ const env = {
   openrouterApiKey: process.env.OPENROUTER_API_KEY,
   elevenLabsApiKey: process.env.ELEVEN_LABS_API_KEY,
   godAccountIds: process.env.GOD_ACCOUNT_IDS?.split(',').filter(Boolean),
+  trustedProxyCidrs: process.env.TRUSTED_PROXY_CIDRS?.split(',')
+    .map((value) => value.trim())
+    .filter(Boolean),
   sentryDsn: process.env.SENTRY_DSN,
   s3AccountId: process.env.S3_ACCOUNT_ID,
   s3AccessKeyId: process.env.S3_ACCESS_KEY_ID,
@@ -64,6 +67,7 @@ const envSchema = z
     posthogPersonalApiKey: z.string(),
     posthogProjectId: z.coerce.number().int().positive(),
     godAccountIds: z.array(idSchema),
+    trustedProxyCidrs: z.array(z.string().min(1)).default([]),
   })
   .superRefine((value, context) => {
     if (value.mode !== 'test' && !value.supabaseServiceRole) {
@@ -71,6 +75,14 @@ const envSchema = z
         code: z.ZodIssueCode.custom,
         path: ['supabaseServiceRole'],
         message: 'SUPABASE_SERVICE_ROLE is required outside test mode',
+      })
+    }
+
+    if (value.mode === 'production' && value.trustedProxyCidrs.length === 0) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['trustedProxyCidrs'],
+        message: 'TRUSTED_PROXY_CIDRS is required in production mode',
       })
     }
   })

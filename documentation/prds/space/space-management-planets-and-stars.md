@@ -1,21 +1,67 @@
+---
+title: Gerenciamento do Espaço Sideral (Planetas e Estrelas)
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/10
+last_updated_at: 2026-02-28
+---
+
 # PRD — Gerenciamento do Espaço Sideral (Planetas e Estrelas)
 
-- **Módulo:** `space`
-- **Milestone:** [#10 — Gerenciamento do Espaço Sideral (Planetas e Estrelas)](https://github.com/JohnPetros/stardust/milestone/10)
-- **Status:** open
-- **Atualizado em:** 2026-02-28T10:57:47Z
+Disponibiliza para: space; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-## 1. Visao Geral
+## 1. Resumo Executivo
 
 O gerenciamento do espaco no Studio permite que a equipe de conteudo administre a estrutura da trilha espacial de aprendizado por meio de planetas e estrelas. A funcionalidade resolve o problema de manutencao manual e fragmentada da jornada, centralizando criacao, edicao, ordenacao e exclusao em um unico fluxo operacional. O objetivo principal e aumentar a eficiencia operacional da equipe ao publicar e ajustar a progressao dos alunos com rapidez e menor risco de erro.
 
-## 2. Requisitos
+## 2. Problema e Oportunidade
 
-- [x] Cadastro de planeta
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-#### Cadastro de planeta
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/10 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Cadastro de planeta
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Cadastro de planeta.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** Permitir criar novos planetas com identidade visual e nome para compor a trilha.
 
@@ -26,7 +72,7 @@ O gerenciamento do espaco no Studio permite que a equipe de conteudo administre 
 - **Estado inicial do planeta:** Um novo planeta nasce sem estrelas, com contadores zerados e indisponivel para usuarios finais.
 - **Posicionamento inicial:** O planeta criado entra no fim da ordem atual de planetas.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Formulario de cadastro:** O modal deve exibir campo de nome e uploads separados para imagem e icone.
 - **Preview visual:** A imagem e o icone devem ser exibidos em preview antes da confirmacao.
@@ -39,7 +85,21 @@ O gerenciamento do espaco no Studio permite que a equipe de conteudo administre 
 
 - [x] Edicao e exclusao de planeta
 
-#### Edicao e exclusao de planeta
+---
+
+#### RP-02 — Edicao e exclusao de planeta
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Edicao e exclusao de planeta.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** Permitir ajustar dados visuais e remover planetas obsoletos com confirmacao explicita.
 
@@ -50,7 +110,7 @@ O gerenciamento do espaco no Studio permite que a equipe de conteudo administre 
 - **Exclusao destrutiva:** A exclusao de planeta remove o planeta e suas estrelas associadas.
 - **Precondicao de exclusao:** A acao de exclusao deve exigir confirmacao do operador.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Acao de editar:** O planeta deve oferecer atalho para abrir formulario de edicao.
 - **Acao de deletar:** O planeta deve oferecer dialogo de confirmacao com aviso de irreversibilidade.
@@ -63,7 +123,21 @@ O gerenciamento do espaco no Studio permite que a equipe de conteudo administre 
 
 - [x] Ordenacao de planetas
 
-#### Ordenacao de planetas
+---
+
+#### RP-03 — Ordenacao de planetas
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Ordenacao de planetas.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** Permitir reordenar planetas via arrastar e soltar para redefinir a progressao macro da trilha.
 
@@ -73,7 +147,7 @@ O gerenciamento do espaco no Studio permite que a equipe de conteudo administre 
 - **Integridade da ordem:** A nova ordem deve conter IDs unicos de todos os planetas envolvidos.
 - **Persistencia de ordem:** A ordem salva deve ser reutilizada nas proximas cargas da pagina.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Interacao drag and drop:** Itens devem apresentar affordance visual de arraste.
 - **Acessibilidade:** Deve existir indicacao visual clara do item em movimento.
@@ -85,7 +159,21 @@ O gerenciamento do espaco no Studio permite que a equipe de conteudo administre 
 
 - [x] Gestao de estrelas do planeta
 
-#### Gestao de estrelas do planeta
+---
+
+#### RP-04 — Gestao de estrelas do planeta
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Gestao de estrelas do planeta.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** Permitir criar, listar, remover e ordenar estrelas dentro de cada planeta.
 
@@ -98,7 +186,7 @@ O gerenciamento do espaco no Studio permite que a equipe de conteudo administre 
 - **Ordenacao de estrelas:** A ordem por drag and drop redefine a numeracao e a sequencia oficial do planeta.
 - **Integridade da ordem:** Reordenacao aceita apenas lista valida de IDs unicos das estrelas.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Visao colapsavel por planeta:** Cada planeta deve expandir/retrair para gerenciamento das estrelas.
 - **Estado vazio:** Quando nao houver estrelas, exibir mensagem de estado vazio.
@@ -112,7 +200,21 @@ O gerenciamento do espaco no Studio permite que a equipe de conteudo administre 
 
 - [x] Configuracao funcional de estrela
 
-#### Configuracao funcional de estrela
+---
+
+#### RP-05 — Configuracao funcional de estrela
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Configuracao funcional de estrela.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** Permitir editar nome e controlar disponibilidade/tipo da estrela, alem de acessar o conteudo associado.
 
@@ -127,7 +229,7 @@ O gerenciamento do espaco no Studio permite que a equipe de conteudo administre 
   - **Quando nao for desafio:** A estrela deve expor acesso aos fluxos de historia e questoes.
 - **Metricas operacionais da estrela:** Exibir quantidade de usuarios na estrela e quantidade de desbloqueios para apoiar curadoria.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Edicao inline:** Nome deve ser editavel diretamente no item da estrela.
 - **Controles de toggle:** Disponibilidade e tipo devem ser ajustados por alternadores dedicados.
@@ -139,7 +241,17 @@ O gerenciamento do espaco no Studio permite que a equipe de conteudo administre 
 - **Confiabilidade:** Falhas de integracao externa (ex.: desafio nao encontrado) devem ter fallback de navegacao funcional.
 - **Compatibilidade:** Comportamento uniforme de edicao e toggles nos navegadores homologados.
 
-## 3. Fluxo de Usuario (User Flow)
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| space | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada preservada do documento legado
+
+### 3. Fluxo de Usuario (User Flow)
 
 **Nome do fluxo:** Montar planeta completo no Studio.
 
@@ -169,10 +281,16 @@ O gerenciamento do espaco no Studio permite que a equipe de conteudo administre 
    - **Sucesso:** Item removido e interface atualizada.
    - **Falha:** Mensagem de erro exibida e item preservado.
 
-## 4. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-- Criacao em massa (bulk) de planetas ou estrelas.
-- Versionamento, historico de alteracoes e desfazer/refazer.
-- Regras automaticas de liberacao pedagogica baseadas em desempenho.
-- Edicao de conteudo de historia/questoes dentro desta tela (apenas navegacao para telas especificas).
-- Definicao de metas analiticas formais para esta versao do PRD.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Criacao em massa (bulk) de planetas ou estrelas. |
+| Escopo | Versionamento, historico de alteracoes e desfazer/refazer. |
+| Escopo | Regras automaticas de liberacao pedagogica baseadas em desempenho. |
+| Escopo | Edicao de conteudo de historia/questoes dentro desta tela (apenas navegacao para telas especificas). |
+| Escopo | Definicao de metas analiticas formais para esta versao do PRD. |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

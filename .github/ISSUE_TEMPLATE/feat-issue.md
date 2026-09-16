@@ -1,31 +1,45 @@
 ---
-name: Feature Issue
+name: Issue de feature
 about: Descreva uma capacidade ou resultado de produto
 title: ''
 labels: 'feature'
 assignees: ''
 ---
 
-## Objetivo
+## 🎯 Objetivo
 
 <!-- Resultado esperado para o usuário ou para o negócio. -->
 
-## Escopo
+## 📦 Escopo da Entrega
 
 - <!-- Comportamento ou capacidade incluída -->
 - <!-- Restrição material de produto, design ou integração -->
-- **Fora do escopo:** <!-- Comportamento adjacente excluído -->
 
-## Critérios de aceite
+## ✅ Critérios de Aceitação
 
-- [ ] <!-- Sucesso observável -->
-- [ ] <!-- Validação ou erro observável, quando aplicável -->
-- [ ] <!-- Autorização, tenancy, responsividade ou acessibilidade, quando aplicável -->
-- [ ] <!-- Validação automatizada e manual exigida -->
+- <!-- Sucesso observável -->
+- <!-- Validação ou erro observável, quando aplicável -->
+- <!-- Autorização, tenancy, responsividade ou acessibilidade, quando aplicável -->
+- <!-- Critério adicional observável -->
 
-## Referências
+## 🧪 Validação
 
+Evidências esperadas:
+
+- <!-- Testes automatizados relevantes -->
+- <!-- Validação manual ou E2E relevante -->
+- <!-- Validação visual, responsiva e de acessibilidade quando aplicável -->
+
+## 🔗 Rastreabilidade
+
+- **PRD:** <!-- Path do PRD canônico em documentation/prds/ -->
+- **Requisito:** <!-- RP-* -->
+- **Jornada:** <!-- JN-* ou Não aplicável -->
+- **User Story:** <!-- SHI-* ou Não aplicável -->
+- **Design:** <!-- Arquivo e node/frame ou Não aplicável -->
 - **Milestone:** <!-- URL -->
-- **PRD principal:** <!-- URL/path obrigatório -->
-- **Requisito do PRD:** <!-- anchor/ID ou documento completo -->
-- **Design/dependência:** <!-- link quando houver -->
+
+## 🚫 Fora de Escopo
+
+- <!-- Comportamento ou capacidade explicitamente excluído -->
+- <!-- Alteração adjacente que não pertence a esta entrega -->

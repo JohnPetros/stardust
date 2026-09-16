@@ -1,13 +1,19 @@
+---
+title: Gerenciador de Chaves de API
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/27
+last_updated_at: 2026-04-22
+---
+
 # PRD — Gerenciador de Chaves de API
 
-- **Módulo:** `auth`
-- **Milestone:** [#27 — Gerenciador de Chaves de API](https://github.com/JohnPetros/stardust/milestone/27)
-- **Status:** open
-- **Atualizado em:** 2026-04-22T18:21:11Z
+Disponibiliza para: auth; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-### 1. Visão Geral
+## 1. Resumo Executivo
 
 O **Gerenciador de API Keys** é uma página na plataforma web do Stardust que permite que usuários com a insígnia de **Engenheiro** criem e gerenciem suas chaves de acesso à API do Stardust — usadas, inicialmente, para conectar ao MCP do Stardust.
 
@@ -17,9 +23,47 @@ O objetivo principal é entregar autonomia ao usuário engenheiro para criar, vi
 
 ---
 
-### 2. Requisitos
+## 2. Problema e Oportunidade
 
-#### [ ] Controlar acesso ao gerenciador
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
+
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/27 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Controlar acesso ao gerenciador
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Controlar acesso ao gerenciador.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** A página do gerenciador de API keys deve ser acessível apenas por usuários com a insígnia de Engenheiro.
 
@@ -28,12 +72,20 @@ O objetivo principal é entregar autonomia ao usuário engenheiro para criar, vi
 - **Acesso não autorizado:** Usuários autenticados sem a insígnia de Engenheiro devem receber uma resposta 404 ao tentar acessar a página.
 - **Usuário não autenticado:** Usuários não autenticados devem ser redirecionados para o fluxo de login antes da verificação de insígnia.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 - **Página 404:** O usuário sem insígnia deve ver a página de erro 404 padrão da plataforma, sem pistas sobre a existência do gerenciador.
 
 ---
 
-#### [ ] Gerar nova API key
+#### RP-02 — Gerar nova API key
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Gerar nova API key.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O usuário engenheiro deve conseguir criar uma nova API key informando um nome descritivo.
 
@@ -46,7 +98,7 @@ O objetivo principal é entregar autonomia ao usuário engenheiro para criar, vi
 - **Irreversibilidade da exibição:** Se o usuário fechar o modal sem copiar a key, ela não poderá ser recuperada — apenas revogada e substituída por uma nova.
 - **Vinculação ao usuário:** A key criada deve ficar associada exclusivamente ao perfil do usuário que a gerou.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 - **Ação de criação:** A página deve ter um botão visível para iniciar a criação de uma nova key.
 - **Modal de criação:** A criação ocorre em um modal com campo de nome e botão de confirmação.
 - **Feedback de loading:** O botão de confirmação exibe estado de carregamento durante a geração.
@@ -57,7 +109,15 @@ O objetivo principal é entregar autonomia ao usuário engenheiro para criar, vi
 
 ---
 
-#### [ ] Listar API keys existentes
+#### RP-03 — Listar API keys existentes
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Listar API keys existentes.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O usuário engenheiro deve conseguir visualizar todas as suas API keys ativas na página do gerenciador.
 
@@ -67,7 +127,7 @@ O objetivo principal é entregar autonomia ao usuário engenheiro para criar, vi
 - **Ordenação:** As keys devem ser ordenadas pela data de criação, da mais recente para a mais antiga.
 - **Keys revogadas:** Keys revogadas não devem aparecer na listagem.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 - **Estado vazio:** Quando o usuário não possuir nenhuma key, exibir mensagem informativa indicando que ele ainda não gerou nenhuma API key, com CTA para criar a primeira.
 - **Feedback de loading:** Exibir estado de carregamento enquanto a lista é buscada.
 - **Feedback de erro:** Exibir mensagem clara em caso de falha no carregamento.
@@ -75,7 +135,15 @@ O objetivo principal é entregar autonomia ao usuário engenheiro para criar, vi
 
 ---
 
-#### [ ] Renomear API key
+#### RP-04 — Renomear API key
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Renomear API key.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O usuário engenheiro deve conseguir alterar o nome de uma API key existente.
 
@@ -84,7 +152,7 @@ O objetivo principal é entregar autonomia ao usuário engenheiro para criar, vi
 - **Propriedade da key:** O usuário só pode renomear keys que ele próprio criou.
 - **Persistência imediata:** A alteração do nome deve ser persistida ao confirmar a ação.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 - **Ação de renomear:** Cada item da lista deve ter uma ação de renomear acessível (ícone/botão).
 - **Modal ou edição inline:** A edição do nome pode ocorrer em modal dedicado ou inline no item da lista.
 - **Feedback de loading:** Exibir estado de carregamento durante a persistência.
@@ -93,7 +161,15 @@ O objetivo principal é entregar autonomia ao usuário engenheiro para criar, vi
 
 ---
 
-#### [ ] Revogar API key
+#### RP-05 — Revogar API key
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Revogar API key.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O usuário engenheiro deve conseguir revogar (invalidar permanentemente) uma API key existente.
 
@@ -104,14 +180,22 @@ O objetivo principal é entregar autonomia ao usuário engenheiro para criar, vi
 - **Irreversibilidade:** A revogação é permanente — uma key revogada não pode ser reativada pelo usuário.
 - **Exclusão da listagem:** Keys revogadas devem deixar de aparecer na listagem exibida ao usuário.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 - **Ação de revogar:** Cada item da lista deve ter uma ação de revogar acessível.
 - **Confirmação destrutiva:** Antes de revogar, exibir diálogo de confirmação destacando que a ação é irreversível e que qualquer integração usando essa key deixará de funcionar.
 - **Feedback de loading:** Exibir estado de carregamento durante a revogação.
 - **Feedback de sucesso:** Exibir confirmação visual após a revogação.
 - **Feedback de erro:** Exibir mensagem clara em caso de falha.
 
----
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| auth | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada preservada do documento legado
 
 ### 3. Fluxo de Usuário (User Flow)
 
@@ -150,13 +234,19 @@ O objetivo principal é entregar autonomia ao usuário engenheiro para criar, vi
 
 ---
 
-### 4. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-- Listagem de keys revogadas para o usuário.
-- Data de expiração de keys.
-- Escopos e permissões granulares por key.
-- Limite de keys por usuário.
-- Regenerar uma key revogada (reativação).
-- Auditoria de uso da key (logs de requisições feitas com ela).
-- Gerenciamento de keys de outros usuários por administradores.
-- Acesso ao gerenciador por usuários sem a insígnia de Engenheiro.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Listagem de keys revogadas para o usuário. |
+| Escopo | Data de expiração de keys. |
+| Escopo | Escopos e permissões granulares por key. |
+| Escopo | Limite de keys por usuário. |
+| Escopo | Regenerar uma key revogada (reativação). |
+| Escopo | Auditoria de uso da key (logs de requisições feitas com ela). |
+| Escopo | Gerenciamento de keys de outros usuários por administradores. |
+| Escopo | Acesso ao gerenciador por usuários sem a insígnia de Engenheiro. |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

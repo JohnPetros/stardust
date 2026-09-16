@@ -17,7 +17,6 @@ describe('Verify Authentication Controller', () => {
     http = mock()
     service = mock<AuthService>()
     service.fetchAccount.mockImplementation()
-    http.pass.mockImplementation()
     controller = new VerifyAuthenticationController(service)
   })
 
@@ -25,10 +24,11 @@ describe('Verify Authentication Controller', () => {
     const restResponse = new RestResponse({ body: AccountsFaker.fakeDto() })
     service.fetchAccount.mockResolvedValue(restResponse)
 
-    await controller.handle(http)
+    const response = await controller.handle(http)
 
     expect(service.fetchAccount).toHaveBeenCalled()
-    expect(http.pass).toHaveBeenCalled()
+    expect(response.body).toEqual(restResponse.body)
+    expect(http.pass).not.toHaveBeenCalled()
   })
 
   it('should throw an error if the auth service returns a failure', async () => {

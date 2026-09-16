@@ -38,7 +38,7 @@ explicitamente como premissa documentada.
 
 ## Gate obrigatório de Grilling
 
-Execute o protocolo de Grilling definido em `documentation/sdd.md` depois da pesquisa factual e
+Execute o **Grilling gate** definido em [`sdd.md#grilling-gate`](../sdd.md#grilling-gate) depois da pesquisa factual e
 antes de escrever ou alterar a Spec. Modele como design tree somente decisões ainda não resolvidas
 pelas fontes, Architecture, Rules, Design ou codebase. Pergunte em cada round toda a frontier
 disponível, com evidência, alternativas, impacto e resposta recomendada; decisões dependentes
@@ -117,10 +117,14 @@ não existir uma fonte canônica; registre a ausência explicitamente.
 
 Inspecione as referências com Pencil; não deduza detalhes visuais somente de
 screenshots ou descrições. Salve referências necessárias sob `design/` e crie
-`design/manifest.md` com node, estado, viewport, surface e comparação esperada, para que a
-implementação normal não dependa de uma sessão Pencil viva. Se a solução exigir alteração no design, inclua o
-arquivo `.pen` no escopo e especifique os nodes afetados. Se não existir fonte
-visual canônica, registre isso explicitamente e não invente arquivo ou Node ID.
+`design/handoff.md` como contrato offline autocontido, com fonte canônica, inventário de node,
+estado, variante, viewport, screenshot, surface, tokens/componentes, comparação esperada e
+vínculos `RF-*`/`CA-*`/`VM-*`. Inclua também a precedência de autoridades, crosswalk de tokens,
+receitas de componentes/layout/ícones/tema/responsividade/acessibilidade, extensões aprovadas,
+fallbacks semânticos e estados sem referência, para que a implementação não dependa de uma
+sessão Pencil viva. Se a solução exigir alteração no design, inclua o arquivo `.pen` no escopo e
+especifique os nodes afetados. Se não existir fonte visual canônica, registre isso explicitamente
+e não invente arquivo ou Node ID.
 Uma divergência material deve ser resolvida antes de a Spec chegar a `open`.
 
 A validação de frontend deve exigir tanto a comparação dos nodes finais no
@@ -150,7 +154,10 @@ status: draft
 revision: 1
 source:
   - type: <prd|issue|report|direct-request>
-    ref: <url>
+    ref: <path do PRD canônico em documentation/prds/ ou outra fonte>
+    revision: <revisão da fonte quando aplicável>
+    requirements: [RP-01]
+    journeys: [JN-01]
 scope:
   - <workspace|diretório|arquivo>
 last_updated_at: YYYY-MM-DD
@@ -169,7 +176,10 @@ Não crie `evaluation.md` nesta etapa; `implement-spec` o materializa no kickoff
 primeira edição de feature. A Spec possui comportamento esperado; o Plan possui execução; a
 Evaluation possui resultados reais.
 
-Use somente `RF-*` e `CA-*` como IDs obrigatórios:
+Use `RP-*` e `JN-*` para rastrear a Spec ao PRD canônico versionado e às jornadas do
+usuário. Use `RF-*` e `CA-*` como IDs obrigatórios da Spec; registre `VM-*`
+para validações manuais e `EV-*` para as evidências esperadas. Use `SHI-*`
+quando houver uma issue Jira Shifu:
 
 ```md
 | CA    | RF    | Dado         | Quando | Então     | Evidência esperada   |

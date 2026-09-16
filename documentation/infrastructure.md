@@ -61,7 +61,18 @@ As variáveis são configuradas diretamente no Coolify, separadas por escopo:
 
 **Web (só Runtime):** `INNGEST_SIGNING_KEY`, `INNGEST_EVENT_KEY`
 
-**Server (só Runtime):** `MODE`, `PORT`, `BASE_URL`, `STARDUST_WEB_URL`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE`, `SUPABASE_DATABASE_URL`, `SUPABASE_DATABASE_PASSWORD`, `S3_ACCOUNT_ID`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `DROPBOX_REFRESH_TOKEN`, `DROPBOX_APP_KEY`, `DROPBOX_APP_SECRET`, `DISCORD_WEBHOOK_URL`, `SENTRY_DSN`
+**Server (só Runtime):** `MODE`, `PORT`, `BASE_URL`, `STARDUST_WEB_URL`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE`, `SUPABASE_DATABASE_URL`, `SUPABASE_DATABASE_PASSWORD`, `REDIS_URL`, `TRUSTED_PROXY_CIDRS`, `S3_ACCOUNT_ID`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `DROPBOX_REFRESH_TOKEN`, `DROPBOX_APP_KEY`, `DROPBOX_APP_SECRET`, `DISCORD_WEBHOOK_URL`, `SENTRY_DSN`
+
+O Server mantém um provider Redis dedicado para o rate limiter. `REDIS_URL` pode
+usar `rediss://` para preservar TLS; a conexão usa timeout de 250 ms e o
+middleware opera fail-open com breaker local de 30 segundos. O endereço do
+cliente é resolvido pelo proxy confiável: Traefik deve produzir
+`X-Forwarded-For` e o endereço da conexão precisa pertencer a um dos CIDRs em
+`TRUSTED_PROXY_CIDRS`. Somente nesse caso o Server usa o endereço mais à direita;
+caso contrário, ignora o header e usa o endereço real da conexão como fallback.
+Em produção, `TRUSTED_PROXY_CIDRS` é obrigatório para evitar falsificação do IP
+por clientes que alcancem o Server diretamente. Nenhuma chave Redis ou identidade
+é enviada à telemetria.
 
 **Studio:** variáveis `VITE_*`, incluindo `VITE_CDN_URL`, como Build Variables (se aplicável).
 

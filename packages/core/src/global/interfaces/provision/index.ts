@@ -5,4 +5,9 @@ export type { ToastProvider } from './ToastProvider'
 export type { NavigationProvider } from './NavigationProvider'
 export type { AudioProvider } from './AudioProvider'
 export type { CacheProvider, CacheOptions } from './CacheProvider'
+export type {
+  RateLimitDecision,
+  RateLimitInput,
+  RateLimiterProvider,
+} from './RateLimiterProvider'
 export type { XlsxProvider } from './XlsxProvider'

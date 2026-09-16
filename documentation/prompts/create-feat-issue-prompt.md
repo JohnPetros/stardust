@@ -8,10 +8,13 @@ description: Criar uma GitHub feature issue de produto no Stardust a partir de m
 Transforme uma capacidade ou resultado de produto em uma única issue coerente. Não implemente,
 crie branch, commit, PR, Spec ou Plan.
 
+Escreva o título, o body, as perguntas do Grilling e as justificativas em português do Brasil.
+Preserve identificadores técnicos, paths, URLs e nomes oficiais de labels.
+
 ## Autoridade
 
 Leia `AGENTS.md`, `documentation/rules/rules.md`, `documentation/modules.md` e a milestone de
-produto informada. Quando a milestone vincular PRD versionado, leia ambos. Leia Architecture e
+produto informada. Quando a milestone vincular o PRD canônico em `documentation/prds/`, leia ambos. Leia Architecture e
 Rules das camadas somente quando uma restrição material precisar ser preservada; detalhes de
 paths, declarations, runtime e comandos pertencem à Spec.
 
@@ -29,13 +32,13 @@ milestone, PRD, código e pedido conflitarem materialmente, esclareça antes do 
 Antes do draft:
 
 1. derive módulo, atores, outcome, capacidades e lifecycle solicitados;
-2. pesquise PRDs versionados em `documentation/**/prd.md` e `documentation/prds/*.md`;
+2. pesquise o PRD canônico em `documentation/prds/*.md` e os PRDs de feature em `documentation/**/prd.md`;
 3. pesquise milestones abertas e fechadas via GitHub e siga seus links de PRD;
 4. compare candidatos pelo contrato completo e pelos User Journeys/fluxos, não apenas pelo
    título ou proximidade de paths;
-5. selecione exatamente um PRD principal e o requisito/anchor mais específico que cobre a issue;
-6. use a milestone como PRD somente quando ela própria contiver o contrato de produto e não
-   houver documento versionado mais específico.
+5. selecione exatamente um PRD principal e o `RP-*` mais específico que cobre a issue;
+6. não trate a milestone como PRD; se nenhum PRD canônico em `documentation/prds/` governar o outcome,
+   encaminhe primeiro para `create-prd`.
 
 Uma feature issue não pode chegar ao approval gate com PRD desconhecido. Se nenhum candidato
 governar o outcome, encaminhe primeiro para `create-prd` ou amendment. Se dois candidatos forem
@@ -43,14 +46,15 @@ materialmente equivalentes ou conflitantes, peça decisão antes de redigir.
 
 ## Gate obrigatório de Grilling
 
-Execute o protocolo de Grilling definido em `documentation/sdd.md` depois da pesquisa factual e
-antes do draft. Modele como design tree as decisões ainda abertas sobre outcome, atores, escopo,
-critérios observáveis, fora do escopo, milestone e prioridade, sem antecipar o Technical Contract
-da Spec.
+Siga integralmente o **Grilling gate** definido em
+[`sdd.md#grilling-gate`](../sdd.md#grilling-gate). Este prompt apenas
+aplica o protocolo ao contexto de uma Feature Issue; não duplique nem crie regras paralelas.
 
-Pergunte toda a frontier disponível com recomendação e deixe decisões dependentes para rounds
-posteriores. A frontier vazia e a confirmação de entendimento compartilhado permitem preparar o
-draft, mas não substituem o approval gate da versão exata a publicar.
+Depois da pesquisa factual e antes do draft, modele como design tree as decisões ainda abertas
+sobre outcome, atores, escopo, critérios observáveis, fora do escopo, milestone e prioridade, sem
+antecipar o Technical Contract da Spec. Recompute a frontier por round, pergunte todas as decisões
+disponíveis com resposta recomendada e aguarde a confirmação de entendimento compartilhado antes
+de preparar o draft. Essa confirmação não substitui o approval gate da versão exata a publicar.
 
 ## Metadata GitHub
 
@@ -71,32 +75,50 @@ Use título nominal, sem prefixo de commit e orientado ao outcome, seguindo o pa
 repositório.
 
 ```md
-## Objetivo
+## 🎯 Objetivo
 
 <resultado para usuário ou negócio>
 
-## Escopo
+## 📦 Escopo da Entrega
 
 - <comportamento/capacidade incluída>
 - <restrição material de produto, Design ou integração>
 - <referência Pencil exata quando fornecida>
-- **Fora do escopo:** <comportamento adjacente excluído>
 
-## Critérios de aceite
+## ✅ Critérios de Aceitação
 
-- [ ] <sucesso observável>
-- [ ] <validação/erro observável>
-- [ ] <autorização/tenant quando aplicável>
-- [ ] <responsividade/acessibilidade quando aplicável>
-- [ ] <validação automatizada e manual exigida>
+- <sucesso observável>
+- <validação/erro observável>
+- <autorização/tenant quando aplicável>
+- <responsividade/acessibilidade quando aplicável>
+- <critério adicional observável>
 
-## Referências
+## 🧪 Validação
 
+Evidências esperadas:
+
+- <testes automatizados relevantes>
+- <validação manual ou E2E relevante>
+- <validação visual, responsiva e de acessibilidade quando aplicável>
+
+## 🔗 Rastreabilidade
+
+- PRD: <path do PRD canônico em documentation/prds/>
+- Requisito: <RP-*>
+- Jornada: <JN-* ou Não aplicável>
+- User Story: <SHI-* ou Não aplicável>
+- Design: <arquivo e node/frame ou Não aplicável>
 - Milestone: <URL>
-- PRD principal: <URL/path obrigatório>
-- Requisito do PRD: <anchor/ID ou documento completo>
-- Design/dependência: <link quando houver>
+
+## 🚫 Fora de Escopo
+
+- <comportamento ou capacidade explicitamente excluído>
+- <alteração adjacente que não pertence a esta entrega>
 ```
+
+O corpo da feature issue não inclui um checklist de DoR. O DoR, quando exigido
+pelas regras de planejamento ou publicação, permanece no mecanismo de workflow
+correspondente.
 
 Mantenha a issue em nível de product delivery. Não inclua signatures, file inventory, fluxo
 técnico detalhado ou decisões novas de arquitetura. Preserve paths/Node IDs Pencil exatamente

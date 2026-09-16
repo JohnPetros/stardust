@@ -1,4 +1,4 @@
-# Spec-Driven Development (SDD) no StarDust
+# Specification-Driven Development (SDD) no StarDust
 
 ## Objetivo
 
@@ -21,6 +21,35 @@ SDD não é obrigatório para manutenção que não precise de Contract de featu
 A task principal classifica a demanda e usa manutenção direta quando uma Spec não acrescenta
 autoridade, risco controlado ou rastreabilidade útil.
 
+## Convenção de abreviações
+
+Use estas abreviações e namespaces em todo artefato SDD novo ou revisado:
+
+| Abreviação | Significado |
+| --- | --- |
+| **SDD** | *Specification-Driven Development* — desenvolvimento orientado por especificação |
+| **PRD** | *Product Requirements Document* — documento de requisitos de produto |
+| **RP-\*** | *Requisito de Produto* — requisito do PRD canônico versionado em `documentation/prds/` |
+| **JN-\*** | *Jornada* — jornada do usuário |
+| **RF-\*** | *Requisito Funcional* — requisito funcional da Spec local |
+| **CA-\*** | *Critério de Aceitação* — critério verificável da Spec |
+| **VM-\*** | *Validação Manual* — cenário de validação manual |
+| **EV-\*** | *Evidência* — evidência de que um critério ou gate foi atendido |
+| **ACH-\*** | *Achado de revisão* — finding de revisão, sensor, CI ou validação |
+| **CI-\*** | check ou gate automatizado de qualidade |
+| **SHI-\*** | chave da issue Jira usada para rastrear uma entrega Shifu |
+
+As relações de rastreabilidade são `RP/JN → RF → CA → EV`; `VM` descreve a
+validação manual que produz uma `EV`, e `ACH` registra problemas encontrados
+durante revisão ou validação. `CI-*` é reservado a checks automatizados e não
+deve ser usado para tarefas, fases, findings ou correções de Builder. `SHI-*`
+é opcional e só aparece quando houver uma issue Jira Shifu.
+
+Artefatos históricos podem manter identificadores antigos para não quebrar
+referências. Ao revisar um artefato antigo, preserve o crosswalk na revisão
+histórica e use os namespaces atuais para novos requisitos, validações,
+evidências e achados.
+
 ## Autoridades
 
 Antes de iniciar ou retomar SDD, leia `AGENTS.md`, `documentation/architecture.md`,
@@ -40,22 +69,49 @@ Issue, Report, Design e código real aplicáveis.
 
 ### PRD canônico e milestone
 
-Os PRDs de produto ficam em `documentation/prds/<module>/<english-slug>.md`. Cada milestone
-de produto no GitHub deve conter somente o link absoluto para o PRD correspondente na branch
-`main`. Esse link é o índice oficial entre produto e SDD:
+O PRD canônico de produto é o documento versionado no repositório em
+`documentation/prds/<module>/<slug>.md`. Esse arquivo é a autoridade de produto
+para resultado, atores, capacidades, experiência, requisitos `RP-*` e jornadas
+`JN-*`; não existe exigência de publicação ou espelhamento no Confluence.
+
+Quando houver milestone de produto no GitHub, ela deve apontar para o PRD local
+correspondente. Esse link é o índice oficial entre produto e SDD:
 
 1. descubra o milestone associado à demanda;
-2. siga sua descrição e abra o único link para o PRD na `main`;
-3. use o conteúdo desse arquivo como autoridade de produto antes de criar a Spec.
+2. siga sua descrição e abra o link para o PRD canônico em `documentation/prds/`;
+3. use o conteúdo desse documento como autoridade de produto antes de criar a Spec.
 
-Não reconstrua o caminho do PRD a partir do título, label ou path da Issue. Se o milestone não
-tiver exatamente um link válido para `documentation/prds/` na `main`, registre a lacuna e resolva
-a rastreabilidade antes de iniciar o Contract. O caminho da branch `main` representa a versão
-canônica atual; Specs abertas devem registrar o link e a revisão do PRD consultado.
+Não reconstrua o PRD a partir do título, label ou path da Issue. Se o milestone
+não tiver um link válido para um PRD local, registre a lacuna e resolva a
+rastreabilidade antes de iniciar o Contract. Specs abertas devem registrar o
+path e a revisão do PRD consultado, além dos `RP-*` e `JN-*` relevantes.
 
 Uma mudança normativa de produto, Architecture, Rule global ou ownership exige aprovação
 explícita do usuário e atualização da autoridade antes da Spec. A implementação atual nunca
 substitui silenciosamente uma autoridade.
+
+### Estrutura obrigatória do PRD
+
+Todo PRD novo ou revisado deve seguir a estrutura canônica abaixo, usando os
+IDs `RP-*` e `JN-*` definidos nesta documentação:
+
+1. Cabeçalho com título, `Disponibiliza para` e `Navegação`;
+2. Resumo Executivo;
+3. Problema e Oportunidade, incluindo a base de fontes e autoridade;
+4. Público-alvo, contexto de uso e Jobs to Be Done;
+5. Objetivos e Métricas de Sucesso, incluindo limites de validação e premissas;
+6. Requisitos de Produto, com conceitos/responsabilidades e, para cada `RP-*`,
+   necessidades do usuário, resultado, atores, regras de negócio e regras de experiência;
+7. Grafo de Dependências do Produto;
+8. Jornadas, identificadas como `JN-*`;
+9. Fora de Escopo, incluindo decisões descartadas durante a definição.
+
+Análise competitiva, preços e posicionamento são conteúdo de discovery
+condicional: só entram quando forem relevantes para uma decisão de produto e
+devem ser sustentados por fontes. Não constituem uma seção obrigatória do PRD.
+O template canônico e o fluxo de criação devem permanecer alinhados a esta
+ordem. PRDs existentes fora desta estrutura são legados e devem ser
+normalizados na próxima revisão, sem inventar conteúdo ausente.
 
 ## Papéis
 
@@ -72,13 +128,13 @@ agente ou task. `create-spec`, `implement-spec` e `conclude-spec` são workflows
 ## Artefatos duráveis
 
 ```text
-documentation/prds/<module>/<english-slug>.md   # autoridade de produto, indexada pelo milestone
+documentation/prds/<module>/<slug>.md           # PRD canônico versionado do módulo
 documentation/features/<domínio>/<feature>/
 ├── spec.md
 ├── plan.md                 # opcional
 ├── evaluation.md           # criado no kickoff da implementação
 └── design/                 # quando houver Design Contract
-    ├── manifest.md
+    ├── handoff.md
     └── <referências>.png
 ```
 
@@ -90,10 +146,17 @@ Uma mudança de comportamento após conclusão usa
 | `spec.md`            | comportamento, Design, Technical e Validation Contracts     | tentativas e resultados executados      |
 | `plan.md`            | waves, dependências, ownership, status e próxima ação       | segundo Contract técnico                |
 | `evaluation.md`      | comandos, evidências, findings, histórico, comparações e CI | autoridade de produto ou arquitetura    |
-| `design/manifest.md` | inventário de referência, estado, viewport e surface        | screenshot produzido pela implementação |
+| `design/handoff.md` | contrato visual offline: inventário de referências; nodes, estados e viewports; mapeamento para surfaces; tokens, componentes, layout, ícones, tema, responsividade e acessibilidade; desvios permitidos; comparação com `RF/CA/VM` | prova produzida pela implementação ou resultado real de validação |
 
-Screenshots de implementação ficam em `test-results/` ignorado ou em artifacts de CI; o
-identificador e a comparação ficam em `evaluation.md`.
+O `.pen` ou a referência visual canônica continua sendo a fonte editável. As imagens salvas em
+`design/` são referências de entrada e devem ter dimensão, estado e viewport registrados no
+handoff. Screenshots da implementação ficam em `test-results/` ignorado ou em artifacts de CI;
+o identificador, a comparação e o resultado ficam em `evaluation.md`.
+
+`design/manifest.md` é um nome legado: artefatos históricos permanecem válidos e não devem ser
+renomeados em massa. Uma nova Spec com Design Contract usa `design/handoff.md`. Ao atualizar
+materialmente um artefato legado, migre o nome somente se o contrato visual estiver sendo
+refrescado, atualize as referências vivas e preserve o histórico da revisão.
 
 ## Estados
 
@@ -104,55 +167,33 @@ identificador e a comparação ficam em `evaluation.md`.
 | Fase/tarefa | `pending`, `in_progress`, `completed`                       |
 | Evaluation  | `in_progress`, `ready`, `completed`                         |
 | Evidência   | `pending`, `passed`, `failed`, `stale`, `not_applicable`    |
-| Finding     | `active`, `resolved`, `accepted_non_blocking`, `superseded` |
+| Achado (`ACH-*`) | `active`, `resolved`, `accepted_non_blocking`, `superseded` |
 
 Falhas não criam estados extras: o item permanece `in_progress`, com finding e próxima ação.
 
-## Protocolo de Grilling
+## Grilling gate
 
-Os workflows de criação de issues, PRDs, Specs e Plans entrevistam o usuário rigorosamente antes
-de escrever o artefato. As decisões formam uma **design tree**: cada decisão se ramifica nas
-decisões que dependem dela. A **frontier** de um round contém todas as decisões cujos
-pré-requisitos já estão resolvidos e que podem ser perguntadas sem adivinhar respostas pendentes.
+Depois da pesquisa factual e antes de escrever ou criar o ticket, aplique o protocolo de Grilling
+do [`grilling-prompt.md`](prompts/grilling-prompt.md). O protocolo também se aplica, conforme o
+artefato, à criação ou atualização de PRDs, Specs e Plans. A task constrói a design tree, calcula
+a frontier, pergunta todo o round atual no formato `❓`/`➡️` com recomendação e impacto, recompõe a
+frontier após cada resposta e não adivinha decisões dependentes.
 
-Em cada round, recompute a árvore, pergunte toda a frontier, numere as perguntas e inclua uma
-resposta recomendada para cada uma. Uma pergunta que dependa de outra decisão ainda aberta no
-round atual pertence a um round posterior. Depois das respostas, registre decisões, alternativas
-descartadas, dependências e contradições e recompute a frontier.
-
-Use este formato:
-
-```yaml
-❓ **Q1** - **<título da pergunta>**: <pergunta e alternativas relevantes>
-
-➡️ <resposta recomendada e justificativa concisa>
-
----
-
-❓ **Q2** - **<título da pergunta>**: <pergunta e alternativas relevantes>
-
-➡️ <resposta recomendada e justificativa concisa>
-```
-
-Encontrar fatos é responsabilidade da task, nunca do usuário. A task principal consulta
-diretamente filesystem, documentação, codebase, GitHub, design, banco e ferramentas aplicáveis
-antes de perguntar. Uma investigação factual ainda aberta adia apenas as perguntas descendentes
-dela; o restante da frontier deve ser perguntado. Não crie agentes de pesquisa.
-
-As decisões pertencem ao usuário. Conteste contradições, exponha impactos e recomende uma resposta,
-mas não transforme ausência de evidência em escolha implícita. O gate termina apenas quando a
-frontier estiver vazia, todos os ramos relevantes tiverem sido visitados e o usuário confirmar o
-entendimento compartilhado. Nenhum artefato é criado, alterado ou publicado antes dessa
-confirmação. Em workflows com approval de publicação separado, a confirmação do Grilling não
-substitui a aprovação da versão exata.
+Para tickets, a frontier deve cobrir ator/outcome, escopo/exclusões, permissões, aceitação/falha,
+fronteira técnica, validação, decomposição, sprint e assignee quando ainda não resolvidos. Fatos
+pesquisáveis são responsabilidade da task; decisões materiais pertencem ao usuário. Nenhum
+artefato ou mutação externa ocorre enquanto houver ramo material aberto. Depois da frontier vazia,
+a task apresenta o entendimento compartilhado e obtém confirmação explícita; decisões e premissas
+aceitas são registradas no artefato final, não no transcript.
 
 ## Intake opcional
 
 GitHub Issue é tracking, não Contract técnico. A Issue pode apontar para um milestone, mas o
-PRD só é identificado depois que o link canônico da descrição do milestone for resolvido:
+PRD só é identificado depois que o path do PRD canônico em `documentation/prds/` for resolvido:
 
-- `create-feat-issue` transforma milestone/PRD ou pedido aprovado em outcome, escopo e critérios
-  observáveis; depois da aprovação/publicação, `create-spec` cria o Contract;
+- `create-feat-issue` transforma milestone/PRD ou pedido aprovado em uma issue com Objetivo,
+  Escopo da Entrega, Critérios de Aceitação, Validação, Rastreabilidade e Fora de Escopo;
+  depois da aprovação/publicação, `create-spec` cria o Contract;
 - `create-bug-issue` registra sintoma, expectativa, reprodução e contexto sem diagnóstico;
 - `create-bug-report` exige a bug issue aprovada, produz diagnóstico durável e recomenda correção
   direta ou Correction Spec conforme risco e coordenação.
@@ -161,12 +202,12 @@ Feature e bug issue exigem approval explícito antes de escrita no GitHub. Aprov
 autoriza implementação, branch, commit, PR ou alteração de produto.
 
 Workflows de feature e bug issue executam descoberta de PRD antes do draft; feature issue exige um
-PRD principal, enquanto bug issue registra o PRD/requisito mais relevante ou `None` com evidência
+PRD principal, enquanto bug issue registra o PRD/`RP-*` mais relevante ou `None` com evidência
 da busca. Chore issue é manutenção técnica independente de produto e não pesquisa, menciona ou
 associa PRD, requisito de PRD ou milestone de produto. Refactor issue só consulta um PRD quando
 precisa definir a fronteira de comportamento que deve ser preservada. A associação nunca é
 inferida apenas por título, label ou path; um milestone só serve como ponte depois que seu único
-link para `documentation/prds/` na `main` for validado.
+link para o PRD canônico em `documentation/prds/` for validado.
 
 Antes do draft, os workflows de issue executam o Grilling: fatos são pesquisados e decisões são
 percorridas em rounds pela frontier da design tree. A confirmação de entendimento compartilhado
@@ -189,20 +230,23 @@ possui exatamente:
 1. Contexto e escopo;
 2. Implementation Contract com `RF-*` e critérios Given/When/Then `CA-*`;
 3. Technical Contract com baseline, runtime flow e paths/declarations por camada;
-4. Validation Contract com testes reais, comandos e cenários manuais `MV-*`;
+4. Validation Contract com testes reais, comandos e cenários manuais `VM-*`;
 5. alinhamento documental, Rule Pack e histórico de revisões.
 
 Depois da pesquisa e antes da escrita, `create-spec` executa o Grilling até esvaziar a frontier e
 obter confirmação explícita. Fatos pertencem à pesquisa; somente decisões não resolvidas pelas
 autoridades são levadas ao usuário.
 
-Todo `RF-*` mapeia para pelo menos um `CA-*` e vice-versa. Paths são exatos e classificados
+Todo `RP-*`/`JN-*` relevante deve mapear para `RF-*`; todo `RF-*` mapeia para
+pelo menos um `CA-*` e vice-versa. Paths são exatos e classificados
 como Create, Modify, Generate ou Remove. A Spec não é um Plan e não contém resultados.
 
 Para UI, a Spec registra o widget tree exato, estados loading/empty/success/error/recovery,
 teclado, foco, responsividade, referências Pencil/screenshot e viewports. Comportamento
-inferido apenas de imagem precisa de clarificação. Uma Spec íntegra passa diretamente de
-`draft` para a revisão independente do Spec Reviewer, antes de qualquer planejamento.
+inferido apenas de imagem precisa de clarificação. O contrato visual detalhado pertence ao
+`design/handoff.md`, que a Spec deve referenciar; a Spec continua sendo a autoridade de produto,
+escopo, comportamento e validação. Uma Spec íntegra passa diretamente de `draft` para a revisão
+independente do Spec Reviewer, antes de qualquer planejamento.
 
 Antes da revisão, `create-spec` executa `npm run check:spec-definition -- <spec>`.
 Esse gate valida estrutura, IDs, rastreabilidade e o mapa canônico de paths;
@@ -217,6 +261,40 @@ cada finding, corrige a mesma Spec e retoma o Reviewer antes do planejamento. A 
 então o fluxo segue para Direct ou planejamento. Amendment posterior invalida o resultado e exige
 nova revisão antes de planejar. A revision history registra a revisão, o resultado e as resoluções
 verificadas, sem incorporar o relatório bruto.
+
+## Design Contract e handoff offline
+
+Quando a entrega tiver Pencil ou referências visuais, o `design/handoff.md` é obrigatório e
+deve ser autocontido para um Builder que não tenha uma sessão Pencil disponível. Ele deve conter,
+no mínimo:
+
+1. fonte visual canônica (`.pen` ou referência fornecida) e data/revisão da inspeção;
+2. inventário de cada referência com node, estado, variante, viewport, screenshot, surface,
+   componentes/tokens e `RF-*`/`CA-*`/`VM-*` relacionados;
+3. ordem de autoridade entre `documentation/design.md`, tokens globais, componentes compartilhados,
+   handoff, imagens salvas e valores brutos da ferramenta;
+4. crosswalk de tokens, receita de tipografia, mapeamento de componentes/variantes e ícones;
+5. receitas de surfaces, layout, estados, responsividade, tema, foco, teclado, acessibilidade e
+   reduced motion;
+6. divergências permitidas, extensões aprovadas, exclusões e estados sem referência canônica;
+7. inspeção estrutural e requisitos de comparação visual vinculados a `CA-*` e `VM-*`.
+
+A precedência padrão é: design system e tokens do repositório; comportamento dos componentes
+compartilhados; mapeamentos e receitas do handoff; imagens salvas para comparação; valores brutos
+do Pencil apenas como evidência. Valor bruto não autoriza cor, medida, componente, ícone ou CSS
+novo sem token, Rule ou decisão registrada. Fallbacks semânticos e adaptações acessíveis devem
+ser declarados no handoff; divergências materiais sem decisão rastreável mantêm a Spec aberta.
+
+O workflow de criação deve inspecionar os nodes pelo Pencil MCP, exportar uma imagem por estado
+exigido, verificar existência e dimensões dos arquivos e confirmar que a implementação pode ser
+executada sem Pencil. O Builder usa o bundle salvo. Reabra o Pencil quando o Design Contract mudar,
+quando o usuário pedir atualização ou quando a validação final exigir o node canônico.
+
+O handoff define a intenção e a receita de implementação; não registra resultados de runtime.
+`evaluation.md` registra screenshots da implementação, comparações, observações, `EV-*`, `ACH-*`
+e o estado final. Se uma mudança alterar a intenção visual, isso é uma mudança de Contract:
+retorne a Spec para `draft`, incremente a revisão, atualize o handoff e invalide as evidências
+afetadas.
 
 ## Plan opcional
 
@@ -282,7 +360,8 @@ consolida os vereditos, findings e evidências no `evaluation.md`. Uma revisão 
 é opcional somente para uma interação cross-boundary que não pertença a um Builder específico.
 
 Evidence anterior à última mudança afetada vira `stale`. Evaluation só muda para `ready`
-quando todos os `CA-*`, sensores, `MV-*`, comparações visuais e findings bloqueantes estão
+quando todos os `CA-*`, sensores, `VM-*`, `EV-*`, comparações visuais e `ACH-*`
+bloqueantes estão
 atuais e resolvidos.
 
 ## Correção versus mudança de Contract

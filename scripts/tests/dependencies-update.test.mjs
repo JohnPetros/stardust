@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { assertScriptSyntax } from './helpers.mjs'
-import { doctorTestFor } from '../dependencies-update.mjs'
+import { doctorTestFor, exactOverrideUpdateNames } from '../dependencies-update.mjs'
 
 test('dependencies update script has valid syntax', () =>
   assertScriptSyntax('dependencies-update.mjs'))
@@ -54,4 +54,32 @@ test('doctor skips checks that a workspace does not define', () => {
 
   assert.match(command, /run check:code && .* run check:types$/)
   assert.doesNotMatch(command, /test:unit/)
+})
+
+test('detects root dependencies whose exact overrides must be updated together', () => {
+  const names = exactOverrideUpdateNames(
+    {
+      overrides: {
+        hono: '4.13.1',
+        react: '19.2.8',
+        'nested-only': {
+          hono: '4.13.1',
+        },
+      },
+    },
+    [
+      {
+        workspace: 'package.json',
+        package: 'hono',
+        to: '4.13.7',
+      },
+      {
+        workspace: 'apps/server/package.json',
+        package: 'react',
+        to: '^19.2.9',
+      },
+    ],
+  )
+
+  assert.deepEqual(names, ['hono'])
 })

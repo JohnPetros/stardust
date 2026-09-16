@@ -50,8 +50,8 @@ Verifique:
   avaliada; ausência de evidência ou impossibilidade de executar a inspeção
   deve gerar finding bloqueante, salvo quando o próprio Contract declarar a
   validação como não aplicável;
-- para cada node Pencil exigido pelo Contract, comparar a renderização Web no
-  mesmo viewport e estado, registrando screenshot/comparação independente; um
+- para cada node Pencil exigido pelo `design/handoff.md` e pelo Contract, comparar a
+  renderização Web no mesmo viewport e estado, registrando screenshot/comparação independente; um
   screenshot isolado ou a afirmação do Builder não é evidência suficiente;
 - nessa comparação, conferir composição, hierarquia, dimensões/anchors,
   espaçamento, tipografia, cores, bordas, elevação, ícones/assets, densidade,
@@ -107,7 +107,7 @@ está presente e atual.
 
 | ID | Estado | Evidência |
 | --- | --- | --- |
-| CA-01 | passed | ... |
+| CA-01 | passed | EV-01 — ... |
 
 ### Sensores
 

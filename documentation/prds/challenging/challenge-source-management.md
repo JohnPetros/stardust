@@ -1,13 +1,19 @@
+---
+title: Gerenciamento de fontes de desafios
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/12
+last_updated_at: 2026-03-30
+---
+
 # PRD — Gerenciamento de fontes de desafios
 
-- **Módulo:** `challenging`
-- **Milestone:** [#12 — Gerenciamento de fontes de desafios](https://github.com/JohnPetros/stardust/milestone/12)
-- **Status:** open
-- **Atualizado em:** 2026-03-30T20:06:15Z
+Disponibiliza para: challenging; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-### 1. Visão Geral
+## 1. Resumo Executivo
 
 O **Gerenciamento de Challenge Sources** é uma funcionalidade do **StarDust Studio** que permite ao administrador (conta god) registrar e visualizar a origem dos desafios de código, cujos problemas são inspirados em questões do LeetCode. A feature centraliza o rastreamento dessas referências externas, associando cada source ao seu respectivo challenge via URL de origem, e atua como suporte direto ao **Agente Criador de Desafios**.
 
@@ -17,25 +23,57 @@ O **Gerenciamento de Challenge Sources** é uma funcionalidade do **StarDust Stu
 
 ---
 
-### 2. Requisitos
+## 2. Problema e Oportunidade
 
-#### Listagem de Challenge Sources
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-- [ ] **Listagem de dados**
-- [ ] **Busca por challenge**
-- [ ] **Estado vazio**
-- [ ] **Estado de loading**
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/12 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Listagem de Challenge Sources
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Listagem de Challenge Sources.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Tabela paginada exibindo todos os challenge sources cadastrados, com suporte a busca pelo título do challenge vinculado.
 
 ##### Regras de Negócio
-
 - **Colunas obrigatórias:** A tabela deve exibir: URL de origem, Título do challenge vinculado e Ações.
 - **Paginação:** A listagem deve ser paginada seguindo o padrão existente no Studio.
 - **Acesso restrito:** A página só pode ser acessada por usuários autenticados com conta god.
 - **Vínculo 1:1:** Cada source está vinculado a exatamente um challenge. Um challenge pode ter no máximo um source.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **URL clicável:** A URL de origem deve ser exibida como link que abre em nova aba.
 - **Título truncado:** O título do challenge deve ser truncado com ellipsis se exceder o espaço disponível na coluna.
@@ -45,24 +83,25 @@ O **Gerenciamento de Challenge Sources** é uma funcionalidade do **StarDust Stu
 
 ---
 
-#### Criação de Challenge Source
+#### RP-02 — Criação de Challenge Source
 
-- [ ] **Abertura via botão**
-- [ ] **Campo de URL**
-- [ ] **Seleção de challenge**
-- [ ] **Validação de URL**
-- [ ] **Unicidade de vínculo**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Criação de Challenge Source.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Dialog para cadastrar um novo source, informando a URL de origem e o challenge ao qual ele pertence.
 
 ##### Regras de Negócio
-
 - **URL obrigatória:** O campo de URL não pode estar vazio.
 - **Challenge obrigatório:** O vínculo com um challenge é obrigatório na criação.
 - **Unicidade:** Se o challenge selecionado já possuir um source, o sistema deve bloquear a criação e exibir mensagem explicativa.
 - **Persistência:** O source deve ser salvo com `url` e `challenge_id`.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Dialog:** Botão "Adicionar source" abre o formulário em um dialog.
 - **Busca por título:** O campo de seleção de challenge deve permitir busca por título para facilitar o vínculo à medida que o catálogo cresce.
@@ -73,29 +112,39 @@ O **Gerenciamento de Challenge Sources** é uma funcionalidade do **StarDust Stu
 
 ---
 
-#### Exclusão de Challenge Source
+#### RP-03 — Exclusão de Challenge Source
 
-- [ ] **Confirmação antes de excluir**
-- [ ] **Exclusão isolada**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Exclusão de Challenge Source.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Ação de remover um source. O challenge vinculado permanece intacto após a exclusão.
 
 ##### Regras de Negócio
-
 - **Imutabilidade do challenge:** A exclusão do source não altera, remove nem desvincula o challenge vinculado de nenhuma forma.
 - **Confirmação obrigatória:** A exclusão não ocorre sem confirmação explícita do usuário.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Dialog de confirmação:** Alert dialog com as opções "Cancelar" e "Confirmar exclusão".
 - **Feedback:** Toast de sucesso após exclusão confirmada; toast de erro se a operação falhar.
 - **Atualização da listagem:** Listagem atualizada automaticamente após exclusão bem-sucedida.
 
----
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| challenging | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
 
 ### 3. Fluxo de Usuário (User Flow)
 
-**Fluxo: Visualizar sources cadastrados**
+#### JN-01 — Visualizar sources cadastrados
 
 1. O administrador (conta god) acessa a página de Challenge Sources no Studio.
 2. O sistema carrega e exibe a listagem paginada de sources.
@@ -104,7 +153,7 @@ O **Gerenciamento de Challenge Sources** é uma funcionalidade do **StarDust Stu
 
 ---
 
-**Fluxo: Cadastrar um novo source**
+#### JN-02 — Cadastrar um novo source
 
 1. O administrador clica no botão "Adicionar source".
 2. O sistema abre o dialog com o formulário de criação.
@@ -117,7 +166,7 @@ O **Gerenciamento de Challenge Sources** é uma funcionalidade do **StarDust Stu
 
 ---
 
-**Fluxo: Excluir um source**
+#### JN-03 — Excluir um source
 
 1. O administrador clica no ícone de lixeira na linha do source desejado.
 2. O sistema abre o alert dialog de confirmação.
@@ -128,12 +177,18 @@ O **Gerenciamento de Challenge Sources** é uma funcionalidade do **StarDust Stu
 
 ---
 
-### 4. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-- **Edição de source:** Não será possível editar um source existente. O fluxo previsto é deletar e recriar.
-- **Múltiplas URLs por source:** Cada source possui apenas uma URL de origem. Suporte a múltiplas plataformas não está contemplado nesta versão.
-- **Vinculação automática pelo agente:** A associação entre source e challenge não é feita automaticamente pelo Agente Criador de Desafios — o cadastro é manual nesta entrega. A automação é um item de backlog futuro e não uma limitação permanente.
-- **Acesso por outros perfis:** Apenas conta god tem acesso. Não há suporte a outros níveis de permissão nesta versão.
-- **Notificações:** Nenhuma notificação é enviada ao criar ou excluir um source.
-- **Histórico de alterações:** Não há rastreamento de quem criou ou deletou um source.
-- **Metadados adicionais da plataforma:** Campos como título original, dificuldade ou ID do problema na plataforma externa não fazem parte desta versão.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | **Edição de source:** Não será possível editar um source existente. O fluxo previsto é deletar e recriar. |
+| Escopo | **Múltiplas URLs por source:** Cada source possui apenas uma URL de origem. Suporte a múltiplas plataformas não está contemplado nesta versão. |
+| Escopo | **Vinculação automática pelo agente:** A associação entre source e challenge não é feita automaticamente pelo Agente Criador de Desafios — o cadastro é manual nesta entrega. A automação é um item de backlog futuro e não uma limitação permanente. |
+| Escopo | **Acesso por outros perfis:** Apenas conta god tem acesso. Não há suporte a outros níveis de permissão nesta versão. |
+| Escopo | **Notificações:** Nenhuma notificação é enviada ao criar ou excluir um source. |
+| Escopo | **Histórico de alterações:** Não há rastreamento de quem criou ou deletou um source. |
+| Escopo | **Metadados adicionais da plataforma:** Campos como título original, dificuldade ou ID do problema na plataforma externa não fazem parte desta versão. |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

@@ -1,13 +1,19 @@
+---
+title: Redefinição de Senha
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/36
+last_updated_at: 2026-06-24
+---
+
 # PRD — Redefinição de Senha
 
-- **Módulo:** `auth`
-- **Milestone:** [#36 — Redefinição de Senha](https://github.com/JohnPetros/stardust/milestone/36)
-- **Status:** open
-- **Atualizado em:** 2026-06-24T00:14:04Z
+Disponibiliza para: auth; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-### 1. Visão Geral
+## 1. Resumo Executivo
 
 A funcionalidade de **Redefinição de Senha** permite que usuários recuperem o acesso à conta quando esquecem a senha.
 
@@ -23,23 +29,58 @@ O objetivo principal é oferecer um fluxo seguro e simples de recuperação de c
 
 ---
 
-### 2. Requisitos
+## 2. Problema e Oportunidade
 
-#### REQ-01 Solicitar e-mail de redefinição
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-- [x] **Solicitar e-mail de redefinição**
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/36 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Solicitar e-mail de redefinição
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Solicitar e-mail de redefinição.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O usuário deve conseguir informar seu e-mail para receber um link de redefinição de senha.
 
 ##### Regras de Negócio
-
 - **Validação de e-mail:** O sistema deve validar se o valor informado tem formato de e-mail válido.
 - **Solicitação de reset:** Ao enviar um e-mail válido, o sistema deve solicitar o envio do link de redefinição.
 - **Mensagem genérica de sucesso:** Quando a solicitação for processada com sucesso, o sistema deve exibir mensagem genérica: “Enviamos um e-mail para você redefinir sua senha (se seu e-mail estiver cadastrado, claro)”.
 - **Proteção contra enumeração:** O sistema não deve confirmar explicitamente se o e-mail existe ou não na base.
 - **Erro de envio:** Caso a solicitação falhe, o sistema deve exibir mensagem de erro: “Erro ao enviar e-mail de redefinição de senha”.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Tela inicial:** Quando o usuário não possui autorização temporária de reset, deve visualizar o formulário de solicitação de e-mail.
 - **Campo de e-mail:** Deve apresentar label “E-mail”, placeholder `seu@email.com` e foco automático.
@@ -50,21 +91,26 @@ O objetivo principal é oferecer um fluxo seguro e simples de recuperação de c
 
 ---
 
-#### REQ-02 Confirmar autorização de redefinição
+#### RP-02 — Confirmar autorização de redefinição
 
-- [x] **Confirmar autorização de redefinição**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Confirmar autorização de redefinição.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O usuário deve acessar o link recebido por e-mail para receber permissão temporária de redefinição de senha.
 
 ##### Regras de Negócio
-
 - **Token de confirmação:** O sistema deve confirmar o token recebido no link de redefinição.
 - **Autorização temporária:** Após confirmação bem-sucedida, o sistema deve habilitar a redefinição de senha por tempo limitado.
 - **Duração da permissão:** A permissão temporária observada na implementação dura 15 minutos.
 - **Sessão temporária:** Após confirmação do token, o sistema mantém tokens necessários para executar a redefinição da senha.
 - **Token inválido ou expirado:** Se a confirmação falhar, o sistema deve remover a permissão temporária e redirecionar o usuário para login com indicação de erro.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Redirecionamento com sucesso:** O usuário deve ser levado para a tela de redefinição de senha.
 - **Redirecionamento com falha:** O usuário deve ser levado para a tela de login com erro.
@@ -72,14 +118,19 @@ O objetivo principal é oferecer um fluxo seguro e simples de recuperação de c
 
 ---
 
-#### REQ-03 Definir nova senha
+#### RP-03 — Definir nova senha
 
-- [x] **Definir nova senha**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Definir nova senha.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Quando autorizado, o usuário deve conseguir informar e confirmar uma nova senha.
 
 ##### Regras de Negócio
-
 - **Acesso condicionado:** O formulário de nova senha só deve ser exibido quando houver permissão temporária de redefinição.
 - **Senha obrigatória:** O usuário deve informar uma nova senha válida.
 - **Confirmação obrigatória:** O usuário deve confirmar a nova senha.
@@ -89,7 +140,7 @@ O objetivo principal é oferecer um fluxo seguro e simples de recuperação de c
 - **Erro ao redefinir:** Caso a redefinição falhe, o sistema deve exibir: “Erro de redefinição, escolha outra senha”.
 - **Sucesso:** Após redefinir a senha com sucesso, o sistema deve encerrar a sessão temporária.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Estado autorizado:** Quando a permissão temporária existe, a tela deve exibir a mensagem “Você já pode redefinir sua senha 🚀!”.
 - **CTA autorizado:** A tela deve exibir o botão “Redefinir senha”.
@@ -102,24 +153,37 @@ O objetivo principal é oferecer um fluxo seguro e simples de recuperação de c
 
 ---
 
-#### REQ-04 Finalizar fluxo e retornar ao login
+#### RP-04 — Finalizar fluxo e retornar ao login
 
-- [x] **Finalizar fluxo e retornar ao login**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Finalizar fluxo e retornar ao login.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Após concluir a redefinição, o usuário deve retornar ao login para acessar a conta com a nova senha.
 
 ##### Regras de Negócio
-
 - **Limpeza de credenciais temporárias:** Ao finalizar o fluxo, o sistema deve remover tokens de acesso, refresh token e permissão temporária de redefinição.
 - **Redirecionamento final:** Após a limpeza, o usuário deve ser redirecionado para a tela de login.
 - **Fechamento do diálogo:** Se o diálogo de sucesso for fechado, o usuário também deve ser redirecionado para login.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Mensagem pós-sucesso:** O usuário deve ser informado que será redirecionado para fazer login com a nova senha.
 - **CTA final:** O botão final deve comunicar claramente a próxima etapa: “Fazer login”.
 
----
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| auth | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada preservada do documento legado
 
 ### 3. Fluxo de Usuário
 
@@ -160,12 +224,18 @@ O objetivo principal é oferecer um fluxo seguro e simples de recuperação de c
 
 ---
 
-### 4. Fora do Escopo
+## 8. Fora do Escopo
 
-- Alteração de senha para usuário já autenticado dentro da área logada.
-- Login automático após redefinir a senha.
-- Redefinição de senha por código digitado manualmente na tela.
-- Reenvio automático do link de redefinição.
-- Exibição detalhada da política de senha na interface.
-- Confirmação explícita de que um e-mail está ou não cadastrado.
-- Recuperação de conta por provedores sociais.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Alteração de senha para usuário já autenticado dentro da área logada. |
+| Escopo | Login automático após redefinir a senha. |
+| Escopo | Redefinição de senha por código digitado manualmente na tela. |
+| Escopo | Reenvio automático do link de redefinição. |
+| Escopo | Exibição detalhada da política de senha na interface. |
+| Escopo | Confirmação explícita de que um e-mail está ou não cadastrado. |
+| Escopo | Recuperação de conta por provedores sociais. |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

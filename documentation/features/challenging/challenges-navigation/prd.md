@@ -1,6 +1,19 @@
-# Challenges Navigation — PRD
+---
+title: Challenges Navigation — PRD
+status: draft
+source:
+  - type: direct-request
+    ref: documentation/features/challenging/challenges-navigation/prd.md
+last_updated_at: 2026-09-15
+---
 
-## 1. Visao Geral
+# PRD — Challenges Navigation — PRD
+
+Disponibiliza para: challenging; consumidores adicionais não explicitados no documento legado.
+
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
+
+## 1. Resumo Executivo
 
 O fluxo de **Challenges Navigation** organiza como o estudante navega entre desafios livres dentro da experiencia de execucao. O objetivo e reduzir atrito entre tentativas, facilitar descoberta de novos desafios e preservar contexto sem obrigar o usuario a voltar para a listagem principal.
 
@@ -10,11 +23,51 @@ O fluxo de **Challenges Navigation** organiza como o estudante navega entre desa
 
 ---
 
-## 2. Requisitos
+## 2. Problema e Oportunidade
 
-### RF-01 Navegacao sequencial entre desafios livres
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-- [x] **Controles Anterior e Proximo**
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | documentation/features/challenging/challenges-navigation/prd.md | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Navegacao sequencial entre desafios livres
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Navegacao sequencial entre desafios livres.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** o usuario consegue navegar para o desafio anterior ou seguinte sem sair da pagina atual, seguindo a ordem global dos desafios livres.
 
@@ -25,16 +78,26 @@ O fluxo de **Challenges Navigation** organiza como o estudante navega entre desa
 - O fluxo preserva o guard de dirty state antes de trocar de desafio.
 - Desafios vinculados a estrela nao entram neste fluxo.
 
-#### Regras de UI/UX
+##### Regras de Experiência
 
 - Os botoes ficam desabilitados quando nao houver desafio anterior ou proximo.
 - Tooltips explicam que a navegacao ignora filtros e segue a ordem global.
 
 ---
 
-### RF-02 Sidebar lateral de navegacao de desafios
+#### RP-02 — Sidebar lateral de navegacao de desafios
 
-- [x] **Sidebar lateral de desafios**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Sidebar lateral de navegacao de desafios.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** o usuario consegue abrir uma sidebar lateral a partir do controle `Desafios` no header da pagina para buscar, filtrar e trocar rapidamente de desafio.
 
@@ -48,7 +111,7 @@ O fluxo de **Challenges Navigation** organiza como o estudante navega entre desa
 - O contador de progresso usa o mesmo universo de desafios livres exibidos pela sidebar.
 - Ao selecionar um desafio, a navegacao ocorre imediatamente.
 
-#### Regras de UI/UX
+##### Regras de Experiência
 
 - O trigger principal da sidebar e o segmento clicavel `Desafios` do widget de navegacao.
 - O carregamento inicial e sob demanda e usa skeletons em vez de spinner central.
@@ -57,9 +120,17 @@ O fluxo de **Challenges Navigation** organiza como o estudante navega entre desa
 - O botao de filtros exibe badge com a quantidade de filtros ativos.
 - A listagem exibe estado vazio amigavel e CTA de retry em caso de erro.
 
----
+## 6. Grafo de Dependências do Produto
 
-## 3. Fluxo de Usuario
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| challenging | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada preservada do documento legado
+
+### 3. Fluxo de Usuario
 
 ### Navegacao sequencial
 
@@ -80,18 +151,15 @@ O fluxo de **Challenges Navigation** organiza como o estudante navega entre desa
 
 ---
 
-## 4. Fora do Escopo
+## 8. Fora do Escopo
 
-- Navegacao aleatoria.
-- Inclusao de desafios de estrela na sidebar.
-- SSR da listagem da sidebar no payload inicial da pagina.
-- Redesenho dos controles sequenciais alem do trigger da sidebar.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Navegacao aleatoria. |
+| Escopo | Inclusao de desafios de estrela na sidebar. |
+| Escopo | SSR da listagem da sidebar no payload inicial da pagina. |
+| Escopo | Redesenho dos controles sequenciais alem do trigger da sidebar. |
 
----
+### Decisões descartadas durante a definição
 
-## 5. Estado Atual
-
-- [x] Navegacao sequencial entregue.
-- [x] Sidebar lateral entregue.
-- [x] Busca, filtros, paginacao e destaque do desafio atual entregues.
-- [x] Contador de progresso para usuarios autenticados entregue.
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

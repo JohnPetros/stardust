@@ -1,13 +1,19 @@
+---
+title: Gestão de Foguetes
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/9
+last_updated_at: 2026-02-23
+---
+
 # PRD — Gestão de Foguetes
 
-- **Módulo:** `shop`
-- **Milestone:** [#9 — Gestão de Foguetes](https://github.com/JohnPetros/stardust/milestone/9)
-- **Status:** open
-- **Atualizado em:** 2026-02-23T20:37:32Z
+Disponibiliza para: shop; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-## 1. Visão Geral
+## 1. Resumo Executivo
 
 A funcionalidade de Gestão de Foguetes no Studio permite que administradores
 consultem, criem, editem e removam foguetes disponíveis na loja em um fluxo
@@ -23,15 +29,52 @@ comportamento funcional atual para alinhamento entre produto, design e
 desenvolvimento. A métrica de sucesso permanece qualitativa, sem meta numérica
 fixa nesta versão.
 
-## 2. Requisitos
+## 2. Problema e Oportunidade
 
-### [x] Listagem e Consulta de Foguetes
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
+
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/9 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Listagem e Consulta de Foguetes
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Listagem e Consulta de Foguetes.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Exibir catálogo administrativo de foguetes com busca, ordenação
 por preço e paginação.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Listagem paginada:** O sistema deve listar foguetes com controle de página e
   limite de itens por página.
 - **Busca textual:** O administrador deve filtrar foguetes por termo de pesquisa.
@@ -42,7 +85,7 @@ por preço e paginação.
 - **Estado vazio:** Quando não houver resultados, o sistema deve exibir mensagem
   clara de lista vazia.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** A tabela deve exibir nome, imagem, preço, adquirido por
   padrão, selecionado por padrão e ações.
@@ -57,12 +100,21 @@ por preço e paginação.
   preservar estado estável da tela.
 - **Compatibilidade:** Comportamento consistente nos navegadores suportados.
 
-### [x] Criação de Foguete
+---
+
+#### RP-02 — Criação de Foguete
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Criação de Foguete.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Permitir cadastro de novo foguete com dados e imagem.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Campos obrigatórios:** A criação deve exigir nome, imagem e preço.
 - **Validação de nome:** O nome deve respeitar validações de entrada do domínio.
 - **Validação de preço:** O preço deve ser numérico e maior ou igual a zero.
@@ -73,7 +125,7 @@ por preço e paginação.
 - **Atualização de listagem:** Após criação bem-sucedida, a tabela deve ser
   recarregada.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** A criação deve ocorrer em diálogo com campos de nome,
   imagem, preço e checkboxes de padrão.
@@ -88,13 +140,22 @@ por preço e paginação.
   imagem não utilizada.
 - **Compatibilidade:** Fluxo consistente nos navegadores suportados.
 
-### [x] Edição de Foguete
+---
+
+#### RP-03 — Edição de Foguete
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Edição de Foguete.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Permitir atualização de foguetes já cadastrados com
 pré-preenchimento de dados.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Pré-preenchimento:** Ao editar, o formulário deve carregar os dados atuais do
   foguete.
 - **Identificação válida:** A atualização deve ocorrer apenas para foguete com ID
@@ -106,7 +167,7 @@ pré-preenchimento de dados.
 - **Atualização de listagem:** Após sucesso, os dados atualizados devem aparecer
   na tabela.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** A ação "Editar" deve abrir o formulário em modo de
   atualização.
@@ -120,13 +181,22 @@ pré-preenchimento de dados.
   persistido e da interface.
 - **Compatibilidade:** Comportamento consistente nos navegadores suportados.
 
-### [x] Exclusão de Foguete
+---
+
+#### RP-04 — Exclusão de Foguete
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Exclusão de Foguete.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Permitir remoção de foguete com confirmação explícita para evitar
 ações acidentais.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Confirmação obrigatória:** A exclusão deve ocorrer apenas após confirmação do
   administrador.
 - **Remoção de registro:** Com confirmação, o foguete deve ser removido do
@@ -138,7 +208,7 @@ ações acidentais.
 - **Atualização de listagem:** Após exclusão bem-sucedida, a tabela deve ser
   recarregada.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** A ação "Excluir" deve abrir diálogo com aviso de
   irreversibilidade.
@@ -151,13 +221,22 @@ ações acidentais.
   tabela.
 - **Compatibilidade:** Fluxo consistente nos navegadores suportados.
 
-### [x] Gestão de Imagem do Foguete
+---
+
+#### RP-05 — Gestão de Imagem do Foguete
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Gestão de Imagem do Foguete.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Controlar upload, associação e limpeza de arquivos de imagem
 durante criação e edição de foguetes.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Upload em pasta dedicada:** As imagens devem ser enviadas para o diretório de
   foguetes no storage.
 - **Validação de nome de arquivo:** O nome da imagem deve obedecer regras válidas
@@ -169,7 +248,7 @@ durante criação e edição de foguetes.
 - **Tratamento de erro de mídia:** Falhas de upload/remoção devem ser reportadas
   ao administrador.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** O formulário deve permitir upload e preview da imagem do
   foguete.
@@ -184,7 +263,17 @@ durante criação e edição de foguetes.
   falha.
 - **Compatibilidade:** Operação consistente nos navegadores suportados.
 
-## 3. Fluxo de Usuário (User Flow)
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| shop | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada preservada do documento legado
+
+### 3. Fluxo de Usuário (User Flow)
 
 **Nome do fluxo:** Consultar foguetes no catálogo administrativo.
 
@@ -218,14 +307,16 @@ durante criação e edição de foguetes.
    - **Sucesso:** Remove foguete da listagem e exibe feedback de sucesso.
    - **Falha:** Não remove item e informa erro ao administrador.
 
-## 4. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-- Gestão de avatares e insígnias na mesma interface de foguetes.
-- Mudanças na experiência de compra/seleção de foguetes para usuário final na
-  aplicação Web.
-- Alterações de economia de StarCoins além da definição de preço de foguetes no
-  catálogo administrativo.
-- Mudanças estruturais de contratos REST e arquitetura de storage além do
-  comportamento já implementado.
-- Fluxos avançados de governança (aprovação em múltiplas etapas, versionamento
-  histórico e agendamento de publicação).
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Gestão de avatares e insígnias na mesma interface de foguetes. |
+| Escopo | Mudanças na experiência de compra/seleção de foguetes para usuário final na |
+| Escopo | Alterações de economia de StarCoins além da definição de preço de foguetes no |
+| Escopo | Mudanças estruturais de contratos REST e arquitetura de storage além do |
+| Escopo | Fluxos avançados de governança (aprovação em múltiplas etapas, versionamento |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

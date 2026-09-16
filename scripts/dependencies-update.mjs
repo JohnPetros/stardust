@@ -23,6 +23,19 @@ const dependencySections = [
   'peerDependencies',
 ]
 
+const dependencyGroups = [
+  {
+    packages: [
+      'react-router',
+      '@react-router/dev',
+      '@react-router/express',
+      '@react-router/node',
+      '@react-router/serve',
+    ],
+    representative: 'react-router',
+  },
+]
+
 function readJson(path) {
   return JSON.parse(readFileSync(path, 'utf8'))
 }
@@ -65,6 +78,99 @@ function dependencyRanges(manifest) {
   }
 
   return ranges
+}
+
+function versionNumber(version) {
+  return version.match(/\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?/)?.[0] ?? null
+}
+
+function versionWithExistingRange(current, target) {
+  const targetNumber = versionNumber(target)
+  if (!targetNumber) return current
+
+  if (current.startsWith('^')) return `^${targetNumber}`
+  if (current.startsWith('~')) return `~${targetNumber}`
+  return targetNumber
+}
+
+export function exactOverrideUpdateNames(manifest, eligibleUpdates) {
+  const rootUpdates = new Map(
+    eligibleUpdates
+      .filter((update) => update.workspace === 'package.json')
+      .map((update) => [update.package, update]),
+  )
+
+  return Object.entries(manifest.overrides ?? {})
+    .filter(
+      ([packageName, override]) =>
+        typeof override === 'string' && rootUpdates.has(packageName),
+    )
+    .map(([packageName]) => packageName)
+}
+
+function synchronizeDependencyPackages(manifestPaths, packageUpdates) {
+  const synchronizedPackages = new Set()
+
+  for (const [packageName, target] of packageUpdates) {
+    for (const manifestPath of manifestPaths) {
+      const manifest = readJson(manifestPath)
+      let changed = false
+
+      for (const section of dependencySections) {
+        const current = manifest[section]?.[packageName]
+        if (typeof current !== 'string') continue
+
+        const next = versionWithExistingRange(current, target)
+        if (next !== current) {
+          manifest[section][packageName] = next
+          changed = true
+        }
+      }
+
+      if (typeof manifest.overrides?.[packageName] === 'string') {
+        const current = manifest.overrides[packageName]
+        const next = versionWithExistingRange(current, target)
+        if (next !== current) {
+          manifest.overrides[packageName] = next
+          changed = true
+        }
+      }
+
+      if (changed) {
+        writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`)
+      }
+    }
+
+    synchronizedPackages.add(packageName)
+  }
+
+  return synchronizedPackages
+}
+
+function synchronizeDependencyGroups(manifestPaths, eligibleUpdates) {
+  const synchronizedPackages = new Set()
+
+  for (const group of dependencyGroups) {
+    const groupUpdates = eligibleUpdates.filter((update) =>
+      group.packages.includes(update.package),
+    )
+    const representativeUpdate =
+      groupUpdates.find((update) => update.package === group.representative) ??
+      groupUpdates[0]
+    if (!representativeUpdate) continue
+
+    const packageUpdates = new Map(
+      group.packages.map((packageName) => [packageName, representativeUpdate.to]),
+    )
+    for (const packageName of synchronizeDependencyPackages(
+      manifestPaths,
+      packageUpdates,
+    )) {
+      synchronizedPackages.add(packageName)
+    }
+  }
+
+  return synchronizedPackages
 }
 
 function runNcu(args, options = {}) {
@@ -301,22 +407,37 @@ function main() {
   const repositoryRoot = process.cwd()
   const doctorInstall = `npm --prefix "${repositoryRoot}" install --ignore-scripts --prefer-offline --no-audit --no-fund`
 
+  const synchronizedPackages = synchronizeDependencyGroups(manifestPaths, eligibleUpdates)
+  const rootUpdates = new Map(
+    eligibleUpdates
+      .filter((update) => update.workspace === 'package.json')
+      .map((update) => [update.package, update.to]),
+  )
+  const exactOverrideUpdates = new Map(
+    exactOverrideUpdateNames(before.get('package.json'), eligibleUpdates)
+      .map((packageName) => [packageName, rootUpdates.get(packageName)])
+      .filter(([, target]) => target),
+  )
+  for (const packageName of synchronizeDependencyPackages(
+    manifestPaths,
+    exactOverrideUpdates,
+  )) {
+    synchronizedPackages.add(packageName)
+  }
+
   for (const manifestPath of manifestPaths) {
-    runNcu(
-      [
-        '--doctor',
-        '--upgrade',
-        '--target',
-        'minor',
-        '--cooldown',
-        '7d',
-        '--doctorInstall',
-        doctorInstall,
-        '--doctorTest',
-        doctorTestFor(manifestPath, before.get(manifestPath), repositoryRoot),
-      ],
-      { cwd: dirname(manifestPath) },
+    const ncuArgs = ['--doctor', '--upgrade', '--target', 'minor', '--cooldown', '7d']
+    if (synchronizedPackages.size > 0) {
+      ncuArgs.push('--reject', [...synchronizedPackages].join(','))
+    }
+    ncuArgs.push(
+      '--doctorInstall',
+      doctorInstall,
+      '--doctorTest',
+      doctorTestFor(manifestPath, before.get(manifestPath), repositoryRoot),
     )
+
+    runNcu(ncuArgs, { cwd: dirname(manifestPath) })
   }
 
   const after = new Map(

@@ -34,18 +34,18 @@
   `apps/web` quando isso ajudar a descobrir locators ou reproduzir um fluxo. Não use
   ferramentas alternativas de browser automation neste projeto.
 
-### Supabase Dev como padrão
+### Supabase local como padrão
 
-- Use o MCP **Supabase Dev** para consultar, diagnosticar e alterar o banco de
-  desenvolvimento remoto.
-- Não use a instância Supabase local, `psql` local ou `supabase db reset` como
-  fonte de verdade para validar a aplicação, salvo quando a tarefa solicitar
-  explicitamente um teste local de infraestrutura.
-- Para alterações de schema, aplique migrations pelo MCP Supabase Dev e valide
-  a assinatura, grants e comportamento no mesmo projeto remoto usado pelo
-  Server.
-- Se o MCP estiver desconectado, informe o bloqueio e não conclua a validação
-  dizendo que o banco local representa o ambiente Dev.
+- Use o **Supabase local** para desenvolvimento e para validar a aplicação e
+  as integrações do Server.
+- Antes dos testes de integração do Server, prepare o stack com:
+  `npm run db:test -w @stardust/server`.
+- Use o MCP **Supabase Dev** somente quando a tarefa exigir validação ou
+  alteração do projeto remoto; o banco remoto não substitui a validação local
+  do stack da aplicação.
+- Para alterações de schema, mantenha as migrations versionadas e valide o
+  comportamento no Supabase local; sincronize o projeto remoto apenas quando
+  o workflow da tarefa solicitar.
 
 ## Playwright no Studio
 

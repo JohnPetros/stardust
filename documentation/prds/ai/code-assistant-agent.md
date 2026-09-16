@@ -1,44 +1,94 @@
+---
+title: Agente assistente de código
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/2
+last_updated_at: 2026-07-29
+---
+
 # PRD — Agente assistente de código
 
-- **Módulo:** `ai`
-- **Milestone:** [#2 — Agente assistente de código](https://github.com/JohnPetros/stardust/milestone/2)
-- **Status:** open
-- **Atualizado em:** 2026-07-29T02:07:57Z
+Disponibiliza para: ai; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-## 📍 Motivação
+## 1. Resumo Executivo
 
 Usuários iniciantes na linguagem **Delégua** frequentemente encontram barreiras na resolução de desafios, seja por dúvidas de sintaxe ou dificuldades em estruturar o raciocínio lógico.
 
 Para aumentar a retenção e o sucesso do aprendizado, precisamos introduzir um assistente inteligente. O objetivo desta task é preparar o terreno técnico, criando a inteligência do agente e a rota de comunicação, garantindo que o suporte pedagógico esteja disponível via API antes de partirmos para a interface visual.
 
-## 🔍 Detalhes
+## 2. Problema e Oportunidade
 
-Esta etapa foca exclusivamente na **infraestrutura e lógica do agente**, respeitando as seguintes premissas:
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-* **Abordagem Pedagógica:** O chatbot deve ser instruído (via System Prompt) a **jamais fornecer a resposta direta** de um desafio. Ele deve atuar como um mentor que guia o aluno.
-* **Capacidades:**
-* Exemplificar sintaxe de Delégua.
-* Analisar e apontar erros lógicos/sintáticos em códigos fornecidos.
-* **Formatação de Resposta (MDX):** O texto de retorno deve ser estruturado em parágrafos e utilizar widgets MDX. Trechos de código multiline devem obrigatoriamente retornar formatados para o widget `Code` com o modo de execução habilitada.
-* **Documentação:** A criação do novo módulo deve ser devidamente registrada na **Wiki StarDust**.
-* **Escopo:** **Não deve ser implementada nenhuma interface de usuário (UI)** nesta task. O objetivo é apenas o endpoint funcional e o módulo de IA.
+### Base de fontes e autoridade
 
-## 💡 Sugestão de Implementação
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/2 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
 
-### 1. Novo Módulo de Infraestrutura (`ai`)
+## 3. Público-alvo
 
-* Criar um módulo centralizado chamado `ai` para concentrar toda a lógica de inteligência artificial.
-* Este módulo deve encapsular as configurações do modelo, definição de *System Prompts* e quaisquer *tools* que o agente venha a utilizar.
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
 
-### 2. Integração com Vercel AI SDK
+## 4. Objetivos e Métricas de Sucesso
 
-* Utilizar o **Vercel AI SDK** pela facilidade de integração com o Next.js e suporte nativo a streaming de dados.
-* Configurar o agente de modo que ele consiga compreender código Delégua. Use os guias de manual sobre o LSP para ser usado como contexto.
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
 
-### 3. API Route / Controller (`web`)
+### Limites de validação e premissas declaradas
 
-* Expor um endpoint na aplicação `web` que aceite as mensagens do usuário.
-* A rota deve utilizar a API de **streaming** do SDK para fornecer respostas em tempo real ao cliente.
-* O controller deve ser "magro", delegando a construção da lógica e o processamento do prompt para o módulo de infraestrutura `ai`.
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Capacidade descrita pela referência legada
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Capacidade descrita pela referência legada.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
+
+- Comportamento registrado no checklist ou na referência legada.
+
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| ai | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada não registrada no legado
+
+1. 🚧 Em construção — o fluxo não está documentado no PRD legado.
+
+## 8. Fora do Escopo
+
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo não registrado | 🚧 Em construção — nenhuma exclusão explícita foi localizada no documento legado. |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

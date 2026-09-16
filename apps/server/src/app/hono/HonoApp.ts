@@ -16,6 +16,10 @@ import {
 import { AppError } from '@stardust/core/global/errors'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
+import type {
+  RateLimiterProvider,
+  TelemetryProvider,
+} from '@stardust/core/global/interfaces'
 
 import { ENV } from '@/constants'
 import { inngest } from '@/queue/inngest/inngest'
@@ -33,6 +37,7 @@ import {
 } from '@/queue/inngest/functions'
 import { InngestAmqp } from '@/queue/inngest/InngestAmqp'
 import { SentryTelemetryProvider } from '@/provision/telemetry'
+import { IORedisRateLimiterProvider } from '@/provision/rate-limiter'
 import { DiscordNotificationService } from '@/rest/services'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 import { HonoServer } from './HonoServer'
@@ -55,6 +60,8 @@ import {
 } from './routers'
 import { ForumRouter } from './routers/forum'
 import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
+import { RateLimitMiddleware } from './middlewares'
+import type { RateLimitClock } from './middlewares/RateLimitMiddleware'
 
 type SupabaseSession = User & { sub: string }
 
@@ -63,22 +70,35 @@ declare module 'hono' {
     account: AccountDto
     supabase: SupabaseClient
     inngest: InngestAmqp<void>
+    rateLimiter: RateLimitMiddleware
   }
 }
 
 export class HonoApp {
   readonly hono = new Hono()
-  private readonly telemetryProvider = new SentryTelemetryProvider()
+  private readonly telemetryProvider: TelemetryProvider
+  private readonly rateLimiterMiddleware: RateLimitMiddleware
   private readonly notificationService = new DiscordNotificationService(
     new AxiosRestClient(ENV.discordWebhookUrl),
   )
 
+  constructor(
+    rateLimiterProvider: RateLimiterProvider = new IORedisRateLimiterProvider(),
+    telemetryProvider: TelemetryProvider = new SentryTelemetryProvider(),
+    rateLimitClock?: RateLimitClock,
+    trustedProxyCidrs: readonly string[] = ENV.trustedProxyCidrs,
+  ) {
+    this.telemetryProvider = telemetryProvider
+    this.rateLimiterMiddleware = new RateLimitMiddleware({
+      rateLimiterProvider,
+      telemetryProvider,
+      clock: rateLimitClock,
+      trustedProxyCidrs,
+    })
+  }
+
   async startServer(port = ENV.port) {
-    this.setUpCors()
-    this.registerMiddlewares()
-    this.registerRoutes()
-    this.registerInngestRoute()
-    this.setUpErrorHandler()
+    this.setup()
     const server = await startNodeServer({
       serve,
       fetch: this.hono.fetch,
@@ -88,6 +108,13 @@ export class HonoApp {
     })
 
     return new HonoServer(this.hono, server)
+  }
+
+  setup() {
+    this.setUpCors()
+    this.registerMiddlewares()
+    this.registerRoutes()
+    this.setUpErrorHandler()
   }
 
   setUpErrorHandler() {
@@ -196,6 +223,14 @@ export class HonoApp {
   }
 
   registerMiddlewares() {
+    this.hono.use('*', async (context, next) => {
+      context.set('rateLimiter', this.rateLimiterMiddleware)
+      await next()
+    })
+    this.hono.use(
+      '*',
+      this.rateLimiterMiddleware.limitByIp.bind(this.rateLimiterMiddleware),
+    )
     this.hono.use('*', this.createSupabaseClient())
     this.hono.use('*', this.createInngestAmqp())
   }

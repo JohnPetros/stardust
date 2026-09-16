@@ -1,13 +1,19 @@
+---
+title: Gestão de Insígnias
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/8
+last_updated_at: 2026-02-23
+---
+
 # PRD — Gestão de Insígnias
 
-- **Módulo:** `shop`
-- **Milestone:** [#8 — Gestão de Insígnias](https://github.com/JohnPetros/stardust/milestone/8)
-- **Status:** open
-- **Atualizado em:** 2026-02-23T20:33:15Z
+Disponibiliza para: shop; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-## 1. Visão Geral
+## 1. Resumo Executivo
 
 A funcionalidade de Gestão de Insígnias no Studio permite que administradores
 cadastrem, atualizem, listem e removam insígnias disponíveis na loja.
@@ -22,15 +28,52 @@ comportamento funcional atual para alinhamento entre produto, design e
 desenvolvimento. A métrica de sucesso permanece qualitativa, sem meta numérica
 rígida nesta versão.
 
-## 2. Requisitos
+## 2. Problema e Oportunidade
 
-### [x] Listagem de Insígnias
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
+
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/8 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Listagem de Insígnias
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Listagem de Insígnias.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Exibir todas as insígnias cadastradas em formato tabular para
 operação administrativa.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Listagem completa:** O sistema deve consultar e exibir todas as insígnias
   disponíveis no catálogo administrativo.
 - **Dados mínimos por item:** Cada linha deve conter imagem, nome, preço e role
@@ -38,7 +81,7 @@ operação administrativa.
 - **Estado vazio:** Quando não houver insígnias cadastradas, deve ser exibida
   mensagem explícita de ausência de dados.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** A tabela deve apresentar colunas de imagem, nome, preço,
   role e ações.
@@ -52,13 +95,22 @@ operação administrativa.
   estado estável da tela.
 - **Compatibilidade:** Comportamento consistente nos navegadores suportados.
 
-### [x] Criação de Insígnia
+---
+
+#### RP-02 — Criação de Insígnia
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Criação de Insígnia.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Permitir cadastro de nova insígnia com formulário dedicado e
 upload de imagem.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Campos obrigatórios:** A criação deve exigir nome, imagem, preço e role.
 - **Validação de nome:** O nome deve respeitar validações de entrada de texto.
 - **Validação de preço:** O preço deve ser numérico e maior ou igual a zero.
@@ -69,7 +121,7 @@ upload de imagem.
 - **Atualização de listagem:** Após criação bem-sucedida, a tabela deve ser
   recarregada com o novo item.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** A criação deve ocorrer via diálogo com campos de nome,
   imagem, preço e seleção de papel.
@@ -85,13 +137,22 @@ upload de imagem.
 - **Compatibilidade:** Fluxo de criação deve funcionar de forma consistente nos
   navegadores suportados.
 
-### [x] Edição de Insígnia
+---
+
+#### RP-03 — Edição de Insígnia
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Edição de Insígnia.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Permitir atualização de insígnias existentes com
 pré-preenchimento do formulário.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Pré-preenchimento:** Ao abrir edição, o formulário deve carregar dados atuais
   da insígnia.
 - **Identificação do item:** A atualização deve ser aplicada à insígnia
@@ -103,7 +164,7 @@ pré-preenchimento do formulário.
 - **Atualização de listagem:** Após sucesso, os dados atualizados devem aparecer
   imediatamente na tabela.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** A ação "Editar" deve abrir o formulário em modo de
   edição.
@@ -117,13 +178,22 @@ pré-preenchimento do formulário.
   interface.
 - **Compatibilidade:** Fluxo de edição consistente nos navegadores suportados.
 
-### [x] Exclusão de Insígnia
+---
+
+#### RP-04 — Exclusão de Insígnia
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Exclusão de Insígnia.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Permitir remoção de insígnia com confirmação explícita para
 prevenir exclusões acidentais.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Confirmação obrigatória:** A exclusão só deve ocorrer após confirmação do
   administrador.
 - **Remoção de registro:** Ao confirmar, a insígnia deve ser removida do
@@ -135,7 +205,7 @@ prevenir exclusões acidentais.
 - **Atualização de listagem:** Após exclusão bem-sucedida, a tabela deve refletir
   a remoção.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** A ação "Excluir" deve abrir diálogo de confirmação com
   aviso de irreversibilidade.
@@ -148,13 +218,22 @@ prevenir exclusões acidentais.
 - **Confiabilidade:** Erros não devem causar estado inconsistente na tabela.
 - **Compatibilidade:** Comportamento consistente nos navegadores suportados.
 
-### [x] Gestão de Imagem da Insígnia
+---
+
+#### RP-05 — Gestão de Imagem da Insígnia
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Gestão de Imagem da Insígnia.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Controlar upload e limpeza de arquivos de imagem no fluxo de
 criação/edição de insígnias.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Upload em pasta dedicada:** Imagens de insígnias devem ser enviadas para o
   diretório de storage específico de insígnias.
 - **Validação de nome de arquivo:** O nome da imagem deve obedecer regras de
@@ -166,7 +245,7 @@ criação/edição de insígnias.
 - **Tratamento de erro de mídia:** Erros de upload/remoção devem ser reportados
   ao administrador.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** O formulário deve permitir upload e preview da imagem da
   insígnia.
@@ -180,7 +259,17 @@ criação/edição de insígnias.
   falha.
 - **Compatibilidade:** Operação consistente de upload nos navegadores suportados.
 
-## 3. Fluxo de Usuário (User Flow)
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| shop | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada preservada do documento legado
+
+### 3. Fluxo de Usuário (User Flow)
 
 **Nome do fluxo:** Listar e consultar insígnias.
 
@@ -215,13 +304,16 @@ criação/edição de insígnias.
    - **Sucesso:** Item é removido da listagem com feedback de sucesso.
    - **Falha:** Exclusão não é concluída e o sistema informa o erro.
 
-## 4. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-- Gestão de avatares e foguetes na mesma interface de insígnias.
-- Alterações no comportamento de compra de insígnias para usuário final na Web.
-- Criação de novos tipos de role fora dos valores atualmente suportados pelo
-  domínio.
-- Mudanças de arquitetura de storage, autenticação ou contratos REST além do que
-  já está implementado.
-- Fluxos avançados de governança editorial (aprovação em múltiplos níveis,
-  agendamento de publicação e versionamento histórico de catálogo).
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Gestão de avatares e foguetes na mesma interface de insígnias. |
+| Escopo | Alterações no comportamento de compra de insígnias para usuário final na Web. |
+| Escopo | Criação de novos tipos de role fora dos valores atualmente suportados pelo |
+| Escopo | Mudanças de arquitetura de storage, autenticação ou contratos REST além do que |
+| Escopo | Fluxos avançados de governança editorial (aprovação em múltiplos níveis, |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

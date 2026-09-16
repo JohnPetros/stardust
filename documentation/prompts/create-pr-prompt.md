@@ -252,12 +252,14 @@ Use sempre o heading:
 ## PRD
 ```
 
-Quando houver PRD, informe uma ou mais URLs completas das milestones do
-Stardust, uma por linha:
+Quando houver PRD, informe o path do PRD canônico em `documentation/prds/` e, para o
+processo de release, as URLs completas das milestones do Stardust, uma por
+linha:
 
 ```markdown
 ## PRD
 
+<path do PRD canônico em documentation/prds/>
 https://github.com/JohnPetros/stardust/milestone/40
 ```
 
@@ -279,12 +281,14 @@ Inclua esta seção somente quando houver PRD:
 ```markdown
 ## Requisitos afetados
 
-- `REQ-01` — descrição resumida.
-- `REQ-03` — descrição resumida.
+- `RP-01` — requisito de produto resumido.
+- `JN-01` — jornada afetada, quando aplicável.
 ```
 
-Use somente identificadores que existam no PRD. Para PRDs legados, preserve o
-identificador original, como `RF-*`, sem convertê-lo artificialmente.
+Use somente identificadores que existam no PRD canônico. Para PRDs legados,
+preserve o identificador original e registre o crosswalk para `RP-*` quando
+houver. Requisitos funcionais da Spec devem ser citados como `RF-*` apenas
+quando a rastreabilidade técnica do PR exigir.
 
 ### Issues relacionadas
 
@@ -296,6 +300,8 @@ Use o heading:
 
 Liste somente Issues reais. Use `resolve #123` apenas quando o merge deste PR
 deve encerrar a Issue. Quando não houver Issue, escreva `Nenhuma.`
+Quando houver rastreamento Jira Shifu, inclua a chave `SHI-*` junto da issue
+relacionada; nunca invente uma chave.
 
 ### Implementação técnica
 

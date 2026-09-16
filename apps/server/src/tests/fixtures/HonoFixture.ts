@@ -1,19 +1,48 @@
 import { createAdaptorServer, type ServerType } from '@hono/node-server'
 
 import { HonoApp } from '@/app/hono/HonoApp'
+import type { RateLimitClock } from '@/app/hono/middlewares/RateLimitMiddleware'
+import type {
+  RateLimitDecision,
+  RateLimitInput,
+  RateLimiterProvider,
+  TelemetryProvider,
+} from '@stardust/core/global/interfaces'
+
+class AllowAllRateLimiterProvider implements RateLimiterProvider {
+  async consume(_input: RateLimitInput): Promise<RateLimitDecision> {
+    return { isAllowed: true, retryAfterInSeconds: 1 }
+  }
+}
+
+const noopTelemetryProvider: TelemetryProvider = {
+  trackError: () => undefined,
+}
 
 export class HonoFixture {
   private readonly app: HonoApp
   readonly server: ServerType
 
-  constructor() {
-    this.app = new HonoApp()
+  get hono() {
+    return this.app.hono
+  }
+
+  constructor(
+    rateLimiterProvider: RateLimiterProvider = new AllowAllRateLimiterProvider(),
+    telemetryProvider: TelemetryProvider = noopTelemetryProvider,
+    rateLimitClock?: RateLimitClock,
+    trustedProxyCidrs?: readonly string[],
+  ) {
+    this.app = new HonoApp(
+      rateLimiterProvider,
+      telemetryProvider,
+      rateLimitClock,
+      trustedProxyCidrs,
+    )
     this.server = createAdaptorServer({ fetch: this.app.hono.fetch })
   }
 
   async setup() {
-    this.app.registerMiddlewares()
-    this.app.registerRoutes()
-    this.app.setUpErrorHandler()
+    this.app.setup()
   }
 }

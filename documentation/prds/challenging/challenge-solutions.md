@@ -1,13 +1,19 @@
+---
+title: Soluções de Desafio
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/40
+last_updated_at: 2026-07-31
+---
+
 # PRD — Soluções de Desafio
 
-- **Módulo:** `challenging`
-- **Milestone:** [#40 — Soluções de Desafio](https://github.com/JohnPetros/stardust/milestone/40)
-- **Status:** open
-- **Atualizado em:** 2026-07-31T11:58:31Z
+Disponibiliza para: challenging; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-### 1. Visao Geral
+## 1. Resumo Executivo
 
 O **Challenge Solutions** e a area da plataforma StarDust onde estudantes podem
 consultar, publicar, editar e discutir solucoes de um desafio. A funcionalidade
@@ -30,11 +36,51 @@ desafio para reduzir spoiler.
 
 ---
 
-### 2. Requisitos
+## 2. Problema e Oportunidade
 
-#### REQ-01 Acesso e Bloqueio de Solucoes
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-- [x] **Acesso e Bloqueio de Solucoes**
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/40 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Acesso e Bloqueio de Solucoes
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Acesso e Bloqueio de Solucoes.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** O sistema deve controlar quando um usuario pode visualizar a
 listagem e os detalhes de solucoes de um desafio.
@@ -59,7 +105,7 @@ listagem e os detalhes de solucoes de um desafio.
 - **Retorno ao desafio:** ao fechar o dialogo de conteudo bloqueado, o usuario
   deve voltar para a rota principal do desafio.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Aba bloqueada:** a aba `Solucoes` deve aparecer com cadeado quando o acesso
   estiver bloqueado.
@@ -76,9 +122,19 @@ listagem e os detalhes de solucoes de um desafio.
 
 ---
 
-#### REQ-02 Listagem de Solucoes
+#### RP-02 — Listagem de Solucoes
 
-- [x] **Listagem de Solucoes**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Listagem de Solucoes.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** O usuario autorizado deve conseguir navegar pelas solucoes de um
 desafio, buscar por titulo, alternar entre todas as solucoes e suas proprias
@@ -100,7 +156,7 @@ solucoes, ordenar resultados e carregar mais itens.
 - **Estado vazio:** quando nenhum resultado for encontrado, a interface deve
   informar que nao ha solucoes.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Busca visivel:** o campo de busca deve ficar no topo da listagem.
 - **Menu de ordenacao:** o seletor deve deixar claro qual ordenacao esta ativa,
@@ -117,9 +173,19 @@ solucoes, ordenar resultados e carregar mais itens.
 
 ---
 
-#### REQ-03 Visualizacao de Solucao
+#### RP-03 — Visualizacao de Solucao
 
-- [x] **Visualizacao de Solucao**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Visualizacao de Solucao.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** O usuario autorizado deve conseguir abrir uma solucao especifica,
 ler seu conteudo e interagir com metricas, voto e comentarios.
@@ -137,7 +203,7 @@ ler seu conteudo e interagir com metricas, voto e comentarios.
   de postagem.
 - **Autor:** o detalhe deve exibir dados do autor, incluindo avatar e nome.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Hierarquia visual:** titulo, autor e metricas devem aparecer antes do
   conteudo da solucao.
@@ -151,9 +217,19 @@ ler seu conteudo e interagir com metricas, voto e comentarios.
 
 ---
 
-#### REQ-04 Publicacao de Solucao
+#### RP-04 — Publicacao de Solucao
 
-- [x] **Publicacao de Solucao**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Publicacao de Solucao.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** Um usuario autenticado deve poder publicar sua propria solucao
 para um desafio, com titulo e conteudo explicativo.
@@ -174,7 +250,7 @@ para um desafio, com titulo e conteudo explicativo.
 - **Redirecionamento apos publicar:** ao publicar com sucesso, o usuario deve ser
   levado para o detalhe da solucao recem-criada.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **CTA de publicacao:** a listagem deve exibir `Compartilhar sua solucao` quando
   o usuario ja tiver concluido o desafio.
@@ -190,9 +266,19 @@ para um desafio, com titulo e conteudo explicativo.
 
 ---
 
-#### REQ-05 Edicao e Remocao da Propria Solucao
+#### RP-05 — Edicao e Remocao da Propria Solucao
 
-- [x] **Edicao e Remocao da Propria Solucao**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Edicao e Remocao da Propria Solucao.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** O autor de uma solucao deve conseguir atualizar ou remover sua
 propria publicacao.
@@ -216,7 +302,7 @@ propria publicacao.
 - **Redirecionamento apos remover:** depois da exclusao, o usuario deve voltar
   para a listagem de solucoes do desafio.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Botao de editar:** no detalhe, o autor deve ver `editar sua solucao`.
 - **Botao de deletar:** no detalhe, o autor deve ver `deletar sua solucao` em
@@ -230,9 +316,19 @@ propria publicacao.
 
 ---
 
-#### REQ-06 Upvote de Solucao
+#### RP-06 — Upvote de Solucao
 
-- [x] **Upvote de Solucao**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Upvote de Solucao.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** Usuarios autenticados devem conseguir avaliar solucoes de outros
 usuarios com upvote.
@@ -250,7 +346,7 @@ usuarios com upvote.
 - **Solucao inexistente:** tentar votar em solucao inexistente deve retornar erro
   de solucao nao encontrada.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Estado votado:** quando o usuario ja deu upvote, o icone e a contagem devem
   usar destaque visual.
@@ -263,9 +359,19 @@ usuarios com upvote.
 
 ---
 
-#### REQ-07 Comentarios em Solucao
+#### RP-07 — Comentarios em Solucao
 
-- [x] **Comentarios em Solucao**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Comentarios em Solucao.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** O detalhe de uma solucao deve permitir leitura e publicacao de
 comentarios relacionados aquela solucao.
@@ -281,7 +387,7 @@ comentarios relacionados aquela solucao.
 - **Estado vazio:** quando nao houver comentarios, a UI deve informar que aquela
   solucao ainda nao tem comentarios.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Posicao previsivel:** comentarios devem aparecer abaixo do conteudo da
   solucao.
@@ -293,9 +399,19 @@ comentarios relacionados aquela solucao.
 
 ---
 
-#### REQ-08 Responsividade, Navegacao e Estados
+#### RP-08 — Responsividade, Navegacao e Estados
 
-- [x] **Responsividade, Navegacao e Estados**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Responsividade, Navegacao e Estados.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** A experiencia de solucoes deve funcionar dentro do layout de
 desafio e tambem nas paginas dedicadas de criacao/edicao.
@@ -315,7 +431,7 @@ desafio e tambem nas paginas dedicadas de criacao/edicao.
 - **Cache paginado:** a listagem deve evitar recarregamentos desnecessarios
   enquanto filtros e ordenacao nao mudarem.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Desktop:** solucoes devem funcionar como aba dentro do layout de desafio,
   preservando contexto do enunciado/editor.
@@ -328,11 +444,17 @@ desafio e tambem nas paginas dedicadas de criacao/edicao.
 - **Links consistentes:** todos os links devem manter o usuario no contexto do
   desafio correto.
 
----
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| challenging | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
 
 ### 3. Fluxo de Usuario (User Flow)
 
-**Fluxo A - Usuario visualiza solucoes apos resolver um desafio**
+#### JN-01 — Usuario visualiza solucoes apos resolver um desafio
 
 1. O usuario autenticado acessa a pagina de um desafio.
 2. O usuario resolve o desafio corretamente.
@@ -343,7 +465,7 @@ desafio e tambem nas paginas dedicadas de criacao/edicao.
 7. O sistema registra a visualizacao e exibe o detalhe com conteudo, autor,
    metricas, upvote e comentarios.
 
-**Fluxo B - Usuario desbloqueia solucoes antes de concluir**
+#### JN-02 — Usuario desbloqueia solucoes antes de concluir
 
 1. O usuario autenticado acessa um desafio com solucoes bloqueadas.
 2. O usuario clica na aba `Solucoes` bloqueada.
@@ -354,7 +476,7 @@ desafio e tambem nas paginas dedicadas de criacao/edicao.
    - **Saldo insuficiente:** o sistema exibe feedback de erro e permanece no
      desafio.
 
-**Fluxo C - Usuario publica sua solucao**
+#### JN-03 — Usuario publica sua solucao
 
 1. O usuario conclui o desafio.
 2. O usuario abre a listagem de solucoes.
@@ -370,7 +492,7 @@ desafio e tambem nas paginas dedicadas de criacao/edicao.
      solucao nova.
    - **Falha:** exibe mensagem de erro.
 
-**Fluxo D - Autor edita ou remove a propria solucao**
+#### JN-04 — Autor edita ou remove a propria solucao
 
 1. O autor abre o detalhe da propria solucao.
 2. O sistema exibe botoes de editar e deletar.
@@ -382,7 +504,7 @@ desafio e tambem nas paginas dedicadas de criacao/edicao.
 5. Para deletar, o usuario abre o dialogo de confirmacao.
 6. Ao confirmar, o sistema remove a solucao e redireciona para a listagem.
 
-**Fluxo E - Usuario interage com uma solucao**
+#### JN-05 — Usuario interage com uma solucao
 
 1. O usuario abre uma solucao de outro autor.
 2. O usuario clica em upvote.
@@ -391,7 +513,7 @@ desafio e tambem nas paginas dedicadas de criacao/edicao.
 4. O usuario le ou publica comentarios no final da solucao.
 5. Se a publicacao de comentario falhar, o sistema exibe toast de erro.
 
-**Fluxo F - Acesso direto sem permissao**
+#### JN-06 — Acesso direto sem permissao
 
 1. O usuario acessa diretamente uma URL de listagem ou detalhe de solucao.
 2. O sistema verifica se as solucoes estao liberadas para o usuario.
@@ -402,22 +524,39 @@ desafio e tambem nas paginas dedicadas de criacao/edicao.
 
 ---
 
-### 4. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-- Geracao automatica de solucoes por IA.
-- Revisao automatica de qualidade da solucao.
-- Execucao do codigo publicado dentro da propria solucao.
-- Comparacao automatica entre solucoes.
-- Deteccao de plagio ou similaridade entre solucoes.
-- Ranking global de autores de solucoes.
-- Moderacao, denuncia ou ocultacao de solucoes por conteudo inadequado.
-- Versionamento historico de edicoes da solucao.
-- Solucoes privadas, nao listadas ou compartilhadas por permissao.
-- Colaboracao em tempo real na escrita de solucoes.
-- Internacionalizacao automatica do conteudo publicado.
-- Persistencia de progresso de leitura da solucao.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Geracao automatica de solucoes por IA. |
+| Escopo | Revisao automatica de qualidade da solucao. |
+| Escopo | Execucao do codigo publicado dentro da propria solucao. |
+| Escopo | Comparacao automatica entre solucoes. |
+| Escopo | Deteccao de plagio ou similaridade entre solucoes. |
+| Escopo | Ranking global de autores de solucoes. |
+| Escopo | Moderacao, denuncia ou ocultacao de solucoes por conteudo inadequado. |
+| Escopo | Versionamento historico de edicoes da solucao. |
+| Escopo | Solucoes privadas, nao listadas ou compartilhadas por permissao. |
+| Escopo | Colaboracao em tempo real na escrita de solucoes. |
+| Escopo | Internacionalizacao automatica do conteudo publicado. |
+| Escopo | Persistencia de progresso de leitura da solucao. |
+| Escopo | **Nao identificado:** a auditoria da codebase nao encontrou registro formal de |
+| Escopo | [x] **Solução Oficial da Plataforma** |
+| Escopo | Um desafio pode possuir uma solução oficial cadastrada. |
+| Escopo | Quando não houver solução oficial, nenhuma chamada ou rota específica para a solução oficial deve ser exibida. |
+| Escopo | Quando houver solução oficial e a área de soluções estiver disponível, a interface deve exibir uma chamada destacada para ela. |
+| Escopo | A solução oficial deve ser exibida em um slot próprio da plataforma, separado do detalhe das soluções publicadas por usuários. |
+| Escopo | O slot deve renderizar o código usando o Code Playback, incluindo input, passos, linha ativa, estado das estruturas, explicação e controles de reprodução. |
+| Escopo | O acesso à solução oficial deve respeitar as mesmas regras de disponibilidade da área de soluções. |
+| Escopo | Quando a área de soluções estiver bloqueada, o acesso direto ou indireto à solução oficial não deve expor seu conteúdo. |
+| Escopo | Quando a área de soluções for liberada, a chamada e o slot da solução oficial devem ficar disponíveis. |
+| Escopo | A visualização da solução oficial é educacional e não deve executar o código real do desafio. |
+| Escopo | A chamada da solução oficial deve aparecer em destaque na área de soluções quando existir. |
+| Escopo | O acesso deve levar o usuário ao slot dedicado da solução oficial, mantendo o contexto do desafio. |
+| Escopo | O Code Playback deve preservar o layout padrão, o modo expandido, os controles de reprodução, a timeline, a velocidade e o destaque da linha ativa. |
+| Escopo | Desafios sem solução oficial devem manter o comportamento atual da área de soluções, sem exibir estados vazios específicos para a solução oficial. |
 
-#### Descartado durante a implementacao
+### Decisões descartadas durante a definição
 
 - **Nao identificado:** a auditoria da codebase nao encontrou registro formal de
   comportamentos considerados e descartados durante a implementacao desta
@@ -425,41 +564,3 @@ desafio e tambem nas paginas dedicadas de criacao/edicao.
 
 
 ---
-
-#### REQ-09 Solução Oficial da Plataforma
-
-- [x] **Solução Oficial da Plataforma**
-
-**Descrição:** O sistema deve permitir a visualização da solução oficial cadastrada pela plataforma para um desafio, usando o componente Code Playback como material educacional.
-
-##### Regras de Negócio
-
-- Um desafio pode possuir uma solução oficial cadastrada.
-- Quando não houver solução oficial, nenhuma chamada ou rota específica para a solução oficial deve ser exibida.
-- Quando houver solução oficial e a área de soluções estiver disponível, a interface deve exibir uma chamada destacada para ela.
-- A solução oficial deve ser exibida em um slot próprio da plataforma, separado do detalhe das soluções publicadas por usuários.
-- O slot deve renderizar o código usando o Code Playback, incluindo input, passos, linha ativa, estado das estruturas, explicação e controles de reprodução.
-- O acesso à solução oficial deve respeitar as mesmas regras de disponibilidade da área de soluções.
-- Quando a área de soluções estiver bloqueada, o acesso direto ou indireto à solução oficial não deve expor seu conteúdo.
-- Quando a área de soluções for liberada, a chamada e o slot da solução oficial devem ficar disponíveis.
-- A visualização da solução oficial é educacional e não deve executar o código real do desafio.
-
-##### Regras de UI/UX
-
-- A chamada da solução oficial deve aparecer em destaque na área de soluções quando existir.
-- O acesso deve levar o usuário ao slot dedicado da solução oficial, mantendo o contexto do desafio.
-- O Code Playback deve preservar o layout padrão, o modo expandido, os controles de reprodução, a timeline, a velocidade e o destaque da linha ativa.
-- Desafios sem solução oficial devem manter o comportamento atual da área de soluções, sem exibir estados vazios específicos para a solução oficial.
-
----
-
-#### Fluxo G — Usuário visualiza a solução oficial
-
-1. O usuário acessa a área de soluções de um desafio.
-2. O sistema verifica se existe solução oficial cadastrada.
-3. Se não houver, nenhuma chamada para a solução oficial é exibida.
-4. Se houver e o acesso estiver liberado, o sistema exibe a chamada destacada.
-5. O usuário clica na chamada.
-6. O sistema navega para o slot da solução oficial.
-7. O slot renderiza o Code Playback.
-8. O usuário navega pelos passos, altera a velocidade ou expande a visualização sem perder o estado atual.

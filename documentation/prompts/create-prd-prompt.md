@@ -12,11 +12,16 @@ Criar um PRD completo e implementável a partir do texto recebido pelo comando:
 create-prd "<texto do produto ou funcionalidade>"
 ```
 
-O PRD deve ser salvo em:
+O rascunho local do PRD deve ser salvo em:
 
 ```text
 documentation/prds/<slug-do-produto>.md
 ```
+
+O PRD canônico de produto é mantido no repositório, em
+`documentation/prds/<module>/<slug>.md`. Esse arquivo é a fonte versionada de
+verdade; não há dependência de Confluence. Requisitos devem usar `RP-*` e
+jornadas devem usar `JN-*`.
 
 Se for informado um caminho de saída, use-o:
 
@@ -45,7 +50,7 @@ Só depois da confirmação o arquivo poderá ser criado ou atualizado.
 
 ## Gate obrigatório de Grilling
 
-Execute obrigatoriamente o protocolo de Grilling definido em `documentation/sdd.md` antes de
+Execute obrigatoriamente o **Grilling gate** definido em [`sdd.md#grilling-gate`](../sdd.md#grilling-gate) antes de
 escrever ou atualizar o PRD. Modele os itens da Árvore de Decisão como uma design tree, pesquise
 os fatos e pergunte em cada round toda a frontier cujos pré-requisitos já estiverem resolvidos.
 Cada pergunta deve incluir a resposta recomendada no formato canônico do protocolo.
@@ -94,9 +99,11 @@ Não pergunte ao usuário algo que possa ser descoberto no ambiente.
 
 ---
 
-## Pesquisa de Mercado Obrigatória
+## Pesquisa Competitiva Condicional
 
-Faça pesquisa atualizada na internet sobre o cenário competitivo.
+Faça pesquisa atualizada na internet sobre o cenário competitivo somente quando
+ela for relevante para uma decisão de produto, posicionamento ou diferenciação.
+Ela não é uma seção obrigatória do PRD.
 
 Analise:
 
@@ -120,11 +127,12 @@ fonte em Markdown.
 Diferencie fatos de inferências usando expressões como:
 
 - `Segundo a fonte...`
-- `A página oficial informa...`
 - `Inferência baseada nas fontes...`
 - `Não identificado publicamente...`
 
 A pesquisa deve orientar recomendações, mas não substituir decisões do usuário.
+Quando não for material, registre essa não aplicabilidade em `Problema e
+Oportunidade` ou nas premissas, sem criar uma seção competitiva vazia.
 
 ---
 
@@ -139,7 +147,7 @@ Investigue em rounds, respeitando as dependências entre estas decisões:
 5. Não público.
 6. Jobs to Be Done.
 7. Proposta de valor.
-8. Diferenciação competitiva.
+8. Diferenciação competitiva, quando material.
 9. Escopo da primeira versão.
 10. Funcionalidades obrigatórias.
 11. Regras de negócio.
@@ -163,7 +171,7 @@ Não faça perguntas sobre itens já resolvidos nos materiais ou pelo usuário.
 
 ## Formato das Perguntas
 
-Use o formato obrigatório de rounds do protocolo de Grilling em `documentation/sdd.md`. Numere
+Use o formato obrigatório de rounds do **Grilling gate** em [`sdd.md#grilling-gate`](../sdd.md#grilling-gate). Numere
 toda a frontier atual e inclua uma recomendação objetiva e justificada para cada pergunta.
 
 ---
@@ -177,8 +185,8 @@ com:
 - objetivo;
 - público-alvo;
 - proposta de valor;
-- cenário competitivo;
-- diferenciais;
+- cenário competitivo, quando pesquisado;
+- diferenciais, quando aplicável;
 - escopo;
 - regras críticas;
 - fluxos principais;
@@ -197,76 +205,110 @@ Não escreva o arquivo até receber confirmação explícita.
 
 ## Formato Obrigatório do PRD
 
-Após a confirmação, escreva o documento nesta estrutura:
+Após a confirmação, escreva o documento exatamente nesta estrutura, sem trocar a
+ordem ou os nomes das seções:
 
-### 1. Visão Geral
+```md
+---
+title: <título>
+status: draft
+source:
+  - type: <confluence|issue|direct-request>
+    ref: <URL ou referência>
+last_updated_at: YYYY-MM-DD
+---
 
-Inclua descrição do produto, objetivo, problema resolvido e valor entregue.
+# PRD — <Nome do Produto ou Área>
 
-### 2. Público-alvo
+Disponibiliza para: <áreas consumidoras e identidade/contrato fornecido>
 
-Inclua público principal, públicos secundários, não público, contexto de uso,
-dores, necessidades e Jobs to Be Done.
-
-Use o formato:
-
-```text
-Quando [contexto], quero [ação], para [resultado].
+Navegação: <links ou âncoras das seções principais>
 ```
 
-### 3. Análise do Cenário Competitivo
+### 1. Resumo Executivo
 
-Inclua resumo do mercado, concorrentes diretos e indiretos, alternativas
-manuais, matriz competitiva, oportunidades, diferenciais recomendados, fontes e
-distinção entre fatos e inferências.
+Inclua o que é o produto/área, o problema, o objetivo, o valor entregue, o
+estado da conta/ator quando aplicável e o que o MVP explicitamente não inclui.
+
+### 2. Problema e Oportunidade
+
+Descreva o problema, a oportunidade e as razões para a capacidade existir.
+Inclua a subseção obrigatória:
+
+#### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | <fonte> | <autoridade/contexto> |
+
+Use o PRD canônico versionado em `documentation/prds/` e registre sua revisão.
+Milestones, issues, entrevistas e código são fontes auxiliares, nunca
+substitutos silenciosos da autoridade local.
+
+### 3. Público-alvo
+
+Inclua público principal, públicos secundários, não público, contexto de uso e
+Jobs to Be Done.
+
+Use o formato `Quando [contexto], quero [ação], para [resultado].`
+
+### 4. Objetivos e Métricas de Sucesso
 
 Use a tabela:
 
-| Solução | Público | Proposta de valor | Funcionalidades | Preço público | Limitações |
-| ------- | ------- | ----------------- | --------------- | ------------- | ---------- |
+| Objetivo do produto | Métrica aprovada | Significado da medição |
+| --- | --- | --- |
+| <objetivo> | <métrica ou nenhuma meta aprovada> | <interpretação> |
 
-Não preencha células com suposições. Use `Não identificado publicamente` quando
-necessário.
+#### Limites de validação e premissas declaradas
 
-### 4. Requisitos
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| <risco/premissa> | <consequência> |
+
+### 5. Requisitos de Produto
+
+#### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| <conceito> | <responsabilidade> |
 
 Cada requisito deve seguir este formato:
 
-#### REQ-01 Nome do Requisito
+#### RP-01 — <Nome do Requisito>
 
-- [ ] **Nome do Requisito**
+Necessidades do usuário:
 
-**Descrição:** descreva o comportamento esperado.
+- Como <ator>, quero <ação>, para <resultado>.
+
+Resultado: <resultado observável do requisito>.
+
+Atores: <atores>.
 
 ##### Regras de Negócio
 
-- **Regra:** comportamento obrigatório.
-- **Validação:** condição e resultado.
-- **Exceção:** comportamento alternativo.
-- **Dependência:** módulo ou entidade relacionada.
+- <regra obrigatória, validação, exceção ou dependência>.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
-- **Interface:** apresentação da funcionalidade.
-- **Feedback:** estados de sucesso, erro e carregamento.
-- **Estado vazio:** comportamento sem dados.
-- **Ação bloqueada:** motivo e correção.
-- **Responsividade:** comportamento em telas menores.
-- **Acessibilidade:** requisitos relevantes.
+- <estado, feedback, acessibilidade, responsividade ou comportamento de interface>.
 
-Use requisitos sequenciais: `REQ-01`, `REQ-02`, `REQ-03`.
+Use requisitos de produto sequenciais: `RP-01`, `RP-02`, `RP-03`. Não use
+`RF-*` ou `CA-*` no PRD; esses IDs pertencem à Spec local.
 
-Use `[ ]` por padrão. Use `[x]` somente quando a implementação tiver sido
-verificada.
+### 6. Grafo de Dependências do Produto
 
-Separe os requisitos com `---`.
+Registre produtores, consumidores e responsabilidades entre áreas. Não
+transforme o grafo de produto em ordem de implementação.
 
-### 5. Fluxo de Usuário (User Flow)
+### 7. Jornadas
 
-Use fluxos identificados por letras:
+Descreva cada jornada com um identificador `JN-*`, seus atores e passos de
+sucesso, erro, recuperação e estados vazios quando aplicáveis:
 
 ```text
-Fluxo A - Nome do fluxo
+JN-01 — Nome da jornada
 
 1. O usuário inicia a ação.
 2. O sistema apresenta o estado.
@@ -280,21 +322,25 @@ Fluxo A - Nome do fluxo
 Inclua fluxos principais, alternativos, erros, estados vazios e confirmações
 destrutivas.
 
-### 6. Fora do Escopo (Out of Scope)
+### 8. Fora do Escopo
 
-Liste funcionalidades explicitamente excluídas da versão.
+Use uma tabela:
 
-#### Descartado durante a definição
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| <área> | <o que não será entregue> |
 
-Registre decisões consideradas e rejeitadas:
+#### Decisões descartadas durante a definição
 
-- **Alternativa:** motivo da rejeição.
-- **Regra anterior:** regra que a substituiu.
+Registre alternativas consideradas e a regra final escolhida:
+
+| Alternativa considerada | Regra final |
+| --- | --- |
+| <alternativa> | <decisão adotada> |
 
 Se nada tiver sido descartado, escreva:
 
-- **Não identificado:** nenhuma alternativa foi formalmente descartada durante a
-  definição.
+- **Não identificado:** nenhuma alternativa foi formalmente descartada durante a definição.
 
 ---
 
@@ -318,10 +364,12 @@ O PRD deve:
 
 Antes de salvar, valide:
 
-- todos os requisitos possuem descrição, regras de negócio e UI/UX;
-- os fluxos cobrem os requisitos;
+- todos os `RP-*` possuem necessidades do usuário, resultado, atores, regras de negócio e regras de experiência;
+- todas as `JN-*` estão cobertas pelos requisitos aplicáveis;
+- o grafo de dependências identifica produtores, consumidores e responsabilidades;
+- objetivos, métricas, limites de validação e premissas estão explícitos;
 - o público-alvo está refletido no produto;
-- a análise competitiva influencia o posicionamento;
+- quando houver análise competitiva, ela influencia o posicionamento;
 - não existem contradições;
 - não há decisões relevantes pendentes.
 

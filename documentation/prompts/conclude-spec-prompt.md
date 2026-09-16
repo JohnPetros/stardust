@@ -1,6 +1,6 @@
 ---
 name: conclude-spec
-description: Fechar uma Spec de feature após os Implementation Reviewers pareados, checks e build do CI, atualizando evaluation.md.
+description: Fechar uma Spec de feature, criar os commits intencionais e publicar ou atualizar o PR após os Implementation Reviewers pareados, checks e build do CI.
 ---
 
 # Concluir Spec
@@ -55,7 +55,7 @@ A task principal conduz o fechamento na task atual. Não crie nova thread.
    necessária estiver pendente.
 
 Para frontend, confirme no `evaluation.md` a auditoria de
-`ui-layer-rules.md` e a matriz independente Pencil/Web antes de marcar a Spec
+`ui-layer-rules.md` e a matriz independente baseada no `design/handoff.md` antes de marcar a Spec
 como concluída. A matriz deve comprovar fidelidade Pencil-to-code no HEAD atual;
 node ausente, contradito, adicionado sem aprovação ou divergência sem decisão
 rastreável mantém a Spec `in_progress` e exige correção ou amendment.
@@ -66,22 +66,36 @@ Alinhe PRD, Rules, Architecture, modules, tooling e overview conforme os fatos.
 Atualizações normativas que alteram produto, Contract, Rules globais ou
 fronteiras arquiteturais exigem decisão do usuário.
 
-`create-pr` cria o commit/PR e solicita Codex Review. O Plan, `evaluation.md`, os
-Reviewers pareados e o CI devem apontar para o HEAD final correspondente. Todos os checks
-obrigatórios e o build verdes são pré-condições para concluir a Spec; enquanto
-o PR estiver aberto, ficam `pending` no `evaluation.md`.
+Com autorização explícita para commit, push e PR, a conclusão executa estes
+workflows em sequência:
 
-### Referência para `create-pr`
+1. invoque `commit-code` para analisar e criar os commits intencionais da
+   entrega; respeite seus gates de staging, agrupamento, mensagem e paths;
+2. invoque `create-pr` para publicar ou atualizar um único PR, solicitar Codex
+   Review e acompanhar o CI do HEAD recém-criado.
 
-Ao concluir a Spec, registre o handoff para a skill `create-pr` quando a entrega
-ainda não tiver um PR associado. Esta integração é somente por referência:
-`conclude-spec` não executa `create-pr`, não cria commit, não faz stage/push e
-não abre PR automaticamente. O workflow responsável por agrupar commits,
-abrir o PR, solicitar Codex Review e acompanhar o CI é
-`.agents/skills/create-pr/SKILL.md`.
+`create-pr` e `commit-code` mantêm seus próprios gates de autorização. Se a
+autorização não existir, pare antes de qualquer mutação externa e solicite-a ao
+usuário. Se houver alterações staged, alterações fora do escopo ou ambiguidade
+de agrupamento, preserve-as e pare conforme as regras dos workflows chamados.
+
+O Plan, `evaluation.md`, os Reviewers pareados e o CI devem apontar para o HEAD
+final correspondente. Todos os checks obrigatórios e o build verde local são
+pré-condições para chamar `commit-code`; o CI verde do PR é pré-condição para
+marcar Spec, Plan e Evaluation como `completed`. Enquanto o PR ou o CI estiver
+pendente, mantenha os artefatos em estado intermediário e registre o URL, SHA,
+resultado e próximo passo em `evaluation.md`.
+
+### Handoff operacional
+
+`conclude-spec` chama `commit-code` e `create-pr`; não trate esse encadeamento
+como mera referência ou resposta textual. O workflow deve aguardar o resultado
+de cada etapa, repassar o commit/PR atual para a seguinte e registrar falhas,
+URL e SHA em `evaluation.md`. Não faça merge ou deploy sem pedido explícito.
 
 Se um check ou o build falhar, mantenha a Spec `in_progress`, registre a falha
-imediatamente em `evaluation.md`, crie `Builder Fix CI-<n>` quando a
+como `CI-<n>` e o problema como `ACH-<n>` imediatamente em `evaluation.md`,
+crie `Builder Fix ACH-<n>` quando a
 correção estiver no escopo, reexecute sensores afetados e repita o Reviewer
 pareado do Builder quando o diff ou a evidência tiver sido invalidada.
 

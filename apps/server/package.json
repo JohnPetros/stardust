@@ -12,7 +12,7 @@
     "check:updates": "ncu",
     "build": "tsup",
     "prod": "node --env-file .env build/main.js",
-    "db:test": "supabase start --exclude studio,imgproxy,inbucket,edge-runtime,logflare,vector && supabase db reset --local --yes",
+    "db:test": "supabase start --exclude studio,imgproxy,mailpit,edge-runtime,logflare,vector && supabase db reset --local --yes",
     "db:migrate": "supabase db diff -f $npm_config_schema_file",
     "db:prod": "supabase link --project-ref aukqejqsiqsqowafpppb",
     "db:dev": "supabase link --project-ref rveubqzvfbqbcpmuevnm",
