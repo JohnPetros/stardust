@@ -1,17 +1,19 @@
-# PRD — Bloco de Código
-
-- **Módulo:** `lesson`
-- **Milestone:** [#24 — Bloco de Código](https://github.com/JohnPetros/stardust/milestone/24)
-- **Status:** open
-- **Atualizado em:** 2026-04-07T21:36:51Z
-
-## Definição do produto
-
-# PRD — CodeSnippet
-
+---
+title: Bloco de Código
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/24
+last_updated_at: 2026-04-07
 ---
 
-### 1. Visão Geral
+# PRD — Bloco de Código
+
+Disponibiliza para: lesson; consumidores adicionais não explicitados no documento legado.
+
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
+
+## 1. Resumo Executivo
 
 O `CodeSnippet` é o componente responsável por exibir trechos de código dentro da experiência de aprendizagem, com suporte a dois modos de uso: visualização somente leitura e execução interativa.
 
@@ -21,21 +23,56 @@ Seu objetivo principal é padronizar a experiência de leitura, edição e execu
 
 ---
 
-### 2. Requisitos
+## 2. Problema e Oportunidade
 
-#### REQ-01 Exibir snippet em modo leitura
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-- [ ] **Exibir snippet em modo leitura**
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/24 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Exibir snippet em modo leitura
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Exibir snippet em modo leitura.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O componente deve permitir a exibição de código em contextos onde o usuário apenas consulta o conteúdo, sem alterar ou executar o snippet.
 
 ##### Regras de Negócio
-
 - **Renderização condicionada:** O snippet só deve ser exibido quando houver conteúdo de código disponível.
 - **Modo não interativo:** Quando configurado como não executável, o snippet deve permanecer somente para leitura.
 - **Preservação do conteúdo inicial:** O conteúdo exibido deve refletir exatamente o código informado pelo contexto de origem.
 
-##### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Barra de ações oculta:** No modo leitura, ações de recarregar, copiar e executar não devem ser exibidas.
 - **Leitura do código:** O conteúdo deve permanecer legível e organizado por linhas.
@@ -46,20 +83,27 @@ Seu objetivo principal é padronizar a experiência de leitura, edição e execu
 - **Confiabilidade:** Na ausência de código, o componente não deve renderizar uma área vazia enganosa.
 - **Compatibilidade:** O modo leitura deve funcionar nos contextos de lição e conteúdos associados.
 
-#### REQ-02 Exibir snippet em modo executável
+---
 
-- [ ] **Exibir snippet em modo executável**
+#### RP-02 — Exibir snippet em modo executável
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Exibir snippet em modo executável.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O componente deve permitir edição e execução do código quando o contexto exigir prática interativa.
 
 ##### Regras de Negócio
-
 - **Ativação explícita:** O modo executável deve depender de configuração explícita do contexto de uso.
 - **Edição habilitada:** Quando executável, o usuário deve poder alterar o código antes de executá-lo.
 - **Código inicial reaproveitável:** O código inicial deve servir como base para experimentação do usuário.
 - **Atualização do valor:** Quando houver integração com formulário ou estado externo, alterações no código devem ser propagadas para o contexto consumidor.
 
-##### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Barra de ações visível:** O modo executável deve expor ações de recarregar, copiar e executar.
 - **Área de edição:** O editor deve permanecer disponível no mesmo bloco visual do snippet.
@@ -70,83 +114,119 @@ Seu objetivo principal é padronizar a experiência de leitura, edição e execu
 - **Confiabilidade:** Falhas de execução não devem quebrar a interface do snippet.
 - **Compatibilidade:** O modo executável deve funcionar nos contextos de desafios e demais superfícies que habilitem prática.
 
-#### REQ-03 Permitir restaurar o código inicial
+---
 
-- [ ] **Permitir restaurar o código inicial**
+#### RP-03 — Permitir restaurar o código inicial
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Permitir restaurar o código inicial.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O usuário deve poder retornar rapidamente ao conteúdo original do snippet após alterações locais.
 
 ##### Regras de Negócio
-
 - **Restauração sob demanda:** A ação de recarregar deve restaurar o código inicial fornecido ao componente.
 - **Escopo local:** A restauração afeta apenas a sessão de edição atual do snippet.
 - **Disponibilidade restrita:** A restauração só deve estar disponível no modo executável.
 
-##### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Ação dedicada:** A restauração deve ser acionável por botão próprio na barra de ações.
 - **Feedback:** O estado resultante deve deixar evidente que o conteúdo voltou ao código inicial.
 - **Confiabilidade:** A restauração não deve exigir recarregamento da página.
 
-#### REQ-04 Permitir copiar o código atual
+---
 
-- [ ] **Permitir copiar o código atual**
+#### RP-04 — Permitir copiar o código atual
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Permitir copiar o código atual.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O usuário deve poder copiar o conteúdo atual do snippet para uso externo ou continuação do estudo.
 
 ##### Regras de Negócio
-
 - **Cópia do valor atual:** A ação deve copiar o estado atual do código, incluindo alterações feitas pelo usuário.
 - **Disponibilidade restrita:** A cópia deve estar disponível no modo executável.
 - **Dependência de suporte do ambiente:** A funcionalidade depende de suporte do ambiente do usuário à área de transferência.
 
-##### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Ação dedicada:** A cópia deve ser acionável por botão próprio na barra de ações.
 - **Feedback de sucesso:** Quando a cópia for concluída, o usuário deve receber confirmação visível.
 - **Confiabilidade:** Se o ambiente não suportar cópia, a interface não deve falhar.
 
-#### REQ-05 Executar o snippet e apresentar retorno
+---
 
-- [ ] **Executar o snippet e apresentar retorno**
+#### RP-05 — Executar o snippet e apresentar retorno
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Executar o snippet e apresentar retorno.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O componente deve permitir que o usuário execute o snippet e visualize o resultado da execução no próprio fluxo de aprendizagem.
 
 ##### Regras de Negócio
-
 - **Execução sob comando do usuário:** O código só deve ser executado após ação explícita.
 - **Resultado contextual:** Saídas da execução devem ser apresentadas no próprio componente.
 - **Tratamento de erro:** Em caso de falha, o usuário deve receber mensagem de erro contextualizada.
 - **Suporte a entrada:** Quando o snippet exigir entrada do usuário, o sistema deve solicitar esse dado antes de concluir a execução.
 - **Reexecução:** Após fornecer entrada ou corrigir o código, o usuário deve poder tentar novamente.
 
-##### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Ação principal:** O botão de executar deve ficar disponível na barra de ações do modo executável.
 - **Feedback:** O componente deve apresentar saída, erro ou solicitação de entrada conforme o caso.
 - **Confiabilidade:** A interface deve continuar utilizável mesmo após erros de execução.
 - **Compatibilidade:** A experiência de execução deve permanecer coerente com os contextos educacionais em que o componente é usado.
 
-#### REQ-06 Adaptar o snippet ao contexto educacional
+---
 
-- [ ] **Adaptar o snippet ao contexto educacional**
+#### RP-06 — Adaptar o snippet ao contexto educacional
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Adaptar o snippet ao contexto educacional.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O mesmo componente deve atender usos distintos em lições e desafios, respeitando o nível de interatividade exigido por cada contexto.
 
 ##### Regras de Negócio
-
 - **Uso em lições objetivas:** Em perguntas e conteúdos expositivos, o snippet deve poder ser apresentado apenas como referência.
 - **Uso em prática guiada:** Em contextos que incentivam experimentação, o snippet deve poder ser executável.
 - **Uso em edição de desafio:** Em formulários de autoria ou edição, o snippet deve permitir edição contínua do código inicial.
 - **Comportamento consistente:** A ativação de capacidades deve depender do contexto, sem alterar o propósito central do componente.
 
-##### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Consistência entre telas:** O usuário deve reconhecer o mesmo padrão de snippet nos diferentes pontos do produto.
 - **Feedback contextual:** As ações disponíveis devem refletir claramente o papel do snippet em cada tela.
 - **Responsividade:** O comportamento deve permanecer funcional nas telas onde o componente já é reutilizado.
 
----
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| lesson | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada preservada do documento legado
 
 ### 3. Fluxo de Usuário (User Flow)
 
@@ -178,10 +258,16 @@ Seu objetivo principal é padronizar a experiência de leitura, edição e execu
 
 ---
 
-### 4. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-- Persistência das alterações feitas pelo usuário entre sessões.
-- Versionamento ou histórico de edições do snippet.
-- Compartilhamento do snippet por link ou exportação estruturada.
-- Personalização avançada de aparência por contexto funcional.
-- Execução automática sem ação explícita do usuário
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Persistência das alterações feitas pelo usuário entre sessões. |
+| Escopo | Versionamento ou histórico de edições do snippet. |
+| Escopo | Compartilhamento do snippet por link ou exportação estruturada. |
+| Escopo | Personalização avançada de aparência por contexto funcional. |
+| Escopo | Execução automática sem ação explícita do usuário |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

@@ -1,13 +1,19 @@
+---
+title: MCP Server para Gerenciamento de Desafios
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/26
+last_updated_at: 2026-08-01
+---
+
 # PRD — MCP Server para Gerenciamento de Desafios
 
-- **Módulo:** `challenging`
-- **Milestone:** [#26 — MCP Server para Gerenciamento de Desafios](https://github.com/JohnPetros/stardust/milestone/26)
-- **Status:** open
-- **Atualizado em:** 2026-08-01T14:17:04Z
+Disponibiliza para: challenging; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-### 1. Visao Geral
+## 1. Resumo Executivo
 
 **MCP Server para Gerenciamento de Desafios** entrega uma integracao do Stardust com o protocolo MCP para que engenheiros autenticados por API key consigam consultar instrucoes oficiais, listar desafios, criar rascunhos, atualizar desafios proprios e excluir desafios proprios a partir do cliente MCP de sua preferencia.
 
@@ -24,10 +30,51 @@
 
 ---
 
-### 2. Requisitos
+## 2. Problema e Oportunidade
 
-#### Conectar ao Stardust via MCP
-- [x] **Conectar ao Stardust via MCP**
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
+
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/26 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Conectar ao Stardust via MCP
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Conectar ao Stardust via MCP.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** O engenheiro consegue conectar seu cliente MCP ao Stardust informando a URL do servidor e sua API key.
 
@@ -37,10 +84,25 @@
 - **Formato da key:** `sk_<random_base62_32chars>` — exibida uma unica vez na geracao e armazenada como SHA-256 no banco.
 - **Gerenciamento:** O engenheiro pode gerar, visualizar e revogar suas keys pelos fluxos existentes do sistema.
 
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
 ---
 
-#### Obter instrucoes de criacao de desafio
-- [x] **Obter instrucoes de criacao de desafio**
+#### RP-02 — Obter instrucoes de criacao de desafio
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Obter instrucoes de criacao de desafio.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** A IA consegue buscar as regras, estrutura esperada e exemplos para gerar um desafio valido no Stardust.
 
@@ -48,10 +110,25 @@
 - **Contexto completo:** As instrucoes retornam campos obrigatorios, formatos aceitos e exemplos de casos de teste validos.
 - **Base para geracao:** A IA usa essas instrucoes antes do fluxo de publicacao ou edicao.
 
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
 ---
 
-#### Publicar desafio como rascunho
-- [x] **Publicar desafio como rascunho**
+#### RP-03 — Publicar desafio como rascunho
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Publicar desafio como rascunho.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** Apos revisar o desafio gerado pela IA, o engenheiro pode publica-lo na plataforma como rascunho.
 
@@ -60,10 +137,25 @@
 - **Validacao dos dados:** O sistema rejeita a publicacao se campos obrigatorios estiverem ausentes ou invalidos.
 - **Autoria preservada:** O desafio e associado a conta do engenheiro autenticado via API key.
 
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
 ---
 
-#### Listar desafios pelo MCP
-- [x] **Listar desafios pelo MCP**
+#### RP-04 — Listar desafios pelo MCP
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Listar desafios pelo MCP.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** A IA consegue listar desafios usando filtros e paginacao para apoiar criacao, revisao e manutencao.
 
@@ -71,10 +163,25 @@
 - **Catalogo publico:** A listagem retorna o catalogo publico no fluxo MCP.
 - **Contexto do usuario:** Quando houver conta autenticada, a resposta pode ser enriquecida com status de conclusao.
 
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
 ---
 
-#### Atualizar desafio criado pelo engenheiro
-- [x] **Atualizar desafio criado pelo engenheiro**
+#### RP-05 — Atualizar desafio criado pelo engenheiro
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Atualizar desafio criado pelo engenheiro.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** A IA consegue atualizar os dados de um desafio criado pelo engenheiro autenticado apos revisao ou solicitacao de ajuste.
 
@@ -83,10 +190,25 @@
 - **Validacao dos dados:** O sistema rejeita a atualizacao se campos obrigatorios estiverem ausentes ou invalidos.
 - **Controle de estado:** O fluxo preserva o autor e permite alterar `isPublic` apenas quando a conta autenticada for a autora.
 
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
 ---
 
-#### Excluir desafio criado pelo engenheiro
-- [x] **Excluir desafio criado pelo engenheiro**
+#### RP-06 — Excluir desafio criado pelo engenheiro
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Excluir desafio criado pelo engenheiro.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** A IA consegue excluir um desafio criado pelo engenheiro autenticado mediante confirmacao explicita.
 
@@ -95,7 +217,19 @@
 - **Confirmacao obrigatoria:** A exclusao exige `confirmacao: true` no payload.
 - **Resposta segura:** O sistema responde como nao encontrado quando o desafio nao existir ou nao pertencer a conta autenticada.
 
----
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| challenging | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada preservada do documento legado
 
 ### 3. Fluxo de Usuario
 
@@ -119,10 +253,16 @@
 
 ---
 
-### 4. Fora do Escopo
+## 8. Fora do Escopo
 
-- Publicacao automatica obrigatoria como publico no momento da criacao.
-- Criacao de desafios por usuarios sem insignia de Engenheiro.
-- Visualizacao, edicao ou exclusao de desafios privados de outros engenheiros.
-- Exposicao via MCP de outros dominios como `lesson`, `manual` ou `space`.
-- Substituicao do pipeline HTTP atual do `HonoApp` por outro adapter.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Publicacao automatica obrigatoria como publico no momento da criacao. |
+| Escopo | Criacao de desafios por usuarios sem insignia de Engenheiro. |
+| Escopo | Visualizacao, edicao ou exclusao de desafios privados de outros engenheiros. |
+| Escopo | Exposicao via MCP de outros dominios como `lesson`, `manual` ou `space`. |
+| Escopo | Substituicao do pipeline HTTP atual do `HonoApp` por outro adapter. |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

@@ -1,60 +1,37 @@
+---
+title: Histórico e Conversas no Diálogo de Feedback
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/41
+last_updated_at: 2026-08-13
+---
+
 # PRD — Histórico e Conversas no Diálogo de Feedback
 
-- **Módulo:** `reporting`
-- **Milestone:** [#41 — Histórico e Conversas no Diálogo de Feedback](https://github.com/JohnPetros/stardust/milestone/41)
-- **Status:** open
-- **Atualizado em:** 2026-08-13T00:19:23Z
+Disponibiliza para: reporting; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-## Objetivo
+## 1. Resumo Executivo
 
-Transformar o diálogo de feedback da aplicação Web em um ponto contínuo de comunicação entre o usuário autenticado e a equipe StarDust. Além de criar um relato, o usuário poderá consultar os próprios reportes, identificar respostas novas, acompanhar o histórico e continuar conversas abertas.
+🚧 Em construção — o documento legado não registra um resumo executivo estruturado.
 
-O escopo desta milestone é restrito à experiência do usuário na aplicação Web. A gestão administrativa permanece coberta pela milestone de acompanhamento de feedbacks no Studio.
+## 2. Problema e Oportunidade
 
-## Escopo
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-- Disponibilizar o diálogo em todas as áreas autenticadas, em desktop e mobile.
-- Criar reportes como `Problema`, `Ideia` ou `Outro`.
-- Exigir relato inicial entre 10 e 1.000 caracteres.
-- Gerar automaticamente título de até 60 caracteres a partir do relato.
-- Permitir uma imagem PNG ou JPG de até 10 MB no relato inicial.
-- Manter captura e recorte no desktop e permitir seleção de imagem no desktop e mobile.
-- Exibir histórico privado com filtros `Todos`, `Abertos` e `Fechados`.
-- Carregar reportes em lotes de 10 com ação `Carregar mais`.
-- Priorizar reportes com nova resposta e atividade mais recente.
-- Exibir badge com quantidade de reportes com novidades, não mensagens.
-- Apresentar `Nova resposta` no item do histórico sem contador individual.
-- Exibir relato inicial, mensagens e anexos em conversa cronológica.
-- Permitir respostas do usuário entre 1 e 2.000 caracteres.
-- Permitir até 3 anexos PNG ou JPG por resposta, com limite de 10 MB cada.
-- Preservar rascunhos localmente enquanto a página permanecer aberta.
-- Manter reportes fechados visíveis, com resposta desabilitada.
-- Abrir diretamente a conversa pelo botão `Ver conversa` do e-mail, preservando o destino após autenticação.
+### Base de fontes e autoridade
 
-## Regras críticas
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/41 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
 
-- O usuário acessa somente reportes da própria conta.
-- Somente administradores alteram o status `Aberto` ou `Fechado`.
-- O relato inicial cria o reporte; respostas posteriores são mensagens associadas.
-- Texto é obrigatório em relatos e respostas, mesmo quando houver anexos.
-- Reportes, mensagens e anexos não podem ser excluídos ou arquivados nesta versão.
-- Não haverá atualização realtime no MVP.
-- E-mail e Discord são canais de aviso; a conversa persistida no StarDust é a fonte canônica.
+## 3. Público-alvo
 
-## Fora do escopo
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
 
-- Feedback de visitantes não autenticados.
-- Alteração de status pelo usuário.
-- Exclusão, arquivamento ou edição de conteúdo persistido.
-- Respostas por e-mail ou Discord.
-- Persistência de rascunho entre sessões.
-- PDF, WEBP, GIF, vídeo, áudio ou outros formatos.
-- Votação, comentários públicos, roadmap, tags, prioridade ou SLA.
-- Painel administrativo do Studio.
-
-## Critérios de sucesso iniciais
+## 4. Objetivos e Métricas de Sucesso
 
 Nos primeiros 60 dias:
 
@@ -63,7 +40,65 @@ Nos primeiros 60 dias:
 - sucesso técnico superior a 99% no envio de relatos e respostas;
 - nenhuma exposição de reporte para outro usuário.
 
-## Referências
+### Limites de validação e premissas declaradas
 
-- [PRD — Histórico e Conversas no Diálogo de Feedback](https://github.com/JohnPetros/stardust/blob/main/documentation/features/reporting/feedback-dialog/prd.md)
-- [Milestone administrativa — Acompanhamento de Relatórios de Feedback no Studio](https://github.com/JohnPetros/stardust/milestone/1)
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Capacidade descrita pela referência legada
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Capacidade descrita pela referência legada.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
+
+- Comportamento registrado no checklist ou na referência legada.
+
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| reporting | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada não registrada no legado
+
+1. 🚧 Em construção — o fluxo não está documentado no PRD legado.
+
+## 8. Fora do Escopo
+
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Feedback de visitantes não autenticados. |
+| Escopo | Alteração de status pelo usuário. |
+| Escopo | Exclusão, arquivamento ou edição de conteúdo persistido. |
+| Escopo | Respostas por e-mail ou Discord. |
+| Escopo | Persistência de rascunho entre sessões. |
+| Escopo | PDF, WEBP, GIF, vídeo, áudio ou outros formatos. |
+| Escopo | Votação, comentários públicos, roadmap, tags, prioridade ou SLA. |
+| Escopo | Painel administrativo do Studio. |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

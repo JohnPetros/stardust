@@ -1,13 +1,19 @@
+---
+title: Layout de desafio
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/17
+last_updated_at: 2026-07-16
+---
+
 # PRD — Layout de desafio
 
-- **Módulo:** `challenging`
-- **Milestone:** [#17 — Layout de desafio](https://github.com/JohnPetros/stardust/milestone/17)
-- **Status:** open
-- **Atualizado em:** 2026-07-16T14:55:37Z
+Disponibiliza para: challenging; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-### 1. Visão Geral
+## 1. Resumo Executivo
 
 O **Challenge Layout** é o layout principal da tela de resolução de desafios
 de programação na plataforma StarDust. Ele organiza a interface onde o usuário
@@ -28,17 +34,52 @@ editor de código e assistente de IA em uma experiência coesa.
 
 ---
 
-### 2. Requisitos
+## 2. Problema e Oportunidade
 
-#### REQ-01 Layout Responsivo com Dois Modos
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-- [x] **Layout Responsivo com Dois Modos (Mobile / Desktop)**
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/17 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Layout Responsivo com Dois Modos
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Layout Responsivo com Dois Modos.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O layout deve adaptar-se ao dispositivo do usuário, exibindo
 uma experiência otimizada para cada formato de tela.
 
 ##### Regras de Negócio
-
 - **Modo Desktop (>= md breakpoint):** Os conteúdos são organizados em painéis
   horizontais redimensionáveis, permitindo visualização simultânea de múltiplos
   conteúdos.
@@ -47,7 +88,7 @@ uma experiência otimizada para cada formato de tela.
 - **Exclusividade de modo:** Apenas um modo é renderizado por vez — o modo
   mobile é ocultado no desktop e vice-versa.
 
-##### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Responsividade:** O breakpoint `md` do Tailwind CSS (768px) define a
   transição entre mobile e desktop. Abaixo de `md`, o slider é exibido; acima,
@@ -57,15 +98,20 @@ uma experiência otimizada para cada formato de tela.
 
 ---
 
-#### REQ-02 Painéis Redimensionáveis (Desktop)
+#### RP-02 — Painéis Redimensionáveis (Desktop)
 
-- [x] **Painéis Redimensionáveis no Desktop**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Painéis Redimensionáveis (Desktop).
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** No modo desktop, o layout organiza o conteúdo em painéis
 horizontais que o usuário pode redimensionar arrastando handles entre eles.
 
 ##### Regras de Negócio
-
 - **Painéis base:** O layout sempre exibe dois painéis obrigatórios:
   1. **Painel de Tabs** (ordem 1): exibe o conteúdo textual (descrição,
      resultado, comentários, soluções).
@@ -82,7 +128,7 @@ horizontais que o usuário pode redimensionar arrastando handles entre eles.
 - **Layout padrão:** Se não houver cookie salvo, os painéis iniciam com
   distribuição 50%/50% entre tabs e editor.
 
-##### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Handle de redimensionamento:** Barra vertical de 8px com indicador visual
   central (barra de 4px de largura e 16px de altura). Efeito de hover com
@@ -92,15 +138,20 @@ horizontais que o usuário pode redimensionar arrastando handles entre eles.
 
 ---
 
-#### REQ-03 Slider de Navegação (Mobile)
+#### RP-03 — Slider de Navegação (Mobile)
 
-- [x] **Slider de Navegação no Mobile**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Slider de Navegação (Mobile).
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** No modo mobile, o conteúdo é organizado em 4 slides navegáveis
 com uma barra de navegação fixa no topo.
 
 ##### Regras de Negócio
-
 - **Slides fixos:** O slider contém exatamente 4 slides na seguinte ordem:
   1. **Slide 0 — Conteúdo Dinâmico:** Exibe o conteúdo ativo
      (Descrição, Comentários ou Soluções). Quando o conteúdo ativo é
@@ -117,7 +168,7 @@ com uma barra de navegação fixa no topo.
   (`simulateTouch: false`, `allowTouchMove: false`). A navegação ocorre
   exclusivamente via botões.
 
-##### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Barra de navegação:** Grid de 4 colunas com botões de texto. O botão ativo
   é destacado em verde (`text-green-400`), os inativos em branco
@@ -129,16 +180,21 @@ com uma barra de navegação fixa no topo.
 
 ---
 
-#### REQ-04 Sistema de Abas de Conteúdo (Desktop)
+#### RP-04 — Sistema de Abas de Conteúdo (Desktop)
 
-- [x] **Sistema de Abas de Conteúdo no Desktop**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Sistema de Abas de Conteúdo (Desktop).
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** No painel de tabs do desktop, o conteúdo textual é organizado
 em abas que permitem alternar entre diferentes tipos de informação sobre o
 desafio.
 
 ##### Regras de Negócio
-
 - **Abas disponíveis:** Descrição, Resultado, Comentários e Soluções.
 - **Aba padrão:** A aba "Descrição" é selecionada por padrão ao abrir o
   desafio.
@@ -162,7 +218,7 @@ desafio.
   é debitado diretamente das moedas do usuário. Caso o usuário não possua
   saldo suficiente, um toast de erro é exibido.
 
-##### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Feedback de bloqueio:** Abas bloqueadas exibem indicação visual
   (ícone de cadeado) e diálogos de alerta ao clicar.
@@ -176,15 +232,20 @@ desafio.
 
 ---
 
-#### REQ-05 Animação de Transição de Página
+#### RP-05 — Animação de Transição de Página
 
-- [x] **Animação de Transição de Página ao Entrar no Desafio**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Animação de Transição de Página.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Ao acessar a tela de um desafio, uma animação de transição de
 página é exibida como overlay, com dicas opcionais.
 
 ##### Regras de Negócio
-
 - **Exibição automática:** A animação é sempre exibida ao entrar na tela do
   desafio.
 - **Duração:** A animação permanece visível por **5 segundos**, após os quais
@@ -192,18 +253,27 @@ página é exibida como overlay, com dicas opcionais.
 - **Dicas:** A animação inclui dicas (`hasTips = true`) para o usuário
   enquanto o conteúdo carrega.
 
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
 ---
 
-#### REQ-06 Assistente de IA (Chatbot)
+#### RP-06 — Assistente de IA (Chatbot)
 
-- [x] **Assistente de IA Integrado ao Layout**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Assistente de IA (Chatbot).
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O layout integra um assistente de IA (chatbot) que auxilia o
 usuário na resolução do desafio, disponível como painel lateral no desktop e
 como slide dedicado no mobile.
 
 ##### Regras de Negócio
-
 - **Disponibilidade:** O assistente está disponível para todos os usuários, sem
   restrição de plano ou feature flag.
 - **Habilitação condicional (desktop):** No desktop, o painel do assistente
@@ -222,23 +292,44 @@ como slide dedicado no mobile.
 - **Contexto do desafio:** O assistente recebe o ID do desafio atual para
   contextualizar suas respostas.
 
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
 ---
 
-#### REQ-07 Contagem de Tempo
+#### RP-07 — Contagem de Tempo
 
-- [x] **Contagem de Tempo de Resolução**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Contagem de Tempo.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O layout inicia uma contagem de tempo enquanto o desafio não
 está completado, permitindo medir o tempo de resolução do usuário.
 
 ##### Regras de Negócio
-
 - **Condição de ativação:** O contador de segundos é ativado quando o desafio
   não está completado (`challenge.isCompleted.isFalse`).
 - **Parada automática:** O contador para automaticamente quando o desafio é
   marcado como completado.
 
----
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| challenging | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada preservada do documento legado
 
 ### 3. Fluxo de Usuário (User Flow)
 
@@ -287,30 +378,21 @@ está completado, permitindo medir o tempo de resolução do usuário.
 
 ---
 
-### 4. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-- Lógica de execução de código do editor (pertence ao módulo de
-  editor/playground).
-- Renderização do conteúdo MDX da descrição do desafio (pertence ao módulo de
-  conteúdo).
-- Lógica de submissão e validação de código (pertence ao fluxo de resolução do
-  desafio).
-- Lógica de IA/NLP do assistente (pertence ao módulo de conversa).
-- Listagem e detalhamento de soluções e comentários (pertence a seus
-  respectivos módulos).
-- Design visual detalhado (cores, tipografia, espaçamentos exatos) — pertence
-  ao Design System.
-- Comportamento offline ou PWA.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Lógica de execução de código do editor (pertence ao módulo de |
+| Escopo | Renderização do conteúdo MDX da descrição do desafio (pertence ao módulo de |
+| Escopo | Lógica de submissão e validação de código (pertence ao fluxo de resolução do |
+| Escopo | Lógica de IA/NLP do assistente (pertence ao módulo de conversa). |
+| Escopo | Listagem e detalhamento de soluções e comentários (pertence a seus |
+| Escopo | Design visual detalhado (cores, tipografia, espaçamentos exatos) — pertence |
+| Escopo | Comportamento offline ou PWA. |
+| Escopo | **Nenhum item descartado:** Todas as funcionalidades planejadas foram |
+| Escopo | **UX de Comentários e Soluções no mobile:** A experiência de acesso a |
 
-#### Descartado durante a implementação
+### Decisões descartadas durante a definição
 
 - **Nenhum item descartado:** Todas as funcionalidades planejadas foram
   implementadas conforme a intenção original de produto.
-
-#### Lacunas conhecidas
-
-- **UX de Comentários e Soluções no mobile:** A experiência de acesso a
-  Comentários e Soluções no modo mobile é insuficiente. O primeiro slide
-  alterna dinamicamente seu conteúdo, mas a navegação entre esses conteúdos
-  secundários (Comentários, Soluções) não possui uma UX dedicada e refinada
-  no mobile, exigindo melhorias futuras. 🚧 Em construção

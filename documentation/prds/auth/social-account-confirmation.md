@@ -1,13 +1,19 @@
+---
+title: Confirmação de Conta Social
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/37
+last_updated_at: 2026-06-15
+---
+
 # PRD — Confirmação de Conta Social
 
-- **Módulo:** `auth`
-- **Milestone:** [#37 — Confirmação de Conta Social](https://github.com/JohnPetros/stardust/milestone/37)
-- **Status:** open
-- **Atualizado em:** 2026-06-15T22:12:27Z
+Disponibiliza para: auth; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-### 1. Visão Geral
+## 1. Resumo Executivo
 
 A funcionalidade de **Confirmação de Conta Social** é a tela exibida após o usuário iniciar autenticação social via Google ou GitHub.
 
@@ -20,23 +26,58 @@ Ela resolve o período intermediário entre o retorno do provedor social e a dis
 
 ---
 
-### 2. Requisitos
+## 2. Problema e Oportunidade
 
-#### REQ-01 Autenticar conta social a partir dos tokens retornados
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-- [ ] **Autenticar conta social a partir dos tokens retornados**
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/37 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Autenticar conta social a partir dos tokens retornados
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Autenticar conta social a partir dos tokens retornados.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** A tela deve processar os tokens retornados pelo provedor social para concluir o login/cadastro social.
 
 ##### Regras de Negócio
-
 - **Leitura dos tokens:** O sistema deve ler `access_token` e `refresh_token` do hash da URL.
 - **Execução única:** O fluxo de autenticação social deve ser executado apenas uma vez por carregamento da página.
 - **Tokens obrigatórios:** Se `access_token` ou `refresh_token` estiverem ausentes, o fluxo de autenticação social não deve ser iniciado.
 - **Conta existente:** Se o backend indicar que a conta social já existe, o usuário deve ser considerado criado/autenticado imediatamente.
 - **Nova conta:** Se o backend indicar que se trata de uma nova conta, a tela deve permanecer em estado de espera até receber confirmação de criação do usuário.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Estado inicial:** Enquanto o processamento ocorre, a tela deve exibir loading e mensagem de espera.
 - **Feedback:** A tela deve manter o usuário informado de que a criação/autenticação está em andamento.
@@ -44,19 +85,24 @@ Ela resolve o período intermediário entre o retorno do provedor social e a dis
 
 ---
 
-#### REQ-02 Exibir estado pendente para nova conta social
+#### RP-02 — Exibir estado pendente para nova conta social
 
-- [ ] **Exibir estado pendente para nova conta social**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Exibir estado pendente para nova conta social.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Quando a autenticação social resultar em uma nova conta, o sistema deve aguardar a criação do perfil do usuário antes de permitir avanço para a aplicação.
 
 ##### Regras de Negócio
-
 - **Conta nova pendente:** Quando `isNewAccount` for verdadeiro, o usuário deve permanecer em estado pendente até que a criação do usuário seja confirmada.
 - **Confirmação por evento:** A criação do usuário deve ser reconhecida quando o sistema receber um evento realtime de criação de usuário cujo e-mail corresponda ao e-mail da conta autenticada.
 - **Correspondência por e-mail:** O evento só deve confirmar a criação se `userEmail` for igual ao e-mail da conta atual.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Loading:** A tela deve exibir indicador de carregamento enquanto o usuário está pendente.
 - **Mensagens rotativas:** A tela deve exibir mensagens de espera em sequência, como “Aquecendo os motores 🚀” e frases similares.
@@ -65,19 +111,24 @@ Ela resolve o período intermediário entre o retorno do provedor social e a dis
 
 ---
 
-#### REQ-03 Confirmar criação do perfil de usuário
+#### RP-03 — Confirmar criação do perfil de usuário
 
-- [ ] **Confirmar criação do perfil de usuário**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Confirmar criação do perfil de usuário.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Quando o perfil do usuário for criado, a tela deve informar sucesso e permitir que o usuário avance para a página principal.
 
 ##### Regras de Negócio
-
 - **Usuário criado:** O sistema deve marcar o usuário como criado após receber o evento realtime correspondente.
 - **Liberação de avanço:** Após a criação do usuário, a tela deve deixar de exibir o estado de loading e mostrar uma mensagem de boas-vindas.
 - **Navegação para aplicação:** Ao clicar no botão principal, o usuário deve ser levado para a rota principal da aplicação (`/space`).
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Mensagem de sucesso:** A tela deve exibir o título “Bem-vindo(a) 👋”.
 - **Subtítulo:** A tela deve exibir “Seu perfil foi criado com sucesso!”.
@@ -87,39 +138,49 @@ Ela resolve o período intermediário entre o retorno do provedor social e a dis
 
 ---
 
-#### REQ-04 Redirecionar conta social existente
+#### RP-04 — Redirecionar conta social existente
 
-- [ ] **Redirecionar conta social existente**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Redirecionar conta social existente.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Quando o login social pertence a uma conta já existente, o usuário não precisa aguardar criação de perfil.
 
 ##### Regras de Negócio
-
 - **Conta existente:** Se `isNewAccount` for falso, o sistema deve considerar o usuário pronto para acessar a aplicação.
 - **Animação automática:** Para conta existente, a animação de foguete deve ser acionada automaticamente.
 - **Destino final:** Após a animação, o usuário deve ser direcionado para `/space`.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Transição:** A tela deve usar a animação de foguete como transição visual para a aplicação.
 - **Sem confirmação manual:** Para conta existente, não é necessário exibir botão de confirmação antes do redirecionamento.
 
 ---
 
-#### REQ-05 Permitir tentativa de recriação do usuário
+#### RP-05 — Permitir tentativa de recriação do usuário
 
-- [ ] **Permitir tentativa de recriação do usuário**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Permitir tentativa de recriação do usuário.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Se a criação do perfil de uma nova conta não for confirmada rapidamente, o usuário deve ter uma opção para tentar novamente.
 
 ##### Regras de Negócio
-
 - **Atraso para retry:** O botão “Tentar novamente” deve aparecer após 7 segundos em estado pendente.
 - **Ocultação do retry:** O botão deve ser ocultado quando o usuário deixar de ser uma nova conta pendente ou quando o usuário for criado.
 - **Nova tentativa:** Ao clicar em “Tentar novamente”, o sistema deve solicitar nova tentativa de criação do usuário.
 - **Dependência do evento:** Mesmo após retry, a conclusão do fluxo depende da chegada do evento realtime de criação do usuário.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Botão de retry:** O botão deve ter o texto “Tentar novamente”.
 - **Estado de loading:** Ao acionar o retry, o botão deve exibir estado de carregamento enquanto a ação estiver em andamento.
@@ -127,26 +188,39 @@ Ela resolve o período intermediário entre o retorno do provedor social e a dis
 
 ---
 
-#### REQ-06 Tratar falhas e exceções conhecidas
+#### RP-06 — Tratar falhas e exceções conhecidas
 
-- [ ] **Tratar falhas e exceções conhecidas**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Tratar falhas e exceções conhecidas.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O PRD deve explicitar os cenários de erro que fazem parte do comportamento esperado ou das lacunas conhecidas do fluxo.
 
 ##### Regras de Negócio
-
 - **Tokens ausentes:** Se os tokens não estiverem presentes na URL, o fluxo não é iniciado.
 - **Falha na autenticação social:** Caso o cadastro/login social falhe, o comportamento observado não apresenta mensagem específica nessa tela.
 - **Falha no realtime:** Se o evento realtime de criação de usuário não chegar, o usuário permanece em estado pendente e recebe a opção de retry.
 - **Retry:** O retry republica a tentativa de criação, mas não garante avanço imediato sem confirmação posterior.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Erro visual:** 🚧 Em construção. Não há evidência de mensagem visual específica na tela para falha de tokens ou falha de autenticação social.
 - **Fallback:** O fallback observado para ausência de confirmação realtime é o botão “Tentar novamente”.
 - **Confiabilidade:** O fluxo depende da confirmação assíncrona da criação do usuário.
 
----
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| auth | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada preservada do documento legado
 
 ### 3. Fluxo de Usuário (User Flow)
 
@@ -196,11 +270,17 @@ Ela resolve o período intermediário entre o retorno do provedor social e a dis
 
 ---
 
-### 4. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-- Criação ou alteração dos provedores sociais disponíveis além de Google e GitHub.
-- Redesenho completo da autenticação social.
-- Definição de arquitetura técnica do realtime ou da fila de criação de usuário.
-- Criação de uma milestone oficial de produto.
-- Mensagens detalhadas de erro para tokens ausentes ou falhas de autenticação social, salvo como lacuna documentada.
-- Fluxos de conexão/desconexão de conta social dentro das configurações de perfil.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Criação ou alteração dos provedores sociais disponíveis além de Google e GitHub. |
+| Escopo | Redesenho completo da autenticação social. |
+| Escopo | Definição de arquitetura técnica do realtime ou da fila de criação de usuário. |
+| Escopo | Criação de uma milestone oficial de produto. |
+| Escopo | Mensagens detalhadas de erro para tokens ausentes ou falhas de autenticação social, salvo como lacuna documentada. |
+| Escopo | Fluxos de conexão/desconexão de conta social dentro das configurações de perfil. |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

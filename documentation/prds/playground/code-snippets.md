@@ -1,13 +1,19 @@
+---
+title: Snippets de código
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/29
+last_updated_at: 2026-05-02
+---
+
 # PRD — Snippets de código
 
-- **Módulo:** `playground`
-- **Milestone:** [#29 — Snippets de código](https://github.com/JohnPetros/stardust/milestone/29)
-- **Status:** open
-- **Atualizado em:** 2026-05-02T18:17:07Z
+Disponibiliza para: playground; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-### 1. Visão Geral
+## 1. Resumo Executivo
 
 O Playground de Snippets e um ambiente livre para escrever, executar, salvar e organizar codigos curtos dentro da plataforma.
 
@@ -17,11 +23,51 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 
 ---
 
-### 2. Requisitos
+## 2. Problema e Oportunidade
 
-#### REQ-01 Acessar o hub de snippets
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-- [x] **Acessar o hub de snippets**
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/29 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Acessar o hub de snippets
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Acessar o hub de snippets.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** O usuario deve conseguir entrar na area principal do playground para visualizar sua colecao de snippets e iniciar a criacao de um novo item, mantendo separado desse hub o consumo de snippets publicos de terceiros por link direto.
 
@@ -35,7 +81,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Experiencia sem login:** `🚧 Em construcao`.
   O comportamento completo do hub para usuarios nao autenticados nao foi validado nesta auditoria.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **CTA principal:** Deve existir uma acao clara para criar um novo snippet.
 - **Feedback de carregamento:** A listagem deve apresentar estado de loading durante a busca dos itens.
@@ -47,9 +93,21 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Confiabilidade:** Falhas de carregamento devem impedir a exibicao de dados inconsistentes.
 - **Compatibilidade:** A experiencia deve funcionar nos navegadores suportados pela aplicacao web.
 
-#### REQ-02 Criar e editar um snippet no playground
+---
 
-- [x] **Criar e editar um snippet no playground**
+#### RP-02 — Criar e editar um snippet no playground
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Criar e editar um snippet no playground.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** O usuario deve conseguir abrir um editor livre, preencher titulo e codigo, executar o trecho digitado e preparar o snippet para salvamento.
 
@@ -65,7 +123,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Persistencia protegida:** Se o usuario tentar salvar sem estar autenticado, o sistema deve solicitar login antes de concluir a persistencia.
 - **Retorno ao hub:** O usuario deve conseguir voltar para a listagem de snippets a partir do editor.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Editor:** A tela deve oferecer campo de titulo e editor de codigo no mesmo fluxo.
 - **Snippets de exemplo:** A tela deve expor uma acao clara para abrir os snippets de exemplo, com titulos compreensiveis e acesso simples antes ou durante a edicao.
@@ -77,9 +135,21 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Confiabilidade:** O sistema deve bloquear a persistencia quando a autenticacao for obrigatoria e inexistente.
 - **Compatibilidade:** O fluxo deve funcionar em mobile e desktop.
 
-#### REQ-03 Salvar e atualizar snippets
+---
 
-- [x] **Salvar e atualizar snippets**
+#### RP-03 — Salvar e atualizar snippets
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Salvar e atualizar snippets.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** O usuario autenticado deve conseguir persistir um novo snippet e atualizar snippets ja existentes, incluindo titulo, codigo e visibilidade.
 
@@ -92,7 +162,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Validacao de formulario:** Quando houver erro de validacao, o sistema deve associar a mensagem ao campo correspondente.
 - **Status de salvamento:** O sistema deve informar estados de sucesso, falha e processamento durante o salvamento.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Estados do salvar:** O botao de salvar deve refletir os estados padrao, em execucao, sucesso e erro.
 - **Mensagens de erro:** Erros de titulo e codigo devem aparecer no contexto do formulario.
@@ -103,9 +173,21 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Confiabilidade:** Falhas nao devem apagar automaticamente o conteudo digitado.
 - **Compatibilidade:** O mesmo fluxo deve valer para criacao e edicao.
 
-#### REQ-04 Gerenciar snippets salvos
+---
 
-- [x] **Gerenciar snippets salvos**
+#### RP-04 — Gerenciar snippets salvos
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Gerenciar snippets salvos.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** O usuario deve conseguir administrar sua colecao de snippets pela listagem, incluindo abrir, renomear e excluir itens salvos.
 
@@ -116,7 +198,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Exclusao confirmada:** O sistema deve exigir confirmacao antes de excluir um snippet.
 - **Atualizacao da colecao:** Depois de excluir um item, a listagem deve refletir o estado mais recente da colecao.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Acoes por item:** Cada card deve expor acoes de abrir, editar titulo e excluir.
 - **Confirmacao destrutiva:** A exclusao deve usar um passo de confirmacao explicita.
@@ -127,9 +209,21 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Confiabilidade:** A exclusao nao deve ocorrer sem confirmacao do usuario.
 - **Compatibilidade:** O comportamento de gerenciamento deve ser consistente em toda a colecao.
 
-#### REQ-05 Controlar visibilidade e compartilhamento
+---
 
-- [x] **Controlar visibilidade e compartilhamento**
+#### RP-05 — Controlar visibilidade e compartilhamento
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Controlar visibilidade e compartilhamento.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** O usuario deve conseguir definir se um snippet e publico ou privado e, quando permitido, copiar um link direto para esse snippet.
 
@@ -142,7 +236,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Acesso por link:** Usuarios podem acessar snippets de outros usuarios quando eles estiverem publicos.
 - **Acesso negado:** Quando o usuario nao puder acessar um snippet por visibilidade, o sistema deve exibir uma mensagem de indisponibilidade e direcionar para criacao do proprio playground.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Toggle de visibilidade:** O autor deve ter um controle simples para alternar entre publico e privado.
 - **Compartilhamento:** O compartilhamento deve copiar a URL direta do snippet.
@@ -154,9 +248,21 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Confiabilidade:** O sistema deve evitar expor acoes de share para itens privados.
 - **Compatibilidade:** O comportamento de visibilidade deve ser consistente entre listagem e editor.
 
-#### REQ-06 Visualizar snippets publicos de terceiros
+---
 
-- [x] **Visualizar snippets publicos de terceiros**
+#### RP-06 — Visualizar snippets publicos de terceiros
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Visualizar snippets publicos de terceiros.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
+
+##### Regras de Negócio
+
+- 🚧 Em construção — regra de negócio não explicitada no documento legado.
 
 **Descricao:** O usuario deve conseguir abrir, por link direto, snippets publicos criados por outros usuarios, sem transformar esse acesso em permissao de gerenciamento.
 
@@ -167,7 +273,7 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Restricao de gerenciamento:** Usuarios visitantes nao podem renomear, excluir, alterar visibilidade ou sobrescrever snippets de terceiros.
 - **Indisponibilidade do privado:** Quando o snippet nao for publico e o visitante nao for o autor, o sistema deve bloquear o acesso.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Leitura do snippet:** O usuario deve conseguir abrir o snippet publico e visualizar seu conteudo no editor.
 - **Ausencia de acoes de dono:** A interface nao deve induzir o visitante a acreditar que pode gerenciar um snippet de terceiro.
@@ -178,7 +284,15 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 - **Confiabilidade:** O sistema deve respeitar a visibilidade configurada pelo autor.
 - **Compatibilidade:** O comportamento deve ser consistente para qualquer snippet publico compartilhado.
 
----
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| playground | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada preservada do documento legado
 
 ### 3. Fluxo de Usuario (User Flow)
 
@@ -230,9 +344,15 @@ O objetivo principal e oferecer um sandbox persistente com gestao basica de snip
 
 ---
 
-### 4. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-- Galeria publica ou exemplos definidos para usuarios nao autenticados.
-- Compartilhamento de snippets privados.
-- Edicao de snippets de terceiros, mesmo quando eles forem publicos.
-- Galeria navegavel de snippets publicos de outros usuarios dentro do hub principal.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Galeria publica ou exemplos definidos para usuarios nao autenticados. |
+| Escopo | Compartilhamento de snippets privados. |
+| Escopo | Edicao de snippets de terceiros, mesmo quando eles forem publicos. |
+| Escopo | Galeria navegavel de snippets publicos de outros usuarios dentro do hub principal. |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

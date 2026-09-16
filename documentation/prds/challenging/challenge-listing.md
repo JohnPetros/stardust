@@ -1,13 +1,19 @@
+---
+title: Listagem de Desafios
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/15
+last_updated_at: 2026-03-23
+---
+
 # PRD — Listagem de Desafios
 
-- **Módulo:** `challenging`
-- **Milestone:** [#15 — Listagem de Desafios](https://github.com/JohnPetros/stardust/milestone/15)
-- **Status:** open
-- **Atualizado em:** 2026-03-23T19:00:56Z
+Disponibiliza para: challenging; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-### 1. Visão Geral
+## 1. Resumo Executivo
 
 A **Listagem de Desafios** é a página central do módulo Challenging que permite
 aos usuários explorar, filtrar e acessar desafios de programação disponíveis na
@@ -32,15 +38,52 @@ prática deliberada de programação fora da trilha obrigatória.
 
 ---
 
-### 2. Requisitos
+## 2. Problema e Oportunidade
 
-#### REQ-01 Listagem Paginada de Desafios
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
+
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/15 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Listagem Paginada de Desafios
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Listagem Paginada de Desafios.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O sistema deve exibir os desafios de programação disponíveis em
 uma lista paginada com scroll infinito.
 
 ##### Regras de Negócio
-
 * **Paginação:** A lista carrega 20 desafios por página. Novas páginas são
   carregadas sob demanda quando o usuário clica em "Mostrar mais".
 * **Ordenação padrão:** Os desafios são ordenados por nível de dificuldade
@@ -53,7 +96,7 @@ uma lista paginada com scroll infinito.
 * **Revalidação:** A lista é automaticamente revalidada quando o usuário
   retorna à aba/janela (refetch on focus).
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 * **Card do desafio:** Cada desafio é exibido como um card contendo:
   + Badge de dificuldade com cor correspondente (verde = fácil, amarelo =
@@ -74,20 +117,27 @@ uma lista paginada com scroll infinito.
 
 ---
 
-#### REQ-02 Filtro por Título
+#### RP-02 — Filtro por Título
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Filtro por Título.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O usuário pode buscar desafios digitando parte do título em um
 campo de busca.
 
 ##### Regras de Negócio
-
 * **Busca parcial:** A busca é feita por substring (contém), case-insensitive.
 * **Sincronização com URL:** O termo de busca é persistido no query parameter
   `title`, permitindo compartilhamento da busca via URL.
 * **Reatividade:** A lista é automaticamente atualizada quando o valor do
   filtro muda.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 * **Campo de busca:** Input com ícone de lupa, posicionado acima da lista.
 * **Debounce:** O campo aplica debounce de 200ms para evitar requisições
@@ -95,19 +145,26 @@ campo de busca.
 
 ---
 
-#### REQ-03 Filtro por Nível de Dificuldade
+#### RP-03 — Filtro por Nível de Dificuldade
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Filtro por Nível de Dificuldade.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O usuário pode filtrar desafios por nível de dificuldade.
 
 ##### Regras de Negócio
-
 * **Opções disponíveis:** Todos (padrão), Fácil, Médio, Difícil.
 * **Seleção única:** Apenas um nível pode estar ativo por vez.
 * **Sincronização com URL:** O valor é persistido no query parameter
   `difficultyLevel`.
 * **Valor padrão:** `all` (exibe todos os níveis).
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 * **Componente:** Select dropdown com label colorido por nível:
   + Todos: cinza.
@@ -120,13 +177,20 @@ campo de busca.
 
 ---
 
-#### REQ-04 Filtro por Status de Conclusão
+#### RP-04 — Filtro por Status de Conclusão
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Filtro por Status de Conclusão.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Usuários autenticados podem filtrar desafios pelo status de
 conclusão pessoal.
 
 ##### Regras de Negócio
-
 * **Opções disponíveis:** Todos (padrão), Resolvido, Não Resolvido.
 * **Seleção única:** Apenas um status pode estar ativo por vez.
 * **Sincronização com URL:** O valor é persistido no query parameter `status`.
@@ -135,7 +199,7 @@ conclusão pessoal.
   desafios completados pelo usuário para determinar o status.
 * **Restrição de acesso:** Este filtro só é exibido para usuários autenticados.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 * **Componente:** Select dropdown com ícones por status:
   + Todos: ícone traço (cinza).
@@ -148,13 +212,20 @@ conclusão pessoal.
 
 ---
 
-#### REQ-05 Filtro por Categorias
+#### RP-05 — Filtro por Categorias
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Filtro por Categorias.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O usuário pode filtrar desafios por uma ou mais categorias
 temáticas.
 
 ##### Regras de Negócio
-
 * **Seleção múltipla:** O usuário pode selecionar várias categorias
   simultaneamente.
 * **Carregamento SSR:** As categorias disponíveis são carregadas no servidor
@@ -164,7 +235,7 @@ temáticas.
 * **Lógica de filtragem:** Desafios que pertencem a qualquer uma das categorias
   selecionadas são exibidos (lógica OR).
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 * **Componente:** Dropdown com busca interna (campo de pesquisa dentro do
   dropdown) e itens clicáveis (checkbox visual) para cada categoria.
@@ -173,14 +244,21 @@ temáticas.
 
 ---
 
-#### REQ-06 Tags de Filtros Ativos
+#### RP-06 — Tags de Filtros Ativos
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Tags de Filtros Ativos.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Todos os filtros ativos (exceto "Todos") são exibidos como tags
 visuais removíveis, proporcionando visibilidade sobre quais filtros estão
 aplicados.
 
 ##### Regras de Negócio
-
 * **Adição automática:** Tags são criadas automaticamente ao selecionar
   filtros.
 * **Remoção por tipo:** Ao remover uma tag:
@@ -191,7 +269,7 @@ aplicados.
 * **Substituição:** Se o usuário muda o valor de um filtro de seleção única
   (dificuldade ou status), a tag anterior é substituída pela nova.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 * **Animação:** Tags entram e saem com animação slide-down/slide-up
   (framer-motion `AnimatePresence`).
@@ -200,20 +278,27 @@ aplicados.
 
 ---
 
-#### REQ-07 Mensagem de Aviso de Pré-requisito
+#### RP-07 — Mensagem de Aviso de Pré-requisito
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Mensagem de Aviso de Pré-requisito.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Exibe uma mensagem informativa para usuários que ainda não
 completaram todos os planetas da trilha principal.
 
 ##### Regras de Negócio
-
 * **Condição de exibição:** Exibida quando o usuário ainda não completou todos os planetas da trilha.
 * **Natureza informativa:** O aviso NÃO bloqueia o acesso aos desafios. É
   apenas uma recomendação.
 * **Visibilidade:** Exibido apenas para usuários autenticados (o componente
   retorna `null` se não houver usuário logado).
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 * **Texto:** "É recomendado que você complete todos os planetas antes de
   prosseguir para fazer desafios de código."
@@ -222,65 +307,93 @@ completaram todos os planetas da trilha principal.
 
 ---
 
-#### REQ-08 Navegação Contextual (Back Link)
+#### RP-08 — Navegação Contextual (Back Link)
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Navegação Contextual (Back Link).
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Exibe um link de navegação no topo da página cujo comportamento
 varia conforme o estado de autenticação.
 
 ##### Regras de Negócio
-
 * **Usuário autenticado:** Exibe um ícone de seta para a esquerda que
   redireciona para a página do espaço (`/space`).
 * **Usuário não autenticado:** Exibe um link estilizado com a mensagem
   "Acessar a sua conta", redirecionando para a página de login.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 * **Autenticado:** Ícone de seta para a esquerda em verde.
 * **Não autenticado:** Link com borda estilizada, texto verde, alinhado à direita.
 
 ---
 
-#### REQ-09 Link para Criação de Desafios
+#### RP-09 — Link para Criação de Desafios
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Link para Criação de Desafios.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Usuários com permissão de engenheiro podem acessar a criação de
 novos desafios diretamente da página de listagem.
 
 ##### Regras de Negócio
-
 * **Condição de exibição:** Exibido apenas para usuários com perfil de engenheiro.
 * **Destino:** Redireciona para a página de criação/edição de desafios.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 * **Texto:** "Criar seu próprio desafio para outros usuários".
 * **Estilo:** Link com borda estilizada, ícone de seta à direita, texto verde, alinhado à direita.
 
 ---
 
-#### REQ-10 Edição de Desafios (Administradores)
+#### RP-10 — Edição de Desafios (Administradores)
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Edição de Desafios (Administradores).
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Usuários com permissão `god` podem acessar a edição de qualquer
 desafio diretamente a partir do card na listagem.
 
 ##### Regras de Negócio
-
 * **Condição de exibição:** Ícone de edição visível apenas para administradores.
 * **Destino:** Redireciona para a página de edição do desafio correspondente.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 * **Componente:** Ícone de edição exibido no canto do card do desafio.
 
 ---
 
-#### REQ-11 Toggle "Novos Primeiro"
+#### RP-11 — Toggle "Novos Primeiro"
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Toggle "Novos Primeiro".
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O usuário pode reordenar a listagem para ver desafios recém-publicados
 pelo agente criador no topo, sem excluir os demais desafios da lista.
 
 ##### Regras de Negócio
-
 * **Comportamento de ordenação:** Quando o toggle está ativo, os desafios novos
   sobem ao topo da lista. Dentro do grupo de novos, a ordem por dificuldade
   crescente é mantida. Os demais desafios continuam abaixo, também ordenados
@@ -294,17 +407,25 @@ pelo agente criador no topo, sem excluir os demais desafios da lista.
   início para garantir consistência dos resultados.
 * **Visibilidade:** Disponível para todos os usuários, autenticados ou não.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 * **Componente:** Switch (toggle) com label "Novos primeiro", posicionado na
   área de filtros ao lado dos selects existentes.
 * **Tag visual:** Quando ativo, uma tag "Novos primeiro" aparece na área de
-  filtros ativos (REQ-06). Clicar no "x" desativa o toggle.
+  filtros ativos (RP-11). Clicar no "x" desativa o toggle.
 * **Animação da tag:** Segue o mesmo padrão das demais tags de filtros ativos.
 * **Estado visual do toggle:** O switch reflete o estado ativo/inativo de forma
   imediata, sem aguardar o recarregamento da lista.
 
----
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| challenging | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada preservada do documento legado
 
 ### 3. Fluxo de Usuário (User Flow)
 
@@ -366,13 +487,19 @@ pelo agente criador no topo, sem excluir os demais desafios da lista.
 
 ---
 
-### 4. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-* Ordenação por data de publicação, upvotes ou número de conclusões — intencionalmente omitidos da interface, com exceção do toggle "Novos primeiro" (REQ-11).
-* Busca avançada por texto completo.
-* Filtro por autor do desafio.
-* Sistema de favoritos/bookmarks de desafios.
-* Modo de visualização alternativo (grid).
-* Filtro por linguagem de programação.
-* Recomendação inteligente de desafios baseada no perfil do usuário.
-* Filtro exclusivo de novos desafios (exibir somente novos) — o comportamento entregue é de reordenação, não de exclusão dos demais.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Ordenação por data de publicação, upvotes ou número de conclusões — intencionalmente omitidos da interface, com exceção do toggle "Novos primeiro" (RP-11). |
+| Escopo | Busca avançada por texto completo. |
+| Escopo | Filtro por autor do desafio. |
+| Escopo | Sistema de favoritos/bookmarks de desafios. |
+| Escopo | Modo de visualização alternativo (grid). |
+| Escopo | Filtro por linguagem de programação. |
+| Escopo | Recomendação inteligente de desafios baseada no perfil do usuário. |
+| Escopo | Filtro exclusivo de novos desafios (exibir somente novos) — o comportamento entregue é de reordenação, não de exclusão dos demais. |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

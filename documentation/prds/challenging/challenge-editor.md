@@ -1,13 +1,19 @@
+---
+title: Editor de desafios
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/4
+last_updated_at: 2026-08-03
+---
+
 # PRD — Editor de desafios
 
-- **Módulo:** `challenging`
-- **Milestone:** [#4 — Editor de desafios](https://github.com/JohnPetros/stardust/milestone/4)
-- **Status:** open
-- **Atualizado em:** 2026-08-03T21:53:56Z
+Disponibiliza para: challenging; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-### 1. Visão Geral
+## 1. Resumo Executivo
 
 O Editor de Desafios permite que uma pessoa autenticada crie desafios de
 programação e que autores ou administradores autorizados atualizem e excluam
@@ -25,29 +31,63 @@ permissão aplicável.
 
 ---
 
-### 2. Requisitos
+## 2. Problema e Oportunidade
 
-#### RF-01 Acessar o editor conforme a permissão do usuário
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-- [x] **Controlar o acesso à criação e ao gerenciamento de desafios**
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/4 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Acessar o editor conforme a permissão do usuário
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Acessar o editor conforme a permissão do usuário.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** A criação depende de uma conta autenticada. A edição e a
 exclusão de um desafio existente ficam disponíveis ao autor original ou a um
 administrador autorizado. A existência do desafio não deve ser revelada para
 usuários sem permissão.
 
-##### Critérios de Aceitação
-
+##### Resultados observáveis
 | ID | Critério observável |
 |---|---|
-| `CA-01` | Dado um usuário autenticado, quando ele acessa a rota de criação, então o editor é apresentado com um formulário vazio. |
-| `CA-02` | Dado o autor de um desafio, quando ele acessa a rota de edição correspondente, então o formulário é preenchido com os dados atuais do desafio. |
-| `CA-03` | Dado um administrador autorizado, quando ele acessa o desafio de outro autor, então o editor é apresentado com um aviso de contexto administrativo. |
-| `CA-04` | Dado um usuário que não é autor nem administrador autorizado, quando ele tenta acessar a edição, então recebe uma resposta equivalente a conteúdo não encontrado. |
-| `CA-05` | Dado um administrador editando um desafio alheio, quando salva as mudanças, então a autoria original é preservada. |
+| `Resultado-01` | Dado um usuário autenticado, quando ele acessa a rota de criação, então o editor é apresentado com um formulário vazio. |
+| `Resultado-02` | Dado o autor de um desafio, quando ele acessa a rota de edição correspondente, então o formulário é preenchido com os dados atuais do desafio. |
+| `Resultado-03` | Dado um administrador autorizado, quando ele acessa o desafio de outro autor, então o editor é apresentado com um aviso de contexto administrativo. |
+| `Resultado-04` | Dado um usuário que não é autor nem administrador autorizado, quando ele tenta acessar a edição, então recebe uma resposta equivalente a conteúdo não encontrado. |
+| `Resultado-05` | Dado um administrador editando um desafio alheio, quando salva as mudanças, então a autoria original é preservada. |
 
 ##### Regras de Negócio
-
 - **Autenticação:** Somente uma conta autenticada pode utilizar o editor.
 - **Propriedade:** O autor pode editar e excluir o próprio desafio.
 - **Administração:** Um usuário com a permissão administrativa aplicável pode
@@ -57,7 +97,7 @@ usuários sem permissão.
 - **Preservação da autoria:** A edição administrativa não transfere o desafio
   para o administrador.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Contexto administrativo:** A tela informa quando o administrador está
   editando o desafio de outro autor.
@@ -66,26 +106,32 @@ usuários sem permissão.
 - **Ausência de sessão:** O conteúdo do editor não é renderizado sem usuário
   autenticado disponível.
 
-#### RF-02 Definir as informações editoriais do desafio
+---
 
-- [x] **Informar título, descrição, categorias e dificuldade**
+#### RP-02 — Definir as informações editoriais do desafio
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Definir as informações editoriais do desafio.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O desafio deve conter informações editoriais suficientes para
 ser identificado, compreendido, classificado e encontrado pelos usuários.
 
-##### Critérios de Aceitação
-
+##### Resultados observáveis
 | ID | Critério observável |
 |---|---|
-| `CA-06` | Dado um título com menos de 3 ou mais de 100 caracteres, quando o formulário é validado, então uma mensagem de erro é exibida. |
-| `CA-07` | Dado um título que gere o mesmo identificador textual de outro desafio, quando a disponibilidade é consultada, então o editor informa que o título já está em uso. |
-| `CA-08` | Dada uma descrição com menos de 3 ou mais de 5.000 caracteres, quando o formulário é validado, então uma mensagem de erro é exibida. |
-| `CA-09` | Dado que nenhuma categoria foi selecionada, quando o formulário é validado, então o desafio não pode ser salvo. |
-| `CA-10` | Dadas as categorias disponíveis, quando o usuário seleciona ou remove uma categoria, então ela muda entre as listas de categorias selecionadas e disponíveis. |
-| `CA-11` | Dado o campo de dificuldade, quando o usuário o preenche, então pode escolher entre fácil, médio e difícil. |
+| `Resultado-06` | Dado um título com menos de 3 ou mais de 100 caracteres, quando o formulário é validado, então uma mensagem de erro é exibida. |
+| `Resultado-07` | Dado um título que gere o mesmo identificador textual de outro desafio, quando a disponibilidade é consultada, então o editor informa que o título já está em uso. |
+| `Resultado-08` | Dada uma descrição com menos de 3 ou mais de 5.000 caracteres, quando o formulário é validado, então uma mensagem de erro é exibida. |
+| `Resultado-09` | Dado que nenhuma categoria foi selecionada, quando o formulário é validado, então o desafio não pode ser salvo. |
+| `Resultado-10` | Dadas as categorias disponíveis, quando o usuário seleciona ou remove uma categoria, então ela muda entre as listas de categorias selecionadas e disponíveis. |
+| `Resultado-11` | Dado o campo de dificuldade, quando o usuário o preenche, então pode escolher entre fácil, médio e difícil. |
 
 ##### Regras de Negócio
-
 - **Título obrigatório:** Deve conter de 3 a 100 caracteres.
 - **Título não duplicado:** O identificador derivado do título não pode
   conflitar com outro desafio; o título atual é aceito durante a edição sem
@@ -96,7 +142,7 @@ ser identificado, compreendido, classificado e encontrado pelos usuários.
   desafio antigo não possui dificuldade específica, o editor adota “fácil”
   como valor inicial.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Descrição:** É editada em um editor de conteúdo rico.
 - **Categorias:** Categorias selecionadas permanecem destacadas e podem ser
@@ -104,25 +150,31 @@ ser identificado, compreendido, classificado e encontrado pelos usuários.
 - **Feedback:** Erros de validação são associados aos respectivos campos e
   também podem ser resumidos no topo do formulário.
 
-#### RF-03 Escolher a forma de avaliação
+---
 
-- [x] **Alternar entre avaliação pelo retorno da função e pela saída do console**
+#### RP-03 — Escolher a forma de avaliação
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Escolher a forma de avaliação.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O autor define se a resposta do participante será avaliada pelo
 valor retornado por uma função ou pelo conteúdo produzido no console.
 
-##### Critérios de Aceitação
-
+##### Resultados observáveis
 | ID | Critério observável |
 |---|---|
-| `CA-12` | Dado o modo de avaliação por função, quando o editor é exibido, então os campos de nome e parâmetros da função ficam visíveis. |
-| `CA-13` | Dado o modo de avaliação pela saída do console, quando o editor é exibido, então os campos de metadados da função ficam ocultos. |
-| `CA-14` | Dado que o usuário alterna o modo de avaliação, quando a mudança ocorre, então o formulário passa a exigir somente os campos aplicáveis ao modo selecionado. |
-| `CA-15` | Dado o modo por função sem nome válido ou sem parâmetros, quando o formulário é validado, então o desafio não pode ser salvo. |
-| `CA-16` | Dado o modo por função, quando nome ou parâmetros são alterados, então o código inicial é gerado com a assinatura correspondente. |
+| `Resultado-12` | Dado o modo de avaliação por função, quando o editor é exibido, então os campos de nome e parâmetros da função ficam visíveis. |
+| `Resultado-13` | Dado o modo de avaliação pela saída do console, quando o editor é exibido, então os campos de metadados da função ficam ocultos. |
+| `Resultado-14` | Dado que o usuário alterna o modo de avaliação, quando a mudança ocorre, então o formulário passa a exigir somente os campos aplicáveis ao modo selecionado. |
+| `Resultado-15` | Dado o modo por função sem nome válido ou sem parâmetros, quando o formulário é validado, então o desafio não pode ser salvo. |
+| `Resultado-16` | Dado o modo por função, quando nome ou parâmetros são alterados, então o código inicial é gerado com a assinatura correspondente. |
 
 ##### Regras de Negócio
-
 - **Modo padrão:** Novos desafios usam avaliação pelo retorno da função.
 - **Função obrigatória:** No modo por função, o nome deve ser um identificador
   de código válido e deve existir pelo menos um parâmetro.
@@ -133,7 +185,7 @@ valor retornado por uma função ou pelo conteúdo produzido no console.
   da função. No modo por console, um código já existente é preservado durante a
   edição, mas não pode ser alterado por esta tela.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Seletor de modo:** O controle informa o modo ativo com os textos “Avaliar
   pelo retorno da função” ou “Avaliar pela saída do console”.
@@ -141,27 +193,33 @@ valor retornado por uma função ou pelo conteúdo produzido no console.
 - **Tipos disponíveis:** Texto, número, lógico e lista estão disponíveis como
   tipos de dados; o valor indefinido funciona como estado sem tipo definido.
 
-#### RF-04 Configurar os casos de teste
+---
 
-- [x] **Definir entradas, saídas esperadas e visibilidade dos casos de teste**
+#### RP-04 — Configurar os casos de teste
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Configurar os casos de teste.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Os casos de teste determinam os exemplos usados para avaliar a
 solução e podem ser visíveis ou ocultos para quem resolve o desafio.
 
-##### Critérios de Aceitação
-
+##### Resultados observáveis
 | ID | Critério observável |
 |---|---|
-| `CA-17` | Dado um desafio com menos de três casos de teste, quando o formulário é validado, então o editor exige pelo menos três casos. |
-| `CA-18` | Dado o modo por função, quando os parâmetros são alterados, então as entradas de cada caso acompanham a quantidade e os tipos definidos para a função. |
-| `CA-19` | Dado um novo parâmetro sem valor correspondente no caso de teste, quando a entrada é criada, então recebe o valor padrão do tipo escolhido. |
-| `CA-20` | Dado um caso de teste, quando o usuário altera o tipo da saída esperada, então o valor é reinicializado com o padrão desse tipo. |
-| `CA-21` | Dado um caso de teste, quando o usuário marca ou desmarca sua visibilidade, então o caso é persistido respectivamente como visível ou oculto. |
-| `CA-22` | Dado um valor de entrada ou saída, quando o usuário o edita, então pode representar texto, número, lógico ou uma lista composta recursivamente por esses tipos. |
-| `CA-23` | Dada a lista de casos, quando o usuário adiciona ou remove um item, então a numeração e a posição persistida acompanham a ordem exibida. |
+| `Resultado-17` | Dado um desafio com menos de três casos de teste, quando o formulário é validado, então o editor exige pelo menos três casos. |
+| `Resultado-18` | Dado o modo por função, quando os parâmetros são alterados, então as entradas de cada caso acompanham a quantidade e os tipos definidos para a função. |
+| `Resultado-19` | Dado um novo parâmetro sem valor correspondente no caso de teste, quando a entrada é criada, então recebe o valor padrão do tipo escolhido. |
+| `Resultado-20` | Dado um caso de teste, quando o usuário altera o tipo da saída esperada, então o valor é reinicializado com o padrão desse tipo. |
+| `Resultado-21` | Dado um caso de teste, quando o usuário marca ou desmarca sua visibilidade, então o caso é persistido respectivamente como visível ou oculto. |
+| `Resultado-22` | Dado um valor de entrada ou saída, quando o usuário o edita, então pode representar texto, número, lógico ou uma lista composta recursivamente por esses tipos. |
+| `Resultado-23` | Dada a lista de casos, quando o usuário adiciona ou remove um item, então a numeração e a posição persistida acompanham a ordem exibida. |
 
 ##### Regras de Negócio
-
 - **Quantidade mínima:** Todo desafio deve possuir pelo menos três casos de
   teste.
 - **Ordem:** A posição persistida de cada caso começa em 1 e segue a ordem do
@@ -173,7 +231,7 @@ solução e podem ser visíveis ou ocultos para quem resolve o desafio.
 - **Listas:** Valores em lista podem conter itens de tipos diferentes e listas
   aninhadas.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Gerenciamento dinâmico:** Casos e itens de listas podem ser adicionados e
   removidos diretamente no formulário.
@@ -182,26 +240,32 @@ solução e podem ser visíveis ou ocultos para quem resolve o desafio.
 - **Orientação:** Quando não há parâmetros disponíveis, a área de entradas
   orienta o usuário a definir os parâmetros primeiro.
 
-#### RF-05 Criar ou atualizar o desafio
+---
 
-- [x] **Validar e persistir o formulário**
+#### RP-05 — Criar ou atualizar o desafio
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Criar ou atualizar o desafio.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O editor deve impedir envios incompletos, diferenciar criação de
 atualização e comunicar o andamento e o resultado da ação.
 
-##### Critérios de Aceitação
-
+##### Resultados observáveis
 | ID | Critério observável |
 |---|---|
-| `CA-24` | Dado um novo desafio com campos obrigatórios incompletos, quando o usuário tenta prosseguir, então a ação de postar permanece desabilitada. |
-| `CA-25` | Dado um desafio existente sem alterações, quando o editor é exibido, então a ação de atualizar permanece desabilitada. |
-| `CA-26` | Dado um formulário válido e alterado, quando o usuário envia, então a ação apresenta estados de confirmação, execução, sucesso ou falha conforme o resultado. |
-| `CA-27` | Dada uma criação bem-sucedida, quando a persistência termina, então o usuário é direcionado ao novo desafio com indicação de que ele acabou de ser criado. |
-| `CA-28` | Dada uma atualização bem-sucedida, quando a persistência termina, então o usuário é direcionado ao desafio atualizado. |
-| `CA-29` | Dada uma falha de criação ou atualização, quando a persistência termina, então o editor permanece disponível e apresenta estado de erro. |
+| `Resultado-24` | Dado um novo desafio com campos obrigatórios incompletos, quando o usuário tenta prosseguir, então a ação de postar permanece desabilitada. |
+| `Resultado-25` | Dado um desafio existente sem alterações, quando o editor é exibido, então a ação de atualizar permanece desabilitada. |
+| `Resultado-26` | Dado um formulário válido e alterado, quando o usuário envia, então a ação apresenta estados de confirmação, execução, sucesso ou falha conforme o resultado. |
+| `Resultado-27` | Dada uma criação bem-sucedida, quando a persistência termina, então o usuário é direcionado ao novo desafio com indicação de que ele acabou de ser criado. |
+| `Resultado-28` | Dada uma atualização bem-sucedida, quando a persistência termina, então o usuário é direcionado ao desafio atualizado. |
+| `Resultado-29` | Dada uma falha de criação ou atualização, quando a persistência termina, então o editor permanece disponível e apresenta estado de erro. |
 
 ##### Regras de Negócio
-
 - **Autoria na criação:** O desafio é associado ao usuário autenticado.
 - **Autoria na atualização:** O autor existente é mantido, inclusive em edição
   administrativa.
@@ -211,7 +275,7 @@ atualização e comunicar o andamento e o resultado da ação.
 - **Alteração necessária:** Um desafio existente só pode ser atualizado após
   alguma mudança no formulário.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Ação contextual:** O botão principal usa “postar” na criação e “atualizar”
   na edição.
@@ -220,58 +284,70 @@ atualização e comunicar o andamento e o resultado da ação.
 - **Redirecionamento:** Após o sucesso, a navegação ocorre depois de uma breve
   confirmação visual.
 
-#### RF-06 Manter o desafio privado pelo editor
+---
 
-- [x] **Criar desafios privados e preservar a visibilidade existente**
+#### RP-06 — Manter o desafio privado pelo editor
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Manter o desafio privado pelo editor.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** A tela do editor não inclui um fluxo de publicação. Sua
 responsabilidade é criar o desafio como privado e manter a visibilidade já
 definida por outros fluxos ao editar.
 
-##### Critérios de Aceitação
-
+##### Resultados observáveis
 | ID | Critério observável |
 |---|---|
-| `CA-30` | Dado um novo desafio, quando ele é criado pelo editor, então é persistido como privado. |
-| `CA-31` | Dado um desafio existente, quando ele é atualizado pelo editor, então sua condição pública ou privada é preservada. |
-| `CA-32` | Dado o formulário do editor, quando o usuário o utiliza, então nenhum controle de publicação ou visibilidade é oferecido. |
+| `Resultado-30` | Dado um novo desafio, quando ele é criado pelo editor, então é persistido como privado. |
+| `Resultado-31` | Dado um desafio existente, quando ele é atualizado pelo editor, então sua condição pública ou privada é preservada. |
+| `Resultado-32` | Dado o formulário do editor, quando o usuário o utiliza, então nenhum controle de publicação ou visibilidade é oferecido. |
 
 ##### Regras de Negócio
-
 - **Privacidade padrão:** Todo desafio criado nesta tela nasce privado.
 - **Preservação de visibilidade:** A edição não altera a visibilidade existente.
 - **Publicação externa:** Tornar um desafio público depende de outro fluxo de
   produto.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Sem controle de publicação:** A interface não apresenta seletor público ou
   privado.
 
-#### RF-07 Excluir um desafio existente
+---
 
-- [x] **Confirmar e executar a exclusão**
+#### RP-07 — Excluir um desafio existente
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Excluir um desafio existente.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Autores e administradores autorizados podem excluir um desafio
 existente após confirmação explícita da ação destrutiva.
 
-##### Critérios de Aceitação
-
+##### Resultados observáveis
 | ID | Critério observável |
 |---|---|
-| `CA-33` | Dado um desafio existente, quando o usuário aciona “Deletar”, então uma confirmação informa que os dados serão perdidos. |
-| `CA-34` | Dado o autor no diálogo de confirmação, quando a ação é exibida, então o texto identifica a exclusão do próprio desafio. |
-| `CA-35` | Dado um administrador editando o desafio de terceiro, quando a confirmação é exibida, então o texto explicita que o desafio pertence a outro autor. |
-| `CA-36` | Dada uma exclusão bem-sucedida, quando a operação termina, então o usuário é direcionado à lista de desafios. |
-| `CA-37` | Dada uma falha de exclusão, quando a operação termina, então o usuário permanece na tela e recebe a mensagem de erro. |
+| `Resultado-33` | Dado um desafio existente, quando o usuário aciona “Deletar”, então uma confirmação informa que os dados serão perdidos. |
+| `Resultado-34` | Dado o autor no diálogo de confirmação, quando a ação é exibida, então o texto identifica a exclusão do próprio desafio. |
+| `Resultado-35` | Dado um administrador editando o desafio de terceiro, quando a confirmação é exibida, então o texto explicita que o desafio pertence a outro autor. |
+| `Resultado-36` | Dada uma exclusão bem-sucedida, quando a operação termina, então o usuário é direcionado à lista de desafios. |
+| `Resultado-37` | Dada uma falha de exclusão, quando a operação termina, então o usuário permanece na tela e recebe a mensagem de erro. |
 
 ##### Regras de Negócio
-
 - **Disponibilidade:** A exclusão só existe para desafios já persistidos.
 - **Permissão:** Apenas o autor ou um administrador autorizado pode excluir.
 - **Confirmação:** A exclusão requer confirmação explícita.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Alerta destrutivo:** O diálogo diferencia a exclusão do próprio desafio da
   exclusão administrativa de um desafio de terceiro.
@@ -279,7 +355,15 @@ existente após confirmação explícita da ação destrutiva.
   desafio.
 - **Feedback de falha:** Erros de exclusão são apresentados por notificação.
 
----
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| challenging | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada preservada do documento legado
 
 ### 3. Fluxo de Usuário (User Flow)
 
@@ -344,18 +428,19 @@ de um desafio alheio.
 
 ---
 
-### 4. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-- Alterar a visibilidade pública ou privada pela tela do editor.
-- Publicar, revisar ou aprovar desafios por um workflow editorial nesta tela.
-- Editar manualmente o código inicial do desafio.
-- Criar funções avaliadas por retorno sem nenhum parâmetro.
-- Definir entradas de parâmetros no modo de avaliação pela saída do console.
-- Permitir que usuários sem autoria ou permissão administrativa gerenciem um
-  desafio existente.
-- Listagem, descoberta, resolução e execução dos desafios pelos participantes.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Alterar a visibilidade pública ou privada pela tela do editor. |
+| Escopo | Publicar, revisar ou aprovar desafios por um workflow editorial nesta tela. |
+| Escopo | Editar manualmente o código inicial do desafio. |
+| Escopo | Criar funções avaliadas por retorno sem nenhum parâmetro. |
+| Escopo | Definir entradas de parâmetros no modo de avaliação pela saída do console. |
+| Escopo | Permitir que usuários sem autoria ou permissão administrativa gerenciem um |
+| Escopo | Listagem, descoberta, resolução e execução dos desafios pelos participantes. |
 
-#### Descartado durante a implementação
+### Decisões descartadas durante a definição
 
 Nenhum comportamento ou requisito descartado foi informado ou identificado
 como decisão de produto durante a auditoria retrospectiva.

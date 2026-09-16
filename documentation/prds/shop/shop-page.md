@@ -1,13 +1,19 @@
+---
+title: Página de Loja
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/6
+last_updated_at: 2026-02-28
+---
+
 # PRD — Página de Loja
 
-- **Módulo:** `shop`
-- **Milestone:** [#6 — Página de Loja](https://github.com/JohnPetros/stardust/milestone/6)
-- **Status:** open
-- **Atualizado em:** 2026-02-28T11:53:07Z
+Disponibiliza para: shop; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-## 1. Visão Geral
+## 1. Resumo Executivo
 
 A Página Shop é o espaço em que usuários logados ativos personalizam sua
 experiência na plataforma por meio da aquisição e seleção de itens cosméticos
@@ -24,15 +30,52 @@ e gasto médio por usuário ativo). Como a página já está implementada, este 
 formaliza o comportamento funcional atual para alinhamento entre produto,
 design e desenvolvimento.
 
-## 2. Requisitos
+## 2. Problema e Oportunidade
 
-### [x] Catálogo de Insígnias
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
+
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/6 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Catálogo de Insígnias
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Catálogo de Insígnias.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Exibir todas as insígnias disponíveis para compra por usuário
 autenticado, com status de aquisição e ação correspondente.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Listagem completa:** O sistema deve listar todas as insígnias disponíveis na
   loja para o usuário autenticado.
 - **Dados mínimos por item:** Cada insígnia deve exibir nome, imagem, preço e
@@ -42,7 +85,7 @@ autenticado, com status de aquisição e ação correspondente.
 - **Compra com moeda virtual:** A compra deve consumir StarCoins quando o
   usuário tiver saldo suficiente.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** Cada insígnia deve apresentar card com imagem, nome,
   preço e ação principal.
@@ -59,13 +102,22 @@ autenticado, com status de aquisição e ação correspondente.
 - **Compatibilidade:** Comportamento consistente nos navegadores modernos de
   desktop e mobile.
 
-### [x] Listagem de Foguetes com Busca, Ordenação e Paginação
+---
+
+#### RP-02 — Listagem de Foguetes com Busca, Ordenação e Paginação
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Listagem de Foguetes com Busca, Ordenação e Paginação.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Permitir descoberta de foguetes por pesquisa textual, ordenação
 por preço e navegação paginada.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Busca textual:** O usuário deve conseguir filtrar foguetes por termo de
   pesquisa.
 - **Ordenação por preço:** O usuário deve alternar entre "Menor preço" e
@@ -74,7 +126,7 @@ por preço e navegação paginada.
 - **Persistência de critérios:** Ao mudar busca ou ordenação, o sistema deve
   reiniciar a paginação para a primeira página.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** A seção de foguetes deve conter campo de busca,
   seletor de ordenação e paginação.
@@ -93,13 +145,22 @@ por preço e navegação paginada.
 - **Compatibilidade:** Busca, ordenação e paginação devem funcionar em
   navegadores modernos.
 
-### [x] Listagem de Avatares com Busca, Ordenação e Paginação
+---
+
+#### RP-03 — Listagem de Avatares com Busca, Ordenação e Paginação
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Listagem de Avatares com Busca, Ordenação e Paginação.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Permitir descoberta de avatares por pesquisa textual, ordenação
 por preço e navegação paginada.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Busca textual:** O usuário deve conseguir filtrar avatares por termo de
   pesquisa.
 - **Ordenação por preço:** O usuário deve alternar entre "Menor preço" e
@@ -108,7 +169,7 @@ por preço e navegação paginada.
 - **Persistência de critérios:** Ao alterar busca ou ordenação, a paginação deve
   retornar ao início.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** A seção de avatares deve conter busca, ordenação e
   paginação.
@@ -124,13 +185,22 @@ por preço e navegação paginada.
 - **Confiabilidade:** Em erro de consulta, exibir fallback e permitir recarregar.
 - **Compatibilidade:** Experiência consistente entre navegadores suportados.
 
-### [x] Compra e Seleção de Itens da Loja
+---
+
+#### RP-04 — Compra e Seleção de Itens da Loja
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Compra e Seleção de Itens da Loja.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Permitir que o usuário compre itens com StarCoins e selecione
 itens já adquiridos para personalização ativa.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Compra de foguete/avatar:** Se o item ainda não for adquirido e houver saldo
   suficiente, o sistema deve concluir a compra, debitar StarCoins e aplicar o
   item como selecionado.
@@ -143,7 +213,7 @@ itens já adquiridos para personalização ativa.
 - **Atualização de perfil:** Após compra ou seleção válida, o estado do usuário
   deve ser atualizado para refletir saldo e inventário atual.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** O botão de ação deve refletir o estado do item com
   rótulos "Comprar", "Selecionar", "Selecionado" ou "Adquirido".
@@ -162,13 +232,22 @@ itens já adquiridos para personalização ativa.
 - **Compatibilidade:** Fluxo de compra/seleção deve ser consistente em
   navegadores modernos.
 
-### [x] Feedback Operacional e Estados de Carregamento
+---
+
+#### RP-05 — Feedback Operacional e Estados de Carregamento
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Feedback Operacional e Estados de Carregamento.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Garantir clareza de estados para evitar ambiguidade durante
 consultas, compra e seleção de itens.
 
-#### Regras de Negócio
-
+##### Regras de Negócio
 - **Estado de carregamento:** Toda ação de compra/seleção deve ter estado de
   processamento para evitar ações duplicadas.
 - **Mensagens de falha:** Erros de negócio devem ser comunicados com mensagem
@@ -176,7 +255,7 @@ consultas, compra e seleção de itens.
 - **Sincronização de estado:** Após fechamento de confirmação de compra, o
   sistema deve sincronizar dados de perfil e inventário.
 
-#### Regras de UI/UX (se houver)
+##### Regras de Experiência
 
 - **Elemento Visual:** Exibir indicadores claros de carregamento e conclusão de
   ação.
@@ -193,7 +272,17 @@ consultas, compra e seleção de itens.
 - **Compatibilidade:** Comportamento consistente dos alertas em navegadores
   suportados.
 
-## 3. Fluxo de Usuário (User Flow)
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| shop | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
+
+#### JN-01 — Jornada preservada do documento legado
+
+### 3. Fluxo de Usuário (User Flow)
 
 **Nome do fluxo:** Explorar catálogo e filtrar itens.
 
@@ -231,12 +320,16 @@ consultas, compra e seleção de itens.
    - **Falha:** Compra é recusada com feedback claro (insígnia já adquirida ou
      saldo insuficiente).
 
-## 4. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-- CRUD administrativo de itens da loja (criar, editar, remover) em painel
-  interno.
-- Criação de novas categorias de itens além de insígnias, foguetes e avatares.
-- Alteração das regras globais de economia de StarCoins fora do contexto de
-  compra na Shop.
-- Versão mobile nativa (app) ou funcionalidades fora da Web responsiva.
-- Reformulação de onboarding de itens padrão de novos usuários.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | CRUD administrativo de itens da loja (criar, editar, remover) em painel |
+| Escopo | Criação de novas categorias de itens além de insígnias, foguetes e avatares. |
+| Escopo | Alteração das regras globais de economia de StarCoins fora do contexto de |
+| Escopo | Versão mobile nativa (app) ou funcionalidades fora da Web responsiva. |
+| Escopo | Reformulação de onboarding de itens padrão de novos usuários. |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.

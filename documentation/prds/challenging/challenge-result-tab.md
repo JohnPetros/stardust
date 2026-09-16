@@ -1,13 +1,19 @@
+---
+title: Tab de resultado do desafio
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/14
+last_updated_at: 2026-03-06
+---
+
 # PRD — Tab de resultado do desafio
 
-- **Módulo:** `challenging`
-- **Milestone:** [#14 — Tab de resultado do desafio](https://github.com/JohnPetros/stardust/milestone/14)
-- **Status:** open
-- **Atualizado em:** 2026-03-06T19:31:28Z
+Disponibiliza para: challenging; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-### 1. Visão Geral
+## 1. Resumo Executivo
 
 A **Challenge Result Tab** é a aba de resultados exibida na página de desafios
 da plataforma StarDust. Após o usuário executar seu código contra os casos de
@@ -25,18 +31,53 @@ deliberada e a progressão gamificada.
 
 ---
 
-### 2. Requisitos
+## 2. Problema e Oportunidade
 
-#### REQ-01 Exibição de Casos de Teste
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-- [x] **Exibição de Casos de Teste**
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/14 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Exibição de Casos de Teste
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Exibição de Casos de Teste.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Cada caso de teste do desafio é apresentado como um card
 individual na aba de resultados, com indicação visual de aprovação ou
 reprovação.
 
 ##### Regras de Negócio
-
 - **Identificação por posição:** Cada card é identificado pela posição do caso
   de teste (ex: "Teste de caso #1", "Teste de caso #2").
 - **Indicador de resultado:** Cada card exibe um ícone de check (verde) se o
@@ -48,7 +89,7 @@ reprovação.
 - **Exceção ao bloqueio:** Se um test case bloqueado for resolvido corretamente,
   ele é desbloqueado e pode ser expandido normalmente.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Responsividade:** Em desktop, os cards são dispostos verticalmente em um
   painel lateral ao editor de código. Em mobile, a aba é apresentada como slide
@@ -58,16 +99,21 @@ reprovação.
 
 ---
 
-#### REQ-02 Detalhes do Caso de Teste
+#### RP-02 — Detalhes do Caso de Teste
 
-- [x] **Detalhes do Caso de Teste**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Detalhes do Caso de Teste.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Ao expandir um caso de teste, o usuário visualiza os dados de
 entrada, sua saída e a saída esperada, traduzidos para a linguagem de
 programação do desafio (Delegua) via LSP.
 
 ##### Regras de Negócio
-
 - **Campos exibidos:** Cada caso de teste expandido mostra três campos:
   - **Entrada:** Valores de entrada fornecidos ao código, traduzidos via
     `LspProvider.translateToLsp()`. Se não houver entradas, exibe "sem entrada".
@@ -83,7 +129,7 @@ programação do desafio (Delegua) via LSP.
 - **Toggle manual:** O usuário pode expandir/colapsar manualmente casos de teste
   não bloqueados clicando no botão de seta.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Destaque visual do output do usuário:** O campo "Seu resultado" possui
   fundo diferenciado (mais claro) para facilitar a comparação visual com o
@@ -94,16 +140,21 @@ programação do desafio (Delegua) via LSP.
 
 ---
 
-#### REQ-03 Verificação da Resposta
+#### RP-03 — Verificação da Resposta
 
-- [x] **Verificação da Resposta**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Verificação da Resposta.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O usuário verifica formalmente sua solução através de um botão
 fixo na parte inferior da aba. A verificação compara todas as saídas do usuário
 com as saídas esperadas.
 
 ##### Regras de Negócio
-
 - **Lógica de verificação:** A verificação é delegada à entidade `Challenge` do
   domínio. A resposta é considerada correta somente se **todos** os resultados
   dos casos de teste forem `true`.
@@ -124,7 +175,7 @@ com as saídas esperadas.
   dispositivo mobile, o sistema automaticamente navega para a aba de código
   para facilitar a correção.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Posição fixa:** O botão de verificação é sticky na parte inferior da aba,
   sempre visível durante a rolagem.
@@ -133,16 +184,21 @@ com as saídas esperadas.
 
 ---
 
-#### REQ-04 Fluxo de Conclusão e Recompensas
+#### RP-04 — Fluxo de Conclusão e Recompensas
 
-- [x] **Fluxo de Conclusão e Recompensas**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Fluxo de Conclusão e Recompensas.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Após verificação correta, o desafio é marcado como concluído e o
 usuário é direcionado à tela de recompensas (ou de volta à navegação, caso já
 tenha completado).
 
 ##### Regras de Negócio
-
 - **Conclusão do desafio:** Quando a verificação é correta, o desafio é marcado
   como `isCompleted = true` e todos os crafts (painel de código) ficam visíveis.
 - **Payload de recompensa:** O sistema monta um payload com métricas de
@@ -165,17 +221,26 @@ tenha completado).
   desafio anteriormente ou é o autor do desafio, é redirecionado para a lista
   de desafios (`/challenging/challenges`) — sem recompensa duplicada.
 
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
 ---
 
-#### REQ-05 Controle de Autenticação
+#### RP-05 — Controle de Autenticação
 
-- [x] **Controle de Autenticação**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Controle de Autenticação.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Usuários não autenticados são impedidos de completar desafios
 livres, sendo solicitados a fazer login.
 
 ##### Regras de Negócio
-
 - **Alerta de login:** Quando um usuário não autenticado tenta completar um
   desafio livre (não vinculado a estrela) após verificação correta, um dialog
   de alerta é exibido solicitando que acesse sua conta antes de continuar.
@@ -183,17 +248,26 @@ livres, sendo solicitados a fazer login.
   (`isStarChallenge = false`). Star Challenges pressupõem que o usuário já está
   autenticado (pois fazem parte da trilha de aprendizado).
 
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
 ---
 
-#### REQ-06 Restauração de Estado
+#### RP-06 — Restauração de Estado
 
-- [x] **Restauração de Estado**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Restauração de Estado.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Ao recarregar a página na rota de resultado, o estado da
 verificação é restaurado automaticamente se o desafio já foi concluído.
 
 ##### Regras de Negócio
-
 - **Condições de restauração:** Se o usuário está na rota `/result`, a resposta
   ainda não foi verificada (`isVerified = false`), o desafio está completado
   (`isCompleted = true`) e possui resposta (`hasAnswer = true`), e a página
@@ -202,11 +276,21 @@ verificação é restaurado automaticamente se o desafio já foi concluído.
 - **Objetivo:** Evitar que o usuário perca o estado visual de "completado" ao
   recarregar a página, garantindo consistência na experiência.
 
----
+##### Regras de Experiência
+
+- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| challenging | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
 
 ### 3. Fluxo de Usuário (User Flow)
 
-**Fluxo principal — Verificação e conclusão do desafio:**
+#### JN-01 — rincipal — Verificação e conclusão do desafio:
 
 1. O usuário escreve código no editor e executa contra os casos de teste
    (ação externa a esta feature).
@@ -238,18 +322,20 @@ verificação é restaurado automaticamente se o desafio já foi concluído.
 
 ---
 
-### 4. Fora do Escopo (Out of Scope)
+## 8. Fora do Escopo
 
-- Execução do código contra os casos de teste (responsabilidade do editor de
-  código / feature separada).
-- Cálculo efetivo da recompensa (XP, starcoins) — responsabilidade da página
-  de rewarding.
-- Exibição da aba de comentários ou soluções do desafio.
-- Persistência server-side do estado de conclusão do desafio.
-- Tratamento de falha de rede ao salvar cookie de rewarding (cenário
-  identificado como não coberto e necessário — 🚧 Em construção).
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Execução do código contra os casos de teste (responsabilidade do editor de |
+| Escopo | Cálculo efetivo da recompensa (XP, starcoins) — responsabilidade da página |
+| Escopo | Exibição da aba de comentários ou soluções do desafio. |
+| Escopo | Persistência server-side do estado de conclusão do desafio. |
+| Escopo | Tratamento de falha de rede ao salvar cookie de rewarding (cenário |
+| Escopo | **Diff visual de outputs:** Comparação lado a lado entre a saída do usuário e |
+| Escopo | **Re-run parcial de test cases:** Possibilidade de re-executar apenas os |
+| Escopo | **Contador de tentativas:** Exibição do número de tentativas realizadas e/ou |
 
-#### Descartado durante a implementação
+### Decisões descartadas durante a definição
 
 - **Diff visual de outputs:** Comparação lado a lado entre a saída do usuário e
   a esperada, com destaque de diferenças. Descartado por escopo/tempo limitado.

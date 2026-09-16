@@ -1,13 +1,19 @@
+---
+title: Code Playback para Blocos de Código
+status: draft
+source:
+  - type: issue
+    ref: https://github.com/JohnPetros/stardust/milestone/38
+last_updated_at: 2026-07-16
+---
+
 # PRD — Code Playback para Blocos de Código
 
-- **Módulo:** `lesson`
-- **Milestone:** [#38 — Code Playback para Blocos de Código](https://github.com/JohnPetros/stardust/milestone/38)
-- **Status:** open
-- **Atualizado em:** 2026-07-16T17:47:15Z
+Disponibiliza para: lesson; consumidores adicionais não explicitados no documento legado.
 
-## Definição do produto
+Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
-### 1. Visão Geral
+## 1. Resumo Executivo
 
 O **Code Playback** é um componente educacional para blocos de texto do tipo `code`. Ele permite que o estudante acompanhe a execução de um código passo a passo, visualizando a linha atual, os valores das variáveis, estruturas de dados, ponteiros, resultados parciais e uma explicação textual para cada etapa.
 
@@ -19,16 +25,51 @@ O **Code Playback** é um componente educacional para blocos de texto do tipo `c
 
 ---
 
-### 2. Requisitos
+## 2. Problema e Oportunidade
 
-#### REQ-01 Controles de Playback
+🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
 
-- [ ] **Controles de Playback**
+### Base de fontes e autoridade
+
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | https://github.com/JohnPetros/stardust/milestone/38 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+
+## 3. Público-alvo
+
+🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+
+## 4. Objetivos e Métricas de Sucesso
+
+🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+
+### Limites de validação e premissas declaradas
+
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+
+## 5. Requisitos de Produto
+
+### Conceitos e responsabilidades
+
+| Conceito | Regra de produto |
+| --- | --- |
+| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+
+#### RP-01 — Controles de Playback
+
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Controles de Playback.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O estudante deve controlar a navegação entre os passos da execução.
 
 ##### Regras de Negócio
-
 - **Play/Pause:** inicia ou pausa a reprodução automática dos passos.
 - **Avançar:** move para o próximo passo.
 - **Voltar:** retorna para o passo anterior.
@@ -38,7 +79,7 @@ O **Code Playback** é um componente educacional para blocos de texto do tipo `c
 - **Limites:** ao chegar no primeiro ou último passo, ações inválidas devem ser desabilitadas ou ignoradas.
 - **Fim da execução:** ao chegar no último passo durante reprodução automática, o playback deve parar.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Indicador de progresso:** deve mostrar algo como `Step 3 / 14`.
 - **Estado atual claro:** a timeline deve indicar visualmente o passo atual.
@@ -48,14 +89,19 @@ O **Code Playback** é um componente educacional para blocos de texto do tipo `c
 
 ---
 
-#### REQ-02 Estado por Passo
+#### RP-02 — Estado por Passo
 
-- [ ] **Estado por Passo**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Estado por Passo.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Cada passo do playback representa um snapshot completo da execução naquele momento.
 
 ##### Regras de Negócio
-
 - **Linha ativa:** cada passo pode indicar uma ou mais linhas de código ativas.
 - **Explicação:** cada passo deve ter uma explicação própria.
 - **Painéis de estado:** cada passo pode exibir diferentes painéis, como arrays, strings, variáveis, mapas, sets, grids ou resultados.
@@ -63,7 +109,7 @@ O **Code Playback** é um componente educacional para blocos de texto do tipo `c
 - **Retrocesso determinístico:** voltar para um passo anterior deve restaurar exatamente o estado visual daquele passo.
 - **Sem efeitos colaterais:** navegar no playback não deve alterar o código nem executar lógica real.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Mudança coordenada:** ao trocar de passo, linha ativa, painéis, ponteiros, destaques e explicação devem mudar juntos.
 - **Consistência visual:** elementos semelhantes devem manter o mesmo padrão entre passos.
@@ -71,20 +117,25 @@ O **Code Playback** é um componente educacional para blocos de texto do tipo `c
 
 ---
 
-#### REQ-03 Destaque da Linha de Código
+#### RP-03 — Destaque da Linha de Código
 
-- [ ] **Destaque da Linha de Código**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Destaque da Linha de Código.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O código exibido deve destacar a linha correspondente ao passo atual.
 
 ##### Regras de Negócio
-
 - **Linha única:** passos simples podem destacar uma linha.
 - **Múltiplas linhas:** passos compostos podem destacar mais de uma linha.
 - **Atualização bidirecional:** ao avançar ou voltar, o destaque deve acompanhar o passo atual.
 - **Código somente leitura:** o playback tem foco em leitura e explicação, não em edição.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Destaque visível:** a linha ativa deve ter contraste suficiente em relação ao restante do código.
 - **Preservação do contexto:** o estudante deve conseguir ver linhas próximas à linha ativa.
@@ -93,20 +144,25 @@ O **Code Playback** é um componente educacional para blocos de texto do tipo `c
 
 ---
 
-#### REQ-04 Painel de Input
+#### RP-04 — Painel de Input
 
-- [ ] **Painel de Input**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Painel de Input.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O playback deve exibir os dados de entrada usados no exemplo.
 
 ##### Regras de Negócio
-
 - **Input textual:** o input pode ser mostrado como texto formatado.
 - **Inputs curtos:** exemplos simples devem aparecer em uma linha ou poucas linhas.
 - **Inputs longos:** exemplos grandes, como matrizes de Sudoku, devem permanecer legíveis sem quebrar o layout.
 - **Múltiplos valores:** deve suportar casos como `nums=[2, 7, 11, 15]`, `target=9`, `s="anagram"` e `t="nagaram"`.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Área fixa e legível:** o input deve ter uma área visual distinta.
 - **Preservação de formatação:** quebras de linha e espaçamento relevantes devem ser mantidos.
@@ -114,14 +170,19 @@ O **Code Playback** é um componente educacional para blocos de texto do tipo `c
 
 ---
 
-#### REQ-05 Painéis de Estruturas de Dados
+#### RP-05 — Painéis de Estruturas de Dados
 
-- [ ] **Painéis de Estruturas de Dados**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Painéis de Estruturas de Dados.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O playback deve representar visualmente diferentes tipos de estado usados em algoritmos.
 
 ##### Regras de Negócio
-
 - **Sequências:** deve suportar arrays, strings e listas, com valores e índices.
 - **Ponteiros:** deve suportar um ou mais ponteiros por sequência, como `i`, `j`, `l`, `r`, `num` ou `sz`.
 - **Destaques:** deve suportar células ativas, múltiplos destaques e intervalos relevantes.
@@ -131,7 +192,7 @@ O **Code Playback** é um componente educacional para blocos de texto do tipo `c
 - **Grids:** deve suportar matrizes, como tabuleiros de Sudoku, com linhas, colunas e células destacadas.
 - **Resultados:** deve suportar estados finais ou parciais com indicação visual de sucesso, erro ou valor neutro.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Labels claras:** cada painel deve ter um nome visível, como `NUMS`, `COUNT`, `RES`, `SUDOKU BOARD`.
 - **Índices visíveis:** sequências e grids devem exibir índices quando isso ajudar o entendimento.
@@ -141,20 +202,25 @@ O **Code Playback** é um componente educacional para blocos de texto do tipo `c
 
 ---
 
-#### REQ-06 Explicação por Passo
+#### RP-06 — Explicação por Passo
 
-- [ ] **Explicação por Passo**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Explicação por Passo.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** Cada passo deve exibir uma explicação textual específica sobre o que está acontecendo.
 
 ##### Regras de Negócio
-
 - **Explicação obrigatória:** todo passo deve ter uma explicação.
 - **Texto contextual:** a explicação deve descrever a ação do passo e, quando necessário, o motivo.
 - **Atualização sincronizada:** ao mudar de passo, a explicação deve mudar junto com o estado visual.
 - **Resultado final:** passos finais devem deixar claro quando o algoritmo retorna ou conclui algo.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Posição previsível:** a explicação deve aparecer sempre no mesmo local.
 - **Texto escaneável:** deve ser curta o suficiente para leitura rápida, mas completa o suficiente para ensinar.
@@ -162,21 +228,26 @@ O **Code Playback** é um componente educacional para blocos de texto do tipo `c
 
 ---
 
-#### REQ-07 Layout Padrão e Expandido
+#### RP-07 — Layout Padrão e Expandido
 
-- [ ] **Layout Padrão e Expandido**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Layout Padrão e Expandido.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O playback deve ter dois modos de visualização: um estado padrão vertical, otimizado para leitura dentro do fluxo da página, e um estado expandido, otimizado para comparação simultânea entre estado da execução e código.
 
 ##### Regras de Negócio
-
 - **Estado padrão:** ao abrir o componente, o playback deve exibir os controles e o estado da execução acima, com o código abaixo.
 - **Estado expandido:** ao clicar em expandir, o componente deve reorganizar o conteúdo para exibir o estado da execução e o código lado a lado.
 - **Alternância reversível:** o usuário deve conseguir sair do modo expandido e voltar ao estado padrão.
 - **Sincronização preservada:** a troca de layout não deve alterar o passo atual, pausar indevidamente a execução, perder highlights ou resetar a timeline.
 - **Mesmo conteúdo:** os dois modos devem apresentar os mesmos dados de execução, código, linha ativa, explicação e controles; apenas a disposição visual muda.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Composição padrão:** no modo padrão, os controles ficam no topo do componente, o painel de execução aparece abaixo dos controles e o código aparece abaixo do painel de execução.
 - **Composição expandida:** no modo expandido, o painel de execução fica à esquerda e o código fica à direita em telas com largura suficiente.
@@ -187,31 +258,42 @@ O **Code Playback** é um componente educacional para blocos de texto do tipo `c
 
 ---
 
-#### REQ-08 Responsividade e Acessibilidade
+#### RP-08 — Responsividade e Acessibilidade
 
-- [ ] **Responsividade e Acessibilidade**
+Necessidades do usuário:
+
+- 🚧 Em construção — necessidade não explicitada no documento legado.
+
+Resultado: Responsividade e Acessibilidade.
+
+Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 **Descrição:** O playback deve funcionar bem em diferentes tamanhos de tela e modos de navegação.
 
 ##### Regras de Negócio
-
 - **Desktop:** deve aproveitar o espaço para exibir código e estado de forma confortável.
 - **Mobile:** deve reorganizar os painéis para leitura vertical.
 - **Navegação por teclado:** controles principais devem ser acessíveis por teclado.
 - **Leitores de tela:** controles devem ter nomes compreensíveis.
 
-##### Regras de UI/UX
+##### Regras de Experiência
 
 - **Sem sobreposição:** controles, timeline, código, painéis e explicação não podem se sobrepor.
 - **Texto legível:** labels, índices e valores devem permanecer legíveis em telas menores.
 - **Área rolável:** conteúdos grandes devem rolar dentro de regiões previsíveis.
 - **Contraste adequado:** destaques, valores e estados devem manter contraste suficiente.
 
----
+## 6. Grafo de Dependências do Produto
+
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| lesson | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+
+## 7. Jornadas
 
 ### 3. Fluxo de Usuário
 
-**Fluxo A — Estudante acompanha um playback**
+#### JN-01 — Estudante acompanha um playback
 
 1. O estudante chega a um bloco de código com playback.
 2. O sistema exibe o código, o input, os controles e o primeiro passo.
@@ -221,26 +303,26 @@ O **Code Playback** é um componente educacional para blocos de texto do tipo `c
 6. O estudante pode pausar, voltar, avançar ou alterar a velocidade.
 7. Ao chegar ao último passo, o sistema exibe o estado final e interrompe a reprodução automática.
 
-**Fluxo B — Estudante revisa um passo anterior**
+#### JN-02 — Estudante revisa um passo anterior
 
 1. O estudante percebe que não entendeu uma mudança.
 2. O estudante clica em voltar ou seleciona um ponto anterior na timeline.
 3. O sistema restaura o snapshot daquele passo.
 4. O estudante compara o estado anterior com os próximos passos usando avanço manual.
 
-**Fluxo C — Bloco de código sem playback**
+#### JN-03 — Bloco de código sem playback
 
 1. O estudante chega a um bloco de código comum.
 2. O sistema renderiza o bloco no comportamento atual.
 3. Nenhum controle de playback é exibido.
 
-**Fluxo D — Bloco executável com playback**
+#### JN-04 — Bloco executável com playback
 
 1. O estudante visualiza o playback para entender a execução.
 2. O estudante também pode executar o código, quando o bloco permitir execução.
 3. O playback continua sendo uma explicação estática e não depende da execução real.
 
-**Fluxo E — Estudante alterna entre layout padrão e expandido**
+#### JN-05 — Estudante alterna entre layout padrão e expandido
 
 1. O estudante abre um playback no estado padrão.
 2. O sistema exibe controles e estado da execução acima, com o código abaixo.
@@ -252,15 +334,21 @@ O **Code Playback** é um componente educacional para blocos de texto do tipo `c
 
 ---
 
-### 4. Fora do Escopo
+## 8. Fora do Escopo
 
-- Geração automática de passos a partir do código.
-- Debugger real com inspeção dinâmica de runtime.
-- Execução linha a linha do código real.
-- Edição de código dentro do modo playback.
-- Alteração manual de variáveis pelo estudante.
-- Suporte inicial a múltiplas linguagens além do conteúdo já usado na plataforma.
-- Persistência do progresso do playback entre sessões.
-- Colaboração em tempo real.
-- Criação automática de explicações por IA.
-- Validação automática de que os passos cadastrados correspondem exatamente ao código.
+| Área | Exclusão explícita do MVP |
+| --- | --- |
+| Escopo | Geração automática de passos a partir do código. |
+| Escopo | Debugger real com inspeção dinâmica de runtime. |
+| Escopo | Execução linha a linha do código real. |
+| Escopo | Edição de código dentro do modo playback. |
+| Escopo | Alteração manual de variáveis pelo estudante. |
+| Escopo | Suporte inicial a múltiplas linguagens além do conteúdo já usado na plataforma. |
+| Escopo | Persistência do progresso do playback entre sessões. |
+| Escopo | Colaboração em tempo real. |
+| Escopo | Criação automática de explicações por IA. |
+| Escopo | Validação automática de que os passos cadastrados correspondem exatamente ao código. |
+
+### Decisões descartadas durante a definição
+
+- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.
