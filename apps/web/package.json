@@ -62,6 +62,7 @@
     "@tiptap/starter-kit": "^3.29.2",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.8.1",
+    "@xyflow/react": "^12.11.6",
     "ai": "^6.0.219",
     "apexcharts": "^6.7.0",
     "autoprefixer": "10.5.4",
