@@ -13,3 +13,4 @@ export { challengeDifficultyLevelsSchema } from './challengeDifficultyLevelsSche
 export { challengesNavigationSidebarQuerySchema } from './challengesNavigationSidebarQuerySchema'
 export { challengeCodeExecutionSchema } from './challengeCodeExecutionSchema'
 export { challengeCodeExecutionsListQuerySchema } from './challengeCodeExecutionsListQuerySchema'
+export { roadmapNodeKeySchema } from './challengeRoadmapSchema'
