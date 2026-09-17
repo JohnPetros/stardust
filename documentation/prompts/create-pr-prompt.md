@@ -378,6 +378,45 @@ Faça `push` da branch preparada e crie ou atualize o PR com `gh`. O workflow do
 Hermes inicia automaticamente depois que os checks aplicáveis passam para o
 head SHA atual.
 
+## CI obrigatório após a publicação
+
+Depois de criar ou atualizar o PR, aguarde obrigatoriamente a conclusão de todos
+os workflows e checks aplicáveis ao HEAD publicado. Não encerre a execução com
+checks `pending`, `queued`, `in_progress`, `failure`, `cancelled`, `timed_out`
+ou `action_required`.
+
+Faça polling pelo GitHub CLI até que o rollup contenha checks e nenhum deles
+esteja incompleto:
+
+```bash
+while true; do
+  total=$(gh pr view <numero> --json statusCheckRollup --jq '.statusCheckRollup | length')
+  pending=$(gh pr view <numero> --json statusCheckRollup --jq '[.statusCheckRollup[] | select(.status != "COMPLETED")] | length')
+  if [ "$total" -gt 0 ] && [ "$pending" -eq 0 ]; then break; fi
+  sleep 10
+done
+gh pr checks <numero>
+```
+
+Depois confira as conclusões no `statusCheckRollup`; o ciclo só pode
+terminar quando todos os checks aplicáveis estiverem verdes.
+
+Quando qualquer workflow ou check falhar:
+
+1. inspecione o workflow, job e logs da falha com `gh run view` e `gh run view --log-failed`;
+2. identifique a causa comprovada e corrija o código, teste, configuração ou documentação dentro do escopo da entrega;
+3. execute novamente as validações locais afetadas e registre o resultado atual;
+4. faça commit da correção com as regras do repositório, atualize a branch e faça `push`;
+5. confirme que o PR aponta para o novo HEAD e aguarde novamente todos os checks;
+6. repita este ciclo até que todos os workflows e checks obrigatórios terminem com sucesso.
+
+Não trate uma falha como limitação conhecida, não marque a entrega como pronta
+com CI pendente e não crie um segundo PR para corrigir o primeiro. Para falhas
+intermitentes, confirme a causa repetindo o workflow ou a validação local antes
+de concluir que a branch está verde. Se a correção exigir nova autoridade ou
+uma decisão fora do escopo, interrompa e informe o bloqueio sem declarar o PR
+concluído.
+
 Depois, obtenha os metadados reais:
 
 ```bash
@@ -392,7 +431,7 @@ Retorne:
 - resumo dos caminhos alterados;
 - PRD ou `Não aplicável`;
 - requisitos afetados;
-- estado atual dos checks e reviews.
+- estado final dos checks, todos concluídos com sucesso, e reviews.
 
 Não faça merge nem deploy. Comentários de review posteriores são tratados por
 `resolve-pr-pendencies`.
