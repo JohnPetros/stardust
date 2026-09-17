@@ -6,7 +6,7 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 
 ## Apps e Pacotes
 
-- **Web (`apps/web/`)**: Frontend principal em Next.js 15 com React Server Components. UI organizada por domínio seguindo o padrão Widget (View + Hook + Index).
+- **Web (`apps/web/`)**: Frontend principal em Next.js 16 com React Server Components. UI organizada por domínio seguindo o padrão Widget (View + Hook + Index).
 - **Server (`apps/server/`)**: API REST em Hono/Node.js. Processa requisições HTTP, expõe um endpoint MCP autenticado em `/mcp` e executa jobs assíncronos via Inngest.
 - **Studio (`apps/studio/`)**: Aplicação administrativa interna em React Router v7.
 - **Core (`packages/core/`)**: Regras de negócio puras com DDD tático. Sem dependência de frameworks. Contém Entities, Structures, Aggregates, Use Cases e Interfaces.
@@ -29,6 +29,8 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 **Product analytics**: Use cases confirmam fatos de negócio → publicam eventos de domínio → Inngest `AnalyticsFunctions` normaliza payloads e usa `context.event.id` como `$insert_id` → `TrackAnalyticsEventJob` executa `ServerAnalyticsProvider.trackEvent(...)` dentro de `amqp.run(...)` → PostHog. No browser, `ClientProviders` inicializa PostHog com bootstrap da conta autenticada, captura pageviews/session recording e `AuthContextProvider` identifica login/cadastro social ou reseta no logout.
 
 **Web integration tests**: Playwright → app web local em `MODE=testing` → route test-only `/api/tests/server` registra respostas fake HTTP consumidas por SSR e browser → `ClientProviders` injeta `ProfileChannelMock` no `RealtimeContextProvider` → rota real `/auth/sign-up` valida requests, estados de UI e eventos realtime sem depender do backend real nem do Supabase realtime.
+
+**Challenge roadmap**: Web `/challenging/roadmap` → Server `GET /challenging/roadmap` e `GET /challenging/roadmap/:nodeKey/challenges` → `ChallengeRoadmapRouter` compõe os use cases → `SupabaseChallengeRoadmapsRepository` consulta somente a revisão publicada e associações de desafios públicos sem Star → mapper converte as rows para `ChallengeRoadmap` do Core. O grafo publicado é um DAG versionado e imutável em runtime; o Web usa React Flow somente como adaptador visual read-only e oferece a mesma progressão em lista linear acessível. O estado pessoal é resolvido pelos IDs de conclusão enviados pelo servidor e o catálogo completo continua disponível em `/challenging/challenges`.
 
 **Daily active users report**: Studio `DailyActiveUsersChart` → Server `GET /profile/users/daily-active-users-report?days=N` → `GetDailyActiveUsersReportUseCase` → `AnalyticsReportingProvider` → PostHog Query API → `DailyActiveUsersDto [{ date, web, mobile }]`
 
@@ -64,7 +66,7 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 | Tecnologia | Pacote/Ferramenta | Finalidade |
 | :--- | :--- | :--- |
 | **Linguagem** | TypeScript 5.8+ | Tipagem estática em todo o projeto |
-| **Frontend** | Next.js 15, React 19 | Server Components e UI principal |
+| **Frontend** | Next.js 16, React 19 | Server Components e UI principal |
 | **Backend** | Hono, Node.js | API REST leve e rápida |
 | **App Interno** | React Router v7 | Ferramentas administrativas |
 | **Banco de Dados** | Supabase (PostgreSQL) | Persistência relacional e BaaS |
