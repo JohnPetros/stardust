@@ -20,9 +20,15 @@ import type {
   ChallengeCodeExecutionDto,
   ChallengeNavigationDto,
   ChallengesCompletionDto,
+  ChallengeRoadmapDto,
+  RoadmapNodeChallengesDto,
 } from '../domain/structures/dtos'
 
 export interface ChallengingService {
+  fetchChallengeRoadmap(): Promise<RestResponse<ChallengeRoadmapDto>>
+  fetchRoadmapNodeChallenges(
+    nodeKey: Slug,
+  ): Promise<RestResponse<RoadmapNodeChallengesDto>>
   fetchChallengeById(challengeId: Id): Promise<RestResponse<ChallengeDto>>
   fetchChallengeBySlug(challengeSlug: Slug): Promise<RestResponse<ChallengeDto>>
   fetchChallengeNavigation(
