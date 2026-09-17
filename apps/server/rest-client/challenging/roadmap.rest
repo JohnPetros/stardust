@@ -1,0 +1,8 @@
+@URL = {{BASE_URL}}/challenging/roadmap
+@NODE_KEY = operadores
+
+### Fetch published challenge roadmap snapshot
+GET {{URL}}
+
+### Fetch curated challenges for a roadmap node
+GET {{URL}}/nodes/{{NODE_KEY}}/challenges

@@ -1,7 +1,6 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { ChallengesFaker } from '@stardust/core/challenging/entities/fakers'
-import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
 import { UpdateChallengeUseCase } from '@stardust/core/challenging/use-cases'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
@@ -18,14 +17,14 @@ describe('Update Challenge Controller', () => {
   }
 
   let http: Mock<Http<Schema>>
-  let repository: Mock<ChallengesRepository>
+  let useCase: Mock<UpdateChallengeUseCase>
   let controller: UpdateChallengeController
 
   beforeEach(() => {
     jest.restoreAllMocks()
     http = mock()
-    repository = mock()
-    controller = new UpdateChallengeController(repository)
+    useCase = mock()
+    controller = new UpdateChallengeController(useCase)
   })
 
   it('should set route id on dto, update challenge and send response', async () => {
@@ -38,14 +37,12 @@ describe('Update Challenge Controller', () => {
     http.getBody.mockResolvedValue(challengeDto)
     http.send.mockReturnValue(restResponse)
 
-    const executeSpy = jest
-      .spyOn(UpdateChallengeUseCase.prototype, 'execute')
-      .mockResolvedValue(updatedChallengeDto)
+    useCase.execute.mockResolvedValue(updatedChallengeDto)
 
     const response = await controller.handle(http)
 
     expect(challengeDto.id).toBe(challengeId)
-    expect(executeSpy).toHaveBeenCalledWith({ challengeDto })
+    expect(useCase.execute).toHaveBeenCalledWith({ challengeDto })
     expect(http.send).toHaveBeenCalledWith(updatedChallengeDto)
     expect(response).toBe(restResponse)
   })

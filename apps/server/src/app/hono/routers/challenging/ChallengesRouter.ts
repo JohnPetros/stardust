@@ -21,6 +21,7 @@ import {
 import {
   SupabaseChallengesRepository,
   SupabaseChallengeSourcesRepository,
+  SupabaseChallengeRoadmapsRepository,
 } from '@/database/supabase/repositories/challenging'
 import {
   FetchChallengeController,
@@ -39,6 +40,12 @@ import {
   FetchPostedChallengesKpiController,
   FetchAllChallengesController,
 } from '@/rest/controllers/challenging/challenges'
+import {
+  DeleteChallengeUseCase,
+  EditChallengeStarUseCase,
+  UpdateChallengeUseCase,
+} from '@stardust/core/challenging/use-cases'
+import { InngestBroker } from '@/queue/inngest/InngestBroker'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import {
@@ -47,7 +54,6 @@ import {
   ValidationMiddleware,
 } from '../../middlewares'
 import { ProfileMiddleware } from '../../middlewares/ProfileMiddleware'
-import { InngestBroker } from '@/queue/inngest/InngestBroker'
 
 export class ChallengesRouter extends HonoRouter {
   private readonly router = new Hono().basePath('/challenges')
@@ -276,8 +282,11 @@ export class ChallengesRouter extends HonoRouter {
       this.validationMiddleware.validate('json', challengeSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
-        const controller = new UpdateChallengeController(repository)
+        const supabase = http.getSupabase()
+        const repository = new SupabaseChallengesRepository(supabase)
+        const roadmapsRepository = new SupabaseChallengeRoadmapsRepository(supabase)
+        const useCase = new UpdateChallengeUseCase(repository, roadmapsRepository)
+        const controller = new UpdateChallengeController(useCase)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -298,8 +307,11 @@ export class ChallengesRouter extends HonoRouter {
       this.validationMiddleware.validate('json', challengeStarSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
-        const controller = new EditChallengeStarController(repository)
+        const supabase = http.getSupabase()
+        const repository = new SupabaseChallengesRepository(supabase)
+        const roadmapsRepository = new SupabaseChallengeRoadmapsRepository(supabase)
+        const useCase = new EditChallengeStarUseCase(repository, roadmapsRepository)
+        const controller = new EditChallengeStarController(useCase)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -345,8 +357,12 @@ export class ChallengesRouter extends HonoRouter {
       this.challengingMiddleware.verifyChallengeManagementPermission,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
-        const controller = new DeleteChallengeController(repository)
+        const supabase = http.getSupabase()
+        const repository = new SupabaseChallengesRepository(supabase)
+        const roadmapsRepository = new SupabaseChallengeRoadmapsRepository(supabase)
+        const broker = new InngestBroker()
+        const useCase = new DeleteChallengeUseCase(repository, broker, roadmapsRepository)
+        const controller = new DeleteChallengeController(useCase)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },

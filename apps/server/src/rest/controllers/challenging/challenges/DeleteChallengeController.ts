@@ -1,8 +1,5 @@
-import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
-import { DeleteChallengeUseCase } from '@stardust/core/challenging/use-cases'
+import type { DeleteChallengeUseCase } from '@stardust/core/challenging/use-cases'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
-
-import { InngestBroker } from '@/queue/inngest/InngestBroker'
 
 type Schema = {
   routeParams: {
@@ -11,12 +8,11 @@ type Schema = {
 }
 
 export class DeleteChallengeController implements Controller<Schema> {
-  constructor(private readonly repository: ChallengesRepository) {}
+  constructor(private readonly deleteChallenge: DeleteChallengeUseCase) {}
 
   async handle(http: Http<Schema>) {
     const { challengeId } = http.getRouteParams()
-    const useCase = new DeleteChallengeUseCase(this.repository, new InngestBroker())
-    await useCase.execute({ challengeId })
+    await this.deleteChallenge.execute({ challengeId })
     return http.statusNoContent().send()
   }
 }
