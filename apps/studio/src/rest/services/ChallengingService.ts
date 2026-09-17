@@ -10,6 +10,8 @@ import type { ChallengeVote } from '@stardust/core/challenging/structures'
 import type {
   ChallengeCodeExecutionDto,
   ChallengeNavigationDto,
+  ChallengeRoadmapDto,
+  RoadmapNodeChallengesDto,
 } from '@stardust/core/challenging/structures/dtos'
 import type { Challenge } from '@stardust/core/challenging/entities'
 import type { PaginationResponse } from '@stardust/core/global/responses'
@@ -20,6 +22,16 @@ import type {
 
 export const ChallengingService = (restClient: RestClient): IChallengingService => {
   return {
+    async fetchChallengeRoadmap() {
+      return await restClient.get<ChallengeRoadmapDto>('/challenging/roadmap')
+    },
+
+    async fetchRoadmapNodeChallenges(nodeKey: Slug) {
+      return await restClient.get<RoadmapNodeChallengesDto>(
+        `/challenging/roadmap/nodes/${nodeKey.value}/challenges`,
+      )
+    },
+
     async fetchChallengeById(challengeId: Id) {
       return await restClient.get(`/challenging/challenges/id/${challengeId.value}`)
     },
