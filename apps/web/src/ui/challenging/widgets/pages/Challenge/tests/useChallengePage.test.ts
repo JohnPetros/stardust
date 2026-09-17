@@ -7,6 +7,7 @@ import { ChallengeVote } from '@stardust/core/challenging/structures'
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 
 import { useChallengePage } from '../useChallengePage'
+import type { ChallengePageParams } from '../useChallengePage'
 
 const setActiveContent = jest.fn()
 const setChallenge = jest.fn()
@@ -69,6 +70,43 @@ describe('useChallengePage', () => {
     officialSolution: null,
   })
 
+  const createParams = (): ChallengePageParams => ({
+    challengeDto,
+    userChallengeVote: 'none',
+    previousChallengeSlug: null,
+    nextChallengeSlug: null,
+    user: null,
+    isAccountAuthenticated: false,
+    analytics: { trackEvent: jest.fn(), identifyUser: jest.fn(), reset: jest.fn() },
+    navigationProvider: {
+      currentRoute: mockCurrentRoute,
+      goTo,
+      goBack: jest.fn(),
+      refresh: jest.fn(),
+      openExternal: jest.fn(),
+    },
+    challenge: mockChallenge,
+    setChallenge,
+    craftsVislibility: null,
+    setCraftsVislibility,
+    setActiveContent,
+    panelOrder: [],
+    resetPanelsLayout: jest.fn(),
+    resetStore,
+    challengeNavigationAlertDialogRef: { current: null },
+    navigationGuard: {
+      requestNavigation: jest.fn(),
+      confirmNavigation: jest.fn(),
+      cancelNavigation: jest.fn(),
+    },
+    isNew: null,
+    from: null,
+    roadmapNode: null,
+    roadmapRevisionKey: null,
+    roadmapContextLocalstorage: { remove: jest.fn() },
+    secondCounterLocalstorage: { remove: jest.fn() },
+  })
+
   beforeEach(() => {
     jest.clearAllMocks()
     mockCurrentRoute = '/challenging/challenges/example/challenge/solutions/official'
@@ -80,6 +118,7 @@ describe('useChallengePage', () => {
     const { rerender } = renderHook(
       ({ officialSolution }: { officialSolution: ChallengeDto['officialSolution'] }) =>
         useChallengePage({
+          ...createParams(),
           challengeDto: { ...challengeDto, officialSolution },
           userChallengeVote: 'none',
           previousChallengeSlug: null,
@@ -106,6 +145,7 @@ describe('useChallengePage', () => {
 
     const { rerender } = renderHook(() =>
       useChallengePage({
+        ...createParams(),
         challengeDto,
         userChallengeVote: 'none',
         previousChallengeSlug: null,
@@ -134,6 +174,7 @@ describe('useChallengePage', () => {
 
     renderHook(() =>
       useChallengePage({
+        ...createParams(),
         challengeDto,
         userChallengeVote: 'upvote',
         previousChallengeSlug: null,
@@ -159,7 +200,9 @@ describe('useChallengePage', () => {
 
     renderHook(() =>
       useChallengePage({
-        challengeDto,
+        ...createParams(),
+        challengeDto: stableChallenge.dto,
+        challenge: stableChallenge,
         userChallengeVote: 'upvote',
         previousChallengeSlug: null,
         nextChallengeSlug: null,
@@ -174,6 +217,7 @@ describe('useChallengePage', () => {
   it('resets only when the page unmounts, not when it rerenders', () => {
     const { rerender, unmount } = renderHook(() =>
       useChallengePage({
+        ...createParams(),
         challengeDto,
         userChallengeVote: 'none',
         previousChallengeSlug: null,
@@ -197,6 +241,7 @@ describe('useChallengePage', () => {
 
     const { result, unmount } = renderHook(() =>
       useChallengePage({
+        ...createParams(),
         challengeDto,
         userChallengeVote: 'none',
         previousChallengeSlug: null,
@@ -212,5 +257,63 @@ describe('useChallengePage', () => {
     expect(goTo).toHaveBeenCalledTimes(1)
 
     unmount()
+  })
+
+  it('returns to the roadmap only for a validated public challenge context', () => {
+    const contextualChallengeDto = {
+      ...challengeDto,
+      starId: null,
+      isPublic: true,
+    }
+    mockChallenge = Challenge.create(contextualChallengeDto)
+    const analytics = {
+      trackEvent: jest.fn(),
+      identifyUser: jest.fn(),
+      reset: jest.fn(),
+    }
+
+    const { result } = renderHook(() =>
+      useChallengePage({
+        ...createParams(),
+        challengeDto: contextualChallengeDto,
+        challenge: mockChallenge,
+        analytics,
+        from: 'roadmap',
+        roadmapNode: 'basico',
+      }),
+    )
+
+    result.current.handleBackButtonClick()
+
+    expect(goTo).toHaveBeenCalledWith('/challenging/roadmap?node=basico')
+    expect(analytics.trackEvent).toHaveBeenCalledWith('challenge_roadmap_returned', {
+      revisionKey: null,
+      nodeKey: 'basico',
+      challengeId: contextualChallengeDto.id,
+    })
+  })
+
+  it('ignores malformed roadmap context and keeps the catalog exit', () => {
+    const contextualChallengeDto = {
+      ...challengeDto,
+      starId: null,
+      isPublic: true,
+    }
+    mockChallenge = Challenge.create(contextualChallengeDto)
+
+    const { result } = renderHook(() =>
+      useChallengePage({
+        ...createParams(),
+        challengeDto: contextualChallengeDto,
+        challenge: mockChallenge,
+        from: 'roadmap',
+        roadmapNode: '../private-node',
+      }),
+    )
+
+    result.current.handleBackButtonClick()
+
+    expect(goTo).toHaveBeenCalledWith('/challenging/challenges')
+    expect(result.current.backButtonLabel).toBe('Sair do desafio')
   })
 })

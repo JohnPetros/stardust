@@ -13,6 +13,7 @@ type Props = {
   challengeNavigationSlot: ReactNode
   challengeNavigationAlertDialogSlot: ReactNode
   handleBackButtonClick: () => void
+  backButtonLabel?: string
 }
 
 export const ChallengePageView = ({
@@ -23,6 +24,7 @@ export const ChallengePageView = ({
   challengeNavigationSlot,
   challengeNavigationAlertDialogSlot,
   handleBackButtonClick,
+  backButtonLabel = 'Sair do desafio',
 }: Props) => {
   if (!challengeTitle) {
     return <Loading isSmall={false} />
@@ -59,7 +61,7 @@ export const ChallengePageView = ({
             }
             shouldPlayAudio={false}
           >
-            <button type='button'>
+            <button type='button' aria-label={backButtonLabel}>
               <Icon
                 name='arrow-left'
                 className='text-xl text-green-400'

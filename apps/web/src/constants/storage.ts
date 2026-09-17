@@ -7,6 +7,8 @@ export const STORAGE = {
     shouldSkipHomeTransitionAnimation: `${APP_PREFIX}:should-skip-home-transition-animation`,
     shouldFormatConsoleOutput: `${APP_PREFIX}:should-format-console-output`,
     challengeLayout: `${APP_PREFIX}:challenge-layout`,
+    challengeRoadmapViewport: `${APP_PREFIX}:challenge-roadmap-viewport`,
+    challengeRoadmapContext: `${APP_PREFIX}:challenge-roadmap-context`,
     speakerVolume: `${APP_PREFIX}:speaker-volume`,
     speakerRate: `${APP_PREFIX}:speaker-rate`,
     speakerAutoPlay: `${APP_PREFIX}:speaker-auto-play`,

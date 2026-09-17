@@ -6,15 +6,16 @@ import {
   type Request,
 } from '@playwright/test'
 
-import { AccountsFaker } from '../../../../../../packages/core/src/auth/domain/entities/fakers/AccountsFaker'
-import { ChallengeCategoriesFaker } from '../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengeCategoriesFaker'
-import { ChallengesFaker } from '../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengesFaker'
-import { UsersFaker } from '../../../../../../packages/core/src/profile/domain/entities/fakers/UsersFaker'
-import { ServerMock } from '../shared/mocks/ServerMock'
-import type { ServerMockRoute } from '../shared/types/ServerMockRoute'
+import { AccountsFaker } from '../../../../../../../packages/core/src/auth/domain/entities/fakers/AccountsFaker'
+import { ChallengeCategoriesFaker } from '../../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengeCategoriesFaker'
+import { ChallengesFaker } from '../../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengesFaker'
+import { UsersFaker } from '../../../../../../../packages/core/src/profile/domain/entities/fakers/UsersFaker'
+import { ServerMock } from '../../../tests/shared/mocks/ServerMock'
+import type { ServerMockRoute } from '../../../tests/shared/types/ServerMockRoute'
 
 const CHALLENGES_ROUTE = '/challenging/challenges'
 const CHALLENGE_PAGE_ROUTE = `${CHALLENGES_ROUTE}/soma-complementar/challenge`
+const ROADMAP_ROUTE = '/challenging/roadmap'
 const TEST_SERVER_ROUTE = '/api/tests/server'
 const USER_ID = '00000000-0000-4000-8000-000000000601'
 const CATEGORY_ID = '00000000-0000-4000-8000-000000000602'
@@ -109,6 +110,22 @@ function createAuthenticatedRoutes(): ServerMockRoute[] {
       path: `/challenging/challenges/${CHALLENGE_ID}/vote`,
       status: 200,
       body: { challengeVote: 'none' },
+    },
+    {
+      method: 'GET',
+      path: ROADMAP_ROUTE,
+      status: 200,
+      body: {
+        revision: {
+          key: 'challenge-roadmap-v1',
+          version: 1,
+          publishedAt: '2026-09-16T00:00:00.000Z',
+        },
+        nodes: [],
+        edges: [],
+        progress: null,
+        recommendation: null,
+      },
     },
   ]
 }
@@ -248,5 +265,24 @@ test.describe(CHALLENGES_ROUTE, () => {
 
     await expect(page).toHaveURL(CHALLENGE_PAGE_ROUTE)
     await expect(page.getByRole('heading', { name: 'Soma complementar' })).toBeVisible()
+  })
+
+  test('keeps roadmap query and origin navigation separate from the catalog', async ({
+    page,
+    context,
+  }) => {
+    await registerScenario(page, context)
+
+    await page.goto(`${ROADMAP_ROUTE}?node=basico`)
+    await expect(page).toHaveURL(`${ROADMAP_ROUTE}?node=basico`)
+    await expect(
+      page.getByRole('heading', { name: 'Roadmap indisponível' }),
+    ).toBeVisible()
+
+    await page.getByRole('link', { name: 'Todos os desafios' }).click()
+    await expect(page).toHaveURL(/\/challenging\/challenges$/)
+    await expect(
+      page.getByRole('link', { name: 'Soma complementar', exact: true }),
+    ).toHaveAttribute('href', CHALLENGE_PAGE_ROUTE)
   })
 })

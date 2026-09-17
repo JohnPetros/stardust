@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type MutableRefObject } from 'react'
 
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 import { Challenge } from '@stardust/core/challenging/entities'
@@ -6,24 +6,62 @@ import {
   ChallengeCraftsVisibility,
   ChallengeVote,
 } from '@stardust/core/challenging/structures'
-
-import { ROUTES, STORAGE } from '@/constants'
-import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
-import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
-import type { ChallengeContent } from '@/ui/challenging/stores/ChallengeStore/types'
-import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
-import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
+import type { NavigationProvider } from '@stardust/core/global/interfaces'
 import type { User } from '@stardust/core/profile/entities'
-import { useChallengeNavigationGuard } from '@/ui/challenging/hooks/useChallengeNavigationGuard'
-import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
+import type { ClientAnalyticsProvider } from '@stardust/core/analytics/interfaces'
+import { roadmapNodeKeySchema } from '@stardust/validation/challenging/schemas'
 
-type Params = {
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
+import type {
+  ChallengeContent,
+  DockablePanelId,
+} from '@/ui/challenging/stores/ChallengeStore/types'
+
+type Storage = { remove: () => void }
+type NavigationGuard = {
+  requestNavigation: (route: string) => void
+  confirmNavigation: () => void
+  cancelNavigation: () => void
+}
+
+function isValidRoadmapContext(
+  from: string | null,
+  roadmapNode: string | null,
+  challenge: Challenge,
+) {
+  return (
+    from === 'roadmap' &&
+    roadmapNodeKeySchema.safeParse(roadmapNode).success &&
+    challenge.isFromStar.isFalse &&
+    challenge.isPublic.isTrue
+  )
+}
+
+export type ChallengePageParams = {
   challengeDto: ChallengeDto
   userChallengeVote: string
   previousChallengeSlug: string | null
   nextChallengeSlug: string | null
   user: User | null
   isAccountAuthenticated: boolean
+  analytics: ClientAnalyticsProvider
+  navigationProvider: NavigationProvider
+  challenge: Challenge | null
+  setChallenge: (challenge: Challenge) => void
+  craftsVislibility: ChallengeCraftsVisibility | null
+  setCraftsVislibility: (value: ChallengeCraftsVisibility) => void
+  setActiveContent: (content: ChallengeContent) => void
+  panelOrder: DockablePanelId[]
+  resetPanelsLayout: () => void
+  resetStore: () => void
+  challengeNavigationAlertDialogRef: MutableRefObject<AlertDialogRef | null>
+  navigationGuard: NavigationGuard
+  isNew: string | null
+  from: string | null
+  roadmapNode: string | null
+  roadmapRevisionKey: string | null
+  roadmapContextLocalstorage: Storage
+  secondCounterLocalstorage: Storage
 }
 
 type HydrationComparablePayload = {
@@ -44,42 +82,37 @@ type HydrationComparablePayload = {
 }
 
 function toHydrationComparablePayload(
-  challengeDto: ChallengeDto,
-  userChallengeVote: string,
+  dto: ChallengeDto,
+  vote: string,
 ): HydrationComparablePayload {
   return {
-    id: challengeDto.id ?? null,
-    title: challengeDto.title,
-    code: challengeDto.initialCode,
-    difficultyLevel: challengeDto.difficultyLevel,
-    description: challengeDto.description,
-    starId: challengeDto.starId ? challengeDto.starId : null,
-    isPublic: challengeDto.isPublic ?? false,
-    downvotesCount: challengeDto.downvotesCount ?? 0,
-    upvotesCount: challengeDto.upvotesCount ?? 0,
-    completionCount: challengeDto.completionCount ?? 0,
-    categories: challengeDto.categories,
-    testCases: challengeDto.testCases,
-    officialSolution: challengeDto.officialSolution ?? null,
-    userChallengeVote,
+    id: dto.id ?? null,
+    title: dto.title,
+    code: dto.initialCode,
+    difficultyLevel: dto.difficultyLevel,
+    description: dto.description,
+    starId: dto.starId ? dto.starId : null,
+    isPublic: dto.isPublic ?? false,
+    downvotesCount: dto.downvotesCount ?? 0,
+    upvotesCount: dto.upvotesCount ?? 0,
+    completionCount: dto.completionCount ?? 0,
+    categories: dto.categories,
+    testCases: dto.testCases,
+    officialSolution: dto.officialSolution ?? null,
+    userChallengeVote: vote,
   }
 }
 
 function shouldHydrateChallenge(
-  challengeDto: ChallengeDto,
-  userChallengeVote: string,
-  currentChallenge: Challenge | null,
+  dto: ChallengeDto,
+  vote: string,
+  current: Challenge | null,
 ) {
-  if (!currentChallenge) return true
-
-  const incomingPayload = JSON.stringify(
-    toHydrationComparablePayload(challengeDto, userChallengeVote),
+  if (!current) return true
+  return (
+    JSON.stringify(toHydrationComparablePayload(dto, vote)) !==
+    JSON.stringify(toHydrationComparablePayload(current.dto, current.userVote.value))
   )
-  const currentPayload = JSON.stringify(
-    toHydrationComparablePayload(currentChallenge.dto, currentChallenge.userVote.value),
-  )
-
-  return incomingPayload !== currentPayload
 }
 
 export function useChallengePage({
@@ -89,81 +122,77 @@ export function useChallengePage({
   nextChallengeSlug,
   user,
   isAccountAuthenticated,
-}: Params) {
-  const {
-    getChallengeSlice,
-    getCraftsVisibilitySlice,
-    getActiveContentSlice,
-    getPanelOrderSlice,
-    resetPanelsLayout,
-    resetStore,
-  } = useChallengeStore()
-  const { setActiveContent } = getActiveContentSlice()
-  const { challenge, setChallenge } = getChallengeSlice()
-  const { panelOrder } = getPanelOrderSlice()
-  const { craftsVislibility, setCraftsVislibility } = getCraftsVisibilitySlice()
-  const { currentRoute, goTo } = useNavigationProvider()
-  const navigationProvider = useNavigationProvider()
-  const [isNew] = useQueryStringParam('isNew')
-  const secondCounterLocalstorage = useLocalStorage(STORAGE.keys.secondsCounter)
-  const challengeNavigationAlertDialogRef = useRef<AlertDialogRef | null>(null)
+  analytics,
+  navigationProvider,
+  challenge,
+  setChallenge,
+  craftsVislibility,
+  setCraftsVislibility,
+  setActiveContent,
+  panelOrder,
+  resetPanelsLayout,
+  resetStore,
+  challengeNavigationAlertDialogRef,
+  navigationGuard,
+  isNew,
+  from,
+  roadmapNode,
+  roadmapRevisionKey,
+  roadmapContextLocalstorage,
+  secondCounterLocalstorage,
+}: ChallengePageParams) {
+  const { currentRoute, goTo } = navigationProvider
   const resetStoreRef = useRef(resetStore)
   resetStoreRef.current = resetStore
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-  const { requestNavigation, confirmNavigation, cancelNavigation } =
-    useChallengeNavigationGuard({
-      challenge,
-      navigationProvider,
-      dialogRef: challengeNavigationAlertDialogRef,
-    })
+  const { requestNavigation, confirmNavigation, cancelNavigation } = navigationGuard
 
   function handleBackButtonClick() {
     if (!challenge) return
-
     secondCounterLocalstorage.remove()
     resetStore()
-    goTo(challenge.isFromStar.isTrue ? ROUTES.space : ROUTES.challenging.challenges.list)
+    if (roadmapNode && isValidRoadmapContext(from, roadmapNode, challenge)) {
+      analytics.trackEvent('challenge_roadmap_returned', {
+        revisionKey: roadmapRevisionKey,
+        nodeKey: roadmapNode,
+        challengeId: challenge.id.value,
+      })
+      roadmapContextLocalstorage.remove()
+      goTo(`/challenging/roadmap?node=${encodeURIComponent(roadmapNode)}`)
+      return
+    }
+    goTo(challenge.isFromStar.isTrue ? '/space' : '/challenging/challenges')
   }
-
   function handleResetLayoutButtonClick() {
     resetPanelsLayout()
   }
-
   function handlePreviousChallengeClick() {
-    if (!previousChallengeSlug) return
-
-    requestNavigation(ROUTES.challenging.challenges.challenge(previousChallengeSlug))
+    if (previousChallengeSlug)
+      requestNavigation(`/challenging/challenges/${previousChallengeSlug}/challenge`)
   }
-
   function handleNextChallengeClick() {
-    if (!nextChallengeSlug) return
-
-    requestNavigation(ROUTES.challenging.challenges.challenge(nextChallengeSlug))
+    if (nextChallengeSlug)
+      requestNavigation(`/challenging/challenges/${nextChallengeSlug}/challenge`)
   }
-
   function handleOpenSidebar() {
     setIsSidebarOpen(true)
   }
-
   function handleCloseSidebar() {
     setIsSidebarOpen(false)
   }
-
-  function handleSidebarChallengeSelect(challengeSlug: string) {
-    goTo(ROUTES.challenging.challenges.challenge(challengeSlug))
+  function handleSidebarChallengeSelect(slug: string) {
+    goTo(`/challenging/challenges/${slug}/challenge`)
   }
 
   useEffect(() => {
     if (shouldHydrateChallenge(challengeDto, userChallengeVote, challenge)) {
-      const challenge = Challenge.create(challengeDto)
-      challenge.userVote = ChallengeVote.create(userChallengeVote)
-      setChallenge(challenge)
+      const nextChallenge = Challenge.create(challengeDto)
+      nextChallenge.userVote = ChallengeVote.create(userChallengeVote)
+      setChallenge(nextChallenge)
     }
-
     if (challenge && !craftsVislibility && isAccountAuthenticated && user) {
       const isUserChallengeAuthor = challenge.author.isEqualTo(user)
       const isChallengeCompleted = user.hasCompletedChallenge(challenge.id)
-
       setCraftsVislibility(
         ChallengeCraftsVisibility.create({
           canShowComments: challenge.isFromStar.isTrue
@@ -175,15 +204,13 @@ export function useChallengePage({
         }),
       )
     }
-
-    if (challenge && !craftsVislibility && !isAccountAuthenticated) {
+    if (challenge && !craftsVislibility && !isAccountAuthenticated)
       setCraftsVislibility(
         ChallengeCraftsVisibility.create({
           canShowComments: true,
           canShowSolutions: false,
         }),
       )
-    }
   }, [
     challenge,
     craftsVislibility,
@@ -197,38 +224,28 @@ export function useChallengePage({
 
   useEffect(() => {
     if (!challenge) return
-
-    const routeSegments = currentRoute.split('/').filter(Boolean)
-    const solutionsSegmentIndex = routeSegments.lastIndexOf('solutions')
-
-    if (solutionsSegmentIndex !== -1) {
+    const segments = currentRoute.split('/').filter(Boolean)
+    if (segments.lastIndexOf('solutions') !== -1) {
       setActiveContent('solutions')
       return
     }
-
-    const activeContent = routeSegments.at(-1)
+    const activeContent = segments.at(-1)
     if (!activeContent) return
-
     if (activeContent === 'challenge') {
       setActiveContent('description')
       return
     }
-
     if (activeContent !== challenge.slug.value)
       setActiveContent(activeContent as ChallengeContent)
   }, [currentRoute, challenge, setActiveContent])
 
-  useEffect(() => {
-    return () => {
-      resetStoreRef.current()
-    }
-  }, [])
+  useEffect(() => () => resetStoreRef.current(), [])
 
   return {
     challengeTitle: challenge?.title.value ?? null,
     panelOrder,
     shouldHaveConfettiAnimation:
-      challenge && user && isNew ? challenge?.author.isEqualTo(user).isTrue : false,
+      challenge && user && isNew ? challenge.author.isEqualTo(user).isTrue : false,
     previousChallengeSlug,
     nextChallengeSlug,
     isSidebarOpen,
@@ -243,5 +260,9 @@ export function useChallengePage({
     handleOpenSidebar,
     handleCloseSidebar,
     handleSidebarChallengeSelect,
+    backButtonLabel:
+      challenge && roadmapNode && isValidRoadmapContext(from, roadmapNode, challenge)
+        ? 'Voltar ao roadmap'
+        : 'Sair do desafio',
   }
 }

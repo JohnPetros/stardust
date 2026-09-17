@@ -1,16 +1,25 @@
 'use client'
 
+import { useRef } from 'react'
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 
-import { useChallengePage } from './useChallengePage'
-import { ChallengePageView } from './ChallengePageView'
+import { STORAGE } from '@/constants'
 import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
+import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
+import { useQueryStringParam } from '@/ui/global/hooks/useQueryStringParam'
+import { useLocalStorage } from '@/ui/global/hooks/useLocalStorage'
+import { useAnalyticsProvider } from '@/provision/analytics/useAnalyticsProvider'
+import { useChallengeStore } from '@/ui/challenging/stores/ChallengeStore'
+import { useChallengeNavigationGuard } from '@/ui/challenging/hooks/useChallengeNavigationGuard'
+import type { AlertDialogRef } from '@/ui/global/widgets/components/AlertDialog/types'
 import { ChallengeNavigation } from '../../components/ChallengeNavigation'
 import { ChallengesNavigationSidebar } from '../../components/ChallengesNavigationSidebar'
 import { ChallengeNavigationAlertDialog } from '../../components/ChallengeNavigationAlertDialog'
 import { NotesDrawer } from '@/ui/global/widgets/components/NotesDrawer'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { ChallengeLayoutControls } from './ChallengeLayoutControls'
+import { useChallengePage } from './useChallengePage'
+import { ChallengePageView } from './ChallengePageView'
 
 type Props = {
   challengeDto: ChallengeDto
@@ -26,56 +35,79 @@ export const ChallengePage = ({
   nextChallengeSlug,
 }: Props) => {
   const { user, isAccountAuthenticated } = useAuthContext()
-  const {
-    challengeTitle,
-    panelOrder,
-    shouldHaveConfettiAnimation,
-    previousChallengeSlug: pagePreviousChallengeSlug,
-    nextChallengeSlug: pageNextChallengeSlug,
-    isSidebarOpen,
-    challengeSlug,
-    challengeNavigationAlertDialogRef,
-    confirmNavigation,
-    cancelNavigation,
-    handleBackButtonClick,
-    handleResetLayoutButtonClick,
-    handlePreviousChallengeClick,
-    handleNextChallengeClick,
-    handleOpenSidebar,
-    handleCloseSidebar,
-    handleSidebarChallengeSelect,
-  } = useChallengePage({
+  const navigationProvider = useNavigationProvider()
+  const analytics = useAnalyticsProvider()
+  const store = useChallengeStore()
+  const { challenge, setChallenge } = store.getChallengeSlice()
+  const { craftsVislibility, setCraftsVislibility } = store.getCraftsVisibilitySlice()
+  const { setActiveContent } = store.getActiveContentSlice()
+  const { panelOrder } = store.getPanelOrderSlice()
+  const challengeNavigationAlertDialogRef = useRef<AlertDialogRef | null>(null)
+  const [isNew] = useQueryStringParam('isNew')
+  const [from] = useQueryStringParam('from')
+  const [roadmapNode] = useQueryStringParam('node')
+  const secondCounterLocalstorage = useLocalStorage(STORAGE.keys.secondsCounter)
+  const roadmapContextLocalstorage = useLocalStorage<{
+    revisionKey: string
+    nodeKey: string
+    challengeId: string | null
+  }>(STORAGE.keys.challengeRoadmapContext)
+  const roadmapContext = roadmapContextLocalstorage.get()
+  const navigationGuard = useChallengeNavigationGuard({
+    challenge,
+    navigationProvider,
+    dialogRef: challengeNavigationAlertDialogRef,
+  })
+  const state = useChallengePage({
     challengeDto,
-    user,
     userChallengeVote,
     previousChallengeSlug,
     nextChallengeSlug,
+    user,
     isAccountAuthenticated,
+    analytics,
+    navigationProvider,
+    challenge,
+    setChallenge,
+    craftsVislibility,
+    setCraftsVislibility,
+    setActiveContent,
+    panelOrder,
+    resetPanelsLayout: store.resetPanelsLayout,
+    resetStore: store.resetStore,
+    challengeNavigationAlertDialogRef,
+    navigationGuard,
+    isNew,
+    from,
+    roadmapNode,
+    roadmapRevisionKey: roadmapContext?.revisionKey ?? null,
+    roadmapContextLocalstorage,
+    secondCounterLocalstorage,
   })
 
   return (
     <ChallengePageView
-      challengeTitle={challengeTitle}
-      shouldHaveConfettiAnimation={shouldHaveConfettiAnimation}
+      challengeTitle={state.challengeTitle}
+      shouldHaveConfettiAnimation={state.shouldHaveConfettiAnimation}
       layoutControlsSlot={
         <ChallengeLayoutControls
-          panelOrder={panelOrder}
-          onResetLayout={handleResetLayoutButtonClick}
+          panelOrder={state.panelOrder}
+          onResetLayout={state.handleResetLayoutButtonClick}
         />
       }
       challengeNavigationSlot={
         <ChallengeNavigation
-          previousChallengeSlug={pagePreviousChallengeSlug}
-          nextChallengeSlug={pageNextChallengeSlug}
-          onPreviousChallengeClick={handlePreviousChallengeClick}
-          onNextChallengeClick={handleNextChallengeClick}
-          onOpenSidebar={handleOpenSidebar}
+          previousChallengeSlug={state.previousChallengeSlug}
+          nextChallengeSlug={state.nextChallengeSlug}
+          onPreviousChallengeClick={state.handlePreviousChallengeClick}
+          onNextChallengeClick={state.handleNextChallengeClick}
+          onOpenSidebar={state.handleOpenSidebar}
           sidebarSlot={
             <ChallengesNavigationSidebar
-              isOpen={isSidebarOpen}
-              onClose={handleCloseSidebar}
-              currentChallengeSlug={challengeSlug}
-              onChallengeSelect={handleSidebarChallengeSelect}
+              isOpen={state.isSidebarOpen}
+              onClose={state.handleCloseSidebar}
+              currentChallengeSlug={state.challengeSlug}
+              onChallengeSelect={state.handleSidebarChallengeSelect}
             />
           }
         />
@@ -89,12 +121,13 @@ export const ChallengePage = ({
       }
       challengeNavigationAlertDialogSlot={
         <ChallengeNavigationAlertDialog
-          dialogRef={challengeNavigationAlertDialogRef}
-          onConfirm={confirmNavigation}
-          onCancel={cancelNavigation}
+          dialogRef={state.challengeNavigationAlertDialogRef}
+          onConfirm={state.confirmNavigation}
+          onCancel={state.cancelNavigation}
         />
       }
-      handleBackButtonClick={handleBackButtonClick}
+      handleBackButtonClick={state.handleBackButtonClick}
+      backButtonLabel={state.backButtonLabel}
     />
   )
 }

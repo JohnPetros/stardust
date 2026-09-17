@@ -15,6 +15,9 @@ export const ROUTES = {
   space: '/space',
   shop: '/shop',
   challenging: {
+    roadmap: '/challenging/roadmap',
+    roadmapNode: (nodeKey: string) =>
+      `/challenging/roadmap?node=${encodeURIComponent(nodeKey)}`,
     challenges: {
       list: '/challenging/challenges',
       challenge: (challengeSlug: string) =>
