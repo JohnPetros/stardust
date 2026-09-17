@@ -94,13 +94,15 @@ export class SupabaseFeedbackReportsRepository
 
   async list(params: FeedbackReportsListingParams): Promise<FeedbackReportsPageDto> {
     const { data, error } = await this.supabase.rpc('list_feedback_reports', {
-      p_search: params.search?.value ?? params.authorName?.value ?? null,
-      p_intent: params.intent?.value as SupabaseFeedbackReport['intent'] | null,
-      p_status: params.status?.value ?? null,
-      p_created_at_start:
-        (params.createdAtPeriod ?? params.sentAtPeriod)?.startDate.toISOString() ?? null,
-      p_created_at_end:
-        (params.createdAtPeriod ?? params.sentAtPeriod)?.endDate.toISOString() ?? null,
+      p_search: params.search?.value ?? params.authorName?.value,
+      p_intent: params.intent?.value as SupabaseFeedbackReport['intent'] | undefined,
+      p_status: params.status?.value,
+      p_created_at_start: (
+        params.createdAtPeriod ?? params.sentAtPeriod
+      )?.startDate.toISOString(),
+      p_created_at_end: (
+        params.createdAtPeriod ?? params.sentAtPeriod
+      )?.endDate.toISOString(),
       p_page: params.page?.value ?? 1,
       p_items_per_page: params.itemsPerPage?.value ?? 20,
     })
@@ -175,13 +177,19 @@ export class SupabaseFeedbackReportsRepository
     report: FeedbackReport,
     expectedStatus: FeedbackReportStatus,
   ): Promise<FeedbackReport> {
-    const { data, error } = await this.supabase.rpc('change_feedback_report_status', {
-      p_request: {
-        reportId: report.id.value,
-        expectedStatus: expectedStatus.value,
-        status: report.status.value,
-      } as unknown as Json,
-    })
+    // The official Dev-generated Database.ts omits this function even though
+    // the versioned local migration exposes it. Keep the existing cast isolated
+    // to this legacy RPC until the remote metadata is reconciled.
+    const { data, error } = await this.supabase.rpc(
+      'change_feedback_report_status' as never,
+      {
+        p_request: {
+          reportId: report.id.value,
+          expectedStatus: expectedStatus.value,
+          status: report.status.value,
+        } as unknown as Json,
+      } as never,
+    )
     if (error) this.handleQueryPostgresError(error)
     const result = data as unknown as Record<string, unknown>
     return FeedbackReport.create({
@@ -250,7 +258,7 @@ export class SupabaseFeedbackReportsRepository
   }): Promise<{ items: FeedbackReport[]; total: number }> {
     const { data, error } = await this.supabase.rpc('list_user_feedback_reports', {
       p_author_id: input.authorId.value,
-      p_status: input.status?.value ?? null,
+      p_status: input.status?.value,
       p_page: input.page.value,
       p_items_per_page: input.itemsPerPage.value,
     })

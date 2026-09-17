@@ -269,6 +269,194 @@ create table public.challenges (
 ) TABLESPACE pg_default;
 
 -- =====================================================
+-- CHALLENGE ROADMAP TABLES (References categories, challenges)
+-- =====================================================
+
+create table public.challenge_roadmap_revisions (
+  id uuid not null default gen_random_uuid (),
+  key text not null,
+  version integer not null,
+  status text not null default 'draft'::text,
+  published_at timestamp with time zone,
+  constraint challenge_roadmap_revisions_pkey primary key (id),
+  constraint challenge_roadmap_revisions_key_version_key unique (key, version),
+  constraint challenge_roadmap_revisions_version_check check (version > 0),
+  constraint challenge_roadmap_revisions_status_check check (status in ('draft', 'published')),
+  constraint challenge_roadmap_revisions_publication_check check (
+    (status = 'published' and published_at is not null)
+    or (status = 'draft' and published_at is null)
+  )
+) TABLESPACE pg_default;
+
+create unique index challenge_roadmap_revisions_one_published_idx
+  on public.challenge_roadmap_revisions (status)
+  where status = 'published';
+
+create index challenge_roadmap_revisions_active_idx
+  on public.challenge_roadmap_revisions (id)
+  where status = 'published';
+
+create table public.challenge_roadmap_nodes (
+  id uuid not null default gen_random_uuid (),
+  revision_id uuid not null,
+  key text not null,
+  category_id uuid not null,
+  position_x double precision not null,
+  position_y double precision not null,
+  recommendation_order integer not null,
+  state text not null default 'content'::text,
+  constraint challenge_roadmap_nodes_pkey primary key (id),
+  constraint challenge_roadmap_nodes_revision_id_key unique (revision_id, id),
+  constraint challenge_roadmap_nodes_revision_key_key unique (revision_id, key),
+  constraint challenge_roadmap_nodes_revision_category_key unique (revision_id, category_id),
+  constraint challenge_roadmap_nodes_revision_recommendation_order_key unique (
+    revision_id,
+    recommendation_order
+  ),
+  constraint challenge_roadmap_nodes_revision_id_fkey
+    foreign key (revision_id) references challenge_roadmap_revisions (id) on delete restrict,
+  constraint challenge_roadmap_nodes_category_id_fkey
+    foreign key (category_id) references categories (id) on delete restrict,
+  constraint challenge_roadmap_nodes_recommendation_order_check check (recommendation_order > 0),
+  constraint challenge_roadmap_nodes_state_check check (state in ('content', 'comingSoon'))
+) TABLESPACE pg_default;
+
+create index challenge_roadmap_nodes_revision_idx
+  on public.challenge_roadmap_nodes (revision_id);
+
+create table public.challenge_roadmap_edges (
+  revision_id uuid not null,
+  prerequisite_node_id uuid not null,
+  dependent_node_id uuid not null,
+  constraint challenge_roadmap_edges_pkey primary key (
+    revision_id,
+    prerequisite_node_id,
+    dependent_node_id
+  ),
+  constraint challenge_roadmap_edges_revision_id_fkey
+    foreign key (revision_id) references challenge_roadmap_revisions (id) on delete restrict,
+  constraint challenge_roadmap_edges_prerequisite_node_fkey
+    foreign key (revision_id, prerequisite_node_id)
+    references challenge_roadmap_nodes (revision_id, id) on delete restrict,
+  constraint challenge_roadmap_edges_dependent_node_fkey
+    foreign key (revision_id, dependent_node_id)
+    references challenge_roadmap_nodes (revision_id, id) on delete restrict,
+  constraint challenge_roadmap_edges_no_self_edge_check check (prerequisite_node_id <> dependent_node_id)
+) TABLESPACE pg_default;
+
+create index challenge_roadmap_edges_prerequisite_idx
+  on public.challenge_roadmap_edges (revision_id, prerequisite_node_id);
+create index challenge_roadmap_edges_dependent_idx
+  on public.challenge_roadmap_edges (revision_id, dependent_node_id);
+
+create table public.challenge_roadmap_node_challenges (
+  revision_id uuid not null,
+  node_id uuid not null,
+  challenge_id uuid not null,
+  position integer not null,
+  constraint challenge_roadmap_node_challenges_pkey primary key (revision_id, node_id, challenge_id),
+  constraint challenge_roadmap_node_challenges_revision_challenge_key unique (revision_id, challenge_id),
+  constraint challenge_roadmap_node_challenges_node_position_key unique (node_id, position),
+  constraint challenge_roadmap_node_challenges_revision_id_fkey
+    foreign key (revision_id) references challenge_roadmap_revisions (id) on delete restrict,
+  constraint challenge_roadmap_node_challenges_node_fkey
+    foreign key (revision_id, node_id)
+    references challenge_roadmap_nodes (revision_id, id) on delete restrict,
+  constraint challenge_roadmap_node_challenges_challenge_id_fkey
+    foreign key (challenge_id) references challenges (id) on delete restrict,
+  constraint challenge_roadmap_node_challenges_position_check check (position > 0)
+) TABLESPACE pg_default;
+
+create index challenge_roadmap_node_challenges_node_position_idx
+  on public.challenge_roadmap_node_challenges (node_id, position);
+create index challenge_roadmap_node_challenges_challenge_idx
+  on public.challenge_roadmap_node_challenges (challenge_id);
+
+create or replace function public.prevent_published_challenge_roadmap_mutation()
+returns trigger
+language plpgsql
+set search_path = public
+as $$
+declare
+  old_revision_status text;
+  new_revision_status text;
+begin
+  if TG_TABLE_NAME = 'challenge_roadmap_revisions' then
+    if OLD.status = 'published' then
+      raise exception 'Published challenge roadmap revisions are immutable';
+    end if;
+    if TG_OP = 'DELETE' then return OLD; end if;
+    return NEW;
+  end if;
+
+  if TG_OP <> 'INSERT' then
+    select status into old_revision_status
+      from public.challenge_roadmap_revisions where id = OLD.revision_id;
+    if old_revision_status = 'published' then
+      raise exception 'Published challenge roadmap rows are immutable';
+    end if;
+  end if;
+
+  if TG_OP <> 'DELETE' then
+    select status into new_revision_status
+      from public.challenge_roadmap_revisions where id = NEW.revision_id;
+    if new_revision_status = 'published' then
+      raise exception 'Published challenge roadmap rows are immutable';
+    end if;
+    return NEW;
+  end if;
+  return OLD;
+end;
+$$;
+
+create trigger challenge_roadmap_revisions_immutable_trigger
+before update or delete on public.challenge_roadmap_revisions
+for each row execute function public.prevent_published_challenge_roadmap_mutation();
+create trigger challenge_roadmap_nodes_immutable_trigger
+before insert or update or delete on public.challenge_roadmap_nodes
+for each row execute function public.prevent_published_challenge_roadmap_mutation();
+create trigger challenge_roadmap_edges_immutable_trigger
+before insert or update or delete on public.challenge_roadmap_edges
+for each row execute function public.prevent_published_challenge_roadmap_mutation();
+create trigger challenge_roadmap_node_challenges_immutable_trigger
+before insert or update or delete on public.challenge_roadmap_node_challenges
+for each row execute function public.prevent_published_challenge_roadmap_mutation();
+
+alter table public.challenge_roadmap_revisions enable row level security;
+alter table public.challenge_roadmap_nodes enable row level security;
+alter table public.challenge_roadmap_edges enable row level security;
+alter table public.challenge_roadmap_node_challenges enable row level security;
+
+create policy "Published challenge roadmap revisions are readable"
+on public.challenge_roadmap_revisions for select to anon, authenticated
+using (status = 'published');
+create policy "Published challenge roadmap nodes are readable"
+on public.challenge_roadmap_nodes for select to anon, authenticated
+using (exists (select 1 from public.challenge_roadmap_revisions revision
+  where revision.id = challenge_roadmap_nodes.revision_id and revision.status = 'published'));
+create policy "Published challenge roadmap edges are readable"
+on public.challenge_roadmap_edges for select to anon, authenticated
+using (exists (select 1 from public.challenge_roadmap_revisions revision
+  where revision.id = challenge_roadmap_edges.revision_id and revision.status = 'published'));
+create policy "Published challenge roadmap challenges are readable"
+on public.challenge_roadmap_node_challenges for select to anon, authenticated
+using (exists (select 1 from public.challenge_roadmap_revisions revision
+  where revision.id = challenge_roadmap_node_challenges.revision_id and revision.status = 'published'));
+
+revoke all on table
+  public.challenge_roadmap_revisions, public.challenge_roadmap_nodes,
+  public.challenge_roadmap_edges, public.challenge_roadmap_node_challenges
+from anon, authenticated;
+grant select on table
+  public.challenge_roadmap_revisions, public.challenge_roadmap_nodes,
+  public.challenge_roadmap_edges, public.challenge_roadmap_node_challenges
+to anon, authenticated;
+grant all on table
+  public.challenge_roadmap_revisions, public.challenge_roadmap_nodes,
+  public.challenge_roadmap_edges, public.challenge_roadmap_node_challenges
+to service_role;
+
+-- =====================================================
 -- SOLUTIONS TABLE (References challenges, users)
 -- =====================================================
 
