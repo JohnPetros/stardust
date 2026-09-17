@@ -335,7 +335,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          hermes_url="${HERMES_API_URL%/}/p/code-reviewer/v1/runs"
+          hermes_url="${HERMES_API_URL%/}/v1/runs"
           session_scope="${SCOPE//\//-}"
           session_id="${REPOSITORY//\//-}-pr-${PR_NUMBER}-${HEAD_SHA}-${session_scope}-attempt-${RUN_ATTEMPT}"
           idempotency_key="${REPOSITORY}:pr:${PR_NUMBER}:${HEAD_SHA}:${SCOPE}:attempt:${RUN_ATTEMPT}"
@@ -533,7 +533,7 @@ jobs:
               "$body" "$scope" "$summary" "$count"
           done
 
-          hermes_url="${HERMES_API_URL%/}/p/code-reviewer/v1/runs"
+          hermes_url="${HERMES_API_URL%/}/v1/runs"
           session_id="${REPOSITORY//\//-}-pr-${PR_NUMBER}-${HEAD_SHA}-conclusion-attempt-${GITHUB_RUN_ATTEMPT}"
           idempotency_key="${REPOSITORY}:pr:${PR_NUMBER}:${HEAD_SHA}:conclusion:attempt:${GITHUB_RUN_ATTEMPT}"
 
@@ -597,7 +597,7 @@ jobs:
                 sleep 10
                 ;;
               *)
-                echo "Unexpected Hermes conclusion status: $status"
+                echo "Unexpected Hermes run status: $status"
                 jq . <<< "$run"
                 exit 1
                 ;;
