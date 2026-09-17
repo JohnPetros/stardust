@@ -6,6 +6,8 @@ on:
       - main
     types:
       - opened
+      - synchronize
+      - reopened
 
 permissions:
   actions: read
