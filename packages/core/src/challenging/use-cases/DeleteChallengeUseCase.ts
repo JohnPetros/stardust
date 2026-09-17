@@ -1,9 +1,12 @@
 import type { Broker } from '#global/interfaces/Broker'
 import type { UseCase } from '#global/interfaces/UseCase'
-import type { ChallengesRepository } from '../interfaces'
+import type { ChallengeRoadmapsRepository, ChallengesRepository } from '../interfaces'
 import { Id } from '#global/domain/structures/index'
 import { ChallengeDeletedEvent } from '../domain/events'
-import { ChallengeNotFoundError } from '../domain/errors'
+import {
+  ChallengeBelongsToPublishedRoadmapError,
+  ChallengeNotFoundError,
+} from '../domain/errors'
 
 type Request = {
   challengeId: string
@@ -13,24 +16,41 @@ export class DeleteChallengeUseCase implements UseCase<Request> {
   constructor(
     private readonly repository: ChallengesRepository,
     private readonly broker: Broker,
+    private readonly roadmapsRepository: ChallengeRoadmapsRepository,
   ) {}
 
   async execute({ challengeId }: Request) {
     const challenge = await this.findChallenge(Id.create(challengeId))
+    await this.ensureChallengeIsNotPublishedInRoadmap(challenge.id)
+    await this.removeAndPublish(challenge)
+  }
+
+  private async removeAndPublish(
+    challenge: Awaited<ReturnType<typeof this.findChallenge>>,
+  ) {
     await this.repository.remove(challenge)
-    await this.broker.publish(
-      new ChallengeDeletedEvent({
-        challengeId: challenge.id.value,
-        challengeSlug: challenge.slug.value,
-        challengeTitle: challenge.title.value,
-        challengeAuthor: challenge.author.dto,
-      }),
-    )
+    await this.broker.publish(this.createDeletedEvent(challenge))
+  }
+
+  private createDeletedEvent(challenge: Awaited<ReturnType<typeof this.findChallenge>>) {
+    return new ChallengeDeletedEvent({
+      challengeId: challenge.id.value,
+      challengeSlug: challenge.slug.value,
+      challengeTitle: challenge.title.value,
+      challengeAuthor: challenge.author.dto,
+    })
   }
 
   private async findChallenge(challengeId: Id) {
     const challenge = await this.repository.findById(challengeId)
     if (!challenge) throw new ChallengeNotFoundError()
     return challenge
+  }
+
+  private async ensureChallengeIsNotPublishedInRoadmap(challengeId: Id) {
+    if (
+      (await this.roadmapsRepository.hasChallengeInPublishedRevision(challengeId)).isTrue
+    )
+      throw new ChallengeBelongsToPublishedRoadmapError()
   }
 }

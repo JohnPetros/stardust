@@ -4,11 +4,14 @@ import { ChallengesFaker } from '#challenging/domain/entities/fakers/ChallengesF
 import { ChallengeNotFoundError } from '#challenging/domain/errors/ChallengeNotFoundError'
 import { ChallengeAlreadyExistsError } from '#challenging/domain/errors/ChallengeAlreadyExistsError'
 import type { ChallengesRepository } from '#challenging/interfaces/ChallengesRepository'
+import type { ChallengeRoadmapsRepository } from '#challenging/interfaces/ChallengeRoadmapsRepository'
+import { Logical } from '#global/domain/structures/Logical'
 import type { ChallengeDto } from '../../domain/entities/dtos'
 import { UpdateChallengeUseCase } from '../UpdateChallengeUseCase'
 
 describe('Update Challenge Use Case', () => {
   let repository: Mock<ChallengesRepository>
+  let roadmapsRepository: Mock<ChallengeRoadmapsRepository>
   let useCase: UpdateChallengeUseCase
 
   beforeEach(() => {
@@ -16,7 +19,34 @@ describe('Update Challenge Use Case', () => {
     repository.findById.mockImplementation()
     repository.findBySlug.mockImplementation()
     repository.replace.mockImplementation()
-    useCase = new UpdateChallengeUseCase(repository)
+    roadmapsRepository = mock<ChallengeRoadmapsRepository>()
+    roadmapsRepository.hasChallengeInPublishedRevision.mockResolvedValue(
+      Logical.create(false),
+    )
+    useCase = new UpdateChallengeUseCase(repository, roadmapsRepository)
+  })
+
+  it('should reject privatizing a challenge from the published roadmap', async () => {
+    const challenge = ChallengesFaker.fake({ isPublic: true })
+    const privateDto = { ...challenge.dto, isPublic: false }
+    repository.findById.mockResolvedValue(challenge)
+    roadmapsRepository.hasChallengeInPublishedRevision.mockResolvedValue(
+      Logical.create(true),
+    )
+
+    await expect(useCase.execute({ challengeDto: privateDto })).rejects.toThrow(
+      'roadmap publicado',
+    )
+    expect(repository.replace).not.toHaveBeenCalled()
+  })
+
+  it('does not consult roadmap membership for a public update', async () => {
+    const challenge = ChallengesFaker.fake({ isPublic: true })
+    repository.findById.mockResolvedValue(challenge)
+
+    await useCase.execute({ challengeDto: { ...challenge.dto, isPublic: true } })
+
+    expect(roadmapsRepository.hasChallengeInPublishedRevision).not.toHaveBeenCalled()
   })
 
   it('should throw an error if the challenge does not exist', async () => {

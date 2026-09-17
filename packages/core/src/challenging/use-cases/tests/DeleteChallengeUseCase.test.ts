@@ -1,6 +1,8 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { ChallengesRepository } from '#challenging/interfaces/ChallengesRepository'
+import type { ChallengeRoadmapsRepository } from '#challenging/interfaces/ChallengeRoadmapsRepository'
+import { Logical } from '#global/domain/structures/Logical'
 import { ChallengeNotFoundError } from '#challenging/domain/errors/ChallengeNotFoundError'
 import { ChallengesFaker } from '#challenging/domain/entities/fakers/ChallengesFaker'
 import { ChallengeDeletedEvent } from '#challenging/domain/events/ChallengeDeletedEvent'
@@ -10,6 +12,7 @@ import { DeleteChallengeUseCase } from '../DeleteChallengeUseCase'
 describe('Delete challenge use case', () => {
   let broker: Mock<Broker>
   let repository: Mock<ChallengesRepository>
+  let roadmapsRepository: Mock<ChallengeRoadmapsRepository>
   let useCase: DeleteChallengeUseCase
 
   beforeEach(() => {
@@ -18,8 +21,26 @@ describe('Delete challenge use case', () => {
     repository = mock<ChallengesRepository>()
     repository.findById.mockImplementation()
     repository.remove.mockImplementation()
+    roadmapsRepository = mock<ChallengeRoadmapsRepository>()
+    roadmapsRepository.hasChallengeInPublishedRevision.mockResolvedValue(
+      Logical.create(false),
+    )
 
-    useCase = new DeleteChallengeUseCase(repository, broker)
+    useCase = new DeleteChallengeUseCase(repository, broker, roadmapsRepository)
+  })
+
+  it('should reject deleting a challenge from the published roadmap', async () => {
+    const challenge = ChallengesFaker.fake()
+    repository.findById.mockResolvedValue(challenge)
+    roadmapsRepository.hasChallengeInPublishedRevision.mockResolvedValue(
+      Logical.create(true),
+    )
+
+    await expect(useCase.execute({ challengeId: challenge.id.value })).rejects.toThrow(
+      'roadmap publicado',
+    )
+    expect(repository.remove).not.toHaveBeenCalled()
+    expect(broker.publish).not.toHaveBeenCalled()
   })
 
   it('should throw an error if the challenge does not exist', async () => {
