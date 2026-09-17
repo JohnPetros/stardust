@@ -10,7 +10,10 @@ config({ path: '.env.testing' })
 const jestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   preset: 'ts-jest',
-  testPathIgnorePatterns: ['<rootDir>/src/app/tests/'],
+  testPathIgnorePatterns: [
+    '<rootDir>/src/app/tests/',
+    '<rootDir>/src/app/.*/tests/.*\\.pw\\.test\\.ts$',
+  ],
   testEnvironment: 'jest-environment-jsdom',
   testEnvironmentOptions: {
     customExportConditions: [],

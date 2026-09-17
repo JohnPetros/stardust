@@ -12,7 +12,7 @@ process.env.NEXT_PUBLIC_STARDUST_WEB_URL = baseURL
 process.env.NEXT_PUBLIC_STARDUST_SERVER_URL = `${baseURL}/api/tests/server`
 
 export default defineConfig({
-  testDir: './src/app/tests',
+  testDir: './src/app',
   testMatch: '**/*.test.ts',
   tsconfig: './tsconfig.playwright.json',
   fullyParallel: false,
@@ -32,7 +32,7 @@ export default defineConfig({
   ],
   webServer: {
     command:
-      'cross-env MODE=testing PORT=3100 NEXT_IGNORE_INCORRECT_LOCKFILE=1 NEXT_PUBLIC_STARDUST_WEB_URL=http://127.0.0.1:3100 NEXT_PUBLIC_STARDUST_SERVER_URL=http://127.0.0.1:3100/api/tests/server next dev --hostname 127.0.0.1 --port 3100',
+      './node_modules/.bin/cross-env MODE=testing PORT=3100 NEXT_IGNORE_INCORRECT_LOCKFILE=1 NEXT_PUBLIC_STARDUST_WEB_URL=http://127.0.0.1:3100 NEXT_PUBLIC_STARDUST_SERVER_URL=http://127.0.0.1:3100/api/tests/server ./node_modules/.bin/next dev --hostname 127.0.0.1 --port 3100',
     url: `${baseURL}/api/tests/server`,
     reuseExistingServer: false,
     timeout: 300000,

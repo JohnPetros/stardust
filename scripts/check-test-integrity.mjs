@@ -11,10 +11,12 @@ const SOURCE_PATH_PATTERN = /^(?:apps|packages)\/([^/]+)\/src\/.*\.[cm]?[jt]sx?$
 const ALLOWED_TEST_PATH_PATTERNS = [
   /^scripts\/tests\/[^/]+\.(?:test|spec)\.[cm]?[jt]sx?$/,
   /^apps\/server\/src\/tests\/routes(?:\/|$)/,
+  /^apps\/server\/src\/database\/supabase\/mappers\/(?:[^/]+\/)*tests(?:\/|$)/,
   /^apps\/server\/src\/app\/hono\/routers\/(?:[^/]+\/)*tests(?:\/|$)/,
   /^apps\/web\/src\/app\/.*\/tests(?:\/|$)/,
   /^(?:apps|packages)\/[^/]+\/src\/(?:[^/]+\/)*domain\/(?:entities|structures|aggregates)\/tests(?:\/|$)/,
   /^(?:apps|packages)\/[^/]+\/src\/(?:[^/]+\/)*use-cases\/tests(?:\/|$)/,
+  /^(?:apps|packages)\/[^/]+\/src\/(?:[^/]+\/)*schemas\/tests(?:\/|$)/,
   /^apps\/(?:server|web)\/src\/rest\/controllers\/(?:[^/]+\/)*tests(?:\/|$)/,
   /^apps\/web\/src\/rpc\/actions\/(?:[^/]+\/)*tests(?:\/|$)/,
   /^apps\/(?:server|web)\/src\/ai\/(?:[^/]+\/)*tools\/(?:[^/]+\/)*tests(?:\/|$)/,

@@ -20,6 +20,9 @@ const nextConfig = {
   experimental: {
     serverSourceMaps: false,
     optimizePackageImports: ['@phosphor-icons/react/dist/ssr'],
+    instantInsights: {
+      validationLevel: 'warning',
+    },
   },
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   images: {

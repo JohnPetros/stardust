@@ -106,5 +106,8 @@ prd.md
 .mcp.json
 .playwright-mcp
 
+# CLIs
+.playwright-cli
+
 # Terminal Paste Image folder
 .cp-images/
