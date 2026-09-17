@@ -1,0 +1,28 @@
+services:
+  kepler:
+    image: 'nousresearch/hermes-agent:latest'
+    restart: unless-stopped
+    command: 'gateway run'
+    environment:
+      API_SERVER_ENABLED: 'true'
+      API_SERVER_HOST: 0.0.0.0
+      API_SERVER_PORT: '8642'
+      API_SERVER_KEY: '${API_SERVER_KEY}'
+      HERMES_DASHBOARD: '1'
+      HERMES_DASHBOARD_HOST: 0.0.0.0
+      HERMES_DASHBOARD_PORT: '9119'
+      HERMES_DASHBOARD_BASIC_AUTH_USERNAME: '${DASHBOARD_USERNAME}'
+      HERMES_DASHBOARD_BASIC_AUTH_PASSWORD: '${DASHBOARD_PASSWORD}'
+      HERMES_DASHBOARD_BASIC_AUTH_SECRET: '${DASHBOARD_AUTH_SECRET}'
+    expose:
+      - '8642'
+      - '9119'
+    volumes:
+      - 'kepler_data:/opt/data'
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+volumes:
+  kepler_data: null
