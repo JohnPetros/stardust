@@ -604,4 +604,4 @@ jobs:
             esac
           done
 
-          echo "Published the final conclusion for $HEAD_SHA."
+          echo "Published the final conclusion for $HEAD_SHA. "
