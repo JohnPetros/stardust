@@ -11,6 +11,12 @@ export { ChallengeNavigation } from './ChallengeNavigation'
 export { ChallengesCompletion } from './ChallengesCompletion'
 export { ChallengeCodeExecution } from './ChallengeCodeExecution'
 export { ChallengeCodeExecutionError } from './ChallengeCodeExecutionError'
+export { ChallengeRoadmap } from './ChallengeRoadmap'
+export type {
+  ChallengeRoadmapDto,
+  RoadmapNodeDto,
+  RoadmapNodeChallengesDto,
+} from './dtos'
 export {
   ChallengeCodeExecutionStatus,
   type ChallengeCodeExecutionStatusValue,

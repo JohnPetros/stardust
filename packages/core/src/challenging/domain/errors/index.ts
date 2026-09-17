@@ -10,3 +10,5 @@ export { ChallengeSourceAlreadyExistsError } from './ChallengeSourceAlreadyExist
 export { ChallengeProblemNotFoundError } from './ChallengeProblemNotFoundError'
 export { ChallengeIsAlreadyStarError } from './ChallengeIsAlreadyStarError'
 export { ChallengeIsNotStarChallengeError } from './ChallengeIsNotStarChallengeError'
+export { ChallengeRoadmapNotFoundError } from './ChallengeRoadmapNotFoundError'
+export { ChallengeBelongsToPublishedRoadmapError } from './ChallengeBelongsToPublishedRoadmapError'
