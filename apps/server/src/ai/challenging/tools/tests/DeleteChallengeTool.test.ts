@@ -1,7 +1,10 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { ChallengeNotFoundError } from '@stardust/core/challenging/errors'
-import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
+import type {
+  ChallengeRoadmapsRepository,
+  ChallengesRepository,
+} from '@stardust/core/challenging/interfaces'
 import {
   DeleteChallengeUseCase,
   GetChallengeUseCase,
@@ -12,14 +15,16 @@ import { DeleteChallengeTool } from '../DeleteChallengeTool'
 
 describe('Delete Challenge Tool', () => {
   let repository: Mock<ChallengesRepository>
+  let roadmapsRepository: Mock<ChallengeRoadmapsRepository>
   let mcp: Mock<Mcp<any>>
   let tool: DeleteChallengeTool
 
   beforeEach(() => {
     jest.restoreAllMocks()
     repository = mock()
+    roadmapsRepository = mock()
     mcp = mock()
-    tool = new DeleteChallengeTool(repository)
+    tool = new DeleteChallengeTool(repository, roadmapsRepository)
   })
 
   it('should delete challenge when account is author and confirmation is true', async () => {

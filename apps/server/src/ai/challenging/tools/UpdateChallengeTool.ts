@@ -1,7 +1,10 @@
 import { Challenge } from '@stardust/core/challenging/entities'
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 import { ChallengeNotFoundError } from '@stardust/core/challenging/errors'
-import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
+import type {
+  ChallengeRoadmapsRepository,
+  ChallengesRepository,
+} from '@stardust/core/challenging/interfaces'
 import {
   GetChallengeUseCase,
   UpdateChallengeUseCase,
@@ -22,7 +25,10 @@ type Input = {
 }
 
 export class UpdateChallengeTool implements Tool<Input, ChallengeDto> {
-  constructor(private readonly repository: ChallengesRepository) {}
+  constructor(
+    private readonly repository: ChallengesRepository,
+    private readonly roadmapsRepository: ChallengeRoadmapsRepository,
+  ) {}
 
   async handle(mcp: Mcp<Input>): Promise<ChallengeDto> {
     const accountId = mcp.getAccountId()
@@ -47,7 +53,10 @@ export class UpdateChallengeTool implements Tool<Input, ChallengeDto> {
       throw new ChallengeNotFoundError()
     }
 
-    const updateChallengeUseCase = new UpdateChallengeUseCase(this.repository)
+    const updateChallengeUseCase = new UpdateChallengeUseCase(
+      this.repository,
+      this.roadmapsRepository,
+    )
 
     return await updateChallengeUseCase.execute({
       challengeDto: {

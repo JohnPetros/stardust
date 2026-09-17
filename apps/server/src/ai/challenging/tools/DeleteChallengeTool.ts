@@ -1,6 +1,9 @@
 import { Challenge } from '@stardust/core/challenging/entities'
 import { ChallengeNotFoundError } from '@stardust/core/challenging/errors'
-import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
+import type {
+  ChallengeRoadmapsRepository,
+  ChallengesRepository,
+} from '@stardust/core/challenging/interfaces'
 import {
   DeleteChallengeUseCase,
   GetChallengeUseCase,
@@ -16,7 +19,10 @@ type Input = {
 }
 
 export class DeleteChallengeTool implements Tool<Input> {
-  constructor(private readonly repository: ChallengesRepository) {}
+  constructor(
+    private readonly repository: ChallengesRepository,
+    private readonly roadmapsRepository: ChallengeRoadmapsRepository,
+  ) {}
 
   async handle(mcp: Mcp<Input>): Promise<void> {
     const accountId = mcp.getAccountId()
@@ -37,6 +43,7 @@ export class DeleteChallengeTool implements Tool<Input> {
     const deleteChallengeUseCase = new DeleteChallengeUseCase(
       this.repository,
       new InngestBroker(),
+      this.roadmapsRepository,
     )
 
     await deleteChallengeUseCase.execute({ challengeId })

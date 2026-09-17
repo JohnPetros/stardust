@@ -1,7 +1,10 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { ChallengeNotFoundError } from '@stardust/core/challenging/errors'
-import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
+import type {
+  ChallengeRoadmapsRepository,
+  ChallengesRepository,
+} from '@stardust/core/challenging/interfaces'
 import {
   GetChallengeUseCase,
   UpdateChallengeUseCase,
@@ -12,14 +15,16 @@ import { UpdateChallengeTool } from '../UpdateChallengeTool'
 
 describe('Update Challenge Tool', () => {
   let repository: Mock<ChallengesRepository>
+  let roadmapsRepository: Mock<ChallengeRoadmapsRepository>
   let mcp: Mock<Mcp<any>>
   let tool: UpdateChallengeTool
 
   beforeEach(() => {
     jest.restoreAllMocks()
     repository = mock()
+    roadmapsRepository = mock()
     mcp = mock()
-    tool = new UpdateChallengeTool(repository)
+    tool = new UpdateChallengeTool(repository, roadmapsRepository)
   })
 
   it('should throw ChallengeNotFoundError when account is not challenge author', async () => {

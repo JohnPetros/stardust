@@ -5,6 +5,7 @@ import { supabase } from '@/database/supabase'
 import {
   SupabaseChallengesRepository,
   SupabaseChallengeSourcesRepository,
+  SupabaseChallengeRoadmapsRepository,
   SupabaseUsersRepository,
 } from '@/database/supabase/repositories'
 import { InngestBroker } from '@/queue/inngest/InngestBroker'
@@ -87,7 +88,8 @@ export class ChallengingToolkit {
       execute: async (input, context) => {
         const mcp = new MastraMcp(input, context)
         const repository = new SupabaseChallengesRepository(supabase)
-        const tool = new UpdateChallengeTool(repository)
+        const roadmapsRepository = new SupabaseChallengeRoadmapsRepository(supabase)
+        const tool = new UpdateChallengeTool(repository, roadmapsRepository)
         await tool.handle(mcp)
       },
     })
@@ -104,7 +106,8 @@ export class ChallengingToolkit {
       execute: async (input, context) => {
         const mcp = new MastraMcp(input, context)
         const repository = new SupabaseChallengesRepository(supabase)
-        const tool = new DeleteChallengeTool(repository)
+        const roadmapsRepository = new SupabaseChallengeRoadmapsRepository(supabase)
+        const tool = new DeleteChallengeTool(repository, roadmapsRepository)
         await tool.handle(mcp)
       },
     })
