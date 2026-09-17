@@ -41,6 +41,7 @@ import { IORedisRateLimiterProvider } from '@/provision/rate-limiter'
 import { DiscordNotificationService } from '@/rest/services'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
 import { HonoServer } from './HonoServer'
+
 import {
   AuthRouter,
   ProfileRouter,
@@ -62,19 +63,6 @@ import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
 import { RateLimitMiddleware } from './middlewares'
 import type { RateLimitClock } from './middlewares/RateLimitMiddleware'
 
-type ServeFn = typeof import('@hono/node-server').serve
-type ServeOptions = Parameters<ServeFn>[0]
-type ListeningListener = Parameters<ServeFn>[1]
-type ServerType = ReturnType<ServeFn>
-
-type StartNodeServerParams = {
-  serve: ServeFn
-  fetch: ServeOptions['fetch']
-  port: number
-  mode: 'development' | 'production' | 'test'
-  baseUrl: string
-}
-
 type SupabaseSession = User & { sub: string }
 
 declare module 'hono' {
@@ -87,7 +75,6 @@ declare module 'hono' {
 }
 
 export class HonoApp {
-  private static readonly MAX_PORT_ATTEMPTS = 10
   readonly hono = new Hono()
   private readonly telemetryProvider: TelemetryProvider
   private readonly rateLimiterMiddleware: RateLimitMiddleware
@@ -121,73 +108,6 @@ export class HonoApp {
     })
 
     return new HonoServer(this.hono, server)
-  }
-
-  async startNodeServer({ serve, fetch, port, mode, baseUrl }: StartNodeServerParams) {
-    for (let portOffset = 0; portOffset < HonoApp.MAX_PORT_ATTEMPTS; portOffset++) {
-      const nextPort = port + portOffset
-
-      try {
-        return await this.listenOnPort({ serve, fetch, port: nextPort, baseUrl })
-      } catch (error) {
-        if (!this.isAddressInUseError(error) || mode !== 'development') throw error
-
-        console.warn(`Port ${nextPort} is already in use. Trying ${nextPort + 1}.`)
-      }
-    }
-
-    throw new Error(
-      `Não foi possível encontrar uma porta disponível após ${HonoApp.MAX_PORT_ATTEMPTS} tentativas.`,
-    )
-  }
-
-  private isAddressInUseError(error: unknown): error is NodeJS.ErrnoException {
-    return error instanceof Error && 'code' in error && error.code === 'EADDRINUSE'
-  }
-
-  private listenOnPort({
-    serve,
-    fetch,
-    port,
-    baseUrl,
-  }: Omit<StartNodeServerParams, 'mode'>): Promise<ServerType> {
-    return new Promise((resolve, reject) => {
-      let server: ServerType | null = null
-      let settled = false
-
-      const stopListeningForStartupError = () => {
-        server?.off('error', handleStartupError)
-      }
-
-      const settle = (callback: () => void) => {
-        if (settled) return
-
-        settled = true
-        stopListeningForStartupError()
-        callback()
-      }
-
-      const handleStartupError = (error: Error) => {
-        settle(() => {
-          server?.close()
-          reject(error)
-        })
-      }
-
-      const handleListening = ((info) => {
-        settle(() => {
-          console.log(`🏢 Server is running on ${baseUrl}:${info.port}`)
-          resolve(server as ServerType)
-        })
-      }) satisfies ListeningListener
-
-      try {
-        server = serve({ fetch, port }, handleListening)
-        server.once('error', handleStartupError)
-      } catch (error) {
-        reject(error)
-      }
-    })
   }
 
   setup() {
@@ -384,4 +304,89 @@ export class HonoApp {
       await next()
     }
   }
+
+  async startNodeServer({ serve, fetch, port, mode, baseUrl }: StartNodeServerParams) {
+    for (let portOffset = 0; portOffset < MAX_PORT_ATTEMPTS; portOffset++) {
+      const nextPort = port + portOffset
+      const result = await this.listenOnPort({
+        serve,
+        fetch,
+        port: nextPort,
+        baseUrl,
+      }).then(
+        (server) => ({ status: 'fulfilled' as const, value: server }),
+        (reason) => ({ status: 'rejected' as const, reason }),
+      )
+
+      if (result.status === 'fulfilled') return result.value
+      if (!this.isAddressInUseError(result.reason) || mode !== 'development')
+        throw result.reason
+
+      console.warn(`Port ${nextPort} is already in use. Trying ${nextPort + 1}.`)
+    }
+
+    throw new Error(
+      `Não foi possível encontrar uma porta disponível após ${MAX_PORT_ATTEMPTS} tentativas.`,
+    )
+  }
+
+  private isAddressInUseError(error: unknown): error is NodeJS.ErrnoException {
+    return error instanceof Error && 'code' in error && error.code === 'EADDRINUSE'
+  }
+
+  private listenOnPort({
+    serve,
+    fetch,
+    port,
+    baseUrl,
+  }: Omit<StartNodeServerParams, 'mode'>): Promise<ServerType> {
+    return new Promise((resolve, reject) => {
+      let server: ServerType | null = null
+      let settled = false
+
+      const settle = (callback: () => void) => {
+        if (settled) return
+
+        settled = true
+        server?.off('error', handleStartupError)
+        callback()
+      }
+
+      const handleStartupError = (error: Error) => {
+        settle(() => {
+          server?.close()
+          reject(error)
+        })
+      }
+
+      const handleListening = ((info) => {
+        settle(() => {
+          console.log(`🏢 Server is running on ${baseUrl}:${info.port}`)
+          resolve(server as ServerType)
+        })
+      }) satisfies ListeningListener
+
+      try {
+        server = serve({ fetch, port }, handleListening)
+        server.once('error', handleStartupError)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+}
+
+const MAX_PORT_ATTEMPTS = 10
+
+type ServeFn = typeof import('@hono/node-server').serve
+type ServeOptions = Parameters<ServeFn>[0]
+type ListeningListener = Parameters<ServeFn>[1]
+type ServerType = ReturnType<ServeFn>
+
+type StartNodeServerParams = {
+  serve: ServeFn
+  fetch: ServeOptions['fetch']
+  port: number
+  mode: 'development' | 'production' | 'test'
+  baseUrl: string
 }
