@@ -525,7 +525,6 @@ jobs:
         with:
           app-id: ${{ secrets.HERMES_GITHUB_APP_ID }}
           private-key: ${{ secrets.HERMES_GITHUB_APP_PRIVATE_KEY }}
-          permission-issues: write
           permission-pull-requests: write
 
       - name: Publish final conclusion
