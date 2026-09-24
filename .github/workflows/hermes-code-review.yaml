@@ -37,7 +37,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-          persist-credentials: false
+          persist-credentials: ***
 
       - name: Wait for applicable CI workflows
         shell: bash
@@ -209,7 +209,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-          persist-credentials: false
+          persist-credentials: ***
 
       - name: Build scoped diff
         id: diff
@@ -336,7 +336,7 @@ jobs:
         shell: bash
         env:
           HERMES_API_URL: ${{ secrets.HERMES_API_URL }}
-          HERMES_API_KEY: ${{ secrets.HERMES_CODE_REVIEWER_API_KEY }}
+          HERMES_API_KEY: *** secrets.HERMES_CODE_REVIEWER_API_KEY }}
           REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
@@ -402,7 +402,7 @@ jobs:
               --silent \
               --show-error \
               --request POST \
-              --header "Authorization: Bearer $HERMES_API_KEY" \
+              --header "Authorization: Bearer ***" \
               --header "Content-Type: application/json" \
               --header "Idempotency-Key: $idempotency_key" \
               --data-binary @hermes-payload.json \
@@ -417,7 +417,7 @@ jobs:
               curl --fail-with-body \
                 --silent \
                 --show-error \
-                --header "Authorization: Bearer $HERMES_API_KEY" \
+                --header "Authorization: Bearer ***" \
                 "$hermes_url/$run_id"
             )"
 
@@ -524,7 +524,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           HERMES_API_URL: ${{ secrets.HERMES_API_URL }}
-          HERMES_API_KEY: ${{ secrets.HERMES_CODE_REVIEWER_API_KEY }}
+          HERMES_API_KEY: *** secrets.HERMES_CODE_REVIEWER_API_KEY }}
           REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
@@ -592,7 +592,7 @@ jobs:
               --silent \
               --show-error \
               --request POST \
-              --header "Authorization: Bearer $HERMES_API_KEY" \
+              --header "Authorization: Bearer ***" \
               --header "Content-Type: application/json" \
               --header "Idempotency-Key: $idempotency_key" \
               --data-binary @conclusion-payload.json \
@@ -607,7 +607,7 @@ jobs:
               curl --fail-with-body \
                 --silent \
                 --show-error \
-                --header "Authorization: Bearer $HERMES_API_KEY" \
+                --header "Authorization: Bearer ***" \
                 "$hermes_url/$run_id"
             )"
 
@@ -615,7 +615,30 @@ jobs:
 
             case "$status" in
               completed)
-                echo 'Hermes conclusion run completed.'
+                hermes_output="$(jq --exit-status --raw-output '.output | strings' <<< "$run")" || {
+                  echo 'O run Hermes terminou sem um campo output textual.'
+                  exit 1
+                }
+
+                case "$hermes_output" in
+                  DONE)
+                    echo 'Hermes informou que a conclusão já existia.'
+                    ;;
+                  COMMENT_CREATED:*)
+                    comment_id="${hermes_output#COMMENT_CREATED:}"
+                    if [[ ! "$comment_id" =~ ^[0-9]+$ ]]; then
+                      echo 'Hermes retornou um comment_id inválido.'
+                      exit 1
+                    fi
+                    echo "Hermes confirmou a criação do comentário (ID: $comment_id)."
+                    ;;
+                  *)
+                    echo 'O run Hermes terminou, mas retornou uma resposta inesperada.'
+                    echo "Tamanho da resposta: ${#hermes_output} caracteres."
+                    exit 1
+                    ;;
+                esac
+
                 break
                 ;;
               failed|cancelled)
