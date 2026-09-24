@@ -45,4 +45,4 @@ module.exports = {
 
     'subject-full-stop': [2, 'never', '.'],
   },
-};
+}
