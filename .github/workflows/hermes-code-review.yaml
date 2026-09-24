@@ -12,7 +12,7 @@ on:
 permissions:
   actions: read
   contents: read
-  issues: write
+  issues: read
   pull-requests: read
 
 concurrency:
@@ -510,6 +510,9 @@ jobs:
       needs.detect-scopes.outputs.scopes != '[]'
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      actions: read
+      issues: write
 
     steps:
       - name: Download scoped reviews
@@ -556,7 +559,9 @@ jobs:
           comment_marker="<!-- hermes-code-review:${HEAD_SHA} -->"
           comments_url="repos/$REPOSITORY/issues/$PR_NUMBER/comments?per_page=100"
 
+          echo "Consultando comentários existentes da PR."
           existing_comments="$(gh api --paginate "$comments_url")"
+          echo "Consulta dos comentários existentes concluída."
 
           if jq -s -e \
               --arg marker "$comment_marker" \
@@ -565,12 +570,14 @@ jobs:
               > /dev/null; then
             echo "A conclusão para $HEAD_SHA já existe."
           else
+            echo "Criando comentário de conclusão na PR."
             comment_response="$(
               gh api \
                 --method POST \
                 "repos/$REPOSITORY/issues/$PR_NUMBER/comments" \
                 --field body="$body"
             )"
+            echo "A API do GitHub aceitou a criação do comentário."
 
             comment_id="$(jq --exit-status --raw-output '.id | numbers' <<< "$comment_response")"
             echo "Comentário de conclusão criado: $comment_id"
