@@ -37,7 +37,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-          persist-credentials: ***
+          persist-credentials: false
 
       - name: Wait for applicable CI workflows
         shell: bash
@@ -209,7 +209,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-          persist-credentials: ***
+          persist-credentials: false
 
       - name: Build scoped diff
         id: diff
@@ -336,7 +336,7 @@ jobs:
         shell: bash
         env:
           HERMES_API_URL: ${{ secrets.HERMES_API_URL }}
-          HERMES_API_KEY: *** secrets.HERMES_CODE_REVIEWER_API_KEY }}
+          HERMES_API_KEY: ${{ secrets.HERMES_CODE_REVIEWER_API_KEY }}
           REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
@@ -402,7 +402,7 @@ jobs:
               --silent \
               --show-error \
               --request POST \
-              --header "Authorization: Bearer ***" \
+              --header "Authorization: Bearer $HERMES_API_KEY" \
               --header "Content-Type: application/json" \
               --header "Idempotency-Key: $idempotency_key" \
               --data-binary @hermes-payload.json \
@@ -417,7 +417,7 @@ jobs:
               curl --fail-with-body \
                 --silent \
                 --show-error \
-                --header "Authorization: Bearer ***" \
+                --header "Authorization: Bearer $HERMES_API_KEY" \
                 "$hermes_url/$run_id"
             )"
 
@@ -524,7 +524,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           HERMES_API_URL: ${{ secrets.HERMES_API_URL }}
-          HERMES_API_KEY: *** secrets.HERMES_CODE_REVIEWER_API_KEY }}
+          HERMES_API_KEY: ${{ secrets.HERMES_CODE_REVIEWER_API_KEY }}
           REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
@@ -592,7 +592,7 @@ jobs:
               --silent \
               --show-error \
               --request POST \
-              --header "Authorization: Bearer ***" \
+              --header "Authorization: Bearer $HERMES_API_KEY" \
               --header "Content-Type: application/json" \
               --header "Idempotency-Key: $idempotency_key" \
               --data-binary @conclusion-payload.json \
@@ -607,7 +607,7 @@ jobs:
               curl --fail-with-body \
                 --silent \
                 --show-error \
-                --header "Authorization: Bearer ***" \
+                --header "Authorization: Bearer $HERMES_API_KEY" \
                 "$hermes_url/$run_id"
             )"
 
