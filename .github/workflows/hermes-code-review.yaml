@@ -606,4 +606,4 @@ jobs:
             exit 1
           fi
 
-          echo "Conclusão confirmada na PR para $HEAD_SHA."
+          echo "Conclusão confirmada na PR para $HEAD_SHA"
