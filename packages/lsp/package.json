@@ -31,12 +31,12 @@
     "test:unit": "node --import tsx --test \"src/**/*.test.ts\""
   },
   "dependencies": {
-    "@designliquido/delegua": "^1.25.1",
+    "@designliquido/delegua": "^0.73.0",
     "@stardust/core": "*",
     "monaco-editor": "^0.56.0"
   },
   "devDependencies": {
     "tsup": "^8.5.1",
-    "typescript": "5.5.3"
+    "typescript": "5.9.3"
   }
 }
