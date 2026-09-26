@@ -8,6 +8,7 @@ on:
       - opened
       - synchronize
       - reopened
+      - ready_for_review
 
 permissions:
   actions: read
@@ -29,31 +30,38 @@ jobs:
     timeout-minutes: 90
 
     steps:
-      - name: Check if already reviewed by Hermes
+      - name: Check if this commit was already reviewed by Hermes
+        id: review_guard
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
 
-          labels="$(gh pr view "$PR_NUMBER" --repo "$REPOSITORY" --json labels --jq '.labels[].name')"
-          if grep -q '^hermes-reviewed$' <<< "$labels"; then
-            echo "Pull Request #$PR_NUMBER já foi revisada pelo Hermes (label hermes-reviewed presente). Ignorando."
-            exit 0
+          marker="hermes-code-review:$HEAD_SHA"
+          existing_comment="$(gh api --paginate "repos/$REPOSITORY/issues/$PR_NUMBER/comments" \
+            --jq ".[] | select(.body | contains(\"$marker\")) | .id" | sed -n '1p')"
+
+          if [ -n "$existing_comment" ]; then
+            echo "Commit $HEAD_SHA já possui conclusão do Hermes no comentário $existing_comment."
+            echo 'already_reviewed=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'already_reviewed=false' >> "$GITHUB_OUTPUT"
           fi
 
       - name: Checkout trusted base without PR code
+        if: steps.review_guard.outputs.already_reviewed != 'true'
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ github.event.pull_request.base.sha }}
           fetch-depth: 0
-          # The workflow token is restricted to contents: read and is needed to
-          # fetch the same-repository PR ref for diff inspection.
-          persist-credentials: true
+          persist-credentials: false
 
-      - name: Wait for HMS CI
+      - name: Wait for Stardust CI
+        if: steps.review_guard.outputs.already_reviewed != 'true'
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
@@ -63,9 +71,10 @@ jobs:
           set -euo pipefail
 
           expected_workflows=(
-            'Core Package CI'
-            'Server App CI'
-            'Web App CI'
+            'Core package CI'
+            'Server app CI'
+            'Web app CI'
+            'Studio app CI'
           )
 
           for attempt in $(seq 1 180); do
@@ -107,14 +116,15 @@ jobs:
               exit 0
             fi
 
-            echo "Waiting for HMS CI (attempt $attempt/180)."
+            echo "Waiting for Stardust CI (attempt $attempt/180)."
             sleep 10
           done
 
-          echo 'Timed out waiting for HMS CI.'
+          echo 'Timed out waiting for Stardust CI.'
           exit 1
 
       - name: Prepare review context
+        if: steps.review_guard.outputs.already_reviewed != 'true'
         shell: bash
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
@@ -182,6 +192,7 @@ jobs:
 
       - name: Ask Hermes to review
         id: hermes
+        if: steps.review_guard.outputs.already_reviewed != 'true'
         shell: bash
         env:
           HERMES_API_URL: ${{ secrets.HERMES_API_URL }}
@@ -309,6 +320,7 @@ jobs:
           echo "Hermes returned $(jq '.findings | length' review.json) finding(s)."
 
       - name: Publish review conclusion
+        if: steps.review_guard.outputs.already_reviewed != 'true'
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
@@ -356,7 +368,7 @@ jobs:
           test "$published_marker" = 'true'
 
       - name: Mark PR as reviewed by Hermes
-        if: success()
+        if: success() && steps.review_guard.outputs.already_reviewed != 'true'
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
