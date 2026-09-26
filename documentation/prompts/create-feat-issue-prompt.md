@@ -95,19 +95,29 @@ repositório.
 
 ## 🧪 Validação
 
+Backend (quando afetado):
+
+- <comandos e testes relevantes para os contratos do servidor>
+
+Frontend (quando afetado):
+
+- <comandos e testes relevantes para as aplicações de interface>
+
 Evidências esperadas:
 
-- <testes automatizados relevantes>
-- <validação manual ou E2E relevante>
+- <testes automatizados, validação manual ou E2E relevantes>
 - <validação visual, responsiva e de acessibilidade quando aplicável>
 
 ## 🔗 Rastreabilidade
 
-- PRD: <path do PRD canônico em documentation/prds/>
-- Requisito: <RP-*>
-- Jornada: <JN-* ou Não aplicável>
-- User Story: <SHI-* ou Não aplicável>
-- Design: <arquivo e node/frame ou Não aplicável>
+- PRD principal: <path do PRD canônico em documentation/prds/ e versão>
+- PRD complementar: <path e versão ou Não aplicável>
+- Requisitos: <RP-* principal e requisitos complementares aplicáveis>
+- Jornadas: <JN-* aplicáveis ou Não aplicável>
+- Issue/User Story de origem: <identificador existente ou Não aplicável>
+- Design: <arquivo e node/frame exatos ou Não aplicável>
+- Spec: <status ou Pendente conforme o processo>
+- PR: <URL ou Pendente — será vinculada pelo workflow create-pr>
 - Milestone: <URL>
 
 ## 🚫 Fora de Escopo
@@ -116,9 +126,9 @@ Evidências esperadas:
 - <alteração adjacente que não pertence a esta entrega>
 ```
 
-O corpo da feature issue não inclui um checklist de DoR. O DoR, quando exigido
-pelas regras de planejamento ou publicação, permanece no mecanismo de workflow
-correspondente.
+Não inclua sprint: o projeto Stardust não usa sprints. O campo Requisito deve conter a
+referência do requisito principal selecionado, e somente requisitos complementares
+aplicáveis devem ser listados como suporte.
 
 Mantenha a issue em nível de product delivery. Não inclua signatures, file inventory, fluxo
 técnico detalhado ou decisões novas de arquitetura. Preserve paths/Node IDs Pencil exatamente

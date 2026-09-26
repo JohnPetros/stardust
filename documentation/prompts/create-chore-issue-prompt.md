@@ -48,6 +48,9 @@ posteriores. Registre decisões, alternativas descartadas, dependências e contr
 vazia e a confirmação de entendimento compartilhado permitem preparar o draft, mas não substituem
 o approval gate da versão exata a publicar.
 
+O projeto Stardust não usa sprints. Trate sprint como não aplicável: não pergunte sobre sprint,
+não inclua sprint no draft ou nos metadados da issue.
+
 ## Metadata GitHub
 
 - repository: `JohnPetros/stardust`;
@@ -61,39 +64,40 @@ o approval gate da versão exata a publicar.
 ## Título e body
 
 Use título nominal, sem prefixo de commit, descrevendo o resultado técnico. Crie exatamente uma
-issue, salvo decomposição explicitamente solicitada.
+issue, salvo decomposição explicitamente solicitada. Estruture todo body com estes títulos, nesta
+ordem:
 
 ```md
-## Objetivo
+## 🎯 Objetivo
 
-<resultado técnico e risco mitigado>
+<resultado técnico pretendido e risco mitigado>
 
-## Escopo
+## 📦 Entregável Esperado
 
-- <mudança de manutenção incluída>
-- <restrição técnica ou contrato preservado>
-- **Fora do escopo:** <comportamento, cleanup ou mudança adjacente excluída>
+- <artefatos, mudanças ou resultado técnico verificável, incluindo local de registro quando aplicável>
+- <validação esperada quando ajudar a definir o resultado concluído>
 
-## Critérios de verificação
+## ⚠️ Dependências / Restrições
 
-- <resultado técnico observável>
-- <contrato ou comportamento preservado>
-- <validação automatizada, estática ou manual aplicável>
-
-## Referências na codebase
-
-- `<path real>` — <evidência e relevância>
+- <dependências, limites técnicos, contratos a preservar ou exclusões relevantes>
+- <responsável pretendido, somente quando conhecido ou definido pelo usuário>
+- <paths reais da codebase relevantes, com breve justificativa>
 ```
 
-Mantenha a issue em nível de delivery técnico. Não inclua PRD, requisito de PRD, milestone,
-signatures, file inventory, fluxo técnico detalhado, arquitetura nova ou tarefas especulativas.
+Mantenha a issue em nível de delivery técnico. Inclua critérios de verificação junto ao entregável
+esperado quando forem necessários para tornar o resultado observável. Registre contratos preservados,
+dependências, exclusões e referências na seção Dependências / Restrições. Não invente responsável;
+quando a atribuição ainda estiver pendente, registre isso apenas se for relevante para o tracking.
+
+Não acrescente milestone, PRD, requisito de PRD, signatures, file inventory, fluxo técnico
+detalhado, arquitetura nova ou tarefas especulativas.
 
 ## Approval gate
 
 Antes de publicar, apresente o título, body, labels, milestone `None`, confirmação de que não há
-relação com PRD e a justificativa técnica. Publique somente após aprovação explícita da versão
-atual. A aprovação autoriza apenas a submissão da issue; não autoriza implementação, branch,
-commit, PR, Spec ou Plan.
+relação com PRD e a justificativa técnica. Não inclua sprint nos metadados apresentados. Publique
+somente após aprovação explícita da versão atual. A aprovação autoriza apenas a submissão da issue;
+não autoriza implementação, branch, commit, PR, Spec ou Plan.
 
 Depois da publicação, retorne número/URL, título, labels, milestone `None` e resumo do resultado
 técnico.
