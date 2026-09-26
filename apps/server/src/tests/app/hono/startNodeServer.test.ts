@@ -1,11 +1,13 @@
 import { EventEmitter } from 'node:events'
 import type { ServerType } from '@hono/node-server'
 
-import { startNodeServer } from '@/app/hono/startNodeServer'
+import { HonoApp } from '@/app/hono/HonoApp'
 
 type ServeFn = typeof import('@hono/node-server').serve
 
 describe('startNodeServer', () => {
+  const app = new HonoApp()
+
   it('should retry with the next port in development mode', async () => {
     const listenCallback = jest.fn()
     const busyServer = createServer()
@@ -28,7 +30,7 @@ describe('startNodeServer', () => {
         return availableServer
       })
 
-    const server = await startNodeServer({
+    const server = await app.startNodeServer({
       serve: serve as unknown as ServeFn,
       fetch: listenCallback,
       port: 3333,
@@ -61,7 +63,7 @@ describe('startNodeServer', () => {
     })
 
     await expect(
-      startNodeServer({
+      app.startNodeServer({
         serve: serve as unknown as ServeFn,
         fetch: jest.fn(),
         port: 3333,

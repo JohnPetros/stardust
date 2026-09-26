@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process'
-import { lstat, readFile } from 'node:fs/promises'
+import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import { promisify } from 'node:util'
@@ -137,12 +137,17 @@ function testMetrics(content) {
   }
 }
 
-async function inspectCurrentPath(repositoryRoot, filePath) {
+function changedTestWorkspace(filePath) {
+  return filePath.match(/^(?:apps|packages)\/([^/]+)\//)?.[1]
+}
+
+async function readCurrentTestFile(repositoryRoot, filePath) {
   try {
-    const stats = await lstat(path.join(repositoryRoot, filePath))
-    return { exists: true, isDirectory: stats.isDirectory() }
+    return { content: await readFile(path.join(repositoryRoot, filePath), 'utf8') }
   } catch (error) {
-    if (error?.code === 'ENOENT') return { exists: false, isDirectory: false }
+    if (error?.code === 'ENOENT' || error?.code === 'EISDIR') {
+      return { content: null }
+    }
     throw error
   }
 }
@@ -190,36 +195,54 @@ async function checkTestIntegrity({ base }) {
       .map(([filePath]) => filePath),
   )
 
-  for (const [filePath, status] of changedPaths) {
-    if (!isTestPath(filePath)) continue
-    if (status === 'D') continue
-    if (!isAllowedTestPath(filePath)) {
-      forbiddenTestPaths.push(filePath)
-      errors.push(`${filePath}: test file is outside allowed test locations`)
-    }
-    const currentPath = await inspectCurrentPath(repositoryRoot, filePath)
-    if (!currentPath.exists || currentPath.isDirectory) {
-      errors.push(`${filePath}: changed test file is missing`)
-      continue
-    }
-    if (!status.startsWith('M')) continue
-    const baseContent = await readBaseFile(repositoryRoot, baseSha, filePath)
-    if (baseContent === null) continue
-    const before = testMetrics(baseContent)
-    const after = testMetrics(await readFile(path.join(repositoryRoot, filePath), 'utf8'))
-    if (after.cases < before.cases) {
-      errors.push(`${filePath}: test cases decreased (${after.cases} < ${before.cases})`)
-    }
-    if (after.assertions < before.assertions) {
-      errors.push(
-        `${filePath}: assertions decreased (${after.assertions} < ${before.assertions})`,
-      )
-    }
-    if (after.disabled > before.disabled) {
-      errors.push(
-        `${filePath}: disabled or todo tests increased (${after.disabled} > ${before.disabled})`,
-      )
-    }
+  const changedTestEntries = [...changedPaths].filter(
+    ([filePath, status]) => isTestPath(filePath) && status !== 'D',
+  )
+  const changedTestWorkspaces = new Set(
+    changedTestEntries
+      .map(([filePath]) => changedTestWorkspace(filePath))
+      .filter(Boolean),
+  )
+  const testChecks = await Promise.all(
+    changedTestEntries.map(async ([filePath, status]) => {
+      const result = { errors: [], filePath, forbidden: false }
+      if (!isAllowedTestPath(filePath)) {
+        result.forbidden = true
+        result.errors.push(`${filePath}: test file is outside allowed test locations`)
+      }
+
+      const currentFile = await readCurrentTestFile(repositoryRoot, filePath)
+      if (currentFile.content === null) {
+        result.errors.push(`${filePath}: changed test file is missing`)
+        return result
+      }
+      if (!status.startsWith('M')) return result
+
+      const baseContent = await readBaseFile(repositoryRoot, baseSha, filePath)
+      if (baseContent === null) return result
+      const before = testMetrics(baseContent)
+      const after = testMetrics(currentFile.content)
+      if (after.cases < before.cases) {
+        result.errors.push(
+          `${filePath}: test cases decreased (${after.cases} < ${before.cases})`,
+        )
+      }
+      if (after.assertions < before.assertions) {
+        result.errors.push(
+          `${filePath}: assertions decreased (${after.assertions} < ${before.assertions})`,
+        )
+      }
+      if (after.disabled > before.disabled) {
+        result.errors.push(
+          `${filePath}: disabled or todo tests increased (${after.disabled} > ${before.disabled})`,
+        )
+      }
+      return result
+    }),
+  )
+  for (const result of testChecks) {
+    if (result.forbidden) forbiddenTestPaths.push(result.filePath)
+    errors.push(...result.errors)
   }
 
   const changedSourceCandidates = [...changedPaths.entries()]
@@ -239,11 +262,7 @@ async function checkTestIntegrity({ base }) {
     isTestableSourcePath(filePath),
   )
   for (const { filePath, workspace } of changedSourcePaths) {
-    const hasWorkspaceTest = [...changedTestPaths].some(
-      (testPath) =>
-        testPath.startsWith(`apps/${workspace}/`) ||
-        testPath.startsWith(`packages/${workspace}/`),
-    )
+    const hasWorkspaceTest = changedTestWorkspaces.has(workspace)
     if (!hasWorkspaceTest)
       warnings.push(`${filePath}: no changed test found in workspace ${workspace}`)
   }
