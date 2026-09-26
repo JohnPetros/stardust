@@ -5,6 +5,13 @@
 - documentation/tooling.md
 - documentation/rules/rules.md
 
+## Protocolo de grilling
+
+- Ao aplicar o protocolo de grilling, não use ferramentas de perguntas, como
+  `request_user_input` ou `request_user_input_async`. Faça as perguntas
+  diretamente na conversa e aguarde as respostas antes de seguir com decisões
+  que dependam delas.
+
 ### Ambiente local e credenciais
 
 - Para desenvolvimento local e validações reais no navegador, use sempre o
