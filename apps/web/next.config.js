@@ -1,3 +1,25 @@
+const isLoopbackHostname = (hostname) =>
+  hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]'
+
+const validateLocalEndpoint = (value, variableName) => {
+  let url
+  try {
+    url = new URL(value)
+  } catch {
+    throw new Error(`${variableName} must use a local endpoint in development`)
+  }
+
+  if (url.protocol !== 'http:' || !isLoopbackHostname(url.hostname)) {
+    throw new Error(`${variableName} must use a local endpoint in development`)
+  }
+}
+
+const appMode = process.env.MODE || process.env.NODE_ENV
+if (appMode === 'development') {
+  validateLocalEndpoint(process.env.NEXT_PUBLIC_SUPABASE_URL, 'NEXT_PUBLIC_SUPABASE_URL')
+  validateLocalEndpoint(process.env.NEXT_PUBLIC_CDN_URL, 'NEXT_PUBLIC_CDN_URL')
+}
+
 const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL
 const cdnRemotePattern = cdnUrl
   ? {

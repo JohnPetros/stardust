@@ -6,7 +6,7 @@ const clientEnv = {
   mode: process.env.MODE,
   cdnUrl: process.env.NEXT_PUBLIC_CDN_URL,
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-  supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
   stardustWebUrl: process.env.NEXT_PUBLIC_STARDUST_WEB_URL,
   stardustServerUrl: process.env.NEXT_PUBLIC_STARDUST_SERVER_URL,
   discordChannelUrl: process.env.NEXT_PUBLIC_DISCORD_CHANNEL_URL,
@@ -26,4 +26,36 @@ const schema = z.object({
   posthogHost: z.string().url(),
 })
 
+type LocalClientEndpoints = Pick<
+  z.infer<typeof schema>,
+  'mode' | 'cdnUrl' | 'supabaseUrl'
+>
+
+const isLoopbackHostname = (hostname: string) =>
+  hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]'
+
+const validateLocalEndpoint = (value: string, variableName: string) => {
+  let url: URL
+  try {
+    url = new URL(value)
+  } catch {
+    throw new Error(`${variableName} must use a local endpoint in development`)
+  }
+
+  if (url.protocol !== 'http:' || !isLoopbackHostname(url.hostname)) {
+    throw new Error(`${variableName} must use a local endpoint in development`)
+  }
+}
+
+export const validateLocalClientEndpoints = (input: LocalClientEndpoints): void => {
+  // MODE is not reliable in the browser bundle under `next dev`; keep this
+  // startup validation on the server, not in browser code or ServerMock tests.
+  if (typeof window !== 'undefined' || input.mode !== 'development') return
+
+  validateLocalEndpoint(input.supabaseUrl, 'NEXT_PUBLIC_SUPABASE_URL')
+  validateLocalEndpoint(input.cdnUrl, 'NEXT_PUBLIC_CDN_URL')
+}
+
 export const CLIENT_ENV = schema.parse(clientEnv)
+
+validateLocalClientEndpoints(CLIENT_ENV)
