@@ -4,7 +4,7 @@ spec: ./spec.md
 spec_revision: 40
 status: in_progress
 base_commit: 0b2ea4cae4870067d506a257f2d3244ecbab742c
-evaluated_commit: 08ccbdc0c87717026775af99f038f67b397b58be
+evaluated_commit: bc5317a2d7dcb28df139db428e773bffd8f04d5b
 last_updated_at: 2026-09-29
 ---
 
@@ -228,6 +228,7 @@ last_updated_at: 2026-09-29
 - EV-23 — fechamento integrado: Spec/Plan definitions passaram na rev39, `check:spec-implementation --base HEAD` passou (57 paths), Compose `config --quiet` passou, `git diff --check` passou e migrations continuam byte-a-byte inalteradas.
 - EV-24 — por decisão do usuário, CA-03 cobre somente o fluxo protegido do Studio; Web CA-03 e seu pré-requisito de perfil/catálogo não são gates. Spec Reviewer rev40: clear. `check:spec-definition`, `check:plan-definition`, `check:spec-implementation --base HEAD`, `check:test-integrity` e `git diff --check` passaram; migrations permanecem inalteradas.
 - EV-25 — revisão para publicação em `08ccbdc0c87717026775af99f038f67b397b58be`: nove commits semânticos criados; hooks `check:code` passaram em 7/7 workspaces. Com base `0b2ea4cae4870067d506a257f2d3244ecbab742c`, `check:spec-definition`, `check:plan-definition`, `check:spec-implementation` (57 paths), `check:test-integrity` (4 test files) e `git diff --check` passaram. Nenhuma migration mudou. ACH-05 continua pendente porque os provedores/alvos antigos não estão identificados.
+- EV-26 — PR [#606](https://github.com/JohnPetros/stardust/pull/606) criado em `2026-09-29`, base `main`, head `bc5317a2d7dcb28df139db428e773bffd8f04d5b`; `origin/main` é ancestral e worktree limpa. Ao registrar, workflows aplicáveis estavam `IN_PROGRESS`/`QUEUED`; nenhum resultado foi presumido.
 - S3 paired implementation review — accepted, Spec rev35, sem findings bloqueantes. Reviewer confirmou publishable key única no runtime Server, autorização God Account antes dos repositories Postgres, queries bindadas, caminho request-scoped/RLS preservado para usuários, CA-13 e full integration passados e migrations inalteradas. CA-12 tem evidência Server pelo gateway; Web browser foi removido do gate por decisão do usuário.
 
 ## Análise preventiva dos findings
