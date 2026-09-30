@@ -1,7 +1,14 @@
 import { execFileSync, spawnSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
+import request from 'supertest'
+
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import { ENV } from '@/constants'
+import { AuthFixture } from '@/tests/fixtures/AuthFixture'
+import { HonoFixture } from '@/tests/fixtures/HonoFixture'
+import { ProfileFixture } from '@/tests/fixtures/ProfileFixture'
+import { SupabaseFixture } from '@/tests/fixtures/SupabaseFixture'
 
 const sql = (query: string) =>
   execFileSync('psql', [ENV.databaseUrl, '-At', '-v', 'ON_ERROR_STOP=1', '-c', query], {
@@ -164,5 +171,76 @@ describe('feedback conversation persistence', () => {
       )
       sql(`delete from public.users where id = '${authorId}'`)
     }
+  })
+
+  describe('God Account administration through PostgreSQL', () => {
+    const honoFixture = new HonoFixture()
+    const supabaseFixture = new SupabaseFixture()
+    const authFixture = new AuthFixture(supabaseFixture.supabase)
+    const profileFixture = new ProfileFixture(supabaseFixture.supabase)
+    const configuredGodAccountIds = [...ENV.godAccountIds]
+
+    beforeAll(async () => {
+      await honoFixture.setup()
+    })
+
+    beforeEach(async () => {
+      await supabaseFixture.clearDatabase()
+      await authFixture.createAccount()
+      await profileFixture.createAccountUser(authFixture.getAccountId())
+      ENV.godAccountIds.push(authFixture.getAccountId())
+    })
+
+    afterEach(() => {
+      ENV.godAccountIds.splice(0, ENV.godAccountIds.length, ...configuredGodAccountIds)
+    })
+
+    it('lists, opens and marks a conversation read with the PostgreSQL repositories', async () => {
+      const reportId = randomUUID()
+      const messageId = randomUUID()
+      const lastUserMessageAt = new Date(Date.now() - 1000).toISOString()
+      sql(
+        `insert into public.feedback_reports (id, content, intent, user_id, title, status, created_at, last_activity_at, last_user_message_at)
+         values ('${reportId}', 'A local administrative feedback report', 'bug', '${authFixture.getAccountId()}', 'Local feedback report', 'open', '${lastUserMessageAt}', '${lastUserMessageAt}', '${lastUserMessageAt}')`,
+      )
+      sql(
+        `insert into public.feedback_messages (id, report_id, author_role, author_id, content, created_at)
+         values ('${messageId}', '${reportId}', 'user', '${authFixture.getAccountId()}', 'A persisted user message', '${lastUserMessageAt}')`,
+      )
+
+      const authorization = authFixture.getAuthorizationHeader()
+      const listResponse = await request(honoFixture.server)
+        .get('/reporting/feedback?page=1&itemsPerPage=10')
+        .set(authorization)
+      const detailResponse = await request(honoFixture.server)
+        .get(`/reporting/feedback/${reportId}`)
+        .set(authorization)
+      const readResponse = await request(honoFixture.server)
+        .put(`/reporting/feedback/${reportId}/read`)
+        .set(authorization)
+        .send({ lastSeenUserMessageId: messageId })
+
+      expect(listResponse.status).toBe(HTTP_STATUS_CODE.ok)
+      expect(listResponse.body.items).toEqual([
+        expect.objectContaining({ id: reportId, title: 'Local feedback report' }),
+      ])
+      expect(detailResponse.status).toBe(HTTP_STATUS_CODE.ok)
+      expect(detailResponse.body).toEqual(
+        expect.objectContaining({
+          id: reportId,
+          messages: [expect.objectContaining({ id: messageId, authorRole: 'user' })],
+          latestUserMessageId: messageId,
+        }),
+      )
+      expect(readResponse.status).toBe(HTTP_STATUS_CODE.noContent)
+
+      expect(
+        new Date(
+          sql(
+            `select studio_read_at from public.feedback_reports where id = '${reportId}'`,
+          ),
+        ).toISOString(),
+      ).toBe(lastUserMessageAt)
+    })
   })
 })
