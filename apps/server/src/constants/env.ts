@@ -6,9 +6,10 @@ const env = {
   port: process.env.PORT,
   baseUrl: process.env.BASE_URL,
   supabaseUrl: process.env.SUPABASE_URL,
-  supabaseKey: process.env.SUPABASE_ANON_KEY,
-  supabaseServiceRole: process.env.SUPABASE_SERVICE_ROLE,
+  supabaseKey: process.env.SUPABASE_PUBLISHABLE_KEY,
   databaseUrl: process.env.SUPABASE_DATABASE_URL,
+  mailpitApiUrl: process.env.MAILPIT_API_URL,
+  s3Endpoint: process.env.S3_ENDPOINT,
   redisUrl: process.env.REDIS_URL,
   inngestEventKey: process.env.INNGEST_EVENT_KEY,
   inngestSigningKey: process.env.INNGEST_SIGNING_KEY ?? process.env.inngestSigningKey,
@@ -43,8 +44,8 @@ const envSchema = z
     baseUrl: z.string().url().default('http://localhost'),
     supabaseUrl: z.string().url(),
     supabaseKey: z.string(),
-    supabaseServiceRole: z.string().optional(),
     databaseUrl: z.string().url(),
+    mailpitApiUrl: z.string().url().optional(),
     redisUrl: z.string().url(),
     inngestEventKey: z.string().optional(),
     inngestSigningKey: z.string().optional(),
@@ -58,9 +59,10 @@ const envSchema = z
     openrouterApiKey: z.string().optional(),
     elevenLabsApiKey: z.string().optional(),
     sentryDsn: z.string().url(),
-    s3AccountId: z.string(),
+    s3AccountId: z.string().optional(),
     s3AccessKeyId: z.string(),
     s3SecretAccessKey: z.string(),
+    s3Endpoint: z.string().url().default('http://127.0.0.1:9000'),
     stardustWebUrl: z.string().url(),
     posthogProjectToken: z.string(),
     posthogHost: z.string().url(),
@@ -70,11 +72,19 @@ const envSchema = z
     trustedProxyCidrs: z.array(z.string().min(1)).default([]),
   })
   .superRefine((value, context) => {
-    if (value.mode !== 'test' && !value.supabaseServiceRole) {
+    if (value.mode === 'production' && !value.s3AccountId) {
       context.addIssue({
         code: z.ZodIssueCode.custom,
-        path: ['supabaseServiceRole'],
-        message: 'SUPABASE_SERVICE_ROLE is required outside test mode',
+        path: ['s3AccountId'],
+        message: 'S3_ACCOUNT_ID is required in production mode',
+      })
+    }
+
+    if (value.mode === 'test' && !value.mailpitApiUrl) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['mailpitApiUrl'],
+        message: 'MAILPIT_API_URL is required in test mode',
       })
     }
 
@@ -87,4 +97,76 @@ const envSchema = z
     }
   })
 
-export const ENV = envSchema.parse(env)
+type LocalEndpointInput = {
+  mode: 'development' | 'production' | 'test'
+  supabaseUrl: string
+  databaseUrl: string
+  mailpitApiUrl?: string
+  s3Endpoint: string
+}
+
+const LOCAL_ENDPOINTS = {
+  supabaseUrl: { schemes: ['http:'] },
+  databaseUrl: { schemes: ['postgres:', 'postgresql:'] },
+  mailpitApiUrl: { schemes: ['http:'] },
+  s3Endpoint: { schemes: ['http:'] },
+} as const
+
+export function validateLocalEndpoints(input: LocalEndpointInput): void {
+  if (input.mode === 'production') return
+
+  const loopbackHosts = new Set(['localhost', '127.0.0.1', '[::1]'])
+
+  const endpointKeys = Object.entries(LOCAL_ENDPOINTS).filter(([key]) => {
+    return key !== 'mailpitApiUrl' || input.mode === 'test'
+  })
+
+  for (const [key, expected] of endpointKeys) {
+    let endpoint: URL
+
+    try {
+      const value = input[key as keyof LocalEndpointInput]
+      if (!value) throw new Error('missing endpoint')
+      endpoint = new URL(value)
+    } catch {
+      throw new Error(`${keyToVariableName(key)} must use a local endpoint`)
+    }
+
+    const port = Number(endpoint.port)
+    const hasValidPort = Number.isInteger(port) && port >= 1 && port <= 65535
+    const hasExpectedScheme = expected.schemes.some(
+      (scheme) => scheme === endpoint.protocol,
+    )
+
+    if (!loopbackHosts.has(endpoint.hostname) || !hasValidPort || !hasExpectedScheme) {
+      throw new Error(`${keyToVariableName(key)} must use a local endpoint`)
+    }
+
+    if (
+      key === 'mailpitApiUrl' &&
+      (endpoint.pathname !== '/' ||
+        endpoint.search ||
+        endpoint.hash ||
+        endpoint.username ||
+        endpoint.password)
+    ) {
+      throw new Error('MAILPIT_API_URL must use a local endpoint')
+    }
+  }
+}
+
+function keyToVariableName(key: string): string {
+  return (
+    {
+      supabaseUrl: 'SUPABASE_URL',
+      databaseUrl: 'SUPABASE_DATABASE_URL',
+      mailpitApiUrl: 'MAILPIT_API_URL',
+      s3Endpoint: 'S3_ENDPOINT',
+    }[key] ?? key
+  )
+}
+
+const parsedEnv = envSchema.parse(env)
+validateLocalEndpoints(parsedEnv)
+
+export const ENV = parsedEnv

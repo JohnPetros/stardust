@@ -10,6 +10,7 @@ import type {
   TelemetryProvider,
 } from '@stardust/core/global/interfaces'
 
+import { ENV } from '@/constants'
 import { HonoFixture } from '@/tests/fixtures/HonoFixture'
 import { IORedisRateLimiterProvider } from '@/provision/rate-limiter'
 
@@ -185,8 +186,8 @@ describe('global rate limiter HTTP contract', () => {
 
   it('uses the real Redis adapter atomically with an isolated key', async () => {
     const key = `rate-limit:test:provider:${Date.now()}`
-    const provider = new IORedisRateLimiterProvider('redis://127.0.0.1:6379')
-    const cleanup = new IORedis('redis://127.0.0.1:6379')
+    const provider = new IORedisRateLimiterProvider(ENV.redisUrl)
+    const cleanup = new IORedis(ENV.redisUrl)
 
     try {
       const decisions = await Promise.all(
