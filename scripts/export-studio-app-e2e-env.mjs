@@ -20,7 +20,7 @@ function shellQuote(value) {
   return `'${value.replaceAll("'", "'\\''")}'`
 }
 const root = output('git', ['rev-parse', '--show-toplevel'])
-const envFile = `${root}/.env.development`
+const envFile = `${root}/.env.local`
 if (!existsSync(envFile)) throw new Error(`arquivo ${envFile} não encontrado`)
 const content = readFileSync(envFile, 'utf8')
 for (const key of keys) {
