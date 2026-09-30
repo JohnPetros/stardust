@@ -1,4 +1,4 @@
-import { S3FileStorageProvider } from '@/provision/storage/S3FileStorageProvider'
+import { S3FileStorageProvider } from '@/provision/storage/s3/S3FileStorageProvider'
 import { HonoHttp } from '../HonoHttp'
 import type { Context, Next } from 'hono'
 import { VerifyFileExistsController } from '@/rest/controllers/storage'

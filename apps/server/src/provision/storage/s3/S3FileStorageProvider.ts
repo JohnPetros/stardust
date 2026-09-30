@@ -23,9 +23,14 @@ import { S3FileObject } from './S3FileObject'
 
 export class S3FileStorageProvider implements FileStorageProvider {
   private static readonly BUCKET_NAME_BY_MODE = {
-    development: 'stardust-bucket-stg',
-    test: 'stardust-bucket-stg',
+    development: 'stardust-bucket-local',
+    test: 'stardust-bucket-local',
     production: 'stardust-bucket-prod',
+  } as const
+  private static readonly ENDPOINT_BY_MODE = {
+    development: ENV.s3Endpoint,
+    test: ENV.s3Endpoint,
+    production: `https://${ENV.s3AccountId}.r2.cloudflarestorage.com`,
   } as const
   private static readonly CACHE_CONTROL = 'max-age=3600'
   private static readonly SIGNED_UPLOAD_URL_EXPIRES_IN_SECONDS = 3600
@@ -35,7 +40,8 @@ export class S3FileStorageProvider implements FileStorageProvider {
   constructor() {
     this.client = new S3Client({
       region: 'auto',
-      endpoint: `https://${ENV.s3AccountId}.r2.cloudflarestorage.com`,
+      endpoint: S3FileStorageProvider.ENDPOINT_BY_MODE[ENV.mode],
+      forcePathStyle: ENV.mode !== 'production',
       credentials: {
         accessKeyId: ENV.s3AccessKeyId,
         secretAccessKey: ENV.s3SecretAccessKey,
