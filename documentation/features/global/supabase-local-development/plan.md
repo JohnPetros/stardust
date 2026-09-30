@@ -12,8 +12,8 @@ updated_at: 2026-09-29
 - **Spec:** revisão 40, in_progress; CA-03 agora valida apenas Studio; Web CA-03 saiu do gate por decisão do usuário. Evidência Web/MinIO/OAuth e CI de PR também removida dos gates. Chaves publishable, gateway Envoy, PostgreSQL feedback e Redis configurável estão implementados; Drizzle/RLS ficam para a próxima task.
 - **Plan:** in_progress; necessário pela dependência entre o stack Compose, o reset do PostgreSQL, os adapters locais, a integração Server e os fluxos reais Web/Studio.
 - **Fase atual:** W7 — implementação e paired reviews concluídos; Spec Reviewer rev40 clear; P2 mantém o handoff em andamento enquanto ACH-05 e os gates formais de PR não forem resolvidos.
-- **Próxima ação:** revogar nos provedores as credenciais antigas associadas ao incidente ACH-05; sensores integrados passaram sem alterar migrations.
-- **Blockers externos:** ACH-05 — revogação provider-side dos tokens antigos exige acesso aos provedores. CA-02 permanece deferred por decisão do usuário, não como gate desta conclusão.
+- **Próxima ação:** identificar quais credenciais de quais provedores foram expostas no incidente ACH-05 e revogar/rotacionar esses alvos; sensores integrados passaram sem alterar migrations.
+- **Blockers externos:** ACH-05 — provedores e credenciais antigas afetadas não estão identificados nas evidências disponíveis, então a revogação seletiva segura não foi executada. CA-02 permanece deferred por decisão do usuário, não como gate desta conclusão.
 - **Findings:** ACH-25 descreve onboarding Web removido do CA-03 e não é gate; CA-03 agora cobre somente Studio. OAuth real e CI de PR foram dispensados dos gates a pedido do usuário. ACH-26/27 corrigiram, respectivamente, o teste de consumo Vite e os links Auth locais.
 - **Builders ativos:** nenhum; Infra, Server, C3/C4, A1 e reviews pareados concluídos. Somente a Task principal mantém o handoff P1 aberto.
 - **Builders próximos:** nenhum; Web browser, MinIO browser, OAuth real e CI de PR foram removidos dos gates por decisão do usuário; CA-02 permanece deferred.

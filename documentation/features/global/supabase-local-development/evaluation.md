@@ -4,7 +4,7 @@ spec: ./spec.md
 spec_revision: 40
 status: in_progress
 base_commit: 0b2ea4cae4870067d506a257f2d3244ecbab742c
-evaluated_commit: uncommitted-worktree
+evaluated_commit: 08ccbdc0c87717026775af99f038f67b397b58be
 last_updated_at: 2026-09-29
 ---
 
@@ -16,7 +16,7 @@ last_updated_at: 2026-09-29
 - Plan: reconciliado para revisão 40, status in_progress; Builders e paired reviews concluídos, com P2 no handoff final.
 - Autoridade de produto: documentation/prds/auth/sign-in.md, RP-01, RP-02, JN-01; Issue #601 foi lida. As decisões de execução usam a revisão vigente da Spec.
 - Commit-base: 0b2ea4cae4870067d506a257f2d3244ecbab742c.
-- Commit-base: `0b2ea4cae4870067d506a257f2d3244ecbab742c`; o trabalho avaliado continua sem commit no worktree. As evidências locais listadas abaixo passaram; CI remoto de PR foi dispensado pelo usuário.
+- Commit-base: `0b2ea4cae4870067d506a257f2d3244ecbab742c`; implementação registrada nos commits da branch até `08ccbdc0c87717026775af99f038f67b397b58be`. CI remoto de PR foi dispensado como gate de evidência pelo usuário.
 - Design: sem Design Contract, sem widgets alterados.
 - Assignments registradas no Plan:
   - Task principal / P0/P1: Rules, AGENTS.md, documentation/sdd.md, Spec, Plan e Evaluation; atualizar a regra de smoke manual para caminho feliz conciso.
@@ -140,7 +140,7 @@ last_updated_at: 2026-09-29
 | `docker compose --env-file .env.local -f docker-compose.yml config --quiet` | passed | Envoy configuration and local key variables interpolate successfully; command emitted no resolved config/value output |
 | `git diff --quiet -- apps/server/supabase/migrations` | passed | migrations permanecem byte-a-byte inalteradas após amendment rev34 e env key rotation |
 | npm run check:spec-definition -- documentation/features/global/supabase-local-development/spec.md | passed no último rerun | CI-12 |
-| npm run check:spec-implementation -- documentation/features/global/supabase-local-development/spec.md --base HEAD | passed | atual; 57 contracted paths; 17 Create, 37 Modify, 0 Generate, 3 Remove; 3 unrelated changed paths ignored |
+| npm run check:spec-implementation -- documentation/features/global/supabase-local-development/spec.md --base 0b2ea4cae4870067d506a257f2d3244ecbab742c | passed | atual; 57 contracted paths; 17 Create, 37 Modify, 0 Generate, 3 Remove; 3 unrelated changed paths ignored |
 | npm run format | passed | 7 workspaces; formatter reported no fixes |
 | npm run check:code | passed | 7/7 workspaces; existing warnings only |
 | npm run check:types | passed | 7/7 workspaces |
@@ -148,7 +148,7 @@ last_updated_at: 2026-09-29
 | npm run test:coverage | passed | 4/4 tasks; Core 176 suites/638 tests, Web 115/480, Server 167/322, Studio 14 suites/62 tests; server worker forced-exit warning after completion |
 | npm run check:coverage | passed | all four workspaces; Studio lines 10.54% vs 10.21%, statements 10.44% vs 10.10%, functions 9.89% vs 9.65%, branches 9.16% vs 8.82% |
 | npm run check:architecture | passed | 3,683 modules / 6,564 dependency edges; no violations |
-| npm run check:test-integrity -- --base HEAD | passed | atual; 4 changed test files, 1 testable source file, 16 excluded source files |
+| npm run check:test-integrity -- --base 0b2ea4cae4870067d506a257f2d3244ecbab742c | passed | atual; 4 changed test files, 1 testable source file, 16 excluded source files |
 | `.env.local` safety audit | passed | root + server/web/studio files parse as dotenv; all 4 are ignored by Git; values never read or printed; exporter scripts pass `node --check`; Server package JSON parses |
 | `docker compose --env-file .env.local -f docker-compose.yml config --quiet` | passed | root `.env.local` now satisfies Compose's required local variables; config output suppressed |
 | npm run db:test -w @stardust/server | passed | CI-09; Compose versionado, root `.env.local`, portas alternativas e jobs `minio-init`/reset separados; migrations reaplicadas |
@@ -189,7 +189,7 @@ last_updated_at: 2026-09-29
 - Reviewer C1 revision 27 — verdict failed: IR-01 confirma que `next.config.js` carrega após `server.listen()`; IR-02 confirma que Studio coverage ratchet continua abaixo do baseline. Não criar teste dedicado de constants nem alterar baseline.
 - ACH-02 — waived by user for this conclusion: OAuth real Google/GitHub não será executado; nenhum valor foi registrado.
 - ACH-04 — resolved: variáveis MinIO/S3 existem em `.env.local` local e correspondem entre Server e Compose; nenhum valor foi registrado.
-- ACH-05 — local containment complete, external rotation pending: quatro `.env.local` foram substituídos por configuração dotenv local-only; Compose config passou e as antigas cópias locais de credenciais de terceiros foram removidas. A tentativa anterior de `source` tratou conteúdo como código, emitiu saída com material de credenciais e tentou comandos locais. Nunca carregar arquivo como shell nem registrar valores. Revogar tokens antigos nos provedores ainda é necessário.
+- ACH-05 — local containment complete, external rotation pending: quatro `.env.local` foram substituídos por configuração dotenv local-only; Compose config passou e as antigas cópias locais de credenciais de terceiros foram removidas. A tentativa anterior de `source` tratou conteúdo como código, emitiu saída com material de credenciais e tentou comandos locais. Nunca carregar arquivo como shell nem registrar valores. As evidências atuais não identificam quais valores antigos de quais provedores foram expostos; não revoguei credenciais externas às cegas. Revogação/provider rotation segue pendente.
 - ACH-07 — resolved in Compose: Realtime recebe `METRICS_JWT_SECRET` vinculado ao JWT local. Startup ainda requer outras correções, registradas como ACH-11/12.
 - ACH-08 — resolved in code: healthcheck Inngest não pode chamar `wget`, ausente na imagem; Bash existe e probe TCP em 8288 foi aplicado.
 - ACH-09 — resolved in Compose: imagem distroless v14.15 oferece `postgrest --ready`, que chama o admin endpoint HTTP `/ready`; a probe real passou contra a instância local.
@@ -227,6 +227,7 @@ last_updated_at: 2026-09-29
 - EV-22 — Spec rev38 remove referências obsoletas a VM-01; a observação não bloqueante do Reviewer sobre CA-12 foi resolvida na rev39, que limita o Auth local comprovado ao Server e esclarece a evidência Web mockada/configuração. Spec Reviewer rev39 clear.
 - EV-23 — fechamento integrado: Spec/Plan definitions passaram na rev39, `check:spec-implementation --base HEAD` passou (57 paths), Compose `config --quiet` passou, `git diff --check` passou e migrations continuam byte-a-byte inalteradas.
 - EV-24 — por decisão do usuário, CA-03 cobre somente o fluxo protegido do Studio; Web CA-03 e seu pré-requisito de perfil/catálogo não são gates. Spec Reviewer rev40: clear. `check:spec-definition`, `check:plan-definition`, `check:spec-implementation --base HEAD`, `check:test-integrity` e `git diff --check` passaram; migrations permanecem inalteradas.
+- EV-25 — revisão para publicação em `08ccbdc0c87717026775af99f038f67b397b58be`: nove commits semânticos criados; hooks `check:code` passaram em 7/7 workspaces. Com base `0b2ea4cae4870067d506a257f2d3244ecbab742c`, `check:spec-definition`, `check:plan-definition`, `check:spec-implementation` (57 paths), `check:test-integrity` (4 test files) e `git diff --check` passaram. Nenhuma migration mudou. ACH-05 continua pendente porque os provedores/alvos antigos não estão identificados.
 - S3 paired implementation review — accepted, Spec rev35, sem findings bloqueantes. Reviewer confirmou publishable key única no runtime Server, autorização God Account antes dos repositories Postgres, queries bindadas, caminho request-scoped/RLS preservado para usuários, CA-13 e full integration passados e migrations inalteradas. CA-12 tem evidência Server pelo gateway; Web browser foi removido do gate por decisão do usuário.
 
 ## Análise preventiva dos findings
@@ -237,7 +238,7 @@ last_updated_at: 2026-09-29
 | ACH-02 | configuração OAuth GitHub não localizada no ambiente development inspecionado | evidência OAuth real removida do gate por decisão do usuário; credenciais ficam fora do Git | waived by user |
 | ACH-03 | Next chama `server.listen()` antes de carregar next.config.js | usuário pediu para tratar CA-02 em trabalho posterior; não ampliar o path map agora | deferred |
 | ACH-04 | variáveis MinIO/S3 locais necessárias ao smoke estavam ausentes | configuração local foi substituída com dotenv sem registrar valores | resolvido localmente |
-| ACH-05 | conteúdo anterior que não era dotenv foi avaliado como shell e expôs saída sensível | ambientes locais foram substituídos por assignments dotenv e segredos locais regenerados; revogação dos tokens antigos nos provedores ainda requer ação externa | pendente externo; não declarar resolvido |
+| ACH-05 | conteúdo anterior que não era dotenv foi avaliado como shell e expôs saída sensível | ambientes locais foram substituídos por assignments dotenv e segredos locais regenerados; os registros não identificam provedores/credenciais antigas para uma revogação seletiva segura | pendente de identificar os alvos e revogar/rotacionar |
 | ACH-06 | cobertura do Studio ficou abaixo do baseline após a execução atual | testar a borda consumidora Vite e manter o baseline intacto | resolved |
 
 ## Decisões
@@ -262,6 +263,6 @@ last_updated_at: 2026-09-29
 - Estado: in_progress
 - Estado: in_progress; não marcar como completed ainda.
 - Gates locais da revisão 40: Spec Reviewer clear; CA-03 Studio passed; definitions, path/integrity checks, coverage, arquitetura, tipos, código, testes, Server integration, builds locais e Compose config passaram. Nenhuma migration foi alterada. Web CA-03, browser MinIO, OAuth real e CI remoto de PR foram dispensados pelo usuário; isso não é registrado como evidência aprovada. CA-02 foi adiado pelo usuário.
-- Pendências para conclusão formal: ACH-05 — revogação provider-side das credenciais antigas continua pendente; commit/PR e CI do PR ainda não foram executados. O fluxo `conclude-spec` exige CI verde do PR antes de marcar Spec/Plan/Evaluation como completed.
+- Pendências para conclusão formal: ACH-05 — revogação provider-side das credenciais antigas continua pendente porque os alvos não estão identificados; PR/CI ainda estão em andamento. O fluxo `conclude-spec` exige CI verde do PR antes de marcar Spec/Plan/Evaluation como completed.
 - Concluído nesta rodada: Spec rev40 revisada e clara; Plan/Evaluation reconciliados com a decisão de remover Web do CA-03 e com as evidências/checkers já executados.
 - Próxima ação: resolver ACH-05 no provedor responsável; depois, com autorização de commit/PR, executar `commit-code` e `create-pr`, acompanhar CI e só então fechar Spec e Plan. Drizzle permanece para a próxima task.
