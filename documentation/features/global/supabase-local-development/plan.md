@@ -11,9 +11,9 @@ updated_at: 2026-09-29
 
 - **Spec:** revisão 40, in_progress; CA-03 agora valida apenas Studio; Web CA-03 saiu do gate por decisão do usuário. Evidência Web/MinIO/OAuth e CI de PR também removida dos gates. Chaves publishable, gateway Envoy, PostgreSQL feedback e Redis configurável estão implementados; Drizzle/RLS ficam para a próxima task.
 - **Plan:** in_progress; necessário pela dependência entre o stack Compose, o reset do PostgreSQL, os adapters locais, a integração Server e os fluxos reais Web/Studio.
-- **Fase atual:** W7 — implementação e paired reviews concluídos; Spec Reviewer rev40 clear; P2 mantém o handoff em andamento enquanto ACH-05 e os gates formais de PR não forem resolvidos.
-- **Próxima ação:** identificar quais credenciais de quais provedores foram expostas no incidente ACH-05 e revogar/rotacionar esses alvos; sensores integrados passaram sem alterar migrations.
-- **Blockers externos:** ACH-05 — provedores e credenciais antigas afetadas não estão identificados nas evidências disponíveis, então a revogação seletiva segura não foi executada. CA-02 permanece deferred por decisão do usuário, não como gate desta conclusão.
+- **Fase atual:** W7 — implementação e paired reviews concluídos; Spec Reviewer rev40 clear; Builder Fix aceito sem findings e sensores locais passaram; P2 aguarda os checks do novo SHA do PR.
+- **Próxima ação:** atualizar o PR #606 com `568e9eed15bbabd21ea62edbc2a6533357e894b8` e aguardar seus checks; ACH-05 continua pendente de identificar e revogar/rotacionar os alvos provider-side.
+- **Blockers externos:** ACH-05 — provedores e credenciais antigas afetadas não estão identificados nas evidências disponíveis, então a revogação seletiva segura não foi executada. CI do PR anterior ao Builder Fix falhou em cobertura Web e complexidade; validações locais atuais passaram, CI da nova revisão ainda não foi executado.
 - **Findings:** ACH-25 descreve onboarding Web removido do CA-03 e não é gate; CA-03 agora cobre somente Studio. OAuth real e CI de PR foram dispensados dos gates a pedido do usuário. ACH-26/27 corrigiram, respectivamente, o teste de consumo Vite e os links Auth locais.
 - **Builders ativos:** nenhum; Infra, Server, C3/C4, A1 e reviews pareados concluídos. Somente a Task principal mantém o handoff P1 aberto.
 - **Builders próximos:** nenhum; Web browser, MinIO browser, OAuth real e CI de PR foram removidos dos gates por decisão do usuário; CA-02 permanece deferred.
@@ -40,7 +40,7 @@ updated_at: 2026-09-29
 | W6 | Builder Infra | I3 | API gateway para chave publishable | Web publishable key | — | completed | IR-02 corrigido e re-review aceito; smoke HTTP/WS mock passou; Server Auth integrado ao Envoy passou na suíte completa |
 | W6 | Builder Server | S3 | Server publishable key e feedback PostgreSQL | API gateway para chave publishable; Web publishable key | — | completed | paired review aceito; CA-13 passou; teste Redis usa `ENV.redisUrl`; Server integration 66/66 suites, 205/205 testes |
 | W6 | Builder Clientes | C5 | Web publishable key | Spec amendment review | — | completed | Paired Reviewer aceitou diff e checks Web passaram; validação real Web/Auth local continua fora da evidência integrada concluída |
-| W7 | Task principal | P2 | Docs, validação integrada e paired review | API gateway para chave publishable; Server publishable key e feedback PostgreSQL; Web publishable key | — | in_progress | Architecture/Rules/Evaluation alinhadas; sensores integrados passaram; fechar ACH-05 e fluxo formal de PR |
+| W7 | Task principal | P2 | Docs, validação integrada e paired review | API gateway para chave publishable; Server publishable key e feedback PostgreSQL; Web publishable key | — | in_progress | Builder Fix aceito em paired review; PR checks atualizados; concluir ACH-05 antes de fechar Spec/Plan |
 
 ## Task cards
 
@@ -258,12 +258,15 @@ As variáveis vêm do `.env.local` raiz pelos scripts de exportação; nunca reg
 | CI-13 | npm run check:spec-implementation -- documentation/features/global/supabase-local-development/spec.md --base 0b2ea4cae4870067d506a257f2d3244ecbab742c | RF-01 a RF-10; todos os paths Create/Modify/Remove correspondem ao diff e filesystem | Spec Sensores; SDD | EV-13 | completed — rerun atual confirmou os 44 paths contratados |
 | CI-14 | Builds de Server, Web e Studio no CI do HEAD do PR | RF-01 a RF-10; builds e checks obrigatórios passam | Spec Sensores; CI do PR | EV-09 | waived by user — builds locais Server/Web/Studio passaram; CI remoto foi removido dos gates |
 | CI-15 | npm run check:plan-definition -- documentation/features/global/supabase-local-development/plan.md antes de salvar e antes de cada wave | RF-01 a RF-11; ledger, dependências, ownership e revisão da Spec continuam íntegros | create-plan; documentation/sdd.md | EV-09 | completed |
+| CI-16 | npm run check:complexity | RF-01 a RF-11; guards Web/Studio e Server/PostgreSQL ficam abaixo dos thresholds, sem alterar thresholds globais | Spec Sensors; CodeMultiVitals | EV-27 | completed locally — erros refatorados; snapshots do baseline atualizados apenas para paths/funções Server alterados ou adicionados |
+| CI-17 | Checks obrigatórios do PR #606 após o Builder Fix | RF-01 a RF-11; novo SHA recebe checks verdes e nenhum resultado anterior é reutilizado | conclude-spec; create-pr | EV-27 | pending — a nova revisão ainda aguarda paired review e push |
 | Reviewer | Task principal — Rules do P0; implementation-reviewer-agent pareado após o diff | Rules routes document root Compose, db:test, no-seed reset, and Mailpit AuthFixture confirmation | Spec revisão 31; SDD; Server Rules | EV-10 | completed — accepted, no findings |
 | Reviewer | Builder Infra — diff I1/I2; implementation-reviewer-agent pareado após o diff | Compose, reset e tooling aderem à Spec e às Rules de Server/Database | Spec revisão 31; Technical Contract | EV-10 | completed — accepted after IR-01 correction, no findings |
 | Reviewer | Builder Server — S1/S2 and rev31 ACH-19/21/23 fixes; paired implementation-reviewer-agent | code meets Mailpit confirmation and local JWT group contracts; CA-09 full-suite evidence required for exit | Spec revisão 31; Architecture; Server Rules | EV-10 | completed — accepted after full-suite pass; no findings in assigned code paths |
 | Reviewer | Task principal — Architecture A1; implementation-reviewer-agent pareado após o diff | Architecture descreve o runtime integrado e respeita a Spec e Rules | Spec revisão 31; Architecture; Rules | EV-10 | completed — re-review clear, no findings |
 | Reviewer | Builder Clientes — diff C1; implementation-reviewer-agent pareado após o diff | guards e detector aderem à Spec e às Rules de Web/Studio/testes | Spec revisão 31; Rules selecionadas | EV-10 | deferred — CA-02 pré-listener conforme decisão do usuário; C3 foi revisado e aceito separadamente |
 | Reviewer | Builder Clientes — diff C4 Studio; implementation-reviewer-agent pareado após o diff | plugin polyfills compatível com Vite 8/Rolldown e startup real preservam Rules e fronteiras | Spec revisão 31; Architecture; Studio Rules | EV-10 | completed — accepted, no findings |
+| Reviewer | Task principal — Builder Fix para CI-07/complexity no P2; implementation-reviewer-agent pareado | correção dos testes Web e complexidade Server/Studio/Web, preservando thresholds e contrato vigente | Spec revisão 40; Plan P2; Rules; Evaluation EV-27 | EV-28 | completed — accepted, no blocking findings; CI remoto aguarda novo SHA |
 
 # Execution log
 
