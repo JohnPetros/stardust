@@ -105,6 +105,8 @@ type LocalEndpointInput = {
   s3Endpoint: string
 }
 
+type LocalEndpointKey = keyof typeof LOCAL_ENDPOINTS
+
 const LOCAL_ENDPOINTS = {
   supabaseUrl: { schemes: ['http:'] },
   databaseUrl: { schemes: ['postgres:', 'postgresql:'] },
@@ -112,46 +114,70 @@ const LOCAL_ENDPOINTS = {
   s3Endpoint: { schemes: ['http:'] },
 } as const
 
+const LOOPBACK_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]'])
+
+function parseLocalEndpoint(input: LocalEndpointInput, key: LocalEndpointKey): URL {
+  const value = input[key]
+  if (!value) throw new Error(`${keyToVariableName(key)} must use a local endpoint`)
+
+  try {
+    return new URL(value)
+  } catch {
+    throw new Error(`${keyToVariableName(key)} must use a local endpoint`)
+  }
+}
+
+function hasLocalEndpointOrigin(endpoint: URL, schemes: readonly string[]): boolean {
+  const port = Number(endpoint.port)
+  return (
+    LOOPBACK_HOSTS.has(endpoint.hostname) &&
+    Number.isInteger(port) &&
+    port >= 1 &&
+    port <= 65535 &&
+    schemes.includes(endpoint.protocol)
+  )
+}
+
+function hasMailpitRootAddress(endpoint: URL): boolean {
+  return (
+    endpoint.pathname === '/' &&
+    !endpoint.search &&
+    !endpoint.hash &&
+    !endpoint.username &&
+    !endpoint.password
+  )
+}
+
+function validateLocalEndpoint(
+  key: LocalEndpointKey,
+  endpoint: URL,
+  schemes: readonly string[],
+): void {
+  if (!hasLocalEndpointOrigin(endpoint, schemes)) {
+    throw new Error(`${keyToVariableName(key)} must use a local endpoint`)
+  }
+
+  if (key === 'mailpitApiUrl' && !hasMailpitRootAddress(endpoint)) {
+    throw new Error('MAILPIT_API_URL must use a local endpoint')
+  }
+}
+
 export function validateLocalEndpoints(input: LocalEndpointInput): void {
   if (input.mode === 'production') return
 
-  const loopbackHosts = new Set(['localhost', '127.0.0.1', '[::1]'])
+  const configuredEndpoints = Object.entries(LOCAL_ENDPOINTS)
+  const endpoints =
+    input.mode === 'test'
+      ? configuredEndpoints
+      : configuredEndpoints.filter(([key]) => key !== 'mailpitApiUrl')
 
-  const endpointKeys = Object.entries(LOCAL_ENDPOINTS).filter(([key]) => {
-    return key !== 'mailpitApiUrl' || input.mode === 'test'
-  })
-
-  for (const [key, expected] of endpointKeys) {
-    let endpoint: URL
-
-    try {
-      const value = input[key as keyof LocalEndpointInput]
-      if (!value) throw new Error('missing endpoint')
-      endpoint = new URL(value)
-    } catch {
-      throw new Error(`${keyToVariableName(key)} must use a local endpoint`)
-    }
-
-    const port = Number(endpoint.port)
-    const hasValidPort = Number.isInteger(port) && port >= 1 && port <= 65535
-    const hasExpectedScheme = expected.schemes.some(
-      (scheme) => scheme === endpoint.protocol,
+  for (const [key, expected] of endpoints) {
+    const endpointKey = key as LocalEndpointKey
+    validateLocalEndpoint(
+      endpointKey,
+      parseLocalEndpoint(input, endpointKey),
+      expected.schemes,
     )
-
-    if (!loopbackHosts.has(endpoint.hostname) || !hasValidPort || !hasExpectedScheme) {
-      throw new Error(`${keyToVariableName(key)} must use a local endpoint`)
-    }
-
-    if (
-      key === 'mailpitApiUrl' &&
-      (endpoint.pathname !== '/' ||
-        endpoint.search ||
-        endpoint.hash ||
-        endpoint.username ||
-        endpoint.password)
-    ) {
-      throw new Error('MAILPIT_API_URL must use a local endpoint')
-    }
   }
 }
 

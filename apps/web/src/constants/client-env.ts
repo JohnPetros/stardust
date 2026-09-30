@@ -6,7 +6,9 @@ const clientEnv = {
   mode: process.env.MODE,
   cdnUrl: process.env.NEXT_PUBLIC_CDN_URL,
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-  supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+  supabaseKey:
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
+    (process.env.NODE_ENV === 'test' ? 'test-publishable-key' : undefined),
   stardustWebUrl: process.env.NEXT_PUBLIC_STARDUST_WEB_URL,
   stardustServerUrl: process.env.NEXT_PUBLIC_STARDUST_SERVER_URL,
   discordChannelUrl: process.env.NEXT_PUBLIC_DISCORD_CHANNEL_URL,
@@ -34,15 +36,17 @@ type LocalClientEndpoints = Pick<
 const isLoopbackHostname = (hostname: string) =>
   hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]'
 
-const validateLocalEndpoint = (value: string, variableName: string) => {
-  let url: URL
+const isLocalEndpoint = (value: string) => {
   try {
-    url = new URL(value)
+    const url = new URL(value)
+    return url.protocol === 'http:' && isLoopbackHostname(url.hostname)
   } catch {
-    throw new Error(`${variableName} must use a local endpoint in development`)
+    return false
   }
+}
 
-  if (url.protocol !== 'http:' || !isLoopbackHostname(url.hostname)) {
+const validateLocalEndpoint = (value: string, variableName: string) => {
+  if (!isLocalEndpoint(value)) {
     throw new Error(`${variableName} must use a local endpoint in development`)
   }
 }

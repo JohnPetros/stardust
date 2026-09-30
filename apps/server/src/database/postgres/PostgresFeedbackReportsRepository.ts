@@ -45,7 +45,7 @@ const timestamp = (value: Date | string | null): string | undefined => {
   return value instanceof Date ? value.toISOString() : new Date(value).toISOString()
 }
 
-const toEntity = (row: FeedbackReportRow): FeedbackReport => {
+const authorFromRow = (row: FeedbackReportRow) => {
   const authorName = row.author_name?.trim().length >= 2 ? row.author_name : 'Você'
   const authorSlug = row.author_slug?.trim().length >= 2 ? row.author_slug : 'voce'
   const avatarName =
@@ -55,20 +55,24 @@ const toEntity = (row: FeedbackReportRow): FeedbackReport => {
       ? row.avatar_image
       : '/images/profile.svg'
 
+  return {
+    id: row.user_id,
+    entity: {
+      name: authorName,
+      slug: authorSlug,
+      avatar: { name: avatarName, image: avatarImage },
+    },
+  }
+}
+
+const toEntity = (row: FeedbackReportRow): FeedbackReport => {
   return FeedbackReportEntity.create({
     id: row.id,
     content: row.content,
     intent: row.intent,
     screenshot: row.screenshot ?? undefined,
     sentAt: timestamp(row.created_at),
-    author: {
-      id: row.user_id,
-      entity: {
-        name: authorName,
-        slug: authorSlug,
-        avatar: { name: avatarName, image: avatarImage },
-      },
-    },
+    author: authorFromRow(row),
     title: row.title,
     status: row.status,
     createdAt: timestamp(row.created_at),
@@ -99,6 +103,31 @@ const rowToUpdate = (report: FeedbackReport) => ({
   lastAdminMessageAt: report.lastAdminMessageAt?.toISOString() ?? null,
   authorReadAt: report.authorReadAt?.toISOString() ?? null,
 })
+
+type FeedbackReportListQuery = {
+  search: string | null
+  intent: string | null
+  status: string | null
+  startAt: string | null
+  endAt: string | null
+  page: number
+  itemsPerPage: number
+}
+
+const normalizeFeedbackReportListQuery = (
+  params: FeedbackReportsListingParams,
+): FeedbackReportListQuery => {
+  const period = params.createdAtPeriod ?? params.sentAtPeriod
+  return {
+    search: params.search?.value ?? params.authorName?.value ?? null,
+    intent: params.intent?.value ?? null,
+    status: params.status?.value ?? null,
+    startAt: period?.startDate.toISOString() ?? null,
+    endAt: period?.endDate.toISOString() ?? null,
+    page: params.page?.value ?? 1,
+    itemsPerPage: params.itemsPerPage?.value ?? 20,
+  }
+}
 
 export class PostgresFeedbackReportsRepository implements FeedbackReportsRepository {
   constructor(private readonly client: PostgresClient = postgresClient) {}
@@ -168,16 +197,29 @@ export class PostgresFeedbackReportsRepository implements FeedbackReportsReposit
   }
 
   async list(params: FeedbackReportsListingParams): Promise<FeedbackReportsPageDto> {
-    const search = params.search?.value ?? params.authorName?.value ?? null
-    const intent = params.intent?.value ?? null
-    const status = params.status?.value ?? null
-    const period = params.createdAtPeriod ?? params.sentAtPeriod
-    const startAt = period?.startDate.toISOString() ?? null
-    const endAt = period?.endDate.toISOString() ?? null
-    const page = params.page?.value ?? 1
-    const itemsPerPage = params.itemsPerPage?.value ?? 20
+    const query = normalizeFeedbackReportListQuery(params)
+    const [rows, summaryRows] = await Promise.all([
+      this.queryListRows(query),
+      this.queryListSummary(query),
+    ])
+    const summary = summaryRows[0]
 
-    const rows = await this.client.query<FeedbackReportRow>`
+    return {
+      items: rows.filter((row) => row.id !== null).map((row) => toEntity(row).dto),
+      page: query.page,
+      itemsPerPage: query.itemsPerPage,
+      total: Number(rows[0]?.total_count ?? summary?.filtered_total ?? 0),
+      summary: {
+        total: Number(summary?.summary_total ?? 0),
+        open: Number(summary?.summary_open ?? 0),
+        closed: Number(summary?.summary_closed ?? 0),
+        unread: Number(summary?.summary_unread ?? 0),
+      },
+    }
+  }
+
+  private queryListRows(query: FeedbackReportListQuery) {
+    return this.client.query<FeedbackReportRow>`
       with filtered as (
         select
           r.id, r.content, r.screenshot, r.intent, r.user_id, r.title, r.status,
@@ -200,28 +242,31 @@ export class PostgresFeedbackReportsRepository implements FeedbackReportsReposit
         left join public.avatars a on a.id = u.avatar_id
         left join public.feedback_messages m on m.report_id = r.id
         where (
-          ${search}::text is null or r.id::text ilike '%' || ${search}::text || '%'
+          ${query.search}::text is null or r.id::text ilike '%' || ${query.search}::text || '%'
           or exists (
             select 1 from public.users search_user
             where search_user.id = r.user_id
-              and search_user.email ilike '%' || ${search}::text || '%'
+              and search_user.email ilike '%' || ${query.search}::text || '%'
           )
         )
-          and (${intent}::public.feedback_intent is null or r.intent = ${intent}::public.feedback_intent)
-          and (${status}::text is null or r.status = ${status}::text)
-          and (${startAt}::timestamptz is null or r.created_at >= ${startAt}::timestamptz)
-          and (${endAt}::timestamptz is null or r.created_at <= ${endAt}::timestamptz)
+          and (${query.intent}::public.feedback_intent is null or r.intent = ${query.intent}::public.feedback_intent)
+          and (${query.status}::text is null or r.status = ${query.status}::text)
+          and (${query.startAt}::timestamptz is null or r.created_at >= ${query.startAt}::timestamptz)
+          and (${query.endAt}::timestamptz is null or r.created_at <= ${query.endAt}::timestamptz)
         group by r.id, u.name, u.email, u.slug, a.name, a.image
       ), paged as (
         select *, count(*) over() as total_count
         from filtered
         order by is_unread desc, last_activity_at desc, id desc
-        offset greatest(${page} - 1, 0) * ${itemsPerPage}
-        limit greatest(${itemsPerPage}, 1)
+        offset greatest(${query.page} - 1, 0) * ${query.itemsPerPage}
+        limit greatest(${query.itemsPerPage}, 1)
       )
       select * from paged
     `
-    const summaryRows = await this.client.query<{
+  }
+
+  private queryListSummary(query: FeedbackReportListQuery) {
+    return this.client.query<{
       summary_total: number
       summary_open: number
       summary_closed: number
@@ -235,28 +280,15 @@ export class PostgresFeedbackReportsRepository implements FeedbackReportsReposit
         (select count(*)::integer from public.feedback_reports where last_user_message_at is not null
           and (studio_read_at is null or last_user_message_at > studio_read_at)) as summary_unread,
         (select count(*)::integer from public.feedback_reports r
-          where (${search}::text is null or r.id::text ilike '%' || ${search}::text || '%'
+          where (${query.search}::text is null or r.id::text ilike '%' || ${query.search}::text || '%'
             or exists (select 1 from public.users search_user
               where search_user.id = r.user_id
-                and search_user.email ilike '%' || ${search}::text || '%'))
-            and (${intent}::public.feedback_intent is null or r.intent = ${intent}::public.feedback_intent)
-            and (${status}::text is null or r.status = ${status}::text)
-            and (${startAt}::timestamptz is null or r.created_at >= ${startAt}::timestamptz)
-            and (${endAt}::timestamptz is null or r.created_at <= ${endAt}::timestamptz)) as filtered_total
+                and search_user.email ilike '%' || ${query.search}::text || '%'))
+            and (${query.intent}::public.feedback_intent is null or r.intent = ${query.intent}::public.feedback_intent)
+            and (${query.status}::text is null or r.status = ${query.status}::text)
+            and (${query.startAt}::timestamptz is null or r.created_at >= ${query.startAt}::timestamptz)
+            and (${query.endAt}::timestamptz is null or r.created_at <= ${query.endAt}::timestamptz)) as filtered_total
     `
-    const summary = summaryRows[0]
-    return {
-      items: rows.filter((row) => row.id !== null).map((row) => toEntity(row).dto),
-      page,
-      itemsPerPage,
-      total: Number(rows[0]?.total_count ?? summary?.filtered_total ?? 0),
-      summary: {
-        total: Number(summary?.summary_total ?? 0),
-        open: Number(summary?.summary_open ?? 0),
-        closed: Number(summary?.summary_closed ?? 0),
-        unread: Number(summary?.summary_unread ?? 0),
-      },
-    }
   }
 
   async findMany(

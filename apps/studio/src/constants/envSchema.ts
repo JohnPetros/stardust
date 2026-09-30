@@ -14,15 +14,17 @@ type LocalStudioEndpoints = Pick<
 const isLoopbackHostname = (hostname: string) =>
   hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]'
 
-const validateLocalEndpoint = (value: string, variableName: string) => {
-  let url: URL
+const isLocalEndpoint = (value: string) => {
   try {
-    url = new URL(value)
+    const url = new URL(value)
+    return url.protocol === 'http:' && isLoopbackHostname(url.hostname)
   } catch {
-    throw new Error(`${variableName} must use a local endpoint in development`)
+    return false
   }
+}
 
-  if (url.protocol !== 'http:' || !isLoopbackHostname(url.hostname)) {
+const validateLocalEndpoint = (value: string, variableName: string) => {
+  if (!isLocalEndpoint(value)) {
     throw new Error(`${variableName} must use a local endpoint in development`)
   }
 }
@@ -32,15 +34,20 @@ export const validateLocalStudioEndpoints = (input: LocalStudioEndpoints): void 
   validateLocalEndpoint(input.VITE_CDN_URL, 'VITE_CDN_URL')
 }
 
-export const parseEnv = (env: Record<string, unknown>) => {
-  const parsedEnv = envSchema.parse({
+const isDevelopmentMode = (mode: unknown) =>
+  (mode ?? process.env.MODE ?? process.env.NODE_ENV ?? 'development') === 'development'
+
+const parseStudioEnvironment = (env: Record<string, unknown>) =>
+  envSchema.parse({
     VITE_SERVER_APP_URL: env.VITE_SERVER_APP_URL,
     VITE_CDN_URL: env.VITE_CDN_URL,
     VITE_WEB_APP_URL: env.VITE_WEB_APP_URL,
   })
 
-  const mode = env.MODE ?? process.env.MODE ?? process.env.NODE_ENV ?? 'development'
-  if (mode === 'development') validateLocalStudioEndpoints(parsedEnv)
+export const parseEnv = (env: Record<string, unknown>) => {
+  const parsedEnv = parseStudioEnvironment(env)
+
+  if (isDevelopmentMode(env.MODE)) validateLocalStudioEndpoints(parsedEnv)
 
   return parsedEnv
 }
