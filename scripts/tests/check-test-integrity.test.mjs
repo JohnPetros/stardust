@@ -140,6 +140,42 @@ test('fails when a test is outside the allowed workspace locations', async () =>
   }
 })
 
+test('rejects dedicated tests for constants, providers and fixtures', async () => {
+  const repositoryRoot = await createRepositoryFixture()
+  const forbiddenTestPaths = [
+    'apps/web/src/constants/tests/client-env.test.ts',
+    'apps/server/src/rest/controllers/tests/StorageProvider.test.ts',
+    'apps/server/src/tests/routes/fixtures/AccountFactory.test.ts',
+  ]
+  try {
+    await Promise.all(
+      forbiddenTestPaths.map(async (forbiddenTestPath) => {
+        await mkdir(path.dirname(path.join(repositoryRoot, forbiddenTestPath)), {
+          recursive: true,
+        })
+        await writeFile(
+          path.join(repositoryRoot, forbiddenTestPath),
+          "test('value', () => expect(true).toBe(true))\n",
+        )
+      }),
+    )
+    await assert.rejects(
+      execFileAsync(process.execPath, [SCRIPT_PATH, '--json'], {
+        cwd: repositoryRoot,
+      }),
+      (error) => {
+        const result = JSON.parse(error.stdout)
+        assert.equal(result.status, 'failed')
+        assert.deepEqual(result.forbiddenTestPaths, [...forbiddenTestPaths].sort())
+        assert.match(result.errors.join('\n'), /outside allowed test locations/)
+        return true
+      },
+    )
+  } finally {
+    await rm(repositoryRoot, { force: true, recursive: true })
+  }
+})
+
 test('allows RPC action and AI tool test locations', async () => {
   const repositoryRoot = await createRepositoryFixture()
   const allowedSourcePaths = [
