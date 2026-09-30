@@ -8,7 +8,7 @@ const env = {
   supabaseUrl: process.env.SUPABASE_URL,
   supabaseKey: getSupabasePublishableKey(),
   databaseUrl: process.env.SUPABASE_DATABASE_URL,
-  mailpitApiUrl: process.env.MAILPIT_API_URL,
+  mailpitApiUrl: getMailpitApiUrl(),
   s3Endpoint: process.env.S3_ENDPOINT,
   redisUrl: process.env.REDIS_URL,
   inngestEventKey: process.env.INNGEST_EVENT_KEY,
@@ -201,5 +201,12 @@ function getSupabasePublishableKey(): string | undefined {
   return (
     process.env.SUPABASE_PUBLISHABLE_KEY ??
     (process.env.MODE === 'test' ? 'test-publishable-key' : undefined)
+  )
+}
+
+function getMailpitApiUrl(): string | undefined {
+  return (
+    process.env.MAILPIT_API_URL ||
+    (process.env.MODE === 'test' ? 'http://127.0.0.1:54327' : undefined)
   )
 }
