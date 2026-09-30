@@ -6,7 +6,7 @@ const env = {
   port: process.env.PORT,
   baseUrl: process.env.BASE_URL,
   supabaseUrl: process.env.SUPABASE_URL,
-  supabaseKey: process.env.SUPABASE_PUBLISHABLE_KEY,
+  supabaseKey: getSupabasePublishableKey(),
   databaseUrl: process.env.SUPABASE_DATABASE_URL,
   mailpitApiUrl: process.env.MAILPIT_API_URL,
   s3Endpoint: process.env.S3_ENDPOINT,
@@ -196,3 +196,10 @@ const parsedEnv = envSchema.parse(env)
 validateLocalEndpoints(parsedEnv)
 
 export const ENV = parsedEnv
+
+function getSupabasePublishableKey(): string | undefined {
+  return (
+    process.env.SUPABASE_PUBLISHABLE_KEY ??
+    (process.env.MODE === 'test' ? 'test-publishable-key' : undefined)
+  )
+}
