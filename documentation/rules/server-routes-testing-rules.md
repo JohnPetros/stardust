@@ -48,9 +48,12 @@ npm run db:test -w @stardust/server
 npm run test:integration -w @stardust/server
 ```
 
-O `db:test` executa `supabase start` e `supabase db reset --local --yes`,
-garantindo que o stack local esteja de pé e que o schema esteja reconstruído a
-partir das migrations.
+O `db:test` prepara o stack Supabase do root `docker-compose.yml` usando as
+variáveis locais de `.env.local` e executa o one-shot `supabase-db-reset`, que
+reconstrói o schema a partir das migrations versionadas sem aplicar seed. Não
+inicie outro stack por `supabase start` para esses testes. A fixture de Auth
+confirma cada conta efêmera pelo email capturado no Mailpit local; mantenha a
+confirmação de email ativa e nunca registre OTP, token ou corpo da mensagem.
 
 Os testes em `apps/server/src/tests/routes/**` dependem do Supabase local mesmo
 quando executados pelo projeto Jest `server`, pois usam `SupabaseFixture`,
@@ -153,6 +156,13 @@ Regras para essas fixtures:
    locais para a fixture compartilhada.
 4. Evite criar fixture nova se `HonoFixture`, `SupabaseFixture`, `AuthFixture`
    e fixtures já existentes já resolverem o caso com clareza.
+5. Fixtures sao infraestrutura de suporte dos testes e nao recebem arquivos de
+   teste dedicados. Nao crie `*.test.*` ou `*.spec.*` em
+   `apps/server/src/tests/fixtures/`.
+6. Valide uma fixture por meio do teste de rota que a utiliza, observando a
+   resposta HTTP e, quando o cenário produzir efeitos persistidos, o estado
+   persistido. Rotas sem mutação podem validar o resultado observável sem essa
+   assertion. Nao teste chamadas internas da fixture.
 
 ## 7. Padrões de Cobertura
 

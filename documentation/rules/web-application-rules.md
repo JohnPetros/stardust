@@ -4,6 +4,8 @@
 
 # Desenvolvimento
 
+O cliente Supabase do browser usa `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Nunca use uma chave API `secret`/`service_role` na Web.
+
 ## Tecnologias e bibliotecas
 
 - **Framework:** [Next.js](https://nextjs.org/) com TypeScript — framework full-stack para React, oferecendo renderização do lado do servidor (SSR), geração de páginas estáticas (SSG), rotas automáticas baseadas na estrutura de arquivos e API Routes (endpoints REST).
@@ -49,7 +51,7 @@ npm run dev
 npm run test
 ```
 > [!NOTE]
-> Defina as variáveis de ambiente de desenvolvimento no arquivo .env.development
+> Defina as variáveis de ambiente de desenvolvimento no arquivo .env.local
 > Para isso veja o arquivo [.env.example](https://github.com/JohnPetros/stardust/blob/main/apps/web/.env.example) para saber quais variáveis devem ser preenchidas
 
 ## Tooling

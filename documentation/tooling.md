@@ -122,7 +122,7 @@ tools. Um teste fora desses locais aparece em `forbiddenTestPaths` e falha o CI.
 
 | Script             | Descrição                                                                                |
 | --- | --- |
-| `dev`              | Inicia a API em modo watch com `.env.development`.                                       |
+| `dev`              | Inicia a API em modo watch com `.env.local`.                                       |
 | `lint`             | Executa o lint de `src` com nível de diagnóstico de erro.                                |
 | `format`           | Formata `src` e grava as alterações.                                                     |
 | `check:code`       | Verifica `src` com Biome, sem aplicar correções.                                         |
@@ -246,6 +246,65 @@ los.
 | `lint`        | Executa o lint de `src` com nível de diagnóstico de erro. |
 | `format`      | Formata `src` e grava as alterações.                      |
 
+## Supabase local
+
+O root Docker Compose é a única origem do Supabase local. Configure as
+variáveis locais no `.env.local` da raiz e mantenha esse arquivo ignorado pelo
+Git. Passe-o ao Compose com `--env-file`; não carregue o arquivo com `source`.
+Os valores nunca devem ser copiados para comandos versionados, documentação ou
+logs.
+
+Suba os serviços persistentes e aguarde os health checks. Em seguida, execute
+o inicializador one-shot do MinIO; ele cria o bucket local de forma idempotente:
+
+```bash
+docker compose --env-file .env.local up -d --wait \
+  inngest redis supabase-postgres supabase-mailpit supabase-templates minio \
+  supabase-auth supabase-rest supabase-realtime supabase-kong
+docker compose --env-file .env.local run --rm minio-init
+```
+
+`supabase-role-init` é iniciado como dependência do Auth, PostgREST e Realtime.
+Ele prepara as roles locais, inclusive quando `docker/volumes/postgres/` já
+contém dados. Para limpar o Auth e o schema público e reaplicar as migrations
+versionadas, execute o reset one-shot; ele não aplica seed:
+
+```bash
+docker compose --env-file .env.local --profile test run --rm supabase-db-reset
+```
+
+O fluxo de integração do Server prepara o mesmo stack e reseta o banco antes
+da suíte:
+
+```bash
+npm run db:test -w @stardust/server
+npm run test:integration -w @stardust/server
+```
+
+As portas host padrão são Kong `54321`, PostgreSQL `54322`, Mailpit HTTP
+`54324`/SMTP `54325`, Redis `6379` e MinIO API `9000`/console `9001`, sempre
+publicadas em loopback. Quando outro stack ocupar esses ports, configure no
+`.env.local` raiz `SUPABASE_API_PORT`, `SUPABASE_DATABASE_PORT`,
+`SUPABASE_MAILPIT_HTTP_PORT`, `SUPABASE_MAILPIT_SMTP_PORT`, `REDIS_PORT`,
+`MINIO_API_PORT` e `MINIO_CONSOLE_PORT`. Os apps devem usar as mesmas portas
+nas URLs de `.env.local`; `apps/server/.env.testing` deve apontar para a API e
+PostgreSQL da stack de teste. Os valores padrão continuam válidos quando os
+overrides forem omitidos. Os guards aceitam qualquer porta somente em loopback
+e com o protocolo local esperado. O bucket MinIO usa o nome configurável
+localmente, com `stardust-bucket-local` como padrão. Não coloque os valores de
+acesso do MinIO no Git.
+
+GoTrue envia mensagens para o Mailpit e carrega os templates versionados de
+cadastro e recuperação pelo serviço interno `supabase-templates`. O serviço
+não publica uma porta no host. Para OAuth Google e GitHub, mantenha IDs e
+secrets somente no `.env.local` da raiz e registre nos provedores o callback
+local `http://127.0.0.1:<SUPABASE_API_PORT>/auth/v1/callback` (porta padrão
+`54321`).
+
+`docker compose --env-file .env.local down` preserva os dados locais de
+PostgreSQL e MinIO em `docker/volumes/`. Redis, Auth, PostgREST, Realtime,
+Mailpit, Inngest, Kong e templates são descartáveis.
+
 ## Testes de integração
 
 Os testes de integração da Web App usam Playwright, o ambiente
@@ -262,7 +321,7 @@ npm --workspace @stardust/web run test:integration:debug
 Para uma inspeção manual autenticada, inicie a API e a Web App em terminais
 separados, carregue o ambiente local com o script correspondente e valide uma
 rota protegida além da tela de login. Credenciais devem permanecer em
-`.env.development` e nunca ser registradas no repositório ou nos logs.
+`.env.local` e nunca ser registradas no repositório ou nos logs.
 
 ## Ordem recomendada
 

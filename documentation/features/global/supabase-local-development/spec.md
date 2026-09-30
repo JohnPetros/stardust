@@ -1,7 +1,7 @@
 ---
 title: Desenvolvimento local isolado com Supabase, MinIO e Mailpit
-status: open
-revision: 10
+status: in_progress
+revision: 40
 source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/issues/601
@@ -14,79 +14,78 @@ scope:
   - apps/web
   - apps/studio
   - scripts
+  - docker/supabase
   - docker-compose.yml
   - documentation/tooling.md
   - documentation/architecture.md
-last_updated_at: 2026-09-26
+  - documentation/rules
+  - AGENTS.md
+  - documentation/sdd.md
+last_updated_at: 2026-09-29
 ---
 
 # Context and scope
 
 ## Origem e limites
 
-A [Issue #601](https://github.com/JohnPetros/stardust/issues/601) requer Web, Studio e Server locais sem acesso ao Supabase staging. O PRD de sign-in preserva email/senha e login social por Google e GitHub. O usuário escolheu um seed a partir dos dados de staging de Space, Learning e Challenging, incluindo challenges, com a mídia associada copiada para MinIO quando consumida pelo provider S3. A renomeação dos comandos remotos foi adiada para outra Spec.
+A [Issue #601](https://github.com/JohnPetros/stardust/issues/601) requer Web, Studio e Server locais sem acesso ao Supabase staging. O PRD de sign-in preserva email/senha e login social por Google e GitHub. O usuário retirou qualquer seed da entrega: não há snapshot de staging, catálogo demonstrativo, usuário Auth pré-criado, arquivo de seed, seeder, gateway de seed, manifesto ou cópia de mídia. A renomeação dos comandos remotos permanece adiada para outra Spec.
 
-Hoje `db:test` exclui Mailpit, `[db.seed]` está desabilitado, o provider S3 fixa R2, `db:types` do Server lê staging e o da Web lê produção. Os `.env.development` locais de Server e Web têm URLs Supabase remotas. Studio consome o Server e uma CDN configurável, sem cliente Supabase direto. Não se alteram schema, regras de negócio, contratos HTTP, permissões ou widgets.
+Hoje `db:test` cria um stack Docker indireto pelo Supabase CLI, `[db.seed]` está desabilitado, o provider S3 fixa R2, `db:types` do Server lê staging e os antigos arquivos de desenvolvimento de Server e Web tinham URLs Supabase remotas. Os arquivos locais são padronizados nesta revisão como `.env.local`. Studio consome o Server e uma CDN configurável, sem cliente Supabase direto. Esta Spec altera somente o script `db:test` do Server para preparar o stack Compose compartilhado; `db:types` e os comandos remotos permanecem como estão. O schema de aplicação e as migrations versionadas não mudam; apenas um schema `storage` local de compatibilidade, vazio, pode ser recriado para satisfazer policies legadas. A revisão acrescenta chaves API publishable para Server e Web e remove o uso da chave service-role pelos apps; as rotas God Account preservam o acesso administrativo via PostgreSQL direto. O fluxo RLS e os repositories atuais permanecem como estão até a próxima task de adoção do Drizzle; esta Spec não cria, remove ou edita migrations.
 
-A inspeção read-only usou o conector **Supabase StarDust Old**, no projeto `stardust dev`, e encontrou a fotografia abaixo. A tabela `public.questions` está vazia; conteúdo de aprendizado existe também em `stars.texts` e `stars.questions`. Não existe `public.docs` nessa revisão do schema. Entre 36 challenges, 27 são públicos e 9 privados; todos os públicos referenciam `user_id` de usuário real, que o snapshot deve substituir por uma conta autora local determinística. O snapshot exclui identidades e credenciais reais, sessões, comentários, soluções de usuários, votos, challenges privados e demais dados pessoais. O seed inclui duas identidades sintéticas em `auth.users`, uma para Web e outra para Studio, sem copiar contas de staging.
-
-| Fluxo | Produtor | Consumidor | Transporte e mudança |
-| --- | --- | --- | --- |
-| Auth, DB, Storage e Realtime | Supabase CLI local | Server e Web | HTTP/Postgres em loopback; Studio acessa via Server |
-| Catálogo | staging read-only | seeders modulares locais | snapshot versionado, sanitizado e determinístico; orquestrador coordena sem escrever tabelas de domínio |
-| Mídia de catálogo | buckets Supabase `images` e `stardust-bucket` | bucket `images` do Supabase local e bucket `stardust-bucket-stg` do MinIO | destino decidido pelo bucket de origem; key mantida e URL reescrita |
-| S3 | MinIO em development, R2 em production | Server e browser por signed URL | interface Core preservada |
-| Email | Supabase Auth local | Mailpit local | porta 54324, sem SMTP externo |
-
-| Fonte no Supabase StarDust Old (`stardust dev`) | Contagem observada em 2026-09-26 | Tratamento no snapshot |
-| --- | ---: | --- |
-| `planets` | 8 | incluir todas |
-| `stars` | 39 (31 comuns, 8 de challenge; 31 com `texts`, 31 com JSON `questions`, 4 com `story`) | incluir todas e conteúdo embedded |
-| `guides` | 10 (9 `lsp`, 1 `mdx`) | incluir todas |
-| `questions` | 0 | tabela vazia; preservar dados JSON nas stars |
-| `challenges` | 36 (27 públicos, 9 privados) | incluir os 27 públicos; substituir `user_id` real por autor local determinístico |
-| `challenge_sources` | 5 (2 públicas, 3 privadas) | incluir somente fontes dos challenges públicos |
-| `categories` | 10 | incluir categorias referenciadas |
-| Storage bucket `images` | 220 objetos | copiar só os keys referenciados para `images` local e reescrever para o endpoint Storage local |
-| Storage bucket `stardust-bucket` | 212 objetos | copiar só os keys referenciados pelo provider S3 para `stardust-bucket-stg` no MinIO |
+| Fluxo                        | Produtor                               | Consumidor                   | Transporte e mudança                 |
+| ---------------------------- | -------------------------------------- | ---------------------------- | ------------------------------------ |
+| Auth, REST, DB e Realtime    | Docker Compose                         | Server e Web                 | loopback; Studio acessa via Server   |
+| S3                           | MinIO em development, R2 em production | Server e browser             | interface Core preservada            |
+| Email                        | Supabase Auth local                    | Mailpit local                | porta host padrão 54324 configurável, sem SMTP externo        |
+| Dados de aplicação           | fluxos reais do desenvolvedor/teste    | banco local vazio após reset | nenhum seed ou importação de staging |
 
 # Implementation Contract
 
 ## Requisitos
 
-| RF | Requisito |
-| --- | --- |
-| RF-01 | `db:local` inicia Supabase local, aplica migrations, reseta banco e carrega seed e duas identidades sintéticas em `auth.users`; IDs e relações entre identidades, perfis e catálogo são determinísticos em execuções repetidas. `db:test` mantém integração Server local. |
-| RF-02 | Em development, Server recusa URL Supabase, PostgreSQL ou S3 remota; Web recusa URL Supabase ou CDN remota; Studio recusa API Server ou CDN remota. Só loopback/localhost e portas locais esperadas são aceitos, antes de servir requests. |
-| RF-03 | Web e Server usam Auth, banco, Storage e Realtime locais; Studio usa Server e mídia locais. Nenhuma requisição ao Supabase staging ocorre nos fluxos locais validados. |
-| RF-04 | Mailpit da Supabase CLI captura emails Auth em `127.0.0.1:54324`, sem envio externo. |
-| RF-05 | Seed reproduz a fotografia observada: 8 `planets`, 39 `stars` (31 com `texts`, 31 com JSON `questions`, 4 com `story`), 10 `guides` (9 `lsp`, 1 `mdx`), zero rows na tabela `questions`, 27 challenges públicos, 2 sources públicas e 10 categorias referenciadas. Não inclui `docs` (tabela ausente), 9 challenges privados ou 3 sources privadas. IDs/FKs permanecem válidos; `challenges.user_id` aponta para autor local determinístico. |
-| RF-06 | A mídia catalogada tem roteamento determinístico: objetos do bucket source `images` são copiados com o mesmo key para bucket Supabase local `images`, e suas URLs tornam-se `http://127.0.0.1:54321/storage/v1/object/public/images/<key>`; objetos do source bucket `stardust-bucket` usados pelo `FileStorageProvider` são copiados com o mesmo key para bucket MinIO `stardust-bucket-stg`, e URLs usam a raiz local `http://127.0.0.1:9000/stardust-bucket-stg`. Nenhum campo consumido em development aponta para staging/R2. |
-| RF-07 | `S3FileStorageProvider` usa MinIO em development com bucket local e signed URL acessível ao browser; production permanece em R2. Upload, download, listagem, metadata, remoção e assinatura preservam interface e erros. |
-| RF-08 | Seed provisiona duas identidades sintéticas em `auth.users`, com IDs fixos `00000000-0000-4000-8000-000000000101` (Web) e `00000000-0000-4000-8000-000000000102` (Studio), além dos perfis públicos correspondentes. Após cada reset, provisionador Auth local atualiza email e senha desses IDs usando `WEB_APP_E2E_EMAIL/PASSWORD` e `STUDIO_APP_E2E_EMAIL/PASSWORD` do `.env.development` ignorado, marca os emails confirmados e sincroniza `public.users.email` para cada ID; nenhum email externo é enviado. A conta Studio está em `GOD_ACCOUNT_IDS` local e pode acessar `/profile/users`. Os challenges públicos usam o ID sintético Web como autor. Não importar usuários/credenciais reais do staging; nenhuma senha/token entra em artefato versionado ou log. |
-| RF-09 | Google e GitHub funcionam com Supabase Auth local e callback `http://127.0.0.1:54321/auth/v1/callback`; retornam às rotas existentes de Web/Studio. IDs e secrets OAuth são locais, fora do Git. Tráfego aos provedores OAuth é permitido, mas Auth e sessão usam Supabase local. |
-| RF-10 | `db:types` do Server gera tipos com `--local`; comandos remotos existentes permanecem legados, fora do fluxo `db:local`. Esta Spec não altera a geração de tipos da Web, que está fora da fronteira de Database definida pelas Rules. |
-| RF-11 | Cada módulo participante possui um seeder próprio seguindo o padrão do `identity-seeder.ts` do Scoops: payload tipado, dependências recebidas no construtor e métodos `clear(): Promise<void>` e `run(seed): Promise<void>`. `AuthSeeder`, `ProfileSeeder`, `SpaceSeeder`, `LessonSeeder`, `ManualSeeder` e `ChallengingSeeder` são os únicos responsáveis por gravar os dados de seus módulos. O orquestrador apenas carrega os snapshots, instancia dependências e chama `clear` na ordem inversa das FKs e `run` na ordem `auth -> profile -> space -> lesson -> manual -> challenging`. |
+| RF    | Requisito                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| RF-01 | Um único `docker compose up -d` inicia `inngest`, `redis`, `supabase-postgres`, `supabase-envoy`, `supabase-auth`, `supabase-rest`, `supabase-realtime`, `supabase-mailpit`, `supabase-templates` e `minio`; `minio-init` conclui a criação idempotente do bucket. Cada serviço pertencente ao stack Supabase usa o prefixo `supabase-`, incluindo o one-shot `supabase-db-reset`. Imagens são fixadas conforme a matriz técnica, serviços têm health checks e dependências esperam readiness. Supabase Studio, Storage, Analytics, Functions, Imgproxy, Vector, Postgres Meta e Supavisor não fazem parte do stack. |
+| RF-02 | Em development, Server recusa URL Supabase, PostgreSQL ou S3 remota; Web recusa URL Supabase ou CDN remota; Studio recusa API Server ou CDN remota. Esses endpoints devem usar host loopback/localhost e seus protocolos locais esperados (`http` para Supabase/S3 e `postgres` ou `postgresql` para PostgreSQL). Portas host podem ser configuradas no `.env.local` raiz; defaults documentados continuam válidos. A recusa antes do listener continua sendo CA-02 e está adiada. |
+| RF-03 | Web e Server usam Auth, PostgREST, PostgreSQL e Realtime locais; Studio usa Server e mídia locais. O PostgreSQL expõe `SUPABASE_DATABASE_URL` para acesso direto e futura adoção do Drizzle sem trocar o container. PostgREST permanece enquanto os repositories atuais usam `supabase.from(...)`. Nenhuma requisição ao Supabase staging ocorre nos fluxos validados. |
+| RF-04 | Mailpit captura emails do Auth local em `127.0.0.1`, porta host padrão `54324` configurável no `.env.local` raiz, sem envio externo. O serviço privado `supabase-templates` serve por HTTP os templates versionados `ConfirmSignUpTemplate.html` e `ConfirmPasswordResetTemplate.html`, com os mesmos nomes dos templates fonte em `packages/email/templates`; GoTrue usa suas URLs em `GOTRUE_MAILER_TEMPLATES_CONFIRMATION` e `GOTRUE_MAILER_TEMPLATES_RECOVERY`. |
+| RF-05 | A entrega não cria nem executa seed. `[db.seed]` permanece desabilitado; não existem `seed.sql`, JSONs de dados, seeders, manifestos, exportadores de staging, sincronizadores de mídia ou usuários sintéticos. Contas de validação são criadas pelo sign-up ou OAuth real após o reset.                                                                                                                                                                                          |
+| RF-06 | `S3FileStorageProvider` usa MinIO em development com bucket local e signed URL acessível ao browser; production permanece em R2. Objetos persistem no bind mount `./docker/volumes/minio:/data`; `docker/volumes/` é ignorado pelo Git e nenhum objeto é versionado. CRUD, listagem, metadata e assinatura preservam interface e erros. |
+| RF-07 | Google e GitHub funcionam com Supabase Auth local e callback `http://127.0.0.1:<SUPABASE_API_PORT>/auth/v1/callback` (default `54321`); retornam às rotas existentes. IDs e secrets ficam fora do Git. Auth e sessão permanecem locais.                                                                                                                                                                                                                                                                           |
+| RF-08 | As Rules proíbem testes dedicados a providers, constants e fixtures. `check:test-integrity` rejeita arquivos novos ou modificados que violem essas fronteiras; a validação ocorre pela borda consumidora.                                                                                                                                                                                                                                                                         |
+| RF-09 | Todos os testes de integração que dependem de Supabase ou PostgreSQL usam exclusivamente os containers do root Docker Compose. `npm run db:test -w @stardust/server` passa a executar o profile de teste, aguardar health checks e rodar o serviço one-shot `supabase-db-reset`, que limpa Auth e dados públicos e reaplica `apps/server/supabase/migrations` sem seed. `LocalSupabaseProxy` valida endpoints loopback com qualquer porta host configurada em `.env.testing` e readiness do stack Compose; não chama `supabase start`. `AuthFixture` confirma cada conta efêmera que cria pelo link enviado ao Mailpit local, sem alterar o autoconfirm do Auth; apaga a mensagem consumida. O teste de contrato do rate limiter usa `ENV.redisUrl`, sem porta host hardcoded, para acessar Redis no Compose. Depois, `npm run test:integration -w @stardust/server` executa a suíte. Os testes Playwright da Web preservam o `ServerMock` definido nas Rules porque não dependem de banco. |
+| RF-10 | Somente dados duráveis de desenvolvimento usam `docker/volumes/`: `postgres/` monta `/var/lib/postgresql/data` para contas e dados locais, e `minio/` monta `/data` para arquivos. Redis é cache descartável e não recebe volume. Envoy, Auth, REST, Realtime, Mailpit, Inngest, Templates e serviços one-shot também não criam subdiretórios persistentes. Templates são configuração versionada read-only em `docker/supabase/templates/`. |
+| RF-11 | As variáveis locais da raiz e de cada app ficam em `.env.local` ignorado. O Server lê `apps/server/.env.local`; os launchers Compose e scripts de exportação leem o `.env.local` da raiz, incluindo overrides opcionais de portas host com defaults preservados; Next e Vite carregam `.env.local` das apps, cujas URLs devem apontar às mesmas portas loopback. Arquivos `.env.testing`, `.env.staging` e `.env.production` permanecem separados e o `.env.testing` Server deve corresponder às portas da stack de teste, incluindo `MAILPIT_API_URL` local. |
+| RF-12 | Os apps Server e Web usam somente uma chave API publishable (`SUPABASE_PUBLISHABLE_KEY` no Server e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` na Web) para seus clientes Supabase. `SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE` deixam de ser requisitos de runtime desses apps. O gateway local aceita a chave opaca publishable e encaminha Auth, REST e Realtime; chaves internas necessárias ao gateway nunca são injetadas no Server ou na Web. |
+| RF-13 | As operações administrativas de feedback que atualmente usam `supabaseAdmin` passam a usar conexão PostgreSQL direta via `SUPABASE_DATABASE_URL`, após a autorização de God Account existente. As demais queries e o comportamento RLS versionado permanecem inalterados nesta entrega; a migração ampla para Drizzle e a retirada de RLS ficam para task posterior. Esta revisão não cria, remove nem altera migrations de aplicação. |
 
 ## Critérios de aceitação
 
-| CA | RF | Dado | Quando | Então | Evidência esperada |
-| --- | --- | --- | --- | --- | --- |
-| CA-01 | RF-01 | Docker e env local | `db:local` roda duas vezes | migrations/seed completos, mesmas contagens/IDs, sem duplicatas | teste de script e SQL local |
-| CA-02 | RF-02 | URL remota em development | Server, Web ou Studio inicia | processo falha antes do listener; erro revela apenas nome da variável | testes de env e startup |
-| CA-03 | RF-03 | apps locais e contas seeded | navegar autenticado | `/auth/account` e endpoints das telas retornam `2xx`, sessão persiste e não há request Supabase staging | VM-01/02, EV-01 |
-| CA-04 | RF-04 | Auth local | solicitar email | mensagem aparece em Mailpit 54324, sem entrega externa | VM-03, EV-02 |
-| CA-05 | RF-05 | snapshot read-only de `stardust dev` | reset local | contagens são 8 planets, 39 stars, 10 guides, 27 challenges públicos, 2 sources públicas e 10 categorias; 31 stars mantêm texts/questions JSON e 4 story; nenhum private challenge/source, conta ou autor real é importado; FKs válidas | SQL e VM-01, EV-03 |
-| CA-06 | RF-06 | catálogo com mídia | abrir telas e arquivos | source `images` responde por Supabase Storage local e source `stardust-bucket` por MinIO; todas as respostas `2xx`, sem URLs remotos | VM-01, EV-04 |
-| CA-07 | RF-07 | MinIO pronto | testar métodos S3 e signed PUT browser | operações funcionam no bucket local; R2 production inalterado | integração e VM-04, EV-05 |
-| CA-08 | RF-01, RF-08 | reset local | consultar Auth/perfis e autenticar com env E2E local | exatamente as duas identidades sintéticas existem nos IDs fixos em `auth.users`; cada `public.users.id` corresponde ao Auth ID e cada perfil tem email igual ao `auth.users.email` configurado; autoria refere IDs válidos; Web abre `/space`, Studio abre `/dashboard` e `/profile/users`; sem segredo versionado | SQL/script test, VM-01/02, diff |
-| CA-09 | RF-09 | OAuth clients locais | login Google e GitHub em Web/Studio | callback local, `/auth/account` 200 e rota protegida | VM-05, EV-06 |
-| CA-10 | RF-10 | DB local pronto | executar `db:types` e `db:local` | tipos locais; nenhum comando remoto invocado | teste de scripts e logs sanitizados |
-| CA-11 | RF-01, RF-05, RF-08, RF-11 | snapshots modulares e banco resetado | executar o orquestrador duas vezes | cada seeder recebe somente seu payload, limpa e grava somente suas tabelas, respeita a ordem de FKs e produz IDs, relações, contagens e conteúdo idênticos sem duplicatas; perfis usam `tier_id`, `rocket_id` e `avatar_id` nulos sem violar FKs | testes unitários dos seeders e integração local do orquestrador |
+| CA    | RF                  | Dado                                                      | Quando                                                               | Então                                                                                                                                                               | Evidência esperada                                                                 |
+| ----- | ------------------- | --------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| CA-01 | RF-01, RF-05        | Docker e env local                                        | executar duas vezes `docker compose up -d` e o reset Compose          | stack mínimo healthy, migrations completas, zero seed e dados de aplicação vazios após cada reset                                                                   | `docker compose ps`, logs sanitizados e SQL local                                  |
+| CA-02 | RF-02               | URL remota em development                                 | Server, Web ou Studio inicia                                         | falha antes do listener; erro revela apenas o nome da variável                                                                                                      | startup real e VM-06                                                               |
+| CA-03 | RF-03, RF-05        | Studio local e banco resetado                             | autenticar pelo fluxo real e navegar para uma rota protegida no Studio | Auth e endpoints retornam `2xx`, sessão persiste e não há request staging; a aceitação Web do CA-03 foi removida por decisão do usuário                                | VM-02, EV-01                                                                        |
+| CA-04 | RF-04               | Auth local e `supabase-templates` healthy                 | solicitar confirmação de cadastro e recuperação de senha             | ambas as mensagens aparecem no Mailpit com conteúdo customizado e links locais válidos, sem entrega externa                                                         | VM-03, EV-02                                                                       |
+| CA-05 | RF-05               | diff e execução local                                     | inspecionar artefatos e logs                                         | nenhum seed, export/sync de staging, catálogo, mídia ou conta pré-criada existe                                                                                     | diff e logs sanitizados                                                            |
+| CA-06 | RF-06               | MinIO pronto e vazio                                      | testar provider e signed PUT                                         | operações funcionam localmente; R2 production inalterado                                                                                                            | integração do consumidor; evidência signed PUT/GET no browser removida por decisão do usuário |
+| CA-07 | RF-07               | OAuth client config local                                 | configurar callback Google e GitHub                                  | callbacks apontam ao Auth local; secrets ficam fora do Git e Auth permanece local                                                                                   | validação de configuração; login real de provider removido por decisão do usuário  |
+| CA-08 | RF-08               | arquivo de teste dedicado a provider, constant ou fixture | executar `check:test-integrity`                                      | detector falha e identifica o path proibido; sem esse arquivo, o detector passa                                                                                     | teste do detector                                                                  |
+| CA-09 | RF-02, RF-05, RF-09 | Docker disponível e `.env.testing`                        | executar `db:test` seguido de `test:integration`                      | containers Compose ficam healthy, Auth e schema público são resetados sem seed, cada conta de fixture confirma seu email pela mensagem Mailpit local e toda integração usa somente URLs loopback, inclusive portas não padrão | testes de rota existentes, Compose logs e VM-06; sem teste dedicado da fixture     |
+| CA-10 | RF-10               | stack iniciado e dados gravados                           | reiniciar com `docker compose down` seguido de `up -d`                | PostgreSQL e MinIO preservam estado; Redis reinicia vazio; nenhum diretório é criado para os demais serviços                                                         | filesystem ignorado, smoke de persistência e `docker inspect`                      |
+| CA-11 | RF-11               | root e apps com ambientes locais                           | iniciar scripts e apps pelo tooling documentado                       | apenas `.env.local` é fonte do ambiente local; arquivos mode-specific permanecem inalterados e arquivos locais continuam ignorados pelo Git                           | `git check-ignore`, auditoria de nomes sem ler valores e smoke dos launchers       |
+| CA-12 | RF-12               | Supabase local com chaves publishable configuradas         | Server e Web inicializam clientes; Server completa Auth local pelo Envoy | ambos usam a chave publishable configurada; nomes legacy anon/service-role não são exigidos pelos apps; Auth do Server funciona via gateway compatível; checks Web cobrem apenas configuração/comportamento mockado e não comprovam Auth Web local | integração Server pelo Envoy; checks de configuração/Web mockados |
+| CA-13 | RF-13               | God Account autorizada e PostgreSQL local disponível       | listar, abrir e atualizar feedback administrativo                       | rotas preservam respostas existentes sem usar chave API service-role; conexão direta usa `SUPABASE_DATABASE_URL`; migrations permanecem byte-a-byte inalteradas       | testes de rota de feedback e diff de migrations                                   |
 
 ## Decisões e falhas
 
-`db:local` valida o alvo antes de qualquer reset e usa somente `supabase db reset --local --yes`; nunca `--linked`, `db:push`, `db:pull` ou `db:revert`. Os snapshots versionados são separados por módulo e o manifesto registra origem, data, tabelas, contagens, checksums e inventário de mídia; exportação read-only não roda no boot nem no CI. Depois do reset, o orquestrador chama seeders modulares; não existe `seed.sql` de catálogo concorrendo com eles. `AuthSeeder.run()` cria ou repara os placeholders de IDs fixos por acesso administrativo exclusivamente local e usa Supabase Auth Admin local para atribuir emails/senhas das variáveis E2E locais e marcar emails confirmados; `ProfileSeeder` cria os perfis correspondentes e mantém cada email alinhado ao Auth ID. Assim o Auth emite sessões reais para o teste sem credenciais no snapshot versionado; `GOD_ACCOUNT_IDS` local contém o ID fixo do Studio. Cópia de mídia é idempotente por key/checksum e falha se referência obrigatória faltar. Sem OAuth credentials, login por senha local continua disponível e a indisponibilidade social é explícita, sem fallback para staging. O adiamento dos nomes dos comandos remotos diverge desse item da Issue; a documentação os identifica como legados, e nenhuma execução local padrão os chama.
+O desenvolvimento local não chama `supabase start`, `--linked`, `db:push`, `db:pull` ou `db:revert`. O serviço Compose `supabase-db-reset` acessa somente o PostgreSQL local, limpa o estado de Auth/aplicação e reaplica as migrations versionadas, sem mecanismo de seed. A ausência de conteúdo em Space, Lesson, Manual e Challenging após reset é o estado contratado. A futura troca dos repositories para Drizzle fica fora desta Spec; o contrato direto de PostgreSQL já fica disponível.
+
+Para integração do Server, esta Spec altera apenas `db:test` para preparar e resetar o stack Compose; `test:integration` continua inalterado. A suíte não cria substituto em memória para persistência e não usa projeto Supabase remoto. Fixtures podem criar dados específicos do cenário após o reset e devem removê-los conforme a fronteira atual de testes; isso não constitui seed de desenvolvimento.
+
+Contas de validação são criadas pelos endpoints reais de sign-up ou por OAuth. Emails/senhas ficam apenas no `.env.local` ignorado. Para validar Studio, o operador cria a conta local pelo fluxo real, obtém seu ID sem registrar token ou senha, adiciona-o a `GOD_ACCOUNT_IDS` local e reinicia o Server. Sem OAuth credentials, senha local continua disponível sem fallback para staging.
+
+O fluxo não habilita RLS nem cria ou edita policies; preserva migrations existentes. Os nomes dos comandos remotos ficam para outra Spec e nenhum fluxo local padrão os chama.
 
 # Technical Contract
 
@@ -95,124 +94,290 @@ A inspeção read-only usou o conector **Supabase StarDust Old**, no projeto `st
 ```mermaid
 sequenceDiagram
   participant Operator
-  participant Setup as db:local
-  participant CLI as Supabase CLI
-  participant Seed as Module seeders
+  participant Compose as Docker Compose
   participant DB as Postgres local
-  participant Media as Storage local/MinIO
-  Operator->>Setup: iniciar/resetar
-  Setup->>CLI: start e db reset --local
-  CLI->>DB: migrations e banco vazio
-  Setup->>Seed: clear em ordem inversa
-  Setup->>Seed: run auth → profile → space → lesson → manual → challenging
-  Seed->>DB: persistir somente tabelas do módulo
-  Setup->>Media: copiar mídia por checksum
+  participant MinIO
+  Operator->>Compose: docker compose up -d
+  Compose->>DB: supabase-postgres/auth/rest/realtime
+  Compose->>MinIO: minio e minio-init
+  Operator->>Compose: run --rm supabase-db-reset
+  Compose->>DB: limpar e aplicar migrations sem seed
+  Operator->>DB: criar dados por fluxos reais quando necessário
 ```
+
+## Matriz de imagens locais
+
+| Serviço | Nome Compose | Imagem fixada |
+| --- | --- | --- |
+| PostgreSQL | `supabase-postgres` | `public.ecr.aws/supabase/postgres:17.6.1.143` |
+| Envoy | `supabase-envoy` | `envoyproxy/envoy:v1.39.1` |
+| GoTrue | `supabase-auth` | `public.ecr.aws/supabase/gotrue:v2.193.0` |
+| PostgREST | `supabase-rest` | `public.ecr.aws/supabase/postgrest:v14.15` |
+| Realtime | `supabase-realtime` | `public.ecr.aws/supabase/realtime:v2.113.4` |
+| Mailpit | `supabase-mailpit` | `public.ecr.aws/supabase/mailpit:v1.30.2` |
+| Templates | `supabase-templates` | `caddy:2.10.2-alpine` |
+| MinIO | `minio` | `quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e` |
+| MinIO Client | `minio-init` | `quay.io/minio/mc@sha256:a7fe349ef4bd8521fb8497f55c6042871b2ae640607cf99d9bede5e9bdf11727` |
+
+Inngest e Redis preservam as versões já declaradas no Compose. A matriz é
+atualizada de forma intencional; `latest` não é aceito.
+
+### Portas host
+
+Os serviços publicam portas somente em `127.0.0.1`. As variáveis opcionais do
+`.env.local` raiz alteram apenas a porta host; as portas internas dos
+containers permanecem fixas.
+
+| Variável | Serviço | Default |
+| --- | --- | ---: |
+| `SUPABASE_API_PORT` | Envoy/API e callback OAuth | 54321 |
+| `SUPABASE_DATABASE_PORT` | PostgreSQL | 54322 |
+| `REDIS_PORT` | Redis | 6379 |
+| `SUPABASE_MAILPIT_HTTP_PORT` | Mailpit HTTP | 54324 |
+| `SUPABASE_MAILPIT_SMTP_PORT` | Mailpit SMTP | 54325 |
+| `MINIO_API_PORT` | MinIO API | 9000 |
+| `MINIO_CONSOLE_PORT` | MinIO console | 9001 |
 
 ## Mapa canônico de paths afetados
 
-### Infraestrutura e scripts
+### Infraestrutura
 
 | Path | Change | Declaration | Contract | Dependencies | Tests |
 | --- | --- | --- | --- | --- | --- |
-| `docker-compose.yml` | Modify | `minio`, `minio-init` | volume, health, bucket e acesso browser local | Docker | smoke S3 |
-| `package.json` | Modify | `db:local` | entrada única na raiz | server workspace | script test |
-| `scripts/local-development.mjs` | Create | `prepareLocalDevelopment(): Promise<void>` | valida localidade, sobe CLI, reseta e invoca o runner modular; não escreve tabelas de domínio | CLI/seed runner/env/MinIO | script test |
-| `scripts/tests/local-development.test.mjs` | Create | scenarios | alvo remoto rejeitado, repetição estável | script | test:scripts |
-| `scripts/export-staging-catalog.mjs` | Create | `exportStagingCatalog(options): Promise<Manifest>` | export read-only sanitizado em snapshots por módulo, FKs ordenadas, manifesto | staging | revisão e seed local |
-| `scripts/sync-local-media.mjs` | Create | `syncLocalMedia(manifest): Promise<void>` | copia objetos inventariados e verifica checksum | Storage/R2/MinIO | integração |
+| `.gitignore` | Modify | `/docker/volumes/` | impede versionamento dos dados persistidos pelos containers locais | Git | diff |
+| `docker-compose.yml` | Modify | stack local mínimo, gateway Envoy, portas host configuráveis e bind mounts persistentes | publica somente em loopback; host ports opcionais usam defaults canônicos e derivam URLs OAuth/API; somente PostgreSQL e MinIO usam subdiretórios de `./docker/volumes`; passa os mapas de chaves necessários somente ao gateway | Docker/.env.local | health/integration |
+| `docker/supabase/envoy/bootstrap.yaml` | Create | bootstrap Envoy | configura listener local e admin interno sem publicar a porta de administração | Envoy | compose/smoke HTTP/WS |
+| `docker/supabase/envoy/clusters.yaml` | Create | clusters Envoy | encaminha Auth, PostgREST e Realtime apenas aos serviços Compose locais | Docker DNS | compose/smoke HTTP/WS |
+| `docker/supabase/envoy/listener.template.yaml` | Create | rotas, filtros Lua e CORS | valida `apikey`, traduz somente a publishable key para a credencial interna `anon`, preserva JWTs de usuário e nunca registra valores de chaves | Envoy | smoke Auth/REST/WS |
+| `docker/supabase/envoy/entrypoint.sh` | Create | renderização de configuração | substitui placeholders do template por env do gateway sem imprimir valores; inicia Envoy com config renderizada | shell/Envoy | compose/startup |
+| `docker/supabase/init/roles.sql` | Create | roles Supabase | cria somente roles/grants necessários para Auth, REST, Realtime e migrations | PostgreSQL | reset/integration |
+| `docker/supabase/init/storage-compatibility.sql` | Create | schema mínimo `storage` | cria `storage.objects` compatível apenas para as policies das migrations legadas; não inicia Storage API | PostgreSQL | reset/integration |
+| `docker/supabase/reset.sh` | Create | reset idempotente | limpa Auth, `public` e `storage`; reaplica bootstrap e migrations ordenadas sem seed | psql/migrations | integration |
+| `docker/supabase/templates/ConfirmSignUpTemplate.html` | Create | template GoTrue | versão HTML do `ConfirmSignUpTemplate.tsx`, preservando placeholders GoTrue | `supabase-templates` | Mailpit/VM-03 |
+| `docker/supabase/templates/ConfirmPasswordResetTemplate.html` | Create | template GoTrue | versão HTML do `ConfirmPasswordResetTemplate.tsx`, preservando placeholders GoTrue | `supabase-templates` | Mailpit/VM-03 |
 
 ### Server: banco, env e provision
 
 | Path | Change | Declaration | Contract | Dependencies | Tests |
 | --- | --- | --- | --- | --- | --- |
-| `apps/server/package.json` | Modify | `db:local`, `db:test`, `db:types` | Mailpit incluso e tipos `--local`; remotos legados | Supabase CLI | script test |
-| `apps/server/supabase/config.toml` | Modify | `[inbucket]`, `[storage.buckets.images]`, `[auth.external.google]`, `[auth.external.github]` | Mailpit habilitado, bucket local `images` público, OAuth via env; seed executado pelo runner modular após reset | CLI/OAuth/Storage | reset/browser |
-| `apps/server/supabase/seed-manifest.json` | Create | `SeedManifest` | fonte `stardust dev`, data, contagens observadas/aplicadas, checksums e objetos; explicita filtro público, rewrite de author e mapa de buckets `images -> Supabase local images`, `stardust-bucket -> MinIO stardust-bucket-stg` | export | manifesto |
-| `apps/server/supabase/seeds/profile.json` | Create | `ProfileSeed` | dois perfis sintéticos sem credenciais; IDs fixos de RF-08 e referências `tierId`, `rocketId`, `avatarId` explicitamente nulas | export sanitizado/env | ProfileSeeder test |
-| `apps/server/supabase/seeds/space.json` | Create | `SpaceSeed` | 8 planets e estrutura das 39 stars, IDs/FKs estáveis | Supabase StarDust Old | SpaceSeeder test |
-| `apps/server/supabase/seeds/lesson.json` | Create | `LessonSeed` | texts, questions e story associados às 39 stars por ID | SpaceSeed | LessonSeeder test |
-| `apps/server/supabase/seeds/manual.json` | Create | `ManualSeed` | 10 guides preservando categoria, formato, posição e conteúdo | Supabase StarDust Old | ManualSeeder test |
-| `apps/server/supabase/seeds/challenging.json` | Create | `ChallengingSeed` | 27 challenges públicos, 2 sources públicas, 10 categorias e associações; autor reescrito | ProfileSeed/SpaceSeed | ChallengingSeeder test |
-| `apps/server/src/database/supabase/seeders/ModuleSeeder.ts` | Create | `ModuleSeeder<TSeed>` | contrato `clear(): Promise<void>` e `run(seed: TSeed): Promise<void>` | — | compile/unit |
-| `apps/server/src/database/supabase/seeders/AuthSeeder.ts` | Create | `AuthSeed`, `AuthSeeder` | `clear()` remove apenas identidades locais conhecidas; `run(seed)` recria/repara IDs fixos por cliente DB administrativo local e aplica env/confirmação via Auth Admin sem logar segredo | DB admin/Auth Admin locais | unit/integration |
-| `apps/server/src/database/supabase/seeders/ProfileSeeder.ts` | Create | `ProfileSeed`, `ProfileSeeder` | perfis Web/Studio; email sincronizado por ID; grava `tier_id`, `rocket_id`, `avatar_id` como `NULL` para não aplicar defaults com FKs sem catálogo; não gerencia identidade Auth | Supabase local | unit/integration |
-| `apps/server/src/database/supabase/seeders/SpaceSeeder.ts` | Create | `SpaceSeed`, `SpaceSeeder` | planets e estrutura de stars; cliente DB local injetado no construtor | Supabase DB local | unit/integration |
-| `apps/server/src/database/supabase/seeders/LessonSeeder.ts` | Create | `LessonSeed`, `LessonSeeder` | aplica questions/texts/story às stars existentes; não cria planet/star | Supabase DB local/SpaceSeed | unit/integration |
-| `apps/server/src/database/supabase/seeders/ManualSeeder.ts` | Create | `ManualSeed`, `ManualSeeder` | grava guides do módulo manual | Supabase DB local | unit/integration |
-| `apps/server/src/database/supabase/seeders/ChallengingSeeder.ts` | Create | `ChallengingSeed`, `ChallengingSeeder` | categories, challenges, relações e sources; somente públicos, autor sintético Web | Supabase DB local/ProfileSeed/SpaceSeed | unit/integration |
-| `apps/server/src/database/supabase/seeders/index.ts` | Create | exports | barrel dos seeders modulares | seeders | check:types |
-| `apps/server/src/database/supabase/seeders/run-local-seed.ts` | Create | `runLocalSeed(): Promise<void>` | lê/valida snapshots, compõe dependências e executa clear/run na ordem de RF-11 | seeders/env/Supabase local | integration |
-| `apps/server/src/database/supabase/seeders/tests/module-seeders.test.ts` | Create | seeder scenarios | ownership de payload/tabelas, ordem, idempotência, falha sem dependência e segredo ausente de logs | seeders | test:unit/integration |
-| `apps/server/.env.example` | Modify | variáveis locais | URLs/nomes, sem valores secretos | CLI/MinIO/OAuth | startup |
-| `apps/server/src/constants/env.ts` | Modify | `ENV`, `validateLocalEndpoints(input): void` | Supabase/DB/S3 loopback em development | Zod | unitário |
-| `apps/server/src/constants/tests/env.test.ts` | Create | env cases | remoto falha; local e production válidos | env | test:unit |
-| `apps/server/src/provision/storage/S3FileStorageProvider.ts` | Remove | `S3FileStorageProvider` | movido para subpasta S3 conforme Provision Rules | — | — |
-| `apps/server/src/provision/storage/S3FileObject.ts` | Remove | `S3FileObject` | helper movido junto ao provider S3 | — | — |
-| `apps/server/src/provision/storage/s3/S3FileStorageProvider.ts` | Create | `constructor()`, métodos de `FileStorageProvider` | endpoint/bucket/forcePathStyle por modo; signatures existentes | S3 SDK/ENV | integração MinIO |
-| `apps/server/src/provision/storage/s3/S3FileObject.ts` | Create | `S3FileObject` | normaliza arquivos dentro do adapter S3 | provider S3 | provider tests |
-| `apps/server/src/provision/storage/DropboxStorageProvider.ts` | Remove | `DropboxStorageProvider` | movido para subpasta Dropbox conforme Provision Rules | — | — |
-| `apps/server/src/provision/storage/dropbox/DropboxStorageProvider.ts` | Create | `DropboxStorageProvider` | implementação Dropbox isolada em sua subpasta | Dropbox SDK | regressão |
-| `apps/server/src/provision/storage/index.ts` | Modify | exports | reexporta providers nas novas subpastas | adapters | check:types |
-| `apps/server/src/app/hono/middlewares/StorageMiddleware.ts` | Modify | composição do storage | importa adapter S3 pela subpasta ou barrel | provider S3 | unit/integration |
-| `apps/server/src/provision/storage/s3/tests/S3FileStorageProvider.test.ts` | Create | provider cases | CRUD, metadata, listagem, signed PUT e erros | MinIO | test:integration |
+| `apps/server/package.json`                                            | Modify | `dev`, `db:test`, dependência `postgres`                               | dev lê `apps/server/.env.local`; prepara profile Compose com root `.env.local` e executa `supabase-db-reset`; inclui driver direto de PostgreSQL | Node/Compose/PostgreSQL | startup/integration |
+| `apps/server/.env.example`                                            | Modify | variáveis locais                                                       | `SUPABASE_PUBLISHABLE_KEY` e `SUPABASE_DATABASE_URL`; sem chave service-role nem senha em variável separada | Compose/MinIO/OAuth/PostgreSQL | startup |
+| `apps/server/src/constants/env.ts`                                    | Modify | `ENV`, `validateLocalEndpoints(input): void`                           | lê `SUPABASE_PUBLISHABLE_KEY`, não requer `SUPABASE_SERVICE_ROLE`; valida endpoints loopback existentes; sem teste dedicado de constants | Zod | server integration/VM-02/06 |
+| `apps/server/src/database/supabase/supabase.ts`                       | Modify | clientes Supabase Server                                                | cliente autenticado usa publishable key; remove `supabaseAdmin` e chave service-role | Supabase JS/ENV | integration |
+| `apps/server/src/database/postgres/PostgresClient.ts`                 | Create | `PostgresClient.query<T>(strings, ...values): Promise<T[]>`; `end(): Promise<void>` | pool usando `SUPABASE_DATABASE_URL`; parâmetros sempre bindados; singleton runtime fecha no shutdown | postgres/ENV | integration |
+| `apps/server/src/database/postgres/PostgresFeedbackReportsRepository.ts` | Create | `FeedbackReportsRepository`                                            | operações administrativas de feedback executadas no PostgreSQL após middleware God Account; mantém filtros, paginação, estado de leitura e conflitos atuais | PostgresClient/Core | route integration |
+| `apps/server/src/database/postgres/PostgresFeedbackMessagesRepository.ts` | Create | `FeedbackMessagesRepository`                                           | cria/lista mensagens e anexos administrativos mantendo ordem e forma DTO atual | PostgresClient/Core | route integration |
+| `apps/server/src/database/postgres/index.ts`                           | Create | exports PostgreSQL                                                     | exporta somente cliente e repositories diretos requeridos pelas rotas de feedback | database layer | types/integration |
+| `apps/server/src/app/hono/routers/reporting/FeedbackRouter.ts`        | Modify | rotas administrativas de feedback                                       | aplica autorização God Account antes de instanciar repositories PostgreSQL; rotas de usuário mantêm Supabase request-scoped | Hono/Core/Postgres | integration |
+| `apps/server/src/tests/routes/reporting/FeedbackConversationsPersistence.test.ts` | Modify | rotas administrativas de feedback                                     | verifica caminho feliz God Account e efeitos no PostgreSQL local sem service-role API key | Compose | integration |
+| `apps/server/src/tests/routes/global/RateLimiterRoute.test.ts` | Modify | contrato HTTP do rate limiter e adapter Redis | acessa o Redis de teste pela URL configurada em `ENV.redisUrl`; sem porta host fixa, compatível com overrides Compose | Redis Compose/.env.testing | integration |
+| `apps/server/src/tests/fixtures/LocalSupabaseProxy.ts`                | Modify | `ensureRunning(): Promise<void>`                                       | exige URLs loopback/protocolo local e permite portas definidas no .env.testing; readiness Compose sem Supabase CLI              | Docker Compose/.env.testing      | integration          |
+| `apps/server/src/tests/fixtures/AuthFixture.ts`                      | Modify | `AuthFixture.createAccount(input?): Promise<void>`                      | encontra a mensagem para o email aleatório no Mailpit local, valida origem/callback local, confirma pelo OTP Supabase e apaga somente essa mensagem antes do sign-in; nunca registra token/conteúdo | Supabase Auth/Mailpit API | integration |
+| `apps/server/src/provision/storage/S3FileStorageProvider.ts`          | Remove | `S3FileStorageProvider`                                                | movido para subpasta S3                                                                        | —                                | —                    |
+| `apps/server/src/provision/storage/S3FileObject.ts`                   | Remove | `S3FileObject`                                                         | movido com o provider                                                                          | —                                | —                    |
+| `apps/server/src/provision/storage/s3/S3FileStorageProvider.ts`       | Create | métodos de `FileStorageProvider`                                       | endpoint/bucket/forcePathStyle por modo                                                        | S3 SDK/ENV                       | integration consumer |
+| `apps/server/src/provision/storage/s3/S3FileObject.ts`                | Create | `S3FileObject`                                                         | normaliza arquivos no adapter                                                                  | S3 provider                      | integration consumer |
+| `apps/server/src/provision/storage/DropboxStorageProvider.ts`         | Remove | `DropboxStorageProvider`                                               | movido para subpasta Dropbox                                                                   | —                                | —                    |
+| `apps/server/src/provision/storage/dropbox/DropboxStorageProvider.ts` | Create | `DropboxStorageProvider`                                               | adapter Dropbox isolado                                                                        | Dropbox SDK                      | regressao pela borda consumidora existente |
+| `apps/server/src/provision/storage/index.ts`                          | Modify | exports                                                                | reexporta providers                                                                            | adapters                         | types                |
+| `apps/server/src/app/hono/middlewares/StorageMiddleware.ts`           | Modify | storage composition                                                    | importa adapter S3 pela nova fronteira                                                         | provider                         | unit/integration     |
 
-### Web e Studio: configuração
+### Web e Studio
 
 | Path | Change | Declaration | Contract | Dependencies | Tests |
 | --- | --- | --- | --- | --- | --- |
-| `apps/web/.env.example` | Modify | URLs locais | Supabase/CDN local | CLI | startup |
-| `apps/web/src/constants/client-env.ts` | Modify | `CLIENT_ENV`, `validateLocalClientEndpoints(input): void` | Supabase/CDN loopback em development | Zod | unitário |
-| `apps/web/src/constants/tests/client-env.test.ts` | Create | env cases | remoto falha; local passa | client-env | test:unit |
-| `apps/studio/src/constants/envSchema.ts` | Modify | `parseEnv`, `validateLocalStudioEndpoints(input): void` | Server/CDN loopback em development | Zod | unitário |
-| `apps/studio/src/constants/tests/envSchema.test.ts` | Create | env cases | remoto falha; local passa | envSchema | test:unit |
+| `apps/web/.env.example`                  | Modify | URLs locais                                 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` e demais endpoints locais; sem chave service-role/secret | CLI          | startup       |
+| `apps/web/next.config.js`                | Modify | guard de endpoints locais no carregamento da configuração | em development, recusa Supabase/CDN não-loopback; porta host configurável; CA-02 antes do listener adiado | Node.js URL  | VM-06/startup |
+| `apps/web/src/constants/client-env.ts`   | Modify | `validateLocalClientEndpoints(input): void` | lê `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; endpoints loopback/protocolo local com portas host configuráveis; sem teste dedicado de constants | Zod | config/consumer checks; Web Auth local não comprovado |
+| `apps/studio/src/constants/envSchema.ts` | Modify | `validateLocalStudioEndpoints(input): void` | Server/CDN loopback/protocolo local com portas host configuráveis; validado pela borda real, sem teste dedicado de constants | Zod          | startup/VM-02 |
+| `apps/studio/src/vite-config.test.ts`    | Create | startup de ambiente via consumidor Vite | valida `.env.local` e cobre parse/guard de `envSchema` pela borda consumidora; não importa a constant isoladamente | Jest/Vite | unit/coverage |
+| `apps/studio/package.json`              | Modify | `vite-plugin-node-polyfills` | atualiza para versão compatível com Vite 8/Rolldown | npm | build/startup |
+| `package-lock.json`                     | Modify | lockfile npm | lock da versão Vite 8 compatível do polyfills plugin; gerado pelo npm | npm | install/build |
+| `apps/studio/vite.config.ts`            | Modify | composição Vite | usa versão compatível do node polyfills sem falha do hook esbuild durante dependency optimization | Vite/Rolldown | build/startup/VM-02 |
 
 ### Documentação
 
 | Path | Change | Declaration | Contract | Dependencies | Tests |
 | --- | --- | --- | --- | --- | --- |
-| `documentation/tooling.md` | Modify | guia local | setup/reset/portas/OAuth/seed/MinIO/Mailpit; remotos legados | contrato | revisão |
-| `documentation/architecture.md` | Modify | fronteira local | local Supabase/MinIO e R2 production | contrato | revisão |
+| `documentation/tooling.md`      | Modify | guia local                                  | stack Compose único, reset sem seed, OAuth, MinIO, Mailpit, chave publishable e sequência `db:test` → `test:integration`; sem valores de keys nos logs | contrato | review |
+| `documentation/architecture.md` | Modify | fronteira local e feedback administrativo | Envoy suporta chaves publishable; feedback God Account usa PostgreSQL direto; repositories comuns e RLS permanecem até task Drizzle | contrato | review |
+| `documentation/infrastructure.md` | Modify | variáveis de build/runtime | documenta nomes publishable Server/Web e remove anon/service-role do runtime dos apps | contrato | review |
+| `documentation/features/global/supabase-local-development/spec.md` | Modify | Spec revisions 34–36 | registra publishable key Server/Web, PostgreSQL direto para feedback administrativo, Redis configurável no teste e o mapa canônico vigente; Drizzle/RLS ficam para task posterior | SDD | definition/review |
 
-Cada seeder implementa `ModuleSeeder<TSeed>`, recebe clientes ou gateways locais no construtor e encapsula a ordem interna de remoção/inserção do módulo, como no padrão do Scoops. `clear()` nunca faz reset global e remove apenas linhas pertencentes ao snapshot local, em ordem segura para FKs; `run(seed)` recebe dados já validados e não lê staging. Os tipos gerados e o client Supabase permanecem dentro de `apps/server/src/database/**`. `runLocalSeed()` é a composition root: lê os JSONs versionados, valida IDs/referências, cria clientes locais, executa os seeders e verifica as contagens finais. Falha interrompe o fluxo com nome do módulo e operação, sem payload sensível; uma nova execução converge para o mesmo estado.
+### Regras e detector de integridade
 
-`ProfileSeeder.run()` não aceita os defaults de `public.users.tier_id`, `rocket_id` e `avatar_id`, pois eles referenciam catálogos fora do escopo desta Spec e não existem após migrations limpas. Ele envia `NULL` explicitamente para os três campos nullable. Nenhum seeder de Profile cria tiers, rockets ou avatars implicitamente; incluir esses catálogos exige amendment próprio.
+| Path | Change | Declaration | Contract | Dependencies | Tests |
+| --- | --- | --- | --- | --- | --- |
+| `documentation/rules/code-conventions-rules.md`      | Modify | regra de constants                | constants nao recebem testes dedicados                                             | convencoes        | review   |
+| `documentation/rules/provision-layer-rules.md`       | Modify | estrategia de testes              | providers sao validados pela borda consumidora                                     | arquitetura       | review   |
+| `documentation/rules/server-routes-testing-rules.md` | Modify | setup Compose e regra de fixtures | substitui `supabase start`/reset CLI por `db:test` sobre Compose; fixtures suportam testes de rota e nao recebem testes próprios | integracao Server | review |
+| `documentation/rules/server-application-rules.md`   | Modify | ambiente local e chaves Supabase   | Server usa `apps/server/.env.local`, chave publishable e PostgreSQL direto autorizado para feedback God Account | tooling/database | review |
+| `documentation/rules/web-application-rules.md`      | Modify | ambiente local e chave Supabase    | Web usa `apps/web/.env.local` e somente chave publishable no cliente | Next.js | review |
+| `documentation/rules/studio-appllication-rules.md` | Modify | ambiente local                     | Studio usa `apps/studio/.env.local`                                                 | Vite              | review |
+| `documentation/rules/rules.md`                       | Modify | indice                            | aponta quando consultar as tres proibicoes                                         | Rules             | review   |
+| `scripts/check-test-integrity.mjs`                   | Modify | `FORBIDDEN_TEST_SUBJECT_PATTERNS` | rejeita testes dedicados novos ou modificados para providers, constants e fixtures | Git diff          | detector |
+| `scripts/tests/check-test-integrity.test.mjs`        | Modify | caso de regressao do detector     | prova a rejeicao das tres categorias                                               | Node test runner  | unit     |
 
-`prepareLocalDevelopment()` valida todas as URLs, executa `supabase start` sem excluir Mailpit e `supabase db reset --local --yes`, aguarda health, chama `runLocalSeed()` e reporta falha sem valores sensíveis. `exportStagingCatalog(options)` recebe conexão read-only e destino e retorna snapshots por módulo, contagens e checksums; rejeita tabelas/colunas sensíveis. `syncLocalMedia(manifest)` decide destino exclusivamente por `sourceBucket`: `images` usa o upload Storage local e URL pública local; `stardust-bucket` usa S3 API MinIO e URL pública local; qualquer bucket desconhecido falha. Copia só chaves inventariadas e falha em objeto/checksum divergente. `S3FileStorageProvider` conserva entradas e retornos dos métodos atuais de `FileStorageProvider`; URLs assinadas usam host alcançável pelo browser, não hostname interno Docker. Nenhum SDK atravessa o Core. O fluxo não habilita RLS nem cria/edita policies; preserva exatamente o estado de RLS definido pelas migrations existentes. O seed usa acesso administrativo somente no Supabase local.
+### Ambiente e exportadores
+
+| Path | Change | Declaration | Contract | Dependencies | Tests |
+| --- | --- | --- | --- | --- | --- |
+| `AGENTS.md` | Modify | ambiente local e validação manual | `.env.local` é a fonte local; smoke manual cobre caminho feliz, endpoints essenciais e diagnóstico sob falha; segredos não são exibidos | Node, Next, Vite, Compose | review |
+| `documentation/sdd.md` | Modify | resumo do gate de validação frontend | smoke manual happy-path conciso; telemetria detalhada sob falha e screenshot quando UI mudar | AGENTS.md | review |
+| `scripts/export-studio-app-e2e-env.mjs` | Modify | origem das credenciais de E2E | lê root `.env.local`, imprime somente atribuições selecionadas | filesystem/parser | test:scripts |
+| `scripts/export-web-app-e2e-env.mjs` | Modify | origem das credenciais de E2E | lê root `.env.local`, imprime somente atribuições selecionadas | filesystem/parser | test:scripts |
+
+## Árvore de arquivos esperada
+
+```text
+stardust/
+├── .gitignore
+├── docker-compose.yml
+├── docker/
+│   ├── volumes/                            # runtime, ignorado pelo Git
+│   │   ├── postgres/                       # banco local
+│   │   └── minio/                          # objetos locais do MinIO
+│   └── supabase/
+│       ├── envoy/
+│       │   ├── bootstrap.yaml
+│       │   ├── clusters.yaml
+│       │   ├── listener.template.yaml
+│       │   └── entrypoint.sh
+│       ├── reset.sh
+│       ├── init/
+│       │   ├── roles.sql
+│       │   └── storage-compatibility.sql
+│       └── templates/
+│           ├── ConfirmSignUpTemplate.html
+│           └── ConfirmPasswordResetTemplate.html
+├── apps/
+│   ├── server/
+│   │   ├── .env.example
+│   │   ├── package.json
+│   │   ├── supabase/migrations/
+│   │   │   └── <migrations-versionadas>.sql
+│   │   └── src/
+│   │       ├── constants/
+│   │       │   └── env.ts
+│   │       ├── tests/
+│   │       │   ├── fixtures/LocalSupabaseProxy.ts
+│   │       │   └── routes/reporting/FeedbackConversationsPersistence.test.ts
+│   │       ├── app/hono/
+│   │       │   ├── middlewares/StorageMiddleware.ts
+│   │       │   └── routers/reporting/FeedbackRouter.ts
+│   │       ├── database/
+│   │       │   ├── postgres/
+│   │       │   │   ├── PostgresClient.ts
+│   │       │   │   ├── PostgresFeedbackReportsRepository.ts
+│   │       │   │   ├── PostgresFeedbackMessagesRepository.ts
+│   │       │   │   └── index.ts
+│   │       │   └── supabase/supabase.ts
+│   │       └── provision/storage/
+│   │           ├── index.ts
+│   │           ├── s3/
+│   │           │   ├── S3FileStorageProvider.ts
+│   │           │   └── S3FileObject.ts
+│   │           └── dropbox/
+│   │               └── DropboxStorageProvider.ts
+│   ├── web/
+│   │   ├── .env.example
+│   │   └── src/constants/client-env.ts
+│   └── studio/
+│       └── src/constants/envSchema.ts
+├── scripts/
+│   ├── check-test-integrity.mjs
+│   └── tests/check-test-integrity.test.mjs
+└── documentation/
+    ├── architecture.md
+    ├── sdd.md
+    ├── tooling.md
+    ├── features/global/supabase-local-development/spec.md
+    └── rules/
+        ├── rules.md
+        ├── code-conventions-rules.md
+        ├── provision-layer-rules.md
+        └── server-routes-testing-rules.md
+```
+
+Os antigos arquivos planos `storage/S3FileStorageProvider.ts`,
+`storage/S3FileObject.ts` e `storage/DropboxStorageProvider.ts` deixam de
+existir depois da movimentacao para as subpastas acima. A árvore não contém
+seed, seeder, manifesto de dados, teste dedicado de provider, constant ou
+fixture, nem wrapper de desenvolvimento local. O `package.json` do Server
+adiciona o driver `postgres` e atualiza o fluxo `db:test` para preparar o
+stack Compose compartilhado.
+
+Somente PostgreSQL e MinIO gravam em `docker/volumes/`, usando respectivamente
+`postgres/` e `minio/`. A pasta inteira é ignorada pelo Git.
+`docker compose down` preserva esses dados; a remoção deliberada apaga os
+diretórios locais. `docker compose down -v` não remove bind mounts. Redis,
+Mailpit, Inngest e `supabase-templates` são descartáveis neste fluxo e não
+recebem persistência. Os HTMLs servidos por `supabase-templates` são arquivos
+de configuração versionados e montados read-only; não pertencem a
+`docker/volumes/`.
+
+O operador inicia toda a infraestrutura com o root Docker Compose e executa o serviço one-shot `supabase-db-reset` quando precisa de estado limpo. O fluxo não lê catálogo, chama staging, cria usuário ou cria objeto. O bucket MinIO nasce vazio. `S3FileStorageProvider` preserva o port Core e produz URLs assinadas alcançáveis pelo browser; a evidência manual signed PUT/GET foi removida por decisão do usuário. O stack Supabase mínimo contém PostgreSQL, Envoy, GoTrue, PostgREST e Realtime; Mailpit recebe SMTP do GoTrue. Envoy traduz a chave publishable opaca para a credencial interna `anon` exigida pelos serviços self-hosted, sem entregar a credencial interna aos apps. Supabase Storage API é excluído porque a mídia da aplicação usa MinIO. O bootstrap mantém somente `storage.objects`, sem dados, para satisfazer as três policies legadas de `20260511182355_remote_schema.sql`; o reset recria esse schema antes de reaplicar as migrations.
+
+Conforme as Rules, não são criados testes dedicados para providers, constants ou fixtures. Providers são verificados pelas bordas consumidoras; constants pelo startup real e VM-06; fixtures apenas preparam/limpam estado para os testes de rota existentes, que exercitam Hono, Auth e Supabase local. A evidência manual Web, MinIO browser e OAuth real foi removida por decisão do usuário. A suíte não importa ou instancia uma fixture apenas para testar sua implementação interna.
 
 # Validation Contract
 
-| ID | Procedimento | Evidência esperada |
-| --- | --- | --- |
-| VM-01 | Playwright real: login Web seeded, `/space`, planeta/estrela, Learning e challenge, mídia | Auth/telas `2xx`, sessão persistida, screenshots de conteúdo/navegação, sem staging |
-| VM-02 | Playwright real: login Studio seeded, `/dashboard`, `/profile/users` e listagem | `2xx`, título `Usuários`, sessão persistida |
-| VM-03 | solicitar email Auth e inspecionar Mailpit | mensagem em 54324 |
-| VM-04 | signed PUT e GET pelo browser para MinIO | `2xx`, host/bucket locais |
-| VM-05 | Google e GitHub em Web/Studio com OAuth clients locais | callback 54321, `/auth/account` 200, rota protegida |
-| EV-01 | console, pageerror, requestfailed e response sanitizados | nenhuma falha/requisição staging |
-| EV-02 | captura Mailpit | email local |
-| EV-03 | manifesto e SQL | contagem, FK e ausência de PII |
-| EV-04 | inventário de mídia | chaves/checksums e URLs locais |
-| EV-05 | integração S3 | interface preservada |
-| EV-06 | status/callback OAuth | provedores locais configurados |
+| ID    | Procedimento                                                                                                                         | Evidência esperada                                                                                                                                   |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| VM-02 | Criar conta local real, configurar ID em `GOD_ACCOUNT_IDS`, reiniciar Server; Playwright Studio `/dashboard` e `/profile/users` | login e listagem `2xx`; heading `Usuários`; sessão persiste |
+| VM-03 | Solicitar confirmação de cadastro e recuperação de senha; validar os dois links locais pelo caminho feliz | ambos os templates locais aparecem no Mailpit e cada link abre seu fluxo correto |
+| VM-06 | Iniciar Server/Web/Studio com endpoints loopback válidos e porta customizada | serviços ficam prontos nos endpoints locais; pré-listener remoto segue deferred em CA-02 |
+| EV-01 | Resumo conciso de app/rota, resultado e status dos endpoints essenciais | caminho feliz aprovado sem request staging; diagnóstico detalhado apenas se falhar |
+| EV-02 | captura Mailpit                                                                                                                      | email local                                                                                                                                          |
+| EV-05 | execução Server integration                                                                                                          | containers Compose locais, endpoints loopback, migrations sem seed e nenhuma conexão remota                                                           |
 
-VM-01/02/04/05 usam serviços locais em terminais separados, credenciais carregadas de `.env.development` pelos scripts de exportação, e registro de `console`, `pageerror`, `requestfailed` e `response`. Após correção, repetir fluxo autenticado completo. A integração Web com mocks também roda; ela não substitui o navegador real. Não há alteração visual de UI, node Pencil ou widget.
+VM-02/03/06 exercitam apenas os caminhos felizes contratados. A evidência real de Web no navegador, signed PUT/GET MinIO no browser e login Google/GitHub foi removida por decisão do usuário; não é gate desta conclusão. Para validações restantes, use somente variáveis locais; registre app/rota, resultado e status dos endpoints essenciais. Screenshots só quando a mudança afetar UI. Após correção, repita somente o caminho feliz afetado. Não há mudança visual de UI, node Pencil ou widget.
 
-Sensores: `npm run format`, `npm run check:code`, `npm run check:types`, `npm run test:unit`, `npm run test:coverage`, `npm run check:coverage` (respeitando `coverage-baseline.json`), `npm run check:architecture`, `npm run test:integration`, `npm --workspace @stardust/web run test:integration`, `npm run check:spec-definition -- documentation/features/global/supabase-local-development/spec.md` e `npm run check:spec-implementation -- documentation/features/global/supabase-local-development/spec.md --base <commit-base>`. CI executa checks e builds finais de Server, Web e Studio.
+Sensores: `npm run format`, `npm run check:code`, `npm run check:types`, `npm run test:unit`, `npm run test:coverage`, `npm run check:coverage`, `npm run check:architecture`, `npm run db:test -w @stardust/server`, `npm run test:integration -w @stardust/server`, `npm --workspace @stardust/web run test:integration`, `npm run check:spec-definition -- documentation/features/global/supabase-local-development/spec.md` e `npm run check:spec-implementation -- documentation/features/global/supabase-local-development/spec.md --base <commit-base>`. CI executa checks e builds de Server, Web e Studio.
 
 # Documentation alignment and revision history
 
-`documentation/tooling.md` define `db:local` como fluxo padrão e identifica os comandos remotos como legados; `documentation/architecture.md` distingue MinIO development e R2 production. O PRD de sign-in mantém Google/GitHub; a UX não muda.
+`documentation/tooling.md` documenta um único stack Docker Compose, o reset one-shot sem seed e a sequência `db:test` → `test:integration`. `documentation/architecture.md` registra PostgreSQL direto como fronteira estável para a futura adoção do Drizzle, mantém temporariamente PostgREST para os repositories atuais e corrige o fluxo de upload do Studio para `StorageMiddleware` → `S3FileStorageProvider`, com MinIO em development e R2 em production. O PRD preserva Google/GitHub e a UX não muda.
 
-| Revision | Date | Status | Change |
-| --- | --- | --- | --- |
-| 1 | 2026-09-26 | draft | Issue #601 e Grilling confirmado; revisão arquitetural clear, sem findings bloqueantes. |
-| 2 | 2026-09-26 | open | Corrigida rastreabilidade do PRD: RP-01 cobre senha, RP-02 cobre Google/GitHub e JN-01 cobre as jornadas. Reviewer da revisão 2: clear, sem findings bloqueantes. |
-| 3 | 2026-09-26 | draft | Atualizada a fonte para Supabase StarDust Old e fotografia factual do catálogo; excluídos challenges privados e reescrito autor real por fixture local. Reviewer identificou três ajustes arquiteturais. |
-| 4 | 2026-09-26 | draft | Providers movidos para subpastas próprias; geração de tipos Web removida; validação CDN restrita aos consumidores configurados. Reviewer pediu explicitar o destino da mídia. |
-| 5 | 2026-09-26 | draft | Mapa explícito de mídia: bucket Supabase `images` para Storage local; bucket `stardust-bucket` para MinIO. Reviewer solicitou o nome explícito do conector Old. |
-| 6 | 2026-09-26 | open | Proveniência corrigida para Supabase StarDust Old (projeto `stardust dev`). Reviewer da revisão 6: clear, sem findings bloqueantes. |
-| 7 | 2026-09-26 | draft | Decisão explicitada: não habilitar RLS nem criar/editar policies; manter o estado definido pelas migrations. SQL de remediação não faz parte da entrega. |
-| 8 | 2026-09-26 | draft | Seed inclui usuários sintéticos de Supabase Auth para Web e Studio com IDs fixos; Auth Admin local aplica credenciais do env ignorado após reset. Challenges usam o autor sintético Web. |
-| 9 | 2026-09-26 | open | Provisionamento sincroniza o email de cada perfil `public.users` com Auth. Spec definition passou e Reviewer da revisão 9: clear, sem findings. |
-| 10 | 2026-09-26 | open | Seed dividido por módulos conforme padrão de seeder do Scoops: contrato `clear/run`, payloads tipados, dependências no construtor e runner apenas como composition root. Incluídos seeders Auth, Profile, Space, Lesson, Manual e Challenging. Defaults de Profile corrigidos para referências explicitamente nulas; Spec definition passou e Reviewer da revisão 10: clear. |
+| Revision | Date       | Status | Change                                                                                                                                                                                                                                                                                                                                                          |
+| -------- | ---------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1        | 2026-09-26 | draft  | Issue e Grilling inicial.                                                                                                                                                                                                                                                                                                                                       |
+| 2        | 2026-09-26 | open   | Rastreabilidade do PRD; Reviewer clear.                                                                                                                                                                                                                                                                                                                         |
+| 3        | 2026-09-26 | draft  | Fotografia de staging adicionada.                                                                                                                                                                                                                                                                                                                               |
+| 4        | 2026-09-26 | draft  | Fronteiras de providers/tipos corrigidas.                                                                                                                                                                                                                                                                                                                       |
+| 5        | 2026-09-26 | draft  | Destinos de mídia explicitados.                                                                                                                                                                                                                                                                                                                                 |
+| 6        | 2026-09-26 | open   | Proveniência Old corrigida; Reviewer clear.                                                                                                                                                                                                                                                                                                                     |
+| 7        | 2026-09-26 | draft  | RLS excluído.                                                                                                                                                                                                                                                                                                                                                   |
+| 8        | 2026-09-26 | draft  | Usuários Auth adicionados ao seed.                                                                                                                                                                                                                                                                                                                              |
+| 9        | 2026-09-26 | open   | Perfil/Auth sincronizados; Reviewer clear.                                                                                                                                                                                                                                                                                                                      |
+| 10       | 2026-09-26 | open   | Seed modular; Reviewer clear.                                                                                                                                                                                                                                                                                                                                   |
+| 11       | 2026-09-26 | open   | Seed provider-neutral; Reviewer clear.                                                                                                                                                                                                                                                                                                                          |
+| 12       | 2026-09-26 | open   | Qualquer seed foi removido: sem snapshots, usuários, catálogo, mídia, seeders, gateways, manifesto ou export/sync de staging. Contas passam a ser criadas pelos fluxos reais. Spec definition passou e Reviewer da revisão 12: clear.                                                                                                                           |
+| 13       | 2026-09-26 | open   | Alterações em package scripts removidas do escopo. Setup local é chamado diretamente por `node scripts/local-development.mjs`; scripts existentes ficam intactos. Integração Server exige `db:test` seguido de `test:integration`, ambos existentes, com proxy restrito aos containers Supabase locais. Spec definition passou e Reviewer da revisão 13: clear. |
+| 14       | 2026-09-26 | open   | Wrapper removido; setup nativo; testes de providers/constants removidos; fluxo Studio S3 corrigido. Reviewer clear.                                                                                                                                                                                                                                             |
+| 15       | 2026-09-26 | open   | Teste dedicado de `LocalSupabaseProxy` removido. A Spec explicita que fixtures, providers e constants não recebem testes próprios; validação ocorre por testes de rota, startup e procedimentos manuais nas bordas. Reviewer clear.                                                                                                                             |
+| 16       | 2026-09-26 | open   | Rules reforçadas e `check:test-integrity` ampliado para rejeitar testes dedicados novos ou modificados de providers, constants e fixtures. Spec definition passou e Reviewer: clear.                                                                                                                                                                            |
+| 17       | 2026-09-26 | open   | Árvore esperada de arquivos adicionada como seção obrigatória da Spec, incluindo movimentos e ausências contratuais. Spec definition passou e Reviewer: clear.                                                                                                                                                                                               |
+| 18       | 2026-09-26 | open   | Toda infraestrutura e os testes dependentes de Supabase/PostgreSQL passam a usar o root Docker Compose. Stack Supabase reduzido a PostgreSQL, Kong, GoTrue, PostgREST e Realtime, com Mailpit; Storage API e serviços não consumidos são excluídos. Um schema `storage` local vazio satisfaz policies legadas. `db:test` prepara/reseta Compose e o PostgreSQL direto fica pronto para futura adoção do Drizzle. Spec definition passou e Reviewer: clear. |
+| 19       | 2026-09-26 | open   | Serviços Compose pertencentes ao Supabase recebem nomes explícitos com prefixo `supabase-`, incluindo `supabase-db-reset`. Objetos MinIO persistem no volume nomeado `stardust-minio-data`, montado em `/data`, sem arquivos no repositório. Spec definition passou e Reviewer: clear. |
+| 20       | 2026-09-26 | open   | Volume Docker do MinIO renomeado para `stardust-minio`; mount interno permanece `/data`. Spec definition passou e Reviewer: clear. |
+| 21       | 2026-09-26 | open   | Persistência do MinIO movida do volume nomeado para o bind mount ignorado `./docker-volumes/minio:/data`. Spec definition passou e Reviewer: clear. |
+| 22       | 2026-09-26 | open   | `docker-volumes/` passa a conter somente estado necessário de PostgreSQL, Redis e MinIO; serviços stateless e descartáveis não recebem diretório. Spec definition passou e Reviewer: clear. |
+| 23       | 2026-09-26 | open   | Persistência de Redis removida: cache é descartável; somente PostgreSQL e MinIO usam `docker-volumes/`. Spec definition passou e Reviewer: clear. |
+| 24       | 2026-09-26 | open   | Templates locais de confirmação e recuperação do GoTrue adicionados como arquivos versionados, servidos internamente pelo serviço stateless `supabase-templates`. Spec definition passou e Reviewer: clear. |
+| 25       | 2026-09-26 | open   | Diretório runtime renomeado de `docker-volumes/` para `docker/volumes/`; configuração versionada permanece em `docker/supabase/`. Spec definition passou e Reviewer: clear. |
+| 26       | 2026-09-26 | open   | HTMLs do GoTrue renomeados para `ConfirmSignUpTemplate.html` e `ConfirmPasswordResetTemplate.html`, alinhados aos templates do package de email. Spec definition passou e Reviewer: clear. |
+| 27       | 2026-09-26 | in_progress | Adicionado `apps/web/next.config.js` ao mapa canônico para guard adicional; Reviewer comprovou que Next abre listener antes da config. Usuário adiou CA-02 para trabalho posterior. |
+| 28       | 2026-09-26 | in_progress | Arquivos locais root/apps passam a `.env.local`; cobertura automatizada pela borda consumidora Vite para CI-07. Definition e Spec Reviewer passaram; CA-02 adiado conforme usuário. |
+| 29       | 2026-09-27 | in_progress | Decisão de grilling aprovada: permitir overrides de portas host loopback em `.env.local`, manter defaults, alinhar URLs de apps e teste; CA-02 antes do listener permanece adiado. |
+| 30       | 2026-09-27 | in_progress | RF-02 esclarece os esquemas por endpoint (HTTP para Supabase/S3; PostgreSQL para DB), sem estender o guard ao Redis, conforme observação não bloqueante do Spec Reviewer. |
+| 31       | 2026-09-27 | in_progress | AuthFixture confirma contas efêmeras pelo Mailpit local sem autoconfirm; Vite polyfills Studio atualizados para Vite 8/Rolldown após CI-10 e VM-02 evidenciarem incompatibilidades. Definition passou; Spec Reviewer: clear, sem blockers arquiteturais/Rules. |
+| 32       | 2026-09-29 | in_progress | Decisão do usuário: validações manuais exercitam apenas caminhos felizes e registram evidência concisa; telemetria detalhada só diagnostica falhas, screenshot só quando UI muda. AGENTS.md e documentation/sdd.md alinhados; critérios de comportamento da feature e testes automatizados preservados. Spec Reviewer: clear, sem findings bloqueantes. |
+| 33       | 2026-09-29 | in_progress | Clarificado que validações manuais não exercitam estados de erro, loading ou recovery; ficam limitadas aos caminhos felizes. Spec Reviewer: clear, sem findings bloqueantes. |
+| 34       | 2026-09-29 | in_progress | Server e Web passam a usar publishable keys, gateway local Envoy traduz a credencial opaca, e somente rotas administrativas de feedback usam PostgreSQL direto após God Account. Não cria, remove ou altera migrations; adoção de Drizzle e retirada de RLS ficam para task posterior. Paths de imagem, porta, stack e adapters alinhados após findings ACH-01/02. |
+| 35       | 2026-09-29 | in_progress | RF-09 e o mapa canônico registram o teste HTTP de rate limiter usando `ENV.redisUrl`, para respeitar as portas host configuráveis do Compose e evitar falhas de integração em stacks com Redis fora da porta padrão. |
+| 36       | 2026-09-29 | in_progress | Mapa canônico limpo de uma remoção antiga de Kong que já não existe no baseline atual; validação de implementação usa `HEAD` como base para o delta local. |
+| 37       | 2026-09-29 | in_progress | Por decisão do usuário, a evidência manual Web, signed PUT/GET do MinIO no browser e login OAuth real foi removida dos gates de conclusão; os requisitos funcionais permanecem, com evidências automatizadas/configuração onde aplicável. |
+| 38       | 2026-09-29 | in_progress | Spec Reviewer rev37 solicitou remover referências obsoletas a VM-01 e esclarecer que checks Web mockados/configuração não comprovam Auth local; CA-12 agora limita sua evidência ao Auth Server real pelo Envoy. |
+| 39       | 2026-09-29 | in_progress | Após observação não bloqueante do Spec Reviewer rev38, CA-12 descreve explicitamente Auth local comprovado pelo Server e mantém Web Auth funcional em RF-12 sem insinuar validação real do fluxo Web. |
+| 40       | 2026-09-29 | in_progress | Por decisão do usuário, CA-03 passa a cobrir somente sign-in/rota protegida no Studio; o cenário Web de onboarding/perfil não é gate desta entrega. RF-03 e RF-12 permanecem sem alteração. |

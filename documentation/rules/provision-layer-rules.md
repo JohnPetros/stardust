@@ -42,12 +42,26 @@ Diretorio base: `apps/server/src/provision`.
 - **Proibido**: o core importar `apps/server/src/provision/**`.
 - **Direcao de dependencia**: apps/adapters implementam providers; o core consome por interface.
 
+## Estrategia de Testes
+
+- Providers e helpers internos da camada Provision nao recebem testes
+  dedicados. Nao crie arquivos `*.test.*` ou `*.spec.*` em
+  `apps/server/src/provision/**`.
+- Valide a integracao do provider pela fronteira que o consome, usando o teste
+  de rota, handler ou caso de uso aplicavel e observando o resultado externo.
+- Quando a integracao depender de infraestrutura real, complemente a validacao
+  na stack local ou no fluxo manual correspondente, sem testar chamadas
+  internas do SDK.
+- Se uma regra de negocio surgir dentro de um provider, mova-a para a camada
+  apropriada e teste essa regra nessa camada.
+
 ## Checklist (antes do PR)
 
 - Interface do core existe para o provider.
 - Provider implementa a interface e nao expoe SDK.
 - Erros externos sao convertidos para `AppError`.
 - Segredos ficam em variaveis de ambiente (sem credenciais em codigo).
+- Nao ha teste dedicado ao provider ou a seus helpers internos.
 
 ## Notas
 

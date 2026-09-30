@@ -15,11 +15,11 @@
 ### Ambiente local e credenciais
 
 - Para desenvolvimento local e validações reais no navegador, use sempre o
-  `.env.development` da raiz como fonte das variáveis de ambiente e credenciais.
+  `.env.local` da raiz como fonte das variáveis de ambiente e credenciais.
 - Carregue essas variáveis com o script de exportação correspondente antes de
   executar comandos ou ferramentas; nunca escreva valores de credenciais em
   testes, documentação versionada, comandos persistentes ou logs.
-- O `.env.development` é ignorado pelo Git e deve permanecer apenas na máquina
+- O `.env.local` é ignorado pelo Git e deve permanecer apenas na máquina
   local.
 
 ## MCPS
@@ -73,7 +73,7 @@ declarar a aplicação funcional.
   ```
 
 - O servidor de desenvolvimento do projeto usa `http://localhost:3334`.
-  Confirme que `apps/studio/.env.development` contém:
+  Confirme que `apps/studio/.env.local` contém:
 
   ```dotenv
   VITE_SERVER_APP_URL=http://localhost:3334
@@ -85,7 +85,7 @@ declarar a aplicação funcional.
   mesma porta no `baseURL` do teste. Não altere a URL do servidor para resolver
   um conflito de porta do Studio.
 
-- Configure as credenciais e a URL do Studio no `.env.development` da raiz:
+- Configure as credenciais e a URL do Studio no `.env.local` da raiz:
 
   ```dotenv
   STUDIO_APP_E2E_EMAIL=<email-da-conta-de-teste>
@@ -99,7 +99,7 @@ declarar a aplicação funcional.
   eval "$(node ./scripts/export-studio-app-e2e-env.mjs)"
   ```
 
-  O arquivo `.env.development` é ignorado pelo Git; nunca coloque essas
+  O arquivo `.env.local` é ignorado pelo Git; nunca coloque essas
   credenciais em testes, documentação versionada ou logs.
 
 ### Fluxo obrigatório
@@ -118,14 +118,6 @@ Exemplo mínimo:
 ```ts
 const studioUrl = "http://localhost:8000";
 const page = await browser.newPage();
-const consoleErrors: string[] = [];
-const failedRequests: string[] = [];
-
-page.on("console", (message) => {
-  if (message.type() === "error") consoleErrors.push(message.text());
-});
-page.on("pageerror", (error) => consoleErrors.push(error.message));
-page.on("requestfailed", (request) => failedRequests.push(request.url()));
 
 await page.goto(`${studioUrl}/`);
 await page.getByLabel(/email/i).fill(process.env.STUDIO_APP_E2E_EMAIL!);
@@ -137,16 +129,14 @@ await page.waitForURL("**/dashboard");
 
 await page.goto(`${studioUrl}/profile/users`);
 await page.getByRole("heading", { name: "Usuários" }).waitFor();
-
-expect(consoleErrors).toEqual([]);
-expect(failedRequests).toEqual([]);
 ```
 
 ### Diagnóstico de falhas
 
-- Registre `page.on('response')` e confirme que o login retorna `2xx`/`201`,
-  `/auth/account` retorna `200` e as requisições da rota protegida também
-  retornam `2xx`.
+- No caminho feliz, confirme apenas os status dos endpoints essenciais:
+  login `2xx`/`201`, `/auth/account` `200` e listagem da rota protegida `2xx`.
+- Se esse fluxo falhar, registre `console`, `pageerror`, `requestfailed` e as
+  respostas relevantes para diagnosticar a causa.
 - Erro `module is not defined` em `stream-browserify` indica falha de
   compatibilidade do bundle SSR/Vite; investigue o erro do servidor antes de
   depurar autenticação.
@@ -156,8 +146,8 @@ expect(failedRequests).toEqual([]);
 - Erros de CORS normalmente indicam mistura de origem local com API de
   produção ou uma porta incorreta. Confirme a origem do navegador e a URL da
   API nas requisições capturadas.
-- Depois de qualquer correção no código, execute os detectores definidos neste
-  arquivo e repita o fluxo autenticado completo.
+- Depois de uma correção, execute os detectores definidos neste arquivo e
+  repita o caminho feliz afetado.
 
 ## Playwright na Web App
 
@@ -280,11 +270,11 @@ Depois, no navegador Playwright:
    endpoints da tela, como `GET /space/planets`, retornam `2xx`.
 
 Nesse fluxo, a Web App usa `http://localhost:3000` e a API usa
-`http://localhost:3334`, conforme `apps/web/.env.development`. Não use
+`http://localhost:3334`, conforme `apps/web/.env.local`. Não use
 `apps/web/playwright.config.ts`, `/api/tests/server` ou `ServerMock`, pois eles
 pertencem exclusivamente aos testes de integração.
 
-Configure as credenciais reais da Web App no `.env.development` da raiz:
+Configure as credenciais reais da Web App no `.env.local` da raiz:
 
 ```dotenv
 WEB_APP_E2E_EMAIL=<email-da-conta-da-web-app>
@@ -304,24 +294,27 @@ são independentes.
 ## Regra obrigatória de validação manual do Frontend
 
 Toda implementação que envolva frontend, UI, rotas client-side ou interação
-com o navegador deve passar por validação manual em um navegador real, além dos
-testes automatizados.
+com o navegador deve passar por um smoke manual do caminho feliz em navegador
+real, além dos testes automatizados.
 
 - Inicie o frontend e os serviços locais dos quais a tela depende em terminais
   separados. Para a Web App, use `apps/server` em `http://localhost:3334` e
   `apps/web` em `http://localhost:3000`; para o Studio, use o servidor local e
   o Studio conforme a seção específica acima.
-- Use Playwright para autenticar quando a rota for protegida, acessar a tela
-  implementada e exercitar o fluxo completo observável, incluindo estados de
-  sucesso, erro, carregamento e navegação relevantes.
-- Não considere a tela de login, uma renderização isolada ou uma suíte baseada
-  somente em mocks suficiente para declarar a implementação funcional.
-- Registre `console`, `pageerror`, `requestfailed` e `response` durante a
-  inspeção; confirme respostas `2xx` nos endpoints de autenticação e da tela.
+- Autentique quando necessário, exercite o caminho feliz da funcionalidade
+  alterada e confirme seu principal resultado visível e os endpoints essenciais
+  `2xx`.
+- Não explore manualmente estados de erro, loading ou recovery. Não considere a tela de login sozinha
+  suficiente quando a funcionalidade exige uma rota protegida.
+- Em uma execução aprovada, registre apenas app/rota, resultado e status dos
+  endpoints essenciais. Capture console, `pageerror`, `requestfailed` e
+  respostas detalhadas somente para diagnosticar uma falha inesperada.
+- Screenshots só são necessários quando a mudança afeta UI ou quando ajudam a
+  registrar uma divergência visual.
 - Use credenciais somente por variáveis de ambiente e nunca as escreva em
   testes, documentação versionada ou logs.
-- Depois de qualquer correção, repita a validação manual completa no mesmo
-  fluxo autenticado.
+- Depois de uma correção, repita o caminho feliz afetado, não a matriz manual
+  inteira.
 
 Se o login redirecionar novamente para `/auth/sign-in`, registre `console`,
 `pageerror`, `requestfailed` e `response` antes de tentar outra rota. Isso
@@ -347,7 +340,7 @@ separa falha visual da página de falha de autenticação, CORS ou API.
   o elemento ainda está com `opacity: 0`.
 - Se for necessário confirmar o contrato da API diretamente, use as variáveis
   locais e mantenha tokens apenas em memória do processo. Não imprima o token,
-  a senha, o conteúdo de `.env.development` ou corpos de resposta sensíveis.
+  a senha, o conteúdo de `.env.local` ou corpos de resposta sensíveis.
 
 ### Diagnóstico
 
