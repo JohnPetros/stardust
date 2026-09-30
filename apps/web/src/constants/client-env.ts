@@ -8,7 +8,9 @@ const clientEnv = {
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
   supabaseKey:
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
-    (process.env.NODE_ENV === 'test' ? 'test-publishable-key' : undefined),
+    (process.env.NODE_ENV === 'test' || process.env.MODE === 'testing'
+      ? 'test-publishable-key'
+      : undefined),
   stardustWebUrl: process.env.NEXT_PUBLIC_STARDUST_WEB_URL,
   stardustServerUrl: process.env.NEXT_PUBLIC_STARDUST_SERVER_URL,
   discordChannelUrl: process.env.NEXT_PUBLIC_DISCORD_CHANNEL_URL,
