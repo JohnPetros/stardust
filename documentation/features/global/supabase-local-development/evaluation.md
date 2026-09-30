@@ -4,7 +4,7 @@ spec: ./spec.md
 spec_revision: 40
 status: in_progress
 base_commit: 0b2ea4cae4870067d506a257f2d3244ecbab742c
-evaluated_commit: a0898d21e5f274aab6f7605449c0bda0f22dc643
+evaluated_commit: 285ce67ef
 last_updated_at: 2026-09-29
 ---
 
@@ -16,7 +16,7 @@ last_updated_at: 2026-09-29
 - Plan: reconciliado para revisão 40, status in_progress; Builders e paired reviews concluídos, com P2 no handoff final.
 - Autoridade de produto: documentation/prds/auth/sign-in.md, RP-01, RP-02, JN-01; Issue #601 foi lida. As decisões de execução usam a revisão vigente da Spec.
 - Commit-base: 0b2ea4cae4870067d506a257f2d3244ecbab742c.
-- Commit-base: `0b2ea4cae4870067d506a257f2d3244ecbab742c`; implementação registrada nos commits da branch até `08ccbdc0c87717026775af99f038f67b397b58be`. CI remoto de PR foi dispensado como gate de evidência pelo usuário.
+- Commit-base: `0b2ea4cae4870067d506a257f2d3244ecbab742c`; implementação registrada nos commits da branch até `285ce67ef`. CI remoto de PR foi dispensado como gate de evidência pelo usuário; o fluxo de conclusão ainda exige checks verdes no head publicado.
 - Design: sem Design Contract, sem widgets alterados.
 - Assignments registradas no Plan:
   - Task principal / P0/P1: Rules, AGENTS.md, documentation/sdd.md, Spec, Plan e Evaluation; atualizar a regra de smoke manual para caminho feliz conciso.
