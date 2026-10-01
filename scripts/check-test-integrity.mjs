@@ -23,6 +23,15 @@ const ALLOWED_TEST_PATH_PATTERNS = [
   /^apps\/(?:web|studio)\/src\/ui\/(?:[^/]+\/)*widgets\/(?:[^/]+\/)*tests(?:\/|$)/,
   /^(?:apps|packages)\/[^/]+\/src\/[^/]+\.(?:test|spec)\.[cm]?[jt]sx?$/,
 ]
+const FORBIDDEN_TEST_SUBJECT_PATTERNS = [
+  /^(?:apps|packages)\/[^/]+\/src\/(?:[^/]+\/)*constants(?:\/|$)/,
+  /^apps\/server\/src\/provision(?:\/|$)/,
+  /(?:^|\/)fixtures(?:\/|$)/,
+  /(?:^|\/)[^/]*Provider\.(?:test|spec)\.[cm]?[jt]sx?$/,
+  /(?:^|\/)[^/]*Fixture\.(?:test|spec)\.[cm]?[jt]sx?$/,
+  /(?:^|\/)constants\.(?:test|spec)\.[cm]?[jt]sx?$/,
+  /(?:^|\/)provision\.(?:test|spec)\.[cm]?[jt]sx?$/,
+]
 const NON_TESTABLE_SOURCE_PATTERNS = [
   /(?:^|\/)index\.[cm]?[jt]sx?$/,
   /(?:^|\/)(?:__mocks__|fakers?|fixtures?|mocks?|tests?)\//,
@@ -112,7 +121,10 @@ function isTestPath(filePath) {
 }
 
 function isAllowedTestPath(filePath) {
-  return ALLOWED_TEST_PATH_PATTERNS.some((pattern) => pattern.test(filePath))
+  return (
+    !FORBIDDEN_TEST_SUBJECT_PATTERNS.some((pattern) => pattern.test(filePath)) &&
+    ALLOWED_TEST_PATH_PATTERNS.some((pattern) => pattern.test(filePath))
+  )
 }
 
 function sourceWorkspace(filePath) {

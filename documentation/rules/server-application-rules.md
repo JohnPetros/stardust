@@ -11,6 +11,7 @@ E a aplicacao responsavel por expor as funcionalidades do StarDust Core via HTTP
 - Background jobs / workflows: [Inngest](https://www.inngest.com/)
 - Validacao de dados: [Zod](https://zod.dev/)
 - Banco e Auth: [Supabase](https://supabase.com/) (`@supabase/supabase-js`)
+- Chave API do cliente Supabase: `SUPABASE_PUBLISHABLE_KEY`; não configure chave API `secret`/`service_role` no runtime do Server. Operações administrativas de feedback usam PostgreSQL direto somente depois da autorização `God Account`.
 - Cache / vetor: Upstash (Redis / Vector)
 - Telemetria: Sentry (`@sentry/node`)
 - IA: Vercel AI SDK (`ai`) e Mastra
@@ -51,7 +52,7 @@ npm run test
 ```
 
 > [!NOTE]
-> Defina as variaveis de ambiente de desenvolvimento no arquivo `.env.development`.
+> Defina as variaveis de ambiente de desenvolvimento no arquivo `.env.local`.
 > Use `apps/server/.env.example` como referencia do que precisa ser preenchido.
 
 ## Tooling

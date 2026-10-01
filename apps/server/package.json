@@ -2,7 +2,7 @@
   "name": "@stardust/server",
   "main": "dist/main.js",
   "scripts": {
-    "dev": "tsx watch --env-file .env.development src/main.ts",
+    "dev": "tsx watch --env-file .env.local src/main.ts",
     "lint": "biome lint src --diagnostic-level=error",
     "format": "biome format src --write",
     "check:code": "biome check src",
@@ -12,7 +12,7 @@
     "check:updates": "ncu",
     "build": "tsup",
     "prod": "node --env-file .env build/main.js",
-    "db:test": "supabase start --exclude studio,imgproxy,mailpit,edge-runtime,logflare,vector && supabase db reset --local --yes",
+    "db:test": "docker compose --env-file ../../.env.local -f ../../docker-compose.yml up -d --wait inngest redis supabase-postgres supabase-mailpit supabase-templates minio supabase-auth supabase-rest supabase-realtime supabase-envoy && docker compose --env-file ../../.env.local -f ../../docker-compose.yml run --rm minio-init && docker compose --env-file ../../.env.local -f ../../docker-compose.yml --profile test run --rm supabase-db-reset",
     "db:migrate": "supabase db diff -f $npm_config_schema_file",
     "db:prod": "supabase link --project-ref aukqejqsiqsqowafpppb",
     "db:dev": "supabase link --project-ref rveubqzvfbqbcpmuevnm",
@@ -46,6 +46,7 @@
     "ioredis": "^5.11.1",
     "jszip": "^3.10.1",
     "jwt-decode": "^4.0.0",
+    "postgres": "^3.4.9",
     "posthog-node": "^5.46.1",
     "zod": "^3.24.4"
   },

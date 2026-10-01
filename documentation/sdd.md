@@ -347,10 +347,13 @@ faz parte do escopo e deve conter exemplos atuais para todas as rotas do control
 Hooks de comportamento `use-*.ts` sob o escopo devem ter testes colocados em `tests/use-*.test.ts`,
 salvo exceção explícita da Rule Pack registrada no Evaluation.
 
-Para frontend, testes automatizados não substituem a validação manual obrigatória definida em
-`AGENTS.md`: serviço real, login quando aplicável, rota protegida, estados relevantes,
-console, `pageerror`, `requestfailed`, respostas HTTP e screenshots atuais. Para Server e
-banco, mocks não substituem request/response real, autorização, tenant e persistência no
+Para frontend, testes automatizados não substituem o smoke manual obrigatório do caminho feliz
+real definido em `AGENTS.md`: serviço local, login e rota protegida quando aplicáveis, resultado
+principal e status dos endpoints essenciais. Não exercite manualmente estados de erro/loading/recovery.
+Registre console, `pageerror`, `requestfailed` e
+respostas detalhadas somente para diagnosticar falha inesperada; screenshot é necessário quando a
+UI muda ou a comparação visual exige. Após correção, repita apenas o caminho feliz afetado. Para
+Server e banco, mocks não substituem request/response real, autorização, tenant e persistência no
 Supabase Dev quando aplicável.
 
 Após a implementação direta, um Implementation Reviewer Direct revisa o diff do Builder Direct.

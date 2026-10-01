@@ -1,0 +1,45 @@
+resources:
+  - name: supabase-auth
+    "@type": type.googleapis.com/envoy.config.cluster.v3.Cluster
+    type: STRICT_DNS
+    connect_timeout: 2s
+    lb_policy: ROUND_ROBIN
+    load_assignment:
+      cluster_name: supabase-auth
+      endpoints:
+        - lb_endpoints:
+            - endpoint:
+                address:
+                  socket_address:
+                    address: supabase-auth
+                    port_value: 9999
+
+  - name: supabase-rest
+    "@type": type.googleapis.com/envoy.config.cluster.v3.Cluster
+    type: STRICT_DNS
+    connect_timeout: 2s
+    lb_policy: ROUND_ROBIN
+    load_assignment:
+      cluster_name: supabase-rest
+      endpoints:
+        - lb_endpoints:
+            - endpoint:
+                address:
+                  socket_address:
+                    address: supabase-rest
+                    port_value: 3000
+
+  - name: supabase-realtime
+    "@type": type.googleapis.com/envoy.config.cluster.v3.Cluster
+    type: STRICT_DNS
+    connect_timeout: 2s
+    lb_policy: ROUND_ROBIN
+    load_assignment:
+      cluster_name: supabase-realtime
+      endpoints:
+        - lb_endpoints:
+            - endpoint:
+                address:
+                  socket_address:
+                    address: supabase-realtime
+                    port_value: 4000

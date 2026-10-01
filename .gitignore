@@ -16,6 +16,9 @@ coverage/
 issue.md
 apps/web/playwright-report
 
+# Local-only development data from the shared Docker Compose stack
+/docker/volumes/
+
 # quality gate (relatório gerado no CI para comentar no PR)
 quality-gate-report.md
 apps/web/test-results

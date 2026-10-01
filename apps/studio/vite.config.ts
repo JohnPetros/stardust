@@ -15,17 +15,15 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    resolve: {
-      alias: {
-        buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
-        process: 'rollup-plugin-node-polyfills/polyfills/process-es6',
-      },
-    },
     plugins: [
       tailwindcss(),
       reactRouter(),
       tsconfigPaths(),
-      nodePolyfills({ exclude: ['stream'] }),
+      ...nodePolyfills({ exclude: ['module', 'stream'] }).map((plugin) => ({
+        ...plugin,
+        applyToEnvironment: (environment: { name: string }) =>
+          environment.name === 'client',
+      })),
     ],
     build: {
       target: 'es2022',

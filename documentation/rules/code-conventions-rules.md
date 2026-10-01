@@ -79,6 +79,15 @@ São escritas em caixa alta e em
 
 Exemplos: `SUPABASE_URL`, `HEADER_HEIGHT`, `EVENT_KEY`.
 
+Constantes sao declaracoes consumidas pelo comportamento da aplicacao e nao
+recebem testes dedicados. Nao crie arquivos `*.test.*` ou `*.spec.*` dentro de
+pastas `constants/`, nem testes isolados cujo objetivo seja repetir o valor
+literal de uma constante. Valide o valor pela fronteira consumidora relevante.
+
+Se um modulo de constantes adquirir transformacoes, decisoes ou outra logica
+que exija teste proprio, mova essa logica para a camada apropriada e mantenha no
+modulo apenas as declaracoes.
+
 ## Interfaces
 
 Caso a interface tenha o mesmo nome que a classe ou função fábrica, importe-a

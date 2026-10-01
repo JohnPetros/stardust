@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Confirmação de cadastro</title>
+  </head>
+  <body style="margin:0;background:#f4f4f5;color:#18181b;font-family:Arial,sans-serif;line-height:1.6">
+    <main style="box-sizing:border-box;margin:32px auto;max-width:600px;padding:32px;background:#fff;border-radius:12px">
+      <h1 style="font-size:24px;margin:0 0 24px">Confirmação de cadastro.</h1>
+      <p>Seja bem-vindo(a) ao nosso incrível universo de aprendizado! Estamos muito felizes por você ter se juntado a nós.</p>
+      <p>Estamos ansiosos para ver você alcançar novos patamares e desbravar os desafios que preparamos para você. Lembre-se de manter o foco e a dedicação!</p>
+      <p>Clique no botão abaixo para confirmar o seu cadastro. Ah, é melhor você clicar o quanto antes porque esse link expira em 1 hora.</p>
+      <p style="margin:28px 0"><a href="{{ .RedirectTo }}/api/auth/confirm-email?token={{ .TokenHash }}" style="display:inline-block;background:#7c3aed;border-radius:8px;color:#fff;padding:12px 20px;text-decoration:none">Confirmar cadastro</a></p>
+      <p>- Equipe StarDust! 🚀</p>
+    </main>
+  </body>
+</html>

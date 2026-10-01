@@ -1,0 +1,16 @@
+node:
+  id: stardust-local-envoy
+  cluster: stardust-local
+
+dynamic_resources:
+  lds_config:
+    path: /tmp/envoy-listener.yaml
+  cds_config:
+    path: /etc/envoy/clusters.yaml
+
+admin:
+  access_log_path: /dev/null
+  address:
+    socket_address:
+      address: 127.0.0.1
+      port_value: 9901

@@ -70,8 +70,8 @@ npm run dev
 npm run test
 ```
 > [!NOTE]
-> Defina as variaveis de ambiente de desenvolvimento no arquivo `.env.development`.
-> Referencia: `apps/studio/.env.development`.
+> Defina as variaveis de ambiente de desenvolvimento no arquivo `.env.local`.
+> Referencia: `apps/studio/.env.local`.
 
 ## Tooling
 

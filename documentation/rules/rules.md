@@ -35,6 +35,7 @@ papéis, artefatos, sensores e critérios de conclusão.
   Objetos de Valor, Agregados).
 - Para regras sobre Barrel files (index.ts).
 - Ao criar classes de Evento ou Erro.
+- Ao definir constantes e aplicar a proibicao de testes dedicados a elas.
 
 ## Regras de Commit
 
@@ -134,6 +135,8 @@ papéis, artefatos, sensores e critérios de conclusão.
 - Ao integrar com ferramentas de terceiros (Armazenamento, Email, Pagamentos,
   etc.).
 - Para implementar novos Providers (Gateways) que encapsulam SDKs externos.
+- Para validar providers pela fronteira consumidora, sem testes dedicados na
+  camada Provision.
 
 ## Regras da Camada AI
 
@@ -235,6 +238,7 @@ papéis, artefatos, sensores e critérios de conclusão.
 - Ao escrever testes para rotas HTTP da aplicacao server.
 - Para validar integracao entre handlers, middlewares e contratos de resposta.
 - Ao padronizar testes de endpoints expostos pelo `apps/server`.
+- Ao criar ou alterar fixtures de integracao, que nao recebem testes dedicados.
 
 ## Regras de Testes de Rotas da App Web
 

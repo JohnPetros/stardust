@@ -4,18 +4,276 @@ services:
     container_name: stardust-inngest
     command: inngest dev -u http://host.docker.internal:3334/inngest --no-discovery
     ports:
-      - "8288:8288"
-      - "8289:8289"
+      - "127.0.0.1:8288:8288"
+      - "127.0.0.1:8289:8289"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8288"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
 
   redis:
     image: redis:8-alpine
     container_name: stardust-redis
     ports:
-      - "6379:6379"
-    volumes:
-      - stardust-redis-data:/data
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
 
-volumes:
-  stardust-redis-data:
+  supabase-postgres:
+    image: public.ecr.aws/supabase/postgres:17.6.1.143
+    container_name: stardust-supabase-postgres
+    environment:
+      POSTGRES_PASSWORD: ${SUPABASE_DATABASE_PASSWORD:?Set a local-only SUPABASE_DATABASE_PASSWORD}
+      POSTGRES_DB: postgres
+      SUPABASE_DATABASE_PASSWORD: ${SUPABASE_DATABASE_PASSWORD:?Set a local-only SUPABASE_DATABASE_PASSWORD}
+      JWT_SECRET: ${SUPABASE_JWT_SECRET:?Set a local-only SUPABASE_JWT_SECRET}
+      JWT_EXP: 3600
+    ports:
+      - "127.0.0.1:${SUPABASE_DATABASE_PORT:-54322}:5432"
+    volumes:
+      - ./docker/volumes/postgres:/var/lib/postgresql/data
+      - ./docker/supabase/init/storage-compatibility.sql:/docker-entrypoint-initdb.d/init-scripts/100-stardust-storage.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  supabase-role-init:
+    image: public.ecr.aws/supabase/postgres:17.6.1.143
+    container_name: stardust-supabase-role-init
+    depends_on:
+      supabase-postgres:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: ${SUPABASE_DATABASE_PASSWORD:?Set a local-only SUPABASE_DATABASE_PASSWORD}
+      SUPABASE_DATABASE_PASSWORD: ${SUPABASE_DATABASE_PASSWORD:?Set a local-only SUPABASE_DATABASE_PASSWORD}
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - >-
+        psql -h supabase-postgres -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f /docker/supabase/init/roles.sql
+    volumes:
+      - ./docker/supabase/init/roles.sql:/docker/supabase/init/roles.sql:ro
+    restart: "no"
+
+  supabase-auth:
+    image: public.ecr.aws/supabase/gotrue:v2.193.0
+    container_name: stardust-supabase-auth
+    depends_on:
+      supabase-postgres:
+        condition: service_healthy
+      supabase-role-init:
+        condition: service_completed_successfully
+      supabase-mailpit:
+        condition: service_healthy
+      supabase-templates:
+        condition: service_healthy
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: http://127.0.0.1:${SUPABASE_API_PORT:-54321}
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${SUPABASE_DATABASE_PASSWORD:?Set a local-only SUPABASE_DATABASE_PASSWORD}@supabase-postgres:5432/postgres
+      GOTRUE_SITE_URL: http://127.0.0.1:3000
+      GOTRUE_URI_ALLOW_LIST: http://localhost:3000/**,http://127.0.0.1:3000/**,http://localhost:8000/**,http://127.0.0.1:8000/**
+      GOTRUE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?Set a local-only SUPABASE_JWT_SECRET}
+      GOTRUE_JWT_EXP: 3600
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_RATE_LIMIT_EMAIL_SENT: 1000/1h
+      GOTRUE_RATE_LIMIT_VERIFY: 1000
+      GOTRUE_DISABLE_SIGNUP: "false"
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
+      GOTRUE_MAILER_AUTOCONFIRM: "false"
+      GOTRUE_SMTP_HOST: supabase-mailpit
+      GOTRUE_SMTP_PORT: 1025
+      GOTRUE_SMTP_USER: ""
+      GOTRUE_SMTP_PASS: ""
+      GOTRUE_SMTP_ADMIN_EMAIL: dev@stardust.local
+      GOTRUE_SMTP_SENDER_NAME: StarDust Local
+      GOTRUE_MAILER_TEMPLATES_CONFIRMATION: http://supabase-templates/ConfirmSignUpTemplate.html
+      GOTRUE_MAILER_TEMPLATES_RECOVERY: http://supabase-templates/ConfirmPasswordResetTemplate.html
+      GOTRUE_EXTERNAL_GOOGLE_ENABLED: ${SUPABASE_AUTH_EXTERNAL_GOOGLE_ENABLED:-false}
+      GOTRUE_EXTERNAL_GOOGLE_CLIENT_ID: ${SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID:-}
+      GOTRUE_EXTERNAL_GOOGLE_SECRET: ${SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET:-}
+      GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI: http://127.0.0.1:${SUPABASE_API_PORT:-54321}/auth/v1/callback
+      GOTRUE_EXTERNAL_GITHUB_ENABLED: ${SUPABASE_AUTH_EXTERNAL_GITHUB_ENABLED:-false}
+      GOTRUE_EXTERNAL_GITHUB_CLIENT_ID: ${SUPABASE_AUTH_EXTERNAL_GITHUB_CLIENT_ID:-}
+      GOTRUE_EXTERNAL_GITHUB_SECRET: ${SUPABASE_AUTH_EXTERNAL_GITHUB_SECRET:-}
+      GOTRUE_EXTERNAL_GITHUB_REDIRECT_URI: http://127.0.0.1:${SUPABASE_API_PORT:-54321}/auth/v1/callback
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:9999/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 20s
+
+  supabase-rest:
+    image: public.ecr.aws/supabase/postgrest:v14.15
+    container_name: stardust-supabase-rest
+    depends_on:
+      supabase-postgres:
+        condition: service_healthy
+      supabase-role-init:
+        condition: service_completed_successfully
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${SUPABASE_DATABASE_PASSWORD:?Set a local-only SUPABASE_DATABASE_PASSWORD}@supabase-postgres:5432/postgres
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${SUPABASE_JWT_SECRET:?Set a local-only SUPABASE_JWT_SECRET}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_SERVER_PORT: 3000
+      PGRST_ADMIN_SERVER_HOST: localhost
+      PGRST_ADMIN_SERVER_PORT: 3001
+    healthcheck:
+      test: ["CMD", "/bin/postgrest", "--ready"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 10s
+
+  supabase-realtime:
+    image: public.ecr.aws/supabase/realtime:v2.113.4
+    container_name: stardust-supabase-realtime
+    depends_on:
+      supabase-postgres:
+        condition: service_healthy
+      supabase-role-init:
+        condition: service_completed_successfully
+    environment:
+      DB_HOST: supabase-postgres
+      DB_PORT: 5432
+      DB_USER: supabase_admin
+      DB_PASSWORD: ${SUPABASE_DATABASE_PASSWORD:?Set a local-only SUPABASE_DATABASE_PASSWORD}
+      DB_NAME: postgres
+      DB_AFTER_CONNECT_QUERY: SET search_path TO _realtime
+      DB_ENC_KEY: ${SUPABASE_REALTIME_DB_ENC_KEY:?Set a local-only SUPABASE_REALTIME_DB_ENC_KEY}
+      API_JWT_SECRET: ${SUPABASE_JWT_SECRET:?Set a local-only SUPABASE_JWT_SECRET}
+      METRICS_JWT_SECRET: ${SUPABASE_JWT_SECRET:?Set a local-only SUPABASE_JWT_SECRET}
+      SECRET_KEY_BASE: ${SUPABASE_REALTIME_SECRET_KEY_BASE:?Set a local-only SUPABASE_REALTIME_SECRET_KEY_BASE}
+      ERL_AFLAGS: -proto_dist inet_tcp
+      ENABLE_TAIL: "false"
+      APP_NAME: realtime-dev
+      PORT: 4000
+      SECURE_CHANNELS: "false"
+      SLOT_NAME: supabase_realtime_replication_slot
+      TEMPORARY_SLOT: "true"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://127.0.0.1:4000/"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 20s
+
+  supabase-mailpit:
+    image: public.ecr.aws/supabase/mailpit:v1.30.2
+    container_name: stardust-supabase-mailpit
+    ports:
+      - "127.0.0.1:${SUPABASE_MAILPIT_HTTP_PORT:-54324}:8025"
+      - "127.0.0.1:${SUPABASE_MAILPIT_SMTP_PORT:-54325}:1025"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8025/api/v1/messages"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  supabase-templates:
+    image: caddy:2.10.2-alpine
+    container_name: stardust-supabase-templates
+    volumes:
+      - ./docker/supabase/templates:/usr/share/caddy:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/ConfirmSignUpTemplate.html"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  supabase-envoy:
+    image: envoyproxy/envoy:v1.39.1
+    container_name: stardust-supabase-envoy
+    depends_on:
+      supabase-auth:
+        condition: service_healthy
+      supabase-rest:
+        condition: service_healthy
+      supabase-realtime:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "/etc/envoy/entrypoint.sh"]
+    environment:
+      SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY:?Set a local-only SUPABASE_PUBLISHABLE_KEY}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY:?Set a local-only SUPABASE_ANON_KEY for gateway translation}
+    ports:
+      - "127.0.0.1:${SUPABASE_API_PORT:-54321}:8000"
+    volumes:
+      - ./docker/supabase/envoy:/etc/envoy:ro
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/9901'"]
+      interval: 5s
+      timeout: 3s
+      retries: 24
+      start_period: 10s
+
+  minio:
+    image: quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+    container_name: stardust-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?Set local-only MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Set local-only MINIO_ROOT_PASSWORD}
+    ports:
+      - "127.0.0.1:${MINIO_API_PORT:-9000}:9000"
+      - "127.0.0.1:${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - ./docker/volumes/minio:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 10s
+
+  minio-init:
+    image: quay.io/minio/mc@sha256:a7fe349ef4bd8521fb8497f55c6042871b2ae640607cf99d9bede5e9bdf11727
+    container_name: stardust-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?Set local-only MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Set local-only MINIO_ROOT_PASSWORD}
+      MINIO_BUCKET: ${MINIO_BUCKET:-stardust-bucket-local}
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - >-
+        mc alias set local http://minio:9000 "$${MINIO_ROOT_USER}" "$${MINIO_ROOT_PASSWORD}";
+        mc mb --ignore-existing "local/$${MINIO_BUCKET}"
+
+  supabase-db-reset:
+    image: public.ecr.aws/supabase/postgres:17.6.1.143
+    container_name: stardust-supabase-db-reset
+    profiles: [test]
+    depends_on:
+      supabase-postgres:
+        condition: service_healthy
+      supabase-auth:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://postgres:${SUPABASE_DATABASE_PASSWORD:?Set a local-only SUPABASE_DATABASE_PASSWORD}@supabase-postgres:5432/postgres
+      PGPASSWORD: ${SUPABASE_DATABASE_PASSWORD:?Set a local-only SUPABASE_DATABASE_PASSWORD}
+      SUPABASE_DATABASE_PASSWORD: ${SUPABASE_DATABASE_PASSWORD:?Set a local-only SUPABASE_DATABASE_PASSWORD}
+    volumes:
+      - ./docker/supabase/reset.sh:/docker/supabase/reset.sh:ro
+      - ./docker/supabase/init/roles.sql:/docker/supabase/init/roles.sql:ro
+      - ./docker/supabase/init/storage-compatibility.sql:/docker/supabase/init/storage-compatibility.sql:ro
+      - ./apps/server/supabase/migrations:/migrations:ro
+    entrypoint: ["/bin/sh", "/docker/supabase/reset.sh"]
+    restart: "no"
