@@ -8,7 +8,7 @@ import {
   loadTransitionManifest,
   inspectTransition,
   readTransitionLedger,
-  isEmptyApplication,
+  inspectEmptyApplication,
   transitionMigrations,
   migrationsFolder,
   projectRoot,
@@ -61,8 +61,11 @@ export async function migrateDatabase(
       return
     }
     if (ledger.length === 0) {
-      if (!(await isEmptyApplication(client, manifest)))
-        throw new Error('Nonempty database requires verified baseline adoption')
+      const differences = await inspectEmptyApplication(client, manifest)
+      if (differences.length > 0)
+        throw new Error(
+          `Nonempty database requires verified baseline adoption (${differences.join(', ')})`,
+        )
     } else {
       const phase = ledger.length === 2 ? 'adopted' : 'server-owned'
       const result = await inspectTransition(client, manifest, phase)

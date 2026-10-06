@@ -407,7 +407,7 @@ export async function inspectTransition(client, manifest, phase) {
   return { compatible: differences.length === 0, differences }
 }
 
-export async function isEmptyApplication(client, manifest) {
+export async function inspectEmptyApplication(client, manifest) {
   const catalog = await captureCatalog(client)
   const emptyKeys = [
     'tables',
@@ -420,20 +420,23 @@ export async function isEmptyApplication(client, manifest) {
     'functions',
     'triggers',
   ]
-  if (
-    emptyKeys.some((key) => catalog[key].length !== 0) ||
-    catalog.policies.length !== 0 ||
-    !equal(catalog.defaultPrivileges, manifest.catalog.defaultPrivileges) ||
-    !equalRoleMemberships(catalog.roleMemberships, manifest.structure.roleMemberships) ||
-    !equal(catalog.extensions, manifest.structure.extensions)
-  )
-    return false
   const storageGrants = manifest.catalog.relationGrants.filter(
     (grant) => grant.schema === 'storage',
   )
-  return (
-    equal(catalog.relationGrants, storageGrants) && !(await auditExternalExposure(client))
-  )
+  const differences = emptyKeys.filter((key) => catalog[key].length !== 0)
+  if (catalog.policies.length !== 0) differences.push('policies')
+  if (!equal(catalog.defaultPrivileges, manifest.catalog.defaultPrivileges))
+    differences.push('defaultPrivileges')
+  if (!equalRoleMemberships(catalog.roleMemberships, manifest.structure.roleMemberships))
+    differences.push('roleMemberships')
+  if (!equal(catalog.extensions, manifest.structure.extensions)) differences.push('extensions')
+  if (!equal(catalog.relationGrants, storageGrants)) differences.push('relationGrants')
+  if (await auditExternalExposure(client)) differences.push('externalExposure')
+  return differences
+}
+
+export async function isEmptyApplication(client, manifest) {
+  return (await inspectEmptyApplication(client, manifest)).length === 0
 }
 
 /** @param {TransitionOptions} options */
