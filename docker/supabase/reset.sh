@@ -35,7 +35,6 @@ SQL
 
 psql -h supabase-postgres -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -c 'DROP SCHEMA IF EXISTS storage CASCADE'
 psql -h supabase-postgres -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f /docker/supabase/init/roles.sql
-psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -c 'ALTER DEFAULT PRIVILEGES FOR ROLE postgres REVOKE EXECUTE ON FUNCTIONS FROM postgres'
 psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f /docker/supabase/init/storage-compatibility.sql
 psql "$DATABASE_URL" -v ON_ERROR_STOP=1 <<'SQL'
 CREATE EXTENSION IF NOT EXISTS unaccent WITH SCHEMA public;

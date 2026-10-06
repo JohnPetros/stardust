@@ -426,10 +426,15 @@ export async function inspectEmptyApplication(client, manifest) {
   const differences = emptyKeys.filter((key) => catalog[key].length !== 0)
   if (catalog.policies.length !== 0) differences.push('policies')
   if (!equal(catalog.defaultPrivileges, manifest.catalog.defaultPrivileges))
-    differences.push('defaultPrivileges')
+    differences.push(
+      `defaultPrivileges(expected=${JSON.stringify(manifest.catalog.defaultPrivileges)},actual=${JSON.stringify(catalog.defaultPrivileges)})`,
+    )
   if (!equalRoleMemberships(catalog.roleMemberships, manifest.structure.roleMemberships))
     differences.push('roleMemberships')
-  if (!equal(catalog.extensions, manifest.structure.extensions)) differences.push('extensions')
+  if (!equal(catalog.extensions, manifest.structure.extensions))
+    differences.push(
+      `extensions(expected=${JSON.stringify(manifest.structure.extensions)},actual=${JSON.stringify(catalog.extensions)})`,
+    )
   if (!equal(catalog.relationGrants, storageGrants)) differences.push('relationGrants')
   if (await auditExternalExposure(client)) differences.push('externalExposure')
   return differences
