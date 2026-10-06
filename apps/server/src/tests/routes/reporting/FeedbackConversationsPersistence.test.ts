@@ -32,11 +32,12 @@ describe('feedback conversation persistence', () => {
         'select count(*) from public.list_feedback_reports(null::text, null::public.feedback_intent, null::text, null::timestamptz, null::timestamptz, 999, 20)',
       ),
     ).toBe('1')
+    const totalReports = sql('select count(*) from public.feedback_reports')
     expect(
       sql(
         "select (id is null)::text || ':' || total_count || ':' || summary_total from public.list_feedback_reports(null::text, null::public.feedback_intent, null::text, null::timestamptz, null::timestamptz, 999, 20)",
       ),
-    ).toBe('true:0:0')
+    ).toBe(`true:${totalReports}:${totalReports}`)
   })
 
   it('has the queue indexes and cascades required by the persistence contract', () => {

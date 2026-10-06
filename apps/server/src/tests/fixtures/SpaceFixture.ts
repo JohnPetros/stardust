@@ -1,6 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-
+import { inArray } from 'drizzle-orm'
 import { PlanetsFaker, StarsFaker } from '@stardust/core/space/entities/fakers'
+import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
+import { planetModel, starModel } from '@/database/drizzle/schema'
 
 export type CreatedStar = {
   id: string
@@ -11,77 +13,66 @@ export type CreatedStar = {
   isAvailable: boolean
   isChallenge: boolean
 }
-
 export class SpaceFixture {
-  constructor(private readonly supabase: SupabaseClient) {}
+  constructor(_supabase: SupabaseClient) {}
+  private get database() {
+    return DrizzleClient.getInstance()
+  }
 
   async createStar(): Promise<CreatedStar> {
     const planet = PlanetsFaker.fakeDto({
       position: Math.floor(Math.random() * 100000) + 1000,
       stars: [],
     })
-
-    const planetResponse = await this.supabase.from('planets').insert({
-      id: planet.id,
-      name: planet.name,
-      icon: planet.icon,
-      image: planet.image,
-      position: planet.position,
+    const star = StarsFaker.fakeDto({ number: Math.floor(Math.random() * 100000) + 1 })
+    return await this.database.transaction(async (transaction) => {
+      const [persistedPlanet] = await transaction
+        .insert(planetModel)
+        .values({
+          id: planet.id,
+          name: planet.name,
+          icon: planet.icon,
+          image: planet.image,
+          position: planet.position,
+        })
+        .returning()
+      const [persistedStar] = await transaction
+        .insert(starModel)
+        .values({
+          id: star.id,
+          name: star.name,
+          number: star.number,
+          slug: star.slug,
+          isChallenge: star.isChallenge,
+          planetId: persistedPlanet.id,
+        })
+        .returning()
+      return {
+        id: persistedStar.id,
+        planetId: persistedStar.planetId,
+        name: persistedStar.name,
+        slug: persistedStar.slug,
+        number: persistedStar.number,
+        isAvailable: persistedStar.isAvailable,
+        isChallenge: persistedStar.isChallenge,
+      }
     })
-
-    if (planetResponse.error) {
-      throw planetResponse.error
-    }
-
-    const star = StarsFaker.fakeDto({
-      number: Math.floor(Math.random() * 100000) + 1,
-    })
-    const starResponse = await this.supabase.from('stars').insert({
-      id: star.id,
-      name: star.name,
-      number: star.number,
-      slug: star.slug,
-      is_challenge: star.isChallenge,
-      planet_id: planet.id,
-    })
-
-    if (starResponse.error) {
-      throw starResponse.error
-    }
-
-    const persistedStarResponse = await this.supabase
-      .from('stars')
-      .select('id, name, number, slug, is_available, is_challenge, planet_id')
-      .eq('id', star.id ?? '')
-      .single()
-
-    if (persistedStarResponse.error) {
-      throw persistedStarResponse.error
-    }
-
-    const persistedStar = persistedStarResponse.data
-
-    return {
-      id: persistedStar.id,
-      planetId: persistedStar.planet_id,
-      name: persistedStar.name,
-      slug: persistedStar.slug,
-      number: persistedStar.number,
-      isAvailable: persistedStar.is_available,
-      isChallenge: persistedStar.is_challenge,
-    }
   }
-
   async cleanupCreatedStars(stars: CreatedStar[]): Promise<void> {
-    const starIds = stars.map((star) => star.id)
-    const planetIds = stars.map((star) => star.planetId)
-
-    if (starIds.length > 0) {
-      await this.supabase.from('stars').delete().in('id', starIds)
-    }
-
-    if (planetIds.length > 0) {
-      await this.supabase.from('planets').delete().in('id', planetIds)
-    }
+    if (!stars.length) return
+    await this.database.transaction(async (transaction) => {
+      await transaction.delete(starModel).where(
+        inArray(
+          starModel.id,
+          stars.map((star) => star.id),
+        ),
+      )
+      await transaction.delete(planetModel).where(
+        inArray(
+          planetModel.id,
+          stars.map((star) => star.planetId),
+        ),
+      )
+    })
   }
 }

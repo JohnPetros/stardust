@@ -10,9 +10,9 @@ import {
 } from '@stardust/validation/global/schemas'
 
 import {
-  SupabaseChallengesRepository,
-  SupabaseSolutionsRepository,
-} from '@/database/supabase/repositories/challenging'
+  DrizzleChallengesRepository,
+  DrizzleSolutionsRepository,
+} from '@/database/drizzle/repositories'
 import {
   FetchSolutionsListController,
   FetchSolutionController,
@@ -44,7 +44,10 @@ export class SolutionsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseSolutionsRepository(http.getSupabase())
+        const repository = new DrizzleSolutionsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchSolutionController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -69,7 +72,10 @@ export class SolutionsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseSolutionsRepository(http.getSupabase())
+        const repository = new DrizzleSolutionsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchSolutionsListController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -91,8 +97,14 @@ export class SolutionsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const solutionsRepository = new SupabaseSolutionsRepository(http.getSupabase())
-        const challengesRepository = new SupabaseChallengesRepository(http.getSupabase())
+        const solutionsRepository = new DrizzleSolutionsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const challengesRepository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new PostSolutionController(
           solutionsRepository,
           challengesRepository,
@@ -122,7 +134,10 @@ export class SolutionsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseSolutionsRepository(http.getSupabase())
+        const repository = new DrizzleSolutionsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new EditSolutionController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -142,7 +157,10 @@ export class SolutionsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseSolutionsRepository(http.getSupabase())
+        const repository = new DrizzleSolutionsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new DeleteSolutionController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -163,7 +181,10 @@ export class SolutionsRouter extends HonoRouter {
       this.profileMiddleware.appendIsSolutionUpvotedToBody,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseSolutionsRepository(http.getSupabase())
+        const repository = new DrizzleSolutionsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpvoteSolutionController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -183,7 +204,10 @@ export class SolutionsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseSolutionsRepository(http.getSupabase())
+        const repository = new DrizzleSolutionsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new ViewSolutionController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)

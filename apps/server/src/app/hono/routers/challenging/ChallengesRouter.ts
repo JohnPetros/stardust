@@ -19,9 +19,9 @@ import {
 } from '@stardust/validation/challenging/schemas'
 
 import {
-  SupabaseChallengesRepository,
-  SupabaseChallengeSourcesRepository,
-} from '@/database/supabase/repositories/challenging'
+  DrizzleChallengesRepository,
+  DrizzleChallengeSourcesRepository,
+} from '@/database/drizzle/repositories'
 import {
   FetchChallengeController,
   FetchChallengeNavigationController,
@@ -62,7 +62,10 @@ export class ChallengesRouter extends HonoRouter {
       this.validationMiddleware.validate('param', z.object({ challengeId: idSchema })),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchChallengeController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -81,7 +84,10 @@ export class ChallengesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchChallengeController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -100,7 +106,10 @@ export class ChallengesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchChallengeNavigationController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -115,7 +124,10 @@ export class ChallengesRouter extends HonoRouter {
       this.validationMiddleware.validate('param', z.object({ starId: idSchema })),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchChallengeController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -149,7 +161,10 @@ export class ChallengesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchChallengesListController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -179,7 +194,10 @@ export class ChallengesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchAllChallengesController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -194,7 +212,10 @@ export class ChallengesRouter extends HonoRouter {
       this.profileMiddleware.appendUserCompletedChallengesIdsToBody,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchCompletedChallengesCountByDifficultyLevelController(
           repository,
         )
@@ -210,7 +231,10 @@ export class ChallengesRouter extends HonoRouter {
       this.profileMiddleware.appendUserCompletedChallengesIdsToBody,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchChallengesCompletionProgressController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -230,7 +254,10 @@ export class ChallengesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchChallengeVoteController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -246,9 +273,13 @@ export class ChallengesRouter extends HonoRouter {
       this.validationMiddleware.validate('json', challengeSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
-        const challengeSourcesRepository = new SupabaseChallengeSourcesRepository(
-          http.getSupabase(),
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const challengeSourcesRepository = new DrizzleChallengeSourcesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
         )
         const broker = new InngestBroker()
         const controller = new PostChallengeController(
@@ -276,7 +307,10 @@ export class ChallengesRouter extends HonoRouter {
       this.validationMiddleware.validate('json', challengeSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpdateChallengeController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -298,7 +332,10 @@ export class ChallengesRouter extends HonoRouter {
       this.validationMiddleware.validate('json', challengeStarSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new EditChallengeStarController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -324,7 +361,10 @@ export class ChallengesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new VoteChallengeController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -345,7 +385,10 @@ export class ChallengesRouter extends HonoRouter {
       this.challengingMiddleware.verifyChallengeManagementPermission,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new DeleteChallengeController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -366,7 +409,10 @@ export class ChallengesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new RemoveChallengeStarController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -380,7 +426,10 @@ export class ChallengesRouter extends HonoRouter {
       this.profileMiddleware.appendUserCompletedChallengesIdsToBody,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchAllChallengeCategoriesController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -394,7 +443,10 @@ export class ChallengesRouter extends HonoRouter {
       this.authMiddleware.verifyAuthentication,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengesRepository(http.getSupabase())
+        const repository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchPostedChallengesKpiController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)

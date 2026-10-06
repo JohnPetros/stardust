@@ -1,9 +1,9 @@
-import { Hono } from 'hono'
+import { Hono, type Context } from 'hono'
 import { z } from 'zod'
 
 import { idSchema, nameSchema } from '@stardust/validation/global/schemas'
 
-import { SupabaseApiKeysRepository } from '@/database/supabase/repositories/auth'
+import { DrizzleApiKeysRepository } from '@/database/drizzle/repositories'
 import { NodeCryptoApiKeySecretProvider } from '@/provision/auth'
 import {
   CreateApiKeyController,
@@ -29,7 +29,10 @@ export class ApiKeysRouter extends HonoRouter {
       this.profileMiddleware.verifyUserEngineerInsignia,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseApiKeysRepository(http.getSupabase())
+        const repository = new DrizzleApiKeysRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchApiKeysListController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -44,7 +47,10 @@ export class ApiKeysRouter extends HonoRouter {
       this.validationMiddleware.validate('json', z.object({ name: nameSchema })),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseApiKeysRepository(http.getSupabase())
+        const repository = new DrizzleApiKeysRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const secretProvider = new NodeCryptoApiKeySecretProvider()
         const controller = new CreateApiKeyController(repository, secretProvider)
         const response = await controller.handle(http)
@@ -56,44 +62,50 @@ export class ApiKeysRouter extends HonoRouter {
   private registerRenameApiKeyRoute(): void {
     this.router.put(
       '/:apiKeyId',
-      this.authMiddleware.verifyAuthentication,
-      this.profileMiddleware.verifyUserEngineerInsignia,
-      this.validationMiddleware.validate(
-        'param',
-        z.object({
-          apiKeyId: idSchema,
-        }),
-      ),
+      ...this.apiKeyIdMiddlewares(),
       this.validationMiddleware.validate('json', z.object({ name: nameSchema })),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const repository = new SupabaseApiKeysRepository(http.getSupabase())
-        const controller = new RenameApiKeyController(repository)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      (context) => this.handleRenameApiKey(context),
     )
   }
 
   private registerRevokeApiKeyRoute(): void {
-    this.router.delete(
-      '/:apiKeyId',
+    this.router.delete('/:apiKeyId', ...this.apiKeyIdMiddlewares(), (context) =>
+      this.handleRevokeApiKey(context),
+    )
+  }
+
+  private apiKeyAccessMiddlewares() {
+    return [
       this.authMiddleware.verifyAuthentication,
       this.profileMiddleware.verifyUserEngineerInsignia,
-      this.validationMiddleware.validate(
-        'param',
-        z.object({
-          apiKeyId: idSchema,
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const repository = new SupabaseApiKeysRepository(http.getSupabase())
-        const controller = new RevokeApiKeyController(repository)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
-    )
+    ] as const
+  }
+
+  private apiKeyIdMiddlewares() {
+    return [
+      ...this.apiKeyAccessMiddlewares(),
+      this.validationMiddleware.validate('param', apiKeyIdParamsSchema),
+    ] as const
+  }
+
+  private apiKeyRepository(http: HonoHttp<Context>): DrizzleApiKeysRepository {
+    return new DrizzleApiKeysRepository(http.getDatabase(), http.getDatabaseAccess())
+  }
+
+  private async handleRenameApiKey(context: Context) {
+    const http = new HonoHttp(context)
+    const repository = this.apiKeyRepository(http)
+    const controller = new RenameApiKeyController(repository)
+    const response = await controller.handle(http)
+    return http.sendResponse(response)
+  }
+
+  private async handleRevokeApiKey(context: Context) {
+    const http = new HonoHttp(context)
+    const repository = this.apiKeyRepository(http)
+    const controller = new RevokeApiKeyController(repository)
+    const response = await controller.handle(http)
+    return http.sendResponse(response)
   }
 
   registerRoutes(): Hono {
@@ -104,3 +116,5 @@ export class ApiKeysRouter extends HonoRouter {
     return this.router
   }
 }
+
+const apiKeyIdParamsSchema = z.object({ apiKeyId: idSchema })

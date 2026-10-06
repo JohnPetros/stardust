@@ -21,9 +21,9 @@ import {
 } from '@/rest/controllers/conversation'
 
 import {
-  SupabaseChatMessagesRepository,
-  SupabaseChatsRepository,
-} from '@/database/supabase/repositories/conversation'
+  DrizzleChatMessagesRepository,
+  DrizzleChatsRepository,
+} from '@/database/drizzle/repositories'
 import { IORedisCacheProvider } from '@/provision/cache/ioredis/IORedisCacheProvider'
 import { HonoHttp } from '../../HonoHttp'
 import { HonoRouter } from '../../HonoRouter'
@@ -46,9 +46,13 @@ export class ChatsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const chatsRepository = new SupabaseChatsRepository(http.getSupabase())
-        const chatMessagesRepository = new SupabaseChatMessagesRepository(
-          http.getSupabase(),
+        const chatsRepository = new DrizzleChatsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const chatMessagesRepository = new DrizzleChatMessagesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
         )
         const controller = new FetchChatMessagesController(
           chatsRepository,
@@ -73,9 +77,13 @@ export class ChatsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', chatMessageSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const chatsRepository = new SupabaseChatsRepository(http.getSupabase())
-        const chatMessagesRepository = new SupabaseChatMessagesRepository(
-          http.getSupabase(),
+        const chatsRepository = new DrizzleChatsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const chatMessagesRepository = new DrizzleChatMessagesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
         )
         const controller = new SendChatMessageController(
           chatsRepository,
@@ -105,7 +113,10 @@ export class ChatsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChatsRepository(http.getSupabase())
+        const repository = new DrizzleChatsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new EditChatNameController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -125,7 +136,10 @@ export class ChatsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChatsRepository(http.getSupabase())
+        const repository = new DrizzleChatsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new DeleteChatController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -136,7 +150,10 @@ export class ChatsRouter extends HonoRouter {
   private registerCreateChatRoute(): void {
     this.router.post('/', this.authMiddleware.verifyAuthentication, async (context) => {
       const http = new HonoHttp(context)
-      const repository = new SupabaseChatsRepository(http.getSupabase())
+      const repository = new DrizzleChatsRepository(
+        http.getDatabase(),
+        http.getDatabaseAccess(),
+      )
       const controller = new CreateChatController(repository)
       const response = await controller.handle(http)
       return http.sendResponse(response)
@@ -171,7 +188,10 @@ export class ChatsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChatsRepository(http.getSupabase())
+        const repository = new DrizzleChatsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchChatsController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)

@@ -346,3 +346,19 @@ inspecionar fluxos reais e o Hermes pode executar validações E2E de release, m
 nenhum dos dois substitui `test:integration` automatizado quando ele for
 aplicável. Os workflows E2E do GitHub Actions estão descritos em
 `documentation/infrastructure.md`.
+
+## Transição aprovada: Drizzle e SSE (Issue #602)
+
+Os scripts listados acima ainda descrevem o estado implementado. Para a entrega da Issue #602, o contrato de tooling é:
+
+| Script Server | Destino aprovado |
+| --- | --- |
+| `db:generate` | Drizzle Kit generate sobre src/database/drizzle/schema.ts agregando models; out em src/database/drizzle/migrations; execução local, sem introspecção remota implícita. |
+| `db:migrate` | Aplica migrations Drizzle pendentes; URL por ambiente, sem reset, sem execução no boot. |
+| `db:preflight` | Compara catálogo/histórico com baseline, apenas leitura; não imprime dados nem credenciais. |
+| `db:adopt` | Adota baseline em banco existente somente após parity; nunca marca a migration de revogação como já aplicada. |
+| `db:test` | Prepara Compose com .env.local raiz, reset exclusivamente local, migrations Drizzle sem seed. |
+
+Scripts Supabase CLI de diff/push/pull/repair e geração de Database.ts são retirados; a Web não gera tipos de banco. npm/package-lock permanecem a fonte das versões. Antes de qualquer aplicação remota, exige-se preflight de Dev e produção e ensaio de rollback em restauração isolada, com evidências no workflow SDD. A indisponibilidade desses ambientes nesta autoria não é evidência de parity. A janela inicial é coordenada, sem release intermediário compatível.
+
+A lista de scripts passa a descrever o runtime vigente apenas após a implementação verificada; atualizar também a seção de migrations da infraestrutura nessa entrega.

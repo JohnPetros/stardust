@@ -10,6 +10,10 @@ import type { AccountDto } from '@stardust/core/auth/entities/dtos'
 import { AppError } from '@stardust/core/global/errors'
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
+import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
+import type { DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
+import type { DatabaseAccess } from '@/database/drizzle/DatabaseAccess'
+
 import type { InngestAmqp } from '@/queue/inngest/InngestAmqp'
 
 type HonoSchema<HonoContext> = (HonoContext extends Context<
@@ -205,6 +209,13 @@ export class HonoHttp<HonoContext extends Context>
       return response.body as Response
     }
 
+    for (const [key, value] of Object.entries(response.headers)) {
+      const header = key.toLowerCase()
+      if (header === 'x-onboarding-signup-eligible' || header === 'x-hono-response')
+        continue
+      if (response.isFailure && header.startsWith('x-onboarding-')) continue
+      this.context.header(key, value)
+    }
     this.context.status(response.statusCode as StatusCode)
 
     if (response.isFailure) {
@@ -230,6 +241,14 @@ export class HonoHttp<HonoContext extends Context>
 
   getSupabase(): SupabaseClient {
     return this.context.get('supabase')
+  }
+
+  getDatabase(): DrizzleDatabase {
+    return DrizzleClient.getInstance()
+  }
+
+  getDatabaseAccess(): DatabaseAccess {
+    return this.context.get('databaseAccess') ?? { kind: 'public' }
   }
 
   getInngest(): InngestAmqp<void> {

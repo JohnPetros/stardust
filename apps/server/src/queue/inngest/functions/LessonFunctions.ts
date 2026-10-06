@@ -1,4 +1,4 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
 
 import type { EventPayload } from '@stardust/core/global/types'
 import type {
@@ -7,8 +7,7 @@ import type {
   TextBlocksAudioGenerationInBatchRequestedEvent,
 } from '@stardust/core/lesson/events'
 
-import type { Database } from '@/database/supabase/types/Database'
-import { SupabaseTextBlocksRepository } from '@/database'
+import { DrizzleTextBlocksRepository } from '@/database/drizzle/repositories'
 import {
   CancelTextBlockAudioGenerationJob,
   GenerateTextBlocksAudioBatchJob,
@@ -69,7 +68,7 @@ export class LessonFunctions extends InngestFunctions {
     )
   }
 
-  private createCancelTextBlockAudioGenerationJob(supabase: SupabaseClient<Database>) {
+  private createCancelTextBlockAudioGenerationJob(database: DrizzleDatabase) {
     return this.createFunction(
       {
         id: CancelTextBlockAudioGenerationJob.KEY,
@@ -85,7 +84,7 @@ export class LessonFunctions extends InngestFunctions {
         },
       },
       async (context) => {
-        const repository = new SupabaseTextBlocksRepository(supabase)
+        const repository = new DrizzleTextBlocksRepository(database, { kind: 'system' })
         const job = new CancelTextBlockAudioGenerationJob(repository)
         const amqp = new InngestAmqp<TextBlockAudioGenerationCancelledPayload>(context)
         return await job.handle(amqp)
@@ -93,7 +92,7 @@ export class LessonFunctions extends InngestFunctions {
     )
   }
 
-  private createUpdateTextBlockAudioJob(supabase: SupabaseClient<Database>) {
+  private createUpdateTextBlockAudioJob(database: DrizzleDatabase) {
     return this.createFunction(
       {
         id: UpdateTextBlockAudioJob.KEY,
@@ -110,7 +109,7 @@ export class LessonFunctions extends InngestFunctions {
         },
       },
       async (context) => {
-        const repository = new SupabaseTextBlocksRepository(supabase)
+        const repository = new DrizzleTextBlocksRepository(database, { kind: 'system' })
         const job = new UpdateTextBlockAudioJob(repository)
         const amqp = new InngestAmqp<TextBlockAudioGeneratedPayload>(context)
         return await job.handle(amqp)
@@ -118,11 +117,11 @@ export class LessonFunctions extends InngestFunctions {
     )
   }
 
-  getFunctions(supabase: SupabaseClient<Database>) {
+  getFunctions(database: DrizzleDatabase) {
     return [
       this.createGenerateTextBlocksAudioBatchJob(),
-      this.createCancelTextBlockAudioGenerationJob(supabase),
-      this.createUpdateTextBlockAudioJob(supabase),
+      this.createCancelTextBlockAudioGenerationJob(database),
+      this.createUpdateTextBlockAudioJob(database),
     ]
   }
 }

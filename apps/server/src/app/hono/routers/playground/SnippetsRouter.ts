@@ -8,7 +8,7 @@ import {
 } from '@stardust/validation/global/schemas'
 import { snippetSchema } from '@stardust/validation/playground/schemas'
 
-import { SupabaseSnippetsRepository } from '@/database/supabase/repositories/playground'
+import { DrizzleSnippetsRepository } from '@/database/drizzle/repositories'
 import {
   CreateSnippetController,
   DeleteSnippetController,
@@ -39,7 +39,10 @@ export class SnippetsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseSnippetsRepository(http.getSupabase())
+        const repository = new DrizzleSnippetsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchSnippetsListController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -59,7 +62,10 @@ export class SnippetsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseSnippetsRepository(http.getSupabase())
+        const repository = new DrizzleSnippetsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchSnippetController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -74,7 +80,10 @@ export class SnippetsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', snippetSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseSnippetsRepository(http.getSupabase())
+        const repository = new DrizzleSnippetsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new CreateSnippetController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -95,7 +104,10 @@ export class SnippetsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', snippetSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseSnippetsRepository(http.getSupabase())
+        const repository = new DrizzleSnippetsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpdateSnippetController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -116,7 +128,10 @@ export class SnippetsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', z.object({ title: titleSchema })),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseSnippetsRepository(http.getSupabase())
+        const repository = new DrizzleSnippetsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new EditSnippetTitleController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -136,7 +151,10 @@ export class SnippetsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseSnippetsRepository(http.getSupabase())
+        const repository = new DrizzleSnippetsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new DeleteSnippetController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)

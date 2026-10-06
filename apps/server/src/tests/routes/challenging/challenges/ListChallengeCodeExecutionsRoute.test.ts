@@ -1,11 +1,12 @@
 import request from 'supertest'
+import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
 
 import { HTTP_HEADERS, HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { AuthError, ValidationError } from '@stardust/core/global/errors'
 import { Id } from '@stardust/core/global/structures'
 
 import { AuthFixture } from '@/tests/fixtures/AuthFixture'
-import { ForumFixture } from '@/tests/fixtures/ForumFixture'
+import { ChallengingFixture } from '@/tests/fixtures/ChallengingFixture'
 import { HonoFixture } from '@/tests/fixtures/HonoFixture'
 import { ProfileFixture } from '@/tests/fixtures/ProfileFixture'
 import { SupabaseFixture } from '@/tests/fixtures/SupabaseFixture'
@@ -15,10 +16,14 @@ describe('[GET] /challenging/challenges/:challengeId/code-executions', () => {
   const supabaseFixture = new SupabaseFixture()
   const authFixture = new AuthFixture(supabaseFixture.supabase)
   const profileFixture = new ProfileFixture(supabaseFixture.supabase)
-  const forumFixture = new ForumFixture(supabaseFixture.supabase)
+  const challengingFixture = new ChallengingFixture(supabaseFixture.supabase)
 
   beforeAll(async () => {
     await honoFixture.setup()
+  })
+
+  afterAll(async () => {
+    await DrizzleClient.close()
   })
 
   beforeEach(async () => {
@@ -59,57 +64,115 @@ describe('[GET] /challenging/challenges/:challengeId/code-executions', () => {
   })
 
   it('should return paginated executions filtered by user and challenge', async () => {
-    const challenge = await forumFixture.createChallenge(authFixture.getAccountId())
-    const otherChallenge = await forumFixture.createChallenge(authFixture.getAccountId())
+    const challenge = await challengingFixture.createChallenge(authFixture.getAccountId())
+    const otherChallenge = await challengingFixture.createChallenge(
+      authFixture.getAccountId(),
+    )
 
-    const { error } = await supabaseFixture.supabase
-      .from('challenge_code_executions')
-      .insert([
-        {
-          user_id: authFixture.getAccountId(),
-          challenge_id: challenge.id,
-          code: 'primeira',
-          status: 'wrong_answer',
-          test_results: [],
-          outputs: [],
-        },
-        {
-          user_id: authFixture.getAccountId(),
-          challenge_id: challenge.id,
-          code: 'segunda',
-          status: 'accepted',
-          test_results: [],
-          outputs: [],
-        },
-        {
-          user_id: authFixture.getAccountId(),
-          challenge_id: otherChallenge.id,
-          code: 'outra',
-          status: 'accepted',
-          test_results: [],
-          outputs: [],
-        },
+    const otherAccount = new AuthFixture(supabaseFixture.supabase)
+    await otherAccount.createAccount()
+    await profileFixture.createAccountUser(otherAccount.getAccountId())
+    await challengingFixture.createCodeExecutions([
+      {
+        userId: authFixture.getAccountId(),
+        challengeId: challenge.id ?? '',
+        code: 'primeira',
+        createdAt: new Date('2026-01-01T12:00:00.000Z'),
+        status: 'wrong_answer',
+        testResults: [],
+        outputs: [],
+      },
+      {
+        userId: authFixture.getAccountId(),
+        challengeId: challenge.id ?? '',
+        code: 'segunda',
+        createdAt: new Date('2026-01-02T12:00:00.000Z'),
+        status: 'accepted',
+        testResults: [],
+        outputs: [],
+      },
+      {
+        userId: authFixture.getAccountId(),
+        challengeId: otherChallenge.id ?? '',
+        code: 'outra',
+        createdAt: new Date('2026-01-03T12:00:00.000Z'),
+        status: 'accepted',
+        testResults: [],
+        outputs: [],
+      },
+      {
+        userId: otherAccount.getAccountId(),
+        challengeId: challenge.id ?? '',
+        code: 'private other-account execution',
+        createdAt: new Date('2026-01-04T12:00:00.000Z'),
+        status: 'accepted',
+        testResults: [],
+        outputs: [],
+      },
+    ])
+
+    async function readPersistedExecutions() {
+      const groups = await Promise.all([
+        challengingFixture.findCodeExecutions(
+          authFixture.getAccountId(),
+          challenge.id ?? '',
+        ),
+        challengingFixture.findCodeExecutions(
+          authFixture.getAccountId(),
+          otherChallenge.id ?? '',
+        ),
+        challengingFixture.findCodeExecutions(
+          otherAccount.getAccountId(),
+          challenge.id ?? '',
+        ),
       ])
-
-    if (error) throw error
-
+      return groups.map((rows) =>
+        rows.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()),
+      )
+    }
+    const before = await readPersistedExecutions()
+    expect(before.map((rows) => rows.map((row) => row.code))).toEqual([
+      ['segunda', 'primeira'],
+      ['outra'],
+      ['private other-account execution'],
+    ])
+    const expectedPages = [
+      { code: 'segunda', status: 'accepted', createdAt: '2026-01-02T12:00:00.000Z' },
+      { code: 'primeira', status: 'wrong_answer', createdAt: '2026-01-01T12:00:00.000Z' },
+    ]
+    for (const [index, expected] of expectedPages.entries()) {
+      const response = await request(honoFixture.server)
+        .get(
+          `/challenging/challenges/${challenge.id}/code-executions?page=${index + 1}&itemsPerPage=1`,
+        )
+        .set(authFixture.getAuthorizationHeader())
+      expect(response.status).toBe(HTTP_STATUS_CODE.ok)
+      expect(response.headers[HTTP_HEADERS.xPaginationResponse.toLowerCase()]).toBe(
+        'true',
+      )
+      expect(response.headers[HTTP_HEADERS.xTotalItemsCount.toLowerCase()]).toBe('2')
+      expect(response.body).toEqual([
+        { ...expected, testResults: [], outputs: [], error: null },
+      ])
+    }
     const response = await request(honoFixture.server)
       .get(
-        `/challenging/challenges/${challenge.id}/code-executions?page=1&itemsPerPage=10`,
+        `/challenging/challenges/${challenge.id}/code-executions?page=1&itemsPerPage=1`,
       )
-      .set(authFixture.getAuthorizationHeader())
-
+      .set(otherAccount.getAuthorizationHeader())
     expect(response.status).toBe(HTTP_STATUS_CODE.ok)
     expect(response.headers[HTTP_HEADERS.xPaginationResponse.toLowerCase()]).toBe('true')
-    expect(response.headers[HTTP_HEADERS.xTotalItemsCount.toLowerCase()]).toBe('2')
-    expect(response.body).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ code: 'primeira' }),
-        expect.objectContaining({ code: 'segunda' }),
-      ]),
-    )
-    expect(response.body).not.toEqual(
-      expect.arrayContaining([expect.objectContaining({ code: 'outra' })]),
-    )
+    expect(response.headers[HTTP_HEADERS.xTotalItemsCount.toLowerCase()]).toBe('1')
+    expect(response.body).toEqual([
+      {
+        code: 'private other-account execution',
+        status: 'accepted',
+        testResults: [],
+        outputs: [],
+        error: null,
+        createdAt: '2026-01-04T12:00:00.000Z',
+      },
+    ])
+    expect(await readPersistedExecutions()).toEqual(before)
   })
 })

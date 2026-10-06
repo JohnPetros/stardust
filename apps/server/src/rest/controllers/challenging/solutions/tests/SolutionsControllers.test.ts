@@ -1,4 +1,4 @@
-import { mock, type Mock } from 'ts-jest-mocker'
+import { mock } from 'ts-jest-mocker'
 
 import type {
   ChallengesRepository,

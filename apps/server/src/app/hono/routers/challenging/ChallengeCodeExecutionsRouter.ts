@@ -8,8 +8,8 @@ import {
 import { idSchema } from '@stardust/validation/global/schemas'
 import { DeleguaProvedorLsp } from '@stardust/lsp'
 
-import { SupabaseChallengeCodeExecutionsRepository } from '@/database/supabase/repositories/challenging'
-import { SupabaseChallengesRepository } from '@/database/supabase/repositories/challenging'
+import { DrizzleChallengeCodeExecutionsRepository } from '@/database/drizzle/repositories'
+import { DrizzleChallengesRepository } from '@/database/drizzle/repositories'
 import {
   CountChallengeCodeExecutionErrorsController,
   ListChallengeCodeExecutionsController,
@@ -37,9 +37,13 @@ export class ChallengeCodeExecutionsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', challengeCodeExecutionSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const challengesRepository = new SupabaseChallengesRepository(http.getSupabase())
-        const executionsRepository = new SupabaseChallengeCodeExecutionsRepository(
-          http.getSupabase(),
+        const challengesRepository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const executionsRepository = new DrizzleChallengeCodeExecutionsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
         )
         const lspProvider = new DeleguaProvedorLsp()
         const controller = new RunChallengeCodeController(
@@ -66,8 +70,9 @@ export class ChallengeCodeExecutionsRouter extends HonoRouter {
       this.validationMiddleware.validate('query', challengeCodeExecutionsListQuerySchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengeCodeExecutionsRepository(
-          http.getSupabase(),
+        const repository = new DrizzleChallengeCodeExecutionsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
         )
         const controller = new ListChallengeCodeExecutionsController(repository)
         const response = await controller.handle(http)
@@ -88,8 +93,9 @@ export class ChallengeCodeExecutionsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengeCodeExecutionsRepository(
-          http.getSupabase(),
+        const repository = new DrizzleChallengeCodeExecutionsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
         )
         const controller = new CountChallengeCodeExecutionErrorsController(repository)
         const response = await controller.handle(http)

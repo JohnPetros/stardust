@@ -27,6 +27,9 @@ import type { RestContextValue } from './types'
 const restClient = NextRestClient({ isCacheEnabled: false })
 restClient.setBaseUrl(CLIENT_ENV.stardustServerUrl)
 
+const signUpRestClient = NextRestClient({ isCacheEnabled: false })
+signUpRestClient.setBaseUrl(new URL('/api', CLIENT_ENV.stardustWebUrl).toString())
+
 export function useRestContextProvider(): RestContextValue {
   const { accessToken } = useAuthContext()
 
@@ -41,7 +44,7 @@ export function useRestContextProvider(): RestContextValue {
   return useMemo(
     () => ({
       signedFileStorageProvider: S3SignedFileStorageProvider(),
-      authService: AuthService(restClient),
+      authService: AuthService(restClient, signUpRestClient),
       profileService: ProfileService(restClient),
       spaceService: SpaceService(restClient),
       shopService: ShopService(restClient),

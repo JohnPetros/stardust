@@ -267,13 +267,13 @@ services:
       supabase-auth:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgres://postgres:${SUPABASE_DATABASE_PASSWORD:?Set a local-only SUPABASE_DATABASE_PASSWORD}@supabase-postgres:5432/postgres
+      DATABASE_URL: postgres://postgres@supabase-postgres:5432/postgres
       PGPASSWORD: ${SUPABASE_DATABASE_PASSWORD:?Set a local-only SUPABASE_DATABASE_PASSWORD}
       SUPABASE_DATABASE_PASSWORD: ${SUPABASE_DATABASE_PASSWORD:?Set a local-only SUPABASE_DATABASE_PASSWORD}
+      STARDUST_LOCAL_RESET: compose
     volumes:
       - ./docker/supabase/reset.sh:/docker/supabase/reset.sh:ro
       - ./docker/supabase/init/roles.sql:/docker/supabase/init/roles.sql:ro
       - ./docker/supabase/init/storage-compatibility.sql:/docker/supabase/init/storage-compatibility.sql:ro
-      - ./apps/server/supabase/migrations:/migrations:ro
     entrypoint: ["/bin/sh", "/docker/supabase/reset.sh"]
     restart: "no"

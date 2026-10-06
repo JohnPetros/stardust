@@ -43,7 +43,7 @@ Se a nova camada não estiver coberta por `rules.md`, o entregável deve incluir
 
 2. **Levantamento do que ja existe**
    - Consultar arquivos de arquitetura e regras do projeto antes de redigir.
-   - Se houver ferramenta de busca no repositorio (MCP Serena), localizar documentos similares da camada e camadas analogas.
+   - Se houver CodeGraph, localizar documentos e implementacoes similares da camada e camadas analogas.
    - Se houver duvida de biblioteca/framework, consultar documentacao oficial com ferramenta de docs (MCP Context7).
    - Sem ferramentas, solicitar ao usuario trechos minimos necessarios (arquitetura, convencoes e exemplos de regra).
 

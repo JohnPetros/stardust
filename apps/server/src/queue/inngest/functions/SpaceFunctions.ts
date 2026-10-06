@@ -1,4 +1,4 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
 
 import { AccountSignedUpEvent } from '@stardust/core/auth/events'
 import type { EventPayload } from '@stardust/core/global/types'
@@ -7,7 +7,7 @@ import {
   StarsOrderChangedEvent,
 } from '@stardust/core/space/events'
 
-import { SupabasePlanetsRepository } from '@/database'
+import { DrizzlePlanetsRepository } from '@/database/drizzle/repositories'
 import { HandleStarsNewOrderJob, UnlockFirstStarJob } from '@/queue/jobs/space'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestFunctions } from './InngestFunctions'
@@ -19,7 +19,7 @@ import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/s
 type AccountSignedUpPayload = EventPayload<typeof AccountSignedUpEvent>
 
 export class SpaceFunctions extends InngestFunctions {
-  private createUnlockFirstStarFunction(supabase: SupabaseClient) {
+  private createUnlockFirstStarFunction(database: DrizzleDatabase) {
     return this.createFunction(
       {
         id: UnlockFirstStarJob.KEY,
@@ -35,7 +35,7 @@ export class SpaceFunctions extends InngestFunctions {
         },
       },
       async (context) => {
-        const repository = new SupabasePlanetsRepository(supabase)
+        const repository = new DrizzlePlanetsRepository(database, { kind: 'system' })
         const amqp = new InngestAmqp<AccountSignedUpPayload>(context)
         const broker = new InngestBroker()
         const job = new UnlockFirstStarJob(repository, broker)
@@ -44,7 +44,7 @@ export class SpaceFunctions extends InngestFunctions {
     )
   }
 
-  private createHandleStarsNewOrderFunction(supabase: SupabaseClient) {
+  private createHandleStarsNewOrderFunction(database: DrizzleDatabase) {
     return this.createFunction(
       {
         id: HandleStarsNewOrderJob.KEY,
@@ -55,7 +55,7 @@ export class SpaceFunctions extends InngestFunctions {
         ],
       },
       async (context) => {
-        const repository = new SupabasePlanetsRepository(supabase)
+        const repository = new DrizzlePlanetsRepository(database, { kind: 'system' })
         const amqp = new InngestAmqp(context)
         const broker = new InngestBroker()
         const job = new HandleStarsNewOrderJob(repository, broker)
@@ -64,10 +64,10 @@ export class SpaceFunctions extends InngestFunctions {
     )
   }
 
-  getFunctions(supabase: SupabaseClient) {
+  getFunctions(database: DrizzleDatabase) {
     return [
-      this.createUnlockFirstStarFunction(supabase),
-      this.createHandleStarsNewOrderFunction(supabase),
+      this.createUnlockFirstStarFunction(database),
+      this.createHandleStarsNewOrderFunction(database),
     ]
   }
 }

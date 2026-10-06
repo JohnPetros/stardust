@@ -12,6 +12,12 @@ on:
       - "packages/core/**"
       - "packages/email/**"
       - "packages/validation/**"
+      - "docker-compose.yml"
+      - "docker/supabase/**"
+      - "scripts/export-local-database-env.mjs"
+      - "scripts/check-drizzle-transition.mjs"
+      - "scripts/adopt-drizzle-baseline.mjs"
+      - "scripts/tests/**"
       - ".dependency-cruiser.cjs"
       - "coverage-baseline.json"
       - "scripts/check-coverage-baseline.mjs"
@@ -132,33 +138,31 @@ jobs:
       - name: Build LSP package
         run: npm run build -w @stardust/lsp
 
-      - name: Setup Supabase CLI
-        uses: supabase/setup-cli@v3
-        with:
-          version: 2.98.2
-
-      - name: Setup Supabase
-        working-directory: apps/server
-        run: supabase start
-
-      - name: Rebuild local database from migrations
-        working-directory: apps/server
-        run: supabase db reset --local --yes
-
-      - name: Create test environment files
-        working-directory: apps/server
+      - name: Create local test environment files
         run: |
-          supabase status -o env > /tmp/supabase.env
-          . /tmp/supabase.env
+          cat <<'EOF' > .env.local
+          SUPABASE_DATABASE_PASSWORD=stardust-local-ci-password
+          SUPABASE_DATABASE_PORT=54322
+          SUPABASE_API_PORT=54321
+          SUPABASE_MAILPIT_HTTP_PORT=54327
+          SUPABASE_JWT_SECRET=stardust-local-ci-jwt-secret-1234567890
+          SUPABASE_PUBLISHABLE_KEY=stardust-ci-publishable-key
+          SUPABASE_ANON_KEY=stardust-ci-anon-key
+          SUPABASE_REALTIME_DB_ENC_KEY=01234567890123456789012345678901
+          SUPABASE_REALTIME_SECRET_KEY_BASE=0123456789012345678901234567890123456789012345678901234567890123
+          MINIO_ROOT_USER=stardust-ci
+          MINIO_ROOT_PASSWORD=stardust-local-ci-minio-password
+          EOF
 
-          cat <<'EOF' > .env.testing
+          cat <<'EOF' > apps/server/.env.testing
           MODE='test'
           PORT='3333'
           BASE_URL='http://localhost'
+          ONBOARDING_RECEIPT_SECRET='stardust-local-ci-onboarding-receipt-secret'
           GOD_ACCOUNT_IDS=f4442be6-ad3e-415b-b31b-cc49a18e1119,
           SUPABASE_URL='http://127.0.0.1:54321'
-          SUPABASE_ANON_KEY='__SUPABASE_SECRET_KEY__'
-          SUPABASE_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+          SUPABASE_PUBLISHABLE_KEY=stardust-ci-publishable-key
+          SUPABASE_DATABASE_URL=postgresql://postgres:stardust-local-ci-password@127.0.0.1:54322/postgres
           REDIS_URL='redis://127.0.0.1:6379'
           S3_ACCOUNT_ID='test-account-id'
           S3_ACCESS_KEY_ID='test-access-key-id'
@@ -176,8 +180,15 @@ jobs:
           POSTHOG_PERSONAL_API_KEY='test-posthog-personal-api-key'
           POSTHOG_PROJECT_ID='1'
           EOF
-          sed -i "s|__SUPABASE_SECRET_KEY__|${SECRET_KEY}|g" .env.testing
-          cp .env.testing .env
+
+      - name: Prepare local stack and migrate empty database
+        run: npm run db:test -w @stardust/server
+
+      - name: Test migration and export scripts
+        run: npm run test:scripts
+
+      - name: Run integration tests
+        run: npm run test:integration -w @stardust/server
 
       - name: Run tests
         run: npm run test:coverage -w @stardust/server

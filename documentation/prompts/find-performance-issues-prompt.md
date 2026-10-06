@@ -81,7 +81,7 @@ Não recomende otimizações que violem as rules de camada. Se a melhor otimiza�
 
 **Uso de Ferramentas Auxiliares (se disponiveis):**
 
-- **Busca no repositorio:** use ferramentas de busca (ex: glob/grep/Serena) para localizar hotspots, implementacoes similares, e referencias.
+- **Busca no repositorio:** use ferramentas de busca (ex: glob/grep/CodeGraph) para localizar hotspots, implementacoes similares, e referencias.
 - **Leitura de arquivos:** leia somente os arquivos necessarios para sustentar as evidencias.
 - **Documentacao oficial:** se houver duvida sobre comportamento de biblioteca/framework, consulte docs oficiais (ex: via Context7) e cite o que muda na recomendacao.
 - **Modo sem ferramentas:** se voce nao tiver acesso ao repositorio, solicite ao usuario:

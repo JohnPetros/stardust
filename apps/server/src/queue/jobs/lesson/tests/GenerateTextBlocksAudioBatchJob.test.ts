@@ -4,7 +4,7 @@ import type { Amqp, Broker } from '@stardust/core/global/interfaces'
 import type { EventPayload } from '@stardust/core/global/types'
 import {
   TextBlockAudioGenerationRequestedEvent,
-  TextBlocksAudioGenerationInBatchRequestedEvent,
+  type TextBlocksAudioGenerationInBatchRequestedEvent,
 } from '@stardust/core/lesson/events'
 
 import { GenerateTextBlocksAudioBatchJob } from '../GenerateTextBlocksAudioBatchJob'

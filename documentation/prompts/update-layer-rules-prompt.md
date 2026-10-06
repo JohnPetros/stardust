@@ -50,7 +50,7 @@ Se a atualização mudar o escopo da rule, atualize também `documentation/rules
      - `documentation/overview.md`
      - `documentation/architecture.md`
      - `documentation/rules/rules.md`
-   - Se houver ferramenta de busca no repositorio (MCP Serena), validar os paths listados na etapa anterior e localizar 2-5 exemplos reais da camada para referenciar.
+   - Se houver CodeGraph, validar os paths listados na etapa anterior e localizar 2-5 exemplos reais da camada para referenciar.
    - Se houver duvida de biblioteca/framework, consultar documentacao oficial com ferramenta de docs (MCP Context7).
    - Sem ferramentas, solicitar ao usuario: conteúdo de `{ARQUIVO_ALVO}`, docs base relevantes e os 2-5 exemplos minimos necessarios.
 

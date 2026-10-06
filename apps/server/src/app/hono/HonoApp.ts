@@ -2,9 +2,11 @@ import { type Context, type Next, Hono } from 'hono'
 import { serve } from '@hono/node-server'
 import { cors } from 'hono/cors'
 import { serve as serveInngest } from 'inngest/hono'
-import { type SupabaseClient, type User, createClient } from '@supabase/supabase-js'
+import { type SupabaseClient, createClient } from '@supabase/supabase-js'
 import { ZodError } from 'zod'
-import { jwtDecode } from 'jwt-decode'
+import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
+import type { DatabaseAccess } from '@/database/drizzle/DatabaseAccess'
+import { Id } from '@stardust/core/global/structures'
 
 import {
   AuthError,
@@ -63,10 +65,9 @@ import { PlaygroundRouter } from './routers/playground/PlaygroundRouter'
 import { RateLimitMiddleware } from './middlewares'
 import type { RateLimitClock } from './middlewares/RateLimitMiddleware'
 
-type SupabaseSession = User & { sub: string }
-
 declare module 'hono' {
   interface ContextVariableMap {
+    databaseAccess: DatabaseAccess
     account: AccountDto
     supabase: SupabaseClient
     inngest: InngestAmqp<void>
@@ -111,6 +112,7 @@ export class HonoApp {
   }
 
   setup() {
+    DrizzleClient.create(ENV.databaseUrl)
     this.setUpCors()
     this.registerMiddlewares()
     this.registerRoutes()
@@ -121,32 +123,7 @@ export class HonoApp {
     this.hono.onError(async (error, context) => {
       console.error('Error:', error)
 
-      if (error instanceof AppError) {
-        console.error('Error title:', error.title)
-        console.error('Error message:', error.message)
-
-        const response = {
-          title: error.title,
-          message: error.message,
-        }
-
-        if (error instanceof AuthError)
-          return context.json(response, HTTP_STATUS_CODE.unauthorized)
-
-        if (error instanceof NotFoundError)
-          return context.json(response, HTTP_STATUS_CODE.notFound)
-
-        if (error instanceof ConflictError)
-          return context.json(response, HTTP_STATUS_CODE.conflict)
-
-        if (error instanceof ValidationError)
-          return context.json(response, HTTP_STATUS_CODE.badRequest)
-
-        if (error instanceof NotAllowedError)
-          return context.json(response, HTTP_STATUS_CODE.notAllowed)
-
-        return context.json(response, HTTP_STATUS_CODE.serverError)
-      }
+      if (error instanceof AppError) return this.respondToAppError(error, context)
 
       if (error instanceof ZodError)
         return context.json(
@@ -169,6 +146,33 @@ export class HonoApp {
     })
   }
 
+  private respondToAppError(error: AppError, context: Context): Response {
+    console.error('Error title:', error.title)
+    console.error('Error message:', error.message)
+
+    const response = {
+      title: error.title,
+      message: error.message,
+    }
+
+    if (error instanceof AuthError)
+      return context.json(response, HTTP_STATUS_CODE.unauthorized)
+
+    if (error instanceof NotFoundError)
+      return context.json(response, HTTP_STATUS_CODE.notFound)
+
+    if (error instanceof ConflictError)
+      return context.json(response, HTTP_STATUS_CODE.conflict)
+
+    if (error instanceof ValidationError)
+      return context.json(response, HTTP_STATUS_CODE.badRequest)
+
+    if (error instanceof NotAllowedError)
+      return context.json(response, HTTP_STATUS_CODE.notAllowed)
+
+    return context.json(response, HTTP_STATUS_CODE.serverError)
+  }
+
   private setUpCors() {
     this.hono.use(
       '*',
@@ -179,7 +183,7 @@ export class HonoApp {
     )
   }
 
-  registerRoutes() {
+  private createRouters() {
     const profileRouter = new ProfileRouter(this)
     const authRouter = new AuthRouter(this)
     const spaceRouter = new SpaceRouter(this)
@@ -197,6 +201,34 @@ export class HonoApp {
     const mcpRouter = new McpRouter(this)
     const healthRouter = new HealthRouter(this)
 
+    return {
+      profileRouter,
+      authRouter,
+      spaceRouter,
+      lessonRouter,
+      shopRouter,
+      challengingRouter,
+      rankingRouter,
+      forumRouter,
+      playgroundRouter,
+      manualRouter,
+      storageRouter,
+      notificationRouter,
+      conversationRouter,
+      reportingRouter,
+      mcpRouter,
+      healthRouter,
+    }
+  }
+
+  registerRoutes() {
+    const routers = this.createRouters()
+    this.registerRootRoutes()
+    this.mountAccountAndLearningRoutes(routers)
+    this.mountContentAndServiceRoutes(routers)
+  }
+
+  private registerRootRoutes() {
     this.hono.get('/live', (context) => {
       return context.json({ status: 'UP' })
     })
@@ -204,6 +236,19 @@ export class HonoApp {
       return context.redirect('/health', HTTP_STATUS_CODE.redirect)
     })
     this.registerInngestRoute()
+  }
+
+  private mountAccountAndLearningRoutes(routers: ReturnType<HonoApp['createRouters']>) {
+    const {
+      healthRouter,
+      authRouter,
+      profileRouter,
+      spaceRouter,
+      lessonRouter,
+      shopRouter,
+      challengingRouter,
+      rankingRouter,
+    } = routers
     this.hono.route('/', healthRouter.registerRoutes())
     this.hono.route('/', authRouter.registerRoutes())
     this.hono.route('/', profileRouter.registerRoutes())
@@ -212,6 +257,19 @@ export class HonoApp {
     this.hono.route('/', shopRouter.registerRoutes())
     this.hono.route('/', challengingRouter.registerRoutes())
     this.hono.route('/', rankingRouter.registerRoutes())
+  }
+
+  private mountContentAndServiceRoutes(routers: ReturnType<HonoApp['createRouters']>) {
+    const {
+      forumRouter,
+      playgroundRouter,
+      manualRouter,
+      storageRouter,
+      notificationRouter,
+      conversationRouter,
+      reportingRouter,
+      mcpRouter,
+    } = routers
     this.hono.route('/', forumRouter.registerRoutes())
     this.hono.route('/', playgroundRouter.registerRoutes())
     this.hono.route('/', manualRouter.registerRoutes())
@@ -237,7 +295,7 @@ export class HonoApp {
 
   registerInngestRoute() {
     this.hono.on(['GET', 'PUT', 'POST'], '/inngest', (context) => {
-      const supabase = context.get('supabase')
+      const database = DrizzleClient.getInstance()
       const profileFunctions = new ProfileFunctions(inngest)
       const analyticsFunctions = new AnalyticsFunctions(inngest)
       const spaceFunctions = new SpaceFunctions(inngest)
@@ -252,30 +310,19 @@ export class HonoApp {
       return serveInngest({
         client: inngest,
         functions: [
-          ...profileFunctions.getFunctions(supabase),
+          ...profileFunctions.getFunctions(database),
           ...analyticsFunctions.getFunctions(),
-          ...spaceFunctions.getFunctions(supabase),
-          ...shopFunctions.getFunctions(supabase),
-          ...rankingFunctions.getFunctions(supabase),
-          ...storageFunctions.getFunctions(supabase),
+          ...spaceFunctions.getFunctions(database),
+          ...shopFunctions.getFunctions(database),
+          ...rankingFunctions.getFunctions(database),
+          ...storageFunctions.getFunctions(database),
           ...notificationFunctions.getFunctions(),
-          ...challengingFunctions.getFunctions(supabase),
-          ...manualFunctions.getFunctions(supabase),
-          ...lessonFunctions.getFunctions(supabase),
+          ...challengingFunctions.getFunctions(database),
+          ...manualFunctions.getFunctions(),
+          ...lessonFunctions.getFunctions(database),
         ],
-      })(context as Context<any, any, {}>)
+      })(context as Context<any, any, Record<string, never>>)
     })
-  }
-
-  private setAccount(accessToken: string, context: Context) {
-    const session = jwtDecode<SupabaseSession>(accessToken)
-    const accountDto: AccountDto = {
-      id: session.sub,
-      email: session.user_metadata.email,
-      name: session.user_metadata.name,
-      isAuthenticated: session.user_metadata.email_verified,
-    }
-    context.set('account', accountDto)
   }
 
   private createSupabaseClient() {
@@ -292,7 +339,22 @@ export class HonoApp {
           })
         : createClient(ENV.supabaseUrl, ENV.supabaseKey)
       context.set('supabase', supabase)
-      if (accessToken && !isMcpRoute) this.setAccount(accessToken, context)
+      context.set('databaseAccess', { kind: 'public' })
+      if (accessToken && !isMcpRoute) {
+        const { data, error } = await supabase.auth.getUser(accessToken)
+        if (!error && data.user) {
+          context.set('account', {
+            id: data.user.id,
+            email: data.user.email ?? '',
+            name: data.user.user_metadata.name ?? '',
+            isAuthenticated: true,
+          })
+          context.set('databaseAccess', {
+            kind: 'user',
+            accountId: Id.create(data.user.id),
+          })
+        }
+      }
       await next()
     }
   }

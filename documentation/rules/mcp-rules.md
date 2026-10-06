@@ -11,8 +11,8 @@ trabalho, nao como substitutos de analise tecnica.
 
 - **Context7**: buscar documentacao atualizada de bibliotecas, frameworks,
   SDKs, APIs e CLIs.
-- **Serena**: navegar a codebase com leitura semantica e localizar simbolos com
-  custo menor que abrir arquivos inteiros.
+- **CodeGraph**: explorar simbolos, caminhos de chamada e impacto de mudancas
+  na codebase indexada.
 - **Pencil**: ler e editar arquivos `.pen`, validar layout e trabalhar com
   contexto de design.
 - **Supabase Dev**: inspecionar e operar o ambiente de desenvolvimento do
@@ -52,16 +52,21 @@ Use para:
 
 Nao use como fonte principal para explicar o proprio codebase do projeto.
 
-### Serena
+### CodeGraph
 
-Use no inicio de tarefas de implementacao, investigacao ou review para localizar
-simbolos, dependencias e referencias sem abrir arquivos desnecessariamente.
+Use antes de ler ou editar codigo quando precisar entender simbolos, fluxos,
+arquitetura, bugs ou o impacto de uma mudanca. A exploracao retorna codigo-fonte,
+caminhos de chamada e raio de impacto.
 
 Boas praticas:
 
-- prefira localizar simbolos e referencias antes de ler arquivos inteiros;
-- leia apenas os corpos realmente necessarios;
-- use para confirmar onde um contrato e definido e onde ele e consumido.
+- consulte simbolos ou arquivos relevantes em uma exploracao;
+- trate o codigo retornado como leitura atual e nao repita a busca com `grep` ou
+  leitura dos mesmos arquivos;
+- use leitura direta para arquivos fora do indice ou detalhes que a exploracao
+  nao mostrou;
+- se o projeto nao estiver indexado, use as ferramentas locais de navegacao e
+  leitura; nao inicialize o indice sem solicitacao.
 
 ### Pencil
 
@@ -152,8 +157,8 @@ Antes de abrir a pagina:
 ## Anti-padroes
 
 - Usar Playwright para tentar provar bug de UI sem app rodando corretamente.
-- Usar Context7 para responder pergunta sobre codigo local que Serena ou leitura
-  direta resolveriam melhor.
+- Usar Context7 para responder pergunta sobre codigo local que CodeGraph ou
+  leitura direta resolveriam melhor.
 - Usar Supabase Prod quando Dev e suficiente.
 - Concluir que uma rota esta quebrada sem verificar autenticacao, redirect ou
   contexto isolado do navegador.

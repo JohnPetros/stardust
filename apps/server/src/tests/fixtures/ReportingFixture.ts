@@ -1,3 +1,5 @@
+import { randomUUID } from 'node:crypto'
+import { eq } from 'drizzle-orm'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 import type {
@@ -8,32 +10,83 @@ import { FeedbackMessage, FeedbackReport } from '@stardust/core/reporting/entiti
 import { Id } from '@stardust/core/global/structures'
 
 import {
-  SupabaseFeedbackMessagesRepository,
-  SupabaseFeedbackReportsRepository,
-} from '@/database/supabase/repositories/reporting'
+  DrizzleFeedbackMessagesRepository,
+  DrizzleFeedbackReportsRepository,
+} from '@/database/drizzle/repositories/reporting'
 
-import { LocalSupabaseProxy } from './LocalSupabaseProxy'
+import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
+import {
+  feedbackReportModel,
+  feedbackMessageModel,
+} from '@/database/drizzle/models/reporting'
 
 export class ReportingFixture {
-  private readonly repository: SupabaseFeedbackReportsRepository
-  private readonly messagesRepository: SupabaseFeedbackMessagesRepository
+  private readonly repository: DrizzleFeedbackReportsRepository
+  private readonly messagesRepository: DrizzleFeedbackMessagesRepository
 
-  constructor(private readonly supabase: SupabaseClient) {
-    this.repository = new SupabaseFeedbackReportsRepository(supabase)
-    this.messagesRepository = new SupabaseFeedbackMessagesRepository(supabase)
+  private readonly database = DrizzleClient.getInstance()
+
+  constructor(_supabase: SupabaseClient) {
+    this.repository = new DrizzleFeedbackReportsRepository(this.database, {
+      kind: 'system',
+    })
+    this.messagesRepository = new DrizzleFeedbackMessagesRepository(this.database, {
+      kind: 'system',
+    })
+  }
+
+  async createReportForAuthor(authorId: string) {
+    const id = randomUUID()
+    await this.database.insert(feedbackReportModel).values({
+      id,
+      userId: authorId,
+      content: 'Persisted feedback for an actual route',
+      intent: 'bug',
+      title: 'Persisted report',
+      status: 'open',
+      lastActivityAt: new Date(),
+    })
+    return id
+  }
+
+  async createAdministrativeReply(reportId: string, authorId: string) {
+    const id = randomUUID()
+    const createdAt = new Date(Date.now() - 1000)
+    await this.database.insert(feedbackMessageModel).values({
+      id,
+      reportId,
+      authorRole: 'admin',
+      authorId,
+      content: 'A canonical administrative reply',
+      createdAt,
+    })
+    await this.database
+      .update(feedbackReportModel)
+      .set({ lastAdminMessageAt: createdAt })
+      .where(eq(feedbackReportModel.id, reportId))
+    return { id, createdAt }
+  }
+
+  async createUserReply(reportId: string, authorId: string) {
+    const id = randomUUID()
+    const createdAt = new Date(Date.now() - 1000)
+    await this.database.insert(feedbackMessageModel).values({
+      id,
+      reportId,
+      authorRole: 'user',
+      authorId,
+      content: 'A persisted user message',
+      createdAt,
+    })
+    await this.database
+      .update(feedbackReportModel)
+      .set({ lastUserMessageAt: createdAt })
+      .where(eq(feedbackReportModel.id, reportId))
+    return { id, createdAt }
   }
 
   async clearFeedbackReports() {
-    await LocalSupabaseProxy.ensureRunning()
-
-    const { error } = await this.supabase
-      .from('feedback_reports')
-      .delete()
-      .not('id', 'is', null)
-
-    if (error) {
-      throw error
-    }
+    await this.database.delete(feedbackReportModel)
   }
 
   async createFeedbackReport(reportDto: FeedbackReportDto) {

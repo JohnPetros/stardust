@@ -1,6 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { IdFaker } from '../../../../../../packages/core/src/global/domain/structures/fakers'
 import { ServerMock } from '../shared/mocks/ServerMock'
 import type { ServerMockRoute } from '../shared/types/ServerMockRoute'
 
@@ -12,6 +11,8 @@ type UserCreatedPayload = {
 }
 
 test.describe('/auth/sign-up', () => {
+  const attemptId = '00000000-0000-4000-8000-000000000101'
+  const webOrigin = 'http://127.0.0.1:3100'
   const validFields = {
     name: 'Cadastro Estelar',
     email: 'cadastro.estelar@stardust.dev',
@@ -20,7 +21,7 @@ test.describe('/auth/sign-up', () => {
 
   function createUserCreatedPayload(email: string, name: string): UserCreatedPayload {
     return {
-      userId: IdFaker.fake().value,
+      userId: attemptId,
       userEmail: email,
       userName: name,
       userSlug: name.toLowerCase().trim().replace(/\s+/g, '-'),
@@ -30,7 +31,30 @@ test.describe('/auth/sign-up', () => {
   async function gotoSignUpPage(page: Page, routes: ServerMockRoute[] = []) {
     const server = ServerMock(page)
 
-    await server.registerSuccessDefaults(routes)
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString()
+    await server.registerSuccessDefaults([
+      {
+        method: 'POST',
+        path: '/auth/sign-up',
+        status: 201,
+        body: null,
+        headers: {
+          'X-Onboarding-Receipt': 'signup-receipt-fixture',
+          'X-Onboarding-Expires-At': expiresAt,
+        },
+      },
+      {
+        method: 'GET',
+        path: '/profile/onboarding-attempt',
+        status: 200,
+        body: {
+          account: { id: attemptId, email: validFields.email, name: validFields.name },
+          expiresAt,
+          isUserCreated: false,
+        },
+      },
+      ...routes,
+    ])
     await page.goto('/auth/sign-up')
 
     return server
@@ -108,15 +132,12 @@ test.describe('/auth/sign-up', () => {
     await fillValidSignUpForm(page, validFields)
 
     const signUpRequestPromise = page.waitForRequest((request) => {
-      return (
-        request.method() === 'POST' &&
-        request.url().endsWith('/api/tests/server/auth/sign-up')
-      )
+      return request.method() === 'POST' && request.url().endsWith('/api/auth/sign-up')
     })
     const signUpResponsePromise = page.waitForResponse((response) => {
       return (
         response.request().method() === 'POST' &&
-        response.url().endsWith('/api/tests/server/auth/sign-up')
+        response.url().endsWith('/api/auth/sign-up')
       )
     })
 
@@ -152,7 +173,7 @@ test.describe('/auth/sign-up', () => {
     const signUpResponsePromise = page.waitForResponse((response) => {
       return (
         response.request().method() === 'POST' &&
-        response.url().endsWith('/api/tests/server/auth/sign-up')
+        response.url().endsWith('/api/auth/sign-up')
       )
     })
 
@@ -182,7 +203,7 @@ test.describe('/auth/sign-up', () => {
     const signUpResponsePromise = page.waitForResponse((response) => {
       return (
         response.request().method() === 'POST' &&
-        response.url().endsWith('/api/tests/server/auth/sign-up')
+        response.url().endsWith('/api/auth/sign-up')
       )
     })
 
@@ -246,7 +267,7 @@ test.describe('/auth/sign-up', () => {
     const signUpResponsePromise = page.waitForResponse((response) => {
       return (
         response.request().method() === 'POST' &&
-        response.url().endsWith('/api/tests/server/auth/sign-up')
+        response.url().endsWith('/api/auth/sign-up')
       )
     })
 
@@ -263,12 +284,132 @@ test.describe('/auth/sign-up', () => {
     await expect(page.getByText(resendErrorMessage)).toBeVisible()
   })
 
-  test('keeps sign-in link pointing to sign-in page', async ({ page }) => {
-    await gotoSignUpPage(page)
+  test('navigates to sign in through the visible sign-in link', async ({ page }) => {
+    await gotoSignUpPage(page, [
+      {
+        method: 'GET',
+        path: '/auth/account',
+        status: 401,
+        body: { title: 'Unauthorized', message: 'Não autorizado.' },
+      },
+    ])
+    await page.getByTestId('sign-in-link').click()
+    await expect(page).toHaveURL(/\/auth\/sign-in$/)
+  })
 
-    await expect(page.getByTestId('sign-in-link')).toHaveAttribute(
-      'href',
-      '/auth/sign-in',
+  test('BFF middleware allows anonymous signup, resume and finite SSE while auth verification would fail', async ({
+    page,
+    context,
+  }) => {
+    await context.clearCookies()
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString()
+    const attempt = {
+      account: { id: attemptId, email: validFields.email, name: validFields.name },
+      expiresAt,
+      isUserCreated: false,
+    }
+    const rawBody = `retry: 1000\n\nevent: user.created\nid: profile:${attemptId}\ndata: ${JSON.stringify(createUserCreatedPayload(validFields.email, validFields.name))}\n\n`
+    await ServerMock(page).register([
+      {
+        method: 'GET',
+        path: '/auth/account',
+        status: 500,
+        body: { title: 'Unavailable', message: 'Must not run on BFF paths' },
+      },
+      {
+        method: 'POST',
+        path: '/auth/sign-up',
+        status: 201,
+        body: { id: attemptId, email: validFields.email, name: validFields.name },
+        headers: {
+          'X-Onboarding-Receipt': 'signup-receipt-fixture',
+          'X-Onboarding-Expires-At': expiresAt,
+        },
+      },
+      { method: 'GET', path: '/profile/onboarding-attempt', status: 200, body: attempt },
+      {
+        method: 'GET',
+        path: '/profile/events',
+        status: 200,
+        rawBody,
+        headers: { 'Content-Type': 'text/event-stream' },
+      },
+    ])
+    const signup = await page.request.post('/api/auth/sign-up', {
+      headers: { Origin: webOrigin },
+      data: validFields,
+    })
+    expect(signup.status()).toBe(201)
+    expect(await signup.json()).toEqual(attempt.account)
+    expect(signup.headers()['x-onboarding-receipt']).toBeUndefined()
+    expect(signup.headers()['x-onboarding-expires-at']).toBeUndefined()
+    const cookies = await context.cookies(`${webOrigin}/api/auth/onboarding-attempt`)
+    expect(
+      cookies.find((cookie) => cookie.name === '@stardust:onboarding-attempt'),
+    ).toEqual(
+      expect.objectContaining({ httpOnly: true, sameSite: 'Lax', path: '/api/auth' }),
     )
+    expect(
+      cookies.find((cookie) => cookie.name === '@stardust:access-token'),
+    ).toBeUndefined()
+    const resume = await page.request.get('/api/auth/onboarding-attempt')
+    expect(resume.status()).toBe(200)
+    expect(await resume.json()).toEqual(attempt)
+    const events = await page.request.get('/api/auth/profile-events')
+    expect(events.status()).toBe(200)
+    expect(events.headers()['content-type']).toContain('text/event-stream')
+    expect(await events.text()).toBe(rawBody)
+  })
+
+  test('BFF middleware stops anonymous SSE and absent attempts without authentication calls', async ({
+    page,
+    context,
+  }) => {
+    await context.clearCookies()
+    await ServerMock(page).register([
+      { method: 'GET', path: '/auth/account', status: 500, body: null },
+    ])
+    const events = await page.request.get('/api/auth/profile-events')
+    expect(events.status()).toBe(204)
+    const resume = await page.request.get('/api/auth/onboarding-attempt')
+    expect(resume.status()).toBe(200)
+    expect(await resume.json()).toBeNull()
+  })
+
+  test('BFF middleware preserves Origin rejection and clears invalid resume receipts', async ({
+    page,
+    context,
+  }) => {
+    await ServerMock(page).register([
+      {
+        method: 'GET',
+        path: '/profile/onboarding-attempt',
+        status: 401,
+        body: { title: 'Unauthorized', message: 'Expired fixture' },
+      },
+    ])
+    const rejected = await page.request.post('/api/auth/sign-up', {
+      headers: { Origin: 'http://other.test' },
+      data: validFields,
+    })
+    expect(rejected.status()).toBe(403)
+    await context.addCookies([
+      {
+        name: '@stardust:onboarding-attempt',
+        value: 'invalid-fixture',
+        domain: '127.0.0.1',
+        path: '/api/auth',
+        httpOnly: true,
+        sameSite: 'Lax',
+      },
+    ])
+    const resume = await page.request.get('/api/auth/onboarding-attempt')
+    expect(resume.status()).toBe(200)
+    expect(await resume.json()).toBeNull()
+    expect(
+      (await context.cookies()).some(
+        (cookie) => cookie.name === '@stardust:onboarding-attempt',
+      ),
+    ).toBe(false)
   })
 })

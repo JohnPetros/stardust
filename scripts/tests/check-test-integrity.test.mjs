@@ -12,6 +12,30 @@ const SCRIPT_PATH = fileURLToPath(new URL('../check-test-integrity.mjs', import.
 const SOURCE_PATH = 'apps/server/src/rest/controllers/ValueController.ts'
 const TEST_PATH = 'apps/server/src/rest/controllers/tests/ValueController.test.ts'
 
+test('accepts canonical and colocated Web browser test directories', async () => {
+  const repositoryRoot = await createRepositoryFixture()
+  try {
+    for (const testPath of [
+      'apps/web/src/app/tests/auth/sign-up.test.ts',
+      'apps/web/src/app/api/auth/sign-up/tests/route.test.ts',
+    ]) {
+      await mkdir(path.dirname(path.join(repositoryRoot, testPath)), { recursive: true })
+      await writeFile(
+        path.join(repositoryRoot, testPath),
+        "test('preserves the route contract', () => expect(true).toBe(true))\n",
+      )
+    }
+    const { stdout } = await execFileAsync(process.execPath, [SCRIPT_PATH, '--json'], {
+      cwd: repositoryRoot,
+    })
+    const result = JSON.parse(stdout)
+    assert.equal(result.status, 'passed')
+    assert.deepEqual(result.errors, [])
+  } finally {
+    await rm(repositoryRoot, { force: true, recursive: true })
+  }
+})
+
 async function runGit(argumentsList, cwd) {
   await execFileAsync('git', argumentsList, { cwd })
 }
@@ -185,6 +209,7 @@ test('allows RPC action and AI tool test locations', async () => {
   const allowedTestPaths = [
     'apps/web/src/rpc/actions/tests/value.test.ts',
     'apps/server/src/ai/lesson/tools/tests/value.test.ts',
+    'apps/server/src/tests/jobs/ValueJob.integration.test.ts',
   ]
   try {
     await Promise.all(
@@ -219,3 +244,57 @@ test('allows RPC action and AI tool test locations', async () => {
     await rm(repositoryRoot, { force: true, recursive: true })
   }
 })
+
+for (const testPath of [
+  'apps/server/src/app/hono/tests/HonoApp.test.ts',
+  'apps/server/src/queue/inngest/functions/tests/InngestFunctionsAssembly.test.ts',
+]) {
+  test(`accepts the exact recognized infrastructure directory: ${testPath}`, async () => {
+    const repositoryRoot = await createRepositoryFixture()
+    try {
+      await mkdir(path.dirname(path.join(repositoryRoot, testPath)), { recursive: true })
+      await writeFile(
+        path.join(repositoryRoot, testPath),
+        "test('contract', () => expect(true).toBe(true))\n",
+      )
+      const { stdout } = await execFileAsync(process.execPath, [SCRIPT_PATH, '--json'], {
+        cwd: repositoryRoot,
+      })
+      const result = JSON.parse(stdout)
+      assert.equal(result.status, 'passed')
+      assert.deepEqual(result.errors, [])
+      assert.deepEqual(result.forbiddenTestPaths, [])
+    } finally {
+      await rm(repositoryRoot, { force: true, recursive: true })
+    }
+  })
+}
+
+for (const testPath of [
+  'apps/server/src/infrastructure/arbitrary/tests/Value.test.ts',
+  'apps/server/src/app/hono/helpers/tests/Value.test.ts',
+  'apps/server/src/queue/inngest/functions/helpers/tests/Value.test.ts',
+]) {
+  test(`rejects unrecognized infrastructure directories: ${testPath}`, async () => {
+    const repositoryRoot = await createRepositoryFixture()
+    try {
+      await mkdir(path.dirname(path.join(repositoryRoot, testPath)), { recursive: true })
+      await writeFile(
+        path.join(repositoryRoot, testPath),
+        "test('contract', () => expect(true).toBe(true))\n",
+      )
+      await assert.rejects(
+        execFileAsync(process.execPath, [SCRIPT_PATH, '--json'], { cwd: repositoryRoot }),
+        (error) => {
+          const result = JSON.parse(error.stdout)
+          assert.equal(result.status, 'failed')
+          assert.deepEqual(result.forbiddenTestPaths, [testPath])
+          assert.match(result.errors.join('\n'), /outside allowed test locations/)
+          return true
+        },
+      )
+    } finally {
+      await rm(repositoryRoot, { force: true, recursive: true })
+    }
+  })
+}

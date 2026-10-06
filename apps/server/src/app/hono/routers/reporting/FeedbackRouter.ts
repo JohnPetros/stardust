@@ -1,4 +1,4 @@
-import { Hono } from 'hono'
+import { Hono, type Context } from 'hono'
 import { z } from 'zod'
 import {
   feedbackAttachmentUploadSchema,
@@ -13,14 +13,14 @@ import { idSchema } from '@stardust/validation/global/schemas'
 import { S3FileStorageProvider } from '@/provision/storage'
 import { InngestBroker } from '@/queue/inngest/InngestBroker'
 import {
-  SupabaseFeedbackMessagesRepository,
-  SupabaseFeedbackReportsRepository,
-} from '@/database/supabase/repositories/reporting'
-import {
-  PostgresFeedbackMessagesRepository,
-  PostgresFeedbackReportsRepository,
-} from '@/database/postgres'
-import { supabase } from '@/database/supabase/supabase'
+  DrizzleFeedbackMessagesRepository,
+  DrizzleFeedbackReportsRepository,
+} from '@/database/drizzle/repositories/reporting'
+import type { Broker } from '@stardust/core/global/interfaces'
+import { Id } from '@stardust/core/global/structures'
+import { RestResponse } from '@stardust/core/global/responses'
+import type { DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
+import type { DatabaseAccess } from '@/database/drizzle/DatabaseAccess'
 import { ENV } from '@/constants'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
@@ -65,17 +65,61 @@ export class FeedbackRouter extends HonoRouter {
   private readonly profile = new ProfileMiddleware()
   private readonly storage = new StorageMiddleware()
   private readonly params = z.object({ feedbackReportId: idSchema })
-  private reports(client = supabase) {
-    return new SupabaseFeedbackReportsRepository(client)
+  private reports<C extends Context>(
+    http: HonoHttp<C>,
+    database: DrizzleDatabase = http.getDatabase(),
+    access: DatabaseAccess = http.getDatabaseAccess(),
+  ) {
+    return new DrizzleFeedbackReportsRepository(database, access)
   }
-  private messages(client = supabase) {
-    return new SupabaseFeedbackMessagesRepository(client)
+  private messages<C extends Context>(
+    http: HonoHttp<C>,
+    database: DrizzleDatabase = http.getDatabase(),
+    access: DatabaseAccess = http.getDatabaseAccess(),
+  ) {
+    return new DrizzleFeedbackMessagesRepository(database, access)
   }
-  private postgresReports() {
-    return new PostgresFeedbackReportsRepository()
+  private async conversationAccess<C extends Context>(
+    http: HonoHttp<C>,
+  ): Promise<DatabaseAccess> {
+    const accountId = await http.getAccountId()
+    return ENV.godAccountIds.includes(accountId)
+      ? { kind: 'god', accountId: Id.create(accountId) }
+      : http.getDatabaseAccess()
   }
-  private postgresMessages() {
-    return new PostgresFeedbackMessagesRepository()
+  private async transaction<C extends Context>(
+    http: HonoHttp<C>,
+    handle: (
+      reports: DrizzleFeedbackReportsRepository,
+      messages: DrizzleFeedbackMessagesRepository,
+      broker: Broker,
+    ) => Promise<RestResponse>,
+    access: DatabaseAccess = http.getDatabaseAccess(),
+  ): Promise<RestResponse> {
+    const events: Parameters<Broker['publish']>[] = []
+    const broker: Broker = {
+      publish: async (...event) => {
+        events.push(event)
+      },
+    }
+    let response: RestResponse
+    try {
+      response = await http.getDatabase().transaction(async (database) => {
+        const result = await handle(
+          this.reports(http, database, access),
+          this.messages(http, database, access),
+          broker,
+        )
+        if (result.isFailure) throw result
+        return result
+      })
+    } catch (error) {
+      if (error instanceof RestResponse) return error
+      throw error
+    }
+    const publisher = new InngestBroker()
+    for (const event of events) await publisher.publish(...event)
+    return response
   }
 
   private registerList() {
@@ -88,7 +132,7 @@ export class FeedbackRouter extends HonoRouter {
         const http = new HonoHttp(context)
         return http.sendResponse(
           await new ListFeedbackReportsController(
-            new ListFeedbackReportsUseCase(this.postgresReports()),
+            new ListFeedbackReportsUseCase(this.reports(http)),
           ).handle(http),
         )
       },
@@ -104,13 +148,13 @@ export class FeedbackRouter extends HonoRouter {
       this.storage.verifyFeedbackInitialAttachment,
       async (context) => {
         const http = new HonoHttp(context)
-        const controller = new SendFeedbackReportController(
-          new SendFeedbackReportUseCase(
-            this.reports(context.get('supabase')),
-            new InngestBroker(),
-          ),
+        return http.sendResponse(
+          await this.transaction(http, async (reports, _messages, broker) => {
+            return new SendFeedbackReportController(
+              new SendFeedbackReportUseCase(reports, broker),
+            ).handle(http)
+          }),
         )
-        return http.sendResponse(await controller.handle(http))
       },
     )
   }
@@ -143,7 +187,7 @@ export class FeedbackRouter extends HonoRouter {
         const http = new HonoHttp(context)
         return http.sendResponse(
           await new ListUserFeedbackReportsController(
-            new ListUserFeedbackReportsUseCase(this.reports(context.get('supabase'))),
+            new ListUserFeedbackReportsUseCase(this.reports(http)),
           ).handle(http),
         )
       },
@@ -158,7 +202,7 @@ export class FeedbackRouter extends HonoRouter {
         const http = new HonoHttp(context)
         return http.sendResponse(
           await new CountUnreadFeedbackReportsController(
-            new CountUnreadFeedbackReportsUseCase(this.reports(context.get('supabase'))),
+            new CountUnreadFeedbackReportsUseCase(this.reports(http)),
           ).handle(http),
         )
       },
@@ -173,12 +217,11 @@ export class FeedbackRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         return http.sendResponse(
-          await new GetUserFeedbackReportController(
-            new GetUserFeedbackReportUseCase(
-              this.reports(context.get('supabase')),
-              this.messages(context.get('supabase')),
-            ),
-          ).handle(http),
+          await this.transaction(http, async (reports, messages) => {
+            return new GetUserFeedbackReportController(
+              new GetUserFeedbackReportUseCase(reports, messages),
+            ).handle(http)
+          }),
         )
       },
     )
@@ -193,12 +236,11 @@ export class FeedbackRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         return http.sendResponse(
-          await new MarkUserFeedbackReportAsReadController(
-            new MarkFeedbackReportAsReadUseCase(
-              this.reports(context.get('supabase')),
-              this.messages(context.get('supabase')),
-            ),
-          ).handle(http),
+          await this.transaction(http, async (reports, messages) => {
+            return new MarkUserFeedbackReportAsReadController(
+              new MarkFeedbackReportAsReadUseCase(reports, messages),
+            ).handle(http)
+          }),
         )
       },
     )
@@ -213,9 +255,11 @@ export class FeedbackRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         return http.sendResponse(
-          await new GetFeedbackReportController(
-            new GetFeedbackReportUseCase(this.postgresReports(), this.postgresMessages()),
-          ).handle(http),
+          await this.transaction(http, async (reports, messages) => {
+            return new GetFeedbackReportController(
+              new GetFeedbackReportUseCase(reports, messages),
+            ).handle(http)
+          }),
         )
       },
     )
@@ -231,12 +275,11 @@ export class FeedbackRouter extends HonoRouter {
       async (context) => {
         const http = new HonoHttp(context)
         return http.sendResponse(
-          await new MarkFeedbackReportAsReadController(
-            new MarkFeedbackReportAsReadUseCase(
-              this.postgresReports(),
-              this.postgresMessages(),
-            ),
-          ).handle(http),
+          await this.transaction(http, async (reports, messages) => {
+            return new MarkFeedbackReportAsReadController(
+              new MarkFeedbackReportAsReadUseCase(reports, messages),
+            ).handle(http)
+          }),
         )
       },
     )
@@ -253,10 +296,9 @@ export class FeedbackRouter extends HonoRouter {
       this.validation.validate('json', feedbackAttachmentUploadSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const accountId = await http.getAccountId()
-        const isGodAccount = ENV.godAccountIds.includes(accountId)
+        const access = await this.conversationAccess(http)
         const useCase = new CreateFeedbackAttachmentUploadUrlUseCase(
-          isGodAccount ? this.postgresReports() : this.reports(context.get('supabase')),
+          this.reports(http, http.getDatabase(), access),
           new S3FileStorageProvider(),
         )
         return http.sendResponse(
@@ -275,16 +317,22 @@ export class FeedbackRouter extends HonoRouter {
       this.storage.verifyFeedbackMessageAttachments,
       async (context) => {
         const http = new HonoHttp(context)
-        const accountId = await http.getAccountId()
-        const isGodAccount = ENV.godAccountIds.includes(accountId)
-        const useCase = new SendFeedbackMessageUseCase(
-          isGodAccount ? this.postgresReports() : this.reports(context.get('supabase')),
-          isGodAccount ? this.postgresMessages() : this.messages(context.get('supabase')),
-          new InngestBroker(),
-          ENV.stardustWebUrl,
+        const access = await this.conversationAccess(http)
+        return http.sendResponse(
+          await this.transaction(
+            http,
+            async (reports, messages, broker) => {
+              const useCase = new SendFeedbackMessageUseCase(
+                reports,
+                messages,
+                broker,
+                ENV.stardustWebUrl,
+              )
+              return new SendFeedbackMessageController(useCase).handle(http)
+            },
+            access,
+          ),
         )
-        const response = await new SendFeedbackMessageController(useCase).handle(http)
-        return http.sendResponse(response)
       },
     )
   }
@@ -298,12 +346,12 @@ export class FeedbackRouter extends HonoRouter {
       this.validation.validate('json', feedbackStatusSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const useCase = new ChangeFeedbackReportStatusUseCase(
-          this.postgresReports(),
-          new InngestBroker(),
-        )
         return http.sendResponse(
-          await new ChangeFeedbackReportStatusController(useCase).handle(http),
+          await this.transaction(http, async (reports, _messages, broker) => {
+            return new ChangeFeedbackReportStatusController(
+              new ChangeFeedbackReportStatusUseCase(reports, broker),
+            ).handle(http)
+          }),
         )
       },
     )

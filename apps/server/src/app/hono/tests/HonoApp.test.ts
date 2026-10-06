@@ -1,4 +1,6 @@
 import { serve as serveInngest } from 'inngest/hono'
+import { mock } from 'ts-jest-mocker'
+import { DrizzleClient, type DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
 
 import { HonoApp } from '../HonoApp'
 
@@ -12,6 +14,12 @@ jest.mock('inngest/hono', () => ({
 }))
 
 describe('Hono App', () => {
+  beforeEach(() => {
+    jest.spyOn(DrizzleClient, 'getInstance').mockReturnValue(mock<DrizzleDatabase>())
+  })
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
   it('should pass the Inngest client to the serve handler', async () => {
     const app = new HonoApp()
 

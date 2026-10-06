@@ -1,6 +1,6 @@
 import type { APIResponse, Page } from '@playwright/test'
 
-import type { ServerMockRoute } from '../types/ServerMockRoute'
+import type { ServerMockRouteWithRawBody as ServerMockRoute } from './ServerMockRegistry'
 
 const SERVER_MOCK_ROUTE = '/api/tests/server'
 
@@ -46,6 +46,10 @@ export function ServerMock(page: Page): ServerMockController {
         data: {
           routes: routes.map((route) => ({
             ...route,
+            body:
+              route.rawBody === undefined
+                ? route.body
+                : { __stardust_raw_body__: route.rawBody },
             headers: {
               ...route.headers,
               'Cache-Control': 'no-store',

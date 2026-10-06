@@ -9,7 +9,7 @@ import {
   UpdateRocketController,
   DeleteRocketController,
 } from '@/rest/controllers/shop'
-import { SupabaseRocketsRepository } from '@/database/supabase/repositories/shop'
+import { DrizzleRocketsRepository } from '@/database/drizzle/repositories'
 import {
   itemsPerPageSchema,
   pageSchema,
@@ -40,7 +40,10 @@ export class RocketsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseRocketsRepository(http.getSupabase())
+        const repository = new DrizzleRocketsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchRocketsListController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -56,7 +59,10 @@ export class RocketsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', rocketSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseRocketsRepository(http.getSupabase())
+        const repository = new DrizzleRocketsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new CreateRocketController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -78,7 +84,10 @@ export class RocketsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', rocketSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseRocketsRepository(http.getSupabase())
+        const repository = new DrizzleRocketsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpdateRocketController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -99,7 +108,10 @@ export class RocketsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseRocketsRepository(http.getSupabase())
+        const repository = new DrizzleRocketsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new DeleteRocketController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)

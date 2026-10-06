@@ -9,7 +9,8 @@ import {
 } from '@stardust/core/profile/errors'
 import { AchievementsFaker } from '@stardust/core/profile/entities/fakers'
 
-import { SupabaseUsersRepository } from '@/database'
+import { DrizzleUsersRepository } from '@/database/drizzle/repositories/profile'
+import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
 import { AuthFixture } from '@/tests/fixtures/AuthFixture'
 import { HonoFixture } from '@/tests/fixtures/HonoFixture'
 import { ProfileFixture } from '@/tests/fixtures/ProfileFixture'
@@ -20,10 +21,16 @@ describe('[PUT] /profile/achievements/:userId/:achievementId/rescue', () => {
   const supabaseFixture = new SupabaseFixture()
   const authFixture = new AuthFixture(supabaseFixture.supabase)
   const profileFixture = new ProfileFixture(supabaseFixture.supabase)
-  const usersRepository = new SupabaseUsersRepository(supabaseFixture.supabase)
+  const usersRepository = new DrizzleUsersRepository(supabaseFixture.database, {
+    kind: 'system',
+  })
 
   beforeAll(async () => {
     await honoFixture.setup()
+  })
+
+  afterAll(async () => {
+    await DrizzleClient.close()
   })
 
   beforeEach(async () => {
@@ -80,31 +87,103 @@ describe('[PUT] /profile/achievements/:userId/:achievementId/rescue', () => {
     expect(response.body).toEqual(expect.objectContaining({ ...new UserNotFoundError() }))
   })
 
-  it('should rescue an achievement for the user', async () => {
-    const user = await profileFixture.createAccountUser(authFixture.getAccountId())
+  it('should not rescue another account achievement or change its coins', async () => {
+    const otherAccount = new AuthFixture(supabaseFixture.supabase)
+    await otherAccount.createAccount()
+    const user = await profileFixture.createAccountUser(otherAccount.getAccountId())
     const achievement = AchievementsFaker.fakeUniqueDto({ id: Id.create().value })
     await profileFixture.createAchievements([achievement])
     await usersRepository.addRescuableAchievement(Id.create(achievement.id), user.id)
+    const before = await profileFixture.getUserCoins(user.id.value)
+    const response = await request(honoFixture.server)
+      .put(`/profile/achievements/${user.id.value}/${achievement.id}/rescue`)
+      .set(authFixture.getAuthorizationHeader())
+    expect(response.status).toBe(HTTP_STATUS_CODE.notFound)
+    expect(await profileFixture.getUserCoins(user.id.value)).toBe(before)
+    expect(
+      await profileFixture.getRescuableAchievements(
+        user.id.value,
+        String(achievement.id),
+      ),
+    ).toEqual([{ achievement_id: achievement.id }])
+  })
+
+  it('should rescue once without duplicate credit or changing another account relation', async () => {
+    const user = await profileFixture.createAccountUser(authFixture.getAccountId())
+    const otherAccount = new AuthFixture(supabaseFixture.supabase)
+    await otherAccount.createAccount()
+    const otherUser = await profileFixture.createAccountUser(otherAccount.getAccountId())
+    const achievement = AchievementsFaker.fakeUniqueDto({ id: Id.create().value })
+    await profileFixture.createAchievements([achievement])
+    await usersRepository.addRescuableAchievement(Id.create(achievement.id), user.id)
+    await usersRepository.addRescuableAchievement(Id.create(achievement.id), otherUser.id)
+    const beforeCoins = await profileFixture.getUserCoins(user.id.value)
+    const otherBeforeCoins = await profileFixture.getUserCoins(otherUser.id.value)
+    const beforeRelation = await profileFixture.getRescuableAchievements(
+      user.id.value,
+      String(achievement.id),
+    )
+    const otherBeforeRelation = await profileFixture.getRescuableAchievements(
+      otherUser.id.value,
+      String(achievement.id),
+    )
+    expect(beforeRelation).toEqual([{ achievement_id: achievement.id }])
+    expect(otherBeforeRelation).toEqual([{ achievement_id: achievement.id }])
 
     const response = await request(honoFixture.server)
       .put(`/profile/achievements/${user.id.value}/${achievement.id}/rescue`)
       .set(authFixture.getAuthorizationHeader())
-
-    const rescuedUserCoins = await profileFixture.getUserCoins(user.id.value)
-    const rescuableAchievements = await profileFixture.getRescuableAchievements(
-      user.id.value,
-      String(achievement.id),
-    )
-
     expect(response.status).toBe(HTTP_STATUS_CODE.ok)
     expect(response.body).toEqual(
       expect.objectContaining({
         id: user.id.value,
-        coins: achievement.reward,
+        coins: beforeCoins + achievement.reward,
         rescuableAchievementsIds: [],
       }),
     )
-    expect(rescuedUserCoins).toBe(achievement.reward)
-    expect(rescuableAchievements).toEqual([])
+    expect(await profileFixture.getUserCoins(user.id.value)).toBe(
+      beforeCoins + achievement.reward,
+    )
+    expect(
+      await profileFixture.getRescuableAchievements(
+        user.id.value,
+        String(achievement.id),
+      ),
+    ).toEqual([])
+    expect(await profileFixture.getUserCoins(otherUser.id.value)).toBe(otherBeforeCoins)
+    expect(
+      await profileFixture.getRescuableAchievements(
+        otherUser.id.value,
+        String(achievement.id),
+      ),
+    ).toEqual(otherBeforeRelation)
+
+    const replay = await request(honoFixture.server)
+      .put(`/profile/achievements/${user.id.value}/${achievement.id}/rescue`)
+      .set(authFixture.getAuthorizationHeader())
+    expect(replay.status).toBe(HTTP_STATUS_CODE.ok)
+    expect(replay.body).toEqual(
+      expect.objectContaining({
+        id: user.id.value,
+        coins: beforeCoins + achievement.reward,
+        rescuableAchievementsIds: [],
+      }),
+    )
+    expect(await profileFixture.getUserCoins(user.id.value)).toBe(
+      beforeCoins + achievement.reward,
+    )
+    expect(
+      await profileFixture.getRescuableAchievements(
+        user.id.value,
+        String(achievement.id),
+      ),
+    ).toEqual([])
+    expect(await profileFixture.getUserCoins(otherUser.id.value)).toBe(otherBeforeCoins)
+    expect(
+      await profileFixture.getRescuableAchievements(
+        otherUser.id.value,
+        String(achievement.id),
+      ),
+    ).toEqual(otherBeforeRelation)
   })
 })

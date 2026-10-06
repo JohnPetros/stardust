@@ -1,10 +1,10 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
 
 import { InngestFunctions } from './InngestFunctions'
 import { InngestAmqp } from '../InngestAmqp'
 import { CreateChallengeJob, ExpireNewChallengesJob } from '@/queue/jobs/challenging'
 import { MastraCreateChallengeWorkflow } from '@/ai/mastra/workflows/MastraCreateChallengeWorkflow'
-import { SupabaseChallengesRepository } from '@/database/supabase/repositories/challenging'
+import { DrizzleChallengesRepository } from '@/database/drizzle/repositories'
 
 export class ChallengingFunctions extends InngestFunctions {
   private createCreateChallengeFunction() {
@@ -26,7 +26,7 @@ export class ChallengingFunctions extends InngestFunctions {
     )
   }
 
-  private createExpireNewChallengesFunction(supabase: SupabaseClient) {
+  private createExpireNewChallengesFunction(database: DrizzleDatabase) {
     return this.createFunction(
       {
         id: ExpireNewChallengesJob.KEY,
@@ -37,7 +37,7 @@ export class ChallengingFunctions extends InngestFunctions {
         },
       },
       async (context) => {
-        const repository = new SupabaseChallengesRepository(supabase)
+        const repository = new DrizzleChallengesRepository(database, { kind: 'system' })
         const amqp = new InngestAmqp(context)
         const job = new ExpireNewChallengesJob(repository)
         return await job.handle(amqp)
@@ -45,10 +45,10 @@ export class ChallengingFunctions extends InngestFunctions {
     )
   }
 
-  getFunctions(supabase: SupabaseClient) {
+  getFunctions(database: DrizzleDatabase) {
     return [
       this.createCreateChallengeFunction(),
-      this.createExpireNewChallengesFunction(supabase),
+      this.createExpireNewChallengesFunction(database),
     ]
   }
 }

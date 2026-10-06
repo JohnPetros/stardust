@@ -1,4 +1,5 @@
-import type { AuthError, User, UserIdentity } from '@supabase/supabase-js'
+import { randomBytes } from 'node:crypto'
+import type { SupabaseClient, AuthError, User, UserIdentity } from '@supabase/supabase-js'
 
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import type { ApiKeyData } from '@stardust/core/auth/interfaces'
@@ -11,11 +12,10 @@ import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { RestResponse } from '@stardust/core/global/responses'
 import { ConflictError, MethodNotImplementedError } from '@stardust/core/global/errors'
 
-import type { Supabase } from '@/database/supabase/types'
 import { ENV } from '@/constants'
 
 export class SupabaseAuthService implements AuthService {
-  constructor(private readonly supabase: Supabase) {}
+  constructor(private readonly supabase: SupabaseClient) {}
 
   private readonly AUTH_ERROR_CODES = {
     no_authorization: 'no_authorization',
@@ -151,38 +151,52 @@ export class SupabaseAuthService implements AuthService {
     throw new MethodNotImplementedError('signInGodAccount')
   }
 
+  private respondToSignUpError(error: AuthError): RestResponse<AccountDto> {
+    switch (error?.code) {
+      case this.AUTH_ERROR_CODES.weekPassword:
+        return new RestResponse<AccountDto>({
+          errorMessage: 'Senha de conter pelo menos 6 caracteres',
+          statusCode: HTTP_STATUS_CODE.conflict,
+        })
+      case this.AUTH_ERROR_CODES.emailExists:
+        return new RestResponse<AccountDto>({
+          errorMessage: 'E-mail já em uso',
+          statusCode: HTTP_STATUS_CODE.conflict,
+        })
+      case this.AUTH_ERROR_CODES.overRequestRateLimit:
+        return new RestResponse<AccountDto>({
+          errorMessage: 'E-mail já em uso',
+          statusCode: HTTP_STATUS_CODE.tooManyRequests,
+        })
+      default:
+        return this.supabaseAuthError<AccountDto>(
+          error,
+          'Error inesperado ao fazer cadastrar conta',
+        )
+    }
+  }
+
+  private isSignUpEligible(user: User | null, email: Email, nonce: string): boolean {
+    return Boolean(
+      user?.id &&
+        user.email?.toLowerCase() === email.value.toLowerCase() &&
+        user.identities?.some((identity) => identity.provider === 'email') &&
+        user.user_metadata.onboarding_attempt_nonce === nonce,
+    )
+  }
+
   async signUp(email: Email, password: Password): Promise<RestResponse<AccountDto>> {
+    const nonce = randomBytes(32).toString('base64url')
     const { data, error } = await this.supabase.auth.signUp({
       email: email.value,
       password: password.value,
       options: {
         emailRedirectTo: ENV.stardustWebUrl,
+        data: { onboarding_attempt_nonce: nonce },
       },
     })
 
-    if (error)
-      switch (error?.code) {
-        case this.AUTH_ERROR_CODES.weekPassword:
-          return new RestResponse<AccountDto>({
-            errorMessage: 'Senha de conter pelo menos 6 caracteres',
-            statusCode: HTTP_STATUS_CODE.conflict,
-          })
-        case this.AUTH_ERROR_CODES.emailExists:
-          return new RestResponse<AccountDto>({
-            errorMessage: 'E-mail já em uso',
-            statusCode: HTTP_STATUS_CODE.conflict,
-          })
-        case this.AUTH_ERROR_CODES.overRequestRateLimit:
-          return new RestResponse<AccountDto>({
-            errorMessage: 'E-mail já em uso',
-            statusCode: HTTP_STATUS_CODE.tooManyRequests,
-          })
-        default:
-          return this.supabaseAuthError<AccountDto>(
-            error,
-            'Error inesperado ao fazer cadastrar conta',
-          )
-      }
+    if (error) return this.respondToSignUpError(error)
 
     const account: AccountDto = {
       id: data?.user?.id ?? '',
@@ -194,6 +208,11 @@ export class SupabaseAuthService implements AuthService {
     return new RestResponse({
       body: account,
       statusCode: HTTP_STATUS_CODE.created,
+      headers: {
+        'X-Onboarding-SignUp-Eligible': String(
+          this.isSignUpEligible(data.user, email, nonce),
+        ),
+      },
     })
   }
 
@@ -513,26 +532,21 @@ export class SupabaseAuthService implements AuthService {
 
     if (error) {
       if (this.isUnauthorizedFetchAccountError(error)) {
-        if (error.code === this.AUTH_ERROR_CODES.bad_jwt) {
+        if (error.code === this.AUTH_ERROR_CODES.bad_jwt)
           return new RestResponse<AccountDto>({
             errorMessage: 'Token de autenticação inválido',
             statusCode: HTTP_STATUS_CODE.unauthorized,
           })
-        }
-
-        if (error.code === this.AUTH_ERROR_CODES.session_expired) {
+        if (error.code === this.AUTH_ERROR_CODES.session_expired)
           return new RestResponse<AccountDto>({
             errorMessage: 'Sessão expirada, faça login novamente',
             statusCode: HTTP_STATUS_CODE.unauthorized,
           })
-        }
-
         return new RestResponse<AccountDto>({
           errorMessage: 'Conta não autorizada',
           statusCode: HTTP_STATUS_CODE.unauthorized,
         })
       }
-
       switch (error.code) {
         default:
           return this.supabaseAuthError<AccountDto>(
@@ -549,9 +563,7 @@ export class SupabaseAuthService implements AuthService {
       isAuthenticated: true,
     }
 
-    return new RestResponse({
-      body: account,
-    })
+    return new RestResponse({ body: account })
   }
 
   async fetchSocialAccount(): Promise<RestResponse<AccountDto>> {

@@ -93,3 +93,15 @@ stardust/
     ├── email/
     └── lsp/
 ```
+
+## Transição aprovada: Drizzle e SSE (Issue #602)
+
+O estado implementado ainda é o descrito acima. O destino aprovado para a Issue #602 é PostgreSQL via Drizzle no Server para toda persistência relacional, mantendo Supabase Auth no Server e S3 para arquivos. A Spec em `documentation/features/global/supabase-replacement-with-drizzle/spec.md` define a transição; este texto não declara a implementação concluída.
+
+A organização Drizzle segue o padrão de models, tipos inferidos em types/entities, mappers, repositories e migrations de Scoops, adaptado à camada Database StarDust: apps/server/src/database/drizzle é a única raiz, agrupada pelos domínios StarDust; schema.ts agrega models e migrations ficam dentro do adapter. Esta referência de organização não introduz módulos ou dependências de Scoops.
+
+No destino, REST, MCP e jobs compõem repositories Drizzle na borda. Os ports do Core continuam agnósticos. Identidade de conta é verificada pelo Auth/API key antes da composição; God Account e ownership permanecem no Server. O bootstrap de API key preserva a consulta interna por hash antes da identidade: contexto public só autoriza findByHash em ApiKeysRepository para validação, sem exposição HTTP de chaves; após validar, a borda compõe os repositories de negócio com a conta resultante. Contexto público, conta, God e sistema são explícitos; ausência de identidade não concede privilégio de sistema. RLS de tabelas públicas da aplicação deixa de ser uma fronteira de autorização e o acesso direto de anon/authenticated às tabelas, views, sequências e funções da aplicação é revogado, incluindo privilégios herdados de PUBLIC. Políticas de infraestrutura cron permanecem.
+
+O browser recebe criação de perfil por SSE do Server, através de uma rota same-origin na Web. Confirmações usam a sessão verificada. O cadastro anterior ao login usa comprovante temporário restrito, guardado pela Web em cookie HttpOnly. O Server consulta a conta autorizada ao conectar e a cada segundo enquanto aguarda; não publica eventos gerais. Fechar a página encerra stream e consultas, mas os jobs continuam. Retornar retoma a tentativa enquanto o comprovante estiver válido.
+
+Migrations Drizzle são aplicadas no pipeline, nunca no boot. A primeira transição exige janela coordenada de manutenção de Server, Web e writers assíncronos, adoção sem reset nos bancos existentes, rollback ensaiado e validação antes da reabertura. O pool PostgreSQL é único por processo. Após a entrega, os trechos anteriores sobre PostgREST, RLS de feedback e variáveis Supabase públicas da Web devem ser substituídos pelo estado verificado.

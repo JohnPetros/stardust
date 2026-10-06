@@ -1,6 +1,9 @@
 import type { Context, Next } from 'hono'
 
-import { SupabasePlanetsRepository, SupabaseStarsRepository } from '@/database'
+import {
+  DrizzlePlanetsRepository,
+  DrizzleStarsRepository,
+} from '@/database/drizzle/repositories'
 import { InngestBroker } from '@/queue/inngest/InngestBroker'
 import {
   AppendNextStarToBodyController,
@@ -12,8 +15,14 @@ export class SpaceMiddleware {
   async appendNextStarToBody(context: Context, next: Next) {
     const http = new HonoHttp(context, next)
     const Broker = new InngestBroker()
-    const starsRepository = new SupabaseStarsRepository(http.getSupabase())
-    const planetsRepository = new SupabasePlanetsRepository(http.getSupabase())
+    const starsRepository = new DrizzleStarsRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
+    const planetsRepository = new DrizzlePlanetsRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
     const controller = new AppendNextStarToBodyController(
       starsRepository,
       planetsRepository,
@@ -24,7 +33,10 @@ export class SpaceMiddleware {
 
   async verifyStarExists(context: Context, next: Next) {
     const http = new HonoHttp(context, next)
-    const starsRepository = new SupabaseStarsRepository(http.getSupabase())
+    const starsRepository = new DrizzleStarsRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
     const controller = new VerifyStarExistsController(starsRepository)
     await controller.handle(http)
   }

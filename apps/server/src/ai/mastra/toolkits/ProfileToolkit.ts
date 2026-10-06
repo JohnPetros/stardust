@@ -1,7 +1,8 @@
 import { createTool } from '@mastra/core/tools'
 
-import { supabase } from '@/database/supabase'
-import { SupabaseUsersRepository } from '@/database/supabase/repositories'
+import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
+import { Id } from '@stardust/core/global/structures'
+import { DrizzleUsersRepository } from '@/database/drizzle/repositories'
 import { TOOLS_DESCRIPTIONS } from '@/ai/profile/constants'
 import { GetAccountUserTool } from '@/ai/profile/tools'
 import { MastraMcp } from '../MastraMcp'
@@ -15,7 +16,10 @@ export class ProfileToolkit {
       outputSchema: userSchema,
       execute: async (input, context) => {
         const mcp = new MastraMcp(input, context)
-        const usersRepository = new SupabaseUsersRepository(supabase)
+        const usersRepository = new DrizzleUsersRepository(DrizzleClient.getInstance(), {
+          kind: 'user',
+          accountId: Id.create(mcp.getAccountId()),
+        })
         const tool = new GetAccountUserTool(usersRepository)
         return await tool.handle(mcp)
       },

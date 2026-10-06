@@ -1,4 +1,4 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
 import type { Inngest } from 'inngest'
 
 import { AnalyticsFunctions } from '../AnalyticsFunctions'
@@ -36,7 +36,7 @@ function stubCreateFunction(instance: InngestFunctions) {
 }
 
 describe('Inngest function assembly', () => {
-  const supabase = {} as SupabaseClient
+  const database = {} as DrizzleDatabase
 
   it('should keep eventType backward compatible', () => {
     expect(eventType('profile/user.created')).toBe('profile/user.created')
@@ -56,7 +56,7 @@ describe('Inngest function assembly', () => {
     const instance = new ChallengingFunctions(createInngestMock())
     const createFunction = stubCreateFunction(instance)
 
-    const functions = instance.getFunctions(supabase)
+    const functions = instance.getFunctions(database)
 
     expect(functions).toHaveLength(2)
     expect(createFunction).toHaveBeenCalledTimes(2)
@@ -66,7 +66,7 @@ describe('Inngest function assembly', () => {
     const instance = new LessonFunctions(createInngestMock())
     const createFunction = stubCreateFunction(instance)
 
-    const functions = instance.getFunctions(supabase)
+    const functions = instance.getFunctions(database)
 
     expect(functions).toHaveLength(3)
     expect(createFunction).toHaveBeenCalledTimes(3)
@@ -76,7 +76,7 @@ describe('Inngest function assembly', () => {
     const instance = new ManualFunctions(createInngestMock())
     const createFunction = stubCreateFunction(instance)
 
-    const functions = instance.getFunctions(supabase)
+    const functions = instance.getFunctions()
 
     expect(functions).toHaveLength(0)
     expect(createFunction).toHaveBeenCalledTimes(0)
@@ -96,7 +96,7 @@ describe('Inngest function assembly', () => {
     const instance = new ProfileFunctions(createInngestMock())
     const createFunction = stubCreateFunction(instance)
 
-    const functions = instance.getFunctions(supabase)
+    const functions = instance.getFunctions(database)
 
     expect(functions).toHaveLength(2)
     expect(createFunction).toHaveBeenCalledTimes(2)
@@ -106,7 +106,7 @@ describe('Inngest function assembly', () => {
     const instance = new RankingFunctions(createInngestMock())
     const createFunction = stubCreateFunction(instance)
 
-    const functions = instance.getFunctions(supabase)
+    const functions = instance.getFunctions(database)
 
     expect(functions).toHaveLength(1)
     expect(createFunction).toHaveBeenCalledTimes(1)
@@ -116,7 +116,7 @@ describe('Inngest function assembly', () => {
     const instance = new ShopFunctions(createInngestMock())
     const createFunction = stubCreateFunction(instance)
 
-    const functions = instance.getFunctions(supabase)
+    const functions = instance.getFunctions(database)
 
     expect(functions).toHaveLength(1)
     expect(createFunction).toHaveBeenCalledTimes(1)
@@ -126,7 +126,7 @@ describe('Inngest function assembly', () => {
     const instance = new SpaceFunctions(createInngestMock())
     const createFunction = stubCreateFunction(instance)
 
-    const functions = instance.getFunctions(supabase)
+    const functions = instance.getFunctions(database)
 
     expect(functions).toHaveLength(2)
     expect(createFunction).toHaveBeenCalledTimes(2)
@@ -136,7 +136,7 @@ describe('Inngest function assembly', () => {
     const instance = new StorageFunctions(createInngestMock())
     const createFunction = stubCreateFunction(instance)
 
-    const functions = instance.getFunctions(supabase)
+    const functions = instance.getFunctions(database)
 
     expect(functions).toHaveLength(4)
     expect(createFunction).toHaveBeenCalledTimes(4)

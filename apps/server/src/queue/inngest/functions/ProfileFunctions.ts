@@ -1,10 +1,10 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
 
 import { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
 import type { EventPayload } from '@stardust/core/global/types'
 
 import { ObserveStreakBreakJob, CreateUserJob } from '@/queue/jobs/profile'
-import { SupabaseUsersRepository } from '@/database'
+import { DrizzleUsersRepository } from '@/database/drizzle/repositories'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestBroker } from '../InngestBroker'
 import { InngestFunctions, eventType } from './InngestFunctions'
@@ -16,7 +16,7 @@ type ShopItemsAcquiredByDefaultPayload = EventPayload<
 >
 
 export class ProfileFunctions extends InngestFunctions {
-  private createCreateUserFunction(supabase: SupabaseClient) {
+  private createCreateUserFunction(database: DrizzleDatabase) {
     return this.createFunction(
       {
         id: CreateUserJob.KEY,
@@ -41,7 +41,7 @@ export class ProfileFunctions extends InngestFunctions {
         },
       },
       async (context) => {
-        const repository = new SupabaseUsersRepository(supabase)
+        const repository = new DrizzleUsersRepository(database, { kind: 'system' })
         const broker = new InngestBroker()
         const amqp = new InngestAmqp<ShopItemsAcquiredByDefaultPayload>(context)
         const job = new CreateUserJob(repository, broker)
@@ -50,7 +50,7 @@ export class ProfileFunctions extends InngestFunctions {
     )
   }
 
-  private createObserveStreakBreakFunction(supabase: SupabaseClient) {
+  private createObserveStreakBreakFunction(database: DrizzleDatabase) {
     return this.createFunction(
       {
         id: ObserveStreakBreakJob.KEY,
@@ -60,7 +60,7 @@ export class ProfileFunctions extends InngestFunctions {
         },
       },
       async (context) => {
-        const repository = new SupabaseUsersRepository(supabase)
+        const repository = new DrizzleUsersRepository(database, { kind: 'system' })
         const amqp = new InngestAmqp(context)
         const job = new ObserveStreakBreakJob(repository)
         return await job.handle(amqp)
@@ -68,10 +68,10 @@ export class ProfileFunctions extends InngestFunctions {
     )
   }
 
-  getFunctions(supabase: SupabaseClient) {
+  getFunctions(database: DrizzleDatabase) {
     return [
-      this.createCreateUserFunction(supabase),
-      this.createObserveStreakBreakFunction(supabase),
+      this.createCreateUserFunction(database),
+      this.createObserveStreakBreakFunction(database),
     ]
   }
 }

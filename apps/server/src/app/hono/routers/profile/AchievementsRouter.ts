@@ -15,9 +15,9 @@ import {
   ReorderAchievementsController,
 } from '@/rest/controllers/profile/achievements'
 import {
-  SupabaseAchievementsRepository,
-  SupabaseUsersRepository,
-} from '@/database/supabase/repositories/profile'
+  DrizzleAchievementsRepository,
+  DrizzleUsersRepository,
+} from '@/database/drizzle/repositories'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
@@ -30,7 +30,10 @@ export class AchievementsRouter extends HonoRouter {
   private fetchAchievementsRoute(): void {
     this.router.get('/', this.authMiddleware.verifyAuthentication, async (context) => {
       const http = new HonoHttp(context)
-      const repository = new SupabaseAchievementsRepository(http.getSupabase())
+      const repository = new DrizzleAchievementsRepository(
+        http.getDatabase(),
+        http.getDatabaseAccess(),
+      )
       const controller = new FetchAllAchievementsController(repository)
       const response = await controller.handle(http)
       return http.sendResponse(response)
@@ -49,7 +52,10 @@ export class AchievementsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseAchievementsRepository(http.getSupabase())
+        const repository = new DrizzleAchievementsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchAllUnlockedAchievementsController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -69,9 +75,14 @@ export class AchievementsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const achievementsRepository = new SupabaseAchievementsRepository(supabase)
-        const usersRepository = new SupabaseUsersRepository(supabase)
+        const achievementsRepository = new DrizzleAchievementsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const usersRepository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new ObserveNewUnlockedAchievementsController(
           achievementsRepository,
           usersRepository,
@@ -95,9 +106,14 @@ export class AchievementsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const achievementsRepository = new SupabaseAchievementsRepository(supabase)
-        const usersRepository = new SupabaseUsersRepository(supabase)
+        const achievementsRepository = new DrizzleAchievementsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const usersRepository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new RescueAchievementController(
           achievementsRepository,
           usersRepository,
@@ -116,7 +132,10 @@ export class AchievementsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', achievementSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseAchievementsRepository(http.getSupabase())
+        const repository = new DrizzleAchievementsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new CreateAchievementController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -138,7 +157,10 @@ export class AchievementsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', achievementSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseAchievementsRepository(http.getSupabase())
+        const repository = new DrizzleAchievementsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpdateAchievementController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -159,7 +181,10 @@ export class AchievementsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseAchievementsRepository(http.getSupabase())
+        const repository = new DrizzleAchievementsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new DeleteAchievementController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -180,7 +205,10 @@ export class AchievementsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseAchievementsRepository(http.getSupabase())
+        const repository = new DrizzleAchievementsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new ReorderAchievementsController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)

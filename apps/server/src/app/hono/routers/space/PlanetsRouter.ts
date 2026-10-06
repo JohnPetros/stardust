@@ -2,7 +2,10 @@ import { Hono } from 'hono'
 import z from 'zod'
 
 import { idSchema, nameSchema, stringSchema } from '@stardust/validation/global/schemas'
-import { SupabasePlanetsRepository, SupabaseStarsRepository } from '@/database'
+import {
+  DrizzlePlanetsRepository,
+  DrizzleStarsRepository,
+} from '@/database/drizzle/repositories'
 import {
   FetchAllPlanetsController,
   CreatePlanetController,
@@ -37,8 +40,10 @@ export class PlanetsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const planetsRepository = new SupabasePlanetsRepository(supabase)
+        const planetsRepository = new DrizzlePlanetsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new CreatePlanetController(planetsRepository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -76,8 +81,10 @@ export class PlanetsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const planetsRepository = new SupabasePlanetsRepository(supabase)
+        const planetsRepository = new DrizzlePlanetsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpdatePlanetController(planetsRepository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -88,7 +95,10 @@ export class PlanetsRouter extends HonoRouter {
   private fetchAllPlanetsRoute(): void {
     this.router.get('/', this.authMiddleware.verifyAuthentication, async (context) => {
       const http = new HonoHttp(context)
-      const repository = new SupabasePlanetsRepository(http.getSupabase())
+      const repository = new DrizzlePlanetsRepository(
+        http.getDatabase(),
+        http.getDatabaseAccess(),
+      )
       const controller = new FetchAllPlanetsController(repository)
       const response = await controller.handle(http)
       return http.sendResponse(response)
@@ -107,8 +117,10 @@ export class PlanetsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const planetsRepository = new SupabasePlanetsRepository(supabase)
+        const planetsRepository = new DrizzlePlanetsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new DeletePlanetController(planetsRepository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -128,9 +140,14 @@ export class PlanetsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const planetsRepository = new SupabasePlanetsRepository(supabase)
-        const starsRepository = new SupabaseStarsRepository(supabase)
+        const planetsRepository = new DrizzlePlanetsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const starsRepository = new DrizzleStarsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new CreatePlanetStarController(
           planetsRepository,
           starsRepository,
@@ -153,8 +170,10 @@ export class PlanetsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const repository = new SupabasePlanetsRepository(supabase)
+        const repository = new DrizzlePlanetsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const broker = new InngestBroker()
         const controller = new ReorderPlanetsController(repository, broker)
         const response = await controller.handle(http)
@@ -181,10 +200,15 @@ export class PlanetsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const repository = new SupabasePlanetsRepository(supabase)
+        const repository = new DrizzlePlanetsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const broker = new InngestBroker()
-        const starsRepository = new SupabaseStarsRepository(supabase)
+        const starsRepository = new DrizzleStarsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new ReorderPlanetStarsController(
           repository,
           starsRepository,
@@ -209,9 +233,14 @@ export class PlanetsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const planetsRepository = new SupabasePlanetsRepository(supabase)
-        const starsRepository = new SupabaseStarsRepository(supabase)
+        const planetsRepository = new DrizzlePlanetsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const starsRepository = new DrizzleStarsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new DeletePlanetStarController(
           planetsRepository,
           starsRepository,

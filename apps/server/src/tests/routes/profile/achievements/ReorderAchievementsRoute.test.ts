@@ -17,6 +17,11 @@ import { HonoFixture } from '@/tests/fixtures/HonoFixture'
 import { ProfileFixture } from '@/tests/fixtures/ProfileFixture'
 import { SupabaseFixture } from '@/tests/fixtures/SupabaseFixture'
 
+const requiredAchievementId = (id: string | undefined): string => {
+  if (id === undefined) throw new Error('Achievement fixture ID is missing')
+  return id
+}
+
 describe('[PATCH] /profile/achievements/order', () => {
   const honoFixture = new HonoFixture()
   const supabaseFixture = new SupabaseFixture()
@@ -100,7 +105,7 @@ describe('[PATCH] /profile/achievements/order', () => {
       .patch('/profile/achievements/order')
       .set(authFixture.getAuthorizationHeader())
       .send({
-        achievementIds: [achievements[0].id!, Id.create().value],
+        achievementIds: [requiredAchievementId(achievements[0].id), Id.create().value],
       })
 
     expect(response.status).toBe(HTTP_STATUS_CODE.notFound)
@@ -114,7 +119,11 @@ describe('[PATCH] /profile/achievements/order', () => {
 
     const achievements = AchievementsFaker.fakeManyUniqueDto(3)
     await profileFixture.createAchievements(achievements)
-    const reorderedIds = [achievements[2].id!, achievements[0].id!, achievements[1].id!]
+    const reorderedIds = [
+      requiredAchievementId(achievements[2].id),
+      requiredAchievementId(achievements[0].id),
+      requiredAchievementId(achievements[1].id),
+    ]
 
     const response = await request(honoFixture.server)
       .patch('/profile/achievements/order')

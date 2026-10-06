@@ -8,6 +8,7 @@ const env = {
   supabaseUrl: process.env.SUPABASE_URL,
   supabaseKey: getSupabasePublishableKey(),
   databaseUrl: process.env.SUPABASE_DATABASE_URL,
+  onboardingReceiptSecret: process.env.ONBOARDING_RECEIPT_SECRET,
   mailpitApiUrl: getMailpitApiUrl(),
   s3Endpoint: process.env.S3_ENDPOINT,
   redisUrl: process.env.REDIS_URL,
@@ -45,6 +46,12 @@ const envSchema = z
     supabaseUrl: z.string().url(),
     supabaseKey: z.string(),
     databaseUrl: z.string().url(),
+    onboardingReceiptSecret: z
+      .string()
+      .refine(
+        (value) => Buffer.byteLength(value) >= 32,
+        'ONBOARDING_RECEIPT_SECRET must contain at least 32 bytes',
+      ),
     mailpitApiUrl: z.string().url().optional(),
     redisUrl: z.string().url(),
     inngestEventKey: z.string().optional(),
@@ -72,30 +79,64 @@ const envSchema = z
     trustedProxyCidrs: z.array(z.string().min(1)).default([]),
   })
   .superRefine((value, context) => {
-    if (value.mode === 'production' && !value.s3AccountId) {
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['s3AccountId'],
-        message: 'S3_ACCOUNT_ID is required in production mode',
-      })
-    }
-
-    if (value.mode === 'test' && !value.mailpitApiUrl) {
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['mailpitApiUrl'],
-        message: 'MAILPIT_API_URL is required in test mode',
-      })
-    }
-
-    if (value.mode === 'production' && value.trustedProxyCidrs.length === 0) {
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['trustedProxyCidrs'],
-        message: 'TRUSTED_PROXY_CIDRS is required in production mode',
-      })
-    }
+    validateRequiredS3Account(value, context)
+    validateRequiredMailpit(value, context)
+    validateRequiredTrustedProxies(value, context)
   })
+
+type RequiredEnvironment = {
+  mode: 'development' | 'production' | 'test'
+  s3AccountId?: string
+  mailpitApiUrl?: string
+  trustedProxyCidrs: string[]
+}
+
+function addRequiredEnvironmentIssue(
+  context: z.RefinementCtx,
+  path: keyof RequiredEnvironment,
+  message: string,
+): void {
+  context.addIssue({ code: z.ZodIssueCode.custom, path: [path], message })
+}
+
+function validateRequiredS3Account(
+  value: RequiredEnvironment,
+  context: z.RefinementCtx,
+): void {
+  if (value.mode === 'production' && !value.s3AccountId) {
+    addRequiredEnvironmentIssue(
+      context,
+      's3AccountId',
+      'S3_ACCOUNT_ID is required in production mode',
+    )
+  }
+}
+
+function validateRequiredMailpit(
+  value: RequiredEnvironment,
+  context: z.RefinementCtx,
+): void {
+  if (value.mode === 'test' && !value.mailpitApiUrl) {
+    addRequiredEnvironmentIssue(
+      context,
+      'mailpitApiUrl',
+      'MAILPIT_API_URL is required in test mode',
+    )
+  }
+}
+
+function validateRequiredTrustedProxies(
+  value: RequiredEnvironment,
+  context: z.RefinementCtx,
+): void {
+  if (value.mode === 'production' && value.trustedProxyCidrs.length === 0) {
+    addRequiredEnvironmentIssue(
+      context,
+      'trustedProxyCidrs',
+      'TRUSTED_PROXY_CIDRS is required in production mode',
+    )
+  }
+}
 
 type LocalEndpointInput = {
   mode: 'development' | 'production' | 'test'
@@ -120,6 +161,10 @@ function parseLocalEndpoint(input: LocalEndpointInput, key: LocalEndpointKey): U
   const value = input[key]
   if (!value) throw new Error(`${keyToVariableName(key)} must use a local endpoint`)
 
+  return parseEndpointUrl(value, key)
+}
+
+function parseEndpointUrl(value: string, key: LocalEndpointKey): URL {
   try {
     return new URL(value)
   } catch {
@@ -128,14 +173,16 @@ function parseLocalEndpoint(input: LocalEndpointInput, key: LocalEndpointKey): U
 }
 
 function hasLocalEndpointOrigin(endpoint: URL, schemes: readonly string[]): boolean {
-  const port = Number(endpoint.port)
   return (
     LOOPBACK_HOSTS.has(endpoint.hostname) &&
-    Number.isInteger(port) &&
-    port >= 1 &&
-    port <= 65535 &&
+    hasValidEndpointPort(endpoint) &&
     schemes.includes(endpoint.protocol)
   )
+}
+
+function hasValidEndpointPort(endpoint: URL): boolean {
+  const port = Number(endpoint.port)
+  return Number.isInteger(port) && port >= 1 && port <= 65535
 }
 
 function hasMailpitRootAddress(endpoint: URL): boolean {
@@ -143,9 +190,18 @@ function hasMailpitRootAddress(endpoint: URL): boolean {
     endpoint.pathname === '/' &&
     !endpoint.search &&
     !endpoint.hash &&
-    !endpoint.username &&
-    !endpoint.password
+    hasNoEndpointCredentials(endpoint)
   )
+}
+
+function hasNoEndpointCredentials(endpoint: URL): boolean {
+  return !endpoint.username && !endpoint.password
+}
+
+function validateMailpitAddress(key: LocalEndpointKey, endpoint: URL): void {
+  if (key === 'mailpitApiUrl' && !hasMailpitRootAddress(endpoint)) {
+    throw new Error('MAILPIT_API_URL must use a local endpoint')
+  }
 }
 
 function validateLocalEndpoint(
@@ -157,28 +213,33 @@ function validateLocalEndpoint(
     throw new Error(`${keyToVariableName(key)} must use a local endpoint`)
   }
 
-  if (key === 'mailpitApiUrl' && !hasMailpitRootAddress(endpoint)) {
-    throw new Error('MAILPIT_API_URL must use a local endpoint')
-  }
+  validateMailpitAddress(key, endpoint)
 }
 
 export function validateLocalEndpoints(input: LocalEndpointInput): void {
   if (input.mode === 'production') return
 
-  const configuredEndpoints = Object.entries(LOCAL_ENDPOINTS)
-  const endpoints =
-    input.mode === 'test'
-      ? configuredEndpoints
-      : configuredEndpoints.filter(([key]) => key !== 'mailpitApiUrl')
+  const endpoints = selectLocalEndpoints(input.mode)
 
   for (const [key, expected] of endpoints) {
-    const endpointKey = key as LocalEndpointKey
-    validateLocalEndpoint(
-      endpointKey,
-      parseLocalEndpoint(input, endpointKey),
-      expected.schemes,
-    )
+    validateConfiguredEndpoint(input, key, expected.schemes)
   }
+}
+
+function selectLocalEndpoints(mode: LocalEndpointInput['mode']) {
+  const configuredEndpoints = Object.entries(LOCAL_ENDPOINTS)
+  return mode === 'test'
+    ? configuredEndpoints
+    : configuredEndpoints.filter(([key]) => key !== 'mailpitApiUrl')
+}
+
+function validateConfiguredEndpoint(
+  input: LocalEndpointInput,
+  key: string,
+  schemes: readonly string[],
+): void {
+  const endpointKey = key as LocalEndpointKey
+  validateLocalEndpoint(endpointKey, parseLocalEndpoint(input, endpointKey), schemes)
 }
 
 function keyToVariableName(key: string): string {

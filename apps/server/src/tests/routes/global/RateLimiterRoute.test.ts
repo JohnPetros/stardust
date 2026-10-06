@@ -1,4 +1,5 @@
 import request from 'supertest'
+import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
 import IORedis from 'ioredis'
 import { createHash } from 'node:crypto'
 
@@ -41,6 +42,9 @@ class FailingRateLimiter implements RateLimiterProvider {
 const createTelemetry = (): TelemetryProvider => ({ trackError: jest.fn() })
 
 describe('global rate limiter HTTP contract', () => {
+  afterAll(async () => {
+    await DrizzleClient.close()
+  })
   it('enforces the general 100-request window through HonoApp', async () => {
     const provider = new CountingRateLimiter()
     const fixture = new HonoFixture(provider, createTelemetry())

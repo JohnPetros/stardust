@@ -18,11 +18,11 @@ import {
   spaceCompletionStatusSchema,
 } from '@stardust/validation/profile/schemas'
 
-import { SupabaseUsersRepository } from '@/database'
+import { DrizzleUsersRepository } from '@/database/drizzle/repositories'
 import {
-  SupabaseChallengeCodeExecutionsRepository,
-  SupabaseChallengesRepository,
-} from '@/database/supabase/repositories/challenging'
+  DrizzleChallengeCodeExecutionsRepository,
+  DrizzleChallengesRepository,
+} from '@/database/drizzle/repositories'
 import { PostHogAnalyticsReportingProvider } from '@/provision/analytics'
 import {
   FetchUserController,
@@ -75,7 +75,10 @@ export class UsersRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchUserController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -95,7 +98,10 @@ export class UsersRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchUserController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -111,7 +117,10 @@ export class UsersRouter extends HonoRouter {
       this.validationMiddleware.validate('json', userSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpdateUserController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -141,7 +150,10 @@ export class UsersRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new RewardUserForStarCompletionController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -171,10 +183,17 @@ export class UsersRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const usersRepository = new SupabaseUsersRepository(http.getSupabase())
-        const challengesRepository = new SupabaseChallengesRepository(http.getSupabase())
-        const executionsRepository = new SupabaseChallengeCodeExecutionsRepository(
-          http.getSupabase(),
+        const usersRepository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const challengesRepository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const executionsRepository = new DrizzleChallengeCodeExecutionsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
         )
         const controller = new RewardUserForStarChallengeCompletionController(
           usersRepository,
@@ -206,10 +225,17 @@ export class UsersRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const usersRepository = new SupabaseUsersRepository(http.getSupabase())
-        const challengesRepository = new SupabaseChallengesRepository(http.getSupabase())
-        const executionsRepository = new SupabaseChallengeCodeExecutionsRepository(
-          http.getSupabase(),
+        const usersRepository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const challengesRepository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const executionsRepository = new DrizzleChallengeCodeExecutionsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
         )
         const controller = new RewardUserForChallengeCompletionController(
           usersRepository,
@@ -237,7 +263,10 @@ export class UsersRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new AcquireRocketController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -260,7 +289,10 @@ export class UsersRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new AcquireAvatarController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -281,7 +313,10 @@ export class UsersRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new AcquireInsigniaController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -301,7 +336,10 @@ export class UsersRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpvoteCommentController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -320,7 +358,10 @@ export class UsersRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new VerifyUserNameInUseController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -339,7 +380,10 @@ export class UsersRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new VerifyUserEmailInUseController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -353,7 +397,10 @@ export class UsersRouter extends HonoRouter {
       this.authMiddleware.verifyAuthentication,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchCreatedUsersKpiController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -367,7 +414,10 @@ export class UsersRouter extends HonoRouter {
       this.authMiddleware.verifyAuthentication,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchCompletedChallengesKpiController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -381,7 +431,10 @@ export class UsersRouter extends HonoRouter {
       this.authMiddleware.verifyAuthentication,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchUnlockedStarsKpiController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -436,7 +489,10 @@ export class UsersRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchUsersListController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -451,7 +507,10 @@ export class UsersRouter extends HonoRouter {
       this.authMiddleware.verifyGodAccount,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseUsersRepository(http.getSupabase())
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const xlsxProvider = new ExcelJsXlsxProvider()
         const controller = new GenerateUsersXlsxFileController(repository, xlsxProvider)
         const response = await controller.handle(http)

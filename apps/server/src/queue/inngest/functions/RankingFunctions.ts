@@ -1,10 +1,10 @@
 import { ReachFirstTierJob } from '@/queue/jobs/ranking'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestFunctions } from './InngestFunctions'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
 import { FirstStarUnlockedEvent } from '@stardust/core/space/events'
 import type { EventPayload } from '@stardust/core/global/types'
-import { SupabaseTiersRepository } from '@/database/supabase/repositories/ranking'
+import { DrizzleTiersRepository } from '@/database/drizzle/repositories'
 import { InngestBroker } from '../InngestBroker'
 import { eventType } from './InngestFunctions'
 import z from 'zod'
@@ -13,7 +13,7 @@ import { idSchema, nameSchema, emailSchema } from '@stardust/validation/global/s
 type FirstStarUnlockedPayload = EventPayload<typeof FirstStarUnlockedEvent>
 
 export class RankingFunctions extends InngestFunctions {
-  private reachFirstTierJob(supabase: SupabaseClient) {
+  private reachFirstTierJob(database: DrizzleDatabase) {
     return this.createFunction(
       {
         id: ReachFirstTierJob.KEY,
@@ -32,7 +32,7 @@ export class RankingFunctions extends InngestFunctions {
         },
       },
       async (context) => {
-        const repository = new SupabaseTiersRepository(supabase)
+        const repository = new DrizzleTiersRepository(database, { kind: 'system' })
         const amqp = new InngestAmqp<FirstStarUnlockedPayload>(context)
         const Broker = new InngestBroker()
         const job = new ReachFirstTierJob(repository, Broker)
@@ -41,7 +41,7 @@ export class RankingFunctions extends InngestFunctions {
     )
   }
 
-  getFunctions(supabase: SupabaseClient) {
-    return [this.reachFirstTierJob(supabase)]
+  getFunctions(database: DrizzleDatabase) {
+    return [this.reachFirstTierJob(database)]
   }
 }

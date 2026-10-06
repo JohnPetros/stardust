@@ -1,6 +1,10 @@
 import { APP_PREFIX } from './app-prefix'
 
 export const COOKIES = {
+  onboardingAttempt: {
+    key: `${APP_PREFIX}:onboarding-attempt`,
+    durationInSeconds: 60 * 15,
+  },
   shouldResetPassword: {
     key: `${APP_PREFIX}:should-reset-password`,
     durationInSeconds: 60 * 15, // 15 minutes

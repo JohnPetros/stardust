@@ -56,6 +56,7 @@ const config: Config = {
       testPathIgnorePatterns: [
         '<rootDir>/src/app/hono/routers/',
         '<rootDir>/src/tests/routes/',
+        '<rootDir>/src/tests/.*\\.integration\\.test\\.ts$',
       ],
     },
     {
@@ -63,6 +64,7 @@ const config: Config = {
       displayName: 'server-integration',
       testMatch: [
         '<rootDir>/src/tests/routes/**/*.test.ts',
+        '<rootDir>/src/tests/jobs/**/*.integration.test.ts',
         '<rootDir>/src/app/hono/routers/**/tests/**/*.test.ts',
       ],
     },

@@ -37,18 +37,13 @@ describe('authenticated user feedback routes', () => {
   ) {
     const id = randomUUID()
     const now = new Date().toISOString()
-    const { error } = await supabaseFixture.supabase.from('feedback_reports').insert({
-      id,
-      content: 'A persisted report for route testing',
-      intent: 'bug',
-      user_id: authFixture.getAccountId(),
-      title: 'Persisted report',
-      status: overrides.status ?? 'open',
-      created_at: now,
-      last_activity_at: now,
-      last_admin_message_at: overrides.lastAdminMessageAt ?? null,
-    })
-    if (error) throw error
+    const lastAdminMessageAt = overrides.lastAdminMessageAt
+      ? `'${overrides.lastAdminMessageAt}'`
+      : 'null'
+    sql(
+      `insert into public.feedback_reports (id, content, intent, user_id, title, status, created_at, last_activity_at, last_admin_message_at)
+       values ('${id}', 'A persisted report for route testing', 'bug', '${authFixture.getAccountId()}', 'Persisted report', '${overrides.status ?? 'open'}', '${now}', '${now}', ${lastAdminMessageAt})`,
+    )
     return id
   }
 
@@ -121,13 +116,13 @@ describe('authenticated user feedback routes', () => {
     expect(readResponse.status).toBe(HTTP_STATUS_CODE.noContent)
     expect(readResponse.text).toBe('')
 
-    const { data, error } = await supabaseFixture.supabase
-      .from('feedback_reports')
-      .select('author_read_at')
-      .eq('id', reportId)
-      .single()
-    if (error) throw error
-    expect(new Date(data.author_read_at).toISOString()).toBe(message.createdAt)
+    expect(
+      new Date(
+        sql(
+          `select author_read_at from public.feedback_reports where id = '${reportId}'`,
+        ),
+      ).toISOString(),
+    ).toBe(message.createdAt)
   })
 
   it('uses the same safe 404 response for absent and non-owned details', async () => {

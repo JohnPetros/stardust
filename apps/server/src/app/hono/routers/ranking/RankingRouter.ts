@@ -3,12 +3,12 @@ import { z } from 'zod'
 
 import { idSchema } from '@stardust/validation/global/schemas'
 
-import { SupabaseRankersRepository } from '@/database'
+import { DrizzleRankersRepository } from '@/database/drizzle/repositories'
 import {
   FetchLastWeekRankingWinnersController,
   FetchRankingController,
 } from '@/rest/controllers/ranking'
-import { SupabaseTiersRepository } from '@/database/supabase/repositories/ranking'
+import { DrizzleTiersRepository } from '@/database/drizzle/repositories'
 import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
@@ -26,8 +26,14 @@ export class RankingRouter extends HonoRouter {
       this.validationMiddleware.validate('param', z.object({ tierId: idSchema })),
       async (context) => {
         const http = new HonoHttp(context)
-        const rankersRepository = new SupabaseRankersRepository(http.getSupabase())
-        const tiersRepository = new SupabaseTiersRepository(http.getSupabase())
+        const rankersRepository = new DrizzleRankersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const tiersRepository = new DrizzleTiersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchRankingController(tiersRepository, rankersRepository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -42,8 +48,14 @@ export class RankingRouter extends HonoRouter {
       this.validationMiddleware.validate('param', z.object({ tierId: idSchema })),
       async (context) => {
         const http = new HonoHttp(context)
-        const rankersRepository = new SupabaseRankersRepository(http.getSupabase())
-        const tiersRepository = new SupabaseTiersRepository(http.getSupabase())
+        const rankersRepository = new DrizzleRankersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const tiersRepository = new DrizzleTiersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchLastWeekRankingWinnersController(
           tiersRepository,
           rankersRepository,

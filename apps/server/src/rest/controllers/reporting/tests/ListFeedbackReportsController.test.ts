@@ -1,6 +1,6 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 import type { Http } from '@stardust/core/global/interfaces'
-import { RestResponse } from '@stardust/core/global/responses'
+import type { RestResponse } from '@stardust/core/global/responses'
 import { ListFeedbackReportsUseCase } from '@stardust/core/reporting/use-cases'
 import { FeedbackReportsFaker } from '@stardust/core/reporting/entities/fakers'
 import { PostgresFeedbackReportsRepository } from '@/database/postgres/PostgresFeedbackReportsRepository'

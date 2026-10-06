@@ -64,9 +64,13 @@ function createConfirmEmailSession(account: AccountDto): SessionDto {
   }
 }
 
-function createUserCreatedPayload(email: string, name: string): UserCreatedPayload {
+function createUserCreatedPayload(
+  email: string,
+  name: string,
+  userId = IdFaker.fake().value,
+): UserCreatedPayload {
   return {
-    userId: IdFaker.fake().value,
+    userId,
     userEmail: email,
     userName: name,
     userSlug: name.toLowerCase().trim().replace(/\s+/g, '-'),
@@ -345,7 +349,10 @@ test.describe('/auth/account-confirmation', () => {
       },
     ])
 
-    await emitUserCreated(page, createUserCreatedPayload(account.email, account.name))
+    await emitUserCreated(
+      page,
+      createUserCreatedPayload(account.email, account.name, account.id),
+    )
 
     await expect(page.getByText('Bem-vindo(a) 👋')).toBeVisible({ timeout: 15000 })
     await expect(page.getByText('Seu perfil foi criado com sucesso!')).toBeVisible()
@@ -367,6 +374,35 @@ test.describe('/auth/account-confirmation', () => {
       createUserCreatedPayload('outro-usuario@stardust.dev', 'Outro Usuario'),
     )
 
+    await expect(page.getByText('Bem-vindo(a) 👋')).toHaveCount(0)
+    await expect(page.getByText('Aquecendo os motores')).toBeVisible()
+  })
+
+  test('ignores another account id even when its email matches', async ({
+    page,
+    context,
+  }) => {
+    const account = createAuthenticatedAccountDto()
+    await gotoAccountConfirmationPage(page, context, account, { userStatus: 'pending' })
+    await expect(page.getByText('Aquecendo os motores')).toBeVisible()
+    await emitUserCreated(
+      page,
+      createUserCreatedPayload(account.email, account.name, createDeterministicId()),
+    )
+    await expect(page.getByText('Bem-vindo(a) 👋')).toHaveCount(0)
+    await expect(page.getByText('Aquecendo os motores')).toBeVisible()
+  })
+
+  test('does not show success when a matching event cannot refetch a persisted profile', async ({
+    page,
+    context,
+  }) => {
+    const account = createAuthenticatedAccountDto()
+    await gotoAccountConfirmationPage(page, context, account, { userStatus: 'pending' })
+    await emitUserCreated(
+      page,
+      createUserCreatedPayload(account.email, account.name, account.id),
+    )
     await expect(page.getByText('Bem-vindo(a) 👋')).toHaveCount(0)
     await expect(page.getByText('Aquecendo os motores')).toBeVisible()
   })
@@ -412,7 +448,10 @@ test.describe('/auth/account-confirmation', () => {
       },
     ])
 
-    await emitUserCreated(page, createUserCreatedPayload(account.email, account.name))
+    await emitUserCreated(
+      page,
+      createUserCreatedPayload(account.email, account.name, account.id),
+    )
 
     await expect(page.getByTestId('go-to-space-button')).toBeVisible({ timeout: 15000 })
     await page.getByTestId('go-to-space-button').click()

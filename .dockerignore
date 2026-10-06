@@ -24,7 +24,6 @@ documentation
 .git
 .vercel
 .cursor
-.serena
 
 # debug
 npm-debug.log*

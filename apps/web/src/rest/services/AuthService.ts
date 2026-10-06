@@ -5,7 +5,10 @@ import type { Email, Id, Name, Text } from '@stardust/core/global/structures'
 import type { Password } from '@stardust/core/auth/structures'
 import type { Account } from '@stardust/core/auth/entities'
 
-export const AuthService = (restClient: RestClient): IAuthService => {
+export const AuthService = (
+  restClient: RestClient,
+  signUpRestClient: RestClient = restClient,
+): IAuthService => {
   return {
     async fetchAccount() {
       return await restClient.get('/auth/account')
@@ -56,7 +59,7 @@ export const AuthService = (restClient: RestClient): IAuthService => {
     },
 
     async requestSignUp(email: Email, password: Password, name: Name) {
-      return await restClient.post('/auth/sign-up', {
+      return await signUpRestClient.post('/auth/sign-up', {
         email: email.value,
         password: password.value,
         name: name.value,
