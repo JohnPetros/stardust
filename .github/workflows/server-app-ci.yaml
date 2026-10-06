@@ -13,6 +13,7 @@ on:
       - "packages/email/**"
       - "packages/validation/**"
       - "docker-compose.yml"
+      - "docker-compose.ci.yml"
       - "docker/supabase/**"
       - "scripts/export-local-database-env.mjs"
       - "scripts/check-drizzle-transition.mjs"
@@ -150,8 +151,8 @@ jobs:
           SUPABASE_ANON_KEY=stardust-ci-anon-key
           SUPABASE_REALTIME_DB_ENC_KEY=01234567890123456789012345678901
           SUPABASE_REALTIME_SECRET_KEY_BASE=0123456789012345678901234567890123456789012345678901234567890123
-          MINIO_ROOT_USER=stardust-ci
-          MINIO_ROOT_PASSWORD=stardust-local-ci-minio-password
+          MINIO_ROOT_USER=test-access-key-id
+          MINIO_ROOT_PASSWORD=test-secret-access-key
           EOF
 
           cat <<'EOF' > apps/server/.env.testing
@@ -182,13 +183,13 @@ jobs:
           EOF
 
       - name: Prepare local stack and migrate empty database
-        run: npm run db:test -w @stardust/server
+        run: npm run db:test:ci -w @stardust/server
 
       - name: Test migration and export scripts
         run: npm run test:scripts
 
       - name: Run integration tests
-        run: npm run test:integration -w @stardust/server
+        run: npm run test:integration:ci -w @stardust/server
 
       - name: Run tests
         run: npm run test:coverage -w @stardust/server

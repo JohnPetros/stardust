@@ -1,0 +1,40 @@
+services:
+  supabase-auth:
+    environment:
+      GOTRUE_RATE_LIMIT_EMAIL_SENT: "100000/1h"
+
+  minio:
+    image: rustfs/rustfs@sha256:8cc9801755448b71a786705ce76692c77e14936cccd87cf2fc31842e58f4d1ff
+    command: []
+    environment:
+      RUSTFS_ACCESS_KEY: ${MINIO_ROOT_USER:?Set local-only MINIO_ROOT_USER}
+      RUSTFS_SECRET_KEY: ${MINIO_ROOT_PASSWORD:?Set local-only MINIO_ROOT_PASSWORD}
+      RUSTFS_ADDRESS: ":9000"
+      RUSTFS_CONSOLE_ADDRESS: ":9001"
+      RUSTFS_CONSOLE_ENABLE: "true"
+      RUSTFS_VOLUMES: /data
+    volumes:
+      - rustfs-ci-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:9000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 10s
+
+  minio-init:
+    image: public.ecr.aws/aws-cli/aws-cli@sha256:1c2d7a51b1ff4f460bc3f1e1ee46a6cef47c7429ad9089ef99012a95e472a1a5
+    environment:
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER:?Set local-only MINIO_ROOT_USER}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:?Set local-only MINIO_ROOT_PASSWORD}
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_EC2_METADATA_DISABLED: "true"
+      MINIO_BUCKET: ${MINIO_BUCKET:-stardust-bucket-local}
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - >-
+        aws --endpoint-url http://minio:9000 s3api head-bucket --bucket "$${MINIO_BUCKET}" >/dev/null 2>&1
+        || aws --endpoint-url http://minio:9000 s3api create-bucket --bucket "$${MINIO_BUCKET}"
+
+volumes:
+  rustfs-ci-data:

@@ -13,6 +13,7 @@
     "build": "tsup",
     "prod": "node --env-file .env build/main.js",
     "db:test": "local_exports=$(node ../../scripts/export-local-database-env.mjs) && eval \"$local_exports\" && docker compose --env-file ../../.env.local -f ../../docker-compose.yml up -d --wait inngest redis supabase-postgres supabase-mailpit supabase-templates minio supabase-auth supabase-rest supabase-realtime supabase-envoy && docker compose --env-file ../../.env.local -f ../../docker-compose.yml run --rm minio-init && docker compose --env-file ../../.env.local -f ../../docker-compose.yml --profile test run --rm supabase-db-reset && npm run db:migrate",
+    "db:test:ci": "local_exports=$(node ../../scripts/export-local-database-env.mjs) && eval \"$local_exports\" && docker compose --env-file ../../.env.local -f ../../docker-compose.yml -f ../../docker-compose.ci.yml up -d --wait inngest redis supabase-postgres supabase-mailpit supabase-templates minio supabase-auth supabase-rest supabase-realtime supabase-envoy && docker compose --env-file ../../.env.local -f ../../docker-compose.yml -f ../../docker-compose.ci.yml run --rm minio-init && docker compose --env-file ../../.env.local -f ../../docker-compose.yml -f ../../docker-compose.ci.yml --profile test run --rm supabase-db-reset && npm run db:migrate",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx scripts/migrate-database.ts",
     "db:preflight": "node ../../scripts/check-drizzle-transition.mjs",
@@ -26,7 +27,8 @@
     "update": "ncu -u -f $npm_config_dep_name",
     "test:unit": "jest --selectProjects server",
     "test:coverage": "jest --selectProjects server --coverage --coverageReporters=json-summary --coverageReporters=text-summary",
-    "test:integration": "INNGEST_DEV=http://127.0.0.1:8288 INNGEST_BASE_URL=http://127.0.0.1:8288 jest --selectProjects server-integration"
+    "test:integration": "INNGEST_DEV=http://127.0.0.1:8288 INNGEST_BASE_URL=http://127.0.0.1:8288 jest --selectProjects server-integration",
+    "test:integration:ci": "npm run test:integration -- --shard=1/4 && npm run test:integration -- --shard=2/4 && npm run test:integration -- --shard=3/4 && npm run test:integration -- --shard=4/4"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1097.0",
