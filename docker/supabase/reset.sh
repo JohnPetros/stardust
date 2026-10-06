@@ -39,4 +39,5 @@ psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f /docker/supabase/init/storage-compati
 psql "$DATABASE_URL" -v ON_ERROR_STOP=1 <<'SQL'
 CREATE EXTENSION IF NOT EXISTS unaccent WITH SCHEMA public;
 CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA public;
+CREATE EXTENSION IF NOT EXISTS pgaudit WITH SCHEMA extensions;
 SQL
