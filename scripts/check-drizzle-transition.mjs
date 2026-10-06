@@ -504,8 +504,16 @@ export function transitionUsage(allowRollback = false) {
 
 /** @param {() => Promise<void>} operation */
 export function runTransitionCli(operation) {
-  void operation().catch(() => {
-    console.error('Database command failed')
+  void operation().catch((error) => {
+    const errorName = error instanceof Error ? error.name : 'UnknownError'
+    const errorCode =
+      error && typeof error === 'object' && 'code' in error ? error.code : undefined
+    const rawMessage = error instanceof Error ? error.message : String(error)
+    const message = rawMessage
+      .replace(/(?:postgres(?:ql)?:\/\/)[^\s]+/gi, 'postgres://[redacted]')
+      .replace(/(password\s*[=:]\s*)\S+/gi, '$1[redacted]')
+
+    console.error('Database command failed:', { errorName, errorCode, message })
     process.exitCode = 1
   })
 }

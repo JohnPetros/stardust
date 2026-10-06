@@ -563,7 +563,7 @@ if (isMain(import.meta.url)) {
         for (const args of invalid) {
           const result = await run(args)
           assert.equal(result.code, 1)
-          assert.equal(result.stderr.trim(), 'Database command failed')
+          assert.match(result.stderr, /^Database command failed:/)
         }
         const noEnvironment = await execute(
           process.execPath,
