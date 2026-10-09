@@ -68,13 +68,13 @@ function localEnvironment() {
   return {
     ...process.env,
     POSTGRES_PASSWORD: password,
-    SUPABASE_DATABASE_URL: url.toString(),
+    DATABASE_URL: url.toString(),
   }
 }
 
 function sanitized(text, environment) {
   return String(text)
-    .replaceAll(environment.SUPABASE_DATABASE_URL, '[database URL]')
+    .replaceAll(environment.DATABASE_URL, '[database URL]')
     .replaceAll(environment.SUPABASE_DATABASE_PASSWORD, '[password]')
 }
 
@@ -162,7 +162,7 @@ export async function withOwnedClone(operation, { legacy = false } = {}) {
       '--workdir',
       '/workspace',
       '--env',
-      'SUPABASE_DATABASE_URL',
+      'DATABASE_URL',
       '--env',
       'SUPABASE_DATABASE_PASSWORD',
       nodeImage,
@@ -208,9 +208,9 @@ export async function withOwnedClone(operation, { legacy = false } = {}) {
           : '/workspace/scripts/check-drizzle-transition.mjs'
     const args = nodeArguments('')
     args.splice(-3, 3, entry, '--environment', 'local', '--phase', phase, ...extra)
-    const url = new URL(environment.SUPABASE_DATABASE_URL)
+    const url = new URL(environment.DATABASE_URL)
     if (applicationName) url.searchParams.set('application_name', applicationName)
-    return command(args, { ...environment, SUPABASE_DATABASE_URL: url.toString() })
+    return command(args, { ...environment, DATABASE_URL: url.toString() })
   }
   const snapshot = async () => {
     const args =
@@ -473,7 +473,7 @@ async function prepareLegacyCli(fixture) {
   )
   await writeFile(resolve(fixture.directory, 'supabase/config.toml'), config.stdout)
   const code = `import {spawnSync} from 'node:child_process';process.loadEnvFile('/workspace/.env.local');
-    const result=spawnSync(process.execPath,['/workspace/apps/server/node_modules/supabase/dist/supabase.js','migration','up','--db-url',process.env.SUPABASE_DATABASE_URL,'--include-all'],{cwd:'/fixture',env:process.env,encoding:'utf8'});
+    const result=spawnSync(process.execPath,['/workspace/apps/server/node_modules/supabase/dist/supabase.js','migration','up','--db-url',process.env.DATABASE_URL,'--include-all'],{cwd:'/fixture',env:process.env,encoding:'utf8'});
     if(result.status!==0){
       const output=(result.stdout??'')+(result.stderr??'');
       const known=['failed to connect','permission denied','does not exist','already exists','password authentication failed','server refused TLS connection','connection refused','context deadline exceeded','invalid connection','missing environment variable','failed to parse config'];
@@ -517,7 +517,7 @@ if (isMain(import.meta.url)) {
       assert.ok(address && typeof address === 'object')
       const environment = {
         ...process.env,
-        SUPABASE_DATABASE_URL: `postgresql://127.0.0.1:${address.port}/postgres`,
+        DATABASE_URL: `postgresql://127.0.0.1:${address.port}/postgres`,
       }
       const entries = [
         'scripts/check-drizzle-transition.mjs',

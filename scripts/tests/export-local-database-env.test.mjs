@@ -37,7 +37,7 @@ test('exports the local loopback URL with the configured port and encoded passwo
   assert.equal(result.stderr, '')
   assert.match(
     result.stdout,
-    /^export SUPABASE_DATABASE_URL='postgresql:\/\/postgres:test%20pass%3A\$word@127\.0\.0\.1:55432\/postgres\?sslmode=disable'\n$/,
+    /^export DATABASE_URL='postgresql:\/\/postgres:test%20pass%3A\$word@127\.0\.0\.1:55432\/postgres\?sslmode=disable'\n$/,
   )
 })
 

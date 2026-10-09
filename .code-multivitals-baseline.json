@@ -13840,8 +13840,8 @@
       "functions": [
         {
           "name": "handle",
-          "startLine": 22,
-          "endLine": 34,
+          "startLine": 58,
+          "endLine": 70,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -13880,50 +13880,9 @@
           "smells": []
         },
         {
-          "name": "checkServices",
-          "startLine": 36,
-          "endLine": 50,
-          "metrics": [
-            {
-              "name": "cyclomaticComplexity",
-              "value": 1,
-              "threshold": 15,
-              "severity": "ok"
-            },
-            {
-              "name": "cognitiveComplexity",
-              "value": 0,
-              "threshold": 25,
-              "severity": "ok"
-            },
-            {
-              "name": "functionLength",
-              "value": 15,
-              "threshold": 70,
-              "severity": "ok"
-            },
-            {
-              "name": "nestingDepth",
-              "value": 0,
-              "threshold": 4,
-              "severity": "ok"
-            },
-            {
-              "name": "halsteadVolume",
-              "value": 114.22,
-              "threshold": 800,
-              "severity": "ok"
-            }
-          ],
-          "maintainabilityIndex": 59.8,
-          "maintainabilityRating": "warn",
-          "healthScore": 86,
-          "smells": []
-        },
-        {
           "name": "checkPostgres",
-          "startLine": 52,
-          "endLine": 69,
+          "startLine": 102,
+          "endLine": 119,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -13963,8 +13922,8 @@
         },
         {
           "name": "checkRedis",
-          "startLine": 71,
-          "endLine": 87,
+          "startLine": 121,
+          "endLine": 137,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -14004,8 +13963,8 @@
         },
         {
           "name": "checkInngest",
-          "startLine": 89,
-          "endLine": 113,
+          "startLine": 139,
+          "endLine": 163,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -14045,8 +14004,8 @@
         },
         {
           "name": "checkHttpEndpoint",
-          "startLine": 122,
-          "endLine": 146,
+          "startLine": 191,
+          "endLine": 215,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -14086,8 +14045,8 @@
         },
         {
           "name": "checkSocketConnection",
-          "startLine": 148,
-          "endLine": 169,
+          "startLine": 217,
+          "endLine": 238,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -14127,8 +14086,8 @@
         },
         {
           "name": "<anonymous>",
-          "startLine": 153,
-          "endLine": 167,
+          "startLine": 222,
+          "endLine": 236,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -14168,8 +14127,8 @@
         },
         {
           "name": "withTimeout",
-          "startLine": 171,
-          "endLine": 187,
+          "startLine": 240,
+          "endLine": 256,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -14209,9 +14168,9 @@
         }
       ],
       "summary": {
-        "totalLines": 189,
-        "weightedMI": 59.6,
-        "weightedHealthScore": 79.2,
+        "totalLines": 258,
+        "weightedMI": 62,
+        "weightedHealthScore": 81.1,
         "worstSeverity": "warn",
         "smellIds": []
       }

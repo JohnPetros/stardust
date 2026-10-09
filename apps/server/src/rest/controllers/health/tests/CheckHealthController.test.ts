@@ -1,3 +1,5 @@
+import { HeadBucketCommand, S3Client } from '@aws-sdk/client-s3'
+
 import { type Mock, mock } from 'ts-jest-mocker'
 
 import { ENV } from '@/constants'
@@ -16,6 +18,7 @@ class CheckHealthControllerStub extends CheckHealthController {
       redis: HealthStatus
       inngest: HealthStatus
       supabase: HealthStatus
+      s3: HealthStatus
     },
   ) {
     super()
@@ -31,6 +34,10 @@ class CheckHealthControllerStub extends CheckHealthController {
 
   protected async checkInngest() {
     return this.services.inngest
+  }
+
+  protected async checkS3() {
+    return this.services.s3
   }
 
   protected async checkSupabase() {
@@ -97,6 +104,12 @@ class CheckHttpControllerStub extends CheckHealthController {
   }
 }
 
+class CheckS3ControllerStub extends CheckHealthController {
+  async runCheckS3() {
+    return this.checkS3()
+  }
+}
+
 describe('Check Health Controller', () => {
   let http: Mock<Http>
 
@@ -111,6 +124,7 @@ describe('Check Health Controller', () => {
       redis: 'UP',
       inngest: 'UP',
       supabase: 'UP',
+      s3: 'UP',
     })
 
     await controller.handle(http)
@@ -123,7 +137,8 @@ describe('Check Health Controller', () => {
         postgres: 'UP',
         redis: 'UP',
         inngest: 'UP',
-        supabase: 'UP',
+        'supabase-auth': 'UP',
+        s3: 'UP',
       },
     })
   })
@@ -134,6 +149,7 @@ describe('Check Health Controller', () => {
       redis: 'DOWN',
       inngest: 'UP',
       supabase: 'UP',
+      s3: 'UP',
     })
 
     await controller.handle(http)
@@ -146,9 +162,87 @@ describe('Check Health Controller', () => {
         postgres: 'UP',
         redis: 'DOWN',
         inngest: 'UP',
-        supabase: 'UP',
+        'supabase-auth': 'UP',
+        s3: 'UP',
       },
     })
+  })
+
+  it('should return DOWN when only S3 is DOWN', async () => {
+    const controller = new CheckHealthControllerStub({
+      postgres: 'UP',
+      redis: 'UP',
+      inngest: 'UP',
+      supabase: 'UP',
+      s3: 'DOWN',
+    })
+
+    await controller.handle(http)
+
+    expect(http.send).toHaveBeenCalledWith(
+      expect.objectContaining({
+        status: 'DOWN',
+        services: expect.objectContaining({ s3: 'DOWN' }),
+      }),
+    )
+  })
+
+  it.each(['development', 'production'] as const)(
+    'should check the S3 bucket in %s mode',
+    async (mode) => {
+      const previousMode = ENV.mode
+      ENV.mode = mode
+      const send = jest.spyOn(S3Client.prototype, 'send').mockResolvedValue({} as never)
+
+      try {
+        expect(await new CheckS3ControllerStub().runCheckS3()).toBe('UP')
+        expect(send).toHaveBeenCalledWith(expect.any(HeadBucketCommand), {
+          abortSignal: expect.any(AbortSignal),
+        })
+        expect(send.mock.calls[0][0].input).toEqual({
+          Bucket:
+            mode === 'production' ? 'stardust-bucket-prod' : 'stardust-bucket-local',
+        })
+      } finally {
+        ENV.mode = previousMode
+        jest.restoreAllMocks()
+      }
+    },
+  )
+
+  it('should return DOWN when the bucket check fails', async () => {
+    jest
+      .spyOn(S3Client.prototype, 'send')
+      .mockImplementation(() => Promise.reject(new Error('Access denied')) as never)
+
+    try {
+      expect(await new CheckS3ControllerStub().runCheckS3()).toBe('DOWN')
+    } finally {
+      jest.restoreAllMocks()
+    }
+  })
+
+  it('should abort a stalled S3 bucket check', async () => {
+    jest.useFakeTimers()
+    jest.spyOn(S3Client.prototype, 'send').mockImplementation(
+      (_, options: any) =>
+        new Promise((_, reject) => {
+          options.abortSignal.addEventListener('abort', () =>
+            reject(new Error('Aborted')),
+          )
+        }) as never,
+    )
+
+    try {
+      const status = new CheckS3ControllerStub().runCheckS3()
+      await jest.advanceTimersByTimeAsync(
+        CheckHealthController.HEALTH_CHECK_TIMEOUT_IN_MS,
+      )
+      expect(await status).toBe('DOWN')
+    } finally {
+      jest.restoreAllMocks()
+      jest.useRealTimers()
+    }
   })
 
   it('should fallback to plain TCP when TLS check fails for postgres', async () => {

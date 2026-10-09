@@ -7,7 +7,7 @@ const env = {
   baseUrl: process.env.BASE_URL,
   supabaseUrl: process.env.SUPABASE_URL,
   supabaseKey: getSupabasePublishableKey(),
-  databaseUrl: process.env.SUPABASE_DATABASE_URL,
+  databaseUrl: process.env.DATABASE_URL,
   onboardingReceiptSecret: process.env.ONBOARDING_RECEIPT_SECRET,
   mailpitApiUrl: getMailpitApiUrl(),
   s3Endpoint: process.env.S3_ENDPOINT,
@@ -32,7 +32,7 @@ const env = {
   trustedProxyCidrs: process.env.TRUSTED_PROXY_CIDRS?.split(',')
     .map((value) => value.trim())
     .filter(Boolean),
-  sentryDsn: process.env.SENTRY_DSN,
+  sentryDsn: process.env.SENTRY_DSN || undefined,
   s3AccountId: process.env.S3_ACCOUNT_ID,
   s3AccessKeyId: process.env.S3_ACCESS_KEY_ID,
   s3SecretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
@@ -65,7 +65,7 @@ const envSchema = z
     openaiApiKey: z.string().optional(),
     openrouterApiKey: z.string().optional(),
     elevenLabsApiKey: z.string().optional(),
-    sentryDsn: z.string().url(),
+    sentryDsn: z.string().url().optional(),
     s3AccountId: z.string().optional(),
     s3AccessKeyId: z.string(),
     s3SecretAccessKey: z.string(),
@@ -82,10 +82,12 @@ const envSchema = z
     validateRequiredS3Account(value, context)
     validateRequiredMailpit(value, context)
     validateRequiredTrustedProxies(value, context)
+    validateRequiredSentryDsn(value, context)
   })
 
 type RequiredEnvironment = {
   mode: 'development' | 'production' | 'test'
+  sentryDsn?: string
   s3AccountId?: string
   mailpitApiUrl?: string
   trustedProxyCidrs: string[]
@@ -108,6 +110,19 @@ function validateRequiredS3Account(
       context,
       's3AccountId',
       'S3_ACCOUNT_ID is required in production mode',
+    )
+  }
+}
+
+function validateRequiredSentryDsn(
+  value: RequiredEnvironment,
+  context: z.RefinementCtx,
+): void {
+  if (value.mode === 'production' && !value.sentryDsn) {
+    addRequiredEnvironmentIssue(
+      context,
+      'sentryDsn',
+      'SENTRY_DSN is required in production mode',
     )
   }
 }
@@ -246,7 +261,7 @@ function keyToVariableName(key: string): string {
   return (
     {
       supabaseUrl: 'SUPABASE_URL',
-      databaseUrl: 'SUPABASE_DATABASE_URL',
+      databaseUrl: 'DATABASE_URL',
       mailpitApiUrl: 'MAILPIT_API_URL',
       s3Endpoint: 'S3_ENDPOINT',
     }[key] ?? key

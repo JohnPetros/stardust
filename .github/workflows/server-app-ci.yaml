@@ -165,7 +165,7 @@ jobs:
           GOD_ACCOUNT_IDS=f4442be6-ad3e-415b-b31b-cc49a18e1119,
           SUPABASE_URL='http://127.0.0.1:54321'
           SUPABASE_PUBLISHABLE_KEY=stardust-ci-publishable-key
-          SUPABASE_DATABASE_URL=postgresql://postgres:stardust-local-ci-password@127.0.0.1:54322/postgres
+          DATABASE_URL=postgresql://postgres:stardust-local-ci-password@127.0.0.1:54322/postgres
           REDIS_URL='redis://127.0.0.1:6379'
           S3_ACCOUNT_ID='test-account-id'
           S3_ACCESS_KEY_ID='test-access-key-id'

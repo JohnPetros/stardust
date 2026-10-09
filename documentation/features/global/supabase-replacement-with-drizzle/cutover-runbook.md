@@ -19,7 +19,7 @@ Before the window, record the operator, approval/change reference, UTC start tim
 - Restore the selected production backup into an isolated database and rehearse adoption, migration, rollback, and legacy-version access there. Preserve the rehearsal report and checksums.
 - Confirm the exact Server and Web artifacts and prior artifacts. Both releases must correspond to the reviewed candidate and be retrievable for rollback.
 - Confirm the existing ingress, Coolify, Inngest, and cron controls needed to block new traffic and pause/drain application writers. This repository does not define a maintenance endpoint. If an existing control cannot be operated or verified, do not start the window.
-- Confirm the protected `production` GitHub Environment requires an authorized reviewer for every referencing job and prevents self-approval. It must contain `SUPABASE_DATABASE_URL`, `COOLIFY_API_TOKEN`, both deployment webhooks, non-secret `SERVER_PROD_HEALTH_URL` / `WEB_PROD_HEALTH_URL` variables, and `PRODUCTION_RELEASES_PAUSED` set to the string `false` outside a maintenance window. The health URLs must return 2xx only when each application is ready. Do not put a connection URL or credential in workflow inputs.
+- Confirm the protected `production` GitHub Environment requires an authorized reviewer for every referencing job and prevents self-approval. It must contain `DATABASE_URL`, `COOLIFY_API_TOKEN`, both deployment webhooks, non-secret `SERVER_PROD_HEALTH_URL` / `WEB_PROD_HEALTH_URL` variables, and `PRODUCTION_RELEASES_PAUSED` set to the string `false` outside a maintenance window. The health URLs must return 2xx only when each application is ready. Do not put a connection URL or credential in workflow inputs.
 
 ## Cutover sequence
 
