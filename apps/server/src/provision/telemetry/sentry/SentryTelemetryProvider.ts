@@ -6,9 +6,11 @@ import { AppError } from '@stardust/core/global/errors'
 import { ENV } from '@/constants'
 
 export class SentryTelemetryProvider implements TelemetryProvider {
-  private readonly sentry: Sentry.NodeClient
+  private readonly sentry?: Sentry.NodeClient
 
   constructor() {
+    if (ENV.mode !== 'production') return
+
     const sentry = Sentry.init({
       dsn: ENV.sentryDsn,
     })
@@ -18,6 +20,11 @@ export class SentryTelemetryProvider implements TelemetryProvider {
   }
 
   trackError(error: Error): void {
-    this.sentry.captureException(error)
+    if (this.sentry) {
+      this.sentry.captureException(error)
+      return
+    }
+
+    console.error(error)
   }
 }
