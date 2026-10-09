@@ -2,6 +2,7 @@ import net from 'node:net'
 import tls from 'node:tls'
 
 import IORedis from 'ioredis'
+import { HeadBucketCommand, S3Client } from '@aws-sdk/client-s3'
 import type { Controller, Http } from '@stardust/core/global/interfaces'
 
 import { APP_VERSION, ENV } from '@/constants'
@@ -13,7 +14,8 @@ type HealthServicesStatus = {
   postgres: HealthStatus
   redis: HealthStatus
   inngest: HealthStatus
-  supabase: HealthStatus
+  'supabase-auth': HealthStatus
+  s3: HealthStatus
 }
 
 export class CheckHealthController implements Controller {
@@ -34,18 +36,20 @@ export class CheckHealthController implements Controller {
   }
 
   private async checkServices(): Promise<HealthServicesStatus> {
-    const [postgres, redis, inngest, supabase] = await Promise.all([
+    const [postgres, redis, inngest, supabaseAuth, s3] = await Promise.all([
       this.checkPostgres(),
       this.checkRedis(),
       this.checkInngest(),
       this.checkSupabase(),
+      this.checkS3(),
     ])
 
     return {
       postgres,
       redis,
       inngest,
-      supabase,
+      'supabase-auth': supabaseAuth,
+      s3,
     }
   }
 
@@ -117,6 +121,43 @@ export class CheckHealthController implements Controller {
       apikey: ENV.supabaseKey,
       Authorization: `Bearer ${ENV.supabaseKey}`,
     })
+  }
+
+  protected async checkS3(): Promise<HealthStatus> {
+    const client = new S3Client({
+      region: 'auto',
+      endpoint:
+        ENV.mode === 'production'
+          ? `https://${ENV.s3AccountId}.r2.cloudflarestorage.com`
+          : ENV.s3Endpoint,
+      forcePathStyle: ENV.mode !== 'production',
+      credentials: {
+        accessKeyId: ENV.s3AccessKeyId,
+        secretAccessKey: ENV.s3SecretAccessKey,
+      },
+      maxAttempts: 1,
+    })
+    const abortController = new AbortController()
+    const timeout = setTimeout(
+      () => abortController.abort(),
+      CheckHealthController.HEALTH_CHECK_TIMEOUT_IN_MS,
+    )
+
+    try {
+      await client.send(
+        new HeadBucketCommand({
+          Bucket:
+            ENV.mode === 'production' ? 'stardust-bucket-prod' : 'stardust-bucket-local',
+        }),
+        { abortSignal: abortController.signal },
+      )
+      return 'UP'
+    } catch {
+      return 'DOWN'
+    } finally {
+      clearTimeout(timeout)
+      client.destroy()
+    }
   }
 
   protected async checkHttpEndpoint(

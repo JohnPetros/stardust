@@ -16,7 +16,8 @@ jest.mock('@/rest/controllers/health', () => ({
           postgres: 'UP',
           redis: 'UP',
           inngest: 'UP',
-          supabase: 'UP',
+          'supabase-auth': 'UP',
+          s3: 'UP',
         },
       }),
     ),
@@ -42,7 +43,8 @@ describe('[GET] /health', () => {
         postgres: 'UP',
         redis: 'UP',
         inngest: 'UP',
-        supabase: 'UP',
+        'supabase-auth': 'UP',
+        s3: 'UP',
       },
     })
     expect(new Date(response.body.timestamp).toISOString()).toBe(response.body.timestamp)
