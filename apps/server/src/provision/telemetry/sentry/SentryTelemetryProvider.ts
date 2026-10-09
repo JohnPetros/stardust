@@ -5,18 +5,20 @@ import { AppError } from '@stardust/core/global/errors'
 
 import { ENV } from '@/constants'
 
+function initializeSentryClient(): Sentry.NodeClient | undefined {
+  if (ENV.mode !== 'production') return
+
+  const sentry = Sentry.init({ dsn: ENV.sentryDsn })
+  if (!sentry) throw new AppError('Falha ao inicializar o Sentry')
+
+  return sentry
+}
+
 export class SentryTelemetryProvider implements TelemetryProvider {
   private readonly sentry?: Sentry.NodeClient
 
   constructor() {
-    if (ENV.mode !== 'production') return
-
-    const sentry = Sentry.init({
-      dsn: ENV.sentryDsn,
-    })
-    if (!sentry) throw new AppError('Falha ao inicializar o Sentry')
-
-    this.sentry = sentry
+    this.sentry = initializeSentryClient()
   }
 
   trackError(error: Error): void {

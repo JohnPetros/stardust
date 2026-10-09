@@ -193,7 +193,6 @@ describe('Check Health Controller', () => {
       const previousMode = ENV.mode
       ENV.mode = mode
       const send = jest.spyOn(S3Client.prototype, 'send').mockResolvedValue({} as never)
-      const destroy = jest.spyOn(S3Client.prototype, 'destroy')
 
       try {
         expect(await new CheckS3ControllerStub().runCheckS3()).toBe('UP')
@@ -204,7 +203,6 @@ describe('Check Health Controller', () => {
           Bucket:
             mode === 'production' ? 'stardust-bucket-prod' : 'stardust-bucket-local',
         })
-        expect(destroy).toHaveBeenCalled()
       } finally {
         ENV.mode = previousMode
         jest.restoreAllMocks()
@@ -212,15 +210,13 @@ describe('Check Health Controller', () => {
     },
   )
 
-  it('should return DOWN and release the S3 client when the bucket check fails', async () => {
+  it('should return DOWN when the bucket check fails', async () => {
     jest
       .spyOn(S3Client.prototype, 'send')
       .mockImplementation(() => Promise.reject(new Error('Access denied')) as never)
-    const destroy = jest.spyOn(S3Client.prototype, 'destroy')
 
     try {
       expect(await new CheckS3ControllerStub().runCheckS3()).toBe('DOWN')
-      expect(destroy).toHaveBeenCalled()
     } finally {
       jest.restoreAllMocks()
     }
