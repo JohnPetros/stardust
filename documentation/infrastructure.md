@@ -61,7 +61,7 @@ As variáveis são configuradas diretamente no Coolify, separadas por escopo:
 
 **Web (só Runtime):** `INNGEST_SIGNING_KEY`, `INNGEST_EVENT_KEY`
 
-**Server (só Runtime):** `MODE`, `PORT`, `BASE_URL`, `STARDUST_WEB_URL`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_DATABASE_URL`, `REDIS_URL`, `TRUSTED_PROXY_CIDRS`, `S3_ACCOUNT_ID`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `DROPBOX_REFRESH_TOKEN`, `DROPBOX_APP_KEY`, `DROPBOX_APP_SECRET`, `DISCORD_WEBHOOK_URL`, `SENTRY_DSN`
+**Server (só Runtime):** `MODE`, `PORT`, `BASE_URL`, `STARDUST_WEB_URL`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `DATABASE_URL`, `REDIS_URL`, `TRUSTED_PROXY_CIDRS`, `S3_ACCOUNT_ID`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `DROPBOX_REFRESH_TOKEN`, `DROPBOX_APP_KEY`, `DROPBOX_APP_SECRET`, `DISCORD_WEBHOOK_URL`, `SENTRY_DSN`
 
 O Server mantém um provider Redis dedicado para o rate limiter. `REDIS_URL` pode
 usar `rediss://` para preservar TLS; a conexão usa timeout de 250 ms e o

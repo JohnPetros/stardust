@@ -4,7 +4,7 @@ declare global {
 
 const LOCAL_ENDPOINTS = {
   SUPABASE_URL: { protocols: ['http:'] },
-  SUPABASE_DATABASE_URL: {
+  DATABASE_URL: {
     protocols: ['postgres:', 'postgresql:'],
   },
 } as const
@@ -29,13 +29,13 @@ export class LocalSupabaseProxy {
   private static async ensureStackReady() {
     const supabaseUrl = process.env.SUPABASE_URL
     const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY
-    const databaseUrl = process.env.SUPABASE_DATABASE_URL
+    const databaseUrl = process.env.DATABASE_URL
 
     LocalSupabaseProxy.assertLocalEndpoint('SUPABASE_URL', supabaseUrl)
     if (!publishableKey) {
       throw new Error('SUPABASE_PUBLISHABLE_KEY is required for local integration tests')
     }
-    LocalSupabaseProxy.assertLocalEndpoint('SUPABASE_DATABASE_URL', databaseUrl)
+    LocalSupabaseProxy.assertLocalEndpoint('DATABASE_URL', databaseUrl)
 
     if (await LocalSupabaseProxy.waitUntilHealthy(supabaseUrl, publishableKey)) return
 

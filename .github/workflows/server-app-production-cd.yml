@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
-      SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       PRODUCTION_RELEASES_PAUSED: ${{ vars.PRODUCTION_RELEASES_PAUSED }}
 
     steps:

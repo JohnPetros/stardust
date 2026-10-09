@@ -187,8 +187,8 @@ function validateOptions(options) {
     !['legacy', 'adopted', 'server-owned'].includes(options.phase)
   )
     throw new Error('Invalid transition options')
-  const url = process.env.SUPABASE_DATABASE_URL
-  if (!url) throw new Error('SUPABASE_DATABASE_URL is required')
+  const url = process.env.DATABASE_URL
+  if (!url) throw new Error('DATABASE_URL is required')
   const parsed = new URL(url)
   if (!['postgres:', 'postgresql:'].includes(parsed.protocol))
     throw new Error('Invalid database protocol')

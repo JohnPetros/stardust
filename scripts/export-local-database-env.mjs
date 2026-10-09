@@ -65,7 +65,7 @@ databaseUrl.password = password
 databaseUrl.port = String(port)
 databaseUrl.searchParams.set('sslmode', 'disable')
 
-const exports = [`export SUPABASE_DATABASE_URL=${shellQuote(databaseUrl.toString())}`]
+const exports = [`export DATABASE_URL=${shellQuote(databaseUrl.toString())}`]
 
 if (minioUser && minioPassword) {
   exports.push(
