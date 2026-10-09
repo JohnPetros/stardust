@@ -9,9 +9,9 @@ import {
 import { challengeSourceSchema } from '@stardust/validation/challenging/schemas'
 
 import {
-  SupabaseChallengesRepository,
-  SupabaseChallengeSourcesRepository,
-} from '@/database/supabase/repositories/challenging'
+  DrizzleChallengesRepository,
+  DrizzleChallengeSourcesRepository,
+} from '@/database/drizzle/repositories'
 import {
   DeleteChallengeSourceController,
   FetchChallengeSourcesListController,
@@ -44,7 +44,10 @@ export class ChallengeSourcesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengeSourcesRepository(http.getSupabase())
+        const repository = new DrizzleChallengeSourcesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchChallengeSourcesListController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -60,11 +63,14 @@ export class ChallengeSourcesRouter extends HonoRouter {
       this.validationMiddleware.validate('json', challengeSourceSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const challengeSourcesRepository = new SupabaseChallengeSourcesRepository(
-          supabase,
+        const challengeSourcesRepository = new DrizzleChallengeSourcesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
         )
-        const challengesRepository = new SupabaseChallengesRepository(supabase)
+        const challengesRepository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new CreateChallengeSourceController(
           challengeSourcesRepository,
           challengesRepository,
@@ -88,7 +94,10 @@ export class ChallengeSourcesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengeSourcesRepository(http.getSupabase())
+        const repository = new DrizzleChallengeSourcesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new DeleteChallengeSourceController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -110,11 +119,14 @@ export class ChallengeSourcesRouter extends HonoRouter {
       this.validationMiddleware.validate('json', challengeSourceSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const challengeSourcesRepository = new SupabaseChallengeSourcesRepository(
-          supabase,
+        const challengeSourcesRepository = new DrizzleChallengeSourcesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
         )
-        const challengesRepository = new SupabaseChallengesRepository(supabase)
+        const challengesRepository = new DrizzleChallengesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpdateChallengeSourceController(
           challengeSourcesRepository,
           challengesRepository,
@@ -138,7 +150,10 @@ export class ChallengeSourcesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseChallengeSourcesRepository(http.getSupabase())
+        const repository = new DrizzleChallengeSourcesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new ReorderChallengeSourcesController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)

@@ -1,6 +1,6 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
 
 import { InngestAmqp } from '../../InngestAmqp'
 import { StorageFunctions } from '../StorageFunctions'
@@ -37,8 +37,8 @@ jest.mock('@/rest/axios/AxiosRestClient', () => ({
   AxiosRestClient: jest.fn().mockImplementation(() => ({})),
 }))
 
-jest.mock('@/database', () => ({
-  SupabaseTextBlocksRepository: jest.fn().mockImplementation(() => ({})),
+jest.mock('@/database/drizzle/repositories', () => ({
+  DrizzleTextBlocksRepository: jest.fn().mockImplementation(() => ({})),
 }))
 
 jest.mock('../../InngestAmqp', () => ({
@@ -55,11 +55,11 @@ jest.mock('../../createMarkTextBlockAudioAsErrorOnFailure', () => ({
 
 describe('StorageFunctions', () => {
   let createFunction: jest.SpyInstance
-  let supabase: Mock<SupabaseClient>
+  let database: Mock<DrizzleDatabase>
 
   beforeEach(() => {
     jest.clearAllMocks()
-    supabase = mock<SupabaseClient>()
+    database = mock<DrizzleDatabase>()
     createFunction = jest
       .spyOn(StorageFunctions.prototype as never, 'createFunction' as never)
       .mockImplementation(
@@ -74,7 +74,7 @@ describe('StorageFunctions', () => {
   it('should register storage backup, database backup and audio jobs', async () => {
     const functions = new StorageFunctions({} as never)
 
-    const registered = functions.getFunctions(supabase)
+    const registered = functions.getFunctions(database)
 
     expect(registered).toHaveLength(4)
     expect(createFunction).toHaveBeenCalledTimes(4)
@@ -82,7 +82,7 @@ describe('StorageFunctions', () => {
 
   it('should execute the database backup handler with concrete providers', async () => {
     const functions = new StorageFunctions({} as never)
-    const [backupFunction] = functions.getFunctions(supabase) as unknown as Array<{
+    const [backupFunction] = functions.getFunctions(database) as unknown as Array<{
       handler: () => Promise<unknown>
     }>
 
@@ -92,7 +92,7 @@ describe('StorageFunctions', () => {
   it('should execute the storage files backup handler with an amqp context', async () => {
     const functions = new StorageFunctions({} as never)
     const [, backupStorageFilesFunction] = functions.getFunctions(
-      supabase,
+      database,
     ) as unknown as Array<{
       handler: (context: unknown) => Promise<unknown>
     }>
@@ -107,7 +107,7 @@ describe('StorageFunctions', () => {
   it('should execute the text block audio handler with an amqp context', async () => {
     const functions = new StorageFunctions({} as never)
     const [, , generateAudioFunction] = functions.getFunctions(
-      supabase,
+      database,
     ) as unknown as Array<{
       handler: (context: unknown) => Promise<unknown>
     }>
@@ -120,7 +120,7 @@ describe('StorageFunctions', () => {
   it('should execute the remove file handler with an amqp context', async () => {
     const functions = new StorageFunctions({} as never)
     const [, , , removeFileFunction] = functions.getFunctions(
-      supabase,
+      database,
     ) as unknown as Array<{
       handler: (context: unknown) => Promise<unknown>
     }>

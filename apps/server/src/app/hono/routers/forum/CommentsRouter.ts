@@ -8,7 +8,7 @@ import {
   stringSchema,
 } from '@stardust/validation/global/schemas'
 
-import { SupabaseCommentsRepository } from '@/database/supabase/repositories/forum'
+import { DrizzleCommentsRepository } from '@/database/drizzle/repositories'
 import {
   DeleteCommentController,
   EditCommentController,
@@ -48,7 +48,10 @@ export class CommentsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseCommentsRepository(http.getSupabase())
+        const repository = new DrizzleCommentsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchSolutionCommentsListController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -76,7 +79,10 @@ export class CommentsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseCommentsRepository(http.getSupabase())
+        const repository = new DrizzleCommentsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchChallengeCommentsListController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -95,7 +101,10 @@ export class CommentsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseCommentsRepository(http.getSupabase())
+        const repository = new DrizzleCommentsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchCommentRepliesController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -116,7 +125,10 @@ export class CommentsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', z.object({ content: stringSchema })),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseCommentsRepository(http.getSupabase())
+        const repository = new DrizzleCommentsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new PostChallengeCommentController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -137,7 +149,10 @@ export class CommentsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', z.object({ content: stringSchema })),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseCommentsRepository(http.getSupabase())
+        const repository = new DrizzleCommentsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new PostSolutionCommentController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -158,7 +173,10 @@ export class CommentsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', z.object({ content: stringSchema })),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseCommentsRepository(http.getSupabase())
+        const repository = new DrizzleCommentsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new ReplyCommentController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -179,7 +197,10 @@ export class CommentsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', z.object({ content: stringSchema })),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseCommentsRepository(http.getSupabase())
+        const repository = new DrizzleCommentsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new EditCommentController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -199,7 +220,10 @@ export class CommentsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseCommentsRepository(http.getSupabase())
+        const repository = new DrizzleCommentsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new DeleteCommentController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)

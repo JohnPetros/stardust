@@ -3,6 +3,8 @@ import { dirname } from 'node:path'
 
 import type { ServerMockRoute } from '../types/ServerMockRoute'
 
+export type ServerMockRouteWithRawBody = ServerMockRoute & { rawBody?: string }
+
 const SERVER_MOCK_ROUTES_FILE_PATH = '/tmp/stardust/stardust-web-server-mock-routes.json'
 
 type FindServerMockRouteParams = {
@@ -12,9 +14,11 @@ type FindServerMockRouteParams = {
 }
 
 type ServerMockRegistry = {
-  registerServerMockRoutes: (routes: ServerMockRoute[]) => void
+  registerServerMockRoutes: (routes: ServerMockRouteWithRawBody[]) => void
   resetServerMockRoutes: () => void
-  findServerMockRoute: (params: FindServerMockRouteParams) => ServerMockRoute | null
+  findServerMockRoute: (
+    params: FindServerMockRouteParams,
+  ) => ServerMockRouteWithRawBody | null
 }
 
 const ServerMockRegistry = (): ServerMockRegistry => {
@@ -30,7 +34,7 @@ const ServerMockRegistry = (): ServerMockRegistry => {
     )
   }
 
-  function getServerMockRoutesStore(): ServerMockRoute[] {
+  function getServerMockRoutesStore(): ServerMockRouteWithRawBody[] {
     if (!existsSync(SERVER_MOCK_ROUTES_FILE_PATH)) {
       return []
     }
@@ -42,13 +46,26 @@ const ServerMockRegistry = (): ServerMockRegistry => {
     registerServerMockRoutes(routes) {
       mkdirSync(dirname(SERVER_MOCK_ROUTES_FILE_PATH), { recursive: true })
 
-      const normalizedRoutes = routes.map((route) => ({
-        ...route,
-        method: route.method.toUpperCase() as ServerMockRoute['method'],
-        path: normalizePath(route.path),
-        query: route.query ? normalizeQuery(route.query) : undefined,
-        headers: route.headers ?? {},
-      }))
+      const normalizedRoutes = routes.map((route) => {
+        const body = route.body
+        const rawBody =
+          body &&
+          typeof body === 'object' &&
+          Object.keys(body).length === 1 &&
+          '__stardust_raw_body__' in body &&
+          typeof body.__stardust_raw_body__ === 'string'
+            ? body.__stardust_raw_body__
+            : route.rawBody
+        return {
+          ...route,
+          rawBody,
+          body: rawBody === undefined ? body : undefined,
+          method: route.method.toUpperCase() as ServerMockRoute['method'],
+          path: normalizePath(route.path),
+          query: route.query ? normalizeQuery(route.query) : undefined,
+          headers: route.headers ?? {},
+        }
+      })
 
       writeFileSync(
         SERVER_MOCK_ROUTES_FILE_PATH,

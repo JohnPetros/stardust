@@ -148,7 +148,7 @@ jobs:
           NEXT_PUBLIC_STARDUST_WEB_URL=http://127.0.0.1:3100
           NEXT_PUBLIC_STARDUST_SERVER_URL=http://127.0.0.1:3100/api/tests/server
           NEXT_PUBLIC_SUPABASE_URL=https://testing.supabase.local
-          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=fake-supabase-publishable-key
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=test-publishable-key
           NEXT_PUBLIC_CDN_URL=https://testing-cdn.local
           NEXT_PUBLIC_DISCORD_WEBHOOK_URL=https://discord.local/webhooks/testing
           NEXT_PUBLIC_SENTRY_DSN=https://public@example.ingest.sentry.io/123456
@@ -203,7 +203,7 @@ jobs:
           NEXT_PUBLIC_STARDUST_WEB_URL=http://127.0.0.1:3100
           NEXT_PUBLIC_STARDUST_SERVER_URL=http://127.0.0.1:3100/api/tests/server
           NEXT_PUBLIC_SUPABASE_URL=https://testing.supabase.local
-          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=fake-supabase-publishable-key
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=test-publishable-key
           NEXT_PUBLIC_CDN_URL=https://testing-cdn.local
           NEXT_PUBLIC_DISCORD_WEBHOOK_URL=https://discord.local/webhooks/testing
           NEXT_PUBLIC_SENTRY_DSN=https://public@example.ingest.sentry.io/123456
@@ -262,7 +262,7 @@ jobs:
           NEXT_PUBLIC_STARDUST_WEB_URL=http://127.0.0.1:3100
           NEXT_PUBLIC_STARDUST_SERVER_URL=http://127.0.0.1:3100/api/tests/server
           NEXT_PUBLIC_SUPABASE_URL=https://testing.supabase.local
-          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=fake-supabase-publishable-key
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=test-publishable-key
           NEXT_PUBLIC_CDN_URL=https://testing-cdn.local
           NEXT_PUBLIC_DISCORD_WEBHOOK_URL=https://discord.local/webhooks/testing
           NEXT_PUBLIC_SENTRY_DSN=https://public@example.ingest.sentry.io/123456

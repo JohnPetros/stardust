@@ -1,3 +1,12 @@
+import { and, eq } from 'drizzle-orm'
+import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
+import {
+  avatarModel,
+  rocketModel,
+  tierModel,
+  userModel,
+  userRescuableAchievementModel,
+} from '@/database/drizzle/schema'
 import { randomUUID } from 'node:crypto'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
@@ -10,18 +19,24 @@ import { TiersFaker } from '@stardust/core/ranking/entities/fakers'
 import { AvatarsFaker, RocketsFaker } from '@stardust/core/shop/entities/fakers'
 import { Achievement, User } from '@stardust/core/profile/entities'
 
-import { SupabaseAchievementsRepository, SupabaseUsersRepository } from '@/database'
+import {
+  DrizzleAchievementsRepository,
+  DrizzleUsersRepository,
+} from '@/database/drizzle/repositories'
 import { Id } from '@stardust/core/global/structures'
 
 export class ProfileFixture {
-  private readonly supabase: SupabaseClient
   private readonly achivementsRepository: AchievementsRepository
   private readonly usersRepository: UsersRepository
 
-  constructor(supabase: SupabaseClient) {
-    this.supabase = supabase
-    this.achivementsRepository = new SupabaseAchievementsRepository(supabase)
-    this.usersRepository = new SupabaseUsersRepository(supabase)
+  constructor(_supabase: SupabaseClient) {
+    this.achivementsRepository = new DrizzleAchievementsRepository(
+      DrizzleClient.getInstance(),
+      { kind: 'system' },
+    )
+    this.usersRepository = new DrizzleUsersRepository(DrizzleClient.getInstance(), {
+      kind: 'system',
+    })
   }
 
   async createAchievements(AchievementDtos: AchievementDto[]) {
@@ -51,49 +66,40 @@ export class ProfileFixture {
       position: Math.floor(Math.random() * 100000) + 1000,
     })
 
-    const [avatarResponse, rocketResponse, tierResponse] = await Promise.all([
-      this.supabase.from('avatars').insert({
+    await DrizzleClient.getInstance().transaction(async (transaction) => {
+      await transaction.insert(avatarModel).values({
         id: avatar.id,
         name: avatar.name,
         image: avatar.image,
         price: avatar.price,
-        is_acquired_by_default: avatar.isAcquiredByDefault ?? false,
-        is_selected_by_default: avatar.isSelectedByDefault ?? false,
-      }),
-      this.supabase.from('rockets').insert({
+        isAcquiredByDefault: avatar.isAcquiredByDefault ?? false,
+        isSelectedByDefault: avatar.isSelectedByDefault ?? false,
+      })
+      await transaction.insert(rocketModel).values({
         id: rocket.id,
         name: rocket.name,
         image: rocket.image,
         price: rocket.price,
-        is_acquired_by_default: rocket.isAcquiredByDefault ?? false,
-        is_selected_by_default: rocket.isSelectedByDefault ?? false,
-      }),
-      this.supabase.from('tiers').insert({
+        isAcquiredByDefault: rocket.isAcquiredByDefault ?? false,
+        isSelectedByDefault: rocket.isSelectedByDefault ?? false,
+      })
+      await transaction.insert(tierModel).values({
         id: tier.id,
         name: tier.name,
         image: tier.image,
         position: tier.position,
         reward: tier.reward,
-      }),
-    ])
-
-    if (avatarResponse.error) throw avatarResponse.error
-    if (rocketResponse.error) throw rocketResponse.error
-    if (tierResponse.error) throw tierResponse.error
-
-    const { error } = await this.supabase.from('users').insert({
-      id: accountId,
-      email: `test-${randomUUID()}@stardust.dev`,
-      name: `Test User ${randomUUID()}`,
-      slug: `user-${randomUUID()}`,
-      avatar_id: avatar.id,
-      rocket_id: rocket.id,
-      tier_id: tier.id,
+      })
+      await transaction.insert(userModel).values({
+        id: accountId,
+        email: `test-${randomUUID()}@stardust.dev`,
+        name: `Test User ${randomUUID()}`,
+        slug: `user-${randomUUID()}`,
+        avatarId: avatar.id,
+        rocketId: rocket.id,
+        tierId: tier.id,
+      })
     })
-
-    if (error) {
-      throw error
-    }
 
     return {
       id: Id.create(accountId),
@@ -101,30 +107,23 @@ export class ProfileFixture {
   }
 
   async getUserCoins(userId: string) {
-    const { data, error } = await this.supabase
-      .from('users')
-      .select('coins')
-      .eq('id', userId)
-      .single()
-
-    if (error) {
-      throw error
-    }
-
-    return data.coins
+    const [row] = await DrizzleClient.getInstance()
+      .select({ coins: userModel.coins })
+      .from(userModel)
+      .where(eq(userModel.id, userId))
+    if (!row) throw new Error('Expected a persisted fixture user')
+    return row.coins
   }
 
   async getRescuableAchievements(userId: string, achievementId: string) {
-    const { data, error } = await this.supabase
-      .from('users_rescuable_achievements')
-      .select('achievement_id')
-      .eq('user_id', userId)
-      .eq('achievement_id', achievementId)
-
-    if (error) {
-      throw error
-    }
-
-    return data
+    return await DrizzleClient.getInstance()
+      .select({ achievement_id: userRescuableAchievementModel.achievementId })
+      .from(userRescuableAchievementModel)
+      .where(
+        and(
+          eq(userRescuableAchievementModel.userId, userId),
+          eq(userRescuableAchievementModel.achievementId, achievementId),
+        ),
+      )
   }
 }

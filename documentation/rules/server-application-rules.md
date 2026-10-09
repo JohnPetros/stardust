@@ -105,3 +105,9 @@ Server
 - A autenticacao e autorizacao do MCP devem acontecer na borda da app antes da execucao das tools.
 - Toolkits MCP devem viver em `src/ai/mastra/toolkits` e concentrar schemas Zod e composicao de dependencias concretas.
 - Tools MCP devem delegar regra de negocio para `use cases` e entidades do `@stardust/core`.
+
+## Transição aprovada: Drizzle e SSE (Issue #602)
+
+A seção Supabase CLI e o uso de Supabase para banco acima descrevem o legado. Na entrega da Issue #602, a persistência usa Drizzle/PostgreSQL e Supabase SDK permanece para Auth. Repositories de negócio são compostos após autenticação/autorização, tanto para usuários quanto para God Account, MCP e jobs. O bootstrap de API key admite somente a consulta interna por hash necessária ao AuthenticateApiKeyUseCase, sem acesso de negócio antes da validação; não restringe PostgreSQL direto apenas ao feedback administrativo.
+
+Os novos scripts e paths estão contratados na Spec. Supabase CLI deixa de ser o runner de migrations. Migrations Drizzle rodam no pipeline, antes da reabertura do tráfego na janela inicial coordenada, nunca no boot. A stack Supabase local continua sendo a origem de PostgreSQL/Auth para testes reais. Portas locais e credenciais seguem AGENTS.md e tooling.md.

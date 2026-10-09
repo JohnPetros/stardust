@@ -46,7 +46,7 @@ cria hierarquia entre Builders.
    estados, responsividade e acessibilidade declarados. Consulte os nodes Pencil canônicos
    quando disponíveis para inspeção e comparação; não copie valores brutos nem substitua,
    simplifique ou adicione elementos visuais sem decisão ou amendment aprovado.
-6. Use MCPs aplicáveis, como Serena, Context7, Pencil, Playwright ou Supabase.
+6. Use MCPs aplicáveis, como CodeGraph, Context7, Pencil, Playwright ou Supabase.
 7. Execute a comparação Pencil/Web no mesmo viewport e estado quando a UI
    estiver no escopo; registre cada divergência, sua causa e a aprovação
    correspondente. A validação não pode ser apenas uma afirmação textual.

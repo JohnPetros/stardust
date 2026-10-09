@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto'
 import request from 'supertest'
 
 import type {
@@ -9,20 +10,9 @@ import type {
 
 import { AuthMiddleware } from '@/app/hono/middlewares/AuthMiddleware'
 import { HonoFixture } from '@/tests/fixtures/HonoFixture'
-
-jest.mock('@/rest/services/SupabaseAuthService', () => ({
-  SupabaseAuthService: jest.fn().mockImplementation(() => ({
-    fetchAccount: jest.fn().mockResolvedValue({
-      isFailure: false,
-      body: {
-        id: 'account-1',
-        email: 'account@example.test',
-        name: 'Account',
-        isAuthenticated: true,
-      },
-    }),
-  })),
-}))
+import { SupabaseFixture } from '@/tests/fixtures/SupabaseFixture'
+import { AuthFixture } from '@/tests/fixtures/AuthFixture'
+import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
 
 class AuthRateLimiter implements RateLimiterProvider {
   readonly calls: RateLimitInput[] = []
@@ -37,6 +27,18 @@ class AuthRateLimiter implements RateLimiterProvider {
 }
 
 describe('REST account rate limit composition', () => {
+  const supabaseFixture = new SupabaseFixture()
+  const authFixture = new AuthFixture(supabaseFixture.supabase)
+
+  beforeEach(async () => {
+    await supabaseFixture.clearDatabase()
+    await authFixture.createAccount()
+  })
+
+  afterAll(async () => {
+    await DrizzleClient.close()
+  })
+
   it('runs IP limiting before verified authentication and account limiting after it', async () => {
     const provider = new AuthRateLimiter()
     const telemetry: TelemetryProvider = { trackError: jest.fn() }
@@ -52,11 +54,15 @@ describe('REST account rate limit composition', () => {
 
     const response = await request(fixture.server)
       .get('/rate-limit-auth')
+      .set(authFixture.getAuthorizationHeader())
       .set('X-Forwarded-For', '198.51.100.30')
 
     expect(response.status).toBe(429)
     expect(provider.calls).toHaveLength(2)
     expect(provider.calls[0]?.key).toContain(':ip:')
-    expect(provider.calls[1]?.key).toContain(':account:')
+    const accountDigest = createHash('sha256')
+      .update(authFixture.getAccountId())
+      .digest('hex')
+    expect(provider.calls[1]?.key).toBe(`rate-limit:general:account:${accountDigest}`)
   })
 })

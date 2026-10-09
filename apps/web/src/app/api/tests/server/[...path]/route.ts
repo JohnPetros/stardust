@@ -64,6 +64,13 @@ async function buildRouteResponse(request: NextRequest, context: RouteContext) {
     })
   }
 
+  if (route.rawBody !== undefined) {
+    return new Response(route.rawBody, {
+      status: route.status ?? 200,
+      headers: route.headers,
+    })
+  }
+
   return Response.json(route.body ?? null, {
     status: route.status ?? 200,
     headers: route.headers,

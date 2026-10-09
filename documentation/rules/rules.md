@@ -155,7 +155,7 @@ papéis, artefatos, sensores e critérios de conclusão.
 
 - Ao decidir qual MCP usar para uma tarefa.
 - Ao validar fluxos reais de browser com Playwright MCP.
-- Ao navegar a codebase com Serena.
+- Ao explorar simbolos e caminhos de chamada com CodeGraph.
 - Ao consultar documentacao atualizada com Context7.
 - Ao interagir com Supabase Dev/Prod.
 - Ao trabalhar com arquivos `.pen` via Pencil.

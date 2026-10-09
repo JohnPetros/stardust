@@ -5,52 +5,201 @@ on:
     branches:
       - main
     paths:
+      - ".github/workflows/server-app-production-cd.yml"
       - "apps/server/**"
       - "packages/core/**"
       - "packages/validation/**"
+  workflow_dispatch:
+    inputs:
+      initial_cutover:
+        description: Confirm maintenance is open and all application writers are paused and drained
+        required: true
+        type: boolean
+        default: false
+      rollback_access:
+        description: Apply the reviewed inverse of migration 0002 and verify adopted-phase access
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
 concurrency:
-  group: server-app-cd-coolify-production
-  cancel-in-progress: true
+  group: stardust-production-release
+  cancel-in-progress: false
 
 jobs:
-  migrate-database:
-    name: Migrate database
+  migrate-and-deploy:
+    name: Verify, migrate, and request deploy
     runs-on: ubuntu-latest
+    environment: production
     env:
-      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
-      SUPABASE_PROJECT_ID: aukqejqsiqsqowafpppb
+      SUPABASE_DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+      PRODUCTION_RELEASES_PAUSED: ${{ vars.PRODUCTION_RELEASES_PAUSED }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Setup Supabase CLI
-        uses: supabase/setup-cli@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
         with:
-          version: 2.98.2
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
 
-      - name: Link production database
-        working-directory: apps/server
-        run: supabase link --project-ref $SUPABASE_PROJECT_ID
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Apply pending migrations
-        working-directory: apps/server
-        run: supabase db push
-
-  deploy:
-    name: Deploy to Coolify
-    runs-on: ubuntu-latest
-    needs:
-      - migrate-database
-
-    steps:
-      - name: Trigger Coolify deploy
+      - name: Validate the requested operation
         run: |
-          curl -X GET "${{ secrets.COOLIFY_WEBHOOK_SERVER_PROD }}" \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
-            --fail --silent --show-error
+          if [ "${{ inputs.initial_cutover }}" = "true" ] && [ "${{ inputs.rollback_access }}" = "true" ]; then
+            echo "Initial cutover and rollback cannot be requested together." >&2
+            exit 1
+          fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.initial_cutover }}" != "true" ] && [ "${{ inputs.rollback_access }}" != "true" ]; then
+            echo "Choose either the initial cutover or access rollback operation." >&2
+            exit 1
+          fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "$PRODUCTION_RELEASES_PAUSED" != "true" ]; then
+            echo "Set the production release pause before cutover or rollback." >&2
+            exit 1
+          fi
+          if [ "${{ github.event_name }}" = "push" ] && [ "$PRODUCTION_RELEASES_PAUSED" != "false" ]; then
+            echo "Normal Server releases require production releases to be explicitly unpaused." >&2
+            exit 1
+          fi
+
+      - name: Verify and adopt legacy baseline for initial cutover
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.initial_cutover == true }}
+        run: |
+          npm run db:preflight -w @stardust/server -- --environment prod --phase legacy
+          npm run db:adopt -w @stardust/server -- --environment prod --phase legacy
+
+      - name: Require completed cutover on normal pushes
+        if: ${{ github.event_name == 'push' }}
+        run: npm run db:preflight -w @stardust/server -- --environment prod --phase server-owned
+
+      - name: Apply server-owned migration
+        if: ${{ inputs.rollback_access != true }}
+        run: |
+          if [ "${{ inputs.initial_cutover }}" = "true" ]; then
+            npm run db:migrate -w @stardust/server -- --environment prod --phase adopted
+          else
+            npm run db:migrate -w @stardust/server -- --environment prod --phase server-owned
+          fi
+
+      - name: Verify server-owned catalog
+        if: ${{ inputs.rollback_access != true }}
+        run: npm run db:preflight -w @stardust/server -- --environment prod --phase server-owned
+
+      - name: Apply reviewed inverse for access rollback
+        if: ${{ inputs.rollback_access == true }}
+        run: npm run db:migrate -w @stardust/server -- --environment prod --phase server-owned --rollback
+
+      - name: Verify adopted catalog after access rollback
+        if: ${{ inputs.rollback_access == true }}
+        run: npm run db:preflight -w @stardust/server -- --environment prod --phase adopted
+
+      - name: Request Server deployment
+        if: ${{ inputs.rollback_access != true }}
+        env:
+          COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
+          COOLIFY_WEBHOOK_SERVER_PROD: ${{ secrets.COOLIFY_WEBHOOK_SERVER_PROD }}
+          EXPECTED_SHA: ${{ github.sha }}
+          HEALTH_URL: ${{ vars.SERVER_PROD_HEALTH_URL }}
+        run: |
+          set -euo pipefail
+          test -n "$COOLIFY_API_TOKEN"
+          test -n "$COOLIFY_WEBHOOK_SERVER_PROD"
+          test -n "$EXPECTED_SHA"
+          test -n "$HEALTH_URL"
+          api_base="${COOLIFY_WEBHOOK_SERVER_PROD%%/api/v1/*}/api/v1"
+          request="$(curl --fail --silent --show-error \
+            -H "Authorization: Bearer ${COOLIFY_API_TOKEN}" \
+            "$COOLIFY_WEBHOOK_SERVER_PROD")"
+          deployment_uuid="$(jq -er '.deployments[0].deployment_uuid // .deployment_uuid' <<<"$request")"
+          test -n "$deployment_uuid"
+          [[ "$deployment_uuid" =~ ^[A-Za-z0-9_-]+$ ]]
+
+          for attempt in $(seq 1 240); do
+            deployment="$(curl --fail --silent --show-error \
+              -H "Authorization: Bearer ${COOLIFY_API_TOKEN}" \
+              "${api_base}/deployments/${deployment_uuid}")"
+            status="$(jq -er '.status' <<<"$deployment")"
+            case "$status" in
+              queued|in_progress|running) sleep 15 ;;
+              successful|finished)
+                deployed_sha="$(jq -er '.commit' <<<"$deployment")"
+                test "$deployed_sha" = "$EXPECTED_SHA"
+                break
+                ;;
+              *) echo "Server deployment ended in unexpected status: $status" >&2; exit 1 ;;
+            esac
+            if [ "$attempt" -eq 240 ]; then echo "Server deployment timed out." >&2; exit 1; fi
+          done
+
+          for attempt in $(seq 1 20); do
+            http_status="$(curl --silent --show-error --output /dev/null --max-time 20 --write-out '%{http_code}' "$HEALTH_URL" || true)"
+            case "$http_status" in 2??) exit 0 ;; esac
+            sleep 15
+          done
+          echo "Server health check did not return 2xx." >&2
+          exit 1
+
+      - name: Request Web deployment for coordinated initial cutover
+        if: ${{ inputs.initial_cutover == true && inputs.rollback_access != true }}
+        env:
+          COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
+          COOLIFY_WEBHOOK_WEB_PROD: ${{ secrets.COOLIFY_WEBHOOK_WEB_PROD }}
+          EXPECTED_SHA: ${{ github.sha }}
+          HEALTH_URL: ${{ vars.WEB_PROD_HEALTH_URL }}
+        run: |
+          set -euo pipefail
+          test -n "$COOLIFY_API_TOKEN"
+          test -n "$COOLIFY_WEBHOOK_WEB_PROD"
+          test -n "$EXPECTED_SHA"
+          test -n "$HEALTH_URL"
+          api_base="${COOLIFY_WEBHOOK_WEB_PROD%%/api/v1/*}/api/v1"
+          request="$(curl --fail --silent --show-error \
+            -H "Authorization: Bearer ${COOLIFY_API_TOKEN}" \
+            "$COOLIFY_WEBHOOK_WEB_PROD")"
+          deployment_uuid="$(jq -er '.deployments[0].deployment_uuid // .deployment_uuid' <<<"$request")"
+          test -n "$deployment_uuid"
+          [[ "$deployment_uuid" =~ ^[A-Za-z0-9_-]+$ ]]
+
+          for attempt in $(seq 1 240); do
+            deployment="$(curl --fail --silent --show-error \
+              -H "Authorization: Bearer ${COOLIFY_API_TOKEN}" \
+              "${api_base}/deployments/${deployment_uuid}")"
+            status="$(jq -er '.status' <<<"$deployment")"
+            case "$status" in
+              queued|in_progress|running) sleep 15 ;;
+              successful|finished)
+                deployed_sha="$(jq -er '.commit' <<<"$deployment")"
+                test "$deployed_sha" = "$EXPECTED_SHA"
+                break
+                ;;
+              *) echo "Web deployment ended in unexpected status: $status" >&2; exit 1 ;;
+            esac
+            if [ "$attempt" -eq 240 ]; then echo "Web deployment timed out." >&2; exit 1; fi
+          done
+
+          for attempt in $(seq 1 20); do
+            http_status="$(curl --silent --show-error --output /dev/null --max-time 20 --write-out '%{http_code}' "$HEALTH_URL" || true)"
+            case "$http_status" in 2??) exit 0 ;; esac
+            sleep 15
+          done
+          echo "Web health check did not return 2xx." >&2
+          exit 1
+
+  operator-signoff:
+    name: Hold production exclusion for operator verification
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    needs: migrate-and-deploy
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Record final maintenance-window approval
+        run: echo "Authorized reviewer approved operator verification and traffic reopening."

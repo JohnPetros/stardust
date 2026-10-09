@@ -134,31 +134,6 @@ export const NextRestClient = ({
       }
 
       const data = await parseResponseJson(response)
-      return new RestResponse({ body: data, statusCode: response.status })
-    },
-
-    async postFormData<Body>(route: string, body: FormData): Promise<RestResponse<Body>> {
-      const { 'Content-Type': _, ...headers } = requestInit.headers as Record<
-        string,
-        string
-      >
-
-      const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
-        ...requestInit,
-        method: 'POST',
-        headers,
-        body,
-      })
-
-      if (!response.ok) {
-        return await handleRestError<Body>(
-          response,
-          async () => await this.postFormData<Body>(route, body),
-          (session) => this.setAuthorization(session.accessToken),
-        )
-      }
-
-      const data = await parseResponseJson(response)
       return new RestResponse({
         body: data,
         statusCode: response.status,
@@ -166,61 +141,44 @@ export const NextRestClient = ({
       })
     },
 
-    async put<Body>(route: string, body: unknown): Promise<RestResponse<Body>> {
-      const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
-        ...requestInit,
-        method: 'PUT',
-        body: JSON.stringify(body),
+    async postFormData<Body>(route: string, body: FormData): Promise<RestResponse<Body>> {
+      const headers = createMultipartHeaders(requestInit.headers)
+      return sendJsonRequest<Body>(route, { method: 'POST', headers }, () => body, {
+        retry: () => this.postFormData<Body>(route, body),
+        onRefreshSuccess: (session) => this.setAuthorization(session.accessToken),
+        includeHeaders: true,
       })
+    },
 
-      if (!response.ok) {
-        return await handleRestError<Body>(
-          response,
-          async () => await this.put(route, body),
-          (session) => this.setAuthorization(session.accessToken),
-        )
-      }
-
-      const data = await parseResponseJson(response)
-      return new RestResponse({ body: data, statusCode: response.status })
+    async put<Body>(route: string, body: unknown): Promise<RestResponse<Body>> {
+      return sendJsonRequest<Body>(route, { method: 'PUT' }, () => JSON.stringify(body), {
+        retry: () => this.put<Body>(route, body),
+        onRefreshSuccess: (session) => this.setAuthorization(session.accessToken),
+      })
     },
 
     async patch<Body>(route: string, body: unknown): Promise<RestResponse<Body>> {
-      const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
-        ...requestInit,
-        method: 'PATCH',
-        body: JSON.stringify(body),
-      })
-
-      if (!response.ok) {
-        return await handleRestError<Body>(
-          response,
-          async () => await this.patch<Body>(route, body),
-          (session) => this.setAuthorization(session.accessToken),
-        )
-      }
-
-      const data = await parseResponseJson(response)
-      return new RestResponse({ body: data, statusCode: response.status })
+      return sendJsonRequest<Body>(
+        route,
+        { method: 'PATCH' },
+        () => JSON.stringify(body),
+        {
+          retry: () => this.patch<Body>(route, body),
+          onRefreshSuccess: (session) => this.setAuthorization(session.accessToken),
+        },
+      )
     },
 
     async delete<Body>(route: string, body?: unknown): Promise<RestResponse<Body>> {
-      const response = await fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
-        ...requestInit,
-        method: 'DELETE',
-        body: body ? JSON.stringify(body) : undefined,
-      })
-
-      if (!response.ok) {
-        return await handleRestError(
-          response,
-          async () => await this.delete(route, body),
-          (session) => this.setAuthorization(session.accessToken),
-        )
-      }
-
-      const data = await parseResponseJson(response)
-      return new RestResponse({ body: data, statusCode: response.status })
+      return sendJsonRequest<Body>(
+        route,
+        { method: 'DELETE' },
+        () => (body ? JSON.stringify(body) : undefined),
+        {
+          retry: () => this.delete<Body>(route, body),
+          onRefreshSuccess: (session) => this.setAuthorization(session.accessToken),
+        },
+      )
     },
 
     setBaseUrl(url: string): void {
@@ -232,17 +190,7 @@ export const NextRestClient = ({
     },
 
     setHeader(key: string, value: string): void {
-      if (requestInit.headers) {
-        requestInit.headers = {
-          ...requestInit.headers,
-          [key]: value,
-        }
-        return
-      }
-
-      requestInit.headers = {
-        [key]: value,
-      }
+      requestInit.headers = { ...requestInit.headers, [key]: value }
     },
 
     setQueryParam(key: string, value: string | string[]): void {
@@ -257,4 +205,50 @@ export const NextRestClient = ({
       queryParams = {}
     },
   }
+
+  function sendJsonRequest<Body>(
+    route: string,
+    init: RequestInit,
+    getBody: () => BodyInit | undefined,
+    { retry, onRefreshSuccess, includeHeaders = false }: JsonResponseOptions<Body>,
+  ): Promise<RestResponse<Body>> {
+    return fetch(`${baseUrl}${addQueryParams(route, queryParams)}`, {
+      ...requestInit,
+      ...init,
+      body: getBody(),
+    }).then((response) =>
+      resolveJsonResponse<Body>(response, retry, onRefreshSuccess, includeHeaders),
+    )
+  }
+}
+
+async function createJsonResponse<Body>(response: Response, includeHeaders: boolean) {
+  return new RestResponse<Body>({
+    body: await parseResponseJson(response),
+    statusCode: response.status,
+    ...(includeHeaders && { headers: Object.fromEntries(response.headers.entries()) }),
+  })
+}
+
+function createMultipartHeaders(headers: RequestInit['headers']) {
+  const { 'Content-Type': _, ...multipartHeaders } = headers as Record<string, string>
+  return multipartHeaders
+}
+
+type JsonResponseOptions<Body> = {
+  retry: () => Promise<RestResponse<Body>>
+  onRefreshSuccess: Parameters<typeof handleRestError>[2]
+  includeHeaders?: boolean
+}
+
+function resolveJsonResponse<Body>(
+  response: Response,
+  retry: () => Promise<RestResponse<Body>>,
+  onRefreshSuccess: Parameters<typeof handleRestError>[2],
+  includeHeaders: boolean,
+) {
+  if (!response.ok) {
+    return handleRestError<Body>(response, retry, onRefreshSuccess)
+  }
+  return createJsonResponse<Body>(response, includeHeaders)
 }

@@ -3,7 +3,7 @@ import z from 'zod'
 
 import { idSchema, stringSchema } from '@stardust/validation/global/schemas'
 
-import { SupabaseStoriesRepository } from '@/database/supabase/repositories/lesson'
+import { DrizzleStoriesRepository } from '@/database/drizzle/repositories'
 import { FetchStoryController, UpdateStoryController } from '@/rest/controllers/lesson'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
@@ -22,7 +22,10 @@ export class StoriesRouter extends HonoRouter {
       this.validationMiddleware.validate('param', z.object({ starId: idSchema })),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseStoriesRepository(http.getSupabase())
+        const repository = new DrizzleStoriesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchStoryController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -50,7 +53,10 @@ export class StoriesRouter extends HonoRouter {
       this.spaceMiddleware.verifyStarExists,
       async (context) => {
         const http = new HonoHttp(context)
-        const storiesRepository = new SupabaseStoriesRepository(http.getSupabase())
+        const storiesRepository = new DrizzleStoriesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpdateStoryController(storiesRepository)
         const response = await controller.handle(http)
         return http.sendResponse(response)

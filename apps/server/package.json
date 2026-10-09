@@ -12,8 +12,12 @@
     "check:updates": "ncu",
     "build": "tsup",
     "prod": "node --env-file .env build/main.js",
-    "db:test": "docker compose --env-file ../../.env.local -f ../../docker-compose.yml up -d --wait inngest redis supabase-postgres supabase-mailpit supabase-templates minio supabase-auth supabase-rest supabase-realtime supabase-envoy && docker compose --env-file ../../.env.local -f ../../docker-compose.yml run --rm minio-init && docker compose --env-file ../../.env.local -f ../../docker-compose.yml --profile test run --rm supabase-db-reset",
-    "db:migrate": "supabase db diff -f $npm_config_schema_file",
+    "db:test": "local_exports=$(node ../../scripts/export-local-database-env.mjs) && eval \"$local_exports\" && docker compose --env-file ../../.env.local -f ../../docker-compose.yml up -d --wait inngest redis supabase-postgres supabase-mailpit supabase-templates minio supabase-auth supabase-rest supabase-realtime supabase-envoy && docker compose --env-file ../../.env.local -f ../../docker-compose.yml run --rm minio-init && docker compose --env-file ../../.env.local -f ../../docker-compose.yml --profile test run --rm supabase-db-reset && npm run db:migrate",
+    "db:test:ci": "local_exports=$(node ../../scripts/export-local-database-env.mjs) && eval \"$local_exports\" && node ../../scripts/pull-ci-database-images.mjs && docker compose --parallel 1 --env-file ../../.env.local -f ../../docker-compose.yml -f ../../docker-compose.ci.yml up -d --wait inngest redis supabase-postgres supabase-mailpit supabase-templates minio supabase-auth supabase-rest supabase-realtime supabase-envoy && docker compose --parallel 1 --env-file ../../.env.local -f ../../docker-compose.yml -f ../../docker-compose.ci.yml run --rm minio-init && docker compose --parallel 1 --env-file ../../.env.local -f ../../docker-compose.yml -f ../../docker-compose.ci.yml --profile test run --rm supabase-db-reset && npm run db:migrate",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx scripts/migrate-database.ts",
+    "db:preflight": "node ../../scripts/check-drizzle-transition.mjs",
+    "db:adopt": "node ../../scripts/adopt-drizzle-baseline.mjs",
     "db:prod": "supabase link --project-ref aukqejqsiqsqowafpppb",
     "db:dev": "supabase link --project-ref rveubqzvfbqbcpmuevnm",
     "db:pull": "supabase db pull --schema auth,public,storage,realtime",
@@ -23,7 +27,8 @@
     "update": "ncu -u -f $npm_config_dep_name",
     "test:unit": "jest --selectProjects server",
     "test:coverage": "jest --selectProjects server --coverage --coverageReporters=json-summary --coverageReporters=text-summary",
-    "test:integration": "jest --selectProjects server-integration"
+    "test:integration": "INNGEST_DEV=http://127.0.0.1:8288 INNGEST_BASE_URL=http://127.0.0.1:8288 jest --selectProjects server-integration",
+    "test:integration:ci": "npm run test:integration -- --shard=1/4 && npm run test:integration -- --shard=2/4 && npm run test:integration -- --shard=3/4 && npm run test:integration -- --shard=4/4"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1097.0",
@@ -48,7 +53,8 @@
     "jwt-decode": "^4.0.0",
     "postgres": "^3.4.9",
     "posthog-node": "^5.46.1",
-    "zod": "^3.24.4"
+    "zod": "^3.24.4",
+    "drizzle-orm": "0.45.3"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
@@ -62,6 +68,7 @@
     "ts-jest-mocker": "^1.3.0",
     "tsup": "^8.5.1",
     "tsx": "^4.7.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "drizzle-kit": "0.31.11"
   }
 }

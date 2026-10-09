@@ -25,11 +25,23 @@
 ## MCPS
 
 - Context7 para buscar informações atualizadas
-- Serena para navegar pela codebase de forma otimizada
+- CodeGraph para explorar símbolos, relações e caminhos de chamada no código
 - Pencil para editar ou saber o contexto de frames de design estilo Figma
 - Playwright CLI para inspecionar e validar fluxos reais no navegador
 - Supabase Dev para interagir com o projeto Supabase de desenvolvimento
 - Supabase Prod para interagir com o projeto Supabase de produção
+
+### CodeGraph
+
+- Use o CodeGraph antes de ler ou editar código quando precisar entender um
+  símbolo, fluxo, arquitetura, bug ou impacto de uma mudança. Consulte os
+  símbolos ou arquivos relevantes em uma única exploração para obter o código
+  fonte, os caminhos de chamada e o raio de impacto.
+- Trate o código-fonte retornado como leitura atual; não repita a exploração
+  com `grep` ou leitura dos mesmos arquivos. Use leitura direta para arquivos
+  que o índice não cobre ou detalhes que a exploração não mostrou.
+- Se o projeto não estiver indexado, use as ferramentas locais de navegação e
+  leitura; não inicialize o índice sem solicitação.
 
 ### Playwright CLI
 

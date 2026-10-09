@@ -70,3 +70,18 @@ export class SupabaseUsersRepository /* extends SupabaseRepository */ {
 
 - O server usa Supabase como integracao principal.
 - Tooling: `documentation/tooling.md`.
+
+## Transição aprovada: Drizzle e SSE (Issue #602)
+
+As convenções Supabase acima descrevem o adapter legado. Para a entrega da Issue #602, prevalecem as seguintes convenções aprovadas; elas não autorizam alterar contratos de domínio:
+
+- Implementações em `apps/server/src/database/drizzle/`, chamadas `Drizzle<Entidade>Repository`; schemas e tipos SQL ficam nessa camada. Os novos paths constam como Create no mapa da Spec.
+- Organização adaptada de Scoops para StarDust: models/<domínio> declara constantes pgTable/pgEnum em arquivos kebab-case; types/entities/<domínio> deriva rows/inserts desses models; mappers/<domínio> e repositories/<domínio> preservam classes/ports. schema.ts apenas agrega os models; DrizzleRepository fica na raiz do adapter. Classes/tipos seguem PascalCase. SQL identifiers e fronteiras Core permanecem intactos.
+- Constructor recebe conexão Drizzle e contexto de acesso explícito, composto pelo Server. Não derive identidade do payload, de JWT apenas decodificado ou da conexão privilegiada; não use contexto system como fallback.
+- Interfaces de repository existentes no Core permanecem intactas, com os mesmos métodos, entradas e retornos. Mappers explícitos traduzem rows/projeções para domínio e usam `toEntity`/`toPersistence`; nenhum row, query builder ou transaction client atravessa para o Core.
+- Ownership é aplicado nas consultas privadas usando a identidade verificada. God Account é verificado antes da composição administrativa. Jobs recebem system explicitamente. Filtros de autorização não substituem regras de negócio dos use cases.
+- Bootstrap de API key preserva AuthenticateApiKeyUseCase: contexto public admite apenas findByHash com hash produzido pelo provider, internamente à borda de autenticação; não concede listagem/escrita de chaves ou acesso a repositories privados. Chave inválida/revogada falha antes da composição de negócio, e não há fallback system.
+- Replacements de relações e persistência de um agregado usam transação local; SQL é parametrizado. Efeitos externos não entram na transação. Erros SQL são convertidos para os erros públicos existentes sem revelar SQL ou credenciais.
+- Migrations versionadas em `apps/server/src/database/drizzle/migrations/` representam o schema final legado, incluindo constraints, índices, FKs, defaults, views, funções e triggers necessários. Drizzle Kit gera artefatos de schema; SQL de objetos não representáveis e segurança é versionado em migrations customizadas. Não edite manualmente snapshots/SQL classificados como Generate.
+- Dev/produção adotam a baseline apenas após preflight de catálogo e histórico; não há reset remoto nem backfill implícito. Remoção de RLS exige revogar acesso direto, inclusive funções SECURITY DEFINER e grants de PUBLIC/default privileges; Auth, storage de infraestrutura e cron não são redesenhados.
+- Um pool por processo, fechamento no shutdown e migrations no pipeline. Validação por testes reais de rota e scripts; não criar testes dedicados de repositories, mappers, tipos ou fixtures.

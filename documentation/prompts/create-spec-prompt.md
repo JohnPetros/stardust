@@ -27,7 +27,7 @@ de Issue. Em caso de conflito, registre a divergência e resolva a ambiguidade
 antes de abrir a Spec.
 
 Leia todas as fontes da demanda, `documentation/architecture.md`, Rules aplicáveis,
-`documentation/sdd.md` e os paths reais da codebase. Use Serena, Context7, Pencil, Playwright ou Supabase quando
+`documentation/sdd.md` e os paths reais da codebase. Use CodeGraph, Context7, Pencil, Playwright ou Supabase quando
 aplicáveis.
 
 Resolva ambiguidades materiais antes de escrever ou modificar `spec.md`. O gate de

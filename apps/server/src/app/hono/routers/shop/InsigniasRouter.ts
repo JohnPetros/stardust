@@ -10,7 +10,7 @@ import {
   UpdateInsigniaController,
   DeleteInsigniaController,
 } from '@/rest/controllers/shop'
-import { SupabaseInsigniasRepository } from '@/database'
+import { DrizzleInsigniasRepository } from '@/database/drizzle/repositories'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
@@ -23,7 +23,10 @@ export class InsigniasRouter extends HonoRouter {
   private fetchInsigniasListRoute(): void {
     this.router.get('/', async (context) => {
       const http = new HonoHttp(context)
-      const repository = new SupabaseInsigniasRepository(http.getSupabase())
+      const repository = new DrizzleInsigniasRepository(
+        http.getDatabase(),
+        http.getDatabaseAccess(),
+      )
       const controller = new FetchInsigniasListController(repository)
       const response = await controller.handle(http)
       return http.sendResponse(response)
@@ -38,7 +41,10 @@ export class InsigniasRouter extends HonoRouter {
       this.validationMiddleware.validate('json', insigniaSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseInsigniasRepository(http.getSupabase())
+        const repository = new DrizzleInsigniasRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new CreateInsigniaController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -60,7 +66,10 @@ export class InsigniasRouter extends HonoRouter {
       this.validationMiddleware.validate('json', insigniaSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseInsigniasRepository(http.getSupabase())
+        const repository = new DrizzleInsigniasRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpdateInsigniaController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -81,7 +90,10 @@ export class InsigniasRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseInsigniasRepository(http.getSupabase())
+        const repository = new DrizzleInsigniasRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new DeleteInsigniaController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)

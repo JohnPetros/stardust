@@ -7,14 +7,72 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: stardust-production-release
+  cancel-in-progress: false
+
 jobs:
   deploy:
     name: Deploy to Coolify
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Resolve expected release SHA
+        id: release
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
       - name: Trigger Coolify deploy
+        env:
+          COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
+          COOLIFY_WEBHOOK_WEB_PROD: ${{ secrets.COOLIFY_WEBHOOK_WEB_PROD }}
+          PRODUCTION_RELEASES_PAUSED: ${{ vars.PRODUCTION_RELEASES_PAUSED }}
+          EXPECTED_SHA: ${{ steps.release.outputs.sha }}
+          HEALTH_URL: ${{ vars.WEB_PROD_HEALTH_URL }}
         run: |
-          curl -X GET "${{ secrets.COOLIFY_WEBHOOK_WEB_PROD }}" \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
-            --fail --silent --show-error
+          set -euo pipefail
+          if [ "$PRODUCTION_RELEASES_PAUSED" != "false" ]; then
+            echo "Normal Web releases require production releases to be explicitly unpaused." >&2
+            exit 1
+          fi
+          test -n "$COOLIFY_API_TOKEN"
+          test -n "$COOLIFY_WEBHOOK_WEB_PROD"
+          test -n "$EXPECTED_SHA"
+          test -n "$HEALTH_URL"
+          api_base="${COOLIFY_WEBHOOK_WEB_PROD%%/api/v1/*}/api/v1"
+          request="$(curl --fail --silent --show-error \
+            -H "Authorization: Bearer ${COOLIFY_API_TOKEN}" \
+            "$COOLIFY_WEBHOOK_WEB_PROD")"
+          deployment_uuid="$(jq -er '.deployments[0].deployment_uuid // .deployment_uuid' <<<"$request")"
+          test -n "$deployment_uuid"
+          [[ "$deployment_uuid" =~ ^[A-Za-z0-9_-]+$ ]]
+
+          for attempt in $(seq 1 240); do
+            deployment="$(curl --fail --silent --show-error \
+              -H "Authorization: Bearer ${COOLIFY_API_TOKEN}" \
+              "${api_base}/deployments/${deployment_uuid}")"
+            status="$(jq -er '.status' <<<"$deployment")"
+            case "$status" in
+              queued|in_progress|running) sleep 15 ;;
+              successful|finished)
+                deployed_sha="$(jq -er '.commit' <<<"$deployment")"
+                test "$deployed_sha" = "$EXPECTED_SHA"
+                break
+                ;;
+              *) echo "Web deployment ended in unexpected status: $status" >&2; exit 1 ;;
+            esac
+            if [ "$attempt" -eq 240 ]; then echo "Web deployment timed out." >&2; exit 1; fi
+          done
+
+          for attempt in $(seq 1 20); do
+            http_status="$(curl --silent --show-error --output /dev/null --max-time 20 --write-out '%{http_code}' "$HEALTH_URL" || true)"
+            case "$http_status" in 2??) exit 0 ;; esac
+            sleep 15
+          done
+          echo "Web health check did not return 2xx." >&2
+          exit 1

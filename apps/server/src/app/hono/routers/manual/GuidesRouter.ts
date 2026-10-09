@@ -11,7 +11,7 @@ import {
   EditGuideTitleController,
   EditGuideContentController,
 } from '@/rest/controllers/manual'
-import { SupabaseGuidesRepository } from '@/database'
+import { DrizzleGuidesRepository } from '@/database/drizzle/repositories'
 import { HonoHttp } from '../../HonoHttp'
 import { HonoRouter } from '../../HonoRouter'
 import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
@@ -33,7 +33,10 @@ export class GuidesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseGuidesRepository(http.getSupabase())
+        const repository = new DrizzleGuidesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchGuidesController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -52,7 +55,10 @@ export class GuidesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseGuidesRepository(http.getSupabase())
+        const repository = new DrizzleGuidesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchGuideController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -74,7 +80,10 @@ export class GuidesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseGuidesRepository(http.getSupabase())
+        const repository = new DrizzleGuidesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new CreateGuideController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -95,7 +104,10 @@ export class GuidesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseGuidesRepository(http.getSupabase())
+        const repository = new DrizzleGuidesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const broker = new InngestBroker()
         const controller = new DeleteGuideController(repository, broker)
         const response = await controller.handle(http)
@@ -117,7 +129,10 @@ export class GuidesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseGuidesRepository(http.getSupabase())
+        const repository = new DrizzleGuidesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new ReorderGuidesController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -144,7 +159,10 @@ export class GuidesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseGuidesRepository(http.getSupabase())
+        const repository = new DrizzleGuidesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new EditGuideTitleController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -171,7 +189,10 @@ export class GuidesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseGuidesRepository(http.getSupabase())
+        const repository = new DrizzleGuidesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const broker = new InngestBroker()
         const controller = new EditGuideContentController(repository, broker)
         const response = await controller.handle(http)

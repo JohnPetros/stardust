@@ -3,7 +3,8 @@ import type { Context, Next } from 'hono'
 import { AuthenticateApiKeyUseCase } from '@stardust/core/auth/use-cases'
 import { AuthError } from '@stardust/core/global/errors'
 
-import { SupabaseApiKeysRepository } from '@/database'
+import { DrizzleApiKeysRepository } from '@/database/drizzle/repositories/auth'
+import { Id } from '@stardust/core/global/structures'
 import { NodeCryptoApiKeySecretProvider } from '@/provision/auth'
 import { SupabaseAuthService } from '@/rest/services/SupabaseAuthService'
 import {
@@ -15,47 +16,78 @@ import { HonoHttp } from '../HonoHttp'
 import type { RateLimitMiddleware } from './RateLimitMiddleware'
 
 export class AuthMiddleware {
-  async verifyAuthentication(context: Context, next: Next) {
+  verifyAuthentication = async (context: Context, next: Next) => {
+    const accountDto = await this.fetchVerifiedAccount(context, next)
+    this.setVerifiedAccountContext(context, accountDto)
+    return this.continueApiKeyAuthentication(context, next)
+  }
+
+  private async fetchVerifiedAccount(context: Context, next: Next) {
     const authService = new SupabaseAuthService(context.get('supabase'))
     const controller = new VerifyAuthenticationController(authService)
     const http = new HonoHttp(context, next)
     const response = await controller.handle(http)
-    context.set('account', response.body)
-    const rateLimiter = (context as Context<any>).get('rateLimiter') as
-      | RateLimitMiddleware
-      | undefined
-    if (rateLimiter) return rateLimiter.limitByAccount(context, next)
-    return next()
+    return response.body
   }
 
-  async verifyGodAccount(context: Context, next: Next) {
+  private setVerifiedAccountContext(context: Context, accountDto: AccountDto) {
+    context.set('account', accountDto)
+    context.set('databaseAccess', {
+      kind: 'user',
+      accountId: Id.create(String(accountDto.id)),
+    })
+  }
+
+  verifyGodAccount = async (context: Context, next: Next) => {
     const controller = new VerifyGodAccountController()
-    const http = new HonoHttp(context, next)
+    const http = new HonoHttp(context, async () => {
+      context.set('databaseAccess', {
+        kind: 'god',
+        accountId: Id.create(String(context.get('account').id)),
+      })
+      await next()
+    })
     await controller.handle(http)
   }
 
-  async verifyApiKeyAuthentication(context: Context, next: Next) {
+  verifyApiKeyAuthentication = async (context: Context, next: Next) => {
     const http = new HonoHttp(context, next)
+    const apiKey = this.requireApiKey(http)
+    const userId = await this.authenticateApiKey(http, apiKey)
+    this.setApiKeyAccount(context, userId)
+    return this.continueApiKeyAuthentication(context, next)
+  }
+
+  private requireApiKey(http: HonoHttp<Context>) {
     const apiKey = http.getHeader('X-Api-Key')
+    if (!apiKey) throw new AuthError('A chave de API não foi informada')
+    return apiKey
+  }
 
-    if (!apiKey) {
-      throw new AuthError('A chave de API não foi informada')
-    }
-
-    const repository = new SupabaseApiKeysRepository(http.getSupabase())
+  private async authenticateApiKey(http: HonoHttp<Context>, apiKey: string) {
+    const repository = new DrizzleApiKeysRepository(http.getDatabase(), {
+      kind: 'public',
+    })
     const secretProvider = new NodeCryptoApiKeySecretProvider()
     const useCase = new AuthenticateApiKeyUseCase(repository, secretProvider)
+    return (await useCase.execute({ apiKey })).userId
+  }
 
-    const { userId } = await useCase.execute({ apiKey })
+  private setApiKeyAccount(context: Context, userId: string) {
+    context.set('account', this.createApiKeyAccount(userId))
+    context.set('databaseAccess', { kind: 'user', accountId: Id.create(userId) })
+  }
 
-    const accountDto: AccountDto = {
+  private createApiKeyAccount(userId: string): AccountDto {
+    return {
       id: userId,
       email: '',
       name: '',
       isAuthenticated: true,
     }
+  }
 
-    context.set('account', accountDto)
+  private continueApiKeyAuthentication(context: Context, next: Next) {
     const rateLimiter = (context as Context<any>).get('rateLimiter') as
       | RateLimitMiddleware
       | undefined

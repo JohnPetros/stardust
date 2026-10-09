@@ -145,3 +145,11 @@ UI → Realtime adapter/context → SDK externo
 - [ ] O acesso ao canal passa por `RealtimeContextProvider` ou por outro `composition root` explícito, sem instanciação local em `widget`.
 - [ ] Nenhum arquivo da camada importa `apps/server/**`, repositórios, jobs ou regras de negócio do fluxo.
 - [ ] Os nomes de arquivos, `factories` e tipos seguem as convenções globais em `documentation/rules/code-conventions-rules.md`.
+
+## Transição aprovada: Drizzle e SSE (Issue #602)
+
+Os exemplos Supabase acima descrevem o adapter legado. Para a Issue #602, o adapter concreto passa a `apps/web/src/realtime/sse/channels/SseProfileChannel.ts`, declarado como Create na Spec, e implementa o mesmo `ProfileChannel`. A factory PascalCase recebe a criação de EventSource por injeção. UI continua consumindo contexto/port; transporte e payloads externos permanecem isolados.
+
+A rota Next same-origin é proxy de transporte para SSE do Server. Ela lê cookies HttpOnly, encaminha autenticação ao Server, propaga cancelamento e não importa código de apps/server. É uma exceção explícita e delimitada ao exemplo SDK externo: o adapter abre EventSource para essa rota, sem chamar services REST ou decidir onboarding. Server filtra pela conta autorizada antes da entrega; filtro defensivo e decisão visual permanecem no Hook consumidor. Terminal event/cleanup fecham a conexão. Reconexão consulta estado persistido; não há Redis pub/sub, replay global ou assinatura pública de users.
+
+O mock existente de ProfileChannel permanece restrito ao ambiente testing. Testes do proxy validam também frames SSE e propagação de abort, sem criar testes dedicados do adapter. Autorização, retomada por cookie e expiração são contratos da Spec, não políticas inventadas pelo canal.

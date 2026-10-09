@@ -92,6 +92,12 @@
   },
   "overrides": [
     {
+      "includes": ["apps/server/src/database/drizzle/migrations/meta/*.json"],
+      "formatter": {
+        "enabled": false
+      }
+    },
+    {
       "linter": {
         "rules": {
           "style": {

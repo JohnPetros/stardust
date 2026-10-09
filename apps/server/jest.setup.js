@@ -14,7 +14,7 @@ if (fs.existsSync(envTestPath)) {
       const [key, ...valueParts] = trimmedLine.split('=')
       if (key && valueParts.length > 0) {
         const value = valueParts.join('=').replace(/^["']|["']$/g, '') // Remove quotes
-        process.env[key] = value
+        process.env[key] ??= value
       }
     }
   })

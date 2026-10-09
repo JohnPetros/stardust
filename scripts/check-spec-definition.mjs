@@ -125,7 +125,7 @@ async function checkSpecDefinition(specPath) {
   if (rows.length === 0) errors.push('affected-path table has no valid rows')
   const seenPaths = new Set()
   for (const row of rows) {
-    if (path.isAbsolute(row.path) || row.path.includes('..'))
+    if (path.isAbsolute(row.path) || row.path.split('/').includes('..'))
       errors.push(`path must be repository-relative: ${row.path}`)
     if (seenPaths.has(row.path)) errors.push(`duplicate affected path: ${row.path}`)
     seenPaths.add(row.path)

@@ -1,6 +1,6 @@
 import type { Context, Next } from 'hono'
 
-import { SupabaseUsersRepository } from '@/database'
+import { DrizzleUsersRepository } from '@/database/drizzle/repositories'
 import {
   AppendUserCompletedChallengesIdsToBodyController,
   AppendIsSolutionUpvotedToBodyController,
@@ -18,7 +18,10 @@ import { InsigniaRole } from '@stardust/core/global/structures'
 export class ProfileMiddleware {
   async appendUserCompletedChallengesIdsToBody(context: Context, next: Next) {
     const http = new HonoHttp(context, next)
-    const usersRepository = new SupabaseUsersRepository(http.getSupabase())
+    const usersRepository = new DrizzleUsersRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
     const controller = new AppendUserCompletedChallengesIdsToBodyController(
       usersRepository,
     )
@@ -27,21 +30,30 @@ export class ProfileMiddleware {
 
   async appendIsSolutionUpvotedToBody(context: Context, next: Next) {
     const http = new HonoHttp(context, next)
-    const usersRepository = new SupabaseUsersRepository(http.getSupabase())
+    const usersRepository = new DrizzleUsersRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
     const controller = new AppendIsSolutionUpvotedToBodyController(usersRepository)
     await controller.handle(http)
   }
 
   async verifyUserSocialAccount(context: Context, next: Next) {
     const http = new HonoHttp(context, next)
-    const usersRepository = new SupabaseUsersRepository(http.getSupabase())
+    const usersRepository = new DrizzleUsersRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
     const controller = new VerifyUserSocialAccountController(usersRepository)
     await controller.handle(http)
   }
 
   async verifyUserEngineerInsignia(context: Context, next: Next) {
     const http = new HonoHttp(context, next)
-    const usersRepository = new SupabaseUsersRepository(http.getSupabase())
+    const usersRepository = new DrizzleUsersRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
     const controller = new VerifyUserInsigniaController(
       [InsigniaRole.createAsEngineer()],
       usersRepository,
@@ -51,7 +63,10 @@ export class ProfileMiddleware {
 
   async verifyUserEngineerOrGodInsignia(context: Context, next: Next) {
     const http = new HonoHttp(context, next)
-    const usersRepository = new SupabaseUsersRepository(http.getSupabase())
+    const usersRepository = new DrizzleUsersRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
     const controller = new VerifyUserInsigniaController(
       [InsigniaRole.createAsEngineer(), InsigniaRole.createAsGod()],
       usersRepository,
@@ -61,7 +76,10 @@ export class ProfileMiddleware {
 
   async appendUserInfoToBody(context: Context, next: Next) {
     const http = new HonoHttp(context, next)
-    const usersRepository = new SupabaseUsersRepository(http.getSupabase())
+    const usersRepository = new DrizzleUsersRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
     const controller = new AppendUserInfoToBodyController(usersRepository)
     await controller.handle(http)
   }
@@ -69,14 +87,20 @@ export class ProfileMiddleware {
   async verifyUserAbsence(context: Context, next: Next) {
     const http = new HonoHttp(context, next)
     const authService = new SupabaseAuthService(http.getSupabase())
-    const usersRepository = new SupabaseUsersRepository(http.getSupabase())
+    const usersRepository = new DrizzleUsersRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
     const controller = new VerifyUserAbsenceController(authService, usersRepository)
     await controller.handle(http)
   }
 
   async completeSpace(context: Context, next: Next) {
     const http = new HonoHttp(context, next)
-    const repository = new SupabaseUsersRepository(http.getSupabase())
+    const repository = new DrizzleUsersRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
     const Broker = new InngestBroker()
     const controller = new CompleteSpaceController(repository, Broker)
     await controller.handle(http)

@@ -1,9 +1,9 @@
-import { execFileSync } from 'node:child_process'
 import type { SupabaseClient } from '@supabase/supabase-js'
-
+import { eq, inArray, or } from 'drizzle-orm'
 import type { AvatarDto, InsigniaDto, RocketDto } from '@stardust/core/shop/entities/dtos'
-
-import { ENV } from '@/constants'
+import { InsigniaRole } from '@stardust/core/global/structures'
+import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
+import { avatarModel, rocketModel, insigniaModel } from '@/database/drizzle/schema'
 
 type PersistedAvatar = Omit<AvatarDto, 'isPurchasable'> & { id: string }
 type PersistedRocket = Omit<Required<RocketDto>, 'isPurchasable'> & {
@@ -12,134 +12,85 @@ type PersistedRocket = Omit<Required<RocketDto>, 'isPurchasable'> & {
 type PersistedInsignia = Required<InsigniaDto>
 
 export class ShopFixture {
-  constructor(private readonly supabase: SupabaseClient) {}
+  constructor(_supabase: SupabaseClient) {}
+  private get database() {
+    return DrizzleClient.getInstance()
+  }
 
   async createAvatars(avatars: AvatarDto[]): Promise<void> {
-    const { error } = await this.supabase.from('avatars').insert(
+    if (!avatars.length) return
+    await this.database.insert(avatarModel).values(
       avatars.map((avatar) => ({
         id: avatar.id,
         name: avatar.name,
         image: avatar.image,
         price: avatar.price,
-        is_acquired_by_default: avatar.isAcquiredByDefault ?? false,
-        is_selected_by_default: avatar.isSelectedByDefault ?? false,
+        isAcquiredByDefault: avatar.isAcquiredByDefault ?? false,
+        isSelectedByDefault: avatar.isSelectedByDefault ?? false,
       })),
     )
-
-    if (error) {
-      throw error
-    }
   }
-
   async getAvatarById(avatarId: string): Promise<PersistedAvatar | null> {
-    const { data, error } = await this.supabase
-      .from('avatars')
-      .select('id, name, image, price, is_acquired_by_default, is_selected_by_default')
-      .eq('id', avatarId)
-      .maybeSingle()
-
-    if (error) {
-      throw error
-    }
-
-    if (!data) {
-      return null
-    }
-
-    return {
-      id: data.id,
-      name: data.name,
-      image: data.image,
-      price: data.price,
-      isAcquiredByDefault: data.is_acquired_by_default,
-      isSelectedByDefault: data.is_selected_by_default,
-    }
+    const [row] = await this.database
+      .select()
+      .from(avatarModel)
+      .where(eq(avatarModel.id, avatarId))
+    if (!row) return null
+    const { isPurchasable: _isPurchasable, ...avatar } = row
+    return avatar
   }
-
   async createRockets(rockets: RocketDto[]): Promise<void> {
-    const { error } = await this.supabase.from('rockets').insert(
+    if (!rockets.length) return
+    await this.database.insert(rocketModel).values(
       rockets.map((rocket) => ({
         id: rocket.id,
         name: rocket.name,
         image: rocket.image,
         price: rocket.price,
-        is_acquired_by_default: rocket.isAcquiredByDefault ?? false,
-        is_selected_by_default: rocket.isSelectedByDefault ?? false,
+        isAcquiredByDefault: rocket.isAcquiredByDefault ?? false,
+        isSelectedByDefault: rocket.isSelectedByDefault ?? false,
       })),
     )
-
-    if (error) {
-      throw error
-    }
   }
-
   async getRocketById(rocketId: string): Promise<PersistedRocket | null> {
-    const { data, error } = await this.supabase
-      .from('rockets')
-      .select('id, name, image, price, is_acquired_by_default, is_selected_by_default')
-      .eq('id', rocketId)
-      .maybeSingle()
-
-    if (error) {
-      throw error
-    }
-
-    if (!data) {
-      return null
-    }
-
-    return {
-      id: data.id,
-      name: data.name,
-      image: data.image,
-      price: data.price,
-      isPurchasable: true,
-      isAcquiredByDefault: data.is_acquired_by_default,
-      isSelectedByDefault: data.is_selected_by_default,
-    }
+    const [row] = await this.database
+      .select()
+      .from(rocketModel)
+      .where(eq(rocketModel.id, rocketId))
+    return row ? { ...row, isPurchasable: true } : null
   }
-
   async createInsignias(insignias: InsigniaDto[]): Promise<void> {
-    const ids = insignias.map((insignia) => `'${insignia.id}'`).join(', ')
-    const roles = insignias.map((insignia) => `'${insignia.role}'`).join(', ')
-    const values = insignias
-      .map((insignia) => {
-        const name = insignia.name.replaceAll("'", "''")
-        const image = insignia.image.replaceAll("'", "''")
-
-        return `('${insignia.id}', '${name}', ${insignia.price}, '${image}', '${insignia.role}', ${insignia.isPurchasable ?? false})`
-      })
-      .join(', ')
-
-    execFileSync('psql', [
-      ENV.databaseUrl,
-      '-c',
-      `delete from public.insignias where id in (${ids}) or role in (${roles}); insert into public.insignias (id, name, price, image, role, is_purchasable) values ${values};`,
-    ])
+    if (!insignias.length) return
+    await this.database.transaction(async (transaction) => {
+      await transaction.delete(insigniaModel).where(
+        or(
+          inArray(
+            insigniaModel.id,
+            insignias.map((item) => item.id ?? ''),
+          ),
+          inArray(
+            insigniaModel.role,
+            insignias.map((item) => InsigniaRole.create(item.role).value),
+          ),
+        ),
+      )
+      await transaction.insert(insigniaModel).values(
+        insignias.map((item) => ({
+          id: item.id,
+          name: item.name,
+          image: item.image,
+          price: item.price,
+          role: InsigniaRole.create(item.role).value,
+          isPurchasable: item.isPurchasable ?? false,
+        })),
+      )
+    })
   }
-
   async getInsigniaById(insigniaId: string): Promise<PersistedInsignia | null> {
-    const { data, error } = await this.supabase
-      .from('insignias')
-      .select('*')
-      .eq('id', insigniaId)
-      .maybeSingle()
-
-    if (error) {
-      throw error
-    }
-
-    if (!data) {
-      return null
-    }
-
-    return {
-      id: data.id,
-      name: data.name,
-      image: data.image,
-      price: data.price,
-      role: data.role,
-      isPurchasable: data.is_purchasable,
-    }
+    const [row] = await this.database
+      .select()
+      .from(insigniaModel)
+      .where(eq(insigniaModel.id, insigniaId))
+    return row ?? null
   }
 }

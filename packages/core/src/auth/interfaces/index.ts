@@ -1,3 +1,5 @@
 export type { AuthService, ApiKeyData } from './AuthService'
 export type { ApiKeysRepository } from './ApiKeysRepository'
 export type { ApiKeySecretProvider } from './ApiKeySecretProvider'
+export type { OnboardingReceiptProvider } from './OnboardingReceiptProvider'
+export type { OnboardingService } from './OnboardingService'

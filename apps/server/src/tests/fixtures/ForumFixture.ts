@@ -1,4 +1,12 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { sql, type SQL } from 'drizzle-orm'
+import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
+import { challengeModel, solutionModel } from '@/database/drizzle/models/challenging'
+import {
+  commentModel,
+  challengeCommentModel,
+  solutionCommentModel,
+} from '@/database/drizzle/models/forum'
 
 import type { ChallengeDto, SolutionDto } from '@stardust/core/challenging/entities/dtos'
 import {
@@ -37,7 +45,9 @@ type CreateReplyInput = CreateCommentInput & {
 }
 
 export class ForumFixture {
-  constructor(private readonly supabase: SupabaseClient) {}
+  private readonly database = DrizzleClient.getInstance()
+
+  constructor(_supabase: SupabaseClient) {}
 
   async createChallenge(
     authorId: string,
@@ -50,27 +60,25 @@ export class ForumFixture {
       isNew: false,
       ...baseDto,
     })
+    const challengeSlug = challenge.slug
+    if (challengeSlug === undefined) throw new Error('Challenge fixture requires a slug')
     challenge.author = {
       ...challenge.author,
       id: authorId,
     }
 
-    const { error } = await this.supabase.from('challenges').insert({
+    await this.database.insert(challengeModel).values({
       id: challenge.id,
       title: challenge.title,
-      difficulty_level: challenge.difficultyLevel,
-      initial_code: challenge.initialCode,
+      difficultyLevel: challenge.difficultyLevel,
+      initialCode: challenge.initialCode,
       description: challenge.description,
-      slug: challenge.slug,
-      user_id: challenge.author.id,
-      star_id: challenge.starId,
-      is_public: challenge.isPublic ?? false,
-      test_cases: challenge.testCases,
+      slug: challengeSlug,
+      userId: authorId,
+      starId: challenge.starId,
+      isPublic: challenge.isPublic ?? false,
+      testCases: challenge.testCases,
     })
-
-    if (error) {
-      throw error
-    }
 
     return challenge
   }
@@ -86,24 +94,22 @@ export class ForumFixture {
       challengeId,
       ...baseDto,
     })
+    const solutionSlug = solution.slug
+    if (solutionSlug === undefined) throw new Error('Solution fixture requires a slug')
     solution.author = {
       ...solution.author,
       id: authorId,
     }
 
-    const { error } = await this.supabase.from('solutions').insert({
+    await this.database.insert(solutionModel).values({
       id: solution.id,
       title: solution.title,
       content: solution.content,
-      slug: solution.slug,
-      user_id: solution.author.id,
-      challenge_id: solution.challengeId,
-      views_count: solution.viewsCount ?? 0,
+      slug: solutionSlug,
+      userId: authorId,
+      challengeId: solution.challengeId,
+      viewsCount: solution.viewsCount ?? 0,
     })
-
-    if (error) {
-      throw error
-    }
 
     return solution
   }
@@ -122,14 +128,10 @@ export class ForumFixture {
 
     await this.insertComment(comment)
 
-    const { error } = await this.supabase.from('challenges_comments').insert({
-      challenge_id: challengeId,
-      comment_id: comment.id,
+    await this.database.insert(challengeCommentModel).values({
+      challengeId,
+      commentId: comment.id ?? '',
     })
-
-    if (error) {
-      throw error
-    }
 
     return this.getRequiredCommentById(comment.id ?? '')
   }
@@ -148,14 +150,10 @@ export class ForumFixture {
 
     await this.insertComment(comment)
 
-    const { error } = await this.supabase.from('solutions_comments').insert({
-      solution_id: solutionId,
-      comment_id: comment.id,
+    await this.database.insert(solutionCommentModel).values({
+      solutionId,
+      commentId: comment.id ?? '',
     })
-
-    if (error) {
-      throw error
-    }
 
     return this.getRequiredCommentById(comment.id ?? '')
   }
@@ -169,139 +167,56 @@ export class ForumFixture {
       id: input.authorId,
     }
 
-    const { error } = await this.supabase.from('comments').insert({
+    await this.database.insert(commentModel).values({
       id: reply.id,
       content: reply.content,
-      user_id: reply.author.id,
-      parent_comment_id: input.commentId,
+      userId: reply.author.id,
+      parentCommentId: input.commentId,
     })
-
-    if (error) {
-      throw error
-    }
 
     return this.getRequiredCommentById(reply.id ?? '')
   }
 
   async findCommentById(commentId: string): Promise<ForumCommentSnapshot | null> {
-    const { data, error } = await this.supabase
-      .from('comments_view')
-      .select(
-        'id, content, parent_comment_id, upvotes_count, replies_count, author_id, author_name, author_slug, author_avatar_name, author_avatar_image',
-      )
-      .eq('id', commentId)
-      .maybeSingle()
-
-    if (error) {
-      throw error
-    }
-
-    if (!data) {
-      return null
-    }
-
-    return {
-      id: data.id,
-      content: data.content,
-      parentCommentId: data.parent_comment_id,
-      upvotesCount: Number(data.upvotes_count ?? 0),
-      repliesCount: Number(data.replies_count ?? 0),
-      author: {
-        id: data.author_id,
-        entity: {
-          name: data.author_name,
-          slug: data.author_slug,
-          avatar: {
-            name: data.author_avatar_name,
-            image: data.author_avatar_image,
-          },
-        },
-      },
-    }
+    const comments = await this.selectComments(sql`c.id = ${commentId}`)
+    return comments[0] ?? null
   }
 
   async listChallengeComments(challengeId: string): Promise<ForumCommentSnapshot[]> {
-    const { data, error } = await this.supabase
-      .from('comments_view')
-      .select(
-        'id, content, parent_comment_id, upvotes_count, replies_count, author_id, author_name, author_slug, author_avatar_name, author_avatar_image, challenges_comments!inner(challenge_id)',
-      )
-      .eq('challenges_comments.challenge_id', challengeId)
-      .is('parent_comment_id', null)
-      .order('created_at', { ascending: false })
-
-    if (error) {
-      throw error
-    }
-
-    return data.map((comment) => ({
-      id: comment.id,
-      content: comment.content,
-      parentCommentId: comment.parent_comment_id,
-      upvotesCount: Number(comment.upvotes_count ?? 0),
-      repliesCount: Number(comment.replies_count ?? 0),
-      author: {
-        id: comment.author_id,
-        entity: {
-          name: comment.author_name,
-          slug: comment.author_slug,
-          avatar: {
-            name: comment.author_avatar_name,
-            image: comment.author_avatar_image,
-          },
-        },
-      },
-    }))
+    return this.selectComments(sql`c.parent_comment_id is null and exists (
+      select 1 from public.challenges_comments cc
+      where cc.comment_id = c.id and cc.challenge_id = ${challengeId}
+    )`)
   }
 
   async listSolutionComments(solutionId: string): Promise<ForumCommentSnapshot[]> {
-    const { data, error } = await this.supabase
-      .from('comments_view')
-      .select(
-        'id, content, parent_comment_id, upvotes_count, replies_count, author_id, author_name, author_slug, author_avatar_name, author_avatar_image, solutions_comments!inner(solution_id)',
-      )
-      .eq('solutions_comments.solution_id', solutionId)
-      .is('parent_comment_id', null)
-      .order('created_at', { ascending: false })
-
-    if (error) {
-      throw error
-    }
-
-    return data.map((comment) => ({
-      id: comment.id,
-      content: comment.content,
-      parentCommentId: comment.parent_comment_id,
-      upvotesCount: Number(comment.upvotes_count ?? 0),
-      repliesCount: Number(comment.replies_count ?? 0),
-      author: {
-        id: comment.author_id,
-        entity: {
-          name: comment.author_name,
-          slug: comment.author_slug,
-          avatar: {
-            name: comment.author_avatar_name,
-            image: comment.author_avatar_image,
-          },
-        },
-      },
-    }))
+    return this.selectComments(sql`c.parent_comment_id is null and exists (
+      select 1 from public.solutions_comments sc
+      where sc.comment_id = c.id and sc.solution_id = ${solutionId}
+    )`)
   }
 
   async listReplies(commentId: string): Promise<ForumCommentSnapshot[]> {
-    const { data, error } = await this.supabase
-      .from('comments_view')
-      .select(
-        'id, content, parent_comment_id, upvotes_count, replies_count, author_id, author_name, author_slug, author_avatar_name, author_avatar_image',
-      )
-      .eq('parent_comment_id', commentId)
-      .order('created_at', { ascending: false })
+    return this.selectComments(sql`c.parent_comment_id = ${commentId}`)
+  }
 
-    if (error) {
-      throw error
-    }
-
-    return data.map((comment) => ({
+  private async selectComments(condition: SQL): Promise<ForumCommentSnapshot[]> {
+    const comments = await this.database.execute<{
+      id: string
+      content: string
+      parent_comment_id: string | null
+      upvotes_count: number | string
+      replies_count: number | string
+      author_id: string
+      author_name: string
+      author_slug: string
+      author_avatar_name: string
+      author_avatar_image: string
+    }>(sql`select c.id, c.content, c.parent_comment_id, c.upvotes_count,
+      c.replies_count, c.author_id, c.author_name, c.author_slug,
+      c.author_avatar_name, c.author_avatar_image
+      from public.comments_view c where ${condition} order by c.created_at desc`)
+    return comments.map((comment) => ({
       id: comment.id,
       content: comment.content,
       parentCommentId: comment.parent_comment_id,
@@ -322,16 +237,12 @@ export class ForumFixture {
   }
 
   private async insertComment(comment: CommentDto): Promise<void> {
-    const { error } = await this.supabase.from('comments').insert({
+    await this.database.insert(commentModel).values({
       id: comment.id,
       content: comment.content,
-      user_id: comment.author.id,
-      parent_comment_id: null,
+      userId: comment.author.id,
+      parentCommentId: null,
     })
-
-    if (error) {
-      throw error
-    }
   }
 
   private async getRequiredCommentById(commentId: string): Promise<ForumCommentSnapshot> {

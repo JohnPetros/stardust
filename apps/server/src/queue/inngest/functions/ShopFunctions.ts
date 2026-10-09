@@ -1,11 +1,11 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
 
 import { FirstTierReachedEvent } from '@stardust/core/ranking/events'
 import type { EventPayload } from '@stardust/core/global/types'
 import {
-  SupabaseAvatarsRepository,
-  SupabaseRocketsRepository,
-} from '@/database/supabase/repositories/shop'
+  DrizzleAvatarsRepository,
+  DrizzleRocketsRepository,
+} from '@/database/drizzle/repositories'
 
 import { AcquireDefaultShopItemsJob } from '@/queue/jobs/shop'
 import { InngestAmqp } from '../InngestAmqp'
@@ -18,7 +18,7 @@ import { emailSchema, idSchema, nameSchema } from '@stardust/validation/global/s
 type FirstTierReachedPayload = EventPayload<typeof FirstTierReachedEvent>
 
 export class ShopFunctions extends InngestFunctions {
-  private acquireDefaultShopItemsJob(supabase: SupabaseClient) {
+  private acquireDefaultShopItemsJob(database: DrizzleDatabase) {
     return this.createFunction(
       {
         id: AcquireDefaultShopItemsJob.KEY,
@@ -40,8 +40,12 @@ export class ShopFunctions extends InngestFunctions {
         },
       },
       async (context) => {
-        const rocketsRepository = new SupabaseRocketsRepository(supabase)
-        const avatarsRepository = new SupabaseAvatarsRepository(supabase)
+        const rocketsRepository = new DrizzleRocketsRepository(database, {
+          kind: 'system',
+        })
+        const avatarsRepository = new DrizzleAvatarsRepository(database, {
+          kind: 'system',
+        })
         const amqp = new InngestAmqp<FirstTierReachedPayload>(context)
         const Broker = new InngestBroker()
         const job = new AcquireDefaultShopItemsJob(
@@ -54,7 +58,7 @@ export class ShopFunctions extends InngestFunctions {
     )
   }
 
-  getFunctions(supabase: SupabaseClient) {
-    return [this.acquireDefaultShopItemsJob(supabase)]
+  getFunctions(database: DrizzleDatabase) {
+    return [this.acquireDefaultShopItemsJob(database)]
   }
 }

@@ -18,7 +18,7 @@ import {
   UpdateAvatarController,
   DeleteAvatarController,
 } from '@/rest/controllers/shop'
-import { SupabaseAvatarsRepository } from '@/database/supabase/repositories/shop'
+import { DrizzleAvatarsRepository } from '@/database/drizzle/repositories'
 import { ValidationMiddleware } from '../../middlewares'
 import { AuthMiddleware } from '../../middlewares'
 
@@ -41,7 +41,10 @@ export class AvatarsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseAvatarsRepository(http.getSupabase())
+        const repository = new DrizzleAvatarsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchAvatarsListController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -57,7 +60,10 @@ export class AvatarsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', avatarSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseAvatarsRepository(http.getSupabase())
+        const repository = new DrizzleAvatarsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new CreateAvatarController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -79,7 +85,10 @@ export class AvatarsRouter extends HonoRouter {
       this.validationMiddleware.validate('json', avatarSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseAvatarsRepository(http.getSupabase())
+        const repository = new DrizzleAvatarsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpdateAvatarController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -100,7 +109,10 @@ export class AvatarsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseAvatarsRepository(http.getSupabase())
+        const repository = new DrizzleAvatarsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new DeleteAvatarController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)

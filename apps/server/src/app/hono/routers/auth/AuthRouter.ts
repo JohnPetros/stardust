@@ -1,4 +1,6 @@
-import { Hono } from 'hono'
+import { NodeOnboardingReceiptProvider } from '@/provision/auth/NodeOnboardingReceiptProvider'
+import { ENV } from '@/constants'
+import { Hono, type Context } from 'hono'
 import { z } from 'zod'
 
 import {
@@ -49,44 +51,43 @@ export class AuthRouter extends HonoRouter {
   private readonly profileMiddleware = new ProfileMiddleware()
 
   private registerSignInRoute(): void {
-    this.router.post(
+    this.registerSignInPath(
       '/sign-in',
-      this.validationMiddleware.validate(
-        'json',
-        z.object({
-          email: emailSchema,
-          password: passwordSchema,
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const service = new SupabaseAuthService(http.getSupabase())
-        const broker = new InngestBroker()
-        const controller = new SignInController(service, broker)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      (service) => new SignInController(service, new InngestBroker()),
     )
   }
 
   private registerSignInGodAccountRoute(): void {
-    this.router.post(
+    this.registerSignInPath(
       '/sign-in/god',
-      this.validationMiddleware.validate(
-        'json',
-        z.object({
-          email: emailSchema,
-          password: passwordSchema,
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const service = new SupabaseAuthService(http.getSupabase())
-        const controller = new SignInGodAccountController(service)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      (service) => new SignInGodAccountController(service),
     )
+  }
+
+  private registerSignInPath(
+    path: string,
+    controllerFactory: (
+      service: SupabaseAuthService,
+    ) => SignInController | SignInGodAccountController,
+  ): void {
+    this.router.post(
+      path,
+      this.validationMiddleware.validate('json', credentialsSignInSchema),
+      (context) => this.handleSignInPath(context, controllerFactory),
+    )
+  }
+
+  private async handleSignInPath(
+    context: Context,
+    controllerFactory: (
+      service: SupabaseAuthService,
+    ) => SignInController | SignInGodAccountController,
+  ) {
+    const http = new HonoHttp(context)
+    const service = new SupabaseAuthService(http.getSupabase())
+    const controller = controllerFactory(service)
+    const response = await controller.handle(http)
+    return http.sendResponse(response)
   }
 
   private registerSignUpRoute(): void {
@@ -104,7 +105,11 @@ export class AuthRouter extends HonoRouter {
         const http = new HonoHttp(context)
         const service = new SupabaseAuthService(http.getSupabase())
         const Broker = new InngestBroker()
-        const controller = new SignUpController(service, Broker)
+        const controller = new SignUpController(
+          service,
+          Broker,
+          new NodeOnboardingReceiptProvider(ENV.onboardingReceiptSecret),
+        )
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -123,42 +128,16 @@ export class AuthRouter extends HonoRouter {
   }
 
   private registerSignInWithGoogleRoute(): void {
-    this.router.get(
+    this.registerSocialSignInPath(
       '/sign-in/google',
-      this.validationMiddleware.validate(
-        'query',
-        z.object({
-          returnUrl: stringSchema,
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const service = new SupabaseAuthService(supabase)
-        const controller = new SignInWithGoogleAccountController(service)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      (service) => new SignInWithGoogleAccountController(service),
     )
   }
 
   private registerSignInWithGithubRoute(): void {
-    this.router.get(
+    this.registerSocialSignInPath(
       '/sign-in/github',
-      this.validationMiddleware.validate(
-        'query',
-        z.object({
-          returnUrl: stringSchema,
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const service = new SupabaseAuthService(supabase)
-        const controller = new SignInWithGithubAccountController(service)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      (service) => new SignInWithGithubAccountController(service),
     )
   }
 
@@ -167,56 +146,84 @@ export class AuthRouter extends HonoRouter {
       '/sign-up/social-account',
       this.validationMiddleware.validate('json', accountSchema),
       this.profileMiddleware.verifyUserSocialAccount,
-      async (context) => {
-        const http = new HonoHttp(context)
-        const Broker = new InngestBroker()
-        const controller = new SignUpWithSocialAccountController(Broker)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      (context) => this.handleSignUpWithSocialAccount(context),
     )
   }
 
+  private async handleSignUpWithSocialAccount(context: Context) {
+    const http = new HonoHttp(context)
+    const Broker = new InngestBroker()
+    const controller = new SignUpWithSocialAccountController(Broker)
+    const response = await controller.handle(http)
+    return http.sendResponse(response)
+  }
+
+  private registerSocialSignInPath(
+    path: string,
+    controllerFactory: (
+      service: SupabaseAuthService,
+    ) => SignInWithGoogleAccountController | SignInWithGithubAccountController,
+  ): void {
+    this.router.get(
+      path,
+      this.validationMiddleware.validate('query', socialSignInQuerySchema),
+      (context) => this.handleSocialSignInPath(context, controllerFactory),
+    )
+  }
+
+  private async handleSocialSignInPath(
+    context: Context,
+    controllerFactory: (
+      service: SupabaseAuthService,
+    ) => SignInWithGoogleAccountController | SignInWithGithubAccountController,
+  ) {
+    const http = new HonoHttp(context)
+    const service = new SupabaseAuthService(http.getSupabase())
+    const controller = controllerFactory(service)
+    const response = await controller.handle(http)
+    return http.sendResponse(response)
+  }
+
   private registerConnectGoogleAccountRoute(): void {
-    this.router.post(
+    this.registerSocialAccountConnectionPath(
       '/social-account/google',
-      this.authMiddleware.verifyAuthentication,
-      this.validationMiddleware.validate(
-        'query',
-        z.object({
-          returnUrl: stringSchema,
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const service = new SupabaseAuthService(supabase)
-        const controller = new ConnectGoogleAccountController(service)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      (service) => new ConnectGoogleAccountController(service),
     )
   }
 
   private registerConnectGithubAccountRoute(): void {
-    this.router.post(
+    this.registerSocialAccountConnectionPath(
       '/social-account/github',
-      this.authMiddleware.verifyAuthentication,
-      this.validationMiddleware.validate(
-        'query',
-        z.object({
-          returnUrl: stringSchema,
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const service = new SupabaseAuthService(supabase)
-        const controller = new ConnectGithubAccountController(service)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      (service) => new ConnectGithubAccountController(service),
     )
+  }
+
+  private registerSocialAccountConnectionPath(
+    path: string,
+    controllerFactory: (
+      service: SupabaseAuthService,
+    ) => ConnectGoogleAccountController | ConnectGithubAccountController,
+  ): void {
+    this.router.post(
+      path,
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate('query', socialSignInQuerySchema),
+      (context) => this.handleSocialAccountConnectionPath(context, controllerFactory),
+    )
+  }
+
+  private async handleSocialAccountConnectionPath(
+    context: Context,
+    controllerFactory: (
+      service: SupabaseAuthService,
+    ) => ConnectGoogleAccountController | ConnectGithubAccountController,
+  ) {
+    const http = new HonoHttp(context)
+    const supabase = http.getSupabase()
+    const service = new SupabaseAuthService(supabase)
+    const controller = controllerFactory(service)
+    const response = await controller.handle(http)
+    return http.sendResponse(response)
   }
 
   private registerDisconnectGithubAccountRoute(): void {
@@ -264,126 +271,118 @@ export class AuthRouter extends HonoRouter {
   }
 
   private registerResendSignUpEmailRoute(): void {
-    this.router.post(
+    this.registerEmailActionPath(
       '/resend-email/sign-up',
-      this.validationMiddleware.validate(
-        'json',
-        z.object({
-          email: emailSchema,
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const service = new SupabaseAuthService(supabase)
-        const controller = new ResendSignUpEmailController(service)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      (service) => new ResendSignUpEmailController(service),
     )
   }
 
   private registerRefreshSessionRoute(): void {
     this.router.post(
       '/refresh-session',
-      this.validationMiddleware.validate(
-        'json',
-        z.object({
-          refreshToken: stringSchema,
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const service = new SupabaseAuthService(supabase)
-        const controller = new RefreshSessionController(service)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      this.validationMiddleware.validate('json', refreshSessionSchema),
+      (context) => this.handleRefreshSessionPath(context),
     )
+  }
+
+  private async handleRefreshSessionPath(context: Context) {
+    const http = new HonoHttp(context)
+    const supabase = http.getSupabase()
+    const service = new SupabaseAuthService(supabase)
+    const controller = new RefreshSessionController(service)
+    const response = await controller.handle(http)
+    return http.sendResponse(response)
   }
 
   private registerRequestPasswordResetRoute(): void {
-    this.router.post(
+    this.registerEmailActionPath(
       '/request-password-reset',
-      this.validationMiddleware.validate(
-        'json',
-        z.object({
-          email: emailSchema,
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const service = new SupabaseAuthService(supabase)
-        const controller = new RequestPasswordResetController(service)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      (service) => new RequestPasswordResetController(service),
     )
   }
 
-  private registerConfirmEmailRoute(): void {
+  private registerEmailActionPath(
+    path: string,
+    controllerFactory: (
+      service: SupabaseAuthService,
+    ) => ResendSignUpEmailController | RequestPasswordResetController,
+  ): void {
     this.router.post(
+      path,
+      this.validationMiddleware.validate('json', emailOnlySchema),
+      (context) => this.handleEmailActionPath(context, controllerFactory),
+    )
+  }
+
+  private async handleEmailActionPath(
+    context: Context,
+    controllerFactory: (
+      service: SupabaseAuthService,
+    ) => ResendSignUpEmailController | RequestPasswordResetController,
+  ) {
+    const http = new HonoHttp(context)
+    const service = new SupabaseAuthService(http.getSupabase())
+    const controller = controllerFactory(service)
+    const response = await controller.handle(http)
+    return http.sendResponse(response)
+  }
+
+  private registerConfirmEmailRoute(): void {
+    this.registerConfirmationPath(
       '/confirm-email',
-      this.validationMiddleware.validate(
-        'json',
-        z.object({
-          token: z.string(),
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const service = new SupabaseAuthService(supabase)
-        const broker = new InngestBroker()
-        const controller = new ConfirmEmailController(service, broker)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      (service) => new ConfirmEmailController(service, new InngestBroker()),
     )
   }
 
   private registerConfirmPasswordResetRoute(): void {
-    this.router.post(
+    this.registerConfirmationPath(
       '/confirm-password-reset',
-      this.validationMiddleware.validate(
-        'json',
-        z.object({
-          token: z.string(),
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const service = new SupabaseAuthService(supabase)
-        const controller = new ConfirmPasswordResetController(service)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      (service) => new ConfirmPasswordResetController(service),
     )
+  }
+
+  private registerConfirmationPath(
+    path: string,
+    controllerFactory: (
+      service: SupabaseAuthService,
+    ) => ConfirmEmailController | ConfirmPasswordResetController,
+  ): void {
+    this.router.post(
+      path,
+      this.validationMiddleware.validate('json', confirmationTokenSchema),
+      (context) => this.handleConfirmationPath(context, controllerFactory),
+    )
+  }
+
+  private async handleConfirmationPath(
+    context: Context,
+    controllerFactory: (
+      service: SupabaseAuthService,
+    ) => ConfirmEmailController | ConfirmPasswordResetController,
+  ) {
+    const http = new HonoHttp(context)
+    const supabase = http.getSupabase()
+    const service = new SupabaseAuthService(supabase)
+    const controller = controllerFactory(service)
+    const response = await controller.handle(http)
+    return http.sendResponse(response)
   }
 
   private registerResetPasswordRoute(): void {
     this.router.patch(
       '/reset-password',
-      this.validationMiddleware.validate(
-        'json',
-        z.object({
-          newPassword: passwordSchema,
-          accessToken: z.string(),
-          refreshToken: z.string(),
-        }),
-      ),
-      async (context) => {
-        const http = new HonoHttp(context)
-        const supabase = http.getSupabase()
-        const service = new SupabaseAuthService(supabase)
-        const controller = new ResetPasswordController(service)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      this.validationMiddleware.validate('json', resetPasswordSchema),
+      (context) => this.handleResetPasswordPath(context),
     )
+  }
+
+  private async handleResetPasswordPath(context: Context) {
+    const http = new HonoHttp(context)
+    const supabase = http.getSupabase()
+    const service = new SupabaseAuthService(supabase)
+    const controller = new ResetPasswordController(service)
+    const response = await controller.handle(http)
+    return http.sendResponse(response)
   }
 
   private registerFetchAccountRoute(): void {
@@ -413,15 +412,17 @@ export class AuthRouter extends HonoRouter {
       '/sign-up/retry',
       this.authMiddleware.verifyAuthentication,
       this.profileMiddleware.verifyUserAbsence,
-      async (context) => {
-        const http = new HonoHttp(context)
-        const service = new SupabaseAuthService(http.getSupabase())
-        const broker = new InngestBroker()
-        const controller = new RetryUserCreationController(service, broker)
-        const response = await controller.handle(http)
-        return http.sendResponse(response)
-      },
+      (context) => this.handleRetryUserCreation(context),
     )
+  }
+
+  private async handleRetryUserCreation(context: Context) {
+    const http = new HonoHttp(context)
+    const service = new SupabaseAuthService(http.getSupabase())
+    const broker = new InngestBroker()
+    const controller = new RetryUserCreationController(service, broker)
+    const response = await controller.handle(http)
+    return http.sendResponse(response)
   }
 
   registerRoutes(): Hono {
@@ -453,3 +454,22 @@ export class AuthRouter extends HonoRouter {
     return this.router
   }
 }
+
+const credentialsSignInSchema = z.object({
+  email: emailSchema,
+  password: passwordSchema,
+})
+
+const socialSignInQuerySchema = z.object({ returnUrl: stringSchema })
+
+const emailOnlySchema = z.object({ email: emailSchema })
+
+const refreshSessionSchema = z.object({ refreshToken: stringSchema })
+
+const confirmationTokenSchema = z.object({ token: z.string() })
+
+const resetPasswordSchema = z.object({
+  newPassword: passwordSchema,
+  accessToken: z.string(),
+  refreshToken: z.string(),
+})

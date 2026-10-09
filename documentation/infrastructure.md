@@ -311,3 +311,7 @@ O container do server **não** contém a Supabase CLI nem o `postgresql-client`.
 - **Renovação VPS:** o preço promocional do KVM 2 (R$ 43,99/mês) renova a R$ 77,99/mês. Avaliar upgrade para KVM 4 se os builds ficarem lentos.
 - **Proxy Cloudflare:** pode ser habilitado (nuvem laranja) após confirmar que todos os certificados Let's Encrypt foram gerados. Requer configurar SSL mode como **Full (Strict)** no Cloudflare.
 - **Inngest:** após migração completa, atualizar as URLs de callback no painel do Inngest Cloud para os novos domínios.
+
+## Transição aprovada: Drizzle e SSE (Issue #602)
+
+O pipeline Supabase CLI acima é o legado. O destino da Issue #602 é aplicar migrations Drizzle pelo workflow Server; o container de runtime não executa migrations. Na primeira implantação, Server e Web são coordenados numa única manutenção com writers pausados, backup/restauração ensaiada, preflight, adoção, revogação de acesso direto, deploy das duas apps, smoke e reabertura. Um webhook Coolify aceito não prova que a revisão está servindo tráfego: o runbook deve verificar revisão implantada e saúde das apps antes da reabertura. Não há mecanismo de manutenção da aplicação verificado nesta autoria; o runbook opera pausa/reabertura pelos controles existentes do ambiente e registra sua execução, sem inventar endpoints de manutenção.

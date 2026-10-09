@@ -10,7 +10,7 @@ import { idSchema } from '@stardust/validation/global/schemas'
 
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
-import { SupabaseTextBlocksRepository } from '@/database/supabase/repositories/lesson'
+import { DrizzleTextBlocksRepository } from '@/database/drizzle/repositories'
 import {
   CancelTextBlockAudioGenerationController,
   CancelTextBlocksAudioGenerationInBatchController,
@@ -37,7 +37,10 @@ export class TextBlocksRouter extends HonoRouter {
       this.spaceMiddleware.verifyStarExists,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseTextBlocksRepository(http.getSupabase())
+        const repository = new DrizzleTextBlocksRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchTextBlocksController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -58,7 +61,10 @@ export class TextBlocksRouter extends HonoRouter {
       this.spaceMiddleware.verifyStarExists,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseTextBlocksRepository(http.getSupabase())
+        const repository = new DrizzleTextBlocksRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpdateTextBlocksController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -76,7 +82,10 @@ export class TextBlocksRouter extends HonoRouter {
       this.spaceMiddleware.verifyStarExists,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseTextBlocksRepository(http.getSupabase())
+        const repository = new DrizzleTextBlocksRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const broker = new InngestBroker()
         const controller = new TriggerTextBlockAudioGenerationController(
           repository,
@@ -97,7 +106,10 @@ export class TextBlocksRouter extends HonoRouter {
       this.spaceMiddleware.verifyStarExists,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseTextBlocksRepository(http.getSupabase())
+        const repository = new DrizzleTextBlocksRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const broker = new InngestBroker()
         const controller = new TriggerTextBlocksAudioGenerationInBatchController(
           repository,
@@ -127,7 +139,10 @@ export class TextBlocksRouter extends HonoRouter {
       this.spaceMiddleware.verifyStarExists,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseTextBlocksRepository(http.getSupabase())
+        const repository = new DrizzleTextBlocksRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const broker = new InngestBroker()
         const controller = new CancelTextBlockAudioGenerationController(
           repository,
@@ -148,7 +163,10 @@ export class TextBlocksRouter extends HonoRouter {
       this.spaceMiddleware.verifyStarExists,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseTextBlocksRepository(http.getSupabase())
+        const repository = new DrizzleTextBlocksRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const broker = new InngestBroker()
         const controller = new CancelTextBlocksAudioGenerationInBatchController(
           repository,
@@ -170,7 +188,10 @@ export class TextBlocksRouter extends HonoRouter {
       this.spaceMiddleware.verifyStarExists,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseTextBlocksRepository(http.getSupabase())
+        const repository = new DrizzleTextBlocksRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const broker = new InngestBroker()
         const controller = new RemoveTextBlockAudioController(repository, broker)
         const response = await controller.handle(http)

@@ -2,8 +2,8 @@ import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Http } from '@stardust/core/global/interfaces'
 import { Integer } from '@stardust/core/global/structures'
-import { RestResponse } from '@stardust/core/global/responses'
-import {
+import type { RestResponse } from '@stardust/core/global/responses'
+import type {
   CountUnreadFeedbackReportsUseCase,
   CreateFeedbackReportAttachmentUploadUrlUseCase,
   GetUserFeedbackReportUseCase,

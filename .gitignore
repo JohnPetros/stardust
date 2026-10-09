@@ -89,7 +89,6 @@ google-key-file.json
 .codex/
 .claude/
 .context/
-.serena/
 .opencode/
 opencode.json
 CLAUDE.md
@@ -105,7 +104,6 @@ prd.md
 .context/
 
 # MCPs
-.serena/
 .mcp.json
 .playwright-mcp
 

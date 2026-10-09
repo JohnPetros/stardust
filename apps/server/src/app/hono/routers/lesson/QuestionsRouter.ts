@@ -3,7 +3,7 @@ import z from 'zod'
 
 import { idSchema } from '@stardust/validation/global/schemas'
 
-import { SupabaseQuestionsRepository } from '@/database/supabase/repositories/lesson'
+import { DrizzleQuestionsRepository } from '@/database/drizzle/repositories'
 import {
   FetchQuestionsController,
   UpdateQuestionsController,
@@ -26,7 +26,10 @@ export class QuestionsRouter extends HonoRouter {
       this.spaceMiddleware.verifyStarExists,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseQuestionsRepository(http.getSupabase())
+        const repository = new DrizzleQuestionsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchQuestionsController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -47,7 +50,10 @@ export class QuestionsRouter extends HonoRouter {
       this.spaceMiddleware.verifyStarExists,
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseQuestionsRepository(http.getSupabase())
+        const repository = new DrizzleQuestionsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpdateQuestionsController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)

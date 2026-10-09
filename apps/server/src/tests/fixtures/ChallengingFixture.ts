@@ -1,3 +1,6 @@
+import { and, eq } from 'drizzle-orm'
+import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
+import { challengeModel, challengeCodeExecutionModel } from '@/database/drizzle/schema'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
@@ -117,7 +120,28 @@ export const OFFICIAL_SOLUTION_FIXTURE: CodePlaybackDto = {
 }
 
 export class ChallengingFixture {
-  constructor(private readonly supabase: SupabaseClient) {}
+  constructor(_supabase: SupabaseClient) {}
+
+  async createCodeExecutions(
+    executions: (typeof challengeCodeExecutionModel.$inferInsert)[],
+  ) {
+    if (executions.length)
+      await DrizzleClient.getInstance()
+        .insert(challengeCodeExecutionModel)
+        .values(executions)
+  }
+
+  async findCodeExecutions(userId: string, challengeId: string) {
+    return DrizzleClient.getInstance()
+      .select()
+      .from(challengeCodeExecutionModel)
+      .where(
+        and(
+          eq(challengeCodeExecutionModel.userId, userId),
+          eq(challengeCodeExecutionModel.challengeId, challengeId),
+        ),
+      )
+  }
 
   async createChallenge(
     authorId: string,
@@ -130,25 +154,27 @@ export class ChallengingFixture {
       isNew: false,
       ...baseDto,
     })
+    const challengeSlug = challenge.slug
+    if (challengeSlug === undefined) throw new Error('Challenge fixture requires a slug')
     challenge.author = { ...challenge.author, id: authorId }
 
-    const { error } = await this.supabase.from('challenges').insert({
-      id: challenge.id,
-      title: challenge.title,
-      difficulty_level: challenge.difficultyLevel,
-      initial_code: challenge.initialCode,
-      description: challenge.description,
-      slug: challenge.slug,
-      user_id: challenge.author.id,
-      star_id: challenge.starId,
-      is_public: challenge.isPublic ?? false,
-      is_new: challenge.isNew ?? false,
-      is_evaluated_by_function: challenge.isEvaluatedByFunction ?? true,
-      test_cases: challenge.testCases,
-      official_solution: challenge.officialSolution ?? null,
-    })
-
-    if (error) throw error
+    await DrizzleClient.getInstance()
+      .insert(challengeModel)
+      .values({
+        id: challenge.id,
+        title: challenge.title,
+        difficultyLevel: challenge.difficultyLevel,
+        initialCode: challenge.initialCode,
+        description: challenge.description,
+        slug: challengeSlug,
+        userId: authorId,
+        starId: challenge.starId,
+        isPublic: challenge.isPublic ?? false,
+        isNew: challenge.isNew ?? false,
+        isEvaluatedByFunction: challenge.isEvaluatedByFunction ?? true,
+        testCases: challenge.testCases,
+        officialSolution: challenge.officialSolution ?? null,
+      })
 
     return challenge
   }
@@ -168,11 +194,9 @@ export class ChallengingFixture {
     challengeId: string,
     officialSolution: CodePlaybackDto | null,
   ): Promise<void> {
-    const { error } = await this.supabase
-      .from('challenges')
-      .update({ official_solution: officialSolution })
-      .eq('id', challengeId)
-
-    if (error) throw error
+    await DrizzleClient.getInstance()
+      .update(challengeModel)
+      .set({ officialSolution })
+      .where(eq(challengeModel.id, challengeId))
   }
 }

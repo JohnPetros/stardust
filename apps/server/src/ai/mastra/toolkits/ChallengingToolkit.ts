@@ -1,12 +1,13 @@
 import z from 'zod'
 import { createTool } from '@mastra/core/tools'
 
-import { supabase } from '@/database/supabase'
+import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
+import { Id } from '@stardust/core/global/structures'
 import {
-  SupabaseChallengesRepository,
-  SupabaseChallengeSourcesRepository,
-  SupabaseUsersRepository,
-} from '@/database/supabase/repositories'
+  DrizzleChallengesRepository,
+  DrizzleChallengeSourcesRepository,
+  DrizzleUsersRepository,
+} from '@/database/drizzle/repositories'
 import { InngestBroker } from '@/queue/inngest/InngestBroker'
 import { TOOLS_DESCRIPTIONS } from '@/ai/challenging/constants'
 import {
@@ -47,9 +48,13 @@ export class ChallengingToolkit {
       }),
       execute: async (input, context) => {
         const mcp = new MastraMcp(input, context)
-        const challengesRepository = new SupabaseChallengesRepository(supabase)
-        const challengeSourcesRepository = new SupabaseChallengeSourcesRepository(
-          supabase,
+        const challengesRepository = new DrizzleChallengesRepository(
+          DrizzleClient.getInstance(),
+          { kind: 'user', accountId: Id.create(mcp.getAccountId()) },
+        )
+        const challengeSourcesRepository = new DrizzleChallengeSourcesRepository(
+          DrizzleClient.getInstance(),
+          { kind: 'user', accountId: Id.create(mcp.getAccountId()) },
         )
         const broker = new InngestBroker()
         const tool = new PostChallengeTool(
@@ -86,7 +91,10 @@ export class ChallengingToolkit {
       }),
       execute: async (input, context) => {
         const mcp = new MastraMcp(input, context)
-        const repository = new SupabaseChallengesRepository(supabase)
+        const repository = new DrizzleChallengesRepository(DrizzleClient.getInstance(), {
+          kind: 'user',
+          accountId: Id.create(mcp.getAccountId()),
+        })
         const tool = new UpdateChallengeTool(repository)
         await tool.handle(mcp)
       },
@@ -103,7 +111,10 @@ export class ChallengingToolkit {
       }),
       execute: async (input, context) => {
         const mcp = new MastraMcp(input, context)
-        const repository = new SupabaseChallengesRepository(supabase)
+        const repository = new DrizzleChallengesRepository(DrizzleClient.getInstance(), {
+          kind: 'user',
+          accountId: Id.create(mcp.getAccountId()),
+        })
         const tool = new DeleteChallengeTool(repository)
         await tool.handle(mcp)
       },
@@ -128,9 +139,12 @@ export class ChallengingToolkit {
           .nullable()
           .optional(),
       }),
-      execute: async (input) => {
-        const mcp = new MastraMcp(input)
-        const repository = new SupabaseChallengeSourcesRepository(supabase)
+      execute: async (input, context) => {
+        const mcp = new MastraMcp(input, context)
+        const repository = new DrizzleChallengeSourcesRepository(
+          DrizzleClient.getInstance(),
+          { kind: 'user', accountId: Id.create(mcp.getAccountId()) },
+        )
         const tool = new GetNextChallengeSourceTool(repository)
         return await tool.handle(mcp)
       },
@@ -142,8 +156,8 @@ export class ChallengingToolkit {
       id: 'get-challenge-problem-tool',
       description: TOOLS_DESCRIPTIONS.getChallengeProblem,
       outputSchema: z.object({ problem: z.string() }),
-      execute: async (input) => {
-        const mcp = new MastraMcp(input)
+      execute: async (input, context) => {
+        const mcp = new MastraMcp(input, context)
         const cacheProvider = new IORedisCacheProvider()
         const tool = new GetChallengeProblemTool(cacheProvider)
         return await tool.handle(mcp)
@@ -158,9 +172,12 @@ export class ChallengingToolkit {
       outputSchema: z.object({
         items: z.array(z.object({ name: nameSchema })),
       }),
-      execute: async (input) => {
-        const mcp = new MastraMcp(input)
-        const repository = new SupabaseChallengesRepository(supabase)
+      execute: async (input, context) => {
+        const mcp = new MastraMcp(input, context)
+        const repository = new DrizzleChallengesRepository(DrizzleClient.getInstance(), {
+          kind: 'user',
+          accountId: Id.create(mcp.getAccountId()),
+        })
         const tool = new GetAllChallengeCategoriesTool(repository)
         return {
           items: await tool.handle(mcp),
@@ -195,8 +212,14 @@ export class ChallengingToolkit {
       }),
       execute: async (input, context) => {
         const mcp = new MastraMcp(input, context)
-        const challengesRepository = new SupabaseChallengesRepository(supabase)
-        const usersRepository = new SupabaseUsersRepository(supabase)
+        const challengesRepository = new DrizzleChallengesRepository(
+          DrizzleClient.getInstance(),
+          { kind: 'user', accountId: Id.create(mcp.getAccountId()) },
+        )
+        const usersRepository = new DrizzleUsersRepository(DrizzleClient.getInstance(), {
+          kind: 'user',
+          accountId: Id.create(mcp.getAccountId()),
+        })
         const tool = new ListChallengesTool(challengesRepository, usersRepository)
         return await tool.handle(mcp)
       },

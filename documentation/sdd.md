@@ -162,7 +162,7 @@ refrescado, atualize as referências vivas e preserve o histórico da revisão.
 
 | Artefato    | Estados                                                     |
 | ----------- | ----------------------------------------------------------- |
-| Spec        | `draft`, `open`, `in_progress`, `completed`                 |
+| Spec        | `draft`, `open`, `in_progress`, `completed`, `superseded`   |
 | Plan        | `pending`, `in_progress`, `completed`, `superseded`         |
 | Fase/tarefa | `pending`, `in_progress`, `completed`                       |
 | Evaluation  | `in_progress`, `ready`, `completed`                         |

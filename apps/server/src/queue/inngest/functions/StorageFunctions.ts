@@ -1,4 +1,4 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
 import type { EventPayload } from '@stardust/core/global/types'
 
 import { InngestFunctions } from './InngestFunctions'
@@ -13,12 +13,11 @@ import {
   GenerateTextBlockAudioJob,
   RemoveTextBlockAudioFileJob,
 } from '@/queue/jobs/storage'
-import type { Database } from '@/database/supabase/types/Database'
 import { SupabaseDatabaseProvider } from '@/provision/database'
 import { DropboxStorageProvider, S3FileStorageProvider } from '@/provision/storage'
 import { OpenAITtsProvider } from '@/provision/tts'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
-import { SupabaseTextBlocksRepository } from '@/database'
+import { DrizzleTextBlocksRepository } from '@/database/drizzle/repositories'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestBroker } from '../InngestBroker'
 import {
@@ -59,7 +58,7 @@ export class StorageFunctions extends InngestFunctions {
     )
   }
 
-  private createBackupStorageFilesJob(supabase: SupabaseClient<Database>) {
+  private createBackupStorageFilesJob() {
     return this.createFunction(
       {
         id: BackupStorageFilesJob.KEY,
@@ -82,7 +81,7 @@ export class StorageFunctions extends InngestFunctions {
     )
   }
 
-  private createGenerateTextBlockAudioJob(supabase: SupabaseClient<Database>) {
+  private createGenerateTextBlockAudioJob(database: DrizzleDatabase) {
     return this.createFunction(
       {
         id: GenerateTextBlockAudioJob.KEY,
@@ -95,7 +94,7 @@ export class StorageFunctions extends InngestFunctions {
           },
         ],
         onFailure: createMarkTextBlockAudioAsErrorOnFailure(
-          supabase,
+          database,
           async (context, jobName) => await this.handleFailure(context, jobName),
         ),
         triggers: {
@@ -111,7 +110,7 @@ export class StorageFunctions extends InngestFunctions {
         },
       },
       async (context) => {
-        const repository = new SupabaseTextBlocksRepository(supabase)
+        const repository = new DrizzleTextBlocksRepository(database, { kind: 'system' })
         const ttsProvider = new OpenAITtsProvider()
         const fileStorageProvider = new S3FileStorageProvider()
         const broker = new InngestBroker()
@@ -127,7 +126,7 @@ export class StorageFunctions extends InngestFunctions {
     )
   }
 
-  private createRemoveTextBlockAudioFileJob(supabase: SupabaseClient<Database>) {
+  private createRemoveTextBlockAudioFileJob() {
     return this.createFunction(
       {
         id: RemoveTextBlockAudioFileJob.KEY,
@@ -151,12 +150,12 @@ export class StorageFunctions extends InngestFunctions {
     )
   }
 
-  getFunctions(supabase: SupabaseClient<Database>) {
+  getFunctions(database: DrizzleDatabase) {
     return [
       this.createBackupDatabaseJob(),
-      this.createBackupStorageFilesJob(supabase),
-      this.createGenerateTextBlockAudioJob(supabase),
-      this.createRemoveTextBlockAudioFileJob(supabase),
+      this.createBackupStorageFilesJob(),
+      this.createGenerateTextBlockAudioJob(database),
+      this.createRemoveTextBlockAudioFileJob(),
     ]
   }
 }

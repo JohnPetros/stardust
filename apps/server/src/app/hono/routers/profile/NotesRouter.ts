@@ -9,7 +9,7 @@ import {
 } from '@stardust/validation/global/schemas'
 import { noteSchema } from '@stardust/validation/profile/schemas'
 
-import { SupabaseNotesRepository } from '@/database/supabase/repositories/profile'
+import { DrizzleNotesRepository } from '@/database/drizzle/repositories'
 import {
   CreateNoteController,
   DeleteNoteController,
@@ -39,7 +39,10 @@ export class NotesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseNotesRepository(http.getSupabase())
+        const repository = new DrizzleNotesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new ListNotesController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -54,7 +57,10 @@ export class NotesRouter extends HonoRouter {
       this.validationMiddleware.validate('json', noteSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseNotesRepository(http.getSupabase())
+        const repository = new DrizzleNotesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new CreateNoteController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -75,7 +81,10 @@ export class NotesRouter extends HonoRouter {
       this.validationMiddleware.validate('json', noteSchema),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseNotesRepository(http.getSupabase())
+        const repository = new DrizzleNotesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new UpdateNoteController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -95,7 +104,10 @@ export class NotesRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseNotesRepository(http.getSupabase())
+        const repository = new DrizzleNotesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new DeleteNoteController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)

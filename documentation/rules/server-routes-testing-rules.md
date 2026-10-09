@@ -333,3 +333,7 @@ Antes de considerar um teste de rota completo, confirme:
 - Qualidade antes de abrir PR: `npm run check:types -w @stardust/server` e
   `npm run check:code -w @stardust/server`
 - Referência geral: `documentation/tooling.md`
+
+## Transição aprovada: Drizzle e SSE (Issue #602)
+
+Para a Issue #602, SupabaseFixture mantém seu client exclusivamente para Auth e passa a preparar/limpar dados via Drizzle. O nome legado da fixture não autoriza PostgREST para persistência. Os exemplos com SupabaseUsersRepository são substituídos pelo repository Drizzle equivalente após a implementação. O db:test reseta somente o banco local, aplica migrations Drizzle e não faz seed. Os testes mantêm Auth real, Hono real e um arquivo por rota; cenários legados agrupados e testes dedicados de database são transferidos para essas fronteiras permitidas.

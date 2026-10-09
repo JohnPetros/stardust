@@ -14,7 +14,7 @@ import {
   EditStarTypeController,
   FetchStarController,
 } from '@/rest/controllers/space/stars'
-import { SupabaseStarsRepository } from '@/database'
+import { DrizzleStarsRepository } from '@/database/drizzle/repositories'
 import { HonoRouter } from '../../HonoRouter'
 import { HonoHttp } from '../../HonoHttp'
 import { AuthMiddleware, ValidationMiddleware } from '../../middlewares'
@@ -36,7 +36,10 @@ export class StarsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseStarsRepository(http.getSupabase())
+        const repository = new DrizzleStarsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchStarController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -56,7 +59,10 @@ export class StarsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseStarsRepository(http.getSupabase())
+        const repository = new DrizzleStarsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new FetchStarController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -82,7 +88,10 @@ export class StarsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseStarsRepository(http.getSupabase())
+        const repository = new DrizzleStarsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new EditStarNameController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -109,7 +118,10 @@ export class StarsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseStarsRepository(http.getSupabase())
+        const repository = new DrizzleStarsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new EditStarAvailabilityController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
@@ -136,7 +148,10 @@ export class StarsRouter extends HonoRouter {
       ),
       async (context) => {
         const http = new HonoHttp(context)
-        const repository = new SupabaseStarsRepository(http.getSupabase())
+        const repository = new DrizzleStarsRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const controller = new EditStarTypeController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)

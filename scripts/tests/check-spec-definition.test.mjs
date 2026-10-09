@@ -75,3 +75,40 @@ test('reports missing Spec definition sections and placeholders', async () => {
     await rm(directory, { recursive: true, force: true })
   }
 })
+
+test('accepts a Next catch-all route while rejecting parent directory traversal', async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), 'stardust-spec-definition-'))
+  try {
+    const specPath = path.join(directory, 'spec.md')
+    await writeFile(
+      specPath,
+      validSpec.replace(
+        'packages/core/src/value.ts',
+        'apps/web/src/app/api/tests/server/[...path]/route.ts',
+      ),
+    )
+    const { stdout } = await execFileAsync(process.execPath, [
+      SCRIPT_PATH,
+      specPath,
+      '--json',
+    ])
+    assert.equal(JSON.parse(stdout).status, 'passed')
+
+    await writeFile(
+      specPath,
+      validSpec.replace('packages/core/src/value.ts', 'apps/../outside.ts'),
+    )
+    await assert.rejects(
+      execFileAsync(process.execPath, [SCRIPT_PATH, specPath, '--json']),
+      (error) => {
+        assert.match(
+          JSON.parse(error.stdout).errors.join('\n'),
+          /path must be repository-relative/,
+        )
+        return true
+      },
+    )
+  } finally {
+    await rm(directory, { recursive: true, force: true })
+  }
+})
