@@ -421,9 +421,9 @@ export class HonoApp {
         })
       }
 
-      const handleListening = ((info) => {
+      const handleListening = (() => {
         settle(() => {
-          console.log(`🏢 Server is running on ${baseUrl}:${info.port}`)
+          console.log(`🏢 Server is running on ${baseUrl}`)
           resolve(server as ServerType)
         })
       }) satisfies ListeningListener
