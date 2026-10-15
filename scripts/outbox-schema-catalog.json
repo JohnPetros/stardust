@@ -1,0 +1,738 @@
+{
+  "stages": {
+    "4": {
+      "tables": [
+        {
+          "name": "outbox_events",
+          "owner": "postgres",
+          "rls": false,
+          "force_rls": false,
+          "options": null
+        }
+      ],
+      "columns": [
+        {
+          "table_name": "outbox_events",
+          "name": "id",
+          "position": 1,
+          "type": "text",
+          "not_null": true,
+          "default_expression": "(gen_random_uuid())::text",
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "event_name",
+          "position": 2,
+          "type": "text",
+          "not_null": true,
+          "default_expression": null,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "payload",
+          "position": 3,
+          "type": "jsonb",
+          "not_null": true,
+          "default_expression": null,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "sequence",
+          "position": 4,
+          "type": "bigint",
+          "not_null": true,
+          "default_expression": "nextval('outbox_events_sequence_seq'::regclass)",
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "status",
+          "position": 5,
+          "type": "text",
+          "not_null": true,
+          "default_expression": "'pending'::text",
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "attempts",
+          "position": 6,
+          "type": "integer",
+          "not_null": true,
+          "default_expression": "0",
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "available_at",
+          "position": 7,
+          "type": "timestamp with time zone",
+          "not_null": true,
+          "default_expression": "now()",
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "created_at",
+          "position": 8,
+          "type": "timestamp with time zone",
+          "not_null": true,
+          "default_expression": "now()",
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "updated_at",
+          "position": 9,
+          "type": "timestamp with time zone",
+          "not_null": true,
+          "default_expression": "now()",
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "published_at",
+          "position": 10,
+          "type": "timestamp with time zone",
+          "not_null": false,
+          "default_expression": null,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "reserved_by",
+          "position": 11,
+          "type": "text",
+          "not_null": false,
+          "default_expression": null,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "reservation_expires_at",
+          "position": 12,
+          "type": "timestamp with time zone",
+          "not_null": false,
+          "default_expression": null,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "last_error_code",
+          "position": 13,
+          "type": "text",
+          "not_null": false,
+          "default_expression": null,
+          "identity": "",
+          "generated": ""
+        }
+      ],
+      "constraints": [
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_attempts_check",
+          "type": "c",
+          "definition": "CHECK (attempts >= 0)",
+          "deferrable": false,
+          "deferred": false,
+          "validated": true,
+          "columns": ["attempts"],
+          "target_schema": null,
+          "target_table": null,
+          "target_columns": null,
+          "delete_action": " ",
+          "update_action": " "
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)",
+          "deferrable": false,
+          "deferred": false,
+          "validated": true,
+          "columns": ["id"],
+          "target_schema": null,
+          "target_table": null,
+          "target_columns": null,
+          "delete_action": " ",
+          "update_action": " "
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_reservation_check",
+          "type": "c",
+          "definition": "CHECK (status = 'publishing'::text AND reserved_by IS NOT NULL AND reservation_expires_at IS NOT NULL OR status <> 'publishing'::text AND reserved_by IS NULL AND reservation_expires_at IS NULL)",
+          "deferrable": false,
+          "deferred": false,
+          "validated": true,
+          "columns": ["status", "reserved_by", "reservation_expires_at"],
+          "target_schema": null,
+          "target_table": null,
+          "target_columns": null,
+          "delete_action": " ",
+          "update_action": " "
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_status_check",
+          "type": "c",
+          "definition": "CHECK (status = ANY (ARRAY['pending'::text, 'publishing'::text, 'published'::text, 'failed'::text]))",
+          "deferrable": false,
+          "deferred": false,
+          "validated": true,
+          "columns": ["status"],
+          "target_schema": null,
+          "target_table": null,
+          "target_columns": null,
+          "delete_action": " ",
+          "update_action": " "
+        }
+      ],
+      "indexes": [
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_available_idx",
+          "definition": "CREATE INDEX outbox_events_available_idx ON public.outbox_events USING btree (status, available_at, sequence)",
+          "is_unique": false,
+          "is_primary": false,
+          "method": "btree",
+          "predicate": null,
+          "expressions": ["status", "available_at", "sequence"],
+          "constraint_backed": false
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_lease_idx",
+          "definition": "CREATE INDEX outbox_events_lease_idx ON public.outbox_events USING btree (status, reservation_expires_at)",
+          "is_unique": false,
+          "is_primary": false,
+          "method": "btree",
+          "predicate": null,
+          "expressions": ["status", "reservation_expires_at"],
+          "constraint_backed": false
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_pkey",
+          "definition": "CREATE UNIQUE INDEX outbox_events_pkey ON public.outbox_events USING btree (id)",
+          "is_unique": true,
+          "is_primary": true,
+          "method": "btree",
+          "predicate": null,
+          "expressions": ["id"],
+          "constraint_backed": true
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_retention_idx",
+          "definition": "CREATE INDEX outbox_events_retention_idx ON public.outbox_events USING btree (status, published_at)",
+          "is_unique": false,
+          "is_primary": false,
+          "method": "btree",
+          "predicate": null,
+          "expressions": ["status", "published_at"],
+          "constraint_backed": false
+        }
+      ],
+      "sequences": [
+        {
+          "schema": "public",
+          "name": "outbox_events_sequence_seq",
+          "owner": "postgres",
+          "type": "bigint",
+          "start_value": 1,
+          "min_value": 1,
+          "max_value": 9223372036854776000,
+          "increment_by": 1,
+          "cycle": false,
+          "cache_size": 1
+        }
+      ],
+      "relationGrants": [
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "DELETE",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "INSERT",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "MAINTAIN",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "REFERENCES",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "SELECT",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "TRIGGER",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "TRUNCATE",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "UPDATE",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events_sequence_seq",
+          "kind": "S",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "USAGE",
+          "is_grantable": false
+        }
+      ]
+    },
+    "5": {
+      "tables": [
+        {
+          "name": "outbox_events",
+          "owner": "postgres",
+          "rls": false,
+          "force_rls": false,
+          "options": null
+        }
+      ],
+      "columns": [
+        {
+          "table_name": "outbox_events",
+          "name": "id",
+          "position": 1,
+          "type": "text",
+          "not_null": true,
+          "default_expression": "(gen_random_uuid())::text",
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "event_name",
+          "position": 2,
+          "type": "text",
+          "not_null": true,
+          "default_expression": null,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "payload",
+          "position": 3,
+          "type": "jsonb",
+          "not_null": true,
+          "default_expression": null,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "sequence",
+          "position": 4,
+          "type": "bigint",
+          "not_null": true,
+          "default_expression": "nextval('outbox_events_sequence_seq'::regclass)",
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "status",
+          "position": 5,
+          "type": "text",
+          "not_null": true,
+          "default_expression": "'pending'::text",
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "attempts",
+          "position": 6,
+          "type": "integer",
+          "not_null": true,
+          "default_expression": "0",
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "available_at",
+          "position": 7,
+          "type": "timestamp with time zone",
+          "not_null": true,
+          "default_expression": "now()",
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "created_at",
+          "position": 8,
+          "type": "timestamp with time zone",
+          "not_null": true,
+          "default_expression": "now()",
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "updated_at",
+          "position": 9,
+          "type": "timestamp with time zone",
+          "not_null": true,
+          "default_expression": "now()",
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "published_at",
+          "position": 10,
+          "type": "timestamp with time zone",
+          "not_null": false,
+          "default_expression": null,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "reserved_by",
+          "position": 11,
+          "type": "text",
+          "not_null": false,
+          "default_expression": null,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "reservation_expires_at",
+          "position": 12,
+          "type": "timestamp with time zone",
+          "not_null": false,
+          "default_expression": null,
+          "identity": "",
+          "generated": ""
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "last_error_code",
+          "position": 13,
+          "type": "text",
+          "not_null": false,
+          "default_expression": null,
+          "identity": "",
+          "generated": ""
+        }
+      ],
+      "constraints": [
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_attempts_check",
+          "type": "c",
+          "definition": "CHECK (attempts >= 0)",
+          "deferrable": false,
+          "deferred": false,
+          "validated": true,
+          "columns": ["attempts"],
+          "target_schema": null,
+          "target_table": null,
+          "target_columns": null,
+          "delete_action": " ",
+          "update_action": " "
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_pkey",
+          "type": "p",
+          "definition": "PRIMARY KEY (id)",
+          "deferrable": false,
+          "deferred": false,
+          "validated": true,
+          "columns": ["id"],
+          "target_schema": null,
+          "target_table": null,
+          "target_columns": null,
+          "delete_action": " ",
+          "update_action": " "
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_reservation_check",
+          "type": "c",
+          "definition": "CHECK (status = 'publishing'::text AND reserved_by IS NOT NULL AND reservation_expires_at IS NOT NULL OR status <> 'publishing'::text AND reserved_by IS NULL AND reservation_expires_at IS NULL)",
+          "deferrable": false,
+          "deferred": false,
+          "validated": true,
+          "columns": ["status", "reserved_by", "reservation_expires_at"],
+          "target_schema": null,
+          "target_table": null,
+          "target_columns": null,
+          "delete_action": " ",
+          "update_action": " "
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_status_check",
+          "type": "c",
+          "definition": "CHECK (status = ANY (ARRAY['pending'::text, 'publishing'::text, 'published'::text, 'failed'::text]))",
+          "deferrable": false,
+          "deferred": false,
+          "validated": true,
+          "columns": ["status"],
+          "target_schema": null,
+          "target_table": null,
+          "target_columns": null,
+          "delete_action": " ",
+          "update_action": " "
+        }
+      ],
+      "indexes": [
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_available_idx",
+          "definition": "CREATE INDEX outbox_events_available_idx ON public.outbox_events USING btree (status, available_at, sequence)",
+          "is_unique": false,
+          "is_primary": false,
+          "method": "btree",
+          "predicate": null,
+          "expressions": ["status", "available_at", "sequence"],
+          "constraint_backed": false
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_lease_idx",
+          "definition": "CREATE INDEX outbox_events_lease_idx ON public.outbox_events USING btree (status, reservation_expires_at)",
+          "is_unique": false,
+          "is_primary": false,
+          "method": "btree",
+          "predicate": null,
+          "expressions": ["status", "reservation_expires_at"],
+          "constraint_backed": false
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_pkey",
+          "definition": "CREATE UNIQUE INDEX outbox_events_pkey ON public.outbox_events USING btree (id)",
+          "is_unique": true,
+          "is_primary": true,
+          "method": "btree",
+          "predicate": null,
+          "expressions": ["id"],
+          "constraint_backed": true
+        },
+        {
+          "table_name": "outbox_events",
+          "name": "outbox_events_retention_idx",
+          "definition": "CREATE INDEX outbox_events_retention_idx ON public.outbox_events USING btree (status, published_at)",
+          "is_unique": false,
+          "is_primary": false,
+          "method": "btree",
+          "predicate": null,
+          "expressions": ["status", "published_at"],
+          "constraint_backed": false
+        }
+      ],
+      "sequences": [
+        {
+          "schema": "public",
+          "name": "outbox_events_sequence_seq",
+          "owner": "postgres",
+          "type": "bigint",
+          "start_value": 1,
+          "min_value": 1,
+          "max_value": 9223372036854776000,
+          "increment_by": 1,
+          "cycle": false,
+          "cache_size": 1
+        }
+      ],
+      "relationGrants": [
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "DELETE",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "INSERT",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "MAINTAIN",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "REFERENCES",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "SELECT",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "TRIGGER",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "TRUNCATE",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events",
+          "kind": "r",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "UPDATE",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events_sequence_seq",
+          "kind": "S",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "SELECT",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events_sequence_seq",
+          "kind": "S",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "UPDATE",
+          "is_grantable": false
+        },
+        {
+          "schema": "public",
+          "name": "outbox_events_sequence_seq",
+          "kind": "S",
+          "owner": "postgres",
+          "grantee": "postgres",
+          "grantor": "postgres",
+          "privilege": "USAGE",
+          "is_grantable": false
+        }
+      ]
+    }
+  }
+}

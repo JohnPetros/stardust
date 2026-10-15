@@ -14,6 +14,8 @@ import {
   advisoryLockKey,
   isMain,
   equalRoleMemberships,
+  transitionMigrations,
+  migrationsFolder,
 } from '../check-drizzle-transition.mjs'
 
 test('role membership comparison preserves exact distinct tuples regardless of order or duplicate projections', () => {
@@ -47,6 +49,48 @@ test('role membership comparison preserves exact distinct tuples regardless of o
     false,
   )
   assert.deepEqual(expected, [first, second, first])
+})
+
+test('migration journal accepts the frozen prefix and reviewed append stages, rejects altered SQL or journal', async () => {
+  const directory = await mkdtemp(resolve(tmpdir(), 'stardust-migration-journal-'))
+  try {
+    await mkdir(resolve(directory, 'meta'))
+    const source = JSON.parse(
+      await readFile(resolve(migrationsFolder, 'meta/_journal.json'), 'utf8'),
+    )
+    for (const entry of source.entries)
+      await writeFile(
+        resolve(directory, `${entry.tag}.sql`),
+        await readFile(resolve(migrationsFolder, `${entry.tag}.sql`)),
+      )
+    const save = (journal) =>
+      writeFile(resolve(directory, 'meta/_journal.json'), JSON.stringify(journal))
+    for (const length of [3, 4, 5]) {
+      await save({ ...source, entries: source.entries.slice(0, length) })
+      assert.equal(transitionMigrations(directory).length, length)
+    }
+    for (const index of [0, 2, 3, 4]) {
+      for (const field of ['idx', 'tag', 'when']) {
+        const modified = structuredClone(source)
+        modified.entries[index][field] = field === 'tag' ? 'unreviewed_migration' : -1
+        await save(modified)
+        assert.throws(
+          () => transitionMigrations(directory),
+          /Unexpected migration journal/,
+        )
+      }
+      await save(source)
+      const path = resolve(directory, `${source.entries[index].tag}.sql`)
+      const original = await readFile(path, 'utf8')
+      await writeFile(path, `${original}\n-- tampered source`)
+      assert.throws(() => transitionMigrations(directory), /Migration SQL differs/)
+      await writeFile(path, original)
+    }
+    await save({ ...source, entries: source.entries.slice(0, 2) })
+    assert.throws(() => transitionMigrations(directory), /Unexpected migration journal/)
+  } finally {
+    await rm(directory, { recursive: true, force: true })
+  }
 })
 
 const execute = promisify(execFile)
@@ -118,6 +162,21 @@ export async function withOwnedClone(operation, { legacy = false } = {}) {
   const identity = randomUUID()
   const name = `stardust-drizzle-test-${identity}`
   const directory = await mkdtemp(resolve(tmpdir(), 'stardust-builder-database-runtime-'))
+  const sourceJournal = JSON.parse(
+    await readFile(resolve(migrationsFolder, 'meta/_journal.json'), 'utf8'),
+  )
+  const journalPath = resolve(directory, 'journal.json')
+  const setMigrationCount = async (count) => {
+    assert.ok([3, 4, 5].includes(count))
+    await writeFile(
+      journalPath,
+      JSON.stringify({
+        ...sourceJournal,
+        entries: sourceJournal.entries.slice(0, count),
+      }),
+    )
+  }
+  await setMigrationCount(3)
   const runnerNames = new Set()
   const sql = async (text, { allowFailure = false, user = 'supabase_admin' } = {}) => {
     const result = await command(
@@ -158,6 +217,8 @@ export async function withOwnedClone(operation, { legacy = false } = {}) {
       `type=bind,src=${projectRoot},dst=/workspace,readonly`,
       '--mount',
       `type=bind,src=${directory},dst=/fixture`,
+      '--mount',
+      `type=bind,src=${journalPath},dst=/workspace/apps/server/src/database/drizzle/migrations/meta/_journal.json,readonly`,
       ...overlays,
       '--workdir',
       '/workspace',
@@ -266,6 +327,7 @@ export async function withOwnedClone(operation, { legacy = false } = {}) {
     snapshot,
     launchSession,
     nodeArguments,
+    setMigrationCount,
     guideId,
     guideInsert,
     async ledger() {
@@ -643,6 +705,64 @@ if (isMain(import.meta.url)) {
         ).stdout.trim(),
         't|t',
       )
+      await fixture.assertUnlocked()
+    })
+  })
+
+  test('append-only outbox migrations advance verified baseline, reject drift and forbid access rollback', {
+    timeout: 240000,
+  }, async () => {
+    await withOwnedClone(async (fixture) => {
+      assert.equal((await fixture.invoke('migrate')).code, 0)
+      assert.equal(JSON.parse(await fixture.ledger()).length, 3)
+      await fixture.sql(fixture.guideInsert)
+      const guide = await fixture.guide()
+      await fixture.setMigrationCount(4)
+      assert.equal((await fixture.invoke('migrate')).code, 0)
+      assert.equal(JSON.parse(await fixture.ledger()).length, 4)
+      assert.equal((await fixture.invoke('check', 'server-owned')).code, 0)
+      const intermediate = await fixture.ledger()
+      assert.equal(
+        (await fixture.invoke('migrate', 'server-owned', ['--rollback'])).code,
+        1,
+      )
+      assert.equal(await fixture.ledger(), intermediate)
+      await fixture.setMigrationCount(5)
+      assert.equal((await fixture.invoke('migrate')).code, 0)
+      assert.equal(JSON.parse(await fixture.ledger()).length, 5)
+      assert.equal((await fixture.invoke('check', 'server-owned')).code, 0)
+      const final = await fixture.ledger()
+      assert.equal((await fixture.invoke('migrate')).code, 0)
+      assert.equal(await fixture.ledger(), final)
+      assert.equal(
+        (await fixture.invoke('migrate', 'server-owned', ['--rollback'])).code,
+        1,
+      )
+      assert.equal(await fixture.ledger(), final)
+      for (const role of ['anon', 'authenticated']) {
+        const denied = await fixture.sql(
+          `SET ROLE ${role}; SELECT * FROM public.outbox_events`,
+          { allowFailure: true },
+        )
+        assert.notEqual(denied.code, 0)
+      }
+      await fixture.sql('ALTER TABLE public.outbox_events ADD COLUMN unknown_field text')
+      assert.equal((await fixture.invoke('check', 'server-owned')).code, 1)
+      assert.equal((await fixture.invoke('migrate')).code, 1)
+      assert.equal(await fixture.ledger(), final)
+      await fixture.sql(
+        'ALTER TABLE public.outbox_events DROP COLUMN unknown_field; GRANT SELECT ON public.outbox_events TO anon',
+      )
+      assert.equal((await fixture.invoke('check', 'server-owned')).code, 1)
+      assert.equal((await fixture.invoke('migrate')).code, 1)
+      assert.equal(await fixture.ledger(), final)
+      await fixture.sql(
+        'REVOKE SELECT ON public.outbox_events FROM anon; GRANT SELECT(payload) ON public.outbox_events TO anon',
+      )
+      assert.equal((await fixture.invoke('check', 'server-owned')).code, 1)
+      assert.equal((await fixture.invoke('migrate')).code, 1)
+      assert.equal(await fixture.ledger(), final)
+      assert.equal(await fixture.guide(), guide)
       await fixture.assertUnlocked()
     })
   })

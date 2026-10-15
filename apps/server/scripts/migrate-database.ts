@@ -27,6 +27,8 @@ export async function migrateDatabase(
   await withTransitionSession(options, async (client, assertSession) => {
     const ledger = await readTransitionLedger(client)
     if (rollback) {
+      if (ledger.length > 3)
+        throw new Error('Access rollback is forbidden after appended migrations')
       const phase = ledger.length === 2 ? 'adopted' : 'server-owned'
       const result = await inspectTransition(client, manifest, phase)
       if (!result.compatible)
@@ -70,7 +72,8 @@ export async function migrateDatabase(
       const phase = ledger.length === 2 ? 'adopted' : 'server-owned'
       const result = await inspectTransition(client, manifest, phase)
       if (!result.compatible) throw new Error('Database is incompatible with migration')
-      if (phase === 'server-owned') return
+      if (phase === 'server-owned' && ledger.length === transitionMigrations().length)
+        return
     }
     await assertSession()
     await client.unsafe('SET search_path TO public, extensions')

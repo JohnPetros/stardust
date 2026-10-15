@@ -16,6 +16,33 @@ export const defaultManifestPath = resolve(
   'apps/server/src/database/drizzle/legacy-schema-manifest.json',
 )
 export const advisoryLockKey = '7531462901845273'
+const frozenTransitionMigrations = [
+  {
+    tag: '0000_baseline',
+    when: 1790901517786,
+    hash: 'a2571500c38a60c9eab1019915bea7327688a723be3961554ec5d354deff4f73',
+  },
+  {
+    tag: '0001_application_objects',
+    when: 1790905057160,
+    hash: '522f52c96056b95e184c509b3925f9c0ddc555d8502a43f892d354fc50f3c3eb',
+  },
+  {
+    tag: '0002_server_owned_access',
+    when: 1790905339345,
+    hash: 'c05710d2121115a207f7122e6ae96ca1057c1173a2f9f2f288e963ebce7b5560',
+  },
+  {
+    tag: '0003_tranquil_mulholland_black',
+    when: 1792105295112,
+    hash: '0d2314244c52fd67b79f8d02ad0288a07d883fe3d1f0fc14ee667f77a3ca2354',
+  },
+  {
+    tag: '0004_outbox_server_access',
+    when: 1792105406365,
+    hash: 'f70703c8f9aa01c52f27670f0e94bbd69d23237564f82ea6a492ba6c947b2f49',
+  },
+]
 const frozenSources = [
   {
     name: '20251008214302_create_tables.sql',
@@ -159,26 +186,33 @@ export function loadTransitionManifest(path = defaultManifestPath) {
   return manifest
 }
 
-export function transitionMigrations() {
-  const journal = JSON.parse(
-    readFileSync(resolve(migrationsFolder, 'meta/_journal.json'), 'utf8'),
-  )
-  const tags = ['0000_baseline', '0001_application_objects', '0002_server_owned_access']
+export function transitionMigrations(folder = migrationsFolder) {
+  const journal = JSON.parse(readFileSync(resolve(folder, 'meta/_journal.json'), 'utf8'))
   if (
     journal.version !== '7' ||
     journal.dialect !== 'postgresql' ||
-    journal.entries.length !== 3 ||
+    journal.entries.length < 3 ||
+    journal.entries.length > frozenTransitionMigrations.length ||
     journal.entries.some(
       (entry, index) =>
         entry.idx !== index ||
-        entry.tag !== tags[index] ||
+        entry.tag !== frozenTransitionMigrations[index]?.tag ||
+        entry.when !== frozenTransitionMigrations[index]?.when ||
+        entry.version !== '7' ||
         !entry.breakpoints ||
         !Number.isSafeInteger(entry.when) ||
         (index > 0 && entry.when <= journal.entries[index - 1].when),
     )
   )
     throw new Error('Unexpected migration journal')
-  return readMigrationFiles({ migrationsFolder })
+  const migrations = readMigrationFiles({ migrationsFolder: folder })
+  if (
+    migrations.some(
+      (migration, index) => migration.hash !== frozenTransitionMigrations[index].hash,
+    )
+  )
+    throw new Error('Migration SQL differs from the verified catalog contract')
+  return migrations
 }
 
 function validateOptions(options) {
@@ -377,12 +411,23 @@ function normalizeColumnOrdinals(columns) {
   })
 }
 
+function isOutboxCatalogRow(row) {
+  return (
+    row.table_name === 'outbox_events' ||
+    row.name === 'outbox_events' ||
+    row.name === 'outbox_events_sequence_seq'
+  )
+}
+
 export async function inspectTransition(client, manifest, phase) {
   const migrations = transitionMigrations()
   const ledger = await readTransitionLedger(client)
-  const expectedEntries = phase === 'legacy' ? 0 : phase === 'adopted' ? 2 : 3
+  const expectedEntries = phase === 'legacy' ? 0 : phase === 'adopted' ? 2 : ledger.length
+  const validServerLedger =
+    phase !== 'server-owned' || (ledger.length >= 3 && ledger.length <= migrations.length)
   const differences = []
   if (
+    !validServerLedger ||
     ledger.length !== expectedEntries ||
     ledger.some(
       (row, index) =>
@@ -393,12 +438,36 @@ export async function inspectTransition(client, manifest, phase) {
     differences.push('Migration ledger differs from the requested phase')
   const catalog = await captureCatalog(client)
   const expected = expectedCatalog(manifest, phase)
+  const outbox =
+    phase === 'server-owned' && ledger.length > 3
+      ? JSON.parse(
+          readFileSync(
+            resolve(projectRoot, 'scripts/outbox-schema-catalog.json'),
+            'utf8',
+          ),
+        ).stages[ledger.length]
+      : undefined
+  if (phase === 'server-owned' && ledger.length > 3 && !outbox)
+    differences.push('Missing catalog contract for appended migrations')
   for (const key of Object.keys(expected)) {
-    const actualRows =
-      key === 'columns' ? normalizeColumnOrdinals(catalog[key]) : catalog[key]
+    const baseRows = outbox
+      ? catalog[key].filter((row) => !isOutboxCatalogRow(row))
+      : catalog[key]
+    if (outbox && !equal(catalog[key].filter(isOutboxCatalogRow), outbox[key] ?? []))
+      differences.push(`Outbox catalog differs: ${key}`)
+    const actualRows = key === 'columns' ? normalizeColumnOrdinals(baseRows) : baseRows
     const expectedRows =
       key === 'columns' ? normalizeColumnOrdinals(expected[key]) : expected[key]
     if (!equal(actualRows, expectedRows)) differences.push(`Catalog differs: ${key}`)
+  }
+  if (outbox) {
+    const [columnAccess] = await client.unsafe(`SELECT EXISTS (
+      SELECT 1 FROM pg_attribute a JOIN pg_class c ON c.oid=a.attrelid
+      JOIN pg_namespace n ON n.oid=c.relnamespace
+      WHERE n.nspname='public' AND c.relname='outbox_events'
+      AND a.attnum>0 AND NOT a.attisdropped AND cardinality(a.attacl)>0
+    ) AS present`)
+    if (columnAccess.present) differences.push('Unrepresented outbox column privileges')
   }
   if (phase === 'legacy' && !(await checkLegacyHistory(client)))
     differences.push('Legacy migration history differs')
