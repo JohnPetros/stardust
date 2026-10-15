@@ -2,50 +2,79 @@
 title: Bloco de Código
 status: draft
 source:
+  - type: direct-request
+    ref: Revisão das capacidades de leitura, edição e execução aprovada em 2026-10-14
   - type: issue
     ref: https://github.com/JohnPetros/stardust/milestone/24
-last_updated_at: 2026-04-07
+last_updated_at: 2026-10-14
 ---
 
 # PRD — Bloco de Código
 
-Disponibiliza para: lesson; consumidores adicionais não explicitados no documento legado.
+Disponibiliza para: lesson, apresentação de exemplos, referências, respostas escritas e código gerado em Delégua; consumidores existentes de challenging e autoria, conforme as capacidades habilitadas pelo contexto, sem reformular seus fluxos.
 
 Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
 ## 1. Resumo Executivo
 
-O `CodeSnippet` é o componente responsável por exibir trechos de código dentro da experiência de aprendizagem, com suporte a dois modos de uso: visualização somente leitura e execução interativa.
+O Bloco de Código apresenta código de forma consistente nos contextos educacionais do Stardust. Leitura, edição e execução são capacidades distintas: permitir executar um programa não exige permitir editar seu conteúdo.
 
-Ele resolve a necessidade de apresentar exemplos de código com clareza em lições e desafios, e, quando aplicável, permitir que o usuário experimente o código diretamente no mesmo contexto.
+Nas histórias, exemplos de leitura permanecem sem edição e podem oferecer execução opcional e cópia. Código de referência em múltipla escolha permanece somente leitura, sem execução. Questões de escrita oferecem editor totalmente editável, respeitando seus bloqueios temporários de execução e análise. Código gerado pelo Blockly permanece somente leitura e segue a modalidade da atividade.
 
-Seu objetivo principal é padronizar a experiência de leitura, edição e execução de snippets educacionais, reduzindo variações entre telas e reforçando o aprendizado prático.
-
----
+Este documento define a apresentação e as capacidades comuns. Avaliação, vidas, retomada da tentativa, destaque e narração seguem os PRDs dos contextos consumidores. A revisão não reformula desafios independentes nem ferramentas de autoria existentes.
 
 ## 2. Problema e Oportunidade
 
-🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
+A revisão anterior de 2026-04-07 vinculava execução a edição e ocultava todas as ações no modo somente leitura. Essa relação conflita com exemplos executáveis sem edição aprovados para as histórias.
+
+Separar as capacidades permite reutilizar o bloco sem liberar ações inadequadas ao conteúdo. A mesma apresentação pode servir à interpretação de código, consulta de exemplos, prática escrita e visualização do código gerado por blocos, preservando a responsabilidade de cada atividade sobre sua avaliação.
+
+Esta revisão é prospectiva; não declara que todos os comportamentos já estejam implementados. Pesquisa competitiva não é necessária para o alinhamento das regras de produto aprovado neste escopo.
 
 ### Base de fontes e autoridade
 
 | ID | Material | Papel neste PRD |
 | --- | --- | --- |
-| S1 | https://github.com/JohnPetros/stardust/milestone/24 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+| S1 | Este PRD canônico, revisão de 2026-10-14 | Autoridade versionada para as capacidades comuns; substitui a vinculação entre edição e execução da revisão de 2026-04-07. |
+| S2 | Revisão das capacidades por contexto aprovada em 2026-10-14 | Confirma a separação entre leitura, edição e execução e o alinhamento aos PRDs específicos. |
+| S3 | [Escrita de código](code-writing.md), revisão de 2026-10-11 | Define exemplos somente leitura executáveis, editor de resposta, bloqueios, restauração, cópia e análise pelo Jev. |
+| S4 | [Múltipla escolha](multiple-choice.md), revisão de 2026-10-11 | Define o código do enunciado como somente leitura e sem execução. |
+| S5 | [Programação em blocos](block-programming.md), revisão de 2026-10-11 | Define código gerado somente leitura e execução conforme modalidade da atividade. |
+| S6 | [Histórias interativas](lesson-page.md) e [Blocos de texto e narração](text-blocks-and-narration.md), revisões de 2026-10-11 | Definem sequência, histórico, destaque e consumo de narração do contexto. |
+| S7 | [Milestone 24](https://github.com/JohnPetros/stardust/milestone/24) | Contexto legado das capacidades de apresentação, cópia, restauração e execução de snippets. |
 
 ## 3. Público-alvo
 
-🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+O público principal é o aluno que consulta ou utiliza código nos contextos educacionais do Stardust, especialmente nas histórias e suas atividades, em desktop e mobile.
+
+Como público secundário, consumidores existentes de challenging e autoria reutilizam as capacidades do bloco conforme seus próprios fluxos. Esta revisão não define novas ferramentas nem novas jornadas de autoria.
+
+Jobs to Be Done:
+
+- Quando consultar um exemplo, quero ler, copiar e, quando permitido, executar seu código, para compreender seu comportamento sem alterar o conteúdo apresentado.
+- Quando interpretar uma questão de múltipla escolha, quero consultar o código de referência, para responder pela leitura.
+- Quando escrever uma solução, quero editar e executar o código conforme a atividade, para construir minha resposta.
+- Quando montar um programa com Blockly, quero consultar o Delégua correspondente, para relacionar as representações sem editar diretamente o código gerado.
 
 ## 4. Objetivos e Métricas de Sucesso
 
-🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+| Objetivo do produto | Métrica aprovada | Significado da medição |
+| --- | --- | --- |
+| Separar capacidades de leitura, edição e execução | Nenhuma meta numérica aprovada | Verificar que exemplos podem executar sem edição e referências podem permanecer sem execução. |
+| Apresentar ações apropriadas ao contexto | Nenhuma meta numérica aprovada | Verificar as ações de cada modalidade e a ausência de controles incompatíveis. |
+| Preservar o código correspondente ao contexto | Nenhuma meta numérica aprovada | Verificar conteúdo fornecido, código atual e código gerado, sem alterações ao alternar a apresentação. |
+| Apresentar retorno sem confundir avaliação | Nenhuma meta numérica aprovada | Verificar saída, erro e entrada no terminal, preservando avaliação e vidas sob responsabilidade da atividade. |
+| Manter usabilidade | Nenhuma meta numérica aprovada | Verificar leitura, navegação por teclado e uso em telas estreitas. |
 
 ### Limites de validação e premissas declaradas
 
 | Risco ou premissa | Consequência para validação |
 | --- | --- |
-| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+| Somente leitura não significa ausência de execução ou cópia. | Validar separadamente as capacidades habilitadas pelo contexto. |
+| Campos vazios podem ser legítimos em escrita do zero. | Não ocultar um editor de resposta apenas por estar vazio; referências sem conteúdo não devem apresentar uma área vazia enganosa. |
+| Execução e avaliação são responsabilidades diferentes. | Não tratar saída do terminal como aprovação de resposta. |
+| Os contextos possuem bloqueios e persistência próprios. | Validar integração com os PRDs específicos, sem usar regras genéricas para contorná-los. |
+| Há consumidores fora das histórias. | Não aplicar a retirada de edição dos exemplos como regra global para desafios ou autoria. |
 
 ## 5. Requisitos de Produto
 
@@ -53,221 +82,255 @@ Seu objetivo principal é padronizar a experiência de leitura, edição e execu
 
 | Conceito | Regra de produto |
 | --- | --- |
-| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+| Leitura | Apresentação do código fornecido ou gerado pelo contexto, sem implicar permissão de edição. |
+| Edição | Capacidade explicitamente habilitada pelo contexto, sujeita aos bloqueios da atividade. |
+| Execução | Capacidade de executar o código correspondente ao contexto, independente da permissão de edição. |
+| Código atual | Conteúdo exibido, incluindo alterações permitidas; é o valor usado para cópia e execução quando habilitadas. |
+| Código inicial | Conteúdo de referência para restauração em contextos editáveis. |
+| Código gerado | Delégua produzido pela montagem Blockly, somente leitura. |
+| Saída | Retorno da execução no terminal, distinto de feedback de avaliação. |
+| Contexto consumidor | Área que define capacidades, avaliação, bloqueios, persistência e progressão aplicáveis. |
 
-#### RP-01 — Exibir snippet em modo leitura
-
-Necessidades do usuário:
-
-- 🚧 Em construção — necessidade não explicitada no documento legado.
-
-Resultado: Exibir snippet em modo leitura.
-
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** O componente deve permitir a exibição de código em contextos onde o usuário apenas consulta o conteúdo, sem alterar ou executar o snippet.
-
-##### Regras de Negócio
-- **Renderização condicionada:** O snippet só deve ser exibido quando houver conteúdo de código disponível.
-- **Modo não interativo:** Quando configurado como não executável, o snippet deve permanecer somente para leitura.
-- **Preservação do conteúdo inicial:** O conteúdo exibido deve refletir exatamente o código informado pelo contexto de origem.
-
-##### Regras de Experiência
-
-- **Barra de ações oculta:** No modo leitura, ações de recarregar, copiar e executar não devem ser exibidas.
-- **Leitura do código:** O conteúdo deve permanecer legível e organizado por linhas.
-- **Responsividade:** O snippet deve ocupar a largura disponível do container e permanecer utilizável em telas menores com rolagem quando necessário.
-- **Acessibilidade:** O conteúdo deve permanecer navegável no fluxo da página sem exigir interação obrigatória.
-- **Feedback:** Não há feedback interativo esperado nesse modo.
-- **Performance:** A exibição deve ocorrer imediatamente após o carregamento do conteúdo.
-- **Confiabilidade:** Na ausência de código, o componente não deve renderizar uma área vazia enganosa.
-- **Compatibilidade:** O modo leitura deve funcionar nos contextos de lição e conteúdos associados.
-
----
-
-#### RP-02 — Exibir snippet em modo executável
+#### RP-01 — Exibir código para leitura
 
 Necessidades do usuário:
 
-- 🚧 Em construção — necessidade não explicitada no documento legado.
+- Como aluno, quero consultar um trecho de código legível, para compreender o conteúdo apresentado.
 
-Resultado: Exibir snippet em modo executável.
+Resultado: o bloco apresenta o código do contexto sem conceder edição ou execução indevidamente.
 
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** O componente deve permitir edição e execução do código quando o contexto exigir prática interativa.
+Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
 
 ##### Regras de Negócio
-- **Ativação explícita:** O modo executável deve depender de configuração explícita do contexto de uso.
-- **Edição habilitada:** Quando executável, o usuário deve poder alterar o código antes de executá-lo.
-- **Código inicial reaproveitável:** O código inicial deve servir como base para experimentação do usuário.
-- **Atualização do valor:** Quando houver integração com formulário ou estado externo, alterações no código devem ser propagadas para o contexto consumidor.
+
+- O código apresentado deve corresponder ao conteúdo fornecido ou gerado pelo contexto.
+- Somente leitura deve impedir alterações diretas no código, sem proibir automaticamente cópia ou execução.
+- Referências sem conteúdo não devem apresentar uma área vazia enganosa.
+- Um editor de resposta vazio deve continuar disponível quando o contexto permitir escrita do zero.
+- A simples apresentação do código não deve executá-lo.
 
 ##### Regras de Experiência
 
-- **Barra de ações visível:** O modo executável deve expor ações de recarregar, copiar e executar.
-- **Área de edição:** O editor deve permanecer disponível no mesmo bloco visual do snippet.
-- **Responsividade:** O bloco deve se ajustar à largura do container mantendo a usabilidade em desktop e mobile.
-- **Acessibilidade:** Os controles acionáveis devem ser acessíveis por foco e clique.
-- **Feedback:** A ação de execução deve produzir retorno visível ao usuário por resultado, erro ou solicitação de entrada.
-- **Performance:** A resposta à ação de execução deve ocorrer em tempo adequado ao fluxo de estudo.
-- **Confiabilidade:** Falhas de execução não devem quebrar a interface do snippet.
-- **Compatibilidade:** O modo executável deve funcionar nos contextos de desafios e demais superfícies que habilitem prática.
+- O conteúdo deve permanecer legível, organizado por linhas e coerente com a apresentação de código do Stardust.
+- O bloco deve se ajustar à largura disponível e oferecer rolagem quando necessária, sem sobrepor os demais elementos.
+- A leitura não deve exigir uma interação de edição.
 
----
-
-#### RP-03 — Permitir restaurar o código inicial
+#### RP-02 — Habilitar edição e execução de forma independente
 
 Necessidades do usuário:
 
-- 🚧 Em construção — necessidade não explicitada no documento legado.
+- Como aluno, quero ter as capacidades apropriadas à atividade, para consultar, experimentar ou escrever sem ações incompatíveis com seu objetivo.
 
-Resultado: Permitir restaurar o código inicial.
+Resultado: o contexto pode oferecer leitura sem execução, leitura com execução ou edição com execução.
 
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** O usuário deve poder retornar rapidamente ao conteúdo original do snippet após alterações locais.
+Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
 
 ##### Regras de Negócio
-- **Restauração sob demanda:** A ação de recarregar deve restaurar o código inicial fornecido ao componente.
-- **Escopo local:** A restauração afeta apenas a sessão de edição atual do snippet.
-- **Disponibilidade restrita:** A restauração só deve estar disponível no modo executável.
+
+- Edição e execução devem depender de habilitação explícita do contexto, sem uma implicar a outra.
+- Exemplos de leitura nas histórias devem impedir edição e podem permitir execução opcional.
+- Questões de escrita devem permitir edição de todo o conteúdo conforme Escrita de código, incluindo bloqueios durante execução e análise.
+- Código gerado pelo Blockly e código de referência em múltipla escolha não devem ser editáveis.
+- Alterações permitidas devem ser disponibilizadas ao contexto consumidor para suas regras de execução, avaliação e retomada.
+- Consumidores existentes de desafios e autoria devem preservar suas permissões e fluxos próprios.
 
 ##### Regras de Experiência
 
-- **Ação dedicada:** A restauração deve ser acionável por botão próprio na barra de ações.
-- **Feedback:** O estado resultante deve deixar evidente que o conteúdo voltou ao código inicial.
-- **Confiabilidade:** A restauração não deve exigir recarregamento da página.
+- A interface deve apresentar apenas ações habilitadas no contexto atual.
+- Bloqueios temporários devem ser compreensíveis e impedir alteração por qualquer ação que modifique o código, inclusive restauração.
+- O aluno deve reconhecer a apresentação de código mesmo quando as capacidades forem diferentes.
 
----
-
-#### RP-04 — Permitir copiar o código atual
+#### RP-03 — Restaurar o código inicial quando houver edição
 
 Necessidades do usuário:
 
-- 🚧 Em construção — necessidade não explicitada no documento legado.
+- Como aluno, quero retornar ao código inicial quando permitido, para recomeçar minha solução sem recarregar a página.
 
-Resultado: Permitir copiar o código atual.
+Resultado: a restauração retorna ao conteúdo inicial no contexto editável, respeitando a confirmação da atividade.
 
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** O usuário deve poder copiar o conteúdo atual do snippet para uso externo ou continuação do estudo.
+Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
 
 ##### Regras de Negócio
-- **Cópia do valor atual:** A ação deve copiar o estado atual do código, incluindo alterações feitas pelo usuário.
-- **Disponibilidade restrita:** A cópia deve estar disponível no modo executável.
-- **Dependência de suporte do ambiente:** A funcionalidade depende de suporte do ambiente do usuário à área de transferência.
+
+- Restaurar deve retornar ao código inicial fornecido pelo contexto quando edição e restauração estiverem habilitadas.
+- A ação não deve depender apenas da permissão de execução.
+- Restauração de uma questão de escrita deve pedir confirmação quando houver alterações, conforme Escrita de código.
+- A ação não deve reiniciar a história, alterar vidas ou contornar os bloqueios da atividade.
+- Na visualização do código gerado pelo Blockly, a restauração da montagem deve seguir Programação em blocos, sem transformar o código gerado em editor.
 
 ##### Regras de Experiência
 
-- **Ação dedicada:** A cópia deve ser acionável por botão próprio na barra de ações.
-- **Feedback de sucesso:** Quando a cópia for concluída, o usuário deve receber confirmação visível.
-- **Confiabilidade:** Se o ambiente não suportar cópia, a interface não deve falhar.
+- A ação deve ser distinguível do recarregamento da página e do reinício integral da história.
+- Cancelar a confirmação deve preservar o conteúdo atual.
+- Restaurar não deve exigir recarregar a página.
 
----
-
-#### RP-05 — Executar o snippet e apresentar retorno
+#### RP-04 — Copiar o código atual quando habilitado
 
 Necessidades do usuário:
 
-- 🚧 Em construção — necessidade não explicitada no documento legado.
+- Como aluno, quero copiar o código disponível, para continuar a consulta ou o estudo fora do bloco.
 
-Resultado: Executar o snippet e apresentar retorno.
+Resultado: a cópia usa o conteúdo atual sem exigir edição ou execução.
 
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** O componente deve permitir que o usuário execute o snippet e visualize o resultado da execução no próprio fluxo de aprendizagem.
+Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
 
 ##### Regras de Negócio
-- **Execução sob comando do usuário:** O código só deve ser executado após ação explícita.
-- **Resultado contextual:** Saídas da execução devem ser apresentadas no próprio componente.
-- **Tratamento de erro:** Em caso de falha, o usuário deve receber mensagem de erro contextualizada.
-- **Suporte a entrada:** Quando o snippet exigir entrada do usuário, o sistema deve solicitar esse dado antes de concluir a execução.
-- **Reexecução:** Após fornecer entrada ou corrigir o código, o usuário deve poder tentar novamente.
+
+- Copiar deve usar o código atual exibido, incluindo alterações quando houver edição.
+- A cópia deve ser habilitada nos exemplos de leitura e nas questões de escrita conforme Escrita de código.
+- A habilitação de cópia não deve depender de o conteúdo ser editável ou executável.
+- Cópia não deve modificar o código, avaliar resposta ou consumir vidas.
 
 ##### Regras de Experiência
 
-- **Ação principal:** O botão de executar deve ficar disponível na barra de ações do modo executável.
-- **Feedback:** O componente deve apresentar saída, erro ou solicitação de entrada conforme o caso.
-- **Confiabilidade:** A interface deve continuar utilizável mesmo após erros de execução.
-- **Compatibilidade:** A experiência de execução deve permanecer coerente com os contextos educacionais em que o componente é usado.
+- Quando a cópia for concluída, deve haver confirmação visível.
+- Se a área de transferência estiver indisponível, a interface deve continuar utilizável.
+- Os controles devem ter nomes acessíveis e permitir uso por teclado.
 
----
-
-#### RP-06 — Adaptar o snippet ao contexto educacional
+#### RP-05 — Executar e apresentar o retorno contextual
 
 Necessidades do usuário:
 
-- 🚧 Em construção — necessidade não explicitada no documento legado.
+- Como aluno, quero consultar a saída ou o erro do código quando a execução for permitida, para compreender seu comportamento.
 
-Resultado: Adaptar o snippet ao contexto educacional.
+Resultado: o contexto executável apresenta saída, erro ou solicitação de entrada no próprio fluxo.
 
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** O mesmo componente deve atender usos distintos em lições e desafios, respeitando o nível de interatividade exigido por cada contexto.
+Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
 
 ##### Regras de Negócio
-- **Uso em lições objetivas:** Em perguntas e conteúdos expositivos, o snippet deve poder ser apresentado apenas como referência.
-- **Uso em prática guiada:** Em contextos que incentivam experimentação, o snippet deve poder ser executável.
-- **Uso em edição de desafio:** Em formulários de autoria ou edição, o snippet deve permitir edição contínua do código inicial.
-- **Comportamento consistente:** A ativação de capacidades deve depender do contexto, sem alterar o propósito central do componente.
+
+- A execução deve depender de ação explícita do usuário e das capacidades do contexto.
+- A execução não deve conceder permissão de edição a um exemplo ou código gerado somente leitura.
+- Quando houver solicitação de entrada, o sistema deve permitir fornecê-la para continuar a execução; cancelar a entrada interrompe essa execução sem inutilizar o bloco.
+- A saída e os erros devem corresponder ao código executado.
+- O contexto deve poder executar novamente, respeitando seus bloqueios.
+- Em programação em blocos, a execução iniciada por Verificar resposta deve seguir o PRD da atividade, sem exigir uma execução manual anterior.
+- Aprovação, reprovação, condição de envio ao Jev e perda de vidas devem permanecer sob os PRDs específicos.
 
 ##### Regras de Experiência
 
-- **Consistência entre telas:** O usuário deve reconhecer o mesmo padrão de snippet nos diferentes pontos do produto.
-- **Feedback contextual:** As ações disponíveis devem refletir claramente o papel do snippet em cada tela.
-- **Responsividade:** O comportamento deve permanecer funcional nas telas onde o componente já é reutilizado.
+- O retorno deve aparecer no terminal Saída integrado e recolhível, conforme os contextos de histórias executáveis.
+- Erros de execução não devem quebrar a interface ou apagar o código apresentado.
+- O botão Executar deve aparecer somente quando essa ação estiver habilitada na modalidade.
+- Feedback de avaliação deve permanecer distinguível da saída do programa.
+
+#### RP-06 — Respeitar o contexto educacional e suas autoridades
+
+Necessidades do usuário:
+
+- Como aluno, quero encontrar as mesmas regras ao consultar código em cada atividade, para compreender o que posso fazer sem ambiguidades.
+
+Resultado: as capacidades comuns são aplicadas conforme a matriz de contextos e os respectivos PRDs.
+
+Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
+
+##### Regras de Negócio
+
+- As capacidades nas histórias devem seguir a matriz abaixo.
+- Avaliação, bloqueios de edição, vidas e persistência devem seguir o PRD específico da atividade e Histórias interativas.
+- Exemplos devem seguir as regras de destaque e histórico; enunciados e questões devem seguir a composição da atividade.
+- Narração de textos e enunciados deve seguir Blocos de texto e narração, sem criar geração de áudio no bloco de código.
+- Explicação de código por IA deve permanecer retirada dos blocos de código das histórias, conforme Escrita de código.
+- Esta revisão não deve reformular desafios independentes ou ferramentas de autoria.
+
+##### Regras de Experiência
+
+- A interface deve usar os tokens canônicos do projeto e manter legibilidade em desktop e mobile.
+- Ações indisponíveis não devem aparecer como se estivessem habilitadas.
+- Código somente leitura não deve ser confundido com uma área editável.
+- A aba Código do Blockly deve permanecer acessível sem cadeado, conforme Programação em blocos.
+
+### Matriz de capacidades nas histórias
+
+| Contexto | Edição direta do código | Execução | Autoridade de produto |
+| --- | --- | --- | --- |
+| Exemplo de leitura | Não | Opcional para o aluno quando oferecida; cópia disponível | Escrita de código; Histórias interativas |
+| Código no enunciado de múltipla escolha | Não | Não | Múltipla escolha |
+| Questão de escrita | Totalmente editável, com bloqueios temporários | Sim, antes da análise da versão atual pelo Jev | Escrita de código |
+| Código gerado por programação em blocos | Não | Conforme a modalidade; questões e exemplos de montagem não oferecem execução | Programação em blocos |
 
 ## 6. Grafo de Dependências do Produto
 
 | Produtor/área | Consumidor | Responsabilidade |
 | --- | --- | --- |
-| lesson | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+| Conteúdo ou editor da atividade | Bloco de Código | Fornecer o código atual, código inicial quando aplicável e capacidades habilitadas. |
+| Montagem Blockly | Bloco de Código | Fornecer Delégua gerado somente leitura, atualizado conforme a montagem. |
+| Bloco de Código | Contexto consumidor | Apresentar conteúdo, oferecer cópia e restauração quando habilitadas e disponibilizar alterações permitidas. |
+| Execução | Bloco de Código e atividade | Fornecer saída, erro ou solicitação de entrada correspondentes ao código executado. |
+| PRDs das atividades | Bloco de Código | Definir edição, execução, bloqueios, avaliação, vidas e persistência aplicáveis. |
+| Histórias interativas; Blocos de texto e narração | Apresentação do código no contexto | Definir destaque, histórico e narração de textos e enunciados, sem ampliar capacidades indevidamente. |
+
+O grafo identifica responsabilidades de produto, não uma ordem de implementação.
 
 ## 7. Jornadas
 
-#### JN-01 — Jornada preservada do documento legado
+#### JN-01 — Consultar código de referência sem execução
 
-### 3. Fluxo de Usuário (User Flow)
+1. A questão de múltipla escolha apresenta seu código de referência.
+2. O aluno consulta o conteúdo somente leitura, sem ação de execução.
+3. Usa a leitura para responder à questão, cuja avaliação segue Múltipla escolha.
+4. A ausência de conteúdo de referência não deve ser apresentada como uma área vazia enganosa.
 
-**Fluxo de consulta de código em lição:** Exibição de código como apoio ao entendimento.
+#### JN-02 — Consultar e executar um exemplo sem editar
 
-1. O usuário acessa uma tela de lição ou questão com trecho de código.
-2. O sistema exibe o snippet em modo leitura.
-3. O usuário consulta o conteúdo apresentado:
-   - **Sucesso:** O usuário compreende o exemplo sem precisar interagir com o snippet.
-   - **Falha:** Se não houver código disponível, o snippet não é exibido.
+1. A história apresenta um exemplo de leitura com cópia e execução habilitadas.
+2. O aluno lê e pode copiar o conteúdo sem poder editá-lo.
+3. Se escolher Executar, o código do exemplo é executado e o terminal apresenta o retorno ou erro.
+4. O aluno pode continuar sem executar, conforme Histórias interativas.
+5. A execução não libera edição nem constitui envio de resposta para avaliação.
 
-**Fluxo de experimentação de código:** Interação com snippet executável.
+#### JN-03 — Escrever, executar e restaurar uma resposta
 
-1. O usuário acessa um contexto com snippet executável.
-2. O sistema exibe o editor com ações de recarregar, copiar e executar.
-3. O usuário altera ou mantém o código inicial.
-4. O usuário realiza uma ação:
-   - **Executar:** O sistema processa o código e apresenta saída, erro ou solicitação de entrada.
-   - **Copiar:** O sistema copia o código atual e confirma a ação quando possível.
-   - **Recarregar:** O sistema restaura o código inicial.
+1. A atividade apresenta o editor vazio ou com código inicial, totalmente editável.
+2. O aluno escreve sua solução e executa; o editor respeita o bloqueio temporário definido em Escrita de código.
+3. Após execução, a atividade trata a condição de envio para análise da versão atual.
+4. Quando permitido, o aluno pode copiar seu código ou restaurar o conteúdo inicial.
+5. Se houver alterações, a restauração pede confirmação; cancelar preserva o trabalho.
+6. Avaliação, vidas e retomada continuam sob o PRD da questão.
 
-**Fluxo de execução com entrada:** Execução de snippet que depende de input do usuário.
+#### JN-04 — Consultar o código gerado por blocos
 
-1. O usuário acessa um snippet executável que exige entrada.
-2. O usuário aciona a execução.
-3. O sistema valida a necessidade de entrada:
-   - **Sucesso:** Solicita o dado necessário, recebe a resposta e continua a execução.
-   - **Falha:** Se a entrada for cancelada, a execução é interrompida e o snippet permanece disponível para nova tentativa.
+1. O aluno monta um programa ou consulta um exemplo em Blockly.
+2. Alterna para a aba Código e encontra o Delégua correspondente somente leitura.
+3. A troca de aba não modifica a montagem.
+4. Se a modalidade for executável, as ações seguem Programação em blocos; modalidades de montagem não oferecem execução.
+5. A visualização não permite converter alterações de código de volta para blocos.
 
----
+#### JN-05 — Executar código com entrada
+
+1. Em um contexto executável, o aluno inicia uma execução que solicita entrada.
+2. O sistema permite fornecer o dado necessário para continuar.
+3. Se a entrada for fornecida, a execução apresenta seu retorno ou erro.
+4. Se a entrada for cancelada, a execução é interrompida e o bloco continua disponível para nova execução conforme seu contexto.
+
+#### JN-06 — Recuperar uma ação indisponível ou falha
+
+1. O aluno tenta copiar código, mas a área de transferência está indisponível, ou executa e recebe um erro.
+2. O bloco mantém o conteúdo e a interface utilizáveis.
+3. O contexto permite nova tentativa da ação quando disponível.
+4. Uma falha de execução não deve ser apresentada como aprovação ou reprovação automática; a avaliação segue o PRD da atividade.
 
 ## 8. Fora do Escopo
 
-| Área | Exclusão explícita do MVP |
+| Área | Exclusão explícita desta revisão |
 | --- | --- |
-| Escopo | Persistência das alterações feitas pelo usuário entre sessões. |
-| Escopo | Versionamento ou histórico de edições do snippet. |
-| Escopo | Compartilhamento do snippet por link ou exportação estruturada. |
-| Escopo | Personalização avançada de aparência por contexto funcional. |
-| Escopo | Execução automática sem ação explícita do usuário |
+| Avaliação | Regras de correção, Jev e avaliação determinística, definidas nos PRDs das atividades. |
+| Persistência | Implementação de salvamento e sincronização; a necessidade de preservar respostas segue os PRDs de escrita e programação em blocos. |
+| Progressão e recompensas | Vidas, desbloqueio, conclusão, XP, StarCoins e streak. |
+| Autoria | Novas ferramentas ou reformulação dos formulários existentes. |
+| Desafios independentes | Mudanças nas regras de edição, execução e avaliação desses fluxos. |
+| Explicação por IA | Geração ou regeneração de explicações de código nas histórias, funcionalidade descontinuada nesse contexto. |
+| Playback | Reformulação do playback estático, tratado em PRD próprio. |
+| Compartilhamento | Versionamento de edições, compartilhamento por link e exportação estruturada. |
 
 ### Decisões descartadas durante a definição
 
-- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.
+| Alternativa considerada | Regra final |
+| --- | --- |
+| Exigir edição sempre que houver execução | Edição e execução são capacidades independentes. |
+| Ocultar todas as ações em código somente leitura | Permitir cópia e execução quando habilitadas pelo contexto, mantendo o conteúdo sem edição. |
+| Restringir restauração apenas pela permissão de executar | Habilitar restauração conforme edição e contexto. |
+| Ocultar um editor de resposta por estar vazio | Preservar a escrita do zero quando prevista pela atividade. |
+| Executar código de referência em múltipla escolha | Apresentar somente leitura e sem execução nesse contexto. |
+| Editar diretamente o código gerado pelo Blockly | Manter Delégua gerado somente leitura, com capacidades da modalidade da atividade. |
+| Aplicar as mudanças dos exemplos a todos os consumidores | Preservar regras próprias dos desafios e da autoria existentes. |

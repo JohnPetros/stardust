@@ -1,55 +1,76 @@
 ---
-title: Página de Lição
+title: Histórias interativas
 status: draft
 source:
+  - type: direct-request
+    ref: Reformulação das histórias aprovada em 2026-10-11
   - type: issue
     ref: https://github.com/JohnPetros/stardust/milestone/23
-last_updated_at: 2026-07-06
+last_updated_at: 2026-10-11
 ---
 
-# PRD — Página de Lição
+# PRD — Histórias interativas
 
-Disponibiliza para: lesson; consumidores adicionais não explicitados no documento legado.
+Disponibiliza para: lesson, experiência de consumo de uma história vinculada a uma estrela; Trilha e Espaço, continuidade e conclusão da estrela; resultado, encaminhamento da conclusão.
 
 Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
 ## 1. Resumo Executivo
 
-A **Página de Lição** é a experiência central de aprendizado do StarDust. Ao acessar uma "estrela" (star) da trilha, o aluno percorre uma jornada pedagógica em três estágios sequenciais:
+Histórias interativas são sequências de blocos que combinam narrativa, apresentação de conceitos e questões durante o aprendizado de programação no Stardust. O aluno autenticado acessa uma estrela de história, acompanha as explicações e pratica dentro da mesma sequência, sem um estágio separado de quiz.
 
-1. **História (Story):** conteúdo narrativo apresentado em blocos, opcionalmente acompanhado de **áudio narrado**.
-2. **Quiz:** conjunto de questões interativas de tipos variados, com sistema de vidas.
-3. **Rewarding:** tela de recompensa que consolida o desempenho (acertos, erros, tempo).
+A página deve oferecer progressão guiada, histórico consultável, elementos visuais em destaque e retomada da tentativa vinculada à conta. Questões exigem acerto para avançar; uma nova tentativa começa com dez vidas.
 
-**Problema que resolve:** oferecer um fluxo de aprendizado guiado e gamificado, unindo leitura de conteúdo, prática por questões e feedback de recompensa numa única sessão contínua.
-
-**Objetivo principal e valor:** garantir uma experiência narrativa consistente entre conteúdo, áudio e progressão, na qual o aluno consome a teoria e, em seguida, valida o aprendizado respondendo questões — recebendo recompensa ao final. A milestone consolidou a construção da história exclusivamente a partir de blocos estruturados (`TextBlocks`) e a reativação do narrador com áudio persistido por bloco.
-
----
+Este PRD define a experiência comum da história. A interação e a avaliação específicas de cada tipo de questão, suas versões de leitura, a autoria do conteúdo e a apresentação das recompensas pertencem a documentos próprios.
 
 ## 2. Problema e Oportunidade
 
-🚧 Em construção — problema e oportunidade não estão explicitados como seção própria no documento legado.
+A experiência anterior separa a história do quiz e mantém uma composição visual pouco variável. Sair da lição reinicia seu estado, dificultando a continuidade de uma sessão incompleta.
+
+A reformulação aproxima explicações e atividades, permite praticar após conhecer um conceito e mantém os blocos anteriores disponíveis para consulta. O destaque visual acompanha o contexto da narrativa, enquanto a retomada permite continuar em outra sessão ou dispositivo.
+
+A revisão é prospectiva: descreve o comportamento aprovado para a reformulação, sem afirmar que ele já existe na implementação. Pesquisa competitiva não é necessária para as decisões de funcionamento aprovadas neste escopo.
 
 ### Base de fontes e autoridade
 
 | ID | Material | Papel neste PRD |
 | --- | --- | --- |
-| S1 | https://github.com/JohnPetros/stardust/milestone/23 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+| S1 | Este PRD canônico, revisão de 2026-10-11 | Autoridade versionada para a experiência comum das histórias interativas. Substitui a revisão de Página de Lição de 2026-07-06. |
+| S2 | Pedido e decisões de produto aprovados em 2026-10-11 | Define blocos, destaque, questões integradas, dez vidas, reinício integral e retomada vinculada à conta. |
+| S3 | [Trilha e Espaço](../space/space-page.md) | Define planetas, estrelas, sequência, acesso e navegação pelo Espaço. |
+| S4 | [Milestone 23](https://github.com/JohnPetros/stardust/milestone/23) | Contexto legado de história estruturada e consumo de narração persistida. |
+| S5 | Fluxos existentes de Lesson, StoryStage e QuizStage na Web App | Evidência auxiliar do comportamento anterior e do diálogo de vidas esgotadas; não substitui as decisões desta revisão. |
 
 ## 3. Público-alvo
 
-🚧 Em construção — público-alvo, contexto de uso e Jobs to Be Done não estão explicitados no documento legado.
+O público principal é o aluno autenticado que aprende programação pela trilha do Stardust. O contexto de uso inclui desktop, mobile, sessões interrompidas e alternância entre dispositivos.
+
+Como público secundário, o aluno que retorna a uma história concluída pode consultar seu conteúdo conforme as regras de revisão da trilha. Autores de conteúdo e administradores não são o público deste fluxo; suas ferramentas ficam fora do escopo.
+
+Jobs to Be Done:
+
+- Quando estiver aprendendo um conceito, quero acompanhar explicações e praticar na mesma sequência, para verificar meu entendimento antes de continuar.
+- Quando precisar consultar uma explicação anterior, quero encontrar os blocos já percorridos, para relacioná-los à atividade atual.
+- Quando interromper uma história, quero retomar meu progresso e minhas vidas, para continuar em outra sessão ou dispositivo.
 
 ## 4. Objetivos e Métricas de Sucesso
 
-🚧 Em construção — objetivos e métricas estruturados não estão registrados no documento legado.
+| Objetivo do produto | Métrica aprovada | Significado da medição |
+| --- | --- | --- |
+| Integrar aprendizado e prática | Nenhuma meta numérica aprovada | Verificar se explicações, exemplos e questões pertencem à mesma sequência. |
+| Manter o histórico consultável | Nenhuma meta numérica aprovada | Verificar a consulta dos blocos anteriores e das respostas aprovadas após o avanço. |
+| Permitir continuidade entre sessões e dispositivos | Nenhuma meta numérica aprovada | Verificar a retomada do ponto de continuidade, respostas aprovadas e vidas restantes. |
+| Tornar o avanço compreensível | Nenhuma meta numérica aprovada | Verificar que a questão bloqueia o avanço até o acerto e que o feedback precede Continuar. |
 
 ### Limites de validação e premissas declaradas
 
 | Risco ou premissa | Consequência para validação |
 | --- | --- |
-| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+| A revisão define comportamento futuro, diferente do fluxo anterior História → Quiz → Resultado. | A implementação atual não comprova os novos requisitos. |
+| O destaque mobile deve preservar espaço para leitura. | Validar a altura limitada e a consulta do histórico em telas estreitas. |
+| A tentativa acompanha a conta. | Validar a continuidade entre sessões e dispositivos, não apenas o estado local da página. |
+| Cada atividade terá um PRD próprio. | Este documento valida o contrato comum de progressão, sem especificar algoritmos de avaliação. |
+| Não foram aprovadas metas numéricas. | Não inferir metas de aprendizagem, conversão ou retenção a partir deste documento. |
 
 ## 5. Requisitos de Produto
 
@@ -57,267 +78,317 @@ A **Página de Lição** é a experiência central de aprendizado do StarDust. A
 
 | Conceito | Regra de produto |
 | --- | --- |
-| Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+| Planeta | Tema da trilha, conforme Trilha e Espaço. |
+| Estrela | Unidade ordenada da trilha; pode conter uma história ou um desafio de código. |
+| História | Sequência de blocos de narrativa, apresentação de conceitos e questões. |
+| Bloco da história | Item da sequência: texto, imagem, Lottie, exemplo de código, exemplo de programação em blocos ou questão. |
+| Bloco de texto | Possui personagem, tipo e avatar próprios. O avatar pode variar entre blocos do mesmo personagem. |
+| Histórico | Conjunto consultável dos blocos percorridos, incluindo falas e respostas aprovadas após o avanço. |
+| Destaque | Apresentação temporária de um elemento visual, até um ponto definido da progressão. Não constitui uma sequência separada. |
+| Questão | Atividade inserida na história que exige resposta aprovada para liberar o avanço. |
+| Exemplo de leitura | Apresentação somente leitura; sua execução, quando disponível, é opcional. |
+| Tentativa | Progresso de uma história e suas vidas, preservados na conta até conclusão ou reinício integral. |
 
-#### RP-01 — Acesso e carregamento da lição
-
-Necessidades do usuário:
-
-- 🚧 Em construção — necessidade não explicitada no documento legado.
-
-Resultado: Acesso e carregamento da lição.
-
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** O aluno acessa a lição de uma estrela específica pela URL (`/lesson/{starSlug}`); o sistema carrega o conteúdo da história e as questões antes de exibir a página.
-
-##### Regras de Negócio
-- **Resolução da estrela:** O acesso é feito por *slug* da estrela. O sistema valida que a estrela existe; se não existir, a página não é renderizada.
-- **Carregamento de dados:** História (blocos de texto) e questões são carregadas no servidor durante a renderização inicial (SSR), em paralelo.
-- **Autenticação:** A lição é acessível apenas por usuário autenticado.
-- **Estado inicial:** A lição sempre inicia no estágio **História**.
-
-##### Regras de Experiência
-
-- **Transição de entrada:** Ao abrir a página, exibe-se uma animação de transição por aproximadamente 1 segundo antes de revelar o conteúdo.
-- **Loading:** Enquanto o áudio da história é preparado, o conteúdo correspondente só é exibido após a checagem de disponibilidade dos arquivos.
-
----
-
-#### RP-02 — Estágio História (Story)
+#### RP-01 — Acesso à história
 
 Necessidades do usuário:
 
-- 🚧 Em construção — necessidade não explicitada no documento legado.
+- Como aluno, quero acessar a história da estrela escolhida, para estudar seu conteúdo.
 
-Resultado: Estágio História (Story).
+Resultado: a história vinculada à estrela é apresentada ao aluno autorizado.
 
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** Apresentação do conteúdo teórico da estrela em blocos sequenciais que o aluno avança um a um.
+Atores: aluno autenticado.
 
 ##### Regras de Negócio
-- **Origem do conteúdo:** A história é construída **exclusivamente a partir de blocos estruturados (`TextBlocks`)**. Não há mais uso de conteúdo textual legado (`storyContent`) separado por `----`.
-- **Tipos de bloco:** Cada bloco tem um tipo (ex.: texto, imagem, código executável) e é renderizado em formato rico (MDX). Blocos de código podem ser executáveis.
-- **Progressão por blocos:** O aluno avança clicando em **Continuar**, que revela o próximo bloco. Blocos já lidos permanecem visíveis (histórico da leitura).
-- **Conclusão da história:** Ao chegar no último bloco, o botão de avanço dá lugar a uma confirmação ("Parabéns! Agora você pode ir para a próxima etapa 🚀") que leva ao estágio Quiz.
-- **Progresso:** O cabeçalho reflete o progresso de leitura (blocos lidos / total).
+
+- A história deve pertencer a uma estrela e respeitar as regras de acesso, desbloqueio e revisão de Trilha e Espaço.
+- O acesso deve identificar a estrela e carregar a sequência da história.
+- Uma tentativa incompleta deve ser apresentada conforme RP-08.
 
 ##### Regras de Experiência
 
-- **Título:** Exibe o número e o nome da estrela no topo do conteúdo.
-- **Animação:** Apenas o bloco recém-revelado é animado; blocos anteriores são apresentados de forma estável.
-- **Botão Continuar:** Fixado no rodapé, recebe foco automaticamente para permitir avanço por teclado.
-- **Feedback de fim:** Diálogo de confirmação ("Bora!") antes de transicionar para o Quiz.
+- O cabeçalho deve identificar o progresso e as vidas restantes, além de permitir sair.
+- O conteúdo deve identificar a história e sua estrela.
+- A entrada deve usar uma transição que comece com opacidade zero e revele o conteúdo.
 
----
-
-#### RP-03 — Áudio narrado da história (Speaker)
+#### RP-02 — Sequência de blocos
 
 Necessidades do usuário:
 
-- 🚧 Em construção — necessidade não explicitada no documento legado.
+- Como aluno, quero acompanhar os blocos em ordem, para aprender e praticar em uma sequência guiada.
 
-Resultado: Áudio narrado da história (Speaker).
+Resultado: o aluno percorre uma única sequência de narrativa, exemplos e questões.
 
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** Reprodução de narração em áudio para blocos elegíveis da história, a partir de arquivos previamente gerados e persistidos.
+Atores: aluno autenticado.
 
 ##### Regras de Negócio
-- **Áudio persistido, sem TTS em tempo real:** O áudio é reproduzido **a partir de arquivo persistido** no storage. **Não há fallback para geração de TTS em tempo real** durante a lição.
-- **Elegibilidade do player:** O controle de áudio só é exibido para blocos elegíveis cujo áudio tenha **status `done`** *e* cujo **arquivo esteja confirmado** no storage (pasta `audios/story`).
-- **Confirmação de existência:** Antes de exibir o player, o sistema verifica no storage se o arquivo de áudio realmente existe, evitando renderizar controles para arquivos indisponíveis.
-- **Blocos sem áudio:** Blocos sem áudio elegível são apresentados normalmente, apenas sem o controle de narração.
+
+- A história pode conter texto, imagem, Lottie, exemplos de código Delégua e de programação em blocos, além de questões de múltipla escolha, programação em blocos e escrita de código.
+- Continuar deve permitir percorrer os blocos na ordem da história, respeitando o bloqueio de questões descrito em RP-04.
+- Exemplos devem ser somente leitura. Quando executáveis, sua execução deve ser opcional para avançar.
+- Não deve existir uma passagem para um estágio separado de quiz.
 
 ##### Regras de Experiência
 
-- **Exibição condicional:** Player de áudio aparece somente nos blocos com áudio confirmado; nos demais, permanece oculto.
-- **Confiabilidade:** Caso a verificação de existência falhe, o bloco é tratado como sem áudio (não exibe player), em vez de exibir um controle quebrado.
+- Cada bloco de texto deve usar seu personagem, tipo e avatar, permitindo imagens diferentes para o mesmo personagem.
+- As cores dos blocos de texto devem ser fixas por personagem ou tipo, independentemente do tema atual.
+- Não deve haver um rótulo redundante com o nome Panda nos blocos de fala desse personagem.
+- Continuar deve permanecer no rodapé e ser operável por teclado.
+- Os blocos percorridos devem permanecer consultáveis no histórico.
 
----
-
-#### RP-04 — Estágio Quiz — questões interativas
+#### RP-03 — Narração disponível
 
 Necessidades do usuário:
 
-- 🚧 Em construção — necessidade não explicitada no documento legado.
+- Como aluno, quero ouvir a narração disponível, para acompanhar a explicação também por áudio.
 
-Resultado: Estágio Quiz — questões interativas.
+Resultado: blocos elegíveis oferecem narração quando seu arquivo está disponível.
 
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** Após a história, o aluno responde a uma sequência de questões de tipos variados para validar o aprendizado.
+Atores: aluno autenticado.
 
 ##### Regras de Negócio
-- **Tipos de questão suportados:** Seleção (`selection`), múltipla escolha (`checkbox`), aberta (`open`), ordenação por arrastar (`drag-and-drop-list`) e preenchimento de código por arrastar (`drag-and-drop`).
-- **Sequência:** As questões são apresentadas uma por vez, na ordem, avançando conforme o aluno acerta.
-- **Verificação em duas etapas:** O aluno primeiro **verifica** a resposta; se estiver correta, um segundo comando avança para a próxima questão. Se estiver incorreta, o aluno pode tentar novamente.
-- **Correção por tipo:** Cada tipo tem sua própria regra de acerto (ex.: seleção compara texto sem diferenciar maiúsculas/minúsculas; ordenação exige a sequência exata dos itens).
-- **Fim do quiz:** Quando não há próxima questão, a lição transiciona automaticamente para o estágio **Rewarding**.
+
+- A história deve consumir áudio previamente gerado e persistido.
+- O player deve ser disponibilizado somente quando o áudio estiver concluído e a existência do arquivo estiver confirmada.
+- Não deve haver geração de voz em tempo real como fallback.
+- A ausência de áudio ou a falha na confirmação do arquivo não deve impedir a leitura do bloco.
 
 ##### Regras de Experiência
 
-- **Renderização por tipo:** Cada tipo de questão possui sua própria interface (opções, checkboxes, campo aberto, itens arrastáveis, blocos de código com lacunas).
-- **Recursos da questão:** Uma questão pode incluir enunciado, imagem ilustrativa e/ou trecho de código.
-- **Botão de verificação:** Estado do botão reflete se a resposta foi respondida, verificada e se está correta.
-- **Progresso:** O cabeçalho reflete o avanço nas questões.
+- Blocos sem áudio disponível devem ser apresentados normalmente, sem player indisponível.
+- A narração não deve substituir o conteúdo textual.
 
----
-
-#### RP-05 — Sistema de vidas
+#### RP-04 — Questões integradas à história
 
 Necessidades do usuário:
 
-- 🚧 Em construção — necessidade não explicitada no documento legado.
+- Como aluno, quero responder questões durante a história e receber feedback, para verificar meu entendimento antes de avançar.
 
-Resultado: Sistema de vidas.
+Resultado: a resposta aprovada libera Continuar; a resposta incorreta permite nova tentativa enquanto houver vidas.
 
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** Mecânica de gamificação que limita a quantidade de erros permitidos durante o quiz.
+Atores: aluno autenticado.
 
 ##### Regras de Negócio
-- **Vidas iniciais:** O aluno começa o quiz com **5 vidas**.
-- **Perda de vida:** Ao confirmar uma resposta incorreta (após já tê-la verificado), o aluno perde uma vida e a contagem de respostas incorretas é incrementada.
-- **Contagem de erros:** O total de respostas incorretas é registrado para compor a recompensa ao final.
-- **Fim por falta de vidas:** Ao zerar as vidas, o aluno não pode continuar a lição.
+
+- Cada questão deve ocupar um ponto da sequência da história.
+- O aluno deve acertar a questão antes de avançar.
+- Uma resposta incorreta deve permitir nova tentativa, respeitando RP-05.
+- Após a aprovação, o próximo bloco não deve aparecer automaticamente: o aluno deve acionar Continuar.
+- A interação, a avaliação e o feedback específicos de cada tipo devem ser definidos em PRDs próprios.
 
 ##### Regras de Experiência
 
-- **Feedback de fim:** Ao ficar sem vidas, exibe-se um diálogo ("Puxa, parece que você não tem mais vidas!" / "Mais sorte da próxima vez 😢") com ação para **Sair** da lição.
+- A questão deve apresentar o enunciado como bloco de texto acima da atividade.
+- Durante a questão, o histórico não deve ser exibido simultaneamente à atividade.
+- O feedback deve permanecer disponível antes de Continuar.
+- Após o avanço, a questão e sua resposta aprovada devem permanecer disponíveis para consulta no histórico.
+- Acerto e erro devem ser compreensíveis por texto ou indicação visual além da cor.
 
----
-
-#### RP-06 — Cronômetro do quiz
+#### RP-05 — Vidas e reinício integral
 
 Necessidades do usuário:
 
-- 🚧 Em construção — necessidade não explicitada no documento legado.
+- Como aluno, quero entender minhas vidas e como recomeçar, para continuar aprendendo após erros.
 
-Resultado: Cronômetro do quiz.
+Resultado: a tentativa inicia com dez vidas e pode ser reiniciada integralmente quando elas acabam.
 
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** Medição do tempo gasto pelo aluno para compor a recompensa.
+Atores: aluno autenticado.
 
 ##### Regras de Negócio
-- **Escopo da contagem:** O tempo é contado **apenas durante o estágio Quiz** (não durante a história).
-- **Reinício:** O contador é zerado ao iniciar/entrar na lição e ao sair.
-- **Uso:** O tempo total (em segundos) integra os dados enviados à tela de recompensa.
+
+- Uma nova tentativa deve começar com dez vidas.
+- Cada resposta enviada e considerada incorreta deve custar uma vida.
+- Executar exemplos ou experimentar código não deve custar vidas.
+- Ao zerar as vidas, o aluno não deve continuar a tentativa atual.
+- Recomeçar história deve limpar toda a tentativa anterior e restaurar dez vidas, reiniciando a história inteira, não apenas a questão.
+- Sair deve retornar ao Espaço. Essa ação não deve restaurar vidas nem reiniciar a tentativa.
 
 ##### Regras de Experiência
 
-- 🚧 Em construção — regra de experiência não explicitada no documento legado.
+- O cabeçalho deve apresentar as vidas restantes.
+- O diálogo existente de vidas esgotadas deve oferecer Recomeçar história e Sair.
+- O diálogo deve deixar claro que recomeçar reinicia toda a história.
 
----
-
-#### RP-07 — Transição para Rewarding
+#### RP-06 — Progresso único da história
 
 Necessidades do usuário:
 
-- 🚧 Em construção — necessidade não explicitada no documento legado.
+- Como aluno, quero acompanhar meu progresso na história, para saber quanto falta concluir.
 
-Resultado: Transição para Rewarding.
+Resultado: uma única barra representa os blocos concluídos da sequência completa.
 
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** Ao concluir o quiz, o sistema consolida o desempenho e encaminha o aluno para a tela de recompensa.
+Atores: aluno autenticado.
 
 ##### Regras de Negócio
-- **Dados consolidados:** Ao final, o sistema reúne número total de questões, quantidade de respostas incorretas, tempo total (segundos) e identificador da estrela.
-- **Encaminhamento:** Esses dados são repassados para a tela de recompensa (`/rewarding/star`), que exibe o resultado.
-- **Limpeza de estado:** Ao encaminhar, o estado da lição e o cronômetro são reiniciados.
+
+- O progresso deve considerar os blocos concluídos em relação ao total de blocos da história, incluindo textos, exemplos e questões.
+- Uma questão não deve contar como concluída antes da aprovação de sua resposta.
+- O progresso deve chegar a 100% somente ao concluir a história.
+- Executar um exemplo não deve ser requisito de conclusão do bloco.
 
 ##### Regras de Experiência
 
-- **Loading de transição:** Durante a passagem para a recompensa, o cabeçalho da lição é ocultado e um indicador de carregamento é exibido.
+- A barra deve permanecer no cabeçalho e representar a mesma sequência durante leitura e questões.
+- Não deve haver uma barra separada para quiz.
 
-> **Assunção:** O cálculo e a apresentação final da recompensa (XP, ganhos, animações) pertencem à tela `/rewarding/star` e são tratados como consumidores dos dados aqui produzidos, não como parte deste PRD.
-
----
-
-#### RP-08 — Sair da lição
+#### RP-07 — Conclusão e encaminhamento ao resultado
 
 Necessidades do usuário:
 
-- 🚧 Em construção — necessidade não explicitada no documento legado.
+- Como aluno, quero concluir a história e visualizar seu resultado, para reconhecer o avanço na trilha.
 
-Resultado: Sair da lição.
+Resultado: concluir todos os blocos encaminha o aluno à experiência de resultado da estrela.
 
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** O aluno pode abandonar a lição a qualquer momento antes da recompensa.
+Atores: aluno autenticado.
 
 ##### Regras de Negócio
-- **Saída:** Ao sair, o estado da lição é reiniciado, o cronômetro é limpo e o aluno é redirecionado para o mapa/espaço (`/space`).
+
+- A história deve ser concluída somente após percorrer a sequência e aprovar suas questões.
+- A conclusão deve identificar a estrela e ser fornecida às áreas responsáveis por progresso e resultado.
+- Cálculo de XP e moedas, apresentação de recompensas e streak devem pertencer ao PRD de resultado.
+- Tempo e quantidade de erros não devem compor o cálculo da recompensa neste fluxo.
 
 ##### Regras de Experiência
 
-- **Cabeçalho:** Presente nos estágios História e Quiz (oculto no Rewarding), oferece a ação de sair e reflete o progresso do estágio atual.
+- Ao terminar a sequência, o aluno deve ser encaminhado à experiência de resultado.
+- Não deve existir uma confirmação intermediária para entrar em um quiz.
+
+#### RP-08 — Saída e retomada vinculada à conta
+
+Necessidades do usuário:
+
+- Como aluno, quero interromper e retomar uma história, para continuar em outra sessão ou dispositivo.
+
+Resultado: a tentativa incompleta é retomada com seu ponto de continuidade e suas vidas preservados.
+
+Atores: aluno autenticado.
+
+##### Regras de Negócio
+
+- Sair ou recarregar uma história incompleta deve preservar o ponto de continuidade, os blocos percorridos, as respostas aprovadas e as vidas restantes.
+- A tentativa deve acompanhar a conta entre dispositivos, não ficar restrita ao dispositivo usado anteriormente.
+- Sair deve retornar ao Espaço sem reiniciar a tentativa.
+- O reinício integral deve ocorrer pela ação Recomeçar história descrita em RP-05.
+
+##### Regras de Experiência
+
+- Ao retornar, o aluno deve continuar do ponto preservado, com o histórico correspondente disponível.
+- A retomada não deve exigir repetir questões já aprovadas na mesma tentativa.
+
+#### RP-09 — Histórico, destaque e composição responsiva
+
+Necessidades do usuário:
+
+- Como aluno, quero consultar as falas anteriores enquanto observo o elemento em destaque, para relacionar a narrativa ao exemplo apresentado.
+
+Resultado: o destaque permanece visível durante seu trecho da história, enquanto todas as falas pertencem ao histórico rolável.
+
+Atores: aluno autenticado.
+
+##### Regras de Negócio
+
+- Um elemento visual pode permanecer em destaque até um ponto definido da progressão.
+- Ao atingir esse ponto, o elemento deve sair do destaque e passar a integrar o histórico como bloco normal.
+- Nenhuma fala deve ficar sticky; todas devem fazer parte do histórico rolável.
+- A apresentação de questões deve seguir RP-04, sem histórico simultâneo.
+
+##### Regras de Experiência
+
+- No desktop, o elemento em destaque deve ficar sticky ao lado do histórico; a composição pode alternar os lados durante a história.
+- No mobile, o elemento em destaque deve ficar sticky no topo, abaixo do cabeçalho, com altura limitada para preservar espaço de leitura. As falas devem rolar abaixo.
+- O topo da área rolável do histórico deve apresentar sombreamento de overflow.
+- Mudanças de composição devem ser animadas; a entrada dos elementos deve começar com opacidade zero.
+- A composição deve permitir consultar os blocos anteriores sem fixar uma fala fora da área de rolagem.
 
 ## 6. Grafo de Dependências do Produto
 
 | Produtor/área | Consumidor | Responsabilidade |
 | --- | --- | --- |
-| lesson | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+| Trilha e Espaço | Histórias interativas | Fornecer identidade da estrela, ordem, desbloqueio e regras de acesso e revisão. |
+| Conteúdo da história | Histórias interativas | Fornecer a sequência de blocos, personagens, avatares, tipos e pontos de encerramento do destaque; a autoria fica fora deste PRD. |
+| Histórias interativas | Questões e exemplos de leitura | Fornecer o contexto da sequência e aplicar o contrato comum de progressão, vidas e histórico. |
+| Múltipla escolha, programação em blocos e escrita de código | Histórias interativas | Fornecer interação, avaliação e feedback específicos por meio de PRDs próprios. |
+| Conta do aluno | Histórias interativas | Preservar e disponibilizar a continuidade da tentativa entre sessões e dispositivos. |
+| Áudio persistido | Histórias interativas | Fornecer arquivos disponíveis para os blocos elegíveis, sem geração em tempo real. |
+| Histórias interativas | Trilha e Espaço; resultado e recompensas | Fornecer a conclusão da estrela para progressão e apresentação do resultado. |
+
+O grafo identifica responsabilidades de produto, não uma ordem de implementação.
 
 ## 7. Jornadas
 
-#### JN-01 — Jornada preservada do documento legado
+#### JN-01 — Percorrer uma história
 
-### 3. Fluxo de Usuário (User Flow)
+1. O aluno acessa uma estrela de história autorizada pela trilha.
+2. O sistema apresenta a sequência, o progresso e as vidas da tentativa.
+3. O aluno acompanha os blocos usando Continuar.
+4. Quando houver narração disponível, pode ouvi-la; sem áudio, continua lendo normalmente.
+5. Quando houver exemplo executável, pode executá-lo ou continuar sem executar.
+6. Ao encontrar uma questão, segue JN-02; ao terminar a sequência, segue JN-06.
 
-**Fluxo principal — concluir a lição:** Caminho feliz do início ao fim.
+#### JN-02 — Responder uma questão
 
-1. O usuário acessa a lição de uma estrela por `/lesson/{starSlug}`.
-2. O sistema valida a existência da estrela e carrega história + questões.
-   - **Sucesso:** A página abre no estágio **História** (após animação de entrada).
-   - **Falha:** A página não é renderizada.
-3. O usuário lê os blocos da história, avançando em **Continuar**; onde houver áudio elegível confirmado, pode reproduzir a narração.
-4. Ao chegar no último bloco, confirma a passagem ("Bora!") e entra no **Quiz**.
-5. O usuário responde às questões (verifica → avança). O cronômetro corre durante o quiz.
-6. O sistema avalia cada resposta:
-   - **Correta:** Avança para a próxima questão.
-   - **Incorreta:** Permite nova tentativa; ao reconfirmar erro, perde uma vida.
-7. Ao responder a última questão, o sistema consolida desempenho e encaminha para **Rewarding** (`/rewarding/star`).
+1. O sistema apresenta o enunciado acima da atividade, sem o histórico simultâneo.
+2. O aluno responde e envia sua resposta para avaliação.
+3. Se a resposta estiver incorreta, recebe feedback, perde uma vida e pode tentar novamente enquanto houver vidas.
+4. Se a resposta estiver aprovada, recebe feedback e pode acionar Continuar.
+5. Após Continuar, a sequência prossegue e a resposta aprovada permanece consultável no histórico.
+6. Se as vidas acabarem, segue JN-05.
 
-**Fluxo alternativo — sem vidas:** Interrupção por esgotamento de vidas.
+#### JN-03 — Consultar o histórico e acompanhar o destaque
 
-1. Durante o quiz, o usuário perde a 5ª vida ao reconfirmar uma resposta incorreta.
-2. O sistema detecta ausência de vidas e exibe o diálogo de fim.
-3. O usuário escolhe **Sair** → estado reiniciado e redirecionamento para `/space`.
+1. A história apresenta um elemento visual em destaque.
+2. No desktop, o elemento permanece ao lado do histórico; no mobile, permanece no topo abaixo do cabeçalho.
+3. O aluno rola todas as falas e os blocos anteriores na área do histórico.
+4. Ao atingir o ponto definido da progressão, o elemento sai do destaque e passa a integrar o histórico normalmente.
+5. A história prossegue com a composição correspondente ao próximo conteúdo.
 
-**Fluxo alternativo — sair no meio:** Abandono voluntário.
+#### JN-04 — Interromper e retomar
 
-1. Em qualquer estágio (História/Quiz), o usuário aciona **Sair** no cabeçalho.
-2. O sistema reinicia estado e cronômetro e redireciona para `/space`.
+1. O aluno sai ou recarrega uma história incompleta.
+2. O ponto de continuidade, os blocos percorridos, as respostas aprovadas e as vidas restantes são preservados na conta.
+3. Ao sair, o aluno retorna ao Espaço.
+4. Ao abrir novamente a história, na mesma sessão ou em outro dispositivo, retoma o ponto preservado.
+5. O aluno consulta seu histórico e continua sem repetir questões já aprovadas na tentativa.
 
----
+#### JN-05 — Ficar sem vidas
+
+1. Uma resposta incorreta consome a última vida da tentativa.
+2. O sistema impede o avanço e apresenta o diálogo de vidas esgotadas.
+3. O aluno escolhe uma ação:
+   - Recomeçar história: toda a tentativa anterior é limpa; a história reinicia com dez vidas.
+   - Sair: o aluno retorna ao Espaço, sem restaurar as vidas da tentativa esgotada.
+4. A ação Recomeçar história não preserva apenas a questão atual nem as respostas aprovadas da tentativa anterior.
+
+#### JN-06 — Concluir a história
+
+1. O aluno percorre todos os blocos e aprova as questões da sequência.
+2. A barra chega a 100% e a conclusão identifica a estrela correspondente.
+3. O sistema encaminha o aluno à experiência de resultado.
+4. O resultado e o retorno ao Espaço seguem seus PRDs próprios.
 
 ## 8. Fora do Escopo
 
-| Área | Exclusão explícita do MVP |
+| Área | Exclusão explícita do MVP deste PRD |
 | --- | --- |
-| Escopo | **Autoria no Studio:** Edição de questões e blocos da história, suporte a áudio para blocos de imagem e novas vozes narrativas para a equipe editorial (itens entregues na milestone, porém pertencentes ao fluxo do Studio, não ao consumo pelo aluno). |
-| Escopo | **Geração de áudio TTS:** Todo o pipeline de geração/cancelamento/remoção de áudio (jobs assíncronos, provedores TTS) — a lição apenas consome arquivos já persistidos. |
-| Escopo | **Explicação de código (code explanation):** Recurso de explicação de trechos de código e seu limite de usos. |
-| Escopo | **TTS em tempo real:** Explicitamente descartado — não há fallback de narração gerada na hora. |
-| Escopo | **Conteúdo legado da história:** `storyContent` separado por `----` foi descontinuado. |
-| Escopo | **Tela de recompensa (`/rewarding/star`):** Cálculo de XP/recompensas e suas animações são consumidores dos dados desta feature, documentados separadamente. |
-| Escopo | **Fallback de TTS em tempo real na lição:** Descartado em favor de áudio persistido — reduz risco de latência/indisponibilidade e de exibir controles para arquivos ainda não prontos. |
-| Escopo | **Fallback por `storyContent` (`----`):** Descartado ao migrar a história para blocos estruturados (`TextBlocks`), tornando o conteúdo mais consistente e estruturado. |
-| Escopo | **Exibir player sem confirmação de arquivo:** Descartado — o player passou a exigir status `done` *e* confirmação da existência do arquivo no storage, evitando controles quebrados. |
+| Autoria | Cadastro, edição e publicação de planetas, estrelas, histórias, questões, soluções e cenas. |
+| Atividades | Algoritmos e regras específicos de avaliação, incluindo avaliação determinística e Jev; interfaces específicas e versões de leitura serão documentadas separadamente. |
+| Desafios | Funcionamento das estrelas de desafio independente de código. |
+| Resultado e recompensas | Cálculo de XP e moedas, apresentação do resultado e streak. |
+| Áudio | Geração, cancelamento ou gerenciamento de arquivos e novas vozes. |
+| Implementação | Contratos de armazenamento, sincronização, concorrência entre dispositivos e infraestrutura de execução. |
 
 ### Decisões descartadas durante a definição
 
-- **Fallback de TTS em tempo real na lição:** Descartado em favor de áudio persistido — reduz risco de latência/indisponibilidade e de exibir controles para arquivos ainda não prontos.
-- **Fallback por `storyContent` (`----`):** Descartado ao migrar a história para blocos estruturados (`TextBlocks`), tornando o conteúdo mais consistente e estruturado.
-- **Exibir player sem confirmação de arquivo:** Descartado — o player passou a exigir status `done` *e* confirmação da existência do arquivo no storage, evitando controles quebrados.
-
----
-
-A implementação observada está **alinhada** aos requisitos de produto descritos na milestone #23. Os pontos abaixo são fronteiras de escopo, não contradições:
-
-- **Itens de Studio/Server na milestone:** A milestone inclui entregas de Studio (áudio para blocos de imagem, novas vozes) e de Server (validação pública de existência de arquivos e vozes atualizadas). Este PRD cobre o **consumo pelo aluno + áudio da história**; esses itens ficam fora do escopo deste documento, embora façam parte da mesma milestone. Impacto: nenhum sobre o comportamento documentado aqui — a lição consome os arquivos e vozes já persistidos.
-- **Sem divergências de comportamento identificadas** entre o que a milestone define para o consumo da lição (história por `TextBlocks`, player condicionado a `audio.status = done` + arquivo confirmado, progressão História → Quiz → Rewarding preservada) e o comportamento observável na codebase.
+| Alternativa considerada | Regra final |
+| --- | --- |
+| História seguida de um estágio separado de quiz | Questões integram a própria sequência da história. |
+| Cinco vidas iniciais | Uma nova tentativa começa com dez vidas. |
+| Reiniciar apenas a questão após esgotar vidas | Recomeçar reinicia toda a história e restaura dez vidas. |
+| Reiniciar o estado ao sair | A tentativa incompleta é preservada na conta. |
+| Retomada restrita ao dispositivo | A tentativa acompanha a conta entre dispositivos. |
+| Avançar automaticamente após o acerto | O aluno lê o feedback e aciona Continuar. |
+| Exigir execução dos exemplos para avançar | Exemplos são somente leitura e sua execução é opcional quando disponível. |
+| Fixar uma fala fora do histórico rolável | Todas as falas pertencem ao histórico; somente o elemento visual fica sticky. |
+| No mobile, o destaque acompanhar a rolagem | O destaque fica sticky no topo abaixo do cabeçalho, com altura limitada. |
+| Usar tempo e erros para compor a recompensa | Tempo e quantidade de erros não compõem o cálculo da recompensa deste fluxo. |
+| Gerar narração em tempo real quando faltar arquivo | Consumir apenas áudio previamente gerado e disponível. |

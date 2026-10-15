@@ -2,12 +2,16 @@
 title: Explicação de bloco de código por IA
 status: draft
 source:
+  - type: direct-request
+    ref: Descontinuação nas histórias aprovada em 2026-10-11
   - type: issue
     ref: https://github.com/JohnPetros/stardust/milestone/25
-last_updated_at: 2026-04-15
+last_updated_at: 2026-10-11
 ---
 
 # PRD — Explicação de bloco de código por IA
+
+> **Descontinuada nas histórias em 2026-10-11:** a funcionalidade de explicação de código por IA deve ser retirada de todos os blocos de código das histórias, inclusive exemplos de leitura. A avaliação das respostas pelo Jev permanece. As regras e jornadas abaixo registram a definição anterior e não autorizam sua manutenção ou nova implementação nessa experiência. Regra vigente: [Escrita de código](code-writing.md#rp-09--retirar-a-explicação-de-código-por-ia-das-histórias).
 
 Disponibiliza para: lesson; consumidores adicionais não explicitados no documento legado.
 
