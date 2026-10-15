@@ -22,6 +22,20 @@
       "when": 1790905339345,
       "tag": "0002_server_owned_access",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792105295112,
+      "tag": "0003_tranquil_mulholland_black",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792105406365,
+      "tag": "0004_outbox_server_access",
+      "breakpoints": true
     }
   ]
 }

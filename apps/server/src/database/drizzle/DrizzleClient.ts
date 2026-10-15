@@ -22,6 +22,7 @@ export class DrizzleClient {
   private static connection: ConnectionState | undefined
   private static closing: Promise<void> | undefined
   private static hasShutdownHandlers = false
+  private static readonly shutdownHooks = new Set<() => Promise<void>>()
 
   static create(databaseUrl: string): DrizzleDatabase {
     DrizzleClient.assertConfiguration(databaseUrl)
@@ -61,6 +62,13 @@ export class DrizzleClient {
     return DrizzleClient.connection.database
   }
 
+  static registerShutdownHook(handler: () => Promise<void>): () => void {
+    DrizzleClient.shutdownHooks.add(handler)
+    return () => {
+      DrizzleClient.shutdownHooks.delete(handler)
+    }
+  }
+
   static close(): Promise<void> {
     if (DrizzleClient.closing) return DrizzleClient.closing
     if (!DrizzleClient.connection) return Promise.resolve()
@@ -68,10 +76,28 @@ export class DrizzleClient {
     return DrizzleClient.closing
   }
 
-  private static endConnection(connection: ConnectionState): Promise<void> {
-    return connection.pool.end({ timeout: 5 }).finally(() => {
+  private static async endConnection(connection: ConnectionState): Promise<void> {
+    try {
+      await DrizzleClient.runShutdownHooks()
+    } finally {
+      await DrizzleClient.closePool(connection)
+    }
+  }
+
+  private static async runShutdownHooks(): Promise<void> {
+    const results = await Promise.allSettled(
+      [...DrizzleClient.shutdownHooks].map(async (handler) => handler()),
+    )
+    const failure = results.find((result) => result.status === 'rejected')
+    if (failure?.status === 'rejected') throw failure.reason
+  }
+
+  private static async closePool(connection: ConnectionState): Promise<void> {
+    try {
+      await connection.pool.end({ timeout: 5 })
+    } finally {
       DrizzleClient.connection = undefined
       DrizzleClient.closing = undefined
-    })
+    }
   }
 }

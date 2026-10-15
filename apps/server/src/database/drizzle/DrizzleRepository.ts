@@ -3,12 +3,17 @@ import { AppError, ConflictError } from '@stardust/core/global/errors'
 import type { DatabaseAccess } from './DatabaseAccess'
 import type { DrizzleDatabase } from './DrizzleClient'
 import { DrizzleDatabaseError } from './errors'
+import { DatabaseTransactionContext } from './DatabaseTransactionContext'
 
 export abstract class DrizzleRepository {
   constructor(
-    protected readonly database: DrizzleDatabase,
+    private readonly connection: DrizzleDatabase,
     protected readonly access: DatabaseAccess,
   ) {}
+
+  protected get database(): DrizzleDatabase {
+    return DatabaseTransactionContext.current?.executor ?? this.connection
+  }
 
   protected async executeQuery<T>(operation: () => Promise<T>): Promise<T> {
     try {
@@ -38,7 +43,7 @@ export abstract class DrizzleRepository {
   protected handleQueryError(error: unknown): never {
     if (error instanceof AppError) throw error
     if (this.hasConstraintConflict(error)) throw new ConflictError('O registro já existe')
-    throw new DrizzleDatabaseError()
+    throw new DrizzleDatabaseError(error)
   }
 
   private hasConstraintConflict(error: unknown, visited = new Set<unknown>()): boolean {
