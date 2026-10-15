@@ -14,13 +14,25 @@ A task principal conduz o fechamento na task atual. Não crie nova thread.
 - nenhuma tarefa ou finding bloqueante pendente;
 - revisão da Spec correspondente ao diff atual;
 - `evaluation.md` criado e atualizado até o preflight;
-- um Implementation Reviewer aceito para cada Builder e o HEAD correspondente.
+- um Implementation Reviewer aceito para cada Builder, com commit avaliado e
+  aplicabilidade ao diff atual registrados; um commit só de ledger não exige
+  nova revisão quando as afirmações/dependências avaliadas permanecem iguais.
 
 ## Validação final
 
+A conclusão consome a evidência do candidato integrado; não reinicia validação.
+Siga `documentation/tooling.md#execução-de-checks-por-impacto`, reutilize checks
+válidos e execute somente os ausentes ou invalidados. Um novo SHA, papel ou
+registro documental não invalida prova por si só. Não execute suites completas
+locais por padrão. Registre comandos, seleções, contagens, resultados, tempo,
+candidato/ambiente e justificativa de qualquer ampliação. Os itens abaixo
+confirmam evidência atual; rerode seus comandos somente quando necessário.
+
 1. Confirme que os sensores locais e o preflight estão registrados em
-   `evaluation.md`, incluindo `test:coverage` e `check:coverage` para Core,
-   Server, Studio ou Web quando aplicável.
+   `evaluation.md`, incluindo a seleção e limites de cobertura. Para Core,
+   Server, Studio e Web, diferencie cobertura local focada do ratchet agregado
+   obrigatório no CI; uma medição completa local exige impacto ou obrigação
+   explícita. Não marque o agregado como passed com um relatório parcial.
 2. Execute `npm run check:spec-definition -- <spec>` contra a revisão final. Um
    resultado diferente de `passed` impede a conclusão.
 3. Se houver Plan, execute `npm run check:plan-definition -- <plan>` contra a
@@ -36,8 +48,9 @@ A task principal conduz o fechamento na task atual. Não crie nova thread.
 7. Não substitua os Reviewers pareados por um veredito único. Confirme um
    `Implementation Reviewer` aceito para cada Builder; em uma Spec direta, há
    um Reviewer Direct, e em um Plan, um Reviewer por fase/tarefa Builder.
-8. Se houver qualquer alteração depois de um veredito, interrompa o fechamento,
-   atualize o diff/evidências e repita o Reviewer pareado do Builder afetado.
+8. Se uma alteração invalidar afirmações/dependências de um veredito, atualize
+   diff/evidências e retome o Reviewer pareado sobre o escopo afetado. Preserve
+   prova válida; não rerode suites automaticamente para review ou novo commit.
 9. Registre o veredito e o commit/HEAD avaliado em `evaluation.md`.
 
 10. Analise todos os findings, warnings e falhas observados durante a Spec
@@ -79,9 +92,11 @@ autorização não existir, pare antes de qualquer mutação externa e solicite-
 usuário. Se houver alterações staged, alterações fora do escopo ou ambiguidade
 de agrupamento, preserve-as e pare conforme as regras dos workflows chamados.
 
-O Plan, `evaluation.md`, os Reviewers pareados e o CI devem apontar para o HEAD
-final correspondente. Todos os checks obrigatórios e o build verde local são
-pré-condições para chamar `commit-code`; o CI verde do PR é pré-condição para
+O Plan e `evaluation.md` identificam o candidato final; os Reviewers registram
+o commit avaliado e sua aplicabilidade atual, e o CI verifica o HEAD publicado.
+Os checks locais contratados e aplicáveis, incluindo
+build quando seu impacto/Contract o exigir, são pré-condições para chamar
+`commit-code`; não há build local universal por entrar em conclusão. O CI verde do PR é pré-condição para
 marcar Spec, Plan e Evaluation como `completed`. Enquanto o PR ou o CI estiver
 pendente, mantenha os artefatos em estado intermediário e registre o URL, SHA,
 resultado e próximo passo em `evaluation.md`.

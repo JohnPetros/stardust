@@ -100,7 +100,11 @@ aumento de `skip`/`todo` ou source testável alterado sem teste correspondente.
 
 ## Baseline e descoberta
 
-Antes de editar, registre o estado do workspace:
+Antes de editar, selecione o boundary e a medição desejada conforme
+`documentation/tooling.md#execução-de-checks-por-impacto`. Reutilize relatório
+atual válido. Os comandos abaixo medem o agregado do workspace e só devem ser
+executados localmente quando o objetivo da tarefa exigir essa medição; não
+execute todos os workspaces por padrão:
 
 ```bash
 npm run check:test-integrity -- --base <commit-base>
@@ -142,9 +146,10 @@ factories, fixtures e convenções existentes. Assertions devem verificar retorn
 estado e efeitos observáveis, não apenas que um mock foi chamado.
 
 Para UI, cubra o widget ou route boundary com locators acessíveis e os estados
-relevantes. Para fluxo real, use Playwright conforme `AGENTS.md`, registre
-`console`, `pageerror`, `requestfailed` e respostas HTTP, e nunca declare uma
-tela autenticada funcional apenas por uma suíte baseada em mocks.
+relevantes. Para fluxo real, use o smoke feliz Playwright conforme `AGENTS.md`:
+registre rota, resultado e status dos endpoints essenciais; capture diagnósticos
+detalhados somente em falha inesperada. Nunca declare uma tela autenticada
+funcional apenas por uma suíte baseada em mocks.
 
 ## Subagentes e ownership
 
@@ -162,7 +167,8 @@ Cada assignment deve informar:
 
 A task principal mantém decisões compartilhadas, integra diffs, resolve
 conflitos e executa a validação final. Relatório de subagente não é evidência:
-verifique o diff integrado e repita testes, cobertura e checks.
+verifique o diff integrado e os artefatos/resultados; reexecute somente testes,
+cobertura e checks ausentes, falhos ou invalidados por essa integração.
 
 Quando a cobertura fizer parte de um Plan, mantenha ownership por Builder e um
 `Implementation Reviewer` read-only pareado por Builder. Qualquer correção após
@@ -189,38 +195,47 @@ artefatos gerados.
 
 ## Gate de validação
 
-Execute primeiro o teste focado e depois os sensores aplicáveis:
+Execute primeiro os testes exatos afetados e depois somente checks
+ausentes/invalidados conforme Tooling. Substitua os placeholders por paths
+verificados, sem executar todos os workspaces:
 
 ```bash
 npm run check:test-integrity -- --base <commit-base>
-npm run test:coverage -w <workspace>
-npm run check:coverage -- <workspace>
-npm run check:code
-npm run check:types
-npm run test:unit
+npm run test:unit -w <workspace> -- --runTestsByPath <arquivos-de-teste> --watch=false
+npm exec -- biome check <paths-alterados>
+npm run check:types -w <workspace>
 ```
 
-Acrescente conforme os paths e Rules:
+Acrescente conforme dependências, Rules e objetivo da medição. Integrações
+afetadas rodam após integrar os escopos; ampliação exige motivo registrado:
 
 ```bash
-npm run check:architecture
-npm run test:integration
-npm run test:scripts
+npm run check:complexity -w <workspace>
+npm run check:architecture -w <workspace>
+npm run test:integration -w @stardust/server -- --runTestsByPath <arquivos-de-teste> --watch=false
+npm run test:integration -w @stardust/web -- <arquivos-de-cenario>
+node --test <arquivos-em-scripts/tests>
 npm run check:spec-definition -- <spec>
 npm run check:plan-definition -- <plan>
 npm run check:spec-implementation -- <spec> --base <commit-base>
 ```
 
-Para Core, Server, Studio e Web, `test:coverage` e `check:coverage` são
-obrigatórios. `lsp`, `validation` e `email` permanecem
-fora do quality ratchet de cobertura. Use validação de banco, browser, build ou
-geração somente quando o boundary exigir.
+Para medir melhoria do agregado em Core, Server, Studio ou Web, use
+`npm run test:coverage -w <workspace>` e
+`npm run check:coverage -- <workspace>` com relatório completo. Cobertura
+focada usa diretório separado e não prova esse ratchet; registre o agregado
+pendente para CI quando não medido localmente. Os gates configurados de CI
+permanecem obrigatórios. `lsp`, `validation` e `email` permanecem fora do quality
+ratchet. Use banco, browser, build ou geração somente quando o boundary exigir.
 
 O gate só passa quando:
 
 - todos os testes novos passam;
 - `check:test-integrity` passa sem forbidden paths ou source testável sem par;
-- cada métrica do workspace permanece no mínimo no baseline;
+- o ratchet agregado permanece obrigatório: medição completa válida ou CI
+  confirma cada métrica no mínimo do baseline antes da conclusão publicada;
+  seleção local focada pode passar com agregado explicitamente pendente,
+  sem declarar esse gate aprovado;
 - nenhuma threshold, exclusão ou classificação foi enfraquecida;
 - evidências de UI, runtime, persistência, autorização e integração estão
   atuais quando aplicáveis;
@@ -230,7 +245,8 @@ O gate só passa quando:
 
 Se houver `evaluation.md`, atualize-o como ledger vivo após cada mudança,
 registrando comando, resultado, SHA/base, freshness, path afetado, cenário,
-finding e decisão. Evidência anterior a uma mudança fica `stale`.
+finding e decisão. Evidência fica `stale` somente quando suas afirmações ou
+dependências forem afetadas; preserve prova válida após mudanças independentes.
 
 Entregue um relatório com:
 

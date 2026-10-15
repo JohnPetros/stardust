@@ -182,6 +182,12 @@ aprovados pelo repositório que forem necessários para validar o estado de
 publicação. Não substitua comandos exatos de `documentation/tooling.md` por
 comandos genéricos presumidos.
 
+Aplique `documentation/tooling.md#execução-de-checks-por-impacto`: publicação,
+review, merge de base e novo SHA não exigem repetir suites locais por si só.
+Verifique o impacto real do diff e reexecute apenas checks ausentes/invalidados;
+justifique ampliação por dependência ou lacuna concreta. Cobertura focada não
+aprova o ratchet agregado. Preserve os workflows aplicáveis no HEAD real do PR.
+
 Quando houver Spec, confirme antes da publicação:
 
 - revisão exata da Spec congelada;

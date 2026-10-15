@@ -185,7 +185,14 @@ backend; não usam a conta real do Studio nem devem apontar para produção.
   npm --workspace @stardust/web run test:integration:install
   ```
 
-- Execute todos os testes de integração:
+- Execute os cenários afetados, com paths relativos a `apps/web`:
+
+  ```bash
+  npm --workspace @stardust/web run test:integration -- <arquivos-de-cenario>
+  ```
+
+- A suíte completa está disponível quando o impacto demonstrado abranger toda
+  a suíte ou quando o usuário solicitar essa medição:
 
   ```bash
   npm --workspace @stardust/web run test:integration
@@ -374,16 +381,36 @@ separa falha visual da página de falha de autenticação, CORS ou API.
 - Em falhas intermitentes, capture `console`, `pageerror`, `requestfailed` e
   `response`, mantendo `trace: 'on-first-retry'` para obter o trace sem gerar
   artefatos desnecessários em toda execução.
-- Após alterar a Web App ou seus testes, execute os detectores deste arquivo e
-  também `npm --workspace @stardust/web run test:integration`.
+- Após alterar a Web App ou seus testes, valide os boundaries e consumidores
+  afetados conforme a política abaixo. Execute os cenários de integração
+  afetados no candidato integrado; uma mudança Web não exige automaticamente
+  toda a suíte Playwright nem testes do Server.
 
 ## Detectores de erros
 
-Após fazer qualquer alteração no código, execute os comandos:
+Selecione a validação local pelo comportamento alterado, diff, dependências reais
+e consumidores diretamente afetados. Consulte os comandos e limites em
+`documentation/tooling.md#execução-de-checks-por-impacto`.
 
-- `npm run check:code`
-- `npm run check:types`
-- `npm run test:unit`
+- Durante a implementação, execute testes unitários/componentes dos arquivos
+  afetados e lint sem escrita nos paths alterados. Execute tipos no projeto
+  afetado com sua configuração real, incluindo consumidores impactados.
+- Após integrar os escopos, execute as seleções afetadas de integração, banco,
+  jobs e navegador, além dos gates aplicáveis de arquitetura, complexidade e
+  build. Serialize comandos que compartilhem banco, portas ou serviços.
+- Não execute suites completas locais ou checks da raiz por padrão. Amplie
+  somente por impacto demonstrado em dependências/consumidores, lacuna concreta
+  de evidência ou pedido explícito do usuário; registre o motivo.
+- Corrija falhas e reexecute os checks falhos e invalidados. Review, retomada,
+  conclusão, novo commit ou edição de ledger não exigem repetir prova válida.
+- Registre comandos, seleção exata, quantidade de testes, resultado, tempo,
+  candidato/ambiente e limitações. Seleção vazia, skip ou exit code isolado não
+  prova aceitação. Infraestrutura obrigatória indisponível é bloqueio.
+- Preserve os baselines de cobertura/complexidade e os checks configurados do
+  CI no HEAD do PR. Cobertura focada não prova o ratchet agregado do workspace.
+- Para alterações somente documentais, registre checks de source/testes como
+  não aplicáveis e valide o diff, links e artefatos derivados pertinentes.
 
-Em workflows SDD, execute também os sensores aplicáveis definidos em
-`documentation/sdd.md`.
+Em workflows SDD, aplique também os sensores pertinentes de
+`documentation/sdd.md`. O smoke manual feliz obrigatório do frontend permanece
+aplicável; testes com mocks não substituem prova real de autenticação ou banco.

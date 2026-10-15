@@ -25,6 +25,24 @@ implement-spec
 
 Execute tudo na task atual. Não crie outra thread para o usuário.
 
+## Política de validação local
+
+Siga `documentation/tooling.md#execução-de-checks-por-impacto`. Selecione testes
+por comportamento alterado e consumidores reais; não rode suites completas ou
+checks da raiz por padrão. Builders usam unitários/componentes e checks
+estáticos focados. Após integrar os escopos, execute integrações afetadas em
+bloco e serialize comandos que compartilham banco/portas/serviços. Tipos,
+arquitetura, complexidade e build usam o contexto de projeto exigido pelo gate.
+Uma ampliação exige impacto demonstrado, lacuna concreta ou pedido do usuário.
+
+Reutilize evidência válida em waves, review, retomada e conclusão. Reexecute
+somente checks falhos ou cujas afirmações/dependências foram invalidadas;
+mudança de SHA, papel ou ledger não impõe uma nova execução. Registre seleção,
+contagem, resultado, tempo, candidato/ambiente e limites. Cobertura focada não
+prova o ratchet agregado; este permanece obrigatório no CI conforme Tooling,
+com execução local completa apenas quando justificada ou explicitamente
+contratada. Não relaxe baselines nem substitua prova real por mocks/skips.
+
 ## Seleção da estratégia
 
 Leia `documentation/sdd.md`, a Spec,
@@ -80,8 +98,9 @@ testes, migrations ou artefatos gerados e registre o blocker:
   crosswalk de tokens, componentes, receitas de layout/estado e extensões aprovadas; não copie
   valores brutos do Pencil nem invente detalhes ausentes;
 - para Server, confirme comportamento real, autorização, persistência e efeitos
-  colaterais conforme AGENTS.md e Supabase Dev quando aplicável;
-- os workspaces Core, Server, Studio e Web executam cobertura e o ratchet; LSP,
+  colaterais no Supabase local conforme AGENTS.md; Dev remoto só quando exigido;
+- os workspaces Core, Server, Studio e Web preservam cobertura e ratchet do CI,
+  distinguindo medição local focada de agregado conforme Tooling; LSP,
   Validation, TypeScript Config e Email permanecem excluídos conforme SDD;
 - `evaluation.md` é um ledger vivo: toda mudança de código, teste, browser,
   migration, artefato, documentação ou validação atualiza comandos, resultado,
@@ -103,10 +122,10 @@ testes, migrations ou artefatos gerados e registre o blocker:
    Execute também `npm run check:spec-definition -- <spec>` e
    `npm run check:plan-definition -- <plan>` após qualquer alteração documental.
    A verificação exige o mapa canônico `Path | Change | ...` do Technical Contract.
-   Depois execute `format`, `check:code`, `check:types`, `test:unit` e
-   `check:test-integrity`; para Core, Server, Studio e Web,
-   execute também `test:coverage` e `check:coverage`; execute
-   `check:architecture` e `test:integration` quando aplicáveis. Para frontend,
+   Depois execute testes selecionados, lint sem escrita, tipos e
+   `check:test-integrity`; acrescente complexidade, arquitetura, build e
+   integrações afetadas conforme a política de validação local. Separe
+   cobertura focada do ratchet agregado e registre gates de CI pendentes. Para frontend,
    faça também a auditoria de `ui-layer-rules.md` e a comparação independente
    dos nodes Pencil aplicáveis com a Web real, no mesmo viewport e estado.
    Preserve o design canônico; qualquer simplificação, substituição, adição ou
@@ -120,7 +139,8 @@ testes, migrations ou artefatos gerados e registre o blocker:
 8. Se `failed`, registre o finding no `evaluation.md` (ou crie um Plan se ele
    exigir tarefas), crie `Builder Fix IR-<n>`, reexecute sensores invalidados e
    repita o Reviewer pareado quando o diff ou qualquer evidência tiver sido invalidada.
-   Qualquer mudança após o veredito invalida o aceite anterior. Após três
+   Mudanças nas afirmações ou dependências avaliadas invalidam o aceite afetado;
+   um novo SHA ou ledger sozinho não o invalida. Após três
    falhas iguais, escale ao usuário.
 9. Execute o preflight integrado e crie/atualize `evaluation.md` com evidências
     reais, resultado do Reviewer, warnings, findings, decisões e lições.
@@ -236,11 +256,13 @@ sensor passou.
 Após integrar o candidato final:
 
 1. execute o `check:spec-implementation` para a revisão exata;
-2. execute `format`, `check:code`, `check:types`, `test:unit`,
-   `check:test-integrity`, cobertura/ratchet e sensores de Architecture,
-   integração, browser e Supabase Dev conforme os paths;
-3. confirme evidências manuais autenticadas da Web App/Studio, quando aplicável,
-   incluindo console, pageerror, requestfailed e respostas HTTP;
+2. confirme resultados válidos e execute apenas checks ausentes/invalidados
+   do escopo e consumidores afetados: lint, tipos, testes selecionados,
+   `check:test-integrity`, complexidade, arquitetura, cobertura, build e
+   integrações/browser/Supabase local conforme Tooling e Contract;
+3. confirme evidências manuais autenticadas da Web App/Studio, quando aplicável:
+   rota, resultado e status dos endpoints essenciais; console, pageerror,
+   requestfailed e respostas detalhadas somente para diagnosticar falha inesperada;
 4. execute o Reviewer pareado aplicável e resolva todos os findings bloqueantes;
 5. só então marque Evaluation como `ready` e invoque `conclude-spec` quando a
    autoridade de publicação estiver disponível.
@@ -286,9 +308,10 @@ registre escopo, procedimento reproduzível e cleanup sem expor segredos; para
 artefatos gerados, fonte, gerador e output; para testes, comportamento protegido
 e comando de execução.
 
-Não agrupe mudanças em um registro retrospectivo. Se a mudança alterar o diff
-ou qualquer evidência de Contract, Rule, Pencil ou Playwright, invalide o
-veredito anterior e registre o novo sensor/Reviewer necessário. O fluxo não pode
+Não agrupe mudanças em um registro retrospectivo. Se a mudança invalidar uma
+afirmação ou dependência de Contract, Rule, Pencil ou Playwright, invalide somente
+a prova/veredito afetado e registre o sensor/Reviewer necessário. Mudança isolada
+de SHA ou ledger não exige nova execução. O fluxo não pode
 prosseguir enquanto o Plan e o `evaluation.md` não refletirem a mudança mais
 recente.
 

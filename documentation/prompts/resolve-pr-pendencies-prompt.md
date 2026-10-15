@@ -10,9 +10,10 @@ Trabalhe na sessão atual e sempre contra o `HEAD` mais recente.
 1. Inspecione status mergeable, checks e conversas não resolvidas.
 2. Classifique cada pendência como falha determinística, teste, build, ambiente,
    feedback de review ou conflito com Spec/Architecture.
-3. Reproduza localmente usando os mesmos scripts do CI:
-   `check:code`, `check:types`, `test:unit`, `check:architecture` e
-   `test:integration` quando aplicável.
+3. Reproduza a falha com a seleção exata afetada e configuração do CI,
+   conforme `documentation/tooling.md#execução-de-checks-por-impacto`.
+   Reutilize resultados válidos; não execute suites completas locais por
+   padrão. Amplie somente por impacto demonstrado ou lacuna concreta.
 4. Corrija a causa no menor escopo seguro; não desative regras nem adicione
    exclusões para esconder regressões.
 5. Aplique `format`, reexecute os sensores invalidados e faça revisão do diff.

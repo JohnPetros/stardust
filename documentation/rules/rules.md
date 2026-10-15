@@ -3,6 +3,17 @@
 Este arquivo serve como índice para as regras de documentação do projeto.
 Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 
+## Seleção de validação local
+
+`AGENTS.md` e [`tooling.md`](../tooling.md#execução-de-checks-por-impacto)
+governam a seleção por diff, comportamento e consumidores afetados. Catálogos
+de comandos nas Rules indicam disponibilidade, não execução obrigatória de
+todas as suites. Use testes focados e gates de projeto pertinentes, agrupe
+integrações afetadas no candidato integrado e reutilize evidência válida.
+Ampliações locais exigem impacto demonstrado, lacuna concreta ou pedido do
+usuário. Preserve obrigações explícitas do Contract, baselines e workflows do CI;
+uma seleção focada não prova o ratchet agregado do workspace.
+
 ## Regras de execução do SDD
 
 **Arquivo principal e única fonte normativa:** `/documentation/sdd.md`

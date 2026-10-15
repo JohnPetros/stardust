@@ -77,13 +77,20 @@ Para cada issue `resolved`:
 
 ### A3: Executar o Checklist de Qualidade
 
-Execute para cada app afetado e registre o resultado:
+Confirme os resultados do escopo conforme
+`documentation/tooling.md#execução-de-checks-por-impacto`. Reutilize evidência
+válida; conclusão não exige suites completas locais. Execute somente checks
+ausentes/invalidados, com paths verificados e ampliação justificada:
 
 ```bash
-npm run test:unit -w @stardust/{APP}
+npm run test:unit -w @stardust/{APP} -- --runTestsByPath <arquivos-de-teste> --watch=false
 npm run check:types -w @stardust/{APP}
-npm run check:code -w @stardust/{APP}
+npm exec -- biome check <paths-alterados>
 ```
+
+Acrescente integrações afetadas no candidato integrado e gates de complexidade,
+arquitetura ou build pertinentes. Registre seleção, quantidade de testes,
+resultado, tempo, candidato/ambiente e limitações; skip/seleção vazia não passa.
 
 Se algum comando falhar, **não feche o report** — registre a falha no checklist e mantenha `status: open`.
 
@@ -158,13 +165,20 @@ Leia a seção **Plano de Correção** do documento (subseções "O que deve ser
 
 ### B2: Executar o Checklist de Qualidade
 
-Execute para cada app afetado e registre o resultado:
+Confirme os resultados do escopo conforme
+`documentation/tooling.md#execução-de-checks-por-impacto`. Reutilize evidência
+válida; conclusão não exige suites completas locais. Execute somente checks
+ausentes/invalidados, com paths verificados e ampliação justificada:
 
 ```bash
-npm run test:unit -w @stardust/{APP}
+npm run test:unit -w @stardust/{APP} -- --runTestsByPath <arquivos-de-teste> --watch=false
 npm run check:types -w @stardust/{APP}
-npm run check:code -w @stardust/{APP}
+npm exec -- biome check <paths-alterados>
 ```
+
+Acrescente integrações afetadas no candidato integrado e gates de complexidade,
+arquitetura ou build pertinentes. Registre seleção, quantidade de testes,
+resultado, tempo, candidato/ambiente e limitações; skip/seleção vazia não passa.
 
 Além dos comandos gerais, verifique:
 
@@ -217,9 +231,9 @@ Faça as seguintes edições no arquivo:
 
 - [ ] Comportamento incorreto nao ocorre mais
 - [ ] Teste unitario cobre o cenario especifico do bug
-- [ ] `npm run test:unit -w @stardust/{APP}` — passou | falhou
+- [ ] Testes exatos do bug/consumidores — seleção, contagem, resultado e tempo registrados
 - [ ] `npm run check:types -w @stardust/{APP}` — passou | falhou
-- [ ] `npm run check:code -w @stardust/{APP}` — passou | falhou
+- [ ] Lint sem escrita nos paths alterados — passou | falhou
 
 ### Observacoes
 

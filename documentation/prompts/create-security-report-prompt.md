@@ -181,9 +181,9 @@ last_updated_at: {DATA}
 
 ## Checklist de Verificação Pós-Correção
 
-- [ ] `npm run check:code` passa (raiz do monorepo)
-- [ ] `npm run check:types` passa no workspace afetado
-- [ ] `npm run test` passa no workspace afetado
+- [ ] Lint sem escrita nos paths alterados conforme `documentation/tooling.md#execução-de-checks-por-impacto`
+- [ ] Tipos e gates estáticos aplicáveis passam nos projetos/consumidores afetados
+- [ ] Testes selecionados de regressão e consumidores afetados passam; ampliações justificadas e prova válida reutilizada
 - [ ] Nenhuma variável de ambiente real exposta
 - [ ] Nenhum `console.log` de debug em código de produção
 - [ ] Middleware de auth aplicado em todas as rotas afetadas

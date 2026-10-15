@@ -8,6 +8,15 @@ description: Orquestrar um Plan de feature com Builders irmãos, sensores e um I
 Leia `plan.md`, Spec, Architecture, Rules e `documentation/sdd.md`. A task principal mantém o Plan e todo o
 fluxo ocorre na task atual.
 
+A seleção de checks segue
+`documentation/tooling.md#execução-de-checks-por-impacto`. Use feedback
+unitário/estático focado por Builder e agrupe integrações afetadas após integrar
+os escopos. Fases/waves e Reviewers não exigem repetir provas válidas nem suites
+completas. Serialize comandos que compartilham serviços. Amplie seleções somente
+com impacto demonstrado, lacuna concreta ou pedido do usuário e registre o motivo.
+Cobertura focada não prova o ratchet agregado obrigatório do CI; execução local
+completa segue os limites de Tooling, sem relaxar baselines.
+
 Antes de criar Builders, a task principal verifica a integridade do Plan contra
 a revisão vigente da Spec. Se o Plan mudou materialmente, repita esse gate.
 
@@ -35,10 +44,10 @@ Para cada fase, em qualquer modo:
    antes dos sensores e novamente após qualquer correção de path contratado;
    execute `npm run check:spec-definition -- <spec>` e
    `npm run check:plan-definition -- <plan>` após alterações documentais;
-   depois execute `format`, `check:code`, `check:types`, `test:unit` e
-   `check:test-integrity`; execute
-   `check:architecture` e `test:integration` conforme a fase. Não execute build
-   a cada fase ou retry;
+   depois confirme evidência válida e execute checks ausentes/invalidados:
+   testes selecionados, lint sem escrita, tipos e `check:test-integrity`;
+   acrescente complexidade, arquitetura, build e integrações afetadas no
+   candidato integrado conforme Tooling, não a cada fase ou retry;
 9. marque tarefas `verified` somente após o Reviewer pareado e os sensores aplicáveis;
 10. registre a fase como aguardando a avaliação integrada e avance somente após
    os sensores aplicáveis;
@@ -67,9 +76,10 @@ tentativas e próxima ação; registra na Spec as avaliações formais.
   teclado, foco, viewport estreito, console, falhas de request e screenshots
   atuais quando houver Design Contract.
 
-Os Builders reportam comandos e resultados exatos, mas o relatório não é
-evidência oficial. A task principal reroda ou verifica os exits no candidato
-integrado e registra a freshness no `evaluation.md`.
+Os Builders reportam comandos, seleção, contagens, resultados, tempo e ambiente,
+mas o relatório não é evidência oficial. A task principal verifica os exits e
+artefatos no candidato integrado e registra a freshness no `evaluation.md`;
+reroda somente checks ausentes ou invalidados, não a suíte para confirmar o relato.
 
 ### Reforço de Rules após findings
 
@@ -108,9 +118,10 @@ gerados, registre a fonte, o gerador e o output; para testes, registre o
 comportamento protegido e o comando de execução.
 
 Não agrupe várias mudanças em um único registro retrospectivo. Se a mudança
-alterar o diff ou qualquer evidência de Contract, Rule, Pencil ou Playwright,
-marque o veredito anterior como invalidado e registre a necessidade de novo
-sensor/Reviewer. Uma tarefa não pode ser marcada `verified` enquanto os dois
+invalidar afirmações/dependências de Contract, Rule, Pencil ou Playwright,
+marque somente a prova/veredito afetado como invalidado e registre o
+sensor/Reviewer necessário. Novo SHA ou ledger sozinho não exige nova execução.
+Uma tarefa não pode ser marcada `verified` enquanto os dois
 artefatos não refletirem a mudança mais recente.
 
 Após todas as fases, execute sensores integrados e o preflight. Consolide em
@@ -131,17 +142,17 @@ Não conclua nem encaminhe enquanto qualquer pré-condição estiver pendente:
 - nenhum finding bloqueante pode estar aberto, incluindo findings de validação
   manual como IR-09;
 - a validação manual autenticada do frontend deve ter sido executada no
-  navegador real, cobrindo login, rota protegida e evidências de console,
-  pageerror, requestfailed e respostas `2xx`;
+  navegador real, cobrindo login, rota protegida, resultado e endpoints
+  essenciais `2xx`; diagnósticos detalhados somente para falha inesperada;
 - `evaluation.md` deve registrar as evidências atuais, todos os Reviewers
   pareados, o preflight e os SHAs avaliados.
 - para frontend, deve existir auditoria de `ui-layer-rules.md` por widget e
   comparação independente dos nodes Pencil aplicáveis com a Web real, com
   dimensões/anchors, divergências aprovadas e evidência no HEAD avaliado; node
   ausente, contradito ou desvio não aprovado bloqueia o encaminhamento;
-- cada SHA avaliado por um Reviewer deve corresponder ao diff do Builder
-  pareado; qualquer alteração posterior nesse escopo invalida o veredito e
-  exige novo Reviewer para o Builder afetado.
+- a revisão deve cobrir o diff do Builder pareado; mudanças nas afirmações ou
+  dependências avaliadas exigem retomar a revisão afetada, sem repetir provas
+  independentes válidas por mudança isolada de SHA ou ledger.
 
 Se o gate falhar, registre a pendência no Plan/evaluation, crie o Builder Fix ou
 a ação de validação apropriada e permaneça no workflow de implementação. Só

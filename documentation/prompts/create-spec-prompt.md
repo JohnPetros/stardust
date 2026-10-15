@@ -274,11 +274,23 @@ complementa o texto e não substitui Contract, métodos, paths, critérios de
 aceitação, decisões técnicas ou comportamento de erro. Use nomes coerentes com
 os contratos da Spec e mantenha a sintaxe renderizável em Markdown.
 
-Declare sensores aplicáveis: `format`, `check:code`, `check:types`, `test:unit`,
-`check:architecture` e `test:integration`. Para Core, Server, Studio e Web, declare também
-`test:coverage` e `check:coverage`; ambos devem respeitar `coverage-baseline.json`. `check:dead-code`
-não é oficial.
-Checks e build são validações finais do CI.
+Declare sensores locais por impacto conforme
+`documentation/tooling.md#execução-de-checks-por-impacto`: arquivos/cenários
+exatos, boundary permitido, asserções, consumidores afetados, pré-requisitos e
+evidência. Inclua lint sem escrita, tipos no projeto real e complexidade
+quantitativa aplicável; acrescente arquitetura/build e integrações afetadas no
+candidato integrado. Não prescreva suites completas por padrão: registre a
+dependência ou lacuna de prova que exige ampliar. Formatação com escrita não é
+um check obrigatório.
+
+Core, Server, Studio e Web preservam o ratchet agregado de cobertura no CI.
+Cobertura focada não o prova; declare separadamente sua seleção e os gates
+agregados de `test:coverage`/`check:coverage`, exigindo execução local completa
+somente por impacto ou medição explicitamente necessária. Não altere
+`coverage-baseline.json` para fazer a seleção passar. Review e conclusão
+reutilizam prova válida e repetem somente checks falhos/invalidados. Suites e
+build configurados do CI continuam obrigatórios no HEAD aplicável do PR.
+`check:dead-code` não é oficial.
 
 ## Decisões técnicas e clarificação
 

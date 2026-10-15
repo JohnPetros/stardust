@@ -109,11 +109,19 @@ viewport ou extensão suplementar, a ausência da evidência exigida mantém a E
 
 ## Sensores e preflight
 
-| Comando                                 | Estado | Evidência                                 |
-| --------------------------------------- | ------ | ----------------------------------------- |
-| `npm run check:code`                    | passed | saída resumida                            |
-| `npm run test:coverage -w <workspace>`  | passed | resumo por métrica e workspace            |
-| `npm run check:coverage -- <workspace>` | passed | baseline comparado e resultado do ratchet |
+| Comando / seleção exata | Boundary / CA | Estado | Quantidade / tempo | Candidato, ambiente e evidência / limites |
+| --- | --- | --- | --- | --- |
+| `<comando com arquivos/cenários verificados>` | `<boundary / CA-*>` | pending | `<testes / duração>` | `<diff/commit, fixtures, artefatos e asserções>` |
+| `<gate agregado de cobertura aplicável>` | `<workspace>` | pending | `<duração quando executado>` | `<medição completa válida ou pendente para CI; seleção focada não prova agregado>` |
+
+Siga `documentation/tooling.md#execução-de-checks-por-impacto`. Separe
+unitários/componentes, integrações Web, Server HTTP/persistência/jobs, checks
+estáticos e cobertura. Registre motivo de ampliações, seleções vazias/skips e
+infraestrutura indisponível sem converter ausência em sucesso. Review, retomada
+e conclusão reutilizam resultados válidos; marque stale somente afirmações e
+dependências afetadas. Preserve falhas históricas e não declare suites completas
+aprovadas por testes selecionados. Source checks podem ser não aplicáveis em
+entrega somente documental, com justificativa.
 
 ## Checks e build do CI
 

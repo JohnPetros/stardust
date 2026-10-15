@@ -1,8 +1,10 @@
 # Tooling
 
 Execute os comandos a partir da raiz para aproveitar o Turbo e o cache. Durante
-a implementação, use `--filter` ou `-w` para limitar o feedback ao workspace
-alterado; antes do PR, valide o escopo integrado.
+a implementação, selecione arquivos/cenários e consumidores afetados; use
+`--filter` ou `-w` para gates que precisam do contexto do workspace. Antes do PR,
+valide o escopo integrado. Os catálogos de scripts não são um checklist de
+execução local completa.
 
 Os scripts auxiliares do projeto são módulos ES e devem ser executados com
 Node.js:
@@ -35,13 +37,12 @@ eval "$(node ./scripts/export-web-app-e2e-env.mjs)"
 | `npm run test:integration`   | Jest/Playwright    | executa as integrações declaradas pelos workspaces |
 | `npm run check:spec-implementation` | Node.js       | valida o mapa `Path | Change | ...` da Spec contra Git e filesystem |
 
-Exemplos de ciclo curto:
+Exemplos de gates de projeto para um workspace afetado (não execute todos os
+workspaces por padrão):
 
 ```bash
-npm run format -- --filter=@stardust/core
 npm run check:code -- --filter=@stardust/core
 npm run check:types -- --filter=@stardust/core
-npm run test:unit -- --filter=@stardust/core
 ```
 
 Os limites do dependency-cruiser ficam em `.dependency-cruiser.cjs`. Altere essa
@@ -410,29 +411,116 @@ separados, carregue o ambiente local com o script correspondente e valide uma
 rota protegida além da tela de login. Credenciais devem permanecer em
 `.env.local` e nunca ser registradas no repositório ou nos logs.
 
-## Ordem recomendada
+## Execução de checks por impacto
 
-1. `format`, `check:code`, `check:types` e `test:unit` durante o ciclo curto.
-2. `check:architecture` quando a estrutura/imports estabilizarem.
-3. `test:integration` para mudanças de integração ou antes da conclusão quando
-   declarado na Spec.
-4. Validação manual no navegador para mudanças de frontend, UI ou rotas
-   client-side.
-5. Preflight local com todos os sensores aplicáveis antes do PR.
-6. Checks no CI, incluindo `check:architecture`, integração e os checks
-   aplicáveis do preflight.
-7. Build no CI, depois dos checks aplicáveis.
+Selecione checks locais a partir do diff, comportamento contratado, boundaries
+alterados e consumidores reais. Nomes semelhantes ou a presença de um arquivo
+em uma aplicação não demonstram impacto em toda ela. Uma mudança de apresentação
+Web não exige testes Server; uma mudança Server sem efeito observável no browser
+não exige Playwright. Contratos compartilhados acrescentam os consumidores
+afetados, não todos os módulos automaticamente.
 
-Os checks do PR são a composição dos checks normais. A cobertura possui um
-quality ratchet por workspace para Core, Server, Studio e Web; os thresholds
-versionados em `coverage-baseline.json` nunca podem diminuir sem uma alteração
-revisada desse arquivo.
+| Check | Durante a implementação | Candidato integrado | Após correção |
+| --- | --- | --- | --- |
+| Unitário/componente | Arquivos exatos do comportamento implementado | Confirmar resultados do escopo e consumidores afetados | Reexecutar arquivos/cenários falhos ou invalidados |
+| Server HTTP/persistência/jobs | Asserções de boundary e feedback unitário/estático | Agrupar seleções afetadas com serviços/fixtures reais exigidos | Reexecutar boundaries afetados, serializando uso de serviços compartilhados |
+| Web Playwright | Preparar cenários afetados; feedback unitário/estático | Executar somente arquivos de cenário afetados | Reexecutar cenários invalidados |
+| Tipos | Após mudanças de contratos, schemas e assinaturas | Projetos afetados e consumidores, com configuração real | Reexecutar produtores/consumidores impactados |
+| Lint/formatação | Paths alterados, sem escrita | Confirmar seleção e gates configurados pertinentes | Revalidar paths/configuração alterados |
+| Complexidade | Lógica alterada no escopo suportado pelo checker | Gate CodeMultiVitals dos workspaces afetados | Reexecutar escopos invalidados sem relaxar baseline |
+| Arquitetura/build | Dependências, exports e composição afetados | Gates exigidos para os projetos e consumidores afetados | Reexecutar gates cujas entradas/afirmações mudaram |
 
-`check:dead-code` não faz parte dos sensores oficiais. Playwright MCP pode
-inspecionar fluxos reais e o Hermes pode executar validações E2E de release, mas
-nenhum dos dois substitui `test:integration` automatizado quando ele for
-aplicável. Os workflows E2E do GitHub Actions estão descritos em
-`documentation/infrastructure.md`.
+Integração é um checkpoint do candidato integrado, não um ritual por edição ou
+por Builder. Agrupe seleções Server para reutilizar setup e serialize comandos
+que usam o mesmo Supabase local, portas ou serviços. Prepare o stack com
+`npm run db:test -w @stardust/server` conforme `AGENTS.md`; não repita resets
+concorrentes nem substitua o banco local pelo remoto.
+
+Não execute suites completas locais por padrão, inclusive no preflight. Amplie
+somente quando o impacto demonstrado abranger a suíte, um consumidor compartilhado
+ou uma lacuna concreta de prova exigir, ou o usuário solicitar a medição. Registre
+a dependência e o motivo da ampliação. Alterações de sessão/root layout, composição
+global, transações ou fixtures compartilhadas podem justificar seleções maiores;
+identifique seus consumidores antes de expandir.
+
+### Seleções executáveis
+
+Substitua placeholders por paths exatos verificados no repositório. Os paths dos
+runners de workspace são relativos ao workspace; os do Biome e de scripts são
+relativos à raiz. Use nomes de teste apenas depois de verificá-los no source.
+
+| Boundary | Comando a partir da raiz |
+| --- | --- |
+| Core, Web, Studio ou Server unitário | `npm run test:unit -w <workspace> -- --runTestsByPath <arquivos-de-teste> --watch=false` |
+| Server HTTP/persistência/jobs de integração | `npm run test:integration -w @stardust/server -- --runTestsByPath <arquivos-de-teste> --watch=false` |
+| Web navegador | `npm run test:integration -w @stardust/web -- <arquivos-de-cenario>` |
+| Scripts auxiliares | `node --test <arquivos-em-scripts/tests>` |
+| Lint/formatação sem escrita | `npm exec -- biome check <paths-alterados>` |
+| Tipos do projeto afetado | `npm run check:types -w <workspace>` |
+| Arquitetura do projeto afetado | `npm run check:architecture -w <workspace>` |
+| Complexidade do projeto afetado | `npm run check:complexity -w <workspace>` |
+
+Os scripts unitários de Core, Server, Studio e Web usam Jest; o Server já seleciona
+`server` para unitários e `server-integration` para integração. Os scripts sem
+seletores executam categorias completas. A Web usa sua configuração Playwright,
+`.env.testing` e mocks; não inicie a API real para essa suíte. Jobs e rotas Server
+usam os pré-requisitos das respectivas fixtures. Não adicione `--passWithNoTests`
+nem trate seleção vazia/skip como prova. Confirme quantidade e asserções executadas.
+
+Tipos devem preservar o tsconfig e o contexto de imports do projeto. Não passe
+arquivos diretamente ao `tsc` contornando essa configuração. Formatação com escrita
+é uma alteração explícita, não uma etapa obrigatória de validação.
+
+### Cobertura, complexidade e CI
+
+O ratchet atual de `coverage-baseline.json` mede o agregado de Core, Server,
+Studio e Web. `check:coverage` lê o total do relatório, não arquivos alterados.
+Um relatório de testes selecionados não prova esse baseline; não reduza
+`collectCoverageFrom`, thresholds ou exclusões para fazê-lo passar. Cobertura
+focada é evidência apenas da seleção, deve usar um diretório separado do relatório
+agregado e registrar seus limites. Este workflow não introduz um gate por arquivo.
+
+Os workflows aplicáveis do CI continuam executando `test:coverage` e
+`check:coverage` para o workspace e suas suites/gates configurados no HEAD do PR.
+Localmente, reutilize uma medição agregada ainda válida; execute uma medição
+completa quando o impacto, uma obrigação explícita de medição ou o usuário a
+exigir, sem transformá-la em pré-requisito automático de toda edição ou conclusão.
+Quando não executada localmente, registre o ratchet agregado como pendente para
+o CI ou não executado localmente, nunca como aprovado por uma seleção focada.
+Qualquer gate local explicitamente contratado permanece obrigatório até sua
+reconciliação; não o dispense silenciosamente. Baselines não podem ser relaxados
+para fazer uma entrega passar.
+
+CodeMultiVitals possui gate quantitativo configurado por workspace, com limites
+e baseline próprios. Lint, tipos e testes não o substituem. Execute o script do
+workspace afetado quando sua lógica mudar, registre resultados e limitações e
+não invente seletores por arquivo não suportados. Infraestrutura ou ferramenta
+obrigatória indisponível é bloqueio; checks somente de source podem ser não
+aplicáveis em entregas exclusivamente documentais, com justificativa.
+
+### Evidência, reuso e entrega
+
+Registre comandos exatos, arquivos/cenários, boundaries, quantidade de testes,
+resultado, tempo de execução, candidato/ambiente e artefatos no Evaluation ou no
+report da tarefa. Separe unitários, Web Playwright, Server HTTP/persistência/jobs,
+smoke manual e cobertura. Exit code isolado não prova critérios de aceitação.
+Preserve resultados históricos com falha e não apresente-os como prova atual.
+
+Review, retomada e conclusão reutilizam resultados válidos. Mudanças em source,
+fixtures, configuração, ambiente ou Contract invalidam somente as afirmações e
+dependências afetadas. Um novo papel, commit ou edição de ledger não invalida
+prova por si só. Corrija falhas e reexecute checks falhos/invalidados; justifique
+qualquer ampliação adicional. O CI obrigatório continua validando o HEAD real do PR.
+
+Frontend continua exigindo o smoke manual feliz em serviços locais conforme
+`AGENTS.md`, com login/rota protegida quando aplicável e capturas atuais quando
+a UI mudar. Mocks não provam autenticação, autorização ou persistência reais.
+Testes automatizados cobrem erros/loading/recovery; o smoke manual não se expande
+para uma matriz de estados. Use Playwright CLI para inspeção e browser real.
+
+`check:dead-code` não faz parte dos sensores oficiais. O Hermes executa E2E de
+release conforme `documentation/infrastructure.md`; não substitui seleções
+automatizadas contratadas nem os checks aplicáveis do CI.
 
 ## Transição aprovada: Drizzle e SSE (Issue #602)
 

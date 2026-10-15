@@ -50,10 +50,15 @@ cria hierarquia entre Builders.
 7. Execute a comparação Pencil/Web no mesmo viewport e estado quando a UI
    estiver no escopo; registre cada divergência, sua causa e a aprovação
    correspondente. A validação não pode ser apenas uma afirmação textual.
-8. Execute o ciclo curto no escopo afetado: `format`, `check:code`,
-   `check:types` e `test:unit`.
-9. Execute `check:architecture` e `test:integration` quando aplicáveis. Build
-   não é exigido a cada fase ou retry.
+8. Siga `documentation/tooling.md#execução-de-checks-por-impacto`: execute
+   unitários/componentes dos arquivos afetados, lint sem escrita e tipos do
+   projeto/consumidores impactados. Inclua complexidade quando a lógica mudar.
+9. Prepare as asserções de integração e informe à task principal a seleção,
+   dependências e serviços necessários. Integrações afetadas são agrupadas
+   após integrar os escopos; não execute suites completas por Builder ou
+   retry. Reutilize checks válidos e reexecute somente falhos/invalidados.
+   Ampliações precisam de impacto demonstrado ou lacuna concreta. Preserve
+   os gates de arquitetura, build e cobertura/ratchet aplicáveis conforme Tooling.
 10. Quando alterar um grupo de rotas HTTP, confirme o `.rest` correspondente em
    `apps/server/rest-client/` com uma requisição rotulada por rota, parâmetros,
    headers e body atuais, sem segredos.
@@ -98,7 +103,7 @@ coordena a integração de seus diffs.
 - **Arquivos criados/alterados:**
   - `<path>`
 - **Resultado observável:** <evidência resumida>
-- **Verificações locais:** <comandos e resultados>
+- **Verificações locais:** <comandos, arquivos/cenários, contagens, resultados, tempo, candidato/ambiente e limites>
 - **Fidelidade Pencil/Web:** não aplicável | <handoff, nodes, viewports, estados e evidências>
 - **Lacunas documentais:** nenhuma | <documento, evidência e ação>
 - **Divergências:** nenhuma | <descrição>

@@ -354,7 +354,7 @@ Registre console, `pageerror`, `requestfailed` e
 respostas detalhadas somente para diagnosticar falha inesperada; screenshot é necessário quando a
 UI muda ou a comparação visual exige. Após correção, repita apenas o caminho feliz afetado. Para
 Server e banco, mocks não substituem request/response real, autorização, tenant e persistência no
-Supabase Dev quando aplicável.
+Supabase local; use Dev remoto somente quando o escopo exigir validação remota.
 
 Após a implementação direta, um Implementation Reviewer Direct revisa o diff do Builder Direct.
 Em um Plan, cada Builder de fase/tarefa recebe seu próprio Implementation Reviewer pareado. O
@@ -366,6 +366,18 @@ Evidence anterior à última mudança afetada vira `stale`. Evaluation só muda 
 quando todos os `CA-*`, sensores, `VM-*`, `EV-*`, comparações visuais e `ACH-*`
 bloqueantes estão
 atuais e resolvidos.
+
+A seleção de sensores locais segue
+[`tooling.md#execução-de-checks-por-impacto`](tooling.md#execução-de-checks-por-impacto).
+A Spec declara arquivos/cenários reais, asserções, consumidores impactados e
+motivo de qualquer ampliação, não suites completas apenas porque um workspace
+foi alterado. Builders usam feedback unitário/estático focado; integrações afetadas
+rodam após integrar os escopos, agrupando setup e serializando serviços compartilhados.
+Uma nova wave, Reviewer, retomada, conclusão, edição de ledger ou SHA não exige
+repetir prova válida. Reexecute somente checks falhos ou invalidados por mudança
+nas suas afirmações, dependências ou ambiente; preserve resultados históricos.
+Os Reviewers inspecionam a evidência e solicitam checagem adicional somente para
+lacuna ou risco concreto, sem repetir automaticamente suites ou smoke manual.
 
 ## Correção versus mudança de Contract
 
@@ -405,13 +417,25 @@ mesma Spec; após merge, defeito usa Bug Report e comportamento novo usa uma cha
 
 ## Sensores oficiais
 
-Após alteração de código, execute os detectores obrigatórios de `AGENTS.md`:
-`npm run check:code`, `npm run check:types` e `npm run test:unit`. Acrescente
-`check:architecture`, testes de integração, geração, browser, Supabase Dev e build conforme
-Rules, Spec, paths e risco. Para `@stardust/core`, `@stardust/server`, `@stardust/studio` e
-`@stardust/web`, execute também `npm run test:coverage -w <workspace>` e
-`npm run check:coverage -- <workspace>` e `npm run check:test-integrity`; os checks falham se qualquer métrica ficar abaixo do
-baseline versionado em `coverage-baseline.json`. O `check:test-integrity` exige pareamento
+Após alteração de código, aplique os detectores de `AGENTS.md` no escopo de
+comportamento e consumidores afetados: testes selecionados, lint sem escrita,
+tipos com configuração de projeto e complexidade quantitativa quando a lógica
+mudar. Acrescente arquitetura, integrações afetadas, geração, browser, Supabase
+local e build conforme Rules, Spec, dependências e risco. Registre comandos,
+seleções, contagens, resultados, tempo, candidato/ambiente e limites de evidência.
+Seleções vazias/skips não passam; infraestrutura obrigatória indisponível bloqueia.
+Source checks podem ser não aplicáveis para documentação apenas, com justificativa.
+
+O CI mantém as suites e gates configurados no HEAD do PR. Para
+`@stardust/core`, `@stardust/server`, `@stardust/studio` e `@stardust/web`, o
+ratchet usa `test:coverage` e `check:coverage` contra o agregado de
+`coverage-baseline.json`. Cobertura focada não prova esse agregado. Localmente,
+reutilize medição válida ou execute a completa por impacto/obrigação explícita;
+sem medição local, registre o gate agregado pendente para CI, nunca como passed.
+Uma obrigação local explícita da Spec deve ser cumprida ou reconciliada, não
+dispensada por esta política. Não relaxe baselines, thresholds ou exclusões.
+Execute `npm run check:test-integrity -- --base <commit-base>` quando source ou
+testes forem alterados. O `check:test-integrity` exige pareamento
 somente para controllers, jobs, use-cases, entidades/structures/aggregates,
 hooks, views/widgets, Web routes (`app/page|layout|route`) e Server routes
 (`tests/routes`), RPC actions e AI tools; barrels, services/repositories genéricos,

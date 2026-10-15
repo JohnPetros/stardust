@@ -102,12 +102,14 @@ reconstruí-los.
 
 ## Detectores e testes
 
-Após qualquer alteração, execute os detectores obrigatórios de `AGENTS.md`:
-
-- `npm run check:code`;
-- `npm run check:types`;
-- `npm run test:unit`;
-- testes específicos do bug e o fluxo Playwright aplicável.
+Selecione os detectores de `AGENTS.md` conforme
+`documentation/tooling.md#execução-de-checks-por-impacto`: testes exatos de
+regressão e consumidores afetados, lint nos paths alterados, tipos no projeto
+real e complexidade aplicável. Execute integrações afetadas no candidato
+integrado e o smoke feliz Playwright quando pertinente. Não rode suites locais
+completas por padrão; registre impacto ou lacuna que justifique ampliar.
+Reutilize evidências válidas e reexecute checks falhos/invalidados. Registre
+comandos, seleção, contagens, resultado, tempo, candidato/ambiente e limites.
 
 Se um detector falhar por estado externo, como porta ocupada, preserve o processo alheio, registre
 o bloqueio exato e execute todas as alternativas seguras. Não declare sucesso global com base em

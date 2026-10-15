@@ -138,32 +138,20 @@ receber testes dedicados segundo as regras do projeto.
    Para rotas do server, preparar fixtures reais em vez de mockar a stack interna.
 3. Implementacao: comecar pelo caminho de sucesso e depois cobrir cenarios de erro/excecao.
 4. Para fluxos reais da Web, adicionar a navegacao obrigatoria definida em `documentation/rules/web-app-routes-testing-rules.md` antes de considerar a suite completa.
-5. Validacao de testes: executar no escopo correto do monorepo.
-6. Validacao de qualidade: executar `typecheck` e `codecheck` antes de concluir.
+5. Validacao de testes: selecionar arquivos/cenarios e consumidores reais conforme `documentation/tooling.md#execução-de-checks-por-impacto`; integrar antes das selecoes de integracao afetadas.
+6. Validacao de qualidade: lint sem escrita nos paths alterados e tipos no projeto afetado; acrescentar complexidade/arquitetura quando aplicaveis. Reutilizar prova valida, rerodar apenas falhos/invalidados e justificar ampliacoes.
 
 ```bash
-npm run test
-npm run check:types
-npm run check:code
-
-npm run test:unit -w @stardust/web
-npm run test:unit -w @stardust/server
-npm run test:unit -w @stardust/studio
-npm run test:unit -w @stardust/core
-
-npm run test:unit -w @stardust/web -- caminho/do/arquivo
-npm run test:unit -w @stardust/server -- caminho/do/arquivo
-npm run test:unit -w @stardust/studio -- caminho/do/arquivo
-npm run test:unit -w @stardust/core -- caminho/do/arquivo
-
-npm run check:types -w @stardust/web
-npm run check:code -w @stardust/web
-npm run check:types -w @stardust/server
-npm run check:code -w @stardust/server
-npm run check:types -w @stardust/studio
-npm run check:code -w @stardust/studio
-npm run check:types -w @stardust/core
-npm run check:code -w @stardust/core
+npm run test:unit -w <workspace> -- --runTestsByPath <arquivos-de-teste> --watch=false
+npm run test:integration -w @stardust/web -- <arquivos-de-cenario>
+npm run test:integration -w @stardust/server -- --runTestsByPath <arquivos-de-teste> --watch=false
+npm exec -- biome check <paths-alterados>
+npm run check:types -w <workspace>
 ```
+
+Os comandos sao alternativas por boundary, nao uma lista para executar inteira.
+Registre selecao, contagens, resultado, tempo, candidato/ambiente e limites;
+selecao vazia ou skip nao passa. Suites locais completas exigem impacto ou
+medicao explicitamente necessarios; CI e baselines permanecem obrigatorios.
 
 <Prompt para subagent>

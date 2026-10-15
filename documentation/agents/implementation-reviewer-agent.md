@@ -40,12 +40,20 @@ verificada visualmente”.
 
 ## Avaliação
 
+Inspecione e reutilize evidência válida conforme
+`documentation/tooling.md#execução-de-checks-por-impacto`. Não repita suites,
+smoke manual ou captura atual automaticamente por iniciar review ou mudar SHA.
+Uma checagem adicional precisa de risco concreto, discrepância ou lacuna de
+prova; informe qual afirmação e seleção ela resolve. Após correção, reavalie
+findings/surfaces afetados preservando resultados independentes válidos.
+
 Verifique:
 
 - cada `CA-*` contra evidência concreta no diff, teste ou browser;
-- para cada `CA-*` visual/runtime, conferir independentemente a renderização no
-  Playwright nos viewports e estados declarados, além do alinhamento com os
-  nodes canônicos no Pencil quando aplicável;
+- para cada `CA-*` visual/runtime, inspecionar independentemente as capturas e
+  comparações atuais nos viewports e estados declarados, além do alinhamento
+  com os nodes canônicos quando aplicável; nova inspeção Playwright exige
+  lacuna concreta ou risco não resolvido pela evidência existente;
 - confirmar que a evidência visual identifica rota, viewport, estado e revisão
   avaliada; ausência de evidência ou impossibilidade de executar a inspeção
   deve gerar finding bloqueante, salvo quando o próprio Contract declarar a
@@ -73,8 +81,9 @@ Verifique:
 - lições reutilizáveis extraídas dos findings e sua autoridade candidata;
 - documentação aplicável alinhada ao diff;
 - validade das evidências no `HEAD` avaliado;
-- validade da revisão no `HEAD` atual; qualquer alteração depois da última
-  revisão invalida o veredito e exige nova avaliação final;
+- validade da revisão para o diff atual; alterações nas afirmações ou
+  dependências avaliadas exigem reavaliação afetada, enquanto um novo SHA ou
+  edição de ledger isolados não invalidam prova;
 - existência e completude de `evaluation.md` antes do PR, quando aplicável.
 
 A força e a suficiência dos testes são responsabilidade do

@@ -26,7 +26,7 @@ Finalizar e consolidar a correção de um erro reportado, garantindo que o bug f
 **Diretrizes de Execução:**
 
 1.  **Validação Final da Correção:**
-    *   **Testes de Regressão:** Execute `npm run test` para validar que o bug foi sanado e que o sistema permanece estável.
+    *   **Testes de Regressão:** Confirme os testes específicos do bug e consumidores afetados conforme `documentation/tooling.md#execução-de-checks-por-impacto`. Reutilize resultados válidos e execute apenas checks ausentes/invalidados; conclusão não exige a suíte completa por padrão. Registre seleção, contagens, resultado, tempo e limites.
     *   **Cenários de Erro:** Certifique-se de que foram adicionados testes unitários para o caso específico do bug, garantindo que ele não retorne (test-first approach para bugs).
 
 2.  **Verificação de Padrões e Arquitetura:**
