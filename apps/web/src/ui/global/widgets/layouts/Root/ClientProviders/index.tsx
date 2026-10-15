@@ -19,6 +19,10 @@ export const ClientProviders = ({ accountDto, children }: ClientProps) => {
     (typeof window !== 'undefined' && window.location.port === '3100')
 
   useEffect(() => {
+    if (process.env.NODE_ENV === 'development' || CLIENT_ENV.mode === 'development') {
+      return
+    }
+
     let isCancelled = false
 
     async function initializePostHog() {
