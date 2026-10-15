@@ -59,7 +59,8 @@ de preparar o draft. Essa confirmação não substitui o approval gate da versã
 ## Metadata GitHub
 
 - repository: `JohnPetros/stardust`;
-- label obrigatória: `feature`;
+- label obrigatória: `feat`;
+- assignee obrigatório: `JohnPetros` em toda feature issue;
 - adicione `web`, `server` e/ou `studio` quando confirmadas;
 - use `infra` ou `documentation` somente quando forem parte real do entregável;
 - use apenas labels existentes;
@@ -136,7 +137,7 @@ quando fornecidos.
 
 ## Approval gate
 
-Antes de publicar, apresente título, body, labels, milestone, PRD/requisito selecionado,
+Antes de publicar, apresente título, body, labels, assignee, milestone, PRD/requisito selecionado,
 justificativa de relevância, Project, Status e prioridade exatos. Publique somente após aprovação
 explícita da versão atual. Approval não autoriza implementação, branch, commit, PR ou Spec.
 

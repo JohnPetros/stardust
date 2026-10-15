@@ -225,7 +225,7 @@ Disponibiliza para: <áreas consumidoras e identidade/contrato fornecido>
 Navegação: <links ou âncoras das seções principais>
 ```
 
-### 1. Resumo Executivo
+### 1. Resumo
 
 Inclua o que é o produto/área, o problema, o objetivo, o valor entregue, o
 estado da conta/ator quando aplicável e o que o MVP explicitamente não inclui.
