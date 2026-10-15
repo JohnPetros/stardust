@@ -537,3 +537,21 @@ Os scripts listados acima ainda descrevem o estado implementado. Para a entrega 
 Scripts Supabase CLI de diff/push/pull/repair e geração de Database.ts são retirados; a Web não gera tipos de banco. npm/package-lock permanecem a fonte das versões. Antes de qualquer aplicação remota, exige-se preflight de Dev e produção e ensaio de rollback em restauração isolada, com evidências no workflow SDD. A indisponibilidade desses ambientes nesta autoria não é evidência de parity. A janela inicial é coordenada, sem release intermediário compatível.
 
 A lista de scripts passa a descrever o runtime vigente apenas após a implementação verificada; atualizar também a seção de migrations da infraestrutura nessa entrega.
+
+## Transações compartilhadas e outbox
+
+`db:migrate` valida o prefixo congelado da transição Drizzle e aplica as migrations
+posteriores pendentes. O catálogo esperado do outbox inclui estrutura e privilégios;
+o preflight deve rejeitar drift ou acesso de `anon`/`authenticated`. O rollback da
+transição de acesso não pode ser aplicado depois de migrations posteriores.
+
+Eventos produzidos pelas mutações são persistidos no mesmo commit dos dados.
+O Server iniciado por `dev`/`prod` executa o dispatcher a cada segundo; fixtures
+que apenas montam o Hono não o iniciam. Validar o envio real exige o Inngest local
+em execução, além de PostgreSQL. Falhas de envio permanecem no outbox com backoff;
+após dez falhas exigem investigação operacional. O envio pode repetir e mantém
+o mesmo ID para deduplicação. Não incluir payloads ou credenciais nos logs.
+
+Antes de implantar a nova composição de criação de usuário, drene as execuções
+Inngest antigas afetadas: os steps de banco foram reunidos em uma transação.
+A migração local não autoriza aplicação remota nem implantação.

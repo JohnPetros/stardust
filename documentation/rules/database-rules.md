@@ -85,3 +85,14 @@ As convenções Supabase acima descrevem o adapter legado. Para a entrega da Iss
 - Migrations versionadas em `apps/server/src/database/drizzle/migrations/` representam o schema final legado, incluindo constraints, índices, FKs, defaults, views, funções e triggers necessários. Drizzle Kit gera artefatos de schema; SQL de objetos não representáveis e segurança é versionado em migrations customizadas. Não edite manualmente snapshots/SQL classificados como Generate.
 - Dev/produção adotam a baseline apenas após preflight de catálogo e histórico; não há reset remoto nem backfill implícito. Remoção de RLS exige revogar acesso direto, inclusive funções SECURITY DEFINER e grants de PUBLIC/default privileges; Auth, storage de infraestrutura e cron não são redesenhados.
 - Um pool por processo, fechamento no shutdown e migrations no pipeline. Validação por testes reais de rota e scripts; não criar testes dedicados de repositories, mappers, tipos ou fixtures.
+
+## Transações compartilhadas e outbox
+
+Na entrega `global/transactions-and-outbox`, Database.run no Core delimita callbacks
+participantes. DrizzleUnitOfWork e contexto async ficam no Server; repositories
+resolvem o executor corrente mantendo access/ownership explícitos. Não passar
+transaction client ao Core, não usar transação global entre requisições e não fazer
+commit independente em callback aninhado. Preserve causas SQL internas para retry
+bounded de 40001/40P01, sem expor SQL ou credenciais. Outbox participa da mesma
+transação; não publicar rede dentro do callback nem usar buffer volátil após commit.
+Auth, storage e AI externos não entram no retry de banco.

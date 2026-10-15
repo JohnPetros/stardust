@@ -105,3 +105,13 @@ No destino, REST, MCP e jobs compõem repositories Drizzle na borda. Os ports do
 O browser recebe criação de perfil por SSE do Server, através de uma rota same-origin na Web. Confirmações usam a sessão verificada. O cadastro anterior ao login usa comprovante temporário restrito, guardado pela Web em cookie HttpOnly. O Server consulta a conta autorizada ao conectar e a cada segundo enquanto aguarda; não publica eventos gerais. Fechar a página encerra stream e consultas, mas os jobs continuam. Retornar retoma a tentativa enquanto o comprovante estiver válido.
 
 Migrations Drizzle são aplicadas no pipeline, nunca no boot. A primeira transição exige janela coordenada de manutenção de Server, Web e writers assíncronos, adoção sem reset nos bancos existentes, rollback ensaiado e validação antes da reabertura. O pool PostgreSQL é único por processo. Após a entrega, os trechos anteriores sobre PostgREST, RLS de feedback e variáveis Supabase públicas da Web devem ser substituídos pelo estado verificado.
+
+## Transações e outbox — entrega autorizada
+
+O contrato em `documentation/features/global/transactions-and-outbox/spec.md` adiciona
+Database.run agnóstico no Core, implementado por DrizzleUnitOfWork no Server. Repositories
+participam do executor async corrente preservando seu DatabaseAccess explícito.
+Serialização/deadlock têm um retry; efeitos externos não são repetidos pelo callback SQL.
+Outbox durável compartilha a transação dos writes; dispatcher após commit envia ao
+Inngest com lease, retry e ID estável. A exclusão histórica de outbox na #602 não
+proíbe esta nova entrega. Esta seção descreve o destino autorizado, não prova de runtime.

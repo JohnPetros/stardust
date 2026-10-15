@@ -70,3 +70,12 @@ export class CreateChallengeJob {
 
 - Inngest e o motor atual de queue.
 - Tooling: `documentation/tooling.md`.
+
+## Outbox durável
+
+Na entrega `global/transactions-and-outbox`, Broker.publish grava no outbox e
+participa do Database.run ativo. Somente o dispatcher chama o transporte Inngest
+direto. Reserva exige lease/owner e ACK condicional; retry recupera falhas/leases
+expirados com limites explícitos. Sweep periódico cobre notificações perdidas.
+IDs estáveis, idempotência dos consumidores e ausência de payload em logs são
+obrigatórios; não prometer exactly-once ou atomicidade com serviço externo.
