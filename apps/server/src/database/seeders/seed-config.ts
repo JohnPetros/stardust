@@ -16,37 +16,60 @@ export type SeedAccount = {
 }
 
 export function readSeedConfig(environment: NodeJS.ProcessEnv = process.env) {
-  const result = seedConfigSchema.safeParse(environment)
-  if (!result.success) {
-    const keys = result.error.issues.map((issue) => issue.path.join('.'))
-    throw new AppError(`Configure root .env.local seed variables: ${keys.join(', ')}`)
-  }
-  const env = result.data
-  const address = new URL(env.DATABASE_URL)
-  if (
-    environment.MODE === 'production' ||
-    !['postgres:', 'postgresql:'].includes(address.protocol) ||
-    !['127.0.0.1', 'localhost', '[::1]'].includes(address.hostname) ||
-    address.pathname !== '/postgres' ||
-    address.username !== 'postgres' ||
-    !address.port ||
-    [...address.searchParams.keys()].some((key) => key !== 'sslmode') ||
-    address.hash
-  ) {
+  const env = parseSeedConfig(environment)
+  assertLocalDatabase(environment, new URL(env.DATABASE_URL))
+  const accounts = readSeedAccounts(env.GOD_ACCOUNT_IDS)
+  return { databaseUrl: env.DATABASE_URL, accounts }
+}
+
+function assertLocalDatabase(environment: NodeJS.ProcessEnv, address: URL) {
+  if (environment.MODE === 'production' || !isLocalDatabase(address)) {
     throw new AppError(
       'Seed requires the local PostgreSQL database; remote reset is forbidden',
     )
   }
-  // Public demo fixtures for the guarded local database only.
+}
+
+function isLocalAddress(address: URL) {
+  return (
+    ['postgres:', 'postgresql:'].includes(address.protocol) &&
+    ['127.0.0.1', 'localhost', '[::1]'].includes(address.hostname) &&
+    address.pathname === '/postgres' &&
+    address.username === 'postgres'
+  )
+}
+
+function hasSafeDatabaseOptions(address: URL) {
+  const hasOnlySslMode = [...address.searchParams.keys()].every(
+    (key) => key === 'sslmode',
+  )
+  return Boolean(address.port) && hasOnlySslMode && !address.hash
+}
+
+function invalidSeedConfig(error: z.ZodError) {
+  const keys = error.issues.map((issue) => issue.path.join('.'))
+  return new AppError(`Configure root .env.local seed variables: ${keys.join(', ')}`)
+}
+
+function readSeedAccounts(godAccountIds: string): SeedAccount[] {
   const accounts: SeedAccount[] = JSON.parse(
     readFileSync(new URL('./data/seed-accounts.json', import.meta.url), 'utf8'),
   )
-  if (
-    !env.GOD_ACCOUNT_IDS.split(',')
-      .map((id) => id.trim())
-      .includes(accounts[1].id)
-  ) {
+  assertStudioAdmin(godAccountIds, accounts[1].id)
+  return accounts
+}
+function assertStudioAdmin(godAccountIds: string, studioId: string) {
+  const ids = godAccountIds.split(',').map((id) => id.trim())
+  if (!ids.includes(studioId))
     throw new AppError('GOD_ACCOUNT_IDS must include the fixed local Studio seed UUID')
-  }
-  return { databaseUrl: env.DATABASE_URL, accounts }
+}
+
+function isLocalDatabase(address: URL) {
+  return isLocalAddress(address) && hasSafeDatabaseOptions(address)
+}
+
+function parseSeedConfig(environment: NodeJS.ProcessEnv) {
+  const result = seedConfigSchema.safeParse(environment)
+  if (!result.success) throw invalidSeedConfig(result.error)
+  return result.data
 }
