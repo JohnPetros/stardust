@@ -1,14 +1,17 @@
-import type { Broker } from '@stardust/core/global/interfaces'
+import type { Broker, OutboxRepository } from '@stardust/core/global/interfaces'
 import type { Event } from '@stardust/core/global/abstracts'
 import type { Text } from '@stardust/core/global/structures'
-import { inngest } from './inngest'
+
+import { DrizzleClient } from '../../database/drizzle/DrizzleClient'
+import { DrizzleOutboxRepository } from '../../database/drizzle/repositories/global/DrizzleOutboxRepository'
 
 export class InngestBroker implements Broker {
+  constructor(private readonly repository?: OutboxRepository) {}
+
   async publish(event: Event, eventId?: Text): Promise<void> {
-    await inngest.send({
-      name: event.name,
-      id: eventId?.value,
-      data: event.payload,
-    })
+    const repository =
+      this.repository ??
+      new DrizzleOutboxRepository(DrizzleClient.getInstance(), { kind: 'system' })
+    await repository.enqueue(event, eventId)
   }
 }

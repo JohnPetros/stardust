@@ -1,3 +1,4 @@
+import { DrizzleUnitOfWork } from '@/database/drizzle/DrizzleUnitOfWork'
 import { ReachFirstTierJob } from '@/queue/jobs/ranking'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestFunctions } from './InngestFunctions'
@@ -14,34 +15,46 @@ type FirstStarUnlockedPayload = EventPayload<typeof FirstStarUnlockedEvent>
 
 export class RankingFunctions extends InngestFunctions {
   private reachFirstTierJob(database: DrizzleDatabase) {
-    return this.createFunction(
-      {
-        id: ReachFirstTierJob.KEY,
-        onFailure: (context) => this.handleFailure(context, ReachFirstTierJob.name),
-        triggers: {
-          event: eventType(FirstStarUnlockedEvent._NAME, {
-            schema: z.object({
-              user: z.object({
-                id: idSchema,
-                name: nameSchema,
-                email: emailSchema,
-              }),
-              firstUnlockedStarId: idSchema,
-            }),
-          }),
-        },
-      },
-      async (context) => {
-        const repository = new DrizzleTiersRepository(database, { kind: 'system' })
-        const amqp = new InngestAmqp<FirstStarUnlockedPayload>(context)
-        const Broker = new InngestBroker()
-        const job = new ReachFirstTierJob(repository, Broker)
-        return job.handle(amqp)
-      },
-    )
+    return this.createFunction(this.reachFirstTierJobOptions(), async (context) => {
+      const amqp = new InngestAmqp<FirstStarUnlockedPayload>(context)
+      return this.createReachFirstTierJob(database).handle(amqp)
+    })
   }
 
   getFunctions(database: DrizzleDatabase) {
     return [this.reachFirstTierJob(database)]
+  }
+  private createReachFirstTierJob(database: DrizzleDatabase) {
+    const repository = new DrizzleTiersRepository(database, { kind: 'system' })
+    const Broker = new InngestBroker()
+    const job = new ReachFirstTierJob(repository, Broker, new DrizzleUnitOfWork(database))
+    return job
+  }
+
+  private reachFirstTierJobOptions() {
+    return {
+      id: ReachFirstTierJob.KEY,
+      onFailure: this.handleJobFailure(ReachFirstTierJob.name),
+      triggers: createFirstStarUnlockedEventTrigger(),
+    }
+  }
+}
+
+function createFirstStarUnlockedEventSchema() {
+  return z.object({
+    user: createUserSchema(),
+    firstUnlockedStarId: idSchema,
+  })
+}
+
+function createUserSchema() {
+  return z.object({ id: idSchema, name: nameSchema, email: emailSchema })
+}
+
+function createFirstStarUnlockedEventTrigger() {
+  return {
+    event: eventType(FirstStarUnlockedEvent._NAME, {
+      schema: createFirstStarUnlockedEventSchema(),
+    }),
   }
 }

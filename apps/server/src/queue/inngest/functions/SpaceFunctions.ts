@@ -1,3 +1,4 @@
+import { DrizzleUnitOfWork } from '@/database/drizzle/DrizzleUnitOfWork'
 import type { DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
 
 import { AccountSignedUpEvent } from '@stardust/core/auth/events'
@@ -21,45 +22,20 @@ type AccountSignedUpPayload = EventPayload<typeof AccountSignedUpEvent>
 export class SpaceFunctions extends InngestFunctions {
   private createUnlockFirstStarFunction(database: DrizzleDatabase) {
     return this.createFunction(
-      {
-        id: UnlockFirstStarJob.KEY,
-        onFailure: (context) => this.handleFailure(context, UnlockFirstStarJob.name),
-        triggers: {
-          event: eventType(AccountSignedUpEvent._NAME, {
-            schema: z.object({
-              accountId: idSchema,
-              accountName: nameSchema,
-              accountEmail: emailSchema,
-            }),
-          }),
-        },
-      },
+      this.createUnlockFirstStarFunctionOptions(),
       async (context) => {
-        const repository = new DrizzlePlanetsRepository(database, { kind: 'system' })
         const amqp = new InngestAmqp<AccountSignedUpPayload>(context)
-        const broker = new InngestBroker()
-        const job = new UnlockFirstStarJob(repository, broker)
-        return job.handle(amqp)
+        return this.createUnlockFirstStarJob(database).handle(amqp)
       },
     )
   }
 
   private createHandleStarsNewOrderFunction(database: DrizzleDatabase) {
     return this.createFunction(
-      {
-        id: HandleStarsNewOrderJob.KEY,
-        onFailure: (context) => this.handleFailure(context, HandleStarsNewOrderJob.name),
-        triggers: [
-          { event: eventType(PlanetsOrderChangedEvent._NAME) },
-          { event: eventType(StarsOrderChangedEvent._NAME) },
-        ],
-      },
+      this.createHandleStarsNewOrderFunctionOptions(),
       async (context) => {
-        const repository = new DrizzlePlanetsRepository(database, { kind: 'system' })
         const amqp = new InngestAmqp(context)
-        const broker = new InngestBroker()
-        const job = new HandleStarsNewOrderJob(repository, broker)
-        return job.handle(amqp)
+        return this.createHandleStarsNewOrderJob(database).handle(amqp)
       },
     )
   }
@@ -70,4 +46,64 @@ export class SpaceFunctions extends InngestFunctions {
       this.createHandleStarsNewOrderFunction(database),
     ]
   }
+  private createUnlockFirstStarJob(database: DrizzleDatabase) {
+    const repository = new DrizzlePlanetsRepository(database, { kind: 'system' })
+    const broker = new InngestBroker()
+    const job = new UnlockFirstStarJob(
+      repository,
+      broker,
+      new DrizzleUnitOfWork(database),
+    )
+    return job
+  }
+
+  private createHandleStarsNewOrderJob(database: DrizzleDatabase) {
+    const repository = new DrizzlePlanetsRepository(database, { kind: 'system' })
+    const broker = new InngestBroker()
+    const job = new HandleStarsNewOrderJob(
+      repository,
+      broker,
+      new DrizzleUnitOfWork(database),
+    )
+    return job
+  }
+
+  private createUnlockFirstStarFunctionOptions() {
+    return {
+      id: UnlockFirstStarJob.KEY,
+      onFailure: this.handleJobFailure(UnlockFirstStarJob.name),
+      triggers: createAccountSignedUpEventTrigger(),
+    }
+  }
+
+  private createHandleStarsNewOrderFunctionOptions() {
+    return {
+      id: HandleStarsNewOrderJob.KEY,
+      onFailure: this.handleJobFailure(HandleStarsNewOrderJob.name),
+      triggers: createOrderChangedTriggers(),
+    }
+  }
+}
+
+function createAccountSignedUpEventSchema() {
+  return z.object({
+    accountId: idSchema,
+    accountName: nameSchema,
+    accountEmail: emailSchema,
+  })
+}
+
+function createAccountSignedUpEventTrigger() {
+  return {
+    event: eventType(AccountSignedUpEvent._NAME, {
+      schema: createAccountSignedUpEventSchema(),
+    }),
+  }
+}
+
+function createOrderChangedTriggers() {
+  return [
+    { event: eventType(PlanetsOrderChangedEvent._NAME) },
+    { event: eventType(StarsOrderChangedEvent._NAME) },
+  ]
 }

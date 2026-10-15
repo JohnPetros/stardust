@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import type { Job, Amqp, Broker } from '@stardust/core/global/interfaces'
 import type {
   RankersRepository,
@@ -13,10 +14,12 @@ export class UpdateRankingsJob implements Job {
     private readonly tiersRepository: TiersRepository,
     private readonly rankersRepository: RankersRepository,
     private readonly broker: Broker,
+    private readonly database: Database,
   ) {}
 
   async handle(amqp: Amqp) {
     const useCase = new UpdateRankingsUseCase(
+      this.database,
       this.tiersRepository,
       this.rankersRepository,
       this.broker,

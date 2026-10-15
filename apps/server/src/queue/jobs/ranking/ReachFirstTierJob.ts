@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import type { Job, Amqp, Broker } from '@stardust/core/global/interfaces'
 import { ReachFirstTierUseCase } from '@stardust/core/ranking/use-cases'
 import type { EventPayload } from '@stardust/core/global/types'
@@ -12,11 +13,16 @@ export class ReachFirstTierJob implements Job<Payload> {
   constructor(
     private readonly tiersRepository: TiersRepository,
     private readonly broker: Broker,
+    private readonly database: Database,
   ) {}
 
   async handle(amqp: Amqp<Payload>) {
     const payload = amqp.getPayload()
-    const useCase = new ReachFirstTierUseCase(this.tiersRepository, this.broker)
+    const useCase = new ReachFirstTierUseCase(
+      this.database,
+      this.tiersRepository,
+      this.broker,
+    )
     await amqp.run(async () => useCase.execute(payload), ReachFirstTierUseCase.name)
   }
 }

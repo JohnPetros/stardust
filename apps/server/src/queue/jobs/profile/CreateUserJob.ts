@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import type { EventPayload } from '@stardust/core/global/types'
 import type { Amqp, Job } from '@stardust/core/global/interfaces'
 import type { Broker } from '@stardust/core/global/interfaces'
@@ -23,86 +24,82 @@ export class CreateUserJob implements Job<Payload> {
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly broker: Broker,
+    private readonly database: Database,
   ) {}
 
   async handle(amqp: Amqp<Payload>) {
-    const {
-      user,
-      firstReachedTierId,
-      firstUnlockedStarId,
-      acquiredAvatarsByDefaultIds,
-      acquiredRocketsByDefaultIds,
-      selectedAvatarByDefaultId,
-      selectedRocketByDefaultId,
-    } = amqp.getPayload()
-
-    const createUserUseCase = new CreateUserUseCase(this.usersRepository)
-    const unlockStarUseCase = new UnlockStarUseCase(this.usersRepository, this.noopBroker)
-    const acquireRocketUseCase = new AcquireRocketUseCase(
-      this.usersRepository,
-      this.noopBroker,
-    )
-    const acquireAvatarUseCase = new AcquireAvatarUseCase(
-      this.usersRepository,
-      this.noopBroker,
-    )
-    const finishUserCreationUseCase = new FinishUserCreationUseCase(this.broker)
-
+    const payload = amqp.getPayload()
     await amqp.run(
-      async () =>
-        await createUserUseCase.execute({
-          userId: user.id,
-          userName: user.name,
-          userEmail: user.email,
-          firstReachedTierId,
-          selectedAvatarByDefaultId,
-          selectedRocketByDefaultId,
-        }),
+      () => this.database.run(() => this.createUser(payload)),
       CreateUserUseCase.name,
     )
+  }
 
-    await amqp.run(
-      async () =>
-        await unlockStarUseCase.execute({
-          userId: user.id,
-          starId: firstUnlockedStarId,
-        }),
-      UnlockStarUseCase.name,
-    )
+  private async createUser(payload: Payload) {
+    await this.createProfile(payload)
+    await this.unlockFirstStar(payload)
+    await this.acquireRockets(payload)
+    await this.acquireAvatars(payload)
+    await this.finishCreation(payload)
+  }
 
-    await amqp.run(async () => {
-      await Promise.all(
-        acquiredRocketsByDefaultIds.map((rocketId) =>
-          acquireRocketUseCase.execute({
-            userId: user.id,
-            rocketId,
-            rocketPrice: 0,
-          }),
-        ),
-      )
-    }, AcquireRocketUseCase.name)
+  private async createProfile(payload: Payload) {
+    const useCase = new CreateUserUseCase(this.usersRepository)
+    await useCase.execute({
+      ...this.userIdentity(payload),
+      firstReachedTierId: payload.firstReachedTierId,
+      selectedAvatarByDefaultId: payload.selectedAvatarByDefaultId,
+      selectedRocketByDefaultId: payload.selectedRocketByDefaultId,
+    })
+  }
 
-    await amqp.run(async () => {
-      await Promise.all(
-        acquiredAvatarsByDefaultIds.map((avatarId) =>
-          acquireAvatarUseCase.execute({
-            userId: user.id,
-            avatarId,
-            avatarPrice: 0,
-          }),
-        ),
-      )
-    }, AcquireAvatarUseCase.name)
+  private async unlockFirstStar(payload: Payload) {
+    const useCase = this.createUnlockStarUseCase()
+    await useCase.execute({
+      userId: payload.user.id,
+      starId: payload.firstUnlockedStarId,
+    })
+  }
 
-    await amqp.run(
-      async () =>
-        await finishUserCreationUseCase.execute({
-          userId: user.id,
-          userName: user.name,
-          userEmail: user.email,
-          userSlug: Name.create(user.name).slug.value,
-        }),
-      FinishUserCreationUseCase.name,
-    )
+  private async acquireRockets(payload: Payload) {
+    const useCase = this.createAcquireRocketUseCase()
+    for (const rocketId of payload.acquiredRocketsByDefaultIds) {
+      await useCase.execute({ userId: payload.user.id, rocketId, rocketPrice: 0 })
+    }
+  }
+
+  private async acquireAvatars(payload: Payload) {
+    const useCase = this.createAcquireAvatarUseCase()
+    for (const avatarId of payload.acquiredAvatarsByDefaultIds) {
+      await useCase.execute({ userId: payload.user.id, avatarId, avatarPrice: 0 })
+    }
+  }
+
+  private async finishCreation(payload: Payload) {
+    const useCase = new FinishUserCreationUseCase(this.database, this.broker)
+    await useCase.execute({
+      ...this.userIdentity(payload),
+      userSlug: Name.create(payload.user.name).slug.value,
+    })
+  }
+
+  private userIdentity(payload: Payload) {
+    return {
+      userId: payload.user.id,
+      userName: payload.user.name,
+      userEmail: payload.user.email,
+    }
+  }
+
+  private createUnlockStarUseCase() {
+    return new UnlockStarUseCase(this.database, this.usersRepository, this.noopBroker)
+  }
+
+  private createAcquireRocketUseCase() {
+    return new AcquireRocketUseCase(this.database, this.usersRepository, this.noopBroker)
+  }
+
+  private createAcquireAvatarUseCase() {
+    return new AcquireAvatarUseCase(this.database, this.usersRepository, this.noopBroker)
   }
 }

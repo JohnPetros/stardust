@@ -1,3 +1,4 @@
+import { DrizzleUnitOfWork } from '@/database/drizzle/DrizzleUnitOfWork'
 import type { DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
 
 import { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
@@ -18,52 +19,20 @@ type ShopItemsAcquiredByDefaultPayload = EventPayload<
 export class ProfileFunctions extends InngestFunctions {
   private createCreateUserFunction(database: DrizzleDatabase) {
     return this.createFunction(
-      {
-        id: CreateUserJob.KEY,
-        onFailure: (context) => this.handleFailure(context, CreateUserJob.name),
-        retries: 0,
-        triggers: {
-          event: eventType(ShopItemsAcquiredByDefaultEvent._NAME, {
-            schema: z.object({
-              user: z.object({
-                id: idSchema,
-                name: nameSchema,
-                email: emailSchema,
-              }),
-              selectedAvatarByDefaultId: idSchema,
-              selectedRocketByDefaultId: idSchema,
-              acquiredAvatarsByDefaultIds: z.array(idSchema),
-              acquiredRocketsByDefaultIds: z.array(idSchema),
-              firstReachedTierId: idSchema,
-              firstUnlockedStarId: idSchema,
-            }),
-          }),
-        },
-      },
+      this.createCreateUserFunctionOptions(),
       async (context) => {
-        const repository = new DrizzleUsersRepository(database, { kind: 'system' })
-        const broker = new InngestBroker()
         const amqp = new InngestAmqp<ShopItemsAcquiredByDefaultPayload>(context)
-        const job = new CreateUserJob(repository, broker)
-        return await job.handle(amqp)
+        return this.createCreateUserJob(database).handle(amqp)
       },
     )
   }
 
   private createObserveStreakBreakFunction(database: DrizzleDatabase) {
     return this.createFunction(
-      {
-        id: ObserveStreakBreakJob.KEY,
-        onFailure: (context) => this.handleFailure(context, ObserveStreakBreakJob.name),
-        triggers: {
-          cron: ObserveStreakBreakJob.CRON_EXPRESSION,
-        },
-      },
+      this.createObserveStreakBreakFunctionOptions(),
       async (context) => {
-        const repository = new DrizzleUsersRepository(database, { kind: 'system' })
         const amqp = new InngestAmqp(context)
-        const job = new ObserveStreakBreakJob(repository)
-        return await job.handle(amqp)
+        return this.createObserveStreakBreakJob(database).handle(amqp)
       },
     )
   }
@@ -73,5 +42,66 @@ export class ProfileFunctions extends InngestFunctions {
       this.createCreateUserFunction(database),
       this.createObserveStreakBreakFunction(database),
     ]
+  }
+  private createCreateUserJob(database: DrizzleDatabase) {
+    const repository = new DrizzleUsersRepository(database, { kind: 'system' })
+    const broker = new InngestBroker()
+    const job = new CreateUserJob(repository, broker, new DrizzleUnitOfWork(database))
+    return job
+  }
+
+  private createObserveStreakBreakJob(database: DrizzleDatabase) {
+    const repository = new DrizzleUsersRepository(database, { kind: 'system' })
+    const job = new ObserveStreakBreakJob(repository)
+    return job
+  }
+
+  private createCreateUserFunctionOptions() {
+    return {
+      id: CreateUserJob.KEY,
+      onFailure: this.handleJobFailure(CreateUserJob.name),
+      retries: 0,
+      triggers: createShopItemsAcquiredByDefaultEventTrigger(),
+    }
+  }
+
+  private createObserveStreakBreakFunctionOptions() {
+    return {
+      id: ObserveStreakBreakJob.KEY,
+      onFailure: this.handleJobFailure(ObserveStreakBreakJob.name),
+      triggers: {
+        cron: ObserveStreakBreakJob.CRON_EXPRESSION,
+      },
+    }
+  }
+}
+
+function createShopItemsAcquiredByDefaultEventSchema() {
+  return z.object({
+    user: createUserSchema(),
+    ...shopDefaultsShape(),
+    firstReachedTierId: idSchema,
+    firstUnlockedStarId: idSchema,
+  })
+}
+
+function createUserSchema() {
+  return z.object({ id: idSchema, name: nameSchema, email: emailSchema })
+}
+
+function shopDefaultsShape() {
+  return {
+    selectedAvatarByDefaultId: idSchema,
+    selectedRocketByDefaultId: idSchema,
+    acquiredAvatarsByDefaultIds: z.array(idSchema),
+    acquiredRocketsByDefaultIds: z.array(idSchema),
+  }
+}
+
+function createShopItemsAcquiredByDefaultEventTrigger() {
+  return {
+    event: eventType(ShopItemsAcquiredByDefaultEvent._NAME, {
+      schema: createShopItemsAcquiredByDefaultEventSchema(),
+    }),
   }
 }

@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import type { PlanetsRepository } from '@stardust/core/space/interfaces'
 import type { Broker } from '@stardust/core/global/interfaces'
 import type { Job, Amqp } from '@stardust/core/global/interfaces'
@@ -9,10 +10,15 @@ export class HandleStarsNewOrderJob implements Job {
   constructor(
     private readonly repository: PlanetsRepository,
     private readonly broker: Broker,
+    private readonly database: Database,
   ) {}
 
   async handle(amqp: Amqp) {
-    const useCase = new HandleStarsNewOrderUseCase(this.repository, this.broker)
+    const useCase = new HandleStarsNewOrderUseCase(
+      this.database,
+      this.repository,
+      this.broker,
+    )
     await amqp.run(async () => await useCase.execute(), HandleStarsNewOrderUseCase.name)
   }
 }

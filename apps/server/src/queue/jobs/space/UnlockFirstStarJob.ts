@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import type { PlanetsRepository } from '@stardust/core/space/interfaces'
 import type { Broker } from '@stardust/core/global/interfaces'
 import type { Job, Amqp } from '@stardust/core/global/interfaces'
@@ -13,20 +14,28 @@ export class UnlockFirstStarJob implements Job<Payload> {
   constructor(
     private readonly planetsRepository: PlanetsRepository,
     private readonly broker: Broker,
+    private readonly database: Database,
   ) {}
 
   async handle(amqp: Amqp<Payload>) {
     const payload = amqp.getPayload()
-    const useCase = new UnlockFirstStarUseCase(this.planetsRepository, this.broker)
+    const useCase = this.createUnlockFirstStarUseCase()
 
     await amqp.run(
-      async () =>
-        await useCase.execute({
-          userId: payload.accountId,
-          userName: payload.accountName,
-          userEmail: payload.accountEmail,
-        }),
+      () => useCase.execute(this.userInput(payload)),
       UnlockFirstStarUseCase.name,
     )
+  }
+
+  private userInput(payload: Payload) {
+    return {
+      userId: payload.accountId,
+      userName: payload.accountName,
+      userEmail: payload.accountEmail,
+    }
+  }
+
+  private createUnlockFirstStarUseCase() {
+    return new UnlockFirstStarUseCase(this.database, this.planetsRepository, this.broker)
   }
 }
