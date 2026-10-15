@@ -4,12 +4,29 @@
 
 This document describes the visual language and interaction patterns of StarDust.
 It is a product-level guide for the Web App, the Challenge experience, and the
-administrative Studio. It records the current implementation baseline and the
-guardrails for new UI work.
+administrative Studio. It records the visual direction, implementation baseline,
+and reusable token contract for the interface and Monaco editor. Design targets
+do not imply that application code already implements them.
 
-The system is intentionally dark-first: the interface should feel like a calm
-control room in space, while green, yellow, blue, and red communicate progress,
-rewards, information, and problems.
+The original visual reference is dark-first, but every selectable theme family
+has both dark and light variants. The user selects StarDust, Orbit, Sakura, or
+Glacial; the current application appearance determines the variant for both UI
+and editor. Theme changes preserve clear actions, status meanings, and reading
+comfort.
+
+### Theme contract at a glance
+
+| Setting | Values | Responsibility |
+| --- | --- | --- |
+| Theme family | `stardust`, `orbit`, `sakura`, `glacial` | User's persisted palette choice |
+| Resolved appearance | `dark`, `light` | Current application mode |
+| Resolved variant | `<family>-<mode>` | Supplies paired UI and Monaco palettes |
+| Standard geometry | `8px` radius, `44px` controls | Shared across all variants |
+
+For example, choosing Sakura in light mode resolves to `sakura-light`. Changing
+to dark mode resolves to `sakura-dark` without changing the selected family.
+There is no independent dark/light choice for the editor. See section 3 for
+palette values, reference frames, tokenizer mapping, and remaining validation.
 
 Sources:
 
@@ -32,7 +49,7 @@ system has two jobs:
 2. Make progress feel tangible without turning the interface into a game HUD.
 
 The space metaphor is expressed through dark canvases, stars, planets, rockets,
-orbit-like motion, and glowing accents. It must support comprehension first:
+orbit-like motion, and restrained color accents. It must support comprehension first:
 decoration never competes with a lesson, code editor, challenge statement, or
 progress metric.
 
@@ -109,137 +126,502 @@ is introduced.
 
 ## 3. Tokens
 
-Tokens below reflect the current Web App palette. Use token names in new code
-and map them to the local Tailwind or shadcn implementation rather than
-introducing arbitrary colors.
+The refined palette preserves the original StarDust identity with calmer greens,
+consistent neutrals, and distinct action, text, reward, and danger roles. These
+values are approved design targets in Pencil, not a record of migrated app CSS.
+Use semantic tokens rather than choosing colors directly from a primitive scale.
 
-### Color palette
+### Approved references
 
-#### Neutrals
+| Pencil node | Role |
+| --- | --- |
+| `Y9nmU` | Original challenge-list reference; retained for comparison |
+| `uvsSQ` | Approved refined dark challenge list |
+| `YGjln` | Refined light alternative |
+| `vbxf1` | Profile using refined tokens |
+| `P7adY` | Sign-in using refined tokens |
+| `ifIsM` | Dark/light token board |
+| `iJGU3` | Full-screen Poppins / Funnel Sans comparison; font decision pending |
+| `UEcrD` | Four theme families, each with dark/light editor previews; beside `ifIsM` |
 
-| Token | Hex | Usage |
-| --- | --- | --- |
-| `$gray-950` | `#0B0E0F` | Deep canvas, editor and challenge surfaces |
-| `$gray-900` | `#141A1B` | Main Web App background, navigation surfaces |
-| `$gray-800` | `#1E2626` | Cards, elevated controls, active dark surfaces |
-| `$gray-700` | `#303030` | Borders, separators, secondary dark controls |
-| `$gray-600` | `#595959` | Muted borders and dividers |
-| `$gray-500` | `#868686` | Secondary text and icons |
-| `$gray-400` | `#AFB6C2` | Placeholder and quiet text |
-| `$gray-300` | `#D3D7E1` | Secondary readable text |
-| `$gray-200` | `#EBEBEB` | Body copy on dark surfaces |
-| `$gray-100` | `#F2F2F2` | Primary text on dark surfaces |
+Other exploratory frames are alternatives, not approved token authority.
 
-#### Green — primary action and progress
+### Semantic colors
 
-| Token | Hex | Usage |
-| --- | --- | --- |
-| `$green-900` | `#07303B` | Green-tinted dark surface |
-| `$green-800` | `#027558` | Strong green surface and selected dark state |
-| `$green-700` | `#20925D` | Secondary positive emphasis |
-| `$green-600` | `#38C76D` | Positive status |
-| `$green-500` | `#0FE983` | Primary accent and readable positive text |
-| `$green-400` | `#00FF88` | Primary CTA, active navigation, focus, progress glow |
-| `$green-300` | `#4AFFAB` | Soft bright accent |
-| `$green-200` | `#ADFFD9` | Pale positive text or surface |
-| `$green-100` | `#DAFFF0` | Very soft positive surface |
+Pencil uses `$original-refined-<role>` for dark colors and
+`$light-refined-<role>` for light colors. The shared names below describe the
+intended app contract, independently of the local Tailwind or shadcn mapping.
 
-Green is the StarDust action color. It must not be used as decoration on every
-element; reserve the brightest values for actions, active states, and progress.
-
-#### Semantic accents
-
-| Semantic role | Token | Hex | Usage |
+| Role | Dark | Light | Usage |
 | --- | --- | --- | --- |
-| Reward | `$yellow-400` | `#FFCE31` | Starcoins, streaks, unlocked stars, ranking rewards |
-| Reward dark | `$yellow-700` | `#674F00` | Text over yellow or dark reward details |
-| Information | `$blue-300` | `#00D1FF` | Informational state, links, editor context |
-| Information dark | `$blue-700` | `#022F43` | Blue-tinted dark surface |
-| Danger | `$red-700` | `#FF3737` | Errors, destructive actions, blocked progress |
-| Danger soft | `$red-300` | `#FF8484` | Secondary danger text or illustration |
-| Purple secondary | `$purple-700` | `#514869` | Focus-ring treatment and restrained secondary accent |
+| `canvas` | `#0B0E0F` | `#FFFFFF` | Deep canvas, inset controls, editor base |
+| `background` | `#141A1B` | `#F2F5F4` | Page background |
+| `surface` | `#1E2626` | `#FFFFFF` | Cards and grouped controls |
+| `border` | `#667778` | `#7E8E90` | Visible control boundaries |
+| `border-quiet` | `#354344` | `#D5DFDC` | Separators and non-interactive grouping |
+| `text-primary` | `#F2F5F4` | `#141A1B` | Primary readable content |
+| `text-secondary` | `#ADB8BA` | `#53636B` | Metadata and supporting copy |
+| `tag-background` | `#A6B3B5` | `#DCE5E3` | Compact category tags |
+| `tag-foreground` | `#141A1B` | `#314642` | Text on tags |
+| `action` | `#32E995` | `#007849` | Primary actions and progress fills |
+| `accent-text` | `#58DFA6` | `#007849` | Accent titles and links |
+| `success` | `#58DFA6` | `#007849` | Positive state and easy difficulty |
+| `reward` | `#FFCE31` | `#876100` | Rewards and medium difficulty |
+| `danger` | `#FF7777` | `#BF3838` | Errors and hard difficulty |
 
-Studio currently uses the shadcn zinc palette (`zinc-950`, `zinc-900`,
-`zinc-800`, and related values) in its shell. Keep that local mapping stable;
-new Studio components should use shadcn semantic variables whenever available.
+Dark primary buttons pair `action` with `canvas` text. Light primary buttons pair
+`action` with white text. Do not reuse a bright dark-mode green as text on white.
 
-### Surface hierarchy
+Green remains the action color; it should not fill every navigation item or
+panel. Keep neutral surfaces dominant. Difficulty and status also need text or
+icons so that color is not the only signal.
 
-From deepest to most prominent:
+Information-blue and focus treatments have not been redefined in the refined
+palette. Existing app treatments remain implementation references until those
+roles and their interaction states are explicitly designed and validated.
+Studio's existing shadcn semantic variables remain its local implementation
+contract until a deliberate migration is made.
 
-1. **Canvas:** `$gray-950` or `$gray-900`.
-2. **Base surface:** `$gray-900` or `$gray-800`.
-3. **Elevated surface:** `$gray-800`, usually with a border.
-4. **Active surface:** green-tinted surface such as `$green-900` or a green
-   accent with dark text.
-5. **Overlay:** dialog, popover, or menu with a clear border and shadow.
+### Supporting color scales — provisional
 
-Avoid white cards, light SaaS backgrounds, and large saturated backgrounds in
-authenticated product screens. Light surfaces may be used only when a feature
-has a deliberate content or accessibility reason.
+The token board includes complete 50–950 proposals under
+`$refined-scale-<family>-<step>`. Intermediate tones are not approved component
+assignments. The green proposal, in particular, still needs a lightness-order
+review before being treated as a graduated scale. Approved semantic values above
+remain authoritative regardless of primitive numbering.
+
+| Step | Neutral | Green | Yellow | Red |
+| --- | --- | --- | --- | --- |
+| 50 | `#F2F5F4` | `#ECFFF4` | `#FFFBEB` | `#FFF4F4` |
+| 100 | `#E5ECEA` | `#D8FFE9` | `#FFF2C2` | `#FFE4E4` |
+| 200 | `#DCE5E3` | `#B2F5D4` | `#FFE58A` | `#FFCACA` |
+| 300 | `#ADB8BA` | `#78EEB5` | `#FFDB65` | `#FFA2A2` |
+| 400 | `#8D9DA0` | `#32E995` | `#FFCE31` | `#FF7777` |
+| 500 | `#667778` | `#58DFA6` | `#CFA518` | `#E35C5C` |
+| 600 | `#53636B` | `#149F64` | `#A57B07` | `#CE4646` |
+| 700 | `#354344` | `#007849` | `#876100` | `#BF3838` |
+| 800 | `#1E2626` | `#065C39` | `#604402` | `#952929` |
+| 900 | `#141A1B` | `#004329` | `#443102` | `#702525` |
+| 950 | `#0B0E0F` | `#002819` | `#281B06` | `#431515` |
+
+### Surface hierarchy and contrast
+
+Dark mode progresses from canvas to page background to card surface. Light mode
+uses the pale page background with white cards; quiet borders can clarify groups.
+Use `border`, rather than `border-quiet`, when a boundary is necessary to identify
+an interactive control. Overlay separation should be clear without decorative
+shadows or glow.
+
+Recorded contrast checks for the selected color pairs:
+
+| Pair | Dark | Light |
+| --- | ---: | ---: |
+| Accent/success text on card surface | 9.20:1 | 5.55:1 |
+| Secondary text on card surface | 7.60:1 | 6.24:1 |
+| Tag foreground on tag background | 8.16:1 | 7.85:1 |
+| Reward text on card surface | 10.38:1 | 5.61:1 |
+| Danger text on card surface | 6.00:1 | 5.47:1 |
+| Control border against page background | 3.75:1 | 3.11:1 |
+
+These checks cover solid-color pairs in the references, not a complete
+accessibility audit. Validate actual component states, opacity, images, focus,
+and adjacent surfaces when implementing them. Normal text needs at least 4.5:1;
+large text and necessary control boundaries need at least 3:1.
 
 ### Typography
 
-#### Web App baseline
+#### Current reference and open decision
 
-- **UI family:** Poppins, loaded through `apps/web/src/constants/fonts.ts`.
-- **Code family:** Roboto Mono, used for Delegua and editor content.
-- **Fallback:** the browser's system sans-serif or monospace fallback.
+- **UI baseline:** Poppins in the refined references and existing Web font setup.
+- **UI candidate:** Funnel Sans; not yet selected as a replacement.
+- **Code family:** Roboto Mono for Delegua and editor content.
+- **Fallback:** system sans-serif or monospace as appropriate.
 
-| Role | Typical size | Weight | Treatment |
+The full-screen comparison `iJGU3` holds content, sizes, weights, and spacing
+constant across challenge lists, profiles, and challenge statements. Only the UI
+family changes; code typography remains separate. The earlier compact specimen
+`xmAFO` is supporting material, not sufficient evidence to choose a family.
+
+Choose the UI family by readability, fit, and identity together: compare long
+Portuguese labels and accents, small metadata, numbers, ambiguous glyphs, and
+sustained reading. Preserve one UI family unless a second family has a clear,
+necessary role. Neither continuity alone nor a different appearance decides the
+choice. Do not migrate production fonts before the comparison is resolved.
+
+| Role | Reference size | Weight | Treatment |
 | --- | ---: | ---: | --- |
-| Landing hero | `48–72px` | 500 | Large, centered, gradient or green/gray emphasis |
-| Page title | `24–36px` | 600–700 | Clear section entry point |
-| Section title | `20–32px` | 700 | Often followed by a thin muted divider |
-| Card title | `16–20px` | 600–700 | Compact and scannable |
-| Body | `14–16px` | 400–600 | Relaxed line height for learning content |
-| Supporting text | `12–14px` | 400–500 | Muted neutral color |
+| Page/profile title | `24–28px` | 600 | Clear entry point |
+| Challenge-list title | `16px` | 500 | Accent text on neutral surface |
+| Reading body | `16px` target | 400 | Comfortable line height and measure |
+| Button/filter label | `14px` | 500 | Consistent across controls |
+| Metadata/supporting copy | `14px` | 400 | Secondary text |
+| Compact tag | `12px` | 600 | Contrasting tag foreground |
 | Code | `12–16px` | 400–600 | Roboto Mono; preserve whitespace |
 
-#### Studio baseline
+The reading-body target is guidance for implementation, not a claim that every
+historical Pencil statement already uses it. Test paragraphs at roughly 45–75
+characters per line and tune line height for the selected face and language.
 
-Studio's current CSS contains both `Inter` and `Outfit` declarations, while
-some screens import Lucide directly and others use the shared icon wrapper.
-This is a known normalization gap. New Studio work should use the existing
-shadcn typography contract and avoid adding another font. A future token pass
-should choose one sans-serif family and remove the conflicting declaration.
+Studio's existing Inter/Outfit conflict remains an implementation gap. The Web
+comparison does not settle the Studio family; avoid adding another isolated font.
 
 ### Shape and spacing
 
-The existing Web App uses compact rounded controls and dark bordered surfaces.
-Use this scale as the baseline:
+**The standard border radius is 8 px.** Apply it consistently to buttons, inputs,
+cards, panels, dialogs, popovers, badges, and tags. Circular avatars and artwork
+retain their intended geometry; a circular treatment is not an alternate radius
+for ordinary controls. Do not reintroduce a 4/6/12/16 px radius ladder.
 
 | Token | Value | Usage |
 | --- | ---: | --- |
-| `$space-1` | `4px` | Icon/text micro-gap |
-| `$space-2` | `8px` | Compact control padding |
-| `$space-3` | `12px` | Input and card inner spacing |
-| `$space-4` | `16px` | Standard gap and section padding |
-| `$space-6` | `24px` | Card and page content padding |
-| `$space-8` | `32px` | Major section separation |
-| `$space-12` | `48px` | Hero and large breathing room |
+| `radius-default` | `8px` | Standard component corners |
+| `radius-circle` | `50%` | Circular avatars and circular shapes |
+| `control-height` | `44px` | Standard buttons, inputs, and filters |
+| `control-padding-x` | `12px` | Button/input horizontal padding |
+| `control-gap` | `8px` | Icon and label spacing |
+| `border-width` | `1px` | Standard component border |
+
+Icon-only primary controls use a 44 × 44 px box. Content buttons fit their labels;
+full-width actions follow their container. Compact workspace utilities may need
+an explicit size exception, but keep the 8 px radius and adequate interaction
+area. Button labels use 14 px / 500 in the current font baseline.
 
 | Token | Value | Usage |
 | --- | ---: | --- |
-| `$radius-sm` | `4–6px` | Dense controls, editor details |
-| `$radius-md` | `6–8px` | Buttons, inputs, cards in dense views |
-| `$radius-lg` | `12px` | Feature cards, challenge cards, popovers |
-| `$radius-xl` | `16–20px` | Large sections and animated borders |
-| `$radius-full` | `999px` | Badges, counters, circular controls |
+| `space-1` | `4px` | Micro-gap |
+| `space-2` | `8px` | Compact spacing |
+| `space-3` | `12px` | Control padding |
+| `space-4` | `16px` | Standard gap |
+| `space-6` | `24px` | Card and page padding |
+| `space-8` | `32px` | Major section separation |
+| `space-12` | `48px` | Large breathing room |
 
-Borders should normally be `1px`. Use `2px` only when it communicates an
-active, selected, or high-priority state.
+Use 2 px borders only for a deliberate selected or focus state; these states
+still need definition before a component migration.
 
 ### Shadows and glow
 
-StarDust uses restrained elevation. Prefer borders and surface contrast over
-large shadows. Glow is reserved for the space metaphor and important feedback:
+Standard controls have no shadow or glow. Use surface contrast and a neutral
+border for separation. Cards also prefer surface contrast or a quiet border.
+Do not add animated border effects or green halos to ordinary CTAs.
 
-- Green active/progress glow: soft and local to the active object.
-- Yellow star/reward glow: local to stars, coins, streaks, and podium rewards.
-- Red error glow: avoid except for a clear destructive or blocked state.
-- Animated border effects may be used on featured cards and CTAs, but must not
-  make text difficult to read.
+Existing stars, coins, rockets, and achievement artwork may retain meaningful
+space/reward effects. Those effects do not become component elevation tokens.
+
+
+### Theme families and appearance mode
+
+The StarDust dark/light pair remains the approved baseline. Orbit, Sakura, and
+Glacial extend the same semantic contract with proposed palettes for review.
+Each family supplies both modes; component layout, font roles, 8 px radius,
+44 px controls, and status meanings stay consistent. Theme accents may change
+while product artwork and brand assets retain their identity.
+
+| Family | Visual direction | Dark page | Light page |
+| --- | --- | --- | --- |
+| Orbit | Blue neutrals and lavender accents | `VNL9p` | `EOEZh` |
+| Sakura | Plum/rose neutrals and pink accents | `TOt7q` | `n1wKj` |
+| Glacial | Blue-grey neutrals and cyan accents | `o4jxB` | `tDTFR` |
+
+These challenge-list variants are arranged in three columns to the right of the
+existing references, dark above light. UI variables use
+`theme-proposal-<family>-<mode>-<role>`; editor variables remain separate.
+
+#### Orbit UI palette
+
+| Semantic role | Dark | Light |
+| --- | --- | --- |
+| `canvas` | `#0C1220` | `#FFFFFF` |
+| `background` | `#111827` | `#F1F4FB` |
+| `surface` | `#1B263B` | `#FFFFFF` |
+| `border` | `#7586A2` | `#7A87A2` |
+| `border-quiet` | `#34435E` | `#D8DFED` |
+| `text-primary` | `#E7EDF7` | `#202A40` |
+| `text-secondary` | `#9AAAC2` | `#536482` |
+| `tag-background` | `#B8C6DC` | `#DDE4F3` |
+| `tag-foreground` | `#111827` | `#354561` |
+| `action` | `#A9B9FF` | `#4B58A7` |
+| `accent-text` | `#A9B9FF` | `#4B58A7` |
+| `success` | `#93D6B5` | `#2B7150` |
+| `reward` | `#EAC48B` | `#805D10` |
+| `danger` | `#FF9090` | `#B13C4B` |
+
+#### Sakura UI palette
+
+| Semantic role | Dark | Light |
+| --- | --- | --- |
+| `canvas` | `#120F14` | `#FFFFFF` |
+| `background` | `#1B151B` | `#FAF2F6` |
+| `surface` | `#2A202B` | `#FFFFFF` |
+| `border` | `#917D8F` | `#91768A` |
+| `border-quiet` | `#4E3B4B` | `#E6D5DF` |
+| `text-primary` | `#F4EDF3` | `#30232D` |
+| `text-secondary` | `#B7A6B4` | `#725969` |
+| `tag-background` | `#D8BCCF` | `#EEDCE7` |
+| `tag-foreground` | `#1B151B` | `#57394B` |
+| `action` | `#F2A8C9` | `#9E3E70` |
+| `accent-text` | `#F2A8C9` | `#9E3E70` |
+| `success` | `#A9D5B2` | `#306F4C` |
+| `reward` | `#EAC48B` | `#805900` |
+| `danger` | `#FF9999` | `#B33D4D` |
+
+#### Glacial UI palette
+
+| Semantic role | Dark | Light |
+| --- | --- | --- |
+| `canvas` | `#091317` | `#FFFFFF` |
+| `background` | `#0E1B20` | `#EFF7FA` |
+| `surface` | `#172B33` | `#FFFFFF` |
+| `border` | `#6E8D98` | `#6C8994` |
+| `border-quiet` | `#2C4B58` | `#CFDFE5` |
+| `text-primary` | `#EAF4F7` | `#183039` |
+| `text-secondary` | `#A1B7C0` | `#506B76` |
+| `tag-background` | `#B4D1DA` | `#D9EBF1` |
+| `tag-foreground` | `#0E1B20` | `#294A56` |
+| `action` | `#86D6E7` | `#006F87` |
+| `accent-text` | `#86D6E7` | `#006F87` |
+| `success` | `#9CD8BB` | `#256B50` |
+| `reward` | `#E8CE91` | `#805D10` |
+| `danger` | `#FF9999` | `#B13C4B` |
+
+For these six UI variants, primary/secondary/accent/status text was checked
+against page and card surfaces at 4.5:1 minimum, and control borders at 3:1.
+Use the listed tag foreground/background pair. Dark action fills use dark canvas
+text; light action fills use white text. Runtime states still require validation.
+
+### Monaco editor themes
+
+This guide also defines the design contract for several user-selectable editor
+themes. Keep three layers separate: primitive palettes, semantic application
+colors, and editor-specific colors/syntax roles. Sharing a palette does not make
+an action green the correct color for a keyword or a string.
+
+Each theme family provides paired UI and editor palettes. Syntax roles remain
+separate from UI roles even when they share values. Orbit, Sakura, and Glacial
+are explicit color alternatives; geometry, typography, and product assets stay
+consistent across families.
+
+#### Theme definition and adapter
+
+Each theme should have a stable ID, display name, light/dark/high-contrast mode,
+and a complete resolved set of editor and syntax roles. Keep this semantic
+contract independent of Monaco's configuration keys, with an adapter responsible
+for the mapping. This is an implementation target; no expanded multi-theme registry has been
+implemented in this design pass.
+
+Monaco's standalone theme definition separates `colors` from token `rules`, with
+`base` and `inherit` controlling the built-in starting theme. Its built-in bases
+include `vs`, `vs-dark`, `hc-black`, and `hc-light`.
+[Official standalone theme contract](https://github.com/microsoft/vscode/blob/main/src/vs/editor/standalone/common/standaloneTheme.ts)
+
+Initial mapping targets:
+
+| Design role | Monaco color key | Starting value/status |
+| --- | --- | --- |
+| `editor.background` | `editor.background` | Theme `canvas` |
+| `editor.foreground` | `editor.foreground` | Theme `text-primary` |
+| `editor.line-number` | `editorLineNumber.foreground` | Theme `text-secondary` |
+| `editor.line-number-active` | `editorLineNumber.activeForeground` | Theme `text-primary` |
+| `editor.cursor` | `editorCursor.foreground` | Define and validate per editor theme |
+| `editor.selection` | `editor.selectionBackground` | Define and validate per editor theme |
+| `editor.selection-inactive` | `editor.inactiveSelectionBackground` | Define and validate per editor theme |
+| `editor.line-highlight` | `editor.lineHighlightBackground` | Define and validate per editor theme |
+| `editor.error` | `editorError.foreground` | Theme `danger`; validate on editor background |
+| `editor.warning` | `editorWarning.foreground` | Candidate: theme `reward`; validate separately |
+| `editor.info` | `editorInfo.foreground` | Pending editor-theme value |
+| `editor.widget-background` | `editorWidget.background` | Theme `surface` |
+| `editor.widget-border` | `editorWidget.border` | Theme `border` |
+
+Color-key meanings are documented in the
+[official theme-color reference](https://code.visualstudio.com/api/references/theme-color).
+Confirm supported keys against the Monaco version used by the app; workbench-only
+colors do not belong in its editor adapter.
+
+Also specify find-match highlights, bracket matching, indent guides, whitespace,
+suggestion/hover widget text and selected rows, scrollbars, and any enabled
+minimap or overview-ruler states. Pending values must be resolved before a theme
+is presented as complete; do not silently depend on arbitrary inherited colors.
+
+#### Syntax roles
+
+Define a separate `syntax.*` set for plain text, comments, keywords, identifiers,
+functions, types, strings, numbers, operators, delimiters, and invalid tokens.
+These roles are a design vocabulary, not assumed Delegua tokenizer names. Inspect
+the actual tokenizer output before mapping them into Monaco `rules`; unsupported
+roles must not be represented as working highlighting.
+
+The palettes below are proposals for visual review, not installed production
+themes. Frame `UEcrD`, beside `ifIsM`, compares the same Delegua sample in four
+family columns, with dark above light. It is a static preview. Pencil uses
+`monaco-proposal-<family>-<mode>-<role>` color variables.
+
+| Family ID | Display name | Dark resolved ID | Light resolved ID |
+| --- | --- | --- | --- |
+| `stardust` | StarDust | `stardust-dark` | `stardust-light` |
+| `orbit` | Orbit | `orbit-dark` | `orbit-light` |
+| `sakura` | Sakura | `sakura-dark` | `sakura-light` |
+| `glacial` | Glacial | `glacial-dark` | `glacial-light` |
+
+Dark variants use Monaco base `vs-dark`; light variants use `vs`. The selected
+family and resolved appearance mode determine the concrete theme ID.
+
+##### StarDust editor palette
+
+| Role | Current category | Dark | Light |
+| --- | --- | --- | --- |
+| Plain text / identifiers / delimiters | `rest` | `#F2F5F4` | `#141A1B` |
+| Keywords / currently grouped native functions | `keywords` | `#58DFA6` | `#007849` |
+| Strings | `strings` | `#E8CD83` | `#805400` |
+| Comments | `comments` | `#94A5A6` | `#5A6B68` |
+| Operators | `operators` | `#CBD6D5` | `#40575B` |
+| Numbers | `numbers` | `#8CC8FF` | `#1C5D99` |
+| Boolean/null-like literals | `booleans` | `#D7ADFF` | `#7E3EB2` |
+| Current type-keyword category (`var`) | `typeKeywords` | `#7DDBCF` | `#006E73` |
+| Editor background | `editor` | `#0B0E0F` | `#FFFFFF` |
+| Active selection | — | `#203D35` | `#E0EEE6` |
+| Inactive selection | — | `#263B35` | `#E5ECE8` |
+| Current line | — | `#141A1B` | `#F2F5F4` |
+| Widget background | — | `#1E2626` | `#F2F5F4` |
+| Widget / bracket-match border | — | `#667778` | `#7E8E90` |
+| Error / invalid token | — | `#FF7777` | `#BF3838` |
+| Warning | — | `#FFCE31` | `#876100` |
+| Information / find-match border | — | `#8CC8FF` | `#1C5D99` |
+
+##### Orbit editor palette
+
+| Role | Current category | Dark | Light |
+| --- | --- | --- | --- |
+| Plain text / identifiers / delimiters | `rest` | `#E7EDF7` | `#202A40` |
+| Keywords / currently grouped native functions | `keywords` | `#A9B9FF` | `#4B58A7` |
+| Strings | `strings` | `#EAC48B` | `#805D10` |
+| Comments | `comments` | `#9AAAC2` | `#586A86` |
+| Operators | `operators` | `#C9D5E8` | `#445571` |
+| Numbers | `numbers` | `#88D5EC` | `#006B82` |
+| Boolean/null-like literals | `booleans` | `#C4ABF4` | `#784B9F` |
+| Current type-keyword category (`var`) | `typeKeywords` | `#93D6B5` | `#286D53` |
+| Editor background | `editor` | `#111827` | `#FFFFFF` |
+| Active selection | — | `#293B59` | `#E6ECF7` |
+| Inactive selection | — | `#243044` | `#EBEFF8` |
+| Current line | — | `#192235` | `#F1F4FB` |
+| Widget background | — | `#1B263B` | `#F1F4FB` |
+| Widget / bracket-match border | — | `#7586A2` | `#7A87A2` |
+| Error / invalid token | — | `#FF9090` | `#B13C4B` |
+| Warning | — | `#EAC48B` | `#805D10` |
+| Information / find-match border | — | `#88D5EC` | `#006B82` |
+
+##### Sakura editor palette
+
+| Role | Current category | Dark | Light |
+| --- | --- | --- | --- |
+| Plain text / identifiers / delimiters | `rest` | `#F4EDF3` | `#30232D` |
+| Keywords / currently grouped native functions | `keywords` | `#F2A8C9` | `#9E3E70` |
+| Strings | `strings` | `#EAC48B` | `#805900` |
+| Comments | `comments` | `#B7A6B4` | `#725969` |
+| Operators | `operators` | `#DCCBD7` | `#63485A` |
+| Numbers | `numbers` | `#ACCAF0` | `#345F94` |
+| Boolean/null-like literals | `booleans` | `#D2B3F1` | `#734595` |
+| Current type-keyword category (`var`) | `typeKeywords` | `#A9D5B2` | `#306F4C` |
+| Editor background | `editor` | `#120F14` | `#FFFFFF` |
+| Active selection | — | `#493043` | `#F3DFE9` |
+| Inactive selection | — | `#362532` | `#F8EBF2` |
+| Current line | — | `#1B151B` | `#FAF2F6` |
+| Widget background | — | `#2A202B` | `#FAF2F6` |
+| Widget / bracket-match border | — | `#917D8F` | `#91768A` |
+| Error / invalid token | — | `#FF9999` | `#B33D4D` |
+| Warning | — | `#EAC48B` | `#805900` |
+| Information / find-match border | — | `#ACCAF0` | `#345F94` |
+
+##### Glacial editor palette
+
+| Role | Current category | Dark | Light |
+| --- | --- | --- | --- |
+| Plain text / identifiers / delimiters | `rest` | `#EAF4F7` | `#183039` |
+| Keywords / currently grouped native functions | `keywords` | `#86D6E7` | `#006F87` |
+| Strings | `strings` | `#E8CE91` | `#805D10` |
+| Comments | `comments` | `#A1B7C0` | `#506B76` |
+| Operators | `operators` | `#CCDFE6` | `#365A69` |
+| Numbers | `numbers` | `#A4C4FF` | `#315D9A` |
+| Boolean/null-like literals | `booleans` | `#C9B9F3` | `#724B96` |
+| Current type-keyword category (`var`) | `typeKeywords` | `#9CD8BB` | `#256B50` |
+| Editor background | `editor` | `#091317` | `#FFFFFF` |
+| Active selection | — | `#25414D` | `#DCEEF3` |
+| Inactive selection | — | `#1E343E` | `#E9F3F7` |
+| Current line | — | `#0E1B20` | `#EFF7FA` |
+| Widget background | — | `#172B33` | `#EFF7FA` |
+| Widget / bracket-match border | — | `#6E8D98` | `#6C8994` |
+| Error / invalid token | — | `#FF9999` | `#B13C4B` |
+| Warning | — | `#E8CE91` | `#805D10` |
+| Information / find-match border | — | `#86D6E7` | `#006F87` |
+
+Use plain foreground for identifiers, functions, types, and delimiters until the
+actual tokenizer exposes distinct categories. Do not invent highlighting support
+to match a design vocabulary. Invalid-token coloring uses the theme error color.
+Suggestion and hover text use foreground, selected rows use active selection,
+and secondary widget text uses the comment color. Find-match and bracket-match
+fills use inactive selection with their specified borders. Scrollbar thumbs use
+the border color with transparency; validate final composited colors separately.
+The minimap and overview ruler inherit the corresponding syntax/diagnostic roles
+when enabled. These assignments are design targets, not verified runtime mapping.
+
+Calculated minimum contrast across all eight code foregrounds against each
+variant's background, current line, active selection, and inactive selection:
+
+| Family | Dark | Light |
+| --- | ---: | ---: |
+| StarDust | 4.6:1 | 4.62:1 |
+| Orbit | 4.78:1 | 4.63:1 |
+| Sakura | 5.11:1 | 4.72:1 |
+| Glacial | 5.18:1 | 4.74:1 |
+
+These checks assume the exact opaque colors above. They do not cover every
+Monaco overlay, diagnostic decoration, or alpha-composited state.
+
+#### Existing Delegua integration
+
+`packages/lsp/src/constants/delegua-tokens.ts` defines the current categories:
+`keywords`, `operators`, `booleans`, `typeKeywords`, `strings`, `comments`,
+`numbers`, `editor`, and `rest`. Native functions such as `escreva` and
+`concatenar` are currently listed with keywords; `var` is in `typeKeywords`.
+`editor` is a surface role, not a syntax category. Empty arrays do not imply that
+the runtime cannot recognize strings, comments, or numbers.
+
+The Web CodeEditor registers the Monarch definition returned by
+`DeleguaConfiguracaoParaEditorMonaco.obterDefinicaoDeLinguagem()`. This definition
+must be checked for its actual emitted token names before mapping the palettes.
+The existing adapter derives singular rule names from plural color keys and
+hardcodes the `darkSpace` palette. Replace that assumption with explicit,
+verified mappings during implementation; a new color table alone is insufficient.
+
+The application currently has legacy `darkSpace` / `dark-space` naming. Preserve
+compatibility with stored preferences when introducing the proposed IDs. Existing
+theme constants are duplicated in Web and Studio; consolidation is an
+implementation task rather than a change made by this document.
+
+#### User choice and invariant geometry
+
+**Decision: users choose a theme family, and every family inherits the current
+application light/dark mode.** This replaces the earlier proposal for choosing
+an editor light/dark appearance independently. For example, Sakura resolves to
+`sakura-dark` in dark mode and `sakura-light` in light mode. Switching mode retains
+the selected family; switching family retains the current mode.
+
+Persist the family ID (`stardust`, `orbit`, `sakura`, or `glacial`), rather than a
+mode-specific ID, as the user's theme choice. Use the application's resolved mode
+as the shared authority; if its mode preference follows the system, both UI and
+editor follow the resulting light/dark mode. No separate editor mode selector is
+needed for this contract.
+
+The existing Web EditorContext persists a legacy `themeName` locally. A migration
+must translate `darkSpace` / `dark-space` to the StarDust family without pinning
+dark mode, and preserve font size and tab size. Family preference storage,
+account synchronization, the new-user default, and unknown-ID fallback still need
+implementation. Do not claim the new resolver is already present.
+
+Changing color themes should preserve code, selection, scroll position, and editor
+settings. Roboto Mono remains the code-family reference; font size and line height
+are editor settings, not properties that a color-theme choice changes. The editor
+container and surrounding controls keep the standard 8 px radius. Monaco theme
+colors do not replace the app's layout or border-radius tokens.
 
 ---
 
@@ -281,6 +663,9 @@ large shadows. Glow is reserved for the space metaphor and important feedback:
 
 ### Buttons and links
 
+All standard buttons use the shared 44 px height, 8 px radius, 12 px horizontal
+padding, 8 px icon gap, and no shadow or glow.
+
 #### Primary button
 
 - Green accent background, dark text, compact rounded shape.
@@ -310,7 +695,8 @@ large shadows. Glow is reserved for the space metaphor and important feedback:
 
 ### Inputs and forms
 
-- Inputs are dark or transparent against the surrounding surface.
+- Inputs use the theme surface against the surrounding background, with the
+  standard 44 px height and 8 px radius.
 - Default border is neutral; focus border is green; invalid border and message
   are red.
 - Icons belong inside the control only when they clarify the field type.
@@ -323,8 +709,8 @@ large shadows. Glow is reserved for the space metaphor and important feedback:
 
 ### Cards and panels
 
-Cards establish grouping on dark surfaces using border, radius, and modest
-contrast. A card should answer what it contains and what the user can do next.
+Cards establish grouping using theme surfaces, an 8 px radius, and modest
+contrast or a quiet border. A card should answer what it contains and what the user can do next.
 
 Common patterns:
 
@@ -357,7 +743,7 @@ must not be the only indication of an important notification.
 - Keep the semantic icon beside the title when an icon is used; do not detach it
   as decoration.
 - Destructive confirmations explain impact and provide a safe cancel action.
-- Popovers and menus inherit the dark surface hierarchy and close predictably
+- Popovers and menus inherit the active theme surface hierarchy and close predictably
   on escape or outside interaction.
 
 ### Tables and lists
@@ -561,39 +947,34 @@ canonical implementation per app and update the wrappers incrementally.
 - New states should be designed and tested as part of the component, not added
   as page-specific exceptions.
 
-### Recommended token aliases
+### Implementation mapping
 
-When a shared token layer is introduced, prefer semantic names over app-specific
-color names:
+Map the approved semantic roles in section 3 into the owning app's Tailwind or
+shadcn tokens. Keep theme values separate from component geometry: all family
+variants share the same 8 px radius and standard control dimensions.
 
-```css
-:root {
-  --color-canvas: #0b0e0f;
-  --color-surface: #141a1b;
-  --color-surface-elevated: #1e2626;
-  --color-border: #303030;
-  --color-text-primary: #f2f2f2;
-  --color-text-secondary: #d3d7e1;
-  --color-text-muted: #868686;
-  --color-action: #00ff88;
-  --color-action-foreground: #07303b;
-  --color-reward: #ffce31;
-  --color-info: #00d1ff;
-  --color-danger: #ff3737;
-  --color-focus: #514869;
-}
-```
+Resolve the family and appearance once, then derive both UI semantic colors and
+Monaco colors/rules from that variant. Store the family preference separately
+from the application mode; do not store a resolved dark/light ID as the palette
+choice. Components consume semantic roles, not family-specific hex literals.
+The Monaco adapter uses explicit tokenizer mappings rather than object order or
+plural-name slicing. Changing mode or family must retain the editor model and
+user settings.
 
-The aliases are a design target, not a request to replace the current Tailwind
-configuration without a migration plan.
+Pencil namespaces document the visual references; they do not require the same
+prefixes in application code. Migrate deliberately and validate the affected
+screens in the local browser. Do not treat the provisional primitive scales or
+unresolved font/focus choices as production-ready decisions.
 
 ---
 
 ## 11. Non-standard — do not use
 
-- White, generic SaaS dashboards for the authenticated Web App.
-- Purple as the main brand or page background; StarDust's primary signal is
-  green, with purple currently reserved for a secondary focus treatment.
+- Generic dashboards that discard the established identity. The refined light
+  alternative is allowed and uses its own approved semantic colors.
+- Arbitrary palette changes outside the selected family. StarDust uses green,
+  while Orbit, Sakura, and Glacial have their own defined accents. Focus
+  treatments still need specification and validation per family.
 - A new font for an isolated component.
 - Emoji or an unapproved icon library as interface controls.
 - Decorative motion that delays learning, submission, navigation, or execution.
@@ -609,14 +990,24 @@ configuration without a migration plan.
 
 ## 12. Known gaps and maintenance
 
-This document intentionally records the current state rather than claiming full
-visual convergence.
+The refined references establish the approved design direction, while production
+implementation still requires a deliberate migration.
 
 - Web and Studio do not yet consume one shared token package.
 - Studio's font declarations contain an unresolved Inter/Outfit conflict.
 - Icon usage is not fully centralized in Studio.
-- The Pencil file contains exploratory references from multiple icon and font
-  families; it is not, by itself, a source of truth for production tokens.
+- Only the named refined Pencil references in section 3 carry the approved
+  palette and geometry; other frames remain exploratory or historical.
+- Poppins versus Funnel Sans is still an open UI-family decision.
+- Paired editor palettes are defined in section 3, but require visual approval,
+  runtime interaction validation, and mappings verified against the Delegua
+  tokenizer. The existing local preference supports a legacy theme; the family
+  registry, shared mode resolver, and preference migration are not implemented.
+- Supporting 50–950 scales are provisional, and their tone ordering needs review.
+- Hover, focus, pressed, disabled, and loading treatments for the refined tokens
+  still need specification and validation.
+- The approved dark/light palettes and 8 px radius have not been migrated into
+  application code as part of this design work.
 - Existing screens contain historical one-off Tailwind values. New work should
   follow this document, and refactors should remove those values only when the
   behavior and visual result are understood.
