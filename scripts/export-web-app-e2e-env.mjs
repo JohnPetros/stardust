@@ -19,6 +19,13 @@ function readEnvValue(content, key) {
 function shellQuote(value) {
   return `'${value.replaceAll("'", "'\\''")}'`
 }
+if (process.argv.includes('--seed')) {
+  const accounts = JSON.parse(readFileSync(new URL('../apps/server/src/database/seeders/data/seed-accounts.json', import.meta.url), 'utf8'))
+  const account = accounts[0]
+  console.log(`export ${keys[0]}=${shellQuote(account.email)}`)
+  console.log(`export ${keys[1]}=${shellQuote(account.password)}`)
+  process.exit(0)
+}
 const root = output('git', ['rev-parse', '--show-toplevel'])
 const envFile = `${root}/.env.local`
 if (!existsSync(envFile)) throw new Error(`arquivo ${envFile} não encontrado`)

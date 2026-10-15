@@ -17,7 +17,7 @@ const signInFormSchema = z.object({
 
 const developmentDefaultValues: SignInFormFields | undefined =
   CLIENT_ENV.mode === 'development'
-    ? { email: 'ctrlaltdel.cursor@gmail.com', password: '123456' }
+    ? { email: 'explorer@stardust.local', password: 'StardustExplorer123!' }
     : undefined
 
 export function useSignInForm(onFormSubmit: (fields: SignInFormFields) => Promise<void>) {

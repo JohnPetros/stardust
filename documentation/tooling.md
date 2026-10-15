@@ -246,6 +246,93 @@ los.
 | `lint`        | Executa o lint de `src` com nível de diagnóstico de erro. |
 | `format`      | Formata `src` e grava as alterações.                      |
 
+## Seed local por módulo
+
+O seed é independente de `db:test` e usa um snapshot versionado do conteúdo do
+Supabase staging (`rveubqzvfbqbcpmuevnm`), exportado em 2026-10-10. Não acessa
+staging durante a execução. O entry point é
+`apps/server/src/database/seed.ts`; cada domínio possui seu seeder em
+`apps/server/src/database/seeders/<Domínio>Seeder.ts`, com `clear()` e `run(seed)`.
+
+Prepare o stack e aplique as migrations com `npm run db:test -w @stardust/server`.
+As contas locais são fixtures públicas fixas definidas em
+`apps/server/src/database/seeders/seed-accounts.json`: `explorer@stardust.local`
+e `studio@stardust.local`. Seus IDs terminam em `0001` e `0002`, respectivamente.
+O seed não usa `WEB_APP_E2E_*` ou `STUDIO_APP_E2E_*`. Inclua o UUID completo do
+Studio (`00000000-0000-4000-8000-000000000002`) em `GOD_ACCOUNT_IDS` da raiz e do
+Server local. Para o Playwright manual, carregue o exportador correspondente com
+`--seed`; sem essa opção ele mantém o suporte às credenciais privadas da raiz.
+
+```bash
+# Valida configuração e snapshot sem conectar ao banco
+npm run db:seed -w @stardust/server -- --check
+
+# Substitui dados da aplicação e usuários Auth locais
+npm run db:seed -w @stardust/server
+```
+
+O comando exporta a conexão local a partir do `.env.local` raiz com
+`scripts/export-local-database-env.mjs` e carrega as credenciais apenas no
+processo. Recusa hosts remotos, outros bancos, parâmetros de conexão que
+redirecionem o destino e modo de produção. Limpeza e inserção acontecem numa
+única transação, com lock para serializar execuções concorrentes. Uma falha
+reverte também o reset de Auth; o pool fecha ao concluir ou falhar.
+
+O snapshot contém 55 avatares, 10 foguetes, 2 insígnias, 6 tiers, 17 conquistas,
+8 planetas, 39 estrelas, 27 desafios públicos ou associados a estrelas,
+60 vínculos de categorias, 10 categorias e 10 guias. Textos, histórias e questões
+embutidos nas estrelas são aplicados pelo `LessonSeeder`; a tabela de questões
+separada está vazia em staging. Autoria dos desafios é substituída pela conta
+Studio local. Não são exportados usuários, emails, sessões, hashes de senha,
+API keys, desafios privados sem estrela nem histórico de atividade de staging.
+Roadmaps de staging não fazem parte do schema local atual e não são importados.
+
+As duas contas locais recebem perfil, itens iniciais e primeira estrela
+desbloqueada. Ranking, nota, snippet, comentário, conversa e feedback são
+ficcionais. O seed não publica eventos, envia mensagens nem gera arquivos;
+nomes e referências de imagens/áudios do catálogo são preservados, mas seus
+arquivos não são copiados pelo comando de banco. Os seeders persistem diretamente
+no PostgreSQL na borda administrativa; não adicionam métodos de reset aos ports
+do Core nem se tornam dependências das rotas ou dos jobs.
+
+As imagens dos planetas, conquistas, avatares, tiers e foguetes estão versionadas em
+`seeders/assets/images/planets/`, `seeders/assets/images/achievements/` e
+`seeders/assets/images/avatars/`, `seeders/assets/images/rankings/` e
+`seeders/assets/images/rockets/`.
+Execute `npm run db:seed:assets -w @stardust/server` depois de preparar o MinIO
+local. O comando usa o `.env.local` da raiz, exige endpoint HTTP em
+`127.0.0.1`, preserva os nomes do catálogo e publica 110 imagens, incluindo seis
+extras. Confirma por HTTP anônimo os 104 arquivos referenciados pelos oito
+planetas, pelas 17 conquistas, pelos 55 avatares, pelos seis tiers e pelos 10 foguetes. Não altera o banco; pode ser executado novamente para atualizar os
+arquivos. A policy existente é preservada e recebe permissão de leitura pública
+somente para `images/planets/*`, `images/achievements/*`, `images/avatars/*`, `images/rankings/*` e `images/rockets/*`. Uploads e outras pastas não recebem permissões.
+Configure `NEXT_PUBLIC_CDN_URL` na Web e `VITE_CDN_URL` no Studio com a URL
+impressa pelo comando (`http://127.0.0.1:<MINIO_API_PORT>/<MINIO_BUCKET>`).
+Os avatares preservam os nomes `.jpg` do catálogo; o Content-Type corresponde
+aos bytes originais (JPEG, AVIF ou WebP). A verificação HTTP compara os bytes
+recebidos com o arquivo versionado. Arquivos de outros itens ainda precisam ser
+fornecidos.
+
+Para atualizar o snapshot em `seeders/data/seed-catalog.json`, exporte somente
+as tabelas de catálogo listadas em `seed-data.ts` por consultas read-only no
+Supabase Dev. Filtre desafios por `is_public OR star_id IS NOT NULL`, mantenha
+apenas vínculos dos desafios incluídos e substitua `user_id` por
+`00000000-0000-4000-8000-000000000002` antes de salvar. Atualize `exportedAt`,
+revise conteúdo e referências e execute as validações locais. Nunca versione
+um dump de Auth ou de tabelas pessoais.
+
+```bash
+node --test scripts/tests/seed-database.test.mjs
+
+# Validação explícita e destrutiva, exclusivamente no banco local
+eval "$(node scripts/export-local-database-env.mjs)"
+STARDUST_LOCAL_SEED_TEST=1 node --env-file=.env.local --test scripts/tests/seed-database.integration.test.mjs
+```
+
+A integração recria o seed duas vezes, autentica as contas pelo GoTrue local,
+verifica seus perfis e força uma falha de inserção para confirmar rollback.
+Sem `STARDUST_LOCAL_SEED_TEST=1`, esse teste não altera o banco.
+
 ## Supabase local
 
 O root Docker Compose é a única origem do Supabase local. Configure as

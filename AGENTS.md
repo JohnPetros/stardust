@@ -14,6 +14,15 @@
 
 ### Ambiente local e credenciais
 
+- Para o Supabase local preparado com `db:seed`, use as contas demo fixas de
+  `apps/server/src/database/seeders/seed-accounts.json`. Elas são fixtures públicas
+  exclusivamente locais. Carregue-as nos fluxos manuais de Playwright com os
+  scripts `export-*-app-e2e-env.mjs --seed`; não copie valores para testes.
+- O Studio seed usa o UUID `00000000-0000-4000-8000-000000000002`; inclua-o
+  em `GOD_ACCOUNT_IDS` da raiz e do Server local.
+- As regras de credenciais privadas em `.env.local` abaixo continuam aplicáveis
+  aos serviços e a contas que não pertencem ao seed.
+
 - Para desenvolvimento local e validações reais no navegador, use sempre o
   `.env.local` da raiz como fonte das variáveis de ambiente e credenciais.
 - Carregue essas variáveis com o script de exportação correspondente antes de
@@ -97,7 +106,8 @@ declarar a aplicação funcional.
   mesma porta no `baseURL` do teste. Não altere a URL do servidor para resolver
   um conflito de porta do Studio.
 
-- Configure as credenciais e a URL do Studio no `.env.local` da raiz:
+- Para contas próprias fora do seed, configure as credenciais no `.env.local` da raiz
+  e execute o exportador sem `--seed`:
 
   ```dotenv
   STUDIO_APP_E2E_EMAIL=<email-da-conta-de-teste>
@@ -108,7 +118,7 @@ declarar a aplicação funcional.
   `source` para que os `export`s permaneçam no shell atual:
 
   ```bash
-  eval "$(node ./scripts/export-studio-app-e2e-env.mjs)"
+  eval "$(node ./scripts/export-studio-app-e2e-env.mjs --seed)"
   ```
 
   O arquivo `.env.local` é ignorado pelo Git; nunca coloque essas
@@ -286,7 +296,8 @@ Nesse fluxo, a Web App usa `http://localhost:3000` e a API usa
 `apps/web/playwright.config.ts`, `/api/tests/server` ou `ServerMock`, pois eles
 pertencem exclusivamente aos testes de integração.
 
-Configure as credenciais reais da Web App no `.env.local` da raiz:
+Para contas próprias fora do seed, configure as credenciais no `.env.local` da raiz
+e execute o exportador sem `--seed`:
 
 ```dotenv
 WEB_APP_E2E_EMAIL=<email-da-conta-da-web-app>
@@ -296,11 +307,11 @@ WEB_APP_E2E_PASSWORD=<senha-da-conta-da-web-app>
 Carregue-as no mesmo terminal que inicia o navegador Playwright:
 
 ```bash
-eval "$(node ./scripts/export-web-app-e2e-env.mjs)"
+eval "$(node ./scripts/export-web-app-e2e-env.mjs --seed)"
 ```
 
-O script falha se alguma variável estiver ausente e não imprime os valores das
-credenciais. Não reutilize `STUDIO_APP_E2E_*`: as contas do Studio e da Web App
+No modo padrão, o script falha se alguma variável estiver ausente.
+No modo `--seed`, carrega as fixtures locais fixas. Não reutilize `STUDIO_APP_E2E_*`: as contas do Studio e da Web App
 são independentes.
 
 ## Regra obrigatória de validação manual do Frontend

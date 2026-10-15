@@ -1,0 +1,16 @@
+[
+  {
+    "id": "00000000-0000-4000-8000-000000000001",
+    "name": "Explorer Seed",
+    "slug": "explorer-seed",
+    "email": "explorer@stardust.local",
+    "password": "StardustExplorer123!"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000000002",
+    "name": "Admin Seed",
+    "slug": "admin-seed",
+    "email": "studio@stardust.local",
+    "password": "StardustStudio123!"
+  }
+]

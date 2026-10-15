@@ -18,6 +18,7 @@ COPY --from=builder /stardust/out/json/ .
 RUN npm install
 COPY --from=builder /stardust/out/full/ .
 COPY turbo.json turbo.json
+COPY tsconfig.base.json tsconfig.base.json
 RUN npm run build:server
 
 FROM base AS runner
