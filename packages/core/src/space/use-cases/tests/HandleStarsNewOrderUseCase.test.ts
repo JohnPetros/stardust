@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { PlanetsRepository } from '#space/interfaces/PlanetsRepository'
@@ -7,16 +8,19 @@ import { PlanetsFaker } from '#space/domain/entities/tests/fakers/PlanetsFaker'
 import { HandleStarsNewOrderUseCase } from '../HandleStarsNewOrderUseCase'
 
 describe('Handle Stars New Order Use Case', () => {
+  let database: Mock<Database>
   let useCase: HandleStarsNewOrderUseCase
   let repository: Mock<PlanetsRepository>
   let broker: Mock<Broker>
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     repository = mock<PlanetsRepository>()
     broker = mock<Broker>()
     repository.findAll.mockImplementation()
     broker.publish.mockImplementation()
-    useCase = new HandleStarsNewOrderUseCase(repository, broker)
+    useCase = new HandleStarsNewOrderUseCase(database, repository, broker)
   })
 
   it('should publish the SpaceOrderChangedEvent with the list of star ids', async () => {

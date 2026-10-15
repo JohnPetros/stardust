@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 import { SendFeedbackReportUseCase } from '../SendFeedbackReportUseCase'
 import type { FeedbackReportsRepository } from '../../interfaces/FeedbackReportsRepository'
@@ -6,18 +7,21 @@ import { FeedbackReportsFaker } from '../../domain/entities/fakers/FeedbackRepor
 import { FeedbackReportSentEvent } from '../../domain/events'
 
 describe('SendFeedbackReportUseCase', () => {
+  let database: Mock<Database>
   let repository: Mock<FeedbackReportsRepository>
   let broker: Mock<Broker>
   let useCase: SendFeedbackReportUseCase
 
-  beforeAll(() => {
+  beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     repository = mock<FeedbackReportsRepository>()
     broker = mock<Broker>()
 
     repository.add.mockResolvedValue(undefined)
     broker.publish.mockResolvedValue(undefined)
 
-    useCase = new SendFeedbackReportUseCase(repository, broker)
+    useCase = new SendFeedbackReportUseCase(database, repository, broker)
   })
 
   it('should send a feedback report successfully', async () => {
@@ -51,5 +55,22 @@ describe('SendFeedbackReportUseCase', () => {
     repository.add.mockRejectedValue(new Error('Repo error'))
 
     await expect(useCase.execute(dto)).rejects.toThrow('Repo error')
+  })
+
+  it('recreates the report and event on each transaction callback invocation', async () => {
+    const dto = FeedbackReportsFaker.fakeDto()
+    database.run.mockImplementationOnce(async (operation) => {
+      await operation()
+      return operation()
+    })
+
+    const result = await useCase.execute(dto)
+
+    expect(repository.add).toHaveBeenCalledTimes(2)
+    const firstReport = repository.add.mock.calls[0][0]
+    const secondReport = repository.add.mock.calls[1][0]
+    expect(firstReport).not.toBe(secondReport)
+    expect(broker.publish.mock.calls[0][0]).not.toBe(broker.publish.mock.calls[1][0])
+    expect(result).toEqual(secondReport.dto)
   })
 })

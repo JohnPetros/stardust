@@ -1,4 +1,5 @@
-import { mock } from 'ts-jest-mocker'
+import type { Database } from '#global/interfaces/Database'
+import { mock, type Mock } from 'ts-jest-mocker'
 import { faker } from '@faker-js/faker'
 
 import type { Broker } from '#global/interfaces/Broker'
@@ -11,19 +12,27 @@ import { StarsOrderChangedEvent } from '#space/domain/events/StarsOrderChangedEv
 import { ConflictError } from '#global/domain/errors/ConflictError'
 
 describe('Reorder Planet Stars Use Case', () => {
+  let database: Mock<Database>
   let useCase: ReorderPlanetStarsUseCase
   let broker: jest.Mocked<Broker>
   let planetsRepository: jest.Mocked<PlanetsRepository>
   let starsRepository: jest.Mocked<StarsRepository>
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     planetsRepository = mock<PlanetsRepository>()
     starsRepository = mock<StarsRepository>()
     broker = mock<Broker>()
     planetsRepository.findById.mockImplementation()
     starsRepository.replaceMany.mockImplementation()
     broker.publish.mockImplementation()
-    useCase = new ReorderPlanetStarsUseCase(planetsRepository, starsRepository, broker)
+    useCase = new ReorderPlanetStarsUseCase(
+      database,
+      planetsRepository,
+      starsRepository,
+      broker,
+    )
   })
 
   it('should reorder the stars of a planet', async () => {

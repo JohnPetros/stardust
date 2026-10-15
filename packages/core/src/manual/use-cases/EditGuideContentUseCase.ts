@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { Broker } from '#global/interfaces/index'
 import type { GuideDto } from '../domain/entities/dtos'
@@ -16,16 +17,20 @@ type Response = Promise<GuideDto>
 
 export class EditGuideContentUseCase implements UseCase<Request, Response> {
   constructor(
+    private readonly database: Database,
     private readonly repository: GuidesRepository,
     private readonly broker: Broker,
   ) {}
 
-  async execute({ guideId, guideContent }: Request): Response {
+  async execute(request: Request): Response {
+    return this.database.run(() => this.executeInTransaction(request))
+  }
+
+  private async executeInTransaction({ guideId, guideContent }: Request): Response {
     const guide = await this.findGuideById(Id.create(guideId))
     guide.content = Text.create(guideContent)
     await this.repository.replace(guide)
-    const event = new GuideContentEditedEvent({ guideId, guideContent })
-    await this.broker.publish(event)
+    await this.broker.publish(new GuideContentEditedEvent({ guideId, guideContent }))
     return guide.dto
   }
 

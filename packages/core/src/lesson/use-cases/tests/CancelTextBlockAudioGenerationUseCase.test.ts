@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Broker } from '#global/interfaces/index'
@@ -22,16 +23,23 @@ const makeTextBlock = (overrides: Partial<TextBlockDto> = {}) =>
   })
 
 describe('Cancel TextBlock Audio Generation Use Case', () => {
+  let database: Mock<Database>
   let repositoryMock: Mock<TextBlocksRepository>
   let brokerMock: Mock<Broker>
   let useCase: CancelTextBlockAudioGenerationUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     repositoryMock = mock<TextBlocksRepository>()
     brokerMock = mock<Broker>()
     repositoryMock.findAllByStar.mockImplementation()
     brokerMock.publish.mockImplementation()
-    useCase = new CancelTextBlockAudioGenerationUseCase(repositoryMock, brokerMock)
+    useCase = new CancelTextBlockAudioGenerationUseCase(
+      database,
+      repositoryMock,
+      brokerMock,
+    )
   })
 
   it('should publish cancellation for a pending block and return the current blocks', async () => {

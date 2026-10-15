@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { StarsRepository, PlanetsRepository } from '#space/interfaces/index'
@@ -8,9 +9,11 @@ import { Id } from '#global/domain/structures/Id'
 import { StarsFaker } from '#space/domain/entities/tests/fakers/StarsFaker'
 import { PlanetNotFoundError } from '#space/domain/errors/PlanetNotFoundError'
 import { PlanetsFaker } from '#space/domain/entities/tests/fakers/PlanetsFaker'
+import { EmptyPlanetError } from '#space/domain/errors/EmptyPlanetError'
 import { PlanetCompletedEvent } from '#space/domain/events/PlanetCompletedEvent'
 
 describe('Get Next Star Use Case', () => {
+  let database: Mock<Database>
   let starsRepository: Mock<StarsRepository>
   let planetsRepository: Mock<PlanetsRepository>
   let Broker: Mock<Broker>
@@ -19,6 +22,8 @@ describe('Get Next Star Use Case', () => {
   const userSlug = 'john-doe'
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     starsRepository = mock<StarsRepository>()
     planetsRepository = mock<PlanetsRepository>()
     Broker = mock<Broker>()
@@ -26,7 +31,7 @@ describe('Get Next Star Use Case', () => {
     starsRepository.findById.mockImplementation()
     planetsRepository.findByStar.mockImplementation()
     planetsRepository.findByPosition.mockImplementation()
-    useCase = new GetNextStarUseCase(starsRepository, planetsRepository, Broker)
+    useCase = new GetNextStarUseCase(database, starsRepository, planetsRepository, Broker)
   })
 
   it('should throw an error if the current star is not found', () => {
@@ -134,5 +139,23 @@ describe('Get Next Star Use Case', () => {
     })
 
     expect(response).toBeNull()
+  })
+  it('does not enqueue completion when the next planet has no first star', async () => {
+    const currentStar = StarsFaker.fake()
+    const planet = PlanetsFaker.fake({ stars: [currentStar.dto] })
+    const emptyNextPlanet = PlanetsFaker.fake({ stars: [] })
+    starsRepository.findById.mockResolvedValue(currentStar)
+    planetsRepository.findByStar.mockResolvedValue(planet)
+    planetsRepository.findByPosition.mockResolvedValue(emptyNextPlanet)
+
+    await expect(
+      useCase.execute({
+        currentStarId: currentStar.id.value,
+        userName,
+        userSlug,
+      }),
+    ).rejects.toThrow(EmptyPlanetError)
+
+    expect(Broker.publish).not.toHaveBeenCalled()
   })
 })

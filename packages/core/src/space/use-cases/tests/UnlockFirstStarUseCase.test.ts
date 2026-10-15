@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { UnlockFirstStarUseCase } from '../UnlockFirstStarUseCase'
@@ -11,16 +12,19 @@ import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 
 describe('Unlock First Star Use Case', () => {
+  let database: Mock<Database>
   let repository: Mock<PlanetsRepository>
   let Broker: Mock<Broker>
   let useCase: UnlockFirstStarUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     repository = mock<PlanetsRepository>()
     Broker = mock<Broker>()
     repository.findByPosition.mockImplementation()
     Broker.publish.mockImplementation()
-    useCase = new UnlockFirstStarUseCase(repository, Broker)
+    useCase = new UnlockFirstStarUseCase(database, repository, Broker)
   })
 
   it('should throw an error if the first planet is not found', async () => {

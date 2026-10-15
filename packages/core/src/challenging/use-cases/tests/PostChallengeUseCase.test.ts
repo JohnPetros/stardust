@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { ChallengesFaker } from '#challenging/domain/entities/fakers/ChallengesFaker'
@@ -11,12 +12,15 @@ import type { ChallengesRepository } from '#challenging/interfaces/ChallengesRep
 import type { Broker } from '#global/interfaces/Broker'
 
 describe('Post Challenge Use Case', () => {
+  let database: Mock<Database>
   let repository: Mock<ChallengesRepository>
   let challengeSourcesRepository: Mock<ChallengeSourcesRepository>
   let broker: Mock<Broker>
   let useCase: PostChallengeUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     repository = mock<ChallengesRepository>()
     challengeSourcesRepository = mock<ChallengeSourcesRepository>()
     broker = mock<Broker>()
@@ -25,7 +29,12 @@ describe('Post Challenge Use Case', () => {
     challengeSourcesRepository.findById.mockImplementation()
     challengeSourcesRepository.replace.mockImplementation()
     broker.publish.mockImplementation()
-    useCase = new PostChallengeUseCase(repository, challengeSourcesRepository, broker)
+    useCase = new PostChallengeUseCase(
+      database,
+      repository,
+      challengeSourcesRepository,
+      broker,
+    )
   })
 
   it('should throw an error if the challenge title is already in use', async () => {

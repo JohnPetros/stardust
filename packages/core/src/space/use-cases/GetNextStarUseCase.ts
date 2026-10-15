@@ -1,7 +1,8 @@
+import type { Database } from '#global/interfaces/Database'
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { PlanetsRepository, StarsRepository } from '../interfaces'
 import type { StarDto } from '../domain/entities/dtos/index'
-import type { Star } from '../domain/entities'
+import type { Planet, Star } from '../domain/entities'
 import type { Broker } from '#global/interfaces/Broker'
 import { Id } from '#global/domain/structures/Id'
 import { PlanetNotFoundError, StarNotFoundError } from '../domain/errors'
@@ -17,32 +18,30 @@ type Response = Promise<StarDto | null>
 
 export class GetNextStarUseCase implements UseCase<Request, Response> {
   constructor(
+    private readonly database: Database,
     private readonly starsRepository: StarsRepository,
     private readonly planetsRepository: PlanetsRepository,
     private readonly broker: Broker,
   ) {}
 
-  async execute({ userName, userSlug, currentStarId }: Request) {
-    const currentStar = await this.findCurrentStar(Id.create(currentStarId))
+  async execute(request: Request) {
+    return this.database.run(() => this.executeInTransaction(request))
+  }
+
+  private async executeInTransaction(request: Request) {
+    const currentStar = await this.findCurrentStar(Id.create(request.currentStarId))
     const currentPlanet = await this.findCurrentPlanet(currentStar)
-    let nextStar = currentPlanet.getNextStar(currentStar)
+    const nextStar = currentPlanet.getNextStar(currentStar)
+    if (nextStar) return nextStar.dto
+    return this.firstStarOfNextPlanet(currentPlanet, request)
+  }
 
-    if (!nextStar) {
-      const nextPlanetPosition = currentPlanet.position.increment()
-      const nextPlanet = await this.planetsRepository.findByPosition(nextPlanetPosition)
-
-      if (nextPlanet) {
-        nextStar = nextPlanet.firstStar
-        const event = new PlanetCompletedEvent({
-          userSlug,
-          userName,
-          planetName: currentPlanet.name.value,
-        })
-        await this.broker.publish(event)
-      }
-    }
-
-    return nextStar ? nextStar.dto : null
+  private async firstStarOfNextPlanet(planet: Planet, request: Request) {
+    const nextPlanet = await this.findNextPlanet(planet)
+    if (!nextPlanet) return null
+    const firstStar = nextPlanet.firstStar
+    await this.publishCompletion(planet, request)
+    return firstStar.dto
   }
 
   private async findCurrentStar(currentStarId: Id) {
@@ -55,5 +54,17 @@ export class GetNextStarUseCase implements UseCase<Request, Response> {
     const currentPlanet = await this.planetsRepository.findByStar(currentStar.id)
     if (!currentPlanet) throw new PlanetNotFoundError()
     return currentPlanet
+  }
+  private publishCompletion(planet: Planet, request: Request) {
+    return this.broker.publish(
+      new PlanetCompletedEvent({
+        userSlug: request.userSlug,
+        userName: request.userName,
+        planetName: planet.name.value,
+      }),
+    )
+  }
+  private findNextPlanet(planet: Planet) {
+    return this.planetsRepository.findByPosition(planet.position.increment())
   }
 }

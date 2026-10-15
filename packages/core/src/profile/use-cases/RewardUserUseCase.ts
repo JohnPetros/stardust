@@ -1,6 +1,8 @@
+import type { Database } from '#global/interfaces/Database'
 import type { UseCase } from '#global/interfaces/index'
 import type { Broker } from '#global/interfaces/Broker'
 import { Id, Integer } from '#global/domain/structures/index'
+import type { User } from '../domain/entities'
 import type { UsersRepository } from '../interfaces'
 import type { WeekStatusValue } from '../domain/types'
 import { UserRewardedEvent } from '../domain/events'
@@ -20,33 +22,61 @@ type Response = Promise<{
 
 export class RewardUserUseCase implements UseCase<Request, Response> {
   constructor(
+    private readonly database: Database,
     private readonly repository: UsersRepository,
     private readonly broker: Broker,
   ) {}
 
-  async execute({ userId, newXp, newCoins }: Request) {
-    const user = await this.repository.findById(Id.create(userId))
-    if (!user) throw new UserNotFoundError()
-    user.earnXp(Integer.create(newXp))
-    user.earnCoins(Integer.create(newCoins))
-    const streakStatus = user.makeTodayStatusDone()
-    await this.repository.replace(user)
+  async execute(request: Request) {
+    return this.database.run(() => this.executeInTransaction(request))
+  }
 
-    const payload = {
+  private async executeInTransaction({ userId, newXp, newCoins }: Request) {
+    const user = await this.findUser(Id.create(userId))
+    const streakStatus = await this.persistReward(user, newXp, newCoins)
+
+    return this.publishReward(this.rewardPayload(user, streakStatus))
+  }
+
+  private async findUser(userId: Id) {
+    const user = await this.repository.findById(userId)
+    if (!user) throw new UserNotFoundError()
+    return user
+  }
+
+  private rewardPayload(user: User, streak: ReturnType<User['makeTodayStatusDone']>) {
+    return {
       userId: user.id.value,
       newXp: user.xp.value,
       newCoins: user.coins.value,
-      newLevel: user.level.didUp.isTrue ? user.level.value.number.value : null,
-      newStreak: streakStatus?.newStreak?.value ?? null,
-      newWeekStatus: streakStatus?.newWeekStatus.value ?? null,
+      ...this.progressPayload(user, streak),
     }
+  }
 
-    await this.broker.publish(new UserRewardedEvent(payload))
+  private progressPayload(user: User, streak: ReturnType<User['makeTodayStatusDone']>) {
+    return {
+      newLevel: user.level.didUp.isTrue ? user.level.value.number.value : null,
+      newStreak: streak?.newStreak?.value ?? null,
+      newWeekStatus: streak?.newWeekStatus.value ?? null,
+    }
+  }
 
+  private rewardResult(payload: UserRewardedEvent['payload']) {
     return {
       newLevel: payload.newLevel,
       newStreak: payload.newStreak,
       newWeekStatus: payload.newWeekStatus,
     }
+  }
+  private async persistReward(user: User, xp: number, coins: number) {
+    user.earnXp(Integer.create(xp))
+    user.earnCoins(Integer.create(coins))
+    const status = user.makeTodayStatusDone()
+    await this.repository.replace(user)
+    return status
+  }
+  private async publishReward(payload: UserRewardedEvent['payload']) {
+    await this.broker.publish(new UserRewardedEvent(payload))
+    return this.rewardResult(payload)
   }
 }

@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Broker } from '#global/interfaces/index'
@@ -23,17 +24,24 @@ const makeTextBlock = (overrides: Partial<TextBlockDto> = {}) =>
   })
 
 describe('Trigger TextBlock Audio Generation Use Case', () => {
+  let database: Mock<Database>
   let repositoryMock: Mock<TextBlocksRepository>
   let brokerMock: Mock<Broker>
   let useCase: TriggerTextBlockAudioGenerationUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     repositoryMock = mock<TextBlocksRepository>()
     brokerMock = mock<Broker>()
     repositoryMock.findAllByStar.mockImplementation()
     repositoryMock.updateAudio.mockImplementation()
     brokerMock.publish.mockImplementation()
-    useCase = new TriggerTextBlockAudioGenerationUseCase(repositoryMock, brokerMock)
+    useCase = new TriggerTextBlockAudioGenerationUseCase(
+      database,
+      repositoryMock,
+      brokerMock,
+    )
   })
 
   it('should mark an eligible block as pending, persist audio and publish the request event', async () => {

@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import type { Broker } from '#global/interfaces/Broker'
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { PlanetsRepository } from '../interfaces'
@@ -5,21 +6,20 @@ import { SpaceOrderChangedEvent } from '../domain/events'
 
 export class HandleStarsNewOrderUseCase implements UseCase {
   constructor(
+    private readonly database: Database,
     private readonly repository: PlanetsRepository,
     private readonly broker: Broker,
   ) {}
 
-  async execute(): Promise<void> {
+  async execute() {
+    return this.database.run(() => this.updateInTransaction())
+  }
+
+  private async updateInTransaction() {
     const planets = await this.repository.findAll()
-    const starsId: string[] = []
-
-    for (const planet of planets) {
-      starsId.push(...planet.stars.map((star) => star.id.value))
-    }
-
-    const event = new SpaceOrderChangedEvent({
-      reorderedStarIds: starsId,
-    })
-    await this.broker.publish(event)
+    const reorderedStarIds = planets.flatMap((planet) =>
+      planet.stars.map((star) => star.id.value),
+    )
+    await this.broker.publish(new SpaceOrderChangedEvent({ reorderedStarIds }))
   }
 }

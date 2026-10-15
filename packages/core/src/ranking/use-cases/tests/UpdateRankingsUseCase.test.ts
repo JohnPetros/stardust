@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 import { UpdateRankingsUseCase } from '../UpdateRankingsUseCase'
 import type { TiersRepository } from '#ranking/interfaces/TiersRepository'
@@ -11,12 +12,15 @@ import { RankingLosersDefinedEvent } from '#ranking/domain/events/RankingLosersD
 import { RankingWinnersDefinedEvent } from '#ranking/domain/events/RankingWinnersDefinedEvent'
 
 describe('Update Rankings Use Case', () => {
+  let database: Mock<Database>
   let tiersRepository: Mock<TiersRepository>
   let rankersRepository: Mock<RankersRepository>
   let Broker: Mock<Broker>
   let useCase: UpdateRankingsUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     tiersRepository = mock<TiersRepository>()
     rankersRepository = mock<RankersRepository>()
     Broker = mock<Broker>()
@@ -27,7 +31,12 @@ describe('Update Rankings Use Case', () => {
     rankersRepository.addWinners.mockImplementation()
     Broker.publish.mockImplementation()
 
-    useCase = new UpdateRankingsUseCase(tiersRepository, rankersRepository, Broker)
+    useCase = new UpdateRankingsUseCase(
+      database,
+      tiersRepository,
+      rankersRepository,
+      Broker,
+    )
   })
 
   it('should remove all current rankers', async () => {

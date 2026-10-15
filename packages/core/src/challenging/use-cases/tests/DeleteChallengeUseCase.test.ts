@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { ChallengesRepository } from '#challenging/interfaces/ChallengesRepository'
@@ -8,18 +9,21 @@ import type { Broker } from '#global/interfaces/Broker'
 import { DeleteChallengeUseCase } from '../DeleteChallengeUseCase'
 
 describe('Delete challenge use case', () => {
+  let database: Mock<Database>
   let broker: Mock<Broker>
   let repository: Mock<ChallengesRepository>
   let useCase: DeleteChallengeUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     broker = mock<Broker>()
     broker.publish.mockImplementation()
     repository = mock<ChallengesRepository>()
     repository.findById.mockImplementation()
     repository.remove.mockImplementation()
 
-    useCase = new DeleteChallengeUseCase(repository, broker)
+    useCase = new DeleteChallengeUseCase(database, repository, broker)
   })
 
   it('should throw an error if the challenge does not exist', async () => {

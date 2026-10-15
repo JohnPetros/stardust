@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { Id } from '#global/domain/structures/Id'
@@ -9,17 +10,20 @@ import { StarUnlockedEvent } from '#profile/domain/events/StarUnlockedEvent'
 import { UnlockStarUseCase } from '../UnlockStarUseCase'
 
 describe('Unlock Star Use Case', () => {
+  let database: Mock<Database>
   let broker: Mock<Broker>
   let repository: Mock<UsersRepository>
   let useCase: UnlockStarUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     broker = mock<Broker>()
     broker.publish.mockImplementation()
     repository = mock<UsersRepository>()
     repository.findById.mockImplementation()
     repository.addUnlockedStar.mockImplementation()
-    useCase = new UnlockStarUseCase(repository, broker)
+    useCase = new UnlockStarUseCase(database, repository, broker)
   })
 
   it('should throw an error if the star is not found', async () => {

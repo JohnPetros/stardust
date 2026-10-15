@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Broker } from '#global/interfaces/index'
@@ -18,17 +19,21 @@ const makeTextBlock = (overrides: Partial<TextBlockDto> = {}) =>
   })
 
 describe('Trigger TextBlocks Audio Generation In Batch Use Case', () => {
+  let database: Mock<Database>
   let repositoryMock: Mock<TextBlocksRepository>
   let brokerMock: Mock<Broker>
   let useCase: TriggerTextBlocksAudioGenerationInBatchUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     repositoryMock = mock<TextBlocksRepository>()
     brokerMock = mock<Broker>()
     repositoryMock.findAllByStar.mockImplementation()
     repositoryMock.updateAudio.mockImplementation()
     brokerMock.publish.mockImplementation()
     useCase = new TriggerTextBlocksAudioGenerationInBatchUseCase(
+      database,
       repositoryMock,
       brokerMock,
     )

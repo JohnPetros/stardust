@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { Id } from '#global/domain/structures/Id'
 import type { Broker } from '#global/interfaces/Broker'
 import type { UseCase } from '#global/interfaces/UseCase'
@@ -13,11 +14,16 @@ type Response = Promise<void>
 
 export class DeleteGuideUseCase implements UseCase<Request, Response> {
   constructor(
+    private readonly database: Database,
     private readonly repository: GuidesRepository,
     private readonly broker: Broker,
   ) {}
 
-  async execute({ guideId }: Request): Response {
+  async execute(request: Request): Response {
+    return this.database.run(() => this.executeInTransaction(request))
+  }
+
+  private async executeInTransaction({ guideId }: Request): Response {
     const guide = await this.findGuide(Id.create(guideId))
     await this.repository.remove(guide)
     const event = new GuideDeletedEvent({ guideId: guide.id.value })

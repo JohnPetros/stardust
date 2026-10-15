@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { type Mock, mock } from 'ts-jest-mocker'
 
 import type { UsersRepository } from '#profile/interfaces/UsersRepository'
@@ -8,17 +9,20 @@ import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
 import { CompleteSpaceUseCase } from '../CompleteSpaceUseCase'
 
 describe('CompleteSpaceUseCase', () => {
+  let database: Mock<Database>
   let repository: Mock<UsersRepository>
   let Broker: Mock<Broker>
   let useCase: CompleteSpaceUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     repository = mock<UsersRepository>()
     Broker = mock<Broker>()
     repository.findById.mockImplementation()
     repository.replace.mockImplementation()
     Broker.publish.mockImplementation()
-    useCase = new CompleteSpaceUseCase(repository, Broker)
+    useCase = new CompleteSpaceUseCase(database, repository, Broker)
   })
 
   it('should throw an error if the user is not found', async () => {

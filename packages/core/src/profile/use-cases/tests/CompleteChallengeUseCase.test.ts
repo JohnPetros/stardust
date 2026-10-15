@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Broker } from '#global/interfaces/Broker'
@@ -9,17 +10,20 @@ import { ChallengeCompletedEvent } from '#profile/domain/events/ChallengeComplet
 import { CompleteChallengeUseCase } from '../CompleteChallengeUseCase'
 
 describe('Complete Challenge Use Case', () => {
+  let database: Mock<Database>
   let broker: Mock<Broker>
   let repository: Mock<UsersRepository>
   let useCase: CompleteChallengeUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     broker = mock<Broker>()
     broker.publish.mockImplementation()
     repository = mock<UsersRepository>()
     repository.findById.mockImplementation()
     repository.addCompletedChallenge.mockImplementation()
-    useCase = new CompleteChallengeUseCase(repository, broker)
+    useCase = new CompleteChallengeUseCase(database, repository, broker)
   })
 
   it('should throw an error if the user is not found', async () => {

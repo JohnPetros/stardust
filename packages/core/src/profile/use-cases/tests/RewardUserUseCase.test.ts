@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Broker } from '#global/interfaces/Broker'
@@ -8,17 +9,20 @@ import type { UsersRepository } from '#profile/interfaces/UsersRepository'
 import { RewardUserUseCase } from '../RewardUserUseCase'
 
 describe('Reward User Use Case', () => {
+  let database: Mock<Database>
   let broker: Mock<Broker>
   let repository: Mock<UsersRepository>
   let useCase: RewardUserUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     broker = mock<Broker>()
     broker.publish.mockImplementation()
     repository = mock<UsersRepository>()
     repository.findById.mockImplementation()
     repository.replace.mockImplementation()
-    useCase = new RewardUserUseCase(repository, broker)
+    useCase = new RewardUserUseCase(database, repository, broker)
   })
 
   it('should throw an error if the user is not found', async () => {
@@ -62,5 +66,51 @@ describe('Reward User Use Case', () => {
       newStreak: user.streak.value,
       newWeekStatus: user.weekStatus.value,
     })
+  })
+
+  it('keeps the decision read, write and enqueue inside the database callback', async () => {
+    const user = UsersFaker.fake({ xp: 0, coins: 10, level: 1, streak: 0 })
+    repository.findById.mockResolvedValue(user)
+    database.run.mockImplementationOnce(async (operation) => {
+      expect(repository.findById).not.toHaveBeenCalled()
+      expect(repository.replace).not.toHaveBeenCalled()
+      expect(broker.publish).not.toHaveBeenCalled()
+      const result = await operation()
+      expect(repository.replace).toHaveBeenCalledWith(user)
+      expect(broker.publish).toHaveBeenCalledWith(expect.any(UserRewardedEvent))
+      return result
+    })
+
+    await useCase.execute({ userId: user.id.value, newXp: 50, newCoins: 25 })
+
+    expect(database.run).toHaveBeenCalledTimes(1)
+  })
+
+  it('propagates a transaction failure without accessing repositories', async () => {
+    const user = UsersFaker.fake()
+    const error = new Error('Transaction unavailable')
+    database.run.mockRejectedValueOnce(error)
+
+    await expect(
+      useCase.execute({ userId: user.id.value, newXp: 50, newCoins: 25 }),
+    ).rejects.toBe(error)
+
+    expect(repository.findById).not.toHaveBeenCalled()
+    expect(repository.replace).not.toHaveBeenCalled()
+    expect(broker.publish).not.toHaveBeenCalled()
+  })
+
+  it('rejects the transaction callback when enqueue fails after the write', async () => {
+    const user = UsersFaker.fake()
+    const error = new Error('Outbox unavailable')
+    repository.findById.mockResolvedValue(user)
+    broker.publish.mockRejectedValueOnce(error)
+
+    await expect(
+      useCase.execute({ userId: user.id.value, newXp: 50, newCoins: 25 }),
+    ).rejects.toBe(error)
+
+    expect(database.run).toHaveBeenCalledTimes(1)
+    expect(repository.replace).toHaveBeenCalledWith(user)
   })
 })

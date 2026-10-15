@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import type { Id } from '#global/domain/structures/Id'
 import type { Broker } from '#global/interfaces/Broker'
 import type { UseCase } from '#global/interfaces/UseCase'
@@ -12,16 +13,18 @@ import type { RankersRepository, TiersRepository } from '../interfaces'
 
 export class UpdateRankingsUseCase implements UseCase<void, void> {
   constructor(
+    private readonly database: Database,
     private readonly tiersRepository: TiersRepository,
     private readonly rankersRepository: RankersRepository,
     private readonly broker: Broker,
   ) {}
 
   async execute() {
-    const [tiers] = await Promise.all([
-      this.tiersRepository.findAll(),
-      this.rankersRepository.removeAll(),
-    ])
+    return this.database.run(() => this.updateInTransaction())
+  }
+
+  private async updateInTransaction() {
+    const tiers = await this.resetRankings()
     await this.addLosers(tiers)
     await this.addWinners(tiers)
 
@@ -30,51 +33,57 @@ export class UpdateRankingsUseCase implements UseCase<void, void> {
   }
 
   private async addLosers(tiers: Tier[]) {
-    for (let index = 0; index < tiers.length; index++) {
-      const currentTier = tiers[index]
-      if (!currentTier) continue
-      let previousTier = tiers[index - 1]
-      previousTier = !previousTier ? currentTier : previousTier
-
-      const ranking = await this.findRankingByTier(currentTier.id)
-      const losers = ranking.losers
-
-      await this.rankersRepository.addLosers(losers, currentTier.id)
-
-      if (previousTier.isEqualTo(currentTier).isFalse) {
-        const event = new RankingLosersDefinedEvent({
-          tierId: previousTier.id.value,
-          losersIds: losers.map((loser) => loser.id.value),
-        })
-        await this.broker.publish(event)
-      }
+    for (const [index, tier] of tiers.entries()) {
+      await this.addTierLosers(tier, tiers[index - 1] ?? tier)
     }
+  }
+
+  private async addTierLosers(current: Tier, previous: Tier) {
+    const ranking = await this.findRankingByTier(current.id)
+    await this.rankersRepository.addLosers(ranking.losers, current.id)
+    if (previous.isEqualTo(current).isFalse) {
+      await this.broker.publish(this.losersEvent(previous, ranking))
+    }
+  }
+
+  private losersEvent(tier: Tier, ranking: Ranking) {
+    return new RankingLosersDefinedEvent({
+      tierId: tier.id.value,
+      losersIds: ranking.losers.map((loser) => loser.id.value),
+    })
   }
 
   private async addWinners(tiers: Tier[]) {
     for (let index = tiers.length - 1; index >= 0; index--) {
-      const currentTier = tiers[index]
-      if (!currentTier) continue
-      let nextTier = tiers[index + 1]
-      nextTier = !nextTier ? currentTier : nextTier
-
-      const ranking = await this.findRankingByTier(currentTier.id)
-      const winners = ranking.winners
-
-      await this.rankersRepository.addWinners(winners, currentTier.id)
-
-      if (nextTier.isEqualTo(currentTier).isFalse) {
-        const event = new RankingWinnersDefinedEvent({
-          tierId: nextTier.id.value,
-          winnersIds: winners.map((winner) => winner.id.value),
-        })
-        await this.broker.publish(event)
-      }
+      const tier = tiers[index]
+      if (tier) await this.addTierWinners(tier, tiers[index + 1] ?? tier)
     }
+  }
+
+  private async addTierWinners(current: Tier, next: Tier) {
+    const ranking = await this.findRankingByTier(current.id)
+    await this.rankersRepository.addWinners(ranking.winners, current.id)
+    if (next.isEqualTo(current).isFalse) {
+      await this.broker.publish(this.winnersEvent(next, ranking))
+    }
+  }
+
+  private winnersEvent(tier: Tier, ranking: Ranking) {
+    return new RankingWinnersDefinedEvent({
+      tierId: tier.id.value,
+      winnersIds: ranking.winners.map((winner) => winner.id.value),
+    })
   }
 
   private async findRankingByTier(tierId: Id) {
     const rankers = await this.rankersRepository.findAllByTier(tierId)
     return Ranking.create(rankers.map((ranker) => ranker.dto))
+  }
+  private async resetRankings() {
+    const [tiers] = await Promise.all([
+      this.tiersRepository.findAll(),
+      this.rankersRepository.removeAll(),
+    ])
+    return tiers
   }
 }

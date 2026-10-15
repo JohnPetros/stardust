@@ -1,3 +1,5 @@
+import type { Logical } from '#global/domain/structures/Logical'
+import type { Database } from '#global/interfaces/Database'
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { Broker } from '#global/interfaces/Broker'
 import { Integer } from '#global/domain/structures/Integer'
@@ -5,6 +7,7 @@ import { Id } from '#global/domain/structures/Id'
 import type { UsersRepository } from '../interfaces'
 import { UserNotFoundError } from '../domain/errors'
 import { RocketAggregate } from '../domain/aggregates'
+import type { User } from '../domain/entities'
 import type { UserDto } from '../domain/entities/dtos'
 import { ShopItemPurchasedEvent } from '../domain/events'
 
@@ -18,47 +21,70 @@ type Request = {
 
 type Response = Promise<UserDto>
 
-type RocketAggregateEntity = {
-  name: string
-  image: string
-}
-
 export class AcquireRocketUseCase implements UseCase<Request, Response> {
   constructor(
+    private readonly database: Database,
     private readonly repository: UsersRepository,
     private readonly broker: Broker,
   ) {}
 
-  async execute({ userId, rocketId, rocketName, rocketImage, rocketPrice }: Request) {
-    const user = await this.repository.findById(Id.create(userId))
-    if (!user) throw new UserNotFoundError()
+  async execute(request: Request) {
+    return this.database.run(() => this.executeInTransaction(request))
+  }
 
-    let entity: RocketAggregateEntity | undefined
-    if (rocketName && rocketImage) {
-      entity = { name: rocketName, image: rocketImage }
-    }
-    const rocket = RocketAggregate.create({ id: rocketId, entity })
-
-    const canAcquireRocket = user
-      .canAcquire(Integer.create(rocketPrice))
-      .andNot(user.hasAcquiredRocket(rocket.id))
-
-    if (canAcquireRocket.isTrue) {
-      await this.repository.addAcquiredRocket(rocket.id, Id.create(userId))
-    }
-    user.acquireRocket(rocket, Integer.create(rocketPrice))
-    await this.repository.replace(user)
-    if (canAcquireRocket.isTrue) {
-      await this.broker.publish(
-        new ShopItemPurchasedEvent({
-          userId: user.id.value,
-          itemId: rocket.id.value,
-          itemType: 'rocket',
-          itemName: rocketName,
-          itemPrice: rocketPrice,
-        }),
-      )
-    }
+  private async executeInTransaction(request: Request) {
+    const user = await this.findUser(Id.create(request.userId))
+    const rocket = this.createRocket(request)
+    await this.acquire(user, rocket, request)
     return user.dto
+  }
+
+  private async findUser(userId: Id) {
+    const user = await this.repository.findById(userId)
+    if (!user) throw new UserNotFoundError()
+    return user
+  }
+
+  private createRocket(request: Request) {
+    const { rocketName: name, rocketImage: image } = request
+    const entity = name && image ? { name, image } : undefined
+    return RocketAggregate.create({ id: request.rocketId, entity })
+  }
+
+  private async acquire(user: User, rocket: RocketAggregate, request: Request) {
+    const price = Integer.create(request.rocketPrice)
+    const canAcquire = this.canAcquire(user, rocket, price)
+    await this.persistOwnership(user.id, rocket.id, canAcquire)
+    await this.persistAcquisition(user, rocket, price)
+    if (canAcquire.isTrue) await this.publishPurchase(user.id, rocket.id, request)
+  }
+
+  private publishPurchase(userId: Id, itemId: Id, request: Request) {
+    const payload = {
+      ...this.purchaseItem(request),
+      userId: userId.value,
+      itemId: itemId.value,
+    }
+    return this.broker.publish(new ShopItemPurchasedEvent(payload))
+  }
+
+  private purchaseItem(request: Request) {
+    return {
+      itemType: 'rocket',
+      itemName: request.rocketName,
+      itemPrice: request.rocketPrice,
+    } as const
+  }
+
+  private canAcquire(user: User, rocket: RocketAggregate, price: Integer) {
+    return user.canAcquire(price).andNot(user.hasAcquiredRocket(rocket.id))
+  }
+
+  private async persistAcquisition(user: User, rocket: RocketAggregate, price: Integer) {
+    user.acquireRocket(rocket, price)
+    await this.repository.replace(user)
+  }
+  private async persistOwnership(userId: Id, itemId: Id, canAcquire: Logical) {
+    if (canAcquire.isTrue) await this.repository.addAcquiredRocket(itemId, userId)
   }
 }

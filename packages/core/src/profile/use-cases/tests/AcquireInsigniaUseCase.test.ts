@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Broker } from '#global/interfaces/Broker'
@@ -10,18 +11,21 @@ import { AcquireInsigniaUseCase } from '../AcquireInsigniaUseCase'
 import type { UsersRepository } from '../../interfaces'
 
 describe('Acquire Insignia Use Case', () => {
+  let database: Mock<Database>
   let broker: Mock<Broker>
   let repository: Mock<UsersRepository>
   let useCase: AcquireInsigniaUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     broker = mock<Broker>()
     broker.publish.mockImplementation()
     repository = mock<UsersRepository>()
     repository.findById.mockImplementation()
     repository.replace.mockImplementation()
     repository.addAcquiredInsignia.mockImplementation()
-    useCase = new AcquireInsigniaUseCase(repository, broker)
+    useCase = new AcquireInsigniaUseCase(database, repository, broker)
   })
 
   it('should throw an error if the user is not found', async () => {

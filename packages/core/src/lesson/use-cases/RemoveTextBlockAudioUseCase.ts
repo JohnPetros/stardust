@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import type { TextBlockDto } from '#global/domain/entities/dtos/TextBlockDto'
 import { Id, Integer } from '#global/domain/structures/index'
 import type { Broker, UseCase } from '#global/interfaces/index'
@@ -6,6 +7,7 @@ import {
   TextBlockNotFoundError,
 } from '../domain/errors'
 import { TextBlockAudioFileRemovedEvent } from '../domain/events'
+import type { TextBlock } from '../domain/structures'
 import type { TextBlocksRepository } from '../interfaces'
 
 type Request = {
@@ -17,37 +19,48 @@ type Response = Promise<TextBlockDto[]>
 
 export class RemoveTextBlockAudioUseCase implements UseCase<Request, Response> {
   constructor(
+    private readonly database: Database,
     private readonly repository: TextBlocksRepository,
     private readonly broker: Broker,
   ) {}
 
-  async execute({ starId, blockIndex }: Request): Response {
-    const parsedStarId = Id.create(starId)
-    const parsedBlockIndex = Integer.create(blockIndex, 'Indice do bloco')
-    const textBlocks = await this.repository.findAllByStar(parsedStarId)
-    const textBlock = textBlocks[parsedBlockIndex.value]
+  async execute(request: Request): Response {
+    return this.database.run(() => this.executeInTransaction(request))
+  }
 
+  private async executeInTransaction(request: Request): Response {
+    const { starId, blockIndex, blocks } = await this.loadBlocks(request)
+    const textBlock = this.findRemovable(blocks, blockIndex)
+    await this.repository.clearAudio(starId, blockIndex)
+    await this.publishRemoval(textBlock)
+    return this.removedDtos(blocks, blockIndex)
+  }
+
+  private findRemovable(blocks: TextBlock[], index: Integer) {
+    const textBlock = blocks[index.value]
     if (!textBlock) throw new TextBlockNotFoundError()
     if (textBlock.audio?.isPending) {
       throw new TextBlockAudioRemovalNotAllowedError(textBlock.audio.status)
     }
+    return textBlock
+  }
 
-    const updatedTextBlocks = textBlocks.map((currentTextBlock, index) =>
-      index === parsedBlockIndex.value
-        ? currentTextBlock.removeAudio()
-        : currentTextBlock,
+  private async publishRemoval(textBlock: TextBlock) {
+    const fileName = textBlock.audio?.fileName.value
+    if (fileName)
+      await this.broker.publish(new TextBlockAudioFileRemovedEvent({ fileName }))
+  }
+
+  private removedDtos(blocks: TextBlock[], blockIndex: Integer) {
+    return blocks.map(
+      (textBlock, index) =>
+        (index === blockIndex.value ? textBlock.removeAudio() : textBlock).dto,
     )
-
-    await this.repository.clearAudio(parsedStarId, parsedBlockIndex)
-
-    if (textBlock.audio?.fileName.value) {
-      await this.broker.publish(
-        new TextBlockAudioFileRemovedEvent({
-          fileName: textBlock.audio.fileName.value,
-        }),
-      )
-    }
-
-    return updatedTextBlocks.map((currentTextBlock) => currentTextBlock.dto)
+  }
+  private async loadBlocks(request: Request) {
+    const starId = Id.create(request.starId)
+    const blockIndex = Integer.create(request.blockIndex, 'Indice do bloco')
+    const blocks = await this.repository.findAllByStar(starId)
+    return { starId, blockIndex, blocks }
   }
 }

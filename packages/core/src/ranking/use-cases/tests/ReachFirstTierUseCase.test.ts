@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import type { Broker } from '#global/interfaces/Broker'
 import type { TiersRepository } from '#ranking/interfaces/TiersRepository'
 import { type Mock, mock } from 'ts-jest-mocker'
@@ -10,16 +11,19 @@ import { FirstTierReachedEvent } from '#ranking/domain/events/FirstTierReachedEv
 import { Id } from '#global/domain/structures/Id'
 
 describe('Reach First Tier Use Case', () => {
+  let database: Mock<Database>
   let tiersRepository: Mock<TiersRepository>
   let Broker: Mock<Broker>
   let useCase: ReachFirstTierUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     tiersRepository = mock<TiersRepository>()
     Broker = mock<Broker>()
     tiersRepository.findByPosition.mockImplementation()
     Broker.publish.mockImplementation()
-    useCase = new ReachFirstTierUseCase(tiersRepository, Broker)
+    useCase = new ReachFirstTierUseCase(database, tiersRepository, Broker)
   })
 
   it('should throw if tier is not found', () => {

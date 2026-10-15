@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { GuidesFaker } from '#manual/domain/entities/fakers/GuidesFaker'
@@ -8,11 +9,14 @@ import type { Broker } from '#global/interfaces/index'
 import { GuideContentEditedEvent } from '#manual/domain/events/GuideContentEditedEvent'
 
 describe('Edit Guide Content Use Case', () => {
+  let database: Mock<Database>
   let repository: Mock<GuidesRepository>
   let broker: Mock<Broker>
   let useCase: EditGuideContentUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     repository = mock<GuidesRepository>()
     broker = mock<Broker>()
 
@@ -20,7 +24,7 @@ describe('Edit Guide Content Use Case', () => {
     repository.replace.mockImplementation()
     broker.publish.mockImplementation()
 
-    useCase = new EditGuideContentUseCase(repository, broker)
+    useCase = new EditGuideContentUseCase(database, repository, broker)
   })
 
   it('should throw an error if the guide does not exist', async () => {

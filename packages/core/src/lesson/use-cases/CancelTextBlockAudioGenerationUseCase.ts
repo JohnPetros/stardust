@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import type { TextBlockDto } from '#global/domain/entities/dtos/TextBlockDto'
 import { Id, Integer } from '#global/domain/structures/index'
 import type { Broker, UseCase } from '#global/interfaces/index'
@@ -6,6 +7,7 @@ import {
   TextBlockNotFoundError,
 } from '../domain/errors'
 import { TextBlockAudioGenerationCancelledEvent } from '../domain/events'
+import type { TextBlock } from '../domain/structures'
 import type { TextBlocksRepository } from '../interfaces'
 
 type Request = {
@@ -17,28 +19,41 @@ type Response = Promise<TextBlockDto[]>
 
 export class CancelTextBlockAudioGenerationUseCase implements UseCase<Request, Response> {
   constructor(
+    private readonly database: Database,
     private readonly repository: TextBlocksRepository,
     private readonly broker: Broker,
   ) {}
 
-  async execute({ starId, blockIndex }: Request): Response {
-    const parsedStarId = Id.create(starId)
-    const parsedBlockIndex = Integer.create(blockIndex, 'Indice do bloco')
-    const textBlocks = await this.repository.findAllByStar(parsedStarId)
-    const textBlock = textBlocks[parsedBlockIndex.value]
+  async execute(request: Request): Response {
+    return this.database.run(() => this.executeInTransaction(request))
+  }
 
+  private async executeInTransaction(request: Request): Response {
+    const { starId, blockIndex, blocks } = await this.loadBlocks(request)
+    this.validatePending(blocks[blockIndex.value])
+    await this.publishCancellation(starId, blockIndex)
+
+    return blocks.map((currentTextBlock) => currentTextBlock.dto)
+  }
+  private validatePending(textBlock: TextBlock | undefined) {
     if (!textBlock) throw new TextBlockNotFoundError()
     if (!textBlock.audio?.isPending) {
       throw new TextBlockAudioGenerationNotPendingError(textBlock.audio?.status ?? 'idle')
     }
+  }
 
-    await this.broker.publish(
+  private publishCancellation(starId: Id, blockIndex: Integer) {
+    return this.broker.publish(
       new TextBlockAudioGenerationCancelledEvent({
-        starId: parsedStarId.value,
-        blockIndex: parsedBlockIndex.value,
+        starId: starId.value,
+        blockIndex: blockIndex.value,
       }),
     )
-
-    return textBlocks.map((currentTextBlock) => currentTextBlock.dto)
+  }
+  private async loadBlocks(request: Request) {
+    const starId = Id.create(request.starId)
+    const blockIndex = Integer.create(request.blockIndex, 'Indice do bloco')
+    const blocks = await this.repository.findAllByStar(starId)
+    return { starId, blockIndex, blocks }
   }
 }

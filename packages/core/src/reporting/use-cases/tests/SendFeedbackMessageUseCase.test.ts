@@ -1,3 +1,5 @@
+import { mock, type Mock } from 'ts-jest-mocker'
+import type { Database } from '#global/interfaces/Database'
 import { FeedbackReportsFaker } from '../../domain/entities/fakers/FeedbackReportsFaker'
 import { FeedbackMessage } from '../../domain/entities/FeedbackMessage'
 import { SendFeedbackMessageUseCase } from '../SendFeedbackMessageUseCase'
@@ -6,6 +8,12 @@ import type { FeedbackMessagesRepository } from '../../interfaces/FeedbackMessag
 import type { Broker } from '#global/interfaces/Broker'
 
 describe('SendFeedbackMessageUseCase fixes', () => {
+  let database: Mock<Database>
+
+  beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
+  })
   const userId = '11111111-1111-4111-8111-111111111111'
   const report = FeedbackReportsFaker.fake({
     author: { id: userId },
@@ -27,7 +35,7 @@ describe('SendFeedbackMessageUseCase fixes', () => {
     } as unknown as FeedbackMessagesRepository
     const publish = jest.fn()
     const broker = { publish } as unknown as Broker
-    const useCase = new SendFeedbackMessageUseCase(repository, messages, broker)
+    const useCase = new SendFeedbackMessageUseCase(database, repository, messages, broker)
     const reportId = report.id.value
     const messageId = crypto.randomUUID()
     const fileId = crypto.randomUUID()
@@ -65,7 +73,7 @@ describe('SendFeedbackMessageUseCase fixes', () => {
       addAttachments: jest.fn(),
     } as unknown as FeedbackMessagesRepository
     const broker = { publish: jest.fn() } as unknown as Broker
-    const useCase = new SendFeedbackMessageUseCase(repository, messages, broker)
+    const useCase = new SendFeedbackMessageUseCase(database, repository, messages, broker)
 
     await expect(
       useCase.execute({
@@ -109,6 +117,7 @@ describe('SendFeedbackMessageUseCase fixes', () => {
     } as unknown as Broker
 
     const response = await new SendFeedbackMessageUseCase(
+      database,
       repository,
       messages,
       broker,

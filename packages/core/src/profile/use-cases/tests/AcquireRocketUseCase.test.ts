@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { Integer } from '#global/domain/structures/Integer'
@@ -10,18 +11,21 @@ import { AcquireRocketUseCase } from '../AcquireRocketUseCase'
 import type { UsersRepository } from '../../interfaces'
 
 describe('Acquire Rocket Use Case', () => {
+  let database: Mock<Database>
   let broker: Mock<Broker>
   let repository: Mock<UsersRepository>
   let useCase: AcquireRocketUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     broker = mock<Broker>()
     broker.publish.mockImplementation()
     repository = mock<UsersRepository>()
     repository.findById.mockImplementation()
     repository.replace.mockImplementation()
     repository.addAcquiredRocket.mockImplementation()
-    useCase = new AcquireRocketUseCase(repository, broker)
+    useCase = new AcquireRocketUseCase(database, repository, broker)
   })
 
   it('should throw an error if the user is not found', async () => {

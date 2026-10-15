@@ -1,3 +1,4 @@
+import type { Database } from '#global/interfaces/Database'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { GuidesRepository } from '#manual/interfaces/GuidesRepository'
@@ -9,18 +10,21 @@ import { GuideDeletedEvent } from '#manual/domain/events/GuideDeletedEvent'
 import { DeleteGuideUseCase } from '../DeleteGuideUseCase'
 
 describe('Delete Guide Use Case', () => {
+  let database: Mock<Database>
   let repository: Mock<GuidesRepository>
   let broker: Mock<Broker>
   let useCase: DeleteGuideUseCase
 
   beforeEach(() => {
+    database = mock<Database>()
+    database.run.mockImplementation(async (operation) => operation())
     repository = mock<GuidesRepository>()
     broker = mock<Broker>()
     repository.findById.mockImplementation()
     repository.remove.mockImplementation()
     broker.publish.mockImplementation()
 
-    useCase = new DeleteGuideUseCase(repository, broker)
+    useCase = new DeleteGuideUseCase(database, repository, broker)
   })
 
   it('should throw an error if the guide does not exist', async () => {
