@@ -57,16 +57,20 @@ export class CheckHealthController implements Controller {
 
   async handle(http: Http) {
     const services = await this.checkServices()
-    const status = Object.values(services).every((status) => status === 'UP')
-      ? 'UP'
-      : 'DOWN'
+    return http.send(this.healthResponse(services))
+  }
 
-    return http.send({
-      status,
+  private healthResponse(services: HealthServicesStatus) {
+    return {
+      status: this.overallStatus(services),
       version: APP_VERSION,
       timestamp: new Date().toISOString(),
       services,
-    })
+    }
+  }
+
+  private overallStatus(services: HealthServicesStatus): HealthStatus {
+    return Object.values(services).every((status) => status === 'UP') ? 'UP' : 'DOWN'
   }
 
   private async checkServices(): Promise<HealthServicesStatus> {
@@ -101,39 +105,62 @@ export class CheckHealthController implements Controller {
 
   protected async checkPostgres(): Promise<HealthStatus> {
     const databaseUrl = new URL(ENV.databaseUrl)
-    const shouldPreferTls =
-      databaseUrl.searchParams.get('sslmode') !== 'disable' &&
-      databaseUrl.hostname !== 'localhost' &&
-      databaseUrl.hostname !== '127.0.0.1'
+    return this.checkPostgresStrategies(databaseUrl)
+  }
 
-    const connectionStrategies = shouldPreferTls ? [true, false] : [false, true]
-
-    for (const shouldUseTls of connectionStrategies) {
-      try {
-        await this.checkSocketConnection(databaseUrl, shouldUseTls)
-        return 'UP'
-      } catch {}
+  private async checkPostgresStrategies(databaseUrl: URL): Promise<HealthStatus> {
+    for (const shouldUseTls of this.connectionStrategies(databaseUrl)) {
+      if (await this.isSocketAvailable(databaseUrl, shouldUseTls)) return 'UP'
     }
 
     return 'DOWN'
   }
 
+  private async isSocketAvailable(url: URL, shouldUseTls: boolean) {
+    try {
+      await this.checkSocketConnection(url, shouldUseTls)
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  private connectionStrategies(url: URL) {
+    const isLocal = ['localhost', '127.0.0.1'].includes(url.hostname)
+    const preferTls = url.searchParams.get('sslmode') !== 'disable' && !isLocal
+    return preferTls ? [true, false] : [false, true]
+  }
+
   protected async checkRedis(): Promise<HealthStatus> {
-    const redis = new IORedis({
+    const redis = this.createRedisClient()
+
+    try {
+      return await this.readRedisStatusSafely(redis)
+    } finally {
+      redis.disconnect()
+    }
+  }
+
+  private async readRedisStatusSafely(redis: IORedis): Promise<HealthStatus> {
+    try {
+      return await this.readRedisStatus(redis)
+    } catch {
+      return 'DOWN'
+    }
+  }
+
+  private async readRedisStatus(redis: IORedis): Promise<HealthStatus> {
+    await this.withTimeout(redis.connect())
+    const response = await this.withTimeout(redis.ping())
+    return response === 'PONG' ? 'UP' : 'DOWN'
+  }
+
+  private createRedisClient() {
+    return new IORedis({
       ...IORedisCacheProvider.buildRedisOptions(ENV.redisUrl),
       connectTimeout: CheckHealthController.HEALTH_CHECK_TIMEOUT_IN_MS,
       maxRetriesPerRequest: 0,
     })
-
-    try {
-      await this.withTimeout(redis.connect())
-      const response = await this.withTimeout(redis.ping())
-      return response === 'PONG' ? 'UP' : 'DOWN'
-    } catch {
-      return 'DOWN'
-    } finally {
-      redis.disconnect()
-    }
   }
 
   protected async checkInngest(): Promise<HealthStatus> {
@@ -141,25 +168,29 @@ export class CheckHealthController implements Controller {
       return this.checkHttpEndpoint('http://127.0.0.1:8288/health')
     }
 
-    if (!ENV.inngestEventKey) {
-      return 'DOWN'
-    }
+    return this.checkConfiguredInngest()
+  }
 
+  private checkConfiguredInngest(): Promise<HealthStatus> | HealthStatus {
+    return ENV.inngestEventKey ? this.checkProductionInngest() : 'DOWN'
+  }
+
+  private checkProductionInngest() {
     return this.checkHttpEndpoint(
       `https://inn.gs/e/${ENV.inngestEventKey}`,
-      {
-        'Content-Type': 'application/json',
-      },
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'health.check',
-          data: {
-            source: 'stardust-healthcheck',
-          },
-        }),
-      },
+      { 'Content-Type': 'application/json' },
+      this.inngestRequest(),
     )
+  }
+
+  private inngestRequest(): RequestInit {
+    return {
+      method: 'POST',
+      body: JSON.stringify({
+        name: 'health.check',
+        data: { source: 'stardust-healthcheck' },
+      }),
+    }
   }
 
   protected async checkSupabase(): Promise<HealthStatus> {
@@ -175,14 +206,16 @@ export class CheckHealthController implements Controller {
 
   private checkS3Bucket(): Promise<HealthStatus> {
     return this.s3Client
-      .send(S3_HEAD_BUCKET_COMMAND_BY_MODE[ENV.mode], {
-        abortSignal: this.createS3TimeoutSignal(),
-      })
+      .send(S3_HEAD_BUCKET_COMMAND_BY_MODE[ENV.mode], this.s3RequestOptions())
       .then(
         () => 'UP' as const,
         () => 'DOWN' as const,
       )
       .finally(() => this.s3Client.destroy())
+  }
+
+  private s3RequestOptions() {
+    return { abortSignal: this.createS3TimeoutSignal() }
   }
 
   private createS3TimeoutSignal(): AbortSignal {
@@ -194,65 +227,80 @@ export class CheckHealthController implements Controller {
     headers?: Record<string, string>,
     init?: RequestInit,
   ): Promise<HealthStatus> {
-    const abortController = new AbortController()
-    const timeout = setTimeout(
-      () => abortController.abort(),
-      CheckHealthController.HEALTH_CHECK_TIMEOUT_IN_MS,
-    )
+    const { signal, cancel } = this.httpTimeout()
 
     try {
-      const response = await fetch(url, {
-        ...init,
-        headers,
-        signal: abortController.signal,
-      })
+      return await this.fetchStatusSafely(url, { ...init, headers, signal })
+    } finally {
+      cancel()
+    }
+  }
 
-      return response.ok ? 'UP' : 'DOWN'
+  private async fetchStatusSafely(url: string, init: RequestInit): Promise<HealthStatus> {
+    try {
+      return await this.fetchStatus(url, init)
     } catch {
       return 'DOWN'
-    } finally {
-      clearTimeout(timeout)
     }
+  }
+
+  private async fetchStatus(url: string, init: RequestInit): Promise<HealthStatus> {
+    const response = await fetch(url, init)
+    return response.ok ? 'UP' : 'DOWN'
+  }
+
+  private httpTimeout() {
+    const controller = new AbortController()
+    const timeout = setTimeout(
+      () => controller.abort(),
+      CheckHealthController.HEALTH_CHECK_TIMEOUT_IN_MS,
+    )
+    return { signal: controller.signal, cancel: () => clearTimeout(timeout) }
   }
 
   protected async checkSocketConnection(
     databaseUrl: URL,
     shouldUseTls: boolean,
   ): Promise<void> {
-    await this.withTimeout(
-      new Promise<void>((resolve, reject) => {
-        const port = Number(databaseUrl.port || 5432)
-        const host = databaseUrl.hostname
-        const socket = shouldUseTls
-          ? tls.connect({ host, port, servername: host })
-          : net.connect({ host, port })
+    await this.withTimeout(this.connectSocket(databaseUrl, shouldUseTls))
+  }
 
-        const handleConnection = () => {
-          socket.destroy()
-          resolve()
-        }
+  private connectSocket(databaseUrl: URL, shouldUseTls: boolean) {
+    const socket = this.createSocket(databaseUrl, shouldUseTls)
+    return new Promise<void>((resolve, reject) => {
+      socket.once(shouldUseTls ? 'secureConnect' : 'connect', () => {
+        socket.destroy()
+        resolve()
+      })
+      socket.once('error', reject)
+    })
+  }
 
-        socket.once(shouldUseTls ? 'secureConnect' : 'connect', handleConnection)
-        socket.once('error', reject)
-      }),
-    )
+  private createSocket(databaseUrl: URL, shouldUseTls: boolean) {
+    const port = Number(databaseUrl.port || 5432)
+    const host = databaseUrl.hostname
+    return shouldUseTls
+      ? tls.connect({ host, port, servername: host })
+      : net.connect({ host, port })
   }
 
   private async withTimeout<T>(promise: Promise<T>): Promise<T> {
-    let timeout: NodeJS.Timeout | undefined
-
+    const timeout = this.rejectionTimeout()
     try {
-      return await Promise.race([
-        promise,
-        new Promise<never>((_, reject) => {
-          timeout = setTimeout(
-            () => reject(new Error('Health check timeout')),
-            CheckHealthController.HEALTH_CHECK_TIMEOUT_IN_MS,
-          )
-        }),
-      ])
+      return await Promise.race([promise, timeout.promise])
     } finally {
-      clearTimeout(timeout)
+      timeout.cancel()
     }
+  }
+
+  private rejectionTimeout() {
+    let timer: NodeJS.Timeout | undefined
+    const promise = new Promise<never>((_, reject) => {
+      timer = setTimeout(
+        () => reject(new Error('Health check timeout')),
+        CheckHealthController.HEALTH_CHECK_TIMEOUT_IN_MS,
+      )
+    })
+    return { promise, cancel: () => clearTimeout(timer) }
   }
 }

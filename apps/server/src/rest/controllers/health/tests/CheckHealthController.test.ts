@@ -273,6 +273,22 @@ describe('Check Health Controller', () => {
     expect(controller.connectionCalls).toEqual([true, false])
   })
 
+  it.each([
+    'postgresql://postgres@localhost:5432/postgres',
+    'postgresql://postgres@127.0.0.1:5432/postgres',
+    'postgresql://postgres@database.example.test:5432/postgres?sslmode=disable',
+  ])('should try plain TCP first for %s and stop after success', async (databaseUrl) => {
+    const controller = new CheckPostgresControllerStub(new Map([[false, 'UP']]))
+    const previousDatabaseUrl = ENV.databaseUrl
+    try {
+      ENV.databaseUrl = databaseUrl
+      expect(await controller.runCheckPostgres()).toBe('UP')
+      expect(controller.connectionCalls).toEqual([false])
+    } finally {
+      ENV.databaseUrl = previousDatabaseUrl
+    }
+  })
+
   it('should check local Inngest health endpoint in development mode', async () => {
     const controller = new CheckHttpControllerStub('UP')
     const previousMode = ENV.mode
