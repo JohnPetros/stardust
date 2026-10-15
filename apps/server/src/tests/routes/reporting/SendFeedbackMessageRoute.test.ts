@@ -12,12 +12,15 @@ import {
 import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 import { Text } from '@stardust/core/global/structures'
 import { S3FileStorageProvider } from '@/provision/storage/s3/S3FileStorageProvider'
+import { outboxEventModel } from '@/database/drizzle/models/global/outbox-event-model'
 import { InngestBroker } from '@/queue/inngest/InngestBroker'
 import { AuthFixture } from '@/tests/fixtures/AuthFixture'
 import { HonoFixture } from '@/tests/fixtures/HonoFixture'
 import { ProfileFixture } from '@/tests/fixtures/ProfileFixture'
 import { ReportingFixture } from '@/tests/fixtures/ReportingFixture'
 import { SupabaseFixture } from '@/tests/fixtures/SupabaseFixture'
+
+const enqueue = InngestBroker.prototype.publish
 
 describe('[POST /reporting/feedback/:feedbackReportId/messages]', () => {
   const hono = new HonoFixture()
@@ -48,28 +51,26 @@ describe('[POST /reporting/feedback/:feedbackReportId/messages]', () => {
   })
   beforeEach(async () => {
     ENV.godAccountIds = []
-    delivery.mockReset().mockResolvedValue(undefined)
+    delivery.mockReset().mockImplementation(enqueue)
     await fixture.clearDatabase()
     await auth.createAccount()
     await profile.createAccountUser(auth.getAccountId())
   })
 
-  it('persists one author reply and preserves replay/conflict semantics', async () => {
+  it('persists one author reply and persists a single durable event on replay and preserves conflict semantics', async () => {
     const reportId = await reporting.createReportForAuthor(auth.getAccountId())
     const body = input()
-    delivery.mockImplementation(async () => {
-      expect(await reporting.listFeedbackMessages(reportId)).toEqual([
-        expect.objectContaining({
-          id: body.messageId,
-          content: body.content,
-          authorId: auth.getAccountId(),
-          authorRole: 'user',
-        }),
-      ])
-    })
     const first = await send(reportId, body)
     expect(first.status).toBe(HTTP_STATUS_CODE.created)
     expect(first.body.isDuplicate).toBe(false)
+    expect(await reporting.listFeedbackMessages(reportId)).toEqual([
+      expect.objectContaining({
+        id: body.messageId,
+        content: body.content,
+        authorId: auth.getAccountId(),
+        authorRole: 'user',
+      }),
+    ])
     const replay = await send(reportId, body)
     expect(replay.status).toBe(HTTP_STATUS_CODE.ok)
     expect(replay.body.isDuplicate).toBe(true)
@@ -98,6 +99,12 @@ describe('[POST /reporting/feedback/:feedbackReportId/messages]', () => {
     )
     expect(await reporting.listFeedbackMessages(reportId)).toHaveLength(1)
     expect(delivery).toHaveBeenCalledTimes(2)
+    expect(await fixture.database.select().from(outboxEventModel)).toEqual([
+      expect.objectContaining({
+        id: `feedback-user-message:${body.messageId}`,
+        status: 'pending',
+      }),
+    ])
   })
 
   it('rejects another account without changing the conversation', async () => {
@@ -150,27 +157,35 @@ describe('[POST /reporting/feedback/:feedbackReportId/messages]', () => {
     expect(delivery).not.toHaveBeenCalled()
   })
 
-  it('publishes God reply and closure events sequentially after committed state', async () => {
+  it('commits God reply and closure events durably in enqueue order', async () => {
     const reportId = await reporting.createReportForAuthor(auth.getAccountId())
     await auth.createAccount()
     await profile.createAccountUser(auth.getAccountId())
     ENV.godAccountIds = [auth.getAccountId()]
     const body = input()
-    delivery.mockImplementation(async () => {
-      expect((await reporting.findFeedbackReportById(reportId))?.status).toBe('closed')
-      expect(await reporting.listFeedbackMessages(reportId)).toEqual([
-        expect.objectContaining({
-          id: body.messageId,
-          authorId: auth.getAccountId(),
-          authorRole: 'admin',
-        }),
-      ])
-    })
     const response = await request(hono.server)
       .post(`/reporting/feedback/${reportId}/messages`)
       .set(auth.getAuthorizationHeader())
       .send({ ...body, targetStatus: 'closed' })
     expect(response.status).toBe(HTTP_STATUS_CODE.created)
+    expect((await reporting.findFeedbackReportById(reportId))?.status).toBe('closed')
+    expect(await reporting.listFeedbackMessages(reportId)).toEqual([
+      expect.objectContaining({
+        id: body.messageId,
+        authorId: auth.getAccountId(),
+        authorRole: 'admin',
+      }),
+    ])
+    const events = await fixture.database
+      .select()
+      .from(outboxEventModel)
+      .orderBy(outboxEventModel.sequence)
+    expect(events.map((event) => event.id)).toEqual([
+      `feedback-message:${body.messageId}`,
+      `feedback-admin-message-sent:${body.messageId}`,
+      `feedback-report-closed:${reportId}:${body.messageId}`,
+    ])
+    expect(events.every((event) => event.status === 'pending')).toBe(true)
     expect(delivery.mock.calls.map(([event, key]) => [event.name, key?.value])).toEqual([
       ['feedback.message.created', `feedback-message:${body.messageId}`],
       ['feedback.admin.message.sent', `feedback-admin-message-sent:${body.messageId}`],

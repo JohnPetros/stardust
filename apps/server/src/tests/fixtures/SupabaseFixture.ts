@@ -25,6 +25,7 @@ export class SupabaseFixture {
 
   async clearDatabase() {
     await LocalSupabaseProxy.ensureRunning()
+    await this.database.execute(sql`DELETE FROM public.outbox_events`)
     await this.deleteAllRowsFrom('users')
     await this.deleteAllRowsFrom('achievements')
     await this.deleteAllRowsFrom('insignias')

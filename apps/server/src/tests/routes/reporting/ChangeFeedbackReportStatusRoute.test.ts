@@ -4,6 +4,7 @@ import request from 'supertest'
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { ENV } from '@/constants'
 import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
+import { outboxEventModel } from '@/database/drizzle/models/global/outbox-event-model'
 import { feedbackReportModel } from '@/database/drizzle/models/reporting'
 import { AuthFixture } from '@/tests/fixtures/AuthFixture'
 import { HonoFixture } from '@/tests/fixtures/HonoFixture'
@@ -11,6 +12,8 @@ import { ProfileFixture } from '@/tests/fixtures/ProfileFixture'
 import { ReportingFixture } from '@/tests/fixtures/ReportingFixture'
 import { SupabaseFixture } from '@/tests/fixtures/SupabaseFixture'
 import { InngestBroker } from '@/queue/inngest/InngestBroker'
+
+const enqueue = InngestBroker.prototype.publish
 
 describe('[PATCH /reporting/feedback/:feedbackReportId/status]', () => {
   const hono = new HonoFixture()
@@ -35,7 +38,7 @@ describe('[PATCH /reporting/feedback/:feedbackReportId/status]', () => {
 
   const delivery = jest.spyOn(InngestBroker.prototype, 'publish')
   beforeEach(() => {
-    delivery.mockReset().mockResolvedValue(undefined)
+    delivery.mockReset().mockImplementation(enqueue)
   })
   afterAll(() => {
     delivery.mockRestore()
@@ -50,12 +53,13 @@ describe('[PATCH /reporting/feedback/:feedbackReportId/status]', () => {
     await reporting.createAdministrativeReply(id, auth.getAccountId())
     ENV.godAccountIds = [auth.getAccountId()]
     const states: string[] = []
-    delivery.mockImplementation(async () => {
+    delivery.mockImplementation(async function (this: InngestBroker, event, eventId) {
       const rows = await fixture.database
         .select()
         .from(feedbackReportModel)
         .where(eq(feedbackReportModel.id, id))
       states.push(rows[0].status)
+      await enqueue.call(this, event, eventId)
     })
     const closed = await change(id, 'closed', 'open')
     expect(closed.status).toBe(HTTP_STATUS_CODE.ok)
@@ -65,12 +69,45 @@ describe('[PATCH /reporting/feedback/:feedbackReportId/status]', () => {
     expect(reopened.status).toBe(HTTP_STATUS_CODE.ok)
     expect(reopened.body).toEqual(expect.objectContaining({ id, status: 'open' }))
     expect((await reporting.findFeedbackReportById(id))?.status).toBe('open')
-    expect(states).toEqual(['closed', 'open'])
+    // A separate connection still sees the prior committed state during enqueue.
+    expect(states).toEqual(['open', 'closed'])
     expect(delivery.mock.calls.map(([event]) => event.name)).toEqual([
       'feedback.report.closed',
       'feedback.report.reopened',
     ])
+    const events = await fixture.database
+      .select()
+      .from(outboxEventModel)
+      .orderBy(outboxEventModel.sequence)
+    expect(events).toEqual([
+      expect.objectContaining({ eventName: 'feedback.report.closed', status: 'pending' }),
+      expect.objectContaining({
+        eventName: 'feedback.report.reopened',
+        status: 'pending',
+      }),
+    ])
+    expect(new Set(events.map((event) => event.id)).size).toBe(2)
   })
+  it('rolls back status and the inserted event when durable enqueue fails', async () => {
+    const id = await reporting.createReportForAuthor(auth.getAccountId())
+    await reporting.createAdministrativeReply(id, auth.getAccountId())
+    ENV.godAccountIds = [auth.getAccountId()]
+    delivery.mockImplementation(async function (this: InngestBroker, event, eventId) {
+      await enqueue.call(this, event, eventId)
+      throw new Error('Controlled status enqueue failure')
+    })
+    const errors = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    try {
+      expect((await change(id, 'closed', 'open')).status).toBe(
+        HTTP_STATUS_CODE.serverError,
+      )
+      expect((await reporting.findFeedbackReportById(id))?.status).toBe('open')
+      expect(await fixture.database.select().from(outboxEventModel)).toEqual([])
+    } finally {
+      errors.mockRestore()
+    }
+  })
+
   it('rejects stale expected status without changing persisted state or publishing', async () => {
     const id = await reporting.createReportForAuthor(auth.getAccountId())
     ENV.godAccountIds = [auth.getAccountId()]
