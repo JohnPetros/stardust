@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type {
@@ -10,6 +11,7 @@ import type { Broker, Mcp } from '@stardust/core/global/interfaces'
 import { PostChallengeTool } from '../PostChallengeTool'
 
 describe('Post Challenge Tool', () => {
+  const database = mock<Database>()
   let repository: Mock<ChallengesRepository>
   let challengeSourcesRepository: Mock<ChallengeSourcesRepository>
   let broker: Mock<Broker>
@@ -17,12 +19,14 @@ describe('Post Challenge Tool', () => {
   let tool: PostChallengeTool
 
   beforeEach(() => {
+    database.run.mockClear()
+    database.run.mockImplementation(async (operation) => operation())
     jest.restoreAllMocks()
     repository = mock()
     challengeSourcesRepository = mock()
     broker = mock()
     mcp = mock()
-    tool = new PostChallengeTool(repository, challengeSourcesRepository, broker)
+    tool = new PostChallengeTool(repository, challengeSourcesRepository, broker, database)
   })
 
   it('should post a challenge and forward challengeSourceId when provided', async () => {

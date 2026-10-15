@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { ChallengeNotFoundError } from '@stardust/core/challenging/errors'
@@ -11,15 +12,18 @@ import type { Mcp } from '@stardust/core/global/interfaces'
 import { DeleteChallengeTool } from '../DeleteChallengeTool'
 
 describe('Delete Challenge Tool', () => {
+  const database = mock<Database>()
   let repository: Mock<ChallengesRepository>
   let mcp: Mock<Mcp<any>>
   let tool: DeleteChallengeTool
 
   beforeEach(() => {
+    database.run.mockClear()
+    database.run.mockImplementation(async (operation) => operation())
     jest.restoreAllMocks()
     repository = mock()
     mcp = mock()
-    tool = new DeleteChallengeTool(repository)
+    tool = new DeleteChallengeTool(repository, database)
   })
 
   it('should delete challenge when account is author and confirmation is true', async () => {

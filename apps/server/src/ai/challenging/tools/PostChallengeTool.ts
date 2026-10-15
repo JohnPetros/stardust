@@ -1,3 +1,5 @@
+import type { Database } from '@stardust/core/global/interfaces'
+import { DrizzleUnitOfWork } from '@/database/drizzle/DrizzleUnitOfWork'
 import type {
   ChallengeDto,
   ChallengeCategoryDto,
@@ -26,42 +28,40 @@ export class PostChallengeTool implements Tool<Input, ChallengeDto> {
     private readonly repository: ChallengesRepository,
     private readonly challengeSourcesRepository: ChallengeSourcesRepository,
     private readonly broker: Broker,
+    private readonly database: Database = new DrizzleUnitOfWork(),
   ) {}
 
   async handle(mcp: Mcp<Input>): Promise<ChallengeDto> {
-    const {
-      title,
-      description,
-      initialCode,
-      difficultyLevel,
-      testCases,
-      categories,
-      challengeSourceId,
-      isEvaluatedByFunction,
-    } = mcp.getInput()
+    const input = mcp.getInput()
     const accountId = mcp.getAccountId()
-    const useCase = new PostChallengeUseCase(
+    return this.createPostChallengeUseCase().execute({
+      challengeDto: this.challengeDto(input, accountId),
+      challengeSourceId: input.challengeSourceId ?? null,
+    })
+  }
+
+  private challengeDto(input: Input, accountId: string): ChallengeDto {
+    return {
+      ...this.challengeContent(input),
+      author: { id: accountId },
+      isPublic: false,
+      isEvaluatedByFunction: input.isEvaluatedByFunction ?? true,
+      isNew: true,
+    }
+  }
+
+  private challengeContent(input: Input) {
+    const { title, description, initialCode, difficultyLevel, testCases, categories } =
+      input
+    return { title, description, initialCode, difficultyLevel, testCases, categories }
+  }
+
+  private createPostChallengeUseCase() {
+    return new PostChallengeUseCase(
+      this.database,
       this.repository,
       this.challengeSourcesRepository,
       this.broker,
     )
-
-    return await useCase.execute({
-      challengeDto: {
-        title: title,
-        description: description,
-        initialCode,
-        difficultyLevel: difficultyLevel,
-        testCases: testCases,
-        categories: categories,
-        author: {
-          id: accountId,
-        },
-        isPublic: false,
-        isEvaluatedByFunction: isEvaluatedByFunction ?? true,
-        isNew: true,
-      },
-      challengeSourceId: challengeSourceId ?? null,
-    })
   }
 }
