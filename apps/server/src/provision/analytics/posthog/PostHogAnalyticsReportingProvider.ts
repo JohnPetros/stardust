@@ -23,7 +23,7 @@ export class PostHogAnalyticsReportingProvider implements AnalyticsReportingProv
   async getDailyActiveUsers(days: Integer): Promise<DailyActiveUsersDto> {
     if (days.isZero.isTrue) return []
 
-    if (ENV.mode === 'test') {
+    if (ENV.mode === 'development' || ENV.mode === 'test') {
       return this.normalizeReport(days, [])
     }
 

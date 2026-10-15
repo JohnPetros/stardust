@@ -8,6 +8,8 @@ import { ENV } from '@/constants'
 
 export class PostHogAnalyticsProvider implements ServerAnalyticsProvider {
   async trackEvent(event: AnalyticsEvent): Promise<void> {
+    if (ENV.mode === 'development') return
+
     const client = new PostHog(ENV.posthogProjectToken, {
       host: ENV.posthogHost,
       flushAt: 1,
