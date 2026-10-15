@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Broker, Http } from '@stardust/core/global/interfaces'
@@ -9,6 +10,7 @@ import { GetNextStarUseCase } from '@stardust/core/space/use-cases'
 import { AppendNextStarToBodyController } from '../AppendNextStarToBodyController'
 
 describe('Append Next Star To Body Controller', () => {
+  const database = mock<Database>()
   type Schema = {
     body: {
       starId: string
@@ -24,6 +26,8 @@ describe('Append Next Star To Body Controller', () => {
   let controller: AppendNextStarToBodyController
 
   beforeEach(() => {
+    database.run.mockClear()
+    database.run.mockImplementation(async (operation) => operation())
     jest.restoreAllMocks()
     http = mock()
     starsRepository = mock()
@@ -35,6 +39,7 @@ describe('Append Next Star To Body Controller', () => {
       starsRepository,
       planetsRepository,
       broker,
+      database,
     )
   })
 

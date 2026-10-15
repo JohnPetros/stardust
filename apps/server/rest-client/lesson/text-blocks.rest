@@ -31,3 +31,12 @@ Content-Type: application/json
 ### Cancel text blocks audio generation in batch
 DELETE {{URL}}/star/{{STAR_ID}}/audio/batch
 Authorization: Bearer {{JWT}}
+
+### Remove text block audio file
+DELETE {{URL}}/star/{{STAR_ID}}/audio/file
+Authorization: Bearer {{JWT}}
+Content-Type: application/json
+
+{
+  "blockIndex": 0
+}

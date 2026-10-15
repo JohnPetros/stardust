@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Broker, Http } from '@stardust/core/global/interfaces'
@@ -10,6 +11,7 @@ import { ReorderPlanetsUseCase } from '@stardust/core/space/use-cases'
 import { ReorderPlanetsController } from '../ReorderPlanetsController'
 
 describe('Reorder Planets Controller', () => {
+  const database = mock<Database>()
   type Schema = {
     body: {
       planetIds: string[]
@@ -22,11 +24,13 @@ describe('Reorder Planets Controller', () => {
   let controller: ReorderPlanetsController
 
   beforeEach(() => {
+    database.run.mockClear()
+    database.run.mockImplementation(async (operation) => operation())
     jest.restoreAllMocks()
     http = mock()
     repository = mock()
     broker = mock()
-    controller = new ReorderPlanetsController(repository, broker)
+    controller = new ReorderPlanetsController(repository, broker, database)
     http.statusOk.mockReturnValue(http)
   })
 

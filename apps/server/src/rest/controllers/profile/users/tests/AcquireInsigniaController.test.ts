@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Http } from '@stardust/core/global/interfaces'
@@ -10,6 +11,7 @@ import { AcquireInsigniaUseCase } from '@stardust/core/profile/use-cases'
 import { AcquireInsigniaController } from '../AcquireInsigniaController'
 
 describe('Acquire Insignia Controller', () => {
+  const database = mock<Database>()
   let http: Mock<
     Http<{
       body: {
@@ -22,10 +24,12 @@ describe('Acquire Insignia Controller', () => {
   let controller: AcquireInsigniaController
 
   beforeEach(() => {
+    database.run.mockClear()
+    database.run.mockImplementation(async (operation) => operation())
     jest.restoreAllMocks()
     http = mock()
     repository = mock()
-    controller = new AcquireInsigniaController(repository)
+    controller = new AcquireInsigniaController(repository, database)
   })
 
   it('should execute acquire insignia use case using body and account id and send response', async () => {

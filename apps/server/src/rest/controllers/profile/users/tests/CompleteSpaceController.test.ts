@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Broker, Http } from '@stardust/core/global/interfaces'
@@ -8,6 +9,7 @@ import { CompleteSpaceUseCase } from '@stardust/core/profile/use-cases'
 import { CompleteSpaceController } from '../CompleteSpaceController'
 
 describe('Complete Space Controller', () => {
+  const database = mock<Database>()
   type Schema = {
     body: {
       nextStarId: string | null
@@ -20,11 +22,13 @@ describe('Complete Space Controller', () => {
   let controller: CompleteSpaceController
 
   beforeEach(() => {
+    database.run.mockClear()
+    database.run.mockImplementation(async (operation) => operation())
     jest.restoreAllMocks()
     http = mock()
     repository = mock()
     broker = mock()
-    controller = new CompleteSpaceController(repository, broker)
+    controller = new CompleteSpaceController(repository, broker, database)
   })
 
   it('should read account and body, execute use case and pass request', async () => {

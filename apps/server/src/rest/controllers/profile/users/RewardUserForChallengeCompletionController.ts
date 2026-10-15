@@ -1,3 +1,5 @@
+import type { Database } from '@stardust/core/global/interfaces'
+import { DrizzleUnitOfWork } from '@/database/drizzle/DrizzleUnitOfWork'
 import type { Controller } from '@stardust/core/global/interfaces'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
@@ -35,102 +37,124 @@ export class RewardUserForChallengeCompletionController implements Controller<Sc
     private readonly usersRepository: UsersRepository,
     private readonly challengesRepository: ChallengesRepository,
     private readonly executionsRepository: ChallengeCodeExecutionsRepository,
+    private readonly database: Database = new DrizzleUnitOfWork(),
   ) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { userId } = http.getRouteParams()
-    const { challengeId, challengeReward } = await http.getBody()
-    const { maximumIncorrectAnswersCount, incorrectAnswersCount } =
-      await this.getTrustedExecutionCounts(userId, challengeId)
+    const body = await http.getBody()
+    return this.database.run(async () => http.send(await this.complete(userId, body)))
+  }
 
-    const { newCoins, newXp, accuracyPercentage } = await this.calculateReward(
-      userId,
-      challengeId,
-      challengeReward?.xp ?? 0,
-      challengeReward?.coins ?? 0,
-      maximumIncorrectAnswersCount,
-      incorrectAnswersCount,
-    )
-
-    await this.completeChallenge(userId, challengeId)
-
-    const { newLevel, newStreak, newWeekStatus } = await this.rewardUser(
-      userId,
-      newCoins,
-      newXp,
-    )
-
-    return http.send({
-      newCoins,
-      newXp,
-      newLevel,
-      newStreak,
-      newWeekStatus,
-      accuracyPercentage,
-    })
+  private async complete(userId: string, body: Schema['body']) {
+    const counts = await this.getTrustedExecutionCounts(userId, body.challengeId)
+    const reward = await this.calculateReward(userId, body, counts)
+    await this.completeChallenge(userId, body.challengeId)
+    const progress = await this.rewardUser(userId, reward.newCoins, reward.newXp)
+    return { ...reward, ...progress }
   }
 
   private async getTrustedExecutionCounts(userId: string, challengeId: string) {
-    const userIdObject = Id.create(userId)
-    const challengeIdObject = Id.create(challengeId)
+    const evidence = await this.fetchExecutionEvidence(userId, challengeId)
+    return this.trustedExecutionCounts(evidence)
+  }
 
-    const [challenge, latestExecution, incorrectAnswersCount] = await Promise.all([
-      this.challengesRepository.findById(challengeIdObject),
-      this.executionsRepository.findLatestByUserAndChallenge(
-        userIdObject,
-        challengeIdObject,
-      ),
-      this.executionsRepository.countIncorrectByUserAndChallenge(
-        userIdObject,
-        challengeIdObject,
-      ),
+  private trustedExecutionCounts(
+    evidence: Awaited<
+      ReturnType<RewardUserForChallengeCompletionController['fetchExecutionEvidence']>
+    >,
+  ) {
+    const [challenge, latestExecution, incorrectAnswersCount] = evidence
+    this.verifyExecutionEvidence(challenge, latestExecution?.isAccepted)
+
+    return this.executionCounts(
+      challenge.maximumIncorrectAnswersCount.value,
+      incorrectAnswersCount.value,
+    )
+  }
+
+  private executionCounts(
+    maximumIncorrectAnswersCount: number,
+    incorrectAnswersCount: number,
+  ) {
+    return { maximumIncorrectAnswersCount, incorrectAnswersCount }
+  }
+
+  private fetchExecutionEvidence(userIdValue: string, challengeIdValue: string) {
+    const userId = Id.create(userIdValue)
+    const challengeId = Id.create(challengeIdValue)
+    return this.queryExecutionEvidence(userId, challengeId)
+  }
+
+  private queryExecutionEvidence(userId: Id, challengeId: Id) {
+    return Promise.all([
+      this.challengesRepository.findById(challengeId),
+      this.executionsRepository.findLatestByUserAndChallenge(userId, challengeId),
+      this.executionsRepository.countIncorrectByUserAndChallenge(userId, challengeId),
     ])
+  }
 
-    if (!challenge) {
-      throw new ChallengeNotFoundError()
-    }
+  private verifyExecutionEvidence(
+    challenge: Awaited<ReturnType<ChallengesRepository['findById']>>,
+    isAccepted: boolean | undefined,
+  ): asserts challenge is NonNullable<typeof challenge> {
+    if (!challenge) throw new ChallengeNotFoundError()
+    this.verifyAcceptedExecution(isAccepted)
+  }
 
-    if (!latestExecution?.isAccepted) {
+  private verifyAcceptedExecution(isAccepted: boolean | undefined) {
+    if (!isAccepted) {
       throw new NotAllowedError(
         'É necessário executar o código com sucesso antes da recompensa',
       )
     }
+  }
 
+  private calculateReward(
+    userId: string,
+    body: Schema['body'],
+    counts: { maximumIncorrectAnswersCount: number; incorrectAnswersCount: number },
+  ) {
+    const useCase = new CalculateRewardForChallengeCompletionUseCase(this.usersRepository)
+    return useCase.execute(this.rewardInput(userId, body, counts))
+  }
+
+  private rewardInput(
+    userId: string,
+    body: Schema['body'],
+    counts: { maximumIncorrectAnswersCount: number; incorrectAnswersCount: number },
+  ) {
     return {
-      maximumIncorrectAnswersCount: challenge.maximumIncorrectAnswersCount.value,
-      incorrectAnswersCount: incorrectAnswersCount.value,
+      userId,
+      challengeId: body.challengeId,
+      ...this.baseReward(body.challengeReward),
+      ...counts,
     }
   }
 
-  private async calculateReward(
-    userId: string,
-    challengeId: string,
-    challengeXp: number,
-    challengeCoins: number,
-    maximumIncorrectAnswersCount: number,
-    incorrectAnswersCount: number,
-  ) {
-    const useCase = new CalculateRewardForChallengeCompletionUseCase(this.usersRepository)
-    return await useCase.execute({
-      userId,
-      challengeId,
-      challengeXp,
-      challengeCoins,
-      maximumIncorrectAnswersCount,
-      incorrectAnswersCount,
-    })
+  private baseReward(reward: Schema['body']['challengeReward']) {
+    return { challengeXp: reward?.xp ?? 0, challengeCoins: reward?.coins ?? 0 }
   }
 
   private async completeChallenge(userId: string, challengeId: string) {
-    const useCase = new CompleteChallengeUseCase(
-      this.usersRepository,
-      new InngestBroker(),
-    )
+    const useCase = this.createCompleteChallengeUseCase()
     await useCase.execute({ userId, challengeId })
   }
 
   private async rewardUser(userId: string, newCoins: number, newXp: number) {
-    const useCase = new RewardUserUseCase(this.usersRepository, new InngestBroker())
+    const useCase = this.createRewardUserUseCase()
     return await useCase.execute({ userId, newCoins, newXp })
+  }
+
+  private createCompleteChallengeUseCase() {
+    return new CompleteChallengeUseCase(
+      this.database,
+      this.usersRepository,
+      new InngestBroker(),
+    )
+  }
+
+  private createRewardUserUseCase() {
+    return new RewardUserUseCase(this.database, this.usersRepository, new InngestBroker())
   }
 }

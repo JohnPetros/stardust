@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import { ChallengesFaker } from '@stardust/core/challenging/entities/fakers'
@@ -12,6 +13,7 @@ import type { RestResponse } from '@stardust/core/global/responses'
 import { PostChallengeController } from '../PostChallengeController'
 
 describe('Post Challenge Controller', () => {
+  const database = mock<Database>()
   type Schema = {
     body: ReturnType<typeof ChallengesFaker.fakeDto>
   }
@@ -23,6 +25,8 @@ describe('Post Challenge Controller', () => {
   let controller: PostChallengeController
 
   beforeEach(() => {
+    database.run.mockClear()
+    database.run.mockImplementation(async (operation) => operation())
     jest.restoreAllMocks()
     http = mock()
     repository = mock()
@@ -32,6 +36,7 @@ describe('Post Challenge Controller', () => {
       repository,
       challengeSourcesRepository,
       broker,
+      database,
     )
   })
 

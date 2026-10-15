@@ -1,3 +1,5 @@
+import type { Database } from '@stardust/core/global/interfaces'
+import { DrizzleUnitOfWork } from '@/database/drizzle/DrizzleUnitOfWork'
 import { ReorderPlanetsUseCase } from '@stardust/core/space/use-cases'
 import type { Controller, Broker, Http } from '@stardust/core/global/interfaces'
 import type { PlanetsRepository } from '@stardust/core/space/interfaces'
@@ -12,11 +14,12 @@ export class ReorderPlanetsController implements Controller<Schema> {
   constructor(
     private readonly repository: PlanetsRepository,
     private readonly broker: Broker,
+    private readonly database: Database = new DrizzleUnitOfWork(),
   ) {}
 
   async handle(http: Http<Schema>) {
     const { planetIds } = await http.getBody()
-    const useCase = new ReorderPlanetsUseCase(this.repository, this.broker)
+    const useCase = new ReorderPlanetsUseCase(this.database, this.repository, this.broker)
     const response = await useCase.execute({ planetIds })
     return http.statusOk().send(response)
   }

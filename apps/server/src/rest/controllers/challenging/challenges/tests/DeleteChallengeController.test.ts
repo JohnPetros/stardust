@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { ChallengesRepository } from '@stardust/core/challenging/interfaces'
@@ -9,15 +10,18 @@ import { IdFaker } from '@stardust/core/global/structures/fakers'
 import { DeleteChallengeController } from '../DeleteChallengeController'
 
 describe('Delete Challenge Controller', () => {
+  const database = mock<Database>()
   let http: Mock<Http<{ routeParams: { challengeId: string } }>>
   let repository: Mock<ChallengesRepository>
   let controller: DeleteChallengeController
 
   beforeEach(() => {
+    database.run.mockClear()
+    database.run.mockImplementation(async (operation) => operation())
     jest.restoreAllMocks()
     http = mock()
     repository = mock()
-    controller = new DeleteChallengeController(repository)
+    controller = new DeleteChallengeController(repository, database)
   })
 
   it('should delete challenge and return no content', async () => {

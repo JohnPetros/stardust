@@ -1,3 +1,5 @@
+import type { Database } from '@stardust/core/global/interfaces'
+import { DrizzleUnitOfWork } from '@/database/drizzle/DrizzleUnitOfWork'
 import type { Controller, Broker } from '@stardust/core/global/interfaces'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
@@ -14,12 +16,13 @@ export class CompleteSpaceController implements Controller<Schema> {
   constructor(
     private readonly repository: UsersRepository,
     private readonly broker: Broker,
+    private readonly database: Database = new DrizzleUnitOfWork(),
   ) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const userId = await http.getAccountId()
     const { nextStarId } = await http.getBody()
-    const useCase = new CompleteSpaceUseCase(this.repository, this.broker)
+    const useCase = new CompleteSpaceUseCase(this.database, this.repository, this.broker)
     await useCase.execute({ userId, nextStarId })
     return await http.pass()
   }

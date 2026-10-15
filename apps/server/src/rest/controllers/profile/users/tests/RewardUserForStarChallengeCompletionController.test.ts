@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Http } from '@stardust/core/global/interfaces'
@@ -25,6 +26,7 @@ import {
 import { RewardUserForStarChallengeCompletionController } from '../RewardUserForStarChallengeCompletionController'
 
 describe('Reward User For Star Challenge Completion Controller', () => {
+  const database = mock<Database>()
   type Schema = {
     routeParams: {
       userId: string
@@ -47,6 +49,8 @@ describe('Reward User For Star Challenge Completion Controller', () => {
   let controller: RewardUserForStarChallengeCompletionController
 
   beforeEach(() => {
+    database.run.mockClear()
+    database.run.mockImplementation(async (operation) => operation())
     jest.restoreAllMocks()
     http = mock()
     usersRepository = mock()
@@ -57,6 +61,8 @@ describe('Reward User For Star Challenge Completion Controller', () => {
       usersRepository,
       challengesRepository,
       executionsRepository,
+      undefined,
+      database,
     )
   })
 
@@ -119,6 +125,8 @@ describe('Reward User For Star Challenge Completion Controller', () => {
       .mockResolvedValue(userProgress)
 
     await controller.handle(http)
+
+    expect(database.run).toHaveBeenCalledTimes(1)
 
     expect(calculateRewardSpy).toHaveBeenCalledWith({
       userId: routeParams.userId,

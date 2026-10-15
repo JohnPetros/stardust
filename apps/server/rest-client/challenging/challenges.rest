@@ -65,8 +65,7 @@ Authorization: Bearer {{JWT}}
 
 {
   "title": "O problema dos 3 corpos",
-  "code": "funcao encontreCorpos(parametro1) {\n\n}",
-  "slug": "o-problema-dos-3-corpos",
+  "initialCode": "funcao encontreCorpos(parametro1) {\n\n}",
   "difficultyLevel": "easy",
   "author": {
     "id": "2ac3e189-e5ed-4003-a87a-d2358411584e"
@@ -81,14 +80,8 @@ Authorization: Bearer {{JWT}}
       "name": "dicionarios"
     }
   ],
-  "languages": [],
-  "completionCount": 0,
   "description": "minha descrição",
-  "downvotesCount": 0,
   "isPublic": false,
-  "postedAt": "Tue Nov 11 2025 11:52:29 GMT-0300 (Horário Padrão de Brasília)",
-  "results": [],
-  "starId": null,
   "testCases": [
     {
       "expectedOutput": "minha resposta",
@@ -114,9 +107,7 @@ Authorization: Bearer {{JWT}}
       "isLocked": false,
       "position": 3
     }
-  ],
-  "upvotesCount": 0,
-  "userOutputs": []
+  ]
 }
 
 ### Update challenge

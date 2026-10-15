@@ -1,3 +1,5 @@
+import type { Database } from '@stardust/core/global/interfaces'
+import { DrizzleUnitOfWork } from '@/database/drizzle/DrizzleUnitOfWork'
 import type { Controller, Broker, Http } from '@stardust/core/global/interfaces'
 import type { PlanetsRepository, StarsRepository } from '@stardust/core/space/interfaces'
 import { GetNextStarUseCase } from '@stardust/core/space/use-cases'
@@ -15,21 +17,30 @@ export class AppendNextStarToBodyController implements Controller<Schema> {
     private readonly starsRepository: StarsRepository,
     private readonly planetsRepository: PlanetsRepository,
     private readonly broker: Broker,
+    private readonly database: Database = new DrizzleUnitOfWork(),
   ) {}
 
   async handle(http: Http<Schema>) {
     const { starId, userName, userSlug } = await http.getBody()
-    const useCase = new GetNextStarUseCase(
-      this.starsRepository,
-      this.planetsRepository,
-      this.broker,
-    )
-    const star = await useCase.execute({
+    const star = await this.findNextStar(starId, userName, userSlug)
+    http.extendBody({ nextStarId: star?.id ?? null })
+    return http.pass()
+  }
+
+  private findNextStar(starId: string, userName: string, userSlug: string) {
+    return this.createGetNextStarUseCase().execute({
       userName,
       userSlug,
       currentStarId: starId,
     })
-    http.extendBody({ nextStarId: star?.id ?? null })
-    return http.pass()
+  }
+
+  private createGetNextStarUseCase() {
+    return new GetNextStarUseCase(
+      this.database,
+      this.starsRepository,
+      this.planetsRepository,
+      this.broker,
+    )
   }
 }

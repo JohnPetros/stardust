@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Broker, Http } from '@stardust/core/global/interfaces'
@@ -19,17 +20,24 @@ type Schema = {
 }
 
 describe('Trigger TextBlock Audio Generation Controller', () => {
+  const database = mock<Database>()
   let http: Mock<Http<Schema>>
   let repository: Mock<TextBlocksRepository>
   let broker: Mock<Broker>
   let controller: TriggerTextBlockAudioGenerationController
 
   beforeEach(() => {
+    database.run.mockClear()
+    database.run.mockImplementation(async (operation) => operation())
     jest.restoreAllMocks()
     http = mock<Http<Schema>>()
     repository = mock<TextBlocksRepository>()
     broker = mock<Broker>()
-    controller = new TriggerTextBlockAudioGenerationController(repository, broker)
+    controller = new TriggerTextBlockAudioGenerationController(
+      repository,
+      broker,
+      database,
+    )
   })
 
   it('should extract params and body, call the use case and return accepted', async () => {

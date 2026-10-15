@@ -1,8 +1,12 @@
+import { DrizzleOutboxRepository } from '@/database/drizzle/repositories/global/DrizzleOutboxRepository'
+import { InngestEventPublisher } from '@/queue/inngest/InngestEventPublisher'
+import { OutboxDispatcher } from '@/queue/inngest/OutboxDispatcher'
+import { DispatchOutboxEventsJob } from '@/queue/jobs/global/DispatchOutboxEventsJob'
 import { type Context, type Next, Hono } from 'hono'
 import { serve } from '@hono/node-server'
 import { cors } from 'hono/cors'
 import { serve as serveInngest } from 'inngest/hono'
-import { type SupabaseClient, createClient } from '@supabase/supabase-js'
+import { type SupabaseClient, type User, createClient } from '@supabase/supabase-js'
 import { ZodError } from 'zod'
 import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
 import type { DatabaseAccess } from '@/database/drizzle/DatabaseAccess'
@@ -100,15 +104,38 @@ export class HonoApp {
 
   async startServer(port = ENV.port) {
     this.setup()
-    const server = await this.startNodeServer({
-      serve,
-      fetch: this.hono.fetch,
-      port,
-      mode: ENV.mode,
-      baseUrl: ENV.baseUrl,
-    })
-
+    const server = await this.startNodeServer(this.serverOptions(port))
+    this.startOutboxDispatcher(server)
     return new HonoServer(this.hono, server)
+  }
+
+  private serverOptions(port: number): StartNodeServerParams {
+    return { serve, fetch: this.hono.fetch, port, mode: ENV.mode, baseUrl: ENV.baseUrl }
+  }
+
+  private startOutboxDispatcher(server: ServerType): void {
+    const dispatcher = this.createOutboxDispatcher()
+    this.registerOutboxShutdown(server, dispatcher)
+    dispatcher.start()
+  }
+
+  private createOutboxDispatcher() {
+    const repository = new DrizzleOutboxRepository(DrizzleClient.getInstance(), {
+      kind: 'system',
+    })
+    const job = new DispatchOutboxEventsJob(repository, new InngestEventPublisher())
+    return new OutboxDispatcher(job, () => this.reportOutboxFailure())
+  }
+
+  private reportOutboxFailure() {
+    this.telemetryProvider.trackError(new Error('Outbox dispatch failed'))
+  }
+
+  private registerOutboxShutdown(server: ServerType, dispatcher: OutboxDispatcher) {
+    const remove = DrizzleClient.registerShutdownHook(() => dispatcher.stop())
+    server.once('close', () => {
+      void dispatcher.stop().finally(remove)
+    })
   }
 
   setup() {
@@ -120,57 +147,60 @@ export class HonoApp {
   }
 
   setUpErrorHandler() {
-    this.hono.onError(async (error, context) => {
-      console.error('Error:', error)
+    this.hono.onError((error, context) => this.handleError(error, context))
+  }
 
-      if (error instanceof AppError) return this.respondToAppError(error, context)
+  private async handleError(error: Error, context: Context): Promise<Response> {
+    if (error instanceof AppError) return this.respondToAppError(error, context)
+    console.error('Error:', error)
+    if (error instanceof ZodError) return this.respondToZodError(error, context)
+    await this.reportUnexpectedError(error)
+    return this.respondToUnexpectedError(context)
+  }
 
-      if (error instanceof ZodError)
-        return context.json(
-          { title: 'Erro de validação', message: error.issues },
-          HTTP_STATUS_CODE.badRequest,
-        )
+  private respondToZodError(error: ZodError, context: Context) {
+    return context.json(
+      { title: 'Erro de validação', message: error.issues },
+      HTTP_STATUS_CODE.badRequest,
+    )
+  }
 
-      if (ENV.mode !== 'development') {
-        this.telemetryProvider.trackError(error)
-        await this.notificationService.sendErrorNotification('server', error.message)
-      }
+  private async reportUnexpectedError(error: Error) {
+    if (ENV.mode === 'development') return
+    this.telemetryProvider.trackError(error)
+    await this.notificationService.sendErrorNotification('server', error.message)
+  }
 
-      return context.json(
-        {
-          title: 'Erro interno do servidor',
-          message: 'Ocorreu um erro interno. Tente novamente mais tarde.',
-        },
-        HTTP_STATUS_CODE.serverError,
-      )
-    })
+  private respondToUnexpectedError(context: Context) {
+    return context.json(
+      {
+        title: 'Erro interno do servidor',
+        message: 'Ocorreu um erro interno. Tente novamente mais tarde.',
+      },
+      HTTP_STATUS_CODE.serverError,
+    )
   }
 
   private respondToAppError(error: AppError, context: Context): Response {
     console.error('Error title:', error.title)
     console.error('Error message:', error.message)
+    return context.json(
+      { title: error.title, message: error.message },
+      this.appErrorStatus(error),
+    )
+  }
 
-    const response = {
-      title: error.title,
-      message: error.message,
-    }
+  private appErrorStatus(error: AppError) {
+    if (error instanceof AuthError) return HTTP_STATUS_CODE.unauthorized
+    if (error instanceof NotFoundError) return HTTP_STATUS_CODE.notFound
+    if (error instanceof ConflictError) return HTTP_STATUS_CODE.conflict
+    return this.validationErrorStatus(error)
+  }
 
-    if (error instanceof AuthError)
-      return context.json(response, HTTP_STATUS_CODE.unauthorized)
-
-    if (error instanceof NotFoundError)
-      return context.json(response, HTTP_STATUS_CODE.notFound)
-
-    if (error instanceof ConflictError)
-      return context.json(response, HTTP_STATUS_CODE.conflict)
-
-    if (error instanceof ValidationError)
-      return context.json(response, HTTP_STATUS_CODE.badRequest)
-
-    if (error instanceof NotAllowedError)
-      return context.json(response, HTTP_STATUS_CODE.notAllowed)
-
-    return context.json(response, HTTP_STATUS_CODE.serverError)
+  private validationErrorStatus(error: AppError) {
+    if (error instanceof ValidationError) return HTTP_STATUS_CODE.badRequest
+    if (error instanceof NotAllowedError) return HTTP_STATUS_CODE.notAllowed
+    return HTTP_STATUS_CODE.serverError
   }
 
   private setUpCors() {
@@ -184,40 +214,47 @@ export class HonoApp {
   }
 
   private createRouters() {
-    const profileRouter = new ProfileRouter(this)
-    const authRouter = new AuthRouter(this)
-    const spaceRouter = new SpaceRouter(this)
-    const lessonRouter = new LessonRouter(this)
-    const shopRouter = new ShopRouter(this)
-    const challengingRouter = new ChallengingRouter(this)
-    const rankingRouter = new RankingRouter(this)
-    const forumRouter = new ForumRouter(this)
-    const playgroundRouter = new PlaygroundRouter(this)
-    const manualRouter = new ManualRouter(this)
-    const storageRouter = new StorageRouter(this)
-    const notificationRouter = new NotificationRouter(this)
-    const conversationRouter = new ConversationRouter(this)
-    const reportingRouter = new ReportingRouter(this)
-    const mcpRouter = new McpRouter(this)
-    const healthRouter = new HealthRouter(this)
-
     return {
-      profileRouter,
-      authRouter,
-      spaceRouter,
-      lessonRouter,
-      shopRouter,
-      challengingRouter,
-      rankingRouter,
-      forumRouter,
-      playgroundRouter,
-      manualRouter,
-      storageRouter,
-      notificationRouter,
-      conversationRouter,
-      reportingRouter,
-      mcpRouter,
-      healthRouter,
+      ...this.createLearningRouters(),
+      ...this.createCommunityRouters(),
+      ...this.createServiceRouters(),
+      ...this.createOperationalRouters(),
+    }
+  }
+
+  private createLearningRouters() {
+    return {
+      profileRouter: new ProfileRouter(this),
+      authRouter: new AuthRouter(this),
+      spaceRouter: new SpaceRouter(this),
+      lessonRouter: new LessonRouter(this),
+    }
+  }
+
+  private createCommunityRouters() {
+    return {
+      shopRouter: new ShopRouter(this),
+      challengingRouter: new ChallengingRouter(this),
+      rankingRouter: new RankingRouter(this),
+      forumRouter: new ForumRouter(this),
+    }
+  }
+
+  private createServiceRouters() {
+    return {
+      playgroundRouter: new PlaygroundRouter(this),
+      manualRouter: new ManualRouter(this),
+      storageRouter: new StorageRouter(this),
+      notificationRouter: new NotificationRouter(this),
+    }
+  }
+
+  private createOperationalRouters() {
+    return {
+      conversationRouter: new ConversationRouter(this),
+      reportingRouter: new ReportingRouter(this),
+      mcpRouter: new McpRouter(this),
+      healthRouter: new HealthRouter(this),
     }
   }
 
@@ -239,48 +276,62 @@ export class HonoApp {
   }
 
   private mountAccountAndLearningRoutes(routers: ReturnType<HonoApp['createRouters']>) {
-    const {
-      healthRouter,
-      authRouter,
-      profileRouter,
-      spaceRouter,
-      lessonRouter,
-      shopRouter,
-      challengingRouter,
-      rankingRouter,
-    } = routers
-    this.hono.route('/', healthRouter.registerRoutes())
-    this.hono.route('/', authRouter.registerRoutes())
-    this.hono.route('/', profileRouter.registerRoutes())
-    this.hono.route('/', spaceRouter.registerRoutes())
-    this.hono.route('/', lessonRouter.registerRoutes())
-    this.hono.route('/', shopRouter.registerRoutes())
-    this.hono.route('/', challengingRouter.registerRoutes())
-    this.hono.route('/', rankingRouter.registerRoutes())
+    this.mountIdentityRoutes(routers)
+    this.mountLearningRoutes(routers)
+  }
+
+  private mountIdentityRoutes(routers: ReturnType<HonoApp['createRouters']>) {
+    this.mountRouters([
+      routers.healthRouter,
+      routers.authRouter,
+      routers.profileRouter,
+      routers.spaceRouter,
+    ])
+  }
+
+  private mountLearningRoutes(routers: ReturnType<HonoApp['createRouters']>) {
+    this.mountRouters([
+      routers.lessonRouter,
+      routers.shopRouter,
+      routers.challengingRouter,
+      routers.rankingRouter,
+    ])
   }
 
   private mountContentAndServiceRoutes(routers: ReturnType<HonoApp['createRouters']>) {
-    const {
-      forumRouter,
-      playgroundRouter,
-      manualRouter,
-      storageRouter,
-      notificationRouter,
-      conversationRouter,
-      reportingRouter,
-      mcpRouter,
-    } = routers
-    this.hono.route('/', forumRouter.registerRoutes())
-    this.hono.route('/', playgroundRouter.registerRoutes())
-    this.hono.route('/', manualRouter.registerRoutes())
-    this.hono.route('/', storageRouter.registerRoutes())
-    this.hono.route('/', notificationRouter.registerRoutes())
-    this.hono.route('/', conversationRouter.registerRoutes())
-    this.hono.route('/', reportingRouter.registerRoutes())
-    this.hono.route('/', mcpRouter.registerRoutes())
+    this.mountContentRoutes(routers)
+    this.mountServiceRoutes(routers)
+  }
+
+  private mountContentRoutes(routers: ReturnType<HonoApp['createRouters']>) {
+    this.mountRouters([
+      routers.forumRouter,
+      routers.playgroundRouter,
+      routers.manualRouter,
+      routers.storageRouter,
+    ])
+  }
+
+  private mountServiceRoutes(routers: ReturnType<HonoApp['createRouters']>) {
+    this.mountRouters([
+      routers.notificationRouter,
+      routers.conversationRouter,
+      routers.reportingRouter,
+      routers.mcpRouter,
+    ])
+  }
+
+  private mountRouters(routers: { registerRoutes(): Hono }[]) {
+    for (const router of routers) this.hono.route('/', router.registerRoutes())
   }
 
   registerMiddlewares() {
+    this.registerRateLimiter()
+    this.hono.use('*', this.createSupabaseClient())
+    this.hono.use('*', this.createInngestAmqp())
+  }
+
+  private registerRateLimiter() {
     this.hono.use('*', async (context, next) => {
       context.set('rateLimiter', this.rateLimiterMiddleware)
       await next()
@@ -289,73 +340,111 @@ export class HonoApp {
       '*',
       this.rateLimiterMiddleware.limitByIp.bind(this.rateLimiterMiddleware),
     )
-    this.hono.use('*', this.createSupabaseClient())
-    this.hono.use('*', this.createInngestAmqp())
   }
 
   registerInngestRoute() {
-    this.hono.on(['GET', 'PUT', 'POST'], '/inngest', (context) => {
-      const database = DrizzleClient.getInstance()
-      const profileFunctions = new ProfileFunctions(inngest)
-      const analyticsFunctions = new AnalyticsFunctions(inngest)
-      const spaceFunctions = new SpaceFunctions(inngest)
-      const shopFunctions = new ShopFunctions(inngest)
-      const rankingFunctions = new RankingFunctions(inngest)
-      const storageFunctions = new StorageFunctions(inngest)
-      const notificationFunctions = new NotificationFunctions(inngest)
-      const challengingFunctions = new ChallengingFunctions(inngest)
-      const manualFunctions = new ManualFunctions(inngest)
-      const lessonFunctions = new LessonFunctions(inngest)
+    this.hono.on(['GET', 'PUT', 'POST'], '/inngest', (context) =>
+      this.handleInngest(context),
+    )
+  }
 
-      return serveInngest({
-        client: inngest,
-        functions: [
-          ...profileFunctions.getFunctions(database),
-          ...analyticsFunctions.getFunctions(),
-          ...spaceFunctions.getFunctions(database),
-          ...shopFunctions.getFunctions(database),
-          ...rankingFunctions.getFunctions(database),
-          ...storageFunctions.getFunctions(database),
-          ...notificationFunctions.getFunctions(),
-          ...challengingFunctions.getFunctions(database),
-          ...manualFunctions.getFunctions(),
-          ...lessonFunctions.getFunctions(database),
-        ],
-      })(context as Context<any, any, Record<string, never>>)
-    })
+  private handleInngest(context: Context) {
+    const functions = this.createInngestFunctions(DrizzleClient.getInstance())
+    return serveInngest({ client: inngest, functions })(
+      context as Context<any, any, Record<string, never>>,
+    )
+  }
+
+  private createInngestFunctions(database: ReturnType<typeof DrizzleClient.getInstance>) {
+    return [
+      ...this.createAccountFunctions(database),
+      ...this.createSpaceFunctions(database),
+      ...this.createContentFunctions(database),
+    ]
+  }
+
+  private createAccountFunctions(database: ReturnType<typeof DrizzleClient.getInstance>) {
+    return [
+      ...new ProfileFunctions(inngest).getFunctions(database),
+      ...new AnalyticsFunctions(inngest).getFunctions(),
+    ]
+  }
+
+  private createSpaceFunctions(database: ReturnType<typeof DrizzleClient.getInstance>) {
+    return [
+      ...new SpaceFunctions(inngest).getFunctions(database),
+      ...new ShopFunctions(inngest).getFunctions(database),
+      ...new RankingFunctions(inngest).getFunctions(database),
+    ]
+  }
+
+  private createContentFunctions(database: ReturnType<typeof DrizzleClient.getInstance>) {
+    return [
+      ...this.createStorageFunctions(database),
+      ...this.createLessonFunctions(database),
+    ]
+  }
+
+  private createStorageFunctions(database: ReturnType<typeof DrizzleClient.getInstance>) {
+    return [
+      ...new StorageFunctions(inngest).getFunctions(database),
+      ...new NotificationFunctions(inngest).getFunctions(),
+      ...new ChallengingFunctions(inngest).getFunctions(database),
+    ]
+  }
+
+  private createLessonFunctions(database: ReturnType<typeof DrizzleClient.getInstance>) {
+    return [
+      ...new ManualFunctions(inngest).getFunctions(),
+      ...new LessonFunctions(inngest).getFunctions(database),
+    ]
   }
 
   private createSupabaseClient() {
-    return async (context: Context, next: Next) => {
-      const accessToken = context.req.header('Authorization')?.split(' ')[1]
-      const isMcpRoute = context.req.path.startsWith('/mcp')
-      const supabase = accessToken
-        ? createClient(ENV.supabaseUrl, ENV.supabaseKey, {
-            global: {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            },
-          })
-        : createClient(ENV.supabaseUrl, ENV.supabaseKey)
-      context.set('supabase', supabase)
-      context.set('databaseAccess', { kind: 'public' })
-      if (accessToken && !isMcpRoute) {
-        const { data, error } = await supabase.auth.getUser(accessToken)
-        if (!error && data.user) {
-          context.set('account', {
-            id: data.user.id,
-            email: data.user.email ?? '',
-            name: data.user.user_metadata.name ?? '',
-            isAuthenticated: true,
-          })
-          context.set('databaseAccess', {
-            kind: 'user',
-            accountId: Id.create(data.user.id),
-          })
-        }
-      }
-      await next()
+    return (context: Context, next: Next) => this.configureSupabase(context, next)
+  }
+
+  private async configureSupabase(context: Context, next: Next) {
+    const accessToken = context.req.header('Authorization')?.split(' ')[1]
+    const supabase = this.createRequestSupabase(accessToken)
+    this.setSupabaseContext(context, supabase)
+    await this.authenticateRequest(context, supabase, accessToken)
+    await next()
+  }
+
+  private setSupabaseContext(context: Context, supabase: SupabaseClient) {
+    context.set('supabase', supabase)
+    context.set('databaseAccess', { kind: 'public' })
+  }
+
+  private createRequestSupabase(accessToken?: string) {
+    if (!accessToken) return createClient(ENV.supabaseUrl, ENV.supabaseKey)
+    return createClient(ENV.supabaseUrl, ENV.supabaseKey, {
+      global: { headers: { Authorization: `Bearer ${accessToken}` } },
+    })
+  }
+
+  private async authenticateRequest(
+    context: Context,
+    supabase: SupabaseClient,
+    accessToken?: string,
+  ) {
+    if (!accessToken || context.req.path.startsWith('/mcp')) return
+    const { data, error } = await supabase.auth.getUser(accessToken)
+    if (!error && data.user) this.setAuthenticatedAccount(context, data.user)
+  }
+
+  private setAuthenticatedAccount(context: Context, user: User) {
+    context.set('account', this.accountFromUser(user))
+    context.set('databaseAccess', { kind: 'user', accountId: Id.create(user.id) })
+  }
+
+  private accountFromUser(user: User): AccountDto {
+    return {
+      id: user.id,
+      email: user.email ?? '',
+      name: user.user_metadata.name ?? '',
+      isAuthenticated: true,
     }
   }
 
@@ -367,74 +456,51 @@ export class HonoApp {
     }
   }
 
-  async startNodeServer({ serve, fetch, port, mode, baseUrl }: StartNodeServerParams) {
-    for (let portOffset = 0; portOffset < MAX_PORT_ATTEMPTS; portOffset++) {
-      const nextPort = port + portOffset
-      const result = await this.listenOnPort({
-        serve,
-        fetch,
-        port: nextPort,
-        baseUrl,
-      }).then(
-        (server) => ({ status: 'fulfilled' as const, value: server }),
-        (reason) => ({ status: 'rejected' as const, reason }),
-      )
+  async startNodeServer(params: StartNodeServerParams) {
+    return this.tryPort(params, 0)
+  }
 
-      if (result.status === 'fulfilled') return result.value
-      if (!this.isAddressInUseError(result.reason) || mode !== 'development')
-        throw result.reason
+  private async tryPort(
+    params: StartNodeServerParams,
+    offset: number,
+  ): Promise<ServerType> {
+    this.assertPortAttempts(offset)
+    return this.listenOnPort(params, params.port + offset).catch((error) =>
+      this.retryPort(error, params, offset),
+    )
+  }
 
-      console.warn(`Port ${nextPort} is already in use. Trying ${nextPort + 1}.`)
-    }
+  private retryPort(
+    error: unknown,
+    params: StartNodeServerParams,
+    offset: number,
+  ): Promise<ServerType> {
+    this.assertPortRetry(error, params.mode)
+    this.reportBusyPort(params.port + offset)
+    return this.tryPort(params, offset + 1)
+  }
 
+  private reportBusyPort(port: number) {
+    console.warn(`Port ${port} is already in use. Trying ${port + 1}.`)
+  }
+
+  private listenOnPort(params: StartNodeServerParams, port: number) {
+    return new NodeServerStartup({ ...params, port }).start()
+  }
+
+  private assertPortAttempts(offset: number) {
+    if (offset < MAX_PORT_ATTEMPTS) return
     throw new Error(
       `Não foi possível encontrar uma porta disponível após ${MAX_PORT_ATTEMPTS} tentativas.`,
     )
   }
 
-  private isAddressInUseError(error: unknown): error is NodeJS.ErrnoException {
-    return error instanceof Error && 'code' in error && error.code === 'EADDRINUSE'
+  private assertPortRetry(error: unknown, mode: StartNodeServerParams['mode']) {
+    if (!this.isAddressInUseError(error) || mode !== 'development') throw error
   }
 
-  private listenOnPort({
-    serve,
-    fetch,
-    port,
-    baseUrl,
-  }: Omit<StartNodeServerParams, 'mode'>): Promise<ServerType> {
-    return new Promise((resolve, reject) => {
-      let server: ServerType | null = null
-      let settled = false
-
-      const settle = (callback: () => void) => {
-        if (settled) return
-
-        settled = true
-        server?.off('error', handleStartupError)
-        callback()
-      }
-
-      const handleStartupError = (error: Error) => {
-        settle(() => {
-          server?.close()
-          reject(error)
-        })
-      }
-
-      const handleListening = (() => {
-        settle(() => {
-          console.log(`🏢 Server is running on ${baseUrl}`)
-          resolve(server as ServerType)
-        })
-      }) satisfies ListeningListener
-
-      try {
-        server = serve({ fetch, port }, handleListening)
-        server.once('error', handleStartupError)
-      } catch (error) {
-        reject(error)
-      }
-    })
+  private isAddressInUseError(error: unknown): error is NodeJS.ErrnoException {
+    return error instanceof Error && 'code' in error && error.code === 'EADDRINUSE'
   }
 }
 
@@ -451,4 +517,60 @@ type StartNodeServerParams = {
   port: number
   mode: 'development' | 'production' | 'test'
   baseUrl: string
+}
+
+class NodeServerStartup {
+  private server: ServerType | null = null
+  private settled = false
+  private resolve!: (server: ServerType) => void
+  private reject!: (error: unknown) => void
+
+  constructor(private readonly options: Omit<StartNodeServerParams, 'mode'>) {}
+
+  start(): Promise<ServerType> {
+    return new Promise((resolve, reject) => {
+      this.resolve = resolve
+      this.reject = reject
+      this.listen()
+    })
+  }
+
+  private listen() {
+    try {
+      this.server = this.createServer()
+      this.server.once('error', this.handleStartupError)
+    } catch (error) {
+      this.reject(error)
+    }
+  }
+
+  private createServer() {
+    const { serve, fetch, port } = this.options
+    return serve({ fetch, port }, this.handleListening)
+  }
+
+  private settle(callback: () => void) {
+    if (this.settled) return
+    this.settled = true
+    this.server?.off('error', this.handleStartupError)
+    callback()
+  }
+
+  private readonly handleStartupError = (error: Error) => {
+    this.settle(() => this.rejectStartup(error))
+  }
+
+  private rejectStartup(error: Error) {
+    this.server?.close()
+    this.reject(error)
+  }
+
+  private readonly handleListening: NonNullable<ListeningListener> = () => {
+    this.settle(() => this.resolveListening())
+  }
+
+  private resolveListening() {
+    console.log(`🏢 Server is running on ${this.options.baseUrl}`)
+    this.resolve(this.server as ServerType)
+  }
 }

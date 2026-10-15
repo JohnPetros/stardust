@@ -1,3 +1,5 @@
+import type { Database } from '@stardust/core/global/interfaces'
+import { DrizzleUnitOfWork } from '@/database/drizzle/DrizzleUnitOfWork'
 import type { Controller } from '@stardust/core/global/interfaces'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
@@ -24,62 +26,49 @@ type Schema = {
 }
 
 export class RewardUserForStarCompletionController implements Controller<Schema> {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly database: Database = new DrizzleUnitOfWork(),
+  ) {}
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { userId } = http.getRouteParams()
-    const { starId, nextStarId, questionsCount, incorrectAnswersCount } =
-      await http.getBody()
-
-    const { newCoins, newXp, accuracyPercentage } = await this.calculateReward(
-      userId,
-      starId,
-      nextStarId ?? null,
-      questionsCount,
-      incorrectAnswersCount,
-    )
-
-    if (nextStarId) {
-      await this.unlockStar(userId, nextStarId)
-    }
-
-    await this.removeRecentlyUnlockedStar(userId, starId)
-
-    const { newLevel, newStreak, newWeekStatus } = await this.rewardUser(
-      userId,
-      newCoins,
-      newXp,
-    )
-
-    return http.send({
-      newCoins,
-      newXp,
-      newLevel,
-      newStreak,
-      newWeekStatus,
-      accuracyPercentage,
-    })
+    const body = await http.getBody()
+    return this.database.run(async () => http.send(await this.complete(userId, body)))
   }
 
-  private async calculateReward(
-    userId: string,
-    starId: string,
-    nextStarId: string | null,
-    questionsCount: number,
-    incorrectAnswersCount: number,
-  ) {
+  private async complete(userId: string, body: Schema['body']) {
+    const reward = await this.calculateReward(userId, body)
+    await this.unlockNextStar(userId, body.nextStarId)
+    await this.removeRecentlyUnlockedStar(userId, body.starId)
+    const progress = await this.rewardUser(userId, reward.newCoins, reward.newXp)
+    return { ...reward, ...progress }
+  }
+
+  private calculateReward(userId: string, body: Schema['body']) {
     const useCase = new CalculateRewardForStarCompletionUseCase(this.usersRepository)
-    return await useCase.execute({
+    return useCase.execute(this.rewardInput(userId, body))
+  }
+
+  private rewardInput(userId: string, body: Schema['body']) {
+    return {
       userId,
-      starId,
-      nextStarId,
-      questionsCount,
-      incorrectAnswersCount,
-    })
+      ...this.answerInput(body),
+      nextStarId: body.nextStarId ?? null,
+    }
+  }
+
+  private answerInput(body: Schema['body']) {
+    const { starId, questionsCount, incorrectAnswersCount } = body
+    return { starId, questionsCount, incorrectAnswersCount }
+  }
+
+  private async unlockNextStar(userId: string, starId?: string) {
+    if (starId) await this.unlockStar(userId, starId)
   }
 
   private async unlockStar(userId: string, starId: string) {
-    const useCase = new UnlockStarUseCase(this.usersRepository, new InngestBroker())
+    const useCase = this.createUnlockStarUseCase()
     await useCase.execute({ userId, starId })
   }
 
@@ -89,7 +78,15 @@ export class RewardUserForStarCompletionController implements Controller<Schema>
   }
 
   private async rewardUser(userId: string, newCoins: number, newXp: number) {
-    const useCase = new RewardUserUseCase(this.usersRepository, new InngestBroker())
+    const useCase = this.createRewardUserUseCase()
     return await useCase.execute({ userId, newCoins, newXp })
+  }
+
+  private createUnlockStarUseCase() {
+    return new UnlockStarUseCase(this.database, this.usersRepository, new InngestBroker())
+  }
+
+  private createRewardUserUseCase() {
+    return new RewardUserUseCase(this.database, this.usersRepository, new InngestBroker())
   }
 }

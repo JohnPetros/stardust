@@ -1,3 +1,5 @@
+import type { Database } from '@stardust/core/global/interfaces'
+import { DrizzleUnitOfWork } from '@/database/drizzle/DrizzleUnitOfWork'
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 import type {
   ChallengeSourcesRepository,
@@ -15,16 +17,22 @@ export class PostChallengeController implements Controller<Schema> {
     private readonly repository: ChallengesRepository,
     private readonly challengeSourcesRepository: ChallengeSourcesRepository,
     private readonly broker: Broker,
+    private readonly database: Database = new DrizzleUnitOfWork(),
   ) {}
 
   async handle(http: Http<Schema>) {
     const challengeDto = await http.getBody()
-    const useCase = new PostChallengeUseCase(
+    const useCase = this.createPostChallengeUseCase()
+    const response = await useCase.execute({ challengeDto, challengeSourceId: null })
+    return http.send(response)
+  }
+
+  private createPostChallengeUseCase() {
+    return new PostChallengeUseCase(
+      this.database,
       this.repository,
       this.challengeSourcesRepository,
       this.broker,
     )
-    const response = await useCase.execute({ challengeDto, challengeSourceId: null })
-    return http.send(response)
   }
 }

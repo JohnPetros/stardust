@@ -24,3 +24,23 @@ Content-Type: application/json
 Authorization: Bearer {{JWT}}
 
 
+### Send a feedback conversation message
+POST {{URL}}/{{FEEDBACK_REPORT_ID}}/messages
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "messageId": "e3abb326-d7e8-430f-9841-8b0d8b95f736",
+  "content": "Mensagem de acompanhamento do feedback",
+  "attachments": []
+}
+
+### Change feedback report status (God Account)
+PATCH {{URL}}/{{FEEDBACK_REPORT_ID}}/status
+Content-Type: application/json
+Authorization: Bearer {{JWT}}
+
+{
+  "status": "closed",
+  "expectedStatus": "open"
+}

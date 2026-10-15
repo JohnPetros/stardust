@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Http } from '@stardust/core/global/interfaces'
@@ -10,6 +11,7 @@ import { AcquireRocketUseCase } from '@stardust/core/profile/use-cases'
 import { AcquireRocketController } from '../AcquireRocketController'
 
 describe('Acquire Rocket Controller', () => {
+  const database = mock<Database>()
   let http: Mock<
     Http<{
       body: {
@@ -24,10 +26,12 @@ describe('Acquire Rocket Controller', () => {
   let controller: AcquireRocketController
 
   beforeEach(() => {
+    database.run.mockClear()
+    database.run.mockImplementation(async (operation) => operation())
     jest.restoreAllMocks()
     http = mock()
     repository = mock()
-    controller = new AcquireRocketController(repository)
+    controller = new AcquireRocketController(repository, database)
   })
 
   it('should execute acquire rocket use case with account and body data then send response', async () => {

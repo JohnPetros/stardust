@@ -1,3 +1,4 @@
+import type { Database } from '@stardust/core/global/interfaces'
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Http } from '@stardust/core/global/interfaces'
@@ -10,6 +11,7 @@ import { AcquireAvatarUseCase } from '@stardust/core/profile/use-cases'
 import { AcquireAvatarController } from '../AcquireAvatarController'
 
 describe('Acquire Avatar Controller', () => {
+  const database = mock<Database>()
   let http: Mock<
     Http<{
       body: {
@@ -24,10 +26,12 @@ describe('Acquire Avatar Controller', () => {
   let controller: AcquireAvatarController
 
   beforeEach(() => {
+    database.run.mockClear()
+    database.run.mockImplementation(async (operation) => operation())
     jest.restoreAllMocks()
     http = mock()
     repository = mock()
-    controller = new AcquireAvatarController(repository)
+    controller = new AcquireAvatarController(repository, database)
   })
 
   it('should execute acquire avatar use case with body and account id and return http.send response', async () => {

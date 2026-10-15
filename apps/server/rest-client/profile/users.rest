@@ -128,7 +128,6 @@ Content-Type: application/json
 {
   "starId": "506f5514-6b54-40ae-8833-392ecbe5e422",
   "questionsCount": 10,
-  "secondsCount": 100,
   "incorrectAnswersCount": 5
 }
 
@@ -139,10 +138,7 @@ Content-Type: application/json
 
 {
   "starId": "bda4c82c-9466-4619-bdd6-89f719c54c27",
-  "challengeId": "342d2f23-ab04-48fe-989d-a0f46ad17390",
-  "maximumIncorrectAnswersCount": 10,
-  "incorrectAnswersCount": 2,
-  "secondsCount": 100
+  "challengeId": "342d2f23-ab04-48fe-989d-a0f46ad17390"
 }
 
 ### Reward user for challenge completion
@@ -151,9 +147,7 @@ Authorization: Bearer {{JWT}}
 Content-Type: application/json
 
 {
-  "challengeId": "3b8894e7-2616-4652-9165-45f9a3dad2f0",
-  "maximumIncorrectAnswersCount": 10,
-  "incorrectAnswersCount": 2
+  "challengeId": "3b8894e7-2616-4652-9165-45f9a3dad2f0"
 }
 
 ### Upvote comment
