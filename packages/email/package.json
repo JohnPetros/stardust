@@ -16,10 +16,10 @@
   "description": "",
   "dependencies": {
     "@react-email/components": "^1.0.12",
-    "@react-email/render": "^2.1.0"
+    "@react-email/render": "^2.1.1"
   },
   "devDependencies": {
-    "react-email": "^6.9.1"
+    "react-email": "^6.11.3"
   },
   "exports": {
     "./templates": "./templates/index.tsx"
