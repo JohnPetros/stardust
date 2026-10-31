@@ -143,6 +143,7 @@ tools. Um teste fora desses locais aparece em `forbiddenTestPaths` e falha o CI.
 | `update`           | Atualiza uma dependência específica com npm-check-updates, usando `npm_config_dep_name`. |
 | `test:unit`        | Executa os testes unitários do projeto Server.                                           |
 | `test:coverage`    | Executa os testes unitários do Server com relatório JSON de cobertura.                   |
+| `test:coverage:merge` | Consolida a cobertura unitária e dos quatro shards de integração do Server antes do ratchet. |
 | `test:integration` | Executa os testes de integração do Server.                                               |
 
 Exemplos de comandos de banco:
@@ -427,6 +428,13 @@ Os checks do PR são a composição dos checks normais. A cobertura possui um
 quality ratchet por workspace para Core, Server, Studio e Web; os thresholds
 versionados em `coverage-baseline.json` nunca podem diminuir sem uma alteração
 revisada desse arquivo.
+
+No Server, o ratchet considera a cobertura conjunta dos testes unitários e dos
+quatro shards de integração, incluindo os adapters Drizzle exercitados pelas
+rotas reais. Prepare o stack local, execute `test:integration:ci` e
+`test:coverage` no workspace `@stardust/server`, depois `test:coverage:merge` e
+`npm run check:coverage -- @stardust/server`. A consolidação exige os cinco
+relatórios completos; um relatório unitário isolado não aprova esse ratchet.
 
 `check:dead-code` não faz parte dos sensores oficiais. Playwright MCP pode
 inspecionar fluxos reais e o Hermes pode executar validações E2E de release, mas
