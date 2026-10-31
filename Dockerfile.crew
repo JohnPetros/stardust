@@ -1,0 +1,27 @@
+FROM node:24-alpine AS build
+WORKDIR /app
+ENV HUSKY=0
+COPY package.json package-lock.json ./
+COPY apps/crew/package.json apps/crew/package.json
+COPY apps/server/package.json apps/server/package.json
+COPY apps/web/package.json apps/web/package.json
+COPY apps/studio/package.json apps/studio/package.json
+COPY packages/core/package.json packages/core/package.json
+COPY packages/email/package.json packages/email/package.json
+COPY packages/lsp/package.json packages/lsp/package.json
+COPY packages/validation/package.json packages/validation/package.json
+RUN npm ci --ignore-scripts
+COPY apps/crew apps/crew
+RUN npm run build:crew
+
+FROM node:24-alpine AS runner
+ENV NODE_ENV=production
+ENV CREW_ENV=prod
+WORKDIR /app
+COPY --from=build --chown=node:node /app/apps/crew/.mastra/output ./
+COPY --from=build --chown=node:node /app/apps/crew/src/database/migrations ./migrations
+USER node
+EXPOSE 4111
+HEALTHCHECK --interval=30s --timeout=8s --start-period=30s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:4111/health', { signal: AbortSignal.timeout(7000) }).then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+CMD ["node", "index.mjs"]
