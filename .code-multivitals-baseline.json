@@ -98362,7 +98362,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/app/root.tsx",
+      "filePath": "apps/backoffice/src/app/root.tsx",
       "functions": [
         {
           "name": "Layout",
@@ -98464,7 +98464,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/app/layouts/AppLayout.tsx",
+      "filePath": "apps/backoffice/src/app/layouts/AppLayout.tsx",
       "functions": [
         {
           "name": "clientLoader",
@@ -98517,7 +98517,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/app/middlewares/AuthMiddleware.ts",
+      "filePath": "apps/backoffice/src/app/middlewares/AuthMiddleware.ts",
       "functions": [
         {
           "name": "AuthMiddleware",
@@ -98570,7 +98570,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/app/middlewares/RestMiddleware.ts",
+      "filePath": "apps/backoffice/src/app/middlewares/RestMiddleware.ts",
       "functions": [
         {
           "name": "RestMiddleware",
@@ -98623,7 +98623,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/app/routes/AchievementsRoute.tsx",
+      "filePath": "apps/backoffice/src/app/routes/AchievementsRoute.tsx",
       "functions": [
         {
           "name": "clientLoader",
@@ -98676,7 +98676,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/app/routes/DashboardRoute.tsx",
+      "filePath": "apps/backoffice/src/app/routes/DashboardRoute.tsx",
       "functions": [
         {
           "name": "clientLoader",
@@ -98729,7 +98729,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/app/routes/GuidePageRoute.tsx",
+      "filePath": "apps/backoffice/src/app/routes/GuidePageRoute.tsx",
       "functions": [
         {
           "name": "clientLoader",
@@ -98782,7 +98782,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/app/routes/GuidesRoute.tsx",
+      "filePath": "apps/backoffice/src/app/routes/GuidesRoute.tsx",
       "functions": [
         {
           "name": "GuidesRoute",
@@ -98835,7 +98835,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/app/routes/LessonQuestionsRoute.tsx",
+      "filePath": "apps/backoffice/src/app/routes/LessonQuestionsRoute.tsx",
       "functions": [
         {
           "name": "clientLoader",
@@ -98888,7 +98888,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/app/routes/LessonStoryRoute.tsx",
+      "filePath": "apps/backoffice/src/app/routes/LessonStoryRoute.tsx",
       "functions": [
         {
           "name": "clientLoader",
@@ -98941,7 +98941,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/provision/storage/S3SignedFileStorageProvider.ts",
+      "filePath": "apps/backoffice/src/provision/storage/S3SignedFileStorageProvider.ts",
       "functions": [
         {
           "name": "S3SignedFileStorageProvider",
@@ -99035,7 +99035,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/rest/axios/AxiosRestClient.ts",
+      "filePath": "apps/backoffice/src/rest/axios/AxiosRestClient.ts",
       "functions": [
         {
           "name": "AxiosRestClient",
@@ -99416,7 +99416,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/rest/services/AuthService.ts",
+      "filePath": "apps/backoffice/src/rest/services/AuthService.ts",
       "functions": [
         {
           "name": "AuthService",
@@ -99469,7 +99469,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/rest/services/ChallengingService.ts",
+      "filePath": "apps/backoffice/src/rest/services/ChallengingService.ts",
       "functions": [
         {
           "name": "ChallengingService",
@@ -99768,7 +99768,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/rest/services/LessonService.ts",
+      "filePath": "apps/backoffice/src/rest/services/LessonService.ts",
       "functions": [
         {
           "name": "LessonService",
@@ -99821,7 +99821,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/rest/services/ManualService.ts",
+      "filePath": "apps/backoffice/src/rest/services/ManualService.ts",
       "functions": [
         {
           "name": "ManualService",
@@ -99874,7 +99874,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/rest/services/ProfileService.ts",
+      "filePath": "apps/backoffice/src/rest/services/ProfileService.ts",
       "functions": [
         {
           "name": "ProfileService",
@@ -100017,7 +100017,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/rest/services/ReportingService.ts",
+      "filePath": "apps/backoffice/src/rest/services/ReportingService.ts",
       "functions": [
         {
           "name": "ReportingService",
@@ -100316,7 +100316,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/rest/services/ShopService.ts",
+      "filePath": "apps/backoffice/src/rest/services/ShopService.ts",
       "functions": [
         {
           "name": "ShopService",
@@ -100451,7 +100451,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/rest/services/SpaceService.ts",
+      "filePath": "apps/backoffice/src/rest/services/SpaceService.ts",
       "functions": [
         {
           "name": "SpaceService",
@@ -100504,7 +100504,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/rest/services/StorageService.ts",
+      "filePath": "apps/backoffice/src/rest/services/StorageService.ts",
       "functions": [
         {
           "name": "StorageService",
@@ -100598,7 +100598,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/rest/axios/utils/buildUrl.ts",
+      "filePath": "apps/backoffice/src/rest/axios/utils/buildUrl.ts",
       "functions": [
         {
           "name": "buildUrl",
@@ -100706,7 +100706,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/rest/axios/utils/handleError.ts",
+      "filePath": "apps/backoffice/src/rest/axios/utils/handleError.ts",
       "functions": [
         {
           "name": "handleError",
@@ -100767,7 +100767,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/rest/axios/utils/normalizeHeaders.ts",
+      "filePath": "apps/backoffice/src/rest/axios/utils/normalizeHeaders.ts",
       "functions": [
         {
           "name": "normalizeHeaders",
@@ -100828,7 +100828,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx",
+      "filePath": "apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx",
       "functions": [
         {
           "name": "ChallengeSourcesPageView",
@@ -100971,7 +100971,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/challenging/ChallengeSources/useChallengeSourcesPage.ts",
+      "filePath": "apps/backoffice/src/ui/challenging/ChallengeSources/useChallengeSourcesPage.ts",
       "functions": [
         {
           "name": "useChallengeSourcesPage",
@@ -101188,7 +101188,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/challenging/Challenges/ChallengesPageView.tsx",
+      "filePath": "apps/backoffice/src/ui/challenging/Challenges/ChallengesPageView.tsx",
       "functions": [
         {
           "name": "ChallengesPageView",
@@ -101290,7 +101290,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/challenging/Challenges/useChallengesPage.ts",
+      "filePath": "apps/backoffice/src/ui/challenging/Challenges/useChallengesPage.ts",
       "functions": [
         {
           "name": "useChallengesPage",
@@ -101466,7 +101466,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/hooks/useClipboard.ts",
+      "filePath": "apps/backoffice/src/ui/global/hooks/useClipboard.ts",
       "functions": [
         {
           "name": "useClipboard",
@@ -101519,7 +101519,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/hooks/useDebounce.ts",
+      "filePath": "apps/backoffice/src/ui/global/hooks/useDebounce.ts",
       "functions": [
         {
           "name": "useDebounce",
@@ -101572,7 +101572,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/hooks/useFetch.ts",
+      "filePath": "apps/backoffice/src/ui/global/hooks/useFetch.ts",
       "functions": [
         {
           "name": "useFetch",
@@ -101666,7 +101666,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/hooks/useNavigationProvider.ts",
+      "filePath": "apps/backoffice/src/ui/global/hooks/useNavigationProvider.ts",
       "functions": [
         {
           "name": "useNavigationProvider",
@@ -101719,7 +101719,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/hooks/usePaginatedFetch.ts",
+      "filePath": "apps/backoffice/src/ui/global/hooks/usePaginatedFetch.ts",
       "functions": [
         {
           "name": "usePaginatedFetch",
@@ -101813,7 +101813,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/alert-dialog.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/alert-dialog.tsx",
       "functions": [
         {
           "name": "useAlertDialog",
@@ -101907,7 +101907,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/alert-message-dialog.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/alert-message-dialog.tsx",
       "functions": [
         {
           "name": "AlertMessageComponent",
@@ -101960,7 +101960,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/badge.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/badge.tsx",
       "functions": [
         {
           "name": "Badge",
@@ -102013,7 +102013,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/button.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/button.tsx",
       "functions": [
         {
           "name": "Button",
@@ -102066,7 +102066,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/calendar.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/calendar.tsx",
       "functions": [
         {
           "name": "Calendar",
@@ -102209,7 +102209,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/chart.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/chart.tsx",
       "functions": [
         {
           "name": "ChartContainer",
@@ -102570,7 +102570,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/checkbox.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/checkbox.tsx",
       "functions": [
         {
           "name": "Checkbox",
@@ -102623,7 +102623,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/copy-button.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/copy-button.tsx",
       "functions": [
         {
           "name": "CopyButton",
@@ -102676,7 +102676,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/date-range-picker.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/date-range-picker.tsx",
       "functions": [
         {
           "name": "DateRangePicker",
@@ -102729,7 +102729,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/dialog.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/dialog.tsx",
       "functions": [
         {
           "name": "useDialog",
@@ -102864,7 +102864,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/dropdown-menu.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/dropdown-menu.tsx",
       "functions": [
         {
           "name": "DropdownMenuContent",
@@ -103081,7 +103081,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/file-upload.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/file-upload.tsx",
       "functions": [
         {
           "name": "FileUpload",
@@ -103134,7 +103134,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/form.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/form.tsx",
       "functions": [
         {
           "name": "useFormField",
@@ -103310,7 +103310,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/image-file-upload.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/image-file-upload.tsx",
       "functions": [
         {
           "name": "ImageFileUpload",
@@ -103363,7 +103363,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/input-with-error.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/input-with-error.tsx",
       "functions": [
         {
           "name": "InputWithError",
@@ -103416,7 +103416,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/input.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/input.tsx",
       "functions": [
         {
           "name": "Input",
@@ -103469,7 +103469,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/radio-group.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/radio-group.tsx",
       "functions": [
         {
           "name": "RadioGroupItem",
@@ -103522,7 +103522,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/select.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/select.tsx",
       "functions": [
         {
           "name": "SelectTrigger",
@@ -103657,7 +103657,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/sonner.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/sonner.tsx",
       "functions": [
         {
           "name": "Toaster",
@@ -103710,7 +103710,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/switch.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/switch.tsx",
       "functions": [
         {
           "name": "Switch",
@@ -103763,7 +103763,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/table.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/table.tsx",
       "functions": [
         {
           "name": "Table",
@@ -103816,7 +103816,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/textarea.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/textarea.tsx",
       "functions": [
         {
           "name": "Textarea",
@@ -103869,7 +103869,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/toggle-group.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/toggle-group.tsx",
       "functions": [
         {
           "name": "ToggleGroup",
@@ -103963,7 +103963,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/tooltip.tsx",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/tooltip.tsx",
       "functions": [
         {
           "name": "TooltipContent",
@@ -104016,7 +104016,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/components/use-dialog-ref.ts",
+      "filePath": "apps/backoffice/src/ui/shadcn/components/use-dialog-ref.ts",
       "functions": [
         {
           "name": "useDialogRef",
@@ -104069,7 +104069,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shadcn/hooks/use-file-upload.ts",
+      "filePath": "apps/backoffice/src/ui/shadcn/hooks/use-file-upload.ts",
       "functions": [
         {
           "name": "useFileUpload",
@@ -104581,7 +104581,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/ChallengeSourceFormView.tsx",
+      "filePath": "apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/ChallengeSourceFormView.tsx",
       "functions": [
         {
           "name": "ChallengeSourceFormView",
@@ -104675,7 +104675,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/index.tsx",
+      "filePath": "apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/index.tsx",
       "functions": [
         {
           "name": "ChallengeSourceForm",
@@ -104728,7 +104728,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/useChallengeSourceForm.ts",
+      "filePath": "apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/useChallengeSourceForm.ts",
       "functions": [
         {
           "name": "useChallengeSourceForm",
@@ -104945,7 +104945,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/contexts/RestContext/useRestContextProvider.ts",
+      "filePath": "apps/backoffice/src/ui/global/contexts/RestContext/useRestContextProvider.ts",
       "functions": [
         {
           "name": "useRestContextProvider",
@@ -105039,7 +105039,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/contexts/TextEditorContext/useTextEditorContextProvider.ts",
+      "filePath": "apps/backoffice/src/ui/global/contexts/TextEditorContext/useTextEditorContextProvider.ts",
       "functions": [
         {
           "name": "useTextEditorContextProvider",
@@ -105358,7 +105358,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/stores/ActionButtonStore/index.ts",
+      "filePath": "apps/backoffice/src/ui/global/stores/ActionButtonStore/index.ts",
       "functions": [
         {
           "name": "useActionButtonStore",
@@ -105411,7 +105411,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/contexts/QuizContext/useQuizContextProvider.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/contexts/QuizContext/useQuizContextProvider.ts",
       "functions": [
         {
           "name": "useQuizContextProvider",
@@ -105595,7 +105595,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/manual/pages/GuidePage/GuidePageView.tsx",
+      "filePath": "apps/backoffice/src/ui/manual/pages/GuidePage/GuidePageView.tsx",
       "functions": [
         {
           "name": "GuidePageView",
@@ -105648,7 +105648,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/manual/pages/GuidePage/index.tsx",
+      "filePath": "apps/backoffice/src/ui/manual/pages/GuidePage/index.tsx",
       "functions": [
         {
           "name": "GuidePage",
@@ -105701,7 +105701,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/manual/pages/GuidePage/useGuidePage.ts",
+      "filePath": "apps/backoffice/src/ui/manual/pages/GuidePage/useGuidePage.ts",
       "functions": [
         {
           "name": "useGuidePage",
@@ -105836,7 +105836,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/auth/widgets/pages/SignIn/SignInPageView.tsx",
+      "filePath": "apps/backoffice/src/ui/auth/widgets/pages/SignIn/SignInPageView.tsx",
       "functions": [
         {
           "name": "SignInPageView",
@@ -105889,7 +105889,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/ActionButton/ActionButtonView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/ActionButton/ActionButtonView.tsx",
       "functions": [
         {
           "name": "ActionButtonView",
@@ -105942,7 +105942,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/ActionButton/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/ActionButton/index.tsx",
       "functions": [
         {
           "name": "ActionButton",
@@ -105995,7 +105995,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/ActionButton/useActionButton.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/ActionButton/useActionButton.ts",
       "functions": [
         {
           "name": "useActionButton",
@@ -106089,7 +106089,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/ChallengesTable/ChallengesTableView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/ChallengesTable/ChallengesTableView.tsx",
       "functions": [
         {
           "name": "ChallengesTableView",
@@ -106183,7 +106183,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/CodeEditor/CodeEditorView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/CodeEditor/CodeEditorView.tsx",
       "functions": [
         {
           "name": "CodeEditorView",
@@ -106236,7 +106236,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/CodeEditor/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/CodeEditor/index.tsx",
       "functions": [
         {
           "name": "Widget",
@@ -106289,7 +106289,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/CodeEditor/useCodeEditor.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/CodeEditor/useCodeEditor.ts",
       "functions": [
         {
           "name": "useCodeEditor",
@@ -106670,7 +106670,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/CodeSnippet/CodeSnippetView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/CodeSnippet/CodeSnippetView.tsx",
       "functions": [
         {
           "name": "CodeSnippetView",
@@ -106723,7 +106723,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/CodeSnippet/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/CodeSnippet/index.tsx",
       "functions": [
         {
           "name": "CodeSnippet",
@@ -106776,7 +106776,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/CodeSnippet/useCodeSnippet.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/CodeSnippet/useCodeSnippet.ts",
       "functions": [
         {
           "name": "useCodeSnippet",
@@ -106870,7 +106870,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/ConfirmDialog/ConfirmDialogView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/ConfirmDialog/ConfirmDialogView.tsx",
       "functions": [
         {
           "name": "ConfirmDialogView",
@@ -106923,7 +106923,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Console/ConsoleView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Console/ConsoleView.tsx",
       "functions": [
         {
           "name": "ConsoleView",
@@ -106976,7 +106976,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Console/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Console/index.tsx",
       "functions": [
         {
           "name": "ConsoleWidget",
@@ -107029,7 +107029,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Console/useConsole.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Console/useConsole.ts",
       "functions": [
         {
           "name": "useConsole",
@@ -107082,7 +107082,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/ContentEditor/ContentEditorView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/ContentEditor/ContentEditorView.tsx",
       "functions": [
         {
           "name": "ContentEditorView",
@@ -107135,7 +107135,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/ExpandableInput/ExpandableInputView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/ExpandableInput/ExpandableInputView.tsx",
       "functions": [
         {
           "name": "ExpandableInputView",
@@ -107188,7 +107188,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/ExpandableInput/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/ExpandableInput/index.tsx",
       "functions": [
         {
           "name": "ExpandableInput",
@@ -107241,7 +107241,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/ExpandableInput/useExpandableInput.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/ExpandableInput/useExpandableInput.ts",
       "functions": [
         {
           "name": "useExpandableInput",
@@ -107294,7 +107294,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/ImageInput/ImageInputView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/ImageInput/ImageInputView.tsx",
       "functions": [
         {
           "name": "ImageInputView",
@@ -107347,7 +107347,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/ImageInput/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/ImageInput/index.tsx",
       "functions": [
         {
           "name": "ImageInput",
@@ -107400,7 +107400,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/ImageInput/useImageInput.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/ImageInput/useImageInput.ts",
       "functions": [
         {
           "name": "useImageInput",
@@ -107502,7 +107502,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Mdx/formatSpecialCharacters.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Mdx/formatSpecialCharacters.ts",
       "functions": [
         {
           "name": "formatSpecialCharacters",
@@ -107555,7 +107555,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Mdx/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Mdx/index.tsx",
       "functions": [
         {
           "name": "Mdx",
@@ -107608,7 +107608,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Mdx/useMdx.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Mdx/useMdx.ts",
       "functions": [
         {
           "name": "useMdx",
@@ -107866,7 +107866,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Pagination/PaginationView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Pagination/PaginationView.tsx",
       "functions": [
         {
           "name": "PaginationView",
@@ -107919,7 +107919,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Pagination/usePagination.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Pagination/usePagination.ts",
       "functions": [
         {
           "name": "usePagination",
@@ -107972,7 +107972,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/PeriodPicker/PeriodPickerView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/PeriodPicker/PeriodPickerView.tsx",
       "functions": [
         {
           "name": "PeriodPickerView",
@@ -108025,7 +108025,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/PlaygroundCodeEditor/PlaygroundCodeEditorView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/PlaygroundCodeEditor/PlaygroundCodeEditorView.tsx",
       "functions": [
         {
           "name": "PlaygroundCodeEditorView",
@@ -108078,7 +108078,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/PlaygroundCodeEditor/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/PlaygroundCodeEditor/index.tsx",
       "functions": [
         {
           "name": "Widget",
@@ -108131,7 +108131,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/PlaygroundCodeEditor/usePlaygroundCodeEditor.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/PlaygroundCodeEditor/usePlaygroundCodeEditor.ts",
       "functions": [
         {
           "name": "usePlaygroundCodeEditor",
@@ -108307,7 +108307,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Prompt/PromptView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Prompt/PromptView.tsx",
       "functions": [
         {
           "name": "PromptView",
@@ -108360,7 +108360,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Prompt/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Prompt/index.tsx",
       "functions": [
         {
           "name": "PromptComponent",
@@ -108413,7 +108413,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Prompt/usePrompt.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Prompt/usePrompt.ts",
       "functions": [
         {
           "name": "usePrompt",
@@ -108466,7 +108466,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/SortableColumn/SortableColumnView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/SortableColumn/SortableColumnView.tsx",
       "functions": [
         {
           "name": "SortableColumnView",
@@ -108519,7 +108519,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/SortableColumn/useSortableColumn.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/SortableColumn/useSortableColumn.ts",
       "functions": [
         {
           "name": "useSortableColumn",
@@ -108572,7 +108572,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/StorageImage/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/StorageImage/index.tsx",
       "functions": [
         {
           "name": "resolveFolderPath",
@@ -108625,7 +108625,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/TextEditor/TextEditorView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/TextEditor/TextEditorView.tsx",
       "functions": [
         {
           "name": "TextEditorView",
@@ -108678,7 +108678,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/TextEditor/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/TextEditor/index.tsx",
       "functions": [
         {
           "name": "TextEditor",
@@ -108772,7 +108772,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/TextEditor/useTextEditor.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/TextEditor/useTextEditor.ts",
       "functions": [
         {
           "name": "useTextEditor",
@@ -109243,7 +109243,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Toggle/ToggleView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Toggle/ToggleView.tsx",
       "functions": [
         {
           "name": "ToggleView",
@@ -109296,7 +109296,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Toolbar/Button.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Toolbar/Button.tsx",
       "functions": [
         {
           "name": "ButtonComponent",
@@ -109349,7 +109349,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/UsersTable/UsersTableView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/UsersTable/UsersTableView.tsx",
       "functions": [
         {
           "name": "UsersTableView",
@@ -109443,7 +109443,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/components/ExpandableInput/ExpandableInputView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/components/ExpandableInput/ExpandableInputView.tsx",
       "functions": [
         {
           "name": "ExpandableInputView",
@@ -109496,7 +109496,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/components/ExpandableInput/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/components/ExpandableInput/index.tsx",
       "functions": [
         {
           "name": "ExpandableInput",
@@ -109549,7 +109549,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/components/ExpandableInput/useExpandableInput.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/components/ExpandableInput/useExpandableInput.ts",
       "functions": [
         {
           "name": "useExpandableInput",
@@ -109602,7 +109602,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/components/PictureInput/PictureInputView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/components/PictureInput/PictureInputView.tsx",
       "functions": [
         {
           "name": "PictureInputView",
@@ -109655,7 +109655,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/components/PictureInput/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/components/PictureInput/index.tsx",
       "functions": [
         {
           "name": "PictureInput",
@@ -109708,7 +109708,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/components/PictureInput/usePictureInput.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/components/PictureInput/usePictureInput.ts",
       "functions": [
         {
           "name": "usePictureInput",
@@ -109761,7 +109761,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/LessonQuizPageView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/LessonQuizPageView.tsx",
       "functions": [
         {
           "name": "LessonQuizPageView",
@@ -109814,7 +109814,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/useLessonQuizPage.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/useLessonQuizPage.ts",
       "functions": [
         {
           "name": "useLessonQuizPage",
@@ -109908,7 +109908,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx",
       "functions": [
         {
           "name": "LessonStoryPageView",
@@ -109969,7 +109969,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/index.tsx",
       "functions": [
         {
           "name": "LessonStoryPage",
@@ -110022,7 +110022,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/useAudioGenerationPolling.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useAudioGenerationPolling.ts",
       "functions": [
         {
           "name": "useAudioGenerationPolling",
@@ -110157,7 +110157,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts",
       "functions": [
         {
           "name": "toEditorItem",
@@ -110922,7 +110922,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/manual/widgets/pages/GuidesPage/GuidesPageView.tsx",
+      "filePath": "apps/backoffice/src/ui/manual/widgets/pages/GuidesPage/GuidesPageView.tsx",
       "functions": [
         {
           "name": "GuidesPageView",
@@ -110975,7 +110975,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/manual/widgets/pages/GuidesPage/useGuidesPage.ts",
+      "filePath": "apps/backoffice/src/ui/manual/widgets/pages/GuidesPage/useGuidesPage.ts",
       "functions": [
         {
           "name": "useGuidesPage",
@@ -111192,7 +111192,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/profile/widgets/components/AchievementForm/AchievementFormView.tsx",
+      "filePath": "apps/backoffice/src/ui/profile/widgets/components/AchievementForm/AchievementFormView.tsx",
       "functions": [
         {
           "name": "AchievementFormView",
@@ -111245,7 +111245,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/profile/widgets/components/AchievementForm/useAchievementForm.ts",
+      "filePath": "apps/backoffice/src/ui/profile/widgets/components/AchievementForm/useAchievementForm.ts",
       "functions": [
         {
           "name": "useAchievementForm",
@@ -111339,7 +111339,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/profile/widgets/components/AchievementsCard/AchievementsCardView.tsx",
+      "filePath": "apps/backoffice/src/ui/profile/widgets/components/AchievementsCard/AchievementsCardView.tsx",
       "functions": [
         {
           "name": "AchievementsCardView",
@@ -111392,7 +111392,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/profile/widgets/pages/AchievementsPage/AchievementsPageView.tsx",
+      "filePath": "apps/backoffice/src/ui/profile/widgets/pages/AchievementsPage/AchievementsPageView.tsx",
       "functions": [
         {
           "name": "AchievementsPageView",
@@ -111445,7 +111445,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/profile/widgets/pages/AchievementsPage/index.tsx",
+      "filePath": "apps/backoffice/src/ui/profile/widgets/pages/AchievementsPage/index.tsx",
       "functions": [
         {
           "name": "AchievementsPage",
@@ -111498,7 +111498,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/profile/widgets/pages/AchievementsPage/useAchievementsPage.ts",
+      "filePath": "apps/backoffice/src/ui/profile/widgets/pages/AchievementsPage/useAchievementsPage.ts",
       "functions": [
         {
           "name": "useAchievementsPage",
@@ -111715,7 +111715,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/profile/widgets/pages/Users/UsersPageView.tsx",
+      "filePath": "apps/backoffice/src/ui/profile/widgets/pages/Users/UsersPageView.tsx",
       "functions": [
         {
           "name": "UsersPageView",
@@ -111768,7 +111768,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/profile/widgets/pages/Users/useUsersPage.ts",
+      "filePath": "apps/backoffice/src/ui/profile/widgets/pages/Users/useUsersPage.ts",
       "functions": [
         {
           "name": "useUsersPage",
@@ -111985,7 +111985,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsPageView.tsx",
+      "filePath": "apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsPageView.tsx",
       "functions": [
         {
           "name": "FeedbackReportsPageView",
@@ -112038,7 +112038,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/index.tsx",
+      "filePath": "apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/index.tsx",
       "functions": [
         {
           "name": "FeedbackReportsPage",
@@ -112091,7 +112091,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/useFeedbackReportsPage.ts",
+      "filePath": "apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/useFeedbackReportsPage.ts",
       "functions": [
         {
           "name": "useFeedbackReportsPage",
@@ -112275,7 +112275,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/PlanetsPageView.tsx",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetsPageView.tsx",
       "functions": [
         {
           "name": "PlanetsPageView",
@@ -112328,7 +112328,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/index.tsx",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/index.tsx",
       "functions": [
         {
           "name": "PlanetsPage",
@@ -112381,7 +112381,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/usePlanetsPage.ts",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/usePlanetsPage.ts",
       "functions": [
         {
           "name": "usePlanetsPage",
@@ -112516,7 +112516,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/auth/widgets/pages/SignIn/SignInForm/SignInFormView.tsx",
+      "filePath": "apps/backoffice/src/ui/auth/widgets/pages/SignIn/SignInForm/SignInFormView.tsx",
       "functions": [
         {
           "name": "SignInFormView",
@@ -112569,7 +112569,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/auth/widgets/pages/SignIn/SignInForm/useSignInForm.ts",
+      "filePath": "apps/backoffice/src/ui/auth/widgets/pages/SignIn/SignInForm/useSignInForm.ts",
       "functions": [
         {
           "name": "useSignInForm",
@@ -112663,7 +112663,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Animation/LottieAnimation/LottieAnimationView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Animation/LottieAnimation/LottieAnimationView.tsx",
       "functions": [
         {
           "name": "LottieAnimationView",
@@ -112716,7 +112716,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Animation/LottieAnimation/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Animation/LottieAnimation/index.tsx",
       "functions": [
         {
           "name": "Widget",
@@ -112769,7 +112769,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Animation/LottieAnimation/useLottieAnimation.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Animation/LottieAnimation/useLottieAnimation.ts",
       "functions": [
         {
           "name": "useLottieAnimation",
@@ -112863,7 +112863,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/ChallengesTable/ChallengesTableSkeleton/ChallengesTableSkeletonView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/ChallengesTable/ChallengesTableSkeleton/ChallengesTableSkeletonView.tsx",
       "functions": [
         {
           "name": "ChallengesTableSkeletonView",
@@ -112916,7 +112916,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Console/AnimatedPanel/AnimatedPanelView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Console/AnimatedPanel/AnimatedPanelView.tsx",
       "functions": [
         {
           "name": "AnimatedPanelView",
@@ -112969,7 +112969,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Console/AnimatedPanel/useAnimatedPanel.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Console/AnimatedPanel/useAnimatedPanel.ts",
       "functions": [
         {
           "name": "useAnimatedPanel",
@@ -113022,7 +113022,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Mdx/Alert/AlertView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Mdx/Alert/AlertView.tsx",
       "functions": [
         {
           "name": "AlertView",
@@ -113075,7 +113075,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Mdx/Code/CodeView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Mdx/Code/CodeView.tsx",
       "functions": [
         {
           "name": "CodeView",
@@ -113136,7 +113136,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Mdx/Content/ContentView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Mdx/Content/ContentView.tsx",
       "functions": [
         {
           "name": "ContentView",
@@ -113189,7 +113189,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Mdx/Image/ImageView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Mdx/Image/ImageView.tsx",
       "functions": [
         {
           "name": "ImageView",
@@ -113242,7 +113242,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Mdx/Link/LinkView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Mdx/Link/LinkView.tsx",
       "functions": [
         {
           "name": "LinkView",
@@ -113295,7 +113295,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Mdx/Picture/PictureView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Mdx/Picture/PictureView.tsx",
       "functions": [
         {
           "name": "PictureView",
@@ -113348,7 +113348,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Mdx/Quote/QuoteView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Mdx/Quote/QuoteView.tsx",
       "functions": [
         {
           "name": "QuoteView",
@@ -113401,7 +113401,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Mdx/Text/TextView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Mdx/Text/TextView.tsx",
       "functions": [
         {
           "name": "TextView",
@@ -113454,7 +113454,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Mdx/User/UserView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Mdx/User/UserView.tsx",
       "functions": [
         {
           "name": "UserView",
@@ -113507,7 +113507,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/Mdx/templates/Code.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/Mdx/templates/Code.tsx",
       "functions": [
         {
           "name": "Code",
@@ -113568,7 +113568,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/SortableGrid/SortableGridContainer/SortableGridContainerView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/SortableGrid/SortableGridContainer/SortableGridContainerView.tsx",
       "functions": [
         {
           "name": "SortableGridContainerView",
@@ -113621,7 +113621,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/SortableGrid/SortableGridContainer/useSortableGridContainer.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/SortableGrid/SortableGridContainer/useSortableGridContainer.ts",
       "functions": [
         {
           "name": "useSortableGridContainer",
@@ -113715,7 +113715,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/SortableGrid/SortableGridItem/SortableGridItemView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/SortableGrid/SortableGridItem/SortableGridItemView.tsx",
       "functions": [
         {
           "name": "SortableGridItemView",
@@ -113768,7 +113768,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/SortableList/SortableContainer/SortableContainerView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/SortableList/SortableContainer/SortableContainerView.tsx",
       "functions": [
         {
           "name": "SortableContainerView",
@@ -113821,7 +113821,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/SortableList/SortableContainer/useSortableContainer.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/SortableList/SortableContainer/useSortableContainer.ts",
       "functions": [
         {
           "name": "useSortableContainer",
@@ -113915,7 +113915,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/SortableList/SortableItem/SortableItemView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/SortableList/SortableItem/SortableItemView.tsx",
       "functions": [
         {
           "name": "SortableItemView",
@@ -113968,7 +113968,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/components/UsersTable/UsersTableSkeleton/UsersTableSkeletonView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/components/UsersTable/UsersTableSkeleton/UsersTableSkeletonView.tsx",
       "functions": [
         {
           "name": "UsersTableSkeletonView",
@@ -114021,7 +114021,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/layouts/App/Header/HeaderView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/layouts/App/Header/HeaderView.tsx",
       "functions": [
         {
           "name": "HeaderView",
@@ -114074,7 +114074,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/layouts/App/NavigationLink/NavigationLinkView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/layouts/App/NavigationLink/NavigationLinkView.tsx",
       "functions": [
         {
           "name": "NavigationLinkView",
@@ -114127,7 +114127,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/layouts/App/Sidebar/SidebarView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/layouts/App/Sidebar/SidebarView.tsx",
       "functions": [
         {
           "name": "SidebarView",
@@ -114188,7 +114188,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/layouts/App/Sidebar/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/layouts/App/Sidebar/index.tsx",
       "functions": [
         {
           "name": "Sidebar",
@@ -114241,7 +114241,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/DailyActiveUsersChartView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/DailyActiveUsersChartView.tsx",
       "functions": [
         {
           "name": "DailyActiveUsersChartView",
@@ -114302,7 +114302,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/index.tsx",
       "functions": [
         {
           "name": "DailyActiveUsersChart",
@@ -114355,7 +114355,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/useDailyActiveUsersChart.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/useDailyActiveUsersChart.ts",
       "functions": [
         {
           "name": "useDailyActiveUsersChart",
@@ -114408,7 +114408,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/pages/Dashboard/KpiCard/KpiCardView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/pages/Dashboard/KpiCard/KpiCardView.tsx",
       "functions": [
         {
           "name": "KpiCardView",
@@ -114469,7 +114469,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/pages/Dashboard/Kpis/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/pages/Dashboard/Kpis/index.tsx",
       "functions": [
         {
           "name": "Kpis",
@@ -114522,7 +114522,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/pages/Dashboard/RecentActivity/RecentActivityView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/pages/Dashboard/RecentActivity/RecentActivityView.tsx",
       "functions": [
         {
           "name": "RecentActivityView",
@@ -114575,7 +114575,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/components/PictureInput/PictureCard/PictureCardView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/components/PictureInput/PictureCard/PictureCardView.tsx",
       "functions": [
         {
           "name": "PictureCardView",
@@ -114628,7 +114628,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/components/PictureInput/PictureCard/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/components/PictureInput/PictureCard/index.tsx",
       "functions": [
         {
           "name": "PictureCard",
@@ -114681,7 +114681,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/components/PictureInput/PictureCard/usePictureCard.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/components/PictureInput/PictureCard/usePictureCard.ts",
       "functions": [
         {
           "name": "usePictureCard",
@@ -114775,7 +114775,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/CheckboxEditor/CheckboxEditorView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/CheckboxEditor/CheckboxEditorView.tsx",
       "functions": [
         {
           "name": "CheckboxQuestionEditorView",
@@ -114828,7 +114828,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/CheckboxEditor/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/CheckboxEditor/index.tsx",
       "functions": [
         {
           "name": "CheckboxQuestionEditor",
@@ -114881,7 +114881,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/CheckboxEditor/useCheckboxQuestionEditor.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/CheckboxEditor/useCheckboxQuestionEditor.ts",
       "functions": [
         {
           "name": "useCheckboxQuestionEditor",
@@ -114934,7 +114934,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/QuestionEditorView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/QuestionEditorView.tsx",
       "functions": [
         {
           "name": "QuestionEditorView",
@@ -114987,7 +114987,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/index.tsx",
       "functions": [
         {
           "name": "QuestionEditor",
@@ -115040,7 +115040,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuizActionButton/QuizActionButtonView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuizActionButton/QuizActionButtonView.tsx",
       "functions": [
         {
           "name": "QuizActionButtonView",
@@ -115093,7 +115093,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuizActionButton/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuizActionButton/index.tsx",
       "functions": [
         {
           "name": "QuizActionButton",
@@ -115146,7 +115146,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuizActionButton/useQuizActionButton.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuizActionButton/useQuizActionButton.ts",
       "functions": [
         {
           "name": "useQuizActionButton",
@@ -115240,7 +115240,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuizArranger/QuizArrangerView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuizArranger/QuizArrangerView.tsx",
       "functions": [
         {
           "name": "QuizArrangerView",
@@ -115334,7 +115334,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuizArranger/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuizArranger/index.tsx",
       "functions": [
         {
           "name": "QuizArranger",
@@ -115387,7 +115387,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuizBank/QuizBankView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuizBank/QuizBankView.tsx",
       "functions": [
         {
           "name": "QuizBankView",
@@ -115440,7 +115440,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx",
       "functions": [
         {
           "name": "TextBlocksView",
@@ -115534,7 +115534,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/index.tsx",
       "functions": [
         {
           "name": "TextBlocks",
@@ -115587,7 +115587,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/useTextBlocks.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/useTextBlocks.ts",
       "functions": [
         {
           "name": "useTextBlocks",
@@ -115763,7 +115763,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/profile/widgets/pages/Users/InsigniaRolesSelect/InsigniaRolesSelectView.tsx",
+      "filePath": "apps/backoffice/src/ui/profile/widgets/pages/Users/InsigniaRolesSelect/InsigniaRolesSelectView.tsx",
       "functions": [
         {
           "name": "InsigniaRolesSelectView",
@@ -115816,7 +115816,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportDetailPage/FeedbackReportDetailPage.tsx",
+      "filePath": "apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportDetailPage/FeedbackReportDetailPage.tsx",
       "functions": [
         {
           "name": "FeedbackReportDetailPageView",
@@ -115918,7 +115918,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportDetailPage/index.tsx",
+      "filePath": "apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportDetailPage/index.tsx",
       "functions": [
         {
           "name": "FeedbackReportDetailPage",
@@ -115971,7 +115971,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportDetailPage/useFeedbackReportDetailPage.ts",
+      "filePath": "apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportDetailPage/useFeedbackReportDetailPage.ts",
       "functions": [
         {
           "name": "useFeedbackReportDetailPage",
@@ -116196,7 +116196,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsTable/FeedbackReportsTableView.tsx",
+      "filePath": "apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsTable/FeedbackReportsTableView.tsx",
       "functions": [
         {
           "name": "FeedbackReportsTableView",
@@ -116290,7 +116290,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/AvatarsPage/AvatarsTable/AvatarsTableView.tsx",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/AvatarsPage/AvatarsTable/AvatarsTableView.tsx",
       "functions": [
         {
           "name": "AvatarsTableView",
@@ -116343,7 +116343,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/AvatarsPage/AvatarsTable/index.tsx",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/AvatarsPage/AvatarsTable/index.tsx",
       "functions": [
         {
           "name": "AvatarsTable",
@@ -116396,7 +116396,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/AvatarsPage/AvatarsTable/useAvatarsTable.ts",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/AvatarsPage/AvatarsTable/useAvatarsTable.ts",
       "functions": [
         {
           "name": "useAvatarsTable",
@@ -116613,7 +116613,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/InsigniasPage/InsigniasTable/InsigniasTableView.tsx",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/InsigniasPage/InsigniasTable/InsigniasTableView.tsx",
       "functions": [
         {
           "name": "InsigniasTableView",
@@ -116666,7 +116666,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/InsigniasPage/InsigniasTable/index.tsx",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/InsigniasPage/InsigniasTable/index.tsx",
       "functions": [
         {
           "name": "InsigniasTable",
@@ -116719,7 +116719,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/InsigniasPage/InsigniasTable/useInsigniasTable.ts",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/InsigniasPage/InsigniasTable/useInsigniasTable.ts",
       "functions": [
         {
           "name": "useInsigniasTable",
@@ -116936,7 +116936,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketsTableView.tsx",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketsTableView.tsx",
       "functions": [
         {
           "name": "RocketsTableView",
@@ -116989,7 +116989,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/index.tsx",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/index.tsx",
       "functions": [
         {
           "name": "RocketsTable",
@@ -117042,7 +117042,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/useRocketsTable.ts",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/useRocketsTable.ts",
       "functions": [
         {
           "name": "useRocketsTable",
@@ -117259,7 +117259,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/PlanetCollapsibleView.tsx",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/PlanetCollapsibleView.tsx",
       "functions": [
         {
           "name": "PlanetCollapsibleView",
@@ -117320,7 +117320,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/index.tsx",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/index.tsx",
       "functions": [
         {
           "name": "PlanetCollapsible",
@@ -117373,7 +117373,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/usePlanetCollapsible.ts",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/usePlanetCollapsible.ts",
       "functions": [
         {
           "name": "usePlanetCollapsible",
@@ -117631,7 +117631,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/PlanetForm/PlanetFormView.tsx",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetForm/PlanetFormView.tsx",
       "functions": [
         {
           "name": "PlanetFormView",
@@ -117684,7 +117684,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/PlanetForm/usePlanetForm.ts",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetForm/usePlanetForm.ts",
       "functions": [
         {
           "name": "usePlanetForm",
@@ -117778,7 +117778,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/layouts/App/Header/SignOutButton/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/layouts/App/Header/SignOutButton/index.tsx",
       "functions": [
         {
           "name": "SignOutButton",
@@ -117831,7 +117831,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/pages/Dashboard/RecentActivity/RecentChallengesTable/RecentChallengesTableView.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/pages/Dashboard/RecentActivity/RecentChallengesTable/RecentChallengesTableView.tsx",
       "functions": [
         {
           "name": "RecentChallengesTableView",
@@ -117925,7 +117925,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/pages/Dashboard/RecentActivity/RecentChallengesTable/useRecentChallengesTable.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/pages/Dashboard/RecentActivity/RecentChallengesTable/useRecentChallengesTable.ts",
       "functions": [
         {
           "name": "useRecentChallengesTable",
@@ -118019,7 +118019,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/pages/Dashboard/RecentActivity/RecentUsersTable/index.tsx",
+      "filePath": "apps/backoffice/src/ui/global/widgets/pages/Dashboard/RecentActivity/RecentUsersTable/index.tsx",
       "functions": [
         {
           "name": "RecentUsersTable",
@@ -118072,7 +118072,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/global/widgets/pages/Dashboard/RecentActivity/RecentUsersTable/useRecentUsersTable.ts",
+      "filePath": "apps/backoffice/src/ui/global/widgets/pages/Dashboard/RecentActivity/RecentUsersTable/useRecentUsersTable.ts",
       "functions": [
         {
           "name": "useRecentUsersTable",
@@ -118125,7 +118125,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/CodeInput/CodeInputView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/CodeInput/CodeInputView.tsx",
       "functions": [
         {
           "name": "CodeInputView",
@@ -118178,7 +118178,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/CodeInput/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/CodeInput/index.tsx",
       "functions": [
         {
           "name": "CodeInput",
@@ -118231,7 +118231,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/CodeInput/useCodeInput.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/CodeInput/useCodeInput.ts",
       "functions": [
         {
           "name": "useCodeInput",
@@ -118284,7 +118284,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/CodeLineEditor/CodeLineEditorView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/CodeLineEditor/CodeLineEditorView.tsx",
       "functions": [
         {
           "name": "CodeLineEditorView",
@@ -118378,7 +118378,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropListQuestionEditor/DragAndDropListQuestionEditorView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropListQuestionEditor/DragAndDropListQuestionEditorView.tsx",
       "functions": [
         {
           "name": "DragAndDropListQuestionEditorView",
@@ -118431,7 +118431,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropListQuestionEditor/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropListQuestionEditor/index.tsx",
       "functions": [
         {
           "name": "DragAndDropListQuestionEditor",
@@ -118484,7 +118484,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropListQuestionEditor/useDragAndDropListQuestionEditor.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropListQuestionEditor/useDragAndDropListQuestionEditor.ts",
       "functions": [
         {
           "name": "useDragAndDropListQuestionEditor",
@@ -118537,7 +118537,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropQuestionEditor/DragAndDropQuestionEditorView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropQuestionEditor/DragAndDropQuestionEditorView.tsx",
       "functions": [
         {
           "name": "DragAndDropQuestionEditorView",
@@ -118713,7 +118713,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropQuestionEditor/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropQuestionEditor/index.tsx",
       "functions": [
         {
           "name": "DragAndDropQuestionEditor",
@@ -118774,7 +118774,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropQuestionEditor/useDragAndDropQuestionEditor.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropQuestionEditor/useDragAndDropQuestionEditor.ts",
       "functions": [
         {
           "name": "useDragAndDropQuestionEditor",
@@ -118827,7 +118827,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/OpenQuestionEditor/OpenQuestionEditorView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/OpenQuestionEditor/OpenQuestionEditorView.tsx",
       "functions": [
         {
           "name": "OpenQuestionEditorView",
@@ -119003,7 +119003,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/OpenQuestionEditor/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/OpenQuestionEditor/index.tsx",
       "functions": [
         {
           "name": "OpenQuestionEditor",
@@ -119064,7 +119064,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/OpenQuestionEditor/useOpenQuestionEditor.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/OpenQuestionEditor/useOpenQuestionEditor.ts",
       "functions": [
         {
           "name": "useOpenQuestionEditor",
@@ -119117,7 +119117,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/QuestionHeaderInput/QuestionStemInputView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/QuestionHeaderInput/QuestionStemInputView.tsx",
       "functions": [
         {
           "name": "QuestionHeaderInputView",
@@ -119170,7 +119170,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/SelectionQuestionEditor/SelectionQuestionEditorView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/SelectionQuestionEditor/SelectionQuestionEditorView.tsx",
       "functions": [
         {
           "name": "SelectionQuestionEditorView",
@@ -119223,7 +119223,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/SelectionQuestionEditor/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/SelectionQuestionEditor/index.tsx",
       "functions": [
         {
           "name": "SelectionQuestionEditor",
@@ -119276,7 +119276,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/SelectionQuestionEditor/useSelectionQuestionEditor.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/SelectionQuestionEditor/useSelectionQuestionEditor.ts",
       "functions": [
         {
           "name": "useSelectionQuestionEditor",
@@ -119329,7 +119329,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/UndoQuestionChangeButton/useUndoQuestionChangeButton.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/UndoQuestionChangeButton/useUndoQuestionChangeButton.ts",
       "functions": [
         {
           "name": "useUndoQuestionChangeButton",
@@ -119382,7 +119382,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx",
       "functions": [
         {
           "name": "TextBlockCardView",
@@ -119435,7 +119435,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/useTextBlockCard.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/useTextBlockCard.ts",
       "functions": [
         {
           "name": "useTextBlockCard",
@@ -119488,7 +119488,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/manual/widgets/pages/GuidesPage/GuidesGrid/CreateGuideCard/CreateGuideCardView.tsx",
+      "filePath": "apps/backoffice/src/ui/manual/widgets/pages/GuidesPage/GuidesGrid/CreateGuideCard/CreateGuideCardView.tsx",
       "functions": [
         {
           "name": "CreateGuideCardView",
@@ -119541,7 +119541,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/manual/widgets/pages/GuidesPage/GuidesGrid/GuideCard/GuideCardView.tsx",
+      "filePath": "apps/backoffice/src/ui/manual/widgets/pages/GuidesPage/GuidesGrid/GuideCard/GuideCardView.tsx",
       "functions": [
         {
           "name": "GuideCardView",
@@ -119594,7 +119594,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/manual/widgets/pages/GuidesPage/GuidesGrid/GuideCard/index.tsx",
+      "filePath": "apps/backoffice/src/ui/manual/widgets/pages/GuidesPage/GuidesGrid/GuideCard/index.tsx",
       "functions": [
         {
           "name": "GuideCard",
@@ -119647,7 +119647,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/manual/widgets/pages/GuidesPage/GuidesGrid/GuideForm/GuideFormView.tsx",
+      "filePath": "apps/backoffice/src/ui/manual/widgets/pages/GuidesPage/GuidesGrid/GuideForm/GuideFormView.tsx",
       "functions": [
         {
           "name": "GuideFormView",
@@ -119700,7 +119700,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/manual/widgets/pages/GuidesPage/GuidesGrid/GuideForm/useGuideForm.ts",
+      "filePath": "apps/backoffice/src/ui/manual/widgets/pages/GuidesPage/GuidesGrid/GuideForm/useGuideForm.ts",
       "functions": [
         {
           "name": "useGuideForm",
@@ -119753,7 +119753,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsTable/FeedbackReportsTableSkeleton/FeedbackReportsTableSkeletonView.tsx",
+      "filePath": "apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsTable/FeedbackReportsTableSkeleton/FeedbackReportsTableSkeletonView.tsx",
       "functions": [
         {
           "name": "FeedbackReportsTableSkeletonView",
@@ -119806,7 +119806,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/AvatarsPage/AvatarsTable/AvatarForm/AvatarFormView.tsx",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/AvatarsPage/AvatarsTable/AvatarForm/AvatarFormView.tsx",
       "functions": [
         {
           "name": "AvatarFormView",
@@ -119859,7 +119859,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/AvatarsPage/AvatarsTable/AvatarForm/useAvatarForm.ts",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/AvatarsPage/AvatarsTable/AvatarForm/useAvatarForm.ts",
       "functions": [
         {
           "name": "useAvatarForm",
@@ -119994,7 +119994,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/AvatarsPage/AvatarsTable/AvatarsTableSkeleton/AvatarsTableSkeletonView.tsx",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/AvatarsPage/AvatarsTable/AvatarsTableSkeleton/AvatarsTableSkeletonView.tsx",
       "functions": [
         {
           "name": "AvatarsTableSkeletonView",
@@ -120047,7 +120047,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/InsigniasPage/InsigniasTable/InsigniaForm/InsigniaFormView.tsx",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/InsigniasPage/InsigniasTable/InsigniaForm/InsigniaFormView.tsx",
       "functions": [
         {
           "name": "InsigniaFormView",
@@ -120100,7 +120100,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/InsigniasPage/InsigniasTable/InsigniaForm/useInsigniaForm.ts",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/InsigniasPage/InsigniasTable/InsigniaForm/useInsigniaForm.ts",
       "functions": [
         {
           "name": "useInsigniaForm",
@@ -120235,7 +120235,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketForm/RocketFormView.tsx",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketForm/RocketFormView.tsx",
       "functions": [
         {
           "name": "RocketFormView",
@@ -120288,7 +120288,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketForm/useRocketForm.ts",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketForm/useRocketForm.ts",
       "functions": [
         {
           "name": "useRocketForm",
@@ -120423,7 +120423,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketsTableSkeleton/RocketsTableSkeletonView.tsx",
+      "filePath": "apps/backoffice/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketsTableSkeleton/RocketsTableSkeletonView.tsx",
       "functions": [
         {
           "name": "RocketsTableSkeletonView",
@@ -120476,7 +120476,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarItemView.tsx",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarItemView.tsx",
       "functions": [
         {
           "name": "StarItemView",
@@ -120537,7 +120537,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/index.tsx",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/index.tsx",
       "functions": [
         {
           "name": "StarItem",
@@ -120590,7 +120590,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/useStarItem.ts",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/useStarItem.ts",
       "functions": [
         {
           "name": "useStarItem",
@@ -120930,7 +120930,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/CodeLineEditor/CodeLineConfigurationDropdownMenu/CodeLineConfigurationDropdownMenuView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/CodeLineEditor/CodeLineConfigurationDropdownMenu/CodeLineConfigurationDropdownMenuView.tsx",
       "functions": [
         {
           "name": "CodeLineConfigurationDropdownMenuView",
@@ -120983,7 +120983,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropQuestionEditor/DragAndDropItemsControl/DragAndDropItemsControlView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropQuestionEditor/DragAndDropItemsControl/DragAndDropItemsControlView.tsx",
       "functions": [
         {
           "name": "DragAndDropItemsControlView",
@@ -121077,7 +121077,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropQuestionEditor/DropZoneSelect/DropZoneSelectView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropQuestionEditor/DropZoneSelect/DropZoneSelectView.tsx",
       "functions": [
         {
           "name": "DropZoneSelectView",
@@ -121130,7 +121130,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockActions/BlockActionsView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockActions/BlockActionsView.tsx",
       "functions": [
         {
           "name": "BlockActionsView",
@@ -121183,7 +121183,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/BlockAudioControlsView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/BlockAudioControlsView.tsx",
       "functions": [
         {
           "name": "BlockAudioControlsView",
@@ -121236,7 +121236,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/index.tsx",
       "functions": [
         {
           "name": "BlockAudioControls",
@@ -121289,7 +121289,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/useBlockAudioControls.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/useBlockAudioControls.ts",
       "functions": [
         {
           "name": "useBlockAudioControls",
@@ -121350,7 +121350,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/BlockAudioPlayerView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/BlockAudioPlayerView.tsx",
       "functions": [
         {
           "name": "BlockAudioPlayerView",
@@ -121403,7 +121403,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/index.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/index.tsx",
       "functions": [
         {
           "name": "BlockAudioPlayerContent",
@@ -121497,7 +121497,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/useBlockAudioPlayer.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/useBlockAudioPlayer.ts",
       "functions": [
         {
           "name": "formatTime",
@@ -121673,7 +121673,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockContentField/BlockContentFieldView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockContentField/BlockContentFieldView.tsx",
       "functions": [
         {
           "name": "BlockContentFieldView",
@@ -121726,7 +121726,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockContentField/useBlockContentField.ts",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockContentField/useBlockContentField.ts",
       "functions": [
         {
           "name": "useBlockContentField",
@@ -121779,7 +121779,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockPictureField/BlockPictureFieldView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockPictureField/BlockPictureFieldView.tsx",
       "functions": [
         {
           "name": "BlockPictureFieldView",
@@ -121832,7 +121832,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockPreview/BlockPreviewView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockPreview/BlockPreviewView.tsx",
       "functions": [
         {
           "name": "BlockPreviewView",
@@ -121885,7 +121885,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockVoiceSelector/BlockVoiceSelectorView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockVoiceSelector/BlockVoiceSelectorView.tsx",
       "functions": [
         {
           "name": "BlockVoiceSelectorView",
@@ -121938,7 +121938,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/StarChallengeSelectorView.tsx",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/StarChallengeSelectorView.tsx",
       "functions": [
         {
           "name": "StarChallengeSelectorView",
@@ -121991,7 +121991,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/index.tsx",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/index.tsx",
       "functions": [
         {
           "name": "StarChallengeSelector",
@@ -122044,7 +122044,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/useStarChallengeSelector.ts",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/useStarChallengeSelector.ts",
       "functions": [
         {
           "name": "useStarChallengeSelector",
@@ -122179,7 +122179,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarUnlockIcon/StarUnlockIconView.tsx",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarUnlockIcon/StarUnlockIconView.tsx",
       "functions": [
         {
           "name": "StarUnlockIconView",
@@ -122232,7 +122232,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarUserIcon/StarUserIconView.tsx",
+      "filePath": "apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarUserIcon/StarUserIconView.tsx",
       "functions": [
         {
           "name": "StarUserIconView",
@@ -122285,7 +122285,7 @@
       }
     },
     {
-      "filePath": "apps/studio/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropQuestionEditor/DragAndDropItemsControl/DragAndDropItem/DragAndDropItemView.tsx",
+      "filePath": "apps/backoffice/src/ui/lesson/widgets/pages/LessonQuizPage/QuestionEditor/DragAndDropQuestionEditor/DragAndDropItemsControl/DragAndDropItem/DragAndDropItemView.tsx",
       "functions": [
         {
           "name": "DragAndDropItemView",

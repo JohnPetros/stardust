@@ -13,8 +13,8 @@
     "functions": 36.35,
     "branches": 82.98
   },
-  "@stardust/studio": {
-    "summary": "apps/studio/coverage/coverage-summary.json",
+  "@stardust/backoffice": {
+    "summary": "apps/backoffice/coverage/coverage-summary.json",
     "lines": 10.21,
     "statements": 10.1,
     "functions": 9.65,

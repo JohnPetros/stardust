@@ -8,7 +8,7 @@
     "apps/server/src/database/supabase/types/Database.ts",
     "apps/web/src/api/supabase/types/Database.ts",
     "apps/web/src/mocks/**",
-    "apps/studio/src/ui/shadcn/**"
+    "apps/backoffice/src/ui/shadcn/**"
   ],
   "workspaces": {
     "apps/server": {
@@ -20,7 +20,7 @@
       "project": ["src/**/*.{ts,tsx}!", "!src/**/*.test.{ts,tsx}!", "!src/**/tests/**!"],
       "jest": false
     },
-    "apps/studio": {
+    "apps/backoffice": {
       "entry": ["src/app/{root,routes}.tsx!", "src/app/routes.ts!"],
       "project": ["src/**/*.{ts,tsx}!", "!src/**/*.test.{ts,tsx}!", "!src/**/tests/**!"],
       "jest": false
