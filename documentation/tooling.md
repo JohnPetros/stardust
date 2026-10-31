@@ -449,3 +449,20 @@ Os scripts listados acima ainda descrevem o estado implementado. Para a entrega 
 Scripts Supabase CLI de diff/push/pull/repair e geração de Database.ts são retirados; a Web não gera tipos de banco. npm/package-lock permanecem a fonte das versões. Antes de qualquer aplicação remota, exige-se preflight de Dev e produção e ensaio de rollback em restauração isolada, com evidências no workflow SDD. A indisponibilidade desses ambientes nesta autoria não é evidência de parity. A janela inicial é coordenada, sem release intermediário compatível.
 
 A lista de scripts passa a descrever o runtime vigente apenas após a implementação verificada; atualizar também a seção de migrations da infraestrutura nessa entrega.
+
+## Crew
+
+`apps/crew` é um workspace npm independente para revisão de PR com Mastra e
+Anthropic direta. `npm run crew` carrega o `.env.local` raiz e inicia Crew;
+`npm run dev` exclui esse workspace. Configure as variáveis listadas em
+`apps/crew/.env.example`, incluindo `CREW_DATABASE_URL`, `CREW_PORT` e `CREW_HOST`,
+para manter banco/porta/host separados dos apps de produto. Inicie o banco com
+`docker compose --env-file .env.local --profile crew up -d --wait crew-db`.
+
+Use `npm run <script> -w @stardust/crew` para `check:code`, `check:types`,
+`check:architecture`, `test:unit`, `test:integration` e `eval`; use
+`npm run build:crew` para compilar. Os testes unitários usam modelos simulados;
+integrações precisam de Docker; evals fazem chamadas pagas à Anthropic e ao
+Composio. Node 24.11+ é recomendado para o toolchain de build. O CI próprio
+valida o workspace e a imagem sem segredos de inferência. Detalhes e limites de
+evidência estão em `apps/crew/README.md`.

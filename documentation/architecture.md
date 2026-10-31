@@ -9,6 +9,7 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 - **Web (`apps/web/`)**: Frontend principal em Next.js 15 com React Server Components. UI organizada por domínio seguindo o padrão Widget (View + Hook + Index).
 - **Server (`apps/server/`)**: API REST em Hono/Node.js. Processa requisições HTTP, expõe um endpoint MCP autenticado em `/mcp` e executa jobs assíncronos via Inngest.
 - **Studio (`apps/studio/`)**: Aplicação administrativa interna em React Router v7.
+- **Crew (`apps/crew/`)**: Ferramenta independente de engenharia em Mastra, com cinco revisores de PR em paralelo via API Anthropic direta. Usa PostgreSQL próprio (`CREW_DATABASE_URL`), schemas `crew`/`mastra`, acesso GitHub read-only via Composio e API autenticada de runs. Não importa apps de produto. Convenções próprias do port estão em `documentation/rules/crew-app-rules.md`.
 - **Core (`packages/core/`)**: Regras de negócio puras com DDD tático. Sem dependência de frameworks. Contém Entities, Structures, Aggregates, Use Cases e Interfaces.
 - **Validation (`packages/validation/`)**: Schemas de validação com Zod, compartilhados entre as apps.
 - **Email (`packages/email/`)**: Templates de e-mail construidos com React Email para envio de e-mails.
@@ -77,7 +78,7 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 | **Validação** | Zod | Schemas compartilhados entre apps |
 | **Monorepo** | TurboRepo, NPM | Orquestração e gerenciamento de dependências |
 | **Linter/Formatter** | Biome | Qualidade e padronização de código |
-| **Testes** | Jest, Playwright | Testes unitários, de composição e fluxos reais de navegador |
+| **Testes** | Jest, Vitest (Crew), Playwright | Testes unitários, de composição e fluxos reais de navegador |
 
 ## Estrutura de Diretórios Geral
 
@@ -86,7 +87,8 @@ stardust/
 ├── apps/
 │   ├── web/
 │   ├── server/
-│   └── studio/
+│   ├── studio/
+│   └── crew/
 └── packages/
     ├── core/
     ├── validation/
