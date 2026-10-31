@@ -1,0 +1,1 @@
+export const REVIEW_RECALL_THRESHOLD = 0.8

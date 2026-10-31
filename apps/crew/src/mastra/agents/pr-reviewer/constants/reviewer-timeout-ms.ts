@@ -1,0 +1,1 @@
+export const REVIEWER_TIMEOUT_MS = 480_000
