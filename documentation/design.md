@@ -36,7 +36,8 @@ Sources:
 - Product architecture: `documentation/architecture.md` and
   `documentation/modules.md`
 - UI structure: `documentation/rules/ui-layer-rules.md`
-- Pencil references: `design/stardust.pen`
+- Canonical design file: `design/stardust.fig`, inspected through Open Pencil
+- Historical Pencil references: `design/stardust.pen`
 
 ---
 
@@ -133,13 +134,35 @@ Use semantic tokens rather than choosing colors directly from a primitive scale.
 
 ### Approved references
 
+`design/stardust.fig` is the canonical design file. Its approved references are
+named frames and components, identified by name because node IDs change between
+sessions.
+
+| `design/stardust.fig` reference | Page | Role |
+| --- | --- | --- |
+| Section `Autenticação · Sign-in` | 🖥️ Desktop | `Autenticação / Desktop / Sign-in` and `Sign-in · Erro de validação` |
+| Section `Autenticação · Sign-up` | 🖥️ Desktop | `Autenticação / Desktop / Sign-up`, `Sign-up · Nome em uso` and `Sign-up · Confirme seu e-mail` |
+| Section `Autenticação · Reset password` | 🖥️ Desktop | `Autenticação / Desktop / Reset password`, `Reset password · E-mail inválido` and `Reset password · Pronto para redefinir`, plus the standalone dialogs `Reset password · Diálogo Nova senha`, `Reset password · Diálogo Senhas diferentes` and `Reset password · Diálogo Senha redefinida` |
+| Section `Autenticação · Account confirmation` | 🖥️ Desktop | `Autenticação / Desktop / Account confirmation · Criando perfil` and `Account confirmation · Perfil criado` |
+| Section `Autenticação · Social account confirmation` | 🖥️ Desktop | `Autenticação / Desktop / Social account confirmation · Conectando conta`, `Social account confirmation · Criando perfil` and `Social account confirmation · Perfil criado` |
+| Sections `Autenticação · Sign-in`, `Sign-up`, `Reset password` and `Account confirmation` | 📱 Mobile | `Autenticação / Mobile / Sign-in`, `Sign-up`, `Reset password`, `Reset password · Pronto para redefinir`, `Account confirmation · Criando perfil` and `Account confirmation · Perfil criado` at 390 × 844 |
+| `Autenticação / Título`, `Campo de texto`, `Botão social`, `Divisor de opções` and `Link de texto` | 🧩 Components | Auth component sets using the refined tokens, 8 px radius and 44 px controls |
+
+The auth references use the `stardust-dark` variant. Mobile frames are not drawn
+for auth error states, dialogs, or social account confirmation; those states
+follow the same components and layout rules.
+
+The following Pencil nodes in `design/stardust.pen` are historical references
+from the original token exploration. They remain valid as palette context until
+they are verified and migrated to `design/stardust.fig`.
+
 | Pencil node | Role |
 | --- | --- |
 | `Y9nmU` | Original challenge-list reference; retained for comparison |
 | `uvsSQ` | Approved refined dark challenge list |
 | `YGjln` | Refined light alternative |
 | `vbxf1` | Profile using refined tokens |
-| `P7adY` | Sign-in using refined tokens |
+| `P7adY` | Sign-in using refined tokens; superseded by `Autenticação / Desktop / Sign-in` |
 | `ifIsM` | Dark/light token board |
 | `iJGU3` | Full-screen Poppins / Funnel Sans comparison; font decision pending |
 | `UEcrD` | Four theme families, each with dark/light editor previews; beside `ifIsM` |
@@ -996,8 +1019,10 @@ implementation still requires a deliberate migration.
 - Web and Studio do not yet consume one shared token package.
 - Studio's font declarations contain an unresolved Inter/Outfit conflict.
 - Icon usage is not fully centralized in Studio.
-- Only the named refined Pencil references in section 3 carry the approved
-  palette and geometry; other frames remain exploratory or historical.
+- Only the named references in section 3 carry the approved palette and
+  geometry; other frames remain exploratory or historical. The historical
+  `design/stardust.pen` nodes other than the sign-in reference have not yet been
+  verified in or migrated to `design/stardust.fig`.
 - Poppins versus Funnel Sans is still an open UI-family decision.
 - Paired editor palettes are defined in section 3, but require visual approval,
   runtime interaction validation, and mappings verified against the Delegua
