@@ -21,20 +21,20 @@
   "dependencies": {
     "@composio/core": "0.27.0",
     "@composio/mastra": "0.10.6",
-    "@mastra/core": "1.81.0",
-    "@mastra/pg": "1.32.0",
-    "drizzle-orm": "0.45.3",
+    "@mastra/core": "1.80.0",
+    "@mastra/pg": "1.33.0",
+    "drizzle-orm": "0.45.4",
     "postgres": "3.4.9",
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@mastra/evals": "1.10.8",
-    "@testcontainers/postgresql": "12.0.4",
-    "@types/node": "22.10.7",
+    "@mastra/evals": "1.10.9",
+    "@testcontainers/postgresql": "12.2.1",
+    "@types/node": "20.19.43",
     "drizzle-kit": "0.31.11",
-    "mastra": "1.35.0",
-    "testcontainers": "12.0.4",
-    "typescript": "5.9.2",
+    "mastra": "1.36.0",
+    "testcontainers": "12.2.1",
+    "typescript": "5.9.3",
     "vitest": "4.1.9"
   }
 }
