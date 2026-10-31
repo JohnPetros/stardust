@@ -196,6 +196,9 @@ jobs:
       - name: Run tests
         run: npm run test:coverage -w @stardust/server
 
+      - name: Merge unit and integration coverage
+        run: npm run test:coverage:merge -w @stardust/server
+
       - name: Check coverage baseline
         run: npm run check:coverage -- @stardust/server
 

@@ -28,10 +28,11 @@
     "db:revert": "supabase migration repair --status reverted $npm_config_migration_id",
     "update": "ncu -u -f $npm_config_dep_name",
     "test:unit": "jest --selectProjects server",
-    "test:coverage": "jest --selectProjects server --coverage --coverageReporters=json-summary --coverageReporters=text-summary",
+    "test:coverage": "jest --selectProjects server --coverage --coverageReporters=json --coverageReporters=json-summary --coverageReporters=text-summary",
     "test:integration": "INNGEST_DEV=http://127.0.0.1:8288 INNGEST_BASE_URL=http://127.0.0.1:8288 jest --selectProjects server-integration",
-    "test:integration:ci": "npm run test:integration -- --shard=1/4 && npm run test:integration -- --shard=2/4 && npm run test:integration -- --shard=3/4 && npm run test:integration -- --shard=4/4",
-    "db:seed:assets": "local_exports=$(node ../../scripts/export-local-database-env.mjs) && eval \"$local_exports\" && node --env-file ../../.env.local ../../scripts/seed-local-assets.mjs"
+    "test:integration:ci": "npm run test:integration -- --shard=1/4 --coverage --maxWorkers=1 --coverageReporters=json --coverageDirectory=coverage/integration-1 && npm run test:integration -- --shard=2/4 --coverage --maxWorkers=1 --coverageReporters=json --coverageDirectory=coverage/integration-2 && npm run test:integration -- --shard=3/4 --coverage --maxWorkers=1 --coverageReporters=json --coverageDirectory=coverage/integration-3 && npm run test:integration -- --shard=4/4 --coverage --maxWorkers=1 --coverageReporters=json --coverageDirectory=coverage/integration-4",
+    "db:seed:assets": "local_exports=$(node ../../scripts/export-local-database-env.mjs) && eval \"$local_exports\" && node --env-file ../../.env.local ../../scripts/seed-local-assets.mjs",
+    "test:coverage:merge": "node ../../scripts/merge-server-coverage.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1097.0",
