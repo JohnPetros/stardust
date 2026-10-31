@@ -9,7 +9,7 @@ O objetivo do StarDust é tornar o aprendizado de programação acessível e div
 -   **Gamificação Robusta:** Sistema de pontos (XP), moedas (StarCoins), ofensiva (Streak) e conquistas.
 -   **Jornada Espacial:** Organização do conteúdo em "Planetas" (temas) e "Estrelas" (fases).
 -   **Arquitetura Modular:** Separação clara de responsabilidades com foco em escalabilidade.
--   **Ambiente Completo:** Inclui plataforma de estudo (Web), área administrativa (Studio) e API (Server).
+-   **Ambiente Completo:** Inclui plataforma de estudo (Web), área administrativa (Backoffice) e API (Server).
 
 ## 🛠 Tech Stack
 
@@ -21,7 +21,7 @@ O projeto é um **monorepo** gerenciado pelo **TurboRepo** e utiliza as tecnolog
 -   **Estilização:** [Tailwind CSS](https://tailwindcss.com/) + [Radix UI](https://www.radix-ui.com/)
 -   **Backend (Server):** [Node.js](https://nodejs.org/) + [Hono](https://hono.dev/)
 -   **Fila/Jobs:** [Inngest](https://www.inngest.com/)
--   **App Interno (Studio):** [React Router](https://reactrouter.com/) v7
+-   **App Interno (Backoffice):** [React Router](https://reactrouter.com/) v7
 -   **Banco de Dados:** [Supabase](https://supabase.com/) (PostgreSQL)
 -   **Qualidade:** [Biome](https://biomejs.dev/) + [Jest](https://jestjs.io/)
 
@@ -31,7 +31,7 @@ O StarDust segue os princípios da **Arquitetura Limpa (Clean Architecture)** e 
 
 -   **Core Agnóstico:** O pacote `@stardust/core` contém toda a lógica de negócio e é independente de frameworks.
 -   **Camadas Bem Definidas:** Separação estrita entre Domínio, Casos de Uso, Interfaces e Infraestrutura.
--   **Adaptação:** As aplicações (`web`, `server`, `studio`) atuam como adaptadores que consomem o núcleo do sistema.
+-   **Adaptação:** As aplicações (`web`, `server`, `backoffice`) atuam como adaptadores que consomem o núcleo do sistema.
 
 Para detalhes profundos sobre as decisões técnicas, consulte a [Documentação de Arquitetura](documentation/architecture.md).
 
@@ -42,11 +42,12 @@ stardust/
 ├── apps/                  # Aplicações executáveis
 │   ├── web/               # Frontend principal (Next.js)
 │   ├── server/            # Backend API (Hono/Node)
-│   └── studio/            # Painel Administrativo (React Router)
+│   └── backoffice/        # Painel Administrativo (React Router)
 ├── packages/              # Bibliotecas compartilhadas
 │   ├── core/              # Regras de Negócio e Domínio (DDD)
 │   ├── validation/        # Schemas de validação (Zod)
 │   ├── email/             # Serviços de Email
+│   ├── studio/            # Autoria de animações Lottie
 │   └── lsp/               # Language Server Protocol (Lógica)
 └── documentation/         # Documentação centralizada
 ```
@@ -95,7 +96,7 @@ A documentação completa do projeto está organizada no diretório `documentati
     -   [Banco de Dados](documentation/rules/database-rules.md)
     -   [Providers](documentation/rules/provision-layer-rules.md)
     -   [Aplicação Web](documentation/rules/web-application-rules.md)
-    -   [Aplicação Studio](documentation/rules/studio-appllication-rules.md)
+    -   [Aplicação Backoffice](documentation/rules/backoffice-application-rules.md)
     -   [Testes de Handlers](documentation/rules/handlers-testing-rules.md)
     -   [Testes de Casos de Uso](documentation/rules/use-cases-testing-rules.md)
     -   [Testes de Widgets](documentation/rules/widget-tests-rules.md)

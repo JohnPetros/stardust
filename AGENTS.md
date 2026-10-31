@@ -18,7 +18,7 @@
   `apps/server/src/database/seeders/seed-accounts.json`. Elas são fixtures públicas
   exclusivamente locais. Carregue-as nos fluxos manuais de Playwright com os
   scripts `export-*-app-e2e-env.mjs --seed`; não copie valores para testes.
-- O Studio seed usa o UUID `00000000-0000-4000-8000-000000000002`; inclua-o
+- O Backoffice seed usa o UUID `00000000-0000-4000-8000-000000000002`; inclua-o
   em `GOD_ACCOUNT_IDS` da raiz e do Server local.
 - As regras de credenciais privadas em `.env.local` abaixo continuam aplicáveis
   aos serviços e a contas que não pertencem ao seed.
@@ -35,7 +35,7 @@
 
 - Context7 para buscar informações atualizadas
 - CodeGraph para explorar símbolos, relações e caminhos de chamada no código
-- Pencil para editar ou saber o contexto de frames de design estilo Figma
+- Open Pencil para inspecionar e editar os frames de design em `design/stardust.fig`
 - Playwright CLI para inspecionar e validar fluxos reais no navegador
 - Supabase Dev para interagir com o projeto Supabase de desenvolvimento
 - Supabase Prod para interagir com o projeto Supabase de produção
@@ -75,26 +75,26 @@
   comportamento no Supabase local; sincronize o projeto remoto apenas quando
   o workflow da tarefa solicitar.
 
-## Playwright no Studio
+## Playwright no Backoffice
 
-Use o Playwright para validar o Studio em um navegador real, incluindo o login
+Use o Playwright para validar o Backoffice em um navegador real, incluindo o login
 e pelo menos uma rota protegida. Não considere a tela de login suficiente para
 declarar a aplicação funcional.
 
 ### Pré-requisitos
 
-- Inicie o servidor local e o Studio em terminais separados:
+- Inicie o servidor local e o Backoffice em terminais separados:
 
   ```bash
   npm --workspace @stardust/server run dev
   ```
 
   ```bash
-  npm --workspace @stardust/studio run dev
+  npm --workspace @stardust/backoffice run dev
   ```
 
 - O servidor de desenvolvimento do projeto usa `http://localhost:3334`.
-  Confirme que `apps/studio/.env.local` contém:
+  Confirme que `apps/backoffice/.env.local` contém:
 
   ```dotenv
   VITE_SERVER_APP_URL=http://localhost:3334
@@ -102,23 +102,23 @@ declarar a aplicação funcional.
   VITE_WEB_APP_URL=http://localhost:3000
   ```
 
-- Se a porta `8000` estiver ocupada, inicie o Studio em outra porta e use essa
+- Se a porta `8000` estiver ocupada, inicie o Backoffice em outra porta e use essa
   mesma porta no `baseURL` do teste. Não altere a URL do servidor para resolver
-  um conflito de porta do Studio.
+  um conflito de porta do Backoffice.
 
 - Para contas próprias fora do seed, configure as credenciais no `.env.local` da raiz
   e execute o exportador sem `--seed`:
 
   ```dotenv
-  STUDIO_APP_E2E_EMAIL=<email-da-conta-de-teste>
-  STUDIO_APP_E2E_PASSWORD=<senha-da-conta-de-teste>
+  BACKOFFICE_APP_E2E_EMAIL=<email-da-conta-de-teste>
+  BACKOFFICE_APP_E2E_PASSWORD=<senha-da-conta-de-teste>
   ```
 
   Carregue-as no terminal antes de iniciar o Playwright. O comando precisa ser
   `source` para que os `export`s permaneçam no shell atual:
 
   ```bash
-  eval "$(node ./scripts/export-studio-app-e2e-env.mjs --seed)"
+  eval "$(node ./scripts/export-backoffice-app-e2e-env.mjs --seed)"
   ```
 
   O arquivo `.env.local` é ignorado pelo Git; nunca coloque essas
@@ -138,18 +138,18 @@ declarar a aplicação funcional.
 Exemplo mínimo:
 
 ```ts
-const studioUrl = "http://localhost:8000";
+const backofficeUrl = "http://localhost:8000";
 const page = await browser.newPage();
 
-await page.goto(`${studioUrl}/`);
-await page.getByLabel(/email/i).fill(process.env.STUDIO_APP_E2E_EMAIL!);
+await page.goto(`${backofficeUrl}/`);
+await page.getByLabel(/email/i).fill(process.env.BACKOFFICE_APP_E2E_EMAIL!);
 await page
   .getByLabel(/senha|password/i)
-  .fill(process.env.STUDIO_APP_E2E_PASSWORD!);
+  .fill(process.env.BACKOFFICE_APP_E2E_PASSWORD!);
 await page.getByRole("button", { name: "Login" }).click();
 await page.waitForURL("**/dashboard");
 
-await page.goto(`${studioUrl}/profile/users`);
+await page.goto(`${backofficeUrl}/profile/users`);
 await page.getByRole("heading", { name: "Usuários" }).waitFor();
 ```
 
@@ -162,7 +162,7 @@ await page.getByRole("heading", { name: "Usuários" }).waitFor();
 - Erro `module is not defined` em `stream-browserify` indica falha de
   compatibilidade do bundle SSR/Vite; investigue o erro do servidor antes de
   depurar autenticação.
-- Erro de variável de ambiente deve impedir o Studio de subir. Confira
+- Erro de variável de ambiente deve impedir o Backoffice de subir. Confira
   `VITE_SERVER_APP_URL`, `VITE_CDN_URL` e `VITE_WEB_APP_URL` antes de abrir o
   navegador; não prossiga com o teste se a validação inicial falhar.
 - Erros de CORS normalmente indicam mistura de origem local com API de
@@ -173,9 +173,9 @@ await page.getByRole("heading", { name: "Usuários" }).waitFor();
 
 ## Playwright na Web App
 
-A Web App possui um fluxo de integração separado do Studio. Esses testes usam
+A Web App possui um fluxo de integração separado do Backoffice. Esses testes usam
 o ambiente `testing`, o servidor de testes da própria aplicação e mocks de
-backend; não usam a conta real do Studio nem devem apontar para produção.
+backend; não usam a conta real do Backoffice nem devem apontar para produção.
 
 ### Execução
 
@@ -212,8 +212,8 @@ misturar ambientes.
   `/auth/account`, `/auth/sign-in`, `/auth/refresh-session` e das rotas da tela
   em `ServerMock`. Depois confirme a navegação para `/space` ou para a rota
   protegida esperada.
-- Não use `STUDIO_APP_E2E_*` nos testes da Web App. Essas variáveis pertencem
-  exclusivamente ao fluxo real do Studio.
+- Não use `BACKOFFICE_APP_E2E_*` nos testes da Web App. Essas variáveis pertencem
+  exclusivamente ao fluxo real do Backoffice.
 
 ### Acesso a rotas autenticadas
 
@@ -311,7 +311,7 @@ eval "$(node ./scripts/export-web-app-e2e-env.mjs --seed)"
 ```
 
 No modo padrão, o script falha se alguma variável estiver ausente.
-No modo `--seed`, carrega as fixtures locais fixas. Não reutilize `STUDIO_APP_E2E_*`: as contas do Studio e da Web App
+No modo `--seed`, carrega as fixtures locais fixas. Não reutilize `BACKOFFICE_APP_E2E_*`: as contas do Backoffice e da Web App
 são independentes.
 
 ## Regra obrigatória de validação manual do Frontend
@@ -322,8 +322,8 @@ real, além dos testes automatizados.
 
 - Inicie o frontend e os serviços locais dos quais a tela depende em terminais
   separados. Para a Web App, use `apps/server` em `http://localhost:3334` e
-  `apps/web` em `http://localhost:3000`; para o Studio, use o servidor local e
-  o Studio conforme a seção específica acima.
+  `apps/web` em `http://localhost:3000`; para o Backoffice, use o servidor local e
+  o Backoffice conforme a seção específica acima.
 - Autentique quando necessário, exercite o caminho feliz da funcionalidade
   alterada e confirme seu principal resultado visível e os endpoints essenciais
   `2xx`.

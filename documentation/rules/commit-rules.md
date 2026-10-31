@@ -123,7 +123,7 @@ Exemplos válidos:
 
 O `scope` é opcional, mas deve ser usado quando:
 
-- a mudança afeta um workspace específico como `web`, `server`, `studio` ou `core`
+- a mudança afeta um workspace específico como `web`, `server`, `backoffice` ou `core`
 - a mudança afeta um domínio claro como `auth`, `notes`, `space` ou `challenge`
 - o prefixo sozinho não deixa claro onde a mudança aconteceu
 

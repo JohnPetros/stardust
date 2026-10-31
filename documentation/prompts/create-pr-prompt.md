@@ -194,11 +194,10 @@ Se essa conformidade falhar, interrompa a publicação e encaminhe a correção 
 `implement-spec`. Não corrija a implementação diretamente dentro do fluxo de
 criação do PR.
 
-Para UI baseada em design, use o bundle de design salvo pela Spec, não o Pencil
-ao vivo. Confirme no `evaluation.md` a comparação independente de cada estado e
-viewport obrigatório, incluindo:
+Para UI baseada em design, use os frames de `design/stardust.fig` declarados na Spec.
+Confirme no `evaluation.md` a comparação independente de cada estado e viewport obrigatório, incluindo:
 
-- rota, estado e referência salva ou source node ID;
+- rota, estado e nome do frame de referência;
 - viewport alvo;
 - resultado da validação manual em navegador;
 - captura da implementação ou identificador do artifact;

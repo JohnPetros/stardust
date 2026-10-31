@@ -4,7 +4,7 @@
 
 This document describes the visual language and interaction patterns of StarDust.
 It is a product-level guide for the Web App, the Challenge experience, and the
-administrative Studio. It records the visual direction, implementation baseline,
+administrative Backoffice. It records the visual direction, implementation baseline,
 and reusable token contract for the interface and Monaco editor. Design targets
 do not imply that application code already implements them.
 
@@ -32,11 +32,12 @@ Sources:
 
 - Web styling and tokens: `apps/web/tailwind.config.js` and
   `apps/web/src/ui/global/styles/global.css`
-- Studio styling and shadcn tokens: `apps/studio/src/ui/global/styles/global.css`
+- Backoffice styling and shadcn tokens: `apps/backoffice/src/ui/global/styles/global.css`
 - Product architecture: `documentation/architecture.md` and
   `documentation/modules.md`
 - UI structure: `documentation/rules/ui-layer-rules.md`
-- Pencil references: `design/stardust.pen`
+- Canonical design file: `design/stardust.fig`, inspected through Open Pencil
+- Historical Pencil references: `design/stardust.pen`
 
 ---
 
@@ -64,7 +65,7 @@ progress metric.
 - **One clear next action.** Primary actions use the green accent and should be
   visually distinct from secondary and destructive actions.
 - **Context determines density.** The learning journey can breathe; challenge
-  and Studio screens may be dense because they support focused work and
+  and Backoffice screens may be dense because they support focused work and
   operations.
 - **Motion explains change.** Transitions show navigation, unlocking, feedback,
   or continuity. Motion is not required for basic comprehension.
@@ -104,9 +105,9 @@ It uses a full-height dark shell with:
   output or feedback states.
 - An optional challenge-navigation sidebar and filter popover.
 
-### Studio — administrative experience
+### Backoffice — administrative experience
 
-Studio is an operational admin panel for managing users, achievements, planets,
+Backoffice is an operational admin panel for managing users, achievements, planets,
 challenges, challenge sources, shop items, manuals, and feedback reports. It
 shares StarDust's dark identity but is more information-dense and less
 decorative than the student journey.
@@ -118,7 +119,7 @@ Current shell baseline:
 - Main area: scrollable content with a rounded top-left edge and right padding.
 - Components: existing shadcn/Radix primitives are the default building blocks.
 
-The Web App and Studio may share semantic tokens, but their layout shells and
+The Web App and Backoffice may share semantic tokens, but their layout shells and
 component implementations remain independent until a shared design-token layer
 is introduced.
 
@@ -133,13 +134,35 @@ Use semantic tokens rather than choosing colors directly from a primitive scale.
 
 ### Approved references
 
+`design/stardust.fig` is the canonical design file. Its approved references are
+named frames and components, identified by name because node IDs change between
+sessions.
+
+| `design/stardust.fig` reference | Page | Role |
+| --- | --- | --- |
+| Section `Autenticação · Sign-in` | 🖥️ Desktop | `Autenticação / Desktop / Sign-in` and `Sign-in · Erro de validação` |
+| Section `Autenticação · Sign-up` | 🖥️ Desktop | `Autenticação / Desktop / Sign-up`, `Sign-up · Nome em uso` and `Sign-up · Confirme seu e-mail` |
+| Section `Autenticação · Reset password` | 🖥️ Desktop | `Autenticação / Desktop / Reset password`, `Reset password · E-mail inválido` and `Reset password · Pronto para redefinir`, plus the standalone dialogs `Reset password · Diálogo Nova senha`, `Reset password · Diálogo Senhas diferentes` and `Reset password · Diálogo Senha redefinida` |
+| Section `Autenticação · Account confirmation` | 🖥️ Desktop | `Autenticação / Desktop / Account confirmation · Criando perfil` and `Account confirmation · Perfil criado` |
+| Section `Autenticação · Social account confirmation` | 🖥️ Desktop | `Autenticação / Desktop / Social account confirmation · Conectando conta`, `Social account confirmation · Criando perfil` and `Social account confirmation · Perfil criado` |
+| Sections `Autenticação · Sign-in`, `Sign-up`, `Reset password` and `Account confirmation` | 📱 Mobile | `Autenticação / Mobile / Sign-in`, `Sign-up`, `Reset password`, `Reset password · Pronto para redefinir`, `Account confirmation · Criando perfil` and `Account confirmation · Perfil criado` at 390 × 844 |
+| `Autenticação / Título`, `Campo de texto`, `Botão social`, `Divisor de opções` and `Link de texto` | 🧩 Components | Auth component sets using the refined tokens, 8 px radius and 44 px controls |
+
+The auth references use the `stardust-dark` variant. Mobile frames are not drawn
+for auth error states, dialogs, or social account confirmation; those states
+follow the same components and layout rules.
+
+The following Pencil nodes in `design/stardust.pen` are historical references
+from the original token exploration. They remain valid as palette context until
+they are verified and migrated to `design/stardust.fig`.
+
 | Pencil node | Role |
 | --- | --- |
 | `Y9nmU` | Original challenge-list reference; retained for comparison |
 | `uvsSQ` | Approved refined dark challenge list |
 | `YGjln` | Refined light alternative |
 | `vbxf1` | Profile using refined tokens |
-| `P7adY` | Sign-in using refined tokens |
+| `P7adY` | Sign-in using refined tokens; superseded by `Autenticação / Desktop / Sign-in` |
 | `ifIsM` | Dark/light token board |
 | `iJGU3` | Full-screen Poppins / Funnel Sans comparison; font decision pending |
 | `UEcrD` | Four theme families, each with dark/light editor previews; beside `ifIsM` |
@@ -179,7 +202,7 @@ icons so that color is not the only signal.
 Information-blue and focus treatments have not been redefined in the refined
 palette. Existing app treatments remain implementation references until those
 roles and their interaction states are explicitly designed and validated.
-Studio's existing shadcn semantic variables remain its local implementation
+Backoffice's existing shadcn semantic variables remain its local implementation
 contract until a deliberate migration is made.
 
 ### Supporting color scales — provisional
@@ -262,8 +285,8 @@ The reading-body target is guidance for implementation, not a claim that every
 historical Pencil statement already uses it. Test paragraphs at roughly 45–75
 characters per line and tune line height for the selected face and language.
 
-Studio's existing Inter/Outfit conflict remains an implementation gap. The Web
-comparison does not settle the Studio family; avoid adding another isolated font.
+Backoffice's existing Inter/Outfit conflict remains an implementation gap. The Web
+comparison does not settle the Backoffice family; avoid adding another isolated font.
 
 ### Shape and spacing
 
@@ -594,7 +617,7 @@ verified mappings during implementation; a new color table alone is insufficient
 
 The application currently has legacy `darkSpace` / `dark-space` naming. Preserve
 compatibility with stored preferences when introducing the proposed IDs. Existing
-theme constants are duplicated in Web and Studio; consolidation is an
+theme constants are duplicated in Web and Backoffice; consolidation is an
 implementation task rather than a change made by this document.
 
 #### User choice and invariant geometry
@@ -652,7 +675,7 @@ colors do not replace the app's layout or border-radius tokens.
 - The challenge route may replace the normal home shell with its dedicated
   workspace shell.
 
-#### Studio
+#### Backoffice
 
 - Navigation is grouped by domain: dashboard, profile, space, challenges,
   shop, manual, and reports.
@@ -704,7 +727,7 @@ padding, 8 px icon gap, and no shadow or glow.
   replacements for labels.
 - Password visibility, loading, disabled, server error, and validation states
   must be represented explicitly.
-- Use the shared Web `Input` component or the Studio shadcn input primitives
+- Use the shared Web `Input` component or the Backoffice shadcn input primitives
   instead of recreating field behavior inside a page.
 
 ### Cards and panels
@@ -737,7 +760,7 @@ must not be the only indication of an important notification.
 
 ### Dialogs and popovers
 
-- Use Radix/shadcn dialog primitives in Studio and the shared Radix dialog in
+- Use Radix/shadcn dialog primitives in Backoffice and the shared Radix dialog in
   Web.
 - Dialog title, supporting text, and close action must form one clear header.
 - Keep the semantic icon beside the title when an icon is used; do not detach it
@@ -822,7 +845,7 @@ must not be the only indication of an important notification.
 - Yellow is the reward signal; green is completion/action. Do not conflate the
   two.
 
-### Studio CRUD and reports
+### Backoffice CRUD and reports
 
 - Page title and purpose come first, followed by primary action.
 - Tables and forms use shadcn/Radix primitives, with explicit loading, empty,
@@ -904,7 +927,7 @@ Additional rules:
 - Dialogs must manage focus and support escape according to their primitive.
 - Form errors must be associated with their fields and remain readable.
 - Decorative images and animation must not create misleading accessible content.
-- Keep `pt-BR` copy concise, direct, and consistent across Web and Studio.
+- Keep `pt-BR` copy concise, direct, and consistent across Web and Backoffice.
 
 ---
 
@@ -913,7 +936,7 @@ Additional rules:
 The codebase currently has different icon systems per surface:
 
 - **Web App:** the shared `Icon` component delegates to Phosphor icons.
-- **Studio:** the shared icon component exists, while some screens currently
+- **Backoffice:** the shared icon component exists, while some screens currently
   import Lucide icons directly.
 - **Pencil references:** contain Lucide, Phosphor, and a small number of other
   icon references.
@@ -937,7 +960,7 @@ canonical implementation per app and update the wrappers incrementally.
 - Prefer existing shared components before creating a one-off visual primitive.
 - Web widgets follow the View + Hook + `index.tsx` entry-point pattern described
   in `documentation/rules/ui-layer-rules.md`.
-- Studio uses existing shadcn components before adding new primitives.
+- Backoffice uses existing shadcn components before adding new primitives.
 - Keep styling close to the owning UI component, but put repeated values in
   Tailwind/shadcn tokens rather than scattered literals.
 - UI code may use Core types and the app's REST/RPC edges; it must not import
@@ -993,11 +1016,13 @@ unresolved font/focus choices as production-ready decisions.
 The refined references establish the approved design direction, while production
 implementation still requires a deliberate migration.
 
-- Web and Studio do not yet consume one shared token package.
-- Studio's font declarations contain an unresolved Inter/Outfit conflict.
-- Icon usage is not fully centralized in Studio.
-- Only the named refined Pencil references in section 3 carry the approved
-  palette and geometry; other frames remain exploratory or historical.
+- Web and Backoffice do not yet consume one shared token package.
+- Backoffice's font declarations contain an unresolved Inter/Outfit conflict.
+- Icon usage is not fully centralized in Backoffice.
+- Only the named references in section 3 carry the approved palette and
+  geometry; other frames remain exploratory or historical. The historical
+  `design/stardust.pen` nodes other than the sign-in reference have not yet been
+  verified in or migrated to `design/stardust.fig`.
 - Poppins versus Funnel Sans is still an open UI-family decision.
 - Paired editor palettes are defined in section 3, but require visual approval,
   runtime interaction validation, and mappings verified against the Delegua

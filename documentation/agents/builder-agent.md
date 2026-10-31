@@ -30,8 +30,8 @@ cria hierarquia entre Builders.
 - resultado observável;
 - paths permitidos e paths proibidos;
 - Rules e Architecture aplicáveis;
-- quando houver UI, `design/handoff.md`, fonte visual canônica, path `.pen`, Node IDs,
-  estados, variantes, viewports, receitas de implementação e divergências aprovadas;
+- quando houver UI, os frames de `design/stardust.fig` declarados na Spec, com estados,
+  variantes, viewports e divergências aprovadas;
 - findings bloqueantes, quando for uma correção.
 
 ## Execução
@@ -41,13 +41,13 @@ cria hierarquia entre Builders.
 2. Confirme paths, contratos e implementações similares na codebase.
 3. Verifique se a solução respeita o Contract vigente.
 4. Implemente somente o escopo recebido.
-5. Quando houver UI, use primeiro o `design/handoff.md` como contrato offline e preserve a
-   composição, hierarquia, dimensões, espaçamento, tipografia, tokens, densidade, variantes,
-   estados, responsividade e acessibilidade declarados. Consulte os nodes Pencil canônicos
-   quando disponíveis para inspeção e comparação; não copie valores brutos nem substitua,
-   simplifique ou adicione elementos visuais sem decisão ou amendment aprovado.
-6. Use MCPs aplicáveis, como CodeGraph, Context7, Pencil, Playwright ou Supabase.
-7. Execute a comparação Pencil/Web no mesmo viewport e estado quando a UI
+5. Quando houver UI, inspecione os frames declarados diretamente pelo Open Pencil MCP e
+   preserve a composição, hierarquia, dimensões, espaçamento, tipografia, variáveis de design,
+   densidade, variantes, estados, responsividade e acessibilidade. Mapeie as variáveis vinculadas
+   aos tokens do repositório; não copie valores sem variável nem substitua, simplifique ou
+   adicione elementos visuais sem decisão ou amendment aprovado.
+6. Use MCPs aplicáveis, como CodeGraph, Context7, Open Pencil, Playwright ou Supabase.
+7. Execute a comparação Open Pencil/Web no mesmo viewport e estado quando a UI
    estiver no escopo; registre cada divergência, sua causa e a aprovação
    correspondente. A validação não pode ser apenas uma afirmação textual.
 8. Execute o ciclo curto no escopo afetado: `format`, `check:code`,
@@ -99,7 +99,7 @@ coordena a integração de seus diffs.
   - `<path>`
 - **Resultado observável:** <evidência resumida>
 - **Verificações locais:** <comandos e resultados>
-- **Fidelidade Pencil/Web:** não aplicável | <handoff, nodes, viewports, estados e evidências>
+- **Fidelidade Open Pencil/Web:** não aplicável | <frames, viewports, estados e evidências>
 - **Lacunas documentais:** nenhuma | <documento, evidência e ação>
 - **Divergências:** nenhuma | <descrição>
 - **Riscos para o Reviewer:** nenhum | <descrição>

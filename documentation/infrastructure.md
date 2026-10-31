@@ -19,7 +19,7 @@ O Stardust é hospedado em uma VPS Hostinger (KVM 2 — 2 vCPU, 8 GB RAM, 100 GB
 | `stardust-web`         | `apps/web`    | Next.js SSR (standalone)    | 3000  | `stardust-app.com.br`, `www.stardust-app.com.br` |
 | `stardust-web-staging` | `apps/web`    | Next.js SSR (standalone)    | 3000  | `staging.stardust-app.com.br`                    |
 | `stardust-server`      | `apps/server` | Hono API (Node.js)          | 3333  | `api.stardust-app.com.br`                        |
-| `stardust-studio`      | `apps/studio` | React Router v7 SPA (Nginx) | 80    | `studio.stardust-app.com.br`                     |
+| `stardust-studio`      | `apps/backoffice` | React Router v7 SPA (Nginx) | 80    | `studio.stardust-app.com.br`                     |
 
 ---
 
@@ -51,7 +51,7 @@ Cada serviço usa **Build Pack: Dockerfile** com os seguintes Dockerfiles na rai
 | ----------------- | ------------------- | -------------- |
 | web / web-staging | `Dockerfile.web`    | `/`            |
 | server            | `Dockerfile.server` | `/`            |
-| studio            | `Dockerfile.studio` | `/`            |
+| backoffice            | `Dockerfile.backoffice` | `/`            |
 
 ### Variáveis de ambiente
 
@@ -74,7 +74,7 @@ Em produção, `TRUSTED_PROXY_CIDRS` é obrigatório para evitar falsificação 
 por clientes que alcancem o Server diretamente. Nenhuma chave Redis ou identidade
 é enviada à telemetria.
 
-**Studio:** variáveis `VITE_*`, incluindo `VITE_CDN_URL`, como Build Variables (se aplicável).
+**Backoffice:** variáveis `VITE_*`, incluindo `VITE_CDN_URL`, como Build Variables (se aplicável).
 
 > As variáveis `NEXT_PUBLIC_*` e `VITE_*` precisam estar marcadas como **Available at Buildtime** no Coolify, pois são embutidas no bundle durante o build.
 
@@ -85,7 +85,7 @@ por clientes que alcancem o Server diretamente. Nenhuma chave Redis ou identidad
 | web prod    | Desabilitado           | GitHub Actions workflow em `release: published` aciona webhook do Coolify                              |
 | web staging | Habilitado             | Push em `main` (paths: `apps/web/**`, `packages/core/**`, `packages/validation/**`, `packages/lsp/**`) |
 | server      | Depende da preferência | Push em `main` (paths: `apps/server/**`, `packages/core/**`, `packages/validation/**`) via workflow    |
-| studio      | Habilitado             | Push em `main` (paths: `apps/studio/**`)                                                               |
+| backoffice      | Habilitado             | Push em `main` (paths: `apps/backoffice/**`)                                                               |
 
 ---
 
@@ -271,7 +271,7 @@ Multi-stage: `builder` (turbo prune) → `installer` (npm install + build) → `
 
 Multi-stage: `builder` (turbo prune) → `installer` (npm install + Next.js build com `output: 'standalone'`) → `runner` (Node.js 22 Alpine). Variáveis `NEXT_PUBLIC_*` precisam estar disponíveis em tempo de build.
 
-### Dockerfile.studio
+### Dockerfile.backoffice
 
 Multi-stage: `builder` (turbo prune) → `installer` (npm install + Vite build) → `runner` (Nginx Alpine servindo arquivos estáticos). Config do Nginx com `try_files` para fallback SPA.
 
@@ -315,3 +315,15 @@ O container do server **não** contém a Supabase CLI nem o `postgresql-client`.
 ## Transição aprovada: Drizzle e SSE (Issue #602)
 
 O pipeline Supabase CLI acima é o legado. O destino da Issue #602 é aplicar migrations Drizzle pelo workflow Server; o container de runtime não executa migrations. Na primeira implantação, Server e Web são coordenados numa única manutenção com writers pausados, backup/restauração ensaiada, preflight, adoção, revogação de acesso direto, deploy das duas apps, smoke e reabertura. Um webhook Coolify aceito não prova que a revisão está servindo tráfego: o runbook deve verificar revisão implantada e saúde das apps antes da reabertura. Não há mecanismo de manutenção da aplicação verificado nesta autoria; o runbook opera pausa/reabertura pelos controles existentes do ambiente e registra sua execução, sem inventar endpoints de manutenção.
+
+## Renomeação do painel administrativo
+
+O código do painel agora fica em `apps/backoffice`, com workspace
+`@stardust/backoffice` e `Dockerfile.backoffice`. O player de animações local
+usa `packages/studio` e `@stardust/studio`.
+
+No Coolify, o recurso existente do painel deve apontar para
+`Dockerfile.backoffice`. O workflow mantém o secret `COOLIFY_WEBHOOK_STUDIO`
+para continuar usando o webhook já configurado. O domínio público
+`studio.stardust-app.com.br` e os nomes dos recursos implantados permanecem
+como estão até uma migração explícita de infraestrutura.

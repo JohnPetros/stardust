@@ -33,7 +33,7 @@ Organize a pesquisa direta da task em lanes delimitadas:
 
 - uma lane para boundary estreito;
 - lanes independentes quando dois ou mais boundaries forem afetados;
-- escolha apenas lanes reais, como Core, Server, Web, Studio, Database ou Integration;
+- escolha apenas lanes reais, como Core, Server, Web, Backoffice, Database ou Integration;
 - defina sintoma, expectativa, paths iniciais, Rule Pack e pergunta diagnóstica;
 - registre paths/declarations exatos, evidência, causa provável, risco e incerteza.
 
@@ -66,7 +66,7 @@ Quando o sintoma envolver navegador:
   ganhar uma seção de manual validation, acceptance, tasks ou implementação por causa dessa
   investigação.
 
-Para Web App e Studio, siga os ambientes, scripts de exportação de credenciais, portas e fluxo
+Para Web App e Backoffice, siga os ambientes, scripts de exportação de credenciais, portas e fluxo
 autenticado descritos em `AGENTS.md`. Use o Playwright CLI tanto para a reprodução formal quanto
 para a exploração visual pontual; não use outra ferramenta de automação de navegador neste
 projeto.

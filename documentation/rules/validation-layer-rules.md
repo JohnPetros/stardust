@@ -31,7 +31,7 @@ A camada **Validation** centraliza os schemas Zod compartilhados entre as apps d
 - **Arquivos pequenos e focados**: cada arquivo deve exportar um schema principal.
 - **Exports por barrel**: todo schema novo deve ser exposto no `index.ts` do modulo e, quando aplicavel, no `src/main.ts`.
 - **Transformacoes explicitas**: use `.transform()` apenas quando a camada realmente precisar normalizar entrada, como query params ou listas.
-- **Sem dependencia de app**: o pacote pode depender de `@stardust/core`, mas nunca de `apps/web`, `apps/server` ou `apps/studio`.
+- **Sem dependencia de app**: o pacote pode depender de `@stardust/core`, mas nunca de `apps/web`, `apps/server` ou `apps/backoffice`.
 
 ## Padroes
 

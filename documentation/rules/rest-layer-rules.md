@@ -20,7 +20,7 @@ A camada **REST** padroniza comunicacao HTTP com APIs externas e com o backend, 
 | Server | `apps/server/src/rest/axios/AxiosRestClient.ts` | Implementacao do `RestClient` via `axios`. |
 | Server | `apps/server/src/rest/services/` | Services usados pelo server. |
 | Server | `apps/server/src/rest/controllers/` | Controllers na borda server. |
-| Studio | `apps/studio/src/rest/axios/AxiosRestClient.ts` | Implementacao do `RestClient` via `axios`. |
+| Backoffice | `apps/backoffice/src/rest/axios/AxiosRestClient.ts` | Implementacao do `RestClient` via `axios`. |
 
 ## Regras
 
@@ -38,8 +38,8 @@ A camada **REST** padroniza comunicacao HTTP com APIs externas e com o backend, 
   - Web: `apps/web/src/rest/next/NextRestClient.ts` (baseado em `fetch`).
   - Web (server-side): `apps/web/src/rest/next/NextServerRestClient.ts` (baseUrl + auth via cookies).
   - Server: `apps/server/src/rest/axios/AxiosRestClient.ts` (baseado em `axios`).
-  - Studio: `apps/studio/src/rest/axios/AxiosRestClient.ts` (baseado em `axios`).
-- **Services tipados**: Web/Studio preferem factory functions (ex: `apps/web/src/rest/services/ConversationService.ts`).
+  - Backoffice: `apps/backoffice/src/rest/axios/AxiosRestClient.ts` (baseado em `axios`).
+- **Services tipados**: Web/Backoffice preferem factory functions (ex: `apps/web/src/rest/services/ConversationService.ts`).
 - **Paginacao**: clients detectam headers e retornam `PaginationResponse` quando aplicavel.
 - **Query params**: preferir `setQueryParam` no `RestClient`.
 
@@ -52,7 +52,7 @@ Foram implementados métodos de service REST com parâmetros primitivos para cas
 `async createApiKey(name: string)` e `async renameApiKey(apiKeyId: Id, name: string)`.
 
 **Por que está errado:**
-Quando o contrato do core já define objetos de domínio/estruturas (como `Name` e `Id`), usar primitivas no service quebra a fronteira tipada entre domínio e adapter, facilita bypass de validações semânticas e cria divergência entre interface e implementação nas apps (`web`, `server`, `studio`).
+Quando o contrato do core já define objetos de domínio/estruturas (como `Name` e `Id`), usar primitivas no service quebra a fronteira tipada entre domínio e adapter, facilita bypass de validações semânticas e cria divergência entre interface e implementação nas apps (`web`, `server`, `backoffice`).
 
 **O que deve ser feito:**
 Os métodos de `services` devem receber apenas objetos de domínio definidos no contrato do core e serializar para primitivas apenas no momento da chamada HTTP.

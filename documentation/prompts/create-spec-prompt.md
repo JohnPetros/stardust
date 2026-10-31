@@ -27,7 +27,7 @@ de Issue. Em caso de conflito, registre a divergência e resolva a ambiguidade
 antes de abrir a Spec.
 
 Leia todas as fontes da demanda, `documentation/architecture.md`, Rules aplicáveis,
-`documentation/sdd.md` e os paths reais da codebase. Use CodeGraph, Context7, Pencil, Playwright ou Supabase quando
+`documentation/sdd.md` e os paths reais da codebase. Use CodeGraph, Context7, Open Pencil, Playwright ou Supabase quando
 aplicáveis.
 
 Resolva ambiguidades materiais antes de escrever ou modificar `spec.md`. O gate de
@@ -77,7 +77,7 @@ a solução, consolide:
 
 Em fluxos multi-app, declare quem expõe, quem consome, o transporte e o formato
 do contrato. Use ferramentas de codebase para evidência local, documentação
-oficial para APIs externas, Pencil para design, Playwright para comportamento de
+oficial para APIs externas, Open Pencil para design, Playwright para comportamento de
 browser e Supabase para schema/dados quando aplicável. Architecture e Rules do
 projeto prevalecem sobre recomendações genéricas de ferramentas externas.
 
@@ -86,60 +86,59 @@ própria task, com perguntas, paths, limites e formato de síntese explícitos. 
 diretamente, resolva conflitos por inspeção direta e verifique afirmações consequenciais. Não crie
 agentes de pesquisa.
 
-## Referências de design e Pencil
+## Referências de design e Open Pencil
 
 Quando o escopo envolver frontend ou UI, crie na Spec uma seção de referências
 de design e declare:
 
-- a fonte visual canônica e o path do arquivo `.pen`;
-- o Node ID e o nome de cada frame ou componente relevante;
+- a fonte visual canônica, `design/stardust.fig`;
+- o nome de cada frame ou componente relevante. Não use Node IDs como
+  referência: eles mudam quando o arquivo é reaberto no Open Pencil;
 - o estado, variante e viewport representados, como loading, error, empty,
   content, aberto/fechado, desktop ou mobile;
 - o mapeamento entre cada referência visual e os respectivos `RF-*`/`CA-*`;
 - divergências entre design, requisitos, Architecture, Rules e comportamento
   atual, indicando a precedência adotada e o alinhamento esperado.
 
-### Regra Pencil-to-code
+### Regra design-to-code
 
-Os nodes declarados são a fonte visual canônica para o código. A Spec deve
+Os frames declarados são a fonte visual canônica para o código. A Spec deve
 tratar como parte do Contract a preservação da composição, hierarquia,
 dimensões, espaçamento, tipografia, cores, bordas, elevação, ícones/assets,
-densidade, variantes e estados observáveis de cada node. HTML semântico,
+densidade, variantes e estados observáveis de cada frame. HTML semântico,
 acessibilidade, interação, dados e reflow responsivo podem adaptar a
 implementação, mas não autorizam substituir, simplificar ou reinterpretar o
 design.
 
-Toda divergência precisa ser vinculada ao node e ao `CA-*`, ter motivo
-verificável e ser aprovada como decisão ou amendment antes de `open`. Node
+Toda divergência precisa ser vinculada ao frame e ao `CA-*`, ter motivo
+verificável e ser aprovada como decisão ou amendment antes de `open`. Frame
 ausente, contradito ou adicionado sem aprovação é bloqueante. Não aceite CSS
-genérico como aproximação, nem invente arquivo, Node ID ou detalhe visual quando
+genérico como aproximação, nem invente arquivo, frame ou detalhe visual quando
 não existir uma fonte canônica; registre a ausência explicitamente.
 
-Inspecione as referências com Pencil; não deduza detalhes visuais somente de
-screenshots ou descrições. Salve referências necessárias sob `design/` e crie
-`design/handoff.md` como contrato offline autocontido, com fonte canônica, inventário de node,
-estado, variante, viewport, screenshot, surface, tokens/componentes, comparação esperada e
-vínculos `RF-*`/`CA-*`/`VM-*`. Inclua também a precedência de autoridades, crosswalk de tokens,
-receitas de componentes/layout/ícones/tema/responsividade/acessibilidade, extensões aprovadas,
-fallbacks semânticos e estados sem referência, para que a implementação não dependa de uma
-sessão Pencil viva. Se a solução exigir alteração no design, inclua o arquivo `.pen` no escopo e
-especifique os nodes afetados. Se não existir fonte visual canônica, registre isso explicitamente
-e não invente arquivo ou Node ID.
+Inspecione as referências com o Open Pencil MCP; não deduza detalhes visuais somente de
+screenshots ou descrições. Não extraia o design para outros artefatos: não crie
+`design/handoff.md`, não exporte imagens para `design/` e não copie tokens, medidas ou receitas
+para a Spec. Builders e Reviewers inspecionam os mesmos frames diretamente pelo Open Pencil MCP.
+A Spec registra apenas os frames, estados, variantes e viewports relevantes, seus vínculos com
+`RF-*`/`CA-*`/`VM-*` e as divergências aprovadas. Se a solução exigir alteração no design,
+inclua `design/stardust.fig` no escopo e especifique os frames afetados. Se não existir fonte
+visual canônica, registre isso explicitamente e não invente arquivo ou frame.
 Uma divergência material deve ser resolvida antes de a Spec chegar a `open`.
 
-A validação de frontend deve exigir tanto a comparação dos nodes finais no
-Pencil quanto o exercício do fluxo real no Playwright, cobrindo os estados e
-viewports especificados. Pencil valida a referência visual; Playwright valida o
+A validação de frontend deve exigir tanto a comparação com os frames no
+Open Pencil quanto o exercício do fluxo real no Playwright, cobrindo os estados e
+viewports especificados. O Open Pencil valida a referência visual; Playwright valida o
 comportamento em runtime. Nenhum deles substitui os testes automatizados.
 
 Quando a validação visual em runtime for obrigatória, escreva isso
 explicitamente no Contract em um ou mais `CA-*`: declare os viewports, estados,
 interações, rota e a evidência exigida (por exemplo, screenshot do dialog
 aberto, loading, erro, vazio, conteúdo e fechado, ou comparação visual
-equivalente). Para cada node Pencil, declare também a dimensão de referência,
+equivalente). Para cada frame, declare também a dimensão de referência,
 o estado, a variante e a comparação esperada com a Web.
 Não use apenas expressões ambíguas como “verificar visualmente”. Diferencie
-sempre a evidência da referência Pencil da evidência do browser real: a primeira
+sempre a evidência da referência no Open Pencil da evidência do browser real: a primeira
 confirma alinhamento com o design canônico; a segunda confirma renderização,
 responsividade e comportamento observável em runtime.
 
@@ -275,7 +274,7 @@ aceitação, decisões técnicas ou comportamento de erro. Use nomes coerentes c
 os contratos da Spec e mantenha a sintaxe renderizável em Markdown.
 
 Declare sensores aplicáveis: `format`, `check:code`, `check:types`, `test:unit`,
-`check:architecture` e `test:integration`. Para Core, Server, Studio e Web, declare também
+`check:architecture` e `test:integration`. Para Core, Server, Backoffice e Web, declare também
 `test:coverage` e `check:coverage`; ambos devem respeitar `coverage-baseline.json`. `check:dead-code`
 não é oficial.
 Checks e build são validações finais do CI.
@@ -298,7 +297,7 @@ para cada `CA-*`.
 Antes de `open`, faça uma checagem de integridade: todo `RF-*` relevante
 possui `CA-*`; cada `CA-*` possui resultado observável, método de validação,
 viewport/estado quando aplicável e path ou camada responsável; cada exigência
-visual possui evidência separada para Pencil e Playwright quando ambas forem
+visual possui evidência separada para Open Pencil e Playwright quando ambas forem
 necessárias; cada mudança UI declara a estrutura Entry Point/View/Hook; e todos
 os sensores aplicáveis estão nomeados. Se uma exigência só aparecer no Plan ou
 na Evaluation, mova-a para o Contract antes da revisão.
@@ -308,8 +307,8 @@ para `open`; corrija todos os erros estruturais reportados antes de ativar o
 Reviewer.
 
 Para UI, o Contract deve conter uma matriz de referências visuais e uma matriz
-de auditoria estrutural. A primeira relaciona node, viewport, estado, rota,
-evidência Pencil/Web, dimensões/anchors relevantes e divergências aprovadas. A
+de auditoria estrutural. A primeira relaciona frame, viewport, estado, rota,
+evidência Open Pencil/Web, dimensões/anchors relevantes e divergências aprovadas. A
 segunda relaciona cada widget alterado a
 `index.tsx`, `*View.tsx`, Hook e regra aplicável. A ausência de qualquer uma
 dessas matrizes impede o estado `open` quando frontend estiver no escopo.

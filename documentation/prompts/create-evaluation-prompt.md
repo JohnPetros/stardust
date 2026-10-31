@@ -92,13 +92,13 @@ Para frontend, registre também:
 | Gate                  | Estado | Evidência                                                                            |
 | --------------------- | ------ | ------------------------------------------------------------------------------------ |
 | UI Layer Audit        | passed | widget, paths e linhas de Entry Point/View/Hook                                      |
-| Pencil/Web comparison | passed | node, viewport, estado, rota, HEAD, anchors, divergência/aprovação e screenshot/diff |
+| Open Pencil/Web comparison | passed | frame, viewport, estado, rota, HEAD, anchors, divergência/aprovação e screenshot/diff |
 
-Quando houver `design/handoff.md`, trate-o como referência de implementação e registre uma matriz por node. Ela deve
-identificar o `.pen`, Node ID, viewport, estado/variante, rota, dimensão e
+Quando a Spec declarar frames de `design/stardust.fig`, inspecione-os pelo Open Pencil MCP e registre uma matriz por frame. Ela deve
+identificar o nome do frame, viewport, estado/variante, rota, dimensão e
 anchors da referência, captura Web no mesmo contexto, HEAD avaliado e qualquer
 divergência aprovada. `match` e `approved adaptation` são os únicos estados
-aceitáveis; node ausente, contradito ou adicionado sem aprovação mantém a
+aceitáveis; frame ausente, contradito ou adicionado sem aprovação mantém a
 avaliação bloqueada.
 
 O handoff e suas imagens são entradas de design, não evidências de runtime. A Evaluation deve
@@ -163,6 +163,6 @@ Checks ou build com falha devem ser registrados imediatamente aqui como `CI-*`
 e, quando houver um problema a corrigir, como `ACH-*`. A Spec permanece
 `in_progress`; correções de escopo usam `Builder Fix ACH-*`, com
 novo sensor e novo Reviewer sempre que o diff ou qualquer evidência de Contract,
-Rule, Pencil ou Playwright for invalidada. Qualquer alteração posterior ao
+Rule, Open Pencil ou Playwright for invalidada. Qualquer alteração posterior ao
 Reviewer invalida o commit avaliado anterior, inclusive quando afetar a fidelidade
-Pencil-to-code.
+design-to-code.

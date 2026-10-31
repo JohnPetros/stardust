@@ -12,7 +12,7 @@ Conduzir uma revisão de segurança orientada à arquitetura do StarDust, identi
 
 ## Entradas
 
-  - Aplicação alvo `{APP}` (ex: `web`, `server`, `studio`)
+  - Aplicação alvo `{APP}` (ex: `web`, `server`, `backoffice`)
   - Escopo da revisão `{ESCOPO}` (ex: módulo `auth`, camada `rest`, feature `challenging`, ou `full`)
   - Arquivos ou caminhos alvo `{ALVOS}` (ex: `apps/server/src/rest/controllers/auth/`, `packages/core/src/auth/`)
   - Contexto do que foi alterado recentemente `{CONTEXTO_MUDANCA}` (ex: "nova feature de social login", "refatoração do authActionClient")
@@ -50,7 +50,7 @@ Antes de iniciar, consulte os documentos de regras de cada camada envolvida no e
 | **AI / Tools** | `documentation/rules/ai-layer-rules.md` | Tool sem contrato interno, prompt vazando regra de negócio, output externo sem validação |
 | **Web App** | `documentation/rules/web-application-rules.md` | Rotas públicas/protegidas inconsistentes, dados sensíveis em server/client boundary |
 | **Server App** | `documentation/rules/server-application-rules.md` | Middlewares ausentes, composição Hono insegura, integração sem validação |
-| **Studio App** | `documentation/rules/studio-appllication-rules.md` | Fluxos administrativos sem autorização ou estados de erro insuficientes |
+| **Backoffice App** | `documentation/rules/backoffice-application-rules.md` | Fluxos administrativos sem autorização ou estados de erro insuficientes |
 
 ---
 

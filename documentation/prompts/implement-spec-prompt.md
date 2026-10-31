@@ -76,12 +76,12 @@ testes, migrations ou artefatos gerados e registre o blocker:
   como substituto;
 - UI exige comportamento automatizado, screenshot Playwright atual e comparação
   inspecionada por viewport/estado; testes passando sozinhos não bastam;
-- quando houver `design/handoff.md`, ele é o bundle visual offline: use sua ordem de autoridade,
-  crosswalk de tokens, componentes, receitas de layout/estado e extensões aprovadas; não copie
-  valores brutos do Pencil nem invente detalhes ausentes;
+- quando houver UI, inspecione os frames de `design/stardust.fig` declarados na Spec
+  diretamente pelo Open Pencil MCP; mapeie as variáveis de design para os tokens do repositório,
+  não copie valores sem variável nem invente detalhes ausentes;
 - para Server, confirme comportamento real, autorização, persistência e efeitos
   colaterais conforme AGENTS.md e Supabase Dev quando aplicável;
-- os workspaces Core, Server, Studio e Web executam cobertura e o ratchet; LSP,
+- os workspaces Core, Server, Backoffice e Web executam cobertura e o ratchet; LSP,
   Validation, TypeScript Config e Email permanecem excluídos conforme SDD;
 - `evaluation.md` é um ledger vivo: toda mudança de código, teste, browser,
   migration, artefato, documentação ou validação atualiza comandos, resultado,
@@ -93,29 +93,27 @@ testes, migrations ou artefatos gerados e registre o blocker:
    (mesmo sem fases), contendo a tarefa, paths, critérios, estado e próxima ação.
    O Plan será mantido durante todo o fluxo para registrar cada mudança.
 4. Execute `Builder Direct` no contexto principal e envie Contract, resultado
-   observável, paths, Rules, Architecture, o `design/handoff.md` e seus Node IDs
-   canônicos, estados, viewports, receitas, extensões e MCPs aplicáveis. Não crie
-   um Builder separado para execução Direct. O Builder deve conseguir implementar
-   usando o bundle salvo mesmo sem Pencil; use Pencil novamente apenas quando o
-   Design Contract mudar ou a validação final exigir a fonte canônica.
+   observável, paths, Rules, Architecture, os frames de `design/stardust.fig`,
+   estados, viewports, extensões e MCPs aplicáveis. Não crie um Builder separado
+   para execução Direct. O Builder inspeciona os frames diretamente pelo Open Pencil MCP.
 5. Inspecione o diff; o Builder não atualiza Spec, Plan ou estado.
 6. Execute `npm run check:spec-implementation -- <spec> --base <commit-base>` antes dos sensores.
    Execute também `npm run check:spec-definition -- <spec>` e
    `npm run check:plan-definition -- <plan>` após qualquer alteração documental.
    A verificação exige o mapa canônico `Path | Change | ...` do Technical Contract.
    Depois execute `format`, `check:code`, `check:types`, `test:unit` e
-   `check:test-integrity`; para Core, Server, Studio e Web,
+   `check:test-integrity`; para Core, Server, Backoffice e Web,
    execute também `test:coverage` e `check:coverage`; execute
    `check:architecture` e `test:integration` quando aplicáveis. Para frontend,
    faça também a auditoria de `ui-layer-rules.md` e a comparação independente
-   dos nodes Pencil aplicáveis com a Web real, no mesmo viewport e estado.
+   dos frames aplicáveis no Open Pencil com a Web real, no mesmo viewport e estado.
    Preserve o design canônico; qualquer simplificação, substituição, adição ou
    divergência não aprovada é finding bloqueante. Build não é necessário neste
    ciclo.
 7. Ative um `Implementation Reviewer Direct` read-only, pareado exclusivamente
    com o Builder Direct. Envie
    Spec, revisão, Contract, diff, critérios, Rules, Architecture, auditoria UI,
-   evidências Pencil/Playwright, matriz de divergências aprovadas e resultados
+   evidências Open Pencil/Playwright, matriz de divergências aprovadas e resultados
    oficiais dos sensores.
 8. Se `failed`, registre o finding no `evaluation.md` (ou crie um Plan se ele
    exigir tarefas), crie `Builder Fix IR-<n>`, reexecute sensores invalidados e
@@ -138,7 +136,7 @@ sem escopo.
 
 Use `Builder Direct` para uma entrega pequena e coesa sem Plan. Com Plan,
 ative Builders estáveis por boundary (`Builder Core`, `Builder Server`,
-`Builder Studio`, `Builder Web` ou equivalente), nunca um Builder por fase,
+`Builder Backoffice`, `Builder Web` ou equivalente), nunca um Builder por fase,
 package ou tarefa quando o trabalho puder permanecer no mesmo contexto. Use no
 máximo três Builders concorrentes salvo justificativa concreta no Plan, com
 paths não sobrepostos. Shared/generated files, dependências e lockfiles ficam
@@ -174,7 +172,7 @@ quando existir uma interação cross-boundary sem Builder responsável.
 
 ### Validação focada por Builder
 
-- `Builder Core`, `Builder Server`, `Builder Studio` e `Builder Web` executam
+- `Builder Core`, `Builder Server`, `Builder Backoffice` e `Builder Web` executam
   os sensores aplicáveis de código, tipos e testes do próprio escopo;
 - alterações de comportamento no Server incluem cenários focados contra o
   servidor real quando exigido pela Spec, cobrindo status/body, validação,
@@ -239,7 +237,7 @@ Após integrar o candidato final:
 2. execute `format`, `check:code`, `check:types`, `test:unit`,
    `check:test-integrity`, cobertura/ratchet e sensores de Architecture,
    integração, browser e Supabase Dev conforme os paths;
-3. confirme evidências manuais autenticadas da Web App/Studio, quando aplicável,
+3. confirme evidências manuais autenticadas da Web App/Backoffice, quando aplicável,
    incluindo console, pageerror, requestfailed e respostas HTTP;
 4. execute o Reviewer pareado aplicável e resolva todos os findings bloqueantes;
 5. só então marque Evaluation como `ready` e invoque `conclude-spec` quando a
@@ -287,7 +285,7 @@ artefatos gerados, fonte, gerador e output; para testes, comportamento protegido
 e comando de execução.
 
 Não agrupe mudanças em um registro retrospectivo. Se a mudança alterar o diff
-ou qualquer evidência de Contract, Rule, Pencil ou Playwright, invalide o
+ou qualquer evidência de Contract, Rule, Open Pencil ou Playwright, invalide o
 veredito anterior e registre o novo sensor/Reviewer necessário. O fluxo não pode
 prosseguir enquanto o Plan e o `evaluation.md` não refletirem a mudança mais
 recente.

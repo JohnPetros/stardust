@@ -1,6 +1,6 @@
 # Para que serve?
 
-E a aplicacao responsavel por expor as funcionalidades do StarDust Core via HTTP (API) para consumo do Web, Studio e outros clientes. Alem de rotas REST, a aplicacao executa tarefas assincronas e workflows baseados em eventos por meio do Inngest, integra com servicos externos (ex.: Supabase, cache, storage, telemetria e provedores de IA) e pode expor endpoints MCP autenticados quando a integracao precisar disponibilizar tools do dominio para clientes externos.
+E a aplicacao responsavel por expor as funcionalidades do StarDust Core via HTTP (API) para consumo do Web, Backoffice e outros clientes. Alem de rotas REST, a aplicacao executa tarefas assincronas e workflows baseados em eventos por meio do Inngest, integra com servicos externos (ex.: Supabase, cache, storage, telemetria e provedores de IA) e pode expor endpoints MCP autenticados quando a integracao precisar disponibilizar tools do dominio para clientes externos.
 
 # Desenvolvimento
 

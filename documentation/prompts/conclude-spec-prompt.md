@@ -20,7 +20,7 @@ A task principal conduz o fechamento na task atual. Não crie nova thread.
 
 1. Confirme que os sensores locais e o preflight estão registrados em
    `evaluation.md`, incluindo `test:coverage` e `check:coverage` para Core,
-   Server, Studio ou Web quando aplicável.
+   Server, Backoffice ou Web quando aplicável.
 2. Execute `npm run check:spec-definition -- <spec>` contra a revisão final. Um
    resultado diferente de `passed` impede a conclusão.
 3. Se houver Plan, execute `npm run check:plan-definition -- <plan>` contra a
@@ -55,9 +55,9 @@ A task principal conduz o fechamento na task atual. Não crie nova thread.
    necessária estiver pendente.
 
 Para frontend, confirme no `evaluation.md` a auditoria de
-`ui-layer-rules.md` e a matriz independente baseada no `design/handoff.md` antes de marcar a Spec
-como concluída. A matriz deve comprovar fidelidade Pencil-to-code no HEAD atual;
-node ausente, contradito, adicionado sem aprovação ou divergência sem decisão
+`ui-layer-rules.md` e a matriz independente baseada nos frames de `design/stardust.fig` declarados na Spec antes de
+marcar a Spec como concluída. A matriz deve comprovar fidelidade design-to-code no HEAD atual;
+frame ausente, contradito, adicionado sem aprovação ou divergência sem decisão
 rastreável mantém a Spec `in_progress` e exige correção ou amendment.
 
 ## Documentação e entrega

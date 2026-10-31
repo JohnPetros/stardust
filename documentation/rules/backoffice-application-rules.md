@@ -1,6 +1,6 @@
 # Para que serve?
 
-A aplicação studio serve como um painel administrativo (Admin), atuando como o nucleo operacional para a gestao digital do StarDust. Ela capacita o usuario administrador com uma visao abrangente e controle sobre metricas essenciais (engajamento, comportamento e tendencias). Alem disso, centraliza a criacao, edicao e publicacao de conteúdo para disponibilizacao consistente no website e no aplicativo mobile.
+A aplicação backoffice serve como um painel administrativo (Admin), atuando como o nucleo operacional para a gestao digital do StarDust. Ela capacita o usuario administrador com uma visao abrangente e controle sobre metricas essenciais (engajamento, comportamento e tendencias). Alem disso, centraliza a criacao, edicao e publicacao de conteúdo para disponibilizacao consistente no website e no aplicativo mobile.
 
 # Funcionalidades principais
 
@@ -40,14 +40,14 @@ A aplicação studio serve como um painel administrativo (Admin), atuando como o
 - Testes automatizados: Jest
 - Testes de UI: React Testing Library
 
-> Para mais detalhes sobre as dependencias e versoes, consulte o arquivo [package.json](https://github.com/JohnPetros/stardust/blob/main/apps/studio/package.json).
+> Para mais detalhes sobre as dependencias e versoes, consulte o arquivo [package.json](https://github.com/JohnPetros/stardust/blob/main/apps/backoffice/package.json).
 
 ## Executando a aplicação
 
-**Navegue até a página da aplicação studio**
+**Navegue até a página da aplicação backoffice**
 
 ```bash
-cd ./stardust/apps/studio
+cd ./stardust/apps/backoffice
 ```
 
 **Instale as dependências**
@@ -62,7 +62,7 @@ npm install
 npm run dev
 ```
 
-> Sera aberto o painel de desenvolvimento da aplicacao studio em http://localhost:8000
+> Sera aberto o painel de desenvolvimento da aplicacao backoffice em http://localhost:8000
 
 ## Executando os testes
 
@@ -71,17 +71,17 @@ npm run test
 ```
 > [!NOTE]
 > Defina as variaveis de ambiente de desenvolvimento no arquivo `.env.local`.
-> Referencia: `apps/studio/.env.local`.
+> Referencia: `apps/backoffice/.env.local`.
 
 ## Tooling
 
-- Scripts do workspace `@stardust/studio`:
-  - Dev: `npm run dev -w @stardust/studio`
-  - Build: `npm run build -w @stardust/studio`
-  - Start (static): `npm run start -w @stardust/studio`
-  - Qualidade: `npm run check:code -w @stardust/studio` (`lint` + `format`)
-  - Tipos: `npm run check:types -w @stardust/studio` (inclui `react-router typegen && tsc`)
-  - Testes: `npm run test:unit -w @stardust/studio` / `npm run test:unit:watch -w @stardust/studio`
+- Scripts do workspace `@stardust/backoffice`:
+  - Dev: `npm run dev -w @stardust/backoffice`
+  - Build: `npm run build -w @stardust/backoffice`
+  - Start (static): `npm run start -w @stardust/backoffice`
+  - Qualidade: `npm run check:code -w @stardust/backoffice` (`lint` + `format`)
+  - Tipos: `npm run check:types -w @stardust/backoffice` (inclui `react-router typegen && tsc`)
+  - Testes: `npm run test:unit -w @stardust/backoffice` / `npm run test:unit:watch -w @stardust/backoffice`
 - Referencia geral: `documentation/tooling.md`.
 
 ## Estruturação do projeto

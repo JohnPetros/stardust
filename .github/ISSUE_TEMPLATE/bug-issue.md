@@ -23,7 +23,7 @@ assignees: ''
 ## Contexto
 
 - **Módulo:** <!-- módulo ou Não identificado -->
-- **Aplicação:** <!-- web | server | studio | combinação | Não identificada -->
+- **Aplicação:** <!-- web | server | backoffice | studio | combinação | Não identificada -->
 - **Ambiente:** <!-- local | staging | production | Não identificado -->
 - **Frequência:** <!-- sempre | intermitente | observado uma vez | Não identificada -->
 - **Perfil afetado:** <!-- perfil ou Não identificado -->

@@ -2,7 +2,7 @@
 
 ## Visao Geral
 
-A camada **UI** implementa a interface (Web e Studio) com foco em usabilidade, acessibilidade e consistencia visual. O padrao principal e o `Widget Pattern`.
+A camada **UI** implementa a interface (Web e Backoffice) com foco em usabilidade, acessibilidade e consistencia visual. O padrao principal e o `Widget Pattern`.
 
 | Item | Definicao |
 | --- | --- |
@@ -19,9 +19,9 @@ A camada **UI** implementa a interface (Web e Studio) com foco em usabilidade, a
 | Web | `apps/web/src/ui/global/contexts/` | Contexts e seus hooks de consumo. |
 | Web | `apps/web/src/ui/global/hooks/` | Hooks reutilizaveis de UI. |
 | Web | `apps/web/src/ui/global/styles/global.css` | Estilos globais. |
-| Studio | `apps/studio/src/ui/` | UI do Studio. |
-| Studio | `apps/studio/src/ui/shadcn/` | Base de componentes do Studio. |
-| Studio | `apps/studio/src/ui/global/stores/` | Stores + facade (quando aplicavel). |
+| Backoffice | `apps/backoffice/src/ui/` | UI do Backoffice. |
+| Backoffice | `apps/backoffice/src/ui/shadcn/` | Base de componentes do Backoffice. |
+| Backoffice | `apps/backoffice/src/ui/global/stores/` | Stores + facade (quando aplicavel). |
 
 ## Widget Pattern
 
@@ -48,7 +48,7 @@ A camada **UI** implementa a interface (Web e Studio) com foco em usabilidade, a
 - **Tipagem**: props e retornos explicitamente tipados.
 - **Exports**: preferir named exports (`export const`); evitar `export default`.
 - **Integracao na borda**: dependencies (services, providers, contexts) resolvidas no Entry Point e passadas via props/params.
-- **Componentes base**: no Studio, priorizar os componentes shadcn existentes;
+- **Componentes base**: no Backoffice, priorizar os componentes shadcn existentes;
   criar primitives novas somente quando o catálogo não atender ao contrato.
 - **Navegação**: usar `useNavigation` para navegação imperativa; não acessar
   `window.history`, `window.location` ou wrappers ad hoc em widgets.
@@ -132,17 +132,17 @@ export const EmptyStateView = ({ title }: EmptyStateViewProps) => {
 }
 ```
 
-### Anti-padrão: Usar prop `icon` no componente `Icon` do Studio
+### Anti-padrão: Usar prop `icon` no componente `Icon` do Backoffice
 
 **O que foi feito:**
-Foi usado o componente `Icon` da UI do Studio com a prop errada `icon`, por exemplo:
+Foi usado o componente `Icon` da UI do Backoffice com a prop errada `icon`, por exemplo:
 
 ```tsx
 <Icon icon='audio' className='mr-2 h-4 w-4' />
 ```
 
 **Por que está errado:**
-No Studio, o contrato de `Icon` (`LucideIconView`) recebe `name` (tipo `IconName`), nao `icon`. Usar `icon` quebra a tipagem, gera erro de compilacao e despadroniza o uso dos componentes globais da UI.
+No Backoffice, o contrato de `Icon` (`LucideIconView`) recebe `name` (tipo `IconName`), nao `icon`. Usar `icon` quebra a tipagem, gera erro de compilacao e despadroniza o uso dos componentes globais da UI.
 
 **O que deve ser feito:**
 Usar sempre a prop `name` com um valor existente em `IconName`:
@@ -180,7 +180,7 @@ export const Button = ({ title, onAction }: { title: string; onAction: () => voi
 - **Permitido**
   - UI depender de `@stardust/core/**` (tipos, entidades, `responses`).
   - UI chamar camadas da propria app: `apps/web/src/rpc/**`, `apps/web/src/rest/**`.
-  - Studio preferir componentes base em `apps/studio/src/ui/shadcn`.
+  - Backoffice preferir componentes base em `apps/backoffice/src/ui/shadcn`.
 - **Proibido**
   - UI importar `apps/server/**`.
   - UI acessar `apps/server/src/database/**` ou qualquer acesso direto a db/queue.
@@ -194,7 +194,7 @@ export const Button = ({ title, onAction }: { title: string; onAction: () => voi
 - Props tipadas; exports sao named.
 - Componentes internos com lógica estão em diretórios próprios.
 - Navegação imperativa usa `useNavigation`.
-- Componentes Studio reutilizam primitives shadcn quando disponíveis.
+- Componentes Backoffice reutilizam primitives shadcn quando disponíveis.
 
 ## Auditoria obrigatória de UI
 

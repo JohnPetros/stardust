@@ -3,7 +3,7 @@
 Crew (`apps/crew`) is standalone engineering tooling ported from HMS. These rules
 apply only to Crew; the product apps retain their existing conventions.
 
-- Crew never imports Server, Web or Studio, and never uses the product database.
+- Crew never imports Server, Web or Backoffice, and never uses the product database.
   Its app-local `AppError` follows the shared error shape and adds stable
   `details.code` metadata without changing product errors.
 - Keep the port's native Mastra agent layout (`config.ts`, `instructions.md`,
@@ -34,7 +34,7 @@ apply only to Crew; the product apps retain their existing conventions.
   `CREW_PORT` and `CREW_HOST` to avoid collisions with product settings. Never log
   secrets or persist input payloads, tokens, tool results or credentials in runs.
 - Production exposes health and the authenticated run API only; Mastra built-in
-  routes and Studio remain unavailable. Do not publish review comments or deploy
+  routes and Backoffice remain unavailable. Do not publish review comments or deploy
   automatically without an explicitly configured caller/deployment workflow.
 - Unit tests use deterministic fake models/tools. Controller integration tests
   use real Mastra route registration and Testcontainers PostgreSQL. Live evals

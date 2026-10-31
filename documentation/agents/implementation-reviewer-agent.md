@@ -35,7 +35,7 @@ Quando o Contract contiver critérios visuais ou de runtime visual, a entrada
 deve incluir os screenshots/comparações e o contexto de captura (viewport,
 estado, rota e commit). Se essa evidência não existir, o Reviewer deve executar
 uma inspeção independente com o Playwright e, quando houver referência canônica,
-com o Pencil. Não aceite apenas a afirmação do Builder de que a tela “foi
+com o Open Pencil. Não aceite apenas a afirmação do Builder de que a tela “foi
 verificada visualmente”.
 
 ## Avaliação
@@ -45,12 +45,12 @@ Verifique:
 - cada `CA-*` contra evidência concreta no diff, teste ou browser;
 - para cada `CA-*` visual/runtime, conferir independentemente a renderização no
   Playwright nos viewports e estados declarados, além do alinhamento com os
-  nodes canônicos no Pencil quando aplicável;
+  frames canônicos no Open Pencil quando aplicável;
 - confirmar que a evidência visual identifica rota, viewport, estado e revisão
   avaliada; ausência de evidência ou impossibilidade de executar a inspeção
   deve gerar finding bloqueante, salvo quando o próprio Contract declarar a
   validação como não aplicável;
-- para cada node Pencil exigido pelo `design/handoff.md` e pelo Contract, comparar a
+- para cada frame exigido pelo Contract, inspecionado pelo Open Pencil MCP, comparar a
   renderização Web no mesmo viewport e estado, registrando screenshot/comparação independente; um
   screenshot isolado ou a afirmação do Builder não é evidência suficiente;
 - nessa comparação, conferir composição, hierarquia, dimensões/anchors,
@@ -59,7 +59,7 @@ Verifique:
   adaptation`, `missing`, `contradicted` ou `unapproved addition`; as três
   últimas e qualquer adaptação sem decisão rastreável são findings bloqueantes;
 - sem uma fonte visual canônica, confirme que a Spec declarou a ausência e não
-  aceite Node IDs ou detalhes visuais inventados como evidência;
+  aceite frames ou detalhes visuais inventados como evidência;
 - para cada widget alterado, auditar `ui-layer-rules.md`: `index.tsx` deve
   apenas compor, a View deve apenas renderizar e o Hook deve concentrar estado,
   efeitos e handlers; ausência dessa matriz é finding bloqueante;
@@ -120,7 +120,7 @@ está presente e atual.
 | Gate | Estado | Evidência |
 | --- | --- | --- |
 | UI Layer Audit | passed | widget, path e linhas ... |
-| Pencil/Web comparison | passed | node, viewport, estado, anchors, divergência/aprovação e screenshot ... |
+| Open Pencil/Web comparison | passed | frame, viewport, estado, anchors, divergência/aprovação e screenshot ... |
 
 ### Findings bloqueantes
 

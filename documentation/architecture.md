@@ -2,17 +2,18 @@
 
 ## Visão Geral
 
-O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote `@stardust/core` atua como núcleo agnóstico a frameworks, e as aplicações (`web`, `server`, `studio`) atuam como adaptadores. É um monorepo gerenciado pelo TurboRepo com frontend em Next.js e backend em Hono/Node.js.
+O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote `@stardust/core` atua como núcleo agnóstico a frameworks, e as aplicações (`web`, `server`, `backoffice`) atuam como adaptadores. É um monorepo gerenciado pelo TurboRepo com frontend em Next.js e backend em Hono/Node.js.
 
 ## Apps e Pacotes
 
 - **Web (`apps/web/`)**: Frontend principal em Next.js 15 com React Server Components. UI organizada por domínio seguindo o padrão Widget (View + Hook + Index).
 - **Server (`apps/server/`)**: API REST em Hono/Node.js. Processa requisições HTTP, expõe um endpoint MCP autenticado em `/mcp` e executa jobs assíncronos via Inngest.
-- **Studio (`apps/studio/`)**: Aplicação administrativa interna em React Router v7.
+- **Backoffice (`apps/backoffice/`)**: Aplicação administrativa interna em React Router v7.
 - **Crew (`apps/crew/`)**: Ferramenta independente de engenharia em Mastra, com cinco revisores de PR em paralelo via API Anthropic direta. Usa PostgreSQL próprio (`CREW_DATABASE_URL`), schemas `crew`/`mastra`, acesso GitHub read-only via Composio e API autenticada de runs. Não importa apps de produto. Convenções próprias do port estão em `documentation/rules/crew-app-rules.md`.
 - **Core (`packages/core/`)**: Regras de negócio puras com DDD tático. Sem dependência de frameworks. Contém Entities, Structures, Aggregates, Use Cases e Interfaces.
 - **Validation (`packages/validation/`)**: Schemas de validação com Zod, compartilhados entre as apps.
 - **Email (`packages/email/`)**: Templates de e-mail construidos com React Email para envio de e-mails.
+- **Studio (`packages/studio/`)**: Ferramenta local independente para criar e visualizar animações Lottie, portada do Shifu. Usa React, Vite e CanvasKit/Skottie; o plugin de desenvolvimento lê e grava os arquivos em `public/projects`. Mantém a estrutura da UI do port e não depende do Server, autenticação ou banco.
 - **LSP (`packages/lsp/`)**: Implementação da Linguagem de Programação Delegua para análise, execução, autocomplete e configuração de editor.
 
 ## Fluxo de Dados (resumo)
@@ -31,15 +32,15 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 
 **Web integration tests**: Playwright → app web local em `MODE=testing` → route test-only `/api/tests/server` registra respostas fake HTTP consumidas por SSR e browser → `ClientProviders` injeta `ProfileChannelMock` no `RealtimeContextProvider` → rota real `/auth/sign-up` valida requests, estados de UI e eventos realtime sem depender do backend real nem do Supabase realtime.
 
-**Daily active users report**: Studio `DailyActiveUsersChart` → Server `GET /profile/users/daily-active-users-report?days=N` → `GetDailyActiveUsersReportUseCase` → `AnalyticsReportingProvider` → PostHog Query API → `DailyActiveUsersDto [{ date, web, mobile }]`
+**Daily active users report**: Backoffice `DailyActiveUsersChart` → Server `GET /profile/users/daily-active-users-report?days=N` → `GetDailyActiveUsersReportUseCase` → `AnalyticsReportingProvider` → PostHog Query API → `DailyActiveUsersDto [{ date, web, mobile }]`
 
 **Lesson audio generation/removal**: REST `/lesson/text-blocks` → use cases do modulo `lesson` → eventos Inngest (`requested`, `batch requested`, `generated`, `cancelled`, `audio-file.removed`) → jobs de fan-out, TTS/upload, limpeza fisica de arquivo e persistencia final do `audio` em `stars.texts[blockIndex].audio`
 
 **Challenge code executions**: Web `ChallengeCodeEditorSlot` → Server `POST /challenging/challenges/:challengeId/code-executions` autenticado → `RunChallengeCodeUseCase` executa Delegua via `LspProvider`, classifica o status e persiste `challenge_code_executions` no Supabase → aba `Execucoes` lista historico paginado por usuario/desafio → recompensa de challenge/star challenge valida ultima execucao aceita e contagem de erros no server, sem confiar em contadores do browser.
 
-**Studio signed upload**: Studio `ImageInput` → `StorageService.createSignedUploadUrl(...)` → Server `POST /storage/signed-upload-url` → `CreateSignedUploadUrl` → provider de armazenamento selecionado no Server → browser envia o arquivo diretamente à URL assinada.
+**Backoffice signed upload**: Backoffice `ImageInput` → `StorageService.createSignedUploadUrl(...)` → Server `POST /storage/signed-upload-url` → `CreateSignedUploadUrl` → provider de armazenamento selecionado no Server → browser envia o arquivo diretamente à URL assinada.
 
-**Upload local e produção**: Studio `ImageInput` → Server `POST /storage/signed-upload-url` → `StorageMiddleware` compõe o provider por ambiente → MinIO via `S3FileStorageProvider` em development ou Cloudflare R2 em production → browser envia o arquivo diretamente à URL assinada. Os providers concretos ficam separados por provedor em `apps/server/src/provision/storage/s3/` e `dropbox/`; o contrato `FileStorageProvider` permanece no Core.
+**Upload local e produção**: Backoffice `ImageInput` → Server `POST /storage/signed-upload-url` → `StorageMiddleware` compõe o provider por ambiente → MinIO via `S3FileStorageProvider` em development ou Cloudflare R2 em production → browser envia o arquivo diretamente à URL assinada. Os providers concretos ficam separados por provedor em `apps/server/src/provision/storage/s3/` e `dropbox/`; o contrato `FileStorageProvider` permanece no Core.
 
 **Infraestrutura local de desenvolvimento**: `docker-compose.yml` inicia o PostgreSQL Supabase, GoTrue, PostgREST, Realtime, Envoy, Mailpit, MinIO, Redis e Inngest. Envoy encaminha Auth, REST e Realtime e traduz a chave publishable opaca para a credencial interna; credenciais internas ficam somente no `.env.local` raiz e não são passadas aos apps. Server e Web usam `SUPABASE_PUBLISHABLE_KEY` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. O Mailpit captura o SMTP e expõe a API local; o serviço separado `supabase-templates` serve os templates versionados de confirmação e recuperação. O Server mantém PostgREST para os repositories atuais (`supabase.from(...)`) e usa `DATABASE_URL` apenas para operações administrativas de feedback após autorização de God Account; a futura adoção de Drizzle e a retirada ampla de RLS ficam para task separada. `npm run db:test -w @stardust/server` aplica o reset e as migrations versionadas sem seed; os testes de rota confirmam contas efêmeras pelo link/token hash extraído da mensagem no Mailpit. Somente PostgreSQL e MinIO persistem sob `docker/volumes/`; os demais serviços locais são descartáveis. Portas host são configuráveis na `.env.local` raiz, limitadas a loopback pelos guards das aplicações.
 
@@ -53,7 +54,7 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 - **RestClient** como adapter sobre Axios/Fetch para chamadas HTTP externas.
 - **Providers de Analytics** para isolar SDKs/APIs externas como PostHog atrás de contratos do Core (`ServerAnalyticsProvider`, `ClientAnalyticsProvider`, `AnalyticsReportingProvider`).
 - **RateLimiterProvider** no Core, implementado por `IORedisRateLimiterProvider` no Server; o middleware Hono aplica IP antes da autenticação e conta após identidade REST/API key verificada.
-- **ProvisionContext no Studio** para resolver providers client-side de infraestrutura, como o upload direto por URL assinada, sem misturar essa responsabilidade no dominio nem no widget.
+- **ProvisionContext no Backoffice** para resolver providers client-side de infraestrutura, como o upload direto por URL assinada, sem misturar essa responsabilidade no dominio nem no widget.
 - **Job** para tarefas assíncronas, agendadas ou falháveis (e-mail, relatórios).
 - **Factory Functions** no lugar de `new Class()` para Serviços e Controllers.
 
@@ -87,12 +88,13 @@ stardust/
 ├── apps/
 │   ├── web/
 │   ├── server/
-│   ├── studio/
+│   ├── backoffice/
 │   └── crew/
 └── packages/
     ├── core/
     ├── validation/
     ├── email/
+    ├── studio/
     └── lsp/
 ```
 

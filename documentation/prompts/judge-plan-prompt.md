@@ -14,7 +14,7 @@ Esse único gate cobre definição e estado de execução; um resultado diferent
 
 Envie a Spec `open`, sua revisão, o Plan, Architecture, Rules, pesquisa dos
 paths envolvidos, riscos e decisões registradas. Quando houver UI, inclua os
-paths/Node IDs Pencil, estados, variantes, viewports e a matriz de divergências
+os frames de `design/stardust.fig`, estados, variantes, viewports e a matriz de divergências
 aprovadas. Essa verificação não edita arquivos, não cria tarefas e não resolve
 decisões de produto ou arquitetura.
 

@@ -353,5 +353,5 @@ describe("SignInForm", () => {
 - Bibliotecas de teste (UI): `@testing-library/react`, `@testing-library/user-event`.
 - Comandos:
   - Web: `npm run test:unit -w @stardust/web` / `npm run test:unit:watch -w @stardust/web`.
-  - Studio: `npm run test:unit -w @stardust/studio` / `npm run test:unit:watch -w @stardust/studio`.
+  - Backoffice: `npm run test:unit -w @stardust/backoffice` / `npm run test:unit:watch -w @stardust/backoffice`.
 - Referencia geral: `documentation/tooling.md`.

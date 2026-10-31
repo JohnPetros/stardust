@@ -299,7 +299,7 @@ Explique o resultado entregue pela versão.
 
 - Mudanças relevantes de API, persistência e jobs.
 
-### Studio
+### Backoffice
 
 - Mudanças relevantes da aplicação administrativa.
 
@@ -394,8 +394,8 @@ A execução do Hermes com Playwright MCP é orientada aos requisitos dos PRDs
 afetados e não substitui nem deve duplicar desnecessariamente a suíte
 versionada.
 
-Nesta primeira versão, o agente não deve acessar o Studio de produção nem
-executar validação E2E diretamente no Server. Requisitos exclusivos de Studio,
+Nesta primeira versão, o agente não deve acessar o Backoffice de produção nem
+executar validação E2E diretamente no Server. Requisitos exclusivos de Backoffice,
 Server ou outro ambiente devem ser classificados como `não aplicável ao escopo
 Web staging`, com justificativa. Essa classificação não pode ser apresentada
 como requisito validado.

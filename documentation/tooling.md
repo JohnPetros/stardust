@@ -18,7 +18,7 @@ MCP do projeto. Os scripts de exportação de ambiente imprimem atribuições pa
 o shell atual; carregue-as com `eval`:
 
 ```bash
-eval "$(node ./scripts/export-studio-app-e2e-env.mjs)"
+eval "$(node ./scripts/export-backoffice-app-e2e-env.mjs)"
 eval "$(node ./scripts/export-web-app-e2e-env.mjs)"
 ```
 
@@ -51,7 +51,7 @@ regressão.
 O check de complexidade usa `.code-multivitals.json` para os limites e um
 baseline compartilhado em `.code-multivitals-baseline.json`. O CI executa o
 check no escopo principal de cada app ou pacote (`apps/server`, `apps/web`,
-`apps/studio` e `packages/core`), tolerando a dívida existente e bloqueando
+`apps/backoffice` e `packages/core`), tolerando a dívida existente e bloqueando
 novas violações. Para atualizar o baseline, execute:
 
 ```bash
@@ -79,7 +79,10 @@ partir da raiz.
 | `prod`               | Inicia os processos de produção definidos pelos workspaces via Turbo.                               |
 | `build`              | Compila os workspaces e substitui imports de pacotes pelos caminhos de build.                       |
 | `build:server`       | Compila o Server sem cache e substitui os imports de pacotes.                                       |
-| `build:studio`       | Compila apenas o Studio.                                                                            |
+| `build:backoffice`       | Compila apenas o Backoffice.                                                                            |
+| `dev:backoffice` | Inicia o painel administrativo em `http://localhost:8000`. |
+| `dev:studio` | Inicia o editor local de animações, preferindo a porta `3030`. |
+| `build:studio` | Compila o player de animações do pacote `@stardust/studio`. |
 | `build:web`          | Compila apenas a Web App.                                                                           |
 | `build:core`         | Compila apenas o pacote Core.                                                                       |
 | `format`             | Formata os arquivos dos workspaces via Turbo.                                                       |
@@ -100,7 +103,7 @@ partir da raiz.
 | `test:scripts`       | Executa os testes de todos os scripts auxiliares em `scripts/tests/`.                               |
 | `test:integration`   | Executa os testes de integração declarados pelos workspaces via Turbo.                              |
 | `test:server`        | Executa os testes unitários do `@stardust/server`.                                                  |
-| `test:studio`        | Executa os testes unitários do `@stardust/studio`.                                                  |
+| `test:backoffice`        | Executa os testes unitários do `@stardust/backoffice`.                                                  |
 | `test:web`           | Executa os testes unitários do `@stardust/web`.                                                     |
 | `test:core`          | Executa os testes unitários do `@stardust/core`.                                                    |
 
@@ -158,22 +161,22 @@ Os comandos `db:prod`, `db:push` e `db:revert` alteram estado externo ou o
 histórico de migrations. Confirme o projeto e os parâmetros antes de executá-
 los.
 
-### `apps/studio`
+### `apps/backoffice`
 
 | Script            | Descrição                                                              |
 | --- | --- |
-| `dev`             | Inicia o servidor de desenvolvimento do Studio na porta `8000`.        |
-| `build`           | Gera o build do Studio com React Router.                               |
-| `start`           | Serve o arquivo estático do Studio a partir de `build/client`.         |
+| `dev`             | Inicia o servidor de desenvolvimento do Backoffice na porta `8000`.        |
+| `build`           | Gera o build do Backoffice com React Router.                               |
+| `start`           | Serve o arquivo estático do Backoffice a partir de `build/client`.         |
 | `lint`            | Executa o lint de `src` com nível de diagnóstico de erro.              |
 | `format`          | Formata `src` e grava as alterações.                                   |
 | `check:code`      | Verifica `src` com Biome, sem aplicar correções.                       |
 | `check:types`     | Gera os tipos do React Router e executa o TypeScript.                  |
-| `check:complexity` | Verifica o escopo `apps/studio` contra o baseline compartilhado.       |
-| `check:architecture` | Verifica as dependências arquiteturais do Studio com dependency-cruiser. |
-| `test:unit`       | Executa os testes unitários do Studio.                                 |
-| `test:coverage`   | Executa os testes unitários do Studio com relatório JSON de cobertura. |
-| `test:unit:watch` | Executa os testes unitários do Studio em modo watch.                   |
+| `check:complexity` | Verifica o escopo `apps/backoffice` contra o baseline compartilhado.       |
+| `check:architecture` | Verifica as dependências arquiteturais do Backoffice com dependency-cruiser. |
+| `test:unit`       | Executa os testes unitários do Backoffice.                                 |
+| `test:coverage`   | Executa os testes unitários do Backoffice com relatório JSON de cobertura. |
+| `test:unit:watch` | Executa os testes unitários do Backoffice em modo watch.                   |
 
 ### `apps/web`
 
@@ -223,6 +226,28 @@ los.
 | `check:types` | Executa o TypeScript sem emitir arquivos.   |
 | `check:complexity` | Verifica os templates de email contra o baseline compartilhado. |
 
+### `packages/studio`
+
+Ferramenta local de autoria de animações Lottie, independente do painel
+administrativo em `apps/backoffice`. Use `npm run dev:studio` na raiz.
+O Vite prefere a porta `3030` e informa outra porta se ela estiver ocupada.
+Não exige Server, Supabase, credenciais ou variáveis de ambiente.
+
+| Script | Efeito |
+| --- | --- |
+| `dev` | Inicia o editor Vite e o backend local de arquivos. |
+| `build` | Verifica tipos e gera o player estático em `dist`. |
+| `preview` | Serve o build estático, sem endpoints de edição. |
+| `check:code` | Verifica UI, plugin e scripts com Biome. |
+| `check:types` | Executa TypeScript sem emissão. |
+| `format` | Formata o código com Biome. |
+| `postinstall` | Copia o CanvasKit WASM para `public`, sem versionar o binário. |
+
+O `npm run dev` geral não inicia esta ferramenta. `npm run build:studio`
+gera seu build pela raiz. Os checks gerais de código e tipos incluem o pacote
+via Turbo. O smoke manual abre uma cena, valida playback, controles e gravação
+em `lottie.json`; não usa o fluxo autenticado do Backoffice administrativo.
+
 ### `packages/lsp`
 
 | Script        | Descrição                                           |
@@ -258,8 +283,8 @@ Prepare o stack e aplique as migrations com `npm run db:test -w @stardust/server
 As contas locais são fixtures públicas fixas definidas em
 `apps/server/src/database/seeders/seed-accounts.json`: `explorer@stardust.local`
 e `studio@stardust.local`. Seus IDs terminam em `0001` e `0002`, respectivamente.
-O seed não usa `WEB_APP_E2E_*` ou `STUDIO_APP_E2E_*`. Inclua o UUID completo do
-Studio (`00000000-0000-4000-8000-000000000002`) em `GOD_ACCOUNT_IDS` da raiz e do
+O seed não usa `WEB_APP_E2E_*` ou `BACKOFFICE_APP_E2E_*`. Inclua o UUID completo do
+Backoffice (`00000000-0000-4000-8000-000000000002`) em `GOD_ACCOUNT_IDS` da raiz e do
 Server local. Para o Playwright manual, carregue o exportador correspondente com
 `--seed`; sem essa opção ele mantém o suporte às credenciais privadas da raiz.
 
@@ -283,7 +308,7 @@ O snapshot contém 55 avatares, 10 foguetes, 2 insígnias, 6 tiers, 17 conquista
 60 vínculos de categorias, 10 categorias e 10 guias. Textos, histórias e questões
 embutidos nas estrelas são aplicados pelo `LessonSeeder`; a tabela de questões
 separada está vazia em staging. Autoria dos desafios é substituída pela conta
-Studio local. Não são exportados usuários, emails, sessões, hashes de senha,
+Backoffice local. Não são exportados usuários, emails, sessões, hashes de senha,
 API keys, desafios privados sem estrela nem histórico de atividade de staging.
 Roadmaps de staging não fazem parte do schema local atual e não são importados.
 
@@ -306,7 +331,7 @@ extras. Confirma por HTTP anônimo os 104 arquivos referenciados pelos oito
 planetas, pelas 17 conquistas, pelos 55 avatares, pelos seis tiers e pelos 10 foguetes. Não altera o banco; pode ser executado novamente para atualizar os
 arquivos. A policy existente é preservada e recebe permissão de leitura pública
 somente para `images/planets/*`, `images/achievements/*`, `images/avatars/*`, `images/rankings/*` e `images/rockets/*`. Uploads e outras pastas não recebem permissões.
-Configure `NEXT_PUBLIC_CDN_URL` na Web e `VITE_CDN_URL` no Studio com a URL
+Configure `NEXT_PUBLIC_CDN_URL` na Web e `VITE_CDN_URL` no Backoffice com a URL
 impressa pelo comando (`http://127.0.0.1:<MINIO_API_PORT>/<MINIO_BUCKET>`).
 Os avatares preservam os nomes `.jpg` do catálogo; o Content-Type corresponde
 aos bytes originais (JPEG, AVIF ou WebP). A verificação HTTP compara os bytes
@@ -397,7 +422,7 @@ Mailpit, Inngest, Kong e templates são descartáveis.
 Os testes de integração da Web App usam Playwright, o ambiente
 `apps/web/.env.testing` e o servidor de testes iniciado pela configuração da
 suíte. Não aponte esse fluxo para produção nem use as credenciais reais do
-Studio:
+Backoffice:
 
 ```bash
 npm --workspace @stardust/web run test:integration:install
@@ -424,7 +449,7 @@ rota protegida além da tela de login. Credenciais devem permanecer em
 7. Build no CI, depois dos checks aplicáveis.
 
 Os checks do PR são a composição dos checks normais. A cobertura possui um
-quality ratchet por workspace para Core, Server, Studio e Web; os thresholds
+quality ratchet por workspace para Core, Server, Backoffice e Web; os thresholds
 versionados em `coverage-baseline.json` nunca podem diminuir sem uma alteração
 revisada desse arquivo.
 
@@ -466,3 +491,9 @@ integrações precisam de Docker; evals fazem chamadas pagas à Anthropic e ao
 Composio. Node 24.11+ é recomendado para o toolchain de build. O CI próprio
 valida o workspace e a imagem sem segredos de inferência. Detalhes e limites de
 evidência estão em `apps/crew/README.md`.
+
+O exportador `scripts/export-backoffice-app-e2e-env.mjs` usa
+`BACKOFFICE_APP_E2E_EMAIL` e `BACKOFFICE_APP_E2E_PASSWORD`. Durante a migração,
+aceita também as chaves locais legadas `STUDIO_APP_E2E_*`, mas sempre exporta
+as variáveis com o prefixo `BACKOFFICE_APP_E2E_`. As contas fixas do seed e
+o namespace de sessão do navegador são preservados.

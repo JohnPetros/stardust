@@ -84,7 +84,7 @@ repositório.
 
 - <comportamento/capacidade incluída>
 - <restrição material de produto, Design ou integração>
-- <referência Pencil exata quando fornecida>
+- <frame de `design/stardust.fig` exato quando fornecido>
 
 ## ✅ Critérios de Aceitação
 
@@ -132,7 +132,7 @@ referência do requisito principal selecionado, e somente requisitos complementa
 aplicáveis devem ser listados como suporte.
 
 Mantenha a issue em nível de product delivery. Não inclua signatures, file inventory, fluxo
-técnico detalhado ou decisões novas de arquitetura. Preserve paths/Node IDs Pencil exatamente
+técnico detalhado ou decisões novas de arquitetura. Preserve nomes de frames do design exatamente
 quando fornecidos.
 
 ## Approval gate

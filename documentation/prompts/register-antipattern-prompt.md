@@ -32,7 +32,7 @@ Este prompt sempre altera `documentation/rules/`, portanto leia:
 - **Camada afetada** (opcional): se já souber, informe a camada
   (`core`, `database`, `rest`, `rpc`, `queue`, `ui`, `realtime`,
   `provision`, `ai`, `validation`, `lsp`, `testing`, `code-conventions`,
-  `web`, `server`, `studio`). Se
+  `web`, `server`, `backoffice`). Se
   não souber, o prompt identifica automaticamente.
 
 ---
@@ -60,7 +60,7 @@ identifique o arquivo de regras da camada afetada:
 | Convenções de código / nomeação / factories | `documentation/rules/code-conventions-rules.md` |
 | Regras da app web | `documentation/rules/web-application-rules.md` |
 | Regras da app server | `documentation/rules/server-application-rules.md` |
-| Regras da app studio | `documentation/rules/studio-appllication-rules.md` |
+| Regras da app studio | `documentation/rules/backoffice-application-rules.md` |
 | Testes de handlers | `documentation/rules/handlers-testing-rules.md` |
 | Testes de rotas HTTP do server | `documentation/rules/server-routes-testing-rules.md` |
 | Testes de rotas e pages da web | `documentation/rules/web-app-routes-testing-rules.md` |

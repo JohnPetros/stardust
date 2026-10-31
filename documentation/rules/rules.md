@@ -165,7 +165,7 @@ papéis, artefatos, sensores e critérios de conclusão.
 - Ao explorar simbolos e caminhos de chamada com CodeGraph.
 - Ao consultar documentacao atualizada com Context7.
 - Ao interagir com Supabase Dev/Prod.
-- Ao trabalhar com arquivos `.pen` via Pencil.
+- Ao inspecionar ou editar `design/stardust.fig` via Open Pencil.
 
 ## Regras da Aplicação Web
 
@@ -177,15 +177,15 @@ papéis, artefatos, sensores e critérios de conclusão.
   Tailwind, etc.).
 - Para entender a estrutura de pastas do projeto `apps/web`.
 
-## Regras da Aplicação Studio
+## Regras da Aplicação Backoffice
 
-**Arquivo:** `/documentation/rules/studio-appllication-rules.md`
+**Arquivo:** `/documentation/rules/backoffice-application-rules.md`
 **Quando consultar:**
 
-- Ao criar ou modificar um documento relacionado a aplicação studio.
-- Para uma visao geral da arquitetura e stack da Aplicacao Studio (Painel
+- Ao criar ou modificar um documento relacionado a aplicação backoffice.
+- Para uma visao geral da arquitetura e stack da Aplicacao Backoffice (Painel
   Admin - React Router v7, Vite, Shadcn).
-- Para entender a estrutura de pastas do projeto `apps/studio`.
+- Para entender a estrutura de pastas do projeto `apps/backoffice`.
 
 ## Regras da Aplicacao Server
 

@@ -17,7 +17,7 @@ Manter atualizado o documento de visão geral do projeto (`documentation/overvie
 Antes de atualizar o overview, leia:
 
 - `documentation/rules/rules.md` — quando a visão geral mencionar camadas, apps ou responsabilidades técnicas.
-- `documentation/rules/web-application-rules.md`, `documentation/rules/server-application-rules.md` e `documentation/rules/studio-appllication-rules.md` — quando a atualização descrever capacidades específicas desses apps.
+- `documentation/rules/web-application-rules.md`, `documentation/rules/server-application-rules.md` e `documentation/rules/backoffice-application-rules.md` — quando a atualização descrever capacidades específicas desses apps.
 - `documentation/rules/code-conventions-rules.md` — quando o overview mencionar padrões gerais de organização ou nomenclatura.
 
 Não transforme o overview em documento de rules; use as rules apenas para evitar descrição técnica incorreta.

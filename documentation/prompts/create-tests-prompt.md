@@ -148,20 +148,20 @@ npm run check:code
 
 npm run test:unit -w @stardust/web
 npm run test:unit -w @stardust/server
-npm run test:unit -w @stardust/studio
+npm run test:unit -w @stardust/backoffice
 npm run test:unit -w @stardust/core
 
 npm run test:unit -w @stardust/web -- caminho/do/arquivo
 npm run test:unit -w @stardust/server -- caminho/do/arquivo
-npm run test:unit -w @stardust/studio -- caminho/do/arquivo
+npm run test:unit -w @stardust/backoffice -- caminho/do/arquivo
 npm run test:unit -w @stardust/core -- caminho/do/arquivo
 
 npm run check:types -w @stardust/web
 npm run check:code -w @stardust/web
 npm run check:types -w @stardust/server
 npm run check:code -w @stardust/server
-npm run check:types -w @stardust/studio
-npm run check:code -w @stardust/studio
+npm run check:types -w @stardust/backoffice
+npm run check:code -w @stardust/backoffice
 npm run check:types -w @stardust/core
 npm run check:code -w @stardust/core
 ```

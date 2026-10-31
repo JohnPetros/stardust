@@ -92,7 +92,7 @@ Durante a reprodução e o rerun:
   `npm exec playwright -- test ...` a partir de `apps/web`; use o ambiente de integração com
   `ServerMock` nos testes versionados e o fluxo real em `localhost:3000`/API local para inspeção
   autenticada fora da suíte;
-- para Studio, use o servidor, a porta e as credenciais definidos em `AGENTS.md`, valide login e
+- para Backoffice, use o servidor, a porta e as credenciais definidos em `AGENTS.md`, valide login e
   pelo menos uma rota protegida;
 - após cada correção, repita o fluxo autenticado completo pelo Playwright CLI. Tela de login, mock isolado ou
   renderização unitária não bastam para declarar a correção funcional.

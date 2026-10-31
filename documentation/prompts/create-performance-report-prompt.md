@@ -13,7 +13,7 @@ Conduzir um diagnóstico de performance orientado à arquitetura do StarDust, id
 ## Entradas
 
 - **Obrigatórias:**
-  - Aplicação alvo `{APP}` (ex: `web`, `server`, `studio`)
+  - Aplicação alvo `{APP}` (ex: `web`, `server`, `backoffice`)
   - Escopo do diagnóstico `{ESCOPO}` (ex: módulo `auth`, rota `/space`, feature `lesson`, ou `full`)
   - Arquivos ou caminhos alvo `{ALVOS}` (ex: `apps/web/src/rpc/`, `apps/server/src/queue/`)
 - **Opcionais:**
@@ -31,7 +31,7 @@ Antes de classificar uma recomendação como segura, leia:
 - `documentation/rules/code-conventions-rules.md` — convenções gerais que afetam refactors recomendados.
 - Rules das camadas tocadas por cada issue de performance:
   - `documentation/rules/web-application-rules.md`
-  - `documentation/rules/studio-appllication-rules.md`
+  - `documentation/rules/backoffice-application-rules.md`
   - `documentation/rules/server-application-rules.md`
   - `documentation/rules/ui-layer-rules.md`
   - `documentation/rules/rpc-layer-rules.md`
@@ -352,7 +352,7 @@ Todas as evidencias abaixo foram verificadas diretamente no codigo fonte.
 - `documentation/architecture.md`
 - `documentation/rules/rules.md`
 - `documentation/rules/web-application-rules.md`
-- `documentation/rules/studio-appllication-rules.md`
+- `documentation/rules/backoffice-application-rules.md`
 - `documentation/rules/ui-layer-rules.md`
 - `documentation/rules/rpc-layer-rules.md`
 - `documentation/rules/rest-layer-rules.md`

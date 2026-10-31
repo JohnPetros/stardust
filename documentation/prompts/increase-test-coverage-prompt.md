@@ -211,7 +211,7 @@ npm run check:plan-definition -- <plan>
 npm run check:spec-implementation -- <spec> --base <commit-base>
 ```
 
-Para Core, Server, Studio e Web, `test:coverage` e `check:coverage` são
+Para Core, Server, Backoffice e Web, `test:coverage` e `check:coverage` são
 obrigatórios. `lsp`, `validation` e `email` permanecem
 fora do quality ratchet de cobertura. Use validação de banco, browser, build ou
 geração somente quando o boundary exigir.

@@ -132,10 +132,7 @@ documentation/prds/<module>/<slug>.md           # PRD canônico versionado do m�
 documentation/features/<domínio>/<feature>/
 ├── spec.md
 ├── plan.md                 # opcional
-├── evaluation.md           # criado no kickoff da implementação
-└── design/                 # quando houver Design Contract
-    ├── handoff.md
-    └── <referências>.png
+└── evaluation.md           # criado no kickoff da implementação
 ```
 
 Uma mudança de comportamento após conclusão usa
@@ -146,17 +143,15 @@ Uma mudança de comportamento após conclusão usa
 | `spec.md`            | comportamento, Design, Technical e Validation Contracts     | tentativas e resultados executados      |
 | `plan.md`            | waves, dependências, ownership, status e próxima ação       | segundo Contract técnico                |
 | `evaluation.md`      | comandos, evidências, findings, histórico, comparações e CI | autoridade de produto ou arquitetura    |
-| `design/handoff.md` | contrato visual offline: inventário de referências; nodes, estados e viewports; mapeamento para surfaces; tokens, componentes, layout, ícones, tema, responsividade e acessibilidade; desvios permitidos; comparação com `RF/CA/VM` | prova produzida pela implementação ou resultado real de validação |
+`design/stardust.fig` é a fonte visual canônica e editável, inspecionada diretamente pelo Open
+Pencil MCP. O design não é extraído para artefatos da feature. Screenshots da implementação ficam
+em `test-results/` ignorado ou em artifacts de CI; o identificador, a comparação e o resultado
+ficam em `evaluation.md`.
 
-O `.pen` ou a referência visual canônica continua sendo a fonte editável. As imagens salvas em
-`design/` são referências de entrada e devem ter dimensão, estado e viewport registrados no
-handoff. Screenshots da implementação ficam em `test-results/` ignorado ou em artifacts de CI;
-o identificador, a comparação e o resultado ficam em `evaluation.md`.
-
-`design/manifest.md` é um nome legado: artefatos históricos permanecem válidos e não devem ser
-renomeados em massa. Uma nova Spec com Design Contract usa `design/handoff.md`. Ao atualizar
-materialmente um artefato legado, migre o nome somente se o contrato visual estiver sendo
-refrescado, atualize as referências vivas e preserve o histórico da revisão.
+`design/handoff.md`, `design/manifest.md` e imagens de referência de Specs anteriores são
+artefatos legados: permanecem válidos como histórico, não devem ser renomeados em massa e não são
+criados por novas Specs. Ao atualizar materialmente uma Spec legada, substitua essas referências
+por frames do `design/stardust.fig` e preserve o histórico da revisão.
 
 ## Estados
 
@@ -242,10 +237,10 @@ pelo menos um `CA-*` e vice-versa. Paths são exatos e classificados
 como Create, Modify, Generate ou Remove. A Spec não é um Plan e não contém resultados.
 
 Para UI, a Spec registra o widget tree exato, estados loading/empty/success/error/recovery,
-teclado, foco, responsividade, referências Pencil/screenshot e viewports. Comportamento
-inferido apenas de imagem precisa de clarificação. O contrato visual detalhado pertence ao
-`design/handoff.md`, que a Spec deve referenciar; a Spec continua sendo a autoridade de produto,
-escopo, comportamento e validação. Uma Spec íntegra passa diretamente de `draft` para a revisão
+teclado, foco, responsividade, frames de referência no `design/stardust.fig` e viewports.
+Comportamento inferido apenas de imagem precisa de clarificação. O detalhe visual permanece no
+`design/stardust.fig`, inspecionado pelo Open Pencil MCP; a Spec continua sendo a autoridade de
+produto, escopo, comportamento e validação. Uma Spec íntegra passa diretamente de `draft` para a revisão
 independente do Spec Reviewer, antes de qualquer planejamento.
 
 Antes da revisão, `create-spec` executa `npm run check:spec-definition -- <spec>`.
@@ -262,39 +257,34 @@ então o fluxo segue para Direct ou planejamento. Amendment posterior invalida o
 nova revisão antes de planejar. A revision history registra a revisão, o resultado e as resoluções
 verificadas, sem incorporar o relatório bruto.
 
-## Design Contract e handoff offline
+## Design Contract
 
-Quando a entrega tiver Pencil ou referências visuais, o `design/handoff.md` é obrigatório e
-deve ser autocontido para um Builder que não tenha uma sessão Pencil disponível. Ele deve conter,
-no mínimo:
+Quando a entrega tiver UI, a fonte visual canônica é `design/stardust.fig`, inspecionada
+diretamente pelo Open Pencil MCP por quem cria, implementa e revisa a Spec. Não há extração do
+design: a Spec não cria `design/handoff.md`, não exporta imagens para a feature e não copia
+tokens, medidas ou receitas visuais.
 
-1. fonte visual canônica (`.pen` ou referência fornecida) e data/revisão da inspeção;
-2. inventário de cada referência com node, estado, variante, viewport, screenshot, surface,
-   componentes/tokens e `RF-*`/`CA-*`/`VM-*` relacionados;
-3. ordem de autoridade entre `documentation/design.md`, tokens globais, componentes compartilhados,
-   handoff, imagens salvas e valores brutos da ferramenta;
-4. crosswalk de tokens, receita de tipografia, mapeamento de componentes/variantes e ícones;
-5. receitas de surfaces, layout, estados, responsividade, tema, foco, teclado, acessibilidade e
-   reduced motion;
-6. divergências permitidas, extensões aprovadas, exclusões e estados sem referência canônica;
-7. inspeção estrutural e requisitos de comparação visual vinculados a `CA-*` e `VM-*`.
+O Design Contract da Spec registra, no mínimo:
+
+1. os frames relevantes, identificados pelo nome (Node IDs mudam quando o arquivo é reaberto);
+2. o estado, a variante e o viewport de cada frame, com os `RF-*`/`CA-*`/`VM-*` relacionados;
+3. divergências permitidas, extensões aprovadas, exclusões e estados sem frame canônico;
+4. os requisitos de comparação visual vinculados a `CA-*` e `VM-*`.
 
 A precedência padrão é: design system e tokens do repositório; comportamento dos componentes
-compartilhados; mapeamentos e receitas do handoff; imagens salvas para comparação; valores brutos
-do Pencil apenas como evidência. Valor bruto não autoriza cor, medida, componente, ícone ou CSS
-novo sem token, Rule ou decisão registrada. Fallbacks semânticos e adaptações acessíveis devem
-ser declarados no handoff; divergências materiais sem decisão rastreável mantêm a Spec aberta.
+compartilhados; frames do `design/stardust.fig` e as variáveis vinculadas a eles. Valor visual
+sem variável não autoriza cor, medida, componente, ícone ou CSS novo sem token, Rule ou decisão
+registrada. Fallbacks semânticos e adaptações acessíveis devem ser declarados na Spec;
+divergências materiais sem decisão rastreável mantêm a Spec aberta.
 
-O workflow de criação deve inspecionar os nodes pelo Pencil MCP, exportar uma imagem por estado
-exigido, verificar existência e dimensões dos arquivos e confirmar que a implementação pode ser
-executada sem Pencil. O Builder usa o bundle salvo. Reabra o Pencil quando o Design Contract mudar,
-quando o usuário pedir atualização ou quando a validação final exigir o node canônico.
+Se o Open Pencil não estiver disponível, ou `design/stardust.fig` não estiver aberto nele, a
+inspeção ou comparação que depende do design fica bloqueada e é registrada como tal; não
+substitua o frame por suposições.
 
-O handoff define a intenção e a receita de implementação; não registra resultados de runtime.
 `evaluation.md` registra screenshots da implementação, comparações, observações, `EV-*`, `ACH-*`
 e o estado final. Se uma mudança alterar a intenção visual, isso é uma mudança de Contract:
-retorne a Spec para `draft`, incremente a revisão, atualize o handoff e invalide as evidências
-afetadas.
+retorne a Spec para `draft`, incremente a revisão, atualize o Design Contract e invalide as
+evidências afetadas.
 
 ## Plan opcional
 
@@ -408,7 +398,7 @@ mesma Spec; após merge, defeito usa Bug Report e comportamento novo usa uma cha
 Após alteração de código, execute os detectores obrigatórios de `AGENTS.md`:
 `npm run check:code`, `npm run check:types` e `npm run test:unit`. Acrescente
 `check:architecture`, testes de integração, geração, browser, Supabase Dev e build conforme
-Rules, Spec, paths e risco. Para `@stardust/core`, `@stardust/server`, `@stardust/studio` e
+Rules, Spec, paths e risco. Para `@stardust/core`, `@stardust/server`, `@stardust/backoffice` e
 `@stardust/web`, execute também `npm run test:coverage -w <workspace>` e
 `npm run check:coverage -- <workspace>` e `npm run check:test-integrity`; os checks falham se qualquer métrica ficar abaixo do
 baseline versionado em `coverage-baseline.json`. O `check:test-integrity` exige pareamento

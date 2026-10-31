@@ -13,8 +13,8 @@ trabalho, nao como substitutos de analise tecnica.
   SDKs, APIs e CLIs.
 - **CodeGraph**: explorar simbolos, caminhos de chamada e impacto de mudancas
   na codebase indexada.
-- **Pencil**: ler e editar arquivos `.pen`, validar layout e trabalhar com
-  contexto de design.
+- **Open Pencil**: inspecionar e editar `design/stardust.fig`, exportar
+  imagens de frames, validar layout e verificar lint do design.
 - **Supabase Dev**: inspecionar e operar o ambiente de desenvolvimento do
   Supabase.
 - **Supabase Prod**: inspecionar o ambiente de producao do Supabase com cuidado
@@ -68,16 +68,22 @@ Boas praticas:
 - se o projeto nao estiver indexado, use as ferramentas locais de navegacao e
   leitura; nao inicialize o indice sem solicitacao.
 
-### Pencil
+### Open Pencil
 
-Use somente para arquivos `.pen` ou quando a tarefa exigir contexto real de
-design do editor.
+Use para inspecionar ou editar `design/stardust.fig`, a fonte visual canonica
+do projeto. O arquivo precisa estar aberto no aplicativo Open Pencil.
 
 Boas praticas:
 
-- obtenha primeiro o estado/schema atual do editor;
-- use screenshot apenas quando validacao visual for necessaria;
-- prefira validacao estrutural quando o objetivo for layout ou hierarquia.
+- confirme com `list_documents` que `design/stardust.fig` esta aberto e use o
+  `document_id` dele; outros arquivos podem estar abertos em outras abas;
+- localize frames por nome (`find_nodes`, `query_nodes`), pois IDs de nodes
+  mudam quando o arquivo e reaberto;
+- leia a estrutura com `get_jsx` ou `get_node` e as variaveis vinculadas antes
+  de deduzir cores, medidas ou componentes;
+- use `export_image` apenas quando validacao visual for necessaria;
+- ao editar, vincule cores as variaveis do design, zere erros e avisos de
+  `lint` e salve com `save_file`.
 
 ### Supabase Dev e Supabase Prod
 

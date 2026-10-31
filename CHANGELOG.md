@@ -832,7 +832,7 @@
 * ⚙️ config: update .gitignore (f49b0847d)
 * 🐛 fix(studio): adjust CI workflow triggers and job dependencies (958bbf53c)
 * 🏎️ ci: enhance GitHub Actions workflows for core, server, and web apps with codecheck, typecheck, tests, and build steps (630057803)
-* 🏎️ ci: add GitHub Actions workflow for Studio app CI with codecheck, typecheck, tests, and build steps (e85059b1e)
+* 🏎️ ci: add GitHub Actions workflow for Backoffice app CI with codecheck, typecheck, tests, and build steps (e85059b1e)
 * ♻️ refactor(studio): update route definitions by removing duplicate achievement route (072e1cc1c)
 
 ## 1.4.1 (2026-03-12)

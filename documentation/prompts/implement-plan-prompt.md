@@ -20,8 +20,8 @@ aguardar seus sensores aplicáveis.
 Para cada fase, em qualquer modo:
 
 1. confirme revisão da Spec, dependências, critérios, paths e evidências; em UI,
-   confirme também o `design/handoff.md`, sua fonte/Node IDs, estados, variantes,
-   viewports, receitas, extensões e divergências aprovadas;
+   confirme também os frames de `design/stardust.fig` declarados na Spec, estados,
+   variantes, viewports, extensões e divergências aprovadas;
 2. marque fase/tarefa como `in_progress`/`implementing`;
 3. crie `Builder F<n>` para o escopo principal;
 4. identifique tarefas prontas, independentes e sem paths sobrepostos;
@@ -53,7 +53,7 @@ tentativas e próxima ação; registra na Spec as avaliações formais.
 
 ### Validação focada por Builder
 
-- `Builder Core`, `Builder Server`, `Builder Studio` e `Builder Web` executam
+- `Builder Core`, `Builder Server`, `Builder Backoffice` e `Builder Web` executam
   os sensores aplicáveis de código, tipos e testes do próprio escopo;
 - alterações de comportamento no Server incluem cenários focados contra o
   servidor real quando exigido pela Spec, cobrindo status/body, validação,
@@ -108,7 +108,7 @@ gerados, registre a fonte, o gerador e o output; para testes, registre o
 comportamento protegido e o comando de execução.
 
 Não agrupe várias mudanças em um único registro retrospectivo. Se a mudança
-alterar o diff ou qualquer evidência de Contract, Rule, Pencil ou Playwright,
+alterar o diff ou qualquer evidência de Contract, Rule, Open Pencil ou Playwright,
 marque o veredito anterior como invalidado e registre a necessidade de novo
 sensor/Reviewer. Uma tarefa não pode ser marcada `verified` enquanto os dois
 artefatos não refletirem a mudança mais recente.
@@ -116,7 +116,7 @@ artefatos não refletirem a mudança mais recente.
 Após todas as fases, execute sensores integrados e o preflight. Consolide em
 `evaluation.md` os vereditos de todos os Reviewers pareados, o Contract, Rules,
 Architecture, diff integrado, resultados dos sensores, auditoria UI e
-evidências Pencil/Playwright. Uma revisão adicional integrada só pode ser criada
+evidências Open Pencil/Playwright. Uma revisão adicional integrada só pode ser criada
 quando houver uma interação cross-boundary que não pertença a nenhum Builder.
 Execute `npm run check:plan-definition -- <plan>` para confirmar que a definição,
 o estado do ledger e os exits correspondem ao status final antes de encaminhar a conclusão.
@@ -136,8 +136,8 @@ Não conclua nem encaminhe enquanto qualquer pré-condição estiver pendente:
 - `evaluation.md` deve registrar as evidências atuais, todos os Reviewers
   pareados, o preflight e os SHAs avaliados.
 - para frontend, deve existir auditoria de `ui-layer-rules.md` por widget e
-  comparação independente dos nodes Pencil aplicáveis com a Web real, com
-  dimensões/anchors, divergências aprovadas e evidência no HEAD avaliado; node
+  comparação independente dos frames aplicáveis no Open Pencil com a Web real, com
+  dimensões/anchors, divergências aprovadas e evidência no HEAD avaliado; frame
   ausente, contradito ou desvio não aprovado bloqueia o encaminhamento;
 - cada SHA avaliado por um Reviewer deve corresponder ao diff do Builder
   pareado; qualquer alteração posterior nesse escopo invalida o veredito e

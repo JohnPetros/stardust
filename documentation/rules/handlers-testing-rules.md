@@ -286,5 +286,5 @@ describe("Get Mdx Guide Tool", () => {
   - `ts-jest-mocker` para mocks type-safe de interfaces.
 - Comandos:
   - Global (Turbo): `npm run test`.
-  - Por workspace: `npm run test:unit -w @stardust/server`, `npm run test:unit -w @stardust/web`, `npm run test:unit -w @stardust/studio`, `npm run test:unit -w @stardust/core`.
+  - Por workspace: `npm run test:unit -w @stardust/server`, `npm run test:unit -w @stardust/web`, `npm run test:unit -w @stardust/backoffice`, `npm run test:unit -w @stardust/core`.
 - Referencia geral: `documentation/tooling.md`.
