@@ -68,6 +68,7 @@
     "@tiptap/core": "3.29.2",
     "@tiptap/pm": "3.29.2",
     "@types/react": "19.2.18",
+    "apexcharts": "6.7.0",
     "code-multivitals": "1.6.2",
     "commitlint-config-git-commit-emoji": "^1.0.0",
     "dependency-cruiser": "^18.1.0",
