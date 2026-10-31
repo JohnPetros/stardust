@@ -80,7 +80,7 @@ test('materializes repository-relative baseline paths for the current runner', (
 test('builds CodeMultiVitals CLI arguments with quality gates', () => {
   const argumentsList = createCliArguments('/tmp/baseline.json', null)
 
-  assert.ok(argumentsList.includes('apps/studio/src/**/*.{ts,tsx}'))
+  assert.ok(argumentsList.includes('apps/backoffice/src/**/*.{ts,tsx}'))
   assert.ok(argumentsList.includes('!**/*.test.ts'))
   assert.ok(
     argumentsList.includes('!apps/server/src/database/supabase/types/Database.ts'),
@@ -96,8 +96,8 @@ test('builds CodeMultiVitals CLI arguments with quality gates', () => {
 })
 
 test('builds a scoped source pattern list for each app or package', () => {
-  assert.deepEqual(getScopePatterns('apps/studio'), [
-    'apps/studio/src/**/*.{ts,tsx}',
+  assert.deepEqual(getScopePatterns('apps/backoffice'), [
+    'apps/backoffice/src/**/*.{ts,tsx}',
     '!**/*.test.ts',
     '!**/*.test.tsx',
     '!**/tests/**',

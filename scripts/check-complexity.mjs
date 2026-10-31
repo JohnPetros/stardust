@@ -25,7 +25,7 @@ const EXCLUDE_PATTERNS = [
 const SOURCE_PATTERNS = [
   'apps/server/src/**/*.ts',
   'apps/web/src/**/*.{ts,tsx}',
-  'apps/studio/src/**/*.{ts,tsx}',
+  'apps/backoffice/src/**/*.{ts,tsx}',
   'packages/core/src/**/*.ts',
   'packages/validation/src/**/*.ts',
   'packages/email/templates/**/*.{ts,tsx}',
@@ -35,7 +35,7 @@ const SOURCE_PATTERNS = [
 const SOURCE_PATTERNS_BY_SCOPE = {
   'apps/server': ['apps/server/src/**/*.ts'],
   'apps/web': ['apps/web/src/**/*.{ts,tsx}'],
-  'apps/studio': ['apps/studio/src/**/*.{ts,tsx}'],
+  'apps/backoffice': ['apps/backoffice/src/**/*.{ts,tsx}'],
   'packages/core': ['packages/core/src/**/*.ts'],
   'packages/validation': ['packages/validation/src/**/*.ts'],
   'packages/email': ['packages/email/templates/**/*.{ts,tsx}'],

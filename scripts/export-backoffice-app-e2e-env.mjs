@@ -3,7 +3,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { output } from './utils.mjs'
 
-const keys = ['STUDIO_APP_E2E_EMAIL', 'STUDIO_APP_E2E_PASSWORD']
+const keys = ['BACKOFFICE_APP_E2E_EMAIL', 'BACKOFFICE_APP_E2E_PASSWORD']
 function readEnvValue(content, key) {
   for (const line of content.split(/\r?\n/)) {
     const trimmed = line.trim()
@@ -31,8 +31,10 @@ const envFile = `${root}/.env.local`
 if (!existsSync(envFile)) throw new Error(`arquivo ${envFile} não encontrado`)
 const content = readFileSync(envFile, 'utf8')
 for (const key of keys) {
-  const value = readEnvValue(content, key)
+  const value =
+    readEnvValue(content, key) ??
+    readEnvValue(content, key.replace('BACKOFFICE_APP_', 'STUDIO_APP_'))
   if (!value) throw new Error(`${key} não encontrado em ${envFile}`)
   console.log(`export ${key}=${shellQuote(value)}`)
 }
-console.error('Variáveis STUDIO_APP_E2E_* exportadas.')
+console.error('Variáveis BACKOFFICE_APP_E2E_* exportadas.')
