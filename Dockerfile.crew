@@ -5,7 +5,7 @@ COPY package.json package-lock.json ./
 COPY apps/crew/package.json apps/crew/package.json
 COPY apps/server/package.json apps/server/package.json
 COPY apps/web/package.json apps/web/package.json
-COPY apps/studio/package.json apps/studio/package.json
+COPY apps/backoffice/package.json apps/backoffice/package.json
 COPY packages/core/package.json packages/core/package.json
 COPY packages/email/package.json packages/email/package.json
 COPY packages/lsp/package.json packages/lsp/package.json
