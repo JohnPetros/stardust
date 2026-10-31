@@ -7,7 +7,7 @@ It uses an independent PostgreSQL database and never imports the product apps.
 
 ## Models and review behavior
 
-Models are pinned in `src/mastra/agents/pr-reviewer/constants/`: 
+Models are pinned in `src/mastra/agents/pr-reviewer/constants/`:
 `anthropic/claude-haiku-5-5` first (one retry), then
 `anthropic/claude-sonnet-5-5` (no retry). `ANTHROPIC_API_KEY` is the only inference
 credential; Crew does not use OpenRouter. Reviewers use adaptive thinking at low
