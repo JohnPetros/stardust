@@ -435,6 +435,9 @@ rotas reais. Prepare o stack local, execute `test:integration:ci` e
 `test:coverage` no workspace `@stardust/server`, depois `test:coverage:merge` e
 `npm run check:coverage -- @stardust/server`. A consolidação exige os cinco
 relatórios completos; um relatório unitário isolado não aprova esse ratchet.
+O CI do Server executa Node 24 para a coleta V8; a execução em Node 22 revelou
+um abort nativo no inspector durante a instrumentação de cobertura. O Hermes
+aguarda até 45 minutos pelos checks antes de iniciar a revisão.
 
 `check:dead-code` não faz parte dos sensores oficiais. Playwright MCP pode
 inspecionar fluxos reais e o Hermes pode executar validações E2E de release, mas
