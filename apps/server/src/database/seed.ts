@@ -46,6 +46,16 @@ async function populateDatabase(
   accounts: SeedAccount[],
 ) {
   const seeders = createSeeders(sql, accounts)
+  await clearDatabase(seeders)
+  await seedCatalog(seeders, catalog, accounts)
+  await seedRanking(seeders, catalog, accounts)
+  await seedCommunityActivity(seeders, catalog, accounts)
+  await seedFeedback(seeders, accounts)
+}
+
+type Seeders = ReturnType<typeof createSeeders>
+
+async function clearDatabase(seeders: Seeders) {
   // Delete profiles before their catalog dependencies; FK cascades remove owned activity.
   for (const seeder of [
     seeders.profile,
@@ -62,7 +72,13 @@ async function populateDatabase(
     seeders.auth,
   ])
     await seeder.clear()
+}
 
+async function seedCatalog(
+  seeders: Seeders,
+  catalog: ModuleSeed,
+  accounts: SeedAccount[],
+) {
   await seeders.shop.run(catalog)
   await seeders.ranking.run({ tiers: catalog.tiers })
   await seeders.auth.run()
@@ -87,6 +103,13 @@ async function populateDatabase(
     challenges: catalog.challenges.map((row) => ({ ...row, user_id: accounts[1].id })),
   })
   await seedProfileProgress(seeders.profile, catalog, accounts)
+}
+
+async function seedRanking(
+  seeders: Seeders,
+  catalog: ModuleSeed,
+  accounts: SeedAccount[],
+) {
   const tier = [...catalog.tiers].sort(
     (a, b) => Number(a.position) - Number(b.position),
   )[0]
@@ -99,6 +122,13 @@ async function populateDatabase(
     })),
   })
   await seeders.manual.run(catalog)
+}
+
+async function seedCommunityActivity(
+  seeders: Seeders,
+  catalog: ModuleSeed,
+  accounts: SeedAccount[],
+) {
   await seeders.playground.run({
     snippets: [
       {
@@ -141,6 +171,9 @@ async function populateDatabase(
       },
     ],
   })
+}
+
+async function seedFeedback(seeders: Seeders, accounts: SeedAccount[]) {
   const timestamp = '2026-01-01T12:00:00.000Z'
   await seeders.reporting.run({
     feedback_reports: [
