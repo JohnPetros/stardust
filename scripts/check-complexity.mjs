@@ -75,7 +75,10 @@ function mapClonePaths(clone) {
   }
 }
 
-function normalizeBaseline(baseline) {
+function normalizeBaseline(baseline, previousBaseline = { files: [] }) {
+  const previousOrder = new Map(
+    previousBaseline.files.map((file, index) => [file.filePath, index]),
+  )
   return {
     ...baseline,
     files: baseline.files
@@ -84,7 +87,13 @@ function normalizeBaseline(baseline) {
         filePath: toRepositoryPath(file.filePath),
         functions: file.functions.filter(isBaselineViolation),
       }))
-      .filter((file) => file.functions.length > 0),
+      .filter((file) => file.functions.length > 0)
+      .sort(
+        (left, right) =>
+          (previousOrder.get(left.filePath) ?? Infinity) -
+            (previousOrder.get(right.filePath) ?? Infinity) ||
+          left.filePath.localeCompare(right.filePath),
+      ),
     clones: baseline.clones.map(mapClonePaths),
   }
 }
@@ -100,6 +109,37 @@ function materializeBaseline(baseline) {
       ...clone,
       blockA: { ...clone.blockA, filePath: toAbsolutePath(clone.blockA.filePath) },
       blockB: { ...clone.blockB, filePath: toAbsolutePath(clone.blockB.filePath) },
+    })),
+  }
+}
+
+function alignBaselineLocations(baseline, current) {
+  const currentFiles = new Map(current.files.map((file) => [file.filePath, file]))
+  return {
+    ...baseline,
+    files: baseline.files.map((file) => ({
+      ...file,
+      functions: file.functions.map((fn) => {
+        const matches =
+          currentFiles
+            .get(file.filePath)
+            ?.functions.filter((candidate) => candidate.name === fn.name) ?? []
+        const sameNameCount = file.functions.filter(
+          (candidate) => candidate.name === fn.name,
+        ).length
+        if (fn.name === '<anonymous>' || sameNameCount !== 1 || matches.length !== 1)
+          return fn
+        const candidate = matches[0]
+        // Only relocate unchanged metrics. New, ambiguous or worsened functions
+        // must still be reported against the committed baseline.
+        if (
+          JSON.stringify(fn.metrics) !== JSON.stringify(candidate.metrics) ||
+          fn.maintainabilityIndex !== candidate.maintainabilityIndex ||
+          fn.maintainabilityRating !== candidate.maintainabilityRating
+        )
+          return fn
+        return { ...fn, startLine: candidate.startLine, endLine: candidate.endLine }
+      }),
     })),
   }
 }
@@ -175,9 +215,12 @@ function updateBaseline(tempDirectory) {
     throw new Error('CodeMultiVitals did not produce a baseline file.')
   }
   const baseline = JSON.parse(readFileSync(temporaryBaselinePath, 'utf8'))
+  const previousBaseline = existsSync(BASELINE_PATH)
+    ? JSON.parse(readFileSync(BASELINE_PATH, 'utf8'))
+    : undefined
   writeFileSync(
     BASELINE_PATH,
-    `${JSON.stringify(normalizeBaseline(baseline), null, 2)}\n`,
+    `${JSON.stringify(normalizeBaseline(baseline, previousBaseline), null, 2)}\n`,
   )
   console.log(`CodeMultiVitals baseline updated at ${toRepositoryPath(BASELINE_PATH)}`)
 }
@@ -189,10 +232,23 @@ function checkAgainstBaseline(tempDirectory) {
     )
   }
   const baseline = JSON.parse(readFileSync(BASELINE_PATH, 'utf8'))
+  const sourcePatterns = getScopePatterns(readScope())
+  const currentPath = path.join(tempDirectory, 'current.json')
+  runCodeMultiVitals([
+    ...createCliArguments(null, null, sourcePatterns),
+    '--reporter',
+    'json',
+    '--output',
+    currentPath,
+  ])
+  if (!existsSync(currentPath)) {
+    throw new Error('CodeMultiVitals did not produce the current analysis.')
+  }
+  const current = JSON.parse(readFileSync(currentPath, 'utf8'))
   const temporaryBaselinePath = path.join(tempDirectory, 'baseline.json')
   writeFileSync(
     temporaryBaselinePath,
-    `${JSON.stringify(materializeBaseline(baseline), null, 2)}\n`,
+    `${JSON.stringify(alignBaselineLocations(materializeBaseline(baseline), current), null, 2)}\n`,
   )
   return runCodeMultiVitals(
     createCliArguments(temporaryBaselinePath, null, getScopePatterns(readScope())),
@@ -231,6 +287,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 }
 
 export {
+  alignBaselineLocations,
   createCliArguments,
   getScopePatterns,
   materializeBaseline,
