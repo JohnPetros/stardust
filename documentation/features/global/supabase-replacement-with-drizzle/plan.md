@@ -756,7 +756,7 @@ Toda evidência abaixo começa `pending`, identifica cenário, ambiente, revisã
 | Web/Hook | useProfileSocket com SseProfileChannel real/factory EventSource: malformed frame/dedup, CONNECTING/CLOSED, terminal, expiry, StrictMode e cleanup | CA-18, CA-19 | S4; W2; teste Hook permitido, sem suite do adapter | EV-09 | pending |
 | Architecture | Models únicos/tipos inferidos/layout, singleton/shutdown, SDK Server Auth somente, nenhum SDK/env/tipo Supabase Web ou SDK/Drizzle/Core; nenhum .from/.rpc relacional runtime | CA-20 | S1/S6; inventário C2 e sensores | EV-10 | pending |
 | Integrity | Suítes permitidas/um arquivo por rota, cenários legados portados antes da remoção, ambientes isolados, coverage sem baseline reduzido | CA-22 | Validation Contract; C2 | EV-12 | pending |
-| Manual VM-04 | Studio login→/dashboard→/profile/users em 8000 ou porta livre; título Usuários e sessão persistida | CA-01, CA-20, CA-22 | AGENTS; Server3334; export-studio-app-e2e-env | EV-10, EV-12 | pending |
+| Manual VM-04 | Studio login→/dashboard→/profile/users em 8000 ou porta livre; título Usuários e sessão persistida | CA-01, CA-20, CA-22 | AGENTS; Server3334; export-backoffice-app-e2e-env | EV-10, EV-12 | pending |
 | Manual VM-05 | Web login real /auth/sign-in→/space; login 2xx, account 200, planets 2xx e conteúdo | CA-01, CA-20, CA-22 | AGENTS; Web3000/Server3334; export-web-app-e2e-env | EV-10, EV-12 | pending |
 
 ## UI, referências e viewports

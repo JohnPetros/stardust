@@ -72,25 +72,25 @@ Adicionar ao editor de história do Studio o controle de geração, acompanhamen
 
 ## Camada UI (Studio)
 
-* **`LessonStoryRoute`** (`apps/studio/src/app/routes/LessonStoryRoute.tsx`) - Resolve `starId`, `starName` e `starNumber` da estrela e renderiza `LessonStoryPage`.
-* **`LessonStoryPage`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/index.tsx`) - Entry point da página; injeta `lessonService`, `toastProvider` e `starId` no hook da página.
-* **`useLessonStoryPage`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`) - Carrega blocos, mantém estado local, serializa blocos para salvar, controla preview, reordenação e action button.
-* **`LessonStoryPageView`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx`) - Renderiza editor, preview MDX, loading, erro e bloqueios da aba.
-* **`TextBlocks`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/index.tsx`) - Exporta `TextBlocksView` diretamente.
-* **`TextBlocksView`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx`) - Renderiza header, busca, botões de criação, geração/cancelamento em lote e lista reordenável com `SortableList`.
-* **`TextBlockCard`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/index.tsx`) - Entry point do card; conecta `useTextBlockCard` e `TextBlockCardView`.
-* **`useTextBlockCard`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/useTextBlockCard.ts`) - Calcula preview, visibilidade de imagem/runnable e label de conteúdo.
-* **`TextBlockCardView`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx`) - Renderiza card expansível com campos de conteúdo, imagem e runnable, aplicando borda destacada durante geração de áudio.
-* **`useFetch`** (`apps/studio/src/ui/global/hooks/useFetch.ts`) - Hook baseado em TanStack Query; já suporta `refreshInterval`, `refetch` e `updateData`.
-* **`useFileStorage`** (`apps/studio/src/ui/global/hooks/useFileStorage.ts`) - Monta URL pública usando `ENV.supabaseCdnUrl` e `FileStorageFolderPath.value`.
-* **`SortableList`** (`apps/studio/src/ui/global/widgets/components/SortableList/index.tsx`) - Wrapper de DnD usado para reordenar blocos.
-* **`select`, `button`, `badge`, `skeleton`** (`apps/studio/src/ui/shadcn/components`) - Componentes base disponíveis para controles de áudio.
+* **`LessonStoryRoute`** (`apps/backoffice/src/app/routes/LessonStoryRoute.tsx`) - Resolve `starId`, `starName` e `starNumber` da estrela e renderiza `LessonStoryPage`.
+* **`LessonStoryPage`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/index.tsx`) - Entry point da página; injeta `lessonService`, `toastProvider` e `starId` no hook da página.
+* **`useLessonStoryPage`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`) - Carrega blocos, mantém estado local, serializa blocos para salvar, controla preview, reordenação e action button.
+* **`LessonStoryPageView`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx`) - Renderiza editor, preview MDX, loading, erro e bloqueios da aba.
+* **`TextBlocks`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/index.tsx`) - Exporta `TextBlocksView` diretamente.
+* **`TextBlocksView`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx`) - Renderiza header, busca, botões de criação, geração/cancelamento em lote e lista reordenável com `SortableList`.
+* **`TextBlockCard`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/index.tsx`) - Entry point do card; conecta `useTextBlockCard` e `TextBlockCardView`.
+* **`useTextBlockCard`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/useTextBlockCard.ts`) - Calcula preview, visibilidade de imagem/runnable e label de conteúdo.
+* **`TextBlockCardView`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx`) - Renderiza card expansível com campos de conteúdo, imagem e runnable, aplicando borda destacada durante geração de áudio.
+* **`useFetch`** (`apps/backoffice/src/ui/global/hooks/useFetch.ts`) - Hook baseado em TanStack Query; já suporta `refreshInterval`, `refetch` e `updateData`.
+* **`useFileStorage`** (`apps/backoffice/src/ui/global/hooks/useFileStorage.ts`) - Monta URL pública usando `ENV.supabaseCdnUrl` e `FileStorageFolderPath.value`.
+* **`SortableList`** (`apps/backoffice/src/ui/global/widgets/components/SortableList/index.tsx`) - Wrapper de DnD usado para reordenar blocos.
+* **`select`, `button`, `badge`, `skeleton`** (`apps/backoffice/src/ui/shadcn/components`) - Componentes base disponíveis para controles de áudio.
 
 ## Camada REST (Studio)
 
-* **`LessonService`** (`apps/studio/src/rest/services/LessonService.ts`) - Implementa `fetchTextsBlocks`, `updateTextBlocks`, `fetchStarStory`, `fetchQuestions`, `updateStory`, `updateQuestions` e métodos de explicação de código.
-* **`RestContext`** (`apps/studio/src/ui/global/contexts/RestContext/useRestContextProvider.ts`) - Disponibiliza `lessonService` para a UI.
-* **`AxiosRestClient`** (`apps/studio/src/rest/axios/AxiosRestClient.ts`) - Cliente REST usado pelos services do Studio.
+* **`LessonService`** (`apps/backoffice/src/rest/services/LessonService.ts`) - Implementa `fetchTextsBlocks`, `updateTextBlocks`, `fetchStarStory`, `fetchQuestions`, `updateStory`, `updateQuestions` e métodos de explicação de código.
+* **`RestContext`** (`apps/backoffice/src/ui/global/contexts/RestContext/useRestContextProvider.ts`) - Disponibiliza `lessonService` para a UI.
+* **`AxiosRestClient`** (`apps/backoffice/src/rest/axios/AxiosRestClient.ts`) - Cliente REST usado pelos services do Studio.
 
 ## Camada Hono App (Server)
 
@@ -151,23 +151,23 @@ Adicionar ao editor de história do Studio o controle de geração, acompanhamen
 
 ## Camada UI (Hooks)
 
-* **Localização:** `apps/studio/src/ui/global/hooks/useStorageAudio.ts` (**novo arquivo**)
+* **Localização:** `apps/backoffice/src/ui/global/hooks/useStorageAudio.ts` (**novo arquivo**)
 * **Métodos:** `useStorageAudio(fileName?: string): { url: string | null }` — retorna URL pública de `audios/story/{fileName}` usando `useFileStorage(FileStorageFolderPath.createAsAudiosStory(), fileName)` ou `null` quando `fileName` estiver ausente.
 
-* **Localização:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/useAudioGenerationPolling.ts` (**novo arquivo**)
+* **Localização:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useAudioGenerationPolling.ts` (**novo arquivo**)
 * **Métodos:** `useAudioGenerationPolling(params: { starId: Id; textBlocks: TextBlockEditorItem[]; lessonService: LessonService; onUpdate(textBlocks: TextBlockDto[]): void; onError(message: string): void }): { isPolling: boolean }` — cria intervalo de 3000ms enquanto houver bloco `pending`, chama `lessonService.fetchTextsBlocks(starId)` e envia a resposta para `onUpdate`.
 
-* **Localização:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/useBlockAudioPlayer.ts` (**novo arquivo**)
+* **Localização:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/useBlockAudioPlayer.ts` (**novo arquivo**)
 * **Métodos:** `useBlockAudioPlayer(params: { url: string }): { audioRef: RefObject<HTMLAudioElement | null>; isPlaying: boolean; progress: number; currentTimeLabel: string; durationLabel: string; togglePlay(): void; handleSeek(progress: number): void }` — controla reprodução de um `HTMLAudioElement`, progresso percentual e formatação de tempo.
 
 ## Camada UI (Widgets)
 
-* **Localização:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockVoiceSelector` (**novo diretório**)
+* **Localização:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockVoiceSelector` (**novo diretório**)
 * **Props:** `voices: AudioVoiceDto[]`, `value: AudioVoiceValue`, `isDisabled?: boolean`, `onChange(voice: AudioVoiceValue): void`.
 * **Estados (Client Component):** Loading não aplicável no widget; Error não aplicável no widget; Empty renderiza `panda` como opção fallback se `voices` estiver vazio; Content renderiza `Select` com as vozes recebidas.
-* **View:** `BlockVoiceSelectorView` em `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockVoiceSelector/BlockVoiceSelectorView.tsx` (**novo arquivo**).
+* **View:** `BlockVoiceSelectorView` em `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockVoiceSelector/BlockVoiceSelectorView.tsx` (**novo arquivo**).
 * **Hook (se aplicável):** Não aplicável.
-* **Index:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockVoiceSelector/index.tsx` (**novo arquivo**) delega renderização para a View.
+* **Index:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockVoiceSelector/index.tsx` (**novo arquivo**) delega renderização para a View.
 * **Widgets internos:** Não aplicável.
 * **Estrutura de pastas:**
 
@@ -177,12 +177,12 @@ BlockVoiceSelector/
 └── index.tsx
 ```
 
-* **Localização:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer` (**novo diretório**)
+* **Localização:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer` (**novo diretório**)
 * **Props:** `fileName: string`.
 * **Estados (Client Component):** Loading não aplicável; Error renderiza fallback compacto quando a URL não puder ser montada; Empty retorna `null` quando `fileName` estiver vazio; Content renderiza player compacto.
-* **View:** `BlockAudioPlayerView` em `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/BlockAudioPlayerView.tsx` (**novo arquivo**).
-* **Hook (se aplicável):** `useBlockAudioPlayer` em `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/useBlockAudioPlayer.ts` (**novo arquivo**).
-* **Index:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/index.tsx` (**novo arquivo**) monta URL com `useStorageAudio`, executa hook e passa estado para a View.
+* **View:** `BlockAudioPlayerView` em `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/BlockAudioPlayerView.tsx` (**novo arquivo**).
+* **Hook (se aplicável):** `useBlockAudioPlayer` em `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/useBlockAudioPlayer.ts` (**novo arquivo**).
+* **Index:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/index.tsx` (**novo arquivo**) monta URL com `useStorageAudio`, executa hook e passa estado para a View.
 * **Widgets internos:** Não aplicável.
 * **Estrutura de pastas:**
 
@@ -193,12 +193,12 @@ BlockAudioPlayer/
 └── useBlockAudioPlayer.ts
 ```
 
-* **Localização:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls` (**novo diretório**)
+* **Localização:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls` (**novo diretório**)
 * **Props:** `item: TextBlockEditorItem`, `voices: AudioVoiceDto[]`, `isGenerateDisabled: boolean`, `isGenerating: boolean`, `onVoiceChange(voice: AudioVoiceValue): void`, `onGenerate(): void`, `onCancel(): void`.
 * **Estados (Client Component):** Loading exibe botão de geração em estado de loading quando `isGenerating` for `true`; Error exibe badge quando `item.audio?.status === 'error'`; Empty exibe seletor e CTA de gerar quando não houver áudio ou status for `idle`; Content exibe player quando `done`, spinner/botão cancelar quando `pending`, badge quando `cancelled`.
-* **View:** `BlockAudioControlsView` em `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/BlockAudioControlsView.tsx` (**novo arquivo**).
-* **Hook (se aplicável):** `useBlockAudioControls` em `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/useBlockAudioControls.ts` (**novo arquivo**) calcula `voice`, `status`, `canShowPlayer`, `canCancel`, `statusLabel` e `statusVariant`.
-* **Index:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/index.tsx` (**novo arquivo**) compõe `BlockVoiceSelector`, `BlockAudioPlayer` e View.
+* **View:** `BlockAudioControlsView` em `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/BlockAudioControlsView.tsx` (**novo arquivo**).
+* **Hook (se aplicável):** `useBlockAudioControls` em `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/useBlockAudioControls.ts` (**novo arquivo**) calcula `voice`, `status`, `canShowPlayer`, `canCancel`, `statusLabel` e `statusVariant`.
+* **Index:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/index.tsx` (**novo arquivo**) compõe `BlockVoiceSelector`, `BlockAudioPlayer` e View.
 * **Widgets internos:** `BlockVoiceSelector`, `BlockAudioPlayer`.
 * **Estrutura de pastas:**
 
@@ -251,46 +251,46 @@ BlockAudioControls/
 
 ## Camada REST (Services)
 
-* **Arquivo:** `apps/studio/src/rest/services/LessonService.ts`
+* **Arquivo:** `apps/backoffice/src/rest/services/LessonService.ts`
 * **Mudança:** Implementar `fetchAudioVoices`, `triggerTextBlockAudioGeneration`, `triggerTextBlocksAudioGenerationInBatch`, `cancelTextBlockAudioGeneration` e `cancelTextBlocksAudioGenerationInBatch` usando rotas relativas de `/lesson`.
 * **Justificativa:** Disponibilizar à UI os contratos server já existentes e o novo endpoint de vozes.
 * **Camada:** `rest`
 
 ## Camada UI (Types)
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/types.ts`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/types.ts`
 * **Mudança:** Garantir que `TextBlockEditorItem` preserve `audio?: TextBlockAudioDto` herdado de `TextBlockDto` e, se necessário, importar `AudioVoiceValue` para tipar handlers de voz.
 * **Justificativa:** O editor atual descarta `audio` durante normalização/salvamento; a UI precisa manter esse subdocumento junto ao bloco.
 * **Camada:** `ui`
 
 ## Camada UI (Widgets)
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
 * **Mudança:** Preservar `audio` em `toEditorItem` e `toPersistedTextBlock`; buscar `audioVoices`; calcular `hasAudioPending`; integrar `useAudioGenerationPolling`; adicionar handlers `handleAudioVoiceChange(blockId, voice)`, `handleGenerateTextBlockAudio(blockId)`, `handleGenerateAllTextBlocksAudios()`, `handleCancelTextBlockAudio(blockId)` e `handleCancelAllTextBlocksAudios()`; criar helper privado `syncTextBlocksBeforeAudioAction(): Promise<boolean>` para salvar alterações locais antes de gerar áudio.
 * **Justificativa:** Centralizar orquestração da página, manter geração por `blockIndex` consistente com a versão persistida e alimentar widgets filhos.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx`
 * **Mudança:** Repassar `audioVoices`, `hasAudioPending`, `isAudioPolling`, handlers de voz/geração/cancelamento e estado de execução para `TextBlocks`.
 * **Justificativa:** Propagar novos contratos do hook da página sem adicionar lógica à View.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx`
 * **Mudança:** Adicionar botão de geração em lote e botão de cancelamento em lote no header; exibir indicador discreto de polling quando `isAudioPolling` for `true`; manter `SortableList` ativo durante todo o ciclo de geração.
 * **Justificativa:** Cumprir ações em lote (gerar/cancelar) e preservar drag-and-drop mesmo com blocos `pending`.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/index.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/index.tsx`
 * **Mudança:** Receber vozes, flags e handlers de áudio; calcular `blockIndex` no nível da lista/página e repassar callbacks já vinculados ao bloco.
 * **Justificativa:** O card precisa compor controles de áudio mantendo dependências resolvidas acima.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/useTextBlockCard.ts`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/useTextBlockCard.ts`
 * **Mudança:** Adicionar cálculos `canHaveAudio`, `audioStatus`, `isAudioPending`, `isAudioDone`, `isAudioError`, `isAudioCancelled`, `audioVoice` e `isGenerateAudioDisabled`.
 * **Justificativa:** Concentrar lógica de estado do card fora da View.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx`
 * **Mudança:** Renderizar `BlockAudioControls` dentro do `CollapsibleContent`, abaixo de `BlockContentField` e antes dos campos de imagem/runnable, apenas quando `canHaveAudio` for verdadeiro e `item.audio` existir; destacar a borda do card enquanto `isGeneratingAudio` for `true`.
 * **Justificativa:** Colocar seletor, geração e player dentro do card expandido, evitar controles quando não há `audio` inicializado e tornar o estado de geração identificável na lista.
 * **Camada:** `ui`
@@ -448,9 +448,9 @@ LessonStoryPage
 * `apps/server/src/app/hono/routers/lesson/TextBlocksRouter.ts` - rotas existentes de blocos e áudio.
 * `apps/server/src/rest/controllers/lesson/TriggerTextBlockAudioGenerationController.ts` - controller de geração individual.
 * `apps/server/src/rest/controllers/lesson/TriggerTextBlocksAudioGenerationInBatchController.ts` - controller de geração em lote.
-* `apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts` - hook central que deve orquestrar estado, save, polling e ações de áudio.
-* `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard` - widget base do card a ser estendido.
-* `apps/studio/src/rest/services/LessonService.ts` - service REST do Studio a ser ampliado.
+* `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts` - hook central que deve orquestrar estado, save, polling e ações de áudio.
+* `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard` - widget base do card a ser estendido.
+* `apps/backoffice/src/rest/services/LessonService.ts` - service REST do Studio a ser ampliado.
 * `packages/core/src/lesson/interfaces/LessonService.ts` - contrato compartilhado do service.
 * `packages/core/src/lesson/domain/structures/TextBlockAudio.ts` - estados de áudio aceitos.
 * `packages/core/src/lesson/domain/structures/AudioVoice.ts` - vozes aceitas e default.

@@ -62,7 +62,7 @@ Pencil não atendiam ao novo gate obrigatório.
 ### Limitações registradas e não bloqueantes
 
 - O build do Studio inicialmente encontrou artefatos sem permissão de escrita;
-  o diretório anterior foi preservado em `apps/studio/build-pre-quality-gate` e
+  o diretório anterior foi preservado em `apps/backoffice/build-pre-quality-gate` e
   o build foi repetido com sucesso.
 - O build da Web exigiu `NEXT_PUBLIC_DISCORD_CHANNEL_URL` no ambiente temporário;
   nenhum arquivo de ambiente ou credencial foi alterado.

@@ -18,9 +18,9 @@ Migrar o upload opcional de screenshots do widget de feedback do `web` para o fl
 ## 2.1 In-scope
 
 * Migrar `apps/web` para executar upload direto ao Supabase Storage via `SignedUploadUrl` antes de enviar o feedback.
-* Criar no `apps/web` um provider client-side equivalente ao provider de signed upload ja existente no `apps/studio`.
+* Criar no `apps/web` um provider client-side equivalente ao provider de signed upload ja existente no `apps/backoffice`.
 * Ajustar o fluxo do `apps/web` para solicitar `StorageService.createSignedUploadUrl(...)` e executar o PUT direto via `SignedFileStorageProvider.uploadFile(...)`.
-* Ajustar o fluxo do `apps/studio` para seguir o mesmo padrao do `web`: `StorageService.createSignedUploadUrl(...)` emite o contrato assinado e `SignedFileStorageProvider.uploadFile(...)` executa o upload binario direto.
+* Ajustar o fluxo do `apps/backoffice` para seguir o mesmo padrao do `web`: `StorageService.createSignedUploadUrl(...)` emite o contrato assinado e `SignedFileStorageProvider.uploadFile(...)` executa o upload binario direto.
 * Permitir que usuarios autenticados solicitem signed upload URL para `images/feedback-reports`.
 * Manter `god account` obrigatorio para signed upload URL nas demais pastas administrativas.
 * Remover a rota legada `POST /storage/files/:folder` do `FilesStorageRouter`.
@@ -72,19 +72,19 @@ Migrar o upload opcional de screenshots do widget de feedback do `web` para o fl
 * **`FeedbackDialogView`** (`apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackDialog/FeedbackDialogView.tsx`) - View que renderiza o dialog, formulario, preview e `ScreenCropper`.
 * **`ScreenCropper`** (`apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackDialog/ScreenCropper`) - Widget interno usado para recortar a captura e gerar `canvas.toDataURL('image/png')`.
 * **`useRestContextProvider`** (`apps/web/src/ui/global/contexts/RestContext/useRestContextProvider.ts`) - Factory client-side dos services REST consumidos pela UI, atualmente instancia `StorageService(restClient)`.
-* **`ImageInput`** (`apps/studio/src/ui/global/widgets/components/ImageInput/index.tsx`) - Widget de upload de imagem do Studio; hoje injeta apenas `storageService` no hook.
-* **`useImageInput`** (`apps/studio/src/ui/global/widgets/components/ImageInput/useImageInput.ts`) - Hook do Studio que hoje chama `storageService.uploadFile(folder, imageFile)` e retorna `response.body.filename` via `onSubmit(...)`.
-* **`useProvisionContext`** (`apps/studio/src/ui/global/hooks/useProvisionContext.ts`) - Hook ja existente para acessar `signedFileStorageProvider` no Studio.
+* **`ImageInput`** (`apps/backoffice/src/ui/global/widgets/components/ImageInput/index.tsx`) - Widget de upload de imagem do Studio; hoje injeta apenas `storageService` no hook.
+* **`useImageInput`** (`apps/backoffice/src/ui/global/widgets/components/ImageInput/useImageInput.ts`) - Hook do Studio que hoje chama `storageService.uploadFile(folder, imageFile)` e retorna `response.body.filename` via `onSubmit(...)`.
+* **`useProvisionContext`** (`apps/backoffice/src/ui/global/hooks/useProvisionContext.ts`) - Hook ja existente para acessar `signedFileStorageProvider` no Studio.
 
 ## Camada REST (Services)
 
 * **`StorageService`** (`apps/web/src/rest/services/StorageService.ts`) - Service web que ja possui `createSignedUploadUrl(folderPath, fileName)`, mas ainda implementa `uploadFile(folder, file)` com `postFormData('/storage/files/${folder.value}', formData)`.
-* **`StorageService`** (`apps/studio/src/rest/services/StorageService.ts`) - Implementacao atual do Studio que ja emite signed URL, mas ainda esconde a emissao e o PUT direto dentro de `uploadFile(folder, file)`.
+* **`StorageService`** (`apps/backoffice/src/rest/services/StorageService.ts`) - Implementacao atual do Studio que ja emite signed URL, mas ainda esconde a emissao e o PUT direto dentro de `uploadFile(folder, file)`.
 * **`ReportingService`** (`apps/web/src/rest/services/ReportingService.ts`) - Service que envia o feedback por `POST /reporting/feedback`; deve permanecer separado do upload da screenshot.
 
 ## Camada Provision (Providers)
 
-* **`SupabaseSignedFileStorageProvider`** (`apps/studio/src/provision/storage/SupabaseSignedFileStorageProvider.ts`) - Provider client-side de referencia que faz `fetch(signedUploadUrl.url.value, { method: 'PUT', body: fileToUpload, headers: { 'Content-Type': ..., 'x-upsert': 'false' } })`.
+* **`SupabaseSignedFileStorageProvider`** (`apps/backoffice/src/provision/storage/SupabaseSignedFileStorageProvider.ts`) - Provider client-side de referencia que faz `fetch(signedUploadUrl.url.value, { method: 'PUT', body: fileToUpload, headers: { 'Content-Type': ..., 'x-upsert': 'false' } })`.
 * **`SupabaseFileStorageProvider`** (`apps/server/src/provision/storage/SupabaseFileStorageProvider.ts`) - Provider server-side que implementa `upload(...)`, `createSignedUploadUrl(...)`, `findFile(...)`, `listFiles(...)` e `removeFile(...)` para o bucket `stardust-bucket`.
 
 ## Camada Core
@@ -141,7 +141,7 @@ Migrar o upload opcional de screenshots do widget de feedback do `web` para o fl
 * **Justificativa:** Alinhar o `web` ao padrao explicito em que a emissao do contrato assinado e feita por `StorageService.createSignedUploadUrl(...)` e o upload binario direto fica no `SignedFileStorageProvider`.
 * **Camada:** `rest`
 
-* **Arquivo:** `apps/studio/src/rest/services/StorageService.ts`
+* **Arquivo:** `apps/backoffice/src/rest/services/StorageService.ts`
 * **Mudanca:** Remover a orquestracao de signed upload de dentro de `uploadFile(folder, file)`; manter `createSignedUploadUrl(folderPath: FileStorageFolderPath, fileName: Text): Promise<RestResponse<SignedUploadUrlDto>>` como unico metodo do service responsavel pela emissao da signed URL; nao executar `SignedUploadUrl.create(...)` nem `signedFileStorageProvider.uploadFile(...)` dentro do service.
 * **Justificativa:** Fazer o `studio` seguir o mesmo padrao do `web`, separando service REST de provider de infraestrutura e evitando que `StorageService.uploadFile(...)` esconda a chamada de signed URL.
 * **Camada:** `rest`
@@ -154,11 +154,11 @@ Migrar o upload opcional de screenshots do widget de feedback do `web` para o fl
 ## Camada UI (Contexts)
 
 * **Arquivo:** `apps/web/src/ui/global/contexts/RestContext/useRestContextProvider.ts`
-* **Mudanca:** Importar `SupabaseSignedFileStorageProvider` de `@/provision/storage` e disponibilizar o provider no contexto/provisionamento client-side seguindo o mesmo padrao do `apps/studio`.
+* **Mudanca:** Importar `SupabaseSignedFileStorageProvider` de `@/provision/storage` e disponibilizar o provider no contexto/provisionamento client-side seguindo o mesmo padrao do `apps/backoffice`.
 * **Justificativa:** Permitir que o fluxo do feedback execute o PUT direto sem acoplar a emissao da signed URL ao upload binario nem ao endpoint legado.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/global/contexts/RestContext/useRestContextProvider.ts`
+* **Arquivo:** `apps/backoffice/src/ui/global/contexts/RestContext/useRestContextProvider.ts`
 * **Mudanca:** Remover a injecao de `signedFileStorageProvider` em `StorageService(...)`, caso ela exista apos a refatoracao; o provider deve continuar vindo do `ProvisionContext` e nao do service REST.
 * **Justificativa:** Manter o `StorageService` do Studio restrito a chamadas REST e padronizar a separacao entre REST service e provision provider.
 * **Camada:** `ui`
@@ -175,12 +175,12 @@ Migrar o upload opcional de screenshots do widget de feedback do `web` para o fl
 * **Justificativa:** O hook precisa orquestrar a emissao da signed URL pelo service e o PUT direto pelo provider sem que o service esconda o upload.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/global/widgets/components/ImageInput/index.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/global/widgets/components/ImageInput/index.tsx`
 * **Mudanca:** Obter `signedFileStorageProvider` via `useProvisionContext()` e repassar para `useImageInput(...)` junto com `storageService`.
 * **Justificativa:** O widget do Studio deve seguir a mesma separacao do Web: service emite signed URL, provider executa upload.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/global/widgets/components/ImageInput/useImageInput.ts`
+* **Arquivo:** `apps/backoffice/src/ui/global/widgets/components/ImageInput/useImageInput.ts`
 * **Mudanca:** Substituir `storageService.uploadFile(folder, imageFile)` por `storageService.createSignedUploadUrl(folder, Text.create(imageFile.name))`, criar `SignedUploadUrl` a partir do body, chamar `signedFileStorageProvider.uploadFile(signedUploadUrl, imageFile)`, e em sucesso chamar `onSubmit(signedUploadUrl.fileName.value)`; em falha, exibir toast e nao fechar o dialog.
 * **Justificativa:** Remover o uso de `StorageService.uploadFile(...)` no Studio e manter comportamento funcional equivalente ao fluxo atual de imagens.
 * **Camada:** `ui`
@@ -235,7 +235,7 @@ Migrar o upload opcional de screenshots do widget de feedback do `web` para o fl
 * **Motivo da escolha:** Ter o mesmo contrato mental e tecnico nos dois apps reduz ambiguidade: `StorageService.createSignedUploadUrl(...)` fala com o server, `SignedFileStorageProvider.uploadFile(...)` fala com o Supabase Storage.
 * **Impactos / trade-offs:** O hook do Studio fica responsavel por mais uma etapa de orquestracao, mas o service REST deixa de depender do provider e fica mais simples e consistente com o Web.
 
-* **Decisao:** Criar `SupabaseSignedFileStorageProvider` no `apps/web` espelhando o provider do `apps/studio`.
+* **Decisao:** Criar `SupabaseSignedFileStorageProvider` no `apps/web` espelhando o provider do `apps/backoffice`.
 * **Alternativas consideradas:** Compartilhar o provider do `studio`; executar o PUT direto dentro do `StorageService`.
 * **Motivo da escolha:** Apps nao devem importar codigo uma da outra, e o provider mantem a responsabilidade de infraestrutura fora do service REST.
 * **Impactos / trade-offs:** Duplica uma pequena implementacao, mas preserva fronteiras entre apps e permite evolucao independente.
@@ -303,7 +303,7 @@ apps/web (depois do upload)
   v
 apps/server (reporting endpoint existente)
 
-apps/studio (consome)
+apps/backoffice (consome)
   StorageService.createSignedUploadUrl
   | REST POST /storage/signed-upload-url
   v
@@ -314,15 +314,15 @@ apps/server (expoe)
 Supabase Storage
   ^ PUT direto com signedUrl
   |
-apps/studio (consome signedUrl via SupabaseSignedFileStorageProvider)
+apps/backoffice (consome signedUrl via SupabaseSignedFileStorageProvider)
 ```
 
 * **Layout (se aplicavel):** Nao aplicavel.
 
 * **Referencias:**
-* `apps/studio/src/rest/services/StorageService.ts` - Service que deve ser ajustado para expor apenas a emissao de signed URL, sem orquestrar o PUT direto em `uploadFile(...)`.
-* `apps/studio/src/provision/storage/SupabaseSignedFileStorageProvider.ts` - Referencia para o PUT direto ao Supabase Storage.
-* `apps/studio/src/ui/global/widgets/components/ImageInput/useImageInput.ts` - Hook consumidor do Studio que deve orquestrar `createSignedUploadUrl(...)` + `signedFileStorageProvider.uploadFile(...)`.
+* `apps/backoffice/src/rest/services/StorageService.ts` - Service que deve ser ajustado para expor apenas a emissao de signed URL, sem orquestrar o PUT direto em `uploadFile(...)`.
+* `apps/backoffice/src/provision/storage/SupabaseSignedFileStorageProvider.ts` - Referencia para o PUT direto ao Supabase Storage.
+* `apps/backoffice/src/ui/global/widgets/components/ImageInput/useImageInput.ts` - Hook consumidor do Studio que deve orquestrar `createSignedUploadUrl(...)` + `signedFileStorageProvider.uploadFile(...)`.
 * `apps/web/src/rest/services/StorageService.ts` - Service web atual que deve trocar o multipart legado por signed upload.
 * `apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackDialog/useFeedbackDialog.ts` - Fluxo atual de captura, crop, upload e envio do feedback.
 * `apps/server/src/app/hono/routers/storage/StorageRouter.ts` - Rota existente `POST /storage/signed-upload-url`.

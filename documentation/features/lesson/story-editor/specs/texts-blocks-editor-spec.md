@@ -84,30 +84,30 @@ Entregar a nova aba de blocos de texto do editor de história no Studio, substit
 
 ## Camada React Router App (Studio)
 
-* **`ROUTES.lesson.story`** (`apps/studio/src/constants/routes.ts`) - *Define a rota `/lesson/story/:starSlug` usada pela gestão do espaço e pela página do editor.*
-* **`LessonStoryRoute`** (`apps/studio/src/app/routes/LessonStoryRoute.tsx`) - *Resolve a estrela pelo `slug` e hoje ainda carrega `story` string para a página.*
-* **`StarItemView`** (`apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarItemView.tsx`) - *Ponto atual de navegação para o editor de história a partir da gestão de estrelas.*
+* **`ROUTES.lesson.story`** (`apps/backoffice/src/constants/routes.ts`) - *Define a rota `/lesson/story/:starSlug` usada pela gestão do espaço e pela página do editor.*
+* **`LessonStoryRoute`** (`apps/backoffice/src/app/routes/LessonStoryRoute.tsx`) - *Resolve a estrela pelo `slug` e hoje ainda carrega `story` string para a página.*
+* **`StarItemView`** (`apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarItemView.tsx`) - *Ponto atual de navegação para o editor de história a partir da gestão de estrelas.*
 
 ## Camada UI (Studio)
 
-* **`LessonStoryPage`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/index.tsx`) - *Entry point atual da página; injeta `lessonService`, `toastProvider` e repassa dados do loader.*
-* **`useLessonStoryPage`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`) - *Hook atual baseado em `story: string`, `updateStory` e `ActionButtonStore`.*
-* **`LessonStoryPageView`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx`) - *Renderiza o layout atual com `TextEditor`, helper de snippets e preview MDX.*
-* **`Header`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/Header/index.tsx`) - *Exibe o nome e o número da estrela no topo da página.*
-* **`TextBlocks`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/index.tsx`) - *Hoje funciona como helper de inserção de snippets MDX no Monaco, não como editor de blocos persistidos.*
-* **`TextBlockButton`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockButton/useTextBlockButton.ts`) - *Insere tags MDX no `TextEditorContext` para o fluxo legado.*
-* **`PictureInput`** (`apps/studio/src/ui/lesson/widgets/components/PictureInput/index.tsx`) - *Seletor de imagem já integrado ao storage da pasta `story`, com busca, upload e paginação.*
-* **`useFetch`** (`apps/studio/src/ui/global/hooks/useFetch.ts`) - *Padrão já consolidado no Studio para estados de loading, error e refetch em páginas administrativas.*
-* **`SortableList`** (`apps/studio/src/ui/global/widgets/components/SortableList/index.tsx`) - *Implementação padrão de drag-and-drop baseada em `dnd-kit`.*
-* **`Mdx`** (`apps/studio/src/ui/global/widgets/components/Mdx/index.tsx`) - *Renderer já usado para preview de componentes `Text`, `Alert`, `Quote`, `User` e `Code`.*
-* **`useMdx`** (`apps/studio/src/ui/global/widgets/components/Mdx/useMdx.ts`) - *Já possui `parseTextBlocksToMdx(textBlocks)` para derivar MDX a partir de `TextBlock[]`.*
-* **`useStorageImage`** (`apps/studio/src/ui/global/hooks/useStorageImage.ts`) - *Monta a URL pública do CDN a partir do nome do arquivo salvo na pasta `story`.*
-* **`ActionButtonStore`** (`apps/studio/src/ui/global/stores/ActionButtonStore/index.ts`) - *Centraliza os estados de execução, sucesso, falha e disponibilidade do botão principal.*
+* **`LessonStoryPage`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/index.tsx`) - *Entry point atual da página; injeta `lessonService`, `toastProvider` e repassa dados do loader.*
+* **`useLessonStoryPage`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`) - *Hook atual baseado em `story: string`, `updateStory` e `ActionButtonStore`.*
+* **`LessonStoryPageView`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx`) - *Renderiza o layout atual com `TextEditor`, helper de snippets e preview MDX.*
+* **`Header`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/Header/index.tsx`) - *Exibe o nome e o número da estrela no topo da página.*
+* **`TextBlocks`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/index.tsx`) - *Hoje funciona como helper de inserção de snippets MDX no Monaco, não como editor de blocos persistidos.*
+* **`TextBlockButton`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockButton/useTextBlockButton.ts`) - *Insere tags MDX no `TextEditorContext` para o fluxo legado.*
+* **`PictureInput`** (`apps/backoffice/src/ui/lesson/widgets/components/PictureInput/index.tsx`) - *Seletor de imagem já integrado ao storage da pasta `story`, com busca, upload e paginação.*
+* **`useFetch`** (`apps/backoffice/src/ui/global/hooks/useFetch.ts`) - *Padrão já consolidado no Studio para estados de loading, error e refetch em páginas administrativas.*
+* **`SortableList`** (`apps/backoffice/src/ui/global/widgets/components/SortableList/index.tsx`) - *Implementação padrão de drag-and-drop baseada em `dnd-kit`.*
+* **`Mdx`** (`apps/backoffice/src/ui/global/widgets/components/Mdx/index.tsx`) - *Renderer já usado para preview de componentes `Text`, `Alert`, `Quote`, `User` e `Code`.*
+* **`useMdx`** (`apps/backoffice/src/ui/global/widgets/components/Mdx/useMdx.ts`) - *Já possui `parseTextBlocksToMdx(textBlocks)` para derivar MDX a partir de `TextBlock[]`.*
+* **`useStorageImage`** (`apps/backoffice/src/ui/global/hooks/useStorageImage.ts`) - *Monta a URL pública do CDN a partir do nome do arquivo salvo na pasta `story`.*
+* **`ActionButtonStore`** (`apps/backoffice/src/ui/global/stores/ActionButtonStore/index.ts`) - *Centraliza os estados de execução, sucesso, falha e disponibilidade do botão principal.*
 
 ## Camada REST (Studio)
 
-* **`LessonService`** (`apps/studio/src/rest/services/LessonService.ts`) - *Já expõe `fetchTextsBlocks`, `fetchStarStory` e `updateStory`; precisa evoluir para o save estruturado.*
-* **`StorageService`** (`apps/studio/src/rest/services/StorageService.ts`) - *Fluxo já usado pelo `PictureInput` para listar, subir e remover assets da pasta `story`.*
+* **`LessonService`** (`apps/backoffice/src/rest/services/LessonService.ts`) - *Já expõe `fetchTextsBlocks`, `fetchStarStory` e `updateStory`; precisa evoluir para o save estruturado.*
+* **`StorageService`** (`apps/backoffice/src/rest/services/StorageService.ts`) - *Fluxo já usado pelo `PictureInput` para listar, subir e remover assets da pasta `story`.*
 
 ## Camada Hono App (Server)
 
@@ -183,7 +183,7 @@ Entregar a nova aba de blocos de texto do editor de história no Studio, substit
 
 ## Camada UI (Widgets)
 
-* **Localização:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/index.tsx` (**novo arquivo**)
+* **Localização:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/index.tsx` (**novo arquivo**)
 * **Props:**
   - `item: { id: string; type: 'default' | 'user' | 'alert' | 'quote' | 'code'; content: string; picture?: string; isRunnable?: boolean }`
   - `isExpanded: boolean`
@@ -193,14 +193,14 @@ Entregar a nova aba de blocos de texto do editor de história no Studio, substit
   - `onPictureChange(blockId: string, picture?: string): void`
   - `onRunnableChange(blockId: string, isRunnable: boolean): void`
 * **Estados (Client Component):** Não aplicável; o widget alterna entre os modos colapsado e expandido com base nas props recebidas.
-* **View:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx` (**novo arquivo**)
-* **Hook:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/useTextBlockCard.ts` (**novo arquivo**) — concentra handlers locais de expansão, preview truncado e delegação dos campos inline.
+* **View:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx` (**novo arquivo**)
+* **Hook:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/useTextBlockCard.ts` (**novo arquivo**) — concentra handlers locais de expansão, preview truncado e delegação dos campos inline.
 * **Index:** Recebe o estado do `LessonStoryPage`, renderiza badge do tipo, preview do conteúdo, indicador de imagem e os campos inline do bloco.
 * **Widgets internos:** `BlockTypeBadge`, `BlockPreview`, `BlockActions`, `BlockContentField`, `BlockPictureField`, `BlockRunnableField`.
 * **Estrutura de pastas:**
 
 ```text
-apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/
+apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/
 ├── index.tsx
 ├── TextBlocksView.tsx
 └── TextBlockCard/
@@ -290,31 +290,31 @@ apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/
 
 ## Camada REST (Services)
 
-* **Arquivo:** `apps/studio/src/rest/services/LessonService.ts`
+* **Arquivo:** `apps/backoffice/src/rest/services/LessonService.ts`
 * **Mudança:** Adicionar `updateTextBlocks(starId, textBlocks)` apontando para `PUT /lesson/text-blocks/star/:starId` com payload `{ textBlocks }`.
 * **Justificativa:** O Studio deixa de salvar uma string livre e passa a persistir a coleção estruturada de blocos.
 * **Camada:** `rest`
 
 ## Camada React Router App (Studio)
 
-* **Arquivo:** `apps/studio/src/app/routes/LessonStoryRoute.tsx`
+* **Arquivo:** `apps/backoffice/src/app/routes/LessonStoryRoute.tsx`
 * **Mudança:** O `clientLoader` deve passar a carregar apenas o contexto da estrela (`starId`, `starName`, `starNumber`) resolvido por `spaceService.fetchStarBySlug`, deixando a carga dos blocos para a página via `useFetch`.
 * **Justificativa:** Esse ajuste permite exibir loading, estados bloqueados e retry dentro da própria página, seguindo o padrão dominante do Studio para telas administrativas.
 * **Camada:** `ui`
 
 ## Camada UI (Widgets)
 
-* **Arquivo:** `apps/studio/src/constants/cache.ts`
+* **Arquivo:** `apps/backoffice/src/constants/cache.ts`
 * **Mudança:** Adicionar uma chave dedicada para a query da página de história, por exemplo `lessonStoryTextBlocks`.
 * **Justificativa:** O `useFetch` da página precisa de uma chave estável para cache, refetch e atualização local do estado carregado.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/index.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/index.tsx`
 * **Mudança:** Remover a dependência de `defaultStory`/`useScreen` e passar a compor a página a partir do contexto da estrela + hook de busca/salvamento dos blocos.
 * **Justificativa:** A tela deixa de depender do Monaco e passa a operar sobre o estado estruturado dos cards.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
 * **Mudança:**
   - Trocar `story: string` por estado local de blocos editáveis com IDs estáveis para DnD.
   - Buscar `textBlocks` e `story` legado com `useFetch`.
@@ -327,7 +327,7 @@ apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/
 * **Justificativa:** O hook atual é centrado em `story: string`; a nova aba precisa orquestrar dados estruturados, estados visuais e salvamento em lote.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx`
 * **Mudança:**
   - Remover `TextEditor` e `TextEditorContextProvider` da página.
   - Substituir o layout por duas colunas (`Blocos` e `Preview`) inspiradas no mockup anexado.
@@ -336,12 +336,12 @@ apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/
 * **Justificativa:** A interface final deixa de ser um editor de MDX livre e passa a ser um editor visual de cards com preview lateral.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/index.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/index.tsx`
 * **Mudança:** Deixar de exportar a view estática de snippets e passar a compor a lista ordenável de blocos com o novo `TextBlockCard`.
 * **Justificativa:** Esse widget deixa de ser um helper de inserção no Monaco e passa a ser a superfície principal de edição dos blocos.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx`
 * **Mudança:**
   - Renderizar cabeçalho do painel com contador de blocos.
   - Usar `SortableList.Container` + `SortableList.Item` para reorder com o `handle` padrão já existente no `SortableList`.
@@ -351,17 +351,17 @@ apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/
 * **Justificativa:** O mockup e o PRD pedem um painel de cards inline, não mais uma lista de atalhos de inserção de MDX.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/components/PictureInput/index.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/components/PictureInput/index.tsx`
 * **Mudança:** Adicionar modo opcional de seleção vazia para contextos em que `picture` pode ser removida do bloco sem excluir o asset do bucket.
 * **Justificativa:** No editor de história, `picture` é opcional e precisa poder voltar para `undefined` sem forçar `panda.jpg` como valor persistido.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/components/PictureInput/usePictureInput.ts`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/components/PictureInput/usePictureInput.ts`
 * **Mudança:** Permitir `selectedImage` vazio quando o modo opcional estiver habilitado e expor handler para limpar apenas a seleção do bloco, sem remover o arquivo do bucket.
 * **Justificativa:** O hook atual sempre inicializa com `panda.jpg`; isso conflita com o contrato opcional de `picture` no editor de blocos.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/components/PictureInput/PictureInputView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/components/PictureInput/PictureInputView.tsx`
 * **Mudança:** Renderizar trigger/preview vazio e uma opção explícita de `Sem imagem` quando o componente for usado pelo editor de história.
 * **Justificativa:** O operador precisa conseguir remover a imagem associada ao bloco sem sair do fluxo visual da aba.
 * **Camada:** `ui`
@@ -372,15 +372,15 @@ apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/
 
 ## Camada UI (Studio)
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockButton/index.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockButton/index.tsx`
 * **Motivo da remoção:** O widget existe apenas para injetar snippets MDX no Monaco, fluxo que deixa de ser a base da edição da história.
 * **Impacto esperado:** A página `LessonStory` passa a editar `stars.texts` por cards inline; não deve haver impacto fora da rota de história.
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockButton/useTextBlockButton.ts`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockButton/useTextBlockButton.ts`
 * **Motivo da remoção:** O hook depende de `TextEditorContext` e gera tags MDX, comportamento obsoleto para a nova aba.
 * **Impacto esperado:** Remove o acoplamento entre a página de história e o editor textual legado.
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockButton/TextBlockButtonView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockButton/TextBlockButtonView.tsx`
 * **Motivo da remoção:** A view representa apenas botões de inserção do fluxo legado.
 * **Impacto esperado:** Limpa o código de UI não utilizado após a troca para o editor visual de blocos.
 
@@ -508,12 +508,12 @@ Formato de comunicação entre camadas: contrato TypeScript compartilhado (`Less
 ```
 
 * **Referências:**
-  - `apps/studio/src/app/routes/LessonStoryRoute.tsx`
-  - `apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
-  - `apps/studio/src/ui/lesson/widgets/components/PictureInput/index.tsx`
-  - `apps/studio/src/ui/global/widgets/components/SortableList/index.tsx`
-  - `apps/studio/src/ui/global/widgets/components/Mdx/useMdx.ts`
-  - `apps/studio/src/ui/challenging/ChallengeSources/useChallengeSourcesPage.ts`
+  - `apps/backoffice/src/app/routes/LessonStoryRoute.tsx`
+  - `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
+  - `apps/backoffice/src/ui/lesson/widgets/components/PictureInput/index.tsx`
+  - `apps/backoffice/src/ui/global/widgets/components/SortableList/index.tsx`
+  - `apps/backoffice/src/ui/global/widgets/components/Mdx/useMdx.ts`
+  - `apps/backoffice/src/ui/challenging/ChallengeSources/useChallengeSourcesPage.ts`
   - `apps/server/src/app/hono/routers/lesson/TextBlocksRouter.ts`
   - `apps/server/src/app/hono/routers/lesson/QuestionsRouter.ts`
   - `apps/server/src/database/supabase/repositories/lesson/SupabaseTextBlocksRepository.ts`

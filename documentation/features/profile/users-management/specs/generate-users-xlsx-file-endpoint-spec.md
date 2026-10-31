@@ -82,9 +82,9 @@ Implementar a exportação administrativa de usuários em XLSX via `GET /profile
 
 ## Camada UI (Widgets)
 
-- **`UsersPage`** (`apps/studio/src/ui/profile/widgets/pages/Users/index.tsx`) - Entrada da página de usuários.
-- **`useUsersPage`** (`apps/studio/src/ui/profile/widgets/pages/Users/useUsersPage.ts`) - Estado e ações da página.
-- **`UsersPageView`** (`apps/studio/src/ui/profile/widgets/pages/Users/UsersPageView.tsx`) - Layout e componentes visuais.
+- **`UsersPage`** (`apps/backoffice/src/ui/profile/widgets/pages/Users/index.tsx`) - Entrada da página de usuários.
+- **`useUsersPage`** (`apps/backoffice/src/ui/profile/widgets/pages/Users/useUsersPage.ts`) - Estado e ações da página.
+- **`UsersPageView`** (`apps/backoffice/src/ui/profile/widgets/pages/Users/UsersPageView.tsx`) - Layout e componentes visuais.
 
 ---
 
@@ -162,27 +162,27 @@ Implementar a exportação administrativa de usuários em XLSX via `GET /profile
 
 ## Camada UI
 
-- **Arquivo:** `apps/studio/src/rest/axios/AxiosRestClient.ts`
+- **Arquivo:** `apps/backoffice/src/rest/axios/AxiosRestClient.ts`
 - **Mudança:** Implementar `getFile` (blob + nome por `Content-Disposition`).
 - **Justificativa:** Download de arquivo via cliente REST.
 - **Camada:** `ui`
 
-- **Arquivo:** `apps/studio/src/rest/services/ProfileService.ts`
+- **Arquivo:** `apps/backoffice/src/rest/services/ProfileService.ts`
 - **Mudança:** Implementar `fetchUsersXlsxFile`.
 - **Justificativa:** Conectar UI ao endpoint de exportação.
 - **Camada:** `ui`
 
-- **Arquivo:** `apps/studio/src/ui/profile/widgets/pages/Users/useUsersPage.ts`
+- **Arquivo:** `apps/backoffice/src/ui/profile/widgets/pages/Users/useUsersPage.ts`
 - **Mudança:** Adicionar `handleUsersXlsxFileDownload` + estado de loading + fallback de extensão `.xlsx`.
 - **Justificativa:** Permitir download seguro no clique.
 - **Camada:** `ui`
 
-- **Arquivo:** `apps/studio/src/ui/profile/widgets/pages/Users/UsersPageView.tsx`
+- **Arquivo:** `apps/backoffice/src/ui/profile/widgets/pages/Users/UsersPageView.tsx`
 - **Mudança:** Adicionar botão `Baixar XLSX`.
 - **Justificativa:** Ação visível de exportação na tela.
 - **Camada:** `ui`
 
-- **Arquivo:** `apps/studio/src/ui/global/contexts/RestContext/useRestContextProvider.ts`
+- **Arquivo:** `apps/backoffice/src/ui/global/contexts/RestContext/useRestContextProvider.ts`
 - **Mudança:** Aplicar header `Authorization` de forma síncrona na inicialização.
 - **Justificativa:** Evitar requisição inicial sem token e erro de autorização no load.
 - **Camada:** `ui`
@@ -288,9 +288,9 @@ UsersPage
   - `apps/server/src/app/hono/routers/profile/UsersRouter.ts`
   - `apps/server/src/rest/controllers/profile/users/GenerateUsersXlsxFileController.ts`
   - `apps/server/src/provision/xlsx/ExcelJsXlsxProvider.ts`
-  - `apps/studio/src/ui/profile/widgets/pages/Users/useUsersPage.ts`
-  - `apps/studio/src/ui/profile/widgets/pages/Users/UsersPageView.tsx`
-  - `apps/studio/src/rest/axios/AxiosRestClient.ts`
+  - `apps/backoffice/src/ui/profile/widgets/pages/Users/useUsersPage.ts`
+  - `apps/backoffice/src/ui/profile/widgets/pages/Users/UsersPageView.tsx`
+  - `apps/backoffice/src/rest/axios/AxiosRestClient.ts`
 
 ---
 

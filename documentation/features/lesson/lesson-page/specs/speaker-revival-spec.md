@@ -115,12 +115,12 @@ Reativar o controle de audio nos blocos narrativos da `Story` da Lesson Page no 
 
 ## Studio Como Referencia
 
-* **`useStorageAudio`** (`apps/studio/src/ui/global/hooks/useStorageAudio.ts`) - wrapper que usa `FileStorageFolderPath.createAsAudiosStory()` e `useFileStorage(fileName)` para retornar `{ url: string | null }`.
-* **`BlockAudioPlayer`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/index.tsx`) - referencia de player com URL publica de audio persistido.
-* **`useBlockAudioPlayer`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/useBlockAudioPlayer.ts`) - referencia de controle HTMLAudioElement com `audioRef`, `isPlaying`, eventos de metadata/timeupdate/ended e `togglePlay()`.
-* **`BlockAudioControls`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/useBlockAudioControls.ts`) - referencia de regra de exibicao de player apenas com `status === 'done'`, `fileName` e arquivo presente no storage.
-* **`useTextBlocks`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/useTextBlocks.ts`) - lista arquivos de audio referenciados por `fileName`, com retry enquanto algum arquivo esperado ainda nao estiver disponivel no storage.
-* **`useLessonStoryPage`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`) - pagina administrativa que suporta blocos `image`, sincroniza alteracoes antes de gerar audio e aciona geracao individual/batch.
+* **`useStorageAudio`** (`apps/backoffice/src/ui/global/hooks/useStorageAudio.ts`) - wrapper que usa `FileStorageFolderPath.createAsAudiosStory()` e `useFileStorage(fileName)` para retornar `{ url: string | null }`.
+* **`BlockAudioPlayer`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/index.tsx`) - referencia de player com URL publica de audio persistido.
+* **`useBlockAudioPlayer`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/useBlockAudioPlayer.ts`) - referencia de controle HTMLAudioElement com `audioRef`, `isPlaying`, eventos de metadata/timeupdate/ended e `togglePlay()`.
+* **`BlockAudioControls`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/useBlockAudioControls.ts`) - referencia de regra de exibicao de player apenas com `status === 'done'`, `fileName` e arquivo presente no storage.
+* **`useTextBlocks`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/useTextBlocks.ts`) - lista arquivos de audio referenciados por `fileName`, com retry enquanto algum arquivo esperado ainda nao estiver disponivel no storage.
+* **`useLessonStoryPage`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`) - pagina administrativa que suporta blocos `image`, sincroniza alteracoes antes de gerar audio e aciona geracao individual/batch.
 * **`FetchAudioVoicesController`** (`apps/server/src/rest/controllers/lesson/FetchAudioVoicesController.ts`) - expõe as vozes disponiveis para o Studio com labels simplificados.
 * **`OpenAITtsProvider`** (`apps/server/src/provision/tts/open-ai/OpenAITtsProvider.ts`) - provider principal de TTS com mapeamento interno das vozes de dominio, incluindo `alien -> echo`.
 
@@ -249,27 +249,27 @@ Reativar o controle de audio nos blocos narrativos da `Story` da Lesson Page no 
 
 ## Camada Studio
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
 * **Mudanca:** incluir `image` entre os tipos suportados/elegiveis para `picture`, validar que blocos `image` tenham `picture`, sincronizar blocos antes de acionar geracao de audio individual/batch e atualizar `textBlocks`/baseline com respostas do polling.
 * **Justificativa:** a geracao de audio precisa operar sobre a versao persistida mais recente dos blocos e suportar legendas de imagem como narracao.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/useTextBlockCard.ts`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/useTextBlockCard.ts`
 * **Mudanca:** incluir `image` em `canHaveAudio` e ajustar label de campo para `Legenda` quando o tipo for `image`.
 * **Justificativa:** permitir que o Studio exiba controles de audio para blocos de imagem e deixe claro que o conteudo textual e a legenda narrada.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/useTextBlocks.ts`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/useTextBlocks.ts`
 * **Mudanca:** consultar o storage por cada `fileName` de audio referenciado, usando `search` especifico, e repetir a checagem a cada 3s enquanto algum arquivo esperado ainda nao estiver disponivel.
 * **Justificativa:** evitar que o player fique oculto quando o status ja virou `done`, mas o arquivo acabou de ser enviado ou nao aparece em uma listagem geral/paginada.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/tests/LessonStoryPageView.test.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/tests/LessonStoryPageView.test.tsx`
 * **Mudanca:** atualizar fixtures de vozes para incluir `alien`, `robot` e `salmonense` com labels simplificados.
 * **Justificativa:** manter testes alinhados ao contrato exposto pelo servidor.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/rest/services/LessonService.ts`
+* **Arquivo:** `apps/backoffice/src/rest/services/LessonService.ts`
 * **Mudanca:** remover `fetchStarStory(starId)` se nao houver consumidores no app `studio` apos a migracao para blocos.
 * **Justificativa:** eliminar consumo REST obsoleto da story textual tambem no Studio.
 * **Camada:** `rest`
@@ -382,7 +382,7 @@ Reativar o controle de audio nos blocos narrativos da `Story` da Lesson Page no 
 
 * **Decisao:** resolver URL no `web` com novo `useStorageAudio`, espelhando o `studio`.
   **Alternativas consideradas:** chamar Supabase SDK, criar endpoint REST para URL publica ou expor contrato novo no `core`.
-  **Motivo da escolha:** `apps/web/src/ui/global/hooks/useFileStorage.ts` ja monta URLs publicas via CDN, e `apps/studio/src/ui/global/hooks/useStorageAudio.ts` e uma referencia direta para `audios/story`.
+  **Motivo da escolha:** `apps/web/src/ui/global/hooks/useFileStorage.ts` ja monta URLs publicas via CDN, e `apps/backoffice/src/ui/global/hooks/useStorageAudio.ts` e uma referencia direta para `audios/story`.
   **Impactos / trade-offs:** mantem a resolucao de URL simples e local; a validacao de existencia fica separada em `useStoryAudioFiles` para evitar acoplar storage listing ao player.
 
 * **Decisao:** substituir TTS por `<audio>` no `Speaker` existente, preservando configuracoes aplicaveis a arquivo persistido.
@@ -521,10 +521,10 @@ LessonPage
 * `apps/server/src/provision/tts/open-router-eleven-labs/OpenRouterElevenLabsTtsProvider.ts`
 * `apps/server/src/queue/inngest/functions/LessonFunctions.ts`
 * `apps/server/src/app/hono/routers/storage/FilesStorageRouter.ts`
-* `apps/studio/src/ui/global/hooks/useStorageAudio.ts`
-* `apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
-* `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/useTextBlocks.ts`
-* `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/useBlockAudioPlayer.ts`
+* `apps/backoffice/src/ui/global/hooks/useStorageAudio.ts`
+* `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
+* `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/useTextBlocks.ts`
+* `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioPlayer/useBlockAudioPlayer.ts`
 
 ---
 

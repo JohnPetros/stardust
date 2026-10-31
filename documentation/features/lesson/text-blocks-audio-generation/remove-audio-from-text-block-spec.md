@@ -23,7 +23,7 @@ Permitir que o operador do Studio remova manualmente o audio associado a um bloc
 * Criar evento de dominio para requisitar remocao fisica do arquivo de audio removido.
 * Criar job no modulo `storage` para consumir o evento e remover o arquivo fisico em `audios/story` quando o bloco removido possuir `audio.fileName` preenchido.
 * Tratar arquivo fisico ausente como sucesso no job, mantendo a referencia do bloco limpa.
-* Adicionar contrato REST compartilhado em `LessonService` e implementacao no `apps/studio`.
+* Adicionar contrato REST compartilhado em `LessonService` e implementacao no `apps/backoffice`.
 * Adicionar acao de remocao nos controles de audio do card apenas quando existir audio persistido e o status nao for `pending`.
 * Exibir loading no botao `Remover audio` durante a requisicao e mante-lo ate a resposta atualizada do `server` ser refletida no estado local do Studio.
 * Sincronizar `baselineTextBlocks` e `textBlocks` no Studio com a resposta `TextBlockDto[]` do server, sobrescrevendo explicitamente `audio` quando a propriedade vier ausente.
@@ -122,20 +122,20 @@ Permitir que o operador do Studio remova manualmente o audio associado a um bloc
 
 ## Camada REST (Studio)
 
-* **`LessonService`** (`apps/studio/src/rest/services/LessonService.ts`) - Implementa fetch/update, vozes, geracao e cancelamento de audio; nao possui remocao manual.
+* **`LessonService`** (`apps/backoffice/src/rest/services/LessonService.ts`) - Implementa fetch/update, vozes, geracao e cancelamento de audio; nao possui remocao manual.
 
 ## Camada UI (Studio)
 
-* **`useLessonStoryPage`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`) - Orquestra fetch, baseline, salvamento, geracao, cancelamento, polling e sincronizacao local de `TextBlockDto[]`.
-* **`LessonStoryPageView`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx`) - Repassa props e handlers do hook para `TextBlocks`.
-* **`TextBlocksView`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx`) - Renderiza lista e repassa handlers de audio para `TextBlockCard`.
-* **`TextBlockCard`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/index.tsx`) - Entry point do card; conecta `useTextBlockCard` e `TextBlockCardView`.
-* **`useTextBlockCard`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/useTextBlockCard.ts`) - Calcula `canHaveAudio`, status e flags de audio.
-* **`TextBlockCardView`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx`) - Renderiza `BlockAudioControls` dentro do card expandido.
-* **`BlockAudioControls`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/index.tsx`) - Compoe seletor, player e view de controles.
-* **`useBlockAudioControls`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/useBlockAudioControls.ts`) - Calcula `canShowPlayer` e `canCancel`; nao calcula `canRemove`.
-* **`BlockAudioControlsView`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/BlockAudioControlsView.tsx`) - Exibe botoes de gerar/cancelar, badge e player; nao possui botao de remover audio.
-* **`useTextBlocks`** (`apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/useTextBlocks.ts`) - Consulta arquivos existentes em `audios/story` e fornece `hasStoredAudioFile(blockId)`.
+* **`useLessonStoryPage`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`) - Orquestra fetch, baseline, salvamento, geracao, cancelamento, polling e sincronizacao local de `TextBlockDto[]`.
+* **`LessonStoryPageView`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx`) - Repassa props e handlers do hook para `TextBlocks`.
+* **`TextBlocksView`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx`) - Renderiza lista e repassa handlers de audio para `TextBlockCard`.
+* **`TextBlockCard`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/index.tsx`) - Entry point do card; conecta `useTextBlockCard` e `TextBlockCardView`.
+* **`useTextBlockCard`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/useTextBlockCard.ts`) - Calcula `canHaveAudio`, status e flags de audio.
+* **`TextBlockCardView`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx`) - Renderiza `BlockAudioControls` dentro do card expandido.
+* **`BlockAudioControls`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/index.tsx`) - Compoe seletor, player e view de controles.
+* **`useBlockAudioControls`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/useBlockAudioControls.ts`) - Calcula `canShowPlayer` e `canCancel`; nao calcula `canRemove`.
+* **`BlockAudioControlsView`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/BlockAudioControlsView.tsx`) - Exibe botoes de gerar/cancelar, badge e player; nao possui botao de remover audio.
+* **`useTextBlocks`** (`apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/useTextBlocks.ts`) - Consulta arquivos existentes em `audios/story` e fornece `hasStoredAudioFile(blockId)`.
 
 # 5. O que deve ser criado?
 
@@ -310,49 +310,49 @@ Permitir que o operador do Studio remova manualmente o audio associado a um bloc
 
 ## Camada REST (Services)
 
-* **Arquivo:** `apps/studio/src/rest/services/LessonService.ts`
+* **Arquivo:** `apps/backoffice/src/rest/services/LessonService.ts`
 * **Mudanca:** Implementar `removeTextBlockAudio(starId, blockIndex)` chamando `DELETE /lesson/text-blocks/star/:starId/audio/file` com body `{ blockIndex: blockIndex.value }` e retorno `RestResponse<TextBlockDto[]>`.
 * **Justificativa:** Disponibilizar a operacao dedicada para a UI do Studio via contrato `LessonService`.
 * **Camada:** `rest`
 
 ## Camada UI (Widgets)
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
 * **Mudanca:** Adicionar `handleRemoveTextBlockAudio(blockId: string): Promise<void>`; encontrar `blockIndex`, opcionalmente sincronizar alteracoes locais antes da remocao quando `hasChanges`, controlar `removingAudioBlockIds`, chamar `lessonService.removeTextBlockAudio(starId, Integer.create(blockIndex))`, tratar falha com `toastProvider.showError`, e em sucesso atualizar `baselineTextBlocks` e `textBlocks` com `toEditorItemsFromPersisted`, sobrescrevendo explicitamente `audio` com o valor persistido retornado pelo server.
 * **Justificativa:** Manter o mesmo padrao de orquestracao e sincronizacao usado por geracao/cancelamento, evitando remover audio de indice desatualizado quando houver alteracoes locais e garantindo que o loading termine quando o estado local refletir a ausencia de `audio`.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/LessonStoryPageView.tsx`
 * **Mudanca:** Receber `onRemoveAudio` do hook e repassar para `TextBlocks`.
 * **Justificativa:** Propagar o novo handler sem adicionar logica na View.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlocksView.tsx`
 * **Mudanca:** Receber `onRemoveAudio(blockId: string)` e `isRemovingAudioByBlockId(blockId: string)`, repassando ambos para cada `TextBlockCard`.
 * **Justificativa:** Conectar a acao do card ao handler da pagina preservando o padrao atual de callbacks por `blockId` e permitindo que a UI renderize loading por bloco.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/index.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/index.tsx`
 * **Mudanca:** Adicionar props `onRemoveAudio(blockId: string): void` e `isRemovingAudio: boolean`, repassando ambas para `TextBlockCardView` vinculada ao `item.id`.
 * **Justificativa:** Manter o entry point do widget como composicao de hook/view enquanto propaga o estado visual de remocao.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/TextBlockCardView.tsx`
 * **Mudanca:** Repassar `onRemove` e `isRemoving` para `BlockAudioControls`.
 * **Justificativa:** A view do card apenas compoe o widget de controles de audio e precisa encaminhar o estado visual da remocao.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/index.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/index.tsx`
 * **Mudanca:** Adicionar props `onRemove(): void` e `isRemoving: boolean`; obter `canRemove` de `useBlockAudioControls`; repassar `canRemove`, `onRemove` e `isRemoving` para a View, alem de desabilitar o seletor durante a remocao.
 * **Justificativa:** Manter regra visual no hook e renderizacao na View, evitando acoes conflitantes enquanto a remocao estiver em andamento.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/useBlockAudioControls.ts`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/useBlockAudioControls.ts`
 * **Mudanca:** Calcular `hasPersistedAudio = Boolean(item.audio?.fileName)` e `canRemove = hasPersistedAudio && status !== 'pending'`.
 * **Justificativa:** A acao deve aparecer somente quando ha audio associado e nao ha geracao em andamento.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/BlockAudioControlsView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/BlockAudioControlsView.tsx`
 * **Mudanca:** Adicionar props `canRemove` e `isRemoving`; renderizar botao `Remover audio` somente quando `canRemove`, trocando o label para `Removendo...` e exibindo loading enquanto `isRemoving` for verdadeiro.
 * **Justificativa:** Expor a acao manual junto aos controles de audio do card expandido com feedback visual imediato e previsivel durante a remocao.
 * **Camada:** `ui`
@@ -445,7 +445,7 @@ Studio sync
 * **Fluxo Cross-app:**
 
 ```text
-apps/studio (consome)
+apps/backoffice (consome)
   REST LessonService.removeTextBlockAudio(starId, blockIndex)
       |
       | HTTP DELETE /lesson/text-blocks/star/:starId/audio/file
@@ -498,10 +498,10 @@ TextBlockCard (expanded)
 * `packages/core/src/lesson/interfaces/TextBlocksRepository.ts`
 * `packages/core/src/lesson/interfaces/LessonService.ts`
 * `packages/validation/src/modules/lesson/schemas/requestTextBlockAudioGenerationSchema.ts`
-* `apps/studio/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
-* `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/useBlockAudioControls.ts`
-* `apps/studio/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/BlockAudioControlsView.tsx`
-* `apps/studio/src/rest/services/LessonService.ts`
+* `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/useLessonStoryPage.ts`
+* `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/useBlockAudioControls.ts`
+* `apps/backoffice/src/ui/lesson/widgets/pages/LessonStory/TextBlocks/TextBlockCard/BlockAudioControls/BlockAudioControlsView.tsx`
+* `apps/backoffice/src/rest/services/LessonService.ts`
 
 # 10. Pendencias / Duvidas
 

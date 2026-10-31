@@ -78,26 +78,26 @@ updated_at: 2026-09-29
 
 - **Status/owner:** blocked — o usuário pediu para lidar com CA-02 mais tarde; Next 16.3.0 abre o listener antes de carregar `next.config.js`, então o critério continua sem solução na revisão vigente.
 - **Dependências/paralelismo:** depende de P0; paralelo com I1 e S1; paths não se sobrepõem aos demais Builders.
-- **Paths:** apps/web/.env.example; apps/web/next.config.js; apps/web/src/constants/client-env.ts; apps/studio/src/constants/envSchema.ts; scripts/check-test-integrity.mjs; scripts/tests/check-test-integrity.test.mjs.
+- **Paths:** apps/web/.env.example; apps/web/next.config.js; apps/web/src/constants/client-env.ts; apps/backoffice/src/constants/envSchema.ts; scripts/check-test-integrity.mjs; scripts/tests/check-test-integrity.test.mjs.
 - **RF/CA:** RF-02, RF-03, RF-08; CA-02, CA-03, CA-08.
 - **Resultado observável:** Web recusa Supabase/CDN remotos, Studio recusa Server/CDN remotos, ambos aceitam somente endpoints locais esperados, e o detector reprova testes dedicados de providers, constants e fixtures com indicação do path.
-- **Rules:** documentation/rules/web-application-rules.md; documentation/rules/studio-appllication-rules.md; documentation/rules/code-conventions-rules.md; documentation/rules/server-routes-testing-rules.md.
+- **Rules:** documentation/rules/web-application-rules.md; documentation/rules/backoffice-application-rules.md; documentation/rules/code-conventions-rules.md; documentation/rules/server-routes-testing-rules.md.
 - **Exit:** Web e Studio passam typecheck; endpoint remoto Web é recusado antes do listener por uma entrypoint validada; detector passa; nenhum teste dedicado a constants é criado; `check:coverage` preserva os baselines.
 
 ### E1 — Convenção `.env.local`
 
 - **Status/owner:** completed — Task principal; quatro arquivos locais renomeados sem ler valores, documentação e launchers atualizados; ignore e sintaxe dotenv verificados.
 - **Dependências/paralelismo:** depende da revisão 29 aprovada; paralelo com C2, sem paths sobrepostos.
-- **Paths versionados:** `AGENTS.md`; `apps/server/package.json`; `documentation/tooling.md`; Rules Server/Web/Studio; `scripts/export-studio-app-e2e-env.mjs`; `scripts/export-web-app-e2e-env.mjs`.
+- **Paths versionados:** `AGENTS.md`; `apps/server/package.json`; `documentation/tooling.md`; Rules Server/Web/Studio; `scripts/export-backoffice-app-e2e-env.mjs`; `scripts/export-web-app-e2e-env.mjs`.
 - **Artefatos locais ignorados:** root e os três apps agora usam `.env.local`; preservar `.env.testing`, `.env.staging` e `.env.production`.
 - **RF/CA:** RF-11; CA-11.
 - **Exit:** referências ativas usam `.env.local`, quatro arquivos locais migrados, `git check-ignore` confirma exclusão, parser dotenv aceita os arquivos e nenhum valor de env foi impresso.
 
 ### C2 — Cobertura pela borda Vite
 
-- **Status/owner:** completed — Builder Clientes; teste consumidor implementado pela composição `apps/studio/vite.config.ts` → `parseEnv`, sem teste isolado de constants; coverage e paired review passaram.
+- **Status/owner:** completed — Builder Clientes; teste consumidor implementado pela composição `apps/backoffice/vite.config.ts` → `parseEnv`, sem teste isolado de constants; coverage e paired review passaram.
 - **Dependências/paralelismo:** depende da revisão 29 aprovada; paralelo com E1.
-- **Paths:** `apps/studio/src/vite-config.test.ts` (Create).
+- **Paths:** `apps/backoffice/src/vite-config.test.ts` (Create).
 - **RF/CA:** RF-08; CA-08; sensores `test:unit`, `test:coverage` e `check:coverage`.
 - **Exit:** casos de endpoint loopback, URL remota e mode não-development exercitam a borda consumidora; cobertura e ratchet do Studio passam; detector de integridade passa.
 
@@ -105,7 +105,7 @@ updated_at: 2026-09-29
 
 - **Status/owner:** completed — Builder Clientes; paired Reviewer aceitou a revisão 29 sem findings; CA-02 pré-listener permanece adiado.
 - **Dependências/paralelismo:** depende da revisão 29 aprovada; paralelo com S2, sem paths sobrepostos.
-- **Paths:** `apps/web/next.config.js`; `apps/web/src/constants/client-env.ts`; `apps/studio/src/constants/envSchema.ts`; `apps/studio/src/vite-config.test.ts`.
+- **Paths:** `apps/web/next.config.js`; `apps/web/src/constants/client-env.ts`; `apps/backoffice/src/constants/envSchema.ts`; `apps/backoffice/src/vite-config.test.ts`.
 - **RF/CA:** RF-02; CA-02 permanece adiado conforme decisão do usuário; VM-06 valida portas customizadas e rejeições.
 - **Resultado observável:** Web e Studio aceitam endpoints `http` em loopback sem exigir porta fixa; endpoints remotos e esquemas diferentes são recusados em development com mensagem sanitizada. A verificação de `next.config.js` é proteção adicional e não satisfaz o requisito pré-listener de CA-02.
 - **Exit:** sensores atuais passam; Studio Vite consumer 6/6, Web integration 73/73, checks de código e tipos Web/Studio e smoke Next aceitam/rejeitam conforme contrato; Reviewer pareado aceitou. CA-02 continua adiado.
@@ -114,10 +114,10 @@ updated_at: 2026-09-29
 
 - **Status/owner:** completed — Builder Clientes; paired Reviewer aceitou rev31 sem findings.
 - **Dependências/paralelismo:** depende de Portas loopback configuráveis; paralelo com Server integration, sem paths sobrepostos.
-- **Paths:** `apps/studio/package.json`; `apps/studio/vite.config.ts`; `package-lock.json`.
+- **Paths:** `apps/backoffice/package.json`; `apps/backoffice/vite.config.ts`; `package-lock.json`.
 - **RF/CA:** RF-02, RF-03; CA-03, CA-09; VM-02, VM-06.
 - **Resultado observável:** plugin upstream substituto do incompatível `vite-plugin-node-polyfills@0.2.0` suporta Vite 8/Rolldown e não chama hooks esbuild legados.
-- **Evidence:** `npm run build -w @stardust/studio` passou com bundles client e SSR; dev startup em `127.0.0.1:8001` retornou HTTP 200. `vite-plugin-node-polyfills@^0.28.0` é client-only e exclui `module`/`stream` do polyfill; Reviewer pareado aceitou sem findings.
+- **Evidence:** `npm run build -w @stardust/backoffice` passou com bundles client e SSR; dev startup em `127.0.0.1:8001` retornou HTTP 200. `vite-plugin-node-polyfills@^0.28.0` é client-only e exclui `module`/`stream` do polyfill; Reviewer pareado aceitou sem findings.
 - **Exit:** focused checks, build e paired review passaram; VM-02 autenticou, abriu dashboard e rota protegida. Um erro independente de `/reporting/feedback` 500 permanece documentado fora do Contract.
 
 ### I2 — Compose runtime
@@ -152,8 +152,8 @@ updated_at: 2026-09-29
 
 - **Status/owner:** completed — Builder Clientes; paired Reviewer aceitou rev31 sem findings. Build passed and Vite dev returned HTTP 200 at `127.0.0.1:8001`.
 - **Assignment:** Spec rev31; RF-02/RF-03; CA-03/CA-09; VM-02/VM-06; Studio Application Rules.
-- **Paths:** `apps/studio/package.json`; `apps/studio/vite.config.ts`; `package-lock.json`.
-- **Resultado observável:** plugin de node polyfills usa versão compatível com Vite 8/Rolldown e `npm run dev -w @stardust/studio` alcança Ready em porta livre.
+- **Paths:** `apps/backoffice/package.json`; `apps/backoffice/vite.config.ts`; `package-lock.json`.
+- **Resultado observável:** plugin de node polyfills usa versão compatível com Vite 8/Rolldown e `npm run dev -w @stardust/backoffice` alcança Ready em porta livre.
 - **Evidence:** build Studio client/SSR passou; Vite dev em `127.0.0.1:8001` retornou HTTP 200. Plugin 0.28.0 limita polyfills ao client e exclui `module`/`stream`; paired review aceito. VM-02 chegou à rota protegida e documenta o erro de feedback fora do Contract.
 - **Exit:** focused checks, build, paired review and VM-02 authenticated flow pass; a screenshot is not required because this task does not change UI.
 

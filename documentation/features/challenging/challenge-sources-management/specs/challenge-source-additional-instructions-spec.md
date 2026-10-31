@@ -106,17 +106,17 @@ Adicionar o campo opcional `additionalInstructions` ao fluxo de gerenciamento de
 
 ## Camada REST (Services)
 
-* **`ChallengingService`** (`apps/studio/src/rest/services/ChallengingService.ts`) - *Cliente REST do Studio; create/update de source ainda enviam apenas `url` e `challengeId`.*
+* **`ChallengingService`** (`apps/backoffice/src/rest/services/ChallengingService.ts`) - *Cliente REST do Studio; create/update de source ainda enviam apenas `url` e `challengeId`.*
 * **`ChallengingService`** (`apps/web/src/rest/services/ChallengingService.ts`) - *Implementacao paralela da mesma interface compartilhada; precisa acompanhar a expansao contratual do core.*
 
 ## Camada UI (Widgets)
 
-* **`ChallengeSourcesPageView`** (`apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx`) - *Tabela do Studio; hoje nao renderiza coluna para `additionalInstructions`.*
-* **`useChallengeSourcesPage`** (`apps/studio/src/ui/challenging/ChallengeSources/useChallengeSourcesPage.ts`) - *Orquestra listagem, create, update, delete e reorder; ainda nao transporta `additionalInstructions`.*
-* **`ChallengeSourceForm`** (`apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/index.tsx`) - *Entry point do dialog compartilhado de create/edit.*
-* **`useChallengeSourceForm`** (`apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/useChallengeSourceForm.ts`) - *Hook do formulario baseado em `challengeSourceSchema`; ainda sem campo textarea.*
-* **`ChallengeSourceFormView`** (`apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/ChallengeSourceFormView.tsx`) - *View do dialog com input de URL e seletor de desafio opcional.*
-* **`AchievementFormView`** (`apps/studio/src/ui/profile/widgets/components/AchievementForm/AchievementFormView.tsx`) - *Referencia de uso de `Textarea` com `FormField` no Studio.*
+* **`ChallengeSourcesPageView`** (`apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx`) - *Tabela do Studio; hoje nao renderiza coluna para `additionalInstructions`.*
+* **`useChallengeSourcesPage`** (`apps/backoffice/src/ui/challenging/ChallengeSources/useChallengeSourcesPage.ts`) - *Orquestra listagem, create, update, delete e reorder; ainda nao transporta `additionalInstructions`.*
+* **`ChallengeSourceForm`** (`apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/index.tsx`) - *Entry point do dialog compartilhado de create/edit.*
+* **`useChallengeSourceForm`** (`apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/useChallengeSourceForm.ts`) - *Hook do formulario baseado em `challengeSourceSchema`; ainda sem campo textarea.*
+* **`ChallengeSourceFormView`** (`apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/ChallengeSourceFormView.tsx`) - *View do dialog com input de URL e seletor de desafio opcional.*
+* **`AchievementFormView`** (`apps/backoffice/src/ui/profile/widgets/components/AchievementForm/AchievementFormView.tsx`) - *Referencia de uso de `Textarea` com `FormField` no Studio.*
 
 ## Camada AI (Tools)
 
@@ -171,7 +171,7 @@ Adicionar o campo opcional `additionalInstructions` ao fluxo de gerenciamento de
 * **Justificativa:** Mantem o update alinhado ao mesmo contrato do formulario compartilhado.
 * **Camada:** `rest`
 
-* **Arquivo:** `apps/studio/src/rest/services/ChallengingService.ts`
+* **Arquivo:** `apps/backoffice/src/rest/services/ChallengingService.ts`
 * **Mudança:** Enviar `additionalInstructions` no body de `createChallengeSource` e `updateChallengeSource`.
 * **Justificativa:** O Studio e o consumidor direto do recurso e precisa transmitir o novo campo para a API.
 * **Camada:** `rest`
@@ -200,27 +200,27 @@ Adicionar o campo opcional `additionalInstructions` ao fluxo de gerenciamento de
 
 ## UI
 
-* **Arquivo:** `apps/studio/src/ui/challenging/ChallengeSources/useChallengeSourcesPage.ts`
+* **Arquivo:** `apps/backoffice/src/ui/challenging/ChallengeSources/useChallengeSourcesPage.ts`
 * **Mudança:** Expandir `onCreateChallengeSource` e `onUpdateChallengeSource` para receber `additionalInstructions?: string | null` e repassar ao service.
 * **Justificativa:** O hook da pagina centraliza as mutacoes do widget e precisa transportar o novo dado do formulario para a camada REST.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx`
 * **Mudança:** Adicionar coluna `Instruções adicionais`, exibir texto truncado quando houver valor e `-` quando vazio, e incluir `additionalInstructions` em `initialValues` do dialog de edicao.
 * **Justificativa:** O valor precisa ficar visivel na operacao diaria e reutilizavel no modo edit.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/index.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/index.tsx`
 * **Mudança:** Expandir `initialValues`, `onCreate` e `onUpdate` para incluir `additionalInstructions`.
 * **Justificativa:** O entry point do widget concentra a integracao entre o hook/view e o service injetado via context.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/useChallengeSourceForm.ts`
+* **Arquivo:** `apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/useChallengeSourceForm.ts`
 * **Mudança:** Adicionar `additionalInstructions` ao `FormData`, `defaultValues`, `reset`, `initialValues` e submit handler.
 * **Justificativa:** O hook precisa controlar o novo campo no ciclo completo do formulario sem quebrar o comportamento atual de create/edit.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/ChallengeSourceFormView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/ChallengeSourceFormView.tsx`
 * **Mudança:** Renderizar textarea opcional para `additionalInstructions` com placeholder orientativo, usando o padrao `FormField` + `Textarea` do Studio.
 * **Justificativa:** O issue exige capturar o conteúdo diretamente no dialog e manter consistencia visual com outros formularios do app.
 * **Camada:** `ui`
@@ -283,7 +283,7 @@ Adicionar o campo opcional `additionalInstructions` ao fluxo de gerenciamento de
         |
         | POST/PUT { url, challengeId?, additionalInstructions? }
         v
-[apps/studio ChallengingService]
+[apps/backoffice ChallengingService]
         |
         | REST JSON
         v
@@ -359,10 +359,10 @@ ChallengeSourceForm
 ```
 
 * **Referências:**
-  - `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx`
-  - `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/useChallengeSourceForm.ts`
-  - `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/ChallengeSourceFormView.tsx`
-  - `apps/studio/src/ui/profile/widgets/components/AchievementForm/AchievementFormView.tsx`
+  - `apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx`
+  - `apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/useChallengeSourceForm.ts`
+  - `apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/ChallengeSourceFormView.tsx`
+  - `apps/backoffice/src/ui/profile/widgets/components/AchievementForm/AchievementFormView.tsx`
   - `apps/server/src/app/hono/routers/challenging/ChallengeSourcesRouter.ts`
   - `apps/server/src/rest/controllers/challenging/sources/CreateChallengeSourceController.ts`
   - `apps/server/src/rest/controllers/challenging/sources/UpdateChallengeSourceController.ts`

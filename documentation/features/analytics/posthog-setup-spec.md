@@ -141,10 +141,10 @@ Implementar a instrumentação de analytics de produto com PostHog, cobrindo eve
 
 ## Studio - UI/REST
 
-* **`DailyActiveUsersChart`** (`apps/studio/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/index.tsx`) - widget do gráfico DAU que consome `profileService`.
-* **`useDailyActiveUsersChart`** (`apps/studio/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/useDailyActiveUsersChart.ts`) - busca DAU com janela `7`, `30` ou `90` dias via `profileService.fetchDailyActiveUsersReport(days)`.
-* **`DailyActiveUsersChartView`** (`apps/studio/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/DailyActiveUsersChartView.tsx`) - renderiza gráfico Recharts usando `date`, `web` e `mobile`.
-* **`ProfileService`** (`apps/studio/src/rest/services/ProfileService.ts`) - chama `GET /profile/users/daily-active-users-report?days=${days.value}`.
+* **`DailyActiveUsersChart`** (`apps/backoffice/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/index.tsx`) - widget do gráfico DAU que consome `profileService`.
+* **`useDailyActiveUsersChart`** (`apps/backoffice/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/useDailyActiveUsersChart.ts`) - busca DAU com janela `7`, `30` ou `90` dias via `profileService.fetchDailyActiveUsersReport(days)`.
+* **`DailyActiveUsersChartView`** (`apps/backoffice/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/DailyActiveUsersChartView.tsx`) - renderiza gráfico Recharts usando `date`, `web` e `mobile`.
+* **`ProfileService`** (`apps/backoffice/src/rest/services/ProfileService.ts`) - chama `GET /profile/users/daily-active-users-report?days=${days.value}`.
 
 ---
 
@@ -482,7 +482,7 @@ Implementar a instrumentação de analytics de produto com PostHog, cobrindo eve
 
 ## Studio - UI
 
-* **Arquivo:** `apps/studio/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/DailyActiveUsersChartView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/DailyActiveUsersChartView.tsx`
 * **Mudança:** alterar copy de `Total de visitas no período selecionado para cada plataforma` para `Usuários únicos ativos no período selecionado para cada plataforma`.
 * **Justificativa:** PostHog DAU mede usuários únicos ativos, não visitas gravadas no banco.
 * **Camada:** `ui`
@@ -671,8 +671,8 @@ RootLayoutView
 * `apps/web/src/ui/global/widgets/layouts/Root/ServerProviders/index.tsx` - resolução server-side de `accountDto`.
 * `apps/web/src/ui/global/widgets/layouts/Root/ClientProviders/index.tsx` - ponto de composição client-side de providers.
 * `apps/web/src/ui/auth/contexts/AuthContext/hooks/useAuthContextProvider.ts` - ponto central de login/logout na UI.
-* `apps/studio/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/useDailyActiveUsersChart.ts` - consumo atual do relatório DAU.
-* `apps/studio/src/rest/services/ProfileService.ts` - service REST que deve manter a chamada atual.
+* `apps/backoffice/src/ui/global/widgets/pages/Dashboard/DailyActiveUsersChart/useDailyActiveUsersChart.ts` - consumo atual do relatório DAU.
+* `apps/backoffice/src/rest/services/ProfileService.ts` - service REST que deve manter a chamada atual.
 * PostHog Next.js docs: `https://posthog.com/docs/libraries/next-js`.
 * PostHog Node.js docs: `https://posthog.com/docs/libraries/node`.
 * PostHog Query API docs: `https://posthog.com/docs/api/query`.

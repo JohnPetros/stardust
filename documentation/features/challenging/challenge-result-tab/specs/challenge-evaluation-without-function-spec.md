@@ -366,7 +366,7 @@ navegação continua funcionando sem atualizar manualmente o navegador.
 | `npm run check:code` | passou | Warnings preexistentes fora do escopo. |
 | `npm run check:types -w @stardust/core` | passou | — |
 | `npm run check:types -w @stardust/web` | passou | — |
-| `npm run check:types` | falhou fora do escopo | Erros preexistentes de tipos em `apps/studio`; core e web passaram. |
+| `npm run check:types` | falhou fora do escopo | Erros preexistentes de tipos em `apps/backoffice`; core e web passaram. |
 | `npm run test:unit` | passou | Core 621, web 441, server 303, studio 128 e LSP 1 testes; 5 workspaces concluídos. |
 | `npm run check:architecture` | passou | Nenhuma violação de dependência. |
 | `npm run test:integration` | falhou por ambiente | O web não iniciou por `next dev` existente (PID 10942); o server sofreu timeout de fixture e depois OOM. |

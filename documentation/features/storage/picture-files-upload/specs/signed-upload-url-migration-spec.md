@@ -113,23 +113,23 @@ Migrar o upload de imagens iniciado pelo Studio para um fluxo baseado em URLs as
 
 ## Studio - REST
 
-* **`StorageService`** (`apps/studio/src/rest/services/StorageService.ts`) - Implementacao atual de `StorageService`, com `uploadFile` enviando `FormData` para `POST /storage/files/${folder.value}`.
-* **`SupabaseSignedFileStorageProvider`** (`apps/studio/src/provision/storage/SupabaseSignedFileStorageProvider.ts`) - Provider client-side dedicado ao upload direto por URL assinada.
-* **`AxiosRestClient`** (`apps/studio/src/rest/axios/AxiosRestClient.ts`) - Implementa `RestClient` com `get`, `post`, `postFormData`, `put`, `patch`, `delete`, headers e query params.
-* **`useRestContextProvider`** (`apps/studio/src/ui/global/contexts/RestContext/useRestContextProvider.ts`) - Cria `AxiosRestClient`, configura `ENV.stardustServerUrl` e injeta `storageService` no contexto da UI.
-* **`ProvisionContext`** (`apps/studio/src/ui/global/contexts/ProvisionContext`) - Composition root de providers client-side consumidos pela UI da `studio`.
-* **`contexts` de UI** (`apps/studio/src/ui/global/contexts`) - Ponto onde a `studio` ja organiza providers de infraestrutura consumidos pela camada UI.
+* **`StorageService`** (`apps/backoffice/src/rest/services/StorageService.ts`) - Implementacao atual de `StorageService`, com `uploadFile` enviando `FormData` para `POST /storage/files/${folder.value}`.
+* **`SupabaseSignedFileStorageProvider`** (`apps/backoffice/src/provision/storage/SupabaseSignedFileStorageProvider.ts`) - Provider client-side dedicado ao upload direto por URL assinada.
+* **`AxiosRestClient`** (`apps/backoffice/src/rest/axios/AxiosRestClient.ts`) - Implementa `RestClient` com `get`, `post`, `postFormData`, `put`, `patch`, `delete`, headers e query params.
+* **`useRestContextProvider`** (`apps/backoffice/src/ui/global/contexts/RestContext/useRestContextProvider.ts`) - Cria `AxiosRestClient`, configura `ENV.stardustServerUrl` e injeta `storageService` no contexto da UI.
+* **`ProvisionContext`** (`apps/backoffice/src/ui/global/contexts/ProvisionContext`) - Composition root de providers client-side consumidos pela UI da `studio`.
+* **`contexts` de UI** (`apps/backoffice/src/ui/global/contexts`) - Ponto onde a `studio` ja organiza providers de infraestrutura consumidos pela camada UI.
 
 ## Studio - UI
 
-* **`ImageInput`** (`apps/studio/src/ui/global/widgets/components/ImageInput/index.tsx`) - Entry point do widget reutilizavel de upload imediato, resolve `storageService` via `useRestContext`.
-* **`useImageInput`** (`apps/studio/src/ui/global/widgets/components/ImageInput/useImageInput.ts`) - Hook que guarda `imageFile`, `imageName`, valida `Image.create(imageName)` e chama `storageService.uploadFile`.
-* **`ImageInputView`** (`apps/studio/src/ui/global/widgets/components/ImageInput/ImageInputView.tsx`) - View com `FileUpload`, input de nome e botao `Enviar` com loading.
-* **`PictureInput`** (`apps/studio/src/ui/lesson/widgets/components/PictureInput/index.tsx`) - Entry point do seletor de imagens de licao.
-* **`usePictureInput`** (`apps/studio/src/ui/lesson/widgets/components/PictureInput/usePictureInput.ts`) - Lista imagens de `FileStorageFolderPath.createAsStory()` com `usePaginatedFetch`, `ITEMS_PER_PAGE = 12`, busca, selecao, preload de thumbnails e refetch apos upload/remocao.
-* **`PictureInputView`** (`apps/studio/src/ui/lesson/widgets/components/PictureInput/PictureInputView.tsx`) - View com busca, imagem selecionada, `ImageInput folder='story'`, loading, empty state, grid e load more.
-* **`PictureCard` hook** (`apps/studio/src/ui/lesson/widgets/components/PictureInput/PictureCard/usePictureCard.ts`) - Remove imagens via `storageService.removeFile(FileStorageFolderPath.createAsStory(), Text.create(imageName))`.
-* **`StorageImage`** (`apps/studio/src/ui/global/widgets/components/StorageImage/index.tsx`) - Renderiza preview a partir do CDN do Supabase e resolve pastas legadas.
+* **`ImageInput`** (`apps/backoffice/src/ui/global/widgets/components/ImageInput/index.tsx`) - Entry point do widget reutilizavel de upload imediato, resolve `storageService` via `useRestContext`.
+* **`useImageInput`** (`apps/backoffice/src/ui/global/widgets/components/ImageInput/useImageInput.ts`) - Hook que guarda `imageFile`, `imageName`, valida `Image.create(imageName)` e chama `storageService.uploadFile`.
+* **`ImageInputView`** (`apps/backoffice/src/ui/global/widgets/components/ImageInput/ImageInputView.tsx`) - View com `FileUpload`, input de nome e botao `Enviar` com loading.
+* **`PictureInput`** (`apps/backoffice/src/ui/lesson/widgets/components/PictureInput/index.tsx`) - Entry point do seletor de imagens de licao.
+* **`usePictureInput`** (`apps/backoffice/src/ui/lesson/widgets/components/PictureInput/usePictureInput.ts`) - Lista imagens de `FileStorageFolderPath.createAsStory()` com `usePaginatedFetch`, `ITEMS_PER_PAGE = 12`, busca, selecao, preload de thumbnails e refetch apos upload/remocao.
+* **`PictureInputView`** (`apps/backoffice/src/ui/lesson/widgets/components/PictureInput/PictureInputView.tsx`) - View com busca, imagem selecionada, `ImageInput folder='story'`, loading, empty state, grid e load more.
+* **`PictureCard` hook** (`apps/backoffice/src/ui/lesson/widgets/components/PictureInput/PictureCard/usePictureCard.ts`) - Remove imagens via `storageService.removeFile(FileStorageFolderPath.createAsStory(), Text.create(imageName))`.
+* **`StorageImage`** (`apps/backoffice/src/ui/global/widgets/components/StorageImage/index.tsx`) - Renderiza preview a partir do CDN do Supabase e resolve pastas legadas.
 
 ## Web - Compatibilidade
 
@@ -163,7 +163,7 @@ Migrar o upload de imagens iniciado pelo Studio para um fluxo baseado em URLs as
 
 ## Camada Provision (Providers)
 
-* **Localizacao:** `apps/studio/src/provision/storage/SupabaseSignedFileStorageProvider.ts` (**novo arquivo**)
+* **Localizacao:** `apps/backoffice/src/provision/storage/SupabaseSignedFileStorageProvider.ts` (**novo arquivo**)
 * **Dependencias:** Nenhuma dependencia externa obrigatoria; usar `fetch` do browser ou `axios` local sem base URL do `server`.
 * **Biblioteca:** Browser Fetch API ou Axios.
 * **Metodos:** `uploadFile(signedUploadUrl: SignedUploadUrl, file: File): Promise<void>` - usa os dados do `SignedUploadUrl` e o binario selecionado para enviar o upload diretamente ao Supabase Storage e resolve sem payload quando o upload for concluido com sucesso.
@@ -240,7 +240,7 @@ Migrar o upload de imagens iniciado pelo Studio para um fluxo baseado em URLs as
 
 ## Studio - Provision
 
-* **Arquivo:** `apps/studio/src/provision/storage/SupabaseSignedFileStorageProvider.ts`
+* **Arquivo:** `apps/backoffice/src/provision/storage/SupabaseSignedFileStorageProvider.ts`
 * **Mudanca:** Implementar `SignedFileStorageProvider` com o metodo `uploadFile(signedUploadUrl: SignedUploadUrl, file: File): Promise<void>`.
 * **Justificativa:** Na `studio`, o provider existe apenas para executar o upload direto a partir do contrato assinado retornado pelo `server`.
 * **Camada:** `provision`
@@ -271,47 +271,47 @@ Migrar o upload de imagens iniciado pelo Studio para um fluxo baseado em URLs as
 
 ## Studio - REST
 
-* **Arquivo:** `apps/studio/src/rest/services/StorageService.ts`
+* **Arquivo:** `apps/backoffice/src/rest/services/StorageService.ts`
 * **Mudanca:** Alterar a factory para receber `signedFileStorageProvider: SignedFileStorageProvider`; implementar `createSignedUploadUrl(folderPath, fileName)` chamando `POST /storage/signed-upload-url` com `{ folderPath: folderPath.value, fileName: fileName.value }`; alterar `uploadFile(folder, file)` para enviar o `fileName` escolhido na UI, montar o `SignedUploadUrl` a partir da resposta e fazer upload direto via `signedFileStorageProvider.uploadFile(signedUploadUrl, file)`; retornar `RestResponse<{ filename: string }>` com o mesmo `fileName` retornado pelo server.
 * **Justificativa:** Preservar o contrato atual dos widgets enquanto remove o uso do endpoint legado no Studio.
 * **Camada:** `rest`
 
 ## Studio - UI (Contexts)
 
-* **Localizacao:** `apps/studio/src/ui/global/contexts/ProvisionContext` (**nova pasta**)
+* **Localizacao:** `apps/backoffice/src/ui/global/contexts/ProvisionContext` (**nova pasta**)
 * **Props:** `children: ReactNode`.
-* **Hook do provider:** `apps/studio/src/ui/global/contexts/ProvisionContext/useProvisionContextProvider.ts`.
+* **Hook do provider:** `apps/backoffice/src/ui/global/contexts/ProvisionContext/useProvisionContextProvider.ts`.
 * **Responsabilidade:** Instanciar e prover providers consumidos pela UI da `studio`, inicialmente `SupabaseSignedFileStorageProvider` com suporte a upload por signed URL.
 * **Value:** `{ signedFileStorageProvider: SignedFileStorageProvider }`.
 
-* **Arquivo:** `apps/studio/src/ui/global/contexts/RestContext/useRestContextProvider.ts`
+* **Arquivo:** `apps/backoffice/src/ui/global/contexts/RestContext/useRestContextProvider.ts`
 * **Mudanca:** Manter o `RestContext` restrito a services REST; remover dele a responsabilidade de instanciar providers de provision.
 * **Justificativa:** Providers de infraestrutura da UI passam a ser resolvidos por `ProvisionContext`, separando REST de provision.
 * **Camada:** `ui`
 
 ## Studio - UI
 
-* **Arquivo:** `apps/studio/src/ui/global/widgets/components/ImageInput/useImageInput.ts`
+* **Arquivo:** `apps/backoffice/src/ui/global/widgets/components/ImageInput/useImageInput.ts`
 * **Mudanca:** Continuar usando o nome editado na UI como `fileName` enviado ao service; apos sucesso, chamar `onSubmit(response.body.filename)` usando o `fileName` retornado pelo server, que deve repetir o `fileName` validado.
 * **Justificativa:** O nome final do arquivo volta a ser controlado pela borda, desde que passe pela validacao do backend antes da emissao da URL assinada.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/lesson/widgets/components/PictureInput/usePictureInput.ts`
+* **Arquivo:** `apps/backoffice/src/ui/lesson/widgets/components/PictureInput/usePictureInput.ts`
 * **Mudanca:** Apos upload bem-sucedido, selecionar automaticamente a imagem recem-enviada; ao remover uma imagem, manter o dialog aberto; ao remover a imagem atualmente selecionada, definir `panda.jpg` como fallback padrao; reduzir `ITEMS_PER_PAGE` para `12` e pre-carregar thumbnails da primeira pagina.
 * **Justificativa:** Preserva a continuidade do fluxo no seletor de imagens, melhora a performance percebida na abertura do dialog e evita estado vazio inesperado apos exclusao da imagem selecionada.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/global/widgets/components/ImageInput/index.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/global/widgets/components/ImageInput/index.tsx`
 * **Mudanca:** Resolver `storageService` via `useRestContext` e `signedFileStorageProvider` via `useProvisionContext`, repassando ambos para o fluxo de upload.
 * **Justificativa:** O widget continua como entry point de integracao, mas cada dependencia passa a vir do contexto correto.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/global/widgets/components/ImageInput/ImageInputView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/global/widgets/components/ImageInput/ImageInputView.tsx`
 * **Mudanca:** Manter o input de nome da imagem como campo editavel e alinhar o texto/placeholder para representar explicitamente o `fileName` que sera validado pelo backend; configurar `FileUpload` com `maxSize={5 * 1024 * 1024}`.
 * **Justificativa:** O fluxo volta a depender do nome informado pelo usuario para compor o `fileName` final no storage.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/global/widgets/components/ImageInput/useImageInput.ts`
+* **Arquivo:** `apps/backoffice/src/ui/global/widgets/components/ImageInput/useImageInput.ts`
 * **Mudanca:** Tratar erro da etapa de signed URL e erro do upload direto no mesmo estado `isSubmitting`, exibindo toast e resetando o loading em `finally`; respeitar o bloqueio de arquivo acima de `5 MB` vindo do `FileUpload`.
 * **Justificativa:** O novo fluxo tem duas chamadas falhaveis e o widget precisa preservar feedback de erro sem fechar o dialog em falha parcial.
 * **Camada:** `ui`
@@ -430,8 +430,8 @@ Migrar o upload de imagens iniciado pelo Studio para um fluxo baseado em URLs as
 
 ```text
 Studio ImageInput
-  -> apps/studio StorageService.uploadFile(folder, file)
-  -> apps/studio StorageService.createSignedUploadUrl(folder, fileName)
+  -> apps/backoffice StorageService.uploadFile(folder, file)
+  -> apps/backoffice StorageService.createSignedUploadUrl(folder, fileName)
   -> POST /storage/signed-upload-url
   -> StorageRouter
   -> CreateSignedUploadUrlController
@@ -450,7 +450,7 @@ Studio ImageInput
 * **Fluxo Cross-app (se aplicavel):**
 
 ```text
-apps/studio consumes REST from apps/server
+apps/backoffice consumes REST from apps/server
 
 [Studio]
   StorageService.createSignedUploadUrl(folderPath, fileName)
@@ -521,10 +521,10 @@ PictureInput Dialog
 * `apps/server/src/rest/controllers/storage/UploadFileController.ts` - referencia de controller de storage com provider injetado.
 * `apps/server/src/provision/storage/SupabaseFileStorageProvider.ts` - provider que deve encapsular o SDK Supabase.
 * `apps/server/src/app/hono/routers/shop/AvatarsRouter.ts` - referencia de rota administrativa de escrita com `verifyAuthentication` e `verifyGodAccount`.
-* `apps/studio/src/rest/services/StorageService.ts` - service REST do Studio a migrar.
-* `apps/studio/src/provision/storage/SupabaseSignedFileStorageProvider.ts` - provider client-side do upload direto por signed URL.
-* `apps/studio/src/ui/global/widgets/components/ImageInput/useImageInput.ts` - ponto central do upload imediato no Studio.
-* `apps/studio/src/ui/lesson/widgets/components/PictureInput/usePictureInput.ts` - referencia de listagem paginada e refetch apos upload/remocao.
+* `apps/backoffice/src/rest/services/StorageService.ts` - service REST do Studio a migrar.
+* `apps/backoffice/src/provision/storage/SupabaseSignedFileStorageProvider.ts` - provider client-side do upload direto por signed URL.
+* `apps/backoffice/src/ui/global/widgets/components/ImageInput/useImageInput.ts` - ponto central do upload imediato no Studio.
+* `apps/backoffice/src/ui/lesson/widgets/components/PictureInput/usePictureInput.ts` - referencia de listagem paginada e refetch apos upload/remocao.
 * `packages/core/src/storage/domain/structures/SignedUploadUrl.ts` - structure do contrato assinado.
 * `packages/validation/src/modules/storage/fileStorageFolderPathSchema.ts` - allowlist atual de folders de storage.
 * Supabase docs: `https://supabase.com/docs/reference/javascript/storage-from-createsigneduploadurl` - referencia de `createSignedUploadUrl`.

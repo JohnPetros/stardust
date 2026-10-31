@@ -66,15 +66,15 @@ Entregar a edição de `challenge_sources` no Studio por ação direta na tabela
 
 ## Camada UI (Studio)
 
-* **`ChallengeSourcesPageView`** (`apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx`) - *Renderiza tabela de sources, ação de exclusão e controles de reordenação.*
-* **`useChallengeSourcesPage`** (`apps/studio/src/ui/challenging/ChallengeSources/useChallengeSourcesPage.ts`) - *Orquestra listagem, criação, exclusão e reorder com `challengingService`.*
-* **`ChallengeSourceFormView`** (`apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/ChallengeSourceFormView.tsx`) - *Dialog atual de criação com URL e seleção obrigatória de desafio.*
-* **`useChallengeSourceForm`** (`apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/useChallengeSourceForm.ts`) - *Hook do formulário com `react-hook-form` + `challengeSourceSchema`.*
-* **`RocketFormView`** (`apps/studio/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketForm/RocketFormView.tsx`) - *Referência de formulário reutilizado para criar/editar via `initialValues`.*
+* **`ChallengeSourcesPageView`** (`apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx`) - *Renderiza tabela de sources, ação de exclusão e controles de reordenação.*
+* **`useChallengeSourcesPage`** (`apps/backoffice/src/ui/challenging/ChallengeSources/useChallengeSourcesPage.ts`) - *Orquestra listagem, criação, exclusão e reorder com `challengingService`.*
+* **`ChallengeSourceFormView`** (`apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/ChallengeSourceFormView.tsx`) - *Dialog atual de criação com URL e seleção obrigatória de desafio.*
+* **`useChallengeSourceForm`** (`apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/useChallengeSourceForm.ts`) - *Hook do formulário com `react-hook-form` + `challengeSourceSchema`.*
+* **`RocketFormView`** (`apps/backoffice/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketForm/RocketFormView.tsx`) - *Referência de formulário reutilizado para criar/editar via `initialValues`.*
 
 ## Camada REST (Studio/Web)
 
-* **`ChallengingService`** (`apps/studio/src/rest/services/ChallengingService.ts`) - *Implementa `fetchChallengeSourcesList`, `createChallengeSource`, `deleteChallengeSource` e `reorderChallengeSources`.*
+* **`ChallengingService`** (`apps/backoffice/src/rest/services/ChallengingService.ts`) - *Implementa `fetchChallengeSourcesList`, `createChallengeSource`, `deleteChallengeSource` e `reorderChallengeSources`.*
 * **`ChallengingService`** (`apps/web/src/rest/services/ChallengingService.ts`) - *Implementação paralela da mesma interface compartilhada; precisa acompanhar mudanças contratuais do core.*
 
 ## Camada Hono App (Server)
@@ -208,7 +208,7 @@ Entregar a edição de `challenge_sources` no Studio por ação direta na tabela
 
 ## Camada REST (Services)
 
-* **Arquivo:** `apps/studio/src/rest/services/ChallengingService.ts`
+* **Arquivo:** `apps/backoffice/src/rest/services/ChallengingService.ts`
 * **Mudança:**
   - Ajustar `createChallengeSource` para enviar `challengeId` opcional.
   - Adicionar `updateChallengeSource` para `PUT /challenging/challenge-sources/:challengeSourceId`.
@@ -222,26 +222,26 @@ Entregar a edição de `challenge_sources` no Studio por ação direta na tabela
 
 ## Camada UI (Widgets)
 
-* **Arquivo:** `apps/studio/src/ui/challenging/ChallengeSources/useChallengeSourcesPage.ts`
+* **Arquivo:** `apps/backoffice/src/ui/challenging/ChallengeSources/useChallengeSourcesPage.ts`
 * **Mudança:**
   - Alterar `onCreateChallengeSource` para receber `challengeId?: string`.
   - Adicionar `onUpdateChallengeSource(challengeSourceId: string, url: string, challengeId?: string): Promise<string | null>`.
 * **Justificativa:** Hook da página é o ponto de orquestração de mutações da tabela e precisa suportar edição.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx`
 * **Mudança:**
   - Adicionar ação `Editar` por linha.
   - Renderizar fallback para `source.challenge` ausente em URL pública e título.
 * **Justificativa:** Expor fluxo de edição e suportar visualmente sources sem vínculo.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/index.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/index.tsx`
 * **Mudança:** Suportar modo create/edit via props `initialValues` e `challengeSourceId`.
 * **Justificativa:** Reuso do mesmo widget para os dois fluxos, seguindo padrão já usado no Studio.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/useChallengeSourceForm.ts`
+* **Arquivo:** `apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/useChallengeSourceForm.ts`
 * **Mudança:**
   - Adaptar `FormData` para `challengeId` opcional.
   - Preencher valores iniciais quando em modo edição.
@@ -249,7 +249,7 @@ Entregar a edição de `challenge_sources` no Studio por ação direta na tabela
 * **Justificativa:** O formulário precisa operar em dois modos e aceitar vínculo opcional.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/ChallengeSourceFormView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/ChallengeSourceFormView.tsx`
 * **Mudança:**
   - Textos dinâmicos para create/edit.
   - Exibir ação para remover desafio selecionado.
@@ -306,7 +306,7 @@ Entregar a edição de `challenge_sources` no Studio por ação direta na tabela
       |
       | REST (studio)
       v
-[apps/studio ChallengingService]
+[apps/backoffice ChallengingService]
       |
       | PUT/POST /challenging/challenge-sources
       v
@@ -366,9 +366,9 @@ Dialog (create/edit)
 ```
 
 * **Referências:**
-  - `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx`
-  - `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourceForm/useChallengeSourceForm.ts`
-  - `apps/studio/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketForm/RocketFormView.tsx`
+  - `apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx`
+  - `apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourceForm/useChallengeSourceForm.ts`
+  - `apps/backoffice/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketForm/RocketFormView.tsx`
   - `apps/server/src/app/hono/routers/challenging/ChallengeSourcesRouter.ts`
   - `apps/server/src/rest/controllers/challenging/challenges/UpdateChallengeController.ts`
   - `apps/server/src/database/supabase/repositories/challenging/SupabaseChallengeSourcesRepository.ts`

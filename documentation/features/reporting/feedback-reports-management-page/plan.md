@@ -345,15 +345,15 @@ sequencialmente para preservar os contratos, sem Judges intermediários.
     (registro `DELETE`),
     `apps/server/src/database/supabase/repositories/reporting/SupabaseFeedbackReportsRepository.ts`
     (método `remove`),
-    `apps/studio/src/rest/services/ReportingService.ts`
+    `apps/backoffice/src/rest/services/ReportingService.ts`
     (método `deleteFeedbackReport`),
-    `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/useFeedbackReportsPage.tsx`,
-    `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsPageView.tsx`,
-    `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/DeleteFeedbackReportDialog/index.tsx`,
-    `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/DeleteFeedbackReportDialog/DeleteFeedbackReportDialogView.tsx`,
-    `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/tests/DeleteFeedbackReportDialogView.test.tsx`,
-    `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/tests/FeedbackReportsPageView.test.tsx`,
-    `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/tests/useFeedbackReportsPage.test.ts`,
+    `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/useFeedbackReportsPage.tsx`,
+    `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsPageView.tsx`,
+    `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/DeleteFeedbackReportDialog/index.tsx`,
+    `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/DeleteFeedbackReportDialog/DeleteFeedbackReportDialogView.tsx`,
+    `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/tests/DeleteFeedbackReportDialogView.test.tsx`,
+    `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/tests/FeedbackReportsPageView.test.tsx`,
+    `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/tests/useFeedbackReportsPage.test.ts`,
     `apps/server/rest-client/reporting/feedback-reports.rest`.
     A busca estática final deve cobrir esses paths e os símbolos
     `DeleteFeedbackReport`, `deleteFeedbackReport`, `reportToDelete` e
@@ -487,9 +487,9 @@ sequencialmente para preservar os contratos, sem Judges intermediários.
 
 - [ ] **F5-T2 — Atualizar service, rotas e deep link do Studio**
   - **Estado:** `validating`
-  - **Paths:** `apps/studio/src/rest/services/ReportingService.ts`,
-    `apps/studio/src/app/routes/FeedbackReportsRoute.tsx`,
-    `apps/studio/src/app/routes.ts`, `apps/studio/src/constants/routes.ts`.
+  - **Paths:** `apps/backoffice/src/rest/services/ReportingService.ts`,
+    `apps/backoffice/src/app/routes/FeedbackReportsRoute.tsx`,
+    `apps/backoffice/src/app/routes.ts`, `apps/backoffice/src/constants/routes.ts`.
   - **Refs:** RF-02, RF-03, RF-04, RF-05, RF-08, RF-09; CA-06 a CA-08,
     CA-12, CA-15, CA-16, CA-21 a CA-23.
   - **Resultado observável:** service serializa os structures e implementa lista,
@@ -502,7 +502,7 @@ sequencialmente para preservar os contratos, sem Judges intermediários.
 
 - [ ] **F5-T3 — Implementar página, summary, filtros, tabela e vazios**
   - **Estado:** `validating`
-  - **Paths:** `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/index.tsx`,
+  - **Paths:** `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/index.tsx`,
     `FeedbackReportsPageView.tsx`, `useFeedbackReportsPage.tsx`,
     `FeedbackReportsTable/`, `FeedbackReportsSummary/` (novo),
     `FeedbackReportsFilters/` (novo), `FeedbackReportsEmptyState/` (novo).
@@ -517,7 +517,7 @@ sequencialmente para preservar os contratos, sem Judges intermediários.
 
 - [ ] **F5-T4 — Implementar conversa, compositor, anexos, status e dialog**
   - **Estado:** `validating`
-  - **Paths:** `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportDialog/`,
+  - **Paths:** `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportDialog/`,
     `FeedbackConversation/` (novo), `FeedbackMessageComposer/` (novo),
     `FeedbackAttachments/` (novo), `FeedbackStatusSelector/` (novo).
   - **Refs:** `nbV72`, `aHFPL`; RF-03 a RF-08; CA-06 a CA-18, CA-21,
@@ -532,9 +532,9 @@ sequencialmente para preservar os contratos, sem Judges intermediários.
 
 - [ ] **F5-T5 — Atualizar Sidebar e remover o legado de exclusão**
   - **Estado:** `validating`
-  - **Paths:** `apps/studio/src/ui/global/widgets/layouts/App/Sidebar/index.tsx`,
+  - **Paths:** `apps/backoffice/src/ui/global/widgets/layouts/App/Sidebar/index.tsx`,
     `SidebarView.tsx`, `NavigationTitle/`,
-    `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/DeleteFeedbackReportDialog/`
+    `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/DeleteFeedbackReportDialog/`
     e testes dedicados; tabela/dialog/handlers existentes que ainda exponham
     delete.
   - **Refs:** RF-07, RF-08, RF-09; CA-20, CA-22, CA-23.
@@ -548,7 +548,7 @@ sequencialmente para preservar os contratos, sem Judges intermediários.
 - [ ] **F5-T6 — Cobrir widgets, acessibilidade e estados operacionais**
   - **Estado:** `validating`
   - **Paths:** testes unitários de hooks/Views em cada widget de reporting e
-    testes de rota do Studio sob `apps/studio/src/app/tests/`.
+    testes de rota do Studio sob `apps/backoffice/src/app/tests/`.
   - **Refs:** RF-03, RF-04, RF-05, RF-07, RF-08, RF-09, RF-10; CA-08,
     CA-09, CA-14, CA-16, CA-19 a CA-25, CA-28, CA-35.
   - **Resultado observável:** estados vazios distintos, filtros inválidos com
@@ -605,13 +605,13 @@ sequencialmente para preservar os contratos, sem Judges intermediários.
 
 - [ ] **F6-T3 — Validar visualmente o Studio e os fluxos reais no Playwright**
   - **Estado:** `blocked`
-  - **Paths:** `apps/studio/src/` e os comandos/fixtures de Playwright existentes
+  - **Paths:** `apps/backoffice/src/` e os comandos/fixtures de Playwright existentes
     do Studio; nenhuma credencial deve ser gravada no repositório.
   - **Refs:** `MVWsz`, `nbV72`, `aHFPL`; RF-07, RF-08, RF-10; CA-06, CA-08,
     CA-11, CA-15, CA-19 a CA-25, CA-35.
   - **Resultado observável:** iniciar Server em `http://localhost:3334` e Studio
-    na porta configurada; autenticar por `STUDIO_APP_E2E_EMAIL`/
-    `STUDIO_APP_E2E_PASSWORD`, aguardar `/dashboard`, acessar `/profile/users`
+    na porta configurada; autenticar por `BACKOFFICE_APP_E2E_EMAIL`/
+    `BACKOFFICE_APP_E2E_PASSWORD`, aguardar `/dashboard`, acessar `/profile/users`
     para confirmar sessão protegida e depois validar `/reporting/feedback` e o
     deep link. Registrar `console`, `pageerror`, `requestfailed` e `response`,
     confirmar `2xx` no login, `/auth/account`, lista, detalhe, read, upload,

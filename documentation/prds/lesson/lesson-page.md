@@ -6,7 +6,7 @@ source:
     ref: Reformulação das histórias aprovada em 2026-10-11
   - type: issue
     ref: https://github.com/JohnPetros/stardust/milestone/23
-last_updated_at: 2026-10-11
+last_updated_at: 2026-10-31
 ---
 
 # PRD — Histórias interativas
@@ -81,7 +81,7 @@ Jobs to Be Done:
 | Planeta | Tema da trilha, conforme Trilha e Espaço. |
 | Estrela | Unidade ordenada da trilha; pode conter uma história ou um desafio de código. |
 | História | Sequência de blocos de narrativa, apresentação de conceitos e questões. |
-| Bloco da história | Item da sequência: texto, imagem, Lottie, exemplo de código, exemplo de programação em blocos ou questão. |
+| Bloco da história | Item da sequência: texto, Lottie, exemplo de código, exemplo de programação em blocos ou questão. Imagens estáticas aparecem apenas em cenas de atividades. |
 | Bloco de texto | Possui personagem, tipo e avatar próprios. O avatar pode variar entre blocos do mesmo personagem. |
 | Histórico | Conjunto consultável dos blocos percorridos, incluindo falas e respostas aprovadas após o avanço. |
 | Destaque | Apresentação temporária de um elemento visual, até um ponto definido da progressão. Não constitui uma sequência separada. |
@@ -123,7 +123,7 @@ Atores: aluno autenticado.
 
 ##### Regras de Negócio
 
-- A história pode conter texto, imagem, Lottie, exemplos de código Delégua e de programação em blocos, além de questões de múltipla escolha, programação em blocos e escrita de código.
+- A história pode conter texto, Lottie, exemplos de código Delégua e de programação em blocos, além de questões de múltipla escolha, programação em blocos e escrita de código. Todo visual em destaque deve ser um Lottie, conforme Blocos visuais.
 - Continuar deve permitir percorrer os blocos na ordem da história, respeitando o bloqueio de questões descrito em RP-04.
 - Exemplos devem ser somente leitura. Quando executáveis, sua execução deve ser opcional para avançar.
 - Não deve existir uma passagem para um estágio separado de quiz.
@@ -329,7 +329,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 
 1. O sistema apresenta o enunciado acima da atividade, sem o histórico simultâneo.
 2. O aluno responde e envia sua resposta para avaliação.
-3. Se a resposta estiver incorreta, recebe feedback, perde uma vida e pode tentar novamente enquanto houver vidas.
+3. Se a resposta estiver incorreta, perde uma vida, recebe a indicação de erro definida pelo PRD do tipo de questão e pode tentar novamente enquanto houver vidas.
 4. Se a resposta estiver aprovada, recebe feedback e pode acionar Continuar.
 5. Após Continuar, a sequência prossegue e a resposta aprovada permanece consultável no histórico.
 6. Se as vidas acabarem, segue JN-05.

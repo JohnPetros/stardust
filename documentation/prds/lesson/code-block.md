@@ -6,7 +6,13 @@ source:
     ref: Revisão das capacidades de leitura, edição e execução aprovada em 2026-10-14
   - type: issue
     ref: https://github.com/JohnPetros/stardust/milestone/24
-last_updated_at: 2026-10-14
+  - type: direct-request
+    ref: Restauração sempre visível no Bloco de Código aprovada em 2026-10-31
+  - type: direct-request
+    ref: Todas as ações visíveis nos blocos de código das histórias, com execução em múltipla escolha e explicação por IA, aprovado em 2026-10-31
+  - type: direct-request
+    ref: Remoção da explicação por IA das questões de escrita aprovada em 2026-10-31
+last_updated_at: 2026-10-31
 ---
 
 # PRD — Bloco de Código
@@ -19,7 +25,7 @@ Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunid
 
 O Bloco de Código apresenta código de forma consistente nos contextos educacionais do Stardust. Leitura, edição e execução são capacidades distintas: permitir executar um programa não exige permitir editar seu conteúdo.
 
-Nas histórias, exemplos de leitura permanecem sem edição e podem oferecer execução opcional e cópia. Código de referência em múltipla escolha permanece somente leitura, sem execução. Questões de escrita oferecem editor totalmente editável, respeitando seus bloqueios temporários de execução e análise. Código gerado pelo Blockly permanece somente leitura e segue a modalidade da atividade.
+Nas histórias, exemplos de leitura permanecem sem edição e podem oferecer execução opcional e cópia. Código de referência em múltipla escolha permanece somente leitura, com execução opcional. Nos blocos de código das histórias, restaurar, copiar e executar permanecem sempre visíveis; explicar com IA aparece nos exemplos de leitura e no código de referência, mas não nas questões de escrita. Questões de escrita oferecem editor totalmente editável, respeitando seus bloqueios temporários de execução e análise. Código gerado pelo Blockly permanece somente leitura e segue a modalidade da atividade.
 
 Este documento define a apresentação e as capacidades comuns. Avaliação, vidas, retomada da tentativa, destaque e narração seguem os PRDs dos contextos consumidores. A revisão não reformula desafios independentes nem ferramentas de autoria existentes.
 
@@ -35,13 +41,14 @@ Esta revisão é prospectiva; não declara que todos os comportamentos já estej
 
 | ID | Material | Papel neste PRD |
 | --- | --- | --- |
-| S1 | Este PRD canônico, revisão de 2026-10-14 | Autoridade versionada para as capacidades comuns; substitui a vinculação entre edição e execução da revisão de 2026-04-07. |
+| S1 | Este PRD canônico, revisão de 2026-10-31 | Autoridade versionada para as capacidades comuns; substitui a vinculação entre edição e execução da revisão de 2026-04-07. |
 | S2 | Revisão das capacidades por contexto aprovada em 2026-10-14 | Confirma a separação entre leitura, edição e execução e o alinhamento aos PRDs específicos. |
 | S3 | [Escrita de código](code-writing.md), revisão de 2026-10-11 | Define exemplos somente leitura executáveis, editor de resposta, bloqueios, restauração, cópia e análise pelo Jev. |
-| S4 | [Múltipla escolha](multiple-choice.md), revisão de 2026-10-11 | Define o código do enunciado como somente leitura e sem execução. |
+| S4 | [Múltipla escolha](multiple-choice.md), revisão de 2026-10-31 | Define o código do enunciado como somente leitura, com execução opcional. |
 | S5 | [Programação em blocos](block-programming.md), revisão de 2026-10-11 | Define código gerado somente leitura e execução conforme modalidade da atividade. |
 | S6 | [Histórias interativas](lesson-page.md) e [Blocos de texto e narração](text-blocks-and-narration.md), revisões de 2026-10-11 | Definem sequência, histórico, destaque e consumo de narração do contexto. |
 | S7 | [Milestone 24](https://github.com/JohnPetros/stardust/milestone/24) | Contexto legado das capacidades de apresentação, cópia, restauração e execução de snippets. |
+| S8 | Decisões de produto aprovadas em 2026-10-31 | Tornam todas as ações do bloco visíveis nas histórias (explicar com IA, restaurar, copiar e executar), inclusive em código somente leitura e no código de referência de múltipla escolha; a explicação por IA não aparece nas questões de escrita. |
 
 ## 3. Público-alvo
 
@@ -52,7 +59,7 @@ Como público secundário, consumidores existentes de challenging e autoria reut
 Jobs to Be Done:
 
 - Quando consultar um exemplo, quero ler, copiar e, quando permitido, executar seu código, para compreender seu comportamento sem alterar o conteúdo apresentado.
-- Quando interpretar uma questão de múltipla escolha, quero consultar o código de referência, para responder pela leitura.
+- Quando interpretar uma questão de múltipla escolha, quero consultar e, se quiser, executar o código de referência, para responder com base em sua leitura.
 - Quando escrever uma solução, quero editar e executar o código conforme a atividade, para construir minha resposta.
 - Quando montar um programa com Blockly, quero consultar o Delégua correspondente, para relacionar as representações sem editar diretamente o código gerado.
 
@@ -60,8 +67,8 @@ Jobs to Be Done:
 
 | Objetivo do produto | Métrica aprovada | Significado da medição |
 | --- | --- | --- |
-| Separar capacidades de leitura, edição e execução | Nenhuma meta numérica aprovada | Verificar que exemplos podem executar sem edição e referências podem permanecer sem execução. |
-| Apresentar ações apropriadas ao contexto | Nenhuma meta numérica aprovada | Verificar as ações de cada modalidade e a ausência de controles incompatíveis. |
+| Separar capacidades de leitura, edição e execução | Nenhuma meta numérica aprovada | Verificar que exemplos e referências podem executar sem edição. |
+| Apresentar ações apropriadas ao contexto | Nenhuma meta numérica aprovada | Verificar as ações de cada contexto das histórias, sem explicação por IA nas questões de escrita. |
 | Preservar o código correspondente ao contexto | Nenhuma meta numérica aprovada | Verificar conteúdo fornecido, código atual e código gerado, sem alterações ao alternar a apresentação. |
 | Apresentar retorno sem confundir avaliação | Nenhuma meta numérica aprovada | Verificar saída, erro e entrada no terminal, preservando avaliação e vidas sob responsabilidade da atividade. |
 | Manter usabilidade | Nenhuma meta numérica aprovada | Verificar leitura, navegação por teclado e uso em telas estreitas. |
@@ -86,7 +93,7 @@ Jobs to Be Done:
 | Edição | Capacidade explicitamente habilitada pelo contexto, sujeita aos bloqueios da atividade. |
 | Execução | Capacidade de executar o código correspondente ao contexto, independente da permissão de edição. |
 | Código atual | Conteúdo exibido, incluindo alterações permitidas; é o valor usado para cópia e execução quando habilitadas. |
-| Código inicial | Conteúdo de referência para restauração em contextos editáveis. |
+| Código inicial | Conteúdo de referência para restauração; em contextos somente leitura, coincide com o código atual. |
 | Código gerado | Delégua produzido pela montagem Blockly, somente leitura. |
 | Saída | Retorno da execução no terminal, distinto de feedback de avaliação. |
 | Contexto consumidor | Área que define capacidades, avaliação, bloqueios, persistência e progressão aplicáveis. |
@@ -128,7 +135,7 @@ Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
 ##### Regras de Negócio
 
 - Edição e execução devem depender de habilitação explícita do contexto, sem uma implicar a outra.
-- Exemplos de leitura nas histórias devem impedir edição e podem permitir execução opcional.
+- Exemplos de leitura e código de referência de múltipla escolha nas histórias devem impedir edição e permitir execução opcional.
 - Questões de escrita devem permitir edição de todo o conteúdo conforme Escrita de código, incluindo bloqueios durante execução e análise.
 - Código gerado pelo Blockly e código de referência em múltipla escolha não devem ser editáveis.
 - Alterações permitidas devem ser disponibilizadas ao contexto consumidor para suas regras de execução, avaliação e retomada.
@@ -136,24 +143,26 @@ Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
 
 ##### Regras de Experiência
 
-- A interface deve apresentar apenas ações habilitadas no contexto atual.
+- Nos exemplos de leitura e no código de referência de múltipla escolha, o bloco deve apresentar sempre as ações de explicar com IA, restaurar, copiar e executar; nas questões de escrita, as mesmas ações, exceto explicar com IA.
 - Bloqueios temporários devem ser compreensíveis e impedir alteração por qualquer ação que modifique o código, inclusive restauração.
 - O aluno deve reconhecer a apresentação de código mesmo quando as capacidades forem diferentes.
 
-#### RP-03 — Restaurar o código inicial quando houver edição
+#### RP-03 — Restaurar o código inicial
 
 Necessidades do usuário:
 
-- Como aluno, quero retornar ao código inicial quando permitido, para recomeçar minha solução sem recarregar a página.
+- Como aluno, quero sempre encontrar a ação de retornar ao código inicial, para recomeçar minha solução ou o exemplo sem recarregar a página.
 
-Resultado: a restauração retorna ao conteúdo inicial no contexto editável, respeitando a confirmação da atividade.
+Resultado: a ação de restaurar fica sempre visível; em contextos editáveis, retorna ao conteúdo inicial respeitando a confirmação da atividade; em contextos somente leitura, retorna o bloco à apresentação inicial.
 
 Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
 
 ##### Regras de Negócio
 
-- Restaurar deve retornar ao código inicial fornecido pelo contexto quando edição e restauração estiverem habilitadas.
-- A ação não deve depender apenas da permissão de execução.
+- A ação de restaurar deve estar visível em todos os contextos do Bloco de Código, inclusive somente leitura.
+- Em contextos editáveis, restaurar deve retornar ao código inicial fornecido pelo contexto.
+- Em contextos somente leitura, restaurar não deve alterar o conteúdo e deve retornar o bloco à apresentação inicial, fechando o terminal Saída quando houver.
+- A visibilidade da ação não deve depender da permissão de edição ou de execução.
 - Restauração de uma questão de escrita deve pedir confirmação quando houver alterações, conforme Escrita de código.
 - A ação não deve reiniciar a história, alterar vidas ou contornar os bloqueios da atividade.
 - Na visualização do código gerado pelo Blockly, a restauração da montagem deve seguir Programação em blocos, sem transformar o código gerado em editor.
@@ -163,6 +172,7 @@ Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
 - A ação deve ser distinguível do recarregamento da página e do reinício integral da história.
 - Cancelar a confirmação deve preservar o conteúdo atual.
 - Restaurar não deve exigir recarregar a página.
+- Durante bloqueios temporários, a ação deve permanecer visível, mas indisponível.
 
 #### RP-04 — Copiar o código atual quando habilitado
 
@@ -177,7 +187,7 @@ Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
 ##### Regras de Negócio
 
 - Copiar deve usar o código atual exibido, incluindo alterações quando houver edição.
-- A cópia deve ser habilitada nos exemplos de leitura e nas questões de escrita conforme Escrita de código.
+- A cópia deve ser habilitada nos exemplos de leitura, no código de referência de múltipla escolha e nas questões de escrita.
 - A habilitação de cópia não deve depender de o conteúdo ser editável ou executável.
 - Cópia não deve modificar o código, avaliar resposta ou consumir vidas.
 
@@ -211,7 +221,7 @@ Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
 
 - O retorno deve aparecer no terminal Saída integrado e recolhível, conforme os contextos de histórias executáveis.
 - Erros de execução não devem quebrar a interface ou apagar o código apresentado.
-- O botão Executar deve aparecer somente quando essa ação estiver habilitada na modalidade.
+- O botão Executar deve aparecer nos exemplos de leitura, no código de referência de múltipla escolha e nas questões de escrita; o código gerado por blocos segue Programação em blocos.
 - Feedback de avaliação deve permanecer distinguível da saída do programa.
 
 #### RP-06 — Respeitar o contexto educacional e suas autoridades
@@ -230,7 +240,7 @@ Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
 - Avaliação, bloqueios de edição, vidas e persistência devem seguir o PRD específico da atividade e Histórias interativas.
 - Exemplos devem seguir as regras de destaque e histórico; enunciados e questões devem seguir a composição da atividade.
 - Narração de textos e enunciados deve seguir Blocos de texto e narração, sem criar geração de áudio no bloco de código.
-- Explicação de código por IA deve permanecer retirada dos blocos de código das histórias, conforme Escrita de código.
+- A explicação de código por IA deve estar disponível nos exemplos de leitura e no código de referência de múltipla escolha, e ausente das questões de escrita, conforme Escrita de código.
 - Esta revisão não deve reformular desafios independentes ou ferramentas de autoria.
 
 ##### Regras de Experiência
@@ -245,9 +255,11 @@ Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
 | Contexto | Edição direta do código | Execução | Autoridade de produto |
 | --- | --- | --- | --- |
 | Exemplo de leitura | Não | Opcional para o aluno quando oferecida; cópia disponível | Escrita de código; Histórias interativas |
-| Código no enunciado de múltipla escolha | Não | Não | Múltipla escolha |
+| Código no enunciado de múltipla escolha | Não | Opcional para o aluno, sem avaliar a resposta; cópia disponível | Múltipla escolha |
 | Questão de escrita | Totalmente editável, com bloqueios temporários | Sim, antes da análise da versão atual pelo Jev | Escrita de código |
 | Código gerado por programação em blocos | Não | Conforme a modalidade; questões e exemplos de montagem não oferecem execução | Programação em blocos |
+
+Nos exemplos de leitura e no código de referência de múltipla escolha, as ações de explicar com IA, restaurar, copiar e executar permanecem sempre visíveis; nas questões de escrita, todas exceto explicar com IA. Em todos os contextos da matriz, a ação de restaurar permanece visível, conforme RP-03.
 
 ## 6. Grafo de Dependências do Produto
 
@@ -255,7 +267,7 @@ Atores: aluno; usuário dos consumidores existentes conforme seu contexto.
 | --- | --- | --- |
 | Conteúdo ou editor da atividade | Bloco de Código | Fornecer o código atual, código inicial quando aplicável e capacidades habilitadas. |
 | Montagem Blockly | Bloco de Código | Fornecer Delégua gerado somente leitura, atualizado conforme a montagem. |
-| Bloco de Código | Contexto consumidor | Apresentar conteúdo, oferecer cópia e restauração quando habilitadas e disponibilizar alterações permitidas. |
+| Bloco de Código | Contexto consumidor | Apresentar conteúdo, oferecer cópia quando habilitada e restauração em todos os contextos, e disponibilizar alterações permitidas. |
 | Execução | Bloco de Código e atividade | Fornecer saída, erro ou solicitação de entrada correspondentes ao código executado. |
 | PRDs das atividades | Bloco de Código | Definir edição, execução, bloqueios, avaliação, vidas e persistência aplicáveis. |
 | Histórias interativas; Blocos de texto e narração | Apresentação do código no contexto | Definir destaque, histórico e narração de textos e enunciados, sem ampliar capacidades indevidamente. |
@@ -264,11 +276,11 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 
 ## 7. Jornadas
 
-#### JN-01 — Consultar código de referência sem execução
+#### JN-01 — Consultar e executar código de referência
 
 1. A questão de múltipla escolha apresenta seu código de referência.
-2. O aluno consulta o conteúdo somente leitura, sem ação de execução.
-3. Usa a leitura para responder à questão, cuja avaliação segue Múltipla escolha.
+2. O aluno consulta o conteúdo somente leitura e pode executá-lo, consultando a saída no terminal.
+3. Usa a leitura e a saída para responder à questão; executar não avalia a resposta nem consome vidas, e a avaliação segue Múltipla escolha.
 4. A ausência de conteúdo de referência não deve ser apresentada como uma área vazia enganosa.
 
 #### JN-02 — Consultar e executar um exemplo sem editar
@@ -319,7 +331,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 | Progressão e recompensas | Vidas, desbloqueio, conclusão, XP, StarCoins e streak. |
 | Autoria | Novas ferramentas ou reformulação dos formulários existentes. |
 | Desafios independentes | Mudanças nas regras de edição, execução e avaliação desses fluxos. |
-| Explicação por IA | Geração ou regeneração de explicações de código nas histórias, funcionalidade descontinuada nesse contexto. |
+| Explicação por IA | Regras de geração, limites de uso e cache das explicações, definidas em [Explicação de bloco de código por IA](ai-code-block-explanation.md). |
 | Playback | Reformulação do playback estático, tratado em PRD próprio. |
 | Compartilhamento | Versionamento de edições, compartilhamento por link e exportação estruturada. |
 
@@ -329,8 +341,10 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 | --- | --- |
 | Exigir edição sempre que houver execução | Edição e execução são capacidades independentes. |
 | Ocultar todas as ações em código somente leitura | Permitir cópia e execução quando habilitadas pelo contexto, mantendo o conteúdo sem edição. |
-| Restringir restauração apenas pela permissão de executar | Habilitar restauração conforme edição e contexto. |
+| Restringir restauração apenas pela permissão de executar | Manter a restauração sempre visível, independente de edição e execução. |
+| Exibir restauração somente em contextos editáveis | Restauração sempre visível; em somente leitura, retorna o bloco à apresentação inicial sem alterar o conteúdo. |
 | Ocultar um editor de resposta por estar vazio | Preservar a escrita do zero quando prevista pela atividade. |
-| Executar código de referência em múltipla escolha | Apresentar somente leitura e sem execução nesse contexto. |
+| Impedir a execução do código de referência em múltipla escolha | Permitir execução opcional, sem edição e sem avaliar a resposta. |
+| Apresentar apenas as ações habilitadas em cada contexto | Manter explicar com IA, restaurar, copiar e executar sempre visíveis nos exemplos e no código de referência; nas questões de escrita, todas exceto explicar com IA. |
 | Editar diretamente o código gerado pelo Blockly | Manter Delégua gerado somente leitura, com capacidades da modalidade da atividade. |
 | Aplicar as mudanças dos exemplos a todos os consumidores | Preservar regras próprias dos desafios e da autoria existentes. |

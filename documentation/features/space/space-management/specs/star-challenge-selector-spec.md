@@ -96,12 +96,12 @@ Implementar, no Studio, um widget de selecao de desafio dentro do item de estrel
 
 ## Camada UI (Widgets e REST client Studio)
 
-* **`StarItem`** (`apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/index.tsx`) - *Entry point do item de estrela onde o seletor sera integrado.*
-* **`useStarItem`** (`apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/useStarItem.ts`) - *Hook atual com handlers de toggle e acao de desafio.*
-* **`StarItemView`** (`apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarItemView.tsx`) - *View onde sera renderizado o gatilho do seletor e estados visuais.*
-* **`ChallengingService`** (`apps/studio/src/rest/services/ChallengingService.ts`) - *Client REST atual para desafios; faltando metodo para patch de star.*
-* **`useFetch`** (`apps/studio/src/ui/global/hooks/useFetch.ts`) - *Hook para busca paginada tradicional por dependencias.*
-* **`Pagination`** (`apps/studio/src/ui/global/widgets/components/Pagination/PaginationView.tsx`) - *Componente de paginacao reutilizavel para o seletor.*
+* **`StarItem`** (`apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/index.tsx`) - *Entry point do item de estrela onde o seletor sera integrado.*
+* **`useStarItem`** (`apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/useStarItem.ts`) - *Hook atual com handlers de toggle e acao de desafio.*
+* **`StarItemView`** (`apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarItemView.tsx`) - *View onde sera renderizado o gatilho do seletor e estados visuais.*
+* **`ChallengingService`** (`apps/backoffice/src/rest/services/ChallengingService.ts`) - *Client REST atual para desafios; faltando metodo para patch de star.*
+* **`useFetch`** (`apps/backoffice/src/ui/global/hooks/useFetch.ts`) - *Hook para busca paginada tradicional por dependencias.*
+* **`Pagination`** (`apps/backoffice/src/ui/global/widgets/components/Pagination/PaginationView.tsx`) - *Componente de paginacao reutilizavel para o seletor.*
 
 ---
 
@@ -134,7 +134,7 @@ Implementar, no Studio, um widget de selecao de desafio dentro do item de estrel
 
 ## Camada UI (Widgets)
 
-* **Localizacao:** `apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/index.tsx` (**novo arquivo**)
+* **Localizacao:** `apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/index.tsx` (**novo arquivo**)
 * **Props:**
   - `starId: Id`
   - `isStarChallenge: boolean`
@@ -146,14 +146,14 @@ Implementar, no Studio, um widget de selecao de desafio dentro do item de estrel
   - `Error`: falha na listagem ou no vinculo (toast + manter dialog aberto)
   - `Empty`: nenhum desafio elegivel para vinculo
   - `Content`: lista com busca + pagina + acao de selecionar
-* **View:** `apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/StarChallengeSelectorView.tsx` (**novo arquivo**)
-* **Hook:** `apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/useStarChallengeSelector.ts` (**novo arquivo**)
-* **Index:** usar `useFetch`, `Pagination`, `Input`, `Dialog`, `ChallengesTable` (`apps/studio/src/ui/global/widgets/components/ChallengesTable`) e `challengingService.editChallengeStar` no fluxo de selecao
+* **View:** `apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/StarChallengeSelectorView.tsx` (**novo arquivo**)
+* **Hook:** `apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/useStarChallengeSelector.ts` (**novo arquivo**)
+* **Index:** usar `useFetch`, `Pagination`, `Input`, `Dialog`, `ChallengesTable` (`apps/backoffice/src/ui/global/widgets/components/ChallengesTable`) e `challengingService.editChallengeStar` no fluxo de selecao
 * **Widgets internos:** Nao aplicavel
 * **Estrutura de pastas:**
 
 ```text
-apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/
+apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/
 └── StarChallengeSelector/
     ├── index.tsx
     ├── useStarChallengeSelector.ts
@@ -194,7 +194,7 @@ apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/
 
 ## Camada REST (Services)
 
-* **Arquivo:** `apps/studio/src/rest/services/ChallengingService.ts`
+* **Arquivo:** `apps/backoffice/src/rest/services/ChallengingService.ts`
 * **Mudanca:** Implementar `editChallengeStar(challengeId, starId)` e `removeChallengeStar(challengeId)` chamando `PATCH/DELETE /challenging/challenges/:challengeId/star`.
 * **Justificativa:** Disponibilizar os novos endpoints para a UI do Studio.
 * **Camada:** `rest`
@@ -206,22 +206,22 @@ apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/
 
 ## Camada UI (Widgets)
 
-* **Arquivo:** `apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/index.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/index.tsx`
 * **Mudanca:** Integrar `StarChallengeSelector` no entry point, injetando `challengingService` e `toastProvider`.
 * **Justificativa:** Manter resolucao de dependencias no `index.tsx` conforme regra da camada UI.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/useStarItem.ts`
+* **Arquivo:** `apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/useStarItem.ts`
 * **Mudanca:** Ajustar handlers para abrir o seletor (em vez de fluxo unico de abrir link externo), sincronizar estado local apos vinculo, disparar `removeChallengeStar` quando o tipo da estrela for alterado para trilha normal e orquestrar troca de vinculo (buscar challenge atual da estrela -> remover -> vincular novo). Tambem carregar inicialmente o desafio vinculado por estrela via `fetchChallengeByStarId`, manter `selectedChallengeTitle`/`selectedChallengeId` em estado local e expor handler de desvinculo no dialog.
 * **Justificativa:** Concentrar logica de estado/handlers no hook do widget.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarItemView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarItemView.tsx`
 * **Mudanca:** Exibir o gatilho do seletor de desafio na mesma linha do botao "Editar desafio" (alinhamento horizontal no bloco de acoes da estrela), com largura fixa e truncamento do titulo selecionado.
 * **Justificativa:** Melhorar consistencia visual e reforcar que editar e selecionar desafio fazem parte do mesmo contexto de gerenciamento.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/global/widgets/components/ChallengesTable/ChallengesTableView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/global/widgets/components/ChallengesTable/ChallengesTableView.tsx`
 * **Mudanca:** Adicionar suporte opcional para acao de selecao por linha no contexto de dialog (ex.: callback `onSelectChallenge?(challengeId: string)` e renderizacao de acao "Selecionar"), sem quebrar os usos atuais.
 * **Justificativa:** Reutilizar `ChallengesTable` no dialog do seletor de desafio, conforme padrao de componentes globais compartilhados.
 * **Camada:** `ui`
@@ -339,9 +339,9 @@ PlanetsPage
   - `apps/server/src/rest/controllers/challenging/challenges/UpdateChallengeController.ts`
   - `apps/server/src/app/hono/routers/space/StarsRouter.ts`
   - `packages/core/src/challenging/use-cases/EditChallengeStarUseCase.ts`
-  - `apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/index.tsx`
-  - `apps/studio/src/ui/challenging/Challenges/useChallengesPage.ts`
-  - `apps/studio/src/ui/global/widgets/components/Pagination/PaginationView.tsx`
+  - `apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/index.tsx`
+  - `apps/backoffice/src/ui/challenging/Challenges/useChallengesPage.ts`
+  - `apps/backoffice/src/ui/global/widgets/components/Pagination/PaginationView.tsx`
 
 ---
 

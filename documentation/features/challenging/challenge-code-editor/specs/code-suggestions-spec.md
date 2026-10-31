@@ -35,7 +35,7 @@ Corrigir o autocomplete do `CodeEditor` usado no `web` para que o Monaco receba 
 - Implementar um LSP completo com analise semantica incremental.
 - Modificar a UI visual do popup nativo do Monaco.
 - Alterar rotas Next.js, RPC, REST, server, banco de dados ou migrations.
-- Corrigir o `CodeEditor` equivalente de `apps/studio`; ele se beneficia apenas do catalogo compartilhado quando consumir `DELEGUA_SNIPPETS`.
+- Corrigir o `CodeEditor` equivalente de `apps/backoffice`; ele se beneficia apenas do catalogo compartilhado quando consumir `DELEGUA_SNIPPETS`.
 
 ---
 

@@ -1055,7 +1055,7 @@ Conexão dedicada S2 pode ser clientexclusivo max1; reserve() de postgres3.4.9 n
 
 ### Ambiente — disponibilidade atual semsegredos
 
-Root.env.local carregado emmemória; metadata presence-only: WEB_APP_E2E_EMAIL/PASSWORD e STUDIO_APP_E2E_EMAIL/PASSWORD presentes. Nenhum email/password/token exibido, nenhumaedição.envlocal peloagente. Pergunta anterior dascontas superada peladisponibilidadeobservada; nãoinferir queautorizacriação/alteraçãoarquivo. Receiptsecret ainda ausente, SMOKEdependente deENVstartupválido. Nãofoi executadologin/browser oucontacriada.
+Root.env.local carregado emmemória; metadata presence-only: WEB_APP_E2E_EMAIL/PASSWORD e BACKOFFICE_APP_E2E_EMAIL/PASSWORD presentes. Nenhum email/password/token exibido, nenhumaedição.envlocal peloagente. Pergunta anterior dascontas superada peladisponibilidadeobservada; nãoinferir queautorizacriação/alteraçãoarquivo. Receiptsecret ainda ausente, SMOKEdependente deENVstartupválido. Nãofoi executadologin/browser oucontacriada.
 
 ### Ambiente — gate secret local
 

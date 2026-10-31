@@ -88,26 +88,26 @@ Implementar no StarDust Studio a pagina de gerenciamento de fontes de desafios (
 
 ## Camada UI (Studio)
 
-* **`ChallengesPage`** (`apps/studio/src/ui/challenging/Challenges/index.tsx`) - *Padrao atual de pagina do modulo challenging consumindo `challengingService`.*
-* **`useChallengesPage`** (`apps/studio/src/ui/challenging/Challenges/useChallengesPage.ts`) - *Busca, filtros por query string e paginacao no dominio challenging.*
-* **`usePaginatedFetch`** (`apps/studio/src/ui/global/hooks/usePaginatedFetch.ts`) - *Hook padrao para listagem paginada com React Query.*
-* **`Pagination`** (`apps/studio/src/ui/global/widgets/components/Pagination/PaginationView.tsx`) - *Componente de paginacao reutilizado no Studio.*
-* **`ConfirmDialog`** (`apps/studio/src/ui/global/widgets/components/ConfirmDialog/ConfirmDialogView.tsx`) - *Dialog de confirmacao reutilizavel para acoes destrutivas.*
-* **`RocketsTable`** (`apps/studio/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketsTableView.tsx`) - *Referencia de CRUD com tabela, dialog e paginacao.*
-* **`StarChallengeSelector`** (`apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/useStarChallengeSelector.ts`) - *Referencia de selecao de challenge com busca e paginacao em dialog.*
-* **`useGuidesPage`** (`apps/studio/src/ui/manual/widgets/pages/GuidesPage/useGuidesPage.ts`) - *Referencia de fluxo drag and drop + chamada de endpoint de reorder.*
-* **`SortableList`** (`apps/studio/src/ui/global/widgets/components/SortableList`) - *Componente base para listas ordenaveis com dnd-kit.*
+* **`ChallengesPage`** (`apps/backoffice/src/ui/challenging/Challenges/index.tsx`) - *Padrao atual de pagina do modulo challenging consumindo `challengingService`.*
+* **`useChallengesPage`** (`apps/backoffice/src/ui/challenging/Challenges/useChallengesPage.ts`) - *Busca, filtros por query string e paginacao no dominio challenging.*
+* **`usePaginatedFetch`** (`apps/backoffice/src/ui/global/hooks/usePaginatedFetch.ts`) - *Hook padrao para listagem paginada com React Query.*
+* **`Pagination`** (`apps/backoffice/src/ui/global/widgets/components/Pagination/PaginationView.tsx`) - *Componente de paginacao reutilizado no Studio.*
+* **`ConfirmDialog`** (`apps/backoffice/src/ui/global/widgets/components/ConfirmDialog/ConfirmDialogView.tsx`) - *Dialog de confirmacao reutilizavel para acoes destrutivas.*
+* **`RocketsTable`** (`apps/backoffice/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketsTableView.tsx`) - *Referencia de CRUD com tabela, dialog e paginacao.*
+* **`StarChallengeSelector`** (`apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/useStarChallengeSelector.ts`) - *Referencia de selecao de challenge com busca e paginacao em dialog.*
+* **`useGuidesPage`** (`apps/backoffice/src/ui/manual/widgets/pages/GuidesPage/useGuidesPage.ts`) - *Referencia de fluxo drag and drop + chamada de endpoint de reorder.*
+* **`SortableList`** (`apps/backoffice/src/ui/global/widgets/components/SortableList`) - *Componente base para listas ordenaveis com dnd-kit.*
 
 ## Camada REST (Studio)
 
-* **`ChallengingService`** (`apps/studio/src/rest/services/ChallengingService.ts`) - *Servico REST do modulo challenging; ainda sem metodos de challenge sources.*
-* **`AxiosRestClient`** (`apps/studio/src/rest/axios/AxiosRestClient.ts`) - *Cliente que interpreta headers de paginacao e retorna `PaginationResponse`.*
+* **`ChallengingService`** (`apps/backoffice/src/rest/services/ChallengingService.ts`) - *Servico REST do modulo challenging; ainda sem metodos de challenge sources.*
+* **`AxiosRestClient`** (`apps/backoffice/src/rest/axios/AxiosRestClient.ts`) - *Cliente que interpreta headers de paginacao e retorna `PaginationResponse`.*
 
 ## Camada React Router App (Studio)
 
-* **`routes.ts`** (`apps/studio/src/app/routes.ts`) - *Registro central de rotas do app Studio.*
-* **`ROUTES`** (`apps/studio/src/constants/routes.ts`) - *Constantes de caminhos de navegacao; modulo challenging ainda possui apenas `challenges`.*
-* **`SidebarView`** (`apps/studio/src/ui/global/widgets/layouts/App/Sidebar/SidebarView.tsx`) - *Menu lateral com link atual para Desafios.*
+* **`routes.ts`** (`apps/backoffice/src/app/routes.ts`) - *Registro central de rotas do app Studio.*
+* **`ROUTES`** (`apps/backoffice/src/constants/routes.ts`) - *Constantes de caminhos de navegacao; modulo challenging ainda possui apenas `challenges`.*
+* **`SidebarView`** (`apps/backoffice/src/ui/global/widgets/layouts/App/Sidebar/SidebarView.tsx`) - *Menu lateral com link atual para Desafios.*
 
 ## Camada Hono App (Server)
 
@@ -276,7 +276,7 @@ Implementar no StarDust Studio a pagina de gerenciamento de fontes de desafios (
 
 ## Camada UI (Widgets)
 
-* **Localizacao:** `apps/studio/src/ui/challenging/ChallengeSources/index.tsx` (**novo arquivo**)
+* **Localizacao:** `apps/backoffice/src/ui/challenging/ChallengeSources/index.tsx` (**novo arquivo**)
 * **Props:** Nenhuma
 * **Estados (Client Component):**
   - Loading: lista/carregamento inicial e refresh
@@ -285,8 +285,8 @@ Implementar no StarDust Studio a pagina de gerenciamento de fontes de desafios (
   - Content: tabela com pagina, busca e acoes
   - Reordering: estado de submissao da nova ordem apos interacao de mover item
   - ReorderingOptimistic: atualiza ordem local imediatamente, com rollback se a persistencia falhar
-* **View:** `apps/studio/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx` (**novo arquivo**)
-* **Hook (se aplicavel):** `apps/studio/src/ui/challenging/ChallengeSources/useChallengeSourcesPage.ts` (**novo arquivo**)
+* **View:** `apps/backoffice/src/ui/challenging/ChallengeSources/ChallengeSourcesPageView.tsx` (**novo arquivo**)
+* **Hook (se aplicavel):** `apps/backoffice/src/ui/challenging/ChallengeSources/useChallengeSourcesPage.ts` (**novo arquivo**)
 * **Index:** usa `useRestContext`, `useToastProvider`, `useChallengeSourcesPage`
 * **Widgets internos:**
   - `ChallengeSourceForm` (dialog de criacao com URL + selecao de challenge)
@@ -301,7 +301,7 @@ Implementar no StarDust Studio a pagina de gerenciamento de fontes de desafios (
 * **Estrutura de pastas:**
 
 ```text
-apps/studio/src/ui/challenging/ChallengeSources/
+apps/backoffice/src/ui/challenging/ChallengeSources/
 ├── index.tsx
 ├── useChallengeSourcesPage.ts
 ├── ChallengeSourcesPageView.tsx
@@ -316,7 +316,7 @@ apps/studio/src/ui/challenging/ChallengeSources/
 
 ## Camada React Router App (Pages, Layouts)
 
-* **Localizacao:** `apps/studio/src/app/routes/ChallengeSourcesRoute.tsx` (**novo arquivo**)
+* **Localizacao:** `apps/backoffice/src/app/routes/ChallengeSourcesRoute.tsx` (**novo arquivo**)
 * **Widget principal:** `ChallengeSourcesPage`
 * **Caminho da rota:** `ROUTES.challenging.sources` (`/challenging/sources`)
 
@@ -397,7 +397,7 @@ apps/studio/src/ui/challenging/ChallengeSources/
 
 ## REST (Services)
 
-* **Arquivo:** `apps/studio/src/rest/services/ChallengingService.ts`
+* **Arquivo:** `apps/backoffice/src/rest/services/ChallengingService.ts`
 * **Mudanca:** Implementar metodos REST para list/create/delete/reorder de challenge sources.
 * **Justificativa:** Disponibilizar contrato para a nova pagina do Studio.
 * **Camada:** `rest`
@@ -416,27 +416,27 @@ apps/studio/src/ui/challenging/ChallengeSources/
 
 ## UI (Studio)
 
-* **Arquivo:** `apps/studio/src/constants/routes.ts`
+* **Arquivo:** `apps/backoffice/src/constants/routes.ts`
 * **Mudanca:** Adicionar `ROUTES.challenging.sources`.
 * **Justificativa:** Criar caminho oficial da pagina no modulo challenging.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/app/routes.ts`
+* **Arquivo:** `apps/backoffice/src/app/routes.ts`
 * **Mudanca:** Registrar rota `ROUTES.challenging.sources` apontando para `routes/ChallengeSourcesRoute.tsx`.
 * **Justificativa:** Tornar a pagina navegavel no app.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/ui/global/widgets/layouts/App/Sidebar/SidebarView.tsx`
+* **Arquivo:** `apps/backoffice/src/ui/global/widgets/layouts/App/Sidebar/SidebarView.tsx`
 * **Mudanca:** Adicionar item de menu "Fontes" na secao "Desafios de codigo".
 * **Justificativa:** Expor a funcionalidade no fluxo de navegacao principal do Studio.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/constants/cache.ts`
+* **Arquivo:** `apps/backoffice/src/constants/cache.ts`
 * **Mudanca:** Adicionar chave de cache para a tabela de challenge sources.
 * **Justificativa:** Padronizar chaves React Query seguindo convencao atual.
 * **Camada:** `ui`
 
-* **Arquivo:** `apps/studio/src/constants/env.ts`
+* **Arquivo:** `apps/backoffice/src/constants/env.ts`
 * **Mudanca:** Adicionar `stardustWebAppUrl` no objeto `ENV` com validacao Zod para uso na composicao da URL publica do desafio na tabela de sources.
 * **Justificativa:** A URL do desafio deve ser construida na UI usando slug + base URL do Web App.
 * **Camada:** `ui`
@@ -559,12 +559,12 @@ Dialog "Adicionar source"
 ```
 
 * **Referencias:**
-  - `apps/studio/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/useRocketsTable.ts`
-  - `apps/studio/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketsTableView.tsx`
-  - `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/useFeedbackReportsPage.ts`
-  - `apps/studio/src/ui/manual/widgets/pages/GuidesPage/useGuidesPage.ts`
-  - `apps/studio/src/ui/global/widgets/components/SortableList/SortableContainer/SortableContainerView.tsx`
-  - `apps/studio/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/useStarChallengeSelector.ts`
+  - `apps/backoffice/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/useRocketsTable.ts`
+  - `apps/backoffice/src/ui/shop/widgets/pages/RocketsPage/RocketsTable/RocketsTableView.tsx`
+  - `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/useFeedbackReportsPage.ts`
+  - `apps/backoffice/src/ui/manual/widgets/pages/GuidesPage/useGuidesPage.ts`
+  - `apps/backoffice/src/ui/global/widgets/components/SortableList/SortableContainer/SortableContainerView.tsx`
+  - `apps/backoffice/src/ui/space/widgets/pages/Planets/PlanetCollapsible/StarItem/StarChallengeSelector/useStarChallengeSelector.ts`
   - `apps/server/src/app/hono/routers/challenging/ChallengesRouter.ts`
   - `apps/server/src/app/hono/routers/profile/AchievementsRouter.ts`
   - `apps/server/src/app/hono/routers/manual/GuidesRouter.ts`

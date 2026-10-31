@@ -296,7 +296,7 @@ Mobile
 
 # 12. Validacao Final
 
-- `npx turbo codecheck --filter=!@stardust/studio` executado com sucesso, sem warnings ou erros.
+- `npx turbo codecheck --filter=!@stardust/backoffice` executado com sucesso, sem warnings ou erros.
 - `npm run test -w @stardust/core` executado com sucesso.
 - `npm run test -w @stardust/web` executado com sucesso.
-- `apps/studio` foi explicitamente desconsiderado nesta conclusão por orientação do solicitante.
+- `apps/backoffice` foi explicitamente desconsiderado nesta conclusão por orientação do solicitante.

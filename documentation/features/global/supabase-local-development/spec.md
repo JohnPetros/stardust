@@ -12,7 +12,7 @@ source:
 scope:
   - apps/server
   - apps/web
-  - apps/studio
+  - apps/backoffice
   - scripts
   - docker/supabase
   - docker-compose.yml
@@ -189,11 +189,11 @@ containers permanecem fixas.
 | `apps/web/.env.example`                  | Modify | URLs locais                                 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` e demais endpoints locais; sem chave service-role/secret | CLI          | startup       |
 | `apps/web/next.config.js`                | Modify | guard de endpoints locais no carregamento da configuração | em development, recusa Supabase/CDN não-loopback; porta host configurável; CA-02 antes do listener adiado | Node.js URL  | VM-06/startup |
 | `apps/web/src/constants/client-env.ts`   | Modify | `validateLocalClientEndpoints(input): void` | lê `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; endpoints loopback/protocolo local com portas host configuráveis; sem teste dedicado de constants | Zod | config/consumer checks; Web Auth local não comprovado |
-| `apps/studio/src/constants/envSchema.ts` | Modify | `validateLocalStudioEndpoints(input): void` | Server/CDN loopback/protocolo local com portas host configuráveis; validado pela borda real, sem teste dedicado de constants | Zod          | startup/VM-02 |
-| `apps/studio/src/vite-config.test.ts`    | Create | startup de ambiente via consumidor Vite | valida `.env.local` e cobre parse/guard de `envSchema` pela borda consumidora; não importa a constant isoladamente | Jest/Vite | unit/coverage |
-| `apps/studio/package.json`              | Modify | `vite-plugin-node-polyfills` | atualiza para versão compatível com Vite 8/Rolldown | npm | build/startup |
+| `apps/backoffice/src/constants/envSchema.ts` | Modify | `validateLocalStudioEndpoints(input): void` | Server/CDN loopback/protocolo local com portas host configuráveis; validado pela borda real, sem teste dedicado de constants | Zod          | startup/VM-02 |
+| `apps/backoffice/src/vite-config.test.ts`    | Create | startup de ambiente via consumidor Vite | valida `.env.local` e cobre parse/guard de `envSchema` pela borda consumidora; não importa a constant isoladamente | Jest/Vite | unit/coverage |
+| `apps/backoffice/package.json`              | Modify | `vite-plugin-node-polyfills` | atualiza para versão compatível com Vite 8/Rolldown | npm | build/startup |
 | `package-lock.json`                     | Modify | lockfile npm | lock da versão Vite 8 compatível do polyfills plugin; gerado pelo npm | npm | install/build |
-| `apps/studio/vite.config.ts`            | Modify | composição Vite | usa versão compatível do node polyfills sem falha do hook esbuild durante dependency optimization | Vite/Rolldown | build/startup/VM-02 |
+| `apps/backoffice/vite.config.ts`            | Modify | composição Vite | usa versão compatível do node polyfills sem falha do hook esbuild durante dependency optimization | Vite/Rolldown | build/startup/VM-02 |
 
 ### Documentação
 
@@ -213,7 +213,7 @@ containers permanecem fixas.
 | `documentation/rules/server-routes-testing-rules.md` | Modify | setup Compose e regra de fixtures | substitui `supabase start`/reset CLI por `db:test` sobre Compose; fixtures suportam testes de rota e nao recebem testes próprios | integracao Server | review |
 | `documentation/rules/server-application-rules.md`   | Modify | ambiente local e chaves Supabase   | Server usa `apps/server/.env.local`, chave publishable e PostgreSQL direto autorizado para feedback God Account | tooling/database | review |
 | `documentation/rules/web-application-rules.md`      | Modify | ambiente local e chave Supabase    | Web usa `apps/web/.env.local` e somente chave publishable no cliente | Next.js | review |
-| `documentation/rules/studio-appllication-rules.md` | Modify | ambiente local                     | Studio usa `apps/studio/.env.local`                                                 | Vite              | review |
+| `documentation/rules/backoffice-application-rules.md` | Modify | ambiente local                     | Studio usa `apps/backoffice/.env.local`                                                 | Vite              | review |
 | `documentation/rules/rules.md`                       | Modify | indice                            | aponta quando consultar as tres proibicoes                                         | Rules             | review   |
 | `scripts/check-test-integrity.mjs`                   | Modify | `FORBIDDEN_TEST_SUBJECT_PATTERNS` | rejeita testes dedicados novos ou modificados para providers, constants e fixtures | Git diff          | detector |
 | `scripts/tests/check-test-integrity.test.mjs`        | Modify | caso de regressao do detector     | prova a rejeicao das tres categorias                                               | Node test runner  | unit     |
@@ -224,7 +224,7 @@ containers permanecem fixas.
 | --- | --- | --- | --- | --- | --- |
 | `AGENTS.md` | Modify | ambiente local e validação manual | `.env.local` é a fonte local; smoke manual cobre caminho feliz, endpoints essenciais e diagnóstico sob falha; segredos não são exibidos | Node, Next, Vite, Compose | review |
 | `documentation/sdd.md` | Modify | resumo do gate de validação frontend | smoke manual happy-path conciso; telemetria detalhada sob falha e screenshot quando UI mudar | AGENTS.md | review |
-| `scripts/export-studio-app-e2e-env.mjs` | Modify | origem das credenciais de E2E | lê root `.env.local`, imprime somente atribuições selecionadas | filesystem/parser | test:scripts |
+| `scripts/export-backoffice-app-e2e-env.mjs` | Modify | origem das credenciais de E2E | lê root `.env.local`, imprime somente atribuições selecionadas | filesystem/parser | test:scripts |
 | `scripts/export-web-app-e2e-env.mjs` | Modify | origem das credenciais de E2E | lê root `.env.local`, imprime somente atribuições selecionadas | filesystem/parser | test:scripts |
 
 ## Árvore de arquivos esperada

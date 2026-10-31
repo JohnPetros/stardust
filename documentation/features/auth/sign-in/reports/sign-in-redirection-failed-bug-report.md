@@ -13,36 +13,36 @@ Após um sign in bem-sucedido no Studio, o usuário recebe feedback de sucesso, 
 
 ## Causas
 
-- O fluxo de sucesso em `apps/studio/src/ui/auth/widgets/pages/SignIn/SignInForm/useSignInForm.ts` considera o login concluído assim que recebe `accessToken`, grava esse valor em `sessionStorage` e navega imediatamente para `ROUTES.dashboard`.
-- A rota de destino depende de uma segunda validação obrigatória em `apps/studio/src/app/middlewares/RestMiddleware.ts`, que chama `/auth/account` e redireciona para `/` em qualquer falha, sem retry, sem refresh de sessão e sem expor o motivo ao usuário.
-- O Studio já possui contrato para `refreshSession` em `apps/studio/src/rest/services/AuthService.ts`, mas não persiste nem reutiliza `refreshToken` em nenhum ponto do fluxo de autenticação.
+- O fluxo de sucesso em `apps/backoffice/src/ui/auth/widgets/pages/SignIn/SignInForm/useSignInForm.ts` considera o login concluído assim que recebe `accessToken`, grava esse valor em `sessionStorage` e navega imediatamente para `ROUTES.dashboard`.
+- A rota de destino depende de uma segunda validação obrigatória em `apps/backoffice/src/app/middlewares/RestMiddleware.ts`, que chama `/auth/account` e redireciona para `/` em qualquer falha, sem retry, sem refresh de sessão e sem expor o motivo ao usuário.
+- O Studio já possui contrato para `refreshSession` em `apps/backoffice/src/rest/services/AuthService.ts`, mas não persiste nem reutiliza `refreshToken` em nenhum ponto do fluxo de autenticação.
 - Hipótese principal: a intermitência ocorre quando a validação imediata de `/auth/account` falha logo após o sign in por estado transitório de autenticação ou erro temporário de rede/API; como o middleware trata toda falha como logout, a navegação retorna para a tela inicial.
 
 ## Contexto e Análise
 
 ### Camada UI
 
-- **Arquivo:** `apps/studio/src/app/routes/SignInRoute.tsx`
+- **Arquivo:** `apps/backoffice/src/app/routes/SignInRoute.tsx`
 - **Diagnóstico:** Este é o ponto de entrada da feature. A rota pública renderiza a página de sign in, mas não possui lógica para redirecionar um usuário já autenticado para a home do Studio.
 
-- **Arquivo:** `apps/studio/src/ui/auth/widgets/pages/SignIn/SignInForm/useSignInForm.ts`
+- **Arquivo:** `apps/backoffice/src/ui/auth/widgets/pages/SignIn/SignInForm/useSignInForm.ts`
 - **Diagnóstico:** O hook grava apenas `response.body.accessToken` em `sessionStorage`, exibe toast de sucesso e chama `navigationProvider.goTo(ROUTES.dashboard)`. O fluxo ignora `response.body.refreshToken`, embora o contrato de `SessionDto` o forneça.
 
-- **Arquivo:** `apps/studio/src/ui/global/hooks/useNavigationProvider.ts`
+- **Arquivo:** `apps/backoffice/src/ui/global/hooks/useNavigationProvider.ts`
 - **Diagnóstico:** A navegação pós-login é client-side via `navigate(route)`, portanto o sucesso percebido pelo usuário depende integralmente dos middlewares da rota de destino aceitarem a sessão recém-criada.
 
 ### Camada Aplicação Studio
 
-- **Arquivo:** `apps/studio/src/app/routes/DashboardRoute.tsx`
+- **Arquivo:** `apps/backoffice/src/app/routes/DashboardRoute.tsx`
 - **Diagnóstico:** `/dashboard` é a primeira rota privada após o sign in e sempre executa `AuthMiddleware` e `RestMiddleware`, o que transforma a abertura da home em uma segunda etapa obrigatória de validação da sessão.
 
-- **Arquivo:** `apps/studio/src/app/middlewares/AuthMiddleware.ts`
+- **Arquivo:** `apps/backoffice/src/app/middlewares/AuthMiddleware.ts`
 - **Diagnóstico:** O middleware lê o token bruto de `sessionStorage` e apenas verifica sua presença para liberar a rota privada. Ele não diferencia token recém-criado, token expirado ou token inválido, e também não redireciona usuários autenticados quando a rota atual é `/`.
 
-- **Arquivo:** `apps/studio/src/app/middlewares/RestMiddleware.ts`
+- **Arquivo:** `apps/backoffice/src/app/middlewares/RestMiddleware.ts`
 - **Diagnóstico:** O middleware monta o `RestClient`, injeta o header `Authorization`, chama `authService.fetchAccount()` e executa `throw redirect(ROUTES.index)` em qualquer resposta malsucedida. Esse ponto concentra a falha percebida pelo usuário, porque converte toda indisponibilidade temporária ou falha de autenticação em retorno silencioso para a tela de sign in.
 
-- **Arquivo:** `apps/studio/src/rest/services/AuthService.ts`
+- **Arquivo:** `apps/backoffice/src/rest/services/AuthService.ts`
 - **Diagnóstico:** A camada REST já expõe `signInGodAccount`, `fetchAccount` e `refreshSession`, mas a aplicação Studio usa apenas a primeira chamada no bootstrap do login e descarta o mecanismo de recuperação já previsto no contrato.
 
 ### Camada Server/Auth
@@ -75,13 +75,13 @@ Após um sign in bem-sucedido no Studio, o usuário recebe feedback de sucesso, 
 
 Liste mudanças pontuais em código existente, explicando o motivo da alteração.
 
-- **Camada UI:** `apps/studio/src/ui/auth/widgets/pages/SignIn/SignInForm/useSignInForm.ts` — Persistir também `response.body.refreshToken` e alinhar o fluxo de sucesso com o contrato completo de `SessionDto`.
-- **Camada Aplicação Studio:** `apps/studio/src/app/middlewares/RestMiddleware.ts` — Trocar o redirecionamento imediato por uma tentativa de recuperação de sessão via `authService.refreshSession(...)` quando `fetchAccount()` falhar por autenticação, atualizando o contexto apenas após a recuperação ou redirecionando somente na falha definitiva.
-- **Camada Aplicação Studio:** `apps/studio/src/app/middlewares/AuthMiddleware.ts` — Redirecionar usuários já autenticados para `ROUTES.dashboard` ao acessar `/`, evitando que um usuário com sessão válida permaneça na tela de sign in.
-- **Camada REST Studio:** `apps/studio/src/rest/services/AuthService.ts` — Reutilizar o método `refreshSession` no bootstrap de autenticação do Studio, sem criar um novo contrato REST.
+- **Camada UI:** `apps/backoffice/src/ui/auth/widgets/pages/SignIn/SignInForm/useSignInForm.ts` — Persistir também `response.body.refreshToken` e alinhar o fluxo de sucesso com o contrato completo de `SessionDto`.
+- **Camada Aplicação Studio:** `apps/backoffice/src/app/middlewares/RestMiddleware.ts` — Trocar o redirecionamento imediato por uma tentativa de recuperação de sessão via `authService.refreshSession(...)` quando `fetchAccount()` falhar por autenticação, atualizando o contexto apenas após a recuperação ou redirecionando somente na falha definitiva.
+- **Camada Aplicação Studio:** `apps/backoffice/src/app/middlewares/AuthMiddleware.ts` — Redirecionar usuários já autenticados para `ROUTES.dashboard` ao acessar `/`, evitando que um usuário com sessão válida permaneça na tela de sign in.
+- **Camada REST Studio:** `apps/backoffice/src/rest/services/AuthService.ts` — Reutilizar o método `refreshSession` no bootstrap de autenticação do Studio, sem criar um novo contrato REST.
 
 ### 4. O que deve ser removido?
 
 Liste código redundante, legado ou incorreto que deve ser eliminado como parte da correção.
 
-- **Camada Aplicação Studio:** `apps/studio/src/app/middlewares/RestMiddleware.ts` — Remover o comportamento de tratar qualquer falha de `fetchAccount()` como redirecionamento imediato para `/`, porque ele mascara erros transitórios e quebra o fluxo de entrada mesmo após autenticação bem-sucedida.
+- **Camada Aplicação Studio:** `apps/backoffice/src/app/middlewares/RestMiddleware.ts` — Remover o comportamento de tratar qualquer falha de `fetchAccount()` como redirecionamento imediato para `/`, porque ele mascara erros transitórios e quebra o fluxo de entrada mesmo após autenticação bem-sucedida.

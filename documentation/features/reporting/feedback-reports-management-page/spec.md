@@ -26,11 +26,11 @@ scope:
   - apps/server/src/tests
   - apps/server/.env.example
   - packages/email
-  - apps/studio/src/rest/services/ReportingService.ts
-  - apps/studio/src/ui/reporting
-  - apps/studio/src/ui/global/widgets/layouts/App/Sidebar
-  - apps/studio/src/app/routes
-  - apps/studio/src/constants/routes.ts
+  - apps/backoffice/src/rest/services/ReportingService.ts
+  - apps/backoffice/src/ui/reporting
+  - apps/backoffice/src/ui/global/widgets/layouts/App/Sidebar
+  - apps/backoffice/src/app/routes
+  - apps/backoffice/src/constants/routes.ts
   - design/stardust.pen
 last_updated_at: 2026-08-06
 ---
@@ -510,13 +510,13 @@ arquivos novos fazem parte da solução; ajustes exigem amendment antes do Build
 | Queue/jobs | `apps/server/src/queue/jobs/reporting/SendFeedbackReplyDiscordJob.ts` — novo arquivo; `apps/server/src/queue/jobs/notification/SendFeedbackReportReplyEmailJob.ts` — novo arquivo; barrel de notification — existente, modificar | Discord permanece em reporting; entrega de e-mail pertence a notification; jobs agnósticos com IO dentro de `amqp.run` e retry | jobs existentes de notification/analytics |
 | Queue/Inngest | `apps/server/src/queue/inngest/InngestBroker.ts`, `apps/server/src/queue/inngest/inngest.ts`, `apps/server/src/queue/inngest/functions/NotificationFunctions.ts` e `apps/server/src/queue/inngest/functions/InngestFunctions.ts` — existentes, modificar; `apps/server/src/queue/inngest/functions/ReportingFunctions.ts` — novo arquivo | transportar `event.id`; ReportingFunctions compõe Discord; NotificationFunctions compõe `SendFeedbackReportReplyEmailJob` e `ResendEmailProvider`; registrar funções nos barrels | `apps/server/src/queue/inngest/functions/AnalyticsFunctions.ts` — existente |
 | Email/template | `packages/email/emails/FeedbackReportReplyTemplate.tsx` e `packages/email/emails/index.tsx` — novos arquivos; `packages/email/package.json` — existente, modificar | assunto/preview/HTML/texto, CTA e export público sem confirmação de entrega | templates `ConfirmSignUpTemplate.tsx` e componentes existentes |
-| Studio/REST | `apps/studio/src/rest/services/ReportingService.ts` — existente, modificar | implementar integralmente `ReportingService`, serializando structures na chamada HTTP | factory atual; regras REST |
-| Studio/route | `apps/studio/src/app/routes/FeedbackReportsRoute.tsx`, `apps/studio/src/app/routes.ts` e `apps/studio/src/constants/routes.ts` — existentes, modificar | suportar lista e deep link `/reporting/feedback/:feedbackReportId` | rota atual e React Router v7 |
-| Studio/page | `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/index.tsx`, `FeedbackReportsPageView.tsx`, `useFeedbackReportsPage.tsx` — existentes, modificar | Entry Point resolve services/cache; Hook controla URL/queries/mutações; View compõe estados | Widget Pattern e página atual |
-| Studio/widgets existentes | `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsTable/` e `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportDialog/` — existentes, modificar | evoluir tabela e dialog sem concentrar estado/renderização | widgets atuais de reporting e Shadcn/Radix |
-| Studio/widgets novos | `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsSummary/`, `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsFilters/`, `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackConversation/`, `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackMessageComposer/`, `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackAttachments/`, `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackStatusSelector/`, `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsEmptyState/` — novos arquivos (`index.tsx` + `*View.tsx`, Hook quando houver estado) | dividir summary, filtros, cronologia, compositor, anexos, status e vazios; hooks recebem dependências | Widget Pattern e Rules da UI |
-| Studio/remoção | `apps/studio/src/ui/reporting/widgets/pages/FeedbackReportsPage/DeleteFeedbackReportDialog/` e testes dedicados — existentes, remover; tabela/dialog atuais — existentes, modificar | eliminar ação/estado de exclusão sem remover testes úteis de outros comportamentos | fluxo legado atual |
-| Studio/sidebar | `apps/studio/src/ui/global/widgets/layouts/App/Sidebar/index.tsx`, `apps/studio/src/ui/global/widgets/layouts/App/Sidebar/SidebarView.tsx` e `apps/studio/src/ui/global/widgets/layouts/App/Sidebar/NavigationTitle/` — existentes, modificar | consultar/exibir badge não lido e ocultar zero, mantendo View pura | Sidebar atual e TanStack Query |
+| Studio/REST | `apps/backoffice/src/rest/services/ReportingService.ts` — existente, modificar | implementar integralmente `ReportingService`, serializando structures na chamada HTTP | factory atual; regras REST |
+| Studio/route | `apps/backoffice/src/app/routes/FeedbackReportsRoute.tsx`, `apps/backoffice/src/app/routes.ts` e `apps/backoffice/src/constants/routes.ts` — existentes, modificar | suportar lista e deep link `/reporting/feedback/:feedbackReportId` | rota atual e React Router v7 |
+| Studio/page | `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/index.tsx`, `FeedbackReportsPageView.tsx`, `useFeedbackReportsPage.tsx` — existentes, modificar | Entry Point resolve services/cache; Hook controla URL/queries/mutações; View compõe estados | Widget Pattern e página atual |
+| Studio/widgets existentes | `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsTable/` e `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportDialog/` — existentes, modificar | evoluir tabela e dialog sem concentrar estado/renderização | widgets atuais de reporting e Shadcn/Radix |
+| Studio/widgets novos | `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsSummary/`, `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsFilters/`, `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackConversation/`, `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackMessageComposer/`, `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackAttachments/`, `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackStatusSelector/`, `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/FeedbackReportsEmptyState/` — novos arquivos (`index.tsx` + `*View.tsx`, Hook quando houver estado) | dividir summary, filtros, cronologia, compositor, anexos, status e vazios; hooks recebem dependências | Widget Pattern e Rules da UI |
+| Studio/remoção | `apps/backoffice/src/ui/reporting/widgets/pages/FeedbackReportsPage/DeleteFeedbackReportDialog/` e testes dedicados — existentes, remover; tabela/dialog atuais — existentes, modificar | eliminar ação/estado de exclusão sem remover testes úteis de outros comportamentos | fluxo legado atual |
+| Studio/sidebar | `apps/backoffice/src/ui/global/widgets/layouts/App/Sidebar/index.tsx`, `apps/backoffice/src/ui/global/widgets/layouts/App/Sidebar/SidebarView.tsx` e `apps/backoffice/src/ui/global/widgets/layouts/App/Sidebar/NavigationTitle/` — existentes, modificar | consultar/exibir badge não lido e ocultar zero, mantendo View pura | Sidebar atual e TanStack Query |
 | Design | `design/stardust.pen` — existente, modificar | alinhar `nbV72` para `Resposta enviada`; preservar `MVWsz`, `nbV72`, `aHFPL` como referência | frames Pencil citados pelo PRD/Issue |
 
 Os diretórios de widgets na tabela não autorizam renderização concentrada: cada
@@ -872,7 +872,7 @@ Após qualquer implementação/correção de frontend:
 
 1. iniciar Server em `http://localhost:3334` e Studio em
    `http://localhost:8000` (ou porta alternativa do Studio);
-2. carregar as credenciais por `eval "$(node ./scripts/export-studio-app-e2e-env.mjs)"`;
+2. carregar as credenciais por `eval "$(node ./scripts/export-backoffice-app-e2e-env.mjs)"`;
 3. autenticar com variáveis de ambiente, aguardar `/dashboard` e confirmar a
    sessão em `/profile/users`;
 4. acessar `/reporting/feedback`, exercitar lista, busca, filtros, paginação,

@@ -325,7 +325,7 @@ formulário, seus bypasses e seus destinos pendentes.
   tela inicial.
 - Captura de console/request failures somente para diagnóstico; a suíte
   automatizada com `ServerMock` não deve usar credenciais reais nem
-  `STUDIO_APP_E2E_*`. A sessão manual usa somente as credenciais locais
+  `BACKOFFICE_APP_E2E_*`. A sessão manual usa somente as credenciais locais
   carregadas pelo script oficial da Web App.
 
 ### Riscos e próxima ação

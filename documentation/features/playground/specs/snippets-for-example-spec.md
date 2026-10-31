@@ -34,7 +34,7 @@ Adicionar ao editor de snippets do Playground uma acao manual `Exemplos`, fechad
 * Adicionar exemplos ao autocomplete global do Monaco.
 * Alterar contratos REST/RPC de criacao, edicao, exclusao ou listagem de snippets.
 * Alterar regras de autenticacao, autorizacao, ownership ou visibilidade de snippets.
-* Alterar `apps/studio`, mesmo que o pacote `@stardust/lsp` passe a exportar a nova constante.
+* Alterar `apps/backoffice`, mesmo que o pacote `@stardust/lsp` passe a exportar a nova constante.
 * Adicionar novos campos em `SnippetDto` ou novos objetos de dominio no `core`.
 
 ---

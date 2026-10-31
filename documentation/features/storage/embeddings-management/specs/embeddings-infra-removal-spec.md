@@ -37,7 +37,7 @@ Remover da plataforma a infraestrutura de embeddings que hoje passa pela `apps/s
 * `StorageRouter.registerRoutes()` deve registrar apenas `/storage/signed-upload-url` e o roteador de arquivos.
 * `StorageFunctions.getFunctions(...)` nao deve retornar jobs de embeddings e deve continuar retornando jobs de backup, geracao de audio de bloco de texto e remocao de arquivo de audio.
 * `ManualFunctions.getFunctions(...)` nao deve retornar job de reindexacao de embeddings.
-* `apps/web` e `apps/studio` nao devem expor metodo REST para `/storage/embeddings`.
+* `apps/web` e `apps/backoffice` nao devem expor metodo REST para `/storage/embeddings`.
 * O assistente manual da web nao deve registrar ou exportar ferramenta que dependa de `/storage/embeddings`.
 * O pacote `core` nao deve exportar use cases, interfaces ou estruturas exclusivas de embeddings se nao houver outro consumidor.
 
@@ -110,7 +110,7 @@ Remover da plataforma a infraestrutura de embeddings que hoje passa pela `apps/s
 
 ### Studio
 
-* **StorageService studio** (`apps/studio/src/rest/services/StorageService.ts`) - implementa `StorageService`, incluindo chamada para `/storage/embeddings`.
+* **StorageService studio** (`apps/backoffice/src/rest/services/StorageService.ts`) - implementa `StorageService`, incluindo chamada para `/storage/embeddings`.
 
 ## 5. O que deve ser criado?
 
@@ -194,7 +194,7 @@ Nao aplicavel.
   **Mudanca:** Remover `tools.searchGuides`.
   **Justificativa:** A descricao ficaria sem ferramenta correspondente.
 
-* **Arquivo:** `apps/studio/src/rest/services/StorageService.ts`
+* **Arquivo:** `apps/backoffice/src/rest/services/StorageService.ts`
   **Mudanca:** Remover implementacao de `searchEmbeddings`.
   **Justificativa:** A rota server sera removida e o contrato do `core` nao tera mais esse metodo.
 
@@ -316,7 +316,7 @@ Nao aplicavel.
 ```mermaid
 flowchart TD
   Web["apps/web"] --> StorageServiceWeb["StorageService sem searchEmbeddings"]
-  Studio["apps/studio"] --> StorageServiceStudio["StorageService sem searchEmbeddings"]
+  Studio["apps/backoffice"] --> StorageServiceStudio["StorageService sem searchEmbeddings"]
   StorageServiceWeb -. nao chama .-> RemovedRoute["/storage/embeddings removida"]
   StorageServiceStudio -. nao chama .-> RemovedRoute
 
@@ -335,7 +335,7 @@ flowchart TD
 
 ### Fluxo cross-app
 
-* `apps/web` e `apps/studio` consomem a `apps/server` via REST; o contrato `/storage/embeddings` sera removido dos services, entao nao havera chamada cross-app para busca vetorial.
+* `apps/web` e `apps/backoffice` consomem a `apps/server` via REST; o contrato `/storage/embeddings` sera removido dos services, entao nao havera chamada cross-app para busca vetorial.
 * `apps/server` continua expondo `/storage/signed-upload-url` e `/storage/files` para os consumers existentes.
 * `packages/core` continua fornecendo `StorageService`, `FileStorageProvider` e estruturas de arquivos; deixa de fornecer contratos/estruturas de embeddings.
 

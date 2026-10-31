@@ -129,7 +129,7 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
 
 ## Studio REST
 
-* **`LessonService`** (`apps/studio/src/rest/services/LessonService.ts`) - segunda implementacao do contrato compartilhado de lesson; sera impactada se o contrato for expandido.
+* **`LessonService`** (`apps/backoffice/src/rest/services/LessonService.ts`) - segunda implementacao do contrato compartilhado de lesson; sera impactada se o contrato for expandido.
 
 ---
 
@@ -310,7 +310,7 @@ Adicionar suporte de explicacao por IA aos blocos de codigo da Lesson Page no ap
 
 ## Studio REST
 
-* **Arquivo:** `apps/studio/src/rest/services/LessonService.ts`
+* **Arquivo:** `apps/backoffice/src/rest/services/LessonService.ts`
   **Mudanca:** implementar os novos metodos adicionados ao contrato compartilhado de `LessonService`, mantendo o adapter compativel mesmo sem expor a feature na UI.
   **Justificativa:** evitar quebra de typecheck em `studio` ao expandir o contrato compartilhado do modulo `lesson`.
   **Camada:** `rest`
@@ -544,7 +544,7 @@ packages/core
   GetRemainingCodeExplanationUsesUseCase
   RegisterCodeExplanationUsageUseCase
 
-apps/studio
+apps/backoffice
   LessonService adapter
     -> apenas compatibilidade de contrato
 ```

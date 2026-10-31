@@ -4,14 +4,18 @@ status: draft
 source:
   - type: direct-request
     ref: Descontinuação nas histórias aprovada em 2026-10-11
+  - type: direct-request
+    ref: Retorno às histórias aprovado em 2026-10-31
+  - type: direct-request
+    ref: Remoção das questões de escrita aprovada em 2026-10-31
   - type: issue
     ref: https://github.com/JohnPetros/stardust/milestone/25
-last_updated_at: 2026-10-11
+last_updated_at: 2026-10-31
 ---
 
 # PRD — Explicação de bloco de código por IA
 
-> **Descontinuada nas histórias em 2026-10-11:** a funcionalidade de explicação de código por IA deve ser retirada de todos os blocos de código das histórias, inclusive exemplos de leitura. A avaliação das respostas pelo Jev permanece. As regras e jornadas abaixo registram a definição anterior e não autorizam sua manutenção ou nova implementação nessa experiência. Regra vigente: [Escrita de código](code-writing.md#rp-09--retirar-a-explicação-de-código-por-ia-das-histórias).
+> **Restaurada nas histórias em 2026-10-31:** a descontinuação de 2026-10-11 foi revertida. A explicação de código por IA volta a estar disponível nos exemplos de leitura e no código de referência de múltipla escolha, com o botão sempre visível. Questões de escrita não oferecem a explicação. A avaliação das respostas continua com o Jev. Regras vigentes: [Escrita de código](code-writing.md#rp-09--oferecer-a-explicação-de-código-por-ia-fora-das-questões-de-escrita) e [Bloco de Código](code-block.md). Termos como Story e Quiz abaixo refletem a estrutura anterior da lição e correspondem aos blocos e às questões das histórias.
 
 Disponibiliza para: lesson; consumidores adicionais não explicitados no documento legado.
 
