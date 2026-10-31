@@ -1,4 +1,4 @@
-name: Studio app CI
+name: Backoffice app CI
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
       - ".github/workflows/**"
       - "package.json"
       - "package-lock.json"
-      - "apps/studio/**"
+      - "apps/backoffice/**"
       - "packages/core/**"
       - "packages/validation/**"
       - ".dependency-cruiser.cjs"
@@ -66,7 +66,7 @@ jobs:
         run: npm ci
 
       - name: Check code
-        run: npm run check:code -w @stardust/studio
+        run: npm run check:code -w @stardust/backoffice
 
   check-code-complexity:
     name: check-code-complexity
@@ -87,7 +87,7 @@ jobs:
         run: npm ci
 
       - name: Check complexity
-        run: npm run check:complexity -w @stardust/studio
+        run: npm run check:complexity -w @stardust/backoffice
 
   check-types:
     name: Check types
@@ -114,7 +114,7 @@ jobs:
           VITE_SERVER_APP_URL: https://stardust-server.test
           VITE_CDN_URL: https://stardust-cdn.test
           VITE_WEB_APP_URL: https://stardust-web.test
-        run: npm run check:types -w @stardust/studio
+        run: npm run check:types -w @stardust/backoffice
 
   unit-tests:
     name: Unit Tests
@@ -138,10 +138,10 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: npm run test:coverage -w @stardust/studio
+        run: npm run test:coverage -w @stardust/backoffice
 
       - name: Check coverage baseline
-        run: npm run check:coverage -- @stardust/studio
+        run: npm run check:coverage -- @stardust/backoffice
 
   build:
     name: Build
@@ -172,4 +172,4 @@ jobs:
           VITE_SERVER_APP_URL: https://stardust-server.test
           VITE_CDN_URL: https://stardust-cdn.test
           VITE_WEB_APP_URL: https://stardust-web.test
-        run: npm run build:studio
+        run: npm run build:backoffice

@@ -1,11 +1,11 @@
-name: Studio app CD
+name: Backoffice app CD
 
 on:
   push:
     branches:
       - main
     paths:
-      - "apps/studio/**"
+      - "apps/backoffice/**"
       - "packages/core/**"
       - "packages/validation/**"
       - "packages/lsp/**"
@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: studio-app-cd-coolify-production
+  group: backoffice-app-cd-coolify-production
   cancel-in-progress: true
 
 jobs:
