@@ -1,0 +1,12 @@
+{
+  "controls": [
+    {
+      "sid": "mascotRed",
+      "label": "Mascot color"
+    },
+    {
+      "sid": "paperColor",
+      "label": "Badge color"
+    }
+  ]
+}

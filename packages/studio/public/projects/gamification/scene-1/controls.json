@@ -1,0 +1,12 @@
+{
+  "controls": [
+    {
+      "sid": "accentColor",
+      "label": "Accent color"
+    },
+    {
+      "sid": "iconColor",
+      "label": "Arrow color"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+# Copied from canvaskit-wasm on postinstall
+public/canvaskit.wasm
+
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo
