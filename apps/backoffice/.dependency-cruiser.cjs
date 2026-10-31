@@ -2,7 +2,7 @@
 module.exports = {
   forbidden: [
     {
-      name: 'studio-does-not-import-other-apps',
+      name: 'backoffice-does-not-import-other-apps',
       severity: 'error',
       from: { path: '^src' },
       to: { path: '^\\.\\./\\.\\./apps/(server|web)(/|$)' },

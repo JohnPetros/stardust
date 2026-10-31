@@ -6,7 +6,7 @@ export const envSchema = z.object({
   VITE_WEB_APP_URL: z.string().url(),
 })
 
-type LocalStudioEndpoints = Pick<
+type LocalBackofficeEndpoints = Pick<
   z.infer<typeof envSchema>,
   'VITE_CDN_URL' | 'VITE_SERVER_APP_URL'
 >
@@ -29,7 +29,9 @@ const validateLocalEndpoint = (value: string, variableName: string) => {
   }
 }
 
-export const validateLocalStudioEndpoints = (input: LocalStudioEndpoints): void => {
+export const validateLocalBackofficeEndpoints = (
+  input: LocalBackofficeEndpoints,
+): void => {
   validateLocalEndpoint(input.VITE_SERVER_APP_URL, 'VITE_SERVER_APP_URL')
   validateLocalEndpoint(input.VITE_CDN_URL, 'VITE_CDN_URL')
 }
@@ -37,7 +39,7 @@ export const validateLocalStudioEndpoints = (input: LocalStudioEndpoints): void 
 const isDevelopmentMode = (mode: unknown) =>
   (mode ?? process.env.MODE ?? process.env.NODE_ENV ?? 'development') === 'development'
 
-const parseStudioEnvironment = (env: Record<string, unknown>) =>
+const parseBackofficeEnvironment = (env: Record<string, unknown>) =>
   envSchema.parse({
     VITE_SERVER_APP_URL: env.VITE_SERVER_APP_URL,
     VITE_CDN_URL: env.VITE_CDN_URL,
@@ -45,9 +47,9 @@ const parseStudioEnvironment = (env: Record<string, unknown>) =>
   })
 
 export const parseEnv = (env: Record<string, unknown>) => {
-  const parsedEnv = parseStudioEnvironment(env)
+  const parsedEnv = parseBackofficeEnvironment(env)
 
-  if (isDevelopmentMode(env.MODE)) validateLocalStudioEndpoints(parsedEnv)
+  if (isDevelopmentMode(env.MODE)) validateLocalBackofficeEndpoints(parsedEnv)
 
   return parsedEnv
 }

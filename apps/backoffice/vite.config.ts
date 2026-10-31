@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
     parseEnv(loadEnv(mode, process.cwd(), ''))
   } catch (error) {
     throw new Error(
-      `Invalid Studio environment for mode "${mode}". Check VITE_SERVER_APP_URL, VITE_CDN_URL and VITE_WEB_APP_URL.\n${error}`,
+      `Invalid Backoffice environment for mode "${mode}". Check VITE_SERVER_APP_URL, VITE_CDN_URL and VITE_WEB_APP_URL.\n${error}`,
     )
   }
 

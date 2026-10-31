@@ -126,10 +126,10 @@ export const FeedbackReportDetailPageView = ({
                             <span
                               className={`flex size-5 items-center justify-center rounded-full text-[9px] font-bold uppercase ${isAdmin ? 'bg-emerald-400/20 text-emerald-300' : 'bg-zinc-700 text-zinc-300'}`}
                             >
-                              {isAdmin ? 'S' : 'U'}
+                              {isAdmin ? 'B' : 'U'}
                             </span>
                             <span className='font-medium text-zinc-300'>
-                              {isAdmin ? 'Studio' : 'Usuário'}
+                              {isAdmin ? 'Backoffice' : 'Usuário'}
                             </span>
                             <span aria-hidden='true'>·</span>
                             <time>
