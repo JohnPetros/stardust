@@ -15,6 +15,27 @@ export type SeedAccount = {
   slug: string
 }
 
+function validateSeedDatabase(environment: NodeJS.ProcessEnv, databaseUrl: string) {
+  const address = new URL(databaseUrl)
+  if (environment.MODE === 'production' || !isLocalDatabase(address)) {
+    throw new AppError(
+      'Seed requires the local PostgreSQL database; remote reset is forbidden',
+    )
+  }
+}
+
+function isLocalDatabase(address: URL): boolean {
+  return (
+    ['postgres:', 'postgresql:'].includes(address.protocol) &&
+    ['127.0.0.1', 'localhost', '[::1]'].includes(address.hostname) &&
+    address.pathname === '/postgres' &&
+    address.username === 'postgres' &&
+    Boolean(address.port) &&
+    [...address.searchParams.keys()].every((key) => key === 'sslmode') &&
+    !address.hash
+  )
+}
+
 export function readSeedConfig(environment: NodeJS.ProcessEnv = process.env) {
   const result = seedConfigSchema.safeParse(environment)
   if (!result.success) {
@@ -22,21 +43,7 @@ export function readSeedConfig(environment: NodeJS.ProcessEnv = process.env) {
     throw new AppError(`Configure root .env.local seed variables: ${keys.join(', ')}`)
   }
   const env = result.data
-  const address = new URL(env.DATABASE_URL)
-  if (
-    environment.MODE === 'production' ||
-    !['postgres:', 'postgresql:'].includes(address.protocol) ||
-    !['127.0.0.1', 'localhost', '[::1]'].includes(address.hostname) ||
-    address.pathname !== '/postgres' ||
-    address.username !== 'postgres' ||
-    !address.port ||
-    [...address.searchParams.keys()].some((key) => key !== 'sslmode') ||
-    address.hash
-  ) {
-    throw new AppError(
-      'Seed requires the local PostgreSQL database; remote reset is forbidden',
-    )
-  }
+  validateSeedDatabase(environment, env.DATABASE_URL)
   // Public demo fixtures for the guarded local database only.
   const accounts: SeedAccount[] = JSON.parse(
     readFileSync(new URL('./data/seed-accounts.json', import.meta.url), 'utf8'),

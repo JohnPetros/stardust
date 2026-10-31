@@ -143,6 +143,7 @@ tools. Um teste fora desses locais aparece em `forbiddenTestPaths` e falha o CI.
 | `update`           | Atualiza uma dependência específica com npm-check-updates, usando `npm_config_dep_name`. |
 | `test:unit`        | Executa os testes unitários do projeto Server.                                           |
 | `test:coverage`    | Executa os testes unitários do Server com relatório JSON de cobertura.                   |
+| `test:coverage:merge` | Consolida a cobertura unitária e dos quatro shards de integração do Server antes do ratchet. |
 | `test:integration` | Executa os testes de integração do Server.                                               |
 
 Exemplos de comandos de banco:
@@ -428,6 +429,16 @@ quality ratchet por workspace para Core, Server, Studio e Web; os thresholds
 versionados em `coverage-baseline.json` nunca podem diminuir sem uma alteração
 revisada desse arquivo.
 
+No Server, o ratchet considera a cobertura conjunta dos testes unitários e dos
+quatro shards de integração, incluindo os adapters Drizzle exercitados pelas
+rotas reais. Prepare o stack local, execute `test:integration:ci` e
+`test:coverage` no workspace `@stardust/server`, depois `test:coverage:merge` e
+`npm run check:coverage -- @stardust/server`. A consolidação exige os cinco
+relatórios completos; um relatório unitário isolado não aprova esse ratchet.
+O CI do Server executa Node 24 para a coleta V8; a execução em Node 22 revelou
+um abort nativo no inspector durante a instrumentação de cobertura. O Hermes
+aguarda até 45 minutos pelos checks antes de iniciar a revisão.
+
 `check:dead-code` não faz parte dos sensores oficiais. Playwright MCP pode
 inspecionar fluxos reais e o Hermes pode executar validações E2E de release, mas
 nenhum dos dois substitui `test:integration` automatizado quando ele for
@@ -449,3 +460,20 @@ Os scripts listados acima ainda descrevem o estado implementado. Para a entrega 
 Scripts Supabase CLI de diff/push/pull/repair e geração de Database.ts são retirados; a Web não gera tipos de banco. npm/package-lock permanecem a fonte das versões. Antes de qualquer aplicação remota, exige-se preflight de Dev e produção e ensaio de rollback em restauração isolada, com evidências no workflow SDD. A indisponibilidade desses ambientes nesta autoria não é evidência de parity. A janela inicial é coordenada, sem release intermediário compatível.
 
 A lista de scripts passa a descrever o runtime vigente apenas após a implementação verificada; atualizar também a seção de migrations da infraestrutura nessa entrega.
+
+## Crew
+
+`apps/crew` é um workspace npm independente para revisão de PR com Mastra e
+Anthropic direta. `npm run crew` carrega o `.env.local` raiz e inicia Crew;
+`npm run dev` exclui esse workspace. Configure as variáveis listadas em
+`apps/crew/.env.example`, incluindo `CREW_DATABASE_URL`, `CREW_PORT` e `CREW_HOST`,
+para manter banco/porta/host separados dos apps de produto. Inicie o banco com
+`docker compose --env-file .env.local --profile crew up -d --wait crew-db`.
+
+Use `npm run <script> -w @stardust/crew` para `check:code`, `check:types`,
+`check:architecture`, `test:unit`, `test:integration` e `eval`; use
+`npm run build:crew` para compilar. Os testes unitários usam modelos simulados;
+integrações precisam de Docker; evals fazem chamadas pagas à Anthropic e ao
+Composio. Node 24.11+ é recomendado para o toolchain de build. O CI próprio
+valida o workspace e a imagem sem segredos de inferência. Detalhes e limites de
+evidência estão em `apps/crew/README.md`.

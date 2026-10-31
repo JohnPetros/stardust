@@ -45,7 +45,10 @@ tsconfig.tsbuildinfo
 *.tsbuildinfo
 
 # environment
+.env
 .env.*
+!apps/crew/.env.example
+.mastra/
 
 # logs
 logs/

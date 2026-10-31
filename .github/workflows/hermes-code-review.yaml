@@ -77,7 +77,7 @@ jobs:
             'Studio app CI'
           )
 
-          for attempt in $(seq 1 180); do
+          for attempt in $(seq 1 270); do
             runs="$(gh api "repos/$REPOSITORY/actions/runs?head_sha=$HEAD_SHA&event=pull_request&per_page=100")"
             all_succeeded=true
 
@@ -116,7 +116,7 @@ jobs:
               exit 0
             fi
 
-            echo "Waiting for Stardust CI (attempt $attempt/180)."
+            echo "Waiting for Stardust CI (attempt $attempt/270)."
             sleep 10
           done
 

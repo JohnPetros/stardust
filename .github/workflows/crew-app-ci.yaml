@@ -1,0 +1,42 @@
+name: Crew app CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/crew/**'
+      - 'packages/core/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.dependency-cruiser.cjs'
+      - 'Dockerfile.crew'
+      - 'Dockerfile.crew.dockerignore'
+      - '.dockerignore'
+      - '.github/workflows/crew-app-ci.yaml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: crew-app-ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Crew lint, types, architecture, tests and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run check:code -w @stardust/crew
+      - run: npm run check:types -w @stardust/crew
+      - run: npm run check:architecture -w @stardust/crew
+      - run: npm run test:unit -w @stardust/crew
+      - run: npm run test:integration -w @stardust/crew
+      - run: npm run build:crew
+      - run: docker build --file Dockerfile.crew --tag stardust-crew:ci .

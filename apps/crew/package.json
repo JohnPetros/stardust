@@ -1,0 +1,40 @@
+{
+  "name": "@stardust/crew",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file=../../.env.local --run dev:mastra",
+    "build": "mastra build",
+    "start": "mastra start",
+    "check:code": "biome check src drizzle.config.ts vitest.config.mts vitest.evals.config.mts .dependency-cruiser.mjs package.json tsconfig.json",
+    "check:types": "tsc --noEmit",
+    "check:architecture": "depcruise --config .dependency-cruiser.mjs src",
+    "test:unit": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
+    "eval": "node --env-file=../../.env.local --run eval:mastra",
+    "db:migration:generate": "drizzle-kit generate",
+    "dev:mastra": "mastra dev",
+    "eval:mastra": "vitest run --config vitest.evals.config.mts",
+    "format": "biome format src --write"
+  },
+  "dependencies": {
+    "@composio/core": "0.27.0",
+    "@composio/mastra": "0.10.6",
+    "@mastra/core": "1.81.0",
+    "@mastra/pg": "1.32.0",
+    "drizzle-orm": "0.45.3",
+    "postgres": "3.4.9",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@mastra/evals": "1.10.8",
+    "@testcontainers/postgresql": "12.0.4",
+    "@types/node": "22.10.7",
+    "drizzle-kit": "0.31.11",
+    "mastra": "1.35.0",
+    "testcontainers": "12.0.4",
+    "typescript": "5.9.2",
+    "vitest": "4.1.9"
+  }
+}

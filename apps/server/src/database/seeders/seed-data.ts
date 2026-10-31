@@ -20,7 +20,10 @@ export const CATALOG_TABLES = [
 ] as const
 
 export function readSeedCatalog(): ModuleSeed {
-  const content = readFileSync(new URL('./seed-catalog.json', import.meta.url), 'utf8')
+  const content = readFileSync(
+    new URL('./data/seed-catalog.json', import.meta.url),
+    'utf8',
+  )
   const snapshot = z
     .object({
       source: z.literal('rveubqzvfbqbcpmuevnm'),

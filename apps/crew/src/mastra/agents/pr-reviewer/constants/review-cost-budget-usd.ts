@@ -1,0 +1,1 @@
+export const REVIEW_COST_BUDGET_USD = 0.05

@@ -31,7 +31,7 @@ permissions:
   contents: read
 
 env:
-  NODE_VERSION: "22"
+  NODE_VERSION: "24"
 
 jobs:
   architecture:
@@ -195,6 +195,9 @@ jobs:
 
       - name: Run tests
         run: npm run test:coverage -w @stardust/server
+
+      - name: Merge unit and integration coverage
+        run: npm run test:coverage:merge -w @stardust/server
 
       - name: Check coverage baseline
         run: npm run check:coverage -- @stardust/server

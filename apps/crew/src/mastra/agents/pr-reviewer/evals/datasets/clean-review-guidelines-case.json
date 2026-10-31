@@ -1,0 +1,14 @@
+{
+  "name": "clean-review-guidelines",
+  "source_pr": "JohnPetros/stardust#595",
+  "description": "Documentation-only slice of merged PR #595: updates create-pr review guidelines. Non-documentation changes are excluded from this clean smoke case.",
+  "base_sha": "3e661f5e3225f46b4ed776c52b865ebbf794bd49",
+  "head_sha": "203679b8b4a16ba99f34d984cfe5639a639d332b",
+  "excluded_path_prefixes": [
+    ".code-multivitals-baseline.json",
+    ".github/",
+    "apps/",
+    "scripts/"
+  ],
+  "expected": []
+}

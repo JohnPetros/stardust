@@ -1,0 +1,14 @@
+**
+!package.json
+!package-lock.json
+!apps/
+!apps/*/
+!apps/*/package.json
+!apps/crew/**
+!packages/
+!packages/*/
+!packages/*/package.json
+apps/crew/node_modules
+apps/crew/.mastra
+apps/crew/.env*
+!apps/crew/.env.example

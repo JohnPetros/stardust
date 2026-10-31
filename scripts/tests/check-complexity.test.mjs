@@ -2,7 +2,9 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { applyBaseline } from 'code-multivitals'
 import {
+  alignBaselineLocations,
   createCliArguments,
   getScopePatterns,
   materializeBaseline,
@@ -113,4 +115,60 @@ test('builds a scoped source pattern list for each app or package', () => {
 
 test('rejects an unknown complexity scope', () => {
   assert.throws(() => getScopePatterns('apps/unknown'), /Unknown complexity scope/)
+})
+
+function createAnalysis(functions) {
+  return { files: [{ filePath: 'apps/web/src/example.ts', functions }], clones: [] }
+}
+
+test('baseline generation preserves existing file order and appends new files deterministically', () => {
+  const file = (filePath) => ({ filePath, functions: [createFunction('legacy', 'warn')] })
+  const baseline = {
+    files: [file('b.ts'), file('new-z.ts'), file('a.ts'), file('new-a.ts')],
+    clones: [],
+  }
+  const previous = { files: [file('a.ts'), file('b.ts')] }
+
+  assert.deepEqual(
+    normalizeBaseline(baseline, previous).files.map((item) => item.filePath),
+    ['a.ts', 'b.ts', 'new-a.ts', 'new-z.ts'],
+  )
+})
+
+test('ignores line-only moves of uniquely named functions without changing baseline metrics', () => {
+  const original = createFunction('initializeAnalytics', 'warn')
+  const baseline = createAnalysis([original])
+  const current = createAnalysis([{ ...original, startLine: 30, endLine: 40 }])
+  const aligned = alignBaselineLocations(baseline, current)
+
+  assert.equal(applyBaseline(current, aligned).warnCount, 0)
+  assert.deepEqual(aligned.files[0].functions[0].metrics, original.metrics)
+  assert.equal(baseline.files[0].functions[0].startLine, 10)
+})
+
+test('still reports new, worsened and changed functions after a line move', () => {
+  const original = createFunction('initializeAnalytics', 'warn')
+  const baseline = createAnalysis([original])
+  for (const changed of [
+    { ...createFunction('newFunction', 'warn'), startLine: 30 },
+    { ...createFunction('initializeAnalytics', 'error'), startLine: 30 },
+    { ...original, startLine: 30, maintainabilityIndex: 70 },
+  ]) {
+    const current = createAnalysis([changed])
+    const result = applyBaseline(current, alignBaselineLocations(baseline, current))
+    assert.equal(result.warnCount + result.errorCount, 1)
+  }
+})
+
+test('does not relocate anonymous functions or ambiguous duplicate names', () => {
+  for (const name of ['<anonymous>', 'handle']) {
+    const original = createFunction(name, 'warn')
+    const functions =
+      name === 'handle' ? [original, { ...original, startLine: 20 }] : [original]
+    const baseline = createAnalysis(functions)
+    const current = createAnalysis(
+      functions.map((fn) => ({ ...fn, startLine: fn.startLine + 30 })),
+    )
+    assert.deepEqual(alignBaselineLocations(baseline, current), baseline)
+  }
 })

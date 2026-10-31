@@ -3,6 +3,13 @@
 Este arquivo serve como índice para as regras de documentação do projeto.
 Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 
+## Regras da aplicação Crew
+
+**Arquivo:** `/documentation/rules/crew-app-rules.md`
+**Quando consultar:** ao alterar `apps/crew/**`, `Dockerfile.crew` ou o CI de Crew.
+Crew é tooling independente; suas exceções de estrutura, classes, persistência e
+testes não se aplicam às aplicações de produto.
+
 ## Regras de execução do SDD
 
 **Arquivo principal e única fonte normativa:** `/documentation/sdd.md`
