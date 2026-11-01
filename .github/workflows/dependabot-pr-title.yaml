@@ -1,0 +1,39 @@
+name: Dependabot PR title
+
+# Dependabot titles are fixed English text; translate them to pt-BR.
+# pull_request_target gives the token write access on Dependabot PRs. It never
+# checks out or runs PR code, only edits the title.
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  translate:
+    name: Translate title to pt-BR
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Translate and update title
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          REPO: ${{ github.repository }}
+        run: |
+          title=$(printf '%s' "$PR_TITLE" | sed -E \
+            -e 's/ bump the (.+) group across ([0-9]+) directory with ([0-9]+) updates?$/ atualiza o grupo \1 em \2 diretório com \3 atualizações/' \
+            -e 's/ bump the (.+) group across ([0-9]+) directories with ([0-9]+) updates?$/ atualiza o grupo \1 em \2 diretórios com \3 atualizações/' \
+            -e 's/ bump the (.+) group with ([0-9]+) updates?$/ atualiza o grupo \1 com \2 atualizações/' \
+            -e 's/ bump (.+) from (.+) to (.+)$/ atualiza \1 de \2 para \3/' \
+            -e 's/ update (.+) requirement from (.+) to (.+)$/ atualiza o requisito de \1 de \2 para \3/' \
+            -e 's/ bump (.+) and (.+)$/ atualiza \1 e \2/' \
+            -e 's/ com 1 atualizações$/ com 1 atualização/')
+          if [ "$title" = "$PR_TITLE" ]; then
+            echo "Title already translated or in an unknown format."
+            exit 0
+          fi
+          gh pr edit "$PR_NUMBER" --repo "$REPO" --title "$title"
