@@ -435,6 +435,10 @@ rotas reais. Prepare o stack local, execute `test:integration:ci` e
 `test:coverage` no workspace `@stardust/server`, depois `test:coverage:merge` e
 `npm run check:coverage -- @stardust/server`. A consolidação exige os cinco
 relatórios completos; um relatório unitário isolado não aprova esse ratchet.
+No CI do Server, cada um dos quatro shards de integração roda em um job próprio
+(`Integration tests (shard N/4)`), com stack local isolado, e envia seu relatório
+como artifact; o job `Tests` baixa os cinco relatórios, consolida e verifica o
+ratchet. O setup do stack fica na action `.github/actions/prepare-server-stack`.
 O CI do Server executa Node 24 para a coleta V8; a execução em Node 22 revelou
 um abort nativo no inspector durante a instrumentação de cobertura. O Hermes
 aguarda até 45 minutos pelos checks antes de iniciar a revisão.
