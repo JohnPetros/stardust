@@ -18,7 +18,7 @@ on:
       - "scripts/tests/check-complexity.test.mjs"
 
 env:
-  NODE_VERSION: "22"
+  NODE_VERSION: "24"
 
 jobs:
   architecture:
