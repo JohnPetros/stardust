@@ -134,6 +134,39 @@ function listChangedLines(runGit, diffArgs, range, paths) {
   return changedLines
 }
 
+// Keeps only the hunks that add at least one line the review may comment on, so the
+// text sent to Crew does not carry what a merge from main brought into the same file.
+export function filterDiffHunks(diff, changedLines) {
+  const allowed = new Set(changedLines.map(({ path, line }) => `${path}:${line}`))
+  return diff
+    .split(/^(?=diff --git )/m)
+    .map((section) => {
+      if (!section.startsWith('diff --git ')) return section
+      const lines = section.replace(/\n$/, '').split('\n')
+      const firstHunk = lines.findIndex((line) => line.startsWith('@@ '))
+      if (firstHunk === -1) return ''
+      const header = lines.slice(0, firstHunk)
+      const target = header.find((line) => line.startsWith('+++ '))?.slice(4)
+      if (target === '/dev/null') return section // Deleted file belonging to the PR.
+      const path = target?.replace(/^b\//, '')
+      const hunks = []
+      for (const line of lines.slice(firstHunk)) {
+        if (line.startsWith('@@ ')) hunks.push([line])
+        else hunks.at(-1).push(line)
+      }
+      const kept = hunks.filter((hunk) => {
+        let lineNumber = Number(/^@@ -\d+(?:,\d+)? \+(\d+)/.exec(hunk[0])?.[1])
+        return hunk.slice(1).some((line) => {
+          if (line.startsWith('+')) return allowed.has(`${path}:${lineNumber++}`)
+          if (line.startsWith(' ')) lineNumber += 1
+          return false
+        })
+      })
+      return kept.length ? `${[...header, ...kept.flat()].join('\n')}\n` : ''
+    })
+    .join('')
+}
+
 export function buildReviewInput(pr, runGit = git, { reviewedShas = [] } = {}) {
   const base = pr.base.sha
   const head = pr.head.sha
@@ -176,6 +209,7 @@ export function buildReviewInput(pr, runGit = git, { reviewedShas = [] } = {}) {
     range,
     ...(reviewedSha && changedFiles.length ? ['--', ...changedFiles] : []),
   )
+  if (reviewedSha) diff = filterDiffHunks(diff, changedLines)
   if (Buffer.byteLength(diff) > MAX_DIFF_BYTES) {
     const suffix = '\n[DIFF TRUNCATED BY CI AT 180000 BYTES]\n'
     // Decode with streaming semantics to discard an incomplete final UTF-8 character.

@@ -16,6 +16,7 @@ import { reviewInputSchema } from '../../apps/crew/src/mastra/agents/pr-reviewer
 
 import {
   buildReviewInput,
+  filterDiffHunks,
   listReviewedShas,
   runCrewReview,
   selectApplicableWorkflows,
@@ -518,7 +519,15 @@ test('lists reviewed SHAs most recent first, trusting only complete bot reviews 
   assert.deepEqual(listReviewedShas([], HEAD), [])
 })
 
-function createRangeGit({ prFiles, incrementalFiles, lines, rejectAncestors = [] }) {
+function createRangeGit({
+  prFiles,
+  incrementalFiles,
+  lines,
+  rejectAncestors = [],
+  missingCommits = [],
+  deletions = { pr: [], incremental: [] },
+  diff = 'diff',
+}) {
   const calls = []
   const runGit = (...args) => {
     calls.push(args)
@@ -526,14 +535,19 @@ function createRangeGit({ prFiles, incrementalFiles, lines, rejectAncestors = []
     const isIncremental = range?.startsWith(REVIEWED)
     if (args[0] === 'fetch') return ''
     if (args[0] === 'rev-parse') return HEAD
-    if (args[0] === 'cat-file') return ''
+    if (args[0] === 'cat-file') {
+      if (missingCommits.includes(args[2].replace('^{commit}', '')))
+        throw new Error('unknown commit')
+      return ''
+    }
     if (args.includes('--is-ancestor')) {
       if (rejectAncestors.includes(args[2])) throw new Error('not an ancestor')
       return ''
     }
     if (args[0] === 'merge-base') return BASE
     if (args[0] === 'show') return 'trusted'
-    if (args.includes('--diff-filter=D')) return ''
+    if (args.includes('--diff-filter=D'))
+      return `${(isIncremental ? deletions.incremental : deletions.pr).join('\0')}\0`
     if (args.includes('--name-only'))
       return `${(isIncremental ? incrementalFiles : prFiles).join('\0')}\0`
     if (args.includes('--unified=0')) {
@@ -541,7 +555,7 @@ function createRangeGit({ prFiles, incrementalFiles, lines, rejectAncestors = []
       const added = lines[isIncremental ? 'incremental' : 'pr'][path] ?? []
       return added.map((line) => `@@ -1,0 +${line} @@\n+x`).join('\n')
     }
-    return 'diff'
+    return diff
   }
   return { runGit, calls }
 }
@@ -596,4 +610,94 @@ test('publishes an incremental review while selecting CI by the whole PR', async
   const review = fixture.publications[0]
   assert.match(review.body, /Escopo: \*\*Incremental\*\*.*`c{40}`/)
   assert.ok(review.body.startsWith(`<!-- crew-code-review:${HEAD}:complete -->`))
+})
+
+const MIXED_DIFF = [
+  'diff --git a/a.ts b/a.ts',
+  '--- a/a.ts',
+  '+++ b/a.ts',
+  '@@ -1,2 +1,3 @@',
+  ' first',
+  '+from the PR',
+  ' last',
+  '@@ -40,2 +41,3 @@',
+  ' tail',
+  '+from main',
+  ' end',
+  'diff --git a/from-main.ts b/from-main.ts',
+  '--- a/from-main.ts',
+  '+++ b/from-main.ts',
+  '@@ -1 +1,2 @@',
+  ' x',
+  '+only main',
+  'diff --git a/gone.ts b/gone.ts',
+  'deleted file mode 100644',
+  '--- a/gone.ts',
+  '+++ /dev/null',
+  '@@ -1 +0,0 @@',
+  '-bye',
+  '',
+].join('\n')
+
+test('keeps only the hunks that add commentable lines and files deleted by the PR', () => {
+  const filtered = filterDiffHunks(MIXED_DIFF, [{ path: 'a.ts', line: 2 }])
+  assert.match(filtered, /\+from the PR/)
+  assert.doesNotMatch(filtered, /from main/)
+  assert.doesNotMatch(filtered, /from-main\.ts/)
+  assert.match(filtered, /diff --git a\/gone\.ts/)
+  assert.ok(filtered.startsWith('diff --git a/a.ts b/a.ts\n--- a/a.ts'))
+  assert.equal(filterDiffHunks('plain text', []), 'plain text')
+})
+
+test('sends only PR hunks of an incremental review to Crew', () => {
+  const { runGit } = createRangeGit({
+    prFiles: ['a.ts'],
+    incrementalFiles: ['a.ts', 'from-main.ts'],
+    lines: { pr: { 'a.ts': [2, 42] }, incremental: { 'a.ts': [2, 42], 'from-main.ts': [2] } },
+    diff: MIXED_DIFF,
+  })
+  const input = buildReviewInput(PR, runGit, { reviewedShas: [REVIEWED] })
+  assert.deepEqual(input.changed_lines, [
+    { path: 'a.ts', line: 2 },
+    { path: 'a.ts', line: 42 },
+  ])
+  assert.match(input.diff, /\+from the PR/)
+  assert.match(input.diff, /\+from main/)
+  assert.doesNotMatch(input.diff, /only main/)
+})
+
+test('falls back when the last reviewed commit is unknown locally', () => {
+  const git = (missingCommits) =>
+    createRangeGit({
+      prFiles: ['a.ts'],
+      incrementalFiles: ['a.ts'],
+      lines: { pr: { 'a.ts': [2] }, incremental: { 'a.ts': [2] } },
+      missingCommits,
+    }).runGit
+  const next = buildReviewInput(PR, git([REVIEWED]), { reviewedShas: [REVIEWED, OLDER] })
+  assert.equal(next.review_mode, 'incremental')
+  assert.equal(next.range_base_sha, OLDER)
+  const full = buildReviewInput(PR, git([REVIEWED, OLDER]), {
+    reviewedShas: [REVIEWED, OLDER],
+  })
+  assert.equal(full.review_mode, 'full')
+  assert.equal(full.range_base_sha, BASE)
+})
+
+test('reports only deletions that belong to the PR in an incremental review', () => {
+  const { runGit } = createRangeGit({
+    prFiles: ['a.ts', 'removed-by-pr.ts'],
+    incrementalFiles: ['a.ts', 'removed-by-pr.ts', 'removed-by-main.ts'],
+    lines: { pr: {}, incremental: {} },
+    deletions: {
+      pr: ['removed-by-pr.ts'],
+      incremental: ['removed-by-pr.ts', 'removed-by-main.ts'],
+    },
+  })
+  const input = buildReviewInput(PR, runGit, { reviewedShas: [REVIEWED] })
+  assert.deepEqual(input.regression_facts.deleted_files, ['removed-by-pr.ts'])
+  assert.equal(
+    buildReviewInput(PR, runGit).regression_facts.deleted_files.join(),
+    'removed-by-pr.ts',
+  )
 })
