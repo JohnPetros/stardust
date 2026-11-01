@@ -8,7 +8,7 @@ const reviewScoringHelper = new ReviewScoringHelper()
 export const falsePositivesScorer = createScorer({
   id: 'false-positive-penalty',
   description:
-    'Lowers the score for each reported finding whose path and area were not expected.',
+    'Lowers the score for each reported finding whose path, area and line were not expected.',
 })
   .preprocess(({ run }) => ({
     output: reviewScoringHelper.readOutput(run.output),
