@@ -480,8 +480,7 @@ Use `npm run <script> -w @stardust/crew` para `check:code`, `check:types`,
 `npm run build:crew` para compilar. Os testes unitários usam modelos simulados;
 integrações precisam de Docker; evals fazem chamadas pagas à Anthropic e ao
 Composio. Node 24.11+ é recomendado para o toolchain de build. O CI próprio
-valida o workspace e a imagem sem segredos de inferência. Detalhes e limites de
-evidência estão em `apps/crew/README.md`.
+valida o workspace e a imagem sem segredos de inferência.
 
 `Crew PR review` substitui `Hermes code review`. O workflow usa
 `pull_request_target`, executa `scripts/run-crew-pr-review.mjs` do base confiável
