@@ -513,6 +513,15 @@ inline via token do Actions. Configure os secrets `CREW_API_URL` e
 ser incorporado ao `main`; não faz deploy. Revisões parciais ou bloqueadas falham
 o check. Testes determinísticos: `node --test scripts/tests/run-crew-pr-review.test.mjs`.
 
+`Crew app CD` usa `.github/workflows/crew-app-production-cd.yaml` e
+`scripts/deploy-crew.mjs` para deploys no Coolify após pushes relevantes em
+`main` ou execução manual nessa branch. Configure `COOLIFY_WEBHOOK_CREW_PROD`,
+`COOLIFY_API_TOKEN` e `CREW_API_URL` no GitHub; as credenciais de runtime ficam
+no Coolify. O job verifica o SHA da implantação e exige `/health` com HTTP 200 e
+`status: ok`, sem tratar o aceite do webhook como conclusão do deploy. Os
+deploys são serializados e respeitam o ambiente `production`. O CI de Crew
+também valida o script de CD: `node --test scripts/tests/deploy-crew.test.mjs`.
+
 O exportador `scripts/export-backoffice-app-e2e-env.mjs` usa
 `BACKOFFICE_APP_E2E_EMAIL` e `BACKOFFICE_APP_E2E_PASSWORD`. Durante a migração,
 aceita também as chaves locais legadas `STUDIO_APP_E2E_*`, mas sempre exporta

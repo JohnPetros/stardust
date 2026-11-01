@@ -145,4 +145,43 @@ and [Sonnet pricing](https://platform.claude.com/docs/en/models/sonnet-5-5/overv
 
 [`Dockerfile.crew`](../../Dockerfile.crew) packages the standalone server; CI checks
 lint, types, architecture, unit and integration tests, and the build. It does not
-run paid evals on untrusted PR code or deploy the service automatically.
+run paid evals on untrusted PR code.
+
+## Continuous deployment
+
+`.github/workflows/crew-app-production-cd.yaml` deploys relevant pushes to `main`
+through Coolify and supports **Run workflow** on `main` for manual deployments.
+It uses the GitHub `production` environment and serializes deployments without
+cancelling an in-progress deployment. The CD job does not run on PRs or other
+branches and does not receive inference or database credentials.
+
+Configure these GitHub secrets:
+
+- `COOLIFY_API_TOKEN`: reuse the existing Coolify API token.
+- `COOLIFY_WEBHOOK_CREW_PROD`: Crew's deployment webhook, such as
+  `https://coolify.example.com/api/v1/deploy?uuid=<crew-application-uuid>&force=false`.
+  It must target exactly one application, without preview or tag parameters.
+- `CREW_API_URL`: the public HTTPS base URL, currently
+  `https://crew.stardust-app.com.br`.
+
+Configure the Crew application in Coolify with repository build context `/`,
+Dockerfile `Dockerfile.crew`, branch `main` and internal port `4111`. Set runtime
+variables from `.env.example`, with `CREW_ENV=prod`, `CREW_HOST=0.0.0.0`,
+`CREW_PORT=4111` and a dedicated persistent PostgreSQL database supporting
+pgvector. Keep all actual credentials in Coolify. The image contains generated
+Crew migrations and applies them at startup. Disable Coolify's separate Git
+auto-deploy when Actions is responsible for deployment to avoid duplicate runs.
+
+The workflow waits for the specific Coolify deployment, verifies its commit
+matches the GitHub run SHA, then requires `GET /health` to return HTTP `200` with
+`{"status":"ok"}`. A webhook acknowledgement or an old healthy deployment does
+not satisfy this check. Configure the Coolify health check for `/health` on port
+`4111`. Missing secrets, a failed deployment, a different revision, a timeout or
+an unhealthy database fail the workflow. After fixing the cause, run it again
+on `main`; CD does not reset the database or perform automatic rollback.
+
+Run the CD regression tests without deploying or using live credentials:
+
+```sh
+node --test scripts/tests/deploy-crew.test.mjs
+```

@@ -20,6 +20,7 @@ O Stardust é hospedado em uma VPS Hostinger (KVM 2 — 2 vCPU, 8 GB RAM, 100 GB
 | `stardust-web-staging` | `apps/web`    | Next.js SSR (standalone)    | 3000  | `staging.stardust-app.com.br`                    |
 | `stardust-server`      | `apps/server` | Hono API (Node.js)          | 3333  | `api.stardust-app.com.br`                        |
 | `stardust-studio`      | `apps/backoffice` | React Router v7 SPA (Nginx) | 80    | `studio.stardust-app.com.br`                     |
+| Crew                  | `apps/crew`   | Mastra / API de revisão    | 4111  | `crew.stardust-app.com.br`                      |
 
 ---
 
@@ -52,6 +53,7 @@ Cada serviço usa **Build Pack: Dockerfile** com os seguintes Dockerfiles na rai
 | web / web-staging | `Dockerfile.web`    | `/`            |
 | server            | `Dockerfile.server` | `/`            |
 | backoffice            | `Dockerfile.backoffice` | `/`            |
+| crew              | `Dockerfile.crew`   | `/`            |
 
 ### Variáveis de ambiente
 
@@ -76,6 +78,13 @@ por clientes que alcancem o Server diretamente. Nenhuma chave Redis ou identidad
 
 **Backoffice:** variáveis `VITE_*`, incluindo `VITE_CDN_URL`, como Build Variables (se aplicável).
 
+**Crew (só Runtime):** `CREW_ENV=prod`, `CREW_HOST=0.0.0.0`, `CREW_PORT=4111`,
+`CREW_DATABASE_URL`, `ANTHROPIC_API_KEY`, `COMPOSIO_API_KEY`, `COMPOSIO_USER_ID`,
+`COMPOSIO_GITHUB_CONNECTED_ACCOUNT_ID` e `PR_REVIEWER_API_KEY`. Use PostgreSQL
+persistente próprio com suporte a pgvector; não use o banco dos apps de produto.
+O proxy e o health check do Coolify devem apontar para a porta interna `4111`,
+com `GET /health`. Credenciais não são passadas ao build nem ao job de CD.
+
 > As variáveis `NEXT_PUBLIC_*` e `VITE_*` precisam estar marcadas como **Available at Buildtime** no Coolify, pois são embutidas no bundle durante o build.
 
 ### Auto-deploy
@@ -86,6 +95,7 @@ por clientes que alcancem o Server diretamente. Nenhuma chave Redis ou identidad
 | web staging | Habilitado             | Push em `main` (paths: `apps/web/**`, `packages/core/**`, `packages/validation/**`, `packages/lsp/**`) |
 | server      | Depende da preferência | Push em `main` (paths: `apps/server/**`, `packages/core/**`, `packages/validation/**`) via workflow    |
 | backoffice      | Habilitado             | Push em `main` (paths: `apps/backoffice/**`)                                                               |
+| crew        | Desabilitado no Coolify | Push relevante em `main` ou execução manual do workflow `Crew app CD`, que aciona o webhook e verifica revisão e saúde |
 
 ---
 
@@ -123,6 +133,7 @@ por clientes que alcancem o Server diretamente. Nenhuma chave Redis ou identidad
 | `web-app-cd-coolify.yaml`         | Release published            | Aciona webhook Coolify → notifica Discord                                                    |
 | `web-app-staging-cd-coolify.yaml` | Push → `main` (paths web)    | Aciona webhook Coolify → notifica Discord                                                    |
 | `crew-pr-review.yaml`             | PR → `main` (`pull_request_target`) | Aguarda os CIs aplicáveis, chama o Crew implantado e publica resumo e apontamentos inline; executa somente código do base confiável |
+| `crew-app-production-cd.yaml`     | Push relevante em `main` ou execução manual em `main` | Solicita deploy no Coolify, aguarda a implantação do SHA esperado e exige `/health` com HTTP 200 e `status: ok` |
 | `hermes-e2e-testing.yaml`         | PR de `release/vX.Y.Z` → `production` | Verifica staging e valida os PRDs/milestones afetados com Playwright MCP             |
 | `create-release.yaml`             | Merge do PR de release       | Confirma o E2E do Hermes, cria a tag e publica a GitHub Release                              |
 
@@ -247,6 +258,7 @@ workflows do GitHub Actions e pelo painel do Coolify.
 | `COOLIFY_WEBHOOK_SERVER_PROD`   | Webhook do serviço stardust-server                                 |
 | `COOLIFY_WEBHOOK_WEB_PROD`      | Webhook do serviço stardust-web                                    |
 | `COOLIFY_WEBHOOK_WEB_STG`       | Webhook do CD normal de `stardust-web-staging` (não usado pelo release E2E) |
+| `COOLIFY_WEBHOOK_CREW_PROD`     | Webhook HTTPS do Coolify para uma única aplicação Crew (`/api/v1/deploy?uuid=...`) |
 | `SERVER_TEST_ENV`               | Conteúdo do `.env.testing` do server (para CI)                     |
 | `WEB_DEV_ENV`                   | Conteúdo do `.env` de dev do web (para CI)                         |
 | `WEB_TEST_ENV`                  | Conteúdo do `.env.test` do web (para CI)                           |
@@ -275,6 +287,18 @@ Multi-stage: `builder` (turbo prune) → `installer` (npm install + Next.js buil
 ### Dockerfile.backoffice
 
 Multi-stage: `builder` (turbo prune) → `installer` (npm install + Vite build) → `runner` (Nginx Alpine servindo arquivos estáticos). Config do Nginx com `try_files` para fallback SPA.
+
+### Dockerfile.crew
+
+Multi-stage em Node 24 Alpine: instala as dependências pelos manifests dos
+workspaces, compila somente Crew e copia o output do Mastra e as migrations
+geradas para o runtime não-root. A imagem usa `CREW_ENV=prod`,
+`CREW_HOST=0.0.0.0`, porta `4111` e health check local em `/health`.
+As migrations do Crew são aplicadas no startup, conforme a exceção documentada
+em `crew-app-rules.md`; o CD não executa migrations ou resets do Server.
+O workflow de deploy é serializado, respeita o ambiente `production` e falha
+se o commit implantado divergir do SHA solicitado ou se o banco não estiver
+saudável. Configuração e recuperação: `apps/crew/README.md`.
 
 ---
 

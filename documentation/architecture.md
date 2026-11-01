@@ -20,6 +20,8 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 
 **Revisão de PR**: GitHub Actions `Crew PR review` → CI aplicável ao diff → API autenticada `/pr-reviewer/v1/runs` do Crew → revisão `COMMENT` com resumo e apontamentos inline no GitHub. O caller substitui a revisão de código do Hermes, usa somente código e políticas do base confiável e nunca executa código do PR. O diff é tratado como dado; resultados de outro SHA ou fora das linhas adicionadas são rejeitados. Revisões parciais ou bloqueadas são identificadas e falham o check. O Hermes continua responsável pelo E2E de release.
 
+**Deploy do Crew**: push relevante em `main` ou execução manual nessa branch → workflow `Crew app CD` → webhook autenticado do Coolify → acompanhamento da implantação e verificação do SHA → `GET /health` com HTTP 200 e `status: ok`. Os deploys são serializados e não cancelam uma implantação em andamento. O container usa `Dockerfile.crew`, porta 4111 e PostgreSQL próprio; as migrations do Crew são aplicadas no startup, sem executar migrations dos apps de produto. Secrets de runtime e banco são configurados no Coolify, sem serem fornecidos ao build ou ao job de CD.
+
 **RPC**: Route/Controller → Action.execute(call) → Use Case → call.redirect() ou call.json()
 
 **REST**: Service → RestClient (Axios/Fetch) → API externa → RestResponse\<T\>
