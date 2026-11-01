@@ -87,19 +87,12 @@ installation and execution of PR code are forbidden in this job. Consequently,
 the caller starts working after its workflow and script are merged into `main`.
 
 The caller fetches the head as git data, reads review policies from the base,
-builds a review payload capped at 180,000 UTF-8 bytes and waits up to 45
+builds a full-review payload capped at 180,000 UTF-8 bytes and waits up to 45
 minutes for applicable Core, Server, Web, Studio/Backoffice and Crew CI. Applicability
 uses their current quoted `paths` block lists from the PR as data, including old
 and new paths for renames. Unsupported trigger syntax fails closed. CI that does
 not apply is not awaited. The caller polls Crew for up to 25 minutes and rejects
 stale PRs, mismatched SHAs and findings outside added RIGHT-side lines.
-
-The first review of a PR is `full`: the whole PR against its merge base. Later
-pushes are `incremental`: the range starts at the most recent commit with a complete
-review by the Actions bot, and only changes that belong to the PR are reviewed (what
-a merge from `main` brought in is excluded). If that commit is no longer an ancestor
-of the head (force-push) the caller tries the previous reviewed commit and then falls
-back to a `full` review. CI applicability is always evaluated against the whole PR.
 
 The Actions token publishes a `COMMENT` review with a Portuguese summary and
 severity badges on inline findings. A completed review by the Actions bot prevents
