@@ -1,0 +1,60 @@
+name: Dependabot lockfile
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'package.json'
+      - 'apps/*/package.json'
+      - 'packages/*/package.json'
+      - 'package-lock.json'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dependabot-lockfile-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "24"
+  NPM_VERSION: "11.13.0"
+
+jobs:
+  regenerate:
+    name: Regenerate lockfile
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          # A token that is not GITHUB_TOKEN, so the push re-triggers the CI workflows.
+          token: ${{ secrets.LOCKFILE_BOT_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install the pinned npm
+        run: npm install --global npm@${{ env.NPM_VERSION }}
+
+      - name: Regenerate package-lock.json
+        run: npm install --package-lock-only --ignore-scripts
+
+      - name: Commit lockfile
+        run: |
+          if git diff --quiet -- package-lock.json; then
+            echo "Lockfile already in sync."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          git commit -m "📦 deps: regenerate lockfile"
+          git push

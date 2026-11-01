@@ -122,7 +122,7 @@ por clientes que alcancem o Server diretamente. Nenhuma chave Redis ou identidad
 | `web-app-ci.yaml`                 | PR → `main` (paths web)      | Codecheck, typecheck, testes, build                                                          |
 | `web-app-cd-coolify.yaml`         | Release published            | Aciona webhook Coolify → notifica Discord                                                    |
 | `web-app-staging-cd-coolify.yaml` | Push → `main` (paths web)    | Aciona webhook Coolify → notifica Discord                                                    |
-| `hermes-code-review.yaml`         | PR → `main`                  | Aguarda os CIs aplicáveis, executa revisões técnicas paralelas e publica os resultados no PR |
+| `crew-pr-review.yaml`             | PR → `main` (`pull_request_target`) | Aguarda os CIs aplicáveis, chama o Crew implantado e publica resumo e apontamentos inline; executa somente código do base confiável |
 | `hermes-e2e-testing.yaml`         | PR de `release/vX.Y.Z` → `production` | Verifica staging e valida os PRDs/milestones afetados com Playwright MCP             |
 | `create-release.yaml`             | Merge do PR de release       | Confirma o E2E do Hermes, cria a tag e publica a GitHub Release                              |
 
@@ -255,7 +255,8 @@ workflows do GitHub Actions e pelo painel do Coolify.
 | `DISCORD_WEBHOOK_URL`           | Notificações de deploy no Discord                                  |
 | `HERMES_API_URL`                | Endpoint da Runs API do Hermes                                     |
 | `HERMES_E2E_TESTER_API_KEY`     | Autenticação do perfil `e2e-tester` do Hermes                      |
-| `HERMES_CODE_REVIEWER_API_KEY`  | Autenticação do perfil `code-reviewer` do Hermes                   |
+| `CREW_API_URL`                | URL base HTTPS do serviço Crew implantado, sem o path do reviewer |
+| `PR_REVIEWER_API_KEY`          | Autenticação do `pr-reviewer` no serviço Crew                     |
 | `HERMES_GITHUB_APP_ID`          | ID da GitHub App usada para publicar a conclusão do E2E            |
 | `HERMES_GITHUB_APP_PRIVATE_KEY` | Chave privada da GitHub App usada para publicar a conclusão do E2E |
 

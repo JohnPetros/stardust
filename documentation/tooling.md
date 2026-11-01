@@ -461,8 +461,9 @@ rotas reais. Prepare o stack local, execute `test:integration:ci` e
 `npm run check:coverage -- @stardust/server`. A consolidação exige os cinco
 relatórios completos; um relatório unitário isolado não aprova esse ratchet.
 O CI do Server executa Node 24 para a coleta V8; a execução em Node 22 revelou
-um abort nativo no inspector durante a instrumentação de cobertura. O Hermes
-aguarda até 45 minutos pelos checks antes de iniciar a revisão.
+um abort nativo no inspector durante a instrumentação de cobertura. O caller de
+revisão do Crew aguarda até 45 minutos pelos checks aplicáveis antes de iniciar
+a revisão.
 
 `check:dead-code` não faz parte dos sensores oficiais. Playwright MCP pode
 inspecionar fluxos reais e o Hermes pode executar validações E2E de release, mas
@@ -502,6 +503,15 @@ integrações precisam de Docker; evals fazem chamadas pagas à Anthropic e ao
 Composio. Node 24.11+ é recomendado para o toolchain de build. O CI próprio
 valida o workspace e a imagem sem segredos de inferência. Detalhes e limites de
 evidência estão em `apps/crew/README.md`.
+
+`Crew PR review` substitui `Hermes code review`. O workflow usa
+`pull_request_target`, executa `scripts/run-crew-pr-review.mjs` do base confiável
+sem instalar dependências nem executar código do PR, aguarda somente os CIs
+aplicáveis (incluindo Crew quando disparado) e publica resumo e comentários
+inline via token do Actions. Configure os secrets `CREW_API_URL` e
+`PR_REVIEWER_API_KEY` para o serviço Crew já implantado. O caller fica ativo após
+ser incorporado ao `main`; não faz deploy. Revisões parciais ou bloqueadas falham
+o check. Testes determinísticos: `node --test scripts/tests/run-crew-pr-review.test.mjs`.
 
 O exportador `scripts/export-backoffice-app-e2e-env.mjs` usa
 `BACKOFFICE_APP_E2E_EMAIL` e `BACKOFFICE_APP_E2E_PASSWORD`. Durante a migração,

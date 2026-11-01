@@ -5,6 +5,16 @@
 - documentation/tooling.md
 - documentation/rules/rules.md
 
+## Idioma dos Pull Requests
+
+- Todo Pull Request deve ter título e descrição escritos em PT-BR, inclusive os
+  criados por agentes. Mantenha em inglês apenas identificadores técnicos,
+  nomes de arquivos, comandos e trechos de código.
+- Siga o contrato de título e body da skill `create-pr`. Não use prefixo de
+  Conventional Commit nem emoji no título.
+- Os PRs do Dependabot têm o título traduzido automaticamente por
+  `.github/workflows/dependabot-pr-title.yaml`.
+
 ## Protocolo de grilling
 
 - Ao aplicar o protocolo de grilling, não use ferramentas de perguntas, como

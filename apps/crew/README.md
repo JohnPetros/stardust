@@ -65,8 +65,47 @@ All reviewer endpoints require `Authorization: Bearer <PR_REVIEWER_API_KEY>`:
 Callers must read `AGENTS.md` and `documentation/rules/pr-review-rules.md` from the
 trusted base commit and provide them as `agents_md` and `review_md`. Never execute
 PR code in a secret-bearing caller. Crew returns findings; it does not publish
-GitHub comments. As in the HMS reference, no automatic PR caller is installed.
-The existing Hermes workflow remains a separate caller of its existing service.
+GitHub comments. The `Crew PR review` GitHub workflow is the caller and replaces
+Hermes code review; Hermes release E2E remains separate.
+
+## Automatic GitHub reviews
+
+Configure two repository secrets before enabling the caller:
+
+- `CREW_API_URL`: the HTTPS base URL of a deployed Crew service, without the
+  `/pr-reviewer/v1/runs` suffix.
+- `PR_REVIEWER_API_KEY`: the same bearer key configured on that service.
+
+The service still needs its own Anthropic, Composio and database configuration.
+The workflow calls the deployed service; it does not deploy Crew or start it in
+Actions. Local `.env.local` values are not GitHub secrets.
+
+`.github/workflows/crew-pr-review.yaml` runs on `pull_request_target` for
+non-draft, same-repository PRs targeting `main`. Both the workflow and
+`scripts/run-crew-pr-review.mjs` execute from the trusted base; dependency
+installation and execution of PR code are forbidden in this job. Consequently,
+the caller starts working after its workflow and script are merged into `main`.
+
+The caller fetches the head as git data, reads review policies from the base,
+builds a full-review payload capped at 180,000 UTF-8 bytes and waits up to 45
+minutes for applicable Core, Server, Web, Studio/Backoffice and Crew CI. Applicability
+uses their current quoted `paths` block lists from the PR as data, including old
+and new paths for renames. Unsupported trigger syntax fails closed. CI that does
+not apply is not awaited. The caller polls Crew for up to 25 minutes and rejects
+stale PRs, mismatched SHAs and findings outside added RIGHT-side lines.
+
+The Actions token publishes a `COMMENT` review with a Portuguese summary and
+severity badges on inline findings. A completed review by the Actions bot prevents
+repeat reviews of the same head; retry keys include the Actions run and attempt.
+Exact duplicate inline comments are suppressed. Partial or blocked results are
+published explicitly and fail the check, allowing a rerun without claiming the
+review is complete. This check does not grant an approving human review.
+
+Run the caller regression tests without secrets or paid inference:
+
+```sh
+node --test scripts/tests/run-crew-pr-review.test.mjs
+```
 
 Runs are idempotent, limited to three concurrent reviews, expire after 20 minutes,
 heartbeat every 15 seconds and retain history for 30 days. Production mode hides
