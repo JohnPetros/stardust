@@ -1,0 +1,45 @@
+name: Crew PR review
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: crew-code-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Review pull request with Crew
+    if: >-
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      # pull_request_target loads this workflow from the trusted base branch.
+      # Keep the script, policies and runtime on that base too. Never checkout PR code.
+      - name: Checkout trusted base
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "24"
+
+      - name: Run Crew review and publish findings
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CREW_API_URL: ${{ secrets.CREW_API_URL }}
+          PR_REVIEWER_API_KEY: ${{ secrets.PR_REVIEWER_API_KEY }}
+        run: node scripts/run-crew-pr-review.mjs
