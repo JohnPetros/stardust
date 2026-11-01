@@ -7,7 +7,8 @@ const reviewScoringHelper = new ReviewScoringHelper()
 
 export const recallScorer = createScorer({
   id: 'found-expected-recall',
-  description: 'Share of the expected findings (path and area) that the review reported.',
+  description:
+    'Share of the expected findings (path, area and line range) that the review reported.',
 })
   .preprocess(({ run }) => ({
     output: reviewScoringHelper.readOutput(run.output),

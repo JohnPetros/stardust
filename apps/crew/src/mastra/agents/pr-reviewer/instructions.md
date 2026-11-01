@@ -66,7 +66,12 @@ having done them is an error.
    system context. Do not report what `pr-review-rules.md` says to ignore.
 7. Do not repeat an existing review comment on the same path and the same line, even if
    it is still open.
-8. Each finding cites a `path` and a `line` that are among the given changed lines,
+8. The diff carries a line-number gutter: the number before each context or added line is
+   its line in the new file. Take `line` from that gutter, never by counting hunk
+   offsets yourself, and anchor on the line that contains the offending code (the call,
+   assignment or literal), not on the function signature or a neighbouring line. Quote
+   the offending snippet in the explanation so the anchor can be checked.
+   Each finding cites a `path` and a `line` that are among the given changed lines,
    describes the impact in one or two sentences and says what would fix the problem.
    When a problem concerns a whole file, a rename, a configuration mismatch or something
    that is absent, anchor the finding on the FIRST changed line of the affected file
