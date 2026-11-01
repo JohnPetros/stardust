@@ -1,0 +1,8 @@
+{
+  "name": "clean-server-integration-shards",
+  "source_pr": "JohnPetros/stardust#622",
+  "description": "Merged PR #622: parallelizes the Server integration test shards in CI through a composite action. Expected clean: any finding counts against precision.",
+  "base_sha": "b18d8ff005489f905f0f03cdd5e8ef074d137370",
+  "head_sha": "d4971ed671da9245b98434646a1c723ea9d8f52f",
+  "expected": []
+}

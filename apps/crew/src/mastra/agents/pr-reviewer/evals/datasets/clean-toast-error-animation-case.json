@@ -1,0 +1,8 @@
+{
+  "name": "clean-toast-error-animation",
+  "source_pr": "JohnPetros/stardust#590",
+  "description": "Merged PR #590: fixes the error toast animation in the Web App and adds tests. Expected clean: any finding counts against precision.",
+  "base_sha": "593ad466a4ed0cc4c041d7bb5131290de5a805dd",
+  "head_sha": "25ac00e7a34a8a1bd5f3cb43d310b140735bb4a5",
+  "expected": []
+}
