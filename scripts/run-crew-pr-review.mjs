@@ -13,6 +13,7 @@ const CI_WORKFLOWS = [
 ]
 const MAX_DIFF_BYTES = 180_000
 const BOT_LOGIN = 'github-actions[bot]'
+const REVIEW_MARKER = /^<!-- crew-code-review:([0-9a-f]{40}):complete -->/
 const SEVERITY_COLORS = { P1: 'd73a4a', P2: 'f57c00', P3: 'd4a72c' }
 const REVIEW_AREAS = [
   'security',
@@ -94,27 +95,32 @@ export function selectApplicableWorkflows(readWorkflow, changedFiles) {
   })
 }
 
-export function buildReviewInput(pr, runGit = git) {
-  const base = pr.base.sha
-  const head = pr.head.sha
-  if (![base, head].every((sha) => /^[0-9a-f]{40}$/.test(sha))) {
-    throw new CrewReviewError('Invalid PR commit SHA')
-  }
-  runGit('fetch', '--no-tags', 'origin', `refs/pull/${pr.number}/head`)
-  if (runGit('rev-parse', 'FETCH_HEAD').trim() !== head) {
-    throw new CrewReviewError('PR head changed while fetching')
-  }
-  const rangeBase = runGit('merge-base', base, head).trim()
-  const range = `${rangeBase}..${head}`
-  const diffArgs = ['diff', '--no-ext-diff', '--no-textconv', '--find-renames']
-  const changedFiles = runGit(...diffArgs, '--name-only', '-z', range)
-    .split('\0')
+// Most recent first. Only complete reviews published by the Actions bot on the
+// commit named in their own marker can seed an incremental range.
+export function listReviewedShas(reviews, headSha) {
+  return reviews
+    .filter((review) => review.user?.login === BOT_LOGIN && review.state === 'COMMENTED')
+    .map((review) => {
+      const sha = REVIEW_MARKER.exec(review.body ?? '')?.[1]
+      return sha && sha === review.commit_id && sha !== headSha ? sha : null
+    })
     .filter(Boolean)
-  const deletedFiles = runGit(...diffArgs, '--name-only', '--diff-filter=D', '-z', range)
-    .split('\0')
-    .filter(Boolean)
+    .reverse()
+}
+
+function isReviewableAncestor(runGit, sha, headSha) {
+  try {
+    runGit('cat-file', '-e', `${sha}^{commit}`)
+    runGit('merge-base', '--is-ancestor', sha, headSha)
+    return true
+  } catch {
+    return false // Unknown commit or force-pushed away: fall back to the next one.
+  }
+}
+
+function listChangedLines(runGit, diffArgs, range, paths) {
   const changedLines = []
-  for (const path of changedFiles) {
+  for (const path of paths) {
     const patch = runGit(...diffArgs, '--unified=0', range, '--', path)
     let lineNumber = null
     for (const line of patch.split('\n')) {
@@ -125,7 +131,51 @@ export function buildReviewInput(pr, runGit = git) {
       } else if (lineNumber !== null && line.startsWith(' ')) lineNumber += 1
     }
   }
-  let diff = runGit(...diffArgs, '--unified=40', range)
+  return changedLines
+}
+
+export function buildReviewInput(pr, runGit = git, { reviewedShas = [] } = {}) {
+  const base = pr.base.sha
+  const head = pr.head.sha
+  if (![base, head].every((sha) => /^[0-9a-f]{40}$/.test(sha))) {
+    throw new CrewReviewError('Invalid PR commit SHA')
+  }
+  runGit('fetch', '--no-tags', 'origin', `refs/pull/${pr.number}/head`)
+  if (runGit('rev-parse', 'FETCH_HEAD').trim() !== head) {
+    throw new CrewReviewError('PR head changed while fetching')
+  }
+  const rangeBase = runGit('merge-base', base, head).trim()
+  const prRange = `${rangeBase}..${head}`
+  const diffArgs = ['diff', '--no-ext-diff', '--no-textconv', '--find-renames']
+  const listPaths = (range, ...extra) =>
+    runGit(...diffArgs, '--name-only', ...extra, '-z', range).split('\0').filter(Boolean)
+  const prFiles = listPaths(prRange)
+
+  // Incremental reviews cover only what changed since the last complete review, and
+  // never anything a merge from main brought in: that is not part of the PR itself.
+  const reviewedSha = reviewedShas.find((sha) => isReviewableAncestor(runGit, sha, head))
+  const range = reviewedSha ? `${reviewedSha}..${head}` : prRange
+  const inPr = new Set(prFiles)
+  const changedFiles = reviewedSha ? listPaths(range).filter((p) => inPr.has(p)) : prFiles
+  const deletedFiles = (reviewedSha
+    ? listPaths(range, '--diff-filter=D')
+    : listPaths(prRange, '--diff-filter=D')
+  ).filter((path) => !reviewedSha || inPr.has(path))
+  let changedLines = listChangedLines(runGit, diffArgs, range, changedFiles)
+  if (reviewedSha) {
+    const prLines = new Set(
+      listChangedLines(runGit, diffArgs, prRange, changedFiles).map(
+        ({ path, line }) => `${path}:${line}`,
+      ),
+    )
+    changedLines = changedLines.filter(({ path, line }) => prLines.has(`${path}:${line}`))
+  }
+  let diff = runGit(
+    ...diffArgs,
+    '--unified=40',
+    range,
+    ...(reviewedSha && changedFiles.length ? ['--', ...changedFiles] : []),
+  )
   if (Buffer.byteLength(diff) > MAX_DIFF_BYTES) {
     const suffix = '\n[DIFF TRUNCATED BY CI AT 180000 BYTES]\n'
     // Decode with streaming semantics to discard an incomplete final UTF-8 character.
@@ -140,8 +190,8 @@ export function buildReviewInput(pr, runGit = git) {
     pull_number: pr.number,
     base_sha: base,
     head_sha: head,
-    range_base_sha: rangeBase,
-    review_mode: 'full',
+    range_base_sha: reviewedSha ?? rangeBase,
+    review_mode: reviewedSha ? 'incremental' : 'full',
     agents_md: runGit('show', `${base}:AGENTS.md`),
     review_md: runGit('show', `${base}:documentation/rules/pr-review-rules.md`),
     changed_files: changedFiles,
@@ -189,12 +239,15 @@ export function validateReview(output, input) {
   return output
 }
 
-function buildReviewBody(output, commentsCount) {
+function buildReviewBody(output, commentsCount, input) {
   const labels = { complete: 'Completa', partial: 'Parcial', blocked: 'Bloqueada' }
   const marker = `<!-- crew-code-review:${output.head_sha}:${output.review_status} -->`
   return (
     `${marker}\n## Revisão de código do Crew\n\n` +
     `Commit revisado: \`${output.head_sha}\`\nEstado: **${labels[output.review_status]}**\n` +
+    (input.review_mode === 'incremental'
+      ? `Escopo: **Incremental**, apenas as alterações desde \`${input.range_base_sha}\`\n`
+      : '') +
     `Apontamentos nesta publicação: **${commentsCount}**\n\n${output.summary}\n\n` +
     (output.review_status !== 'complete'
       ? '**A revisão não foi concluída integralmente. Execute novamente após resolver o bloqueio.**'
@@ -256,7 +309,9 @@ export async function runCrewReview({
       'CREW_API_URL must be an HTTPS base URL without credentials, query or fragment',
     )
   }
-  const input = buildReviewInput(pr, runGit)
+  const input = buildReviewInput(pr, runGit, {
+    reviewedShas: listReviewedShas(reviews, pr.head.sha),
+  })
   if (!input.changed_files.length) {
     log('No changes to review.')
     return
@@ -268,7 +323,8 @@ export async function runCrewReview({
     '--no-renames',
     '--name-only',
     '-z',
-    `${input.range_base_sha}..${input.head_sha}`,
+    // GitHub evaluates CI path filters against the whole PR, not the incremental range.
+    `${runGit('merge-base', pr.base.sha, input.head_sha).trim()}..${input.head_sha}`,
   )
     .split('\0')
     .filter(Boolean)
@@ -386,7 +442,7 @@ export async function runCrewReview({
   await api(`${root}/reviews`, {
     commit_id: pr.head.sha,
     event: 'COMMENT',
-    body: buildReviewBody(output, comments.length),
+    body: buildReviewBody(output, comments.length, input),
     ...(comments.length > 0 && { comments }),
   })
   log(

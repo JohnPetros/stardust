@@ -16,6 +16,7 @@ import { reviewInputSchema } from '../../apps/crew/src/mastra/agents/pr-reviewer
 
 import {
   buildReviewInput,
+  listReviewedShas,
   runCrewReview,
   selectApplicableWorkflows,
   validateReview,
@@ -491,4 +492,108 @@ test('rejects a force-pushed head while preparing the context', () => {
       ),
     /head changed while fetching/,
   )
+})
+
+const REVIEWED = 'c'.repeat(40)
+const OLDER = 'd'.repeat(40)
+const botReview = (sha, overrides = {}) => ({
+  state: 'COMMENTED',
+  commit_id: sha,
+  user: { login: 'github-actions[bot]' },
+  body: `<!-- crew-code-review:${sha}:complete -->\nComplete`,
+  ...overrides,
+})
+
+test('lists reviewed SHAs most recent first, trusting only complete bot reviews on their own commit', () => {
+  const reviews = [
+    botReview(OLDER),
+    botReview(REVIEWED),
+    botReview(HEAD),
+    botReview(BASE, { user: { login: 'somebody' } }),
+    botReview(BASE, { state: 'PENDING' }),
+    botReview(BASE, { commit_id: OLDER }),
+    botReview(BASE, { body: `<!-- crew-code-review:${BASE}:partial -->` }),
+  ]
+  assert.deepEqual(listReviewedShas(reviews, HEAD), [REVIEWED, OLDER])
+  assert.deepEqual(listReviewedShas([], HEAD), [])
+})
+
+function createRangeGit({ prFiles, incrementalFiles, lines, rejectAncestors = [] }) {
+  const calls = []
+  const runGit = (...args) => {
+    calls.push(args)
+    const range = args.find((arg) => /^[0-9a-f]{40}\.\.[0-9a-f]{40}$/.test(arg))
+    const isIncremental = range?.startsWith(REVIEWED)
+    if (args[0] === 'fetch') return ''
+    if (args[0] === 'rev-parse') return HEAD
+    if (args[0] === 'cat-file') return ''
+    if (args.includes('--is-ancestor')) {
+      if (rejectAncestors.includes(args[2])) throw new Error('not an ancestor')
+      return ''
+    }
+    if (args[0] === 'merge-base') return BASE
+    if (args[0] === 'show') return 'trusted'
+    if (args.includes('--diff-filter=D')) return ''
+    if (args.includes('--name-only'))
+      return `${(isIncremental ? incrementalFiles : prFiles).join('\0')}\0`
+    if (args.includes('--unified=0')) {
+      const path = args.at(-1)
+      const added = lines[isIncremental ? 'incremental' : 'pr'][path] ?? []
+      return added.map((line) => `@@ -1,0 +${line} @@\n+x`).join('\n')
+    }
+    return 'diff'
+  }
+  return { runGit, calls }
+}
+
+test('builds an incremental input from the last reviewed commit, scoped to the PR itself', () => {
+  const { runGit, calls } = createRangeGit({
+    prFiles: ['a.ts'],
+    incrementalFiles: ['a.ts', 'from-main.ts'],
+    lines: {
+      pr: { 'a.ts': [2, 7] },
+      incremental: { 'a.ts': [7, 9], 'from-main.ts': [1] },
+    },
+  })
+  const input = buildReviewInput(PR, runGit, { reviewedShas: [REVIEWED, OLDER] })
+  assert.equal(input.review_mode, 'incremental')
+  assert.equal(input.range_base_sha, REVIEWED)
+  assert.equal(input.base_sha, BASE)
+  assert.deepEqual(input.changed_files, ['a.ts'])
+  assert.deepEqual(input.changed_lines, [{ path: 'a.ts', line: 7 }])
+  assert.equal(reviewInputSchema.safeParse(input).success, true)
+  const diffCall = calls.find((args) => args.includes('--unified=40'))
+  assert.ok(diffCall.includes(`${REVIEWED}..${HEAD}`))
+  assert.deepEqual(diffCall.slice(diffCall.indexOf('--')), ['--', 'a.ts'])
+})
+
+test('falls back to the next reviewed commit, then to a full review, when history was rewritten', () => {
+  const git = () =>
+    createRangeGit({
+      prFiles: ['a.ts'],
+      incrementalFiles: ['a.ts'],
+      lines: { pr: { 'a.ts': [2] }, incremental: { 'a.ts': [2] } },
+      rejectAncestors: [REVIEWED],
+    }).runGit
+  const next = buildReviewInput(PR, git(), { reviewedShas: [REVIEWED, OLDER] })
+  assert.equal(next.review_mode, 'incremental')
+  assert.equal(next.range_base_sha, OLDER)
+  const full = buildReviewInput(PR, git(), { reviewedShas: [REVIEWED] })
+  assert.equal(full.review_mode, 'full')
+  assert.equal(full.range_base_sha, BASE)
+  assert.equal(buildReviewInput(PR, git()).review_mode, 'full')
+})
+
+test('publishes an incremental review while selecting CI by the whole PR', async () => {
+  const fixture = createFixture({ reviews: [botReview(OLDER), botReview(REVIEWED)] })
+  await runCrewReview(fixture.args)
+  const input = JSON.parse(fixture.requests[0].config.body)
+  assert.equal(input.review_mode, 'incremental')
+  assert.equal(input.range_base_sha, REVIEWED)
+  assert.equal(reviewInputSchema.safeParse(input).success, true)
+  const ciRangeCall = fixture.gitCalls.find((args) => args.includes('--no-renames'))
+  assert.equal(ciRangeCall.at(-1), `${BASE}..${HEAD}`)
+  const review = fixture.publications[0]
+  assert.match(review.body, /Escopo: \*\*Incremental\*\*.*`c{40}`/)
+  assert.ok(review.body.startsWith(`<!-- crew-code-review:${HEAD}:complete -->`))
 })
