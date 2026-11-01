@@ -1,0 +1,49 @@
+name: Crew app CD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/crew/**'
+      - 'apps/*/package.json'
+      - 'packages/*/package.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'Dockerfile.crew'
+      - 'Dockerfile.crew.dockerignore'
+      - '.dockerignore'
+      - 'scripts/deploy-crew.mjs'
+      - '.github/workflows/crew-app-production-cd.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: crew-app-cd-coolify-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy Crew to Coolify and verify health
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 40
+    steps:
+      - name: Checkout deployment commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+
+      - name: Deploy and verify Crew
+        env:
+          COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
+          COOLIFY_WEBHOOK_CREW_PROD: ${{ secrets.COOLIFY_WEBHOOK_CREW_PROD }}
+          CREW_API_URL: ${{ secrets.CREW_API_URL }}
+        run: node scripts/deploy-crew.mjs
