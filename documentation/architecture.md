@@ -17,6 +17,8 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 
 ## Fluxo de Dados (resumo)
 
+**Revisão de PR**: GitHub Actions `Crew PR review` → CI aplicável ao diff → API autenticada `/pr-reviewer/v1/runs` do Crew → revisão `COMMENT` com resumo e apontamentos inline no GitHub. O caller substitui a revisão de código do Hermes, usa somente código e políticas do base confiável e nunca executa código do PR. O diff é tratado como dado; resultados de outro SHA ou fora das linhas adicionadas são rejeitados. Revisões parciais ou bloqueadas são identificadas e falham o check. O Hermes continua responsável pelo E2E de release.
+
 **RPC**: Route/Controller → Action.execute(call) → Use Case → call.redirect() ou call.json()
 
 **REST**: Service → RestClient (Axios/Fetch) → API externa → RestResponse\<T\>
