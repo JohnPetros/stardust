@@ -1,0 +1,73 @@
+name: Prepare Server test stack
+description: Install dependencies, build the LSP package, write local test env files and start the local Supabase stack with a migrated empty database.
+
+inputs:
+  node-version:
+    description: Node.js version.
+    default: "24"
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: npm
+        cache-dependency-path: package-lock.json
+
+    - name: Install dependencies
+      shell: bash
+      run: npm ci
+
+    - name: Build LSP package
+      shell: bash
+      run: npm run build -w @stardust/lsp
+
+    - name: Create local test environment files
+      shell: bash
+      run: |
+          cat <<'EOF' > .env.local
+          SUPABASE_DATABASE_PASSWORD=stardust-local-ci-password
+          SUPABASE_DATABASE_PORT=54322
+          SUPABASE_API_PORT=54321
+          SUPABASE_MAILPIT_HTTP_PORT=54327
+          SUPABASE_JWT_SECRET=stardust-local-ci-jwt-secret-1234567890
+          SUPABASE_PUBLISHABLE_KEY=stardust-ci-publishable-key
+          SUPABASE_ANON_KEY=stardust-ci-anon-key
+          SUPABASE_REALTIME_DB_ENC_KEY=01234567890123456789012345678901
+          SUPABASE_REALTIME_SECRET_KEY_BASE=0123456789012345678901234567890123456789012345678901234567890123
+          MINIO_ROOT_USER=test-access-key-id
+          MINIO_ROOT_PASSWORD=test-secret-access-key
+          EOF
+
+          cat <<'EOF' > apps/server/.env.testing
+          MODE='test'
+          PORT='3333'
+          BASE_URL='http://localhost'
+          ONBOARDING_RECEIPT_SECRET='stardust-local-ci-onboarding-receipt-secret'
+          GOD_ACCOUNT_IDS=f4442be6-ad3e-415b-b31b-cc49a18e1119,
+          SUPABASE_URL='http://127.0.0.1:54321'
+          SUPABASE_PUBLISHABLE_KEY=stardust-ci-publishable-key
+          DATABASE_URL=postgresql://postgres:stardust-local-ci-password@127.0.0.1:54322/postgres
+          REDIS_URL='redis://127.0.0.1:6379'
+          S3_ACCOUNT_ID='test-account-id'
+          S3_ACCESS_KEY_ID='test-access-key-id'
+          S3_SECRET_ACCESS_KEY='test-secret-access-key'
+          STARDUST_WEB_URL='http://localhost:3000'
+          DROPBOX_REFRESH_TOKEN='test-refresh-token'
+          DROPBOX_APP_KEY='test-app-key'
+          DROPBOX_APP_SECRET='test-app-secret'
+          DISCORD_WEBHOOK_URL='https://discord.com/api/webhooks/test'
+          SENTRY_DSN='https://test@sentry.io/test'
+          INNGEST_EVENT_KEY='test-event-key'
+          INNGEST_SIGNING_KEY='test-signing-key'
+          POSTHOG_PROJECT_TOKEN='test-posthog-project-token'
+          POSTHOG_HOST='https://us.i.posthog.com'
+          POSTHOG_PERSONAL_API_KEY='test-posthog-personal-api-key'
+          POSTHOG_PROJECT_ID='1'
+          EOF
+
+    - name: Prepare local stack and migrate empty database
+      shell: bash
+      run: npm run db:test:ci -w @stardust/server

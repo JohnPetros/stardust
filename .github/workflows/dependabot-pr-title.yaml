@@ -1,5 +1,8 @@
 name: Dependabot PR title
 
+# Dependabot titles are fixed English text; translate them to pt-BR.
+# pull_request_target gives the token write access on Dependabot PRs. It never
+# checks out or runs PR code, only edits the title.
 on:
   pull_request_target:
     types: [opened, reopened, synchronize, edited]
