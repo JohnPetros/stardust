@@ -1,0 +1,15 @@
+{
+  "name": "seeded-review-smoke",
+  "source_pr": "JohnPetros/stardust#624",
+  "description": "Synthetic PR #624 with intentional defects in scripts/crew-review-smoke.mjs: hardcoded token, disabled TLS verification, unchecked HTTP response, sequential N+1 requests, shell injection and eval. Architecture must stay silent: the file is a repository-level script, not part of apps/crew.",
+  "base_sha": "1896d989f2a902c86256242bc2200a768f4a66bd",
+  "head_sha": "e4b37535363ff9f9f74c9657ebd52148de680999",
+  "expected": [
+    { "path": "scripts/crew-review-smoke.mjs", "lines": [4, 4], "area": "security" },
+    { "path": "scripts/crew-review-smoke.mjs", "lines": [6, 6], "area": "security" },
+    { "path": "scripts/crew-review-smoke.mjs", "lines": [12, 12], "area": "regression" },
+    { "path": "scripts/crew-review-smoke.mjs", "lines": [18, 21], "area": "performance" },
+    { "path": "scripts/crew-review-smoke.mjs", "lines": [24, 24], "area": "security" },
+    { "path": "scripts/crew-review-smoke.mjs", "lines": [29, 29], "area": "security" }
+  ]
+}

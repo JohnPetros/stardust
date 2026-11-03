@@ -18,7 +18,14 @@ export class ReviewScoringHelper {
     finding: ReviewOutput['findings'][number],
     expected: EvalCase['expected'][number],
   ): boolean {
-    return finding.path === expected.path && finding.area === expected.area
+    const [from, to] = expected.lines
+
+    return (
+      finding.path === expected.path &&
+      finding.area === expected.area &&
+      finding.line >= from &&
+      finding.line <= to
+    )
   }
 
   calculateRecall(
