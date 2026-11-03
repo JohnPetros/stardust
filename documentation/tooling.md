@@ -488,5 +488,9 @@ sem instalar dependências nem executar código do PR, aguarda somente os CIs
 aplicáveis (incluindo Crew quando disparado) e publica resumo e comentários
 inline via token do Actions. Configure os secrets `CREW_API_URL` e
 `PR_REVIEWER_API_KEY` para o serviço Crew já implantado. O caller fica ativo após
-ser incorporado ao `main`; não faz deploy. Revisões parciais ou bloqueadas falham
+ser incorporado ao `main`; não faz deploy. A primeira revisão de um PR é `full`;
+os pushes seguintes são `incremental`, a partir do último commit com revisão
+completa do bot, limitada ao que pertence ao PR (sem o que veio de merges de
+`main`), com fallback para `full` quando o histórico foi reescrito. Os CIs
+aplicáveis continuam sendo avaliados pelo PR inteiro. Revisões parciais ou bloqueadas falham
 o check. Testes determinísticos: `node --test scripts/tests/run-crew-pr-review.test.mjs`.
