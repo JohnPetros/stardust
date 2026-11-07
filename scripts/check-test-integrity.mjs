@@ -84,13 +84,13 @@ function parseArguments(argumentsList) {
   }
 
   if (positionalArguments.length > 0) {
-    throw new Error('Usage: npm run check:test-integrity -- [--base <git-ref>] [--json]')
+    throw new Error('Usage: pnpm run check:test-integrity [--base <git-ref>] [--json]')
   }
   return { base, shouldPrintHelp: false, shouldPrintJson }
 }
 
 function printHelp() {
-  console.log('Usage: npm run check:test-integrity -- [--base <git-ref>] [--json]')
+  console.log('Usage: pnpm run check:test-integrity [--base <git-ref>] [--json]')
   console.log(
     'Checks test weakening and missing tests for changed testable source files.',
   )

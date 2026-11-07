@@ -10,4 +10,4 @@ const skills = [
   'vercel-labs/agent-skills@vercel-react-best-practices',
   'pproenca/dot-skills@zod',
 ]
-for (const skill of skills) run('npx', ['skills', 'add', skill])
+for (const skill of skills) run('pnpm', ['dlx', 'skills', 'add', skill])

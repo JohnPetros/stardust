@@ -37,7 +37,7 @@ function parseArguments(argumentsList) {
     else positional.push(argument)
   }
   if (positional.length !== 1)
-    throw new Error('Usage: npm run check:spec-definition -- <spec.md> [--json]')
+    throw new Error('Usage: pnpm run check:spec-definition <spec.md> [--json]')
   return { json, specPath: positional[0] }
 }
 
@@ -155,7 +155,7 @@ async function main() {
   try {
     const args = parseArguments(process.argv.slice(2))
     if (args.help) {
-      console.log('Usage: npm run check:spec-definition -- <spec.md> [--json]')
+      console.log('Usage: pnpm run check:spec-definition <spec.md> [--json]')
       return
     }
     await access(args.specPath)
