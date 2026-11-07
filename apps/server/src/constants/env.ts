@@ -82,7 +82,39 @@ const envSchema = z
     validateRequiredS3Account(value, context)
     validateRequiredMailpit(value, context)
     validateRequiredTrustedProxies(value, context)
+    validateRequiredProductionIntegrations(value, context)
   })
+
+const PRODUCTION_INTEGRATION_VARIABLES = {
+  dropboxRefreshToken: 'DROPBOX_REFRESH_TOKEN',
+  dropboxAppKey: 'DROPBOX_APP_KEY',
+  dropboxAppSecret: 'DROPBOX_APP_SECRET',
+  sentryDsn: 'SENTRY_DSN',
+  posthogProjectToken: 'POSTHOG_PROJECT_TOKEN',
+  posthogHost: 'POSTHOG_HOST',
+  posthogPersonalApiKey: 'POSTHOG_PERSONAL_API_KEY',
+  posthogProjectId: 'POSTHOG_PROJECT_ID',
+} as const
+
+function addMissingIntegrationIssue(
+  context: z.RefinementCtx,
+  key: string,
+  name: string,
+): void {
+  const message = `${name} is required in production mode`
+  context.addIssue({ code: z.ZodIssueCode.custom, path: [key], message })
+}
+
+function validateRequiredProductionIntegrations(
+  value: Record<string, unknown>,
+  context: z.RefinementCtx,
+): void {
+  if (value.mode !== 'production') return
+
+  for (const [key, name] of Object.entries(PRODUCTION_INTEGRATION_VARIABLES)) {
+    if (!value[key]) addMissingIntegrationIssue(context, key, name)
+  }
+}
 
 type RequiredEnvironment = {
   mode: 'development' | 'production' | 'test'
