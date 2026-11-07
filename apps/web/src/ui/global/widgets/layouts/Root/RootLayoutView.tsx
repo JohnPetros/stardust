@@ -8,9 +8,9 @@ import { SERVER_ENV } from '@/constants/server-env'
 
 export const RootLayoutView = ({ children }: PropsWithChildren) => {
   return (
-    <html lang='pt-BR' className='scroll-smooth'>
+    <html lang='pt-BR' data-theme='stardust-dark' className='scroll-smooth'>
       <body
-        className={`${roboto_mono.variable} ${poppins.variable} relative h-screen bg-gray-900 font-normal`}
+        className={`${roboto_mono.variable} ${poppins.variable} relative h-screen bg-theme-background font-normal`}
       >
         {SERVER_ENV.mode === 'production' && (
           <>
