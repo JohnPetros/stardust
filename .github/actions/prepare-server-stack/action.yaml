@@ -9,20 +9,22 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v6
+
     - name: Setup Node.js
       uses: actions/setup-node@v7
       with:
         node-version: ${{ inputs.node-version }}
-        cache: npm
-        cache-dependency-path: package-lock.json
+        cache: pnpm
 
     - name: Install dependencies
       shell: bash
-      run: npm ci
+      run: pnpm install --frozen-lockfile
 
     - name: Build LSP package
       shell: bash
-      run: npm run build -w @stardust/lsp
+      run: pnpm --filter @stardust/lsp run build
 
     - name: Create local test environment files
       shell: bash
@@ -70,4 +72,4 @@ runs:
 
     - name: Prepare local stack and migrate empty database
       shell: bash
-      run: npm run db:test:ci -w @stardust/server
+      run: pnpm --filter @stardust/server run db:test:ci

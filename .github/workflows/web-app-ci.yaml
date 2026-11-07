@@ -7,7 +7,8 @@ on:
     paths:
       - ".github/workflows/**"
       - "package.json"
-      - "package-lock.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
       - "apps/web/**"
       - "packages/core/**"
       - "packages/validation/**"
@@ -35,18 +36,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Check architecture
-        run: npm run check:architecture
+        run: pnpm run check:architecture
 
   check-code:
     name: Check code
@@ -56,29 +59,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
         shell: bash
         run: |
           for attempt in 1 2 3; do
-            npm ci --prefer-offline --no-audit && exit 0
+            pnpm install --frozen-lockfile --prefer-offline && exit 0
 
             if [ "$attempt" -eq 3 ]; then
               exit 1
             fi
 
-            echo "npm ci failed on attempt $attempt. Retrying in 15 seconds..."
+            echo "pnpm install failed on attempt $attempt. Retrying in 15 seconds..."
             sleep 15
           done
 
       - name: Check code
-        run: npm run check:code -w @stardust/web
+        run: pnpm --filter @stardust/web run check:code
 
   check-code-complexity:
     name: check-code-complexity
@@ -88,18 +93,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Check complexity
-        run: npm run check:complexity -w @stardust/web
+        run: pnpm --filter @stardust/web run check:complexity
 
   check-types:
     name: Check types
@@ -109,29 +116,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
         shell: bash
         run: |
           for attempt in 1 2 3; do
-            npm ci --prefer-offline --no-audit && exit 0
+            pnpm install --frozen-lockfile --prefer-offline && exit 0
 
             if [ "$attempt" -eq 3 ]; then
               exit 1
             fi
 
-            echo "npm ci failed on attempt $attempt. Retrying in 15 seconds..."
+            echo "pnpm install failed on attempt $attempt. Retrying in 15 seconds..."
             sleep 15
           done
 
       - name: Check types
-        run: npm run check:types -w @stardust/web
+        run: pnpm --filter @stardust/web run check:types
 
   unit-tests:
     name: Unit Tests
@@ -158,35 +167,37 @@ jobs:
           NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
           EOF
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
         shell: bash
         run: |
           for attempt in 1 2 3; do
-            npm ci --prefer-offline --no-audit && exit 0
+            pnpm install --frozen-lockfile --prefer-offline && exit 0
 
             if [ "$attempt" -eq 3 ]; then
               exit 1
             fi
 
-            echo "npm ci failed on attempt $attempt. Retrying in 15 seconds..."
+            echo "pnpm install failed on attempt $attempt. Retrying in 15 seconds..."
             sleep 15
           done
 
       - name: Build LSP package
-        run: npm run build -w @stardust/lsp
+        run: pnpm --filter @stardust/lsp run build
 
       - name: Run tests
-        run: npm run test:coverage -w @stardust/web
+        run: pnpm --filter @stardust/web run test:coverage
 
       - name: Check coverage baseline
-        run: npm run check:coverage -- @stardust/web
+        run: pnpm run check:coverage @stardust/web
 
   integration-tests:
     name: Integration tests
@@ -213,32 +224,34 @@ jobs:
           NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
           EOF
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
         shell: bash
         run: |
           for attempt in 1 2 3; do
-            npm ci --prefer-offline --no-audit && exit 0
+            pnpm install --frozen-lockfile --prefer-offline && exit 0
 
             if [ "$attempt" -eq 3 ]; then
               exit 1
             fi
 
-            echo "npm ci failed on attempt $attempt. Retrying in 15 seconds..."
+            echo "pnpm install failed on attempt $attempt. Retrying in 15 seconds..."
             sleep 15
           done
 
       - name: Install Playwright browsers
-        run: npm exec --workspace=@stardust/web -- playwright install --with-deps chromium
+        run: pnpm --filter @stardust/web exec playwright install --with-deps chromium
 
       - name: Run integration tests
-        run: npm run test:integration -w @stardust/web
+        run: pnpm --filter @stardust/web run test:integration
 
   build:
     name: Build
@@ -272,26 +285,28 @@ jobs:
           NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
           EOF
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
         shell: bash
         run: |
           for attempt in 1 2 3; do
-            npm ci --prefer-offline --no-audit && exit 0
+            pnpm install --frozen-lockfile --prefer-offline && exit 0
 
             if [ "$attempt" -eq 3 ]; then
               exit 1
             fi
 
-            echo "npm ci failed on attempt $attempt. Retrying in 15 seconds..."
+            echo "pnpm install failed on attempt $attempt. Retrying in 15 seconds..."
             sleep 15
           done
 
       - name: Build project
-        run: npm run build:web
+        run: pnpm run build:web

@@ -7,7 +7,8 @@ on:
     paths:
       - ".github/workflows/**"
       - "package.json"
-      - "package-lock.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
       - "apps/studio/**"
       - "packages/core/**"
       - "packages/validation/**"
@@ -34,18 +35,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Check architecture
-        run: npm run check:architecture
+        run: pnpm run check:architecture
 
   check-code:
     name: Check code
@@ -55,18 +58,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Check code
-        run: npm run check:code -w @stardust/studio
+        run: pnpm --filter @stardust/studio run check:code
 
   check-code-complexity:
     name: check-code-complexity
@@ -76,18 +81,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Check complexity
-        run: npm run check:complexity -w @stardust/studio
+        run: pnpm --filter @stardust/studio run check:complexity
 
   check-types:
     name: Check types
@@ -99,22 +106,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Check types
         env:
           VITE_SERVER_APP_URL: https://stardust-server.test
           VITE_CDN_URL: https://stardust-cdn.test
           VITE_WEB_APP_URL: https://stardust-web.test
-        run: npm run check:types -w @stardust/studio
+        run: pnpm --filter @stardust/studio run check:types
 
   unit-tests:
     name: Unit Tests
@@ -127,21 +136,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Run tests
-        run: npm run test:coverage -w @stardust/studio
+        run: pnpm --filter @stardust/studio run test:coverage
 
       - name: Check coverage baseline
-        run: npm run check:coverage -- @stardust/studio
+        run: pnpm run check:coverage @stardust/studio
 
   build:
     name: Build
@@ -157,19 +168,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build project
         env:
           VITE_SERVER_APP_URL: https://stardust-server.test
           VITE_CDN_URL: https://stardust-cdn.test
           VITE_WEB_APP_URL: https://stardust-web.test
-        run: npm run build:studio
+        run: pnpm run build:studio
