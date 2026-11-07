@@ -8,13 +8,10 @@ import { ENV } from '@/constants'
 
 export class PostHogAnalyticsProvider implements ServerAnalyticsProvider {
   async trackEvent(event: AnalyticsEvent): Promise<void> {
-    if (ENV.mode === 'development') return
+    const { posthogProjectToken, posthogHost } = ENV
+    if (ENV.mode === 'development' || !posthogProjectToken || !posthogHost) return
 
-    const client = new PostHog(ENV.posthogProjectToken, {
-      host: ENV.posthogHost,
-      flushAt: 1,
-      flushInterval: 0,
-    })
+    const client = this.createClient(posthogProjectToken, posthogHost)
 
     try {
       client.capture({
@@ -34,5 +31,9 @@ export class PostHogAnalyticsProvider implements ServerAnalyticsProvider {
         'PostHog Analytics Provider Error',
       )
     }
+  }
+
+  private createClient(token: string, host: string): PostHog {
+    return new PostHog(token, { host, flushAt: 1, flushInterval: 0 })
   }
 }

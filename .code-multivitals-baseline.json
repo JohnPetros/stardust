@@ -1,7 +1,7 @@
 {
-  "analysedAt": "2026-11-07T19:54:04.913Z",
+  "analysedAt": "2026-11-07T20:03:01.595Z",
   "totalFiles": 3494,
-  "totalFunctions": 9589,
+  "totalFunctions": 9592,
   "warnCount": 2712,
   "errorCount": 243,
   "averageMI": 54.2,
@@ -7166,23 +7166,23 @@
         {
           "name": "trackEvent",
           "startLine": 10,
-          "endLine": 37,
+          "endLine": 34,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
-              "value": 4,
+              "value": 6,
               "threshold": 15,
               "severity": "ok"
             },
             {
               "name": "cognitiveComplexity",
-              "value": 2,
+              "value": 4,
               "threshold": 25,
               "severity": "ok"
             },
             {
               "name": "functionLength",
-              "value": 28,
+              "value": 25,
               "threshold": 70,
               "severity": "ok"
             },
@@ -7194,21 +7194,21 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 377.86,
+              "value": 385.5,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 49.8,
+          "maintainabilityIndex": 50.6,
           "maintainabilityRating": "warn",
-          "healthScore": 68,
+          "healthScore": 63,
           "smells": []
         }
       ],
       "summary": {
-        "totalLines": 39,
-        "weightedMI": 49.8,
-        "weightedHealthScore": 68,
+        "totalLines": 40,
+        "weightedMI": 53.6,
+        "weightedHealthScore": 66.2,
         "worstSeverity": "warn",
         "smellIds": []
       }
@@ -7218,24 +7218,24 @@
       "functions": [
         {
           "name": "getDailyActiveUsers",
-          "startLine": 23,
-          "endLine": 49,
+          "startLine": 21,
+          "endLine": 45,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
-              "value": 6,
+              "value": 5,
               "threshold": 15,
               "severity": "ok"
             },
             {
               "name": "cognitiveComplexity",
-              "value": 5,
+              "value": 4,
               "threshold": 25,
               "severity": "ok"
             },
             {
               "name": "functionLength",
-              "value": 27,
+              "value": 25,
               "threshold": 70,
               "severity": "ok"
             },
@@ -7247,20 +7247,20 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 343.66,
+              "value": 292.3,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 50.2,
+          "maintainabilityIndex": 51.6,
           "maintainabilityRating": "warn",
-          "healthScore": 65,
+          "healthScore": 68,
           "smells": []
         },
         {
           "name": "normalizeReport",
-          "startLine": 66,
-          "endLine": 96,
+          "startLine": 74,
+          "endLine": 104,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -7300,8 +7300,8 @@
         },
         {
           "name": "<anonymous>",
-          "startLine": 85,
-          "endLine": 95,
+          "startLine": 93,
+          "endLine": 103,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -7341,9 +7341,9 @@
         }
       ],
       "summary": {
-        "totalLines": 111,
-        "weightedMI": 57.4,
-        "weightedHealthScore": 74.7,
+        "totalLines": 119,
+        "weightedMI": 59.1,
+        "weightedHealthScore": 75.9,
         "worstSeverity": "warn",
         "smellIds": []
       }
