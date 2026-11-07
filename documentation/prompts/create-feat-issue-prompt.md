@@ -118,7 +118,7 @@ Evidências esperadas:
 - Issue/User Story de origem: <identificador existente ou Não aplicável>
 - Design: <arquivo e node/frame exatos ou Não aplicável>
 - Spec: <status ou Pendente conforme o processo>
-- PR: <URL ou Pendente — será vinculada pelo workflow create-pr>
+- PR: <URL ou Pendente — será vinculada pelo workflow open-pr>
 - Milestone: <URL>
 
 ## 🚫 Fora de Escopo
