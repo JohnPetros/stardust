@@ -20,11 +20,7 @@
   "engines": {
     "node": ">=22"
   },
-  "packageManager": "npm@11.13.0",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "packageManager": "pnpm@11.28.11",
   "scripts": {
     "setup": "node ./scripts/setup-project.mjs",
     "prepare": "husky",
@@ -36,11 +32,11 @@
     "build:web": "turbo build --filter=@stardust/web",
     "build:core": "turbo build --filter=@stardust/core",
     "build:lsp": "turbo build --filter=@stardust/lsp",
-    "test": "npm run test:unit",
+    "test": "pnpm run test:unit",
     "format": "turbo format",
     "check:code": "turbo check:code",
     "check:types": "turbo check:types",
-    "check:architecture": "depcruise --config .dependency-cruiser.cjs packages/core/src apps/server/src apps/web/src apps/studio/src && npm run check:architecture -w @stardust/crew",
+    "check:architecture": "depcruise --config .dependency-cruiser.cjs packages/core/src apps/server/src apps/web/src apps/studio/src && pnpm --filter @stardust/crew run check:architecture",
     "test:coverage": "turbo test:coverage",
     "check:coverage": "node ./scripts/check-coverage-baseline.mjs",
     "check:complexity": "node ./scripts/check-complexity.mjs",
@@ -56,8 +52,8 @@
     "test:studio": "turbo test:unit --filter=@stardust/studio",
     "test:web": "turbo test:unit --filter=@stardust/web",
     "test:core": "turbo test:unit --filter=@stardust/core",
-    "crew": "npm run dev -w @stardust/crew",
-    "build:crew": "npm run build -w @stardust/crew"
+    "crew": "pnpm --filter @stardust/crew run dev",
+    "build:crew": "pnpm --filter @stardust/crew run build"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.7",
@@ -89,29 +85,11 @@
     "zod": "4.4.3"
   },
   "dependencies": {
-    "@ai-sdk/provider-utils-v5": "npm:@ai-sdk/provider-utils@^5.0.5",
+    "@ai-sdk/provider-utils-v5": "npm:@ai-sdk/provider-utils@5.0.5",
+    "@aws-sdk/client-s3": "3.1097.0",
     "@designliquido/delegua": "^1.25.1",
-    "@faker-js/faker": "8.4.1"
-  },
-  "overrides": {
-    "@ai-sdk/provider-utils": "5.0.5",
-    "@types/react": "19.2.18",
-    "hono": "4.13.1",
-    "monaco-editor": "0.56.0",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "@ai-sdk/ui-utils": {
-      "@ai-sdk/provider-utils": "5.0.5"
-    },
-    "esbuild": "0.28.1",
-    "tsup": {
-      "esbuild": "0.28.1"
-    },
-    "uuid": "11.1.1",
-    "vite": "8.2.2",
-    "react-router": "8.3.1",
-    "@react-router/express": "8.3.1",
-    "@react-router/node": "8.3.1",
-    "@react-router/serve": "8.3.1"
+    "@faker-js/faker": "8.4.1",
+    "drizzle-orm": "0.45.3",
+    "postgres": "3.4.9"
   }
 }
