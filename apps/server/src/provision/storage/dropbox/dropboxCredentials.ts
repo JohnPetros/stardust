@@ -1,26 +1,28 @@
+import { z } from 'zod'
+
 import { ENV } from '@/constants'
 
-const REQUIRED_VARIABLES = [
-  'DROPBOX_REFRESH_TOKEN',
-  'DROPBOX_APP_KEY',
-  'DROPBOX_APP_SECRET',
-]
+const dropboxCredentialsSchema = z.object({
+  dropboxRefreshToken: z.string({ required_error: 'DROPBOX_REFRESH_TOKEN is required' }),
+  dropboxAppKey: z.string({ required_error: 'DROPBOX_APP_KEY is required' }),
+  dropboxAppSecret: z.string({ required_error: 'DROPBOX_APP_SECRET is required' }),
+})
 
-export function assertDropboxCredentials(): void {
-  const missing = REQUIRED_VARIABLES.filter((name) => !process.env[name])
-  if (missing.length === 0) return
+export type DropboxCredentials = z.infer<typeof dropboxCredentialsSchema>
 
-  throw new Error(
-    `Dropbox storage is not configured. Missing environment variables: ${missing.join(', ')}`,
-  )
+export function getDropboxCredentials(): DropboxCredentials {
+  const result = dropboxCredentialsSchema.safeParse(ENV)
+  if (result.success) return result.data
+
+  const reasons = result.error.issues.map((issue) => issue.message).join(', ')
+  throw new Error(`Dropbox storage is not configured: ${reasons}`)
 }
 
-export function getDropboxTokenParams(): Record<string, string> {
-  assertDropboxCredentials()
-
-  return {
-    refresh_token: String(ENV.dropboxRefreshToken),
-    client_id: String(ENV.dropboxAppKey),
-    client_secret: String(ENV.dropboxAppSecret),
-  }
+export function buildDropboxTokenRequestBody(credentials: DropboxCredentials): string {
+  return new URLSearchParams({
+    grant_type: 'refresh_token',
+    refresh_token: credentials.dropboxRefreshToken,
+    client_id: credentials.dropboxAppKey,
+    client_secret: credentials.dropboxAppSecret,
+  }).toString()
 }

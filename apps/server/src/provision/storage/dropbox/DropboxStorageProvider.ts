@@ -12,11 +12,16 @@ import type { FilesListingParams } from '@stardust/core/storage/types'
 import type { Text } from '@stardust/core/global/structures'
 
 import { ENV } from '@/constants'
-import { assertDropboxCredentials, getDropboxTokenParams } from './dropboxCredentials'
+import {
+  buildDropboxTokenRequestBody,
+  getDropboxCredentials,
+  type DropboxCredentials,
+} from './dropboxCredentials'
 
 export class DropboxStorageProvider implements FileStorageProvider {
   private dropbox: Dropbox
   private readonly restClient: RestClient
+  private readonly credentials: DropboxCredentials
   private static readonly BASE_URL = 'https://api.dropbox.com'
   private static readonly MAX_UPLOAD_ATTEMPTS = 3
   private static readonly DEFAULT_RETRY_AFTER_IN_SECONDS = 1
@@ -24,7 +29,7 @@ export class DropboxStorageProvider implements FileStorageProvider {
     ENV.mode === 'development' ? 'dev' : 'prod'
 
   constructor(restClient: RestClient) {
-    assertDropboxCredentials()
+    this.credentials = getDropboxCredentials()
     this.dropbox = new Dropbox()
     this.restClient = restClient
     this.restClient.setBaseUrl(DropboxStorageProvider.BASE_URL)
@@ -153,11 +158,11 @@ export class DropboxStorageProvider implements FileStorageProvider {
   }
 
   private async fetchAccessToken(): Promise<string> {
-    this.restClient.setQueryParam('grant_type', 'refresh_token')
-    for (const [name, value] of Object.entries(getDropboxTokenParams())) {
-      this.restClient.setQueryParam(name, value)
-    }
-    const response = await this.restClient.post<{ access_token: string }>('/oauth2/token')
+    this.restClient.setHeader('Content-Type', 'application/x-www-form-urlencoded')
+    const response = await this.restClient.post<{ access_token: string }>(
+      '/oauth2/token',
+      buildDropboxTokenRequestBody(this.credentials),
+    )
     return response.body.access_token
   }
 
