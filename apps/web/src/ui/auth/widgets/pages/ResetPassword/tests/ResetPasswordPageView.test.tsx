@@ -38,4 +38,29 @@ describe('ResetPasswordPageView', () => {
     expect(screen.getByTestId('submit-button')).toBeVisible()
     expect(screen.getByTestId('sign-in-link')).toHaveAttribute('href', ROUTES.auth.signIn)
   })
+
+  it('should render the request form with the subtle sign in link inside the 384px content container', () => {
+    View()
+
+    expect(screen.getByRole('heading', { name: 'Redefina sua senha' })).toBeVisible()
+    expect(screen.getByTestId('sign-in-link')).toHaveClass('text-theme-text-secondary')
+    const contentContainer = screen
+      .getByTestId('reset-password-request-form')
+      .closest('.max-w-\\[384px\\]')
+
+    expect(contentContainer).not.toBeNull()
+    expect(contentContainer).toHaveClass('w-full', 'max-w-[384px]')
+    expect(contentContainer).toContainElement(screen.getByTestId('email-input'))
+    expect(contentContainer?.querySelector('.w-\\[100rem\\]')).toBeNull()
+  })
+
+  it('should render the reset message and the dialog trigger when canResetPassword is true', () => {
+    View({ canResetPassword: true })
+
+    expect(
+      screen.getByRole('heading', { name: 'Você já pode redefinir sua senha 🚀!' }),
+    ).toBeInTheDocument()
+    expect(screen.getByTestId('open-reset-password-dialog-button')).toBeInTheDocument()
+    expect(screen.queryByTestId('reset-password-request-form')).toBeNull()
+  })
 })

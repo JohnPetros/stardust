@@ -52,6 +52,43 @@ module.exports = {
         purple: {
           700: '#514869',
         },
+        // Tokens `Semantic/Dark` do Penpot, definidos em global.css sob
+        // `:root[data-theme='stardust-dark']`.
+        theme: {
+          background: 'var(--theme-background)',
+          canvas: 'var(--theme-canvas)',
+          surface: 'var(--theme-surface)',
+          border: 'var(--theme-border)',
+          'border-quiet': 'var(--theme-border-quiet)',
+          'text-primary': 'var(--theme-text-primary)',
+          'text-secondary': 'var(--theme-text-secondary)',
+          action: 'var(--theme-action)',
+          'accent-text': 'var(--theme-accent-text)',
+          success: 'var(--theme-success)',
+          reward: 'var(--theme-reward)',
+          danger: 'var(--theme-danger)',
+          'tag-background': 'var(--theme-tag-background)',
+          'tag-foreground': 'var(--theme-tag-foreground)',
+          selection: 'var(--theme-selection)',
+          'selection-surface': 'var(--theme-selection-surface)',
+          'success-surface': 'var(--theme-success-surface)',
+          'danger-surface': 'var(--theme-danger-surface)',
+        },
+      },
+      // Geometria (`Geometry` do Penpot): raio, altura, padding, gap e borda de controle.
+      borderRadius: {
+        theme: 'var(--theme-radius-default)',
+        'theme-full': 'var(--theme-radius-full)',
+      },
+      height: {
+        'theme-control': 'var(--theme-control-height)',
+      },
+      spacing: {
+        'theme-control-x': 'var(--theme-control-padding-x)',
+        'theme-control-gap': 'var(--theme-control-icon-gap)',
+      },
+      borderWidth: {
+        'theme-control': 'var(--theme-control-border)',
       },
       screens: {
         xs: '440px',

@@ -24,6 +24,7 @@ const ALLOWED_TEST_PATH_PATTERNS = [
   /^apps\/server\/src\/queue\/jobs\/(?:[^/]+\/)*tests(?:\/|$)/,
   /^apps\/(?:web|studio)\/src\/ui\/(?:[^/]+\/)*hooks\/tests(?:\/|$)/,
   /^apps\/(?:web|studio)\/src\/ui\/(?:[^/]+\/)*widgets\/(?:[^/]+\/)*tests(?:\/|$)/,
+  /^apps\/(?:web|studio)\/src\/ui\/(?:[^/]+\/)*contexts\/(?:[^/]+\/)*tests(?:\/|$)/,
   /^(?:apps|packages)\/[^/]+\/src\/[^/]+\.(?:test|spec)\.[cm]?[jt]sx?$/,
 ]
 const FORBIDDEN_TEST_SUBJECT_PATTERNS = [

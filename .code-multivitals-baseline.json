@@ -1,9 +1,9 @@
 {
-  "analysedAt": "2026-10-31T14:17:48.827Z",
-  "totalFiles": 3493,
-  "totalFunctions": 9586,
-  "warnCount": 2712,
-  "errorCount": 243,
+  "analysedAt": "2026-11-07T21:54:38.424Z",
+  "totalFiles": 3512,
+  "totalFunctions": 9598,
+  "warnCount": 2725,
+  "errorCount": 242,
   "averageMI": 54.2,
   "averageHealthScore": 72,
   "clones": [],
@@ -51133,112 +51133,6 @@
       }
     },
     {
-      "filePath": "apps/web/src/ui/auth/widgets/components/AnimatedForm/index.tsx",
-      "functions": [
-        {
-          "name": "AnimatedForm",
-          "startLine": 31,
-          "endLine": 44,
-          "metrics": [
-            {
-              "name": "cyclomaticComplexity",
-              "value": 3,
-              "threshold": 15,
-              "severity": "ok"
-            },
-            {
-              "name": "cognitiveComplexity",
-              "value": 0,
-              "threshold": 25,
-              "severity": "ok"
-            },
-            {
-              "name": "functionLength",
-              "value": 14,
-              "threshold": 70,
-              "severity": "ok"
-            },
-            {
-              "name": "nestingDepth",
-              "value": 0,
-              "threshold": 4,
-              "severity": "ok"
-            },
-            {
-              "name": "halsteadVolume",
-              "value": 48.43,
-              "threshold": 800,
-              "severity": "ok"
-            }
-          ],
-          "maintainabilityIndex": 62.8,
-          "maintainabilityRating": "warn",
-          "healthScore": 84,
-          "smells": []
-        }
-      ],
-      "summary": {
-        "totalLines": 45,
-        "weightedMI": 62.8,
-        "weightedHealthScore": 84,
-        "worstSeverity": "warn",
-        "smellIds": []
-      }
-    },
-    {
-      "filePath": "apps/web/src/ui/auth/widgets/components/AppMessage/index.tsx",
-      "functions": [
-        {
-          "name": "AppMessage",
-          "startLine": 24,
-          "endLine": 44,
-          "metrics": [
-            {
-              "name": "cyclomaticComplexity",
-              "value": 1,
-              "threshold": 15,
-              "severity": "ok"
-            },
-            {
-              "name": "cognitiveComplexity",
-              "value": 0,
-              "threshold": 25,
-              "severity": "ok"
-            },
-            {
-              "name": "functionLength",
-              "value": 21,
-              "threshold": 70,
-              "severity": "ok"
-            },
-            {
-              "name": "nestingDepth",
-              "value": 0,
-              "threshold": 4,
-              "severity": "ok"
-            },
-            {
-              "name": "halsteadVolume",
-              "value": 73.57,
-              "threshold": 800,
-              "severity": "ok"
-            }
-          ],
-          "maintainabilityIndex": 58,
-          "maintainabilityRating": "warn",
-          "healthScore": 85,
-          "smells": []
-        }
-      ],
-      "summary": {
-        "totalLines": 45,
-        "weightedMI": 58,
-        "weightedHealthScore": 85,
-        "worstSeverity": "warn",
-        "smellIds": []
-      }
-    },
-    {
       "filePath": "apps/web/src/ui/auth/widgets/components/Hero/index.tsx",
       "functions": [
         {
@@ -51550,7 +51444,7 @@
         {
           "name": "ResetPasswordPageView",
           "startLine": 23,
-          "endLine": 83,
+          "endLine": 90,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -51566,7 +51460,7 @@
             },
             {
               "name": "functionLength",
-              "value": 52,
+              "value": 59,
               "threshold": 70,
               "severity": "warn"
             },
@@ -51578,21 +51472,21 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 158.53,
+              "value": 165,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 46.9,
+          "maintainabilityIndex": 45.6,
           "maintainabilityRating": "warn",
-          "healthScore": 74,
+          "healthScore": 72,
           "smells": []
         }
       ],
       "summary": {
-        "totalLines": 84,
-        "weightedMI": 47.6,
-        "weightedHealthScore": 74.4,
+        "totalLines": 91,
+        "weightedMI": 46.3,
+        "weightedHealthScore": 72.3,
         "worstSeverity": "warn",
         "smellIds": []
       }
@@ -51749,7 +51643,7 @@
       "functions": [
         {
           "name": "SignInPageView",
-          "startLine": 20,
+          "startLine": 21,
           "endLine": 69,
           "metrics": [
             {
@@ -51766,7 +51660,7 @@
             },
             {
               "name": "functionLength",
-              "value": 46,
+              "value": 45,
               "threshold": 70,
               "severity": "warn"
             },
@@ -51778,21 +51672,21 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 146.72,
+              "value": 133.78,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 48.4,
+          "maintainabilityIndex": 48.9,
           "maintainabilityRating": "warn",
-          "healthScore": 77,
+          "healthScore": 78,
           "smells": []
         }
       ],
       "summary": {
         "totalLines": 70,
-        "weightedMI": 48.4,
-        "weightedHealthScore": 77,
+        "weightedMI": 48.9,
+        "weightedHealthScore": 78,
         "worstSeverity": "warn",
         "smellIds": []
       }
@@ -52019,12 +51913,12 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 183.15,
+              "value": 196.46,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 45.9,
+          "maintainabilityIndex": 45.7,
           "maintainabilityRating": "warn",
           "healthScore": 73,
           "smells": []
@@ -52032,7 +51926,7 @@
       ],
       "summary": {
         "totalLines": 82,
-        "weightedMI": 45.9,
+        "weightedMI": 45.7,
         "weightedHealthScore": 73,
         "worstSeverity": "warn",
         "smellIds": []
@@ -58363,11 +58257,11 @@
         {
           "name": "ToastView",
           "startLine": 43,
-          "endLine": 134,
+          "endLine": 136,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
-              "value": 6,
+              "value": 5,
               "threshold": 15,
               "severity": "ok"
             },
@@ -58379,7 +58273,7 @@
             },
             {
               "name": "functionLength",
-              "value": 83,
+              "value": 85,
               "threshold": 70,
               "severity": "error"
             },
@@ -58391,27 +58285,27 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 518.02,
+              "value": 458.47,
               "threshold": 800,
               "severity": "warn"
             }
           ],
-          "maintainabilityIndex": 38.3,
+          "maintainabilityIndex": 38.6,
           "maintainabilityRating": "warn",
-          "healthScore": 58,
+          "healthScore": 61,
           "smells": [
             {
               "id": "bloated",
               "label": "Bloated",
-              "reason": "Large function (83 lines) with high vocabulary (Halstead volume 518.02) but low branching — consider extracting helpers."
+              "reason": "Large function (85 lines) with high vocabulary (Halstead volume 458.47) but low branching — consider extracting helpers."
             }
           ]
         }
       ],
       "summary": {
-        "totalLines": 135,
-        "weightedMI": 38.3,
-        "weightedHealthScore": 58,
+        "totalLines": 137,
+        "weightedMI": 38.6,
+        "weightedHealthScore": 61,
         "worstSeverity": "error",
         "smellIds": [
           "bloated"
@@ -58876,26 +58770,26 @@
       "functions": [
         {
           "name": "AlertDialogComponent",
-          "startLine": 25,
-          "endLine": 91,
+          "startLine": 9,
+          "endLine": 34,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
-              "value": 5,
+              "value": 1,
               "threshold": 15,
               "severity": "ok"
             },
             {
               "name": "cognitiveComplexity",
-              "value": 1,
+              "value": 0,
               "threshold": 25,
               "severity": "ok"
             },
             {
               "name": "functionLength",
-              "value": 53,
+              "value": 23,
               "threshold": 70,
-              "severity": "warn"
+              "severity": "ok"
             },
             {
               "name": "nestingDepth",
@@ -58905,21 +58799,21 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 289.52,
+              "value": 128,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 44.5,
+          "maintainabilityIndex": 55.4,
           "maintainabilityRating": "warn",
-          "healthScore": 67,
+          "healthScore": 84,
           "smells": []
         }
       ],
       "summary": {
-        "totalLines": 96,
-        "weightedMI": 47.8,
-        "weightedHealthScore": 69.4,
+        "totalLines": 39,
+        "weightedMI": 59.4,
+        "weightedHealthScore": 85.5,
         "worstSeverity": "warn",
         "smellIds": []
       }
@@ -59814,59 +59708,6 @@
         "totalLines": 95,
         "weightedMI": 51.1,
         "weightedHealthScore": 63,
-        "worstSeverity": "warn",
-        "smellIds": []
-      }
-    },
-    {
-      "filePath": "apps/web/src/ui/global/widgets/components/Button/index.tsx",
-      "functions": [
-        {
-          "name": "ButtonComponent",
-          "startLine": 11,
-          "endLine": 49,
-          "metrics": [
-            {
-              "name": "cyclomaticComplexity",
-              "value": 4,
-              "threshold": 15,
-              "severity": "ok"
-            },
-            {
-              "name": "cognitiveComplexity",
-              "value": 2,
-              "threshold": 25,
-              "severity": "ok"
-            },
-            {
-              "name": "functionLength",
-              "value": 28,
-              "threshold": 70,
-              "severity": "ok"
-            },
-            {
-              "name": "nestingDepth",
-              "value": 1,
-              "threshold": 4,
-              "severity": "ok"
-            },
-            {
-              "name": "halsteadVolume",
-              "value": 106.2,
-              "threshold": 800,
-              "severity": "ok"
-            }
-          ],
-          "maintainabilityIndex": 53.7,
-          "maintainabilityRating": "warn",
-          "healthScore": 73,
-          "smells": []
-        }
-      ],
-      "summary": {
-        "totalLines": 52,
-        "weightedMI": 53.7,
-        "weightedHealthScore": 73,
         "worstSeverity": "warn",
         "smellIds": []
       }
@@ -62659,7 +62500,7 @@
         {
           "name": "DialogContent",
           "startLine": 13,
-          "endLine": 27,
+          "endLine": 29,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -62675,7 +62516,7 @@
             },
             {
               "name": "functionLength",
-              "value": 15,
+              "value": 17,
               "threshold": 70,
               "severity": "ok"
             },
@@ -62692,16 +62533,16 @@
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 64.5,
+          "maintainabilityIndex": 63.4,
           "maintainabilityRating": "warn",
-          "healthScore": 88,
+          "healthScore": 87,
           "smells": []
         }
       ],
       "summary": {
-        "totalLines": 28,
-        "weightedMI": 64.5,
-        "weightedHealthScore": 88,
+        "totalLines": 30,
+        "weightedMI": 63.4,
+        "weightedHealthScore": 87,
         "worstSeverity": "warn",
         "smellIds": []
       }
@@ -63237,26 +63078,26 @@
       "functions": [
         {
           "name": "InputComponent",
-          "startLine": 20,
-          "endLine": 91,
+          "startLine": 8,
+          "endLine": 25,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
-              "value": 11,
+              "value": 1,
               "threshold": 15,
-              "severity": "warn"
+              "severity": "ok"
             },
             {
               "name": "cognitiveComplexity",
-              "value": 5,
+              "value": 0,
               "threshold": 25,
               "severity": "ok"
             },
             {
               "name": "functionLength",
-              "value": 61,
+              "value": 15,
               "threshold": 70,
-              "severity": "warn"
+              "severity": "ok"
             },
             {
               "name": "nestingDepth",
@@ -63266,21 +63107,21 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 398.84,
+              "value": 56.47,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 41.4,
+          "maintainabilityIndex": 61.9,
           "maintainabilityRating": "warn",
-          "healthScore": 49,
+          "healthScore": 87,
           "smells": []
         }
       ],
       "summary": {
-        "totalLines": 94,
-        "weightedMI": 41.4,
-        "weightedHealthScore": 49,
+        "totalLines": 28,
+        "weightedMI": 61.9,
+        "weightedHealthScore": 87,
         "worstSeverity": "warn",
         "smellIds": []
       }
@@ -67919,12 +67760,12 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 80,
+              "value": 85.84,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 55.2,
+          "maintainabilityIndex": 55,
           "maintainabilityRating": "warn",
           "healthScore": 80,
           "smells": []
@@ -67932,7 +67773,7 @@
       ],
       "summary": {
         "totalLines": 36,
-        "weightedMI": 55.2,
+        "weightedMI": 55,
         "weightedHealthScore": 80,
         "worstSeverity": "warn",
         "smellIds": []
@@ -71525,8 +71366,8 @@
       "functions": [
         {
           "name": "ResetPasswordFormDialog",
-          "startLine": 22,
-          "endLine": 95,
+          "startLine": 19,
+          "endLine": 46,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -71542,9 +71383,9 @@
             },
             {
               "name": "functionLength",
-              "value": 70,
+              "value": 24,
               "threshold": 70,
-              "severity": "warn"
+              "severity": "ok"
             },
             {
               "name": "nestingDepth",
@@ -71554,21 +71395,21 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 338.61,
+              "value": 134.89,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 41.9,
+          "maintainabilityIndex": 54.8,
           "maintainabilityRating": "warn",
-          "healthScore": 70,
+          "healthScore": 83,
           "smells": []
         }
       ],
       "summary": {
-        "totalLines": 96,
-        "weightedMI": 41.9,
-        "weightedHealthScore": 70,
+        "totalLines": 47,
+        "weightedMI": 54.8,
+        "weightedHealthScore": 83,
         "worstSeverity": "warn",
         "smellIds": []
       }
@@ -71725,8 +71566,8 @@
       "functions": [
         {
           "name": "SignInForm",
-          "startLine": 10,
-          "endLine": 47,
+          "startLine": 9,
+          "endLine": 20,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -71742,9 +71583,9 @@
             },
             {
               "name": "functionLength",
-              "value": 38,
+              "value": 12,
               "threshold": 70,
-              "severity": "warn"
+              "severity": "ok"
             },
             {
               "name": "nestingDepth",
@@ -71754,21 +71595,21 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 218.72,
+              "value": 48,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 49,
+          "maintainabilityIndex": 64.6,
           "maintainabilityRating": "warn",
-          "healthScore": 79,
+          "healthScore": 88,
           "smells": []
         }
       ],
       "summary": {
-        "totalLines": 48,
-        "weightedMI": 49,
-        "weightedHealthScore": 79,
+        "totalLines": 21,
+        "weightedMI": 64.6,
+        "weightedHealthScore": 88,
         "worstSeverity": "warn",
         "smellIds": []
       }
@@ -71831,8 +71672,8 @@
       "functions": [
         {
           "name": "SocialLinksView",
-          "startLine": 7,
-          "endLine": 26,
+          "startLine": 10,
+          "endLine": 29,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -71860,7 +71701,7 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 122.62,
+              "value": 120,
               "threshold": 800,
               "severity": "ok"
             }
@@ -71872,7 +71713,7 @@
         }
       ],
       "summary": {
-        "totalLines": 27,
+        "totalLines": 30,
         "weightedMI": 56.9,
         "weightedHealthScore": 85,
         "worstSeverity": "warn",
@@ -71884,26 +71725,26 @@
       "functions": [
         {
           "name": "SignUpForm",
-          "startLine": 16,
-          "endLine": 107,
+          "startLine": 14,
+          "endLine": 29,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
-              "value": 9,
+              "value": 1,
               "threshold": 15,
-              "severity": "warn"
+              "severity": "ok"
             },
             {
               "name": "cognitiveComplexity",
-              "value": 6,
+              "value": 0,
               "threshold": 25,
               "severity": "ok"
             },
             {
               "name": "functionLength",
-              "value": 92,
+              "value": 16,
               "threshold": 70,
-              "severity": "error"
+              "severity": "ok"
             },
             {
               "name": "nestingDepth",
@@ -71913,22 +71754,22 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 564.08,
+              "value": 86.04,
               "threshold": 800,
-              "severity": "warn"
+              "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 36.7,
+          "maintainabilityIndex": 60.1,
           "maintainabilityRating": "warn",
-          "healthScore": 48,
+          "healthScore": 86,
           "smells": []
         }
       ],
       "summary": {
-        "totalLines": 108,
-        "weightedMI": 36.7,
-        "weightedHealthScore": 48,
-        "worstSeverity": "error",
+        "totalLines": 30,
+        "weightedMI": 60.1,
+        "weightedHealthScore": 86,
+        "worstSeverity": "warn",
         "smellIds": []
       }
     },
@@ -140688,6 +140529,801 @@
         "totalLines": 47,
         "weightedMI": 67.3,
         "weightedHealthScore": 83.9,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/auth/widgets/components/AnimatedForm/AnimatedFormView.tsx",
+      "functions": [
+        {
+          "name": "AnimatedFormView",
+          "startLine": 33,
+          "endLine": 46,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 3,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 0,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 14,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 48.43,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 62.8,
+          "maintainabilityRating": "warn",
+          "healthScore": 84,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 47,
+        "weightedMI": 62.8,
+        "weightedHealthScore": 84,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/auth/widgets/components/AppMessage/AppMessageView.tsx",
+      "functions": [
+        {
+          "name": "AppMessageView",
+          "startLine": 25,
+          "endLine": 47,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 1,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 0,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 23,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 73.57,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 57.1,
+          "maintainabilityRating": "warn",
+          "healthScore": 84,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 48,
+        "weightedMI": 57.1,
+        "weightedHealthScore": 84,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/auth/widgets/components/OptionsDivider/OptionsDividerView.tsx",
+      "functions": [
+        {
+          "name": "OptionsDividerView",
+          "startLine": 5,
+          "endLine": 21,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 1,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 0,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 17,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 33,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 62.4,
+          "maintainabilityRating": "warn",
+          "healthScore": 87,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 22,
+        "weightedMI": 62.4,
+        "weightedHealthScore": 87,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/auth/widgets/components/Title/TitleView.tsx",
+      "functions": [
+        {
+          "name": "TitleView",
+          "startLine": 10,
+          "endLine": 22,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 2,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 1,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 13,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 41.51,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 64.1,
+          "maintainabilityRating": "warn",
+          "healthScore": 85,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 23,
+        "weightedMI": 64.1,
+        "weightedHealthScore": 85,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/auth/widgets/pages/ResetPassword/ResetPasswordFormDialog/ResetPasswordFormDialogView.tsx",
+      "functions": [
+        {
+          "name": "ResetPasswordFormDialogView",
+          "startLine": 27,
+          "endLine": 94,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 1,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 0,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 60,
+              "threshold": 70,
+              "severity": "warn"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 190.2,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 45.1,
+          "maintainabilityRating": "warn",
+          "healthScore": 73,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 95,
+        "weightedMI": 45.1,
+        "weightedHealthScore": 73,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/auth/widgets/pages/SignIn/SignInForm/SignInFormView.tsx",
+      "functions": [
+        {
+          "name": "SignInFormView",
+          "startLine": 15,
+          "endLine": 49,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 1,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 0,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 30,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 155.89,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 52.3,
+          "maintainabilityRating": "warn",
+          "healthScore": 81,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 50,
+        "weightedMI": 52.3,
+        "weightedHealthScore": 81,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/auth/widgets/pages/SignUp/SignUpForm/SignUpFormView.tsx",
+      "functions": [
+        {
+          "name": "SignUpFormView",
+          "startLine": 27,
+          "endLine": 59,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 4,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 3,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 25,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 133.44,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 54.1,
+          "maintainabilityRating": "warn",
+          "healthScore": 75,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 60,
+        "weightedMI": 54.1,
+        "weightedHealthScore": 75,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/global/widgets/components/AlertDialog/AlertDialogView.tsx",
+      "functions": [
+        {
+          "name": "AlertDialogView",
+          "startLine": 36,
+          "endLine": 89,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 5,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 1,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 41,
+              "threshold": 70,
+              "severity": "warn"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 152.16,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 48.9,
+          "maintainabilityRating": "warn",
+          "healthScore": 71,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 90,
+        "weightedMI": 49.7,
+        "weightedHealthScore": 71.5,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/global/widgets/components/Button/ButtonView.tsx",
+      "functions": [
+        {
+          "name": "<anonymous>",
+          "startLine": 22,
+          "endLine": 52,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 4,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 2,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 28,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 1,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 106.2,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 53.7,
+          "maintainabilityRating": "warn",
+          "healthScore": 73,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 53,
+        "weightedMI": 53.7,
+        "weightedHealthScore": 73,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/global/widgets/components/Dialog/DialogAnimationView.tsx",
+      "functions": [
+        {
+          "name": "DialogAnimationView",
+          "startLine": 34,
+          "endLine": 49,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 1,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 0,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 16,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 31.7,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 63.1,
+          "maintainabilityRating": "warn",
+          "healthScore": 87,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 50,
+        "weightedMI": 63.1,
+        "weightedHealthScore": 87,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/global/widgets/components/Dialog/DialogHeaderView.tsx",
+      "functions": [
+        {
+          "name": "DialogHeaderView",
+          "startLine": 13,
+          "endLine": 32,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 1,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 0,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 20,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 43.02,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 60,
+          "maintainabilityRating": "warn",
+          "healthScore": 86,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 33,
+        "weightedMI": 60,
+        "weightedHealthScore": 86,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/global/widgets/components/Input/InputView.tsx",
+      "functions": [
+        {
+          "name": "InputViewComponent",
+          "startLine": 27,
+          "endLine": 101,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 12,
+              "threshold": 15,
+              "severity": "warn"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 8,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 61,
+              "threshold": 70,
+              "severity": "warn"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 1,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 409.79,
+              "threshold": 800,
+              "severity": "warn"
+            }
+          ],
+          "maintainabilityIndex": 41.1,
+          "maintainabilityRating": "warn",
+          "healthScore": 42,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 104,
+        "weightedMI": 41.1,
+        "weightedHealthScore": 42,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/auth/widgets/pages/SignUp/SignUpForm/EmailField/EmailFieldView.tsx",
+      "functions": [
+        {
+          "name": "EmailFieldView",
+          "startLine": 12,
+          "endLine": 39,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 2,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 1,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 24,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 51.81,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 57.6,
+          "maintainabilityRating": "warn",
+          "healthScore": 82,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 40,
+        "weightedMI": 57.6,
+        "weightedHealthScore": 82,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/auth/widgets/pages/SignUp/SignUpForm/NameField/NameFieldView.tsx",
+      "functions": [
+        {
+          "name": "NameFieldView",
+          "startLine": 12,
+          "endLine": 40,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 2,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 1,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 25,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 51.81,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 57.2,
+          "maintainabilityRating": "warn",
+          "healthScore": 81,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 41,
+        "weightedMI": 57.2,
+        "weightedHealthScore": 81,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/auth/widgets/pages/SignUp/SignUpForm/PasswordField/PasswordFieldView.tsx",
+      "functions": [
+        {
+          "name": "PasswordFieldView",
+          "startLine": 11,
+          "endLine": 35,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 2,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 1,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 25,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 51.81,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 57.2,
+          "maintainabilityRating": "warn",
+          "healthScore": 81,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 36,
+        "weightedMI": 57.2,
+        "weightedHealthScore": 81,
         "worstSeverity": "warn",
         "smellIds": []
       }
