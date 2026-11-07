@@ -69,10 +69,18 @@ function parseAgent(file) {
 function readOnly(name) {
   return (
     name.startsWith('judge-') ||
-    ['spec-reviewer-agent', 'implementation-reviewer-agent'].includes(
-      name,
-    )
+    [
+      'spec-reviewer-agent',
+      'implementation-reviewer-agent',
+      'visual-reviewer-agent',
+    ].includes(name)
   )
+}
+
+// Os Reviewers de texto usam apenas Read/Glob/Grep; o Visual Reviewer também
+// precisa dos MCPs de Penpot e de leitura de imagens, então bloqueia só escrita.
+function usesToolDenylist(name) {
+  return name === 'visual-reviewer-agent'
 }
 
 function writeIfChanged(file, content, managed = false) {
@@ -150,7 +158,10 @@ for (const agent of agents) {
     `name: ${agent.name}`,
     `description: ${JSON.stringify(agent.description)}`,
   ]
-  if (readOnly(agent.name)) claude.push('tools: Read, Glob, Grep', 'permissionMode: plan')
+  if (usesToolDenylist(agent.name))
+    claude.push('disallowedTools: Edit, Write, NotebookEdit, Agent')
+  else if (readOnly(agent.name))
+    claude.push('tools: Read, Glob, Grep', 'permissionMode: plan')
   else if (agent.name === 'builder-agent') claude.push('disallowedTools: Agent')
   claude.push(
     '---',
