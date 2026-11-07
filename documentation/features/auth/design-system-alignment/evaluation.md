@@ -172,7 +172,7 @@ Efeito colateral local: o Sign-up criou o usuário `vm03-85af544f@stardust.local
 
 | ID | Verificação | Estado | HEAD / evidência |
 | --- | --- | --- | --- |
-| CI-01 | Checks automatizados | pending | PR https://github.com/JohnPetros/stardust/pull/631, head `feat/design-system-alignment-web-auth`, base `main` (`cb8460cfc`); aguardando os workflows do HEAD publicado |
+| CI-01 | Checks automatizados | pending | PR https://github.com/JohnPetros/stardust/pull/631, head `feat/design-system-alignment-web-auth`, base `main` (`cb8460cfc`). No HEAD `8c4012d81`, `check-code-complexity` do Web reprovou (`SignUpFormView`, `functionLength=95` contra 70, job 128521314553): ACH-15, corrigido em `d9f201ad7`; check code, check types, check architecture e unit tests do Web passaram. Aguardando os workflows do HEAD `d9f201ad7` |
 | CI-02 | Build | pending | workflow do PR #631 |
 
 ## Warnings e findings
@@ -265,6 +265,7 @@ Efeito colateral local: o Sign-up criou o usuário `vm03-85af544f@stardust.local
   `jest` do Sign-up 17/17. Pendência: a revisão 3 da Spec deve reescrever DV-01 (a faixa do frame é placeholder e o fundo
   cobre a viewport) e o Implementation Reviewer pareado deve revalidar.
   Estado: **corrigido, aguardando revisão 3 da Spec**.
+- `ACH-15` (CI-01, `check-code-complexity` do Web, reprovado no HEAD `8c4012d81`) — `SignUpFormView` (`SignUp/SignUpForm/SignUpFormView.tsx`, View criada nesta Spec) tinha `functionLength=95` contra o limite de erro 70 (`cyclomaticComplexity=9` e `halsteadVolume=458,59` eram só avisos). O `check:complexity` (que `tooling.md` pede quando a lógica alterada puder piorar o baseline) não foi executado antes da publicação porque as Views novas foram tratadas como apresentação, sem lógica nova. Estado: **corrigido** por `Builder Fix ACH-15` em `d9f201ad7`: `NameField`, `EmailField`, `PasswordField` e `SubmitButton` extraídos como componentes de apresentação puros no mesmo arquivo (sem estado, hooks ou contexts; sem novo path), DOM, classes, `data-testid` e revelação progressiva idênticos. Evidência do Builder: Biome limpo, Jest do Sign-up 17/17, `check-complexity --scope apps/web` com 0 erros (`functionLength` 27, 26, 25, 14 e 31; `SignUpFormView` sem avisos), `check:types` não executável no worktree limpo (sem `node_modules` próprio) e deixado ao CI. Implementation Reviewer pareado do Builder Fix: `accepted`, sem findings bloqueantes (NB-01: `check:types` fica para o CI; NB-02: tipo `SignUpFormFields` duplicado já existente, fora de escopo).
 - Disposição de `ACH-09` com o pacote Penpot (EV-02, lado Penpot: índice `scratchpad/ev02/penpot-index.md`, âncoras
   `scratchpad/ev02/penpot-anchors.json`, 33 PNGs em `scratchpad/ev02/png/`; leitura somente, nada editado no Penpot):
   confirmados no Penpot, sem mudança de código: gap campo → mensagem de erro de 12 px (`mt-3`; nó `…e29ec628d5c1`), margens do
@@ -299,6 +300,7 @@ Efeito colateral local: o Sign-up criou o usuário `vm03-85af544f@stardust.local
 | ACH-07, ACH-08, ACH-09 | O Reviewer read-only não chama o Penpot MCP, a evidência ficou `stale` após correções e mudanças visuais não citavam o nó do Penpot; lacuna recorrente de processo em Specs de frontend | `documentation/prompts/implement-spec-prompt.md` (nó e valor do frame por mudança visual, pacote de exports entregue ao Reviewer, capturas `stale` após correção), no branch de tooling | atualizado no worktree; entra com o branch de tooling |
 | ACH-10, ACH-11, ACH-12, ACH-14 | O ambiente local não estava pronto (seed, tenant, publicação e `SELECT` do Realtime, `apexcharts` na raiz); recorrente a cada recriação do volume | `documentation/tooling.md` (seção Supabase local, requisitos do Realtime e `apexcharts`), no branch de tooling; o provisionamento durável (compose, init ou seed) é trabalho separado | nota atualizada no worktree; provisionamento durável pendente fora desta Spec |
 | ACH-13 | A Spec leu o placeholder de 900 px do frame como contêiner do fundo animado; causa pontual da Spec | não aplicável: DV-01 e DV-12 reescritos na revisão 3 e Spec Reviewer `clear` | concluído |
+| ACH-15 | O gatilho de `check:complexity` em `tooling.md` fala em "lógica alterada"; Views novas ou extraídas não o acionam e só falham no CI | `documentation/tooling.md` (linha Complexidade da execução local escopada: sempre que criar ou extrair arquivo de código, inclusive Views, limite de 70 linhas por função), no branch de tooling `docs/scoped-local-checks` | atualizado no worktree; entra com o branch de tooling |
 
 ## Decisões
 
