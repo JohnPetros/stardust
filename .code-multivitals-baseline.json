@@ -1,7 +1,7 @@
 {
-  "analysedAt": "2026-11-07T20:59:30.513Z",
-  "totalFiles": 3504,
-  "totalFunctions": 9596,
+  "analysedAt": "2026-11-07T21:54:38.424Z",
+  "totalFiles": 3512,
+  "totalFunctions": 9598,
   "warnCount": 2725,
   "errorCount": 242,
   "averageMI": 54.2,
@@ -140855,101 +140855,19 @@
       "filePath": "apps/web/src/ui/auth/widgets/pages/SignUp/SignUpForm/SignUpFormView.tsx",
       "functions": [
         {
-          "name": "NameField",
-          "startLine": 32,
-          "endLine": 58,
+          "name": "SignUpFormView",
+          "startLine": 27,
+          "endLine": 59,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
+              "value": 4,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
               "value": 3,
-              "threshold": 15,
-              "severity": "ok"
-            },
-            {
-              "name": "cognitiveComplexity",
-              "value": 1,
-              "threshold": 25,
-              "severity": "ok"
-            },
-            {
-              "name": "functionLength",
-              "value": 27,
-              "threshold": 70,
-              "severity": "ok"
-            },
-            {
-              "name": "nestingDepth",
-              "value": 0,
-              "threshold": 4,
-              "severity": "ok"
-            },
-            {
-              "name": "halsteadVolume",
-              "value": 89.21,
-              "threshold": 800,
-              "severity": "ok"
-            }
-          ],
-          "maintainabilityIndex": 54.7,
-          "maintainabilityRating": "warn",
-          "healthScore": 79,
-          "smells": []
-        },
-        {
-          "name": "EmailField",
-          "startLine": 60,
-          "endLine": 85,
-          "metrics": [
-            {
-              "name": "cyclomaticComplexity",
-              "value": 3,
-              "threshold": 15,
-              "severity": "ok"
-            },
-            {
-              "name": "cognitiveComplexity",
-              "value": 1,
-              "threshold": 25,
-              "severity": "ok"
-            },
-            {
-              "name": "functionLength",
-              "value": 26,
-              "threshold": 70,
-              "severity": "ok"
-            },
-            {
-              "name": "nestingDepth",
-              "value": 0,
-              "threshold": 4,
-              "severity": "ok"
-            },
-            {
-              "name": "halsteadVolume",
-              "value": 87.57,
-              "threshold": 800,
-              "severity": "ok"
-            }
-          ],
-          "maintainabilityIndex": 55.1,
-          "maintainabilityRating": "warn",
-          "healthScore": 79,
-          "smells": []
-        },
-        {
-          "name": "PasswordField",
-          "startLine": 87,
-          "endLine": 111,
-          "metrics": [
-            {
-              "name": "cyclomaticComplexity",
-              "value": 2,
-              "threshold": 15,
-              "severity": "ok"
-            },
-            {
-              "name": "cognitiveComplexity",
-              "value": 1,
               "threshold": 25,
               "severity": "ok"
             },
@@ -140967,62 +140885,21 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 60.92,
+              "value": 133.44,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 56.7,
+          "maintainabilityIndex": 54.1,
           "maintainabilityRating": "warn",
-          "healthScore": 81,
-          "smells": []
-        },
-        {
-          "name": "SignUpFormView",
-          "startLine": 128,
-          "endLine": 158,
-          "metrics": [
-            {
-              "name": "cyclomaticComplexity",
-              "value": 4,
-              "threshold": 15,
-              "severity": "ok"
-            },
-            {
-              "name": "cognitiveComplexity",
-              "value": 3,
-              "threshold": 25,
-              "severity": "ok"
-            },
-            {
-              "name": "functionLength",
-              "value": 23,
-              "threshold": 70,
-              "severity": "ok"
-            },
-            {
-              "name": "nestingDepth",
-              "value": 0,
-              "threshold": 4,
-              "severity": "ok"
-            },
-            {
-              "name": "halsteadVolume",
-              "value": 98.99,
-              "threshold": 800,
-              "severity": "ok"
-            }
-          ],
-          "maintainabilityIndex": 55.8,
-          "maintainabilityRating": "warn",
-          "healthScore": 76,
+          "healthScore": 75,
           "smells": []
         }
       ],
       "summary": {
-        "totalLines": 159,
-        "weightedMI": 56.9,
-        "weightedHealthScore": 79.8,
+        "totalLines": 60,
+        "weightedMI": 54.1,
+        "weightedHealthScore": 75,
         "worstSeverity": "warn",
         "smellIds": []
       }
@@ -141288,6 +141165,165 @@
         "totalLines": 104,
         "weightedMI": 41.1,
         "weightedHealthScore": 42,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/auth/widgets/pages/SignUp/SignUpForm/EmailField/EmailFieldView.tsx",
+      "functions": [
+        {
+          "name": "EmailFieldView",
+          "startLine": 12,
+          "endLine": 39,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 2,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 1,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 24,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 51.81,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 57.6,
+          "maintainabilityRating": "warn",
+          "healthScore": 82,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 40,
+        "weightedMI": 57.6,
+        "weightedHealthScore": 82,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/auth/widgets/pages/SignUp/SignUpForm/NameField/NameFieldView.tsx",
+      "functions": [
+        {
+          "name": "NameFieldView",
+          "startLine": 12,
+          "endLine": 40,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 2,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 1,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 25,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 51.81,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 57.2,
+          "maintainabilityRating": "warn",
+          "healthScore": 81,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 41,
+        "weightedMI": 57.2,
+        "weightedHealthScore": 81,
+        "worstSeverity": "warn",
+        "smellIds": []
+      }
+    },
+    {
+      "filePath": "apps/web/src/ui/auth/widgets/pages/SignUp/SignUpForm/PasswordField/PasswordFieldView.tsx",
+      "functions": [
+        {
+          "name": "PasswordFieldView",
+          "startLine": 11,
+          "endLine": 35,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 2,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 1,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 25,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 0,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 51.81,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 57.2,
+          "maintainabilityRating": "warn",
+          "healthScore": 81,
+          "smells": []
+        }
+      ],
+      "summary": {
+        "totalLines": 36,
+        "weightedMI": 57.2,
+        "weightedHealthScore": 81,
         "worstSeverity": "warn",
         "smellIds": []
       }
