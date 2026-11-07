@@ -3,6 +3,8 @@ import { twMerge } from 'tailwind-merge'
 
 export const ErrorMessageView = ({ children, className }: ComponentProps<'p'>) => {
   return (
-    <p className={twMerge('text-sm font-medium text-red-700', className)}>{children}</p>
+    <p className={twMerge('text-sm font-medium text-theme-danger', className)}>
+      {children}
+    </p>
   )
 }
