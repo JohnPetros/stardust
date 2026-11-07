@@ -1,6 +1,6 @@
 ---
 title: Componentes compartilhados e páginas de autenticação alinhados ao design system
-status: in_progress
+status: completed
 revision: 6
 source:
   - type: issue
@@ -578,3 +578,4 @@ npm run check:spec-implementation -- documentation/features/auth/design-system-a
 | 5 | 2026-11-07 | Emenda após o review do PR #631 (comentário P3 sobre `DialogHeaderView` e `DialogAnimationView` sem teste), por pedido do usuário de resolver as pendências do PR: dois testes de View (`Create`) no mapa e na tabela de testes. Mapa com 59 paths. |
 | 6 | 2026-11-07 | Emenda após o review do PR #631 (comentário P2 do Crew e decisão do usuário de mover os subcomponentes para diretórios próprios): `NameField`, `EmailField`, `PasswordField` e `SubmitButton` saem de `SignUpFormView.tsx` para `SignUp/SignUpForm/<Campo>/index.tsx` e `<Campo>View.tsx` (8 `Create`), cobertos pela suíte existente `SignUpForm.test.tsx` (exceção de widget de formulário). Mapa com 68 paths (Create 30, Modify 36, Remove 2); `SignUpForm.test.tsx` ganha dois casos de "já utilizado". |
 | 6 | 2026-11-07 | Spec Reviewer: revisão 6 avaliada, resultado `clear`, sem findings. Observações não bloqueantes adotadas: auditoria estrutural e D-10 citam os quatro subwidgets, declarações de Entry Point e View corrigidas, contratos sem referência a revisão anterior, suíte de `SignUpForm` cobrindo os subwidgets e dois casos novos de "já utilizado" (`SignUpForm.test.tsx` como `Modify`); D-14 será atualizada com a regeneração do baseline. |
+| 6 | 2026-11-07 | Spec concluída: CI do PR #631 verde no HEAD `ad0f48bb4` (31 checks aprovados, 1 ignorado), Reviewers pareados aceitos e evidências no `evaluation.md`. |

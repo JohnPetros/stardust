@@ -1,6 +1,6 @@
 ---
 title: Componentes compartilhados e páginas de autenticação alinhados ao design system — implementation plan
-status: in_progress
+status: completed
 spec: ./spec.md
 spec_revision: 6
 evaluation: ./evaluation.md
@@ -245,3 +245,4 @@ integrada adicional.
 - 2026-11-07 — Publicação: PR #631 aberto de uma branch limpa a partir de `origin/main`. `CI-01` reprovou em `check-code-complexity` (ACH-15, `SignUpFormView` com 95 linhas): `Builder Fix ACH-15` extraiu helpers de apresentação no mesmo arquivo e o Reviewer pareado aceitou. A segunda execução comparou 22 funções com o baseline de complexidade; com decisão do usuário, a Spec foi emendada para a revisão 4 (D-14 e o path `.code-multivitals-baseline.json`) e o baseline regenerado e revisado por função.
 - 2026-11-07 — CI verde no HEAD `7c47bcc2f` (31 checks aprovados, 1 ignorado) após reexecuções do Server CI (falhas de memória do Jest sem relação com o diff) e do `Crew PR review`. O review do Crew deixou 6 comentários; por pedido do usuário (`resolve-pr-pendencies`), a Spec foi emendada para a revisão 5 (testes de `DialogHeaderView` e `DialogAnimationView`).
 - 2026-11-07 — Review do PR #631: `DialogHeaderView.test.tsx` e `DialogAnimationView.test.tsx` criados (revisão 5). Por decisão do usuário, `NameField`, `EmailField`, `PasswordField` e `SubmitButton` saem de `SignUpFormView.tsx` para diretórios próprios e `SignUpForm.test.tsx` ganha dois casos de "já utilizado" (revisão 6, 68 paths); baseline de complexidade regenerado e revisado por função (+3 Views, −3 helpers, 1 remedida, erros 243→242).
+- 2026-11-07 — Concluído: CI verde no HEAD `ad0f48bb4` do PR #631; Spec, Plan e `evaluation.md` marcados como `completed`.

@@ -2,9 +2,9 @@
 title: Componentes compartilhados e páginas de autenticação alinhados ao design system
 spec: ./spec.md
 spec_revision: 6
-status: ready
+status: completed
 base_commit: cb8460cfca198da0ff3236fc47bd786389ce96c3
-evaluated_commit: d81701c589a40855959b6b7693267c1307a8ed7c
+evaluated_commit: ad0f48bb4
 last_updated_at: 2026-11-07
 ---
 
@@ -172,8 +172,8 @@ Efeito colateral local: o Sign-up criou o usuário `vm03-85af544f@stardust.local
 
 | ID | Verificação | Estado | HEAD / evidência |
 | --- | --- | --- | --- |
-| CI-01 | Checks automatizados | pending | PR https://github.com/JohnPetros/stardust/pull/631, head `feat/design-system-alignment-web-auth`, base `main` (`cb8460cfc`). No HEAD `8c4012d81`, `check-code-complexity` do Web reprovou (`SignUpFormView`, `functionLength=95` contra 70, job 128521314553): ACH-15, corrigido em `d9f201ad7`; check code, check types, check architecture e unit tests do Web passaram. Aguardando os workflows do HEAD `d9f201ad7` |
-| CI-02 | Build | pending | workflow do PR #631 |
+| CI-01 | Checks automatizados | passed | PR https://github.com/JohnPetros/stardust/pull/631, head `feat/design-system-alignment-web-auth`, HEAD `ad0f48bb4` (revisão 6 da Spec): 31 checks aprovados e 1 ignorado (`gh pr checks 631`), incluindo `check-code-complexity`, `Check code`, `Check types`, `Check architecture`, `Unit tests`, os testes de integração da Web e do Server e o `Crew PR review`. Falhas anteriores, todas resolvidas: ACH-15 e ACH-16 (complexidade, HEAD `8c4012d81` e `48d156cc6`) e falhas de memória do Jest nos testes de integração do Server (sem relação com o diff; reexecutadas até passar, sem alteração de código) |
+| CI-02 | Build | passed | Job `Build` aprovado no HEAD `ad0f48bb4` do PR #631 (três workflows; o quarto foi ignorado por regra do workflow) |
 
 ## Warnings e findings
 
@@ -336,6 +336,6 @@ Efeito colateral local: o Sign-up criou o usuário `vm03-85af544f@stardust.local
 
 ## Conclusão
 
-- Estado: `ready`, com PR aberto e CI pendente
-- Entrega: PR #631, branch limpa `feat/design-system-alignment-web-auth` criada de `origin/main` (`cb8460cfc`) com os seis commits da entrega por `cherry-pick`; os 35 commits locais não publicados de `main` e `1380ab9af` (PR #630) ficaram de fora. Dois conflitos mecânicos resolvidos mantendo o nome `studio` de `main` (`scripts/check-test-integrity.mjs` e `documentation/design.md`; a Spec cita `backoffice` no padrão D-11, equivalente ao `studio` do `main` atual). A árvore de `apps/web` e a pasta da Spec são idênticas às avaliadas. Sensores reexecutados na branch limpa com `--base origin/main`: `check:spec-definition`, `check:plan-definition`, `check:spec-implementation` (56 paths) e `check:test-integrity` PASSED; `node --test scripts/tests/check-test-integrity.test.mjs` 14/14.
-- Próxima ação: aguardar `CI-01` e `CI-02` do PR; só então a Spec, o Plan e esta avaliação passam a `completed`. As atualizações preventivas de documentação (ACH-04, ACH-07 a ACH-09, ACH-10 a ACH-14) seguem no branch de tooling `docs/scoped-local-checks`.
+- Estado: `completed`
+- Entrega: PR https://github.com/JohnPetros/stardust/pull/631 (base `main`, head `feat/design-system-alignment-web-auth`), CI verde no HEAD `ad0f48bb4`. Falta a aprovação de review humana, que `main` exige para o merge; nenhum merge ou deploy foi feito.
+- Pendências fora desta Spec: os quatro comentários do `Crew PR review` recusados (`ACH-17`, `ACH-19`) seguem abertos para o revisor; `ACH-06`, `ACH-14` e `ACH-18` são observações pré-existentes; as atualizações preventivas de documentação (`create-spec`, `implement-spec`, `open-pr` e `tooling.md`) estão no branch de tooling `docs/scoped-local-checks`, ainda sem commit.
