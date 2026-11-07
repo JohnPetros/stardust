@@ -6,7 +6,6 @@ para uma futura Spec. Os desenhos não constituem implementação na aplicação
 
 Referências: [canvas](stardust.pen), [tokens de design](../documentation/design.md),
 [PRD do editor de histórias](../documentation/features/lesson/story-editor/prd.md).
-O handoff de onboarding em `design/handoff.md` pertence a outra entrega.
 
 ## 1. Vocabulário e organização da trilha
 

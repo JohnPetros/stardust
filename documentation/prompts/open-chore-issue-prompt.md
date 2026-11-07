@@ -1,5 +1,5 @@
 ---
-name: create-chore-issue
+name: open-chore-issue
 description: Criar uma GitHub chore issue técnica para manutenção sem mudança de comportamento ou relação com PRD.
 ---
 
@@ -7,7 +7,7 @@ description: Criar uma GitHub chore issue técnica para manutenção sem mudanç
 
 Transforme uma tarefa de manutenção técnica em uma única issue coerente de tracking. Chore não é
 produto: não possui PRD, requisito de PRD ou milestone de produto. Não implemente, crie branch,
-commit, PR, Spec ou Plan.
+commit, PR ou Spec.
 
 Escreva o título, o body, as perguntas do Grilling e as justificativas em português do Brasil.
 Preserve identificadores técnicos, paths, URLs e nomes oficiais de labels.
@@ -17,9 +17,9 @@ Preserve identificadores técnicos, paths, URLs e nomes oficiais de labels.
 Use este workflow somente quando o resultado não alterar comportamento de usuário, regras de
 negócio, permissões, tenancy, contratos públicos, semântica de API ou outcome de produto.
 
-- mudança de comportamento ou capacidade → `create-feat-issue`;
-- falha observada → `create-bug-issue`;
-- refatoração estrutural behavior-preserving → `create-refactor-issue`;
+- mudança de comportamento ou capacidade → `open-feat-issue`;
+- falha observada → `open-bug-issue`;
+- refatoração estrutural behavior-preserving → `open-refactor-issue`;
 - manutenção técnica independente de produto → continue neste workflow.
 
 Não reclassifique uma tarefa como chore apenas para evitar esclarecimento de produto ou trabalho
@@ -97,7 +97,7 @@ detalhado, arquitetura nova ou tarefas especulativas.
 Antes de publicar, apresente o título, body, labels, milestone `None`, confirmação de que não há
 relação com PRD e a justificativa técnica. Não inclua sprint nos metadados apresentados. Publique
 somente após aprovação explícita da versão atual. A aprovação autoriza apenas a submissão da issue;
-não autoriza implementação, branch, commit, PR, Spec ou Plan.
+não autoriza implementação, branch, commit, PR ou Spec.
 
 Depois da publicação, retorne número/URL, título, labels, milestone `None` e resumo do resultado
 técnico.

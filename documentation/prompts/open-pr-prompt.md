@@ -11,7 +11,7 @@ Publicar uma entrega coerente do Stardust no GitHub. Use somente `gh`, preserve 
 worktree do usuário e atualize um PR existente da mesma entrega em vez de criar
 uma duplicata.
 
-Esta tarefa não cria Spec, PRD, Plan, Issue ou Report. Apenas consome os
+Esta tarefa não cria Spec, PRD, Issue ou Report. Apenas consome os
 documentos que já existirem e a demanda direta quando a entrega não tiver
 documentação SDD.
 
@@ -20,7 +20,6 @@ documentação SDD.
 Leia, quando existirem e forem aplicáveis:
 
 - Spec ou Bug Report implementado;
-- Plan;
 - `evaluation.md`;
 - diff real da entrega;
 - `documentation/sdd.md`;
@@ -194,11 +193,10 @@ Se essa conformidade falhar, interrompa a publicação e encaminhe a correção 
 `implement-spec`. Não corrija a implementação diretamente dentro do fluxo de
 criação do PR.
 
-Para UI baseada em design, use o bundle de design salvo pela Spec, não o Pencil
-ao vivo. Confirme no `evaluation.md` a comparação independente de cada estado e
-viewport obrigatório, incluindo:
+Para UI baseada em design, use os frames do Penpot `stardust` declarados na Spec.
+Confirme no `evaluation.md` a comparação independente de cada estado e viewport obrigatório, incluindo:
 
-- rota, estado e referência salva ou source node ID;
+- rota, estado e nome do frame de referência;
 - viewport alvo;
 - resultado da validação manual em navegador;
 - captura da implementação ou identificador do artifact;

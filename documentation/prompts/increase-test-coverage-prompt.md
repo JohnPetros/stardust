@@ -7,7 +7,7 @@ description: Aumentar cobertura comportamental no StarDust sem enfraquecer basel
 
 Use este workflow para uma solicitação explícita de aumento ou preservação da
 cobertura automatizada em uma implementação existente do StarDust. Ele é um
-workflow de manutenção de testes; não substitui Issue, PRD, Spec ou Plan.
+workflow de manutenção de testes; não substitui Issue, PRD ou Spec.
 
 Se a mudança necessária alterar comportamento de produto, autorização,
 persistência, contrato público, arquitetura ou resultado de PRD, interrompa o
@@ -40,9 +40,9 @@ qualquer métrica do workspace ficar abaixo do baseline versionado.
 Antes de criar ou modificar testes:
 
 1. Determine se a demanda é somente cobertura. Se houver mudança de produto ou
-   contrato, pare e use `create-issue`/`create-spec`.
+   contrato, pare e use `open-feat-issue`/`create-spec`.
 2. Identifique o workspace e o boundary comportamental dono do código.
-3. Se existir uma Spec ou Plan aberto relacionado, preserve sua revisão,
+3. Se existir uma Spec aberta relacionada, preserve sua revisão,
    paths, RF/CA, assignment e exits; registre a atividade no `evaluation.md`.
 4. Se não houver Contract e a alteração continuar sendo apenas manutenção de
    testes, não invente uma Spec apenas para aumentar um número.
@@ -158,15 +158,15 @@ Cada assignment deve informar:
 - source e test paths exatos que podem ser inspecionados/editados;
 - cenários e gaps de cobertura sob responsabilidade do agente;
 - Rules, fixtures, comandos e evidências esperadas;
-- paths proibidos e proibição de editar Spec, Plan, Evaluation ou Rules.
+- paths proibidos e proibição de editar Spec, Evaluation ou Rules.
 
 A task principal mantém decisões compartilhadas, integra diffs, resolve
 conflitos e executa a validação final. Relatório de subagente não é evidência:
 verifique o diff integrado e repita testes, cobertura e checks.
 
-Quando a cobertura fizer parte de um Plan, mantenha ownership por Builder e um
-`Implementation Reviewer` read-only pareado por Builder. Qualquer correção após
-um veredito invalida a evidência do Builder afetado e exige nova revisão.
+Quando a cobertura fizer parte de uma Spec, use um `Implementation Reviewer`
+read-only. Qualquer correção após um veredito invalida a evidência afetada e
+exige nova revisão.
 
 ## Implementação dos testes
 
@@ -206,8 +206,6 @@ Acrescente conforme os paths e Rules:
 npm run check:architecture
 npm run test:integration
 npm run test:scripts
-npm run check:spec-definition -- <spec>
-npm run check:plan-definition -- <plan>
 npm run check:spec-implementation -- <spec> --base <commit-base>
 ```
 
