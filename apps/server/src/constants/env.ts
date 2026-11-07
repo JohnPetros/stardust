@@ -56,9 +56,9 @@ const envSchema = z
     redisUrl: z.string().url(),
     inngestEventKey: z.string().optional(),
     inngestSigningKey: z.string().optional(),
-    dropboxRefreshToken: z.string(),
-    dropboxAppKey: z.string(),
-    dropboxAppSecret: z.string(),
+    dropboxRefreshToken: z.string().optional(),
+    dropboxAppKey: z.string().optional(),
+    dropboxAppSecret: z.string().optional(),
     discordWebhookUrl: z.string().url(),
     resendApiKey: z.string().optional(),
     resendFromEmail: z.string().email().optional(),
@@ -82,12 +82,10 @@ const envSchema = z
     validateRequiredS3Account(value, context)
     validateRequiredMailpit(value, context)
     validateRequiredTrustedProxies(value, context)
-    validateRequiredSentryDsn(value, context)
   })
 
 type RequiredEnvironment = {
   mode: 'development' | 'production' | 'test'
-  sentryDsn?: string
   s3AccountId?: string
   mailpitApiUrl?: string
   trustedProxyCidrs: string[]
@@ -110,19 +108,6 @@ function validateRequiredS3Account(
       context,
       's3AccountId',
       'S3_ACCOUNT_ID is required in production mode',
-    )
-  }
-}
-
-function validateRequiredSentryDsn(
-  value: RequiredEnvironment,
-  context: z.RefinementCtx,
-): void {
-  if (value.mode === 'production' && !value.sentryDsn) {
-    addRequiredEnvironmentIssue(
-      context,
-      'sentryDsn',
-      'SENTRY_DSN is required in production mode',
     )
   }
 }

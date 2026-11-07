@@ -23,6 +23,7 @@ export class DropboxStorageProvider implements FileStorageProvider {
     ENV.mode === 'development' ? 'dev' : 'prod'
 
   constructor(restClient: RestClient) {
+    DropboxStorageProvider.assertCredentials()
     this.dropbox = new Dropbox()
     this.restClient = restClient
     this.restClient.setBaseUrl(DropboxStorageProvider.BASE_URL)
@@ -150,11 +151,42 @@ export class DropboxStorageProvider implements FileStorageProvider {
     })
   }
 
+  private static assertCredentials(): {
+    refreshToken: string
+    appKey: string
+    appSecret: string
+  } {
+    const { dropboxRefreshToken, dropboxAppKey, dropboxAppSecret } = ENV
+    const missing = [
+      !dropboxRefreshToken && 'DROPBOX_REFRESH_TOKEN',
+      !dropboxAppKey && 'DROPBOX_APP_KEY',
+      !dropboxAppSecret && 'DROPBOX_APP_SECRET',
+    ].filter(Boolean)
+
+    if (
+      missing.length > 0 ||
+      !dropboxRefreshToken ||
+      !dropboxAppKey ||
+      !dropboxAppSecret
+    ) {
+      throw new Error(
+        `Dropbox storage is not configured. Missing environment variables: ${missing.join(', ')}`,
+      )
+    }
+
+    return {
+      refreshToken: dropboxRefreshToken,
+      appKey: dropboxAppKey,
+      appSecret: dropboxAppSecret,
+    }
+  }
+
   private async fetchAccessToken(): Promise<string> {
+    const { refreshToken, appKey, appSecret } = DropboxStorageProvider.assertCredentials()
     this.restClient.setQueryParam('grant_type', 'refresh_token')
-    this.restClient.setQueryParam('refresh_token', ENV.dropboxRefreshToken)
-    this.restClient.setQueryParam('client_id', ENV.dropboxAppKey)
-    this.restClient.setQueryParam('client_secret', ENV.dropboxAppSecret)
+    this.restClient.setQueryParam('refresh_token', refreshToken)
+    this.restClient.setQueryParam('client_id', appKey)
+    this.restClient.setQueryParam('client_secret', appSecret)
     const response = await this.restClient.post<{ access_token: string }>('/oauth2/token')
     return response.body.access_token
   }

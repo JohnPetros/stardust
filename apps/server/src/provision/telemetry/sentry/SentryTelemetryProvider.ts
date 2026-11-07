@@ -7,6 +7,10 @@ import { ENV } from '@/constants'
 
 function initializeSentryClient(): Sentry.NodeClient | undefined {
   if (ENV.mode !== 'production') return
+  if (!ENV.sentryDsn) {
+    console.warn('SENTRY_DSN is not set; errors will only be logged to the console')
+    return
+  }
 
   const sentry = Sentry.init({ dsn: ENV.sentryDsn })
   if (!sentry) throw new AppError('Falha ao inicializar o Sentry')
