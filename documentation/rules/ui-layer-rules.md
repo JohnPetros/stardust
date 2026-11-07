@@ -34,6 +34,14 @@ A camada **UI** implementa a interface (Web e Studio) com foco em usabilidade, a
 - **Regra do Entry Point**: `index.tsx` conecta dependências, chama o hook e
   delega a renderização para a View. Não deve declarar estado, efeitos ou
   handlers de interface, nem reproduzir a árvore visual do widget.
+- **Entry Point como alias da View**: quando o widget não tem hook, context,
+  service nem integração para conectar, o `index.tsx` pode exportar a View com o
+  nome público do widget e as mesmas props, por exemplo
+  `export const AnimatedForm = AnimatedFormView`. Isso é válido e não é
+  violação do Widget Pattern: o `index.tsx` continua sendo o único export
+  público e a `View` continua explícita. Não crie um componente que apenas
+  repassa props para a View. Quando o widget passar a precisar de hook, context
+  ou integração, o alias vira um Entry Point com composição.
 - **Regra da View**: `*View.tsx` recebe props prontas e renderiza. Não acessa
   context/provider, não chama service/RPC e não possui `useEffect` ou lógica de
   orquestração.
@@ -58,6 +66,8 @@ A camada **UI** implementa a interface (Web e Studio) com foco em usabilidade, a
 > - View conter `useEffect` ou chamadas de service.
 > - UI importar `apps/server/**`.
 > - Entry Point concentrar estado, efeitos ou a árvore visual inteira do widget.
+>   O alias `export const X = XView` não entra nesta proibição, pois não declara
+>   nada: apenas reexporta a View.
 > - Componente interno espalhado diretamente em um `index.tsx` de outro widget
 >   quando ele possui lógica, estado ou contrato reutilizável próprio.
 
@@ -208,7 +218,8 @@ Toda mudança frontend deve registrar uma auditoria da Rule no Plan ou no
 Para cada widget, confirme explicitamente:
 
 1. `index.tsx` apenas resolve dependências, conecta Hook + View e compõe o
-   contrato;
+   contrato; em widget sem hook, context ou integração, o alias
+   `export const X = XView` com as mesmas props é aceito;
 2. `*View.tsx` apenas renderiza e não contém effects, services ou contexts;
 3. o Hook usa declaração `function`, recebe dependências por parâmetros e
    concentra a lógica de UI;
