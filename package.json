@@ -46,8 +46,6 @@
     "check:complexity": "node ./scripts/check-complexity.mjs",
     "update:complexity-baseline": "node ./scripts/check-complexity.mjs --update-baseline",
     "check:test-integrity": "node ./scripts/check-test-integrity.mjs",
-    "check:spec-definition": "node ./scripts/check-spec-definition.mjs",
-    "check:plan-definition": "node ./scripts/check-plan-definition.mjs",
     "check:spec-implementation": "node ./scripts/check-spec-implementation.mjs",
     "test:unit": "turbo test:unit",
     "test:integration": "turbo test:integration",
