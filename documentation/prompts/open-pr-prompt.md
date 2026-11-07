@@ -399,7 +399,7 @@ head SHA atual.
   que se repete é tratada como defeito e levada ao usuário.
 - Comentários de review também chegam por `gh` (`gh pr view <numero> --comments` e
   `gh api repos/<owner>/<repo>/pulls/<numero>/comments`); trate-os por
-  `resolve-pr-pendencies`.
+  `resolve-pr-feedback`.
 
 ## CI obrigatório após a publicação
 
@@ -457,4 +457,4 @@ Retorne:
 - estado final dos checks, todos concluídos com sucesso, e reviews.
 
 Não faça merge nem deploy. Comentários de review posteriores são tratados por
-`resolve-pr-pendencies`.
+`resolve-pr-feedback`.
