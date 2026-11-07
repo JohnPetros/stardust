@@ -116,7 +116,10 @@ ficam fora desse pareamento; o resultado JSON lista esses caminhos em
 ou no diretório `tests/` da própria camada: objetos de domínio
 (`domain/entities|structures|aggregates`), use-cases, controllers REST,
 jobs, hooks, widgets/views, páginas/rotas Web, rotas Server, RPC actions e AI
-tools. Um teste fora desses locais aparece em `forbiddenTestPaths` e falha o CI.
+tools. Testes colocalizados de views e hooks de `contexts`
+(`ui/**/contexts/**/tests`) também são locais permitidos; testes dedicados de
+constantes, providers e fixtures continuam rejeitados. Um teste fora desses
+locais aparece em `forbiddenTestPaths` e falha o CI.
 
 ### `apps/server`
 
