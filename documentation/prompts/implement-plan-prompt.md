@@ -35,9 +35,10 @@ Para cada fase, em qualquer modo:
    antes dos sensores e novamente após qualquer correção de path contratado;
    execute `npm run check:spec-definition -- <spec>` e
    `npm run check:plan-definition -- <plan>` após alterações documentais;
-   depois execute `format`, `check:code`, `check:types`, `test:unit` e
-   `check:test-integrity`; execute
-   `check:architecture` e `test:integration` conforme a fase. Não execute build
+   depois execute `format`, `check:code` e `check:types` nos workspaces afetados,
+   `test:unit` com os arquivos afetados e `check:test-integrity`; execute
+   `check:architecture` e `test:integration` (somente arquivos ou cenários afetados)
+   conforme a fase. Não execute build
    a cada fase ou retry;
 9. marque tarefas `verified` somente após o Reviewer pareado e os sensores aplicáveis;
 10. registre a fase como aguardando a avaliação integrada e avance somente após
@@ -121,7 +122,7 @@ quando houver uma interação cross-boundary que não pertença a nenhum Builder
 Execute `npm run check:plan-definition -- <plan>` para confirmar que a definição,
 o estado do ledger e os exits correspondem ao status final antes de encaminhar a conclusão.
 
-Antes de encaminhar para `create-pr` ou `conclude-spec`, faça um gate explícito.
+Antes de encaminhar para `open-pr` ou `conclude-spec`, faça um gate explícito.
 Não conclua nem encaminhe enquanto qualquer pré-condição estiver pendente:
 
 - a Spec deve estar no estado de implementação previsto pelo workflow e ter
@@ -145,7 +146,7 @@ Não conclua nem encaminhe enquanto qualquer pré-condição estiver pendente:
 
 Se o gate falhar, registre a pendência no Plan/evaluation, crie o Builder Fix ou
 a ação de validação apropriada e permaneça no workflow de implementação. Só
-depois do gate atendido encaminhe para `create-pr` e, após o CI verde, para
+depois do gate atendido encaminhe para `open-pr` e, após o CI verde, para
 `conclude-spec`.
 
 Não crie outro papel de implementação, fork ou nova thread para o fechamento.
