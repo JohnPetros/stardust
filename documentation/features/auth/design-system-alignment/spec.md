@@ -1,7 +1,7 @@
 ---
 title: Componentes compartilhados e páginas de autenticação alinhados ao design system
 status: in_progress
-revision: 3
+revision: 4
 source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/issues/620
@@ -45,6 +45,7 @@ scope:
   - documentation/tooling.md
   - scripts/check-test-integrity.mjs
   - scripts/tests/check-test-integrity.test.mjs
+  - .code-multivitals-baseline.json
   - penpot:stardust
 last_updated_at: 2026-11-07
 ---
@@ -62,7 +63,8 @@ aprovados **em toda a Web App**, sem variante opt-in. As rotas de autenticação
 Esta Spec não altera Core, Server, banco, rotas HTTP, contratos de domínio ou autorização. É uma entrega
 exclusivamente de UI (`apps/web`), de tokens de estilo e de documentação, mais a manutenção do arquivo Penpot
 `stardust` já realizada durante a criação desta Spec. A revisão 2 acrescenta um ajuste mínimo no detector
-`check:test-integrity` (D-11), necessário para que o teste do Toast seja alterável.
+`check:test-integrity` (D-11), necessário para que o teste do Toast seja alterável, e a revisão 4, a atualização revisada do baseline de
+complexidade (D-14).
 
 ## Classificação
 
@@ -82,6 +84,7 @@ exclusivamente de UI (`apps/web`), de tokens de estilo e de documentação, mais
 - Atualização de `documentation/design.md`.
 - Ajuste do detector `check:test-integrity` para aceitar testes colocalizados em `ui/**/contexts/**/tests`, com seu teste e
   a descrição em `documentation/tooling.md` (RF-18, D-11).
+- Atualização revisada de `.code-multivitals-baseline.json` com `update:complexity-baseline` (D-14).
 - Referências Penpot: frames desktop redimensionados para 1440 × 900 e componentes `Notificação / Toast`,
   `Diálogos / Diálogo` e `Diálogos / Diálogo de alerta` adicionados ao arquivo `stardust` (já feitos).
 
@@ -300,6 +303,7 @@ páginas de autenticação aos frames.
 | D-11 | Adicionar ao `ALLOWED_TEST_PATH_PATTERNS` de `scripts/check-test-integrity.mjs` um padrão para `apps/(web\|backoffice)/src/ui/**/contexts/**/tests`, com um caso de teste em `scripts/tests/check-test-integrity.test.mjs` e uma frase em `documentation/tooling.md`. Os padrões proibidos (constantes, providers, fixtures) não mudam. | ACH-01: `check:test-integrity` falhou com `ToastView.test.tsx: test file is outside allowed test locations`; o arquivo é pré-existente em `contexts/ToastContext/Toast/tests`, `tooling.md` e `sdd.md` já permitem testes de views colocalizados, e a Spec `supabase-local-development` já alterou o mesmo script e seu teste. Decisão do usuário (opção b). | Reverter o teste e remover a linha `Modify` do Toast, deixando o novo markup sem teste atualizado. | O detector estava mais estreito que a política documentada; o ajuste é mínimo e mantém todas as rejeições existentes. |
 | D-12 | Manter a escala da fonte raiz de `global.css`; a tipografia mobile diverge dos frames por aproximadamente 9,5% (DV-09). | ACH-02: `html { font-size: 94.75% }` até 1080 px e `90.5%` até 720 px; medições em `results-signin-mobile.json`. Decisão do usuário (opção a). | Remover ou escopar a regra para a Web App inteira. | Remover mudaria todas as telas, contra RF-15 e a Issue #620. |
 | D-13 | `Hero` permanece sem alteração; a citação diverge do frame (DV-10). | ACH-03: `components/Hero/index.tsx` está fora do mapa e exigiria extração de View. Decisão do usuário (opção b). | Incluir `Hero` no mapa e restilizar. | Menor escopo; logo e ilustração já coincidem. |
+| D-14 | Atualizar `.code-multivitals-baseline.json` com `npm run update:complexity-baseline` depois de revisar as entradas: Views e componentes extraídos por D-10 e as Views criadas nesta entrega entram como funções novas no baseline, todas em nível de aviso (índice de manutenibilidade de JSX, comprimento de função de 41 a 61 linhas, complexidade ciclomática 12 no `InputView`), nenhuma em nível de erro. | CI-01: `check-code-complexity` do Web reprovou com 22 funções piores que o baseline após o ACH-15; `tooling.md` permite atualizar o baseline após revisão explícita das alterações de complexidade. Decisão do usuário (2026-11-07). | Refatorar as 22 funções para sair do nível de aviso. | As Views só renderizam e não têm lógica a simplificar; refatorar invalidaria Views já comparadas com o Penpot e revisadas. O diff do baseline foi conferido por função: 15 entradas novas, 3 removidas e 12 remedidas (nenhuma em nível de erro), todas em arquivos desta Spec, e o total de erros do baseline caiu de 243 para 242. |
 
 ## Mapa canônico de paths afetados
 
@@ -384,6 +388,12 @@ páginas de autenticação aos frames.
 | `scripts/tests/check-test-integrity.test.mjs` | Modify | caso de teste do detector | Prova que um teste de view em `contexts/**/tests` é aceito e que os testes dedicados de constantes, providers e fixtures seguem rejeitados | Node test runner | este arquivo (`test:scripts`) |
 | `documentation/tooling.md` | Modify | parágrafo de `check:test-integrity` | Registra `contexts/**/tests` entre os locais permitidos de testes de views e hooks | detector | revisão do diff |
 
+### Baseline de complexidade
+
+| Path | Change | Declaration | Contract | Dependencies | Tests |
+| --- | --- | --- | --- | --- | --- |
+| `.code-multivitals-baseline.json` | Modify | entradas das funções dos arquivos desta Spec | Regenerado por `npm run update:complexity-baseline` e revisado por função (D-14); nenhuma entrada fora dos arquivos desta Spec muda | `scripts/check-complexity.mjs` | `check:complexity -w @stardust/web` |
+
 ## Interfaces, ports e assinaturas
 
 Esta entrega não cria nem altera interface, port, repository ou service. As únicas assinaturas novas ou alteradas
@@ -441,8 +451,8 @@ requisitos de fundo animado, spinner e painel Hero são cumpridos pelos arquivos
 ## Sensores aplicáveis
 
 `format`, `check:code`, `check:types`, `test:unit`, `check:architecture`, `test:integration`, `test:coverage` e
-`check:coverage` para `@stardust/web` (respeitando `coverage-baseline.json`), `check:test-integrity` e
-`check:spec-implementation`; `test:scripts` cobre o detector alterado (RF-18).
+`check:coverage` para `@stardust/web` (respeitando `coverage-baseline.json`), `check:complexity` para `@stardust/web`
+(contra `.code-multivitals-baseline.json`), `check:test-integrity` e `check:spec-implementation`; `test:scripts` cobre o detector alterado (RF-18).
 
 # Validation Contract
 
@@ -474,6 +484,7 @@ npm run check:code
 npm run check:types
 npm run test:unit
 npm run check:architecture -w @stardust/web
+npm run check:complexity -w @stardust/web
 npm --workspace @stardust/web run test:integration
 npm run test:coverage -w @stardust/web
 npm run check:coverage -- @stardust/web
@@ -515,6 +526,7 @@ npm run check:spec-implementation -- documentation/features/auth/design-system-a
   regressão.
 - **`documentation/design.md`:** atualizado conforme RF-16 durante a implementação.
 - **`documentation/tooling.md`:** uma frase registra `contexts/**/tests` entre os locais permitidos (RF-18).
+- **`.code-multivitals-baseline.json`:** regenerado e revisado por função após o CI-01 (D-14).
 - **PRDs:** sem alteração; os requisitos de comportamento permanecem.
 - **Penpot `stardust`:** frames desktop de autenticação redimensionados para 1440 × 900; componentes `Toast`,
   `Diálogo` e `Diálogo de alerta` adicionados.
@@ -543,3 +555,5 @@ npm run check:spec-implementation -- documentation/features/auth/design-system-a
 | 2 | 2026-11-04 | Spec Reviewer: revisão 2 avaliada, resultado `clear`, sem findings. Observação não bloqueante adotada: a frase de `tooling.md` cita testes de views e hooks de `contexts`, igual ao alcance do padrão. A Spec retorna a `in_progress` e o Plan é reconciliado para a revisão 2. |
 | 3 | 2026-11-07 | Emenda durante a validação, com decisão do usuário (fundo animado do Sign-up cobrindo a página inteira): DV-01 e DV-12 reescritos; DV-03 ajustado para os 392 px do `Campo de texto`; DV-17 a DV-20 acrescentados após o pacote EV-02 (Penpot × Web) medido em 1440 × 900 e 390 × 844; `SignInPageView.test.tsx` e `ResetPasswordPageView.test.tsx` incluídos no mapa; `AlertDialogViewProps.animation` alinhado a `AnimationName \| null`; linhas da matriz e do mapa do Sign-up atualizadas para o fundo em tela cheia. Sem mudança de requisitos funcionais nem de critérios de aceitação. A Spec volta a `draft` até a revisão do Spec Reviewer. |
 | 3 | 2026-11-07 | Spec Reviewer: revisão 3 avaliada, resultado `clear`, sem findings. Observações não bloqueantes adotadas: pipe escapado na assinatura de `AlertDialogViewProps`, `last_updated_at` atualizado, DV-20 cita os 462 px da Web, histórico e dependências de `SignUpPageView` completados e uma frase na matriz sobre as divergências aprovadas. A Spec retorna a `in_progress` e o Plan é reconciliado para a revisão 3. |
+| 4 | 2026-11-07 | Emenda após o CI-01 (ACH-15 e comparação com o baseline de complexidade), com decisão do usuário (atualizar o baseline após revisão): D-14 e o path `.code-multivitals-baseline.json` (Modify). Mapa com 57 paths. |
+| 4 | 2026-11-07 | Spec Reviewer: revisão 4 avaliada, resultado `clear`, sem findings. Observações não bloqueantes adotadas: `check:complexity` em Sensores e Comandos, item em Escopo incluído, menção no Contexto, no `scope` do front matter e no Alinhamento documental, e D-14 esclarece que nenhuma das 12 entradas remedidas está em nível de erro. |
