@@ -23,6 +23,108 @@ export type SignUpFormViewProps = {
   handleSubmit: (event?: BaseSyntheticEvent) => Promise<void>
 }
 
+type FieldProps = {
+  errorMessage?: string
+  isValid: boolean
+  register: UseFormRegister<SignUpFormFields>
+}
+
+const NameField = ({ errorMessage, isValid, register }: FieldProps) => {
+  return (
+    <AnimatedContainer>
+      <Input
+        testId='name-input'
+        label='Nome de usuário'
+        type='text'
+        icon='lock'
+        placeholder='Digite seu nome de usuário'
+        isActive={isValid}
+        autoFocus
+        errorMessage={
+          errorMessage === 'Nome já utilizado por outro usuário' ? errorMessage : ''
+        }
+        {...register('name')}
+      />
+      {!isValid && (
+        <p
+          data-testid='name-input-error'
+          className='mt-3 text-sm text-theme-text-secondary'
+        >
+          Pelo menos 3 caracteres
+        </p>
+      )}
+    </AnimatedContainer>
+  )
+}
+
+const EmailField = ({ errorMessage, isValid, register }: FieldProps) => {
+  return (
+    <AnimatedContainer>
+      <Input
+        testId='email-input'
+        label='E-mail'
+        type='email'
+        icon='mail'
+        placeholder='Digite seu e-mail'
+        isActive={isValid}
+        errorMessage={
+          errorMessage === 'E-mail já utilizado por outro usuário' ? errorMessage : ''
+        }
+        {...register('email')}
+      />
+      {!isValid && (
+        <p
+          data-testid='email-input-error'
+          className='mt-3 text-sm text-theme-text-secondary'
+        >
+          E-mail válido, por favor
+        </p>
+      )}
+    </AnimatedContainer>
+  )
+}
+
+const PasswordField = ({ isValid, register }: Omit<FieldProps, 'errorMessage'>) => {
+  return (
+    <AnimatedContainer>
+      <div className='space-y-4'>
+        <Input
+          testId='password-input'
+          label='Senha'
+          type='password'
+          icon='lock'
+          placeholder='Digite sua senha'
+          isActive={isValid}
+          {...register('password')}
+        />
+        {!isValid && (
+          <p
+            data-testid='password-input-error'
+            className='text-sm leading-6 tracking-wider text-theme-text-secondary'
+          >
+            Senha deve conter pelo menos 6 caracteres 😙.
+          </p>
+        )}
+      </div>
+    </AnimatedContainer>
+  )
+}
+
+const SubmitButton = ({ isSubmitting }: { isSubmitting: boolean }) => {
+  return (
+    <AnimatedContainer>
+      <Button
+        testId='submit-button'
+        type='submit'
+        className='mt-6'
+        isLoading={isSubmitting}
+      >
+        Criar conta
+      </Button>
+    </AnimatedContainer>
+  )
+}
+
 export const SignUpFormView = ({
   errors,
   isNameValid,
@@ -35,94 +137,22 @@ export const SignUpFormView = ({
   return (
     <form onSubmit={handleSubmit}>
       <div className='space-y-4'>
-        <AnimatedContainer>
-          <Input
-            testId='name-input'
-            label='Nome de usuário'
-            type='text'
-            icon='lock'
-            placeholder='Digite seu nome de usuário'
-            isActive={isNameValid}
-            autoFocus
-            errorMessage={
-              errors.name?.message === 'Nome já utilizado por outro usuário'
-                ? errors.name?.message
-                : ''
-            }
-            {...register('name')}
-          />
-          {!isNameValid && (
-            <p
-              data-testid='name-input-error'
-              className='mt-3 text-sm text-theme-text-secondary'
-            >
-              Pelo menos 3 caracteres
-            </p>
-          )}
-        </AnimatedContainer>
+        <NameField
+          errorMessage={errors.name?.message}
+          isValid={isNameValid}
+          register={register}
+        />
         {isNameValid && (
-          <AnimatedContainer>
-            <Input
-              testId='email-input'
-              label='E-mail'
-              type='email'
-              icon='mail'
-              placeholder='Digite seu e-mail'
-              isActive={isEmailValid}
-              errorMessage={
-                errors.email?.message === 'E-mail já utilizado por outro usuário'
-                  ? errors.email?.message
-                  : ''
-              }
-              {...register('email')}
-            />
-            {!isEmailValid && (
-              <p
-                data-testid='email-input-error'
-                className='mt-3 text-sm text-theme-text-secondary'
-              >
-                E-mail válido, por favor
-              </p>
-            )}
-          </AnimatedContainer>
+          <EmailField
+            errorMessage={errors.email?.message}
+            isValid={isEmailValid}
+            register={register}
+          />
         )}
 
-        {isEmailValid && (
-          <AnimatedContainer>
-            <div className='space-y-4'>
-              <Input
-                testId='password-input'
-                label='Senha'
-                type='password'
-                icon='lock'
-                placeholder='Digite sua senha'
-                isActive={isPasswordValid}
-                {...register('password')}
-              />
-              {!isPasswordValid && (
-                <p
-                  data-testid='password-input-error'
-                  className='text-sm leading-6 tracking-wider text-theme-text-secondary'
-                >
-                  Senha deve conter pelo menos 6 caracteres 😙.
-                </p>
-              )}
-            </div>
-          </AnimatedContainer>
-        )}
+        {isEmailValid && <PasswordField isValid={isPasswordValid} register={register} />}
       </div>
-      {isPasswordValid && (
-        <AnimatedContainer>
-          <Button
-            testId='submit-button'
-            type='submit'
-            className='mt-6'
-            isLoading={isSubmitting}
-          >
-            Criar conta
-          </Button>
-        </AnimatedContainer>
-      )}
+      {isPasswordValid && <SubmitButton isSubmitting={isSubmitting} />}
     </form>
   )
 }
