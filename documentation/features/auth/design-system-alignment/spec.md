@@ -1,7 +1,7 @@
 ---
 title: Componentes compartilhados e páginas de autenticação alinhados ao design system
 status: in_progress
-revision: 4
+revision: 5
 source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/issues/620
@@ -46,6 +46,7 @@ scope:
   - scripts/check-test-integrity.mjs
   - scripts/tests/check-test-integrity.test.mjs
   - .code-multivitals-baseline.json
+  - apps/web/src/ui/global/widgets/components/Dialog/tests
   - penpot:stardust
 last_updated_at: 2026-11-07
 ---
@@ -329,6 +330,8 @@ páginas de autenticação aos frames.
 | `apps/web/src/ui/global/widgets/components/Dialog/DialogAnimationView.tsx` | Create | `DialogAnimationView({ children, className }: DialogAnimationProps)` | Substitui `DialogAnimation.tsx` com o mesmo contrato; superfície, borda `border-quiet` e raio por token; animação inalterada | `motion` | VM-02 |
 | `apps/web/src/ui/global/widgets/components/Dialog/DialogAnimation.tsx` | Remove | `DialogAnimation` | Removido; o alias `Animation` do barrel passa a apontar para `DialogAnimationView` | não se aplica | não se aplica |
 | `apps/web/src/ui/global/widgets/components/Dialog/DialogHeaderView.tsx` | Create | `DialogHeaderView({ children, className }: DialogHeaderProps)` | Substitui `DialogHeader.tsx` com o mesmo contrato; título 18/600, divisor `border-quiet`, fechar 44 × 44 com foco D-04 | Radix Dialog, Phosphor | VM-02 |
+| `apps/web/src/ui/global/widgets/components/Dialog/tests/DialogHeaderView.test.tsx` | Create | `describe('DialogHeaderView')` | Cobre título e conteúdo filho, o botão `Fechar` com o rótulo acessível e o override de `className` | Testing Library, `@radix-ui/react-dialog` | este arquivo |
+| `apps/web/src/ui/global/widgets/components/Dialog/tests/DialogAnimationView.test.tsx` | Create | `describe('DialogAnimationView')` | Cobre o conteúdo filho renderizado, as classes do token da superfície e o override de `className` | Testing Library, `motion` | este arquivo |
 | `apps/web/src/ui/global/widgets/components/Dialog/DialogHeader.tsx` | Remove | `DialogHeader` | Removido; o alias `Header` do barrel passa a apontar para `DialogHeaderView` | não se aplica | não se aplica |
 | `apps/web/src/ui/global/widgets/components/Dialog/index.tsx` | Modify | `export { Dialog as Container, DialogAnimationView as Animation, DialogHeaderView as Header, … }` | Barrel mantém os nomes públicos `Animation` e `Header`; nenhum consumidor muda | `DialogAnimationView`, `DialogHeaderView` | VM-02 |
 | `apps/web/src/ui/global/widgets/components/Dialog/DialogContent.tsx` | Modify | `DialogContent({ children, className, animationClassName }: DialogProps)` | Importa `DialogAnimationView`; contrato e props inalterados | `DialogAnimationView` | VM-02 |
@@ -463,6 +466,7 @@ requisitos de fundo animado, spinner e painel Hero são cumpridos pelos arquivos
 | `ButtonView` | unidade (View) | padrão, `isLoading`, `disabled`, `asChild`, `testId`, override de `className`, classes de foco | CA-03 |
 | `InputView` | unidade (View) | padrão, ícone, erro, ativo, senha com alternador, `testId` | CA-04 |
 | `AlertDialogView` | unidade (View, Radix com mock) | título, corpo, ação, cancelar opcional, animação | CA-05 |
+| `DialogHeaderView` e `DialogAnimationView` | unidade (View) | título e filhos, `Fechar`, classes do token e override de `className` | CA-05 |
 | `TitleView` e `AppMessageView` | unidade (View) | título, texto, ícone, subtítulo e rodapé | CA-14 |
 | `AnimatedFormView` | unidade (View) | casos existentes retargetados para a View | CA-15 |
 | `SignInForm`, `SignUpForm` e `ResetPasswordFormDialog` | unidade de widget de formulário (exceção de `widget-tests-rules.md` §2 para react-hook-form) | suítes existentes preservadas, sem redução de casos ou asserções | CA-15 |
@@ -557,3 +561,4 @@ npm run check:spec-implementation -- documentation/features/auth/design-system-a
 | 3 | 2026-11-07 | Spec Reviewer: revisão 3 avaliada, resultado `clear`, sem findings. Observações não bloqueantes adotadas: pipe escapado na assinatura de `AlertDialogViewProps`, `last_updated_at` atualizado, DV-20 cita os 462 px da Web, histórico e dependências de `SignUpPageView` completados e uma frase na matriz sobre as divergências aprovadas. A Spec retorna a `in_progress` e o Plan é reconciliado para a revisão 3. |
 | 4 | 2026-11-07 | Emenda após o CI-01 (ACH-15 e comparação com o baseline de complexidade), com decisão do usuário (atualizar o baseline após revisão): D-14 e o path `.code-multivitals-baseline.json` (Modify). Mapa com 57 paths. |
 | 4 | 2026-11-07 | Spec Reviewer: revisão 4 avaliada, resultado `clear`, sem findings. Observações não bloqueantes adotadas: `check:complexity` em Sensores e Comandos, item em Escopo incluído, menção no Contexto, no `scope` do front matter e no Alinhamento documental, e D-14 esclarece que nenhuma das 12 entradas remedidas está em nível de erro. |
+| 5 | 2026-11-07 | Emenda após o review do PR #631 (comentário P3 sobre `DialogHeaderView` e `DialogAnimationView` sem teste), por pedido do usuário de resolver as pendências do PR: dois testes de View (`Create`) no mapa e na tabela de testes. Mapa com 59 paths. |
