@@ -1,10 +1,10 @@
 ---
 title: Migração do gerenciador de pacotes de npm para pnpm
 spec: ./spec.md
-spec_revision: 2
+spec_revision: 3
 status: in_progress
 base_commit: ea870e258ba71caf80db559a1460ba29318e5a86
-evaluated_commit: working tree sobre ea870e258 (nada commitado)
+evaluated_commit: commits da migração sobre origin/main ed91d7f02 (rebase; SHA final registrado no PR)
 last_updated_at: 2026-11-07
 ---
 
@@ -126,9 +126,17 @@ Versões diretas: zero diferenças. Transitivos (`name@version`): npm 2438, pnpm
 
 - Spec: alinhada (revisão 2). Plan: não aplicável. Docs vivas: atualizadas conforme o mapa; Rules sem outra mudança.
 
+## Rebase sobre origin/main (revisão 3)
+
+O commit-base `ea870e258` continha 35 commits ausentes de `origin/main` (workspace `apps/backoffice`, `packages/studio`). A pedido do usuário, os oito commits da migração foram reaplicados sobre `origin/main` (`ed91d7f02`), onde o workspace equivalente é `apps/studio`. O `package-lock.json` de `origin/main` foi reimportado (`pnpm import`) e convertido de novo (`pnpm-lock.yaml`, `pnpm-workspace.yaml` com as mesmas overrides e `allowBuilds`); `Dockerfile.studio`, `studio-app-ci.yaml` e a documentação nova de `main` foram convertidos; `crew-app-production-cd.yaml`, `apps/crew/README.md` e `packages/studio/README.md` não existem em `main` e saíram do mapa (Spec revisão 3, sem mudança de comportamento; sem novo Spec Reviewer por ser renomeação mecânica de paths).
+
+Reverificado na árvore rebaseada (Node 24.20.0, pnpm 11.28.11): `pnpm install --frozen-lockfile`; `check:spec-definition` e `check:spec-implementation --base origin/main` (Passed, 70 paths); `check:test-integrity --base origin/main` (Passed); `check:code` (8/8) e `check:architecture`; `check:types` e `test:unit` do Studio (com `VITE_*` fictícios); `test:unit` do Core (638 testes) e do lsp (2); `startNodeServer.test.ts` do Server (Jest `.pnpm`); `build:studio`.
+
+Evidências anteriores de Docker, Playwright (VM-02/VM-03, no workspace então chamado backoffice), `build:web`, Server integration e cobertura permanecem do candidato pré-rebase e ficam `pending` no CI do PR: CI-01/CI-02, CA-08, CA-10, `check:coverage` do Server.
+
 ## Handoff
 
-- Revisão 2; nada commitado; limpeza feita: servidores dev de scratch parados, `crew-db` removido, worktree de base removido. Imagens locais `stardust-pnpm-*` permanecem. Próxima ação: commit/PR com CI; depois `conclude-spec`.
+- Revisão 3 (rebase sobre `origin/main` `ed91d7f02`); migração commitada em 9 commits; limpeza feita: servidores dev de scratch parados, `crew-db` removido, worktree de base removido. Imagens locais `stardust-pnpm-*` permanecem. Próxima ação: commit/PR com CI; depois `conclude-spec`.
 
 ## Conclusão
 
