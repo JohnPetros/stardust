@@ -1,0 +1,47 @@
+'use client'
+
+import type { ReactNode } from 'react'
+import { motion, type Variants } from 'motion/react'
+
+import { Animation } from '@/ui/global/widgets/components/Animation'
+
+const appMessageAnimations: Variants = {
+  hidden: {
+    opacity: 0,
+    y: -150,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+  },
+}
+
+type AppMessageProps = {
+  title: string
+  subtitle: string
+  footer: ReactNode
+}
+
+export const AppMessageView = ({ title, subtitle, footer }: AppMessageProps) => {
+  return (
+    <motion.div
+      variants={appMessageAnimations}
+      initial='hidden'
+      animate='visible'
+      exit='hidden'
+      transition={{
+        type: 'spring',
+        duration: 0.8,
+      }}
+      className='z-50 mx-auto flex w-full max-w-[384px] flex-col items-center space-y-5'
+    >
+      <Animation name='apollo-asking' size={200} hasLoop={true} />
+
+      <h1 className='text-center text-lg font-normal text-theme-text-primary'>{title}</h1>
+      <p className='text-center text-base font-normal text-theme-text-secondary'>
+        {subtitle}
+      </p>
+      {footer}
+    </motion.div>
+  )
+}

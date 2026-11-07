@@ -85,6 +85,26 @@ describe('SignUpPageView', () => {
     )
   })
 
+  it('should render the corrected confirmation copy when isSignUpSuccessfull is true', async () => {
+    isSignUpSuccessfull = true
+
+    render(View())
+
+    const successMessage = screen.getByTestId('sign-up-success-message')
+
+    await waitFor(
+      () => {
+        expect(successMessage).toBeVisible()
+      },
+      { timeout: 2500 },
+    )
+
+    expect(successMessage).toHaveTextContent(
+      'Verifique o seu e-mail para confirmar o seu cadastro 😉.',
+    )
+    expect(successMessage).not.toHaveTextContent('Verique')
+  })
+
   it('should disable ', async () => {
     isSignUpSuccessfull = true
 
