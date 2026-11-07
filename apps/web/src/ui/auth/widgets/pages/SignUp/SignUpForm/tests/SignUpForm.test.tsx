@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import { type Mock, mock } from 'ts-jest-mocker'
 import { SignUpForm } from '..'
 
+import { RestResponse } from '@stardust/core/global/responses'
 import type { ProfileService } from '@stardust/core/profile/interfaces'
 import userEvent from '@testing-library/user-event'
 
@@ -10,6 +11,8 @@ describe('SignUpForm', () => {
   const userEmail = 'fake@email.com'
   const userPassword = '123456'
   let profileService: Mock<ProfileService>
+  const resolveAfterLatency = (response: RestResponse) =>
+    new Promise<RestResponse>((resolve) => setTimeout(() => resolve(response), 50))
   let onSubmit: jest.Mock
 
   beforeEach(() => {
@@ -123,5 +126,53 @@ describe('SignUpForm', () => {
     await userEvent.click(submitButton)
 
     expect(onSubmit).toHaveBeenCalledWith(userEmail, userPassword, userName)
+  })
+
+  it('should render the name already in use error message when the name is taken', async () => {
+    profileService.verifyUserNameInUse.mockImplementation(() =>
+      resolveAfterLatency(
+        new RestResponse({ statusCode: 409, errorMessage: 'Nome em uso' }),
+      ),
+    )
+
+    render(
+      <SignUpForm
+        isSubmitting={false}
+        profileService={profileService}
+        onSubmit={onSubmit}
+      />,
+    )
+
+    const nameInput = screen.getByTestId('name-input')
+    await userEvent.type(nameInput, userName)
+
+    await waitFor(() =>
+      expect(screen.getByText('Nome já utilizado por outro usuário')).toBeVisible(),
+    )
+  })
+
+  it('should render the email already in use error message when the email is taken', async () => {
+    profileService.verifyUserEmailInUse.mockImplementation(() =>
+      resolveAfterLatency(
+        new RestResponse({ statusCode: 409, errorMessage: 'E-mail em uso' }),
+      ),
+    )
+
+    render(
+      <SignUpForm
+        isSubmitting={false}
+        profileService={profileService}
+        onSubmit={onSubmit}
+      />,
+    )
+
+    const nameInput = screen.getByTestId('name-input')
+    await userEvent.type(nameInput, userName)
+    const emailInput = await screen.findByTestId('email-input')
+    await userEvent.type(emailInput, userEmail)
+
+    await waitFor(() =>
+      expect(screen.getByText('E-mail já utilizado por outro usuário')).toBeVisible(),
+    )
   })
 })
