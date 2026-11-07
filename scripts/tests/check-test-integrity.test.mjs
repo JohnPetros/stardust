@@ -200,6 +200,73 @@ test('rejects dedicated tests for constants, providers and fixtures', async () =
   }
 })
 
+test('accepts a colocated view test inside contexts tests and pairs it with the changed source', async () => {
+  const repositoryRoot = await createRepositoryFixture()
+  const sourcePath = 'apps/web/src/ui/global/contexts/ToastContext/Toast/ToastView.tsx'
+  const testPath =
+    'apps/web/src/ui/global/contexts/ToastContext/Toast/tests/ToastView.test.tsx'
+  try {
+    await mkdir(path.dirname(path.join(repositoryRoot, testPath)), { recursive: true })
+    await writeFile(path.join(repositoryRoot, sourcePath), 'export const ToastView = 1\n')
+    await writeFile(
+      path.join(repositoryRoot, testPath),
+      "test('renders the toast', () => expect(true).toBe(true))\n",
+    )
+    await runGit(['add', '.'], repositoryRoot)
+    await runGit(['commit', '-m', 'test: add toast baseline'], repositoryRoot)
+    await writeFile(path.join(repositoryRoot, sourcePath), 'export const ToastView = 2\n')
+    await writeFile(
+      path.join(repositoryRoot, testPath),
+      "test('renders the toast', () => expect(true).toBe(true))\ntest('closes the toast', () => expect(true).toBe(true))\n",
+    )
+    const { stdout } = await execFileAsync(process.execPath, [SCRIPT_PATH, '--json'], {
+      cwd: repositoryRoot,
+    })
+    const result = JSON.parse(stdout)
+    assert.equal(result.status, 'passed')
+    assert.deepEqual(result.forbiddenTestPaths, [])
+    assert.deepEqual(result.errors, [])
+  } finally {
+    await rm(repositoryRoot, { force: true, recursive: true })
+  }
+})
+
+test('still rejects provider, fixture and unrecognized tests inside contexts', async () => {
+  const repositoryRoot = await createRepositoryFixture()
+  const forbiddenTestPaths = [
+    'apps/web/src/ui/global/contexts/ToastContext/tests/ToastProvider.test.tsx',
+    'apps/web/src/ui/global/contexts/ToastContext/tests/fixtures/ToastFixture.test.tsx',
+    'apps/web/src/ui/global/contexts/ToastContext/Toast/ToastView.test.tsx',
+  ]
+  try {
+    await Promise.all(
+      forbiddenTestPaths.map(async (forbiddenTestPath) => {
+        await mkdir(path.dirname(path.join(repositoryRoot, forbiddenTestPath)), {
+          recursive: true,
+        })
+        await writeFile(
+          path.join(repositoryRoot, forbiddenTestPath),
+          "test('value', () => expect(true).toBe(true))\n",
+        )
+      }),
+    )
+    await assert.rejects(
+      execFileAsync(process.execPath, [SCRIPT_PATH, '--json'], {
+        cwd: repositoryRoot,
+      }),
+      (error) => {
+        const result = JSON.parse(error.stdout)
+        assert.equal(result.status, 'failed')
+        assert.deepEqual(result.forbiddenTestPaths, [...forbiddenTestPaths].sort())
+        assert.match(result.errors.join('\n'), /outside allowed test locations/)
+        return true
+      },
+    )
+  } finally {
+    await rm(repositoryRoot, { force: true, recursive: true })
+  }
+})
+
 test('allows RPC action and AI tool test locations', async () => {
   const repositoryRoot = await createRepositoryFixture()
   const allowedSourcePaths = [

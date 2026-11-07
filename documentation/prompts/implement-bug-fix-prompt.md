@@ -102,12 +102,12 @@ reconstruí-los.
 
 ## Detectores e testes
 
-Após qualquer alteração, execute os detectores obrigatórios de `AGENTS.md`:
+Após qualquer alteração, execute os detectores de `AGENTS.md` no escopo afetado:
 
-- `npm run check:code`;
-- `npm run check:types`;
-- `npm run test:unit`;
-- testes específicos do bug e o fluxo Playwright aplicável.
+- `npm run check:code -w <workspace>`;
+- `npm run check:types -w <workspace>`;
+- `npm run test:unit -w <workspace> -- <arquivos-de-teste>`, incluindo o teste de regressão do bug;
+- o fluxo Playwright aplicável, somente nos arquivos afetados.
 
 Se um detector falhar por estado externo, como porta ocupada, preserve o processo alheio, registre
 o bloqueio exato e execute todas as alternativas seguras. Não declare sucesso global com base em

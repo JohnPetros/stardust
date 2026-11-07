@@ -10,7 +10,7 @@
 - Todo Pull Request deve ter título e descrição escritos em PT-BR, inclusive os
   criados por agentes. Mantenha em inglês apenas identificadores técnicos,
   nomes de arquivos, comandos e trechos de código.
-- Siga o contrato de título e body da skill `create-pr`. Não use prefixo de
+- Siga o contrato de título e body da skill `open-pr`. Não use prefixo de
   Conventional Commit nem emoji no título.
 - Os PRs do Dependabot têm o título traduzido automaticamente por
   `.github/workflows/dependabot-pr-title.yaml`.
@@ -195,7 +195,7 @@ backend; não usam a conta real do Studio nem devem apontar para produção.
   npm --workspace @stardust/web run test:integration:install
   ```
 
-- Execute todos os testes de integração:
+- Execute todos os testes de integração, apenas quando o escopo exigir a suíte completa:
 
   ```bash
   npm --workspace @stardust/web run test:integration
@@ -384,16 +384,35 @@ separa falha visual da página de falha de autenticação, CORS ou API.
 - Em falhas intermitentes, capture `console`, `pageerror`, `requestfailed` e
   `response`, mantendo `trace: 'on-first-retry'` para obter o trace sem gerar
   artefatos desnecessários em toda execução.
-- Após alterar a Web App ou seus testes, execute os detectores deste arquivo e
-  também `npm --workspace @stardust/web run test:integration`.
+- Após alterar a Web App ou seus testes, execute os detectores deste arquivo e os
+  cenários Playwright afetados com
+  `npm --workspace @stardust/web run test:integration -- <arquivos>`. A suíte completa
+  só é necessária quando o impacto abrange várias jornadas (rota, sessão ou layout raiz
+  compartilhados) ou quando o usuário a solicita.
 
 ## Detectores de erros
 
-Após fazer qualquer alteração no código, execute os comandos:
+Execute os detectores no escopo da alteração; o CI executa as suítes completas.
+Defina o escopo pelo diff e pelas dependências reais (workspaces alterados e
+consumidores diretos), não por arquivos de nome parecido nem pelo app tocado. Uma
+mudança de apresentação na Web não exige testes do Server, e uma mudança no Server
+sem efeito observável no navegador não exige testes de browser.
 
-- `npm run check:code`
-- `npm run check:types`
-- `npm run test:unit`
+- `npm run check:code -w <workspace>` e `npm run check:types -w <workspace>` para
+  cada workspace alterado e para os consumidores afetados. O typecheck usa o projeto
+  inteiro do workspace; não passe arquivos ao `tsc`.
+- `npm run test:unit -w <workspace> -- <arquivos-de-teste>`, com caminhos verificados
+  no código. Na Web, acrescente
+  `npm --workspace @stardust/web run test:integration -- <arquivos>` somente para as
+  jornadas afetadas.
+- Execute uma suíte completa (`npm run test:unit`, `test:integration`,
+  `test:coverage` e `check:coverage`) somente quando o impacto demonstrado abranger
+  essa suíte, por exemplo tokens, componentes compartilhados, contratos do Core,
+  composição global do Server ou rota, sessão e layout raiz da Web, ou quando o
+  usuário pedir. Registre a dependência e o motivo da ampliação.
+- Uma seleção vazia ou ignorada não é aprovação: confirme a contagem e o resultado.
 
 Em workflows SDD, execute também os sensores aplicáveis definidos em
-`documentation/sdd.md`.
+`documentation/sdd.md` e registre no `evaluation.md` os comandos executados, os
+arquivos e cenários, as contagens e os resultados. Os detalhes de seleção estão em
+`documentation/tooling.md`, seção "Execução local escopada".

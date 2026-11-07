@@ -71,10 +71,10 @@ workflows em sequência:
 
 1. invoque `commit-code` para analisar e criar os commits intencionais da
    entrega; respeite seus gates de staging, agrupamento, mensagem e paths;
-2. invoque `create-pr` para publicar ou atualizar um único PR, solicitar Codex
+2. invoque `open-pr` para publicar ou atualizar um único PR, solicitar Codex
    Review e acompanhar o CI do HEAD recém-criado.
 
-`create-pr` e `commit-code` mantêm seus próprios gates de autorização. Se a
+`open-pr` e `commit-code` mantêm seus próprios gates de autorização. Se a
 autorização não existir, pare antes de qualquer mutação externa e solicite-a ao
 usuário. Se houver alterações staged, alterações fora do escopo ou ambiguidade
 de agrupamento, preserve-as e pare conforme as regras dos workflows chamados.
@@ -88,7 +88,7 @@ resultado e próximo passo em `evaluation.md`.
 
 ### Handoff operacional
 
-`conclude-spec` chama `commit-code` e `create-pr`; não trate esse encadeamento
+`conclude-spec` chama `commit-code` e `open-pr`; não trate esse encadeamento
 como mera referência ou resposta textual. O workflow deve aguardar o resultado
 de cada etapa, repassar o commit/PR atual para a seguinte e registrar falhas,
 URL e SHA em `evaluation.md`. Não faça merge ou deploy sem pedido explícito.

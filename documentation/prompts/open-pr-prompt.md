@@ -1,5 +1,5 @@
 ---
-name: create-pr
+name: open-pr
 description: Publicar ou atualizar um Pull Request do Stardust com rastreabilidade de Issue, PRD e SDD, além de evidências atuais de validação.
 ---
 
@@ -7,7 +7,7 @@ description: Publicar ou atualizar um Pull Request do Stardust com rastreabilida
 
 ## Objetivo
 
-Publicar uma entrega coerente do Stardust no GitHub. Use `gh`, preserve a
+Publicar uma entrega coerente do Stardust no GitHub. Use somente `gh`, preserve a
 worktree do usuário e atualize um PR existente da mesma entrega em vez de criar
 uma duplicata.
 
@@ -378,6 +378,29 @@ Faça `push` da branch preparada e crie ou atualize o PR com `gh`. O workflow do
 Hermes inicia automaticamente depois que os checks aplicáveis passam para o
 head SHA atual.
 
+### Todas as operações do PR usam somente o `gh`
+
+- Crie, atualize, vincule e acompanhe o PR exclusivamente com o GitHub CLI (`gh`):
+  `gh pr create`, `gh pr edit`, `gh pr view`, `gh pr checks`, `gh run view`,
+  `gh run rerun` e `gh api`. Não use as ferramentas `ccd_pr` do app, o navegador,
+  `WebFetch` nem um monitor externo, e não dependa de ele estar ligado.
+- O Auto-fix é sempre aplicado por este fluxo, sem pedir confirmação: depois de criar
+  ou atualizar o PR, acompanhe os checks com `gh`, corrija toda falha dentro do escopo
+  da entrega, faça commit e `push`, e repita até todos os checks ficarem verdes, como
+  descrito na seção seguinte.
+- Leia checks e conclusões com `gh pr checks <numero>` e
+  `gh pr view <numero> --json statusCheckRollup,commits` (o último commit de `commits`
+  é o HEAD publicado). Leia logs com `gh run view <run-id> --log-failed` e, para um job
+  concluído de uma execução ainda em andamento, com
+  `gh api repos/<owner>/<repo>/actions/jobs/<job-id>/logs`.
+- Para uma falha intermitente comprovada (por exemplo, memória esgotada em um job sem
+  relação com o diff), reexecute com `gh run rerun <run-id>`; esta versão do `gh` não
+  aceita `--failed`. Registre cada reexecução e não reexecute indefinidamente: uma falha
+  que se repete é tratada como defeito e levada ao usuário.
+- Comentários de review também chegam por `gh` (`gh pr view <numero> --comments` e
+  `gh api repos/<owner>/<repo>/pulls/<numero>/comments`); trate-os por
+  `resolve-pr-feedback`.
+
 ## CI obrigatório após a publicação
 
 Depois de criar ou atualizar o PR, aguarde obrigatoriamente a conclusão de todos
@@ -434,4 +457,4 @@ Retorne:
 - estado final dos checks, todos concluídos com sucesso, e reviews.
 
 Não faça merge nem deploy. Comentários de review posteriores são tratados por
-`resolve-pr-pendencies`.
+`resolve-pr-feedback`.

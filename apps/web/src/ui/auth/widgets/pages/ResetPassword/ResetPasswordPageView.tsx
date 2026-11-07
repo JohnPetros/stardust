@@ -31,53 +31,60 @@ export const ResetPasswordPageView = ({
   onPasswordReset,
 }: Props) => {
   return (
-    <div className='mx-auto flex h-full w-full max-w-[24rem] items-center justify-center px-6 md:px-0'>
-      {canResetPassword ? (
-        <AppMessage
-          title='Você já pode redefinir sua senha 🚀!'
-          subtitle='clique no botão abaixo para redefiní-la.'
-          footer={
-            <ResetPasswordFormDialog
-              onNewPasswordSubmit={onNewPasswordSubmit}
-              onPasswordReset={onPasswordReset}
-            >
-              <Button className='w-full' testId='open-reset-password-dialog-button'>
-                Redefinir senha
+    <div className='flex h-full w-full items-center justify-center px-[24px]'>
+      <div className='w-full max-w-[384px]'>
+        {canResetPassword ? (
+          <AppMessage
+            title='Você já pode redefinir sua senha 🚀!'
+            subtitle='clique no botão abaixo para redefiní-la.'
+            footer={
+              <ResetPasswordFormDialog
+                onNewPasswordSubmit={onNewPasswordSubmit}
+                onPasswordReset={onPasswordReset}
+              >
+                <Button className='w-full' testId='open-reset-password-dialog-button'>
+                  Redefinir senha
+                </Button>
+              </ResetPasswordFormDialog>
+            }
+          />
+        ) : (
+          <AnimatedForm>
+            <div data-testid='reset-password-request-form' className='contents'>
+              <h1 className='text-2xl font-semibold leading-[1.417] text-theme-text-primary'>
+                Redefina sua senha
+              </h1>
+              <p className='text-sm leading-[1.5] text-theme-text-secondary'>
+                Digite seu e-mail de cadastro e nós enviaremos um link para você redefinir
+                sua senha.
+              </p>
+              <Input
+                testId='email-input'
+                label='E-mail'
+                type='email'
+                icon='mail'
+                value={email}
+                onChange={({ currentTarget }) => onEmailChange(currentTarget.value)}
+                errorMessage={errorMessage}
+                placeholder='seu@email.com'
+                autoFocus
+              />
+              <Button
+                onClick={onEmailSubmit}
+                isLoading={isLoading}
+                testId='submit-button'
+              >
+                Enviar e-mail
               </Button>
-            </ResetPasswordFormDialog>
-          }
-        />
-      ) : (
-        <AnimatedForm>
-          <div data-testid='reset-password-request-form' className='contents'>
-            <h1 className='text-2xl font-semibold text-gray-100'>Redefina sua senha</h1>
-            <p className='text-sm text-gray-300'>
-              Digite seu e-mail de cadastro e nós enviaremos um link para você redefinir
-              sua senha.
-            </p>
-            <Input
-              testId='email-input'
-              label='E-mail'
-              type='email'
-              icon='mail'
-              value={email}
-              onChange={({ currentTarget }) => onEmailChange(currentTarget.value)}
-              errorMessage={errorMessage}
-              placeholder='seu@email.com'
-              autoFocus
-              className='w-[100rem]'
-            />
-            <Button onClick={onEmailSubmit} isLoading={isLoading} testId='submit-button'>
-              Enviar e-mail
-            </Button>
-            <div className='w-max self-center'>
-              <Link href={ROUTES.auth.signIn} testId='sign-in-link'>
-                Já tem uma conta? Faça login
-              </Link>
+              <div className='w-max self-center'>
+                <Link href={ROUTES.auth.signIn} testId='sign-in-link' tone='subtle'>
+                  Já tem uma conta? Faça login
+                </Link>
+              </div>
             </div>
-          </div>
-        </AnimatedForm>
-      )}
+          </AnimatedForm>
+        )}
+      </div>
     </div>
   )
 }

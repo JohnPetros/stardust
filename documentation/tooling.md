@@ -41,8 +41,58 @@ Exemplos de ciclo curto:
 npm run format -- --filter=@stardust/core
 npm run check:code -- --filter=@stardust/core
 npm run check:types -- --filter=@stardust/core
-npm run test:unit -- --filter=@stardust/core
+npm run test:unit -w @stardust/core -- <arquivos-de-teste>
 ```
+
+## Execução local escopada
+
+As suítes completas não são o padrão local. Execute só as verificações que o escopo da
+alteração exige: o comportamento da Spec, as fronteiras de produção alteradas e os
+consumidores diretamente afetados. Determine o impacto pelo diff e pelas dependências
+reais, não por arquivos de nome parecido nem pelo fato de um app ter sido tocado. Uma
+mudança de apresentação na Web não exige testes do Server; uma mudança no Server sem
+efeito observável no navegador não exige testes de browser. Contratos compartilhados
+acrescentam os testes dos consumidores realmente afetados, não todos os módulos.
+
+| Verificação | Durante a implementação | Verificação integrada | Após correção |
+| --- | --- | --- | --- |
+| Unit/componente | Rode os arquivos de teste afetados conforme o comportamento ficar coerente. | Confirme os resultados do comportamento no escopo e dos consumidores afetados. | Rerrode os arquivos que falharam ou foram invalidados. |
+| Integração do Server | Escreva as asserções de fronteira; use feedback unit e estático durante a construção. | Agrupe os arquivos de controller, rota ou migration afetados depois da integração, com fixtures descartáveis. | Rerrode a seleção afetada em sequência. |
+| Integração Web (Playwright) | Escreva os cenários de rota ou jornada afetados; use feedback de componente e estático durante a construção. | Rode somente os arquivos de cenário afetados. | Rerrode os cenários afetados. |
+| Tipos | Verifique depois de mudar tipos públicos, schemas, assinaturas ou consumidores. | Rode o typecheck dos workspaces afetados e dos consumidores, com a configuração real. | Rerrode os projetos produtor e consumidor impactados. |
+| Lint | `check:code` no workspace alterado, sem escrita. | Confirme o lint do escopo. | Reverifique os paths editados. |
+| Complexidade | `check:complexity -w <workspace>` quando a lógica alterada puder piorar o baseline e sempre que criar ou extrair um arquivo de código novo, inclusive Views (limite de erro de 70 linhas por função). | Rode `check:complexity` no workspace afetado antes de publicar: ele compara com o baseline e reprova funções novas em nível de aviso. Revise as entradas por função e, se forem aceitas, regenere com `update:complexity-baseline`. Registre o resultado e os limites. | Reverifique a lógica alterada; nunca relaxe regras nem atualize o baseline só para passar. |
+| Arquitetura e build | `check:architecture` quando dependências, exports ou composição mudarem. | Rode os gates exigidos; o build ocorre na verificação integrada, não a cada edição. | Rerrode os gates cujas entradas ou afirmações mudaram. |
+
+A integração é um checkpoint, não um ritual por edição. Agrupe as seleções relacionadas
+do Server para reaproveitar o setup das fixtures e serialize os comandos que usam
+containers, para que processos independentes não disputem portas e serviços. Checks
+read-only independentes podem rodar em paralelo quando não competem por recursos; geração,
+builds dependentes e a validação das suas saídas permanecem sequenciais.
+
+Use estas formas de comando com caminhos de arquivo verificados no código. Os caminhos são
+relativos ao workspace. Filtros por nome exigem nomes verificados no código; evite globs
+amplos ou buscas por palavra-chave que incluam testes alheios.
+
+| Fronteira | Diretório | Forma do comando |
+| --- | --- | --- |
+| Unit Core, Server, Studio ou Web | Raiz | `npm run test:unit -w @stardust/<workspace> -- <arquivos-de-teste>` |
+| Integração do Server | Raiz | `npm run test:integration -w @stardust/server -- <arquivos-de-teste>`, depois de `npm run db:test -w @stardust/server` |
+| Integração da Web | Raiz | `npm --workspace @stardust/web run test:integration -- <arquivos-de-teste>` |
+
+Os scripts completos (`test:unit`, `test:integration`, `test:coverage` e `check:coverage`)
+são comandos disponíveis, não um checklist local obrigatório. Amplie a seleção só quando o
+impacto demonstrado abranger a suíte, por exemplo tokens e componentes compartilhados da
+Web, contratos do Core, composição global do Server, ou rota, sessão e layout raiz com
+várias jornadas, ou quando o usuário pedir a medição. Registre a dependência e o motivo.
+
+O CI executa de forma independente, para cada PR, os jobs de arquitetura, lint, complexidade,
+tipos, testes com cobertura e ratchet, integração e build de cada app ou pacote, e é a prova
+das suítes completas. Os testes locais escopados e o ratchet de cobertura não o substituem.
+Uma seleção vazia ou ignorada não passa só porque o comando terminou com sucesso: confirme a
+contagem de testes e o resultado. Registre no `evaluation.md` os arquivos e cenários, os
+comandos executados, as contagens, o resultado e o candidato avaliado, mantendo separados
+os resultados de unit, integração do Server e integração da Web.
 
 Os limites do dependency-cruiser ficam em `.dependency-cruiser.cjs`. Altere essa
 configuração somente para representar limites legítimos, nunca para ocultar uma
@@ -116,7 +166,10 @@ ficam fora desse pareamento; o resultado JSON lista esses caminhos em
 ou no diretório `tests/` da própria camada: objetos de domínio
 (`domain/entities|structures|aggregates`), use-cases, controllers REST,
 jobs, hooks, widgets/views, páginas/rotas Web, rotas Server, RPC actions e AI
-tools. Um teste fora desses locais aparece em `forbiddenTestPaths` e falha o CI.
+tools. Testes colocalizados de views e hooks de `contexts`
+(`ui/**/contexts/**/tests`) também são locais permitidos; testes dedicados de
+constantes, providers e fixtures continuam rejeitados. Um teste fora desses
+locais aparece em `forbiddenTestPaths` e falha o CI.
 
 ### `apps/server`
 
@@ -388,6 +441,14 @@ não publica uma porta no host. Para OAuth Google e GitHub, mantenha IDs e
 secrets somente no `.env.local` da raiz e registre nos provedores o callback
 local `http://127.0.0.1:<SUPABASE_API_PORT>/auth/v1/callback` (porta padrão
 `54321`).
+
+O Realtime local exige, para o Web App receber eventos de `postgres_changes`
+(por exemplo o sucesso do Sign-up), um tenant cujo identificador externo é o
+primeiro rótulo do host (`127` para `127.0.0.1`), a tabela `public.users` na
+publicação `supabase_realtime` e `SELECT` em `public.users` para `anon` e
+`authenticated`. Se o WebSocket responder `TenantNotFound` ou `401`, confira
+esses três itens; eles não sobrevivem à recriação do volume do banco. Se `/profile`
+retornar 500 com `Can't resolve 'apexcharts'`, reinstale as dependências na raiz.
 
 `docker compose --env-file .env.local down` preserva os dados locais de
 PostgreSQL e MinIO em `docker/volumes/`. Redis, Auth, PostgREST, Realtime,
