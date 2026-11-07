@@ -34,13 +34,13 @@ cd ./stardust/apps/web
 **Instale as dependências**
 
 ```bash
-npm install
+pnpm install
 ```
 
 **Execute a aplicação em modo de desenvolvimento**
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 > Será aberto o painel de desenvolvimento do Inngest em http://localhost:3000
@@ -48,7 +48,7 @@ npm run dev
 ## Executando os testes
 
 ```bash
-npm run test
+pnpm run test
 ```
 > [!NOTE]
 > Defina as variáveis de ambiente de desenvolvimento no arquivo .env.local
@@ -57,14 +57,14 @@ npm run test
 ## Tooling
 
 - Scripts do workspace `@stardust/web`:
-  - Dev: `npm run dev -w @stardust/web`
-  - Queue (Inngest local): `npm run queue -w @stardust/web`
-  - Build: `npm run build -w @stardust/web`
-  - Start (standalone): `npm run start -w @stardust/web`
-  - Qualidade: `npm run check:code -w @stardust/web` (`lint` + `format`)
-  - Tipos: `npm run check:types -w @stardust/web`
-  - Testes: `npm run test:unit -w @stardust/web` / `npm run test:unit:watch -w @stardust/web`
-  - Tipos do banco (Supabase): `npm run db:types -w @stardust/web`
+  - Dev: `pnpm --filter @stardust/web run dev`
+  - Queue (Inngest local): `pnpm --filter @stardust/web run queue`
+  - Build: `pnpm --filter @stardust/web run build`
+  - Start (standalone): `pnpm --filter @stardust/web run start`
+  - Qualidade: `pnpm --filter @stardust/web run check:code` (`lint` + `format`)
+  - Tipos: `pnpm --filter @stardust/web run check:types`
+  - Testes: `pnpm --filter @stardust/web run test:unit` / `pnpm --filter @stardust/web run test:unit:watch`
+  - Tipos do banco (Supabase): `pnpm --filter @stardust/web run db:types`
 - Referencia geral: `documentation/tooling.md`.
 
 ## Estruturação de pastas

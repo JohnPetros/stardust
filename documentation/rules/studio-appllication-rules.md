@@ -53,13 +53,13 @@ cd ./stardust/apps/studio
 **Instale as dependências**
 
 ```bash
-npm install
+pnpm install
 ```
 
 **Execute a aplicação em modo de desenvolvimento**
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 > Sera aberto o painel de desenvolvimento da aplicacao studio em http://localhost:8000
@@ -67,7 +67,7 @@ npm run dev
 ## Executando os testes
 
 ```bash
-npm run test
+pnpm run test
 ```
 > [!NOTE]
 > Defina as variaveis de ambiente de desenvolvimento no arquivo `.env.local`.
@@ -76,12 +76,12 @@ npm run test
 ## Tooling
 
 - Scripts do workspace `@stardust/studio`:
-  - Dev: `npm run dev -w @stardust/studio`
-  - Build: `npm run build -w @stardust/studio`
-  - Start (static): `npm run start -w @stardust/studio`
-  - Qualidade: `npm run check:code -w @stardust/studio` (`lint` + `format`)
-  - Tipos: `npm run check:types -w @stardust/studio` (inclui `react-router typegen && tsc`)
-  - Testes: `npm run test:unit -w @stardust/studio` / `npm run test:unit:watch -w @stardust/studio`
+  - Dev: `pnpm --filter @stardust/studio run dev`
+  - Build: `pnpm --filter @stardust/studio run build`
+  - Start (static): `pnpm --filter @stardust/studio run start`
+  - Qualidade: `pnpm --filter @stardust/studio run check:code` (`lint` + `format`)
+  - Tipos: `pnpm --filter @stardust/studio run check:types` (inclui `react-router typegen && tsc`)
+  - Testes: `pnpm --filter @stardust/studio run test:unit` / `pnpm --filter @stardust/studio run test:unit:watch`
 - Referencia geral: `documentation/tooling.md`.
 
 ## Estruturação do projeto

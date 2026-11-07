@@ -6,8 +6,13 @@ description: Criar ou revisar uma Spec implementável, compacta ou completa, a p
 # Criar Spec
 
 A task principal conduz a autoria na task atual. Não crie nova thread. Use Spec
-somente para uma entrega relacionada a uma feature. Para manutenção transversal
-sem Contract de feature, use fluxo direto.
+para uma entrega originada de uma issue de feature, `chore` ou `refactor`, de um
+PRD, de um Report ou de uma demanda direta, sempre que um Contract acrescentar
+autoridade, controle de risco ou rastreabilidade (múltiplos fluxos, integrações,
+migrations, CI/CD ou fases). Uma Spec originada de `chore` ou `refactor` não
+exige PRD nem milestone de produto; registre apenas a Issue em `source`. Para
+manutenção pequena e coesa em que um Contract não acrescente nada, use fluxo
+direto.
 
 ## Classificação
 
@@ -227,7 +232,7 @@ contrate edição manual de artefato gerado.
 Os paths devem ser relativos à raiz do repositório, exatos, normalizados e
 verificados no filesystem. Dependências inalteradas são evidência ou
 consumidores, não linhas do mapa. O checker
-`npm run check:spec-implementation -- <spec>` valida esse mapa contra o diff
+`pnpm run check:spec-implementation <spec>` valida esse mapa contra o diff
 Git e falha em duplicidade, classificação inconsistente, path ausente ou
 mudança não entregue. Specs legadas com inventário em prosa ou no formato
 `Camada | Path e estado` devem ser normalizadas antes de serem implementadas;
@@ -307,7 +312,7 @@ necessárias; cada mudança UI declara a estrutura Entry Point/View/Hook; e todo
 os sensores aplicáveis estão nomeados. Se uma exigência só aparecer no Plan ou
 na Evaluation, mova-a para o Contract antes da revisão.
 
-Execute `npm run check:spec-definition -- <spec.md>` antes de alterar o status
+Execute `pnpm run check:spec-definition <spec.md>` antes de alterar o status
 para `open`; corrija todos os erros estruturais reportados antes de ativar o
 Reviewer.
 

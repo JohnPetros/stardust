@@ -113,7 +113,7 @@ está presente e atual.
 
 | Comando | Estado | Evidência |
 | --- | --- | --- |
-| `npm run check:types` | passed | ... |
+| `pnpm run check:types` | passed | ... |
 
 ### Rules e evidência visual
 

@@ -227,7 +227,7 @@ Para cada widget, confirme explicitamente:
 5. a navegação usa `useNavigation` e os componentes base disponíveis foram
    reutilizados.
 
-`npm run check:architecture` não substitui esta auditoria: o sensor valida
+`pnpm run check:architecture` não substitui esta auditoria: o sensor valida
 fronteiras de dependência e não detecta violações do Widget Pattern.
 
 ## Notas

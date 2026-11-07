@@ -63,10 +63,10 @@ testes, migrations ou artefatos gerados e registre o blocker:
   revisão, RF/CA, Rules e exits ser registrada no `plan.md`/`evaluation.md`;
 - a Spec, seus paths, contratos, exclusões e estados são autoridade; código
   existente, screenshot isolado ou teste passando não os substitui;
-- `npm run check:spec-implementation -- <spec> --base <commit-base>` roda antes
+- `pnpm run check:spec-implementation <spec> --base <commit-base>` roda antes
   dos sensores integrados e novamente após qualquer correção que altere, crie,
   gere ou remova path contratado;
-- `npm run check:spec-definition -- <spec>` e `npm run check:plan-definition -- <plan>`
+- `pnpm run check:spec-definition <spec>` e `pnpm run check:plan-definition <plan>`
   devem passar antes de qualquer Builder iniciar;
 - qualquer erro de implementação, teste, browser, rede, console, migration,
   CI ou visual dentro do Contract é correção automática: registre, invalide a
@@ -99,9 +99,9 @@ testes, migrations ou artefatos gerados e registre o blocker:
    usando o bundle salvo mesmo sem Pencil; use Pencil novamente apenas quando o
    Design Contract mudar ou a validação final exigir a fonte canônica.
 5. Inspecione o diff; o Builder não atualiza Spec, Plan ou estado.
-6. Execute `npm run check:spec-implementation -- <spec> --base <commit-base>` antes dos sensores.
-   Execute também `npm run check:spec-definition -- <spec>` e
-   `npm run check:plan-definition -- <plan>` após qualquer alteração documental.
+6. Execute `pnpm run check:spec-implementation <spec> --base <commit-base>` antes dos sensores.
+   Execute também `pnpm run check:spec-definition <spec>` e
+   `pnpm run check:plan-definition <plan>` após qualquer alteração documental.
    A verificação exige o mapa canônico `Path | Change | ...` do Technical Contract.
    Depois execute `format`, `check:code` e `check:types` nos workspaces afetados,
    `test:unit` com os arquivos de teste afetados e `check:test-integrity`; execute

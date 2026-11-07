@@ -80,9 +80,9 @@ Para cada issue `resolved`:
 Execute para cada app afetado e registre o resultado:
 
 ```bash
-npm run test:unit -w @stardust/{APP}
-npm run check:types -w @stardust/{APP}
-npm run check:code -w @stardust/{APP}
+pnpm --filter @stardust/{APP} run test:unit
+pnpm --filter @stardust/{APP} run check:types
+pnpm --filter @stardust/{APP} run check:code
 ```
 
 Se algum comando falhar, **não feche o report** — registre a falha no checklist e mantenha `status: open`.
@@ -161,9 +161,9 @@ Leia a seção **Plano de Correção** do documento (subseções "O que deve ser
 Execute para cada app afetado e registre o resultado:
 
 ```bash
-npm run test:unit -w @stardust/{APP}
-npm run check:types -w @stardust/{APP}
-npm run check:code -w @stardust/{APP}
+pnpm --filter @stardust/{APP} run test:unit
+pnpm --filter @stardust/{APP} run check:types
+pnpm --filter @stardust/{APP} run check:code
 ```
 
 Além dos comandos gerais, verifique:
@@ -217,9 +217,9 @@ Faça as seguintes edições no arquivo:
 
 - [ ] Comportamento incorreto nao ocorre mais
 - [ ] Teste unitario cobre o cenario especifico do bug
-- [ ] `npm run test:unit -w @stardust/{APP}` — passou | falhou
-- [ ] `npm run check:types -w @stardust/{APP}` — passou | falhou
-- [ ] `npm run check:code -w @stardust/{APP}` — passou | falhou
+- [ ] `pnpm --filter @stardust/{APP} run test:unit` — passou | falhou
+- [ ] `pnpm --filter @stardust/{APP} run check:types` — passou | falhou
+- [ ] `pnpm --filter @stardust/{APP} run check:code` — passou | falhou
 
 ### Observacoes
 

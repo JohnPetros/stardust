@@ -8,7 +8,7 @@ description: Verificar se um Plan SDD está íntegro e pronto para implementaç�
 A task principal verifica o `plan.md` depois de sua criação e antes do primeiro
 Builder. Não há agente separado para esse gate.
 
-Antes da análise semântica, execute `npm run check:plan-definition -- <plan.md>`.
+Antes da análise semântica, execute `pnpm run check:plan-definition <plan.md>`.
 Esse único gate cobre definição e estado de execução; um resultado diferente de `passed` é
 `needs_revision` e deve ser corrigido antes do julgamento.
 

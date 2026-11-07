@@ -17,9 +17,10 @@ PRD, Issue, Report ou demanda direta
 → Spec, Plan e Evaluation completed
 ```
 
-SDD não é obrigatório para manutenção que não precise de Contract de feature. A
-task principal classifica a demanda e usa manutenção direta quando uma Spec não acrescenta
-autoridade, risco controlado ou rastreabilidade útil.
+SDD não é obrigatório para manutenção que não precise de Contract. A task principal
+classifica a demanda e usa manutenção direta quando uma Spec não acrescenta autoridade,
+risco controlado ou rastreabilidade útil. Issues `chore` e `refactor` com múltiplos fluxos,
+CI/CD, integrações ou migrations podem originar uma Spec, sem PRD nem milestone de produto.
 
 ## Convenção de abreviações
 
@@ -248,7 +249,7 @@ inferido apenas de imagem precisa de clarificação. O contrato visual detalhado
 escopo, comportamento e validação. Uma Spec íntegra passa diretamente de `draft` para a revisão
 independente do Spec Reviewer, antes de qualquer planejamento.
 
-Antes da revisão, `create-spec` executa `npm run check:spec-definition -- <spec>`.
+Antes da revisão, `create-spec` executa `pnpm run check:spec-definition <spec>`.
 Esse gate valida estrutura, IDs, rastreabilidade e o mapa canônico de paths;
 não substitui o Spec Reviewer.
 
@@ -328,9 +329,9 @@ comparada com a árvore de arquivos, contratos, estados e exclusões antes de ca
 cada correção. Falha de conformance, cenário manual/runtime indisponível ou evidência stale mantém
 o trabalho `in_progress` e bloqueia o avanço para `ready`.
 
-Antes dos sensores e do Reviewer, execute `npm run check:spec-definition -- <spec>` e,
-quando houver Plan, `npm run check:plan-definition -- <plan>`.
-Em seguida, execute `npm run check:spec-implementation -- <spec> --base <commit-base>`.
+Antes dos sensores e do Reviewer, execute `pnpm run check:spec-definition <spec>` e,
+quando houver Plan, `pnpm run check:plan-definition <plan>`.
+Em seguida, execute `pnpm run check:spec-implementation <spec> --base <commit-base>`.
 Esse preflight exige o mapa canônico `Path | Change | ...` do `Technical Contract` e
 confirma que cada `Create`, `Modify`, `Generate` ou `Remove` corresponde ao diff e ao
 filesystem. Ele é estrutural e não substitui testes, sensores, Reviewer ou Evaluation.
@@ -409,9 +410,9 @@ Após alteração de código, execute os detectores de `AGENTS.md` no escopo afe
 `check:code` e `check:types` nos workspaces alterados e nos consumidores, e `test:unit`
 com os arquivos de teste verificados no código. Acrescente `check:architecture`, testes
 de integração (somente os arquivos ou cenários afetados), geração, browser, Supabase Dev e
-build conforme Rules, Spec, paths e risco. Execute `npm run check:test-integrity` depois de
+build conforme Rules, Spec, paths e risco. Execute `pnpm run check:test-integrity` depois de
 adicionar, mover ou remover testes. O ratchet de cobertura
-(`npm run test:coverage -w <workspace>` e `npm run check:coverage -- <workspace>`) mede o
+(`pnpm run test:coverage -w <workspace>` e `pnpm run check:coverage <workspace>`) mede o
 workspace inteiro e roda no CI de `@stardust/core`, `@stardust/server`, `@stardust/studio` e
 `@stardust/web`; execute-o localmente apenas quando o impacto demonstrado abranger o
 workspace, quando a Spec o exigir ou quando o usuário pedir. Os checks falham se qualquer

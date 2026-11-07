@@ -111,9 +111,9 @@ viewport ou extensão suplementar, a ausência da evidência exigida mantém a E
 
 | Comando                                 | Estado | Evidência                                 |
 | --------------------------------------- | ------ | ----------------------------------------- |
-| `npm run check:code`                    | passed | saída resumida                            |
-| `npm run test:coverage -w <workspace>`  | passed | resumo por métrica e workspace            |
-| `npm run check:coverage -- <workspace>` | passed | baseline comparado e resultado do ratchet |
+| `pnpm run check:code`                    | passed | saída resumida                            |
+| `pnpm --filter <workspace> run test:coverage`  | passed | resumo por métrica e workspace            |
+| `pnpm run check:coverage <workspace>` | passed | baseline comparado e resultado do ratchet |
 
 ## Checks e build do CI
 

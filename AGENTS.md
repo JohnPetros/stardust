@@ -66,9 +66,9 @@
 
 - Use o Playwright CLI para exploração, inspeção visual, diagnóstico e tarefas
   pontuais em um navegador real, além de validações formais e testes repetíveis.
-- Para testes versionados, use `npm --workspace @stardust/web run test:integration -- <arquivo>`
-  ou `npm exec playwright -- test ...` a partir de `apps/web`.
-- Para uma sessão interativa, use `npm exec playwright -- codegen <url>` a partir de
+- Para testes versionados, use `pnpm --filter @stardust/web run test:integration <arquivo>`
+  ou `pnpm exec playwright test ...` a partir de `apps/web`.
+- Para uma sessão interativa, use `pnpm exec playwright codegen <url>` a partir de
   `apps/web` quando isso ajudar a descobrir locators ou reproduzir um fluxo. Não use
   ferramentas alternativas de browser automation neste projeto.
 
@@ -77,7 +77,7 @@
 - Use o **Supabase local** para desenvolvimento e para validar a aplicação e
   as integrações do Server.
 - Antes dos testes de integração do Server, prepare o stack com:
-  `npm run db:test -w @stardust/server`.
+  `pnpm --filter @stardust/server run db:test`.
 - Use o MCP **Supabase Dev** somente quando a tarefa exigir validação ou
   alteração do projeto remoto; o banco remoto não substitui a validação local
   do stack da aplicação.
@@ -96,11 +96,11 @@ declarar a aplicação funcional.
 - Inicie o servidor local e o Studio em terminais separados:
 
   ```bash
-  npm --workspace @stardust/server run dev
+  pnpm --filter @stardust/server run dev
   ```
 
   ```bash
-  npm --workspace @stardust/studio run dev
+  pnpm --filter @stardust/studio run dev
   ```
 
 - O servidor de desenvolvimento do projeto usa `http://localhost:3334`.
@@ -192,13 +192,13 @@ backend; não usam a conta real do Studio nem devem apontar para produção.
 - Instale o navegador, se necessário:
 
   ```bash
-  npm --workspace @stardust/web run test:integration:install
+  pnpm --filter @stardust/web run test:integration:install
   ```
 
 - Execute todos os testes de integração, apenas quando o escopo exigir a suíte completa:
 
   ```bash
-  npm --workspace @stardust/web run test:integration
+  pnpm --filter @stardust/web run test:integration
   ```
 
 - Para investigar uma falha, use `test:integration:debug` ou
@@ -282,12 +282,12 @@ Para verificar visualmente uma página real com o Playwright, fora de
 
 ```bash
 # terminal 1
-npm --workspace @stardust/server run dev
+pnpm --filter @stardust/server run dev
 ```
 
 ```bash
 # terminal 2
-npm --workspace @stardust/web run dev
+pnpm --filter @stardust/web run dev
 ```
 
 Depois, no navegador Playwright:
@@ -386,7 +386,7 @@ separa falha visual da página de falha de autenticação, CORS ou API.
   artefatos desnecessários em toda execução.
 - Após alterar a Web App ou seus testes, execute os detectores deste arquivo e os
   cenários Playwright afetados com
-  `npm --workspace @stardust/web run test:integration -- <arquivos>`. A suíte completa
+  `pnpm --filter @stardust/web run test:integration <arquivos>`. A suíte completa
   só é necessária quando o impacto abrange várias jornadas (rota, sessão ou layout raiz
   compartilhados) ou quando o usuário a solicita.
 
@@ -398,14 +398,14 @@ consumidores diretos), não por arquivos de nome parecido nem pelo app tocado. U
 mudança de apresentação na Web não exige testes do Server, e uma mudança no Server
 sem efeito observável no navegador não exige testes de browser.
 
-- `npm run check:code -w <workspace>` e `npm run check:types -w <workspace>` para
+- `pnpm run check:code -w <workspace>` e `pnpm run check:types -w <workspace>` para
   cada workspace alterado e para os consumidores afetados. O typecheck usa o projeto
   inteiro do workspace; não passe arquivos ao `tsc`.
-- `npm run test:unit -w <workspace> -- <arquivos-de-teste>`, com caminhos verificados
+- `pnpm run test:unit -w <workspace> -- <arquivos-de-teste>`, com caminhos verificados
   no código. Na Web, acrescente
-  `npm --workspace @stardust/web run test:integration -- <arquivos>` somente para as
+  `pnpm --filter @stardust/web run test:integration <arquivos>` somente para as
   jornadas afetadas.
-- Execute uma suíte completa (`npm run test:unit`, `test:integration`,
+- Execute uma suíte completa (`pnpm run test:unit`, `test:integration`,
   `test:coverage` e `check:coverage`) somente quando o impacto demonstrado abranger
   essa suíte, por exemplo tokens, componentes compartilhados, contratos do Core,
   composição global do Server ou rota, sessão e layout raiz da Web, ou quando o

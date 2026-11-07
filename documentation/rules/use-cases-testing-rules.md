@@ -109,7 +109,7 @@ const dto = UsersFaker.fakeDto(); // Retorna um DTO
 - Runner de testes: Jest.
 - Mocks type-safe: `ts-jest-mocker`.
 - Comandos:
-  - Pacote core: `npm run test:unit -w @stardust/core`.
-  - Global (Turbo): `npm run test`.
-- Tipos e qualidade (antes de abrir PR): `npm run check:types -w @stardust/core` e `npm run check:code -w @stardust/core`.
+  - Pacote core: `pnpm --filter @stardust/core run test:unit`.
+  - Global (Turbo): `pnpm run test`.
+- Tipos e qualidade (antes de abrir PR): `pnpm --filter @stardust/core run check:types` e `pnpm --filter @stardust/core run check:code`.
 - Referencia geral: `documentation/tooling.md`.

@@ -257,8 +257,8 @@ test.describe('/auth/sign-up', () => {
 
 ## Tooling
 
-- Workspace web: `npm run test:unit -w @stardust/web`
-- Suite Playwright web: `npm run test:integration -w @stardust/web`
-- Qualidade local: `npm run check:types -w @stardust/web` e
-  `npm run check:code -w @stardust/web`
+- Workspace web: `pnpm --filter @stardust/web run test:unit`
+- Suite Playwright web: `pnpm --filter @stardust/web run test:integration`
+- Qualidade local: `pnpm --filter @stardust/web run check:types` e
+  `pnpm --filter @stardust/web run check:code`
 - Referencia geral: `documentation/tooling.md`

@@ -88,7 +88,7 @@ usar `ACH-*`; checks automatizados devem usar `CI-*`.
 Inclua somente depois de finding, retry, blocker ou evento material. O Plan possui status e
 próxima ação; detalhes de comandos e resultados pertencem a `evaluation.md`.
 
-Antes de salvar, execute `npm run check:plan-definition -- <plan.md>` e corrija todos os
+Antes de salvar, execute `pnpm run check:plan-definition <plan.md>` e corrija todos os
 erros estruturais. Em seguida, verifique revisão, DAG acíclico, RF/CA completos, paths não sobrepostos,
 Rules válidas, exits executáveis e handoff para `implement-spec`. A task principal executa esse
 gate sem ativar um agente separado.

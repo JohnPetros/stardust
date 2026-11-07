@@ -21,14 +21,14 @@ A task principal conduz o fechamento na task atual. Não crie nova thread.
 1. Confirme que os sensores locais e o preflight estão registrados em
    `evaluation.md`, incluindo `test:coverage` e `check:coverage` para Core,
    Server, Studio ou Web quando aplicável.
-2. Execute `npm run check:spec-definition -- <spec>` contra a revisão final. Um
+2. Execute `pnpm run check:spec-definition <spec>` contra a revisão final. Um
    resultado diferente de `passed` impede a conclusão.
-3. Se houver Plan, execute `npm run check:plan-definition -- <plan>` contra a
+3. Se houver Plan, execute `pnpm run check:plan-definition <plan>` contra a
    definição e o estado final. Um resultado diferente de `passed` impede a conclusão.
-4. Execute `npm run check:spec-implementation -- <spec> --base <commit-base>`
+4. Execute `pnpm run check:spec-implementation <spec> --base <commit-base>`
    contra o HEAD final e registre a saída em `evaluation.md`. Um resultado
    diferente de `passed` impede a conclusão.
-5. Execute `npm run check:test-integrity -- --base <commit-base>` contra o HEAD
+5. Execute `pnpm run check:test-integrity --base <commit-base>` contra o HEAD
    final e registre a saída em `evaluation.md`. Um resultado diferente de
    `passed` impede a conclusão.
 6. Atualize `evaluation.md` com a matriz de evidências reais, status de warnings

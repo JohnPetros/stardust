@@ -33,14 +33,14 @@ cd ./stardust/apps/server
 **Instale as dependencias**
 
 ```bash
-npm install
+pnpm install
 ```
 
 **Execute a aplicacao em modo de desenvolvimento**
 
 ```bash
 docker compose up -d redis inngest
-npm run dev
+pnpm run dev
 ```
 
 > O servidor HTTP inicia, por padrao, em `http://localhost:3333` quando `PORT` nao esta definida. O runtime local do Inngest deve ser iniciado via `docker compose`, fica disponivel em `http://127.0.0.1:8288` e faz discovery em `http://host.docker.internal:3333/inngest`.
@@ -48,7 +48,7 @@ npm run dev
 ## Executando os testes
 
 ```bash
-npm run test
+pnpm run test
 ```
 
 > [!NOTE]
@@ -58,15 +58,15 @@ npm run test
 ## Tooling
 
 - Scripts do workspace `@stardust/server`:
-  - Dev (HTTP): `npm run dev -w @stardust/server`
-  - Dev (HTTP, alias explicito): `npm run dev:server -w @stardust/server`
+  - Dev (HTTP): `pnpm --filter @stardust/server run dev`
+  - Dev (HTTP, alias explicito): `pnpm --filter @stardust/server run dev:server`
   - Inngest local: `docker compose up -d ingest`
-  - Build: `npm run build -w @stardust/server`
-  - Producao: `npm run prod -w @stardust/server`
-  - Qualidade: `npm run check:code -w @stardust/server` (`lint` + `format`)
-  - Tipos: `npm run check:types -w @stardust/server`
-  - Testes: `npm run test:unit -w @stardust/server`
-  - Banco (Supabase CLI): `npm run db:local|db:pull|db:push|db:types -w @stardust/server`
+  - Build: `pnpm --filter @stardust/server run build`
+  - Producao: `pnpm --filter @stardust/server run prod`
+  - Qualidade: `pnpm --filter @stardust/server run check:code` (`lint` + `format`)
+  - Tipos: `pnpm --filter @stardust/server run check:types`
+  - Testes: `pnpm --filter @stardust/server run test:unit`
+  - Banco (Supabase CLI): `pnpm --filter @stardust/server run <db:local|db:pull|db:push|db:types>`
 - Referencia geral: `documentation/tooling.md`.
 
 ## Supabase CLI

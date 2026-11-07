@@ -31,10 +31,10 @@ Para cada fase, em qualquer modo:
    Builder e aguarde o veredito antes de marcar a tarefa `verified`;
 7. inspecione e integre o diff; para UI, use o handoff como contrato offline e compare cada
    node canônico com a Web no mesmo viewport/estado antes de considerar a tarefa `verified`;
-8. execute `npm run check:spec-implementation -- <spec> --base <commit-base>`
+8. execute `pnpm run check:spec-implementation <spec> --base <commit-base>`
    antes dos sensores e novamente após qualquer correção de path contratado;
-   execute `npm run check:spec-definition -- <spec>` e
-   `npm run check:plan-definition -- <plan>` após alterações documentais;
+   execute `pnpm run check:spec-definition <spec>` e
+   `pnpm run check:plan-definition <plan>` após alterações documentais;
    depois execute `format`, `check:code` e `check:types` nos workspaces afetados,
    `test:unit` com os arquivos afetados e `check:test-integrity`; execute
    `check:architecture` e `test:integration` (somente arquivos ou cenários afetados)
@@ -119,7 +119,7 @@ Após todas as fases, execute sensores integrados e o preflight. Consolide em
 Architecture, diff integrado, resultados dos sensores, auditoria UI e
 evidências Pencil/Playwright. Uma revisão adicional integrada só pode ser criada
 quando houver uma interação cross-boundary que não pertença a nenhum Builder.
-Execute `npm run check:plan-definition -- <plan>` para confirmar que a definição,
+Execute `pnpm run check:plan-definition <plan>` para confirmar que a definição,
 o estado do ledger e os exits correspondem ao status final antes de encaminhar a conclusão.
 
 Antes de encaminhar para `open-pr` ou `conclude-spec`, faça um gate explícito.
