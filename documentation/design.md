@@ -1092,7 +1092,7 @@ implementation still requires a deliberate migration.
 - The `stardust-dark` palette and the standard geometry are migrated into the Web
   App as `theme-*` tokens and are consumed by the shared `Button`, `Input`,
   `ErrorMessage`, `Dialog`, `AlertDialog` and Toast. The light palettes, the Orbit,
-  Sakura and Glacial families, and Backoffice are not migrated.
+  Sakura and Glacial families, and Studio are not migrated.
 - Mixed palettes are accepted as a transition (Issue #620): Web App screens that do
   not come from the shared components keep their historical `gray`, `green` and
   `red` classes, so a screen can combine `theme-*` components with legacy values
