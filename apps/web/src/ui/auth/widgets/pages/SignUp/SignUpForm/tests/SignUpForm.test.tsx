@@ -40,6 +40,44 @@ describe('SignUpForm', () => {
     expect(nameInputError).toBeVisible()
   })
 
+  it('should not render the schema validation message in the name error slot', async () => {
+    render(
+      <SignUpForm
+        isSubmitting={false}
+        profileService={profileService}
+        onSubmit={onSubmit}
+      />,
+    )
+
+    await userEvent.type(screen.getByTestId('name-input'), '1')
+
+    await waitFor(() => expect(screen.getByTestId('name-input-error')).toBeVisible())
+    expect(screen.getByTestId('name-input-error')).toHaveTextContent(
+      'Pelo menos 3 caracteres',
+    )
+    expect(screen.queryByText('Nome deve conter pelo menos 3 caracteres')).toBeNull()
+  })
+
+  it('should not render the schema validation message in the email error slot', async () => {
+    render(
+      <SignUpForm
+        isSubmitting={false}
+        profileService={profileService}
+        onSubmit={onSubmit}
+      />,
+    )
+
+    await userEvent.type(screen.getByTestId('name-input'), userName)
+    const emailInput = await screen.findByTestId('email-input')
+    await userEvent.type(emailInput, 'abc')
+
+    await waitFor(() => expect(screen.getByTestId('email-input-error')).toBeVisible())
+    expect(screen.getByTestId('email-input-error')).toHaveTextContent(
+      'E-mail válido, por favor',
+    )
+    expect(screen.queryByText('Informe um e-mail válido')).toBeNull()
+  })
+
   it('should render email input only when name input is valid', async () => {
     render(
       <SignUpForm
