@@ -103,14 +103,21 @@ testes, migrations ou artefatos gerados e registre o blocker:
    Execute também `npm run check:spec-definition -- <spec>` e
    `npm run check:plan-definition -- <plan>` após qualquer alteração documental.
    A verificação exige o mapa canônico `Path | Change | ...` do Technical Contract.
-   Depois execute `format`, `check:code`, `check:types`, `test:unit` e
-   `check:test-integrity`; para Core, Server, Studio e Web,
-   execute também `test:coverage` e `check:coverage`; execute
-   `check:architecture` e `test:integration` quando aplicáveis. Para frontend,
+   Depois execute `format`, `check:code` e `check:types` nos workspaces afetados,
+   `test:unit` com os arquivos de teste afetados e `check:test-integrity`; execute
+   `check:architecture` e `test:integration` (somente arquivos ou cenários afetados)
+   quando aplicáveis, conforme "Execução local escopada" em `documentation/tooling.md`.
+   Cobertura/ratchet e suítes completas ficam para o CI, salvo impacto demonstrado ou
+   pedido do usuário. Para frontend,
    faça também a auditoria de `ui-layer-rules.md` e a comparação independente
    dos nodes Pencil aplicáveis com a Web real, no mesmo viewport e estado.
    Preserve o design canônico; qualquer simplificação, substituição, adição ou
-   divergência não aprovada é finding bloqueante. Build não é necessário neste
+   divergência não aprovada é finding bloqueante. Todo Builder registra, para cada
+   mudança visual, o nó e o valor do frame que a sustenta (ou a divergência
+   proposta). Como o Reviewer é read-only e não chama o MCP do Penpot, a task
+   principal entrega a ele o pacote de exports dos frames aplicáveis e as
+   capturas da Web no HEAD final; correções posteriores tornam essas capturas
+   `stale`. Build não é necessário neste
    ciclo.
 7. Ative um `Implementation Reviewer Direct` read-only, pareado exclusivamente
    com o Builder Direct. Envie
@@ -124,7 +131,7 @@ testes, migrations ou artefatos gerados e registre o blocker:
    falhas iguais, escale ao usuário.
 9. Execute o preflight integrado e crie/atualize `evaluation.md` com evidências
     reais, resultado do Reviewer, warnings, findings, decisões e lições.
-10. Encaminhe para `create-pr` somente com o Reviewer pareado aceito e o `evaluation.md`
+10. Encaminhe para `open-pr` somente com o Reviewer pareado aceito e o `evaluation.md`
     completo; depois do CI verde, use `conclude-spec`.
 
 ## Builder activation gate
@@ -236,9 +243,10 @@ sensor passou.
 Após integrar o candidato final:
 
 1. execute o `check:spec-implementation` para a revisão exata;
-2. execute `format`, `check:code`, `check:types`, `test:unit`,
-   `check:test-integrity`, cobertura/ratchet e sensores de Architecture,
-   integração, browser e Supabase Dev conforme os paths;
+2. execute `format`, `check:code` e `check:types` nos workspaces afetados, `test:unit`
+   com os arquivos afetados, `check:test-integrity` e os sensores de Architecture,
+   integração, browser e Supabase Dev conforme os paths; cobertura/ratchet e suítes
+   completas só com impacto demonstrado ou pedido do usuário (o CI as executa);
 3. confirme evidências manuais autenticadas da Web App/Studio, quando aplicável,
    incluindo console, pageerror, requestfailed e respostas HTTP;
 4. execute o Reviewer pareado aplicável e resolva todos os findings bloqueantes;

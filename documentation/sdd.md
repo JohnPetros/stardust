@@ -13,7 +13,7 @@ PRD, Issue, Report ou demanda direta
 → sensores integrados + validação manual real
 → Implementation Reviewer por Builder (Direct sem Plan ou pareado por fase/tarefa)
 → check:spec-definition + check:plan-definition + check-spec-implementation + check:test-integrity + evaluation.md ready
-→ conclude-spec → commit-code → create-pr → CI do HEAD do PR
+→ conclude-spec → commit-code → open-pr → CI do HEAD do PR
 → Spec, Plan e Evaluation completed
 ```
 
@@ -385,7 +385,7 @@ conformance atual e nenhuma evidência bloqueante. Com autorização para commit
 
 1. repete preflight e conformance no candidato atual;
 2. invoca `commit-code` para commits intencionais;
-3. invoca `create-pr` para criar ou atualizar um PR ready-for-review;
+3. invoca `open-pr` para criar ou atualizar um PR ready-for-review;
 4. aguarda cada workflow aplicável no HEAD atual do PR;
 5. registra nome, resultado, URL e SHA em Evaluation;
 6. em falha, roteia imediatamente para `implement-spec` ou amendment, republica e repete CI;
@@ -405,13 +405,18 @@ mesma Spec; após merge, defeito usa Bug Report e comportamento novo usa uma cha
 
 ## Sensores oficiais
 
-Após alteração de código, execute os detectores obrigatórios de `AGENTS.md`:
-`npm run check:code`, `npm run check:types` e `npm run test:unit`. Acrescente
-`check:architecture`, testes de integração, geração, browser, Supabase Dev e build conforme
-Rules, Spec, paths e risco. Para `@stardust/core`, `@stardust/server`, `@stardust/studio` e
-`@stardust/web`, execute também `npm run test:coverage -w <workspace>` e
-`npm run check:coverage -- <workspace>` e `npm run check:test-integrity`; os checks falham se qualquer métrica ficar abaixo do
-baseline versionado em `coverage-baseline.json`. O `check:test-integrity` exige pareamento
+Após alteração de código, execute os detectores de `AGENTS.md` no escopo afetado:
+`check:code` e `check:types` nos workspaces alterados e nos consumidores, e `test:unit`
+com os arquivos de teste verificados no código. Acrescente `check:architecture`, testes
+de integração (somente os arquivos ou cenários afetados), geração, browser, Supabase Dev e
+build conforme Rules, Spec, paths e risco. Execute `npm run check:test-integrity` depois de
+adicionar, mover ou remover testes. O ratchet de cobertura
+(`npm run test:coverage -w <workspace>` e `npm run check:coverage -- <workspace>`) mede o
+workspace inteiro e roda no CI de `@stardust/core`, `@stardust/server`, `@stardust/studio` e
+`@stardust/web`; execute-o localmente apenas quando o impacto demonstrado abranger o
+workspace, quando a Spec o exigir ou quando o usuário pedir. Os checks falham se qualquer
+métrica ficar abaixo do baseline versionado em `coverage-baseline.json`. O
+`check:test-integrity` exige pareamento
 somente para controllers, jobs, use-cases, entidades/structures/aggregates,
 hooks, views/widgets, Web routes (`app/page|layout|route`) e Server routes
 (`tests/routes`), RPC actions e AI tools; barrels, services/repositories genéricos,
@@ -420,5 +425,11 @@ listados no resultado JSON. Testes devem ficar em `scripts/tests/**` ou em
 `tests/` co-localizado com o alvo permitido (domínio, use-case, controller,
 job, hook, widget/view, rota Web/Server, RPC action ou AI tool); os demais
 falham com `forbiddenTestPaths`. `@stardust/lsp`, `@stardust/validation`,
-`@stardust/email` está fora desse quality ratchet. `format`
+`@stardust/email` está fora desse quality ratchet.
+
+Registre no `evaluation.md` os comandos exatos, os arquivos e cenários, as contagens, o resultado
+e o candidato avaliado. Uma seleção vazia ou ignorada não passa só porque o comando terminou com
+sucesso. Revisão, continuação e conclusão reutilizam a evidência não invalidada: um novo commit
+ou uma edição do ledger sozinhos não justificam outra execução. Preserve o resultado original de
+falhas e de execuções completas; uma correção focada prova apenas o escopo que executou. `format`
 aplica formatação, mas não prova comportamento.

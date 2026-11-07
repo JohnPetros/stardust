@@ -212,14 +212,16 @@ seguindo sempre esta ordem nas duas primeiras colunas:
 ```md
 | Path | Change | Declaration | Contract | Dependencies | Tests |
 | --- | --- | --- | --- | --- | --- |
-| `packages/core/src/...` | `Modify` | `<símbolo exato>` | `<garantia de runtime>` | `<colaboradores>` | `<fronteira de teste>` |
+| `packages/core/src/...` | Modify | `<símbolo exato>` | `<garantia de runtime>` | `<colaboradores>` | `<fronteira de teste>` |
 ```
 
 As colunas depois de `Change` podem variar conforme a camada, mas `Path` deve
 ser o primeiro campo e `Change` o segundo. Cada path afetado aparece exatamente
 uma vez em todo o `Technical Contract` e usa somente `Create`, `Modify`,
 `Generate` ou `Remove`. Use `Create` para arquivo novo, nunca `novo arquivo` na
-coluna de estado. Para `Generate`, declare fonte, comando/entrada e saída; não
+coluna de estado. Escreva o valor de `Change` sem crases (`Modify`, não
+`` `Modify` ``): `check:spec-implementation` só reconhece o texto puro e, com
+crases, recusa a Spec por não encontrar linhas de paths. Para `Generate`, declare fonte, comando/entrada e saída; não
 contrate edição manual de artefato gerado.
 
 Os paths devem ser relativos à raiz do repositório, exatos, normalizados e
@@ -275,8 +277,10 @@ aceitação, decisões técnicas ou comportamento de erro. Use nomes coerentes c
 os contratos da Spec e mantenha a sintaxe renderizável em Markdown.
 
 Declare sensores aplicáveis: `format`, `check:code`, `check:types`, `test:unit`,
-`check:architecture` e `test:integration`. Para Core, Server, Studio e Web, declare também
-`test:coverage` e `check:coverage`; ambos devem respeitar `coverage-baseline.json`. `check:dead-code`
+`check:architecture` e `test:integration`, com os arquivos de teste exatos verificados no código
+(a execução local é escopada; ver `documentation/tooling.md`). `test:coverage` e `check:coverage`
+rodam no CI e só entram na Spec quando o impacto demonstrado abranger o workspace; ambos devem
+respeitar `coverage-baseline.json`. `check:dead-code`
 não é oficial.
 Checks e build são validações finais do CI.
 

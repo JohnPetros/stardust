@@ -1,9 +1,9 @@
 ---
-name: resolve-pr-pendencies
+name: resolve-pr-feedback
 description: Resolver checks de CI e conversas de review até o PR ficar mergeable.
 ---
 
-# Resolver pendências de PR
+# Resolver feedback de PR
 
 Trabalhe na sessão atual e sempre contra o `HEAD` mais recente.
 
