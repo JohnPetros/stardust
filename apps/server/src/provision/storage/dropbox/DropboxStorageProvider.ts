@@ -12,13 +12,14 @@ import type { FilesListingParams } from '@stardust/core/storage/types'
 import type { Text } from '@stardust/core/global/structures'
 
 import { ENV } from '@/constants'
-import { buildDropboxTokenRequestBody, getDropboxCredentials } from './dropboxCredentials'
 
 export class DropboxStorageProvider implements FileStorageProvider {
   private dropbox: Dropbox
   private readonly restClient: RestClient
   private static readonly BASE_URL = 'https://api.dropbox.com'
   private static readonly MAX_UPLOAD_ATTEMPTS = 3
+  private static readonly MISSING_CREDENTIALS_MESSAGE =
+    'Dropbox storage is not configured: DROPBOX_REFRESH_TOKEN, DROPBOX_APP_KEY and DROPBOX_APP_SECRET are required'
   private static readonly DEFAULT_RETRY_AFTER_IN_SECONDS = 1
   private static readonly INTERNAL_FOLDER_NAME =
     ENV.mode === 'development' ? 'dev' : 'prod'
@@ -155,9 +156,32 @@ export class DropboxStorageProvider implements FileStorageProvider {
     this.restClient.setHeader('Content-Type', 'application/x-www-form-urlencoded')
     const response = await this.restClient.post<{ access_token: string }>(
       '/oauth2/token',
-      buildDropboxTokenRequestBody(getDropboxCredentials()),
+      this.buildTokenRequestBody(),
     )
     return response.body.access_token
+  }
+
+  private buildTokenRequestBody(): string {
+    return new URLSearchParams({
+      grant_type: 'refresh_token',
+      ...this.getCredentials(),
+    }).toString()
+  }
+
+  private getCredentials(): Record<
+    'refresh_token' | 'client_id' | 'client_secret',
+    string
+  > {
+    const { dropboxRefreshToken, dropboxAppKey, dropboxAppSecret } = ENV
+    if (!dropboxRefreshToken || !dropboxAppKey || !dropboxAppSecret) {
+      throw new Error(DropboxStorageProvider.MISSING_CREDENTIALS_MESSAGE)
+    }
+
+    return {
+      refresh_token: dropboxRefreshToken,
+      client_id: dropboxAppKey,
+      client_secret: dropboxAppSecret,
+    }
   }
 
   private async uploadWithRetry(
