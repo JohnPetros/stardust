@@ -1,7 +1,7 @@
 ---
 title: Migração do gerenciador de pacotes de npm para pnpm
 spec: ./spec.md
-spec_revision: 4
+spec_revision: 5
 status: in_progress
 base_commit: ea870e258ba71caf80db559a1460ba29318e5a86
 evaluated_commit: commits da migração sobre origin/main ed91d7f02 (rebase; SHA final registrado no PR)
@@ -127,6 +127,10 @@ Versões diretas: zero diferenças. Transitivos (`name@version`): npm 2438, pnpm
 ## Alinhamento documental
 
 - Spec: alinhada (revisão 2). Plan: não aplicável. Docs vivas: atualizadas conforme o mapa; Rules sem outra mudança.
+
+## Remoção do teste do LSP (revisão 5)
+
+A pedido do usuário, `packages/lsp/src/DeleguaProvedorLsp.test.ts` foi removido; a cobertura do `DeleguaProvedorLsp` real não existe mais em nenhum teste, e IR-01 deixa de se aplicar (não há teste do LSP a executar no CI). `check:test-integrity --base origin/main` continua `Passed` (só o caso de imutabilidade em `Code.test.ts` mantém contagens).
 
 ## Rebase sobre origin/main (revisão 3)
 
