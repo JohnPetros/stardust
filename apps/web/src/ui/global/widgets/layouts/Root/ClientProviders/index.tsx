@@ -23,14 +23,17 @@ export const ClientProviders = ({ accountDto, children }: ClientProps) => {
       return
     }
 
+    const { posthogProjectToken, posthogHost } = CLIENT_ENV
+    if (!posthogProjectToken || !posthogHost) return
+
     let isCancelled = false
 
-    async function initializePostHog() {
+    async function initializePostHog(token: string, host: string) {
       const { default: posthog } = await import('posthog-js')
       if (isCancelled) return
 
-      posthog.init(CLIENT_ENV.posthogProjectToken, {
-        api_host: CLIENT_ENV.posthogHost,
+      posthog.init(token, {
+        api_host: host,
         autocapture: true,
         capture_pageview: true,
         bootstrap: accountDto?.id
@@ -59,7 +62,7 @@ export const ClientProviders = ({ accountDto, children }: ClientProps) => {
       })
     }
 
-    void initializePostHog()
+    void initializePostHog(posthogProjectToken, posthogHost)
 
     return () => {
       isCancelled = true

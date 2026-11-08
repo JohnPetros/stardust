@@ -14,21 +14,41 @@ const clientEnv = {
   stardustWebUrl: process.env.NEXT_PUBLIC_STARDUST_WEB_URL,
   stardustServerUrl: process.env.NEXT_PUBLIC_STARDUST_SERVER_URL,
   discordChannelUrl: process.env.NEXT_PUBLIC_DISCORD_CHANNEL_URL,
-  posthogProjectToken: process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN,
-  posthogHost: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+  posthogProjectToken: process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN || undefined,
+  posthogHost: process.env.NEXT_PUBLIC_POSTHOG_HOST || undefined,
 }
 
-const schema = z.object({
-  mode: appModeSchema,
-  cdnUrl: z.string().url(),
-  supabaseUrl: z.string().url(),
-  supabaseKey: z.string(),
-  stardustWebUrl: z.string().url(),
-  stardustServerUrl: z.string().url(),
-  discordChannelUrl: z.string().url(),
-  posthogProjectToken: z.string(),
-  posthogHost: z.string().url(),
-})
+const schema = z
+  .object({
+    mode: appModeSchema,
+    cdnUrl: z.string().url(),
+    supabaseUrl: z.string().url(),
+    supabaseKey: z.string(),
+    stardustWebUrl: z.string().url(),
+    stardustServerUrl: z.string().url(),
+    discordChannelUrl: z.string().url(),
+    posthogProjectToken: z.string().optional(),
+    posthogHost: z.string().url().optional(),
+  })
+  .superRefine((env, context) => {
+    if (env.mode !== 'production') return
+
+    if (!env.posthogProjectToken) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['posthogProjectToken'],
+        message: 'NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN is required in production',
+      })
+    }
+
+    if (!env.posthogHost) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['posthogHost'],
+        message: 'NEXT_PUBLIC_POSTHOG_HOST is required in production',
+      })
+    }
+  })
 
 type LocalClientEndpoints = Pick<
   z.infer<typeof schema>,
