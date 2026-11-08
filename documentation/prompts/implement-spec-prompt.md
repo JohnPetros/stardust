@@ -366,7 +366,7 @@ próxima ação. Mantenha os bloqueios específicos; não converta esta seção 
 Registre lições reutilizáveis com referências `ACH`/`EV` de apoio e a ação documental ou
 o motivo de nenhuma mudança. Uma correção trivial não precisa virar lição nem política
 global. Mantenha o Delivery (verificação de fonte, alinhamento documental, estado de
-publicação/CI e limitações) factual.
+publicação e limitações) factual, sem resultados de CI do PR.
 
 Quando todos os critérios tiverem prova atual aprovada ou não-aplicabilidade justificada,
 os sensores aplicáveis passarem e os findings bloqueantes estiverem resolvidos, marque o

@@ -21,7 +21,7 @@ desse escopo; não existe Plan nem ledger de execução.
   (por exemplo `builder_core`, `builder_server`, `builder_web`), com paths disjuntos
   dos de outros Builders concorrentes.
 - **Builder Fix ACH-<n>:** correção de um achado, inclusive um originado por falha
-  de `CI-<n>` (check do CI do PR).
+  de um check do CI do PR.
 
 Todos os modos usam este mesmo contrato. O nome identifica o contexto e não cria
 hierarquia entre Builders. Você não está sozinho no worktree: preserve as edições

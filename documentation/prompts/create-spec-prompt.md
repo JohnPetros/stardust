@@ -415,7 +415,7 @@ que uma categoria é inaplicável em vez de manter blocos vazios.
 | `## Visual` | `VV-*` | comparação de um board do Penpot com a captura Playwright correspondente |
 
 Os IDs `AV`, `MV` e `VV` são únicos entre as três categorias e entre si. Os resultados reais
-pertencem ao Evaluation (`EV-*`); `CI-*` fica reservado aos checks do CI do PR. Mantenha IDs e
+pertencem ao Evaluation (`EV-*`); O CI do PR não é registrado no Evaluation. Mantenha IDs e
 mapeamentos existentes na continuação; divida um grupo antigo apenas com mapeamento explícito e
 prova nova onde o resultado histórico não bastar. Bloco no formato abaixo:
 

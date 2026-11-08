@@ -1,6 +1,6 @@
 ---
 name: create-evaluation
-description: Criar e manter o evaluation.md obrigatório de uma entrega SDD com evidências reais, revisões, preflight, CI, findings, decisões e lições.
+description: Criar e manter o evaluation.md obrigatório de uma entrega SDD com evidências reais, revisões, preflight, findings, decisões e lições.
 ---
 
 # Criar Evaluation
@@ -40,7 +40,7 @@ das seções e atualize-o após cada mudança de implementação, teste, browser
 migration, artefato, documentação ou validação.
 
 Use IDs estáveis: `EV-*` para cada evidência, `AV-*` para verificações automatizadas, `MV-*` para verificações manuais, `VV-*` para
-verificações visuais, `ACH-*` para achados e `CI-*` para checks do CI do PR. Comparações
+verificações visuais, e `ACH-*` para achados. O Evaluation não registra resultados de CI do PR (workflows, checks, build); eles ficam no próprio PR. Comparações
 visuais também são evidências `EV-*`, com viewport, estado e referência
 registrados. Marque evidências afetadas como `stale`;
 não reutilize uma captura ou resultado anterior à última alteração relevante.
@@ -137,13 +137,6 @@ distintos (page, dialog, mobile) são linhas distintas; a evidência de uma não
 | `npm run test:coverage -w <workspace>`  | passed | resumo por métrica e workspace            |
 | `npm run check:coverage -- <workspace>` | passed | baseline comparado e resultado do ratchet |
 
-## Checks e build do CI
-
-| ID | Verificação | Estado | HEAD / evidência |
-| --- | --- | --- | --- |
-| CI-01 | Checks automatizados | pending | PR e workflows aplicáveis; EV-... |
-| CI-02 | Build | pending | workflow; EV-... |
-
 ## Warnings e findings
 
 - Nenhum | `<ID> — descrição, impacto, estado e resolução>`
@@ -154,7 +147,7 @@ distintos (page, dialog, mobile) são linhas distintas; a evidência de uma não
 | ------- | ----- | ------------------------- | ------ |
 | `<ID>` | pontual | não aplicável — justificativa | concluído |
 
-Analise findings do Reviewer, sensores, CI e validação manual. Quando um item
+Analise findings do Reviewer, sensores e verificações manuais. Quando um item
 revelar uma lacuna recorrente de processo, arquitetura, tooling ou Rule, atualize
 o documento normativo correspondente antes da conclusão. Para um anti-padrão de
 implementação reutilizável, registre-o na Rule da camada com o workflow
@@ -193,9 +186,9 @@ segundo Contract.
 - Próxima ação: `<ação>`
 ```
 
-Checks ou build com falha devem ser registrados imediatamente aqui como `CI-*`
-e, quando houver um problema a corrigir, como `ACH-*`. A Spec permanece
-`in_progress`; correções de escopo usam `Builder Fix ACH-*`, com
+Falhas de sensores, builds locais ou verificações devem ser registradas imediatamente aqui como
+`EV-*` e, quando houver um problema a corrigir, como `ACH-*`. Resultados do CI do PR não são
+registrados no Evaluation. A Spec permanece `in_progress`; correções de escopo usam `Builder Fix ACH-*`, com
 novo sensor e novo Reviewer sempre que o diff ou qualquer evidência de Contract,
 Rule, Penpot ou Playwright for invalidada. Qualquer alteração posterior ao
 Reviewer invalida o commit avaliado anterior, inclusive quando afetar a fidelidade

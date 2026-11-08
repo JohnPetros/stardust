@@ -192,7 +192,7 @@ e resolução em Findings. Leia as Lições aprendidas e identifique orientaçã
 Architecture, Modules, Design, Infraestrutura, Tooling, Rules ou workflow; mantenha
 detalhes específicos da feature locais. Declare um motivo concreto de `No change` quando a
 orientação existente for suficiente, em vez de inventar uma lição. Analise todos os
-findings, warnings e falhas da entrega (Reviewers, sensores, CI e verificação manual) e
+findings, warnings e falhas da entrega (Reviewers, sensores e verificação manual) e
 identifique causas que possam se repetir. Lacunas recorrentes de processo, Architecture,
 tooling ou Rules atualizam a documentação normativa correspondente; erros de implementação
 reutilizáveis usam `register-antipattern` na Rule da camada. Registre no Evaluation uma
@@ -221,8 +221,7 @@ revisão. Nenhum `plan.md` é criado, lido ou concluído.
 
 Para fechamento local, quando a publicação não for solicitada ou for explicitamente
 local, marque a Spec e o Evaluation como `completed` depois que todos os requisitos locais
-passarem; registre publicação/CI do HEAD atual como não solicitados ou não aplicáveis, com o
-motivo. Para publicação autorizada, mantenha a Spec `in_progress` e o Evaluation `ready`
+passarem; registre a publicação como não solicitada, com o motivo. Para publicação autorizada, mantenha a Spec `in_progress` e o Evaluation `ready`
 durante o handoff de commit/PR até a publicação, o CI exigido do HEAD atual e as conversas
 de review bloqueantes estarem resolvidos. Uma falha de publicação registra um bloqueio e
 não pode ser reportada como entrega concluída. Não crie um commit só para atualizar o
@@ -247,19 +246,19 @@ workflow. Se a publicação estiver indisponível, reporte o bloqueio e mantenha
 prontos para publicação; não alegue publicação nem entrega autorizada concluída.
 
 Para cada head atual do PR da entrega, inspecione os path filters dos workflows de CI
-versionados e os checks atuais com o `gh` autenticado, aguarde os resultados terminais e
-registre nome, URL da execução, SHA do head e resultado no Evaluation. Inspecione o estado
+versionados e os checks atuais com o `gh` autenticado e aguarde os resultados terminais. O
+resultado do CI fica no PR: não o registre no Evaluation. Inspecione o estado
 do repositório em vez de presumir que os workflows existem. CI ausente, pendente,
 cancelado ou de um head anterior não é CI atual aprovado; se nenhum workflow aplicável
-existir, registre não aplicável. Uma execução de CI exigida no head atual é distinta de
+existir, trate como não aplicável. Uma execução de CI exigida no head atual é distinta de
 repetir suites locais.
 
-Para falhas de CI acionáveis, reabra o Evaluation, registre a falha como `CI-<n>` e o
-problema como `ACH-<n>`, roteie a correção por `implement-spec` (com `Builder Fix ACH-<n>`
-quando a correção estiver no escopo), atualize a evidência afetada, depois faça commit e
-atualize o PR existente quando autorizado, repetindo o Reviewer quando o diff ou a
+Para falhas de CI acionáveis, roteie a correção por `implement-spec` (com `Builder Fix`
+quando a correção estiver no escopo). Se a correção invalidar evidência já registrada,
+reabra o Evaluation e atualize só essa evidência; a falha de CI em si não é registrada. Faça
+commit e atualize o PR existente quando autorizado, repetindo o Reviewer quando o diff ou a
 evidência tiver sido invalidada. Reexecute o mesmo SHA apenas para uma falha transitória
-documentada. Não mude a disposição de produto, a menos que a falha estabeleça um defeito de
+comprovada. Não mude a disposição de produto, a menos que a falha estabeleça um defeito de
 produto.
 
 Marque a Spec e o Evaluation publicados como `completed` somente depois que todo o CI

@@ -37,14 +37,13 @@ Use estas abreviações e namespaces em todo artefato SDD novo ou revisado:
 | **MV-\*** | *Verificação Manual* — jornada happy-path executada em navegador ou terminal reais |
 | **VV-\*** | *Verificação Visual* — comparação de um board do Penpot com a captura Playwright correspondente |
 | **EV-\*** | *Evidência* — evidência de que um critério ou gate foi atendido |
-| **ACH-\*** | *Achado de revisão* — finding de revisão, sensor, CI ou verificação |
-| **CI-\*** | check do CI do PR (workflow, build) no HEAD avaliado |
+| **ACH-\*** | *Achado de revisão* — finding de revisão, sensor ou verificação |
 | **SHI-\*** | chave da issue Jira usada para rastrear uma entrega Shifu |
 
 As relações de rastreabilidade são `RP/JN → RF → CA → EV`; `AV`, `MV` e `VV`
 descrevem as verificações que produzem uma `EV` (os IDs são únicos entre os três tipos), e
-`ACH` registra problemas encontrados durante revisão ou verificação. `CI-*` é reservado a
-checks do CI do PR e não deve ser usado para tarefas, fases, findings ou correções de Builder. `SHI-*`
+`ACH` registra problemas encontrados durante revisão ou verificação. O Evaluation não registra resultados
+do CI do PR: workflows, checks e build ficam no PR. `SHI-*`
 é opcional e só aparece quando houver uma issue Jira Shifu.
 
 Artefatos históricos podem manter identificadores antigos para não quebrar
