@@ -18,6 +18,43 @@ const clientEnv = {
   posthogHost: process.env.NEXT_PUBLIC_POSTHOG_HOST || undefined,
 }
 
+type ProductionRequiredEnv = {
+  mode: string
+  posthogProjectToken?: string
+  posthogHost?: string
+}
+
+function addRequiredEnvIssue(
+  context: z.RefinementCtx,
+  path: 'posthogProjectToken' | 'posthogHost',
+  name: string,
+): void {
+  context.addIssue({
+    code: z.ZodIssueCode.custom,
+    path: [path],
+    message: `${name} is required in production`,
+  })
+}
+
+function requirePostHogProjectToken(
+  env: ProductionRequiredEnv,
+  context: z.RefinementCtx,
+): void {
+  if (env.mode === 'production' && !env.posthogProjectToken) {
+    addRequiredEnvIssue(
+      context,
+      'posthogProjectToken',
+      'NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN',
+    )
+  }
+}
+
+function requirePostHogHost(env: ProductionRequiredEnv, context: z.RefinementCtx): void {
+  if (env.mode === 'production' && !env.posthogHost) {
+    addRequiredEnvIssue(context, 'posthogHost', 'NEXT_PUBLIC_POSTHOG_HOST')
+  }
+}
+
 const schema = z
   .object({
     mode: appModeSchema,
@@ -31,23 +68,8 @@ const schema = z
     posthogHost: z.string().url().optional(),
   })
   .superRefine((env, context) => {
-    if (env.mode !== 'production') return
-
-    if (!env.posthogProjectToken) {
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['posthogProjectToken'],
-        message: 'NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN is required in production',
-      })
-    }
-
-    if (!env.posthogHost) {
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['posthogHost'],
-        message: 'NEXT_PUBLIC_POSTHOG_HOST is required in production',
-      })
-    }
+    requirePostHogProjectToken(env, context)
+    requirePostHogHost(env, context)
   })
 
 type LocalClientEndpoints = Pick<
