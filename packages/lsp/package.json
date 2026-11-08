@@ -36,6 +36,7 @@
     "monaco-editor": "^0.56.0"
   },
   "devDependencies": {
+    "@types/node": "^20.11.17",
     "tsup": "^8.5.1",
     "typescript": "5.5.3"
   }
