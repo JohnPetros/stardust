@@ -1,7 +1,7 @@
 ---
 title: Migração do gerenciador de pacotes de npm para pnpm
 status: in_progress
-revision: 3
+revision: 4
 source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/issues/632
@@ -149,7 +149,7 @@ Versões abaixo são as resolvidas pelo npm para o workspace; o gerenciador deci
 | Path | Change | Declaration | Contract | Dependencies | Tests |
 | --- | --- | --- | --- | --- | --- |
 | `package.json` | Modify | `packageManager`, `workspaces`, `overrides`, scripts, `dependencies` e `devDependencies` | `packageManager` = `pnpm@11.28.11`; sem `workspaces`/`overrides`; scripts `test` = `pnpm run test:unit`, `check:architecture` encadeia `pnpm --filter @stardust/crew run check:architecture`, `crew` = `pnpm --filter @stardust/crew run dev`, `build:crew`, `dev:studio` e `dev:studio` análogos; alias `@ai-sdk/provider-utils-v5` pinado; `postgres`, `drizzle-orm` e `@aws-sdk/client-s3` declarados | pnpm, Turbo | CA-01, CA-05, CA-06 |
-| `pnpm-workspace.yaml` | Create | `packages`, `overrides`, `allowBuilds` | `packages: [apps/*, packages/*]`; as 13 overrides (`@types/react`, `hono`, `monaco-editor`, `react`, `react-dom`, `esbuild`, `tsup>esbuild`, `uuid`, `vite`, `react-router`, `@react-router/express`, `@react-router/node`, `@react-router/serve`) com os mesmos valores; sem as overrides de `@ai-sdk/provider-utils` (D-11); `allowBuilds` de D-04; sem chaves de hoisting | pnpm 11 | CA-01, CA-02 |
+| `pnpm-workspace.yaml` | Create | `packages`, `overrides`, `allowBuilds` | `packages: [apps/*, packages/*]`; as 13 overrides mais `@react-email/tailwind>tailwindcss` e `react-email>tailwindcss` fixadas em `4.1.18` (D-14) (`@types/react`, `hono`, `monaco-editor`, `react`, `react-dom`, `esbuild`, `tsup>esbuild`, `uuid`, `vite`, `react-router`, `@react-router/express`, `@react-router/node`, `@react-router/serve`) com os mesmos valores; sem as overrides de `@ai-sdk/provider-utils` (D-11); `allowBuilds` de D-04; sem chaves de hoisting | pnpm 11 | CA-01, CA-02 |
 | `pnpm-lock.yaml` | Generate | fonte `package-lock.json`; comando `pnpm import` seguido de `pnpm install --frozen-lockfile` | lockfile v9; versões diretas idênticas às do lockfile npm (D-03); não editar à mão | pnpm 11 | CA-01, CA-05 |
 | `package-lock.json` | Remove | lockfile npm | removido depois do `pnpm import`; as versões anteriores permanecem acessíveis via Git para a comparação | Git | CA-01 |
 
@@ -296,3 +296,4 @@ Esta entrega atualiza `AGENTS.md`, `README.md`, os READMEs dos apps e pacotes, `
 | 1 | 2026-11-07 | open | `check:spec-definition` passou. Spec Reviewer da revisão 1: clear. Observações não bloqueantes verificadas e incorporadas (citação das linhas 49 e 84 de `architecture.md`, busca de CA-14 sem diferenciar maiúsculas, restrição sobre publicação dos pacotes públicos e Rule Pack ampliado); nova confirmação do mesmo Reviewer após o amendment: clear. |
 | 2 | 2026-11-07 | draft | Amendment durante `implement-spec` (achados reais): D-11 (overrides de `@ai-sdk/provider-utils` não migram), D-12 (Jest do Server ciente do layout `.pnpm`), D-13 (teste real movido para `packages/lsp` e caso de imutabilidade no Core), declaração de `typescript` no Email e ajustes de Docker. Spec Reviewer da revisão 2: clear (observação sobre o Rule Pack incorporada). |
 | 3 | 2026-11-07 | in_progress | Rebase sobre `origin/main`: o workspace `apps/backoffice` passa a `apps/studio` (`Dockerfile.studio`, `studio-app-ci.yaml`, `studio-appllication-rules.md`); `apps/crew/README.md`, `packages/studio/README.md` e `crew-app-production-cd.yaml` não existem mais em `main` e saem do mapa. Contract de comportamento inalterado; evidências anteriores do workspace renomeado são reverificadas ou reportadas como pendentes de CI no `evaluation.md`. |
+| 4 | 2026-11-08 | in_progress | Correções de CI-01/CI-02 do PR: D-14 (override de `tailwindcss` 4.1.18 para `@react-email/tailwind` e `react-email`, preservando a resolução do npm); `@types/jest`/`@types/node` declarados em Core, LSP e Validation (o linker estrito do pnpm não os expõe). Comportamento do Contract inalterado. |

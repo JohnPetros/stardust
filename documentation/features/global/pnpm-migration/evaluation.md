@@ -1,7 +1,7 @@
 ---
 title: Migração do gerenciador de pacotes de npm para pnpm
 spec: ./spec.md
-spec_revision: 3
+spec_revision: 4
 status: in_progress
 base_commit: ea870e258ba71caf80db559a1460ba29318e5a86
 evaluated_commit: commits da migração sobre origin/main ed91d7f02 (rebase; SHA final registrado no PR)
@@ -101,7 +101,9 @@ last_updated_at: 2026-11-07
 - ACH-03 — `check:test-integrity` reprova a remoção do caso de `Code.test.ts`. Resolvido por D-13 (teste real em `packages/lsp/src/DeleguaProvedorLsp.test.ts`, caso de imutabilidade em `Code.test.ts`); a decisão do usuário de remover o caso real foi preservada, a compensação é adição minha, sujeita a veto.
 - ACH-04 — a override `@ai-sdk/provider-utils: 5.0.5` (e a aninhada) quebrava `build:web` com o pnpm; o lockfile npm nunca a aplicou. Removidas as duas (D-11). Estado: resolvido; `build:web` passa.
 - ACH-05 — `Dockerfile.web` e `Dockerfile.backoffice` não copiavam `tsconfig.base.json`/`tsconfig.nextjs.json` (já quebrados no base, `TS5083`). Corrigido. Estado: resolvido. Ressalva: o `pnpm add --global` exigiu `PATH=$PNPM_HOME/bin`.
-- ACH-06 — Limitação ambiental pré-existente: `email export` falha localmente e em Docker (base com npm e pnpm) com `space-y-5 cannot be inlined`; passa no CI do GitHub. Não corrigido (código de produto fora do escopo). Estado: aberto, depende de CI-02.
+- ACH-06 (substituído por ACH-09) — Limitação aparente: `email export` falha localmente e em Docker (base com npm e pnpm) com `space-y-5 cannot be inlined`; passa no CI do GitHub. Não corrigido (código de produto fora do escopo). Estado: aberto, depende de CI-02.
+- ACH-08 / CI-01 — `Check types` e `Tests` do Core falharam no CI (`TS2582`/`TS2580`: sem `@types/jest` e `@types/node`). Causa: o Core não declarava os tipos; localmente o TypeScript os achava no `node_modules` do checkout pai (npm), mascarando o erro. Corrigido: `@types/jest` e `@types/node` em Core, LSP e Validation, verificado com `tsc --typeRoots ./node_modules/@types`. Ação preventiva: sondar `check:types` com `typeRoots` do próprio workspace ao declarar dependências sob o linker estrito. Estado: resolvido, aguardando CI.
+- ACH-09 / CI-02 — `Build` da Web/Email falhou no CI com `space-y-5 cannot be inlined`. Causa: `pnpm import` ligou `@react-email/tailwind` e `react-email` a `tailwindcss` 4.3.3 (o npm usava 4.1.18 hoisted). Corrigido com duas overrides em `pnpm-workspace.yaml` (D-14); `pnpm --filter @stardust/email run build` passa localmente, o que resolve ACH-06 (a limitação "só no CI" era a diferença de versão, não ambiente). Estado: resolvido, aguardando CI.
 - ACH-07 — Dependabot com `pnpm-lock.yaml` 11: comportamento só observável em PR do Dependabot. Pendente pós-merge.
 
 ## Drift transitivo (CA-05)
