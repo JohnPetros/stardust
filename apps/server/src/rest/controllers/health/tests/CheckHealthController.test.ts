@@ -191,7 +191,9 @@ describe('Check Health Controller', () => {
     'should check the S3 bucket in %s mode',
     async (mode) => {
       const previousMode = ENV.mode
+      const previousBucketName = ENV.s3BucketName
       ENV.mode = mode
+      ENV.s3BucketName = 'configured-bucket'
       const send = jest.spyOn(S3Client.prototype, 'send').mockResolvedValue({} as never)
       const destroy = jest.spyOn(S3Client.prototype, 'destroy')
 
@@ -200,13 +202,11 @@ describe('Check Health Controller', () => {
         expect(send).toHaveBeenCalledWith(expect.any(HeadBucketCommand), {
           abortSignal: expect.any(AbortSignal),
         })
-        expect(send.mock.calls[0][0].input).toEqual({
-          Bucket:
-            mode === 'production' ? 'stardust-bucket-prod' : 'stardust-bucket-local',
-        })
+        expect(send.mock.calls[0][0].input).toEqual({ Bucket: 'configured-bucket' })
         expect(destroy).toHaveBeenCalled()
       } finally {
         ENV.mode = previousMode
+        ENV.s3BucketName = previousBucketName
         jest.restoreAllMocks()
       }
     },

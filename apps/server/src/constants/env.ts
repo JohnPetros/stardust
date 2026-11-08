@@ -1,6 +1,8 @@
 import { idSchema } from '@stardust/validation/global/schemas'
 import { z } from 'zod'
 
+const LOCAL_S3_BUCKET_NAME = 'stardust-bucket-local'
+
 const env = {
   mode: process.env.MODE,
   port: process.env.PORT,
@@ -36,6 +38,7 @@ const env = {
   s3AccountId: process.env.S3_ACCOUNT_ID,
   s3AccessKeyId: process.env.S3_ACCESS_KEY_ID,
   s3SecretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  s3BucketName: process.env.S3_BUCKET_NAME || undefined,
 }
 
 const envSchema = z
@@ -69,6 +72,7 @@ const envSchema = z
     s3AccountId: z.string().optional(),
     s3AccessKeyId: z.string(),
     s3SecretAccessKey: z.string(),
+    s3BucketName: z.string().min(1).optional(),
     s3Endpoint: z.string().url().default('http://127.0.0.1:9000'),
     stardustWebUrl: z.string().url(),
     posthogProjectToken: z.string(),
@@ -80,15 +84,21 @@ const envSchema = z
   })
   .superRefine((value, context) => {
     validateRequiredS3Account(value, context)
+    validateRequiredS3Bucket(value, context)
     validateRequiredMailpit(value, context)
     validateRequiredTrustedProxies(value, context)
     validateRequiredSentryDsn(value, context)
   })
+  .transform((value) => ({
+    ...value,
+    s3BucketName: value.s3BucketName ?? LOCAL_S3_BUCKET_NAME,
+  }))
 
 type RequiredEnvironment = {
   mode: 'development' | 'production' | 'test'
   sentryDsn?: string
   s3AccountId?: string
+  s3BucketName?: string
   mailpitApiUrl?: string
   trustedProxyCidrs: string[]
 }
@@ -123,6 +133,19 @@ function validateRequiredSentryDsn(
       context,
       'sentryDsn',
       'SENTRY_DSN is required in production mode',
+    )
+  }
+}
+
+function validateRequiredS3Bucket(
+  value: RequiredEnvironment,
+  context: z.RefinementCtx,
+): void {
+  if (value.mode === 'production' && !value.s3BucketName) {
+    addRequiredEnvironmentIssue(
+      context,
+      's3BucketName',
+      'S3_BUCKET_NAME is required in production mode',
     )
   }
 }

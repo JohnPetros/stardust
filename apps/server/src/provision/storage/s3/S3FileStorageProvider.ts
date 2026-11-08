@@ -22,11 +22,6 @@ import { ENV } from '@/constants'
 import { S3FileObject } from './S3FileObject'
 
 export class S3FileStorageProvider implements FileStorageProvider {
-  private static readonly BUCKET_NAME_BY_MODE = {
-    development: 'stardust-bucket-local',
-    test: 'stardust-bucket-local',
-    production: 'stardust-bucket-prod',
-  } as const
   private static readonly ENDPOINT_BY_MODE = {
     development: ENV.s3Endpoint,
     test: ENV.s3Endpoint,
@@ -285,7 +280,7 @@ export class S3FileStorageProvider implements FileStorageProvider {
   }
 
   private get bucketName(): string {
-    return S3FileStorageProvider.BUCKET_NAME_BY_MODE[ENV.mode]
+    return ENV.s3BucketName
   }
 
   private handleError(error: unknown, operation: string): never {
