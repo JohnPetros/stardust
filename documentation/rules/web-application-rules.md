@@ -58,7 +58,6 @@ npm run test
 
 - Scripts do workspace `@stardust/web`:
   - Dev: `npm run dev -w @stardust/web`
-  - Queue (Inngest local): `npm run queue -w @stardust/web`
   - Build: `npm run build -w @stardust/web`
   - Start (standalone): `npm run start -w @stardust/web`
   - Qualidade: `npm run check:code -w @stardust/web` (`lint` + `format`)

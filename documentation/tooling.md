@@ -234,7 +234,6 @@ los.
 | Script                     | Descrição                                                               |
 | --- | --- |
 | `dev`                      | Inicia a Web App em desenvolvimento na porta `3000`.                    |
-| `queue`                    | Inicia o Inngest CLI local apontando para `/api/serverless`.            |
 | `build`                    | Gera o build de produção da Web App com Next.js.                        |
 | `start`                    | Inicia o build standalone usando a porta definida em `PORT`.            |
 | `check:code`               | Verifica `src` com Biome, sem aplicar correções.                        |
