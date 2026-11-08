@@ -1,7 +1,7 @@
 {
-  "analysedAt": "2026-11-07T21:54:38.424Z",
+  "analysedAt": "2026-11-08T01:13:59.062Z",
   "totalFiles": 3512,
-  "totalFunctions": 9598,
+  "totalFunctions": 9604,
   "warnCount": 2725,
   "errorCount": 242,
   "averageMI": 54.2,
@@ -8679,8 +8679,8 @@
       "functions": [
         {
           "name": "constructor",
-          "startLine": 40,
-          "endLine": 50,
+          "startLine": 35,
+          "endLine": 45,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -8720,8 +8720,8 @@
         },
         {
           "name": "upload",
-          "startLine": 56,
-          "endLine": 77,
+          "startLine": 51,
+          "endLine": 72,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -8761,8 +8761,8 @@
         },
         {
           "name": "createSignedUploadUrl",
-          "startLine": 79,
-          "endLine": 105,
+          "startLine": 74,
+          "endLine": 100,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -8802,8 +8802,8 @@
         },
         {
           "name": "listFiles",
-          "startLine": 107,
-          "endLine": 132,
+          "startLine": 102,
+          "endLine": 127,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -8843,8 +8843,8 @@
         },
         {
           "name": "findFile",
-          "startLine": 134,
-          "endLine": 155,
+          "startLine": 129,
+          "endLine": 150,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -8884,8 +8884,8 @@
         },
         {
           "name": "getFileMetadata",
-          "startLine": 157,
-          "endLine": 178,
+          "startLine": 152,
+          "endLine": 173,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -8925,8 +8925,8 @@
         },
         {
           "name": "removeFile",
-          "startLine": 180,
-          "endLine": 193,
+          "startLine": 175,
+          "endLine": 188,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -8966,8 +8966,8 @@
         },
         {
           "name": "listAllObjects",
-          "startLine": 195,
-          "endLine": 223,
+          "startLine": 190,
+          "endLine": 218,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -9007,8 +9007,8 @@
         },
         {
           "name": "getFile",
-          "startLine": 225,
-          "endLine": 256,
+          "startLine": 220,
+          "endLine": 251,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -9048,8 +9048,8 @@
         },
         {
           "name": "resolveFileNameFromKey",
-          "startLine": 269,
-          "endLine": 281,
+          "startLine": 264,
+          "endLine": 276,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -9089,8 +9089,8 @@
         },
         {
           "name": "handleError",
-          "startLine": 291,
-          "endLine": 301,
+          "startLine": 286,
+          "endLine": 296,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -9130,8 +9130,8 @@
         },
         {
           "name": "resolveErrorMessage",
-          "startLine": 303,
-          "endLine": 313,
+          "startLine": 298,
+          "endLine": 308,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -9171,8 +9171,8 @@
         },
         {
           "name": "isNotFoundError",
-          "startLine": 315,
-          "endLine": 325,
+          "startLine": 310,
+          "endLine": 320,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -9212,8 +9212,8 @@
         }
       ],
       "summary": {
-        "totalLines": 327,
-        "weightedMI": 56.4,
+        "totalLines": 322,
+        "weightedMI": 56.5,
         "weightedHealthScore": 70.6,
         "worstSeverity": "warn",
         "smellIds": []
@@ -13541,8 +13541,8 @@
       "functions": [
         {
           "name": "handle",
-          "startLine": 58,
-          "endLine": 70,
+          "startLine": 46,
+          "endLine": 58,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -13582,8 +13582,8 @@
         },
         {
           "name": "checkPostgres",
-          "startLine": 102,
-          "endLine": 119,
+          "startLine": 90,
+          "endLine": 107,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -13623,8 +13623,8 @@
         },
         {
           "name": "checkRedis",
-          "startLine": 121,
-          "endLine": 137,
+          "startLine": 109,
+          "endLine": 125,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -13664,8 +13664,8 @@
         },
         {
           "name": "checkInngest",
-          "startLine": 139,
-          "endLine": 163,
+          "startLine": 127,
+          "endLine": 151,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -13705,8 +13705,8 @@
         },
         {
           "name": "checkS3Bucket",
-          "startLine": 176,
-          "endLine": 186,
+          "startLine": 164,
+          "endLine": 174,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -13734,20 +13734,20 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 75.28,
+              "value": 83.76,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 64,
+          "maintainabilityIndex": 63.7,
           "maintainabilityRating": "warn",
           "healthScore": 88,
           "smells": []
         },
         {
           "name": "checkHttpEndpoint",
-          "startLine": 192,
-          "endLine": 216,
+          "startLine": 180,
+          "endLine": 204,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -13787,8 +13787,8 @@
         },
         {
           "name": "checkSocketConnection",
-          "startLine": 218,
-          "endLine": 239,
+          "startLine": 206,
+          "endLine": 227,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -13828,8 +13828,8 @@
         },
         {
           "name": "<anonymous>",
-          "startLine": 223,
-          "endLine": 237,
+          "startLine": 211,
+          "endLine": 225,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -13869,8 +13869,8 @@
         },
         {
           "name": "withTimeout",
-          "startLine": 241,
-          "endLine": 257,
+          "startLine": 229,
+          "endLine": 245,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -13910,7 +13910,7 @@
         }
       ],
       "summary": {
-        "totalLines": 259,
+        "totalLines": 247,
         "weightedMI": 62.1,
         "weightedHealthScore": 81.2,
         "worstSeverity": "warn",
@@ -81028,11 +81028,11 @@
         {
           "name": "ClientProviders",
           "startLine": 16,
-          "endLine": 72,
+          "endLine": 75,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
-              "value": 9,
+              "value": 11,
               "threshold": 15,
               "severity": "warn"
             },
@@ -81044,7 +81044,7 @@
             },
             {
               "name": "functionLength",
-              "value": 57,
+              "value": 60,
               "threshold": 70,
               "severity": "warn"
             },
@@ -81061,31 +81061,31 @@
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 45.6,
+          "maintainabilityIndex": 44.8,
           "maintainabilityRating": "warn",
-          "healthScore": 59,
+          "healthScore": 55,
           "smells": []
         },
         {
           "name": "<anonymous>",
           "startLine": 21,
-          "endLine": 67,
+          "endLine": 70,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
-              "value": 7,
+              "value": 9,
               "threshold": 15,
-              "severity": "ok"
+              "severity": "warn"
             },
             {
               "name": "cognitiveComplexity",
-              "value": 2,
+              "value": 4,
               "threshold": 25,
               "severity": "ok"
             },
             {
               "name": "functionLength",
-              "value": 47,
+              "value": 50,
               "threshold": 70,
               "severity": "warn"
             },
@@ -81097,20 +81097,20 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 84,
+              "value": 148.68,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 49.1,
+          "maintainabilityIndex": 46.5,
           "maintainabilityRating": "warn",
-          "healthScore": 63,
+          "healthScore": 56,
           "smells": []
         },
         {
           "name": "initializePostHog",
-          "startLine": 28,
-          "endLine": 60,
+          "startLine": 31,
+          "endLine": 63,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -81138,20 +81138,20 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 180.69,
+              "value": 159.81,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 50.4,
+          "maintainabilityIndex": 50.8,
           "maintainabilityRating": "warn",
           "healthScore": 70,
           "smells": []
         },
         {
           "name": "loaded",
-          "startLine": 45,
-          "endLine": 58,
+          "startLine": 48,
+          "endLine": 61,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -81191,9 +81191,9 @@
         }
       ],
       "summary": {
-        "totalLines": 73,
-        "weightedMI": 49.7,
-        "weightedHealthScore": 65.1,
+        "totalLines": 76,
+        "weightedMI": 48.6,
+        "weightedHealthScore": 61.3,
         "worstSeverity": "warn",
         "smellIds": []
       }
