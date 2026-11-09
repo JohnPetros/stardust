@@ -266,15 +266,15 @@ workflows do GitHub Actions e pelo painel do Coolify.
 
 ### Dockerfile.server
 
-Multi-stage: `builder` (turbo prune) → `installer` (npm install + build) → `runner` (Node.js 22 Alpine). Variáveis de ambiente injetadas pelo Coolify em runtime via `process.env`. Não usa arquivo `.env`.
+Multi-stage: `builder` (turbo prune) → `installer` (pnpm install + build) → `runner` (Node.js 22 Alpine). Variáveis de ambiente injetadas pelo Coolify em runtime via `process.env`. Não usa arquivo `.env`.
 
 ### Dockerfile.web
 
-Multi-stage: `builder` (turbo prune) → `installer` (npm install + Next.js build com `output: 'standalone'`) → `runner` (Node.js 22 Alpine). Variáveis `NEXT_PUBLIC_*` precisam estar disponíveis em tempo de build.
+Multi-stage: `builder` (turbo prune) → `installer` (pnpm install + Next.js build com `output: 'standalone'`) → `runner` (Node.js 22 Alpine). Variáveis `NEXT_PUBLIC_*` precisam estar disponíveis em tempo de build.
 
 ### Dockerfile.studio
 
-Multi-stage: `builder` (turbo prune) → `installer` (npm install + Vite build) → `runner` (Nginx Alpine servindo arquivos estáticos). Config do Nginx com `try_files` para fallback SPA.
+Multi-stage: `builder` (turbo prune) → `installer` (pnpm install + Vite build) → `runner` (Nginx Alpine servindo arquivos estáticos). Config do Nginx com `try_files` para fallback SPA.
 
 ---
 

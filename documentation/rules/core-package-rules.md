@@ -237,13 +237,13 @@ cd ./stardust/packages/core
 **Instale as dependências**
 
 ```bash
-npm install
+pnpm install
 ```
 
 **Execute os testes**
 
 ```bash
-npm run test
+pnpm run test
 ```
 ## Estruturação de pastas
 
@@ -287,9 +287,9 @@ Os arquivos de teste para `entities`, `structures` e `use-cases` são colocados 
 ## Tooling
 
 - Scripts do workspace `@stardust/core`:
-  - Build: `npm run build -w @stardust/core` (tsup)
-  - Tipos: `npm run check:types -w @stardust/core`
-  - Qualidade: `npm run check:code -w @stardust/core` (`lint` + `format`)
-  - Testes: `npm run test:unit -w @stardust/core`
-- Orquestracao (raiz): `npm run test`, `npm run check:types`, `npm run check:code` (Turbo) para rodar em todos os workspaces.
+  - Build: `pnpm --filter @stardust/core run build` (tsup)
+  - Tipos: `pnpm --filter @stardust/core run check:types`
+  - Qualidade: `pnpm --filter @stardust/core run check:code` (`lint` + `format`)
+  - Testes: `pnpm --filter @stardust/core run test:unit`
+- Orquestracao (raiz): `pnpm run test`, `pnpm run check:types`, `pnpm run check:code` (Turbo) para rodar em todos os workspaces.
 - Referencia geral: `documentation/tooling.md`.

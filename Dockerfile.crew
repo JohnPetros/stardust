@@ -1,7 +1,7 @@
 FROM node:24-alpine AS build
 WORKDIR /app
 ENV HUSKY=0
-COPY package.json package-lock.json ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/crew/package.json apps/crew/package.json
 COPY apps/server/package.json apps/server/package.json
 COPY apps/web/package.json apps/web/package.json
@@ -10,9 +10,10 @@ COPY packages/core/package.json packages/core/package.json
 COPY packages/email/package.json packages/email/package.json
 COPY packages/lsp/package.json packages/lsp/package.json
 COPY packages/validation/package.json packages/validation/package.json
-RUN npm ci --ignore-scripts
+RUN corepack enable \
+  && pnpm install --frozen-lockfile --ignore-scripts
 COPY apps/crew apps/crew
-RUN npm run build:crew
+RUN pnpm run build:crew
 
 FROM node:24-alpine AS runner
 ENV NODE_ENV=production

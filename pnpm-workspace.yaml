@@ -1,0 +1,29 @@
+packages:
+  - apps/*
+  - packages/*
+overrides:
+  "@types/react": "19.2.18"
+  "hono": "4.13.1"
+  "monaco-editor": "0.56.0"
+  "react": "19.2.8"
+  "react-dom": "19.2.8"
+  "esbuild": "0.28.1"
+  "tsup>esbuild": "0.28.1"
+  "uuid": "11.1.1"
+  "vite": "8.2.2"
+  "react-router": "8.3.1"
+  "@react-router/express": "8.3.1"
+  "@react-router/node": "8.3.1"
+  "@react-router/serve": "8.3.1"
+  "@react-email/tailwind>tailwindcss": "4.1.18"
+  "react-email>tailwindcss": "4.1.18"
+allowBuilds:
+  esbuild: true
+  "@swc/core": true
+  unrs-resolver: true
+  cpu-features: true
+  ssh2: true
+  fsevents: true
+  core-js: false
+  protobufjs: false
+  "@tsparticles/engine": false

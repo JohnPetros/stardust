@@ -88,8 +88,8 @@ Durante a reprodução e o rerun:
   `waitForFunction` e `waitForURL`, sem depender de `waitForTimeout` isolado;
 - confirme estados observáveis de sucesso e erro, além de loading e navegação quando fizerem
   parte do fluxo;
-- execute testes versionados com `npm --workspace @stardust/web run test:integration -- <arquivo>` ou
-  `npm exec playwright -- test ...` a partir de `apps/web`; use o ambiente de integração com
+- execute testes versionados com `pnpm --filter @stardust/web run test:integration <arquivo>` ou
+  `pnpm exec playwright test ...` a partir de `apps/web`; use o ambiente de integração com
   `ServerMock` nos testes versionados e o fluxo real em `localhost:3000`/API local para inspeção
   autenticada fora da suíte;
 - para Studio, use o servidor, a porta e as credenciais definidos em `AGENTS.md`, valide login e
@@ -104,9 +104,9 @@ reconstruí-los.
 
 Após qualquer alteração, execute os detectores de `AGENTS.md` no escopo afetado:
 
-- `npm run check:code -w <workspace>`;
-- `npm run check:types -w <workspace>`;
-- `npm run test:unit -w <workspace> -- <arquivos-de-teste>`, incluindo o teste de regressão do bug;
+- `pnpm run check:code -w <workspace>`;
+- `pnpm run check:types -w <workspace>`;
+- `pnpm run test:unit -w <workspace> -- <arquivos-de-teste>`, incluindo o teste de regressão do bug;
 - o fluxo Playwright aplicável, somente nos arquivos afetados.
 
 Se um detector falhar por estado externo, como porta ocupada, preserve o processo alheio, registre

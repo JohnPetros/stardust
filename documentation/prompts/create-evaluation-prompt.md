@@ -133,9 +133,9 @@ distintos (page, dialog, mobile) são linhas distintas; a evidência de uma não
 
 | Comando                                 | Estado | Evidência                                 |
 | --------------------------------------- | ------ | ----------------------------------------- |
-| `npm run check:code`                    | passed | saída resumida                            |
-| `npm run test:coverage -w <workspace>`  | passed | resumo por métrica e workspace            |
-| `npm run check:coverage -- <workspace>` | passed | baseline comparado e resultado do ratchet |
+| `pnpm run check:code`                    | passed | saída resumida                            |
+| `pnpm --filter <workspace> run test:coverage`  | passed | resumo por métrica e workspace            |
+| `pnpm run check:coverage <workspace>` | passed | baseline comparado e resultado do ratchet |
 
 ## Warnings e findings
 

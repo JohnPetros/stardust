@@ -285,6 +285,6 @@ describe("Get Mdx Guide Tool", () => {
   - `ts-jest` para transformar TS quando configurado no workspace.
   - `ts-jest-mocker` para mocks type-safe de interfaces.
 - Comandos:
-  - Global (Turbo): `npm run test`.
-  - Por workspace: `npm run test:unit -w @stardust/server`, `npm run test:unit -w @stardust/web`, `npm run test:unit -w @stardust/studio`, `npm run test:unit -w @stardust/core`.
+  - Global (Turbo): `pnpm run test`.
+  - Por workspace: `pnpm --filter @stardust/server run test:unit`, `pnpm --filter @stardust/web run test:unit`, `pnpm --filter @stardust/studio run test:unit`, `pnpm --filter @stardust/core run test:unit`.
 - Referencia geral: `documentation/tooling.md`.

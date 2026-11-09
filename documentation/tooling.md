@@ -26,22 +26,22 @@ eval "$(node ./scripts/export-web-app-e2e-env.mjs)"
 
 | Script                       | Ferramenta         | Comportamento                                      |
 | --- | --- | --- |
-| `npm run format`             | Biome              | formata e escreve arquivos                         |
-| `npm run check:code`         | Biome              | lint/check read-only                               |
-| `npm run check:types`        | TypeScript         | typecheck sem emissão                              |
-| `npm run check:architecture` | dependency-cruiser | valida dependências entre camadas/apps             |
-| `npm run check:complexity`   | CodeMultiVitals    | falha quando a complexidade ou a qualidade piora em relação ao baseline |
-| `npm run test:unit`          | Jest/Vitest        | executa testes unitários por workspace             |
-| `npm run test:integration`   | Jest/Playwright    | executa as integrações declaradas pelos workspaces |
-| `npm run check:spec-implementation` | Node.js       | valida o mapa `Path | Change | ...` da Spec contra Git e filesystem |
+| `pnpm run format`             | Biome              | formata e escreve arquivos                         |
+| `pnpm run check:code`         | Biome              | lint/check read-only                               |
+| `pnpm run check:types`        | TypeScript         | typecheck sem emissão                              |
+| `pnpm run check:architecture` | dependency-cruiser | valida dependências entre camadas/apps             |
+| `pnpm run check:complexity`   | CodeMultiVitals    | falha quando a complexidade ou a qualidade piora em relação ao baseline |
+| `pnpm run test:unit`          | Jest/Vitest        | executa testes unitários por workspace             |
+| `pnpm run test:integration`   | Jest/Playwright    | executa as integrações declaradas pelos workspaces |
+| `pnpm run check:spec-implementation` | Node.js       | valida o mapa `Path | Change | ...` da Spec contra Git e filesystem |
 
 Exemplos de ciclo curto:
 
 ```bash
-npm run format -- --filter=@stardust/core
-npm run check:code -- --filter=@stardust/core
-npm run check:types -- --filter=@stardust/core
-npm run test:unit -w @stardust/core -- <arquivos-de-teste>
+pnpm run format --filter=@stardust/core
+pnpm run check:code --filter=@stardust/core
+pnpm run check:types --filter=@stardust/core
+pnpm --filter @stardust/core run test:unit <arquivos-de-teste>
 ```
 
 ## Execução local escopada
@@ -76,9 +76,9 @@ amplos ou buscas por palavra-chave que incluam testes alheios.
 
 | Fronteira | Diretório | Forma do comando |
 | --- | --- | --- |
-| Unit Core, Server, Studio ou Web | Raiz | `npm run test:unit -w @stardust/<workspace> -- <arquivos-de-teste>` |
-| Integração do Server | Raiz | `npm run test:integration -w @stardust/server -- <arquivos-de-teste>`, depois de `npm run db:test -w @stardust/server` |
-| Integração da Web | Raiz | `npm --workspace @stardust/web run test:integration -- <arquivos-de-teste>` |
+| Unit Core, Server, Studio ou Web | Raiz | `pnpm run test:unit -w @stardust/<workspace> -- <arquivos-de-teste>` |
+| Integração do Server | Raiz | `pnpm --filter @stardust/server run test:integration <arquivos-de-teste>`, depois de `pnpm --filter @stardust/server run db:test` |
+| Integração da Web | Raiz | `pnpm --filter @stardust/web run test:integration <arquivos-de-teste>` |
 
 Os scripts completos (`test:unit`, `test:integration`, `test:coverage` e `check:coverage`)
 são comandos disponíveis, não um checklist local obrigatório. Amplie a seleção só quando o
@@ -105,7 +105,7 @@ check no escopo principal de cada app ou pacote (`apps/server`, `apps/web`,
 novas violações. Para atualizar o baseline, execute:
 
 ```bash
-npm run update:complexity-baseline
+pnpm run update:complexity-baseline
 ```
 
 A atualização deve ser feita somente quando a mudança de complexidade for
@@ -116,7 +116,7 @@ centrado nas métricas por função.
 ## Scripts por workspace
 
 As descrições abaixo refletem os scripts declarados nos `package.json` atuais.
-Use `npm run <script> -w <workspace>` para executar um script de um workspace a
+Use `pnpm --filter <workspace> run <script>` para executar um script de um workspace a
 partir da raiz.
 
 ### Raiz (`stardust`)
@@ -180,18 +180,18 @@ locais aparece em `forbiddenTestPaths` e falha o CI.
 | `check:types`      | Executa o TypeScript sem emitir arquivos.                                                |
 | `check:complexity` | Verifica o escopo `apps/server` contra o baseline compartilhado.                          |
 | `check:architecture` | Verifica as dependências arquiteturais do Server com dependency-cruiser.               |
-| `check:updates`    | Lista atualizações de dependências com npm-check-updates.                                |
+| `check:updates`    | Lista atualizações de dependências com `ncu`.                                            |
 | `build`            | Compila o Server com tsup.                                                               |
 | `prod`             | Inicia o build do Server usando `.env`.                                                  |
 | `db:test`          | Inicia os serviços Supabase necessários e reinicia o banco local de testes.              |
-| `db:migrate`       | Gera uma migration com `supabase db diff`, usando `npm_config_schema_file`.              |
+| `db:migrate`       | Aplica as migrations Drizzle com `tsx scripts/migrate-database.ts`.                      |
 | `db:prod`          | Vincula a CLI Supabase ao projeto de produção.                                           |
 | `db:dev`           | Vincula a CLI Supabase ao projeto de desenvolvimento.                                    |
 | `db:pull`          | Baixa os schemas Auth, Public, Storage e Realtime.                                       |
 | `db:push`          | Aplica migrations ao projeto Supabase vinculado.                                         |
 | `db:types`         | Gera os tipos TypeScript do banco de desenvolvimento.                                    |
-| `db:revert`        | Marca uma migration como revertida, usando `npm_config_migration_id`.                    |
-| `update`           | Atualiza uma dependência específica com npm-check-updates, usando `npm_config_dep_name`. |
+| `db:revert`        | Marca uma migration como revertida; o ID da migration é argumento posicional.            |
+| `update`           | Atualiza uma dependência específica com `ncu`; o nome da dependência é argumento posicional. |
 | `test:unit`        | Executa os testes unitários do projeto Server.                                           |
 | `test:coverage`    | Executa os testes unitários do Server com relatório JSON de cobertura.                   |
 | `test:coverage:merge` | Consolida a cobertura unitária e dos quatro shards de integração do Server antes do ratchet. |
@@ -200,10 +200,10 @@ locais aparece em `forbiddenTestPaths` e falha o CI.
 Exemplos de comandos de banco:
 
 ```bash
-npm run db:dev -w @stardust/server
-npm run db:migrate -w @stardust/server --schema-file=nome_da_tabela
-npm run db:revert -w @stardust/server --migration-id=20240101000000
-npm run update -w @stardust/server --dep-name=nome-do-pacote
+pnpm --filter @stardust/server run db:dev
+pnpm --filter @stardust/server run db:migrate
+pnpm --filter @stardust/server run db:revert 20240101000000
+pnpm --filter @stardust/server run update nome-do-pacote
 ```
 
 Os comandos `db:prod`, `db:push` e `db:revert` alteram estado externo ou o
@@ -305,7 +305,7 @@ staging durante a execução. O entry point é
 `apps/server/src/database/seed.ts`; cada domínio possui seu seeder em
 `apps/server/src/database/seeders/<Domínio>Seeder.ts`, com `clear()` e `run(seed)`.
 
-Prepare o stack e aplique as migrations com `npm run db:test -w @stardust/server`.
+Prepare o stack e aplique as migrations com `pnpm --filter @stardust/server run db:test`.
 As contas locais são fixtures públicas fixas definidas em
 `apps/server/src/database/seeders/seed-accounts.json`: `explorer@stardust.local`
 e `studio@stardust.local`. Seus IDs terminam em `0001` e `0002`, respectivamente.
@@ -316,10 +316,10 @@ Server local. Para o Playwright manual, carregue o exportador correspondente com
 
 ```bash
 # Valida configuração e snapshot sem conectar ao banco
-npm run db:seed -w @stardust/server -- --check
+pnpm --filter @stardust/server run db:seed --check
 
 # Substitui dados da aplicação e usuários Auth locais
-npm run db:seed -w @stardust/server
+pnpm --filter @stardust/server run db:seed
 ```
 
 O comando exporta a conexão local a partir do `.env.local` raiz com
@@ -350,7 +350,7 @@ As imagens dos planetas, conquistas, avatares, tiers e foguetes estão versionad
 `seeders/assets/images/planets/`, `seeders/assets/images/achievements/` e
 `seeders/assets/images/avatars/`, `seeders/assets/images/rankings/` e
 `seeders/assets/images/rockets/`.
-Execute `npm run db:seed:assets -w @stardust/server` depois de preparar o MinIO
+Execute `pnpm --filter @stardust/server run db:seed:assets` depois de preparar o MinIO
 local. O comando usa o `.env.local` da raiz, exige endpoint HTTP em
 `127.0.0.1`, preserva os nomes do catálogo e publica 110 imagens, incluindo seis
 extras. Confirma por HTTP anônimo os 104 arquivos referenciados pelos oito
@@ -415,8 +415,8 @@ O fluxo de integração do Server prepara o mesmo stack e reseta o banco antes
 da suíte:
 
 ```bash
-npm run db:test -w @stardust/server
-npm run test:integration -w @stardust/server
+pnpm --filter @stardust/server run db:test
+pnpm --filter @stardust/server run test:integration
 ```
 
 As portas host padrão são Kong `54321`, PostgreSQL `54322`, Mailpit HTTP
@@ -459,9 +459,9 @@ suíte. Não aponte esse fluxo para produção nem use as credenciais reais do
 Studio:
 
 ```bash
-npm --workspace @stardust/web run test:integration:install
-npm --workspace @stardust/web run test:integration
-npm --workspace @stardust/web run test:integration:debug
+pnpm --filter @stardust/web run test:integration:install
+pnpm --filter @stardust/web run test:integration
+pnpm --filter @stardust/web run test:integration:debug
 ```
 
 Para uma inspeção manual autenticada, inicie a API e a Web App em terminais
@@ -491,7 +491,7 @@ No Server, o ratchet considera a cobertura conjunta dos testes unitários e dos
 quatro shards de integração, incluindo os adapters Drizzle exercitados pelas
 rotas reais. Prepare o stack local, execute `test:integration:ci` e
 `test:coverage` no workspace `@stardust/server`, depois `test:coverage:merge` e
-`npm run check:coverage -- @stardust/server`. A consolidação exige os cinco
+`pnpm run check:coverage @stardust/server`. A consolidação exige os cinco
 relatórios completos; um relatório unitário isolado não aprova esse ratchet.
 No CI do Server, cada um dos quatro shards de integração roda em um job próprio
 (`Integration tests (shard N/4)`), com stack local isolado, e envia seu relatório
@@ -520,22 +520,22 @@ Os scripts listados acima ainda descrevem o estado implementado. Para a entrega 
 | `db:adopt` | Adota baseline em banco existente somente após parity; nunca marca a migration de revogação como já aplicada. |
 | `db:test` | Prepara Compose com .env.local raiz, reset exclusivamente local, migrations Drizzle sem seed. |
 
-Scripts Supabase CLI de diff/push/pull/repair e geração de Database.ts são retirados; a Web não gera tipos de banco. npm/package-lock permanecem a fonte das versões. Antes de qualquer aplicação remota, exige-se preflight de Dev e produção e ensaio de rollback em restauração isolada, com evidências no workflow SDD. A indisponibilidade desses ambientes nesta autoria não é evidência de parity. A janela inicial é coordenada, sem release intermediário compatível.
+Scripts Supabase CLI de diff/push/pull/repair e geração de Database.ts são retirados; a Web não gera tipos de banco. pnpm/`pnpm-lock.yaml` permanecem a fonte das versões. Antes de qualquer aplicação remota, exige-se preflight de Dev e produção e ensaio de rollback em restauração isolada, com evidências no workflow SDD. A indisponibilidade desses ambientes nesta autoria não é evidência de parity. A janela inicial é coordenada, sem release intermediário compatível.
 
 A lista de scripts passa a descrever o runtime vigente apenas após a implementação verificada; atualizar também a seção de migrations da infraestrutura nessa entrega.
 
 ## Crew
 
-`apps/crew` é um workspace npm independente para revisão de PR com Mastra e
-Anthropic direta. `npm run crew` carrega o `.env.local` raiz e inicia Crew;
-`npm run dev` exclui esse workspace. Configure as variáveis listadas em
+`apps/crew` é um workspace pnpm independente para revisão de PR com Mastra e
+Anthropic direta. `pnpm run crew` carrega o `.env.local` raiz e inicia Crew;
+`pnpm run dev` exclui esse workspace. Configure as variáveis listadas em
 `apps/crew/.env.example`, incluindo `CREW_DATABASE_URL`, `CREW_PORT` e `CREW_HOST`,
 para manter banco/porta/host separados dos apps de produto. Inicie o banco com
 `docker compose --env-file .env.local --profile crew up -d --wait crew-db`.
 
-Use `npm run <script> -w @stardust/crew` para `check:code`, `check:types`,
+Use `pnpm --filter @stardust/crew run <script>` para `check:code`, `check:types`,
 `check:architecture`, `test:unit`, `test:integration` e `eval`; use
-`npm run build:crew` para compilar. Os testes unitários usam modelos simulados;
+`pnpm run build:crew` para compilar. Os testes unitários usam modelos simulados;
 integrações precisam de Docker; evals fazem chamadas pagas à Anthropic e ao
 Composio. Node 24.11+ é recomendado para o toolchain de build. O CI próprio
 valida o workspace e a imagem sem segredos de inferência.

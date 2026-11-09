@@ -191,7 +191,7 @@ function readScope() {
 function runCodeMultiVitals(argumentsList) {
   if (!existsSync(CODE_MULTIVITALS_PATH)) {
     throw new Error(
-      `Missing CodeMultiVitals executable at ${toRepositoryPath(CODE_MULTIVITALS_PATH)}. Run npm ci first.`,
+      `Missing CodeMultiVitals executable at ${toRepositoryPath(CODE_MULTIVITALS_PATH)}. Run pnpm install --frozen-lockfile first.`,
     )
   }
   const result = spawnSync(CODE_MULTIVITALS_PATH, argumentsList, {
@@ -228,7 +228,7 @@ function updateBaseline(tempDirectory) {
 function checkAgainstBaseline(tempDirectory) {
   if (!existsSync(BASELINE_PATH)) {
     throw new Error(
-      `Missing ${toRepositoryPath(BASELINE_PATH)}. Run npm run update:complexity-baseline first.`,
+      `Missing ${toRepositoryPath(BASELINE_PATH)}. Run pnpm run update:complexity-baseline first.`,
     )
   }
   const baseline = JSON.parse(readFileSync(BASELINE_PATH, 'utf8'))

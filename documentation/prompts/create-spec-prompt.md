@@ -275,7 +275,7 @@ contrate edição manual de artefato gerado.
 Os paths devem ser relativos à raiz do repositório, exatos, normalizados e
 verificados no filesystem. Dependências inalteradas são evidência ou
 consumidores, não linhas do mapa. O checker
-`npm run check:spec-implementation -- <spec>` valida esse mapa contra o diff
+`pnpm run check:spec-implementation <spec>` valida esse mapa contra o diff
 Git e falha em duplicidade, classificação inconsistente, path ausente ou
 mudança não entregue. Specs legadas com inventário em prosa ou no formato
 `Camada | Path e estado` devem ser normalizadas antes de serem implementadas;

@@ -105,7 +105,7 @@ testes, migrations ou artefatos gerados e registre o blocker:
   removidos nem simule papéis antigos;
 - a Spec, seus paths, contratos, exclusões e estados são autoridade; código existente,
   screenshot isolado ou teste passando não os substitui;
-- `npm run check:spec-implementation -- <spec> --base <commit-base>` roda antes dos
+- `pnpm run check:spec-implementation <spec> --base <commit-base>` roda antes dos
   sensores integrados e novamente após qualquer correção que altere, crie, gere ou
   remova path contratado;
 - qualquer erro de implementação, teste, browser, rede, console, migration, CI ou
@@ -218,7 +218,7 @@ Depois de integrar todos os fluxos de implementação e os artefatos gerados:
 
 1. Compare o diff completo com resultados, fronteiras, contratos públicos, invariantes
    persistentes, exclusões e cobertura de sensores da Spec.
-2. Execute `npm run check:spec-implementation -- <spec> --base <commit-base>`. Esse
+2. Execute `pnpm run check:spec-implementation <spec> --base <commit-base>`. Esse
    preflight exige o mapa canônico `Path | Change | ...` do Technical Contract e
    confirma que cada `Create`, `Modify`, `Generate` ou `Remove` corresponde ao diff e ao
    filesystem. Ele é estrutural e não substitui testes, sensores, Reviewers nem Evaluation.

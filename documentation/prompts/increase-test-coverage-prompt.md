@@ -103,9 +103,9 @@ aumento de `skip`/`todo` ou source testável alterado sem teste correspondente.
 Antes de editar, registre o estado do workspace:
 
 ```bash
-npm run check:test-integrity -- --base <commit-base>
-npm run test:coverage -w <workspace>
-npm run check:coverage -- <workspace>
+pnpm run check:test-integrity --base <commit-base>
+pnpm --filter <workspace> run test:coverage
+pnpm run check:coverage <workspace>
 ```
 
 Inspecione o resumo textual e o
@@ -192,21 +192,21 @@ artefatos gerados.
 Execute primeiro o teste focado e depois os sensores aplicáveis:
 
 ```bash
-npm run check:test-integrity -- --base <commit-base>
-npm run test:coverage -w <workspace>
-npm run check:coverage -- <workspace>
-npm run check:code
-npm run check:types
-npm run test:unit
+pnpm run check:test-integrity --base <commit-base>
+pnpm --filter <workspace> run test:coverage
+pnpm run check:coverage <workspace>
+pnpm run check:code
+pnpm run check:types
+pnpm run test:unit
 ```
 
 Acrescente conforme os paths e Rules:
 
 ```bash
-npm run check:architecture
-npm run test:integration
-npm run test:scripts
-npm run check:spec-implementation -- <spec> --base <commit-base>
+pnpm run check:architecture
+pnpm run test:integration
+pnpm run test:scripts
+pnpm run check:spec-implementation <spec> --base <commit-base>
 ```
 
 Para Core, Server, Studio e Web, `test:coverage` e `check:coverage` são
