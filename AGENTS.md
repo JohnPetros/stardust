@@ -324,7 +324,7 @@ No modo padrão, o script falha se alguma variável estiver ausente.
 No modo `--seed`, carrega as fixtures locais fixas. Não reutilize `STUDIO_APP_E2E_*`: as contas do Studio e da Web App
 são independentes.
 
-## Regra obrigatória de validação manual do Frontend
+## Regra obrigatória de verificação manual do Frontend
 
 Toda implementação que envolva frontend, UI, rotas client-side ou interação
 com o navegador deve passar por um smoke manual do caminho feliz em navegador

@@ -208,7 +208,7 @@ export const Button = ({ title, onAction }: { title: string; onAction: () => voi
 
 ## Auditoria obrigatória de UI
 
-Toda mudança frontend deve registrar uma auditoria da Rule no Plan ou no
+Toda mudança frontend deve registrar uma auditoria da Rule no
 `evaluation.md`. A auditoria precisa enumerar cada widget alterado e informar:
 
 | Widget | Entry Point | View | Hook | Resultado | Evidência |

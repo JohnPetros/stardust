@@ -66,5 +66,5 @@ ou publicar o artefato.
 
 Registre as decisões resolvidas, alternativas descartadas e premissas aceitas no artefato final;
 não copie o transcript da entrevista. Se uma nova decisão material surgir durante a escrita,
-integrity check ou revisão, interrompa, reabra o Grilling e só continue após resolver a nova
+checagem de integridade ou revisão, interrompa, reabra o Grilling e só continue após resolver a nova
 frontier e obter a confirmação necessária.

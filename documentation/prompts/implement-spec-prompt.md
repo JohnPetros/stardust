@@ -1,56 +1,100 @@
 ---
 name: implement-spec
-description: Orquestrar uma Spec aberta ou retomada por execução direta ou Plan-backed, mantendo evidências, correções e validação integrada.
+description: Implementar de forma autônoma uma Spec aberta ou retomada do Stardust, verificar o candidato integrado e preservar a evidência para continuação.
 ---
 
 # Implementar Spec
 
-Use este prompt como a única entrada de implementação para toda Spec `open` ou
-`in_progress`. Selecione a estratégia a partir dos artefatos atuais; não peça ao
-usuário para escolher outro prompt:
+Siga [`documentation/sdd.md`](../sdd.md). A Spec fixa comportamento, contratos,
+exclusões e sensores exigidos. Organize a execução diretamente na task atual. Use
+delegação focada quando os escopos forem independentes; não há sequência de
+aprovação por fase ou tarefa. Este prompt é a única
+entrada de implementação: não peça ao usuário para escolher outro prompt e não
+crie outra thread.
 
 ```text
 implement-spec
-├── sem Plan atual → Builder Direct no contexto atual ───────────────┐
-└── Plan atual    → Builders estáveis por ownership e wave ─────────┤
-                                                                     ↓
-                                                           candidato integrado
-                                                                     ↓
-                                  check:spec-implementation + sensores + Reviewers pareados
-                                                                     ↓
-                                                              evaluation.md ready
-                                                                     ↓
-                                                               conclude-spec
+→ Builder Direct ou Builders delimitados
+→ candidato integrado
+→ check:spec-implementation + sensores + verificação manual real
+→ Implementation Reviewer (+ Visual Reviewer em paralelo, quando há UI)
+→ evaluation.md ready
+→ conclude-spec
 ```
 
-Execute tudo na task atual. Não crie outra thread para o usuário.
+## Persistência e regra de parada
 
-## Seleção da estratégia
+Seja dono da implementação e da verificação até o Evaluation ficar `ready`. Não pare
+quando um check passar, o código estiver completo ou um Reviewer responder enquanto
+houver obrigações exigidas e acionáveis. Uma pergunta sobre um check conduz a Spec em
+andamento, salvo se o usuário restringir ou cancelar o objetivo explicitamente.
 
-Leia `documentation/sdd.md`, a Spec,
-Architecture, Modules, Rules aplicáveis e `documentation/tooling.md`. Inspecione
-o `plan.md` colocado ao lado da Spec, quando existir.
+1. Reconcilie todas as verificações `AV-*`/`MV-*`/`VV-*` e de baseline, o mapeamento dos `CA-*`,
+   os `ACH-*` abertos e a revisão independente com o `evaluation.md` antes de
+   escolher a próxima ação.
+2. Execute os checks pendentes, diagnostique falhas, corrija causas dentro do
+   Contract e rerode a verificação afetada. Após cada correção, inspecione todo o
+   conjunto de obrigações restantes e preserve a prova atual não afetada.
+3. Investigue falhas de setup local dentro da autorização existente: saúde e
+   configuração dos serviços, estado de browser expirado, contas/dados definidos na
+   fonte e fixtures/seeds desatualizados. Use fixtures isoladas ou ambientes da própria
+   task. Uma primeira falha ou setup ausente pede diagnóstico, não handoff imediato.
+4. Obtenha as revisões e rechecks exigidos, resolva os findings bloqueantes e
+   reconcilie o alinhamento documental. Nunca remova checks nem enfraqueça asserções ou
+   limiares só para passar; mudanças materiais passam pela reconciliação do Contract.
+5. Antes de ceder o controle, audite cada check/finding restante e continue sempre que
+   houver uma ação segura e autorizada que o faça avançar. O handoff descreve uma
+   interrupção ou um bloqueio real; não substitui trabalho executável.
 
-| Condição | Estratégia |
-| --- | --- |
-| Plan atual não superseded referencia a revisão exata da Spec | execução Plan-backed |
-| Não há Plan e a Spec recomenda entrega pequena e coesa | Builder Direct |
-| Não há Plan, mas dependências, risco ou recovery exigem um | invoque `create-plan` e continue aqui |
-| Plan ficou stale após amendment da Spec | reconcilie ou recrie antes de editar |
-| Spec revisada não precisa mais de Plan | marque Plan como `superseded` e execute Direct |
+Uma fonte de fixture/seed desatualizada é acionável quando os dados pretendidos estão
+definidos no Contract. Inspecione seus consumidores e as Rules aplicáveis, corrija a
+definição na fonte, valide-a e rerode o check originalmente bloqueado. Distinga
+corrigir a fonte de aplicar um seed: inspecione o comportamento real do comando de
+reset/seed e use alvos descartáveis ou isolados. Nunca resete/reseed dados
+compartilhados (inclusive Supabase Dev) sem autorização explícita. Pergunte apenas
+quando os dados pretendidos forem materialmente ambíguos ou quando uma operação
+compartilhada necessária não tiver autorização depois de investigadas as alternativas
+isoladas.
 
-O grafo de dependências do PRD é autoridade de produto, não ordem de execução.
-Derive ownership, waves e paralelismo somente do Technical Contract da Spec,
-paths afetados, dependências de runtime e limites das camadas.
+Pare o trabalho inacabado somente por uma parada/restrição explícita, uma decisão ou
+autorização material genuinamente ausente, ou uma dependência externa indisponível
+depois do diagnóstico e da recuperação permitidos. Conclua antes o trabalho
+independente; registre os IDs afetados, a recuperação e a prova tentadas, por que uma
+ação externa é necessária e a entrada ou mudança exata requerida. Não invente
+não-aplicabilidade nem marque prova ausente como `passed`. Retome quando o bloqueio
+sumir, sem pedir novamente autoridade.
 
-O `Spec Reviewer` já deve estar `clear` antes desta entrada, no gate
-pré-planejamento de compatibilidade com Architecture e Rules. Não invoque nem
-recrie esse Reviewer durante a implementação; use os Reviewers de implementação
-para avaliar o candidato e seus diffs.
+## Estabelecer ou retomar o Contract
 
-As etapas numeradas abaixo descrevem a execução Direct. Para uma Spec com Plan,
-aplique o gate e a sequência de waves descritos em **Execução Plan-backed** e
-use os mesmos sensores, persistência e critérios de prontidão.
+Leia `AGENTS.md`, `documentation/sdd.md`, a Spec e o `evaluation.md` atuais,
+Architecture, Modules, as Rules selecionadas pelos paths afetados,
+`documentation/tooling.md` e o Design Contract com as páginas, boards e componentes do
+Penpot `stardust` pelo Penpot MCP. Reutilize fontes completas ainda atuais neste
+contexto. Inspecione `git status` e os diffs e preserve trabalho não relacionado. Use o
+CodeGraph para cada nova exploração de código, conforme `AGENTS.md`.
+
+A implementação inicial exige Spec `open`; o trabalho retomado exige a mesma revisão e
+um Evaluation com critérios ou findings inacabados. Não ative o Spec Reviewer para
+evidência de implementação. Uma mudança material de Contract passa por `create-spec`:
+preserve o histórico, reconcilie fonte/design/sensores, incremente a revisão e
+invalide a prova afetada.
+
+Antes de qualquer edição de feature, crie ou reconcilie o `evaluation.md` pelo
+Contract de [`create-evaluation`](create-evaluation-prompt.md) e mude a Spec para
+`in_progress`. Registre o Contract atual, a revisão da Spec, o commit-base, o
+branch/candidato, os fatos conhecidos de baseline e a assignment (RP/JN, RF/CA e
+SHI-* mapeados, paths permitidos e proibidos, Rule Pack, referências de Design e
+exits). Inicialize uma linha de Progress por `CA-*`, separando implementação de
+verificação, além de Check Results, Findings, Lições, Handoff e Delivery. Leia os
+relatórios de falha existentes; não lance suites de integração para um baseline nem
+para cumprir o kickoff. A disponibilidade do ambiente pode ser inspecionada sem iniciar
+uma suite comportamental.
+
+Na continuação, compare progresso e evidência registrados com a árvore atual. Um
+critério concluído permanece concluído somente quando o comportamento coberto e as
+provas não mudaram. Inspecione sessões de processo e portas ativas registradas antes de
+subir serviços. Recupere o trabalho inacabado a partir do diff e dos findings e escolha
+a próxima ação sem reconstruir um ledger de tarefas.
 
 ## Invariantes fail-closed
 
@@ -59,245 +103,294 @@ testes, migrations ou artefatos gerados e registre o blocker:
 
 - `implement-spec` é a única entrada de implementação; não reative workflows
   removidos nem simule papéis antigos;
-- nenhuma alteração de feature começa antes de uma assignment com paths,
-  revisão, RF/CA, Rules e exits ser registrada no `plan.md`/`evaluation.md`;
-- a Spec, seus paths, contratos, exclusões e estados são autoridade; código
-  existente, screenshot isolado ou teste passando não os substitui;
-- `npm run check:spec-implementation -- <spec> --base <commit-base>` roda antes
-  dos sensores integrados e novamente após qualquer correção que altere, crie,
-  gere ou remova path contratado;
-- `npm run check:spec-definition -- <spec>` e `npm run check:plan-definition -- <plan>`
-  devem passar antes de qualquer Builder iniciar;
-- qualquer erro de implementação, teste, browser, rede, console, migration,
-  CI ou visual dentro do Contract é correção automática: registre, invalide a
-  evidência afetada, corrija no escopo e rerode os checks;
-- cenários manuais/runtime exigidos são fail-closed. Indisponibilidade,
-  timeout ou falha bloqueia a fase afetada; não use mock ou evidência antiga
-  como substituto;
-- UI exige comportamento automatizado, screenshot Playwright atual e comparação
-  inspecionada por viewport/estado; testes passando sozinhos não bastam;
-- quando houver `design/handoff.md`, ele é o bundle visual offline: use sua ordem de autoridade,
-  crosswalk de tokens, componentes, receitas de layout/estado e extensões aprovadas; não copie
-  valores brutos do Pencil nem invente detalhes ausentes;
+- a Spec, seus paths, contratos, exclusões e estados são autoridade; código existente,
+  screenshot isolado ou teste passando não os substitui;
+- `npm run check:spec-implementation -- <spec> --base <commit-base>` roda antes dos
+  sensores integrados e novamente após qualquer correção que altere, crie, gere ou
+  remova path contratado;
+- qualquer erro de implementação, teste, browser, rede, console, migration, CI ou
+  visual dentro do Contract é correção automática: registre, invalide a evidência
+  afetada, corrija no escopo e rerode os checks;
+- cenários manuais/runtime exigidos são fail-closed: indisponibilidade, timeout ou
+  falha bloqueia o item afetado; não use mock nem evidência antiga como substituto;
 - para Server, confirme comportamento real, autorização, persistência e efeitos
-  colaterais conforme AGENTS.md e Supabase Dev quando aplicável;
-- os workspaces Core, Server, Studio e Web executam cobertura e o ratchet; LSP,
-  Validation, TypeScript Config e Email permanecem excluídos conforme SDD;
-- `evaluation.md` é um ledger vivo: toda mudança de código, teste, browser,
-  migration, artefato, documentação ou validação atualiza comandos, resultado,
-  evidências, freshness, findings e lessons antes do próximo passo.
+  colaterais conforme `AGENTS.md`; o Supabase local é o padrão e o Supabase Dev só entra
+  quando a tarefa exigir o projeto remoto;
+- a execução local é escopada (ver "Execução local escopada" em `documentation/tooling.md`):
+  cobertura/ratchet (`test:coverage`, `check:coverage`) e suítes completas ficam para o CI,
+  salvo impacto demonstrado no workspace inteiro, exigência da Spec ou pedido do usuário; LSP,
+  Validation, TypeScript Config e Email permanecem excluídos do ratchet.
 
-1. Leia Spec, Architecture, Rules e `documentation/sdd.md`.
-2. Congele a revisão e o commit-base.
-3. Crie ou atualize um `plan.md` operacional mínimo para a implementação direta
-   (mesmo sem fases), contendo a tarefa, paths, critérios, estado e próxima ação.
-   O Plan será mantido durante todo o fluxo para registrar cada mudança.
-4. Execute `Builder Direct` no contexto principal e envie Contract, resultado
-   observável, paths, Rules, Architecture, o `design/handoff.md` e seus Node IDs
-   canônicos, estados, viewports, receitas, extensões e MCPs aplicáveis. Não crie
-   um Builder separado para execução Direct. O Builder deve conseguir implementar
-   usando o bundle salvo mesmo sem Pencil; use Pencil novamente apenas quando o
-   Design Contract mudar ou a validação final exigir a fonte canônica.
-5. Inspecione o diff; o Builder não atualiza Spec, Plan ou estado.
-6. Execute `npm run check:spec-implementation -- <spec> --base <commit-base>` antes dos sensores.
-   Execute também `npm run check:spec-definition -- <spec>` e
-   `npm run check:plan-definition -- <plan>` após qualquer alteração documental.
-   A verificação exige o mapa canônico `Path | Change | ...` do Technical Contract.
-   Depois execute `format`, `check:code` e `check:types` nos workspaces afetados,
-   `test:unit` com os arquivos de teste afetados e `check:test-integrity`; execute
-   `check:architecture` e `test:integration` (somente arquivos ou cenários afetados)
-   quando aplicáveis, conforme "Execução local escopada" em `documentation/tooling.md`.
-   Cobertura/ratchet e suítes completas ficam para o CI, salvo impacto demonstrado ou
-   pedido do usuário. Para frontend,
-   faça também a auditoria de `ui-layer-rules.md` e a comparação independente
-   dos nodes Pencil aplicáveis com a Web real, no mesmo viewport e estado.
-   Preserve o design canônico; qualquer simplificação, substituição, adição ou
-   divergência não aprovada é finding bloqueante. Todo Builder registra, para cada
-   mudança visual, o nó e o valor do frame que a sustenta (ou a divergência
-   proposta). Como o Reviewer é read-only e não chama o MCP do Penpot, a task
-   principal entrega a ele o pacote de exports dos frames aplicáveis e as
-   capturas da Web no HEAD final; correções posteriores tornam essas capturas
-   `stale`. Build não é necessário neste
-   ciclo.
-7. Ative um `Implementation Reviewer Direct` read-only, pareado exclusivamente
-   com o Builder Direct. Envie
-   Spec, revisão, Contract, diff, critérios, Rules, Architecture, auditoria UI,
-   evidências Pencil/Playwright, matriz de divergências aprovadas e resultados
-   oficiais dos sensores.
-8. Se `failed`, registre o finding no `evaluation.md` (ou crie um Plan se ele
-   exigir tarefas), crie `Builder Fix IR-<n>`, reexecute sensores invalidados e
-   repita o Reviewer pareado quando o diff ou qualquer evidência tiver sido invalidada.
-   Qualquer mudança após o veredito invalida o aceite anterior. Após três
-   falhas iguais, escale ao usuário.
-9. Execute o preflight integrado e crie/atualize `evaluation.md` com evidências
-    reais, resultado do Reviewer, warnings, findings, decisões e lições.
-10. Encaminhe para `open-pr` somente com o Reviewer pareado aceito e o `evaluation.md`
-    completo; depois do CI verde, use `conclude-spec`.
+## Execução autônoma e ownership delimitado
 
-## Builder activation gate
+A task principal decide a ordem, a estrutura de implementação, as dependências e a
+recuperação dentro do Contract aprovado e das Rules. Resolva escolhas rotineiras e
+reversíveis diretamente. Pergunte somente quando uma escolha não resolvida alterar
+materialmente comportamento de produto, escopo, ownership, contratos públicos ou
+persistentes, ou um compromisso técnico consequente. Árvores internas existentes
+orientam o posicionamento; não exigem amendment para cada helper ou widget.
 
-Antes de qualquer alteração de feature, ative uma assignment delimitada contendo
-a revisão exata da Spec, RP/JN, RF/CA e SHI-* mapeados, paths permitidos e proibidos,
-Rule Pack, referências de Design, ownership e exits de validação. Registre a
-assignment no `plan.md` e no `evaluation.md`. A task principal coordena,
-inspeciona e integra; não substitui um Builder de ownership por edição direta
-sem escopo.
+O grafo de dependências do PRD é autoridade de produto, não ordem de execução. Derive
+a ordem somente do Technical Contract, dos paths afetados, das dependências de runtime
+e dos limites das camadas.
 
-Use `Builder Direct` para uma entrega pequena e coesa sem Plan. Com Plan,
-ative Builders estáveis por boundary (`Builder Core`, `Builder Server`,
-`Builder Studio`, `Builder Web` ou equivalente), nunca um Builder por fase,
-package ou tarefa quando o trabalho puder permanecer no mesmo contexto. Use no
-máximo três Builders concorrentes salvo justificativa concreta no Plan, com
-paths não sobrepostos. Shared/generated files, dependências e lockfiles ficam
-sob coordenação da task principal.
+Implemente diretamente quando o trabalho for coeso (`Builder Direct`, no contexto
+principal, sem subagente). Para fluxos independentes, atribua Builders irmãos nomeados
+por ownership (`builder_core`, `builder_server`, `builder_web` ou equivalente) com:
 
-Para o painel de subagentes, use nomes estáveis em `snake_case` (por exemplo,
-`builder_core`, `builder_server`, `builder_studio`, `builder_web` e
-`implementation_reviewer`). Retome o mesmo Builder/Reviewer após correções;
-crie Builder Fix apenas quando o original não puder ser retomado ou a correção
-for genuinamente independente.
+- caminho e revisão da Spec e os resultados `RF`/`CA` relevantes;
+- fronteiras exatas permitidas e proibidas e dependências compartilhadas;
+- Rule Pack, referências de design e findings existentes;
+- comandos de feedback unit/component/estático e o resultado esperado.
 
-## Execução Plan-backed
+Builders não criam outros subagentes. Mantenha o ownership concorrente disjunto, avise
+que não estão sozinhos no worktree e devem preservar edições alheias. Coordene
+contratos compartilhados, artefatos gerados, migrations, lockfiles e mudanças
+cross-boundary na task principal. Inspecione cada diff devolvido e incorpore só o
+trabalho aderente ao Contract. Delegue por ownership/resultado coeso, não por arquivo
+nem por fase cerimonial.
 
-Quando houver Plan atual, ele controla sequencing, status, tentativas e próxima
-ação; o `evaluation.md` controla evidências executadas e findings. Para cada
-wave pronta:
+Builders escrevem ou atualizam testes a partir das alegações de aceitação, inclusive
+falhas, recuperação e estados enumerados, e executam checks focados unit/component e
+estáticos durante a implementação. Integração de Server, browser, jobs e migrations
+pertence ao ciclo de verificação integrada final, não a cada saída de Builder. Prefira
+os comandos reais do CI e configuração reproduzível explícita a segredos de
+desenvolvedor.
 
-1. confirme revisão, dependências, critérios, paths, Rules, assignments e exits;
-2. marque a wave e tarefas afetadas como `in_progress`;
-3. ative ou retome apenas Builders de ownership com paths independentes;
-4. inspecione e integre diffs sem permitir que Builders editem Spec, Plan ou
-   Evaluation;
-5. execute sensores focados da fase e atualize imediatamente Evaluation e Plan;
-6. conclua uma tarefa somente com seus exits aprovados e a fase somente quando
-   todos os seus exits passarem;
-7. em falha, mantenha o trabalho `in_progress`, invalide evidências afetadas,
-   retome o Builder responsável e rerode somente o que mudou.
+Siga as Rules de fronteira de teste selecionadas: use-cases mockam ports; controllers
+exercitam o app registrado e a persistência reais; jobs exercitam a execução durável
+registrada; testes Web usam a fronteira do widget/hook/Page/Layout dono. Mantenha
+cobertura e asserções existentes significativas. Não enfraqueça um check, não pule uma
+falha, não remova cenários válidos nem invente um comando para reportar verde.
 
-Cada Builder recebe um `Implementation Reviewer` read-only pareado com seu
-escopo. Não crie Reviewer por aplicação adicional, nem aceite relatório de
-Builder como evidência oficial. Uma revisão integrada extra só é permitida
-quando existir uma interação cross-boundary sem Builder responsável.
+Atualize os exemplos `.rest` do grupo de rotas junto com a implementação dona, em
+`apps/server/rest-client/`, com uma requisição rotulada por rota, contrato atual e
+variáveis reutilizáveis sem segredos. Cada hook de comportamento `use-*.ts` no escopo
+tem `tests/use-*.test.ts`, salvo exceção explícita da Rule Pack registrada no
+Evaluation. Gere rotas e outros artefatos com os comandos do repositório.
 
-### Validação focada por Builder
+## Implementação com design
 
-- `Builder Core`, `Builder Server`, `Builder Studio` e `Builder Web` executam
-  os sensores aplicáveis de código, tipos e testes do próprio escopo;
-- alterações de comportamento no Server incluem cenários focados contra o
-  servidor real quando exigido pela Spec, cobrindo status/body, validação,
-  autenticação, autorização, persistência e efeitos colaterais;
-- cada grupo de rotas HTTP alterado mantém o `.rest` correspondente em
-  `apps/server/rest-client/`, com uma requisição rotulada por rota e contrato
-  atual, sem credenciais;
-- cada hook de comportamento `use-*.ts` sob o escopo possui teste
-  `tests/use-*.test.ts`, salvo exceção explícita da Rule Pack;
-- `Builder Web` usa Playwright para interações/estados afetados, incluindo
-  teclado, foco, viewport estreito, console, falhas de request e screenshots
-  atuais quando houver Design Contract.
+Leia o Design Contract da Spec e inspecione os boards e componentes nomeados do Penpot
+`stardust` pelo **Penpot MCP** (o Builder e o Visual Reviewer usam o MCP diretamente),
+exportando-os quando precisar de uma referência renderizada.
+Mapeie as variáveis vinculadas aos tokens do repositório; não copie valores sem
+variável, não invente detalhes ausentes e use primitivos e tokens semânticos
+existentes, copy pt-BR acessível e as Rules de UI/roteamento selecionadas. Preserve o
+design canônico: qualquer simplificação, substituição, adição ou divergência não
+aprovada é finding bloqueante. Não salve exports na pasta da feature nem edite o
+arquivo Penpot, salvo se a Spec o incluir no escopo.
 
-Os Builders reportam comandos e resultados exatos, mas o relatório não é
-evidência oficial. A task principal verifica os exits no candidato integrado e
-registra comandos, resultados, freshness e lessons no `evaluation.md`.
+A Spec define os estados renderizados happy-path e os viewports exigidos. Cubra
+loading, empty, error, recovery, concorrência e desfechos incomuns com testes
+automatizados; não transforme cada board em outro cenário manual. A evidência visual
+exigida vem do candidato integrado, depois da última edição de UI afetada, com
+rota/estado/viewport/fixture e path do artefato. Uma captura anterior de UI inalterada
+pode permanecer válida quando suas dependências e o estado renderizado não mudaram;
+explique a evidência mantida no Evaluation.
 
-### Contrato do Evaluation
+### Inventário de evidência manual e visual
 
-Use a estrutura canônica definida em `documentation/prompts/create-evaluation-prompt.md`;
-não invente um formato paralelo nem edite um template compartilhado. Ao iniciar
-ou retomar uma implementação, reconcilie as seções existentes sem apagar
-evidências históricas. Registre uma linha por `RF/CA`, sensor, cenário `VM-*`,
-comparação visual, finding e check de CI, usando IDs estáveis `EV-*`, `VM-*`,
-`ACH-*` e `CI-*`. Toda evidência afetada por uma mudança deve ser marcada como
-`stale` antes de nova captura.
+Antes de executar ou delegar a verificação, enumere no Evaluation cada obrigação Manual
+e Visual do Contract, com uma linha por jornada ou por estado/viewport renderizado
+exigido: IDs `MV`/`VV`/`CA`, superfície/rota, estado, viewport, board do Penpot, candidato,
+path do artefato, resultado observado e disposição da revisão. Mantenha o inventário no
+Evaluation, sem criar outro artefato de planejamento nem cenários além do Contract.
 
-## Reinforcement de Rules e findings
+Page, dialog, estados mobile e demais superfícies são obrigações distintas quando
+exigidas: a evidência de uma superfície não estabelece o resultado de outra, mesmo que
+compartilhem componentes. Uma captura continua `pending` até ser inspecionada contra um
+export atual do board específico. Registre observações concretas sobre as propriedades
+visuais exigidas e qualquer desvio aprovado; a mera existência da imagem não é prova.
+Comportamento manual e aparência visual têm resultados separados: uma jornada que
+funciona não prova correspondência de design, e uma imagem correspondente não prova
+autenticação nem persistência reais.
+
+## Verificação integrada e ciclo de falha
+
+Execute as verificações Automatizadas (`AV-*`), Manuais (`MV-*`) e Visuais (`VV-*`) do Verification Contract e todos os gates de
+baseline aplicáveis de Rules e Tooling. Para conjuntos finitos contratados, verifique as
+combinações definidas; para entradas ilimitadas, use as classes de equivalência e os
+limites contratados. Tooling exigido e indisponível deixa o check `blocked`; cobertura
+não o substitui. Não instale um runner como ação incidental.
+
+Depois de integrar todos os fluxos de implementação e os artefatos gerados:
+
+1. Compare o diff completo com resultados, fronteiras, contratos públicos, invariantes
+   persistentes, exclusões e cobertura de sensores da Spec.
+2. Execute `npm run check:spec-implementation -- <spec> --base <commit-base>`. Esse
+   preflight exige o mapa canônico `Path | Change | ...` do Technical Contract e
+   confirma que cada `Create`, `Modify`, `Generate` ou `Remove` corresponde ao diff e ao
+   filesystem. Ele é estrutural e não substitui testes, sensores, Reviewers nem Evaluation.
+3. Execute `format`, `check:code` e `check:types` nos workspaces afetados e em seus
+   consumidores, `test:unit` com os arquivos de teste afetados, `check:test-integrity` e
+   `check:architecture` quando aplicável, conforme "Execução local escopada" em
+   `documentation/tooling.md`. Cobertura/ratchet e suítes completas só entram com impacto
+   demonstrado no workspace, exigência da Spec ou pedido do usuário (o CI as executa).
+   Rode `check:complexity -w <workspace>` quando o escopo exigir. Registre cada categoria
+   estática explicitamente. Um runner designado na task principal é dono dos comandos e
+   resultados de integração.
+4. Execute as seleções de integração contratadas (Server, browser, jobs) contra o
+   candidato integrado, com arquivos/cenários exatos e fixtures compatíveis com o CI,
+   mostrando que os testes pretendidos rodaram. Selecione testes locais somente para as
+   mudanças do escopo e seus consumidores diretamente afetados; amplie apenas diante de
+   impacto de dependência demonstrado ou de uma lacuna concreta na prova do escopo. Uma
+   suite local completa exige escopo que a abranja ou pedido explícito do usuário.
+5. Em falha, registre o comando/resultado e o finding mapeado, corrija dentro do
+   Contract e rerode os checks de integração que falharam e os afetados até todas as
+   seleções exigidas passarem. Seleções que passaram e não foram afetadas mantêm sua
+   evidência; reexecuções mais amplas exigem uma dependência compartilhada alterada ou
+   uma lacuna de cobertura concreta. Preserve falhas históricas de execuções completas:
+   uma correção focada estabelece resultados focados, não um passe completo inferido.
+   Evite repetir testes completos inalterados quando um comando real de cobertura já os
+   executa.
+6. Execute os cenários manuais happy-path concisos exigidos pela Spec com o Playwright
+   em navegador real, seguindo a seção de verificação manual do `AGENTS.md`: serviços
+   locais, login e rota protegida quando aplicáveis, resultado principal visível e
+   status `2xx` dos endpoints essenciais, além de URL final, persistência,
+   teclado/foco, viewport estreito e console/rede conforme aplicável. Capture os visuais
+   exigidos durante essas jornadas. Não explore manualmente estados de erro, loading ou
+   recovery, nem adicione matrizes negativas ou contas/fixtures repetidas sem uma
+   obrigação de aceite.
+7. Inspecione as capturas reais contra as referências e registre as diferenças
+   concretas e os limites da evidência. Um screenshot não prova persistência nem
+   autorização; transporte mockado não substitui uma jornada real exigida.
+8. Encerre apenas processos e fixtures descartáveis iniciados por esta task; preserve
+   serviços e dados compartilhados conforme `AGENTS.md`.
+
+Serviços, contas ou fixtures exigidos e indisponíveis são bloqueios, nunca checks
+aprovados. Continue o trabalho independente útil e reporte a prova indisponível exata.
+Repita uma falha transitória de ambiente quando houver indício de que pode ter sucesso.
+Uma dispensa explícita do usuário é registrada como `waived`, sem alegação de aprovação
+nem remoção das obrigações de aceite automatizadas.
+
+## Revisão paralela e correções
+
+Ative o [Implementation Reviewer](../agents/implementation-reviewer-agent.md)
+independente sobre o diff integrado, a Spec atual, as Rules selecionadas e a evidência de
+aceite atual. Para UI design-backed, ative o
+[Visual Reviewer](../agents/visual-reviewer-agent.md) **em paralelo** sobre o mesmo
+candidato e as capturas e referências exigidas já existentes. Não adicione um terceiro
+Reviewer serial; especialistas adicionais exigem um risco material distinto, não uma
+contagem de pacotes nem uma fronteira de tarefa.
+
+Os Reviewers inspecionam as asserções e o escopo/atualidade da evidência para cada
+`CA-*`. Eles consomem os resultados de integração registrados e não rerodam suites
+verdes só para ocupar outro papel. Prova ausente, stale ou não sustentada gera um
+finding concreto e o sensor específico necessário. A task principal reconcilia os
+relatórios, verifica os findings e registra os IDs `ACH-*` e sua disposição.
+
+Entregue ao Visual Reviewer o inventário completo de estados visuais exigidos, inclusive
+capturas ausentes, e peça uma disposição para cada linha. Reconcilie você mesmo o
+escopo revisado com o inventário: um PASS geral ou a revisão de apenas algumas capturas
+não fecha as linhas restantes. Estados exigidos ausentes, não inspecionados, stale ou
+divergentes continuam `pending`, `stale` ou `failed` e impedem o check visual de passar.
+Conclua o trabalho autorizado que falta e peça a revisão afetada antes de alegar
+conclusão.
+
+Corrija findings dentro do Contract de forma autônoma. Rerode apenas os sensores e as
+comparações visuais invalidados e retome somente o escopo de revisão afetado. Uma
+correção que cruza código e visuais reativa os dois Reviewers em paralelo. Um conflito
+de Contract volta a `create-spec`; findings de implementação permanecem neste ciclo de
+correção. Não reduza o aceite silenciosamente nem altere PRDs. Crie `Builder Fix ACH-<n>`
+somente quando o Builder original não puder ser retomado ou a correção for
+genuinamente independente. Após três falhas materialmente idênticas, peça decisão ao
+usuário apenas se a resolução não puder ser obtida nas autoridades, na codebase ou no
+ambiente.
+
+### Correção versus mudança de Contract
+
+Classifique qualquer pedido ou discrepância contra a revisão vigente antes de alterar
+código ou artefatos:
+
+- **Correção de implementação:** mantenha a revisão, registre um `ACH-*`, reabra o
+  Evaluation e o trabalho afetado, marque como `stale` somente a evidência afetada,
+  retome o Builder e rerode seus exits.
+- **Mudança de Contract:** pause, retorne a Spec para `draft`, invoque `create-spec`
+  para obter autoridade e atualizar PRD, Architecture, Modules, Design, Tooling ou Rules
+  quando necessário; incremente a revisão, reconcilie o Evaluation e só então retome.
+
+Não solicite autorização para corrigir uma discrepância dentro do Contract. Pergunte
+somente quando a classificação, o resultado de produto, uma autoridade, segurança ou o
+ambiente não puderem ser resolvidos pelas fontes do projeto. Alterações fora da Spec
+permanecem fora do candidato e do Evaluation, salvo se afetarem os paths avaliados,
+contaminarem a evidência ou causarem regressão.
+
+## Reforço de Rules e findings
 
 Quando um finding revelar guidance ausente, ambígua ou repetidamente violada:
 
 - se a Rule já for clara, corrija a implementação e registre `No change` com a
   justificativa;
-- se a convenção reutilizável não estiver clara, pause o trabalho dependente,
-  atualize a autoridade pelo workflow apropriado e recompute o Rule Pack;
-- para anti-padrão de implementação reutilizável, use `register-antipattern` na
-  Rule da camada, com padrão proibido, alternativa obrigatória e prova de
-  validação;
-- invalide evidências afetadas, registre a alteração em Evaluation e rerode o
-  correction path e seus sensores.
+- se a convenção reutilizável não estiver clara, pause o trabalho dependente, atualize a
+  autoridade pelo workflow apropriado e recompute o Rule Pack;
+- para anti-padrão de implementação reutilizável, use `register-antipattern` na Rule da
+  camada, com padrão proibido, alternativa obrigatória e prova de validação;
+- invalide evidências afetadas, registre a alteração no Evaluation e rerode o caminho
+  de correção e seus sensores.
 
-Todo finding aceito possui dois registros no `evaluation.md`: o problema
-concreto em `Findings` e, quando houver orientação reaproveitável, uma entrada
-em `Lessons learned` com a autoridade afetada e sua disposição. Atualize PRD,
-Architecture, Design, Tooling, Rules ou prompts quando a lição for durável;
-detalhes locais, typo isolado, falha transitória ou regra já documentada recebem
-uma disposição explícita de não alteração. Mudanças de produto, Contract,
-ownership arquitetural ou política global exigem autoridade do usuário.
+Todo finding aceito tem o problema concreto em `Findings` e, quando houver orientação
+reaproveitável, uma entrada em `Lições aprendidas` com a autoridade afetada e sua
+disposição. Atualize PRD, Architecture, Design, Tooling, Rules ou prompts quando a
+lição for durável; detalhes locais, typo isolado, falha transitória ou regra já
+documentada recebem uma disposição explícita de não alteração. Mudanças de produto,
+Contract, ownership arquitetural ou política global exigem autoridade do usuário.
 
-## Conformance e prontidão
+## Evidência e prontidão
 
-Antes de cada handoff e depois de cada correção, compare o candidato com a
-árvore de arquivos, contratos, comportamentos, estados, exclusões e exits da
-Spec. Registre no Evaluation a existência de paths, ownership, RF/CA, testes,
-estados de UI, Design, REST-client e comandos executados. Falha estrutural ou
-semântica mantém o item `in_progress`; não marque como passed porque outro
-sensor passou.
+Siga a estrutura do [Evaluation](create-evaluation-prompt.md). O Progress tem uma linha
+por `CA-*` com Implementation (`Pending`/`Partial`/`Complete`) e Verification
+(`Pending`/`Partial`/`Passed`/`Failed`/`Blocked`/`Stale`) separados, checks/evidências
+mapeados e trabalho restante. Check Results inclui os checks de baseline e usa `Pending`,
+`Passed`, `Failed`, `Blocked`, `Stale` ou `Not applicable`, com IDs `EV-*`, procedimentos
+exatos, seleção e contagem reais de testes, resultados esperado/observado,
+candidato/data, ambiente/fixtures, paths de artefatos e limites. Preserve tentativas falhas ou
+interrompidas e limitações. Use IDs estáveis `CA`/`AV`/`MV`/`VV`/`EV`/`ACH` e registre
+checkpoints significativos (trabalho de Builder aceito, execução de sensores, findings
+resolvidos) em vez de uma atualização de ledger por edição de arquivo.
 
-Após integrar o candidato final:
+Invalide a evidência pela alegação e dependências afetadas, não pela idade do commit.
+Uma mudança de implementação, fixtures, ambiente ou Contract reabre os checks que afeta.
+Evidência aprovada inalterada permanece válida entre transições de papel, edições de
+ledger, revisão e conclusão; registre a evidência mantida e o motivo. Seed, fixture,
+configuração ou ambiente alterados registram escopo, procedimento reproduzível e
+cleanup sem segredos; artefatos gerados registram fonte, gerador e output; testes novos
+ou alterados registram o comportamento protegido e o comando.
 
-1. execute o `check:spec-implementation` para a revisão exata;
-2. execute `format`, `check:code` e `check:types` nos workspaces afetados, `test:unit`
-   com os arquivos afetados, `check:test-integrity` e os sensores de Architecture,
-   integração, browser e Supabase Dev conforme os paths; cobertura/ratchet e suítes
-   completas só com impacto demonstrado ou pedido do usuário (o CI as executa);
-3. confirme evidências manuais autenticadas da Web App/Studio, quando aplicável,
-   incluindo console, pageerror, requestfailed e respostas HTTP;
-4. execute o Reviewer pareado aplicável e resolva todos os findings bloqueantes;
-5. só então marque Evaluation como `ready` e invoque `conclude-spec` quando a
-   autoridade de publicação estiver disponível.
+Mantenha um Handoff factual e pequeno: revisão do Contract, branch/candidato, critérios
+concluídos e inacabados, paths interrompidos ou não commitados e seu ownership, últimos
+resultados, sessões de processo/portas iniciadas pela task e cleanup, bloqueios e a
+próxima ação. Mantenha os bloqueios específicos; não converta esta seção em fases,
+árvores de tarefas, estimativas nem um segundo Contract.
 
-Após três falhas materialmente idênticas, peça decisão do usuário somente se a
-resolução não puder ser obtida nas autoridades, codebase ou ambiente.
+Registre lições reutilizáveis com referências `ACH`/`EV` de apoio e a ação documental ou
+o motivo de nenhuma mudança. Uma correção trivial não precisa virar lição nem política
+global. Mantenha o Delivery (verificação de fonte, alinhamento documental, estado de
+publicação e limitações) factual, sem resultados de CI do PR.
 
-## Correções solicitadas durante a implementação
+Quando todos os critérios tiverem prova atual aprovada ou não-aplicabilidade justificada,
+os sensores aplicáveis passarem e os findings bloqueantes estiverem resolvidos, marque o
+Evaluation como `ready` e continue diretamente para `conclude-spec`. A conclusão reutiliza
+esses resultados; não inicia outra execução ampla de integração. Os registros exatos de
+automação, manual, revisão, dispensa e limitações devem sustentar cada alegação de
+prontidão. Uma dispensa não transforma um check obrigatório `failed`/`blocked`/`stale` em
+aprovação nem em prontidão. A publicação ainda exige a autoridade existente, e a conclusão
+publicada aguarda o CI do HEAD atual e a resolução das conversas bloqueantes.
 
-Classifique qualquer pedido ou discrepância contra a revisão vigente antes de
-alterar código ou artefatos:
+Antes de mudar o status de prontidão ou reportar que todas as validações
+manuais/visuais passaram, reconcilie o conjunto completo exigido pela Spec com o
+inventário, os artefatos reais, os resultados observados e as disposições dos Reviewers.
+Cada linha exigida deve ter evidência atual aprovada e sustentada ou não-aplicabilidade
+autorizada pelo Contract. Não exclua silenciosamente uma página, viewport ou estado, não
+infira cobertura total do resumo de um Reviewer nem apresente verificação parcial como
+completa. Se uma alegação anterior de conclusão não era sustentada, preserve-a e corrija-a
+no Evaluation, reabra o check afetado e reporte a correção explicitamente.
 
-- **Correção de implementação:** mantenha a revisão, registre um `ACH-*`, mude
-  Evaluation e o trabalho afetado para `in_progress`, marque somente a
-  evidência afetada como `stale`, retome o Builder responsável e rerode seus
-  exits. Crie Builder Fix apenas quando o Builder original não puder ser
-  retomado ou a correção for independente.
-- **Mudança de Contract:** pause, retorne a Spec para `draft`, invoque
-  `create-spec` para obter autoridade e atualizar PRD, Architecture, Modules,
-  Design, Tooling ou Rules quando necessário; incremente a revisão, reconcilie
-  Plan/Evaluation e só então retome este workflow.
+## Relatório
 
-Não solicite autorização para corrigir uma discrepância dentro do Contract.
-Pergunte somente quando a classificação, o resultado de produto, uma autoridade,
-segurança ou o ambiente não puderem ser resolvidos pelas fontes do projeto.
-Alterações fora da Spec permanecem fora do candidato e da Evaluation, salvo se
-afetarem os paths avaliados, contaminarem a evidência ou causarem regressão.
-
-## Persistência obrigatória após cada mudança
-
-Depois de **cada mudança de implementação**, a task principal deve atualizar
-imediatamente o `plan.md` e o `evaluation.md`, antes de iniciar outra mudança,
-executar o próximo sensor ou criar o Reviewer. Isso vale individualmente para a
-implementação inicial, `Builder Fix`, alterações de seed/fixture/configuração/
-ambiente, artefatos gerados ou derivados e testes novos ou alterados — inclusive
-mudanças feitas para corrigir review, sensores ou CI.
-
-No `plan.md`, registre a tarefa, tentativa, motivo, paths/artefatos afetados,
-RF/CA, estado e próxima ação. No `evaluation.md`, registre a mudança como
-evidência factual, impacto nos critérios, sensores/evidências invalidados ou
-pendentes, commit/HEAD e decisões, warnings ou findings. Para seed/ambiente,
-registre escopo, procedimento reproduzível e cleanup sem expor segredos; para
-artefatos gerados, fonte, gerador e output; para testes, comportamento protegido
-e comando de execução.
-
-Não agrupe mudanças em um registro retrospectivo. Se a mudança alterar o diff
-ou qualquer evidência de Contract, Rule, Pencil ou Playwright, invalide o
-veredito anterior e registre o novo sensor/Reviewer necessário. O fluxo não pode
-prosseguir enquanto o Plan e o `evaluation.md` não refletirem a mudança mais
-recente.
-
-Não crie outro papel de implementação, fork ou nova task para o fechamento.
+Devolva links da Spec e do Evaluation, revisão/candidato, resultados implementados,
+resultados dos sensores, findings e disposições dos Reviewers, critérios/bloqueios
+restantes e a próxima ação. Mantenha explícitas as limitações de runtime e visuais.
+Orientação reutilizável revelada por um defeito pode ser registrada como lição
+fundamentada; mudanças de autoridade em todo o repositório e escritas externas seguem
+suas fronteiras de autorização.

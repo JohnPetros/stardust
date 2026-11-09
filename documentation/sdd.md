@@ -8,13 +8,13 @@ rastreável e uma entrega fechada por evidência no PR. Todo o fluxo ocorre na m
 ```text
 PRD, Issue, Report ou demanda direta
 → create-spec
-→ Spec Reviewer
-→ implement-spec direto | create-plan → implement-spec Plan-backed
-→ sensores integrados + validação manual real
-→ Implementation Reviewer por Builder (Direct sem Plan ou pareado por fase/tarefa)
-→ check:spec-definition + check:plan-definition + check-spec-implementation + check:test-integrity + evaluation.md ready
+→ Spec Reviewer + revisão do usuário da Spec escrita
+→ implement-spec
+→ verificação integrada (automatizada + manual + visual)
+→ Implementation Reviewer (+ Visual Reviewer em paralelo, quando há UI)
+→ check-spec-implementation + check:test-integrity + evaluation.md ready
 → conclude-spec → commit-code → open-pr → CI do HEAD do PR
-→ Spec, Plan e Evaluation completed
+→ Spec e Evaluation completed
 ```
 
 SDD não é obrigatório para manutenção que não precise de Contract de feature. A
@@ -33,16 +33,17 @@ Use estas abreviações e namespaces em todo artefato SDD novo ou revisado:
 | **JN-\*** | *Jornada* — jornada do usuário |
 | **RF-\*** | *Requisito Funcional* — requisito funcional da Spec local |
 | **CA-\*** | *Critério de Aceitação* — critério verificável da Spec |
-| **VM-\*** | *Validação Manual* — cenário de validação manual |
+| **AV-\*** | *Verificação Automatizada* — teste, sensor ou gate automatizado de baseline |
+| **MV-\*** | *Verificação Manual* — jornada happy-path executada em navegador ou terminal reais |
+| **VV-\*** | *Verificação Visual* — comparação de um board do Penpot com a captura Playwright correspondente |
 | **EV-\*** | *Evidência* — evidência de que um critério ou gate foi atendido |
-| **ACH-\*** | *Achado de revisão* — finding de revisão, sensor, CI ou validação |
-| **CI-\*** | check ou gate automatizado de qualidade |
+| **ACH-\*** | *Achado de revisão* — finding de revisão, sensor ou verificação |
 | **SHI-\*** | chave da issue Jira usada para rastrear uma entrega Shifu |
 
-As relações de rastreabilidade são `RP/JN → RF → CA → EV`; `VM` descreve a
-validação manual que produz uma `EV`, e `ACH` registra problemas encontrados
-durante revisão ou validação. `CI-*` é reservado a checks automatizados e não
-deve ser usado para tarefas, fases, findings ou correções de Builder. `SHI-*`
+As relações de rastreabilidade são `RP/JN → RF → CA → EV`; `AV`, `MV` e `VV`
+descrevem as verificações que produzem uma `EV` (os IDs são únicos entre os três tipos), e
+`ACH` registra problemas encontrados durante revisão ou verificação. O Evaluation não registra resultados
+do CI do PR: workflows, checks e build ficam no PR. `SHI-*`
 é opcional e só aparece quando houver uma issue Jira Shifu.
 
 Artefatos históricos podem manter identificadores antigos para não quebrar
@@ -115,12 +116,13 @@ normalizados na próxima revisão, sem inventar conteúdo ausente.
 
 ## Papéis
 
-| Papel                   | Responsabilidade                                                                                                    | Restrição                                                            |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Task principal          | seleciona workflows, mantém artefatos, integra diffs, executa sensores, registra evidência, publica e roteia falhas | não delega o veredito oficial nem usa relato de subagente como prova |
-| Spec Reviewer           | executa um único gate antes do planejamento, com retries da mesma revisão quando necessário                  | read-only; só avalia Architecture e Rules                              |
-| Builder                 | implementa um escopo de paths contra uma revisão exata                                                              | não edita Spec, Plan, Evaluation, PRD ou Rules                       |
-| Implementation Reviewer | revisa o diff e o escopo do Builder pareado, contra Architecture e layer rules                                 | read-only; não corrige nem produz o veredito oficial                 |
+| Papel                   | Responsabilidade                                                                                                          | Restrição                                                            |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Task principal (Orchestrator) | seleciona workflows, mantém Spec e Evaluation, decide ordem e delegação, integra diffs, executa sensores, registra evidência, publica e roteia falhas | não delega o veredito oficial nem usa relato de subagente como prova |
+| Spec Reviewer           | executa um único gate antes da implementação, com retries da mesma revisão quando necessário                              | read-only; só avalia Architecture e Rules                            |
+| Builder                 | implementa um escopo delimitado de paths contra uma revisão exata (Direct no contexto principal ou irmãos por ownership)   | não edita Spec, Evaluation, PRD ou Rules; usa o Penpot MCP para UI   |
+| Implementation Reviewer | revisa o candidato integrado contra Contract, Architecture, layer rules e a evidência atual                               | read-only; não corrige nem produz o veredito oficial                 |
+| Visual Reviewer         | compara, em paralelo, as capturas happy-path exigidas com exports atuais dos boards do Penpot, linha a linha do inventário | não edita nem captura; lê o Penpot só pelo MCP; consultivo           |
 
 Subagentes são irmãos criados pela task principal na task atual. Nenhum subagente cria outro
 agente ou task. `create-spec`, `implement-spec` e `conclude-spec` são workflows, não papéis.
@@ -131,11 +133,7 @@ agente ou task. `create-spec`, `implement-spec` e `conclude-spec` são workflows
 documentation/prds/<module>/<slug>.md           # PRD canônico versionado do módulo
 documentation/features/<domínio>/<feature>/
 ├── spec.md
-├── plan.md                 # opcional
-├── evaluation.md           # criado no kickoff da implementação
-└── design/                 # quando houver Design Contract
-    ├── handoff.md
-    └── <referências>.png
+└── evaluation.md           # criado no kickoff da implementação
 ```
 
 Uma mudança de comportamento após conclusão usa
@@ -143,28 +141,24 @@ Uma mudança de comportamento após conclusão usa
 
 | Artefato             | Possui                                                      | Não possui                              |
 | -------------------- | ----------------------------------------------------------- | --------------------------------------- |
-| `spec.md`            | comportamento, Design, Technical e Validation Contracts     | tentativas e resultados executados      |
-| `plan.md`            | waves, dependências, ownership, status e próxima ação       | segundo Contract técnico                |
+| `spec.md`            | comportamento, Design, Technical e Verification Contracts     | tentativas e resultados executados      |
 | `evaluation.md`      | comandos, evidências, findings, histórico, comparações e CI | autoridade de produto ou arquitetura    |
-| `design/handoff.md` | contrato visual offline: inventário de referências; nodes, estados e viewports; mapeamento para surfaces; tokens, componentes, layout, ícones, tema, responsividade e acessibilidade; desvios permitidos; comparação com `RF/CA/VM` | prova produzida pela implementação ou resultado real de validação |
+O arquivo Penpot `stardust` é a fonte visual canônica e editável, inspecionado diretamente pelo
+Penpot MCP. O design não é extraído para artefatos da feature. Screenshots da implementação ficam
+em `test-results/` ignorado ou em artifacts de CI; o identificador, a comparação e o resultado
+ficam em `evaluation.md`.
 
-O `.pen` ou a referência visual canônica continua sendo a fonte editável. As imagens salvas em
-`design/` são referências de entrada e devem ter dimensão, estado e viewport registrados no
-handoff. Screenshots da implementação ficam em `test-results/` ignorado ou em artifacts de CI;
-o identificador, a comparação e o resultado ficam em `evaluation.md`.
-
-`design/manifest.md` é um nome legado: artefatos históricos permanecem válidos e não devem ser
-renomeados em massa. Uma nova Spec com Design Contract usa `design/handoff.md`. Ao atualizar
-materialmente um artefato legado, migre o nome somente se o contrato visual estiver sendo
-refrescado, atualize as referências vivas e preserve o histórico da revisão.
+Handoffs de design, manifests e imagens de referência extraídas não são mais usados: novas Specs
+não os criam nem os referenciam. Ao atualizar materialmente uma Spec legada que os cite,
+substitua essas referências por boards do Penpot `stardust` e preserve o histórico da revisão.
+`design/stardust.fig` (Open Pencil) é um arquivo legado congelado, mantido só como histórico: não
+é mais fonte de verdade e não deve ser aberto ou editado por novas Specs.
 
 ## Estados
 
 | Artefato    | Estados                                                     |
 | ----------- | ----------------------------------------------------------- |
 | Spec        | `draft`, `open`, `in_progress`, `completed`, `superseded`   |
-| Plan        | `pending`, `in_progress`, `completed`, `superseded`         |
-| Fase/tarefa | `pending`, `in_progress`, `completed`                       |
 | Evaluation  | `in_progress`, `ready`, `completed`                         |
 | Evidência   | `pending`, `passed`, `failed`, `stale`, `not_applicable`    |
 | Achado (`ACH-*`) | `active`, `resolved`, `accepted_non_blocking`, `superseded` |
@@ -175,7 +169,7 @@ Falhas não criam estados extras: o item permanece `in_progress`, com finding e 
 
 Depois da pesquisa factual e antes de escrever ou criar o ticket, aplique o protocolo de Grilling
 do [`grilling-prompt.md`](prompts/grilling-prompt.md). O protocolo também se aplica, conforme o
-artefato, à criação ou atualização de PRDs, Specs e Plans. A task constrói a design tree, calcula
+artefato, à criação ou atualização de PRDs e Specs. A task constrói a design tree, calcula
 a frontier, pergunta todo o round atual no formato `❓`/`➡️` com recomendação e impacto, recompõe a
 frontier após cada resposta e não adivinha decisões dependentes.
 
@@ -191,10 +185,10 @@ aceitas são registradas no artefato final, não no transcript.
 GitHub Issue é tracking, não Contract técnico. A Issue pode apontar para um milestone, mas o
 PRD só é identificado depois que o path do PRD canônico em `documentation/prds/` for resolvido:
 
-- `create-feat-issue` transforma milestone/PRD ou pedido aprovado em uma issue com Objetivo,
+- `open-feat-issue` transforma milestone/PRD ou pedido aprovado em uma issue com Objetivo,
   Escopo da Entrega, Critérios de Aceitação, Validação, Rastreabilidade e Fora de Escopo;
   depois da aprovação/publicação, `create-spec` cria o Contract;
-- `create-bug-issue` registra sintoma, expectativa, reprodução e contexto sem diagnóstico;
+- `open-bug-issue` registra sintoma, expectativa, reprodução e contexto sem diagnóstico;
 - `create-bug-report` exige a bug issue aprovada, produz diagnóstico durável e recomenda correção
   direta ou Correction Spec conforme risco e coordenação.
 
@@ -229,8 +223,8 @@ possui exatamente:
 
 1. Contexto e escopo;
 2. Implementation Contract com `RF-*` e critérios Given/When/Then `CA-*`;
-3. Technical Contract com baseline, runtime flow e paths/declarations por camada;
-4. Validation Contract com testes reais, comandos e cenários manuais `VM-*`;
+3. Technical Contract com baseline, mapa de paths, `Expected file tree` por app/pacote, runtime flow e declarations por camada;
+4. Verification Contract com verificações automatizadas `AV-*`, manuais `MV-*` e visuais `VV-*`;
 5. alinhamento documental, Rule Pack e histórico de revisões.
 
 Depois da pesquisa e antes da escrita, `create-spec` executa o Grilling até esvaziar a frontier e
@@ -239,98 +233,72 @@ autoridades são levadas ao usuário.
 
 Todo `RP-*`/`JN-*` relevante deve mapear para `RF-*`; todo `RF-*` mapeia para
 pelo menos um `CA-*` e vice-versa. Paths são exatos e classificados
-como Create, Modify, Generate ou Remove. A Spec não é um Plan e não contém resultados.
+como Create, Modify, Generate ou Remove. A Spec não contém resultados de execução.
 
 Para UI, a Spec registra o widget tree exato, estados loading/empty/success/error/recovery,
-teclado, foco, responsividade, referências Pencil/screenshot e viewports. Comportamento
-inferido apenas de imagem precisa de clarificação. O contrato visual detalhado pertence ao
-`design/handoff.md`, que a Spec deve referenciar; a Spec continua sendo a autoridade de produto,
-escopo, comportamento e validação. Uma Spec íntegra passa diretamente de `draft` para a revisão
-independente do Spec Reviewer, antes de qualquer planejamento.
+teclado, foco, responsividade, frames de referência no Penpot `stardust` e viewports.
+Comportamento inferido apenas de imagem precisa de clarificação. O detalhe visual permanece no
+o Penpot `stardust`, inspecionado pelo Penpot MCP; a Spec continua sendo a autoridade de
+produto, escopo, comportamento e validação. Uma Spec íntegra passa diretamente de `draft` para a revisão
+independente do Spec Reviewer, antes de qualquer implementação.
 
-Antes da revisão, `create-spec` executa `npm run check:spec-definition -- <spec>`.
-Esse gate valida estrutura, IDs, rastreabilidade e o mapa canônico de paths;
-não substitui o Spec Reviewer.
+Antes da revisão, `create-spec` faz uma checagem de integridade manual da estrutura, dos IDs, da
+rastreabilidade e do mapa canônico de paths; ela não substitui o Spec Reviewer. O formato do
+mapa de paths é validado depois, contra o diff, por `check:spec-implementation`.
 
-Depois do integrity gate, e antes de decidir entre execução Direct e `create-plan`, a task
+Depois da checagem de integridade, e antes de `implement-spec`, a task
 principal ativa exatamente um Spec Reviewer read-only com a revisão exata, `architecture.md` e o
 Rule Pack das camadas afetadas. O Reviewer verifica somente fronteiras, dependências, ownership
 e aderência às Rules; não avalia produto, Design, critérios ou validação. A task principal verifica
-cada finding, corrige a mesma Spec e retoma o Reviewer antes do planejamento. A Spec só passa para
+cada finding, corrige a mesma Spec e retoma o Reviewer antes da implementação. A Spec só passa para
 `open` quando essa revisão estiver `clear` e nenhum finding bloqueante verificado permanecer;
-então o fluxo segue para Direct ou planejamento. Amendment posterior invalida o resultado e exige
-nova revisão antes de planejar. A revision history registra a revisão, o resultado e as resoluções
+então o fluxo segue para `implement-spec`. Amendment posterior invalida o resultado e exige
+nova revisão antes de implementar. A revision history registra a revisão, o resultado e as resoluções
 verificadas, sem incorporar o relatório bruto.
 
-## Design Contract e handoff offline
+## Design Contract
 
-Quando a entrega tiver Pencil ou referências visuais, o `design/handoff.md` é obrigatório e
-deve ser autocontido para um Builder que não tenha uma sessão Pencil disponível. Ele deve conter,
-no mínimo:
+Quando a entrega tiver UI, a fonte visual canônica é o arquivo Penpot `stardust`, inspecionado
+diretamente pelo Penpot MCP por quem cria, implementa e revisa a Spec. Não há extração do
+design: a Spec não cria `design/handoff.md`, não exporta imagens para a feature e não copia
+tokens, medidas ou receitas visuais.
 
-1. fonte visual canônica (`.pen` ou referência fornecida) e data/revisão da inspeção;
-2. inventário de cada referência com node, estado, variante, viewport, screenshot, surface,
-   componentes/tokens e `RF-*`/`CA-*`/`VM-*` relacionados;
-3. ordem de autoridade entre `documentation/design.md`, tokens globais, componentes compartilhados,
-   handoff, imagens salvas e valores brutos da ferramenta;
-4. crosswalk de tokens, receita de tipografia, mapeamento de componentes/variantes e ícones;
-5. receitas de surfaces, layout, estados, responsividade, tema, foco, teclado, acessibilidade e
-   reduced motion;
-6. divergências permitidas, extensões aprovadas, exclusões e estados sem referência canônica;
-7. inspeção estrutural e requisitos de comparação visual vinculados a `CA-*` e `VM-*`.
+O Design Contract da Spec (subseção `## Design Contract` de `Implementation Contract`, só com UI) registra, no mínimo:
+
+1. os frames relevantes, identificados pela página e pelo nome do board ou componente (o nome é o
+   contrato; IDs podem mudar se o board for recriado);
+2. o estado, a variante e o viewport de cada frame, com os `RF-*`/`CA-*`/`VV-*` relacionados;
+3. divergências permitidas, extensões aprovadas, exclusões e estados sem frame canônico;
+4. os requisitos de comparação visual vinculados a `CA-*` e `VV-*`.
 
 A precedência padrão é: design system e tokens do repositório; comportamento dos componentes
-compartilhados; mapeamentos e receitas do handoff; imagens salvas para comparação; valores brutos
-do Pencil apenas como evidência. Valor bruto não autoriza cor, medida, componente, ícone ou CSS
-novo sem token, Rule ou decisão registrada. Fallbacks semânticos e adaptações acessíveis devem
-ser declarados no handoff; divergências materiais sem decisão rastreável mantêm a Spec aberta.
+compartilhados; frames do Penpot `stardust` e os tokens vinculados a eles. Valor visual
+sem variável não autoriza cor, medida, componente, ícone ou CSS novo sem token, Rule ou decisão
+registrada. Fallbacks semânticos e adaptações acessíveis devem ser declarados na Spec;
+divergências materiais sem decisão rastreável mantêm a Spec aberta.
 
-O workflow de criação deve inspecionar os nodes pelo Pencil MCP, exportar uma imagem por estado
-exigido, verificar existência e dimensões dos arquivos e confirmar que a implementação pode ser
-executada sem Pencil. O Builder usa o bundle salvo. Reabra o Pencil quando o Design Contract mudar,
-quando o usuário pedir atualização ou quando a validação final exigir o node canônico.
+Se o Penpot MCP não estiver disponível, ou o arquivo Penpot `stardust` não estiver conectado a ele, a
+inspeção ou comparação que depende do design fica bloqueada e é registrada como tal; não
+substitua o frame por suposições.
 
-O handoff define a intenção e a receita de implementação; não registra resultados de runtime.
 `evaluation.md` registra screenshots da implementação, comparações, observações, `EV-*`, `ACH-*`
 e o estado final. Se uma mudança alterar a intenção visual, isso é uma mudança de Contract:
-retorne a Spec para `draft`, incremente a revisão, atualize o handoff e invalide as evidências
-afetadas.
-
-## Plan opcional
-
-`create-plan` só é usado para fases dependentes, múltiplos boundaries, migração/integração,
-risco de segurança ou concorrência, paralelismo útil, UI complexa ou necessidade real de
-recovery ledger. O Plan deriva dependências do Technical Contract e dos paths, nunca de um
-grafo de dependência de produto.
-
-O Plan contém snapshot de execução, ledger de waves/fases/tarefas, agenda de validação e log
-condicional. Builders têm ownership estável (`Builder Core`, `Builder Server`, `Builder Web`
-ou boundary equivalente), podem executar várias fases e nunca compartilham paths ativos. O
-padrão é no máximo três Builders concorrentes. A integridade do Plan é verificada pela task
-principal antes de salvar e antes de cada wave com `check:plan-definition`; esse mesmo gate
-confere o estado do ledger e os exits. Não há agente separado para esses gates.
-
-Antes de salvar, `create-plan` executa o Grilling sobre decisões de execução ainda abertas. O
-interview não pode redefinir a Spec; qualquer ambiguidade de Contract retorna para amendment.
+retorne a Spec para `draft`, incremente a revisão, atualize o Design Contract e invalide as
+evidências afetadas.
 
 ## Implementação e evidência viva
 
-`implement-spec` é a única entrada de implementação:
-
-- sem Plan atual: Builder Direct no contexto principal;
-- com Plan da revisão atual: Builders de ownership por wave;
-- Plan ausente mas necessário: invoca `create-plan` e continua automaticamente;
-- Plan obsoleto: reconcilia ou marca `superseded` antes de editar.
+`implement-spec` é a única entrada de implementação e executa sempre o Builder Direct no
+contexto principal. O `evaluation.md` é o único ledger de execução: progresso, evidências,
+findings e próxima ação.
 
 Nenhum source, teste, migration ou artefato gerado é alterado antes de uma assignment delimitada
-ser registrada no Plan/Evaluation com revisão, RF/CA, paths, Rules, ownership e exits. A Spec é
+ser registrada no Evaluation com revisão, RF/CA, paths, Rules e exits. A Spec é
 comparada com a árvore de arquivos, contratos, estados e exclusões antes de cada handoff e após
 cada correção. Falha de conformance, cenário manual/runtime indisponível ou evidência stale mantém
 o trabalho `in_progress` e bloqueia o avanço para `ready`.
 
-Antes dos sensores e do Reviewer, execute `npm run check:spec-definition -- <spec>` e,
-quando houver Plan, `npm run check:plan-definition -- <plan>`.
-Em seguida, execute `npm run check:spec-implementation -- <spec> --base <commit-base>`.
+Antes dos sensores e do Reviewer, execute `npm run check:spec-implementation -- <spec> --base <commit-base>`.
 Esse preflight exige o mapa canônico `Path | Change | ...` do `Technical Contract` e
 confirma que cada `Create`, `Modify`, `Generate` ou `Remove` corresponde ao diff e ao
 filesystem. Ele é estrutural e não substitui testes, sensores, Reviewer ou Evaluation.
@@ -356,14 +324,21 @@ UI muda ou a comparação visual exige. Após correção, repita apenas o caminh
 Server e banco, mocks não substituem request/response real, autorização, tenant e persistência no
 Supabase Dev quando aplicável.
 
-Após a implementação direta, um Implementation Reviewer Direct revisa o diff do Builder Direct.
-Em um Plan, cada Builder de fase/tarefa recebe seu próprio Implementation Reviewer pareado. O
-Reviewer verifica Contract, Architecture e layer rules do escopo atribuído; a task principal
-consolida os vereditos, findings e evidências no `evaluation.md`. Uma revisão integrada adicional
-é opcional somente para uma interação cross-boundary que não pertença a um Builder específico.
+Depois da integração, um Implementation Reviewer revisa o candidato integrado. Para UI
+design-backed, o Visual Reviewer roda em paralelo sobre o mesmo candidato e as capturas já
+existentes, com uma disposição por linha do inventário manual/visual do Evaluation; não há
+terceiro Reviewer serial. Os Reviewers consomem os resultados registrados e não reexecutam
+suites verdes. A task principal verifica os findings e consolida veredito, `ACH-*` e
+evidências no `evaluation.md`.
+
+A evidência é invalidada pela alegação e pelas dependências afetadas, não pela idade do commit:
+um novo SHA ou uma edição de ledger, por si só, não invalida prova de comportamento inalterado.
+O Evaluation mantém uma seção de Handoff factual (revisão, candidato, critérios inacabados,
+paths sujos e ownership, processos e portas iniciados, bloqueios e próxima ação) para que outro
+agente retome a partir da Spec, do Evaluation e do diff.
 
 Evidence anterior à última mudança afetada vira `stale`. Evaluation só muda para `ready`
-quando todos os `CA-*`, sensores, `VM-*`, `EV-*`, comparações visuais e `ACH-*`
+quando todos os `CA-*`, sensores, `AV-*`, `MV-*`, `VV-*`, `EV-*`, comparações visuais e `ACH-*`
 bloqueantes estão
 atuais e resolvidos.
 
@@ -372,7 +347,7 @@ atuais e resolvidos.
 | Classe                    | Ação                                                                                                                                |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | Correção de implementação | mantém revisão; registra finding; reabre trabalho/evidência; retoma Builder; reexecuta somente exits invalidados                    |
-| Mudança de Contract       | pausa; Spec volta a `draft`; atualiza autoridade; incrementa revisão; reconcilia Design, Plan e Evaluation; retoma `implement-spec` |
+| Mudança de Contract       | pausa; Spec volta a `draft`; atualiza autoridade; incrementa revisão; reconcilia Design e Evaluation; retoma `implement-spec` |
 
 Erro de teste, browser, console, runtime, migration, CI ou comparação visual dentro do Contract
 é correção automática. Não se pede autorização para tornar a implementação aderente. Pergunte
@@ -380,7 +355,7 @@ somente quando faltar decisão de produto, autoridade, ambiente, segurança ou e
 
 ## Conclusão, PR e CI
 
-`conclude-spec` exige Spec `in_progress`, Evaluation `ready`, Plan completo quando houver,
+`conclude-spec` exige Spec `in_progress`, Evaluation `ready`,
 conformance atual e nenhuma evidência bloqueante. Com autorização para commit/push/PR:
 
 1. repete preflight e conformance no candidato atual;
@@ -389,7 +364,7 @@ conformance atual e nenhuma evidência bloqueante. Com autorização para commit
 4. aguarda cada workflow aplicável no HEAD atual do PR;
 5. registra nome, resultado, URL e SHA em Evaluation;
 6. em falha, roteia imediatamente para `implement-spec` ou amendment, republica e repete CI;
-7. após CI verde, marca Spec, Plan e Evaluation como `completed`.
+7. após CI verde, marca Spec e Evaluation como `completed`.
 
 Antes de marcar os artefatos como `completed`, `conclude-spec` analisa todos os findings,
 warnings e falhas da entrega e identifica causas que possam se repetir. Lacunas de processo,
@@ -412,7 +387,7 @@ de integração (somente os arquivos ou cenários afetados), geração, browser,
 build conforme Rules, Spec, paths e risco. Execute `npm run check:test-integrity` depois de
 adicionar, mover ou remover testes. O ratchet de cobertura
 (`npm run test:coverage -w <workspace>` e `npm run check:coverage -- <workspace>`) mede o
-workspace inteiro e roda no CI de `@stardust/core`, `@stardust/server`, `@stardust/studio` e
+workspace inteiro e roda no CI de `@stardust/core`, `@stardust/server`, `@stardust/backoffice` e
 `@stardust/web`; execute-o localmente apenas quando o impacto demonstrado abranger o
 workspace, quando a Spec o exigir ou quando o usuário pedir. Os checks falham se qualquer
 métrica ficar abaixo do baseline versionado em `coverage-baseline.json`. O
