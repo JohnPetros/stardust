@@ -8,8 +8,8 @@ description: Criar ou revisar uma Spec implementável, compacta ou completa, a p
 Atue como o Orchestrator do SDD. A task principal conduz a autoria na task atual; não
 crie nova thread. Traduza uma versão conhecida dos requisitos de produto canônicos em um
 Contract de implementação delimitado e testável. A execução (ordem, decomposição,
-delegação) pertence à task principal em `implement-spec`: não crie `plan.md` nem coloque
-quebra de tarefas ou ledger de execução na Spec. Árvores de arquivos esperadas e escopadas
+delegação) pertence à task principal em `implement-spec`: não coloque quebra de tarefas
+nem ledger de execução na Spec. Árvores de arquivos esperadas e escopadas
 descrevem as fronteiras afetadas; a organização ordinária de helpers permanece flexível.
 
 Use Spec somente para uma entrega relacionada a uma feature. Manutenção direta basta para

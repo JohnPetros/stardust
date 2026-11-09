@@ -10,13 +10,13 @@ findings e as referências de publicação. A task principal conduz o fechamento
 atual; não crie nova thread. Consuma a evidência de implementação válida: a conclusão
 não inicia outro ciclo amplo de validação nem de revisão.
 
-Uma invocação explícita de `conclude-spec` autoriza, junto com a autorização de commit,
-push e PR já concedida pelo usuário, o encadeamento `commit-code` → `open-pr`. Um
-pedido apenas local pula commit e PR. Isto nunca autoriza fazer merge da entrega em
-`main`, deploy ou escrita em serviços externos além do PR. A continuação automática a
-partir de `implement-spec` não amplia a autorização: sincronize e publique somente quando
-o pedido do usuário já conceder isso; caso contrário, conclua localmente e reporte a
-publicação como não solicitada.
+Invocar `conclude-spec` não autoriza, por si só, nenhuma mutação externa. Commit, `push`,
+criação ou atualização de PR (o encadeamento `commit-code` → `open-pr`) e a sincronização
+com `main` exigem autorização explícita e separada do usuário, dada no próprio pedido. Sem
+ela, conclua localmente, pare antes de qualquer mutação externa e reporte a publicação como
+não solicitada; um pedido apenas local pula commit e PR. Mesmo autorizada, a publicação
+nunca autoriza fazer merge da entrega em `main`, deploy ou escrita em serviços externos
+além do PR. A continuação automática a partir de `implement-spec` não amplia a autorização.
 
 ## Pré-condições e continuidade
 
@@ -217,7 +217,7 @@ findings, lições, handoff e delivery) e mantenha o alinhamento documental e a 
 history da Spec corretos, com a prova detalhada e o estado da entrega no Evaluation.
 Preserve tentativas falhas, heads anteriores de PR, escopo da evidência e fatos atuais de
 processo/paths sujos. Atualizações rotineiras de fechamento/status não incrementam a
-revisão. Nenhum `plan.md` é criado, lido ou concluído.
+revisão.
 
 Para fechamento local, quando a publicação não for solicitada ou for explicitamente
 local, marque a Spec e o Evaluation como `completed` depois que todos os requisitos locais

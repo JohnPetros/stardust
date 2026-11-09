@@ -7,8 +7,8 @@ description: Implementar de forma autônoma uma Spec aberta ou retomada do Stard
 
 Siga [`documentation/sdd.md`](../sdd.md). A Spec fixa comportamento, contratos,
 exclusões e sensores exigidos. Organize a execução diretamente na task atual. Use
-delegação focada quando os escopos forem independentes; não existe Plan, sequência
-de aprovação por fase/tarefa nem transição para `create-plan`. Este prompt é a única
+delegação focada quando os escopos forem independentes; não há sequência de
+aprovação por fase ou tarefa. Este prompt é a única
 entrada de implementação: não peça ao usuário para escolher outro prompt e não
 crie outra thread.
 
@@ -345,7 +345,7 @@ mapeados e trabalho restante. Check Results inclui os checks de baseline e usa `
 `Passed`, `Failed`, `Blocked`, `Stale` ou `Not applicable`, com IDs `EV-*`, procedimentos
 exatos, seleção e contagem reais de testes, resultados esperado/observado,
 candidato/data, ambiente/fixtures, paths de artefatos e limites. Preserve tentativas falhas ou
-interrompidas e limitações. Use IDs estáveis `CA`/`AV`/`MV`/`VV`/`EV`/`ACH`/`CI` e registre
+interrompidas e limitações. Use IDs estáveis `CA`/`AV`/`MV`/`VV`/`EV`/`ACH` e registre
 checkpoints significativos (trabalho de Builder aceito, execução de sensores, findings
 resolvidos) em vez de uma atualização de ledger por edição de arquivo.
 
