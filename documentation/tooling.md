@@ -143,8 +143,6 @@ partir da raiz.
 | `test:coverage`      | Executa cobertura dos workspaces com ratchet habilitado.                                            |
 | `check:coverage`     | Compara os relatórios de cobertura com `coverage-baseline.json` e falha quando um baseline diminui. |
 | `check:test-integrity` | Falha quando testes são enfraquecidos ou código testável alterado não tem teste correspondente. |
-| `check:spec-definition` | Valida a estrutura, rastreabilidade e mapa de paths de uma Spec. |
-| `check:plan-definition` | Valida a estrutura, ownership, DAG e estado de execução de um Plan. |
 | `check:spec-implementation` | Valida o mapa canônico de paths da Spec contra o diff Git e o filesystem. |
 | `test:spec-implementation` | Executa os testes do checker de conformidade de Spec.                                               |
 | `test:scripts`       | Executa os testes de todos os scripts auxiliares em `scripts/tests/`.                               |
@@ -234,7 +232,6 @@ los.
 | Script                     | Descrição                                                               |
 | --- | --- |
 | `dev`                      | Inicia a Web App em desenvolvimento na porta `3000`.                    |
-| `queue`                    | Inicia o Inngest CLI local apontando para `/api/serverless`.            |
 | `build`                    | Gera o build de produção da Web App com Next.js.                        |
 | `start`                    | Inicia o build standalone usando a porta definida em `PORT`.            |
 | `check:code`               | Verifica `src` com Biome, sem aplicar correções.                        |

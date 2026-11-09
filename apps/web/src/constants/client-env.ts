@@ -14,21 +14,63 @@ const clientEnv = {
   stardustWebUrl: process.env.NEXT_PUBLIC_STARDUST_WEB_URL,
   stardustServerUrl: process.env.NEXT_PUBLIC_STARDUST_SERVER_URL,
   discordChannelUrl: process.env.NEXT_PUBLIC_DISCORD_CHANNEL_URL,
-  posthogProjectToken: process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN,
-  posthogHost: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+  posthogProjectToken: process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN || undefined,
+  posthogHost: process.env.NEXT_PUBLIC_POSTHOG_HOST || undefined,
 }
 
-const schema = z.object({
-  mode: appModeSchema,
-  cdnUrl: z.string().url(),
-  supabaseUrl: z.string().url(),
-  supabaseKey: z.string(),
-  stardustWebUrl: z.string().url(),
-  stardustServerUrl: z.string().url(),
-  discordChannelUrl: z.string().url(),
-  posthogProjectToken: z.string(),
-  posthogHost: z.string().url(),
-})
+type ProductionRequiredEnv = {
+  mode: string
+  posthogProjectToken?: string
+  posthogHost?: string
+}
+
+function addRequiredEnvIssue(
+  context: z.RefinementCtx,
+  path: 'posthogProjectToken' | 'posthogHost',
+  name: string,
+): void {
+  context.addIssue({
+    code: z.ZodIssueCode.custom,
+    path: [path],
+    message: `${name} is required in production`,
+  })
+}
+
+function requirePostHogProjectToken(
+  env: ProductionRequiredEnv,
+  context: z.RefinementCtx,
+): void {
+  if (env.mode === 'production' && !env.posthogProjectToken) {
+    addRequiredEnvIssue(
+      context,
+      'posthogProjectToken',
+      'NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN',
+    )
+  }
+}
+
+function requirePostHogHost(env: ProductionRequiredEnv, context: z.RefinementCtx): void {
+  if (env.mode === 'production' && !env.posthogHost) {
+    addRequiredEnvIssue(context, 'posthogHost', 'NEXT_PUBLIC_POSTHOG_HOST')
+  }
+}
+
+const schema = z
+  .object({
+    mode: appModeSchema,
+    cdnUrl: z.string().url(),
+    supabaseUrl: z.string().url(),
+    supabaseKey: z.string(),
+    stardustWebUrl: z.string().url(),
+    stardustServerUrl: z.string().url(),
+    discordChannelUrl: z.string().url(),
+    posthogProjectToken: z.string().optional(),
+    posthogHost: z.string().url().optional(),
+  })
+  .superRefine((env, context) => {
+    requirePostHogProjectToken(env, context)
+    requirePostHogHost(env, context)
+  })
 
 type LocalClientEndpoints = Pick<
   z.infer<typeof schema>,

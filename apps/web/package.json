@@ -3,7 +3,6 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=1 next dev --port 3000",
-    "queue": "pnpm dlx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/serverless",
     "build": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=1 next build",
     "start": "node .next/standalone/apps/web/server.js -p $PORT",
     "check:code": "biome check src",
@@ -71,7 +70,6 @@
     "framer-motion": "12.43.0",
     "html-to-image": "^1.11.13",
     "immer": "^11.1.18",
-    "inngest": "^4.16.0",
     "jsonwebtoken": "^9.0.2",
     "lottie-react": "^2.4.1",
     "markdown-to-jsx": "^9.9.0",

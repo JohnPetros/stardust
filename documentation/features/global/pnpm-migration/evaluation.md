@@ -1,7 +1,7 @@
 ---
 title: Migração do gerenciador de pacotes de npm para pnpm
 spec: ./spec.md
-spec_revision: 5
+spec_revision: 6
 status: in_progress
 base_commit: ea870e258ba71caf80db559a1460ba29318e5a86
 evaluated_commit: commits da migração sobre origin/main ed91d7f02 (rebase; SHA final registrado no PR)
@@ -60,7 +60,7 @@ last_updated_at: 2026-11-07
 
 | Comando | Estado | Evidência |
 | --- | --- | --- |
-| `check:spec-definition` | Passed | revisão 2 |
+| `check:spec-definition` | Removido em `main` (histórico: Passed até a revisão 5) | — |
 | `check:spec-implementation --base ea870e258` | Passed | 73 paths contratados (Create 2, Modify 69, Generate 1, Remove 1) |
 | `format` | Passed | sem alterações |
 | `check:code` | Passed | 9 tarefas; warnings pré-existentes |
@@ -127,6 +127,10 @@ Versões diretas: zero diferenças. Transitivos (`name@version`): npm 2438, pnpm
 ## Alinhamento documental
 
 - Spec: alinhada (revisão 2). Plan: não aplicável. Docs vivas: atualizadas conforme o mapa; Rules sem outra mudança.
+
+## Merge de origin/main (revisão 6)
+
+`origin/main` `0e815443d` (#630, #634, #636) foi incorporado: removeu o fluxo de Plan, `check-plan-definition`, `check-spec-definition`, os prompts de Plan e o script `queue` da Web, e atualizou `package-lock.json`. Conflitos de documentação resolvidos com o texto de `main` e conversão `npm` → `pnpm`; as remoções de `main` foram aceitas; `pnpm-lock.yaml` foi reimportado do `package-lock.json` atualizado de `main` (`pnpm import`, `pnpm install --frozen-lockfile` aprovado). O sensor `check:spec-definition` não existe mais; a checagem de estrutura da Spec passa a ser manual (`sdd.md`). `check:spec-implementation` permanece.
 
 ## Remoção do teste do LSP (revisão 5)
 

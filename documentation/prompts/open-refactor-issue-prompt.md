@@ -1,5 +1,5 @@
 ---
-name: create-refactor-issue
+name: open-refactor-issue
 description: Create a scoped GitHub refactor issue for evidence-backed, behavior-preserving structural improvements, technical debt, dependency cleanup, or maintainability work.
 ---
 
@@ -32,9 +32,9 @@ Use this workflow only when the intended result preserves approved product behav
 contracts.
 
 - If delivered behavior violates the current product or technical contract, route to
-  `create-bug-issue`.
+  `open-bug-issue`.
 - If the request adds or changes user-visible behavior, business rules, permissions, validation,
-  workflows, API semantics or product outcomes, route to `create-feat-issue` and amend the owning
+  workflows, API semantics or product outcomes, route to `open-feat-issue` and amend the owning
   PRD when required.
 - If the request is documentation-only, dependency installation, infrastructure configuration or
   routine maintenance without a structural refactor, use the corresponding documentation or

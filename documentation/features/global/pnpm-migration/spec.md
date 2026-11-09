@@ -1,7 +1,7 @@
 ---
 title: Migração do gerenciador de pacotes de npm para pnpm
 status: in_progress
-revision: 5
+revision: 6
 source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/issues/632
@@ -161,7 +161,7 @@ Versões abaixo são as resolvidas pelo npm para o workspace; o gerenciador deci
 | `apps/studio/package.json` | Modify | dependências `@stardust/core`, `@stardust/lsp`, `@stardust/validation`; pins; declarações | `workspace:*` nos três `@stardust/*`; pins de `typescript` e `@radix-ui/react-slot`; adições da tabela de pins | pnpm | CA-03, CA-04, CA-05 |
 | `apps/crew/package.json` | Modify | `hono` | declara `hono` `4.13.1` usado por `src/controllers/tests/crew-rest-fixture.ts` | pnpm | CA-04 |
 | `apps/server/package.json` | Modify | scripts `db:test`, `db:test:ci`, `db:revert`, `update`, `test:integration:ci`; dependências | `db:test` e `db:test:ci` terminam em `pnpm run db:migrate`; `db:revert` = `supabase migration repair --status reverted` (o ID é argumento posicional); `update` = `ncu -u -f` (a dependência é argumento posicional); `test:integration:ci` encadeia `pnpm run test:integration --shard=N/4 ...` sem `--`; `workspace:*` em core, email, lsp, validation; pin de `typescript`; adições da tabela | pnpm, Supabase CLI, npm-check-updates | CA-03, CA-06 |
-| `apps/web/package.json` | Modify | script `queue`; dependências | `queue` = `pnpm dlx inngest-cli@latest dev --no-discovery -u http://localhost:3000/api/serverless`; `workspace:*` em core, lsp, validation; pin de `@radix-ui/react-slot`; adições da tabela | pnpm | CA-03, CA-06 |
+| `apps/web/package.json` | Modify | dependências | `workspace:*` em core, lsp, validation; pin de `@radix-ui/react-slot`; adições da tabela | pnpm | CA-03, CA-06 |
 | `packages/core/package.json` | Modify | `devDependencies` | declara `dependency-cruiser`; não declara `@stardust/lsp` | pnpm | CA-03, CA-04 |
 | `packages/email/package.json` | Modify | `dependencies` | declara `react` e `@react-email/html` | pnpm | CA-04 |
 | `packages/lsp/package.json` | Modify | `dependencies` | `@stardust/core` passa a `workspace:*` | pnpm | CA-03 |
@@ -175,8 +175,6 @@ Versões abaixo são as resolvidas pelo npm para o workspace; o gerenciador deci
 | --- | --- | --- | --- | --- | --- |
 | `.husky/pre-commit` | Modify | comando do hook | `pnpm run check:code` | pnpm, Husky | CA-07 |
 | `.husky/commit-msg` | Modify | comando do hook | `pnpm exec commitlint --edit ${1}` (equivalente a `--no-install`) | pnpm, commitlint | CA-07 |
-| `scripts/check-plan-definition.mjs` | Modify | mensagens de uso | cita `pnpm run check:plan-definition <plan.md> [--json]` | Node.js | CA-06 |
-| `scripts/check-spec-definition.mjs` | Modify | mensagens de uso | cita `pnpm run check:spec-definition <spec.md> [--json]` | Node.js | CA-06 |
 | `scripts/check-spec-implementation.mjs` | Modify | mensagens de uso | cita `pnpm run check:spec-implementation <spec> [--base <git-ref>] [--json]` | Node.js | CA-06 |
 | `scripts/check-test-integrity.mjs` | Modify | mensagens de uso | cita `pnpm run check:test-integrity [--base <git-ref>] [--json]` | Node.js | CA-06 |
 | `scripts/check-complexity.mjs` | Modify | mensagens de erro | cita `pnpm install --frozen-lockfile` e `pnpm run update:complexity-baseline` | Node.js | CA-06 |
@@ -216,7 +214,6 @@ Versões abaixo são as resolvidas pelo npm para o workspace; o gerenciador deci
 | `documentation/infrastructure.md` | Modify | descrição das imagens | `pnpm install` nos estágios `installer` | Docker | CA-14 |
 | `documentation/architecture.md` | Modify | linha 49 (`npm run db:test -w @stardust/server`) e linha 84 (tabela de stack, `TurboRepo, NPM`) | comando em pnpm e stack `TurboRepo, pnpm` | pnpm | CA-14 |
 | `documentation/sdd.md` | Modify | comandos dos sensores e do preflight | comandos em pnpm, preservando a frase de elegibilidade de issues `chore` e `refactor` já adicionada | pnpm | CA-14 |
-| `documentation/agents/implementation-reviewer-agent.md` | Modify | exemplo de tabela de sensores | `pnpm run check:types` | pnpm | CA-14 |
 | `documentation/rules/studio-appllication-rules.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
 | `documentation/rules/code-conventions-rules.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
 | `documentation/rules/core-package-rules.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
@@ -231,18 +228,14 @@ Versões abaixo são as resolvidas pelo npm para o workspace; o gerenciador deci
 | `documentation/rules/widget-tests-rules.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
 | `documentation/prompts/conclude-bug-report-prompt.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
 | `documentation/prompts/conclude-report-prompt.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
-| `documentation/prompts/conclude-spec-prompt.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
 | `documentation/prompts/create-evaluation-prompt.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
 | `documentation/prompts/create-performance-report-prompt.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
-| `documentation/prompts/create-plan-prompt.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
 | `documentation/prompts/create-security-report-prompt.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
 | `documentation/prompts/create-spec-prompt.md` | Modify | comandos e elegibilidade | comandos em pnpm, preservando a elegibilidade de issues `chore` e `refactor` já adicionada | pnpm | CA-14 |
 | `documentation/prompts/create-tests-prompt.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
 | `documentation/prompts/implement-bug-fix-prompt.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
-| `documentation/prompts/implement-plan-prompt.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
 | `documentation/prompts/implement-spec-prompt.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
 | `documentation/prompts/increase-test-coverage-prompt.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
-| `documentation/prompts/judge-plan-prompt.md` | Modify | comandos | formas pnpm | pnpm | CA-14 |
 
 ## Restrições técnicas e riscos
 
@@ -298,3 +291,4 @@ Esta entrega atualiza `AGENTS.md`, `README.md`, os READMEs dos apps e pacotes, `
 | 3 | 2026-11-07 | in_progress | Rebase sobre `origin/main`: o workspace `apps/backoffice` passa a `apps/studio` (`Dockerfile.studio`, `studio-app-ci.yaml`, `studio-appllication-rules.md`); `apps/crew/README.md`, `packages/studio/README.md` e `crew-app-production-cd.yaml` não existem mais em `main` e saem do mapa. Contract de comportamento inalterado; evidências anteriores do workspace renomeado são reverificadas ou reportadas como pendentes de CI no `evaluation.md`. |
 | 4 | 2026-11-08 | in_progress | Correções de CI-01/CI-02 do PR: D-14 (override de `tailwindcss` 4.1.18 para `@react-email/tailwind` e `react-email`, preservando a resolução do npm); `@types/jest`/`@types/node` declarados em Core, LSP e Validation (o linker estrito do pnpm não os expõe). Comportamento do Contract inalterado. |
 | 5 | 2026-11-08 | in_progress | Remoção de `packages/lsp/src/DeleguaProvedorLsp.test.ts` a pedido do usuário: D-13 passa a manter apenas o caso de imutabilidade em `Code.test.ts`; o path sai do mapa. `check:test-integrity` continua aprovado. |
+| 6 | 2026-11-08 | in_progress | Merge de `origin/main` (#630, #634, #636): `main` removeu o fluxo de Plan, `scripts/check-plan-definition.mjs`, `scripts/check-spec-definition.mjs` e o script `queue` da Web; os paths removidos, os prompts de Plan e os documentos cujo texto de `main` já não usa npm (`implementation-reviewer-agent.md`, `conclude-spec-prompt.md`) e a linha `queue` saem do mapa, e a sonda `check:spec-definition` de EV-04 deixa de existir. Contract de comportamento inalterado. |

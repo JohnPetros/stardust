@@ -1,12 +1,12 @@
 ---
-name: create-feat-issue
+name: open-feat-issue
 description: Criar uma GitHub feature issue de produto no Stardust a partir de milestone, PRD ou pedido aprovado, com approval e Project 2.
 ---
 
 # Criar Feature Issue
 
 Transforme uma capacidade ou resultado de produto em uma única issue coerente. Não implemente,
-crie branch, commit, PR, Spec ou Plan.
+crie branch, commit, PR ou Spec.
 
 Escreva o título, o body, as perguntas do Grilling e as justificativas em português do Brasil.
 Preserve identificadores técnicos, paths, URLs e nomes oficiais de labels.
@@ -84,7 +84,7 @@ repositório.
 
 - <comportamento/capacidade incluída>
 - <restrição material de produto, Design ou integração>
-- <referência Pencil exata quando fornecida>
+- <board do Penpot `stardust` exato (página e nome) quando fornecido>
 
 ## ✅ Critérios de Aceitação
 
@@ -132,7 +132,7 @@ referência do requisito principal selecionado, e somente requisitos complementa
 aplicáveis devem ser listados como suporte.
 
 Mantenha a issue em nível de product delivery. Não inclua signatures, file inventory, fluxo
-técnico detalhado ou decisões novas de arquitetura. Preserve paths/Node IDs Pencil exatamente
+técnico detalhado ou decisões novas de arquitetura. Preserve nomes de frames do design exatamente
 quando fornecidos.
 
 ## Approval gate

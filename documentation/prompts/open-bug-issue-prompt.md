@@ -1,5 +1,5 @@
 ---
-name: create-bug-issue
+name: open-bug-issue
 description: Criar uma GitHub bug issue factual no Stardust a partir de uma falha observada, com approval gate e sem diagnóstico técnico.
 ---
 

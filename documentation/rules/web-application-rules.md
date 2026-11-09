@@ -58,7 +58,6 @@ pnpm run test
 
 - Scripts do workspace `@stardust/web`:
   - Dev: `pnpm --filter @stardust/web run dev`
-  - Queue (Inngest local): `pnpm --filter @stardust/web run queue`
   - Build: `pnpm --filter @stardust/web run build`
   - Start (standalone): `pnpm --filter @stardust/web run start`
   - Qualidade: `pnpm --filter @stardust/web run check:code` (`lint` + `format`)
