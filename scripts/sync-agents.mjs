@@ -78,7 +78,8 @@ function readOnly(name) {
 }
 
 // Os Reviewers de texto usam apenas Read/Glob/Grep; o Visual Reviewer também
-// precisa dos MCPs de Penpot e de leitura de imagens, então bloqueia só escrita.
+// precisa dos MCPs de Penpot e de leitura de imagens, então bloqueia escrita, shell
+// (que permitiria gravar arquivos) e a criação de agentes.
 function usesToolDenylist(name) {
   return name === 'visual-reviewer-agent'
 }
@@ -159,7 +160,7 @@ for (const agent of agents) {
     `description: ${JSON.stringify(agent.description)}`,
   ]
   if (usesToolDenylist(agent.name))
-    claude.push('disallowedTools: Edit, Write, NotebookEdit, Agent')
+    claude.push('disallowedTools: Edit, Write, NotebookEdit, Bash, Agent')
   else if (readOnly(agent.name))
     claude.push('tools: Read, Glob, Grep', 'permissionMode: plan')
   else if (agent.name === 'builder-agent') claude.push('disallowedTools: Agent')

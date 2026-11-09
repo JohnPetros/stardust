@@ -18,7 +18,8 @@ Use o **Penpot MCP** para ler os boards: `high_level_overview` uma vez, `execute
 somente em modo de leitura (localizar a página/board pelo nome) e `export_shape` para
 exportar cada board como imagem. Leia as capturas da implementação como imagens com a
 ferramenta de leitura de arquivos. No Claude Code, este agente bloqueia escrita e edição
-(`Edit`, `Write`, `NotebookEdit`) e criação de agentes, mas mantém os MCPs permitidos. Sem
+(`Edit`, `Write`, `NotebookEdit`), o shell (`Bash`) e a criação de agentes, mas mantém os
+MCPs permitidos. Sem
 acesso ao Penpot MCP, nenhum check visual pode passar: reporte `BLOCKED`.
 
 ## Ativação e entrada
