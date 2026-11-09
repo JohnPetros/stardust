@@ -59,9 +59,9 @@ const envSchema = z
     redisUrl: z.string().url(),
     inngestEventKey: z.string().optional(),
     inngestSigningKey: z.string().optional(),
-    dropboxRefreshToken: z.string(),
-    dropboxAppKey: z.string(),
-    dropboxAppSecret: z.string(),
+    dropboxRefreshToken: z.string().optional(),
+    dropboxAppKey: z.string().optional(),
+    dropboxAppSecret: z.string().optional(),
     discordWebhookUrl: z.string().url(),
     resendApiKey: z.string().optional(),
     resendFromEmail: z.string().email().optional(),
@@ -75,10 +75,10 @@ const envSchema = z
     s3BucketName: z.string().min(1).optional(),
     s3Endpoint: z.string().url().default('http://127.0.0.1:9000'),
     stardustWebUrl: z.string().url(),
-    posthogProjectToken: z.string(),
-    posthogHost: z.string().url(),
-    posthogPersonalApiKey: z.string(),
-    posthogProjectId: z.coerce.number().int().positive(),
+    posthogProjectToken: z.string().optional(),
+    posthogHost: z.string().url().optional(),
+    posthogPersonalApiKey: z.string().optional(),
+    posthogProjectId: z.coerce.number().int().positive().optional(),
     godAccountIds: z.array(idSchema),
     trustedProxyCidrs: z.array(z.string().min(1)).default([]),
   })
@@ -87,16 +87,46 @@ const envSchema = z
     validateRequiredS3Bucket(value, context)
     validateRequiredMailpit(value, context)
     validateRequiredTrustedProxies(value, context)
-    validateRequiredSentryDsn(value, context)
+    validateRequiredProductionIntegrations(value, context)
   })
   .transform((value) => ({
     ...value,
     s3BucketName: value.s3BucketName ?? LOCAL_S3_BUCKET_NAME,
   }))
 
+const PRODUCTION_INTEGRATION_VARIABLES = {
+  dropboxRefreshToken: 'DROPBOX_REFRESH_TOKEN',
+  dropboxAppKey: 'DROPBOX_APP_KEY',
+  dropboxAppSecret: 'DROPBOX_APP_SECRET',
+  sentryDsn: 'SENTRY_DSN',
+  posthogProjectToken: 'POSTHOG_PROJECT_TOKEN',
+  posthogHost: 'POSTHOG_HOST',
+  posthogPersonalApiKey: 'POSTHOG_PERSONAL_API_KEY',
+  posthogProjectId: 'POSTHOG_PROJECT_ID',
+} as const
+
+function addMissingIntegrationIssue(
+  context: z.RefinementCtx,
+  key: string,
+  name: string,
+): void {
+  const message = `${name} is required in production mode`
+  context.addIssue({ code: z.ZodIssueCode.custom, path: [key], message })
+}
+
+function validateRequiredProductionIntegrations(
+  value: Record<string, unknown>,
+  context: z.RefinementCtx,
+): void {
+  if (value.mode !== 'production') return
+
+  for (const [key, name] of Object.entries(PRODUCTION_INTEGRATION_VARIABLES)) {
+    if (!value[key]) addMissingIntegrationIssue(context, key, name)
+  }
+}
+
 type RequiredEnvironment = {
   mode: 'development' | 'production' | 'test'
-  sentryDsn?: string
   s3AccountId?: string
   s3BucketName?: string
   mailpitApiUrl?: string
@@ -120,19 +150,6 @@ function validateRequiredS3Account(
       context,
       's3AccountId',
       'S3_ACCOUNT_ID is required in production mode',
-    )
-  }
-}
-
-function validateRequiredSentryDsn(
-  value: RequiredEnvironment,
-  context: z.RefinementCtx,
-): void {
-  if (value.mode === 'production' && !value.sentryDsn) {
-    addRequiredEnvironmentIssue(
-      context,
-      'sentryDsn',
-      'SENTRY_DSN is required in production mode',
     )
   }
 }

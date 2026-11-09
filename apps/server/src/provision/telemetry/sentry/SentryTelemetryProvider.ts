@@ -5,8 +5,16 @@ import { AppError } from '@stardust/core/global/errors'
 
 import { ENV } from '@/constants'
 
+function isSentryConfigured(): boolean {
+  if (ENV.mode !== 'production') return false
+  if (ENV.sentryDsn) return true
+
+  console.warn('SENTRY_DSN is not set; errors will only be logged to the console')
+  return false
+}
+
 function initializeSentryClient(): Sentry.NodeClient | undefined {
-  if (ENV.mode !== 'production') return
+  if (!isSentryConfigured()) return
 
   const sentry = Sentry.init({ dsn: ENV.sentryDsn })
   if (!sentry) throw new AppError('Falha ao inicializar o Sentry')

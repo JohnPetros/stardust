@@ -13,19 +13,15 @@ type PostHogQueryResponse = {
 
 export class PostHogAnalyticsReportingProvider implements AnalyticsReportingProvider {
   constructor(private readonly restClient: RestClient) {
-    this.restClient.setBaseUrl(ENV.posthogHost)
-    this.restClient.setHeader(
-      HTTP_HEADERS.authorization,
-      `Bearer ${ENV.posthogPersonalApiKey}`,
-    )
+    const { posthogHost, posthogPersonalApiKey } = ENV
+    if (posthogHost && posthogPersonalApiKey)
+      this.configure(posthogHost, posthogPersonalApiKey)
   }
 
   async getDailyActiveUsers(days: Integer): Promise<DailyActiveUsersDto> {
     if (days.isZero.isTrue) return []
 
-    if (ENV.mode === 'development' || ENV.mode === 'test') {
-      return this.normalizeReport(days, [])
-    }
+    if (this.isReportingDisabled()) return this.normalizeReport(days, [])
 
     const response = await this.restClient.post<PostHogQueryResponse>(
       `/api/projects/${ENV.posthogProjectId}/query/`,
@@ -46,6 +42,18 @@ export class PostHogAnalyticsReportingProvider implements AnalyticsReportingProv
     }
 
     return this.normalizeReport(days, response.body.results ?? [])
+  }
+
+  private configure(host: string, apiKey: string): void {
+    this.restClient.setBaseUrl(host)
+    this.restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${apiKey}`)
+  }
+
+  private isReportingDisabled(): boolean {
+    const { posthogHost, posthogPersonalApiKey, posthogProjectId } = ENV
+    const isLocalMode = ENV.mode === 'development' || ENV.mode === 'test'
+
+    return isLocalMode || !posthogHost || !posthogPersonalApiKey || !posthogProjectId
   }
 
   private buildQuery(days: Integer): string {
