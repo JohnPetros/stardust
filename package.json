@@ -85,7 +85,7 @@
   "dependencies": {
     "@ai-sdk/provider-utils-v5": "npm:@ai-sdk/provider-utils@5.0.5",
     "@aws-sdk/client-s3": "3.1163.0",
-    "@designliquido/delegua": "^0.73.0",
+    "@designliquido/delegua": "^1.25.1",
     "@faker-js/faker": "8.4.1",
     "drizzle-orm": "0.45.4",
     "postgres": "3.4.9"

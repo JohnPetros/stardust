@@ -31,7 +31,7 @@
     "test:unit": "node --import tsx --test \"src/**/*.test.ts\""
   },
   "dependencies": {
-    "@designliquido/delegua": "^0.73.0",
+    "@designliquido/delegua": "^1.25.1",
     "@stardust/core": "workspace:*",
     "monaco-editor": "^0.57.0"
   },
