@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "comfyui-workflow-builder": {
+      "source": "mckruz/comfyui-expert",
+      "sourceType": "github",
+      "skillPath": "skills/comfyui-workflow-builder/SKILL.md",
+      "computedHash": "711b2aef12e3537dde5620ca551954c730338a45520bb296b98cea4142e2762e"
+    },
     "frontend-design": {
       "source": "anthropics/skills",
       "sourceType": "github",
@@ -23,21 +29,17 @@
       "sourceType": "github",
       "computedHash": "e898f789a2fdf7eceace95294be4601aa7a2699aeefbb16a741c1ee78d208856"
     },
-    "performance": {
-      "source": "addyosmani/web-quality-skills",
+    "penpot-uiux-design": {
+      "source": "github/awesome-copilot",
       "sourceType": "github",
-      "computedHash": "acbafe2fcbfc3a1a67db47c2f6299d5c0e16f543c4e683e38e74a8ccb54888fb"
+      "skillPath": "skills/penpot-uiux-design/SKILL.md",
+      "computedHash": "cd29e08bb7d2d4b9212582bcd9b70823619fbc6397078b8ba853962054ba4230"
     },
     "playwright-cli": {
       "source": "microsoft/playwright-cli",
       "sourceType": "github",
       "skillPath": "skills/playwright-cli/SKILL.md",
       "computedHash": "f602822b51bcb6d033749c60731b8f1e80f308222fcb2e4af551905a817c6e08"
-    },
-    "sqlalchemy-orm": {
-      "source": "bobmatnyc/claude-mpm-skills",
-      "sourceType": "github",
-      "computedHash": "b3e79184c5ac53544551e38ee2906cb1e7d62d6ed9debbbf6f30f86f17e8dfa1"
     }
   }
 }
