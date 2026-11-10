@@ -701,3 +701,19 @@ test('reports only deletions that belong to the PR in an incremental review', ()
     'removed-by-pr.ts',
   )
 })
+
+test('skips an incremental review whose only changes since the last review are deletions', async () => {
+  const fixture = createFixture({ reviews: [botReview(REVIEWED)] })
+  const logs = []
+  const isDiffContent = (args) => args[0] === 'diff' && !args.includes('--name-only')
+  const deletionOnlyDiff = `diff --git a/${FINDING.path} b/${FINDING.path}\n--- a/${FINDING.path}\n+++ b/${FINDING.path}\n@@ -1,2 +1 @@\n first\n-second\n`
+  await runCrewReview({
+    ...fixture.args,
+    runGit: (...args) =>
+      isDiffContent(args) ? deletionOnlyDiff : fixture.args.runGit(...args),
+    log: (message) => logs.push(message),
+  })
+  assert.deepEqual(logs, ['No changes to review.'])
+  assert.equal(fixture.requests.length, 0)
+  assert.equal(fixture.publications.length, 0)
+})

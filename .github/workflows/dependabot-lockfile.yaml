@@ -23,7 +23,9 @@ env:
 jobs:
   regenerate:
     name: Regenerate lockfile
-    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    if: >-
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

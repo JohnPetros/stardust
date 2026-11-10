@@ -23,18 +23,42 @@ export function mergeCoverageReports(inputPaths, summaryPath) {
   return summary
 }
 
+const INTEGRATION_SHARDS_COUNT = 6
+
+function listShards(count) {
+  return Array.from({ length: count }, (_, index) => index + 1)
+}
+
+// Locally the unit suite runs in one process and writes a single report; CI splits it
+// into shards and passes their count.
+export function resolveReportPaths(coverageDirectory, unitShardsCount = 0) {
+  const unitReports = unitShardsCount
+    ? listShards(unitShardsCount).map((shard) =>
+        resolve(coverageDirectory, `unit-${shard}/coverage-final.json`),
+      )
+    : [resolve(coverageDirectory, 'coverage-final.json')]
+  return [
+    ...unitReports,
+    ...listShards(INTEGRATION_SHARDS_COUNT).map((shard) =>
+      resolve(coverageDirectory, `integration-${shard}/coverage-final.json`),
+    ),
+  ]
+}
+
+export function parseUnitShardsCount(args) {
+  const value = args.find((arg) => arg.startsWith('--unit-shards='))?.split('=')[1]
+  if (value === undefined) return 0
+  if (!/^[1-9]\d*$/.test(value)) throw new Error(`Invalid --unit-shards value: ${value}`)
+  return Number(value)
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
     mergeCoverageReports(
-      [
-        resolve(COVERAGE_DIRECTORY, 'coverage-final.json'),
-        ...[1, 2, 3, 4].map((shard) =>
-          resolve(COVERAGE_DIRECTORY, `integration-${shard}/coverage-final.json`),
-        ),
-      ],
+      resolveReportPaths(COVERAGE_DIRECTORY, parseUnitShardsCount(process.argv.slice(2))),
       resolve(COVERAGE_DIRECTORY, 'coverage-summary.json'),
     )
-    console.log('Merged Server unit coverage and all four integration shards.')
+    console.log('Merged Server unit coverage and all six integration shards.')
   } catch (error) {
     console.error(error instanceof Error ? error.message : String(error))
     process.exitCode = 1
