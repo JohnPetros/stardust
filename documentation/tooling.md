@@ -491,8 +491,9 @@ No Server, o ratchet considera a cobertura conjunta dos testes unitários e dos
 seis shards de integração, incluindo os adapters Drizzle exercitados pelas
 rotas reais. Prepare o stack local, execute `test:integration:ci` e
 `test:coverage` no workspace `@stardust/server`, depois `test:coverage:merge` e
-`pnpm run check:coverage @stardust/server`. A consolidação exige os sete
-relatórios completos; um relatório unitário isolado não aprova esse ratchet.
+`pnpm run check:coverage @stardust/server`. Nesse fluxo local, a consolidação
+exige os sete relatórios completos (um unitário e seis de integração); um
+relatório unitário isolado não aprova esse ratchet.
 No CI do Server, cada um dos seis shards de integração roda em um job próprio
 (`Integration tests (shard N/6)`), com stack local isolado, e envia seu relatório
 como artifact. Os testes unitários também são divididos, em dois shards
