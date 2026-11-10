@@ -346,7 +346,9 @@ export async function runCrewReview({
   const input = buildReviewInput(pr, runGit, {
     reviewedShas: listReviewedShas(reviews, pr.head.sha),
   })
-  if (!input.changed_files.length) {
+  // An incremental range that only deletes lines leaves no hunk to comment on, and Crew
+  // rejects an empty diff.
+  if (!input.changed_files.length || !input.diff.trim()) {
     log('No changes to review.')
     return
   }
