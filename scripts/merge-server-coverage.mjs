@@ -28,13 +28,13 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     mergeCoverageReports(
       [
         resolve(COVERAGE_DIRECTORY, 'coverage-final.json'),
-        ...[1, 2, 3, 4].map((shard) =>
+        ...[1, 2, 3, 4, 5, 6].map((shard) =>
           resolve(COVERAGE_DIRECTORY, `integration-${shard}/coverage-final.json`),
         ),
       ],
       resolve(COVERAGE_DIRECTORY, 'coverage-summary.json'),
     )
-    console.log('Merged Server unit coverage and all four integration shards.')
+    console.log('Merged Server unit coverage and all six integration shards.')
   } catch (error) {
     console.error(error instanceof Error ? error.message : String(error))
     process.exitCode = 1
