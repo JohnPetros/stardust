@@ -53,6 +53,7 @@ export const SignUpFormView = ({
           <PasswordField isValid={isPasswordValid} registration={register('password')} />
         )}
       </div>
+
       {isPasswordValid && <SubmitButton isSubmitting={isSubmitting} />}
     </form>
   )
