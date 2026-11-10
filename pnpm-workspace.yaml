@@ -17,6 +17,10 @@ overrides:
   "@react-router/serve": "8.3.1"
   "@react-email/tailwind>tailwindcss": "4.1.18"
   "react-email>tailwindcss": "4.1.18"
+packageExtensions:
+  "@openrouter/ai-sdk-provider":
+    dependencies:
+      "@ai-sdk/provider": "^3.0.0"
 allowBuilds:
   esbuild: true
   "@swc/core": true
