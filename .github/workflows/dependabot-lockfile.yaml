@@ -23,7 +23,11 @@ env:
 jobs:
   regenerate:
     name: Regenerate lockfile
-    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    # LOCKFILE_BOT_TOKEN is a Dependabot secret, so it is only available when Dependabot
+    # itself triggers the run. Skip pushes made by anyone else to a Dependabot branch.
+    if: >-
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
