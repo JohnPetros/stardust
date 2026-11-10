@@ -11,18 +11,15 @@ updated_at: 2026-11-07
 
 ## Estado
 
-- **Spec:** `in_progress`, revisão 3 (emenda de 2026-11-07: fundo animado do Sign-up em tela cheia por decisão do usuário, DV-03 em 392 px,
-  DV-17 a DV-20 após o pacote EV-02 e dois testes no mapa), `Spec Reviewer` com resultado `clear` para a revisão 3. Issue #620.
+- **Spec:** `completed`, revisão 6 (as revisões 4 a 6 acrescentaram o refresh do baseline de complexidade, os testes das Views do `Dialog` e as
+  pastas dos campos do Sign-up), `Spec Reviewer` com resultado `clear` para cada revisão. Issue #620.
 - **Motivo do Plan:** mudança visual global em `apps/web` (tokens, cinco componentes compartilhados com 68 + 28 + 14 + 9
   consumidores, nove extrações de View, cinco rotas), dependência entre tokens/componentes e páginas, paralelismo útil
   entre duas áreas sem paths em comum, UI com validação por frame e varredura de regressão dependente de ambiente.
-- **Branch e baseline:** branch `feat/design-system-alignment-auth` criada a partir de `main`; commit-base congelado em
-  `ea870e258ba71caf80db559a1460ba29318e5a86`. As alterações do working tree alheias à Spec (por exemplo `AGENTS.md`,
-  `design/*`, prompts SDD) permanecem não commitadas e fora do candidato.
-- **Fase atual:** validação integrada concluída em 2026-11-07 (sensores, `test:integration` 78/78, VM-01 a VM-06 e pacote EV-02).
-  Falta a revisão dos dois Implementation Reviewers pareados sobre o candidato final.
-- **Próxima ação:** reativar `implementation_reviewer_foundation` e `implementation_reviewer_auth` com o pacote EV-02 e o candidato atual; com os dois
-  aceitos, marcar `evaluation.md` como `ready` e seguir para `conclude-spec`.
+- **Branch e baseline:** a entrega foi publicada na branch limpa `feat/design-system-alignment-web-auth` a partir de `origin/main`
+  (PR #631); commit-base congelado em `cb8460cfca198da0ff3236fc47bd786389ce96c3`. Mergeado em `main` por squash (`ed91d7f02`).
+- **Fase atual:** concluída. Validação integrada, Implementation Reviewers pareados aceitos e CI verde no HEAD final `45eb57dc5` do PR #631.
+- **Próxima ação:** nenhuma nesta Spec. As pendências fora dela estão na seção Conclusão de `evaluation.md`.
 - **Blockers:** nenhum. O servidor de testes Web usa `distDir` isolado e porta própria (`3100`), em paralelo ao `next dev` do usuário.
 
 ## Builders

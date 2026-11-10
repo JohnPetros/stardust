@@ -12,11 +12,11 @@ last_updated_at: 2026-11-07
 
 ## Escopo avaliado
 
-- Spec: `./spec.md` (revisão 2, `in_progress`)
+- Spec: `./spec.md` (revisão 6, `completed`)
 - Plan: `./plan.md`
 - Commit-base: `ea870e258ba71caf80db559a1460ba29318e5a86` (`main`)
-- Commit avaliado: `ea870e258ba71caf80db559a1460ba29318e5a86` (ainda sem candidato; branch
-  `feat/design-system-alignment-auth`)
+- Commit avaliado: HEAD final do PR #631 `45eb57dc5` (branch `feat/design-system-alignment-web-auth`); squash em `main`
+  como `ed91d7f02`
 - Alterações do working tree alheias à Spec (`AGENTS.md`, `design/*`, prompts SDD, `scripts/open-penpot.mjs`,
   `skills-lock.json`, `documentation/rules/*`, `documentation/sdd.md`) permanecem fora do candidato.
 
@@ -327,15 +327,20 @@ Efeito colateral local: o Sign-up criou o usuário `vm03-85af544f@stardust.local
 
 ## Alinhamento documental
 
-- Spec: alinhada (revisão 3)
+- Spec: alinhada (revisão 6)
 - Plan: alinhado
 - `documentation/design.md` e `documentation/tooling.md` (frase de `contexts/**/tests`): atualizados pela entrega e dentro do mapa.
 - Rules/Architecture/Overview: não aplicáveis; nenhuma fronteira arquitetural ou Rule mudou.
-- Atualizações preventivas (`create-spec-prompt.md`, `implement-spec-prompt.md` e a nota de Realtime em `tooling.md`) ficam no
-  branch de tooling `docs/scoped-local-checks`, fora do mapa desta Spec e do commit da entrega.
+- Atualizações preventivas (`create-spec-prompt.md`, `implement-spec-prompt.md`, `open-pr-prompt.md`, a nota de Realtime em
+  `tooling.md` e a regra do Entry Point como alias da View em `ui-layer-rules.md`): fora do mapa desta Spec e do commit da
+  entrega, entregues no PR #633 (squash `96f9004a5`).
 
 ## Conclusão
 
 - Estado: `completed`
-- Entrega: PR https://github.com/JohnPetros/stardust/pull/631 (base `main`, head `feat/design-system-alignment-web-auth`), CI verde no HEAD `ad0f48bb4`. Falta a aprovação de review humana, que `main` exige para o merge; nenhum merge ou deploy foi feito.
-- Pendências fora desta Spec: os quatro comentários do `Crew PR review` recusados (`ACH-17`, `ACH-19`) seguem abertos para o revisor; `ACH-06`, `ACH-14` e `ACH-18` são observações pré-existentes; as atualizações preventivas de documentação (`create-spec`, `implement-spec`, `open-pr` e `tooling.md`) estão no branch de tooling `docs/scoped-local-checks`, ainda sem commit.
+- Entrega: PR https://github.com/JohnPetros/stardust/pull/631 (base `main`, head `feat/design-system-alignment-web-auth`), CI verde no HEAD
+  final `45eb57dc5` (31 checks aprovados, 1 ignorado). Mergeado em `main` por squash (`ed91d7f02`) com privilégios de administrador, sem a
+  aprovação de review humana que `main` exige; nenhum deploy foi feito.
+- Pendências fora desta Spec: os quatro comentários do `Crew PR review` recusados (`ACH-17`, `ACH-19`) ficaram abertos no PR já
+  mergeado; `ACH-06`, `ACH-14` e `ACH-18` são observações pré-existentes; a falha intermitente de memória nos jobs de integração do Server
+  precisa de tarefa própria. As atualizações preventivas de documentação foram entregues no PR #633.
