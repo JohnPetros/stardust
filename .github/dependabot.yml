@@ -10,8 +10,6 @@ updates:
         applies-to: version-updates
         patterns:
           - "*"
-        # Used at different major versions across workspaces. Grouped updates wrote one
-        # version to every workspace and downgraded the newer ones (see PR #639).
         exclude-patterns:
           - "@designliquido/delegua"
           - "tailwindcss"
