@@ -194,7 +194,7 @@ locais aparece em `forbiddenTestPaths` e falha o CI.
 | `update`           | Atualiza uma dependência específica com `ncu`; o nome da dependência é argumento posicional. |
 | `test:unit`        | Executa os testes unitários do projeto Server.                                           |
 | `test:coverage`    | Executa os testes unitários do Server com relatório JSON de cobertura.                   |
-| `test:coverage:merge` | Consolida a cobertura unitária e dos quatro shards de integração do Server antes do ratchet. |
+| `test:coverage:merge` | Consolida a cobertura unitária e dos seis shards de integração do Server antes do ratchet. |
 | `test:integration` | Executa os testes de integração do Server.                                               |
 
 Exemplos de comandos de banco:
@@ -488,15 +488,19 @@ versionados em `coverage-baseline.json` nunca podem diminuir sem uma alteração
 revisada desse arquivo.
 
 No Server, o ratchet considera a cobertura conjunta dos testes unitários e dos
-quatro shards de integração, incluindo os adapters Drizzle exercitados pelas
+seis shards de integração, incluindo os adapters Drizzle exercitados pelas
 rotas reais. Prepare o stack local, execute `test:integration:ci` e
 `test:coverage` no workspace `@stardust/server`, depois `test:coverage:merge` e
-`pnpm run check:coverage @stardust/server`. A consolidação exige os cinco
-relatórios completos; um relatório unitário isolado não aprova esse ratchet.
-No CI do Server, cada um dos quatro shards de integração roda em um job próprio
-(`Integration tests (shard N/4)`), com stack local isolado, e envia seu relatório
-como artifact; o job `Tests` baixa os cinco relatórios, consolida e verifica o
-ratchet. O setup do stack fica na action `.github/actions/prepare-server-stack`.
+`pnpm run check:coverage @stardust/server`. Nesse fluxo local, a consolidação
+exige os sete relatórios completos (um unitário e seis de integração); um
+relatório unitário isolado não aprova esse ratchet.
+No CI do Server, cada um dos seis shards de integração roda em um job próprio
+(`Integration tests (shard N/6)`), com stack local isolado, e envia seu relatório
+como artifact. Os testes unitários também são divididos, em dois shards
+(`Unit tests (shard N/2)`), e os testes de `scripts/tests` rodam somente no
+primeiro. O job `Tests` baixa os oito relatórios, consolida com
+`test:coverage:merge --unit-shards=2` e verifica o ratchet. O setup do stack
+fica na action `.github/actions/prepare-server-stack`.
 O CI do Server executa Node 24 para a coleta V8; a execução em Node 22 revelou
 um abort nativo no inspector durante a instrumentação de cobertura. O caller de
 revisão do Crew aguarda até 45 minutos pelos checks aplicáveis antes de iniciar

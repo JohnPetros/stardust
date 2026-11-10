@@ -3,7 +3,11 @@ import { mkdtempSync, writeFileSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { test } from 'node:test'
-import { mergeCoverageReports } from '../merge-server-coverage.mjs'
+import {
+  mergeCoverageReports,
+  parseUnitShardsCount,
+  resolveReportPaths,
+} from '../merge-server-coverage.mjs'
 
 function createReport(hits) {
   const report = {
@@ -63,5 +67,29 @@ test('fails on missing or empty shard reports without replacing the summary', ()
     assert.equal(readFileSync(output, 'utf8'), 'previous summary')
   } finally {
     rmSync(directory, { recursive: true, force: true })
+  }
+})
+
+test('resolves one unit report locally and one per shard in CI, plus six integration shards', () => {
+  const relative = (paths) => paths.map((path) => path.replace('/coverage/', ''))
+  const integration = [1, 2, 3, 4, 5, 6].map(
+    (shard) => `integration-${shard}/coverage-final.json`,
+  )
+  assert.deepEqual(relative(resolveReportPaths('/coverage')), [
+    'coverage-final.json',
+    ...integration,
+  ])
+  assert.deepEqual(relative(resolveReportPaths('/coverage', 2)), [
+    'unit-1/coverage-final.json',
+    'unit-2/coverage-final.json',
+    ...integration,
+  ])
+})
+
+test('reads the unit shards count from the arguments and rejects invalid values', () => {
+  assert.equal(parseUnitShardsCount([]), 0)
+  assert.equal(parseUnitShardsCount(['--unit-shards=2']), 2)
+  for (const value of ['0', '-1', 'two', '']) {
+    assert.throws(() => parseUnitShardsCount([`--unit-shards=${value}`]), /Invalid/)
   }
 })
