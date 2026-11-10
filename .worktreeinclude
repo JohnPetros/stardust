@@ -1,0 +1,4 @@
+# Gitignored files copied into new worktrees.
+.env.local
+apps/*/.env.local
+apps/*/.env.testing
