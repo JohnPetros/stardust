@@ -495,8 +495,11 @@ rotas reais. Prepare o stack local, execute `test:integration:ci` e
 relatórios completos; um relatório unitário isolado não aprova esse ratchet.
 No CI do Server, cada um dos seis shards de integração roda em um job próprio
 (`Integration tests (shard N/6)`), com stack local isolado, e envia seu relatório
-como artifact; o job `Tests` baixa os sete relatórios, consolida e verifica o
-ratchet. O setup do stack fica na action `.github/actions/prepare-server-stack`.
+como artifact. Os testes unitários também são divididos, em dois shards
+(`Unit tests (shard N/2)`), e os testes de `scripts/tests` rodam somente no
+primeiro. O job `Tests` baixa os oito relatórios, consolida com
+`test:coverage:merge --unit-shards=2` e verifica o ratchet. O setup do stack
+fica na action `.github/actions/prepare-server-stack`.
 O CI do Server executa Node 24 para a coleta V8; a execução em Node 22 revelou
 um abort nativo no inspector durante a instrumentação de cobertura. O caller de
 revisão do Crew aguarda até 45 minutos pelos checks aplicáveis antes de iniciar

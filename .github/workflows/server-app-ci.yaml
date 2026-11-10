@@ -129,8 +129,12 @@ jobs:
         run: pnpm --filter @stardust/server run check:types
 
   unit-tests:
-    name: Unit tests
+    name: Unit tests (shard ${{ matrix.shard }}/2)
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
 
     steps:
       - name: Checkout code
@@ -144,16 +148,20 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Test migration and export scripts
+        if: matrix.shard == 1
         run: pnpm run test:scripts
 
       - name: Run tests
-        run: pnpm --filter @stardust/server run test:coverage
+        run: >-
+          pnpm --filter @stardust/server run test:coverage
+          --shard=${{ matrix.shard }}/2
+          --coverageDirectory=coverage/unit-${{ matrix.shard }}
 
       - name: Upload unit coverage
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: server-unit-coverage
-          path: apps/server/coverage/coverage-final.json
+          name: server-unit-coverage-${{ matrix.shard }}
+          path: apps/server/coverage/unit-${{ matrix.shard }}/coverage-final.json
           if-no-files-found: error
           retention-days: 1
 
@@ -217,8 +225,8 @@ jobs:
       - name: Download unit coverage
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
-          name: server-unit-coverage
-          path: apps/server/coverage
+          pattern: server-unit-coverage-*
+          path: apps/server/coverage/shards
 
       - name: Download integration coverage
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
@@ -226,8 +234,13 @@ jobs:
           pattern: server-integration-coverage-*
           path: apps/server/coverage/shards
 
-      - name: Place integration shard reports
+      - name: Place shard reports
         run: |
+          for shard in 1 2; do
+            mkdir -p "apps/server/coverage/unit-$shard"
+            mv "apps/server/coverage/shards/server-unit-coverage-$shard/coverage-final.json" \
+              "apps/server/coverage/unit-$shard/coverage-final.json"
+          done
           for shard in 1 2 3 4 5 6; do
             mkdir -p "apps/server/coverage/integration-$shard"
             mv "apps/server/coverage/shards/server-integration-coverage-$shard/coverage-final.json" \
@@ -235,7 +248,7 @@ jobs:
           done
 
       - name: Merge unit and integration coverage
-        run: pnpm --filter @stardust/server run test:coverage:merge
+        run: pnpm --filter @stardust/server run test:coverage:merge --unit-shards=2
 
       - name: Check coverage baseline
         run: pnpm run check:coverage @stardust/server
