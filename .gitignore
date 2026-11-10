@@ -25,6 +25,7 @@ apps/web/test-results
 
 # next.js
 .next
+.next-testing
 /out/
 
 # TypeScript

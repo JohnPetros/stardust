@@ -3,10 +3,12 @@ import { defineConfig, devices } from '@playwright/test'
 
 loadEnv({ path: '.env.testing' })
 
-const baseURL = 'http://127.0.0.1:3100'
+const port = process.env.WEB_APP_TEST_PORT ?? '3100'
+const distDir = '.next-testing'
+const baseURL = `http://127.0.0.1:${port}`
 
 process.env.MODE = 'testing'
-process.env.PORT = '3100'
+process.env.PORT = port
 process.env.NEXT_IGNORE_INCORRECT_LOCKFILE = '1'
 process.env.NEXT_PUBLIC_STARDUST_WEB_URL = baseURL
 process.env.NEXT_PUBLIC_STARDUST_SERVER_URL = `${baseURL}/api/tests/server`
@@ -31,8 +33,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command:
-      'cross-env MODE=testing PORT=3100 NEXT_IGNORE_INCORRECT_LOCKFILE=1 NEXT_PUBLIC_STARDUST_WEB_URL=http://127.0.0.1:3100 NEXT_PUBLIC_STARDUST_SERVER_URL=http://127.0.0.1:3100/api/tests/server next dev --hostname 127.0.0.1 --port 3100',
+    command: `cross-env MODE=testing PORT=${port} NEXT_DIST_DIR=${distDir} NEXT_IGNORE_INCORRECT_LOCKFILE=1 `
+      + `NEXT_PUBLIC_STARDUST_WEB_URL=${baseURL} NEXT_PUBLIC_STARDUST_SERVER_URL=${baseURL}/api/tests/server `
+      + `next dev --hostname 127.0.0.1 --port ${port}`,
     url: `${baseURL}/api/tests/server`,
     reuseExistingServer: false,
     timeout: 300000,
