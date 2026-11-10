@@ -1,12 +1,6 @@
 {
   "version": 1,
   "skills": {
-    "comfyui-workflow-builder": {
-      "source": "mckruz/comfyui-expert",
-      "sourceType": "github",
-      "skillPath": "skills/comfyui-workflow-builder/SKILL.md",
-      "computedHash": "711b2aef12e3537dde5620ca551954c730338a45520bb296b98cea4142e2762e"
-    },
     "frontend-design": {
       "source": "anthropics/skills",
       "sourceType": "github",
