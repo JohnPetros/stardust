@@ -67,13 +67,13 @@ export function useAccountConfirmationPage({
   }, [user])
 
   useEffect(() => {
-    if (!account) return
+    if (!account || user) return
 
     return profileChannel.onCreateUser((event: UserCreatedEvent) => {
       if (event.payload.userEmail !== account.email.value) return
       onRefetchUser()
     })
-  }, [account, profileChannel, onRefetchUser])
+  }, [account, user, profileChannel, onRefetchUser])
 
   return {
     isRocketVisible,

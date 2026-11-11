@@ -83,7 +83,7 @@ export function useSocialAccountConfirmationPage({
   }, [account, user])
 
   useEffect(() => {
-    if (!account) return
+    if (!account || user) return
 
     return profileChannel.onCreateUser((event: UserCreatedEvent) => {
       if (event.payload.userEmail === account?.email?.value) {
@@ -91,7 +91,7 @@ export function useSocialAccountConfirmationPage({
         setIsUserCreated(true)
       }
     })
-  }, [account, profileChannel, onRefetchUser])
+  }, [account, user, profileChannel, onRefetchUser])
 
   useEffect(() => {
     if (!isNewAccount || isUserCreated) {

@@ -1,15 +1,23 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import type { UserCreatedEvent } from '@stardust/core/profile/events'
 
 import { useRealtimeContext } from './useRealtimeContext'
 
-export function useProfileSocket(onCreateUser: (event: UserCreatedEvent) => void) {
+type Listener = (event: UserCreatedEvent) => void
+
+export function useProfileSocket(
+  onCreateUser: Listener,
+  options?: { enabled?: boolean },
+) {
   const { profileChannel } = useRealtimeContext()
+  const listenerRef = useRef(onCreateUser)
+  listenerRef.current = onCreateUser
 
   useEffect(() => {
-    return profileChannel.onCreateUser(onCreateUser)
-  }, [onCreateUser, profileChannel])
+    if (options?.enabled === false) return
+    return profileChannel.onCreateUser((event) => listenerRef.current(event))
+  }, [options?.enabled, profileChannel])
 }
