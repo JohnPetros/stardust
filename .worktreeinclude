@@ -1,0 +1,6 @@
+# Gitignored files copied into new worktrees.
+# They hold local credentials: the copies stay on this machine and are ignored by
+# Git (`.env.*`), so list only the files a worktree needs to run the apps and tests.
+.env.local
+apps/*/.env.local
+apps/*/.env.testing

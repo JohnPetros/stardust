@@ -5,6 +5,20 @@
 - documentation/tooling.md
 - documentation/rules/rules.md
 
+## Leitura obrigatória das regras antes de alterar
+
+- Antes de criar ou alterar qualquer arquivo (código, testes, configuração ou
+  documentação), abra `documentation/rules/rules.md`, identifique o arquivo de
+  regras cujo "Quando consultar" corresponde à camada, ao app ou à tarefa e leia
+  esse arquivo por completo. Faça isso antes da primeira edição, não depois de
+  uma revisão apontar o problema.
+- Isso vale também para correções de comentários de review, falhas de CI e
+  mudanças pequenas. Uma mudança que toca mais de uma camada exige ler as regras
+  de cada uma, inclusive as de testes (por exemplo, a camada Provision não
+  recebe arquivos `*.test.*` dedicados).
+- Se nenhuma regra cobrir a mudança, registre isso no relatório ou no PR em vez
+  de presumir um padrão.
+
 ## Idioma dos Pull Requests
 
 - Todo Pull Request deve ter título e descrição escritos em PT-BR, inclusive os

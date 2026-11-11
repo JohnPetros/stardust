@@ -23,6 +23,7 @@
   "packageManager": "pnpm@11.28.11",
   "scripts": {
     "setup": "node ./scripts/setup-project.mjs",
+    "penpot": "node ./scripts/open-penpot.mjs",
     "prepare": "husky",
     "prod": "turbo prod",
     "dev": "turbo dev --filter=!@stardust/crew",

@@ -13,6 +13,8 @@ trabalho, nao como substitutos de analise tecnica.
   SDKs, APIs e CLIs.
 - **CodeGraph**: explorar simbolos, caminhos de chamada e impacto de mudancas
   na codebase indexada.
+- **Penpot**: inspecionar e editar o arquivo Penpot `stardust`, exportar
+  imagens de boards, ler componentes e tokens e validar layout.
 - **Pencil**: ler e editar arquivos `.pen`, validar layout e trabalhar com
   contexto de design.
 - **Supabase Dev**: inspecionar e operar o ambiente de desenvolvimento do
@@ -67,6 +69,30 @@ Boas praticas:
   nao mostrou;
 - se o projeto nao estiver indexado, use as ferramentas locais de navegacao e
   leitura; nao inicialize o indice sem solicitacao.
+
+### Penpot
+
+Use para inspecionar ou editar o arquivo Penpot `stardust`, a fonte visual
+canonica do projeto. O MCP so funciona com o arquivo aberto no navegador e o
+plugin Penpot MCP carregado e conectado a ele.
+
+Boas praticas:
+
+- leia `high_level_overview` uma vez por sessao e consulte `penpot_api_info`
+  antes de usar `execute_code`;
+- confirme com `penpot.currentFile.name` que o arquivo conectado e `stardust`;
+  o servidor MCP pode estar ligado a outro arquivo Penpot;
+- localize paginas e boards por nome (`penpot.currentFile.pages`,
+  `penpotUtils.findShapes`); o nome e o contrato e IDs mudam se o board for
+  recriado;
+- leia a estrutura, os componentes (`penpot.library.local`) e os tokens antes
+  de deduzir cores, medidas ou componentes;
+- use `export_shape` apenas quando validacao visual for necessaria;
+- ao editar, use os componentes e tokens da biblioteca, nao altere
+  componentes da biblioteca sem pedido e confira o resultado com
+  `export_shape`; o Penpot salva automaticamente;
+- o sandbox do `execute_code` nao tem `fetch`; envie dados inline e nao dependa
+  de servidores locais.
 
 ### Pencil
 
