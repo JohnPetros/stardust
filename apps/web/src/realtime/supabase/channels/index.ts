@@ -1,1 +1,0 @@
-export { SupabaseProfileChannel } from './SupabaseProfileChannel'
