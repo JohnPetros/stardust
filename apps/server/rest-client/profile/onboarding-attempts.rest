@@ -1,0 +1,6 @@
+@URL = {{BASE_URL}}/profile/onboarding-attempt
+@ONBOARDING_RECEIPT = <onboarding-receipt-from-sign-up>
+
+### Fetch onboarding attempt
+GET {{URL}}
+X-Onboarding-Receipt: {{ONBOARDING_RECEIPT}}
