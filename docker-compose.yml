@@ -100,7 +100,7 @@ services:
       GOTRUE_DB_DRIVER: postgres
       GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${SUPABASE_DATABASE_PASSWORD:?Set a local-only SUPABASE_DATABASE_PASSWORD}@supabase-postgres:5432/postgres
       GOTRUE_SITE_URL: http://127.0.0.1:3000
-      GOTRUE_URI_ALLOW_LIST: http://localhost:3000/**,http://127.0.0.1:3000/**,http://localhost:8000/**,http://127.0.0.1:8000/**
+      GOTRUE_URI_ALLOW_LIST: http://localhost:3000,http://127.0.0.1:3000,http://localhost:3000/**,http://127.0.0.1:3000/**,http://localhost:8000/**,http://127.0.0.1:8000/**
       GOTRUE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?Set a local-only SUPABASE_JWT_SECRET}
       GOTRUE_JWT_EXP: 3600
       GOTRUE_JWT_ADMIN_ROLES: service_role
