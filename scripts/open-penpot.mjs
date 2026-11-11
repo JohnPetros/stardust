@@ -7,6 +7,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { setTimeout as sleep } from 'node:timers/promises'
+import { fileURLToPath } from 'node:url'
 
 const defaultUrl = 'https://design.penpot.app'
 const profileName = 'Stardust'
@@ -85,7 +86,7 @@ function resolveTarget() {
   }
 }
 
-function readUserDataDirectory(commandLine) {
+export function readUserDataDirectory(commandLine) {
   const match =
     commandLine.match(/"--user-data-dir=([^"]+)"/) ??
     commandLine.match(/--user-data-dir=(?:"([^"]+)"|([^\s"]+))/)
@@ -111,8 +112,14 @@ function findInstance(profileDirectory) {
       .filter(Boolean)
       .map(([, pid, commandLine]) => ({ pid: Number(pid), commandLine }))
   }
+  return filterInstances(processes, profileDirectory, isWsl)
+}
+
+// Keeps the main browser processes whose --user-data-dir is the profile
+// directory. Windows paths are case-insensitive, so WSL compares them that way.
+export function filterInstances(processes, profileDirectory, caseInsensitive) {
   const sameDirectory = (directory) =>
-    isWsl
+    caseInsensitive
       ? directory.toLowerCase() === profileDirectory.toLowerCase()
       : directory === profileDirectory
   return processes.filter((p) => {
@@ -138,32 +145,36 @@ function launch({ chrome, profileDirectory }, url) {
   spawn(chrome, args, { detached: true, stdio: 'ignore' }).unref()
 }
 
-const url = process.argv[2] ?? defaultUrl
-if (!/^https?:\/\//.test(url)) fail(`expected an http(s) URL, got: ${url}`)
+async function main() {
+  const url = process.argv[2] ?? defaultUrl
+  if (!/^https?:\/\//.test(url)) fail(`expected an http(s) URL, got: ${url}`)
 
-const target = resolveTarget()
-const wasRunning = findInstance(target.profileDirectory).length > 0
-launch(target, url)
+  const target = resolveTarget()
+  const wasRunning = findInstance(target.profileDirectory).length > 0
+  launch(target, url)
 
-let instance = []
-for (let attempt = 0; attempt < 20 && instance.length === 0; attempt++) {
-  await sleep(500)
-  instance = findInstance(target.profileDirectory)
-}
-if (instance.length === 0)
-  fail(`Chrome did not start with profile ${target.profileDirectory}`)
+  let instance = []
+  for (let attempt = 0; attempt < 20 && instance.length === 0; attempt++) {
+    await sleep(500)
+    instance = findInstance(target.profileDirectory)
+  }
+  if (instance.length === 0)
+    fail(`Chrome did not start with profile ${target.profileDirectory}`)
 
-console.log(`opened ${url}`)
-console.log(
-  `profile ${target.profileDirectory} (pid ${instance.map((p) => p.pid).join(', ')})`,
-)
-if (wasRunning)
-  console.log('this profile was already open, so the page opened in a new window of it')
-const missingFlags = keepAwakeFlags.filter(
-  (flag) => !instance.some((p) => p.commandLine.includes(flag)),
-)
-if (missingFlags.length > 0) {
+  console.log(`opened ${url}`)
   console.log(
-    `warning: the open window lacks ${missingFlags.join(' ')}; close every window of this profile and run again`,
+    `profile ${target.profileDirectory} (pid ${instance.map((p) => p.pid).join(', ')})`,
   )
+  if (wasRunning)
+    console.log('this profile was already open, so the page opened in a new window of it')
+  const missingFlags = keepAwakeFlags.filter(
+    (flag) => !instance.some((p) => p.commandLine.includes(flag)),
+  )
+  if (missingFlags.length > 0) {
+    console.log(
+      `warning: the open window lacks ${missingFlags.join(' ')}; close every window of this profile and run again`,
+    )
+  }
 }
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) await main()

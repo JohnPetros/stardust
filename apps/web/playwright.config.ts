@@ -4,6 +4,9 @@ import { defineConfig, devices } from '@playwright/test'
 loadEnv({ path: '.env.testing' })
 
 const port = process.env.WEB_APP_TEST_PORT ?? '3100'
+if (!/^\d{2,5}$/.test(port)) {
+  throw new Error(`WEB_APP_TEST_PORT must be a numeric port, got: ${port}`)
+}
 const distDir = '.next-testing'
 const baseURL = `http://127.0.0.1:${port}`
 
