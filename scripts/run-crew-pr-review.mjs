@@ -239,6 +239,30 @@ export function buildReviewInput(pr, runGit = git, { reviewedShas = [] } = {}) {
   }
 }
 
+// Safe, non-private description of an unexpected failure. It never includes the error
+// message, subprocess output, request bodies or tokens: only the error class, a
+// well-formed error code and, for gh/git subprocess failures, the command, exit status,
+// HTTP status and the repository API endpoint.
+export function describeUnexpectedError(error) {
+  const parts = [typeof error?.name === 'string' ? error.name : 'Error']
+  const code = error?.code ?? error?.cause?.code
+  if (typeof code === 'string' && /^[A-Z][A-Z0-9_]*$/.test(code)) {
+    parts.push(`code=${code}`)
+  }
+  const command = error?.path
+  if ((command === 'gh' || command === 'git') && Number.isInteger(error.status)) {
+    parts.push(`${command} exit=${error.status}`)
+    const args = Array.isArray(error.spawnargs) ? error.spawnargs : []
+    const endpoint = command === 'gh' ? args[args.indexOf('api') + 1] : undefined
+    if (/^repos\/[\w.-]+\/[\w.-]+\/[\w/.?=&-]+$/.test(endpoint ?? '')) {
+      parts.push(`endpoint=${endpoint}`)
+    }
+    const http = String(error.stderr ?? '').match(/\(HTTP (\d{3})\)/)
+    if (http) parts.push(`http=${http[1]}`)
+  }
+  return parts.join(' ')
+}
+
 export function validateReview(output, input) {
   const isText = (text) => typeof text === 'string' && text.trim().length > 0
   if (
@@ -497,7 +521,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
     console.error(
       error instanceof CrewReviewError
         ? error.message
-        : 'Crew review failed. Check GitHub access and Crew health; no private error details are logged.',
+        : `Crew review failed (${describeUnexpectedError(error)}). Check GitHub access and Crew health; no private error details are logged.`,
     )
     process.exitCode = 1
   }

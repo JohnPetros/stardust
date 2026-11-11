@@ -16,6 +16,7 @@ import { reviewInputSchema } from '../../apps/crew/src/mastra/agents/pr-reviewer
 
 import {
   buildReviewInput,
+  describeUnexpectedError,
   filterDiffHunks,
   listReviewedShas,
   runCrewReview,
@@ -714,4 +715,39 @@ test('skips an incremental review whose only changes since the last review are d
   assert.deepEqual(logs, ['No changes to review.'])
   assert.equal(fixture.requests.length, 0)
   assert.equal(fixture.publications.length, 0)
+})
+
+test('describes unexpected failures without leaking private details', () => {
+  const timeout = Object.assign(new Error('secret-token in message'), {
+    name: 'TimeoutError',
+  })
+  assert.equal(describeUnexpectedError(timeout), 'TimeoutError')
+
+  const network = new TypeError('fetch failed secret-token')
+  network.cause = { code: 'ENOTFOUND' }
+  assert.equal(describeUnexpectedError(network), 'TypeError code=ENOTFOUND')
+
+  const github = Object.assign(new Error('Command failed: gh api secret-token'), {
+    path: 'gh',
+    status: 1,
+    spawnargs: ['gh', 'api', 'repos/JohnPetros/stardust/pulls/647/reviews', '--input', '-'],
+    stderr: 'gh: Unprocessable Entity secret-token (HTTP 422)',
+  })
+  assert.equal(
+    describeUnexpectedError(github),
+    'Error gh exit=1 endpoint=repos/JohnPetros/stardust/pulls/647/reviews http=422',
+  )
+
+  const git = Object.assign(new Error('git secret-token'), {
+    path: 'git',
+    status: 128,
+    spawnargs: ['git', 'show', 'secret-token'],
+    stderr: 'fatal: bad object secret-token',
+  })
+  assert.equal(describeUnexpectedError(git), 'Error git exit=128')
+
+  for (const error of [timeout, network, github, git, null, 'secret-token']) {
+    assert.ok(!describeUnexpectedError(error).includes('secret-token'))
+  }
+  assert.equal(describeUnexpectedError(null), 'Error')
 })
