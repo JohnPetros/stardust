@@ -103,6 +103,41 @@ describe('useSocialAccountConfirmationPage', () => {
     expect(result.current.isRetryVisible).toBe(false)
   })
 
+  it('should not subscribe to profile creation when the profile is already available', async () => {
+    user = {
+      email: { value: 'john@example.com' },
+    } as never
+    onSignUpWithSocialAccount.mockResolvedValueOnce({ isNewAccount: true })
+
+    renderHook(Hook)
+
+    await waitFor(() => expect(onSignUpWithSocialAccount).toHaveBeenCalled())
+
+    expect(
+      (profileChannel as unknown as { onCreateUser: jest.Mock }).onCreateUser,
+    ).not.toHaveBeenCalled()
+  })
+
+  it('should unsubscribe and not resubscribe when the profile becomes available after a refetch', async () => {
+    onSignUpWithSocialAccount.mockResolvedValueOnce({ isNewAccount: true })
+
+    const { rerender } = renderHook(Hook)
+
+    await waitFor(() => expect(onSignUpWithSocialAccount).toHaveBeenCalled())
+    const subscribedCount = (profileChannel as unknown as { onCreateUser: jest.Mock })
+      .onCreateUser.mock.calls.length
+    expect(subscribedCount).toBeGreaterThan(0)
+
+    user = { email: { value: 'john@example.com' } } as never
+    rerender()
+    rerender()
+
+    expect(unsubscribe).toHaveBeenCalled()
+    expect(
+      (profileChannel as unknown as { onCreateUser: jest.Mock }).onCreateUser,
+    ).toHaveBeenCalledTimes(subscribedCount)
+  })
+
   it('should mark user as created when the authenticated profile is already available', async () => {
     user = {
       email: { value: 'john@example.com' },

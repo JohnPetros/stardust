@@ -131,6 +131,12 @@ test.describe('/auth/sign-up', () => {
     await gotoSignUpPage(page)
     await fillValidSignUpForm(page, validFields)
 
+    expect(
+      await page.evaluate(
+        () => window.__STARDUST_PROFILE_CHANNEL_MOCK__?.getSubscriptionsCount() ?? 0,
+      ),
+    ).toBe(0)
+
     const signUpRequestPromise = page.waitForRequest((request) => {
       return request.method() === 'POST' && request.url().endsWith('/api/auth/sign-up')
     })
@@ -159,6 +165,11 @@ test.describe('/auth/sign-up', () => {
       page,
       createUserCreatedPayload(validFields.email, validFields.name),
     )
+    expect(
+      await page.evaluate(
+        () => window.__STARDUST_PROFILE_CHANNEL_MOCK__?.getSubscriptionsCount() ?? 0,
+      ),
+    ).toBe(1)
 
     await expect(page.getByTestId('sign-up-success-message')).toBeVisible()
     await expect(
@@ -297,7 +308,7 @@ test.describe('/auth/sign-up', () => {
     await expect(page).toHaveURL(/\/auth\/sign-in$/)
   })
 
-  test('BFF middleware allows anonymous signup, resume and finite SSE while auth verification would fail', async ({
+  test('BFF middleware allows anonymous signup and resume while auth verification would fail', async ({
     page,
     context,
   }) => {
@@ -308,7 +319,6 @@ test.describe('/auth/sign-up', () => {
       expiresAt,
       isUserCreated: false,
     }
-    const rawBody = `retry: 1000\n\nevent: user.created\nid: profile:${attemptId}\ndata: ${JSON.stringify(createUserCreatedPayload(validFields.email, validFields.name))}\n\n`
     await ServerMock(page).register([
       {
         method: 'GET',
@@ -327,13 +337,6 @@ test.describe('/auth/sign-up', () => {
         },
       },
       { method: 'GET', path: '/profile/onboarding-attempt', status: 200, body: attempt },
-      {
-        method: 'GET',
-        path: '/profile/events',
-        status: 200,
-        rawBody,
-        headers: { 'Content-Type': 'text/event-stream' },
-      },
     ])
     const signup = await page.request.post('/api/auth/sign-up', {
       headers: { Origin: webOrigin },
@@ -355,13 +358,12 @@ test.describe('/auth/sign-up', () => {
     const resume = await page.request.get('/api/auth/onboarding-attempt')
     expect(resume.status()).toBe(200)
     expect(await resume.json()).toEqual(attempt)
-    const events = await page.request.get('/api/auth/profile-events')
-    expect(events.status()).toBe(200)
-    expect(events.headers()['content-type']).toContain('text/event-stream')
-    expect(await events.text()).toBe(rawBody)
+    const events = await page.request.get('/api/auth/profile-events', { maxRedirects: 0 })
+    expect(events.status()).not.toBe(200)
+    expect(events.headers()['content-type'] ?? '').not.toContain('text/event-stream')
   })
 
-  test('BFF middleware stops anonymous SSE and absent attempts without authentication calls', async ({
+  test('BFF middleware stops absent attempts and no longer serves the removed event route', async ({
     page,
     context,
   }) => {
@@ -369,8 +371,9 @@ test.describe('/auth/sign-up', () => {
     await ServerMock(page).register([
       { method: 'GET', path: '/auth/account', status: 500, body: null },
     ])
-    const events = await page.request.get('/api/auth/profile-events')
-    expect(events.status()).toBe(204)
+    const events = await page.request.get('/api/auth/profile-events', { maxRedirects: 0 })
+    expect(events.status()).not.toBe(200)
+    expect(events.headers()['content-type'] ?? '').not.toContain('text/event-stream')
     const resume = await page.request.get('/api/auth/onboarding-attempt')
     expect(resume.status()).toBe(200)
     expect(await resume.json()).toBeNull()
