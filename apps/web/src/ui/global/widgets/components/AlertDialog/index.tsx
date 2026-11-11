@@ -1,40 +1,13 @@
 'use client'
 
-import { type ForwardedRef, forwardRef, type ReactNode, useImperativeHandle } from 'react'
-import * as AlertDialog from '@radix-ui/react-alert-dialog'
+import { type ForwardedRef, forwardRef, useImperativeHandle } from 'react'
 
-import type { AlertDialogRef, AlertDialogType } from './types'
-import { Animation as DialogAnimation } from '../Dialog'
-import { Hydration } from '../Hydration'
-import { Animation } from '../Animation'
+import type { AlertDialogRef } from './types'
 import { useAlertDialog } from './useAlertDialog'
-
-type AlertDialogProps = {
-  type: AlertDialogType
-  title: string
-  body: ReactNode
-  action: ReactNode
-  cancel?: ReactNode
-  children?: ReactNode
-  shouldPlayAudio?: boolean
-  shouldForceMount?: boolean
-  shouldCloseOnInteractOutside?: boolean
-  onOpenChange?: (isOpen: boolean) => void
-}
+import { AlertDialogView, type AlertDialogProps } from './AlertDialogView'
 
 const AlertDialogComponent = (
-  {
-    type,
-    title,
-    body,
-    action,
-    cancel,
-    children: trigger,
-    shouldPlayAudio = true,
-    shouldForceMount = false,
-    shouldCloseOnInteractOutside = false,
-    onOpenChange,
-  }: AlertDialogProps,
+  { type, shouldPlayAudio = true, onOpenChange, ...viewProps }: AlertDialogProps,
   ref: ForwardedRef<AlertDialogRef>,
 ) => {
   const { animation, isRendered, isOpen, containerRef, handleOpenChange, open, close } =
@@ -48,45 +21,15 @@ const AlertDialogComponent = (
   }, [open, close])
 
   return (
-    <Hydration>
-      <AlertDialog.Root open={isOpen} onOpenChange={handleOpenChange}>
-        <AlertDialog.Portal container={isRendered ? containerRef.current : null}>
-          <AlertDialog.Overlay
-            className='fixed inset-0 z-[1000] overflow-y-auto bg-black bg-opacity-50'
-            onClick={
-              shouldCloseOnInteractOutside ? () => handleOpenChange(false) : undefined
-            }
-          />
-          <AlertDialog.Content
-            forceMount={shouldForceMount ? true : undefined}
-            className='fixed left-1/2 top-1/2 z-[1100] max-h-screen w-full max-w-lg -translate-x-1/2 -translate-y-1/2 p-6'
-          >
-            <DialogAnimation>
-              <div className='flex items-center border-b border-gray-700 pb-2'>
-                <AlertDialog.Title className='mx-auto flex items-center justify-center text-center font-semibold text-white'>
-                  {title}
-                </AlertDialog.Title>
-              </div>
-
-              <div className='mt-3 flex justify-center'>
-                {animation && <Animation name={animation} size={200} hasLoop={true} />}
-              </div>
-
-              {body}
-              <div className='mt-4 flex justify-center gap-2'>
-                <AlertDialog.AlertDialogAction asChild>
-                  {action}
-                </AlertDialog.AlertDialogAction>
-                <AlertDialog.AlertDialogCancel asChild>
-                  {cancel}
-                </AlertDialog.AlertDialogCancel>
-              </div>
-            </DialogAnimation>
-          </AlertDialog.Content>
-        </AlertDialog.Portal>
-        <AlertDialog.Trigger asChild>{trigger as null}</AlertDialog.Trigger>
-      </AlertDialog.Root>
-    </Hydration>
+    <AlertDialogView
+      {...viewProps}
+      type={type}
+      animation={animation}
+      isRendered={isRendered}
+      isOpen={isOpen}
+      containerRef={containerRef}
+      onOpenChange={handleOpenChange}
+    />
   )
 }
 

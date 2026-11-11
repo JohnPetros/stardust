@@ -13,8 +13,10 @@ trabalho, nao como substitutos de analise tecnica.
   SDKs, APIs e CLIs.
 - **CodeGraph**: explorar simbolos, caminhos de chamada e impacto de mudancas
   na codebase indexada.
-- **Open Pencil**: inspecionar e editar `design/stardust.fig`, exportar
-  imagens de frames, validar layout e verificar lint do design.
+- **Penpot**: inspecionar e editar o arquivo Penpot `stardust`, exportar
+  imagens de boards, ler componentes e tokens e validar layout.
+- **Pencil**: ler e editar arquivos `.pen`, validar layout e trabalhar com
+  contexto de design.
 - **Supabase Dev**: inspecionar e operar o ambiente de desenvolvimento do
   Supabase.
 - **Supabase Prod**: inspecionar o ambiente de producao do Supabase com cuidado
@@ -68,22 +70,40 @@ Boas praticas:
 - se o projeto nao estiver indexado, use as ferramentas locais de navegacao e
   leitura; nao inicialize o indice sem solicitacao.
 
-### Open Pencil
+### Penpot
 
-Use para inspecionar ou editar `design/stardust.fig`, a fonte visual canonica
-do projeto. O arquivo precisa estar aberto no aplicativo Open Pencil.
+Use para inspecionar ou editar o arquivo Penpot `stardust`, a fonte visual
+canonica do projeto. O MCP so funciona com o arquivo aberto no navegador e o
+plugin Penpot MCP carregado e conectado a ele.
 
 Boas praticas:
 
-- confirme com `list_documents` que `design/stardust.fig` esta aberto e use o
-  `document_id` dele; outros arquivos podem estar abertos em outras abas;
-- localize frames por nome (`find_nodes`, `query_nodes`), pois IDs de nodes
-  mudam quando o arquivo e reaberto;
-- leia a estrutura com `get_jsx` ou `get_node` e as variaveis vinculadas antes
+- leia `high_level_overview` uma vez por sessao e consulte `penpot_api_info`
+  antes de usar `execute_code`;
+- confirme com `penpot.currentFile.name` que o arquivo conectado e `stardust`;
+  o servidor MCP pode estar ligado a outro arquivo Penpot;
+- localize paginas e boards por nome (`penpot.currentFile.pages`,
+  `penpotUtils.findShapes`); o nome e o contrato e IDs mudam se o board for
+  recriado;
+- leia a estrutura, os componentes (`penpot.library.local`) e os tokens antes
   de deduzir cores, medidas ou componentes;
-- use `export_image` apenas quando validacao visual for necessaria;
-- ao editar, vincule cores as variaveis do design, zere erros e avisos de
-  `lint` e salve com `save_file`.
+- use `export_shape` apenas quando validacao visual for necessaria;
+- ao editar, use os componentes e tokens da biblioteca, nao altere
+  componentes da biblioteca sem pedido e confira o resultado com
+  `export_shape`; o Penpot salva automaticamente;
+- o sandbox do `execute_code` nao tem `fetch`; envie dados inline e nao dependa
+  de servidores locais.
+
+### Pencil
+
+Use somente para arquivos `.pen` ou quando a tarefa exigir contexto real de
+design do editor.
+
+Boas praticas:
+
+- obtenha primeiro o estado/schema atual do editor;
+- use screenshot apenas quando validacao visual for necessaria;
+- prefira validacao estrutural quando o objetivo for layout ou hierarquia.
 
 ### Supabase Dev e Supabase Prod
 

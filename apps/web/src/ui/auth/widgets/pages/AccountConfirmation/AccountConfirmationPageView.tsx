@@ -35,7 +35,7 @@ export function AccountConfirmationPageView({
 
       <AnimatePresence>
         {!isRocketVisible && (
-          <main className='flex h-full w-full items-center justify-center'>
+          <main className='flex h-full w-full items-center justify-center px-[24px]'>
             {user ? (
               <AppMessage
                 title='Bem-vindo(a) 👋'
@@ -44,14 +44,14 @@ export function AccountConfirmationPageView({
                   <Button
                     onClick={onLinkClick}
                     testId='go-to-space-button'
-                    className='w-72'
+                    className='w-[288px]'
                   >
                     Ir para a página principal
                   </Button>
                 }
               />
             ) : (
-              <div className='flex flex-col items-center justify-center'>
+              <div className='flex w-[288px] flex-col items-center justify-center'>
                 <Loading />
                 <UserCreationPendingMessage />
                 {isRetryVisible && (
@@ -59,7 +59,7 @@ export function AccountConfirmationPageView({
                     onClick={onRetryUserCreation}
                     isLoading={isRetryingUserCreation}
                     testId='retry-user-creation-button'
-                    className='mt-8 w-72'
+                    className='mt-[32px] w-[288px]'
                   >
                     Tentar novamente
                   </Button>

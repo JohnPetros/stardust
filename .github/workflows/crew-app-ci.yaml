@@ -7,7 +7,8 @@ on:
       - 'apps/crew/**'
       - 'packages/core/**'
       - 'package.json'
-      - 'package-lock.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
       - '.dependency-cruiser.cjs'
       - 'Dockerfile.crew'
       - 'Dockerfile.crew.dockerignore'
@@ -31,16 +32,17 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
-          cache: npm
-      - run: npm ci
-      - run: npm run check:code -w @stardust/crew
-      - run: npm run check:types -w @stardust/crew
-      - run: npm run check:architecture -w @stardust/crew
-      - run: npm run test:unit -w @stardust/crew
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @stardust/crew run check:code
+      - run: pnpm --filter @stardust/crew run check:types
+      - run: pnpm --filter @stardust/crew run check:architecture
+      - run: pnpm --filter @stardust/crew run test:unit
       - run: node --test scripts/tests/deploy-crew.test.mjs
-      - run: npm run test:integration -w @stardust/crew
-      - run: npm run build:crew
+      - run: pnpm --filter @stardust/crew run test:integration
+      - run: pnpm run build:crew
       - run: docker build --file Dockerfile.crew --tag stardust-crew:ci .

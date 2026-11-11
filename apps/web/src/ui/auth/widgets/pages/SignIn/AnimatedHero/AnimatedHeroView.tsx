@@ -25,7 +25,7 @@ export const AnimatedHeroView = ({ isVisible }: Props) => {
           variants={variants}
           data-testid='animated-hero'
           exit='hidden'
-          className='hidden bg-gray-800 lg:grid lg:place-content-center'
+          className='hidden bg-theme-surface lg:grid lg:place-content-center'
         >
           <Hero />
         </motion.div>

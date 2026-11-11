@@ -42,15 +42,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: "22"
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Validate the requested operation
         run: |
@@ -74,33 +76,33 @@ jobs:
       - name: Verify and adopt legacy baseline for initial cutover
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.initial_cutover == true }}
         run: |
-          npm run db:preflight -w @stardust/server -- --environment prod --phase legacy
-          npm run db:adopt -w @stardust/server -- --environment prod --phase legacy
+          pnpm --filter @stardust/server run db:preflight --environment prod --phase legacy
+          pnpm --filter @stardust/server run db:adopt --environment prod --phase legacy
 
       - name: Require completed cutover on normal pushes
         if: ${{ github.event_name == 'push' }}
-        run: npm run db:preflight -w @stardust/server -- --environment prod --phase server-owned
+        run: pnpm --filter @stardust/server run db:preflight --environment prod --phase server-owned
 
       - name: Apply server-owned migration
         if: ${{ inputs.rollback_access != true }}
         run: |
           if [ "${{ inputs.initial_cutover }}" = "true" ]; then
-            npm run db:migrate -w @stardust/server -- --environment prod --phase adopted
+            pnpm --filter @stardust/server run db:migrate --environment prod --phase adopted
           else
-            npm run db:migrate -w @stardust/server -- --environment prod --phase server-owned
+            pnpm --filter @stardust/server run db:migrate --environment prod --phase server-owned
           fi
 
       - name: Verify server-owned catalog
         if: ${{ inputs.rollback_access != true }}
-        run: npm run db:preflight -w @stardust/server -- --environment prod --phase server-owned
+        run: pnpm --filter @stardust/server run db:preflight --environment prod --phase server-owned
 
       - name: Apply reviewed inverse for access rollback
         if: ${{ inputs.rollback_access == true }}
-        run: npm run db:migrate -w @stardust/server -- --environment prod --phase server-owned --rollback
+        run: pnpm --filter @stardust/server run db:migrate --environment prod --phase server-owned --rollback
 
       - name: Verify adopted catalog after access rollback
         if: ${{ inputs.rollback_access == true }}
-        run: npm run db:preflight -w @stardust/server -- --environment prod --phase adopted
+        run: pnpm --filter @stardust/server run db:preflight --environment prod --phase adopted
 
       - name: Request Server deployment
         if: ${{ inputs.rollback_access != true }}

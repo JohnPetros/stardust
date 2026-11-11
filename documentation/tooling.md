@@ -26,23 +26,73 @@ eval "$(node ./scripts/export-web-app-e2e-env.mjs)"
 
 | Script                       | Ferramenta         | Comportamento                                      |
 | --- | --- | --- |
-| `npm run format`             | Biome              | formata e escreve arquivos                         |
-| `npm run check:code`         | Biome              | lint/check read-only                               |
-| `npm run check:types`        | TypeScript         | typecheck sem emissão                              |
-| `npm run check:architecture` | dependency-cruiser | valida dependências entre camadas/apps             |
-| `npm run check:complexity`   | CodeMultiVitals    | falha quando a complexidade ou a qualidade piora em relação ao baseline |
-| `npm run test:unit`          | Jest/Vitest        | executa testes unitários por workspace             |
-| `npm run test:integration`   | Jest/Playwright    | executa as integrações declaradas pelos workspaces |
-| `npm run check:spec-implementation` | Node.js       | valida o mapa `Path | Change | ...` da Spec contra Git e filesystem |
+| `pnpm run format`             | Biome              | formata e escreve arquivos                         |
+| `pnpm run check:code`         | Biome              | lint/check read-only                               |
+| `pnpm run check:types`        | TypeScript         | typecheck sem emissão                              |
+| `pnpm run check:architecture` | dependency-cruiser | valida dependências entre camadas/apps             |
+| `pnpm run check:complexity`   | CodeMultiVitals    | falha quando a complexidade ou a qualidade piora em relação ao baseline |
+| `pnpm run test:unit`          | Jest/Vitest        | executa testes unitários por workspace             |
+| `pnpm run test:integration`   | Jest/Playwright    | executa as integrações declaradas pelos workspaces |
+| `pnpm run check:spec-implementation` | Node.js       | valida o mapa `Path | Change | ...` da Spec contra Git e filesystem |
 
 Exemplos de ciclo curto:
 
 ```bash
-npm run format -- --filter=@stardust/core
-npm run check:code -- --filter=@stardust/core
-npm run check:types -- --filter=@stardust/core
-npm run test:unit -- --filter=@stardust/core
+pnpm run format --filter=@stardust/core
+pnpm run check:code --filter=@stardust/core
+pnpm run check:types --filter=@stardust/core
+pnpm --filter @stardust/core run test:unit <arquivos-de-teste>
 ```
+
+## Execução local escopada
+
+As suítes completas não são o padrão local. Execute só as verificações que o escopo da
+alteração exige: o comportamento da Spec, as fronteiras de produção alteradas e os
+consumidores diretamente afetados. Determine o impacto pelo diff e pelas dependências
+reais, não por arquivos de nome parecido nem pelo fato de um app ter sido tocado. Uma
+mudança de apresentação na Web não exige testes do Server; uma mudança no Server sem
+efeito observável no navegador não exige testes de browser. Contratos compartilhados
+acrescentam os testes dos consumidores realmente afetados, não todos os módulos.
+
+| Verificação | Durante a implementação | Verificação integrada | Após correção |
+| --- | --- | --- | --- |
+| Unit/componente | Rode os arquivos de teste afetados conforme o comportamento ficar coerente. | Confirme os resultados do comportamento no escopo e dos consumidores afetados. | Rerrode os arquivos que falharam ou foram invalidados. |
+| Integração do Server | Escreva as asserções de fronteira; use feedback unit e estático durante a construção. | Agrupe os arquivos de controller, rota ou migration afetados depois da integração, com fixtures descartáveis. | Rerrode a seleção afetada em sequência. |
+| Integração Web (Playwright) | Escreva os cenários de rota ou jornada afetados; use feedback de componente e estático durante a construção. | Rode somente os arquivos de cenário afetados. | Rerrode os cenários afetados. |
+| Tipos | Verifique depois de mudar tipos públicos, schemas, assinaturas ou consumidores. | Rode o typecheck dos workspaces afetados e dos consumidores, com a configuração real. | Rerrode os projetos produtor e consumidor impactados. |
+| Lint | `check:code` no workspace alterado, sem escrita. | Confirme o lint do escopo. | Reverifique os paths editados. |
+| Complexidade | `check:complexity -w <workspace>` quando a lógica alterada puder piorar o baseline e sempre que criar ou extrair um arquivo de código novo, inclusive Views (limite de erro de 70 linhas por função). | Rode `check:complexity` no workspace afetado antes de publicar: ele compara com o baseline e reprova funções novas em nível de aviso. Revise as entradas por função e, se forem aceitas, regenere com `update:complexity-baseline`. Registre o resultado e os limites. | Reverifique a lógica alterada; nunca relaxe regras nem atualize o baseline só para passar. |
+| Arquitetura e build | `check:architecture` quando dependências, exports ou composição mudarem. | Rode os gates exigidos; o build ocorre na verificação integrada, não a cada edição. | Rerrode os gates cujas entradas ou afirmações mudaram. |
+
+A integração é um checkpoint, não um ritual por edição. Agrupe as seleções relacionadas
+do Server para reaproveitar o setup das fixtures e serialize os comandos que usam
+containers, para que processos independentes não disputem portas e serviços. Checks
+read-only independentes podem rodar em paralelo quando não competem por recursos; geração,
+builds dependentes e a validação das suas saídas permanecem sequenciais.
+
+Use estas formas de comando com caminhos de arquivo verificados no código. Os caminhos são
+relativos ao workspace. Filtros por nome exigem nomes verificados no código; evite globs
+amplos ou buscas por palavra-chave que incluam testes alheios.
+
+| Fronteira | Diretório | Forma do comando |
+| --- | --- | --- |
+| Unit Core, Server, Backoffice ou Web | Raiz | `pnpm run test:unit -w @stardust/<workspace> -- <arquivos-de-teste>` |
+| Integração do Server | Raiz | `pnpm --filter @stardust/server run test:integration <arquivos-de-teste>`, depois de `pnpm --filter @stardust/server run db:test` |
+| Integração da Web | Raiz | `pnpm --filter @stardust/web run test:integration <arquivos-de-teste>` |
+
+Os scripts completos (`test:unit`, `test:integration`, `test:coverage` e `check:coverage`)
+são comandos disponíveis, não um checklist local obrigatório. Amplie a seleção só quando o
+impacto demonstrado abranger a suíte, por exemplo tokens e componentes compartilhados da
+Web, contratos do Core, composição global do Server, ou rota, sessão e layout raiz com
+várias jornadas, ou quando o usuário pedir a medição. Registre a dependência e o motivo.
+
+O CI executa de forma independente, para cada PR, os jobs de arquitetura, lint, complexidade,
+tipos, testes com cobertura e ratchet, integração e build de cada app ou pacote, e é a prova
+das suítes completas. Os testes locais escopados e o ratchet de cobertura não o substituem.
+Uma seleção vazia ou ignorada não passa só porque o comando terminou com sucesso: confirme a
+contagem de testes e o resultado. Registre no `evaluation.md` os arquivos e cenários, os
+comandos executados, as contagens, o resultado e o candidato avaliado, mantendo separados
+os resultados de unit, integração do Server e integração da Web.
 
 Os limites do dependency-cruiser ficam em `.dependency-cruiser.cjs`. Altere essa
 configuração somente para representar limites legítimos, nunca para ocultar uma
@@ -55,7 +105,7 @@ check no escopo principal de cada app ou pacote (`apps/server`, `apps/web`,
 novas violações. Para atualizar o baseline, execute:
 
 ```bash
-npm run update:complexity-baseline
+pnpm run update:complexity-baseline
 ```
 
 A atualização deve ser feita somente quando a mudança de complexidade for
@@ -66,7 +116,7 @@ centrado nas métricas por função.
 ## Scripts por workspace
 
 As descrições abaixo refletem os scripts declarados nos `package.json` atuais.
-Use `npm run <script> -w <workspace>` para executar um script de um workspace a
+Use `pnpm --filter <workspace> run <script>` para executar um script de um workspace a
 partir da raiz.
 
 ### Raiz (`stardust`)
@@ -96,8 +146,6 @@ partir da raiz.
 | `test:coverage`      | Executa cobertura dos workspaces com ratchet habilitado.                                            |
 | `check:coverage`     | Compara os relatórios de cobertura com `coverage-baseline.json` e falha quando um baseline diminui. |
 | `check:test-integrity` | Falha quando testes são enfraquecidos ou código testável alterado não tem teste correspondente. |
-| `check:spec-definition` | Valida a estrutura, rastreabilidade e mapa de paths de uma Spec. |
-| `check:plan-definition` | Valida a estrutura, ownership, DAG e estado de execução de um Plan. |
 | `check:spec-implementation` | Valida o mapa canônico de paths da Spec contra o diff Git e o filesystem. |
 | `test:spec-implementation` | Executa os testes do checker de conformidade de Spec.                                               |
 | `test:scripts`       | Executa os testes de todos os scripts auxiliares em `scripts/tests/`.                               |
@@ -119,7 +167,10 @@ ficam fora desse pareamento; o resultado JSON lista esses caminhos em
 ou no diretório `tests/` da própria camada: objetos de domínio
 (`domain/entities|structures|aggregates`), use-cases, controllers REST,
 jobs, hooks, widgets/views, páginas/rotas Web, rotas Server, RPC actions e AI
-tools. Um teste fora desses locais aparece em `forbiddenTestPaths` e falha o CI.
+tools. Testes colocalizados de views e hooks de `contexts`
+(`ui/**/contexts/**/tests`) também são locais permitidos; testes dedicados de
+constantes, providers e fixtures continuam rejeitados. Um teste fora desses
+locais aparece em `forbiddenTestPaths` e falha o CI.
 
 ### `apps/server`
 
@@ -132,30 +183,30 @@ tools. Um teste fora desses locais aparece em `forbiddenTestPaths` e falha o CI.
 | `check:types`      | Executa o TypeScript sem emitir arquivos.                                                |
 | `check:complexity` | Verifica o escopo `apps/server` contra o baseline compartilhado.                          |
 | `check:architecture` | Verifica as dependências arquiteturais do Server com dependency-cruiser.               |
-| `check:updates`    | Lista atualizações de dependências com npm-check-updates.                                |
+| `check:updates`    | Lista atualizações de dependências com `ncu`.                                            |
 | `build`            | Compila o Server com tsup.                                                               |
 | `prod`             | Inicia o build do Server usando `.env`.                                                  |
 | `db:test`          | Inicia os serviços Supabase necessários e reinicia o banco local de testes.              |
-| `db:migrate`       | Gera uma migration com `supabase db diff`, usando `npm_config_schema_file`.              |
+| `db:migrate`       | Aplica as migrations Drizzle com `tsx scripts/migrate-database.ts`.                      |
 | `db:prod`          | Vincula a CLI Supabase ao projeto de produção.                                           |
 | `db:dev`           | Vincula a CLI Supabase ao projeto de desenvolvimento.                                    |
 | `db:pull`          | Baixa os schemas Auth, Public, Storage e Realtime.                                       |
 | `db:push`          | Aplica migrations ao projeto Supabase vinculado.                                         |
 | `db:types`         | Gera os tipos TypeScript do banco de desenvolvimento.                                    |
-| `db:revert`        | Marca uma migration como revertida, usando `npm_config_migration_id`.                    |
-| `update`           | Atualiza uma dependência específica com npm-check-updates, usando `npm_config_dep_name`. |
+| `db:revert`        | Marca uma migration como revertida; o ID da migration é argumento posicional.            |
+| `update`           | Atualiza uma dependência específica com `ncu`; o nome da dependência é argumento posicional. |
 | `test:unit`        | Executa os testes unitários do projeto Server.                                           |
 | `test:coverage`    | Executa os testes unitários do Server com relatório JSON de cobertura.                   |
-| `test:coverage:merge` | Consolida a cobertura unitária e dos quatro shards de integração do Server antes do ratchet. |
+| `test:coverage:merge` | Consolida a cobertura unitária e dos seis shards de integração do Server antes do ratchet. |
 | `test:integration` | Executa os testes de integração do Server.                                               |
 
 Exemplos de comandos de banco:
 
 ```bash
-npm run db:dev -w @stardust/server
-npm run db:migrate -w @stardust/server --schema-file=nome_da_tabela
-npm run db:revert -w @stardust/server --migration-id=20240101000000
-npm run update -w @stardust/server --dep-name=nome-do-pacote
+pnpm --filter @stardust/server run db:dev
+pnpm --filter @stardust/server run db:migrate
+pnpm --filter @stardust/server run db:revert 20240101000000
+pnpm --filter @stardust/server run update nome-do-pacote
 ```
 
 Os comandos `db:prod`, `db:push` e `db:revert` alteram estado externo ou o
@@ -184,7 +235,6 @@ los.
 | Script                     | Descrição                                                               |
 | --- | --- |
 | `dev`                      | Inicia a Web App em desenvolvimento na porta `3000`.                    |
-| `queue`                    | Inicia o Inngest CLI local apontando para `/api/serverless`.            |
 | `build`                    | Gera o build de produção da Web App com Next.js.                        |
 | `start`                    | Inicia o build standalone usando a porta definida em `PORT`.            |
 | `check:code`               | Verifica `src` com Biome, sem aplicar correções.                        |
@@ -230,7 +280,7 @@ los.
 ### `packages/studio`
 
 Ferramenta local de autoria de animações Lottie, independente do painel
-administrativo em `apps/backoffice`. Use `npm run dev:studio` na raiz.
+administrativo em `apps/backoffice`. Use `pnpm run dev:studio` na raiz.
 O Vite prefere a porta `3030` e informa outra porta se ela estiver ocupada.
 Não exige Server, Supabase, credenciais ou variáveis de ambiente.
 
@@ -244,7 +294,7 @@ Não exige Server, Supabase, credenciais ou variáveis de ambiente.
 | `format` | Formata o código com Biome. |
 | `postinstall` | Copia o CanvasKit WASM para `public`, sem versionar o binário. |
 
-O `npm run dev` geral não inicia esta ferramenta. `npm run build:studio`
+O `pnpm run dev` geral não inicia esta ferramenta. `pnpm run build:studio`
 gera seu build pela raiz. Os checks gerais de código e tipos incluem o pacote
 via Turbo. O smoke manual abre uma cena, valida playback, controles e gravação
 em `lottie.json`; não usa o fluxo autenticado do Backoffice administrativo.
@@ -280,7 +330,7 @@ staging durante a execução. O entry point é
 `apps/server/src/database/seed.ts`; cada domínio possui seu seeder em
 `apps/server/src/database/seeders/<Domínio>Seeder.ts`, com `clear()` e `run(seed)`.
 
-Prepare o stack e aplique as migrations com `npm run db:test -w @stardust/server`.
+Prepare o stack e aplique as migrations com `pnpm --filter @stardust/server run db:test`.
 As contas locais são fixtures públicas fixas definidas em
 `apps/server/src/database/seeders/seed-accounts.json`: `explorer@stardust.local`
 e `studio@stardust.local`. Seus IDs terminam em `0001` e `0002`, respectivamente.
@@ -291,10 +341,10 @@ Server local. Para o Playwright manual, carregue o exportador correspondente com
 
 ```bash
 # Valida configuração e snapshot sem conectar ao banco
-npm run db:seed -w @stardust/server -- --check
+pnpm --filter @stardust/server run db:seed --check
 
 # Substitui dados da aplicação e usuários Auth locais
-npm run db:seed -w @stardust/server
+pnpm --filter @stardust/server run db:seed
 ```
 
 O comando exporta a conexão local a partir do `.env.local` raiz com
@@ -325,7 +375,7 @@ As imagens dos planetas, conquistas, avatares, tiers e foguetes estão versionad
 `seeders/assets/images/planets/`, `seeders/assets/images/achievements/` e
 `seeders/assets/images/avatars/`, `seeders/assets/images/rankings/` e
 `seeders/assets/images/rockets/`.
-Execute `npm run db:seed:assets -w @stardust/server` depois de preparar o MinIO
+Execute `pnpm --filter @stardust/server run db:seed:assets` depois de preparar o MinIO
 local. O comando usa o `.env.local` da raiz, exige endpoint HTTP em
 `127.0.0.1`, preserva os nomes do catálogo e publica 110 imagens, incluindo seis
 extras. Confirma por HTTP anônimo os 104 arquivos referenciados pelos oito
@@ -390,8 +440,8 @@ O fluxo de integração do Server prepara o mesmo stack e reseta o banco antes
 da suíte:
 
 ```bash
-npm run db:test -w @stardust/server
-npm run test:integration -w @stardust/server
+pnpm --filter @stardust/server run db:test
+pnpm --filter @stardust/server run test:integration
 ```
 
 As portas host padrão são Kong `54321`, PostgreSQL `54322`, Mailpit HTTP
@@ -414,6 +464,14 @@ secrets somente no `.env.local` da raiz e registre nos provedores o callback
 local `http://127.0.0.1:<SUPABASE_API_PORT>/auth/v1/callback` (porta padrão
 `54321`).
 
+O Realtime local exige, para o Web App receber eventos de `postgres_changes`
+(por exemplo o sucesso do Sign-up), um tenant cujo identificador externo é o
+primeiro rótulo do host (`127` para `127.0.0.1`), a tabela `public.users` na
+publicação `supabase_realtime` e `SELECT` em `public.users` para `anon` e
+`authenticated`. Se o WebSocket responder `TenantNotFound` ou `401`, confira
+esses três itens; eles não sobrevivem à recriação do volume do banco. Se `/profile`
+retornar 500 com `Can't resolve 'apexcharts'`, reinstale as dependências na raiz.
+
 `docker compose --env-file .env.local down` preserva os dados locais de
 PostgreSQL e MinIO em `docker/volumes/`. Redis, Auth, PostgREST, Realtime,
 Mailpit, Inngest, Kong e templates são descartáveis.
@@ -426,9 +484,9 @@ suíte. Não aponte esse fluxo para produção nem use as credenciais reais do
 Backoffice:
 
 ```bash
-npm --workspace @stardust/web run test:integration:install
-npm --workspace @stardust/web run test:integration
-npm --workspace @stardust/web run test:integration:debug
+pnpm --filter @stardust/web run test:integration:install
+pnpm --filter @stardust/web run test:integration
+pnpm --filter @stardust/web run test:integration:debug
 ```
 
 Para uma inspeção manual autenticada, inicie a API e a Web App em terminais
@@ -455,15 +513,19 @@ versionados em `coverage-baseline.json` nunca podem diminuir sem uma alteração
 revisada desse arquivo.
 
 No Server, o ratchet considera a cobertura conjunta dos testes unitários e dos
-quatro shards de integração, incluindo os adapters Drizzle exercitados pelas
+seis shards de integração, incluindo os adapters Drizzle exercitados pelas
 rotas reais. Prepare o stack local, execute `test:integration:ci` e
 `test:coverage` no workspace `@stardust/server`, depois `test:coverage:merge` e
-`npm run check:coverage -- @stardust/server`. A consolidação exige os cinco
-relatórios completos; um relatório unitário isolado não aprova esse ratchet.
-No CI do Server, cada um dos quatro shards de integração roda em um job próprio
-(`Integration tests (shard N/4)`), com stack local isolado, e envia seu relatório
-como artifact; o job `Tests` baixa os cinco relatórios, consolida e verifica o
-ratchet. O setup do stack fica na action `.github/actions/prepare-server-stack`.
+`pnpm run check:coverage @stardust/server`. Nesse fluxo local, a consolidação
+exige os sete relatórios completos (um unitário e seis de integração); um
+relatório unitário isolado não aprova esse ratchet.
+No CI do Server, cada um dos seis shards de integração roda em um job próprio
+(`Integration tests (shard N/6)`), com stack local isolado, e envia seu relatório
+como artifact. Os testes unitários também são divididos, em dois shards
+(`Unit tests (shard N/2)`), e os testes de `scripts/tests` rodam somente no
+primeiro. O job `Tests` baixa os oito relatórios, consolida com
+`test:coverage:merge --unit-shards=2` e verifica o ratchet. O setup do stack
+fica na action `.github/actions/prepare-server-stack`.
 O CI do Server executa Node 24 para a coleta V8; a execução em Node 22 revelou
 um abort nativo no inspector durante a instrumentação de cobertura. O caller de
 revisão do Crew aguarda até 45 minutos pelos checks aplicáveis antes de iniciar
@@ -487,26 +549,25 @@ Os scripts listados acima ainda descrevem o estado implementado. Para a entrega 
 | `db:adopt` | Adota baseline em banco existente somente após parity; nunca marca a migration de revogação como já aplicada. |
 | `db:test` | Prepara Compose com .env.local raiz, reset exclusivamente local, migrations Drizzle sem seed. |
 
-Scripts Supabase CLI de diff/push/pull/repair e geração de Database.ts são retirados; a Web não gera tipos de banco. npm/package-lock permanecem a fonte das versões. Antes de qualquer aplicação remota, exige-se preflight de Dev e produção e ensaio de rollback em restauração isolada, com evidências no workflow SDD. A indisponibilidade desses ambientes nesta autoria não é evidência de parity. A janela inicial é coordenada, sem release intermediário compatível.
+Scripts Supabase CLI de diff/push/pull/repair e geração de Database.ts são retirados; a Web não gera tipos de banco. pnpm/`pnpm-lock.yaml` permanecem a fonte das versões. Antes de qualquer aplicação remota, exige-se preflight de Dev e produção e ensaio de rollback em restauração isolada, com evidências no workflow SDD. A indisponibilidade desses ambientes nesta autoria não é evidência de parity. A janela inicial é coordenada, sem release intermediário compatível.
 
 A lista de scripts passa a descrever o runtime vigente apenas após a implementação verificada; atualizar também a seção de migrations da infraestrutura nessa entrega.
 
 ## Crew
 
-`apps/crew` é um workspace npm independente para revisão de PR com Mastra e
-Anthropic direta. `npm run crew` carrega o `.env.local` raiz e inicia Crew;
-`npm run dev` exclui esse workspace. Configure as variáveis listadas em
+`apps/crew` é um workspace pnpm independente para revisão de PR com Mastra e
+Anthropic direta. `pnpm run crew` carrega o `.env.local` raiz e inicia Crew;
+`pnpm run dev` exclui esse workspace. Configure as variáveis listadas em
 `apps/crew/.env.example`, incluindo `CREW_DATABASE_URL`, `CREW_PORT` e `CREW_HOST`,
 para manter banco/porta/host separados dos apps de produto. Inicie o banco com
 `docker compose --env-file .env.local --profile crew up -d --wait crew-db`.
 
-Use `npm run <script> -w @stardust/crew` para `check:code`, `check:types`,
+Use `pnpm --filter @stardust/crew run <script>` para `check:code`, `check:types`,
 `check:architecture`, `test:unit`, `test:integration` e `eval`; use
-`npm run build:crew` para compilar. Os testes unitários usam modelos simulados;
+`pnpm run build:crew` para compilar. Os testes unitários usam modelos simulados;
 integrações precisam de Docker; evals fazem chamadas pagas à Anthropic e ao
 Composio. Node 24.11+ é recomendado para o toolchain de build. O CI próprio
-valida o workspace e a imagem sem segredos de inferência. Detalhes e limites de
-evidência estão em `apps/crew/README.md`.
+valida o workspace e a imagem sem segredos de inferência.
 
 `Crew PR review` substitui `Hermes code review`. O workflow usa
 `pull_request_target`, executa `scripts/run-crew-pr-review.mjs` do base confiável
@@ -514,7 +575,11 @@ sem instalar dependências nem executar código do PR, aguarda somente os CIs
 aplicáveis (incluindo Crew quando disparado) e publica resumo e comentários
 inline via token do Actions. Configure os secrets `CREW_API_URL` e
 `PR_REVIEWER_API_KEY` para o serviço Crew já implantado. O caller fica ativo após
-ser incorporado ao `main`; não faz deploy. Revisões parciais ou bloqueadas falham
+ser incorporado ao `main`; não faz deploy. A primeira revisão de um PR é `full`;
+os pushes seguintes são `incremental`, a partir do último commit com revisão
+completa do bot, limitada ao que pertence ao PR (sem o que veio de merges de
+`main`), com fallback para `full` quando o histórico foi reescrito. Os CIs
+aplicáveis continuam sendo avaliados pelo PR inteiro. Revisões parciais ou bloqueadas falham
 o check. Testes determinísticos: `node --test scripts/tests/run-crew-pr-review.test.mjs`.
 
 `Crew app CD` usa `.github/workflows/crew-app-production-cd.yaml` e

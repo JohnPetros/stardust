@@ -15,7 +15,7 @@ O objetivo do StarDust é tornar o aprendizado de programação acessível e div
 
 O projeto é um **monorepo** gerenciado pelo **TurboRepo** e utiliza as tecnologias mais modernas do ecossistema JavaScript/TypeScript:
 
--   **Gerenciamento:** [TurboRepo](https://turbo.build/) + NPM
+-   **Gerenciamento:** [TurboRepo](https://turbo.build/) + pnpm
 -   **Linguagem:** [TypeScript](https://www.typescriptlang.org/) 5.8+
 -   **Frontend (Web):** [Next.js](https://nextjs.org/) 15 + [React](https://react.dev/) 19
 -   **Estilização:** [Tailwind CSS](https://tailwindcss.com/) + [Radix UI](https://www.radix-ui.com/)
@@ -56,7 +56,7 @@ stardust/
 
 ### Pré-requisitos
 -   Node.js 22 ou superior.
--   NPM (gerenciador de pacotes).
+-   pnpm 11 (gerenciador de pacotes; habilite com `corepack enable`).
 
 ### Passo a Passo
 
@@ -71,12 +71,12 @@ stardust/
 
 3.  **Instale as dependências:**
     ```bash
-    npm install
+    pnpm install
     ```
 
 4.  **Execute o projeto (modo desenvolvimento):**
     ```bash
-    npm run dev
+    pnpm run dev
     ```
     Isso iniciará todas as aplicações do monorepo simultaneamente via TurboRepo.
 
@@ -108,10 +108,10 @@ O projeto utiliza `Jest` para testes automatizados, cobrindo desde regras de neg
 
 ```bash
 # Executar todos os testes
-npm run test
+pnpm run test
 
 # Executar testes apenas do core
-npm run test:core
+pnpm run test:core
 ```
 
 ## 📝 Licença

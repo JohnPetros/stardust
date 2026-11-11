@@ -39,18 +39,6 @@ const S3_CLIENT_OPTIONS_BY_MODE = {
   },
 }
 
-const S3_BUCKET_BY_MODE = {
-  development: 'stardust-bucket-local',
-  test: 'stardust-bucket-local',
-  production: 'stardust-bucket-prod',
-}
-
-const S3_HEAD_BUCKET_COMMAND_BY_MODE = {
-  development: new HeadBucketCommand({ Bucket: S3_BUCKET_BY_MODE.development }),
-  test: new HeadBucketCommand({ Bucket: S3_BUCKET_BY_MODE.test }),
-  production: new HeadBucketCommand({ Bucket: S3_BUCKET_BY_MODE.production }),
-}
-
 export class CheckHealthController implements Controller {
   static readonly HEALTH_CHECK_TIMEOUT_IN_MS = 1500
   private readonly s3Client = new S3Client(S3_CLIENT_OPTIONS_BY_MODE[ENV.mode])
@@ -175,7 +163,7 @@ export class CheckHealthController implements Controller {
 
   private checkS3Bucket(): Promise<HealthStatus> {
     return this.s3Client
-      .send(S3_HEAD_BUCKET_COMMAND_BY_MODE[ENV.mode], {
+      .send(new HeadBucketCommand({ Bucket: ENV.s3BucketName }), {
         abortSignal: this.createS3TimeoutSignal(),
       })
       .then(

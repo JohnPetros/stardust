@@ -20,13 +20,10 @@
   "engines": {
     "node": ">=22"
   },
-  "packageManager": "npm@11.13.0",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "packageManager": "pnpm@11.28.11",
   "scripts": {
     "setup": "node ./scripts/setup-project.mjs",
+    "penpot": "node ./scripts/open-penpot.mjs",
     "prepare": "husky",
     "prod": "turbo prod",
     "dev": "turbo dev --filter=!@stardust/crew --filter=!@stardust/studio",
@@ -36,18 +33,16 @@
     "build:web": "turbo build --filter=@stardust/web",
     "build:core": "turbo build --filter=@stardust/core",
     "build:lsp": "turbo build --filter=@stardust/lsp",
-    "test": "npm run test:unit",
+    "test": "pnpm run test:unit",
     "format": "turbo format",
     "check:code": "turbo check:code",
     "check:types": "turbo check:types",
-    "check:architecture": "depcruise --config .dependency-cruiser.cjs packages/core/src apps/server/src apps/web/src apps/backoffice/src && npm run check:architecture -w @stardust/crew",
+    "check:architecture": "depcruise --config .dependency-cruiser.cjs packages/core/src apps/server/src apps/web/src apps/backoffice/src && pnpm --filter @stardust/crew run check:architecture",
     "test:coverage": "turbo test:coverage",
     "check:coverage": "node ./scripts/check-coverage-baseline.mjs",
     "check:complexity": "node ./scripts/check-complexity.mjs",
     "update:complexity-baseline": "node ./scripts/check-complexity.mjs --update-baseline",
     "check:test-integrity": "node ./scripts/check-test-integrity.mjs",
-    "check:spec-definition": "node ./scripts/check-spec-definition.mjs",
-    "check:plan-definition": "node ./scripts/check-plan-definition.mjs",
     "check:spec-implementation": "node ./scripts/check-spec-implementation.mjs",
     "test:unit": "turbo test:unit",
     "test:integration": "turbo test:integration",
@@ -56,10 +51,10 @@
     "test:backoffice": "turbo test:unit --filter=@stardust/backoffice",
     "test:web": "turbo test:unit --filter=@stardust/web",
     "test:core": "turbo test:unit --filter=@stardust/core",
-    "crew": "npm run dev -w @stardust/crew",
-    "build:crew": "npm run build -w @stardust/crew",
-    "dev:backoffice": "npm run dev -w @stardust/backoffice",
-    "dev:studio": "npm run dev -w @stardust/studio",
+    "crew": "pnpm --filter @stardust/crew run dev",
+    "build:crew": "pnpm --filter @stardust/crew run build",
+    "dev:backoffice": "pnpm --filter @stardust/backoffice run dev",
+    "dev:studio": "pnpm --filter @stardust/studio run dev",
     "build:studio": "turbo build --filter=@stardust/studio"
   },
   "devDependencies": {
@@ -92,29 +87,11 @@
     "zod": "4.4.3"
   },
   "dependencies": {
-    "@ai-sdk/provider-utils-v5": "npm:@ai-sdk/provider-utils@^5.0.5",
+    "@ai-sdk/provider-utils-v5": "npm:@ai-sdk/provider-utils@5.0.5",
+    "@aws-sdk/client-s3": "3.1097.0",
     "@designliquido/delegua": "^1.25.1",
-    "@faker-js/faker": "8.4.1"
-  },
-  "overrides": {
-    "@ai-sdk/provider-utils": "5.0.5",
-    "@types/react": "19.2.18",
-    "hono": "4.13.1",
-    "monaco-editor": "0.56.0",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "@ai-sdk/ui-utils": {
-      "@ai-sdk/provider-utils": "5.0.5"
-    },
-    "esbuild": "0.28.1",
-    "tsup": {
-      "esbuild": "0.28.1"
-    },
-    "uuid": "11.1.1",
-    "vite": "8.2.2",
-    "react-router": "8.3.1",
-    "@react-router/express": "8.3.1",
-    "@react-router/node": "8.3.1",
-    "@react-router/serve": "8.3.1"
+    "@faker-js/faker": "8.4.1",
+    "drizzle-orm": "0.45.3",
+    "postgres": "3.4.9"
   }
 }

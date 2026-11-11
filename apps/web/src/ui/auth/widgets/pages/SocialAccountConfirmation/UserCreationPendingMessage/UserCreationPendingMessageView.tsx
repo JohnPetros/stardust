@@ -15,7 +15,7 @@ export const UserCreationPendingMessageView = ({
         text={quote}
         delay={200}
         onAnimationComplete={handleAnimationComplete}
-        className='text-center text-lg text-gray-500'
+        className='justify-center text-center text-lg font-normal text-theme-text-secondary'
       />
     </div>
   )

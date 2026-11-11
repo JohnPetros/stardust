@@ -124,6 +124,6 @@ Como agregados apenas encapsulam uma relação entre entidades, seus testes gera
 - Runner de testes: Jest (principalmente no pacote `@stardust/core`).
 - Geracao de dados: fakers do core + `@faker-js/faker` (quando aplicavel).
 - Comandos:
-  - `npm run test:unit -w @stardust/core`
-  - `npm run check:types -w @stardust/core`
+  - `pnpm --filter @stardust/core run test:unit`
+  - `pnpm --filter @stardust/core run check:types`
 - Referencia geral: `documentation/tooling.md`.

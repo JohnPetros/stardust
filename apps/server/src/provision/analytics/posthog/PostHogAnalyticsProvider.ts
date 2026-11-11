@@ -6,15 +6,14 @@ import { AppError } from '@stardust/core/global/errors'
 
 import { ENV } from '@/constants'
 
+let sharedClient: PostHog | undefined
+
 export class PostHogAnalyticsProvider implements ServerAnalyticsProvider {
   async trackEvent(event: AnalyticsEvent): Promise<void> {
-    if (ENV.mode === 'development') return
+    const { posthogProjectToken, posthogHost } = ENV
+    if (ENV.mode === 'development' || !posthogProjectToken || !posthogHost) return
 
-    const client = new PostHog(ENV.posthogProjectToken, {
-      host: ENV.posthogHost,
-      flushAt: 1,
-      flushInterval: 0,
-    })
+    const client = this.getClient(posthogProjectToken, posthogHost)
 
     try {
       client.capture({
@@ -27,12 +26,17 @@ export class PostHogAnalyticsProvider implements ServerAnalyticsProvider {
         },
       })
 
-      await client.shutdown()
+      await client.flush()
     } catch (error) {
       throw new AppError(
         error instanceof Error ? error.message : 'Failed to send analytics event',
         'PostHog Analytics Provider Error',
       )
     }
+  }
+
+  private getClient(token: string, host: string): PostHog {
+    sharedClient ??= new PostHog(token, { host, flushAt: 1, flushInterval: 0 })
+    return sharedClient
   }
 }

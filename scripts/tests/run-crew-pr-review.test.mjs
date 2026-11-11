@@ -16,6 +16,8 @@ import { reviewInputSchema } from '../../apps/crew/src/mastra/agents/pr-reviewer
 
 import {
   buildReviewInput,
+  filterDiffHunks,
+  listReviewedShas,
   runCrewReview,
   selectApplicableWorkflows,
   validateReview,
@@ -97,7 +99,6 @@ function createFixture(options = {}) {
         'core-package',
         'server-app',
         'web-app',
-        'studio-app',
         'backoffice-app',
         'crew-app',
       ]
@@ -246,17 +247,16 @@ test('uses current CI path filters, including shared packages, workflow changes 
   )
 })
 
-test('recognizes both Studio and Backoffice CI during the administrative app rename', () => {
-  for (const file of ['studio-app-ci.yaml', 'backoffice-app-ci.yaml']) {
-    const source = '  pull_request:\n    paths:\n      - "apps/admin/**"\n'
-    assert.deepEqual(
-      selectApplicableWorkflows(
-        (path) => (path.endsWith(file) ? source : null),
-        ['apps/admin/example.ts'],
-      ),
-      [file],
-    )
-  }
+test('recognizes the Backoffice CI workflow', () => {
+  const file = 'backoffice-app-ci.yaml'
+  const source = '  pull_request:\n    paths:\n      - "apps/backoffice/**"\n'
+  assert.deepEqual(
+    selectApplicableWorkflows(
+      (path) => (path.endsWith(file) ? source : null),
+      ['apps/backoffice/example.ts'],
+    ),
+    [file],
+  )
 })
 
 test('skips forks, drafts and PRs outside main without touching credentials or APIs', async () => {
@@ -491,4 +491,227 @@ test('rejects a force-pushed head while preparing the context', () => {
       ),
     /head changed while fetching/,
   )
+})
+
+const REVIEWED = 'c'.repeat(40)
+const OLDER = 'd'.repeat(40)
+const botReview = (sha, overrides = {}) => ({
+  state: 'COMMENTED',
+  commit_id: sha,
+  user: { login: 'github-actions[bot]' },
+  body: `<!-- crew-code-review:${sha}:complete -->\nComplete`,
+  ...overrides,
+})
+
+test('lists reviewed SHAs most recent first, trusting only complete bot reviews on their own commit', () => {
+  const reviews = [
+    botReview(OLDER),
+    botReview(REVIEWED),
+    botReview(HEAD),
+    botReview(BASE, { user: { login: 'somebody' } }),
+    botReview(BASE, { state: 'PENDING' }),
+    botReview(BASE, { commit_id: OLDER }),
+    botReview(BASE, { body: `<!-- crew-code-review:${BASE}:partial -->` }),
+  ]
+  assert.deepEqual(listReviewedShas(reviews, HEAD), [REVIEWED, OLDER])
+  assert.deepEqual(listReviewedShas([], HEAD), [])
+})
+
+function createRangeGit({
+  prFiles,
+  incrementalFiles,
+  lines,
+  rejectAncestors = [],
+  missingCommits = [],
+  deletions = { pr: [], incremental: [] },
+  diff = 'diff',
+}) {
+  const calls = []
+  const runGit = (...args) => {
+    calls.push(args)
+    const range = args.find((arg) => /^[0-9a-f]{40}\.\.[0-9a-f]{40}$/.test(arg))
+    const isIncremental = range?.startsWith(REVIEWED)
+    if (args[0] === 'fetch') return ''
+    if (args[0] === 'rev-parse') return HEAD
+    if (args[0] === 'cat-file') {
+      if (missingCommits.includes(args[2].replace('^{commit}', '')))
+        throw new Error('unknown commit')
+      return ''
+    }
+    if (args.includes('--is-ancestor')) {
+      if (rejectAncestors.includes(args[2])) throw new Error('not an ancestor')
+      return ''
+    }
+    if (args[0] === 'merge-base') return BASE
+    if (args[0] === 'show') return 'trusted'
+    if (args.includes('--diff-filter=D'))
+      return `${(isIncremental ? deletions.incremental : deletions.pr).join('\0')}\0`
+    if (args.includes('--name-only'))
+      return `${(isIncremental ? incrementalFiles : prFiles).join('\0')}\0`
+    if (args.includes('--unified=0')) {
+      const path = args.at(-1)
+      const added = lines[isIncremental ? 'incremental' : 'pr'][path] ?? []
+      return added.map((line) => `@@ -1,0 +${line} @@\n+x`).join('\n')
+    }
+    return diff
+  }
+  return { runGit, calls }
+}
+
+test('builds an incremental input from the last reviewed commit, scoped to the PR itself', () => {
+  const { runGit, calls } = createRangeGit({
+    prFiles: ['a.ts'],
+    incrementalFiles: ['a.ts', 'from-main.ts'],
+    lines: {
+      pr: { 'a.ts': [2, 7] },
+      incremental: { 'a.ts': [7, 9], 'from-main.ts': [1] },
+    },
+  })
+  const input = buildReviewInput(PR, runGit, { reviewedShas: [REVIEWED, OLDER] })
+  assert.equal(input.review_mode, 'incremental')
+  assert.equal(input.range_base_sha, REVIEWED)
+  assert.equal(input.base_sha, BASE)
+  assert.deepEqual(input.changed_files, ['a.ts'])
+  assert.deepEqual(input.changed_lines, [{ path: 'a.ts', line: 7 }])
+  assert.equal(reviewInputSchema.safeParse(input).success, true)
+  const diffCall = calls.find((args) => args.includes('--unified=40'))
+  assert.ok(diffCall.includes(`${REVIEWED}..${HEAD}`))
+  assert.deepEqual(diffCall.slice(diffCall.indexOf('--')), ['--', 'a.ts'])
+})
+
+test('falls back to the next reviewed commit, then to a full review, when history was rewritten', () => {
+  const git = () =>
+    createRangeGit({
+      prFiles: ['a.ts'],
+      incrementalFiles: ['a.ts'],
+      lines: { pr: { 'a.ts': [2] }, incremental: { 'a.ts': [2] } },
+      rejectAncestors: [REVIEWED],
+    }).runGit
+  const next = buildReviewInput(PR, git(), { reviewedShas: [REVIEWED, OLDER] })
+  assert.equal(next.review_mode, 'incremental')
+  assert.equal(next.range_base_sha, OLDER)
+  const full = buildReviewInput(PR, git(), { reviewedShas: [REVIEWED] })
+  assert.equal(full.review_mode, 'full')
+  assert.equal(full.range_base_sha, BASE)
+  assert.equal(buildReviewInput(PR, git()).review_mode, 'full')
+})
+
+test('publishes an incremental review while selecting CI by the whole PR', async () => {
+  const fixture = createFixture({ reviews: [botReview(OLDER), botReview(REVIEWED)] })
+  await runCrewReview(fixture.args)
+  const input = JSON.parse(fixture.requests[0].config.body)
+  assert.equal(input.review_mode, 'incremental')
+  assert.equal(input.range_base_sha, REVIEWED)
+  assert.equal(reviewInputSchema.safeParse(input).success, true)
+  const ciRangeCall = fixture.gitCalls.find((args) => args.includes('--no-renames'))
+  assert.equal(ciRangeCall.at(-1), `${BASE}..${HEAD}`)
+  const review = fixture.publications[0]
+  assert.match(review.body, /Escopo: \*\*Incremental\*\*.*`c{40}`/)
+  assert.ok(review.body.startsWith(`<!-- crew-code-review:${HEAD}:complete -->`))
+})
+
+const MIXED_DIFF = [
+  'diff --git a/a.ts b/a.ts',
+  '--- a/a.ts',
+  '+++ b/a.ts',
+  '@@ -1,2 +1,3 @@',
+  ' first',
+  '+from the PR',
+  ' last',
+  '@@ -40,2 +41,3 @@',
+  ' tail',
+  '+from main',
+  ' end',
+  'diff --git a/from-main.ts b/from-main.ts',
+  '--- a/from-main.ts',
+  '+++ b/from-main.ts',
+  '@@ -1 +1,2 @@',
+  ' x',
+  '+only main',
+  'diff --git a/gone.ts b/gone.ts',
+  'deleted file mode 100644',
+  '--- a/gone.ts',
+  '+++ /dev/null',
+  '@@ -1 +0,0 @@',
+  '-bye',
+  '',
+].join('\n')
+
+test('keeps only the hunks that add commentable lines and files deleted by the PR', () => {
+  const filtered = filterDiffHunks(MIXED_DIFF, [{ path: 'a.ts', line: 2 }])
+  assert.match(filtered, /\+from the PR/)
+  assert.doesNotMatch(filtered, /from main/)
+  assert.doesNotMatch(filtered, /from-main\.ts/)
+  assert.match(filtered, /diff --git a\/gone\.ts/)
+  assert.ok(filtered.startsWith('diff --git a/a.ts b/a.ts\n--- a/a.ts'))
+  assert.equal(filterDiffHunks('plain text', []), 'plain text')
+})
+
+test('sends only PR hunks of an incremental review to Crew', () => {
+  const { runGit } = createRangeGit({
+    prFiles: ['a.ts'],
+    incrementalFiles: ['a.ts', 'from-main.ts'],
+    lines: { pr: { 'a.ts': [2, 42] }, incremental: { 'a.ts': [2, 42], 'from-main.ts': [2] } },
+    diff: MIXED_DIFF,
+  })
+  const input = buildReviewInput(PR, runGit, { reviewedShas: [REVIEWED] })
+  assert.deepEqual(input.changed_lines, [
+    { path: 'a.ts', line: 2 },
+    { path: 'a.ts', line: 42 },
+  ])
+  assert.match(input.diff, /\+from the PR/)
+  assert.match(input.diff, /\+from main/)
+  assert.doesNotMatch(input.diff, /only main/)
+})
+
+test('falls back when the last reviewed commit is unknown locally', () => {
+  const git = (missingCommits) =>
+    createRangeGit({
+      prFiles: ['a.ts'],
+      incrementalFiles: ['a.ts'],
+      lines: { pr: { 'a.ts': [2] }, incremental: { 'a.ts': [2] } },
+      missingCommits,
+    }).runGit
+  const next = buildReviewInput(PR, git([REVIEWED]), { reviewedShas: [REVIEWED, OLDER] })
+  assert.equal(next.review_mode, 'incremental')
+  assert.equal(next.range_base_sha, OLDER)
+  const full = buildReviewInput(PR, git([REVIEWED, OLDER]), {
+    reviewedShas: [REVIEWED, OLDER],
+  })
+  assert.equal(full.review_mode, 'full')
+  assert.equal(full.range_base_sha, BASE)
+})
+
+test('reports only deletions that belong to the PR in an incremental review', () => {
+  const { runGit } = createRangeGit({
+    prFiles: ['a.ts', 'removed-by-pr.ts'],
+    incrementalFiles: ['a.ts', 'removed-by-pr.ts', 'removed-by-main.ts'],
+    lines: { pr: {}, incremental: {} },
+    deletions: {
+      pr: ['removed-by-pr.ts'],
+      incremental: ['removed-by-pr.ts', 'removed-by-main.ts'],
+    },
+  })
+  const input = buildReviewInput(PR, runGit, { reviewedShas: [REVIEWED] })
+  assert.deepEqual(input.regression_facts.deleted_files, ['removed-by-pr.ts'])
+  assert.equal(
+    buildReviewInput(PR, runGit).regression_facts.deleted_files.join(),
+    'removed-by-pr.ts',
+  )
+})
+
+test('skips an incremental review whose only changes since the last review are deletions', async () => {
+  const fixture = createFixture({ reviews: [botReview(REVIEWED)] })
+  const logs = []
+  const isDiffContent = (args) => args[0] === 'diff' && !args.includes('--name-only')
+  const deletionOnlyDiff = `diff --git a/${FINDING.path} b/${FINDING.path}\n--- a/${FINDING.path}\n+++ b/${FINDING.path}\n@@ -1,2 +1 @@\n first\n-second\n`
+  await runCrewReview({
+    ...fixture.args,
+    runGit: (...args) =>
+      isDiffContent(args) ? deletionOnlyDiff : fixture.args.runGit(...args),
+    log: (message) => logs.push(message),
+  })
+  assert.deepEqual(logs, ['No changes to review.'])
+  assert.equal(fixture.requests.length, 0)
+  assert.equal(fixture.publications.length, 0)
 })

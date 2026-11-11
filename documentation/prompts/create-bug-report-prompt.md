@@ -6,7 +6,7 @@ description: Diagnosticar uma GitHub bug issue aprovada em um Bug Report factual
 # Criar Bug Report
 
 Transforme uma GitHub bug issue aprovada em um diagnóstico técnico durável. O Bug Report é
-input de correção, não Spec: não inclua `CA-*`, um roteiro de validação manual, fases, tasks,
+input de correção, não Spec: não inclua `CA-*`, um roteiro de verificação manual, tasks,
 assinaturas, inventário proposto de arquivos ou implementação detalhada.
 
 ## Entrada
@@ -14,7 +14,7 @@ assinaturas, inventário proposto de arquivos ou implementação detalhada.
 - GitHub bug issue com problema, comportamento esperado, reprodução e contexto;
 - contexto técnico opcional: ambiente, browser/dispositivo, frequência e evidências.
 
-Sem issue existente, pare e encaminhe para `create-bug-issue`; este workflow não cria nem
+Sem issue existente, pare e encaminhe para `open-bug-issue`; este workflow não cria nem
 atualiza a issue.
 
 ## Autoridade e Rules
@@ -84,7 +84,7 @@ projeto.
 7. recomende no resumo final:
    - **Correção direta:** narrow, bem compreendida, baixo risco e sem Contract durável; ou
    - **Correction Spec:** ambígua, cross-layer, coordenada ou de risco material, exigindo
-     `RF-*`, `CA-*`, `VM-*` ou Plan.
+     `RF-*`, `CA-*`, `AV-*`, `MV-*` ou `VV-*`.
 
 Não escreva a delivery route dentro do Bug Report e não crie a Spec neste workflow.
 
@@ -135,8 +135,8 @@ last_updated_at: YYYY-MM-DD
 
 - use GitHub Issues e paths relativos reais;
 - não invente execução, causa, método, contrato ou arquivo;
-- não inclua acceptance, uma seção de manual validation, tasks, fases ou file plan; evidências
+- não inclua acceptance, uma seção de manual validation, tasks ou file plan; evidências
   Playwright podem fundamentar a causa, mas devem ser sintetizadas nas seções factuais do report;
-- não edite Spec, Plan, Evaluation, PRD ou Rule;
+- não edite Spec, Evaluation, PRD ou Rule;
 - não exponha credenciais, dados privados ou logs sensíveis;
 - no fim, reporte issue, path e route recomendada.

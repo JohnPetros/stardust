@@ -44,8 +44,8 @@ Antes de rodar os testes de integração da app server, prepare o Supabase local
 com o script de teste do workspace:
 
 ```bash
-npm run db:test -w @stardust/server
-npm run test:integration -w @stardust/server
+pnpm --filter @stardust/server run db:test
+pnpm --filter @stardust/server run test:integration
 ```
 
 O `db:test` prepara o stack Supabase do root `docker-compose.yml` usando as
@@ -326,12 +326,12 @@ Antes de considerar um teste de rota completo, confirme:
 
 ## Tooling
 
-- Workspace server: `npm run test:unit -w @stardust/server`
-- Integração server: `npm run db:test -w @stardust/server` antes de
-  `npm run test:integration -w @stardust/server`
-- Global (Turbo): `npm run test`
-- Qualidade antes de abrir PR: `npm run check:types -w @stardust/server` e
-  `npm run check:code -w @stardust/server`
+- Workspace server: `pnpm --filter @stardust/server run test:unit`
+- Integração server: `pnpm --filter @stardust/server run db:test` antes de
+  `pnpm --filter @stardust/server run test:integration`
+- Global (Turbo): `pnpm run test`
+- Qualidade antes de abrir PR: `pnpm --filter @stardust/server run check:types` e
+  `pnpm --filter @stardust/server run check:code`
 - Referência geral: `documentation/tooling.md`
 
 ## Transição aprovada: Drizzle e SSE (Issue #602)

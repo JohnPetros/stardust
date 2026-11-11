@@ -53,13 +53,13 @@ cd ./stardust/apps/backoffice
 **Instale as dependências**
 
 ```bash
-npm install
+pnpm install
 ```
 
 **Execute a aplicação em modo de desenvolvimento**
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 > Sera aberto o painel de desenvolvimento da aplicacao backoffice em http://localhost:8000
@@ -67,7 +67,7 @@ npm run dev
 ## Executando os testes
 
 ```bash
-npm run test
+pnpm run test
 ```
 > [!NOTE]
 > Defina as variaveis de ambiente de desenvolvimento no arquivo `.env.local`.
@@ -76,12 +76,12 @@ npm run test
 ## Tooling
 
 - Scripts do workspace `@stardust/backoffice`:
-  - Dev: `npm run dev -w @stardust/backoffice`
-  - Build: `npm run build -w @stardust/backoffice`
-  - Start (static): `npm run start -w @stardust/backoffice`
-  - Qualidade: `npm run check:code -w @stardust/backoffice` (`lint` + `format`)
-  - Tipos: `npm run check:types -w @stardust/backoffice` (inclui `react-router typegen && tsc`)
-  - Testes: `npm run test:unit -w @stardust/backoffice` / `npm run test:unit:watch -w @stardust/backoffice`
+  - Dev: `pnpm --filter @stardust/backoffice run dev`
+  - Build: `pnpm --filter @stardust/backoffice run build`
+  - Start (static): `pnpm --filter @stardust/backoffice run start`
+  - Qualidade: `pnpm --filter @stardust/backoffice run check:code` (`lint` + `format`)
+  - Tipos: `pnpm --filter @stardust/backoffice run check:types` (inclui `react-router typegen && tsc`)
+  - Testes: `pnpm --filter @stardust/backoffice run test:unit` / `pnpm --filter @stardust/backoffice run test:unit:watch`
 - Referencia geral: `documentation/tooling.md`.
 
 ## Estruturação do projeto

@@ -16,14 +16,13 @@ testes não se aplicam às aplicações de produto.
 **Quando consultar:**
 
 - Ao criar ou revisar uma Spec técnica.
-- O Spec Reviewer executa um único gate antes do planejamento (com retries da
+- O Spec Reviewer executa um único gate antes da implementação (com retries da
   mesma revisão quando houver findings) e avalia somente compatibilidade com
   Architecture e Rules.
-- Ao criar ou executar um Plan.
 - Ao implementar uma Spec diretamente.
 - Ao executar sensores e concluir uma implementação.
 - Ao atualizar Spec, PRD, Architecture ou Rules durante a implementação.
-- Ao registrar revisão humana, progresso ou finding no Plan.
+- Ao registrar revisão humana, progresso ou finding.
 - Ao criar ou atualizar `evaluation.md`.
 - Ao separar sensores locais dos checks e do build do CI.
 
@@ -165,7 +164,7 @@ papéis, artefatos, sensores e critérios de conclusão.
 - Ao explorar simbolos e caminhos de chamada com CodeGraph.
 - Ao consultar documentacao atualizada com Context7.
 - Ao interagir com Supabase Dev/Prod.
-- Ao inspecionar ou editar `design/stardust.fig` via Open Pencil.
+- Ao inspecionar ou editar o arquivo Penpot `stardust` via Penpot MCP.
 
 ## Regras da Aplicação Web
 

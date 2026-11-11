@@ -159,7 +159,7 @@ Use exatamente a estrutura canônica definida em
 O cabeçalho deve registrar o PRD canônico, sua revisão, as fontes auxiliares,
 os `RP-*` e os `JN-*`. Cada `RP-*` deve conter necessidades do usuário,
 resultado, atores, regras de negócio e regras de experiência. Não use `RF-*`,
-`CA-*`, `VM-*` ou `EV-*` no PRD; esses IDs pertencem à Spec/Evaluation.
+`CA-*`, `AV-*`, `MV-*`, `VV-*` ou `EV-*` no PRD; esses IDs pertencem à Spec/Evaluation.
 
 ## Restrições para o PRD
 

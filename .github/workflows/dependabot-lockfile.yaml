@@ -7,7 +7,8 @@ on:
       - 'package.json'
       - 'apps/*/package.json'
       - 'packages/*/package.json'
-      - 'package-lock.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
 
 permissions:
   contents: read
@@ -18,12 +19,13 @@ concurrency:
 
 env:
   NODE_VERSION: "24"
-  NPM_VERSION: "11.13.0"
 
 jobs:
   regenerate:
     name: Regenerate lockfile
-    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    if: >-
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -36,25 +38,25 @@ jobs:
           # A token that is not GITHUB_TOKEN, so the push re-triggers the CI workflows.
           token: ${{ secrets.LOCKFILE_BOT_TOKEN }}
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install the pinned npm
-        run: npm install --global npm@${{ env.NPM_VERSION }}
-
-      - name: Regenerate package-lock.json
-        run: npm install --package-lock-only --ignore-scripts
+      - name: Regenerate pnpm-lock.yaml
+        run: pnpm install --lockfile-only --ignore-scripts
 
       - name: Commit lockfile
         run: |
-          if git diff --quiet -- package-lock.json; then
+          if git diff --quiet -- pnpm-lock.yaml; then
             echo "Lockfile already in sync."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package-lock.json
+          git add pnpm-lock.yaml
           git commit -m "📦 deps: regenerate lockfile"
           git push

@@ -35,4 +35,23 @@ describe('SignInPageView', () => {
     expect(resetPasswordLink).toHaveAttribute('href', ROUTES.auth.resetPassword)
     expect(createAccountLink).toHaveAttribute('href', ROUTES.auth.signUp)
   })
+
+  it('should render the title, the options divider and the highlight links', () => {
+    render(
+      <SignInPageView
+        rocketAnimationRef={animationRefMock}
+        isRocketVisible={false}
+        handleFormSubmit={handleFormSubmit}
+      />,
+    )
+
+    expect(screen.getByRole('heading', { name: 'Entre na sua conta' })).toBeVisible()
+    expect(screen.getByTestId('options-divider')).toHaveTextContent('ou')
+    expect(screen.getByTestId('reset-password-link')).toHaveClass(
+      'text-theme-accent-text',
+    )
+    expect(screen.getByTestId('create-account-link')).toHaveClass(
+      'text-theme-accent-text',
+    )
+  })
 })

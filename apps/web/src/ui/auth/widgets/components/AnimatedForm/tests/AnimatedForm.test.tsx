@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 
-import { AnimatedForm } from '..'
+import { AnimatedFormView } from '../AnimatedFormView'
 
 jest.mock('motion/react', () => ({
   motion: {
@@ -17,11 +17,13 @@ jest.mock('motion/react', () => ({
 
 describe('AnimatedForm', () => {
   it('keeps the form mounted while animating it out', () => {
-    const { rerender } = render(<AnimatedForm isVisible={false}>Conteúdo</AnimatedForm>)
+    const { rerender } = render(
+      <AnimatedFormView isVisible={false}>Conteúdo</AnimatedFormView>,
+    )
 
     const animatedForm = screen.getByTestId('animated-form')
 
-    rerender(<AnimatedForm isVisible>Conteúdo</AnimatedForm>)
+    rerender(<AnimatedFormView isVisible>Conteúdo</AnimatedFormView>)
 
     expect(screen.getByTestId('animated-form')).toBe(animatedForm)
     expect(animatedForm).toHaveAttribute('aria-hidden', 'true')

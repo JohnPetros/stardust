@@ -32,7 +32,7 @@ const sharedConfig: Config = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'mjs', 'cjs', 'json'],
   extensionsToTreatAsEsm: ['.ts'],
   transformIgnorePatterns: [
-    'node_modules/(?!((@mastra|@sindresorhus|escape-string-regexp|p-map|@workflow|tokenx|ai|@ai-sdk)/))',
+    'node_modules/(?!(\\.pnpm/|(@mastra|@sindresorhus|escape-string-regexp|p-map|@workflow|tokenx|ai|@ai-sdk)/))',
   ],
   setupFiles: ['<rootDir>/jest.setup.js'],
   collectCoverageFrom: [

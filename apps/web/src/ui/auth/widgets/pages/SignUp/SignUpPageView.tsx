@@ -27,40 +27,40 @@ export const SignUpPageView = ({
 }: Props) => {
   return (
     <div className='h-screen'>
-      <div className='fixed z-[-5] brightness-[0.25]'>
-        <AnimatedOpacity delay={0.5} className='h-full w-full'>
+      <div className='fixed inset-0 z-[-5] overflow-hidden brightness-[0.25]'>
+        <AnimatedOpacity
+          delay={0.5}
+          className='flex h-full w-full items-center justify-center [&>div]:!h-[max(100vw,100vh)] [&>div]:!w-[max(100vw,100vh)] [&>div]:shrink-0'
+        >
           <Animation name='rocket-exploring' size='full' hasLoop={true} />
         </AnimatedOpacity>
       </div>
 
-      <main className='flex justify-center w-full h-full'>
+      <main className='flex h-full w-full justify-center px-[24px]'>
         {isSignUpSuccessfull ? (
-          <AnimatedOpacity delay={2}>
+          <AnimatedOpacity
+            delay={2}
+            className='flex h-full w-full max-w-[384px] flex-col justify-center'
+          >
             <div
               data-testid='sign-up-success-message'
-              className='flex-1 flex flex-col justify-center h-full'
+              className='flex flex-col items-center gap-6'
             >
-              <p className='text-green-400 font-medium text-lg text-center'>
-                Verique o seu e-mail para confirmar o seu cadastro 😉.
-              </p>
-              <p className='text-green-400 font-medium text-md text-center'>
-                Até logo 👋🏻.
-              </p>
-              <Button
-                onClick={onResendEmail}
-                isLoading={isResendingEmail}
-                className='mt-6'
-              >
+              <div className='text-center font-medium text-theme-accent-text'>
+                <p className='text-lg'>
+                  Verifique o seu e-mail para confirmar o seu cadastro 😉.
+                </p>
+                <p className='text-base'>Até logo 👋🏻.</p>
+              </div>
+              <Button onClick={onResendEmail} isLoading={isResendingEmail}>
                 Reenviar e-mail de confirmação de cadastro.
               </Button>
             </div>
           </AnimatedOpacity>
         ) : (
-          <AnimatedOpacity delay={2}>
-            <div data-testid='sign-up-form' className='w-[24rem] pt-12'>
-              <div className='text-center'>
-                <Title title='Bem-vindo(a) ao StarDust' icon='rocket' text='' />
-              </div>
+          <AnimatedOpacity delay={2} className='w-full max-w-[384px] pt-[48px]'>
+            <div data-testid='sign-up-form' className='flex flex-col gap-6'>
+              <Title title='Bem-vindo(a) ao StarDust' icon='rocket' text='' />
               <SignUpForm
                 profileService={profileService}
                 isSubmitting={isSubmitting}
@@ -69,7 +69,7 @@ export const SignUpPageView = ({
             </div>
 
             <div className='mt-6 flex w-full items-center justify-center'>
-              <Link testId='sign-in-link' href={ROUTES.auth.signIn}>
+              <Link testId='sign-in-link' href={ROUTES.auth.signIn} tone='subtle'>
                 Eu já tenho uma conta 😁.
               </Link>
             </div>

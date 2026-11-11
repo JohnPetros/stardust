@@ -43,4 +43,4 @@ apply only to Crew; the product apps retain their existing conventions.
 - Report the distinction between scripted tests, database integration tests and
   live model quality evals. Clean datasets alone do not prove defect recall.
 
-See `apps/crew/README.md` for commands, model selection and runtime contracts.
+See `documentation/tooling.md` for commands and runtime contracts.

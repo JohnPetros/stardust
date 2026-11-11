@@ -24,6 +24,7 @@ const ALLOWED_TEST_PATH_PATTERNS = [
   /^apps\/server\/src\/queue\/jobs\/(?:[^/]+\/)*tests(?:\/|$)/,
   /^apps\/(?:web|backoffice)\/src\/ui\/(?:[^/]+\/)*hooks\/tests(?:\/|$)/,
   /^apps\/(?:web|backoffice)\/src\/ui\/(?:[^/]+\/)*widgets\/(?:[^/]+\/)*tests(?:\/|$)/,
+  /^apps\/(?:web|backoffice)\/src\/ui\/(?:[^/]+\/)*contexts\/(?:[^/]+\/)*tests(?:\/|$)/,
   /^(?:apps|packages)\/[^/]+\/src\/[^/]+\.(?:test|spec)\.[cm]?[jt]sx?$/,
 ]
 const FORBIDDEN_TEST_SUBJECT_PATTERNS = [
@@ -83,13 +84,13 @@ function parseArguments(argumentsList) {
   }
 
   if (positionalArguments.length > 0) {
-    throw new Error('Usage: npm run check:test-integrity -- [--base <git-ref>] [--json]')
+    throw new Error('Usage: pnpm run check:test-integrity [--base <git-ref>] [--json]')
   }
   return { base, shouldPrintHelp: false, shouldPrintJson }
 }
 
 function printHelp() {
-  console.log('Usage: npm run check:test-integrity -- [--base <git-ref>] [--json]')
+  console.log('Usage: pnpm run check:test-integrity [--base <git-ref>] [--json]')
   console.log(
     'Checks test weakening and missing tests for changed testable source files.',
   )

@@ -35,26 +35,26 @@ export const SocialAccountConfirmationPageView = ({
 
       <AnimatePresence>
         {!isRocketVisible && (
-          <main className='flex h-full w-full items-center justify-center'>
+          <main className='flex h-full w-full items-center justify-center px-[24px]'>
             {isNewAccount && isUserCreated ? (
               <AppMessage
                 title='Bem-vindo(a) 👋'
                 subtitle='Seu perfil foi criado com sucesso!'
                 footer={
-                  <Button onClick={onLinkClick} className='w-72'>
+                  <Button onClick={onLinkClick} className='w-[288px]'>
                     Ir para a página principal
                   </Button>
                 }
               />
             ) : (
-              <div className='flex flex-col items-center justify-center'>
+              <div className='flex w-[288px] flex-col items-center justify-center'>
                 <Loading />
                 <UserCreationPendingMessage />
                 {isRetryVisible && (
                   <Button
                     onClick={onRetryUserCreation}
                     isLoading={isRetryingUserCreation}
-                    className='mt-8 w-72'
+                    className='mt-[32px] w-[288px]'
                   >
                     Tentar novamente
                   </Button>

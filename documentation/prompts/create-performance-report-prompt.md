@@ -326,7 +326,7 @@ Todas as evidencias abaixo foram verificadas diretamente no codigo fonte.
 | KPI | App | Onde Medir | Como Medir | Baseline |
 |-----|-----|-----------|------------|----------|
 | Bundle JS total | web | Build output | `next build` -> `.next/static` total size | Rodar antes das correcoes |
-| TTFB | web | Browser/Lighthouse | `npx lighthouse http://localhost:3000 --output json` | Medir agora |
+| TTFB | web | Browser/Lighthouse | `pnpm dlx lighthouse http://localhost:3000 --output json` | Medir agora |
 | LCP | web | Browser | Lighthouse ou `web-vitals` lib | Medir agora |
 | API calls por page load | web | Backend logs | Contar requests para `/auth/account` por page view | Medir agora |
 | Latencia de endpoint | server | Sentry / logs | Tempo medio de resposta por rota | Medir agora |
@@ -337,10 +337,10 @@ Todas as evidencias abaixo foram verificadas diretamente no codigo fonte.
 
 ## Checklist de Verificacao
 
-- [ ] Nao mudou comportamento funcional (testes passam: `npm run test:unit -w @stardust/{APP}`)
-- [ ] Build completa com sucesso (`npm run build -w @stardust/{APP}`)
-- [ ] Typecheck passa (`npm run check:types -w @stardust/{APP}`)
-- [ ] Qualidade passa (`npm run check:code -w @stardust/{APP}`)
+- [ ] Nao mudou comportamento funcional (testes passam: `pnpm --filter @stardust/{APP} run test:unit`)
+- [ ] Build completa com sucesso (`pnpm --filter @stardust/{APP} run build`)
+- [ ] Typecheck passa (`pnpm --filter @stardust/{APP} run check:types`)
+- [ ] Qualidade passa (`pnpm --filter @stardust/{APP} run check:code`)
 - [ ] Metricas comparadas antes/depois (bundle size, latencia, query count)
 - [ ] Jobs idempotentes validados com reprocessamento manual no Inngest dashboard _(se aplicavel)_
 - [ ] {VALIDACAO_ESPECIFICA_DO_ESCOPO}

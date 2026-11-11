@@ -38,8 +38,8 @@ to it.
 ## Usage
 
 ```sh
-npm install
-npm run dev:studio
+pnpm install
+pnpm run dev:studio
 ```
 
 The dev server prefers port `3030` and falls back to the next free port. Use
@@ -47,7 +47,7 @@ the URL Vite prints.
 
 No API, database, login or environment variables are required. The Vite plugin
 serves the scene catalog and writes edits directly to local scene files. The
-tool is started separately from `npm run dev`.
+tool is started separately from `pnpm run dev`.
 
 The `text-to-lottie` agent skill can be used to author animations if installed
 separately. It is not included in this package.
@@ -65,21 +65,21 @@ with `?frame=<N>`.
 ## Checks
 
 ```sh
-npm run check:code -w @stardust/studio
-npm run check:types -w @stardust/studio
-npm run build:studio
+pnpm --filter @stardust/studio run check:code
+pnpm --filter @stardust/studio run check:types
+pnpm run build:studio
 ```
 
 ## Development and preview
 
 Project and scene creation, deletion, property saving and `/__context` are
 available only in development. A production build includes a static
-`scenes.json` catalog for playback. `npm run preview -w @stardust/studio`
+`scenes.json` catalog for playback. `pnpm --filter @stardust/studio run preview`
 serves that build without the editing backend.
 
-`npm install` copies CanvasKit WASM into `public/canvaskit.wasm` through the
+`pnpm install` copies CanvasKit WASM into `public/canvaskit.wasm` through the
 package postinstall script. If installation skips lifecycle scripts, run
-`npm run postinstall -w @stardust/studio` before starting or building.
+`pnpm --filter @stardust/studio run postinstall` before starting or building.
 
 Animation source can be imported by workspace consumers as
 `@stardust/studio/scenes/<project>/<scene>`. The included `mascot` and

@@ -37,7 +37,7 @@ function parseArguments(argumentsList) {
 
   if (positionalArguments.length !== 1) {
     throw new Error(
-      'Usage: npm run check:spec-implementation -- <documentation/features/.../spec.md|*-spec.md> [--base <git-ref>] [--json]',
+      'Usage: pnpm run check:spec-implementation <documentation/features/.../spec.md|*-spec.md> [--base <git-ref>] [--json]',
     )
   }
 
@@ -51,7 +51,7 @@ function parseArguments(argumentsList) {
 
 function printHelp() {
   console.log(
-    'Usage: npm run check:spec-implementation -- <documentation/features/.../spec.md|*-spec.md> [--base <git-ref>] [--json]',
+    'Usage: pnpm run check:spec-implementation <documentation/features/.../spec.md|*-spec.md> [--base <git-ref>] [--json]',
   )
   console.log(
     'Checks every Create, Modify, Generate and Remove path in the Spec against Git and disk.',

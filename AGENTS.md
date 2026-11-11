@@ -5,12 +5,26 @@
 - documentation/tooling.md
 - documentation/rules/rules.md
 
+## Leitura obrigatória das regras antes de alterar
+
+- Antes de criar ou alterar qualquer arquivo (código, testes, configuração ou
+  documentação), abra `documentation/rules/rules.md`, identifique o arquivo de
+  regras cujo "Quando consultar" corresponde à camada, ao app ou à tarefa e leia
+  esse arquivo por completo. Faça isso antes da primeira edição, não depois de
+  uma revisão apontar o problema.
+- Isso vale também para correções de comentários de review, falhas de CI e
+  mudanças pequenas. Uma mudança que toca mais de uma camada exige ler as regras
+  de cada uma, inclusive as de testes (por exemplo, a camada Provision não
+  recebe arquivos `*.test.*` dedicados).
+- Se nenhuma regra cobrir a mudança, registre isso no relatório ou no PR em vez
+  de presumir um padrão.
+
 ## Idioma dos Pull Requests
 
 - Todo Pull Request deve ter título e descrição escritos em PT-BR, inclusive os
   criados por agentes. Mantenha em inglês apenas identificadores técnicos,
   nomes de arquivos, comandos e trechos de código.
-- Siga o contrato de título e body da skill `create-pr`. Não use prefixo de
+- Siga o contrato de título e body da skill `open-pr`. Não use prefixo de
   Conventional Commit nem emoji no título.
 - Os PRs do Dependabot têm o título traduzido automaticamente por
   `.github/workflows/dependabot-pr-title.yaml`.
@@ -45,7 +59,7 @@
 
 - Context7 para buscar informações atualizadas
 - CodeGraph para explorar símbolos, relações e caminhos de chamada no código
-- Open Pencil para inspecionar e editar os frames de design em `design/stardust.fig`
+- Penpot MCP para inspecionar e editar o arquivo de design `stardust`
 - Playwright CLI para inspecionar e validar fluxos reais no navegador
 - Supabase Dev para interagir com o projeto Supabase de desenvolvimento
 - Supabase Prod para interagir com o projeto Supabase de produção
@@ -66,9 +80,9 @@
 
 - Use o Playwright CLI para exploração, inspeção visual, diagnóstico e tarefas
   pontuais em um navegador real, além de validações formais e testes repetíveis.
-- Para testes versionados, use `npm --workspace @stardust/web run test:integration -- <arquivo>`
-  ou `npm exec playwright -- test ...` a partir de `apps/web`.
-- Para uma sessão interativa, use `npm exec playwright -- codegen <url>` a partir de
+- Para testes versionados, use `pnpm --filter @stardust/web run test:integration <arquivo>`
+  ou `pnpm exec playwright test ...` a partir de `apps/web`.
+- Para uma sessão interativa, use `pnpm exec playwright codegen <url>` a partir de
   `apps/web` quando isso ajudar a descobrir locators ou reproduzir um fluxo. Não use
   ferramentas alternativas de browser automation neste projeto.
 
@@ -77,7 +91,7 @@
 - Use o **Supabase local** para desenvolvimento e para validar a aplicação e
   as integrações do Server.
 - Antes dos testes de integração do Server, prepare o stack com:
-  `npm run db:test -w @stardust/server`.
+  `pnpm --filter @stardust/server run db:test`.
 - Use o MCP **Supabase Dev** somente quando a tarefa exigir validação ou
   alteração do projeto remoto; o banco remoto não substitui a validação local
   do stack da aplicação.
@@ -96,11 +110,11 @@ declarar a aplicação funcional.
 - Inicie o servidor local e o Backoffice em terminais separados:
 
   ```bash
-  npm --workspace @stardust/server run dev
+  pnpm --filter @stardust/server run dev
   ```
 
   ```bash
-  npm --workspace @stardust/backoffice run dev
+  pnpm --filter @stardust/backoffice run dev
   ```
 
 - O servidor de desenvolvimento do projeto usa `http://localhost:3334`.
@@ -192,13 +206,13 @@ backend; não usam a conta real do Backoffice nem devem apontar para produção.
 - Instale o navegador, se necessário:
 
   ```bash
-  npm --workspace @stardust/web run test:integration:install
+  pnpm --filter @stardust/web run test:integration:install
   ```
 
-- Execute todos os testes de integração:
+- Execute todos os testes de integração, apenas quando o escopo exigir a suíte completa:
 
   ```bash
-  npm --workspace @stardust/web run test:integration
+  pnpm --filter @stardust/web run test:integration
   ```
 
 - Para investigar uma falha, use `test:integration:debug` ou
@@ -282,12 +296,12 @@ Para verificar visualmente uma página real com o Playwright, fora de
 
 ```bash
 # terminal 1
-npm --workspace @stardust/server run dev
+pnpm --filter @stardust/server run dev
 ```
 
 ```bash
 # terminal 2
-npm --workspace @stardust/web run dev
+pnpm --filter @stardust/web run dev
 ```
 
 Depois, no navegador Playwright:
@@ -324,7 +338,7 @@ No modo padrão, o script falha se alguma variável estiver ausente.
 No modo `--seed`, carrega as fixtures locais fixas. Não reutilize `BACKOFFICE_APP_E2E_*`: as contas do Backoffice e da Web App
 são independentes.
 
-## Regra obrigatória de validação manual do Frontend
+## Regra obrigatória de verificação manual do Frontend
 
 Toda implementação que envolva frontend, UI, rotas client-side ou interação
 com o navegador deve passar por um smoke manual do caminho feliz em navegador
@@ -384,16 +398,35 @@ separa falha visual da página de falha de autenticação, CORS ou API.
 - Em falhas intermitentes, capture `console`, `pageerror`, `requestfailed` e
   `response`, mantendo `trace: 'on-first-retry'` para obter o trace sem gerar
   artefatos desnecessários em toda execução.
-- Após alterar a Web App ou seus testes, execute os detectores deste arquivo e
-  também `npm --workspace @stardust/web run test:integration`.
+- Após alterar a Web App ou seus testes, execute os detectores deste arquivo e os
+  cenários Playwright afetados com
+  `pnpm --filter @stardust/web run test:integration <arquivos>`. A suíte completa
+  só é necessária quando o impacto abrange várias jornadas (rota, sessão ou layout raiz
+  compartilhados) ou quando o usuário a solicita.
 
 ## Detectores de erros
 
-Após fazer qualquer alteração no código, execute os comandos:
+Execute os detectores no escopo da alteração; o CI executa as suítes completas.
+Defina o escopo pelo diff e pelas dependências reais (workspaces alterados e
+consumidores diretos), não por arquivos de nome parecido nem pelo app tocado. Uma
+mudança de apresentação na Web não exige testes do Server, e uma mudança no Server
+sem efeito observável no navegador não exige testes de browser.
 
-- `npm run check:code`
-- `npm run check:types`
-- `npm run test:unit`
+- `pnpm run check:code -w <workspace>` e `pnpm run check:types -w <workspace>` para
+  cada workspace alterado e para os consumidores afetados. O typecheck usa o projeto
+  inteiro do workspace; não passe arquivos ao `tsc`.
+- `pnpm run test:unit -w <workspace> -- <arquivos-de-teste>`, com caminhos verificados
+  no código. Na Web, acrescente
+  `pnpm --filter @stardust/web run test:integration <arquivos>` somente para as
+  jornadas afetadas.
+- Execute uma suíte completa (`pnpm run test:unit`, `test:integration`,
+  `test:coverage` e `check:coverage`) somente quando o impacto demonstrado abranger
+  essa suíte, por exemplo tokens, componentes compartilhados, contratos do Core,
+  composição global do Server ou rota, sessão e layout raiz da Web, ou quando o
+  usuário pedir. Registre a dependência e o motivo da ampliação.
+- Uma seleção vazia ou ignorada não é aprovação: confirme a contagem e o resultado.
 
 Em workflows SDD, execute também os sensores aplicáveis definidos em
-`documentation/sdd.md`.
+`documentation/sdd.md` e registre no `evaluation.md` os comandos executados, os
+arquivos e cenários, as contagens e os resultados. Os detalhes de seleção estão em
+`documentation/tooling.md`, seção "Execução local escopada".

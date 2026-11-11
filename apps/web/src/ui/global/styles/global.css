@@ -10,6 +10,36 @@
   -webkit-text-size-adjust: 100%;
 }
 
+:root[data-theme="stardust-dark"] {
+  /* Semantic/Dark (Penpot `stardust`) */
+  --theme-background: #141a1b;
+  --theme-canvas: #0b0e0f;
+  --theme-surface: #1e2626;
+  --theme-border: #667778;
+  --theme-border-quiet: #354344;
+  --theme-text-primary: #f2f5f4;
+  --theme-text-secondary: #adb8ba;
+  --theme-action: #32e995;
+  --theme-accent-text: #58dfa6;
+  --theme-success: #58dfa6;
+  --theme-reward: #ffce31;
+  --theme-danger: #ff7777;
+  --theme-tag-background: #a6b3b5;
+  --theme-tag-foreground: #141a1b;
+  --theme-selection: #00d1ff;
+  --theme-selection-surface: #022f43;
+  --theme-success-surface: #002819;
+  --theme-danger-surface: #431515;
+
+  /* Geometry (Penpot `stardust`) */
+  --theme-radius-default: 8px;
+  --theme-radius-full: 9999px;
+  --theme-control-height: 44px;
+  --theme-control-padding-x: 12px;
+  --theme-control-icon-gap: 8px;
+  --theme-control-border: 1px;
+}
+
 * {
   margin: 0;
   padding: 0;

@@ -33,6 +33,7 @@ import type { ReviewerTrace } from '@/mastra/agents/pr-reviewer/types/reviewer-t
 import type { ReviewerUsage } from '@/mastra/agents/pr-reviewer/types/reviewer-usage'
 import type { ReviewerUsageRecorder } from '@/mastra/agents/pr-reviewer/types/reviewer-usage-recorder'
 import { describeError } from '@/utils/describe-error'
+import { numberDiffLines } from '@/utils/number-diff-lines'
 import { z } from 'zod'
 import { COMPOSIO_TOOLSET_KEY } from '@/mastra/agents/pr-reviewer/constants/composio-toolset-key'
 import { MAX_FINDINGS } from '@/mastra/agents/pr-reviewer/constants/max-findings'
@@ -552,8 +553,8 @@ export class PrReviewWorkflow {
       'Regression facts:',
       JSON.stringify(input.regression_facts),
       '',
-      'Diff:',
-      input.diff,
+      'Diff (the number before each context or added line is its line in the new file; removed lines have none):',
+      numberDiffLines(input.diff),
     ]
       .join('\n')
       .replace(UNTRUSTED_CLOSING_TAG, '<\\/untrusted_diff>')

@@ -255,8 +255,8 @@ export const AccessChallengeEditorPageAction = (
   - Typecheck: TypeScript (`tsc`).
   - Testes: Jest.
 - Execucao recomendada:
-  - Global: `npm run check:code`, `npm run check:types`, `npm run test` (na raiz, via Turbo).
-  - Workspace especifico: `npm run check:code -w <workspace>`.
+  - Global: `pnpm run check:code`, `pnpm run check:types`, `pnpm run test` (na raiz, via Turbo).
+  - Workspace especifico: `pnpm --filter <workspace> run check:code`.
 - Hooks de commit/release:
   - Husky e commitlint sao usados na raiz (ver `/package.json`).
 - Referencia geral: `documentation/tooling.md`.

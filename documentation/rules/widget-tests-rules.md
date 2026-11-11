@@ -352,6 +352,6 @@ describe("SignInForm", () => {
 - Runner de testes: Jest.
 - Bibliotecas de teste (UI): `@testing-library/react`, `@testing-library/user-event`.
 - Comandos:
-  - Web: `npm run test:unit -w @stardust/web` / `npm run test:unit:watch -w @stardust/web`.
-  - Backoffice: `npm run test:unit -w @stardust/backoffice` / `npm run test:unit:watch -w @stardust/backoffice`.
+  - Web: `pnpm --filter @stardust/web run test:unit` / `pnpm --filter @stardust/web run test:unit:watch`.
+  - Backoffice: `pnpm --filter @stardust/backoffice run test:unit` / `pnpm --filter @stardust/backoffice run test:unit:watch`.
 - Referencia geral: `documentation/tooling.md`.

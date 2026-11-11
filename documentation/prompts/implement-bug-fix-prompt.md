@@ -39,7 +39,7 @@ Antes de editar código:
 2. confirme os paths reais, o entry point, o fluxo afetado e a causa com inspeção direta;
 3. reproduza a falha quando possível e capture um baseline mínimo;
 4. defina o teste de regressão que falharia antes da mudança;
-5. confirme que a mudança permanece narrow, sem criar Plan, Spec ou Contract artificial.
+5. confirme que a mudança permanece narrow, sem criar Spec ou Contract artificial.
 
 Se a reprodução contrariar o diagnóstico, não force a implementação: atualize o diagnóstico por
 meio de `create-bug-report` ou reavalie o roteamento.
@@ -56,7 +56,7 @@ sempre que houver qualquer mudança relevante em:
 Se a implementação revelar uma causa complementar, uma divergência do diagnóstico ou um novo risco,
 pare antes de ampliar o escopo, registre a descoberta no Bug Report e confirme se a correção continua
 direta. Não deixe o relatório desatualizado até a etapa de encerramento. O relatório deve registrar
-fatos observados e comandos/resultados de validação, sem virar uma Spec, Plan ou lista de tarefas.
+fatos observados e comandos/resultados de validação, sem virar uma Spec ou lista de tarefas.
 
 ## Implementação
 
@@ -67,7 +67,7 @@ fatos observados e comandos/resultados de validação, sem virar uma Spec, Plan 
    nomenclatura, factories, tratamento de erros e fronteiras entre camadas.
 3. Preserve estados de sucesso, erro, loading, retry, navegação, autenticação e consumidores
    relacionados que não fazem parte do defeito.
-4. Não altere credenciais, `.env.development`, migrations, issue, Spec, Plan ou Evaluation sem
+4. Não altere credenciais, `.env.development`, migrations, issue, Spec ou Evaluation sem
    autorização explícita e sem o workflow correspondente.
 5. Mantenha o Bug Report atualizado enquanto a implementação avança; se o código ou os testes
    alterarem o diagnóstico, o escopo, a evidência ou o risco, atualize o relatório antes de
@@ -88,8 +88,8 @@ Durante a reprodução e o rerun:
   `waitForFunction` e `waitForURL`, sem depender de `waitForTimeout` isolado;
 - confirme estados observáveis de sucesso e erro, além de loading e navegação quando fizerem
   parte do fluxo;
-- execute testes versionados com `npm --workspace @stardust/web run test:integration -- <arquivo>` ou
-  `npm exec playwright -- test ...` a partir de `apps/web`; use o ambiente de integração com
+- execute testes versionados com `pnpm --filter @stardust/web run test:integration <arquivo>` ou
+  `pnpm exec playwright test ...` a partir de `apps/web`; use o ambiente de integração com
   `ServerMock` nos testes versionados e o fluxo real em `localhost:3000`/API local para inspeção
   autenticada fora da suíte;
 - para Backoffice, use o servidor, a porta e as credenciais definidos em `AGENTS.md`, valide login e
@@ -102,12 +102,12 @@ reconstruí-los.
 
 ## Detectores e testes
 
-Após qualquer alteração, execute os detectores obrigatórios de `AGENTS.md`:
+Após qualquer alteração, execute os detectores de `AGENTS.md` no escopo afetado:
 
-- `npm run check:code`;
-- `npm run check:types`;
-- `npm run test:unit`;
-- testes específicos do bug e o fluxo Playwright aplicável.
+- `pnpm run check:code -w <workspace>`;
+- `pnpm run check:types -w <workspace>`;
+- `pnpm run test:unit -w <workspace> -- <arquivos-de-teste>`, incluindo o teste de regressão do bug;
+- o fluxo Playwright aplicável, somente nos arquivos afetados.
 
 Se um detector falhar por estado externo, como porta ocupada, preserve o processo alheio, registre
 o bloqueio exato e execute todas as alternativas seguras. Não declare sucesso global com base em
