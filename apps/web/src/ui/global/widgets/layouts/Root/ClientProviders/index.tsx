@@ -9,14 +9,20 @@ import { markAnalyticsProviderAsInitialized } from '@/provision/analytics/useAna
 import { ClientProvidersView } from './ClientProvidersView'
 
 type ClientProps = {
-  accountDto?: AccountDto | null
+  accountDto: AccountDto | null
+  accessToken: string | null
   children: ReactNode
 }
 
-export const ClientProviders = ({ accountDto, children }: ClientProps) => {
-  const isTestingMode =
+function checkTestingMode() {
+  return (
     CLIENT_ENV.mode === 'testing' ||
     (typeof window !== 'undefined' && window.location.port === '3100')
+  )
+}
+
+export const ClientProviders = ({ accountDto, accessToken, children }: ClientProps) => {
+  const isTestingMode = checkTestingMode()
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'development' || CLIENT_ENV.mode === 'development') {
@@ -69,7 +75,7 @@ export const ClientProviders = ({ accountDto, children }: ClientProps) => {
     }
   }, [accountDto?.email, accountDto?.id])
 
-  return (
-    <ClientProvidersView isTestingMode={isTestingMode}>{children}</ClientProvidersView>
-  )
+  const viewProps = { isTestingMode, accountDto, accessToken }
+
+  return <ClientProvidersView {...viewProps}>{children}</ClientProvidersView>
 }

@@ -1,21 +1,25 @@
 'use client'
 
 import { useMemo } from 'react'
-import type { ProfileChannel } from '@stardust/core/profile/interfaces'
+import type { Account } from '@stardust/core/auth/entities'
+import type { ProfileChannel, ProfileService } from '@stardust/core/profile/interfaces'
 
-import { SupabaseClient } from '@/realtime/supabase/client'
-import { SupabaseProfileChannel } from '@/realtime/supabase/channels'
 import type { RealtimeContextValue } from './types'
+import { useProfileCreationPolling } from './useProfileCreationPolling'
 
-const supabaseClient = SupabaseClient()
+type Params = {
+  profileChannel?: ProfileChannel
+  profileService: ProfileService
+  account: Account | null
+  accessToken: string | null
+}
 
-export function useRealtimeContextProvider(
-  profileChannel?: ProfileChannel,
-): RealtimeContextValue {
+export function useRealtimeContextProvider(params: Params): RealtimeContextValue {
+  const { profileChannel, ...session } = params
+  const pollingChannel = useProfileCreationPolling(session)
+
   return useMemo(
-    () => ({
-      profileChannel: profileChannel ?? SupabaseProfileChannel(supabaseClient),
-    }),
-    [profileChannel],
+    () => ({ profileChannel: profileChannel ?? pollingChannel }),
+    [profileChannel, pollingChannel],
   )
 }

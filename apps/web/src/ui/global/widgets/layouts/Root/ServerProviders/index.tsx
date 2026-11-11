@@ -6,7 +6,6 @@ import * as cookieActions from '@/rpc/next-safe-action/cookieActions'
 import { AuthService } from '@/rest/services'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import { ToastContextProvider } from '@/ui/global/contexts/ToastContext'
-import { AuthContextProvider } from '@/ui/auth/contexts/AuthContext'
 import { AudioContextProvider } from '@/ui/global/contexts/AudioContext'
 import { ClientProviders } from '../ClientProviders'
 import { FeedbackLayout } from '@/ui/reporting/widgets/layouts/FeedbackLayout'
@@ -31,13 +30,11 @@ export const ServerProviders = async ({ children }: Props) => {
     <NuqsAdapter>
       <ToastContextProvider>
         <AudioContextProvider isDefaultAudioDisabled={Boolean(isAudioDisabled?.data)}>
-          <ClientProviders accountDto={accountDto}>
-            <AuthContextProvider
-              accountDto={accountDto}
-              accessToken={accessToken?.data ?? null}
-            >
-              {accountDto ? <FeedbackLayout>{children}</FeedbackLayout> : children}
-            </AuthContextProvider>
+          <ClientProviders
+            accountDto={accountDto}
+            accessToken={accessToken?.data ?? null}
+          >
+            {accountDto ? <FeedbackLayout>{children}</FeedbackLayout> : children}
           </ClientProviders>
         </AudioContextProvider>
       </ToastContextProvider>
