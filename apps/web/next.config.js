@@ -16,7 +16,6 @@ const validateLocalEndpoint = (value, variableName) => {
 
 const appMode = process.env.MODE || process.env.NODE_ENV
 if (appMode === 'development') {
-  validateLocalEndpoint(process.env.NEXT_PUBLIC_SUPABASE_URL, 'NEXT_PUBLIC_SUPABASE_URL')
   validateLocalEndpoint(process.env.NEXT_PUBLIC_CDN_URL, 'NEXT_PUBLIC_CDN_URL')
 }
 
