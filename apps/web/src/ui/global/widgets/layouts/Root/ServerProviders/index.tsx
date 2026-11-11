@@ -34,7 +34,7 @@ export const ServerProviders = async ({ children }: Props) => {
             accountDto={accountDto}
             accessToken={accessToken?.data ?? null}
           >
-            {accountDto ? <FeedbackLayout>{children}</FeedbackLayout> : children}
+            <FeedbackLayout isEnabled={Boolean(accountDto)}>{children}</FeedbackLayout>
           </ClientProviders>
         </AudioContextProvider>
       </ToastContextProvider>

@@ -6,15 +6,18 @@ import { FeedbackDialog } from './FeedbackDialog'
 
 type Props = {
   children: ReactNode
-  isDialogReady: boolean
-  isPublicRoute: boolean
+  classNames: { container: string; content: string }
+  isDialogVisible: boolean
 }
 
-export function FeedbackLayoutView({ children, isDialogReady, isPublicRoute }: Props) {
+// The wrapper elements are always rendered so the page keeps its position in the
+// React tree when the account appears (e.g. right after sign-in). When the layout is
+// disabled they use `display: contents` and do not affect the page layout.
+export function FeedbackLayoutView({ children, classNames, isDialogVisible }: Props) {
   return (
-    <div className='relative flex h-screen w-screen overflow-hidden'>
-      <div className='flex-1 overflow-auto'>{children}</div>
-      {isDialogReady && !isPublicRoute && <FeedbackDialog />}
+    <div className={classNames.container}>
+      <div className={classNames.content}>{children}</div>
+      {isDialogVisible && <FeedbackDialog />}
     </div>
   )
 }
