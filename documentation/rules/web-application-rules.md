@@ -4,7 +4,7 @@
 
 # Desenvolvimento
 
-O cliente Supabase do browser usa `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Nunca use uma chave API `secret`/`service_role` na Web.
+A Web não possui client Supabase: a confirmação de criação de perfil usa polling via `RealtimeContext`. Nunca use uma chave API `secret`/`service_role` na Web.
 
 ## Tecnologias e bibliotecas
 
@@ -63,7 +63,6 @@ pnpm run test
   - Qualidade: `pnpm --filter @stardust/web run check:code` (`lint` + `format`)
   - Tipos: `pnpm --filter @stardust/web run check:types`
   - Testes: `pnpm --filter @stardust/web run test:unit` / `pnpm --filter @stardust/web run test:unit:watch`
-  - Tipos do banco (Supabase): `pnpm --filter @stardust/web run db:types`
 - Referencia geral: `documentation/tooling.md`.
 
 ## Estruturação de pastas

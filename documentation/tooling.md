@@ -243,7 +243,6 @@ los.
 | `check:architecture`       | Verifica as dependências arquiteturais da Web App com dependency-cruiser. |
 | `lint`                     | Executa o lint de `src` com nível de diagnóstico de erro.               |
 | `format`                   | Formata `src` e grava as alterações.                                    |
-| `db:types`                 | Gera os tipos TypeScript do banco usado pela Web App.                   |
 | `test:unit`                | Executa os testes unitários da Web App.                                 |
 | `test:coverage`            | Executa os testes unitários da Web App com relatório JSON de cobertura. |
 | `test:unit:watch`          | Executa os testes unitários da Web App em modo watch.                   |
@@ -464,13 +463,11 @@ secrets somente no `.env.local` da raiz e registre nos provedores o callback
 local `http://127.0.0.1:<SUPABASE_API_PORT>/auth/v1/callback` (porta padrão
 `54321`).
 
-O Realtime local exige, para o Web App receber eventos de `postgres_changes`
-(por exemplo o sucesso do Sign-up), um tenant cujo identificador externo é o
-primeiro rótulo do host (`127` para `127.0.0.1`), a tabela `public.users` na
-publicação `supabase_realtime` e `SELECT` em `public.users` para `anon` e
-`authenticated`. Se o WebSocket responder `TenantNotFound` ou `401`, confira
-esses três itens; eles não sobrevivem à recriação do volume do banco. Se `/profile`
-retornar 500 com `Can't resolve 'apexcharts'`, reinstale as dependências na raiz.
+O Web App não consome mais `postgres_changes` do Realtime local: o sucesso do
+Sign-up e das confirmações vem de polling REST (`PollingProfileChannel`). O
+tenant do Realtime, a publicação `supabase_realtime` de `public.users` e o
+`SELECT` para `anon`/`authenticated` permanecem somente até o follow-up de
+infraestrutura que os remove. Se `/profile` retornar 500 com `Can't resolve 'apexcharts'`, reinstale as dependências na raiz.
 
 `docker compose --env-file .env.local down` preserva os dados locais de
 PostgreSQL e MinIO em `docker/volumes/`. Redis, Auth, PostgREST, Realtime,
