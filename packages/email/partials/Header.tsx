@@ -13,10 +13,13 @@ export const Header = ({ children }: HeaderProps) => {
       <Img
         width={180}
         height={30}
+        alt='StarDust'
         src='https://aukqejqsiqsqowafpppb.supabase.co/storage/v1/object/public/images/marketing/logo.png'
       />
 
-      <Text className='text-lg font-medium text-green-400'>{children}</Text>
+      <Text className='mb-6 mt-6 text-2xl font-semibold leading-8 text-green-400'>
+        {children}
+      </Text>
     </Container>
   )
 }

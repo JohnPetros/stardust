@@ -9,9 +9,9 @@ type BoxProps = {
   className?: string
 }
 
-export const Box = ({ children, className }: BoxProps) => {
+export const Box = ({ children, className = '' }: BoxProps) => {
   return (
-    <Container className={`space-y-5 rounded-md bg-zinc-800 p-6 ${className}`}>
+    <Container className={`rounded-lg bg-gray-900 px-8 pb-4 pt-8 ${className}`}>
       {children}
     </Container>
   )

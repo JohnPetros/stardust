@@ -8,9 +8,11 @@ type ParagraphProps = {
   className?: string
 }
 
-export const Paragraph = ({ children, className }: ParagraphProps) => {
+export const Paragraph = ({ children, className = '' }: ParagraphProps) => {
   return (
-    <Text className={`font-medium tracking-wider text-gray-100 ${className}`}>
+    <Text
+      className={`mx-0 mb-5 mt-0 text-base font-normal leading-7 text-gray-300 ${className}`}
+    >
       {children}
     </Text>
   )
