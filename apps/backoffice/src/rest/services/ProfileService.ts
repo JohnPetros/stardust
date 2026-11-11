@@ -1,5 +1,6 @@
 import type { ProfileService as IProfileService } from '@stardust/core/profile/interfaces'
 import type { RestClient } from '@stardust/core/global/interfaces'
+import { MethodNotImplementedError } from '@stardust/core/global/errors'
 import type {
   Email,
   Id,
@@ -21,6 +22,10 @@ import { Datetime } from '@stardust/core/global/libs'
 
 export const ProfileService = (restClient: RestClient): IProfileService => {
   return {
+    async fetchOnboardingAttempt() {
+      throw new MethodNotImplementedError('fetchOnboardingAttempt')
+    },
+
     async fetchAchievements() {
       return await restClient.get('/profile/achievements')
     },

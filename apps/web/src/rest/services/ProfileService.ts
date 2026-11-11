@@ -19,8 +19,15 @@ import type {
 import type { AvatarAggregate, RocketAggregate } from '@stardust/core/profile/aggregates'
 import { Datetime } from '@stardust/core/global/libs'
 
-export const ProfileService = (restClient: RestClient): IProfileService => {
+export const ProfileService = (
+  restClient: RestClient,
+  webApiRestClient: RestClient = restClient,
+): IProfileService => {
   return {
+    async fetchOnboardingAttempt() {
+      return await webApiRestClient.get('/auth/onboarding-attempt')
+    },
+
     async fetchAchievements() {
       return await restClient.get('/profile/achievements')
     },
