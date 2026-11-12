@@ -1,15 +1,16 @@
 import type { ReactNode } from 'react'
 import * as React from 'react'
-import { Body as Container, Tailwind } from '@react-email/components'
+import { Body as Container, Head, Preview, Tailwind } from '@react-email/components'
 import { Html } from '@react-email/html'
 
 void React
 
 type BodyProps = {
   children: ReactNode
+  preview?: string
 }
 
-export const Body = ({ children }: BodyProps) => {
+export const Body = ({ children, preview }: BodyProps) => {
   return (
     <Tailwind
       config={{
@@ -74,7 +75,9 @@ export const Body = ({ children }: BodyProps) => {
       }}
     >
       <Html lang='pt-br'>
-        <Container className='font-sans rounded-md bg-black/90 p-8'>{children}</Container>
+        <Head />
+        {preview ? <Preview>{preview}</Preview> : null}
+        <Container className='bg-black p-8 font-sans'>{children}</Container>
       </Html>
     </Tailwind>
   )

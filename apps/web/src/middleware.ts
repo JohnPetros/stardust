@@ -11,11 +11,9 @@ import { PUBLIC_ROUTE_GROUPS, PUBLIC_ROUTES, ROUTES } from './constants'
 export const middleware = async (request: NextRequest) => {
   if (
     request.nextUrl.pathname.startsWith('/api/tests/server') ||
-    [
-      '/api/auth/sign-up',
-      '/api/auth/onboarding-attempt',
-      '/api/auth/profile-events',
-    ].includes(request.nextUrl.pathname)
+    ['/api/auth/sign-up', '/api/auth/onboarding-attempt'].includes(
+      request.nextUrl.pathname,
+    )
   ) {
     return NextResponse.next()
   }

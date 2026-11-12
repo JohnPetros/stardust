@@ -35,9 +35,16 @@ type RewardingResponse = {
   accuracyPercentage: number
 }
 
+type OnboardingAttempt = {
+  account: { id: string; email: string; name: string }
+  expiresAt: string
+  isUserCreated: boolean
+}
+
 export interface ProfileService {
   fetchUserById(userId: Id): Promise<RestResponse<UserDto>>
   fetchUserBySlug(userSlug: Slug): Promise<RestResponse<UserDto>>
+  fetchOnboardingAttempt(): Promise<RestResponse<OnboardingAttempt | null>>
   fetchAchievements(): Promise<RestResponse<AchievementDto[]>>
   fetchUnlockedAchievements(userId: Id): Promise<RestResponse<AchievementDto[]>>
   fetchCreatedUsersKpi(): Promise<RestResponse<KpiDto>>

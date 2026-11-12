@@ -59,7 +59,7 @@ Cada serviço usa **Build Pack: Dockerfile** com os seguintes Dockerfiles na rai
 
 As variáveis são configuradas diretamente no Coolify, separadas por escopo:
 
-**Web (Build + Runtime):** `NEXT_PUBLIC_WEB_APP_URL`, `NEXT_PUBLIC_SERVER_APP_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_CDN_URL`, `NEXT_PUBLIC_DISCORD_CHANNEL_URL`, `GOOGLE_ANALYTICS_ID`
+**Web (Build + Runtime):** `NEXT_PUBLIC_WEB_APP_URL`, `NEXT_PUBLIC_SERVER_APP_URL`, `NEXT_PUBLIC_CDN_URL`, `NEXT_PUBLIC_DISCORD_CHANNEL_URL`, `GOOGLE_ANALYTICS_ID`
 
 **Web (só Runtime):** `INNGEST_SIGNING_KEY`, `INNGEST_EVENT_KEY`
 

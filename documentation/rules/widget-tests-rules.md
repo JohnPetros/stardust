@@ -276,6 +276,13 @@ it("should call onSelectChat when chat button is clicked", async () => {
 
 > O arquivo index.tsx do widget nunca deve ser testada.
 
+#### Hooks globais não recebem testes dedicados
+
+Hooks de `apps/web/src/ui/global/hooks/` (por exemplo `useProfileSocket`) não
+recebem arquivos de teste dedicados. Cubra o comportamento pelos consumidores:
+hooks de widget, hooks de context (`ui/**/contexts/**/tests`) ou jornadas
+Playwright. `usePaginatedCache.test.ts` é legado e não serve de precedente.
+
 ## 2. Exceção: Widgets de Formulário (React Hook Form)
 
 Widgets que dependem fortemente de bibliotecas de gerenciamento de estado local

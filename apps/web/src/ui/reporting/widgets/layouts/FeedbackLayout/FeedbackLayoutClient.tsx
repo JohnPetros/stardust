@@ -7,10 +7,11 @@ import type { ReactNode } from 'react'
 
 type Props = {
   children: ReactNode
+  isEnabled: boolean
 }
 
-export function FeedbackLayoutClient({ children }: Props) {
-  const layout = useFeedbackLayout()
+export function FeedbackLayoutClient({ children, isEnabled }: Props) {
+  const layout = useFeedbackLayout({ isEnabled })
 
   return <FeedbackLayoutView {...layout}>{children}</FeedbackLayoutView>
 }

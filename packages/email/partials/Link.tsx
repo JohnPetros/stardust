@@ -10,10 +10,10 @@ type LinkProps = {
   href: string
 }
 
-export const Link = ({ children, className, href }: LinkProps) => {
+export const Link = ({ children, className = '', href }: LinkProps) => {
   return (
     <Button
-      className={`w-full rounded-md bg-green-400 py-3 text-center text-base font-semibold text-gray-900 ${className}`}
+      className={`mb-5 box-border w-full rounded-lg bg-green-400 px-6 py-4 text-center text-base font-semibold text-gray-950 no-underline ${className}`}
       href={href}
     >
       {children}

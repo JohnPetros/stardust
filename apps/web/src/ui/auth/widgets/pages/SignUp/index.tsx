@@ -10,6 +10,7 @@ export const SignUpPage = () => {
   const { authService, profileService } = useRestContext()
   const { user } = useAuthContext()
   const {
+    userEmail,
     isSubmitting,
     isSignUpSuccessfull,
     isResendingEmail,
@@ -17,7 +18,7 @@ export const SignUpPage = () => {
     handleResendEmail,
     handleUserCreated,
   } = useSignUpPage(authService, user !== null)
-  useProfileSocket(handleUserCreated)
+  useProfileSocket(handleUserCreated, { enabled: userEmail !== null })
 
   return (
     <SignUpPageView

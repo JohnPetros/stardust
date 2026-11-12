@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useEffect } from 'react'
+import { useMemo } from 'react'
 import { HTTP_HEADERS } from '@stardust/core/global/constants'
 
 import { CLIENT_ENV } from '@/constants'
@@ -33,19 +33,18 @@ signUpRestClient.setBaseUrl(new URL('/api', CLIENT_ENV.stardustWebUrl).toString(
 export function useRestContextProvider(): RestContextValue {
   const { accessToken } = useAuthContext()
 
-  useEffect(() => {
-    if (accessToken) {
-      restClient.setHeader(HTTP_HEADERS.authorization, `Bearer ${accessToken}`)
-    } else {
-      restClient.setHeader(HTTP_HEADERS.authorization, '')
-    }
-  }, [accessToken])
+  // Applied during render so descendant effects, such as the profile creation polling,
+  // already send the bearer on their first request.
+  restClient.setHeader(
+    HTTP_HEADERS.authorization,
+    accessToken ? `Bearer ${accessToken}` : '',
+  )
 
   return useMemo(
     () => ({
       signedFileStorageProvider: S3SignedFileStorageProvider(),
       authService: AuthService(restClient, signUpRestClient),
-      profileService: ProfileService(restClient),
+      profileService: ProfileService(restClient, signUpRestClient),
       spaceService: SpaceService(restClient),
       shopService: ShopService(restClient),
       challengingService: ChallengingService(restClient),

@@ -209,7 +209,7 @@ backend; não usam a conta real do Backoffice nem devem apontar para produção.
   pnpm --filter @stardust/web run test:integration:install
   ```
 
-- Execute todos os testes de integração, apenas quando o escopo exigir a suíte completa:
+- Execute todos os testes de integração apenas quando o usuário pedir a suíte completa:
 
   ```bash
   pnpm --filter @stardust/web run test:integration
@@ -400,9 +400,9 @@ separa falha visual da página de falha de autenticação, CORS ou API.
   artefatos desnecessários em toda execução.
 - Após alterar a Web App ou seus testes, execute os detectores deste arquivo e os
   cenários Playwright afetados com
-  `pnpm --filter @stardust/web run test:integration <arquivos>`. A suíte completa
-  só é necessária quando o impacto abrange várias jornadas (rota, sessão ou layout raiz
-  compartilhados) ou quando o usuário a solicita.
+  `pnpm --filter @stardust/web run test:integration <arquivos>`. Rode só os testes do
+  código alterado e dos consumidores diretamente afetados; a suíte completa só roda
+  quando o usuário a solicita, e o CI a executa de forma independente.
 
 ## Detectores de erros
 
@@ -419,11 +419,12 @@ sem efeito observável no navegador não exige testes de browser.
   no código. Na Web, acrescente
   `pnpm --filter @stardust/web run test:integration <arquivos>` somente para as
   jornadas afetadas.
-- Execute uma suíte completa (`pnpm run test:unit`, `test:integration`,
-  `test:coverage` e `check:coverage`) somente quando o impacto demonstrado abranger
-  essa suíte, por exemplo tokens, componentes compartilhados, contratos do Core,
-  composição global do Server ou rota, sessão e layout raiz da Web, ou quando o
-  usuário pedir. Registre a dependência e o motivo da ampliação.
+- Execute apenas os testes do código que mudou e dos consumidores diretamente
+  afetados. Uma suíte completa (`pnpm run test:unit`, `test:integration`,
+  `test:coverage` e `check:coverage`) só roda quando o usuário pedir; o CI as executa.
+  Não amplie a seleção por inferência de impacto (por exemplo, por tocar rota, sessão
+  ou layout raiz): se a ampliação parecer necessária, registre a dependência e o motivo
+  e pergunte antes.
 - Uma seleção vazia ou ignorada não é aprovação: confirme a contagem e o resultado.
 
 Em workflows SDD, execute também os sensores aplicáveis definidos em

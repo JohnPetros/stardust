@@ -106,7 +106,7 @@ Server
 - Toolkits MCP devem viver em `src/ai/mastra/toolkits` e concentrar schemas Zod e composicao de dependencias concretas.
 - Tools MCP devem delegar regra de negocio para `use cases` e entidades do `@stardust/core`.
 
-## Transição aprovada: Drizzle e SSE (Issue #602)
+## Transição aprovada: Drizzle (Issue #602)
 
 A seção Supabase CLI e o uso de Supabase para banco acima descrevem o legado. Na entrega da Issue #602, a persistência usa Drizzle/PostgreSQL e Supabase SDK permanece para Auth. Repositories de negócio são compostos após autenticação/autorização, tanto para usuários quanto para God Account, MCP e jobs. O bootstrap de API key admite somente a consulta interna por hash necessária ao AuthenticateApiKeyUseCase, sem acesso de negócio antes da validação; não restringe PostgreSQL direto apenas ao feedback administrativo.
 

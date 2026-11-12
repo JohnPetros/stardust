@@ -1,4 +1,4 @@
-import { ProfileEventsRouter } from './ProfileEventsRouter'
+import { OnboardingAttemptsRouter } from './OnboardingAttemptsRouter'
 import { Hono } from 'hono'
 import { UsersRouter } from './UsersRouter'
 import { HonoRouter } from '../../HonoRouter'
@@ -13,7 +13,7 @@ export class ProfileRouter extends HonoRouter {
     const achievementsRouter = new AchievementsRouter(this.app)
     const notesRouter = new NotesRouter(this.app)
 
-    this.router.route('/', new ProfileEventsRouter(this.app).registerRoutes())
+    this.router.route('/', new OnboardingAttemptsRouter(this.app).registerRoutes())
     this.router.route('/', usersRouter.registerRoutes())
     this.router.route('/', achievementsRouter.registerRoutes())
     this.router.route('/', notesRouter.registerRoutes())
