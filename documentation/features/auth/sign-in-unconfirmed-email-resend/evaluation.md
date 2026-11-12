@@ -2,7 +2,7 @@
 title: Avaliação — Aviso de e-mail não confirmado e reenvio do link no sign-in
 spec: ./spec.md
 spec_revision: 3
-status: ready
+status: completed
 base_commit: 93b3e3e0956bfb60c968a8b5520ffe07b84611db
 evaluated_commit: working-tree@93b3e3e09
 last_updated_at: 2026-11-12
@@ -177,5 +177,5 @@ Candidato: working tree sobre `93b3e3e09` (sem commits). Datas: 2026-11-12.
 
 ## Conclusão
 
-- Estado: `ready` (revisão 3: token aplicado e provado; Implementation Reviewer `PASS` e Visual Reviewer `pass`)
+- Estado: `completed` (revisão 3: token aplicado e provado; Implementation Reviewer `PASS` e Visual Reviewer `pass`)
 - Próxima ação: `conclude-spec`

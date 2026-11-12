@@ -1,6 +1,6 @@
 ---
 title: Aviso de e-mail não confirmado e reenvio do link no sign-in
-status: in_progress
+status: completed
 revision: 3
 source:
   - type: issue
