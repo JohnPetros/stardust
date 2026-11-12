@@ -2,13 +2,15 @@ import type { Account } from '@stardust/core/auth/entities'
 import type { User } from '@stardust/core/global/entities'
 import type { UserDto } from '@stardust/core/profile/entities/dtos'
 
+import type { SignInResult } from './SignInResult'
+
 export type AuthContextValue = {
   account: Account | null
   user: User | null
   accessToken: string | null
   isLoading: boolean
   isAccountAuthenticated: boolean
-  handleSignIn(email: string, password: string): Promise<boolean>
+  handleSignIn(email: string, password: string): Promise<SignInResult>
   handleSignOut(): Promise<void>
   handleSignUpWithSocialAccount(
     accessToken: string,

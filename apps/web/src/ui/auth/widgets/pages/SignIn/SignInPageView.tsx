@@ -16,12 +16,18 @@ type Props = {
   rocketAnimationRef: RefObject<AnimationRef | null>
   isRocketVisible: boolean
   handleFormSubmit: (fields: SignInFormFields) => Promise<void>
+  unconfirmedEmail: string | null
+  isResendingEmail: boolean
+  onResendEmail: () => Promise<void>
 }
 
 export const SignInPageView = ({
   rocketAnimationRef,
   isRocketVisible,
   handleFormSubmit,
+  unconfirmedEmail,
+  isResendingEmail,
+  onResendEmail,
 }: Props) => {
   return (
     <>
@@ -40,7 +46,12 @@ export const SignInPageView = ({
                 </p>
               </div>
 
-              <SignInForm onSubmit={handleFormSubmit} />
+              <SignInForm
+                onSubmit={handleFormSubmit}
+                unconfirmedEmail={unconfirmedEmail}
+                isResendingEmail={isResendingEmail}
+                onResendEmail={onResendEmail}
+              />
 
               <div className='flex w-full items-center justify-between'>
                 <Link
