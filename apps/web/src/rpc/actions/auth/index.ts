@@ -1,4 +1,5 @@
 export { SignInAction } from './SignInAction'
+export type { SignInActionResponse } from './SignInAction'
 export { SignOutAction } from './SignOutAction'
 export { SignUpWithSocialAccountAction } from './SignUpWithSocialAccountAction'
 export { ConnectSocialAccountAction } from './ConnectSocialAccountAction'
