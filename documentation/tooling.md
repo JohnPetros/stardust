@@ -579,7 +579,8 @@ completa do bot, limitada ao que pertence ao PR (sem o que veio de merges de
 aplicáveis continuam sendo avaliados pelo PR inteiro. Revisões parciais ou bloqueadas falham
 o check. Uma falha inesperada registra só um resumo seguro (classe do erro, código, comando,
 status de saída e HTTP, endpoint do repositório), nunca mensagens, saídas de subprocesso nem
-segredos. Como o script roda do `main`, uma correção nele só vale para os PRs seguintes. Testes determinísticos: `node --test scripts/tests/run-crew-pr-review.test.mjs`.
+segredos. O resumo aparece no log do job `Review pull request with Crew`, na mensagem
+`Crew review failed (...)`. Como o script roda do `main`, uma correção nele só vale para os PRs seguintes. Testes determinísticos: `node --test scripts/tests/run-crew-pr-review.test.mjs`.
 
 `Crew app CD` usa `.github/workflows/crew-app-production-cd.yaml` e
 `scripts/deploy-crew.mjs` para deploys no Coolify após pushes relevantes em
