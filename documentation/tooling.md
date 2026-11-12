@@ -577,7 +577,9 @@ os pushes seguintes são `incremental`, a partir do último commit com revisão
 completa do bot, limitada ao que pertence ao PR (sem o que veio de merges de
 `main`), com fallback para `full` quando o histórico foi reescrito. Os CIs
 aplicáveis continuam sendo avaliados pelo PR inteiro. Revisões parciais ou bloqueadas falham
-o check. Testes determinísticos: `node --test scripts/tests/run-crew-pr-review.test.mjs`.
+o check. Uma falha inesperada registra só um resumo seguro (classe do erro, código, comando,
+status de saída e HTTP, endpoint do repositório), nunca mensagens, saídas de subprocesso nem
+segredos. Como o script roda do `main`, uma correção nele só vale para os PRs seguintes. Testes determinísticos: `node --test scripts/tests/run-crew-pr-review.test.mjs`.
 
 `Crew app CD` usa `.github/workflows/crew-app-production-cd.yaml` e
 `scripts/deploy-crew.mjs` para deploys no Coolify após pushes relevantes em
