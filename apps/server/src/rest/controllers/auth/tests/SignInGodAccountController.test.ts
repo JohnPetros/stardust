@@ -2,7 +2,8 @@ import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import type { SessionDto } from '@stardust/core/auth/structures/dtos'
-import { NotGodAccountError } from '@stardust/core/global/errors'
+import { AuthError, NotGodAccountError } from '@stardust/core/global/errors'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import type { Http } from '@stardust/core/global/interfaces'
 import { RestResponse } from '@stardust/core/global/responses'
 
@@ -71,5 +72,24 @@ describe('SignInGodAccountController', () => {
     )
 
     await expect(controller.handle(http)).rejects.toThrow(NotGodAccountError)
+  })
+
+  it('should keep the unauthorized contract when the account email is not confirmed', async () => {
+    ENV.godAccountIds = ['god-account-id']
+    http.getBody.mockResolvedValue({
+      email: 'god@stardust.dev',
+      password: 'secret-123',
+    })
+    authService.signIn.mockResolvedValue(
+      new RestResponse<SessionDto>({
+        errorMessage: 'Confirme seu e-mail antes de entrar',
+        statusCode: HTTP_STATUS_CODE.forbidden,
+      }),
+    )
+
+    const result = controller.handle(http)
+
+    await expect(result).rejects.toThrow(AuthError)
+    await expect(result).rejects.toThrow('E-mail ou senha incorretos')
   })
 })
