@@ -44,17 +44,39 @@ Uma feature issue não pode chegar ao approval gate com PRD desconhecido. Se nen
 governar o outcome, encaminhe primeiro para `create-prd` ou amendment. Se dois candidatos forem
 materialmente equivalentes ou conflitantes, peça decisão antes de redigir.
 
+Quando o PRD governa o fluxo, mas **não cobre** o comportamento pedido (por exemplo, o `RP-*`
+só descreve a falha genérica), não bloqueie a issue por isso: cite o `RP-*` mais específico,
+registre em Rastreabilidade que a regra ainda não existe no PRD e declare a emenda do PRD como
+pré-requisito da Spec. Leve a escolha entre essa abordagem e criar antes um `RP-*` novo via
+`create-prd` ao Grilling.
+
 ## Gate obrigatório de Grilling
 
 Siga integralmente o **Grilling gate** definido em
 [`sdd.md#grilling-gate`](../sdd.md#grilling-gate). Este prompt apenas
 aplica o protocolo ao contexto de uma Feature Issue; não duplique nem crie regras paralelas.
 
+Aplique o formato de round de [`grilling-prompt.md`](grilling-prompt.md) **desde o primeiro
+round** (`## Grilling — round <n>`, perguntas `Q<n>` com opções `(a)`/`(b)` e linha `➡️ Recomendo`,
+IDs contínuos na sessão). Não use listas numeradas livres nem ferramentas de perguntas; as
+perguntas vão direto na conversa.
+
 Depois da pesquisa factual e antes do draft, modele como design tree as decisões ainda abertas
 sobre outcome, atores, escopo, critérios observáveis, fora do escopo, milestone e prioridade, sem
-antecipar o Technical Contract da Spec. Recompute a frontier por round, pergunte todas as decisões
-disponíveis com resposta recomendada e aguarde a confirmação de entendimento compartilhado antes
-de preparar o draft. Essa confirmação não substitui o approval gate da versão exata a publicar.
+antecipar o Technical Contract da Spec. Em toda feature issue, pergunte o que permanecer
+materialmente aberto entre:
+
+- tratamento do PRD quando ele não cobre o comportamento;
+- milestone;
+- uma issue ou decomposição (por exemplo, `web` e `server` juntas ou separadas);
+- permissão e autoridade do backend sobre ações novas, inclusive reaproveitar endpoint existente;
+- limites de uso (cooldown, rate limit) quando a ação puder ser repetida;
+- cobertura do design (viewports e estados) quando houver UI;
+- prioridade.
+
+Recompute a frontier por round, pergunte todas as decisões disponíveis com resposta recomendada e
+aguarde a confirmação de entendimento compartilhado antes de preparar o draft. Essa confirmação
+não substitui o approval gate da versão exata a publicar.
 
 ## Metadata GitHub
 
@@ -69,6 +91,17 @@ de preparar o draft. Essa confirmação não substitui o approval gate da versã
   (`HIGH`, `MEDIUM` ou `LOW`), consultando IDs atuais via GraphQL em vez de hardcode.
 
 Se milestone ou prioridade não estiverem disponíveis, obtenha-as antes do approval final.
+
+Quando a issue envolver UI, verifique no Penpot `stardust` (página, board e frame, pelo nome) os
+frames de cada viewport e estado que a issue vai citar. Se faltar algum, leve ao Grilling a
+decisão de desenhá-lo antes ou de citar só o que existe; se for desenhado, cite os nomes
+exatos criados. Estados que seguem um padrão já existente (por exemplo, loading e toast) não
+exigem frame novo, mas a issue deve dizer qual padrão seguem.
+
+Para publicar, escreva o body em um arquivo no scratchpad e use `gh issue create --body-file`,
+com `--label`, `--assignee` e `--milestone` pelo título. Para o Project 2, consulte via GraphQL
+o projeto `JohnPetros`/`projectV2(number: 2)` e os campos `Status` e `Priority`, adicione o item
+e grave os dois campos. Releia os valores gravados antes de reportar.
 
 ## Título e body
 
@@ -140,6 +173,10 @@ quando fornecidos.
 Antes de publicar, apresente título, body, labels, assignee, milestone, PRD/requisito selecionado,
 justificativa de relevância, Project, Status e prioridade exatos. Publique somente após aprovação
 explícita da versão atual. Approval não autoriza implementação, branch, commit, PR ou Spec.
+
+A confirmação do entendimento compartilhado, ou um pedido como "publique", dado antes de o
+usuário ver o draft completo, não é approval: apresente o draft exato e peça aprovação dessa
+versão. Se o usuário pedir mudança, reapresente a versão atual antes de publicar.
 
 Depois da publicação, retorne número/URL, título, milestone, PRD/requisito, labels,
 Project/Status/Priority e resumo do escopo.

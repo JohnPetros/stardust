@@ -22,22 +22,55 @@ sem remover decisões materiais.
    decisão, alternativas descartadas, dependências e contradições; recompute a árvore e a próxima
    frontier. Perguntas que dependem de respostas do round atual ficam para o round seguinte.
 
-Use obrigatoriamente:
+## Formato das perguntas
 
-```yaml
-❓ **Q1** - **<título da pergunta>**: <pergunta e alternativas relevantes>
+Escreva o round diretamente em Markdown na conversa (não dentro de bloco de código), usando
+obrigatoriamente esta estrutura:
 
-➡️ <resposta recomendada e justificativa concisa>
+```md
+## Grilling — round <n> (<k> perguntas)
+
+❓ **Q<n> — <decisão em poucas palavras>**
+<Contexto: o fato verificado que abre a decisão, com evidência (`path:linha`, issue, doc), em até
+três linhas. Depende de: <Qx = resposta> ou "nenhuma".>
+
+- **(a) <opção>** — <consequência ou trade-off desta opção>
+- **(b) <opção>** — <consequência ou trade-off desta opção>
+
+➡️ **Recomendo (a)** — <justificativa em uma frase>.
 
 ---
 
-❓ **Q2** - **<título da pergunta>**: <pergunta e alternativas relevantes>
+❓ **Q<n+1> — ...**
 
-➡️ <resposta recomendada e justificativa concisa>
+---
+
+**Adiadas:** Q<m> — <decisão> (depende de Q<n>).
+**Como responder:** `Q<n>: a` por linha; texto livre também vale. Pergunta sem resposta continua aberta.
 ```
 
-Cada pergunta deve trazer evidência, recomendação e impacto. Conteste contradições e riscos;
-não transforme ausência de evidência em decisão implícita.
+Regras do formato:
+
+- **Uma decisão por pergunta.** Se a escolha de uma opção abre outra decisão (por exemplo,
+  renomear e também mudar o contrato), separe em duas perguntas e adie a dependente.
+- **Contexto autossuficiente.** O usuário deve entender a pergunta sem rolar a conversa: diga o
+  que existe hoje, o que muda e por que a decisão está aberta. Não pressuponha termos não definidos
+  no round ou em rounds anteriores.
+- **Opções explícitas.** De duas a quatro opções mutuamente exclusivas, rotuladas `(a)`, `(b)`…,
+  cada uma com sua consequência. Não esconda opções dentro de um parágrafo. Não invente opção
+  só para completar a lista; quando houver só um caminho viável, pergunte confirmação.
+- **Recomendação referenciada.** A linha `➡️` cita a letra recomendada e o motivo principal;
+  impacto e evidência já estão no contexto e nas opções.
+- **IDs estáveis.** Numere as perguntas em sequência por toda a sessão (`Q1`, `Q2`…), sem reiniciar
+  por round. Uma decisão reaberta recebe novo ID com `Reabre Qx` no contexto; um desdobramento de
+  uma resposta pode usar sufixo (`Q9a`).
+- **Respostas ambíguas.** Não infira. Se a resposta não identifica a pergunta ou a opção, ou só
+  responde parte do round, confirme em uma linha a interpretação e repita, em forma curta, apenas
+  as perguntas ainda abertas.
+- **Registro do round.** Depois das respostas, liste as decisões tomadas (`Qx → opção`) antes de
+  abrir o próximo round ou a revisão de design.
+
+Conteste contradições e riscos; não transforme ausência de evidência em decisão implícita.
 
 ## Frontier mínima para tickets
 
