@@ -4,7 +4,8 @@ import type { RestResponse } from '@stardust/core/global/responses'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import { Password } from '@stardust/core/auth/structures'
 import { Email } from '@stardust/core/global/structures'
-import { NotGodAccountError } from '@stardust/core/global/errors'
+import { AuthError, NotGodAccountError } from '@stardust/core/global/errors'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 
 import { ENV } from '@/constants'
 
@@ -24,6 +25,8 @@ export class SignInGodAccountController implements Controller<Schema> {
       Email.create(email),
       Password.create(password),
     )
+    if (response.statusCode === HTTP_STATUS_CODE.forbidden)
+      throw new AuthError('E-mail ou senha incorretos')
     if (response.isFailure) response.throwError()
 
     if (!ENV.godAccountIds.includes(String(response.body.account.id))) {
