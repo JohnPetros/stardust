@@ -73,6 +73,7 @@ module.exports = {
           'selection-surface': 'var(--theme-selection-surface)',
           'success-surface': 'var(--theme-success-surface)',
           'danger-surface': 'var(--theme-danger-surface)',
+          'reward-surface': 'var(--theme-reward-surface)',
         },
       },
       // Geometria (`Geometry` do Penpot): raio, altura, padding, gap e borda de controle.
