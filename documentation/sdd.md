@@ -174,15 +174,13 @@ Failures do not create extra states: the item stays `in_progress`, with a findin
 
 ## Grilling gate
 
-After factual research and before writing or creating the ticket, apply the Grilling protocol
-from [`grilling-prompt.md`](prompts/grilling-prompt.md). The protocol also applies, depending on the
-artifact, to the creation or update of PRDs and Specs. The task builds the design tree, computes
-the frontier, asks the whole current round in the `❓`/`➡️` format with recommendation and impact, recomposes the
-frontier after each answer and does not guess dependent decisions.
+After factual research and before writing or creating an issue, PRD or Spec, apply the
+interview protocol in [`interview-prompt.md`](prompts/interview-prompt.md). It is the only
+definition of the gate: the decision tree and frontier, the rounds of at most three
+questions, the question format with a recommendation, the stop condition and where the
+decisions are recorded. Do not restate it in other documents.
 
-For tickets, the frontier must cover actor/outcome, scope/exclusions, permissions, acceptance/failure,
-technical boundary, validation, decomposition, sprint and assignee when not yet resolved. Researchable
-facts are the task's responsibility; material decisions belong to the user. No
+Researchable facts are the task's responsibility; material decisions belong to the user. No
 artifact or external mutation occurs while a material branch is open. Once the frontier is empty,
 the task presents the shared understanding and obtains explicit confirmation; accepted decisions and
 assumptions are recorded in the final artifact, not in the transcript.

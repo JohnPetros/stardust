@@ -38,13 +38,12 @@ of the repository to avoid duplication and check existing labels before the draf
 
 ## Mandatory Grilling gate
 
-After the factual research and before the draft, run the **Grilling gate** defined in
-[`sdd.md#grilling-gate`](../sdd.md#grilling-gate). Model as a design tree the still-open decisions about technical outcome,
+After the factual research and before the draft, run the interview protocol in
+[`interview-prompt.md`](interview-prompt.md). Model as a design tree the still-open decisions about technical outcome,
 mitigated risk, boundaries, preserved contracts, verification criteria, affected application and
 metadata.
 
-Ask the whole available frontier with a recommendation and leave dependent decisions for later
-rounds. Record decisions, discarded alternatives, dependencies and contradictions. An empty frontier
+Record decisions, discarded alternatives, dependencies and contradictions. An empty frontier
 and the confirmation of shared understanding allow preparing the draft, but do not replace
 the approval gate of the exact version to be published.
 

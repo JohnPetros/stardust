@@ -52,14 +52,9 @@ prerequisite of the Spec. Take the choice between this approach and first creati
 
 ## Mandatory Grilling gate
 
-Follow the **Grilling gate** defined in
-[`sdd.md#grilling-gate`](../sdd.md#grilling-gate) in full. This prompt only
-applies the protocol to the context of a Feature Issue; do not duplicate it or create parallel rules.
-
-Apply the round format of [`grilling-prompt.md`](grilling-prompt.md) **from the first
-round** (`## Grilling — round <n>`, questions `Q<n>` with options `(a)`/`(b)` and a line `➡️ I recommend`,
-continuous IDs across the session). Do not use free numbered lists or question tools; the
-questions go directly in the conversation.
+Follow the interview protocol in [`interview-prompt.md`](interview-prompt.md) in full. This
+prompt only applies the protocol to the context of a Feature Issue; do not duplicate it or
+create parallel rules. Ask the questions in PT-BR, directly in the conversation.
 
 After the factual research and before the draft, model as a design tree the still-open decisions
 about outcome, actors, scope, observable criteria, out of scope, milestone and priority, without
@@ -74,8 +69,7 @@ materially open among:
 - design coverage (viewports and states) when there is UI;
 - priority.
 
-Recompute the frontier per round, ask all the available decisions with a recommended answer and
-wait for confirmation of shared understanding before preparing the draft. This confirmation
+Wait for confirmation of shared understanding before preparing the draft. This confirmation
 does not replace the approval gate of the exact version to be published.
 
 ## GitHub metadata

@@ -51,14 +51,12 @@ as a documented assumption.
 
 ## Mandatory Grilling gate
 
-Run the **Grilling gate** defined in [`sdd.md#grilling-gate`](../sdd.md#grilling-gate) after the factual research and
+Run the interview protocol in [`interview-prompt.md`](interview-prompt.md) after the factual research and
 before writing or changing the Spec. Model as a design tree only decisions not yet resolved
-by the sources, Architecture, Rules, Design, or codebase. In each round, ask the entire
-available frontier, with evidence, alternatives, impact, and a recommended answer; dependent decisions
-are left for later rounds.
+by the sources, Architecture, Rules, Design, or codebase. Each question carries evidence,
+alternatives, impact, and a recommended answer.
 
-When independent investigations are still in progress, defer only the questions that
-depend on them and conduct the rest of the frontier. An empty frontier and explicit confirmation of
+An empty frontier and explicit confirmation of
 shared understanding are prerequisites for drafting. If a new material gap emerges
 during the integrity check or the review, reopen the Grilling before continuing.
 

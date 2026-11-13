@@ -46,13 +46,12 @@ selection are mandatory even when the user does not provide a PRD or milestone.
 
 ## Mandatory Grilling gate
 
-Run the **Grilling gate** defined in [`sdd.md#grilling-gate`](../sdd.md#grilling-gate) after the factual research and
+Run the interview protocol in [`interview-prompt.md`](interview-prompt.md) after the factual research and
 before the draft. Model as a design tree only the decisions needed to delimit the symptom, the
 expected behavior, the reproduction, and the issue context; do not turn the round into a technical
 diagnosis.
 
-Ask the entire available frontier with a recommendation and leave dependent decisions for later
-rounds. An empty frontier and confirmation of shared understanding allow preparing the
+An empty frontier and confirmation of shared understanding allow preparing the
 draft, but they do not replace the approval gate for the exact version to be published.
 
 ## GitHub metadata
