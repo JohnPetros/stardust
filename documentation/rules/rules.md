@@ -166,6 +166,16 @@ roles, artifacts, sensors and completion criteria.
 - When interacting with Supabase Dev/Prod.
 - When inspecting or editing the `stardust` Penpot file via Penpot MCP.
 
+## Penpot Design File Rules
+
+**File:** `/documentation/rules/penpot-rules.md`
+**When to consult:**
+
+- When creating or editing frames, components or tokens in the `stardust` Penpot file.
+- To decide which page (Desktop, Mobile, Components or Design System) owns a frame.
+- To name screens, dialogs, components and variant properties.
+- When extracting a repeated element into a component or updating the Design System page.
+
 ## Web Application Rules
 
 **File:** `/documentation/rules/web-application-rules.md`
