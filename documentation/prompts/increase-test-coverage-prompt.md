@@ -1,198 +1,198 @@
 ---
 name: increase-test-coverage
-description: Aumentar cobertura comportamental no StarDust sem enfraquecer baselines, Rules, integridade de testes ou o workflow SDD.
+description: Increase behavioral coverage in StarDust without weakening baselines, Rules, test integrity or the SDD workflow.
 ---
 
-# Aumentar cobertura de testes
+# Increase test coverage
 
-Use este workflow para uma solicitação explícita de aumento ou preservação da
-cobertura automatizada em uma implementação existente do StarDust. Ele é um
-workflow de manutenção de testes; não substitui Issue, PRD ou Spec.
+Use this workflow for an explicit request to increase or preserve automated
+coverage in an existing StarDust implementation. It is a test
+maintenance workflow; it does not replace Issue, PRD or Spec.
 
-Se a mudança necessária alterar comportamento de produto, autorização,
-persistência, contrato público, arquitetura ou resultado de PRD, interrompa o
-trabalho de cobertura e encaminhe a alteração pelo workflow SDD normal. Uma
-correção de produção só pode entrar nesta tarefa quando for mínima,
-behavior-preserving, explicitamente autorizada e registrada no handoff.
+If the required change alters product behavior, authorization,
+persistence, public contract, architecture or a PRD outcome, stop the
+coverage work and route the change through the normal SDD workflow. A
+production fix may only enter this task when it is minimal,
+behavior-preserving, explicitly authorized and recorded in the handoff.
 
-## Objetivo e invariantes
+## Goal and invariants
 
-Melhore a cobertura comportamental dos workspaces afetados por meio de cenários
-significativos. Percentuais são sinais de diagnóstico; não são, sozinhos,
-critério de aceite.
+Improve the behavioral coverage of the affected workspaces through meaningful
+scenarios. Percentages are diagnostic signals; they are not, on their own,
+an acceptance criterion.
 
-Nunca:
+Never:
 
-- reduza qualquer métrica registrada em `coverage-baseline.json`;
-- diminua thresholds, altere exclusões ou enfraqueça `check:test-integrity`;
-- adicione assertions superficiais, branches artificiais, sleeps, snapshots sem
-  valor ou casos duplicados apenas para elevar uma métrica;
-- transforme uma falha real de produto em uma mudança silenciosa de comportamento;
-- trate teste unitário mockado como prova de autenticação, persistência,
-  integração ou jornada real.
+- reduce any metric recorded in `coverage-baseline.json`;
+- lower thresholds, change exclusions or weaken `check:test-integrity`;
+- add superficial assertions, artificial branches, sleeps, snapshots without
+  value or duplicate cases just to raise a metric;
+- turn a real product failure into a silent behavior change;
+- treat a mocked unit test as proof of authentication, persistence,
+  integration or a real journey.
 
-Um baseline pode ser atualizado somente com evidência atual, revisão explícita
-e justificativa registrada no `evaluation.md`. CI deve continuar falhando se
-qualquer métrica do workspace ficar abaixo do baseline versionado.
+A baseline may only be updated with current evidence, explicit review
+and a justification recorded in `evaluation.md`. CI must keep failing if
+any workspace metric falls below the versioned baseline.
 
-## Roteamento antes de editar
+## Routing before editing
 
-Antes de criar ou modificar testes:
+Before creating or modifying tests:
 
-1. Determine se a demanda é somente cobertura. Se houver mudança de produto ou
-   contrato, pare e use `open-feat-issue`/`create-spec`.
-2. Identifique o workspace e o boundary comportamental dono do código.
-3. Se existir uma Spec aberta relacionada, preserve sua revisão,
-   paths, RF/CA, assignment e exits; registre a atividade no `evaluation.md`.
-4. Se não houver Contract e a alteração continuar sendo apenas manutenção de
-   testes, não invente uma Spec apenas para aumentar um número.
+1. Determine whether the request is coverage-only. If there is a product or
+   contract change, stop and use `open-feat-issue`/`create-spec`.
+2. Identify the workspace and the behavioral boundary that owns the code.
+3. If there is a related open Spec, preserve its revision,
+   paths, RF/CA, assignment and exits; record the activity in `evaluation.md`.
+4. If there is no Contract and the change remains just test
+   maintenance, do not invent a Spec just to raise a number.
 
-## Autoridades obrigatórias
+## Mandatory authorities
 
-Leia antes da implementação:
+Read before implementation:
 
 1. `AGENTS.md`;
-2. `documentation/architecture.md`, `documentation/tooling.md` e
+2. `documentation/architecture.md`, `documentation/tooling.md` and
    `documentation/rules/rules.md`;
-3. as Rules específicas dos paths afetados:
+3. the specific Rules for the affected paths:
    `domain-objects-testing-rules.md`, `use-cases-testing-rules.md`,
    `handlers-testing-rules.md`, `server-routes-testing-rules.md`,
-   `web-app-routes-testing-rules.md` e `widget-tests-rules.md`;
-4. `documentation/modules.md`, PRD e Design quando o comportamento envolver
-   uma capacidade de produto ou UI;
-5. source, testes existentes, configuração do runner, fixtures e
+   `web-app-routes-testing-rules.md` and `widget-tests-rules.md`;
+4. `documentation/modules.md`, PRD and Design when the behavior involves
+   a product capability or UI;
+5. source, existing tests, runner configuration, fixtures and
    `coverage-baseline.json`.
 
-Use somente comandos declarados nos `package.json` e em `documentation/tooling.md`.
-Não use credenciais, tokens, storage state ou dados do `.env.development` em
-arquivos versionados, testes ou logs.
+Use only commands declared in the `package.json` files and in `documentation/tooling.md`.
+Do not use credentials, tokens, storage state or data from `.env.development` in
+versioned files, tests or logs.
 
-## Targets permitidos e integridade
+## Allowed targets and integrity
 
-O `check:test-integrity` exige pareamento para source executável alterado
-somente nestes targets:
+`check:test-integrity` requires pairing for changed executable source
+only in these targets:
 
-- objetos de domínio: `entities`, `structures` e `aggregates`;
-- use-cases;
-- controllers REST;
+- domain objects: `entities`, `structures` and `aggregates`;
+- use cases;
+- REST controllers;
 - jobs;
 - hooks;
 - widgets/views;
-- rotas Web (`app/page`, `app/layout`, `app/route`);
-- rotas Server;
+- Web routes (`app/page`, `app/layout`, `app/route`);
+- Server routes;
 - RPC actions;
 - AI tools.
 
-Testes novos devem seguir as localizações permitidas pelas Rules e pelo checker,
-normalmente uma subpasta `tests/` do boundary correspondente ou
-`scripts/tests/**`. Um teste fora do allowlist falha com `forbiddenTestPaths`.
+New tests must follow the locations allowed by the Rules and by the checker,
+normally a `tests/` subfolder of the corresponding boundary or
+`scripts/tests/**`. A test outside the allowlist fails with `forbiddenTestPaths`.
 
-Não crie testes diretos para services/repositories genéricos, providers,
-gateways, clients, mappers, factories, constantes, interfaces, stores,
-contexts, barrels, fakers, fixtures, mocks, tipos, código gerado ou
-infraestrutura de testes. Cubra source indireto pelo consumidor permitido ou
-registre a exclusão com justificativa.
+Do not create direct tests for generic services/repositories, providers,
+gateways, clients, mappers, factories, constants, interfaces, stores,
+contexts, barrels, fakers, fixtures, mocks, types, generated code or
+test infrastructure. Cover indirect source through the allowed consumer or
+record the exclusion with a justification.
 
-É permitido remover um teste obsoleto quando o comportamento deixou de existir,
-mas a remoção deve estar no escopo e o comportamento restante deve continuar
-coberto. O checker deve continuar falhando para redução de casos/assertions,
-aumento de `skip`/`todo` ou source testável alterado sem teste correspondente.
+Removing an obsolete test is allowed when the behavior no longer exists,
+but the removal must be in scope and the remaining behavior must stay
+covered. The checker must keep failing for a reduction in cases/assertions,
+an increase in `skip`/`todo` or changed testable source without a corresponding test.
 
-## Baseline e descoberta
+## Baseline and discovery
 
-Antes de editar, registre o estado do workspace:
+Before editing, record the workspace state:
 
 ```bash
-pnpm run check:test-integrity --base <commit-base>
+pnpm run check:test-integrity --base <base-commit>
 pnpm --filter <workspace> run test:coverage
 pnpm run check:coverage <workspace>
 ```
 
-Inspecione o resumo textual e o
-`<workspace>/coverage/coverage-summary.json`. Registre para `statements`,
-`branches`, `functions` e `lines`:
+Inspect the textual summary and
+`<workspace>/coverage/coverage-summary.json`. Record for `statements`,
+`branches`, `functions` and `lines`:
 
-- baseline versionado;
-- valor atual;
-- arquivos, funções, branches e linhas não cobertos;
-- boundary responsável;
-- motivo para testar diretamente, testar indiretamente ou excluir.
+- versioned baseline;
+- current value;
+- uncovered files, functions, branches and lines;
+- responsible boundary;
+- reason to test directly, test indirectly or exclude.
 
-Priorize risco de produção, não o menor percentual: regras de domínio,
-validação, autorização/tenant, persistência, falha de provider, retry e
-idempotência, mapeamento de erros REST, efeitos colaterais, estados loading,
-empty, error e recovery, além de interações acessíveis de teclado.
+Prioritize production risk, not the lowest percentage: domain rules,
+validation, authorization/tenant, persistence, provider failure, retry and
+idempotency, REST error mapping, side effects, loading,
+empty, error and recovery states, plus accessible keyboard interactions.
 
-## Matriz de cenários
+## Scenario matrix
 
-Antes de implementar, crie uma matriz pequena por boundary contendo:
+Before implementing, create a small matrix per boundary containing:
 
-| Campo | Conteúdo obrigatório |
+| Field | Required content |
 | --- | --- |
-| Source e entry point | arquivo, função pública e boundary dono |
-| Teste | arquivo permitido que será criado ou alterado |
-| Sucesso | resultado observável e efeitos esperados |
-| Alternativas | entrada inválida, ausência, autorização e falhas de dependência |
-| Estado/efeitos | transição, persistência, evento, provider ou recuperação |
-| Aceite | comportamento que o cenário protege |
-| Exclusões | path indireto, gerado, defensivo ou não aplicável e justificativa |
+| Source and entry point | file, public function and owning boundary |
+| Test | allowed file that will be created or changed |
+| Success | observable result and expected effects |
+| Alternatives | invalid input, absence, authorization and dependency failures |
+| State/effects | transition, persistence, event, provider or recovery |
+| Acceptance | behavior the scenario protects |
+| Exclusions | indirect, generated, defensive or not-applicable path and justification |
 
-Teste o menor boundary capaz de provar o comportamento. Reutilize fakers,
-factories, fixtures e convenções existentes. Assertions devem verificar retorno,
-estado e efeitos observáveis, não apenas que um mock foi chamado.
+Test the smallest boundary capable of proving the behavior. Reuse existing fakers,
+factories, fixtures and conventions. Assertions must verify return value,
+state and observable effects, not just that a mock was called.
 
-Para UI, cubra o widget ou route boundary com locators acessíveis e os estados
-relevantes. Para fluxo real, use Playwright conforme `AGENTS.md`, registre
-`console`, `pageerror`, `requestfailed` e respostas HTTP, e nunca declare uma
-tela autenticada funcional apenas por uma suíte baseada em mocks.
+For UI, cover the widget or route boundary with accessible locators and the relevant
+states. For a real flow, use Playwright per `AGENTS.md`, record
+`console`, `pageerror`, `requestfailed` and HTTP responses, and never declare an
+authenticated screen functional based only on a mock-based suite.
 
-## Subagentes e ownership
+## Subagents and ownership
 
-Use subagentes somente quando existirem workstreams independentes e isso reduzir
-risco ou tempo. Não paralelize cenários acoplados, fixtures compartilhados ou
-paths sobrepostos.
+Use subagents only when there are independent workstreams and it reduces
+risk or time. Do not parallelize coupled scenarios, shared fixtures or
+overlapping paths.
 
-Cada assignment deve informar:
+Each assignment must state:
 
-- um workspace e boundary únicos;
-- source e test paths exatos que podem ser inspecionados/editados;
-- cenários e gaps de cobertura sob responsabilidade do agente;
-- Rules, fixtures, comandos e evidências esperadas;
-- paths proibidos e proibição de editar Spec, Evaluation ou Rules.
+- a single workspace and boundary;
+- exact source and test paths that may be inspected/edited;
+- scenarios and coverage gaps the agent is responsible for;
+- Rules, fixtures, commands and expected evidence;
+- forbidden paths and a prohibition on editing Spec, Evaluation or Rules.
 
-A task principal mantém decisões compartilhadas, integra diffs, resolve
-conflitos e executa a validação final. Relatório de subagente não é evidência:
-verifique o diff integrado e repita testes, cobertura e checks.
+The main task keeps shared decisions, integrates diffs, resolves
+conflicts and runs the final validation. A subagent report is not evidence:
+verify the integrated diff and repeat tests, coverage and checks.
 
-Quando a cobertura fizer parte de uma Spec, use um `Implementation Reviewer`
-read-only. Qualquer correção após um veredito invalida a evidência afetada e
-exige nova revisão.
+When coverage is part of a Spec, use a read-only `Implementation Reviewer`.
+Any fix after a verdict invalidates the affected evidence and
+requires a new review.
 
-## Implementação dos testes
+## Test implementation
 
-1. Crie ou ajuste somente testes em targets e paths permitidos.
-2. Preserve Arrange-Act-Assert, isolamento por teste e as convenções do runner.
-3. Cubra primeiro sucesso e depois branches significativos de erro, autorização,
-   ausência, persistência, side effects e recovery.
-4. Para controllers, actions, jobs e tools, valide entrada, orquestração e
-   saída no contrato público do handler.
-5. Para rotas Server, use a borda Hono/HTTP e persistência real quando a Rule
-   exigir; não substitua integração por mock interno.
-6. Para páginas Web, diferencie teste de composição da página, widget e fluxo
-   Playwright real.
-7. Se precisar de um refactor mínimo para testabilidade, explique-o no
-   `evaluation.md` e prove que o comportamento não mudou.
+1. Create or adjust only tests in allowed targets and paths.
+2. Preserve Arrange-Act-Assert, per-test isolation and the runner's conventions.
+3. Cover success first and then significant branches of error, authorization,
+   absence, persistence, side effects and recovery.
+4. For controllers, actions, jobs and tools, validate input, orchestration and
+   output on the handler's public contract.
+5. For Server routes, use the Hono/HTTP edge and real persistence when the Rule
+   requires it; do not replace integration with an internal mock.
+6. For Web pages, distinguish page composition tests, widget tests and real
+   Playwright flows.
+7. If a minimal refactor is needed for testability, explain it in
+   `evaluation.md` and prove that the behavior did not change.
 
-Não altere thresholds, exclusões, classificação de source ou Rules para fazer o
-check passar. Não versione coverage output, screenshots locais, credenciais ou
-artefatos gerados.
+Do not change thresholds, exclusions, source classification or Rules to make the
+check pass. Do not version coverage output, local screenshots, credentials or
+generated artifacts.
 
-## Gate de validação
+## Validation gate
 
-Execute primeiro o teste focado e depois os sensores aplicáveis:
+Run the focused test first and then the applicable sensors:
 
 ```bash
-pnpm run check:test-integrity --base <commit-base>
+pnpm run check:test-integrity --base <base-commit>
 pnpm --filter <workspace> run test:coverage
 pnpm run check:coverage <workspace>
 pnpm run check:code
@@ -200,46 +200,46 @@ pnpm run check:types
 pnpm run test:unit
 ```
 
-Acrescente conforme os paths e Rules:
+Add according to the paths and Rules:
 
 ```bash
 pnpm run check:architecture
 pnpm run test:integration
 pnpm run test:scripts
-pnpm run check:spec-implementation <spec> --base <commit-base>
+pnpm run check:spec-implementation <spec> --base <base-commit>
 ```
 
-Para Core, Server, Backoffice e Web, `test:coverage` e `check:coverage` são
-obrigatórios. `lsp`, `validation` e `email` permanecem
-fora do quality ratchet de cobertura. Use validação de banco, browser, build ou
-geração somente quando o boundary exigir.
+For Core, Server, Backoffice and Web, `test:coverage` and `check:coverage` are
+mandatory. `lsp`, `validation` and `email` remain
+outside the coverage quality ratchet. Use database, browser, build or
+generation validation only when the boundary requires it.
 
-O gate só passa quando:
+The gate only passes when:
 
-- todos os testes novos passam;
-- `check:test-integrity` passa sem forbidden paths ou source testável sem par;
-- cada métrica do workspace permanece no mínimo no baseline;
-- nenhuma threshold, exclusão ou classificação foi enfraquecida;
-- evidências de UI, runtime, persistência, autorização e integração estão
-  atuais quando aplicáveis;
-- gaps restantes têm boundary, motivo e próximo passo explícitos.
+- all new tests pass;
+- `check:test-integrity` passes with no forbidden paths or testable source without a pair;
+- each workspace metric stays at least at the baseline;
+- no threshold, exclusion or classification was weakened;
+- UI, runtime, persistence, authorization and integration evidence is
+  current when applicable;
+- remaining gaps have an explicit boundary, reason and next step.
 
-## Evaluation e handoff
+## Evaluation and handoff
 
-Se houver `evaluation.md`, atualize-o como ledger vivo após cada mudança,
-registrando comando, resultado, SHA/base, freshness, path afetado, cenário,
-finding e decisão. Evidência anterior a uma mudança fica `stale`.
+If there is an `evaluation.md`, update it as a living ledger after each change,
+recording command, result, SHA/base, freshness, affected path, scenario,
+finding and decision. Evidence that predates a change becomes `stale`.
 
-Entregue um relatório com:
+Deliver a report with:
 
-1. workspaces e source/test paths afetados;
-2. gaps escolhidos e cenário que cada teste prova;
-3. statements, branches, functions e lines antes/depois;
-4. comandos exatos e resultados;
-5. evidências de integridade, cobertura, integração, browser, persistência e
-   autorização, quando aplicáveis;
-6. gaps restantes, justificativa e follow-up;
-7. qualquer alteração behavior-preserving feita para permitir testabilidade.
+1. affected workspaces and source/test paths;
+2. chosen gaps and the scenario each test proves;
+3. statements, branches, functions and lines before/after;
+4. exact commands and results;
+5. integrity, coverage, integration, browser, persistence and
+   authorization evidence, when applicable;
+6. remaining gaps, justification and follow-up;
+7. any behavior-preserving change made to enable testability.
 
-Não declare que cobertura, sozinha, prova aceite de feature, autorização,
-persistência, integração ou conclusão da jornada do usuário.
+Do not claim that coverage, on its own, proves feature acceptance, authorization,
+persistence, integration or completion of the user journey.

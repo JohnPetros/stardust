@@ -1,142 +1,142 @@
 ---
 name: create-bug-report
-description: Diagnosticar uma GitHub bug issue aprovada em um Bug Report factual do Stardust e recomendar correção direta ou Correction Spec.
+description: Diagnose an approved GitHub bug issue into a factual Stardust Bug Report and recommend a direct fix or a Correction Spec.
 ---
 
-# Criar Bug Report
+# Create Bug Report
 
-Transforme uma GitHub bug issue aprovada em um diagnóstico técnico durável. O Bug Report é
-input de correção, não Spec: não inclua `CA-*`, um roteiro de verificação manual, tasks,
-assinaturas, inventário proposto de arquivos ou implementação detalhada.
+Turn an approved GitHub bug issue into a durable technical diagnosis. The Bug Report is
+a fix input, not a Spec: do not include `CA-*`, a manual verification script, tasks,
+signatures, a proposed file inventory or detailed implementation.
 
-## Entrada
+## Input
 
-- GitHub bug issue com problema, comportamento esperado, reprodução e contexto;
-- contexto técnico opcional: ambiente, browser/dispositivo, frequência e evidências.
+- GitHub bug issue with problem, expected behavior, reproduction and context;
+- optional technical context: environment, browser/device, frequency and evidence.
 
-Sem issue existente, pare e encaminhe para `open-bug-issue`; este workflow não cria nem
-atualiza a issue.
+Without an existing issue, stop and route to `open-bug-issue`; this workflow neither creates nor
+updates the issue.
 
-## Autoridade e Rules
+## Authority and Rules
 
-Leia `AGENTS.md`, `documentation/sdd.md`, `documentation/rules/rules.md`,
-`documentation/architecture.md`, `documentation/modules.md`, a milestone associada e o PRD
-versionado vinculado quando existir. Selecione e leia por inteiro as Rules das camadas e tipos de
-teste afetados. Use-as para validar fronteiras, sem transformar o relatório em Spec.
+Read `AGENTS.md`, `documentation/sdd.md`, `documentation/rules/rules.md`,
+`documentation/architecture.md`, `documentation/modules.md`, the associated milestone and the linked
+versioned PRD when one exists. Select and read in full the Rules of the affected layers and test
+types. Use them to validate boundaries, without turning the report into a Spec.
 
-Milestone e PRD definem comportamento esperado. Se a expectativa solicitada mudar o produto,
-pare e encaminhe para amendment/feature; não classifique mudança de comportamento como bug.
+Milestone and PRD define expected behavior. If the requested expectation changes the product,
+stop and route to amendment/feature; do not classify a behavior change as a bug.
 
-## Pesquisa diagnóstica
+## Diagnostic research
 
-Organize a pesquisa direta da task em lanes delimitadas:
+Organize the task's direct research into bounded lanes:
 
-- uma lane para boundary estreito;
-- lanes independentes quando dois ou mais boundaries forem afetados;
-- escolha apenas lanes reais, como Core, Server, Web, Backoffice, Database ou Integration;
-- defina sintoma, expectativa, paths iniciais, Rule Pack e pergunta diagnóstica;
-- registre paths/declarations exatos, evidência, causa provável, risco e incerteza.
+- one lane for a narrow boundary;
+- independent lanes when two or more boundaries are affected;
+- choose only real lanes, such as Core, Server, Web, Backoffice, Database or Integration;
+- define symptom, expectation, initial paths, Rule Pack and diagnostic question;
+- record exact paths/declarations, evidence, probable cause, risk and uncertainty.
 
-A task principal pesquisa cada lane, resolve conflitos por inspeção direta e separa fato de
-hipótese. Não crie agentes de pesquisa.
+The main task researches each lane, resolves conflicts by direct inspection and separates fact from
+hypothesis. Do not create research agents.
 
-## Diagnóstico com Playwright
+## Diagnosis with Playwright
 
-Playwright pode e deve ser usado para diagnosticar bugs de frontend, UI, rotas client-side,
-autenticação ou qualquer falha que dependa do navegador real. Ele não é reservado à validação
-final da correção.
+Playwright can and should be used to diagnose frontend bugs, UI, client-side routes,
+authentication or any failure that depends on the real browser. It is not reserved for the final
+validation of the fix.
 
-Quando o sintoma envolver navegador:
+When the symptom involves the browser:
 
-- reproduza a rota e o fluxo observável com Playwright antes de concluir a causa;
-- para rotas protegidas, autentique usando as variáveis locais previstas em `AGENTS.md`, nunca
-  credenciais literais, e acesse pelo menos uma rota protegida no mesmo contexto;
-- registre `console`, `pageerror`, `requestfailed` e `response`, incluindo método, path e status
-  dos endpoints relevantes, sem registrar headers ou corpos que contenham tokens, cookies ou
-  dados pessoais;
-- use `waitForURL`, `waitForRequest`, `waitForResponse` ou `waitForFunction` para sincronizar
-  estados; não use `waitForTimeout` como única evidência;
-- inspecione o estado efetivamente observado: DOM, estilos computados, atributos, loading,
-  navegação, remounts, timing e respostas HTTP; em falhas visuais, capture screenshot quando isso
-  ajudar a distinguir composição, stacking context, asset ou hidratação;
-- se o fluxo falhar por autenticação, separe falha de credencial/API, propagação de sessão,
-  CORS, middleware, refresh e carregamento da tela. Confirme o endpoint de login e as chamadas
-  subsequentes sem expor os valores sensíveis;
-- trate a execução Playwright como evidência diagnóstica do relatório. O documento final não deve
-  ganhar uma seção de manual validation, acceptance, tasks ou implementação por causa dessa
-  investigação.
+- reproduce the route and the observable flow with Playwright before concluding the cause;
+- for protected routes, authenticate using the local variables defined in `AGENTS.md`, never
+  literal credentials, and access at least one protected route in the same context;
+- record `console`, `pageerror`, `requestfailed` and `response`, including method, path and status
+  of the relevant endpoints, without recording headers or bodies that contain tokens, cookies or
+  personal data;
+- use `waitForURL`, `waitForRequest`, `waitForResponse` or `waitForFunction` to synchronize
+  states; do not use `waitForTimeout` as the sole evidence;
+- inspect the state actually observed: DOM, computed styles, attributes, loading,
+  navigation, remounts, timing and HTTP responses; for visual failures, capture a screenshot when it
+  helps distinguish composition, stacking context, asset or hydration;
+- if the flow fails due to authentication, separate credential/API failure, session propagation,
+  CORS, middleware, refresh and screen loading. Confirm the login endpoint and the subsequent
+  calls without exposing the sensitive values;
+- treat the Playwright execution as diagnostic evidence for the report. The final document must not
+  gain a manual validation, acceptance, tasks or implementation section because of this
+  investigation.
 
-Para Web App e Backoffice, siga os ambientes, scripts de exportação de credenciais, portas e fluxo
-autenticado descritos em `AGENTS.md`. Use o Playwright CLI tanto para a reprodução formal quanto
-para a exploração visual pontual; não use outra ferramenta de automação de navegador neste
-projeto.
+For the Web App and Backoffice, follow the environments, credential export scripts, ports and
+authenticated flow described in `AGENTS.md`. Use the Playwright CLI both for the formal reproduction and
+for ad hoc visual exploration; do not use another browser automation tool in this
+project.
 
 ## Workflow
 
-1. confira a issue real e a reprodução informada;
-2. separe falha observada de comportamento esperado;
-3. associe milestone, PRD e requisito real quando aplicáveis, sem alterar seu estado;
-4. inspecione entry point, estado, transporte, use case, persistência e integração implicados;
-5. quando aplicável, reproduza e instrumente o fluxo real com Playwright conforme a seção de
-   diagnóstico no navegador;
-6. salve ou atualize
-   `documentation/features/<domínio>/<feature>/reports/<slug>-bug-report.md`;
-7. recomende no resumo final:
-   - **Correção direta:** narrow, bem compreendida, baixo risco e sem Contract durável; ou
-   - **Correction Spec:** ambígua, cross-layer, coordenada ou de risco material, exigindo
-     `RF-*`, `CA-*`, `AV-*`, `MV-*` ou `VV-*`.
+1. check the real issue and the reported reproduction;
+2. separate the observed failure from the expected behavior;
+3. associate milestone, PRD and real requirement when applicable, without changing their state;
+4. inspect the implicated entry point, state, transport, use case, persistence and integration;
+5. when applicable, reproduce and instrument the real flow with Playwright according to the
+   browser diagnosis section;
+6. save or update
+   `documentation/features/<domain>/<feature>/reports/<slug>-bug-report.md`;
+7. recommend in the final summary:
+   - **Direct fix:** narrow, well understood, low risk and with no durable Contract; or
+   - **Correction Spec:** ambiguous, cross-layer, coordinated or of material risk, requiring
+     `RF-*`, `CA-*`, `AV-*`, `MV-*` or `VV-*`.
 
-Não escreva a delivery route dentro do Bug Report e não crie a Spec neste workflow.
+Do not write the delivery route inside the Bug Report and do not create the Spec in this workflow.
 
-## Estrutura obrigatória
+## Required structure
 
 ```md
 ---
-title: <título curto>
+title: <short title>
 issue: <GitHub issue URL>
-milestone: <URL ou null>
-prd: <path/requisito ou null>
+milestone: <URL or null>
+prd: <path/requirement or null>
 apps:
   - <web|server|studio>
 status: open
 last_updated_at: YYYY-MM-DD
 ---
 
-# Bug Report: <título>
+# Bug Report: <title>
 
-## Diagnóstico
+## Diagnosis
 
-### Falha observada
+### Observed failure
 
-<comportamento confirmado e condições>
+<confirmed behavior and conditions>
 
-### Comportamento esperado
+### Expected behavior
 
-<contrato de produto, Spec, Design ou comportamento estabelecido>
+<product contract, Spec, Design or established behavior>
 
-### Causa raiz
+### Root cause
 
-<explicação sustentada por evidência; hipóteses restantes explicitamente marcadas>
+<explanation backed by evidence; remaining hypotheses explicitly marked>
 
-### Áreas afetadas
+### Affected areas
 
-- `<path relativo>` — <responsabilidade no defeito>
+- `<relative path>` — <responsibility in the defect>
 
-### Risco de regressão
+### Regression risk
 
-<comportamentos relacionados que a correção deve preservar>
+<related behaviors that the fix must preserve>
 
-## Limite da correção
+## Fix boundary
 
-<o que deve ser corrigido e o que deve permanecer inalterado>
+<what must be fixed and what must remain unchanged>
 ```
 
-## Restrições
+## Constraints
 
-- use GitHub Issues e paths relativos reais;
-- não invente execução, causa, método, contrato ou arquivo;
-- não inclua acceptance, uma seção de manual validation, tasks ou file plan; evidências
-  Playwright podem fundamentar a causa, mas devem ser sintetizadas nas seções factuais do report;
-- não edite Spec, Evaluation, PRD ou Rule;
-- não exponha credenciais, dados privados ou logs sensíveis;
-- no fim, reporte issue, path e route recomendada.
+- use GitHub Issues and real relative paths;
+- do not invent execution, cause, method, contract or file;
+- do not include acceptance, a manual validation section, tasks or file plan; Playwright
+  evidence can support the cause, but must be synthesized into the factual sections of the report;
+- do not edit Spec, Evaluation, PRD or Rule;
+- do not expose credentials, private data or sensitive logs;
+- at the end, report issue, path and recommended route.

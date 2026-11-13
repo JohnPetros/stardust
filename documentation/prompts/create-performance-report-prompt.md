@@ -1,35 +1,35 @@
 ---
-description: Prompt para conduzir diagnóstico de performance no projeto StarDust, cobrindo bundle, data fetching, queries, jobs e runtime em todas as camadas da arquitetura (web e server).
+description: Prompt to conduct a performance diagnosis in the StarDust project, covering bundle, data fetching, queries, jobs and runtime across all architecture layers (web and server).
 ---
 
-# Prompt: Diagnóstico de Performance — StarDust
+# Prompt: Performance Diagnosis — StarDust
 
-## Objetivo
+## Goal
 
-Conduzir um diagnóstico de performance orientado à arquitetura do StarDust, identificando gargalos, waterfalls, desperdícios de bundle e problemas de runtime em todas as camadas do sistema (Build, UI, RPC, REST, Queue, Database, Provision, Assets). O resultado deve ser um relatório com issues classificados por área e esforço, com recomendações de correção alinhadas às convenções do projeto.
-
----
-
-## Entradas
-
-- **Obrigatórias:**
-  - Aplicação alvo `{APP}` (ex: `web`, `server`, `backoffice`)
-  - Escopo do diagnóstico `{ESCOPO}` (ex: módulo `auth`, rota `/space`, feature `lesson`, ou `full`)
-  - Arquivos ou caminhos alvo `{ALVOS}` (ex: `apps/web/src/rpc/`, `apps/server/src/queue/`)
-- **Opcionais:**
-  - Métricas ou sintomas observados `{SINTOMAS}` (ex: "LCP alto na landing page", "endpoint /auth/account lento", "job de XP demora demais")
-  - Critérios de sucesso `{CRITERIOS}` (ex: "reduzir bundle JS em 50%", "eliminar waterfalls de auth", "reduzir latência do endpoint para <100ms")
-  - Restrições `{RESTRICOES}` (ex: "não alterar schema de banco", "preservar comportamento funcional")
+Conduct a performance diagnosis oriented to the StarDust architecture, identifying bottlenecks, waterfalls, bundle waste and runtime problems across all layers of the system (Build, UI, RPC, REST, Queue, Database, Provision, Assets). The result must be a report with issues classified by area and effort, with fix recommendations aligned with the project conventions.
 
 ---
 
-## Regras Aplicáveis
+## Inputs
 
-Antes de classificar uma recomendação como segura, leia:
+- **Required:**
+  - Target application `{APP}` (e.g. `web`, `server`, `backoffice`)
+  - Diagnosis scope `{SCOPE}` (e.g. module `auth`, route `/space`, feature `lesson`, or `full`)
+  - Target files or paths `{TARGETS}` (e.g. `apps/web/src/rpc/`, `apps/server/src/queue/`)
+- **Optional:**
+  - Observed metrics or symptoms `{SYMPTOMS}` (e.g. "high LCP on the landing page", "slow /auth/account endpoint", "XP job takes too long")
+  - Success criteria `{CRITERIA}` (e.g. "reduce JS bundle by 50%", "eliminate auth waterfalls", "reduce endpoint latency to <100ms")
+  - Constraints `{CONSTRAINTS}` (e.g. "do not change the database schema", "preserve functional behavior")
 
-- `documentation/rules/rules.md` — índice das rules por camada.
-- `documentation/rules/code-conventions-rules.md` — convenções gerais que afetam refactors recomendados.
-- Rules das camadas tocadas por cada issue de performance:
+---
+
+## Applicable Rules
+
+Before classifying a recommendation as safe, read:
+
+- `documentation/rules/rules.md` — index of the rules per layer.
+- `documentation/rules/code-conventions-rules.md` — general conventions that affect recommended refactors.
+- Rules of the layers touched by each performance issue:
   - `documentation/rules/web-application-rules.md`
   - `documentation/rules/backoffice-application-rules.md`
   - `documentation/rules/server-application-rules.md`
@@ -43,178 +43,178 @@ Antes de classificar uma recomendação como segura, leia:
   - `documentation/rules/ai-layer-rules.md`
   - `documentation/rules/validation-layer-rules.md`
 
-Recomendações de performance não podem romper contratos de camada. Quando uma otimização exigir novo padrão arquitetural, registre como recomendação estrutural e cite a rule que precisará ser atualizada.
+Performance recommendations must not break layer contracts. When an optimization requires a new architectural pattern, record it as a structural recommendation and cite the rule that will need to be updated.
 
 ---
 
-## Mapa de Áreas para Diagnóstico
+## Area Map for Diagnosis
 
-Antes de iniciar, identifique quais áreas estão no escopo e os arquivos de regra relevantes:
+Before starting, identify which areas are in scope and the relevant rule files:
 
 ### `apps/web`
 
-| Área | Arquivos-Chave | Problemas Típicos |
-|------|---------------|-------------------|
-| **Build** | `apps/web/next.config.js`, `package.json` | Minificação desabilitada (`minimizer = []`), `optimizePackageImports` ausente |
-| **Bundle / Frontend** | `apps/web/src/ui/**/index.tsx`, `lotties.ts` | Imports estáticos de libs pesadas sem `next/dynamic`, JSONs Lottie inlined, barrel imports de ícones |
-| **Data Fetching / RPC** | `apps/web/src/rpc/next-safe-action/clients/`, `apps/web/src/rpc/actions/` | `authActionClient` com chamadas sequenciais sem cache, fetches que deveriam ser `Promise.all` |
-| **Data Fetching / REST** | `apps/web/src/rest/next/NextRestClient.ts`, `apps/web/src/rest/controllers/` | `isCacheEnabled: false` como default, `fetchAccount` chamado antes de verificar rota pública |
-| **Middleware** | `apps/web/src/rest/controllers/auth/VerifyAuthRoutesController.ts` | API call incondicional em toda request, incluindo rotas públicas |
-| **Re-renders / Runtime** | `apps/web/src/ui/**/contexts/`, `hooks/` | `useMemo` ausente em criações de objeto, `form.watch()` sem campo, scroll listeners sem throttle |
-| **Assets** | `apps/web/public/lotties/`, `apps/web/public/audios/` | Arquivos WAV não comprimidos, JSONs Lottie importados estaticamente |
+| Area | Key Files | Typical Problems |
+|------|-----------|------------------|
+| **Build** | `apps/web/next.config.js`, `package.json` | Minification disabled (`minimizer = []`), `optimizePackageImports` missing |
+| **Bundle / Frontend** | `apps/web/src/ui/**/index.tsx`, `lotties.ts` | Static imports of heavy libs without `next/dynamic`, inlined Lottie JSONs, barrel imports of icons |
+| **Data Fetching / RPC** | `apps/web/src/rpc/next-safe-action/clients/`, `apps/web/src/rpc/actions/` | `authActionClient` with sequential calls without cache, fetches that should be `Promise.all` |
+| **Data Fetching / REST** | `apps/web/src/rest/next/NextRestClient.ts`, `apps/web/src/rest/controllers/` | `isCacheEnabled: false` as default, `fetchAccount` called before checking for a public route |
+| **Middleware** | `apps/web/src/rest/controllers/auth/VerifyAuthRoutesController.ts` | Unconditional API call on every request, including public routes |
+| **Re-renders / Runtime** | `apps/web/src/ui/**/contexts/`, `hooks/` | Missing `useMemo` on object creation, `form.watch()` without a field, scroll listeners without throttle |
+| **Assets** | `apps/web/public/lotties/`, `apps/web/public/audios/` | Uncompressed WAV files, Lottie JSONs imported statically |
 
 ### `apps/server`
 
-| Área | Arquivos-Chave | Problemas Típicos |
-|------|---------------|-------------------|
-| **API / Controllers** | `apps/server/src/rest/controllers/`, `apps/server/src/app/hono/routers/` | Handlers sem paginação, serialização excessiva de entidades, N+1 entre repositórios no controller |
-| **API / Middleware** | `apps/server/src/app/hono/middlewares/` | Middlewares pesados executando em rotas que não precisam (ex: auth em rota pública) |
-| **Database / Repositories** | `apps/server/src/database/supabase/repositories/` | `select('*')` em tabelas com muitas colunas, N+1 entre repositórios, ausência de `calculateQueryRange`, joins pesados sem índice |
-| **Database / Mappers** | `apps/server/src/database/supabase/mappers/` | Loops síncronos em arrays grandes, normalização de tipos ausente (campos numéricos do Supabase chegando como `string \| null`) |
-| **Queue / Jobs** | `apps/server/src/queue/jobs/`, `apps/server/src/queue/inngest/functions/` | Steps independentes em sequência em vez de `Promise.all`, IO fora de `amqp.run`, jobs sem idempotência |
-| **Provision / Cache** | `apps/server/src/provision/cache/UpstashCacheProvider.ts` | Cache não utilizado em endpoints de leitura estável, TTL ausente ou muito curto |
-| **Provision / Telemetria** | `apps/server/src/provision/monitor/SentryTelemetryProvider.ts` | Erros silenciados sem reporte ao Sentry, ausência de spans em operações críticas |
-| **REST Client / Axios** | `apps/server/src/rest/axios/AxiosRestClient.ts` | Sem timeout configurado, sem retry em falhas transitórias |
-| **Build** | `apps/server/package.json`, `tsup.config.ts` | Dependências desnecessárias no bundle de produção |
+| Area | Key Files | Typical Problems |
+|------|-----------|------------------|
+| **API / Controllers** | `apps/server/src/rest/controllers/`, `apps/server/src/app/hono/routers/` | Handlers without pagination, excessive entity serialization, N+1 across repositories in the controller |
+| **API / Middleware** | `apps/server/src/app/hono/middlewares/` | Heavy middlewares running on routes that do not need them (e.g. auth on a public route) |
+| **Database / Repositories** | `apps/server/src/database/supabase/repositories/` | `select('*')` on tables with many columns, N+1 across repositories, missing `calculateQueryRange`, heavy joins without an index |
+| **Database / Mappers** | `apps/server/src/database/supabase/mappers/` | Synchronous loops over large arrays, missing type normalization (numeric Supabase fields arriving as `string \| null`) |
+| **Queue / Jobs** | `apps/server/src/queue/jobs/`, `apps/server/src/queue/inngest/functions/` | Independent steps in sequence instead of `Promise.all`, IO outside `amqp.run`, jobs without idempotency |
+| **Provision / Cache** | `apps/server/src/provision/cache/UpstashCacheProvider.ts` | Cache unused on stable read endpoints, missing or too short TTL |
+| **Provision / Telemetry** | `apps/server/src/provision/monitor/SentryTelemetryProvider.ts` | Errors silenced without reporting to Sentry, missing spans on critical operations |
+| **REST Client / Axios** | `apps/server/src/rest/axios/AxiosRestClient.ts` | No timeout configured, no retry on transient failures |
+| **Build** | `apps/server/package.json`, `tsup.config.ts` | Unnecessary dependencies in the production bundle |
 
 ---
 
-## Checklist de Diagnóstico por Área
+## Diagnosis Checklist per Area
 
-### `apps/web` — 📦 Build e Bundle
+### `apps/web` — 📦 Build and Bundle
 
-- [ ] `next.config.js` não desabilita `config.optimization.minimizer` (remove 40-60% do JS de produção)
-- [ ] Libs pesadas usam `next/dynamic({ ssr: false })`: Three.js, tsparticles, swiper, react-confetti, typewriter-effect, html-to-image
-- [ ] JSONs Lottie não são importados estaticamente — usar `fetch('/lotties/${name}.json')` ou dynamic `import()`
-- [ ] `@phosphor-icons/react` importado de `/dist/ssr` para se beneficiar do `optimizePackageImports`
-- [ ] `next.config.js` tem `optimizePackageImports` configurado para libs de ícones/componentes
+- [ ] `next.config.js` does not disable `config.optimization.minimizer` (removes 40-60% of the production JS)
+- [ ] Heavy libs use `next/dynamic({ ssr: false })`: Three.js, tsparticles, swiper, react-confetti, typewriter-effect, html-to-image
+- [ ] Lottie JSONs are not imported statically — use `fetch('/lotties/${name}.json')` or dynamic `import()`
+- [ ] `@phosphor-icons/react` imported from `/dist/ssr` to benefit from `optimizePackageImports`
+- [ ] `next.config.js` has `optimizePackageImports` configured for icon/component libs
 
 ### `apps/web` — 🌐 Data Fetching
 
-- [ ] `VerifyAuthRoutesController` verifica `isPublicRoute` **antes** de chamar `fetchAccount()` — rotas públicas não fazem API call
-- [ ] `ServerProviders` não duplica `fetchAccount()` já feito no middleware — usar `isCacheEnabled: true` ou passar `accountDto` via props
-- [ ] `authActionClient` não faz 2 chamadas sequenciais não-cacheadas (`fetchAccount` + `fetchUserById`) em toda server action
-- [ ] `NextRestClient` usa `isCacheEnabled: true` como default para endpoints de leitura estável (planetas, achievements, challenges metadata)
-- [ ] Fetches independentes dentro de uma mesma action usam `Promise.all` em vez de `await` sequencial (ref: `FetchLessonStoryAndQuestionsAction`)
-- [ ] Slots paralelos do Next.js (ex: `@tabContent/comments`) não rebuscam dados já carregados na página pai
+- [ ] `VerifyAuthRoutesController` checks `isPublicRoute` **before** calling `fetchAccount()` — public routes make no API call
+- [ ] `ServerProviders` does not duplicate the `fetchAccount()` already done in the middleware — use `isCacheEnabled: true` or pass `accountDto` via props
+- [ ] `authActionClient` does not make 2 sequential non-cached calls (`fetchAccount` + `fetchUserById`) on every server action
+- [ ] `NextRestClient` uses `isCacheEnabled: true` as default for stable read endpoints (planets, achievements, challenges metadata)
+- [ ] Independent fetches within the same action use `Promise.all` instead of sequential `await` (ref: `FetchLessonStoryAndQuestionsAction`)
+- [ ] Next.js parallel slots (e.g. `@tabContent/comments`) do not refetch data already loaded on the parent page
 
-### `apps/web` — 🔄 Re-renders e Runtime
+### `apps/web` — 🔄 Re-renders and Runtime
 
-- [ ] Objetos de domínio criados durante render estão memoizados com `useMemo` (ex: `User.create(userDto)` no `AuthContext`)
-- [ ] `form.watch()` do react-hook-form especifica campos concretos — sem `watch()` sem argumento
-- [ ] Scroll listeners globais usam throttle ou `IntersectionObserver` (ref: `useToast`)
-- [ ] Contextos grandes separados em dados vs ações para evitar re-render cascade (ex: `AuthContext`)
-- [ ] Listas longas com potencial de crescimento usam virtualização (`@tanstack/react-virtual`) — Ranking, Comments, Solutions
+- [ ] Domain objects created during render are memoized with `useMemo` (e.g. `User.create(userDto)` in `AuthContext`)
+- [ ] react-hook-form's `form.watch()` specifies concrete fields — no `watch()` without an argument
+- [ ] Global scroll listeners use throttle or `IntersectionObserver` (ref: `useToast`)
+- [ ] Large contexts split into data vs actions to avoid re-render cascades (e.g. `AuthContext`)
+- [ ] Long lists with growth potential use virtualization (`@tanstack/react-virtual`) — Ranking, Comments, Solutions
 
 ### `apps/web` — 🗃️ Assets
 
-- [ ] Arquivos de áudio em MP3/OGG — não WAV (~80% de economia)
-- [ ] Animações Lottie carregadas sob demanda — não inlined no bundle JS
-- [ ] Imagens com `next/image` para lazy loading e otimização automática
+- [ ] Audio files in MP3/OGG — not WAV (~80% savings)
+- [ ] Lottie animations loaded on demand — not inlined in the JS bundle
+- [ ] Images with `next/image` for lazy loading and automatic optimization
 
-### `apps/server` — 🗄️ Database e Queries
+### `apps/server` — 🗄️ Database and Queries
 
-- [ ] Queries Supabase usam `.select('col1, col2')` explícito — sem `select('*')` em tabelas com muitas colunas
-- [ ] Repositórios que precisam de dados relacionados usam joins no Supabase em vez de N+1 queries separadas (ex: `select('*, users(...)')`)
-- [ ] Listagens de recursos usam `calculateQueryRange` para paginação — sem `findAll()` irrestrito em tabelas de crescimento ilimitado
-- [ ] Mappers não executam loops síncronos pesados em arrays grandes
-- [ ] Tipos numéricos do banco são normalizados nos mappers antes de chegar ao Core (ex: `Number(value)` — ref: bug `SupabasePlanetMapper`)
+- [ ] Supabase queries use an explicit `.select('col1, col2')` — no `select('*')` on tables with many columns
+- [ ] Repositories that need related data use Supabase joins instead of separate N+1 queries (e.g. `select('*, users(...)')`)
+- [ ] Resource listings use `calculateQueryRange` for pagination — no unrestricted `findAll()` on unbounded-growth tables
+- [ ] Mappers do not run heavy synchronous loops over large arrays
+- [ ] Numeric database types are normalized in the mappers before reaching the Core (e.g. `Number(value)` — ref: `SupabasePlanetMapper` bug)
 
-### `apps/server` — ⚡ API e Controllers
+### `apps/server` — ⚡ API and Controllers
 
-- [ ] Controllers retornam DTOs mínimos — sem serializar entidades completas quando apenas subsets são necessários
-- [ ] Middlewares de auth aplicados apenas nas rotas que precisam — sem overhead em rotas públicas
-- [ ] Endpoints de leitura estável utilizam `UpstashCacheProvider` para evitar round-trips desnecessários ao Supabase
-- [ ] `AxiosRestClient` tem timeout configurado — sem requests indefinidamente pendentes em integrações externas
+- [ ] Controllers return minimal DTOs — no serializing full entities when only subsets are needed
+- [ ] Auth middlewares applied only on the routes that need them — no overhead on public routes
+- [ ] Stable read endpoints use `UpstashCacheProvider` to avoid unnecessary round-trips to Supabase
+- [ ] `AxiosRestClient` has a timeout configured — no indefinitely pending requests in external integrations
 
-### `apps/server` — 🎞️ Queue e Jobs (Inngest)
+### `apps/server` — 🎞️ Queue and Jobs (Inngest)
 
-- [ ] Steps independentes dentro de um job usam `Promise.all` em vez de `await` sequencial
-- [ ] Todo IO externo (repositório, provider) roda dentro de `amqp.run` para garantir rastreabilidade e retries
-- [ ] Jobs são idempotentes — reprocessamento pelo Inngest não causa duplicações (ex: XP duplicado, conquista concedida duas vezes)
-- [ ] Jobs com payloads grandes não carregam dados desnecessários — payload mínimo, dados buscados dentro do `amqp.run`
-- [ ] Cron jobs (`CRON_EXPRESSION`) não executam em janelas de alto tráfego sem necessidade
+- [ ] Independent steps within a job use `Promise.all` instead of sequential `await`
+- [ ] All external IO (repository, provider) runs inside `amqp.run` to ensure traceability and retries
+- [ ] Jobs are idempotent — reprocessing by Inngest does not cause duplication (e.g. duplicated XP, achievement granted twice)
+- [ ] Jobs with large payloads do not carry unnecessary data — minimal payload, data fetched inside `amqp.run`
+- [ ] Cron jobs (`CRON_EXPRESSION`) do not run in high-traffic windows without need
 
-### `apps/server` — 🔭 Observabilidade
+### `apps/server` — 🔭 Observability
 
-- [ ] Erros críticos em controllers e jobs são reportados via `SentryTelemetryProvider` — sem `try/catch` silencioso
-- [ ] Operações lentas têm spans de tracing identificáveis no Sentry
-- [ ] Logs estruturados presentes em operações de alto volume para facilitar diagnóstico de latência
-
----
-
-## Diretrizes de Execução
-
-### Passo 1: Mapeamento do Escopo
-
-- Identifique quais áreas e módulos estão no `{ESCOPO}` e qual app está sendo analisado.
-- Para `web`: mapeie o fluxo browser → middleware → server component → action → UI.
-- Para `server`: mapeie o fluxo request HTTP → Hono router → middleware → controller → use case → repository → response.
-- Para jobs: mapeie evento → Inngest function → job handler → steps → efeitos.
-- Marque explicitamente os pontos de I/O (Supabase, Upstash, Axios, Inngest) e pontos de CPU (parse, serialização, mapeamento).
-
-### Passo 2: Coleta de Evidências
-
-- Leia apenas os arquivos necessários para sustentar as evidências — não leia o projeto inteiro.
-- Para cada suspeita de gargalo, localize o arquivo e a linha específica.
-- Se houver dúvida sobre comportamento de lib (ex: Supabase query planner, Inngest steps, Next.js cache), consulte a documentação oficial antes de classificar como issue.
-- Sem métricas reais disponíveis, sinalize como **estimativa por análise estática** e indique como medir.
-
-### Passo 3: Classificação de Issues
-
-| Esforço | Critério |
-|---------|----------|
-| **S** | Mudança pontual em 1 arquivo, menos de 30 min (ex: adicionar `select` explícito, `Promise.all`, trocar import) |
-| **M** | Mudança em 2-5 arquivos, 1-3h (ex: adicionar cache em endpoint, refatorar mapper, ajustar paginação) |
-| **L** | Mudança estrutural, 1+ dias (ex: novo endpoint consolidado, separar contextos, índice no banco com migração) |
-
-| Impacto | Critério |
-|---------|----------|
-| 🔴 **Alto** | Afeta todas as requests ou o initial load — middleware, N+1 em listagens, jobs sem idempotência |
-| 🟡 **Médio** | Afeta rotas específicas ou usuários autenticados — fetches sequenciais, queries sem paginação, re-renders de contexto |
-| 🟢 **Baixo** | Afeta componente isolado ou operação pontual — scroll listener, assets individuais, mapper sem normalização |
-
-### Passo 4: Relatório
-
-Produza o relatório seguindo o template abaixo.
+- [ ] Critical errors in controllers and jobs are reported via `SentryTelemetryProvider` — no silent `try/catch`
+- [ ] Slow operations have identifiable tracing spans in Sentry
+- [ ] Structured logs present on high-volume operations to ease latency diagnosis
 
 ---
 
-## Template de Saída (Estrutura Obrigatória)
+## Execution Guidelines
+
+### Step 1: Scope Mapping
+
+- Identify which areas and modules are in `{SCOPE}` and which app is being analyzed.
+- For `web`: map the flow browser → middleware → server component → action → UI.
+- For `server`: map the flow HTTP request → Hono router → middleware → controller → use case → repository → response.
+- For jobs: map event → Inngest function → job handler → steps → effects.
+- Explicitly mark the I/O points (Supabase, Upstash, Axios, Inngest) and CPU points (parse, serialization, mapping).
+
+### Step 2: Evidence Collection
+
+- Read only the files needed to support the evidence — do not read the whole project.
+- For each suspected bottleneck, locate the specific file and line.
+- If in doubt about lib behavior (e.g. Supabase query planner, Inngest steps, Next.js cache), consult the official documentation before classifying it as an issue.
+- Without real metrics available, flag it as an **estimate from static analysis** and state how to measure it.
+
+### Step 3: Issue Classification
+
+| Effort | Criterion |
+|--------|-----------|
+| **S** | Targeted change in 1 file, under 30 min (e.g. add an explicit `select`, `Promise.all`, swap an import) |
+| **M** | Change in 2-5 files, 1-3h (e.g. add cache to an endpoint, refactor a mapper, adjust pagination) |
+| **L** | Structural change, 1+ days (e.g. new consolidated endpoint, split contexts, database index with migration) |
+
+| Impact | Criterion |
+|--------|-----------|
+| 🔴 **High** | Affects all requests or the initial load — middleware, N+1 in listings, jobs without idempotency |
+| 🟡 **Medium** | Affects specific routes or authenticated users — sequential fetches, queries without pagination, context re-renders |
+| 🟢 **Low** | Affects an isolated component or one-off operation — scroll listener, individual assets, mapper without normalization |
+
+### Step 4: Report
+
+Produce the report following the template below.
+
+---
+
+## Output Template (Required Structure)
 
 ```md
 ---
 app: {APP}
 status: open|closed
-last_updated_at: {DATA}
+last_updated_at: {DATE}
 ---
 
-# Diagnostico de Performance - `apps/{APP}`
+# Performance Diagnosis - `apps/{APP}`
 
-## Escopo
+## Scope
 
-- **Tarefa:** {TAREFA}
-- **Alvo:** `apps/{APP}` -- {DESCRICAO_DO_ALVO}
-- **Criterios de sucesso:** {CRITERIOS}
-- **Restricoes:** {RESTRICOES}
-
----
-
-## Assuncoes e Pendencias
-
-**Assuncoes:**
-- {ASSUNCAO_1}
-- {ASSUNCAO_2}
-
-**Pendencias:**
-- {PENDENCIA_1}
-- {PENDENCIA_2}
+- **Task:** {TASK}
+- **Target:** `apps/{APP}` -- {TARGET_DESCRIPTION}
+- **Success criteria:** {CRITERIA}
+- **Constraints:** {CONSTRAINTS}
 
 ---
 
-## Mapa do Fluxo
+## Assumptions and Pending Items
 
-[Para web]
+**Assumptions:**
+- {ASSUMPTION_1}
+- {ASSUMPTION_2}
+
+**Pending items:**
+- {PENDING_ITEM_1}
+- {PENDING_ITEM_2}
+
+---
+
+## Flow Map
+
+[For web]
 ```text
 [Browser] --(HTTP)--> [Next.js Middleware / VerifyAuthRoutesController]
                            |
@@ -228,9 +228,9 @@ last_updated_at: {DATA}
                       [Response -> React Render -> Client Hydration -> SWR]
 ```
 
-[Para server]
+[For server]
 ```text
-[Cliente HTTP] --(HTTP)--> [Hono Router]
+[HTTP Client] --(HTTP)--> [Hono Router]
                                 |
                                 v
                            [Middlewares: verifyAuthentication, validationMiddleware]
@@ -248,9 +248,9 @@ last_updated_at: {DATA}
                            [http.send(dto)]
 ```
 
-[Para jobs]
+[For jobs]
 ```text
-[Evento via InngestBroker]
+[Event via InngestBroker]
         |
         v
 [Inngest Function (composition root)]
@@ -262,92 +262,92 @@ last_updated_at: {DATA}
 [amqp.run("step", () => UseCase.execute())]
         |
         v
-[Efeito: persistência / notificação / cache invalidation]
+[Effect: persistence / notification / cache invalidation]
 ```
 
-**Pontos de I/O criticos:**
-1. {PONTO_IO_1}
-2. {PONTO_IO_2}
+**Critical I/O points:**
+1. {IO_POINT_1}
+2. {IO_POINT_2}
 
 ---
 
-## Evidencias Coletadas
+## Evidence Collected
 
-Todas as evidencias abaixo foram verificadas diretamente no codigo fonte.
+All the evidence below was verified directly in the source code.
 
 ---
 
-## Issues de Performance (Prioridade)
+## Performance Issues (Priority)
 
-### ISSUE-01: {TITULO}
+### ISSUE-01: {TITLE}
 
 - **Area:** Build | Frontend/Bundle | API/Middleware | API/RPC | API/REST | API/Controllers | Database/Queries | Database/Mappers | Queue/Jobs | Provision/Cache | Frontend/Re-renders | Assets
 - **App:** web | server
-- **Sintoma:** {SINTOMA}
-- **Causa provavel:** {CAUSA} (`caminho/do/arquivo.ts:linha`)
-- **Evidencia:** `caminho/do/arquivo.ts:linhas`:
+- **Symptom:** {SYMPTOM}
+- **Probable cause:** {CAUSE} (`path/to/file.ts:line`)
+- **Evidence:** `path/to/file.ts:lines`:
   ```ts
-  // trecho de código problemático
+  // problematic code snippet
   ```
-- **Impacto:** {IMPACTO} (ex: "N+1 queries a cada listagem", "~200ms de waterfall por page load")
-- **Risco:** Baixo | Médio | Alto. Regressão possível: {RISCO_REGRESSAO}
-- **Correcao (quick win):** {CORRECAO_RAPIDA}
-- **Correcao (robusta):** {CORRECAO_ESTRUTURAL} _(opcional)_
-- **Como validar:** {VALIDACAO} (ex: contar queries no log do Supabase antes/depois)
-- **Estimativa:** S | M | L
+- **Impact:** {IMPACT} (e.g. "N+1 queries on every listing", "~200ms of waterfall per page load")
+- **Risk:** Low | Medium | High. Possible regression: {REGRESSION_RISK}
+- **Fix (quick win):** {QUICK_FIX}
+- **Fix (robust):** {STRUCTURAL_FIX} _(optional)_
+- **How to validate:** {VALIDATION} (e.g. count queries in the Supabase log before/after)
+- **Estimate:** S | M | L
 
 ---
 
-## Recomendacoes (Plano em Etapas)
+## Recommendations (Staged Plan)
 
-### Etapa 1: Quick Wins (1-2 dias)
+### Stage 1: Quick Wins (1-2 days)
 
-| # | Acao | App | Issues | Impacto Estimado |
-|---|------|-----|--------|-----------------|
+| # | Action | App | Issues | Estimated Impact |
+|---|--------|-----|--------|------------------|
 | 1 | ... | web | ISSUE-01 | ... |
 | 2 | ... | server | ISSUE-02 | ... |
 
-### Etapa 2: Correcoes Estruturais (3-5 dias)
+### Stage 2: Structural Fixes (3-5 days)
 
-| # | Acao | App | Issues | Impacto Estimado |
-|---|------|-----|--------|-----------------|
+| # | Action | App | Issues | Estimated Impact |
+|---|--------|-----|--------|------------------|
 | 1 | ... | server | ISSUE-XX | ... |
 
-### Etapa 3: Hardening (1 semana+)
+### Stage 3: Hardening (1 week+)
 
-| # | Acao | App | Issues | Impacto |
-|---|------|-----|--------|---------|
+| # | Action | App | Issues | Impact |
+|---|--------|-----|--------|--------|
 | 1 | ... | server | ISSUE-XX | ... |
 
 ---
 
-## Instrumentacao e Medicao
+## Instrumentation and Measurement
 
-| KPI | App | Onde Medir | Como Medir | Baseline |
-|-----|-----|-----------|------------|----------|
-| Bundle JS total | web | Build output | `next build` -> `.next/static` total size | Rodar antes das correcoes |
-| TTFB | web | Browser/Lighthouse | `pnpm dlx lighthouse http://localhost:3000 --output json` | Medir agora |
-| LCP | web | Browser | Lighthouse ou `web-vitals` lib | Medir agora |
-| API calls por page load | web | Backend logs | Contar requests para `/auth/account` por page view | Medir agora |
-| Latencia de endpoint | server | Sentry / logs | Tempo medio de resposta por rota | Medir agora |
-| Queries por request | server | Supabase logs | Contar queries SQL por request HTTP | Medir agora |
-| Duracao de job | server | Inngest dashboard | Tempo de execucao por function | Medir agora |
-
----
-
-## Checklist de Verificacao
-
-- [ ] Nao mudou comportamento funcional (testes passam: `pnpm --filter @stardust/{APP} run test:unit`)
-- [ ] Build completa com sucesso (`pnpm --filter @stardust/{APP} run build`)
-- [ ] Typecheck passa (`pnpm --filter @stardust/{APP} run check:types`)
-- [ ] Qualidade passa (`pnpm --filter @stardust/{APP} run check:code`)
-- [ ] Metricas comparadas antes/depois (bundle size, latencia, query count)
-- [ ] Jobs idempotentes validados com reprocessamento manual no Inngest dashboard _(se aplicavel)_
-- [ ] {VALIDACAO_ESPECIFICA_DO_ESCOPO}
+| KPI | App | Where to Measure | How to Measure | Baseline |
+|-----|-----|------------------|----------------|----------|
+| Total JS bundle | web | Build output | `next build` -> `.next/static` total size | Run before the fixes |
+| TTFB | web | Browser/Lighthouse | `pnpm dlx lighthouse http://localhost:3000 --output json` | Measure now |
+| LCP | web | Browser | Lighthouse or `web-vitals` lib | Measure now |
+| API calls per page load | web | Backend logs | Count requests to `/auth/account` per page view | Measure now |
+| Endpoint latency | server | Sentry / logs | Average response time per route | Measure now |
+| Queries per request | server | Supabase logs | Count SQL queries per HTTP request | Measure now |
+| Job duration | server | Inngest dashboard | Execution time per function | Measure now |
 
 ---
 
-## Referencias
+## Verification Checklist
+
+- [ ] Did not change functional behavior (tests pass: `pnpm --filter @stardust/{APP} run test:unit`)
+- [ ] Build completes successfully (`pnpm --filter @stardust/{APP} run build`)
+- [ ] Typecheck passes (`pnpm --filter @stardust/{APP} run check:types`)
+- [ ] Quality passes (`pnpm --filter @stardust/{APP} run check:code`)
+- [ ] Metrics compared before/after (bundle size, latency, query count)
+- [ ] Idempotent jobs validated with manual reprocessing in the Inngest dashboard _(if applicable)_
+- [ ] {SCOPE_SPECIFIC_VALIDATION}
+
+---
+
+## References
 
 - `documentation/architecture.md`
 - `documentation/rules/rules.md`
@@ -364,18 +364,18 @@ Todas as evidencias abaixo foram verificadas diretamente no codigo fonte.
 - `documentation/rules/ai-layer-rules.md`
 - `documentation/rules/validation-layer-rules.md`
 - `documentation/reports/web-app-performance-report.md`
-- `{OUTROS_ARQUIVOS_CONSULTADOS}`
+- `{OTHER_FILES_CONSULTED}`
 ```
 
 ---
 
-## Restrições
+## Constraints
 
-- **Não invente** caminhos de arquivo, APIs, nomes de módulos ou métricas sem evidência na codebase.
-- Cite sempre o arquivo e a linha do problema — sem issues genéricos sem localização.
-- Separe fato (evidência encontrada no código) de hipótese (suspeita sem confirmação) de experimento (sugestão de como medir).
-- Não proponha correções que violem os contratos entre camadas definidos em `documentation/rules/` (ex: job não pode importar Inngest diretamente, core não pode depender de `apps/`, provider não pode expor tipos do SDK).
-- Correções de banco devem ser compatíveis com a interface de repositório do core — não alterar contratos sem avaliar impacto no domínio.
-- Se uma correção impactar o fluxo de auth, inclua validação explícita (rotas públicas, redirect para `/space`, cookies) no checklist.
-- Quando não houver métricas reais disponíveis, sinalize como **análise estática** e inclua o instrumento de medição nas pendências.
-- Issues sem `Como validar` concreto não devem ser incluídos no relatório.
+- **Do not invent** file paths, APIs, module names or metrics without evidence in the codebase.
+- Always cite the file and line of the problem — no generic issues without a location.
+- Separate fact (evidence found in the code) from hypothesis (suspicion without confirmation) and from experiment (suggestion of how to measure).
+- Do not propose fixes that violate the contracts between layers defined in `documentation/rules/` (e.g. a job cannot import Inngest directly, core cannot depend on `apps/`, a provider cannot expose SDK types).
+- Database fixes must be compatible with the core's repository interface — do not change contracts without assessing the impact on the domain.
+- If a fix affects the auth flow, include explicit validation (public routes, redirect to `/space`, cookies) in the checklist.
+- When no real metrics are available, flag it as **static analysis** and include the measurement instrument in the pending items.
+- Issues without a concrete `How to validate` must not be included in the report.

@@ -1,125 +1,125 @@
 <h1 align="center">✨ StarDust</h1>
 
-Plataforma educativa **gamificada** desenvolvida para o ensino de **lógica de programação**. O projeto utiliza uma metáfora espacial para engajar os estudantes em uma jornada de aprendizado, combinando elementos de jogos com conteúdo técnico estruturado.
+**Gamified** educational platform built to teach **programming logic**. The project uses a space metaphor to engage students in a learning journey, combining game elements with structured technical content.
 
-## 🚀 Visão Geral
+## 🚀 Overview
 
-O objetivo do StarDust é tornar o aprendizado de programação acessível e divertido, oferecendo:
+StarDust aims to make learning programming accessible and fun by offering:
 
--   **Gamificação Robusta:** Sistema de pontos (XP), moedas (StarCoins), ofensiva (Streak) e conquistas.
--   **Jornada Espacial:** Organização do conteúdo em "Planetas" (temas) e "Estrelas" (fases).
--   **Arquitetura Modular:** Separação clara de responsabilidades com foco em escalabilidade.
--   **Ambiente Completo:** Inclui plataforma de estudo (Web), área administrativa (Backoffice) e API (Server).
+-   **Robust Gamification:** Points (XP), coins (StarCoins), streaks (Streak) and achievements.
+-   **Space Journey:** Content organized into "Planets" (themes) and "Stars" (stages).
+-   **Modular Architecture:** Clear separation of responsibilities with a focus on scalability.
+-   **Complete Environment:** Includes a study platform (Web), an administrative area (Backoffice) and an API (Server).
 
 ## 🛠 Tech Stack
 
-O projeto é um **monorepo** gerenciado pelo **TurboRepo** e utiliza as tecnologias mais modernas do ecossistema JavaScript/TypeScript:
+The project is a **monorepo** managed by **TurboRepo** and uses the most modern technologies in the JavaScript/TypeScript ecosystem:
 
--   **Gerenciamento:** [TurboRepo](https://turbo.build/) + pnpm
--   **Linguagem:** [TypeScript](https://www.typescriptlang.org/) 5.8+
+-   **Management:** [TurboRepo](https://turbo.build/) + pnpm
+-   **Language:** [TypeScript](https://www.typescriptlang.org/) 5.8+
 -   **Frontend (Web):** [Next.js](https://nextjs.org/) 15 + [React](https://react.dev/) 19
--   **Estilização:** [Tailwind CSS](https://tailwindcss.com/) + [Radix UI](https://www.radix-ui.com/)
+-   **Styling:** [Tailwind CSS](https://tailwindcss.com/) + [Radix UI](https://www.radix-ui.com/)
 -   **Backend (Server):** [Node.js](https://nodejs.org/) + [Hono](https://hono.dev/)
--   **Fila/Jobs:** [Inngest](https://www.inngest.com/)
--   **App Interno (Backoffice):** [React Router](https://reactrouter.com/) v7
--   **Banco de Dados:** [Supabase](https://supabase.com/) (PostgreSQL)
--   **Qualidade:** [Biome](https://biomejs.dev/) + [Jest](https://jestjs.io/)
+-   **Queue/Jobs:** [Inngest](https://www.inngest.com/)
+-   **Internal App (Backoffice):** [React Router](https://reactrouter.com/) v7
+-   **Database:** [Supabase](https://supabase.com/) (PostgreSQL)
+-   **Quality:** [Biome](https://biomejs.dev/) + [Jest](https://jestjs.io/)
 
-## 🏗 Arquitetura
+## 🏗 Architecture
 
-O StarDust segue os princípios da **Arquitetura Limpa (Clean Architecture)** e **Domain-Driven Design (DDD)**, adotando um modelo **Hexagonal (Ports and Adapters)**.
+StarDust follows the principles of **Clean Architecture** and **Domain-Driven Design (DDD)**, adopting a **Hexagonal (Ports and Adapters)** model.
 
--   **Core Agnóstico:** O pacote `@stardust/core` contém toda a lógica de negócio e é independente de frameworks.
--   **Camadas Bem Definidas:** Separação estrita entre Domínio, Casos de Uso, Interfaces e Infraestrutura.
--   **Adaptação:** As aplicações (`web`, `server`, `backoffice`) atuam como adaptadores que consomem o núcleo do sistema.
+-   **Framework-Agnostic Core:** The `@stardust/core` package holds all the business logic and is independent of frameworks.
+-   **Well-Defined Layers:** Strict separation between Domain, Use Cases, Interfaces and Infrastructure.
+-   **Adaptation:** The applications (`web`, `server`, `backoffice`) act as adapters that consume the system core.
 
-Para detalhes profundos sobre as decisões técnicas, consulte a [Documentação de Arquitetura](documentation/architecture.md).
+For an in-depth look at the technical decisions, see the [Architecture Documentation](documentation/architecture.md).
 
-## 📂 Estrutura do Projeto
+## 📂 Project Structure
 
 ```bash
 stardust/
-├── apps/                  # Aplicações executáveis
-│   ├── web/               # Frontend principal (Next.js)
+├── apps/                  # Executable applications
+│   ├── web/               # Main frontend (Next.js)
 │   ├── server/            # Backend API (Hono/Node)
-│   └── backoffice/        # Painel Administrativo (React Router)
-├── packages/              # Bibliotecas compartilhadas
-│   ├── core/              # Regras de Negócio e Domínio (DDD)
-│   ├── validation/        # Schemas de validação (Zod)
-│   ├── email/             # Serviços de Email
-│   ├── studio/            # Autoria de animações Lottie
-│   └── lsp/               # Language Server Protocol (Lógica)
-└── documentation/         # Documentação centralizada
+│   └── backoffice/        # Admin panel (React Router)
+├── packages/              # Shared libraries
+│   ├── core/              # Business rules and domain (DDD)
+│   ├── validation/        # Validation schemas (Zod)
+│   ├── email/             # Email services
+│   ├── studio/            # Lottie animation authoring
+│   └── lsp/               # Language Server Protocol (Logic)
+└── documentation/         # Centralized documentation
 ```
 
-## ⚙️ Configuração e Instalação
+## ⚙️ Setup and Installation
 
-### Pré-requisitos
--   Node.js 22 ou superior.
--   pnpm 11 (gerenciador de pacotes; habilite com `corepack enable`).
+### Prerequisites
+-   Node.js 22 or higher.
+-   pnpm 11 (package manager; enable it with `corepack enable`).
 
-### Passo a Passo
+### Step by Step
 
-1.  **Clone o repositório:**
+1.  **Clone the repository:**
     ```bash
     git clone https://github.com/JohnPetros/stardust.git
     cd stardust
     ```
 
-2.  **Configure o Ambiente:**
-    Crie um arquivo `.env` na raiz do projeto (e nos apps específicos, se necessário) contendo as variáveis de ambiente. Consulte o time de desenvolvimento para obter as credenciais do Supabase e outros serviços.
+2.  **Configure the Environment:**
+    Create a `.env` file at the project root (and in the specific apps, if needed) containing the environment variables. Ask the development team for the Supabase and other service credentials.
 
-3.  **Instale as dependências:**
+3.  **Install the dependencies:**
     ```bash
     pnpm install
     ```
 
-4.  **Execute o projeto (modo desenvolvimento):**
+4.  **Run the project (development mode):**
     ```bash
     pnpm run dev
     ```
-    Isso iniciará todas as aplicações do monorepo simultaneamente via TurboRepo.
+    This starts all the monorepo applications simultaneously through TurboRepo.
 
-## 📖 Documentação
+## 📖 Documentation
 
-A documentação completa do projeto está organizada no diretório `documentation/`. Comece por aqui:
+The complete project documentation lives in the `documentation/` directory. Start here:
 
--   [Visão Geral do Produto](documentation/overview.md)
--   [Arquitetura e Decisões Técnicas](documentation/architecture.md)
--   [Regras e Convenções](documentation/rules/rules.md)
-    -   [Convenções de Código](documentation/rules/code-conventions-rules.md)
-    -   [Core e Domínio](documentation/rules/core-package-rules.md)
-    -   [Regras de UI](documentation/rules/ui-layer-rules.md)
-    -   [Camada REST](documentation/rules/rest-layer-rules.md)
-    -   [Camada RPC](documentation/rules/rpc-layer-rules.md)
-    -   [Camada de Fila](documentation/rules/queue-layer-rules.md)
-    -   [Banco de Dados](documentation/rules/database-rules.md)
+-   [Product Overview](documentation/overview.md)
+-   [Architecture and Technical Decisions](documentation/architecture.md)
+-   [Rules and Conventions](documentation/rules/rules.md)
+    -   [Code Conventions](documentation/rules/code-conventions-rules.md)
+    -   [Core and Domain](documentation/rules/core-package-rules.md)
+    -   [UI Rules](documentation/rules/ui-layer-rules.md)
+    -   [REST Layer](documentation/rules/rest-layer-rules.md)
+    -   [RPC Layer](documentation/rules/rpc-layer-rules.md)
+    -   [Queue Layer](documentation/rules/queue-layer-rules.md)
+    -   [Database](documentation/rules/database-rules.md)
     -   [Providers](documentation/rules/provision-layer-rules.md)
-    -   [Aplicação Web](documentation/rules/web-application-rules.md)
-    -   [Aplicação Backoffice](documentation/rules/backoffice-application-rules.md)
-    -   [Testes de Handlers](documentation/rules/handlers-testing-rules.md)
-    -   [Testes de Casos de Uso](documentation/rules/use-cases-testing-rules.md)
-    -   [Testes de Widgets](documentation/rules/widget-tests-rules.md)
-    -   [Testes de Objetos de Domínio](documentation/rules/domain-objects-testing-rules.md)
+    -   [Web Application](documentation/rules/web-application-rules.md)
+    -   [Backoffice Application](documentation/rules/backoffice-application-rules.md)
+    -   [Handler Tests](documentation/rules/handlers-testing-rules.md)
+    -   [Use Case Tests](documentation/rules/use-cases-testing-rules.md)
+    -   [Widget Tests](documentation/rules/widget-tests-rules.md)
+    -   [Domain Object Tests](documentation/rules/domain-objects-testing-rules.md)
 
-## 🧪 Testes
+## 🧪 Tests
 
-O projeto utiliza `Jest` para testes automatizados, cobrindo desde regras de negócio no core até componentes de UI.
+The project uses `Jest` for automated tests, covering everything from business rules in the core to UI components.
 
 ```bash
-# Executar todos os testes
+# Run all tests
 pnpm run test
 
-# Executar testes apenas do core
+# Run core tests only
 pnpm run test:core
 ```
 
-## 📝 Licença
+## 📝 License
 
-Este projeto está sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
 ---
 
 <p align="center">
-  Feito com 💜 por <a href="https://github.com/JohnPetros">John Petros</a> 👋🏻
+  Made with 💜 by <a href="https://github.com/JohnPetros">John Petros</a> 👋🏻
 </p>

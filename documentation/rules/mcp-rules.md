@@ -1,191 +1,191 @@
-# Regras de Uso de MCPs
+# MCP Usage Rules
 
-## Objetivo
+## Goal
 
-Os MCPs do projeto existem para acelerar leitura de contexto, validacao de
-comportamento real, integracao com servicos externos e edicao assistida de
-artefatos fora do codigo. Eles devem ser usados como extensoes operacionais do
-trabalho, nao como substitutos de analise tecnica.
+The project's MCPs exist to speed up context reading, validation of real
+behavior, integration with external services and assisted editing of
+non-code artifacts. They must be used as operational extensions of the
+work, not as substitutes for technical analysis.
 
-## MCPs suportados no projeto
+## MCPs supported in the project
 
-- **Context7**: buscar documentacao atualizada de bibliotecas, frameworks,
-  SDKs, APIs e CLIs.
-- **CodeGraph**: explorar simbolos, caminhos de chamada e impacto de mudancas
-  na codebase indexada.
-- **Penpot**: inspecionar e editar o arquivo Penpot `stardust`, exportar
-  imagens de boards, ler componentes e tokens e validar layout.
-- **Pencil**: ler e editar arquivos `.pen`, validar layout e trabalhar com
-  contexto de design.
-- **Supabase Dev**: inspecionar e operar o ambiente de desenvolvimento do
-  Supabase.
-- **Supabase Prod**: inspecionar o ambiente de producao do Supabase com cuidado
-  extra.
-- **Playwright MCP**: validar fluxos reais de navegador, navegacao,
-  autenticacao, scroll, formularios e regressao visual/interativa.
+- **Context7**: fetch up-to-date documentation for libraries, frameworks,
+  SDKs, APIs and CLIs.
+- **CodeGraph**: explore symbols, call paths and the impact of changes
+  in the indexed codebase.
+- **Penpot**: inspect and edit the Penpot file `stardust`, export
+  board images, read components and tokens and validate layout.
+- **Pencil**: read and edit `.pen` files, validate layout and work with
+  design context.
+- **Supabase Dev**: inspect and operate the Supabase development
+  environment.
+- **Supabase Prod**: inspect the Supabase production environment with extra
+  care.
+- **Playwright MCP**: validate real browser flows, navigation,
+  authentication, scroll, forms and visual/interactive regression.
 
-## Regras gerais
+## General rules
 
-- Sempre escolha o MCP mais especifico para a tarefa antes de recorrer a shell
-  ou web search genérico.
-- Nao use MCP quando a resposta pode ser obtida de forma mais simples e segura
-  pelo proprio codebase local.
-- Nao assuma que o MCP esta pronto para uso: confirme pre-requisitos do
-  ambiente quando a ferramenta depende de binarios, servicos locais, sessao ou
-  credenciais.
-- Trate a saida do MCP como evidencia operacional. Ainda e necessario
-  interpretar o resultado com base na arquitetura e nas regras do projeto.
-- Quando o MCP revelar falha de infraestrutura ou ambiente, registre isso
-  explicitamente em vez de concluir incorretamente que o bug esta no codigo.
+- Always choose the most specific MCP for the task before resorting to the shell
+  or generic web search.
+- Do not use an MCP when the answer can be obtained in a simpler and safer way
+  from the local codebase itself.
+- Do not assume the MCP is ready to use: confirm the environment prerequisites
+  when the tool depends on binaries, local services, session or
+  credentials.
+- Treat the MCP output as operational evidence. It is still necessary to
+  interpret the result based on the project's architecture and rules.
+- When the MCP reveals an infrastructure or environment failure, record that
+  explicitly instead of incorrectly concluding that the bug is in the code.
 
-## Quando usar cada MCP
+## When to use each MCP
 
 ### Context7
 
-Use quando a tarefa depender de documentacao atualizada e houver risco de
-desvio por informacao desatualizada.
+Use when the task depends on up-to-date documentation and there is a risk of
+drift from outdated information.
 
-Use para:
+Use for:
 
-- sintaxe e contratos de bibliotecas;
-- opcoes de configuracao;
-- migracoes de versao;
-- comportamento atual de ferramentas externas.
+- library syntax and contracts;
+- configuration options;
+- version migrations;
+- current behavior of external tools.
 
-Nao use como fonte principal para explicar o proprio codebase do projeto.
+Do not use as the main source to explain the project's own codebase.
 
 ### CodeGraph
 
-Use antes de ler ou editar codigo quando precisar entender simbolos, fluxos,
-arquitetura, bugs ou o impacto de uma mudanca. A exploracao retorna codigo-fonte,
-caminhos de chamada e raio de impacto.
+Use before reading or editing code when you need to understand symbols, flows,
+architecture, bugs or the impact of a change. The exploration returns source code,
+call paths and blast radius.
 
-Boas praticas:
+Best practices:
 
-- consulte simbolos ou arquivos relevantes em uma exploracao;
-- trate o codigo retornado como leitura atual e nao repita a busca com `grep` ou
-  leitura dos mesmos arquivos;
-- use leitura direta para arquivos fora do indice ou detalhes que a exploracao
-  nao mostrou;
-- se o projeto nao estiver indexado, use as ferramentas locais de navegacao e
-  leitura; nao inicialize o indice sem solicitacao.
+- query relevant symbols or files in a single exploration;
+- treat the returned code as a current read and do not repeat the search with `grep` or
+  by reading the same files;
+- use direct reading for files outside the index or details that the exploration
+  did not show;
+- if the project is not indexed, use the local navigation and reading
+  tools; do not initialize the index without a request.
 
 ### Penpot
 
-Use para inspecionar ou editar o arquivo Penpot `stardust`, a fonte visual
-canonica do projeto. O MCP so funciona com o arquivo aberto no navegador e o
-plugin Penpot MCP carregado e conectado a ele.
+Use to inspect or edit the Penpot file `stardust`, the project's canonical
+visual source. The MCP only works with the file open in the browser and the
+Penpot MCP plugin loaded and connected to it.
 
-Boas praticas:
+Best practices:
 
-- leia `high_level_overview` uma vez por sessao e consulte `penpot_api_info`
-  antes de usar `execute_code`;
-- confirme com `penpot.currentFile.name` que o arquivo conectado e `stardust`;
-  o servidor MCP pode estar ligado a outro arquivo Penpot;
-- localize paginas e boards por nome (`penpot.currentFile.pages`,
-  `penpotUtils.findShapes`); o nome e o contrato e IDs mudam se o board for
-  recriado;
-- leia a estrutura, os componentes (`penpot.library.local`) e os tokens antes
-  de deduzir cores, medidas ou componentes;
-- use `export_shape` apenas quando validacao visual for necessaria;
-- ao editar, use os componentes e tokens da biblioteca, nao altere
-  componentes da biblioteca sem pedido e confira o resultado com
-  `export_shape`; o Penpot salva automaticamente;
-- o sandbox do `execute_code` nao tem `fetch`; envie dados inline e nao dependa
-  de servidores locais.
+- read `high_level_overview` once per session and consult `penpot_api_info`
+  before using `execute_code`;
+- confirm with `penpot.currentFile.name` that the connected file is `stardust`;
+  the MCP server may be linked to another Penpot file;
+- locate pages and boards by name (`penpot.currentFile.pages`,
+  `penpotUtils.findShapes`); the name is the contract and IDs change if the board is
+  recreated;
+- read the structure, the components (`penpot.library.local`) and the tokens before
+  deducing colors, measurements or components;
+- use `export_shape` only when visual validation is necessary;
+- when editing, use the library's components and tokens, do not change
+  library components without a request and check the result with
+  `export_shape`; Penpot saves automatically;
+- the `execute_code` sandbox has no `fetch`; send data inline and do not depend
+  on local servers.
 
 ### Pencil
 
-Use somente para arquivos `.pen` ou quando a tarefa exigir contexto real de
-design do editor.
+Use only for `.pen` files or when the task requires real editor
+design context.
 
-Boas praticas:
+Best practices:
 
-- obtenha primeiro o estado/schema atual do editor;
-- use screenshot apenas quando validacao visual for necessaria;
-- prefira validacao estrutural quando o objetivo for layout ou hierarquia.
+- first obtain the editor's current state/schema;
+- use a screenshot only when visual validation is necessary;
+- prefer structural validation when the goal is layout or hierarchy.
 
-### Supabase Dev e Supabase Prod
+### Supabase Dev and Supabase Prod
 
-Use para verificar schema, logs, configuracao e dados relacionados ao fluxo
-investigado.
+Use to verify schema, logs, configuration and data related to the flow
+under investigation.
 
-Boas praticas:
+Best practices:
 
-- comece por inspecao antes de alterar qualquer coisa;
-- prefira `Dev` por padrao;
-- use `Prod` apenas quando a pergunta exigir o estado real de producao;
-- em producao, evite operacoes mutativas sem necessidade objetiva e evidencia.
+- start with inspection before changing anything;
+- prefer `Dev` by default;
+- use `Prod` only when the question requires the real production state;
+- in production, avoid mutating operations without an objective need and evidence.
 
 ### Playwright MCP
 
-Use quando a mudanca tocar comportamento visual ou interativo real:
+Use when the change touches real visual or interactive behavior:
 
-- paginas autenticadas;
-- navegacao;
-- formularios;
+- authenticated pages;
+- navigation;
+- forms;
 - scroll;
-- modais e drawers;
-- regressao de layout;
-- comportamento do browser que teste unitario nao cobre bem.
+- modals and drawers;
+- layout regression;
+- browser behavior that a unit test does not cover well.
 
-## Regras especificas para o Playwright MCP
+## Specific rules for the Playwright MCP
 
-### Pre-requisitos
+### Prerequisites
 
-Antes de abrir a pagina:
+Before opening the page:
 
-- confirme que o app correto esta rodando na porta esperada;
-- confirme que o binario exigido pelo MCP existe no host;
-- confirme que a URL responde sem erro estrutural;
-- confirme se a rota exige autenticacao.
+- confirm that the correct app is running on the expected port;
+- confirm that the binary required by the MCP exists on the host;
+- confirm that the URL responds without a structural error;
+- confirm whether the route requires authentication.
 
-### Sessao e autenticacao
+### Session and authentication
 
-- O navegador do MCP usa contexto isolado. Login manual no navegador local do
-  usuario nao implica sessao autenticada no Playwright.
-- Para rotas autenticadas, autentique dentro do proprio MCP ou injete a sessao
-  explicitamente.
-- Quando for necessario autenticar no ambiente atual para validar paginas
-  protegidas, use as credenciais informadas pelo usuario neste projeto:
+- The MCP's browser uses an isolated context. A manual login in the user's local
+  browser does not imply an authenticated session in Playwright.
+- For authenticated routes, authenticate inside the MCP itself or inject the session
+  explicitly.
+- When it is necessary to authenticate in the current environment to validate
+  protected pages, use the credentials provided by the user in this project:
   `ctrlaltdel.cursor@gmail.com` / `123456`.
-- Se a rota protegida redirecionar para login, nao trate isso como bug da tela
-  alvo sem antes validar ausencia de sessao.
+- If the protected route redirects to login, do not treat this as a bug of the
+  target screen without first validating the absence of a session.
 
-### Validacao correta
+### Correct validation
 
-- Nao confie apenas na URL final. Capture snapshot, console e, quando fizer
-  sentido, screenshot.
-- Diferencie erro de produto de erro de ambiente. Exemplo: assets `404`,
-  processo incorreto na porta, sessao ausente, server quebrado.
-- Quando medir bugs de scroll ou viewport, colete dimensoes reais do container
-  rolavel e do elemento alvo no contexto do browser.
-- Quando o fluxo depender de animacao, lazy-load ou layout tardio, aguarde
-  estado estavel antes de concluir que o comportamento esta correto.
+- Do not rely only on the final URL. Capture a snapshot, the console and, when it makes
+  sense, a screenshot.
+- Distinguish a product error from an environment error. Example: `404` assets,
+  wrong process on the port, missing session, broken server.
+- When measuring scroll or viewport bugs, collect the real dimensions of the scrollable
+  container and of the target element in the browser context.
+- When the flow depends on animation, lazy-load or late layout, wait for a
+  stable state before concluding that the behavior is correct.
 
-### Limites
+### Limits
 
-- Warnings de console so importam quando afetam diretamente o fluxo validado.
-- Erros auxiliares em requests paralelos devem ser registrados, mas nao devem
-  invalidar a conclusao principal sem nexo causal claro.
-- Se o MCP falhar por infraestrutura, documente a causa exata e a etapa que
-  ficou pendente.
+- Console warnings only matter when they directly affect the validated flow.
+- Auxiliary errors in parallel requests must be recorded, but must not
+  invalidate the main conclusion without a clear causal link.
+- If the MCP fails due to infrastructure, document the exact cause and the step that
+  remained pending.
 
-## Ordem recomendada de uso
+## Recommended order of use
 
-1. Confirmar o objetivo e o tipo de validacao necessario.
-2. Escolher o MCP apropriado.
-3. Verificar pre-requisitos de ambiente.
-4. Executar a leitura ou validacao.
-5. Registrar evidencias observadas.
-6. Separar problema de ambiente, problema de dados e problema de codigo.
+1. Confirm the goal and the type of validation needed.
+2. Choose the appropriate MCP.
+3. Verify the environment prerequisites.
+4. Run the reading or validation.
+5. Record the observed evidence.
+6. Separate environment problem, data problem and code problem.
 
-## Anti-padroes
+## Anti-patterns
 
-- Usar Playwright para tentar provar bug de UI sem app rodando corretamente.
-- Usar Context7 para responder pergunta sobre codigo local que CodeGraph ou
-  leitura direta resolveriam melhor.
-- Usar Supabase Prod quando Dev e suficiente.
-- Concluir que uma rota esta quebrada sem verificar autenticacao, redirect ou
-  contexto isolado do navegador.
-- Ignorar falhas de infraestrutura do MCP e seguir com conclusoes especulativas.
+- Using Playwright to try to prove a UI bug without the app running correctly.
+- Using Context7 to answer a question about local code that CodeGraph or
+  direct reading would solve better.
+- Using Supabase Prod when Dev is enough.
+- Concluding that a route is broken without checking authentication, redirect or
+  the browser's isolated context.
+- Ignoring MCP infrastructure failures and proceeding with speculative conclusions.

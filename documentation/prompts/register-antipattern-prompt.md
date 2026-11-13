@@ -1,142 +1,142 @@
 ---
-description: Registra um anti-padrão cometido durante a implementação no doc de rules da camada correspondente, para evitar reincidência nas próximas sessões.
+description: Registers an anti-pattern committed during implementation in the corresponding layer's rules doc, to avoid recurrence in future sessions.
 ---
 
-# Prompt: Registrar Anti-padrão
+# Prompt: Register Anti-pattern
 
-**Objetivo:** Documentar um erro de implementação cometido pela IA no arquivo
-de regras da camada correspondente, de forma clara e acionável para que o
-mesmo anti-padrão não se repita em sessões futuras.
+**Goal:** Document an implementation mistake made by the AI in the corresponding
+layer's rules file, in a clear and actionable way so that the
+same anti-pattern does not recur in future sessions.
 
-> Antes de registrar o anti-padrão, leia:
+> Before registering the anti-pattern, read:
 > - `documentation/overview.md`
 > - `documentation/architecture.md`
 > - `documentation/rules/rules.md`
 
 ---
 
-## Regras Aplicáveis
+## Applicable Rules
 
-Este prompt sempre altera `documentation/rules/`, portanto leia:
+This prompt always changes `documentation/rules/`, so read:
 
-- `documentation/rules/rules.md` — índice para selecionar o arquivo de destino.
-- Rule específica da camada afetada pelo anti-padrão.
-- `documentation/rules/code-conventions-rules.md` — quando o anti-padrão envolver nomes, factories, erros, eventos ou organização geral.
+- `documentation/rules/rules.md` — index for selecting the target file.
+- The specific Rule of the layer affected by the anti-pattern.
+- `documentation/rules/code-conventions-rules.md` — when the anti-pattern involves names, factories, errors, events or general organization.
 
 ---
 
-## Entrada
+## Input
 
-- **Descrição do anti-padrão:** o que foi feito de errado e em qual contexto
-  (texto livre, trecho de código, descrição do comportamento incorreto).
-- **Camada afetada** (opcional): se já souber, informe a camada
+- **Anti-pattern description:** what was done wrong and in what context
+  (free text, code snippet, description of the incorrect behavior).
+- **Affected layer** (optional): if already known, provide the layer
   (`core`, `database`, `rest`, `rpc`, `queue`, `ui`, `realtime`,
   `provision`, `ai`, `validation`, `lsp`, `testing`, `code-conventions`,
-  `web`, `server`, `backoffice`). Se
-  não souber, o prompt identifica automaticamente.
+  `web`, `server`, `backoffice`). If
+  unknown, the prompt identifies it automatically.
 
 ---
 
-## Diretrizes de Execução
+## Execution Guidelines
 
-### 1. Identificar o doc de rules correto
+### 1. Identify the correct rules doc
 
-Leia `documentation/rules/rules.md` e, com base na descrição do anti-padrão,
-identifique o arquivo de regras da camada afetada:
+Read `documentation/rules/rules.md` and, based on the anti-pattern description,
+identify the rules file of the affected layer:
 
-| Camada | Arquivo |
+| Layer | File |
 |---|---|
-| Regra de negócio / domínio | `documentation/rules/core-package-rules.md` |
-| Persistência / repositórios / mappers | `documentation/rules/database-rules.md` |
-| Comunicação HTTP / `RestClient` / services REST | `documentation/rules/rest-layer-rules.md` |
-| Actions / contrato `Call` / RPC | `documentation/rules/rpc-layer-rules.md` |
-| Jobs assíncronos / Inngest / broker | `documentation/rules/queue-layer-rules.md` |
+| Business rule / domain | `documentation/rules/core-package-rules.md` |
+| Persistence / repositories / mappers | `documentation/rules/database-rules.md` |
+| HTTP communication / `RestClient` / REST services | `documentation/rules/rest-layer-rules.md` |
+| Actions / `Call` contract / RPC | `documentation/rules/rpc-layer-rules.md` |
+| Async jobs / Inngest / broker | `documentation/rules/queue-layer-rules.md` |
 | Widgets / hooks / views / stores | `documentation/rules/ui-layer-rules.md` |
-| Canais em tempo real / listeners | `documentation/rules/realtime-rules.md` |
-| Providers / gateways de terceiros | `documentation/rules/provision-layer-rules.md` |
-| Tools / workflows / prompts de IA | `documentation/rules/ai-layer-rules.md` |
-| Schemas e validações compartilhadas | `documentation/rules/validation-layer-rules.md` |
-| Linguagem Delegua / pacote LSP | `documentation/rules/lsp-layer-rules.md` |
-| Convenções de código / nomeação / factories | `documentation/rules/code-conventions-rules.md` |
-| Regras da app web | `documentation/rules/web-application-rules.md` |
-| Regras da app server | `documentation/rules/server-application-rules.md` |
-| Regras da app studio | `documentation/rules/backoffice-application-rules.md` |
-| Testes de handlers | `documentation/rules/handlers-testing-rules.md` |
-| Testes de rotas HTTP do server | `documentation/rules/server-routes-testing-rules.md` |
-| Testes de rotas e pages da web | `documentation/rules/web-app-routes-testing-rules.md` |
-| Testes de use cases | `documentation/rules/use-cases-testing-rules.md` |
-| Testes de widgets | `documentation/rules/widget-tests-rules.md` |
-| Testes de objetos de domínio | `documentation/rules/domain-objects-testing-rules.md` |
-| Uso de MCPs | `documentation/rules/mcp-rules.md` |
-| Revisao de PR | `documentation/rules/pr-review-rules.md` |
+| Realtime channels / listeners | `documentation/rules/realtime-rules.md` |
+| Third-party providers / gateways | `documentation/rules/provision-layer-rules.md` |
+| AI tools / workflows / prompts | `documentation/rules/ai-layer-rules.md` |
+| Shared schemas and validations | `documentation/rules/validation-layer-rules.md` |
+| Delegua language / LSP package | `documentation/rules/lsp-layer-rules.md` |
+| Code conventions / naming / factories | `documentation/rules/code-conventions-rules.md` |
+| Web app rules | `documentation/rules/web-application-rules.md` |
+| Server app rules | `documentation/rules/server-application-rules.md` |
+| Studio app rules | `documentation/rules/backoffice-application-rules.md` |
+| Handler tests | `documentation/rules/handlers-testing-rules.md` |
+| Server HTTP route tests | `documentation/rules/server-routes-testing-rules.md` |
+| Web routes and pages tests | `documentation/rules/web-app-routes-testing-rules.md` |
+| Use case tests | `documentation/rules/use-cases-testing-rules.md` |
+| Widget tests | `documentation/rules/widget-tests-rules.md` |
+| Domain object tests | `documentation/rules/domain-objects-testing-rules.md` |
+| MCP usage | `documentation/rules/mcp-rules.md` |
+| PR review | `documentation/rules/pr-review-rules.md` |
 | Commits | `documentation/rules/commit-rules.md` |
 
-Se o anti-padrão cruzar mais de uma camada, registre em todos os docs
-relevantes.
+If the anti-pattern crosses more than one layer, register it in all the
+relevant docs.
 
-> Use os nomes e paths reais do projeto. Não invente arquivos de rules.
+> Use the project's real names and paths. Do not invent rules files.
 
-### 2. Formatar a entrada do anti-padrão
+### 2. Format the anti-pattern entry
 
-Estruture o registro no seguinte formato antes de inserir no doc de rules:
+Structure the record in the following format before inserting it into the rules doc:
 
 ```markdown
-### Anti-padrão: <Título curto e descritivo>
+### Anti-pattern: <Short, descriptive title>
 
-**O que foi feito:**
-<Descrição objetiva do erro cometido, com trecho de código se disponível.>
+**What was done:**
+<Objective description of the mistake made, with a code snippet if available.>
 
-**Por que está errado:**
-<Explicação do impacto arquitetural, violação de princípio ou risco gerado.>
+**Why it is wrong:**
+<Explanation of the architectural impact, principle violation or risk created.>
 
-**O que deve ser feito:**
-<Descrição da abordagem correta, com trecho de código se possível.>
+**What should be done:**
+<Description of the correct approach, with a code snippet if possible.>
 ```
 
-### 3. Inserir no doc de rules
+### 3. Insert into the rules doc
 
-Abra o arquivo de rules identificado no passo 1 e insira o registro:
+Open the rules file identified in step 1 and insert the record:
 
-- Localize a seção mais apropriada do doc para registrar o anti-padrão.
-  Prioridade de encaixe:
-  1. seção de proibições/antipadrões existente;
-  2. seção `## Regras` ou `## Padroes` quando ela já concentra alertas;
-  3. seção `## Notas`, se o documento for mais antigo e não possuir bloco
-     claro para proibições.
-- Se o documento não tiver uma subseção apropriada, crie uma subseção H3 curta
-  e objetiva, sem reestruturar o resto do arquivo.
-- Acrescente o novo anti-padrão ao final da seção escolhida, sem remover
-  entradas existentes.
-- Mantenha o estilo e a linguagem do documento original.
-- Preserve a consistência com a arquitetura do StarDust: `packages/core`
-  agnóstico a frameworks, apps como adapters, uso de Factory Functions quando
-  aplicável e direção de dependência apontando para dentro.
+- Locate the most appropriate section of the doc to register the anti-pattern.
+  Fit priority:
+  1. an existing prohibitions/anti-patterns section;
+  2. a `## Rules` or `## Patterns` section when it already concentrates warnings;
+  3. a `## Notes` section, if the document is older and has no
+     clear block for prohibitions.
+- If the document has no appropriate subsection, create a short, objective
+  H3 subsection, without restructuring the rest of the file.
+- Add the new anti-pattern at the end of the chosen section, without removing
+  existing entries.
+- Keep the style and language of the original document.
+- Preserve consistency with the StarDust architecture: `packages/core`
+  framework-agnostic, apps as adapters, use of Factory Functions where
+  applicable and dependency direction pointing inward.
 
-### 4. Confirmar
+### 4. Confirm
 
-Após inserir, exiba o trecho adicionado e confirme o caminho do arquivo
-atualizado.
-
----
-
-## Saída Esperada
-
-- Doc de rules da camada atualizado com o novo anti-padrão registrado na seção
-  mais apropriada do documento.
-- Exibição do trecho inserido para confirmação visual.
+After inserting, display the added excerpt and confirm the path of the
+updated file.
 
 ---
 
-## Restrições
+## Expected Output
 
-- **Não remova nem reescreva** entradas existentes no doc de rules.
-- **Não generalize** o anti-padrão além do que foi descrito — registre exatamente
-  o erro cometido, sem inferir problemas não observados.
-- **Não invente** seções fixas que não existem no documento atual. Adapte a
-  inserção à estrutura real do arquivo de rules.
-- Se o anti-padrão envolver violação arquitetural, explicite o limite quebrado
-  (ex: `core` importando app, lógica de negócio fora de `packages/core`,
-  `RestClient` instanciado dentro de `service`, `job` acoplado ao SDK do
-  Inngest, widget acessando infraestrutura diretamente).
-- Se faltar contexto suficiente para identificar a camada ou descrever o
-  "O que deve ser feito", use a tool `question` antes de escrever.
+- The layer's rules doc updated with the new anti-pattern registered in the most
+  appropriate section of the document.
+- Display of the inserted excerpt for visual confirmation.
+
+---
+
+## Restrictions
+
+- **Do not remove or rewrite** existing entries in the rules doc.
+- **Do not generalize** the anti-pattern beyond what was described — register exactly
+  the mistake made, without inferring unobserved problems.
+- **Do not invent** fixed sections that do not exist in the current document. Adapt the
+  insertion to the real structure of the rules file.
+- If the anti-pattern involves an architectural violation, state explicitly the broken boundary
+  (e.g., `core` importing an app, business logic outside `packages/core`,
+  `RestClient` instantiated inside a `service`, `job` coupled to the Inngest
+  SDK, widget accessing infrastructure directly).
+- If there is not enough context to identify the layer or describe the
+  "What should be done", use the `question` tool before writing.

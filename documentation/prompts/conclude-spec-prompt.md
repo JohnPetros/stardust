@@ -1,85 +1,85 @@
 ---
 name: conclude-spec
-description: Verificar uma entrega do Stardust, completar seus artefatos SDD e publicar ou atualizar o PR após o Implementation Reviewer, os checks e o CI do HEAD do PR.
+description: Verify a Stardust delivery, complete its SDD artifacts and publish or update the PR after the Implementation Reviewer, the checks and the CI of the PR HEAD.
 ---
 
-# Concluir Spec
+# Conclude Spec
 
-Feche a entrega atual reconciliando o Contract da Spec, a evidência do Evaluation, os
-findings e as referências de publicação. A task principal conduz o fechamento na task
-atual; não crie nova thread. Consuma a evidência de implementação válida: a conclusão
-não inicia outro ciclo amplo de validação nem de revisão.
+Close the current delivery by reconciling the Spec Contract, the Evaluation evidence, the
+findings and the publication references. The main task drives the closure within the
+current task; do not create a new thread. Consume the valid implementation evidence:
+the conclusion does not start another broad validation or review cycle.
 
-Invocar `conclude-spec` não autoriza, por si só, nenhuma mutação externa. Commit, `push`,
-criação ou atualização de PR (o encadeamento `commit-code` → `open-pr`) e a sincronização
-com `main` exigem autorização explícita e separada do usuário, dada no próprio pedido. Sem
-ela, conclua localmente, pare antes de qualquer mutação externa e reporte a publicação como
-não solicitada; um pedido apenas local pula commit e PR. Mesmo autorizada, a publicação
-nunca autoriza fazer merge da entrega em `main`, deploy ou escrita em serviços externos
-além do PR. A continuação automática a partir de `implement-spec` não amplia a autorização.
+Invoking `conclude-spec` does not, by itself, authorize any external mutation. Commit, `push`,
+creating or updating a PR (the `commit-code` → `open-pr` chain) and syncing
+with `main` require explicit, separate authorization from the user, given in the request itself. Without
+it, conclude locally, stop before any external mutation and report publication as
+not requested; a local-only request skips commit and PR. Even when authorized, publication
+never authorizes merging the delivery into `main`, deploying or writing to external services
+beyond the PR. Automatic continuation from `implement-spec` does not widen the authorization.
 
-## Pré-condições e continuidade
+## Preconditions and continuity
 
-Leia `AGENTS.md`, `documentation/sdd.md`, a revisão exata da Spec e seu Verification
-Contract (`Validation Contract` em Specs legadas), o Evaluation, as Rules e o tooling relevantes e o diff integrado. Verifique o
-PRD canônico em `documentation/prds/` e a revisão registrada; reutilize uma leitura
-completa e atual no mesmo contexto e releia se a revisão mudou ou a autoridade for
-incerta. Reporte conflitos de autoridade; devolva a Spec afetada a `draft` para
-reconciliação por `create-spec` e retome a implementação. Nunca altere silenciosamente a
-intenção de produto, o ownership de módulos, a Architecture, as Rules nem o contrato de
-aceitação.
+Read `AGENTS.md`, `documentation/sdd.md`, the exact Spec revision and its Verification
+Contract (`Validation Contract` in legacy Specs), the Evaluation, the relevant Rules and tooling, and the integrated diff. Verify the
+canonical PRD in `documentation/prds/` and the recorded revision; reuse a complete and
+current read in the same context and re-read if the revision changed or the authority is
+uncertain. Report authority conflicts; return the affected Spec to `draft` for
+reconciliation by `create-spec` and resume the implementation. Never silently change the
+product intent, module ownership, Architecture, Rules or the acceptance
+contract.
 
-Exija:
+Require:
 
-- a Spec atual está `in_progress` e o Evaluation está `ready` para aquela revisão;
-- todo `RF-*`, `CA-*`, verificação `AV-*`, `MV-*` e `VV-*` exigida tem evidência atual aprovada ou uma
-  disposição explícita e justificada de não aplicável; o Progress distingue
-  implementação `Complete` de verificação `Passed`;
-- as revisões independentes de implementação e visuais exigidas cobrem o candidato (um
-  Implementation Reviewer aceito para o HEAD correspondente e, com UI design-backed, o
-  Visual Reviewer com disposição para cada linha do inventário);
-- nenhum finding bloqueante permanece; e
-- a rastreabilidade para PRD/Issue/Report, o escopo e as exclusões estão corretos.
+- the current Spec is `in_progress` and the Evaluation is `ready` for that revision;
+- every required `RF-*`, `CA-*`, `AV-*`, `MV-*` and `VV-*` verification has current approved evidence or an
+  explicit, justified not-applicable disposition; Progress distinguishes
+  `Complete` implementation from `Passed` verification;
+- the required independent implementation and visual reviews cover the candidate (an
+  Implementation Reviewer accepted for the matching HEAD and, with design-backed UI, the
+  Visual Reviewer with a disposition for every inventory row);
+- no blocking finding remains; and
+- traceability to the PRD/Issue/Report, the scope and the exclusions are correct.
 
-Um check exigido que falhou, está ausente, indisponível, pulado, dispensado ou stale não
-é um passe e não pode gerar prontidão nem conclusão. Reconcilie Check Results, Progress,
-Findings e o candidato real; um status `passed` sem prova observada é insuficiente. Mantenha o
-Evaluation `in_progress` enquanto houver evidência ou correção pendente e retenha um
-Handoff factual: progresso por critério, candidato atual, resultados reutilizáveis e
-stale, trabalho inacabado, bloqueios e a próxima ação concreta.
+A required check that failed, is missing, unavailable, skipped, waived or stale is not
+a pass and cannot produce readiness or conclusion. Reconcile Check Results, Progress,
+Findings and the real candidate; a `passed` status without observed proof is insufficient. Keep the
+Evaluation `in_progress` while there is pending evidence or a pending fix, and retain a
+factual Handoff: progress per criterion, current candidate, reusable and stale
+results, unfinished work, blockers and the concrete next action.
 
-Para um defeito dentro do Contract, adicione um `ACH-*`, invalide só a evidência afetada e
-roteie direto para `implement-spec` na task atual. O Builder responsável corrige; o runner
-de verificação designado atualiza os checks afetados até passarem. Retome a conclusão
-quando o Evaluation estiver `ready`. Não pare em uma sugestão de próximo passo para uma
-correção já autorizada.
+For a defect within the Contract, add an `ACH-*`, invalidate only the affected evidence and
+route directly to `implement-spec` in the current task. The responsible Builder fixes; the designated
+verification runner updates the affected checks until they pass. Resume the conclusion
+when the Evaluation is `ready`. Do not stop at a next-step suggestion for a
+fix that is already authorized.
 
-## Sincronizar antes da verificação final de integração
+## Sync before the final integration verification
 
-Quando a publicação estiver autorizada:
+When publication is authorized:
 
-1. Confirme que o branch atual é o branch da entrega (não `main` nem produção) e verifique
-   seu remote configurado e o ref real de `main`.
-2. Inspecione mudanças staged, unstaged e untracked. Preserve mudanças não relacionadas;
-   nunca faça reset, stash, autostash, troca de branch nem sobrescreva trabalho para forçar
-   um merge. Pause apenas se o Git não puder preservar o trabalho com segurança.
-3. Faça fetch e merge do `main` mais recente daquele remote no branch da entrega; não use
-   rebase nem `git pull` sem qualificação. Registre o commit buscado e o candidato resultante
-   no Evaluation. Se o ref buscado já estava incorporado, reutilize o resultado.
-4. Em conflitos, siga `resolve-merge-conflicts`, preserve as duas intenções, faça stage dos
-   paths exatos, conclua o merge pendente e inspecione o diff integrado. Coordene a
-   execução de integração com o runner designado.
-5. Inspecione o que a sincronização introduziu. Se os checks já passaram e a sincronização
-   alterou comportamento coberto, fixtures, dependências ou configuração, reabra apenas os
-   checks e o escopo de revisão afetados. Um merge apenas de ancestralidade ou uma mudança
-   não afetada não exige reexecução geral.
+1. Confirm that the current branch is the delivery branch (not `main` nor production) and check
+   its configured remote and the real `main` ref.
+2. Inspect staged, unstaged and untracked changes. Preserve unrelated changes;
+   never reset, stash, autostash, switch branches or overwrite work to force
+   a merge. Pause only if Git cannot safely preserve the work.
+3. Fetch and merge the latest `main` of that remote into the delivery branch; do not use
+   rebase or an unqualified `git pull`. Record the fetched commit and the resulting candidate
+   in the Evaluation. If the fetched ref was already incorporated, reuse the result.
+4. On conflicts, follow `resolve-merge-conflicts`, preserve both intents, stage
+   the exact paths, complete the pending merge and inspect the integrated diff. Coordinate the
+   integration run with the designated runner.
+5. Inspect what the sync introduced. If the checks already passed and the sync
+   changed covered behavior, fixtures, dependencies or configuration, reopen only the affected
+   checks and review scope. An ancestry-only merge or an unaffected change does not require a
+   general rerun.
 
-Se `main` avançar durante a publicação, aplique a mesma regra de invalidação escopada. Fetch
-falho, autoridade de remote desconhecida e conflitos não resolvidos impedem a publicação.
+If `main` advances during publication, apply the same scoped invalidation rule. A failed fetch,
+unknown remote authority and unresolved conflicts block publication.
 
-## Reconciliar conformance e evidência
+## Reconcile conformance and evidence
 
-Inspecione o worktree e o diff completos da entrega:
+Inspect the full worktree and delivery diff:
 
 ```bash
 git status --short
@@ -90,188 +90,185 @@ git diff --cached
 git log -10 --format='%h %s'
 ```
 
-Classifique os paths exatos da entrega, a documentação factual exigida, as mudanças de
-ledger operacional e o trabalho não relacionado. Inclua a documentação factual exigida nos
-commits ordinários; preserve e exclua explicitamente o trabalho não relacionado. Leia o
-arquivo Penpot apenas pelo Penpot MCP.
+Classify the exact delivery paths, the required factual documentation, the operational
+ledger changes and the unrelated work. Include the required factual documentation in the
+ordinary commits; explicitly preserve and exclude the unrelated work. Read the
+Penpot file only through the Penpot MCP.
 
-Para cada critério selecionado, confirme que a implementação atual satisfaz a Spec e seu
-sensor concreto. Testes passando, sozinhos, não estabelecem cobertura completa do
-Contract. Registre fronteiras, exclusões, evidência de sensores e limitações conhecidas.
-Use identificadores estáveis e preserve falhas e suas resoluções.
+For each selected criterion, confirm that the current implementation satisfies the Spec and its
+concrete sensor. Passing tests alone do not establish full coverage of the
+Contract. Record boundaries, exclusions, sensor evidence and known limitations.
+Use stable identifiers and preserve failures and their resolutions.
 
-Use o Progress e os Check Results do Evaluation, em vez de outra matriz de aceite. O
-Progress separa implementação de verificação e mapeia `CA`/`RF` para `AV`/`MV`/`VV` e IDs
-`EV`. As verificações Manual (`MV`) e Visual (`VV`) têm condições de aprovação explícitas; os
-checks de baseline permanecem no mesmo registro de resultados. Confirme as disposições
-atuais separadas de tipos (`check:types`), lint/código (`check:code`) e complexidade para
-as mudanças escopadas e os projetos consumidores afetados. Reutilize resultados
-aplicáveis; lint de complexidade configurado não prova uma métrica quantitativa, e tooling
-exigido ausente bloqueia o fechamento.
+Use the Evaluation's Progress and Check Results instead of another acceptance matrix. Progress
+separates implementation from verification and maps `CA`/`RF` to `AV`/`MV`/`VV` and `EV`
+IDs. The Manual (`MV`) and Visual (`VV`) verifications have explicit pass conditions; the
+baseline checks stay in the same results record. Confirm the current separate
+dispositions for types (`check:types`), lint/code (`check:code`) and complexity for
+the scoped changes and the affected consuming projects. Reuse applicable
+results; configured complexity lint does not prove a quantitative metric, and
+required tooling that is missing blocks closure.
 
-A evidência inclui o comando exato e o diretório de trabalho, o resultado, a revisão de
-código ou a identidade do worktree, a fixture/configuração relevante e os critérios
-cobertos. Os resultados permanecem válidos quando seu Contract, o código e as
-dependências cobertos, as fixtures e a configuração não mudaram. Explique o reuso entre
-SHAs de candidato; edições de ledger não invalidam resultados. Correções invalidam a
-evidência afetada até serem atualizadas; impacto desconhecido exige checar o escopo mais
-amplo potencialmente afetado. Não sobrescreva um ID de evidência antigo com um resultado
-materialmente diferente.
+The evidence includes the exact command and working directory, the result, the code
+revision or worktree identity, the relevant fixture/configuration and the criteria
+covered. Results remain valid when their covered Contract, code and
+dependencies, fixtures and configuration have not changed. Explain reuse across
+candidate SHAs; ledger edits do not invalidate results. Fixes invalidate the affected
+evidence until updated; unknown impact requires checking the widest potentially affected
+scope. Do not overwrite an old evidence ID with a materially different result.
 
-Para mudanças HTTP, compare cada grupo de rotas de controller afetado com seu
-`apps/server/rest-client/<módulo>/<grupo>.rest`: uma requisição rotulada por rota,
-parâmetros/headers/body/status/contratos de erro atuais e variáveis reutilizáveis sem
-segredos. Cada hook de comportamento `use-*.ts` no escopo tem seu `tests/use-*.test.ts`,
-salvo exceção registrada. Esses checks de artefato não substituem a evidência real de
-HTTP, autorização e persistência.
+For HTTP changes, compare each affected controller route group with its
+`apps/server/rest-client/<module>/<group>.rest`: one request labeled per route, current
+parameters/headers/body/status/error contracts and reusable variables without
+secrets. Each `use-*.ts` behavior hook in scope has its `tests/use-*.test.ts`,
+unless a recorded exception applies. These artifact checks do not replace real
+HTTP, authorization and persistence evidence.
 
-Para critérios server-backed, exija evidência pela fronteira real da aplicação
-(autorização, persistência, transação, eventos, providers e retries relevantes); transporte
-mockado não prova uma alegação de integração real.
+For server-backed criteria, require evidence through the real application boundary
+(authorization, persistence, transaction, events, providers and relevant retries); mocked
+transport does not prove a real-integration claim.
 
-Para critérios de UI, consuma as asserções de interação happy-path e as capturas
-inspecionadas das rotas/estados/viewports exatos da Spec: teclado/foco, comportamento
-responsivo, URL final, resultado de console/rede e efeitos persistidos relevantes.
-Screenshots não provam autenticação nem persistência. Cenários negativos, de loading,
-empty, error, recovery e incomuns pertencem aos testes automatizados; não adicione
-cenários manuais nem capturas durante o fechamento sem um Contract afetado ou uma correção
-concreta que os exija. A revisão de código e a visual rodam em paralelo sobre o mesmo
-candidato. Confirme também a auditoria de `ui-layer-rules.md` registrada no Evaluation.
+For UI criteria, consume the happy-path interaction assertions and the inspected
+captures of the exact routes/states/viewports of the Spec: keyboard/focus, responsive
+behavior, final URL, console/network result and relevant persisted effects.
+Screenshots do not prove authentication or persistence. Negative, loading,
+empty, error, recovery and unusual scenarios belong to the automated tests; do not add
+manual scenarios or captures during closure without an affected Contract or a
+concrete fix that requires them. Code review and visual review run in parallel on the same
+candidate. Also confirm the `ui-layer-rules.md` audit recorded in the Evaluation.
 
-Para UI design-backed, confirme que as comparações visuais registradas usaram exports
-atuais do Penpot MCP das páginas, boards e componentes do Design Contract, e que a matriz
-comprova fidelidade design-to-code no HEAD atual. Frame ausente, contradito, adicionado
-sem aprovação ou divergência sem decisão rastreável mantém a Spec `in_progress` e exige
-correção ou amendment. Reutilize comparações aceitas e atuais; o fechamento, por si só,
-não exige novos exports.
+For design-backed UI, confirm that the recorded visual comparisons used current
+Penpot MCP exports of the Design Contract's pages, boards and components, and that the matrix
+proves design-to-code fidelity at the current HEAD. A missing frame, a contradicted one, one added
+without approval, or a divergence without a traceable decision keeps the Spec `in_progress` and requires
+a fix or amendment. Reuse accepted and current comparisons; closure, by itself,
+does not require new exports.
 
-## Propriedade da verificação e ciclo de falha
+## Verification ownership and failure cycle
 
-O runner de verificação designado na task principal é dono das seleções de integração de
-Server, browser e jobs depois da integração completa. Selecione testes locais apenas para
-mudanças do escopo e consumidores diretamente afetados; a conclusão não adiciona suites
-não relacionadas. Seleções mais amplas exigem impacto de dependência demonstrado ou uma
-lacuna concreta na prova do escopo; uma suite local completa exige escopo que a abranja ou
-pedido explícito do usuário. Corrija falhas e rerode os checks que falharam ou foram
-afetados até passarem, mantendo a prova não afetada. O CI do PR executa seus comandos
-configurados de forma independente.
+The verification runner designated in the main task owns the Server, browser and jobs
+integration selections after full integration. Select local tests only for
+in-scope changes and directly affected consumers; the conclusion does not add unrelated
+suites. Broader selections require demonstrated dependency impact or a concrete
+gap in the scope's proof; a full local suite requires a scope that covers it or an explicit
+user request. Fix failures and rerun the checks that failed or were
+affected until they pass, keeping the unaffected proof. The PR's CI runs its
+configured commands independently.
 
-Consuma a evidência atual de unit/component, lint, tipos, arquitetura, build, integração e
-manual definida pela Spec e pelas Rules. Use apenas comandos que existem em manifests e
-tooling; nunca invente um checker genérico. Fechamento, Reviewers, commit e PR reutilizam
-essa evidência. Execuções adicionais exigem um resultado ausente, mudança de
-comportamento/dependência/fixture/configuração coberta ou um finding concreto não
-resolvido. Registre checks pulados ou bloqueados por ambiente como limitações, nunca como
-sucessos; repita falhas transitórias de infraestrutura só com evidência concreta.
+Consume the current unit/component, lint, types, architecture, build, integration and
+manual evidence defined by the Spec and the Rules. Use only commands that exist in manifests and
+tooling; never invent a generic checker. Closure, Reviewers, commit and PR reuse
+that evidence. Additional runs require a missing result, a covered
+behavior/dependency/fixture/configuration change or a concrete unresolved finding. Record checks skipped or blocked by the environment as limitations, never as
+successes; repeat transient infrastructure failures only with concrete evidence.
 
-Antes de chamar `commit-code`, confirme os sensores obrigatórios de `AGENTS.md`
-(`check:code` e `check:types` nos workspaces afetados e consumidores, `test:unit` com os
-arquivos afetados), `check:spec-implementation -- <spec> --base <commit-base>` e
-`check:test-integrity -- --base <commit-base>` contra o HEAD final. Cobertura/ratchet
-(`test:coverage`, `check:coverage`) e suítes completas só entram com impacto demonstrado no
-workspace, exigência da Spec ou pedido do usuário; o CI as executa. Reutilize os
-resultados atuais registrados e execute apenas o que faltar ou estiver stale. O build local
-verde é pré-condição para chamar `commit-code`; se não houver evidência atual de build, execute
-uma vez. Um resultado diferente de `passed` impede a conclusão.
+Before calling `commit-code`, confirm the mandatory sensors from `AGENTS.md`
+(`check:code` and `check:types` in the affected workspaces and consumers, `test:unit` with the
+affected files), `check:spec-implementation -- <spec> --base <base-commit>` and
+`check:test-integrity -- --base <base-commit>` against the final HEAD. Coverage/ratchet
+(`test:coverage`, `check:coverage`) and full suites only apply with demonstrated impact on the
+workspace, a Spec requirement or a user request; CI runs them. Reuse the current
+recorded results and run only what is missing or stale. A green local build
+is a precondition for calling `commit-code`; if there is no current build evidence, run
+it once. A result other than `passed` prevents the conclusion.
 
-## Disposição da entrega e lições
+## Delivery disposition and lessons
 
-Mapeie os requisitos selecionados do PRD, por `RF-*` e `CA-*`, para a evidência aceita:
+Map the selected PRD requirements, by `RF-*` and `CA-*`, to the accepted evidence:
 
-| RP/JN | Cobertura RF | Cobertura CA | Evidência | Disposição da entrega |
+| RP/JN | RF coverage | CA coverage | Evidence | Delivery disposition |
 | --- | --- | --- | --- | --- |
 | RP-01 / JN-01 | RF-01 | CA-01 | EV-01 | implemented |
 
-Use `implemented`, `partially_implemented`, `not_implemented` ou `not_applicable` com
-evidência. Entrega parcial nunca conta como implementação completa. Os requisitos de
-produto permanecem canônicos no PRD versionado; não os altere sem um pedido explícito e
-o workflow de autoridade aplicável.
+Use `implemented`, `partially_implemented`, `not_implemented` or `not_applicable` with
+evidence. A partial delivery never counts as a complete implementation. Product requirements
+remain canonical in the versioned PRD; do not change them without an explicit request and
+the applicable authority workflow.
 
-Registre findings materiais como `ACH-*` com evidência, severidade, checks afetados, estado
-e resolução em Findings. Leia as Lições aprendidas e identifique orientação duradoura para
-Architecture, Modules, Design, Infraestrutura, Tooling, Rules ou workflow; mantenha
-detalhes específicos da feature locais. Declare um motivo concreto de `No change` quando a
-orientação existente for suficiente, em vez de inventar uma lição. Analise todos os
-findings, warnings e falhas da entrega (Reviewers, sensores e verificação manual) e
-identifique causas que possam se repetir. Lacunas recorrentes de processo, Architecture,
-tooling ou Rules atualizam a documentação normativa correspondente; erros de implementação
-reutilizáveis usam `register-antipattern` na Rule da camada. Registre no Evaluation uma
-ação preventiva por finding (causa, documento atualizado ou `não aplicável` com
-justificativa, evidência e estado).
+Record material findings as `ACH-*` with evidence, severity, affected checks, state
+and resolution in Findings. Read the Lessons learned and identify lasting guidance for
+Architecture, Modules, Design, Infrastructure, Tooling, Rules or workflow; keep
+feature-specific details local. State a concrete `No change` reason when the existing
+guidance is sufficient, instead of inventing a lesson. Analyze all
+findings, warnings and failures of the delivery (Reviewers, sensors and manual verification) and
+identify causes that may recur. Recurring process, Architecture,
+tooling or Rules gaps update the corresponding normative documentation; reusable implementation
+errors use `register-antipattern` in the layer's Rule. Record in the Evaluation one
+preventive action per finding (cause, updated document or `not applicable` with
+justification, evidence and state).
 
-Para atualizações de documentação além do fechamento rotineiro de Spec/Evaluation, reutilize
-o escopo e a autorização já concedidos. Caso contrário, prepare o alvo exato, a mudança
-proposta, a lição `ACH`/`EV` de apoio e o motivo, e obtenha aprovação antes de aplicar.
-Permissão para concluir, sozinha, não autoriza nova política global; uma aprovação parcial
-cobre apenas as mudanças aprovadas. Mudanças normativas que alteram produto, Contract, Rules
-globais ou fronteiras arquiteturais exigem decisão do usuário e mantêm a Spec aberta até a
-aprovação. Registre atualizações propostas/aplicadas/rejeitadas/adiadas em Lições aprendidas
-e Delivery. Melhorias opcionais adiadas não bloqueiam o fechamento; alinhamento exigido não
-resolvido ou conflito material de autoridade bloqueia. Não promova falhas transitórias a
-política global nem enfraqueça Rules silenciosamente.
+For documentation updates beyond the routine Spec/Evaluation closure, reuse
+the scope and authorization already granted. Otherwise, prepare the exact target, the
+proposed change, the supporting `ACH`/`EV` lesson and the reason, and obtain approval before applying.
+Permission to conclude, by itself, does not authorize a new global policy; a partial approval
+covers only the approved changes. Normative changes that alter product, Contract, global
+Rules or architectural boundaries require a user decision and keep the Spec open until
+approval. Record proposed/applied/rejected/deferred updates in Lessons learned
+and Delivery. Deferred optional improvements do not block closure; required alignment that is
+unresolved or a material authority conflict blocks. Do not promote transient failures to global
+policy or silently weaken Rules.
 
-## Completar artefatos e publicar
+## Complete artifacts and publish
 
-Reconcilie todas as seções do Evaluation (estado atual, progresso, resultados de checks,
-findings, lições, handoff e delivery) e mantenha o alinhamento documental e a revision
-history da Spec corretos, com a prova detalhada e o estado da entrega no Evaluation.
-Preserve tentativas falhas, heads anteriores de PR, escopo da evidência e fatos atuais de
-processo/paths sujos. Atualizações rotineiras de fechamento/status não incrementam a
-revisão.
+Reconcile all sections of the Evaluation (current state, progress, check results,
+findings, lessons, handoff and delivery) and keep the Spec's documentation alignment and revision
+history correct, with the detailed proof and the delivery state in the Evaluation.
+Preserve failed attempts, previous PR heads, the evidence scope and current facts about
+process/dirty paths. Routine closure/status updates do not increment the
+revision.
 
-Para fechamento local, quando a publicação não for solicitada ou for explicitamente
-local, marque a Spec e o Evaluation como `completed` depois que todos os requisitos locais
-passarem; registre a publicação como não solicitada, com o motivo. Para publicação autorizada, mantenha a Spec `in_progress` e o Evaluation `ready`
-durante o handoff de commit/PR até a publicação, o CI exigido do HEAD atual e as conversas
-de review bloqueantes estarem resolvidos. Uma falha de publicação registra um bloqueio e
-não pode ser reportada como entrega concluída. Não crie um commit só para atualizar o
-ledger operacional; inclua a documentação factual exigida nos commits normais da entrega.
+For local closure, when publication is not requested or is explicitly
+local, mark the Spec and the Evaluation as `completed` after all local requirements
+pass; record publication as not requested, with the reason. For authorized publication, keep the Spec `in_progress` and the Evaluation `ready`
+during the commit/PR handoff until publication, the required CI of the current HEAD and the blocking review
+conversations are resolved. A publication failure records a blocker and
+cannot be reported as a completed delivery. Do not create a commit just to update the
+operational ledger; include the required factual documentation in the delivery's normal commits.
 
-Para uma publicação explicitamente autorizada:
+For an explicitly authorized publication:
 
-1. Verifique o branch, o resultado da sincronização, o diff escopado e a evidência atual.
-2. Invoque `commit-code` para criar os commits intencionais da entrega, respeitando seus
-   gates de staging, agrupamento, mensagem e paths.
-3. Invoque `open-pr` para publicar ou atualizar um único PR da entrega, reutilizando os
-   commits preparados e a evidência de verificação válida, solicitar o Codex Review e
-   acompanhar o CI do HEAD recém-criado.
-4. Verifique base, SHA do head, rastreabilidade do título/corpo e o estado da publicação;
-   registre branch, hashes de commit e a URL do PR.
+1. Verify the branch, the sync result, the scoped diff and the current evidence.
+2. Invoke `commit-code` to create the delivery's intentional commits, respecting its
+   staging, grouping, message and path gates.
+3. Invoke `open-pr` to publish or update a single delivery PR, reusing the prepared
+   commits and the valid verification evidence, request the Codex Review and
+   track the CI of the newly created HEAD.
+4. Verify base, head SHA, title/body traceability and the publication state;
+   record the branch, commit hashes and the PR URL.
 
-`open-pr` e `commit-code` mantêm seus próprios gates de autorização. Sem autorização,
-pare antes de qualquer mutação externa e solicite-a. Havendo mudanças staged, mudanças fora
-do escopo ou ambiguidade de agrupamento, preserve-as e pare conforme as regras dos
-workflows chamados. Não crie PRs duplicados nem use publicação ad hoc para contornar o
-workflow. Se a publicação estiver indisponível, reporte o bloqueio e mantenha os estados
-prontos para publicação; não alegue publicação nem entrega autorizada concluída.
+`open-pr` and `commit-code` keep their own authorization gates. Without authorization,
+stop before any external mutation and request it. If there are staged changes, out-of-scope
+changes or grouping ambiguity, preserve them and stop according to the rules of the
+called workflows. Do not create duplicate PRs or use ad hoc publication to bypass the
+workflow. If publication is unavailable, report the blocker and keep the states
+ready for publication; do not claim an authorized publication or delivery as completed.
 
-Para cada head atual do PR da entrega, inspecione os path filters dos workflows de CI
-versionados e os checks atuais com o `gh` autenticado e aguarde os resultados terminais. O
-resultado do CI fica no PR: não o registre no Evaluation. Inspecione o estado
-do repositório em vez de presumir que os workflows existem. CI ausente, pendente,
-cancelado ou de um head anterior não é CI atual aprovado; se nenhum workflow aplicável
-existir, trate como não aplicável. Uma execução de CI exigida no head atual é distinta de
-repetir suites locais.
+For each current head of the delivery PR, inspect the path filters of the versioned CI
+workflows and the current checks with the authenticated `gh` and wait for the terminal results. The
+CI result stays in the PR: do not record it in the Evaluation. Inspect the repository
+state instead of assuming the workflows exist. Missing, pending,
+cancelled CI or CI from a previous head is not an approved current CI; if no applicable workflow
+exists, treat it as not applicable. A required CI run on the current head is distinct from
+repeating local suites.
 
-Para falhas de CI acionáveis, roteie a correção por `implement-spec` (com `Builder Fix`
-quando a correção estiver no escopo). Se a correção invalidar evidência já registrada,
-reabra o Evaluation e atualize só essa evidência; a falha de CI em si não é registrada. Faça
-commit e atualize o PR existente quando autorizado, repetindo o Reviewer quando o diff ou a
-evidência tiver sido invalidada. Reexecute o mesmo SHA apenas para uma falha transitória
-comprovada. Não mude a disposição de produto, a menos que a falha estabeleça um defeito de
-produto.
+For actionable CI failures, route the fix through `implement-spec` (with `Builder Fix`
+when the fix is in scope). If the fix invalidates already recorded evidence,
+reopen the Evaluation and update only that evidence; the CI failure itself is not recorded. Commit
+and update the existing PR when authorized, repeating the Reviewer when the diff or the
+evidence was invalidated. Rerun the same SHA only for a proven transient failure. Do not change the
+product disposition unless the failure establishes a product defect.
 
-Marque a Spec e o Evaluation publicados como `completed` somente depois que todo o CI
-exigido do head atual passar e as conversas de review bloqueantes tiverem resoluções
-verificadas. Não espere indefinidamente por feedback hipotético futuro. Feedback posterior
-em PR aberto pode reabrir a mesma Spec (`resolve-pr-feedback`); após o merge, um defeito
-usa Bug Report e comportamento novo usa uma change Spec. Não faça merge da entrega em
-`main` nem deploy sem autoridade separada.
+Mark the published Spec and Evaluation as `completed` only after all required CI
+of the current head passes and the blocking review conversations have verified resolutions.
+Do not wait indefinitely for hypothetical future feedback. Later feedback
+on an open PR may reopen the same Spec (`resolve-pr-feedback`); after the merge, a defect
+uses a Bug Report and new behavior uses a change Spec. Do not merge the delivery into
+`main` or deploy without separate authority.
 
-## Saída
+## Output
 
-Devolva links clicáveis e concisos da Spec, do Evaluation e do PR; a revisão da Spec e os
-estados finais; branch/commits e referências de Issue/PRD; a cobertura de critérios/sensores
-e a evidência reutilizada; as disposições da entrega; o estado de CI e publicação; findings
-resolvidos, limitações remanescentes, atualizações factuais de documentação e exclusões
-preservadas. Afirme apenas resultados realmente observados e registrados.
+Return concise clickable links to the Spec, the Evaluation and the PR; the Spec revision and the
+final states; branch/commits and Issue/PRD references; the criteria/sensor coverage
+and the reused evidence; the delivery dispositions; the CI and publication state; resolved
+findings, remaining limitations, factual documentation updates and preserved
+exclusions. State only results actually observed and recorded.

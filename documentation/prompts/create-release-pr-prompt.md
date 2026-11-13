@@ -1,170 +1,170 @@
 ---
-description: Criar Pull Requests de release de uma release branch para production, com SemVer, PRDs afetados, validação E2E da Web App em staging e publicação pós-merge.
+description: Create release Pull Requests from a release branch to production, with SemVer, affected PRDs, Web App E2E validation on staging and post-merge publishing.
 ---
 
-# Prompt: Criar PR de Release
+# Prompt: Create Release PR
 
-## Objetivo
+## Objective
 
-Padronizar a criação de Pull Requests de release de `release/vX.Y.Z` para
-`production`, sempre a partir de um snapshot de `main`. O PR deve identificar
-exatamente as mudanças e os PRDs incluídos na versão,
-registrar o `head SHA` alvo da validação no staging existente e fornecer as
-notas usadas na GitHub Release após o merge.
+Standardize the creation of release Pull Requests from `release/vX.Y.Z` to
+`production`, always from a snapshot of `main`. The PR must identify
+exactly the changes and the PRDs included in the version,
+record the `head SHA` targeted by the validation on the existing staging, and provide the
+notes used in the GitHub Release after the merge.
 
-Use exclusivamente a GitHub CLI (`gh`) para interações com o GitHub. Esta
-tarefa não exige nem deve criar uma Spec.
+Use exclusively the GitHub CLI (`gh`) for GitHub interactions. This
+task does not require and must not create a Spec.
 
-## Entrada
+## Input
 
-- Versão alvo opcional no formato `vX.Y.Z`.
-- Branch `main` contendo as mudanças candidatas à produção.
-- Branch `release/vX.Y.Z` criada exatamente a partir do SHA de `origin/main`.
-- Branch `production` representando a versão atualmente publicada.
-- PRs normais incorporados em `main`, cada um com um PRD explicitamente
-  relacionado ou marcado como `Não aplicável`.
+- Optional target version in the format `vX.Y.Z`.
+- Branch `main` containing the changes that are candidates for production.
+- Branch `release/vX.Y.Z` created exactly from the SHA of `origin/main`.
+- Branch `production` representing the currently published version.
+- Regular PRs merged into `main`, each with a PRD explicitly
+  related or marked as `Não aplicável` (not applicable).
 
-Quando nenhuma versão for informada, determine a próxima versão SemVer pelas
-mudanças desde a última release publicada.
+When no version is given, determine the next SemVer version from the
+changes since the last published release.
 
-## Responsabilidades
+## Responsibilities
 
-Este prompt é responsável por:
+This prompt is responsible for:
 
-1. preparar e apresentar o draft completo do PR de release para aprovação;
-2. criar ou atualizar o PR somente depois da aprovação explícita do usuário;
-3. identificar e registrar os PRDs afetados;
-4. registrar o `head SHA` alvo da validação E2E no staging existente;
-5. acompanhar os checks da release sem executar diretamente o deploy ou os
-   testes E2E;
-6. fornecer notas compatíveis com a criação posterior da tag e da GitHub
+1. preparing and presenting the complete draft of the release PR for approval;
+2. creating or updating the PR only after the user's explicit approval;
+3. identifying and recording the affected PRDs;
+4. recording the `head SHA` targeted by the E2E validation on the existing staging;
+5. tracking the release checks without directly running the deploy or the
+   E2E tests;
+6. providing notes compatible with the later creation of the tag and the GitHub
    Release.
 
-O workflow `.github/workflows/hermes-e2e-testing.yaml` é responsável por:
+The workflow `.github/workflows/hermes-e2e-testing.yaml` is responsible for:
 
-- verificar a disponibilidade da Web App de staging, sem iniciar um deploy;
-- executar na Web App em staging os testes E2E dos PRDs afetados com o perfil
-  `e2e-tester` do Hermes e o servidor MCP `playwright`;
-- publicar a matriz de requisitos e as referências das evidências no PR;
+- verifying the availability of the staging Web App, without starting a deploy;
+- running, on the staging Web App, the E2E tests of the affected PRDs with the Hermes
+  `e2e-tester` profile and the `playwright` MCP server;
+- publishing the requirements matrix and the evidence references on the PR;
 
-O workflow `.github/workflows/create-release.yaml` é responsável por:
+The workflow `.github/workflows/create-release.yaml` is responsible for:
 
-- criar a tag e a GitHub Release após o merge em `production`;
+- creating the tag and the GitHub Release after the merge into `production`;
 
-Os workflows `*-production-cd.yaml` são responsáveis por:
+The `*-production-cd.yaml` workflows are responsible for:
 
-- disparar o deploy de produção.
+- triggering the production deploy.
 
-## Regras obrigatórias
+## Mandatory rules
 
-- O PR de release deve usar `release/vX.Y.Z` como `head` e `production` como
-  `base`, com o nome da branch correspondendo exatamente à versão do título.
-- A release branch deve ser criada a partir do SHA exato de `origin/main` e não
-  deve receber commits adicionais antes da abertura do PR.
-- Não faça commit de alterações locais pendentes.
-- Não abra mais de um PR de release para o mesmo `head SHA`.
-- Não crie nem atualize o PR no GitHub antes de apresentar o título e o corpo
-  completos e receber aprovação explícita do usuário.
-- Use o SHA exato de `origin/main` para criar a release branch e preserve-o como
-  o `head SHA` durante todo o processo.
-- Não trate caminhos alterados como fonte de verdade para associação de PRD.
-- Exija uma classificação inequívoca em `## PRD` no corpo de cada PR incluído.
-- Não inclua mais de dez PRDs afetados em uma única release.
-- Não invente PRDs, requisitos, evidências, resultados de CI ou validações.
-- Não inclua segredos, credenciais ou URLs internas no PR.
-- A aprovação final da release continua sendo humana.
+- The release PR must use `release/vX.Y.Z` as `head` and `production` as
+  `base`, with the branch name matching exactly the version in the title.
+- The release branch must be created from the exact SHA of `origin/main` and must not
+  receive additional commits before the PR is opened.
+- Do not commit pending local changes.
+- Do not open more than one release PR for the same `head SHA`.
+- Do not create or update the PR on GitHub before presenting the complete title and body
+  and receiving explicit approval from the user.
+- Use the exact SHA of `origin/main` to create the release branch and preserve it as
+  the `head SHA` throughout the process.
+- Do not treat changed paths as the source of truth for PRD association.
+- Require an unambiguous classification in `## PRD` in the body of each included PR.
+- Do not include more than ten affected PRDs in a single release.
+- Do not invent PRDs, requirements, evidence, CI results or validations.
+- Do not include secrets, credentials or internal URLs in the PR.
+- The final approval of the release remains human.
 
 ## Workflow
 
-### 1. Verificar o estado do repositório
+### 1. Check the repository state
 
-1. Execute `git status --short` e interrompa se houver alterações locais.
-2. Atualize as referências remotas de `main`, `production` e tags.
-3. Confirme que `origin/main` e `origin/production` existem.
-4. Registre:
-   - o SHA atual de `origin/main` como `head SHA`;
-   - o SHA atual de `origin/production` como `base SHA`;
-   - a árvore Git correspondente a cada SHA.
-5. Confirme que `main` contém mudanças ainda não presentes em `production`.
-6. Verifique se existe PR de release aberto com `release/vX.Y.Z` como `head` e
-   `production` como `base`.
+1. Run `git status --short` and stop if there are local changes.
+2. Update the remote references of `main`, `production` and tags.
+3. Confirm that `origin/main` and `origin/production` exist.
+4. Record:
+   - the current SHA of `origin/main` as `head SHA`;
+   - the current SHA of `origin/production` as `base SHA`;
+   - the Git tree corresponding to each SHA.
+5. Confirm that `main` contains changes not yet present in `production`.
+6. Check whether there is an open release PR with `release/vX.Y.Z` as `head` and
+   `production` as `base`.
 
-Interrompa quando:
+Stop when:
 
-- não houver mudanças para publicar;
-- as branches estiverem ausentes ou divergirem de forma incompatível;
-- houver conflitos de merge;
-- já existir um PR de release para o mesmo `head SHA`.
+- there are no changes to publish;
+- the branches are missing or diverge in an incompatible way;
+- there are merge conflicts;
+- a release PR already exists for the same `head SHA`.
 
-### 2. Identificar os PRs incluídos
+### 2. Identify the included PRs
 
-Liste os commits presentes em `origin/main` e ausentes em
-`origin/production`. Para cada commit, identifique o PR incorporado que o
-introduziu quando essa associação existir no GitHub. Registre separadamente os
-commits diretos sem PR associado; eles fazem parte da release, mas não originam
-classificações de PRD nem execuções E2E.
+List the commits present in `origin/main` and absent from
+`origin/production`. For each commit, identify the merged PR that
+introduced it when that association exists on GitHub. Record separately the
+direct commits with no associated PR; they are part of the release, but do not originate
+PRD classifications or E2E runs.
 
-Produza uma lista deduplicada contendo:
+Produce a deduplicated list containing:
 
-- número e URL do PR;
-- título;
-- merge commit ou commits associados;
-- issues relacionadas;
-- valor declarado na seção `## PRD`.
+- PR number and URL;
+- title;
+- merge commit or associated commits;
+- related issues;
+- value declared in the `## PRD` section.
 
-Produza também uma lista de commits sem PR contendo SHA, URL e mensagem. Não
-omita nem bloqueie a release apenas pela ausência de associação retrospectiva,
-mas não derive PRDs desses commits.
+Also produce a list of commits without a PR containing SHA, URL and message. Do not
+omit them or block the release merely because of the absence of a retrospective association,
+but do not derive PRDs from these commits.
 
-Não considere como parte da release um PR que não introduziu commits no
-intervalo comparado.
+Do not consider as part of the release a PR that did not introduce commits in the
+compared range.
 
-### 3. Identificar os PRDs afetados
+### 3. Identify the affected PRDs
 
-A seção `## PRD` dos PRs normais é a única fonte de rastreabilidade aceita pelo
-workflow da release. Ela deve conter uma ou mais URLs de milestones do
-repositório ou o valor `Não aplicável`, sem combinar as duas classificações.
+The `## PRD` section of regular PRs is the only traceability source accepted by the
+release workflow. It must contain one or more repository milestone URLs
+or the value `Não aplicável`, without combining the two classifications.
 
-Para cada PR incluído:
+For each included PR:
 
-1. leia a seção `## PRD`;
-2. valide que cada URL pertence a uma milestone existente do Stardust;
-3. deduplique as milestones pelo número;
-4. registre quais PRs originaram cada associação;
-5. registre separadamente os PRs marcados como `Não aplicável`.
+1. read the `## PRD` section;
+2. validate that each URL belongs to an existing Stardust milestone;
+3. deduplicate the milestones by number;
+4. record which PRs originated each association;
+5. record separately the PRs marked as `Não aplicável`.
 
-Interrompa quando um PR não possuir `## PRD`, não contiver uma classificação
-inequívoca ou combinar URLs de milestones com `Não aplicável`. Solicite a
-classificação humana e atualize o corpo do PR original antes de criar ou
-atualizar o release PR. Não derive a classificação de issues, arquivos
-alterados, Specs ou reports, pois essas fontes não são aceitas pelo workflow.
+Stop when a PR has no `## PRD`, does not contain an unambiguous classification
+or combines milestone URLs with `Não aplicável`. Request the
+human classification and update the original PR body before creating or
+updating the release PR. Do not derive the classification from issues, changed
+files, Specs or reports, as those sources are not accepted by the workflow.
 
-Interrompa também quando a release afetar mais de dez PRDs. Divida o conteúdo
-em releases menores em vez de omitir associações.
+Also stop when the release affects more than ten PRDs. Split the content
+into smaller releases instead of omitting associations.
 
-### 4. Montar o manifesto da release
+### 4. Build the release manifest
 
-Monte um manifesto lógico associado ao `head SHA`, contendo no mínimo:
+Build a logical manifest associated with the `head SHA`, containing at least:
 
 ```json
 {
   "repository": "JohnPetros/stardust",
   "pull_request": 999,
   "version": "vX.Y.Z",
-  "head_sha": "<sha de origin/main>",
-  "base_sha": "<sha de origin/production>",
+  "head_sha": "<sha of origin/main>",
+  "base_sha": "<sha of origin/production>",
   "head_branch": "release/vX.Y.Z",
   "base_branch": "production",
   "pull_requests": [
     {
       "number": 123,
       "html_url": "https://github.com/JohnPetros/stardust/pull/123",
-      "title": "Título do PR"
+      "title": "PR title"
     },
     {
       "number": 124,
       "html_url": "https://github.com/JohnPetros/stardust/pull/124",
-      "title": "Alteração técnica"
+      "title": "Technical change"
     }
   ],
   "affected_prds": [
@@ -179,67 +179,67 @@ Monte um manifesto lógico associado ao `head SHA`, contendo no mínimo:
     {
       "sha": "<sha>",
       "html_url": "https://github.com/JohnPetros/stardust/commit/<sha>",
-      "message": "Mensagem do commit"
+      "message": "Commit message"
     }
   ]
 }
 ```
 
-O manifesto pode ser reproduzido no corpo do PR e persistido como artifact do
-workflow. Não crie ou versione um arquivo no repositório apenas para armazená-lo.
+The manifest can be reproduced in the PR body and persisted as a workflow
+artifact. Do not create or version a file in the repository just to store it.
 
-### 5. Determinar a versão
+### 5. Determine the version
 
-Inspecione a última GitHub Release, a tag correspondente e todas as mudanças
-posteriores. Escolha o maior incremento aplicável:
+Inspect the last GitHub Release, the corresponding tag and all later changes.
+Choose the largest applicable increment:
 
-- **major:** mudança incompatível que exige adaptação;
-- **minor:** funcionalidade compatível adicionada;
-- **patch:** correção, performance, refatoração, documentação, testes, build,
-  CI ou manutenção.
+- **major:** incompatible change that requires adaptation;
+- **minor:** compatible functionality added;
+- **patch:** fix, performance, refactoring, documentation, tests, build,
+  CI or maintenance.
 
-Use `v0.1.0` na primeira release, salvo instrução explícita diferente.
+Use `v0.1.0` on the first release, unless explicitly instructed otherwise.
 
-Interrompa se:
+Stop if:
 
-- a versão ou tag já existir para outro commit;
-- a versão informada não for maior que a última versão publicada;
-- as mudanças exigirem um incremento maior que o solicitado.
+- the version or tag already exists for another commit;
+- the given version is not greater than the last published version;
+- the changes require a larger increment than the one requested.
 
-### 6. Registrar validações existentes
+### 6. Record existing validations
 
-Leia os resultados reais dos workflows executados nos PRs incluídos e no
-`head SHA`. Não execute novamente toda a CI normal durante a criação do PR de
-release e não declare como aprovado um check ausente ou pendente.
+Read the actual results of the workflows run on the included PRs and on the
+`head SHA`. Do not rerun the whole regular CI while creating the release
+PR and do not declare a missing or pending check as passed.
 
-Registre separadamente:
+Record separately:
 
-- CI dos PRs normais;
-- health check da Web App em staging;
-- validação E2E da release.
+- CI of the regular PRs;
+- health check of the staging Web App;
+- E2E validation of the release.
 
-Os dois últimos itens permanecem pendentes até os workflows do release PR.
+The last two items remain pending until the release PR workflows.
 
-### 7. Apresentar o draft para aprovação
+### 7. Present the draft for approval
 
-Antes de qualquer comando `gh pr create` ou `gh pr edit`:
+Before any `gh pr create` or `gh pr edit` command:
 
-1. apresente o título proposto;
-2. apresente o corpo completo do PR exatamente como será publicado;
-3. destaque a versão, o `base SHA`, o `head SHA`, os PRs incluídos, os PRDs
-   afetados e os checks que permanecerão pendentes;
-4. solicite aprovação explícita para publicar o draft no GitHub.
+1. present the proposed title;
+2. present the complete PR body exactly as it will be published;
+3. highlight the version, the `base SHA`, the `head SHA`, the included PRs, the affected
+   PRDs and the checks that will remain pending;
+4. request explicit approval to publish the draft on GitHub.
 
-Interrompa e aguarde a resposta do usuário. Não interprete silêncio, uma
-aprovação anterior de outro draft ou a solicitação inicial de criação da
-release como aprovação para publicar este draft. Se o usuário solicitar
-ajustes, gere e apresente novamente o draft completo revisado antes de pedir
-uma nova aprovação.
+Stop and wait for the user's response. Do not interpret silence, a previous
+approval of another draft or the initial request to create the
+release as approval to publish this draft. If the user requests
+adjustments, generate and present the complete revised draft again before asking for
+a new approval.
 
-### 8. Criar ou atualizar o PR
+### 8. Create or update the PR
 
-Somente depois da aprovação explícita do draft, crie a release branch apontando
-para o `head SHA` de `origin/main` e então abra o PR de `release/vX.Y.Z` para
+Only after the explicit approval of the draft, create the release branch pointing
+to the `head SHA` of `origin/main` and then open the PR from `release/vX.Y.Z` to
 `production`:
 
 ```bash
@@ -254,29 +254,31 @@ gh pr create \
   --base production \
   --head "$release_branch" \
   --title "Release vX.Y.Z" \
-  --body-file <arquivo-temporario>
+  --body-file <temporary-file>
 ```
 
-Confirme que a branch aponta para o mesmo `head SHA` e que não possui commits
-adicionais. Se ela já existir, interrompa quando apontar para outro SHA ou
-contiver commits fora do snapshot de `origin/main`.
+Confirm that the branch points to the same `head SHA` and has no additional
+commits. If it already exists, stop when it points to another SHA or
+contains commits outside the `origin/main` snapshot.
 
-O título deve seguir exatamente:
+The title must follow exactly:
 
 ```text
 Release vX.Y.Z
 ```
 
-A versão declarada no título será usada pelo workflow pós-merge para criar a
-tag e a GitHub Release.
+The version declared in the title will be used by the post-merge workflow to create the
+tag and the GitHub Release.
 
-Se um PR de release compatível já existir e precisar ser atualizado, apresente
-e aprove o novo draft pelo mesmo processo antes de executar `gh pr edit`.
+If a compatible release PR already exists and needs to be updated, present
+and approve the new draft through the same process before running `gh pr edit`.
 
-## Corpo do PR
+## PR body
 
-O corpo também será usado como base para as notas da GitHub Release. Não use um
-título de nível `#`, afirmações especulativas ou seções vazias.
+The body will also be used as the basis for the GitHub Release notes. Do not use a
+`#`-level heading, speculative statements or empty sections.
+
+The PR body is written in PT-BR, as every Pull Request in this project is, so the template below stays in Portuguese. Only the technical identifiers (versions, SHAs, paths, commands) are not translated. An English gloss of the template sections follows the block.
 
 ```markdown
 ## Objetivo
@@ -343,130 +345,144 @@ Explique o resultado entregue pela versão.
 resolve #456
 ```
 
-Omita `## Issues relacionadas` quando nenhuma issue for conhecida. Omita
-`## PRDs afetados` somente quando todos os PRs estiverem explicitamente
-marcados como `Não aplicável`. Omita `## PRs sem PRD` quando todos os PRs
-possuírem PRD.
+English gloss of the template (the PR itself stays in PT-BR):
 
-## Validação E2E da release
+- `## Objetivo` (Objective): explain the result delivered by the version.
+- `## Versão` (Version): version, base SHA and validated head SHA.
+- `## Principais mudanças` (Main changes): subsections per area, namely Web (frontend), Server (API, persistence and jobs), Backoffice (administrative application), Core e packages (domain and shared packages) and Infraestrutura (Docker, Coolify, CI/CD or tooling).
+- `## Correções` (Fixes): included fixes or "No specific fix in this version."
+- `## PRs incluídos` (Included PRs): list of `#number — PR title`.
+- `## PRDs afetados` (Affected PRDs): table with PRD, source PRs and E2E status (`Pendente` means pending).
+- `## PRs sem PRD` (PRs without PRD): technical changes with no associated PRD.
+- `## Migrações e deploy` (Migrations and deploy): migrations, environment variables, execution order and deploy cautions.
+- `## Breaking changes`: required incompatibilities and adaptations, or "No breaking change identified."
+- `## Issues relacionadas` (Related issues): `resolve #456`.
 
-Depois da abertura ou atualização do PR, o workflow de release deve:
+Omit `## Issues relacionadas` when no issue is known. Omit
+`## PRDs afetados` only when all PRs are explicitly
+marked as `Não aplicável`. Omit `## PRs sem PRD` when all PRs
+have a PRD.
 
-1. validar que o PR usa `release/vX.Y.Z` como `head` e `production` como
+## Release E2E validation
+
+After the PR is opened or updated, the release workflow must:
+
+1. validate that the PR uses `release/vX.Y.Z` as `head` and `production` as
    `base`;
-2. aguardar o health check da Web App no staging existente; o workflow não
-   inicia deploy nem confirma que o ambiente executa o `head SHA`;
-3. criar uma execução do perfil `e2e-tester` do Hermes para cada PRD afetado,
-   com no máximo duas execuções simultâneas;
-4. fornecer a cada execução o conteúdo completo de `AGENTS.md` obtido do
-   `base SHA` confiável de `production`, o número do release PR, o `head SHA` e
-   a milestone atribuída;
-5. usar exclusivamente o servidor MCP `playwright`, conectado ao Chromium
-   isolado via CDP, para exercitar a Web App em staging em um navegador real;
-6. reutilizar o bootstrap seguro de autenticação do Playwright MCP, sem expor
-   credenciais ao modelo ou enviá-las em prompts e argumentos de ferramentas;
-7. usar o contexto read-only do milestone e seus issues carregado pelo
-   workflow para identificar seus requisitos `RP-*` e jornadas `JN-*`;
-8. validar os requisitos daquele PRD que forem aplicáveis à Web App e puderem
-   ser exercitados pelo ambiente de staging disponível;
-9. coletar screenshots, estado visível final, console, falhas de página,
-    requisições de rede e demais evidências disponibilizadas pelo Playwright;
-10. armazenar screenshots e demais arquivos no volume persistente do Hermes,
-    organizados por PR, SHA, milestone e requisito;
-11. retornar no JSON os paths locais das evidências sem afirmar que foram
-    transferidas ao GitHub;
-12. armazenar o manifesto e os resultados JSON em GitHub Actions Artifacts;
-13. publicar ou atualizar uma única matriz consolidada no release PR.
+2. wait for the Web App health check on the existing staging; the workflow does not
+   start a deploy nor confirm that the environment runs the `head SHA`;
+3. create a Hermes `e2e-tester` profile run for each affected PRD,
+   with at most two simultaneous runs;
+4. provide each run with the full content of `AGENTS.md` obtained from the trusted
+   `base SHA` of `production`, the release PR number, the `head SHA` and
+   the assigned milestone;
+5. use exclusively the `playwright` MCP server, connected to the isolated Chromium
+   via CDP, to exercise the staging Web App in a real browser;
+6. reuse the Playwright MCP's secure authentication bootstrap, without exposing
+   credentials to the model or sending them in prompts and tool arguments;
+7. use the read-only context of the milestone and its issues loaded by the
+   workflow to identify its `RP-*` requirements and `JN-*` journeys;
+8. validate the requirements of that PRD that apply to the Web App and can
+   be exercised by the available staging environment;
+9. collect screenshots, final visible state, console, page failures,
+   network requests and other evidence made available by Playwright;
+10. store screenshots and other files in the Hermes persistent volume,
+    organized by PR, SHA, milestone and requirement;
+11. return in the JSON the local paths of the evidence without claiming they were
+    transferred to GitHub;
+12. store the manifest and the JSON results in GitHub Actions Artifacts;
+13. publish or update a single consolidated matrix on the release PR.
 
-O Playwright MCP do perfil `e2e-tester` é o executor dos E2E agentic de
-aceitação da release. Ele deve usar somente a Web App em staging, manter a
-sessão autenticada preparada pelo bootstrap do perfil e produzir evidências
-associadas ao PRD, requisito e `head SHA` da execução.
+The Playwright MCP of the `e2e-tester` profile is the executor of the agentic
+release acceptance E2E. It must use only the staging Web App, keep the
+authenticated session prepared by the profile bootstrap and produce evidence
+associated with the PRD, requirement and `head SHA` of the run.
 
-A Runs API do Hermes não expõe os arquivos gerados no contêiner. Enquanto não
-existir um endpoint autenticado de transferência, o workflow deve publicar
-somente os resultados estruturados e as referências locais. Nunca apresente
-um arquivo local como artifact ou link acessível pelo GitHub.
+The Hermes Runs API does not expose the files generated in the container. Until there is
+an authenticated transfer endpoint, the workflow must publish
+only the structured results and the local references. Never present
+a local file as an artifact or a link accessible from GitHub.
 
-Os testes Playwright versionados no repositório continuam pertencendo à CI
-normal. Eles são determinísticos, repetíveis e orientados a regressão técnica.
-A execução do Hermes com Playwright MCP é orientada aos requisitos dos PRDs
-afetados e não substitui nem deve duplicar desnecessariamente a suíte
-versionada.
+The Playwright tests versioned in the repository remain part of the regular
+CI. They are deterministic, repeatable and oriented to technical regression.
+The Hermes run with Playwright MCP is oriented to the requirements of the affected
+PRDs and neither replaces nor should unnecessarily duplicate the versioned
+suite.
 
-Nesta primeira versão, o agente não deve acessar o Backoffice de produção nem
-executar validação E2E diretamente no Server. Requisitos exclusivos de Backoffice,
-Server ou outro ambiente devem ser classificados como `não aplicável ao escopo
-Web staging`, com justificativa. Essa classificação não pode ser apresentada
-como requisito validado.
+In this first version, the agent must not access the production Backoffice nor
+run E2E validation directly on the Server. Requirements exclusive to the Backoffice,
+Server or another environment must be classified as `not applicable to the
+Web staging scope`, with a justification. This classification cannot be presented
+as a validated requirement.
 
-Cada requisito deve receber exatamente um dos valores do contrato JSON:
+Each requirement must receive exactly one of the values of the JSON contract
+(these values stay in Portuguese because the workflow matches them literally):
 
-- `passou`;
-- `falhou`;
-- `bloqueado`;
-- `não_aplicável`.
+- `passou` (passed);
+- `falhou` (failed);
+- `bloqueado` (blocked);
+- `não_aplicável` (not applicable).
 
-Resultados `falhou` ou `bloqueado` devem falhar o check da release. A decisão
-de merge permanece humana mesmo quando todos os requisitos passarem.
+Results of `falhou` or `bloqueado` must fail the release check. The merge
+decision remains human even when all requirements pass.
 
-Quando todos os PRs incluídos estiverem explicitamente marcados como `Não
-aplicável`, o workflow deve concluir com sucesso, registrar que não há E2E de
-produto aplicável e não iniciar sessões de navegador.
+When all included PRs are explicitly marked as `Não
+aplicável`, the workflow must finish successfully, record that there is no applicable
+product E2E and not start browser sessions.
 
-## Atualizações e reexecuções
+## Updates and reruns
 
-Ao receber um novo commit na release branch:
+When receiving a new commit on the release branch:
 
-1. preserve a execução ativa que compartilha o ambiente de staging;
-2. mantenha a nova execução na fila compartilhada, permitindo que o GitHub
-   substitua uma execução ainda pendente pela revisão mais recente;
-3. recalcule os PRs e PRDs afetados;
-4. gere um novo manifesto para o novo `head SHA`;
-5. aguarde a disponibilidade do staging existente;
-6. execute novamente os E2E aplicáveis;
-7. atualize a conclusão existente em vez de publicar comentários duplicados.
+1. preserve the active run that shares the staging environment;
+2. keep the new run in the shared queue, allowing GitHub to
+   replace a still-pending run with the most recent revision;
+3. recompute the affected PRs and PRDs;
+4. generate a new manifest for the new `head SHA`;
+5. wait for the availability of the existing staging;
+6. rerun the applicable E2E;
+7. update the existing conclusion instead of publishing duplicate comments.
 
-Os workflows de deploy em staging e E2E da release devem compartilhar o grupo
-de concorrência `stardust-web-staging` com `cancel-in-progress: false`. Assim, o
-ambiente não muda durante uma validação ativa.
+The staging deploy and release E2E workflows must share the concurrency group
+`stardust-web-staging` with `cancel-in-progress: false`. This way, the
+environment does not change during an active validation.
 
-Nunca reutilize evidências produzidas para outro SHA.
+Never reuse evidence produced for another SHA.
 
-## Pós-merge: tag, GitHub Release e produção
+## Post-merge: tag, GitHub Release and production
 
-Após o merge do release PR em `production`, o workflow pós-merge deve:
+After the release PR is merged into `production`, the post-merge workflow must:
 
-1. confirmar que o PR incorporado tinha `release/vX.Y.Z` como `head` e
-   `production` como `base`;
-2. extrair e validar `vX.Y.Z` do título `Release vX.Y.Z`;
-3. registrar o `head SHA` alvo da validação E2E e o merge commit SHA;
-4. confirmar que o merge commit possui a mesma árvore Git do `head SHA`
-   validado;
-5. verificar se a tag ou a GitHub Release já existem;
-6. criar uma tag anotada `vX.Y.Z` apontando para o merge commit em
+1. confirm that the merged PR had `release/vX.Y.Z` as `head` and
+   `production` as `base`;
+2. extract and validate `vX.Y.Z` from the title `Release vX.Y.Z`;
+3. record the `head SHA` targeted by the E2E validation and the merge commit SHA;
+4. confirm that the merge commit has the same Git tree as the validated
+   `head SHA`;
+5. check whether the tag or the GitHub Release already exist;
+6. create an annotated tag `vX.Y.Z` pointing to the merge commit on
    `production`;
-7. criar a GitHub Release com título `Release vX.Y.Z` e notas derivadas do
-   corpo do PR;
-8. publicar a GitHub Release, cujo evento dispara separadamente os workflows
-   `*-production-cd.yaml` responsáveis pelo deploy de produção;
-9. publicar no PR os links da tag, da GitHub Release e do deploy.
+7. create the GitHub Release with title `Release vX.Y.Z` and notes derived from the
+   PR body;
+8. publish the GitHub Release, whose event separately triggers the
+   `*-production-cd.yaml` workflows responsible for the production deploy;
+9. publish on the PR the links to the tag, the GitHub Release and the deploy.
 
-O processo deve ser idempotente. Se a tag ou a release já existirem, confirme
-que apontam para o commit correto e não crie duplicatas. Interrompa se
-apontarem para outro commit.
+The process must be idempotent. If the tag or the release already exist, confirm
+that they point to the correct commit and do not create duplicates. Stop if
+they point to another commit.
 
-## Retorno
+## Return
 
-Depois de criar o PR, retorne:
+After creating the PR, return:
 
-- URL e número do release PR;
-- versão escolhida;
-- base SHA e head SHA;
-- PRs incluídos;
-- PRDs afetados;
-- PRs sem PRD;
-- checks ainda pendentes.
+- URL and number of the release PR;
+- chosen version;
+- base SHA and head SHA;
+- included PRs;
+- affected PRDs;
+- PRs without PRD;
+- checks still pending.
 
-Não declare a release publicada antes do merge, da criação da tag, da GitHub
-Release e da confirmação do deploy de produção.
+Do not declare the release published before the merge, the creation of the tag, the GitHub
+Release and the confirmation of the production deploy.

@@ -1,89 +1,89 @@
 ---
-description: Prompt para analisar alterações e executar commits reais com padrão de mensagens definido.
+description: Prompt to analyze changes and execute real commits with a defined message standard.
 ---
 
-# Prompt: Fazer Commits no Código
+# Prompt: Make Commits in the Code
 
-**Objetivo Principal**
+**Main Objective**
 
-Criar **e executar commits reais** no repositório para todas as alterações
-detectadas, com mensagens altamente descritivas e padronizadas, seguindo
-rigorosamente as diretrizes de contribuição do projeto.
+Create **and execute real commits** in the repository for all the detected changes,
+with highly descriptive and standardized messages, strictly following the
+project's contribution guidelines.
 
-Você **deve executar comandos git**, não apenas sugerir mensagens.
-
----
-
-## Regras Aplicáveis
-
-Antes de agrupar ou criar commits, leia:
-
-- `documentation/rules/commit-rules.md` — fonte normativa para agrupamento, prefixos, emojis e formato da mensagem.
-- `documentation/rules/code-conventions-rules.md` — usar apenas quando o diff exigir entender convenções gerais de nomenclatura ou organização.
-
-Se houver divergência entre este prompt e `commit-rules.md`, siga `commit-rules.md` e atualize este prompt depois.
+You **must run git commands**, not just suggest messages.
 
 ---
 
-## 🚨 PRÉ-CONDIÇÕES OBRIGATÓRIAS
+## Applicable Rules
 
-Execute estas verificações **antes de qualquer outra coisa**. Se qualquer
-condição falhar, **pare imediatamente** e informe o motivo.
+Before grouping or creating commits, read:
 
-### 1. Verificar staging area
+- `documentation/rules/commit-rules.md` — normative source for grouping, prefixes, emojis and message format.
+- `documentation/rules/code-conventions-rules.md` — use only when the diff requires understanding general naming or organization conventions.
+
+If there is a divergence between this prompt and `commit-rules.md`, follow `commit-rules.md` and update this prompt afterwards.
+
+---
+
+## 🚨 MANDATORY PRECONDITIONS
+
+Run these checks **before anything else**. If any
+condition fails, **stop immediately** and report the reason.
+
+### 1. Check the staging area
 ```bash
 git diff --cached --name-only
 ```
 
-- Se houver arquivos em stage → **ABORTAR**
-- Informe: `⛔ Aborted: there are already staged files. Run 'git reset HEAD' to
+- If there are staged files → **ABORT**
+- Report: `⛔ Aborted: there are already staged files. Run 'git reset HEAD' to
   unstage them before proceeding.`
 
-### 2. Verificar se há alterações
+### 2. Check whether there are changes
 ```bash
 git status --porcelain
 ```
 
-- Se vazio → responda: `✅ No changes to commit` e pare.
-- Se houver alterações → continue para a próxima etapa.
+- If empty → respond: `✅ No changes to commit` and stop.
+- If there are changes → continue to the next step.
 
 ---
 
-## 🔍 Análise das Alterações
+## 🔍 Analysis of the Changes
 
-### Regra de análise
+### Analysis rule
 
-Para cada arquivo alterado, analise **tanto o caminho quanto o conteúdo do
-diff** para determinar a natureza real da mudança:
+For each changed file, analyze **both the path and the content of the
+diff** to determine the real nature of the change:
 ```bash
 git diff --stat
-git diff -- <arquivo>
+git diff -- <file>
 ```
 
-Não se baseie apenas no nome do arquivo. Um `user.service.ts` pode conter
-um bugfix, um refactor ou um novo use case — o caminho sozinho não é
-suficiente para classificar.
+Do not rely only on the file name. A `user.service.ts` may contain
+a bugfix, a refactor or a new use case — the path alone is not
+enough to classify it.
 
-### Regra de agrupamento
+### Grouping rule
 
-Agrupe arquivos por **responsabilidade semântica**, não por pasta. Critérios:
+Group files by **semantic responsibility**, not by folder. Criteria:
 
-- Arquivos que implementam a mesma funcionalidade → mesmo commit
-- Arquivos em camadas diferentes (ex: domain + REST) → commits separados por
-  camada
+- Files that implement the same functionality → same commit
+- Files in different layers (e.g., domain + REST) → separate commits per
+  layer
 
-### Regra para arquivos ambíguos
+### Rule for ambiguous files
 
-Se um arquivo puder pertencer a mais de um grupo:
+If a file could belong to more than one group:
 
-1. Sinalize a ambiguidade explicitamente no output:
-   `⚠️ Ambiguous: <arquivo> could be '<prefix-a>' or '<prefix-b>'. Classifying
-   as '<prefix-escolhido>' based on diff content.`
-2. Tome a decisão e prossiga com o commit.
+1. Flag the ambiguity explicitly in the output:
+   `⚠️ Ambiguous: <file> could be '<prefix-a>' or '<prefix-b>'. Classifying
+   as '<chosen-prefix>' based on diff content.`
+2. Make the decision and proceed with the commit.
 
 ---
 
-## 📋 Tabela de Prefixos
+## 📋 Prefix Table
 
 | Type                          | Prefix     | Emoji |
 | :---------------------------- | :--------- | :---- |
@@ -117,46 +117,46 @@ Se um arquivo puder pertencer a mais de um grupo:
 
 ---
 
-## 📝 Padrão de Mensagem (Strict)
+## 📝 Message Standard (Strict)
 ```
 emoji prefix: concise description in English
 ```
 
-- Mensagem **obrigatoriamente em Inglês**
-- Use apenas prefixos da tabela acima
-- Um commit por responsabilidade semântica
-- Descrição curta, direta, no imperativo (ex: `add`, `fix`, `remove`)
+- Message **must be in English**
+- Use only prefixes from the table above
+- One commit per semantic responsibility
+- Short, direct description, in the imperative (e.g., `add`, `fix`, `remove`)
 
 ---
 
-## ⚙️ Execução Obrigatória
+## ⚙️ Mandatory Execution
 
-Para cada grupo de arquivos identificado, execute na ordem:
+For each identified group of files, execute in order:
 ```bash
-git add <arquivos-do-grupo>
+git add <group-files>
 git commit -m "emoji prefix: concise description in English"
 ```
 
-**Não peça confirmação. Não explique antes. Execute.**
+**Do not ask for confirmation. Do not explain beforehand. Execute.**
 
-Repita até `git status --porcelain` retornar vazio.
-
----
-
-## ✅ Verificação por Commit (Checklist Interno)
-
-Antes de executar cada `git commit`, valide mentalmente:
-
-- [ ] Analisei o diff, não apenas o nome do arquivo
-- [ ] A mensagem está em inglês
-- [ ] O emoji corresponde ao prefixo
-- [ ] O prefixo está na tabela
-- [ ] A descrição representa corretamente o grupo
-- [ ] Arquivos ambíguos foram sinalizados
+Repeat until `git status --porcelain` returns empty.
 
 ---
 
-## 📤 Formato de Saída Obrigatório
+## ✅ Per-Commit Verification (Internal Checklist)
+
+Before running each `git commit`, mentally validate:
+
+- [ ] I analyzed the diff, not just the file name
+- [ ] The message is in English
+- [ ] The emoji matches the prefix
+- [ ] The prefix is in the table
+- [ ] The description correctly represents the group
+- [ ] Ambiguous files were flagged
+
+---
+
+## 📤 Mandatory Output Format
 ```
 [PRE-CHECK] Staging area: clean ✅
 [PRE-CHECK] Pending changes: 4 files ✅
@@ -177,10 +177,10 @@ git commit -m "✨ use case: add authentication flow"
 
 ---
 
-## 🚫 Comportamentos Proibidos
+## 🚫 Prohibited Behaviors
 
-- Commitar com staging area suja previamente
-- Classificar arquivos apenas pelo caminho, sem analisar o diff
-- Gerar apenas sugestões sem executar os comandos
-- Parar no meio do processo sem commitar todas as alterações
-- Inventar prefixos fora da tabela
+- Committing with a previously dirty staging area
+- Classifying files only by path, without analyzing the diff
+- Generating only suggestions without running the commands
+- Stopping midway without committing all the changes
+- Inventing prefixes outside the table

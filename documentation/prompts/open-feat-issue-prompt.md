@@ -1,112 +1,109 @@
 ---
 name: open-feat-issue
-description: Criar uma GitHub feature issue de produto no Stardust a partir de milestone, PRD ou pedido aprovado, com approval e Project 2.
+description: Create a product GitHub feature issue in Stardust from an approved milestone, PRD or request, with approval and Project 2.
 ---
 
-# Criar Feature Issue
+# Create Feature Issue
 
-Transforme uma capacidade ou resultado de produto em uma única issue coerente. Não implemente,
-crie branch, commit, PR ou Spec.
+Turn a product capability or outcome into a single coherent issue. Do not implement,
+create a branch, commit, PR or Spec.
 
-Escreva o título, o body, as perguntas do Grilling e as justificativas em português do Brasil.
-Preserve identificadores técnicos, paths, URLs e nomes oficiais de labels.
+Write the title, the body, the Grilling questions and the justifications in Brazilian Portuguese (PT-BR).
+Preserve technical identifiers, paths, URLs and official label names.
 
-## Autoridade
+## Authority
 
-Leia `AGENTS.md`, `documentation/rules/rules.md`, `documentation/modules.md` e a milestone de
-produto informada. Quando a milestone vincular o PRD canônico em `documentation/prds/`, leia ambos. Leia Architecture e
-Rules das camadas somente quando uma restrição material precisar ser preservada; detalhes de
-paths, declarations, runtime e comandos pertencem à Spec.
+Read `AGENTS.md`, `documentation/rules/rules.md`, `documentation/modules.md` and the given product
+milestone. When the milestone links the canonical PRD in `documentation/prds/`, read both. Read the
+Architecture and the layer Rules only when a material constraint needs to be preserved; details of
+paths, declarations, runtime and commands belong to the Spec.
 
-Consuma a estrutura real da autoridade:
+Consume the real structure of the authority:
 
-- PRDs novos: Outcome, Actors, Consumes, Provides, Capabilities, Experience e User Journeys;
-- PRDs/milestones legados: descrição, requisitos, regras de negócio, UI/UX, critérios, fluxos e
-  fora de escopo.
+- New PRDs: Outcome, Actors, Consumes, Provides, Capabilities, Experience and User Journeys;
+- Legacy PRDs/milestones: description, requirements, business rules, UI/UX, criteria, flows and
+  out of scope.
 
-Não trate dependency graph ou ordem textual como implementação. Preserve checkboxes/status. Se
-milestone, PRD, código e pedido conflitarem materialmente, esclareça antes do draft.
+Do not treat the dependency graph or textual order as implementation. Preserve checkboxes/status. If
+the milestone, PRD, code and request conflict materially, clarify before the draft.
 
-## Gate obrigatório de PRD
+## Mandatory PRD gate
 
-Antes do draft:
+Before the draft:
 
-1. derive módulo, atores, outcome, capacidades e lifecycle solicitados;
-2. pesquise o PRD canônico em `documentation/prds/*.md` e os PRDs de feature em `documentation/**/prd.md`;
-3. pesquise milestones abertas e fechadas via GitHub e siga seus links de PRD;
-4. compare candidatos pelo contrato completo e pelos User Journeys/fluxos, não apenas pelo
-   título ou proximidade de paths;
-5. selecione exatamente um PRD principal e o `RP-*` mais específico que cobre a issue;
-6. não trate a milestone como PRD; se nenhum PRD canônico em `documentation/prds/` governar o outcome,
-   encaminhe primeiro para `create-prd`.
+1. derive the requested module, actors, outcome, capabilities and lifecycle;
+2. search the canonical PRD in `documentation/prds/*.md` and the feature PRDs in `documentation/**/prd.md`;
+3. search open and closed milestones via GitHub and follow their PRD links;
+4. compare candidates by the full contract and by the User Journeys/flows, not just by
+   title or path proximity;
+5. select exactly one main PRD and the most specific `RP-*` that covers the issue;
+6. do not treat the milestone as a PRD; if no canonical PRD in `documentation/prds/` governs the outcome,
+   route first to `create-prd`.
 
-Uma feature issue não pode chegar ao approval gate com PRD desconhecido. Se nenhum candidato
-governar o outcome, encaminhe primeiro para `create-prd` ou amendment. Se dois candidatos forem
-materialmente equivalentes ou conflitantes, peça decisão antes de redigir.
+A feature issue cannot reach the approval gate with an unknown PRD. If no candidate
+governs the outcome, route first to `create-prd` or an amendment. If two candidates are
+materially equivalent or conflicting, ask for a decision before drafting.
 
-Quando o PRD governa o fluxo, mas **não cobre** o comportamento pedido (por exemplo, o `RP-*`
-só descreve a falha genérica), não bloqueie a issue por isso: cite o `RP-*` mais específico,
-registre em Rastreabilidade que a regra ainda não existe no PRD e declare a emenda do PRD como
-pré-requisito da Spec. Leve a escolha entre essa abordagem e criar antes um `RP-*` novo via
-`create-prd` ao Grilling.
+When the PRD governs the flow but **does not cover** the requested behavior (for example, the `RP-*`
+only describes the generic failure), do not block the issue for that: cite the most specific `RP-*`,
+record under “Rastreabilidade” (Traceability) that the rule does not yet exist in the PRD and declare the PRD amendment as a
+prerequisite of the Spec. Take the choice between this approach and first creating a new `RP-*` via
+`create-prd` to the Grilling.
 
-## Gate obrigatório de Grilling
+## Mandatory Grilling gate
 
-Siga integralmente o **Grilling gate** definido em
-[`sdd.md#grilling-gate`](../sdd.md#grilling-gate). Este prompt apenas
-aplica o protocolo ao contexto de uma Feature Issue; não duplique nem crie regras paralelas.
+Follow the interview protocol in [`interview-prompt.md`](interview-prompt.md) in full. This
+prompt only applies the protocol to the context of a Feature Issue; do not duplicate it or
+create parallel rules. Ask the questions in PT-BR, directly in the conversation.
 
-Aplique o formato de round de [`grilling-prompt.md`](grilling-prompt.md) **desde o primeiro
-round** (`## Grilling — round <n>`, perguntas `Q<n>` com opções `(a)`/`(b)` e linha `➡️ Recomendo`,
-IDs contínuos na sessão). Não use listas numeradas livres nem ferramentas de perguntas; as
-perguntas vão direto na conversa.
+After the factual research and before the draft, model as a design tree the still-open decisions
+about outcome, actors, scope, observable criteria, out of scope, milestone and priority, without
+anticipating the Spec's Technical Contract. In every feature issue, ask whatever remains
+materially open among:
 
-Depois da pesquisa factual e antes do draft, modele como design tree as decisões ainda abertas
-sobre outcome, atores, escopo, critérios observáveis, fora do escopo, milestone e prioridade, sem
-antecipar o Technical Contract da Spec. Em toda feature issue, pergunte o que permanecer
-materialmente aberto entre:
-
-- tratamento do PRD quando ele não cobre o comportamento;
+- handling of the PRD when it does not cover the behavior;
 - milestone;
-- uma issue ou decomposição (por exemplo, `web` e `server` juntas ou separadas);
-- permissão e autoridade do backend sobre ações novas, inclusive reaproveitar endpoint existente;
-- limites de uso (cooldown, rate limit) quando a ação puder ser repetida;
-- cobertura do design (viewports e estados) quando houver UI;
-- prioridade.
+- one issue or a decomposition (for example, `web` and `server` together or separate);
+- permission and backend authority over new actions, including reusing an existing endpoint;
+- usage limits (cooldown, rate limit) when the action can be repeated;
+- design coverage (viewports and states) when there is UI;
+- priority.
 
-Recompute a frontier por round, pergunte todas as decisões disponíveis com resposta recomendada e
-aguarde a confirmação de entendimento compartilhado antes de preparar o draft. Essa confirmação
-não substitui o approval gate da versão exata a publicar.
+Wait for confirmation of shared understanding before preparing the draft. This confirmation
+does not replace the approval gate of the exact version to be published.
 
-## Metadata GitHub
+## GitHub metadata
 
 - repository: `JohnPetros/stardust`;
-- label obrigatória: `feat`;
-- assignee obrigatório: `JohnPetros` em toda feature issue;
-- adicione `web`, `server` e/ou `studio` quando confirmadas;
-- use `infra` ou `documentation` somente quando forem parte real do entregável;
-- use apenas labels existentes;
-- associe exatamente uma milestone de produto;
-- depois de criada, adicione ao Project 2, defina `Status: Todo` e a prioridade aprovada
-  (`HIGH`, `MEDIUM` ou `LOW`), consultando IDs atuais via GraphQL em vez de hardcode.
+- required label: `feat`;
+- required assignee: `JohnPetros` on every feature issue;
+- add `web`, `server` and/or `studio` when confirmed;
+- use `infra` or `documentation` only when they are a real part of the deliverable;
+- use only existing labels;
+- associate exactly one product milestone;
+- after it is created, add it to Project 2, set `Status: Todo` and the approved priority
+  (`HIGH`, `MEDIUM` or `LOW`), querying current IDs via GraphQL instead of hardcoding.
 
-Se milestone ou prioridade não estiverem disponíveis, obtenha-as antes do approval final.
+If the milestone or priority is not available, obtain it before the final approval.
 
-Quando a issue envolver UI, verifique no Penpot `stardust` (página, board e frame, pelo nome) os
-frames de cada viewport e estado que a issue vai citar. Se faltar algum, leve ao Grilling a
-decisão de desenhá-lo antes ou de citar só o que existe; se for desenhado, cite os nomes
-exatos criados. Estados que seguem um padrão já existente (por exemplo, loading e toast) não
-exigem frame novo, mas a issue deve dizer qual padrão seguem.
+When the issue involves UI, check in the Penpot `stardust` file (page, board and frame, by name) the
+frames of each viewport and state that the issue will cite. If any is missing, take to the Grilling the
+decision of whether to draw it first or to cite only what exists; if it is drawn, cite the
+exact names created. States that follow an existing pattern (for example, loading and toast) do
+not require a new frame, but the issue must say which pattern they follow.
 
-Para publicar, escreva o body em um arquivo no scratchpad e use `gh issue create --body-file`,
-com `--label`, `--assignee` e `--milestone` pelo título. Para o Project 2, consulte via GraphQL
-o projeto `JohnPetros`/`projectV2(number: 2)` e os campos `Status` e `Priority`, adicione o item
-e grave os dois campos. Releia os valores gravados antes de reportar.
+To publish, write the body to a file in the scratchpad and use `gh issue create --body-file`,
+with `--label`, `--assignee` and `--milestone` by title. For Project 2, query via GraphQL
+the project `JohnPetros`/`projectV2(number: 2)` and the `Status` and `Priority` fields, add the item
+and write both fields. Re-read the written values before reporting.
 
-## Título e body
+## Title and body
 
-Use título nominal, sem prefixo de commit e orientado ao outcome, seguindo o padrão atual do
-repositório.
+Use a noun-phrase title, without a commit prefix and outcome-oriented, following the repository's current
+pattern.
+
+The issue body is written in PT-BR, so the template below keeps its literal Portuguese headings and
+placeholders; an English gloss follows the block.
 
 ```md
 ## 🎯 Objetivo
@@ -160,32 +157,41 @@ Evidências esperadas:
 - <alteração adjacente que não pertence a esta entrega>
 ```
 
-Não inclua sprint: o projeto Stardust não usa sprints. O campo Requisito deve conter a
-referência do requisito principal selecionado, e somente requisitos complementares
-aplicáveis devem ser listados como suporte.
+English gloss of the template (not part of the issue body):
 
-Mantenha a issue em nível de product delivery. Não inclua signatures, file inventory, fluxo
-técnico detalhado ou decisões novas de arquitetura. Preserve nomes de frames do design exatamente
-quando fornecidos.
+- `Objetivo` (Objective): outcome for the user or the business.
+- `Escopo da Entrega` (Delivery Scope): included behavior/capability, material product/Design/integration constraints and the exact Penpot `stardust` board (page and name) when provided.
+- `Critérios de Aceitação` (Acceptance Criteria): observable success, validation/error, authorization/tenant, responsiveness/accessibility and any additional observable criterion.
+- `Validação` (Validation): relevant commands and tests for the backend and frontend when affected, and the expected evidence (automated tests, manual validation or E2E, visual/responsive/accessibility validation).
+- `Rastreabilidade` (Traceability): main PRD, complementary PRD, requirements, journeys, source Issue/User Story, Design, Spec, PR (`Pendente` — pending — until linked by the `open-pr` workflow) and Milestone; `Não aplicável` means not applicable.
+- `Fora de Escopo` (Out of Scope): explicitly excluded behavior or capability and adjacent changes that do not belong to this delivery.
+
+Do not include a sprint: the Stardust project does not use sprints. The “Requisito” (requirement) field must contain the
+reference of the selected main requirement, and only applicable complementary requirements
+must be listed as support.
+
+Keep the issue at the product delivery level. Do not include signatures, file inventory, detailed
+technical flow or new architecture decisions. Preserve design frame names exactly
+when provided.
 
 ## Approval gate
 
-Antes de publicar, apresente título, body, labels, assignee, milestone, PRD/requisito selecionado,
-justificativa de relevância, Project, Status e prioridade exatos. Publique somente após aprovação
-explícita da versão atual. Approval não autoriza implementação, branch, commit, PR ou Spec.
+Before publishing, present the exact title, body, labels, assignee, milestone, selected PRD/requirement,
+relevance justification, Project, Status and priority. Publish only after explicit
+approval of the current version. Approval does not authorize implementation, branch, commit, PR or Spec.
 
-A confirmação do entendimento compartilhado, ou um pedido como "publique", dado antes de o
-usuário ver o draft completo, não é approval: apresente o draft exato e peça aprovação dessa
-versão. Se o usuário pedir mudança, reapresente a versão atual antes de publicar.
+Confirmation of shared understanding, or a request such as “publique” (publish), given before the
+user has seen the complete draft, is not approval: present the exact draft and ask for approval of that
+version. If the user asks for a change, re-present the current version before publishing.
 
-Depois da publicação, retorne número/URL, título, milestone, PRD/requisito, labels,
-Project/Status/Priority e resumo do escopo.
+After publishing, return the number/URL, title, milestone, PRD/requirement, labels,
+Project/Status/Priority and a summary of the scope.
 
-## Restrições
+## Constraints
 
-- uma issue salvo decomposição explicitamente solicitada;
-- preserve boundaries dos módulos e backend authority para permissões, economia e tenancy;
-- sem cleanup, dependências ou comportamento especulativo;
-- não publique feature issue sem um PRD principal identificado;
-- não altere checkbox/status de requisito;
-- não invente metadata, milestone, project field ou evidência.
+- one issue unless a decomposition is explicitly requested;
+- preserve module boundaries and backend authority for permissions, economy and tenancy;
+- no cleanup, dependencies or speculative behavior;
+- do not publish a feature issue without an identified main PRD;
+- do not change a requirement's checkbox/status;
+- do not invent metadata, milestone, project field or evidence.

@@ -47,25 +47,10 @@ Do not create a refactor issue merely to avoid product clarification or Spec wor
 
 ## Grilling protocol
 
-Build a decision tree for the issue after repository research. Resolve the available frontier in
-rounds:
-
-- Ask every currently answerable material question in one round.
-- Number questions and provide an evidence-backed recommended answer.
-- Research facts directly; keep actual scope, tradeoffs and compatibility decisions with the user.
-- Record resolved decisions and challenge contradictions.
-- When the frontier is empty, present the shared understanding and request explicit confirmation.
-- Do not draft or publish the issue before that confirmation.
-
-Use this format:
-
-```yaml
-❓ **Q1** - **<question title>**: <question body, including choices when useful>
-
-➡️ <recommended answer>
-
----
-```
+Follow the interview protocol in [`interview-prompt.md`](interview-prompt.md) after repository
+research. Research facts directly; keep actual scope, tradeoffs and compatibility decisions with
+the user. Do not draft or publish the issue before the frontier is empty and the user confirms
+the shared understanding.
 
 At minimum resolve, when applicable:
 

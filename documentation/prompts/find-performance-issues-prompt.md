@@ -1,150 +1,150 @@
 
 ---
-description: Prompt para encontrar issues de performance em uma base de codigo e propor correcoes priorizadas.
+description: Prompt to find performance issues in a codebase and propose prioritized fixes.
 ---
 
-# Prompt: Encontrar Issues de Performance
+# Prompt: Find Performance Issues
 
-**Objetivo:**
-- Dada uma base de codigo e um contexto de uso, identificar gargalos e riscos de performance (frontend, backend, build, banco, integracoes) com evidencias, impacto esperado e um plano de correcoes priorizado.
-- Entregar um diagnostico acionavel: o que esta lento, por que provavelmente esta lento, onde no codigo isso ocorre, e como validar a melhora.
+**Objective:**
+- Given a codebase and a usage context, identify performance bottlenecks and risks (frontend, backend, build, database, integrations) with evidence, expected impact and a prioritized fix plan.
+- Deliver an actionable diagnosis: what is slow, why it is probably slow, where in the code this occurs, and how to validate the improvement.
 
-**Entrada:**
+**Input:**
 
-- **Tarefa/tema principal (obrigatorio):** `{TAREFA}`
-  - Ex: "encontrar issues de performance no fluxo de login", "reduzir TTFB do dashboard", "otimizar pagina X", "reduzir uso de memoria no job Y".
-- **Alvo e escopo (obrigatorio):** `{ALVO}`
-  - Caminhos/pacotes/apps para inspecionar, rotas, features, ou "repo inteiro".
-- **Contexto do produto e do problema (obrigatorio):** `{CONTEXTO}`
-  - Fluxo(s) afetado(s), ambiente (dev/stage/prod), usuarios, volumetria, e sintomas.
-- **Sinais e metricas observadas (opcional, mas recomendado):** `{SINAIS}`
-  - Ex: tempos (p95/p99), TTFB/LCP/INP, CPU/memoria, erros, logs, traces, flamegraphs, bundle size.
-- **Stack e constraints (opcional):** `{STACK}`
-  - Frameworks, runtime, DB, filas, cache, provedores, limites (SLA, custo, compatibilidade).
-- **Restricoes e preferencias (obrigatorio):** `{RESTRICOES}`
-  - Ex: "nao alterar schema", "sem mudar comportamento", "nao adicionar dependencia", "usar Markdown", "sem otimizar prematuramente".
-- **Fontes disponiveis (obrigatorio):** `{FONTES}`
-  - PRDs/specs, guidelines internas, links, observability, tickets, e acesso ao codebase.
+- **Main task/topic (required):** `{TASK}`
+  - E.g.: "find performance issues in the login flow", "reduce the dashboard's TTFB", "optimize page X", "reduce memory usage in job Y".
+- **Target and scope (required):** `{TARGET}`
+  - Paths/packages/apps to inspect, routes, features, or "entire repo".
+- **Product and problem context (required):** `{CONTEXT}`
+  - Affected flow(s), environment (dev/stage/prod), users, volume, and symptoms.
+- **Observed signals and metrics (optional, but recommended):** `{SIGNALS}`
+  - E.g.: timings (p95/p99), TTFB/LCP/INP, CPU/memory, errors, logs, traces, flamegraphs, bundle size.
+- **Stack and constraints (optional):** `{STACK}`
+  - Frameworks, runtime, DB, queues, cache, providers, limits (SLA, cost, compatibility).
+- **Restrictions and preferences (required):** `{CONSTRAINTS}`
+  - E.g.: "do not change the schema", "do not change behavior", "do not add a dependency", "use Markdown", "no premature optimization".
+- **Available sources (required):** `{SOURCES}`
+  - PRDs/specs, internal guidelines, links, observability, tickets, and access to the codebase.
 
-Formato esperado para `{FONTES}`:
-- Links (bullets) e/ou caminhos de arquivo.
-- Trechos relevantes (copiados/colados) se voce nao tiver acesso ao repositorio.
+Expected format for `{SOURCES}`:
+- Links (bullets) and/or file paths.
+- Relevant excerpts (copied/pasted) if you do not have access to the repository.
 
-**Regras Aplicáveis:**
+**Applicable Rules:**
 
-Antes de propor correções, leia:
+Before proposing fixes, read:
 
-- `documentation/rules/rules.md` — índice para selecionar rules por camada.
-- `documentation/rules/code-conventions-rules.md` — quando a recomendação envolver refactor, nomenclatura ou organização de código.
-- Rules específicas das camadas afetadas pelo gargalo (`ui`, `web`, `server`, `rest`, `rpc`, `database`, `queue`, `provision`, `realtime`, `ai`, `validation`, etc.).
+- `documentation/rules/rules.md` — index for selecting rules by layer.
+- `documentation/rules/code-conventions-rules.md` — when the recommendation involves refactoring, naming or code organization.
+- Specific rules of the layers affected by the bottleneck (`ui`, `web`, `server`, `rest`, `rpc`, `database`, `queue`, `provision`, `realtime`, `ai`, `validation`, etc.).
 
-Não recomende otimizações que violem as rules de camada. Se a melhor otimização exigir mudar uma rule, marque como decisão arquitetural e não como correção automática.
+Do not recommend optimizations that violate the layer rules. If the best optimization requires changing a rule, flag it as an architectural decision and not as an automatic fix.
 
-**Diretrizes de Execucao:**
+**Execution Guidelines:**
 
-1. **Entendimento e validacao de entradas**
-   - Reescreva `{TAREFA}` em uma frase objetiva e defina o tipo de performance em foco (ex: runtime frontend, API, DB, build, job, cold start).
-   - Defina criterios de sucesso mensuraveis (mesmo que por hipotese), e anote restricoes criticas de `{RESTRICOES}`.
-   - Se algo essencial estiver faltando (ex: qual rota/fluxo ou qual sintoma), registre em "Pendencias" e siga com defaults seguros (explicitos).
+1. **Understanding and validation of inputs**
+   - Rewrite `{TASK}` in one objective sentence and define the type of performance in focus (e.g., frontend runtime, API, DB, build, job, cold start).
+   - Define measurable success criteria (even if by hypothesis), and note the critical constraints from `{CONSTRAINTS}`.
+   - If something essential is missing (e.g., which route/flow or which symptom), record it under "Open items" and proceed with safe (explicit) defaults.
 
-2. **Levantamento do que ja existe (antes de inspecionar codigo)**
-   - Leia primeiro as regras/arquitetura/guidelines relevantes em `{FONTES}`.
-   - Procure por implementacoes similares (features parecidas, endpoints equivalentes, paginas com mesmo padrao) para comparar abordagens.
-   - Identifique onde o sistema deveria medir performance (logs/metrics/traces) e se ja existe instrumentacao.
+2. **Survey of what already exists (before inspecting code)**
+   - First read the relevant rules/architecture/guidelines in `{SOURCES}`.
+   - Look for similar implementations (similar features, equivalent endpoints, pages with the same pattern) to compare approaches.
+   - Identify where the system should measure performance (logs/metrics/traces) and whether instrumentation already exists.
 
-3. **Investigacao no codebase (coletar evidencias, nao apenas palpites)**
-   - Mapeie o caminho do request/acao do usuario:
-     - Entrada (UI/rota) -> chamada (RPC/REST) -> dominio/servico -> repositorio/DB -> retorno -> renderizacao.
-   - Encontre hotspots por sinais e por padroes comuns, por exemplo:
-     - **Frontend:** re-render excessivo, estado global mal particionado, listas sem virtualizacao, calculos pesados em render, imagens/JS grandes, requests duplicadas, waterfall, uso incorreto de suspense/caching.
-     - **Backend/API:** N+1, consultas sem indice/sem filtro, serializacao pesada, loops sincronos, falta de paginacao, uso indevido de cache, concorrencia baixa.
-     - **DB:** consultas com join pesado, falta de indice, scans, paginacao incorreta, transacoes longas.
-     - **Jobs/filas:** processamento em lote sem chunking, retries explosivos, concorrencia/limites, memoria crescente.
-     - **Build/bundle:** dependencias grandes, imports indevidos, code splitting ausente, configuracao de bundler.
-   - Para cada suspeita, anote pelo menos uma evidencia verificavel:
-     - Caminho(s) de arquivo e simbolos; trecho minimo do codigo; ou comando/saida de profiling; ou metrica/log.
-   - Diferencie claramente:
-     - **Fato observado** (evidencia)
-     - **Hipotese** (causa provavel)
-     - **Experimento** (como confirmar)
+3. **Investigation in the codebase (collect evidence, not just guesses)**
+   - Map the path of the request/user action:
+     - Entry (UI/route) -> call (RPC/REST) -> domain/service -> repository/DB -> return -> rendering.
+   - Find hotspots by signals and by common patterns, for example:
+     - **Frontend:** excessive re-rendering, poorly partitioned global state, lists without virtualization, heavy computations in render, large images/JS, duplicate requests, waterfalls, incorrect use of suspense/caching.
+     - **Backend/API:** N+1, queries without index/without filter, heavy serialization, synchronous loops, lack of pagination, improper use of cache, low concurrency.
+     - **DB:** queries with heavy joins, missing indexes, scans, incorrect pagination, long transactions.
+     - **Jobs/queues:** batch processing without chunking, exploding retries, concurrency/limits, growing memory.
+     - **Build/bundle:** large dependencies, improper imports, missing code splitting, bundler configuration.
+   - For each suspicion, note at least one verifiable piece of evidence:
+     - File path(s) and symbols; a minimal code excerpt; or a profiling command/output; or a metric/log.
+   - Clearly differentiate:
+     - **Observed fact** (evidence)
+     - **Hypothesis** (probable cause)
+     - **Experiment** (how to confirm)
 
-4. **Geracao da saida final (priorizada e acionavel)**
-   - Agrupe issues por area (frontend, api, db, infra, build) e priorize por:
-     - Impacto no usuario/custo
-     - Probabilidade
-     - Esforco
-     - Risco de regressao
-   - Para cada issue, proponha uma correcao:
-     - "Quick win" (baixo risco/esforco)
-     - "Solucao robusta" (se houver)
-   - Inclua como validar (metricas antes/depois, roteiro de reproducao, comandos).
+4. **Generation of the final output (prioritized and actionable)**
+   - Group issues by area (frontend, api, db, infra, build) and prioritize by:
+     - Impact on the user/cost
+     - Probability
+     - Effort
+     - Regression risk
+   - For each issue, propose a fix:
+     - "Quick win" (low risk/effort)
+     - "Robust solution" (if any)
+   - Include how to validate (before/after metrics, reproduction script, commands).
 
-**Uso de Ferramentas Auxiliares (se disponiveis):**
+**Use of Auxiliary Tools (if available):**
 
-- **Busca no repositorio:** use ferramentas de busca (ex: glob/grep/CodeGraph) para localizar hotspots, implementacoes similares, e referencias.
-- **Leitura de arquivos:** leia somente os arquivos necessarios para sustentar as evidencias.
-- **Documentacao oficial:** se houver duvida sobre comportamento de biblioteca/framework, consulte docs oficiais (ex: via Context7) e cite o que muda na recomendacao.
-- **Modo sem ferramentas:** se voce nao tiver acesso ao repositorio, solicite ao usuario:
-  - Estrutura de pastas (tree), arquivos alvo, e trechos das rotas/componentes/queries relevantes;
-  - Logs/metricas (p95/p99, LCP/INP, TTFB) e passos para reproducao.
+- **Repository search:** use search tools (e.g., glob/grep/CodeGraph) to locate hotspots, similar implementations, and references.
+- **File reading:** read only the files necessary to support the evidence.
+- **Official documentation:** if there is doubt about the behavior of a library/framework, consult the official docs (e.g., via Context7) and cite what changes in the recommendation.
+- **No-tools mode:** if you do not have access to the repository, ask the user for:
+  - Folder structure (tree), target files, and excerpts of the relevant routes/components/queries;
+  - Logs/metrics (p95/p99, LCP/INP, TTFB) and reproduction steps.
 
-**Template de Saida (Estrutura Obrigatoria):**
+**Output Template (Mandatory Structure):**
 
-# Escopo
-- `{TAREFA}`
-- `{ALVO}`
-- Criterios de sucesso: `{CRITERIOS_DE_SUCESSO}`
-- Restricoes: `{RESTRICOES}`
+# Scope
+- `{TASK}`
+- `{TARGET}`
+- Success criteria: `{SUCCESS_CRITERIA}`
+- Constraints: `{CONSTRAINTS}`
 
-# Assuncoes e Pendencias
-- Assuncoes adotadas (defaults) e por que sao seguras
-- Pendencias para fechar diagnostico (perguntas objetivas)
+# Assumptions and Open Items
+- Assumptions adopted (defaults) and why they are safe
+- Open items to close the diagnosis (objective questions)
 
-# Mapa do Fluxo (onde o tempo pode estar indo)
-- Fluxo resumido do usuario/request (entrada -> camadas -> saida)
-- Pontos de I/O (rede, DB, filas) e pontos de CPU (parse, serializacao, render)
+# Flow Map (where the time may be going)
+- Summarized user/request flow (entry -> layers -> output)
+- I/O points (network, DB, queues) and CPU points (parse, serialization, render)
 
-# Evidencias Coletadas
-- Metricas/sinais observados (com fonte)
-- Referencias no codigo (caminhos de arquivo e simbolos) com trechos minimos
+# Evidence Collected
+- Observed metrics/signals (with source)
+- References in the code (file paths and symbols) with minimal excerpts
 
-# Issues de Performance (Prioridade)
-Para cada item, preencher os campos:
+# Performance Issues (Priority)
+For each item, fill in the fields:
 - **ID:** `{ISSUE_ID}`
-- **Area:** `{AREA}` (frontend/api/db/infra/build/outro)
-- **Sintoma:** `{SINTOMA}`
-- **Causa provavel:** `{CAUSA}`
-- **Evidencia:** `{EVIDENCIA}` (arquivo/linha, metrica, log, output)
-- **Impacto:** `{IMPACTO}` (usuario/custo/SLA)
-- **Risco:** `{RISCO}` (baixo/medio/alto) + regressao possivel
-- **Correcao (quick win):** `{FIX_QUICK}`
-- **Correcao (robusta):** `{FIX_ROBUSTA}` (opcional)
-- **Como validar:** `{VALIDACAO}` (metricas, passos, comandos)
-- **Estimativa:** `{ESFORCO}` (S/M/L) e dependencias
+- **Area:** `{AREA}` (frontend/api/db/infra/build/other)
+- **Symptom:** `{SYMPTOM}`
+- **Probable cause:** `{CAUSE}`
+- **Evidence:** `{EVIDENCE}` (file/line, metric, log, output)
+- **Impact:** `{IMPACT}` (user/cost/SLA)
+- **Risk:** `{RISK}` (low/medium/high) + possible regression
+- **Fix (quick win):** `{FIX_QUICK}`
+- **Fix (robust):** `{FIX_ROBUST}` (optional)
+- **How to validate:** `{VALIDATION}` (metrics, steps, commands)
+- **Estimate:** `{EFFORT}` (S/M/L) and dependencies
 
-# Recomendacoes (Plano em Etapas)
-- Etapa 1: quick wins + instrumentacao minima
-- Etapa 2: correcoes estruturais
-- Etapa 3: hardening (limites, caching, guardrails)
+# Recommendations (Phased Plan)
+- Phase 1: quick wins + minimal instrumentation
+- Phase 2: structural fixes
+- Phase 3: hardening (limits, caching, guardrails)
 
-# Instrumentacao e Medicao
-- O que medir (KPIs) e onde instrumentar
-- Como coletar (logs/metrics/traces/profiler)
-- Baseline e criterio de comparacao (antes/depois)
+# Instrumentation and Measurement
+- What to measure (KPIs) and where to instrument
+- How to collect (logs/metrics/traces/profiler)
+- Baseline and comparison criterion (before/after)
 
-# Checklist de Verificacao
-- Nao mudou comportamento funcional
-- Nao degradou acessibilidade/SEO (se aplicavel)
-- Nao aumentou bundle/build time sem justificativa
-- Validacao em ambientes relevantes (dev/stage/prod)
+# Verification Checklist
+- Did not change functional behavior
+- Did not degrade accessibility/SEO (if applicable)
+- Did not increase bundle/build time without justification
+- Validation in relevant environments (dev/stage/prod)
 
-# Referencias
-- `{FONTES}` (links, arquivos, tickets)
+# References
+- `{SOURCES}` (links, files, tickets)
 
-**Regras:**
-- Nao invente caminhos de arquivo, APIs, nomes de modulos ou metricas; se nao encontrar, marque como pendencia.
-- Nao exponha raciocinio passo a passo; mantenha o pensamento detalhado interno e apresente somente conclusoes, evidencias e acoes.
-- Sempre separe fato vs hipotese vs experimento.
-- Seja especifico: cite arquivos/simbolos/comandos e descreva como reproduzir/medir.
-- Nao proponha "otimizacoes" sem um sintoma/risco claro ou uma medicao alvo.
-- Respeite `{RESTRICOES}`; se uma recomendacao violar, ofereca alternativa compativel.
+**Rules:**
+- Do not invent file paths, APIs, module names or metrics; if you cannot find them, flag them as open items.
+- Do not expose step-by-step reasoning; keep the detailed thinking internal and present only conclusions, evidence and actions.
+- Always separate fact vs hypothesis vs experiment.
+- Be specific: cite files/symbols/commands and describe how to reproduce/measure.
+- Do not propose "optimizations" without a clear symptom/risk or a target measurement.
+- Respect `{CONSTRAINTS}`; if a recommendation violates them, offer a compatible alternative.

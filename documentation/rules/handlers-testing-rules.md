@@ -1,16 +1,16 @@
-# Regras de Teste de Handlers (Controllers, Actions, Jobs e Tools)
+# Handler Testing Rules (Controllers, Actions, Jobs and Tools)
 
-Esta documentação define os padrões e práticas para escrever testes unitários
-para os diferentes tipos de handlers no projeto Stardust: **Controllers**
-(REST), **Actions** (RPC), **Jobs** (Queue) e **Tools** (AI).
+This documentation defines the standards and practices for writing unit tests
+for the different types of handlers in the Stardust project: **Controllers**
+(REST), **Actions** (RPC), **Jobs** (Queue) and **Tools** (AI).
 
-## 1. Visão Geral
+## 1. Overview
 
-Handlers são os pontos de entrada da aplicação. Sua responsabilidade é receber
-dados de uma fonte externa (HTTP, RPC, Queue, IA), orquestrar a chamada para a camada
-de domínio ou casos de uso e retornar uma resposta formatada.
+Handlers are the entry points of the application. Their responsibility is to receive
+data from an external source (HTTP, RPC, Queue, AI), orchestrate the call to the domain
+layer or use cases and return a formatted response.
 
-| Tipo           | Camada | Contexto (Entrada) | Retorno (Saída)         |
+| Type           | Layer | Context (Input) | Return (Output)         |
 | :------------- | :----- | :----------------- | :---------------------- |
 | **Controller** | REST   | `Http<T>`          | `Promise<RestResponse>` |
 | **Action**     | RPC    | `Call<T>`          | `Promise<U>`            |
@@ -21,19 +21,19 @@ de domínio ou casos de uso e retornar uma resposta formatada.
 
 ## 2. Controllers (REST)
 
-Os controllers residem principalmente em `apps/server/src/rest/controllers` ou
+Controllers live mainly in `apps/server/src/rest/controllers` or
 `apps/web/src/rest/controllers`.
 
-### 2.1. Padrão de Teste
+### 2.1. Test Pattern
 
-O teste deve garantir que o controller:
+The test must ensure that the controller:
 
-1. Extraia os dados corretamente do objeto `Http` (body, params, query,
+1. Correctly extracts the data from the `Http` object (body, params, query,
    accountId).
-2. Chame o Caso de Uso com os parâmetros transformados.
-3. Responda com o status code e corpo corretos através do objeto `Http`.
+2. Calls the Use Case with the transformed parameters.
+3. Responds with the correct status code and body through the `Http` object.
 
-### 2.2. Exemplo de Implementação
+### 2.2. Implementation Example
 
 ```ts
 import { type Mock, mock } from "ts-jest-mocker";
@@ -60,7 +60,7 @@ describe("Send Feedback Report Controller", () => {
 
     http.getBody.mockResolvedValue(body);
     useCase.execute.mockResolvedValue(feedbackDto);
-    http.statusCreated.mockReturnValue(http); // Suporte a interface fluida
+    http.statusCreated.mockReturnValue(http); // Fluent interface support
 
     // Act
     await controller.handle(http);
@@ -79,20 +79,20 @@ describe("Send Feedback Report Controller", () => {
 
 ## 3. Actions (RPC)
 
-As actions vivem em `apps/web/src/rpc/actions` e são implementadas como _Factory
+Actions live in `apps/web/src/rpc/actions` and are implemented as _Factory
 Functions_.
 
-### 3.1. Padrão de Teste
+### 3.1. Test Pattern
 
-O teste deve focar no método `handle` retornado pela factory. Deve-se garantir
-que a Action:
+The test must focus on the `handle` method returned by the factory. It must ensure
+that the Action:
 
-1. Use o objeto `Call` para obter dados da requisição e gerenciar
-   cookies/sessão.
-2. Dispare eventos via `Broker` se necessário.
-3. Retorne o dado puro para o chamador RPC.
+1. Uses the `Call` object to obtain request data and manage
+   cookies/session.
+2. Fires events via `Broker` if necessary.
+3. Returns the plain data to the RPC caller.
 
-### 3.2. Exemplo de Implementação
+### 3.2. Implementation Example
 
 ```ts
 import { type Mock, mock } from "ts-jest-mocker";
@@ -153,21 +153,21 @@ describe("Sign In Action", () => {
 
 ## 4. Jobs (Queue)
 
-Os jobs vivem principalmente em `apps/server/src/queue/jobs` e representam os
-handlers assíncronos da aplicação. Eles recebem eventos via `Amqp<T>`,
-orquestram workflows, casos de uso ou serviços e delegam a execução ao motor
-de fila na borda da aplicação.
+Jobs live mainly in `apps/server/src/queue/jobs` and represent the application's
+asynchronous handlers. They receive events via `Amqp<T>`,
+orchestrate workflows, use cases or services and delegate execution to the queue
+engine at the application boundary.
 
-### 4.1. Padrão de Teste
+### 4.1. Test Pattern
 
-O teste deve garantir que o Job:
+The test must ensure that the Job:
 
-1. Extraia corretamente o payload do objeto `Amqp` através de `getPayload()`.
-2. Chame o workflow, caso de uso ou serviço com os parâmetros transformados.
-3. Execute efeitos colaterais e IO dentro de `amqp.run(...)` quando aplicável.
-4. Propague falhas corretamente quando a dependência retornar erro.
+1. Correctly extracts the payload from the `Amqp` object through `getPayload()`.
+2. Calls the workflow, use case or service with the transformed parameters.
+3. Executes side effects and IO inside `amqp.run(...)` when applicable.
+4. Correctly propagates failures when the dependency returns an error.
 
-### 4.2. Exemplo de Implementação
+### 4.2. Implementation Example
 
 ```ts
 import { type Mock, mock } from "ts-jest-mocker";
@@ -204,20 +204,20 @@ describe("Create Challenge Job", () => {
 
 ## 5. Tools (AI)
 
-As tools são utilizadas por assistentes de IA e vivem em
-`apps/web/src/ai/tools`. Elas também seguem o padrão _Factory Function_.
+Tools are used by AI assistants and live in
+`apps/web/src/ai/tools`. They also follow the _Factory Function_ pattern.
 
-### 5.1. Padrão de Teste
+### 5.1. Test Pattern
 
-Tools usam o objeto `Mcp` (Model Context Protocol) para entrada. O teste deve
-validar se a Tool:
+Tools use the `Mcp` (Model Context Protocol) object for input. The test must
+validate whether the Tool:
 
-1. Extrai corretamente os argumentos do `Mcp`.
-2. Utiliza os serviços de infraestrutura ou domínio para buscar/processar
-   informações.
-3. Retorna uma resposta amigável para o modelo de linguagem.
+1. Correctly extracts the arguments from the `Mcp`.
+2. Uses the infrastructure or domain services to fetch/process
+   information.
+3. Returns a friendly response for the language model.
 
-### 5.2. Exemplo de Implementação
+### 5.2. Implementation Example
 
 ```ts
 import { type Mock, mock } from "ts-jest-mocker";
@@ -259,32 +259,32 @@ describe("Get Mdx Guide Tool", () => {
 
 ---
 
-## 6. Boas Práticas Comuns
+## 6. Common Best Practices
 
-1. **Iisolar o Handler:** Não teste a lógica de negócio dentro do handler. Ela
-   deve estar no Caso de Uso ou Serviço. O teste do handler foca na
-   **orquestração** e **tradução de dados**.
-2. **Mocks de Interfaces:** Sempre prefira mockar interfaces (`Http`, `Call`,
-   `Amqp`, `Mcp`, `Broker`, `UseCase`) em vez de implementações concretas.
-3. **Uso de Fakers:** Utilize os Fakers do core para gerar dados de resposta das
-   dependências, mantendo os testes limpos e focados.
-4. **Async/Await:** Todos os handlers são inerentemente assíncronos.
-   Certifique-se de usar `await` em todas as chamadas e asserções de erro
+1. **Isolate the Handler:** Do not test the business logic inside the handler. It
+   must be in the Use Case or Service. The handler test focuses on
+   **orchestration** and **data translation**.
+2. **Interface Mocks:** Always prefer mocking interfaces (`Http`, `Call`,
+   `Amqp`, `Mcp`, `Broker`, `UseCase`) instead of concrete implementations.
+3. **Use of Fakers:** Use the core Fakers to generate response data for the
+   dependencies, keeping the tests clean and focused.
+4. **Async/Await:** All handlers are inherently asynchronous.
+   Make sure to use `await` in all calls and error assertions
    (`rejects`).
-5. **Fluent Interface:** Para controllers, lembre-se de que métodos como
-   `statusCreated`, `statusOk`, etc., retornam a própria instância do `http`.
-   Mocke-os adequadamente: `http.statusOk.mockReturnValue(http)`.
-6. **Contexto de Queue:** Para jobs, mocke explicitamente `amqp.getPayload()` e,
-   quando houver IO ou efeitos colaterais, faça `amqp.run.mockImplementation(async (callback) => await callback())`
-   para validar a orquestração sem depender da infraestrutura real da fila.
+5. **Fluent Interface:** For controllers, remember that methods such as
+   `statusCreated`, `statusOk`, etc., return the `http` instance itself.
+   Mock them appropriately: `http.statusOk.mockReturnValue(http)`.
+6. **Queue Context:** For jobs, explicitly mock `amqp.getPayload()` and,
+   when there is IO or side effects, use `amqp.run.mockImplementation(async (callback) => await callback())`
+   to validate the orchestration without depending on the real queue infrastructure.
 
 ## Tooling
 
-- Runner de testes: Jest.
-- TypeScript em testes:
-  - `ts-jest` para transformar TS quando configurado no workspace.
-  - `ts-jest-mocker` para mocks type-safe de interfaces.
-- Comandos:
+- Test runner: Jest.
+- TypeScript in tests:
+  - `ts-jest` to transform TS when configured in the workspace.
+  - `ts-jest-mocker` for type-safe mocks of interfaces.
+- Commands:
   - Global (Turbo): `pnpm run test`.
-  - Por workspace: `pnpm --filter @stardust/server run test:unit`, `pnpm --filter @stardust/web run test:unit`, `pnpm --filter @stardust/backoffice run test:unit`, `pnpm --filter @stardust/core run test:unit`.
-- Referencia geral: `documentation/tooling.md`.
+  - Per workspace: `pnpm --filter @stardust/server run test:unit`, `pnpm --filter @stardust/web run test:unit`, `pnpm --filter @stardust/backoffice run test:unit`, `pnpm --filter @stardust/core run test:unit`.
+- General reference: `documentation/tooling.md`.

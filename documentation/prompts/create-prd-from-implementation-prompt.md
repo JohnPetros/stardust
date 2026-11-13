@@ -57,11 +57,10 @@ Não transforme o PRD em spec técnica. Use as rules apenas para não documentar
 
 ### Skill obrigatória: Grilling
 
-Execute o **Grilling gate** definido em [`sdd.md#grilling-gate`](../sdd.md#grilling-gate) nos modos prospectivo e
+Execute o protocolo de entrevista definido em [`interview-prompt.md`](interview-prompt.md) nos modos prospectivo e
 retrospectivo depois de pesquisar milestone, documentação, codebase, design e demais fatos
-disponíveis. Modele as decisões pendentes como uma design tree e pergunte, em cada round, toda a
-frontier cujos pré-requisitos já estiverem resolvidos. Cada pergunta deve trazer a resposta
-recomendada no formato canônico do protocolo; decisões dependentes pertencem a rounds posteriores.
+disponíveis. Modele as decisões pendentes como uma design tree e conduza os rounds conforme o
+protocolo, com a resposta recomendada em cada pergunta. Faça as perguntas em PT-BR.
 
 Não pergunte fatos pesquisáveis. Somente avance para a escrita quando a frontier estiver vazia e
 o usuário confirmar explicitamente o entendimento compartilhado.
@@ -91,9 +90,9 @@ preencher lacunas. Organize em:
 2. **UX/Design:** Público-alvo, jornada, dores atuais.
 3. **Técnico:** Plataformas, integrações, performance, dados.
 
-**→ Use os rounds e o formato obrigatório do protocolo de Grilling.**
+**→ Use os rounds e o formato obrigatório de [`interview-prompt.md`](interview-prompt.md).**
 
-**→ Pergunte toda a frontier atual e aguarde as respostas antes de continuar.**
+**→ Aguarde as respostas de cada round antes de continuar.**
 
 **→ Recompute a design tree e faça rounds adicionais até esvaziar a frontier.**
 
@@ -116,9 +115,9 @@ Em seguida, faça perguntas para validar e preencher lacunas. Organize em:
 4. **Restrições conhecidas:** Existem bugs, débitos técnicos ou limitações
    conhecidas que afetam o comportamento documentado?
 
-**→ Use os rounds e o formato obrigatório do protocolo de Grilling.**
+**→ Use os rounds e o formato obrigatório de [`interview-prompt.md`](interview-prompt.md).**
 
-**→ Pergunte toda a frontier atual e aguarde as respostas antes de continuar.**
+**→ Aguarde as respostas de cada round antes de continuar.**
 
 **→ Recompute a design tree e faça rounds adicionais até esvaziar a frontier.**
 

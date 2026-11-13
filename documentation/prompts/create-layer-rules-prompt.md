@@ -1,123 +1,123 @@
 ---
-description: Criar um prompt genérico para gerar documento de regras de uma camada da aplicacao
+description: Create a generic prompt to generate a rules document for an application layer
 ---
 
-# Prompt: Criar Regras de Camada
+# Prompt: Create Layer Rules
 
-**Objetivo:** Criar um meta-prompt reutilizavel para gerar um documento de regras arquiteturais de uma camada especifica da aplicacao. O resultado deve padronizar como a camada e descrita, quais limites ela possui, como integra com outras camadas e como validar novas features rapidamente. O prompt deve ser orientado a consistencia, clareza e aplicabilidade no dia a dia do time.
+**Goal:** Create a reusable meta-prompt to generate an architectural rules document for a specific application layer. The result must standardize how the layer is described, what boundaries it has, how it integrates with other layers and how to quickly validate new features. The prompt must be oriented toward consistency, clarity and day-to-day applicability for the team.
 
-**Entrada:**
+**Input:**
 
-- **Obrigatorias:**
-  - Nome da camada `{CAMADA}` (ex: UI, REST, RPC, Queue, Core, Database).
-  - Objetivo da camada `{OBJETIVO_CAMADA}`.
-  - Fontes disponiveis `{FONTES}` (arquivos, links, docs internas).
-- **Opcionais:**
-  - Stack e frameworks relacionados `{STACK}`.
-  - Restricoes do documento `{RESTRICOES}`.
-  - Convencoes ja existentes `{CONVENCOES_EXISTENTES}`.
-  - Formato de saida esperado `{FORMATO_SAIDA}` (default: Markdown).
-  - Nivel de detalhe `{NIVEL_DETALHE}` (resumido, medio, completo).
-- **Formato esperado da entrada:**
-  - Preferencialmente em bullets.
-  - Caminhos de arquivo como `documentation/...`.
-  - Trechos de regras e exemplos reais quando existirem.
+- **Required:**
+  - Layer name `{LAYER}` (e.g. UI, REST, RPC, Queue, Core, Database).
+  - Layer goal `{LAYER_GOAL}`.
+  - Available sources `{SOURCES}` (files, links, internal docs).
+- **Optional:**
+  - Related stack and frameworks `{STACK}`.
+  - Document constraints `{CONSTRAINTS}`.
+  - Existing conventions `{EXISTING_CONVENTIONS}`.
+  - Expected output format `{OUTPUT_FORMAT}` (default: Markdown).
+  - Level of detail `{DETAIL_LEVEL}` (summarized, medium, complete).
+- **Expected input format:**
+  - Preferably in bullets.
+  - File paths such as `documentation/...`.
+  - Rule excerpts and real examples when they exist.
 
-**Regras Aplicáveis:**
+**Applicable Rules:**
 
-Antes de criar um novo documento de regras, leia:
+Before creating a new rules document, read:
 
-- `documentation/rules/rules.md` — para verificar se já existe rule aplicável e evitar duplicação.
-- `documentation/rules/code-conventions-rules.md` — para manter nomenclatura, factories, erros, eventos e organização consistentes.
-- Rules de camadas vizinhas ou análogas à `{CAMADA}` — para preservar fronteiras e direção de dependência.
+- `documentation/rules/rules.md` — to check whether an applicable rule already exists and avoid duplication.
+- `documentation/rules/code-conventions-rules.md` — to keep naming, factories, errors, events and organization consistent.
+- Rules of neighboring or analogous layers to `{LAYER}` — to preserve boundaries and dependency direction.
 
-Se a nova camada não estiver coberta por `rules.md`, o entregável deve incluir também a atualização do índice `documentation/rules/rules.md`.
+If the new layer is not covered by `rules.md`, the deliverable must also include updating the `documentation/rules/rules.md` index.
 
-**Diretrizes de Execucao:**
+**Execution Guidelines:**
 
-1. **Entendimento e validacao de contexto**
-   - Confirmar objetivo do documento de regras para a camada `{CAMADA}`.
-   - Extrair e listar placeholders que serao usados na geracao: `{CAMADA}`, `{OBJETIVO_CAMADA}`, `{DIRETORIOS_GLOBAIS}`, `{PRINCIPIOS}`, `{PADROES_PROJETO}`, `{PADROES_USO}`, `{INTEGRACOES}`, `{CHECKLIST}`, `{REGRAS_FIXAS}`.
-   - Validar se as fontes fornecidas sao suficientes para cobrir arquitetura, convencoes e limites da camada.
-   - Quando houver lacunas, assumir padroes conservadores e registrar pendencias explicitamente na secao de observacoes.
+1. **Context understanding and validation**
+   - Confirm the goal of the rules document for the `{LAYER}` layer.
+   - Extract and list the placeholders that will be used in generation: `{LAYER}`, `{LAYER_GOAL}`, `{GLOBAL_DIRECTORIES}`, `{PRINCIPLES}`, `{DESIGN_PATTERNS}`, `{USAGE_PATTERNS}`, `{INTEGRATIONS}`, `{CHECKLIST}`, `{FIXED_RULES}`.
+   - Validate whether the provided sources are sufficient to cover the layer's architecture, conventions and boundaries.
+   - When there are gaps, assume conservative standards and record open items explicitly in the notes section.
 
-2. **Levantamento do que ja existe**
-   - Consultar arquivos de arquitetura e regras do projeto antes de redigir.
-   - Se houver CodeGraph, localizar documentos e implementacoes similares da camada e camadas analogas.
-   - Se houver duvida de biblioteca/framework, consultar documentacao oficial com ferramenta de docs (MCP Context7).
-   - Sem ferramentas, solicitar ao usuario trechos minimos necessarios (arquitetura, convencoes e exemplos de regra).
+2. **Survey of what already exists**
+   - Consult the project's architecture and rules files before writing.
+   - If CodeGraph is available, locate similar documents and implementations of the layer and of analogous layers.
+   - If there is doubt about a library/framework, consult the official documentation with a docs tool (Context7 MCP).
+   - Without tools, ask the user for the minimum necessary excerpts (architecture, conventions and rule examples).
 
-3. **Geracao da estrutura final**
-   - Produzir o documento final com secoes obrigatorias e linguagem prescritiva (deve/nao deve).
-   - Explicitar fronteiras da camada: o que pertence, o que nao pertence, e como comunicar com outras camadas.
-   - Incluir exemplos praticos de padroes de projeto e padroes de uso aplicados ao contexto `{CAMADA}`.
-   - Incluir checklist rapido e objetivo para orientar criacao de novas features.
+3. **Generation of the final structure**
+   - Produce the final document with the mandatory sections and prescriptive language (must/must not).
+   - Make the layer's boundaries explicit: what belongs, what does not belong, and how to communicate with other layers.
+   - Include practical examples of design patterns and usage patterns applied to the `{LAYER}` context.
+   - Include a quick, objective checklist to guide the creation of new features.
 
-4. **Checagens finais de qualidade**
-   - Verificar consistencia entre principios, padroes e regras de integracao.
-   - Verificar se nao ha contradicoes com arquitetura global e regras existentes.
-   - Garantir que todas as secoes obrigatorias foram preenchidas.
-   - Marcar claramente qualquer premissa adotada e pendencia de informacao.
+4. **Final quality checks**
+   - Verify consistency between principles, patterns and integration rules.
+   - Verify there are no contradictions with the global architecture and existing rules.
+   - Ensure all mandatory sections were filled in.
+   - Clearly mark any assumption adopted and any missing information.
 
-**Template de Saida (Estrutura Obrigatoria):**
+**Output Template (Mandatory Structure):**
 
-- O documento final deve conter exatamente os titulos de primeiro nivel abaixo:
+- The final document must contain exactly the first-level headings below:
 
 ```markdown
-# Regras da Camada {CAMADA}
+# {LAYER} Layer Rules
 
-# Visao Geral
-- Objetivo da camada
-- Responsabilidades principais
-- Limites da camada
+# Overview
+- Layer goal
+- Main responsibilities
+- Layer boundaries
 
-# Estrutura de Diretorios Globais
-- Mapa de pastas relevantes
-- Responsabilidade de cada diretorio
-- Regras de organizacao e nomeacao
+# Global Directory Structure
+- Map of relevant folders
+- Responsibility of each directory
+- Organization and naming rules
 
-# Principios Fundamentais
-## Deve conter
-- Elementos obrigatorios da camada
-- Praticas recomendadas
+# Core Principles
+## Must contain
+- Mandatory elements of the layer
+- Recommended practices
 
-## Nao deve conter
-- Antipadroes e acoplamentos proibidos
-- Responsabilidades que pertencem a outras camadas
+## Must not contain
+- Anti-patterns and forbidden couplings
+- Responsibilities that belong to other layers
 
-# Padroes de Projeto
-- Padroes arquiteturais aceitos
-- Como aplicar cada padrao na camada
-- Quando evitar cada padrao
+# Design Patterns
+- Accepted architectural patterns
+- How to apply each pattern in the layer
+- When to avoid each pattern
 
-# Padroes de Uso Aplicados
-- Fluxos comuns da camada
-- Exemplos de uso correto
-- Erros comuns e como evitar
+# Applied Usage Patterns
+- Common flows of the layer
+- Examples of correct usage
+- Common mistakes and how to avoid them
 
-# Regras de Integracao com Outras Camadas
-- Dependencias permitidas e proibidas
-- Contratos/interface de comunicacao
-- Direcao de dependencia e limites de acoplamento
+# Integration Rules with Other Layers
+- Allowed and forbidden dependencies
+- Communication contracts/interfaces
+- Dependency direction and coupling limits
 
-# Checklist Rapido para Novas Features na Camada
-- Itens objetivos de validacao antes de abrir PR
-- Criterios minimos de conformidade arquitetural
-- Sinais de alerta para revisao tecnica
+# Quick Checklist for New Features in the Layer
+- Objective validation items before opening a PR
+- Minimum architectural conformance criteria
+- Warning signs for technical review
 
-# Observacoes e Pendencias
-- Premissas adotadas
-- Informacoes ausentes
-- Proximos passos para refinamento
+# Notes and Pending Items
+- Assumptions adopted
+- Missing information
+- Next steps for refinement
 ```
 
-4. **Regras:**
+4. **Rules:**
 
-- Usar Markdown como formato de saida.
-- Nao omitir secoes obrigatorias do template.
-- Nao inventar caminhos de arquivo, contratos ou componentes inexistentes.
-- Priorizar regras acionaveis e verificaveis em code review.
-- Manter linguagem normativa: usar "deve", "nao deve", "pode" com criterio.
-- Alinhar o documento com a arquitetura em camadas vigente.
-- Se faltar contexto critico, registrar em `# Observacoes e Pendencias` em vez de inferir livremente.
-- Evitar genericidade: adaptar exemplos e regras ao contexto de `{CAMADA}` e `{STACK}`.
+- Use Markdown as the output format.
+- Do not omit mandatory sections of the template.
+- Do not invent nonexistent file paths, contracts or components.
+- Prioritize actionable rules that are verifiable in code review.
+- Keep normative language: use "must", "must not", "may" with judgment.
+- Align the document with the current layered architecture.
+- If critical context is missing, record it in `# Notes and Pending Items` instead of inferring freely.
+- Avoid genericity: adapt examples and rules to the context of `{LAYER}` and `{STACK}`.

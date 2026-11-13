@@ -1,50 +1,50 @@
 ---
-description: Prompt para concluir um report de qualquer tipo (performance, security, bug report), verificando correções no código, atualizando o status dos itens e fechando o documento.
+description: Prompt to conclude a report of any type (performance, security, bug report), verifying fixes in the code, updating item statuses, and closing the document.
 ---
 
 # Prompt: Conclude Report
 
-## Objetivo
+## Goal
 
-Finalizar um report — de diagnóstico (performance, segurança) ou bug report — verificando as correções aplicadas no código, consolidando o estado de cada item identificado e atualizando o documento com o registro da resolução.
-
----
-
-## Entrada
-
-- **Report:** Caminho do documento a ser concluído
-  - Diagnóstico: `documentation/reports/{nome}.md`
-  - Bug report: `documentation/features/{dominio}/bug-reports/{nome}.md`
-- **Itens resolvidos:** IDs ou descrição do que foi corrigido (ex: `ISSUE-01, ISSUE-03` ou `"bug principal corrigido"`)
-- **Itens descartados (opcional):** O que foi avaliado e não será corrigido, com justificativa
-- **Novas descobertas (opcional):** Problemas encontrados durante a implementação que não estavam no report original
+Finalize a report — a diagnostic one (performance, security) or a bug report — by verifying the fixes applied in the code, consolidating the state of each identified item, and updating the document with the resolution record.
 
 ---
 
-## Passo 1: Identificar o Tipo e o App
+## Input
 
-Leia o frontmatter do documento:
+- **Report:** Path of the document to be concluded
+  - Diagnostic: `documentation/reports/{name}.md`
+  - Bug report: `documentation/features/{domain}/bug-reports/{name}.md`
+- **Resolved items:** IDs or description of what was fixed (e.g., `ISSUE-01, ISSUE-03` or `"main bug fixed"`)
+- **Discarded items (optional):** What was evaluated and will not be fixed, with justification
+- **New findings (optional):** Problems found during implementation that were not in the original report
 
-| Campo | Diagnóstico | Bug Report |
+---
+
+## Step 1: Identify the Type and the App
+
+Read the document's frontmatter:
+
+| Field | Diagnostic | Bug Report |
 |-------|-------------|------------|
-| Localização | `documentation/reports/` | `documentation/features/.../bug-reports/` |
-| `type` | `performance` \| `security` | ausente |
-| `apps` | ex: `web`, `server` | ex: `web`, `server` |
-| `last_updated_at` | ✓ | ausente — usa `last_updated` |
+| Location | `documentation/reports/` | `documentation/features/.../bug-reports/` |
+| `type` | `performance` \| `security` | absent |
+| `apps` | e.g., `web`, `server` | e.g., `web`, `server` |
+| `last_updated_at` | ✓ | absent — uses `last_updated` |
 
-Use o campo `apps` para montar os comandos de qualidade. Se houver múltiplos apps (ex: `web, server`), execute os comandos para cada um.
+Use the `apps` field to build the quality commands. If there are multiple apps (e.g., `web, server`), run the commands for each one.
 
-O fluxo de execução diverge conforme o tipo identificado.
+The execution flow diverges according to the identified type.
 
 ---
 
-## Regras Aplicáveis
+## Applicable Rules
 
-Antes de verificar ou fechar qualquer report, leia:
+Before verifying or closing any report, read:
 
-- `documentation/rules/rules.md` — índice para descobrir as rules das camadas afetadas pelos itens resolvidos.
-- `documentation/rules/code-conventions-rules.md` — validação geral de nomenclatura, organização, factories, erros e eventos.
-- Rules de teste correspondentes aos artefatos corrigidos, quando houver cobertura criada ou alterada:
+- `documentation/rules/rules.md` — index to discover the rules of the layers affected by the resolved items.
+- `documentation/rules/code-conventions-rules.md` — general validation of naming, organization, factories, errors, and events.
+- The testing rules corresponding to the fixed artifacts, when coverage was created or changed:
   - `documentation/rules/domain-objects-testing-rules.md`
   - `documentation/rules/use-cases-testing-rules.md`
   - `documentation/rules/handlers-testing-rules.md`
@@ -52,32 +52,32 @@ Antes de verificar ou fechar qualquer report, leia:
   - `documentation/rules/web-app-routes-testing-rules.md`
   - `documentation/rules/widget-tests-rules.md`
 
-Para reports de performance ou segurança, também consulte as rules das camadas citadas em cada issue antes de marcar o item como `resolved`.
+For performance or security reports, also consult the rules of the layers cited in each issue before marking the item as `resolved`.
 
 ---
 
-## Fluxo A — Diagnóstico (performance, security)
+## Flow A — Diagnostic (performance, security)
 
-### A1: Classificar os Issues
+### A1: Classify the Issues
 
-Leia todos os issues do documento. Para cada um, defina o estado com base nas entradas recebidas:
+Read all issues in the document. For each one, set the state based on the inputs received:
 
-- `resolved` — corrigido e validado no código
-- `open` — ainda não tratado
-- `discarded` — avaliado e descartado com justificativa
+- `resolved` — fixed and validated in the code
+- `open` — not yet addressed
+- `discarded` — evaluated and discarded with justification
 
-### A2: Verificar as Correções no Código
+### A2: Verify the Fixes in the Code
 
-Para cada issue `resolved`:
+For each `resolved` issue:
 
-- Localize o arquivo e linha apontados como **Evidência** no issue original.
-- Confirme que o trecho problemático foi alterado.
-- Se a abordagem real diferir da recomendada, documente a diferença — não reescreva o issue original.
-- Se não for possível verificar no código, marque como `resolved (não verificado)` e registre nas pendências da seção de Resolução Final.
+- Locate the file and line pointed to as **Evidence** in the original issue.
+- Confirm that the problematic snippet was changed.
+- If the actual approach differs from the recommended one, document the difference — do not rewrite the original issue.
+- If it is not possible to verify in the code, mark it as `resolved (not verified)` and record it in the pending items of the Final Resolution section.
 
-### A3: Executar o Checklist de Qualidade
+### A3: Run the Quality Checklist
 
-Execute para cada app afetado e registre o resultado:
+Run for each affected app and record the result:
 
 ```bash
 pnpm --filter @stardust/{APP} run test:unit
@@ -85,80 +85,80 @@ pnpm --filter @stardust/{APP} run check:types
 pnpm --filter @stardust/{APP} run check:code
 ```
 
-Se algum comando falhar, **não feche o report** — registre a falha no checklist e mantenha `status: open`.
+If any command fails, **do not close the report** — record the failure in the checklist and keep `status: open`.
 
-### A4: Registrar Novas Descobertas
+### A4: Record New Findings
 
-Se houver novas descobertas:
+If there are new findings:
 
-- Adicione-as ao report com IDs sequenciais a partir do último existente (ex: se o último era `ISSUE-16`, a nova começa em `ISSUE-17`).
-- Use o mesmo formato dos issues originais do documento.
-- Classifique como `open`.
+- Add them to the report with sequential IDs starting from the last existing one (e.g., if the last was `ISSUE-16`, the new one starts at `ISSUE-17`).
+- Use the same format as the document's original issues.
+- Classify them as `open`.
 
-### A5: Atualizar o Documento
+### A5: Update the Document
 
-Faça as seguintes edições no arquivo:
+Make the following edits to the file:
 
-1. **Frontmatter:** Atualize `last_updated_at`. Mude `status` para `closed` **somente** se não houver nenhum issue `open` sem justificativa de descarte.
-2. **Status por issue:** Adicione `- **Status:** resolved | open | discarded` ao final de cada bloco de issue.
-3. **Justificativa de descarte:** Nos issues `discarded`, adicione `- **Justificativa do descarte:** {MOTIVO}`.
-4. **Checklist de Verificação:** Preencha o checklist já existente no documento com `[x]` para passou e `[ ]` para falhou.
-5. **Seção de Resolução Final:** Adicione ao final do documento, antes de `## Referencias`.
+1. **Frontmatter:** Update `last_updated_at`. Change `status` to `closed` **only** if there is no `open` issue without a discard justification.
+2. **Status per issue:** Add `- **Status:** resolved | open | discarded` at the end of each issue block.
+3. **Discard justification:** In `discarded` issues, add `- **Discard justification:** {REASON}`.
+4. **Verification Checklist:** Fill in the checklist that already exists in the document with `[x]` for passed and `[ ]` for failed.
+5. **Final Resolution section:** Add it at the end of the document, before `## References`.
 
 ---
 
-### Template: Seção de Resolução Final (Diagnóstico)
+### Template: Final Resolution Section (Diagnostic)
 
 ```md
-## Resolucao Final
+## Final Resolution
 
-**Data de conclusao:** {DATA}
+**Completion date:** {DATE}
 
-### Itens Resolvidos
+### Resolved Items
 
-| ID | Titulo | Abordagem Adotada |
+| ID | Title | Approach Taken |
 |----|--------|-------------------|
-| ISSUE-01 | {TITULO} | Conforme recomendacao original |
-| ISSUE-03 | {TITULO} | Abordagem alternativa: {DESCRICAO} |
+| ISSUE-01 | {TITLE} | As per the original recommendation |
+| ISSUE-03 | {TITLE} | Alternative approach: {DESCRIPTION} |
 
-### Itens Descartados
+### Discarded Items
 
-| ID | Titulo | Justificativa |
+| ID | Title | Justification |
 |----|--------|---------------|
-| ISSUE-05 | {TITULO} | {MOTIVO} |
+| ISSUE-05 | {TITLE} | {REASON} |
 
-### Itens em Aberto
+### Open Items
 
-| ID | Titulo | Proximo Passo |
+| ID | Title | Next Step |
 |----|--------|---------------|
-| ISSUE-07 | {TITULO} | {ACAO_PENDENTE} |
+| ISSUE-07 | {TITLE} | {PENDING_ACTION} |
 
-### Novas Descobertas
+### New Findings
 
-| ID | Titulo | Impacto | Status |
+| ID | Title | Impact | Status |
 |----|--------|---------|--------|
-| ISSUE-17 | {TITULO} | {IMPACTO} | open |
+| ISSUE-17 | {TITLE} | {IMPACT} | open |
 
-### Observacoes
+### Notes
 
-{OBSERVACOES_SOBRE_A_CONDUCAO_DAS_CORRECOES — omitir secao se nao houver}
+{NOTES_ABOUT_HOW_THE_FIXES_WERE_CARRIED_OUT — omit section if there are none}
 ```
 
 ---
 
-## Fluxo B — Bug Report
+## Flow B — Bug Report
 
-### B1: Verificar a Correção no Código
+### B1: Verify the Fix in the Code
 
-Leia a seção **Plano de Correção** do documento (subseções "O que deve ser criado", "O que deve ser modificado", "O que deve ser removido"). Para cada item:
+Read the **Correction Plan** section of the document (subsections "What must be created", "What must be modified", "What must be removed"). For each item:
 
-- Confirme no código se a alteração foi de fato aplicada.
-- Se a abordagem real diferir do plano, documente a divergência — não reescreva o plano original.
-- Se um item do plano não foi implementado, ele é um item `open` — não feche o report.
+- Confirm in the code that the change was actually applied.
+- If the actual approach differs from the plan, document the divergence — do not rewrite the original plan.
+- If a plan item was not implemented, it is an `open` item — do not close the report.
 
-### B2: Executar o Checklist de Qualidade
+### B2: Run the Quality Checklist
 
-Execute para cada app afetado e registre o resultado:
+Run for each affected app and record the result:
 
 ```bash
 pnpm --filter @stardust/{APP} run test:unit
@@ -166,72 +166,72 @@ pnpm --filter @stardust/{APP} run check:types
 pnpm --filter @stardust/{APP} run check:code
 ```
 
-Além dos comandos gerais, verifique:
+In addition to the general commands, verify:
 
-- Existe **teste unitário cobrindo o cenário específico que causou o bug**? Se não existir, adicione antes de fechar.
-- Os testes de regressão do módulo afetado continuam passando?
+- Is there a **unit test covering the specific scenario that caused the bug**? If not, add one before closing.
+- Do the regression tests of the affected module still pass?
 
-Se algum comando falhar ou o teste do caso específico estiver ausente, **não feche o report**.
+If any command fails or the test for the specific case is missing, **do not close the report**.
 
-### B3: Registrar Novas Descobertas
+### B3: Record New Findings
 
-Se durante a correção foram encontrados problemas adicionais não cobertos pelo bug report original:
+If additional problems not covered by the original bug report were found during the fix:
 
-- Avalie se merecem um **novo bug report separado** (problema distinto, camada diferente) ou podem ser registrados como observação no atual (variação do mesmo problema).
-- Se criar bug report separado, registre o caminho na seção de Resolução Final.
+- Assess whether they deserve a **separate new bug report** (distinct problem, different layer) or can be recorded as a note in the current one (variation of the same problem).
+- If you create a separate bug report, record its path in the Final Resolution section.
 
-### B4: Atualizar o Documento
+### B4: Update the Document
 
-Faça as seguintes edições no arquivo:
+Make the following edits to the file:
 
-1. **Frontmatter:** Atualize `last_updated` (sem `_at`, padrão do bug report). Mude `status` para `closed` **somente** se todos os itens do plano foram implementados e os testes passam.
-2. **Seção de Resolução Final:** Adicione ao final do documento.
+1. **Frontmatter:** Update `last_updated` (without `_at`, the bug report standard). Change `status` to `closed` **only** if all plan items were implemented and the tests pass.
+2. **Final Resolution section:** Add it at the end of the document.
 
 ---
 
-### Template: Seção de Resolução Final (Bug Report)
+### Template: Final Resolution Section (Bug Report)
 
 ```md
-## Resolucao Final
+## Final Resolution
 
-**Data de conclusao:** {DATA}
+**Completion date:** {DATE}
 
-### Causa Raiz Confirmada
+### Confirmed Root Cause
 
-{Descricao da causa raiz real. Se diferiu do diagnostico original, registre a divergencia aqui.}
+{Description of the actual root cause. If it differed from the original diagnosis, record the divergence here.}
 
-### Abordagem Adotada
+### Approach Taken
 
-{Resumo do que foi efetivamente implementado.}
+{Summary of what was actually implemented.}
 
-**Divergencias do plano original:**
-- {Item do plano original} → {O que foi feito de diferente e por que}
+**Divergences from the original plan:**
+- {Item from the original plan} → {What was done differently and why}
 
-### Novas Descobertas
+### New Findings
 
-{Problemas encontrados durante a correcao que nao estavam no report original. Omitir secao se nao houver.}
+{Problems found during the fix that were not in the original report. Omit section if there are none.}
 
-- Bug report separado criado: {sim — `documentation/features/{dominio}/bug-reports/{nome}.md` | nao}
+- Separate bug report created: {yes — `documentation/features/{domain}/bug-reports/{name}.md` | no}
 
-### Resultado do Checklist
+### Checklist Result
 
-- [ ] Comportamento incorreto nao ocorre mais
-- [ ] Teste unitario cobre o cenario especifico do bug
-- [ ] `pnpm --filter @stardust/{APP} run test:unit` — passou | falhou
-- [ ] `pnpm --filter @stardust/{APP} run check:types` — passou | falhou
-- [ ] `pnpm --filter @stardust/{APP} run check:code` — passou | falhou
+- [ ] The incorrect behavior no longer occurs
+- [ ] Unit test covers the specific bug scenario
+- [ ] `pnpm --filter @stardust/{APP} run test:unit` — passed | failed
+- [ ] `pnpm --filter @stardust/{APP} run check:types` — passed | failed
+- [ ] `pnpm --filter @stardust/{APP} run check:code` — passed | failed
 
-### Observacoes
+### Notes
 
-{Observacoes livres sobre a conducao da correcao — omitir secao se nao houver}
+{Free-form notes about how the fix was carried out — omit section if there are none}
 ```
 
 ---
 
-## Restrições
+## Constraints
 
-- Não altere o conteúdo original dos issues, diagnósticos ou do plano de correção — apenas acrescente campos de status, justificativas e a seção de Resolução Final.
-- Não marque um item como `resolved` sem verificar a correção no código ou receber confirmação explícita.
-- Não altere `status` para `closed` no frontmatter enquanto houver itens `open` sem justificativa de descarte.
-- Se a causa raiz real diferir da identificada originalmente, registre a divergência — nunca reescreva o histórico do documento.
-- Em bug reports, não feche sem confirmar a existência de teste unitário para o cenário específico do bug.
+- Do not change the original content of the issues, diagnostics, or the correction plan — only add status fields, justifications, and the Final Resolution section.
+- Do not mark an item as `resolved` without verifying the fix in the code or receiving explicit confirmation.
+- Do not change `status` to `closed` in the frontmatter while there are `open` items without a discard justification.
+- If the actual root cause differs from the one originally identified, record the divergence — never rewrite the document's history.
+- In bug reports, do not close without confirming the existence of a unit test for the specific bug scenario.

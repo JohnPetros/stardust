@@ -1,76 +1,80 @@
 ---
 name: open-bug-issue
-description: Criar uma GitHub bug issue factual no Stardust a partir de uma falha observada, com approval gate e sem diagnóstico técnico.
+description: Create a factual GitHub bug issue in Stardust from an observed failure, with an approval gate and no technical diagnosis.
 ---
 
-# Criar Bug Issue
+# Create Bug Issue
 
-Transforme um relato informal em uma única issue de intake e tracking. Não diagnostique causa,
-crie Bug Report/Spec, implemente, abra branch, commit ou PR.
+Turn an informal report into a single intake and tracking issue. Do not diagnose the cause,
+create a Bug Report/Spec, implement, open a branch, commit, or open a PR.
 
-Escreva o título, o body, as perguntas do Grilling e as justificativas em português do Brasil.
-Preserve identificadores técnicos, paths, URLs e nomes oficiais de labels.
+Write the title, the body, the Grilling questions, and the justifications in Brazilian Portuguese
+(PT-BR). Preserve technical identifiers, paths, URLs, and official label names.
 
-## Contexto obrigatório
+## Required context
 
-Leia `AGENTS.md`, `documentation/rules/rules.md` e `documentation/modules.md`. Leia a milestone e
-o PRD canônico em `documentation/prds/` aplicáveis quando a falha violar comportamento de produto. Inspecione source ou
-testes apenas para identificar app/módulo ou distinguir comportamento atual de intenção; deep
-diagnosis pertence a `create-bug-report`.
+Read `AGENTS.md`, `documentation/rules/rules.md`, and `documentation/modules.md`. Read the applicable
+milestone and the canonical PRD in `documentation/prds/` when the failure violates product behavior. Inspect source or
+tests only to identify the app/module or to distinguish current behavior from intent; deep
+diagnosis belongs to `create-bug-report`.
 
-Use o contrato de produto real para Expected Behavior e preserve qualquer checkbox/status.
-Se a expectativa mudar o comportamento pretendido, pare e encaminhe para feature/amendment.
+Use the actual product contract for Expected Behavior and preserve any checkbox/status.
+If the expectation changes the intended behavior, stop and route to a feature/amendment.
 
-## Gate obrigatório de PRD
+## Mandatory PRD gate
 
-Antes do draft, identifique o PRD mais relevante:
+Before the draft, identify the most relevant PRD:
 
-1. derive módulo, ator, lifecycle e comportamento violado a partir do relato;
-2. pesquise o PRD canônico em `documentation/prds/*.md` e os PRDs de feature em `documentation/**/prd.md`;
-3. pesquise milestones abertas e fechadas via GitHub e siga links para PRDs versionados;
-4. compare candidatos pelo mesmo outcome, atores, capacidades, experiência e fluxo — não apenas
-   por palavras do título;
-5. selecione uma única referência principal e o `RP-*` mais específico disponível;
-6. quando nenhum PRD governar o comportamento, registre explicitamente
-   `None — <evidência da busca e motivo>` em vez de omitir ou inventar associação.
+1. derive module, actor, lifecycle, and violated behavior from the report;
+2. search the canonical PRD in `documentation/prds/*.md` and the feature PRDs in `documentation/**/prd.md`;
+3. search open and closed milestones via GitHub and follow links to versioned PRDs;
+4. compare candidates by the same outcome, actors, capabilities, experience, and flow — not only
+   by title words;
+5. select a single main reference and the most specific `RP-*` available;
+6. when no PRD governs the behavior, explicitly record
+   `None — <search evidence and reason>` instead of omitting it or inventing an association.
 
-Se a busca não encontrar um PRD candidato, antes de preparar o draft pergunte ao usuário:
+If the search does not find a candidate PRD, before preparing the draft ask the user (in PT-BR):
 “Qual PRD você considera mais relevante para este comportamento? Se nenhum se aplicar, confirme
-que não há PRD.” Use a indicação do usuário somente após conferir que ela corresponde ao módulo,
-ator, outcome e fluxo relatados. Se o usuário confirmar que não há PRD, registre
-`None — usuário confirmou que não há PRD aplicável após a busca`.
+que não há PRD.” (“Which PRD do you consider most relevant for this behavior? If none applies, confirm
+that there is no PRD.”) Use the user's indication only after checking that it matches the reported module,
+actor, outcome, and flow. If the user confirms there is no PRD, record
+`None — usuário confirmou que não há PRD aplicável após a busca` (“None — user confirmed there is no applicable PRD after the search”; this text goes into the PT-BR issue, so it stays in Portuguese).
 
-Se milestone e PRD canônico em `documentation/prds/` divergirem, resolva a autoridade antes do draft. A busca e a
-seleção são obrigatórias mesmo quando o usuário não fornece PRD ou milestone.
+If the milestone and the canonical PRD in `documentation/prds/` diverge, resolve the authority before the draft. The search and
+selection are mandatory even when the user does not provide a PRD or milestone.
 
-## Gate obrigatório de Grilling
+## Mandatory Grilling gate
 
-Execute o **Grilling gate** definido em [`sdd.md#grilling-gate`](../sdd.md#grilling-gate) depois da pesquisa factual e
-antes do draft. Modele como design tree somente decisões necessárias para delimitar o sintoma, o
-comportamento esperado, a reprodução e o contexto da issue; não transforme o round em diagnóstico
-técnico.
+Run the interview protocol in [`interview-prompt.md`](interview-prompt.md) after the factual research and
+before the draft. Model as a design tree only the decisions needed to delimit the symptom, the
+expected behavior, the reproduction, and the issue context; do not turn the round into a technical
+diagnosis.
 
-Pergunte toda a frontier disponível com recomendação e deixe decisões dependentes para rounds
-posteriores. A frontier vazia e a confirmação de entendimento compartilhado permitem preparar o
-draft, mas não substituem o approval gate da versão exata a publicar.
+An empty frontier and confirmation of shared understanding allow preparing the
+draft, but they do not replace the approval gate for the exact version to be published.
 
-## Metadata GitHub
+## GitHub metadata
 
 - repository: `JohnPetros/stardust`;
-- label obrigatória: `bug`;
-- labels `web`, `server` e/ou `studio` somente quando confirmadas;
-- use apenas labels existentes; não crie labels;
-- milestone somente quando ownership de produto estiver estabelecido;
-- não adicione bug ao Project 2 por inferência.
+- required label: `bug`;
+- labels `web`, `server`, and/or `studio` only when confirmed;
+- use only existing labels; do not create labels;
+- milestone only when product ownership is established;
+- do not add the bug to Project 2 by inference.
 
-## Título e body
+## Title and body
 
-Use título nominal, sem prefixo de commit, descrevendo o sintoma, por exemplo
-`Correção do redirecionamento após login`.
+Use a noun-phrase title, without a commit prefix, describing the symptom, for example
+`Correção do redirecionamento após login` (“Fix the redirect after login”). The title and the body stay in PT-BR.
 
-As seções `Contexto` e `Evidência` são opcionais: inclua cada uma somente quando houver dados
-úteis fornecidos pelo usuário ou encontrados na investigação permitida. Nunca invente valores
-para preencher uma seção opcional.
+The `Contexto` (Context) and `Evidência` (Evidence) sections are optional: include each one only when there is useful
+data provided by the user or found during the permitted investigation. Never invent values
+to fill in an optional section.
+
+The body template below is the literal issue body and stays in PT-BR (it mirrors `.github/ISSUE_TEMPLATE/bug-issue.md`).
+Section order: `Problema` (Problem), `Comportamento esperado` (Expected behavior), `Reprodução` (Reproduction),
+`Contexto` (Context), `Evidência` (Evidence).
 
 ```md
 ## Problema
@@ -105,23 +109,23 @@ para preencher uma seção opcional.
 - <links, screenshots, gravações ou outra evidência fornecida>
 ```
 
-Quando não houver reprodução, escreva `Ainda não reproduzível`; mantenha desconhecidos
-explícitos e nunca os adivinhe.
+When there is no reproduction, write `Ainda não reproduzível` (“Not yet reproducible”); keep unknowns
+explicit and never guess them.
 
 ## Approval gate
 
-Antes de escrever no GitHub, apresente título, body, labels, milestone, PRD selecionado,
-requisito/anchor e justificativa de relevância. Publique somente depois de aprovação explícita
-da versão atual. A aprovação autoriza apenas a issue.
+Before writing to GitHub, present the title, body, labels, milestone, selected PRD,
+requirement/anchor, and relevance justification. Publish only after explicit approval
+of the current version. The approval authorizes only the issue.
 
-Depois da publicação, retorne número, URL, título, labels, milestone, PRD/requisito selecionado e
-resumo da falha. Recomende `create-bug-report` como próximo diagnóstico, mas não o invoque sem
-pedido.
+After publishing, return the number, URL, title, labels, milestone, selected PRD/requirement, and
+a summary of the failure. Recommend `create-bug-report` as the next diagnostic step, but do not invoke it without
+being asked.
 
-## Restrições
+## Constraints
 
-- exatamente uma issue salvo pedido de decomposição;
-- sem root cause, affected files, correction guidance, acceptance, validation ou tasks;
-- não altere produto, PRD ou SDD artifacts;
-- não use `None` sem executar e resumir a busca obrigatória de PRD;
-- não invente reprodução, ambiente ou expectativa.
+- exactly one issue unless a decomposition is requested;
+- no root cause, affected files, correction guidance, acceptance, validation, or tasks;
+- do not change product, PRD, or SDD artifacts;
+- do not use `None` without running and summarizing the mandatory PRD search;
+- do not invent reproduction, environment, or expectation.

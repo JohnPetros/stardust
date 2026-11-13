@@ -50,14 +50,13 @@ Só depois da confirmação o arquivo poderá ser criado ou atualizado.
 
 ## Gate obrigatório de Grilling
 
-Execute obrigatoriamente o **Grilling gate** definido em [`sdd.md#grilling-gate`](../sdd.md#grilling-gate) antes de
-escrever ou atualizar o PRD. Modele os itens da Árvore de Decisão como uma design tree, pesquise
-os fatos e pergunte em cada round toda a frontier cujos pré-requisitos já estiverem resolvidos.
-Cada pergunta deve incluir a resposta recomendada no formato canônico do protocolo.
+Execute obrigatoriamente o protocolo de entrevista definido em [`interview-prompt.md`](interview-prompt.md)
+antes de escrever ou atualizar o PRD. Modele os itens da Árvore de Decisão como uma design tree, pesquise
+os fatos e conduza os rounds conforme o protocolo, com a resposta recomendada em cada pergunta. Faça as
+perguntas em PT-BR.
 
-Não misture no mesmo round perguntas que dependam umas das outras. Recompute a frontier após cada
-resposta, conteste contradições ou riscos e não execute a criação do PRD até a frontier ficar
-vazia e o usuário confirmar o entendimento compartilhado.
+Não execute a criação do PRD até a frontier ficar vazia e o usuário confirmar o entendimento
+compartilhado.
 
 ---
 
@@ -171,8 +170,8 @@ Não faça perguntas sobre itens já resolvidos nos materiais ou pelo usuário.
 
 ## Formato das Perguntas
 
-Use o formato obrigatório de rounds do **Grilling gate** em [`sdd.md#grilling-gate`](../sdd.md#grilling-gate). Numere
-toda a frontier atual e inclua uma recomendação objetiva e justificada para cada pergunta.
+Use o formato obrigatório de perguntas de [`interview-prompt.md`](interview-prompt.md), com uma
+recomendação objetiva e justificada para cada pergunta.
 
 ---
 

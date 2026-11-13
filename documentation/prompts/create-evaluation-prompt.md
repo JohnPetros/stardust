@@ -1,195 +1,195 @@
 ---
 name: create-evaluation
-description: Criar e manter o evaluation.md obrigatório de uma entrega SDD com evidências reais, revisões, preflight, findings, decisões e lições.
+description: Create and maintain the mandatory evaluation.md of an SDD delivery with real evidence, reviews, preflight, findings, decisions and lessons.
 ---
 
-# Criar Evaluation
+# Create Evaluation
 
-O `evaluation.md` é o registro factual da entrega. Ele é criado após a
-implementação ou o primeiro julgamento relevante e deve existir antes do PR.
-Não substitui `spec.md`; consolida as
-evidências necessárias para fechar a feature.
+`evaluation.md` is the factual record of the delivery. It is created after
+implementation or the first relevant judgment and must exist before the PR.
+It does not replace `spec.md`; it consolidates the
+evidence needed to close the feature.
 
-## Localização
+## Location
 
-Para uma feature:
-
-```text
-documentation/features/<domínio>/<feature>/evaluation.md
-```
-
-Para uma mudança posterior:
+For a feature:
 
 ```text
-changes/<nome-da-mudanca>/evaluation.md
+documentation/features/<domain>/<feature>/evaluation.md
 ```
 
-## Persistência imediata
+For a later change:
 
-A task principal atualiza este documento a cada checkpoint significativo (trabalho de
-Builder aceito, execução de sensores, finding ou decisão, lição descoberta), em vez de uma
-atualização por edição de arquivo. Evidência é invalidada pela alegação e dependências
-afetadas, não pela idade do commit. Requisitos pertencem à `spec.md`; progresso, evidências e
-findings operacionais pertencem a este documento.
+```text
+changes/<change-name>/evaluation.md
+```
+
+## Immediate persistence
+
+The main task updates this document at each significant checkpoint (accepted
+Builder work, sensor execution, finding or decision, lesson discovered), instead of one
+update per file edit. Evidence is invalidated by the claim and affected
+dependencies, not by the age of the commit. Requirements belong to `spec.md`; progress, evidence and
+operational findings belong to this document.
 
 ## Template
 
-Use este formato como a estrutura canônica do Stardust. `evaluation.md` é um
-ledger vivo, não um relatório escrito apenas no encerramento: preserve a ordem
-das seções e atualize-o após cada mudança de implementação, teste, browser,
-migration, artefato, documentação ou validação.
+Use this format as the canonical Stardust structure. `evaluation.md` is a
+living ledger, not a report written only at wrap-up: preserve the order
+of the sections and update it after each change to implementation, tests, browser,
+migration, artifact, documentation or validation.
 
-Use IDs estáveis: `EV-*` para cada evidência, `AV-*` para verificações automatizadas, `MV-*` para verificações manuais, `VV-*` para
-verificações visuais, e `ACH-*` para achados. O Evaluation não registra resultados de CI do PR (workflows, checks, build); eles ficam no próprio PR. Comparações
-visuais também são evidências `EV-*`, com viewport, estado e referência
-registrados. Marque evidências afetadas como `stale`;
-não reutilize uma captura ou resultado anterior à última alteração relevante.
-Para cada finding material, mantenha a entrada concreta em `Warnings e findings`
-e uma lição/disposição em `Lições aprendidas` ou `Análise preventiva dos findings`.
+Use stable IDs: `EV-*` for each piece of evidence, `AV-*` for automated verifications, `MV-*` for manual verifications, `VV-*` for
+visual verifications, and `ACH-*` for findings. The Evaluation does not record PR CI results (workflows, checks, build); those stay in the PR itself. Visual
+comparisons are also `EV-*` evidence, with viewport, state and reference
+recorded. Mark affected evidence as `stale`;
+do not reuse a capture or result that predates the last relevant change.
+For each material finding, keep the concrete entry in `Warnings and findings`
+and a lesson/disposition in `Lessons learned` or `Preventive analysis of findings`.
 
 ```md
 ---
-title: <título da avaliação>
+title: <evaluation title>
 spec: ./spec.md
-spec_revision: <revisão ou sha>
+spec_revision: <revision or sha>
 status: in_progress
 base_commit: <sha>
 evaluated_commit: <sha>
 last_updated_at: YYYY-MM-DD
 ---
 
-# Evaluation — <título>
+# Evaluation — <title>
 
-## Escopo avaliado
+## Evaluated scope
 
 - Spec: `./spec.md`
-- Commit-base: `<sha>`
-- Commit avaliado: `<sha>`
+- Base commit: `<sha>`
+- Evaluated commit: `<sha>`
 
-## Evidências dos critérios
+## Criteria evidence
 
-Uma linha por `CA-*`. A implementação (`Pending`/`Partial`/`Complete`) e a verificação
-(`Pending`/`Partial`/`Passed`/`Failed`/`Blocked`/`Stale`) são registradas separadamente.
+One row per `CA-*`. Implementation (`Pending`/`Partial`/`Complete`) and verification
+(`Pending`/`Partial`/`Passed`/`Failed`/`Blocked`/`Stale`) are recorded separately.
 
-| Critério | Implementação | Verificação | Evidência real | Trabalho restante |
-| -------- | ------------- | ----------- | -------------- | ----------------- |
-| CA-01    | Complete      | Passed      | EV-01 — teste, browser, sensor ou diff | nenhum |
+| Criterion | Implementation | Verification | Real evidence | Remaining work |
+| --------- | -------------- | ------------ | ------------- | -------------- |
+| CA-01     | Complete       | Passed       | EV-01 — test, browser, sensor or diff | none |
 
-## Revisões
+## Reviews
 
 ### Spec Reviewer
 
-- Veredito: `clear` | `blocking_findings`
-- Revisão: `<revisão>`
-- Escopo: compatibilidade com `architecture.md` e Rules antes da implementação
-- Findings: nenhum | `<IDs e estado>`
+- Verdict: `clear` | `blocking_findings`
+- Revision: `<revision>`
+- Scope: compatibility with `architecture.md` and Rules before implementation
+- Findings: none | `<IDs and state>`
 
 ### Implementation Reviewer
 
-- Veredito: `PASS` | `FAIL` | `BLOCKED`
+- Verdict: `PASS` | `FAIL` | `BLOCKED`
 - Commit: `<sha>`
-- Findings: nenhum | `<IDs e estado>`
+- Findings: none | `<IDs and state>`
 
 ### Visual Reviewer
 
-- Veredito: `PASS` | `FAIL` | `BLOCKED` | não aplicável (sem UI design-backed)
+- Verdict: `PASS` | `FAIL` | `BLOCKED` | not applicable (no design-backed UI)
 - Commit: `<sha>`
-- Disposição por linha do inventário manual/visual: `<VV-* → disposição>`
-- Findings: nenhum | `<IDs e estado>`
+- Disposition per manual/visual inventory row: `<VV-* → disposition>`
+- Findings: none | `<IDs and state>`
 
-Os relatórios dos Reviewers são entrada consultiva; a task principal verifica cada
-finding e registra os aceitos como `ACH-*` na seção de findings.
+The Reviewers' reports are advisory input; the main task verifies each
+finding and records the accepted ones as `ACH-*` in the findings section.
 
-Para frontend, registre também:
+For frontend, also record:
 
-| Gate                  | Estado | Evidência                                                                            |
+| Gate                  | State  | Evidence                                                                             |
 | --------------------- | ------ | ------------------------------------------------------------------------------------ |
-| UI Layer Audit        | passed | widget, paths e linhas de Entry Point/View/Hook                                      |
-| Penpot/Web comparison | passed | frame, viewport, estado, rota, HEAD, anchors, divergência/aprovação e screenshot/diff |
+| UI Layer Audit        | passed | widget, paths and lines of Entry Point/View/Hook                                     |
+| Penpot/Web comparison | passed | frame, viewport, state, route, HEAD, anchors, divergence/approval and screenshot/diff |
 
-Quando a Spec declarar frames do Penpot `stardust`, inspecione-os pelo Penpot MCP e registre uma matriz por frame. Ela deve
-identificar o nome do frame, viewport, estado/variante, rota, dimensão e
-anchors da referência, captura Web no mesmo contexto, HEAD avaliado e qualquer
-divergência aprovada. `match` e `approved adaptation` são os únicos estados
-aceitáveis; frame ausente, contradito ou adicionado sem aprovação mantém a
-avaliação bloqueada.
+When the Spec declares frames of the Penpot `stardust` file, inspect them through the Penpot MCP and record a matrix per frame. It must
+identify the frame name, viewport, state/variant, route, dimension and
+anchors of the reference, Web capture in the same context, evaluated HEAD and any approved
+divergence. `match` and `approved adaptation` are the only acceptable
+states; a frame that is missing, contradicted or added without approval keeps the
+evaluation blocked.
 
-Os boards do Penpot são entradas de design, não evidências de runtime. A Evaluation deve
-registrar separadamente a captura da implementação, a comparação visual, as observações de
-responsividade/acessibilidade e o `EV-*` correspondente. Se o Design Contract declarar estado,
-viewport ou extensão suplementar, a ausência da evidência exigida mantém a Evaluation
+Penpot boards are design inputs, not runtime evidence. The Evaluation must
+record separately the implementation capture, the visual comparison, the
+responsiveness/accessibility observations and the corresponding `EV-*`. If the Design Contract declares a state,
+viewport or supplementary extension, the absence of the required evidence keeps the Evaluation
 `in_progress`.
 
-## Inventário manual e visual
+## Manual and visual inventory
 
-Uma linha por jornada (`MV-*`) ou por estado/viewport renderizado (`VV-*`) exigido pela Spec. Estados
-distintos (page, dialog, mobile) são linhas distintas; a evidência de uma não prova outra.
+One row per journey (`MV-*`) or per rendered state/viewport (`VV-*`) required by the Spec. Distinct
+states (page, dialog, mobile) are distinct rows; the evidence of one does not prove another.
 
-| MV/VV | CA | Superfície/rota | Estado | Viewport | Board Penpot | Candidato | Artefato | Resultado observado | Disposição do Reviewer |
-| ----- | ---- | --------------- | ------ | -------- | ------------ | --------- | -------- | ------------------- | ---------------------- |
-| VV-01 | CA-01 | `/space` | content | desktop | `<página/board>` | `<sha>` | `test-results/...` | pending | pending |
+| MV/VV | CA | Surface/route | State | Viewport | Penpot board | Candidate | Artifact | Observed result | Reviewer disposition |
+| ----- | ---- | ------------- | ----- | -------- | ------------ | --------- | -------- | --------------- | -------------------- |
+| VV-01 | CA-01 | `/space` | content | desktop | `<page/board>` | `<sha>` | `test-results/...` | pending | pending |
 
-## Sensores e preflight
+## Sensors and preflight
 
-| Comando                                 | Estado | Evidência                                 |
+| Command                                 | State  | Evidence                                  |
 | --------------------------------------- | ------ | ----------------------------------------- |
-| `pnpm run check:code`                    | passed | saída resumida                            |
-| `pnpm --filter <workspace> run test:coverage`  | passed | resumo por métrica e workspace            |
-| `pnpm run check:coverage <workspace>` | passed | baseline comparado e resultado do ratchet |
+| `pnpm run check:code`                    | passed | summarized output                         |
+| `pnpm --filter <workspace> run test:coverage`  | passed | summary per metric and workspace          |
+| `pnpm run check:coverage <workspace>` | passed | compared baseline and ratchet result      |
 
-## Warnings e findings
+## Warnings and findings
 
-- Nenhum | `<ID> — descrição, impacto, estado e resolução>`
+- None | `<ID> — description, impact, state and resolution>`
 
-## Análise preventiva dos findings
+## Preventive analysis of findings
 
-| Finding | Causa | Ação preventiva/documento | Estado |
-| ------- | ----- | ------------------------- | ------ |
-| `<ID>` | pontual | não aplicável — justificativa | concluído |
+| Finding | Cause | Preventive action/document | State |
+| ------- | ----- | -------------------------- | ----- |
+| `<ID>` | one-off | not applicable — justification | completed |
 
-Analise findings do Reviewer, sensores e verificações manuais. Quando um item
-revelar uma lacuna recorrente de processo, arquitetura, tooling ou Rule, atualize
-o documento normativo correspondente antes da conclusão. Para um anti-padrão de
-implementação reutilizável, registre-o na Rule da camada com o workflow
-`register-antipattern`. Registre a evidência da decisão ou a pendência de
-aprovação do usuário nesta matriz.
+Analyze findings from the Reviewer, sensors and manual verifications. When an item
+reveals a recurring gap in process, architecture, tooling or Rule, update
+the corresponding normative document before completion. For a reusable
+implementation anti-pattern, record it in the layer's Rule with the
+`register-antipattern` workflow. Record the evidence of the decision or the pending
+user approval in this matrix.
 
-## Decisões
+## Decisions
 
-- `<decisão>` — motivo e impacto.
+- `<decision>` — reason and impact.
 
-## Lições aprendidas
+## Lessons learned
 
-- `<lição reutilizável ou confirmação de que não houve>`.
+- `<reusable lesson or confirmation that there was none>`.
 
-## Alinhamento documental
+## Documentation alignment
 
-- Spec: alinhada | `<ação pendente>`
-- Rules/Architecture/Overview: alinhados | não aplicáveis | `<ação pendente>`
+- Spec: aligned | `<pending action>`
+- Rules/Architecture/Overview: aligned | not applicable | `<pending action>`
 
 ## Handoff
 
-Registro factual e pequeno para quem retomar a entrega; não é um plano de fases nem um
-segundo Contract.
+Small factual record for whoever resumes the delivery; it is not a phase plan nor a
+second Contract.
 
-- Revisão da Spec e branch/candidato: `<revisão, branch, sha>`
-- Critérios concluídos / inacabados: `<IDs>`
-- Paths interrompidos ou não commitados e seu ownership: `<paths>`
-- Últimos resultados reutilizáveis e evidência stale: `<EV-*>`
-- Processos/portas iniciados pela task e cleanup: `nenhum` | `<sessão, porta>`
-- Bloqueios específicos: `nenhum` | `<bloqueio e entrada necessária>`
-- Próxima ação: `<ação>`
+- Spec revision and branch/candidate: `<revision, branch, sha>`
+- Criteria completed / unfinished: `<IDs>`
+- Interrupted or uncommitted paths and their ownership: `<paths>`
+- Latest reusable results and stale evidence: `<EV-*>`
+- Processes/ports started by the task and cleanup: `none` | `<session, port>`
+- Specific blockers: `none` | `<blocker and required input>`
+- Next action: `<action>`
 
-## Conclusão
+## Conclusion
 
-- Estado: `in_progress` | `accepted` | `completed` | `blocked`
-- Próxima ação: `<ação>`
+- State: `in_progress` | `accepted` | `completed` | `blocked`
+- Next action: `<action>`
 ```
 
-Falhas de sensores, builds locais ou verificações devem ser registradas imediatamente aqui como
-`EV-*` e, quando houver um problema a corrigir, como `ACH-*`. Resultados do CI do PR não são
-registrados no Evaluation. A Spec permanece `in_progress`; correções de escopo usam `Builder Fix ACH-*`, com
-novo sensor e novo Reviewer sempre que o diff ou qualquer evidência de Contract,
-Rule, Penpot ou Playwright for invalidada. Qualquer alteração posterior ao
-Reviewer invalida o commit avaliado anterior, inclusive quando afetar a fidelidade
-design-to-code.
+Failures of sensors, local builds or verifications must be recorded here immediately as
+`EV-*` and, when there is a problem to fix, as `ACH-*`. PR CI results are not
+recorded in the Evaluation. The Spec remains `in_progress`; scope corrections use `Builder Fix ACH-*`, with
+a new sensor and a new Reviewer whenever the diff or any Contract,
+Rule, Penpot or Playwright evidence is invalidated. Any change after the
+Reviewer invalidates the previously evaluated commit, including when it affects design-to-code
+fidelity.
