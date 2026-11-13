@@ -4,7 +4,7 @@ StarDust é uma plataforma web focada no ensino de lógica de programação, uti
 
 ## Arquitetura Modular
 
-O sistema adota uma arquitetura modular paracom o objetivo de promover organização, escalabilidade e manutenibilidade. A aplicação é dividida em unidades independentes chamadas **módulos**, onde cada um encapsula uma lógica de domínio específica.
+O sistema adota uma arquitetura modular com o objetivo de promover organização, escalabilidade e manutenibilidade. A aplicação é dividida em unidades independentes chamadas **módulos**, onde cada um encapsula uma lógica de domínio específica.
 
 Atualmente, o StarDust é composto por **nove módulos de domínio**, além de um módulo transversal de recursos compartilhados.
 

@@ -62,7 +62,7 @@ pnpm install
 pnpm run dev
 ```
 
-> Sera aberto o painel de desenvolvimento da aplicacao backoffice em http://localhost:8000
+> Será aberto o painel de desenvolvimento da aplicacao backoffice em http://localhost:8000
 
 ## Executando os testes
 

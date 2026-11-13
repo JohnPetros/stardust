@@ -6,7 +6,7 @@ práticas que desenvolvedores seguem ao escrever código. Pense nelas como um
 código seja consistente, legível e fácil de manter por qualquer pessoa no
 projeto.
 
-A seguir serão listadas as principais conveções na hora de escrever código
+A seguir serão listadas as principais convenções na hora de escrever código
 
 # Nomeação de variáveis, tipos, objetos e funções
 
@@ -33,8 +33,8 @@ Sempre opte por nomes que descrevam claramente o propósito da variável.
 
 ## Menos redundância
 
-Se você já tem o nome explicícito significa que, muitas vezes, você pode
-simplicar o nome da variável.
+Se você já tem o nome explícito significa que, muitas vezes, você pode
+simplificar o nome da variável.
 
 ex.:
 
