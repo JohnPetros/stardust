@@ -1,209 +1,209 @@
 ---
-description: Prompt para conduzir revisão de segurança no projeto StarDust, retornando um relatório com findings classificados por severidade e recomendações de correção alinhadas às convenções do projeto.
+description: Prompt to conduct a security review of the StarDust project, returning a report with findings classified by severity and fix recommendations aligned with the project conventions.
 ---
 
-# Prompt: Criar Relatorio de Seguranca
+# Prompt: Create Security Report
 
-## Objetivo
+## Objective
 
-Conduzir uma revisão de segurança orientada à arquitetura do StarDust, identificando vulnerabilidades, más práticas e riscos em todas as camadas do sistema (UI, RPC, REST, Core, Database, Provision, Queue). O resultado deve ser um relatório com findings classificados por severidade e recomendações de correção alinhadas às convenções do projeto.
-
----
-
-## Entradas
-
-  - Aplicação alvo `{APP}` (ex: `web`, `server`, `backoffice`)
-  - Escopo da revisão `{ESCOPO}` (ex: módulo `auth`, camada `rest`, feature `challenging`, ou `full`)
-  - Arquivos ou caminhos alvo `{ALVOS}` (ex: `apps/server/src/rest/controllers/auth/`, `packages/core/src/auth/`)
-  - Contexto do que foi alterado recentemente `{CONTEXTO_MUDANCA}` (ex: "nova feature de social login", "refatoração do authActionClient")
-  - Critérios prioritários `{FOCO}` (ex: autenticação, autorização, exposição de dados, validação de inputs)
+Conduct an architecture-oriented security review of StarDust, identifying vulnerabilities, bad practices and risks across all layers of the system (UI, RPC, REST, Core, Database, Provision, Queue). The result must be a report with findings classified by severity and fix recommendations aligned with the project conventions.
 
 ---
 
-## Regras Aplicáveis
+## Inputs
 
-Antes da revisão, leia:
-
-- `documentation/rules/rules.md` — índice para selecionar rules por camada.
-- `documentation/rules/code-conventions-rules.md` — convenções gerais que influenciam segurança, como nomes, erros e factories.
-- Rules das camadas incluídas no escopo, conforme a tabela abaixo.
-
-Findings e recomendações devem citar a rule mais específica possível. Se a correção exigir novo padrão de segurança, registre a necessidade de atualizar a rule correspondente.
+  - Target application `{APP}` (e.g. `web`, `server`, `backoffice`)
+  - Review scope `{SCOPE}` (e.g. module `auth`, layer `rest`, feature `challenging`, or `full`)
+  - Target files or paths `{TARGETS}` (e.g. `apps/server/src/rest/controllers/auth/`, `packages/core/src/auth/`)
+  - Context of what was recently changed `{CHANGE_CONTEXT}` (e.g. "new social login feature", "refactoring of authActionClient")
+  - Priority criteria `{FOCUS}` (e.g. authentication, authorization, data exposure, input validation)
 
 ---
 
-## Mapa de Camadas para Revisão
+## Applicable Rules
 
-Antes de iniciar, consulte os documentos de regras de cada camada envolvida no escopo:
+Before the review, read:
 
-| Camada | Arquivo de Regras | Riscos Típicos |
+- `documentation/rules/rules.md` — index to select rules by layer.
+- `documentation/rules/code-conventions-rules.md` — general conventions that influence security, such as names, errors and factories.
+- Rules of the layers included in the scope, according to the table below.
+
+Findings and recommendations must cite the most specific rule possible. If the fix requires a new security pattern, record the need to update the corresponding rule.
+
+---
+
+## Layer Map for Review
+
+Before starting, consult the rules documents of each layer involved in the scope:
+
+| Layer | Rules File | Typical Risks |
 |--------|-------------------|----------------|
-| **UI / Widgets** | `documentation/rules/ui-layer-rules.md` | Exposição de dados sensíveis no estado, lógica de autorização no cliente |
-| **RPC / Actions** | `documentation/rules/rpc-layer-rules.md` | Ausência de validação Zod no composition root, lógica de negócio em actions |
-| **REST / Controllers** | `documentation/rules/rest-layer-rules.md` | Falta de middleware de auth, ausência de verificação de `accountId`, status codes que vazam informação |
-| **Core / Use Cases** | `documentation/rules/core-package-rules.md` | Regras de autorização ausentes no domínio, entidades sem validação de contrato |
-| **Database / Repositories** | `documentation/rules/database-rules.md` | Queries sem escopo de `accountId`, mappers que não normalizam tipos antes do domínio |
-| **Provision / Providers** | `documentation/rules/provision-layer-rules.md` | Segredos hardcoded, erros do SDK expostos sem tratamento, tipos do SDK vazando |
-| **Queue / Jobs** | `documentation/rules/queue-layer-rules.md` | Jobs sem idempotência, ausência de validação de payload de entrada |
-| **Validation / Schemas** | `documentation/rules/validation-layer-rules.md` | Schemas permissivos, mensagens inconsistentes, entrada externa sem normalização explícita |
-| **Realtime / Channels** | `documentation/rules/realtime-rules.md` | Eventos externos expostos diretamente à UI, listeners sem limpeza, payload sem tradução para domínio |
-| **AI / Tools** | `documentation/rules/ai-layer-rules.md` | Tool sem contrato interno, prompt vazando regra de negócio, output externo sem validação |
-| **Web App** | `documentation/rules/web-application-rules.md` | Rotas públicas/protegidas inconsistentes, dados sensíveis em server/client boundary |
-| **Server App** | `documentation/rules/server-application-rules.md` | Middlewares ausentes, composição Hono insegura, integração sem validação |
-| **Backoffice App** | `documentation/rules/backoffice-application-rules.md` | Fluxos administrativos sem autorização ou estados de erro insuficientes |
+| **UI / Widgets** | `documentation/rules/ui-layer-rules.md` | Exposure of sensitive data in state, authorization logic on the client |
+| **RPC / Actions** | `documentation/rules/rpc-layer-rules.md` | Missing Zod validation in the composition root, business logic in actions |
+| **REST / Controllers** | `documentation/rules/rest-layer-rules.md` | Missing auth middleware, missing `accountId` check, status codes that leak information |
+| **Core / Use Cases** | `documentation/rules/core-package-rules.md` | Missing authorization rules in the domain, entities without contract validation |
+| **Database / Repositories** | `documentation/rules/database-rules.md` | Queries without `accountId` scope, mappers that do not normalize types before the domain |
+| **Provision / Providers** | `documentation/rules/provision-layer-rules.md` | Hardcoded secrets, SDK errors exposed without handling, SDK types leaking |
+| **Queue / Jobs** | `documentation/rules/queue-layer-rules.md` | Jobs without idempotency, missing validation of the input payload |
+| **Validation / Schemas** | `documentation/rules/validation-layer-rules.md` | Permissive schemas, inconsistent messages, external input without explicit normalization |
+| **Realtime / Channels** | `documentation/rules/realtime-rules.md` | External events exposed directly to the UI, listeners without cleanup, payload not translated to the domain |
+| **AI / Tools** | `documentation/rules/ai-layer-rules.md` | Tool without internal contract, prompt leaking business rule, external output without validation |
+| **Web App** | `documentation/rules/web-application-rules.md` | Inconsistent public/protected routes, sensitive data at the server/client boundary |
+| **Server App** | `documentation/rules/server-application-rules.md` | Missing middlewares, insecure Hono composition, integration without validation |
+| **Backoffice App** | `documentation/rules/backoffice-application-rules.md` | Administrative flows without authorization or with insufficient error states |
 
 ---
 
-## Checklist de Revisão por Camada
+## Review Checklist by Layer
 
-### 🔐 Autenticação e Autorização
+### 🔐 Authentication and Authorization
 
-- [ ] **Middleware de auth** está aplicado em todas as rotas protegidas no Hono (`verifyAuthentication`, `verifyGodAccount`)
-- [ ] **`VerifyAuthRoutesController`** só chama `fetchAccount()` após confirmar que a rota não é pública (ver ISSUE-03 do performance report)
-- [ ] **`authActionClient`** não realiza chamadas desnecessárias para rotas que não exigem usuário autenticado
-- [ ] Rotas administrativas (ex: `GET /profile/users/xlsx`) aplicam `verifyGodAccount` além de `verifyAuthentication`
-- [ ] Permissões de editor/god em `challenging` seguem o padrão `autor || god` (ref: `god-user-permission-for-challenge-editor-spec.md`)
-- [ ] `InsigniaRole` é verificada pelo domínio, não apenas pela UI
-- [ ] Erros de autorização retornam **404** (mascaramento de existência) em vez de 403 onde aplicável
+- [ ] **Auth middleware** is applied on all protected routes in Hono (`verifyAuthentication`, `verifyGodAccount`)
+- [ ] **`VerifyAuthRoutesController`** only calls `fetchAccount()` after confirming the route is not public (see ISSUE-03 of the performance report)
+- [ ] **`authActionClient`** does not make unnecessary calls for routes that do not require an authenticated user
+- [ ] Administrative routes (e.g. `GET /profile/users/xlsx`) apply `verifyGodAccount` in addition to `verifyAuthentication`
+- [ ] Editor/god permissions in `challenging` follow the `author || god` pattern (ref: `god-user-permission-for-challenge-editor-spec.md`)
+- [ ] `InsigniaRole` is verified by the domain, not only by the UI
+- [ ] Authorization errors return **404** (existence masking) instead of 403 where applicable
 
-### 🧹 Validação de Inputs
+### 🧹 Input Validation
 
-- [ ] Toda **Action (RPC)** possui schema Zod no composition root (`apps/web/src/rpc/next-safe-action/`)
-- [ ] **Controllers REST** extraem body/params via `Http` sem confiar em dados não validados
-- [ ] **Entidades do Core** rejeitam DTOs com contratos inválidos (ex: `Integer.create` rejeita `string | null`)
-- [ ] **Mappers de banco** normalizam tipos antes de repassar ao Core (ex: `Number(value)` em campos numéricos do Supabase — ref: bug `SupabasePlanetMapper`)
-- [ ] Nenhum `any` ou cast inseguro (`as unknown as X`) nos pontos de entrada de dados externos
+- [ ] Every **Action (RPC)** has a Zod schema in the composition root (`apps/web/src/rpc/next-safe-action/`)
+- [ ] **REST Controllers** extract body/params via `Http` without trusting unvalidated data
+- [ ] **Core entities** reject DTOs with invalid contracts (e.g. `Integer.create` rejects `string | null`)
+- [ ] **Database mappers** normalize types before passing them to the Core (e.g. `Number(value)` on numeric Supabase fields — ref: bug `SupabasePlanetMapper`)
+- [ ] No `any` or unsafe cast (`as unknown as X`) at external data entry points
 
-### 🔑 Segredos e Variáveis de Ambiente
+### 🔑 Secrets and Environment Variables
 
-- [ ] Nenhuma credencial hardcoded — todas as configs usam `ENV` (ref: `documentation/rules/provision-layer-rules.md`)
-- [ ] Providers (`SupabaseFileStorageProvider`, etc.) não expõem chaves ou clients do SDK externamente
-- [ ] Arquivos `.env.example` não contêm valores reais
-- [ ] Variáveis de ambiente são validadas via Zod no boot (padrão `envSchema`)
+- [ ] No hardcoded credentials — all configs use `ENV` (ref: `documentation/rules/provision-layer-rules.md`)
+- [ ] Providers (`SupabaseFileStorageProvider`, etc.) do not expose SDK keys or clients externally
+- [ ] `.env.example` files do not contain real values
+- [ ] Environment variables are validated via Zod at boot (`envSchema` pattern)
 
-### 🚪 Exposição de Dados
+### 🚪 Data Exposure
 
-- [ ] Controllers não retornam dados além do necessário (sem dump de entidade inteira quando só o ID é suficiente)
-- [ ] Erros de domínio (`AppError`) não expõem stack trace ou detalhes internos para o cliente
-- [ ] Providers mapeiam erros do SDK para `AppError` antes de propagar (nenhum `error.message` do Supabase/SDK exposto diretamente)
-- [ ] `console.log` de debug não existe em produção (ex: `Planet.create` com `console.log(dto)` — ref: bug report space)
+- [ ] Controllers do not return data beyond what is necessary (no dump of the whole entity when only the ID is enough)
+- [ ] Domain errors (`AppError`) do not expose stack traces or internal details to the client
+- [ ] Providers map SDK errors to `AppError` before propagating (no Supabase/SDK `error.message` exposed directly)
+- [ ] Debug `console.log` does not exist in production (e.g. `Planet.create` with `console.log(dto)` — ref: space bug report)
 
-### 🏗️ Integridade Arquitetural (Segurança por Design)
+### 🏗️ Architectural Integrity (Security by Design)
 
-- [ ] `@stardust/core` não importa nenhum pacote de `apps/` (violação da arquitetura hexagonal)
-- [ ] Actions RPC não importam `next/*` diretamente (ref: regra da camada RPC)
-- [ ] Providers não retornam tipos do SDK externo para fora da camada `provision`
-- [ ] Cookies de sessão são definidos via `call.setCookie` com `durationInISSUEods` explícito
+- [ ] `@stardust/core` does not import any package from `apps/` (violation of the hexagonal architecture)
+- [ ] RPC Actions do not import `next/*` directly (ref: RPC layer rule)
+- [ ] Providers do not return external SDK types outside the `provision` layer
+- [ ] Session cookies are set via `call.setCookie` with an explicit `durationInISSUEods`
 
-### 🔄 Jobs e Filas (Inngest)
+### 🔄 Jobs and Queues (Inngest)
 
-- [ ] Jobs são idempotentes (reprocessamento não causa efeitos duplicados)
-- [ ] Payloads de entrada dos jobs são validados antes de execução
-- [ ] Falhas em jobs não silenciam erros críticos
+- [ ] Jobs are idempotent (reprocessing does not cause duplicate effects)
+- [ ] Job input payloads are validated before execution
+- [ ] Job failures do not silence critical errors
 
 ---
 
-## Diretrizes de Execução
+## Execution Guidelines
 
-### Passo 1: Mapeamento do Escopo
+### Step 1: Scope Mapping
 
-- Identifique quais camadas e módulos estão no `{ESCOPO}`.
-- Consulte `documentation/rules/rules.md` para localizar os arquivos de regra relevantes.
-- Se o escopo incluir um domínio de feature, consulte `documentation/features/<dominio>/` para entender o contexto de negócio.
+- Identify which layers and modules are in the `{SCOPE}`.
+- Consult `documentation/rules/rules.md` to locate the relevant rule files.
+- If the scope includes a feature domain, consult `documentation/features/<domain>/` to understand the business context.
 
-### Passo 2: Coleta de Evidências
+### Step 2: Evidence Collection
 
-- Leia apenas os arquivos necessários para sustentar as evidências — não leia o projeto inteiro.
-- Para cada suspeita de vulnerabilidade, localize o arquivo e a linha específica.
-- Se houver dúvida sobre comportamento de lib (ex: Supabase, Hono, next-safe-action), consulte a documentação oficial antes de classificar como finding.
+- Read only the files needed to support the evidence — do not read the whole project.
+- For each suspected vulnerability, locate the specific file and line.
+- If in doubt about lib behavior (e.g. Supabase, Hono, next-safe-action), consult the official documentation before classifying it as a finding.
 
-### Passo 3: Classificação de Findings
+### Step 3: Finding Classification
 
-Use a tabela de severidade abaixo:
+Use the severity table below:
 
-| Severidade | Critério |
+| Severity | Criterion |
 |------------|----------|
-| 🔴 **Critical** | Bypass de autenticação/autorização, exposição direta de credenciais, RCE |
-| 🟠 **High** | Autorização ausente em rota protegida, dados sensíveis expostos na resposta, validação de input completamente ausente |
-| 🟡 **Medium** | Mascaramento de erro insuficiente, mapper sem normalização de tipos quebrando contrato do core, cookie sem expiração |
-| 🟢 **Low** | `console.log` em produção, `any` em ponto de entrada, variável de ambiente sem validação de schema |
-| ℹ️ **Info** | Sugestão de melhoria defensiva, alinhamento com padrão já existente na codebase |
+| 🔴 **Critical** | Authentication/authorization bypass, direct credential exposure, RCE |
+| 🟠 **High** | Missing authorization on a protected route, sensitive data exposed in the response, completely missing input validation |
+| 🟡 **Medium** | Insufficient error masking, mapper without type normalization breaking the core contract, cookie without expiration |
+| 🟢 **Low** | `console.log` in production, `any` at an entry point, environment variable without schema validation |
+| ℹ️ **Info** | Defensive improvement suggestion, alignment with a pattern that already exists in the codebase |
 
-### Passo 4: Relatório
+### Step 4: Report
 
-Produza o relatório seguindo o template abaixo.
+Produce the report following the template below.
 
 ---
 
-## Template de Saída (Estrutura Obrigatória)
+## Output Template (Mandatory Structure)
 
 ```
 ---
 app: {APP}
 status: open|closed 
-last_updated_at: {DATA}
+last_updated_at: {DATE}
 ---
 
-## Resumo Executivo
+## Executive Summary
 
-- Total de findings: X (Critical: X | High: X | Medium: X | Low: X | Info: X)
-- Área de maior risco: {AREA}
-- Ação imediata recomendada: {ACAO_CRITICA}
+- Total findings: X (Critical: X | High: X | Medium: X | Low: X | Info: X)
+- Highest-risk area: {AREA}
+- Recommended immediate action: {CRITICAL_ACTION}
 
 ---
 
 ## Findings
 
-### [ISSUE-01] Título do Finding
+### [ISSUE-01] Finding Title
 
-- **Severidade:** 🔴 Critical / 🟠 High / 🟡 Medium / 🟢 Low / ℹ️ Info
-- **Camada:** ui | rpc | rest | core | database | provision | queue
-- **Arquivo:** `caminho/do/arquivo.ts` (linha X)
-- **Descrição:** O que está errado e por quê é um risco.
-- **Evidência:**
+- **Severity:** 🔴 Critical / 🟠 High / 🟡 Medium / 🟢 Low / ℹ️ Info
+- **Layer:** ui | rpc | rest | core | database | provision | queue
+- **File:** `path/to/file.ts` (line X)
+- **Description:** What is wrong and why it is a risk.
+- **Evidence:**
   ```ts
-  // trecho de código problemático
+  // problematic code excerpt
   ```
-- **Impacto:** O que pode acontecer se explorado.
-- **Recomendação:** Como corrigir, alinhado às regras do StarDust.
-- **Referência:** `documentation/rules/<arquivo-relevante>.md`
+- **Impact:** What can happen if exploited.
+- **Recommendation:** How to fix it, aligned with the StarDust rules.
+- **Reference:** `documentation/rules/<relevant-file>.md`
 
 ---
 
-## Recomendações Priorizadas
+## Prioritized Recommendations
 
-| # | Ação | Finding(s) | Severidade | Esforço |
+| # | Action | Finding(s) | Severity | Effort |
 |---|------|------------|------------|---------|
 | 1 | ... | ISSUE-01 | Critical | S |
 | 2 | ... | ISSUE-02 | High | M |
 
 ---
 
-## Checklist de Verificação Pós-Correção
+## Post-Fix Verification Checklist
 
-- [ ] `pnpm run check:code` passa (raiz do monorepo)
-- [ ] `pnpm run check:types` passa no workspace afetado
-- [ ] `pnpm run test` passa no workspace afetado
-- [ ] Nenhuma variável de ambiente real exposta
-- [ ] Nenhum `console.log` de debug em código de produção
-- [ ] Middleware de auth aplicado em todas as rotas afetadas
+- [ ] `pnpm run check:code` passes (monorepo root)
+- [ ] `pnpm run check:types` passes in the affected workspace
+- [ ] `pnpm run test` passes in the affected workspace
+- [ ] No real environment variable exposed
+- [ ] No debug `console.log` in production code
+- [ ] Auth middleware applied on all affected routes
 
 ---
 
-## Referências
+## References
 
 - `documentation/architecture.md`
 - `documentation/rules/rules.md`
-- `{OUTROS_ARQUIVOS_CONSULTADOS}`
+- `{OTHER_CONSULTED_FILES}`
 ```
 
 ---
 
-## Restrições
+## Constraints
 
-- **Não invente** caminhos de arquivo, métodos ou contratos sem evidência na codebase.
-- Quando faltar informação para classificar um finding, marque como **pendência** com a pergunta objetiva.
-- Cite sempre o arquivo e linha do problema — sem findings genéricos sem localização.
-- Recomendações devem ser **alinhadas às convenções do projeto** (nomenclatura, padrão de camada, uso de `AppError`, etc.).
-- Não proponha correções que violem os contratos entre camadas definidos em `documentation/rules/`.
-- Separe fato (evidência encontrada) de hipótese (suspeita sem confirmação de código).
+- **Do not invent** file paths, methods or contracts without evidence in the codebase.
+- When information is missing to classify a finding, mark it as a **pending item** with an objective question.
+- Always cite the file and line of the problem — no generic findings without a location.
+- Recommendations must be **aligned with the project conventions** (naming, layer pattern, use of `AppError`, etc.).
+- Do not propose fixes that violate the contracts between layers defined in `documentation/rules/`.
+- Separate fact (evidence found) from hypothesis (suspicion without code confirmation).

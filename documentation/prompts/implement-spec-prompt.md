@@ -1,396 +1,394 @@
 ---
 name: implement-spec
-description: Implementar de forma autônoma uma Spec aberta ou retomada do Stardust, verificar o candidato integrado e preservar a evidência para continuação.
+description: Autonomously implement an open or resumed Stardust Spec, verify the integrated candidate and preserve the evidence for continuation.
 ---
 
-# Implementar Spec
+# Implement Spec
 
-Siga [`documentation/sdd.md`](../sdd.md). A Spec fixa comportamento, contratos,
-exclusões e sensores exigidos. Organize a execução diretamente na task atual. Use
-delegação focada quando os escopos forem independentes; não há sequência de
-aprovação por fase ou tarefa. Este prompt é a única
-entrada de implementação: não peça ao usuário para escolher outro prompt e não
-crie outra thread.
+Follow [`documentation/sdd.md`](../sdd.md). The Spec fixes behavior, contracts,
+exclusions and required sensors. Organize the execution directly in the current task. Use
+focused delegation when the scopes are independent; there is no per-phase or per-task
+approval sequence. This prompt is the only
+implementation entry point: do not ask the user to choose another prompt and do not
+create another thread.
 
 ```text
 implement-spec
-→ Builder Direct ou Builders delimitados
-→ candidato integrado
-→ check:spec-implementation + sensores + verificação manual real
-→ Implementation Reviewer (+ Visual Reviewer em paralelo, quando há UI)
+→ Builder Direct or bounded Builders
+→ integrated candidate
+→ check:spec-implementation + sensors + real manual verification
+→ Implementation Reviewer (+ Visual Reviewer in parallel, when there is UI)
 → evaluation.md ready
 → conclude-spec
 ```
 
-## Persistência e regra de parada
+## Persistence and stop rule
 
-Seja dono da implementação e da verificação até o Evaluation ficar `ready`. Não pare
-quando um check passar, o código estiver completo ou um Reviewer responder enquanto
-houver obrigações exigidas e acionáveis. Uma pergunta sobre um check conduz a Spec em
-andamento, salvo se o usuário restringir ou cancelar o objetivo explicitamente.
+Own the implementation and verification until the Evaluation is `ready`. Do not stop
+when a check passes, the code is complete or a Reviewer responds while
+required and actionable obligations remain. A question about a check drives the Spec in
+progress, unless the user explicitly restricts or cancels the goal.
 
-1. Reconcilie todas as verificações `AV-*`/`MV-*`/`VV-*` e de baseline, o mapeamento dos `CA-*`,
-   os `ACH-*` abertos e a revisão independente com o `evaluation.md` antes de
-   escolher a próxima ação.
-2. Execute os checks pendentes, diagnostique falhas, corrija causas dentro do
-   Contract e rerode a verificação afetada. Após cada correção, inspecione todo o
-   conjunto de obrigações restantes e preserve a prova atual não afetada.
-3. Investigue falhas de setup local dentro da autorização existente: saúde e
-   configuração dos serviços, estado de browser expirado, contas/dados definidos na
-   fonte e fixtures/seeds desatualizados. Use fixtures isoladas ou ambientes da própria
-   task. Uma primeira falha ou setup ausente pede diagnóstico, não handoff imediato.
-4. Obtenha as revisões e rechecks exigidos, resolva os findings bloqueantes e
-   reconcilie o alinhamento documental. Nunca remova checks nem enfraqueça asserções ou
-   limiares só para passar; mudanças materiais passam pela reconciliação do Contract.
-5. Antes de ceder o controle, audite cada check/finding restante e continue sempre que
-   houver uma ação segura e autorizada que o faça avançar. O handoff descreve uma
-   interrupção ou um bloqueio real; não substitui trabalho executável.
+1. Reconcile all `AV-*`/`MV-*`/`VV-*` and baseline verifications, the `CA-*` mapping,
+   the open `ACH-*` and the independent review with `evaluation.md` before
+   choosing the next action.
+2. Run the pending checks, diagnose failures, fix causes within the
+   Contract and rerun the affected verification. After each fix, inspect the entire
+   set of remaining obligations and preserve the current proof that is not affected.
+3. Investigate local setup failures within the existing authorization: service health and
+   configuration, expired browser state, accounts/data defined at the
+   source and outdated fixtures/seeds. Use isolated fixtures or the task's own
+   environments. A first failure or missing setup calls for diagnosis, not an immediate handoff.
+4. Obtain the required reviews and rechecks, resolve blocking findings and
+   reconcile the documentation alignment. Never remove checks or weaken assertions or
+   thresholds just to pass; material changes go through Contract reconciliation.
+5. Before yielding control, audit each remaining check/finding and keep going whenever
+   there is a safe and authorized action that moves it forward. The handoff describes a
+   real interruption or blocker; it does not replace executable work.
 
-Uma fonte de fixture/seed desatualizada é acionável quando os dados pretendidos estão
-definidos no Contract. Inspecione seus consumidores e as Rules aplicáveis, corrija a
-definição na fonte, valide-a e rerode o check originalmente bloqueado. Distinga
-corrigir a fonte de aplicar um seed: inspecione o comportamento real do comando de
-reset/seed e use alvos descartáveis ou isolados. Nunca resete/reseed dados
-compartilhados (inclusive Supabase Dev) sem autorização explícita. Pergunte apenas
-quando os dados pretendidos forem materialmente ambíguos ou quando uma operação
-compartilhada necessária não tiver autorização depois de investigadas as alternativas
-isoladas.
+An outdated fixture/seed source is actionable when the intended data is
+defined in the Contract. Inspect its consumers and the applicable Rules, fix the
+definition at the source, validate it and rerun the check that was originally blocked. Distinguish
+fixing the source from applying a seed: inspect the actual behavior of the
+reset/seed command and use disposable or isolated targets. Never reset/reseed shared
+data (including Supabase Dev) without explicit authorization. Ask only
+when the intended data is materially ambiguous or when a necessary shared
+operation lacks authorization after the isolated alternatives have been investigated.
 
-Pare o trabalho inacabado somente por uma parada/restrição explícita, uma decisão ou
-autorização material genuinamente ausente, ou uma dependência externa indisponível
-depois do diagnóstico e da recuperação permitidos. Conclua antes o trabalho
-independente; registre os IDs afetados, a recuperação e a prova tentadas, por que uma
-ação externa é necessária e a entrada ou mudança exata requerida. Não invente
-não-aplicabilidade nem marque prova ausente como `passed`. Retome quando o bloqueio
-sumir, sem pedir novamente autoridade.
+Stop unfinished work only for an explicit stop/restriction, a genuinely missing material
+decision or authorization, or an unavailable external dependency
+after the permitted diagnosis and recovery. Finish the independent work first; record the affected IDs, the recovery and the proof attempted, why an
+external action is necessary and the exact input or change required. Do not invent
+non-applicability nor mark missing proof as `passed`. Resume when the blocker
+disappears, without asking for authority again.
 
-## Estabelecer ou retomar o Contract
+## Establish or resume the Contract
 
-Leia `AGENTS.md`, `documentation/sdd.md`, a Spec e o `evaluation.md` atuais,
-Architecture, Modules, as Rules selecionadas pelos paths afetados,
-`documentation/tooling.md` e o Design Contract com as páginas, boards e componentes do
-Penpot `stardust` pelo Penpot MCP. Reutilize fontes completas ainda atuais neste
-contexto. Inspecione `git status` e os diffs e preserve trabalho não relacionado. Use o
-CodeGraph para cada nova exploração de código, conforme `AGENTS.md`.
+Read `AGENTS.md`, `documentation/sdd.md`, the current Spec and `evaluation.md`,
+Architecture, Modules, the Rules selected by the affected paths,
+`documentation/tooling.md` and the Design Contract with the pages, boards and components of the
+Penpot `stardust` file through the Penpot MCP. Reuse complete sources still current in this
+context. Inspect `git status` and the diffs and preserve unrelated work. Use
+CodeGraph for each new code exploration, per `AGENTS.md`.
 
-A implementação inicial exige Spec `open`; o trabalho retomado exige a mesma revisão e
-um Evaluation com critérios ou findings inacabados. Não ative o Spec Reviewer para
-evidência de implementação. Uma mudança material de Contract passa por `create-spec`:
-preserve o histórico, reconcilie fonte/design/sensores, incremente a revisão e
-invalide a prova afetada.
+Initial implementation requires an `open` Spec; resumed work requires the same revision and
+an Evaluation with unfinished criteria or findings. Do not activate the Spec Reviewer for
+implementation evidence. A material Contract change goes through `create-spec`:
+preserve the history, reconcile source/design/sensors, increment the revision and
+invalidate the affected proof.
 
-Antes de qualquer edição de feature, crie ou reconcilie o `evaluation.md` pelo
-Contract de [`create-evaluation`](create-evaluation-prompt.md) e mude a Spec para
-`in_progress`. Registre o Contract atual, a revisão da Spec, o commit-base, o
-branch/candidato, os fatos conhecidos de baseline e a assignment (RP/JN, RF/CA e
-SHI-* mapeados, paths permitidos e proibidos, Rule Pack, referências de Design e
-exits). Inicialize uma linha de Progress por `CA-*`, separando implementação de
-verificação, além de Check Results, Findings, Lições, Handoff e Delivery. Leia os
-relatórios de falha existentes; não lance suites de integração para um baseline nem
-para cumprir o kickoff. A disponibilidade do ambiente pode ser inspecionada sem iniciar
-uma suite comportamental.
+Before any feature edit, create or reconcile `evaluation.md` per the
+Contract of [`create-evaluation`](create-evaluation-prompt.md) and change the Spec to
+`in_progress`. Record the current Contract, the Spec revision, the base commit, the
+branch/candidate, the known baseline facts and the assignment (mapped RP/JN, RF/CA and
+SHI-*, allowed and forbidden paths, Rule Pack, Design references and
+exits). Initialize one Progress row per `CA-*`, separating implementation from
+verification, plus Check Results, Findings, Lessons, Handoff and Delivery. Read the existing
+failure reports; do not launch integration suites for a baseline nor
+to fulfill the kickoff. Environment availability may be inspected without starting
+a behavioral suite.
 
-Na continuação, compare progresso e evidência registrados com a árvore atual. Um
-critério concluído permanece concluído somente quando o comportamento coberto e as
-provas não mudaram. Inspecione sessões de processo e portas ativas registradas antes de
-subir serviços. Recupere o trabalho inacabado a partir do diff e dos findings e escolha
-a próxima ação sem reconstruir um ledger de tarefas.
+On continuation, compare the recorded progress and evidence with the current tree. A
+completed criterion remains completed only when the covered behavior and the
+proofs have not changed. Inspect recorded process sessions and active ports before
+starting services. Recover unfinished work from the diff and the findings and choose
+the next action without rebuilding a task ledger.
 
-## Invariantes fail-closed
+## Fail-closed invariants
 
-Se uma destas condições não puder ser verificada, pare antes de editar source,
-testes, migrations ou artefatos gerados e registre o blocker:
+If one of these conditions cannot be verified, stop before editing source,
+tests, migrations or generated artifacts and record the blocker:
 
-- `implement-spec` é a única entrada de implementação; não reative workflows
-  removidos nem simule papéis antigos;
-- a Spec, seus paths, contratos, exclusões e estados são autoridade; código existente,
-  screenshot isolado ou teste passando não os substitui;
-- `pnpm run check:spec-implementation <spec> --base <commit-base>` roda antes dos
-  sensores integrados e novamente após qualquer correção que altere, crie, gere ou
-  remova path contratado;
-- qualquer erro de implementação, teste, browser, rede, console, migration, CI ou
-  visual dentro do Contract é correção automática: registre, invalide a evidência
-  afetada, corrija no escopo e rerode os checks;
-- cenários manuais/runtime exigidos são fail-closed: indisponibilidade, timeout ou
-  falha bloqueia o item afetado; não use mock nem evidência antiga como substituto;
-- para Server, confirme comportamento real, autorização, persistência e efeitos
-  colaterais conforme `AGENTS.md`; o Supabase local é o padrão e o Supabase Dev só entra
-  quando a tarefa exigir o projeto remoto;
-- a execução local é escopada (ver "Execução local escopada" em `documentation/tooling.md`):
-  cobertura/ratchet (`test:coverage`, `check:coverage`) e suítes completas ficam para o CI,
-  salvo impacto demonstrado no workspace inteiro, exigência da Spec ou pedido do usuário; LSP,
-  Validation, TypeScript Config e Email permanecem excluídos do ratchet.
+- `implement-spec` is the only implementation entry point; do not reactivate removed
+  workflows nor simulate old roles;
+- the Spec, its paths, contracts, exclusions and states are the authority; existing code,
+  an isolated screenshot or a passing test does not replace them;
+- `pnpm run check:spec-implementation <spec> --base <base-commit>` runs before the
+  integrated sensors and again after any fix that changes, creates, generates or
+  removes a contracted path;
+- any implementation, test, browser, network, console, migration, CI or
+  visual error within the Contract is an automatic fix: record it, invalidate the
+  affected evidence, fix it within scope and rerun the checks;
+- required manual/runtime scenarios are fail-closed: unavailability, timeout or
+  failure blocks the affected item; do not use a mock nor old evidence as a substitute;
+- for Server, confirm real behavior, authorization, persistence and side
+  effects per `AGENTS.md`; local Supabase is the default and Supabase Dev only comes in
+  when the task requires the remote project;
+- local execution is scoped (see "Scoped local execution" in `documentation/tooling.md`):
+  coverage/ratchet (`test:coverage`, `check:coverage`) and full suites are left to CI,
+  unless there is demonstrated impact on the whole workspace, a Spec requirement or a user request; LSP,
+  Validation, TypeScript Config and Email remain excluded from the ratchet.
 
-## Execução autônoma e ownership delimitado
+## Autonomous execution and bounded ownership
 
-A task principal decide a ordem, a estrutura de implementação, as dependências e a
-recuperação dentro do Contract aprovado e das Rules. Resolva escolhas rotineiras e
-reversíveis diretamente. Pergunte somente quando uma escolha não resolvida alterar
-materialmente comportamento de produto, escopo, ownership, contratos públicos ou
-persistentes, ou um compromisso técnico consequente. Árvores internas existentes
-orientam o posicionamento; não exigem amendment para cada helper ou widget.
+The main task decides the order, the implementation structure, the dependencies and the
+recovery within the approved Contract and the Rules. Resolve routine and
+reversible choices directly. Ask only when an unresolved choice materially changes
+product behavior, scope, ownership, public or persistent contracts, or a consequential
+technical commitment. Existing internal trees guide placement; they do not require an amendment
+for each helper or widget.
 
-O grafo de dependências do PRD é autoridade de produto, não ordem de execução. Derive
-a ordem somente do Technical Contract, dos paths afetados, das dependências de runtime
-e dos limites das camadas.
+The PRD dependency graph is a product authority, not an execution order. Derive
+the order only from the Technical Contract, the affected paths, the runtime dependencies
+and the layer boundaries.
 
-Implemente diretamente quando o trabalho for coeso (`Builder Direct`, no contexto
-principal, sem subagente). Para fluxos independentes, atribua Builders irmãos nomeados
-por ownership (`builder_core`, `builder_server`, `builder_web` ou equivalente) com:
+Implement directly when the work is cohesive (`Builder Direct`, in the main
+context, without a subagent). For independent flows, assign sibling Builders named
+by ownership (`builder_core`, `builder_server`, `builder_web` or equivalent) with:
 
-- caminho e revisão da Spec e os resultados `RF`/`CA` relevantes;
-- fronteiras exatas permitidas e proibidas e dependências compartilhadas;
-- Rule Pack, referências de design e findings existentes;
-- comandos de feedback unit/component/estático e o resultado esperado.
+- Spec path and revision and the relevant `RF`/`CA` outcomes;
+- exact allowed and forbidden boundaries and shared dependencies;
+- Rule Pack, design references and existing findings;
+- unit/component/static feedback commands and the expected result.
 
-Builders não criam outros subagentes. Mantenha o ownership concorrente disjunto, avise
-que não estão sozinhos no worktree e devem preservar edições alheias. Coordene
-contratos compartilhados, artefatos gerados, migrations, lockfiles e mudanças
-cross-boundary na task principal. Inspecione cada diff devolvido e incorpore só o
-trabalho aderente ao Contract. Delegue por ownership/resultado coeso, não por arquivo
-nem por fase cerimonial.
+Builders do not create other subagents. Keep concurrent ownership disjoint, warn
+them that they are not alone in the worktree and must preserve others' edits. Coordinate
+shared contracts, generated artifacts, migrations, lockfiles and
+cross-boundary changes in the main task. Inspect each returned diff and incorporate only
+work that adheres to the Contract. Delegate by ownership/cohesive outcome, not by file
+nor by ceremonial phase.
 
-Builders escrevem ou atualizam testes a partir das alegações de aceitação, inclusive
-falhas, recuperação e estados enumerados, e executam checks focados unit/component e
-estáticos durante a implementação. Integração de Server, browser, jobs e migrations
-pertence ao ciclo de verificação integrada final, não a cada saída de Builder. Prefira
-os comandos reais do CI e configuração reproduzível explícita a segredos de
-desenvolvedor.
+Builders write or update tests from the acceptance claims, including
+failures, recovery and enumerated states, and run focused unit/component and
+static checks during implementation. Server, browser, jobs and migrations integration
+belongs to the final integrated verification cycle, not to each Builder output. Prefer
+the real CI commands and explicit reproducible configuration over
+developer secrets.
 
-Siga as Rules de fronteira de teste selecionadas: use-cases mockam ports; controllers
-exercitam o app registrado e a persistência reais; jobs exercitam a execução durável
-registrada; testes Web usam a fronteira do widget/hook/Page/Layout dono. Mantenha
-cobertura e asserções existentes significativas. Não enfraqueça um check, não pule uma
-falha, não remova cenários válidos nem invente um comando para reportar verde.
+Follow the selected test-boundary Rules: use cases mock ports; controllers
+exercise the registered app and real persistence; jobs exercise the registered durable
+execution; Web tests use the boundary of the owning widget/hook/Page/Layout. Keep meaningful
+existing coverage and assertions. Do not weaken a check, do not skip a
+failure, do not remove valid scenarios nor invent a command to report green.
 
-Atualize os exemplos `.rest` do grupo de rotas junto com a implementação dona, em
-`apps/server/rest-client/`, com uma requisição rotulada por rota, contrato atual e
-variáveis reutilizáveis sem segredos. Cada hook de comportamento `use-*.ts` no escopo
-tem `tests/use-*.test.ts`, salvo exceção explícita da Rule Pack registrada no
-Evaluation. Gere rotas e outros artefatos com os comandos do repositório.
+Update the `.rest` examples of the route group together with the owning implementation, in
+`apps/server/rest-client/`, with one labeled request per route, the current contract and
+reusable variables without secrets. Each `use-*.ts` behavior hook in scope
+has `tests/use-*.test.ts`, unless an explicit exception of the Rule Pack is recorded in the
+Evaluation. Generate routes and other artifacts with the repository's commands.
 
-## Implementação com design
+## Implementation with design
 
-Leia o Design Contract da Spec e inspecione os boards e componentes nomeados do Penpot
-`stardust` pelo **Penpot MCP** (o Builder e o Visual Reviewer usam o MCP diretamente),
-exportando-os quando precisar de uma referência renderizada.
-Mapeie as variáveis vinculadas aos tokens do repositório; não copie valores sem
-variável, não invente detalhes ausentes e use primitivos e tokens semânticos
-existentes, copy pt-BR acessível e as Rules de UI/roteamento selecionadas. Preserve o
-design canônico: qualquer simplificação, substituição, adição ou divergência não
-aprovada é finding bloqueante. Não salve exports na pasta da feature nem edite o
-arquivo Penpot, salvo se a Spec o incluir no escopo.
+Read the Spec's Design Contract and inspect the named boards and components of the Penpot
+`stardust` file through the **Penpot MCP** (the Builder and the Visual Reviewer use the MCP directly),
+exporting them when you need a rendered reference.
+Map the variables bound to the repository tokens; do not copy values without a
+variable, do not invent missing details and use existing primitives and semantic tokens,
+accessible pt-BR copy and the selected UI/routing Rules. Preserve the
+canonical design: any unapproved simplification, substitution, addition or divergence
+is a blocking finding. Do not save exports in the feature folder nor edit the
+Penpot file, unless the Spec includes it in scope.
 
-A Spec define os estados renderizados happy-path e os viewports exigidos. Cubra
-loading, empty, error, recovery, concorrência e desfechos incomuns com testes
-automatizados; não transforme cada board em outro cenário manual. A evidência visual
-exigida vem do candidato integrado, depois da última edição de UI afetada, com
-rota/estado/viewport/fixture e path do artefato. Uma captura anterior de UI inalterada
-pode permanecer válida quando suas dependências e o estado renderizado não mudaram;
-explique a evidência mantida no Evaluation.
+The Spec defines the happy-path rendered states and the required viewports. Cover
+loading, empty, error, recovery, concurrency and unusual outcomes with automated
+tests; do not turn each board into another manual scenario. The required visual evidence
+comes from the integrated candidate, after the last affected UI edit, with
+route/state/viewport/fixture and artifact path. An earlier capture of unchanged UI
+may remain valid when its dependencies and the rendered state have not changed;
+explain the retained evidence in the Evaluation.
 
-### Inventário de evidência manual e visual
+### Manual and visual evidence inventory
 
-Antes de executar ou delegar a verificação, enumere no Evaluation cada obrigação Manual
-e Visual do Contract, com uma linha por jornada ou por estado/viewport renderizado
-exigido: IDs `MV`/`VV`/`CA`, superfície/rota, estado, viewport, board do Penpot, candidato,
-path do artefato, resultado observado e disposição da revisão. Mantenha o inventário no
-Evaluation, sem criar outro artefato de planejamento nem cenários além do Contract.
+Before running or delegating the verification, enumerate in the Evaluation each Manual
+and Visual obligation of the Contract, with one row per journey or per required rendered
+state/viewport: `MV`/`VV`/`CA` IDs, surface/route, state, viewport, Penpot board, candidate,
+artifact path, observed result and review disposition. Keep the inventory in the
+Evaluation, without creating another planning artifact nor scenarios beyond the Contract.
 
-Page, dialog, estados mobile e demais superfícies são obrigações distintas quando
-exigidas: a evidência de uma superfície não estabelece o resultado de outra, mesmo que
-compartilhem componentes. Uma captura continua `pending` até ser inspecionada contra um
-export atual do board específico. Registre observações concretas sobre as propriedades
-visuais exigidas e qualquer desvio aprovado; a mera existência da imagem não é prova.
-Comportamento manual e aparência visual têm resultados separados: uma jornada que
-funciona não prova correspondência de design, e uma imagem correspondente não prova
-autenticação nem persistência reais.
+Page, dialog, mobile states and other surfaces are distinct obligations when
+required: the evidence of one surface does not establish the result of another, even if
+they share components. A capture remains `pending` until it is inspected against a
+current export of the specific board. Record concrete observations about the required visual
+properties and any approved deviation; the mere existence of the image is not proof.
+Manual behavior and visual appearance have separate results: a journey that
+works does not prove design match, and a matching image does not prove real
+authentication or persistence.
 
-## Verificação integrada e ciclo de falha
+## Integrated verification and failure cycle
 
-Execute as verificações Automatizadas (`AV-*`), Manuais (`MV-*`) e Visuais (`VV-*`) do Verification Contract e todos os gates de
-baseline aplicáveis de Rules e Tooling. Para conjuntos finitos contratados, verifique as
-combinações definidas; para entradas ilimitadas, use as classes de equivalência e os
-limites contratados. Tooling exigido e indisponível deixa o check `blocked`; cobertura
-não o substitui. Não instale um runner como ação incidental.
+Run the Automated (`AV-*`), Manual (`MV-*`) and Visual (`VV-*`) verifications of the Verification Contract and all applicable baseline
+gates from Rules and Tooling. For contracted finite sets, verify the
+defined combinations; for unbounded inputs, use the equivalence classes and the
+contracted limits. Required tooling that is unavailable leaves the check `blocked`; coverage
+does not replace it. Do not install a runner as an incidental action.
 
-Depois de integrar todos os fluxos de implementação e os artefatos gerados:
+After integrating all implementation flows and the generated artifacts:
 
-1. Compare o diff completo com resultados, fronteiras, contratos públicos, invariantes
-   persistentes, exclusões e cobertura de sensores da Spec.
-2. Execute `pnpm run check:spec-implementation <spec> --base <commit-base>`. Esse
-   preflight exige o mapa canônico `Path | Change | ...` do Technical Contract e
-   confirma que cada `Create`, `Modify`, `Generate` ou `Remove` corresponde ao diff e ao
-   filesystem. Ele é estrutural e não substitui testes, sensores, Reviewers nem Evaluation.
-3. Execute `format`, `check:code` e `check:types` nos workspaces afetados e em seus
-   consumidores, `test:unit` com os arquivos de teste afetados, `check:test-integrity` e
-   `check:architecture` quando aplicável, conforme "Execução local escopada" em
-   `documentation/tooling.md`. Cobertura/ratchet e suítes completas só entram com impacto
-   demonstrado no workspace, exigência da Spec ou pedido do usuário (o CI as executa).
-   Rode `check:complexity -w <workspace>` quando o escopo exigir. Registre cada categoria
-   estática explicitamente. Um runner designado na task principal é dono dos comandos e
-   resultados de integração.
-4. Execute as seleções de integração contratadas (Server, browser, jobs) contra o
-   candidato integrado, com arquivos/cenários exatos e fixtures compatíveis com o CI,
-   mostrando que os testes pretendidos rodaram. Selecione testes locais somente para as
-   mudanças do escopo e seus consumidores diretamente afetados; amplie apenas diante de
-   impacto de dependência demonstrado ou de uma lacuna concreta na prova do escopo. Uma
-   suite local completa exige escopo que a abranja ou pedido explícito do usuário.
-5. Em falha, registre o comando/resultado e o finding mapeado, corrija dentro do
-   Contract e rerode os checks de integração que falharam e os afetados até todas as
-   seleções exigidas passarem. Seleções que passaram e não foram afetadas mantêm sua
-   evidência; reexecuções mais amplas exigem uma dependência compartilhada alterada ou
-   uma lacuna de cobertura concreta. Preserve falhas históricas de execuções completas:
-   uma correção focada estabelece resultados focados, não um passe completo inferido.
-   Evite repetir testes completos inalterados quando um comando real de cobertura já os
-   executa.
-6. Execute os cenários manuais happy-path concisos exigidos pela Spec com o Playwright
-   em navegador real, seguindo a seção de verificação manual do `AGENTS.md`: serviços
-   locais, login e rota protegida quando aplicáveis, resultado principal visível e
-   status `2xx` dos endpoints essenciais, além de URL final, persistência,
-   teclado/foco, viewport estreito e console/rede conforme aplicável. Capture os visuais
-   exigidos durante essas jornadas. Não explore manualmente estados de erro, loading ou
-   recovery, nem adicione matrizes negativas ou contas/fixtures repetidas sem uma
-   obrigação de aceite.
-7. Inspecione as capturas reais contra as referências e registre as diferenças
-   concretas e os limites da evidência. Um screenshot não prova persistência nem
-   autorização; transporte mockado não substitui uma jornada real exigida.
-8. Encerre apenas processos e fixtures descartáveis iniciados por esta task; preserve
-   serviços e dados compartilhados conforme `AGENTS.md`.
+1. Compare the full diff with the Spec's outcomes, boundaries, public contracts, persistent
+   invariants, exclusions and sensor coverage.
+2. Run `pnpm run check:spec-implementation <spec> --base <base-commit>`. This
+   preflight requires the canonical `Path | Change | ...` map of the Technical Contract and
+   confirms that each `Create`, `Modify`, `Generate` or `Remove` matches the diff and the
+   filesystem. It is structural and does not replace tests, sensors, Reviewers nor Evaluation.
+3. Run `format`, `check:code` and `check:types` in the affected workspaces and in their
+   consumers, `test:unit` with the affected test files, `check:test-integrity` and
+   `check:architecture` when applicable, per "Scoped local execution" in
+   `documentation/tooling.md`. Coverage/ratchet and full suites only come in with demonstrated
+   impact on the workspace, a Spec requirement or a user request (CI runs them).
+   Run `check:complexity -w <workspace>` when the scope requires it. Record each static
+   category explicitly. A runner designated in the main task owns the integration
+   commands and results.
+4. Run the contracted integration selections (Server, browser, jobs) against the
+   integrated candidate, with exact files/scenarios and CI-compatible fixtures,
+   showing that the intended tests ran. Select local tests only for the
+   scope's changes and their directly affected consumers; widen only in the face of demonstrated
+   dependency impact or a concrete gap in the scope's proof. A full local
+   suite requires a scope that covers it or an explicit user request.
+5. On failure, record the command/result and the mapped finding, fix within the
+   Contract and rerun the integration checks that failed and the affected ones until all required
+   selections pass. Selections that passed and were not affected keep their
+   evidence; broader reruns require a changed shared dependency or
+   a concrete coverage gap. Preserve historical failures of full runs:
+   a focused fix establishes focused results, not an inferred full pass.
+   Avoid repeating unchanged full tests when a real coverage command already
+   runs them.
+6. Run the concise happy-path manual scenarios required by the Spec with Playwright
+   in a real browser, following the manual verification section of `AGENTS.md`: local
+   services, login and protected route when applicable, main visible result and
+   `2xx` status of the essential endpoints, plus final URL, persistence,
+   keyboard/focus, narrow viewport and console/network as applicable. Capture the required
+   visuals during these journeys. Do not manually explore error, loading or
+   recovery states, nor add negative matrices or repeated accounts/fixtures without an
+   acceptance obligation.
+7. Inspect the real captures against the references and record the concrete
+   differences and the limits of the evidence. A screenshot does not prove persistence nor
+   authorization; mocked transport does not replace a required real journey.
+8. Shut down only the disposable processes and fixtures started by this task; preserve
+   shared services and data per `AGENTS.md`.
 
-Serviços, contas ou fixtures exigidos e indisponíveis são bloqueios, nunca checks
-aprovados. Continue o trabalho independente útil e reporte a prova indisponível exata.
-Repita uma falha transitória de ambiente quando houver indício de que pode ter sucesso.
-Uma dispensa explícita do usuário é registrada como `waived`, sem alegação de aprovação
-nem remoção das obrigações de aceite automatizadas.
+Required services, accounts or fixtures that are unavailable are blockers, never approved
+checks. Continue the useful independent work and report the exact unavailable proof.
+Repeat a transient environment failure when there is a sign that it may succeed.
+An explicit user waiver is recorded as `waived`, with no claim of approval
+nor removal of the automated acceptance obligations.
 
-## Revisão paralela e correções
+## Parallel review and fixes
 
-Ative o [Implementation Reviewer](../agents/implementation-reviewer-agent.md)
-independente sobre o diff integrado, a Spec atual, as Rules selecionadas e a evidência de
-aceite atual. Para UI design-backed, ative o
-[Visual Reviewer](../agents/visual-reviewer-agent.md) **em paralelo** sobre o mesmo
-candidato e as capturas e referências exigidas já existentes. Não adicione um terceiro
-Reviewer serial; especialistas adicionais exigem um risco material distinto, não uma
-contagem de pacotes nem uma fronteira de tarefa.
+Activate the independent [Implementation Reviewer](../agents/implementation-reviewer-agent.md)
+over the integrated diff, the current Spec, the selected Rules and the current acceptance
+evidence. For design-backed UI, activate the
+[Visual Reviewer](../agents/visual-reviewer-agent.md) **in parallel** over the same
+candidate and the already existing required captures and references. Do not add a third
+serial Reviewer; additional specialists require a distinct material risk, not a
+package count nor a task boundary.
 
-Os Reviewers inspecionam as asserções e o escopo/atualidade da evidência para cada
-`CA-*`. Eles consomem os resultados de integração registrados e não rerodam suites
-verdes só para ocupar outro papel. Prova ausente, stale ou não sustentada gera um
-finding concreto e o sensor específico necessário. A task principal reconcilia os
-relatórios, verifica os findings e registra os IDs `ACH-*` e sua disposição.
+The Reviewers inspect the assertions and the scope/freshness of the evidence for each
+`CA-*`. They consume the recorded integration results and do not rerun green
+suites just to fill another role. Missing, stale or unsupported proof generates a
+concrete finding and the specific sensor required. The main task reconciles the
+reports, verifies the findings and records the `ACH-*` IDs and their disposition.
 
-Entregue ao Visual Reviewer o inventário completo de estados visuais exigidos, inclusive
-capturas ausentes, e peça uma disposição para cada linha. Reconcilie você mesmo o
-escopo revisado com o inventário: um PASS geral ou a revisão de apenas algumas capturas
-não fecha as linhas restantes. Estados exigidos ausentes, não inspecionados, stale ou
-divergentes continuam `pending`, `stale` ou `failed` e impedem o check visual de passar.
-Conclua o trabalho autorizado que falta e peça a revisão afetada antes de alegar
-conclusão.
+Hand the Visual Reviewer the complete inventory of required visual states, including
+missing captures, and ask for a disposition for each row. Reconcile the reviewed
+scope with the inventory yourself: an overall PASS or the review of only some captures
+does not close the remaining rows. Required states that are missing, uninspected, stale or
+divergent remain `pending`, `stale` or `failed` and prevent the visual check from passing.
+Complete the remaining authorized work and request the affected review before claiming
+completion.
 
-Corrija findings dentro do Contract de forma autônoma. Rerode apenas os sensores e as
-comparações visuais invalidados e retome somente o escopo de revisão afetado. Uma
-correção que cruza código e visuais reativa os dois Reviewers em paralelo. Um conflito
-de Contract volta a `create-spec`; findings de implementação permanecem neste ciclo de
-correção. Não reduza o aceite silenciosamente nem altere PRDs. Crie `Builder Fix ACH-<n>`
-somente quando o Builder original não puder ser retomado ou a correção for
-genuinamente independente. Após três falhas materialmente idênticas, peça decisão ao
-usuário apenas se a resolução não puder ser obtida nas autoridades, na codebase ou no
-ambiente.
+Fix findings within the Contract autonomously. Rerun only the invalidated sensors and
+visual comparisons and resume only the affected review scope. A
+fix that crosses code and visuals reactivates both Reviewers in parallel. A Contract
+conflict goes back to `create-spec`; implementation findings stay in this fix
+cycle. Do not silently reduce the acceptance nor change PRDs. Create `Builder Fix ACH-<n>`
+only when the original Builder cannot be resumed or the fix is
+genuinely independent. After three materially identical failures, ask the
+user for a decision only if the resolution cannot be obtained from the authorities, the codebase or the
+environment.
 
-### Correção versus mudança de Contract
+### Fix versus Contract change
 
-Classifique qualquer pedido ou discrepância contra a revisão vigente antes de alterar
-código ou artefatos:
+Classify any request or discrepancy against the current revision before changing
+code or artifacts:
 
-- **Correção de implementação:** mantenha a revisão, registre um `ACH-*`, reabra o
-  Evaluation e o trabalho afetado, marque como `stale` somente a evidência afetada,
-  retome o Builder e rerode seus exits.
-- **Mudança de Contract:** pause, retorne a Spec para `draft`, invoque `create-spec`
-  para obter autoridade e atualizar PRD, Architecture, Modules, Design, Tooling ou Rules
-  quando necessário; incremente a revisão, reconcilie o Evaluation e só então retome.
+- **Implementation fix:** keep the revision, record an `ACH-*`, reopen the
+  Evaluation and the affected work, mark as `stale` only the affected evidence,
+  resume the Builder and rerun its exits.
+- **Contract change:** pause, return the Spec to `draft`, invoke `create-spec`
+  to obtain authority and update PRD, Architecture, Modules, Design, Tooling or Rules
+  when necessary; increment the revision, reconcile the Evaluation and only then resume.
 
-Não solicite autorização para corrigir uma discrepância dentro do Contract. Pergunte
-somente quando a classificação, o resultado de produto, uma autoridade, segurança ou o
-ambiente não puderem ser resolvidos pelas fontes do projeto. Alterações fora da Spec
-permanecem fora do candidato e do Evaluation, salvo se afetarem os paths avaliados,
-contaminarem a evidência ou causarem regressão.
+Do not request authorization to fix a discrepancy within the Contract. Ask
+only when the classification, the product outcome, an authority, security or the
+environment cannot be resolved from the project sources. Changes outside the Spec
+stay outside the candidate and the Evaluation, unless they affect the evaluated paths,
+contaminate the evidence or cause a regression.
 
-## Reforço de Rules e findings
+## Reinforcing Rules and findings
 
-Quando um finding revelar guidance ausente, ambígua ou repetidamente violada:
+When a finding reveals missing, ambiguous or repeatedly violated guidance:
 
-- se a Rule já for clara, corrija a implementação e registre `No change` com a
-  justificativa;
-- se a convenção reutilizável não estiver clara, pause o trabalho dependente, atualize a
-  autoridade pelo workflow apropriado e recompute o Rule Pack;
-- para anti-padrão de implementação reutilizável, use `register-antipattern` na Rule da
-  camada, com padrão proibido, alternativa obrigatória e prova de validação;
-- invalide evidências afetadas, registre a alteração no Evaluation e rerode o caminho
-  de correção e seus sensores.
+- if the Rule is already clear, fix the implementation and record `No change` with the
+  justification;
+- if the reusable convention is not clear, pause the dependent work, update the
+  authority through the appropriate workflow and recompute the Rule Pack;
+- for a reusable implementation anti-pattern, use `register-antipattern` on the layer's
+  Rule, with forbidden pattern, mandatory alternative and validation proof;
+- invalidate affected evidence, record the change in the Evaluation and rerun the fix
+  path and its sensors.
 
-Todo finding aceito tem o problema concreto em `Findings` e, quando houver orientação
-reaproveitável, uma entrada em `Lições aprendidas` com a autoridade afetada e sua
-disposição. Atualize PRD, Architecture, Design, Tooling, Rules ou prompts quando a
-lição for durável; detalhes locais, typo isolado, falha transitória ou regra já
-documentada recebem uma disposição explícita de não alteração. Mudanças de produto,
-Contract, ownership arquitetural ou política global exigem autoridade do usuário.
+Every accepted finding has the concrete problem in `Findings` and, when there is
+reusable guidance, an entry in `Lessons learned` with the affected authority and its
+disposition. Update PRD, Architecture, Design, Tooling, Rules or prompts when the
+lesson is durable; local details, an isolated typo, a transient failure or an already
+documented rule receive an explicit no-change disposition. Changes to product,
+Contract, architectural ownership or global policy require user authority.
 
-## Evidência e prontidão
+## Evidence and readiness
 
-Siga a estrutura do [Evaluation](create-evaluation-prompt.md). O Progress tem uma linha
-por `CA-*` com Implementation (`Pending`/`Partial`/`Complete`) e Verification
-(`Pending`/`Partial`/`Passed`/`Failed`/`Blocked`/`Stale`) separados, checks/evidências
-mapeados e trabalho restante. Check Results inclui os checks de baseline e usa `Pending`,
-`Passed`, `Failed`, `Blocked`, `Stale` ou `Not applicable`, com IDs `EV-*`, procedimentos
-exatos, seleção e contagem reais de testes, resultados esperado/observado,
-candidato/data, ambiente/fixtures, paths de artefatos e limites. Preserve tentativas falhas ou
-interrompidas e limitações. Use IDs estáveis `CA`/`AV`/`MV`/`VV`/`EV`/`ACH` e registre
-checkpoints significativos (trabalho de Builder aceito, execução de sensores, findings
-resolvidos) em vez de uma atualização de ledger por edição de arquivo.
+Follow the structure of the [Evaluation](create-evaluation-prompt.md). Progress has one row
+per `CA-*` with Implementation (`Pending`/`Partial`/`Complete`) and Verification
+(`Pending`/`Partial`/`Passed`/`Failed`/`Blocked`/`Stale`) separate, mapped
+checks/evidence and remaining work. Check Results includes the baseline checks and uses `Pending`,
+`Passed`, `Failed`, `Blocked`, `Stale` or `Not applicable`, with `EV-*` IDs, exact
+procedures, real test selection and count, expected/observed results,
+candidate/date, environment/fixtures, artifact paths and limits. Preserve failed or
+interrupted attempts and limitations. Use stable `CA`/`AV`/`MV`/`VV`/`EV`/`ACH` IDs and record
+significant checkpoints (accepted Builder work, sensor execution, resolved findings)
+instead of one ledger update per file edit.
 
-Invalide a evidência pela alegação e dependências afetadas, não pela idade do commit.
-Uma mudança de implementação, fixtures, ambiente ou Contract reabre os checks que afeta.
-Evidência aprovada inalterada permanece válida entre transições de papel, edições de
-ledger, revisão e conclusão; registre a evidência mantida e o motivo. Seed, fixture,
-configuração ou ambiente alterados registram escopo, procedimento reproduzível e
-cleanup sem segredos; artefatos gerados registram fonte, gerador e output; testes novos
-ou alterados registram o comportamento protegido e o comando.
+Invalidate evidence by the claim and affected dependencies, not by commit age.
+A change to implementation, fixtures, environment or Contract reopens the checks it affects.
+Unchanged approved evidence remains valid across role transitions, ledger
+edits, review and completion; record the retained evidence and the reason. Changed seed, fixture,
+configuration or environment record scope, reproducible procedure and
+cleanup without secrets; generated artifacts record source, generator and output; new
+or changed tests record the protected behavior and the command.
 
-Mantenha um Handoff factual e pequeno: revisão do Contract, branch/candidato, critérios
-concluídos e inacabados, paths interrompidos ou não commitados e seu ownership, últimos
-resultados, sessões de processo/portas iniciadas pela task e cleanup, bloqueios e a
-próxima ação. Mantenha os bloqueios específicos; não converta esta seção em fases,
-árvores de tarefas, estimativas nem um segundo Contract.
+Keep a small, factual Handoff: Contract revision, branch/candidate, completed and
+unfinished criteria, interrupted or uncommitted paths and their ownership, latest
+results, process sessions/ports started by the task and cleanup, blockers and the
+next action. Keep the blockers specific; do not turn this section into phases,
+task trees, estimates nor a second Contract.
 
-Registre lições reutilizáveis com referências `ACH`/`EV` de apoio e a ação documental ou
-o motivo de nenhuma mudança. Uma correção trivial não precisa virar lição nem política
-global. Mantenha o Delivery (verificação de fonte, alinhamento documental, estado de
-publicação e limitações) factual, sem resultados de CI do PR.
+Record reusable lessons with supporting `ACH`/`EV` references and the documentation action or
+the reason for no change. A trivial fix does not need to become a lesson nor a global
+policy. Keep the Delivery (source verification, documentation alignment, publication
+state and limitations) factual, without PR CI results.
 
-Quando todos os critérios tiverem prova atual aprovada ou não-aplicabilidade justificada,
-os sensores aplicáveis passarem e os findings bloqueantes estiverem resolvidos, marque o
-Evaluation como `ready` e continue diretamente para `conclude-spec`. A conclusão reutiliza
-esses resultados; não inicia outra execução ampla de integração. Os registros exatos de
-automação, manual, revisão, dispensa e limitações devem sustentar cada alegação de
-prontidão. Uma dispensa não transforma um check obrigatório `failed`/`blocked`/`stale` em
-aprovação nem em prontidão. A publicação ainda exige a autoridade existente, e a conclusão
-publicada aguarda o CI do HEAD atual e a resolução das conversas bloqueantes.
+When all criteria have current approved proof or justified non-applicability,
+the applicable sensors pass and the blocking findings are resolved, mark the
+Evaluation as `ready` and proceed directly to `conclude-spec`. Conclusion reuses
+these results; it does not start another broad integration run. The exact records of
+automation, manual, review, waiver and limitations must support each readiness
+claim. A waiver does not turn a required `failed`/`blocked`/`stale` check into
+approval nor into readiness. Publication still requires the existing authority, and the published
+conclusion waits for the CI of the current HEAD and the resolution of blocking conversations.
 
-Antes de mudar o status de prontidão ou reportar que todas as validações
-manuais/visuais passaram, reconcilie o conjunto completo exigido pela Spec com o
-inventário, os artefatos reais, os resultados observados e as disposições dos Reviewers.
-Cada linha exigida deve ter evidência atual aprovada e sustentada ou não-aplicabilidade
-autorizada pelo Contract. Não exclua silenciosamente uma página, viewport ou estado, não
-infira cobertura total do resumo de um Reviewer nem apresente verificação parcial como
-completa. Se uma alegação anterior de conclusão não era sustentada, preserve-a e corrija-a
-no Evaluation, reabra o check afetado e reporte a correção explicitamente.
+Before changing the readiness status or reporting that all manual/visual
+validations passed, reconcile the full set required by the Spec with the
+inventory, the real artifacts, the observed results and the Reviewers' dispositions.
+Each required row must have current approved and supported evidence or non-applicability
+authorized by the Contract. Do not silently exclude a page, viewport or state, do not
+infer full coverage from a Reviewer's summary nor present partial verification as
+complete. If an earlier completion claim was not supported, preserve it and correct it
+in the Evaluation, reopen the affected check and report the correction explicitly.
 
-## Relatório
+## Report
 
-Devolva links da Spec e do Evaluation, revisão/candidato, resultados implementados,
-resultados dos sensores, findings e disposições dos Reviewers, critérios/bloqueios
-restantes e a próxima ação. Mantenha explícitas as limitações de runtime e visuais.
-Orientação reutilizável revelada por um defeito pode ser registrada como lição
-fundamentada; mudanças de autoridade em todo o repositório e escritas externas seguem
-suas fronteiras de autorização.
+Return links to the Spec and the Evaluation, revision/candidate, implemented outcomes,
+sensor results, Reviewers' findings and dispositions, remaining criteria/blockers
+and the next action. Keep the runtime and visual limitations explicit.
+Reusable guidance revealed by a defect may be recorded as a grounded lesson;
+repository-wide authority changes and external writes follow
+their authorization boundaries.

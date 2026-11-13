@@ -1,43 +1,43 @@
 ---
 name: grilling
-description: Conduzir o gate de decisões antes de escrever ou mutar um artefato SDD.
+description: Conduct the decision gate before writing or mutating an SDD artifact.
 ---
 
 # Grilling gate
 
-Depois da pesquisa factual e antes de escrever ou criar o artefato, aplique este protocolo.
-Ele é obrigatório para tickets, PRDs, Specs e Plans; adapte as perguntas ao tipo de artefato
-sem remover decisões materiais.
+After the factual research and before writing or creating the artifact, apply this protocol.
+It is mandatory for tickets, PRDs, Specs and Plans; adapt the questions to the artifact type
+without removing material decisions.
 
-## Design tree e frontier
+## Design tree and frontier
 
-1. Pesquise primeiro os fatos no repositório, nas autoridades, no design, no GitHub/Jira e nas
-   demais fontes aplicáveis. Use pesquisa read-only delimitada quando houver uma fronteira
-   independente. Nunca peça ao usuário fatos que possam ser verificados.
-2. Modele as decisões ainda abertas como uma **design tree**. Cada decisão deve declarar as
-   decisões que dependem dela, as alternativas relevantes, o impacto e a evidência disponível.
-3. Calcule a **frontier** do round: todas as decisões materialmente necessárias cujos pré-requisitos
-   já estejam resolvidos. Não adivinhe uma decisão pendente para liberar uma pergunta descendente.
-4. Pergunte toda a frontier atual em um único round numerado. Depois de cada resposta, registre a
-   decisão, alternativas descartadas, dependências e contradições; recompute a árvore e a próxima
-   frontier. Perguntas que dependem de respostas do round atual ficam para o round seguinte.
+1. Research the facts first in the repository, the authorities, the design, GitHub/Jira and the
+   other applicable sources. Use bounded read-only research when there is an
+   independent boundary. Never ask the user for facts that can be verified.
+2. Model the still-open decisions as a **design tree**. Each decision must declare the
+   decisions that depend on it, the relevant alternatives, the impact and the available evidence.
+3. Compute the round's **frontier**: all materially necessary decisions whose prerequisites
+   are already resolved. Do not guess a pending decision to unlock a descendant question.
+4. Ask the entire current frontier in a single numbered round. After each answer, record the
+   decision, discarded alternatives, dependencies and contradictions; recompute the tree and the next
+   frontier. Questions that depend on answers from the current round are left for the next round.
 
-## Formato das perguntas
+## Question format
 
-Escreva o round diretamente em Markdown na conversa (não dentro de bloco de código), usando
-obrigatoriamente esta estrutura:
+Write the round directly in Markdown in the conversation (not inside a code block), using
+this structure without exception:
 
 ```md
-## Grilling — round <n> (<k> perguntas)
+## Grilling — round <n> (<k> questions)
 
-❓ **Q<n> — <decisão em poucas palavras>**
-<Contexto: o fato verificado que abre a decisão, com evidência (`path:linha`, issue, doc), em até
-três linhas. Depende de: <Qx = resposta> ou "nenhuma".>
+❓ **Q<n> — <decision in a few words>**
+<Context: the verified fact that opens the decision, with evidence (`path:line`, issue, doc), in up to
+three lines. Depends on: <Qx = answer> or "none".>
 
-- **(a) <opção>** — <consequência ou trade-off desta opção>
-- **(b) <opção>** — <consequência ou trade-off desta opção>
+- **(a) <option>** — <consequence or trade-off of this option>
+- **(b) <option>** — <consequence or trade-off of this option>
 
-➡️ **Recomendo (a)** — <justificativa em uma frase>.
+➡️ **I recommend (a)** — <one-sentence justification>.
 
 ---
 
@@ -45,59 +45,59 @@ três linhas. Depende de: <Qx = resposta> ou "nenhuma".>
 
 ---
 
-**Adiadas:** Q<m> — <decisão> (depende de Q<n>).
-**Como responder:** `Q<n>: a` por linha; texto livre também vale. Pergunta sem resposta continua aberta.
+**Deferred:** Q<m> — <decision> (depends on Q<n>).
+**How to answer:** `Q<n>: a` per line; free text is also fine. An unanswered question remains open.
 ```
 
-Regras do formato:
+Format rules:
 
-- **Uma decisão por pergunta.** Se a escolha de uma opção abre outra decisão (por exemplo,
-  renomear e também mudar o contrato), separe em duas perguntas e adie a dependente.
-- **Contexto autossuficiente.** O usuário deve entender a pergunta sem rolar a conversa: diga o
-  que existe hoje, o que muda e por que a decisão está aberta. Não pressuponha termos não definidos
-  no round ou em rounds anteriores.
-- **Opções explícitas.** De duas a quatro opções mutuamente exclusivas, rotuladas `(a)`, `(b)`…,
-  cada uma com sua consequência. Não esconda opções dentro de um parágrafo. Não invente opção
-  só para completar a lista; quando houver só um caminho viável, pergunte confirmação.
-- **Recomendação referenciada.** A linha `➡️` cita a letra recomendada e o motivo principal;
-  impacto e evidência já estão no contexto e nas opções.
-- **IDs estáveis.** Numere as perguntas em sequência por toda a sessão (`Q1`, `Q2`…), sem reiniciar
-  por round. Uma decisão reaberta recebe novo ID com `Reabre Qx` no contexto; um desdobramento de
-  uma resposta pode usar sufixo (`Q9a`).
-- **Respostas ambíguas.** Não infira. Se a resposta não identifica a pergunta ou a opção, ou só
-  responde parte do round, confirme em uma linha a interpretação e repita, em forma curta, apenas
-  as perguntas ainda abertas.
-- **Registro do round.** Depois das respostas, liste as decisões tomadas (`Qx → opção`) antes de
-  abrir o próximo round ou a revisão de design.
+- **One decision per question.** If choosing an option opens another decision (for example,
+  renaming and also changing the contract), split it into two questions and defer the dependent one.
+- **Self-sufficient context.** The user must understand the question without scrolling the conversation: say
+  what exists today, what changes and why the decision is open. Do not presuppose terms not defined
+  in the round or in earlier rounds.
+- **Explicit options.** Two to four mutually exclusive options, labeled `(a)`, `(b)`…,
+  each with its consequence. Do not hide options inside a paragraph. Do not invent an option
+  just to fill out the list; when there is only one viable path, ask for confirmation.
+- **Referenced recommendation.** The `➡️` line cites the recommended letter and the main reason;
+  impact and evidence are already in the context and in the options.
+- **Stable IDs.** Number the questions sequentially across the whole session (`Q1`, `Q2`…), without restarting
+  per round. A reopened decision gets a new ID with `Reopens Qx` in the context; a follow-up from
+  an answer may use a suffix (`Q9a`).
+- **Ambiguous answers.** Do not infer. If the answer does not identify the question or the option, or only
+  answers part of the round, confirm the interpretation in one line and repeat, in short form, only
+  the questions still open.
+- **Round record.** After the answers, list the decisions made (`Qx → option`) before
+  opening the next round or the design review.
 
-Conteste contradições e riscos; não transforme ausência de evidência em decisão implícita.
+Challenge contradictions and risks; do not turn the absence of evidence into an implicit decision.
 
-## Frontier mínima para tickets
+## Minimum frontier for tickets
 
-Em tickets, faça perguntas sobre cada item abaixo que permanecer materialmente unresolved:
+In tickets, ask questions about each item below that remains materially unresolved:
 
-- ator e outcome;
-- escopo e exclusões;
-- permissões;
-- aceitação e comportamento de falha;
-- fronteira técnica;
-- expectativas de validação;
-- se um ticket é a decomposição correta;
+- actor and outcome;
+- scope and exclusions;
+- permissions;
+- acceptance and failure behavior;
+- technical boundary;
+- validation expectations;
+- whether a ticket is the right decomposition;
 - sprint;
 - assignee.
 
-Para PRDs, Specs e Plans, percorra as mesmas decisões quando forem aplicáveis e acrescente as
-decisões próprias do artefato. O Grilling não substitui pesquisa factual, aprovação de issue,
-aprovação de publicação ou decisão de mudança de autoridade.
+For PRDs, Specs and Plans, go through the same decisions when applicable and add the
+decisions specific to the artifact. Grilling does not replace factual research, issue approval,
+publication approval or an authority-change decision.
 
-## Gate de escrita e confirmação
+## Writing gate and confirmation
 
-Não escreva o ticket ou qualquer artefato, nem mute Jira/GitHub ou outra autoridade externa,
-enquanto existir um ramo material unresolved. Quando a frontier estiver vazia, apresente o
-entendimento compartilhado e obtenha confirmação explícita do usuário antes de criar, atualizar
-ou publicar o artefato.
+Do not write the ticket or any artifact, nor mutate Jira/GitHub or another external authority,
+while a material unresolved branch exists. When the frontier is empty, present the
+shared understanding and obtain explicit confirmation from the user before creating, updating
+or publishing the artifact.
 
-Registre as decisões resolvidas, alternativas descartadas e premissas aceitas no artefato final;
-não copie o transcript da entrevista. Se uma nova decisão material surgir durante a escrita,
-checagem de integridade ou revisão, interrompa, reabra o Grilling e só continue após resolver a nova
-frontier e obter a confirmação necessária.
+Record the resolved decisions, discarded alternatives and accepted assumptions in the final artifact;
+do not copy the interview transcript. If a new material decision arises during writing,
+integrity checking or review, stop, reopen Grilling and only continue after resolving the new
+frontier and obtaining the necessary confirmation.

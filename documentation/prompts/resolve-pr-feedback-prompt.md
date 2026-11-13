@@ -1,24 +1,24 @@
 ---
 name: resolve-pr-feedback
-description: Resolver checks de CI e conversas de review até o PR ficar mergeable.
+description: Resolve CI checks and review conversations until the PR is mergeable.
 ---
 
-# Resolver feedback de PR
+# Resolve PR feedback
 
-Trabalhe na sessão atual e sempre contra o `HEAD` mais recente.
+Work in the current session and always against the latest `HEAD`.
 
-1. Inspecione status mergeable, checks e conversas não resolvidas.
-2. Classifique cada pendência como falha determinística, teste, build, ambiente,
-   feedback de review ou conflito com Spec/Architecture.
-3. Reproduza localmente usando os mesmos scripts do CI:
-   `check:code`, `check:types`, `test:unit`, `check:architecture` e
-   `test:integration` quando aplicável.
-4. Corrija a causa no menor escopo seguro; não desative regras nem adicione
-   exclusões para esconder regressões.
-5. Aplique `format`, reexecute os sensores invalidados e faça revisão do diff.
-6. Responda/resolva conversas apenas após a correção existir no branch.
-7. Faça push e aguarde novamente os checks, testes e build do novo `HEAD`.
+1. Inspect mergeable status, checks and unresolved conversations.
+2. Classify each pending item as a deterministic failure, test, build, environment,
+   review feedback or conflict with Spec/Architecture.
+3. Reproduce locally using the same scripts as CI:
+   `check:code`, `check:types`, `test:unit`, `check:architecture` and
+   `test:integration` when applicable.
+4. Fix the cause in the smallest safe scope; do not disable rules or add
+   exclusions to hide regressions.
+5. Apply `format`, rerun the invalidated sensors and review the diff.
+6. Reply to/resolve conversations only after the fix exists on the branch.
+7. Push and wait again for the checks, tests and build of the new `HEAD`.
 
-Mudança de produto, Contract, arquitetura ou segurança precisa atualizar as
-fontes normativas antes de prosseguir. Encerre somente com checks verdes,
-conversas bloqueantes resolvidas e PR mergeable.
+A product, Contract, architecture or security change must update the normative
+sources before proceeding. Finish only with green checks,
+blocking conversations resolved and a mergeable PR.

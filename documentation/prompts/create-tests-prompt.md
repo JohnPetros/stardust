@@ -1,22 +1,22 @@
 ---
-description: Prompt para criar testes unitarios e de integracao seguindo os padroes de testes do projeto.
+description: Prompt to create unit and integration tests following the project's testing standards.
 ---
 
-# Prompt: Criar testes
+# Prompt: Create tests
 
-## Objetivo
+## Objective
 
-Orientar a criacao de testes unitarios e de integracao **padronizados** e **eficientes**, garantindo:
+Guide the creation of **standardized** and **efficient** unit and integration tests, ensuring:
 
-- integridade da logica de negocio
-- orquestracao correta de `handlers`
-- fidelidade da borda HTTP nas rotas da aplicacao server
-- fidelidade das entradas da app web baseadas em `Next.js App Router`
-- fidelidade funcional de componentes de UI
+- integrity of the business logic
+- correct orchestration of `handlers`
+- fidelity of the HTTP boundary in the server application routes
+- fidelity of the web app entry points based on `Next.js App Router`
+- functional fidelity of UI components
 
-## Regras Aplicáveis
+## Applicable Rules
 
-Antes de criar qualquer teste, identifique o tipo de artefato e leia a rule correspondente:
+Before creating any test, identify the artifact type and read the corresponding rule:
 
 - `documentation/rules/domain-objects-testing-rules.md`
 - `documentation/rules/use-cases-testing-rules.md`
@@ -25,121 +25,121 @@ Antes de criar qualquer teste, identifique o tipo de artefato e leia a rule corr
 - `documentation/rules/web-app-routes-testing-rules.md`
 - `documentation/rules/widget-tests-rules.md`
 
-Leia também `documentation/rules/code-conventions-rules.md` quando precisar criar fakers, mocks, nomes de arquivos ou novos helpers de teste.
+Also read `documentation/rules/code-conventions-rules.md` when you need to create fakers, mocks, file names or new test helpers.
 
-## Escopo permitido
+## Allowed scope
 
-No StarDust, **so e permitido criar testes para**:
+In StarDust, **tests may only be created for**:
 
-- objetos de dominio (`Entity`, `Structure`, `Aggregate`)
+- domain objects (`Entity`, `Structure`, `Aggregate`)
 - `Use Case`
-- `View` ou `Hook`
+- `View` or `Hook`
 - `handlers` (`Controller`, `Job`, `Action`, `Tool`)
-- rotas HTTP da app server (`apps/server`) via testes de integracao
-- paginas e fluxos da app web (`apps/web/src/app/**`)
+- HTTP routes of the server app (`apps/server`) via integration tests
+- pages and flows of the web app (`apps/web/src/app/**`)
 
-**Nao e permitido criar testes novos** para `repository`, `service`, `provider`,
-`gateway`, `client`, `mapper`, `factory`, `config`, adaptadores de
-infraestrutura ou arquivos de composicao. Se a entrada apontar para um arquivo
-fora desse escopo, nao gere teste direto para ele; em vez disso, identifique o
-objeto de dominio, use case, widget, handler ou rota responsavel pelo
-comportamento e concentre a cobertura nele.
+**It is not allowed to create new tests** for `repository`, `service`, `provider`,
+`gateway`, `client`, `mapper`, `factory`, `config`, infrastructure
+adapters or composition files. If the input points to a file
+outside this scope, do not generate a test directly for it; instead, identify the
+domain object, use case, widget, handler or route responsible for the
+behavior and concentrate the coverage there.
 
-## Entrada
+## Input
 
-- **Codigo fonte:** arquivo a ser testado (`Entity`, `Structure`, `Use Case`, `Controller`, `Action`, `Tool`, `Hook`, `Widget` ou `Route`).
+- **Source code:** file to be tested (`Entity`, `Structure`, `Use Case`, `Controller`, `Action`, `Tool`, `Hook`, `Widget` or `Route`).
 
-## Regras de execucao
+## Execution rules
 
-- Se houver **mais de um** `Controller`, `Widget` ou objeto de dominio (`Entity`/`Structure`) na entrada, acione `subagents` (um por item) para trabalhar em paralelo.
-- Cada `subagent` deve retornar:
-  - arquivos de teste criados/alterados
-  - `mocks` necessarios
-  - lista de cenarios cobertos
+- If there is **more than one** `Controller`, `Widget` or domain object (`Entity`/`Structure`) in the input, trigger `subagents` (one per item) to work in parallel.
+- Each `subagent` must return:
+  - test files created/changed
+  - necessary `mocks`
+  - list of scenarios covered
 
-> 💡 Ao final, consolide os resultados em uma unica resposta.
+> 💡 At the end, consolidate the results into a single response.
 
-Para cada subagent envie o seguinte prompt:
+For each subagent send the following prompt:
 
-<Prompt para subagent>
+<Prompt for subagent>
 
-Cria testes para o arquivo <Nome>.test.ts
+Create tests for the file <Name>.test.ts
 
-### Adesao as normas do projeto
+### Adherence to the project's standards
 
-Identifique o tipo de codigo e siga a regra correspondente em `documentation/rules/`:
+Identify the code type and follow the corresponding rule in `documentation/rules/`:
 
-- **Objetos de dominio:** [domain-objects-testing-rules.md](../rules/domain-objects-testing-rules.md)
-- **Casos de uso:** [use-cases-testing-rules.md](../rules/use-cases-testing-rules.md)
+- **Domain objects:** [domain-objects-testing-rules.md](../rules/domain-objects-testing-rules.md)
+- **Use cases:** [use-cases-testing-rules.md](../rules/use-cases-testing-rules.md)
 - **Handlers** (`REST`, `RPC`, `AI`, `Queue`): [handlers-testing-rules.md](../rules/handlers-testing-rules.md)
-- **Rotas HTTP da app server:** [server-routes-testing-rules.md](../rules/server-routes-testing-rules.md)
-- **Rotas e paginas da app web:** [web-app-routes-testing-rules.md](../rules/web-app-routes-testing-rules.md)
+- **HTTP routes of the server app:** [server-routes-testing-rules.md](../rules/server-routes-testing-rules.md)
+- **Routes and pages of the web app:** [web-app-routes-testing-rules.md](../rules/web-app-routes-testing-rules.md)
 - **Widgets** (UI): [widget-tests-rules.md](../rules/widget-tests-rules.md)
 
-Se o arquivo nao pertencer a uma dessas categorias permitidas, interrompa a
-criacao do teste direto e reporte claramente que o tipo de arquivo nao pode
-receber testes dedicados segundo as regras do projeto.
+If the file does not belong to one of these allowed categories, stop the
+direct test creation and clearly report that the file type cannot
+receive dedicated tests according to the project rules.
 
-### Estrutura e nomenclatura
+### Structure and naming
 
-- **Localizacao padrao:** crie testes **co-localizados** em uma subpasta `tests/` no diretorio do arquivo original.
-- **Excecao para rotas do server:** crie os testes em `apps/server/src/tests/routes/<dominio>/...`, espelhando o dominio e o recurso testado.
-- **Excecao para paginas da app web:** crie testes co-localizados em `tests/page.test.tsx` no diretorio da pagina; para fluxos de navegador, use `apps/web/src/app/tests/<dominio>/...`.
-- **Extensao:**
+- **Default location:** create **co-located** tests in a `tests/` subfolder in the directory of the original file.
+- **Exception for server routes:** create the tests in `apps/server/src/tests/routes/<domain>/...`, mirroring the domain and the tested resource.
+- **Exception for web app pages:** create co-located tests in `tests/page.test.tsx` in the page directory; for browser flows, use `apps/web/src/app/tests/<domain>/...`.
+- **Extension:**
 
-| Tipo | Extensao |
+| Type | Extension |
 | --- | --- |
-| Logica e `handlers` | `.test.ts` |
-| Rotas HTTP do server | `.test.ts` |
-| Paginas e fluxos da app web | `.test.tsx` ou `.test.ts` |
-| Componentes (`Widget`, `Page`) | `.test.tsx` |
+| Logic and `handlers` | `.test.ts` |
+| Server HTTP routes | `.test.ts` |
+| Web app pages and flows | `.test.tsx` or `.test.ts` |
+| Components (`Widget`, `Page`) | `.test.tsx` |
 
-- **Exemplo:**
+- **Example:**
   - Original: `src/auth/actions/SignInAction.ts`
-  - Teste: `src/auth/actions/tests/SignInAction.test.ts`
-  - Rota server: `apps/server/src/app/hono/routers/profile/achievements/CreateAchievementRoute.ts`
-  - Teste: `apps/server/src/tests/routes/profile/achievements/CreateAchievementRoute.test.ts`
+  - Test: `src/auth/actions/tests/SignInAction.test.ts`
+  - Server route: `apps/server/src/app/hono/routers/profile/achievements/CreateAchievementRoute.ts`
+  - Test: `apps/server/src/tests/routes/profile/achievements/CreateAchievementRoute.test.ts`
 
-### Stack de testes
+### Testing stack
 
 - **Runner:** `jest`
-- **Mocking:** `ts-jest-mocker` (usar `mock<Interface>()` e `Mock<Interface>`)
-- **Fakers:** `@faker-js/faker` via classes estaticas em `domain/entities/fakers/`
-- **React:** `@testing-library/react` e `@testing-library/user-event`
-- **Rotas server:** `supertest`, `HonoFixture`, `SupabaseFixture`, `AuthFixture` e fixtures de dominio quando necessario
+- **Mocking:** `ts-jest-mocker` (use `mock<Interface>()` and `Mock<Interface>`)
+- **Fakers:** `@faker-js/faker` via static classes in `domain/entities/fakers/`
+- **React:** `@testing-library/react` and `@testing-library/user-event`
+- **Server routes:** `supertest`, `HonoFixture`, `SupabaseFixture`, `AuthFixture` and domain fixtures when necessary
 
-### Preparacao de dados (`fakers`)
+### Data preparation (`fakers`)
 
-- Use sempre classes `Faker` (ex: `UsersFaker.fake()`) para instanciar entidades, DTOs e estruturas.
-- Se o `Faker` necessario nao existir, **crie-o primeiro** seguindo o padrao do dominio.
+- Always use `Faker` classes (e.g. `UsersFaker.fake()`) to instantiate entities, DTOs and structures.
+- If the needed `Faker` does not exist, **create it first** following the domain's pattern.
 
-### Estrategia por tipo de teste
+### Strategy by test type
 
-- **Domain objects:** validacoes de regras no construtor/factory e metodos de comportamento.
-- **Use cases:** 100% da logica de negocio, cobrindo `happy path` e todas as excecoes de dominio.
-- **Handlers:** extracao de dados do contexto (`Http`, `Call`, `Amqp`, `Mcp`), orquestracao do caso de uso/servico e formatacao da resposta.
-- **Rotas HTTP do server:** exercitar a app Hono real, cobrindo autenticacao, validacao, autorizacao, mapeamento de erros, payload de resposta e efeitos persistidos no banco sem mockar dependencias internas, salvo necessidade excepcional.
-- **Paginas e fluxos da app web:** para `page.tsx`, validar composicao de borda do App Router com mocks da borda web; para fluxos reais do navegador, usar Playwright com `ServerMock(page)` e bridges test-only da propria web. Toda suite de navegador deve obrigatoriamente cobrir navegacao observavel por um controle da aplicacao; para rotas protegidas, deve cobrir navegacao autenticada a partir de outra rota e redirecionamento para login sem sessao.
+- **Domain objects:** validation of rules in the constructor/factory and behavior methods.
+- **Use cases:** 100% of the business logic, covering the `happy path` and all domain exceptions.
+- **Handlers:** extraction of data from the context (`Http`, `Call`, `Amqp`, `Mcp`), orchestration of the use case/service and formatting of the response.
+- **Server HTTP routes:** exercise the real Hono app, covering authentication, validation, authorization, error mapping, response payload and effects persisted in the database without mocking internal dependencies, except in exceptional cases.
+- **Web app pages and flows:** for `page.tsx`, validate the App Router boundary composition with web boundary mocks; for real browser flows, use Playwright with `ServerMock(page)` and test-only bridges of the web app itself. Every browser suite must mandatorily cover navigation observable through an application control; for protected routes, it must cover authenticated navigation from another route and redirect to login without a session.
 - **Widgets:**
-  - testar `hooks` e `views` separadamente usando `Hook()` e `View()`
-  - para formularios complexos, testar integracao no `Widget` (Index)
+  - test `hooks` and `views` separately using `Hook()` and `View()`
+  - for complex forms, test integration in the `Widget` (Index)
 
-### Qualidade e `clean code`
+### Quality and `clean code`
 
-- **Arrange-Act-Assert:** estruturar os testes nas 3 fases (sem comentarios; uma quebra de linha e suficiente).
-- **Isolamento:** usar `beforeEach` para reiniciar `mocks` e garantir que cada `it` seja independente.
-- **Assercoes especificas:** preferir `toHaveBeenCalledWith` com valores exatos ou `expect.objectContaining`.
+- **Arrange-Act-Assert:** structure the tests in the 3 phases (without comments; a line break is enough).
+- **Isolation:** use `beforeEach` to reset `mocks` and ensure each `it` is independent.
+- **Specific assertions:** prefer `toHaveBeenCalledWith` with exact values or `expect.objectContaining`.
 
-### Workflow sugerido
+### Suggested workflow
 
-1. Setup: criar `tests/` e o arquivo `<Nome>.test.ts(x)`.
-   Para rotas do server, criar o arquivo em `apps/server/src/tests/routes/<dominio>/`.
-2. Mocking: identificar interfaces de dependencia e instanciar `mocks`.
-   Para rotas do server, preparar fixtures reais em vez de mockar a stack interna.
-3. Implementacao: comecar pelo caminho de sucesso e depois cobrir cenarios de erro/excecao.
-4. Para fluxos reais da Web, adicionar a navegacao obrigatoria definida em `documentation/rules/web-app-routes-testing-rules.md` antes de considerar a suite completa.
-5. Validacao de testes: executar no escopo correto do monorepo.
-6. Validacao de qualidade: executar `typecheck` e `codecheck` antes de concluir.
+1. Setup: create `tests/` and the file `<Name>.test.ts(x)`.
+   For server routes, create the file in `apps/server/src/tests/routes/<domain>/`.
+2. Mocking: identify dependency interfaces and instantiate `mocks`.
+   For server routes, prepare real fixtures instead of mocking the internal stack.
+3. Implementation: start with the success path and then cover error/exception scenarios.
+4. For real Web flows, add the mandatory navigation defined in `documentation/rules/web-app-routes-testing-rules.md` before considering the suite complete.
+5. Test validation: run in the correct monorepo scope.
+6. Quality validation: run `typecheck` and `codecheck` before concluding.
 
 ```bash
 pnpm run test
@@ -151,10 +151,10 @@ pnpm --filter @stardust/server run test:unit
 pnpm --filter @stardust/backoffice run test:unit
 pnpm --filter @stardust/core run test:unit
 
-pnpm --filter @stardust/web run test:unit caminho/do/arquivo
-pnpm --filter @stardust/server run test:unit caminho/do/arquivo
-pnpm --filter @stardust/backoffice run test:unit caminho/do/arquivo
-pnpm --filter @stardust/core run test:unit caminho/do/arquivo
+pnpm --filter @stardust/web run test:unit path/to/file
+pnpm --filter @stardust/server run test:unit path/to/file
+pnpm --filter @stardust/backoffice run test:unit path/to/file
+pnpm --filter @stardust/core run test:unit path/to/file
 
 pnpm --filter @stardust/web run check:types
 pnpm --filter @stardust/web run check:code
@@ -166,4 +166,4 @@ pnpm --filter @stardust/core run check:types
 pnpm --filter @stardust/core run check:code
 ```
 
-<Prompt para subagent>
+<Prompt for subagent>

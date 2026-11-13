@@ -1,47 +1,47 @@
 ---
 name: open-pr
-description: Publicar ou atualizar um Pull Request do Stardust com rastreabilidade de Issue, PRD e SDD, além de evidências atuais de validação.
+description: Publish or update a Stardust Pull Request with Issue, PRD and SDD traceability, plus current validation evidence.
 ---
 
-# Prompt: Criar ou Atualizar Pull Request
+# Prompt: Create or Update Pull Request
 
-## Objetivo
+## Goal
 
-Publicar uma entrega coerente do Stardust no GitHub. Use somente `gh`, preserve a
-worktree do usuário e atualize um PR existente da mesma entrega em vez de criar
-uma duplicata.
+Publish a coherent Stardust delivery to GitHub. Use only `gh`, preserve the
+user's worktree, and update an existing PR of the same delivery instead of
+creating a duplicate.
 
-Esta tarefa não cria Spec, PRD, Issue ou Report. Apenas consome os
-documentos que já existirem e a demanda direta quando a entrega não tiver
-documentação SDD.
+This task does not create a Spec, PRD, Issue, or Report. It only consumes the
+documents that already exist and the direct request when the delivery has no SDD
+documentation.
 
-## Entradas e fontes de autoridade
+## Inputs and sources of authority
 
-Leia, quando existirem e forem aplicáveis:
+Read, when they exist and are applicable:
 
-- Spec ou Bug Report implementado;
+- the implemented Spec or Bug Report;
 - `evaluation.md`;
-- diff real da entrega;
+- the actual diff of the delivery;
 - `documentation/sdd.md`;
 - `documentation/tooling.md`;
-- rules aplicáveis;
+- applicable rules;
 - `documentation/rules/commit-rules.md`;
-- Issue e milestone do GitHub usadas como rastreabilidade.
+- the GitHub Issue and milestone used for traceability.
 
-Quando a entrega vier de uma Spec, confirme que o `evaluation.md` usa a
-estrutura canônica de `documentation/templates/evaluation.md` e possui
-evidências atuais para a revisão exata da Spec.
+When the delivery comes from a Spec, confirm that `evaluation.md` uses the
+canonical structure of `documentation/templates/evaluation.md` and has current
+evidence for the exact revision of the Spec.
 
-Quando a entrega vier de uma demanda direta, não invente Spec, PRD, Issue,
-requisitos ou registros externos para preencher o PR.
+When the delivery comes from a direct request, do not invent a Spec, PRD, Issue,
+requirements, or external records to fill in the PR.
 
-Exija autorização explícita antes de fazer commit, `push` e criar ou atualizar
-o PR. No uso independente, invoque `commit-code` para alterações pendentes do
-escopo. Quando chamado por `conclude-spec`, reutilize os commits já preparados.
+Require explicit authorization before committing, running `push`, and creating or updating
+the PR. In standalone use, invoke `commit-code` for pending changes in the
+scope. When called by `conclude-spec`, reuse the commits already prepared.
 
-## Inspeção da entrega
+## Delivery inspection
 
-Antes da publicação, inspecione a worktree completa e o histórico da entrega:
+Before publishing, inspect the full worktree and the delivery history:
 
 ```bash
 git status --short
@@ -52,207 +52,206 @@ git diff --cached
 git log -10 --format='%h %s'
 ```
 
-Identifique:
+Identify:
 
-- arquivos em `stage`, modificados e não rastreados;
-- artifacts gerados, migrations, seeds e configurações;
-- aplicações e packages afetados;
-- alterações do usuário sem relação com a entrega;
-- segredos ou dados locais que não podem entrar no PR.
+- staged, modified, and untracked files;
+- generated artifacts, migrations, seeds, and configurations;
+- affected applications and packages;
+- user changes unrelated to the delivery;
+- secrets or local data that cannot go into the PR.
 
-Preserve alterações alheias e mantenha-as fora dos commits. Se a relação entre
-um arquivo e a entrega for ambígua, interrompa e informe a ambiguidade em vez
-de incluir o arquivo por suposição.
+Preserve others' changes and keep them out of the commits. If the relationship between
+a file and the delivery is ambiguous, stop and report the ambiguity instead
+of including the file by assumption.
 
-## Preparação da branch e do PR
+## Branch and PR preparation
 
-1. Inspecione as alterações em `stage` e fora dele.
-2. Conclua os commits autorizados da entrega e confirme que a worktree está
-   limpa antes de iniciar o merge com `main`.
-3. Busque a branch real de integração sem trocar a worktree:
+1. Inspect the staged and unstaged changes.
+2. Finish the authorized commits of the delivery and confirm that the worktree is
+   clean before starting the merge with `main`.
+3. Fetch the actual integration branch without switching the worktree:
 
    ```bash
    git fetch origin main --prune
    ```
 
-4. Consulte PRs abertos e fechados relacionados à entrega:
+4. Look up open and closed PRs related to the delivery:
 
    ```bash
-   gh pr list --state all --search "<termos da Spec, Issue ou entrega>"
+   gh pr list --state all --search "<terms from the Spec, Issue, or delivery>"
    ```
 
-5. Verifique base, head, SHA e ancestralidade. O nome da branch não comprova
-   incorporação.
-6. Use `main`/`origin/main` como base de integração, salvo instrução explícita
-   diferente.
-7. Incorpore obrigatoriamente o `origin/main` mais recente na branch da entrega
-   conforme a seção seguinte.
-8. Calcule e revise o diff completo contra a base do PR após o merge.
-9. Se já existir um PR da mesma entrega, atualize seu head e body. Caso
-   contrário, crie um único PR para a entrega coerente.
+5. Verify base, head, SHA, and ancestry. The branch name does not prove
+   incorporation.
+6. Use `main`/`origin/main` as the integration base, unless explicitly instructed
+   otherwise.
+7. Mandatorily incorporate the latest `origin/main` into the delivery branch
+   per the following section.
+8. Compute and review the full diff against the PR base after the merge.
+9. If a PR of the same delivery already exists, update its head and body.
+   Otherwise, create a single PR for the coherent delivery.
 
-Não use operações Git destrutivas, não ignore hooks, não crie branches
-dependentes acidentalmente e não misture alterações sem relação. Entregas
-separadas exigem fronteiras semânticas reais e ordem explícita de dependência.
+Do not use destructive Git operations, do not bypass hooks, do not create dependent
+branches by accident, and do not mix unrelated changes. Separate
+deliveries require real semantic boundaries and an explicit dependency order.
 
-## Sincronização obrigatória com `main`
+## Mandatory synchronization with `main`
 
-Antes de criar ou atualizar o PR, faça merge do `origin/main` mais recente na
-branch da entrega. Não substitua essa etapa por `rebase` e não publique uma
-branch que ainda não contenha o SHA remoto de `main` observado imediatamente
-antes da publicação.
+Before creating or updating the PR, merge the latest `origin/main` into the
+delivery branch. Do not replace this step with `rebase` and do not publish a
+branch that does not yet contain the remote SHA of `main` observed immediately
+before publishing.
 
-Com a worktree limpa, execute:
+With a clean worktree, run:
 
 ```bash
 git fetch origin main --prune
 git merge --no-edit origin/main
 ```
 
-Quando o merge for concluído sem conflitos, revise o novo diff e repita as
-validações afetadas pelo conteúdo incorporado.
+When the merge completes without conflicts, review the new diff and repeat
+the validations affected by the incorporated content.
 
-### Conflitos menores e inequívocos
+### Minor and unambiguous conflicts
 
-Resolva automaticamente somente conflitos mecânicos cujo resultado correto
-possa ser determinado sem escolher entre comportamentos concorrentes. Exemplos:
+Automatically resolve only mechanical conflicts whose correct result
+can be determined without choosing between competing behaviors. Examples:
 
-- ordenação de imports ou formatação;
-- alterações independentes em documentação;
-- adições independentes que devem coexistir;
-- artifacts gerados que podem ser recriados por um comando oficial e
-  determinístico do repositório.
+- import ordering or formatting;
+- independent changes in documentation;
+- independent additions that must coexist;
+- generated artifacts that can be recreated by an official and
+  deterministic repository command.
 
-Antes de resolver, inspecione os três lados do conflito e confirme que a
-solução preserva integralmente a intenção de `main` e da entrega. Depois:
+Before resolving, inspect the three sides of the conflict and confirm that the
+solution fully preserves the intent of `main` and of the delivery. Then:
 
-1. edite apenas os arquivos em conflito;
-2. execute `git add -- <arquivos-resolvidos>` com paths explícitos;
-3. conclua o merge sem alterar a mensagem padrão;
-4. revise o diff resultante;
-5. execute novamente os checks afetados.
+1. edit only the conflicting files;
+2. run `git add -- <resolved-files>` with explicit paths;
+3. complete the merge without changing the default message;
+4. review the resulting diff;
+5. rerun the affected checks.
 
-Não classifique um conflito como menor apenas pela quantidade de arquivos ou
-linhas envolvidas.
+Do not classify a conflict as minor merely because of the number of files or
+lines involved.
 
-### Conflitos complexos ou ambíguos
+### Complex or ambiguous conflicts
 
-Interrompa o fluxo e solicite orientação ao usuário quando a resolução exigir
-decidir qual comportamento deve prevalecer. Isso inclui, entre outros:
+Stop the flow and ask the user for guidance when the resolution requires
+deciding which behavior must prevail. This includes, among others:
 
-- lógica de domínio ou regras de negócio concorrentes;
-- contratos de API, tipos públicos ou schemas incompatíveis;
-- migrations, seeds ou mudanças de persistência conflitantes;
-- autenticação, autorização ou segurança;
-- versões de dependências ou lockfiles cuja intenção não possa ser inferida;
-- arquivo removido de um lado e modificado do outro;
-- workflows, infraestrutura ou variáveis de ambiente com estratégias
-  divergentes;
-- testes que expressem expectativas funcionais incompatíveis.
+- competing domain logic or business rules;
+- incompatible API contracts, public types, or schemas;
+- conflicting migrations, seeds, or persistence changes;
+- authentication, authorization, or security;
+- dependency versions or lockfiles whose intent cannot be inferred;
+- a file removed on one side and modified on the other;
+- workflows, infrastructure, or environment variables with diverging
+  strategies;
+- tests that express incompatible functional expectations.
 
-Ao solicitar orientação:
+When asking for guidance:
 
-1. liste os arquivos e hunks em conflito;
-2. explique a intenção observável de `main` e da branch da entrega;
-3. apresente o impacto de cada resolução possível;
-4. não escolha silenciosamente uma alternativa;
-5. não faça `git add`, commit, `push` ou publicação do PR;
-6. preserve o merge pausado, salvo quando o usuário solicitar explicitamente
+1. list the conflicting files and hunks;
+2. explain the observable intent of `main` and of the delivery branch;
+3. present the impact of each possible resolution;
+4. do not silently choose an alternative;
+5. do not run `git add`, commit, `push`, or publish the PR;
+6. keep the merge paused, unless the user explicitly requests
    `git merge --abort`.
 
-### Verificação antes da publicação
+### Verification before publishing
 
-Imediatamente antes do `push` e da criação ou atualização do PR, atualize
-novamente a referência e confirme a ancestralidade:
+Immediately before the `push` and the creation or update of the PR, refresh
+the reference again and confirm ancestry:
 
 ```bash
 git fetch origin main --prune
 git merge-base --is-ancestor origin/main HEAD
 ```
 
-Se a verificação falhar, incorpore novamente `origin/main`, trate conflitos
-pelas mesmas regras e repita as validações afetadas. Não publique enquanto
-`origin/main` não for ancestral do `HEAD`.
+If the verification fails, incorporate `origin/main` again, handle conflicts
+by the same rules, and repeat the affected validations. Do not publish while
+`origin/main` is not an ancestor of `HEAD`.
 
-## Evidências de validação
+## Validation evidence
 
-Use as evidências atuais da entrega e execute somente os checks adicionais
-aprovados pelo repositório que forem necessários para validar o estado de
-publicação. Não substitua comandos exatos de `documentation/tooling.md` por
-comandos genéricos presumidos.
+Use the delivery's current evidence and run only the additional checks
+approved by the repository that are needed to validate the publication state. Do not replace exact commands from `documentation/tooling.md` with
+presumed generic commands.
 
-Quando houver Spec, confirme antes da publicação:
+When there is a Spec, confirm before publishing:
 
-- revisão exata da Spec congelada;
-- todos os caminhos alterados dentro do escopo registrado;
-- árvore obrigatória de arquivos e widgets preservada;
-- contratos atendidos;
-- nenhuma evidência afetada está obsoleta.
+- exact frozen revision of the Spec;
+- all changed paths within the recorded scope;
+- mandatory file and widget tree preserved;
+- contracts met;
+- no affected evidence is stale.
 
-Se essa conformidade falhar, interrompa a publicação e encaminhe a correção por
-`implement-spec`. Não corrija a implementação diretamente dentro do fluxo de
-criação do PR.
+If this conformance fails, stop the publication and route the fix through
+`implement-spec`. Do not fix the implementation directly within the PR
+creation flow.
 
-Para UI baseada em design, use os frames do Penpot `stardust` declarados na Spec.
-Confirme no `evaluation.md` a comparação independente de cada estado e viewport obrigatório, incluindo:
+For design-based UI, use the Penpot `stardust` frames declared in the Spec.
+Confirm in `evaluation.md` the independent comparison of each mandatory state and viewport, including:
 
-- rota, estado e nome do frame de referência;
-- viewport alvo;
-- resultado da validação manual em navegador;
-- captura da implementação ou identificador do artifact;
-- comparação de estrutura, conteúdo, hierarquia, espaçamento, dimensões,
-  tokens, interações e responsividade;
-- observações de acessibilidade e DOM;
-- findings visuais resolvidos.
+- route, state, and name of the reference frame;
+- target viewport;
+- result of the manual validation in a browser;
+- capture of the implementation or the artifact identifier;
+- comparison of structure, content, hierarchy, spacing, dimensions,
+  tokens, interactions, and responsiveness;
+- accessibility and DOM observations;
+- resolved visual findings.
 
-Não crie uma seção separada de evidências visuais no body do PR. Quando houver
-alteração de UI, resuma o resultado em `## Testes manuais` e referencie o
-`evaluation.md` em `## Validações automatizadas` ou `## Limitações conhecidas`.
+Do not create a separate visual evidence section in the PR body. When there is a
+UI change, summarize the result in `## Testes manuais` and reference
+`evaluation.md` in `## Validações automatizadas` or `## Limitações conhecidas`.
 
-Revise migrations, artifacts gerados e lockfiles quando afetados. Não declare
-como executado um check, fluxo manual, review ou deploy que não foi observado.
-Registre limitações de ambiente, tentativas com falha e comandos omitidos sem
-convertê-los em evidência de sucesso.
+Review migrations, generated artifacts, and lockfiles when affected. Do not declare
+as executed a check, manual flow, review, or deploy that was not observed.
+Record environment limitations, failed attempts, and omitted commands without
+turning them into success evidence.
 
-## Artifacts gerados e migrations
+## Generated artifacts and migrations
 
-Quando a entrega alterar persistência ou conteúdo gerado:
+When the delivery changes persistence or generated content:
 
-- compare migrations, snapshots e journals com `origin/main`;
-- resolva colisões de numeração preservando entradas anteriores;
-- execute uma vez o comando documentado de geração ou verificação;
-- revise SQL e metadados gerados contra a fonte da entrega;
-- confirme que seeds, rotas geradas, lockfiles e demais derivados estão
-  atuais e incluídos somente quando necessários.
+- compare migrations, snapshots, and journals with `origin/main`;
+- resolve numbering collisions preserving earlier entries;
+- run the documented generation or verification command once;
+- review the generated SQL and metadata against the delivery source;
+- confirm that seeds, generated routes, lockfiles, and other derived files are
+  current and included only when necessary.
 
-Nunca edite manualmente artifacts gerados para ocultar divergências. Nunca
-trate falha de geração ou ambiente indisponível como check aprovado.
+Never manually edit generated artifacts to hide divergences. Never
+treat a generation failure or an unavailable environment as a passed check.
 
-## Contrato do PR
+## PR contract
 
-O body deve usar exatamente as seções abaixo e na mesma ordem.
+The body must use exactly the sections below, in the same order. The PR title and body are written in PT-BR (Brazilian Portuguese), so the section headings and literal texts shown in the code blocks below stay in PT-BR (glosses in parentheses are for the reader only). Some of them (such as `## PRD` and `Não aplicável`) are also matched by CI workflows.
 
-### Objetivo
+### Objective
 
-Use o heading:
+Use the heading (`Objetivo` = Objective):
 
 ```markdown
 ## Objetivo
 ```
 
-Descreva o problema, o resultado esperado, o escopo e as exclusões relevantes.
+Describe the problem, the expected outcome, the scope, and the relevant exclusions.
 
 ### PRD
 
-Use sempre o heading:
+Always use the heading:
 
 ```markdown
 ## PRD
 ```
 
-Quando houver PRD, informe o path do PRD canônico em `documentation/prds/` e, para o
-processo de release, as URLs completas das milestones do Stardust, uma por
-linha:
+When there is a PRD, give the path of the canonical PRD in `documentation/prds/` and, for the
+release process, the full URLs of the Stardust milestones, one per
+line:
 
 ```markdown
 ## PRD
@@ -261,7 +260,9 @@ linha:
 https://github.com/JohnPetros/stardust/milestone/40
 ```
 
-Quando não houver PRD, use:
+(`<path do PRD canônico em documentation/prds/>` = path of the canonical PRD in `documentation/prds/`.)
+
+When there is no PRD, use:
 
 ```markdown
 ## PRD
@@ -269,12 +270,14 @@ Quando não houver PRD, use:
 Não aplicável — alteração exclusivamente técnica.
 ```
 
-Não omita esta seção. Ela é a fonte principal usada pelo processo de release
-para selecionar quais PRDs terão E2E.
+(“Not applicable — exclusively technical change.”)
 
-### Requisitos afetados
+Do not omit this section. It is the main source used by the release process
+to select which PRDs will have E2E.
 
-Inclua esta seção somente quando houver PRD:
+### Affected requirements
+
+Include this section only when there is a PRD (`Requisitos afetados` = Affected requirements):
 
 ```markdown
 ## Requisitos afetados
@@ -283,176 +286,178 @@ Inclua esta seção somente quando houver PRD:
 - `JN-01` — jornada afetada, quando aplicável.
 ```
 
-Use somente identificadores que existam no PRD canônico. Para PRDs legados,
-preserve o identificador original e registre o crosswalk para `RP-*` quando
-houver. Requisitos funcionais da Spec devem ser citados como `RF-*` apenas
-quando a rastreabilidade técnica do PR exigir.
+(“`RP-01` — summarized product requirement. `JN-01` — affected journey, when applicable.”)
 
-### Issues relacionadas
+Use only identifiers that exist in the canonical PRD. For legacy PRDs,
+preserve the original identifier and record the crosswalk to `RP-*` when
+there is one. Functional requirements of the Spec must be cited as `RF-*` only
+when the PR's technical traceability requires it.
 
-Use o heading:
+### Related issues
+
+Use the heading (`Issues relacionadas` = Related issues):
 
 ```markdown
 ## Issues relacionadas
 ```
 
-Liste somente Issues reais. Use `resolve #123` apenas quando o merge deste PR
-deve encerrar a Issue. Quando não houver Issue, escreva `Nenhuma.`
-Quando houver rastreamento Jira Shifu, inclua a chave `SHI-*` junto da issue
-relacionada; nunca invente uma chave.
+List only real Issues. Use `resolve #123` only when the merge of this PR
+must close the Issue. When there is no Issue, write `Nenhuma.` (“None.”)
+When there is Jira Shifu tracking, include the `SHI-*` key alongside the related
+issue; never invent a key.
 
-### Implementação técnica
+### Technical implementation
 
-Use o heading:
+Use the heading (`Implementação técnica` = Technical implementation):
 
 ```markdown
 ## Implementação técnica
 ```
 
-Resuma os recortes coerentes de frontend, backend, domínio, persistência e
-testes, citando apenas os caminhos mais relevantes.
+Summarize the coherent slices of frontend, backend, domain, persistence, and
+tests, citing only the most relevant paths.
 
-### Alterações de regras de negócio
+### Business rule changes
 
-Inclua esta seção somente quando comportamento, validação, autorização ou
-workflow de produto forem alterados. Registre comportamento anterior, novo
-comportamento, motivo e evidência.
+Include this section only when product behavior, validation, authorization, or
+workflow are changed. Record previous behavior, new
+behavior, reason, and evidence. (Heading in the PR: `Alterações de regras de negócio`.)
 
-### Testes manuais
+### Manual tests
 
-Use o heading:
+Use the heading (`Testes manuais` = Manual tests):
 
 ```markdown
 ## Testes manuais
 ```
 
-Informe pré-requisitos, passos reproduzíveis, resultado esperado e fluxos de
-erro ou recuperação. Para mudanças de UI, inclua aqui um resumo da validação
-visual, sem criar uma seção própria de evidências visuais.
+Give prerequisites, reproducible steps, expected result, and error or
+recovery flows. For UI changes, include here a summary of the visual
+validation, without creating a dedicated visual evidence section.
 
-### Validações automatizadas
+### Automated validations
 
-Use o heading:
+Use the heading (`Validações automatizadas` = Automated validations):
 
 ```markdown
 ## Validações automatizadas
 ```
 
-Liste comandos exatos e resultados observados, incluindo falhas, limitações e
-checks omitidos.
+List exact commands and observed results, including failures, limitations, and
+omitted checks.
 
-### Limitações conhecidas
+### Known limitations
 
-Use o heading:
+Use the heading (`Limitações conhecidas` = Known limitations):
 
 ```markdown
 ## Limitações conhecidas
 ```
 
-Registre lacunas não bloqueantes ou escreva `Nenhuma.`
+Record non-blocking gaps or write `Nenhuma.` (“None.”)
 
-Não adicione seções genéricas como `Changelog`, `Impacto e compatibilidade`,
-`Observações` ou `Evidências visuais`. Não copie o diff inteiro. Não invente
-Issues, requisitos, resultados de testes ou aprovações humanas. Não inclua uma
-seção `Codex Review Summary` nem qualquer resumo automatizado de revisão no
-body do PR.
+Do not add generic sections such as `Changelog`, `Impacto e compatibilidade`
+(Impact and compatibility), `Observações` (Notes), or `Evidências visuais` (Visual evidence). Do not copy the whole diff. Do not invent
+Issues, requirements, test results, or human approvals. Do not include a
+`Codex Review Summary` section or any automated review summary in the
+PR body.
 
-## Título
+## Title
 
-Use uma frase nominal curta em PT-BR, sem prefixo de Conventional Commit ou
-chave de Issue inventada. Não comece o título com verbo.
+Use a short noun phrase in PT-BR, without a Conventional Commit prefix or an
+invented Issue key. Do not start the title with a verb.
 
-Exemplos:
+Examples (the titles stay in PT-BR):
 
-- `Configuração da listagem de produtos`
-- `Correção da navegação para a tela de catálogo`
-- `Cobertura do cadastro com testes de integração`
+- `Configuração da listagem de produtos` (Product listing configuration)
+- `Correção da navegação para a tela de catálogo` (Fix of the navigation to the catalog screen)
+- `Cobertura do cadastro com testes de integração` (Sign-up coverage with integration tests)
 
-Para correções, inclua no body a causa comprovada e a solução aplicada.
+For fixes, include in the body the proven cause and the solution applied.
 
-## Publicação e retorno
+## Publishing and return
 
-Faça `push` da branch preparada e crie ou atualize o PR com `gh`. O workflow do
-Hermes inicia automaticamente depois que os checks aplicáveis passam para o
-head SHA atual.
+`push` the prepared branch and create or update the PR with `gh`. The Hermes
+workflow starts automatically after the applicable checks pass for the
+current head SHA.
 
-### Todas as operações do PR usam somente o `gh`
+### All PR operations use only `gh`
 
-- Crie, atualize, vincule e acompanhe o PR exclusivamente com o GitHub CLI (`gh`):
+- Create, update, link, and follow the PR exclusively with the GitHub CLI (`gh`):
   `gh pr create`, `gh pr edit`, `gh pr view`, `gh pr checks`, `gh run view`,
-  `gh run rerun` e `gh api`. Não use as ferramentas `ccd_pr` do app, o navegador,
-  `WebFetch` nem um monitor externo, e não dependa de ele estar ligado.
-- O Auto-fix é sempre aplicado por este fluxo, sem pedir confirmação: depois de criar
-  ou atualizar o PR, acompanhe os checks com `gh`, corrija toda falha dentro do escopo
-  da entrega, faça commit e `push`, e repita até todos os checks ficarem verdes, como
-  descrito na seção seguinte.
-- Leia checks e conclusões com `gh pr checks <numero>` e
-  `gh pr view <numero> --json statusCheckRollup,commits` (o último commit de `commits`
-  é o HEAD publicado). Leia logs com `gh run view <run-id> --log-failed` e, para um job
-  concluído de uma execução ainda em andamento, com
+  `gh run rerun`, and `gh api`. Do not use the app's `ccd_pr` tools, the browser,
+  `WebFetch`, or an external monitor, and do not depend on one being on.
+- Auto-fix is always applied by this flow, without asking for confirmation: after creating
+  or updating the PR, follow the checks with `gh`, fix every failure within the scope
+  of the delivery, commit and `push`, and repeat until all checks are green, as
+  described in the next section.
+- Read checks and conclusions with `gh pr checks <number>` and
+  `gh pr view <number> --json statusCheckRollup,commits` (the last commit in `commits`
+  is the published HEAD). Read logs with `gh run view <run-id> --log-failed` and, for a job
+  completed in a run still in progress, with
   `gh api repos/<owner>/<repo>/actions/jobs/<job-id>/logs`.
-- Para uma falha intermitente comprovada (por exemplo, memória esgotada em um job sem
-  relação com o diff), reexecute com `gh run rerun <run-id>`; esta versão do `gh` não
-  aceita `--failed`. Registre cada reexecução e não reexecute indefinidamente: uma falha
-  que se repete é tratada como defeito e levada ao usuário.
-- Comentários de review também chegam por `gh` (`gh pr view <numero> --comments` e
-  `gh api repos/<owner>/<repo>/pulls/<numero>/comments`); trate-os por
+- For a proven intermittent failure (for example, out of memory in a job unrelated
+  to the diff), rerun with `gh run rerun <run-id>`; this version of `gh` does not
+  accept `--failed`. Record each rerun and do not rerun indefinitely: a failure
+  that repeats is treated as a defect and brought to the user.
+- Review comments also arrive through `gh` (`gh pr view <number> --comments` and
+  `gh api repos/<owner>/<repo>/pulls/<number>/comments`); handle them with
   `resolve-pr-feedback`.
 
-## CI obrigatório após a publicação
+## Mandatory CI after publishing
 
-Depois de criar ou atualizar o PR, aguarde obrigatoriamente a conclusão de todos
-os workflows e checks aplicáveis ao HEAD publicado. Não encerre a execução com
-checks `pending`, `queued`, `in_progress`, `failure`, `cancelled`, `timed_out`
-ou `action_required`.
+After creating or updating the PR, you must wait for all
+workflows and checks applicable to the published HEAD to complete. Do not end the run with
+checks `pending`, `queued`, `in_progress`, `failure`, `cancelled`, `timed_out`,
+or `action_required`.
 
-Faça polling pelo GitHub CLI até que o rollup contenha checks e nenhum deles
-esteja incompleto:
+Poll through the GitHub CLI until the rollup contains checks and none of them
+is incomplete:
 
 ```bash
 while true; do
-  total=$(gh pr view <numero> --json statusCheckRollup --jq '.statusCheckRollup | length')
-  pending=$(gh pr view <numero> --json statusCheckRollup --jq '[.statusCheckRollup[] | select(.status != "COMPLETED")] | length')
+  total=$(gh pr view <number> --json statusCheckRollup --jq '.statusCheckRollup | length')
+  pending=$(gh pr view <number> --json statusCheckRollup --jq '[.statusCheckRollup[] | select(.status != "COMPLETED")] | length')
   if [ "$total" -gt 0 ] && [ "$pending" -eq 0 ]; then break; fi
   sleep 10
 done
-gh pr checks <numero>
+gh pr checks <number>
 ```
 
-Depois confira as conclusões no `statusCheckRollup`; o ciclo só pode
-terminar quando todos os checks aplicáveis estiverem verdes.
+Then check the conclusions in `statusCheckRollup`; the cycle may only
+end when all applicable checks are green.
 
-Quando qualquer workflow ou check falhar:
+When any workflow or check fails:
 
-1. inspecione o workflow, job e logs da falha com `gh run view` e `gh run view --log-failed`;
-2. identifique a causa comprovada e corrija o código, teste, configuração ou documentação dentro do escopo da entrega;
-3. execute novamente as validações locais afetadas e registre o resultado atual;
-4. faça commit da correção com as regras do repositório, atualize a branch e faça `push`;
-5. confirme que o PR aponta para o novo HEAD e aguarde novamente todos os checks;
-6. repita este ciclo até que todos os workflows e checks obrigatórios terminem com sucesso.
+1. inspect the workflow, job, and failure logs with `gh run view` and `gh run view --log-failed`;
+2. identify the proven cause and fix the code, test, configuration, or documentation within the scope of the delivery;
+3. rerun the affected local validations and record the current result;
+4. commit the fix following the repository's rules, update the branch, and `push`;
+5. confirm that the PR points to the new HEAD and wait again for all checks;
+6. repeat this cycle until all mandatory workflows and checks finish successfully.
 
-Não trate uma falha como limitação conhecida, não marque a entrega como pronta
-com CI pendente e não crie um segundo PR para corrigir o primeiro. Para falhas
-intermitentes, confirme a causa repetindo o workflow ou a validação local antes
-de concluir que a branch está verde. Se a correção exigir nova autoridade ou
-uma decisão fora do escopo, interrompa e informe o bloqueio sem declarar o PR
-concluído.
+Do not treat a failure as a known limitation, do not mark the delivery as ready
+with pending CI, and do not create a second PR to fix the first. For
+intermittent failures, confirm the cause by repeating the workflow or the local validation before
+concluding that the branch is green. If the fix requires new authority or
+a decision outside the scope, stop and report the blocker without declaring the PR
+complete.
 
-Depois, obtenha os metadados reais:
+Then, obtain the actual metadata:
 
 ```bash
-gh pr view <numero> \
+gh pr view <number> \
   --json number,url,headRefName,baseRefName,headRefOid,commits,statusCheckRollup
 ```
 
-Retorne:
+Return:
 
-- URL e número do PR;
-- base, head e head SHA;
-- resumo dos caminhos alterados;
-- PRD ou `Não aplicável`;
-- requisitos afetados;
-- estado final dos checks, todos concluídos com sucesso, e reviews.
+- PR URL and number;
+- base, head, and head SHA;
+- summary of the changed paths;
+- PRD or `Não aplicável` (“Not applicable”);
+- affected requirements;
+- final state of the checks, all completed successfully, and reviews.
 
-Não faça merge nem deploy. Comentários de review posteriores são tratados por
+Do not merge or deploy. Later review comments are handled by
 `resolve-pr-feedback`.

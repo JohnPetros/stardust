@@ -1,220 +1,219 @@
 ---
 name: create-spec
-description: Criar ou revisar uma Spec implementável, compacta ou completa, a partir de PRD, Issue, Report ou demanda direta.
+description: Create or review an implementable Spec, compact or full, from a PRD, Issue, Report, or direct request.
 ---
 
-# Criar Spec
+# Create Spec
 
-Atue como o Orchestrator do SDD. A task principal conduz a autoria na task atual; não
-crie nova thread. Traduza uma versão conhecida dos requisitos de produto canônicos em um
-Contract de implementação delimitado e testável. A execução (ordem, decomposição,
-delegação) pertence à task principal em `implement-spec`: não coloque quebra de tarefas
-nem ledger de execução na Spec. Árvores de arquivos esperadas e escopadas
-descrevem as fronteiras afetadas; a organização ordinária de helpers permanece flexível.
+Act as the SDD Orchestrator. The main task conducts the authoring in the current task; do not
+create a new thread. Translate a known version of the canonical product requirements into a
+bounded and testable implementation Contract. Execution (order, decomposition,
+delegation) belongs to the main task in `implement-spec`: do not put task breakdown
+or an execution ledger in the Spec. Expected and scoped file trees
+describe the affected boundaries; the ordinary organization of helpers remains flexible.
 
-Use Spec somente para uma entrega relacionada a uma feature. Manutenção direta basta para
-formatação, tooling, refactors mecânicos e reparos cobertos por um Contract inalterado. Uma
-mudança de comportamento de produto, contratos públicos, semântica de persistência, eventos
-entre módulos ou jornadas de usuário exige Spec nova ou emendada. Preserve trabalho não
-relacionado.
+Use a Spec only for a delivery related to a feature. Direct maintenance is enough for
+formatting, tooling, mechanical refactors, and repairs covered by an unchanged Contract. A
+change to product behavior, public contracts, persistence semantics, events
+between modules, or user journeys requires a new or amended Spec. Preserve unrelated
+work.
 
-## Classificação
+## Classification
 
-Identifique a origem: `prd`, `issue`, `report` ou `direct-request`. Defina
-`scope` com workspaces, diretórios ou arquivos. Use modo compacto para um
-resultado coeso, de fronteiras estáveis e baixo risco; use modo completo quando houver risco
-material de segurança, concorrência, migration, persistência, múltiplos módulos/fluxos ou
-integrações. Escale o detalhe pelo risco, não pela contagem de arquivos. A Spec compacta
-mantém todas as seções, com escopo conciso, apenas os contratos consequentes afetados e
-prova focada suficiente; omita detalhe opcional vazio, sem tamanho mínimo. O modo completo
-acrescenta detalhe somente para os riscos e garantias identificados.
+Identify the origin: `prd`, `issue`, `report`, or `direct-request`. Define
+`scope` with workspaces, directories, or files. Use compact mode for a cohesive
+outcome with stable boundaries and low risk; use full mode when there is material
+risk in security, concurrency, migration, persistence, multiple modules/flows, or
+integrations. Scale the detail by risk, not by file count. The compact Spec
+keeps all sections, with concise scope, only the affected consequent contracts, and
+sufficient focused proof; omit empty optional detail, with no minimum size. Full mode
+adds detail only for the identified risks and guarantees.
 
-## Fontes
+## Sources
 
-`source` é uma lista e pode conter múltiplas referências associadas à mesma
-Spec. É permitido associar Issue e PRD simultaneamente, além de Report ou
-demanda direta quando aplicável. Detecte todas as fontes informadas ou
-associadas, busque e leia cada uma delas. Se um PRD estiver associado à Issue,
-sua leitura é obrigatória; a ausência de PRD não bloqueia uma Spec originada
-de Issue. Em caso de conflito, registre a divergência e resolva a ambiguidade
-antes de abrir a Spec.
+`source` is a list and may contain multiple references associated with the same
+Spec. It is allowed to associate an Issue and a PRD simultaneously, in addition to a Report or
+direct request when applicable. Detect all the sources given or
+associated, then fetch and read each of them. If a PRD is associated with the Issue,
+reading it is mandatory; the absence of a PRD does not block a Spec originating
+from an Issue. In case of conflict, record the divergence and resolve the ambiguity
+before opening the Spec.
 
-Leia todas as fontes da demanda, `documentation/architecture.md`, Rules aplicáveis,
-`documentation/sdd.md` e os paths reais da codebase. Use CodeGraph, Context7, Penpot, Playwright ou Supabase quando
-aplicáveis.
+Read all the sources of the request, `documentation/architecture.md`, applicable Rules,
+`documentation/sdd.md`, and the real paths of the codebase. Use CodeGraph, Context7, Penpot, Playwright, or Supabase when
+applicable.
 
-Resolva ambiguidades materiais antes de escrever ou modificar `spec.md`. O gate de
-clarificação é um hard stop: não codifique uma decisão material em draft para só depois
-perguntar ao usuário. Perguntas devem trazer evidência, recomendação, alternativa e impacto.
-Escreva somente quando todas as escolhas estiverem resolvidas pela autoridade ou aceitas
-explicitamente como premissa documentada.
+Resolve material ambiguities before writing or modifying `spec.md`. The clarification
+gate is a hard stop: do not encode a material decision in a draft only to ask the
+user afterwards. Questions must bring evidence, recommendation, alternative, and impact.
+Write only when all choices are resolved by the authority or explicitly accepted
+as a documented assumption.
 
-## Gate obrigatório de Grilling
+## Mandatory Grilling gate
 
-Execute o **Grilling gate** definido em [`sdd.md#grilling-gate`](../sdd.md#grilling-gate) depois da pesquisa factual e
-antes de escrever ou alterar a Spec. Modele como design tree somente decisões ainda não resolvidas
-pelas fontes, Architecture, Rules, Design ou codebase. Pergunte em cada round toda a frontier
-disponível, com evidência, alternativas, impacto e resposta recomendada; decisões dependentes
-ficam para rounds posteriores.
+Run the **Grilling gate** defined in [`sdd.md#grilling-gate`](../sdd.md#grilling-gate) after the factual research and
+before writing or changing the Spec. Model as a design tree only decisions not yet resolved
+by the sources, Architecture, Rules, Design, or codebase. In each round, ask the entire
+available frontier, with evidence, alternatives, impact, and a recommended answer; dependent decisions
+are left for later rounds.
 
-Quando investigações independentes ainda estiverem em andamento, adie apenas as perguntas que
-dependem delas e conduza o restante da frontier. A frontier vazia e a confirmação explícita de
-entendimento compartilhado são pré-requisitos para redigir. Se uma nova lacuna material surgir
-durante a checagem de integridade ou a revisão, reabra o Grilling antes de continuar.
+When independent investigations are still in progress, defer only the questions that
+depend on them and conduct the rest of the frontier. An empty frontier and explicit confirmation of
+shared understanding are prerequisites for drafting. If a new material gap emerges
+during the integrity check or the review, reopen the Grilling before continuing.
 
-## Revisão do design em chat
+## Design review in chat
 
-Depois que a frontier do Grilling esvaziar e antes de redigir, valide o design com o
-usuário em seções curtas no chat, escaladas ao risco: resultado e escopo; ownership,
-componentes e contratos públicos (incluindo a árvore de arquivos esperada das fronteiras
-Server/Web afetadas); fluxo de runtime, persistência e tratamento de falhas; composição de UI
-e referências de design, quando aplicável; e verificação. Para escolhas arquiteturais
-consequentes, compare as alternativas viáveis ancoradas no Stardust (geralmente duas a
-quatro) com recomendação e os trade-offs de compatibilidade, ownership, consistência e
-recuperação; não invente alternativas quando a autoridade existente já resolve a escolha
-nem adicione capacidades especulativas. Use listas e blocos de código, não tabelas, nas
-seções de chat. Pergunte explicitamente se cada seção está correta antes de continuar;
-responder às perguntas de uma seção não a aprova, e uma seção reaberta por uma decisão
-posterior é reapresentada como delta. A aprovação explícita do design completo permite
-escrever a Spec; ela não aprova a Spec escrita nem autoriza a implementação. Registre a
-abordagem escolhida e a justificativa no Technical Contract existente: a `spec.md` é o
-artefato de design escrito, sem segundo documento de design.
+After the Grilling frontier empties and before drafting, validate the design with the
+user in short sections in chat, scaled to risk: outcome and scope; ownership,
+components, and public contracts (including the expected file tree of the affected
+Server/Web boundaries); runtime flow, persistence, and failure handling; UI composition
+and design references, when applicable; and verification. For consequent architectural
+choices, compare the viable alternatives anchored in Stardust (usually two to
+four) with a recommendation and the trade-offs of compatibility, ownership, consistency, and
+recovery; do not invent alternatives when the existing authority already resolves the choice
+nor add speculative capabilities. Use lists and code blocks, not tables, in the
+chat sections. Explicitly ask whether each section is correct before continuing;
+answering the questions of a section does not approve it, and a section reopened by a later
+decision is re-presented as a delta. Explicit approval of the complete design allows
+writing the Spec; it does not approve the written Spec nor authorize implementation. Record the
+chosen approach and the justification in the existing Technical Contract: `spec.md` is the
+written design artifact, with no second design document.
 
-## Princípios de evidência e fronteiras
+## Evidence and boundary principles
 
-- Todo path citado deve existir; uma criação deve ser declarada como `Create` no
-  mapa canônico de paths.
-- Toda criação ou alteração deve estar apoiada em fonte, Architecture, Rule,
-  implementação similar ou decisão técnica explicitamente registrada.
-- Preserve as fronteiras existentes entre autenticação, autorização, ownership,
-  transporte e domínio. Dados derivados da sessão não pertencem ao payload do
-  client; HTTP, Supabase e SDKs não atravessam para o Core.
-- Não introduza acoplamento cross-domain, schema, provider ou integração sem
-  precedente ou justificativa arquitetural verificável.
-- Quando houver migration, especifique backfill, constraints, índices, FKs,
-  comportamento de deleção, RLS/grants e reflexos em tipos/mappers/repositories.
+- Every cited path must exist; a creation must be declared as `Create` in the
+  canonical path map.
+- Every creation or change must be backed by a source, Architecture, Rule,
+  similar implementation, or an explicitly recorded technical decision.
+- Preserve the existing boundaries between authentication, authorization, ownership,
+  transport, and domain. Data derived from the session does not belong in the client
+  payload; HTTP, Supabase, and SDKs do not cross into the Core.
+- Do not introduce cross-domain coupling, schema, provider, or integration without
+  precedent or a verifiable architectural justification.
+- When there is a migration, specify backfill, constraints, indexes, FKs,
+  deletion behavior, RLS/grants, and effects on types/mappers/repositories.
 
-## Protocolo de pesquisa e síntese
+## Research and synthesis protocol
 
-Pesquise somente apps, pacotes e camadas alcançados pelo escopo. Antes de redigir
-a solução, consolide:
+Research only apps, packages, and layers reached by the scope. Before drafting
+the solution, consolidate:
 
-| Seção          | Conteúdo                                                                 |
+| Section        | Content                                                                  |
 | -------------- | ------------------------------------------------------------------------ |
-| Mapeamento     | paths reais, contratos, dependências e implementações similares          |
-| Fluxo de dados | estado atual, produtores, consumidores, transporte e mudança necessária  |
-| Atenção        | riscos, autorização, concorrência, segurança, performance e acoplamentos |
-| Lacunas        | elementos esperados não encontrados e decisões sem evidência suficiente  |
+| Mapping        | real paths, contracts, dependencies, and similar implementations         |
+| Data flow      | current state, producers, consumers, transport, and required change      |
+| Attention      | risks, authorization, concurrency, security, performance, and couplings  |
+| Gaps           | expected elements not found and decisions without sufficient evidence    |
 
-Em fluxos multi-app, declare quem expõe, quem consome, o transporte e o formato
-do contrato. Use ferramentas de codebase para evidência local, documentação
-oficial para APIs externas, Penpot para design, Playwright para comportamento de
-browser e Supabase para schema/dados quando aplicável. Architecture e Rules do
-projeto prevalecem sobre recomendações genéricas de ferramentas externas.
+In multi-app flows, declare who exposes, who consumes, the transport, and the format
+of the contract. Use codebase tools for local evidence, official
+documentation for external APIs, Penpot for design, Playwright for browser
+behavior, and Supabase for schema/data when applicable. The project's Architecture and
+Rules prevail over generic recommendations from external tools.
 
-Quando existirem duas ou mais lanes independentes, organize-as como investigações delimitadas da
-própria task, com perguntas, paths, limites e formato de síntese explícitos. Pesquise cada boundary
-diretamente, resolva conflitos por inspeção direta e verifique afirmações consequenciais. Não crie
-agentes de pesquisa.
+When there are two or more independent lanes, organize them as bounded investigations of the
+task itself, with explicit questions, paths, limits, and synthesis format. Research each boundary
+directly, resolve conflicts by direct inspection, and verify consequential claims. Do not create
+research agents.
 
-## Referências de design e Penpot
+## Design and Penpot references
 
-Quando o escopo envolver frontend ou UI, crie a subseção `## Design Contract` dentro de
-`Implementation Contract` (omita-a quando não houver UI) e declare:
+When the scope involves frontend or UI, create the `## Design Contract` subsection inside
+`Implementation Contract` (omit it when there is no UI) and declare:
 
-- a fonte visual canônica, o arquivo Penpot `stardust`;
-- a página e o nome de cada board ou componente relevante. Não use IDs como
-  referência: o nome é o contrato e o ID muda se o board for recriado no Penpot;
-- o estado, variante e viewport representados, como loading, error, empty,
-  content, aberto/fechado, desktop ou mobile;
-- o mapeamento entre cada referência visual e os respectivos `RF-*`/`CA-*`;
-- divergências entre design, requisitos, Architecture, Rules e comportamento
-  atual, indicando a precedência adotada e o alinhamento esperado.
+- the canonical visual source, the Penpot file `stardust`;
+- the page and the name of each relevant board or component. Do not use IDs as a
+  reference: the name is the contract and the ID changes if the board is recreated in Penpot;
+- the state, variant, and viewport represented, such as loading, error, empty,
+  content, open/closed, desktop, or mobile;
+- the mapping between each visual reference and the respective `RF-*`/`CA-*`;
+- divergences between design, requirements, Architecture, Rules, and current
+  behavior, indicating the precedence adopted and the expected alignment.
 
-Use esta tabela como núcleo da subseção, uma linha por superfície/estado/viewport exigido:
+Use this table as the core of the subsection, one row per required surface/state/viewport:
 
 ```md
-| Superfície / rota | Estado / viewport | Página / board / componentes do Penpot | CA / VV | Desvios permitidos |
+| Surface / route | State / viewport | Penpot page / board / components | CA / VV | Allowed deviations |
 | --- | --- | --- | --- | --- |
-| <superfície afetada> | <estado e viewport exato> | <nomes reais> | CA-01 / VV-01 | <diferenças aceitas ou nenhuma> |
+| <affected surface> | <exact state and viewport> | <real names> | CA-01 / VV-01 | <accepted differences or none> |
 ```
 
-Mapeie os widgets afetados para tokens semânticos existentes e variantes de primitivos
-compartilhados, e identifique a UI preservada fora da mudança.
+Map the affected widgets to existing semantic tokens and variants of shared
+primitives, and identify the UI preserved outside the change.
 
-### Regra design-to-code
+### Design-to-code rule
 
-Os frames declarados são a fonte visual canônica para o código. A Spec deve
-tratar como parte do Contract a preservação da composição, hierarquia,
-dimensões, espaçamento, tipografia, cores, bordas, elevação, ícones/assets,
-densidade, variantes e estados observáveis de cada frame. HTML semântico,
-acessibilidade, interação, dados e reflow responsivo podem adaptar a
-implementação, mas não autorizam substituir, simplificar ou reinterpretar o
+The declared frames are the canonical visual source for the code. The Spec must
+treat as part of the Contract the preservation of the composition, hierarchy,
+dimensions, spacing, typography, colors, borders, elevation, icons/assets,
+density, variants, and observable states of each frame. Semantic HTML,
+accessibility, interaction, data, and responsive reflow may adapt the
+implementation, but do not authorize replacing, simplifying, or reinterpreting the
 design.
 
-Toda divergência precisa ser vinculada ao frame e ao `CA-*`, ter motivo
-verificável e ser aprovada como decisão ou amendment antes de `open`. Frame
-ausente, contradito ou adicionado sem aprovação é bloqueante. Não aceite CSS
-genérico como aproximação, nem invente arquivo, frame ou detalhe visual quando
-não existir uma fonte canônica; registre a ausência explicitamente.
+Every divergence must be linked to the frame and the `CA-*`, have a verifiable
+reason, and be approved as a decision or amendment before `open`. A missing,
+contradicted, or unapproved added frame is blocking. Do not accept generic
+CSS as an approximation, and do not invent a file, frame, or visual detail when
+there is no canonical source; record the absence explicitly.
 
-Inspecione as referências com o Penpot MCP; não deduza detalhes visuais somente de
-screenshots ou descrições. Não extraia o design para outros artefatos: não crie
-`design/handoff.md`, não exporte imagens para `design/` e não copie tokens, medidas ou receitas
-para a Spec. Builders e Reviewers inspecionam os mesmos frames diretamente pelo Penpot MCP.
-A Spec registra apenas os frames, estados, variantes e viewports relevantes, seus vínculos com
-`RF-*`/`CA-*`/`VV-*` e as divergências aprovadas. Se a solução exigir alteração no design,
-inclua o Penpot `stardust` no escopo e especifique os boards afetados. Se não existir fonte
-visual canônica, registre isso explicitamente e não invente arquivo ou frame.
-Uma divergência material deve ser resolvida antes de a Spec chegar a `open`.
+Inspect the references with the Penpot MCP; do not deduce visual details only from
+screenshots or descriptions. Do not extract the design into other artifacts: do not create
+`design/handoff.md`, do not export images to `design/`, and do not copy tokens, measurements, or recipes
+into the Spec. Builders and Reviewers inspect the same frames directly through the Penpot MCP.
+The Spec records only the relevant frames, states, variants, and viewports, their links with
+`RF-*`/`CA-*`/`VV-*`, and the approved divergences. If the solution requires a change to the design,
+include the Penpot `stardust` in the scope and specify the affected boards. If there is no canonical
+visual source, record that explicitly and do not invent a file or frame.
+A material divergence must be resolved before the Spec reaches `open`.
 
-A validação de frontend deve exigir tanto a comparação com os frames no
-Penpot quanto o exercício do fluxo real no Playwright, cobrindo os estados e
-viewports especificados. O Penpot valida a referência visual; Playwright valida o
-comportamento em runtime. Nenhum deles substitui os testes automatizados.
+Frontend validation must require both the comparison with the frames in
+Penpot and the exercise of the real flow in Playwright, covering the specified states and
+viewports. Penpot validates the visual reference; Playwright validates
+runtime behavior. Neither of them replaces the automated tests.
 
-Quando a validação visual em runtime for obrigatória, escreva isso
-explicitamente no Contract em um ou mais `CA-*`: declare os viewports, estados,
-interações, rota e a evidência exigida (por exemplo, screenshot do dialog
-aberto, loading, erro, vazio, conteúdo e fechado, ou comparação visual
-equivalente). Para cada frame, declare também a dimensão de referência,
-o estado, a variante e a comparação esperada com a Web.
-Não use apenas expressões ambíguas como “verificar visualmente”. Diferencie
-sempre a evidência da referência no Penpot da evidência do browser real: a primeira
-confirma alinhamento com o design canônico; a segunda confirma renderização,
-responsividade e comportamento observável em runtime.
+When runtime visual validation is mandatory, write that
+explicitly in the Contract in one or more `CA-*`: declare the viewports, states,
+interactions, route, and the required evidence (for example, a screenshot of the dialog
+open, loading, error, empty, content, and closed, or an equivalent visual comparison). For each frame, also declare the reference dimension,
+the state, the variant, and the expected comparison with the Web.
+Do not use only ambiguous expressions such as “verify visually”. Always distinguish
+the evidence of the reference in Penpot from the evidence of the real browser: the former
+confirms alignment with the canonical design; the latter confirms rendering,
+responsiveness, and observable behavior at runtime.
 
-## Arquivo e Contract
+## File and Contract
 
-Crie `documentation/features/<domínio>/<feature>/spec.md` com:
+Create `documentation/features/<domain>/<feature>/spec.md` with:
 
 ```yaml
 ---
-title: <título>
+title: <title>
 status: draft
 revision: 1
 source:
   - type: <prd|issue|report|direct-request>
-    ref: <path do PRD canônico em documentation/prds/ ou outra fonte>
-    revision: <revisão da fonte quando aplicável>
+    ref: <path of the canonical PRD in documentation/prds/ or other source>
+    revision: <source revision when applicable>
     requirements: [RP-01]
     journeys: [JN-01]
 scope:
-  - <workspace|diretório|arquivo>
+  - <workspace|directory|file>
 last_updated_at: YYYY-MM-DD
 ---
 ```
 
-O corpo deve conter exatamente cinco seções de primeiro nível (listadas abaixo da tabela).
-Algumas têm subseções nomeadas obrigatórias, quando aplicáveis:
+The body must contain exactly five first-level sections (listed below the table).
+Some have mandatory named subsections, when applicable:
 
-| Seção | Subseção nomeada |
+| Section | Named subsection |
 | --- | --- |
-| `Implementation Contract` | `## Design Contract` — somente com UI |
-| `Technical Contract` | `## Expected file tree` — árvore por app/pacote; `## Runtime Flow` — fluxo de runtime (o mapa de paths e o detalhamento por camada ficam na mesma seção) |
-| `Verification Contract` | `## Shared setup`, seguido de `## Automated`, `## Manual` e `## Visual` |
+| `Implementation Contract` | `## Design Contract` — only with UI |
+| `Technical Contract` | `## Expected file tree` — tree per app/package; `## Runtime Flow` — runtime flow (the path map and the per-layer detail live in the same section) |
+| `Verification Contract` | `## Shared setup`, followed by `## Automated`, `## Manual`, and `## Visual` |
 
-As cinco seções de primeiro nível são:
+The five first-level sections are:
 
 1. `Context and scope`;
 2. `Implementation Contract`;
@@ -222,113 +221,113 @@ As cinco seções de primeiro nível são:
 4. `Verification Contract`;
 5. `Documentation alignment and revision history`.
 
-Não crie `evaluation.md` nesta etapa; `implement-spec` o materializa no kickoff, antes da
-primeira edição de feature. A Spec possui comportamento esperado; a Evaluation possui
-execução e resultados reais.
+Do not create `evaluation.md` at this stage; `implement-spec` materializes it at kickoff, before the
+first feature edit. The Spec owns expected behavior; the Evaluation owns
+execution and real results.
 
-Use `RP-*` e `JN-*` para rastrear a Spec ao PRD canônico versionado e às jornadas do
-usuário. Use `RF-*` e `CA-*` como IDs obrigatórios da Spec; registre `AV-*`
-para verificações automatizadas, `MV-*` para verificações manuais, `VV-*` para verificações
-visuais e `EV-*` para as evidências esperadas. Use `SHI-*`
-quando houver uma issue Jira Shifu:
+Use `RP-*` and `JN-*` to trace the Spec to the versioned canonical PRD and to the user
+journeys. Use `RF-*` and `CA-*` as mandatory Spec IDs; record `AV-*`
+for automated verifications, `MV-*` for manual verifications, `VV-*` for visual
+verifications, and `EV-*` for the expected evidence. Use `SHI-*`
+when there is a Jira Shifu issue:
 
 ```md
-| CA    | RF    | Dado         | Quando | Então     | Evidência esperada   |
+| CA    | RF    | Given        | When   | Then      | Expected evidence    |
 | ----- | ----- | ------------ | ------ | --------- | -------------------- |
-| CA-01 | RF-01 | pré-condição | ação   | resultado | teste/browser/sensor |
+| CA-01 | RF-01 | precondition | action | result    | test/browser/sensor  |
 ```
 
-Segurança, performance e arquitetura entram como critérios de aceitação ou
-restrições técnicas. Não use `RN-*`, `RNF-*`, `RA-*`, comentários
-`harness:evidence`, gates próprios ou baselines.
+Security, performance, and architecture enter as acceptance criteria or
+technical constraints. Do not use `RN-*`, `RNF-*`, `RA-*`, `harness:evidence`
+comments, own gates, or baselines.
 
-Especifique os métodos de toda interface, port, repository ou service criado ou
-alterado pela solução, incluindo nome, entrada e retorno. Não delegue ao Builder
-a definição dessas assinaturas.
+Specify the methods of every interface, port, repository, or service created or
+changed by the solution, including name, input, and return. Do not delegate to the Builder
+the definition of these signatures.
 
-O `Contract` da Spec é a fonte de verdade para o Builder. Cada requisito,
-restrição e critério de aceitação deve ser implementável e verificável sem que o
-Builder precise inferir comportamento ausente. O `evaluation.md` registra o resultado
-real da evidência de cada `CA-*`, mas não substitui o requisito do Contract.
+The Spec's `Contract` is the source of truth for the Builder. Each requirement,
+constraint, and acceptance criterion must be implementable and verifiable without the
+Builder needing to infer missing behavior. `evaluation.md` records the real result
+of the evidence for each `CA-*`, but does not replace the requirement in the Contract.
 
-## Mapa canônico de paths afetados
+## Canonical map of affected paths
 
-O `Technical Contract` deve conter um mapa de paths afetados, agrupado por
-aplicação e camada. Use uma tabela por combinação de aplicação/camada afetada,
-seguindo sempre esta ordem nas duas primeiras colunas:
+The `Technical Contract` must contain a map of affected paths, grouped by
+application and layer. Use one table per affected application/layer combination,
+always following this order in the first two columns:
 
 ```md
 | Path | Change | Declaration | Contract | Dependencies | Tests |
 | --- | --- | --- | --- | --- | --- |
-| `packages/core/src/...` | Modify | `<símbolo exato>` | `<garantia de runtime>` | `<colaboradores>` | `<fronteira de teste>` |
+| `packages/core/src/...` | Modify | `<exact symbol>` | `<runtime guarantee>` | `<collaborators>` | `<test boundary>` |
 ```
 
-As colunas depois de `Change` podem variar conforme a camada, mas `Path` deve
-ser o primeiro campo e `Change` o segundo. Cada path afetado aparece exatamente
-uma vez em todo o `Technical Contract` e usa somente `Create`, `Modify`,
-`Generate` ou `Remove`. Use `Create` para arquivo novo, nunca `novo arquivo` na
-coluna de estado. Escreva o valor de `Change` sem crases (`Modify`, não
-`` `Modify` ``): `check:spec-implementation` só reconhece o texto puro e, com
-crases, recusa a Spec por não encontrar linhas de paths. Para `Generate`, declare fonte, comando/entrada e saída; não
-contrate edição manual de artefato gerado.
+The columns after `Change` may vary by layer, but `Path` must
+be the first field and `Change` the second. Each affected path appears exactly
+once in the entire `Technical Contract` and uses only `Create`, `Modify`,
+`Generate`, or `Remove`. Use `Create` for a new file, never `new file` in the
+state column. Write the `Change` value without backticks (`Modify`, not
+`` `Modify` ``): `check:spec-implementation` only recognizes plain text and, with
+backticks, rejects the Spec for not finding path rows. For `Generate`, declare source, command/input, and output; do not
+contract manual editing of a generated artifact.
 
-Os paths devem ser relativos à raiz do repositório, exatos, normalizados e
-verificados no filesystem. Dependências inalteradas são evidência ou
-consumidores, não linhas do mapa. O checker
-`pnpm run check:spec-implementation <spec>` valida esse mapa contra o diff
-Git e falha em duplicidade, classificação inconsistente, path ausente ou
-mudança não entregue. Specs legadas com inventário em prosa ou no formato
-`Camada | Path e estado` devem ser normalizadas antes de serem implementadas;
-o checker não interpreta formatos ambíguos.
+Paths must be relative to the repository root, exact, normalized, and
+verified on the filesystem. Unchanged dependencies are evidence or
+consumers, not rows of the map. The checker
+`pnpm run check:spec-implementation <spec>` validates this map against the Git
+diff and fails on duplicates, inconsistent classification, a missing path, or an
+undelivered change. Legacy Specs with an inventory in prose or in the
+`Layer | Path and state` format must be normalized before being implemented;
+the checker does not interpret ambiguous formats.
 
 ## Expected file tree
 
-Todo `Technical Contract` inclui a subseção `## Expected file tree`, nos modos compacto e
-completo: uma árvore em bloco `text` **por app/pacote afetado** (`apps/server`, `apps/web`,
-`apps/backoffice`, `packages/core` etc.). Uma árvore apenas no chat, ou só o mapa de paths em
-tabela, não a substitui. O mapa canônico continua sendo a fonte verificada por
-`check:spec-implementation`; a árvore mostra a estrutura e o ownership, e deve conter
-exatamente os mesmos paths do mapa.
+Every `Technical Contract` includes the `## Expected file tree` subsection, in compact and
+full modes: a `text` block tree **per affected app/package** (`apps/server`, `apps/web`,
+`apps/backoffice`, `packages/core`, etc.). A tree only in chat, or only the path map in a
+table, does not replace it. The canonical map remains the source verified by
+`check:spec-implementation`; the tree shows structure and ownership, and must contain
+exactly the same paths as the map.
 
-- Escopo: arquivos criados, modificados, gerados ou removidos e os diretórios que os contêm.
-  Use paths relativos à raiz do repositório e alinhe as colunas de marcadores.
-- Marcadores: `[N]` (`Create`), `[M]` (`Modify`), `[G]` (`Generate`), `[D]` (`Remove`) e
-  `(unchanged)` apenas para um vizinho que esclareça ownership ou composição. Não liste
-  helpers privados inalterados nem catálogos exaustivos.
-- Camadas Core/Server: entidades, structures, use-cases, ports, controllers, routers, jobs,
-  repositórios, mappers, migrations (nunca invente nomes de migration) e os testes permitidos
-  em `tests/` colocalizados, além do `.rest` do grupo de rotas em
+- Scope: files created, modified, generated, or removed and the directories that contain them.
+  Use paths relative to the repository root and align the marker columns.
+- Markers: `[N]` (`Create`), `[M]` (`Modify`), `[G]` (`Generate`), `[D]` (`Remove`), and
+  `(unchanged)` only for a neighbor that clarifies ownership or composition. Do not list
+  unchanged private helpers nor exhaustive catalogs.
+- Core/Server layers: entities, structures, use-cases, ports, controllers, routers, jobs,
+  repositories, mappers, migrations (never invent migration names), and the allowed tests
+  in colocated `tests/`, plus the route group's `.rest` in
   `apps/server/rest-client/`.
-- UI: a hierarquia real de ownership: page/layout, componentes reutilizados, widgets filhos
-  aninhados sob o dono, cada `index.tsx` (Entry Point), `*View.tsx`, o hook `use-*.ts`
-  colocalizado e os `tests/` permitidos. Não pare em uma page ou componente de topo quando a
-  composição aprovada tem filhos. Componentes reutilizados por mais de um dono ficam na
-  fronteira de módulo apropriada. Explique o estado compartilhado e as responsabilidades locais
-  de interação sem duplicar estado. Não fabrique hooks ou testes para filhos puramente
-  estruturais (View sem comportamento).
-- Contexts e hooks de domínio: inclua os contexts afetados com nomes de arquivo concretos
-  (entrada do provider, tipo do value, hook do provider, hook consumidor e o teste permitido do
-  hook do provider) e os hooks de query/action de domínio, sem um diretório genérico de hooks.
-  Explique onde o context é montado, quais ramos compartilham seu estado e a direção entre
-  provider, hooks de operação e hooks de widget; evite ciclos e estado duplicado. Hooks de
-  query/action não têm arquivos de teste dedicados: aponte o consumidor ou a rota que os cobre
-  na `Verification Contract`.
-- IA: com composição de IA afetada, mostre agent, structured output, workflow, port do Core,
-  adapter de modelo/provider e composição que pertencem ao slice, com os testes permitidos,
-  separando as capacidades incluídas das adiadas.
-- Reconcilie a árvore com os nomes e a composição aprovados, as declarações, o mapa de paths,
-  o Design Contract e os paths da `Verification Contract` antes de apresentar a Spec. Helpers
-  privados e a decomposição ordinária permanecem escolhas de implementação: mudá-los, sozinho,
-  não exige amendment.
+- UI: the real ownership hierarchy: page/layout, reused components, child widgets
+  nested under the owner, each `index.tsx` (Entry Point), `*View.tsx`, the colocated
+  `use-*.ts` hook, and the allowed `tests/`. Do not stop at a top-level page or component when the
+  approved composition has children. Components reused by more than one owner live at the
+  appropriate module boundary. Explain the shared state and the local interaction
+  responsibilities without duplicating state. Do not fabricate hooks or tests for purely
+  structural children (View without behavior).
+- Domain contexts and hooks: include the affected contexts with concrete file names
+  (provider entry, value type, provider hook, consumer hook, and the allowed test of the
+  provider hook) and the domain query/action hooks, without a generic hooks directory.
+  Explain where the context is mounted, which branches share its state, and the direction between
+  provider, operation hooks, and widget hooks; avoid cycles and duplicated state. Query/action
+  hooks have no dedicated test files: point to the consumer or route that covers them
+  in the `Verification Contract`.
+- AI: with AI composition affected, show agent, structured output, workflow, Core port,
+  model/provider adapter, and composition that belong to the slice, with the allowed tests,
+  separating the included capabilities from the deferred ones.
+- Reconcile the tree with the approved names and composition, the declarations, the path map,
+  the Design Contract, and the paths of the `Verification Contract` before presenting the Spec. Private
+  helpers and ordinary decomposition remain implementation choices: changing them, alone,
+  does not require an amendment.
 
 ```text
 apps/server/
-├── rest-client/<módulo>/<grupo>.rest                                  [M]
-├── src/<camada>/<módulo>/
+├── rest-client/<module>/<group>.rest                                  [M]
+├── src/<layer>/<module>/
 │   ├── use-cases/get-example-use-case.ts                              [N]
 │   └── tests/get-example-use-case.test.ts                             [N]
 apps/web/
-└── src/ui/<módulo>/widgets/pages/Example/
+└── src/ui/<module>/widgets/pages/Example/
     ├── index.tsx                                                      [M]
     ├── ExamplePageView.tsx                                            [M]
     ├── useExamplePage.ts                                              [M]
@@ -337,257 +336,256 @@ apps/web/
         └── ExampleListView.tsx                                        [N]
 ```
 
-## Detalhamento técnico por camada afetada
+## Technical detail per affected layer
 
-Inclua apenas camadas realmente afetadas. Para cada linha do mapa canônico,
-informe responsabilidade, dependências, assinatura/shape, referência similar e
-evidência de teste. Não escreva implementação.
+Include only layers that are really affected. For each row of the canonical map,
+state responsibility, dependencies, signature/shape, similar reference, and
+test evidence. Do not write implementation.
 
-- Core/handlers/services/repositories/providers/jobs: dependências injetadas,
-  métodos, request/response, erros e efeitos.
-- Validation/routes: schemas, campos derivados no servidor, middlewares,
-  autorização e códigos de resposta.
-- Database: migration, backfill, constraints, índices, RLS/grants, mappers e
-  tipos gerados.
-- UI: Entry Point, View, Hook, props, dependências, widgets filhos e estados
-  loading/error/empty/content, além de responsividade e acessibilidade.
-- Queue/integrações: evento, idempotência, retry, observabilidade, composição na
-  borda e separação entre persistência e efeito externo.
+- Core/handlers/services/repositories/providers/jobs: injected dependencies,
+  methods, request/response, errors, and effects.
+- Validation/routes: schemas, server-derived fields, middlewares,
+  authorization, and response codes.
+- Database: migration, backfill, constraints, indexes, RLS/grants, mappers, and
+  generated types.
+- UI: Entry Point, View, Hook, props, dependencies, child widgets, and
+  loading/error/empty/content states, plus responsiveness and accessibility.
+- Queue/integrations: event, idempotency, retry, observability, composition at the
+  edge, and separation between persistence and external effect.
 
 ## Runtime Flow
 
-Todo `Technical Contract` termina com a subseção `## Runtime Flow`. Explique as interações de
-runtime afetadas: pontos de entrada reais, contexto confiável do ator (sessão, não o payload do
-client), validação, decisões de domínio, transações, persistência, efeitos colaterais,
-resultado visível e cache, e as garantias relevantes de rejeição, concorrência, retry e
-recuperação. Em fluxo cross-app complexo, declare quem expõe, quem consome, o transporte e o
-formato do contrato. Use o diagrama abaixo somente quando ele reduzir ambiguidade material.
+Every `Technical Contract` ends with the `## Runtime Flow` subsection. Explain the affected
+runtime interactions: real entry points, trusted actor context (session, not the
+client payload), validation, domain decisions, transactions, persistence, side effects,
+visible result and cache, and the relevant guarantees of rejection, concurrency, retry, and
+recovery. In a complex cross-app flow, declare who exposes, who consumes, the transport, and the
+format of the contract. Use the diagram below only when it reduces material ambiguity.
 
-### Diagrama técnico opcional
+### Optional technical diagram
 
-Inclua um diagrama Mermaid somente quando ele reduzir ambiguidade material em
-uma solução que envolva pelo menos uma destas condições:
+Include a Mermaid diagram only when it reduces material ambiguity in
+a solution that involves at least one of these conditions:
 
-- três ou mais camadas, aplicações ou sistemas participantes;
-- processamento assíncrono, queue, outbox, retry ou efeito externo;
-- transação seguida de publicação ou integração não transacional;
-- múltiplos atores, caminhos de autorização ou regras de ownership;
-- estados, transições ou concorrência difíceis de compreender linearmente.
+- three or more participating layers, applications, or systems;
+- asynchronous processing, queue, outbox, retry, or external effect;
+- a transaction followed by publication or a non-transactional integration;
+- multiple actors, authorization paths, or ownership rules;
+- states, transitions, or concurrency that are hard to understand linearly.
 
-Escolha o menor tipo de diagrama adequado:
+Choose the smallest suitable diagram type:
 
-- `sequenceDiagram` para sequência entre apps, API, banco, queue e providers;
-- `flowchart` para decisões, bifurcações e processamento;
-- `stateDiagram-v2` para ciclo de vida e transições de estado;
-- `erDiagram` para relacionamentos persistentes relevantes ao Contract.
+- `sequenceDiagram` for sequence between apps, API, database, queue, and providers;
+- `flowchart` for decisions, forks, and processing;
+- `stateDiagram-v2` for lifecycle and state transitions;
+- `erDiagram` for persistent relationships relevant to the Contract.
 
-Não inclua Mermaid em fluxo simples apenas para preencher o template. O diagrama
-complementa o texto e não substitui Contract, métodos, paths, critérios de
-aceitação, decisões técnicas ou comportamento de erro. Use nomes coerentes com
-os contratos da Spec e mantenha a sintaxe renderizável em Markdown.
+Do not include Mermaid in a simple flow just to fill in the template. The diagram
+complements the text and does not replace Contract, methods, paths, acceptance
+criteria, technical decisions, or error behavior. Use names consistent with
+the Spec's contracts and keep the syntax renderable in Markdown.
 
-Explique por padrão, dentro do Technical Contract, cada conceito novo e consequente do
-projeto: um nome na árvore de arquivos ou uma declaração, sozinhos, não bastam. Para cada
-um, declare propósito, módulo/camada dono, entradas e saídas, relações com conceitos
-existentes, fonte de verdade e ownership de estado, e as garantias aplicáveis de ciclo de
-vida, falha/recuperação e autorização, ligando a explicação às declarações, ao fluxo de
-runtime e aos sensores sem duplicar esses contratos. Para novos hooks, contexts e componentes
-realtime, documente contratos de entrada/retorno, consumidor e direção de dependência,
-ownership de conexão/assinatura, validação e ordenação de eventos, reconciliação/reconexão e
-limpeza de callbacks obsoletos; distinga estado de transporte de estado de domínio. Defina
-termos pouco familiares e use um exemplo concreto pequeno quando ajudar. Essas explicações
-esclarecem o design aprovado; não autorizam novo comportamento de produto nem integrações.
-Helpers privados ordinários e conceitos inalterados dispensam inventário.
+By default, explain, within the Technical Contract, each new and consequential concept of the
+project: a name in the file tree or a declaration, alone, is not enough. For each
+one, declare purpose, owning module/layer, inputs and outputs, relations with existing
+concepts, source of truth and state ownership, and the applicable guarantees of
+lifecycle, failure/recovery, and authorization, linking the explanation to the declarations, the
+runtime flow, and the sensors without duplicating those contracts. For new hooks, contexts, and
+realtime components, document input/return contracts, consumer and dependency direction,
+connection/subscription ownership, event validation and ordering, reconciliation/reconnection, and
+cleanup of stale callbacks; distinguish transport state from domain state. Define
+unfamiliar terms and use a small concrete example when it helps. These explanations
+clarify the approved design; they do not authorize new product behavior or integrations.
+Ordinary private helpers and unchanged concepts need no inventory.
 
 ## Verification Contract
 
-O `Verification Contract` (nome de Specs legadas: `Validation Contract`) usa três categorias,
-cada uma como subseção `##` com blocos `###` individualmente nomeados, em vez de tabelas longas
-de comandos e procedimentos. Cada `CA-*` mapeia para prova concreta suficiente; não precisa usar
-as três categorias. Dê a cada resultado observável distinto um bloco próprio (prova
-complementar de use-case/controller/widget/job pode sustentar o mesmo resultado). Explique por
-que uma categoria é inaplicável em vez de manter blocos vazios.
+The `Verification Contract` (name in legacy Specs: `Validation Contract`) uses three categories,
+each as a `##` subsection with individually named `###` blocks, instead of long tables
+of commands and procedures. Each `CA-*` maps to sufficient concrete proof; it does not need to use
+all three categories. Give each distinct observable result its own block (complementary
+use-case/controller/widget/job proof may support the same result). Explain why a category is not applicable instead of keeping empty blocks.
 
-| Categoria | Prefixo | Conteúdo |
+| Category | Prefix | Content |
 | --- | --- | --- |
-| `## Automated` | `AV-*` | testes e gates automatizados: unit/component, integração, estáticos e baseline |
-| `## Manual` | `MV-*` | jornada happy-path concisa, executável pelo agente, em navegador ou terminal reais |
-| `## Visual` | `VV-*` | comparação de um board do Penpot com a captura Playwright correspondente |
+| `## Automated` | `AV-*` | automated tests and gates: unit/component, integration, static, and baseline |
+| `## Manual` | `MV-*` | concise happy-path journey, executable by the agent, in a real browser or terminal |
+| `## Visual` | `VV-*` | comparison of a Penpot board with the corresponding Playwright capture |
 
-Os IDs `AV`, `MV` e `VV` são únicos entre as três categorias e entre si. Os resultados reais
-pertencem ao Evaluation (`EV-*`); O CI do PR não é registrado no Evaluation. Mantenha IDs e
-mapeamentos existentes na continuação; divida um grupo antigo apenas com mapeamento explícito e
-prova nova onde o resultado histórico não bastar. Bloco no formato abaixo:
+The `AV`, `MV`, and `VV` IDs are unique across the three categories and among themselves. Real results
+belong to the Evaluation (`EV-*`); the PR's CI is not recorded in the Evaluation. Keep existing IDs and
+mappings on continuation; split an old group only with explicit mapping and
+new proof where the historical result is not enough. Block in the format below:
 
 ```md
 ## Shared setup
 
-<ambiente/URLs e saúde; atores e resolução de credenciais; dados e estado inicial; isolamento, reruns e cleanup; paths de fonte das fixtures>
+<environment/URLs and health; actors and credential resolution; data and initial state; isolation, reruns, and cleanup; source paths of the fixtures>
 
 ## Automated
 
-### AV-01 — <resultado observável>
+### AV-01 — <observable result>
 
-**Critérios:** CA-01
-**Alvo / fronteira:** <arquivo de teste exato e fronteira (use-case, controller, widget, job)>
-**Comando:** <comando real, diretório de trabalho e seletor verificado>
-**Condição de aprovação:** <asserções, seleção pretendida e limites da evidência>
+**Criteria:** CA-01
+**Target / boundary:** <exact test file and boundary (use-case, controller, widget, job)>
+**Command:** <real command, working directory, and verified selector>
+**Approval condition:** <assertions, intended selection, and limits of the evidence>
 
-### AV-02 — Verificações de baseline aplicáveis
+### AV-02 — Applicable baseline checks
 
-**Escopo:** <apps/pacotes afetados e consumidores>
-**Verificações:** <sensores exigidos por Tooling e Rules; exceções da feature>
-**Condição de aprovação:** <gates exigidos passam, disposições estáticas têm prova real e os testes pretendidos executam>
+**Scope:** <affected apps/packages and consumers>
+**Checks:** <sensors required by Tooling and Rules; feature exceptions>
+**Approval condition:** <required gates pass, static dispositions have real proof, and the intended tests execute>
 
 ## Manual
 
-### MV-01 — <happy path conciso e executável pelo agente>
+### MV-01 — <concise happy path executable by the agent>
 
-**Critérios:** CA-01
-**Ferramenta / setup:** <Playwright ou terminal; setup compartilhado e diferenças>
-**Procedimento:** <ações ordenadas e estreitas contra a fronteira de runtime pretendida>
-**Condição de aprovação:** <URL final, efeitos visíveis/persistidos, requests `2xx`, console, teclado/foco, viewport estreito e cleanup, conforme aplicável>
+**Criteria:** CA-01
+**Tool / setup:** <Playwright or terminal; shared setup and differences>
+**Procedure:** <ordered, narrow actions against the intended runtime boundary>
+**Approval condition:** <final URL, visible/persisted effects, `2xx` requests, console, keyboard/focus, narrow viewport, and cleanup, as applicable>
 
 ## Visual
 
-### VV-01 — <superfície, estado e viewport>
+### VV-01 — <surface, state, and viewport>
 
-**Critérios:** CA-01
-**Referência / setup:** <página, board e componentes do Penpot `stardust`; viewport exato; MV relacionado>
-**Captura / comparação:** <export atual do Penpot MCP comparado com a captura Playwright correspondente; reutilize a captura de um MV atual quando possível>
-**Condição de aprovação:** <propriedades visuais comparadas e desvios aceitos>
+**Criteria:** CA-01
+**Reference / setup:** <page, board, and components of the Penpot `stardust`; exact viewport; related MV>
+**Capture / comparison:** <current Penpot MCP export compared with the corresponding Playwright capture; reuse the capture from a current MV when possible>
+**Approval condition:** <visual properties compared and accepted deviations>
 ```
 
-Regras de conteúdo:
+Content rules:
 
-- Separe os gates de baseline e referencie os checks de Tooling e Rules aplicáveis, inclusive os
-  consumidores afetados. Defina obrigações/disposições separadas de tipos (`check:types`),
-  lint/código (`check:code`) e complexidade, com caminhos exatos para lint e projetos
-  configurados afetados para tipos. Complexidade identifica seu checker e limites reais; uma
-  métrica quantitativa exigida e indisponível fica `Blocked`. Marque arquivos/cenários
-  inexistentes como planejados e verifique nomes de testes antes de prescrever filtros.
-- Declare os sensores aplicáveis: `format`, `check:code`, `check:types`, `test:unit`,
-  `check:architecture` e `test:integration`, com os arquivos de teste exatos verificados no
-  código (a execução local é escopada; ver `documentation/tooling.md`). `test:coverage` e
-  `check:coverage` rodam no CI e só entram na Spec quando o impacto demonstrado abranger o
-  workspace; ambos respeitam `coverage-baseline.json`. `check:dead-code` não é oficial. Checks
-  e build também são executados pelo CI do PR.
-- Registre o setup executável de checks relacionados uma única vez na subseção
-  `## Shared setup` (antes de `## Automated`); cada bloco AV/MV/VV referencia o setup e cita só as
-  diferenças. Inspecione contas, fixtures,
-  seeders, manifests e configuração definidos na fonte antes de prescrever: ambiente/URLs e
-  saúde, registro de rotas/funções, serviços reais/mockados/descartáveis; atores, permissões e
-  resolução de credenciais privadas a partir de paths exatos (`seed-accounts.json`,
-  `export-*-app-e2e-env.mjs --seed`); relações/status de dados necessários, asserções de
-  estado inicial e correções planejadas de fixture; isolamento, dependências de rerun e cleanup
-  de recursos próprios. Redigir o setup não exige rodar testes nem autoriza resetar/reseedar
-  dados compartilhados. Distinga corrigir a fonte da fixture de aplicá-la. Setup executável
-  ausente é uma lacuna do Contract.
-- Automated cobre autorização, isolamento, persistência, combinações finitas contratadas,
-  limites, falha/recuperação e concorrência nas fronteiras permitidas. Para domínios ilimitados,
-  especifique classes de equivalência e valores de fronteira. Respeite as Rules de
-  test-integrity: teste direto de fonte excluída/indireta ou diretório proibido é defeito
-  bloqueante do Contract. Confirme que os testes pretendidos executam; skip e seleção vazia não
-  são aprovação. Nunca invente percentuais de cobertura nem um comando agregado genérico.
-- Use feedback focado de unit/component e estático durante a construção. Depois da integração,
-  rode as seleções de integração afetadas (mudanças, consumidores e dependências) com um runner
-  da task principal. Selecione testes apenas para mudanças do escopo e consumidores diretamente
-  afetados; amplie somente diante de impacto demonstrado ou lacuna concreta, registrando por
-  quê. Uma suite local completa exige escopo que a abranja ou pedido explícito do usuário.
-  Revisão e conclusão reutilizam a prova atual não afetada.
-- Manual são happy paths concisos; testes automatizados detêm as matrizes sistemáticas
-  negativas, de falha/recuperação e de concorrência. Mocks não provam jornadas reais exigidas
-  de autenticação e persistência. Siga `AGENTS.md` (verificação manual do Frontend).
-- Visual nomeia página, board e componentes relacionados, estado, viewport, propriedades
-  comparadas e desvios aceitos. Capture durante os MV vinculados quando possível e inspecione as
-  imagens: salvar um screenshot não é uma aprovação visual. Mantenha a evidência de runtime em
-  `test-results/` ignorado ou artifacts de CI; registre paths e resultados no Evaluation, sem
-  novas pastas de evidência na feature.
+- Separate the baseline gates and reference the applicable Tooling and Rules checks, including the
+  affected consumers. Define separate obligations/dispositions for types (`check:types`),
+  lint/code (`check:code`), and complexity, with exact paths for lint and affected
+  configured projects for types. Complexity identifies its checker and real limits; a required
+  quantitative metric that is unavailable stays `Blocked`. Mark nonexistent
+  files/scenarios as planned and verify test names before prescribing filters.
+- Declare the applicable sensors: `format`, `check:code`, `check:types`, `test:unit`,
+  `check:architecture`, and `test:integration`, with the exact test files verified in the
+  code (local execution is scoped; see `documentation/tooling.md`). `test:coverage` and
+  `check:coverage` run in CI and only enter the Spec when the demonstrated impact spans the
+  workspace; both respect `coverage-baseline.json`. `check:dead-code` is not official. Checks
+  and build are also run by the PR's CI.
+- Record the executable setup of related checks only once in the
+  `## Shared setup` subsection (before `## Automated`); each AV/MV/VV block references the setup and cites only the
+  differences. Inspect accounts, fixtures,
+  seeders, manifests, and configuration defined in the source before prescribing: environment/URLs and
+  health, route/function registration, real/mocked/disposable services; actors, permissions, and
+  resolution of private credentials from exact paths (`seed-accounts.json`,
+  `export-*-app-e2e-env.mjs --seed`); required data relations/statuses, initial-state
+  assertions, and planned fixture fixes; isolation, rerun dependencies, and cleanup
+  of own resources. Drafting the setup does not require running tests nor authorize resetting/reseeding
+  shared data. Distinguish fixing the fixture source from applying it. Missing executable
+  setup is a gap in the Contract.
+- Automated covers authorization, isolation, persistence, contracted finite combinations,
+  limits, failure/recovery, and concurrency at the allowed boundaries. For unbounded domains,
+  specify equivalence classes and boundary values. Respect the test-integrity
+  Rules: a direct test of an excluded/indirect source or a forbidden directory is a
+  blocking defect of the Contract. Confirm that the intended tests execute; skip and empty selection are not
+  approval. Never invent coverage percentages nor a generic aggregate command.
+- Use focused unit/component and static feedback during construction. After integration,
+  run the affected integration selections (changes, consumers, and dependencies) with a
+  runner from the main task. Select tests only for changes in scope and directly
+  affected consumers; broaden only given demonstrated impact or a concrete gap, recording
+  why. A complete local suite requires a scope that covers it or an explicit user request.
+  Review and conclusion reuse the current unaffected proof.
+- Manual are concise happy paths; automated tests hold the systematic negative,
+  failure/recovery, and concurrency matrices. Mocks do not prove required real
+  authentication and persistence journeys. Follow `AGENTS.md` (manual Frontend verification).
+- Visual names the page, board, and related components, state, viewport, compared
+  properties, and accepted deviations. Capture during the linked MV when possible and inspect the
+  images: saving a screenshot is not a visual approval. Keep runtime evidence in the ignored
+  `test-results/` or CI artifacts; record paths and results in the Evaluation, without
+  new evidence folders in the feature.
 
-Specs legadas com tabelas `VM-*`/`CI-*` e subseções "Testes automatizados", "Comandos" e
-"Validações manuais" permanecem válidas como histórico; normalize para este formato na próxima
-revisão material.
+Legacy Specs with `VM-*`/`CI-*` tables and the subsections "Testes automatizados" (Automated tests), "Comandos" (Commands), and
+"Validações manuais" (Manual validations) remain valid as history; normalize to this format at the next
+material revision.
 
-## Decisões técnicas e clarificação
+## Technical decisions and clarification
 
-Registre cada decisão material com evidência, alternativas consideradas, motivo,
-trade-offs e impacto no Contract. Não trate ausência de evidência como liberdade
-de implementação.
+Record each material decision with evidence, alternatives considered, reason,
+trade-offs, and impact on the Contract. Do not treat the absence of evidence as freedom
+of implementation.
 
-Antes de `open`, leve ao usuário decisões de produto ou arquitetura cujo impacto
-material não possa ser resolvido pelas fontes e Rules. Incorpore a resposta como
-decisão da Spec. Só permaneça em questões pendentes o que o usuário deixar
-explicitamente aberto; uma pendência material impede `open`.
+Before `open`, bring to the user product or architecture decisions whose material
+impact cannot be resolved by the sources and Rules. Incorporate the answer as a
+decision of the Spec. Only what the user explicitly leaves open remains in pending
+questions; a material pending item prevents `open`.
 
-A Spec não contém código de teste, fixtures detalhadas ou implementação de mocks,
-mas deve declarar cenários, camada de cobertura, sensores e evidência esperada
-para cada `CA-*`.
+The Spec does not contain test code, detailed fixtures, or mock implementation,
+but must declare scenarios, coverage layer, sensors, and expected evidence
+for each `CA-*`.
 
-Antes de `open`, faça uma checagem de integridade manual: o frontmatter e as cinco seções
-de primeiro nível estão completos; a `## Expected file tree` existe por app/pacote afetado e
-coincide com o mapa canônico de paths; não restam placeholders (`TBD`, `TODO`, `FIXME`); todo
-`RF-*` relevante possui `CA-*` e todo `CA-*` aponta para um `RF-*` existente; cada `CA-*` é
-coberto por pelo menos uma verificação `AV-*`, `MV-*` ou `VV-*` (IDs únicos, cada bloco sob a
-categoria correta e com **Critérios** e **Condição de aprovação**); cada `CA-*` possui resultado
-observável, método de verificação,
-viewport/estado quando aplicável e path ou camada responsável; cada exigência
-visual possui evidência separada para Penpot e Playwright quando ambas forem
-necessárias; cada mudança UI declara a estrutura Entry Point/View/Hook; e todos
-os sensores aplicáveis estão nomeados. Se uma exigência só aparecer na
-Evaluation, mova-a para o Contract antes da revisão.
+Before `open`, do a manual integrity check: the frontmatter and the five first-level
+sections are complete; the `## Expected file tree` exists per affected app/package and
+matches the canonical path map; no placeholders remain (`TBD`, `TODO`, `FIXME`); every
+relevant `RF-*` has a `CA-*` and every `CA-*` points to an existing `RF-*`; each `CA-*` is
+covered by at least one `AV-*`, `MV-*`, or `VV-*` verification (unique IDs, each block under the
+correct category and with **Criteria** and **Approval condition**); each `CA-*` has an
+observable result, verification method,
+viewport/state when applicable, and responsible path or layer; each visual
+requirement has separate evidence for Penpot and Playwright when both are
+necessary; each UI change declares the Entry Point/View/Hook structure; and all
+applicable sensors are named. If a requirement appears only in the
+Evaluation, move it to the Contract before the review.
 
-Para UI, o Contract deve conter uma matriz de referências visuais e uma matriz
-de auditoria estrutural. A primeira relaciona frame, viewport, estado, rota,
-evidência Penpot/Web, dimensões/anchors relevantes e divergências aprovadas. A
-segunda relaciona cada widget alterado a
-`index.tsx`, `*View.tsx`, Hook e regra aplicável. A ausência de qualquer uma
-dessas matrizes impede o estado `open` quando frontend estiver no escopo.
+For UI, the Contract must contain a visual reference matrix and a structural
+audit matrix. The first relates frame, viewport, state, route,
+Penpot/Web evidence, relevant dimensions/anchors, and approved divergences. The
+second relates each changed widget to
+`index.tsx`, `*View.tsx`, Hook, and applicable rule. The absence of either
+of these matrices prevents the `open` state when frontend is in scope.
 
-Após a checagem de integridade, e antes de `implement-spec`, ative exatamente um
-`spec-reviewer-agent` read-only com a revisão exata, `architecture.md` e o Rule Pack das camadas
-afetadas. O Reviewer verifica somente compatibilidade de fronteiras, dependências, ownership e
-Rules; não avalia produto, Design, critérios ou validação. O relatório não é veredito oficial:
-verifique cada finding diretamente, corrija a mesma Spec e retome o mesmo Reviewer até não restar
-finding arquitetural ou de Rule bloqueante. Qualquer amendment posterior invalida o resultado e
-exige nova revisão antes de implementar. Registre na revision history a revisão avaliada, o resultado
-`clear` e a resolução concisa dos findings verificados; não cole o relatório bruto na Spec.
+After the integrity check, and before `implement-spec`, activate exactly one read-only
+`spec-reviewer-agent` with the exact revision, `architecture.md`, and the Rule Pack of the
+affected layers. The Reviewer verifies only compatibility of boundaries, dependencies, ownership, and
+Rules; it does not assess product, Design, criteria, or validation. The report is not an official verdict:
+verify each finding directly, fix the same Spec, and resume the same Reviewer until no blocking
+architectural or Rule finding remains. Any later amendment invalidates the result and
+requires a new review before implementing. Record in the revision history the evaluated revision, the `clear`
+result, and the concise resolution of the verified findings; do not paste the raw report into the Spec.
 
-Faça uma autorrevisão da Spec escrita: placeholders, contradições internas, requisitos
-ambíguos e escopo que exija decomposição; corrija antes de apresentá-la. Verifique que os
-conceitos novos e seus contratos consequentes de ciclo de vida estão explicados, e não só
-listados na árvore ou nas declarações. Antes de apresentar, confirme: metadados de
-autoridade/versão; escopo e rastreabilidade; critérios observáveis; declarações resultantes,
-impacto em consumidores/wiring e garantias de runtime; a árvore de arquivos esperada e sua
-concordância com a composição de widgets aprovada e os paths dos sensores; referências de
-design disponíveis; fronteiras de teste permitidas; comandos reais dos sensores; links de
-documentação; viabilidade de setup/fixture reproduzível e cleanup seguro; e resolução dos
-findings de compatibilidade verificados. Dependências explícitas de implementação bloqueiam
-o trabalho afetado, não a abertura, salvo se deixarem o Contract materialmente ambíguo;
-reporte bloqueios concretos em vez de um gate bem-sucedido.
+Do a self-review of the written Spec: placeholders, internal contradictions, ambiguous
+requirements, and scope that requires decomposition; fix before presenting it. Verify that the
+new concepts and their consequent lifecycle contracts are explained, and not just
+listed in the tree or in the declarations. Before presenting, confirm: authority/version
+metadata; scope and traceability; observable criteria; resulting declarations,
+impact on consumers/wiring, and runtime guarantees; the expected file tree and its
+agreement with the approved widget composition and the sensor paths; available design
+references; allowed test boundaries; real sensor commands; documentation links;
+feasibility of reproducible setup/fixture and safe cleanup; and resolution of the verified
+compatibility findings. Explicit implementation dependencies block
+the affected work, not the opening, unless they leave the Contract materially ambiguous;
+report concrete blockers instead of a successful gate.
 
-Depois que a revisão independente não tiver findings bloqueantes, entregue ao usuário o
-caminho e a revisão da Spec e peça que revise o Contract escrito. Aguarde a aprovação
-explícita antes de alterar para `open` ou entregar a `implement-spec`. Se o usuário pedir
-mudanças, emende a Spec, repita a autorrevisão e a revisão independente afetadas e apresente
-o Contract revisado novamente.
+After the independent review has no blocking findings, give the user the
+path and revision of the Spec and ask them to review the written Contract. Wait for
+explicit approval before changing to `open` or handing off to `implement-spec`. If the user asks for
+changes, amend the Spec, repeat the affected self-review and independent review, and present
+the revised Contract again.
 
-Somente então altere para `open`. Reporte o caminho/revisão/status da Spec, o resultado
-delimitado, a fonte/versão canônica, as decisões consequentes, a cobertura de sensores e o
-resultado da revisão. O próximo passo é `implement-spec`; a task principal decide a mecânica
-de execução.
+Only then change to `open`. Report the Spec's path/revision/status, the bounded
+outcome, the canonical source/version, the consequent decisions, the sensor coverage, and the
+result of the review. The next step is `implement-spec`; the main task decides the execution
+mechanics.
 
-## Amendments e continuação
+## Amendments and continuation
 
-Para uma mudança material de Contract, devolva a mesma Spec a `draft`, incremente a revisão,
-releia a autoridade afetada, resolva as decisões materiais e atualize o Contract e o
-mapeamento de sensores. Preserve a evidência histórica do Evaluation e marque como `stale`
-somente os resultados afetados. Repita os checks de integridade e de compatibilidade
-afetados antes de voltar a `open`. Reorganização estrutural, mudança de status, reruns,
-publicação e conclusão não incrementam a revisão. Uma mudança distinta após a conclusão pode
-receber uma Spec nova (`changes/<mudança>/`).
+For a material change to the Contract, return the same Spec to `draft`, increment the revision,
+re-read the affected authority, resolve the material decisions, and update the Contract and the
+sensor mapping. Preserve the historical evidence of the Evaluation and mark as `stale`
+only the affected results. Repeat the affected integrity and compatibility checks
+before returning to `open`. Structural reorganization, status change, reruns,
+publication, and conclusion do not increment the revision. A distinct change after
+conclusion may receive a new Spec (`changes/<change>/`).
 
-O Evaluation preserva a continuidade: status de aceite, revisão atual do código e escopo não
-commitado, resultados válidos de sensores, falhas/bloqueios e o trabalho imediato inacabado.
-Um agente que continue lê a Spec, o Evaluation e o diff real, confirma o registro e escolhe
-como prosseguir. Não reconstrua um ledger de fases nem um plano de execução em nenhum dos
-artefatos.
+The Evaluation preserves continuity: acceptance status, current code revision and uncommitted
+scope, valid sensor results, failures/blockers, and the immediate unfinished work.
+A continuing agent reads the Spec, the Evaluation, and the real diff, confirms the record, and chooses
+how to proceed. Do not rebuild a phase ledger nor an execution plan in either of the
+artifacts.

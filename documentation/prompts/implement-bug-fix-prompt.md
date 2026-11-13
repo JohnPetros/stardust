@@ -1,158 +1,158 @@
 ---
 name: implement-bug-fix
-description: Implementar uma correção direta derivada de um Bug Report do Stardust, com regressão automatizada e validação real quando aplicável.
+description: Implement a direct fix derived from a Stardust Bug Report, with an automated regression test and real validation when applicable.
 ---
 
-# Implementar Correção de Bug
+# Implement Bug Fix
 
-Implemente uma correção direta a partir de um Bug Report diagnosticado. O Bug Report é a
-autoridade do sintoma, da causa raiz e do limite da correção; este workflow transforma esse
-diagnóstico em uma mudança pequena, testada e validada. Não use este prompt para implementar
-uma mudança de produto, uma correção ambígua ou uma alteração de Contract.
+Implement a direct fix from a diagnosed Bug Report. The Bug Report is the
+authority on the symptom, the root cause and the boundary of the fix; this workflow turns that
+diagnosis into a small, tested and validated change. Do not use this prompt to implement
+a product change, an ambiguous fix or a Contract change.
 
-## Entrada
+## Input
 
-- caminho do Bug Report, preferencialmente em
-  `documentation/features/<domínio>/<feature>/reports/`;
-- código e issue relacionados disponíveis no workspace;
-- contexto opcional sobre ambiente, reprodução ou falhas encontradas depois do diagnóstico.
+- path of the Bug Report, preferably in
+  `documentation/features/<domain>/<feature>/reports/`;
+- related code and issue available in the workspace;
+- optional context about the environment, reproduction or failures found after the diagnosis.
 
-Se o Bug Report não existir, estiver sem causa sustentada ou recomendar Correction Spec, pare e
-encaminhe para `create-bug-report` ou `create-spec`. Não invente o escopo da correção.
+If the Bug Report does not exist, lacks a supported cause or recommends a Correction Spec, stop and
+route to `create-bug-report` or `create-spec`. Do not invent the scope of the fix.
 
-## Autoridade e Rules
+## Authority and Rules
 
-Leia `AGENTS.md`, `documentation/sdd.md`, o Bug Report, `documentation/rules/rules.md`,
-`documentation/architecture.md`, `documentation/modules.md` e o Rule Pack das camadas afetadas.
-Leia também `documentation/rules/code-conventions-rules.md` quando houver mudança de código e as
-Rules específicas de testes quando a cobertura for alterada.
+Read `AGENTS.md`, `documentation/sdd.md`, the Bug Report, `documentation/rules/rules.md`,
+`documentation/architecture.md`, `documentation/modules.md` and the Rule Pack of the affected layers.
+Also read `documentation/rules/code-conventions-rules.md` when there is a code change and the
+test-specific Rules when coverage is changed.
 
-Preserve a milestone, o PRD, o comportamento esperado e os contratos existentes. Se a causa
-exigir mudar API, schema, evento, rota pública, requisito, design ou qualquer outro Contract,
-pause a implementação direta, registre a divergência e encaminhe para `create-spec`.
+Preserve the milestone, the PRD, the expected behavior and the existing contracts. If the cause
+requires changing an API, schema, event, public route, requirement, design or any other Contract,
+pause the direct implementation, record the divergence and route to `create-spec`.
 
-## Gate antes da edição
+## Gate before editing
 
-Antes de editar código:
+Before editing code:
 
-1. confirme o Bug Report, issue, status e limite da correção;
-2. confirme os paths reais, o entry point, o fluxo afetado e a causa com inspeção direta;
-3. reproduza a falha quando possível e capture um baseline mínimo;
-4. defina o teste de regressão que falharia antes da mudança;
-5. confirme que a mudança permanece narrow, sem criar Spec ou Contract artificial.
+1. confirm the Bug Report, issue, status and boundary of the fix;
+2. confirm the real paths, the entry point, the affected flow and the cause through direct inspection;
+3. reproduce the failure when possible and capture a minimal baseline;
+4. define the regression test that would fail before the change;
+5. confirm that the change remains narrow, without creating an artificial Spec or Contract.
 
-Se a reprodução contrariar o diagnóstico, não force a implementação: atualize o diagnóstico por
-meio de `create-bug-report` ou reavalie o roteamento.
+If the reproduction contradicts the diagnosis, do not force the implementation: update the diagnosis
+through `create-bug-report` or reassess the routing.
 
-## Bug Report como registro vivo
+## Bug Report as a living record
 
-O Bug Report deve permanecer alinhado ao estado real da correção durante todo o workflow. Atualize-o
-sempre que houver qualquer mudança relevante em:
+The Bug Report must stay aligned with the real state of the fix throughout the workflow. Update it
+whenever there is any relevant change in:
 
-- sintoma reproduzido, causa raiz, hipótese descartada ou limite da correção;
-- paths afetados, regressão automatizada, evidência de validação ou blocker;
-- risco de regressão, comportamento esperado, dependências ou status da correção.
+- reproduced symptom, root cause, discarded hypothesis or boundary of the fix;
+- affected paths, automated regression test, validation evidence or blocker;
+- regression risk, expected behavior, dependencies or status of the fix.
 
-Se a implementação revelar uma causa complementar, uma divergência do diagnóstico ou um novo risco,
-pare antes de ampliar o escopo, registre a descoberta no Bug Report e confirme se a correção continua
-direta. Não deixe o relatório desatualizado até a etapa de encerramento. O relatório deve registrar
-fatos observados e comandos/resultados de validação, sem virar uma Spec ou lista de tarefas.
+If the implementation reveals a complementary cause, a divergence from the diagnosis or a new risk,
+stop before widening the scope, record the finding in the Bug Report and confirm whether the fix is still
+direct. Do not leave the report outdated until the closing step. The report must record
+observed facts and validation commands/results, without turning into a Spec or task list.
 
-## Implementação
+## Implementation
 
-1. Faça primeiro o teste de regressão no nível correto: unitário para lógica isolada, widget para
-   View/Hook, rota para composição App Router e Playwright para o comportamento publicado no
-   navegador.
-2. Implemente somente o limite descrito no Bug Report, respeitando arquitetura, dependências,
-   nomenclatura, factories, tratamento de erros e fronteiras entre camadas.
-3. Preserve estados de sucesso, erro, loading, retry, navegação, autenticação e consumidores
-   relacionados que não fazem parte do defeito.
-4. Não altere credenciais, `.env.development`, migrations, issue, Spec ou Evaluation sem
-   autorização explícita e sem o workflow correspondente.
-5. Mantenha o Bug Report atualizado enquanto a implementação avança; se o código ou os testes
-   alterarem o diagnóstico, o escopo, a evidência ou o risco, atualize o relatório antes de
-   prosseguir.
+1. Write the regression test first at the right level: unit for isolated logic, widget for
+   View/Hook, route for App Router composition and Playwright for the behavior published in the
+   browser.
+2. Implement only the boundary described in the Bug Report, respecting architecture, dependencies,
+   naming, factories, error handling and boundaries between layers.
+3. Preserve success, error, loading, retry, navigation and authentication states and related
+   consumers that are not part of the defect.
+4. Do not change credentials, `.env.development`, migrations, issue, Spec or Evaluation without
+   explicit authorization and without the corresponding workflow.
+5. Keep the Bug Report updated as the implementation progresses; if the code or the tests
+   change the diagnosis, the scope, the evidence or the risk, update the report before
+   proceeding.
 
-## Diagnóstico e validação com Playwright CLI
+## Diagnosis and validation with Playwright CLI
 
-Para qualquer correção que envolva frontend, UI, rota client-side ou autenticação, use o Playwright
-CLI também como instrumento de diagnóstico e de validação final.
+For any fix involving frontend, UI, a client-side route or authentication, use the Playwright
+CLI also as a diagnosis tool and for the final validation.
 
-Durante a reprodução e o rerun:
+During the reproduction and the rerun:
 
-- carregue as credenciais somente pelas variáveis e scripts locais definidos em `AGENTS.md`;
-- autentique no mesmo contexto do navegador e exercite a rota protegida relevante;
-- registre `console`, `pageerror`, `requestfailed` e `response`, mantendo apenas método, path,
-  status e evidência não sensível;
-- aguarde autenticação, requests, estados visuais e navegação com `waitForResponse`,
-  `waitForFunction` e `waitForURL`, sem depender de `waitForTimeout` isolado;
-- confirme estados observáveis de sucesso e erro, além de loading e navegação quando fizerem
-  parte do fluxo;
-- execute testes versionados com `pnpm --filter @stardust/web run test:integration <arquivo>` ou
-  `pnpm exec playwright test ...` a partir de `apps/web`; use o ambiente de integração com
-  `ServerMock` nos testes versionados e o fluxo real em `localhost:3000`/API local para inspeção
-  autenticada fora da suíte;
-- para Backoffice, use o servidor, a porta e as credenciais definidos em `AGENTS.md`, valide login e
-  pelo menos uma rota protegida;
-- após cada correção, repita o fluxo autenticado completo pelo Playwright CLI. Tela de login, mock isolado ou
-  renderização unitária não bastam para declarar a correção funcional.
+- load credentials only through the local variables and scripts defined in `AGENTS.md`;
+- authenticate in the same browser context and exercise the relevant protected route;
+- record `console`, `pageerror`, `requestfailed` and `response`, keeping only the method, path,
+  status and non-sensitive evidence;
+- wait for authentication, requests, visual states and navigation with `waitForResponse`,
+  `waitForFunction` and `waitForURL`, without relying on a lone `waitForTimeout`;
+- confirm observable success and error states, in addition to loading and navigation when they are
+  part of the flow;
+- run versioned tests with `pnpm --filter @stardust/web run test:integration <file>` or
+  `pnpm exec playwright test ...` from `apps/web`; use the integration environment with
+  `ServerMock` in the versioned tests and the real flow on `localhost:3000`/local API for authenticated
+  inspection outside the suite;
+- for the Backoffice, use the server, the port and the credentials defined in `AGENTS.md`, and validate login and
+  at least one protected route;
+- after each fix, repeat the complete authenticated flow through the Playwright CLI. A login screen, an isolated mock or
+  a unit render are not enough to declare the fix functional.
 
-Não registre tokens, cookies, senhas, corpos sensíveis, valores de `.env` ou logs que permitam
-reconstruí-los.
+Do not record tokens, cookies, passwords, sensitive bodies, `.env` values or logs that allow
+reconstructing them.
 
-## Detectores e testes
+## Detectors and tests
 
-Após qualquer alteração, execute os detectores de `AGENTS.md` no escopo afetado:
+After any change, run the `AGENTS.md` detectors in the affected scope:
 
 - `pnpm run check:code -w <workspace>`;
 - `pnpm run check:types -w <workspace>`;
-- `pnpm run test:unit -w <workspace> -- <arquivos-de-teste>`, incluindo o teste de regressão do bug;
-- o fluxo Playwright aplicável, somente nos arquivos afetados.
+- `pnpm run test:unit -w <workspace> -- <test-files>`, including the bug's regression test;
+- the applicable Playwright flow, only on the affected files.
 
-Se um detector falhar por estado externo, como porta ocupada, preserve o processo alheio, registre
-o bloqueio exato e execute todas as alternativas seguras. Não declare sucesso global com base em
-um teste parcial.
+If a detector fails because of an external state, such as a busy port, preserve the foreign process, record
+the exact blocker and run all safe alternatives. Do not declare global success based on
+a partial test.
 
-## Conclusão
+## Conclusion
 
-Depois de validar a mudança:
+After validating the change:
 
-1. inspecione `git diff` e `git diff --check`;
-2. confirme que não há arquivos ou credenciais acidentais no diff;
-3. atualize obrigatoriamente o Bug Report com todas as descobertas, paths, testes, evidências,
-   blockers e mudanças de status relevantes; mesmo sem divergência de causa, registre a evidência
-   final quando ela ainda não estiver documentada;
-4. invoque `conclude-bug-report` para consolidar as evidências e fechar o report somente quando a
-   correção estiver realmente validada;
-5. informe paths alterados, testes executados, validação manual/Playwright, blockers e o status
-   final do Bug Report.
+1. inspect `git diff` and `git diff --check`;
+2. confirm that there are no accidental files or credentials in the diff;
+3. mandatorily update the Bug Report with all findings, paths, tests, evidence,
+   blockers and relevant status changes; even without a cause divergence, record the final evidence
+   when it is not yet documented;
+4. invoke `conclude-bug-report` to consolidate the evidence and close the report only when the
+   fix is truly validated;
+5. report the changed paths, tests run, manual/Playwright validation, blockers and the final status
+   of the Bug Report.
 
-## Restrições
+## Restrictions
 
-- não implemente uma Correction Spec neste workflow;
-- não transforme relato em evidência: registre comandos, cenários e resultados observados;
-- não invente paths, testes, contratos, respostas HTTP ou causa raiz;
-- não faça mudanças destrutivas nem mate processos externos para liberar portas;
-- não faça commit, push, issue update ou PR sem solicitação explícita;
-- mantenha a correção mínima e reversível, com regressão automatizada proporcional ao risco.
+- do not implement a Correction Spec in this workflow;
+- do not turn a report into evidence: record commands, scenarios and observed results;
+- do not invent paths, tests, contracts, HTTP responses or root cause;
+- do not make destructive changes nor kill external processes to free ports;
+- do not commit, push, update an issue or open a PR without an explicit request;
+- keep the fix minimal and reversible, with an automated regression test proportional to the risk.
 
-## Template de saída
+## Output template
 
 ```md
-## Correção implementada
+## Fix implemented
 
 - Bug Report: <path>
-- Causa confirmada: <resumo>
-- Paths alterados: <paths>
+- Confirmed cause: <summary>
+- Changed paths: <paths>
 
-## Evidências
+## Evidence
 
-- Testes automatizados: <comandos e resultados>
-- Playwright/manual: <cenário, endpoints/status e estado observado>
-- Blockers: <nenhum ou descrição exata>
+- Automated tests: <commands and results>
+- Playwright/manual: <scenario, endpoints/status and observed state>
+- Blockers: <none or exact description>
 
-## Encaminhamento
+## Handoff
 
 - Bug Report: <open|closed|blocked>
-- Próximo passo: <conclude-bug-report|create-spec|nenhum>
+- Next step: <conclude-bug-report|create-spec|none>
 ```

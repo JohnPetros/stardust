@@ -1,44 +1,44 @@
 ---
-description: Prompt para atualizar o documento de arquitetura com base em PRDs, specs, rules e mudancas no codigo.
+description: Prompt to update the architecture document based on PRDs, specs, rules, and code changes.
 ---
 
-# Prompt: Atualizar documento de arquitetura
+# Prompt: Update architecture document
 
-**Objetivo:**
-Manter atualizado o documento de arquitetura do projeto (`documentation/architecture.md`), garantindo que ele reflita fielmente as decisões estruturais, padrões de design, tecnologias adotadas e a organização do código.
+**Goal:**
+Keep the project's architecture document (`documentation/architecture.md`) up to date, ensuring it faithfully reflects the structural decisions, design patterns, adopted technologies, and code organization.
 
-**Entradas:**
-1.  Documentos de Requisitos de Produto (PRDs) e Especificações Técnicas (Specs).
-    *   *Nota:* todos os arquivos de Spec possuem a extensão `-spec.md`.
-2.  Documentos de regras de arquitetura e camada.
-    *   Exemplo: `documentation/rules/rules.md`, `documentation/rules/ui-layer-rules.md`, `documentation/rules/core-package-rules.md`.
-3.  Alterações significativas no código fonte (novas camadas, refatorações, introdução de pacotes).
-4.  O arquivo atual `documentation/architecture.md`.
+**Inputs:**
+1.  Product Requirements Documents (PRDs) and Technical Specifications (Specs).
+    *   *Note:* all Spec files have the `-spec.md` extension.
+2.  Architecture and layer rules documents.
+    *   Example: `documentation/rules/rules.md`, `documentation/rules/ui-layer-rules.md`, `documentation/rules/core-package-rules.md`.
+3.  Significant changes in the source code (new layers, refactorings, introduction of packages).
+4.  The current `documentation/architecture.md` file.
 
-**Regras Aplicáveis:**
+**Applicable Rules:**
 
-Antes de editar a arquitetura, leia:
+Before editing the architecture, read:
 
-- `documentation/rules/rules.md` — índice de regras por camada.
-- Rules das camadas impactadas pela mudança arquitetural.
-- `documentation/rules/code-conventions-rules.md` — quando a atualização mencionar padrões de nomeação, factories, eventos, erros ou organização.
+- `documentation/rules/rules.md` — index of rules per layer.
+- The Rules of the layers impacted by the architectural change.
+- `documentation/rules/code-conventions-rules.md` — when the update mentions naming patterns, factories, events, errors, or organization.
 
-Se a arquitetura e uma rule específica divergirem, registre a divergência e atualize ambos os documentos no mesmo fluxo.
+If the architecture and a specific rule diverge, record the divergence and update both documents in the same flow.
 
-**Diretrizes de Execução:**
+**Execution Guidelines:**
 
-1.  **Análise de Impacto:**
-    *   **PRDs/Specs:** Avalie se introduzem novos domínios, componentes ou necessidades tecnológicas.
-    *   **Rules:** Verifique se novas regras alteram padrões arquiteturais existentes (ex: nova forma de tratar erros, nova estrutura de pastas obrigatória).
-    *   **Código:** Verifique se as mudanças no código respeitam os limites definidos na arquitetura atual ou se exigem uma atualização da documentação (evolução da arquitetura).
+1.  **Impact Analysis:**
+    *   **PRDs/Specs:** Assess whether they introduce new domains, components, or technological needs.
+    *   **Rules:** Check whether new rules change existing architectural patterns (e.g., a new way of handling errors, a new mandatory folder structure).
+    *   **Code:** Check whether the code changes respect the boundaries defined in the current architecture or require a documentation update (architecture evolution).
 
-2.  **Atualização de Seções Críticas:**
-    *   **Visão Geral e Diagramas:** Atualize os diagramas ASCII se houver mudanças no fluxo de dados ou relação entre camadas.
-    *   **Módulos de Domínio:** Adicione novos módulos ou atualize os DTOs listados na tabela de contextos delimitados.
-    *   **Stack Tecnológica:** Mantenha as versões das dependências atualizadas conforme o `pubspec.yaml` e documente novas bibliotecas chave.
-    *   **Camadas (UI, Core, Rest, Banco de Dados, RPC etc):** Reflita mudanças na estrutura de pastas ou responsabilidades de cada camada. Se novos padrões forem adotados (ex: mudou de MVP para MVVM), atualize as explicações e exemplos de código.
-    *   **Estrutura de Diretórios:** Mantenha a árvore de diretórios no final do documento sincronizada com a realidade do projeto.
+2.  **Updating Critical Sections:**
+    *   **Overview and Diagrams:** Update the ASCII diagrams if there are changes in the data flow or the relationship between layers.
+    *   **Domain Modules:** Add new modules or update the DTOs listed in the bounded contexts table.
+    *   **Technology Stack:** Keep dependency versions up to date according to `pubspec.yaml` and document new key libraries.
+    *   **Layers (UI, Core, Rest, Database, RPC, etc.):** Reflect changes in the folder structure or in each layer's responsibilities. If new patterns are adopted (e.g., moved from MVP to MVVM), update the explanations and code examples.
+    *   **Directory Structure:** Keep the directory tree at the end of the document in sync with the project's reality.
 
-3.  **Validação de Consistência:**
-    *   Garanta que os exemplos de código no documento de arquitetura compilem ou sejam sintaticamente corretos e representativos do código real.
-    *   Verifique se as "Armadilhas a Evitar" ainda são relevantes ou se novas lições aprendidas devem ser adicionadas.
+3.  **Consistency Validation:**
+    *   Ensure the code examples in the architecture document compile or are syntactically correct and representative of the real code.
+    *   Check whether the "Pitfalls to Avoid" are still relevant or whether new lessons learned should be added.

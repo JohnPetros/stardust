@@ -1,71 +1,72 @@
 ---
 name: open-chore-issue
-description: Criar uma GitHub chore issue técnica para manutenção sem mudança de comportamento ou relação com PRD.
+description: Create a technical GitHub chore issue for maintenance with no behavior change or PRD relation.
 ---
 
-# Criar Chore Issue
+# Create Chore Issue
 
-Transforme uma tarefa de manutenção técnica em uma única issue coerente de tracking. Chore não é
-produto: não possui PRD, requisito de PRD ou milestone de produto. Não implemente, crie branch,
-commit, PR ou Spec.
+Turn a technical maintenance task into a single coherent tracking issue. A chore is not
+product: it has no PRD, PRD requirement or product milestone. Do not implement, create a branch,
+commit, PR or Spec.
 
-Escreva o título, o body, as perguntas do Grilling e as justificativas em português do Brasil.
-Preserve identificadores técnicos, paths, URLs e nomes oficiais de labels.
+Write the title, the body, the Grilling questions and the justifications in Brazilian Portuguese
+(PT-BR). Preserve technical identifiers, paths, URLs and official label names.
 
-## Classificação
+## Classification
 
-Use este workflow somente quando o resultado não alterar comportamento de usuário, regras de
-negócio, permissões, tenancy, contratos públicos, semântica de API ou outcome de produto.
+Use this workflow only when the result does not change user behavior, business
+rules, permissions, tenancy, public contracts, API semantics or product outcome.
 
-- mudança de comportamento ou capacidade → `open-feat-issue`;
-- falha observada → `open-bug-issue`;
-- refatoração estrutural behavior-preserving → `open-refactor-issue`;
-- manutenção técnica independente de produto → continue neste workflow.
+- change of behavior or capability → `open-feat-issue`;
+- observed failure → `open-bug-issue`;
+- behavior-preserving structural refactoring → `open-refactor-issue`;
+- technical maintenance independent of product → continue in this workflow.
 
-Não reclassifique uma tarefa como chore apenas para evitar esclarecimento de produto ou trabalho
-de Spec.
+Do not reclassify a task as a chore merely to avoid product clarification or Spec
+work.
 
-## Autoridade e pesquisa
+## Authority and research
 
-Leia `AGENTS.md`, `documentation/architecture.md`, `documentation/tooling.md`,
-`documentation/rules/rules.md`, `documentation/modules.md` e as Rules aplicáveis aos paths reais.
-Inspecione implementação, testes, configuração e dependências somente o suficiente para descrever
-o problema técnico com evidência.
+Read `AGENTS.md`, `documentation/architecture.md`, `documentation/tooling.md`,
+`documentation/rules/rules.md`, `documentation/modules.md` and the Rules applicable to the real paths.
+Inspect implementation, tests, configuration and dependencies only enough to describe
+the technical problem with evidence.
 
-Não pesquise, selecione, mencione ou associe PRDs, requisitos de PRD ou milestones de produto.
-Não invente contexto de produto para justificar a manutenção. Pesquise issues abertas e fechadas
-do repositório para evitar duplicação e verifique labels existentes antes do draft.
+Do not research, select, mention or associate PRDs, PRD requirements or product milestones.
+Do not invent product context to justify the maintenance. Search open and closed issues
+of the repository to avoid duplication and check existing labels before the draft.
 
-## Gate obrigatório de Grilling
+## Mandatory Grilling gate
 
-Depois da pesquisa factual e antes do draft, execute o **Grilling gate** definido em
-[`sdd.md#grilling-gate`](../sdd.md#grilling-gate). Modele como design tree as decisões ainda abertas sobre resultado técnico,
-risco mitigado, limites, contratos preservados, critérios de verificação, aplicação afetada e
+After the factual research and before the draft, run the **Grilling gate** defined in
+[`sdd.md#grilling-gate`](../sdd.md#grilling-gate). Model as a design tree the still-open decisions about technical outcome,
+mitigated risk, boundaries, preserved contracts, verification criteria, affected application and
 metadata.
 
-Pergunte toda a frontier disponível com recomendação e deixe decisões dependentes para rounds
-posteriores. Registre decisões, alternativas descartadas, dependências e contradições. A frontier
-vazia e a confirmação de entendimento compartilhado permitem preparar o draft, mas não substituem
-o approval gate da versão exata a publicar.
+Ask the whole available frontier with a recommendation and leave dependent decisions for later
+rounds. Record decisions, discarded alternatives, dependencies and contradictions. An empty frontier
+and the confirmation of shared understanding allow preparing the draft, but do not replace
+the approval gate of the exact version to be published.
 
-O projeto Stardust não usa sprints. Trate sprint como não aplicável: não pergunte sobre sprint,
-não inclua sprint no draft ou nos metadados da issue.
+The Stardust project does not use sprints. Treat sprint as not applicable: do not ask about sprint,
+do not include sprint in the draft or in the issue metadata.
 
-## Metadata GitHub
+## GitHub metadata
 
 - repository: `JohnPetros/stardust`;
-- use somente labels existentes, como `refactor`, `infra`, `documentation`, `web`, `server` e
-  `studio`, quando realmente aplicáveis;
-- não use `feature` ou `bug`;
+- use only existing labels, such as `refactor`, `infra`, `documentation`, `web`, `server` and
+  `studio`, when really applicable;
+- do not use `feature` or `bug`;
 - milestone: `None`;
-- não associe a PRD, requisito de PRD ou milestone de produto;
-- não adicione ao Project 2 por inferência de produto.
+- do not associate with a PRD, PRD requirement or product milestone;
+- do not add to Project 2 by product inference.
 
-## Título e body
+## Title and body
 
-Use título nominal, sem prefixo de commit, descrevendo o resultado técnico. Crie exatamente uma
-issue, salvo decomposição explicitamente solicitada. Estruture todo body com estes títulos, nesta
-ordem:
+Use a nominal title, with no commit prefix, describing the technical outcome. Create exactly one
+issue, unless decomposition is explicitly requested. Structure every body with these headings, in this
+order (the issue itself is written in PT-BR, so the template below stays in Portuguese; the glosses are
+"Objective", "Expected Deliverable" and "Dependencies / Constraints"):
 
 ```md
 ## 🎯 Objetivo
@@ -84,20 +85,20 @@ ordem:
 - <paths reais da codebase relevantes, com breve justificativa>
 ```
 
-Mantenha a issue em nível de delivery técnico. Inclua critérios de verificação junto ao entregável
-esperado quando forem necessários para tornar o resultado observável. Registre contratos preservados,
-dependências, exclusões e referências na seção Dependências / Restrições. Não invente responsável;
-quando a atribuição ainda estiver pendente, registre isso apenas se for relevante para o tracking.
+Keep the issue at the technical delivery level. Include verification criteria alongside the expected
+deliverable when they are needed to make the result observable. Record preserved contracts,
+dependencies, exclusions and references in the Dependências / Restrições (Dependencies / Constraints) section. Do not invent an owner;
+when the assignment is still pending, record that only if it is relevant for tracking.
 
-Não acrescente milestone, PRD, requisito de PRD, signatures, file inventory, fluxo técnico
-detalhado, arquitetura nova ou tarefas especulativas.
+Do not add milestone, PRD, PRD requirement, signatures, file inventory, detailed technical
+flow, new architecture or speculative tasks.
 
 ## Approval gate
 
-Antes de publicar, apresente o título, body, labels, milestone `None`, confirmação de que não há
-relação com PRD e a justificativa técnica. Não inclua sprint nos metadados apresentados. Publique
-somente após aprovação explícita da versão atual. A aprovação autoriza apenas a submissão da issue;
-não autoriza implementação, branch, commit, PR ou Spec.
+Before publishing, present the title, body, labels, milestone `None`, confirmation that there is no
+relation to a PRD and the technical justification. Do not include sprint in the metadata presented. Publish
+only after explicit approval of the current version. The approval authorizes only the submission of the issue;
+it does not authorize implementation, branch, commit, PR or Spec.
 
-Depois da publicação, retorne número/URL, título, labels, milestone `None` e resumo do resultado
-técnico.
+After publishing, return number/URL, title, labels, milestone `None` and a summary of the technical
+outcome.

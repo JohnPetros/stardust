@@ -1,68 +1,68 @@
 ---
-description: Prompt para refinar documentos markdown com foco em estrutura, clareza, consistencia e qualidade textual.
+description: Prompt to refine markdown documents with a focus on structure, clarity, consistency and textual quality.
 ---
 
-# Prompt: Refinar Documento (PRD/Spec/MD)
+# Prompt: Refine Document (PRD/Spec/MD)
 
-**Objetivo Principal** Atuar como um Technical Writer Sênior para revisar,
-estruturar e polir documentos técnicos em Markdown. O objetivo é garantir que a
-informação seja densa, porém clara, com hierarquia lógica e formatação impecável
-para consumo tanto por humanos quanto por LLMs.
+**Main Goal** Act as a Senior Technical Writer to review,
+structure and polish technical documents in Markdown. The goal is to ensure that
+the information is dense yet clear, with a logical hierarchy and impeccable formatting
+for consumption by both humans and LLMs.
 
-**Entrada:**
+**Input:**
 
-- Documento ou trecho em Markdown a ser refinado.
-- Contexto adicional (opcional).
+- Markdown document or excerpt to be refined.
+- Additional context (optional).
 
-**Regras Aplicáveis:**
+**Applicable Rules:**
 
-Não há rule de camada obrigatória para todo documento.
+There is no mandatory layer rule for every document.
 
-Use rules quando o documento refinado tocar o projeto StarDust:
+Use rules when the refined document touches the StarDust project:
 
-- `documentation/rules/rules.md` — para validar links e citações de rules por camada.
-- `documentation/rules/code-conventions-rules.md` — quando o documento padronizar nomes, exemplos de código, factories, erros ou eventos.
-- Rule específica da camada quando o documento for PRD, spec, report ou guideline técnico sobre uma camada.
+- `documentation/rules/rules.md` — to validate links and citations of rules per layer.
+- `documentation/rules/code-conventions-rules.md` — when the document standardizes names, code examples, factories, errors or events.
+- The layer-specific rule when the document is a PRD, spec, report or technical guideline about a layer.
 
-Se o documento refinado for uma rule, use também `documentation/prompts/update-layer-rules-prompt.md`.
+If the refined document is a rule, also use `documentation/prompts/update-layer-rules-prompt.md`.
 
-**Diretrizes de Execução:**
+**Execution Guidelines:**
 
-1. **Análise de Estrutura e Hierarquia:**
-   - **Níveis de Cabeçalho:** Garanta que os `#` sigam uma ordem lógica (H1 ->
-     H2 -> H3). Não pule níveis.
-   - **Escaneabilidade:** Transforme blocos longos de texto em listas (bullet
-     points ou numeradas) sempre que possível.
-   - **Ênfase:** Use **negrito** para destacar termos chave, nomes de
-     componentes ou conceitos críticos.
+1. **Structure and Hierarchy Analysis:**
+   - **Heading Levels:** Ensure the `#` follow a logical order (H1 ->
+     H2 -> H3). Do not skip levels.
+   - **Scannability:** Turn long blocks of text into lists (bullet
+     points or numbered) whenever possible.
+   - **Emphasis:** Use **bold** to highlight key terms, component
+     names or critical concepts.
 
-2. **Qualidade do Texto:**
-   - **Tom de Voz:** Mantenha um tom profissional, direto e técnico. Evite
-     ambiguidades ou palavras vagas como "talvez", "alguns", "geralmente" (a
-     menos que o contexto exija).
-   - **Consistência Linguística:** O corpo do texto deve ser predominantemente
-     em Português (Brasil), mas termos técnicos de programação (ex: `hook`,
-     `store`, `middleware`, `request`) devem ser mantidos no original em Inglês
-     e formatados como `code`.
+2. **Text Quality:**
+   - **Tone of Voice:** Keep a professional, direct and technical tone. Avoid
+     ambiguities or vague words such as "maybe", "some", "usually" (unless
+     the context requires it).
+   - **Language Consistency:** The body of the text must be predominantly
+     in English, but technical programming terms (e.g. `hook`,
+     `store`, `middleware`, `request`) must be kept in their original form
+     and formatted as `code`.
 
-3. **Validação de Referências e Links:**
-   - **Arquivos Locais:** Verifique se as referências a arquivos (ex:
-     `@[caminho/do/arquivo]`) estão corretas e se os arquivos realmente existem
-     no projeto.
-   - **Links Externos:** Garanta que a sintaxe `[Texto](URL)` esteja correta.
+3. **Validation of References and Links:**
+   - **Local Files:** Check that file references (e.g.
+     `@[path/to/file]`) are correct and that the files actually exist
+     in the project.
+   - **External Links:** Ensure the `[Text](URL)` syntax is correct.
 
-4. **Recursos Visuais:**
-   - **Blocos de Código:** Use blocos de código com a linguagem especificada
-     (ex: ```typescript) para exemplos técnicos.
-   - **Tabelas:** Organize informações comparativas ou listas de propriedades em
-     tabelas Markdown para facilitar a leitura.
-   - **Callouts:** Use citações (`>`) ou emojis (ex: 💡, ⚠️, 🛠️) para destacar
-     notas ou avisos importantes.
+4. **Visual Resources:**
+   - **Code Blocks:** Use code blocks with the language specified
+     (e.g. ```typescript) for technical examples.
+   - **Tables:** Organize comparative information or property lists in
+     Markdown tables to make them easier to read.
+   - **Callouts:** Use quotes (`>`) or emojis (e.g. 💡, ⚠️, 🛠️) to highlight
+     important notes or warnings.
 
-**Checklist de Saída:**
+**Output Checklist:**
 
-- [ ] O documento possui um título claro (H1).
-- [ ] A hierarquia de cabeçalhos está consistente.
-- [ ] Todos os caminhos de arquivos citados foram validados.
-- [ ] Termos técnicos estão formatados como `code`.
-- [ ] Não há erros gramaticais ou de digitação.
+- [ ] The document has a clear title (H1).
+- [ ] The heading hierarchy is consistent.
+- [ ] All cited file paths were validated.
+- [ ] Technical terms are formatted as `code`.
+- [ ] There are no grammatical or typing errors.

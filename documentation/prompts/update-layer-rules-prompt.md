@@ -1,166 +1,166 @@
 ---
-description: Atualizar um documento de regras de uma camada existente, corrigindo estrutura, escaneabilidade, paths e consistencia com a arquitetura vigente.
+description: Update a rules document of an existing layer, fixing structure, scannability, paths, and consistency with the current architecture.
 ---
 
-# Prompt: Atualizar Regras de Camada
+# Prompt: Update Layer Rules
 
-**Objetivo:** Atualizar o documento `{ARQUIVO_ALVO}` (regras da camada `{CAMADA}`) preservando o conteúdo valido existente, corrigindo problemas estruturais, validando referencias a paths e alinhando o documento com a arquitetura e convencoes vigentes do projeto. O resultado deve ser o Markdown final pronto para substituir o arquivo diretamente.
+**Goal:** Update the document `{TARGET_FILE}` (rules of the `{LAYER}` layer) preserving the existing valid content, fixing structural problems, validating path references, and aligning the document with the project's current architecture and conventions. The result must be the final Markdown, ready to replace the file directly.
 
-**Entrada:**
+**Input:**
 
-- **Obrigatorias:**
-  - Nome da camada `{CAMADA}` (ex: UI, REST, RPC, Queue, Core, Database).
-  - Caminho do arquivo a ser atualizado `{ARQUIVO_ALVO}` (ex: `documentation/rules/rest-layer-rules.md`).
-  - Objetivo da atualizacao `{OBJETIVO_DA_ATUALIZACAO}`: o que precisa mudar e por que (2-6 bullets).
-- **Opcionais:**
-  - Restricoes especificas `{RESTRICOES}` (ex: "nao alterar a secao de checklist", "manter exemplos de codigo existentes").
-  - Fontes adicionais `{FONTES}` (arquivos, links, docs internas com informacao nova a incorporar).
+- **Required:**
+  - Layer name `{LAYER}` (e.g., UI, REST, RPC, Queue, Core, Database).
+  - Path of the file to be updated `{TARGET_FILE}` (e.g., `documentation/rules/rest-layer-rules.md`).
+  - Update goal `{UPDATE_GOAL}`: what needs to change and why (2-6 bullets).
+- **Optional:**
+  - Specific constraints `{CONSTRAINTS}` (e.g., "do not change the checklist section", "keep existing code examples").
+  - Additional sources `{SOURCES}` (files, links, internal docs with new information to incorporate).
 
-- **Formato esperado para `{OBJETIVO_DA_ATUALIZACAO}`:**
+- **Expected format for `{UPDATE_GOAL}`:**
 
 ```md
-- Corrigir hierarquia de cabecalhos (H1 unico, H2/H3 sem pular niveis)
-- Transformar blocos longos em tabelas e listas
-- Validar e corrigir paths citados
-  - Incorporar novas convencoes de nomeacao definidas em {FONTES}
+- Fix the heading hierarchy (single H1, H2/H3 without skipping levels)
+- Turn long blocks into tables and lists
+- Validate and fix cited paths
+  - Incorporate new naming conventions defined in {SOURCES}
 ```
 
-**Regras Aplicáveis:**
+**Applicable Rules:**
 
-Antes de atualizar `{ARQUIVO_ALVO}`, leia:
+Before updating `{TARGET_FILE}`, read:
 
-- `documentation/rules/rules.md` — para manter o índice consistente com a rule atualizada.
-- `documentation/rules/code-conventions-rules.md` — quando a atualização envolver nomes, factories, erros, eventos ou organização geral.
-- Rules de camadas vizinhas quando a atualização mexer em fronteiras, dependências ou integração entre camadas.
+- `documentation/rules/rules.md` — to keep the index consistent with the updated rule.
+- `documentation/rules/code-conventions-rules.md` — when the update involves names, factories, errors, events, or general organization.
+- Rules of neighboring layers when the update touches boundaries, dependencies, or integration between layers.
 
-Se a atualização mudar o escopo da rule, atualize também `documentation/rules/rules.md`.
+If the update changes the scope of the rule, also update `documentation/rules/rules.md`.
 
-**Diretrizes de Execucao:**
+**Execution Guidelines:**
 
-1. **Entendimento e validacao de entradas**
-   - Confirmar que `{ARQUIVO_ALVO}` existe e e um arquivo Markdown.
-   - Ler o conteúdo atual na integra e identificar:
-     - Lacunas em relacao ao template padrao de regras de camada.
-     - Repeticoes, inconsistencias de termos e problemas de hierarquia (H1/H2/H3).
-     - Todos os paths e links referenciados no documento (extrair como lista).
-   - Confirmar o escopo de `{OBJETIVO_DA_ATUALIZACAO}`: o que deve mudar, o que deve ser preservado.
+1. **Understanding and validating inputs**
+   - Confirm that `{TARGET_FILE}` exists and is a Markdown file.
+   - Read the current content in full and identify:
+     - Gaps relative to the standard layer rules template.
+     - Repetitions, inconsistencies in terms, and hierarchy problems (H1/H2/H3).
+     - All paths and links referenced in the document (extract as a list).
+   - Confirm the scope of `{UPDATE_GOAL}`: what must change, what must be preserved.
 
-2. **Levantamento de contexto (antes de reescrever)**
-   - Consultar docs base do projeto para garantir alinhamento:
+2. **Context gathering (before rewriting)**
+   - Consult the project's base docs to ensure alignment:
      - `documentation/overview.md`
      - `documentation/architecture.md`
      - `documentation/rules/rules.md`
-   - Se houver CodeGraph, validar os paths listados na etapa anterior e localizar 2-5 exemplos reais da camada para referenciar.
-   - Se houver duvida de biblioteca/framework, consultar documentacao oficial com ferramenta de docs (MCP Context7).
-   - Sem ferramentas, solicitar ao usuario: conteúdo de `{ARQUIVO_ALVO}`, docs base relevantes e os 2-5 exemplos minimos necessarios.
+   - If CodeGraph is available, validate the paths listed in the previous step and locate 2-5 real examples of the layer to reference.
+   - If there is doubt about a library/framework, consult the official documentation with a docs tool (MCP Context7).
+   - Without tools, ask the user for: the content of `{TARGET_FILE}`, the relevant base docs, and the minimum 2-5 examples needed.
 
-3. **Atualizacao do documento (reescrita final)**
-   - Reescrever preservando conteúdo valido e aplicando as correcoes de `{OBJETIVO_DA_ATUALIZACAO}`.
-   - Manter tom profissional, direto e tecnico.
-   - Corpo do texto em Portugues (Brasil); termos tecnicos em Ingles como `code` (ex: `provider`, `repository`, `service`, `DTO`, `handler`, `runtime`).
-   - Melhorar escaneabilidade:
-     - Preferir listas e tabelas para responsabilidades, limites e regras.
-     - Usar callouts `>` para notas e avisos (ex: `> ⚠️` para proibicoes criticas).
-   - Manter consistencia com a arquitetura em camadas:
-     - Explicitar direcao de dependencia, contratos e limites.
-     - Garantir que o checklist "antes do PR" esteja presente e atualizado.
-   - Se `{ARQUIVO_ALVO}` nao seguir o template padrao de secoes, reestruturar para conformidade (ver template abaixo).
+3. **Updating the document (final rewrite)**
+   - Rewrite preserving valid content and applying the fixes from `{UPDATE_GOAL}`.
+   - Keep a professional, direct, and technical tone.
+   - Body text in English; technical terms as `code` (e.g., `provider`, `repository`, `service`, `DTO`, `handler`, `runtime`).
+   - Improve scannability:
+     - Prefer lists and tables for responsibilities, boundaries, and rules.
+     - Use `>` callouts for notes and warnings (e.g., `> ⚠️` for critical prohibitions).
+   - Keep consistency with the layered architecture:
+     - Make dependency direction, contracts, and boundaries explicit.
+     - Ensure that the "before the PR" checklist is present and up to date.
+   - If `{TARGET_FILE}` does not follow the standard section template, restructure it for conformance (see the template below).
 
-4. **Checagens finais de qualidade**
-   - Validar antes de entregar:
-     - H1 unico no documento; H2/H3 sem pular niveis.
-     - Todos os paths citados existem no projeto — nao inventar.
-     - Links externos com sintaxe correta: `[Texto](URL)`.
-     - Blocos de codigo com linguagem declarada (ex: ` ```ts `, ` ```tsx `, ` ```bash `).
-     - Nenhuma secao obrigatoria omitida.
-   - Se informacao critica estiver ausente:
-     - **Nao inventar.** Registrar em `## Pendencias` o que nao foi possivel validar.
+4. **Final quality checks**
+   - Validate before delivering:
+     - Single H1 in the document; H2/H3 without skipping levels.
+     - All cited paths exist in the project — do not invent.
+     - External links with correct syntax: `[Text](URL)`.
+     - Code blocks with a declared language (e.g., ` ```ts `, ` ```tsx `, ` ```bash `).
+     - No mandatory section omitted.
+   - If critical information is missing:
+     - **Do not invent.** Record in `## Pending Items` what could not be validated.
 
-**Template de Saida (Estrutura Obrigatoria):**
+**Output Template (Mandatory Structure):**
 
-O documento atualizado deve seguir exatamente esta estrutura de secoes:
+The updated document must follow exactly this section structure:
 
 ```markdown
-# Regras da Camada {CAMADA}
+# {LAYER} Layer Rules
 
-## Visao Geral
-- Objetivo da camada
-- Responsabilidades principais
-- Nao faz (escopo negativo)
+## Overview
+- Goal of the layer
+- Main responsibilities
+- Does not do (negative scope)
 
-## Estrutura de Diretorios
-<!-- Se a camada nao possuir diretorio proprio bem definido, simplifique
-     para uma nota curta indicando onde seus artefatos residem. -->
-- Tabela com caminhos e finalidades
+## Directory Structure
+<!-- If the layer does not have a well-defined directory of its own, simplify
+     to a short note indicating where its artifacts reside. -->
+- Table with paths and purposes
 
-## Principios Fundamentais
+## Fundamental Principles
 
-### Deve conter
-- Elementos obrigatorios da camada
-- Praticas recomendadas
+### Must contain
+- Mandatory elements of the layer
+- Recommended practices
 
-### Nao deve conter
-- Antipadroes e acoplamentos proibidos
-- Responsabilidades que pertencem a outras camadas
+### Must not contain
+- Anti-patterns and forbidden couplings
+- Responsibilities that belong to other layers
 
-## Padroes de Projeto
-- Padroes arquiteturais aceitos
-- Como aplicar cada padrao na camada
-- Quando evitar cada padrao
+## Design Patterns
+- Accepted architectural patterns
+- How to apply each pattern in the layer
+- When to avoid each pattern
 
-## Padroes de Uso Aplicados
-- Fluxos comuns da camada
-- Exemplos de uso correto
-- Erros comuns e como evitar
+## Applied Usage Patterns
+- Common flows of the layer
+- Examples of correct usage
+- Common mistakes and how to avoid them
 
-## Regras de Integracao com Outras Camadas
-- Dependencias permitidas e proibidas
-- Contratos/interface de comunicacao
-- Direcao de dependencia e limites de acoplamento
+## Integration Rules with Other Layers
+- Allowed and forbidden dependencies
+- Communication contracts/interfaces
+- Dependency direction and coupling limits
 
-## Checklist Rapido para Novas Features na Camada
-- Itens objetivos de validacao antes de abrir PR
-- Criterios minimos de conformidade arquitetural
-- Sinais de alerta para revisao tecnica
+## Quick Checklist for New Features in the Layer
+- Objective validation items before opening a PR
+- Minimum architectural conformance criteria
+- Warning signs for technical review
 
-## Notas
-- Premissas adotadas
-- Referencias internas relevantes
+## Notes
+- Assumptions adopted
+- Relevant internal references
 
-## Pendencias
-<!-- Incluir apenas se houver informacao faltante ou nao validada.
-     Remover a secao se nao houver pendencias. -->
-- Informacoes ausentes
-- Proximos passos para refinamento
+## Pending Items
+<!-- Include only if there is missing or unvalidated information.
+     Remove the section if there are no pending items. -->
+- Missing information
+- Next steps for refinement
 ```
 
-**Regras:**
+**Rules:**
 
-- Usar Markdown como formato de saida.
-- Nao pular niveis de cabecalho (H1 -> H2 -> H3).
-- Nao omitir secoes obrigatorias do template.
-- Nao inventar paths, nomes de arquivos, contratos ou componentes inexistentes.
-- Preservar conteúdo valido do documento original — atualizar nao e reescrever do zero sem criterio.
-- Manter linguagem normativa: usar "deve", "nao deve", "pode" com criterio.
-- Termos tecnicos permanecem em Ingles como `code`.
-- Se houver conflito entre `{RESTRICOES}` e o padrao do template, priorizar `{RESTRICOES}` e registrar o impacto em `## Notas`.
-- Entregar o conteúdo Markdown completo e final, pronto para substituir `{ARQUIVO_ALVO}` diretamente.
+- Use Markdown as the output format.
+- Do not skip heading levels (H1 -> H2 -> H3).
+- Do not omit mandatory sections of the template.
+- Do not invent paths, file names, contracts, or nonexistent components.
+- Preserve valid content from the original document — updating is not rewriting from scratch without criteria.
+- Keep normative language: use "must", "must not", "may" with discretion.
+- Technical terms remain in English as `code`.
+- If there is a conflict between `{CONSTRAINTS}` and the template standard, prioritize `{CONSTRAINTS}` and record the impact in `## Notes`.
+- Deliver the complete and final Markdown content, ready to replace `{TARGET_FILE}` directly.
 
-**Saida esperada:**
+**Expected output:**
 
-Alem do documento Markdown final, incluir ao final um bloco de validacao resumido:
+In addition to the final Markdown document, include at the end a summarized validation block:
 
 ```md
-## Checklist de Validacao da Atualizacao
+## Update Validation Checklist
 
-- [ ] H1 unico; H2/H3 sem pular niveis
-- [ ] Todas as secoes obrigatorias presentes
-- [ ] Paths citados validados (existem no repo)
-- [ ] Termos tecnicos em `code`
-- [ ] Links externos com sintaxe correta (quando existirem)
-- [ ] Blocos de codigo com linguagem declarada
-- [ ] conteúdo valido do original preservado
-- [ ] Pendencias registradas (se houver)
+- [ ] Single H1; H2/H3 without skipping levels
+- [ ] All mandatory sections present
+- [ ] Cited paths validated (exist in the repo)
+- [ ] Technical terms in `code`
+- [ ] External links with correct syntax (when present)
+- [ ] Code blocks with a declared language
+- [ ] Valid content of the original preserved
+- [ ] Pending items recorded (if any)
 ```
 
-> 💡 Para criar um documento de regras do zero, use o prompt `documentation/prompts/create-layer-rules-prompt.md`.
+> 💡 To create a rules document from scratch, use the prompt `documentation/prompts/create-layer-rules-prompt.md`.
