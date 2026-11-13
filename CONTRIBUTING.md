@@ -1,254 +1,255 @@
-# Contribuindo com o projeto
+# Contributing to the project
 
-Antes de seguir a diante não se esqueça de conferir primeiro a
-[wiki do projeto](https://github.com/JohnPetros/stardust/wiki).
+Before going any further, don't forget to check the
+[project wiki](https://github.com/JohnPetros/stardust/wiki) first.
 
-Clone esse repositório na sua máquina.
+Clone this repository to your machine.
 
 ```bash
 git clone https://github.com/JohnPetros/stardust.git
 ```
 
-Crie uma ramificação (branch) com a funcionalidade/correção de erro que você
-quer adicionar
+Create a branch with the feature/bug fix you want to add
 
 ```bash
-git checkout -b minha-funcionalidade
+git checkout -b my-feature
 ```
 
-Realize os commits seguindo o padrão utilizado no projeto e abra uma Pull
-Request da sua cópia para o repositório oficial.
+Make your commits following the convention used in the project and open a Pull
+Request from your copy to the official repository.
 
 ```bash
-git push origin minha-feature
+git push origin my-feature
 ```
 
-> Nunca de fazer a sua contribuição sempre com testes automatizados 😙
+> Never forget to make your contribution with automated tests 😙
 
 ## Commits
 
-No contexto de sistemas de controle de versão, como o Git, um commit é o ato de
-registrar um conjunto de alterações no histórico do projeto. Pense nele como um
-"ponto de salvamento" ou uma "fotografia" do seu trabalho em um determinado
-momento. Cada commit representa uma mudança específica ou um conjunto de
-mudanças relacionadas que você deseja preservar. Ele é a unidade fundamental do
-histórico de um repositório Git.
+In the context of version control systems such as Git, a commit is the act of
+recording a set of changes in the project history. Think of it as a
+"save point" or a "snapshot" of your work at a given
+moment. Each commit represents a specific change or a set of
+related changes that you want to preserve. It is the fundamental unit of a Git
+repository's history.
 
-Inspirado no
-[conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), cada
-commit é escrito em inglês e composto por três partes:
+Inspired by
+[conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), each
+commit is written in English and made up of three parts:
 
-- prefixo: indentifica o tipo de commit e é sempre acompanhado por seu emoji
-  respectivo.
-- escopo (opcional): indica qual pacote ou aplicação esse commit é relacionado.
-- corpo: uma mensagem concisa que diz o que esse commit altera
+- prefix: identifies the type of commit and is always accompanied by its
+  respective emoji.
+- scope (optional): indicates which package or application this commit relates to.
+- body: a concise message saying what this commit changes
 
-Exemplos:
+Examples:
 
-1. Com escopo `🐛 fix(server): ensure only one achievement is unlocked at once`
+1. With scope `🐛 fix(server): ensure only one achievement is unlocked at once`
 
-2. Sem escopo `📑 interface: add AchievementsRepository`
+2. Without scope `📑 interface: add AchievementsRepository`
 
-- commits relacionados a use cases e testes, o corpo da mensagem não precisa
-  começar por um verbo
+- for commits related to use cases and tests, the message body does not need to
+  start with a verb
 
-Exemplos:
+Examples:
 
 - ✨ use case: list all challenges
 - ✨ use case: verify user name in use
 - 🧪 test: list all challenges use case
 - 🧪 test: useChallengePage hook
 
-### Tabela de commits
+### Commit table
 
-| Tipo de commit                   | Prefixo    | Emoji |
+| Commit type                      | Prefix     | Emoji |
 | :------------------------------- | :--------- | :---- |
-| Camada de domínio                | domain     | 🌐    |
-| Camada de API REST               | rest       | 📶    |
-| Camada de UI                     | ui         | 🖥️    |
-| Camada de banco de dados         | db         | 💾    |
-| Camada de fila/mensager          | queue      | 🎞️    |
-| Camada de provisão               | provision  | 🧰    |
-| Camada de API RPC                | rpc        | 📟    |
+| Domain layer                     | domain     | 🌐    |
+| REST API layer                   | rest       | 📶    |
+| UI layer                         | ui         | 🖥️    |
+| Database layer                   | db         | 💾    |
+| Queue/messaging layer            | queue      | 🎞️    |
+| Provision layer                  | provision  | 🧰    |
+| RPC API layer                    | rpc        | 📟    |
 | Use cases                        | use case   | ✨    |
 | Interfaces                       | interface  | 📑    |
-| Tipagem                          | type       | 🏷️    |
-| Documentação                     | docs       | 📚    |
-| Correção de bug                  | fix        | 🐛    |
-| Refatoração de código            | refactor   | ♻️    |
-| Teste automatizado               | test       | 🧪    |
-| Configuração/infraestrutura      | config     | ⚙️    |
-| Constantes                       | constants  | 🪨    |
-| Dependências                     | deps       | 📦    |
-| Arquivos estáticos               | assets     | 🎴    |
-| Merge de branches                | merge      | 🔀    |
-| Reset de histórico de commits    | revert     | ⏪    |
-| Executor/Interpretador de código | cr         | ⏪    |
-| Estruturação de pastas/arquivos  | ftree      | 🗃️    |
-| Certificados e licenças          | cert       | 📜    |
-| Schema para validação            | validation | 📮    |
-| Trabalho em andamento            | wip        | 🚧    |
-| Conserto de erro de emergencia   | hotfix     | 🚑    |
-| Entrega contínua                 | cd         | 🚚    |
-| Integração contínua              | ci         | 🏎️    |
-| Nova release                     | release    | 🔖    |
-| Containers Docker                | docker     | 🐳    |
+| Typing                           | type       | 🏷️    |
+| Documentation                    | docs       | 📚    |
+| Bug fix                          | fix        | 🐛    |
+| Code refactoring                 | refactor   | ♻️    |
+| Automated test                   | test       | 🧪    |
+| Configuration/infrastructure     | config     | ⚙️    |
+| Constants                        | constants  | 🪨    |
+| Dependencies                     | deps       | 📦    |
+| Static files                     | assets     | 🎴    |
+| Branch merge                     | merge      | 🔀    |
+| Commit history reset             | revert     | ⏪    |
+| Code runner/interpreter          | cr         | ⏪    |
+| Folder/file structuring          | ftree      | 🗃️    |
+| Certificates and licenses        | cert       | 📜    |
+| Validation schema                | validation | 📮    |
+| Work in progress                 | wip        | 🚧    |
+| Emergency bug fix                | hotfix     | 🚑    |
+| Continuous delivery              | cd         | 🚚    |
+| Continuous integration           | ci         | 🏎️    |
+| New release                      | release    | 🔖    |
+| Docker containers                | docker     | 🐳    |
 
 ## Issues
 
-No GitHub, uma Issue (ou "questão", em tradução livre) é uma forma padronizada e
-eficiente de rastrear tarefas, bugs, melhorias e discussões relacionadas a um
-projeto de software. Uma issue serve como um item em uma lista de afazeres
-colaborativa para o repositório.
+On GitHub, an Issue is a standardized and
+efficient way to track tasks, bugs, improvements and discussions related to a
+software project. An issue works as an item in a collaborative to-do list
+for the repository.
 
-Nesse sentido, uma issue pode ser criada para:
+In that sense, an issue can be created to:
 
-- Identificar um bug: O código não está funcionando como esperado em determinada
-  situação.
-- Sugerir uma nova funcionalidade: Você tem uma ideia para adicionar algo útil
-  ao projeto.
-- Pedir uma melhoria: Algo já existe, mas poderia ser mais eficiente ou fácil de
-  usar.
-- Fazer uma pergunta: Você tem uma dúvida sobre o funcionamento de uma parte do
-  código.
-- Discutir um tópico: É preciso conversar com a equipe sobre uma decisão de
-  design ou arquitetura.
+- Identify a bug: The code is not working as expected in a certain
+  situation.
+- Suggest a new feature: You have an idea to add something useful
+  to the project.
+- Request an improvement: Something already exists, but it could be more efficient or easier to
+  use.
+- Ask a question: You have a doubt about how a part of the
+  code works.
+- Discuss a topic: You need to talk with the team about a design
+  or architecture decision.
 
-### Issue de task
+### Task issue
 
-Geralmente, são itens de trabalho que contribuem para o progresso do projeto,
-podendo ser uma nova funcionalidade ou melhoria/refatoração.
+Generally, these are work items that contribute to the project's progress,
+and may be a new feature or an improvement/refactoring.
 
-A descrição de uma issue de task deve conter as seções:
+The description of a task issue must contain the sections (the section titles
+below are kept in PT-BR, as in the templates, with an English gloss in parentheses):
 
-#### 📍 Motivação
+#### 📍 Motivação (Motivation)
 
-Este é o ponto de partida da sua Issue, o "porquê" dela existir. Aqui você deve
-descrever claramente o problema que está sendo resolvido ou a oportunidade que
-está sendo aproveitada. Explique o cenário atual, os impactos negativos que ele
-causa (se for um bug ou uma falha) ou os benefícios que serão gerados com a
-implementação (se for uma nova funcionalidade ou melhoria). O objetivo é
-garantir que todos que leiam a Issue compreendam sua relevância e o valor do
-trabalho a ser realizado, estabelecendo o propósito antes de mergulhar nos
-detalhes técnicos.
+This is the starting point of your Issue, the "why" of its existence. Here you must
+clearly describe the problem being solved or the opportunity being
+seized. Explain the current scenario, the negative impacts it
+causes (if it is a bug or a failure) or the benefits that will be generated by
+the implementation (if it is a new feature or improvement). The goal is to
+ensure that everyone who reads the Issue understands its relevance and the value of
+the work to be done, establishing the purpose before diving into
+the technical details.
 
-#### 🔍 Detalhes (opcional)
+#### 🔍 Detalhes (Details) (optional)
 
-Este título serve para adicionar qualquer informação extra e contextual que seja
-relevante e ajude a esclarecer a Issue. Pense em tudo que complementa a
-motivação e a sugestão de implementação, mas que não se encaixa perfeitamente
-nas seções anteriores. Isso pode incluir links para documentações, logs de erro,
-capturas de tela, exemplos específicos, dados de testes, ou qualquer outro
-recurso que forneça clareza adicional. O objetivo é munir a pessoa que for
-trabalhar na Issue com todas as informações necessárias para iniciar o trabalho
-sem dúvidas, evitando idas e vindas desnecessárias.
+This title serves to add any extra, contextual information that is
+relevant and helps clarify the Issue. Think of everything that complements the
+motivation and the implementation suggestion, but that does not fit perfectly
+in the previous sections. This can include links to documentation, error logs,
+screenshots, specific examples, test data, or any other
+resource that provides additional clarity. The goal is to equip the person who will
+work on the Issue with all the information needed to start the work without
+doubts, avoiding unnecessary back and forth.
 
-#### 💡 Sugestão de Implementação
+#### 💡 Sugestão de Implementação (Implementation Suggestion)
 
-Nesta seção, o foco é o "como". Trata-se de uma proposta de solução para a
-motivação apresentada. Aqui, você pode detalhar os passos técnicos ou lógicos
-sugeridos para resolver o problema ou implementar a funcionalidade. Mencione os
-componentes do sistema que serão afetados, descreva um fluxo de trabalho
-esperado ou sugira abordagens. A ideia não é engessar a solução, mas sim
-oferecer um ponto de partida claro para o desenvolvimento e para as discussões
-da equipe, reduzindo a ambiguidade e agilizando o processo.
+In this section, the focus is the "how". It is a proposed solution to the
+motivation presented. Here, you can detail the technical or logical steps
+suggested to solve the problem or implement the feature. Mention the
+system components that will be affected, describe an expected workflow
+or suggest approaches. The idea is not to lock in the solution, but to
+offer a clear starting point for development and for team
+discussions, reducing ambiguity and speeding up the process.
 
-### Issue de bug
+### Bug issue
 
-Uma Issue de Bug é usada para reportar e rastrear um problema ou defeito no
-software, onde o sistema se comporta de uma maneira diferente da esperada. O
-objetivo é descrever o erro de forma clara para que ele possa ser diagnosticado,
-reproduzido e corrigido pela equipe de desenvolvimento.
+A Bug Issue is used to report and track a problem or defect in the
+software, where the system behaves differently from what is expected. The
+goal is to describe the error clearly so that it can be diagnosed,
+reproduced and fixed by the development team.
 
-#### ✖️ Comportamento atual
+#### ✖️ Comportamento atual (Current behavior)
 
-Nesta seção, você descreve exatamente o que está acontecendo de errado. Seja o
-mais preciso possível, detalhando o comportamento inesperado que o sistema
-apresenta. Inclua mensagens de erro, resultados incorretos ou qualquer anomalia
-observada. O foco é documentar o estado do sistema quando o bug ocorre.
+In this section, you describe exactly what is going wrong. Be as
+precise as possible, detailing the unexpected behavior the system
+shows. Include error messages, incorrect results or any anomaly
+observed. The focus is to document the state of the system when the bug occurs.
 
-#### ☑️ Comportamento esperado
+#### ☑️ Comportamento esperado (Expected behavior)
 
-Aqui, você explica como o sistema deveria se comportar. Descreva a
-funcionalidade correta e o resultado que você esperava ver. Isso ajuda a
-contrastar o que está acontecendo com o que deveria acontecer, deixando claro o
-objetivo da correção.
+Here, you explain how the system should behave. Describe the correct
+functionality and the result you expected to see. This helps
+contrast what is happening with what should happen, making clear the
+goal of the fix.
 
-#### 📃 Como reproduzir (opcional)
+#### 📃 Como reproduzir (How to reproduce) (optional)
 
-Esta é uma seção crucial para o desenvolvedor. Descreva um passo a passo
-detalhado de como a equipe pode replicar o bug. Inclua cada clique, cada dado
-inserido e a ordem exata das ações. Quanto mais fácil for reproduzir o bug, mais
-rápido ele poderá ser investigado e corrigido. Se for difícil de reproduzir
-consistentemente, mencione isso.
+This is a crucial section for the developer. Describe a detailed
+step-by-step of how the team can replicate the bug. Include every click, every piece of data
+entered and the exact order of the actions. The easier it is to reproduce the bug, the
+faster it can be investigated and fixed. If it is hard to reproduce
+consistently, mention that.
 
-#### 🎋 Ambiente (opcional)
+#### 🎋 Ambiente (Environment) (optional)
 
-Forneça informações sobre o ambiente onde o bug foi encontrado. Isso pode
-incluir o sistema operacional (Windows, macOS, Linux), o navegador (Chrome,
-Firefox, Safari) e sua versão, a versão do aplicativo, dispositivos específicos,
-ou qualquer configuração relevante. Dados do ambiente ajudam a identificar se o
-bug é isolado ou generalizado.
+Provide information about the environment where the bug was found. This can
+include the operating system (Windows, macOS, Linux), the browser (Chrome,
+Firefox, Safari) and its version, the application version, specific devices,
+or any relevant configuration. Environment data helps identify whether the
+bug is isolated or widespread.
 
-#### 👀 Observação (opcional)
+#### 👀 Observação (Note) (optional)
 
-Use esta seção para adicionar qualquer informação extra ou contexto que possa
-ser útil, mas que não se encaixou nas categorias anteriores. Isso pode incluir
-screenshots, vídeos do problema, links para logs de erro, informações sobre
-tentativas de solução, ou notas adicionais que podem ajudar na compreensão do
+Use this section to add any extra information or context that may
+be useful but did not fit in the previous categories. This can include
+screenshots, videos of the problem, links to error logs, information about
+attempted solutions, or additional notes that may help in understanding the
 bug.
 
 ## Pull requests
 
-Um pull request é uma proposta para integrar (ou "puxar") mudanças de uma branch
-para outra, geralmente da sua ramificação de funcionalidade (onde você trabalhou
-nas suas alterações) para a ramificação principal do projeto (main).
+A pull request is a proposal to integrate (or "pull") changes from one branch
+into another, usually from your feature branch (where you worked
+on your changes) into the project's main branch (main).
 
-A descrição de um pull request deve conter as seções:
+The description of a pull request must contain the sections (titles kept in PT-BR,
+as in the template, with an English gloss in parentheses):
 
-- 🎯 Objetivo: explica claramente o propósito principal do PR. É a resposta à
-  pergunta "Por que este PR existe?".
-- #️⃣ Issues relacionadas (opcional): Aqui, o desenvolvedor conecta o PR a uma ou
-  mais issues (tarefas ou bugs). Use termos como resolve, closes, fixes
-  (seguidos do número da issue) ára fechar a issue automaticamente
-- 🐛 Causa do bug (opcional): detalha a razão fundamental pela qual o bug
-  existia. É uma explicação técnica da raiz do problema.
-- 📋 Changelog: lista as modificações específicas e pontuais realizadas no
-  código para atingir o objetivo do PR. É um resumo das ações tomadas. Não
-  precisa ser todas, mas as principais
-- 🧪 Como testar (opcional): fornece instruções claras e detalhadas sobre como
-  os revisores (ou qualquer pessoa que precise validar as mudanças) podem
-  reproduzir o cenário e verificar se as alterações funcionam como esperado e se
-  o bug foi realmente resolvido. É essencialmente um guia passo a passo para
-  testar o que foi implementado.
-- 👀 Observações: para informações adicionais, contextos ou avisos que o
-  desenvolvedor considera relevantes para o revisor. Pode incluir limitações
-  conhecidas, decisões de design, ou como no exemplo, a identificação de um novo
-  problema.
+- 🎯 Objetivo (Objective): clearly explains the main purpose of the PR. It is the answer to the
+  question "Why does this PR exist?".
+- #️⃣ Issues relacionadas (Related issues) (optional): Here, the developer connects the PR to one or
+  more issues (tasks or bugs). Use terms like resolve, closes, fixes
+  (followed by the issue number) to close the issue automatically
+- 🐛 Causa do bug (Bug cause) (optional): details the fundamental reason why the bug
+  existed. It is a technical explanation of the root of the problem.
+- 📋 Changelog: lists the specific, targeted modifications made in the
+  code to achieve the PR's goal. It is a summary of the actions taken. It does not
+  need to be all of them, but the main ones
+- 🧪 Como testar (How to test) (optional): provides clear and detailed instructions on how
+  reviewers (or anyone who needs to validate the changes) can
+  reproduce the scenario and verify that the changes work as expected and that
+  the bug was really resolved. It is essentially a step-by-step guide to
+  test what was implemented.
+- 👀 Observações (Notes): for additional information, context or warnings that the
+  developer considers relevant to the reviewer. It may include known
+  limitations, design decisions, or, as in the example, the identification of a new
+  problem.
 
-> Veja os
-> [PR's já criadas no projeto](https://github.com/JohnPetros/stardust/pulls)
-> como um exemplo.
+> See the
+> [PRs already created in the project](https://github.com/JohnPetros/stardust/pulls)
+> as an example.
 
 ## Releases
 
-Uma release é uma versão específica de um software ou produto que é
-disponibilizada para uso, seja para usuários finais, clientes, para teste
-interno ou para a próxima fase de desenvolvimento.
+A release is a specific version of a software or product that is
+made available for use, whether for end users, customers, internal testing
+or for the next development phase.
 
-A equipe StarDust segue o [Semantic Versioning](https://semver.org/) para
-nomeação das versões, que é um sistema que usa três números (MAIOR.MENOR.PATCH)
-para indicar, de forma clara e padronizada, se uma nova release contém mudanças
-que quebram a compatibilidade, novas funcionalidades ou apenas correções de
-bugs, respectivamente.
+The StarDust team follows [Semantic Versioning](https://semver.org/) for
+naming versions, which is a system that uses three numbers (MAJOR.MINOR.PATCH)
+to indicate, clearly and in a standardized way, whether a new release contains changes
+that break compatibility, new features or only bug fixes,
+respectively.
 
-Exemplos:
+Examples:
 
-v1.0.0 -> uma grande refatoração que torna incompativel com versões anteriores
-v0.1.0 -> nova funcionalidade v0.0.1 -> correção de bug
+v1.0.0 -> a major refactoring that makes it incompatible with previous versions
+v0.1.0 -> new feature v0.0.1 -> bug fix
 
-As releases são criadas por meio de um Pull Request de `main` para
-`production`, com o título `Release vX.Y.Z`. Após a validação E2E e o merge,
-o GitHub Actions cria a tag e a GitHub Release automaticamente. Consulte o
-[workflow de criação de releases](/.github/workflows/create-release.yaml) e o
-[prompt de PR de release](/documentation/prompts/create-release-pr-prompt.md).
+Releases are created through a Pull Request from `main` to
+`production`, with the title `Release vX.Y.Z`. After E2E validation and the merge,
+GitHub Actions creates the tag and the GitHub Release automatically. See the
+[release creation workflow](/.github/workflows/create-release.yaml) and the
+[release PR prompt](/documentation/prompts/create-release-pr-prompt.md).
