@@ -4,23 +4,23 @@ status: closed
 last_updated_at: 2026-03-11
 ---
 
-## Resumo Executivo
+## Executive Summary
 
-- Total de findings: 6 (Critical: 0 | High: 2 | Medium: 3 | Low: 1 | Info: 0)
-- Area de maior risco: fronteira de autenticacao/redirecionamento na camada REST/RPC do `apps/web`
-- Acao imediata recomendada: corrigir o `fail-open` do middleware e bloquear redirecionamentos externos via `redirect_to`
+- Total findings: 6 (Critical: 0 | High: 2 | Medium: 3 | Low: 1 | Info: 0)
+- Highest-risk area: authentication/redirection boundary in the REST/RPC layer of `apps/web`
+- Recommended immediate action: fix the middleware's `fail-open` and block external redirects via `redirect_to`
 
 ---
 
 ## Findings
 
-### [ISSUE-01] Middleware de autenticacao falha em modo fail-open
+### [ISSUE-01] Authentication middleware fails open
 
-- **Severidade:** High
-- **Camada:** rest
-- **Arquivo:** `apps/web/src/middleware.ts` (linha 35)
-- **Descricao:** a cadeia de controllers do middleware e protegida por um `try/catch` que libera a requisicao com `NextResponse.next()` em qualquer excecao. Isso transforma falhas de auth, parse ou integracao em bypass da borda de protecao.
-- **Evidencia:**
+- **Severity:** High
+- **Layer:** rest
+- **File:** `apps/web/src/middleware.ts` (line 35)
+- **Description:** the middleware's controller chain is protected by a `try/catch` that lets the request through with `NextResponse.next()` on any exception. This turns auth, parsing, or integration failures into a bypass of the protection edge.
+- **Evidence:**
   ```ts
   try {
     for (const controller of controllers) {
@@ -31,38 +31,38 @@ last_updated_at: 2026-03-11
     return NextResponse.next()
   }
   ```
-- **Impacto:** uma falha temporaria em `VerifyAuthRoutesController`, `SetAccessTokenController` ou qualquer dependencia do middleware pode permitir acesso nao redirecionado a rotas que dependem dessa barreira para exigir sessao.
-- **Recomendacao:** aplicar fail-closed para rotas protegidas. No `catch`, registrar o erro e retornar redirect controlado para login/erro, liberando `NextResponse.next()` apenas para rotas explicitamente publicas.
-- **Referencia:** `documentation/rules/rest-layer-rules.md`
+- **Impact:** a temporary failure in `VerifyAuthRoutesController`, `SetAccessTokenController`, or any middleware dependency may allow non-redirected access to routes that depend on this barrier to require a session.
+- **Recommendation:** apply fail-closed for protected routes. In the `catch`, log the error and return a controlled redirect to login/error, letting `NextResponse.next()` through only for explicitly public routes.
+- **Reference:** `documentation/rules/rest-layer-rules.md`
 - **Status:** resolved
 
 ---
 
-### [ISSUE-02] Parametro `redirect_to` permite open redirect
+### [ISSUE-02] The `redirect_to` parameter allows open redirect
 
-- **Severidade:** Medium
-- **Camada:** rest
-- **Arquivo:** `apps/web/src/rest/controllers/global/HandleRedirectController.ts` (linha 12)
-- **Descricao:** o middleware aceita `redirect_to` como `string` arbitraria e a repassa diretamente para `http.redirect()`, sem validacao de origem, allowlist ou restricao a caminhos relativos.
-- **Evidencia:**
+- **Severity:** Medium
+- **Layer:** rest
+- **File:** `apps/web/src/rest/controllers/global/HandleRedirectController.ts` (line 12)
+- **Description:** the middleware accepts `redirect_to` as an arbitrary `string` and passes it directly to `http.redirect()`, without origin validation, allowlist, or restriction to relative paths.
+- **Evidence:**
   ```ts
   const queryParams = http.getQueryParams()
   if (queryParams?.redirect_to) return http.redirect(queryParams?.redirect_to)
   ```
-- **Impacto:** um atacante pode construir URLs do dominio legitimo do StarDust que redirecionam o usuario para dominios externos, facilitando phishing, encadeamento com login social e abuso de confianca.
-- **Recomendacao:** aceitar apenas rotas internas relativas ou validar o destino contra uma allowlist de origens/paths do StarDust antes de chamar `http.redirect()`.
-- **Referencia:** `documentation/rules/rest-layer-rules.md`
+- **Impact:** an attacker can build URLs on the legitimate StarDust domain that redirect the user to external domains, facilitating phishing, chaining with social login, and abuse of trust.
+- **Recommendation:** accept only relative internal routes or validate the destination against an allowlist of StarDust origins/paths before calling `http.redirect()`.
+- **Reference:** `documentation/rules/rest-layer-rules.md`
 - **Status:** resolved
 
 ---
 
-### [ISSUE-03] Cookie de sessao e derivado de header de entrada nao confiavel
+### [ISSUE-03] Session cookie is derived from an untrusted incoming header
 
-- **Severidade:** Medium
-- **Camada:** rest
-- **Arquivo:** `apps/web/src/rest/controllers/auth/SetAccessTokenController.ts` (linha 8)
-- **Descricao:** qualquer request que chegue ao `apps/web` com header `Authorization` faz o middleware gravar o token recebido em cookie HTTP-only, sem validar emissor, formato ou se o token veio de um fluxo de autenticacao confiavel.
-- **Evidencia:**
+- **Severity:** Medium
+- **Layer:** rest
+- **File:** `apps/web/src/rest/controllers/auth/SetAccessTokenController.ts` (line 8)
+- **Description:** any request that reaches `apps/web` with an `Authorization` header makes the middleware write the received token into an HTTP-only cookie, without validating the issuer, the format, or whether the token came from a trusted authentication flow.
+- **Evidence:**
   ```ts
   const header = http.getHeader('Authorization')
   if (!header) return http.pass()
@@ -76,20 +76,20 @@ last_updated_at: 2026-03-11
     COOKIES.accessToken.durationInSeconds,
   )
   ```
-- **Impacto:** o browser pode persistir um token arbitrario como sessao do app, abrindo espaco para fixation/confusao de sessao e estados inconsistentes entre web e backend.
-- **Recomendacao:** remover essa promocao automatica de header para cookie e retirar `SetAccessTokenController` do middleware. Para handlers em `apps/web/src/app/api`, introduzir um `NextApiRestClient` que receba a request atual, procure primeiro o token no header `Authorization` e depois nos cookies, encaminhando-o apenas como credencial transitória para o backend. Cookies de autenticacao devem continuar sendo emitidos apenas em fluxos confiaveis de `sign-in`, `confirm-email` ou `refresh-session`.
-- **Referencia:** `documentation/rules/rest-layer-rules.md`
+- **Impact:** the browser may persist an arbitrary token as the app's session, opening room for session fixation/confusion and inconsistent states between web and backend.
+- **Recommendation:** remove this automatic promotion from header to cookie and remove `SetAccessTokenController` from the middleware. For handlers in `apps/web/src/app/api`, introduce a `NextApiRestClient` that receives the current request, looks for the token first in the `Authorization` header and then in the cookies, forwarding it only as a transient credential to the backend. Authentication cookies must continue to be issued only in trusted `sign-in`, `confirm-email`, or `refresh-session` flows.
+- **Reference:** `documentation/rules/rest-layer-rules.md`
 - **Status:** resolved
 
 ---
 
-### [ISSUE-05] Erros internos sao devolvidos ao cliente com mensagens cruas
+### [ISSUE-05] Internal errors are returned to the client with raw messages
 
-- **Severidade:** High
-- **Camada:** rpc
-- **Arquivo:** `apps/web/src/rpc/next-safe-action/clients/actionClient.ts` (linha 7)
-- **Descricao:** o client global de server actions retorna `AppError.message` diretamente ao frontend e, para erros desconhecidos, monta uma resposta com `error.message`. Isso expoe detalhes internos da execucao em vez de mascarar a falha.
-- **Evidencia:**
+- **Severity:** High
+- **Layer:** rpc
+- **File:** `apps/web/src/rpc/next-safe-action/clients/actionClient.ts` (line 7)
+- **Description:** the global server actions client returns `AppError.message` directly to the frontend and, for unknown errors, builds a response with `error.message`. This exposes internal execution details instead of masking the failure. (The string `Erro interno do servidor: ...` in the snippet below is the user-facing PT-BR message, kept as in the code: "Internal server error: ...".)
+- **Evidence:**
   ```ts
   handleServerError(error) {
     if (error instanceof AppError) {
@@ -100,20 +100,20 @@ last_updated_at: 2026-03-11
     return `Erro interno do servidor: ${error.message}`
   }
   ```
-- **Impacto:** mensagens de excecao do backend podem chegar a toasts, telas e responses do cliente, revelando detalhes de infraestrutura, regras internas ou estados inesperados.
-- **Recomendacao:** padronizar mascaramento com mensagens seguras ao usuario e log estruturado apenas no servidor. Para `AppError`, devolver mensagens de negocio revisadas; para erros desconhecidos, responder com texto generico.
-- **Referencia:** `documentation/rules/rpc-layer-rules.md`
+- **Impact:** backend exception messages may reach toasts, screens, and client responses, revealing infrastructure details, internal rules, or unexpected states.
+- **Recommendation:** standardize masking with user-safe messages and structured logging only on the server. For `AppError`, return reviewed business messages; for unknown errors, respond with generic text.
+- **Reference:** `documentation/rules/rpc-layer-rules.md`
 - **Status:** resolved
 
 ---
 
-### [ISSUE-06] Cookies de autenticacao nao definem hardening explicito de `secure` e `sameSite`
+### [ISSUE-06] Authentication cookies do not explicitly define `secure` and `sameSite` hardening
 
-- **Severidade:** Medium
-- **Camada:** rpc
-- **Arquivo:** `apps/web/src/rpc/next/NextCall.ts` (linha 32)
-- **Descricao:** os setters centrais de cookie definem apenas `httpOnly`, `path` e `maxAge`. O mesmo padrao aparece em `apps/web/src/rest/next/NextHttp.ts` nos caminhos de `redirect()` e `send()`.
-- **Evidencia:**
+- **Severity:** Medium
+- **Layer:** rpc
+- **File:** `apps/web/src/rpc/next/NextCall.ts` (line 32)
+- **Description:** the central cookie setters define only `httpOnly`, `path`, and `maxAge`. The same pattern appears in `apps/web/src/rest/next/NextHttp.ts` in the `redirect()` and `send()` paths.
+- **Evidence:**
   ```ts
   cookieStore.set({
     name: key,
@@ -123,20 +123,20 @@ last_updated_at: 2026-03-11
     maxAge: durationInSeconds,
   })
   ```
-- **Impacto:** a aplicacao nao explicita as garantias recomendadas para cookies de sessao em ambiente autenticado, reduzindo a defesa contra transporte inseguro e cenarios de cross-site request.
-- **Recomendacao:** definir `secure: true` em ambientes HTTPS e `sameSite: 'lax'` (ou mais restritivo quando possivel) nos emissores centrais de cookie, mantendo a configuracao padronizada na borda.
-- **Referencia:** `documentation/rules/rpc-layer-rules.md`
+- **Impact:** the application does not make explicit the guarantees recommended for session cookies in an authenticated environment, reducing the defense against insecure transport and cross-site request scenarios.
+- **Recommendation:** set `secure: true` in HTTPS environments and `sameSite: 'lax'` (or stricter when possible) in the central cookie emitters, keeping the configuration standardized at the edge.
+- **Reference:** `documentation/rules/rpc-layer-rules.md`
 - **Status:** resolved
 
 ---
 
-### [ISSUE-07] Logs de debug em codigo de producao registram payloads e URLs de feedback
+### [ISSUE-07] Debug logs in production code record feedback payloads and URLs
 
-- **Severidade:** Low
-- **Camada:** ui
-- **Arquivo:** `apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackDialog/useFeedbackDialog.ts` (linha 230)
-- **Descricao:** o fluxo de envio de feedback faz `console.log` do `uploadResponse`, do `filename` retornado e da `screenshotUrl` final. Esses dados pertencem a um fluxo que manipula imagens capturadas da tela do usuario.
-- **Evidencia:**
+- **Severity:** Low
+- **Layer:** ui
+- **File:** `apps/web/src/ui/reporting/widgets/layouts/FeedbackLayout/FeedbackDialog/useFeedbackDialog.ts` (line 230)
+- **Description:** the feedback submission flow does `console.log` of the `uploadResponse`, the returned `filename`, and the final `screenshotUrl`. This data belongs to a flow that handles images captured from the user's screen.
+- **Evidence:**
   ```ts
   console.log('uploadResponse', uploadResponse)
 
@@ -147,71 +147,71 @@ last_updated_at: 2026-03-11
 
   console.log('screenshotUrl', screenshotUrl)
   ```
-- **Impacto:** dados operacionais do upload ficam expostos no console do navegador, o que aumenta superficie de vazamento em ambientes compartilhados e contraria o hardening esperado para producao.
-- **Recomendacao:** remover logs de debug e manter apenas telemetria controlada/anonimizada quando realmente necessaria.
-- **Referencia:** `documentation/rules/ui-layer-rules.md`
+- **Impact:** operational upload data is exposed in the browser console, which increases the leakage surface in shared environments and goes against the hardening expected for production.
+- **Recommendation:** remove debug logs and keep only controlled/anonymized telemetry when really necessary.
+- **Reference:** `documentation/rules/ui-layer-rules.md`
 - **Status:** resolved
 
 ---
 
-## Pendencias
+## Pending Items
 
-- Nenhuma pendencia aberta para o escopo `apps/web`.
+- No open pending items for the `apps/web` scope.
 
-## Esclarecimentos do Escopo
+## Scope Clarifications
 
-- `redirect_to` nao e mais usado legitimamente no app; portanto, qualquer suporte remanescente deve ser tratado como superficie desnecessaria.
-- O `apps/web` nao contem jobs proprios em `apps/web/src/queue/jobs`; a revisao de idempotencia de jobs nao se aplica a este app.
+- `redirect_to` is no longer legitimately used in the app; therefore, any remaining support must be treated as unnecessary surface.
+- `apps/web` does not contain its own jobs in `apps/web/src/queue/jobs`; the job idempotency review does not apply to this app.
 
 ---
 
-## Recomendações Priorizadas
+## Prioritized Recommendations
 
 
-| #   | Acao                                                                                                                                                                                     | Finding(s)       | Severidade   | Esforco |
+| #   | Action                                                                                                                                                                                   | Finding(s)       | Severity     | Effort  |
 | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ------------ | ------- |
-| 1   | Trocar o middleware para fail-closed e tratar excecoes de auth com redirect/control flow seguro                                                                                          | ISSUE-01          | High         | S       |
-| 2   | Bloquear redirects externos em `redirect_to` e aceitar apenas caminhos internos ou allowlist assinada                                                                                    | ISSUE-02          | Medium       | S       |
-| 3   | Remover `SetAccessTokenController` do middleware e criar `NextApiRestClient` para `apps/web/src/app/api`, usando `Authorization` ou cookie apenas como credencial transitória da request | ISSUE-03          | Medium       | S       |
-| 4   | Padronizar mascaramento de erros nas server actions e helpers REST, removendo `error.message` da resposta ao cliente                                                                     | ISSUE-05          | High         | M       |
-| 5   | Endurecer emissores de cookie com `secure` e `sameSite`, e remover logs de debug do fluxo de feedback                                                                                     | ISSUE-06, ISSUE-07 | Medium / Low | S       |
+| 1   | Switch the middleware to fail-closed and handle auth exceptions with a safe redirect/control flow                                                                                        | ISSUE-01          | High         | S       |
+| 2   | Block external redirects in `redirect_to` and accept only internal paths or a signed allowlist                                                                                           | ISSUE-02          | Medium       | S       |
+| 3   | Remove `SetAccessTokenController` from the middleware and create `NextApiRestClient` for `apps/web/src/app/api`, using `Authorization` or cookie only as a transient request credential | ISSUE-03          | Medium       | S       |
+| 4   | Standardize error masking in server actions and REST helpers, removing `error.message` from the client response                                                                          | ISSUE-05          | High         | M       |
+| 5   | Harden cookie emitters with `secure` and `sameSite`, and remove debug logs from the feedback flow                                                                                        | ISSUE-06, ISSUE-07 | Medium / Low | S       |
 
 
 ---
 
-## Checklist de Verificacao Pós-Correção
+## Post-Fix Verification Checklist
 
-- [x] `npm run check:code -w @stardust/web` passa
-- [x] `npm run check:types -w @stardust/web` passa
-- [x] `npm run test -w @stardust/web` passa
-- [x] Nenhuma variavel de ambiente real exposta
-- [x] Nenhum `console.log` de debug em codigo de producao
-- [x] Middleware de auth aplicado em todas as rotas afetadas
+- [x] `npm run check:code -w @stardust/web` passes
+- [x] `npm run check:types -w @stardust/web` passes
+- [x] `npm run test -w @stardust/web` passes
+- [x] No real environment variable exposed
+- [x] No debug `console.log` in production code
+- [x] Auth middleware applied on all affected routes
 
 ---
 
-## Resolucao Final
+## Final Resolution
 
-**Data de conclusao:** 2026-03-11
+**Completion date:** 2026-03-11
 
-### Itens Resolvidos
+### Resolved Items
 
-| ID | Titulo | Abordagem Adotada |
+| ID | Title | Approach Taken |
 |----|--------|-------------------|
-| SEC-01 | Middleware de autenticacao falha em modo fail-open | O `catch` do middleware agora registra o erro e aplica fail-closed para rotas protegidas, com `401` para rotas de API e redirect controlado para login nas demais. |
-| SEC-02 | Parametro `redirect_to` permite open redirect | Abordagem alternativa: o suporte a `redirect_to` foi mantido, mas agora o redirecionamento so aceita caminhos internos relativos e ignora URLs absolutas ou protocol-relative. |
-| SEC-03 | Cookie de sessao e derivado de header de entrada nao confiavel | Conforme recomendacao original: `SetAccessTokenController` foi removido do middleware e as rotas em `apps/web/src/app/api` passaram a usar `NextApiRestClient` para encaminhar credenciais apenas no escopo da request atual. |
-| SEC-05 | Erros internos sao devolvidos ao cliente com mensagens cruas | Abordagem alternativa: o client continua registrando detalhes do `AppError` no servidor, mas agora sempre responde ao frontend com mensagem segura e generica. |
-| SEC-06 | Cookies de autenticacao nao definem hardening explicito de `secure` e `sameSite` | Conforme recomendacao original: `NextCall` e `NextHttp` passaram a definir `sameSite: 'lax'` e `secure` de forma centralizada conforme o ambiente. |
-| SEC-07 | Logs de debug em codigo de producao registram payloads e URLs de feedback | Conforme recomendacao original: os `console.log` do fluxo de feedback foram removidos do widget afetado. |
+| SEC-01 | Authentication middleware fails open | The middleware's `catch` now logs the error and applies fail-closed for protected routes, with `401` for API routes and a controlled redirect to login for the others. |
+| SEC-02 | The `redirect_to` parameter allows open redirect | Alternative approach: support for `redirect_to` was kept, but the redirect now only accepts relative internal paths and ignores absolute or protocol-relative URLs. |
+| SEC-03 | Session cookie is derived from an untrusted incoming header | As per the original recommendation: `SetAccessTokenController` was removed from the middleware and the routes in `apps/web/src/app/api` started using `NextApiRestClient` to forward credentials only within the scope of the current request. |
+| SEC-05 | Internal errors are returned to the client with raw messages | Alternative approach: the client keeps logging the `AppError` details on the server, but now always responds to the frontend with a safe, generic message. |
+| SEC-06 | Authentication cookies do not explicitly define `secure` and `sameSite` hardening | As per the original recommendation: `NextCall` and `NextHttp` now define `sameSite: 'lax'` and `secure` centrally according to the environment. |
+| SEC-07 | Debug logs in production code record feedback payloads and URLs | As per the original recommendation: the `console.log` calls in the feedback flow were removed from the affected widget. |
 
-### Observacoes
+### Notes
 
-Todas as validacoes do `@stardust/web` passaram. Durante a suite completa, `src/ui/auth/widgets/pages/SignIn/AnimatedHero/tests/AnimatedHeroView.test.tsx` ainda emite um warning de `act(...)` no console do Jest, mas sem falha de teste nem exposicao ao usuario final.
+All `@stardust/web` validations passed. During the full suite, `src/ui/auth/widgets/pages/SignIn/AnimatedHero/tests/AnimatedHeroView.test.tsx` still emits an `act(...)` warning in the Jest console, but with no test failure nor exposure to the end user.
 
 ---
 
-## Referencias
+## References
 
 - `documentation/architecture.md`
 - `documentation/rules/rules.md`
