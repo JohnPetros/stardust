@@ -1,52 +1,52 @@
-# Domain Object Testing Rules
+# Regras de Testes de Objetos de Domínio
 
-The domain is the heart of StarDust. Since it encapsulates the essential business rules, we ensure that this layer has high test coverage and follows strict quality standards.
+O domínio é o coração do StarDust. Como ele encapsula as regras de negócio essenciais, garantimos que essa camada possua uma alta cobertura de testes e siga padrões rigorosos de qualidade.
 
-This document details how to test **Entities**, **Structures (Value Objects)**, and **Aggregates**.
+Este documento detalha como testar **Entidades**, **Estruturas (Value Objects)** e **Agregados**.
 
-## 📍 Location and Naming
+## 📍 Localização e Nomenclatura
 
-Test files must be placed in a `tests` subfolder inside the corresponding object's directory.
+Os arquivos de teste devem ser colocados em uma subpasta `tests` dentro do diretório do objeto correspondente.
 
-- **Entities**: `packages/core/src/[module]/domain/entities/tests/[EntityName].test.ts`
-- **Structures**: `packages/core/src/[module]/domain/structures/tests/[StructureName].test.ts`
+- **Entidades**: `packages/core/src/[modulo]/domain/entities/tests/[NomeEntidade].test.ts`
+- **Estruturas**: `packages/core/src/[modulo]/domain/structures/tests/[NomeEstrutura].test.ts`
 
-The suffix must always be `.test.ts`.
+O sufixo deve ser sempre `.test.ts`.
 
-## 🥸 The Role of Fakers
+## 🥸 O Papel dos Fakers
 
-To speed up test creation and avoid coupling to the internal structure of DTOs, we use **Fakers**. Every complex domain object must have its corresponding Faker.
+Para agilizar a criação de testes e evitar o acoplamento com a estrutura interna de DTOs, utilizamos **Fakers**. Cada objeto de domínio complexo deve ter seu Faker correspondente.
 
-- **Usage**: Always prefer `EntityFaker.fake()` over instantiating manually in the test.
-- **Overrides**: Use the overrides parameter to define only the data relevant to the test scenario.
+- **Uso**: Sempre prefira `EntidadeFaker.fake()` em vez de instanciar manualmente no teste.
+- **Sobrescrita**: Utilize o parâmetro de overrides para definir apenas os dados relevantes para o cenário do teste.
 
 ```ts
-// Good: Focuses only on what matters for the test
+// Bom: Foca apenas no que importa para o teste
 const user = UsersFaker.fake({ coins: 0 });
 
-// Bad: Verbose and prone to breaking on DTO changes
+// Ruim: Verboso e propenso a quebras por mudanças no DTO
 const user = User.create({
   id: 'any-id',
   name: 'Any Name',
   email: 'any@email.com',
   coins: 0,
-  // ... dozens of other fields
+  // ... dezenas de outros campos
 });
 ```
 
 ---
 
-## 🏗️ Testing Entities
+## 🏗️ Testando Entidades (Entities)
 
-Entities are mutable and identified by an `id`. Tests must focus on **behavior** and **state changes**.
+Entidades são mutáveis e identificadas por um `id`. Os testes devem focar no **comportamento** e nas **mudanças de estado**.
 
-### What to test:
-1.  **Business Methods**: Verify that the internal state (`props`) changes correctly after a method runs.
-2.  **Validation Rules**: Verify that exceptions (Domain Errors) are thrown when preconditions are not met.
-3.  **Identity Guarantee**: Verify that identity is preserved.
-4.  **DTO Conversion**: Ensure that the `dto` method or `dto` getter returns the correct representation.
+### O que testar:
+1.  **Métodos de Negócio**: Verifique se o estado interno (`props`) muda corretamente após a execução de um método.
+2.  **Regras de Validação**: Verifique se exceções (Domain Errors) são lançadas quando pré-condições não são atendidas.
+3.  **Garantia de Identidade**: Verifique se a identidade é preservada.
+4.  **Conversão para DTO**: Garanta que o método `dto` ou getter `dto` retorna a representação correta.
 
-### Example:
+### Exemplo:
 ```ts
 describe('User Entity', () => {
   it('should increase coins when user earns coins', () => {
@@ -68,17 +68,17 @@ describe('User Entity', () => {
 
 ---
 
-## 💎 Testing Structures
+## 💎 Testando Estruturas (Structures)
 
-Structures (Value Objects) are immutable. Tests must focus on **validation at creation** and **correctness of operations**.
+Estruturas (Value Objects) são imutáveis. O foco dos testes deve ser a **validação na criação** e a **corretude das operações**.
 
-### What to test:
-1.  **Creation (Factory Method)**: Test the `static create()` method with valid and invalid values.
-2.  **Immutability**: Ensure that methods that "change" the value return a **new instance**, without modifying the original.
-3.  **Comparison**: Test equality methods such as `isEqualTo`.
-4.  **Internal Logic**: Test encapsulated algorithms (e.g., XP calculation, formatting).
+### O que testar:
+1.  **Criação (Factory Method)**: Teste o método `static create()` com valores válidos e inválidos.
+2.  **Imutabilidade**: Garanta que métodos que "alteram" o valor retornem uma **nova instância**, sem modificar a original.
+3.  **Comparação**: Teste métodos de igualdade como `isEqualTo`.
+4.  **Lógica Interna**: Teste algoritmos encapsulados (ex: cálculo de XP, formatação).
 
-### Example:
+### Exemplo:
 ```ts
 describe('Email Structure', () => {
   it('should be created from a valid email string', () => {
@@ -95,7 +95,7 @@ describe('Level Structure', () => {
     const level = Level.create(1);
     const nextLevel = level.up(currentXp, earnedXp);
     
-    expect(nextLevel).not.toBe(level); // Immutability
+    expect(nextLevel).not.toBe(level); // Imutabilidade
     expect(nextLevel.value).toBe(2);
   });
 });
@@ -103,27 +103,27 @@ describe('Level Structure', () => {
 
 ---
 
-## 🧩 Testing Aggregates
+## 🧩 Testando Agregados (Aggregates)
 
-Since aggregates only encapsulate a relationship between entities, their tests are usually simple and focus on ensuring that the aggregated entity is being loaded or referenced correctly.
+Como agregados apenas encapsulam uma relação entre entidades, seus testes geralmente são simples e focam em garantir que a entidade agregada está sendo carregada ou referenciada corretamente.
 
 ---
 
-## 🚀 Best Practices
+## 🚀 Boas Práticas
 
-1.  **Isolation**: Domain tests must **never** depend on infrastructure (database, APIs).
-2.  **Strong Typing**: Use the domain types (such as `Integer`, `Id`, `Logical`) in assertions whenever possible.
+1.  **Isolamento**: Testes de domínio **nunca** devem depender de infraestrutura (banco de dados, APIs).
+2.  **Tipagem Forte**: Utilize os tipos de domínio (como `Integer`, `Id`, `Logical`) nas asserções sempre que possível.
 3.  **Arrange-Act-Assert**:
-    - **Arrange**: Prepare the state using Fakers.
-    - **Act**: Call the domain method.
-    - **Assert**: Verify the result or the state change.
-4.  **Use Spies sparingly**: If a domain object interacts with another complex object passed as a parameter, use `jest.spyOn` to verify the interaction if needed.
+    - **Arrange**: Prepare o estado usando Fakers.
+    - **Act**: Chame o método de domínio.
+    - **Assert**: Verifique o resultado ou a mudança de estado.
+4.  **Use Spies com moderação**: Se um objeto de domínio interage com outro objeto complexo passado por parâmetro, use `jest.spyOn` para verificar a interação se necessário.
 
 ## Tooling
 
-- Test runner: Jest (mainly in the `@stardust/core` package).
-- Data generation: core fakers + `@faker-js/faker` (when applicable).
-- Commands:
+- Runner de testes: Jest (principalmente no pacote `@stardust/core`).
+- Geracao de dados: fakers do core + `@faker-js/faker` (quando aplicavel).
+- Comandos:
   - `pnpm --filter @stardust/core run test:unit`
   - `pnpm --filter @stardust/core run check:types`
-- General reference: `documentation/tooling.md`.
+- Referencia geral: `documentation/tooling.md`.

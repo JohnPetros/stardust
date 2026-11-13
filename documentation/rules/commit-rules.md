@@ -1,67 +1,67 @@
-# Commit Rules
+# Regras de Commit
 
-This document defines the rules for creating commits in the repository. It replaces
-the use of commit-specific prompts as the main source of decision.
+Este documento define as regras para criar commits no repositório. Ele substitui
+o uso de prompts específicos de commit como fonte principal de decisão.
 
-## Goal
+## Objetivo
 
-Every commit must:
+Todo commit deve:
 
-- represent a single semantic responsibility
-- make the history easier to read and the changes easier to review
-- make clear the type of change made
-- avoid ambiguous, generic or mixed commits
+- representar uma responsabilidade semântica única
+- facilitar leitura do histórico e revisão de mudanças
+- deixar claro o tipo de alteração feita
+- evitar commits ambíguos, genéricos ou misturados
 
-## Mandatory preconditions
+## Pré-condições obrigatórias
 
-Before creating any commit, the following must be validated:
+Antes de criar qualquer commit, deve-se validar:
 
-- there are no previously staged files that are not part of the current commit
-- there are real changes in the worktree
-- the files of the group to be committed were analyzed through the diff, not just by path
+- não existem arquivos previamente em stage que não façam parte do commit atual
+- existem alterações reais no worktree
+- os arquivos do grupo a ser commitado foram analisados pelo diff, não apenas pelo caminho
 
-If there are already staged files with no direct relation to the intended commit, the
-process must stop until the stage is cleaned or reorganized.
+Se já houver arquivos em stage sem relação direta com o commit pretendido, o
+processo deve parar até que o stage seja limpo ou reorganizado.
 
-## Grouping rule
+## Regra de agrupamento
 
-Commits must be grouped by semantic responsibility, not by folder.
+Commits devem ser agrupados por responsabilidade semântica, não por pasta.
 
-### Must
+### Deve
 
-- group files that implement the same functional change
-- separate independent changes into different commits
-- separate fixes, refactors, tests, docs and config when they are distinct responsibilities
+- agrupar arquivos que implementam a mesma mudança funcional
+- separar mudanças independentes em commits diferentes
+- separar correções, refactors, testes, docs e config quando forem responsabilidades distintas
 
-### Must not
+### Não deve
 
-- mix a bugfix with an unnecessary refactor
-- mix a documentation change with a runtime change without a clear relation
-- mix changes from different layers just because they are in the same PR
+- juntar bugfix com refactor não necessário
+- juntar mudança de documentação com mudança de runtime sem relação clara
+- juntar alterações de camadas diferentes apenas porque estão no mesmo PR
 
-> ⚠️ If a file touches more than one responsibility, the decision must be made
-> by the content of the diff. The file path alone is not enough.
+> ⚠️ Se um arquivo tocar mais de uma responsabilidade, a decisão deve ser feita
+> pelo conteúdo do diff. O caminho do arquivo sozinho não é suficiente.
 
-## Analysis rule
+## Regra de análise
 
-Before classifying a commit, the following must be analyzed:
+Antes de classificar um commit, deve-se analisar:
 
-- the file path
-- the actual content of the diff
-- the impact of the change
-- whether the change is a new feature, fix, refactor, test, docs or config
+- o caminho do arquivo
+- o conteúdo real do diff
+- o impacto da alteração
+- se a mudança é nova feature, correção, refactor, teste, docs ou config
 
-Ambiguous files must be classified by the predominant intent of the change.
+Arquivos ambíguos devem ser classificados pela intenção predominante da mudança.
 
-## Mandatory message format
+## Formato obrigatório da mensagem
 
-Every commit message must follow exactly this format:
+Toda mensagem de commit deve seguir exatamente este formato:
 
 ```text
-emoji prefix(optional scope): concise description in English
+emoji prefix(scope opcional): concise description in English
 ```
 
-Valid examples:
+Exemplos válidos:
 
 ```text
 🐛 fix(server): align Inngest local discovery port
@@ -70,48 +70,48 @@ Valid examples:
 ⚙️ config: restore default server port
 ```
 
-## Message rules
+## Regras da mensagem
 
-### Must
+### Deve
 
-- write the description in English
-- use a short, direct and specific description
-- use a verb in the imperative or an objective description of the action
-- use only approved prefixes
-- include a `scope` when it increases clarity
+- escrever a descrição em inglês
+- usar descrição curta, direta e específica
+- usar verbo no imperativo ou descrição objetiva de ação
+- usar apenas prefixos aprovados
+- incluir `scope` quando isso aumentar clareza
 
-### Must not
+### Não deve
 
-- use vague messages such as `update code`, `fix stuff`, `changes`
-- use Portuguese in the description
-- invent prefixes outside the approved table
-- describe more than one semantic change in the same message
+- usar mensagens vagas como `update code`, `fix stuff`, `changes`
+- usar português na descrição
+- inventar prefixos fora da tabela aprovada
+- descrever mais de uma mudança semântica na mesma mensagem
 
-## Table of approved prefixes
+## Tabela de prefixos aprovados
 
-| Type of change | Prefix | Emoji |
+| Tipo de alteração | Prefixo | Emoji |
 | --- | --- | --- |
-| Domain | `domain` | `🌐` |
+| Domínio | `domain` | `🌐` |
 | REST | `rest` | `📶` |
 | UI | `ui` | `🖥️` |
-| Database | `db` | `💾` |
+| Banco de dados | `db` | `💾` |
 | Work in progress | `wip` | `🚧` |
-| Artificial intelligence | `ai` | `🤖` |
+| Inteligência artificial | `ai` | `🤖` |
 | RPC | `rpc` | `📟` |
 | Use case | `use case` | `✨` |
 | Interfaces | `interface` | `📑` |
-| Types | `type` | `🏷️` |
-| Documentation | `docs` | `📚` |
-| Fix | `fix` | `🐛` |
+| Tipos | `type` | `🏷️` |
+| Documentação | `docs` | `📚` |
+| Correção | `fix` | `🐛` |
 | Refactor | `refactor` | `♻️` |
-| Tests | `test` | `🧪` |
-| Configuration / infra | `config` | `⚙️` |
-| Dependencies | `deps` | `📦` |
-| Folder structure | `ftree` | `🗃️` |
+| Testes | `test` | `🧪` |
+| Configuração / infra | `config` | `⚙️` |
+| Dependências | `deps` | `📦` |
+| Estrutura de pastas | `ftree` | `🗃️` |
 | Providers / provision | `provision` | `🧰` |
 | Response | `response` | `📤` |
 | Design | `design` | `🎨` |
-| Certificates / licenses | `cert` | `📜` |
+| Certificados / licenças | `cert` | `📜` |
 | Validation | `validation` | `📮` |
 | Hotfix | `hotfix` | `🚑` |
 | Continuous delivery | `cd` | `🚚` |
@@ -119,78 +119,78 @@ Valid examples:
 | Release | `release` | `🔖` |
 | Docker | `docker` | `🐳` |
 
-## When to use `scope`
+## Quando usar `scope`
 
-The `scope` is optional, but must be used when:
+O `scope` é opcional, mas deve ser usado quando:
 
-- the change affects a specific workspace such as `web`, `server`, `backoffice` or `core`
-- the change affects a clear domain such as `auth`, `notes`, `space` or `challenge`
-- the prefix alone does not make clear where the change happened
+- a mudança afeta um workspace específico como `web`, `server`, `backoffice` ou `core`
+- a mudança afeta um domínio claro como `auth`, `notes`, `space` ou `challenge`
+- o prefixo sozinho não deixa claro onde a mudança aconteceu
 
-Examples:
+Exemplos:
 
 - `🐛 fix(server): restore default port`
 - `📚 docs(rules): add commit message policy`
 - `🧪 test(profile): cover user absence controller`
 
-## Recommended order of execution
+## Ordem recomendada de execução
 
-For each commit:
+Para cada commit:
 
-1. analyze `git diff --stat`
-2. analyze the `git diff` of the candidate files
-3. select only the correct semantic group
-4. add only the files of the group
-5. create the commit with a message in the standard format
-6. repeat until no pending changes remain
+1. analisar `git diff --stat`
+2. analisar `git diff` dos arquivos candidatos
+3. selecionar apenas o grupo semântico correto
+4. adicionar somente os arquivos do grupo
+5. criar o commit com mensagem no padrão
+6. repetir até não restarem mudanças pendentes
 
-## Quality criteria
+## Critérios de qualidade
 
-Before running the commit, confirm that:
+Antes de executar o commit, deve-se confirmar:
 
-- the message correctly represents the diff
-- there are no files of another responsibility in the same stage
-- the chosen prefix is consistent with the change
-- the commit improves, rather than worsens, the readability of the history
+- a mensagem representa corretamente o diff
+- não há arquivos de outra responsabilidade no mesmo stage
+- o prefixo escolhido é consistente com a alteração
+- o commit melhora, e não piora, a legibilidade do histórico
 
-## Cases that require extra attention
+## Casos que exigem atenção extra
 
-### Ambiguous changes
+### Mudanças ambíguas
 
-If a file can be classified in more than one category:
+Se um arquivo puder ser classificado em mais de uma categoria:
 
-- the category must be chosen based on the content of the diff
-- the main responsibility delivered by the file must be prioritized
+- deve-se escolher a categoria com base no conteúdo do diff
+- deve-se priorizar a responsabilidade principal entregue pelo arquivo
 
-### Large changes
+### Mudanças grandes
 
-If the worktree has extensive changes:
+Se o worktree tiver alterações extensas:
 
-- splitting into multiple small, coherent commits is preferred
-- a single "umbrella" commit must not be used
+- deve-se preferir dividir em múltiplos commits pequenos e coerentes
+- não se deve usar um único commit "guarda-chuva"
 
-### Dirty worktree
+### Worktree sujo
 
-If there are unrelated changes:
+Se houver alterações não relacionadas:
 
-- committing them together must be avoided
-- the scope of the current change must be isolated
+- deve-se evitar commitá-las juntas
+- deve-se isolar o escopo da mudança atual
 
-## What is forbidden
+## O que é proibido
 
-- creating a commit without reviewing the diff
-- creating a commit with a previously contaminated stage
-- mixing independent responsibilities
-- using a generic message
-- using a prefix outside the table
-- doing an `amend` without an explicit request
+- criar commit sem revisar o diff
+- criar commit com stage previamente contaminado
+- misturar responsabilidades independentes
+- usar mensagem genérica
+- usar prefixo fora da tabela
+- fazer `amend` sem solicitação explícita
 
-## Relationship with other rules
+## Relação com outras regras
 
-When preparing a commit, the following must also be respected:
+Ao preparar um commit, também deve-se respeitar:
 
 - `documentation/rules/code-conventions-rules.md`
 - `documentation/rules/rules.md`
 
-If the change involves a specific layer, that layer's rules must also
-be consulted before defining the final message.
+Se a mudança envolver uma camada específica, as regras dessa camada também
+devem ser consultadas antes de definir a mensagem final.

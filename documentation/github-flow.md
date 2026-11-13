@@ -100,7 +100,7 @@ git switch -c feat/notes-drawer
 - keep the change within the issue or Spec scope
 - create or update the required tests
 - run the detectors for the changed workspaces and their direct consumers; the
-  selection rules are in [`tooling.md`](tooling.md#scoped-local-execution)
+  selection rules are in [`tooling.md`](tooling.md#execução-local-escopada)
 - do not include secrets, `.env` files or unrelated local changes
 
 ### 4. Create commits
@@ -197,7 +197,7 @@ Pull Requests targeting `main` run the CI of every area their paths touch:
 
 Each CI workflow is filtered by paths, so a PR only runs the workflows of the
 areas it changes. The CI runs the full suites; locally, run only the scope
-defined in [`tooling.md`](tooling.md#scoped-local-execution).
+defined in [`tooling.md`](tooling.md#execução-local-escopada).
 
 ---
 

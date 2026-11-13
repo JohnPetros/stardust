@@ -1,294 +1,294 @@
-# Project Rules
+# Regras do Projeto
 
-This file serves as an index for the project's documentation rules.
-Always consult the specific files below based on the task at hand.
+Este arquivo serve como índice para as regras de documentação do projeto.
+Sempre consulte os arquivos específicos abaixo com base na tarefa em questão.
 
-## Crew Application Rules
+## Regras da aplicação Crew
 
-**File:** `/documentation/rules/crew-app-rules.md`
-**When to consult:** when changing `apps/crew/**`, `Dockerfile.crew` or the Crew CI.
-Crew is independent tooling; its exceptions for structure, classes, persistence and
-tests do not apply to the product applications.
+**Arquivo:** `/documentation/rules/crew-app-rules.md`
+**Quando consultar:** ao alterar `apps/crew/**`, `Dockerfile.crew` ou o CI de Crew.
+Crew é tooling independente; suas exceções de estrutura, classes, persistência e
+testes não se aplicam às aplicações de produto.
 
-## SDD Execution Rules
+## Regras de execução do SDD
 
-**Main file and sole normative source:** `/documentation/sdd.md`
-**When to consult:**
+**Arquivo principal e única fonte normativa:** `/documentation/sdd.md`
+**Quando consultar:**
 
-- When creating or reviewing a technical Spec.
-- The Spec Reviewer runs a single gate before implementation (with retries of the
-  same review when there are findings) and evaluates only compatibility with
-  Architecture and Rules.
-- When implementing a Spec directly.
-- When running sensors and concluding an implementation.
-- When updating Spec, PRD, Architecture or Rules during implementation.
-- When recording human review, progress or a finding.
-- When creating or updating `evaluation.md`.
-- When separating local sensors from the CI checks and build.
+- Ao criar ou revisar uma Spec técnica.
+- O Spec Reviewer executa um único gate antes da implementação (com retries da
+  mesma revisão quando houver findings) e avalia somente compatibilidade com
+  Architecture e Rules.
+- Ao implementar uma Spec diretamente.
+- Ao executar sensores e concluir uma implementação.
+- Ao atualizar Spec, PRD, Architecture ou Rules durante a implementação.
+- Ao registrar revisão humana, progresso ou finding.
+- Ao criar ou atualizar `evaluation.md`.
+- Ao separar sensores locais dos checks e do build do CI.
 
-See `documentation/sdd.md` for the full flow, contracts, states,
-roles, artifacts, sensors and completion criteria.
+Consulte `documentation/sdd.md` para o fluxo completo, contratos, estados,
+papéis, artefatos, sensores e critérios de conclusão.
 
-## Code Conventions Rules
+## Regras de Convenções de Código
 
-**File:** `/documentation/rules/code-conventions-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/code-conventions-rules.md`
+**Quando consultar:**
 
-- When creating or modifying a document related to code conventions.
-- For general naming conventions (variables, functions, classes,
-  files).
-- To understand the use of Factory Functions and Domain Objects (Entities,
-  Value Objects, Aggregates).
-- For rules about Barrel files (index.ts).
-- When creating Event or Error classes.
-- When defining constants and applying the prohibition of dedicated tests for them.
+- Ao criar ou modificar um documento relacionado às convenções de código.
+- Para convenções gerais de nomenclatura (variáveis, funções, classes,
+  arquivos).
+- Para entender o uso de Factory Functions e Objetos de Domínio (Entidades,
+  Objetos de Valor, Agregados).
+- Para regras sobre Barrel files (index.ts).
+- Ao criar classes de Evento ou Erro.
+- Ao definir constantes e aplicar a proibicao de testes dedicados a elas.
 
-## Commit Rules
+## Regras de Commit
 
-**File:** `/documentation/rules/commit-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/commit-rules.md`
+**Quando consultar:**
 
-- Before creating commits in the repository.
-- To choose the prefix, emoji and format of the commit message.
-- To group changes by semantic responsibility.
-- To replace the use of commit-specific prompts as the main source of decision.
+- Antes de criar commits no repositório.
+- Para escolher o prefixo, emoji e formato da mensagem de commit.
+- Para agrupar alterações por responsabilidade semântica.
+- Para substituir o uso de prompts específicos de commit como fonte principal de decisão.
 
-## UI Layer Rules
+## Regras da Camada UI
 
-**File:** `/documentation/rules/ui-layer-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/ui-layer-rules.md`
+**Quando consultar:**
 
-- When creating or modifying a document related to the UI layer.
-- When creating or modifying React components (Widgets).
-- To understand the structure of a widget (View, Hook, Index).
-- For naming conventions of Views, Hooks and Props.
-- When implementing event handlers or action executors.
-- To understand when to use `forwardRef`.
+- Ao criar ou modificar um documento relacionado a camada UI.
+- Ao criar ou modificar componentes React (Widgets).
+- Para entender a estrutura de um widget (View, Hook, Index).
+- Para convenções de nomenclatura de Views, Hooks e Props.
+- Ao implementar manipuladores de eventos ou executores de ações.
+- Para entender quando usar `forwardRef`.
 
-## REST Layer Rules
+## Regras da Camada REST
 
-**File:** `/documentation/rules/rest-layer-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/rest-layer-rules.md`
+**Quando consultar:**
 
-- When creating or modifying a document related to the REST layer.
-- When making HTTP requests to external APIs or services.
-- To implement new Services using `RestClient`.
-- To understand how `RestResponse` works and the error handling in this
-  layer.
+- Ao criar ou modificar um documento relacionado a camada REST.
+- Ao realizar requisições HTTP para APIs externas ou serviços.
+- Para implementar novos Services usando `RestClient`.
+- Para entender como funciona `RestResponse` e o tratamento de erros nesta
+  camada.
 
-## RPC Layer Rules
+## Regras da Camada RPC
 
-**File:** `/documentation/rules/rpc-layer-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/rpc-layer-rules.md`
+**Quando consultar:**
 
-- When creating or modifying a document related to the RPC layer.
-- When implementing Actions on the server using the Factory Function pattern.
-- To understand the `Call` interface and how to handle
-  requests/redirects.
-- When organizing actions by domain.
+- Ao criar ou modificar um documento relacionado a camada RPC.
+- Ao implementar Actions no servidor usando o padrão Factory Function.
+- Para entender a interface `Call` e como lidar com
+  requisições/redirecionamentos.
+- Ao organizar actions por domínio.
 
-## LSP Layer Rules
+## Regras da Camada LSP
 
-**File:** `/documentation/rules/lsp-layer-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/lsp-layer-rules.md`
+**Quando consultar:**
 
-- When creating or modifying a document related to the LSP layer.
-- When changing the `packages/lsp` package.
-- To understand the responsibilities of `DeleguaLsp`, `DeleguaInterpretador` and `DeleguaConfiguracaoParaEditorMonaco`.
-- When adding snippets, documentation, regex or tokens of the Delegua language.
-- When integrating code editing, execution or analysis features with core contracts.
+- Ao criar ou modificar um documento relacionado a camada LSP.
+- Ao alterar o pacote `packages/lsp`.
+- Para entender as responsabilidades de `DeleguaLsp`, `DeleguaInterpretador` e `DeleguaConfiguracaoParaEditorMonaco`.
+- Ao adicionar snippets, documentacoes, regex ou tokens da linguagem Delegua.
+- Ao integrar recursos de edicao, execucao ou analise de codigo com contratos do core.
 
-## Delegua Language Rules
+## Regras da Linguagem Delegua
 
-**File:** `/documentation/rules/delegua-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/delegua-rules.md`
+**Quando consultar:**
 
-- When creating or modifying executable Delégua code.
-- When writing challenges, official solutions, fixtures, mocks or snippets of
+- Ao criar ou modificar código executável em Delégua.
+- Ao escrever desafios, soluções oficiais, fixtures, mocks ou snippets de
   Delégua.
-- When defining inputs, outputs or expected results of Delégua programs.
-- To ensure that booleans, reserved words, types and native functions
-  are in Portuguese.
-- When choosing the simplest, most readable and most didactic solution for a challenge.
-- When integrating Delégua code with the editor, the LSP, the server or the playback.
+- Ao definir entradas, saídas ou resultados esperados de programas Delégua.
+- Para garantir que booleanos, palavras reservadas, tipos e funções nativas
+  estejam em português.
+- Ao escolher a solução mais simples, legível e didática para um desafio.
+- Ao integrar código Delégua com o editor, o LSP, o servidor ou o playback.
 
-## Queue Layer Rules
+## Regras da Camada de Fila (queue)
 
-**File:** `/documentation/rules/queue-layer-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/queue-layer-rules.md`
+**Quando consultar:**
 
-- When creating or modifying a document related to the queue layer.
-- When implementing background jobs or asynchronous processing.
-- To understand the `Job` interface and the `Amqp` protocol.
-- When defining new jobs with the `Job<Payload>` structure.
+- Ao criar ou modificar um documento relacionado a camada de fila.
+- Ao implementar jobs em background ou processamento assíncrono.
+- Para entender a interface `Job` e o protocolo `Amqp`.
+- Ao definir novos jobs com a estrutura `Job<Payload>`.
 
-## Realtime Layer Rules
+## Regras da Camada Realtime
 
-**File:** `/documentation/rules/realtime-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/realtime-rules.md`
+**Quando consultar:**
 
-- When creating or modifying a document related to the realtime layer.
-- When implementing new realtime channels, adapters or clients in `apps/web`.
-- To understand how to expose provider events to the UI without coupling widgets to the external SDK.
-- When integrating hooks, contexts and listeners with core contracts, such as `ProfileChannel`.
+- Ao criar ou modificar um documento relacionado a camada realtime.
+- Ao implementar novos canais, adaptadores ou clients realtime no `apps/web`.
+- Para entender como expor eventos do provedor para a UI sem acoplar widgets ao SDK externo.
+- Ao integrar hooks, contexts e listeners com contratos do core, como `ProfileChannel`.
 
-## Providers Layer Rules (provision)
+## Regras da Camada de Providers (provision)
 
-**File:** `/documentation/rules/provision-layer-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/provision-layer-rules.md`
+**Quando consultar:**
 
-- When creating or modifying a document related to the provision layer.
-- When integrating with third-party tools (Storage, Email, Payments,
+- Ao criar ou modificar um documento relacionado a camada de provision.
+- Ao integrar com ferramentas de terceiros (Armazenamento, Email, Pagamentos,
   etc.).
-- To implement new Providers (Gateways) that encapsulate external SDKs.
-- To validate providers through the consuming boundary, without dedicated tests in the
-  Provision layer.
+- Para implementar novos Providers (Gateways) que encapsulam SDKs externos.
+- Para validar providers pela fronteira consumidora, sem testes dedicados na
+  camada Provision.
 
-## AI Layer Rules
+## Regras da Camada AI
 
-**File:** `/documentation/rules/ai-layer-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/ai-layer-rules.md`
+**Quando consultar:**
 
-- When creating or modifying a document related to the AI layer.
-- When implementing tools, agents, prompts or AI flows.
-- To understand the boundaries between AI adapters and the project's internal contracts.
-- When integrating models, providers or inference orchestration.
+- Ao criar ou modificar um documento relacionado a camada AI.
+- Ao implementar tools, agentes, prompts ou fluxos de IA.
+- Para entender as fronteiras entre adapters de IA e contratos internos do projeto.
+- Ao integrar modelos, provedores ou orchestration de inferencia.
 
-## MCP Usage Rules
+## Regras de Uso de MCPs
 
-**File:** `/documentation/rules/mcp-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/mcp-rules.md`
+**Quando consultar:**
 
-- When deciding which MCP to use for a task.
-- When validating real browser flows with Playwright MCP.
-- When exploring symbols and call paths with CodeGraph.
-- When consulting up-to-date documentation with Context7.
-- When interacting with Supabase Dev/Prod.
-- When inspecting or editing the `stardust` Penpot file via Penpot MCP.
+- Ao decidir qual MCP usar para uma tarefa.
+- Ao validar fluxos reais de browser com Playwright MCP.
+- Ao explorar simbolos e caminhos de chamada com CodeGraph.
+- Ao consultar documentacao atualizada com Context7.
+- Ao interagir com Supabase Dev/Prod.
+- Ao inspecionar ou editar o arquivo Penpot `stardust` via Penpot MCP.
 
-## Web Application Rules
+## Regras da Aplicação Web
 
-**File:** `/documentation/rules/web-application-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/web-application-rules.md`
+**Quando consultar:**
 
-- When creating or modifying a document related to the web application.
-- For an overview of the Web Application's architecture and stack (Next.js,
+- Ao criar ou modificar um documento relacionado a aplicação web.
+- Para uma visão geral da arquitetura e stack da Aplicação Web (Next.js,
   Tailwind, etc.).
-- To understand the folder structure of the `apps/web` project.
+- Para entender a estrutura de pastas do projeto `apps/web`.
 
-## Backoffice Application Rules
+## Regras da Aplicação Backoffice
 
-**File:** `/documentation/rules/backoffice-application-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/backoffice-application-rules.md`
+**Quando consultar:**
 
-- When creating or modifying a document related to the backoffice application.
-- For an overview of the Backoffice Application's architecture and stack (Admin
-  Panel - React Router v7, Vite, Shadcn).
-- To understand the folder structure of the `apps/backoffice` project.
+- Ao criar ou modificar um documento relacionado a aplicação backoffice.
+- Para uma visao geral da arquitetura e stack da Aplicacao Backoffice (Painel
+  Admin - React Router v7, Vite, Shadcn).
+- Para entender a estrutura de pastas do projeto `apps/backoffice`.
 
-## Server Application Rules
+## Regras da Aplicacao Server
 
-**File:** `/documentation/rules/server-application-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/server-application-rules.md`
+**Quando consultar:**
 
-- When creating or modifying a document related to the server application.
-- For an overview of the Server Application's architecture and stack (Hono, Inngest, Supabase, etc.).
-- To understand the folder structure of the `apps/server` project.
+- Ao criar ou modificar um documento relacionado a aplicacao server.
+- Para uma visao geral da arquitetura e stack da Aplicacao Server (Hono, Inngest, Supabase, etc.).
+- Para entender a estrutura de pastas do projeto `apps/server`.
 
-## Database Layer Rules (db)
+## Regras da Camada de Banco de Dados (db)
 
-**File:** `/documentation/rules/database-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/database-rules.md`
+**Quando consultar:**
 
-- When creating or modifying a document related to the database layer.
-- When implementing data persistence (Repositories).
-- To understand the Mappers pattern (DB <-> Entity conversion).
-- When configuring connections or handling database-specific errors.
+- Ao criar ou modificar um documento relacionado a camada de banco de dados.
+- Ao implementar persistência de dados (Repositories).
+- Para entender o padrão de Mappers (conversão DB <-> Entidade).
+- Ao configurar conexões ou tratar erros específicos de banco de dados.
 
-## Core Package Rules (core)
+## Regras do Pacote Core (core)
 
-**File:** `/documentation/rules/core-package-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/core-package-rules.md`
+**Quando consultar:**
 
-- When creating or modifying a document related to the core package.
-- To understand the Domain architecture (Tactical DDD).
-- When creating Entities, Structures (Value Objects), Aggregates and Events.
-- When implementing Use Cases and DTOs.
-- When writing unit tests, Fakers or Mocks for the domain.
+- Ao criar ou modificar um documento relacionado ao pacote core.
+- Para entender a arquitetura de Domínio (DD Tático).
+- Ao criar Entidades, Estruturas (Value Objects), Agregados e Eventos.
+- Ao implementar Casos de Uso (Use Cases) e DTOs.
+- Ao escrever testes unitários, Fakers ou Mocks para o domínio.
 
-## Validation Layer Rules
+## Regras da Camada de Validation
 
-**File:** `/documentation/rules/validation-layer-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/validation-layer-rules.md`
+**Quando consultar:**
 
-- When creating or modifying Zod schemas in the `packages/validation` package.
-- To understand how to organize global and per-module validations.
-- To standardize error messages in PT-BR within the schema itself.
-- When exposing new schemas in the package's barrel files.
+- Ao criar ou modificar schemas Zod no pacote `packages/validation`.
+- Para entender como organizar validacoes globais e por modulo.
+- Para padronizar mensagens de erro em PT-BR dentro do proprio schema.
+- Ao expor novos schemas nos barrel files do pacote.
 
-## Handler Testing Rules
+## Regras de Testes de Handlers
 
-**File:** `/documentation/rules/handlers-testing-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/handlers-testing-rules.md`
+**Quando consultar:**
 
-- When writing tests for Controllers (REST), Actions (RPC), Jobs (Queue) or Tools (AI).
-- To understand how to mock the `Http`, `Call`, `Amqp` and `Mcp` context objects.
-- To follow the orchestration and data translation patterns in the application's
-  entry tests.
+- Ao escrever testes para Controllers (REST), Actions (RPC), Jobs (Queue) ou Tools (AI).
+- Para entender como mockar os objetos de contexto `Http`, `Call`, `Amqp` e `Mcp`.
+- Para seguir os padrões de orquestração e tradução de dados nos testes de
+  entrada da aplicação.
 
-## Server App Route Testing Rules
+## Regras de Testes de Rotas da App Server
 
-**File:** `/documentation/rules/server-routes-testing-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/server-routes-testing-rules.md`
+**Quando consultar:**
 
-- When writing tests for the server application's HTTP routes.
-- To validate integration between handlers, middlewares and response contracts.
-- When standardizing tests of endpoints exposed by `apps/server`.
-- When creating or changing integration fixtures, which do not receive dedicated tests.
+- Ao escrever testes para rotas HTTP da aplicacao server.
+- Para validar integracao entre handlers, middlewares e contratos de resposta.
+- Ao padronizar testes de endpoints expostos pelo `apps/server`.
+- Ao criar ou alterar fixtures de integracao, que nao recebem testes dedicados.
 
-## Web App Route Testing Rules
+## Regras de Testes de Rotas da App Web
 
-**File:** `/documentation/rules/web-app-routes-testing-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/web-app-routes-testing-rules.md`
+**Quando consultar:**
 
-- When writing tests for pages, slots and flows of the `Next.js App Router` in
+- Ao escrever testes para paginas, slots e fluxos do `Next.js App Router` em
   `apps/web/src/app/**`.
-- To standardize co-located tests of `page.tsx` and App Router entries.
-- To write browser tests with Playwright in
+- Para padronizar testes co-localizados de `page.tsx` e entradas do App Router.
+- Para escrever testes de navegador com Playwright em
   `apps/web/src/app/tests/**`.
-- When validating web edge composition, route requests, redirects, `notFound()`
-  and test-only bridges of the web app.
-- When defining the mandatory coverage of authenticated navigation and of
-  redirection to login in Web flows.
+- Ao validar composicao de borda web, requests da rota, redirects, `notFound()`
+  e bridges test-only da app web.
+- Ao definir a cobertura obrigatoria de navegacao autenticada e de
+  redirecionamento para login em fluxos da Web.
 
-## Use Case Testing Rules
+## Regras de Testes de Casos de Uso
 
-**File:** `/documentation/rules/use-cases-testing-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/use-cases-testing-rules.md`
+**Quando consultar:**
 
-- When writing unit tests for Use Cases in the core package.
-- To understand how to mock repositories and other dependencies using
+- Ao escrever testes unitários para Casos de Uso (Use Cases) no pacote core.
+- Para entender como mockar repositórios e outras dependências usando
   `ts-jest-mocker`.
-- To follow the pattern of testing success paths and business errors.
-- For instructions on using Fakers to generate test data.
+- Para seguir o padrão de teste de caminhos de sucesso e erros de negócio.
+- Para instruções sobre o uso de Fakers para gerar dados de teste.
 
-## Widget Testing Rules
+## Regras de Testes de Widgets
 
-**File:** `/documentation/rules/widget-tests-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/widget-tests-rules.md`
+**Quando consultar:**
 
-- When testing React components (Widgets) in the UI layer.
-- To understand the separation of tests between Hooks and Views.
-- To use helper functions such as `Hook()` and `View()` for cleaner
-  tests.
-- For instructions on integration tests of complex form widgets.
+- Ao testar componentes React (Widgets) na camada de UI.
+- Para entender a separação de testes entre Hooks e Views.
+- Para utilizar funções auxiliares como `Hook()` e `View()` para testes mais
+  limpos.
+- Para instruções sobre testes de integração de widgets de formulário complexos.
 
-## Domain Object Testing Rules
+## Regras de Testes de Objetos de Domínio
 
-**File:** `/documentation/rules/domain-objects-testing-rules.md`
-**When to consult:**
+**Arquivo:** `/documentation/rules/domain-objects-testing-rules.md`
+**Quando consultar:**
 
-- When writing tests for Entities, Structures and Aggregates.
-- To understand how to use Fakers to prepare the state of domain tests.
-- To follow the patterns of assertion and validation of business rules in the
-  domain.
+- Ao escrever testes para Entidades, Estruturas (Structures) e Agregados.
+- Para entender como usar Fakers para preparar o estado dos testes de domínio.
+- Para seguir os padrões de asserção e validação de regras de negócio no
+  domínio.

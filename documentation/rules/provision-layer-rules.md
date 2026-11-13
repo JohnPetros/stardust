@@ -1,69 +1,68 @@
-# Provision Layer Rules
+# Regras da Camada Provision
 
-## Overview
+## Visao Geral
 
-The **Provision** layer encapsulates external SDKs and services as `providers` (gateways) that implement **core interfaces**, keeping the domain decoupled from third parties.
+A camada **Provision** encapsula SDKs e servicos externos como `providers` (gateways) que implementam **interfaces do core**, mantendo o dominio desacoplado de terceiros.
 
-| Item | Definition |
+| Item | Definicao |
 | --- | --- |
-| **Goal** | Adapt external infrastructure (SDKs/services) to core contracts. |
-| **Responsibilities** | Implement `providers`; map errors to `AppError`; centralize configuration via `ENV`/`fromEnv` without leaking secrets. |
-| **Does not** | Business rules; expose SDK types/clients; decide domain policies. |
+| **Objetivo** | Adaptar infraestrutura externa (SDKs/servicos) para contratos do core. |
+| **Responsabilidades** | Implementar `providers`; mapear erros para `AppError`; centralizar configuracao via `ENV`/`fromEnv` sem vazar segredos. |
+| **Nao faz** | Regra de negocio; expor tipos/clients do SDK; decidir politicas de dominio. |
 
-## Directory Structure
+## Estrutura de Diretorios
 
-Base directory: `apps/server/src/provision`.
+Diretorio base: `apps/server/src/provision`.
 
-| Folder | Purpose | Example |
+| Pasta | Finalidade | Exemplo |
 | --- | --- | --- |
-| `cache/` | Implements `CacheProvider` (core) without exposing Redis/Upstash. | `apps/server/src/provision/cache/UpstashCacheProvider.ts` |
-| `storage/` | Implements `FileStorageProvider` (core) without exposing bucket/SDK. | `apps/server/src/provision/storage/SupabaseFileStorageProvider.ts` |
-| `monitor/` | Implements `TelemetryProvider` (core). | `apps/server/src/provision/monitor/SentryTelemetryProvider.ts` |
-| `database/` | Implements `DatabaseProvider` (core) for auxiliary operations (e.g., backup). | `apps/server/src/provision/database/SupabaseDatabaseProvider.ts` |
+| `cache/` | Implementa `CacheProvider` (core) sem expor Redis/Upstash. | `apps/server/src/provision/cache/UpstashCacheProvider.ts` |
+| `storage/` | Implementa `FileStorageProvider` (core) sem expor bucket/SDK. | `apps/server/src/provision/storage/SupabaseFileStorageProvider.ts` |
+| `monitor/` | Implementa `TelemetryProvider` (core). | `apps/server/src/provision/monitor/SentryTelemetryProvider.ts` |
+| `database/` | Implementa `DatabaseProvider` (core) para operacoes auxiliares (ex: backup). | `apps/server/src/provision/database/SupabaseDatabaseProvider.ts` |
 
-## Rules
+## Regras
 
-- **Implementation**: a `provider` must only adapt the external SDK to the core interface.
-- **Error mapping**: catch SDK errors and rethrow them as `AppError` (or an equivalent domain error) to avoid leaking details.
-- **Types**: do not return SDK types; map them to core/domain types.
-- **Configuration**: read environment variables (e.g., `ENV`) without logging/propagating secrets.
+- **Implementacao**: `provider` deve apenas adaptar o SDK externo para a interface do core.
+- **Error mapping**: capturar erros do SDK e relancar como `AppError` (ou erro equivalente do dominio) para evitar vazamento de detalhes.
+- **Tipos**: nao retornar tipos do SDK; mapear para tipos do core/dominio.
+- **Configuracao**: ler variaveis de ambiente (ex: `ENV`) sem registrar/propagar segredos.
 
-> ⚠️ Warning sign: any `import`/return of SDK types outside the `provider` indicates an infrastructure leak.
+> ⚠️ Sinal de alerta: qualquer `import`/retorno de tipos do SDK fora do `provider` indica vazamento de infraestrutura.
 
-## Organization and Naming
+## Organizacao e Nomeacao
 
-- `provider`: `<Vendor><Capability>Provider` (e.g., `UpstashCacheProvider`).
-- SDK `client`: internal detail of the `provider` (do not expose it through a public property).
-- When there is more than one concrete implementation for the same capability, each provider must live in its own subfolder inside the capability. E.g.: `apps/server/src/provision/tts/open-ai/OpenAITtsProvider.ts`, `apps/server/src/provision/tts/eleven-labs/ElevenLabsTtsProvider.ts`.
+- `provider`: `<Vendor><Capability>Provider` (ex: `UpstashCacheProvider`).
+- `client` do SDK: detalhe interno do `provider` (nao expor por propriedade publica).
+- Quando houver mais de uma implementacao concreta para a mesma capability, cada provider deve viver em sua propria subpasta dentro da capability. Ex.: `apps/server/src/provision/tts/open-ai/OpenAITtsProvider.ts`, `apps/server/src/provision/tts/eleven-labs/ElevenLabsTtsProvider.ts`.
 
-## Integration with Other Layers
+## Integracao com Outras Camadas
 
-- **Allowed**: depend on third-party SDKs; depend on core interfaces/errors.
-- **Forbidden**: the core importing `apps/server/src/provision/**`.
-- **Dependency direction**: apps/adapters implement providers; the core consumes them through an interface.
+- **Permitido**: depender de SDKs de terceiros; depender de interfaces/erros do core.
+- **Proibido**: o core importar `apps/server/src/provision/**`.
+- **Direcao de dependencia**: apps/adapters implementam providers; o core consome por interface.
 
-## Testing Strategy
+## Estrategia de Testes
 
-- Providers and internal helpers of the Provision layer do not receive dedicated
-  tests. Do not create `*.test.*` or `*.spec.*` files in
+- Providers e helpers internos da camada Provision nao recebem testes
+  dedicados. Nao crie arquivos `*.test.*` ou `*.spec.*` em
   `apps/server/src/provision/**`.
-- Validate the provider integration through the boundary that consumes it, using
-  the applicable route, handler, or use case test and observing the external
-  result.
-- When the integration depends on real infrastructure, complement the validation
-  on the local stack or in the corresponding manual flow, without testing internal
-  SDK calls.
-- If a business rule emerges inside a provider, move it to the appropriate layer
-  and test that rule in that layer.
+- Valide a integracao do provider pela fronteira que o consome, usando o teste
+  de rota, handler ou caso de uso aplicavel e observando o resultado externo.
+- Quando a integracao depender de infraestrutura real, complemente a validacao
+  na stack local ou no fluxo manual correspondente, sem testar chamadas
+  internas do SDK.
+- Se uma regra de negocio surgir dentro de um provider, mova-a para a camada
+  apropriada e teste essa regra nessa camada.
 
-## Checklist (before the PR)
+## Checklist (antes do PR)
 
-- A core interface exists for the provider.
-- The provider implements the interface and does not expose the SDK.
-- External errors are converted to `AppError`.
-- Secrets live in environment variables (no credentials in code).
-- There is no test dedicated to the provider or its internal helpers.
+- Interface do core existe para o provider.
+- Provider implementa a interface e nao expoe SDK.
+- Erros externos sao convertidos para `AppError`.
+- Segredos ficam em variaveis de ambiente (sem credenciais em codigo).
+- Nao ha teste dedicado ao provider ou a seus helpers internos.
 
-## Notes
+## Notas
 
-- The current Provision layer lives in `apps/server/src/provision`.
+- A camada Provision atual vive em `apps/server/src/provision`.
