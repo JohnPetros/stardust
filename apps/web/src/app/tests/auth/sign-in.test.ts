@@ -18,6 +18,28 @@ test.describe('/auth/sign-in', () => {
     password: '123456',
   }
 
+  // Credenciais próprias: o fetch do Next cacheia POSTs idênticos por 60 s, então
+  // reusar `validFields` serviria o login bem-sucedido do primeiro teste.
+  const rejectedFields = {
+    email: 'senha.incorreta@stardust.dev',
+    password: '123456',
+  }
+
+  const unconfirmedFields = {
+    email: 'conta.pendente@stardust.dev',
+    password: '123456',
+  }
+
+  const unconfirmedEmailSignInRoute = {
+    method: 'POST',
+    path: '/auth/sign-in',
+    status: 403,
+    body: {
+      title: 'Service Error',
+      message: 'Confirme seu e-mail antes de entrar',
+    },
+  } satisfies ServerMockRoute
+
   function createDeterministicId() {
     deterministicIdCounter += 1
     return `00000000-0000-4000-8000-${String(deterministicIdCounter).padStart(12, '0')}`
@@ -335,7 +357,7 @@ test.describe('/auth/sign-in', () => {
         },
       ],
     })
-    await fillValidSignInForm(page, validFields)
+    await fillValidSignInForm(page, rejectedFields)
 
     await page.getByTestId('submit-button').click()
 
@@ -343,8 +365,84 @@ test.describe('/auth/sign-in', () => {
       timeout: 10000,
     })
     await expect(page.getByRole('alert')).toBeVisible({ timeout: 10000 })
+    await expect(page.getByTestId('toast-progress-bar')).toBeVisible({ timeout: 10000 })
+    await expect(page.getByTestId('unconfirmed-email-notice')).toHaveCount(0)
     await page.waitForTimeout(5000)
     await expect(page).toHaveURL(/\/auth\/sign-in(?:\?.*)?$/)
+  })
+
+  test('shows the unconfirmed email notice without a toast when the email is not confirmed', async ({
+    page,
+  }) => {
+    await gotoSignInPage(page, { routes: [unconfirmedEmailSignInRoute] })
+    await fillValidSignInForm(page, unconfirmedFields)
+
+    const signInResponsePromise = waitForSignInPageAction(page)
+    await page.getByTestId('submit-button').click()
+    await signInResponsePromise
+
+    const notice = page.getByTestId('unconfirmed-email-notice')
+
+    await expect(notice).toBeVisible({ timeout: 10000 })
+    await expect(notice).toContainText('Confirme seu e-mail para entrar')
+    await expect(notice).toContainText(unconfirmedFields.email)
+    await expect(page).toHaveURL(/\/auth\/sign-in(?:\?.*)?$/)
+    await expect(page.getByTestId('toast-progress-bar')).toHaveCount(0)
+  })
+
+  test('resends the confirmation email for the rejected email', async ({ page }) => {
+    await gotoSignInPage(page, {
+      routes: [
+        unconfirmedEmailSignInRoute,
+        { method: 'POST', path: '/auth/resend-email/sign-up', status: 200, body: {} },
+      ],
+    })
+    await fillValidSignInForm(page, unconfirmedFields)
+    await page.getByTestId('submit-button').click()
+    await expect(page.getByTestId('unconfirmed-email-notice')).toBeVisible({
+      timeout: 10000,
+    })
+
+    const resendRequestPromise = page.waitForRequest((request) => {
+      return (
+        request.method() === 'POST' &&
+        request.url().endsWith('/auth/resend-email/sign-up')
+      )
+    })
+    await page.getByTestId('resend-confirmation-email-button').click()
+    const resendRequest = await resendRequestPromise
+
+    expect(resendRequest.postData() ?? '').toContain(unconfirmedFields.email)
+    await expect(
+      page.getByText('Reenviamos para você o e-mail de confirmação').first(),
+    ).toBeVisible({ timeout: 10000 })
+  })
+
+  test('shows the provider limit message when the resend is rate limited', async ({
+    page,
+  }) => {
+    const rateLimitMessage = 'Aguarde alguns instantes antes de reenviar o e-mail'
+
+    await gotoSignInPage(page, {
+      routes: [
+        unconfirmedEmailSignInRoute,
+        {
+          method: 'POST',
+          path: '/auth/resend-email/sign-up',
+          status: 429,
+          body: { title: 'Service Error', message: rateLimitMessage },
+        },
+      ],
+    })
+    await fillValidSignInForm(page, unconfirmedFields)
+    await page.getByTestId('submit-button').click()
+    await expect(page.getByTestId('unconfirmed-email-notice')).toBeVisible({
+      timeout: 10000,
+    })
+
+    await page.getByTestId('resend-confirmation-email-button').click()
+
+    await expect(page.getByText(rateLimitMessage).first()).toBeVisible({ timeout: 10000 })
   })
 
   test('keeps social links pointing to configured server providers', async ({ page }) => {

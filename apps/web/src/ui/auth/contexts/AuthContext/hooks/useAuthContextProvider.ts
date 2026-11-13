@@ -18,19 +18,36 @@ import {
 import { useCache } from '@/ui/global/hooks/useCache'
 import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
+import type { SignInActionResponse } from '@/rpc/actions/auth'
+import type { SignInResult } from '../types'
 
 type Params = {
   profileService: ProfileService
   analyticsProvider: ClientAnalyticsProvider
   accountDto: AccountDto | null
   accessToken: string | null
-  signIn: (email: string, password: string) => Promise<ActionResponse<AccountDto>>
+  signIn: (
+    email: string,
+    password: string,
+  ) => Promise<ActionResponse<SignInActionResponse>>
   signOut: () => Promise<ActionResponse<void>>
   retryUserCreation: () => Promise<ActionResponse<void>>
   signUpWithSocialAccount: (
     accessToken: string,
     refreshToken: string,
   ) => Promise<ActionResponse<{ isNewAccount: boolean; account: AccountDto }>>
+}
+
+function resolveSignIn(
+  response: ActionResponse<SignInActionResponse>,
+  notifyError: (message: string) => void,
+): { result: SignInResult; account?: AccountDto } {
+  if (response.isFailure) {
+    notifyError(response.errorMessage)
+    return { result: 'failed' }
+  }
+  if (!response.data.isEmailConfirmed) return { result: 'email-not-confirmed' }
+  return { result: 'signed-in', account: response.data.account }
 }
 
 export function useAuthContextProvider({
@@ -78,21 +95,19 @@ export function useAuthContextProvider({
   }, [])
 
   const handleSignIn = useCallback(
-    async (email: string, password: string) => {
+    async (email: string, password: string): Promise<SignInResult> => {
       const response = await signIn(email, password)
+      const { result, account: signedIn } = resolveSignIn(response, (message) =>
+        toast.showError(message, 10),
+      )
 
-      if (response.isSuccessful) {
-        const authenticatedAccount = Account.create(response.data)
-        setAccount(authenticatedAccount)
-        analyticsProvider.identifyUser(
-          authenticatedAccount.id,
-          authenticatedAccount.email,
-        )
-        return true
+      if (signedIn) {
+        const authenticated = Account.create(signedIn)
+        setAccount(authenticated)
+        analyticsProvider.identifyUser(authenticated.id, authenticated.email)
       }
 
-      toast.showError(response.errorMessage, 10)
-      return false
+      return result
     },
     [analyticsProvider, signIn, toast],
   )

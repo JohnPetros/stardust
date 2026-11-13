@@ -998,7 +998,7 @@ user settings.
 #### Web App token mapping (`stardust-dark`)
 
 The Web App implements only the `stardust-dark` variant. The Penpot token sets
-`Semantic/Dark` (all 18 colors) and `Geometry` (radius, control height, padding,
+`Semantic/Dark` (all 18 colors; see the Web-only role below) and `Geometry` (radius, control height, padding,
 icon gap, border) are CSS variables declared in
 `apps/web/src/ui/global/styles/global.css` under
 `:root[data-theme="stardust-dark"]`. The Root layout sets
@@ -1015,6 +1015,15 @@ collisions with the legacy `gray`, `green` and `border` utilities.
 | `control.padding-x` | `--theme-control-padding-x` | `px-theme-control-x` |
 | `control.icon-gap` | `--theme-control-icon-gap` | `gap-theme-control-gap` |
 | `control.border` | `--theme-control-border` | `border-theme-control` |
+
+The Web App also declares one Web-only role that has no counterpart in `Semantic/Dark`:
+`reward-surface` (`--theme-reward-surface`, `bg-theme-reward-surface`, `#443102`). In
+Penpot the unconfirmed-email notice binds its fill directly to the primitive
+`color.yellow.900` (`#443102`); the Web App exposes that value as a semantic role,
+following the `*-surface` pattern, so components never use a primitive scale or a hex
+literal. It is consumed only by the unconfirmed-email notice on the sign-in page. The
+legacy Tailwind `yellow` palette is unchanged. If Penpot gains an equivalent
+`Semantic/Dark` token, this role should adopt its name.
 
 Spacing `space.*`, Primitives, Story and Achievement tokens are not duplicated;
 Tailwind's own spacing scale is used instead. Light mode and the Orbit, Sakura and

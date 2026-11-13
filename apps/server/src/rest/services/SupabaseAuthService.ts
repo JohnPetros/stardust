@@ -22,6 +22,8 @@ export class SupabaseAuthService implements AuthService {
     weekPassword: 'weak_password',
     emailExists: 'email_exists',
     overRequestRateLimit: 'over_request_rate_limit',
+    overEmailSendRateLimit: 'over_email_send_rate_limit',
+    emailNotConfirmed: 'email_not_confirmed',
     otpExpired: 'otp_expired',
     default: 'default',
     bad_jwt: 'bad_jwt',
@@ -35,6 +37,27 @@ export class SupabaseAuthService implements AuthService {
       error.code === this.AUTH_ERROR_CODES.session_expired ||
       error.status === HTTP_STATUS_CODE.unauthorized ||
       error.message === 'Auth session missing!'
+    )
+  }
+
+  private signInError(error: AuthError): RestResponse<SessionDto> {
+    if (error.code === this.AUTH_ERROR_CODES.emailNotConfirmed)
+      return new RestResponse<SessionDto>({
+        errorMessage: 'Confirme seu e-mail antes de entrar',
+        statusCode: HTTP_STATUS_CODE.forbidden,
+      })
+
+    return this.supabaseAuthError<SessionDto>(
+      error,
+      'E-mail ou senha incorretos',
+      HTTP_STATUS_CODE.unauthorized,
+    )
+  }
+
+  private isResendRateLimitError(error: AuthError | null): boolean {
+    return (
+      error?.code === this.AUTH_ERROR_CODES.overEmailSendRateLimit ||
+      error?.code === this.AUTH_ERROR_CODES.overRequestRateLimit
     )
   }
 
@@ -125,12 +148,7 @@ export class SupabaseAuthService implements AuthService {
       password: password.value,
     })
 
-    if (error)
-      return this.supabaseAuthError<SessionDto>(
-        error,
-        'E-mail ou senha incorretos',
-        HTTP_STATUS_CODE.unauthorized,
-      )
+    if (error) return this.signInError(error)
 
     const session: SessionDto = {
       account: {
@@ -378,6 +396,12 @@ export class SupabaseAuthService implements AuthService {
         emailRedirectTo: ENV.stardustWebUrl,
       },
     })
+
+    if (this.isResendRateLimitError(error))
+      return new RestResponse({
+        errorMessage: 'Aguarde alguns instantes antes de reenviar o e-mail',
+        statusCode: HTTP_STATUS_CODE.tooManyRequests,
+      })
 
     if (error)
       return this.supabaseAuthError(

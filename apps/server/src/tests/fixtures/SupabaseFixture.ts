@@ -75,6 +75,23 @@ export class SupabaseFixture {
     })
   }
 
+  async setConfirmationSentAt(accountId: Id, sentAt: Date): Promise<void> {
+    if (ENV.mode === 'production') throw new Error('Confirmation fixture is local only')
+    await this.database.execute(
+      sql`UPDATE auth.users SET confirmation_sent_at = ${sentAt.toISOString()} WHERE id = ${accountId.value}::uuid`,
+    )
+  }
+
+  async getConfirmationSentAt(accountId: Id): Promise<Date | null> {
+    if (ENV.mode === 'production') throw new Error('Confirmation fixture is local only')
+    const rows = await this.database.execute(
+      sql`SELECT confirmation_sent_at FROM auth.users WHERE id = ${accountId.value}::uuid`,
+    )
+    const value = rows[0]?.confirmation_sent_at
+    if (!value) return null
+    return new Date(value as string | Date)
+  }
+
   private async deleteAllRowsFrom(tableName: string) {
     const allowed = ['users', 'achievements', 'insignias', 'avatars', 'rockets', 'tiers']
     if (!allowed.includes(tableName)) throw new Error('Unsupported local fixture table')

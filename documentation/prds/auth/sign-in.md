@@ -4,7 +4,7 @@ status: draft
 source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/milestone/20
-last_updated_at: 2026-08-30
+last_updated_at: 2026-11-11
 ---
 
 # PRD — Sign In
@@ -72,11 +72,17 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 - **Perfil ausente após autenticação:** Quando as credenciais forem válidas mas o perfil interno do usuário não existir, o sistema deve autenticar a sessão e redirecionar para a page dedicada de criação de perfil.
 - **Destino após login:** Após login com sucesso e perfil existente, o sistema deve redirecionar para `nextRoute` quando esse parâmetro estiver presente; caso contrário, deve redirecionar para a página principal da experiência autenticada.
 - **Falha de autenticação:** Quando as credenciais forem inválidas, o sistema deve impedir o avanço do fluxo e informar o erro ao usuário.
+- **Conta não confirmada:** Quando o e-mail e a senha estiverem corretos, mas o e-mail da conta ainda não tiver sido confirmado, o sistema deve recusar a entrada sem criar sessão e informar que é preciso confirmar o e-mail, de forma distinta do erro de credenciais inválidas.
+- **Sigilo do estado da conta:** Senha incorreta ou e-mail inexistente devem continuar recebendo apenas a mensagem genérica "E-mail ou senha incorretos", sem revelar se a conta existe ou se está confirmada.
+- **Reenvio sem sessão:** A pessoa com conta não confirmada deve poder reenviar o e-mail de confirmação a partir da página de login, sem sessão, usando o e-mail informado na tentativa recusada. O link reenviado confirma a conta pelo fluxo existente de confirmação de cadastro.
+- **Limite de reenvio:** Quando o provedor limitar o reenvio, o sistema deve informar que é preciso aguardar antes de reenviar, sem cooldown próprio.
 
 ##### Regras de Experiência
 
 - **Feedback de envio:** O formulário deve exibir estado de carregamento durante a tentativa de autenticação.
 - **Feedback de erro:** O formulário deve exibir mensagens de erro de validação e de autenticação quando houver falha.
+- **Aviso inline de confirmação:** A conta não confirmada recebe, dentro do formulário e sem toast, um aviso "Confirme seu e-mail para entrar" com o e-mail informado, o prazo de expiração do link e a ação "Reenviar e-mail de confirmação". O aviso é substituído ou removido na próxima tentativa de login.
+- **Feedback de reenvio:** A ação de reenvio mostra estado de carregamento e, ao terminar, uma confirmação de sucesso ou a mensagem de erro recebida.
 
 ---
 
@@ -173,6 +179,7 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
    - **Sucesso com perfil existente:** O usuário é autenticado e segue para `nextRoute`, quando existir, ou para a página principal autenticada.
    - **Sucesso com perfil ausente:** O sistema autentica a sessão e redireciona para a page dedicada de criação de perfil.
    - **Falha:** O sistema bloqueia a entrada e exibe a mensagem de erro correspondente.
+   - **Conta não confirmada:** O sistema mantém o usuário na página de login e exibe o aviso de confirmação com a ação de reenvio. Após reenviar e confirmar pelo link, o usuário consegue entrar normalmente.
 
 **Login social com conta existente:** Fluxo para usuários que já possuem conta social associada e perfil disponível.
 

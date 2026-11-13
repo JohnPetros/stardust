@@ -1,6 +1,7 @@
 import type { Action, Call } from '@stardust/core/global/interfaces'
 import type { AuthService } from '@stardust/core/auth/interfaces'
 import type { AccountDto } from '@stardust/core/auth/entities/dtos'
+import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
 import { Email } from '@stardust/core/global/structures'
 import { Password } from '@stardust/core/auth/structures'
 
@@ -11,9 +12,13 @@ type Request = {
   password: string
 }
 
-type Response = AccountDto
+export type SignInActionResponse =
+  | { isEmailConfirmed: true; account: AccountDto }
+  | { isEmailConfirmed: false }
 
-export const SignInAction = (authService: AuthService): Action<Request, Response> => {
+export const SignInAction = (
+  authService: AuthService,
+): Action<Request, SignInActionResponse> => {
   return {
     async handle(call: Call<Request>) {
       const { email, password } = call.getRequest()
@@ -21,6 +26,9 @@ export const SignInAction = (authService: AuthService): Action<Request, Response
         Email.create(email),
         Password.create(password),
       )
+      if (response.statusCode === HTTP_STATUS_CODE.forbidden) {
+        return { isEmailConfirmed: false }
+      }
       if (response.isFailure) response.throwError()
 
       const session = response.body
@@ -37,7 +45,7 @@ export const SignInAction = (authService: AuthService): Action<Request, Response
         ),
       ])
 
-      return session.account
+      return { isEmailConfirmed: true, account: session.account }
     },
   }
 }

@@ -19,6 +19,7 @@ jest.mock('@/ui/auth/widgets/components/RocketAnimation', () => ({
 
 describe('SignInPageView', () => {
   const handleFormSubmit = jest.fn()
+  const onResendEmail = jest.fn()
 
   it('should render the reset password and create account links', () => {
     render(
@@ -26,6 +27,9 @@ describe('SignInPageView', () => {
         rocketAnimationRef={animationRefMock}
         isRocketVisible={false}
         handleFormSubmit={handleFormSubmit}
+        unconfirmedEmail={null}
+        isResendingEmail={false}
+        onResendEmail={onResendEmail}
       />,
     )
 
@@ -42,6 +46,9 @@ describe('SignInPageView', () => {
         rocketAnimationRef={animationRefMock}
         isRocketVisible={false}
         handleFormSubmit={handleFormSubmit}
+        unconfirmedEmail={null}
+        isResendingEmail={false}
+        onResendEmail={onResendEmail}
       />,
     )
 
@@ -53,5 +60,38 @@ describe('SignInPageView', () => {
     expect(screen.getByTestId('create-account-link')).toHaveClass(
       'text-theme-accent-text',
     )
+  })
+
+  it('should pass the unconfirmed email notice props down to the sign in form', () => {
+    render(
+      <SignInPageView
+        rocketAnimationRef={animationRefMock}
+        isRocketVisible={false}
+        handleFormSubmit={handleFormSubmit}
+        unconfirmedEmail='apollo@gmail.com'
+        isResendingEmail={true}
+        onResendEmail={onResendEmail}
+      />,
+    )
+
+    expect(screen.getByTestId('unconfirmed-email-notice')).toHaveTextContent(
+      'apollo@gmail.com',
+    )
+    expect(screen.getByTestId('resend-confirmation-email-button')).toBeDisabled()
+  })
+
+  it('should not render the unconfirmed email notice when there is no unconfirmed email', () => {
+    render(
+      <SignInPageView
+        rocketAnimationRef={animationRefMock}
+        isRocketVisible={false}
+        handleFormSubmit={handleFormSubmit}
+        unconfirmedEmail={null}
+        isResendingEmail={false}
+        onResendEmail={onResendEmail}
+      />,
+    )
+
+    expect(screen.queryByTestId('unconfirmed-email-notice')).toBeNull()
   })
 })

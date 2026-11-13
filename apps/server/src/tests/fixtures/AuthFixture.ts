@@ -82,6 +82,32 @@ export class AuthFixture {
     }
   }
 
+  async createUnconfirmedAccount(
+    input?: CreateAccountInput,
+  ): Promise<{ accountId: string; email: string; password: string }> {
+    await LocalSupabaseProxy.ensureRunning()
+
+    const email = input?.email ?? `test-${randomUUID()}@stardust.dev`
+    const password = input?.password ?? 'password123'
+    const name = input?.name ?? `Test User ${randomUUID().slice(0, 8)}`
+
+    const signUpResponse = await this.supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: name,
+        },
+      },
+    })
+
+    if (signUpResponse.error || !signUpResponse.data.user?.id) {
+      throw new Error('Failed to sign up unconfirmed test account')
+    }
+
+    return { accountId: signUpResponse.data.user.id, email, password }
+  }
+
   getAccount(): AccountDto {
     if (!this.account) {
       throw new AppError('No authenticated account')
