@@ -1,21 +1,21 @@
-# Regras de Teste de Casos de Uso (Use Cases)
+# Use Case Testing Rules
 
-Esta documentação define os padrões e práticas para escrever testes unitários para os Casos de Uso (Use Cases) no projeto Stardust.
+This documentation defines the standards and practices for writing unit tests for Use Cases in the Stardust project.
 
-## 1. Localização e Nomenclatura
+## 1. Location and Naming
 
-- **Localização:** Os testes devem ser colocados em uma pasta `tests/` dentro do diretório `use-cases/` correspondente.
-- **Nomenclatura:** `[NomeDoUseCase].test.ts`.
+- **Location:** Tests must be placed in a `tests/` folder inside the corresponding `use-cases/` directory.
+- **Naming:** `[UseCaseName].test.ts`.
 
-Exemplo: `packages/core/src/profile/use-cases/tests/CreateUserUseCase.test.ts`.
+Example: `packages/core/src/profile/use-cases/tests/CreateUserUseCase.test.ts`.
 
-## 2. Estrutura do Teste
+## 2. Test Structure
 
-Seguimos o padrão `describe`, `beforeEach` e `it`.
+We follow the `describe`, `beforeEach` and `it` pattern.
 
-### 2.1. Mocking de Dependências
+### 2.1. Mocking Dependencies
 
-Utilizamos o `ts-jest-mocker` para criar mocks das interfaces dos repositórios ou outros serviços.
+We use `ts-jest-mocker` to create mocks of the repository interfaces or other services.
 
 ```ts
 import { mock, type Mock } from 'ts-jest-mocker';
@@ -26,24 +26,24 @@ describe('Create User Use Case', () => {
   let useCase: CreateUserUseCase;
 
   beforeEach(() => {
-    // 1. Criar o mock da interface
+    // 1. Create the interface mock
     repositoryMock = mock<UsersRepository>();
     
-    // 2. Definir implementações padrão se necessário
+    // 2. Define default implementations if necessary
     repositoryMock.findByEmail.mockImplementation();
     repositoryMock.add.mockImplementation();
 
-    // 3. Instanciar o Use Case com o mock
+    // 3. Instantiate the Use Case with the mock
     useCase = new CreateUserUseCase(repositoryMock);
   });
 });
 ```
 
-## 3. Padrões de Teste
+## 3. Test Patterns
 
-### 3.1. Testando Caminhos de Sucesso
+### 3.1. Testing Success Paths
 
-Verifique se o Use Case chama os métodos corretos das dependências com os dados transformados adequadamente.
+Verify that the Use Case calls the correct methods of the dependencies with appropriately transformed data.
 
 ```ts
 it('should create a user with the given request data', async () => {
@@ -65,9 +65,9 @@ it('should create a user with the given request data', async () => {
 });
 ```
 
-### 3.2. Testando Erros de Negócio
+### 3.2. Testing Business Errors
 
-Utilize `expect(...).rejects.toThrow()` para validar se o Use Case lança as exceções corretas em cenários de erro.
+Use `expect(...).rejects.toThrow()` to validate that the Use Case throws the correct exceptions in error scenarios.
 
 ```ts
 it('should throw an error if the email is already in use', async () => {
@@ -86,30 +86,30 @@ it('should throw an error if the email is already in use', async () => {
 });
 ```
 
-## 4. Uso de Fakers
+## 4. Using Fakers
 
-Sempre utilize os `Fakers` das entidades para gerar dados de teste. Isso evita a criação manual de objetos complexos e mantém o código de teste limpo.
+Always use the entity `Fakers` to generate test data. This avoids manually creating complex objects and keeps the test code clean.
 
 ```ts
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker';
 
-const user = UsersFaker.fake(); // Retorna uma entidade User
-const dto = UsersFaker.fakeDto(); // Retorna um DTO
+const user = UsersFaker.fake(); // Returns a User entity
+const dto = UsersFaker.fakeDto(); // Returns a DTO
 ```
 
-## 5. Boas Práticas
+## 5. Best Practices
 
-1.  **Isolamento:** Cada `it` deve ser independente. Use `beforeEach` para garantir um estado limpo.
-2.  **Mocks Type-Safe:** Sempre use `Mock<T>` para tipar as variáveis de mock.
-3.  **Asserções Específicas:** Prefira `toHaveBeenCalledWith` com valores específicos em vez de apenas `toHaveBeenCalled`.
-4.  **Async/Await:** A maioria dos Use Cases são assíncronos; certifique-se de usar `await` no `execute` e no `expect(...).rejects`.
+1.  **Isolation:** Each `it` must be independent. Use `beforeEach` to guarantee a clean state.
+2.  **Type-Safe Mocks:** Always use `Mock<T>` to type the mock variables.
+3.  **Specific Assertions:** Prefer `toHaveBeenCalledWith` with specific values instead of just `toHaveBeenCalled`.
+4.  **Async/Await:** Most Use Cases are asynchronous; make sure to use `await` on `execute` and on `expect(...).rejects`.
 
 ## Tooling
 
-- Runner de testes: Jest.
-- Mocks type-safe: `ts-jest-mocker`.
-- Comandos:
-  - Pacote core: `pnpm --filter @stardust/core run test:unit`.
+- Test runner: Jest.
+- Type-safe mocks: `ts-jest-mocker`.
+- Commands:
+  - Core package: `pnpm --filter @stardust/core run test:unit`.
   - Global (Turbo): `pnpm run test`.
-- Tipos e qualidade (antes de abrir PR): `pnpm --filter @stardust/core run check:types` e `pnpm --filter @stardust/core run check:code`.
-- Referencia geral: `documentation/tooling.md`.
+- Types and quality (before opening a PR): `pnpm --filter @stardust/core run check:types` and `pnpm --filter @stardust/core run check:code`.
+- General reference: `documentation/tooling.md`.

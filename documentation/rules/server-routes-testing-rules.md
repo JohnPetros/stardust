@@ -1,75 +1,75 @@
-# Regras de Teste de Rotas do Server
+# Server Route Testing Rules
 
-Esta documentação define os padrões e práticas para escrever testes de rotas
-HTTP em `apps/server`, com base nos testes existentes em
+This documentation defines the standards and practices for writing HTTP route
+tests in `apps/server`, based on the existing tests in
 `apps/server/src/tests/routes`.
 
-## 1. Visão Geral
+## 1. Overview
 
-Os testes de rota do server são testes de integração da borda HTTP. Eles devem
-validar a aplicação montada com Hono, exercitando autenticação, validação,
-autorização, mapeamento de erros e efeitos persistidos no banco.
+Server route tests are integration tests of the HTTP edge. They must
+validate the application mounted with Hono, exercising authentication, validation,
+authorization, error mapping and effects persisted in the database.
 
-Diferente dos testes de handlers e use cases, aqui o foco não é mockar
-dependências internas. O teste deve atravessar a stack real da rota sempre que
-possível.
+Unlike handler and use case tests, the focus here is not on mocking internal
+dependencies. The test must go through the route's real stack whenever
+possible.
 
-## 2. Localização e Nomenclatura
+## 2. Location and Naming
 
-- **Localização:** `apps/server/src/tests/routes/<dominio>/...`
-- **Nomenclatura:** `[NomeDaRota].test.ts`
-- **Organização:** espelhe o domínio e o recurso testado, como em
+- **Location:** `apps/server/src/tests/routes/<domain>/...`
+- **Naming:** `[RouteName].test.ts`
+- **Organization:** mirror the domain and the tested resource, as in
   `profile/achievements`.
-- **Granularidade:** crie exatamente **um arquivo de teste por rota HTTP**.
-  Não agrupe múltiplas rotas diferentes no mesmo arquivo, mesmo que pertençam
-  ao mesmo resource ou router.
+- **Granularity:** create exactly **one test file per HTTP route**.
+  Do not group multiple different routes in the same file, even if they belong
+  to the same resource or router.
 
-Exemplos:
+Examples:
 
 - `apps/server/src/tests/routes/profile/achievements/CreateAchievementRoute.test.ts`
 - `apps/server/src/tests/routes/profile/achievements/FetchAchievementsRoute.test.ts`
 
-## 3. Stack e Ferramentas
+## 3. Stack and Tools
 
-- Runner de testes: Jest.
-- Cliente HTTP: `supertest`.
-- Servidor sob teste: `HonoFixture`.
-- Banco para preparação e limpeza: `SupabaseFixture`.
-- Autenticação real para cenários protegidos: `AuthFixture`.
-- Seed e leitura de dados auxiliares: fixtures de domínio, como `ProfileFixture`.
+- Test runner: Jest.
+- HTTP client: `supertest`.
+- Server under test: `HonoFixture`.
+- Database for setup and cleanup: `SupabaseFixture`.
+- Real authentication for protected scenarios: `AuthFixture`.
+- Seed and reading of auxiliary data: domain fixtures, such as `ProfileFixture`.
 
-## 4. Pré-Requisitos de Execução
+## 4. Execution Prerequisites
 
-Antes de rodar os testes de integração da app server, prepare o Supabase local
-com o script de teste do workspace:
+Before running the integration tests of the server app, prepare the local Supabase
+with the workspace's test script:
 
 ```bash
 pnpm --filter @stardust/server run db:test
 pnpm --filter @stardust/server run test:integration
 ```
 
-O `db:test` prepara o stack Supabase do root `docker-compose.yml` usando as
-variáveis locais de `.env.local` e executa o one-shot `supabase-db-reset`, que
-reconstrói o schema a partir das migrations versionadas sem aplicar seed. Não
-inicie outro stack por `supabase start` para esses testes. A fixture de Auth
-confirma cada conta efêmera pelo email capturado no Mailpit local; mantenha a
-confirmação de email ativa e nunca registre OTP, token ou corpo da mensagem.
+`db:test` prepares the Supabase stack from the root `docker-compose.yml` using the
+local variables from `.env.local` and runs the `supabase-db-reset` one-shot, which
+rebuilds the schema from the versioned migrations without applying a seed. Do not
+start another stack through `supabase start` for these tests. The Auth fixture
+confirms each ephemeral account through the email captured in the local Mailpit; keep
+email confirmation enabled and never record the OTP, token or message body.
 
-Os testes em `apps/server/src/tests/routes/**` dependem do Supabase local mesmo
-quando executados pelo projeto Jest `server`, pois usam `SupabaseFixture`,
-`AuthFixture`, repositories reais e validação de efeitos persistidos.
+The tests in `apps/server/src/tests/routes/**` depend on the local Supabase even
+when run by the Jest `server` project, since they use `SupabaseFixture`,
+`AuthFixture`, real repositories and validation of persisted effects.
 
-## 5. Estrutura Base do Teste
+## 5. Base Test Structure
 
-O padrão observado é:
+The observed pattern is:
 
-1. Instanciar as fixtures uma vez no escopo do `describe`.
-2. Executar `honoFixture.setup()` em `beforeAll` para registrar middlewares,
-   rotas e tratamento de erro.
-3. Limpar o banco em `beforeEach`.
-4. Criar uma conta autenticável em `beforeEach` quando a rota exige sessão.
-5. Resetar estado global mutável, como `ENV.godAccountIds`, quando o fluxo usar
-   autorização especial.
+1. Instantiate the fixtures once in the `describe` scope.
+2. Run `honoFixture.setup()` in `beforeAll` to register middlewares,
+   routes and error handling.
+3. Clean the database in `beforeEach`.
+4. Create an authenticatable account in `beforeEach` when the route requires a session.
+5. Reset mutable global state, such as `ENV.godAccountIds`, when the flow uses
+   special authorization.
 
 ```ts
 import request from 'supertest'
@@ -96,100 +96,100 @@ describe('[GET] /profile/achievements', () => {
 })
 ```
 
-## 6. Fixtures Compartilhadas
+## 6. Shared Fixtures
 
 ### 6.1. `HonoFixture`
 
-Use para subir a aplicação Hono real e expor `honoFixture.server` ao
+Use it to bring up the real Hono application and expose `honoFixture.server` to
 `supertest`.
 
 ### 6.2. `SupabaseFixture`
 
-Use para limpar o estado persistido entre testes. Cada `it` deve começar com o
-banco isolado.
+Use it to clean the persisted state between tests. Each `it` must start with the
+database isolated.
 
 ### 6.3. `AuthFixture`
 
-Use para criar uma conta real no Supabase Auth e obter o header de autorização:
+Use it to create a real account in Supabase Auth and obtain the authorization header:
 
 ```ts
 .set(authFixture.getAuthorizationHeader())
 ```
 
-Também use `authFixture.getAccountId()` quando o cenário depender do id da
-conta autenticada.
+Also use `authFixture.getAccountId()` when the scenario depends on the id of the
+authenticated account.
 
-### 6.4. Fixtures de domínio
+### 6.4. Domain fixtures
 
-Use fixtures específicas para preparar dados de suporte ou verificar efeitos
-colaterais, como:
+Use specific fixtures to prepare support data or verify side effects,
+such as:
 
-- `ProfileFixture` para criar conquistas, usuários e consultar estado final.
-- Repositórios reais quando o cenário exigir preparar relações específicas,
-  como `SupabaseUsersRepository`.
+- `ProfileFixture` to create achievements, users and query the final state.
+- Real repositories when the scenario requires preparing specific relations,
+  such as `SupabaseUsersRepository`.
 
-### 6.5. Fixtures de módulo
+### 6.5. Module fixtures
 
-Quando a preparação de dados de um módulo começar a se repetir entre testes de
-rotas do mesmo domínio, prefira extrair essa lógica para uma fixture dedicada em
+When data preparation for a module starts to repeat across route tests
+of the same domain, prefer extracting that logic into a dedicated fixture in
 `apps/server/src/tests/fixtures/`.
 
-Use uma fixture de módulo quando houver necessidade de:
+Use a module fixture when there is a need to:
 
-- criar entidades relacionadas do mesmo domínio de forma recorrente;
-- encapsular cleanup de dados criados durante o teste;
-- centralizar leitura do estado persistido para assertions de integração;
-- evitar helpers locais duplicados em múltiplos arquivos de teste.
+- recurrently create related entities of the same domain;
+- encapsulate cleanup of data created during the test;
+- centralize reading of the persisted state for integration assertions;
+- avoid duplicated local helpers across multiple test files.
 
-Exemplo de naming esperado:
+Expected naming examples:
 
 - `ProfileFixture`
 - `SpaceFixture`
 
-Regras para essas fixtures:
+Rules for these fixtures:
 
-1. A fixture deve representar um módulo ou agregado funcional, não uma rota
-   específica.
-2. Prefira métodos de alto nível, como `createStar()`, `createAccountUser()` ou
+1. The fixture must represent a module or functional aggregate, not a specific
+   route.
+2. Prefer high-level methods, such as `createStar()`, `createAccountUser()` or
    `getUserCoins()`.
-3. Se a lógica passar a ser usada por mais de um arquivo de teste, mova helpers
-   locais para a fixture compartilhada.
-4. Evite criar fixture nova se `HonoFixture`, `SupabaseFixture`, `AuthFixture`
-   e fixtures já existentes já resolverem o caso com clareza.
-5. Fixtures sao infraestrutura de suporte dos testes e nao recebem arquivos de
-   teste dedicados. Nao crie `*.test.*` ou `*.spec.*` em
+3. If the logic comes to be used by more than one test file, move local helpers
+   to the shared fixture.
+4. Avoid creating a new fixture if `HonoFixture`, `SupabaseFixture`, `AuthFixture`
+   and already existing fixtures already solve the case clearly.
+5. Fixtures are test support infrastructure and do not receive dedicated test
+   files. Do not create `*.test.*` or `*.spec.*` in
    `apps/server/src/tests/fixtures/`.
-6. Valide uma fixture por meio do teste de rota que a utiliza, observando a
-   resposta HTTP e, quando o cenário produzir efeitos persistidos, o estado
-   persistido. Rotas sem mutação podem validar o resultado observável sem essa
-   assertion. Nao teste chamadas internas da fixture.
+6. Validate a fixture through the route test that uses it, observing the HTTP
+   response and, when the scenario produces persisted effects, the persisted
+   state. Routes without mutation may validate the observable result without that
+   assertion. Do not test the fixture's internal calls.
 
-## 7. Padrões de Cobertura
+## 7. Coverage Patterns
 
-Cada rota deve cobrir, quando aplicável:
+Each route must cover, when applicable:
 
-1. Falha de autenticação (`401`) quando a rota é protegida.
-2. Falha de autorização (`401` ou `403`) quando há regra de permissão.
-3. Falha de validação (`400`) para `params`, `query` ou `body` inválidos.
-4. Erros de domínio mapeados para HTTP, como `404` e `409`.
-5. Caminho de sucesso com validação do payload retornado.
-6. Verificação de efeito persistido após mutações, fazendo uma nova leitura ou
-   consulta ao banco.
+1. Authentication failure (`401`) when the route is protected.
+2. Authorization failure (`401` or `403`) when there is a permission rule.
+3. Validation failure (`400`) for invalid `params`, `query` or `body`.
+4. Domain errors mapped to HTTP, such as `404` and `409`.
+5. Success path with validation of the returned payload.
+6. Verification of the persisted effect after mutations, by doing a new read or
+   database query.
 
-## 8. Padrões de Asserção
+## 8. Assertion Patterns
 
-### 8.1. Status HTTP
+### 8.1. HTTP status
 
-Sempre use `HTTP_STATUS_CODE` em vez de números literais.
+Always use `HTTP_STATUS_CODE` instead of literal numbers.
 
 ```ts
 expect(response.status).toBe(HTTP_STATUS_CODE.ok)
 ```
 
-### 8.2. Corpo de erro
+### 8.2. Error body
 
-Para erros conhecidos, compare com `expect.objectContaining` e a instância do
-erro esperado.
+For known errors, compare with `expect.objectContaining` and the instance of the
+expected error.
 
 ```ts
 expect(response.body).toEqual(
@@ -197,7 +197,9 @@ expect(response.body).toEqual(
 )
 ```
 
-Para erros de validação, valide os campos relevantes:
+(`'Conta não autorizada'` is the PT-BR error message returned by the application ("Unauthorized account"); it stays in Portuguese.)
+
+For validation errors, validate the relevant fields:
 
 ```ts
 expect(response.body).toEqual(
@@ -209,11 +211,11 @@ expect(response.body).toEqual(
 )
 ```
 
-### 8.3. Corpo de sucesso
+### 8.3. Success body
 
-Prefira comparar a resposta com objetos reais criados por fixtures ou fakers.
-Isso deixa o teste mais explícito e evita assertions genéricas como
-`expect.any(String)` quando o valor esperado pode ser conhecido.
+Prefer comparing the response with real objects created by fixtures or fakers.
+This makes the test more explicit and avoids generic assertions such as
+`expect.any(String)` when the expected value can be known.
 
 ```ts
 const achievement = AchievementsFaker.fakeUniqueDto()
@@ -230,9 +232,9 @@ expect(response.body).toEqual(
 )
 ```
 
-Use `expect.any(...)` apenas como fallback para campos realmente não
-determinísticos ou derivados em runtime, como um id gerado pela aplicação,
-timestamps ou posições calculadas a partir do estado atual.
+Use `expect.any(...)` only as a fallback for fields that are truly
+non-deterministic or derived at runtime, such as an id generated by the application,
+timestamps or positions computed from the current state.
 
 ```ts
 expect(response.body).toEqual(
@@ -244,96 +246,96 @@ expect(response.body).toEqual(
 )
 ```
 
-### 8.4. Respostas sem corpo
+### 8.4. Responses without a body
 
-Para `204 No Content`, valide status e corpo vazio.
+For `204 No Content`, validate the status and an empty body.
 
 ```ts
 expect(response.status).toBe(HTTP_STATUS_CODE.noContent)
 expect(response.text).toBe('')
 ```
 
-## 9. Preparação de Dados
+## 9. Data Preparation
 
-Use sempre os fakers do domínio para montar payloads e entidades de apoio.
+Always use the domain fakers to build payloads and support entities.
 
-Exemplos observados:
+Observed examples:
 
 - `AchievementsFaker.fakeUniqueDto()`
 - `AchievementsFaker.fakeManyUniqueDto()`
-- `Id.create().value` para ids válidos em params
+- `Id.create().value` for valid ids in params
 
-Evite montar objetos manualmente quando já existir faker no core.
+Avoid building objects manually when a faker already exists in the core.
 
-## 10. Regras para Rotas Protegidas
+## 10. Rules for Protected Routes
 
-Quando a rota exigir autenticação:
+When the route requires authentication:
 
-1. Tenha um teste sem header `Authorization`.
-2. Tenha um teste autenticado para o caminho feliz.
-3. Se houver autorização adicional, prepare o estado explicitamente.
+1. Have a test without the `Authorization` header.
+2. Have an authenticated test for the happy path.
+3. If there is additional authorization, prepare the state explicitly.
 
-Exemplo recorrente:
+Recurring example:
 
 ```ts
 ENV.godAccountIds = []
 ENV.godAccountIds.push(authFixture.getAccountId())
 ```
 
-Sempre resete esse tipo de estado no `beforeEach` para evitar vazamento entre
-cenários.
+Always reset this kind of state in `beforeEach` to avoid leakage between
+scenarios.
 
-## 11. Verificação de Persistência
+## 11. Persistence Verification
 
-Em rotas de mutação (`POST`, `PUT`, `PATCH`, `DELETE`), não pare na resposta
-imediata. Valide também o efeito final no sistema.
+On mutation routes (`POST`, `PUT`, `PATCH`, `DELETE`), do not stop at the
+immediate response. Also validate the final effect on the system.
 
-Padrões aceitos:
+Accepted patterns:
 
-1. Fazer um `GET` antes e depois da operação.
-2. Consultar o banco por meio de uma fixture.
-3. Consultar repositórios reais quando necessário.
+1. Do a `GET` before and after the operation.
+2. Query the database through a fixture.
+3. Query real repositories when necessary.
 
-Exemplos observados:
+Observed examples:
 
-- Recarregar `/profile/achievements` após criar, atualizar, reordenar ou excluir.
-- Ler `coins` do usuário após resgatar uma conquista.
-- Confirmar remoção de vínculos em tabelas associativas.
+- Reloading `/profile/achievements` after creating, updating, reordering or deleting.
+- Reading the user's `coins` after redeeming an achievement.
+- Confirming the removal of links in association tables.
 
-## 12. O Que Evitar
+## 12. What to Avoid
 
-- Não mocke controllers, use cases, middlewares ou repositórios dentro do teste
-  de rota, salvo necessidade excepcional.
-- Não acople o teste à implementação interna da rota; valide contrato HTTP e
-  efeito observável.
-- Não agrupe várias rotas em um único arquivo de teste.
-- Não compartilhe estado entre testes.
-- Não use números mágicos para status code.
+- Do not mock controllers, use cases, middlewares or repositories inside the route
+  test, except in exceptional need.
+- Do not couple the test to the route's internal implementation; validate the HTTP contract and
+  the observable effect.
+- Do not group several routes in a single test file.
+- Do not share state between tests.
+- Do not use magic numbers for status codes.
 
 ## 13. Checklist
 
-Antes de considerar um teste de rota completo, confirme:
+Before considering a route test complete, confirm:
 
-1. A rota foi exercitada com `supertest` sobre `honoFixture.server`.
-2. O banco foi limpo no `beforeEach`.
-3. A autenticação foi preparada com `AuthFixture` quando necessária.
-4. Existe apenas um arquivo de teste para a rota coberta.
-5. Se houve preparação de dados repetida no módulo, foi avaliado o uso ou a
-   criação de uma fixture compartilhada.
-6. Foram cobertos cenários de erro relevantes da borda HTTP.
-7. O teste validou o corpo retornado.
-8. Em mutações, o teste validou o estado persistido após a chamada.
+1. The route was exercised with `supertest` over `honoFixture.server`.
+2. The database was cleaned in `beforeEach`.
+3. Authentication was prepared with `AuthFixture` when needed.
+4. There is only one test file for the covered route.
+5. If there was repeated data preparation in the module, the use or
+   creation of a shared fixture was evaluated.
+6. Relevant error scenarios of the HTTP edge were covered.
+7. The test validated the returned body.
+8. In mutations, the test validated the persisted state after the call.
 
 ## Tooling
 
-- Workspace server: `pnpm --filter @stardust/server run test:unit`
-- Integração server: `pnpm --filter @stardust/server run db:test` antes de
+- Server workspace: `pnpm --filter @stardust/server run test:unit`
+- Server integration: `pnpm --filter @stardust/server run db:test` before
   `pnpm --filter @stardust/server run test:integration`
 - Global (Turbo): `pnpm run test`
-- Qualidade antes de abrir PR: `pnpm --filter @stardust/server run check:types` e
+- Quality before opening a PR: `pnpm --filter @stardust/server run check:types` and
   `pnpm --filter @stardust/server run check:code`
-- Referência geral: `documentation/tooling.md`
+- General reference: `documentation/tooling.md`
 
-## Transição aprovada: Drizzle (Issue #602)
+## Approved transition: Drizzle (Issue #602)
 
-Para a Issue #602, SupabaseFixture mantém seu client exclusivamente para Auth e passa a preparar/limpar dados via Drizzle. O nome legado da fixture não autoriza PostgREST para persistência. Os exemplos com SupabaseUsersRepository são substituídos pelo repository Drizzle equivalente após a implementação. O db:test reseta somente o banco local, aplica migrations Drizzle e não faz seed. Os testes mantêm Auth real, Hono real e um arquivo por rota; cenários legados agrupados e testes dedicados de database são transferidos para essas fronteiras permitidas.
+For Issue #602, SupabaseFixture keeps its client exclusively for Auth and starts preparing/cleaning data via Drizzle. The fixture's legacy name does not authorize PostgREST for persistence. The examples with SupabaseUsersRepository are replaced by the equivalent Drizzle repository after the implementation. db:test resets only the local database, applies Drizzle migrations and does not seed. The tests keep real Auth, real Hono and one file per route; grouped legacy scenarios and dedicated database tests are transferred to these allowed boundaries.

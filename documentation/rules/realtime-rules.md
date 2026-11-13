@@ -1,68 +1,68 @@
-# Regras da Camada Realtime
+# Realtime Layer Rules
 
-## Visão Geral
+## Overview
 
-A camada **Realtime** encapsula assinaturas de eventos em tempo real da aplicação web, traduzindo eventos externos para contratos estáveis do `@stardust/core`.
+The **Realtime** layer encapsulates real-time event subscriptions of the web application, translating external events into stable `@stardust/core` contracts.
 
-**Responsabilidades centrais:**
+**Core responsibilities:**
 
-- Permitir que a UI reaja a eventos assíncronos de onboarding e sincronização sem acoplar `widgets` diretamente ao SDK do provedor realtime.
-- Centralizar a criação de canais, adaptadores e clientes realtime da aplicação web.
+- Allow the UI to react to asynchronous onboarding and synchronization events without coupling `widgets` directly to the realtime provider SDK.
+- Centralize the creation of realtime channels, adapters and clients of the web application.
 
-**Fora do escopo desta camada:**
+**Out of scope for this layer:**
 
-- Regras de negócio, navegação, estado de `widget` ou acesso direto a `controllers`, banco de dados do servidor e jobs.
+- Business rules, navigation, `widget` state or direct access to `controllers`, the server database and jobs.
 
-> O limite atual da camada é o app `web`, com integração concreta em `apps/web/src/realtime/polling/` e exposição para a UI via `apps/web/src/ui/global/contexts/RealtimeContext/`. Hoje o transporte é **polling REST**; a camada não mantém conexão longa, WebSocket nem stream.
+> The current boundary of the layer is the `web` app, with the concrete integration in `apps/web/src/realtime/polling/` and exposure to the UI through `apps/web/src/ui/global/contexts/RealtimeContext/`. Today the transport is **REST polling**; the layer keeps no long-lived connection, WebSocket or stream.
 
 ---
 
-## Estrutura de Diretórios
+## Directory Structure
 
-| Caminho | Responsabilidade |
+| Path | Responsibility |
 | :--- | :--- |
-| `apps/web/src/realtime/polling/channels/` | Adaptadores de canais por domínio que consultam uma função injetada (ex: `PollingProfileChannel.ts`). |
-| `apps/web/src/realtime/polling/types/` | Tipos do resultado de cada consulta (ex: `ProfileCreationPoll.ts`). |
-| `apps/web/src/ui/global/contexts/RealtimeContext/` | `Composition root` cliente que injeta canais realtime na árvore React. |
-| `apps/web/src/ui/global/contexts/RealtimeContext/useProfileCreationPolling.ts` | Compõe o canal de polling: decide o transporte da credencial e traduz respostas REST em `ProfileCreationPoll`. |
-| `apps/web/src/ui/global/hooks/useRealtimeContext.ts` | Expõe o acesso ao contexto, sem recriar canais. |
-| `apps/web/src/ui/global/hooks/useProfileSocket.ts` | `Hook` fino de consumo para assinatura de eventos de perfil, com `enabled` opcional. |
-| `apps/web/src/ui/global/widgets/layouts/Root/ClientProviders/` | Registra o `RealtimeContextProvider` na borda cliente global, dentro de `AuthContextProvider` e `RestContextProvider`. |
-| `packages/core/src/profile/interfaces/ProfileChannel.ts` | Contrato estável consumido pela UI. A camada realtime **não deve** redefinir esse contrato dentro de `apps/web`. |
+| `apps/web/src/realtime/polling/channels/` | Per-domain channel adapters that query an injected function (e.g. `PollingProfileChannel.ts`). |
+| `apps/web/src/realtime/polling/types/` | Result types of each query (e.g. `ProfileCreationPoll.ts`). |
+| `apps/web/src/ui/global/contexts/RealtimeContext/` | Client `Composition root` that injects realtime channels into the React tree. |
+| `apps/web/src/ui/global/contexts/RealtimeContext/useProfileCreationPolling.ts` | Composes the polling channel: decides the credential transport and translates REST responses into `ProfileCreationPoll`. |
+| `apps/web/src/ui/global/hooks/useRealtimeContext.ts` | Exposes access to the context, without recreating channels. |
+| `apps/web/src/ui/global/hooks/useProfileSocket.ts` | Thin consumer `Hook` for subscribing to profile events, with an optional `enabled`. |
+| `apps/web/src/ui/global/widgets/layouts/Root/ClientProviders/` | Registers the `RealtimeContextProvider` at the global client edge, inside `AuthContextProvider` and `RestContextProvider`. |
+| `packages/core/src/profile/interfaces/ProfileChannel.ts` | Stable contract consumed by the UI. The realtime layer **must not** redefine this contract inside `apps/web`. |
 
 ---
 
-## Princípios Fundamentais
+## Core Principles
 
-### Deve conter
+### Must contain
 
-- Adaptadores realtime devem **implementar contratos do core** (ex: `ProfileChannel`), em vez de expor diretamente APIs do transporte.
-- O adaptador recebe por parâmetro a função de consulta e os tempos de polling; ele **não conhece REST, sessão nem UI**.
-- A **tradução em dois níveis** é explícita: o composition root (`useProfileCreationPolling`) traduz respostas REST em `ProfileCreationPoll`; o adaptador traduz `ProfileCreationPoll` em evento do domínio (ex: `UserCreatedEvent`).
-- A composição do canal e a injeção na árvore acontecem na **borda cliente**, em `RealtimeContextProvider`, `useRealtimeContextProvider` e `useProfileCreationPolling`.
-- `Hooks` de consumo dependem de interfaces estáveis da camada (ex: `profileChannel.onCreateUser(...)`).
-- Cada assinatura retorna **cleanup explícito e idempotente** para uso correto em `useEffect`.
-- Cada assinatura tem estado próprio, no máximo uma consulta em voo, timeout e entrega única.
+- Realtime adapters must **implement core contracts** (e.g. `ProfileChannel`), instead of directly exposing transport APIs.
+- The adapter receives the query function and the polling times as parameters; it **knows nothing about REST, session or UI**.
+- The **two-level translation** is explicit: the composition root (`useProfileCreationPolling`) translates REST responses into `ProfileCreationPoll`; the adapter translates `ProfileCreationPoll` into a domain event (e.g. `UserCreatedEvent`).
+- Channel composition and injection into the tree happen at the **client edge**, in `RealtimeContextProvider`, `useRealtimeContextProvider` and `useProfileCreationPolling`.
+- Consumer `Hooks` depend on stable interfaces of the layer (e.g. `profileChannel.onCreateUser(...)`).
+- Each subscription returns an **explicit and idempotent cleanup** for correct use in `useEffect`.
+- Each subscription has its own state, at most one query in flight, a timeout and single delivery.
 
-### Não deve conter
+### Must not contain
 
-- Regra de negócio de onboarding, `retry`, redirecionamento ou decisão de fluxo — isso pertence à UI e ao core.
-- Imports de `apps/server/**`, repositórios, jobs, `controllers` REST ou `actions` RPC, nem de `apps/web/src/rest/**` ou `apps/web/src/ui/**` dentro de `apps/web/src/realtime/**`.
-- Vazamento de respostas HTTP ou do tipo `ProfileCreationPoll` para `widgets` e `hooks` de domínio.
-- Mistura de tratamento visual, estado de componente ou feedback de UX com adaptadores realtime.
-- Contratos paralelos aos do core quando já existir interface canônica em `packages/core/**`.
-- Testes em `apps/web/src/realtime/**`: o local não é permitido pelo `check:test-integrity`.
+- Onboarding business rules, `retry`, redirection or flow decisions — those belong to the UI and the core.
+- Imports from `apps/server/**`, repositories, jobs, REST `controllers` or RPC `actions`, nor from `apps/web/src/rest/**` or `apps/web/src/ui/**` inside `apps/web/src/realtime/**`.
+- Leaking HTTP responses or the `ProfileCreationPoll` type into `widgets` and domain `hooks`.
+- Mixing visual handling, component state or UX feedback with realtime adapters.
+- Contracts parallel to the core's when a canonical interface already exists in `packages/core/**`.
+- Tests in `apps/web/src/realtime/**`: the location is not allowed by `check:test-integrity`.
 
 ---
 
-## Padrões de Projeto
+## Design Patterns
 
-### Adapter por Domínio
+### Adapter per Domain
 
-Cada integração realtime deve ser implementada como `factory function` com nome em `PascalCase`, recebendo dependências por parâmetro e retornando uma interface do core.
+Each realtime integration must be implemented as a `factory function` named in `PascalCase`, receiving dependencies as parameters and returning a core interface.
 
 ```typescript
-// Exemplo atual
+// Current example
 function PollingProfileChannel(params: {
   pollProfileCreation: () => Promise<ProfileCreationPoll>
   intervalInMs: number
@@ -75,7 +75,7 @@ function PollingProfileChannel(params: {
 
 ### Payload Translation
 
-O composition root mapeia respostas REST para `ProfileCreationPoll` (`pending`, `created`, `stopped`, `failed`). O adaptador mapeia `created` para um evento canônico do domínio antes de notificar `listeners`.
+The composition root maps REST responses to `ProfileCreationPoll` (`pending`, `created`, `stopped`, `failed`). The adapter maps `created` to a canonical domain event before notifying `listeners`.
 
 ```typescript
 // apps/web/src/ui/global/contexts/RealtimeContext/useProfileCreationPolling.ts
@@ -86,75 +86,75 @@ O composition root mapeia respostas REST para `ProfileCreationPoll` (`pending`, 
 
 ### Composition Root via Context
 
-A composição do canal acontece em `apps/web/src/ui/global/contexts/RealtimeContext/`. O Entry Point (`index.tsx`) resolve `profileService`, `account` e `accessToken` pelos contexts de Rest e Auth e os passa por parâmetro a `useRealtimeContextProvider`. Um canal injetado por prop (ambiente `testing`) tem precedência sobre o canal de polling.
+Channel composition happens in `apps/web/src/ui/global/contexts/RealtimeContext/`. The Entry Point (`index.tsx`) resolves `profileService`, `account` and `accessToken` through the Rest and Auth contexts and passes them as parameters to `useRealtimeContextProvider`. A channel injected by prop (`testing` environment) takes precedence over the polling channel.
 
-### Consumer Hook Fino
+### Thin Consumer Hook
 
-`Hooks` como `apps/web/src/ui/global/hooks/useProfileSocket.ts` apenas assinam e limpam `listeners`. O hook aceita `{ enabled }`, guarda o listener mais recente em `useRef` e só refaz a assinatura quando `enabled` ou `profileChannel` mudam, para que re-renders não reiniciem o polling. Qualquer filtro por conta, tela ou fluxo fica no `hook`/página consumidora.
+`Hooks` such as `apps/web/src/ui/global/hooks/useProfileSocket.ts` only subscribe and clean up `listeners`. The hook accepts `{ enabled }`, keeps the latest listener in a `useRef` and only resubscribes when `enabled` or `profileChannel` change, so that re-renders do not restart the polling. Any filtering by account, screen or flow stays in the consuming `hook`/page.
 
-### Cobertura de testes
+### Test coverage
 
-Hooks globais não recebem testes dedicados. O comportamento do canal é coberto por `RealtimeContext/tests/useProfileCreationPolling.test.ts` (executa o adaptador real com timers falsos) e pelas jornadas Playwright da Web com `ProfileChannelMock`.
+Global hooks do not get dedicated tests. The channel behavior is covered by `RealtimeContext/tests/useProfileCreationPolling.test.ts` (runs the real adapter with fake timers) and by the Web Playwright journeys with `ProfileChannelMock`.
 
-> **Nota:** Evite um adaptador genérico demais quando existir apenas um contrato de domínio claro. Enquanto a necessidade for localizada, prefira canais por domínio em vez de uma camada abstrata sem uso real.
+> **Note:** Avoid an adapter that is too generic when there is only one clear domain contract. While the need is localized, prefer per-domain channels over an abstract layer with no real use.
 
 ---
 
-## Padrões de Uso Aplicados
+## Applied Usage Patterns
 
-### Fluxo correto
+### Correct flow
 
-1. `ClientProviders` registra `AuthContextProvider > RestContextProvider > RealtimeContextProvider`.
-2. O contexto injeta `profileChannel` (polling, ou o mock em `testing`).
-3. `Hooks`/páginas cliente assinam `onCreateUser` para reagir a `UserCreatedEvent`.
+1. `ClientProviders` registers `AuthContextProvider > RestContextProvider > RealtimeContextProvider`.
+2. The context injects `profileChannel` (polling, or the mock in `testing`).
+3. Client `Hooks`/pages subscribe to `onCreateUser` to react to `UserCreatedEvent`.
 
-### Exemplos de uso correto
+### Examples of correct usage
 
-- **Páginas de confirmação:** a UI pode filtrar o evento por `account.email.value` e disparar `onRefetchUser()` ou atualizar estado local.
+- **Confirmation pages:** the UI can filter the event by `account.email.value` and trigger `onRefetchUser()` or update local state.
   - `apps/web/src/ui/auth/widgets/pages/AccountConfirmation/useAccountConfirmationPage.ts`
   - `apps/web/src/ui/auth/widgets/pages/SocialAccountConfirmation/useSocialAccountConfirmationPage.ts`
-- **Cadastro:** `SignUpPage` só assina depois do envio bem-sucedido: `useProfileSocket(handleUserCreated, { enabled: userEmail !== null })`.
+- **Sign-up:** `SignUpPage` only subscribes after the successful submission: `useProfileSocket(handleUserCreated, { enabled: userEmail !== null })`.
 
-### Erros comuns
+### Common mistakes
 
-| Erro | Correção |
+| Mistake | Fix |
 | :--- | :--- |
-| Chamar `ProfileService` ou `fetch` dentro de `apps/web/src/realtime/**`. | A consulta é injetada pelo composition root. |
-| Passar o corpo HTTP ou `ProfileCreationPoll` para a UI. | A UI deve receber `UserCreatedEvent` ou outro evento do core. |
-| Assinar com um listener novo a cada render sem a ref. | Use `useProfileSocket`, que mantém a assinatura estável. |
-| Duplicar filtros de assinatura e conversão de evento em múltiplos componentes. | Concentre-os no adaptador ou no `hook` consumidor adequado. |
+| Calling `ProfileService` or `fetch` inside `apps/web/src/realtime/**`. | The query is injected by the composition root. |
+| Passing the HTTP body or `ProfileCreationPoll` to the UI. | The UI must receive `UserCreatedEvent` or another core event. |
+| Subscribing with a new listener on every render without the ref. | Use `useProfileSocket`, which keeps the subscription stable. |
+| Duplicating subscription filters and event conversion across multiple components. | Concentrate them in the adapter or in the appropriate consumer `hook`. |
 
 ---
 
-## Regras de Integração com Outras Camadas
+## Integration Rules with Other Layers
 
-| Camada | Regra |
+| Layer | Rule |
 | :--- | :--- |
-| **Core** | A camada realtime pode importar eventos, entidades auxiliares e interfaces de `@stardust/core` (ex: `ProfileChannel`, `UserCreatedEvent`). O core **não deve** importar nada de `apps/web/src/realtime/**`. |
-| **UI** | A UI consome realtime via `RealtimeContext` ou `hooks` dedicados. O composition root (`useProfileCreationPolling`), na UI, é quem conhece REST e sessão. |
-| **REST/RPC/Queue** | O adaptador realtime não chama essas camadas; a função de consulta injetada, criada na UI, usa os services de `RestContext`. |
-| **Infraestrutura externa** | O transporte é isolado no adaptador; a escolha do transporte não deve alterar contratos públicos da UI. |
+| **Core** | The realtime layer may import events, auxiliary entities and interfaces from `@stardust/core` (e.g. `ProfileChannel`, `UserCreatedEvent`). The core **must not** import anything from `apps/web/src/realtime/**`. |
+| **UI** | The UI consumes realtime through `RealtimeContext` or dedicated `hooks`. The composition root (`useProfileCreationPolling`), in the UI, is what knows REST and session. |
+| **REST/RPC/Queue** | The realtime adapter does not call these layers; the injected query function, created in the UI, uses the `RestContext` services. |
+| **External infrastructure** | The transport is isolated in the adapter; the choice of transport must not change the UI's public contracts. |
 
-**Direção de dependência:**
+**Dependency direction:**
 
 ```
-UI (composition root) → ProfileService (port) → adapter REST
-UI → Realtime adapter (recebe a função de consulta)
+UI (composition root) → ProfileService (port) → REST adapter
+UI → Realtime adapter (receives the query function)
               ↑
-         @stardust/core (contratos de domínio)
+         @stardust/core (domain contracts)
 ```
 
-> Novos canais devem ser expostos por interfaces nomeadas por domínio e injetados no contexto. Não deve existir `import` cruzado da UI para arquivos internos de `realtime/polling/channels/**` fora do composition root.
+> New channels must be exposed through interfaces named by domain and injected into the context. There must be no cross `import` from the UI to internal files of `realtime/polling/channels/**` outside the composition root.
 
 ---
 
-## Checklist para Novas Features na Camada
+## Checklist for New Features in the Layer
 
-- [ ] O novo canal implementa uma interface existente do core **ou** introduz um contrato novo no core antes da implementação web.
-- [ ] O adaptador foi criado em `apps/web/src/realtime/...` como `factory function` e recebe a função de consulta por injeção.
-- [ ] A resposta externa foi mapeada para evento/objeto canônico antes de chegar à UI.
-- [ ] A assinatura retorna `cleanup` idempotente e o consumo em React acontece dentro de `useEffect`.
-- [ ] O acesso ao canal passa por `RealtimeContextProvider` ou por outro `composition root` explícito, sem instanciação local em `widget`.
-- [ ] Nenhum arquivo da camada importa `apps/server/**`, REST, UI, repositórios, jobs ou regras de negócio do fluxo.
-- [ ] Os testes ficam em locais permitidos (`ui/**/contexts/**/tests`), nunca em `realtime/**` nem em hooks globais.
-- [ ] Os nomes de arquivos, `factories` e tipos seguem as convenções globais em `documentation/rules/code-conventions-rules.md`.
+- [ ] The new channel implements an existing core interface **or** introduces a new contract in the core before the web implementation.
+- [ ] The adapter was created in `apps/web/src/realtime/...` as a `factory function` and receives the query function by injection.
+- [ ] The external response was mapped to a canonical event/object before reaching the UI.
+- [ ] The subscription returns an idempotent `cleanup` and consumption in React happens inside `useEffect`.
+- [ ] Access to the channel goes through `RealtimeContextProvider` or another explicit `composition root`, with no local instantiation in a `widget`.
+- [ ] No file in the layer imports `apps/server/**`, REST, UI, repositories, jobs or flow business rules.
+- [ ] Tests live in allowed locations (`ui/**/contexts/**/tests`), never in `realtime/**` nor in global hooks.
+- [ ] File names, `factories` and types follow the global conventions in `documentation/rules/code-conventions-rules.md`.

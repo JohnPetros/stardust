@@ -1,10 +1,10 @@
-# Camada LSP - Language Server Protocol para Delegua
+# LSP Layer - Language Server Protocol for Delegua
 
-A camada LSP (Language Server Protocol) é responsável por fornecer recursos específicos da linguagem para a linguagem **Delegua**. Ela habilita recursos como autocompletar, diagnósticos e informações de hover em editores de código que suportam o LSP.
+The LSP (Language Server Protocol) layer is responsible for providing language-specific features for the **Delegua** language. It enables features such as autocomplete, diagnostics and hover information in code editors that support the LSP.
 
-## Estrutura
+## Structure
 
-A camada LSP está localizada no diretório `./packages/lsp`.
+The LSP layer is located in the `./packages/lsp` directory.
 
 ```
 packages/lsp/
@@ -16,23 +16,23 @@ packages/lsp/
     └── main.ts
 ```
 
-- **`DeleguaProvedorLsp.ts`**: O núcleo da implementação do LSP para a linguagem Delegua.
-- **`DeleguaInterpretador.ts`**: Um interpretador para a linguagem Delegua.
-- **`DeleguaConfiguracaoParaEditorMonaco.ts`**: Configuração para o Editor Monaco para integrar com o LSP do Delegua.
-- **`constants/`**: Constantes relacionadas à implementação do LSP.
-- **`main.ts`**: O ponto de entrada do pacote.
+- **`DeleguaProvedorLsp.ts`**: The core of the LSP implementation for the Delegua language.
+- **`DeleguaInterpretador.ts`**: An interpreter for the Delegua language.
+- **`DeleguaConfiguracaoParaEditorMonaco.ts`**: Configuration for the Monaco Editor to integrate with the Delegua LSP.
+- **`constants/`**: Constants related to the LSP implementation.
+- **`main.ts`**: The package entry point.
 
 ## DeleguaProvedorLsp
 
-A classe `DeleguaProvedorLsp` é o coração da camada LSP. Ela implementa a interface `LspProvider` do pacote `core` e fornece os seguintes recursos:
+The `DeleguaProvedorLsp` class is the heart of the LSP layer. It implements the `LspProvider` interface of the `core` package and provides the following features:
 
-- **Execução de Código**: O método `run` executa um bloco de código Delegua e retorna o resultado.
-- **Análise Sintática e Semântica**: Os métodos `performSyntaxAnalysis` e `performSemanticAnalysis` analisam o código em busca de erros e retornam diagnósticos.
-- **Autocomplete**: O método `getCompletions` expõe sugestões agnósticas de editor via contrato do `core`, combinando catálogos estáticos com símbolos extraídos do código aberto.
-- **Manipulação de Código**: Métodos como `addInputs`, `addFunctionCall` e `buildFunction` permitem a manipulação programática do código Delegua.
-- **Tradução**: Os métodos `translateToLsp` e `translateToJs` traduzem o código entre Delegua e JavaScript.
+- **Code Execution**: The `run` method executes a block of Delegua code and returns the result.
+- **Syntactic and Semantic Analysis**: The `performSyntaxAnalysis` and `performSemanticAnalysis` methods analyze the code for errors and return diagnostics.
+- **Autocomplete**: The `getCompletions` method exposes editor-agnostic suggestions via the `core` contract, combining static catalogs with symbols extracted from the open code.
+- **Code Manipulation**: Methods such as `addInputs`, `addFunctionCall` and `buildFunction` allow programmatic manipulation of Delegua code.
+- **Translation**: The `translateToLsp` and `translateToJs` methods translate code between Delegua and JavaScript.
 
-**Exemplo: `DeleguaProvedorLsp.ts`**
+**Example: `DeleguaProvedorLsp.ts`**
 
 ```typescript
 export class DeleguaProvedorLsp implements LspProvider {
@@ -43,33 +43,33 @@ export class DeleguaProvedorLsp implements LspProvider {
     new AnalisadorSemantico();
 
   async run(code: string) {
-    // ... implementação
+    // ... implementation
   }
 
   performSyntaxAnalysis(code: string): LspResponse {
-    // ... implementação
+    // ... implementation
   }
 
   performSemanticAnalysis(code: string): LspResponse {
-    // ... implementação
+    // ... implementation
   }
 
   getCompletions(code: string): LspCompletion[] {
-    // ... implementação
+    // ... implementation
   }
 
-  // ... outros métodos
+  // ... other methods
 }
 ```
 
-## Integração com o Editor Monaco
+## Monaco Editor Integration
 
-O arquivo `DeleguaConfiguracaoParaEditorMonaco.ts` fornece a configuração necessária para integrar o LSP do Delegua com o Editor Monaco. Isso permite que a aplicação web tenha uma experiência rica de edição de código para a linguagem Delegua.
+The `DeleguaConfiguracaoParaEditorMonaco.ts` file provides the configuration needed to integrate the Delegua LSP with the Monaco Editor. This gives the web application a rich code editing experience for the Delegua language.
 
-Sugestões de autocomplete devem permanecer no contrato agnóstico `LspCompletion`
-do `core`; a UI faz apenas a adaptação final para `CompletionItem` do Monaco
-com `range`, `kind` e regras de snippet.
+Autocomplete suggestions must stay in the agnostic `LspCompletion` contract
+of `core`; the UI only does the final adaptation to Monaco's `CompletionItem`
+with `range`, `kind` and snippet rules.
 
-## Interpretador
+## Interpreter
 
-O arquivo `DeleguaInterpretador.ts` contém um interpretador para a linguagem Delegua. Isso é usado pelo método `run` na classe `DeleguaProvedorLsp` para executar o código.
+The `DeleguaInterpretador.ts` file contains an interpreter for the Delegua language. This is used by the `run` method in the `DeleguaProvedorLsp` class to execute the code.
