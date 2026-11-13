@@ -1,45 +1,45 @@
-# Queue Layer Rules
+# Regras da Camada Queue
 
-## Overview
+## Visao Geral
 
-The **Queue** layer runs asynchronous processing and background `jobs` on the server using **Inngest**, isolating infrastructure through the core's `Job` and `Amqp` contracts.
+A camada **Queue** executa processamento assincrono e `jobs` em background no server usando **Inngest**, isolando infraestrutura via os contratos `Job` e `Amqp` do core.
 
-| Item | Definition |
+| Item | Definicao |
 | --- | --- |
-| **Goal** | Orchestrate `jobs` and connect an execution engine (Inngest) to the core contracts. |
-| **Responsibilities** | Define agnostic `jobs`; implement `composition roots` in the `runtime`; publish events via the `broker`. |
-| **Does not do** | Business rules; direct coupling of a `job` to the Inngest SDK/`runtime`. |
+| **Objetivo** | Orquestrar `jobs` e conectar um motor de execucao (Inngest) aos contratos do core. |
+| **Responsabilidades** | Definir `jobs` agnosticos; implementar `composition roots` no `runtime`; publicar eventos via `broker`. |
+| **Nao faz** | Regra de negocio; acoplamento direto de `job` ao SDK/`runtime` do Inngest. |
 
-## Directory Structure
+## Estrutura de Diretorios
 
-| Folder/File | Purpose |
+| Pasta/Arquivo | Finalidade |
 | --- | --- |
-| `apps/server/src/queue/jobs/` | Jobs per domain (infrastructure-agnostic). |
-| `apps/server/src/queue/inngest/` | Inngest infra (runtime/adapters). |
-| `apps/server/src/queue/inngest/functions/` | Composition roots per domain (instantiates dependencies and runs the job). |
-| `apps/server/src/queue/inngest/InngestAmqp.ts` | Adapter of the `Amqp` contract. |
-| `apps/server/src/queue/inngest/inngest.ts` | Config and event schemas. |
-| `apps/server/src/queue/inngest/InngestBroker.ts` | Event publishing (implements `Broker`). |
-| `packages/core/src/global/interfaces/queue/Job.ts` | `Job` contract (core). |
-| `packages/core/src/global/interfaces/queue/Amqp.ts` | `Amqp` contract (core). |
+| `apps/server/src/queue/jobs/` | Jobs por dominio (agnosticos de infraestrutura). |
+| `apps/server/src/queue/inngest/` | Infra do Inngest (runtime/adaptadores). |
+| `apps/server/src/queue/inngest/functions/` | Composition roots por dominio (instancia dependencias e executa job). |
+| `apps/server/src/queue/inngest/InngestAmqp.ts` | Adaptador do contrato `Amqp`. |
+| `apps/server/src/queue/inngest/inngest.ts` | Config e schemas de eventos. |
+| `apps/server/src/queue/inngest/InngestBroker.ts` | Publicacao de eventos (implementa `Broker`). |
+| `packages/core/src/global/interfaces/queue/Job.ts` | Contrato `Job` (core). |
+| `packages/core/src/global/interfaces/queue/Amqp.ts` | Contrato `Amqp` (core). |
 
-## Rules
+## Regras
 
-- **Job vs infra separation**: a `job` must be testable and engine-agnostic; the infra connects the `job` to Inngest.
-- **`amqp.run`**: external IO and side effects must run inside `amqp.run` (traceability and retries).
-- **Composition at the edge**: concrete dependencies are instantiated in `apps/server/src/queue/inngest/functions/**`.
+- **Separacao job vs infra**: `job` deve ser testavel e agnostico do motor; a infra conecta `job` ao Inngest.
+- **`amqp.run`**: IO externo e efeitos colaterais devem rodar dentro de `amqp.run` (rastreabilidade e retries).
+- **Composicao na borda**: dependencias concretas sao instanciadas em `apps/server/src/queue/inngest/functions/**`.
 
-> ⚠️ Forbidden: a `job` importing `inngest` directly.
+> ⚠️ Proibido: `job` importar `inngest` diretamente.
 
-## Organization and Naming
+## Organizacao e Nomeacao
 
-- `job`: `VerbNounJob`.
-- When used by Inngest: expose `static KEY` (and `static CRON_EXPRESSION` when applicable).
+- `job`: `VerboSubstantivoJob`.
+- Quando usado por Inngest: expor `static KEY` (e `static CRON_EXPRESSION` quando aplicavel).
 
-## Example
+## Exemplo
 
 ```ts
-// Job (agnostic)
+// Job (agnostico)
 export class CreateChallengeJob {
   static readonly KEY = 'challenging/create.challenge.job'
   static readonly CRON_EXPRESSION = 'TZ=America/Sao_Paulo 0 0 * * *'
@@ -52,21 +52,21 @@ export class CreateChallengeJob {
 }
 ```
 
-## Integration with Other Layers
+## Integracao com Outras Camadas
 
-- **Allowed**: `apps/server/src/queue/inngest/functions/**` instantiating repos/REST services/providers; jobs depending on core interfaces via injection.
-- **Forbidden**: the core depending on `apps/server/src/queue/**`.
-- **Contract**: `Job` + `Amqp` (core); `InngestAmqp` (adapter).
-- **Direction**: Inngest (infra) -> Job -> Core.
+- **Permitido**: `apps/server/src/queue/inngest/functions/**` instanciar repos/services REST/providers; jobs dependerem de interfaces do core por injecao.
+- **Proibido**: o core depender de `apps/server/src/queue/**`.
+- **Contrato**: `Job` + `Amqp` (core); `InngestAmqp` (adaptador).
+- **Direcao**: Inngest (infra) -> Job -> Core.
 
-## Checklist (before the PR)
+## Checklist (antes do PR)
 
-- The job is Inngest-agnostic.
-- IO runs inside `amqp.run`.
-- The composition root instantiates concrete dependencies.
-- `KEY`/cron/event names are stable and unique.
+- Job e agnostico do Inngest.
+- IO roda dentro de `amqp.run`.
+- Composition root instancia dependencias concretas.
+- `KEY`/cron/event names sao estaveis e unicos.
 
-## Notes
+## Notas
 
-- Inngest is the current queue engine.
+- Inngest e o motor atual de queue.
 - Tooling: `documentation/tooling.md`.

@@ -1,63 +1,63 @@
-# REST Layer Rules
+# Regras da Camada REST
 
-## Overview
+## Visao Geral
 
-The **REST** layer standardizes HTTP communication with external APIs and with the backend, consolidating configuration, parsing and error handling through `RestClient`.
+A camada **REST** padroniza comunicacao HTTP com APIs externas e com o backend, consolidando configuracao, parsing e tratamento de erros via `RestClient`.
 
-| Item | Definition |
+| Item | Definicao |
 | --- | --- |
-| **Goal** | Transport data over HTTP with stable contracts (`RestClient`, `RestResponse`). |
-| **Responsibilities** | Implement `clients` per environment; implement typed `services` per route; normalize errors and pagination. |
-| **Does not do** | Business rules (use cases/entities); instantiate `RestClient` inside a `service`. |
+| **Objetivo** | Transportar dados via HTTP com contratos estaveis (`RestClient`, `RestResponse`). |
+| **Responsabilidades** | Implementar `clients` por ambiente; implementar `services` tipados por rota; normalizar erros e paginacao. |
+| **Nao faz** | Regra de negocio (use-cases/entidades); instanciar `RestClient` dentro de `service`. |
 
-## Directory Structure
+## Estrutura de Diretorios
 
-| App | Path | Purpose |
+| App | Caminho | Finalidade |
 | --- | --- | --- |
-| Web | `apps/web/src/rest/next/` | `fetch` clients and Next adaptations. |
-| Web | `apps/web/src/rest/services/` | Services consumed by UI/RPC/tools. |
-| Web | `apps/web/src/rest/controllers/` | Controllers/handlers at the web edge (when applicable). |
-| Server | `apps/server/src/rest/axios/AxiosRestClient.ts` | `RestClient` implementation via `axios`. |
-| Server | `apps/server/src/rest/services/` | Services used by the server. |
-| Server | `apps/server/src/rest/controllers/` | Controllers at the server edge. |
-| Backoffice | `apps/backoffice/src/rest/axios/AxiosRestClient.ts` | `RestClient` implementation via `axios`. |
+| Web | `apps/web/src/rest/next/` | Clientes `fetch` e adaptacoes Next. |
+| Web | `apps/web/src/rest/services/` | Services consumidos por UI/RPC/tools. |
+| Web | `apps/web/src/rest/controllers/` | Controllers/handlers na borda web (quando aplicavel). |
+| Server | `apps/server/src/rest/axios/AxiosRestClient.ts` | Implementacao do `RestClient` via `axios`. |
+| Server | `apps/server/src/rest/services/` | Services usados pelo server. |
+| Server | `apps/server/src/rest/controllers/` | Controllers na borda server. |
+| Backoffice | `apps/backoffice/src/rest/axios/AxiosRestClient.ts` | Implementacao do `RestClient` via `axios`. |
 
-## Rules
+## Regras
 
-- **Dependency inversion**: `services` receive `RestClient` by injection (argument or constructor).
-- **Return**: methods return `Promise<RestResponse<Body>>` (or `RestResponse` without `body`).
-- **Failures**: always handle `response.isFailure` and use `response.throwError()` when necessary.
-- **URLs**: `routes` in `services` are relative; `baseUrl` is configured in the `client` (`setBaseUrl`).
-- **DTO mapping**: if the API returns a `shape` different from the domain, map it before returning.
+- **Inversao de dependencia**: `services` recebem `RestClient` por injecao (argumento ou construtor).
+- **Retorno**: metodos retornam `Promise<RestResponse<Body>>` (ou `RestResponse` sem `body`).
+- **Falhas**: sempre tratar `response.isFailure` e usar `response.throwError()` quando necessario.
+- **URLs**: `routes` em `services` sao relativas; `baseUrl` e configurada no `client` (`setBaseUrl`).
+- **DTO mapping**: se a API retorna um `shape` diferente do dominio, mapear antes de retornar.
 
-> ⚠️ Forbidden: instantiating `RestClient` inside `*/rest/services/**`.
+> ⚠️ Proibido: instanciar `RestClient` dentro de `*/rest/services/**`.
 
-## Patterns
+## Padroes
 
-- **Clients per environment**
-  - Web: `apps/web/src/rest/next/NextRestClient.ts` (based on `fetch`).
+- **Clientes por ambiente**
+  - Web: `apps/web/src/rest/next/NextRestClient.ts` (baseado em `fetch`).
   - Web (server-side): `apps/web/src/rest/next/NextServerRestClient.ts` (baseUrl + auth via cookies).
-  - Server: `apps/server/src/rest/axios/AxiosRestClient.ts` (based on `axios`).
-  - Backoffice: `apps/backoffice/src/rest/axios/AxiosRestClient.ts` (based on `axios`).
-- **Typed services**: Web/Backoffice prefer factory functions (e.g., `apps/web/src/rest/services/ConversationService.ts`).
-- **Pagination**: clients detect headers and return `PaginationResponse` when applicable.
-- **Query params**: prefer `setQueryParam` on `RestClient`.
+  - Server: `apps/server/src/rest/axios/AxiosRestClient.ts` (baseado em `axios`).
+  - Backoffice: `apps/backoffice/src/rest/axios/AxiosRestClient.ts` (baseado em `axios`).
+- **Services tipados**: Web/Backoffice preferem factory functions (ex: `apps/web/src/rest/services/ConversationService.ts`).
+- **Paginacao**: clients detectam headers e retornam `PaginationResponse` quando aplicavel.
+- **Query params**: preferir `setQueryParam` no `RestClient`.
 
-### Registered anti-patterns
+### Anti-padroes registrados
 
-### Anti-pattern: REST Service with primitive parameters instead of domain objects
+### Anti-padrão: Service REST com parâmetros primitivos no lugar de objetos de domínio
 
-**What was done:**
-REST service methods were implemented with primitive parameters for API key cases, for example:
-`async createApiKey(name: string)` and `async renameApiKey(apiKeyId: Id, name: string)`.
+**O que foi feito:**
+Foram implementados métodos de service REST com parâmetros primitivos para casos de API keys, por exemplo:
+`async createApiKey(name: string)` e `async renameApiKey(apiKeyId: Id, name: string)`.
 
-**Why it is wrong:**
-When the core contract already defines domain objects/structures (such as `Name` and `Id`), using primitives in the service breaks the typed boundary between domain and adapter, makes it easier to bypass semantic validations and creates divergence between the interface and the implementation in the apps (`web`, `server`, `backoffice`).
+**Por que está errado:**
+Quando o contrato do core já define objetos de domínio/estruturas (como `Name` e `Id`), usar primitivas no service quebra a fronteira tipada entre domínio e adapter, facilita bypass de validações semânticas e cria divergência entre interface e implementação nas apps (`web`, `server`, `backoffice`).
 
-**What should be done:**
-`services` methods must receive only domain objects defined in the core contract and serialize to primitives only at the moment of the HTTP call.
+**O que deve ser feito:**
+Os métodos de `services` devem receber apenas objetos de domínio definidos no contrato do core e serializar para primitivas apenas no momento da chamada HTTP.
 
-Correct example:
+Exemplo correto:
 
 ```ts
 async createApiKey(name: Name) {
@@ -71,7 +71,7 @@ async renameApiKey(apiKeyId: Id, name: Name) {
 }
 ```
 
-## Example
+## Exemplo
 
 ```ts
 import type { RestClient } from '@stardust/core/global/interfaces'
@@ -86,22 +86,22 @@ export const ConversationService = (restClient: RestClient): IConversationServic
 }
 ```
 
-## Integration with Other Layers
+## Integracao com Outras Camadas
 
-- **Allowed**: import core contracts (e.g., `@stardust/core/global/interfaces`, `@stardust/core/global/responses`).
-- **Forbidden**: `@stardust/core` importing anything from `apps/**`.
-- **Contract**: `RestClient` + `RestResponse` (core).
-- **Direction**: apps implement REST adapters; the core defines interfaces/DTOs.
+- **Permitido**: importar contratos do core (ex: `@stardust/core/global/interfaces`, `@stardust/core/global/responses`).
+- **Proibido**: `@stardust/core` importar qualquer coisa de `apps/**`.
+- **Contrato**: `RestClient` + `RestResponse` (core).
+- **Direcao**: apps implementam adaptadores REST; o core define interfaces/DTOs.
 
-## Checklist (before the PR)
+## Checklist (antes do PR)
 
-- Interface in the core exists/was updated.
-- Service receives `RestClient` by injection.
-- Return is a typed `RestResponse`.
-- URL is relative; `baseUrl` is configured in the client.
-- Mapping of external formats is encapsulated in the service.
+- Interface no core existe/foi atualizada.
+- Service recebe `RestClient` por injecao.
+- Retorno e `RestResponse` tipado.
+- URL e relativa; `baseUrl` configurada no client.
+- Mapeamento de formatos externos esta encapsulado no service.
 
-## Notes
+## Notas
 
-- `NextServerRestClient` uses cookies for `authorization` when present (`apps/web/src/rest/next/NextServerRestClient.ts`).
+- `NextServerRestClient` usa cookies para `authorization` quando presente (`apps/web/src/rest/next/NextServerRestClient.ts`).
 - Tooling: `documentation/tooling.md`.

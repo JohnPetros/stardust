@@ -1,148 +1,149 @@
-# Introduction
+# Introdução
 
-In a few words, code conventions are a set of rules and best practices that
-developers follow when writing code. Think of them as a "style guide" for
-programming. The main goal is to ensure that the code is consistent, readable
-and easy to maintain by anyone on the project.
+Em poucas palavras, convenções de código são um conjunto de regras e boas
+práticas que desenvolvedores seguem ao escrever código. Pense nelas como um
+"guia de estilo" para a programação. O objetivo principal é garantir que o
+código seja consistente, legível e fácil de manter por qualquer pessoa no
+projeto.
 
-The main conventions to follow when writing code are listed below.
+A seguir serão listadas as principais conveções na hora de escrever código
 
-# Naming of variables, types, objects and functions
+# Nomeação de variáveis, tipos, objetos e funções
 
-## Language
+## Idioma
 
-All the project's code is written in English, because it is believed to be easier
-to write that way than if it were in Portuguese.
+Todo o código do projeto é escrito em inglês, pois acredita-se que é mais fácil
+escrever assim do que se fosse em português.
 
 ## Camel case
 
-Local variables, object properties, function parameters and names of
-functions/methods must be written in
-[camelCase](https://developer.mozilla.org/en-US/docs/Glossary/Camel_case).
+variáveis locais, propriedades de objetos, parâmetros de função e nomes de
+funções/métodos deve ser escritas em
+[camelCase](https://developer.mozilla.org/en-US/docs/Glossary/Camel_case)
 
 ## Pascal case
 
-Names of classes, interfaces, types and factory functions are written in
+Nome de classes, interfaces, tipos e funções fábrica são escritos em
 [PascalCase](https://www.theserverside.com/definition/Pascal-case).
 
-## Descriptiveness and Clarity
+## Descritividade e Clareza
 
-Always opt for names that clearly describe the purpose of the variable.
-`productsList` is better than pl or items, for example.
+Sempre opte por nomes que descrevam claramente o propósito da variável.
+`productsList` é melhor que pl ou items, por exemplo.
 
-## Less redundancy
+## Menos redundância
 
-If you already have the name explicit, it often means you can
-simplify the variable name.
+Se você já tem o nome explicícito significa que, muitas vezes, você pode
+simplicar o nome da variável.
 
-e.g.:
+ex.:
 
 ```ts
 const controller = new FetchLastWeekRankingWinnersController();
 
-// instead of
+// em vez de
 
 const fetchLastWeekRankingWinnersController =
   new FetchLastWeekRankingWinnersController();
 ```
 
-## Boolean variables:
+## Variáveis Booleanas:
 
-Use prefixes such as `is`, `has`, `can`, `should` for variables that store
-boolean values.
+Use prefixos como `is`, `has`, `can`, `should` para variáveis que armazenam
+valores booleanos.
 
-Examples: `isActive`, `hasPermission`, `canEdit`, `shouldRetry`.
+Exemplos: `isActive`, `hasPermission`, `canEdit`, `shouldRetry`.
 
-> Difference between `can` and `should`: when the variable indicates true to
-> execute an action use `should`, in the other cases opt for `can`.
+> Diferença entre `can` e `should`: quando variável serve indica true para
+> executar uma ação use `should`, nos demais casos opte por `can`.
 
-## Collection variables
+## Variáveis de coleção
 
-Use the plural for names of arrays or lists.
+Use o plural para nomes de arrays ou listas.
 
-Examples: `users`, `achievements`, `unlockedStars`.
+Exemplos: `users`, `achievements`, `unlockedStars`.
 
-## Number variables
+## Variáveis de número
 
-Use the suffix `count` to indicate that a variable is a number.
+Use o sufixo `count` para indicar que uma variável é um número.
 
-Examples: `upvotesCount`, `completedChallengesCount`, `unlockedStarsCount`
+Exemplos: `upvotesCount`, `completedChallengesCount`, `unlockedStarsCount`
 
-This rule is not necessary for nouns that by nature are already
-represented as a number, such as `height`, `level`, `margin` etc.
+Essa regra não é necessária para substantivos que por natureza já são
+representados como número, como `height`, `level`, `margin` etc.
 
-## Constants
+## Constantes
 
-They are written in upper case and in
+São escritas em caixa alta e em
 [snake_case](https://www.theserverside.com/definition/Snake-case).
 
-Examples: `SUPABASE_URL`, `HEADER_HEIGHT`, `EVENT_KEY`.
+Exemplos: `SUPABASE_URL`, `HEADER_HEIGHT`, `EVENT_KEY`.
 
-Constants are declarations consumed by the application's behavior and do not
-receive dedicated tests. Do not create `*.test.*` or `*.spec.*` files inside
-`constants/` folders, nor isolated tests whose purpose is to repeat the literal
-value of a constant. Validate the value through the relevant consuming boundary.
+Constantes sao declaracoes consumidas pelo comportamento da aplicacao e nao
+recebem testes dedicados. Nao crie arquivos `*.test.*` ou `*.spec.*` dentro de
+pastas `constants/`, nem testes isolados cujo objetivo seja repetir o valor
+literal de uma constante. Valide o valor pela fronteira consumidora relevante.
 
-If a constants module acquires transformations, decisions or other logic
-that requires its own test, move that logic to the appropriate layer and keep only
-the declarations in the module.
+Se um modulo de constantes adquirir transformacoes, decisoes ou outra logica
+que exija teste proprio, mova essa logica para a camada apropriada e mantenha no
+modulo apenas as declaracoes.
 
 ## Interfaces
 
-If the interface has the same name as the class or factory function, import it
-via an alias with an uppercase I as a prefix.
+Caso a interface tenha o mesmo nome que a classe ou função fábrica, importe-a
+via alias com I maiuscula como prefixo.
 
-Example: `import { ProfileService as IProfileService }`
+Exemplo: `import { ProfileService as IProfileService }`
 
-## Functions
+## Funções
 
-Functions must always start with a verb in the imperative, except factory
-functions, which must be nouns.
+Funções sempre devem começar com um verbo no imperativo, exceto factory
+functions, que devem ser substantivos.
 
-Examples: `unlockStar`, `earnCoins`, `acquireAvatar`.
+Exemplos: `unlockStar`, `earnCoins`, `acquireAvatar`.
 
-## File naming
+## Nomeação de arquivos
 
-A file serves to export a class, factory function, widget, function,
-validation object, type, interface or constant. The object naming rules
-almost always also apply to file names, except for constants,
-which must be written in
+Um arquivo serve para exportar um classe, factory function, widget, função,
+objeto de validação, tipo, interface e constante. Quase sempre a regras de
+nomeação de objetos se aplicam também ao nome dos arquivos, excetos as contantes
+que deve ser escritos em
 [kebab-case](https://developer.mozilla.org/en-US/docs/Glossary/Kebab_case).
 
-Examples:
+Exemplos:
 
 ```
-AppError.ts // Class
+AppError.ts // Classe
 ProfilePageView.tsx // Widget
-usePagination.ts // function
-special-characters.ts // constant
-userSchema.ts // validation object
+usePagination.ts // função
+special-characters.ts // constante
+userSchema.ts // objeto de validação
 ```
 
 # Barrel files
 
-## Internal application errors
+## Erros internos da aplicação
 
-Internal application errors must be represented by `AppError` or by a
-domain error class that inherits from `AppError`. Do not use `new Error()` or
-`throw Error()` in production code; this loses the handling contract and the
-classification used by the application. SDK/infrastructure errors must be
-converted to `AppError` at the provider or adapter boundary.
+Erros internos da aplicação devem ser representados por `AppError` ou por uma
+classe de erro de domínio que herde de `AppError`. Não use `new Error()` nem
+`throw Error()` em código de produção; isso perde o contrato de tratamento e a
+classificação usada pela aplicação. Erros de SDK/infraestrutura devem ser
+convertidos para `AppError` na fronteira do provider ou adapter.
 
-Allowed exceptions: `Error` types required by external APIs (for example,
-React error boundaries) and `new Error` used only to make a test fixture
-or matcher fail. These exceptions do not represent internal application
-errors.
+Exceções permitidas: tipos `Error` exigidos por APIs externas (por exemplo,
+error boundaries do React) e `new Error` usado somente para fazer uma fixture
+ou matcher de teste falhar. Essas exceções não representam erros internos da
+aplicação.
 
-A Barrel File is a file (usually named index.ts or index.tsx) whose
-role is to export multiple modules from a folder in a centralized way. Instead of
-importing each module individually from its respective location, it is possible to
-import everything directly from the barrel file, simplifying the import
-statements.
+Um Barrel File é um arquivo (geralmente nomeado index.ts ou index.tsx) que tem a
+função de exportar múltiplos módulos de uma pasta centralizada. Em vez de
+importar cada módulo individualmente de sua respectiva localização, é possível
+importar tudo diretamente do barrel file, simplificando as declarações de
+importação.
 
-## Practical example
+## Exemplo prático
 
-Consider a controllers folder containing several controller classes:
+Considere uma pasta controllers contendo diversas classes de controladores:
 
 ```ts
 // controllers/index.ts
@@ -152,10 +153,11 @@ export { Controller3 } from "./Controller3";
 export { Controller4 } from "./Controller4";
 ```
 
-Then, in another file, you can import these components in a simplified way:
+Então, em outro arquivo, você pode importar esses componentes de forma
+simplificada:
 
 ```ts
-// Your application.ts
+// Sua aplicação.ts
 import { Controller1, Controller2 } from "./controllers";
 
 const controller1 = new Controller1();
@@ -163,44 +165,44 @@ const controller2 = new Controller2();
 ```
 
 > [!Caution]\
-> Folders dedicated to exporting hooks and widgets do not have an index.ts file
-> to avoid problems of improper code execution and to make it more explicit
-> which hook or widget is being mocked in automated tests.
+> Pastas dedicadas a exportar hooks e widgets não possuem um arquivo index.ts
+> para evitar problemas execução indevida de código e para deixar mais explícito
+> para qual hook ou widget está sendo criado um mock em testes automatizados.
 
 # Factory functions
 
-In React projects, the functional paradigm is prioritized. To maintain
-consistency throughout the application, Factory Functions are
-adopted as the standard for creating "classes" and modules that need to
-manage state or dependencies.
+Em projetos React, o paradigma funcional é priorizado. Para manter a
+consistência em toda a aplicação, as Factory Functions (Funções Fábrica) são
+adotadas como padrão para a criação de "classes" e módulos que precisam
+gerenciar estado ou dependências.
 
-A Factory Function is a function that returns a new object. They can be
-considered a flexible "constructor" that does not require the new keyword. They
-offer a powerful and more idiomatic alternative to the use of class or traditional
-constructor functions in modern JavaScript, especially in a functional
-context.
+Uma Factory Function é uma função que retorna um novo objeto. Pode-se
+considerá-las um "construtor" flexível que não exige a palavra-chave new. Elas
+oferecem uma alternativa poderosa e mais idiomática ao uso de class ou funções
+construtoras tradicionais em JavaScript moderno, especialmente em um contexto
+funcional.
 
-To ensure consistency and readability, Factory Functions must follow
-the following conventions:
+Para garantir a consistência e a legibilidade, as Factory Functions devem seguir
+as seguintes convenções:
 
-- Declaration: They must be declared as an arrow function (=>) and assigned to
-  a constant (const).
-- Return: They must always return an object containing the methods and/or properties
-  that the factory function exposes.
-- Typing: If the factory function is implementing an interface, the interface
-  must be the function's explicit return type.
-- Naming: The function name must be written in
-  [PascalCase](https://www.theserverside.com/definition/Pascal-case) (e.g.:
-  MyService, DataManager).
-- Dependency Inversion: Its arguments must be dependencies (such as other
-  services, HTTP clients, etc.), applying the
-  [Dependency Inversion](https://www.baeldung.com/cs/dip) principle. This makes
-  testability and maintenance easier.
+- Declaração: Devem ser declaradas como uma arrow function (=>) e associadas a
+  uma constante (const).
+- Retorno: Devem sempre retornar um objeto contendo os métodos e/ou propriedades
+  que a função fábrica expõe.
+- Tipagem: Se a função fábrica estiver implementando uma interface, a interface
+  deve ser o tipo de retorno explícito da função.
+- Nomenclatura: O nome da função deve ser escrito em
+  [PascalCase](https://www.theserverside.com/definition/Pascal-case) (ex:
+  MeuServico, GerenciadorDeDados).
+- Inversão de Dependência: Seus argumentos devem ser dependências (como outros
+  serviços, clientes HTTP, etc.), aplicando o princípio da
+  [Inversão de Dependência](https://www.baeldung.com/cs/dip). Isso facilita a
+  testabilidade e a manutenção.
 
-## Practical example
+## Exemplo prático
 
 ```ts
-// Defines the interface to guarantee the service contract
+// Define a interface para garantir o contrato do serviço
 interface ISpaceService {
   fetchPlanets(): Promise<any>;
   fetchStarBySlug(starSlug: Slug): Promise<any>;
@@ -208,7 +210,7 @@ interface ISpaceService {
 }
 
 const SpaceService = (restClient: RestClient): ISpaceService => {
-  // The function returns an object that implements ISpaceService
+  // A função retorna um objeto que implementa ISpaceService
   return {
     async fetchPlanets() {
       return await restClient.get("/space/planets");
@@ -220,14 +222,14 @@ const SpaceService = (restClient: RestClient): ISpaceService => {
   };
 };
 
-// Usage example: instantiating the service (note that 'new' is not used)
-const myRestClient = new RestClient(); // Assuming a RestClient instance
+// Exemplo de uso: instanciando o serviço (observa-se que não se utiliza 'new')
+const myRestClient = new RestClient(); // Supondo uma instância de RestClient
 const spaceServiceInstance = SpaceService(myRestClient);
 ```
 
-If auxiliary logic is needed that does not have to be publicly exposed, it is
-possible to declare internal functions inside the Factory Function. They
-benefit from the closure to access the dependencies passed to the factory.
+Caso seja necessária lógica auxiliar que não precisa ser exposta publicamente, é
+possível declarar funções internas dentro da Factory Function. Elas se
+beneficiam do closure para acessar as dependências passadas para a fábrica.
 
 ```ts
 export const AccessChallengeEditorPageAction = (
@@ -248,13 +250,13 @@ export const AccessChallengeEditorPageAction = (
 
 # Tooling
 
-- Monorepo quality standard:
-  - Lint/format: Biome (via the `lint`, `format`, `codecheck` scripts).
+- Padrao de qualidade do monorepo:
+  - Lint/format: Biome (via scripts `lint`, `format`, `codecheck`).
   - Typecheck: TypeScript (`tsc`).
-  - Tests: Jest.
-- Recommended execution:
-  - Global: `pnpm run check:code`, `pnpm run check:types`, `pnpm run test` (at the root, via Turbo).
-  - Specific workspace: `pnpm --filter <workspace> run check:code`.
-- Commit/release hooks:
-  - Husky and commitlint are used at the root (see `/package.json`).
-- General reference: `documentation/tooling.md`.
+  - Testes: Jest.
+- Execucao recomendada:
+  - Global: `pnpm run check:code`, `pnpm run check:types`, `pnpm run test` (na raiz, via Turbo).
+  - Workspace especifico: `pnpm --filter <workspace> run check:code`.
+- Hooks de commit/release:
+  - Husky e commitlint sao usados na raiz (ver `/package.json`).
+- Referencia geral: `documentation/tooling.md`.

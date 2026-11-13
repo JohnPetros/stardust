@@ -1,295 +1,295 @@
-# What is the core package?
+# O que é o pacote core?
 
-The `core` package is the main component of StarDust, on which all other packages and applications depend.
+O pacote `core` é o componente principal do StarDust, do qual todos os outros pacotes e aplicações dependem.
 
-# Implementation
+# Implementação
 
-## 🌐 Domain
+## 🌐 Domínio
 
-In DDD (Domain-Driven Design), the domain is the heart of the system — it is the area of knowledge or activity that the software is trying to solve. StarDust follows this same principle, representing the essential business rules and behaviors at the core of the system.
+Em DDD (Domain-Driven Design), o domínio é o coração do sistema — é a área de conhecimento ou atividade que o software está tentando resolver. O StarDust segue esse mesmo princípio, representando as regras de negócio e comportamentos essenciais no núcleo do sistema.
 
-Thus, the domain (or `domain`) is the main layer of StarDust's `core`. For this reason, we value readability, standardization and high test coverage in this layer.
+Dessa forma, o domínio (ou `domain`) é a camada principal do `core` do StarDust. Por isso, prezamos pela legibilidade, padronização e alta cobertura de testes nessa camada.
 
-The domain implementation follows the principles of tactical DDD modeling (with some adaptations), obeying the rules of *[Object Calisthenics](https://developerhandbook.stakater.com/architecture/object-calisthenics.html)* and containing exclusively classes that represent the domain objects described below.
+A implementação do domínio segue os princípios da modelagem do DDD tático (com algumas adaptações), obedecendo às regras de *[Object Calisthenics](https://developerhandbook.stakater.com/architecture/object-calisthenics.html)* e contendo exclusivamente classes que representam os objetos de domínio descritos a seguir.
 
-## 🔌 Decoupling between modules
+## 🔌 Desacoplamento entre módulos
 
-The modules inside `packages/core` must remain **decoupled by default**. The fact that they all live in the same package does not mean they can freely depend on one another.
+Os módulos dentro de `packages/core` devem permanecer **desacoplados por padrão**. O fato de todos viverem no mesmo pacote não significa que podem depender livremente uns dos outros.
 
-Mandatory rules:
+Regras obrigatórias:
 
-- A module must not import repositories, services, use cases or entities from another module merely for convenience.
-- When a flow requires coordination between modules, prefer communication through explicit contracts, domain events or composition at the app boundary, following the pattern that already exists in the codebase.
-- Authentication, authorization, HTTP context assembly, transport-bound ownership checks and payload adaptation **must not be pushed into the core** when they are already responsibilities of the boundary (`middleware`, `controller`, `router`, `tool`, `job`, `action`).
-- A `use case` may depend on interfaces of another module only when that collaboration is part of the domain's business rule and there is clear evidence of this pattern in the project.
-- When in doubt, preserve the module that owns the responsibility. Example: validating an API key belongs to the `auth` module; validating the user's insignia/role belongs to the module that already resolves profile/permission in the real flow.
-- When a rule depends only on the state and meaning of the domain object itself, prefer implementing it in the object itself (`entity`, `structure` or `aggregate`) instead of duplicating it in the `use case`. The `use case` must orchestrate the flow; the domain object must know how to answer about its own capabilities, restrictions and behaviors.
+- Um módulo não deve importar repositórios, services, use cases ou entidades de outro módulo apenas por conveniência.
+- Quando um fluxo exigir coordenação entre módulos, prefira comunicação por contratos explícitos, eventos de domínio ou composição na borda da app, conforme o padrão já existente na codebase.
+- Autenticação, autorização, montagem de contexto HTTP, checks de ownership ligados ao transporte e adaptação de payloads **não devem ser empurrados para o core** quando já forem responsabilidades da borda (`middleware`, `controller`, `router`, `tool`, `job`, `action`).
+- Um `use case` pode depender de interfaces de outro módulo apenas quando essa colaboração fizer parte da regra de negócio do domínio e houver evidência clara desse padrão no projeto.
+- Na dúvida, preserve o módulo dono da responsabilidade. Exemplo: validar API key pertence ao módulo `auth`; validar insignia/papel do usuário pertence ao módulo que já resolve perfil/permissão no fluxo real.
+- Quando uma regra depende apenas do estado e do significado do próprio objeto de domínio, prefira implementá-la no próprio objeto (`entity`, `structure` ou `aggregate`) em vez de duplicá-la no `use case`. O `use case` deve orquestrar o fluxo; o objeto de domínio deve saber responder sobre suas próprias capacidades, restrições e comportamentos.
 
-Warning signs:
+Sinais de alerta:
 
-- a `use case` of one module needing to import the `Repository` of another module just to resolve permission.
-- a `use case` assuming transport details, such as headers, cookies, session, bearer token or HTTP context.
-- creation of cross-domain dependencies in the core without a similar reference in the codebase.
+- `use case` de um módulo precisando importar `Repository` de outro módulo só para resolver permissão.
+- `use case` assumindo detalhes de transporte, como headers, cookies, sessão, bearer token ou contexto HTTP.
+- criação de dependências cross-domain no core sem referência semelhante na codebase.
 
-When there is a real need to cross modules and there is not enough evidence to decide, record this as an architectural pending item and validate it before consolidating the implementation/spec.
-
----
-
-### Entity
-
-A class that represents something that can be identified by an `id`, and whose properties can change over time.
-
-> Example: A Rocket being a store item may have its price changed.
-
-An entity must follow the pattern:
-
-- Have a private constructor.
-- Be created from a `dto`, using a static method called `create`. Every entity needs a `dto`.
-- Have a method that converts the entity back into a `dto`.
-- Must not be an anemic class (with only getters and setters), but contain methods that execute rules or behaviors important to the business.
-- Cannot be inherited by any subclass; for that, `abstracts` must be used.
+Quando houver necessidade real de cruzar módulos e não existir evidência suficiente para decidir, registre isso como pendência arquitetural e valide antes de consolidar a implementação/spec.
 
 ---
 
-### Structure
+### Entidade (Entity)
 
-It is the value object described in DDD, a class that represents something immutable and identified by the set of its attributes (and not by an `id`).
+Classe que representa algo que pode ser identificado por um `id`, e cujas propriedades podem mudar ao longo do tempo.
 
-> Example: There can be an object called `Level`, which encapsulates the algorithm of how a user levels up.
+> Exemplo: Um Foguete sendo um item da loja pode ter seu preço alterado.
 
-A structure must follow the pattern:
+Uma entidade deve seguir o padrão:
 
-- Have a private constructor.
-- Be created from primitive values or a `dto`, through a static method called `create`. Most `objects` do not require a `dto`, but there may be rare cases where it is necessary.
-- Have all its attributes public and constant.
-- Must not be an anemic class, but contain methods with relevant business logic.
-- To change a property of an `object`, a new instance of the class must be created. Thus, almost all methods of an `object` return a new instance of itself.
-- May contain other `objects` and `entities` as attributes. In the case of association with entities via aggregation, `aggregates` must be used.
-
-Example of architectural preference:
-
-- If the rule can be answered just by looking at the object itself, such as `canHaveAudio`, `isLocked`, `canBePublished` or `hasReachedLimit`, it must live in the domain object.
-- Avoid spreading conditionals based on the object's internal details across the `use case`, such as manually comparing `type`, `status` or flags in several flows.
-- Use the `use case` to decide **when** to perform an action; use the domain object to answer **whether** that action makes sense for its current state.
+- Possuir construtor privado.
+- Ser criada a partir de um `dto`, utilizando um método estático chamado `create`. Toda entidade necessita de um `dto`.
+- Possuir um método que converta a entidade de volta para um `dto`.
+- Não deve ser uma classe anêmica (com apenas getters e setters), mas conter métodos que executem regras ou comportamentos importantes para o negócio.
+- Não pode ser herdada por nenhuma subclasse; para isso, devem ser utilizados `abstracts`.
 
 ---
 
-### Aggregate
+### Estrutura (Structure)
 
-In DDD, an *Aggregate* is a set of domain objects (entities and value objects) that form a unit of consistency and integrity. In StarDust, an `aggregate` is a class that encapsulates an entity that has a 1:1 aggregation relationship with another entity.
+É o value object descrito no DDD, um classe que representa algo imutável e identificado pelo conjunto de seus atributos (e não por um `id`).
 
-> Example: Every user has an avatar. However, to create a user, it is not necessary to provide all the avatar's attributes, only its `id`. In this case, the `User` entity has an `AvatarAggregate` as an attribute, instead of directly referencing the `Avatar` entity.
+> Exemplo: Pode existir um objeto chamado `Level`, que encapsula o algoritmo de como um usuário sobe de nível.
 
-An `aggregate` must follow the pattern:
+Uma estrutura deve seguir o padrão:
 
-- Have an `id` attribute (mandatory) and an `entity` attribute (which may be `undefined`).
-- Have the `id` attribute exactly equal to the `id` of the aggregated entity.
-- Have the `entity` attribute with the type of the corresponding entity.
+- Possuir construtor privado.
+- Ser criado a partir de valores primitivos ou de um `dto`, por meio de um método estático chamado `create`. A maioria dos `objects` não requer um `dto`, mas podem haver casos raros em que isso seja necessário.
+- Possuir todos os seus atributos públicos e constantes.
+- Não deve ser uma classe anêmica, mas conter métodos com lógica de negócio relevante.
+- Para alterar uma propriedade de um `object`, deve-se criar uma nova instância da classe. Assim, quase todos os métodos de um `object` retornam uma nova instância dele mesmo.
+- Pode conter outros `objects` e `entities` como atributos. No caso de associação com entidades via agregação, devem ser usados `aggregates`.
 
-Each `aggregate` must have a corresponding `dto`, in which the `entity` attribute is represented as a `dto`, with the `dto` type of the original entity.
+Exemplo de preferência arquitetural:
 
----
-
-### Event
-
-Domain events are classes that represent messages indicating that something important happened in the domain — something that has already occurred and that the business cares about. Every event carries a `payload`, that is, a set of primitive data describing what occurred and which may be relevant to other parts of the system.
-
-Events are used to promote communication between StarDust's modules, keeping them independent from one another.
-
-An `event` must follow the pattern:
-
-- Be named in the past tense and end with the suffix `Event`, such as `UserCreatedEvent`, `StarUnlockedEvent`, `LastTierReachedEvent`.
-- Ensure that all `payload` data is public and immutable.
-- Contain a static property called `key`, of type `string`, that indicates the name of the event and the module where it was fired.
+- Se a regra puder ser respondida apenas olhando para o próprio objeto, como `canHaveAudio`, `isLocked`, `canBePublished` ou `hasReachedLimit`, ela deve viver no objeto de domínio.
+- Evite espalhar no `use case` condicionais baseadas em detalhes internos do objeto, como comparar `type`, `status` ou flags manualmente em vários fluxos.
+- Use o `use case` para decidir **quando** executar uma ação; use o objeto de domínio para responder **se** aquela ação faz sentido para o seu estado atual.
 
 ---
 
-### Abstract
+### Agregado (Aggregate)
 
-A base class that must be extended by domain elements, with the goal of sharing common behaviors, leaving the implementation of specific parts to the subclasses.
+No DDD, um *Aggregate* é um conjunto de objetos do domínio (entidades e value objects) que formam uma unidade de consistência e integridade. No StarDust, um `aggregate` é uma classe que encapsula uma entidade que possui uma relação de agregação 1:1 com outra entidade.
 
-An `abstract` can also be used to apply the [Strategy](https://refactoring.guru/design-patterns/strategy) pattern, allowing the dynamic choice of algorithms or behaviors among several options, without modifying the class that uses them.
+> Exemplo: Todo usuário possui um avatar. No entanto, para criar um usuário, não é necessário fornecer todos os atributos do avatar, apenas o seu `id`. Nesse caso, a entidade `User` possui um `AvatarAggregate` como atributo, em vez de referenciar diretamente a entidade `Avatar`.
 
----
+Um `aggregate` deve seguir o padrão:
 
-### Error
+- Possuir um atributo `id` (obrigatório) e um atributo `entity` (que pode ser `undefined`).
+- Ter o atributo `id` exatamente igual ao `id` da entidade agregada.
+- Ter o atributo `entity` com o tipo da entidade correspondente.
 
-A class that represents an error related to a specific business rule, indicating that execution cannot continue.
-
-An `error` class can be extended to create other specialized error classes.
-
-It must follow the pattern:
-
-- Inherit from the language's base `Error` class.
-- Contain only attributes with primitive and immutable types.
-- Have the suffix `Error`, such as `UserNotFoundError`, `StarLockedError`, `ChallengeNotPublicError`.
-- Must not have methods, only attributes.
+Cada `aggregate` deve possuir um `dto` correspondente, no qual o atributo `entity` é representado como `dto`, com o tipo do `dto` da entidade original.
 
 ---
 
-### Factory
+### Evento (Event)
 
-A factory is a class that encapsulates the object creation logic, especially when that logic is complex or depends on other entities/services. It ensures that entities or aggregates are created in a consistent and valid way, without exposing that complexity to other parts of the system.
+Eventos de domínio são classes que representam mensagens indicando que algo importante aconteceu no domínio — algo que já ocorreu e que o negócio se importa. Todo evento carrega um `payload`, ou seja, um conjunto de dados primitivos que descrevem o que ocorreu e que pode ser relevante para outras partes do sistema.
 
-A `factory` must follow the pattern:
+Os eventos são utilizados para promover a comunicação entre os módulos do StarDust, mantendo-os independentes entre si.
 
-- Contain a single public method called `produce`, which creates and returns the expected type.
-- Have the suffix `Factory`, such as `UserFactory`, `PlanetFactory`, `ChallengeFactory`.
+Um `event` deve seguir o padrão:
+
+- Ser nomeado no pretérito (tempo passado) e terminar com o sufixo `Event`, como `UserCreatedEvent`, `StarUnlockedEvent`, `LastTierReachedEvent`.
+- Assegurar que todos os dados do `payload` sejam públicos e imutáveis.
+- Conter uma propriedade estática chamada `key`, do tipo `string`, que indica o nome do evento e o módulo onde ele foi disparado.
+
+---
+
+### Abstrato (Abstract)
+
+Classe base que deve ser estendida por elementos de domínio, com o objetivo de compartilhar comportamentos comuns, deixando a implementação de partes específicas para as subclasses.
+
+Um `abstract` também pode ser usado para aplicar o padrão [Strategy](https://refactoring.guru/design-patterns/strategy), permitindo a escolha dinâmica de algoritmos ou comportamentos entre várias opções, sem modificar a classe que os utiliza.
+
+---
+
+### Erro (Error)
+
+Classe que representa um erro relacionado a uma regra específica de negócio, indicando que a execução não pode continuar.
+
+Uma classe de `error` pode ser estendida para criar outras classes de erro especializadas.
+
+Ela deve seguir o padrão:
+
+- Herdar da classe base `Error` da linguagem.
+- Conter apenas atributos com tipos primitivos e imutáveis.
+- Ter sufixo `Error`, como `UserNotFoundError`, `StarLockedError`, `ChallengeNotPublicError`.
+- Não deve possuir métodos, apenas atributos.
+
+---
+
+### Fábrica (Factory)
+
+Uma fábrica é uma classe que encapsula a lógica de criação de objetos, especialmente quando essa lógica é complexa ou depende de outras entidades/serviços. Ela garante que entidades ou agregados sejam criados de forma consistente e válida, sem expor essa complexidade para outras partes do sistema.
+
+Uma `factory` deve seguir o padrão:
+
+- Conter um único método público chamado `produce`, que cria e retorna o tipo esperado.
+- Ter o sufixo `Factory`, como `UserFactory`, `PlanetFactory`, `ChallengeFactory`.
 
 ## 📑 Interfaces
 
-They are the contracts that define how a handler, gateway or protocol must behave exclusively through methods. An interface can be implemented by a class or a function. In the case of a function, it must return an object that contains the methods established by the interface in question.
+São os contratos que definem como um handler, gateway ou protocol deve se comportar através exclusivamente métodos. Uma interface pode se implementada por uma classe ou função. No caso da função ela deve retonar um objeto que atenda contenha os métodos estabelecidos pela interface em questão.
 
-The interface serves precisely to apply the dependency inversion principle to decouple applications, services and libraries.
+A interface serve justamente para aplicar o princípio de inversão de indepedância para desacoplar aplicações, serviços e bibliotecas.
 
-Mandatory rules for `repository` interfaces and equivalent contracts:
+Regras obrigatórias para interfaces de `repository` e contratos equivalentes:
 
-- Methods must receive **domain objects/core structures** whenever that type already exists to represent the data with semantic meaning.
-- Avoid primitive parameters in core contracts when the module already has a `structure` or another appropriate object for that value.
-- The conversion between primitive and domain object must happen before the call to the contract, usually in the `use case` or at the application boundary.
-- The concrete adapter may serialize the domain object to a primitive only at the moment of talking to the database, external API or SDK.
+- Métodos devem receber **objetos de domínio/estruturas do core** sempre que esse tipo já existir para representar o dado com significado semântico.
+- Evite parâmetros primitivos em contratos do core quando o módulo já possuir uma `structure` ou outro objeto apropriado para aquele valor.
+- A conversão entre primitivo e objeto de domínio deve acontecer antes da chamada ao contrato, normalmente no `use case` ou na borda da aplicação.
+- O adapter concreto pode serializar o objeto de domínio para primitivo apenas no momento de conversar com banco, API externa ou SDK.
 
-Examples:
+Exemplos:
 
-- Correct: `findByHash(keyHash: Text): Promise<ApiKey | null>`
-- Incorrect: `findByHash(keyHash: string): Promise<ApiKey | null>`
-- Correct: `findById(userId: Id): Promise<User | null>`
-- Incorrect: `findById(userId: string): Promise<User | null>`
+- Correto: `findByHash(keyHash: Text): Promise<ApiKey | null>`
+- Incorreto: `findByHash(keyHash: string): Promise<ApiKey | null>`
+- Correto: `findById(userId: Id): Promise<User | null>`
+- Incorreto: `findById(userId: string): Promise<User | null>`
 
-## 📤 Responses
+## 📤 Respostas (Responses)
 
-They are classes that establish the return format of a method with the goal of standardizing responses at scale. This type of class is inspired by the [Result Pattern](https://medium.com/@wgyxxbf/result-pattern-a01729f42f8c)
+São classes que estabelecem o formato de retorno de um método com o objetivo de padronizar as respostas em larga escala. Esse tipo de classe é inspirado no [Padrão Result](https://medium.com/@wgyxxbf/result-pattern-a01729f42f8c)
 
-> For example: `RestResponse` can encapsulate the http response, containing status code, headers, body, etc. `PaginationResponse` encapsulates the total number of pages and items, and so on.
+> Por exemplo: `RestResponse` pode encapsular o response http, contento status code, headers, body etc. `PaginationResponse` encapsula o total de páginas e de itens e assim por diante.
 
-In addition, a `response` can contain another `response`. For example, following the example above, the `body` property of the `ApiResponse` can be of type `PaginationResponse`.
+Além disso, um `response` pode conter outro `response`. Por exemplo, seguindo o exemplo acima, a propriedade `body` do `ApiResponse` pode ser do tipo `PaginationResponse`.
 
-## 🛍️ Data Transfer Objects (DTOs)
+## 🛍️ Objetos de transferência de dados (DTO's ou Data Transfer Object)
 
-They are simple objects used to carry data between layers of a system or between different systems, without containing business logic. They are generally used to create `entities`, `vos` and `aggregates`
+são objetos simples usados para transportar dados entre camadas de um sistema ou entre sistemas diferentes, sem conter lógica de negócio. Geralmente eles são usados para criar `entities`, `vos` e `aggregates`
 
-A `dto` must follow the pattern:
+Um `dto` deve seguir padrão:
 
-- Contain only attributes of primitive type, all public and mutable.
-- End with the suffix `Dto`, such as `UserDto`, `StarDto`, `PlanetDto`.
-- Not have any method/behavior
-
-
-## ✨ Use cases
-
-They are classes that represent the actions the system performs from the business point of view. For example, “Create order”, “Send welcome email”, “Update user profile”, “Export report as PDF”. 
-
-Therefore, they orchestrate the business logic, calling domain elements and interfaces.
-
-A Use Case follows the pattern:
-
-- A clear name, such as `CreateChallenge`, `SendConfirmationEmail`, `GenerateReport`, `ListRockets`, `GetAvatar`.
-- A main method, usually called `do()`. All other methods of the `use case` must be private.
-- A `use case` must not receive or return any domain element directly, only `dtos`.
-- All dependencies of the `use cases` must be constants and interfaces.
-- A `use case` must not reimplement a rule that can legitimately live in a domain object. If the decision depends only on the state of the object itself, the rule must be exposed by the object and merely consumed/orchestrated by the `use case`.
-
-## 🥸 Domain object fakers
-
-They are classes responsible for generating domain objects with fictitious data. Their main goal is to speed up the creation of tests, whether automated tests or visual tests, quickly providing realistic data, but without the need to use real information.
-
-A faker follows the pattern:
-
-- End with the suffix `Faker`, such as `CommentsFaker`, `UsersFaker`, `CategoriesFaker`.
-- Have only static methods
-- Have all or some of these methods:
-`fake` -> Returns the domain object. Receives a dto as a base parameter, if necessary.
-`fakeMany` -> Returns a list of objects of the same type as the domain object.
-`fakeDto` -> Returns the dto of the domain object. Receives a dto as a base parameter, if necessary. 
-`fakeManyDto` -> Returns a list of dtos of the domain object. Receives a dto as a base parameter, if necessary, and the number of items to be faked.
+- Conter apenas atributos do tipo primitivo e todos públicos e mutáveis.
+- Terminar com o sufixo de `Dto`, como `UserDto`, `StarDto`, `PlanetDto`.
+- Não possuir nenhum método/comportamento
 
 
-## 🤡 Mocks
+## ✨ Casos de uso (Use cases)
 
-A mock is a simulated object that imitates the behavior of real components in software systems, especially in tests. Therefore, it is used to isolate the part of the system being tested, avoiding the need to interact with external dependencies, such as databases, APIs or other services. In the core package, mocks implement interfaces to replace the real implementations in use cases and domain objects.
+São classes que representam as ações que o sistema executa do ponto de vista do negócio. Por exemplo, “Criar pedido”, “Enviar e-mail de boas-vindas”, “Atualizar perfil do usuário”, “Exportar relatório em PDF”. 
 
-A mock follows the pattern:
-- End with the suffix `Mock`, such as `ProfileServiceMock`, `ShopServiceMock`, `AuthServiceMock`.
-- If persistence is needed, only in memory.
+Logo, eles orquestram a lógica do negócio, chamando elementos de domínio e interfaces.
 
-# Development
+Um Use Case segue o padrão:
 
-## Libraries
+- Nome claro, como `CreateChallenge`, `SendConfirmationEmail`, `GenerateReport`, `ListRockets`, `GetAvatar`.
+- Um método principal, geralmente chamado `do()`. Todos os demais métodos do `use case` devem ser privados.
+- Um `use case` não deve receber ou retornar qualquer elemento de domínio diretamente, mas apenas `dtos`.
+- Todas as dependências do `use cases` devem ser constantes e interfaces.
+- Um `use case` não deve reimplementar regra que já pode viver legitimamente em um objeto de domínio. Se a decisão depende apenas do estado do próprio objeto, a regra deve ser exposta pelo objeto e apenas consumida/orquestrada pelo `use case`.
 
-- [Faker.js](https://fakerjs.dev) - library used to generate fake data quickly.
-- [Dayjs](https://day.js.org/) - library for working with dates in JavaScript.
-- [UUID](https://www.npmjs.com/package/uuid) - library to generate [uuid](https://en.wikipedia.org/wiki/Universally_unique_identifier) ids.
+## 🥸 Falsificadores de objetos de domínio (fakers)
 
-## Running the tests
+São classes responsáveis por gerar objetos de domínio com dados fictícios. Seu principal objetivo é agilizar a criação de testes, seja para testes automatizados ou testes visuais, fornecendo rapidamente dados realistas, mas sem a necessidade de utilizar informações reais.
 
-**Clone the repository**
+Um faker segue o padrão:
+
+- Terminar com o sufixo `Faker`, como `CommentsFaker`, `UsersFaker`, `CategoriesFaker`.
+- Possuir apenas métodos estáticos
+- Possuir todos ou alguns desses métodos:
+`fake` -> Retorna o objeto de domínio. Recebe como parâmetro um dto como base, se necessário.
+`fakeMany` -> Retorna uma lista de objetos do mesmo tipo do objeto de domínio.
+`fakeDto` -> Retorna o dto do objeto de domínio. Recebe como parâmetro um dto como base, se necessário. 
+`fakeManyDto` -> Retorna uma lista de dtos do objeto de domínio. Recebe como parâmetro um dto como base, se necessário e quantidade de itens a serem falsificados.
+
+
+## 🤡 imitadores (mocks)
+
+Um mock é um objeto simulado que imita o comportamento de componentes reais em sistemas de software, especialmente em testes. Portanto, ele é utilizado para isolar a parte do sistema que está sendo testada, evitando a necessidade de interagir com dependências externas, como bancos de dados, APIs, ou outros serviços. No Pacote core os mocks implementam interfaces para substituirem as implementações reais em use cases e objetos de domínio.
+
+Um mock segue o padrão:
+- Terminar com o sufixo `Mock`, como `ProfileServiceMock`, `ShopServiceMock`, `AuthServiceMock`.
+- Se necessário persistência, apenas em memória.
+
+# Desenvolvimento
+
+## Bibliotecas
+
+- [Faker.js](https://fakerjs.dev) - biblioteca usada para gerar dados falsos (fake data) de forma rápida.
+- [Dayjs](https://day.js.org/) - biblioteca para trabalhar com datas em JavaScript.
+- [UUID](https://www.npmjs.com/package/uuid) - biblioteca para gerar id's do tipo [uuid](https://en.wikipedia.org/wiki/Universally_unique_identifier).
+
+## Executando os testes
+
+**Clone o repositório**
 
 ```bash
 git clone https://github.com/JohnPetros/stardust.git
 ```
 
-**Navigate to the core package folder**
+**Navegue até a página do pacote core**
 
 ```bash
 cd ./stardust/packages/core
 ```
 
-**Install the dependencies**
+**Instale as dependências**
 
 ```bash
 pnpm install
 ```
 
-**Run the tests**
+**Execute os testes**
 
 ```bash
 pnpm run test
 ```
-## Folder structure
+## Estruturação de pastas
 
 ```
-📦 Core package
-├─ <Module name>
-├─ ✨ use-cases
-├─ 📑 interfaces
+📦 Pacote core
+├─ <Nome do módulo>
+├─ ✨ use-cases
+├─ 📑 interfaces
 📤 responses
 🪨 constants
 📖 libs
-├─ 🛍️ dtos
-└─ 🌐 domain
-   ├─ abstracts
-   ├─ entities
-   ├─ structures
-   ├─ events
-   ├─ errors
-   └─ factories
+├─ 🛍️ dtos
+└─ 🌐 domain
+   ├─ abstracts
+   ├─ entities
+   ├─ structures
+   ├─ events
+   ├─ errors
+   └─ factories
 ```
-The number of folder types described above will depend on the module; some may have more, others fewer.
+A quantidade de tipos de pastas descritos acima vai depender do módulo, alguns podem ter mais outros menos.
 
-The test files for `entities`, `structures` and `use-cases` are placed inside a folder called `tests` inside their respective folders where the original code to be tested is. Likewise, the `faker` implementation files for `entities` and `structures` are placed inside a folder called `fakers` inside the `entities` and `structures` folders.
+Os arquivos de teste para `entities`, `structures` e `use-cases` são colocados dentro uma pasta chamada `testes` dentro das suas respectivas pastas onde o código original a ser testado está. Assim como, os arquivos de implementações de `fakers` para `entities`e  `structures` são colocados dentro uma pasta chamada de `fakers` dentro das pastas `entities` e `structures`.
 
 ```
 📦 
-├─ use-cases
-│  ├─ 🧪 tests
-│  └─ ...
-└─ domain
-   ├─ entities
-   │  ├─ 🧪 tests
-   │  ├─ 🥸 fakers
-   │  └─ ...
-   └─ structures
-      ├─ 🧪 tests
-      ├─ 🥸 fakers
-      └─ ...
+├─ use-cases
+│  ├─ 🧪 tests
+│  └─ ...
+└─ domain
+   ├─ entities
+   │  ├─ 🧪 tests
+   │  ├─ 🥸 fakers
+   │  └─ ...
+   └─ structures
+      ├─ 🧪 tests
+      ├─ 🥸 fakers
+      └─ ...
 ```
 
 ## Tooling
 
-- Scripts of the `@stardust/core` workspace:
+- Scripts do workspace `@stardust/core`:
   - Build: `pnpm --filter @stardust/core run build` (tsup)
-  - Types: `pnpm --filter @stardust/core run check:types`
-  - Quality: `pnpm --filter @stardust/core run check:code` (`lint` + `format`)
-  - Tests: `pnpm --filter @stardust/core run test:unit`
-- Orchestration (root): `pnpm run test`, `pnpm run check:types`, `pnpm run check:code` (Turbo) to run in all workspaces.
-- General reference: `documentation/tooling.md`.
+  - Tipos: `pnpm --filter @stardust/core run check:types`
+  - Qualidade: `pnpm --filter @stardust/core run check:code` (`lint` + `format`)
+  - Testes: `pnpm --filter @stardust/core run test:unit`
+- Orquestracao (raiz): `pnpm run test`, `pnpm run check:types`, `pnpm run check:code` (Turbo) para rodar em todos os workspaces.
+- Referencia geral: `documentation/tooling.md`.

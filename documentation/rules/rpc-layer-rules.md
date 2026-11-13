@@ -1,41 +1,41 @@
-# RPC Layer Rules
+# Regras da Camada RPC
 
-## Overview
+## Visao Geral
 
-The **RPC** layer exposes application calls as typed `actions`, connecting UI/routes/server actions to the core through the `Action` + `Call` contract.
+A camada **RPC** expoe chamadas de aplicacao como `actions` tipadas, conectando UI/rotas/server actions ao core por meio do contrato `Action` + `Call`.
 
-| Item | Definition |
+| Item | Definicao |
 | --- | --- |
-| **Goal** | Provide a typed boundary to execute core logic at the edge (Next.js). |
-| **Responsibilities** | Define `actions` per domain; adapt `Call` to the `runtime`; execute `actions` in `composition roots` with input validation. |
-| **Does not do** | Business rules; instantiate dependencies inside the `action`; couple the `action` to the `runtime`. |
+| **Objetivo** | Fornecer uma fronteira tipada para executar logica do core na borda (Next.js). |
+| **Responsabilidades** | Definir `actions` por dominio; adaptar `Call` para o `runtime`; executar `actions` em `composition roots` com validacao de input. |
+| **Nao faz** | Regra de negocio; instanciar dependencias dentro da `action`; acoplar `action` a `runtime`. |
 
-## Directory Structure
+## Estrutura de Diretorios
 
-| Folder/File | Purpose |
+| Pasta/Arquivo | Finalidade |
 | --- | --- |
-| `apps/web/src/rpc/actions/` | Actions organized by domain. |
-| `apps/web/src/rpc/next/NextCall.ts` | Next adapter for the core's `Call`. |
-| `apps/web/src/rpc/next-safe-action/` | Composition root: `zod` validation, dependency instantiation and execution. |
-| `apps/web/src/rpc/next-safe-action/clients/actionClient.ts` | Client with consistent error handling. |
-| `packages/core/src/global/interfaces/rpc/Action.ts` | `Action` contract (core). |
-| `packages/core/src/global/interfaces/rpc/Call.ts` | `Call` contract (core). |
+| `apps/web/src/rpc/actions/` | Actions organizadas por dominio. |
+| `apps/web/src/rpc/next/NextCall.ts` | Adaptador Next para `Call` do core. |
+| `apps/web/src/rpc/next-safe-action/` | Composition root: validacao `zod`, instanciacao de dependencias e execucao. |
+| `apps/web/src/rpc/next-safe-action/clients/actionClient.ts` | Client com tratamento consistente de erro. |
+| `packages/core/src/global/interfaces/rpc/Action.ts` | Contrato `Action` (core). |
+| `packages/core/src/global/interfaces/rpc/Call.ts` | Contrato `Call` (core). |
 
-## Rules
+## Regras
 
-- **Core contracts**: every `action` implements `Action<Request, Response>`; every execution goes through `Call<Request>`.
-- **Dependency inversion**: `action` receives dependencies (`services`, `broker`, etc.) via parameters.
-- **Validation at the edge**: the `composition root` validates inputs with `zod` before creating the `Call`.
-- **Errors**: domain errors are propagated as `AppError` and handled by the `actionClient`.
+- **Contratos do core**: toda `action` implementa `Action<Request, Response>`; toda execucao passa por `Call<Request>`.
+- **Inversao de dependencia**: `action` recebe dependencias (`services`, `broker`, etc.) via parametros.
+- **Validacao na borda**: `composition root` valida inputs com `zod` antes de criar o `Call`.
+- **Erros**: erros de dominio sao propagados como `AppError` e tratados pelo `actionClient`.
 
-> ⚠️ Forbidden: `action` importing `next/*` or `next-safe-action`.
+> ⚠️ Proibido: `action` importar `next/*` ou `next-safe-action`.
 
-## Organization and Naming
+## Organizacao e Nomeacao
 
-- Action: `VerbNounAction` and exported as `export const`.
-- Actions per domain: expose through `index.ts` inside the domain folder.
+- Action: `VerboSubstantivoAction` e exportada como `export const`.
+- Actions por dominio: expor por `index.ts` dentro da pasta de dominio.
 
-## Example
+## Exemplo
 
 ```ts
 import type { Action, Call, Broker } from '@stardust/core/global/interfaces'
@@ -58,22 +58,22 @@ export const SignInAction = (authService: AuthService, broker: Broker): Action<R
 }
 ```
 
-## Integration with Other Layers
+## Integracao com Outras Camadas
 
-- **Allowed**: actions depending on core interfaces and on the app's REST services (injected).
-- **Allowed (composition root)**: instantiating the broker (e.g.: `apps/web/src/rpc/next-safe-action/authActions.ts`).
-- **Forbidden**: `@stardust/core` depending on `apps/web/src/rpc/**`; action depending on UI.
-- **Direction**: UI -> RPC -> REST/Queue -> Core (dependencies always point inward to the core).
+- **Permitido**: actions dependerem de interfaces do core e de services REST da app (injetados).
+- **Permitido (composition root)**: instanciar broker (ex: `apps/web/src/rpc/next-safe-action/authActions.ts`).
+- **Proibido**: `@stardust/core` depender de `apps/web/src/rpc/**`; action depender de UI.
+- **Direcao**: UI -> RPC -> REST/Queue -> Core (dependencias sempre apontam para dentro do core).
 
-## Checklist (before the PR)
+## Checklist (antes do PR)
 
-- A `zod` schema exists in the composition root.
-- Action receives dependencies by parameter.
-- Action implements `Action<Request, Response>`.
-- The correct `Call` was used (e.g.: `NextCall`).
-- Error handling follows the `actionClient` pattern.
+- Existe schema `zod` no composition root.
+- Action recebe dependencias por parametro.
+- Action implementa `Action<Request, Response>`.
+- `Call` correto foi usado (ex: `NextCall`).
+- Tratamento de erro segue o padrao do `actionClient`.
 
-## Notes
+## Notas
 
-- The RPC layer currently exists in `apps/web/src/rpc`.
-- For handler/action tests: `documentation/rules/handlers-testing-rules.md`.
+- A camada RPC existe hoje em `apps/web/src/rpc`.
+- Para testes de handlers/actions: `documentation/rules/handlers-testing-rules.md`.

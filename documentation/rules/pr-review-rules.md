@@ -1,80 +1,78 @@
-# Instructions for Pull Request Review
+# Instruções para Revisão de Pull Request
 
-## Before starting
+## Antes de iniciar
 
-- If there is an issue linked to the pull request, read it before analyzing the changes. If there is no issue, base the review exclusively on the code and the project rules, without treating the absence as a problem.
-
----
-
-## What must be validated
-
-When reviewing the changes, identify and report:
-
-- performance problems
-- security problems
-- concurrency problems
-- coupling problems
-- maintainability problems
-- code or logic duplication
-- missing tests or insufficient coverage
-- readability problems
-- typos, incorrect names or writing inconsistencies
+- Se houver uma issue vinculada ao pull request, leia-a antes de analisar as alterações. Se não houver issue, baseie a revisão exclusivamente no código e nas regras do projeto, sem tratar a ausência como problema.
 
 ---
 
-## Compliance with project standards
+## O que deve ser validado
 
-Check whether the changes follow the standards defined in the files:
+Ao revisar as alterações, identifique e reporte:
+
+- problemas de performance
+- problemas de segurança
+- problemas de concorrência
+- problemas de acoplamento
+- problemas de manutenibilidade
+- duplicações de código ou de lógica
+- ausência de testes ou cobertura insuficiente
+- problemas de legibilidade
+- erros de digitação, nomes incorretos ou inconsistências de escrita
+
+---
+
+## Conformidade com padrões do projeto
+
+Verifique se as alterações seguem os padrões definidos nos arquivos:
 
 - `documentation/rules/code-conventions-rules.md`
 - `documentation/rules/rules.md`
 
-If any of these files is not available, state it explicitly and limit the review to the general criteria listed above.
+Se algum desses arquivos não estiver disponível, informe explicitamente e limite a revisão aos critérios gerais listados acima.
 
-In addition to the code convention, also confirm that the implementation is appropriate for the layer and responsibility of the changed code, respecting the architectural and organizational standards described in the documentation.
-
----
-
-## Validation against the issue
-
-If there is a linked issue, use it as a reference to validate whether the implementation:
-
-- meets what was requested
-- respects the defined scope
-- covers the main requirements
-- does not introduce behavior that diverges from what was expected
+Além da convenção de código, confirme também que a implementação está adequada à camada e à responsabilidade do código alterado, respeitando os padrões arquiteturais e organizacionais descritos na documentação.
 
 ---
 
-## How to report the problems found
+## Validação contra a issue
 
-Use the following format for each problem identified:
+Se houver uma issue vinculada, use-a como referência para validar se a implementação:
+
+- atende ao que foi solicitado
+- respeita o escopo definido
+- cobre os requisitos principais
+- não introduz comportamento divergente do esperado
+
+---
+
+## Como reportar os problemas encontrados
+
+Use o seguinte formato para cada problema identificado:
 
 ```
 **[OBRIGATÓRIO | SUGESTÃO]**
-**Problema:** clear and specific description of what is wrong
-**Impacto:** real or potential consequence of the problem
-**Sugestão:** recommended corrective action (whenever possible)
+**Problema:** descrição clara e específica do que está errado
+**Impacto:** consequência real ou potencial do problema
+**Sugestão:** ação corretiva recomendada (sempre que possível)
 ```
 
-The review comment labels above (`OBRIGATÓRIO` = REQUIRED, `SUGESTÃO` = SUGGESTION, `Problema` = Problem, `Impacto` = Impact) stay in PT-BR, because review comments are written in Portuguese.
+**Critério de classificação:**
 
-**Classification criteria:**
-
-- **OBRIGATÓRIO** (REQUIRED) — security problems, bugs, direct violations of the project rules or behavior that diverges from what was expected in the issue.
-- **SUGESTÃO** (SUGGESTION) — readability improvements, non-critical performance, refactoring opportunities or best practices not required by the rules.
+- **OBRIGATÓRIO** — problemas de segurança, bugs, violações diretas das regras do projeto ou comportamento divergente do esperado na issue.
+- **SUGESTÃO** — melhorias de legibilidade, performance não crítica, oportunidades de refatoração ou boas práticas não exigidas pelas regras.
 
 ---
 
-## What not to do
+## O que não fazer
 
-- Do not comment on personal style preferences that are not covered by the project rules.
-- Do not repeat what the code already clearly documents.
-- Do not point out the absence of a linked issue as a problem.
-- Do not invent standards or rules that are not documented in the reference files.
+- Não comente preferências pessoais de estilo que não estejam cobertas pelas regras do projeto.
+- Não repita o que o código já documenta claramente.
+- Não aponte a ausência de issue vinculada como um problema.
+- Não invente padrões ou regras que não estejam documentados nos arquivos de referência.
 
 ---
 
-## Final guideline
+## Diretriz final
 
-Prioritize relevant, actionable comments grounded in the project rules. Avoid generic or subjective observations without justification. Quantity is not quality — one precise comment is worth more than five vague ones.
+Priorize comentários relevantes, acionáveis e fundamentados nas regras do projeto. Evite observações genéricas ou subjetivas sem justificativa. Quantidade não é qualidade — um comentário preciso vale mais do que cinco vagos.
