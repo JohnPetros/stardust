@@ -9,6 +9,7 @@ test('agent synchronizer has valid syntax', () => assertScriptSyntax('sync-agent
 
 const AGENTS = [
   'builder-agent',
+  'spec-searcher-agent',
   'spec-reviewer-agent',
   'implementation-reviewer-agent',
   'visual-reviewer-agent',
@@ -55,7 +56,11 @@ test('generates per-agent tool restrictions for Claude Code, OpenCode and Codex'
       )
     }
 
-    for (const name of ['visual-reviewer-agent', 'design-reviewer-agent']) {
+    for (const name of [
+      'spec-searcher-agent',
+      'visual-reviewer-agent',
+      'design-reviewer-agent',
+    ]) {
       const claude = await read(root, `.claude/agents/${name}.md`)
       assert.match(claude, /^disallowedTools: Edit, Write, NotebookEdit, Bash, Agent$/m)
       assert.doesNotMatch(claude, /^tools:/m)
