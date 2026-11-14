@@ -1,13 +1,8 @@
 #!/usr/bin/env node
 
+// Restores the third-party skills pinned in skills-lock.json into .agents/skills/.
+// The lock file is the only list: add or remove a skill with `pnpm dlx skills add`
+// or `pnpm dlx skills remove`, which update it, instead of editing this script.
 import { run } from './utils.mjs'
 
-const skills = [
-  'anthropics/skills@frontend-design',
-  'github/awesome-copilot@gh-cli',
-  'microsoft/playwright-cli',
-  'chiroro-jr/pencil-design-skill@pencil-design',
-  'vercel-labs/agent-skills@vercel-react-best-practices',
-  'pproenca/dot-skills@zod',
-]
-for (const skill of skills) run('pnpm', ['dlx', 'skills', 'add', skill])
+run('pnpm', ['dlx', 'skills', 'install', '--frozen-lockfile'])
