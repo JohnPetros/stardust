@@ -537,6 +537,7 @@ results without changing those obligations.
 Use subagents only for the independent, bounded roles that
 [SDD Workflow](documentation/sdd.md) defines. Follow the
 [Builder](documentation/agents/builder-agent.md),
+[Spec Searcher](documentation/agents/spec-searcher-agent.md),
 [Spec Reviewer](documentation/agents/spec-reviewer-agent.md),
 [Implementation Reviewer](documentation/agents/implementation-reviewer-agent.md),
 [Visual Reviewer](documentation/agents/visual-reviewer-agent.md) and

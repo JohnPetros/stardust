@@ -110,10 +110,14 @@ documentation for external APIs, Penpot for design, Playwright for browser
 behavior, and Supabase for schema/data when applicable. The project's Architecture and
 Rules prevail over generic recommendations from external tools.
 
-When there are two or more independent lanes, organize them as bounded investigations of the
-task itself, with explicit questions, paths, limits, and synthesis format. Research each boundary
-directly, resolve conflicts by direct inspection, and verify consequential claims. Do not create
-research agents.
+When there are two or more independent lanes, organize them as bounded investigations with
+explicit questions, paths, limits, and synthesis format. Research a lane directly, or delegate it
+to a bounded read-only [Spec Searcher](../agents/spec-searcher-agent.md) when it answers an independent
+question that can proceed in parallel. Assign questions and boundaries rather than a fixed
+Spec Searcher per layer, and give each one the applicable authorities and Rule Pack. Join the reports,
+resolve conflicts by direct inspection, and verify consequential claims before contracting them.
+The main task owns the Spec; Spec Searcher reports do not replace the required authority reading or
+become Contract artifacts.
 
 ## Design and Penpot references
 
