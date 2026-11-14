@@ -12,6 +12,7 @@ const AGENTS = [
   'spec-reviewer-agent',
   'implementation-reviewer-agent',
   'visual-reviewer-agent',
+  'design-reviewer-agent',
   'custom-agent',
 ]
 
@@ -54,17 +55,19 @@ test('generates per-agent tool restrictions for Claude Code, OpenCode and Codex'
       )
     }
 
-    const visual = await read(root, '.claude/agents/visual-reviewer-agent.md')
-    assert.match(visual, /^disallowedTools: Edit, Write, NotebookEdit, Bash, Agent$/m)
-    assert.doesNotMatch(visual, /^tools:/m)
-    assert.match(
-      await read(root, '.opencode/agents/visual-reviewer-agent.md'),
-      /permission:\n {2}edit: deny\n {2}bash: deny\n {2}task: deny/,
-    )
-    assert.match(
-      await read(root, '.codex/agents/visual-reviewer-agent.toml'),
-      /sandbox_mode = "read-only"/,
-    )
+    for (const name of ['visual-reviewer-agent', 'design-reviewer-agent']) {
+      const claude = await read(root, `.claude/agents/${name}.md`)
+      assert.match(claude, /^disallowedTools: Edit, Write, NotebookEdit, Bash, Agent$/m)
+      assert.doesNotMatch(claude, /^tools:/m)
+      assert.match(
+        await read(root, `.opencode/agents/${name}.md`),
+        /permission:\n {2}edit: deny\n {2}bash: deny\n {2}task: deny/,
+      )
+      assert.match(
+        await read(root, `.codex/agents/${name}.toml`),
+        /sandbox_mode = "read-only"/,
+      )
+    }
 
     const builder = await read(root, '.claude/agents/builder-agent.md')
     assert.match(builder, /^disallowedTools: Agent$/m)

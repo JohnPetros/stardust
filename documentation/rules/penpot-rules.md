@@ -13,10 +13,34 @@ frame na página que é dona dele e consulte os IDs das páginas pelo Penpot MCP
 
 | Página | Contém | Nome dos frames |
 | --- | --- | --- |
-| 🖥️ Desktop | Telas desktop completas, 1440 de largura (1440 × 900 por padrão) | `<Domínio> / Desktop / <Tela> · <estado>` |
-| 📱 Mobile | A versão mobile das telas do Desktop, 390 × 844 | `<Domínio> / Mobile / <Tela> · <estado>` |
+| 🖥️ Desktop | Telas desktop completas, 1440 de largura (1440 × 900 por padrão) | `<Módulo> / <Página> / <Componente> / <Estado ou variante> / Desktop` |
+| 📱 Mobile | A versão mobile das telas do Desktop, 390 × 844 | `<Módulo> / <Página> / <Componente> / <Estado ou variante> / Mobile` |
 | 🧩 Components | Somente componentes principais e conjuntos de variantes | Boards nomeados por domínio, como `Lição / Cabeçalho` e `Botão` |
 | 🎨 Design System | A referência visual dos tokens de `documentation/design.md` | `StarDust / Tokens · Dark & Light` |
+
+## Nome dos frames de tela
+
+O nome de um frame das páginas Desktop e Mobile tem até cinco segmentos, nesta
+ordem, separados por ` / `:
+
+1. **Módulo:** o nome em português do módulo do produto (`Espaço`, `Lição`,
+   `Autenticação`).
+2. **Página:** a página da aplicação (`Galáxias`, `Sign-in`).
+3. **Componente:** a parte da página que o frame desenha, quando ele não é a
+   página inteira (`Diálogo`).
+4. **Estado ou variante:** o estado desenhado, quando não é o padrão
+   (`carregando`, `falha ao carregar`).
+5. **Viewport:** `Desktop` ou `Mobile`, sempre o último segmento.
+
+- Módulo, página e viewport são obrigatórios. Omita o componente e o estado
+  quando não se aplicam: `Espaço / Galáxias / Desktop` é a página inteira no
+  estado padrão e `Espaço / Galáxias / carregando / Mobile` é o estado de
+  carregamento.
+- As versões Desktop e Mobile do mesmo frame diferem apenas no último segmento.
+- **Migração.** A regra vale desde 2026-11-14. Os frames anteriores seguem o
+  padrão `<Domínio> / <Desktop|Mobile> / <Tela> · <estado>` e são renomeados
+  quando uma tarefa os alterar, junto com as referências em Specs, PRDs e
+  registros de revisão. Não renomeie frames que a tarefa não toca.
 
 ## Regras por página
 
@@ -31,7 +55,7 @@ frame na página que é dona dele e consulte os IDs das páginas pelo Penpot MCP
   mesmos componentes e regras de layout. Nas telas Mobile, use a altura de
   controle de 44 px (`control-height`) como alvo de toque.
 - **Diálogos** são desenhados como frames independentes, com o tamanho do
-  próprio diálogo (por exemplo `Lição / Desktop / Diálogo · Energia esgotada`),
+  próprio diálogo (por exemplo `Lição / História / Diálogo / Energia esgotada / Desktop`),
   nunca como uma tela inteira com backdrop.
 - **Components** contém elementos reutilizáveis e nada além disso: nunca coloque
   uma tela ou um exemplo avulso nela. Extraia um elemento para esta página
