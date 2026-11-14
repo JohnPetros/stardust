@@ -260,7 +260,7 @@ Atores: dono do perfil e visitantes autenticados.
 1. O usuário acessa `/profile/[userSlug]` com o `slug` da própria conta.
 2. O sistema valida o `slug` e busca os dados do perfil.
 3. O sistema valida a existência do perfil:
-   - **Sucesso:** exibe cabeçalho, indicadores, streak, gráfico, conquistas e histórico de criações.
+   - **Sucesso:** exibe cabeçalho, indicadores, sequência com o calendário mensal de dias estudados, gráfico, conquistas e histórico de criações.
    - **Falha:** retorna `404`.
 4. O sistema identifica que o visitante é o dono do perfil.
 5. O usuário pode acessar os atalhos de `Configurações` e `Snippets`.

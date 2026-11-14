@@ -29,11 +29,6 @@ não comunica uma ordem pedagógica clara. Usuários iniciantes ou sem um plano 
 estudo precisam decidir sozinhos qual categoria e qual desafio resolver em
 seguida. Isso aumenta a carga de decisão e enfraquece a percepção de avanço.
 
-A listagem tradicional oferece autonomia e filtros sobre todo o catálogo, mas
-não comunica uma ordem pedagógica clara. Usuários iniciantes ou sem um plano de
-estudo precisam decidir sozinhos qual categoria e qual desafio resolver em
-seguida. Isso aumenta a carga de decisão e enfraquece a percepção de avanço.
-
 Inferência baseada nas fontes: o Stardust pode diferenciar-se ao integrar a
 orientação visual diretamente ao estado global de conclusão dos desafios e à
 identidade de constelação já usada pelo produto, sem transformar a trilha em um
@@ -92,21 +87,6 @@ categoria estudar em seguida.
 ---
 
 ## 4. Objetivos e Métricas de Sucesso
-
-- Aumentar a proporção de visitas ao módulo Challenging que iniciam um desafio.
-- Aumentar a continuidade entre a conclusão de um desafio e o início do próximo
-  desafio recomendado.
-- Aumentar o retorno de usuários autenticados ao roadmap.
-- Medir visitas, abertura de nós, uso de “continuar”, início e conclusão de
-  desafios e retornos ao roadmap por meio da infraestrutura existente do
-  PostHog.
-- Registrar uma linha de base antes de definir metas numéricas posteriores.
-
-### Limites de validação e premissas declaradas
-
-| Risco ou premissa | Consequência para validação |
-| --- | --- |
-| Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
 
 - Aumentar a proporção de visitas ao módulo Challenging que iniciam um desafio.
 - Aumentar a continuidade entre a conclusão de um desafio e o início do próximo
@@ -688,15 +668,6 @@ tecnologias assistivas em diferentes tamanhos de tela.
 | Escopo | Favoritos no drawer do roadmap. |
 | Escopo | Edição, conexão ou arraste persistente de nós pela Web App. |
 | Escopo | Auto-layout do grafo. |
-| Escopo | Editor visual ou gerenciamento do roadmap pelo Studio. |
-| Escopo | Mais de um roadmap oficial na V1. |
-| Escopo | Roadmaps pessoais, gerados por usuários ou por inteligência artificial. |
-| Escopo | Personalização automática da sequência por desempenho, objetivo ou perfil. |
-| Escopo | Bloqueio de nós ou desafios por pré-requisitos. |
-| Escopo | Inclusão automática de todos os desafios de uma categoria. |
-| Escopo | Calendário, streak, corações, metas diárias ou gamificação equivalente à |
-| Escopo | Favoritos no drawer do roadmap. |
-| Escopo | Edição, conexão ou arraste persistente de nós pela Web App. |
 
 ### Decisões descartadas durante a definição
 
