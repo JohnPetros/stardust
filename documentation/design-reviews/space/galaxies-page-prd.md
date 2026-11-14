@@ -2,36 +2,36 @@
 prd: documentation/prds/space/galaxies-page-prd.md
 prd_last_updated_at: 2026-11-14
 reviewed_at: 2026-11-14
-penpot_revn: 396
+penpot_revn: 412
 verdict: findings
 boards:
   - page: 🖥️ Desktop
-    board: Galáxias / Desktop / Página de galáxias
-    digest: 262a7b1961164a3c
+    board: Espaço / Galáxias / Desktop
+    digest: 764c24e399254121
   - page: 🖥️ Desktop
-    board: Galáxias / Desktop / Página de galáxias · carregando
-    digest: 828f5872ef5eb0fd
+    board: Espaço / Galáxias / carregando / Desktop
+    digest: 6c6bf373d531689d
   - page: 🖥️ Desktop
-    board: Galáxias / Desktop / Página de galáxias · falha ao carregar
-    digest: 603c658584e8358b
+    board: Espaço / Galáxias / falha ao carregar / Desktop
+    digest: d8a2c1105cb78184
   - page: 🖥️ Desktop
-    board: Galáxia / Desktop
-    digest: c84811de6386e725
+    board: Espaço / Galáxia / Desktop
+    digest: a3cde18189fde36e
   - page: 🖥️ Desktop
-    board: Galáxia / Desktop · planeta liberado
-    digest: 4c6adf80ba202ad3
+    board: Espaço / Galáxia / planeta liberado / Desktop
+    digest: fa1deb0979b65c33
   - page: 📱 Mobile
-    board: Galáxias / Mobile / Página de galáxias
-    digest: 582e1c2f5ccb9765
+    board: Espaço / Galáxias / Mobile
+    digest: 7165c02b1b126cff
   - page: 📱 Mobile
-    board: Galáxias / Mobile / Página de galáxias · carregando
-    digest: fe7ebd9ceec965a7
+    board: Espaço / Galáxias / carregando / Mobile
+    digest: 99ccf2bcf77fa160
   - page: 📱 Mobile
-    board: Galáxias / Mobile / Página de galáxias · falha ao carregar
-    digest: 3406f152939a5f58
+    board: Espaço / Galáxias / falha ao carregar / Mobile
+    digest: 8487b681ddb02ad2
   - page: 📱 Mobile
-    board: Galáxia / Mobile
-    digest: 5c4422fef4e214a7
+    board: Espaço / Galáxia / Mobile
+    digest: 56633d3e77f3ef74
 ---
 
 # Design review: Página de Galáxias
@@ -40,10 +40,10 @@ boards:
 
 RP-01 to RP-05 and JN-01 to JN-04 of the Galaxies Page PRD.
 
-- RP-01, RP-02, RP-03, RP-05, JN-01 to JN-03: the three `Galáxias / Desktop / …` boards
-  and the three `Galáxias / Mobile / …` boards (map, loading, load failure).
+- RP-01, RP-02, RP-03, RP-05, JN-01 to JN-03: the three `Espaço / Galáxias / … / Desktop` boards
+  and the three `Espaço / Galáxias / … / Mobile` boards (map, loading, load failure).
 - RP-04: the `Controle de galáxia` layer added to `Main › Header` of the existing
-  `Galáxia / Desktop` and `Galáxia / Desktop · planeta liberado` boards (named `Espaço / …`
+  `Espaço / Galáxia / Desktop` and `Espaço / Galáxia / planeta liberado / Desktop` boards (named `Espaço / Desktop …`
   until the page was renamed to Galáxia on 2026-11-14). The rest of those
   two boards is outside this review and keeps its baseline debt.
 
@@ -57,7 +57,7 @@ The PRD was revised after the review rounds (interview of 2026-11-14) and now se
 two gaps below. The verdict stays `findings` because the boards do not yet reflect them.
 
 - **Galaxy control on mobile (RP-04, JN-01 step 1).** Drawn after the review rounds as a
-  full-width 48 px strip below the header on the new board `Galáxia / Mobile` (section
+  full-width 48 px strip below the header on the new board `Espaço / Galáxia / Mobile` (section
   `Galáxia · Trilha` of the `📱 Mobile` page). `check:design` reports nothing new on it,
   but the Reviewer has not seen this board. The board draws the first viewport of the
   mobile Galáxia page (header, control, planet header, four stars, bottom navigation) to
@@ -97,6 +97,13 @@ two gaps below. The verdict stays `findings` because the boards do not yet refle
 
 ## Decisions
 
+- The nine boards were renamed to the pattern
+  `<Módulo> / <Página> / <Componente> / <Estado ou variante> / <Desktop|Mobile>` by the
+  user's decision of 2026-11-14, now in `documentation/rules/penpot-rules.md`. Only the
+  names changed; the digests above were taken after the rename and `check:design`
+  reports nothing new at revision 412. The seven other boards of the section
+  `Galáxia · Trilha` (video dialogs and the lock animation) keep the previous pattern
+  until a task changes them.
 - The load-failure message is centered in the content area, with centered text, on
   desktop and mobile, by the user's request after the review rounds; not sent back to
   the Reviewer.
@@ -105,7 +112,7 @@ two gaps below. The verdict stays `findings` because the boards do not yet refle
   label changed (302 px wide, it fits the 342 px mobile content), so the boards were not
   sent back to the Reviewer.
 - The study page was renamed from Espaço to Galáxia after the review rounds → the section
-  is now `Galáxia · Trilha`, its boards are `Galáxia / Desktop …`, and the back button
+  is now `Galáxia · Trilha`, its boards were `Galáxia / Desktop …` until the naming decision above, and the back button
   first read “Voltar à galáxia”. Only names and that label changed, so the boards were not sent
   back to the Reviewer; the digests above were taken after the rename. “Space” in this
   record means that page.
