@@ -20,7 +20,6 @@ on:
       - "scripts/export-local-database-env.mjs"
       - "scripts/check-drizzle-transition.mjs"
       - "scripts/adopt-drizzle-baseline.mjs"
-      - "scripts/tests/**"
       - ".dependency-cruiser.cjs"
       - "coverage-baseline.json"
       - "scripts/check-coverage-baseline.mjs"
