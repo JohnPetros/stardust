@@ -47,10 +47,10 @@ O documento é prospectivo: descreve a experiência aprovada, sem afirmar que j�
 | --- | --- | --- |
 | S1 | Este PRD canônico, revisão de 2026-11-13 | Autoridade versionada para múltipla escolha de seleção única nas histórias. |
 | S2 | Pedido e decisões de produto aprovados em 2026-10-11 | Define seleção, feedback, desabilitação das alternativas rejeitadas, código somente leitura, ordem fixa e retomada. |
-| S3 | [Histórias interativas](lesson-page.md), revisão de 2026-10-11 | Define questões na sequência, vidas, Continuar, reinício integral, conta e histórico. |
-| S4 | [Escrita de código](code-writing.md), revisão de 2026-10-11 | Delimita a prática de escrita e execução como experiência própria. |
+| S3 | [Histórias interativas](lesson-page-prd.md), revisão de 2026-10-11 | Define questões na sequência, vidas, Continuar, reinício integral, conta e histórico. |
+| S4 | [Escrita de código](code-writing-prd.md), revisão de 2026-10-11 | Delimita a prática de escrita e execução como experiência própria. |
 | S5 | Decisão de produto aprovada em 2026-10-31 | Removeu o feedback explicativo após resposta incorreta. Revista por S7. |
-| S6 | [Bloco de Código](code-block.md), revisão de 2026-11-13 | Mantém todas as ações do bloco visíveis e permite executar o código de referência sem editar, respeitando a indisponibilidade do modo previsão. |
+| S6 | [Bloco de Código](code-block-prd.md), revisão de 2026-11-13 | Mantém todas as ações do bloco visíveis e permite executar o código de referência sem editar, respeitando a indisponibilidade do modo previsão. |
 | S7 | Decisões de produto aprovadas em 2026-11-13 | Restabelecem a orientação no erro por meio de uma dica por alternativa rejeitada e criam o modo previsão, em que a execução fica indisponível até a aprovação. |
 | S8 | [Story Writing Rules](../../rules/story-writing-rules.md) | Define quando o conteúdo usa o modo previsão e como alternativas incorretas e dicas são escritas. |
 
@@ -204,7 +204,7 @@ Atores: aluno autenticado.
 - A resposta incorreta deve apresentar a dica da alternativa rejeitada. O erro também deve ser indicado pela alternativa rejeitada e pela vida consumida.
 - A dica não deve revelar a alternativa correta nem permitir identificá-la por eliminação das demais.
 - A dica deve permanecer associada à alternativa rejeitada nas próximas tentativas e na retomada da mesma tentativa da história.
-- A dica deve ser uma fala de Faísca, com o tipo dica, conforme [Blocos de texto e narração](text-blocks-and-narration.md) e [Narrativa e universo das histórias](story-narrative.md).
+- A dica deve ser uma fala de Faísca, com o tipo dica, conforme [Blocos de texto e narração](text-blocks-and-narration-prd.md) e [Narrativa e universo das histórias](story-narrative-prd.md).
 - Novas tentativas devem ser permitidas enquanto houver vidas.
 - Esgotamento de vidas e reinício integral devem seguir Histórias interativas; uma nova tentativa da história não deve herdar alternativas rejeitadas da tentativa anterior.
 

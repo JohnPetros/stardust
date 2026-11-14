@@ -15,7 +15,7 @@ last_updated_at: 2026-11-12
 - Spec: `./spec.md` (revisão 3, `in_progress`; reaberta em 2026-11-12 para o token D-15)
 - Commit-base: `93b3e3e0956bfb60c968a8b5520ffe07b84611db`
 - Commit avaliado: ainda não definido (candidato = working tree do branch `feat/sign-in-unconfirmed-email-resend`, sem commits)
-- Assignment: Builder Direct (task principal). RP-01/JN-01 de `documentation/prds/auth/sign-in.md`; RF-01..RF-08; CA-01..CA-17. Paths permitidos: os 31 do mapa canônico (revisão 3) da Spec; proibidos: Core, `packages/validation`, banco, migrations, Backoffice, `auth.rest` (D-09).
+- Assignment: Builder Direct (task principal). RP-01/JN-01 de `documentation/prds/auth/sign-in-prd.md`; RF-01..RF-08; CA-01..CA-17. Paths permitidos: os 31 do mapa canônico (revisão 3) da Spec; proibidos: Core, `packages/validation`, banco, migrations, Backoffice, `auth.rest` (D-09).
 - Rule Pack: `rest-layer-rules`, `rpc-layer-rules`, `ui-layer-rules`, `handlers-testing-rules`, `server-routes-testing-rules`, `widget-tests-rules`, `web-app-routes-testing-rules`, `server-application-rules`, `web-application-rules`, `code-conventions-rules`, `sdd.md`.
 - Design: Penpot `stardust`, frames `Autenticação / Desktop|Mobile / Sign-in · E-mail não confirmado`.
 

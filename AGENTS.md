@@ -493,7 +493,7 @@ files and scenarios, the counts and the results. The selection details are in
 
 Use [SDD Workflow](documentation/sdd.md) and the applicable canonical workflow
 under `documentation/prompts/` for feature behavior. The canonical PRD of the
-module lives in `documentation/prds/<module>/<slug>.md`; reconcile material
+module lives in `documentation/prds/<module>/<slug>-prd.md`; reconcile material
 contract changes through the workflow rather than editing around it. Keep
 feature artifacts under `documentation/features/<domain>/<feature>/`
 (`spec.md` and `evaluation.md`). The main task (Orchestrator) owns contract

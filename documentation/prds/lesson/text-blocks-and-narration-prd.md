@@ -41,8 +41,8 @@ Esta revisão é prospectiva e não afirma que as regras já estejam implementad
 | --- | --- | --- |
 | S1 | Este PRD canônico, revisão de 2026-10-11 | Autoridade versionada para apresentação dos textos e consumo de narração nas histórias. |
 | S2 | Pedido e decisões de produto aprovados em 2026-10-11 | Define tipos, personagens, cores, avatar omitido, formatação, reprodução, preferência e retomada. |
-| S3 | [Histórias interativas](lesson-page.md), revisão de 2026-10-11 | Define sequência, histórico, avanço, narração disponível e continuidade da tentativa. |
-| S4 | [Geração automática de áudio em blocos de texto](automatic-audio-generation-in-text-blocks.md) | Contexto de produção dos arquivos; o consumo deste PRD não inclui geração ou gerenciamento. |
+| S3 | [Histórias interativas](lesson-page-prd.md), revisão de 2026-10-11 | Define sequência, histórico, avanço, narração disponível e continuidade da tentativa. |
+| S4 | [Geração automática de áudio em blocos de texto](automatic-audio-generation-in-text-blocks-prd.md) | Contexto de produção dos arquivos; o consumo deste PRD não inclui geração ou gerenciamento. |
 | S5 | Fluxos existentes de verificação de arquivos de história e reprodução pelo Speaker | Evidência auxiliar de consumo de arquivos confirmados e reprodução; não substitui as regras aprovadas desta revisão. |
 | S6 | Decisões de produto aprovadas em 2026-11-13 | Definem o efeito sonoro opcional de um bloco, sua relação com a narração e a apresentação das dicas de questões como falas de Faísca. |
 
@@ -216,7 +216,7 @@ Atores: aluno autenticado.
 ##### Regras de Experiência
 
 - A opção de reprodução automática deve deixar compreensível seu estado ativo ou inativo.
-- A opção deve estar disponível no diálogo de controles de áudio da história, conforme [Histórias interativas](lesson-page.md), como a mesma preferência da conta.
+- A opção deve estar disponível no diálogo de controles de áudio da história, conforme [Histórias interativas](lesson-page-prd.md), como a mesma preferência da conta.
 - O player deve oferecer ações de reproduzir e pausar, com nomes acessíveis e operação por teclado.
 - A interface deve distinguir leitura de conteúdo e reprodução de áudio.
 
@@ -236,7 +236,7 @@ Atores: aluno autenticado.
 - O aluno não deve precisar esperar o término da narração para avançar.
 - Iniciar outra narração deve interromper a narração anterior, mantendo apenas uma reprodução por vez.
 - O efeito sonoro de um bloco não conta como narração: não deve interromper, atrasar nem substituir a narração do mesmo bloco ou de outro.
-- O efeito sonoro do bloco deve seguir a preferência de som e as regras de reprodução de [Histórias interativas](lesson-page.md), e não a preferência de reprodução automática da narração.
+- O efeito sonoro do bloco deve seguir a preferência de som e as regras de reprodução de [Histórias interativas](lesson-page-prd.md), e não a preferência de reprodução automática da narração.
 - O áudio não deve liberar automaticamente uma questão nem substituir as condições de avanço da história.
 
 ##### Regras de Experiência

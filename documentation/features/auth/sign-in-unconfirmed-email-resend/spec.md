@@ -6,12 +6,12 @@ source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/issues/646
   - type: prd
-    ref: documentation/prds/auth/sign-in.md
+    ref: documentation/prds/auth/sign-in-prd.md
     revision: last_updated_at 2026-11-11 (emenda de RP-01 e JN-01 aprovada nesta task, Q1/Q8)
     requirements: [RP-01]
     journeys: [JN-01]
   - type: prd
-    ref: documentation/prds/auth/sign-up.md
+    ref: documentation/prds/auth/sign-up-prd.md
     revision: last_updated_at 2026-06-17
     requirements: [RP-06]
   - type: direct-request
@@ -27,7 +27,7 @@ scope:
   - apps/web/src/app/tests/auth
   - apps/web/src/ui/global/styles
   - apps/web/tailwind.config.js
-  - documentation/prds/auth/sign-in.md
+  - documentation/prds/auth/sign-in-prd.md
   - documentation/design.md
 last_updated_at: 2026-11-12
 ---
@@ -39,11 +39,11 @@ sai antes de confirmar o e-mail e tenta entrar recebe "E-mail ou senha incorreto
 achar que errou as credenciais. A entrega faz o sign-in informar que falta confirmar o e-mail e
 permite reenviar o link na própria página, sem sessão.
 
-**Autoridade de produto.** `documentation/prds/auth/sign-in.md` (RP-01 e JN-01) foi emendado
+**Autoridade de produto.** `documentation/prds/auth/sign-in-prd.md` (RP-01 e JN-01) foi emendado
 nesta task, com aprovação explícita do usuário (Q8), para incluir as regras "Conta não
 confirmada", "Sigilo do estado da conta", "Reenvio sem sessão", "Limite de reenvio", "Aviso
 inline de confirmação", "Feedback de reenvio" e o ramo "Conta não confirmada" de JN-01.
-`documentation/prds/auth/sign-up.md` RP-06 (reenvio com loading e feedback) é a referência
+`documentation/prds/auth/sign-up-prd.md` RP-06 (reenvio com loading e feedback) é a referência
 complementar do padrão de reenvio.
 
 **Estado atual verificado:**
@@ -172,7 +172,7 @@ e-mail de confirmação" e o `focus-visible` do primitivo; fica desabilitado dur
 
 | Decisão | Escolha | Alternativas descartadas | Motivo e impacto |
 | --- | --- | --- | --- |
-| D-01 (Q1, Q8) | Emendar `sign-in.md` (RP-01 e JN-01) antes da Spec, com o texto aprovado pelo usuário | Registrar a regra só na Spec | `sdd.md` exige atualizar a autoridade de produto antes do Contract; preserva a rastreabilidade `RP → RF`. |
+| D-01 (Q1, Q8) | Emendar `sign-in-prd.md` (RP-01 e JN-01) antes da Spec, com o texto aprovado pelo usuário | Registrar a regra só na Spec | `sdd.md` exige atualizar a autoridade de produto antes do Contract; preserva a rastreabilidade `RP → RF`. |
 | D-02 (Q2) | `403 Forbidden` + "Confirme seu e-mail antes de entrar", detectado por `error.code === 'email_not_confirmed'` no adapter | `401` com mensagem diferente | O status é o discriminador estável; a mensagem é só para pessoas. Não revela estado de conta porque o GoTrue só emite o código após validar a senha. No contrato de `/auth/sign-in`, `403` significa exclusivamente conta não confirmada. |
 | D-03 (Q3) | `SignInAction` retorna `SignInActionResponse` (`{ isEmailConfirmed: false }` no `403`) e `handleSignIn` retorna `SignInResult` | `serverError` estruturado no `actionClient` global; comparar a mensagem no cliente | Menor raio de impacto: só o caminho do sign-in muda; o `actionClient` e as demais Server Actions ficam intactos; não acopla a UI ao texto do Server. Exceção consciente a `rpc-layer-rules.md` ("erros de domínio são propagados como `AppError` e tratados pelo `actionClient`"): conta não confirmada é modelada como resultado esperado do login, não como erro; todas as demais falhas continuam em `response.throwError()`. |
 | D-04 (Q4) | Manter "Ele expira em 1 hora." do frame | Remover a frase; texto neutro | O usuário confirmou que a expiração de OTP de e-mail em produção é 1 hora. O GoTrue local usa o padrão de 24 h, o que não afeta a cópia. |
@@ -266,7 +266,7 @@ apps/web/
                         └── tests/UnconfirmedEmailNoticeView.test.tsx    [N]
 documentation/
 ├── design.md                                                        [M]
-└── prds/auth/sign-in.md                                             [M]
+└── prds/auth/sign-in-prd.md                                             [M]
 ```
 
 `apps/server/rest-client/auth/auth.rest` é vizinho inalterado (D-09) e por isso não aparece na
@@ -347,7 +347,7 @@ documentation/
 
 | Path | Change | Declaration | Contract | Dependencies | Tests |
 | --- | --- | --- | --- | --- | --- |
-| `documentation/prds/auth/sign-in.md` | Modify | RP-01 (Regras de Negócio e de Experiência), JN-01 e `last_updated_at` | Emenda aprovada (Q8), já aplicada antes da Spec | — | Revisão do usuário |
+| `documentation/prds/auth/sign-in-prd.md` | Modify | RP-01 (Regras de Negócio e de Experiência), JN-01 e `last_updated_at` | Emenda aprovada (Q8), já aplicada antes da Spec | — | Revisão do usuário |
 | `documentation/design.md` | Modify | Seção de tokens do Web: tabela `color.<role>` e a frase "all 18 colors" | Acrescenta `reward-surface` em linha ou nota própria, fora da linha `color.<role>` dos 18 roles do Penpot (para a tabela não afirmar que é token do Penpot), ajusta "all 18 colors" e registra que ele é um token só do Web, ligado no Penpot ao primitivo `color.yellow.900` (`#443102`), sem contraparte em `Semantic/Dark`; demais conteúdos inalterados | `global.css`, `tailwind.config.js` | Revisão do usuário |
 
 ## Detalhamento técnico por camada afetada
@@ -568,7 +568,7 @@ retornam `201`, a página executa o foguete e navega para `/space`.
 
 # Documentation alignment and revision history
 
-**Alinhamento documental:** `documentation/prds/auth/sign-in.md` foi emendado nesta task (D-01) e
+**Alinhamento documental:** `documentation/prds/auth/sign-in-prd.md` foi emendado nesta task (D-01) e
 `documentation/design.md` passa a listar o token `reward-surface` (D-15). Nenhuma Rule, Architecture
 ou Tooling muda: o comportamento novo usa padrões existentes (adapter
 REST, action RPC, Widget Pattern, testes por rota). A Issue #646 aponta para esta Spec no campo
@@ -581,6 +581,6 @@ REST, action RPC, Widget Pattern, testes por rota). A Issue #646 aponta para est
 
 | Revisão | Data | Mudança | Revisão independente |
 | --- | --- | --- | --- |
-| 1 | 2026-11-12 | Criação a partir da Issue #646 e do PRD `sign-in.md` emendado, após grilling (Q1–Q10) e aprovação das cinco seções de design. | Spec Reviewer: `blocking_findings`. Bloqueante: `POST /auth/sign-in/god` também consome `SupabaseAuthService.signIn` e passaria de `401` a `405` (via `NotAllowedError`) para conta não confirmada, sem declaração nem cobertura. Não bloqueantes: exceção ao padrão de erros de `rpc-layer-rules.md` não registrada; resultado esperado da auditoria de UI com D-07; `UPDATE` em `auth.users` no arquivo de teste em vez de fixture; padrão novo de tipo exportado por action; justificativa inexistente para não testar `useSignInAction`; página SignUp não declarada como consumidora do `429`. Todos verificados diretamente no código. |
+| 1 | 2026-11-12 | Criação a partir da Issue #646 e do PRD `sign-in-prd.md` emendado, após grilling (Q1–Q10) e aprovação das cinco seções de design. | Spec Reviewer: `blocking_findings`. Bloqueante: `POST /auth/sign-in/god` também consome `SupabaseAuthService.signIn` e passaria de `401` a `405` (via `NotAllowedError`) para conta não confirmada, sem declaração nem cobertura. Não bloqueantes: exceção ao padrão de erros de `rpc-layer-rules.md` não registrada; resultado esperado da auditoria de UI com D-07; `UPDATE` em `auth.users` no arquivo de teste em vez de fixture; padrão novo de tipo exportado por action; justificativa inexistente para não testar `useSignInAction`; página SignUp não declarada como consumidora do `429`. Todos verificados diretamente no código. |
 | 2 | 2026-11-12 | Q11 (a): `SignInGodAccountController` preserva `401` (D-11, RF-08, CA-17, AV-08, dois paths). D-03 registra a exceção de RPC; D-07 fixa o resultado da auditoria; D-10 (`import type`), D-12 (consumidor SignUp), D-13 (fixture `SupabaseFixture` para `confirmation_sent_at`, um path) e D-14 (sem teste de `useSignInAction`). Escopo, Shared setup e AV-07 corrigidos. | Mesmo Spec Reviewer: `clear`. Os sete findings da revisão 1 foram resolvidos e nenhum finding novo apareceu. `AuthError` → `401` (`HonoApp.ts:158-159`) foi verificado diretamente. O usuário aprovou o Contract escrito em 2026-11-12 e o status passou a `open`, sem incremento de revisão. |
 | 3 | 2026-11-12 | Q12 (token novo): `reward-surface` (`--theme-reward-surface: #443102`, `bg-theme-reward-surface`) substitui o `yellow-900` legado no aviso (D-15; `global.css`, `tailwind.config.js` e `design.md`, três paths novos no mapa; `scope`, Design Contract, CA-10, AV-05, AV-07 e VV-01 ajustados). Correção de redação: CA-07, CA-08 e AV-06 localizam o toast por `data-testid="toast-progress-bar"`, não por `role="alert"`. Desvios de design registrados: altura do aviso (+2 px do `border`) e escala de `rem` no mobile. A prova VV-01 e VV-02 e a revisão independente da implementação ficam invalidadas até a recaptura. | Spec Reviewer: `clear`, sem findings bloqueantes. Dois não bloqueantes aplicados: `design.md` registra `reward-surface` fora da linha dos 18 roles do Penpot, e a Spec cita o path completo e o uso de `yellow-900` como texto. O usuário aprovou o Contract escrito em 2026-11-12 e o status passou a `open`, sem incremento de revisão. Correção de redação pós-aprovação (2026-11-12, sem mudança de comportamento nem de path): AV-07 passa a dizer que o `check:code` do Web (`biome check src`) não alcança `tailwind.config.js`, provado por VV-01/VV-02. |

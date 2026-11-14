@@ -29,12 +29,12 @@ imediatamente de prática.
   de lição (vidas, progresso, retomada, destaque, histórico) pertence aos PRDs
   em `documentation/prds/lesson/`.
 - O enredo, o elenco e o que cada planeta revela pertencem a
-  [Narrativa e universo das histórias](../prds/lesson/story-narrative.md). Uma
+  [Narrativa e universo das histórias](../prds/lesson/story-narrative-prd.md). Uma
   história não deve contradizê-la nem antecipá-la.
 - Todo trecho de Delégua em uma história também segue as
   [Regras da Linguagem Delégua](delegua-rules.md).
 - Os vídeos dos planetas são assistidos no Espaço, não na história, e pertencem
-  a [Trilha e Espaço](../prds/space/space-page.md). O estudante pode pulá-los,
+  a [Trilha e Espaço](../prds/space/space-page-prd.md). O estudante pode pulá-los,
   portanto uma história deve se sustentar sem eles.
 - Estas regras não cobrem as estrelas de desafio, que são avaliadas de forma
   independente.
@@ -46,17 +46,17 @@ imediatamente de prática.
 
 O conteúdo das histórias e as suas autoridades ficam em:
 
-- `documentation/prds/lesson/story-narrative.md`: enredo, elenco, planetas,
+- `documentation/prds/lesson/story-narrative-prd.md`: enredo, elenco, planetas,
   reviravoltas e o código da história.
-- `documentation/prds/lesson/lesson-page.md`: sequência de blocos, questões,
+- `documentation/prds/lesson/lesson-page-prd.md`: sequência de blocos, questões,
   vidas, histórico e destaque.
-- `documentation/prds/lesson/multiple-choice.md`,
-  `documentation/prds/lesson/block-programming.md` e
-  `documentation/prds/lesson/code-writing.md`: os três tipos de questão.
-- `documentation/prds/lesson/text-blocks-and-narration.md` e
-  `documentation/prds/lesson/visual-blocks.md`: tipos de bloco de texto e
+- `documentation/prds/lesson/multiple-choice-prd.md`,
+  `documentation/prds/lesson/block-programming-prd.md` e
+  `documentation/prds/lesson/code-writing-prd.md`: os três tipos de questão.
+- `documentation/prds/lesson/text-blocks-and-narration-prd.md` e
+  `documentation/prds/lesson/visual-blocks-prd.md`: tipos de bloco de texto e
   visuais.
-- `documentation/prds/space/space-page.md`: abertura do planeta, o vídeo de
+- `documentation/prds/space/space-page-prd.md`: abertura do planeta, o vídeo de
   apresentação de cada planeta e o vídeo de encerramento da trilha.
 - `apps/web/src/mocks/lesson/planets/planet<N>/star<N>/`: `texts.ts` e
   `questions.ts` de cada estrela.
@@ -357,30 +357,30 @@ A dica correta também combina com a Faísca: uma fala curta e direta.
   questão e os estados que esses PRDs definem. Quando uma regra daqui precisar
   de uma nova capacidade, altere o PRD primeiro, pelo workflow de SDD.
 - **Vidas e energia da nave.** Os PRDs usam `vida` para a regra e a apresentam
-  ao estudante como `energia da nave`, conforme definido em `lesson-page.md`.
+  ao estudante como `energia da nave`, conforme definido em `lesson-page-prd.md`.
   O texto da história usa somente a segunda.
 - **Som.** Os efeitos de sistema e o efeito opcional de um bloco são definidos
-  em `lesson-page.md`. O efeito de um bloco toca uma vez, quando o bloco é
+  em `lesson-page-prd.md`. O efeito de um bloco toca uma vez, quando o bloco é
   revelado, e nunca no histórico. O som ambiente base pertence ao planeta; um
   bloco só pode trocá-lo por um clima do conjunto compartilhado. O estudante
   controla a narração, os efeitos e o som ambiente pelo diálogo de áudio da
   história.
-- **Vídeos dos planetas.** O seu conteúdo é definido em `story-narrative.md` e
-  a sua reprodução em `space-page.md`. Uma história não os reproduz nem os
+- **Vídeos dos planetas.** O seu conteúdo é definido em `story-narrative-prd.md` e
+  a sua reprodução em `space-page-prd.md`. Uma história não os reproduz nem os
   referencia.
 - **Múltipla escolha.** O modo previsão e as dicas por alternativa são
-  definidos em `multiple-choice.md`. Toda questão de múltipla escolha fornece o
+  definidos em `multiple-choice-prd.md`. Toda questão de múltipla escolha fornece o
   enunciado, as alternativas ordenadas, uma alternativa correta, o feedback de
   acerto e uma dica para cada alternativa incorreta, dita pela Faísca.
 - **Escrita de código.** As questões de corrigir o erro usam a modalidade de
-  completar definida em `code-writing.md`. Executar código nunca custa uma
+  completar definida em `code-writing-prd.md`. Executar código nunca custa uma
   vida; somente uma resposta avaliada e reprovada custa.
 - **Programação em blocos.** Cada questão oferece somente os blocos
-  selecionados para a atividade, conforme definido em `block-programming.md`.
+  selecionados para a atividade, conforme definido em `block-programming-prd.md`.
 - **Visuais.** Um visual em destaque é sempre um Lottie, conforme definido em
-  `visual-blocks.md`.
+  `visual-blocks-prd.md`.
 - **Narrativa.** O elenco, a identidade dos planetas, as pistas e as
-  reviravoltas vêm de `story-narrative.md`.
+  reviravoltas vêm de `story-narrative-prd.md`.
 - **Delégua.** Palavras reservadas, valores lógicos e identificadores seguem
   `delegua-rules.md`.
 
@@ -430,7 +430,7 @@ A dica correta também combina com a Faísca: uma fala curta e direta.
   pretendido, não um arquivo.
 - **Dicas fora da múltipla escolha.** Hoje somente a múltipla escolha define
   uma dica. Se outro tipo de questão ganhar uma, ela segue a mesma regra.
-- **Medição.** `lesson-page.md` define os eventos que medem uma história.
+- **Medição.** `lesson-page-prd.md` define os eventos que medem uma história.
   Nenhuma meta numérica foi aprovada, portanto estas regras não estabelecem
   limite para o tempo por estrela nem para a taxa de erro.
 - **Ferramentas de autoria.** Estas regras não dependem de como uma história é

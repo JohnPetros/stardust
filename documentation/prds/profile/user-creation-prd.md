@@ -70,7 +70,7 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 ##### Regras de Negócio
 - **Gatilho de criação:** A criação do perfil deve ocorrer após a conclusão do cadastro da conta.
 - **Dados obrigatórios:** O perfil deve ser criado com identificador, nome e email do usuário.
-- **Estado inicial do perfil:** O perfil deve nascer já associado ao tier inicial e ao avatar padrão selecionado. O perfil não possui foguete associado: o foguete é único e igual para todos os usuários, conforme [Página de Loja](../shop/shop-page.md).
+- **Estado inicial do perfil:** O perfil deve nascer já associado ao tier inicial e ao avatar padrão selecionado. O perfil não possui foguete associado: o foguete é único e igual para todos os usuários, conforme [Página de Loja](../shop/shop-page-prd.md).
 - **Persistência do perfil:** O perfil deve ser salvo como a referência principal do usuário dentro do módulo `profile`.
 
 ##### Regras de Experiência

@@ -41,9 +41,9 @@ Este documento é prospectivo e não afirma que todas as regras já estejam impl
 | --- | --- | --- |
 | S1 | Este PRD canônico, revisão de 2026-10-11 | Autoridade versionada para consumo de imagens, Lotties e cenas nas histórias. |
 | S2 | Pedido e decisões de produto aprovados em 2026-10-11 | Define reprodução, avanço, histórico, legenda, retomada, movimento reduzido e recuperação. |
-| S3 | [Histórias interativas](lesson-page.md), revisão de 2026-10-11 | Define blocos, sequência, histórico rolável, destaque sticky, transições e continuidade da tentativa. |
-| S4 | [Programação em blocos](block-programming.md), revisão de 2026-10-11 | Define cenas associadas à atividade, eventos de execução, restauração inicial e composição responsiva das questões. |
-| S5 | [Seleção e Gestão de Imagens de Lição](lesson-image-selection-and-management.md) | Contexto de seleção e gerenciamento de arquivos; autoria e infraestrutura não pertencem ao consumo definido neste PRD. |
+| S3 | [Histórias interativas](lesson-page-prd.md), revisão de 2026-10-11 | Define blocos, sequência, histórico rolável, destaque sticky, transições e continuidade da tentativa. |
+| S4 | [Programação em blocos](block-programming-prd.md), revisão de 2026-10-11 | Define cenas associadas à atividade, eventos de execução, restauração inicial e composição responsiva das questões. |
+| S5 | [Seleção e Gestão de Imagens de Lição](lesson-image-selection-and-management-prd.md) | Contexto de seleção e gerenciamento de arquivos; autoria e infraestrutura não pertencem ao consumo definido neste PRD. |
 | S6 | Decisão de produto aprovada em 2026-10-31 | Define que todo visual em destaque é um Lottie, reproduzido uma única vez e sem controles de pausa e reprodução. |
 | S7 | Decisões de produto aprovadas em 2026-11-13 | Definem o efeito sonoro opcional de um Lottie, mantêm as cenas por evento onde já existem e situam os vídeos de planeta em Trilha e Espaço. |
 
@@ -163,7 +163,7 @@ Atores: aluno autenticado.
 - O Lottie deve ser reproduzido uma única vez e permanecer parado no último quadro ao terminar.
 - Não devem ser oferecidos controles de pausa, retomada ou nova reprodução.
 - O término da animação não deve ser obrigatório para avançar.
-- Um Lottie narrativo pode possuir um efeito sonoro opcional, reproduzido uma única vez quando o bloco é revelado, conforme [Histórias interativas](lesson-page.md).
+- Um Lottie narrativo pode possuir um efeito sonoro opcional, reproduzido uma única vez quando o bloco é revelado, conforme [Histórias interativas](lesson-page-prd.md).
 - O efeito sonoro depende da preferência de som, não da preferência por movimento reduzido: com movimento reduzido, o Lottie aparece parado e o efeito segue a preferência de som.
 - Cenas por evento devem seguir RP-05, não a regra de reprodução narrativa automática.
 
@@ -362,7 +362,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 | Autoria | Cadastro, edição e publicação dos blocos, legendas, descrições e configurações de eventos. |
 | Editor de animações | Ferramentas para criar ou alterar animações Lottie. |
 | Remotion | Adoção de Remotion como dependência ou requisito desta experiência. |
-| Vídeos de planeta | Vídeos de apresentação dos planetas e de encerramento da trilha. São arquivos pré-renderizados reproduzidos no Espaço, definidos em [Trilha e Espaço](../space/space-page.md), e não são blocos visuais da história. |
+| Vídeos de planeta | Vídeos de apresentação dos planetas e de encerramento da trilha. São arquivos pré-renderizados reproduzidos no Espaço, definidos em [Trilha e Espaço](../space/space-page-prd.md), e não são blocos visuais da história. |
 | Infraestrutura | Estratégia de armazenamento, CDN e contratos técnicos de arquivos e eventos. |
 | Avaliadores | Mudanças na avaliação determinística ou pelo Jev; os visuais não substituem a avaliação da atividade. |
 | Reprodução sincronizada | Retomada entre dispositivos no segundo exato de uma animação. |

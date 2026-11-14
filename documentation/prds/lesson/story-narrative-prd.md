@@ -25,7 +25,7 @@ A ameaça, o Nulo, não é um vilão: é Lira, uma Stardust que ficou sem valor.
 
 Cada planeta é apresentado por um vídeo curto, assistido no Espaço quando o aluno abre o planeta, e a trilha termina com um vídeo de encerramento. Esta trilha substitui a anterior: todos os alunos começam em Aurora.
 
-Este PRD define o enredo, o elenco, o arco por planeta, as reviravoltas, a mitologia e o conteúdo dos vídeos. O texto das estrelas, a arte, o planeta Limbo e os personagens reservados a outros jogos ficam fora do escopo. O comportamento da página segue [Histórias interativas](lesson-page.md) e a forma de escrever cada estrela segue as [Story Writing Rules](../../rules/story-writing-rules.md).
+Este PRD define o enredo, o elenco, o arco por planeta, as reviravoltas, a mitologia e o conteúdo dos vídeos. O texto das estrelas, a arte, o planeta Limbo e os personagens reservados a outros jogos ficam fora do escopo. O comportamento da página segue [Histórias interativas](lesson-page-prd.md) e a forma de escrever cada estrela segue as [Story Writing Rules](../../rules/story-writing-rules.md).
 
 ## 2. Problema e Oportunidade
 
@@ -41,8 +41,8 @@ O documento é prospectivo: descreve a narrativa aprovada, sem afirmar que o con
 | --- | --- | --- |
 | S1 | Este PRD canônico, revisão de 2026-11-13 | Autoridade versionada para enredo, elenco, arco por planeta, reviravoltas e mitologia. |
 | S2 | Pedido e decisões de produto aprovados em 2026-11-13 | Define a liberdade em relação à história atual, o elenco, os nomes, a divisão de Listas, o planeta de tuplas, a reserva do Limbo e a ambiguidade sobre Panda. |
-| S3 | [Histórias interativas](lesson-page.md), revisão de 2026-11-13 | Define sequência de blocos, questões, vidas, histórico, destaque e conclusão da história. |
-| S4 | [Trilha e Espaço](../space/space-page.md) | Define planetas, estrelas, ordem, desbloqueio e navegação. |
+| S3 | [Histórias interativas](lesson-page-prd.md), revisão de 2026-11-13 | Define sequência de blocos, questões, vidas, histórico, destaque e conclusão da história. |
+| S4 | [Trilha e Espaço](../space/space-page-prd.md) | Define planetas, estrelas, ordem, desbloqueio e navegação. |
 | S5 | Catálogo atual de planetas e estrelas, exportado em 2026-10-10 | Evidência auxiliar da história anterior: oito planetas, 39 estrelas e os personagens Panda, a princesa, Sharkorno e os salmonenses. Não substitui as decisões desta revisão. |
 | S6 | [Delegua Language Rules](../../rules/delegua-rules.md) | Define o vocabulário e a validação de todo código Delégua citado na narrativa. |
 | S7 | [What is Ozaria](https://codecombat.zendesk.com/hc/en-us/articles/1500009116581-What-is-Ozaria), consultado em 2026-11-12 | Registra que outro jogo de ensino de programação possui uma personagem chamada Vega; fundamenta o descarte desse nome. |
@@ -80,7 +80,7 @@ Jobs to Be Done:
 | Nomes de planetas e de participações de um planeta foram propostos e não individualmente revisados. | Tratar como nomes vigentes, sujeitos a troca em revisão futura sem alterar o arco. |
 | A distribuição exata dos métodos de lista entre as estrelas do Comboio pertence ao conteúdo. | Validar apenas o recorte por parte definido em RP-04. |
 | Todo código Delégua citado é ilustrativo. | Validar no interpretador do projeto antes de incluir em uma estrela, conforme S6. |
-| A trilha passa de oito para dez planetas e substitui a anterior. | A criação dos planetas no catálogo e a operação sobre o progresso dos alunos pertencem ao gerenciamento e a [Trilha e Espaço](../space/space-page.md), fora deste PRD. |
+| A trilha passa de oito para dez planetas e substitui a anterior. | A criação dos planetas no catálogo e a operação sobre o progresso dos alunos pertencem ao gerenciamento e a [Trilha e Espaço](../space/space-page-prd.md), fora deste PRD. |
 | Os vídeos são pulados por parte dos alunos. | Validar que nenhuma estrela depende de informação presente apenas em um vídeo. |
 | Não foram aprovadas metas numéricas. | Não inferir metas de engajamento, retenção ou conclusão a partir deste documento. |
 
@@ -155,8 +155,8 @@ Atores: aluno autenticado; autor de conteúdo.
 | Ária e Sharkorno | Princesa de Chavalor, guardiã do Grande Arquivo, e seu tubarão de estimação | Ela enviou o pedido de ajuda e leu o registro do que ocorreu com Lira | A partir de Arcana |
 | Lira | A melhor Stardust da primeira expedição | É o Nulo | Como o Nulo até Chavalor |
 
-- O aluno deve ser um personagem com falas próprias, conforme [Blocos de texto e narração](text-blocks-and-narration.md).
-- Faísca deve ser o computador de bordo do foguete do aluno, que é único e igual para todos, conforme [Página de Loja](../shop/shop-page.md). A história e os vídeos devem mostrar sempre esse mesmo foguete.
+- O aluno deve ser um personagem com falas próprias, conforme [Blocos de texto e narração](text-blocks-and-narration-prd.md).
+- Faísca deve ser o computador de bordo do foguete do aluno, que é único e igual para todos, conforme [Página de Loja](../shop/shop-page-prd.md). A história e os vídeos devem mostrar sempre esse mesmo foguete.
 - Faísca deve executar exatamente o que foi escrito, sem interpretar a intenção.
 - As dicas das questões devem ser falas de Faísca.
 - Cifra deve tornar-se aliada em Arcana, quando descobre que não consegue copiar uma função sem entendê-la.
@@ -229,7 +229,7 @@ Atores: aluno autenticado; autor de conteúdo.
 - Cada planeta deve terminar em uma estrela de desafio.
 - O planeta de Listas deve ser dividido em duas partes, cada uma com seu desafio. A parte 1 exige um desafio novo.
 - O planeta Perene deve vir depois de Arcana, porque tuplas usam funções.
-- Esta trilha deve substituir a trilha anterior. Todos os alunos começam em Aurora, conforme [Trilha e Espaço](../space/space-page.md).
+- Esta trilha deve substituir a trilha anterior. Todos os alunos começam em Aurora, conforme [Trilha e Espaço](../space/space-page-prd.md).
 - A ordem das estrelas dentro de cada planeta e a quantidade de estrelas por recorte devem seguir a progressão pedagógica do conteúdo.
 
 ##### Regras de Experiência
@@ -392,7 +392,7 @@ arquivo["Lira"] = "Stardust"
 ##### Regras de Experiência
 
 - Um trecho do código da trama não deve ser apresentado antes de o aluno ter aprendido o conceito necessário para lê-lo no nível indicado.
-- O código da trama deve ser apresentado como bloco de código da história, conforme [Bloco de Código](code-block.md).
+- O código da trama deve ser apresentado como bloco de código da história, conforme [Bloco de Código](code-block-prd.md).
 
 #### RP-10 — Ganchos para o universo expandido
 
@@ -453,7 +453,7 @@ Atores: aluno autenticado; autor de conteúdo; produção de vídeo.
 ##### Regras de Experiência
 
 - Os vídeos devem ser animações curtas em motion graphics, com áudio, compreensíveis apenas pela imagem: a compreensão não deve depender do som nem de texto explicativo. Um texto só deve aparecer quando for necessário, como parte da própria animação.
-- Os vídeos devem seguir a reprodução definida em [Trilha e Espaço](../space/space-page.md).
+- Os vídeos devem seguir a reprodução definida em [Trilha e Espaço](../space/space-page-prd.md).
 - O tom deve ser o mesmo das histórias: bem-humorado, sem assustar.
 - Faísca, Panda e o aluno podem aparecer em qualquer vídeo. Cifra, Ária, Sharkorno e as participações só devem aparecer a partir do planeta em que entram na trama.
 

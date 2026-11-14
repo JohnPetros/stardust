@@ -39,8 +39,8 @@ Este documento é prospectivo: estabelece o funcionamento aprovado, sem afirmar 
 | --- | --- | --- |
 | S1 | Este PRD canônico, revisão de 2026-10-11 | Autoridade versionada para as questões e os exemplos de programação em blocos. |
 | S2 | Pedido, catálogo e decisões de produto aprovados em 2026-10-11 | Define modalidades, blocos disponíveis, avaliação determinística, controles, cenas e retomada. |
-| S3 | [Histórias interativas](lesson-page.md), revisão de 2026-10-11 | Define sequência, destaque, histórico, vidas, conclusão e continuidade da tentativa. |
-| S4 | [Bloco de Código](code-block.md) | Contexto existente de leitura e execução de código; não substitui as regras específicas das modalidades deste PRD. |
+| S3 | [Histórias interativas](lesson-page-prd.md), revisão de 2026-10-11 | Define sequência, destaque, histórico, vidas, conclusão e continuidade da tentativa. |
+| S4 | [Bloco de Código](code-block-prd.md) | Contexto existente de leitura e execução de código; não substitui as regras específicas das modalidades deste PRD. |
 | S5 | [Procedures — documentação oficial do Blockly](https://docs.blockly.com/guides/create-custom-blocks/procedures/overview/) | Evidência técnica auxiliar de que definições e chamadas de funções podem manter seu vínculo sem conexão física entre os blocos. |
 | S6 | Decisões de design aprovadas em 2026-10-31 | Define o estado no cabeçalho da atividade, os banners de acerto e erro no rodapé e a ação Tentar novamente. |
 

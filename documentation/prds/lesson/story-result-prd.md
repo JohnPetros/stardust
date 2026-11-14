@@ -37,8 +37,8 @@ Esta revisão é prospectiva e não afirma que as regras já estejam implementad
 | --- | --- | --- |
 | S1 | Este PRD canônico, revisão de 2026-10-11 | Autoridade versionada para o resultado e as recompensas de conclusão de histórias. |
 | S2 | Pedido e decisões de produto aprovados em 2026-10-11 | Define valores fixos por história, concessão única, navegação, celebrações, recarregamento, revisão e recuperação. |
-| S3 | [Histórias interativas](lesson-page.md), revisão de 2026-10-11 | Define as condições de conclusão da sequência e o encaminhamento ao resultado. |
-| S4 | [Trilha e Espaço](../space/space-page.md), revisão de 2026-10-11 | Define acesso, ordem, desbloqueio, revisão e retorno à navegação da trilha. |
+| S3 | [Histórias interativas](lesson-page-prd.md), revisão de 2026-10-11 | Define as condições de conclusão da sequência e o encaminhamento ao resultado. |
+| S4 | [Trilha e Espaço](../space/space-page-prd.md), revisão de 2026-10-11 | Define acesso, ordem, desbloqueio, revisão e retorno à navegação da trilha. |
 | S5 | Fluxos existentes de RewardingPage, acesso ao resultado e estado diário da conta | Evidência auxiliar da concessão, celebração de nível antes de streak e limite diário existente; não substitui as regras desta revisão. |
 
 ## 3. Público-alvo

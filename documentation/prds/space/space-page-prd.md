@@ -29,7 +29,7 @@ A experiência deve mostrar onde continuar, o que já foi concluído e o que ain
 
 Os planetas passam a ser interativos. Um planeta liberado precisa ser aberto pelo aluno: o clique libera suas estrelas e apresenta, em um diálogo, o vídeo de apresentação do planeta, que pode ser revisto depois. Todo planeta ainda não aberto mostra um cadeado sobre sua ilustração; no clique, o cadeado se abre e se desfaz antes de o diálogo aparecer. Ao concluir toda a trilha, um vídeo de encerramento precede os agradecimentos. Nesta versão, o planeta oferece apenas esse vídeo.
 
-A trilha de dez planetas definida em [Narrativa e universo das histórias](../lesson/story-narrative.md) substitui a trilha anterior: todos os alunos começam no primeiro planeta e mantêm o que acumularam na conta.
+A trilha de dez planetas definida em [Narrativa e universo das histórias](../lesson/story-narrative-prd.md) substitui a trilha anterior: todos os alunos começam no primeiro planeta e mantêm o que acumularam na conta.
 
 Esta revisão é prospectiva: substitui a descrição anterior da Página de Espaço por regras para a reformulação aprovada. Preserva o caminho canônico e os IDs RP-01 a RP-07, com atualização explícita de seus comportamentos. Não declara que os novos desenhos ou regras já estejam implementados.
 
@@ -47,14 +47,14 @@ Pesquisa competitiva não é material para esta revisão: as decisões decorrem 
 
 | ID | Material | Papel neste PRD |
 | --- | --- | --- |
-| S1 | documentation/prds/space/space-page.md, revisão de 2026-10-11 | Autoridade canônica versionada; esta revisão substitui o conteúdo anterior de 2026-02-28. |
+| S1 | documentation/prds/space/space-page-prd.md, revisão de 2026-10-11 | Autoridade canônica versionada; esta revisão substitui o conteúdo anterior de 2026-02-28. |
 | S2 | Pedido direto e decisões registradas em 2026-10-11 | Regras de progressão, hover desktop, painel inferior mobile e recuperação de falha. |
 | S3 | [Consolidação da sessão](../../../design/trilha-consolidacao.md) | Registro auxiliar das decisões e fronteiras entre PRDs. |
 | S4 | [Sistema de design](../../design.md) | Tokens e convenções visuais. |
-| S5 | [Gerenciamento do Espaço](space-management-planets-and-stars.md) e [Página de Lição](../lesson/lesson-page.md) | Contexto administrativo e de conteúdo; não ampliam o escopo. |
+| S5 | [Gerenciamento do Espaço](space-management-planets-and-stars-prd.md) e [Página de Lição](../lesson/lesson-page-prd.md) | Contexto administrativo e de conteúdo; não ampliam o escopo. |
 | S6 | SpacePage, StarView, useStar, SpaceContext, UnlockStarUseCase e GetNextStarUseCase, consultados via CodeGraph | Evidência auxiliar do comportamento existente; não substitui as decisões prospectivas. |
 | S7 | Decisões de produto aprovadas em 2026-11-13 | Definem a abertura do planeta por clique, o vídeo de apresentação em diálogo, a liberação das estrelas no clique, o vídeo de encerramento, a entrega pré-renderizada e a substituição da trilha. |
-| S8 | [Narrativa e universo das histórias](../lesson/story-narrative.md), revisão de 2026-11-13 | Define os dez planetas, sua ordem e o conteúdo dos vídeos de apresentação e de encerramento. |
+| S8 | [Narrativa e universo das histórias](../lesson/story-narrative-prd.md), revisão de 2026-11-13 | Define os dez planetas, sua ordem e o conteúdo dos vídeos de apresentação e de encerramento. |
 | S9 | PlanetView e página de encerramento existentes na Web App | Evidência auxiliar: o planeta atual é uma ilustração sem interação e os agradecimentos já existem como encerramento. |
 | S10 | Decisões de produto sobre o cadeado do planeta aprovadas em 2026-11-13 | Definem o cadeado sobre a ilustração dos planetas bloqueados e liberados, o movimento em loop apenas no planeta liberado e a animação de abertura que precede o diálogo do vídeo. |
 | S11 | Decisões de produto sobre o formato dos vídeos aprovadas em 2026-11-13 | Definem os vídeos como animações em motion graphics com áudio, compreensíveis pela imagem, com texto incorporado à animação apenas quando necessário, sem legendas separadas e com controle de som no diálogo. |
@@ -170,7 +170,7 @@ Atores: aluno autenticado.
 
 - A estrela atual deve ser reconhecível pelo destaque e pelos estados do mapa.
 - A distinção entre estrela atual e estrela consultada para revisão deve permanecer clara.
-- O foguete indicador de posição deve preservar a identidade atual da aplicação. Ele é o foguete único da aplicação, igual para todos os alunos, conforme [Página de Loja](../shop/shop-page.md).
+- O foguete indicador de posição deve preservar a identidade atual da aplicação. Ele é o foguete único da aplicação, igual para todos os alunos, conforme [Página de Loja](../shop/shop-page-prd.md).
 
 #### RP-03 — Entrada orientada e FAB de reposicionamento
 
@@ -381,7 +381,7 @@ Atores: aluno autenticado.
 - Um planeta bloqueado não deve abrir o diálogo nem reproduzir o vídeo; deve apresentar sua condição de liberação.
 - Os vídeos devem ser arquivos previamente renderizados. A aplicação não deve compor nem renderizar vídeo durante o uso.
 - Cada planeta deve possuir um único vídeo de apresentação. Nesta versão, o planeta não oferece outras atividades ou conteúdos.
-- O conteúdo de cada vídeo deve seguir [Narrativa e universo das histórias](../lesson/story-narrative.md).
+- O conteúdo de cada vídeo deve seguir [Narrativa e universo das histórias](../lesson/story-narrative-prd.md).
 
 ##### Regras de Experiência
 
@@ -416,7 +416,7 @@ Atores: aluno autenticado com conclusão total confirmada.
 - O vídeo deve preceder os agradecimentos existentes no acesso ao encerramento.
 - O aluno deve poder pular o vídeo e seguir para os agradecimentos.
 - Rever o encerramento não deve alterar progresso nem conceder recompensas.
-- O vídeo deve ser um arquivo previamente renderizado, com conteúdo definido em [Narrativa e universo das histórias](../lesson/story-narrative.md).
+- O vídeo deve ser um arquivo previamente renderizado, com conteúdo definido em [Narrativa e universo das histórias](../lesson/story-narrative-prd.md).
 
 ##### Regras de Experiência
 

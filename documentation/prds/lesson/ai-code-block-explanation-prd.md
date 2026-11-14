@@ -15,7 +15,7 @@ last_updated_at: 2026-10-31
 
 # PRD — Explicação de bloco de código por IA
 
-> **Restaurada nas histórias em 2026-10-31:** a descontinuação de 2026-10-11 foi revertida. A explicação de código por IA volta a estar disponível nos exemplos de leitura e no código de referência de múltipla escolha, com o botão sempre visível. Questões de escrita não oferecem a explicação. A avaliação das respostas continua com o Jev. Regras vigentes: [Escrita de código](code-writing.md#rp-09--oferecer-a-explicação-de-código-por-ia-fora-das-questões-de-escrita) e [Bloco de Código](code-block.md). Termos como Story e Quiz abaixo refletem a estrutura anterior da lição e correspondem aos blocos e às questões das histórias.
+> **Restaurada nas histórias em 2026-10-31:** a descontinuação de 2026-10-11 foi revertida. A explicação de código por IA volta a estar disponível nos exemplos de leitura e no código de referência de múltipla escolha, com o botão sempre visível. Questões de escrita não oferecem a explicação. A avaliação das respostas continua com o Jev. Regras vigentes: [Escrita de código](code-writing-prd.md#rp-09--oferecer-a-explicação-de-código-por-ia-fora-das-questões-de-escrita) e [Bloco de Código](code-block-prd.md). Termos como Story e Quiz abaixo refletem a estrutura anterior da lição e correspondem aos blocos e às questões das histórias.
 
 Disponibiliza para: lesson; consumidores adicionais não explicitados no documento legado.
 

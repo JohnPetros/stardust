@@ -6,27 +6,27 @@ source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/issues/620
   - type: prd
-    ref: documentation/prds/auth/sign-in.md
+    ref: documentation/prds/auth/sign-in-prd.md
     revision: 2026-08-30
     requirements: [RP-01, RP-02, RP-03, RP-04]
     journeys: [JN-01]
   - type: prd
-    ref: documentation/prds/auth/sign-up.md
+    ref: documentation/prds/auth/sign-up-prd.md
     revision: 2026-06-17
     requirements: [RP-01, RP-02, RP-06, RP-07]
     journeys: [JN-01]
   - type: prd
-    ref: documentation/prds/auth/password-reset.md
+    ref: documentation/prds/auth/password-reset-prd.md
     revision: 2026-06-24
     requirements: [RP-01, RP-02, RP-03, RP-04]
     journeys: [JN-01]
   - type: prd
-    ref: documentation/prds/auth/account-confirmation.md
+    ref: documentation/prds/auth/account-confirmation-prd.md
     revision: 2026-06-28
     requirements: [RP-02, RP-03, RP-04]
     journeys: [JN-01]
   - type: prd
-    ref: documentation/prds/auth/social-account-confirmation.md
+    ref: documentation/prds/auth/social-account-confirmation-prd.md
     revision: 2026-06-15
     requirements: [RP-02, RP-03, RP-05, RP-06]
     journeys: [JN-01]
@@ -110,11 +110,11 @@ complexidade (D-14).
 
 | PRD | RP cobertos | JN | RF desta Spec |
 | --- | --- | --- | --- |
-| `sign-in.md` | RP-01 principal, RP-02, RP-03, RP-04 | JN-01 | RF-06, RF-11, RF-12 |
-| `sign-up.md` | RP-01, RP-02, RP-06, RP-07 | JN-01 | RF-07, RF-11, RF-12 |
-| `password-reset.md` | RP-01 a RP-04 | JN-01 | RF-08, RF-11, RF-12 |
-| `account-confirmation.md` | RP-02 a RP-04 | JN-01 | RF-09, RF-12 |
-| `social-account-confirmation.md` | RP-02, RP-03, RP-05 e RP-06 como suporte | JN-01 | RF-10, RF-12 |
+| `sign-in-prd.md` | RP-01 principal, RP-02, RP-03, RP-04 | JN-01 | RF-06, RF-11, RF-12 |
+| `sign-up-prd.md` | RP-01, RP-02, RP-06, RP-07 | JN-01 | RF-07, RF-11, RF-12 |
+| `password-reset-prd.md` | RP-01 a RP-04 | JN-01 | RF-08, RF-11, RF-12 |
+| `account-confirmation-prd.md` | RP-02 a RP-04 | JN-01 | RF-09, RF-12 |
+| `social-account-confirmation-prd.md` | RP-02, RP-03, RP-05 e RP-06 como suporte | JN-01 | RF-10, RF-12 |
 
 Os PRDs não definem requisitos visuais; a autoridade visual é o Penpot `stardust`. Os PRDs fixam o comportamento
 que esta entrega deve preservar.

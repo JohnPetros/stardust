@@ -14,7 +14,7 @@ last_updated_at: 2026-09-29
 
 - Spec: revisão 40, in_progress; CA-03 cobre somente o caminho protegido do Studio. O cenário Web foi removido por decisão do usuário. Publishable keys em Server/Web, Envoy para o gateway local e PostgreSQL direto somente nas operações administrativas de feedback. Drizzle/RLS permanecem para a próxima task; migrations não mudam. Spec Reviewer rev40 clear.
 - Plan: reconciliado para revisão 40, status in_progress; Builders e paired reviews concluídos, com P2 no handoff final.
-- Autoridade de produto: documentation/prds/auth/sign-in.md, RP-01, RP-02, JN-01; Issue #601 foi lida. As decisões de execução usam a revisão vigente da Spec.
+- Autoridade de produto: documentation/prds/auth/sign-in-prd.md, RP-01, RP-02, JN-01; Issue #601 foi lida. As decisões de execução usam a revisão vigente da Spec.
 - Commit-base: 0b2ea4cae4870067d506a257f2d3244ecbab742c.
 - Commit-base: `0b2ea4cae4870067d506a257f2d3244ecbab742c`; implementação registrada nos commits da branch até `2d5cc61bbf4a17f3c2c972f18704aee272f869d6`. CI remoto de PR foi dispensado como gate de evidência pelo usuário; o fluxo de conclusão ainda exige checks verdes no head publicado.
 - Design: sem Design Contract, sem widgets alterados.

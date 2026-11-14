@@ -49,10 +49,10 @@ A revisão é prospectiva: descreve o comportamento aprovado para a reformulaç�
 | --- | --- | --- |
 | S1 | Este PRD canônico, revisão de 2026-10-11 | Autoridade versionada para a experiência comum das histórias interativas. Substitui a revisão de Página de Lição de 2026-07-06. |
 | S2 | Pedido e decisões de produto aprovados em 2026-10-11 | Define blocos, destaque, questões integradas, dez vidas, reinício integral e retomada vinculada à conta. |
-| S3 | [Trilha e Espaço](../space/space-page.md) | Define planetas, estrelas, sequência, acesso e navegação pelo Espaço. |
+| S3 | [Trilha e Espaço](../space/space-page-prd.md) | Define planetas, estrelas, sequência, acesso e navegação pelo Espaço. |
 | S4 | [Milestone 23](https://github.com/JohnPetros/stardust/milestone/23) | Contexto legado de história estruturada e consumo de narração persistida. |
 | S5 | Fluxos existentes de Lesson, StoryStage e QuizStage na Web App | Evidência auxiliar do comportamento anterior e do diálogo de vidas esgotadas; não substitui as decisões desta revisão. |
-| S6 | [Narrativa e universo das histórias](story-narrative.md), revisão de 2026-11-13 | Define enredo, elenco, planetas e reviravoltas apresentados pela sequência de blocos. |
+| S6 | [Narrativa e universo das histórias](story-narrative-prd.md), revisão de 2026-11-13 | Define enredo, elenco, planetas e reviravoltas apresentados pela sequência de blocos. |
 | S7 | [Story Writing Rules](../../rules/story-writing-rules.md) | Define ritmo, ordem das questões e estrutura do conteúdo de cada história. |
 | S8 | Decisão de produto aprovada em 2026-11-13 | Define os eventos que medem o percurso da história, sem metas numéricas. |
 | S9 | Decisões de produto aprovadas em 2026-11-13 | Definem a energia da nave como apresentação das vidas, a resposta aprovada como ação do aluno, o ambiente por planeta e os efeitos sonoros de sistema e de história. |
@@ -376,7 +376,7 @@ Atores: aluno autenticado; equipe de produto e de conteúdo, como consumidora do
 
 - A retomada de uma tentativa incompleta não deve ser registrada como história iniciada.
 - Os eventos não devem incluir o conteúdo das respostas, como o código escrito ou o texto das alternativas.
-- A identificação do aluno e o envio dos eventos devem seguir [Analytics de Produto](../analytics/product-analytics.md).
+- A identificação do aluno e o envio dos eventos devem seguir [Analytics de Produto](../analytics/product-analytics-prd.md).
 - Falha no registro de um evento não deve impedir, atrasar ou alterar a progressão, as vidas ou a conclusão.
 - Este PRD não define metas numéricas para as métricas derivadas desses eventos.
 
@@ -412,7 +412,7 @@ Atores: aluno autenticado.
 - Ao retomar uma história incompleta, o som ambiente deve ser o clima em vigor no ponto de continuidade.
 - Consultar o histórico não deve alterar o clima em vigor.
 - Recomeçar história deve devolver o som ambiente ao som de base.
-- As cores dos blocos de texto devem permanecer fixas por personagem ou tipo, conforme RP-02 e [Blocos de texto e narração](text-blocks-and-narration.md).
+- As cores dos blocos de texto devem permanecer fixas por personagem ou tipo, conforme RP-02 e [Blocos de texto e narração](text-blocks-and-narration-prd.md).
 - O som ambiente deve vir silenciado por padrão. O aluno deve poder ativá-lo, silenciá-lo e ajustar seu volume pelos controles de áudio de RP-13, e essas preferências devem acompanhar a conta entre sessões e dispositivos.
 - O som ambiente não deve reproduzir enquanto estiver silenciado nem substituir a narração ou os efeitos sonoros.
 - A ausência ou a falha de carregamento do fundo ou do som ambiente não deve impedir leitura, resposta, avanço ou conclusão.
@@ -487,7 +487,7 @@ Atores: aluno autenticado.
 - As configurações devem ser persistidas e aplicadas automaticamente ao abrir qualquer outra história, sem nova ação do aluno.
 - O silenciamento e o volume do som ambiente devem acompanhar a conta entre sessões e dispositivos, conforme RP-11. O silenciamento dos efeitos deve ser a preferência de som já existente na aplicação, e o volume dos efeitos deve ser guardado junto a ela.
 - Os padrões devem ser: som ambiente silenciado e efeitos ativos. O volume inicial de cada categoria deve ser o volume padrão.
-- O diálogo deve oferecer também a reprodução automática da narração, como a mesma preferência definida em [Blocos de texto e narração](text-blocks-and-narration.md). Ativá-la não deve iniciar a narração do bloco atual; ela vale para os blocos revelados depois de Continuar. O diálogo não ajusta o volume da narração.
+- O diálogo deve oferecer também a reprodução automática da narração, como a mesma preferência definida em [Blocos de texto e narração](text-blocks-and-narration-prd.md). Ativá-la não deve iniciar a narração do bloco atual; ela vale para os blocos revelados depois de Continuar. O diálogo não ajusta o volume da narração.
 - Ativar e silenciar devem ser as mesmas preferências disponíveis fora da história; o diálogo não deve criar preferências exclusivas de uma história.
 - Abrir, usar ou fechar o diálogo não deve alterar vidas, progresso, resposta em andamento ou estado da questão, nem ser tratado como saída da história.
 - Uma falha ao guardar uma configuração não deve impedir a leitura, a resposta ou o avanço; a configuração deve continuar valendo na história em andamento.
@@ -603,12 +603,12 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 | Resultado e recompensas | Cálculo de XP e moedas, apresentação do resultado e streak. |
 | Áudio | Geração, cancelamento ou gerenciamento de arquivos e novas vozes. |
 | Implementação | Contratos de armazenamento, sincronização, concorrência entre dispositivos e infraestrutura de execução. |
-| Narrativa | Enredo, elenco, planetas e reviravoltas, definidos em [Narrativa e universo das histórias](story-narrative.md). |
+| Narrativa | Enredo, elenco, planetas e reviravoltas, definidos em [Narrativa e universo das histórias](story-narrative-prd.md). |
 | Metas de medição | Metas numéricas para tempo por estrela, taxa de erro, abandono ou conclusão. |
 | Produção de som e ambiente | Criação, seleção e gerenciamento dos efeitos sonoros, dos sons de base, dos climas e dos fundos de cada planeta; a definição de quais climas compõem o conjunto. |
 | Volume da narração e volume geral | Ajuste do volume da narração e um controle único de volume para todo o áudio; o diálogo ajusta apenas som ambiente e efeitos. |
 | Volume nas configurações | Oferta dos controles de volume fora da história, nas configurações da aplicação. |
-| Vídeos | Vídeos de apresentação dos planetas e de encerramento da trilha, definidos em [Trilha e Espaço](../space/space-page.md). A história não reproduz vídeos. |
+| Vídeos | Vídeos de apresentação dos planetas e de encerramento da trilha, definidos em [Trilha e Espaço](../space/space-page-prd.md). A história não reproduz vídeos. |
 | Preferência de som existente | Mudança da preferência de som da aplicação para a conta ou alteração de seu controle nas configurações. |
 
 ### Decisões descartadas durante a definição

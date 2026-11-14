@@ -93,7 +93,7 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 ##### Regras de Negócio
 - **Identidade da conta:** o sistema deve exibir nome, avatar, nível, XP e data de entrada do usuário.
-- **Adornos da conta:** o sistema deve exibir o tier associado ao usuário. O foguete não é exibido no perfil, porque é único e igual para todos os usuários, conforme [Página de Loja](../shop/shop-page.md).
+- **Adornos da conta:** o sistema deve exibir o tier associado ao usuário. O foguete não é exibido no perfil, porque é único e igual para todos os usuários, conforme [Página de Loja](../shop/shop-page-prd.md).
 - **Dono da conta:** o sistema deve identificar se o visitante autenticado está acessando o próprio perfil.
 - **Ações exclusivas do dono:** apenas o dono do perfil pode acessar os atalhos de configurações e snippets de código.
 

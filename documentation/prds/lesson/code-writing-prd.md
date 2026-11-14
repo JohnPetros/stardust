@@ -41,9 +41,9 @@ A revisão é prospectiva: descreve o comportamento aprovado, sem afirmar que el
 | --- | --- | --- |
 | S1 | Este PRD canônico, revisão de 2026-10-11 | Autoridade versionada para questões de escrita e exemplos de leitura de código nas histórias. |
 | S2 | Pedido e decisões de produto aprovados em 2026-10-11 | Define execução anterior à análise, editor editável, Jev, requisitos, vidas, retomada e retirada da explicação de código por IA. |
-| S3 | [Histórias interativas](lesson-page.md), revisão de 2026-10-11 | Define sequência, destaque, histórico, vidas, reinício integral e continuidade da tentativa. |
-| S4 | [Bloco de Código](code-block.md) | Contexto existente de apresentação, cópia, restauração e execução; as modalidades desta revisão seguem as regras específicas deste PRD. |
-| S5 | [Explicação de bloco de código por IA](ai-code-block-explanation.md), revisão de 2026-10-31 | Define a explicação por IA, restaurada nas histórias e distinta da avaliação de respostas pelo Jev. |
+| S3 | [Histórias interativas](lesson-page-prd.md), revisão de 2026-10-11 | Define sequência, destaque, histórico, vidas, reinício integral e continuidade da tentativa. |
+| S4 | [Bloco de Código](code-block-prd.md) | Contexto existente de apresentação, cópia, restauração e execução; as modalidades desta revisão seguem as regras específicas deste PRD. |
+| S5 | [Explicação de bloco de código por IA](ai-code-block-explanation-prd.md), revisão de 2026-10-31 | Define a explicação por IA, restaurada nas histórias e distinta da avaliação de respostas pelo Jev. |
 | S6 | Decisões de produto aprovadas em 2026-10-31 | Revertem a retirada da explicação por IA nos exemplos e no código de referência e a mantêm fora das questões de escrita. |
 
 ## 3. Público-alvo

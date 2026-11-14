@@ -45,10 +45,10 @@ Esta revisão é prospectiva; não declara que todos os comportamentos já estej
 | --- | --- | --- |
 | S1 | Este PRD canônico, revisão de 2026-11-13 | Autoridade versionada para as capacidades comuns; substitui a vinculação entre edição e execução da revisão de 2026-04-07. |
 | S2 | Revisão das capacidades por contexto aprovada em 2026-10-14 | Confirma a separação entre leitura, edição e execução e o alinhamento aos PRDs específicos. |
-| S3 | [Escrita de código](code-writing.md), revisão de 2026-10-11 | Define exemplos somente leitura executáveis, editor de resposta, bloqueios, restauração, cópia e análise pelo Jev. |
-| S4 | [Múltipla escolha](multiple-choice.md), revisão de 2026-11-13 | Define o código do enunciado como somente leitura, com execução opcional, e o modo previsão, em que a execução fica indisponível até a aprovação. |
-| S5 | [Programação em blocos](block-programming.md), revisão de 2026-10-11 | Define código gerado somente leitura e execução conforme modalidade da atividade. |
-| S6 | [Histórias interativas](lesson-page.md) e [Blocos de texto e narração](text-blocks-and-narration.md), revisões de 2026-10-11 | Definem sequência, histórico, destaque e consumo de narração do contexto. |
+| S3 | [Escrita de código](code-writing-prd.md), revisão de 2026-10-11 | Define exemplos somente leitura executáveis, editor de resposta, bloqueios, restauração, cópia e análise pelo Jev. |
+| S4 | [Múltipla escolha](multiple-choice-prd.md), revisão de 2026-11-13 | Define o código do enunciado como somente leitura, com execução opcional, e o modo previsão, em que a execução fica indisponível até a aprovação. |
+| S5 | [Programação em blocos](block-programming-prd.md), revisão de 2026-10-11 | Define código gerado somente leitura e execução conforme modalidade da atividade. |
+| S6 | [Histórias interativas](lesson-page-prd.md) e [Blocos de texto e narração](text-blocks-and-narration-prd.md), revisões de 2026-10-11 | Definem sequência, histórico, destaque e consumo de narração do contexto. |
 | S7 | [Milestone 24](https://github.com/JohnPetros/stardust/milestone/24) | Contexto legado das capacidades de apresentação, cópia, restauração e execução de snippets. |
 | S8 | Decisões de produto aprovadas em 2026-10-31 | Tornam todas as ações do bloco visíveis nas histórias (explicar com IA, restaurar, copiar e executar), inclusive em código somente leitura e no código de referência de múltipla escolha; a explicação por IA não aparece nas questões de escrita. |
 | S9 | Decisão de produto aprovada em 2026-11-13 | Mantém executar visível e o torna indisponível até a aprovação nas questões de múltipla escolha em modo previsão; não altera a explicação por IA. |
@@ -339,7 +339,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 | Progressão e recompensas | Vidas, desbloqueio, conclusão, XP, StarCoins e streak. |
 | Autoria | Novas ferramentas ou reformulação dos formulários existentes. |
 | Desafios independentes | Mudanças nas regras de edição, execução e avaliação desses fluxos. |
-| Explicação por IA | Regras de geração, limites de uso e cache das explicações, definidas em [Explicação de bloco de código por IA](ai-code-block-explanation.md). |
+| Explicação por IA | Regras de geração, limites de uso e cache das explicações, definidas em [Explicação de bloco de código por IA](ai-code-block-explanation-prd.md). |
 | Playback | Reformulação do playback estático, tratado em PRD próprio. |
 | Compartilhamento | Versionamento de edições, compartilhamento por link e exportação estruturada. |
 
