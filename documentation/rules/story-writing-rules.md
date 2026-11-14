@@ -1,419 +1,441 @@
-# Story Writing Rules
+# Regras de Escrita de Histórias
 
-# Overview
+# Visão Geral
 
-A story is the content of a lesson star: an ordered sequence of text blocks,
-visuals, read-only examples and questions. These rules define how a story must
-be written so that the student spends more time practicing than reading.
+Uma história é o conteúdo de uma estrela de lição: uma sequência ordenada de
+blocos de texto, visuais, exemplos somente leitura e questões. Estas regras
+definem como uma história deve ser escrita para que o estudante passe mais
+tempo praticando do que lendo.
 
-## Goal
+## Objetivo
 
-Standardize the pacing, the question mix and the structure of every story, so
-that each star teaches one concept through explanation followed immediately by
-practice.
+Padronizar o ritmo, a combinação de questões e a estrutura de toda história,
+para que cada estrela ensine um conceito por meio de uma explicação seguida
+imediatamente de prática.
 
-## Responsibilities
+## Responsabilidades
 
-- Limit continuous reading and interleave it with questions.
-- Order the questions of a star from recognition to writing.
-- Reuse earlier concepts so they are not forgotten.
-- Open and close every star with a narrative hook.
-- Keep the mechanics inside the fiction: ship energy, hints spoken by Faísca,
-  answers that read as actions of the student.
-- Keep every story consistent with the approved narrative.
+- Limitar a leitura contínua e intercalá-la com questões.
+- Ordenar as questões de uma estrela do reconhecimento à escrita.
+- Reutilizar conceitos anteriores para que não sejam esquecidos.
+- Abrir e fechar toda estrela com um gancho narrativo.
+- Manter as mecânicas dentro da ficção: energia da nave, dicas ditas pela
+  Faísca, respostas que soam como ações do estudante.
+- Manter toda história consistente com a narrativa aprovada.
 
-## Boundaries
+## Limites
 
-- These rules cover the **content** of a story. The behavior of the lesson page
-  (lives, progress, resume, highlight, history) belongs to the PRDs under
-  `documentation/prds/lesson/`.
-- The plot, the cast and what each planet reveals belong to
-  [Narrativa e universo das histórias](../prds/lesson/story-narrative.md). A
-  story must not contradict or anticipate it.
-- Every Delégua snippet in a story also follows the
-  [Delegua Language Rules](delegua-rules.md).
-- The planet videos are watched in the Space, not in the story, and belong to
-  [Trilha e Espaço](../prds/space/space-page.md). The student can skip them, so
-  a story must stand without them.
-- These rules do not cover challenge stars, which are evaluated independently.
-- Student-facing content is written in PT-BR. This document is in English, like
-  the other rules, and quotes PT-BR product terms literally.
+- Estas regras cobrem o **conteúdo** de uma história. O comportamento da página
+  de lição (vidas, progresso, retomada, destaque, histórico) pertence aos PRDs
+  em `documentation/prds/lesson/`.
+- O enredo, o elenco e o que cada planeta revela pertencem a
+  [Narrativa e universo das histórias](../prds/lesson/story-narrative.md). Uma
+  história não deve contradizê-la nem antecipá-la.
+- Todo trecho de Delégua em uma história também segue as
+  [Regras da Linguagem Delégua](delegua-rules.md).
+- Os vídeos dos planetas são assistidos no Espaço, não na história, e pertencem
+  a [Trilha e Espaço](../prds/space/space-page.md). O estudante pode pulá-los,
+  portanto uma história deve se sustentar sem eles.
+- Estas regras não cobrem as estrelas de desafio, que são avaliadas de forma
+  independente.
+- O conteúdo voltado ao estudante é escrito em PT-BR. Este documento também
+  está em PT-BR, como as demais regras, e cita os termos do produto
+  literalmente.
 
-# Global Directory Structure
+# Estrutura de Diretórios Globais
 
-Story content and its authorities live in:
+O conteúdo das histórias e as suas autoridades ficam em:
 
-- `documentation/prds/lesson/story-narrative.md`: plot, cast, planets, twists
-  and the story code.
-- `documentation/prds/lesson/lesson-page.md`: block sequence, questions, lives,
-  history and highlight.
+- `documentation/prds/lesson/story-narrative.md`: enredo, elenco, planetas,
+  reviravoltas e o código da história.
+- `documentation/prds/lesson/lesson-page.md`: sequência de blocos, questões,
+  vidas, histórico e destaque.
 - `documentation/prds/lesson/multiple-choice.md`,
-  `documentation/prds/lesson/block-programming.md` and
-  `documentation/prds/lesson/code-writing.md`: the three question types.
-- `documentation/prds/lesson/text-blocks-and-narration.md` and
-  `documentation/prds/lesson/visual-blocks.md`: text block types and visuals.
-- `documentation/prds/space/space-page.md`: planet opening, the presentation
-  video of each planet and the closing video of the trail.
-- `apps/web/src/mocks/lesson/planets/planet<N>/star<N>/`: `texts.ts` and
-  `questions.ts` of each star.
-- `apps/server/src/database/seeders/data/seed-catalog.json`: the catalog
-  snapshot that seeds planets and stars locally.
+  `documentation/prds/lesson/block-programming.md` e
+  `documentation/prds/lesson/code-writing.md`: os três tipos de questão.
+- `documentation/prds/lesson/text-blocks-and-narration.md` e
+  `documentation/prds/lesson/visual-blocks.md`: tipos de bloco de texto e
+  visuais.
+- `documentation/prds/space/space-page.md`: abertura do planeta, o vídeo de
+  apresentação de cada planeta e o vídeo de encerramento da trilha.
+- `apps/web/src/mocks/lesson/planets/planet<N>/star<N>/`: `texts.ts` e
+  `questions.ts` de cada estrela.
+- `apps/server/src/database/seeders/data/seed-catalog.json`: o snapshot do
+  catálogo que popula planetas e estrelas localmente.
 
-## Organization
+## Organização
 
-- One star teaches one concept. A second concept belongs to another star.
-- The star order inside a planet follows the pedagogical progression, not the
-  order of the plot.
-- A story is written for the block types and question types the PRDs define. A
-  rule here must not require a capability the PRDs do not provide.
+- Uma estrela ensina um conceito. Um segundo conceito pertence a outra estrela.
+- A ordem das estrelas dentro de um planeta segue a progressão pedagógica, não
+  a ordem do enredo.
+- Uma história é escrita para os tipos de bloco e os tipos de questão que os
+  PRDs definem. Uma regra daqui não deve exigir uma capacidade que os PRDs não
+  oferecem.
 
-# Core Principles
+# Princípios Fundamentais
 
-## Must contain
+## Deve conter
 
-### At most five consecutive text blocks
+### No máximo cinco blocos de texto consecutivos
 
-A story must not present more than five text blocks in a row before a
-question.
+Uma história não deve apresentar mais de cinco blocos de texto seguidos antes
+de uma questão.
 
-- Only text blocks count. Read-only examples and visuals neither count nor
-  reset the count.
-- The count resets at every question.
-- A story that needs more than five text blocks to explain something must be
-  split by a question about what was just explained.
+- Somente os blocos de texto contam. Exemplos somente leitura e visuais não
+  contam nem reiniciam a contagem.
+- A contagem reinicia a cada questão.
+- Uma história que precisa de mais de cinco blocos de texto para explicar algo
+  deve ser dividida por uma questão sobre o que acabou de ser explicado.
 
-### Predict before running
+### Prever antes de executar
 
-Before the student can run a read-only example whose output teaches the
-concept, the story must ask what the code will print.
+Antes que o estudante possa executar um exemplo somente leitura cuja saída
+ensina o conceito, a história deve perguntar o que o código vai escrever.
 
-- Use a multiple-choice question in prediction mode (`modo previsão`), which
-  keeps `Executar` unavailable until the question is approved.
-- After approval, the student runs the code to confirm the prediction.
-- The alternatives must be plausible outputs, including the outputs produced by
-  common misreadings of the code.
+- Use uma questão de múltipla escolha em `modo previsão`, que
+  mantém `Executar` indisponível até a questão ser aprovada.
+- Após a aprovação, o estudante executa o código para confirmar a previsão.
+- As alternativas devem ser saídas plausíveis, incluindo as saídas produzidas
+  por leituras equivocadas comuns do código.
 
-### A ladder in every star
+### Uma escada em toda estrela
 
-The questions of a star must follow this order of difficulty:
+As questões de uma estrela devem seguir esta ordem de dificuldade:
 
-1. **Predict**: multiple choice about what a snippet does.
-2. **Assemble**: block programming with a curated set of blocks.
-3. **Complete**: code writing that starts from an initial snippet.
-4. **Write**: code writing from scratch.
+1. **Prever**: múltipla escolha sobre o que um trecho faz.
+2. **Montar**: programação em blocos com um conjunto selecionado de blocos.
+3. **Completar**: escrita de código que parte de um trecho inicial.
+4. **Escrever**: escrita de código do zero.
 
-A star may skip a step that does not fit its concept, but it must not reorder
-the steps, and it must end with a code-writing question.
+Uma estrela pode pular um degrau que não se encaixa no seu conceito, mas não
+deve reordenar os degraus e deve terminar com uma questão de escrita de
+código.
 
-**Exception:** a star that teaches no syntax is exempt from the code-writing
-requirement. Today the only one is the programming-logic star of the first
-planet. A new exception must be added to this list before the star is written.
+**Exceção:** uma estrela que não ensina sintaxe está isenta do requisito de
+escrita de código. Hoje a única é a estrela de lógica de programação do
+primeiro planeta. Uma nova exceção deve ser adicionada a esta lista antes de a
+estrela ser escrita.
 
-### Fix-the-bug questions
+### Questões de corrigir o erro
 
-Each planet must contain at least one code-writing question whose initial
-snippet is broken code that the student repairs.
+Cada planeta deve conter pelo menos uma questão de escrita de código cujo
+trecho inicial é um código quebrado que o estudante conserta.
 
-- In the fiction, the broken code is something Faísca ran without thinking.
-- The snippet must contain exactly one kind of mistake, and that mistake must
-  be a common one for the concept of the star.
-- Use the completion modality of code writing. The whole editor stays editable.
+- Na ficção, o código quebrado é algo que a Faísca executou sem pensar.
+- O trecho deve conter exatamente um tipo de erro, e esse erro deve ser comum
+  para o conceito da estrela.
+- Use a modalidade de completar da escrita de código. O editor inteiro
+  permanece editável.
 
-### Embedded review
+### Revisão embutida
 
-- The first question of every star, except the first star of the trail, must
-  be about the concept of the previous star.
-- The challenge star that closes a planet must require at least one concept
-  from an earlier planet.
+- A primeira questão de toda estrela, exceto a primeira estrela da trilha,
+  deve ser sobre o conceito da estrela anterior.
+- A estrela de desafio que fecha um planeta deve exigir pelo menos um conceito
+  de um planeta anterior.
 
-### Wrong alternatives with a purpose
+### Alternativas erradas com propósito
 
-- Every incorrect alternative of a multiple-choice question must represent a
-  specific, common beginner mistake. An alternative that no student would
-  choose must be replaced.
-- Every incorrect alternative must have its own hint (`dica`). The hint
-  addresses the mistake behind that alternative and must not reveal or point to
-  the correct one.
-- The success feedback explains why the correct alternative is correct.
+- Toda alternativa incorreta de uma questão de múltipla escolha deve
+  representar um erro específico e comum de iniciante. Uma alternativa que
+  nenhum estudante escolheria deve ser substituída.
+- Toda alternativa incorreta deve ter a sua própria `dica`. A dica trata
+  do erro por trás daquela alternativa e não deve revelar nem apontar a
+  correta.
+- O feedback de acerto explica por que a alternativa correta está correta.
 
-### A visible consequence after written code
+### Uma consequência visível após o código escrito
 
-After a code-writing question, the next block must be a highlighted visual
-that shows what the approved code caused in the story: the rocket takes off,
-the door opens, the ship rejoins the convoy.
+Após uma questão de escrita de código, o bloco seguinte deve ser um visual em
+destaque que mostra o que o código aprovado causou na história: o foguete
+decola, a porta se abre, a nave se reúne ao comboio.
 
-### A summary at the end
+### Um resumo no final
 
-The last block of every story must be a text block of type `informação` with
-at most three lines stating what the student learned in the star.
+O último bloco de toda história deve ser um bloco de texto do tipo
+`informação`, com no máximo três linhas, declarando o que o estudante aprendeu
+na estrela.
 
-### A hook at both ends
+### Um gancho nas duas pontas
 
-Every star must open and close with a narrative hook, written as text blocks.
+Toda estrela deve abrir e fechar com um gancho narrativo, escrito como blocos
+de texto.
 
-- **Opening hook.** The first blocks of the star, before the first question,
-  state what is happening in the planet right now and what is at stake. They
-  count toward the five-block limit.
-- **Closing hook.** The block immediately before the summary leaves an open
-  question about what comes next, so the student has a reason to return.
-- A hook must not recap the plot. It moves the story forward.
-- A hook must not repeat what the planet video shows, and must not depend on
-  the student having watched it.
+- **Gancho de abertura.** Os primeiros blocos da estrela, antes da primeira
+  questão, declaram o que está acontecendo no planeta neste momento e o que
+  está em jogo. Eles contam para o limite de cinco blocos.
+- **Gancho de encerramento.** O bloco imediatamente anterior ao resumo deixa
+  uma pergunta em aberto sobre o que vem a seguir, para que o estudante tenha
+  um motivo para voltar.
+- Um gancho não deve recapitular o enredo. Ele faz a história avançar.
+- Um gancho não deve repetir o que o vídeo do planeta mostra e não deve
+  depender de o estudante tê-lo assistido.
 
-### Hints in Faísca's voice
+### Dicas na voz da Faísca
 
-Every hint of a question must be a line spoken by Faísca, in a block of type
-`dica`.
+Toda dica de uma questão deve ser uma fala dita pela Faísca, em um bloco do
+tipo `dica`.
 
-- Faísca is impulsive: her hints are short and direct, never a lecture.
-- The rules of [Wrong alternatives with a purpose](#wrong-alternatives-with-a-purpose)
-  still apply: the hint addresses the mistake and does not reveal the answer.
+- A Faísca é impulsiva: as suas dicas são curtas e diretas, nunca uma aula.
+- As regras de [Alternativas erradas com propósito](#alternativas-erradas-com-propósito)
+  continuam valendo: a dica trata do erro e não revela a resposta.
 
-### Ship energy, never lives
+### Energia da nave, nunca vidas
 
-In the fiction, a wrong answer is a wrong command that the ship runs, and it
-costs ship energy. Without energy, the ship falls back to the orbit of the
-planet and the story restarts.
+Na ficção, uma resposta errada é um comando errado que a nave executa, e ele
+custa energia da nave. Sem energia, a nave recua para a órbita do planeta e a
+história recomeça.
 
-- Story text must say `energia` or `energia da nave`, never `vidas`.
-- Running a read-only example or testing code costs no energy, and the story
-  must not suggest that it does.
+- O texto da história deve dizer `energia` ou `energia da nave`, nunca `vidas`.
+- Executar um exemplo somente leitura ou testar código não custa energia, e a
+  história não deve sugerir que custa.
 
-### Sound effects that mark events
+### Efeitos sonoros que marcam eventos
 
-A block may have one optional sound effect, chosen from the shared library.
+Um bloco pode ter um efeito sonoro opcional, escolhido da biblioteca
+compartilhada.
 
-- Use a sound effect only on a block where something happens in the story: an
-  alarm, a door, a takeoff, an arrival.
-- Use the same effect for the same event or character across the trail. The
-  presence of the Nulo always uses its own effect.
-- The text or the visual of the block must convey the event on its own: the
-  student may have sound turned off.
+- Use um efeito sonoro somente em um bloco em que algo acontece na história:
+  um alarme, uma porta, uma decolagem, uma chegada.
+- Use o mesmo efeito para o mesmo evento ou personagem ao longo da trilha. A
+  presença do Nulo sempre usa o seu próprio efeito.
+- O texto ou o visual do bloco deve transmitir o evento por conta própria: o
+  estudante pode estar com o som desligado.
 
-### Mood changes at turning points
+### Mudanças de clima nos pontos de virada
 
-Every story starts with the base ambient sound of its planet, which is a
-soundscape of the place, not music. A block may mark a change of mood
-(`clima`), chosen from the set shared by all stories. A mood is discreet
-music.
+Toda história começa com o som ambiente base do seu planeta, que é uma
+paisagem sonora do lugar, não música. Um bloco pode marcar uma mudança de
+`clima`, escolhido do conjunto compartilhado por todas as histórias. Um
+clima é uma música discreta.
 
-- Change the mood only when the scene turns: a threat arrives, a danger
-  passes, something is revealed.
-- A mood lasts until the next change or the end of the star. Return to the
-  base sound of the planet when the turn is over.
-- Use each mood for the same kind of moment across the trail, so the student
-  learns what it means.
-- The mood is sound only, and ambient sound is off by default: the text or the
-  visual must carry the turn without it.
+- Mude o clima somente quando a cena vira: uma ameaça chega, um perigo passa,
+  algo é revelado.
+- Um clima dura até a próxima mudança ou até o fim da estrela. Volte ao som
+  base do planeta quando a virada terminar.
+- Use cada clima para o mesmo tipo de momento ao longo da trilha, para que o
+  estudante aprenda o que ele significa.
+- O clima é apenas som, e o som ambiente vem desligado por padrão: o texto ou
+  o visual deve sustentar a virada sem ele.
 
-## Must not contain
+## Não deve conter
 
-- More than five consecutive text blocks.
-- A read-only example whose output is the point of the lesson, shown without a
-  prediction question before it.
-- A star that ends on a multiple-choice or block-programming question, unless
-  it is a listed exception.
-- A multiple-choice question that can only be answered by elimination because
-  its wrong alternatives are implausible.
-- A hint that states the correct answer or excludes all but one alternative.
-- A question whose answer depends on a concept the trail has not taught yet.
-- A character, place or revelation that contradicts the narrative PRD, or a
-  twist revealed before its planet.
-- A question whose correct answer is who ran the function that erased Lira.
-  The narrative keeps that open.
-- A star that begins with a question or ends without a closing hook.
-- A story that depends on something shown only in a planet video.
-- A hint spoken by a character other than Faísca, or written as interface text
-  with no character.
-- The word `vidas` in story text.
-- A sound effect on an ordinary line of dialogue, or an event that only the
-  sound conveys.
-- A mood that is not in the shared set, or a mood change every few blocks.
-- Delégua code that was not validated in the project interpreter.
+- Mais de cinco blocos de texto consecutivos.
+- Um exemplo somente leitura cuja saída é o ponto central da lição, mostrado
+  sem uma questão de previsão antes dele.
+- Uma estrela que termina em uma questão de múltipla escolha ou de programação
+  em blocos, a menos que seja uma exceção listada.
+- Uma questão de múltipla escolha que só pode ser respondida por eliminação
+  porque as suas alternativas erradas são implausíveis.
+- Uma dica que declara a resposta correta ou exclui todas as alternativas
+  menos uma.
+- Uma questão cuja resposta depende de um conceito que a trilha ainda não
+  ensinou.
+- Um personagem, lugar ou revelação que contradiz o PRD de narrativa, ou uma
+  reviravolta revelada antes do seu planeta.
+- Uma questão cuja resposta correta é quem executou a função que apagou Lira.
+  A narrativa mantém isso em aberto.
+- Uma estrela que começa com uma questão ou termina sem um gancho de
+  encerramento.
+- Uma história que depende de algo mostrado somente em um vídeo de planeta.
+- Uma dica dita por um personagem que não seja a Faísca, ou escrita como texto
+  de interface sem personagem.
+- A palavra `vidas` no texto da história.
+- Um efeito sonoro em uma fala comum de diálogo, ou um evento que somente o
+  som transmite.
+- Um clima que não está no conjunto compartilhado, ou uma mudança de clima a
+  cada poucos blocos.
+- Código Delégua que não foi validado no interpretador do projeto.
 
-# Design Patterns
+# Padrões de Projeto
 
-## Star skeleton
+## Esqueleto da estrela
 
-Use this skeleton as the starting point of a story. Text runs between
-questions stay within the five-block limit.
+Use este esqueleto como ponto de partida de uma história. As sequências de
+texto entre questões ficam dentro do limite de cinco blocos.
 
-1. Opening hook: what is happening in the planet right now.
-2. Review question about the previous star, set in that situation.
-3. Explanation of the concept, with one read-only example.
-4. Prediction question about that example, then the student runs it.
-5. Block-programming question that assembles the same idea.
-6. Code-writing question from an initial snippet. When the planet still lacks
-   one, make it a fix-the-bug question.
-7. Code-writing question from scratch.
-8. Highlighted visual with the consequence in the story.
-9. Closing hook: the question that the next star answers.
-10. Summary block of type `informação`.
+1. Gancho de abertura: o que está acontecendo no planeta neste momento.
+2. Questão de revisão sobre a estrela anterior, ambientada nessa situação.
+3. Explicação do conceito, com um exemplo somente leitura.
+4. Questão de previsão sobre esse exemplo; em seguida, o estudante o executa.
+5. Questão de programação em blocos que monta a mesma ideia.
+6. Questão de escrita de código a partir de um trecho inicial. Quando o planeta
+   ainda não tiver uma, faça dela uma questão de corrigir o erro.
+7. Questão de escrita de código do zero.
+8. Visual em destaque com a consequência na história.
+9. Gancho de encerramento: a pergunta que a próxima estrela responde.
+10. Bloco de resumo do tipo `informação`.
 
-Avoid stretching the skeleton with extra explanation steps. When a concept
-needs a second example, give it its own prediction question.
+Evite esticar o esqueleto com etapas extras de explicação. Quando um conceito
+precisar de um segundo exemplo, dê a ele a sua própria questão de previsão.
 
-## Prediction question
+## Questão de previsão
 
-- The statement asks what the code prints or which value a variable holds at
-  the end.
-- The reference code is the same read-only example the story has just
-  presented, or a small variation of it.
-- Keep the snippet short enough to be traced mentally.
+- O enunciado pergunta o que o código escreve ou qual valor uma variável guarda
+  ao final.
+- O código de referência é o mesmo exemplo somente leitura que a história
+  acabou de apresentar, ou uma pequena variação dele.
+- Mantenha o trecho curto o suficiente para ser acompanhado mentalmente.
 
-Avoid prediction questions for code whose output depends on input the student
-cannot see.
+Evite questões de previsão para código cuja saída depende de uma entrada que o
+estudante não pode ver.
 
-## Fix-the-bug question
+## Questão de corrigir o erro
 
-- The statement says what the code was supposed to do and what happened
-  instead. It does not say where the mistake is.
-- The requirements describe the expected behavior, not the specific edit.
+- O enunciado diz o que o código deveria fazer e o que aconteceu no lugar. Ele
+  não diz onde está o erro.
+- Os requisitos descrevem o comportamento esperado, não a edição específica.
 
-Avoid snippets with several unrelated mistakes: the student cannot tell which
-one the star is about.
+Evite trechos com vários erros não relacionados: o estudante não consegue
+saber de qual deles a estrela trata.
 
-## Question as an action
+## Questão como ação
 
-After approval, the answer appears in the history as an action of the student
-character.
+Após a aprovação, a resposta aparece no histórico como uma ação do personagem
+do estudante.
 
-- Write the statement so that the answer is something the student does in the
-  story: the command sent to the ship, the choice made at a fork, the program
-  that opens a door.
-- Prefer statements spoken by a character who needs that action over
-  statements that address the student as a test-taker.
+- Escreva o enunciado de modo que a resposta seja algo que o estudante faz na
+  história: o comando enviado à nave, a escolha feita em uma bifurcação, o
+  programa que abre uma porta.
+- Prefira enunciados ditos por um personagem que precisa daquela ação a
+  enunciados que tratam o estudante como alguém fazendo uma prova.
 
-Avoid statements such as "Marque a alternativa correta", which make the answer
-read as a test item in the history.
+Evite enunciados como "Marque a alternativa correta", que fazem a resposta
+soar como um item de prova no histórico.
 
-# Applied Usage Patterns
+# Padrões de Uso Aplicados
 
-## Counting text blocks
+## Contagem de blocos de texto
 
-| Sequence | Valid | Reason |
+| Sequência | Válida | Motivo |
 | --- | --- | --- |
-| text, text, text, example, text, text, question | Yes | Five text blocks; the example does not count. |
-| text ×5, visual, text, question | No | Six text blocks; the visual does not reset the count. |
-| text ×5, question, text ×5, question | Yes | The count resets at each question. |
+| texto, texto, texto, exemplo, texto, texto, questão | Sim | Cinco blocos de texto; o exemplo não conta. |
+| texto ×5, visual, texto, questão | Não | Seis blocos de texto; o visual não reinicia a contagem. |
+| texto ×5, questão, texto ×5, questão | Sim | A contagem reinicia a cada questão. |
 
-## Writing a hint
+## Escrita de uma dica
 
-For a question that asks what `escreva("2" + 2)` prints, an alternative of `4`
-comes from treating the text `"2"` as a number.
+Em uma questão que pergunta o que `escreva("2" + 2)` escreve, uma alternativa
+`4` vem de tratar o texto `"2"` como um número.
 
-- Correct hint: "Observe as aspas em volta do primeiro valor."
-- Incorrect hint: "O resultado é um texto, não um número." It reveals the
-  answer category and excludes the other alternatives.
+- Dica correta: "Observe as aspas em volta do primeiro valor."
+- Dica incorreta: "O resultado é um texto, não um número." Ela revela a
+  categoria da resposta e exclui as outras alternativas.
 
-The correct hint also fits Faísca: one short, direct line.
+A dica correta também combina com a Faísca: uma fala curta e direta.
 
-## Choosing a sound effect
+## Escolha de um efeito sonoro
 
-| Block | Sound effect | Reason |
+| Bloco | Efeito sonoro | Motivo |
 | --- | --- | --- |
-| The ship alarm goes off while Panda is talking | Yes | An event happens in this block. |
-| The Nulo appears at the end of a corridor | Yes, the Nulo effect | The same effect marks the Nulo in every planet. |
-| Panda explains what a variable is | No | Nothing happens; it is ordinary speech. |
-| A door opens, and the text only says "Ouça." | No | Only the sound conveys the event. Rewrite the text first. |
+| O alarme da nave dispara enquanto Panda está falando | Sim | Um evento acontece neste bloco. |
+| O Nulo aparece no fim de um corredor | Sim, o efeito do Nulo | O mesmo efeito marca o Nulo em todos os planetas. |
+| Panda explica o que é uma variável | Não | Nada acontece; é uma fala comum. |
+| Uma porta se abre, e o texto diz apenas "Ouça." | Não | Somente o som transmite o evento. Reescreva o texto primeiro. |
 
-## Common mistakes
+## Erros comuns
 
-- **Explaining twice before asking once.** Ask after the first explanation and
-  explain the rest in the success feedback.
-- **Using multiple choice as the only question type.** The student ends the
-  star recognizing code without having written any.
-- **Reviewing with the same question.** A review question must apply the
-  earlier concept to a new situation, not repeat a question the student already
-  answered.
-- **Decorative visuals.** A highlighted visual after written code must show the
-  effect of that code, not an unrelated scene.
-- **A recap instead of a hook.** An opening that retells the previous star
-  spends text blocks without moving the story.
-- **Sound everywhere.** When most blocks have an effect, the effect stops
-  meaning that something happened.
-- **A mood that never ends.** A tension mood left on through the explanation
-  and the questions stops reading as tension. Return to the base sound.
+- **Explicar duas vezes antes de perguntar uma.** Pergunte após a primeira
+  explicação e explique o restante no feedback de acerto.
+- **Usar múltipla escolha como único tipo de questão.** O estudante termina a
+  estrela reconhecendo código sem ter escrito nenhum.
+- **Revisar com a mesma questão.** Uma questão de revisão deve aplicar o
+  conceito anterior a uma situação nova, não repetir uma questão que o
+  estudante já respondeu.
+- **Visuais decorativos.** Um visual em destaque após o código escrito deve
+  mostrar o efeito desse código, não uma cena sem relação.
+- **Uma recapitulação no lugar de um gancho.** Uma abertura que reconta a
+  estrela anterior gasta blocos de texto sem fazer a história avançar.
+- **Som em todo lugar.** Quando a maioria dos blocos tem um efeito, o efeito
+  deixa de significar que algo aconteceu.
+- **Um clima que nunca termina.** Um clima de tensão mantido durante a
+  explicação e as questões deixa de soar como tensão. Volte ao som base.
 
-# Integration Rules with Other Layers
+# Regras de Integração com Outras Camadas
 
-- **Lesson page PRDs.** A story uses only the blocks, question types and states
-  those PRDs define. When a rule here needs a new capability, change the PRD
-  first, through the SDD workflow.
-- **Lives and ship energy.** The PRDs use `vida` for the rule and present it to
-  the student as `energia da nave`, as defined in `lesson-page.md`. Story text
-  uses only the second.
-- **Sound.** System effects and the optional effect of a block are defined in
-  `lesson-page.md`. A block effect plays once, when the block is revealed, and
-  never in the history. The base ambient sound belongs to the planet; a block
-  can only switch it to a mood of the shared set. The student controls
-  narration, effects and ambient sound from the audio dialog of the story.
-- **Planet videos.** Their content is defined in `story-narrative.md` and their
-  playback in `space-page.md`. A story neither plays nor references them.
-- **Multiple choice.** Prediction mode and per-alternative hints are defined in
-  `multiple-choice.md`. Every multiple-choice question provides the statement,
-  the ordered alternatives, one correct alternative, the success feedback and a
-  hint for each incorrect alternative, spoken by Faísca.
-- **Code writing.** Fix-the-bug questions use the completion modality defined
-  in `code-writing.md`. Running code never costs a life; only an evaluated,
-  failed answer does.
-- **Block programming.** Each question offers only the blocks selected for the
-  activity, as defined in `block-programming.md`.
-- **Visuals.** A highlighted visual is always a Lottie, as defined in
+- **PRDs da página de lição.** Uma história usa somente os blocos, os tipos de
+  questão e os estados que esses PRDs definem. Quando uma regra daqui precisar
+  de uma nova capacidade, altere o PRD primeiro, pelo workflow de SDD.
+- **Vidas e energia da nave.** Os PRDs usam `vida` para a regra e a apresentam
+  ao estudante como `energia da nave`, conforme definido em `lesson-page.md`.
+  O texto da história usa somente a segunda.
+- **Som.** Os efeitos de sistema e o efeito opcional de um bloco são definidos
+  em `lesson-page.md`. O efeito de um bloco toca uma vez, quando o bloco é
+  revelado, e nunca no histórico. O som ambiente base pertence ao planeta; um
+  bloco só pode trocá-lo por um clima do conjunto compartilhado. O estudante
+  controla a narração, os efeitos e o som ambiente pelo diálogo de áudio da
+  história.
+- **Vídeos dos planetas.** O seu conteúdo é definido em `story-narrative.md` e
+  a sua reprodução em `space-page.md`. Uma história não os reproduz nem os
+  referencia.
+- **Múltipla escolha.** O modo previsão e as dicas por alternativa são
+  definidos em `multiple-choice.md`. Toda questão de múltipla escolha fornece o
+  enunciado, as alternativas ordenadas, uma alternativa correta, o feedback de
+  acerto e uma dica para cada alternativa incorreta, dita pela Faísca.
+- **Escrita de código.** As questões de corrigir o erro usam a modalidade de
+  completar definida em `code-writing.md`. Executar código nunca custa uma
+  vida; somente uma resposta avaliada e reprovada custa.
+- **Programação em blocos.** Cada questão oferece somente os blocos
+  selecionados para a atividade, conforme definido em `block-programming.md`.
+- **Visuais.** Um visual em destaque é sempre um Lottie, conforme definido em
   `visual-blocks.md`.
-- **Narrative.** The cast, the planet identity, the clues and the twists come
-  from `story-narrative.md`.
-- **Delégua.** Reserved words, logical values and identifiers follow
+- **Narrativa.** O elenco, a identidade dos planetas, as pistas e as
+  reviravoltas vêm de `story-narrative.md`.
+- **Delégua.** Palavras reservadas, valores lógicos e identificadores seguem
   `delegua-rules.md`.
 
-# Quick Checklist for New Features in the Layer
+# Checklist Rápido para Novas Features na Camada
 
-- [ ] No run of text blocks is longer than five.
-- [ ] Every example whose output matters is preceded by a prediction question.
-- [ ] The questions follow the ladder, in order.
-- [ ] The star ends with a code-writing question, or is a listed exception.
-- [ ] The planet has at least one fix-the-bug question.
-- [ ] The first question reviews the previous star.
-- [ ] Every incorrect alternative is a plausible mistake and has its own hint.
-- [ ] No hint reveals or points to the correct alternative.
-- [ ] A highlighted visual follows each code-writing question.
-- [ ] The last block is an `informação` summary of at most three lines.
-- [ ] The star opens with a hook and has a closing hook right before the
-      summary.
-- [ ] Nothing in the story depends on the planet video.
-- [ ] Every hint is a short line spoken by Faísca.
-- [ ] Story text says `energia`, never `vidas`.
-- [ ] Each sound effect marks an event that the text or the visual also
-      conveys.
-- [ ] Each mood change marks a turn of the scene, uses the shared set and
-      returns to the base sound when the turn is over.
-- [ ] Each statement makes the answer read as an action of the student.
-- [ ] Nothing contradicts or anticipates the narrative PRD.
-- [ ] All Delégua code was validated in the project interpreter.
+- [ ] Nenhuma sequência de blocos de texto tem mais de cinco.
+- [ ] Todo exemplo cuja saída importa é precedido por uma questão de previsão.
+- [ ] As questões seguem a escada, em ordem.
+- [ ] A estrela termina com uma questão de escrita de código, ou é uma exceção
+      listada.
+- [ ] O planeta tem pelo menos uma questão de corrigir o erro.
+- [ ] A primeira questão revisa a estrela anterior.
+- [ ] Toda alternativa incorreta é um erro plausível e tem a sua própria dica.
+- [ ] Nenhuma dica revela ou aponta a alternativa correta.
+- [ ] Um visual em destaque vem após cada questão de escrita de código.
+- [ ] O último bloco é um resumo `informação` de no máximo três linhas.
+- [ ] A estrela abre com um gancho e tem um gancho de encerramento logo antes
+      do resumo.
+- [ ] Nada na história depende do vídeo do planeta.
+- [ ] Toda dica é uma fala curta dita pela Faísca.
+- [ ] O texto da história diz `energia`, nunca `vidas`.
+- [ ] Cada efeito sonoro marca um evento que o texto ou o visual também
+      transmite.
+- [ ] Cada mudança de clima marca uma virada da cena, usa o conjunto
+      compartilhado e volta ao som base quando a virada termina.
+- [ ] Cada enunciado faz a resposta soar como uma ação do estudante.
+- [ ] Nada contradiz ou antecipa o PRD de narrativa.
+- [ ] Todo o código Delégua foi validado no interpretador do projeto.
 
-# Notes and Pending Items
+# Observações e Pendências
 
-- **Existing content does not comply.** The stories in the current catalog were
-  written before these rules and have between 34 and 59 blocks each. They must
-  be rewritten, not patched.
-- **AI explanation in prediction questions.** The PRDs keep `explicar com IA`
-  available on reference code, including in prediction mode, where it can
-  describe the output before the student answers. The feature is planned to be
-  disabled in code for now. The rule must be revisited before it is enabled
-  again.
-- **Closing hook before the summary.** The summary stays as the last block, as
-  approved, so the closing hook is the block before it. Placing the hook last
-  would end the star on the open question; that order was not approved.
-- **Sound library.** The shared library of story effects and the shared set of
-  moods do not exist yet. Until they do, a story records the intended event of
-  each effect and the intended kind of mood, not a file.
-- **Hints outside multiple choice.** Only multiple choice defines a hint today.
-  If another question type gains one, it follows the same rule.
-- **Measurement.** `lesson-page.md` defines the events that measure a story. No
-  numeric targets were approved, so these rules set no threshold for time per
-  star or error rate.
-- **Authoring tools.** These rules do not depend on how a story is authored.
-  When the Backoffice validates a story, the checklist above is the reference.
-- **Exceptions list.** The only exception to the code-writing requirement is
-  the programming-logic star. The trail is being rewritten, so the list must be
-  reviewed when the new stars are defined.
+- **O conteúdo existente não está em conformidade.** As histórias do catálogo
+  atual foram escritas antes destas regras e têm entre 34 e 59 blocos cada.
+  Elas devem ser reescritas, não remendadas.
+- **Explicação com IA em questões de previsão.** Os PRDs mantêm
+  `explicar com IA` disponível no código de referência, inclusive em modo
+  previsão, no qual ela pode descrever a saída antes de o estudante responder.
+  Está previsto que o recurso seja desativado no código por enquanto. A regra
+  deve ser revista antes de ele ser habilitado novamente.
+- **Gancho de encerramento antes do resumo.** O resumo permanece como o último
+  bloco, conforme aprovado, portanto o gancho de encerramento é o bloco
+  anterior a ele. Colocar o gancho por último encerraria a estrela na pergunta
+  em aberto; essa ordem não foi aprovada.
+- **Biblioteca de sons.** A biblioteca compartilhada de efeitos das histórias
+  e o conjunto compartilhado de climas ainda não existem. Até existirem, uma
+  história registra o evento pretendido de cada efeito e o tipo de clima
+  pretendido, não um arquivo.
+- **Dicas fora da múltipla escolha.** Hoje somente a múltipla escolha define
+  uma dica. Se outro tipo de questão ganhar uma, ela segue a mesma regra.
+- **Medição.** `lesson-page.md` define os eventos que medem uma história.
+  Nenhuma meta numérica foi aprovada, portanto estas regras não estabelecem
+  limite para o tempo por estrela nem para a taxa de erro.
+- **Ferramentas de autoria.** Estas regras não dependem de como uma história é
+  escrita. Quando o Backoffice validar uma história, o checklist acima é a
+  referência.
+- **Lista de exceções.** A única exceção ao requisito de escrita de código é a
+  estrela de lógica de programação. A trilha está sendo reescrita, portanto a
+  lista deve ser revista quando as novas estrelas forem definidas.
