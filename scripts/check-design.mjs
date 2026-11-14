@@ -829,9 +829,13 @@ export function normalizeConfig(raw = {}) {
       )
     }
   }
+  if (raw.penpotUrl !== undefined) {
+    throw new Error(
+      `"penpotUrl" is not read from the config, because the access token is sent to it; set PENPOT_URL instead.`,
+    )
+  }
   return {
     fileId: raw.fileId,
-    penpotUrl: raw.penpotUrl ?? 'https://design.penpot.app',
     theme: raw.theme ?? 'Dark',
     excludePages: raw.excludePages ?? [],
     nearTokenDeltaE: raw.nearTokenDeltaE ?? 5,
@@ -941,6 +945,21 @@ function readEnvValue(content, key) {
   return null
 }
 
+// The access token goes to this host, so it comes from the developer's environment,
+// never from the versioned config: a changed config cannot redirect the token.
+export function resolvePenpotUrl(env = process.env) {
+  const value = env.PENPOT_URL?.trim()
+  if (!value) return DEFAULT_PENPOT_URL
+  let url
+  try {
+    url = new URL(value)
+  } catch {
+    throw new Error(`PENPOT_URL is not a valid URL: ${value}`)
+  }
+  if (url.protocol !== 'https:') throw new Error('PENPOT_URL must use https.')
+  return url.origin
+}
+
 function readAccessToken() {
   if (process.env.PENPOT_ACCESS_TOKEN) return process.env.PENPOT_ACCESS_TOKEN
   const envFile = path.join(ROOT_DIRECTORY, '.env.local')
@@ -957,7 +976,7 @@ function readAccessToken() {
 
 async function fetchFile(config) {
   if (!config.fileId) throw new Error(`Set "fileId" in ${path.basename(CONFIG_PATH)}.`)
-  const response = await fetch(`${config.penpotUrl}/api/rpc/command/get-file`, {
+  const response = await fetch(`${resolvePenpotUrl()}/api/rpc/command/get-file`, {
     method: 'POST',
     headers: {
       Authorization: `Token ${readAccessToken()}`,

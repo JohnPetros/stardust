@@ -131,7 +131,9 @@ páginas de produto (todas, exceto `🎨 Design System`):
 | `hygiene` | seções sobrepostas, camada solta na raiz, nome padrão, board vazio, camada oculta, cópia de componente removido | erro ou aviso |
 
 O script exige `PENPOT_ACCESS_TOKEN` (Penpot → Your account → Access tokens) no
-`.env.local` da raiz ou no ambiente; nunca registre o valor. A configuração fica
+`.env.local` da raiz ou no ambiente; nunca registre o valor. O token é enviado
+apenas a `https://design.penpot.app`; outro host só pode ser definido pela
+variável de ambiente `PENPOT_URL` (https), nunca pelo arquivo de configuração. A configuração fica
 em `.design-check.json`: ID do arquivo, tema dos tokens, páginas excluídas,
 escalas de tipografia, espaçamento e raio, e exceções em `ignore`, cada uma com
 `rule`, `shapeId` ou `layer` e um `reason` obrigatório.

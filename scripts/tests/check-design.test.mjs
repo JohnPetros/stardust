@@ -10,6 +10,7 @@ import {
   parseArguments,
   parseFile,
   parseHex,
+  resolvePenpotUrl,
   resolveTokens,
 } from '../check-design.mjs'
 
@@ -368,6 +369,23 @@ test('rejects ignore entries without a reason', () => {
     () => normalizeConfig({ ignore: [{ rule: 'contrast', shapeId: 'a' }] }),
     /needs a reason/,
   )
+})
+
+test('does not read the Penpot host from the versioned config', () => {
+  assert.throws(
+    () => normalizeConfig({ penpotUrl: 'https://attacker.example' }),
+    /set PENPOT_URL instead/,
+  )
+})
+
+test('resolves the Penpot host from the environment only', () => {
+  assert.equal(resolvePenpotUrl({}), 'https://design.penpot.app')
+  assert.equal(
+    resolvePenpotUrl({ PENPOT_URL: 'https://penpot.example.com/path' }),
+    'https://penpot.example.com',
+  )
+  assert.throws(() => resolvePenpotUrl({ PENPOT_URL: 'http://penpot.example.com' }), /https/)
+  assert.throws(() => resolvePenpotUrl({ PENPOT_URL: 'not a url' }), /not a valid URL/)
 })
 
 test('rejects files whose pages are not stored inline', () => {
