@@ -1,4 +1,5 @@
 ---
+name: commit
 description: Prompt to analyze changes and execute real commits with a defined message standard.
 ---
 
