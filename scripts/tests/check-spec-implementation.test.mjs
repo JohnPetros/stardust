@@ -330,6 +330,24 @@ test('rejects a completed plan that still has unfinished rows', async () => {
   }
 })
 
+test('reads only the top-level revision of the Spec frontmatter', async () => {
+  const repositoryRoot = await createRepositoryFixture()
+  try {
+    const specWithSources = SPEC.replace(
+      'revision: 1\n---',
+      'revision: 1\nsource:\n  - type: prd\n    ref: documentation/prds/example-prd.md\n    revision: last_updated_at 2026-06-17\n---',
+    )
+    assert.notEqual(specWithSources, SPEC)
+    await writeFile(path.join(repositoryRoot, SPEC_PATH), specWithSources)
+    await writeFile(path.join(repositoryRoot, PLAN_PATH), buildPlan())
+    const result = await runChecker(repositoryRoot, ['--plan-only'])
+    assert.deepEqual(result.errors, [])
+    assert.equal(result.status, 'passed')
+  } finally {
+    await rm(repositoryRoot, { force: true, recursive: true })
+  }
+})
+
 test('pairs a legacy <name>-spec.md with <name>-plan.md', async () => {
   const repositoryRoot = await createRepositoryFixture()
   try {
