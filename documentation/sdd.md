@@ -76,6 +76,13 @@ O PRD canônico de produto é o documento versionado no repositório em
 para resultado, atores, capacidades, experiência, requisitos `RP-*` e jornadas
 `JN-*`; não existe exigência de publicação ou espelhamento no Confluence.
 
+Todo arquivo de PRD termina com o sufixo `-prd.md` (por exemplo,
+`documentation/prds/space/space-page-prd.md`). A convenção vale para os PRDs
+existentes e para os novos; links, caminhos em Specs e referências em outros
+documentos devem usar o nome com o sufixo. A decisão foi tomada por pedido
+direto em 2026-11-14, sem Spec própria, por ser uma mudança apenas de
+nomenclatura dos arquivos.
+
 Quando houver milestone de produto no GitHub, ela deve apontar para o PRD local
 correspondente. Esse link é o índice oficial entre produto e SDD:
 
