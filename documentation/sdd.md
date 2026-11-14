@@ -316,13 +316,17 @@ que os paths já estejam entregues.
 
 ### Entregas anteriores ao Plan
 
-Uma entrega cujo `evaluation.md` foi criado antes de o `plan.md` existir (frontmatter do
-Evaluation sem a chave `plan:`) segue o fluxo anterior: não exige `plan.md` nem `--require-plan`,
-e o progresso continua na coluna `Implementation` do próprio Evaluation. O checker valida o
-`plan.md` apenas quando ele existe. Para adotar o Plan numa entrega em andamento, rode
+Uma entrega cujo `evaluation.md` foi criado antes de o `plan.md` existir pode continuar sem
+Plan, mas só por opt-out explícito e verificável: o frontmatter do Evaluation declara
+`plan: none` e o Handoff registra o motivo. O progresso continua na coluna `Implementation`
+do próprio Evaluation. `check:spec-implementation --require-plan` lê a chave `plan:` do
+Evaluation: `plan: <path>` exige o Plan, `plan: none` o dispensa e a ausência da chave é erro,
+para que nenhuma entrega fique sem Plan por omissão. O template do Evaluation declara
+`plan: ./plan.md`, então toda entrega nova usa o Plan; `plan: none` numa entrega nova é um
+desvio e deve ser rejeitado na revisão. Para adotar o Plan numa entrega em andamento, rode
 `create-plan`, marque como `completed` as linhas já entregues depois de inspecionar o diff,
-remova a coluna `Implementation` do Evaluation e adicione `plan:` ao frontmatter; a partir daí
-valem as regras do Plan. Toda Spec sem Evaluation, e toda entrega nova, usa o Plan.
+remova a coluna `Implementation` do Evaluation e troque `plan: none` por `plan: ./plan.md`.
+Esta exceção foi confirmada pelo usuário ao aprovar o escopo da introdução do Plan.
 
 ## Implementação e evidência viva
 
@@ -342,7 +346,7 @@ Antes dos sensores e do Reviewer, execute `pnpm run check:spec-implementation <s
 Esse preflight exige o mapa canônico `Path | Change | ...` do `Technical Contract` e
 confirma que cada `Create`, `Modify`, `Generate` ou `Remove` corresponde ao diff e ao
 filesystem. Com `--require-plan`, exige também o `plan.md` da revisão atual, com uma linha por
-path do mapa, links `RF-*`/`CA-*` existentes na Spec e todas as linhas `completed`. Ele é
+path do mapa, links `RF-*`/`CA-*` existentes na Spec e todas as linhas `completed`, salvo `plan: none` no Evaluation. Ele é
 estrutural e não substitui testes, sensores, Reviewer ou Evaluation.
 
 Antes de alterar source ou testes, confirme o `plan.md` da revisão atual, materialize `evaluation.md` pelo Contract canônico definido
@@ -401,8 +405,7 @@ somente quando faltar decisão de produto, autoridade, ambiente, segurança ou e
 anteriores ao Plan), Evaluation `ready`,
 conformance atual e nenhuma evidência bloqueante. Com autorização para commit/push/PR:
 
-1. repete preflight (com `--require-plan`, exceto em entregas anteriores ao Plan) e conformance
-   no candidato atual;
+1. repete preflight (com `--require-plan`) e conformance no candidato atual;
 2. invoca `commit` para commits intencionais;
 3. invoca `open-pr` para criar ou atualizar um PR ready-for-review;
 4. aguarda cada workflow aplicável no HEAD atual do PR;

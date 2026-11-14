@@ -73,8 +73,9 @@ last_updated_at: YYYY-MM-DD
 One row per `CA-*`. Only verification is recorded here
 (`Pending`/`Partial`/`Passed`/`Failed`/`Blocked`/`Stale`). The implementation progress of a
 criterion is derived from the `plan.md` rows that link it and is never repeated in this table.
-An Evaluation created before `plan.md` existed (no `plan:` key in its frontmatter) keeps its
-`Implementation` column until the delivery adopts the Plan.
+An Evaluation created before `plan.md` existed may opt out with `plan: none` in its frontmatter
+and keeps its `Implementation` column until the delivery adopts the Plan. A missing `plan:` key
+is an error for `check:spec-implementation --require-plan`.
 
 | Criterion | Verification | Real evidence | Remaining work |
 | --------- | ------------ | ------------- | -------------- |
