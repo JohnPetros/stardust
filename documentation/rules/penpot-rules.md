@@ -31,7 +31,7 @@ frame na página que é dona dele e consulte os IDs das páginas pelo Penpot MCP
   mesmos componentes e regras de layout. Nas telas Mobile, use a altura de
   controle de 44 px (`control-height`) como alvo de toque.
 - **Diálogos** são desenhados como frames independentes, com o tamanho do
-  próprio diálogo (por exemplo `Lição / Desktop / Diálogo · Vidas esgotadas`),
+  próprio diálogo (por exemplo `Lição / Desktop / Diálogo · Energia esgotada`),
   nunca como uma tela inteira com backdrop.
 - **Components** contém elementos reutilizáveis e nada além disso: nunca coloque
   uma tela ou um exemplo avulso nela. Extraia um elemento para esta página
