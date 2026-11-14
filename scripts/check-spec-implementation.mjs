@@ -6,18 +6,33 @@ import { promisify } from 'node:util'
 
 const DEFAULT_BASE = 'main'
 const ALLOWED_CHANGES = new Set(['Create', 'Generate', 'Modify', 'Remove'])
+const PLAN_STATUSES = new Set(['pending', 'in_progress', 'completed'])
+const PLAN_DOCUMENT_STATUSES = new Set(['in_progress', 'completed'])
+const REQUIREMENT_ID_PATTERN = /\b(?:RF|CA)-\d+[A-Za-z]*\b/g
+const USAGE =
+  'Usage: pnpm run check:spec-implementation <documentation/features/.../spec.md|*-spec.md> [--base <git-ref>] [--plan-only] [--require-plan] [--json]'
 const execFileAsync = promisify(execFile)
 
 function parseArguments(argumentsList) {
   const positionalArguments = []
   let base = DEFAULT_BASE
   let shouldPrintJson = false
+  let planOnly = false
+  let requirePlan = false
 
   for (let index = 0; index < argumentsList.length; index += 1) {
     const argument = argumentsList[index]
 
     if (argument === '--') continue
     if (argument === '--help') return { shouldPrintHelp: true }
+    if (argument === '--plan-only') {
+      planOnly = true
+      continue
+    }
+    if (argument === '--require-plan') {
+      requirePlan = true
+      continue
+    }
     if (argument === '--json') {
       shouldPrintJson = true
       continue
@@ -36,13 +51,13 @@ function parseArguments(argumentsList) {
   }
 
   if (positionalArguments.length !== 1) {
-    throw new Error(
-      'Usage: pnpm run check:spec-implementation <documentation/features/.../spec.md|*-spec.md> [--base <git-ref>] [--json]',
-    )
+    throw new Error(USAGE)
   }
 
   return {
     base,
+    planOnly,
+    requirePlan,
     shouldPrintHelp: false,
     shouldPrintJson,
     specArgument: positionalArguments[0],
@@ -50,12 +65,17 @@ function parseArguments(argumentsList) {
 }
 
 function printHelp() {
-  console.log(
-    'Usage: pnpm run check:spec-implementation <documentation/features/.../spec.md|*-spec.md> [--base <git-ref>] [--json]',
-  )
+  console.log(USAGE)
   console.log(
     'Checks every Create, Modify, Generate and Remove path in the Spec against Git and disk.',
   )
+  console.log(
+    'A sibling plan.md (spec.md -> plan.md, <name>-spec.md -> <name>-plan.md) is validated against the Spec when it exists.',
+  )
+  console.log(
+    '--plan-only validates only the plan against the Spec, without requiring delivered paths.',
+  )
+  console.log('--require-plan requires the plan to exist and every row to be completed.')
 }
 
 async function runGit(argumentsList, cwd) {
@@ -195,7 +215,173 @@ function isSpecPath(relativeSpecPath) {
   return /^documentation\/features\/.+\/(?:spec|[^/]+-spec)\.md$/.test(relativeSpecPath)
 }
 
-async function checkSpecImplementation({ base, specArgument }) {
+function unquote(value) {
+  return (value ?? '').replace(/^(["'])(.*)\1$/, '$2')
+}
+
+function parseFrontmatter(markdown) {
+  const block = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? ''
+  const fields = {}
+  for (const line of block.split(/\r?\n/)) {
+    const separator = line.indexOf(':')
+    if (separator > 0)
+      fields[line.slice(0, separator).trim()] = unquote(line.slice(separator + 1).trim())
+  }
+  return fields
+}
+
+function planPathFor(relativeSpecPath) {
+  return relativeSpecPath.replace(/spec\.md$/, 'plan.md')
+}
+
+function splitCells(line) {
+  return line
+    .trim()
+    .replace(/^\|/, '')
+    .replace(/\|$/, '')
+    .split('|')
+    .map((cell) => cell.trim())
+}
+
+/**
+ * Plan rows share the first two cells with the Spec path map; the remaining
+ * cells are fixed by position: RF/CA, Status, Notes.
+ */
+function parsePlanRows(markdown) {
+  const rows = []
+  const malformed = []
+  for (const line of markdown.split(/\r?\n/)) {
+    if (!line.trim().startsWith('|')) continue
+    const cells = splitCells(line)
+    const pathMatch = cells[0]?.match(/^`([^`]+)`$/)
+    if (!pathMatch || !ALLOWED_CHANGES.has(cells[1])) continue
+    if (cells.length < 4) {
+      malformed.push(pathMatch[1])
+      continue
+    }
+    rows.push({
+      change: cells[1],
+      path: pathMatch[1],
+      requirements: cells[2],
+      status: cells[3].replaceAll('`', ''),
+    })
+  }
+  return { malformed, rows }
+}
+
+async function checkPlan({
+  affectedPaths,
+  basePaths,
+  changedPaths,
+  currentTrackedPaths,
+  errors,
+  planOnly,
+  relativePlanPath,
+  repositoryRoot,
+  requirePlan,
+  specMarkdown,
+  untrackedPaths,
+}) {
+  let markdown
+  try {
+    markdown = await readFile(path.join(repositoryRoot, relativePlanPath), 'utf8')
+  } catch (error) {
+    if (error?.code !== 'ENOENT') throw error
+    if (planOnly || requirePlan)
+      errors.push(`${relativePlanPath}: plan is required but does not exist`)
+    return undefined
+  }
+
+  const planErrors = []
+  const fields = parseFrontmatter(markdown)
+  const specRevision = parseFrontmatter(specMarkdown).revision
+  const planStatus = fields.status
+  if (!PLAN_DOCUMENT_STATUSES.has(planStatus))
+    planErrors.push(
+      `status must be in_progress or completed (found "${planStatus ?? ''}")`,
+    )
+  if (specRevision && fields.spec_revision !== specRevision)
+    planErrors.push(
+      `spec_revision "${fields.spec_revision ?? ''}" does not match the Spec revision "${specRevision}"`,
+    )
+
+  const { malformed, rows } = parsePlanRows(markdown)
+  for (const malformedPath of malformed)
+    planErrors.push(
+      `${malformedPath}: row must have Path, Change, RF/CA and Status cells`,
+    )
+  if (rows.length === 0 && malformed.length === 0)
+    planErrors.push('plan has no rows using Create, Modify, Generate or Remove')
+
+  const specIds = new Set(specMarkdown.match(REQUIREMENT_ID_PATTERN) ?? [])
+  const specChanges = new Map(
+    affectedPaths.map(({ change, path: contractedPath }) => [contractedPath, change]),
+  )
+  const seenPaths = new Set()
+  for (const row of rows) {
+    if (seenPaths.has(row.path)) {
+      planErrors.push(`${row.path}: appears more than once`)
+      continue
+    }
+    seenPaths.add(row.path)
+    const specChange = specChanges.get(row.path)
+    if (!specChange) planErrors.push(`${row.path}: row is not in the Spec path map`)
+    else if (specChange !== row.change)
+      planErrors.push(
+        `${row.path}: Change ${row.change} differs from the Spec (${specChange})`,
+      )
+    if (!PLAN_STATUSES.has(row.status))
+      planErrors.push(
+        `${row.path}: status must be pending, in_progress or completed (found "${row.status}")`,
+      )
+    const linkedIds = row.requirements.match(REQUIREMENT_ID_PATTERN) ?? []
+    if (linkedIds.length === 0)
+      planErrors.push(`${row.path}: RF/CA must link at least one RF-* or CA-*`)
+    for (const id of linkedIds)
+      if (!specIds.has(id))
+        planErrors.push(`${row.path}: ${id} does not exist in the Spec`)
+  }
+  for (const contractedPath of specChanges.keys())
+    if (!seenPaths.has(contractedPath))
+      planErrors.push(`${contractedPath}: Spec path has no plan row`)
+
+  if (!planOnly) {
+    for (const row of rows) {
+      if (row.status !== 'completed' || !specChanges.has(row.path)) continue
+      if (validateAffectedPath(row.path)) continue
+      const rowErrors = []
+      addClassificationFindings({
+        affectedPath: { change: row.change, path: row.path },
+        basePaths,
+        changedPaths,
+        currentPath: await inspectCurrentPath(repositoryRoot, row.path),
+        currentTrackedPaths,
+        errors: rowErrors,
+        untrackedPaths,
+      })
+      for (const rowError of rowErrors)
+        planErrors.push(`${rowError} (row is marked completed)`)
+    }
+  }
+
+  if (requirePlan || planStatus === 'completed')
+    for (const row of rows)
+      if (row.status !== 'completed')
+        planErrors.push(
+          `${row.path}: status is ${row.status} but every row must be completed`,
+        )
+
+  for (const planError of planErrors) errors.push(`${relativePlanPath}: ${planError}`)
+  const statusCounts = Object.fromEntries(
+    [...PLAN_STATUSES].map((status) => [
+      status,
+      rows.filter((row) => row.status === status).length,
+    ]),
+  )
+  return { path: relativePlanPath, rowsCount: rows.length, statusCounts }
+}
+
+async function checkSpecImplementation({ base, planOnly, requirePlan, specArgument }) {
   const repositoryRoot = (await runGit(['rev-parse', '--show-toplevel'], process.cwd()))
     .toString('utf8')
     .trim()
@@ -210,24 +396,34 @@ async function checkSpecImplementation({ base, specArgument }) {
     )
   }
 
-  const baseSha = (
-    await runGit(
-      ['rev-parse', '--verify', '--end-of-options', `${base}^{commit}`],
-      repositoryRoot,
-    )
-  )
-    .toString('utf8')
-    .trim()
+  // --plan-only validates the plan against the Spec and needs no Git state.
+  const baseSha = planOnly
+    ? null
+    : (
+        await runGit(
+          ['rev-parse', '--verify', '--end-of-options', `${base}^{commit}`],
+          repositoryRoot,
+        )
+      )
+        .toString('utf8')
+        .trim()
+  const emptyOutput = Buffer.alloc(0)
   const [markdown, baseOutput, diffOutput, trackedOutput, untrackedOutput] =
     await Promise.all([
       readFile(specPath, 'utf8'),
-      runGit(['ls-tree', '-r', '-z', '--name-only', baseSha], repositoryRoot),
-      runGit(
-        ['diff', '--name-status', '-z', '--no-renames', baseSha, '--'],
-        repositoryRoot,
-      ),
-      runGit(['ls-files', '-z', '--cached'], repositoryRoot),
-      runGit(['ls-files', '--others', '--exclude-standard', '-z'], repositoryRoot),
+      planOnly
+        ? emptyOutput
+        : runGit(['ls-tree', '-r', '-z', '--name-only', baseSha], repositoryRoot),
+      planOnly
+        ? emptyOutput
+        : runGit(
+            ['diff', '--name-status', '-z', '--no-renames', baseSha, '--'],
+            repositoryRoot,
+          ),
+      planOnly ? emptyOutput : runGit(['ls-files', '-z', '--cached'], repositoryRoot),
+      planOnly
+        ? emptyOutput
+        : runGit(['ls-files', '--others', '--exclude-standard', '-z'], repositoryRoot),
     ])
   const affectedPaths = parseAffectedPaths(markdown)
   const basePaths = new Set(parseNullSeparated(baseOutput))
@@ -254,6 +450,7 @@ async function checkSpecImplementation({ base, specArgument }) {
       continue
     }
     seenPaths.set(affectedPath.path, affectedPath.change)
+    if (planOnly) continue
     const currentPath = await inspectCurrentPath(repositoryRoot, affectedPath.path)
     addClassificationFindings({
       affectedPath,
@@ -265,6 +462,20 @@ async function checkSpecImplementation({ base, specArgument }) {
       untrackedPaths,
     })
   }
+
+  const plan = await checkPlan({
+    affectedPaths,
+    basePaths,
+    changedPaths,
+    currentTrackedPaths,
+    errors,
+    planOnly,
+    relativePlanPath: planPathFor(relativeSpecPath),
+    repositoryRoot,
+    requirePlan,
+    specMarkdown: markdown,
+    untrackedPaths,
+  })
 
   const contractedPaths = new Set(
     affectedPaths.map(({ path: contractedPath }) => contractedPath),
@@ -286,6 +497,8 @@ async function checkSpecImplementation({ base, specArgument }) {
     counts,
     errors,
     pathsCount: affectedPaths.length,
+    plan: plan ?? null,
+    planOnly,
     spec: relativeSpecPath,
     status: errors.length === 0 ? 'passed' : 'failed',
     unrelatedChangedPathsCount,
@@ -299,10 +512,17 @@ function printResult(result, shouldPrintJson) {
   }
   console.log(`Spec path implementation: ${result.status.toUpperCase()}`)
   console.log(`Spec: ${result.spec}`)
-  console.log(`Baseline: ${result.base} (${result.baseSha})`)
+  if (result.baseSha) console.log(`Baseline: ${result.base} (${result.baseSha})`)
   console.log(
     `Contracted paths: ${result.pathsCount} (Create ${result.counts.Create}, Modify ${result.counts.Modify}, Generate ${result.counts.Generate}, Remove ${result.counts.Remove})`,
   )
+  if (result.plan)
+    console.log(
+      `Plan: ${result.plan.path} (${result.plan.rowsCount} rows: pending ${result.plan.statusCounts.pending}, in_progress ${result.plan.statusCounts.in_progress}, completed ${result.plan.statusCounts.completed})`,
+    )
+  else console.log('Plan: not present')
+  if (result.planOnly)
+    console.log('Mode: plan-only (delivery of the contracted paths was not checked).')
   for (const error of result.errors) console.error(`ERROR: ${error}`)
   console.log(`Unrelated changed paths ignored: ${result.unrelatedChangedPathsCount}`)
   console.log(
