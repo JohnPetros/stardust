@@ -112,6 +112,21 @@ roles, artifacts, sensors and completion criteria.
 - When choosing the simplest, most readable and most didactic solution for a challenge.
 - When integrating Delégua code with the editor, the LSP, the server or the playback.
 
+## Story Writing Rules
+
+**File:** `/documentation/rules/story-writing-rules.md`
+**When to consult:**
+
+- When writing or rewriting the story of a lesson star (text blocks, examples,
+  visuals and questions).
+- When creating or changing `texts.ts` or `questions.ts` under
+  `apps/web/src/mocks/lesson/planets/**`, or the stars of the seed catalog.
+- To pace text blocks and questions, and to order the questions of a star.
+- When writing multiple-choice alternatives, hints or fix-the-bug questions.
+- When writing the opening and closing hooks of a star, or choosing a sound
+  effect for a block.
+- To check a story against the approved narrative before publishing it.
+
 ## Queue Layer Rules
 
 **File:** `/documentation/rules/queue-layer-rules.md`
