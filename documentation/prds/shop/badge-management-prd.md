@@ -308,7 +308,7 @@ criação/edição de insígnias.
 
 | Área | Exclusão explícita do MVP |
 | --- | --- |
-| Escopo | Gestão de avatares e foguetes na mesma interface de insígnias. |
+| Escopo | Gestão de avatares na mesma interface de insígnias. |
 | Escopo | Alterações no comportamento de compra de insígnias para usuário final na Web. |
 | Escopo | Criação de novos tipos de role fora dos valores atualmente suportados pelo |
 | Escopo | Mudanças de arquitetura de storage, autenticação ou contratos REST além do que |

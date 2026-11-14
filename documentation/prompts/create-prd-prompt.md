@@ -15,11 +15,11 @@ create-prd "<texto do produto ou funcionalidade>"
 O rascunho local do PRD deve ser salvo em:
 
 ```text
-documentation/prds/<slug-do-produto>.md
+documentation/prds/<slug-do-produto>-prd.md
 ```
 
 O PRD canônico de produto é mantido no repositório, em
-`documentation/prds/<module>/<slug>.md`. Esse arquivo é a fonte versionada de
+`documentation/prds/<module>/<slug>-prd.md`. Esse arquivo é a fonte versionada de
 verdade; não há dependência de Confluence. Requisitos devem usar `RP-*` e
 jornadas devem usar `JN-*`.
 
@@ -394,7 +394,7 @@ Formato final:
 [RESEARCH] Environment analyzed ✅
 [RESEARCH] Competitive analysis completed ✅
 [INTERVIEW] Shared understanding confirmed ✅
-[PRD] Generated: documentation/prds/<arquivo>.md ✅
+[PRD] Generated: documentation/prds/<arquivo>-prd.md ✅
 ```
 
 ---

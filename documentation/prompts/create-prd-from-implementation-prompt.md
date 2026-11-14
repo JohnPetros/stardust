@@ -11,7 +11,7 @@ features novas quanto para features já implementadas.
 ## Fonte de Verdade do Produto
 
 Neste projeto, o PRD canônico de produto é mantido no repositório, em
-`documentation/prds/<module>/<slug>.md`. O arquivo versionado é a fonte de
+`documentation/prds/<module>/<slug>-prd.md`. O arquivo versionado é a fonte de
 verdade do produto; não há dependência de Confluence.
 
 Use a seguinte ordem de precedência como fonte de verdade:

@@ -6,7 +6,7 @@ source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/issues/601
   - type: prd
-    ref: documentation/prds/auth/sign-in.md
+    ref: documentation/prds/auth/sign-in-prd.md
     requirements: [RP-01, RP-02]
     journeys: [JN-01]
 scope:

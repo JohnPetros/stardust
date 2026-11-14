@@ -72,9 +72,16 @@ Issue, Report, Design e código real aplicáveis.
 ### PRD canônico e milestone
 
 O PRD canônico de produto é o documento versionado no repositório em
-`documentation/prds/<module>/<slug>.md`. Esse arquivo é a autoridade de produto
+`documentation/prds/<module>/<slug>-prd.md`. Esse arquivo é a autoridade de produto
 para resultado, atores, capacidades, experiência, requisitos `RP-*` e jornadas
 `JN-*`; não existe exigência de publicação ou espelhamento no Confluence.
+
+Todo arquivo de PRD termina com o sufixo `-prd.md` (por exemplo,
+`documentation/prds/space/space-page-prd.md`). A convenção vale para os PRDs
+existentes e para os novos; links, caminhos em Specs e referências em outros
+documentos devem usar o nome com o sufixo. A decisão foi tomada por pedido
+direto em 2026-11-14, sem Spec própria, por ser uma mudança apenas de
+nomenclatura dos arquivos.
 
 Quando houver milestone de produto no GitHub, ela deve apontar para o PRD local
 correspondente. Esse link é o índice oficial entre produto e SDD:
@@ -131,7 +138,7 @@ agente ou task. `create-spec`, `implement-spec` e `conclude-spec` são workflows
 ## Artefatos duráveis
 
 ```text
-documentation/prds/<module>/<slug>.md           # PRD canônico versionado do módulo
+documentation/prds/<module>/<slug>-prd.md           # PRD canônico versionado do módulo
 documentation/features/<domínio>/<feature>/
 ├── spec.md
 └── evaluation.md           # criado no kickoff da implementação

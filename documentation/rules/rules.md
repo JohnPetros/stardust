@@ -112,6 +112,23 @@ papéis, artefatos, sensores e critérios de conclusão.
 - Ao escolher a solução mais simples, legível e didática para um desafio.
 - Ao integrar código Delégua com o editor, o LSP, o servidor ou o playback.
 
+## Regras de Escrita de Histórias
+
+**Arquivo:** `/documentation/rules/story-writing-rules.md`
+**Quando consultar:**
+
+- Ao escrever ou reescrever a história de uma estrela de lição (blocos de texto,
+  exemplos, visuais e questões).
+- Ao criar ou alterar `texts.ts` ou `questions.ts` em
+  `apps/web/src/mocks/lesson/planets/**`, ou as estrelas do catálogo de seed.
+- Para definir o ritmo de blocos de texto e questões e a ordem das questões de
+  uma estrela.
+- Ao escrever alternativas de múltipla escolha, dicas ou questões de corrigir o
+  erro.
+- Ao escrever os ganchos de abertura e de encerramento de uma estrela, ou ao
+  escolher um efeito sonoro para um bloco.
+- Para conferir uma história com a narrativa aprovada antes de publicá-la.
+
 ## Regras da Camada de Fila (queue)
 
 **Arquivo:** `/documentation/rules/queue-layer-rules.md`
@@ -292,3 +309,13 @@ papéis, artefatos, sensores e critérios de conclusão.
 - Para entender como usar Fakers para preparar o estado dos testes de domínio.
 - Para seguir os padrões de asserção e validação de regras de negócio no
   domínio.
+
+## Regras do Arquivo de Design (Penpot)
+
+**Arquivo:** `/documentation/rules/penpot-rules.md`
+**Quando consultar:**
+
+- Ao criar ou editar frames, componentes ou tokens no arquivo Penpot `stardust`.
+- Para decidir qual página (Desktop, Mobile, Components ou Design System) é dona de um frame.
+- Para nomear telas, diálogos, componentes e propriedades de variantes.
+- Ao extrair um elemento repetido para um componente ou atualizar a página Design System.
