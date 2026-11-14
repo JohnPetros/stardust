@@ -82,7 +82,9 @@ function readOnly(name) {
 // Os Reviewers de texto usam apenas Read/Glob/Grep; os Reviewers Visual e de Design
 // também precisam dos MCPs de Penpot e de leitura de imagens, então bloqueiam escrita,
 // shell (que permitiria gravar arquivos) e a criação de agentes. O Spec Searcher também usa a
-// denylist para manter o acesso ao MCP do CodeGraph.
+// denylist porque precisa do MCP do CodeGraph, que uma allowlist Read/Glob/Grep bloquearia.
+// Como os MCPs de escrita não podem ser negados de forma portável, o contrato do agente
+// restringe os MCPs a chamadas de leitura.
 function usesToolDenylist(name) {
   return ['spec-searcher-agent', 'visual-reviewer-agent', 'design-reviewer-agent'].includes(
     name,
