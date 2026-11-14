@@ -102,8 +102,9 @@ two gaps below. The verdict stays `findings` because the boards do not yet refle
   user's decision of 2026-11-14, now in `documentation/rules/penpot-rules.md`. Only the
   names changed; the digests above were taken after the rename and `check:design`
   reports nothing new at revision 412. The seven other boards of the section
-  `Galáxia · Trilha` (video dialogs and the lock animation) keep the previous pattern
-  until a task changes them.
+  `Galáxia · Trilha` (six video dialogs and the lock animation) were renamed to the same
+  pattern, for example `Espaço / Galáxia / Diálogo de vídeo de apresentação / sem som /
+  Desktop`; they are outside this review and have no digest here.
 - The load-failure message is centered in the content area, with centered text, on
   desktop and mobile, by the user's request after the review rounds; not sent back to
   the Reviewer.
