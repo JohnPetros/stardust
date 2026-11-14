@@ -326,7 +326,6 @@ para que nenhuma entrega fique sem Plan por omissão. O template do Evaluation d
 desvio e deve ser rejeitado na revisão. Para adotar o Plan numa entrega em andamento, rode
 `create-plan`, marque como `completed` as linhas já entregues depois de inspecionar o diff,
 remova a coluna `Implementation` do Evaluation e troque `plan: none` por `plan: ./plan.md`.
-Esta exceção foi confirmada pelo usuário ao aprovar o escopo da introdução do Plan.
 
 ## Implementação e evidência viva
 
