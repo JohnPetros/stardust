@@ -39,7 +39,7 @@ eval "$(node ./scripts/export-web-app-e2e-env.mjs)"
 | `pnpm run check:complexity`   | CodeMultiVitals    | falha quando a complexidade ou a qualidade piora em relação ao baseline |
 | `pnpm run test:unit`          | Jest/Vitest        | executa testes unitários por workspace             |
 | `pnpm run test:integration`   | Jest/Playwright    | executa as integrações declaradas pelos workspaces |
-| `pnpm run check:spec-implementation` | Node.js       | valida o mapa `Path | Change | ...` da Spec contra Git e filesystem |
+| `pnpm run check:spec-implementation` | Node.js       | valida o mapa `Path | Change | ...` da Spec contra Git e filesystem e valida o `plan.md` da Spec |
 | `pnpm run check:design`       | Node.js + API do Penpot | verifica o arquivo `stardust` do Penpot contra o baseline de design |
 
 Exemplos de ciclo curto:
@@ -187,7 +187,7 @@ partir da raiz.
 | `test:coverage`      | Executa cobertura dos workspaces com ratchet habilitado.                                            |
 | `check:coverage`     | Compara os relatórios de cobertura com `coverage-baseline.json` e falha quando um baseline diminui. |
 | `check:test-integrity` | Falha quando testes são enfraquecidos ou código testável alterado não tem teste correspondente. |
-| `check:spec-implementation` | Valida o mapa canônico de paths da Spec contra o diff Git e o filesystem. |
+| `check:spec-implementation` | Valida o mapa canônico de paths da Spec contra o diff Git e o filesystem e, quando existe, o `plan.md` da Spec. `--plan-only` valida só o Plan contra a Spec (sem exigir paths entregues); `--require-plan` exige o Plan com todas as linhas `completed` e lê a chave `plan:` do `evaluation.md` irmão: `plan: <path>` exige o Plan, `plan: none` é o opt-out explícito de entregas anteriores ao Plan e a ausência da chave é erro; sem `evaluation.md`, o Plan continua exigido. |
 | `check:design` | Verifica contraste, tokens, tipografia, espaçamento e higiene do arquivo `stardust` do Penpot contra `.design-check-baseline.json`. |
 | `update:design-baseline` | Atualiza o baseline de design após uma revisão explícita dos findings. |
 | `test:spec-implementation` | Executa os testes do checker de conformidade de Spec.                                               |

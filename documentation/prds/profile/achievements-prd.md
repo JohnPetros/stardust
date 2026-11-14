@@ -29,14 +29,14 @@ A reformulação da trilha (histórias interativas com vidas e questões) e a re
 
 ### Base de fontes e autoridade
 
-| ID  | Material                                                                                          | Papel neste PRD                                                                                                                         |
-| --- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| S1  | Este PRD canônico, revisão de 2026-10-31                                                          | Autoridade versionada para catálogo, desbloqueio, celebração e crédito de conquistas.                                                   |
-| S2  | Decisões de produto aprovadas em 2026-10-31                                                       | Grupos, trilhas em níveis, Especiais ocultas, momento da celebração, crédito automático, arte por trilha e exclusão do catálogo antigo. |
-| S3  | [Perfil](profile-page-prd.md), RP-05                                                              | Lista de conquistas desbloqueadas no perfil; continua válida e passa a consumir o novo catálogo.                                        |
-| S4  | [Resultado e recompensas da história](../lesson/story-result-prd.md)                              | Mantém conquistas fora do fluxo de resultado; a celebração ocorre depois, na Galáxia.                                                   |
-| S5  | [Histórias interativas](../lesson/lesson-page-prd.md)                                             | Define vidas, questões, tentativas e conclusão das histórias que alimentam a trilha Histórias.                                          |
-| S6  | Implementação existente (entidade Achievement, ObserveNewUnlockedAchievements, RescueAchievement) | Evidência auxiliar do modelo atual; não define as regras desta revisão.                                                                 |
+| ID | Material | Papel neste PRD |
+| --- | --- | --- |
+| S1 | Este PRD canônico, revisão de 2026-10-31 | Autoridade versionada para catálogo, desbloqueio, celebração e crédito de conquistas. |
+| S2 | Decisões de produto aprovadas em 2026-10-31 | Grupos, trilhas em níveis, Especiais ocultas, momento da celebração, crédito automático, arte por trilha e exclusão do catálogo antigo. |
+| S3 | [Perfil](profile-page-prd.md), RP-05 | Lista de conquistas desbloqueadas no perfil; continua válida e passa a consumir o novo catálogo. |
+| S4 | [Resultado e recompensas da história](../lesson/story-result-prd.md) | Mantém conquistas fora do fluxo de resultado; a celebração ocorre depois, na Galáxia. |
+| S5 | [Histórias interativas](../lesson/lesson-page-prd.md) | Define vidas, questões, tentativas e conclusão das histórias que alimentam a trilha Histórias. |
+| S6 | Implementação existente (entidade Achievement, ObserveNewUnlockedAchievements, RescueAchievement) | Evidência auxiliar do modelo atual; não define as regras desta revisão. |
 
 ## 3. Público-alvo
 
@@ -51,39 +51,39 @@ Jobs to Be Done:
 
 ## 4. Objetivos e Métricas de Sucesso
 
-| Objetivo do produto                 | Métrica aprovada               | Significado da medição                                                                                                         |
-| ----------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
-| Celebrar perto do momento do mérito | Nenhuma meta numérica aprovada | Verificar que o desbloqueio é registrado na ação e que o aviso aparece sem recarregar a página.                                |
-| Reconhecer como o aluno aprende     | Nenhuma meta numérica aprovada | Verificar que as trilhas de qualidade (Sem arranhões, Na mosca, Por conta própria) progridem apenas pelas condições definidas. |
-| Tornar o próximo objetivo visível   | Nenhuma meta numérica aprovada | Verificar que cada trilha mostra nível atual, próximo nível e progresso.                                                       |
-| Conceder recompensa uma única vez   | Nenhuma meta numérica aprovada | Verificar que cada nível é desbloqueado e creditado no máximo uma vez por conta.                                               |
+| Objetivo do produto | Métrica aprovada | Significado da medição |
+| --- | --- | --- |
+| Celebrar perto do momento do mérito | Nenhuma meta numérica aprovada | Verificar que o desbloqueio é registrado na ação e que o aviso aparece sem recarregar a página. |
+| Reconhecer como o aluno aprende | Nenhuma meta numérica aprovada | Verificar que as trilhas de qualidade (Sem arranhões, Na mosca, Por conta própria) progridem apenas pelas condições definidas. |
+| Tornar o próximo objetivo visível | Nenhuma meta numérica aprovada | Verificar que cada trilha mostra nível atual, próximo nível e progresso. |
+| Conceder recompensa uma única vez | Nenhuma meta numérica aprovada | Verificar que cada nível é desbloqueado e creditado no máximo uma vez por conta. |
 
 ### Limites de validação e premissas declaradas
 
-| Risco ou premissa                                                                                                                                             | Consequência para validação                                                                                                                                                  |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| As metas numéricas do catálogo inicial são provisórias.                                                                                                       | Tratá-las como valores iniciais editáveis no Backoffice, não como regra fixa.                                                                                                |
-| A trilha terá entre 30 e 50 estrelas.                                                                                                                         | Metas de exploração usam valores pequenos ou relativos ao conteúdo publicado.                                                                                                |
-| O progresso de todos os usuários será reiniciado.                                                                                                             | Não há migração; todos começam o novo catálogo do zero.                                                                                                                      |
+| Risco ou premissa | Consequência para validação |
+| --- | --- |
+| As metas numéricas do catálogo inicial são provisórias. | Tratá-las como valores iniciais editáveis no Backoffice, não como regra fixa. |
+| A trilha terá entre 30 e 50 estrelas. | Metas de exploração usam valores pequenos ou relativos ao conteúdo publicado. |
+| O progresso de todos os usuários será reiniciado. | Não há migração; todos começam o novo catálogo do zero. |
 | Várias trilhas dependem de dados que hoje não são registrados (tentativas e vidas por questão, tipo de questão, uso do assistente por desafio, fuso horário). | Registrar esses dados no servidor faz parte desta entrega, sem aguardar a conclusão da reformulação da lição. Dados enviados pelo cliente não são confiáveis para progresso. |
-| As tentativas e vidas registradas aqui são as mesmas que [Histórias interativas](../lesson/lesson-page-prd.md) vincula à conta.                               | Implementar um único registro de tentativas por questão e de vidas por história, compartilhado entre lição e conquistas, sem duplicação.                                     |
-| Os tipos de questão de programação em blocos e de escrita de código são definidos por seus próprios PRDs.                                                     | Arquiteto de blocos e Mão no código registram o tipo da questão desde já e passam a progredir quando esses tipos estiverem publicados.                                       |
-| Conquistas não fazem parte do resultado da história.                                                                                                          | Não acrescentar etapa de conquistas ao fluxo de Resultado e recompensas da história.                                                                                         |
+| As tentativas e vidas registradas aqui são as mesmas que [Histórias interativas](../lesson/lesson-page-prd.md) vincula à conta. | Implementar um único registro de tentativas por questão e de vidas por história, compartilhado entre lição e conquistas, sem duplicação. |
+| Os tipos de questão de programação em blocos e de escrita de código são definidos por seus próprios PRDs. | Arquiteto de blocos e Mão no código registram o tipo da questão desde já e passam a progredir quando esses tipos estiverem publicados. |
+| Conquistas não fazem parte do resultado da história. | Não acrescentar etapa de conquistas ao fluxo de Resultado e recompensas da história. |
 
 ## 5. Requisitos de Produto
 
 ### Conceitos e responsabilidades
 
-| Conceito           | Regra de produto                                                                                                     |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------- |
-| Grupo              | Agrupamento temático de trilhas: Exploração, Histórias, Desafios, Constância, Evolução, Coleção, Criação, Especiais. |
-| Trilha             | Conquista com uma métrica e níveis crescentes. Possui um único ícone.                                                |
-| Nível              | Etapa de uma trilha com meta e recompensa próprias. Numerado I, II, III, IV.                                         |
-| Conquista especial | Conquista única, sem níveis, oculta até o desbloqueio.                                                               |
-| Meta absoluta      | Valor numérico fixo (ex.: 10 estrelas).                                                                              |
-| Meta relativa      | Valor calculado sobre o conteúdo publicado no momento da verificação (ex.: todas as estrelas, metade dos planetas).  |
-| Desbloqueio        | Registro permanente de que a conta alcançou um nível ou uma conquista especial.                                      |
-| Crédito            | Concessão automática das StarCoins de um nível no momento do desbloqueio.                                            |
+| Conceito | Regra de produto |
+| --- | --- |
+| Grupo | Agrupamento temático de trilhas: Exploração, Histórias, Desafios, Constância, Evolução, Coleção, Criação, Especiais. |
+| Trilha | Conquista com uma métrica e níveis crescentes. Possui um único ícone. |
+| Nível | Etapa de uma trilha com meta e recompensa próprias. Numerado I, II, III, IV. |
+| Conquista especial | Conquista única, sem níveis, oculta até o desbloqueio. |
+| Meta absoluta | Valor numérico fixo (ex.: 10 estrelas). |
+| Meta relativa | Valor calculado sobre o conteúdo publicado no momento da verificação (ex.: todas as estrelas, metade dos planetas). |
+| Desbloqueio | Registro permanente de que a conta alcançou um nível ou uma conquista especial. |
+| Crédito | Concessão automática das StarCoins de um nível no momento do desbloqueio. |
 
 #### RP-01 — Organizar o catálogo em grupos e trilhas
 
@@ -300,34 +300,34 @@ Atores: administrador (conta god).
 
 As metas são valores iniciais e editáveis. "Todas" e "metade" são metas relativas (RP-02).
 
-| Grupo      | Trilha              | Métrica                                                | Níveis               |
-| ---------- | ------------------- | ------------------------------------------------------ | -------------------- |
-| Exploração | Desbravador         | Estrelas desbloqueadas                                 | 1 · 10 · 25 · todas  |
-| Exploração | Cartógrafo          | Planetas concluídos                                    | 1 · metade · todos   |
-| Histórias  | Leitor              | Histórias concluídas                                   | 1 · 10 · 25 · todas  |
-| Histórias  | Sem arranhões       | Histórias concluídas pela primeira vez sem perder vida | 1 · 5 · 15           |
-| Histórias  | Na mosca            | Questões acertadas na primeira tentativa               | 10 · 50 · 150        |
-| Histórias  | Arquiteto de blocos | Questões de programação em blocos resolvidas           | 5 · 20 · 50          |
-| Histórias  | Mão no código       | Questões de escrita de código resolvidas               | 5 · 20 · 50          |
-| Histórias  | Persistente         | Histórias concluídas após ficar sem vidas nelas        | 1 · 5                |
-| Desafios   | Solucionador        | Desafios concluídos                                    | 1 · 10 · 30 · 75     |
-| Desafios   | Escalada            | Desafios difíceis concluídos                           | 1 · 5 · 15           |
-| Desafios   | De primeira         | Desafios concluídos na primeira submissão              | 1 · 10 · 30          |
-| Desafios   | Por conta própria   | Desafios concluídos sem usar o assistente de IA        | 5 · 20 · 50          |
-| Desafios   | Versátil            | Categorias com ao menos um desafio concluído           | 3 · 6 · todas        |
-| Constância | Chama acesa         | Maior streak alcançado                                 | 7 · 30 · 100 · 365   |
-| Constância | Dedicado            | Total de dias com atividade                            | 10 · 50 · 150        |
-| Constância | Semana cheia        | Semanas com atividade nos 7 dias                       | 1 · 4 · 12           |
-| Evolução   | Ascensão            | Nível alcançado                                        | 5 · 10 · 20 · 30     |
-| Coleção    | Identidade          | Avatares adquiridos                                    | 1 · 5 · todos        |
-| Coleção    | Insígnias           | Insígnias adquiridas                                   | 1 · 3 · todas        |
-| Coleção    | Investidor          | StarCoins gastas na loja                               | 500 · 2.000 · 10.000 |
-| Criação    | Inventor            | Snippets criados no Playground                         | 1 · 10 · 30          |
-| Criação    | Mentor              | Soluções de desafio publicadas                         | 1 · 5 · 20           |
-| Criação    | Autor               | Desafios criados e publicados                          | 1 · 3 · 10           |
-| Criação    | Reconhecido         | Votos recebidos em soluções e desafios publicados      | 10 · 50 · 200        |
-| Especiais  | Coruja              | Concluir uma história entre 00:00 e 04:59              | única, oculta        |
-| Especiais  | Madrugador          | Concluir uma história entre 05:00 e 06:59              | única, oculta        |
+| Grupo | Trilha | Métrica | Níveis |
+| --- | --- | --- | --- |
+| Exploração | Desbravador | Estrelas desbloqueadas | 1 · 10 · 25 · todas |
+| Exploração | Cartógrafo | Planetas concluídos | 1 · metade · todos |
+| Histórias | Leitor | Histórias concluídas | 1 · 10 · 25 · todas |
+| Histórias | Sem arranhões | Histórias concluídas pela primeira vez sem perder vida | 1 · 5 · 15 |
+| Histórias | Na mosca | Questões acertadas na primeira tentativa | 10 · 50 · 150 |
+| Histórias | Arquiteto de blocos | Questões de programação em blocos resolvidas | 5 · 20 · 50 |
+| Histórias | Mão no código | Questões de escrita de código resolvidas | 5 · 20 · 50 |
+| Histórias | Persistente | Histórias concluídas após ficar sem vidas nelas | 1 · 5 |
+| Desafios | Solucionador | Desafios concluídos | 1 · 10 · 30 · 75 |
+| Desafios | Escalada | Desafios difíceis concluídos | 1 · 5 · 15 |
+| Desafios | De primeira | Desafios concluídos na primeira submissão | 1 · 10 · 30 |
+| Desafios | Por conta própria | Desafios concluídos sem usar o assistente de IA | 5 · 20 · 50 |
+| Desafios | Versátil | Categorias com ao menos um desafio concluído | 3 · 6 · todas |
+| Constância | Chama acesa | Maior streak alcançado | 7 · 30 · 100 · 365 |
+| Constância | Dedicado | Total de dias com atividade | 10 · 50 · 150 |
+| Constância | Semana cheia | Semanas com atividade nos 7 dias | 1 · 4 · 12 |
+| Evolução | Ascensão | Nível alcançado | 5 · 10 · 20 · 30 |
+| Coleção | Identidade | Avatares adquiridos | 1 · 5 · todos |
+| Coleção | Insígnias | Insígnias adquiridas | 1 · 3 · todas |
+| Coleção | Investidor | StarCoins gastas na loja | 500 · 2.000 · 10.000 |
+| Criação | Inventor | Snippets criados no Playground | 1 · 10 · 30 |
+| Criação | Mentor | Soluções de desafio publicadas | 1 · 5 · 20 |
+| Criação | Autor | Desafios criados e publicados | 1 · 3 · 10 |
+| Criação | Reconhecido | Votos recebidos em soluções e desafios publicados | 10 · 50 · 200 |
+| Especiais | Coruja | Concluir uma história entre 00:00 e 04:59 | única, oculta |
+| Especiais | Madrugador | Concluir uma história entre 05:00 e 06:59 | única, oculta |
 
 Regras de contagem:
 
@@ -350,17 +350,17 @@ Todas as métricas começam em zero após o reinício do progresso. Não há cá
 
 ## 7. Grafo de Dependências do Produto
 
-| Produtor/área         | Consumidor     | Responsabilidade                                                                                                         |
-| --------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Histórias interativas | Conquistas     | Fornecer conclusões, vidas perdidas, tentativas por questão e tipo de questão, registradas no servidor por esta entrega. |
-| Desafios              | Conquistas     | Fornecer conclusões, dificuldade, categoria, número de submissões e uso do assistente de IA.                             |
-| Conta do aluno        | Conquistas     | Fornecer streak, dias com atividade, nível e saldo de StarCoins.                                                         |
-| Loja                  | Conquistas     | Fornecer itens adquiridos e StarCoins gastas.                                                                            |
-| Playground e soluções | Conquistas     | Fornecer snippets, soluções e desafios publicados e votos recebidos.                                                     |
-| Trilha e Galáxia      | Conquistas     | Fornecer estrelas e planetas publicados e concluídos para metas relativas.                                               |
-| Conquistas            | Conta do aluno | Creditar StarCoins no desbloqueio.                                                                                       |
-| Conquistas            | Layout Home    | Fornecer celebrações pendentes.                                                                                          |
-| Backoffice            | Conquistas     | Manter apresentação, metas e recompensas do catálogo.                                                                    |
+| Produtor/área | Consumidor | Responsabilidade |
+| --- | --- | --- |
+| Histórias interativas | Conquistas | Fornecer conclusões, vidas perdidas, tentativas por questão e tipo de questão, registradas no servidor por esta entrega. |
+| Desafios | Conquistas | Fornecer conclusões, dificuldade, categoria, número de submissões e uso do assistente de IA. |
+| Conta do aluno | Conquistas | Fornecer streak, dias com atividade, nível e saldo de StarCoins. |
+| Loja | Conquistas | Fornecer itens adquiridos e StarCoins gastas. |
+| Playground e soluções | Conquistas | Fornecer snippets, soluções e desafios publicados e votos recebidos. |
+| Trilha e Galáxia | Conquistas | Fornecer estrelas e planetas publicados e concluídos para metas relativas. |
+| Conquistas | Conta do aluno | Creditar StarCoins no desbloqueio. |
+| Conquistas | Layout Home | Fornecer celebrações pendentes. |
+| Backoffice | Conquistas | Manter apresentação, metas e recompensas do catálogo. |
 
 O grafo identifica responsabilidades de produto, não uma ordem de implementação.
 
@@ -402,32 +402,32 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 
 ## 9. Fora do Escopo
 
-| Área                           | Exclusão explícita desta versão                                                               |
-| ------------------------------ | --------------------------------------------------------------------------------------------- |
-| Ranking                        | Conquistas relacionadas a ligas, divisões ou promoções.                                       |
-| Migração                       | Preservar desbloqueios ou StarCoins do catálogo antigo; o progresso de todos será reiniciado. |
-| Resultado da história          | Etapa de conquistas dentro do fluxo de resultado.                                             |
-| Comunidade                     | Conquistas de fórum ou interação social além de votos recebidos.                              |
-| Arte por nível                 | Arte exclusiva para cada nível; cada trilha tem um ícone, e o nível é indicado pelo frame.    |
-| Novas métricas pelo Backoffice | Criação de métricas sem mudança de produto.                                                   |
+| Área | Exclusão explícita desta versão |
+| --- | --- |
+| Ranking | Conquistas relacionadas a ligas, divisões ou promoções. |
+| Migração | Preservar desbloqueios ou StarCoins do catálogo antigo; o progresso de todos será reiniciado. |
+| Resultado da história | Etapa de conquistas dentro do fluxo de resultado. |
+| Comunidade | Conquistas de fórum ou interação social além de votos recebidos. |
+| Arte por nível | Arte exclusiva para cada nível; cada trilha tem um ícone, e o nível é indicado pelo frame. |
+| Novas métricas pelo Backoffice | Criação de métricas sem mudança de produto. |
 
 ### Decisões descartadas durante a definição
 
-| Alternativa considerada                                                   | Regra final                                                                                                                    |
-| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Conquistas avulsas, cada uma com uma meta                                 | Trilhas em níveis.                                                                                                             |
-| Metas absolutas grandes para estrelas e planetas                          | Metas pequenas ou relativas, porque a trilha tem entre 30 e 50 estrelas.                                                       |
-| Conquistas de ranking (Liga, Promovido)                                   | Removidas.                                                                                                                     |
-| Seis conquistas especiais                                                 | Apenas Coruja e Madrugador.                                                                                                    |
-| Trilha Frota, por foguetes adquiridos                                     | Removida em 2026-11-13: o foguete passou a ser único e fixo, fora da loja. Quem já a desbloqueou mantém a recompensa recebida. |
-| Substituir Frota por outra trilha de coleção                              | Sem substituição; Coleção fica com Identidade, Insígnias e Investidor.                                                         |
-| Especiais invisíveis até o desbloqueio                                    | Espaços "???" na lista.                                                                                                        |
-| Verificar ao montar o layout Home                                         | Verificar no servidor, na ação.                                                                                                |
-| Lista completa na gaveta lateral do layout Home                           | Página dedicada `/profile/[userSlug]/achievements`, acessível apenas ao dono.                                                  |
-| Página de conquistas pública                                              | Apenas o dono vê o progresso; os demais veem os níveis desbloqueados no perfil.                                                |
-| Apenas toast ou apenas diálogo                                            | Toast imediato e diálogo no layout Home.                                                                                       |
-| Resgate manual por toque                                                  | Crédito automático no desbloqueio; o diálogo apenas notifica.                                                                  |
-| Uma arte por nível                                                        | Um ícone por trilha, com frame por nível.                                                                                      |
-| Migrar ou creditar o catálogo antigo                                      | Excluir o catálogo antigo; o progresso de todos será reiniciado.                                                               |
-| Recompensar velocidade nas histórias                                      | Não recompensar, para não incentivar pressa na narrativa.                                                                      |
-| Lançar as trilhas de qualidade das histórias após a reformulação da lição | Construir o registro de tentativas, vidas e tipo de questão nesta entrega.                                                     |
+| Alternativa considerada | Regra final |
+| --- | --- |
+| Conquistas avulsas, cada uma com uma meta | Trilhas em níveis. |
+| Metas absolutas grandes para estrelas e planetas | Metas pequenas ou relativas, porque a trilha tem entre 30 e 50 estrelas. |
+| Conquistas de ranking (Liga, Promovido) | Removidas. |
+| Seis conquistas especiais | Apenas Coruja e Madrugador. |
+| Trilha Frota, por foguetes adquiridos | Removida em 2026-11-13: o foguete passou a ser único e fixo, fora da loja. Quem já a desbloqueou mantém a recompensa recebida. |
+| Substituir Frota por outra trilha de coleção | Sem substituição; Coleção fica com Identidade, Insígnias e Investidor. |
+| Especiais invisíveis até o desbloqueio | Espaços "???" na lista. |
+| Verificar ao montar o layout Home | Verificar no servidor, na ação. |
+| Lista completa na gaveta lateral do layout Home | Página dedicada `/profile/[userSlug]/achievements`, acessível apenas ao dono. |
+| Página de conquistas pública | Apenas o dono vê o progresso; os demais veem os níveis desbloqueados no perfil. |
+| Apenas toast ou apenas diálogo | Toast imediato e diálogo no layout Home. |
+| Resgate manual por toque | Crédito automático no desbloqueio; o diálogo apenas notifica. |
+| Uma arte por nível | Um ícone por trilha, com frame por nível. |
+| Migrar ou creditar o catálogo antigo | Excluir o catálogo antigo; o progresso de todos será reiniciado. |
+| Recompensar velocidade nas histórias | Não recompensar, para não incentivar pressa na narrativa. |
+| Lançar as trilhas de qualidade das histórias após a reformulação da lição | Construir o registro de tentativas, vidas e tipo de questão nesta entrega. |

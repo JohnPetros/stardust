@@ -13,10 +13,11 @@ implementation entry point: do not ask the user to choose another prompt and do 
 create another thread.
 
 ```text
-implement-spec
+implement-spec (requires the plan.md of the current revision, from create-plan)
 → Builder Direct or bounded Builders
+→ plan.md rows completed
 → integrated candidate
-→ check:spec-implementation + sensors + real manual verification
+→ check:spec-implementation --require-plan + sensors + real manual verification
 → Implementation Reviewer (+ Visual Reviewer in parallel, when there is UI)
 → evaluation.md ready
 → conclude-spec
@@ -29,7 +30,7 @@ when a check passes, the code is complete or a Reviewer responds while
 required and actionable obligations remain. A question about a check drives the Spec in
 progress, unless the user explicitly restricts or cancels the goal.
 
-1. Reconcile all `AV-*`/`MV-*`/`VV-*` and baseline verifications, the `CA-*` mapping,
+1. Reconcile the `plan.md` rows, all `AV-*`/`MV-*`/`VV-*` and baseline verifications, the `CA-*` mapping,
    the open `ACH-*` and the independent review with `evaluation.md` before
    choosing the next action.
 2. Run the pending checks, diagnose failures, fix causes within the
@@ -64,32 +65,41 @@ disappears, without asking for authority again.
 
 ## Establish or resume the Contract
 
-Read `AGENTS.md`, `documentation/sdd.md`, the current Spec and `evaluation.md`,
+Read `AGENTS.md`, `documentation/sdd.md`, the current Spec, `plan.md` and `evaluation.md`,
 Architecture, Modules, the Rules selected by the affected paths,
 `documentation/tooling.md` and the Design Contract with the pages, boards and components of the
 Penpot `stardust` file through the Penpot MCP. Reuse complete sources still current in this
 context. Inspect `git status` and the diffs and preserve unrelated work. Use
 CodeGraph for each new code exploration, per `AGENTS.md`.
 
-Initial implementation requires an `open` Spec; resumed work requires the same revision and
-an Evaluation with unfinished criteria or findings. Do not activate the Spec Reviewer for
-implementation evidence. A material Contract change goes through `create-spec`:
-preserve the history, reconcile source/design/sensors, increment the revision and
-invalidate the affected proof.
+Initial implementation requires an `open` Spec and a `plan.md` whose `spec_revision` is the
+Spec's current revision, created by [`create-plan`](create-plan-prompt.md). If the plan is
+missing or stale, stop and report that `create-plan` must run first; do not create it here.
+The only exception is a resumed delivery whose existing `evaluation.md` predates `plan.md` and
+declares `plan: none` in its frontmatter, an explicit opt-out that the checker reads: it
+continues without a plan and keeps its progress in the Evaluation's legacy `Implementation`
+column (see "Entregas anteriores ao Plan" in `documentation/sdd.md`). A missing `plan:` key is
+an error, and `plan: none` is never added to a new delivery.
+Resumed work requires the same revision and a `plan.md` with unfinished rows or an Evaluation
+with unfinished criteria or findings. Do not activate the Spec Reviewer for implementation
+evidence. A material Contract change goes through `create-spec`: preserve the history,
+reconcile source/design/sensors, increment the revision, rerun `create-plan` to reconcile
+`plan.md` and invalidate the affected proof.
 
 Before any feature edit, create or reconcile `evaluation.md` per the
 Contract of [`create-evaluation`](create-evaluation-prompt.md) and change the Spec to
 `in_progress`. Record the current Contract, the Spec revision, the base commit, the
 branch/candidate, the known baseline facts and the assignment (mapped RP/JN, RF/CA and
 SHI-*, allowed and forbidden paths, Rule Pack, Design references and
-exits). Initialize one Progress row per `CA-*`, separating implementation from
-verification, plus Check Results, Findings, Lessons, Handoff and Delivery. Read the existing
+exits). Initialize one Criteria evidence row per `CA-*` (verification only; implementation
+progress lives in `plan.md`), plus Check Results, Findings, Lessons, Handoff and Delivery.
+Mark a `plan.md` row `in_progress` when work on its path starts. Read the existing
 failure reports; do not launch integration suites for a baseline nor
 to fulfill the kickoff. Environment availability may be inspected without starting
 a behavioral suite.
 
-On continuation, compare the recorded progress and evidence with the current tree. A
-completed criterion remains completed only when the covered behavior and the
+On continuation, compare the `plan.md` rows and the recorded evidence with the current tree. A
+completed row or criterion remains completed only when the covered behavior and the
 proofs have not changed. Inspect recorded process sessions and active ports before
 starting services. Recover unfinished work from the diff and the findings and choose
 the next action without rebuilding a task ledger.
@@ -103,7 +113,10 @@ tests, migrations or generated artifacts and record the blocker:
   workflows nor simulate old roles;
 - the Spec, its paths, contracts, exclusions and states are the authority; existing code,
   an isolated screenshot or a passing test does not replace them;
-- `pnpm run check:spec-implementation <spec> --base <base-commit>` runs before the
+- a `plan.md` for the current Spec revision exists before any edit (a legacy delivery whose
+  Evaluation declares `plan: none` is the only exception), and only the main task edits it;
+- `pnpm run check:spec-implementation <spec> --base <base-commit> --require-plan` (it honors
+  an Evaluation's `plan: none`) runs before the
   integrated sensors and again after any fix that changes, creates, generates or
   removes a contracted path;
 - any implementation, test, browser, network, console, migration, CI or
@@ -141,7 +154,8 @@ by ownership (`builder_core`, `builder_server`, `builder_web` or equivalent) wit
 - Rule Pack, design references and existing findings;
 - unit/component/static feedback commands and the expected result.
 
-Builders do not create other subagents. Keep concurrent ownership disjoint, warn
+Builders do not create other subagents and do not edit `plan.md`: the main task updates the
+rows from the diffs it accepts. Keep concurrent ownership disjoint, warn
 them that they are not alone in the worktree and must preserve others' edits. Coordinate
 shared contracts, generated artifacts, migrations, lockfiles and
 cross-boundary changes in the main task. Inspect each returned diff and incorporate only
@@ -216,10 +230,13 @@ After integrating all implementation flows and the generated artifacts:
 
 1. Compare the full diff with the Spec's outcomes, boundaries, public contracts, persistent
    invariants, exclusions and sensor coverage.
-2. Run `pnpm run check:spec-implementation <spec> --base <base-commit>`. This
+2. Mark every delivered `plan.md` row `completed` after inspecting its path in the diff, then
+   run `pnpm run check:spec-implementation <spec> --base <base-commit> --require-plan`. This
    preflight requires the canonical `Path | Change | ...` map of the Technical Contract and
    confirms that each `Create`, `Modify`, `Generate` or `Remove` matches the diff and the
-   filesystem. It is structural and does not replace tests, sensors, Reviewers nor Evaluation.
+   filesystem. With `--require-plan` it also requires the `plan.md` of the current revision, with
+   one row per mapped path, linked `RF-*`/`CA-*` IDs that exist in the Spec and every row
+   `completed`. It is structural and does not replace tests, sensors, Reviewers nor Evaluation.
 3. Run `format`, `check:code` and `check:types` in the affected workspaces and in their
    consumers, `test:unit` with the affected test files, `check:test-integrity` and
    `check:architecture` when applicable, per "Execução local escopada" in
@@ -265,8 +282,8 @@ nor removal of the automated acceptance obligations.
 ## Parallel review and fixes
 
 Activate the independent [Implementation Reviewer](../agents/implementation-reviewer-agent.md)
-over the integrated diff, the current Spec, the selected Rules and the current acceptance
-evidence. For design-backed UI, activate the
+over the integrated diff, the current Spec, `plan.md`, the selected Rules and the current
+acceptance evidence. For design-backed UI, activate the
 [Visual Reviewer](../agents/visual-reviewer-agent.md) **in parallel** over the same
 candidate and the already existing required captures and references. Do not add a third
 serial Reviewer; additional specialists require a distinct material risk, not a
@@ -302,11 +319,11 @@ Classify any request or discrepancy against the current revision before changing
 code or artifacts:
 
 - **Implementation fix:** keep the revision, record an `ACH-*`, reopen the
-  Evaluation and the affected work, mark as `stale` only the affected evidence,
+  Evaluation, the affected `plan.md` rows and the affected work, mark as `stale` only the affected evidence,
   resume the Builder and rerun its exits.
 - **Contract change:** pause, return the Spec to `draft`, invoke `create-spec`
   to obtain authority and update PRD, Architecture, Modules, Design, Tooling or Rules
-  when necessary; increment the revision, reconcile the Evaluation and only then resume.
+  when necessary; increment the revision, rerun `create-plan`, reconcile the Evaluation and only then resume.
 
 Do not request authorization to fix a discrepancy within the Contract. Ask
 only when the classification, the product outcome, an authority, security or the
@@ -336,10 +353,10 @@ Contract, architectural ownership or global policy require user authority.
 
 ## Evidence and readiness
 
-Follow the structure of the [Evaluation](create-evaluation-prompt.md). Progress has one row
-per `CA-*` with Implementation (`Pending`/`Partial`/`Complete`) and Verification
-(`Pending`/`Partial`/`Passed`/`Failed`/`Blocked`/`Stale`) separate, mapped
-checks/evidence and remaining work. Check Results includes the baseline checks and uses `Pending`,
+Follow the structure of the [Evaluation](create-evaluation-prompt.md). Criteria evidence has
+one row per `CA-*` with Verification (`Pending`/`Partial`/`Passed`/`Failed`/`Blocked`/`Stale`),
+mapped checks/evidence and remaining work; implementation progress lives only in the `plan.md`
+rows (see [`create-plan`](create-plan-prompt.md)). Check Results includes the baseline checks and uses `Pending`,
 `Passed`, `Failed`, `Blocked`, `Stale` or `Not applicable`, with `EV-*` IDs, exact
 procedures, real test selection and count, expected/observed results,
 candidate/date, environment/fixtures, artifact paths and limits. Preserve failed or
@@ -355,8 +372,8 @@ configuration or environment record scope, reproducible procedure and
 cleanup without secrets; generated artifacts record source, generator and output; new
 or changed tests record the protected behavior and the command.
 
-Keep a small, factual Handoff: Contract revision, branch/candidate, completed and
-unfinished criteria, interrupted or uncommitted paths and their ownership, latest
+Keep a small, factual Handoff: Contract revision, branch/candidate, verified and
+unverified criteria, unfinished `plan.md` rows, interrupted or uncommitted paths and their ownership, latest
 results, process sessions/ports started by the task and cleanup, blockers and the
 next action. Keep the blockers specific; do not turn this section into phases,
 task trees, estimates nor a second Contract.
@@ -366,7 +383,7 @@ the reason for no change. A trivial fix does not need to become a lesson nor a g
 policy. Keep the Delivery (source verification, documentation alignment, publication
 state and limitations) factual, without PR CI results.
 
-When all criteria have current approved proof or justified non-applicability,
+When every `plan.md` row is `completed`, all criteria have current approved proof or justified non-applicability,
 the applicable sensors pass and the blocking findings are resolved, mark the
 Evaluation as `ready` and proceed directly to `conclude-spec`. Conclusion reuses
 these results; it does not start another broad integration run. The exact records of
@@ -386,7 +403,7 @@ in the Evaluation, reopen the affected check and report the correction explicitl
 
 ## Report
 
-Return links to the Spec and the Evaluation, revision/candidate, implemented outcomes,
+Return links to the Spec, the Plan and the Evaluation, revision/candidate, implemented outcomes,
 sensor results, Reviewers' findings and dispositions, remaining criteria/blockers
 and the next action. Keep the runtime and visual limitations explicit.
 Reusable guidance revealed by a defect may be recorded as a grounded lesson;
