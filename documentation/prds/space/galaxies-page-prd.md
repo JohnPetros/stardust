@@ -74,6 +74,7 @@ Jobs to Be Done:
 | Não há metas numéricas | Não inventar metas nem exigir novos eventos de analytics. |
 | O mapa foi desenhado com duas galáxias | Validar com duas galáxias. Com três ou mais, vale a regra de RP-02, sem desenho de referência. |
 | Uma galáxia publicada pode deixar de estar publicada | Validar que o aluno não fica sem galáxia atual e que o progresso na galáxia retirada é preservado. |
+| O catálogo ainda não informa o estado “anunciada” | A galáxia “Em breve” depende de o catálogo de space fornecer esse estado, conforme a seção 6. Enquanto ele não for fornecido, nenhuma galáxia deve aparecer como “Em breve”. |
 | Uma galáxia anunciada não tem conteúdo disponível | Validar que ela não pode ser aberta por clique, toque, teclado ou acesso direto. |
 | O foco de teclado não tem board no Penpot | Validar o foco pela extensão aprovada em `documentation/design.md`. |
 
@@ -309,7 +310,7 @@ Atores: aluno autenticado. Requisitos: RP-01, RP-02, RP-03 e RP-04.
 
 | Área | Exclusão explícita desta versão |
 | --- | --- |
-| Catálogo e Studio | Cadastro, ordenação, anúncio e publicação de galáxias; associação de planetas a galáxias. |
+| Catálogo e Studio | As telas e os fluxos de autoria para cadastrar, ordenar, anunciar e publicar galáxias e para associar planetas a galáxias. O estado de cada galáxia continua sendo uma dependência desta página, conforme a seção 6. |
 | Conteúdo | Planetas, estrelas e narrativa da galáxia Orientação a Objetos ou de qualquer outra galáxia além da primeira. |
 | Arte | Ilustração final de cada galáxia. |
 | Cadastro | Escolha de curso durante o cadastro. |

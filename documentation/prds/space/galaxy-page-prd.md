@@ -505,7 +505,7 @@ Atores: aluno autenticado; área responsável pelo catálogo e pelo progresso.
 | Conta do aluno | Trilha e Galáxia | Preservar o estado de abertura de cada planeta entre sessões e dispositivos. |
 | Preferência de som e de movimento reduzido | Diálogo do planeta, cadeado do planeta e encerramento | Orientar o início sem som, a abertura com o vídeo parado, o cadeado sem movimento contínuo e a troca da animação de abertura por uma transição curta. |
 | Design e produção de animação | Cadeado do planeta | Fornecer a animação do cadeado, com o estado fechado, o movimento contínuo e a abertura. |
-| Catálogo de space | Galáxias | Associar cada planeta a uma galáxia e informar as galáxias publicadas, quando houver mais de uma. |
+| Catálogo de space | Galáxias | Associar cada planeta a uma galáxia e informar as galáxias publicadas e as anunciadas, com o estado de cada uma, quando houver mais de uma galáxia visível. |
 
 Os PRDs separados de histórias, modalidades de questão e conclusão são responsáveis pelos seus comportamentos. Esta tabela não define ordem de implementação. Gerenciamento no Studio fornece contexto do catálogo, sem receber alterações administrativas nesta entrega.
 
