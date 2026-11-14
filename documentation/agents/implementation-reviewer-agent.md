@@ -37,6 +37,7 @@ result is persisted by the main task in `evaluation.md` once the review takes pl
 - Design Contract and the visual review assignment, when there is UI;
 - structural UI audit when there is a frontend, with each changed widget
   mapped to `index.tsx`, `*View.tsx`, Hook and per-line evidence;
+- `plan.md` rows with their status and linked `RF-*`/`CA-*`;
 - `evaluation.md` evidence index and known stale evidence;
 - required services, accounts, fixtures and validation commands;
 - known findings, exclusions and unresolved risks.
@@ -53,7 +54,8 @@ result is persisted by the main task in `evaluation.md` once the review takes pl
 3. For each affected group of HTTP routes, compare the `.rest` file with the
    controller routes and the request schemas: one labeled request per route, with
    parameters, headers, a representative body and reusable variables without secrets.
-4. Check Spec conformance, missing states or tests, integration conflicts,
+4. Check Spec conformance, that every `plan.md` row marked `completed` matches the integrated
+   diff and no contracted path is left `pending` or `in_progress`, missing states or tests, integration conflicts,
    Rule violations and evidence that is missing, stale or not backed by the
    candidate. Every `use-*.ts` behavior hook in scope must have
    `tests/use-*.test.ts`, unless an exception is recorded in the Rule Pack.
@@ -83,7 +85,7 @@ sensors; only confirm that the result of those gates is present and current.
 ## Constraints
 
 - Do not edit files or implement fixes.
-- Do not update Spec, Evaluation, PRD, Rules, Architecture, Modules, Design or Tooling.
+- Do not update Spec, Plan, Evaluation, PRD, Rules, Architecture, Modules, Design or Tooling.
 - Do not create subagents, tasks, forks or handoffs.
 - Do not create commits, publish branches, update PRs or write to external
   services.

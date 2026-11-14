@@ -9,12 +9,13 @@ rastreável e uma entrega fechada por evidência no PR. Todo o fluxo ocorre na m
 PRD, Issue, Report ou demanda direta
 → create-spec
 → Spec Reviewer + revisão do usuário da Spec escrita
+→ create-plan
 → implement-spec
 → verificação integrada (automatizada + manual + visual)
 → Implementation Reviewer (+ Visual Reviewer em paralelo, quando há UI)
 → check-spec-implementation + check:test-integrity + evaluation.md ready
 → conclude-spec → commit → open-pr → CI do HEAD do PR
-→ Spec e Evaluation completed
+→ Spec, Plan e Evaluation completed
 ```
 
 SDD não é obrigatório para manutenção que não precise de Contract. A task principal
@@ -126,14 +127,14 @@ normalizados na próxima revisão, sem inventar conteúdo ausente.
 
 | Papel                   | Responsabilidade                                                                                                          | Restrição                                                            |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Task principal (Orchestrator) | seleciona workflows, mantém Spec e Evaluation, decide ordem e delegação, integra diffs, executa sensores, registra evidência, publica e roteia falhas | não delega o veredito oficial nem usa relato de subagente como prova |
+| Task principal (Orchestrator) | seleciona workflows, mantém Spec, Plan e Evaluation, decide ordem e delegação, integra diffs, executa sensores, registra evidência, publica e roteia falhas | não delega o veredito oficial nem usa relato de subagente como prova |
 | Spec Reviewer           | executa um único gate antes da implementação, com retries da mesma revisão quando necessário                              | read-only; só avalia Architecture e Rules                            |
-| Builder                 | implementa um escopo delimitado de paths contra uma revisão exata (Direct no contexto principal ou irmãos por ownership)   | não edita Spec, Evaluation, PRD ou Rules; usa o Penpot MCP para UI   |
+| Builder                 | implementa um escopo delimitado de paths contra uma revisão exata (Direct no contexto principal ou irmãos por ownership)   | não edita Spec, Plan, Evaluation, PRD ou Rules; usa o Penpot MCP para UI   |
 | Implementation Reviewer | revisa o candidato integrado contra Contract, Architecture, layer rules e a evidência atual                               | read-only; não corrige nem produz o veredito oficial                 |
 | Visual Reviewer         | compara, em paralelo, as capturas happy-path exigidas com exports atuais dos boards do Penpot, linha a linha do inventário | não edita nem captura; lê o Penpot só pelo MCP; consultivo           |
 
 Subagentes são irmãos criados pela task principal na task atual. Nenhum subagente cria outro
-agente ou task. `create-spec`, `implement-spec` e `conclude-spec` são workflows, não papéis.
+agente ou task. `create-spec`, `create-plan`, `implement-spec` e `conclude-spec` são workflows, não papéis.
 
 ## Artefatos duráveis
 
@@ -141,6 +142,7 @@ agente ou task. `create-spec`, `implement-spec` e `conclude-spec` são workflows
 documentation/prds/<module>/<slug>-prd.md           # PRD canônico versionado do módulo
 documentation/features/<domínio>/<feature>/
 ├── spec.md
+├── plan.md                 # criado por create-plan, depois que a Spec fica open
 └── evaluation.md           # criado no kickoff da implementação
 ```
 
@@ -150,7 +152,9 @@ Uma mudança de comportamento após conclusão usa
 | Artefato             | Possui                                                      | Não possui                              |
 | -------------------- | ----------------------------------------------------------- | --------------------------------------- |
 | `spec.md`            | comportamento, Design, Technical e Verification Contracts     | tentativas e resultados executados      |
-| `evaluation.md`      | comandos, evidências, findings, histórico, comparações e CI | autoridade de produto ou arquitetura    |
+| `plan.md`            | progresso de implementação: uma linha por path do mapa canônico da Spec, com RF/CA, status e notas | Contract, tasks, fases, evidência, findings, handoff |
+| `evaluation.md`      | comandos, evidências, findings, histórico, comparações e CI | autoridade de produto ou arquitetura, nem progresso de implementação |
+
 O arquivo Penpot `stardust` é a fonte visual canônica e editável, inspecionado diretamente pelo
 Penpot MCP. O design não é extraído para artefatos da feature. Screenshots da implementação ficam
 em `test-results/` ignorado ou em artifacts de CI; o identificador, a comparação e o resultado
@@ -167,6 +171,8 @@ substitua essas referências por boards do Penpot `stardust` e preserve o histó
 | Artefato    | Estados                                                     |
 | ----------- | ----------------------------------------------------------- |
 | Spec        | `draft`, `open`, `in_progress`, `completed`, `superseded`   |
+| Plan        | `in_progress`, `completed`                                  |
+| Linha do Plan | `pending`, `in_progress`, `completed`                     |
 | Evaluation  | `in_progress`, `ready`, `completed`                         |
 | Evidência   | `pending`, `passed`, `failed`, `stale`, `not_applicable`    |
 | Achado (`ACH-*`) | `active`, `resolved`, `accepted_non_blocking`, `superseded` |
@@ -258,7 +264,7 @@ Rule Pack das camadas afetadas. O Reviewer verifica somente fronteiras, dependê
 e aderência às Rules; não avalia produto, Design, critérios ou validação. A task principal verifica
 cada finding, corrige a mesma Spec e retoma o Reviewer antes da implementação. A Spec só passa para
 `open` quando essa revisão estiver `clear` e nenhum finding bloqueante verificado permanecer;
-então o fluxo segue para `implement-spec`. Amendment posterior invalida o resultado e exige
+então o fluxo segue para `create-plan` e, em seguida, `implement-spec`. Amendment posterior invalida o resultado e exige
 nova revisão antes de implementar. A revision history registra a revisão, o resultado e as resoluções
 verificadas, sem incorporar o relatório bruto.
 
@@ -292,11 +298,28 @@ e o estado final. Se uma mudança alterar a intenção visual, isso é uma mudan
 retorne a Spec para `draft`, incremente a revisão, atualize o Design Contract e invalide as
 evidências afetadas.
 
+## Plan
+
+`create-plan` cria `plan.md` ao lado da Spec `open`, antes de `implement-spec`, e o reconcilia
+sempre que um amendment incrementa a revisão. O Plan tem uma linha por linha do mapa canônico
+de paths da Spec, na mesma ordem, com `Path`, `Change`, `RF/CA`, `Status` e `Notes`. Os links
+`RF-*`/`CA-*` são escritos por `create-plan` e verificados pelo checker. Cada linha usa
+`pending`, `in_progress` ou `completed`; uma falha ou um bloqueio mantém a linha `in_progress`
+com o `ACH-*` em `Notes`. Um `CA-*` está implementado quando todas as linhas que o citam estão
+`completed`; se ele está comprovado é registrado apenas no Evaluation.
+
+O Plan é a única fonte do progresso de implementação. Ele não possui Contract, tasks, fases,
+waves, estimativas nem evidência. Só a task principal o edita; Builders e Reviewers reportam.
+Não há Grilling em `create-plan`, porque as linhas derivam da Spec. Antes de `implement-spec`,
+`pnpm run check:spec-implementation <spec> --plan-only` valida o Plan contra a Spec sem exigir
+que os paths já estejam entregues.
+
 ## Implementação e evidência viva
 
 `implement-spec` é a única entrada de implementação e executa sempre o Builder Direct no
-contexto principal. O `evaluation.md` é o único ledger de execução: progresso, evidências,
-findings e próxima ação.
+contexto principal. Ele exige o `plan.md` da revisão atual da Spec. O `plan.md` é a única fonte
+do progresso de implementação; o `evaluation.md` é o ledger de evidências, findings e próxima
+ação.
 
 Nenhum source, teste, migration ou artefato gerado é alterado antes de uma assignment delimitada
 ser registrada no Evaluation com revisão, RF/CA, paths, Rules e exits. A Spec é
@@ -304,15 +327,17 @@ comparada com a árvore de arquivos, contratos, estados e exclusões antes de ca
 cada correção. Falha de conformance, cenário manual/runtime indisponível ou evidência stale mantém
 o trabalho `in_progress` e bloqueia o avanço para `ready`.
 
-Antes dos sensores e do Reviewer, execute `pnpm run check:spec-implementation <spec> --base <commit-base>`.
+Antes dos sensores e do Reviewer, execute `pnpm run check:spec-implementation <spec> --base <commit-base> --require-plan`.
 Esse preflight exige o mapa canônico `Path | Change | ...` do `Technical Contract` e
 confirma que cada `Create`, `Modify`, `Generate` ou `Remove` corresponde ao diff e ao
-filesystem. Ele é estrutural e não substitui testes, sensores, Reviewer ou Evaluation.
+filesystem. Com `--require-plan`, exige também o `plan.md` da revisão atual, com uma linha por
+path do mapa, links `RF-*`/`CA-*` existentes na Spec e todas as linhas `completed`. Ele é
+estrutural e não substitui testes, sensores, Reviewer ou Evaluation.
 
-Antes de alterar source ou testes, materialize `evaluation.md` pelo Contract canônico definido
+Antes de alterar source ou testes, confirme o `plan.md` da revisão atual, materialize `evaluation.md` pelo Contract canônico definido
 em `implement-spec`, registre revisão, assignment, paths, Rules, critérios e exits, e mude a Spec para
 `in_progress`. A task principal inspeciona cada diff, executa os sensores oficiais e atualiza
-Evaluation após cada mudança de código, teste, browser, migration, artefato ou documentação.
+o Plan (progresso) e o Evaluation (evidência) após cada mudança de código, teste, browser, migration, artefato ou documentação.
 Relatos de Builder e Reviewer são input, não evidência; a task principal verifica o candidato
 integrado e registra os comandos, resultados, freshness e IDs de evidência.
 
@@ -341,10 +366,10 @@ A evidência é invalidada pela alegação e pelas dependências afetadas, não 
 um novo SHA ou uma edição de ledger, por si só, não invalida prova de comportamento inalterado.
 O Evaluation mantém uma seção de Handoff factual (revisão, candidato, critérios inacabados,
 paths sujos e ownership, processos e portas iniciados, bloqueios e próxima ação) para que outro
-agente retome a partir da Spec, do Evaluation e do diff.
+agente retome a partir da Spec, do Plan, do Evaluation e do diff.
 
 Evidence anterior à última mudança afetada vira `stale`. Evaluation só muda para `ready`
-quando todos os `CA-*`, sensores, `AV-*`, `MV-*`, `VV-*`, `EV-*`, comparações visuais e `ACH-*`
+quando todas as linhas do `plan.md` estão `completed` e todos os `CA-*`, sensores, `AV-*`, `MV-*`, `VV-*`, `EV-*`, comparações visuais e `ACH-*`
 bloqueantes estão
 atuais e resolvidos.
 
@@ -353,7 +378,7 @@ atuais e resolvidos.
 | Classe                    | Ação                                                                                                                                |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | Correção de implementação | mantém revisão; registra finding; reabre trabalho/evidência; retoma Builder; reexecuta somente exits invalidados                    |
-| Mudança de Contract       | pausa; Spec volta a `draft`; atualiza autoridade; incrementa revisão; reconcilia Design e Evaluation; retoma `implement-spec` |
+| Mudança de Contract       | pausa; Spec volta a `draft`; atualiza autoridade; incrementa revisão; reconcilia Design, Plan (via `create-plan`) e Evaluation; retoma `implement-spec` |
 
 Erro de teste, browser, console, runtime, migration, CI ou comparação visual dentro do Contract
 é correção automática. Não se pede autorização para tornar a implementação aderente. Pergunte
@@ -361,16 +386,16 @@ somente quando faltar decisão de produto, autoridade, ambiente, segurança ou e
 
 ## Conclusão, PR e CI
 
-`conclude-spec` exige Spec `in_progress`, Evaluation `ready`,
+`conclude-spec` exige Spec `in_progress`, Plan com todas as linhas `completed`, Evaluation `ready`,
 conformance atual e nenhuma evidência bloqueante. Com autorização para commit/push/PR:
 
-1. repete preflight e conformance no candidato atual;
+1. repete preflight (com `--require-plan`) e conformance no candidato atual;
 2. invoca `commit` para commits intencionais;
 3. invoca `open-pr` para criar ou atualizar um PR ready-for-review;
 4. aguarda cada workflow aplicável no HEAD atual do PR;
 5. registra nome, resultado, URL e SHA em Evaluation;
 6. em falha, roteia imediatamente para `implement-spec` ou amendment, republica e repete CI;
-7. após CI verde, marca Spec e Evaluation como `completed`.
+7. após CI verde, marca Spec, Plan e Evaluation como `completed`.
 
 Antes de marcar os artefatos como `completed`, `conclude-spec` analisa todos os findings,
 warnings e falhas da entrega e identifica causas que possam se repetir. Lacunas de processo,

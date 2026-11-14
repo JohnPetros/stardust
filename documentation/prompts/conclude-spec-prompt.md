@@ -31,10 +31,11 @@ contract.
 
 Require:
 
-- the current Spec is `in_progress` and the Evaluation is `ready` for that revision;
+- the current Spec is `in_progress`, every row of its `plan.md` is `completed` and the
+  Evaluation is `ready` for that revision;
 - every required `RF-*`, `CA-*`, `AV-*`, `MV-*` and `VV-*` verification has current approved evidence or an
-  explicit, justified not-applicable disposition; Progress distinguishes
-  `Complete` implementation from `Passed` verification;
+  explicit, justified not-applicable disposition; implementation progress comes from
+  `plan.md` and verification from the Evaluation;
 - the required independent implementation and visual reviews cover the candidate (an
   Implementation Reviewer accepted for the matching HEAD and, with design-backed UI, the
   Visual Reviewer with a disposition for every inventory row);
@@ -42,10 +43,10 @@ Require:
 - traceability to the PRD/Issue/Report, the scope and the exclusions are correct.
 
 A required check that failed, is missing, unavailable, skipped, waived or stale is not
-a pass and cannot produce readiness or conclusion. Reconcile Check Results, Progress,
+a pass and cannot produce readiness or conclusion. Reconcile the `plan.md` rows, Check Results, Criteria evidence,
 Findings and the real candidate; a `passed` status without observed proof is insufficient. Keep the
 Evaluation `in_progress` while there is pending evidence or a pending fix, and retain a
-factual Handoff: progress per criterion, current candidate, reusable and stale
+factual Handoff: verification per criterion, unfinished `plan.md` rows, current candidate, reusable and stale
 results, unfinished work, blockers and the concrete next action.
 
 For a defect within the Contract, add an `ACH-*`, invalidate only the affected evidence and
@@ -100,9 +101,9 @@ concrete sensor. Passing tests alone do not establish full coverage of the
 Contract. Record boundaries, exclusions, sensor evidence and known limitations.
 Use stable identifiers and preserve failures and their resolutions.
 
-Use the Evaluation's Progress and Check Results instead of another acceptance matrix. Progress
-separates implementation from verification and maps `CA`/`RF` to `AV`/`MV`/`VV` and `EV`
-IDs. The Manual (`MV`) and Visual (`VV`) verifications have explicit pass conditions; the
+Use `plan.md` for implementation progress and the Evaluation's Criteria evidence and Check
+Results instead of another acceptance matrix. Criteria evidence maps `CA`/`RF` to
+`AV`/`MV`/`VV` and `EV` IDs. The Manual (`MV`) and Visual (`VV`) verifications have explicit pass conditions; the
 baseline checks stay in the same results record. Confirm the current separate
 dispositions for types (`check:types`), lint/code (`check:code`) and complexity for
 the scoped changes and the affected consuming projects. Reuse applicable
@@ -164,7 +165,7 @@ successes; repeat transient infrastructure failures only with concrete evidence.
 
 Before calling `commit`, confirm the mandatory sensors from `AGENTS.md`
 (`check:code` and `check:types` in the affected workspaces and consumers, `test:unit` with the
-affected files), `check:spec-implementation -- <spec> --base <base-commit>` and
+affected files), `check:spec-implementation -- <spec> --base <base-commit> --require-plan` and
 `check:test-integrity -- --base <base-commit>` against the final HEAD. Coverage/ratchet
 (`test:coverage`, `check:coverage`) and full suites only apply with demonstrated impact on the
 workspace, a Spec requirement or a user request; CI runs them. Reuse the current
@@ -210,7 +211,7 @@ policy or silently weaken Rules.
 
 ## Complete artifacts and publish
 
-Reconcile all sections of the Evaluation (current state, progress, check results,
+Reconcile `plan.md` and all sections of the Evaluation (current state, criteria evidence, check results,
 findings, lessons, handoff and delivery) and keep the Spec's documentation alignment and revision
 history correct, with the detailed proof and the delivery state in the Evaluation.
 Preserve failed attempts, previous PR heads, the evidence scope and current facts about
@@ -218,8 +219,8 @@ process/dirty paths. Routine closure/status updates do not increment the
 revision.
 
 For local closure, when publication is not requested or is explicitly
-local, mark the Spec and the Evaluation as `completed` after all local requirements
-pass; record publication as not requested, with the reason. For authorized publication, keep the Spec `in_progress` and the Evaluation `ready`
+local, mark the Spec, the Plan and the Evaluation as `completed` after all local requirements
+pass; record publication as not requested, with the reason. For authorized publication, keep the Spec and the Plan `in_progress` and the Evaluation `ready`
 during the commit/PR handoff until publication, the required CI of the current HEAD and the blocking review
 conversations are resolved. A publication failure records a blocker and
 cannot be reported as a completed delivery. Do not create a commit just to update the
@@ -258,7 +259,7 @@ and update the existing PR when authorized, repeating the Reviewer when the diff
 evidence was invalidated. Rerun the same SHA only for a proven transient failure. Do not change the
 product disposition unless the failure establishes a product defect.
 
-Mark the published Spec and Evaluation as `completed` only after all required CI
+Mark the published Spec, Plan and Evaluation as `completed` only after all required CI
 of the current head passes and the blocking review conversations have verified resolutions.
 Do not wait indefinitely for hypothetical future feedback. Later feedback
 on an open PR may reopen the same Spec (`resolve-pr-feedback`); after the merge, a defect
@@ -267,7 +268,7 @@ uses a Bug Report and new behavior uses a change Spec. Do not merge the delivery
 
 ## Output
 
-Return concise clickable links to the Spec, the Evaluation and the PR; the Spec revision and the
+Return concise clickable links to the Spec, the Plan, the Evaluation and the PR; the Spec revision and the
 final states; branch/commits and Issue/PRD references; the criteria/sensor coverage
 and the reused evidence; the delivery dispositions; the CI and publication state; resolved
 findings, remaining limitations, factual documentation updates and preserved

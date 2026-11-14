@@ -29,7 +29,7 @@ changes/<change-name>/evaluation.md
 The main task updates this document at each significant checkpoint (accepted
 Builder work, sensor execution, finding or decision, lesson discovered), instead of one
 update per file edit. Evidence is invalidated by the claim and affected
-dependencies, not by the age of the commit. Requirements belong to `spec.md`; progress, evidence and
+dependencies, not by the age of the commit. Requirements belong to `spec.md`; implementation progress belongs to `plan.md`; evidence and
 operational findings belong to this document.
 
 ## Template
@@ -51,6 +51,7 @@ and a lesson/disposition in `Lessons learned` or `Preventive analysis of finding
 ---
 title: <evaluation title>
 spec: ./spec.md
+plan: ./plan.md
 spec_revision: <revision or sha>
 status: in_progress
 base_commit: <sha>
@@ -63,17 +64,19 @@ last_updated_at: YYYY-MM-DD
 ## Evaluated scope
 
 - Spec: `./spec.md`
+- Plan: `./plan.md`
 - Base commit: `<sha>`
 - Evaluated commit: `<sha>`
 
 ## Criteria evidence
 
-One row per `CA-*`. Implementation (`Pending`/`Partial`/`Complete`) and verification
-(`Pending`/`Partial`/`Passed`/`Failed`/`Blocked`/`Stale`) are recorded separately.
+One row per `CA-*`. Only verification is recorded here
+(`Pending`/`Partial`/`Passed`/`Failed`/`Blocked`/`Stale`). The implementation progress of a
+criterion is derived from the `plan.md` rows that link it and is never repeated in this table.
 
-| Criterion | Implementation | Verification | Real evidence | Remaining work |
-| --------- | -------------- | ------------ | ------------- | -------------- |
-| CA-01     | Complete       | Passed       | EV-01 — test, browser, sensor or diff | none |
+| Criterion | Verification | Real evidence | Remaining work |
+| --------- | ------------ | ------------- | -------------- |
+| CA-01     | Passed       | EV-01 — test, browser, sensor or diff | none |
 
 ## Reviews
 
@@ -173,7 +176,7 @@ Small factual record for whoever resumes the delivery; it is not a phase plan no
 second Contract.
 
 - Spec revision and branch/candidate: `<revision, branch, sha>`
-- Criteria completed / unfinished: `<IDs>`
+- Criteria verified / unverified: `<IDs>` (implementation progress is in `plan.md`)
 - Interrupted or uncommitted paths and their ownership: `<paths>`
 - Latest reusable results and stale evidence: `<EV-*>`
 - Processes/ports started by the task and cleanup: `none` | `<session, port>`
