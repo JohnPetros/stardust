@@ -348,6 +348,59 @@ test('reads only the top-level revision of the Spec frontmatter', async () => {
   }
 })
 
+test('reports plan rows that do not have all required cells', async () => {
+  const repositoryRoot = await createRepositoryFixture()
+  try {
+    await writeFile(
+      path.join(repositoryRoot, PLAN_PATH),
+      `${buildPlan()}| \`src/broken.ts\` | Create |\n`,
+    )
+    const result = await runChecker(repositoryRoot, ['--plan-only'])
+    assert.equal(result.status, 'failed')
+    assert.deepEqual(result.errors, [
+      `${PLAN_PATH}: src/broken.ts: row must have Path, Change, RF/CA and Status cells`,
+    ])
+  } finally {
+    await rm(repositoryRoot, { force: true, recursive: true })
+  }
+})
+
+test('prints the plan flags in the usage for --help', async () => {
+  const { stdout } = await execFileAsync(process.execPath, [SCRIPT_PATH, '--help'])
+  assert.match(stdout, /--plan-only/)
+  assert.match(stdout, /--require-plan/)
+})
+
+test('prints the plan summary and the plan-only mode in text output', async () => {
+  const repositoryRoot = await createRepositoryFixture()
+  try {
+    await writeFile(path.join(repositoryRoot, PLAN_PATH), buildPlan())
+    const { stdout: planOnly } = await execFileAsync(
+      process.execPath,
+      [SCRIPT_PATH, SPEC_PATH, '--plan-only'],
+      { cwd: repositoryRoot },
+    )
+    assert.match(
+      planOnly,
+      /Plan: .*plan\.md \(4 rows: pending 4, in_progress 0, completed 0\)/,
+    )
+    assert.match(planOnly, /Mode: plan-only/)
+    assert.doesNotMatch(planOnly, /Baseline:/)
+
+    await rm(path.join(repositoryRoot, PLAN_PATH))
+    await deliverContractedPaths(repositoryRoot)
+    const { stdout: withoutPlan } = await execFileAsync(
+      process.execPath,
+      [SCRIPT_PATH, SPEC_PATH],
+      { cwd: repositoryRoot },
+    )
+    assert.match(withoutPlan, /Plan: not present/)
+    assert.match(withoutPlan, /Baseline: main/)
+  } finally {
+    await rm(repositoryRoot, { force: true, recursive: true })
+  }
+})
+
 test('pairs a legacy <name>-spec.md with <name>-plan.md', async () => {
   const repositoryRoot = await createRepositoryFixture()
   try {
