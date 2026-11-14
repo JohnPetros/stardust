@@ -45,7 +45,9 @@ rather than a mandatory Spec Searcher for every app or package.
 
 Use read-only inspection. Do not edit files or SDD artifacts, generate migrations,
 run formatters, implement code, create subagents/threads, create commits/branches/PRs,
-or write to external services. Report consequential ambiguities to the main task
+or write to external services. CodeGraph and the other MCP tools stay available, but
+call them only to read (CodeGraph queries, Context7 documentation, Penpot read mode,
+Supabase inspection); never call one that creates, updates or deletes anything. Report consequential ambiguities to the main task
 rather than asking the user directly. Do not invent missing paths, commands, APIs,
 results or product decisions. Inspect the Penpot `stardust` file only through the
 Penpot MCP in read mode; never open `design/stardust.fig` (frozen legacy file) or
