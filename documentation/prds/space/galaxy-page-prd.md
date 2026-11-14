@@ -477,7 +477,7 @@ Atores: aluno autenticado; área responsável pelo catálogo e pelo progresso.
 - Cada galáxia deve possuir um arco narrativo próprio, com começo e fim. O arco definido em Narrativa e universo das histórias termina na primeira galáxia.
 - A conclusão total, o vídeo de encerramento e os agradecimentos de RP-06 e RP-11 devem ser avaliados por galáxia.
 - O aluno novo deve começar na primeira galáxia, sem etapa de escolha de curso no cadastro.
-- Enquanto existir uma única galáxia publicada, a Galáxia não deve apresentar seleção de galáxia; o aluno entra diretamente na trilha.
+- Enquanto existir uma única galáxia visível, a Galáxia não deve apresentar seleção de galáxia; o aluno entra diretamente na trilha. Galáxias publicadas e anunciadas são visíveis, conforme a [Página de Galáxias](galaxies-page-prd.md).
 - Alternar entre galáxias não deve alterar o progresso de nenhuma delas.
 - O foguete deve ser o mesmo em todas as galáxias, conforme RP-02.
 - A seleção de galáxia na interface segue [Página de Galáxias](galaxies-page-prd.md), incluindo o controle de galáxia no topo da Galáxia.
@@ -679,4 +679,4 @@ Atores: aluno autenticado. Requisitos: RP-02, RP-10 e RP-13. Depende da publica�
 | XP e ranking separados por galáxia | XP, moedas, nível, sequência, ranking e conquistas pertencem à conta. |
 | Galáxias liberadas em sequência ou com pré-requisito | Todas as galáxias publicadas ficam disponíveis desde o início. |
 | Escolha de curso no cadastro | O aluno novo começa na primeira galáxia. |
-| Seleção de galáxia com uma única galáxia publicada | O aluno entra diretamente na trilha. |
+| Seleção de galáxia com uma única galáxia visível | O aluno entra diretamente na trilha. |
