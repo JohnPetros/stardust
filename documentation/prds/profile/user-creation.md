@@ -70,7 +70,7 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 ##### Regras de Negócio
 - **Gatilho de criação:** A criação do perfil deve ocorrer após a conclusão do cadastro da conta.
 - **Dados obrigatórios:** O perfil deve ser criado com identificador, nome e email do usuário.
-- **Estado inicial do perfil:** O perfil deve nascer já associado ao tier inicial, ao avatar padrão selecionado e ao foguete padrão selecionado.
+- **Estado inicial do perfil:** O perfil deve nascer já associado ao tier inicial e ao avatar padrão selecionado. O perfil não possui foguete associado: o foguete é único e igual para todos os usuários, conforme [Página de Loja](../shop/shop-page.md).
 - **Persistência do perfil:** O perfil deve ser salvo como a referência principal do usuário dentro do módulo `profile`.
 
 ##### Regras de Experiência
@@ -144,9 +144,9 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 **Descrição:** O sistema deve entregar ao novo usuário os itens cosméticos definidos como padrão para início de jornada.
 
 ##### Regras de Negócio
-- **Itens adquiridos por padrão:** O sistema deve conceder todos os avatares e foguetes marcados como itens iniciais do usuário.
+- **Itens adquiridos por padrão:** O sistema deve conceder todos os avatares marcados como itens iniciais do usuário.
 - **Custo inicial:** Os itens padrão devem ser concedidos sem custo para o usuário.
-- **Item equipado no nascimento do perfil:** O avatar padrão selecionado e o foguete padrão selecionado devem permanecer como itens ativos do perfil inicial.
+- **Item equipado no nascimento do perfil:** O avatar padrão selecionado deve permanecer como item ativo do perfil inicial.
 
 ##### Regras de Experiência
 
@@ -194,7 +194,7 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 1. O usuário conclui o cadastro de conta por email e senha ou por login social.
 2. O sistema recebe os dados básicos do novo usuário.
 3. O sistema valida a criação do perfil:
-   - **Sucesso:** O perfil é criado com tier inicial, avatar padrão, foguete padrão, primeira estrela desbloqueada e itens iniciais concedidos.
+   - **Sucesso:** O perfil é criado com tier inicial, avatar padrão, primeira estrela desbloqueada e itens iniciais concedidos.
    - **Falha:** A criação do perfil é interrompida por conflito de nome/email ou por dependência inicial ausente.
 
 **Disponibilização do perfil:** Fluxo de consumo do estado inicial do usuário após o cadastro.
@@ -211,7 +211,7 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 | Área | Exclusão explícita do MVP |
 | --- | --- |
-| Escopo | Escolha manual de avatar ou foguete durante o cadastro. |
+| Escopo | Escolha manual de avatar durante o cadastro. |
 | Escopo | Compra de itens pagos como parte do onboarding inicial. |
 | Escopo | Definicao manual do tier inicial ou da estrela inicial por operador ou pelo usuario. |
 | Escopo | Recuperacao automatica de provisionamento parcial como parte desta versao documentada. |

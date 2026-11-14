@@ -4,10 +4,14 @@ status: draft
 source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/milestone/9
-last_updated_at: 2026-02-23
+  - type: direct-request
+    ref: Foguete único e fixo, fora da loja, aprovado em 2026-11-13
+last_updated_at: 2026-11-13
 ---
 
 # PRD — Gestão de Foguetes
+
+> **Descontinuado em 2026-11-13.** A aplicação passa a ter um único foguete, fixo e fora da loja, conforme [Página de Loja](shop-page.md). A gestão de foguetes deixa de ser uma funcionalidade do produto. Este PRD permanece apenas para documentar a tela que ainda existe no Backoffice e deve ser apagado na entrega que a remover. Não o use como base para novas funcionalidades.
 
 Disponibiliza para: shop; consumidores adicionais não explicitados no documento legado.
 
