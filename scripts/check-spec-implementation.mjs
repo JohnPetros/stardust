@@ -223,6 +223,9 @@ function parseFrontmatter(markdown) {
   const block = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? ''
   const fields = {}
   for (const line of block.split(/\r?\n/)) {
+    // Only top-level keys count: nested entries (for example `source[].revision`)
+    // must not overwrite the Spec's own `revision`.
+    if (/^[\s-]/.test(line)) continue
     const separator = line.indexOf(':')
     if (separator > 0)
       fields[line.slice(0, separator).trim()] = unquote(line.slice(separator + 1).trim())
