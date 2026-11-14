@@ -73,15 +73,16 @@ function readOnly(name) {
       'spec-reviewer-agent',
       'implementation-reviewer-agent',
       'visual-reviewer-agent',
+      'design-reviewer-agent',
     ].includes(name)
   )
 }
 
-// Os Reviewers de texto usam apenas Read/Glob/Grep; o Visual Reviewer também
-// precisa dos MCPs de Penpot e de leitura de imagens, então bloqueia escrita, shell
-// (que permitiria gravar arquivos) e a criação de agentes.
+// Os Reviewers de texto usam apenas Read/Glob/Grep; os Reviewers Visual e de Design
+// também precisam dos MCPs de Penpot e de leitura de imagens, então bloqueiam escrita,
+// shell (que permitiria gravar arquivos) e a criação de agentes.
 function usesToolDenylist(name) {
-  return name === 'visual-reviewer-agent'
+  return ['visual-reviewer-agent', 'design-reviewer-agent'].includes(name)
 }
 
 function writeIfChanged(file, content, managed = false) {
