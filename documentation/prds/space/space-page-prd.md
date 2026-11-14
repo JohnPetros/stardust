@@ -35,7 +35,7 @@ A trilha de dez planetas definida em [Narrativa e universo das histórias](../le
 
 Cada curso do Stardust passa a ser representado por uma galáxia. A trilha de dez planetas é a primeira galáxia; cursos futuros serão outras galáxias, cada uma com trilha, progresso e história próprios, enquanto XP, moedas, nível, sequência, ranking e conquistas continuam sendo da conta. RP-13 registra essa decisão; a escolha de galáxia na interface e a segunda galáxia ficam fora desta entrega.
 
-Esta revisão é prospectiva: substitui a descrição anterior da Página de Espaço por regras para a reformulação aprovada. Preserva o caminho canônico e os IDs RP-01 a RP-07, com atualização explícita de seus comportamentos. Não declara que os novos desenhos ou regras já estejam implementados.
+Esta revisão é prospectiva: substitui a descrição anterior da Página de Espaço por regras para a reformulação aprovada. Preserva o caminho canônico e os IDs RP-01 a RP-07, com atualização explícita de seus comportamentos, e acrescenta RP-08 a RP-13. Não declara que os novos desenhos ou regras já estejam implementados.
 
 O MVP inclui mapa, progressão, estados, detalhes, navegação desktop/mobile, abertura de planetas e reprodução dos vídeos. Autoria no Studio, produção dos vídeos, execução da migração de dados, funcionamento interno das histórias, avaliação das questões, recompensas e novos roteiros pedagógicos ficam fora desta entrega.
 
