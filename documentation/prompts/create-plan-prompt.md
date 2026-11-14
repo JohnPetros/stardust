@@ -152,3 +152,6 @@ filesystem.
 
 Return the link to `plan.md`, the Spec revision, the number of rows per `Change`, any
 criteria without a contracted path and the result of `--plan-only`.
+
+End with the next step: `implement-spec`, once `--plan-only` passes. If it fails, state the
+errors and that `implement-spec` must not start until they are fixed.
