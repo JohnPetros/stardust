@@ -75,6 +75,10 @@ CodeGraph for each new code exploration, per `AGENTS.md`.
 Initial implementation requires an `open` Spec and a `plan.md` whose `spec_revision` is the
 Spec's current revision, created by [`create-plan`](create-plan-prompt.md). If the plan is
 missing or stale, stop and report that `create-plan` must run first; do not create it here.
+The only exception is a resumed delivery whose existing `evaluation.md` has no `plan:`
+frontmatter key: it predates `plan.md`, continues without a plan and without `--require-plan`,
+and keeps its progress in the Evaluation's legacy `Implementation` column (see "Entregas
+anteriores ao Plan" in `documentation/sdd.md`).
 Resumed work requires the same revision and a `plan.md` with unfinished rows or an Evaluation
 with unfinished criteria or findings. Do not activate the Spec Reviewer for implementation
 evidence. A material Contract change goes through `create-spec`: preserve the history,
@@ -108,9 +112,10 @@ tests, migrations or generated artifacts and record the blocker:
   workflows nor simulate old roles;
 - the Spec, its paths, contracts, exclusions and states are the authority; existing code,
   an isolated screenshot or a passing test does not replace them;
-- a `plan.md` for the current Spec revision exists before any edit, and only the main task
-  edits it;
-- `pnpm run check:spec-implementation <spec> --base <base-commit> --require-plan` runs before the
+- a `plan.md` for the current Spec revision exists before any edit (a legacy delivery without
+  a `plan:` key in its Evaluation is the only exception), and only the main task edits it;
+- `pnpm run check:spec-implementation <spec> --base <base-commit> --require-plan` (without
+  `--require-plan` for a legacy delivery) runs before the
   integrated sensors and again after any fix that changes, creates, generates or
   removes a contracted path;
 - any implementation, test, browser, network, console, migration, CI or

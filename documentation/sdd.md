@@ -314,10 +314,21 @@ Não há Grilling em `create-plan`, porque as linhas derivam da Spec. Antes de `
 `pnpm run check:spec-implementation <spec> --plan-only` valida o Plan contra a Spec sem exigir
 que os paths já estejam entregues.
 
+### Entregas anteriores ao Plan
+
+Uma entrega cujo `evaluation.md` foi criado antes de o `plan.md` existir (frontmatter do
+Evaluation sem a chave `plan:`) segue o fluxo anterior: não exige `plan.md` nem `--require-plan`,
+e o progresso continua na coluna `Implementation` do próprio Evaluation. O checker valida o
+`plan.md` apenas quando ele existe. Para adotar o Plan numa entrega em andamento, rode
+`create-plan`, marque como `completed` as linhas já entregues depois de inspecionar o diff,
+remova a coluna `Implementation` do Evaluation e adicione `plan:` ao frontmatter; a partir daí
+valem as regras do Plan. Toda Spec sem Evaluation, e toda entrega nova, usa o Plan.
+
 ## Implementação e evidência viva
 
 `implement-spec` é a única entrada de implementação e executa sempre o Builder Direct no
-contexto principal. Ele exige o `plan.md` da revisão atual da Spec. O `plan.md` é a única fonte
+contexto principal. Ele exige o `plan.md` da revisão atual da Spec (exceto em entregas
+anteriores ao Plan, descritas acima). O `plan.md` é a única fonte
 do progresso de implementação; o `evaluation.md` é o ledger de evidências, findings e próxima
 ação.
 
@@ -386,10 +397,12 @@ somente quando faltar decisão de produto, autoridade, ambiente, segurança ou e
 
 ## Conclusão, PR e CI
 
-`conclude-spec` exige Spec `in_progress`, Plan com todas as linhas `completed`, Evaluation `ready`,
+`conclude-spec` exige Spec `in_progress`, Plan com todas as linhas `completed` (exceto em entregas
+anteriores ao Plan), Evaluation `ready`,
 conformance atual e nenhuma evidência bloqueante. Com autorização para commit/push/PR:
 
-1. repete preflight (com `--require-plan`) e conformance no candidato atual;
+1. repete preflight (com `--require-plan`, exceto em entregas anteriores ao Plan) e conformance
+   no candidato atual;
 2. invoca `commit` para commits intencionais;
 3. invoca `open-pr` para criar ou atualizar um PR ready-for-review;
 4. aguarda cada workflow aplicável no HEAD atual do PR;

@@ -32,7 +32,8 @@ contract.
 Require:
 
 - the current Spec is `in_progress`, every row of its `plan.md` is `completed` and the
-  Evaluation is `ready` for that revision;
+  Evaluation is `ready` for that revision. A legacy delivery (its Evaluation has no `plan:`
+  frontmatter key) has no plan: its Evaluation's `Implementation` column is checked instead;
 - every required `RF-*`, `CA-*`, `AV-*`, `MV-*` and `VV-*` verification has current approved evidence or an
   explicit, justified not-applicable disposition; implementation progress comes from
   `plan.md` and verification from the Evaluation;
@@ -165,7 +166,8 @@ successes; repeat transient infrastructure failures only with concrete evidence.
 
 Before calling `commit`, confirm the mandatory sensors from `AGENTS.md`
 (`check:code` and `check:types` in the affected workspaces and consumers, `test:unit` with the
-affected files), `check:spec-implementation -- <spec> --base <base-commit> --require-plan` and
+affected files), `check:spec-implementation -- <spec> --base <base-commit> --require-plan` (without
+`--require-plan` for a legacy delivery) and
 `check:test-integrity -- --base <base-commit>` against the final HEAD. Coverage/ratchet
 (`test:coverage`, `check:coverage`) and full suites only apply with demonstrated impact on the
 workspace, a Spec requirement or a user request; CI runs them. Reuse the current
