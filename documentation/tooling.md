@@ -146,7 +146,7 @@ partir da raiz.
 | `test:coverage`      | Executa cobertura dos workspaces com ratchet habilitado.                                            |
 | `check:coverage`     | Compara os relatórios de cobertura com `coverage-baseline.json` e falha quando um baseline diminui. |
 | `check:test-integrity` | Falha quando testes são enfraquecidos ou código testável alterado não tem teste correspondente. |
-| `check:spec-implementation` | Valida o mapa canônico de paths da Spec contra o diff Git e o filesystem e, quando existe, o `plan.md` da Spec. `--plan-only` valida só o Plan contra a Spec (sem exigir paths entregues); `--require-plan` exige o Plan com todas as linhas `completed` e lê a chave `plan:` do `evaluation.md` irmão: `plan: <path>` exige o Plan, `plan: none` é o opt-out explícito de entregas anteriores ao Plan e a ausência da chave é erro. |
+| `check:spec-implementation` | Valida o mapa canônico de paths da Spec contra o diff Git e o filesystem e, quando existe, o `plan.md` da Spec. `--plan-only` valida só o Plan contra a Spec (sem exigir paths entregues); `--require-plan` exige o Plan com todas as linhas `completed` e lê a chave `plan:` do `evaluation.md` irmão: `plan: <path>` exige o Plan, `plan: none` é o opt-out explícito de entregas anteriores ao Plan e a ausência da chave é erro; sem `evaluation.md`, o Plan continua exigido. |
 | `test:spec-implementation` | Executa os testes do checker de conformidade de Spec.                                               |
 | `test:scripts`       | Executa os testes de todos os scripts auxiliares em `scripts/tests/`.                               |
 | `test:integration`   | Executa os testes de integração declarados pelos workspaces via Turbo.                              |
