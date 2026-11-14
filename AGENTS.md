@@ -496,7 +496,7 @@ under `documentation/prompts/` for feature behavior. The canonical PRD of the
 module lives in `documentation/prds/<module>/<slug>-prd.md`; reconcile material
 contract changes through the workflow rather than editing around it. Keep
 feature artifacts under `documentation/features/<domain>/<feature>/`
-(`spec.md` and `evaluation.md`). The main task (Orchestrator) owns contract
+(`spec.md`, `plan.md` and `evaluation.md`). The main task (Orchestrator) owns contract
 changes, artifact state and the official verdict; Builders and reviewers report
 results without changing those obligations.
 
