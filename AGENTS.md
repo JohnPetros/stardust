@@ -514,8 +514,9 @@ Use subagents only for the independent, bounded roles that
 [SDD Workflow](documentation/sdd.md) defines. Follow the
 [Builder](documentation/agents/builder-agent.md),
 [Spec Reviewer](documentation/agents/spec-reviewer-agent.md),
-[Implementation Reviewer](documentation/agents/implementation-reviewer-agent.md) and
-[Visual Reviewer](documentation/agents/visual-reviewer-agent.md) contracts.
+[Implementation Reviewer](documentation/agents/implementation-reviewer-agent.md),
+[Visual Reviewer](documentation/agents/visual-reviewer-agent.md) and
+[Design Reviewer](documentation/agents/design-reviewer-agent.md) contracts.
 
 - Assign a clear outcome and exclusive file/responsibility ownership. Explain
   that the workspace is shared and other agents' edits must be preserved.
