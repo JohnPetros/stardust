@@ -1,93 +1,93 @@
-# Web App Route Testing Rules
+# Regras de Teste de Rotas da App Web
 
-This documentation defines the standards for testing entry points of the `apps/web` application
-based on `Next.js App Router`, focusing on pages, edge composition and
-real browser flows.
+Esta documentacao define os padroes para testar entradas da aplicacao `apps/web`
+baseadas em `Next.js App Router`, com foco em paginas, composicao de borda e
+fluxos reais de navegador.
 
-## 1. Overview
+## 1. Visao Geral
 
-The web app route tests validate the `Next.js` edge at two complementary
-levels:
+Os testes de rotas da app web validam a borda do `Next.js` em dois niveis
+complementares:
 
-1. **Page/composition test** with `Jest`, to ensure that the page in
-   `apps/web/src/app/**/page.tsx` resolves dependencies correctly, reacts to
-   `params`/`searchParams` and delegates to the expected widget.
-2. **Real browser flow test** with `Playwright`, to validate the route
-   published to the end user, including rendering, HTTP requests, client-side
-   events and observable UI states.
+1. **Teste de pagina/composicao** com `Jest`, para garantir que a pagina em
+   `apps/web/src/app/**/page.tsx` resolve dependencias corretamente, reage a
+   `params`/`searchParams` e delega para o widget esperado.
+2. **Teste de fluxo real no navegador** com `Playwright`, para validar a rota
+   publicada ao usuario final, incluindo renderizacao, requests HTTP, eventos
+   client-side e estados de UI observaveis.
 
-Unlike `widget` tests, the focus here is not the isolated View. Unlike the
-`apps/server` routes, the focus is not the Hono app or direct persistence
-in the database. The goal is to validate the web edge of the monorepo: App Router pages,
-the web app's own test-only routes and real browser journeys.
+Diferente dos testes de `widgets`, o foco aqui nao e a View isolada. Diferente
+das rotas do `apps/server`, o foco nao e a app Hono nem a persistencia direta
+no banco. O objetivo e validar a borda web do monorepo: paginas do App Router,
+rotas test-only da propria web e jornadas reais do navegador.
 
-## 2. Scope Covered
+## 2. Escopo Coberto
 
-This rule applies to:
+Esta rule se aplica a:
 
-- pages in `apps/web/src/app/**/page.tsx`
-- App Router slots/defaults when they have their own behavior
-- browser flows organized in `apps/web/src/app/tests/**`
-- test-only routes or local HTTP handlers of the web app when they support a
-  flow of the web app itself
+- paginas em `apps/web/src/app/**/page.tsx`
+- slots/defaults do App Router quando tiverem comportamento proprio
+- fluxos de navegador organizados em `apps/web/src/app/tests/**`
+- rotas test-only ou handlers HTTP locais da app web quando forem suporte de um
+  fluxo da propria web
 
-It does not replace:
+Ela nao substitui:
 
-- `widget-tests-rules.md` for `View`, `Hook` and `index.tsx`
-- `handlers-testing-rules.md` for the web's REST controllers
-- `server-routes-testing-rules.md` for the HTTP edge of `apps/server`
+- `widget-tests-rules.md` para `View`, `Hook` e `index.tsx`
+- `handlers-testing-rules.md` para controllers REST da web
+- `server-routes-testing-rules.md` para a borda HTTP do `apps/server`
 
-## 3. Location and Naming
+## 3. Localizacao e Nomenclatura
 
-### 3.1 Pages and App Router entries
+### 3.1 Paginas e entradas do App Router
 
-- **Location:** co-located in `tests/` in the page's directory.
-- **Example:**
-  - page: `apps/web/src/app/(home)/profile/[userSlug]/api-keys/page.tsx`
-  - test: `apps/web/src/app/(home)/profile/[userSlug]/api-keys/tests/page.test.tsx`
-- **Extension:** `.test.tsx`
+- **Localizacao:** co-localizada em `tests/` no diretorio da pagina.
+- **Exemplo:**
+  - pagina: `apps/web/src/app/(home)/profile/[userSlug]/api-keys/page.tsx`
+  - teste: `apps/web/src/app/(home)/profile/[userSlug]/api-keys/tests/page.test.tsx`
+- **Extensao:** `.test.tsx`
 
-### 3.2 Real browser flows
+### 3.2 Fluxos reais de navegador
 
-- **Location:** `apps/web/src/app/tests/<domain>/...`
-- **Example:** `apps/web/src/app/tests/auth/sign-up.test.ts`
-- **Extension:** `.test.ts`
+- **Localizacao:** `apps/web/src/app/tests/<dominio>/...`
+- **Exemplo:** `apps/web/src/app/tests/auth/sign-up.test.ts`
+- **Extensao:** `.test.ts`
 - **Runner:** `@playwright/test`
 
-## 4. Tools and Stack
+## 4. Ferramentas e Stack
 
-### 4.1 Page/composition tests
+### 4.1 Testes de pagina/composicao
 
 - Runner: `jest`
 - Mocking: `jest.mock(...)`
-- DTOs and payloads: core `Fakers` when it makes sense
-- HTTP responses: `RestResponse`
+- DTOs e payloads: `Fakers` do core quando fizer sentido
+- Responses HTTP: `RestResponse`
 
-### 4.2 Real flow tests
+### 4.2 Testes de fluxo real
 
 - Runner: `@playwright/test`
-- Initial browser: `chromium`
-- Test-only infra:
+- Browser inicial: `chromium`
+- Infra test-only:
   - `apps/web/playwright.config.ts`
   - `apps/web/src/app/api/tests/server/**`
   - `ServerMock(page)`
   - `window.__STARDUST_PROFILE_CHANNEL_MOCK__`
 
-## 5. Pattern for Page Tests
+## 5. Padrrao para Testes de Pagina
 
-The tests co-located in `page.test.tsx` must treat the page as an async
-composition function of the App Router.
+Os testes co-localizados em `page.test.tsx` devem tratar a pagina como uma
+funcao async de composicao do App Router.
 
-### 5.1 What to validate
+### 5.1 O que validar
 
-1. Resolution of edge dependencies, such as `NextServerRestClient`.
-2. Instantiation of the correct `services` with the resolved `restClient`.
-3. Reaction to `params: Promise<...>` and `searchParams` when they exist.
-4. Success paths, `notFound()` and observable redirects.
-5. Delegation to the final widget/page, without testing the widget's internal
-   implementation.
+1. Resolucao de dependencias de borda, como `NextServerRestClient`.
+2. Instanciacao dos `services` corretos com o `restClient` resolvido.
+3. Reacao a `params: Promise<...>` e `searchParams` quando existirem.
+4. Caminhos de sucesso, `notFound()` e redirecionamentos observaveis.
+5. Delegacao para o widget/pagina final, sem testar a implementacao interna do
+   widget.
 
-### 5.2 Observed pattern
+### 5.2 Padrrao observado
 
 ```tsx
 import Page from '../page'
@@ -115,83 +115,83 @@ describe('API Keys Page', () => {
 })
 ```
 
-### 5.3 Specific rules
+### 5.3 Regras especificas
 
-- Keep `params` in the same shape used by the current App Router: `Promise.resolve(...)`.
-- Mock only the immediate web edge of the page: `next/navigation`,
-  `NextServerRestClient` and the `services` factories consumed by the page.
-- Do not rewrite the widget's logic in page assertions; just confirm that
-  the page reached the correct composition point.
-- For `notFound()`, use the existing pattern of mocking `next/navigation` and making
-  the test fail through a controlled exception.
+- Mantenha `params` no mesmo shape usado pelo App Router atual: `Promise.resolve(...)`.
+- Mocke apenas a borda web imediata da pagina: `next/navigation`,
+  `NextServerRestClient` e factories de `services` consumidos pela pagina.
+- Nao reescreva a logica do widget em assertions de pagina; apenas confirme que
+  a pagina chegou ao ponto correto de composicao.
+- Para `notFound()`, use o padrao existente de mockar `next/navigation` e fazer
+  o teste falhar por excecao controlada.
 
-## 6. Pattern for Real Flow Tests with Playwright
+## 6. Padrrao para Testes de Fluxo Real com Playwright
 
-Use Playwright when coverage depends on the published route, the real browser
-and the interaction between SSR, hydration, client-side requests and asynchronous events.
+Use Playwright quando a cobertura depender da rota publicada, do navegador real
+e da interacao entre SSR, hidracao, requests client-side e eventos assincronos.
 
-### 6.1 What to validate
+### 6.1 O que validar
 
-1. Initial rendering of the real route.
-2. HTTP requests triggered by the page.
-3. Progressive UI states and visible messages.
-4. Client-side effects based on events or test-only bridges.
-5. Observable public contracts, such as links, loading and success messages.
+1. Renderizacao inicial da rota real.
+2. Requests HTTP disparadas pela pagina.
+3. Estados de UI progressivos e mensagens visiveis.
+4. Efeitos client-side baseados em eventos ou bridges test-only.
+5. Contratos publicos observaveis, como links, loading e mensagens de sucesso.
 
-### 6.1.1 Mandatory navigation
+### 6.1.1 Navegacao obrigatoria
 
-Every real browser flow suite must contain at least one observable
-navigation test. The test cannot validate the screen only through a direct
-`page.goto()` to the route under test.
+Toda suite de fluxo real de navegador deve conter pelo menos um teste de
+navegacao observavel. O teste nao pode validar a tela apenas por meio de
+`page.goto()` direto na rota sob teste.
 
-For protected routes, the mandatory minimum coverage is:
+Para rotas protegidas, a cobertura minima obrigatoria e:
 
-1. prepare an authenticated session with `ServerMock(page)`;
-2. open a protected source route, such as `/space`;
-3. trigger a visible link or control of the application to reach the route under
-   test;
-4. confirm the final URL with `expect(page).toHaveURL(...)` and validate the
-   route's main content;
-5. open the route under test without a session and confirm the redirect to login,
-   including the return route when that contract exists.
+1. preparar uma sessao autenticada com `ServerMock(page)`;
+2. abrir uma rota protegida de origem, como `/space`;
+3. acionar um link ou controle visivel da aplicacao para chegar à rota sob
+   teste;
+4. confirmar a URL final com `expect(page).toHaveURL(...)` e validar o
+   conteúdo principal da rota;
+5. abrir a rota sob teste sem sessao e confirmar o redirecionamento para login,
+   incluindo a rota de retorno quando esse contrato existir.
 
-When the route is public, the test must cover the most relevant entry or exit
-navigation of the flow, such as a link to the route, a return after a completed
-action or an error redirect.
+Quando a rota for publica, o teste deve cobrir a navegacao de entrada ou de
+saida mais relevante do fluxo, como um link para a rota, retorno após uma
+acao concluida ou redirecionamento de erro.
 
-Use `page.waitForURL(...)` or `expect(page).toHaveURL(...)` to synchronize
-navigation. Do not consider the static existence of a link sufficient: the test
-must click the control and observe the route change. Requests triggered
-during the transition must be awaited with `page.waitForRequest(...)` or
-`page.waitForResponse(...)` when they are part of the validated contract.
+Use `page.waitForURL(...)` ou `expect(page).toHaveURL(...)` para sincronizar a
+navegacao. Nao considere a existencia estatica de um link suficiente: o teste
+deve clicar no controle e observar a mudanca de rota. Requests disparadas
+durante a transicao devem ser aguardadas com `page.waitForRequest(...)` ou
+`page.waitForResponse(...)` quando fizerem parte do contrato validado.
 
-Co-located `page.tsx` composition tests with Jest do not need to open
-a browser nor duplicate this flow; the requirement applies to the suites in
+Testes co-localizados de composicao de `page.tsx` com Jest nao precisam abrir
+um navegador nem duplicar este fluxo; a exigencia se aplica às suites em
 `apps/web/src/app/tests/**`.
 
-### 6.2 Standard infra
+### 6.2 Infra padrao
 
-- The suite must start the local web app via Playwright's `webServer`.
-- Page requests must point to `/api/tests/server` during the suite.
-- Each test must configure its own scenario via `ServerMock(page)`.
-- `ServerMock(page)` must be treated as the canonical factory function for the mock server of the web integration tests.
-- Do not duplicate local helpers such as `createServerMock(...)` in the suites; extract or reuse the shared implementation in `apps/web/src/app/tests/shared/mocks/ServerMock.ts`.
-- Fake realtime events must be triggered through
+- A suite deve subir a app web local via `webServer` do Playwright.
+- Requests da pagina devem apontar para `/api/tests/server` durante a suite.
+- Cada teste deve configurar seu proprio cenario via `ServerMock(page)`.
+- `ServerMock(page)` deve ser tratado como a factory function canonica para o mock server dos testes de integracao da web.
+- Nao duplique helpers locais como `createServerMock(...)` nas suites; extraia ou reutilize a implementacao compartilhada em `apps/web/src/app/tests/shared/mocks/ServerMock.ts`.
+- Eventos realtime fake devem ser disparados por
   `window.__STARDUST_PROFILE_CHANNEL_MOCK__`.
 
-### 6.3 Writing rules
+### 6.3 Regras de escrita
 
-- Group the suite by route with `test.describe('/route', ...)`.
-- Prefer the suite's own local helpers to keep the scenario readable, such as:
+- Agrupe a suite por rota com `test.describe('/rota', ...)`.
+- Prefira helpers locais da propria suite para manter o cenario legivel, como:
   - `goto<Route>Page(...)`
   - `fillValid<Form>(...)`
   - `emit<Event>(...)`
-- Use `page.waitForRequest(...)` and `page.waitForResponse(...)` when the test
-  explicitly depends on the request cycle.
-- Use `getByTestId`, `getByRole` and `expect(locator)` with auto-waiting.
-- Avoid `waitForTimeout` as the main synchronization mechanism.
+- Use `page.waitForRequest(...)` e `page.waitForResponse(...)` quando o teste
+  depender explicitamente do ciclo da request.
+- Use `getByTestId`, `getByRole` e `expect(locator)` com auto-waiting.
+- Evite `waitForTimeout` como mecanismo principal de sincronizacao.
 
-### 6.4 Observed example
+### 6.4 Exemplo observado
 
 ```ts
 test.describe('/auth/sign-up', () => {
@@ -215,50 +215,50 @@ test.describe('/auth/sign-up', () => {
 })
 ```
 
-## 7. Rules for the Web Test-Only Infra
+## 7. Regras para Infra Test-Only da Web
 
-- Shared stateful mocks must live in `apps/web/src/app/tests/shared/mocks/`.
-- Support factories shared across Playwright suites must live in `apps/web/src/app/tests/shared/mocks/` when they control test-only state or HTTP contracts.
-- Browser-safe utils and global bridges must live in
+- Mocks stateful compartilhados devem ficar em `apps/web/src/app/tests/shared/mocks/`.
+- Factories de suporte compartilhadas entre suites de Playwright devem ficar em `apps/web/src/app/tests/shared/mocks/` quando controlarem estado ou contratos HTTP test-only.
+- Utils browser-safe e bridges globais devem ficar em
   `apps/web/src/app/tests/shared/utils/`.
-- Global types and shared support types must live in
+- Tipos globais e tipos compartilhados de suporte devem ficar em
   `apps/web/src/app/tests/shared/types/`.
-- Web test-only routes must be protected by `MODE=testing`.
-- When the app has a global middleware, the test-only infrastructure must explicitly
-  escape from the authentication flows that would cause recursion.
+- Rotas test-only da web devem ser protegidas por `MODE=testing`.
+- Quando a app tiver middleware global, a infraestrutura test-only deve escapar
+  explicitamente dos fluxos de autenticacao que causariam recursao.
 
-## 8. What to Avoid
+## 8. O Que Evitar
 
-- Do not test an App Router page by internally rendering the whole widget with
-  `render(...)` if the goal is to validate edge composition.
-- Do not use Playwright to replace widget tests already covered in Jest.
-- Do not depend on a real websocket, real Supabase realtime or a real backend when
-  the suite has a defined test-only boundary.
-- Do not couple the test to cosmetic layout details with structural CSS
-  selectors.
-- Do not share fake route state between scenarios.
-- Do not create parallel versions of `ServerMock(page)` inside test files; evolve the shared factory to keep compatibility with all the integration suites.
+- Nao testar pagina do App Router renderizando internamente o widget inteiro com
+  `render(...)` se o objetivo e validar composicao de borda.
+- Nao usar Playwright para substituir testes de widget ja cobertos em Jest.
+- Nao depender de websocket real, Supabase realtime real ou backend real quando
+  a suite tiver boundary test-only definido.
+- Nao acoplar o teste a detalhes cosmeticos do layout com seletores CSS
+  estruturais.
+- Nao compartilhar estado de rotas fake entre cenarios.
+- Nao criar versoes paralelas de `ServerMock(page)` dentro de arquivos de teste; evolua a factory compartilhada para manter compatibilidade com todas as suites de integracao.
 
 ## 9. Checklist
 
-1. The test covers a real entry of the web app, and not just an isolated widget.
-2. The file location follows `tests/page.test.tsx` or `src/app/tests/**`.
-3. If it is an App Router page, `params`/`searchParams` were simulated in the real shape.
-4. If it is Playwright, the scenario explicitly configured `ServerMock(page)`.
-5. If the test needed a mock server, it reused the shared factory instead of duplicating a local implementation.
-6. The test validated observable behavior of the route: rendering,
-   redirect, request, message, link or loading.
-7. The suite has at least one test that navigates from a source route/state
-   to the route under test through a visible control.
-8. For protected routes, the suite covers both authenticated navigation and the
-   redirect on access without a session.
-9. The test did not duplicate responsibility that already belongs to a
-   unit-tested `widget` or `controller` in another layer.
+1. O teste cobre uma entrada real da app web, e nao apenas um widget isolado.
+2. A localizacao do arquivo segue `tests/page.test.tsx` ou `src/app/tests/**`.
+3. Se for pagina App Router, `params`/`searchParams` foram simulados no shape real.
+4. Se for Playwright, o cenario configurou explicitamente `ServerMock(page)`.
+5. Se o teste precisou de mock server, reutilizou a factory compartilhada em vez de duplicar implementacao local.
+6. O teste validou comportamento observavel da rota: renderizacao,
+   redirecionamento, request, mensagem, link ou loading.
+7. A suite possui pelo menos um teste que navega de uma rota/estado de origem
+   para a rota sob teste por meio de um controle visivel.
+8. Para rotas protegidas, a suite cobre tanto a navegacao autenticada quanto o
+   redirecionamento de acesso sem sessao.
+9. O teste nao duplicou responsabilidade que ja pertence a `widget` ou
+   `controller` unitariamente testado em outra camada.
 
 ## Tooling
 
-- Web workspace: `pnpm --filter @stardust/web run test:unit`
-- Web Playwright suite: `pnpm --filter @stardust/web run test:integration`
-- Local quality: `pnpm --filter @stardust/web run check:types` and
+- Workspace web: `pnpm --filter @stardust/web run test:unit`
+- Suite Playwright web: `pnpm --filter @stardust/web run test:integration`
+- Qualidade local: `pnpm --filter @stardust/web run check:types` e
   `pnpm --filter @stardust/web run check:code`
-- General reference: `documentation/tooling.md`
+- Referencia geral: `documentation/tooling.md`

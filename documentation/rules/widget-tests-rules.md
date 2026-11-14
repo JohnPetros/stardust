@@ -1,23 +1,23 @@
-# Widget Testing Rules (UI layer)
+# Regras de Teste de Widgets (camada UI)
 
-When testing React components (widgets), we follow the separation between logic (hook)
-and interface (view). However, there are exceptions for complex form
-components.
+Ao testar componentes React (widgets), seguimos a separação entre lógica (hook)
+e interface (view). No entanto, existem exceções para componentes complexos de
+formulário.
 
-## 1. Standard: Separation of Responsibilities
+## 1. Padrão: Separação de Responsabilidades
 
-In most cases, we must test the **Hook** and the **View** separately.
+Na maioria dos casos, devemos testar o **Hook** e a **View** separadamente.
 
-### Testing the Hook
+### Testando o Hook
 
-Use `renderHook` from `@testing-library/react` to test the isolated logic.
+Utilize `renderHook` da `@testing-library/react` para testar a lógica isolada.
 
-#### Basic Pattern (Helper Function)
+#### Padrão Básico (Helper Function)
 
-To make it easier to write multiple tests with different states, create a
-`Hook` helper function that accepts a `Partial` of the parameters. This lets you
-override only what is needed in each test case, keeping sensible
-default values.
+Para facilitar a escrita de múltiplos testes com diferentes estados, crie uma
+função auxiliar `Hook` que aceite um `Partial` dos parâmetros. Isso permite
+sobrescrever apenas o necessário em cada caso de teste, mantendo valores padrão
+sensatos.
 
 ```ts
 import { act, renderHook, waitFor } from "@testing-library/react";
@@ -33,13 +33,13 @@ describe("useAssistantChatsHistory", () => {
   let service: Mock<ConversationService>;
   let onSelectChat: jest.Mock;
 
-  // Helper function with Partial to make overriding easier
+  // Função auxiliar com Partial para facilitar a sobrescrita
   const Hook = (params?: Partial<Params>) =>
     renderHook(() =>
       useAssistantChatsHistory({
         service,
         onSelectChat,
-        // ... other dependencies with default mocks
+        // ... outras dependências com mocks padrão
         ...params,
       })
     );
@@ -61,14 +61,14 @@ describe("useAssistantChatsHistory", () => {
       statusCode: 200,
     });
 
-    const { result } = Hook(); // Uses the default mocks
+    const { result } = Hook(); // Usa os mocks padrão
 
     await waitFor(() => expect(result.current.chats).toHaveLength(1));
     expect(result.current.chats[0].dto).toEqual(chat.dto);
   });
 
   it("should call onSelectChat when handleChatSelect is called", async () => {
-    const { result } = Hook(); // Uses the default mocks
+    const { result } = Hook(); // Usa os mocks padrão
 
     act(() => {
       result.current.handleChatSelect(ChatFaker.fake().dto);
@@ -79,9 +79,9 @@ describe("useAssistantChatsHistory", () => {
 });
 ```
 
-#### Hooks with SWR
+#### Hooks com SWR
 
-For hooks that use SWR for caching, a wrapper must be provided:
+Para hooks que utilizam SWR para cache, é necessário fornecer um wrapper:
 
 ```ts
 import { SWRConfig } from "swr";
@@ -96,11 +96,11 @@ const swrWrapper = ({ children }: PropsWithChildren) =>
     children,
   });
 
-// In the test:
+// No teste:
 const { result } = renderHook(() => useHook(), { wrapper: swrWrapper });
 ```
 
-#### Testing Callbacks and Effects
+#### Testando Callbacks e Efeitos
 
 ```ts
 it("should show error toast when delete chat fails", async () => {
@@ -129,16 +129,16 @@ it("should show error toast when delete chat fails", async () => {
 });
 ```
 
-### Testing the View
+### Testando a View
 
-Use `render` and `screen` to test rendering and simple interactions,
-mocking the handlers.
+Utilize `render` e `screen` para testar a renderização e interações simples,
+mockando os handlers.
 
-#### Basic Pattern (Helper Function)
+#### Padrão Básico (Helper Function)
 
-As with hooks, use a `View` helper function with `Partial<Props>`
-to centralize rendering and make it easier to override specific
-properties.
+Assim como nos hooks, utilize uma função auxiliar `View` com `Partial<Props>`
+para centralizar a renderização e facilitar a sobrescrita de propriedades
+específicas.
 
 ```tsx
 import { render, screen, within } from "@testing-library/react";
@@ -150,7 +150,7 @@ import {
 import { ChatFaker } from "@stardust/core/conversation/entities/fakers";
 
 describe("AssistantChatsHistoryView", () => {
-  // Helper function with Partial to make overriding easier
+  // Função auxiliar com Partial para facilitar a sobrescrita
   const View = (props?: Partial<Props>) => {
     render(
       <AssistantChatsHistoryView
@@ -168,13 +168,13 @@ describe("AssistantChatsHistoryView", () => {
   };
 
   it("should render trigger button", () => {
-    View(); // Uses the default values
+    View(); // Usa os valores padrão
     expect(screen.getByTestId("trigger")).toBeInTheDocument();
   });
 
   it("should render chat list with chats", () => {
     const chats = ChatFaker.fakeMany(3);
-    View({ chats }); // Overrides only the chats
+    View({ chats }); // Sobrescreve apenas os chats
 
     chats.forEach((chat) => {
       expect(screen.getByText(chat.name.value)).toBeInTheDocument();
@@ -183,9 +183,9 @@ describe("AssistantChatsHistoryView", () => {
 });
 ```
 
-#### Mocking Child Components
+#### Mock de Componentes Filhos
 
-To avoid testing complex child components, use `jest.mock`:
+Para evitar testar componentes filhos complexos, utilize `jest.mock`:
 
 ```tsx
 jest.mock("@/ui/global/widgets/components/Dialog", () => ({
@@ -199,9 +199,9 @@ jest.mock("@/ui/global/widgets/components/Loading", () => ({
 }));
 ```
 
-#### Scoped Queries with `within`
+#### Consultas Escopadas com `within`
 
-Use `within` to look up elements inside a specific component:
+Use `within` para buscar elementos dentro de um componente específico:
 
 ```tsx
 import { within } from "@testing-library/react";
@@ -213,11 +213,11 @@ it("should call onDeleteChat when delete button is clicked", async () => {
 
   View({ chats, onDeleteChat });
 
-  // Find the chat row by name
+  // Encontrar a linha do chat pelo nome
   const chatRow = screen.getByText(chats[0].name.value).closest(".group");
   if (!chatRow) throw new Error("Chat row not found");
 
-  // Look up buttons only inside that row
+  // Buscar botões apenas dentro dessa linha
   const buttons = within(chatRow as HTMLElement).getAllByRole("button");
   const deleteButton = buttons.at(-1);
 
@@ -227,7 +227,7 @@ it("should call onDeleteChat when delete button is clicked", async () => {
 });
 ```
 
-#### Testing States and Conditional Rendering
+#### Testando Estados e Renderização Condicional
 
 ```tsx
 it("should render empty state when no chats and not loading", () => {
@@ -256,11 +256,9 @@ it("should not render edit button when onEditChatName is not provided", () => {
 });
 ```
 
-(`"Nenhuma conversa encontrada."` means "No conversations found."; UI strings asserted in tests stay in PT-BR.)
+#### Interações de Usuário
 
-#### User Interactions
-
-Use `userEvent.setup()` to create an interaction session:
+Use `userEvent.setup()` para criar uma sessão de interação:
 
 ```tsx
 it("should call onSelectChat when chat button is clicked", async () => {
@@ -276,38 +274,38 @@ it("should call onSelectChat when chat button is clicked", async () => {
 });
 ```
 
-> The widget's index.tsx file must never be tested.
+> O arquivo index.tsx do widget nunca deve ser testada.
 
-#### Global hooks do not receive dedicated tests
+#### Hooks globais não recebem testes dedicados
 
-Hooks in `apps/web/src/ui/global/hooks/` (for example `useProfileSocket`) do not
-receive dedicated test files. Cover the behavior through the consumers:
-widget hooks, context hooks (`ui/**/contexts/**/tests`) or Playwright
-journeys. `usePaginatedCache.test.ts` is legacy and is not a precedent.
+Hooks de `apps/web/src/ui/global/hooks/` (por exemplo `useProfileSocket`) não
+recebem arquivos de teste dedicados. Cubra o comportamento pelos consumidores:
+hooks de widget, hooks de context (`ui/**/contexts/**/tests`) ou jornadas
+Playwright. `usePaginatedCache.test.ts` é legado e não serve de precedente.
 
-## 2. Exception: Form Widgets (React Hook Form)
+## 2. Exceção: Widgets de Formulário (React Hook Form)
 
-Widgets that rely heavily on complex local state management libraries,
-such as `react-hook-form`, become hard to test separately (the
-hook would return many internal methods of the lib, and the view would need
-complex mocks of the form context).
+Widgets que dependem fortemente de bibliotecas de gerenciamento de estado local
+complexo, como `react-hook-form`, tornam-se difíceis de testar separadamente (o
+hook retornaria muitos métodos internos da lib, e a view precisaria de mocks
+complexos do contexto do formulário).
 
-In these cases, we test the **Widget as a whole** (the component exported in
-`index.tsx`), performing an interface integration test.
+Nesses casos, testamos o **Widget como um todo** (o componente exportado no
+`index.tsx`), realizando um teste de integração de interface.
 
-**What to test:**
+**O que testar:**
 
-- Field validation (error messages).
-- Submission behavior (whether the `onSubmit` function is called with the correct
-  data).
-- Visual states dependent on inputs.
+- Validação de campos (mensagens de erro).
+- Comportamento de submissão (se a função `onSubmit` é chamada com os dados
+  corretos).
+- Estados visuais dependentes de inputs.
 
-### Example: Form Test
+### Exemplo: Teste de Formulário
 
 ```tsx
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { SignInForm } from "../"; // Imports the main widget (index)
+import { SignInForm } from "../"; // Importa o widget principal (index)
 
 describe("SignInForm", () => {
   const onSubmitMock = jest.fn();
@@ -318,11 +316,11 @@ describe("SignInForm", () => {
   it("should render error when email is invalid", async () => {
     render(Widget());
 
-    // Tries to submit without filling in
+    // Tenta submeter sem preencher
     const submitButton = screen.getByTestId("submit-button");
     await userEvent.click(submitButton);
 
-    // Checks the error message (awaiting the async rendering of the hook form)
+    // Verifica a mensagem de erro (aguardando a renderização assíncrona do hook form)
     await waitFor(() => {
       expect(screen.getByText("Email inválido")).toBeVisible();
     });
@@ -334,11 +332,11 @@ describe("SignInForm", () => {
     const emailInput = screen.getByTestId("email-input");
     const submitButton = screen.getByTestId("submit-button");
 
-    // Fills in the form
+    // Preenche o formulário
     await userEvent.type(emailInput, fakeEmail);
     await userEvent.click(submitButton);
 
-    // Checks whether the prop function was called
+    // Verifica se a função de prop foi chamada
     await waitFor(() => {
       expect(onSubmitMock).toHaveBeenCalledWith({
         email: fakeEmail,
@@ -348,21 +346,19 @@ describe("SignInForm", () => {
 });
 ```
 
-(`"Email inválido"` means "Invalid email"; it is a PT-BR validation message and stays in Portuguese.)
+**Dicas para Testes de Formulário:**
 
-**Tips for Form Tests:**
-
-- Use `screen.getByTestId` for stable selectors.
-- Use `userEvent` (not `fireEvent`) to simulate real user interactions
-  (typing, clicking).
-- Use `waitFor` for assertions that depend on asynchronous state changes of
+- Use `screen.getByTestId` para seletores estáveis.
+- Use `userEvent` (e não `fireEvent`) para simular interações reais de usuário
+  (digitação, clique).
+- Use `waitFor` para asserções que dependem de mudanças de estado assíncronas do
   React Hook Form.
 
 ## Tooling
 
-- Test runner: Jest.
-- Test libraries (UI): `@testing-library/react`, `@testing-library/user-event`.
-- Commands:
+- Runner de testes: Jest.
+- Bibliotecas de teste (UI): `@testing-library/react`, `@testing-library/user-event`.
+- Comandos:
   - Web: `pnpm --filter @stardust/web run test:unit` / `pnpm --filter @stardust/web run test:unit:watch`.
   - Backoffice: `pnpm --filter @stardust/backoffice run test:unit` / `pnpm --filter @stardust/backoffice run test:unit:watch`.
-- General reference: `documentation/tooling.md`.
+- Referencia geral: `documentation/tooling.md`.

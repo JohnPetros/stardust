@@ -1,98 +1,98 @@
-# What is it for?
+# Para que serve?
 
-It is the application that lets users access the StarDust Core features through a web browser. In addition, it also processes HTTP requests from other systems or applications via the REST standard, as well as running asynchronous tasks through queues.
+É a aplicação que permite aos usuários acessarem as funcionalidades do StarDust Core por meio de um navegador web. Além disso, ela também processa requisições HTTP de outros sistemas ou aplicações via padrão REST, bem como executa tarefas assíncronas por meio de filas.
 
-# Development
+# Desenvolvimento
 
-The Web has no Supabase client: confirmation of profile creation uses polling via `RealtimeContext`. Never use a `secret`/`service_role` API key in the Web.
+A Web não possui client Supabase: a confirmação de criação de perfil usa polling via `RealtimeContext`. Nunca use uma chave API `secret`/`service_role` na Web.
 
-## Technologies and libraries
+## Tecnologias e bibliotecas
 
-- **Framework:** [Next.js](https://nextjs.org/) with TypeScript — full-stack framework for React, offering server-side rendering (SSR), static page generation (SSG), automatic routes based on the file structure and API Routes (REST endpoints).
-- **Background jobs platform:** [Inngest](https://www.inngest.com/) — execution of asynchronous tasks, scheduled jobs and event-based workflows.
-- **Validation and safe actions:** [Next Safe Action](https://next-safe-action.dev/) — creation of safe server-side actions, with input validation and automatic error handling.
-- **State management:** [Zustand](https://zustand-demo.pmnd.rs/) — management of complex interface states.
-- **Data validation:** [Zod](https://zod.dev/) — schema and data validation.
-- **Styling:** [TailwindCSS](https://tailwindcss.com/) — utility-first CSS framework for styling HTML/JSX.
-- **UI components:** [Radix UI](https://www.radix-ui.com/) — accessible, headless components for React.
-- **Animations:** [Motion](https://motion.dev/) — animation library for React.
-- **Embedded language:** [Delégua](https://github.com/DesignLiquido/delegua) — programming language in Portuguese with an embedded interpreter.
-- **Cache and data fetching:** [SWR](https://swr.vercel.app/) — data retrieval and caching in React applications.
-- **Drag-and-drop:** [Dndkit](https://dndkit.com/) — drag-and-drop functionality for React.
-- **Automated tests:** [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) — React component tests simulating real user interaction.
+- **Framework:** [Next.js](https://nextjs.org/) com TypeScript — framework full-stack para React, oferecendo renderização do lado do servidor (SSR), geração de páginas estáticas (SSG), rotas automáticas baseadas na estrutura de arquivos e API Routes (endpoints REST).
+- **Plataforma de background jobs:** [Inngest](https://www.inngest.com/) — execução de tarefas assíncronas, jobs agendados e workflows baseados em eventos.
+- **Validação e actions seguras:** [Next Safe Action](https://next-safe-action.dev/) — criação de actions seguras do lado do servidor, com validação de input e tratamento automático de erros.
+- **Gerenciamento de estado:** [Zustand](https://zustand-demo.pmnd.rs/) — gerenciamento de estados de interface complexos.
+- **Validação de dados:** [Zod](https://zod.dev/) — validação de schemas e dados.
+- **Estilização:** [TailwindCSS](https://tailwindcss.com/) — framework utilitário de CSS para estilização de HTML/JSX.
+- **Componentes de UI:** [Radix UI](https://www.radix-ui.com/) — componentes acessíveis e headless para React.
+- **Animações:** [Motion](https://motion.dev/) — biblioteca de animações para React.
+- **Linguagem integrada:** [Delégua](https://github.com/DesignLiquido/delegua) — linguagem de programação em português com interpretador integrado.
+- **Cache e fetch de dados:** [SWR](https://swr.vercel.app/) — recuperação e cache de dados em aplicações React.
+- **Drag-and-drop:** [Dndkit](https://dndkit.com/) — funcionalidade de arrastar e soltar para React.
+- **Testes automatizados:** [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) — testes de componentes React simulando a interação real do usuário.
 
-> For more details about dependencies and versions, see the [package.json](https://github.com/JohnPetros/stardust/blob/main/apps/web/package.json) file.
+> Para mais detalhes sobre as dependências e versões, consulte o arquivo [package.json](https://github.com/JohnPetros/stardust/blob/main/apps/web/package.json).
 
-## Running the application
+## Executando a aplicação
 
-**Navigate to the web application folder**
+**Navegue até a página da aplicação web**
 
 ```bash
 cd ./stardust/apps/web
 ```
 
-**Install the dependencies**
+**Instale as dependências**
 
 ```bash
 pnpm install
 ```
 
-**Run the application in development mode**
+**Execute a aplicação em modo de desenvolvimento**
 
 ```bash
 pnpm run dev
 ```
 
-> The Inngest development panel will open at http://localhost:3000
+> Será aberto o painel de desenvolvimento do Inngest em http://localhost:3000
 
-## Running the tests
+## Executando os testes
 
 ```bash
 pnpm run test
 ```
 > [!NOTE]
-> Set the development environment variables in the .env.local file
-> To do so, see the [.env.example](https://github.com/JohnPetros/stardust/blob/main/apps/web/.env.example) file to know which variables must be filled in
+> Defina as variáveis de ambiente de desenvolvimento no arquivo .env.local
+> Para isso veja o arquivo [.env.example](https://github.com/JohnPetros/stardust/blob/main/apps/web/.env.example) para saber quais variáveis devem ser preenchidas
 
 ## Tooling
 
-- Scripts of the `@stardust/web` workspace:
+- Scripts do workspace `@stardust/web`:
   - Dev: `pnpm --filter @stardust/web run dev`
   - Build: `pnpm --filter @stardust/web run build`
   - Start (standalone): `pnpm --filter @stardust/web run start`
-  - Quality: `pnpm --filter @stardust/web run check:code` (`lint` + `format`)
-  - Types: `pnpm --filter @stardust/web run check:types`
-  - Tests: `pnpm --filter @stardust/web run test:unit` / `pnpm --filter @stardust/web run test:unit:watch`
-- General reference: `documentation/tooling.md`.
+  - Qualidade: `pnpm --filter @stardust/web run check:code` (`lint` + `format`)
+  - Tipos: `pnpm --filter @stardust/web run check:types`
+  - Testes: `pnpm --filter @stardust/web run test:unit` / `pnpm --filter @stardust/web run test:unit:watch`
+- Referencia geral: `documentation/tooling.md`.
 
-## Folder structure
+## Estruturação de pastas
 
 ```
 📦 Web
-├─ public
-└─ src
+├─ public
+└─ src
    ├─⚙️ app
    ├─🪨 constants
-   ├─ 🎞️ queue
-   │  ├─ jobs
-   │  └─ ⚙️ inngest
-   ├─ 🛜 rest
-   │  ├─ controllers
-   │  ├─ ⚙️ next
-   ├─ 📟 rpc
-   │  ├─ actions
-   │  └─ ⚙️ next-safe-action
-   └─ 🖥️ ui
-      └─ <module name>
-         ├─ styles
+   ├─ 🎞️ queue
+   │  ├─ jobs
+   │  └─ ⚙️ inngest
+   ├─ 🛜 rest
+   │  ├─ controllers
+   │  ├─ ⚙️ next
+   ├─ 📟 rpc
+   │  ├─ actions
+   │  └─ ⚙️ next-safe-action
+   └─ 🖥️ ui
+      └─ <nome do módulo>
+         ├─ styles
          ├─ hooks
-         ├─ stores
-         │  ├─ <store name>
-         │  └─ zustand
-         ├─ widgets
-         │  ├─ components
-         │  ├─ layouts
-         │  ├─ pages
-         │  └─ slots
-         └─ contexts
+         ├─ stores
+         │  ├─ <nome do store>
+         │  └─ zustand
+         ├─ widgets
+         │  ├─ components
+         │  ├─ layouts
+         │  ├─ pages
+         │  └─ slots
+         └─ contexts
 ```

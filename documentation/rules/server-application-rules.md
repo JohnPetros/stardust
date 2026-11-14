@@ -1,81 +1,81 @@
-# What is it for?
+# Para que serve?
 
-It is the application responsible for exposing the StarDust Core features via HTTP (API) for consumption by the Web, the Backoffice and other clients. Besides REST routes, the application runs asynchronous tasks and event-based workflows through Inngest, integrates with external services (e.g., Supabase, cache, storage, telemetry and AI providers) and can expose authenticated MCP endpoints when the integration needs to make domain tools available to external clients.
+E a aplicacao responsavel por expor as funcionalidades do StarDust Core via HTTP (API) para consumo do Web, Backoffice e outros clientes. Alem de rotas REST, a aplicacao executa tarefas assincronas e workflows baseados em eventos por meio do Inngest, integra com servicos externos (ex.: Supabase, cache, storage, telemetria e provedores de IA) e pode expor endpoints MCP autenticados quando a integracao precisar disponibilizar tools do dominio para clientes externos.
 
-# Development
+# Desenvolvimento
 
-## Technologies and libraries
+## Tecnologias e bibliotecas
 
-- HTTP framework: [Hono](https://hono.dev/) (Node)
+- Framework HTTP: [Hono](https://hono.dev/) (Node)
 - TypeScript runtime (dev): `tsx`
 - Background jobs / workflows: [Inngest](https://www.inngest.com/)
-- Data validation: [Zod](https://zod.dev/)
-- Database and Auth: [Supabase](https://supabase.com/) (`@supabase/supabase-js`)
-- Supabase client API key: `SUPABASE_PUBLISHABLE_KEY`; do not configure a `secret`/`service_role` API key in the Server runtime. Administrative feedback operations use direct PostgreSQL only after the `God Account` authorization.
-- Cache / vector: Upstash (Redis / Vector)
-- Telemetry: Sentry (`@sentry/node`)
-- AI: Vercel AI SDK (`ai`) and Mastra
+- Validacao de dados: [Zod](https://zod.dev/)
+- Banco e Auth: [Supabase](https://supabase.com/) (`@supabase/supabase-js`)
+- Chave API do cliente Supabase: `SUPABASE_PUBLISHABLE_KEY`; não configure chave API `secret`/`service_role` no runtime do Server. Operações administrativas de feedback usam PostgreSQL direto somente depois da autorização `God Account`.
+- Cache / vetor: Upstash (Redis / Vector)
+- Telemetria: Sentry (`@sentry/node`)
+- IA: Vercel AI SDK (`ai`) e Mastra
 - HTTP client: Axios
-- Quality: Biome (lint/format)
-- Tests: Jest
+- Qualidade: Biome (lint/format)
+- Testes: Jest
 - Build: `tsup`
 
-> For more details about dependencies and versions, see the [package.json](https://github.com/JohnPetros/stardust/blob/main/apps/server/package.json) file.
+> Para mais detalhes sobre as dependencias e versoes, consulte o arquivo [package.json](https://github.com/JohnPetros/stardust/blob/main/apps/server/package.json).
 
-## Running the application
+## Executando a aplicacao
 
-**Navigate to the server application folder**
+**Navegue ate a pagina da aplicacao server**
 
 ```bash
 cd ./stardust/apps/server
 ```
 
-**Install the dependencies**
+**Instale as dependencias**
 
 ```bash
 pnpm install
 ```
 
-**Run the application in development mode**
+**Execute a aplicacao em modo de desenvolvimento**
 
 ```bash
 docker compose up -d redis inngest
 pnpm run dev
 ```
 
-> The HTTP server starts, by default, at `http://localhost:3333` when `PORT` is not set. The local Inngest runtime must be started via `docker compose`, is available at `http://127.0.0.1:8288` and performs discovery at `http://host.docker.internal:3333/inngest`.
+> O servidor HTTP inicia, por padrao, em `http://localhost:3333` quando `PORT` nao esta definida. O runtime local do Inngest deve ser iniciado via `docker compose`, fica disponivel em `http://127.0.0.1:8288` e faz discovery em `http://host.docker.internal:3333/inngest`.
 
-## Running the tests
+## Executando os testes
 
 ```bash
 pnpm run test
 ```
 
 > [!NOTE]
-> Set the development environment variables in the `.env.local` file.
-> Use `apps/server/.env.example` as a reference for what needs to be filled in.
+> Defina as variaveis de ambiente de desenvolvimento no arquivo `.env.local`.
+> Use `apps/server/.env.example` como referencia do que precisa ser preenchido.
 
 ## Tooling
 
-- Scripts of the `@stardust/server` workspace:
+- Scripts do workspace `@stardust/server`:
   - Dev (HTTP): `pnpm --filter @stardust/server run dev`
-  - Dev (HTTP, explicit alias): `pnpm --filter @stardust/server run dev:server`
-  - Local Inngest: `docker compose up -d ingest`
+  - Dev (HTTP, alias explicito): `pnpm --filter @stardust/server run dev:server`
+  - Inngest local: `docker compose up -d ingest`
   - Build: `pnpm --filter @stardust/server run build`
-  - Production: `pnpm --filter @stardust/server run prod`
-  - Quality: `pnpm --filter @stardust/server run check:code` (`lint` + `format`)
-  - Types: `pnpm --filter @stardust/server run check:types`
-  - Tests: `pnpm --filter @stardust/server run test:unit`
-  - Database (Supabase CLI): `pnpm --filter @stardust/server run <db:local|db:pull|db:push|db:types>`
-- General reference: `documentation/tooling.md`.
+  - Producao: `pnpm --filter @stardust/server run prod`
+  - Qualidade: `pnpm --filter @stardust/server run check:code` (`lint` + `format`)
+  - Tipos: `pnpm --filter @stardust/server run check:types`
+  - Testes: `pnpm --filter @stardust/server run test:unit`
+  - Banco (Supabase CLI): `pnpm --filter @stardust/server run <db:local|db:pull|db:push|db:types>`
+- Referencia geral: `documentation/tooling.md`.
 
 ## Supabase CLI
 
-- The CLI configuration lives in `apps/server/supabase/config.toml`.
-- SQL migrations live in `apps/server/supabase/migrations`.
-- The production deploy must apply migrations in the pipeline before the app release, not on server boot.
+- A configuracao da CLI fica em `apps/server/supabase/config.toml`.
+- Migrations SQL ficam em `apps/server/supabase/migrations`.
+- O deploy de producao deve aplicar migrations no pipeline antes do release da app, nao no boot do servidor.
 
-## Folder structure
+## Estruturacao de pastas
 
 ```
 Server
@@ -99,15 +99,15 @@ Server
 └─ supabase
 ```
 
-## Relevant app conventions
+## Convencoes relevantes da app
 
-- HTTP MCP endpoints must live in `src/app/hono/routers/mcp`.
-- MCP authentication and authorization must happen at the app edge before the tools run.
-- MCP toolkits must live in `src/ai/mastra/toolkits` and concentrate Zod schemas and the composition of concrete dependencies.
-- MCP tools must delegate business rules to `use cases` and entities from `@stardust/core`.
+- Endpoints MCP HTTP devem ficar em `src/app/hono/routers/mcp`.
+- A autenticacao e autorizacao do MCP devem acontecer na borda da app antes da execucao das tools.
+- Toolkits MCP devem viver em `src/ai/mastra/toolkits` e concentrar schemas Zod e composicao de dependencias concretas.
+- Tools MCP devem delegar regra de negocio para `use cases` e entidades do `@stardust/core`.
 
-## Approved transition: Drizzle (Issue #602)
+## Transição aprovada: Drizzle (Issue #602)
 
-The Supabase CLI section and the use of Supabase for the database above describe the legacy. In the delivery of Issue #602, persistence uses Drizzle/PostgreSQL and the Supabase SDK remains for Auth. Business repositories are composed after authentication/authorization, for users as well as for God Account, MCP and jobs. The API key bootstrap admits only the internal lookup by hash needed by AuthenticateApiKeyUseCase, with no business access before validation; it does not restrict direct PostgreSQL to administrative feedback only.
+A seção Supabase CLI e o uso de Supabase para banco acima descrevem o legado. Na entrega da Issue #602, a persistência usa Drizzle/PostgreSQL e Supabase SDK permanece para Auth. Repositories de negócio são compostos após autenticação/autorização, tanto para usuários quanto para God Account, MCP e jobs. O bootstrap de API key admite somente a consulta interna por hash necessária ao AuthenticateApiKeyUseCase, sem acesso de negócio antes da validação; não restringe PostgreSQL direto apenas ao feedback administrativo.
 
-The new scripts and paths are contracted in the Spec. The Supabase CLI stops being the migrations runner. Drizzle migrations run in the pipeline, before traffic is reopened in the coordinated initial window, never on boot. The local Supabase stack remains the source of PostgreSQL/Auth for real tests. Local ports and credentials follow AGENTS.md and tooling.md.
+Os novos scripts e paths estão contratados na Spec. Supabase CLI deixa de ser o runner de migrations. Migrations Drizzle rodam no pipeline, antes da reabertura do tráfego na janela inicial coordenada, nunca no boot. A stack Supabase local continua sendo a origem de PostgreSQL/Auth para testes reais. Portas locais e credenciais seguem AGENTS.md e tooling.md.

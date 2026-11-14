@@ -114,7 +114,7 @@ tests, migrations or generated artifacts and record the blocker:
 - for Server, confirm real behavior, authorization, persistence and side
   effects per `AGENTS.md`; local Supabase is the default and Supabase Dev only comes in
   when the task requires the remote project;
-- local execution is scoped (see "Scoped local execution" in `documentation/tooling.md`):
+- local execution is scoped (see "Execução local escopada" in `documentation/tooling.md`):
   coverage/ratchet (`test:coverage`, `check:coverage`) and full suites are left to CI,
   unless there is demonstrated impact on the whole workspace, a Spec requirement or a user request; LSP,
   Validation, TypeScript Config and Email remain excluded from the ratchet.
@@ -222,7 +222,7 @@ After integrating all implementation flows and the generated artifacts:
    filesystem. It is structural and does not replace tests, sensors, Reviewers nor Evaluation.
 3. Run `format`, `check:code` and `check:types` in the affected workspaces and in their
    consumers, `test:unit` with the affected test files, `check:test-integrity` and
-   `check:architecture` when applicable, per "Scoped local execution" in
+   `check:architecture` when applicable, per "Execução local escopada" in
    `documentation/tooling.md`. Coverage/ratchet and full suites only come in with demonstrated
    impact on the workspace, a Spec requirement or a user request (CI runs them).
    Run `check:complexity -w <workspace>` when the scope requires it. Record each static

@@ -4,7 +4,7 @@
 
 1. Open the [Rule router](documentation/rules/rules.md) before creating or
    changing any file (code, tests, configuration or documentation). Identify the
-   rules file whose "When to consult" matches the layer, the app or the task and
+   rules file whose "Quando consultar" (when to consult) matches the layer, the app or the task and
    read it in full before the first edit, not after a review points out the
    problem.
 2. This also applies to fixes for review comments, CI failures and small
@@ -45,8 +45,11 @@ planned infrastructure; use only commands that actually exist.
   `.github/workflows/dependabot-pr-title.yaml`.
 - PRDs (`documentation/prds/**`) and GitHub issues, including the drafts in
   `documentation/issues/**`, are also written in PT-BR, using the Portuguese
-  section titles defined in `documentation/sdd.md`. All other project
-  documentation is written in English.
+  section titles defined in `documentation/sdd.md`.
+- The rules (`documentation/rules/**`) and the documents `architecture.md`,
+  `infrastructure.md`, `modules.md`, `sdd.md` and `tooling.md` under
+  `documentation/` are written in PT-BR. Prompts, agent definitions and the
+  remaining project documentation are written in English.
 
 ## Local environment and credentials
 
@@ -484,7 +487,7 @@ tests.
 In SDD workflows, also run the applicable sensors defined in
 `documentation/sdd.md` and record in `evaluation.md` the commands run, the
 files and scenarios, the counts and the results. The selection details are in
-`documentation/tooling.md`, section "Scoped local execution".
+`documentation/tooling.md`, section "Execução local escopada".
 
 ## Specification-driven development
 

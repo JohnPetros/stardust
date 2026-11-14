@@ -1,104 +1,104 @@
-# Delegua Layer Rules
+# Regras da Camada Delegua
 
-# Overview
+# Visao Geral
 
-Delégua is the language executed by StarDust's challenges, lessons, official
-solutions and educational examples. All Delégua code must respect the
-syntax and the Portuguese vocabulary defined by the language.
+Delégua é a linguagem executada pelos desafios, lições, soluções oficiais e
+exemplos educacionais da StarDust. Todo código Delégua deve respeitar a
+sintaxe e o vocabulário em português definidos pela linguagem.
 
-## Goal
+## Objetivo
 
-Standardize the writing, execution, presentation and validation of Delégua
-code in the project.
+Padronizar a escrita, a execução, a apresentação e a validação de código
+Delégua no projeto.
 
-## Responsibilities
+## Responsabilidades
 
-- Write examples and solutions in valid, idiomatic Delégua.
-- Keep reserved words, logical values, types and native functions in
-  Portuguese.
-- Validate Delégua code through the interpreter/LSP used by the project.
-- Distinguish Delégua code from TypeScript, JavaScript or texts that merely
-  store Delégua code.
+- Escrever exemplos e soluções em Delégua válido e idiomático.
+- Manter palavras reservadas, valores lógicos, tipos e funções nativas em
+  português.
+- Validar código Delégua pelo interpretador/LSP utilizado pelo projeto.
+- Diferenciar código Delégua de TypeScript, JavaScript ou textos que apenas
+  armazenam código Delégua.
 
-## Boundaries
+## Limites
 
-- These rules apply to content executed as Delégua, including code strings,
-  fixtures, mocks, challenges, official solutions, snippets and tests.
-- They do not replace the TypeScript, React or persistence rules that surround
-  that content.
-- The interpreter version available in the project is the final authority for
-  versioned language features.
+- Estas regras se aplicam ao conteúdo executado como Delégua, incluindo strings
+  de código, fixtures, mocks, desafios, soluções oficiais, snippets e testes.
+- Elas não substituem as regras de TypeScript, React ou persistência que cercam
+  esse conteúdo.
+- A versão do interpretador disponível no projeto é a autoridade final para
+  recursos versionados da linguagem.
 
-# Global Directory Structure
+# Estrutura de Diretorios Globais
 
-Delégua code can appear in different areas of the monorepo:
+O código Delégua pode aparecer em diferentes áreas do monorepo:
 
-- `packages/lsp/`: execution, syntactic analysis, semantic analysis and
-  editor integration.
-- `packages/core/`: contracts, entities and DTOs that carry code,
-  inputs and results.
-- `apps/web/src/mocks/`: educational examples and lesson data that contain
-  Delégua code.
-- `apps/web/src/ui/`: editors, snippets and components that display or submit
-  Delégua code.
-- `apps/server/`: execution of submissions and integration with the LSP provider.
-- `documentation/`: normative examples and language documentation in the
-  context of the project.
+- `packages/lsp/`: execução, análise sintática, análise semântica e integração
+  com o editor.
+- `packages/core/`: contratos, entidades e DTOs que transportam código,
+  entradas e resultados.
+- `apps/web/src/mocks/`: exemplos educacionais e dados de lições que contêm
+  código Delégua.
+- `apps/web/src/ui/`: editores, snippets e componentes que exibem ou enviam
+  código Delégua.
+- `apps/server/`: execução de submissões e integração com o provedor LSP.
+- `documentation/`: exemplos normativos e documentação da linguagem no
+  contexto do projeto.
 
-## Organization
+## Organização
 
-- Delégua code must be kept as text only at the edge that needs to
-  carry or persist it.
-- The execution logic must not be reimplemented in TypeScript to simulate
-  the result of a Delégua program.
-- Fixtures must make explicit when a field contains Delégua code,
-  Delégua input or expected output.
-- TypeScript file and symbol names follow the project's general rules;
-  names written inside the Delégua program follow the rules of this layer.
+- Código Delégua deve ser mantido como texto apenas na borda que precisa
+  transportá-lo ou persistí-lo.
+- A lógica de execução não deve ser reimplementada em TypeScript para simular
+  o resultado de um programa Delégua.
+- Fixtures devem deixar explícito quando um campo contém código Delégua,
+  entrada Delégua ou saída esperada.
+- Nomes de arquivos e símbolos TypeScript seguem as regras gerais do projeto;
+  nomes escritos dentro do programa Delégua seguem as regras desta camada.
 
-# Fundamental Principles
+# Principios Fundamentais
 
-## Must contain
+## Deve conter
 
-### Simplicity first
+### Simplicidade primeiro
 
-Challenge solutions must prioritize the simplest correct, readable and
-didactic approach for the proposed goal. Simplicity does not just mean
-having fewer lines: it means reducing decisions, abstractions and structures that do not
-help to explain or solve the problem.
+As soluções de desafios devem priorizar a abordagem correta mais simples,
+legível e didática para o objetivo proposto. Simplicidade não significa apenas
+ter menos linhas: significa reduzir decisões, abstrações e estruturas que não
+ajudam a explicar ou resolver o problema.
 
-- Start with the direct solution before considering an optimization.
-- Prefer clear control flow and descriptive names over compact
-  or clever constructs.
-- Do not add maps, sets, conversions, helper functions or extra steps
-  without a real need of the algorithm.
-- Use a more complex approach only when the statement, the input
-  constraints or the pedagogical goal justify the complexity.
-- When an optimization is necessary, the official solution must explain the
-  motivation and the cost-benefit of the choice.
+- Comece pela solução direta antes de considerar uma otimização.
+- Prefira fluxo de controle claro e nomes descritivos a construções compactas
+  ou engenhosas.
+- Não adicione mapas, conjuntos, conversões, funções auxiliares ou etapas
+  extras sem uma necessidade real do algoritmo.
+- Use uma abordagem mais complexa somente quando o enunciado, as restrições de
+  entrada ou o objetivo pedagógico justificarem a complexidade.
+- Quando uma otimização for necessária, a solução oficial deve explicar a
+  motivação e o custo-benefício da escolha.
 
-### Portuguese as a mandatory rule
+### Português como regra obrigatória
 
-All Delégua code must use the Portuguese vocabulary. This includes:
+Todo código Delégua deve usar o vocabulário em português. Isso inclui:
 
-- reserved words and control structures;
-- the logical values `verdadeiro` (true) and `falso` (false);
-- the empty value `nulo` (null);
-- names of functions, variables, parameters and keys created for the
-  challenge's domain;
-- comments and supporting texts inserted in the code itself.
+- palavras reservadas e estruturas de controle;
+- valores lógicos `verdadeiro` e `falso`;
+- o valor vazio `nulo`;
+- nomes de funções, variáveis, parâmetros e chaves criados para o domínio do
+  desafio;
+- comentários e textos de apoio inseridos no próprio código.
 
-Challenges must also use Portuguese in their titles, statements, explanations,
-panel labels, messages, inputs, outputs and results. An English term
-must not appear in the challenge experience when there is a clear Portuguese
-equivalent.
+Desafios também devem usar português em seus títulos, enunciados, explicações,
+rótulos de painéis, mensagens, entradas, saídas e resultados. Um termo em
+inglês não deve aparecer na experiência do desafio quando houver um equivalente
+claro em português.
 
-Booleans must not be written in English inside Delégua code. The result
-of comparisons and logical functions must also be represented by
-`verdadeiro` or `falso`.
+Não se deve escrever booleanos em inglês dentro de código Delégua. O resultado
+de comparações e funções lógicas também deve ser representado por
+`verdadeiro` ou `falso`.
 
-When the Delégua code is inside a TypeScript string, the rule still
-applies to the content of the string:
+Quando o código Delégua estiver dentro de uma string TypeScript, a regra ainda
+se aplica ao conteúdo da string:
 
 ```ts
 const codigo = `funcao ehPar(numero) {
@@ -108,55 +108,55 @@ const codigo = `funcao ehPar(numero) {
 escreva(ehPar(4))`
 ```
 
-The program above must produce `verdadeiro`, and not an English boolean
-literal.
+O programa acima deve produzir `verdadeiro`, e não um literal booleano em
+inglês.
 
-### Canonical vocabulary
+### Vocabulário canônico
 
-Use the forms below in the project's new code:
+Use as formas abaixo nos novos códigos do projeto:
 
-| Concept | Delégua |
+| Conceito | Delégua |
 | --- | --- |
-| variable | `var` or `variavel` |
-| constant | `const` or `constante` |
-| function | `funcao` |
-| return | `retorna` |
-| conditional | `se`, `senao se`, `senao` |
-| conditional loop | `enquanto` |
-| counted loop | `para` |
-| output | `escreva()` |
-| input | `leia()` |
-| true | `verdadeiro` |
-| false | `falso` |
-| empty | `nulo` |
-| conjunction | `e` |
-| disjunction | `ou` |
-| membership | `em` or `contem()`/`contém()` |
+| variável | `var` ou `variavel` |
+| constante | `const` ou `constante` |
+| função | `funcao` |
+| retorno | `retorna` |
+| condicional | `se`, `senao se`, `senao` |
+| laço condicional | `enquanto` |
+| laço contado | `para` |
+| saída | `escreva()` |
+| entrada | `leia()` |
+| verdadeiro | `verdadeiro` |
+| falso | `falso` |
+| vazio | `nulo` |
+| conjunção | `e` |
+| disjunção | `ou` |
+| pertencimento | `em` ou `contem()`/`contém()` |
 
-Delégua accepts some accented and unaccented forms as equivalent.
-To keep compatibility with the existing examples and avoid typing
-problems, the project must prefer the unaccented forms in reserved words
-(`funcao`, `senao`, `variavel`). Texts displayed to the user must
-follow normal Portuguese spelling.
+Delégua aceita algumas formas acentuadas e não acentuadas como equivalentes.
+Para manter compatibilidade com os exemplos existentes e evitar problemas de
+digitação, o projeto deve preferir as formas não acentuadas nas palavras
+reservadas (`funcao`, `senao`, `variavel`). Textos exibidos ao usuário devem
+seguir a ortografia normal do português.
 
-### Names in Delégua code
+### Nomes no código Delégua
 
-- Domain names must be written in Portuguese and be descriptive.
-- Functions must start, whenever possible, with a verb in the infinitive or
-  a clear action: `calcularMedia`, `encontrarMaior`, `verificarPalindromo`.
-- Boolean variables must communicate a condition: `ehValido`, `encontrou`,
+- Nomes de domínio devem ser escritos em português e ser descritivos.
+- Funções devem começar, sempre que possível, com um verbo no infinitivo ou
+  uma ação clara: `calcularMedia`, `encontrarMaior`, `verificarPalindromo`.
+- Variáveis booleanas devem comunicar uma condição: `ehValido`, `encontrou`,
   `estaOrdenado`.
-- Use camelCase for compound identifiers and do not use accents in
-  identifiers, even when the language accepts accented lexemes.
-- Names of libraries, external APIs or concepts that are necessarily
-  proper names may remain as external names, but must not change the
-  language's vocabulary.
+- Use camelCase para identificadores compostos e não use acentos em
+  identificadores, mesmo quando a linguagem aceitar lexemas acentuados.
+- Nomes de bibliotecas, APIs externas ou conceitos que são necessariamente
+  próprios podem permanecer como nomes externos, mas não devem alterar o
+  vocabulário da linguagem.
 
-### Types and values
+### Tipos e valores
 
-The basic types used in challenges are text, number, logical, vector,
-dictionary, tuple and null. Delégua normally infers types, but allows
-explicit annotations when the context requires them.
+Os tipos básicos usados nos desafios são texto, número, lógico, vetor,
+dicionário, tupla e nulo. Delégua normalmente infere tipos, mas permite
+anotações explícitas quando o contexto exigir.
 
 ```delegua
 var nome = "Stardust"
@@ -166,14 +166,14 @@ var itens = [1, 2, 3]
 var configuracao = { "modo": "pratica", "ativo": verdadeiro }
 ```
 
-Vectors must be treated as lists in the vocabulary of the interface and of the
-project's documentation, although the official syntax and documentation also
-use the term vector (`vetor`).
+Vetores devem ser tratados como listas no vocabulário da interface e da
+documentação do projeto, embora a sintaxe e a documentação oficial também
+usem o termo vetor.
 
-### Input and conversions
+### Entrada e conversões
 
-`leia()` returns text. When the logic needs a number, the input must be
-converted explicitly:
+`leia()` retorna texto. Quando a lógica precisar de número, a entrada deve ser
+convertida explicitamente:
 
 ```delegua
 var texto = leia()
@@ -181,14 +181,14 @@ var numero = inteiro(texto)
 escreva(numero + 1)
 ```
 
-Use the appropriate native functions (`inteiro`, `numero`, `real`, `texto`) instead
-of assuming that the input already has the desired type.
+Use as funções nativas adequadas (`inteiro`, `numero`, `real`, `texto`) em vez
+de assumir que a entrada já possui o tipo desejado.
 
-### Output and results
+### Saída e resultados
 
-Use `escreva()` for observable output. In challenges that expect a function to return
-a value, use `retorna` inside the function and do not depend on side effects to
-represent the answer.
+Use `escreva()` para saída observável. Em desafios que esperam retorno de uma
+função, use `retorna` dentro da função e não dependa de efeitos colaterais para
+representar a resposta.
 
 ```delegua
 funcao ehCodigoValido(codigo) {
@@ -200,37 +200,37 @@ funcao ehCodigoValido(codigo) {
 }
 ```
 
-## Must not contain
+## Nao deve conter
 
-- Boolean literals or reserved words in English in Delégua code.
-- JavaScript/TypeScript syntax used out of habit, such as anonymous functions with
-  `function`, return with `return` or conditionals with `if`.
-- `null` or `undefined` in place of `nulo`.
-- Implicit conversion of values read by `leia()` when the algorithm requires
-  a number.
-- TypeScript code used to mask an incompatibility of the Delégua
-  interpreter.
-- Domain variable names in English when there is a clear Portuguese
-  equivalent.
-- Comments that teach a syntax different from the one actually executed.
-- Labels, titles or messages in English in the challenge experience when
-  there is a Portuguese equivalent.
+- Literais booleanos ou palavras reservadas em inglês no código Delégua.
+- Sintaxe JavaScript/TypeScript usada por hábito, como funções anônimas com
+  `function`, retorno com `return` ou condicionais com `if`.
+- `null` ou `undefined` no lugar de `nulo`.
+- Conversão implícita de valores lidos por `leia()` quando o algoritmo exige
+  um número.
+- Código TypeScript usado para mascarar uma incompatibilidade do interpretador
+  Delégua.
+- Nomes de variáveis de domínio em inglês quando há equivalente claro em
+  português.
+- Comentários que ensinam uma sintaxe diferente da realmente executada.
+- Rótulos, títulos ou mensagens em inglês na experiência do desafio quando
+  houver equivalente em português.
 
-# Design Patterns
+# Padroes de Projeto
 
-## Challenge algorithms
+## Algoritmos de desafios
 
-- The solution must be a Delégua function with explicit parameters and a
-  deterministic return.
-- The first alternative evaluated must be the simplest solution that meets
-  the statement and the known constraints.
-- The function must avoid unnecessary side effects.
-- Invalid input cases must be handled according to the statement before the
-  main algorithm.
-- When the solution can return early, `retorna` must be used to make
-  the case found clear.
-- An optimization must not be introduced just to make the solution more
-  sophisticated or to reduce a few operations with no relevant impact.
+- A solução deve ser uma função Delégua com parâmetros explícitos e retorno
+  determinístico.
+- A primeira alternativa avaliada deve ser a solução mais simples que atende
+  ao enunciado e às restrições conhecidas.
+- A função deve evitar efeitos colaterais desnecessários.
+- Casos de entrada inválidos devem ser tratados conforme o enunciado antes do
+  algoritmo principal.
+- Quando a solução puder retornar cedo, `retorna` deve ser usado para deixar
+  claro o caso encontrado.
+- Uma otimização não deve ser introduzida apenas para tornar a solução mais
+  sofisticada ou para reduzir algumas operações sem impacto relevante.
 
 ```delegua
 funcao encontrarPrimeiroPar(numeros) {
@@ -244,10 +244,10 @@ funcao encontrarPrimeiroPar(numeros) {
 }
 ```
 
-## Two pointers
+## Dois ponteiros
 
-For algorithms with two indices, use Portuguese names that explain the
-role of each pointer and update them inside an `enquanto` loop:
+Para algoritmos com dois índices, use nomes em português que expliquem o
+papel de cada ponteiro e atualize-os dentro de um laço `enquanto`:
 
 ```delegua
 funcao ehPalindromo(texto) {
@@ -267,18 +267,18 @@ funcao ehPalindromo(texto) {
 }
 ```
 
-## Native functions and methods
+## Funções nativas e métodos
 
-- Prefer native functions and methods documented by the language.
-- For lists, use methods such as `tamanho()`, `adicionar()`, `fatiar()`,
-  `filtrarPor()` and `mapear()` when they make the intent clearer.
-- For conversions, prefer `inteiro()`, `real()`, `numero()` and `texto()`.
-- Do not invent a native function in an example without validating that it exists in
-  the interpreter version used by the project.
+- Prefira funções e métodos nativos documentados pela linguagem.
+- Para listas, use métodos como `tamanho()`, `adicionar()`, `fatiar()`,
+  `filtrarPor()` e `mapear()` quando tornarem a intenção mais clara.
+- Para conversões, prefira `inteiro()`, `real()`, `numero()` e `texto()`.
+- Não invente uma função nativa em um exemplo sem validar que ela existe na
+  versão do interpretador usada pelo projeto.
 
-# Applied Usage Patterns
+# Padroes de Uso Aplicados
 
-## Minimal example
+## Exemplo mínimo
 
 ```delegua
 funcao saudar(nome) {
@@ -288,10 +288,10 @@ funcao saudar(nome) {
 escreva(saudar("explorador"))
 ```
 
-## Conditionals
+## Condicionais
 
-Use `se`, `senao se` and `senao`. Conditions must produce logical values or
-use an expression whose logical value is intentional:
+Use `se`, `senao se` e `senao`. Condições devem produzir valores lógicos ou
+usar uma expressão cujo valor lógico seja intencional:
 
 ```delegua
 se pontuacao >= 100 {
@@ -303,82 +303,82 @@ se pontuacao >= 100 {
 }
 ```
 
-## Loops
+## Laços
 
-- Use `enquanto` when the continuation depends on a condition.
-- Use `para` when there is initialization, condition and step controlled by an
-  index.
-- Ensure that the state used in the condition is changed to avoid infinite
-  loops.
+- Use `enquanto` quando a continuação depender de uma condição.
+- Use `para` quando houver inicialização, condição e passo controlados por um
+  índice.
+- Garanta que o estado usado na condição seja alterado para evitar laços
+  infinitos.
 
-## Boolean output
+## Saída booleana
 
-All documentation, fixtures, official solutions and expected results must use
-`verdadeiro` and `falso` when representing Delégua logical values. The
-presentation layer must also translate logical values to PT-BR before showing them
-to the user.
+Toda documentação, fixture, solução oficial e resultado esperado deve usar
+`verdadeiro` e `falso` quando representar valores lógicos Delégua. A camada de
+apresentação também deve traduzir valores lógicos para PT-BR antes de mostrá-los
+ao usuário.
 
-## Comments
+## Comentários
 
-Comments must explain the intent of the algorithm, not translate the syntax
-line by line. They must be written in Portuguese and must not present a
-foreign keyword as if it were valid code.
+Comentários devem explicar a intenção do algoritmo, não traduzir linha a
+linha a sintaxe. Devem ser escritos em português e não podem apresentar uma
+palavra-chave estrangeira como se fosse código válido.
 
-# Integration Rules with Other Layers
+# Regras de Integracao com Outras Camadas
 
-- The UI must send and display the code as Delégua text without rewriting its
+- A UI deve enviar e exibir o código como texto Delégua sem reescrever seus
   tokens.
-- The server must execute Delégua code through the `LspProvider` contract
-  and the `DeleguaProvedorLsp`, not through `eval`, `new Function` or direct
-  JavaScript execution.
-- Syntactic and semantic analysis must be delegated to the `packages/lsp` package.
-- The `core` package must carry code, input and output through DTOs without
-  introducing syntax from another language into the Delégua content.
-- Code playback must keep the real tokens of the executed program;
-  interface labels can be localized without changing the code.
-- Output values must be normalized for PT-BR presentation,
-  especially booleans (`verdadeiro`/`falso`) and null (`nulo`).
-- TypeScript code that contains a Delégua template string must have tests that
-  validate the executable content, not just the existence of the string.
+- O servidor deve executar código Delégua através do contrato de `LspProvider`
+  e do `DeleguaProvedorLsp`, não através de `eval`, `new Function` ou execução
+  direta de JavaScript.
+- Análise sintática e semântica devem ser delegadas ao pacote `packages/lsp`.
+- O pacote `core` deve transportar código, entrada e saída por DTOs sem
+  introduzir sintaxe de outra linguagem no conteúdo Delégua.
+- O playback de código deve manter os tokens reais do programa executado;
+  rótulos da interface podem ser localizados sem alterar o código.
+- Valores de saída devem ser normalizados para a apresentação em PT-BR,
+  principalmente booleanos (`verdadeiro`/`falso`) e nulo (`nulo`).
+- Código TypeScript que contém um template string Delégua deve ter testes que
+  validem o conteúdo executável, não apenas a existência da string.
 
-# Quick Checklist for New Features in the Delegua Layer
+# Checklist Rapido para Novas Features na Camada Delegua
 
-- [ ] All executable code uses reserved words in Portuguese.
-- [ ] The chosen solution is the simplest correct approach for the challenge's
-      goal.
-- [ ] Booleans are written as `verdadeiro` or `falso`.
-- [ ] The empty value is written as `nulo`.
-- [ ] Domain functions, variables, parameters and comments are in
-      Portuguese.
-- [ ] `leia()` had its return converted when necessary.
-- [ ] Native functions and methods used exist in the project's interpreter
-      version.
-- [ ] Execution is done by the Delégua LSP/interpreter, without JavaScript
-      simulation.
-- [ ] Inputs, outputs and expected results were tested.
-- [ ] Code strings in TypeScript were validated as Delégua programs.
-- [ ] No text displayed to the user presents `true`, `false`, `null` or
-      reserved words in English as the result of Delégua code.
-- [ ] The challenge's titles, explanations, labels, inputs, outputs and messages
-      are in Portuguese.
-- [ ] Any additional complexity has a justification in the statement, in the
-      constraints or in the solution's explanation.
+- [ ] Todo o código executável usa palavras reservadas em português.
+- [ ] A solução escolhida é a abordagem correta mais simples para o objetivo do
+      desafio.
+- [ ] Booleanos estão escritos como `verdadeiro` ou `falso`.
+- [ ] O valor vazio está escrito como `nulo`.
+- [ ] Funções, variáveis, parâmetros e comentários do domínio estão em
+      português.
+- [ ] `leia()` teve seu retorno convertido quando necessário.
+- [ ] Funções nativas e métodos usados existem na versão do interpretador do
+      projeto.
+- [ ] A execução é feita pelo LSP/interpretador Delégua, sem simulação em
+      JavaScript.
+- [ ] Entradas, saídas e resultados esperados foram testados.
+- [ ] Strings de código em TypeScript foram validadas como programas Delégua.
+- [ ] Nenhum texto exibido ao usuário apresenta `true`, `false`, `null` ou
+      palavras reservadas em inglês como resultado de código Delégua.
+- [ ] Títulos, explicações, rótulos, entradas, saídas e mensagens do desafio
+      estão em português.
+- [ ] Toda complexidade adicional possui uma justificativa no enunciado, nas
+      restrições ou na explicação da solução.
 
-# Notes and Open Items
+# Observacoes e Pendencias
 
-- These rules adopt as a reference the [official Delégua
-  wiki](https://github.com/DesignLiquido/delegua/wiki), especially the
-  pages on [introduction](https://github.com/DesignLiquido/delegua/wiki/Inicial),
-  [data structures](https://github.com/DesignLiquido/delegua/wiki/Estruturas-de-dados-elementares),
-  [input and output](https://github.com/DesignLiquido/delegua/wiki/Entrada-e-Sa%C3%ADda),
-  [operators](https://github.com/DesignLiquido/delegua/wiki/Operadores),
-  [conditionals](https://github.com/DesignLiquido/delegua/wiki/Condicionais),
-  [loops](https://github.com/DesignLiquido/delegua/wiki/La%C3%A7os-de-repeti%C3%A7%C3%A3o),
-  [functions](https://github.com/DesignLiquido/delegua/wiki/Fun%C3%A7%C3%B5es) and
-  [native functions](https://github.com/DesignLiquido/delegua/wiki/Fun%C3%A7%C3%B5es-nativas).
-- The wiki has version-specific features. Before using a new function,
-  method or feature in an official solution, support must be confirmed in the
-  interpreter installed in the monorepo.
-- The convention of Portuguese identifiers is a project rule for
-  Delégua code; technical names in TypeScript remain subject to the monorepo's
-  general conventions rules.
+- Estas regras adotam como referência a [wiki oficial do
+  Delégua](https://github.com/DesignLiquido/delegua/wiki), especialmente as
+  páginas de [introdução](https://github.com/DesignLiquido/delegua/wiki/Inicial),
+  [estruturas de dados](https://github.com/DesignLiquido/delegua/wiki/Estruturas-de-dados-elementares),
+  [entrada e saída](https://github.com/DesignLiquido/delegua/wiki/Entrada-e-Sa%C3%ADda),
+  [operadores](https://github.com/DesignLiquido/delegua/wiki/Operadores),
+  [condicionais](https://github.com/DesignLiquido/delegua/wiki/Condicionais),
+  [laços de repetição](https://github.com/DesignLiquido/delegua/wiki/La%C3%A7os-de-repeti%C3%A7%C3%A3o),
+  [funções](https://github.com/DesignLiquido/delegua/wiki/Fun%C3%A7%C3%B5es) e
+  [funções nativas](https://github.com/DesignLiquido/delegua/wiki/Fun%C3%A7%C3%B5es-nativas).
+- A wiki possui recursos específicos por versão. Antes de usar uma função,
+  método ou recurso novo em uma solução oficial, deve-se confirmar o suporte no
+  interpretador instalado no monorepo.
+- A convenção de identificadores em português é uma regra do projeto para
+  código Delégua; nomes técnicos em TypeScript continuam sujeitos às regras
+  gerais de convenções do monorepo.

@@ -1,414 +1,409 @@
-# Specification-Driven Development (SDD) at StarDust
+# Specification-Driven Development (SDD) no StarDust
 
-## Goal
+## Objetivo
 
-SDD turns a feature demand into an implementable Contract, a traceable execution and a
-delivery closed by evidence in the PR. The whole flow happens in the same task:
+O SDD transforma uma demanda de feature em um Contract implementável, uma execução
+rastreável e uma entrega fechada por evidência no PR. Todo o fluxo ocorre na mesma task:
 
 ```text
-PRD, Issue, Report or direct demand
+PRD, Issue, Report ou demanda direta
 → create-spec
-→ Spec Reviewer + user review of the written Spec
+→ Spec Reviewer + revisão do usuário da Spec escrita
 → implement-spec
-→ integrated verification (automated + manual + visual)
-→ Implementation Reviewer (+ Visual Reviewer in parallel, when there is UI)
+→ verificação integrada (automatizada + manual + visual)
+→ Implementation Reviewer (+ Visual Reviewer em paralelo, quando há UI)
 → check-spec-implementation + check:test-integrity + evaluation.md ready
-→ conclude-spec → commit-code → open-pr → CI of the PR HEAD
-→ Spec and Evaluation completed
+→ conclude-spec → commit-code → open-pr → CI do HEAD do PR
+→ Spec e Evaluation completed
 ```
 
-SDD is not mandatory for maintenance that does not need a Contract. The main task
-classifies the demand and uses direct maintenance when a Spec adds no authority,
-controlled risk or useful traceability. `chore` and `refactor` issues with multiple flows,
-CI/CD, integrations or migrations may originate a Spec, without a PRD or product milestone.
+SDD não é obrigatório para manutenção que não precise de Contract. A task principal
+classifica a demanda e usa manutenção direta quando uma Spec não acrescenta autoridade,
+risco controlado ou rastreabilidade útil. Issues `chore` e `refactor` com múltiplos fluxos,
+CI/CD, integrações ou migrations podem originar uma Spec, sem PRD nem milestone de produto.
 
-## Abbreviation convention
+## Convenção de abreviações
 
-Use these abbreviations and namespaces in every new or revised SDD artifact:
+Use estas abreviações e namespaces em todo artefato SDD novo ou revisado:
 
-| Abbreviation | Meaning |
+| Abreviação | Significado |
 | --- | --- |
-| **SDD** | *Specification-Driven Development* — development driven by specification |
-| **PRD** | *Product Requirements Document* — product requirements document |
-| **RP-\*** | *Requisito de Produto* (Product Requirement) — requirement of the canonical PRD versioned in `documentation/prds/` |
-| **JN-\*** | *Jornada* (Journey) — user journey |
-| **RF-\*** | *Requisito Funcional* (Functional Requirement) — functional requirement of the local Spec |
-| **CA-\*** | *Critério de Aceitação* (Acceptance Criterion) — verifiable criterion of the Spec |
-| **AV-\*** | *Verificação Automatizada* (Automated Verification) — automated test, sensor or baseline gate |
-| **MV-\*** | *Verificação Manual* (Manual Verification) — happy-path journey executed in a real browser or terminal |
-| **VV-\*** | *Verificação Visual* (Visual Verification) — comparison of a Penpot board with the corresponding Playwright capture |
-| **EV-\*** | *Evidência* (Evidence) — evidence that a criterion or gate was met |
-| **ACH-\*** | *Achado de revisão* (Review Finding) — finding from a review, sensor or verification |
-| **SHI-\*** | key of the Jira issue used to track a Shifu delivery |
+| **SDD** | *Specification-Driven Development* — desenvolvimento orientado por especificação |
+| **PRD** | *Product Requirements Document* — documento de requisitos de produto |
+| **RP-\*** | *Requisito de Produto* — requisito do PRD canônico versionado em `documentation/prds/` |
+| **JN-\*** | *Jornada* — jornada do usuário |
+| **RF-\*** | *Requisito Funcional* — requisito funcional da Spec local |
+| **CA-\*** | *Critério de Aceitação* — critério verificável da Spec |
+| **AV-\*** | *Verificação Automatizada* — teste, sensor ou gate automatizado de baseline |
+| **MV-\*** | *Verificação Manual* — jornada happy-path executada em navegador ou terminal reais |
+| **VV-\*** | *Verificação Visual* — comparação de um board do Penpot com a captura Playwright correspondente |
+| **EV-\*** | *Evidência* — evidência de que um critério ou gate foi atendido |
+| **ACH-\*** | *Achado de revisão* — finding de revisão, sensor ou verificação |
+| **SHI-\*** | chave da issue Jira usada para rastrear uma entrega Shifu |
 
-The prefixes (`RP`, `JN`, `RF`, `CA`, `AV`, `MV`, `VV`, `EV`, `ACH`, `SHI`) are identifiers derived from the
-original Portuguese terms and stay unchanged. The traceability relations are `RP/JN → RF → CA → EV`; `AV`, `MV` and `VV`
-describe the verifications that produce an `EV` (the IDs are unique across the three types), and
-`ACH` records problems found during review or verification. The Evaluation does not record PR
-CI results: workflows, checks and build stay in the PR. `SHI-*`
-is optional and only appears when there is a Shifu Jira issue.
+As relações de rastreabilidade são `RP/JN → RF → CA → EV`; `AV`, `MV` e `VV`
+descrevem as verificações que produzem uma `EV` (os IDs são únicos entre os três tipos), e
+`ACH` registra problemas encontrados durante revisão ou verificação. O Evaluation não registra resultados
+do CI do PR: workflows, checks e build ficam no PR. `SHI-*`
+é opcional e só aparece quando houver uma issue Jira Shifu.
 
-Historical artifacts may keep old identifiers so as not to break
-references. When revising an old artifact, preserve the crosswalk in the
-historical revision and use the current namespaces for new requirements, validations,
-evidence and findings.
+Artefatos históricos podem manter identificadores antigos para não quebrar
+referências. Ao revisar um artefato antigo, preserve o crosswalk na revisão
+histórica e use os namespaces atuais para novos requisitos, validações,
+evidências e achados.
 
-## Authorities
+## Autoridades
 
-Before starting or resuming SDD, read `AGENTS.md`, `documentation/architecture.md`,
-`documentation/modules.md`, `documentation/tooling.md`, `documentation/rules/rules.md` and
-all the Rules selected by the affected paths and behaviors. Also read the applicable canonical PRD,
-Issue, Report, Design and real code.
+Antes de iniciar ou retomar SDD, leia `AGENTS.md`, `documentation/architecture.md`,
+`documentation/modules.md`, `documentation/tooling.md`, `documentation/rules/rules.md` e
+todas as Rules selecionadas pelos paths e comportamentos afetados. Leia também o PRD canônico,
+Issue, Report, Design e código real aplicáveis.
 
-| Authority                   | Governs                                                     |
+| Autoridade                  | Governa                                                     |
 | --------------------------- | ----------------------------------------------------------- |
-| `AGENTS.md`                 | safety, tools, environments and mandatory validations       |
-| Architecture and Overview   | system boundaries, dependencies and responsibilities        |
-| Selected Rules              | reusable implementation and testing conventions             |
-| PRD                         | product outcome, actors, capabilities and experience        |
-| Design and saved references | visual intent and UI states                                 |
-| Tooling                     | real commands and environments                              |
-| Spec                        | delivery-specific Contract                                  |
+| `AGENTS.md`                 | segurança, ferramentas, ambientes e validações obrigatórias |
+| Architecture e Overview     | fronteiras, dependências e responsabilidades do sistema     |
+| Rules selecionadas          | convenções reutilizáveis de implementação e teste           |
+| PRD                         | resultado de produto, atores, capacidades e experiência     |
+| Design e referências salvas | intenção visual e estados de UI                             |
+| Tooling                     | comandos e ambientes reais                                  |
+| Spec                        | Contract específico da entrega                              |
 
-### Canonical PRD and milestone
+### PRD canônico e milestone
 
-The canonical product PRD is the document versioned in the repository at
-`documentation/prds/<module>/<slug>.md`. That file is the product authority
-for outcome, actors, capabilities, experience, `RP-*` requirements and `JN-*`
-journeys; there is no requirement to publish or mirror it in Confluence.
+O PRD canônico de produto é o documento versionado no repositório em
+`documentation/prds/<module>/<slug>.md`. Esse arquivo é a autoridade de produto
+para resultado, atores, capacidades, experiência, requisitos `RP-*` e jornadas
+`JN-*`; não existe exigência de publicação ou espelhamento no Confluence.
 
-When there is a product milestone on GitHub, it must point to the corresponding
-local PRD. That link is the official index between product and SDD:
+Quando houver milestone de produto no GitHub, ela deve apontar para o PRD local
+correspondente. Esse link é o índice oficial entre produto e SDD:
 
-1. find the milestone associated with the demand;
-2. follow its description and open the link to the canonical PRD in `documentation/prds/`;
-3. use the content of that document as the product authority before creating the Spec.
+1. descubra o milestone associado à demanda;
+2. siga sua descrição e abra o link para o PRD canônico em `documentation/prds/`;
+3. use o conteúdo desse documento como autoridade de produto antes de criar a Spec.
 
-Do not reconstruct the PRD from the Issue's title, label or path. If the milestone
-has no valid link to a local PRD, record the gap and resolve the
-traceability before starting the Contract. Open Specs must record the
-path and revision of the PRD consulted, along with the relevant `RP-*` and `JN-*`.
+Não reconstrua o PRD a partir do título, label ou path da Issue. Se o milestone
+não tiver um link válido para um PRD local, registre a lacuna e resolva a
+rastreabilidade antes de iniciar o Contract. Specs abertas devem registrar o
+path e a revisão do PRD consultado, além dos `RP-*` e `JN-*` relevantes.
 
-A normative change to product, Architecture, a global Rule or ownership requires explicit
-user approval and an update of the authority before the Spec. The current implementation never
-silently replaces an authority.
+Uma mudança normativa de produto, Architecture, Rule global ou ownership exige aprovação
+explícita do usuário e atualização da autoridade antes da Spec. A implementação atual nunca
+substitui silenciosamente uma autoridade.
 
-### Required PRD structure
+### Estrutura obrigatória do PRD
 
-PRDs are written in PT-BR, like Pull Requests, so the section titles below are
-the literal Portuguese headings, each followed by its English meaning in
-parentheses. Every new or revised PRD must follow the canonical structure below,
-using the `RP-*` and `JN-*` IDs defined in this documentation:
+Todo PRD novo ou revisado deve seguir a estrutura canônica abaixo, usando os
+IDs `RP-*` e `JN-*` definidos nesta documentação:
 
-1. Header with title, `Disponibiliza para` (provided to) and `Navegação` (navigation);
-2. Resumo Executivo (Executive Summary);
-3. Problema e Oportunidade (Problem and Opportunity), including the source base
-   and authority;
-4. Público-alvo (Target Audience), usage context and Jobs to Be Done;
-5. Objetivos e Métricas de Sucesso (Goals and Success Metrics), including
-   validation limits and assumptions;
-6. Requisitos de Produto (Product Requirements), with concepts/responsibilities
-   and, for each `RP-*`, user needs, outcome, actors, business rules and
-   experience rules;
-7. Grafo de Dependências do Produto (Product Dependency Graph);
-8. Jornadas (Journeys), identified as `JN-*`;
-9. Fora do Escopo (Out of Scope), including decisions discarded during definition.
+1. Cabeçalho com título, `Disponibiliza para` e `Navegação`;
+2. Resumo Executivo;
+3. Problema e Oportunidade, incluindo a base de fontes e autoridade;
+4. Público-alvo, contexto de uso e Jobs to Be Done;
+5. Objetivos e Métricas de Sucesso, incluindo limites de validação e premissas;
+6. Requisitos de Produto, com conceitos/responsabilidades e, para cada `RP-*`,
+   necessidades do usuário, resultado, atores, regras de negócio e regras de experiência;
+7. Grafo de Dependências do Produto;
+8. Jornadas, identificadas como `JN-*`;
+9. Fora de Escopo, incluindo decisões descartadas durante a definição.
 
-Competitive analysis, pricing and positioning are conditional discovery content:
-they only enter when relevant to a product decision and
-must be supported by sources. They are not a mandatory PRD section.
-The canonical template and the creation flow must stay aligned with this
-order. Existing PRDs outside this structure are legacy and must be
-normalized at the next revision, without inventing missing content.
+Análise competitiva, preços e posicionamento são conteúdo de discovery
+condicional: só entram quando forem relevantes para uma decisão de produto e
+devem ser sustentados por fontes. Não constituem uma seção obrigatória do PRD.
+O template canônico e o fluxo de criação devem permanecer alinhados a esta
+ordem. PRDs existentes fora desta estrutura são legados e devem ser
+normalizados na próxima revisão, sem inventar conteúdo ausente.
 
-## Roles
+## Papéis
 
-| Role                    | Responsibility                                                                                                            | Constraint                                                           |
+| Papel                   | Responsabilidade                                                                                                          | Restrição                                                            |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Main task (Orchestrator) | selects workflows, maintains Spec and Evaluation, decides order and delegation, integrates diffs, runs sensors, records evidence, publishes and routes failures | does not delegate the official verdict nor use a subagent's report as proof |
-| Spec Reviewer           | runs a single gate before implementation, with retries of the same revision when needed                                   | read-only; only evaluates Architecture and Rules                     |
-| Builder                 | implements a bounded scope of paths against an exact revision (Direct in the main context or siblings by ownership)       | does not edit Spec, Evaluation, PRD or Rules; uses the Penpot MCP for UI |
-| Implementation Reviewer | reviews the integrated candidate against the Contract, Architecture, layer rules and the current evidence                 | read-only; does not fix nor produce the official verdict             |
-| Visual Reviewer         | compares, in parallel, the required happy-path captures with current exports of the Penpot boards, row by row of the inventory | does not edit nor capture; reads Penpot only through the MCP; advisory |
+| Task principal (Orchestrator) | seleciona workflows, mantém Spec e Evaluation, decide ordem e delegação, integra diffs, executa sensores, registra evidência, publica e roteia falhas | não delega o veredito oficial nem usa relato de subagente como prova |
+| Spec Reviewer           | executa um único gate antes da implementação, com retries da mesma revisão quando necessário                              | read-only; só avalia Architecture e Rules                            |
+| Builder                 | implementa um escopo delimitado de paths contra uma revisão exata (Direct no contexto principal ou irmãos por ownership)   | não edita Spec, Evaluation, PRD ou Rules; usa o Penpot MCP para UI   |
+| Implementation Reviewer | revisa o candidato integrado contra Contract, Architecture, layer rules e a evidência atual                               | read-only; não corrige nem produz o veredito oficial                 |
+| Visual Reviewer         | compara, em paralelo, as capturas happy-path exigidas com exports atuais dos boards do Penpot, linha a linha do inventário | não edita nem captura; lê o Penpot só pelo MCP; consultivo           |
 
-Subagents are siblings created by the main task in the current task. No subagent creates another
-agent or task. `create-spec`, `implement-spec` and `conclude-spec` are workflows, not roles.
+Subagentes são irmãos criados pela task principal na task atual. Nenhum subagente cria outro
+agente ou task. `create-spec`, `implement-spec` e `conclude-spec` são workflows, não papéis.
 
-## Durable artifacts
+## Artefatos duráveis
 
 ```text
-documentation/prds/<module>/<slug>.md           # canonical versioned PRD of the module
-documentation/features/<domain>/<feature>/
+documentation/prds/<module>/<slug>.md           # PRD canônico versionado do módulo
+documentation/features/<domínio>/<feature>/
 ├── spec.md
-└── evaluation.md           # created at the implementation kickoff
+└── evaluation.md           # criado no kickoff da implementação
 ```
 
-A behavior change after completion uses
-`documentation/features/<domain>/<feature>/changes/<change>/`.
+Uma mudança de comportamento após conclusão usa
+`documentation/features/<domínio>/<feature>/changes/<mudança>/`.
 
-| Artifact             | Owns                                                        | Does not own                            |
+| Artefato             | Possui                                                      | Não possui                              |
 | -------------------- | ----------------------------------------------------------- | --------------------------------------- |
-| `spec.md`            | behavior, Design, Technical and Verification Contracts      | attempts and executed results           |
-| `evaluation.md`      | commands, evidence, findings, history, comparisons and CI   | product or architecture authority       |
-The Penpot file `stardust` is the canonical, editable visual source, inspected directly by the
-Penpot MCP. The design is not extracted into feature artifacts. Screenshots of the implementation stay
-in the ignored `test-results/` or in CI artifacts; the identifier, the comparison and the result
-stay in `evaluation.md`.
+| `spec.md`            | comportamento, Design, Technical e Verification Contracts     | tentativas e resultados executados      |
+| `evaluation.md`      | comandos, evidências, findings, histórico, comparações e CI | autoridade de produto ou arquitetura    |
+O arquivo Penpot `stardust` é a fonte visual canônica e editável, inspecionado diretamente pelo
+Penpot MCP. O design não é extraído para artefatos da feature. Screenshots da implementação ficam
+em `test-results/` ignorado ou em artifacts de CI; o identificador, a comparação e o resultado
+ficam em `evaluation.md`.
 
-Design handoffs, manifests and extracted reference images are no longer used: new Specs
-do not create nor reference them. When materially updating a legacy Spec that cites them,
-replace those references with Penpot `stardust` boards and preserve the revision history.
-`design/stardust.fig` (Open Pencil) is a frozen legacy file, kept only as history: it is
-no longer the source of truth and must not be opened or edited by new Specs.
+Handoffs de design, manifests e imagens de referência extraídas não são mais usados: novas Specs
+não os criam nem os referenciam. Ao atualizar materialmente uma Spec legada que os cite,
+substitua essas referências por boards do Penpot `stardust` e preserve o histórico da revisão.
+`design/stardust.fig` (Open Pencil) é um arquivo legado congelado, mantido só como histórico: não
+é mais fonte de verdade e não deve ser aberto ou editado por novas Specs.
 
-## States
+## Estados
 
-| Artifact    | States                                                      |
+| Artefato    | Estados                                                     |
 | ----------- | ----------------------------------------------------------- |
 | Spec        | `draft`, `open`, `in_progress`, `completed`, `superseded`   |
 | Evaluation  | `in_progress`, `ready`, `completed`                         |
-| Evidence    | `pending`, `passed`, `failed`, `stale`, `not_applicable`    |
-| Finding (`ACH-*`) | `active`, `resolved`, `accepted_non_blocking`, `superseded` |
+| Evidência   | `pending`, `passed`, `failed`, `stale`, `not_applicable`    |
+| Achado (`ACH-*`) | `active`, `resolved`, `accepted_non_blocking`, `superseded` |
 
-Failures do not create extra states: the item stays `in_progress`, with a finding and next action.
+Falhas não criam estados extras: o item permanece `in_progress`, com finding e próxima ação.
 
 ## Grilling gate
 
-After factual research and before writing or creating an issue, PRD or Spec, apply the
-interview protocol in [`interview-prompt.md`](prompts/interview-prompt.md). It is the only
-definition of the gate: the decision tree and frontier, the rounds of at most three
-questions, the question format with a recommendation, the stop condition and where the
-decisions are recorded. Do not restate it in other documents.
+Depois da pesquisa factual e antes de escrever ou criar uma issue, um PRD ou uma Spec, aplique o
+protocolo de entrevista de [`interview-prompt.md`](prompts/interview-prompt.md). Ele é a única
+definição do gate: a árvore de decisões e a frontier, os rounds de no máximo três perguntas, o
+formato da pergunta com recomendação, a condição de parada e onde as decisões são registradas. Não
+o reescreva em outros documentos.
 
-Researchable facts are the task's responsibility; material decisions belong to the user. No
-artifact or external mutation occurs while a material branch is open. Once the frontier is empty,
-the task presents the shared understanding and obtains explicit confirmation; accepted decisions and
-assumptions are recorded in the final artifact, not in the transcript.
+Fatos pesquisáveis são responsabilidade da task; decisões materiais pertencem ao usuário. Nenhum
+artefato ou mutação externa ocorre enquanto houver ramo material aberto. Depois da frontier vazia,
+a task apresenta o entendimento compartilhado e obtém confirmação explícita; decisões e premissas
+aceitas são registradas no artefato final, não no transcript.
 
-## Optional intake
+## Intake opcional
 
-A GitHub Issue is tracking, not a technical Contract. The Issue may point to a milestone, but the
-PRD is only identified after the canonical PRD path in `documentation/prds/` is resolved:
+GitHub Issue é tracking, não Contract técnico. A Issue pode apontar para um milestone, mas o
+PRD só é identificado depois que o path do PRD canônico em `documentation/prds/` for resolvido:
 
-- `open-feat-issue` turns a milestone/PRD or approved request into an issue with Objetivo (Goal),
-  Escopo da Entrega (Delivery Scope), Critérios de Aceitação (Acceptance Criteria), Validação (Validation), Rastreabilidade (Traceability) and Fora de Escopo (Out of Scope)
-  (the issue itself and its section headings stay in PT-BR); after approval/publication, `create-spec` creates the Contract;
-- `open-bug-issue` records symptom, expectation, reproduction and context without diagnosis;
-- `create-bug-report` requires the approved bug issue, produces a durable diagnosis and recommends a direct
-  fix or a Correction Spec according to risk and coordination.
+- `open-feat-issue` transforma milestone/PRD ou pedido aprovado em uma issue com Objetivo,
+  Escopo da Entrega, Critérios de Aceitação, Validação, Rastreabilidade e Fora de Escopo;
+  depois da aprovação/publicação, `create-spec` cria o Contract;
+- `open-bug-issue` registra sintoma, expectativa, reprodução e contexto sem diagnóstico;
+- `create-bug-report` exige a bug issue aprovada, produz diagnóstico durável e recomenda correção
+  direta ou Correction Spec conforme risco e coordenação.
 
-Feature and bug issues require explicit approval before writing to GitHub. Approving an issue does not
-authorize implementation, branch, commit, PR or product change.
+Feature e bug issue exigem approval explícito antes de escrita no GitHub. Aprovar issue não
+autoriza implementação, branch, commit, PR ou alteração de produto.
 
-Feature and bug issue workflows run PRD discovery before the draft; a feature issue requires a
-main PRD, while a bug issue records the most relevant PRD/`RP-*` or `None` with evidence
-of the search. A chore issue is technical maintenance independent of product and does not research, mention or
-associate a PRD, PRD requirement or product milestone. A refactor issue only consults a PRD when
-it needs to define the boundary of the behavior that must be preserved. The association is never
-inferred from the title, label or path alone; a milestone only serves as a bridge after its single
-link to the canonical PRD in `documentation/prds/` has been validated.
+Workflows de feature e bug issue executam descoberta de PRD antes do draft; feature issue exige um
+PRD principal, enquanto bug issue registra o PRD/`RP-*` mais relevante ou `None` com evidência
+da busca. Chore issue é manutenção técnica independente de produto e não pesquisa, menciona ou
+associa PRD, requisito de PRD ou milestone de produto. Refactor issue só consulta um PRD quando
+precisa definir a fronteira de comportamento que deve ser preservada. A associação nunca é
+inferida apenas por título, label ou path; um milestone só serve como ponte depois que seu único
+link para o PRD canônico em `documentation/prds/` for validado.
 
-Before the draft, the issue workflows run Grilling: facts are researched and decisions are
-walked through in rounds along the design tree's frontier. The confirmation of shared understanding
-ends the interview but does not replace the explicit approval of the exact published version.
+Antes do draft, os workflows de issue executam o Grilling: fatos são pesquisados e decisões são
+percorridas em rounds pela frontier da design tree. A confirmação de entendimento compartilhado
+encerra a entrevista, mas não substitui o approval explícito da versão exata publicada.
 
-The two PRD workflows, prospective or retrospective, also run Grilling after the
-research and before writing. The PRD is only created or updated after the frontier is empty and the
-user confirms the shared understanding.
+Os dois workflows de PRD, prospectivo ou retrospectivo, também executam o Grilling depois da
+pesquisa e antes da escrita. O PRD só é criado ou atualizado após a frontier ficar vazia e o
+usuário confirmar o entendimento compartilhado.
 
 ## Spec
 
-`create-spec` researches the codebase directly before writing. Organize independent boundaries
-as investigation lanes of the task itself, check the authorities and resolve conflicts by direct
-inspection, without creating research agents.
+`create-spec` pesquisa diretamente a codebase antes de escrever. Organize boundaries independentes
+como lanes de investigação da própria task, confira as autoridades e resolva conflitos por
+inspeção direta, sem criar agentes de pesquisa.
 
-The Spec is not written while a material product, technical, Design or validation choice exists.
-Questions must bring evidence, recommendation, alternative and impact. The Spec
-has exactly:
+A Spec não é escrita enquanto existir escolha material de produto, técnica, Design ou
+validação. Perguntas devem trazer evidência, recomendação, alternativa e impacto. A Spec
+possui exatamente:
 
-1. Context and scope;
-2. Implementation Contract with `RF-*` and Given/When/Then `CA-*` criteria;
-3. Technical Contract with baseline, path map, `Expected file tree` per app/package, runtime flow and declarations per layer;
-4. Verification Contract with automated `AV-*`, manual `MV-*` and visual `VV-*` verifications;
-5. documentation alignment, Rule Pack and revision history.
+1. Contexto e escopo;
+2. Implementation Contract com `RF-*` e critérios Given/When/Then `CA-*`;
+3. Technical Contract com baseline, mapa de paths, `Expected file tree` por app/pacote, runtime flow e declarations por camada;
+4. Verification Contract com verificações automatizadas `AV-*`, manuais `MV-*` e visuais `VV-*`;
+5. alinhamento documental, Rule Pack e histórico de revisões.
 
-After research and before writing, `create-spec` runs Grilling until the frontier is empty and
-explicit confirmation is obtained. Facts belong to research; only decisions not resolved by the
-authorities are taken to the user.
+Depois da pesquisa e antes da escrita, `create-spec` executa o Grilling até esvaziar a frontier e
+obter confirmação explícita. Fatos pertencem à pesquisa; somente decisões não resolvidas pelas
+autoridades são levadas ao usuário.
 
-Every relevant `RP-*`/`JN-*` must map to `RF-*`; every `RF-*` maps to
-at least one `CA-*` and vice versa. Paths are exact and classified
-as Create, Modify, Generate or Remove. The Spec does not contain execution results.
+Todo `RP-*`/`JN-*` relevante deve mapear para `RF-*`; todo `RF-*` mapeia para
+pelo menos um `CA-*` e vice-versa. Paths são exatos e classificados
+como Create, Modify, Generate ou Remove. A Spec não contém resultados de execução.
 
-For UI, the Spec records the exact widget tree, loading/empty/success/error/recovery states,
-keyboard, focus, responsiveness, reference frames in Penpot `stardust` and viewports.
-Behavior inferred only from an image needs clarification. The visual detail stays in
-Penpot `stardust`, inspected through the Penpot MCP; the Spec remains the authority for
-product, scope, behavior and validation. A sound Spec goes straight from `draft` to the independent
-review by the Spec Reviewer, before any implementation.
+Para UI, a Spec registra o widget tree exato, estados loading/empty/success/error/recovery,
+teclado, foco, responsividade, frames de referência no Penpot `stardust` e viewports.
+Comportamento inferido apenas de imagem precisa de clarificação. O detalhe visual permanece no
+o Penpot `stardust`, inspecionado pelo Penpot MCP; a Spec continua sendo a autoridade de
+produto, escopo, comportamento e validação. Uma Spec íntegra passa diretamente de `draft` para a revisão
+independente do Spec Reviewer, antes de qualquer implementação.
 
-Before the review, `create-spec` performs a manual integrity check of the structure, the IDs, the
-traceability and the canonical path map; it does not replace the Spec Reviewer. The format of the
-path map is validated afterwards, against the diff, by `check:spec-implementation`.
+Antes da revisão, `create-spec` faz uma checagem de integridade manual da estrutura, dos IDs, da
+rastreabilidade e do mapa canônico de paths; ela não substitui o Spec Reviewer. O formato do
+mapa de paths é validado depois, contra o diff, por `check:spec-implementation`.
 
-After the integrity check, and before `implement-spec`, the main task
-activates exactly one read-only Spec Reviewer with the exact revision, `architecture.md` and the
-Rule Pack of the affected layers. The Reviewer only checks boundaries, dependencies, ownership
-and adherence to the Rules; it does not evaluate product, Design, criteria or validation. The main task verifies
-each finding, fixes the same Spec and resumes the Reviewer before implementation. The Spec only moves to
-`open` when that review is `clear` and no verified blocking finding remains;
-then the flow proceeds to `implement-spec`. A later amendment invalidates the result and requires
-a new review before implementing. The revision history records the revision, the result and the verified
-resolutions, without incorporating the raw report.
+Depois da checagem de integridade, e antes de `implement-spec`, a task
+principal ativa exatamente um Spec Reviewer read-only com a revisão exata, `architecture.md` e o
+Rule Pack das camadas afetadas. O Reviewer verifica somente fronteiras, dependências, ownership
+e aderência às Rules; não avalia produto, Design, critérios ou validação. A task principal verifica
+cada finding, corrige a mesma Spec e retoma o Reviewer antes da implementação. A Spec só passa para
+`open` quando essa revisão estiver `clear` e nenhum finding bloqueante verificado permanecer;
+então o fluxo segue para `implement-spec`. Amendment posterior invalida o resultado e exige
+nova revisão antes de implementar. A revision history registra a revisão, o resultado e as resoluções
+verificadas, sem incorporar o relatório bruto.
 
 ## Design Contract
 
-When the delivery has UI, the canonical visual source is the Penpot file `stardust`, inspected
-directly by the Penpot MCP by whoever creates, implements and reviews the Spec. There is no extraction of the
-design: the Spec does not create `design/handoff.md`, does not export images to the feature and does not copy
-tokens, measurements or visual recipes.
+Quando a entrega tiver UI, a fonte visual canônica é o arquivo Penpot `stardust`, inspecionado
+diretamente pelo Penpot MCP por quem cria, implementa e revisa a Spec. Não há extração do
+design: a Spec não cria `design/handoff.md`, não exporta imagens para a feature e não copia
+tokens, medidas ou receitas visuais.
 
-The Spec's Design Contract (`## Design Contract` subsection of `Implementation Contract`, UI only) records, at a minimum:
+O Design Contract da Spec (subseção `## Design Contract` de `Implementation Contract`, só com UI) registra, no mínimo:
 
-1. the relevant frames, identified by the page and the name of the board or component (the name is the
-   contract; IDs may change if the board is recreated);
-2. the state, variant and viewport of each frame, with the related `RF-*`/`CA-*`/`VV-*`;
-3. allowed divergences, approved extensions, exclusions and states with no canonical frame;
-4. the visual comparison requirements tied to `CA-*` and `VV-*`.
+1. os frames relevantes, identificados pela página e pelo nome do board ou componente (o nome é o
+   contrato; IDs podem mudar se o board for recriado);
+2. o estado, a variante e o viewport de cada frame, com os `RF-*`/`CA-*`/`VV-*` relacionados;
+3. divergências permitidas, extensões aprovadas, exclusões e estados sem frame canônico;
+4. os requisitos de comparação visual vinculados a `CA-*` e `VV-*`.
 
-The default precedence is: the repository's design system and tokens; behavior of shared
-components; Penpot `stardust` frames and the tokens bound to them. A visual value
-without a variable does not authorize a new color, measurement, component, icon or CSS without a token, Rule or recorded
-decision. Semantic fallbacks and accessible adaptations must be declared in the Spec;
-material divergences without a traceable decision keep the Spec open.
+A precedência padrão é: design system e tokens do repositório; comportamento dos componentes
+compartilhados; frames do Penpot `stardust` e os tokens vinculados a eles. Valor visual
+sem variável não autoriza cor, medida, componente, ícone ou CSS novo sem token, Rule ou decisão
+registrada. Fallbacks semânticos e adaptações acessíveis devem ser declarados na Spec;
+divergências materiais sem decisão rastreável mantêm a Spec aberta.
 
-If the Penpot MCP is not available, or the Penpot file `stardust` is not connected to it, the
-inspection or comparison that depends on the design is blocked and recorded as such; do not
-replace the frame with assumptions.
+Se o Penpot MCP não estiver disponível, ou o arquivo Penpot `stardust` não estiver conectado a ele, a
+inspeção ou comparação que depende do design fica bloqueada e é registrada como tal; não
+substitua o frame por suposições.
 
-`evaluation.md` records implementation screenshots, comparisons, observations, `EV-*`, `ACH-*`
-and the final state. If a change alters the visual intent, that is a Contract change:
-return the Spec to `draft`, increment the revision, update the Design Contract and invalidate the affected
-evidence.
+`evaluation.md` registra screenshots da implementação, comparações, observações, `EV-*`, `ACH-*`
+e o estado final. Se uma mudança alterar a intenção visual, isso é uma mudança de Contract:
+retorne a Spec para `draft`, incremente a revisão, atualize o Design Contract e invalide as
+evidências afetadas.
 
-## Implementation and living evidence
+## Implementação e evidência viva
 
-`implement-spec` is the only implementation entry point and always runs the Builder Direct in the
-main context. `evaluation.md` is the only execution ledger: progress, evidence,
-findings and next action.
+`implement-spec` é a única entrada de implementação e executa sempre o Builder Direct no
+contexto principal. O `evaluation.md` é o único ledger de execução: progresso, evidências,
+findings e próxima ação.
 
-No source, test, migration or generated artifact is changed before a bounded assignment
-is recorded in the Evaluation with revision, RF/CA, paths, Rules and exits. The Spec is
-compared with the file tree, contracts, states and exclusions before each handoff and after
-each fix. A conformance failure, an unavailable manual/runtime scenario or stale evidence keeps
-the work `in_progress` and blocks advancing to `ready`.
+Nenhum source, teste, migration ou artefato gerado é alterado antes de uma assignment delimitada
+ser registrada no Evaluation com revisão, RF/CA, paths, Rules e exits. A Spec é
+comparada com a árvore de arquivos, contratos, estados e exclusões antes de cada handoff e após
+cada correção. Falha de conformance, cenário manual/runtime indisponível ou evidência stale mantém
+o trabalho `in_progress` e bloqueia o avanço para `ready`.
 
-Before the sensors and the Reviewer, run `pnpm run check:spec-implementation <spec> --base <base-commit>`.
-This preflight requires the canonical `Path | Change | ...` map of the `Technical Contract` and
-confirms that each `Create`, `Modify`, `Generate` or `Remove` matches the diff and the
-filesystem. It is structural and does not replace tests, sensors, Reviewer or Evaluation.
+Antes dos sensores e do Reviewer, execute `pnpm run check:spec-implementation <spec> --base <commit-base>`.
+Esse preflight exige o mapa canônico `Path | Change | ...` do `Technical Contract` e
+confirma que cada `Create`, `Modify`, `Generate` ou `Remove` corresponde ao diff e ao
+filesystem. Ele é estrutural e não substitui testes, sensores, Reviewer ou Evaluation.
 
-Before changing source or tests, materialize `evaluation.md` through the canonical Contract defined
-in `implement-spec`, record revision, assignment, paths, Rules, criteria and exits, and move the Spec to
-`in_progress`. The main task inspects each diff, runs the official sensors and updates the
-Evaluation after each change to code, test, browser, migration, artifact or documentation.
-Builder and Reviewer reports are input, not evidence; the main task verifies the integrated
-candidate and records the commands, results, freshness and evidence IDs.
+Antes de alterar source ou testes, materialize `evaluation.md` pelo Contract canônico definido
+em `implement-spec`, registre revisão, assignment, paths, Rules, critérios e exits, e mude a Spec para
+`in_progress`. A task principal inspeciona cada diff, executa os sensores oficiais e atualiza
+Evaluation após cada mudança de código, teste, browser, migration, artefato ou documentação.
+Relatos de Builder e Reviewer são input, não evidência; a task principal verifica o candidato
+integrado e registra os comandos, resultados, freshness e IDs de evidência.
 
-For each affected group of HTTP routes, the corresponding `.rest` file in `apps/server/rest-client/`
-is part of the scope and must contain current examples for all the controller's routes, without secrets.
-`use-*.ts` behavior hooks in scope must have tests colocated in `tests/use-*.test.ts`,
-unless there is an explicit Rule Pack exception recorded in the Evaluation.
+Para cada grupo de rotas HTTP afetado, o arquivo `.rest` correspondente em `apps/server/rest-client/`
+faz parte do escopo e deve conter exemplos atuais para todas as rotas do controller, sem segredos.
+Hooks de comportamento `use-*.ts` sob o escopo devem ter testes colocados em `tests/use-*.test.ts`,
+salvo exceção explícita da Rule Pack registrada no Evaluation.
 
-For frontend, automated tests do not replace the mandatory manual smoke test of the real happy path
-defined in `AGENTS.md`: local service, login and protected route when applicable, main
-result and status of the essential endpoints. Do not manually exercise error/loading/recovery states.
-Record console, `pageerror`, `requestfailed` and
-detailed responses only to diagnose an unexpected failure; a screenshot is necessary when the
-UI changes or the visual comparison requires it. After a fix, repeat only the affected happy path. For
-Server and database, mocks do not replace real request/response, authorization, tenant and persistence in
-Supabase Dev when applicable.
+Para frontend, testes automatizados não substituem o smoke manual obrigatório do caminho feliz
+real definido em `AGENTS.md`: serviço local, login e rota protegida quando aplicáveis, resultado
+principal e status dos endpoints essenciais. Não exercite manualmente estados de erro/loading/recovery.
+Registre console, `pageerror`, `requestfailed` e
+respostas detalhadas somente para diagnosticar falha inesperada; screenshot é necessário quando a
+UI muda ou a comparação visual exige. Após correção, repita apenas o caminho feliz afetado. Para
+Server e banco, mocks não substituem request/response real, autorização, tenant e persistência no
+Supabase Dev quando aplicável.
 
-After integration, an Implementation Reviewer reviews the integrated candidate. For design-backed
-UI, the Visual Reviewer runs in parallel on the same candidate and the already existing captures,
-with one disposition per row of the Evaluation's manual/visual inventory; there is no
-third serial Reviewer. The Reviewers consume the recorded results and do not rerun green
-suites. The main task verifies the findings and consolidates the verdict, `ACH-*` and
-evidence in `evaluation.md`.
+Depois da integração, um Implementation Reviewer revisa o candidato integrado. Para UI
+design-backed, o Visual Reviewer roda em paralelo sobre o mesmo candidato e as capturas já
+existentes, com uma disposição por linha do inventário manual/visual do Evaluation; não há
+terceiro Reviewer serial. Os Reviewers consomem os resultados registrados e não reexecutam
+suites verdes. A task principal verifica os findings e consolida veredito, `ACH-*` e
+evidências no `evaluation.md`.
 
-Evidence is invalidated by the claim and the affected dependencies, not by commit age:
-a new SHA or a ledger edit, by itself, does not invalidate proof of unchanged behavior.
-The Evaluation keeps a factual Handoff section (revision, candidate, unfinished criteria,
-dirty paths and ownership, processes and ports started, blockers and next action) so that another
-agent can resume from the Spec, the Evaluation and the diff.
+A evidência é invalidada pela alegação e pelas dependências afetadas, não pela idade do commit:
+um novo SHA ou uma edição de ledger, por si só, não invalida prova de comportamento inalterado.
+O Evaluation mantém uma seção de Handoff factual (revisão, candidato, critérios inacabados,
+paths sujos e ownership, processos e portas iniciados, bloqueios e próxima ação) para que outro
+agente retome a partir da Spec, do Evaluation e do diff.
 
-Evidence prior to the last affected change becomes `stale`. The Evaluation only moves to `ready`
-when all `CA-*`, sensors, `AV-*`, `MV-*`, `VV-*`, `EV-*`, visual comparisons and blocking `ACH-*`
-are current and resolved.
+Evidence anterior à última mudança afetada vira `stale`. Evaluation só muda para `ready`
+quando todos os `CA-*`, sensores, `AV-*`, `MV-*`, `VV-*`, `EV-*`, comparações visuais e `ACH-*`
+bloqueantes estão
+atuais e resolvidos.
 
-## Fix versus Contract change
+## Correção versus mudança de Contract
 
-| Class                     | Action                                                                                                                              |
+| Classe                    | Ação                                                                                                                                |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Implementation fix        | keeps the revision; records a finding; reopens work/evidence; resumes the Builder; reruns only invalidated exits                    |
-| Contract change           | pauses; Spec returns to `draft`; updates the authority; increments the revision; reconciles Design and Evaluation; resumes `implement-spec` |
+| Correção de implementação | mantém revisão; registra finding; reabre trabalho/evidência; retoma Builder; reexecuta somente exits invalidados                    |
+| Mudança de Contract       | pausa; Spec volta a `draft`; atualiza autoridade; incrementa revisão; reconcilia Design e Evaluation; retoma `implement-spec` |
 
-A test, browser, console, runtime, migration, CI or visual comparison error within the Contract
-is an automatic fix. No authorization is requested to make the implementation conform. Ask
-only when a product, authority, environment, security or scope decision is missing.
+Erro de teste, browser, console, runtime, migration, CI ou comparação visual dentro do Contract
+é correção automática. Não se pede autorização para tornar a implementação aderente. Pergunte
+somente quando faltar decisão de produto, autoridade, ambiente, segurança ou escopo.
 
-## Conclusion, PR and CI
+## Conclusão, PR e CI
 
-`conclude-spec` requires the Spec `in_progress`, the Evaluation `ready`,
-current conformance and no blocking evidence. With authorization for commit/push/PR:
+`conclude-spec` exige Spec `in_progress`, Evaluation `ready`,
+conformance atual e nenhuma evidência bloqueante. Com autorização para commit/push/PR:
 
-1. repeats preflight and conformance on the current candidate;
-2. invokes `commit-code` for intentional commits;
-3. invokes `open-pr` to create or update a ready-for-review PR;
-4. waits for each applicable workflow on the PR's current HEAD;
-5. records name, result, URL and SHA in the Evaluation;
-6. on failure, routes immediately to `implement-spec` or an amendment, republishes and repeats CI;
-7. after green CI, marks the Spec and Evaluation as `completed`.
+1. repete preflight e conformance no candidato atual;
+2. invoca `commit-code` para commits intencionais;
+3. invoca `open-pr` para criar ou atualizar um PR ready-for-review;
+4. aguarda cada workflow aplicável no HEAD atual do PR;
+5. registra nome, resultado, URL e SHA em Evaluation;
+6. em falha, roteia imediatamente para `implement-spec` ou amendment, republica e repete CI;
+7. após CI verde, marca Spec e Evaluation como `completed`.
 
-Before marking the artifacts as `completed`, `conclude-spec` analyzes all the findings,
-warnings and failures of the delivery and identifies causes that may recur. Gaps in process,
-Architecture, tooling or Rules must update the corresponding normative documentation; reusable
-implementation errors must be recorded as anti-patterns in the layer's Rule. Each
-preventive action, changed document or justification of non-applicability is recorded in
-`evaluation.md`. Normative changes that require a user decision keep the Spec open until
-approval.
+Antes de marcar os artefatos como `completed`, `conclude-spec` analisa todos os findings,
+warnings e falhas da entrega e identifica causas que possam se repetir. Lacunas de processo,
+Architecture, tooling ou Rules devem atualizar a documentação normativa correspondente; erros de
+implementação reutilizáveis devem ser registrados como anti-padrões na Rule da camada. Cada ação
+preventiva, documento alterado ou justificativa de não aplicabilidade fica registrada em
+`evaluation.md`. Mudanças normativas que exigem decisão do usuário mantêm a Spec aberta até a
+aprovação.
 
-Do not use a push run, an old SHA, a missing check or a local build as a substitute for the PR's CI.
-Do not merge or deploy without an explicit request. Later feedback on an open PR may reopen the
-same Spec; after merge, a defect uses a Bug Report and new behavior uses a change Spec.
+Não use run de push, SHA antigo, check ausente ou build local como substituto do CI do PR.
+Não faça merge ou deploy sem pedido explícito. Feedback posterior em PR aberto pode reabrir a
+mesma Spec; após merge, defeito usa Bug Report e comportamento novo usa uma change Spec.
 
-## Official sensors
+## Sensores oficiais
 
-After a code change, run the detectors from `AGENTS.md` in the affected scope:
-`check:code` and `check:types` in the changed workspaces and in the consumers, and `test:unit`
-with the test files verified in the code. Add `check:architecture`, integration tests
-(only the affected files or scenarios), generation, browser, Supabase Dev and
-build according to Rules, Spec, paths and risk. Run `pnpm run check:test-integrity` after
-adding, moving or removing tests. The coverage ratchet
-(`pnpm run test:coverage -w <workspace>` and `pnpm run check:coverage <workspace>`) measures the
-whole workspace and runs in the CI of `@stardust/core`, `@stardust/server`, `@stardust/backoffice` and
-`@stardust/web`; run it locally only when the demonstrated impact spans the
-workspace, when the Spec requires it or when the user asks. The checks fail if any
-metric falls below the baseline versioned in `coverage-baseline.json`. The
-`check:test-integrity` requires pairing
-only for controllers, jobs, use-cases, entities/structures/aggregates,
-hooks, views/widgets, Web routes (`app/page|layout|route`) and Server routes
-(`tests/routes`), RPC actions and AI tools; barrels, generic services/repositories,
-generated types/code, fixtures, mocks and test infrastructure are excluded and
-listed in the JSON result. Tests must live in `scripts/tests/**` or in a
-`tests/` colocated with the allowed target (domain, use-case, controller,
-job, hook, widget/view, Web/Server route, RPC action or AI tool); the others
-fail with `forbiddenTestPaths`. `@stardust/lsp`, `@stardust/validation`,
-`@stardust/email` are outside this quality ratchet.
+Após alteração de código, execute os detectores de `AGENTS.md` no escopo afetado:
+`check:code` e `check:types` nos workspaces alterados e nos consumidores, e `test:unit`
+com os arquivos de teste verificados no código. Acrescente `check:architecture`, testes
+de integração (somente os arquivos ou cenários afetados), geração, browser, Supabase Dev e
+build conforme Rules, Spec, paths e risco. Execute `pnpm run check:test-integrity` depois de
+adicionar, mover ou remover testes. O ratchet de cobertura
+(`pnpm run test:coverage -w <workspace>` e `pnpm run check:coverage <workspace>`) mede o
+workspace inteiro e roda no CI de `@stardust/core`, `@stardust/server`, `@stardust/backoffice` e
+`@stardust/web`; execute-o localmente apenas quando o impacto demonstrado abranger o
+workspace, quando a Spec o exigir ou quando o usuário pedir. Os checks falham se qualquer
+métrica ficar abaixo do baseline versionado em `coverage-baseline.json`. O
+`check:test-integrity` exige pareamento
+somente para controllers, jobs, use-cases, entidades/structures/aggregates,
+hooks, views/widgets, Web routes (`app/page|layout|route`) e Server routes
+(`tests/routes`), RPC actions e AI tools; barrels, services/repositories genéricos,
+tipos/código gerado, fixtures, mocks e infraestrutura de testes são excluídos e
+listados no resultado JSON. Testes devem ficar em `scripts/tests/**` ou em
+`tests/` co-localizado com o alvo permitido (domínio, use-case, controller,
+job, hook, widget/view, rota Web/Server, RPC action ou AI tool); os demais
+falham com `forbiddenTestPaths`. `@stardust/lsp`, `@stardust/validation`,
+`@stardust/email` está fora desse quality ratchet.
 
-Record in `evaluation.md` the exact commands, the files and scenarios, the counts, the result
-and the evaluated candidate. An empty or ignored selection does not pass just because the command finished
-successfully. Review, continuation and conclusion reuse the non-invalidated evidence: a new commit
-or a ledger edit alone does not justify another run. Preserve the original result of
-failures and of full runs; a focused fix proves only the scope it ran. `format`
-applies formatting but does not prove behavior.
+Registre no `evaluation.md` os comandos exatos, os arquivos e cenários, as contagens, o resultado
+e o candidato avaliado. Uma seleção vazia ou ignorada não passa só porque o comando terminou com
+sucesso. Revisão, continuação e conclusão reutilizam a evidência não invalidada: um novo commit
+ou uma edição do ledger sozinhos não justificam outra execução. Preserve o resultado original de
+falhas e de execuções completas; uma correção focada prova apenas o escopo que executou. `format`
+aplica formatação, mas não prova comportamento.

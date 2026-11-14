@@ -1,45 +1,45 @@
-# Validation Layer Rules
+# Regras da Camada de Validation
 
-## Overview
+## Visao Geral
 
-The **Validation** layer centralizes the Zod schemas shared across the monorepo apps. It defines input contracts at the application edge and standardizes reusable validations without carrying domain business rules.
+A camada **Validation** centraliza os schemas Zod compartilhados entre as apps do monorepo. Ela define contratos de entrada na borda da aplicacao e padroniza validacoes reutilizaveis sem carregar regra de negocio do dominio.
 
-| Item | Definition |
+| Item | Definicao |
 | --- | --- |
-| **Goal** | Validate and normalize input data with Zod before it reaches the core or the adapters. |
-| **Responsibilities** | Declare reusable schemas, compose schemas per module and translate Zod errors into `ValidationError`. |
-| **Does not do** | Implement domain business rules; access the database; call external services; depend on `apps/**`. |
+| **Objetivo** | Validar e normalizar dados de entrada com Zod antes que cheguem ao core ou aos adapters. |
+| **Responsabilidades** | Declarar schemas reutilizaveis, compor schemas por modulo e traduzir erros do Zod para `ValidationError`. |
+| **Nao faz** | Implementar regra de negocio de dominio; acessar banco; chamar servicos externos; depender de `apps/**`. |
 
-## Directory Structure
+## Estrutura de Diretorios
 
-| Path | Purpose |
+| Caminho | Finalidade |
 | --- | --- |
-| `packages/validation/src/main.ts` | Main barrel of the package. |
-| `packages/validation/src/factories/` | Layer factory/utilities, such as `ZodError` translation. |
-| `packages/validation/src/modules/global/schemas/` | Primitives and base schemas reusable across modules. |
-| `packages/validation/src/modules/<module>/` | Schemas specific to each domain context. |
-| `packages/validation/src/modules/<module>/schemas/index.ts` | Module barrel when it exposes schemas. |
+| `packages/validation/src/main.ts` | Barrel principal do pacote. |
+| `packages/validation/src/factories/` | Fabrica/utilitarios da camada, como traducao de `ZodError`. |
+| `packages/validation/src/modules/global/schemas/` | Primitivos e schemas base reutilizaveis entre modulos. |
+| `packages/validation/src/modules/<modulo>/` | Schemas especificos de cada contexto de dominio. |
+| `packages/validation/src/modules/<modulo>/schemas/index.ts` | Barrel do modulo quando ele expoe schemas. |
 
-## Rules
+## Regras
 
-- **Zod as the standard**: every shared validation must be implemented with `zod`.
-- **Composition first**: prefer composing schemas from reusable bases such as `stringSchema`, `idSchema`, `nameSchema` and similar.
-- **Messages in the schema itself**: error messages must be defined inline in the schema, in PT-BR (they are shown to end users and stay in Portuguese), close to the rule that triggers them.
-- **No global message catalog**: do not create generic constants such as `GLOBAL_ERROR_MESSAGES` to centralize validation texts.
-- **Global schemas in `global/schemas`**: cross-cutting validations and reusable primitives must live in the `global` module.
-- **Domain schemas per module**: validations specific to a context must live inside the module itself (`auth`, `challenging`, `lesson`, etc.).
-- **Small, focused files**: each file must export one main schema.
-- **Exports through barrels**: every new schema must be exposed in the module's `index.ts` and, when applicable, in `src/main.ts`.
-- **Explicit transformations**: use `.transform()` only when the layer really needs to normalize input, such as query params or lists.
-- **No app dependency**: the package may depend on `@stardust/core`, but never on `apps/web`, `apps/server` or `apps/backoffice`.
+- **Zod como padrao**: toda validacao compartilhada deve ser implementada com `zod`.
+- **Composicao primeiro**: prefira compor schemas a partir de bases reutilizaveis como `stringSchema`, `idSchema`, `nameSchema` e similares.
+- **Mensagens no proprio schema**: mensagens de erro devem ser definidas inline no schema, em PT-BR, proximas da regra que as dispara.
+- **Sem catalogo global de mensagens**: nao criar constantes genericas como `GLOBAL_ERROR_MESSAGES` para centralizar textos de validacao.
+- **Schemas globais em `global/schemas`**: validacoes transversais e primitivas reutilizaveis devem ficar no modulo `global`.
+- **Schemas de dominio por modulo**: validacoes especificas de um contexto devem ficar dentro do proprio modulo (`auth`, `challenging`, `lesson`, etc.).
+- **Arquivos pequenos e focados**: cada arquivo deve exportar um schema principal.
+- **Exports por barrel**: todo schema novo deve ser exposto no `index.ts` do modulo e, quando aplicavel, no `src/main.ts`.
+- **Transformacoes explicitas**: use `.transform()` apenas quando a camada realmente precisar normalizar entrada, como query params ou listas.
+- **Sem dependencia de app**: o pacote pode depender de `@stardust/core`, mas nunca de `apps/web`, `apps/server` ou `apps/backoffice`.
 
-## Patterns
+## Padroes
 
-### Reusable base schemas
+### Schemas base reutilizaveis
 
-Low-level schemas must capture the most common rule of that type and serve as a building block for other schemas.
+Schemas de baixo nivel devem capturar a regra mais comum daquele tipo e servir como bloco de construcao para outros schemas.
 
-Real example:
+Exemplo real:
 
 ```ts
 import { z } from 'zod'
@@ -47,13 +47,11 @@ import { z } from 'zod'
 export const stringSchema = z.string({ required_error: 'Campo obrigatório' })
 ```
 
-(`'Campo obrigatório'` means "Required field"; the message stays in PT-BR.)
+### Extensao e composicao
 
-### Extension and composition
+Quando um schema representa uma estrutura maior, ele deve reaproveitar schemas existentes em vez de reescrever as mesmas regras.
 
-When a schema represents a larger structure, it must reuse existing schemas instead of rewriting the same rules.
-
-Real example:
+Exemplo real:
 
 ```ts
 export const nameSchema = stringSchema
@@ -61,9 +59,7 @@ export const nameSchema = stringSchema
   .max(100, 'Nome deve conter no máximo 100 caracteres')
 ```
 
-(The messages mean "Name must contain at least 3 characters" and "Name must contain at most 100 characters".)
-
-Example of composition across modules:
+Exemplo de composicao entre modulos:
 
 ```ts
 export const challengeFormSchema = challengeSchema.extend({
@@ -76,11 +72,11 @@ export const challengeFormSchema = challengeSchema.extend({
 })
 ```
 
-### Input normalization
+### Normalizacao de entrada
 
-Transformations are allowed when the layer needs to convert transport formats into types that are more convenient for later consumption.
+Transformacoes sao permitidas quando a camada precisa converter formatos de transporte em tipos mais convenientes para consumo posterior.
 
-Real example:
+Exemplo real:
 
 ```ts
 export const queryParamBooleanSchema = z
@@ -88,30 +84,30 @@ export const queryParamBooleanSchema = z
   .transform((val) => val === 'true')
 ```
 
-## Error Handling
+## Tratamento de Erros
 
-Zod errors must be converted to the project's standard format via `ZodValidationErrorFactory`.
+Erros do Zod devem ser convertidos para o formato padrao do projeto via `ZodValidationErrorFactory`.
 
-Factory responsibilities:
+Responsabilidades da factory:
 
-- Group messages by field from `zodError.issues`.
-- Produce an instance of the core's `ValidationError`.
-- Keep error translation outside the schemas, keeping the schemas focused only on validating and transforming data.
+- Agrupar mensagens por campo a partir de `zodError.issues`.
+- Produzir uma instancia de `ValidationError` do core.
+- Manter a traducao de erro fora dos schemas, preservando os schemas focados apenas em validar e transformar dados.
 
-## Anti-patterns
+## Anti-padroes
 
-### Anti-pattern: centralizing all messages in a global object
+### Anti-padrao: centralizar todas as mensagens em um objeto global
 
-**What to avoid:**
-Creating files such as `GLOBAL_ERROR_MESSAGES` and referencing the messages by key in all the schemas.
+**O que evitar:**
+Criar arquivos como `GLOBAL_ERROR_MESSAGES` e referenciar as mensagens por chave em todos os schemas.
 
-**Why it is wrong:**
-It moves the message away from the rule that uses it, worsens schema readability, increases unnecessary coupling and makes localized maintenance harder.
+**Por que esta errado:**
+Afasta a mensagem da regra que a utiliza, piora a legibilidade do schema, aumenta acoplamento desnecessario e dificulta manutencao localizada.
 
-**How to do it:**
-Define the message directly in the schema method call.
+**Como fazer:**
+Defina a mensagem diretamente na chamada do metodo do schema.
 
-Correct example:
+Exemplo correto:
 
 ```ts
 export const passwordSchema = stringSchema.min(
@@ -120,34 +116,32 @@ export const passwordSchema = stringSchema.min(
 )
 ```
 
-(The message means "Your password must contain at least 6 characters".)
+### Anti-padrao: reescrever validacoes base em schemas de dominio
 
-### Anti-pattern: rewriting base validations in domain schemas
+**O que evitar:**
+Declarar `z.string()` com as mesmas regras em varios modulos quando ja existe um schema global equivalente.
 
-**What to avoid:**
-Declaring `z.string()` with the same rules in several modules when an equivalent global schema already exists.
+**Como fazer:**
+Reutilize o schema base e acrescente apenas as restricoes especificas daquele caso.
 
-**How to do it:**
-Reuse the base schema and add only the restrictions specific to that case.
+## Integracao com Outras Camadas
 
-## Integration with Other Layers
+- **Core**: pode importar tipos/erros do core, como `ValidationError`.
+- **Apps**: `web`, `server` e `studio` consomem os schemas deste pacote, mas o pacote nao importa nada delas.
+- **Borda**: controllers, actions, routes, tools e formularios devem usar estes schemas para validar input.
+- **Direcao de dependencia**: `apps/** -> packages/validation -> @stardust/core`.
 
-- **Core**: may import types/errors from the core, such as `ValidationError`.
-- **Apps**: `web`, `server` and `studio` consume the schemas of this package, but the package imports nothing from them.
-- **Edge**: controllers, actions, routes, tools and forms must use these schemas to validate input.
-- **Dependency direction**: `apps/** -> packages/validation -> @stardust/core`.
+## Checklist (antes do PR)
 
-## Checklist (before the PR)
+- O schema novo esta no modulo correto.
+- A mensagem de erro esta no proprio schema e em PT-BR.
+- O schema reutiliza bases globais quando fizer sentido.
+- O arquivo exporta um unico schema principal com nome claro.
+- O `index.ts` do modulo foi atualizado.
+- O `src/main.ts` foi atualizado quando o modulo faz parte da API publica do pacote.
+- Nenhuma dependencia de `apps/**` foi introduzida.
 
-- The new schema is in the correct module.
-- The error message is in the schema itself and in PT-BR.
-- The schema reuses global bases when it makes sense.
-- The file exports a single main schema with a clear name.
-- The module's `index.ts` was updated.
-- `src/main.ts` was updated when the module is part of the package's public API.
-- No dependency on `apps/**` was introduced.
+## Notas
 
-## Notes
-
-- The package exposes its public contracts through `packages/validation/src/main.ts` and through subpaths defined in `packages/validation/package.json`.
-- `global/schemas` must remain the main source of shared primitives.
+- O pacote expoe seus contratos publicos por `packages/validation/src/main.ts` e por subpaths definidos em `packages/validation/package.json`.
+- `global/schemas` deve permanecer como a fonte principal de primitives compartilhadas.
