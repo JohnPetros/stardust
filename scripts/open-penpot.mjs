@@ -25,17 +25,41 @@ function fail(message) {
 const isWsl =
   os.platform() === 'linux' && /microsoft/i.test(fs.readFileSync('/proc/version', 'utf8'))
 
+const interopMaxAttempts = 4
+const interopRetryDelayMs = 1000
+
+// WSL sometimes fails to start a Windows process with "UtilAcceptVsock ...
+// accept4 failed 110" (a timeout on the interop socket) before the command
+// runs. It is transient, so the call is safe to retry.
+export function isTransientInteropError(error) {
+  return /UtilAcceptVsock|accept4 failed/.test(String(error?.stderr ?? ''))
+}
+
+function sleepSync(milliseconds) {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, milliseconds)
+}
+
 function powershell(command) {
-  return execFileSync(
-    'powershell.exe',
-    ['-NoProfile', '-NonInteractive', '-Command', command],
-    {
-      cwd: '/mnt/c',
-      encoding: 'utf8',
-    },
-  )
-    .replace(/\r/g, '')
-    .trim()
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return execFileSync(
+        'powershell.exe',
+        ['-NoProfile', '-NonInteractive', '-Command', command],
+        {
+          cwd: '/mnt/c',
+          encoding: 'utf8',
+        },
+      )
+        .replace(/\r/g, '')
+        .trim()
+    } catch (error) {
+      if (attempt >= interopMaxAttempts || !isTransientInteropError(error)) throw error
+      console.warn(
+        `WSL interop failed (attempt ${attempt}/${interopMaxAttempts}), retrying...`,
+      )
+      sleepSync(interopRetryDelayMs * attempt)
+    }
+  }
 }
 
 function quotePowershell(value) {
@@ -130,7 +154,12 @@ export function filterInstances(processes, profileDirectory, caseInsensitive) {
 }
 
 function launch({ chrome, profileDirectory }, url) {
-  const args = [`--user-data-dir=${profileDirectory}`, ...keepAwakeFlags, '--new-window', url]
+  const args = [
+    `--user-data-dir=${profileDirectory}`,
+    ...keepAwakeFlags,
+    '--new-window',
+    url,
+  ]
   if (isWsl) {
     // Start-Process joins arguments with spaces, so quote only those containing one.
     const windowsArgs = args.map((arg) =>
