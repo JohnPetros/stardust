@@ -15,9 +15,12 @@ node ./scripts/sync-agents.mjs
 
 O script `setup-project.mjs` configura as skills, os comandos e a configuração
 MCP do projeto. As skills de terceiros são restauradas de `skills-lock.json`
-por `install-skills.mjs` (`pnpm dlx skills install --frozen-lockfile`); para
+por `install-skills.mjs` (`pnpm dlx skills@1.8.1 install --frozen-lockfile`); para
 adicionar ou remover uma skill, use `pnpm dlx skills add` ou `remove`, que
-atualizam o lock. Os scripts de exportação de ambiente imprimem atribuições para
+atualizam o lock. O lock fixa a origem e o `computedHash` do conteúdo de cada
+skill, e o modo `--frozen-lockfile` recalcula esse hash e falha quando o conteúdo
+baixado difere; por isso a versão da CLI fica fixada no script. Revise toda
+alteração de `skills-lock.json` no PR como uma mudança de dependência. Os scripts de exportação de ambiente imprimem atribuições para
 o shell atual; carregue-as com `eval`:
 
 ```bash
