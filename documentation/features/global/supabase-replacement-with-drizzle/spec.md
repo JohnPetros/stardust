@@ -6,17 +6,17 @@ source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/issues/602
   - type: prd
-    ref: documentation/prds/auth/sign-up.md
+    ref: documentation/prds/auth/sign-up-prd.md
     requirements: [RP1, RP2, RP3, RP4, RP5, RP6, RP7, RP8]
   - type: prd
-    ref: documentation/prds/auth/account-confirmation.md
+    ref: documentation/prds/auth/account-confirmation-prd.md
     requirements: [RP1, RP2, RP3, RP4, RP5, RP6]
   - type: prd
-    ref: documentation/prds/auth/social-account-confirmation.md
+    ref: documentation/prds/auth/social-account-confirmation-prd.md
     requirements: [RP1, RP2, RP3, RP4, RP5, RP6]
     journeys: [JN1]
   - type: prd
-    ref: documentation/prds/profile/user-creation.md
+    ref: documentation/prds/profile/user-creation-prd.md
     requirements: [RP1, RP2, RP3, RP4, RP5]
     journeys: [JN1]
   - type: direct-request

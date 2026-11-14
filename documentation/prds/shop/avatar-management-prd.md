@@ -333,7 +333,7 @@ fluxo de criação/edição.
 
 | Área | Exclusão explícita do MVP |
 | --- | --- |
-| Escopo | Gestão de foguetes e insígnias em conjunto com a tela de avatares. |
+| Escopo | Gestão de insígnias em conjunto com a tela de avatares. |
 | Escopo | Alterações na experiência de compra/seleção de avatares para usuário final na |
 | Escopo | Mudança de regras globais de economia de StarCoins além do impacto indireto de |
 | Escopo | Criação de novos papéis de acesso administrativo ou redefinição de política de |

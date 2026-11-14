@@ -4,7 +4,9 @@ status: draft
 source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/milestone/6
-last_updated_at: 2026-02-28
+  - type: direct-request
+    ref: Foguete único e fixo, fora da loja, aprovado em 2026-11-13
+last_updated_at: 2026-11-13
 ---
 
 # PRD — Página de Loja
@@ -17,7 +19,8 @@ Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunid
 
 A Página Shop é o espaço em que usuários logados ativos personalizam sua
 experiência na plataforma por meio da aquisição e seleção de itens cosméticos
-(insígnias, foguetes e avatares) usando StarCoins.
+(insígnias e avatares) usando StarCoins. A aplicação possui um único foguete,
+fixo e igual para todos os usuários, que não é vendido nem selecionado na loja.
 
 O problema que ela resolve é a baixa motivação de longo prazo quando o usuário
 não percebe progressão visual e valor no acúmulo de moedas. Ao permitir compra
@@ -39,6 +42,7 @@ design e desenvolvimento.
 | ID | Material | Papel neste PRD |
 | --- | --- | --- |
 | S1 | https://github.com/JohnPetros/stardust/milestone/6 | Fonte legada de produto; autoridade canônica no Confluence não identificada. |
+| S2 | Decisões de produto aprovadas em 2026-11-13 | Definem o foguete único e fixo, a retirada dos foguetes da loja e a ausência de devolução das StarCoins já gastas em foguetes. |
 
 ## 3. Público-alvo
 
@@ -53,6 +57,7 @@ design e desenvolvimento.
 | Risco ou premissa | Consequência para validação |
 | --- | --- |
 | Conteúdo legado não informa uma meta aprovada. | A meta precisa ser confirmada antes de usar o PRD como autoridade de produto. |
+| A retirada dos foguetes foi aprovada como decisão de produto; sua execução na aplicação e nos dados não foi especificada. | A remoção da seção de foguetes, do inventário de foguetes e da gestão no Backoffice exige escopo próprio. Até lá, a aplicação mantém o comportamento anterior. |
 
 ## 5. Requisitos de Produto
 
@@ -61,6 +66,10 @@ design e desenvolvimento.
 | Conceito | Regra de produto |
 | --- | --- |
 | Capacidade documentada | Preservar o comportamento descrito no conteúdo legado até validação canônica. |
+| Itens da loja | Insígnias e avatares. |
+| Foguete | Único e fixo, igual para todos os usuários. Não é item da loja: não pode ser comprado, adquirido nem selecionado. |
+
+RP-02, que tratava da listagem de foguetes, foi removido em 2026-11-13. A numeração dos demais requisitos foi preservada.
 
 #### RP-01 — Catálogo de Insígnias
 
@@ -101,49 +110,6 @@ autenticado, com status de aquisição e ação correspondente.
   permitir nova tentativa.
 - **Compatibilidade:** Comportamento consistente nos navegadores modernos de
   desktop e mobile.
-
----
-
-#### RP-02 — Listagem de Foguetes com Busca, Ordenação e Paginação
-
-Necessidades do usuário:
-
-- 🚧 Em construção — necessidade não explicitada no documento legado.
-
-Resultado: Listagem de Foguetes com Busca, Ordenação e Paginação.
-
-Atores: 🚧 Em construção — atores não explicitados no documento legado.
-
-**Descrição:** Permitir descoberta de foguetes por pesquisa textual, ordenação
-por preço e navegação paginada.
-
-##### Regras de Negócio
-- **Busca textual:** O usuário deve conseguir filtrar foguetes por termo de
-  pesquisa.
-- **Ordenação por preço:** O usuário deve alternar entre "Menor preço" e
-  "Maior preço".
-- **Paginação:** A listagem deve ser paginada para limitar volume por tela.
-- **Persistência de critérios:** Ao mudar busca ou ordenação, o sistema deve
-  reiniciar a paginação para a primeira página.
-
-##### Regras de Experiência
-
-- **Elemento Visual:** A seção de foguetes deve conter campo de busca,
-  seletor de ordenação e paginação.
-- **Responsividade:** A grade de foguetes deve se adaptar a diferentes larguras
-  de tela.
-- **Acessibilidade:** Busca, seletor e paginação devem ter foco visível e uso
-  via teclado.
-- **Feedback:** Mudanças de filtro devem atualizar a lista sem ambiguidade de
-  estado.
-- **Performance:** A atualização de lista deve manter tempo de resposta
-  percebido adequado.
-- **Segurança:** Dados de listagem devem respeitar contexto do usuário
-  autenticado quando aplicável.
-- **Confiabilidade:** Em lista vazia, exibir estado vazio sem quebrar a
-  navegação.
-- **Compatibilidade:** Busca, ordenação e paginação devem funcionar em
-  navegadores modernos.
 
 ---
 
@@ -201,11 +167,14 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 itens já adquiridos para personalização ativa.
 
 ##### Regras de Negócio
-- **Compra de foguete/avatar:** Se o item ainda não for adquirido e houver saldo
+- **Compra de avatar:** Se o item ainda não for adquirido e houver saldo
   suficiente, o sistema deve concluir a compra, debitar StarCoins e aplicar o
   item como selecionado.
-- **Seleção sem nova compra:** Se foguete/avatar já estiver adquirido, o sistema
+- **Seleção sem nova compra:** Se o avatar já estiver adquirido, o sistema
   deve apenas selecionar o item, sem novo débito.
+- **Foguetes já adquiridos:** Com a retirada dos foguetes da loja, os foguetes
+  adquiridos deixam de existir no inventário do usuário e as StarCoins gastas
+  neles não são devolvidas.
 - **Compra de insígnia:** A compra deve falhar quando a insígnia já tiver sido
   adquirida ou quando não houver saldo suficiente.
 - **Bloqueio por saldo insuficiente:** Itens sem saldo suficiente não devem ser
@@ -287,15 +256,15 @@ consultas, compra e seleção de itens.
 **Nome do fluxo:** Explorar catálogo e filtrar itens.
 
 1. O usuário acessa a tela Shop.
-2. O usuário visualiza seções de insígnias, foguetes e avatares.
-3. O usuário realiza busca e ordenação por preço em foguetes/avatares.
+2. O usuário visualiza seções de insígnias e avatares.
+3. O usuário realiza busca e ordenação por preço em avatares.
 4. O sistema valida os critérios informados:
    - **Sucesso:** Lista é atualizada com paginação correspondente.
    - **Falha:** Sistema apresenta erro de carregamento e mantém estado estável.
 
-**Nome do fluxo:** Comprar foguete ou avatar.
+**Nome do fluxo:** Comprar avatar.
 
-1. O usuário acessa a seção de foguetes ou avatares.
+1. O usuário acessa a seção de avatares.
 2. O usuário realiza a ação de compra em um item não adquirido.
 3. O sistema valida saldo e disponibilidade do item:
    - **Sucesso:** Debita StarCoins, adiciona item ao inventário, seleciona o item
@@ -305,7 +274,7 @@ consultas, compra e seleção de itens.
 
 **Nome do fluxo:** Selecionar item já adquirido.
 
-1. O usuário acessa item já adquirido (foguete/avatar).
+1. O usuário acessa um avatar já adquirido.
 2. O usuário aciona "Selecionar".
 3. O sistema valida se o item pertence ao inventário:
    - **Sucesso:** Item passa a ser o selecionado ativo do usuário.
@@ -325,11 +294,17 @@ consultas, compra e seleção de itens.
 | Área | Exclusão explícita do MVP |
 | --- | --- |
 | Escopo | CRUD administrativo de itens da loja (criar, editar, remover) em painel |
-| Escopo | Criação de novas categorias de itens além de insígnias, foguetes e avatares. |
+| Escopo | Criação de novas categorias de itens além de insígnias e avatares. |
+| Escopo | Venda, aquisição ou seleção de foguetes. |
+| Escopo | Execução da retirada dos foguetes na aplicação, no Backoffice e nos dados dos usuários; exige escopo próprio. |
 | Escopo | Alteração das regras globais de economia de StarCoins fora do contexto de |
 | Escopo | Versão mobile nativa (app) ou funcionalidades fora da Web responsiva. |
 | Escopo | Reformulação de onboarding de itens padrão de novos usuários. |
 
 ### Decisões descartadas durante a definição
 
-- **Não identificado:** nenhuma alternativa foi formalmente descartada no documento legado.
+| Alternativa considerada | Regra final |
+| --- | --- |
+| Manter os foguetes como categoria da loja | Foguete único e fixo, fora da loja. |
+| Devolver as StarCoins gastas em foguetes | Sem devolução. |
+| Converter os foguetes adquiridos em outro item da loja | Sem conversão; os foguetes adquiridos deixam de existir. |
