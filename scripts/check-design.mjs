@@ -18,6 +18,7 @@ const CONFIG_PATH = path.join(ROOT_DIRECTORY, '.design-check.json')
 const BASELINE_PATH = path.join(ROOT_DIRECTORY, '.design-check-baseline.json')
 const ROOT_SHAPE_ID = '00000000-0000-0000-0000-000000000000'
 const DEFAULT_PAGE_BACKGROUND = '#E8E9EA'
+const DEFAULT_PENPOT_URL = 'https://design.penpot.app'
 
 const RULE_CATEGORIES = {
   contrast: 'contrast',
@@ -286,16 +287,29 @@ function textRuns(shape) {
   return runs.filter((run) => run.text.trim().length > 0)
 }
 
+// Only shapes with fills can paint a background, so each page indexes them once, in
+// paint order and with their boxes, instead of scanning every layer for every text.
+function filledLayersOf(context) {
+  if (!context.filledLayers) {
+    context.filledLayers = []
+    context.paintOrder.forEach((id, index) => {
+      const candidate = context.objects[id]
+      if (!candidate || candidate.type === 'text' || !candidate.fills?.length) return
+      context.filledLayers.push({ index, candidate, box: boxOf(candidate) })
+    })
+  }
+  return context.filledLayers
+}
+
 function backgroundBehind(context, shape) {
   const target = boxOf(shape)
   const limit = context.paintIndex.get(shape.id) ?? 0
   let color = parseHex(context.page.background) ?? parseHex(DEFAULT_PAGE_BACKGROUND)
   let unknown = false
-  for (let index = 0; index < limit; index++) {
-    const candidate = context.objects[context.paintOrder[index]]
-    if (!candidate || candidate.type === 'text' || context.isHidden(candidate.id))
-      continue
-    if (!contains(boxOf(candidate), target)) continue
+  for (const { index, candidate, box } of filledLayersOf(context)) {
+    if (index >= limit) break
+    if (context.isHidden(candidate.id)) continue
+    if (!contains(box, target)) continue
     const opacity = context.opacityOf(candidate.id)
     for (const fill of [...(candidate.fills ?? [])].reverse()) {
       if (fill.fillImage || fill.fillColorGradient) {
