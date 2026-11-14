@@ -319,3 +319,4 @@ papéis, artefatos, sensores e critérios de conclusão.
 - Para decidir qual página (Desktop, Mobile, Components ou Design System) é dona de um frame.
 - Para nomear telas, diálogos, componentes e propriedades de variantes.
 - Ao extrair um elemento repetido para um componente ou atualizar a página Design System.
+- Ao criar ou atualizar um registro de revisão de design em `documentation/design-reviews/`.
