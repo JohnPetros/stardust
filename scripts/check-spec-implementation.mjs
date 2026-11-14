@@ -75,7 +75,9 @@ function printHelp() {
   console.log(
     '--plan-only validates only the plan against the Spec, without requiring delivered paths.',
   )
-  console.log('--require-plan requires the plan to exist and every row to be completed.')
+  console.log(
+    '--require-plan requires the plan to exist and every row to be completed; the sibling evaluation.md may opt out with "plan: none" and must otherwise declare "plan:".',
+  )
 }
 
 async function runGit(argumentsList, cwd) {
@@ -235,6 +237,39 @@ function parseFrontmatter(markdown) {
 
 function planPathFor(relativeSpecPath) {
   return relativeSpecPath.replace(/spec\.md$/, 'plan.md')
+}
+
+function evaluationPathFor(relativeSpecPath) {
+  return relativeSpecPath.replace(/spec\.md$/, 'evaluation.md')
+}
+
+/**
+ * The Evaluation declares how its delivery tracks progress: `plan: <path>` requires
+ * the plan, `plan: none` is the explicit opt-out of a delivery that predates plan.md,
+ * and a missing key is an error so no delivery is left without a plan by omission.
+ */
+async function resolvePlanRequirement({
+  errors,
+  planOnly,
+  relativeEvaluationPath,
+  repositoryRoot,
+  requirePlan,
+}) {
+  if (!requirePlan || planOnly) return { optOut: false, requirePlan }
+  let markdown
+  try {
+    markdown = await readFile(path.join(repositoryRoot, relativeEvaluationPath), 'utf8')
+  } catch (error) {
+    if (error?.code === 'ENOENT') return { optOut: false, requirePlan }
+    throw error
+  }
+  const declaration = parseFrontmatter(markdown).plan
+  if (declaration === 'none') return { optOut: true, requirePlan: false }
+  if (!declaration)
+    errors.push(
+      `${relativeEvaluationPath}: frontmatter must declare plan: <path> or plan: none (explicit opt-out for a delivery that predates plan.md)`,
+    )
+  return { optOut: false, requirePlan }
 }
 
 function splitCells(line) {
@@ -466,6 +501,13 @@ async function checkSpecImplementation({ base, planOnly, requirePlan, specArgume
     })
   }
 
+  const planRequirement = await resolvePlanRequirement({
+    errors,
+    planOnly,
+    relativeEvaluationPath: evaluationPathFor(relativeSpecPath),
+    repositoryRoot,
+    requirePlan,
+  })
   const plan = await checkPlan({
     affectedPaths,
     basePaths,
@@ -475,7 +517,7 @@ async function checkSpecImplementation({ base, planOnly, requirePlan, specArgume
     planOnly,
     relativePlanPath: planPathFor(relativeSpecPath),
     repositoryRoot,
-    requirePlan,
+    requirePlan: planRequirement.requirePlan,
     specMarkdown: markdown,
     untrackedPaths,
   })
@@ -502,6 +544,7 @@ async function checkSpecImplementation({ base, planOnly, requirePlan, specArgume
     pathsCount: affectedPaths.length,
     plan: plan ?? null,
     planOnly,
+    planOptOut: planRequirement.optOut,
     spec: relativeSpecPath,
     status: errors.length === 0 ? 'passed' : 'failed',
     unrelatedChangedPathsCount,
@@ -523,6 +566,8 @@ function printResult(result, shouldPrintJson) {
     console.log(
       `Plan: ${result.plan.path} (${result.plan.rowsCount} rows: pending ${result.plan.statusCounts.pending}, in_progress ${result.plan.statusCounts.in_progress}, completed ${result.plan.statusCounts.completed})`,
     )
+  else if (result.planOptOut)
+    console.log('Plan: opted out (evaluation.md declares plan: none)')
   else console.log('Plan: not present')
   if (result.planOnly)
     console.log('Mode: plan-only (delivery of the contracted paths was not checked).')
