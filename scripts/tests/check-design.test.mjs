@@ -204,6 +204,55 @@ test('uses a sibling surface painted underneath as the text background', () => {
   )
 })
 
+function labelOverCard(order, cardOptions = {}) {
+  const card = {
+    ...frame('card', 'screen', [], {
+      fill: '#adb8ba',
+      token: 'color.text-secondary',
+      box: [10, 10, 200, 100],
+    }),
+    ...cardOptions,
+  }
+  const file = createFile([
+    card,
+    text('label', 'screen', 'Rótulo', { token: 'color.text-secondary' }),
+  ])
+  file.data.pagesIndex.page.objects.screen.shapes = order
+  const result = analyzeFile(file, config)
+  return {
+    contrast: result.findings
+      .filter((item) => item.rule === 'contrast')
+      .map((item) => item.shapeId),
+    unknownBackgrounds: result.stats.unknownBackgrounds,
+  }
+}
+
+test('ignores a surface painted above the text', () => {
+  assert.deepEqual(labelOverCard(['label', 'card']), {
+    contrast: [],
+    unknownBackgrounds: 0,
+  })
+})
+
+test('ignores a hidden surface underneath the text', () => {
+  assert.deepEqual(labelOverCard(['card', 'label'], { hidden: true }), {
+    contrast: [],
+    unknownBackgrounds: 0,
+  })
+})
+
+test('treats image and gradient fills underneath the text as an unknown background', () => {
+  for (const fill of [
+    { fillImage: { id: 'image' }, fillOpacity: 1 },
+    { fillColorGradient: { stops: [] }, fillOpacity: 1 },
+  ]) {
+    assert.deepEqual(labelOverCard(['card', 'label'], { fills: [fill] }), {
+      contrast: [],
+      unknownBackgrounds: 1,
+    })
+  }
+})
+
 test('classifies unbound, near-token, off-palette and stale colors', () => {
   const file = createFile([
     text('unbound', 'screen', 'a', { color: '#adb8ba' }),
