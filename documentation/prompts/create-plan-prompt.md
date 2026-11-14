@@ -59,6 +59,12 @@ left to ask. If deriving them exposes a material ambiguity, stop and route it to
 5. Do not add tasks, phases, waves, estimates, owners or acceptance text. Those would be a
    second Contract or an execution ledger.
 
+Repeating `Path` and `Change` from the Spec is a deliberate decision, not an oversight. A
+progress row needs a stable key that the checker can reconcile with the Spec and with Git. The
+Spec stays the only owner of the Contract (`Declaration`, `Contract`, `Dependencies` and
+`Tests` are never copied), and `--plan-only` and `--require-plan` report drift in both
+directions, so the copy cannot diverge silently.
+
 ## Template
 
 ```md
