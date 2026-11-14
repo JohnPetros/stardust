@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { filterInstances, readUserDataDirectory } from '../open-penpot.mjs'
+import {
+  filterInstances,
+  isTransientInteropError,
+  readUserDataDirectory,
+} from '../open-penpot.mjs'
 import { assertScriptSyntax } from './helpers.mjs'
 
 test('open-penpot has valid syntax', async () => {
@@ -28,6 +32,20 @@ test('readUserDataDirectory reads quoted and unquoted flags', () => {
 
 test('readUserDataDirectory returns null without the flag', () => {
   assert.equal(readUserDataDirectory('chrome --new-window'), null)
+})
+
+test('isTransientInteropError detects the WSL vsock timeout', () => {
+  assert.equal(
+    isTransientInteropError({
+      stderr: '<3>WSL (203329 - ) ERROR: UtilAcceptVsock:273: accept4 failed 110\n',
+    }),
+    true,
+  )
+  assert.equal(
+    isTransientInteropError({ stderr: 'Start-Process : file not found' }),
+    false,
+  )
+  assert.equal(isTransientInteropError(new Error('boom')), false)
 })
 
 const profile = '/home/me/.config/chrome-stardust'
