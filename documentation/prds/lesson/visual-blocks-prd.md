@@ -8,7 +8,7 @@ source:
     ref: Destaque somente com Lotties e sem controles de reprodução aprovado em 2026-10-31
   - type: direct-request
     ref: Efeito sonoro opcional do Lottie e vídeos de planeta fora dos blocos visuais aprovados em 2026-11-13
-last_updated_at: 2026-11-13
+last_updated_at: 2026-11-14
 ---
 
 # PRD — Blocos visuais — imagens e Lotties
@@ -45,7 +45,7 @@ Este documento é prospectivo e não afirma que todas as regras já estejam impl
 | S4 | [Programação em blocos](block-programming-prd.md), revisão de 2026-10-11 | Define cenas associadas à atividade, eventos de execução, restauração inicial e composição responsiva das questões. |
 | S5 | [Seleção e Gestão de Imagens de Lição](lesson-image-selection-and-management-prd.md) | Contexto de seleção e gerenciamento de arquivos; autoria e infraestrutura não pertencem ao consumo definido neste PRD. |
 | S6 | Decisão de produto aprovada em 2026-10-31 | Define que todo visual em destaque é um Lottie, reproduzido uma única vez e sem controles de pausa e reprodução. |
-| S7 | Decisões de produto aprovadas em 2026-11-13 | Definem o efeito sonoro opcional de um Lottie, mantêm as cenas por evento onde já existem e situam os vídeos de planeta em Trilha e Espaço. |
+| S7 | Decisões de produto aprovadas em 2026-11-13 | Definem o efeito sonoro opcional de um Lottie, mantêm as cenas por evento onde já existem e situam os vídeos de planeta em Trilha e Galáxia. |
 
 ## 3. Público-alvo
 
@@ -362,7 +362,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 | Autoria | Cadastro, edição e publicação dos blocos, legendas, descrições e configurações de eventos. |
 | Editor de animações | Ferramentas para criar ou alterar animações Lottie. |
 | Remotion | Adoção de Remotion como dependência ou requisito desta experiência. |
-| Vídeos de planeta | Vídeos de apresentação dos planetas e de encerramento da trilha. São arquivos pré-renderizados reproduzidos no Espaço, definidos em [Trilha e Espaço](../space/space-page-prd.md), e não são blocos visuais da história. |
+| Vídeos de planeta | Vídeos de apresentação dos planetas e de encerramento da trilha. São arquivos pré-renderizados reproduzidos na Galáxia, definidos em [Trilha e Galáxia](../space/galaxy-page-prd.md), e não são blocos visuais da história. |
 | Infraestrutura | Estratégia de armazenamento, CDN e contratos técnicos de arquivos e eventos. |
 | Avaliadores | Mudanças na avaliação determinística ou pelo Jev; os visuais não substituem a avaliação da atividade. |
 | Reprodução sincronizada | Retomada entre dispositivos no segundo exato de uma animação. |
@@ -382,6 +382,6 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 | Avaliar uma questão dependente de visual indisponível | Aguardar recuperação sem consumir vidas. |
 | Exigir legenda em todos os visuais | Legenda opcional e descrição acessível. |
 | Reproduzir automaticamente mesmo com movimento reduzido | Mostrar o estado final parado, sem reprodução. |
-| Adotar Remotion para a experiência | Consumir Lotties no destaque e imagens ou Lotties nas cenas por evento; Remotion não é requisito. Os vídeos de planeta, que podem ser produzidos com essa ferramenta, chegam à aplicação já renderizados e pertencem a Trilha e Espaço. |
+| Adotar Remotion para a experiência | Consumir Lotties no destaque e imagens ou Lotties nas cenas por evento; Remotion não é requisito. Os vídeos de planeta, que podem ser produzidos com essa ferramenta, chegam à aplicação já renderizados e pertencem a Trilha e Galáxia. |
 | Estender a cena por evento à escrita de código e aos exemplos executáveis | Cenas por evento permanecem nas atividades que já as possuem; após a escrita de código, a consequência é um Lottie em destaque. |
 | Efeito sonoro apenas em Lotties | Qualquer bloco da história pode possuir um efeito sonoro opcional, conforme Histórias interativas. |

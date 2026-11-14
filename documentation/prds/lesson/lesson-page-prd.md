@@ -16,12 +16,12 @@ source:
     ref: Volume individual e silenciamento de som ambiente e de efeitos, persistidos entre histórias, aprovados em 2026-11-13
   - type: direct-request
     ref: Som ambiente composto por cenário sonoro na base e música discreta nos climas, aprovado em 2026-11-13
-last_updated_at: 2026-11-13
+last_updated_at: 2026-11-14
 ---
 
 # PRD — Histórias interativas
 
-Disponibiliza para: lesson, experiência de consumo de uma história vinculada a uma estrela; Trilha e Espaço, continuidade e conclusão da estrela; resultado, encaminhamento da conclusão; analytics, eventos do percurso da história.
+Disponibiliza para: lesson, experiência de consumo de uma história vinculada a uma estrela; Trilha e Galáxia, continuidade e conclusão da estrela; resultado, encaminhamento da conclusão; analytics, eventos do percurso da história.
 
 Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
@@ -49,7 +49,7 @@ A revisão é prospectiva: descreve o comportamento aprovado para a reformulaç�
 | --- | --- | --- |
 | S1 | Este PRD canônico, revisão de 2026-10-11 | Autoridade versionada para a experiência comum das histórias interativas. Substitui a revisão de Página de Lição de 2026-07-06. |
 | S2 | Pedido e decisões de produto aprovados em 2026-10-11 | Define blocos, destaque, questões integradas, dez vidas, reinício integral e retomada vinculada à conta. |
-| S3 | [Trilha e Espaço](../space/space-page-prd.md) | Define planetas, estrelas, sequência, acesso e navegação pelo Espaço. |
+| S3 | [Trilha e Galáxia](../space/galaxy-page-prd.md) | Define planetas, estrelas, sequência, acesso e navegação pela Galáxia. |
 | S4 | [Milestone 23](https://github.com/JohnPetros/stardust/milestone/23) | Contexto legado de história estruturada e consumo de narração persistida. |
 | S5 | Fluxos existentes de Lesson, StoryStage e QuizStage na Web App | Evidência auxiliar do comportamento anterior e do diálogo de vidas esgotadas; não substitui as decisões desta revisão. |
 | S6 | [Narrativa e universo das histórias](story-narrative-prd.md), revisão de 2026-11-13 | Define enredo, elenco, planetas e reviravoltas apresentados pela sequência de blocos. |
@@ -111,7 +111,7 @@ Jobs to Be Done:
 
 | Conceito | Regra de produto |
 | --- | --- |
-| Planeta | Tema da trilha, conforme Trilha e Espaço. |
+| Planeta | Tema da trilha, conforme Trilha e Galáxia. |
 | Estrela | Unidade ordenada da trilha; pode conter uma história ou um desafio de código. |
 | História | Sequência de blocos de narrativa, apresentação de conceitos e questões. |
 | Bloco da história | Item da sequência: texto, Lottie, exemplo de código, exemplo de programação em blocos ou questão. Imagens estáticas aparecem apenas em cenas de atividades. |
@@ -145,7 +145,7 @@ Atores: aluno autenticado.
 
 ##### Regras de Negócio
 
-- A história deve pertencer a uma estrela e respeitar as regras de acesso, desbloqueio e revisão de Trilha e Espaço.
+- A história deve pertencer a uma estrela e respeitar as regras de acesso, desbloqueio e revisão de Trilha e Galáxia.
 - O acesso deve identificar a estrela e carregar a sequência da história.
 - Uma tentativa incompleta deve ser apresentada conforme RP-08.
 
@@ -248,7 +248,7 @@ Atores: aluno autenticado.
 - Executar exemplos ou experimentar código não deve custar vidas.
 - Ao zerar as vidas, o aluno não deve continuar a tentativa atual.
 - Recomeçar história deve limpar toda a tentativa anterior e restaurar dez vidas, reiniciando a história inteira, não apenas a questão.
-- Sair deve retornar ao Espaço. Essa ação não deve restaurar vidas nem reiniciar a tentativa.
+- Sair deve retornar à Galáxia. Essa ação não deve restaurar vidas nem reiniciar a tentativa.
 - As vidas devem ser apresentadas ao aluno como a energia da nave. A mudança é de nome e de representação; quantidade, consumo, esgotamento e reinício permanecem os definidos acima.
 
 ##### Regras de Experiência
@@ -318,7 +318,7 @@ Atores: aluno autenticado.
 
 - Sair ou recarregar uma história incompleta deve preservar o ponto de continuidade, os blocos percorridos, as respostas aprovadas e as vidas restantes.
 - A tentativa deve acompanhar a conta entre dispositivos, não ficar restrita ao dispositivo usado anteriormente.
-- Sair deve retornar ao Espaço sem reiniciar a tentativa.
+- Sair deve retornar à Galáxia sem reiniciar a tentativa.
 - O reinício integral deve ocorrer pela ação Recomeçar história descrita em RP-05.
 
 ##### Regras de Experiência
@@ -397,7 +397,7 @@ Atores: aluno autenticado.
 
 ##### Regras de Negócio
 
-- O ambiente deve ser determinado pelo planeta da estrela, conforme Trilha e Espaço.
+- O ambiente deve ser determinado pelo planeta da estrela, conforme Trilha e Galáxia.
 - O ambiente deve compreender o fundo da página, o cabeçalho e um som ambiente opcional.
 - O fundo e o cabeçalho devem permanecer os mesmos durante toda a história, em leitura e em questões.
 - Toda história deve começar com o som de base do seu planeta.
@@ -506,9 +506,9 @@ Atores: aluno autenticado.
 
 | Produtor/área | Consumidor | Responsabilidade |
 | --- | --- | --- |
-| Trilha e Espaço | Histórias interativas | Fornecer identidade da estrela, ordem, desbloqueio e regras de acesso e revisão. |
+| Trilha e Galáxia | Histórias interativas | Fornecer identidade da estrela, ordem, desbloqueio e regras de acesso e revisão. |
 | Conteúdo da história | Histórias interativas | Fornecer a sequência de blocos, personagens, avatares, tipos, pontos de encerramento do destaque, o efeito sonoro dos blocos que o possuem e as trocas de clima; a autoria fica fora deste PRD. |
-| Trilha e Espaço | Ambiente do planeta | Fornecer o planeta ao qual a estrela pertence. |
+| Trilha e Galáxia | Ambiente do planeta | Fornecer o planeta ao qual a estrela pertence. |
 | Biblioteca de efeitos e ambientes | Histórias interativas | Fornecer os efeitos, o som de base de cada planeta, o conjunto compartilhado de climas e os fundos; sua produção fica fora deste PRD. |
 | Preferências de som | Histórias interativas | Fornecer a preferência de som existente e o volume dos efeitos, o silenciamento e o volume do som ambiente vinculados à conta e a preferência de reprodução automática da narração, todos ajustáveis pelos controles de áudio. |
 | Narrativa e universo das histórias | Conteúdo da história | Fornecer enredo, elenco, planetas e reviravoltas que o conteúdo apresenta. |
@@ -517,7 +517,7 @@ Atores: aluno autenticado.
 | Múltipla escolha, programação em blocos e escrita de código | Histórias interativas | Fornecer interação, avaliação e feedback específicos por meio de PRDs próprios. |
 | Conta do aluno | Histórias interativas | Preservar e disponibilizar a continuidade da tentativa entre sessões e dispositivos. |
 | Áudio persistido | Histórias interativas | Fornecer arquivos disponíveis para os blocos elegíveis, sem geração em tempo real. |
-| Histórias interativas | Trilha e Espaço; resultado e recompensas | Fornecer a conclusão da estrela para progressão e apresentação do resultado. |
+| Histórias interativas | Trilha e Galáxia; resultado e recompensas | Fornecer a conclusão da estrela para progressão e apresentação do resultado. |
 
 O grafo identifica responsabilidades de produto, não uma ordem de implementação.
 
@@ -553,7 +553,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 
 1. O aluno sai ou recarrega uma história incompleta.
 2. O ponto de continuidade, os blocos percorridos, as respostas aprovadas e as vidas restantes são preservados na conta.
-3. Ao sair, o aluno retorna ao Espaço.
+3. Ao sair, o aluno retorna à Galáxia.
 4. Ao abrir novamente a história, na mesma sessão ou em outro dispositivo, retoma o ponto preservado.
 5. O aluno consulta seu histórico e continua sem repetir questões já aprovadas na tentativa.
 
@@ -563,7 +563,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 2. O sistema impede o avanço e apresenta o diálogo de vidas esgotadas, informando que a nave ficou sem energia e recua para a órbita.
 3. O aluno escolhe uma ação:
    - Recomeçar história: toda a tentativa anterior é limpa; a história reinicia com dez vidas.
-   - Sair: o aluno retorna ao Espaço, sem restaurar as vidas da tentativa esgotada.
+   - Sair: o aluno retorna à Galáxia, sem restaurar as vidas da tentativa esgotada.
 4. A ação Recomeçar história não preserva apenas a questão atual nem as respostas aprovadas da tentativa anterior.
 
 #### JN-06 — Concluir a história
@@ -571,7 +571,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 1. O aluno percorre todos os blocos e aprova as questões da sequência.
 2. A barra chega a 100% e a conclusão identifica a estrela correspondente.
 3. O sistema encaminha o aluno à experiência de resultado.
-4. O resultado e o retorno ao Espaço seguem seus PRDs próprios.
+4. O resultado e o retorno à Galáxia seguem seus PRDs próprios.
 
 #### JN-07 — Acompanhar o ambiente e os sons da história
 
@@ -608,7 +608,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 | Produção de som e ambiente | Criação, seleção e gerenciamento dos efeitos sonoros, dos sons de base, dos climas e dos fundos de cada planeta; a definição de quais climas compõem o conjunto. |
 | Volume da narração e volume geral | Ajuste do volume da narração e um controle único de volume para todo o áudio; o diálogo ajusta apenas som ambiente e efeitos. |
 | Volume nas configurações | Oferta dos controles de volume fora da história, nas configurações da aplicação. |
-| Vídeos | Vídeos de apresentação dos planetas e de encerramento da trilha, definidos em [Trilha e Espaço](../space/space-page-prd.md). A história não reproduz vídeos. |
+| Vídeos | Vídeos de apresentação dos planetas e de encerramento da trilha, definidos em [Trilha e Galáxia](../space/galaxy-page-prd.md). A história não reproduz vídeos. |
 | Preferência de som existente | Mudança da preferência de som da aplicação para a conta ou alteração de seu controle nas configurações. |
 
 ### Decisões descartadas durante a definição
@@ -643,4 +643,4 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 | Climas próprios de cada planeta | Conjunto pequeno e compartilhado; cada planeta possui apenas o som de base. |
 | Qualquer áudio indicado livremente pelo conteúdo como som ambiente | O conteúdo escolhe entre os climas do conjunto compartilhado. |
 | Troca de clima também visual, com variação do fundo | Apenas sonora nesta versão; o fundo permanece fixo por planeta. |
-| Vídeo de abertura e de gancho em cada estrela | Abertura e gancho são texto da história; vídeos existem apenas por planeta, no Espaço. |
+| Vídeo de abertura e de gancho em cada estrela | Abertura e gancho são texto da história; vídeos existem apenas por planeta, na Galáxia. |

@@ -4,12 +4,12 @@ status: draft
 source:
   - type: direct-request
     ref: Reformulação do catálogo, desbloqueio, celebração e crédito de conquistas aprovada em 2026-10-31
-last_updated_at: 2026-11-13
+last_updated_at: 2026-11-14
 ---
 
 # PRD — Conquistas
 
-Disponibiliza para: perfil e página de conquistas, catálogo e progresso de conquistas do aluno; conta do aluno, StarCoins de recompensa; Espaço e demais páginas do layout Home, celebração de novas conquistas; Backoffice, gestão do catálogo.
+Disponibiliza para: perfil e página de conquistas, catálogo e progresso de conquistas do aluno; conta do aluno, StarCoins de recompensa; Galáxia e demais páginas do layout Home, celebração de novas conquistas; Backoffice, gestão do catálogo.
 
 Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Catálogo](#6-catálogo-inicial) · [Dependências](#7-grafo-de-dependências-do-produto) · [Jornadas](#8-jornadas) · [Escopo](#9-fora-do-escopo)
 
@@ -34,7 +34,7 @@ A reformulação da trilha (histórias interativas com vidas e questões) e a re
 | S1 | Este PRD canônico, revisão de 2026-10-31 | Autoridade versionada para catálogo, desbloqueio, celebração e crédito de conquistas. |
 | S2 | Decisões de produto aprovadas em 2026-10-31 | Grupos, trilhas em níveis, Especiais ocultas, momento da celebração, crédito automático, arte por trilha e exclusão do catálogo antigo. |
 | S3 | [Perfil](profile-page-prd.md), RP-05 | Lista de conquistas desbloqueadas no perfil; continua válida e passa a consumir o novo catálogo. |
-| S4 | [Resultado e recompensas da história](../lesson/story-result-prd.md) | Mantém conquistas fora do fluxo de resultado; a celebração ocorre depois, no Espaço. |
+| S4 | [Resultado e recompensas da história](../lesson/story-result-prd.md) | Mantém conquistas fora do fluxo de resultado; a celebração ocorre depois, na Galáxia. |
 | S5 | [Histórias interativas](../lesson/lesson-page-prd.md) | Define vidas, questões, tentativas e conclusão das histórias que alimentam a trilha Histórias. |
 | S6 | Implementação existente (entidade Achievement, ObserveNewUnlockedAchievements, RescueAchievement) | Evidência auxiliar do modelo atual; não define as regras desta revisão. |
 
@@ -174,11 +174,11 @@ Atores: aluno autenticado.
 
 - O aviso imediato aparece na página atual assim que o desbloqueio é confirmado, inclusive na aba de resultado de um desafio. Os desbloqueios retornam na resposta da ação que os gerou.
 - Desbloqueios causados por terceiros, como receber um voto, não geram aviso imediato e aparecem apenas na celebração.
-- A celebração aparece no próximo acesso a uma página do layout Home (Espaço, lista de desafios, perfil e afins).
+- A celebração aparece no próximo acesso a uma página do layout Home (Galáxia, lista de desafios, perfil e afins).
 - A celebração inclui todas as conquistas desbloqueadas desde a última celebração vista.
 - Se vários níveis da mesma trilha foram desbloqueados, a celebração mostra apenas o nível mais alto, com a soma das StarCoins de todos os níveis desbloqueados.
 - Uma celebração vista não é repetida, mesmo ao recarregar.
-- Depois de uma história, a celebração aparece no Espaço, após o fluxo de resultado, novo nível e novo streak, sem alterar esse fluxo.
+- Depois de uma história, a celebração aparece na Galáxia, após o fluxo de resultado, novo nível e novo streak, sem alterar esse fluxo.
 
 ##### Regras de Experiência
 
@@ -345,7 +345,7 @@ Todas as métricas começam em zero após o reinício do progresso. Não há cá
 | Conta do aluno | Conquistas | Fornecer streak, dias com atividade, nível e saldo de StarCoins. |
 | Loja | Conquistas | Fornecer itens adquiridos e StarCoins gastas. |
 | Playground e soluções | Conquistas | Fornecer snippets, soluções e desafios publicados e votos recebidos. |
-| Trilha e Espaço | Conquistas | Fornecer estrelas e planetas publicados e concluídos para metas relativas. |
+| Trilha e Galáxia | Conquistas | Fornecer estrelas e planetas publicados e concluídos para metas relativas. |
 | Conquistas | Conta do aluno | Creditar StarCoins no desbloqueio. |
 | Conquistas | Layout Home | Fornecer celebrações pendentes. |
 | Backoffice | Conquistas | Manter apresentação, metas e recompensas do catálogo. |
@@ -354,12 +354,12 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 
 ## 8. Jornadas
 
-#### JN-01 — Desbloquear durante uma história e celebrar no Espaço
+#### JN-01 — Desbloquear durante uma história e celebrar na Galáxia
 
 1. O aluno conclui sua 10ª história, sem perder vidas.
 2. O servidor registra a conclusão e desbloqueia Leitor II e Sem arranhões I.
 3. Um toast aparece enquanto o fluxo de resultado segue normalmente.
-4. Ao retornar ao Espaço, após as celebrações de nível e streak, o diálogo apresenta as duas conquistas.
+4. Ao retornar à Galáxia, após as celebrações de nível e streak, o diálogo apresenta as duas conquistas.
 5. As 35 StarCoins já foram creditadas no desbloqueio. O aluno toca em Continuar.
 
 #### JN-02 — Desbloquear ao concluir um desafio

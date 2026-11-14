@@ -4,12 +4,12 @@ status: draft
 source:
   - type: direct-request
     ref: Resultado, recompensas, nível, streak e recuperação aprovados em 2026-10-11
-last_updated_at: 2026-10-11
+last_updated_at: 2026-11-14
 ---
 
 # PRD — Resultado e recompensas da história
 
-Disponibiliza para: lesson, resultado da conclusão de uma história; conta do aluno, XP e StarCoins de conclusão; Trilha e Espaço, conclusão confirmada e retorno à navegação da trilha.
+Disponibiliza para: lesson, resultado da conclusão de uma história; conta do aluno, XP e StarCoins de conclusão; Trilha e Galáxia, conclusão confirmada e retorno à navegação da trilha.
 
 Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
@@ -19,7 +19,7 @@ O resultado da história reconhece a conclusão de uma estrela e apresenta o XP 
 
 O registro da conclusão e a concessão devem ocorrer automaticamente ao terminar a história, sem exigir uma ação na tela para receber. O resultado apresenta ganhos confirmados, sem métricas de tempo ou percentual de acertos. Erros afetam vidas durante a história, sem reduzir recompensas.
 
-Quando aplicáveis, o fluxo apresenta a celebração de novo nível e depois a de novo streak, com visualização semanal. A ação principal retorna ao Espaço após as celebrações aplicáveis; consultar a história é uma ação secundária.
+Quando aplicáveis, o fluxo apresenta a celebração de novo nível e depois a de novo streak, com visualização semanal. A ação principal retorna à Galáxia após as celebrações aplicáveis; consultar a história é uma ação secundária.
 
 Recarregar deve manter o resultado sem repetir ganhos. Falhas de registro ou concessão preservam a conclusão pendente e permitem tentar novamente sem refazer a história. Conquistas, autoria das recompensas e resultados de desafios independentes ficam fora do escopo.
 
@@ -38,7 +38,7 @@ Esta revisão é prospectiva e não afirma que as regras já estejam implementad
 | S1 | Este PRD canônico, revisão de 2026-10-11 | Autoridade versionada para o resultado e as recompensas de conclusão de histórias. |
 | S2 | Pedido e decisões de produto aprovados em 2026-10-11 | Define valores fixos por história, concessão única, navegação, celebrações, recarregamento, revisão e recuperação. |
 | S3 | [Histórias interativas](lesson-page-prd.md), revisão de 2026-10-11 | Define as condições de conclusão da sequência e o encaminhamento ao resultado. |
-| S4 | [Trilha e Espaço](../space/space-page-prd.md), revisão de 2026-10-11 | Define acesso, ordem, desbloqueio, revisão e retorno à navegação da trilha. |
+| S4 | [Trilha e Galáxia](../space/galaxy-page-prd.md), revisão de 2026-10-11 | Define acesso, ordem, desbloqueio, revisão e retorno à navegação da trilha. |
 | S5 | Fluxos existentes de RewardingPage, acesso ao resultado e estado diário da conta | Evidência auxiliar da concessão, celebração de nível antes de streak e limite diário existente; não substitui as regras desta revisão. |
 
 ## 3. Público-alvo
@@ -51,7 +51,7 @@ Jobs to Be Done:
 
 - Quando concluir uma história, quero ver os ganhos confirmados, para reconhecer o avanço na minha conta e na trilha.
 - Quando alcançar um novo nível ou ampliar meu streak, quero acompanhar essa celebração, para reconhecer minha evolução.
-- Quando terminar o resultado, quero retornar ao Espaço, para escolher a próxima estrela disponível.
+- Quando terminar o resultado, quero retornar à Galáxia, para escolher a próxima estrela disponível.
 - Quando ocorrer uma falha ao registrar a conclusão, quero tentar novamente sem refazer a história, para preservar o trabalho já concluído.
 
 ## 4. Objetivos e Métricas de Sucesso
@@ -62,7 +62,7 @@ Jobs to Be Done:
 | Conceder uma única vez | Nenhuma meta numérica aprovada | Verificar ausência de ganhos adicionais em revisão, recarregamento e repetição da operação. |
 | Celebrar evolução quando aplicável | Nenhuma meta numérica aprovada | Verificar nível antes de streak e ausência de etapas sem evento correspondente. |
 | Recuperar falhas sem repetir aprendizagem | Nenhuma meta numérica aprovada | Verificar conclusão pendente preservada e nova tentativa sem refazer a história. |
-| Retornar ao mapa | Nenhuma meta numérica aprovada | Verificar retorno ao Espaço após as etapas aplicáveis, sem abrir automaticamente a próxima estrela. |
+| Retornar ao mapa | Nenhuma meta numérica aprovada | Verificar retorno à Galáxia após as etapas aplicáveis, sem abrir automaticamente a próxima estrela. |
 
 ### Limites de validação e premissas declaradas
 
@@ -105,7 +105,7 @@ Atores: aluno autenticado.
 - A conclusão deve seguir as condições de Histórias interativas.
 - Ao concluir, o sistema deve registrar a conclusão da estrela e conceder suas recompensas, sem exigir uma ação para receber na tela de resultado.
 - Ganhos só devem ser apresentados como recebidos após confirmação.
-- O progresso da trilha deve consumir a conclusão confirmada conforme Trilha e Espaço.
+- O progresso da trilha deve consumir a conclusão confirmada conforme Trilha e Galáxia.
 - Falhas devem seguir RP-07 sem exigir repetir a história.
 
 ##### Regras de Experiência
@@ -191,7 +191,7 @@ Atores: aluno autenticado.
 
 ##### Regras de Experiência
 
-- O recarregamento não deve retornar automaticamente ao Espaço.
+- O recarregamento não deve retornar automaticamente à Galáxia.
 - O resultado deve permanecer disponível para consulta com os valores já confirmados.
 
 #### RP-05 — Celebrar novo nível e novo streak
@@ -207,7 +207,7 @@ Atores: aluno autenticado.
 ##### Regras de Negócio
 
 - Quando houver novo nível e novo streak, a celebração de nível deve preceder a celebração de streak.
-- A sequência deve ser recompensas, novo nível quando houver, novo streak quando houver e retorno ao Espaço.
+- A sequência deve ser recompensas, novo nível quando houver, novo streak quando houver e retorno à Galáxia.
 - Etapas sem evento correspondente devem ser omitidas.
 - Uma nova conclusão pode contar para streak, respeitando o limite diário existente da conta.
 - Revisão, recarregamento e repetição da concessão não devem incrementar streak.
@@ -219,19 +219,19 @@ Atores: aluno autenticado.
 - A visualização mensal de streak no perfil não deve ser substituída ou refatorada por este fluxo.
 - Continuar deve percorrer as etapas aplicáveis, sem inserir uma tela final genérica adicional.
 
-#### RP-06 — Retornar ao Espaço e permitir revisão
+#### RP-06 — Retornar à Galáxia e permitir revisão
 
 Necessidades do usuário:
 
 - Como aluno, quero retornar ao mapa ou revisar a história, para decidir como continuar o aprendizado.
 
-Resultado: a ação principal retorna ao Espaço após as celebrações aplicáveis; revisar é uma ação secundária.
+Resultado: a ação principal retorna à Galáxia após as celebrações aplicáveis; revisar é uma ação secundária.
 
 Atores: aluno autenticado.
 
 ##### Regras de Negócio
 
-- Sem celebrações adicionais, a ação principal deve retornar diretamente ao Espaço.
+- Sem celebrações adicionais, a ação principal deve retornar diretamente à Galáxia.
 - Havendo celebrações, Continuar deve percorrê-las antes do retorno.
 - A ação principal não deve abrir automaticamente a próxima estrela.
 - Revisar deve permitir consultar a história concluída, sem nova recompensa ou incremento de streak neste fluxo.
@@ -240,8 +240,8 @@ Atores: aluno autenticado.
 ##### Regras de Experiência
 
 - A revisão deve aparecer como ação secundária, distinguível da ação principal.
-- O último passo aplicável deve oferecer retorno ao Espaço.
-- A página Espaço deve aplicar suas próprias regras de ponto de continuidade e navegação.
+- O último passo aplicável deve oferecer retorno à Galáxia.
+- A página Galáxia deve aplicar suas próprias regras de ponto de continuidade e navegação.
 
 #### RP-07 — Recuperar falhas sem refazer a história
 
@@ -276,7 +276,7 @@ Atores: aluno autenticado.
 | Conteúdo da história | Resultado e recompensas | Fornecer os valores fixos de XP e StarCoins de conclusão; autoria fica fora deste PRD. |
 | Registro da conclusão e concessão | Conta do aluno; resultado | Confirmar a conclusão e conceder uma única vez os ganhos configurados. |
 | Conta do aluno | Resultado | Fornecer ganhos confirmados e eventos aplicáveis de novo nível e novo streak. |
-| Resultado | Trilha e Espaço | Retornar o aluno ao mapa e fornecer conclusão confirmada para progressão. |
+| Resultado | Trilha e Galáxia | Retornar o aluno ao mapa e fornecer conclusão confirmada para progressão. |
 | Resultado | Consulta da história | Disponibilizar revisão sem nova recompensa ou incremento de streak. |
 
 O grafo identifica responsabilidades de produto, não uma ordem de implementação.
@@ -289,7 +289,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 2. O sistema registra automaticamente a conclusão e concede os valores configurados de XP e StarCoins, uma única vez.
 3. Após confirmação, apresenta História concluída! e os ganhos recebidos.
 4. O aluno não precisa clicar para receber os ganhos.
-5. Se não houver novo nível ou novo streak, a ação principal retorna diretamente ao Espaço.
+5. Se não houver novo nível ou novo streak, a ação principal retorna diretamente à Galáxia.
 
 #### JN-02 — Celebrar nível e streak
 
@@ -297,7 +297,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 2. Se houver novo nível, o fluxo apresenta a celebração de nível.
 3. Se houver novo streak, apresenta depois a celebração com visualização semanal.
 4. Etapas sem evento correspondente são omitidas.
-5. Ao terminar as celebrações aplicáveis, o aluno retorna ao Espaço.
+5. Ao terminar as celebrações aplicáveis, o aluno retorna à Galáxia.
 
 #### JN-03 — Recarregar o resultado
 
@@ -311,7 +311,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 1. O aluno escolhe a ação secundária de revisão.
 2. Consulta a história e as respostas aprovadas conforme seus estados de leitura.
 3. A consulta não concede XP, StarCoins nem incremento de streak.
-4. A navegação de retorno segue a experiência da história e do Espaço.
+4. A navegação de retorno segue a experiência da história e da Galáxia.
 
 #### JN-05 — Recuperar registro ou concessão pendente
 
@@ -347,9 +347,9 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 | Usar 60 XP e 20 StarCoins como valores universais | Tratar os números como exemplos; usar a configuração de cada história. |
 | Exigir clique para receber a recompensa | Registrar conclusão e conceder automaticamente ao terminar. |
 | Conceder novamente ao revisar ou recarregar | Uma concessão por história e conta; consulta e repetição não geram ganhos adicionais. |
-| Retornar automaticamente ao Espaço ao recarregar | Manter o resultado com os ganhos registrados. |
+| Retornar automaticamente à Galáxia ao recarregar | Manter o resultado com os ganhos registrados. |
 | Contar revisão como atividade para streak | Apenas nova conclusão conta neste fluxo, respeitando o limite diário existente. |
-| Abrir diretamente a próxima estrela | Retornar ao Espaço como destino principal. |
+| Abrir diretamente a próxima estrela | Retornar à Galáxia como destino principal. |
 | Mostrar streak antes de novo nível | Manter novo nível antes de novo streak quando ambos existirem. |
 | Acrescentar etapa de conquistas | Conquistas ficam fora do escopo deste PRD. |
 | Exigir repetição da história em caso de falha | Preservar conclusão pendente e oferecer nova tentativa sem duplicar ganhos. |

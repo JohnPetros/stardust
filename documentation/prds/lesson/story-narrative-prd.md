@@ -6,12 +6,14 @@ source:
     ref: Narrativa, elenco, trilha em dez planetas e reviravoltas aprovados em 2026-11-13
   - type: direct-request
     ref: Energia da nave, dicas na voz de Faísca, vídeos de planeta e de encerramento e substituição da trilha aprovados em 2026-11-13
-last_updated_at: 2026-11-13
+  - type: direct-request
+    ref: Arco narrativo próprio para cada galáxia, com o arco desta trilha encerrado na primeira galáxia, aprovado em 2026-11-14
+last_updated_at: 2026-11-14
 ---
 
 # PRD — Narrativa e universo das histórias
 
-Disponibiliza para: lesson, enredo, elenco e arco narrativo das histórias; Trilha e Espaço, identidade, ordem e conceito dos planetas; autoria de conteúdo, base para a escrita das estrelas; universo Stardust, mitologia reutilizável por outros jogos.
+Disponibiliza para: lesson, enredo, elenco e arco narrativo das histórias; Trilha e Galáxia, identidade, ordem e conceito dos planetas; autoria de conteúdo, base para a escrita das estrelas; universo Stardust, mitologia reutilizável por outros jogos.
 
 Navegação: [Resumo](#1-resumo-executivo) · [Problema](#2-problema-e-oportunidade) · [Público](#3-público-alvo) · [Métricas](#4-objetivos-e-métricas-de-sucesso) · [Requisitos](#5-requisitos-de-produto) · [Dependências](#6-grafo-de-dependências-do-produto) · [Jornadas](#7-jornadas) · [Escopo](#8-fora-do-escopo)
 
@@ -23,7 +25,7 @@ A trilha passa a ter dez planetas em três atos. Cada planeta possui identidade,
 
 A ameaça, o Nulo, não é um vilão: é Lira, uma Stardust que ficou sem valor. O aluno a recupera devolvendo seu valor, sem destruí-la. A responsabilidade de Panda pelo que ocorreu com Lira nunca é confirmada.
 
-Cada planeta é apresentado por um vídeo curto, assistido no Espaço quando o aluno abre o planeta, e a trilha termina com um vídeo de encerramento. Esta trilha substitui a anterior: todos os alunos começam em Aurora.
+Cada planeta é apresentado por um vídeo curto, assistido na Galáxia quando o aluno abre o planeta, e a trilha termina com um vídeo de encerramento. Esta trilha substitui a anterior: todos os alunos começam em Aurora.
 
 Este PRD define o enredo, o elenco, o arco por planeta, as reviravoltas, a mitologia e o conteúdo dos vídeos. O texto das estrelas, a arte, o planeta Limbo e os personagens reservados a outros jogos ficam fora do escopo. O comportamento da página segue [Histórias interativas](lesson-page-prd.md) e a forma de escrever cada estrela segue as [Story Writing Rules](../../rules/story-writing-rules.md).
 
@@ -42,7 +44,7 @@ O documento é prospectivo: descreve a narrativa aprovada, sem afirmar que o con
 | S1 | Este PRD canônico, revisão de 2026-11-13 | Autoridade versionada para enredo, elenco, arco por planeta, reviravoltas e mitologia. |
 | S2 | Pedido e decisões de produto aprovados em 2026-11-13 | Define a liberdade em relação à história atual, o elenco, os nomes, a divisão de Listas, o planeta de tuplas, a reserva do Limbo e a ambiguidade sobre Panda. |
 | S3 | [Histórias interativas](lesson-page-prd.md), revisão de 2026-11-13 | Define sequência de blocos, questões, vidas, histórico, destaque e conclusão da história. |
-| S4 | [Trilha e Espaço](../space/space-page-prd.md) | Define planetas, estrelas, ordem, desbloqueio e navegação. |
+| S4 | [Trilha e Galáxia](../space/galaxy-page-prd.md) | Define planetas, estrelas, ordem, desbloqueio e navegação. |
 | S5 | Catálogo atual de planetas e estrelas, exportado em 2026-10-10 | Evidência auxiliar da história anterior: oito planetas, 39 estrelas e os personagens Panda, a princesa, Sharkorno e os salmonenses. Não substitui as decisões desta revisão. |
 | S6 | [Delegua Language Rules](../../rules/delegua-rules.md) | Define o vocabulário e a validação de todo código Delégua citado na narrativa. |
 | S7 | [What is Ozaria](https://codecombat.zendesk.com/hc/en-us/articles/1500009116581-What-is-Ozaria), consultado em 2026-11-12 | Registra que outro jogo de ensino de programação possui uma personagem chamada Vega; fundamenta o descarte desse nome. |
@@ -80,7 +82,7 @@ Jobs to Be Done:
 | Nomes de planetas e de participações de um planeta foram propostos e não individualmente revisados. | Tratar como nomes vigentes, sujeitos a troca em revisão futura sem alterar o arco. |
 | A distribuição exata dos métodos de lista entre as estrelas do Comboio pertence ao conteúdo. | Validar apenas o recorte por parte definido em RP-04. |
 | Todo código Delégua citado é ilustrativo. | Validar no interpretador do projeto antes de incluir em uma estrela, conforme S6. |
-| A trilha passa de oito para dez planetas e substitui a anterior. | A criação dos planetas no catálogo e a operação sobre o progresso dos alunos pertencem ao gerenciamento e a [Trilha e Espaço](../space/space-page-prd.md), fora deste PRD. |
+| A trilha passa de oito para dez planetas e substitui a anterior. | A criação dos planetas no catálogo e a operação sobre o progresso dos alunos pertencem ao gerenciamento e a [Trilha e Galáxia](../space/galaxy-page-prd.md), fora deste PRD. |
 | Os vídeos são pulados por parte dos alunos. | Validar que nenhuma estrela depende de informação presente apenas em um vídeo. |
 | Não foram aprovadas metas numéricas. | Não inferir metas de engajamento, retenção ou conclusão a partir deste documento. |
 
@@ -99,7 +101,7 @@ Jobs to Be Done:
 | Limbo | Lugar para onde vão os nomes sem valor. Existe na mitologia e não é visitável nesta versão. |
 | Grande Arquivo | Registro, em Chavalor, do nome e do valor de cada coisa do universo. |
 | Energia da nave | O que a nave gasta ao executar um comando errado. É a forma como a ficção apresenta as vidas da história. |
-| Vídeo de apresentação | Vídeo curto que mostra o planeta ao aluno quando ele o abre no Espaço. |
+| Vídeo de apresentação | Vídeo curto que mostra o planeta ao aluno quando ele o abre na Galáxia. |
 | Vídeo de encerramento | Vídeo apresentado após a conclusão da trilha, antes dos agradecimentos. |
 | Elenco fixo | Personagens com arco próprio ao longo da trilha. |
 | Participação | Personagem local de um único planeta, sem arco próprio. |
@@ -229,7 +231,7 @@ Atores: aluno autenticado; autor de conteúdo.
 - Cada planeta deve terminar em uma estrela de desafio.
 - O planeta de Listas deve ser dividido em duas partes, cada uma com seu desafio. A parte 1 exige um desafio novo.
 - O planeta Perene deve vir depois de Arcana, porque tuplas usam funções.
-- Esta trilha deve substituir a trilha anterior. Todos os alunos começam em Aurora, conforme [Trilha e Espaço](../space/space-page-prd.md).
+- Esta trilha deve substituir a trilha anterior. Todos os alunos começam em Aurora, conforme [Trilha e Galáxia](../space/galaxy-page-prd.md).
 - A ordem das estrelas dentro de cada planeta e a quantidade de estrelas por recorte devem seguir a progressão pedagógica do conteúdo.
 
 ##### Regras de Experiência
@@ -409,6 +411,8 @@ Atores: aluno autenticado; equipes de outros jogos do universo Stardust.
 - Devem permanecer abertos ao final: a Primeira Estrela apagada; o Limbo cheio do que foi apagado; a profecia de Ifthenia sem o caso padrão; a primeira expedição de Panda e Lira.
 - Personagens reservados a outros jogos não devem aparecer na trilha, conforme a seção 8.
 - Outros jogos devem usar lugares e termos já apresentados na trilha, mantendo os nomes definidos neste PRD.
+- A trilha deste PRD é a primeira galáxia, conforme [Trilha e Galáxia](../space/galaxy-page-prd.md). O arco do Nulo e de Lira deve terminar nela e não deve continuar em outra galáxia.
+- Cada nova galáxia deve possuir um arco próprio, com começo e fim, e pode usar os ganchos, lugares e termos deste PRD.
 
 ##### Regras de Experiência
 
@@ -453,7 +457,7 @@ Atores: aluno autenticado; autor de conteúdo; produção de vídeo.
 ##### Regras de Experiência
 
 - Os vídeos devem ser animações curtas em motion graphics, com áudio, compreensíveis apenas pela imagem: a compreensão não deve depender do som nem de texto explicativo. Um texto só deve aparecer quando for necessário, como parte da própria animação.
-- Os vídeos devem seguir a reprodução definida em [Trilha e Espaço](../space/space-page-prd.md).
+- Os vídeos devem seguir a reprodução definida em [Trilha e Galáxia](../space/galaxy-page-prd.md).
 - O tom deve ser o mesmo das histórias: bem-humorado, sem assustar.
 - Faísca, Panda e o aluno podem aparecer em qualquer vídeo. Cifra, Ária, Sharkorno e as participações só devem aparecer a partir do planeta em que entram na trama.
 
@@ -462,8 +466,8 @@ Atores: aluno autenticado; autor de conteúdo; produção de vídeo.
 | Produtor/área | Consumidor | Responsabilidade |
 | --- | --- | --- |
 | Narrativa e universo | Conteúdo das estrelas | Fornecer enredo, elenco, pistas, reviravoltas e o que permanece em segredo em cada planeta. |
-| Narrativa e universo | Trilha e Espaço | Fornecer nome, ordem e conceito dos dez planetas e o conteúdo dos vídeos de apresentação e de encerramento. |
-| Trilha e Espaço | Narrativa e universo | Fornecer a abertura do planeta, o diálogo em que o vídeo é reproduzido e o encerramento da trilha. |
+| Narrativa e universo | Trilha e Galáxia | Fornecer nome, ordem e conceito dos dez planetas e o conteúdo dos vídeos de apresentação e de encerramento. |
+| Trilha e Galáxia | Narrativa e universo | Fornecer a abertura do planeta, o diálogo em que o vídeo é reproduzido e o encerramento da trilha. |
 | Histórias interativas | Narrativa e universo | Fornecer a sequência de blocos, questões, destaque e histórico em que a narrativa é apresentada. |
 | Story Writing Rules | Conteúdo das estrelas | Definir ritmo, tipos de questão e estrutura de cada estrela. |
 | Delegua Language Rules | Narrativa e universo | Definir o vocabulário e a validação do código da trama. |
@@ -505,7 +509,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 1. Lira é recuperada e não diz o que aconteceu.
 2. Panda permanece sem memória da primeira expedição.
 3. A Primeira Estrela continua apagada e o Limbo continua cheio.
-4. O aluno retorna ao Espaço com a trilha concluída e os ganchos em aberto.
+4. O aluno retorna à Galáxia com a trilha concluída e os ganchos em aberto.
 5. No encerramento, o vídeo de encerramento mostra essas cenas antes dos agradecimentos.
 
 ## 8. Fora do Escopo
@@ -517,9 +521,10 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 | Limbo | Planeta visitável e o ensino de tratamento de erros; permanece como expansão futura. |
 | Elenco de outros jogos | Os heróis Soma e Retorno, e os Apagadores: Rasura, Barão Falso, Eterno, Estouro e Exceção. |
 | Outros jogos | Mecânicas, enredo e personagens de qualquer jogo além da trilha. |
+| Outras galáxias | Enredo, elenco e planetas dos cursos futuros; cada galáxia terá seu próprio arco. |
 | Gerenciamento da trilha | Criação, reordenação e publicação de planetas e estrelas no catálogo. |
 | Comportamento da página | Vidas, progresso, retomada, destaque, histórico, ambiente e efeitos sonoros, definidos em Histórias interativas. |
-| Reprodução dos vídeos | Abertura do planeta, diálogo, som e falhas de carregamento, definidos em Trilha e Espaço. |
+| Reprodução dos vídeos | Abertura do planeta, diálogo, som e falhas de carregamento, definidos em Trilha e Galáxia. |
 | Desafios | Funcionamento e avaliação das estrelas de desafio. |
 
 ### Decisões descartadas durante a definição
@@ -538,6 +543,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 | Rival chamada Vega | Cifra, porque outro jogo de ensino de programação já possui uma personagem chamada Vega. |
 | Princesa chamada Clave, Léxia, Glosa, Runa, Sonata, Valora ou Rima | Ária. |
 | Listas em um único planeta de nove estrelas | Dois planetas, cada um com seu desafio. |
+| Continuar o arco do Nulo e de Lira nas galáxias seguintes | O arco termina na primeira galáxia; cada galáxia tem seu próprio arco. |
 | Reduzir Listas a seis estrelas mais densas | Dois planetas, cada um com seu desafio. |
 | Tuplas como estrelas dentro de Listas | Planeta próprio, Perene, depois de Arcana. |
 | Incluir o Limbo agora, com tratamento de erros | Limbo reservado como expansão futura. |

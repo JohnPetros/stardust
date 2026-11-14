@@ -33,8 +33,8 @@ imediatamente de prática.
   história não deve contradizê-la nem antecipá-la.
 - Todo trecho de Delégua em uma história também segue as
   [Regras da Linguagem Delégua](delegua-rules.md).
-- Os vídeos dos planetas são assistidos no Espaço, não na história, e pertencem
-  a [Trilha e Espaço](../prds/space/space-page-prd.md). O estudante pode pulá-los,
+- Os vídeos dos planetas são assistidos na Galáxia, não na história, e pertencem
+  a [Trilha e Galáxia](../prds/space/galaxy-page-prd.md). O estudante pode pulá-los,
   portanto uma história deve se sustentar sem eles.
 - Estas regras não cobrem as estrelas de desafio, que são avaliadas de forma
   independente.
@@ -56,7 +56,7 @@ O conteúdo das histórias e as suas autoridades ficam em:
 - `documentation/prds/lesson/text-blocks-and-narration-prd.md` e
   `documentation/prds/lesson/visual-blocks-prd.md`: tipos de bloco de texto e
   visuais.
-- `documentation/prds/space/space-page-prd.md`: abertura do planeta, o vídeo de
+- `documentation/prds/space/galaxy-page-prd.md`: abertura do planeta, o vídeo de
   apresentação de cada planeta e o vídeo de encerramento da trilha.
 - `apps/web/src/mocks/lesson/planets/planet<N>/star<N>/`: `texts.ts` e
   `questions.ts` de cada estrela.
@@ -366,7 +366,7 @@ A dica correta também combina com a Faísca: uma fala curta e direta.
   controla a narração, os efeitos e o som ambiente pelo diálogo de áudio da
   história.
 - **Vídeos dos planetas.** O seu conteúdo é definido em `story-narrative-prd.md` e
-  a sua reprodução em `space-page-prd.md`. Uma história não os reproduz nem os
+  a sua reprodução em `galaxy-page-prd.md`. Uma história não os reproduz nem os
   referencia.
 - **Múltipla escolha.** O modo previsão e as dicas por alternativa são
   definidos em `multiple-choice-prd.md`. Toda questão de múltipla escolha fornece o
