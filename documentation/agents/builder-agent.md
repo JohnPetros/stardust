@@ -73,7 +73,7 @@ of other Builders and of the main task.
    test `tests/use-*.test.ts`, unless the Rule Pack explicitly makes an exception.
 12. Report each discovery immediately to the main task, indicating the
    correct artifact for persistence.
-13. Finish without editing `spec.md` or `evaluation.md`; persistence is
+13. Finish without editing `spec.md`, `plan.md` or `evaluation.md`; persistence is
    done by the main task in the same decision cycle.
 
 The Builder does not create subagents. The main task creates all Builders and
@@ -91,7 +91,7 @@ coordinates the integration of their diffs.
 
 ## Constraints
 
-- Do not update `spec.md`, `evaluation.md`, PRD, Rules or Architecture
+- Do not update `spec.md`, `plan.md`, `evaluation.md`, PRD, Rules or Architecture
   on your own initiative.
 - Do not mark the Spec or the Evaluation as completed.
 - Do not evaluate your own work.

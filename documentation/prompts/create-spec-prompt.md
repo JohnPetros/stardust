@@ -569,8 +569,8 @@ the revised Contract again.
 
 Only then change to `open`. Report the Spec's path/revision/status, the bounded
 outcome, the canonical source/version, the consequent decisions, the sensor coverage, and the
-result of the review. The next step is `implement-spec`; the main task decides the execution
-mechanics.
+result of the review. The next step is [`create-plan`](create-plan-prompt.md), then `implement-spec`; the main task
+decides the execution mechanics.
 
 ## Amendments and continuation
 
@@ -578,12 +578,13 @@ For a material change to the Contract, return the same Spec to `draft`, incremen
 re-read the affected authority, resolve the material decisions, and update the Contract and the
 sensor mapping. Preserve the historical evidence of the Evaluation and mark as `stale`
 only the affected results. Repeat the affected integrity and compatibility checks
-before returning to `open`. Structural reorganization, status change, reruns,
+before returning to `open`, then rerun `create-plan` to reconcile `plan.md` with the new
+revision. Structural reorganization, status change, reruns,
 publication, and conclusion do not increment the revision. A distinct change after
 conclusion may receive a new Spec (`changes/<change>/`).
 
 The Evaluation preserves continuity: acceptance status, current code revision and uncommitted
 scope, valid sensor results, failures/blockers, and the immediate unfinished work.
-A continuing agent reads the Spec, the Evaluation, and the real diff, confirms the record, and chooses
-how to proceed. Do not rebuild a phase ledger nor an execution plan in either of the
-artifacts.
+A continuing agent reads the Spec, `plan.md`, the Evaluation, and the real diff, confirms the record,
+and chooses how to proceed. Do not rebuild a phase ledger nor a task breakdown: `plan.md` only
+tracks the rows of the Spec's path map.
