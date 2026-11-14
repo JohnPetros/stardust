@@ -183,7 +183,7 @@ Atores: aluno autenticado.
 ##### Regras de Experiência
 
 - O aviso imediato é um toast com ícone, nome e nível ("Conquista desbloqueada: Leitor II"), fecha sozinho e leva à página de conquistas (RP-06), na trilha desbloqueada.
-- A celebração é um diálogo apenas informativo: fechá-lo não altera o crédito. Sua única ação é Continuar.
+- A celebração é um diálogo apenas informativo, no diálogo padrão do produto: fechá-lo não altera o crédito. Sua única ação é Continuar; fechar pelo botão do cabeçalho ou por Esc equivale a Continuar.
 - Com uma conquista, o diálogo apresenta:
   - o rótulo "Conquista desbloqueada";
   - o ícone da trilha em destaque, no frame do nível, com um selo do nível (ex.: II);
@@ -195,7 +195,7 @@ Atores: aluno autenticado.
   - o "Total recebido" com a soma das StarCoins.
 - StarCoins são representadas pelo ícone de moedas da biblioteca Lucide (`coins`), na cor de recompensa.
 - Conquistas Especiais são reveladas na celebração.
-- Referência visual: frames "Conquistas / Desktop / Diálogo · Conquista desbloqueada" e "Conquistas / Desktop / Diálogo · Várias conquistas" em `design/stardust.fig`.
+- Referência visual: boards da seção "Conquistas · Conquista desbloqueada" do arquivo Penpot `stardust`.
 
 #### RP-05 — Creditar recompensas automaticamente
 
@@ -239,7 +239,7 @@ Atores: aluno autenticado.
 
 - A lista completa de conquistas fica em uma página dedicada, `/profile/[userSlug]/achievements`, dentro do layout Home.
 - A página é acessível apenas ao dono da conta. O acesso à página de conquistas de outro usuário redireciona para o perfil desse usuário.
-- O botão Conquistas da barra lateral do layout Home navega para a página. A lista de conquistas na gaveta lateral deixa de existir.
+- O botão Conquistas da barra lateral do layout Home navega para a página; no mobile, o item Conquistas da gaveta lateral faz o mesmo. A lista de conquistas na gaveta lateral deixa de existir.
 - O topo da página apresenta um resumo com os níveis desbloqueados sobre o total de níveis do catálogo.
 - A página apresenta uma seção por grupo, na ordem da seção 6.
 - Cada trilha exibe:
@@ -252,17 +252,29 @@ Atores: aluno autenticado.
 
 ##### Regras de Experiência
 
-- Cada trilha é um cartão com o ícone no frame do nível mais alto, o nome com o nível, a meta do próximo nível, uma barra de progresso com o valor atual e a meta (ex.: 18/25 estrelas) e marcadores dos níveis da trilha, preenchidos até o nível desbloqueado.
+- Cada trilha é um cartão com o ícone no frame do nível mais alto, o nome com o nível, quanto falta para o próximo nível (ex.: "Faltam 7 estrelas para o nível III"), uma barra de progresso com o valor atual e a meta e marcadores dos níveis da trilha, preenchidos até o nível desbloqueado.
+- **Nível em texto:** o cartão identifica o nível também por texto (Bronze, Prata, Ouro ou Estelar), não apenas pela cor do frame e dos marcadores.
+- **Trilha bloqueada:** uma trilha sem nível desbloqueado aparece rebaixada, com borda tracejada, ícone esmaecido e o selo "Bloqueada"; as Especiais ainda não reveladas usam o selo "Secreta".
+- **Recompensa visível:** cada cartão mostra as StarCoins do próximo nível.
+- **Quase lá:** abaixo do resumo, a página destaca até três trilhas mais próximas do próximo nível, com quanto falta, a recompensa e o progresso.
+  - As trilhas são ordenadas pelo percentual de progresso até o próximo nível, do maior para o menor; em empate, vem primeiro a que tem menos unidades restantes; em novo empate, vale a ordem do catálogo (seção 6).
+  - Trilhas concluídas e conquistas Especiais não entram no destaque.
+  - Com menos de três candidatas, a seção mostra apenas as existentes; sem nenhuma candidata, a seção não é exibida.
+- **Carregamento:** enquanto a lista carrega, a página mostra o cabeçalho, a mensagem "Carregando conquistas..." e cartões esqueleto no lugar do resumo e das trilhas.
+- **Falha ao carregar:** se a lista não puder ser carregada, a página mostra "Não foi possível carregar as conquistas", informa que o progresso continua salvo e oferece o botão "Tentar novamente".
 - Ao chegar pelo toast de desbloqueio, a página rola até a trilha desbloqueada e a destaca.
+- **Atalhos de grupo no mobile:** abaixo do resumo, uma fileira de chips com os nomes dos grupos leva à seção de cada grupo.
 
 - O ícone da trilha usa um frame por nível:
   - I: bronze;
   - II: prata;
   - III: ouro;
   - IV: verde estelar.
+- Conquistas Especiais, de nível único, usam o frame bronze e contam como Bronze no resumo.
 - As cores dos frames são as variáveis `achievement/tier/bronze`, `silver`, `gold` e `stellar` do design, fixas nos dois temas.
 - Trilhas ainda sem nível desbloqueado exibem o ícone esmaecido.
 - A ordenação por "Ordem padrão", "Desbloqueadas" e "Bloqueadas" e a busca por nome continuam disponíveis.
+- Ao ordenar por "Desbloqueadas" ou "Bloqueadas", a página mantém as seções por grupo, mostra em cada uma apenas as trilhas correspondentes e oculta os grupos que ficarem vazios.
 
 #### RP-07 — Gerir o catálogo no Backoffice
 
@@ -323,7 +335,7 @@ Regras de contagem:
 - **Na mosca:** conta a primeira tentativa de cada questão durante a primeira conclusão da história.
 - **Persistente:** conta uma história quando o aluno fica sem vidas nela e depois a conclui.
 - **Desafios:** contam apenas a primeira conclusão de cada desafio.
-- **De primeira:** conta um desafio concluído sem nenhuma execução anterior com resultado diferente de aceito naquele desafio.
+- **De primeira:** conta um desafio concluído sem nenhuma submissão anterior com resultado diferente de aceito naquele desafio. Execuções de teste do código antes da submissão não contam.
 - **Por conta própria:** exige que o aluno não tenha enviado nenhuma mensagem ao assistente de IA naquele desafio até a conclusão. Para isso, cada conversa com o assistente passa a registrar o desafio de origem.
 - **Versátil:** "todas" considera as categorias com ao menos um desafio publicado.
 - **Constância:** usa a mesma definição de dia com atividade do streak.

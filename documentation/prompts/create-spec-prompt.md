@@ -539,6 +539,17 @@ second relates each changed widget to
 `index.tsx`, `*View.tsx`, Hook, and applicable rule. The absence of either
 of these matrices prevents the `open` state when frontend is in scope.
 
+When the Spec has a Design Contract, check the design review record before the Spec
+Reviewer; do not review the design yourself. Open
+`documentation/design-reviews/<module>/<prd-slug>.md` and confirm that its `verdict` is
+`pass`, that its `prd_last_updated_at` equals the PRD's current `last_updated_at`, and that
+every board in the Design Contract is listed with the digest that
+`pnpm run check:design --digest --board "<board>"` returns now. If the record is missing or
+any of these differs, the review is stale: keep the Spec in `draft` and tell the user which
+boards need review before continuing: `/review-design` when the boards are complete, or
+`/design` when they must change. Reference the record in the
+Design Contract.
+
 After the integrity check, and before `implement-spec`, activate exactly one read-only
 `spec-reviewer-agent` with the exact revision, `architecture.md`, and the Rule Pack of the
 affected layers. The Reviewer verifies only compatibility of boundaries, dependencies, ownership, and

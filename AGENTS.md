@@ -134,6 +134,30 @@ those designs.
   on the local Supabase; sync the remote project only when the task workflow
   requires it.
 
+### Skills
+
+The third-party skills pinned in `skills-lock.json` live in `.agents/skills/` and are
+restored by `scripts/install-skills.mjs`; change the set with `pnpm dlx skills add` or
+`remove`, which update the lock file. Invoke
+the skill whose purpose matches the task instead of working from memory; project
+workflows under `documentation/prompts/` and the rules in this file take precedence
+over a skill's generic advice.
+
+| Skill                | Use when                                                                                       | Project notes                                                                                                   |
+| -------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `impeccable`         | Designing, critiquing, auditing or refining UI: hierarchy, type, color, layout, copy, motion. | In Penpot work, use it through `/design`; its `critique` runs only through the Design Reviewer.                 |
+| `penpot-uiux-design` | Building or changing boards, components or tokens in the Penpot file `stardust`.              | Invoke it before the first `execute_code` call; the Penpot MCP rules above still apply.                         |
+| `frontend-design`    | Choosing an aesthetic direction for new UI or a reshaped one.                                  | `documentation/design.md` and the Penpot file decide; use it only where they leave the direction open.          |
+| `accessibility`      | WCAG 2.2 audits and fixes: contrast, keyboard, focus, screen readers.                          | For Penpot boards, `pnpm run check:design --rule contrast` covers contrast.                                    |
+| `performance`        | Load speed, bundle size, caching and rendering cost.                                           | For a full diagnosis, use the `create-performance-report` workflow.                                            |
+| `core-web-vitals`    | LCP, INP and CLS problems.                                                                     |                                                                                                                 |
+| `best-practices`     | Security, compatibility and code-quality review of web code.                                   | For a security review, use the `create-security-report` workflow.                                               |
+| `seo`                | Meta tags, structured data, sitemaps and search visibility.                                    |                                                                                                                 |
+| `web-quality-audit`  | A combined audit of performance, accessibility, SEO and best practices.                        |                                                                                                                 |
+| `playwright-cli`     | Driving a real browser: exploration, inspection, diagnosis and one-off tasks.                 | Follow the Playwright sections below for environments, accounts and credentials.                                |
+| `gh-cli`             | GitHub operations through `gh`: issues, Pull Requests, CI checks and releases.                 | Pull Requests follow the `open-pr` workflow and the language rules above.                                       |
+| `pencil-design`      | Pencil (`.pen`) design files.                                                                  | Do not use it for StarDust: the Penpot file is the design source and `design/stardust.fig` is frozen.          |
+
 ## Playwright CLI
 
 - Use the Playwright CLI for exploration, visual inspection, diagnosis and
@@ -514,8 +538,9 @@ Use subagents only for the independent, bounded roles that
 [SDD Workflow](documentation/sdd.md) defines. Follow the
 [Builder](documentation/agents/builder-agent.md),
 [Spec Reviewer](documentation/agents/spec-reviewer-agent.md),
-[Implementation Reviewer](documentation/agents/implementation-reviewer-agent.md) and
-[Visual Reviewer](documentation/agents/visual-reviewer-agent.md) contracts.
+[Implementation Reviewer](documentation/agents/implementation-reviewer-agent.md),
+[Visual Reviewer](documentation/agents/visual-reviewer-agent.md) and
+[Design Reviewer](documentation/agents/design-reviewer-agent.md) contracts.
 
 - Assign a clear outcome and exclusive file/responsibility ownership. Explain
   that the workspace is shared and other agents' edits must be preserved.

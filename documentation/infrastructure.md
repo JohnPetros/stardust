@@ -326,6 +326,7 @@ O container do server **não** contém a Supabase CLI nem o `postgresql-client`.
 | Sentry              | Monitoramento de erros                | Sentry Cloud     |
 | Discord             | Notificações de deploy                | Discord Webhooks |
 | Cloudflare          | DNS e (futuro) CDN/DDoS protection    | Cloudflare       |
+| Penpot              | Fonte canônica do design; lido por `check:design` via API REST | Penpot Cloud |
 
 ---
 

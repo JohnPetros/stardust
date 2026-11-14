@@ -7,6 +7,7 @@ rastreável e uma entrega fechada por evidência no PR. Todo o fluxo ocorre na m
 
 ```text
 PRD, Issue, Report ou demanda direta
+→ design ou review-design (quando há UI: boards no Penpot + Design Reviewer + registro da revisão)
 → create-spec
 → Spec Reviewer + revisão do usuário da Spec escrita
 → create-plan
@@ -132,9 +133,10 @@ normalizados na próxima revisão, sem inventar conteúdo ausente.
 | Builder                 | implementa um escopo delimitado de paths contra uma revisão exata (Direct no contexto principal ou irmãos por ownership)   | não edita Spec, Plan, Evaluation, PRD ou Rules; usa o Penpot MCP para UI   |
 | Implementation Reviewer | revisa o candidato integrado contra Contract, Architecture, layer rules e a evidência atual                               | read-only; não corrige nem produz o veredito oficial                 |
 | Visual Reviewer         | compara, em paralelo, as capturas happy-path exigidas com exports atuais dos boards do Penpot, linha a linha do inventário | não edita nem captura; lê o Penpot só pelo MCP; consultivo           |
+| Design Reviewer         | ativado pelos workflows `design` e `review-design`, revisa os boards desenhados contra o PRD e `design.md`: cobertura de regras e estados, fidelidade, crítica impeccable e resultados de `check:design` | não edita arquivos nem o Penpot; lê o Penpot só pelo MCP; consultivo |
 
 Subagentes são irmãos criados pela task principal na task atual. Nenhum subagente cria outro
-agente ou task. `create-spec`, `create-plan`, `implement-spec` e `conclude-spec` são workflows, não papéis.
+agente ou task. `design`, `review-design`, `create-spec`, `create-plan`, `implement-spec` e `conclude-spec` são workflows, não papéis.
 
 ## Artefatos duráveis
 
@@ -288,6 +290,19 @@ compartilhados; frames do Penpot `stardust` e os tokens vinculados a eles. Valor
 sem variável não autoriza cor, medida, componente, ícone ou CSS novo sem token, Rule ou decisão
 registrada. Fallbacks semânticos e adaptações acessíveis devem ser declarados na Spec;
 divergências materiais sem decisão rastreável mantêm a Spec aberta.
+
+Os boards de uma entrega com UI são desenhados ou alterados pelo workflow `design`
+(`documentation/prompts/design-prompt.md`), que roda `check:design`, ativa o Design Reviewer,
+corrige os findings e grava o registro da revisão em
+`documentation/design-reviews/<módulo>/<slug-do-prd>.md`, com o digest de cada board revisado.
+`create-spec` não revisa o design: antes do Spec Reviewer, confere que cada board do Design
+Contract está no registro com veredito `pass`, que o digest atual
+(`pnpm run check:design --digest --board <board>`) é igual ao registrado e que o
+`last_updated_at` do PRD não mudou. Board ausente, digest diferente ou PRD alterado tornam o
+registro desatualizado: a Spec permanece em `draft` até que o workflow `design` revise esses
+boards, ou que `review-design` (`documentation/prompts/review-design-prompt.md`) revise boards
+existentes sem alterá-los e grave o registro quando a revisão passar. O Design Contract
+referencia o registro.
 
 Se o Penpot MCP não estiver disponível, ou o arquivo Penpot `stardust` não estiver conectado a ele, a
 inspeção ou comparação que depende do design fica bloqueada e é registrada como tal; não

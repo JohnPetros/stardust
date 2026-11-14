@@ -75,3 +75,19 @@ ordem, separados por ` / `:
   principais nesta página.
 - Não crie páginas novas sem perguntar ao usuário. Uma tela sem página
   correspondente continua pertencendo a Desktop ou Mobile.
+
+## Registros de revisão de design
+
+- Cada PRD com boards revisados tem um registro em
+  `documentation/design-reviews/<módulo>/<slug-do-prd>.md`, com o mesmo nome do
+  arquivo do PRD. Ele é escrito em inglês pelos workflows `design` e
+  `review-design` (`documentation/prompts/design-prompt.md` e
+  `review-design-prompt.md`), que definem o formato do frontmatter e das seções.
+- Grave ou atualize o registro somente depois da última correção nos boards, com
+  o `penpot_revn` e o digest de cada board vindos de
+  `pnpm run check:design --digest --board "<board>"`. Não edite digests à mão.
+- Qualquer alteração em um board revisado ou no `last_updated_at` do PRD torna o
+  registro desatualizado; ele volta a valer só depois de uma nova revisão por
+  `design` ou `review-design`.
+- O registro guarda findings resolvidos e decisões, não o relatório bruto do
+  Design Reviewer.
