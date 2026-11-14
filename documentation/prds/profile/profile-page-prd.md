@@ -4,7 +4,7 @@ status: draft
 source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/milestone/28
-last_updated_at: 2026-04-18
+last_updated_at: 2026-11-14
 ---
 
 # PRD — Página de Perfil
@@ -120,7 +120,7 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 - **Estrelas completadas:** exibir a quantidade de estrelas desbloqueadas ou concluídas pelo usuário.
 - **Planetas concluídos:** exibir a quantidade de planetas concluídos pelo usuário.
 - **Conquistas adquiridas:** exibir a quantidade total de conquistas desbloqueadas pelo usuário.
-- **Streak:** exibir a ofensiva atual do usuário com base no status semanal disponível.
+- **Sequência:** exibir a sequência atual do dono do perfil, em dias seguidos, junto ao calendário mensal de dias estudados (RP-07).
 
 ##### Regras de Experiência
 
@@ -167,12 +167,14 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 ##### Regras de Negócio
 - **Origem da lista:** a listagem deve considerar apenas conquistas desbloqueadas pelo dono do perfil.
-- **Dados da conquista:** cada item deve apresentar, no mínimo, identificação da conquista, nome, descrição, ícone e recompensa.
+- **Dados da conquista:** cada item representa um nível desbloqueado de uma trilha e deve apresentar, no mínimo, o ícone da trilha no frame do nível, o nome com o nível, a descrição e a recompensa, conforme o [PRD de Conquistas](achievements-prd.md).
 - **Estado vazio:** quando o usuário não possuir conquistas desbloqueadas, o sistema deve exibir uma mensagem de lista vazia.
+- **Página de conquistas:** para o dono do perfil, a seção oferece o link "Ver todas", que leva à página de conquistas (RP-06 de Conquistas). Visitantes não veem o link.
 
 ##### Regras de Experiência
 
 - **Rolagem da lista:** a área de conquistas deve suportar navegação em listas extensas.
+- **Indicador:** "Conquistas adquiridas" conta os níveis desbloqueados.
 - **Feedback vazio:** o usuário deve receber uma mensagem clara quando não houver itens para exibir.
 
 ---
@@ -207,11 +209,45 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 - **Feedback vazio:** cada aba deve informar claramente quando não houver conteúdo.
 - **Navegação por item:** cada linha da lista deve levar para o conteúdo correspondente.
 
+---
+
+#### RP-07 — Calendário da Sequência
+
+Necessidades do usuário:
+
+- Quero ver em quais dias estudei, mês a mês, para acompanhar minha constância além da semana atual.
+
+Resultado: o perfil mostra a sequência atual e um calendário mensal com os dias estudados.
+
+Atores: dono do perfil e visitantes autenticados.
+
+**Descrição:** Substituir o quadro semanal de sequência do perfil por um calendário mensal dos dias estudados pelo dono do perfil.
+
+##### Regras de Negócio
+
+- **Dia estudado:** um dia conta como estudado quando a conta registrou atividade que conta para a sequência, com a mesma definição usada pela celebração de novo streak ([Resultado e recompensas da história](../lesson/story-result-prd.md)) e pelas conquistas de Constância ([PRD de Conquistas](achievements-prd.md)).
+- **Histórico diário:** a conta passa a registrar cada dia estudado. O registro começa quando a funcionalidade é lançada; meses anteriores aparecem sem dias estudados.
+- **Mês inicial:** o calendário abre no mês atual.
+- **Navegação entre meses:** o usuário pode voltar mês a mês até o mês de criação da conta. Não é possível avançar além do mês atual.
+- **Visibilidade:** o calendário segue a visibilidade do perfil; o dono e os visitantes autenticados o veem.
+- **Sequência atual:** o topo do calendário exibe a sequência atual em dias seguidos.
+
+##### Regras de Experiência
+
+- **Semana atual:** a linha da semana atual fica destacada no mês atual, como continuação da visualização semanal da celebração de novo streak.
+- **Dia estudado:** aparece preenchido com a cor de ação.
+- **Dia sem estudo:** aparece neutro, como círculo vazio, sem cor de erro.
+- **Hoje:** recebe um anel de destaque, esteja estudado ou não.
+- **Dias futuros:** aparecem esmaecidos e sem marcação.
+- **Legenda:** o calendário identifica os estados de dia estudado e dia sem estudo.
+- **Vocabulário:** a interface usa "sequência" e "dias seguidos", não "streak".
+
 ## 6. Grafo de Dependências do Produto
 
 | Produtor/área | Consumidor | Responsabilidade |
 | --- | --- | --- |
 | profile | Não explicitado no documento legado | Validar e manter o contrato de produto correspondente. |
+| Conta do aluno | Perfil | Fornecer a sequência atual e o histórico de dias estudados por mês, desde o lançamento do registro diário. |
 
 ## 7. Jornadas
 
@@ -263,4 +299,9 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 ### Decisões descartadas durante a definição
 
-- **Nenhum item descartado confirmado:** a auditoria da implementação e as respostas fornecidas não confirmaram requisitos removidos ou adiados de forma explícita.
+| Alternativa descartada | Decisão |
+| --- | --- |
+| Calendário em um popover a partir da chama do cabeçalho | O calendário fica apenas no perfil (RP-07). |
+| Mostrar somente o mês atual | O usuário navega até o mês de criação da conta. |
+| Calendário visível apenas para o dono | O calendário segue a visibilidade do perfil. |
+| Marcar dias sem estudo em vermelho | Dias sem estudo ficam neutros, como na celebração de novo streak. |
