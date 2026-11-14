@@ -16,6 +16,7 @@ export type CodeSnippetProps = {
   isRunnable?: boolean
   editorHeight: number
   codeEditorRef: React.RefObject<PlaygroundCodeEditorRef | null>
+  hasToolBar: boolean
   canExplainCode: boolean
   explanation: string
   isCodeExplanationDialogOpen: boolean
@@ -40,6 +41,7 @@ export const CodeSnippetView = ({
   isRunnable = false,
   editorHeight,
   codeEditorRef,
+  hasToolBar,
   canExplainCode,
   explanation,
   isCodeExplanationDialogOpen,
@@ -65,7 +67,7 @@ export const CodeSnippetView = ({
         isRunnable ? `h-[${editorHeight}px]` : 'h-auto',
       )}
     >
-      {(isRunnable || canExplainCode) && (
+      {hasToolBar && (
         <ToolBar.Root className='not-prose flex items-center justify-end gap-2 border-b border-gray-700 p-2'>
           {canExplainCode && (
             <Tooltip content='Explicar codigo com IA' direction='bottom'>

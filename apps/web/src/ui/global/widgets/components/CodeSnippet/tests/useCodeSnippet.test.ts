@@ -35,6 +35,7 @@ describe('useCodeSnippet', () => {
 
   const Hook = (params?: {
     lessonCodeExplanation?: LessonCodeExplanation
+    isCodeExplanationEnabled?: boolean
     code?: string
   }) =>
     renderHook(() =>
@@ -43,6 +44,7 @@ describe('useCodeSnippet', () => {
         codeEditorRef,
         lessonService,
         lessonCodeExplanation: params?.lessonCodeExplanation,
+        isCodeExplanationEnabled: params?.isCodeExplanationEnabled ?? true,
       }),
     )
 
@@ -71,6 +73,54 @@ describe('useCodeSnippet', () => {
     lessonService.explainCode.mockResolvedValue(
       createResponse({ body: { explanation: 'Explicacao gerada' }, statusCode: 200 }),
     )
+  })
+
+  it('should allow explaining code when the code explanation is enabled for a lesson source', () => {
+    const { result } = Hook({ lessonCodeExplanation: { source: 'quiz' } })
+
+    expect(result.current.canExplainCode).toBe(true)
+  })
+
+  it('should not allow explaining code when the code explanation is disabled', () => {
+    const { result } = Hook({
+      lessonCodeExplanation: { source: 'story', chunkIndex: 4 },
+      isCodeExplanationEnabled: false,
+    })
+
+    expect(result.current.canExplainCode).toBe(false)
+  })
+
+  it('should keep the tool bar for lesson code when the code explanation is disabled', () => {
+    const { result } = Hook({
+      lessonCodeExplanation: { source: 'story', chunkIndex: 4 },
+      isCodeExplanationEnabled: false,
+    })
+
+    expect(result.current.hasToolBar).toBe(true)
+  })
+
+  it('should not have a tool bar when the code is neither runnable nor lesson code', () => {
+    const { result } = Hook()
+
+    expect(result.current.hasToolBar).toBe(false)
+  })
+
+  it('should ignore the explanation button click when the code explanation is disabled', async () => {
+    window.localStorage.setItem(storyStorageKey, JSON.stringify('Explicacao em cache'))
+
+    const { result } = Hook({
+      lessonCodeExplanation: { source: 'story', chunkIndex: 4 },
+      isCodeExplanationEnabled: false,
+    })
+
+    await act(async () => {
+      await result.current.handleCodeExplanationButtonClick()
+    })
+
+    expect(result.current.isCodeExplanationDialogOpen).toBe(false)
+    expect(result.current.isCodeExplanationAlertDialogOpen).toBe(false)
+    expect(lessonService.fetchRemainingCodeExplanationUses).not.toHaveBeenCalled()
+    expect(lessonService.explainCode).not.toHaveBeenCalled()
   })
 
   it('should open the explanation dialog from story cache hit without calling the service', async () => {
