@@ -2,8 +2,8 @@
 prd: documentation/prds/space/galaxies-page-prd.md
 prd_last_updated_at: 2026-11-14
 reviewed_at: 2026-11-14
-penpot_revn: 412
-verdict: findings
+penpot_revn: 515
+verdict: pass
 boards:
   - page: 🖥️ Desktop
     board: Espaço / Galáxias / Desktop
@@ -15,6 +15,12 @@ boards:
     board: Espaço / Galáxias / falha ao carregar / Desktop
     digest: d8a2c1105cb78184
   - page: 🖥️ Desktop
+    board: Espaço / Galáxias / galáxia em breve / Desktop
+    digest: 2e8bb025274b1d9a
+  - page: 🖥️ Desktop
+    board: Espaço / Galáxias / Toast / falha ao entrar / Desktop
+    digest: 467452f2366375c3
+  - page: 🖥️ Desktop
     board: Espaço / Galáxia / Desktop
     digest: a3cde18189fde36e
   - page: 🖥️ Desktop
@@ -22,54 +28,72 @@ boards:
     digest: fa1deb0979b65c33
   - page: 📱 Mobile
     board: Espaço / Galáxias / Mobile
-    digest: 7165c02b1b126cff
+    digest: 6b905b3bf9b59572
   - page: 📱 Mobile
     board: Espaço / Galáxias / carregando / Mobile
     digest: 99ccf2bcf77fa160
   - page: 📱 Mobile
     board: Espaço / Galáxias / falha ao carregar / Mobile
-    digest: 8487b681ddb02ad2
+    digest: ae6fb265ab9d32b0
+  - page: 📱 Mobile
+    board: Espaço / Galáxias / galáxia em breve / Mobile
+    digest: 52e35f1e0c705840
+  - page: 📱 Mobile
+    board: Espaço / Galáxias / Toast / falha ao entrar / Mobile
+    digest: 7703ec62b57ffb87
   - page: 📱 Mobile
     board: Espaço / Galáxia / Mobile
-    digest: 56633d3e77f3ef74
+    digest: fdec4ddb48d14a6c
 ---
 
 # Design review: Página de Galáxias
 
 ## Scope
 
-RP-01 to RP-05 and JN-01 to JN-04 of the Galaxies Page PRD.
+RP-01 to RP-05 and JN-01 to JN-07 of the Galaxies Page PRD.
 
-- RP-01, RP-02, RP-03, RP-05, JN-01 to JN-03: the three `Espaço / Galáxias / … / Desktop` boards
-  and the three `Espaço / Galáxias / … / Mobile` boards (map, loading, load failure).
-- RP-04: the `Controle de galáxia` layer added to `Main › Header` of the existing
-  `Espaço / Galáxia / Desktop` and `Espaço / Galáxia / planeta liberado / Desktop` boards (named `Espaço / Desktop …`
-  until the page was renamed to Galáxia on 2026-11-14). The rest of those
-  two boards is outside this review and keeps its baseline debt.
+- RP-01, RP-02, RP-03, RP-05, JN-01 to JN-03: the `Espaço / Galáxias / … / Desktop` and
+  `Espaço / Galáxias / … / Mobile` boards for the map, loading and load failure.
+- Announced galaxy (RP-01 to RP-03, JN-07): `Espaço / Galáxias / galáxia em breve /
+  Desktop` and `/ Mobile`.
+- Failure when entering a galaxy (RP-03, JN-05): `Espaço / Galáxias / Toast / falha ao
+  entrar / Desktop` and `/ Mobile`, standalone frames with the `Notificação / Toast`
+  component, variant `Tipo=Erro`.
+- RP-04 on desktop: the `Controle de galáxia` layer in `Main › Header` of
+  `Espaço / Galáxia / Desktop` and `Espaço / Galáxia / planeta liberado / Desktop`. The
+  rest of those two boards is outside this review and keeps its baseline debt.
+- RP-04 on mobile: the `Controle de galáxia` strip of `Espaço / Galáxia / Mobile`. That
+  board draws only the first viewport of the mobile Galáxia page (header, control, planet
+  header, four stars, bottom navigation) to place the control. It has no starfield or
+  rocket, and the mobile trail itself belongs to a review under `galaxy-page-prd.md`.
 
-`check:design` reports no new error or warning on any of the eight boards at file
-revision 390. The Design Reviewer ran two rounds; the second covered only the boards
-changed after the first.
+`check:design` reports no new error or warning on any of the thirteen boards at file
+revision 515. The Design Reviewer ran four rounds; the third covered all boards drawn
+until then and the fourth the announced-galaxy boards, the toast boards and the mobile
+control, against the PRD revised on 2026-11-14. No `missing` or `contradicted` finding
+is open.
 
-## Open findings
+Two notes on the evidence:
 
-The PRD was revised after the review rounds (interview of 2026-11-14) and now settles the
-two gaps below. The verdict stays `findings` because the boards do not yet reflect them.
-
-- **Galaxy control on mobile (RP-04, JN-01 step 1).** Drawn after the review rounds as a
-  full-width 48 px strip below the header on the new board `Espaço / Galáxia / Mobile` (section
-  `Galáxia · Trilha` of the `📱 Mobile` page). `check:design` reports nothing new on it,
-  but the Reviewer has not seen this board. The board draws the first viewport of the
-  mobile Galáxia page (header, control, planet header, four stars, bottom navigation) to
-  place the control; the rest of the mobile trail is not drawn.
-- **Failure when entering a galaxy (RP-03, JN-05).** The PRD now defines an error toast
-  that names the galaxy. No board draws it; decide whether it reuses the toast component
-  without a dedicated board.
-- **Current galaxy unpublished (RP-03, JN-06).** New in the PRD; it changes no board, and
-  has not been through the Reviewer.
+- The toast boards were resized after the fourth round (see the first resolved finding)
+  and were not sent back to the Reviewer; the fix was checked by export.
+- The digests of `Espaço / Galáxias / Mobile` and `Espaço / Galáxias / falha ao carregar /
+  Mobile` changed between revisions 412 and 462 without an intended edit. Both exports
+  were checked and look as reviewed; the cause is unknown.
 
 ## Resolved findings
 
+- The toast instance had a fixed 70 px height and clipped the bottom padding and the
+  4 px time bar of the three-line message (round 4) → the instance now sizes to its
+  content and both frames are 87 px tall.
+- No board drew the failure when entering a galaxy (round 3) → the two toast boards.
+- The mobile `Controle de galáxia` strip read as an informative bar (round 3) → its
+  stroke uses `color.border`, as the desktop control.
+- The PRD did not say where the galaxy name of the return action comes from while the
+  page loads or after a load failure (round 3) → RP-04 now states that it comes from the
+  current galaxy of the account, with “Voltar” as the fallback.
+- The PRD forbade “Em breve” galaxies and any state label → revised with the user on
+  2026-11-14: the catalog has an announced state, shown as “Em breve”.
 - “Tentar novamente” was clipped on both failure boards (the label box kept a stale
   width), reported by the user → label and button resized to fit; particles that sat
   inside buttons, texts or plates were removed.
@@ -97,11 +121,26 @@ two gaps below. The verdict stays `findings` because the boards do not yet refle
 
 ## Decisions
 
-- The nine boards were renamed to the pattern
+- Announced galaxy (`Galáxia Orientação a Objetos · em breve`) → illustration at 40%
+  opacity, neutral “Em breve” chip in the position of “Você está aqui”, dashed `Placa`
+  border, no progress and no padlock. It is not a control: it has no hover, pressed or
+  focus treatment.
+- Toast position over the page → no board. The toast uses the Web App's existing toast
+  position on both viewports; the boards are standalone frames, as the other toasts of
+  the file.
+- Return action with the fallback label “Voltar” → no board; it is the same `Botão`
+  (Contorno) with a shorter label.
+- Current galaxy unpublished (JN-06) → no board; the student lands on the Galáxia page of
+  another galaxy, which is already drawn.
+- Loading skeleton with an announced galaxy → kept. The skeleton shows a progress line
+  for both galaxies and a 178 px `Placa` against the 166 px announced one, because the
+  state of each galaxy is unknown while loading.
+- Subtitle “Escolha em qual você quer estudar” with a single published galaxy → kept;
+  the PRD defines no variant.
+- The first nine boards were renamed to the pattern
   `<Módulo> / <Página> / <Componente> / <Estado ou variante> / <Desktop|Mobile>` by the
   user's decision of 2026-11-14, now in `documentation/rules/penpot-rules.md`. Only the
-  names changed; the digests above were taken after the rename and `check:design`
-  reports nothing new at revision 412. The seven other boards of the section
+  names changed; `check:design` reported nothing new after the rename, at revision 412. The seven other boards of the section
   `Galáxia · Trilha` (six video dialogs and the lock animation) were renamed to the same
   pattern, for example `Espaço / Galáxia / Diálogo de vídeo de apresentação / sem som /
   Desktop`; they are outside this review and have no digest here.
@@ -117,7 +156,7 @@ two gaps below. The verdict stays `findings` because the boards do not yet refle
   first read “Voltar à galáxia”. Only names and that label changed, so the boards were not sent
   back to the Reviewer; the digests above were taken after the rename. “Space” in this
   record means that page.
-- Space with a single published galaxy (RP-04, JN-04) → no board. It is the Space header
+- Space with a single visible galaxy (RP-04, JN-04) → no board. It is the Space header
   as it was before this change, without `Controle de galáxia`. Direct access to the page
   with one galaxy is a redirect and has nothing to draw.
 - Three or more galaxies and long names (implied maximum) → no board. The stagger
