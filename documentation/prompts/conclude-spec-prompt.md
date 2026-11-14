@@ -11,7 +11,7 @@ current task; do not create a new thread. Consume the valid implementation evide
 the conclusion does not start another broad validation or review cycle.
 
 Invoking `conclude-spec` does not, by itself, authorize any external mutation. Commit, `push`,
-creating or updating a PR (the `commit-code` → `open-pr` chain) and syncing
+creating or updating a PR (the `commit` → `open-pr` chain) and syncing
 with `main` require explicit, separate authorization from the user, given in the request itself. Without
 it, conclude locally, stop before any external mutation and report publication as
 not requested; a local-only request skips commit and PR. Even when authorized, publication
@@ -162,14 +162,14 @@ that evidence. Additional runs require a missing result, a covered
 behavior/dependency/fixture/configuration change or a concrete unresolved finding. Record checks skipped or blocked by the environment as limitations, never as
 successes; repeat transient infrastructure failures only with concrete evidence.
 
-Before calling `commit-code`, confirm the mandatory sensors from `AGENTS.md`
+Before calling `commit`, confirm the mandatory sensors from `AGENTS.md`
 (`check:code` and `check:types` in the affected workspaces and consumers, `test:unit` with the
 affected files), `check:spec-implementation -- <spec> --base <base-commit>` and
 `check:test-integrity -- --base <base-commit>` against the final HEAD. Coverage/ratchet
 (`test:coverage`, `check:coverage`) and full suites only apply with demonstrated impact on the
 workspace, a Spec requirement or a user request; CI runs them. Reuse the current
 recorded results and run only what is missing or stale. A green local build
-is a precondition for calling `commit-code`; if there is no current build evidence, run
+is a precondition for calling `commit`; if there is no current build evidence, run
 it once. A result other than `passed` prevents the conclusion.
 
 ## Delivery disposition and lessons
@@ -228,7 +228,7 @@ operational ledger; include the required factual documentation in the delivery's
 For an explicitly authorized publication:
 
 1. Verify the branch, the sync result, the scoped diff and the current evidence.
-2. Invoke `commit-code` to create the delivery's intentional commits, respecting its
+2. Invoke `commit` to create the delivery's intentional commits, respecting its
    staging, grouping, message and path gates.
 3. Invoke `open-pr` to publish or update a single delivery PR, reusing the prepared
    commits and the valid verification evidence, request the Codex Review and
@@ -236,7 +236,7 @@ For an explicitly authorized publication:
 4. Verify base, head SHA, title/body traceability and the publication state;
    record the branch, commit hashes and the PR URL.
 
-`open-pr` and `commit-code` keep their own authorization gates. Without authorization,
+`open-pr` and `commit` keep their own authorization gates. Without authorization,
 stop before any external mutation and request it. If there are staged changes, out-of-scope
 changes or grouping ambiguity, preserve them and stop according to the rules of the
 called workflows. Do not create duplicate PRs or use ad hoc publication to bypass the

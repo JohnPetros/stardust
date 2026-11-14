@@ -13,7 +13,7 @@ PRD, Issue, Report ou demanda direta
 → verificação integrada (automatizada + manual + visual)
 → Implementation Reviewer (+ Visual Reviewer em paralelo, quando há UI)
 → check-spec-implementation + check:test-integrity + evaluation.md ready
-→ conclude-spec → commit-code → open-pr → CI do HEAD do PR
+→ conclude-spec → commit → open-pr → CI do HEAD do PR
 → Spec e Evaluation completed
 ```
 
@@ -365,7 +365,7 @@ somente quando faltar decisão de produto, autoridade, ambiente, segurança ou e
 conformance atual e nenhuma evidência bloqueante. Com autorização para commit/push/PR:
 
 1. repete preflight e conformance no candidato atual;
-2. invoca `commit-code` para commits intencionais;
+2. invoca `commit` para commits intencionais;
 3. invoca `open-pr` para criar ou atualizar um PR ready-for-review;
 4. aguarda cada workflow aplicável no HEAD atual do PR;
 5. registra nome, resultado, URL e SHA em Evaluation;

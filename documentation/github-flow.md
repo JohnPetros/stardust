@@ -121,7 +121,7 @@ Examples:
 
 Never use `--no-verify` or amend without an explicit request. See
 [`rules/commit-rules.md`](rules/commit-rules.md) for the approved prefixes and
-[`prompts/commit-code-prompt.md`](prompts/commit-code-prompt.md) for the
+[`prompts/commit-prompt.md`](prompts/commit-prompt.md) for the
 automated commit procedure.
 
 ### 5. Synchronize with `main`

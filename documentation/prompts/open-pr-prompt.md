@@ -36,7 +36,7 @@ When the delivery comes from a direct request, do not invent a Spec, PRD, Issue,
 requirements, or external records to fill in the PR.
 
 Require explicit authorization before committing, running `push`, and creating or updating
-the PR. In standalone use, invoke `commit-code` for pending changes in the
+the PR. In standalone use, invoke `commit` for pending changes in the
 scope. When called by `conclude-spec`, reuse the commits already prepared.
 
 ## Delivery inspection
