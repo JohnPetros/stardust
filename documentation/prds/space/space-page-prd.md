@@ -12,7 +12,9 @@ source:
     ref: Cadeado sobre os planetas ainda não abertos e animação de abertura antes do vídeo aprovados em 2026-11-13
   - type: direct-request
     ref: Vídeos em motion graphics com áudio, compreensíveis pela imagem e sem legendas separadas, aprovados em 2026-11-13
-last_updated_at: 2026-11-13
+  - type: direct-request
+    ref: Cada curso representado por uma galáxia, com progresso da trilha por galáxia e conta compartilhada, aprovado em 2026-11-14
+last_updated_at: 2026-11-14
 ---
 
 # PRD — Trilha e Espaço
@@ -30,6 +32,8 @@ A experiência deve mostrar onde continuar, o que já foi concluído e o que ain
 Os planetas passam a ser interativos. Um planeta liberado precisa ser aberto pelo aluno: o clique libera suas estrelas e apresenta, em um diálogo, o vídeo de apresentação do planeta, que pode ser revisto depois. Todo planeta ainda não aberto mostra um cadeado sobre sua ilustração; no clique, o cadeado se abre e se desfaz antes de o diálogo aparecer. Ao concluir toda a trilha, um vídeo de encerramento precede os agradecimentos. Nesta versão, o planeta oferece apenas esse vídeo.
 
 A trilha de dez planetas definida em [Narrativa e universo das histórias](../lesson/story-narrative-prd.md) substitui a trilha anterior: todos os alunos começam no primeiro planeta e mantêm o que acumularam na conta.
+
+Cada curso do Stardust passa a ser representado por uma galáxia. A trilha de dez planetas é a primeira galáxia; cursos futuros serão outras galáxias, cada uma com trilha, progresso e história próprios, enquanto XP, moedas, nível, sequência, ranking e conquistas continuam sendo da conta. RP-13 registra essa decisão; a escolha de galáxia na interface e a segunda galáxia ficam fora desta entrega.
 
 Esta revisão é prospectiva: substitui a descrição anterior da Página de Espaço por regras para a reformulação aprovada. Preserva o caminho canônico e os IDs RP-01 a RP-07, com atualização explícita de seus comportamentos. Não declara que os novos desenhos ou regras já estejam implementados.
 
@@ -58,6 +62,7 @@ Pesquisa competitiva não é material para esta revisão: as decisões decorrem 
 | S9 | PlanetView e página de encerramento existentes na Web App | Evidência auxiliar: o planeta atual é uma ilustração sem interação e os agradecimentos já existem como encerramento. |
 | S10 | Decisões de produto sobre o cadeado do planeta aprovadas em 2026-11-13 | Definem o cadeado sobre a ilustração dos planetas bloqueados e liberados, o movimento em loop apenas no planeta liberado e a animação de abertura que precede o diálogo do vídeo. |
 | S11 | Decisões de produto sobre o formato dos vídeos aprovadas em 2026-11-13 | Definem os vídeos como animações em motion graphics com áudio, compreensíveis pela imagem, com texto incorporado à animação apenas quando necessário, sem legendas separadas e com controle de som no diálogo. |
+| S12 | Decisões de produto sobre galáxias aprovadas em 2026-11-14 | Definem a galáxia como representação de um curso, o arco narrativo próprio de cada galáxia, o que pertence à conta e o que pertence à galáxia, e o acesso livre a todas as galáxias. |
 
 A lista de planetas e o conteúdo dos vídeos pertencem a S8. Esta revisão não define roteiros, valores de recompensas ou quantidade obrigatória de estrelas.
 
@@ -99,6 +104,7 @@ Jobs to Be Done:
 | A ferramenta de produção dos vídeos não é dependência da aplicação | Não exigir da Web App nenhum componente de composição ou renderização de vídeo. |
 | Não há metas numéricas novas | Não inventar metas ou exigir novos eventos de analytics nesta entrega. |
 | Detalhes mobile apresentados em painel inferior | A experiência mobile não deve usar expansão dos detalhes abaixo da estrela. |
+| Existe uma única galáxia publicada; as galáxias foram aprovadas como decisão de produto, sem escopo de execução | RP-13 define o resultado esperado. Não exigir seleção de galáxia, mudança de catálogo ou de progresso nesta entrega. |
 
 ## 5. Requisitos de Produto
 
@@ -106,6 +112,8 @@ Jobs to Be Done:
 
 | Conceito | Regra de produto |
 | --- | --- |
+| Galáxia | Representa um curso do Stardust; contém planetas em ordem e possui trilha, progresso e história próprios. |
+| Trilha | Sequência de planetas e estrelas de uma galáxia. |
 | Planeta | Tema da trilha; contém estrelas em ordem. |
 | Estrela | Unidade de progressão; contém uma história ou um desafio de código. |
 | Bloqueada | Não pode ser iniciada; falta cumprir o requisito de progressão. |
@@ -446,6 +454,38 @@ Atores: aluno autenticado; área responsável pelo catálogo e pelo progresso.
 - O aluno existente deve encontrar a nova trilha sem indicação de que perdeu XP, moedas, nível, sequência ou conquistas.
 - O ponto de continuidade do aluno existente deve ser o primeiro planeta, conforme RP-02.
 
+#### RP-13 — Galáxias como cursos
+
+Necessidades do usuário:
+
+- Como aluno, quero estudar outro curso em uma nova galáxia, para aprender outro assunto sem perder o que conquistei.
+
+Resultado: cada curso é uma galáxia com trilha, progresso e história próprios; o que o aluno acumulou pertence à conta e vale em todas as galáxias.
+
+Atores: aluno autenticado; área responsável pelo catálogo e pelo progresso.
+
+##### Regras de Negócio
+
+- Cada curso do Stardust deve ser representado por uma galáxia. Uma galáxia contém planetas em ordem, e RP-01 a RP-11 se aplicam à trilha de cada galáxia.
+- Os dez planetas definidos em [Narrativa e universo das histórias](../lesson/story-narrative-prd.md) formam a primeira galáxia. O progresso do aluno nesses planetas pertence a ela.
+- O progresso da trilha deve ser próprio de cada galáxia: planetas liberados e abertos, estrelas concluídas, ponto de continuidade e conclusão total.
+- XP, moedas, nível, sequência, ranking e conquistas devem pertencer à conta e ser os mesmos em todas as galáxias.
+- Todas as galáxias publicadas devem ficar disponíveis desde o início. Nenhuma galáxia exige a conclusão de outra.
+- Em cada galáxia, o primeiro planeta começa liberado e ainda não aberto, conforme RP-08 e RP-10.
+- Cada galáxia deve possuir um arco narrativo próprio, com começo e fim. O arco definido em Narrativa e universo das histórias termina na primeira galáxia.
+- A conclusão total, o vídeo de encerramento e os agradecimentos de RP-06 e RP-11 devem ser avaliados por galáxia.
+- O aluno novo deve começar na primeira galáxia, sem etapa de escolha de curso no cadastro.
+- Enquanto existir uma única galáxia publicada, o Espaço não deve apresentar seleção de galáxia; o aluno entra diretamente na trilha.
+- Alternar entre galáxias não deve alterar o progresso de nenhuma delas.
+- O foguete deve ser o mesmo em todas as galáxias, conforme RP-02.
+- A seleção de galáxia na interface, a associação de planetas a galáxias no catálogo e a publicação de uma segunda galáxia exigem escopo próprio e não são autorizadas por este requisito isoladamente.
+
+##### Regras de Experiência
+
+- A interface deve usar “galáxia” para se referir a um curso.
+- Ao entrar em uma galáxia, o mapa deve se posicionar no ponto de continuidade daquela galáxia, conforme RP-03.
+- Ao começar uma nova galáxia, o aluno não deve encontrar indicação de que perdeu ou reiniciou XP, moedas, nível, sequência, ranking ou conquistas.
+
 ## 6. Grafo de Dependências do Produto
 
 | Produtor/área | Consumidor | Responsabilidade |
@@ -462,6 +502,7 @@ Atores: aluno autenticado; área responsável pelo catálogo e pelo progresso.
 | Conta do aluno | Trilha e Espaço | Preservar o estado de abertura de cada planeta entre sessões e dispositivos. |
 | Preferência de som e de movimento reduzido | Diálogo do planeta, cadeado do planeta e encerramento | Orientar o início sem som, a abertura com o vídeo parado, o cadeado sem movimento contínuo e a troca da animação de abertura por uma transição curta. |
 | Design e produção de animação | Cadeado do planeta | Fornecer a animação do cadeado, com o estado fechado, o movimento contínuo e a abertura. |
+| Catálogo de space | Galáxias | Associar cada planeta a uma galáxia e informar as galáxias publicadas, quando houver mais de uma. |
 
 Os PRDs separados de histórias, modalidades de questão e conclusão são responsáveis pelos seus comportamentos. Esta tabela não define ordem de implementação. Gerenciamento no Studio fornece contexto do catálogo, sem receber alterações administrativas nesta entrega.
 
@@ -569,6 +610,16 @@ Atores: aluno autenticado com progresso na trilha anterior. Requisitos: RP-02 e 
 3. XP, moedas, nível, sequência e conquistas permanecem como estavam.
 4. O aluno abre o primeiro planeta, conforme JN-08, e começa a nova trilha.
 
+#### JN-11 — Começar outra galáxia
+
+Atores: aluno autenticado. Requisitos: RP-02, RP-10 e RP-13. Depende da publicação de uma segunda galáxia, fora desta entrega.
+
+1. O aluno escolhe outra galáxia, tendo ou não concluído a atual.
+2. O mapa apresenta a trilha dessa galáxia, com o primeiro planeta liberado e ainda não aberto.
+3. XP, moedas, nível, sequência, ranking e conquistas permanecem como estavam.
+4. O aluno abre o primeiro planeta, conforme JN-08.
+5. Ao voltar à galáxia anterior, o aluno encontra seu progresso e seu ponto de continuidade preservados.
+
 ## 8. Fora do Escopo
 
 | Área | Exclusão explícita do MVP |
@@ -586,6 +637,7 @@ Atores: aluno autenticado com progresso na trilha anterior. Requisitos: RP-02 e 
 | Dados e catálogo | Execução da substituição da trilha sobre catálogo e progresso; o resultado esperado está em RP-12. |
 | Personalização | Trilhas adaptativas, ordem individual, atalhos que ignoram pré-requisitos ou recomendação automática. |
 | Integrações | Novos serviços externos, dashboards ou instrumentação avançada de analytics. |
+| Galáxias | Seleção ou mapa de galáxias na interface, associação de planetas a galáxias no catálogo, conteúdo e narrativa de outras galáxias; o resultado esperado está em RP-13. |
 
 ### Decisões descartadas durante a definição
 
@@ -618,3 +670,9 @@ Atores: aluno autenticado com progresso na trilha anterior. Requisitos: RP-02 e 
 | Liberar o vídeo de encerramento ao desbloquear o último planeta | Disponível após a conclusão de todas as estrelas. |
 | Manter a trilha anterior disponível para consulta | A nova trilha substitui a anterior. |
 | Converter o progresso anterior por conceito | Todos começam no primeiro planeta, mantendo XP, moedas, nível, sequência e conquistas. |
+| Uma história única continuando de galáxia em galáxia | Cada galáxia possui um arco próprio, com começo e fim. |
+| Galáxias sem narrativa além da primeira | Cada galáxia possui um arco próprio. |
+| XP e ranking separados por galáxia | XP, moedas, nível, sequência, ranking e conquistas pertencem à conta. |
+| Galáxias liberadas em sequência ou com pré-requisito | Todas as galáxias publicadas ficam disponíveis desde o início. |
+| Escolha de curso no cadastro | O aluno novo começa na primeira galáxia. |
+| Seleção de galáxia com uma única galáxia publicada | O aluno entra diretamente na trilha. |

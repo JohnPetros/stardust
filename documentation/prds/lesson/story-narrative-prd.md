@@ -6,7 +6,9 @@ source:
     ref: Narrativa, elenco, trilha em dez planetas e reviravoltas aprovados em 2026-11-13
   - type: direct-request
     ref: Energia da nave, dicas na voz de Faísca, vídeos de planeta e de encerramento e substituição da trilha aprovados em 2026-11-13
-last_updated_at: 2026-11-13
+  - type: direct-request
+    ref: Arco narrativo próprio para cada galáxia, com o arco desta trilha encerrado na primeira galáxia, aprovado em 2026-11-14
+last_updated_at: 2026-11-14
 ---
 
 # PRD — Narrativa e universo das histórias
@@ -409,6 +411,8 @@ Atores: aluno autenticado; equipes de outros jogos do universo Stardust.
 - Devem permanecer abertos ao final: a Primeira Estrela apagada; o Limbo cheio do que foi apagado; a profecia de Ifthenia sem o caso padrão; a primeira expedição de Panda e Lira.
 - Personagens reservados a outros jogos não devem aparecer na trilha, conforme a seção 8.
 - Outros jogos devem usar lugares e termos já apresentados na trilha, mantendo os nomes definidos neste PRD.
+- A trilha deste PRD é a primeira galáxia, conforme [Trilha e Espaço](../space/space-page-prd.md). O arco do Nulo e de Lira deve terminar nela e não deve continuar em outra galáxia.
+- Cada nova galáxia deve possuir um arco próprio, com começo e fim, e pode usar os ganchos, lugares e termos deste PRD.
 
 ##### Regras de Experiência
 
@@ -517,6 +521,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 | Limbo | Planeta visitável e o ensino de tratamento de erros; permanece como expansão futura. |
 | Elenco de outros jogos | Os heróis Soma e Retorno, e os Apagadores: Rasura, Barão Falso, Eterno, Estouro e Exceção. |
 | Outros jogos | Mecânicas, enredo e personagens de qualquer jogo além da trilha. |
+| Outras galáxias | Enredo, elenco e planetas dos cursos futuros; cada galáxia terá seu próprio arco. |
 | Gerenciamento da trilha | Criação, reordenação e publicação de planetas e estrelas no catálogo. |
 | Comportamento da página | Vidas, progresso, retomada, destaque, histórico, ambiente e efeitos sonoros, definidos em Histórias interativas. |
 | Reprodução dos vídeos | Abertura do planeta, diálogo, som e falhas de carregamento, definidos em Trilha e Espaço. |
@@ -538,6 +543,7 @@ O grafo identifica responsabilidades de produto, não uma ordem de implementaç�
 | Rival chamada Vega | Cifra, porque outro jogo de ensino de programação já possui uma personagem chamada Vega. |
 | Princesa chamada Clave, Léxia, Glosa, Runa, Sonata, Valora ou Rima | Ária. |
 | Listas em um único planeta de nove estrelas | Dois planetas, cada um com seu desafio. |
+| Continuar o arco do Nulo e de Lira nas galáxias seguintes | O arco termina na primeira galáxia; cada galáxia tem seu próprio arco. |
 | Reduzir Listas a seis estrelas mais densas | Dois planetas, cada um com seu desafio. |
 | Tuplas como estrelas dentro de Listas | Planeta próprio, Perene, depois de Arcana. |
 | Incluir o Limbo agora, com tratamento de erros | Limbo reservado como expansão futura. |
