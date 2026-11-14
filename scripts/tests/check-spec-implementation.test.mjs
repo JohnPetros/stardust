@@ -401,6 +401,66 @@ test('prints the plan summary and the plan-only mode in text output', async () =
   }
 })
 
+const EVALUATION_PATH = 'documentation/features/example/path-check/evaluation.md'
+
+function buildEvaluation(planLine) {
+  return `---\ntitle: Path check — evaluation\nspec: ./spec.md\n${planLine}\nstatus: in_progress\n---\n\n# Evaluation\n`
+}
+
+test('--require-plan honors an explicit plan: none opt-out and rejects a missing key', async () => {
+  const repositoryRoot = await createRepositoryFixture()
+  try {
+    await deliverContractedPaths(repositoryRoot)
+    const evaluationFile = path.join(repositoryRoot, EVALUATION_PATH)
+
+    await writeFile(evaluationFile, buildEvaluation('plan: none'))
+    const optOut = await runChecker(repositoryRoot, ['--require-plan'])
+    assert.deepEqual(optOut.errors, [])
+    assert.equal(optOut.status, 'passed')
+    assert.equal(optOut.planOptOut, true)
+    const { stdout } = await execFileAsync(
+      process.execPath,
+      [SCRIPT_PATH, SPEC_PATH, '--require-plan'],
+      { cwd: repositoryRoot },
+    )
+    assert.match(stdout, /Plan: opted out \(evaluation\.md declares plan: none\)/)
+
+    await writeFile(evaluationFile, buildEvaluation('plan_note: none'))
+    const missingKey = await runChecker(repositoryRoot, ['--require-plan'])
+    const missingKeyMessages = missingKey.errors.join('\n')
+    assert.equal(missingKey.status, 'failed')
+    assert.match(
+      missingKeyMessages,
+      /evaluation\.md: frontmatter must declare plan: <path> or plan: none/,
+    )
+    assert.match(missingKeyMessages, /plan\.md: plan is required/)
+
+    await writeFile(evaluationFile, buildEvaluation('plan: ./plan.md'))
+    const declared = await runChecker(repositoryRoot, ['--require-plan'])
+    assert.equal(declared.status, 'failed')
+    assert.equal(declared.planOptOut, false)
+    assert.match(declared.errors.join('\n'), /plan\.md: plan is required/)
+  } finally {
+    await rm(repositoryRoot, { force: true, recursive: true })
+  }
+})
+
+test('--plan-only ignores the plan: none opt-out', async () => {
+  const repositoryRoot = await createRepositoryFixture()
+  try {
+    await writeFile(
+      path.join(repositoryRoot, EVALUATION_PATH),
+      buildEvaluation('plan: none'),
+    )
+    const result = await runChecker(repositoryRoot, ['--plan-only'])
+    assert.equal(result.status, 'failed')
+    assert.equal(result.planOptOut, false)
+    assert.match(result.errors.join('\n'), /plan\.md: plan is required/)
+  } finally {
+    await rm(repositoryRoot, { force: true, recursive: true })
+  }
+})
+
 test('pairs a legacy <name>-spec.md with <name>-plan.md', async () => {
   const repositoryRoot = await createRepositoryFixture()
   try {
