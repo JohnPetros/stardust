@@ -15,7 +15,6 @@ type UseCodeSnippetProps = {
   codeEditorRef: RefObject<PlaygroundCodeEditorRef | null>
   lessonService: LessonService
   lessonCodeExplanation?: LessonCodeExplanation
-  isCodeExplanationEnabled: boolean
 }
 
 type CodeExplanationAlertDialogMode = 'confirm' | 'blocked'
@@ -26,7 +25,6 @@ export function useCodeSnippet({
   isRunnable,
   lessonService,
   lessonCodeExplanation,
-  isCodeExplanationEnabled,
 }: UseCodeSnippetProps) {
   const { copy } = useClipboard()
   const [isCodeExplanationDialogOpen, setIsCodeExplanationDialogOpen] = useState(false)
@@ -43,9 +41,7 @@ export function useCodeSnippet({
   const [hasLoadedExplanationFromCache, setHasLoadedExplanationFromCache] =
     useState(false)
 
-  const isLessonCode = Boolean(lessonCodeExplanation)
-  const canExplainCode = isCodeExplanationEnabled && isLessonCode
-  const hasToolBar = Boolean(isRunnable) || isLessonCode
+  const canExplainCode = Boolean(lessonCodeExplanation)
   const isStorySource = lessonCodeExplanation?.source === 'story'
   const storyChunkIndex = isStorySource ? lessonCodeExplanation.chunkIndex : null
   const storyExplanationStorage = useLocalStorage<string>(
@@ -131,7 +127,7 @@ export function useCodeSnippet({
   }
 
   async function handleCodeExplanationButtonClick() {
-    if (!canExplainCode) return
+    if (!lessonCodeExplanation) return
 
     if (isStorySource) {
       const cachedExplanation = storyExplanationStorage.get()
@@ -206,7 +202,6 @@ export function useCodeSnippet({
   return {
     codeEditorRef,
     editorHeight,
-    hasToolBar,
     canExplainCode,
     explanation,
     remainingUses,

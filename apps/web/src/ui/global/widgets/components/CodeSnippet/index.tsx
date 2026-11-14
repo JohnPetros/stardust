@@ -7,7 +7,6 @@ import { useCodeSnippet } from './useCodeSnippet'
 import type { PlaygroundCodeEditorRef } from '../PlaygroundCodeEditor/types'
 import { CodeSnippetView } from './CodeSnippetView'
 import { useRestContext } from '@/ui/global/hooks/useRestContext'
-import { IS_CODE_EXPLANATION_ENABLED } from '@/constants/code-explanation'
 
 export type LessonCodeExplanation =
   | { source: 'story'; chunkIndex: number }
@@ -34,7 +33,6 @@ export const CodeSnippet = ({
     handleReloadCodeButtonClick,
     handleCopyCodeButtonClick,
     handleRunCode,
-    hasToolBar,
     canExplainCode,
     explanation,
     isCodeExplanationDialogOpen,
@@ -54,7 +52,6 @@ export const CodeSnippet = ({
     isRunnable,
     lessonService: lessonService as LessonService,
     lessonCodeExplanation,
-    isCodeExplanationEnabled: IS_CODE_EXPLANATION_ENABLED,
   })
 
   if (editorHeight)
@@ -67,7 +64,6 @@ export const CodeSnippet = ({
         onReloadCodeButtonClick={handleReloadCodeButtonClick}
         onCopyCodeButtonClick={handleCopyCodeButtonClick}
         onRunCode={handleRunCode}
-        hasToolBar={hasToolBar}
         canExplainCode={canExplainCode}
         explanation={explanation}
         isCodeExplanationDialogOpen={isCodeExplanationDialogOpen}
