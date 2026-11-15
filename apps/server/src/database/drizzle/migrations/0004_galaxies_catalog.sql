@@ -22,7 +22,7 @@ VALUES (
   1,
   'published'
 )
-ON CONFLICT DO NOTHING;
+ON CONFLICT ("id") DO NOTHING;
 --> statement-breakpoint
 INSERT INTO "public"."galaxies" ("id", "slug", "name", "description", "animation", "position", "status")
 VALUES (
@@ -34,7 +34,7 @@ VALUES (
   2,
   'announced'
 )
-ON CONFLICT DO NOTHING;
+ON CONFLICT ("id") DO NOTHING;
 --> statement-breakpoint
 UPDATE "public"."planets" SET "galaxy_id" = '7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01' WHERE "galaxy_id" IS NULL;
 --> statement-breakpoint
