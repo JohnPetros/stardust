@@ -6,9 +6,10 @@ export interface PlanetsRepository {
   add(planet: Planet): Promise<void>
   findAll(): Promise<Planet[]>
   findById(id: Id): Promise<Planet | null>
-  findByPosition(position: OrdinalNumber): Promise<Planet | null>
+  findAllByGalaxy(galaxyId: Id): Promise<Planet[]>
+  findByPosition(position: OrdinalNumber, galaxyId: Id): Promise<Planet | null>
   findByStar(starId: Id): Promise<Planet | null>
-  findLastPlanet(): Promise<Planet | null>
+  findLastPlanet(galaxyId: Id): Promise<Planet | null>
   replace(planet: Planet): Promise<void>
   replaceMany(planets: Planet[]): Promise<void>
   remove(planetId: Id): Promise<void>

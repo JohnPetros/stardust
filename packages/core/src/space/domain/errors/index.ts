@@ -1,3 +1,5 @@
 export { EmptyPlanetError } from './EmptyPlanetError'
 export { PlanetNotFoundError } from './PlanetNotFoundError'
 export { StarNotFoundError } from './StarNotFoundError'
+export { GalaxyNotFoundError } from './GalaxyNotFoundError'
+export { GalaxyNotEnterableError } from './GalaxyNotEnterableError'

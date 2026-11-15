@@ -74,6 +74,10 @@ export class FileStorageFolderPath {
     return FileStorageFolderPath.createAsImagesFeedbackReports()
   }
 
+  static createAsLottiesGalaxies(): FileStorageFolderPath {
+    return FileStorageFolderPath.create('lotties/galaxies')
+  }
+
   static createAsFeedbackMessages(
     feedbackReportId: string,
     feedbackMessageId: string,
@@ -120,6 +124,7 @@ export class FileStorageFolderPath {
         'images/insignias',
         'images/feedback-reports',
         'database-backups',
+        'lotties/galaxies',
       ])
       .validate()
     return true

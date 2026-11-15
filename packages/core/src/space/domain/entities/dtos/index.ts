@@ -1,2 +1,5 @@
 export type { PlanetDto } from './PlanetDto'
 export type { StarDto } from './StarDto'
+export type { GalaxyDto } from './GalaxyDto'
+export type { GalaxySummaryDto } from './GalaxySummaryDto'
+export type { CurrentGalaxyDto } from './CurrentGalaxyDto'

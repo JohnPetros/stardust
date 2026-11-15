@@ -8,6 +8,7 @@ export type PlanetDto = {
   position: number
   completionCount: number
   userCount: number
+  galaxyId?: string
   stars: StarDto[]
   isAvailable: boolean
 }

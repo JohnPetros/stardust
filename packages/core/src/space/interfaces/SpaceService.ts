@@ -7,13 +7,21 @@ import type {
   Slug,
   Text,
 } from '#global/domain/structures/index'
-import type { PlanetDto, StarDto } from '../domain/entities/dtos'
+import type {
+  CurrentGalaxyDto,
+  GalaxySummaryDto,
+  PlanetDto,
+  StarDto,
+} from '../domain/entities/dtos'
 import type { Planet } from '../domain/entities'
 
 export interface SpaceService {
   fetchStarBySlug(starSlug: Slug): Promise<RestResponse<StarDto>>
   fetchStarById(starId: Id): Promise<RestResponse<StarDto>>
   fetchPlanets(): Promise<RestResponse<PlanetDto[]>>
+  fetchGalaxies(): Promise<RestResponse<GalaxySummaryDto[]>>
+  fetchCurrentGalaxy(): Promise<RestResponse<CurrentGalaxyDto>>
+  fetchGalaxyPlanets(galaxySlug: Slug): Promise<RestResponse<PlanetDto[]>>
   createPlanet(
     planetName: Name,
     planetIcon: Image,

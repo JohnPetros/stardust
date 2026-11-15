@@ -10,6 +10,7 @@ export type FileStorageFolderPathValue =
   | 'images/feedback-reports'
   | `images/feedback-messages/${string}/${string}`
   | 'database-backups'
+  | 'lotties/galaxies'
 
 export type FileStorageFolderPathName =
   | 'story'

@@ -5,7 +5,7 @@ import {
   OrdinalNumber,
   Integer,
   Logical,
-  type Id,
+  Id,
 } from '#global/domain/structures/index'
 import type { PlanetDto } from './dtos'
 import { EmptyPlanetError, StarNotFoundError } from '../errors'
@@ -15,6 +15,7 @@ type PlanetProps = {
   name: Name
   icon: Image
   image: Image
+  galaxyId: Id
   position: OrdinalNumber
   userCount: Integer
   completionCount: Integer
@@ -31,6 +32,7 @@ export class Planet extends Entity<PlanetProps> {
         name: Name.create(dto.name),
         icon: Image.create(dto.icon),
         image: Image.create(dto.image),
+        galaxyId: Id.create(dto.galaxyId),
         position: OrdinalNumber.create(dto.position, 'Posição do planeta'),
         completionCount: Integer.create(
           dto.completionCount,
@@ -154,6 +156,10 @@ export class Planet extends Entity<PlanetProps> {
     this.props.icon = icon
   }
 
+  get galaxyId(): Id {
+    return this.props.galaxyId
+  }
+
   get position(): OrdinalNumber {
     return this.props.position
   }
@@ -188,6 +194,7 @@ export class Planet extends Entity<PlanetProps> {
       name: this.name.value,
       image: this.image.value,
       icon: this.icon.value,
+      galaxyId: this.galaxyId.value,
       position: this.position.value,
       completionCount: this.completionCount.value,
       userCount: this.userCount.value,

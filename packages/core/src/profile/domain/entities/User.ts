@@ -8,7 +8,7 @@ import {
   Integer,
   Logical,
 } from '#global/domain/structures/index'
-import type { AvatarAggregate, RocketAggregate } from '../aggregates'
+import type { AvatarAggregate, GalaxyAggregate, RocketAggregate } from '../aggregates'
 import { TierAggregate } from '../aggregates'
 import { RankingPosition } from '#ranking/domain/structures/index'
 import { Entity } from '#global/domain/abstracts/index'
@@ -26,6 +26,7 @@ type UserProps = {
   avatar: AvatarAggregate
   tier: TierAggregate
   rocket: RocketAggregate
+  currentGalaxy: GalaxyAggregate | null
   slug: Slug
   email: Email
   name: Name
@@ -199,6 +200,14 @@ export class User extends Entity<UserProps> {
       throw new ShopItemNotAcquiredError()
     }
     this.props.rocket = rocket
+  }
+
+  enterGalaxy(galaxy: GalaxyAggregate): void {
+    this.props.currentGalaxy = galaxy
+  }
+
+  isInGalaxy(galaxyId: Id): Logical {
+    return Logical.create(this.props.currentGalaxy?.id.value === galaxyId.value)
   }
 
   selectAvatar(avatar: AvatarAggregate): void {
@@ -397,6 +406,10 @@ export class User extends Entity<UserProps> {
     return this.props.rocket
   }
 
+  get currentGalaxy(): GalaxyAggregate | null {
+    return this.props.currentGalaxy
+  }
+
   get tier() {
     return this.props.tier
   }
@@ -462,22 +475,8 @@ export class User extends Entity<UserProps> {
     return this.props.createdAt
   }
 
-  get dto(): UserDto {
+  private get idsListsDto() {
     return {
-      id: this.id.value,
-      slug: this.slug.value,
-      email: this.email.value,
-      name: this.name.value,
-      rocket: this.props.rocket.dto,
-      avatar: this.props.avatar.dto,
-      tier: this.props.tier.dto,
-      level: this.level.value.number.value,
-      coins: this.coins.value,
-      xp: this.xp.value,
-      weeklyXp: this.weeklyXp.value,
-      streak: this.streak.value,
-      weekStatus: this.props.weekStatus.value,
-      insigniaRoles: this.props.insigniaRoles.map((role) => role.value),
       unlockedStarsIds: this.props.unlockedStarsIds.dto,
       recentlyUnlockedStarsIds: this.props.recentlyUnlockedStarsIds.dto,
       acquiredRocketsIds: this.props.acquiredRocketsIds.dto,
@@ -488,6 +487,27 @@ export class User extends Entity<UserProps> {
       upvotedCommentsIds: this.props.upvotedCommentsIds.dto,
       completedChallengesIds: this.props.completedChallengesIds.dto,
       completedPlanetsIds: this.props.completedPlanetsIds.dto,
+    }
+  }
+
+  get dto(): UserDto {
+    return {
+      id: this.id.value,
+      slug: this.slug.value,
+      email: this.email.value,
+      name: this.name.value,
+      rocket: this.props.rocket.dto,
+      avatar: this.props.avatar.dto,
+      tier: this.props.tier.dto,
+      currentGalaxy: this.props.currentGalaxy?.dto ?? null,
+      level: this.level.value.number.value,
+      coins: this.coins.value,
+      xp: this.xp.value,
+      weeklyXp: this.weeklyXp.value,
+      streak: this.streak.value,
+      weekStatus: this.props.weekStatus.value,
+      insigniaRoles: this.props.insigniaRoles.map((role) => role.value),
+      ...this.idsListsDto,
       canSeeRankingResult: this.props.canSeeRankingResult.value,
       lastWeekRankingPosition:
         this.props.lastWeekRankingPosition?.position.number.value ?? null,

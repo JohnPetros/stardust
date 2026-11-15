@@ -1,5 +1,6 @@
 import type {
   AvatarAggregateDto,
+  GalaxyAggregateDto,
   RocketAggregateDto,
   TierAggregateDto,
 } from '../../aggregates/dtos'
@@ -18,6 +19,7 @@ export type UserDto = {
   rocket: RocketAggregateDto
   avatar: AvatarAggregateDto
   tier: TierAggregateDto
+  currentGalaxy?: GalaxyAggregateDto | null
   hasCompletedSpace?: boolean
   hasEngineerInsignia?: boolean
   unlockedStarsIds?: string[]

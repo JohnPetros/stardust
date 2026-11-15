@@ -108,4 +108,7 @@ export interface ProfileService {
     insigniaRole: InsigniaRole,
     insigniaPrice: Integer,
   ): Promise<RestResponse<UserDto>>
+  enterGalaxy(
+    galaxySlug: Slug,
+  ): Promise<RestResponse<{ currentGalaxy: { id: string; slug: string; name: string } }>>
 }
