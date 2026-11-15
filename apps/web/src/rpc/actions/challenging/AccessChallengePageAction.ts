@@ -51,76 +51,110 @@ async function fetchUserChallengeVote(
   return ChallengeVote.create(response.body.challengeVote)
 }
 
+async function fetchChallenge(challengingService: ChallengingService, slug: string) {
+  const response = await challengingService.fetchChallengeBySlug(Slug.create(slug))
+  if (response.isFailure) response.throwError()
+  return Challenge.create(response.body)
+}
+
+async function fetchChallengeNavigation(
+  challengingService: ChallengingService,
+  slug: string,
+) {
+  const response = await challengingService.fetchChallengeNavigation(Slug.create(slug))
+  if (response.isFailure) response.throwError()
+  return response.body
+}
+
+function buildResponse(
+  challenge: Challenge,
+  userChallengeVote: string,
+  navigation: Pick<Response, 'previousChallengeSlug' | 'nextChallengeSlug'>,
+): Response {
+  return {
+    challengeDto: challenge.dto,
+    userChallengeVote,
+    previousChallengeSlug: navigation.previousChallengeSlug,
+    nextChallengeSlug: navigation.nextChallengeSlug,
+  }
+}
+
+async function accessAsVisitor(
+  call: Call<Request>,
+  challengingService: ChallengingService,
+  challenge: Challenge,
+  challengeSlug: string,
+) {
+  if (challenge.starId || challenge.isPublic.isFalse) {
+    call.notFound()
+  }
+
+  const navigation = await fetchChallengeNavigation(challengingService, challengeSlug)
+  return buildResponse(challenge, ChallengeVote.createAsNone().value, navigation)
+}
+
+async function assertStarAccessible(
+  call: Call<Request>,
+  spaceService: SpaceService,
+  challenge: Challenge,
+  user: User,
+) {
+  if (
+    challenge.starId &&
+    (await isStarInaccessible(spaceService, user, challenge.starId))
+  ) {
+    call.notFound()
+  }
+}
+
+function assertChallengeVisible(call: Call<Request>, challenge: Challenge, user: User) {
+  const isAuthor = challenge.isChallengeAuthor(user.id)
+  if (challenge.isPublic.isFalse && isAuthor.isFalse && user.isGod.isFalse) {
+    call.notFound()
+  }
+}
+
+async function accessAsUser(
+  call: Call<Request>,
+  { challengingService, spaceService }: Omit<Dependencies, 'isAuthenticated'>,
+  challenge: Challenge,
+  challengeSlug: string,
+  user: User,
+) {
+  await assertStarAccessible(call, spaceService, challenge, user)
+
+  const navigation = challenge.starId
+    ? EMPTY_NAVIGATION
+    : await fetchChallengeNavigation(challengingService, challengeSlug)
+
+  assertChallengeVisible(call, challenge, user)
+
+  const userChallengeVote = await fetchUserChallengeVote(challengingService, challenge.id)
+  return buildResponse(challenge, userChallengeVote.value, navigation)
+}
+
 export const AccessChallengePageAction = ({
   challengingService,
   spaceService,
   isAuthenticated,
 }: Dependencies): Action<Request, Response> => {
-  async function fetchChallenge(challengeSlug: string) {
-    const response = await challengingService.fetchChallengeBySlug(
-      Slug.create(challengeSlug),
-    )
-    if (response.isFailure) response.throwError()
-    return Challenge.create(response.body)
-  }
-
-  async function fetchChallengeNavigation(challengeSlug: string) {
-    const response = await challengingService.fetchChallengeNavigation(
-      Slug.create(challengeSlug),
-    )
-    if (response.isFailure) response.throwError()
-    return response.body
-  }
-
   return {
     async handle(call: Call<Request>) {
       const { challengeSlug } = call.getRequest()
-      const challenge = await fetchChallenge(challengeSlug)
-      const user = isAuthenticated ? User.create(await call.getUser()) : null
+      const challenge = await fetchChallenge(challengingService, challengeSlug)
 
-      if (!user) {
-        if (challenge.starId || challenge.isPublic.isFalse) {
-          call.notFound()
-        }
-
-        const challengeNavigation = await fetchChallengeNavigation(challengeSlug)
-
-        return {
-          challengeDto: challenge.dto,
-          userChallengeVote: ChallengeVote.createAsNone().value,
-          previousChallengeSlug: challengeNavigation.previousChallengeSlug,
-          nextChallengeSlug: challengeNavigation.nextChallengeSlug,
-        }
+      if (!isAuthenticated) {
+        return accessAsVisitor(call, challengingService, challenge, challengeSlug)
       }
 
-      if (
-        challenge.starId &&
-        (await isStarInaccessible(spaceService, user, challenge.starId))
-      ) {
-        call.notFound()
-      }
-
-      const challengeNavigation = challenge.starId
-        ? EMPTY_NAVIGATION
-        : await fetchChallengeNavigation(challengeSlug)
-
-      const isAuthor = challenge.isChallengeAuthor(user.id)
-
-      if (challenge.isPublic.isFalse && isAuthor.isFalse && user.isGod.isFalse) {
-        call.notFound()
-      }
-
-      const userChallengeVote = await fetchUserChallengeVote(
-        challengingService,
-        challenge.id,
+      const user = User.create(await call.getUser())
+      return accessAsUser(
+        call,
+        { challengingService, spaceService },
+        challenge,
+        challengeSlug,
+        user,
       )
-
-      return {
-        challengeDto: challenge.dto,
-        userChallengeVote: userChallengeVote.value,
-        previousChallengeSlug: challengeNavigation.previousChallengeSlug,
-        nextChallengeSlug: challengeNavigation.nextChallengeSlug,
-      }
     },
   }
 }
