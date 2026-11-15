@@ -48,44 +48,36 @@ export class RewardUserForStarChallengeCompletionController
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { userId } = http.getRouteParams()
-    const { starId, nextStarId, isFirstGalaxy, challengeId, challengeReward } =
-      await http.getBody()
-    const { maximumIncorrectAnswersCount, incorrectAnswersCount } =
-      await this.getTrustedExecutionCounts(userId, challengeId)
+    const body = await http.getBody()
+    const reward = await this.rewardCompletion(userId, body)
+    return http.send(reward)
+  }
 
-    await this.completeSpace(userId, nextStarId ?? null, isFirstGalaxy ?? false)
+  private async rewardCompletion(userId: string, body: Schema['body']) {
+    const { challengeId } = body
+    const counts = await this.getTrustedExecutionCounts(userId, challengeId)
 
-    const { newCoins, newXp, accuracyPercentage } = await this.calculateReward(
-      userId,
-      challengeId,
-      challengeReward?.xp ?? 0,
-      challengeReward?.coins ?? 0,
-      maximumIncorrectAnswersCount,
-      incorrectAnswersCount,
-    )
+    await this.completeSpace(userId, body.nextStarId ?? null, body.isFirstGalaxy ?? false)
 
-    if (nextStarId) {
-      await this.unlockStar(userId, nextStarId)
-    }
+    const reward = await this.calculateReward(userId, body, counts)
 
-    await this.removeRecentlyUnlockedStar(userId, starId)
-
+    await this.progressStars(userId, body)
     await this.completeChallenge(userId, challengeId)
 
-    const { newLevel, newStreak, newWeekStatus } = await this.rewardUser(
-      userId,
-      newCoins,
-      newXp,
-    )
+    const user = await this.rewardUser(userId, reward.newCoins, reward.newXp)
+    return {
+      newCoins: reward.newCoins,
+      newXp: reward.newXp,
+      newLevel: user.newLevel,
+      newStreak: user.newStreak,
+      newWeekStatus: user.newWeekStatus,
+      accuracyPercentage: reward.accuracyPercentage,
+    }
+  }
 
-    return http.send({
-      newCoins,
-      newXp,
-      newLevel,
-      newStreak,
-      newWeekStatus,
-      accuracyPercentage,
-    })
+  private async progressStars(userId: string, body: Schema['body']) {
+    if (body.nextStarId) await this.unlockStar(userId, body.nextStarId)
+    await this.removeRecentlyUnlockedStar(userId, body.starId)
   }
 
   private async getTrustedExecutionCounts(userId: string, challengeId: string) {
@@ -122,20 +114,16 @@ export class RewardUserForStarChallengeCompletionController
 
   private async calculateReward(
     userId: string,
-    challengeId: string,
-    challengeXp: number,
-    challengeCoins: number,
-    maximumIncorrectAnswersCount: number,
-    incorrectAnswersCount: number,
+    body: Schema['body'],
+    counts: { maximumIncorrectAnswersCount: number; incorrectAnswersCount: number },
   ) {
     const useCase = new CalculateRewardForChallengeCompletionUseCase(this.usersRepository)
     return await useCase.execute({
       userId,
-      challengeId,
-      challengeXp,
-      challengeCoins,
-      maximumIncorrectAnswersCount,
-      incorrectAnswersCount,
+      challengeId: body.challengeId,
+      challengeXp: body.challengeReward?.xp ?? 0,
+      challengeCoins: body.challengeReward?.coins ?? 0,
+      ...counts,
     })
   }
 

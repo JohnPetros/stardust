@@ -16,6 +16,24 @@ import { rocketModel } from '../shop/rocket-model'
 import { tierModel } from '../ranking/tier-model'
 import { galaxyModel } from '../space/galaxy-model'
 
+type ForeignKeyColumn = Parameters<typeof foreignKey>[0]['columns'][number]
+type ForeignKeyAction = 'no action' | 'set null'
+
+function userForeignKey(
+  name: string,
+  column: ForeignKeyColumn,
+  foreignColumn: ForeignKeyColumn,
+  onDelete: ForeignKeyAction = 'no action',
+) {
+  return foreignKey({
+    columns: [column],
+    foreignColumns: [foreignColumn],
+    name,
+  })
+    .onUpdate('no action')
+    .onDelete(onDelete)
+}
+
 export const userModel = pgTable(
   'users',
   {
@@ -54,35 +72,16 @@ export const userModel = pgTable(
   ({ email, id, avatarId, name, tierId, rocketId, slug, currentGalaxyId }) => [
     unique('user_email_user_key').on(email),
     primaryKey({ columns: [id], name: 'user_pkey' }),
-    foreignKey({
-      columns: [avatarId],
-      foreignColumns: [avatarModel.id],
-      name: 'users_avatar_id_fkey',
-    })
-      .onUpdate('no action')
-      .onDelete('no action'),
+    userForeignKey('users_avatar_id_fkey', avatarId, avatarModel.id),
     unique('users_name_key').on(name),
-    foreignKey({
-      columns: [tierId],
-      foreignColumns: [tierModel.id],
-      name: 'users_ranking_id_fkey',
-    })
-      .onUpdate('no action')
-      .onDelete('no action'),
-    foreignKey({
-      columns: [rocketId],
-      foreignColumns: [rocketModel.id],
-      name: 'users_rocket_id_fkey',
-    })
-      .onUpdate('no action')
-      .onDelete('no action'),
+    userForeignKey('users_ranking_id_fkey', tierId, tierModel.id),
+    userForeignKey('users_rocket_id_fkey', rocketId, rocketModel.id),
     unique('users_slug_key').on(slug),
-    foreignKey({
-      columns: [currentGalaxyId],
-      foreignColumns: [galaxyModel.id],
-      name: 'users_current_galaxy_id_fkey',
-    })
-      .onUpdate('no action')
-      .onDelete('set null'),
+    userForeignKey(
+      'users_current_galaxy_id_fkey',
+      currentGalaxyId,
+      galaxyModel.id,
+      'set null',
+    ),
   ],
 )
