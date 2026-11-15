@@ -1,8 +1,18 @@
 import { Id } from '#global/domain/structures/Id'
 import { StarNotFoundError } from '../../errors'
+import { Planet } from '../Planet'
 import { PlanetsFaker, StarsFaker } from './fakers'
 
 describe('Planet Entity', () => {
+  it('should keep the galaxy id when converting back to a dto', () => {
+    const galaxyId = Id.create().value
+    const planet = PlanetsFaker.fake({ galaxyId })
+
+    expect(planet.galaxyId.value).toBe(galaxyId)
+    expect(planet.dto.galaxyId).toBe(galaxyId)
+    expect(Planet.create(planet.dto).galaxyId.value).toBe(galaxyId)
+  })
+
   it('should get the next star based on the given current star', () => {
     const currentStar = StarsFaker.fake({ number: 1 })
     const nextStar = StarsFaker.fake({ number: 2 })

@@ -2,7 +2,8 @@ import { mock, type Mock } from 'ts-jest-mocker'
 
 import { UnlockFirstStarUseCase } from '../UnlockFirstStarUseCase'
 import type { Broker } from '#global/interfaces/Broker'
-import type { PlanetsRepository } from '../../interfaces'
+import type { GalaxiesRepository, PlanetsRepository } from '../../interfaces'
+import { GalaxiesFaker } from '#space/domain/entities/fakers/GalaxiesFaker'
 import { FirstStarUnlockedEvent } from '#space/domain/events/FirstStarUnlockedEvent'
 import { PlanetNotFoundError } from '#space/domain/errors/PlanetNotFoundError'
 import { PlanetsFaker } from '#space/domain/entities/tests/fakers/PlanetsFaker'
@@ -12,29 +13,36 @@ import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 
 describe('Unlock First Star Use Case', () => {
   let repository: Mock<PlanetsRepository>
+  let galaxiesRepository: Mock<GalaxiesRepository>
+  const galaxy = GalaxiesFaker.fake({ position: 1 })
   let Broker: Mock<Broker>
   let useCase: UnlockFirstStarUseCase
 
   beforeEach(() => {
     repository = mock<PlanetsRepository>()
     Broker = mock<Broker>()
+    galaxiesRepository = mock<GalaxiesRepository>()
+    galaxiesRepository.findFirst.mockResolvedValue(galaxy)
     repository.findByPosition.mockImplementation()
     Broker.publish.mockImplementation()
-    useCase = new UnlockFirstStarUseCase(repository, Broker)
+    useCase = new UnlockFirstStarUseCase(repository, galaxiesRepository, Broker)
   })
 
   it('should throw an error if the first planet is not found', async () => {
     const user = UsersFaker.fake()
     repository.findByPosition.mockResolvedValue(null)
 
-    expect(
+    await expect(
       useCase.execute({
         userId: user.id.value,
         userName: user.name.value,
         userEmail: user.email.value,
       }),
     ).rejects.toThrow(PlanetNotFoundError)
-    expect(repository.findByPosition).toHaveBeenCalledWith(OrdinalNumber.create(1))
+    expect(repository.findByPosition).toHaveBeenCalledWith(
+      OrdinalNumber.create(1),
+      galaxy.id,
+    )
   })
 
   it('should publish an event when the first star is unlocked', async () => {
@@ -55,7 +63,10 @@ describe('Unlock First Star Use Case', () => {
       userEmail: user.email.value,
     })
 
-    expect(repository.findByPosition).toHaveBeenCalledWith(OrdinalNumber.create(1))
+    expect(repository.findByPosition).toHaveBeenCalledWith(
+      OrdinalNumber.create(1),
+      galaxy.id,
+    )
     expect(Broker.publish).toHaveBeenCalledWith(
       new FirstStarUnlockedEvent({
         user: {
@@ -66,5 +77,41 @@ describe('Unlock First Star Use Case', () => {
         firstUnlockedStarId: String(firstStar.id),
       }),
     )
+  })
+
+  it('should unlock the first star of the first galaxy of the catalog', async () => {
+    const user = UsersFaker.fake()
+    const firstPlanet = PlanetsFaker.fake({
+      galaxyId: galaxy.id.value,
+      stars: [StarsFaker.fakeDto({ number: 1 })],
+    })
+    repository.findByPosition.mockResolvedValue(firstPlanet)
+
+    await useCase.execute({
+      userId: user.id.value,
+      userName: user.name.value,
+      userEmail: user.email.value,
+    })
+
+    expect(galaxiesRepository.findFirst).toHaveBeenCalledTimes(1)
+    expect(repository.findByPosition).toHaveBeenCalledWith(
+      OrdinalNumber.create(1),
+      galaxy.id,
+    )
+  })
+
+  it('should throw PlanetNotFoundError when there is no first galaxy', async () => {
+    const user = UsersFaker.fake()
+    galaxiesRepository.findFirst.mockResolvedValue(null)
+
+    await expect(
+      useCase.execute({
+        userId: user.id.value,
+        userName: user.name.value,
+        userEmail: user.email.value,
+      }),
+    ).rejects.toThrow(PlanetNotFoundError)
+    expect(repository.findByPosition).not.toHaveBeenCalled()
+    expect(Broker.publish).not.toHaveBeenCalled()
   })
 })

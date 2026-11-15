@@ -13,6 +13,7 @@ export class PlanetsFaker {
     return {
       id: faker.string.uuid(),
       name: faker.person.firstName(),
+      galaxyId: faker.string.uuid(),
       position: faker.number.int({ min: 1, max: 20 }),
       icon: `${faker.image.avatar()}.jpg`,
       image: `${faker.image.avatar()}.jpg`,

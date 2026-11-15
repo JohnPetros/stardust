@@ -6,6 +6,7 @@ import {
 } from '#profile/domain/errors/index'
 import {
   AvatarAggregatesFaker,
+  GalaxyAggregatesFaker,
   RocketAggregatesFaker,
   TierAggregatesFaker,
 } from '../../aggregates/fakers'
@@ -579,5 +580,62 @@ describe('User Entity', () => {
     })
 
     expect(user.acquiredRocketsCount).toEqual(Integer.create(2))
+  })
+
+  it('should have no current galaxy when the dto has none', () => {
+    expect(UsersFaker.fake().currentGalaxy).toBeNull()
+    expect(UsersFaker.fake({ currentGalaxy: null }).currentGalaxy).toBeNull()
+  })
+
+  it('should replace the current galaxy when enters a galaxy', () => {
+    const user = UsersFaker.fake({ currentGalaxy: GalaxyAggregatesFaker.fakeDto() })
+    const galaxy = GalaxyAggregatesFaker.fake()
+
+    user.enterGalaxy(galaxy)
+
+    expect(user.currentGalaxy).toBe(galaxy)
+    expect(user.isInGalaxy(galaxy.id).isTrue).toBe(true)
+  })
+
+  it('should indicate whether the user is in the given galaxy', () => {
+    const currentGalaxy = GalaxyAggregatesFaker.fake()
+    const user = UsersFaker.fake({ currentGalaxy: currentGalaxy.dto })
+
+    expect(user.isInGalaxy(currentGalaxy.id).isTrue).toBe(true)
+    expect(user.isInGalaxy(Id.create()).isFalse).toBe(true)
+    expect(UsersFaker.fake().isInGalaxy(Id.create()).isFalse).toBe(true)
+  })
+
+  it('should keep the progress untouched when enters a galaxy', () => {
+    const unlockedStarsIds = [Id.create().value, Id.create().value]
+    const user = UsersFaker.fake({
+      coins: 120,
+      xp: 340,
+      weeklyXp: 50,
+      streak: 4,
+      unlockedStarsIds,
+      completedPlanetsIds: [Id.create().value],
+      unlockedAchievementsIds: [Id.create().value],
+      hasCompletedSpace: true,
+    })
+    const dtoBefore = user.dto
+
+    user.enterGalaxy(GalaxyAggregatesFaker.fake())
+
+    const { currentGalaxy: _, ...dtoAfter } = user.dto
+    const { currentGalaxy: __, ...expectedDto } = dtoBefore
+    expect(dtoAfter).toEqual(expectedDto)
+    expect(user.coins.value).toBe(120)
+    expect(user.xp.value).toBe(340)
+    expect(user.streak.value).toBe(4)
+    expect(user.unlockedStarsIds.dto).toEqual(unlockedStarsIds)
+  })
+
+  it('should convert the current galaxy back to the dto', () => {
+    const currentGalaxy = GalaxyAggregatesFaker.fakeDto()
+    const user = UsersFaker.fake({ currentGalaxy })
+
+    expect(user.dto.currentGalaxy).toEqual(currentGalaxy)
+    expect(UsersFaker.fake().dto.currentGalaxy).toBeNull()
   })
 })

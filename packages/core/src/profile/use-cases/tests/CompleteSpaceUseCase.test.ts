@@ -26,10 +26,11 @@ describe('CompleteSpaceUseCase', () => {
     repository.findById.mockResolvedValue(null)
     user.completeSpace = jest.fn()
 
-    expect(
+    await expect(
       useCase.execute({
         userId: user.id.value,
         nextStarId: null,
+        isFirstGalaxy: true,
       }),
     ).rejects.toThrow(UserNotFoundError)
   })
@@ -42,6 +43,7 @@ describe('CompleteSpaceUseCase', () => {
     await useCase.execute({
       userId: user.id.value,
       nextStarId: null,
+      isFirstGalaxy: true,
     })
 
     expect(user.completeSpace).toHaveBeenCalled()
@@ -62,6 +64,7 @@ describe('CompleteSpaceUseCase', () => {
     await useCase.execute({
       userId: user.id.value,
       nextStarId: 'next-star-id',
+      isFirstGalaxy: true,
     })
 
     expect(user.completeSpace).not.toHaveBeenCalled()
@@ -79,10 +82,43 @@ describe('CompleteSpaceUseCase', () => {
     await useCase.execute({
       userId: user.id.value,
       nextStarId: 'next-star-id',
+      isFirstGalaxy: true,
     })
 
     expect(user.completeSpace).not.toHaveBeenCalled()
     expect(repository.replace).not.toHaveBeenCalled()
+    expect(Broker.publish).not.toHaveBeenCalled()
+  })
+
+  it('should not complete the space nor publish the event when the last star belongs to a galaxy that is not the first one', async () => {
+    const user = UsersFaker.fake({ hasCompletedSpace: false })
+    repository.findById.mockResolvedValue(user)
+    user.completeSpace = jest.fn()
+
+    await useCase.execute({
+      userId: user.id.value,
+      nextStarId: null,
+      isFirstGalaxy: false,
+    })
+
+    expect(user.completeSpace).not.toHaveBeenCalled()
+    expect(repository.replace).not.toHaveBeenCalled()
+    expect(Broker.publish).not.toHaveBeenCalled()
+    expect(user.hasCompletedSpace.isFalse).toBe(true)
+  })
+
+  it('should keep not completing the space on a galaxy that is not the first one while there is a next star', async () => {
+    const user = UsersFaker.fake()
+    repository.findById.mockResolvedValue(user)
+    user.completeSpace = jest.fn()
+
+    await useCase.execute({
+      userId: user.id.value,
+      nextStarId: 'next-star-id',
+      isFirstGalaxy: false,
+    })
+
+    expect(user.completeSpace).not.toHaveBeenCalled()
     expect(Broker.publish).not.toHaveBeenCalled()
   })
 })
