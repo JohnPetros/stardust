@@ -122,8 +122,9 @@ last_updated_at: 2026-11-15
 | AV-07 (Playwright)                                                                | passed (rerun pendente) | Builder: 25/25; rerun após o formato do biome ainda pendente                                                                 |
 | AV-08                                                                             | passed                  | 12/12; suítes docker de transição e adoção 24/24                                                                             |
 | `pnpm run test:scripts`                                                           | passed com falha alheia | 131 testes, 128 passam, 1 falha pré-existente (`run-crew-pr-review`), 2 ignorados                                            |
-| `check:complexity` core                                                           | passed                  | 0 erros após extrair helpers de `UserFactory.produce` e `User.dto` (ACH-01)                                                  |
-| `check:complexity` web                                                            | failed                  | 1 erro pré-existente: `useSpaceContextProvider` (244 linhas no HEAD, 242 agora)                                              |
+| `check:complexity` server                                                         | passed                  | exit 0 após refatoração e atualização do baseline (ACH-16)                                                                   |
+| `check:complexity` core                                                           | passed                  | exit 0 após refatoração e atualização do baseline (ACH-16)                                                                   |
+| `check:complexity` web                                                            | passed                  | exit 0 após refatoração e atualização do baseline (ACH-16)                                                                   |
 | `check:test-integrity`                                                            | failed                  | `useSpaceContextProvider.test.ts` fora dos locais permitidos (padrão `*Provider.test`); decisão do usuário pendente (ACH-02) |
 | AV-04 (rotas server)                                                              | failed                  | 29/30; o caso `has_completed_space` da primeira galáxia falha (ACH-03)                                                       |
 
@@ -143,7 +144,7 @@ last_updated_at: 2026-11-15
 - ACH-11 [aberto] — Visual Reviewer (2026-11-15): D1 (conteúdo da Página de Galáxias e controle desktop começam sob a sidenav fixa: x=48, board 160 = 88 + 72), M1/M2 (tipografia mobile ~7% menor e Placa da LP 197 px contra 225 px). Reconfirmado no navegador pela task principal. Builder de correção em andamento; depois recapturar todas as linhas em pasta fora de `test-results/` (o Playwright a limpa) e repetir a revisão visual.
 - ACH-12 [resolvido] — esqueleto de carregamento e foguete de `GalaxyItemView` em px (a raiz escala o `rem` em ≤1080px e ≤720px), mais o caso de falha de `fetchGalaxyPlanets` nas duas ações de acesso; Web unit 157/157, AV-07 27/27.
 - Resolvido: `GalaxiesPageView` não importa mais `Particles` (fundo de estrelas animadas removido a pedido do usuário, emenda da revisão 3).
-- Gate de complexidade: `check:complexity` do Web sem erros após ACH-09; ainda sai com código 2 por avisos contra o baseline por posição de linha; sem atualização de baseline.
+- Gate de complexidade: `check:complexity` (Core, Server, Web e Backoffice) sai com 0 após ACH-16.
 - Observação: `db:test` não é repetível em banco local já migrado (default ACL global da 0002 não some no reset) e falha em `minio-init` (401 na imagem do quay.io).
 
 - ACH-13 [resolvido] — botão "Tentar novamente" (`GalaxiesLoadFailureView`) quebrava em duas linhas a 1440px (`w-[180px]`); agora `w-auto min-w-[180px] whitespace-nowrap`; Web unit Galaxies 49/49, biome 0 erros, tsc ok, recaptura confere com o board. Arquivo dentro do mapa.
@@ -192,6 +193,8 @@ last_updated_at: 2026-11-15
 
 - ACH-15 [resolvido] — Lighthouse (produção, autenticado): `label-content-name-mismatch` nos botões de galáxia; `aria-label` removido (nome vem do conteúdo visível); testes ajustados; Web unit Galaxies 48/48, Playwright `galaxies.test.ts` 21/22 (o caso de falha passa isolado 2/2; flaky sob carga). LCP (5,4 s desktop, 9,4 s mobile) vem da carga dos dados no cliente e não foi alterado.
 
+- ACH-16 [resolvido] — o CI (PR #660) reprovou `check-code-complexity` em Core, Server e Web: avisos fora do baseline (`--max-warnings 0`). A afirmação anterior de que os 50 avisos do Web eram "pré-existentes" estava errada (nunca comparada com o baseline nem com `origin/main`). Causa: o código novo, mais helpers extraídos, gerou avisos de índice de manutenibilidade; 32 funções estavam acima de limites explícitos (comprimento, Halstead, ciclomática) e foram refatoradas (Core 6, Server 2, Web 24, sem mudança de comportamento; Web unit 714/714, Playwright `galaxies.test.ts` 22/22, rotas AV-04 37/37). Os avisos restantes são só de índice de manutenibilidade e foram incorporados ao baseline com revisão do diff (0 arquivos removidos, 40 adicionados, 16 alterados; 0 entradas novas com métrica explícita em warn/error; `errorCount` 242 → 237; `warnCount` 2722 → 2811). Ação preventiva: `tooling.md`, `implement-spec-prompt.md`, `conclude-spec-prompt.md` e `AGENTS.md` agora exigem `check:complexity` com saída 0 em todo workspace alterado e prova antes de chamar um aviso de pré-existente.
+
 ## Delivery
 
 - Publicação: não solicitada (conclusão local); nenhum commit, push ou PR criado. Autorização separada necessária para `commit` → `open-pr`.
@@ -199,7 +202,7 @@ last_updated_at: 2026-11-15
 - Emendas pós-revisão a pedido do usuário (revisão 3; Implementation Reviewer e Visual Reviewer cobrem a revisão 2, sem nova rodada): foguete e `Particles` removidos, mapa e título/subtítulo centralizados no desktop, zoom no hover, opacidade 20% da animação "Em breve", `aria-label` removido (ACH-15), cache de galáxias atualizado sem limpar ao trocar de galáxia (elimina o flash do estado de carregamento), script `storage:seed` e `Cache-Control: no-cache` no MinIO local, botão "Tentar novamente" sem quebra (ACH-13). Evidências visuais VV-01 a VV-04 mostram elementos removidos; o resto das comparações segue válido.
 - Arquivos fora do mapa da Spec nesta entrega (além dos já registrados): `scripts/check-web-quality.mjs`, `scripts/web-quality.config.json`, `scripts/tests/check-web-quality.test.mjs`, `package.json` e `pnpm-lock.yaml` (dependência `lighthouse@12.8.2`), `documentation/tooling.md` (comando novo e formas `--filter`), `documentation/prompts/create-spec-prompt.md` (fonte `tooling.md`), `apps/web/src/ui/space/hooks/useEnterGalaxyAction.ts` (já no mapa; ajuste do cache).
 - Reviews: Implementation Reviewer PASS (rodada 2); Visual Reviewer PASS (VV-01 a VV-09).
-- Limitações: build local de produção não executado (só necessário antes de `commit`); `check:complexity` do Web sai com código 2 por 50 warnings pré-existentes (0 erros); desvios aceitos listados em Reviews.
+- Limitações: build local de produção não executado (só necessário antes de `commit`); desvios aceitos listados em Reviews.
 
 | RP/JN                  | RF coverage   | CA coverage   | Evidence                           | Delivery disposition |
 | ---------------------- | ------------- | ------------- | ---------------------------------- | -------------------- |
