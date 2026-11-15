@@ -158,6 +158,41 @@ over a skill's generic advice.
 | `gh-cli`             | GitHub operations through `gh`: issues, Pull Requests, CI checks and releases.                 | Pull Requests follow the `open-pr` workflow and the language rules above.                                       |
 | `pencil-design`      | Pencil (`.pen`) design files.                                                                  | Do not use it for StarDust: the Penpot file is the design source and `design/stardust.fig` is frozen.          |
 
+### Project workflow skills
+
+The project's own workflows are the prompts in `documentation/prompts/*-prompt.md`. They
+are the only source: `node ./scripts/sync-commands.mjs` turns each prompt into a skill
+(`.agents/skills/<name>/SKILL.md`) and a slash command (`.claude/commands`,
+`.cursor/commands`, `.opencode/commands`), where `<name>` is the file name without the
+`-prompt` suffix. The agent definitions in `documentation/agents/*-agent.md` are also
+exposed as skills by the same script, and as subagents by `scripts/sync-agents.mjs`.
+
+- Edit the prompt or agent definition and re-run the script; never edit the generated
+  files, which are ignored by Git and overwritten on the next sync.
+- Every prompt needs a one-line `description` in its frontmatter; the script fails
+  without it, and it is what makes the skill discoverable. The skill name comes from
+  the file name, not from a `name` field.
+- When a task matches a workflow below, invoke that skill instead of working from
+  memory. These workflows take precedence over the generic third-party skills above;
+  [SDD Workflow](documentation/sdd.md) defines how the SDD ones chain together.
+- A workflow that is missing for a recurring task is a gap: ask before adding a prompt,
+  as with the Rule router.
+
+| Group            | Skills                                                                                                    | Use when                                                                                  |
+| ---------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Issues           | `open-feat-issue`, `open-bug-issue`, `open-chore-issue`, `open-refactor-issue`                            | Creating a GitHub issue; each has an approval gate before anything is written.            |
+| PRD              | `create-prd`, `create-prd-from-implementation`                                                            | Writing or revising a canonical PRD, prospectively or from existing code.                 |
+| Design           | `design`, `review-design`                                                                                 | Drawing or reviewing the Penpot boards of a PRD.                                          |
+| SDD delivery     | `interview`, `create-spec`, `create-plan`, `create-evaluation`, `implement-spec`, `conclude-spec`         | Specifying, planning, implementing and closing a feature delivery.                        |
+| Bugs             | `create-bug-report`, `implement-bug-fix`, `conclude-bug-report`                                           | Diagnosing an approved bug issue, fixing it and closing the report.                       |
+| Reports          | `create-performance-report`, `find-performance-issues`, `create-security-report`, `conclude-report`       | Running a performance or security diagnosis and closing its report.                       |
+| Git and PRs      | `commit`, `open-pr`, `resolve-pr-feedback`, `resolve-merge-conflicts`, `create-release-pr`                | Committing, publishing or updating a PR, resolving CI/review feedback and conflicts, releasing. |
+| Tests            | `create-tests`, `increase-test-coverage`                                                                  | Writing tests or raising coverage without weakening baselines.                            |
+| Rules and docs   | `create-layer-rules`, `update-layer-rules`, `register-antipattern`, `update-archtecture`, `update-overview`, `refine-doc`, `create-prompt` | Maintaining Rules, Architecture, the overview, other documents and the prompts themselves. |
+
+The table groups the prompts for orientation; `documentation/prompts/` is the complete
+and current list. Skill names follow the file names exactly, including `update-archtecture`.
+
 ## Playwright CLI
 
 - Use the Playwright CLI for exploration, visual inspection, diagnosis and
@@ -537,6 +572,7 @@ results without changing those obligations.
 Use subagents only for the independent, bounded roles that
 [SDD Workflow](documentation/sdd.md) defines. Follow the
 [Builder](documentation/agents/builder-agent.md),
+[Spec Searcher](documentation/agents/spec-searcher-agent.md),
 [Spec Reviewer](documentation/agents/spec-reviewer-agent.md),
 [Implementation Reviewer](documentation/agents/implementation-reviewer-agent.md),
 [Visual Reviewer](documentation/agents/visual-reviewer-agent.md) and
