@@ -78,6 +78,26 @@ function authenticatedRoutes(): ServerMockRoute[] {
     { method: 'GET', path: '/space/planets', status: 200, body: [] },
     {
       method: 'GET',
+      path: '/space/galaxies/current',
+      status: 200,
+      body: {
+        galaxy: {
+          id: '00000000-0000-4000-8000-000000000a01',
+          slug: 'logica-de-programacao',
+          name: 'Lógica de Programação',
+        },
+        isFirstGalaxy: true,
+        hasGalaxyChoice: false,
+      },
+    },
+    {
+      method: 'GET',
+      path: '/space/galaxies/logica-de-programacao/planets',
+      status: 200,
+      body: [],
+    },
+    {
+      method: 'GET',
       path: '/reporting/feedback/mine/unread-count',
       status: 200,
       body: { count: 1 },
