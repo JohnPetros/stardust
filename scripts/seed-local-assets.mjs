@@ -43,6 +43,16 @@ async function seedAssets() {
     }
   }
 
+  const galaxies = catalog.tables.galaxies
+  if (!Array.isArray(galaxies)) throw new Error('Galaxy catalog required')
+  for (const galaxy of galaxies) {
+    if (!/^[a-z0-9-]+$/.test(galaxy.slug) || galaxy.animation !== `${galaxy.slug}.json`) throw new Error('Invalid galaxy animation')
+    const body = await readFile(new URL(`../packages/studio/public/projects/galaxies/${galaxy.slug}/lottie.json`, import.meta.url))
+    if (!Array.isArray(JSON.parse(body.toString()).layers)) throw new Error('Invalid galaxy Lottie')
+    assets.push({ key: `lotties/galaxies/${galaxy.animation}`, body, contentType: 'application/json' })
+    references.add(`lotties/galaxies/${galaxy.animation}`)
+  }
+
   const client = new S3Client({ endpoint: endpoint.origin, region: 'us-east-1', forcePathStyle: true, credentials: { accessKeyId, secretAccessKey } })
   try {
     let policy = { Version: '2012-10-17', Statement: [] }
@@ -53,19 +63,19 @@ async function seedAssets() {
       if (error.name !== 'NoSuchBucketPolicy') throw error
     }
     for (const { key, body, contentType } of assets) {
-      await client.send(new PutObjectCommand({ Bucket: bucket, Key: key, Body: body, ContentType: contentType, CacheControl: 'public, max-age=3600' }))
+      await client.send(new PutObjectCommand({ Bucket: bucket, Key: key, Body: body, ContentType: contentType, CacheControl: 'no-cache' }))
     }
     const sid = 'StardustLocalSeedPlanetsRead'
     policy.Statement = policy.Statement.filter((statement) => statement.Sid !== sid)
-    policy.Statement.push({ Sid: sid, Effect: 'Allow', Principal: { AWS: ['*'] }, Action: ['s3:GetObject'], Resource: folders.map((folder) => `arn:aws:s3:::${bucket}/images/${folder}/*`) })
+    policy.Statement.push({ Sid: sid, Effect: 'Allow', Principal: { AWS: ['*'] }, Action: ['s3:GetObject'], Resource: [...folders.map((folder) => `arn:aws:s3:::${bucket}/images/${folder}/*`), `arn:aws:s3:::${bucket}/lotties/galaxies/*`] })
     await client.send(new PutBucketPolicyCommand({ Bucket: bucket, Policy: JSON.stringify(policy) }))
     for (const file of references) {
       const response = await fetch(`${endpoint.origin}/${bucket}/${file}`)
       const asset = assets.find((item) => item.key === file)
       const body = Buffer.from(await response.arrayBuffer())
-      if (!response.ok || !response.headers.get('content-type')?.includes(asset.contentType) || !body.equals(asset.body)) throw new Error('Public image verification failed')
+      if (!response.ok || !response.headers.get('content-type')?.includes(asset.contentType) || !body.equals(asset.body)) throw new Error('Public asset verification failed')
     }
-    console.log(`Uploaded ${assets.length} catalog images; verified ${references.size} catalog references with anonymous HTTP access.`)
+    console.log(`Uploaded ${assets.length} catalog assets; verified ${references.size} catalog references with anonymous HTTP access.`)
     console.log(`Local CDN URL: ${endpoint.origin}/${bucket}`)
   } finally {
     client.destroy()

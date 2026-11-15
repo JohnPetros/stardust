@@ -9,6 +9,8 @@ import {
   inspectTransition,
   readTransitionLedger,
   inspectEmptyApplication,
+  inspectPendingPostTransition,
+  transitionMigrationCount,
   transitionMigrations,
   migrationsFolder,
   projectRoot,
@@ -27,6 +29,8 @@ export async function migrateDatabase(
   await withTransitionSession(options, async (client, assertSession) => {
     const ledger = await readTransitionLedger(client)
     if (rollback) {
+      if (ledger.length > transitionMigrationCount)
+        throw new Error('Access rollback is restricted to the transition state')
       const phase = ledger.length === 2 ? 'adopted' : 'server-owned'
       const result = await inspectTransition(client, manifest, phase)
       if (!result.compatible)
@@ -68,9 +72,13 @@ export async function migrateDatabase(
         )
     } else {
       const phase = ledger.length === 2 ? 'adopted' : 'server-owned'
-      const result = await inspectTransition(client, manifest, phase)
+      const total = transitionMigrations().length
+      const partial = ledger.length > transitionMigrationCount && ledger.length < total
+      const result = partial
+        ? await inspectPendingPostTransition(client)
+        : await inspectTransition(client, manifest, phase)
       if (!result.compatible) throw new Error('Database is incompatible with migration')
-      if (phase === 'server-owned') return
+      if (phase === 'server-owned' && ledger.length === total) return
     }
     await assertSession()
     await client.unsafe('SET search_path TO public, extensions')

@@ -231,6 +231,37 @@ test('accepts a colocated view test inside contexts tests and pairs it with the 
   }
 })
 
+test('accepts a context provider hook test while provider tests stay forbidden', async () => {
+  const repositoryRoot = await createRepositoryFixture()
+  const sourcePath =
+    'apps/web/src/ui/space/contexts/SpaceContext/useSpaceContextProvider.ts'
+  const testPath =
+    'apps/web/src/ui/space/contexts/SpaceContext/tests/useSpaceContextProvider.test.ts'
+  try {
+    await mkdir(path.dirname(path.join(repositoryRoot, testPath)), { recursive: true })
+    await writeFile(path.join(repositoryRoot, sourcePath), 'export const value = 1\n')
+    await writeFile(
+      path.join(repositoryRoot, testPath),
+      "test('provides the value', () => expect(true).toBe(true))\n",
+    )
+    await runGit(['add', '.'], repositoryRoot)
+    await runGit(['commit', '-m', 'test: add provider hook baseline'], repositoryRoot)
+    await writeFile(path.join(repositoryRoot, sourcePath), 'export const value = 2\n')
+    await writeFile(
+      path.join(repositoryRoot, testPath),
+      "test('provides the value', () => expect(true).toBe(true))\ntest('keeps the value', () => expect(true).toBe(true))\n",
+    )
+    const { stdout } = await execFileAsync(process.execPath, [SCRIPT_PATH, '--json'], {
+      cwd: repositoryRoot,
+    })
+    const result = JSON.parse(stdout)
+    assert.equal(result.status, 'passed')
+    assert.deepEqual(result.forbiddenTestPaths, [])
+  } finally {
+    await rm(repositoryRoot, { force: true, recursive: true })
+  }
+})
+
 test('still rejects provider, fixture and unrecognized tests inside contexts', async () => {
   const repositoryRoot = await createRepositoryFixture()
   const forbiddenTestPaths = [

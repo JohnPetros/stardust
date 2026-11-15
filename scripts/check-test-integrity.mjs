@@ -31,7 +31,7 @@ const FORBIDDEN_TEST_SUBJECT_PATTERNS = [
   /^(?:apps|packages)\/[^/]+\/src\/(?:[^/]+\/)*constants(?:\/|$)/,
   /^apps\/server\/src\/provision(?:\/|$)/,
   /(?:^|\/)fixtures(?:\/|$)/,
-  /(?:^|\/)[^/]*Provider\.(?:test|spec)\.[cm]?[jt]sx?$/,
+  /(?:^|\/)(?!use[A-Z])[^/]*Provider\.(?:test|spec)\.[cm]?[jt]sx?$/,
   /(?:^|\/)[^/]*Fixture\.(?:test|spec)\.[cm]?[jt]sx?$/,
   /(?:^|\/)constants\.(?:test|spec)\.[cm]?[jt]sx?$/,
   /(?:^|\/)provision\.(?:test|spec)\.[cm]?[jt]sx?$/,

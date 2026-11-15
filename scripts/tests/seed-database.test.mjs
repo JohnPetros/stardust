@@ -29,7 +29,7 @@ function runSeed(argumentsList, overrides = {}) {
 test('seed preflight validates the snapshot without connecting to a database', () => {
   const result = runSeed(['--check'])
   assert.equal(result.status, 0, result.stderr)
-  assert.match(result.stdout, /8 planets, 39 stars, 27 challenges/)
+  assert.match(result.stdout, /9 planets, 41 stars, 27 challenges/)
   assert.match(result.stdout, /No database changes/)
 })
 

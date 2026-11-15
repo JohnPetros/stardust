@@ -14,6 +14,10 @@ import {
   advisoryLockKey,
   isMain,
   equalRoleMemberships,
+  transitionMigrations,
+  inspectTransition,
+  inspectPostTransition,
+  inspectPendingPostTransition,
 } from '../check-drizzle-transition.mjs'
 
 test('role membership comparison preserves exact distinct tuples regardless of order or duplicate projections', () => {
@@ -47,6 +51,190 @@ test('role membership comparison preserves exact distinct tuples regardless of o
     false,
   )
   assert.deepEqual(expected, [first, second, first])
+})
+
+const transitionTags = [
+  '0000_baseline',
+  '0001_application_objects',
+  '0002_server_owned_access',
+]
+
+/** Writes a journal fixture whose first entries are the transition tags plus `extraTags`. */
+async function journalFixture(extraTags = [], mutate = (entries) => entries) {
+  const folder = await mkdtemp(resolve(tmpdir(), 'stardust-journal-fixture-'))
+  await mkdir(resolve(folder, 'meta'), { recursive: true })
+  const tags = [...transitionTags, ...extraTags]
+  const entries = mutate(
+    tags.map((tag, idx) => ({
+      idx,
+      version: '7',
+      when: 1790901517786 + idx * 1000,
+      tag,
+      breakpoints: true,
+    })),
+  )
+  for (const tag of tags)
+    await writeFile(resolve(folder, `${tag}.sql`), `SELECT '${tag}';`)
+  await writeFile(
+    resolve(folder, 'meta/_journal.json'),
+    JSON.stringify({ version: '7', dialect: 'postgresql', entries }),
+  )
+  return folder
+}
+
+/** Minimal postgres client double that serves the ledger and a clean exposure audit. */
+function ledgerClient(rows, { exposure = false } = {}) {
+  const client = async (strings) => {
+    const text = strings.join('?')
+    if (text.includes('to_regclass')) return [{ present: true }]
+    if (text.includes('__drizzle_migrations')) return rows
+    throw new Error(`Unexpected query: ${text}`)
+  }
+  client.unsafe = async () => [
+    {
+      function_exposure: exposure,
+      view_exposure: false,
+      membership_exposure: false,
+    },
+  ]
+  return client
+}
+
+const ledgerOf = (migrations) =>
+  migrations.map((migration) => ({
+    hash: migration.hash,
+    created_at: String(migration.folderMillis),
+  }))
+
+test('journal accepts the three transition tags followed by later entries', async () => {
+  const folder = await journalFixture(['0003_galaxies', '0004_galaxies_catalog'])
+  try {
+    assert.equal(transitionMigrations(folder).length, 5)
+  } finally {
+    await rm(folder, { recursive: true, force: true })
+  }
+})
+
+test('journal with only the transition entries is still accepted', async () => {
+  const folder = await journalFixture()
+  try {
+    assert.equal(transitionMigrations(folder).length, 3)
+  } finally {
+    await rm(folder, { recursive: true, force: true })
+  }
+})
+
+test('journal with a divergent prefix, order or later entry is refused', async () => {
+  const cases = {
+    'divergent tag in the prefix': (entries) => {
+      entries[1].tag = '0001_other'
+      return entries
+    },
+    'missing transition entry': (entries) => entries.slice(0, 2),
+    'non sequential idx': (entries) => {
+      entries[3].idx = 7
+      return entries
+    },
+    'non increasing when': (entries) => {
+      entries[3].when = entries[2].when
+      return entries
+    },
+    'missing breakpoints': (entries) => {
+      entries[3].breakpoints = false
+      return entries
+    },
+  }
+  for (const [name, mutate] of Object.entries(cases)) {
+    const folder = await journalFixture(['0003_galaxies'], mutate)
+    try {
+      assert.throws(
+        () => transitionMigrations(folder),
+        /Unexpected migration journal/,
+        name,
+      )
+    } finally {
+      await rm(folder, { recursive: true, force: true })
+    }
+  }
+})
+
+test('real journal is accepted by the transition tooling', () => {
+  assert.ok(transitionMigrations().length >= 3)
+})
+
+test('server-owned with a larger ledger accepts the identical prefix and every journal entry', async () => {
+  const folder = await journalFixture(['0003_galaxies', '0004_galaxies_catalog'])
+  try {
+    const client = ledgerClient(ledgerOf(transitionMigrations(folder)))
+    const result = await inspectTransition(client, null, 'server-owned', folder)
+    assert.deepEqual(result, { compatible: true, differences: [] })
+    assert.equal((await inspectPostTransition(client, folder)).compatible, true)
+  } finally {
+    await rm(folder, { recursive: true, force: true })
+  }
+})
+
+test('server-owned with a larger ledger refuses divergent hash, created_at, missing and extra rows', async () => {
+  const folder = await journalFixture(['0003_galaxies', '0004_galaxies_catalog'])
+  try {
+    const rows = ledgerOf(transitionMigrations(folder))
+    const variants = {
+      'divergent prefix hash': rows.map((row, i) =>
+        i === 1 ? { ...row, hash: 'x' } : row,
+      ),
+      'divergent later hash': rows.map((row, i) =>
+        i === 4 ? { ...row, hash: 'x' } : row,
+      ),
+      'divergent created_at': rows.map((row, i) =>
+        i === 3 ? { ...row, created_at: '1' } : row,
+      ),
+      'journal entry not applied': rows.slice(0, 4),
+      'row beyond the journal': [...rows, { hash: 'extra', created_at: '9999999999999' }],
+    }
+    for (const [name, ledger] of Object.entries(variants)) {
+      const result = await inspectTransition(
+        ledgerClient(ledger),
+        null,
+        'server-owned',
+        folder,
+      )
+      assert.equal(result.compatible, false, name)
+    }
+    const exposed = await inspectTransition(
+      ledgerClient(rows, { exposure: true }),
+      null,
+      'server-owned',
+      folder,
+    )
+    assert.equal(exposed.compatible, false)
+  } finally {
+    await rm(folder, { recursive: true, force: true })
+  }
+})
+
+test('pending post-transition check accepts a ledger that is a journal prefix only', async () => {
+  const folder = await journalFixture(['0003_galaxies', '0004_galaxies_catalog'])
+  try {
+    const rows = ledgerOf(transitionMigrations(folder))
+    for (const size of [3, 4, 5])
+      assert.equal(
+        (await inspectPendingPostTransition(ledgerClient(rows.slice(0, size)), folder))
+          .compatible,
+        true,
+      )
+    assert.equal(
+      (await inspectPendingPostTransition(ledgerClient(rows.slice(0, 2)), folder))
+        .compatible,
+      false,
+    )
+    const divergent = rows.map((row, i) => (i === 3 ? { ...row, hash: 'x' } : row))
+    assert.equal(
+      (await inspectPendingPostTransition(ledgerClient(divergent), folder)).compatible,
+      false,
+    )
+  } finally {
+    await rm(folder, { recursive: true, force: true })
+  }
 })
 
 const execute = promisify(execFile)
@@ -113,12 +301,28 @@ async function command(args, environment, input, timeout = 60000) {
   }
 }
 
-export async function withOwnedClone(operation, { legacy = false } = {}) {
+export async function withOwnedClone(
+  operation,
+  { legacy = false, fullJournal = false } = {},
+) {
   const environment = localEnvironment()
   const identity = randomUUID()
   const name = `stardust-drizzle-test-${identity}`
   const directory = await mkdtemp(resolve(tmpdir(), 'stardust-builder-database-runtime-'))
   const runnerNames = new Set()
+  // The transition suites exercise the exact three-migration transition state
+  // (RF-14); later migrations are covered by the unit tests and the galaxies
+  // migration test, so the clone sees only the transition entries by default.
+  const transitionJournal = resolve(directory, 'transition-journal.json')
+  if (!fullJournal) {
+    const journalPath = resolve(
+      projectRoot,
+      'apps/server/src/database/drizzle/migrations/meta/_journal.json',
+    )
+    const journal = JSON.parse(await readFile(journalPath, 'utf8'))
+    journal.entries = journal.entries.slice(0, 3)
+    await writeFile(transitionJournal, JSON.stringify(journal, null, 2))
+  }
   const sql = async (text, { allowFailure = false, user = 'supabase_admin' } = {}) => {
     const result = await command(
       [
@@ -158,6 +362,12 @@ export async function withOwnedClone(operation, { legacy = false } = {}) {
       `type=bind,src=${projectRoot},dst=/workspace,readonly`,
       '--mount',
       `type=bind,src=${directory},dst=/fixture`,
+      ...(fullJournal
+        ? []
+        : [
+            '--mount',
+            `type=bind,src=${transitionJournal},dst=/workspace/apps/server/src/database/drizzle/migrations/meta/_journal.json,readonly`,
+          ]),
       ...overlays,
       '--workdir',
       '/workspace',
@@ -534,7 +744,11 @@ if (isMain(import.meta.url)) {
             )
             return { code: 0, ...result }
           } catch (error) {
-            return { code: error.code, stdout: error.stdout, stderr: error.stderr }
+            return {
+              code: error.code,
+              stdout: error.stdout,
+              stderr: error.stderr,
+            }
           }
         }
         const help = await run([
@@ -568,7 +782,11 @@ if (isMain(import.meta.url)) {
         const noEnvironment = await execute(
           process.execPath,
           ['--import', 'tsx', resolve(projectRoot, entry), '--help'],
-          { cwd: projectRoot, env: { PATH: process.env.PATH }, timeout: 15000 },
+          {
+            cwd: projectRoot,
+            env: { PATH: process.env.PATH },
+            timeout: 15000,
+          },
         )
         assert.match(noEnvironment.stdout, /^Usage:/)
       }
@@ -725,5 +943,122 @@ if (isMain(import.meta.url)) {
       )
       assert.match(advisoryLockKey, /^\d+$/)
     })
+  })
+}
+
+const realJournalPath = resolve(
+  projectRoot,
+  'apps/server/src/database/drizzle/migrations/meta/_journal.json',
+)
+
+/**
+ * Mounts a journal trimmed to its first `size` entries over the real one so the
+ * runner sees only those migrations. Used with `withOwnedClone(..., { fullJournal: true })`
+ * to move one fixture through the 3 -> N ledger states with the real runner.
+ */
+async function journalOverlay(fixture, size) {
+  const journal = JSON.parse(await readFile(realJournalPath, 'utf8'))
+  journal.entries = journal.entries.slice(0, size)
+  const path = resolve(fixture.directory, `journal-${size}.json`)
+  await writeFile(path, JSON.stringify(journal, null, 2))
+  return [
+    '--mount',
+    `type=bind,src=${path},dst=/workspace/apps/server/src/database/drizzle/migrations/meta/_journal.json,readonly`,
+  ]
+}
+
+const ledgerSize = async (fixture) =>
+  Number(
+    (
+      await fixture.sql('SELECT count(*) FROM drizzle.__drizzle_migrations')
+    ).stdout.trim(),
+  )
+
+if (isMain(import.meta.url)) {
+  test('real runner completes the 3-row transition ledger to every journal entry, stays idempotent and refuses rollback', {
+    timeout: 360000,
+  }, async () => {
+    const journalLength = JSON.parse(await readFile(realJournalPath, 'utf8')).entries
+      .length
+    assert.ok(journalLength > 3, 'Real journal must hold post-transition entries')
+    await withOwnedClone(
+      async (fixture) => {
+        const transition = await journalOverlay(fixture, 3)
+        // 3-row transition state, applied by the real runner with the trimmed journal.
+        assert.equal((await fixture.invoke('migrate', 'legacy', [], transition)).code, 0)
+        assert.equal(await ledgerSize(fixture), 3)
+        assert.equal(
+          (await fixture.invoke('check', 'server-owned', [], transition)).code,
+          0,
+          'Preflight passes at the 3-row transition state',
+        )
+        await fixture.sql(fixture.guideInsert)
+        const guide = await fixture.guide()
+        assert.ok(guide, 'Populated guide row must exist before the migration')
+        const transitionLedger = await fixture.ledger()
+
+        // Full journal: 0003..last are applied by the real runner on top of 3 rows.
+        const completed = await fixture.invoke('migrate')
+        assert.equal(completed.code, 0, completed.stderr)
+        assert.equal(await ledgerSize(fixture), journalLength)
+        const ledger = JSON.parse(await fixture.ledger())
+        assert.deepEqual(
+          ledger.slice(0, 3),
+          JSON.parse(transitionLedger),
+          'Transition prefix rows are unchanged',
+        )
+        assert.equal(
+          (await fixture.invoke('check', 'server-owned')).code,
+          0,
+          'Preflight passes with every journal entry in the ledger',
+        )
+        assert.equal(await fixture.guide(), guide, 'Populated data survives')
+
+        // Second migrate is a no-op.
+        const before = await fixture.ledger()
+        assert.equal((await fixture.invoke('migrate')).code, 0)
+        assert.equal(await fixture.ledger(), before)
+        assert.equal(await fixture.guide(), guide)
+
+        // Rollback is restricted to the transition state.
+        const refused = await fixture.invoke('migrate', 'legacy', ['--rollback'])
+        assert.equal(refused.code, 1)
+        assert.equal(await fixture.ledger(), before, 'Rollback refusal leaves the ledger')
+        assert.equal(await fixture.guide(), guide)
+        await fixture.assertUnlocked()
+      },
+      { fullJournal: true },
+    )
+  })
+
+  test('real runner completes a partially applied post-transition ledger', {
+    timeout: 360000,
+  }, async () => {
+    const journalLength = JSON.parse(await readFile(realJournalPath, 'utf8')).entries
+      .length
+    assert.ok(journalLength > 4, 'Real journal must hold at least two later entries')
+    await withOwnedClone(
+      async (fixture) => {
+        const partial = await journalOverlay(fixture, 4)
+        assert.equal((await fixture.invoke('migrate', 'legacy', [], partial)).code, 0)
+        assert.equal(await ledgerSize(fixture), 4, 'Only 0003 was applied')
+        await fixture.sql(fixture.guideInsert)
+        const guide = await fixture.guide()
+        const partialLedger = JSON.parse(await fixture.ledger())
+
+        const completed = await fixture.invoke('migrate')
+        assert.equal(completed.code, 0, completed.stderr)
+        assert.equal(await ledgerSize(fixture), journalLength)
+        assert.deepEqual(
+          JSON.parse(await fixture.ledger()).slice(0, 4),
+          partialLedger,
+          'Rows applied before the partial state are unchanged',
+        )
+        assert.equal((await fixture.invoke('check', 'server-owned')).code, 0)
+        assert.equal(await fixture.guide(), guide)
+        await fixture.assertUnlocked()
+      },
+      { fullJournal: true },
+    )
   })
 }

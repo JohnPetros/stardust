@@ -159,26 +159,37 @@ export function loadTransitionManifest(path = defaultManifestPath) {
   return manifest
 }
 
-export function transitionMigrations() {
-  const journal = JSON.parse(
-    readFileSync(resolve(migrationsFolder, 'meta/_journal.json'), 'utf8'),
-  )
-  const tags = ['0000_baseline', '0001_application_objects', '0002_server_owned_access']
+const transitionTags = [
+  '0000_baseline',
+  '0001_application_objects',
+  '0002_server_owned_access',
+]
+export const transitionMigrationCount = transitionTags.length
+
+/**
+ * The first three journal entries are the fixed transition prefix; later entries only
+ * need a sequential `idx`, an increasing `when` and `breakpoints`.
+ * @param {string} folder
+ */
+export function transitionMigrations(folder = migrationsFolder) {
+  const journal = JSON.parse(readFileSync(resolve(folder, 'meta/_journal.json'), 'utf8'))
   if (
     journal.version !== '7' ||
     journal.dialect !== 'postgresql' ||
-    journal.entries.length !== 3 ||
+    !Array.isArray(journal.entries) ||
+    journal.entries.length < transitionMigrationCount ||
     journal.entries.some(
       (entry, index) =>
         entry.idx !== index ||
-        entry.tag !== tags[index] ||
+        (index < transitionMigrationCount && entry.tag !== transitionTags[index]) ||
+        typeof entry.tag !== 'string' ||
         !entry.breakpoints ||
         !Number.isSafeInteger(entry.when) ||
         (index > 0 && entry.when <= journal.entries[index - 1].when),
     )
   )
     throw new Error('Unexpected migration journal')
-  return readMigrationFiles({ migrationsFolder })
+  return readMigrationFiles({ migrationsFolder: folder })
 }
 
 function validateOptions(options) {
@@ -377,19 +388,68 @@ function normalizeColumnOrdinals(columns) {
   })
 }
 
-export async function inspectTransition(client, manifest, phase) {
-  const migrations = transitionMigrations()
+/** @returns {boolean} true when every ledger row equals the migration at the same position */
+function ledgerMatches(ledger, migrations) {
+  return ledger.every(
+    (row, index) =>
+      row.hash === migrations[index]?.hash &&
+      Number(row.created_at) === migrations[index]?.folderMillis,
+  )
+}
+
+/**
+ * Verifies that every journal entry is in the ledger with equal hash and created_at and
+ * that no external access path exists. Used when migrations follow the transition.
+ */
+export async function inspectPostTransition(client, folder = migrationsFolder) {
+  const migrations = transitionMigrations(folder)
   const ledger = await readTransitionLedger(client)
-  const expectedEntries = phase === 'legacy' ? 0 : phase === 'adopted' ? 2 : 3
+  const differences = []
+  if (ledger.length !== migrations.length || !ledgerMatches(ledger, migrations))
+    differences.push('Migration ledger differs from the migration journal')
+  if (await auditExternalExposure(client))
+    differences.push('Unrepresented external access path requires an amendment')
+  return { compatible: differences.length === 0, differences }
+}
+
+/**
+ * Pre-migrate check for a ledger that already holds migrations after the transition but
+ * not every journal entry yet: the ledger must be a prefix of the journal.
+ */
+export async function inspectPendingPostTransition(client, folder = migrationsFolder) {
+  const migrations = transitionMigrations(folder)
+  const ledger = await readTransitionLedger(client)
   const differences = []
   if (
-    ledger.length !== expectedEntries ||
-    ledger.some(
-      (row, index) =>
-        row.hash !== migrations[index]?.hash ||
-        Number(row.created_at) !== migrations[index]?.folderMillis,
-    )
+    ledger.length < transitionMigrationCount ||
+    ledger.length > migrations.length ||
+    !ledgerMatches(ledger, migrations)
   )
+    differences.push('Migration ledger differs from the migration journal')
+  if (await auditExternalExposure(client))
+    differences.push('Unrepresented external access path requires an amendment')
+  return { compatible: differences.length === 0, differences }
+}
+
+export async function inspectTransition(
+  client,
+  manifest,
+  phase,
+  folder = migrationsFolder,
+) {
+  const migrations = transitionMigrations(folder)
+  const ledger = await readTransitionLedger(client)
+  if (phase === 'server-owned' && ledger.length > transitionMigrationCount) {
+    const differences = []
+    if (!ledgerMatches(ledger.slice(0, transitionMigrationCount), migrations))
+      differences.push('Migration ledger differs from the requested phase')
+    const post = await inspectPostTransition(client, folder)
+    differences.push(...post.differences)
+    return { compatible: differences.length === 0, differences }
+  }
+  const expectedEntries = phase === 'legacy' ? 0 : phase === 'adopted' ? 2 : 3
+  const differences = []
+  if (ledger.length !== expectedEntries || !ledgerMatches(ledger, migrations))
     differences.push('Migration ledger differs from the requested phase')
   const catalog = await captureCatalog(client)
   const expected = expectedCatalog(manifest, phase)
@@ -521,7 +581,11 @@ export function runTransitionCli(operation) {
       .replace(/(?:postgres(?:ql)?:\/\/)[^\s]+/gi, 'postgres://[redacted]')
       .replace(/(password\s*[=:]\s*)\S+/gi, '$1[redacted]')
 
-    console.error('Database command failed:', { errorName, errorCode, message })
+    console.error('Database command failed:', {
+      errorName,
+      errorCode,
+      message,
+    })
     process.exitCode = 1
   })
 }
