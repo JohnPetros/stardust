@@ -242,7 +242,13 @@ After integrating all implementation flows and the generated artifacts:
    `check:architecture` when applicable, per "Execução local escopada" in
    `documentation/tooling.md`. Coverage/ratchet and full suites only come in with demonstrated
    impact on the workspace, a Spec requirement or a user request (CI runs them).
-   Run `check:complexity -w <workspace>` when the scope requires it. Record each static
+   Run `pnpm --filter @stardust/<workspace> run check:complexity` for every workspace that
+   gains or changes code, Server included (new files and extracted Views count). The gate runs
+   with `--max-warnings 0` against `.code-multivitals-baseline.json`, so any warning outside the
+   baseline fails the check, not only errors: a non-zero exit is a failed check, never an
+   accepted limitation. Call a warning pre-existing only after proving it is in the baseline or
+   that the same command reports it on `origin/main`. Fix new warnings by refactoring; update the
+   baseline only when the change is intentional and the user approved it. Record each static
    category explicitly. A runner designated in the main task owns the integration
    commands and results.
 4. Run the contracted integration selections (Server, browser, jobs) against the

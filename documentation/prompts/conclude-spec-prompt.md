@@ -109,7 +109,10 @@ baseline checks stay in the same results record. Confirm the current separate
 dispositions for types (`check:types`), lint/code (`check:code`) and complexity for
 the scoped changes and the affected consuming projects. Reuse applicable
 results; configured complexity lint does not prove a quantitative metric, and
-required tooling that is missing blocks closure.
+required tooling that is missing blocks closure. `check:complexity` must exit 0 in every
+workspace with new or changed code, Server included: its gate fails on warnings outside
+`.code-multivitals-baseline.json`, and a warning is called pre-existing only when the baseline
+or the same command on `origin/main` proves it.
 
 The evidence includes the exact command and working directory, the result, the code
 revision or worktree identity, the relevant fixture/configuration and the criteria
@@ -168,7 +171,8 @@ Before calling `commit`, confirm the mandatory sensors from `AGENTS.md`
 (`check:code` and `check:types` in the affected workspaces and consumers, `test:unit` with the
 affected files), `check:spec-implementation -- <spec> --base <base-commit> --require-plan` (it honors an
 Evaluation's `plan: none`) and
-`check:test-integrity -- --base <base-commit>` against the final HEAD. Coverage/ratchet
+`check:test-integrity -- --base <base-commit>` and `check:complexity` in each affected
+workspace against the final HEAD. Coverage/ratchet
 (`test:coverage`, `check:coverage`) and full suites only apply with demonstrated impact on the
 workspace, a Spec requirement or a user request; CI runs them. Reuse the current
 recorded results and run only what is missing or stale. A green local build

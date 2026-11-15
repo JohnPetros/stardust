@@ -116,6 +116,13 @@ novas violações. Para atualizar o baseline, execute:
 pnpm run update:complexity-baseline
 ```
 
+O gate roda com `--max-warnings 0`: qualquer aviso fora do baseline falha o check,
+não só os erros. Um código de saída diferente de zero é um check reprovado, nunca uma
+limitação aceita. Rode `pnpm --filter @stardust/<workspace> run check:complexity` em todo
+workspace com código novo ou alterado (inclusive `apps/server`) antes de commitar. Só chame
+um aviso de pré-existente depois de provar que ele consta no baseline ou que o mesmo comando
+o reporta em `origin/main`. Corrija os avisos novos refatorando.
+
 A atualização deve ser feita somente quando a mudança de complexidade for
 intencional e estiver revisada. A detecção de clones fica desabilitada no
 ratchet atual para evitar ruído e custo desproporcional no monorepo; o gate é
