@@ -4,7 +4,10 @@ import type { Broker, Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
 import { IdFaker } from '@stardust/core/global/structures/fakers'
 import { PlanetsFaker } from '@stardust/core/space/entities/fakers'
-import type { PlanetsRepository } from '@stardust/core/space/interfaces'
+import type {
+  GalaxiesRepository,
+  PlanetsRepository,
+} from '@stardust/core/space/interfaces'
 import { ReorderPlanetsUseCase } from '@stardust/core/space/use-cases'
 
 import { ReorderPlanetsController } from '../ReorderPlanetsController'
@@ -18,6 +21,7 @@ describe('Reorder Planets Controller', () => {
 
   let http: Mock<Http<Schema>>
   let repository: Mock<PlanetsRepository>
+  let galaxiesRepository: Mock<GalaxiesRepository>
   let broker: Mock<Broker>
   let controller: ReorderPlanetsController
 
@@ -25,8 +29,9 @@ describe('Reorder Planets Controller', () => {
     jest.restoreAllMocks()
     http = mock()
     repository = mock()
+    galaxiesRepository = mock()
     broker = mock()
-    controller = new ReorderPlanetsController(repository, broker)
+    controller = new ReorderPlanetsController(repository, galaxiesRepository, broker)
     http.statusOk.mockReturnValue(http)
   })
 

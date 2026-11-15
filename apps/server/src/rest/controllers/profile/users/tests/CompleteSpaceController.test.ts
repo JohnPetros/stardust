@@ -11,6 +11,7 @@ describe('Complete Space Controller', () => {
   type Schema = {
     body: {
       nextStarId: string | null
+      isFirstGalaxy: boolean
     }
   }
 
@@ -29,7 +30,7 @@ describe('Complete Space Controller', () => {
 
   it('should read account and body, execute use case and pass request', async () => {
     const userId = 'user-1'
-    const body = { nextStarId: 'star-99' }
+    const body = { nextStarId: 'star-99', isFirstGalaxy: true }
     const restResponse = mock<RestResponse>()
 
     http.getAccountId.mockResolvedValue(userId)
@@ -47,8 +48,31 @@ describe('Complete Space Controller', () => {
     expect(executeSpy).toHaveBeenCalledWith({
       userId,
       nextStarId: body.nextStarId,
+      isFirstGalaxy: body.isFirstGalaxy,
     })
     expect(http.pass).toHaveBeenCalled()
     expect(response).toBe(restResponse)
+  })
+
+  it('should forward a non-first galaxy and a null next star id to the use case', async () => {
+    const userId = 'user-2'
+    const body = { nextStarId: null, isFirstGalaxy: false }
+
+    http.getAccountId.mockResolvedValue(userId)
+    http.getBody.mockResolvedValue(body)
+    http.pass.mockResolvedValue(mock<RestResponse>())
+
+    const executeSpy = jest
+      .spyOn(CompleteSpaceUseCase.prototype, 'execute')
+      .mockResolvedValue(undefined)
+
+    await controller.handle(http)
+
+    expect(executeSpy).toHaveBeenCalledWith({
+      userId,
+      nextStarId: null,
+      isFirstGalaxy: false,
+    })
+    expect(http.pass).toHaveBeenCalled()
   })
 })

@@ -3,7 +3,11 @@ import { mock, type Mock } from 'ts-jest-mocker'
 import type { Broker, Http } from '@stardust/core/global/interfaces'
 import { IdFaker } from '@stardust/core/global/structures/fakers'
 import { StarsFaker } from '@stardust/core/space/entities/fakers'
-import type { PlanetsRepository, StarsRepository } from '@stardust/core/space/interfaces'
+import type {
+  GalaxiesRepository,
+  PlanetsRepository,
+  StarsRepository,
+} from '@stardust/core/space/interfaces'
 import { GetNextStarUseCase } from '@stardust/core/space/use-cases'
 
 import { AppendNextStarToBodyController } from '../AppendNextStarToBodyController'
@@ -20,6 +24,7 @@ describe('Append Next Star To Body Controller', () => {
   let http: Mock<Http<Schema>>
   let starsRepository: Mock<StarsRepository>
   let planetsRepository: Mock<PlanetsRepository>
+  let galaxiesRepository: Mock<GalaxiesRepository>
   let broker: Mock<Broker>
   let controller: AppendNextStarToBodyController
 
@@ -28,12 +33,14 @@ describe('Append Next Star To Body Controller', () => {
     http = mock()
     starsRepository = mock()
     planetsRepository = mock()
+    galaxiesRepository = mock()
     broker = mock()
     http.extendBody.mockImplementation()
     http.pass.mockImplementation()
     controller = new AppendNextStarToBodyController(
       starsRepository,
       planetsRepository,
+      galaxiesRepository,
       broker,
     )
   })
@@ -49,7 +56,7 @@ describe('Append Next Star To Body Controller', () => {
     http.getBody.mockResolvedValue(body)
     const executeSpy = jest
       .spyOn(GetNextStarUseCase.prototype, 'execute')
-      .mockResolvedValue(nextStar)
+      .mockResolvedValue({ nextStar, isFirstGalaxy: true })
 
     await controller.handle(http)
 
@@ -59,11 +66,14 @@ describe('Append Next Star To Body Controller', () => {
       userName: body.userName,
       userSlug: body.userSlug,
     })
-    expect(http.extendBody).toHaveBeenCalledWith({ nextStarId: nextStar.id })
+    expect(http.extendBody).toHaveBeenCalledWith({
+      nextStarId: nextStar.id,
+      isFirstGalaxy: true,
+    })
     expect(http.pass).toHaveBeenCalledTimes(1)
   })
 
-  it('should append null nextStarId when use case returns null', async () => {
+  it('should append null nextStarId and isFirstGalaxy false when there is no next star in another galaxy', async () => {
     const body = {
       starId: IdFaker.fake().value,
       userName: 'ana',
@@ -73,7 +83,7 @@ describe('Append Next Star To Body Controller', () => {
     http.getBody.mockResolvedValue(body)
     const executeSpy = jest
       .spyOn(GetNextStarUseCase.prototype, 'execute')
-      .mockResolvedValue(null)
+      .mockResolvedValue({ nextStar: null, isFirstGalaxy: false })
 
     await controller.handle(http)
 
@@ -82,7 +92,10 @@ describe('Append Next Star To Body Controller', () => {
       userName: body.userName,
       userSlug: body.userSlug,
     })
-    expect(http.extendBody).toHaveBeenCalledWith({ nextStarId: null })
+    expect(http.extendBody).toHaveBeenCalledWith({
+      nextStarId: null,
+      isFirstGalaxy: false,
+    })
     expect(http.pass).toHaveBeenCalledTimes(1)
   })
 

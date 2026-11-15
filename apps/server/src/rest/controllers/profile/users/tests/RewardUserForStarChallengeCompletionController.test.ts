@@ -36,6 +36,7 @@ describe('Reward User For Star Challenge Completion Controller', () => {
         coins: number
       }
       nextStarId?: string
+      isFirstGalaxy?: boolean
       starId: string
     }
   }
@@ -65,6 +66,7 @@ describe('Reward User For Star Challenge Completion Controller', () => {
     const body = {
       starId: IdFaker.fake().value,
       nextStarId: IdFaker.fake().value,
+      isFirstGalaxy: true,
       challengeId: IdFaker.fake().value,
       challengeReward: { xp: 20, coins: 5 },
     }
@@ -131,6 +133,7 @@ describe('Reward User For Star Challenge Completion Controller', () => {
     expect(completeSpaceSpy).toHaveBeenCalledWith({
       userId: routeParams.userId,
       nextStarId: body.nextStarId,
+      isFirstGalaxy: true,
     })
     expect(unlockStarSpy).toHaveBeenCalledWith({
       userId: routeParams.userId,
@@ -229,6 +232,7 @@ describe('Reward User For Star Challenge Completion Controller', () => {
     expect(completeSpaceSpy).toHaveBeenCalledWith({
       userId: routeParams.userId,
       nextStarId: null,
+      isFirstGalaxy: false,
     })
     expect(unlockStarSpy).not.toHaveBeenCalled()
     expect(removeRecentlyUnlockedStarSpy).toHaveBeenCalledWith({

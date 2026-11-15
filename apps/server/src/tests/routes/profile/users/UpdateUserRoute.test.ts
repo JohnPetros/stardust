@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { asc, inArray } from 'drizzle-orm'
+import { asc, eq, inArray } from 'drizzle-orm'
 import { userModel } from '@/database/drizzle/schema'
 
 import { HTTP_STATUS_CODE } from '@stardust/core/global/constants'
@@ -14,6 +14,7 @@ import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
 import { AuthFixture } from '@/tests/fixtures/AuthFixture'
 import { HonoFixture } from '@/tests/fixtures/HonoFixture'
 import { ProfileFixture } from '@/tests/fixtures/ProfileFixture'
+import { SpaceFixture, type CreatedGalaxy } from '@/tests/fixtures/SpaceFixture'
 import { SupabaseFixture } from '@/tests/fixtures/SupabaseFixture'
 
 describe('[PUT] /profile/users/:userId', () => {
@@ -21,6 +22,8 @@ describe('[PUT] /profile/users/:userId', () => {
   const supabaseFixture = new SupabaseFixture()
   const authFixture = new AuthFixture(supabaseFixture.supabase)
   const profileFixture = new ProfileFixture(supabaseFixture.supabase)
+  const spaceFixture = new SpaceFixture(supabaseFixture.supabase)
+  const createdGalaxies: CreatedGalaxy[] = []
   const usersRepository = new DrizzleUsersRepository(supabaseFixture.database, {
     kind: 'system',
   })
@@ -31,6 +34,16 @@ describe('[PUT] /profile/users/:userId', () => {
 
   afterAll(async () => {
     await DrizzleClient.close()
+  })
+
+  afterEach(async () => {
+    if (!createdGalaxies.length) return
+    await supabaseFixture.database
+      .update(userModel)
+      .set({ currentGalaxyId: null })
+      .where(eq(userModel.id, authFixture.getAccountId()))
+    await spaceFixture.cleanupCreatedGalaxies(createdGalaxies)
+    createdGalaxies.length = 0
   })
 
   beforeEach(async () => {
@@ -190,5 +203,34 @@ describe('[PUT] /profile/users/:userId', () => {
         email: payload.email,
       }),
     )
+  })
+
+  it('should keep the current galaxy and the space completion when the client body omits them', async () => {
+    const user = await profileFixture.createAccountUser(authFixture.getAccountId())
+    const galaxy = await spaceFixture.createGalaxy({ status: 'published' })
+    createdGalaxies.push(galaxy)
+    await supabaseFixture.database
+      .update(userModel)
+      .set({ currentGalaxyId: galaxy.id, hasCompletedSpace: true })
+      .where(eq(userModel.id, user.id.value))
+    const persistedUser = await usersRepository.findById(user.id)
+    if (!persistedUser) throw new Error('Expected the account profile to exist')
+    const { currentGalaxy, hasCompletedSpace, ...clientBody } = persistedUser.dto
+    expect(currentGalaxy?.id).toBe(galaxy.id)
+    expect(hasCompletedSpace).toBe(true)
+
+    const response = await request(honoFixture.server)
+      .put(`/profile/users/${user.id.value}`)
+      .set(authFixture.getAuthorizationHeader())
+      .send({ ...clientBody, name: `kept-galaxy-${Id.create().value.slice(0, 8)}` })
+
+    expect(response.status).toBe(HTTP_STATUS_CODE.ok)
+    const [row] = await supabaseFixture.database
+      .select()
+      .from(userModel)
+      .where(eq(userModel.id, user.id.value))
+    expect(row.currentGalaxyId).toBe(galaxy.id)
+    expect(row.hasCompletedSpace).toBe(true)
+    expect(row.name).toBe(response.body.name)
   })
 })

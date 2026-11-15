@@ -3,7 +3,10 @@ import { mock, type Mock } from 'ts-jest-mocker'
 import type { Http } from '@stardust/core/global/interfaces'
 import type { RestResponse } from '@stardust/core/global/responses'
 import { PlanetsFaker } from '@stardust/core/space/entities/fakers'
-import type { PlanetsRepository } from '@stardust/core/space/interfaces'
+import type {
+  GalaxiesRepository,
+  PlanetsRepository,
+} from '@stardust/core/space/interfaces'
 import { CreatePlanetUseCase } from '@stardust/core/space/use-cases'
 
 import { CreatePlanetController } from '../CreatePlanetController'
@@ -19,13 +22,15 @@ describe('Create Planet Controller', () => {
 
   let http: Mock<Http<Schema>>
   let planetsRepository: Mock<PlanetsRepository>
+  let galaxiesRepository: Mock<GalaxiesRepository>
   let controller: CreatePlanetController
 
   beforeEach(() => {
     jest.restoreAllMocks()
     http = mock()
     planetsRepository = mock()
-    controller = new CreatePlanetController(planetsRepository)
+    galaxiesRepository = mock()
+    controller = new CreatePlanetController(planetsRepository, galaxiesRepository)
   })
 
   it('should read body, call use case and send created planet', async () => {
