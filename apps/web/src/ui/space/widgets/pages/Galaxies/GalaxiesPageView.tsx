@@ -17,6 +17,37 @@ export type Props = {
   onEnter: (galaxy: GalaxySummaryDto) => void
 }
 
+type ContentProps = Pick<
+  Props,
+  'galaxies' | 'isLoading' | 'hasError' | 'pendingGalaxySlug' | 'onRetry' | 'onEnter'
+>
+
+function GalaxiesContent({
+  galaxies,
+  isLoading,
+  hasError,
+  pendingGalaxySlug,
+  onRetry,
+  onEnter,
+}: ContentProps) {
+  if (isLoading) return <GalaxiesLoading />
+
+  if (hasError) return <GalaxiesLoadFailure onRetry={onRetry} />
+
+  return (
+    <>
+      <p className='mt-[8px] max-w-[520px] text-[14px] leading-[1.5] text-theme-text-secondary lg:mx-auto lg:text-center'>
+        Cada galáxia é um curso. Escolha em qual você quer estudar.
+      </p>
+      <GalaxiesMap
+        galaxies={galaxies}
+        pendingGalaxySlug={pendingGalaxySlug}
+        onEnter={onEnter}
+      />
+    </>
+  )
+}
+
 export function GalaxiesPageView({
   backLabel,
   galaxies,
@@ -42,22 +73,14 @@ export function GalaxiesPageView({
           Galáxias
         </h1>
 
-        {isLoading && <GalaxiesLoading />}
-
-        {!isLoading && hasError && <GalaxiesLoadFailure onRetry={onRetry} />}
-
-        {!isLoading && !hasError && (
-          <>
-            <p className='mt-[8px] max-w-[520px] text-[14px] leading-[1.5] text-theme-text-secondary lg:mx-auto lg:text-center'>
-              Cada galáxia é um curso. Escolha em qual você quer estudar.
-            </p>
-            <GalaxiesMap
-              galaxies={galaxies}
-              pendingGalaxySlug={pendingGalaxySlug}
-              onEnter={onEnter}
-            />
-          </>
-        )}
+        <GalaxiesContent
+          galaxies={galaxies}
+          isLoading={isLoading}
+          hasError={hasError}
+          pendingGalaxySlug={pendingGalaxySlug}
+          onRetry={onRetry}
+          onEnter={onEnter}
+        />
       </section>
     </div>
   )

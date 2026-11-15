@@ -7,11 +7,29 @@ import type { CurrentGalaxyDto } from '@stardust/core/space/entities/dtos'
 
 import { useLastUnlockedStarScroll } from './useLastUnlockedStarScroll'
 
-export function useSpaceContextProvider(
+function findLastUnlockedStarId(
   planets: Planet[],
-  user: User | null,
-  currentGalaxy: CurrentGalaxyDto,
+  firstStarId: Id,
+  isStarUnlocked: (starId: Id) => boolean,
 ) {
+  const reversedPlanets = [...planets]
+  reversedPlanets.reverse()
+
+  for (const planet of reversedPlanets) {
+    const reversedStars = [...planet.stars]
+    reversedStars.reverse()
+
+    for (const star of reversedStars) {
+      if (isStarUnlocked(star.id)) {
+        return star.id.value
+      }
+    }
+  }
+
+  return firstStarId?.value
+}
+
+function useStarUnlocking(planets: Planet[], user: User | null) {
   const firstStarId = planets[0]?.stars[0]?.id
 
   const isStarUnlocked = useCallback(
@@ -26,30 +44,20 @@ export function useSpaceContextProvider(
   const lastUnlockedStarId = useMemo(() => {
     if (!user) return null
 
-    const reversedPlanets = [...planets]
-    reversedPlanets.reverse()
-
-    for (const planet of reversedPlanets) {
-      const reversedStars = [...planet.stars]
-      reversedStars.reverse()
-
-      for (const star of reversedStars) {
-        if (isStarUnlocked(star.id)) {
-          return star.id.value
-        }
-      }
-    }
-
-    return firstStarId?.value
+    return findLastUnlockedStarId(planets, firstStarId, isStarUnlocked)
   }, [user, planets, firstStarId, isStarUnlocked])
 
-  const {
-    lastUnlockedStarRef,
-    lastUnlockedStarPosition,
-    setLastUnlockedStarPosition,
-    getLastUnlockedStarLayoutSnapshot,
-    scrollIntoLastUnlockedStar,
-  } = useLastUnlockedStarScroll(lastUnlockedStarId)
+  return { isStarUnlocked, lastUnlockedStarId }
+}
+
+export function useSpaceContextProvider(
+  planets: Planet[],
+  user: User | null,
+  currentGalaxy: CurrentGalaxyDto,
+) {
+  const { isStarUnlocked, lastUnlockedStarId } = useStarUnlocking(planets, user)
+
+  const scroll = useLastUnlockedStarScroll(lastUnlockedStarId)
 
   const spaceContextValue = useMemo(() => {
     return {
@@ -59,20 +67,20 @@ export function useSpaceContextProvider(
       hasGalaxyChoice: currentGalaxy.hasGalaxyChoice,
       isStarUnlocked,
       lastUnlockedStarId,
-      lastUnlockedStarRef,
-      lastUnlockedStarPosition,
-      getLastUnlockedStarLayoutSnapshot,
-      scrollIntoLastUnlockedStar,
-      setLastUnlockedStarPosition,
+      lastUnlockedStarRef: scroll.lastUnlockedStarRef,
+      lastUnlockedStarPosition: scroll.lastUnlockedStarPosition,
+      getLastUnlockedStarLayoutSnapshot: scroll.getLastUnlockedStarLayoutSnapshot,
+      scrollIntoLastUnlockedStar: scroll.scrollIntoLastUnlockedStar,
+      setLastUnlockedStarPosition: scroll.setLastUnlockedStarPosition,
     }
   }, [
     planets,
     currentGalaxy,
     isStarUnlocked,
     lastUnlockedStarId,
-    lastUnlockedStarPosition,
-    getLastUnlockedStarLayoutSnapshot,
-    scrollIntoLastUnlockedStar,
+    scroll.lastUnlockedStarPosition,
+    scroll.getLastUnlockedStarLayoutSnapshot,
+    scroll.scrollIntoLastUnlockedStar,
   ])
 
   return spaceContextValue

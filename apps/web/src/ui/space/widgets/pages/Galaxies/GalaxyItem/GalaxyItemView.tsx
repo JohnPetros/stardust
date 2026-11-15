@@ -75,21 +75,23 @@ function GalaxyIllustration({
   )
 }
 
-function GalaxyPlaque({ galaxy }: Pick<Props, 'galaxy'>) {
+function getPlaqueClassName(galaxy: GalaxySummaryDto) {
   const isAnnounced = galaxy.status === 'announced'
 
+  return twMerge(
+    'relative z-10 flex w-full flex-col items-start gap-[12px] rounded-theme bg-theme-surface p-[24px] text-left lg:w-[340px]',
+    isAnnounced && 'border border-dashed border-theme-border-quiet',
+    !isAnnounced &&
+      !galaxy.isCurrent &&
+      'border border-theme-border-quiet group-hover:border-theme-border',
+    galaxy.isCurrent && 'border-2 border-theme-reward',
+  )
+}
+
+function GalaxyChips({ galaxy }: Pick<Props, 'galaxy'>) {
   return (
-    <div
-      className={twMerge(
-        'relative z-10 flex w-full flex-col items-start gap-[12px] rounded-theme bg-theme-surface p-[24px] text-left lg:w-[340px]',
-        isAnnounced && 'border border-dashed border-theme-border-quiet',
-        !isAnnounced &&
-          !galaxy.isCurrent &&
-          'border border-theme-border-quiet group-hover:border-theme-border',
-        galaxy.isCurrent && 'border-2 border-theme-reward',
-      )}
-    >
-      {isAnnounced && (
+    <>
+      {galaxy.status === 'announced' && (
         <span
           className={twMerge(
             CHIP_CLASS_NAME,
@@ -106,22 +108,32 @@ function GalaxyPlaque({ galaxy }: Pick<Props, 'galaxy'>) {
           Você está aqui
         </span>
       )}
+    </>
+  )
+}
 
-      {isAnnounced ? (
-        <h2 className='text-[20px] font-semibold leading-[1.2] text-theme-text-primary lg:leading-7'>
-          {galaxy.name}
-        </h2>
-      ) : (
-        <span className='block text-[20px] font-semibold leading-[1.2] text-theme-text-primary lg:leading-7'>
-          {galaxy.name}
-        </span>
-      )}
+const TITLE_CLASS_NAME =
+  'text-[20px] font-semibold leading-[1.2] text-theme-text-primary lg:leading-7'
+
+function GalaxyTitle({ galaxy }: Pick<Props, 'galaxy'>) {
+  if (galaxy.status === 'announced') {
+    return <h2 className={TITLE_CLASS_NAME}>{galaxy.name}</h2>
+  }
+
+  return <span className={twMerge('block', TITLE_CLASS_NAME)}>{galaxy.name}</span>
+}
+
+function GalaxyPlaque({ galaxy }: Pick<Props, 'galaxy'>) {
+  return (
+    <div className={getPlaqueClassName(galaxy)}>
+      <GalaxyChips galaxy={galaxy} />
+      <GalaxyTitle galaxy={galaxy} />
 
       <p className='text-[14px] leading-[1.5] text-theme-text-secondary'>
         {galaxy.description}
       </p>
 
-      {!isAnnounced && (
+      {galaxy.status !== 'announced' && (
         <GalaxyProgress
           completedPlanetsCount={galaxy.completedPlanetsCount ?? 0}
           planetsCount={galaxy.planetsCount ?? 0}
@@ -134,6 +146,9 @@ function GalaxyPlaque({ galaxy }: Pick<Props, 'galaxy'>) {
 const LAYOUT_CLASS_NAME =
   'relative flex w-full flex-col lg:flex-row lg:items-center lg:gap-8'
 
+const BUTTON_CLASS_NAME =
+  'group cursor-pointer rounded-theme text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-theme-action'
+
 export function GalaxyItemView({
   galaxy,
   side,
@@ -143,22 +158,19 @@ export function GalaxyItemView({
   onEnter,
 }: Props) {
   const isAnnounced = galaxy.status === 'announced'
-  const illustration = (
-    <GalaxyIllustration
-      side={side}
-      animationUrl={animationUrl}
-      isAnimationStatic={isAnimationStatic}
-      isAnnounced={isAnnounced}
-    />
+  const content = (
+    <>
+      <GalaxyIllustration
+        side={side}
+        animationUrl={animationUrl}
+        isAnimationStatic={isAnimationStatic}
+        isAnnounced={isAnnounced}
+      />
+      <GalaxyPlaque galaxy={galaxy} />
+    </>
   )
 
-  if (isAnnounced)
-    return (
-      <article className={LAYOUT_CLASS_NAME}>
-        {illustration}
-        <GalaxyPlaque galaxy={galaxy} />
-      </article>
-    )
+  if (isAnnounced) return <article className={LAYOUT_CLASS_NAME}>{content}</article>
 
   return (
     <button
@@ -168,12 +180,11 @@ export function GalaxyItemView({
       onClick={() => onEnter(galaxy)}
       className={twMerge(
         LAYOUT_CLASS_NAME,
-        'group cursor-pointer rounded-theme text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-theme-action',
+        BUTTON_CLASS_NAME,
         isPending && 'cursor-progress opacity-70',
       )}
     >
-      {illustration}
-      <GalaxyPlaque galaxy={galaxy} />
+      {content}
     </button>
   )
 }

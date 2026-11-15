@@ -22,6 +22,37 @@ export type Props = {
   onFabClick: () => void
 }
 
+function PlanetList({ planets }: Pick<Props, 'planets'>) {
+  return (
+    <ul className='mt-10 flex max-w-[75vw] flex-col items-start justify-center gap-12 z-40'>
+      {planets.map((planet) => (
+        <li key={planet.id.value}>
+          <Planet
+            name={planet.name.value}
+            icon={planet.icon.value}
+            image={planet.image.value}
+            stars={planet.stars}
+          />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function EndingLink() {
+  return (
+    <Link
+      href={ROUTES.lesson.ending}
+      className='block z-50 mt-12 pb-6 hover:scale-105 transition-transform duration-200'
+    >
+      <p className='text-medium text-gray-50 text-center translate-y-6'>
+        Agradecimentos.
+      </p>
+      <Animation name='galaxy' size={320} />
+    </Link>
+  )
+}
+
 export function SpacePageView({
   planets,
   lastUnlockedStarId,
@@ -44,32 +75,9 @@ export function SpacePageView({
       )}
 
       <div className='flex flex-col items-center pb-6'>
-        {lastUnlockedStarId && (
-          <ul className='mt-10 flex max-w-[75vw] flex-col items-start justify-center gap-12 z-40'>
-            {planets.map((planet) => (
-              <li key={planet.id.value}>
-                <Planet
-                  name={planet.name.value}
-                  icon={planet.icon.value}
-                  image={planet.image.value}
-                  stars={planet.stars}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
+        {lastUnlockedStarId && <PlanetList planets={planets} />}
 
-        {shouldShowEnding && (
-          <Link
-            href={ROUTES.lesson.ending}
-            className='block z-50 mt-12 pb-6 hover:scale-105 transition-transform duration-200'
-          >
-            <p className='text-medium text-gray-50 text-center translate-y-6'>
-              Agradecimentos.
-            </p>
-            <Animation name='galaxy' size={320} />
-          </Link>
-        )}
+        {shouldShowEnding && <EndingLink />}
 
         <Fab
           isVisible={lastUnlockedStarPosition !== 'in'}

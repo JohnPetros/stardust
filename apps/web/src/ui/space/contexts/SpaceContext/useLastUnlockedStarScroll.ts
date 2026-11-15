@@ -86,43 +86,86 @@ function useLayoutMetrics(
   }, [lastUnlockedStarRef, resolveScrollContainer])
 }
 
-function useScrollIntoLastUnlockedStar(
-  getLayoutMetrics: ReturnType<typeof useLayoutMetrics>,
+type GetLayoutMetrics = ReturnType<typeof useLayoutMetrics>
+
+function scrollToLastUnlockedStar(
+  layoutMetrics: NonNullable<ReturnType<GetLayoutMetrics>>,
 ) {
-  return useCallback(() => {
-    function recenterLastUnlockedStar(remainingAttempts: number) {
-      const layoutMetrics = getLayoutMetrics()
+  const scrollOptions: ScrollToOptions = {
+    top: getLastUnlockedStarScrollTarget(layoutMetrics),
+    behavior: 'smooth',
+  }
 
-      if (!layoutMetrics) return
+  if (layoutMetrics.scrollContainer) {
+    layoutMetrics.scrollContainer.scrollTo(scrollOptions)
+    return
+  }
 
-      const scrollOptions: ScrollToOptions = {
-        top: getLastUnlockedStarScrollTarget(layoutMetrics),
-        behavior: 'smooth',
-      }
+  window.scrollTo(scrollOptions)
+}
 
-      if (layoutMetrics.scrollContainer) {
-        layoutMetrics.scrollContainer.scrollTo(scrollOptions)
-      } else {
-        window.scrollTo(scrollOptions)
-      }
+function recenterLastUnlockedStar(
+  getLayoutMetrics: GetLayoutMetrics,
+  remainingAttempts: number,
+) {
+  const layoutMetrics = getLayoutMetrics()
 
-      if (remainingAttempts <= 0) {
-        return
-      }
+  if (!layoutMetrics) return
 
-      window.setTimeout(() => {
-        const nextLayoutMetrics = getLayoutMetrics()
+  scrollToLastUnlockedStar(layoutMetrics)
 
-        if (!nextLayoutMetrics || isLastUnlockedStarCentered(nextLayoutMetrics)) {
-          return
-        }
+  if (remainingAttempts <= 0) {
+    return
+  }
 
-        recenterLastUnlockedStar(remainingAttempts - 1)
-      }, SCROLL_RECENTER_DELAY_IN_MS)
+  window.setTimeout(() => {
+    const nextLayoutMetrics = getLayoutMetrics()
+
+    if (!nextLayoutMetrics || isLastUnlockedStarCentered(nextLayoutMetrics)) {
+      return
     }
 
-    recenterLastUnlockedStar(MAX_SCROLL_RECENTER_ATTEMPTS)
+    recenterLastUnlockedStar(getLayoutMetrics, remainingAttempts - 1)
+  }, SCROLL_RECENTER_DELAY_IN_MS)
+}
+
+function useScrollIntoLastUnlockedStar(getLayoutMetrics: GetLayoutMetrics) {
+  return useCallback(() => {
+    recenterLastUnlockedStar(getLayoutMetrics, MAX_SCROLL_RECENTER_ATTEMPTS)
   }, [getLayoutMetrics])
+}
+
+function subscribeScrollListeners(
+  handleScroll: () => void,
+  resolveScrollContainer: () => HTMLElement | null,
+) {
+  const targets: Array<HTMLElement | Window> = []
+
+  function registerTarget(target: HTMLElement | Window | null) {
+    if (!target || targets.includes(target)) {
+      return
+    }
+
+    target.addEventListener('scroll', handleScroll, { passive: true })
+    targets.push(target)
+  }
+
+  registerTarget(window)
+  registerTarget(resolveScrollContainer())
+  handleScroll()
+
+  const animationFrameId = window.requestAnimationFrame(() => {
+    registerTarget(resolveScrollContainer())
+    handleScroll()
+  })
+
+  return () => {
+    window.cancelAnimationFrame(animationFrameId)
+
+    for (const target of targets) {
+      target.removeEventListener('scroll', handleScroll)
+    }
+  }
 }
 
 function useScrollListeners(
@@ -131,44 +174,7 @@ function useScrollListeners(
   lastUnlockedStarId: string | null | undefined,
 ) {
   useEffect(() => {
-    const targets: Array<HTMLElement | Window> = []
-
-    function registerTarget(target: HTMLElement | Window) {
-      if (targets.includes(target)) {
-        return
-      }
-
-      target.addEventListener('scroll', handleScroll, { passive: true })
-      targets.push(target)
-    }
-
-    registerTarget(window)
-
-    const initialScrollContainer = resolveScrollContainer()
-
-    if (initialScrollContainer) {
-      registerTarget(initialScrollContainer)
-    }
-
-    handleScroll()
-
-    const animationFrameId = window.requestAnimationFrame(() => {
-      const delayedScrollContainer = resolveScrollContainer()
-
-      if (delayedScrollContainer) {
-        registerTarget(delayedScrollContainer)
-      }
-
-      handleScroll()
-    })
-
-    return () => {
-      window.cancelAnimationFrame(animationFrameId)
-
-      for (const target of targets) {
-        target.removeEventListener('scroll', handleScroll)
-      }
-    }
+    return subscribeScrollListeners(handleScroll, resolveScrollContainer)
   }, [handleScroll, resolveScrollContainer, lastUnlockedStarId])
 }
 

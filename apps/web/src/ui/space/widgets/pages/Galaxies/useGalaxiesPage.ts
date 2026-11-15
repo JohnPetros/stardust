@@ -18,31 +18,20 @@ export type Params = {
   navigation: Pick<NavigationProvider, 'goTo'>
 }
 
-export function useGalaxiesPage({
-  galaxies,
-  galaxiesError,
-  isLoadingGalaxies,
-  refetchGalaxies,
+type EnteringParams = Pick<
+  Params,
+  'enterGalaxy' | 'isEnteringGalaxy' | 'refetchUser' | 'showError' | 'navigation'
+>
+
+function useGalaxyEntering({
   enterGalaxy,
   isEnteringGalaxy,
-  currentGalaxyName,
   refetchUser,
   showError,
   navigation,
-}: Params) {
+}: EnteringParams) {
   const [pendingGalaxySlug, setPendingGalaxySlug] = useState<string | null>(null)
   const isEnteringRef = useRef(false)
-
-  const backLabel = currentGalaxyName ? `Voltar para ${currentGalaxyName}` : 'Voltar'
-  const hasError = Boolean(galaxiesError) && !isLoadingGalaxies
-
-  function handleBack() {
-    navigation.goTo(ROUTES.space)
-  }
-
-  function handleRetry() {
-    refetchGalaxies()
-  }
 
   async function handleEnter(galaxy: GalaxySummaryDto) {
     if (galaxy.status !== 'published') return
@@ -68,6 +57,40 @@ export function useGalaxiesPage({
 
     await refetchUser().catch(() => undefined)
     navigation.goTo(ROUTES.galaxy(galaxy.slug))
+  }
+
+  return { pendingGalaxySlug, handleEnter }
+}
+
+export function useGalaxiesPage({
+  galaxies,
+  galaxiesError,
+  isLoadingGalaxies,
+  refetchGalaxies,
+  enterGalaxy,
+  isEnteringGalaxy,
+  currentGalaxyName,
+  refetchUser,
+  showError,
+  navigation,
+}: Params) {
+  const { pendingGalaxySlug, handleEnter } = useGalaxyEntering({
+    enterGalaxy,
+    isEnteringGalaxy,
+    refetchUser,
+    showError,
+    navigation,
+  })
+
+  const backLabel = currentGalaxyName ? `Voltar para ${currentGalaxyName}` : 'Voltar'
+  const hasError = Boolean(galaxiesError) && !isLoadingGalaxies
+
+  function handleBack() {
+    navigation.goTo(ROUTES.space)
+  }
+
+  function handleRetry() {
+    refetchGalaxies()
   }
 
   return {

@@ -7,6 +7,7 @@ import { useEnterGalaxyAction } from '@/ui/space/hooks/useEnterGalaxyAction'
 import { useGalaxiesQuery } from '@/ui/space/hooks/useGalaxiesQuery'
 
 import { GalaxiesPageView } from './GalaxiesPageView'
+import { getGalaxiesPageViewProps } from './getGalaxiesPageViewProps'
 import { useGalaxiesPage } from './useGalaxiesPage'
 
 export function GalaxiesPage() {
@@ -29,16 +30,5 @@ export function GalaxiesPage() {
     navigation,
   })
 
-  return (
-    <GalaxiesPageView
-      backLabel={page.backLabel}
-      galaxies={page.galaxies}
-      isLoading={page.isLoading}
-      hasError={page.hasError}
-      pendingGalaxySlug={page.pendingGalaxySlug}
-      onBack={page.handleBack}
-      onRetry={page.handleRetry}
-      onEnter={page.handleEnter}
-    />
-  )
+  return <GalaxiesPageView {...getGalaxiesPageViewProps(page)} />
 }

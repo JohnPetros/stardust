@@ -13,6 +13,62 @@ const LINES = [
   'h-[14px] w-[120px]',
 ]
 
+type PlaceholderProps = {
+  side: (typeof PLACEHOLDERS)[number]['side']
+  plaqueClassName: string
+  index: number
+}
+
+function PlaceholderIllustration({ side }: Pick<PlaceholderProps, 'side'>) {
+  return (
+    <div
+      className={twMerge(
+        'relative z-0 -mb-[36px] flex h-[180px] w-[180px] shrink-0 items-center justify-center lg:mb-0 lg:h-[260px] lg:w-[260px]',
+        side === 'start' ? 'ml-[8px] lg:ml-0' : 'ml-auto mr-[8px] lg:mr-0',
+      )}
+    >
+      <div className='h-full w-full rounded-full bg-theme-surface motion-safe:animate-pulse lg:h-[200px] lg:w-[200px]' />
+    </div>
+  )
+}
+
+function PlaceholderPlaque({
+  plaqueClassName,
+}: Pick<PlaceholderProps, 'plaqueClassName'>) {
+  return (
+    <div
+      className={twMerge(
+        'relative z-10 flex w-full flex-col gap-[12px] rounded-theme border border-theme-border-quiet bg-theme-surface p-[24px] lg:w-[340px]',
+        plaqueClassName,
+      )}
+    >
+      {LINES.map((lineClassName) => (
+        <div
+          key={lineClassName}
+          className={twMerge(
+            'rounded-theme bg-theme-border-quiet motion-safe:animate-pulse',
+            lineClassName,
+          )}
+        />
+      ))}
+    </div>
+  )
+}
+
+function Placeholder({ side, plaqueClassName, index }: PlaceholderProps) {
+  return (
+    <li
+      className={twMerge(
+        'flex flex-col lg:w-[632px] lg:flex-row lg:items-center lg:gap-[32px]',
+        index === 0 ? 'lg:ml-[72px]' : 'lg:ml-auto lg:mr-[48px]',
+      )}
+    >
+      <PlaceholderIllustration side={side} />
+      <PlaceholderPlaque plaqueClassName={plaqueClassName} />
+    </li>
+  )
+}
+
 export function GalaxiesLoadingView() {
   return (
     <div role='status' className='mt-[8px] flex flex-col'>
@@ -22,41 +78,12 @@ export function GalaxiesLoadingView() {
 
       <ul aria-hidden='true' className='mt-[32px] flex flex-col gap-[32px] lg:gap-[20px]'>
         {PLACEHOLDERS.map((placeholder, index) => (
-          <li
+          <Placeholder
             key={placeholder.id}
-            className={twMerge(
-              'flex flex-col lg:w-[632px] lg:flex-row lg:items-center lg:gap-[32px]',
-              index === 0 ? 'lg:ml-[72px]' : 'lg:ml-auto lg:mr-[48px]',
-            )}
-          >
-            <div
-              className={twMerge(
-                'relative z-0 -mb-[36px] flex h-[180px] w-[180px] shrink-0 items-center justify-center lg:mb-0 lg:h-[260px] lg:w-[260px]',
-                placeholder.side === 'start'
-                  ? 'ml-[8px] lg:ml-0'
-                  : 'ml-auto mr-[8px] lg:mr-0',
-              )}
-            >
-              <div className='h-full w-full rounded-full bg-theme-surface motion-safe:animate-pulse lg:h-[200px] lg:w-[200px]' />
-            </div>
-
-            <div
-              className={twMerge(
-                'relative z-10 flex w-full flex-col gap-[12px] rounded-theme border border-theme-border-quiet bg-theme-surface p-[24px] lg:w-[340px]',
-                placeholder.plaqueClassName,
-              )}
-            >
-              {LINES.map((lineClassName) => (
-                <div
-                  key={lineClassName}
-                  className={twMerge(
-                    'rounded-theme bg-theme-border-quiet motion-safe:animate-pulse',
-                    lineClassName,
-                  )}
-                />
-              ))}
-            </div>
-          </li>
+            side={placeholder.side}
+            plaqueClassName={placeholder.plaqueClassName}
+            index={index}
+          />
         ))}
       </ul>
     </div>

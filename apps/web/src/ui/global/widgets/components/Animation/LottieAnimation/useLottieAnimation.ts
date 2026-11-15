@@ -20,6 +20,28 @@ export type Params = {
   isStatic: boolean
 }
 
+async function loadLottieData(
+  lottieUrl: string,
+  signal: AbortSignal,
+  setLottieData: (lottieData: unknown) => void,
+) {
+  try {
+    const response = await fetch(lottieUrl, { signal })
+
+    if (!response.ok) {
+      throw new AppError(`Failed to load animation data: ${lottieUrl}`)
+    }
+
+    const animationData = await response.json()
+    lottieDataCache.set(lottieUrl, animationData)
+    setLottieData(animationData)
+  } catch {
+    if (!signal.aborted) {
+      setLottieData(null)
+    }
+  }
+}
+
 function useLottieData(lottieUrl: string) {
   const [lottieData, setLottieData] = useState<unknown>(
     () => lottieDataCache.get(lottieUrl) ?? null,
@@ -35,28 +57,8 @@ function useLottieData(lottieUrl: string) {
 
     const abortController = new AbortController()
 
-    async function loadLottieData() {
-      try {
-        const response = await fetch(lottieUrl, {
-          signal: abortController.signal,
-        })
-
-        if (!response.ok) {
-          throw new AppError(`Failed to load animation data: ${lottieUrl}`)
-        }
-
-        const animationData = await response.json()
-        lottieDataCache.set(lottieUrl, animationData)
-        setLottieData(animationData)
-      } catch {
-        if (!abortController.signal.aborted) {
-          setLottieData(null)
-        }
-      }
-    }
-
     setLottieData(null)
-    void loadLottieData()
+    void loadLottieData(lottieUrl, abortController.signal, setLottieData)
 
     return () => {
       abortController.abort()
