@@ -85,6 +85,7 @@
     "./lesson/interfaces": "./src/lesson/interfaces/index.ts",
     "./space/entities": "./src/space/domain/entities/index.ts",
     "./space/entities/dtos": "./src/space/domain/entities/dtos/index.ts",
+    "./space/structures": "./src/space/domain/structures/index.ts",
     "./space/structures/dtos": "./src/space/domain/structures/dtos/index.ts",
     "./space/entities/fakers": "./src/space/domain/entities/fakers/index.ts",
     "./space/structures/fakers": "./src/space/domain/structures/fakers/index.ts",
