@@ -40,7 +40,8 @@ from an Issue. In case of conflict, record the divergence and resolve the ambigu
 before opening the Spec.
 
 Read all the sources of the request, `documentation/architecture.md`, applicable Rules,
-`documentation/sdd.md`, and the real paths of the codebase. Use CodeGraph, Context7, Penpot, Playwright, or Supabase when
+`documentation/sdd.md`, `documentation/tooling.md` (to write verification commands in the forms it
+defines and that exist in the manifests), and the real paths of the codebase. Use CodeGraph, Context7, Penpot, Playwright, or Supabase when
 applicable.
 
 Resolve material ambiguities before writing or modifying `spec.md`. The clarification

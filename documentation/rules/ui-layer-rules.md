@@ -51,6 +51,38 @@ A camada **UI** implementa a interface (Web e Backoffice) com foco em usabilidad
 
 > 💡 Regra pratica: integracoes e resolucao de dependencias acontecem no **Entry Point**.
 
+## Hooks de query e de action de domínio
+
+Hooks de query e de action encapsulam uma leitura ou uma operação de domínio da
+Web, para que o hook do widget receba valores e operações com nomes do domínio
+em vez de detalhes de cache ou de transporte.
+
+- **Query**: `use<Nome>Query` envolve o `useCache` (SWR) para uma única leitura
+  de domínio. Define a chave e o fetcher, lança o erro da resposta com falha e
+  retorna nomes do domínio, como `galaxies`, `galaxiesError`,
+  `isLoadingGalaxies` e `refetchGalaxies`. Nunca retorna os nomes genéricos
+  `data`, `error` ou `mutate`.
+- **Action**: `use<Nome>Action` envolve uma única chamada de service REST ou de
+  action RPC (`next-safe-action`). Executa a chamada, lança o erro da resposta
+  com falha e expõe a operação com nome do domínio e seu estado pendente, como
+  `enterGalaxy` e `isEnteringGalaxy`.
+- **Local**: `apps/web/src/ui/<módulo>/hooks/`, mesmo quando um único widget os
+  consome, em arquivos camelCase (`useGalaxiesQuery.ts`) e declarados com
+  `function`.
+- **Exceção ao acesso a contexts**: podem obter services do `RestContext`
+  (`useRestContext`). Nenhum outro context ou provider.
+- **Consumo**: o Entry Point (`index.tsx`) do widget chama os hooks de query e
+  de action e passa os resultados ao hook do widget por parâmetros. O hook do
+  widget continua sem acessar contexts.
+- **Efeitos observáveis**: toast, navegação e recarga do usuário pertencem ao
+  hook do widget ou da página que consome a query ou a action, que possui teste
+  próprio.
+- **Testes**: não recebem arquivos de teste dedicados; veja
+  [Regras de Teste de Widgets](widget-tests-rules.md).
+- **Débito de migração**: hooks de widget que chamam `useCache` diretamente e
+  os hooks de action RPC de `ui/auth/contexts/AuthContext/hooks/` permanecem
+  como estão e migram quando a funcionalidade dona for alterada.
+
 ## Regras
 
 - **Tipagem**: props e retornos explicitamente tipados.
@@ -62,7 +94,8 @@ A camada **UI** implementa a interface (Web e Backoffice) com foco em usabilidad
   `window.history`, `window.location` ou wrappers ad hoc em widgets.
 
 > ⚠️ Proibido:
-> - Hook chamar hooks de context/service diretamente.
+> - Hook chamar hooks de context/service diretamente. A exceção são os hooks de
+>   query e de action de domínio, que podem ler o `RestContext`.
 > - View conter `useEffect` ou chamadas de service.
 > - UI importar `apps/server/**`.
 > - Entry Point concentrar estado, efeitos ou a árvore visual inteira do widget.

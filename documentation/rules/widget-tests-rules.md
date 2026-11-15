@@ -283,6 +283,14 @@ recebem arquivos de teste dedicados. Cubra o comportamento pelos consumidores:
 hooks de widget, hooks de context (`ui/**/contexts/**/tests`) ou jornadas
 Playwright. `usePaginatedCache.test.ts` é legado e não serve de precedente.
 
+#### Hooks de query e de action não recebem testes dedicados
+
+Hooks `use<Nome>Query` e `use<Nome>Action` de `apps/web/src/ui/<módulo>/hooks/`
+(veja [Regras da Camada UI](ui-layer-rules.md)) não recebem arquivos de teste
+dedicados nem `hooks/tests`. O Entry Point passa os resultados deles ao hook do
+widget, então cubra o comportamento pelo teste do hook consumidor, com valores
+injetados por parâmetros, e pela jornada Playwright da rota.
+
 ## 2. Exceção: Widgets de Formulário (React Hook Form)
 
 Widgets que dependem fortemente de bibliotecas de gerenciamento de estado local
