@@ -21,11 +21,14 @@ export class GalaxiesFaker {
       animation: `${faker.helpers.slugify(name).toLowerCase()}.json`,
       position: faker.number.int({ min: 1, max: 20 }),
       status: 'published',
-      planetsIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }).map(() =>
-        faker.string.uuid(),
-      ),
+      planetsIds: GalaxiesFaker.fakePlanetsIds(),
       ...baseDto,
     }
+  }
+
+  private static fakePlanetsIds(): string[] {
+    const count = faker.number.int({ min: 1, max: 10 })
+    return Array.from({ length: count }).map(() => faker.string.uuid())
   }
 
   static fakeMany(count?: number, baseDto?: Partial<GalaxyDto>): Galaxy[] {

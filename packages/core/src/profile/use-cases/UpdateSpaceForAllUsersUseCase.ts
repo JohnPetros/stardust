@@ -23,29 +23,43 @@ export class UpdateSpaceForAllUsersUseCase implements UseCase<Request, void> {
       this.repository.findRecentlyUnlockedStars(userId),
     ])
     const reorderedStars = IdsList.create(reorderedStarIds.map((id) => id.value))
-    let unlockedStars = IdsList.create(
+    const unlockedStars = IdsList.create(
       allUnlockedStars.dto.filter((id) => reorderedStars.includes(Id.create(id)).isTrue),
     )
 
-    if (unlockedStars.count.value === reorderedStarIds.length) {
-      return
-    }
+    if (unlockedStars.count.value === reorderedStarIds.length) return
+
+    await this.unlockMissingStars(
+      userId,
+      reorderedStarIds,
+      unlockedStars,
+      recentlyUnlockedStars,
+    )
+  }
+
+  private async unlockMissingStars(
+    userId: Id,
+    reorderedStarIds: Id[],
+    initialUnlockedStars: IdsList,
+    recentlyUnlockedStars: IdsList,
+  ): Promise<void> {
+    let unlockedStars = initialUnlockedStars
 
     for (let index = 0; index < unlockedStars.count.value; index++) {
       const unlockedStarId = unlockedStars.ids[index]
       const reorderedStarId = reorderedStarIds[index]
-
-      if (
+      const isMissing =
         unlockedStarId.value !== reorderedStarId.value &&
         recentlyUnlockedStars.includes(reorderedStarId).isFalse &&
         unlockedStars.includes(reorderedStarId).isFalse
-      ) {
-        await Promise.all([
-          this.repository.addUnlockedStar(reorderedStarId, userId),
-          this.repository.addRecentlyUnlockedStar(reorderedStarId, userId),
-        ])
-        unlockedStars = unlockedStars.addAt(reorderedStarId, index)
-      }
+
+      if (!isMissing) continue
+
+      await Promise.all([
+        this.repository.addUnlockedStar(reorderedStarId, userId),
+        this.repository.addRecentlyUnlockedStar(reorderedStarId, userId),
+      ])
+      unlockedStars = unlockedStars.addAt(reorderedStarId, index)
     }
   }
 }

@@ -30,30 +30,35 @@ export class GetNextStarUseCase implements UseCase<Request, Response> {
   async execute({ userName, userSlug, currentStarId }: Request) {
     const currentStar = await this.findCurrentStar(Id.create(currentStarId))
     const currentPlanet = await this.findCurrentPlanet(currentStar)
-    let nextStar = currentPlanet.getNextStar(currentStar)
-
-    if (!nextStar) {
-      const nextPlanetPosition = currentPlanet.position.increment()
-      const nextPlanet = await this.planetsRepository.findByPosition(
-        nextPlanetPosition,
-        currentPlanet.galaxyId,
-      )
-
-      if (nextPlanet) {
-        nextStar = nextPlanet.firstStar
-        const event = new PlanetCompletedEvent({
-          userSlug,
-          userName,
-          planetName: currentPlanet.name.value,
-        })
-        await this.broker.publish(event)
-      }
-    }
+    const nextStar =
+      currentPlanet.getNextStar(currentStar) ??
+      (await this.findFirstStarOfNextPlanet(currentPlanet, userName, userSlug))
 
     return {
       nextStar: nextStar ? nextStar.dto : null,
       isFirstGalaxy: await this.isFirstGalaxy(currentPlanet),
     }
+  }
+
+  private async findFirstStarOfNextPlanet(
+    currentPlanet: Planet,
+    userName: string,
+    userSlug: string,
+  ): Promise<Star | null> {
+    const nextPlanet = await this.planetsRepository.findByPosition(
+      currentPlanet.position.increment(),
+      currentPlanet.galaxyId,
+    )
+    if (!nextPlanet) return null
+
+    await this.broker.publish(
+      new PlanetCompletedEvent({
+        userSlug,
+        userName,
+        planetName: currentPlanet.name.value,
+      }),
+    )
+    return nextPlanet.firstStar
   }
 
   private async isFirstGalaxy(currentPlanet: Planet) {

@@ -490,7 +490,7 @@ export class User extends Entity<UserProps> {
     }
   }
 
-  get dto(): UserDto {
+  private get identityDto() {
     return {
       id: this.id.value,
       slug: this.slug.value,
@@ -500,6 +500,11 @@ export class User extends Entity<UserProps> {
       avatar: this.props.avatar.dto,
       tier: this.props.tier.dto,
       currentGalaxy: this.props.currentGalaxy?.dto ?? null,
+    }
+  }
+
+  private get progressDto() {
+    return {
       level: this.level.value.number.value,
       coins: this.coins.value,
       xp: this.xp.value,
@@ -507,6 +512,13 @@ export class User extends Entity<UserProps> {
       streak: this.streak.value,
       weekStatus: this.props.weekStatus.value,
       insigniaRoles: this.props.insigniaRoles.map((role) => role.value),
+    }
+  }
+
+  get dto(): UserDto {
+    return {
+      ...this.identityDto,
+      ...this.progressDto,
       ...this.idsListsDto,
       canSeeRankingResult: this.props.canSeeRankingResult.value,
       lastWeekRankingPosition:

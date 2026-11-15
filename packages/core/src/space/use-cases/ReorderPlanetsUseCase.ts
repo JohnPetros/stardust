@@ -27,23 +27,25 @@ export class ReorderPlanetsUseCase implements UseCase<Request, Response> {
     if (!galaxy) throw new GalaxyNotFoundError()
 
     const planets = await this.repository.findAllByGalaxy(galaxy.id)
-    const reorderedPlanets: Planet[] = []
 
     if (new Set(planetIds).size !== planetIds.length) {
       throw new ConflictError('Todos os IDs dos planetas devem ser fornecidos e únicos')
     }
 
-    for (let number = 1; number <= planetIds.length; number++) {
-      const planetId = planetIds[number - 1]
-      const planet = planets.find((planet) => planet.id.value === planetId)
-      if (!planet) throw new PlanetNotFoundError()
-
-      planet.position = OrdinalNumber.create(number)
-      reorderedPlanets.push(planet)
-    }
+    const reorderedPlanets = this.reorder(planets, planetIds)
 
     await this.repository.replaceMany(reorderedPlanets)
     await this.broker.publish(new PlanetsOrderChangedEvent())
     return reorderedPlanets.map((planet) => planet.dto)
+  }
+
+  private reorder(planets: Planet[], planetIds: string[]): Planet[] {
+    return planetIds.map((planetId, index) => {
+      const planet = planets.find((planet) => planet.id.value === planetId)
+      if (!planet) throw new PlanetNotFoundError()
+
+      planet.position = OrdinalNumber.create(index + 1)
+      return planet
+    })
   }
 }

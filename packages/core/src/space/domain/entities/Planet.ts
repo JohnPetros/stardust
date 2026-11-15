@@ -34,22 +34,30 @@ export class Planet extends Entity<PlanetProps> {
         image: Image.create(dto.image),
         galaxyId: Id.create(dto.galaxyId),
         position: OrdinalNumber.create(dto.position, 'Posição do planeta'),
-        completionCount: Integer.create(
-          dto.completionCount,
-          'Quantidade de usuários que completaram esse planeta',
-        ),
-        userCount: Integer.create(
-          dto.userCount,
-          'Quantidade de usuários que estão nesse planeta',
-        ),
-        isAvailable: Logical.create(
-          dto.isAvailable,
-          'O planeta está disponível para os usuários?',
-        ),
+        ...Planet.createCounters(dto),
         stars,
       },
       dto.id,
     )
+  }
+
+  private static createCounters(
+    dto: PlanetDto,
+  ): Pick<PlanetProps, 'completionCount' | 'userCount' | 'isAvailable'> {
+    return {
+      completionCount: Integer.create(
+        dto.completionCount,
+        'Quantidade de usuários que completaram esse planeta',
+      ),
+      userCount: Integer.create(
+        dto.userCount,
+        'Quantidade de usuários que estão nesse planeta',
+      ),
+      isAvailable: Logical.create(
+        dto.isAvailable,
+        'O planeta está disponível para os usuários?',
+      ),
+    }
   }
 
   getNextStar(currentStar: Star): Star | null {
