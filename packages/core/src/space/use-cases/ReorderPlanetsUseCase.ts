@@ -1,10 +1,11 @@
 import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { PlanetsRepository } from '../interfaces/PlanetsRepository'
+import type { GalaxiesRepository } from '../interfaces/GalaxiesRepository'
 import type { Planet } from '../domain/entities/Planet'
 import type { PlanetDto } from '../domain/entities/dtos/PlanetDto'
 import type { Broker } from '#global/interfaces/Broker'
-import { PlanetNotFoundError } from '../domain/errors'
+import { GalaxyNotFoundError, PlanetNotFoundError } from '../domain/errors'
 import { PlanetsOrderChangedEvent } from '../domain/events'
 import { ConflictError } from '../../main'
 
@@ -17,11 +18,15 @@ type Response = Promise<PlanetDto[]>
 export class ReorderPlanetsUseCase implements UseCase<Request, Response> {
   constructor(
     private readonly repository: PlanetsRepository,
+    private readonly galaxiesRepository: GalaxiesRepository,
     private readonly broker: Broker,
   ) {}
 
   async execute({ planetIds }: Request): Response {
-    const planets = await this.repository.findAll()
+    const galaxy = await this.galaxiesRepository.findFirst()
+    if (!galaxy) throw new GalaxyNotFoundError()
+
+    const planets = await this.repository.findAllByGalaxy(galaxy.id)
     const reorderedPlanets: Planet[] = []
 
     if (new Set(planetIds).size !== planetIds.length) {

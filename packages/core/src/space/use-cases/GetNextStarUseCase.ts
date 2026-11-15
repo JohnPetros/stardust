@@ -1,7 +1,11 @@
 import type { UseCase } from '#global/interfaces/UseCase'
-import type { PlanetsRepository, StarsRepository } from '../interfaces'
+import type {
+  GalaxiesRepository,
+  PlanetsRepository,
+  StarsRepository,
+} from '../interfaces'
 import type { StarDto } from '../domain/entities/dtos/index'
-import type { Star } from '../domain/entities'
+import type { Planet, Star } from '../domain/entities'
 import type { Broker } from '#global/interfaces/Broker'
 import { Id } from '#global/domain/structures/Id'
 import { PlanetNotFoundError, StarNotFoundError } from '../domain/errors'
@@ -13,12 +17,13 @@ type Request = {
   currentStarId: string
 }
 
-type Response = Promise<StarDto | null>
+type Response = Promise<{ nextStar: StarDto | null; isFirstGalaxy: boolean }>
 
 export class GetNextStarUseCase implements UseCase<Request, Response> {
   constructor(
     private readonly starsRepository: StarsRepository,
     private readonly planetsRepository: PlanetsRepository,
+    private readonly galaxiesRepository: GalaxiesRepository,
     private readonly broker: Broker,
   ) {}
 
@@ -29,7 +34,10 @@ export class GetNextStarUseCase implements UseCase<Request, Response> {
 
     if (!nextStar) {
       const nextPlanetPosition = currentPlanet.position.increment()
-      const nextPlanet = await this.planetsRepository.findByPosition(nextPlanetPosition)
+      const nextPlanet = await this.planetsRepository.findByPosition(
+        nextPlanetPosition,
+        currentPlanet.galaxyId,
+      )
 
       if (nextPlanet) {
         nextStar = nextPlanet.firstStar
@@ -42,7 +50,16 @@ export class GetNextStarUseCase implements UseCase<Request, Response> {
       }
     }
 
-    return nextStar ? nextStar.dto : null
+    return {
+      nextStar: nextStar ? nextStar.dto : null,
+      isFirstGalaxy: await this.isFirstGalaxy(currentPlanet),
+    }
+  }
+
+  private async isFirstGalaxy(currentPlanet: Planet) {
+    const firstGalaxy = await this.galaxiesRepository.findFirst()
+    if (!firstGalaxy) return false
+    return firstGalaxy.id.value === currentPlanet.galaxyId.value
   }
 
   private async findCurrentStar(currentStarId: Id) {

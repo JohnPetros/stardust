@@ -1,3 +1,7 @@
+export { ListGalaxiesUseCase } from './ListGalaxiesUseCase'
+export { GetCurrentGalaxyUseCase } from './GetCurrentGalaxyUseCase'
+export { GetGalaxyUseCase } from './GetGalaxyUseCase'
+export { ListGalaxyPlanetsUseCase } from './ListGalaxyPlanetsUseCase'
 export { GetStarUseCase } from './GetStarUseCase'
 export { GetNextStarUseCase } from './GetNextStarUseCase'
 export { UnlockFirstStarUseCase } from './UnlockFirstStarUseCase'

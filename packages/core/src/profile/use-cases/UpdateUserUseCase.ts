@@ -9,16 +9,21 @@ export class UpdateUserUseCase implements UseCase<UserDto, Promise<UserDto>> {
   constructor(private readonly repository: UsersRepository) {}
 
   async execute(userDto: UserDto): Promise<UserDto> {
-    const user = User.create(userDto)
-    await this.findUser(user.id)
+    const persistedUser = await this.findUser(User.create(userDto).id)
+    const user = User.create({
+      ...userDto,
+      currentGalaxy: persistedUser.dto.currentGalaxy,
+      hasCompletedSpace: persistedUser.dto.hasCompletedSpace,
+    })
     await this.repository.replace(user)
     return user.dto
   }
 
-  private async findUser(id: Id): Promise<void> {
+  private async findUser(id: Id): Promise<User> {
     const user = await this.repository.findById(id)
     if (!user) {
       throw new UserNotFoundError()
     }
+    return user
   }
 }

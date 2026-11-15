@@ -1,6 +1,7 @@
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { UsersRepository } from '../interfaces'
 import { Id } from '../../global/domain/structures/Id'
+import { IdsList } from '../../global/domain/structures/IdsList'
 
 type Request = {
   reorderedStarIds: string[]
@@ -17,10 +18,14 @@ export class UpdateSpaceForAllUsersUseCase implements UseCase<Request, void> {
   }
 
   private async update(userId: Id, reorderedStarIds: Id[]): Promise<void> {
-    let [unlockedStars, recentlyUnlockedStars] = await Promise.all([
+    const [allUnlockedStars, recentlyUnlockedStars] = await Promise.all([
       this.repository.findUnlockedStars(userId),
       this.repository.findRecentlyUnlockedStars(userId),
     ])
+    const reorderedStars = IdsList.create(reorderedStarIds.map((id) => id.value))
+    let unlockedStars = IdsList.create(
+      allUnlockedStars.dto.filter((id) => reorderedStars.includes(Id.create(id)).isTrue),
+    )
 
     if (unlockedStars.count.value === reorderedStarIds.length) {
       return

@@ -3,7 +3,7 @@ import type { Broker } from '#global/interfaces/Broker'
 import type { UseCase } from '#global/interfaces/UseCase'
 import { PlanetNotFoundError } from '../domain/errors'
 import { FirstStarUnlockedEvent } from '../domain/events'
-import type { PlanetsRepository } from '../interfaces'
+import type { GalaxiesRepository, PlanetsRepository } from '../interfaces'
 
 type Request = {
   userId: string
@@ -15,15 +15,20 @@ type Response = Promise<void>
 
 export class UnlockFirstStarUseCase implements UseCase<Request, Response> {
   constructor(
-    private readonly repository: PlanetsRepository,
+    private readonly planetsRepository: PlanetsRepository,
+    private readonly galaxiesRepository: GalaxiesRepository,
     private readonly broker: Broker,
   ) {}
 
   async execute(request: Request) {
-    const firstPlanet = await this.repository.findByPosition(OrdinalNumber.create(1))
-    if (!firstPlanet) {
-      throw new PlanetNotFoundError()
-    }
+    const firstGalaxy = await this.galaxiesRepository.findFirst()
+    if (!firstGalaxy) throw new PlanetNotFoundError()
+
+    const firstPlanet = await this.planetsRepository.findByPosition(
+      OrdinalNumber.create(1),
+      firstGalaxy.id,
+    )
+    if (!firstPlanet) throw new PlanetNotFoundError()
 
     const event = new FirstStarUnlockedEvent({
       user: {
