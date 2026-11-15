@@ -1,4 +1,5 @@
 import type { Id, OrdinalNumber } from '@stardust/core/global/structures'
+import { MethodNotImplementedError } from '@stardust/core/global/errors'
 import type { PlanetsRepository } from '@stardust/core/space/interfaces'
 import type { Planet } from '@stardust/core/space/entities'
 
@@ -210,43 +211,12 @@ export class SupabasePlanetsRepository
     return this.buildPlanet(planet, starsByPlanetId.get(planet.id) ?? [])
   }
 
-  async findByPosition(position: OrdinalNumber): Promise<Planet | null> {
-    const primaryResponse = await this.supabase
-      .from('planets')
-      .select(`
-        *,
-        completion_count: count_planet_completions,
-        user_count: count_users_at_planet
-      `)
-      .eq('position', position.value)
-      .single<Omit<SupabasePlanet, 'stars'>>()
+  async findAllByGalaxy(_galaxyId: Id): Promise<Planet[]> {
+    throw new MethodNotImplementedError('findAllByGalaxy')
+  }
 
-    let data = (primaryResponse.data as unknown as SupabasePlanetRow | null) ?? null
-    let error = primaryResponse.error
-
-    if (this.shouldFallbackPlanetCounts(error)) {
-      const fallbackResponse = await this.supabase
-        .from('planets')
-        .select('*')
-        .eq('position', position.value)
-        .single<Omit<SupabasePlanet, 'stars'>>()
-
-      data = (fallbackResponse.data as unknown as SupabasePlanetRow | null) ?? null
-      error = fallbackResponse.error
-    }
-
-    if (error) {
-      return this.handleQueryPostgresError(error)
-    }
-
-    if (!data) {
-      return null
-    }
-
-    const planet = this.withDefaultCounts(data)
-    const starsByPlanetId = await this.findStarsByPlanetIds([planet.id])
-
-    return this.buildPlanet(planet, starsByPlanetId.get(planet.id) ?? [])
+  async findByPosition(_position: OrdinalNumber, _galaxyId: Id): Promise<Planet | null> {
+    throw new MethodNotImplementedError('findByPosition')
   }
 
   async findByStar(starId: Id): Promise<Planet | null> {
@@ -289,45 +259,8 @@ export class SupabasePlanetsRepository
     return this.buildPlanet(planet, starsByPlanetId.get(planet.id) ?? [])
   }
 
-  async findLastPlanet(): Promise<Planet | null> {
-    const primaryResponse = await this.supabase
-      .from('planets')
-      .select(`
-        *,
-        completion_count: count_planet_completions,
-        user_count: count_users_at_planet
-      `)
-      .order('position', { ascending: false })
-      .limit(1)
-      .single<Omit<SupabasePlanet, 'stars'>>()
-
-    let data = (primaryResponse.data as unknown as SupabasePlanetRow | null) ?? null
-    let error = primaryResponse.error
-
-    if (this.shouldFallbackPlanetCounts(error)) {
-      const fallbackResponse = await this.supabase
-        .from('planets')
-        .select('*')
-        .order('position', { ascending: false })
-        .limit(1)
-        .single<Omit<SupabasePlanet, 'stars'>>()
-
-      data = (fallbackResponse.data as unknown as SupabasePlanetRow | null) ?? null
-      error = fallbackResponse.error
-    }
-
-    if (error) {
-      return this.handleQueryPostgresError(error)
-    }
-
-    if (!data) {
-      return null
-    }
-
-    const planet = this.withDefaultCounts(data)
-    const starsByPlanetId = await this.findStarsByPlanetIds([planet.id])
-
-    return this.buildPlanet(planet, starsByPlanetId.get(planet.id) ?? [])
+  async findLastPlanet(_galaxyId: Id): Promise<Planet | null> {
+    throw new MethodNotImplementedError('findLastPlanet')
   }
 
   async add(planet: Planet): Promise<void> {

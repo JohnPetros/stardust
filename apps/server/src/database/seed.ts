@@ -84,6 +84,7 @@ async function seedCatalog(
   await seeders.auth.run()
   await seeders.profile.run(buildSeedProfiles(catalog, accounts))
   await seeders.space.run({
+    galaxies: catalog.galaxies,
     planets: catalog.planets,
     stars: catalog.stars.map(
       ({ texts: _texts, questions: _questions, story: _story, ...star }) => star,

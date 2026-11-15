@@ -825,6 +825,35 @@
         "required_count": 5000
       }
     ],
+    "galaxies": [
+      {
+        "id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01",
+        "slug": "logica-de-programacao",
+        "name": "Lógica de Programação",
+        "description": "Aprenda a pensar como quem programa: variáveis, condições, laços e funções.",
+        "animation": "logica-de-programacao.json",
+        "position": 1,
+        "status": "published"
+      },
+      {
+        "id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a02",
+        "slug": "orientacao-a-objetos",
+        "name": "Orientação a Objetos",
+        "description": "Organize programas em classes e objetos que trabalham juntos.",
+        "animation": "orientacao-a-objetos.json",
+        "position": 2,
+        "status": "announced"
+      },
+      {
+        "id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a03",
+        "slug": "galaxia-de-teste",
+        "name": "Galáxia de Teste",
+        "description": "Galáxia publicada só para o ambiente local, com um planeta e duas estrelas.",
+        "animation": "galaxia-de-teste.json",
+        "position": 3,
+        "status": "published"
+      }
+    ],
     "planets": [
       {
         "id": "2ee862da-4b73-4fb3-984a-d6ed1743102b",
@@ -832,7 +861,8 @@
         "name": "Introdução",
         "image": "planet-2ee862da-4b73-4fb3-984a-d6ed1743102b-image.svg",
         "position": 1,
-        "is_available": true
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
       },
       {
         "id": "6a4aca25-b962-4cad-9aa4-81e0a2b6c0ee",
@@ -840,7 +870,8 @@
         "name": "Laços",
         "image": "planet-6a4aca25-b962-4cad-9aa4-81e0a2b6c0ee-image.svg",
         "position": 5,
-        "is_available": true
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
       },
       {
         "id": "800775c1-b4f7-4dc7-8010-142f8dfb7ac9",
@@ -848,7 +879,8 @@
         "name": "Operadores",
         "image": "planet-800775c1-b4f7-4dc7-8010-142f8dfb7ac9-image.svg",
         "position": 3,
-        "is_available": true
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
       },
       {
         "id": "83500701-a9b7-4f5b-8a63-599a08406f73",
@@ -856,7 +888,8 @@
         "name": "Condicionais",
         "image": "planet-83500701-a9b7-4f5b-8a63-599a08406f73-image.svg",
         "position": 4,
-        "is_available": true
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
       },
       {
         "id": "8c3b6cab-d3c6-4d64-8701-c580d4a6d31a",
@@ -864,7 +897,8 @@
         "name": "Tipos de dados",
         "image": "planet-8c3b6cab-d3c6-4d64-8701-c580d4a6d31a-image.svg",
         "position": 2,
-        "is_available": true
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
       },
       {
         "id": "af70e6c2-49b3-4bdf-a548-6512b0f5dc94",
@@ -872,7 +906,8 @@
         "name": "Funções",
         "image": "planet-4334d4ed-7b36-4e17-a917-7839f09f670e-image.svg",
         "position": 7,
-        "is_available": true
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
       },
       {
         "id": "d76aa273-902e-451c-b471-0c4574bafb0a",
@@ -880,7 +915,8 @@
         "name": "Dicionários",
         "image": "planet-af70e6c2-49b3-4bdf-a548-6512b0f5dc94-image.svg",
         "position": 9,
-        "is_available": true
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
       },
       {
         "id": "f0fa99e3-d5fb-4ff0-8c29-a3fc7cff21e8",
@@ -888,7 +924,17 @@
         "name": "Listas",
         "image": "planet-f0fa99e3-d5fb-4ff0-8c29-a3fc7cff21e8.image.svg",
         "position": 6,
-        "is_available": true
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
+      },
+      {
+        "id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0b01",
+        "icon": "planet-f0fa99e3-d5fb-4ff0-8c29-a3fc7cff21e8.icon.svg",
+        "name": "Planeta de Teste",
+        "image": "planet-f0fa99e3-d5fb-4ff0-8c29-a3fc7cff21e8.image.svg",
+        "position": 1,
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a03"
       }
     ],
     "stars": [
@@ -12834,6 +12880,30 @@
             "correctItems": ["fazer", "25", "pausa"]
           }
         ],
+        "is_available": true,
+        "is_challenge": false
+      },
+      {
+        "id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0c01",
+        "name": "Estrela de Teste 1",
+        "slug": "estrela-de-teste-1",
+        "story": "",
+        "texts": [],
+        "number": 1,
+        "planet_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0b01",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false
+      },
+      {
+        "id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0c02",
+        "name": "Estrela de Teste 2",
+        "slug": "estrela-de-teste-2",
+        "story": "",
+        "texts": [],
+        "number": 2,
+        "planet_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0b01",
+        "questions": [],
         "is_available": true,
         "is_challenge": false
       }

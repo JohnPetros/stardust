@@ -49,6 +49,7 @@ import { insigniaModel } from '../../models/shop/insignia-model'
 import { tierModel } from '../../models/ranking/tier-model'
 import { starModel } from '../../models/space/star-model'
 import { planetModel } from '../../models/space/planet-model'
+import { galaxyModel } from '../../models/space/galaxy-model'
 import { DrizzleUserMapper } from '../../mappers/profile/DrizzleUserMapper'
 import type { DrizzleUser } from '../../types/entities/profile'
 
@@ -70,6 +71,7 @@ export class DrizzleUsersRepository extends DrizzleRepository implements UsersRe
       .leftJoin(avatarModel, eq(avatarModel.id, userModel.avatarId))
       .leftJoin(rocketModel, eq(rocketModel.id, userModel.rocketId))
       .leftJoin(tierModel, eq(tierModel.id, userModel.tierId))
+      .leftJoin(galaxyModel, eq(galaxyModel.id, userModel.currentGalaxyId))
   }
 
   private baseQuery() {
@@ -90,6 +92,11 @@ export class DrizzleUsersRepository extends DrizzleRepository implements UsersRe
       avatar: getTableColumns(avatarModel),
       rocket: getTableColumns(rocketModel),
       tier: getTableColumns(tierModel),
+      currentGalaxy: {
+        id: galaxyModel.id,
+        name: galaxyModel.name,
+        slug: galaxyModel.slug,
+      },
     }
   }
 
@@ -617,12 +624,17 @@ export class DrizzleUsersRepository extends DrizzleRepository implements UsersRe
       .from(table)
       .innerJoin(starModel, eq(starModel.id, table.starId))
       .innerJoin(planetModel, eq(planetModel.id, starModel.planetId))
+      .innerJoin(galaxyModel, eq(galaxyModel.id, planetModel.galaxyId))
   }
 
   private orderedStarProgressQuery(table: StarUnlockTable, userId: Id) {
     return this.starProgressQuery(table)
       .where(eq(table.userId, userId.value))
-      .orderBy(asc(planetModel.position), asc(starModel.number))
+      .orderBy(
+        asc(galaxyModel.position),
+        asc(planetModel.position),
+        asc(starModel.number),
+      )
   }
 
   private unlockedStarIds(table: StarUnlockTable, userId: Id): Promise<IdsList> {

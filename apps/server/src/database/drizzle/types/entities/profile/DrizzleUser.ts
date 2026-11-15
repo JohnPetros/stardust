@@ -2,6 +2,7 @@ import type { userModel } from '../../../models/profile/user-model'
 import type { avatarModel } from '../../../models/shop/avatar-model'
 import type { rocketModel } from '../../../models/shop/rocket-model'
 import type { tierModel } from '../../../models/ranking/tier-model'
+import type { galaxyModel } from '../../../models/space/galaxy-model'
 import type { planetModel } from '../../../models/space/planet-model'
 import type { insigniaModel } from '../../../models/shop/insignia-model'
 import type { userUnlockedStarModel } from '../../../models/profile/user-unlocked-star-model'
@@ -18,6 +19,7 @@ export type DrizzleUser = typeof userModel.$inferSelect & {
   avatar?: typeof avatarModel.$inferSelect | null
   rocket?: typeof rocketModel.$inferSelect | null
   tier?: typeof tierModel.$inferSelect | null
+  currentGalaxy?: Pick<typeof galaxyModel.$inferSelect, 'id' | 'name' | 'slug'> | null
   insignias?: Pick<typeof insigniaModel.$inferSelect, 'role'>[]
   usersUnlockedStars?: Pick<typeof userUnlockedStarModel.$inferSelect, 'starId'>[]
   usersRecentlyUnlockedStars?: Pick<

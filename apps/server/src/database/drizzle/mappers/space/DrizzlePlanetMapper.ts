@@ -13,15 +13,19 @@ export class DrizzlePlanetMapper {
     return {
       id: planet.id.value,
       ...DrizzlePlanetMapper.persistenceCatalog(planet),
+      galaxyId: planet.galaxyId.value,
       position: planet.position.value,
       isAvailable: planet.isAvailable.value,
     }
   }
   private static catalog(
     row: DrizzlePlanet,
-  ): Pick<DrizzlePlanet, 'id' | 'name' | 'image' | 'icon' | 'position' | 'isAvailable'> {
-    const { id, name, image, icon, position, isAvailable } = row
-    return { id, name, image, icon, position, isAvailable }
+  ): Pick<
+    DrizzlePlanet,
+    'id' | 'name' | 'image' | 'icon' | 'position' | 'isAvailable' | 'galaxyId'
+  > {
+    const { id, name, image, icon, position, isAvailable, galaxyId } = row
+    return { id, name, image, icon, position, isAvailable, galaxyId }
   }
   private static progress(
     row: DrizzlePlanet,

@@ -14,6 +14,7 @@ import {
 import { avatarModel } from '../shop/avatar-model'
 import { rocketModel } from '../shop/rocket-model'
 import { tierModel } from '../ranking/tier-model'
+import { galaxyModel } from '../space/galaxy-model'
 
 export const userModel = pgTable(
   'users',
@@ -48,8 +49,9 @@ export const userModel = pgTable(
     isLoser: boolean('is_loser').default(sql`false`),
     slug: text('slug').notNull(),
     hasCompletedSpace: boolean('has_completed_space').notNull().default(sql`false`),
+    currentGalaxyId: uuid('current_galaxy_id'),
   },
-  ({ email, id, avatarId, name, tierId, rocketId, slug }) => [
+  ({ email, id, avatarId, name, tierId, rocketId, slug, currentGalaxyId }) => [
     unique('user_email_user_key').on(email),
     primaryKey({ columns: [id], name: 'user_pkey' }),
     foreignKey({
@@ -75,5 +77,12 @@ export const userModel = pgTable(
       .onUpdate('no action')
       .onDelete('no action'),
     unique('users_slug_key').on(slug),
+    foreignKey({
+      columns: [currentGalaxyId],
+      foreignColumns: [galaxyModel.id],
+      name: 'users_current_galaxy_id_fkey',
+    })
+      .onUpdate('no action')
+      .onDelete('set null'),
   ],
 )

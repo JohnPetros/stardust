@@ -10,6 +10,7 @@ export const CATALOG_TABLES = [
   'insignias',
   'tiers',
   'achievements',
+  'galaxies',
   'planets',
   'stars',
   'questions',
@@ -106,9 +107,13 @@ export async function seedProfileProgress(
   catalog: ModuleSeed,
   accounts: SeedAccount[],
 ) {
-  const planet = [...catalog.planets].sort(
+  const galaxy = [...catalog.galaxies].sort(
     (a, b) => Number(a.position) - Number(b.position),
   )[0]
+  const planet = catalog.planets
+    .filter((row) => row.galaxy_id === galaxy?.id)
+    .sort((a, b) => Number(a.position) - Number(b.position))[0]
+  if (!planet) throw new AppError('Catalog is missing the first planet')
   const firstStar = catalog.stars
     .filter((row) => row.planet_id === planet.id)
     .sort((a, b) => Number(a.number) - Number(b.number))[0]

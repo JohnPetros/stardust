@@ -22,6 +22,27 @@
       "when": 1790905339345,
       "tag": "0002_server_owned_access",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794705418949,
+      "tag": "0003_galaxies",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794705424195,
+      "tag": "0004_galaxies_catalog",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794705436693,
+      "tag": "0005_planets_galaxy_required",
+      "breakpoints": true
     }
   ]
 }

@@ -10,6 +10,7 @@ export class DrizzleUserMapper {
     return {
       ...accountProfile(row),
       ...appearance(row),
+      currentGalaxy: currentGalaxy(row),
       ...progress(row),
       ...rankingState(row),
     }
@@ -21,6 +22,7 @@ export class DrizzleUserMapper {
       ...persistenceSelection(user),
       ...persistencePerformance(user),
       ...persistenceStudyRoutine(user),
+      ...persistenceSpaceProgress(user),
     }
   }
 }
@@ -39,6 +41,12 @@ function appearance(row: DrizzleUser) {
     rocket: selectedItem(row.rocket),
     tier: selectedTier(row),
   }
+}
+
+function currentGalaxy(row: DrizzleUser) {
+  const galaxy = row.currentGalaxy
+  if (!galaxy?.id) return null
+  return { id: galaxy.id, entity: { name: galaxy.name, slug: galaxy.slug } }
 }
 
 function selectedTier(row: DrizzleUser) {
@@ -177,6 +185,7 @@ function persistenceSelection(user: User) {
     avatarId: user.avatar.id.value,
     rocketId: user.rocket.id.value,
     tierId: user.tier.id.value,
+    currentGalaxyId: user.currentGalaxy?.id.value ?? null,
   }
 }
 function persistencePerformance(user: User) {
@@ -185,6 +194,11 @@ function persistencePerformance(user: User) {
     xp: user.xp.value,
     weeklyXp: user.weeklyXp.value,
     level: user.level.value.number.value,
+  }
+}
+function persistenceSpaceProgress(user: User) {
+  return {
+    hasCompletedSpace: user.hasCompletedSpace.value,
   }
 }
 function persistenceStudyRoutine(user: User) {

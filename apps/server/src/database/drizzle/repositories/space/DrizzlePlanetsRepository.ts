@@ -1,4 +1,4 @@
-import { asc, desc, eq, getTableColumns, inArray, sql, type SQL } from 'drizzle-orm'
+import { and, asc, desc, eq, getTableColumns, inArray, sql, type SQL } from 'drizzle-orm'
 import type { Planet } from '@stardust/core/space/entities'
 import type { PlanetsRepository } from '@stardust/core/space/interfaces'
 import type { Id, OrdinalNumber } from '@stardust/core/global/structures'
@@ -85,8 +85,21 @@ export class DrizzlePlanetsRepository
     return (await this.findPlanets(eq(planetModel.id, id.value)))[0] ?? null
   }
 
-  async findByPosition(position: OrdinalNumber): Promise<Planet | null> {
-    return (await this.findPlanets(eq(planetModel.position, position.value)))[0] ?? null
+  async findAllByGalaxy(galaxyId: Id): Promise<Planet[]> {
+    return this.findPlanets(eq(planetModel.galaxyId, galaxyId.value))
+  }
+
+  async findByPosition(position: OrdinalNumber, galaxyId: Id): Promise<Planet | null> {
+    return (
+      (
+        await this.findPlanets(
+          and(
+            eq(planetModel.position, position.value),
+            eq(planetModel.galaxyId, galaxyId.value),
+          ),
+        )
+      )[0] ?? null
+    )
   }
 
   private starPlanetQuery(starId: Id) {
@@ -104,8 +117,10 @@ export class DrizzlePlanetsRepository
     )
   }
 
-  async findLastPlanet(): Promise<Planet | null> {
-    return (await this.findPlanets(undefined, true))[0] ?? null
+  async findLastPlanet(galaxyId: Id): Promise<Planet | null> {
+    return (
+      (await this.findPlanets(eq(planetModel.galaxyId, galaxyId.value), true))[0] ?? null
+    )
   }
 
   async add(planet: Planet): Promise<void> {
