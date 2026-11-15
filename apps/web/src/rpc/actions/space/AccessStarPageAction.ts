@@ -5,6 +5,8 @@ import { User } from '@stardust/core/global/entities'
 import { Slug } from '@stardust/core/global/structures'
 import { Star } from '@stardust/core/space/entities'
 
+import { isFirstStarOfCurrentGalaxy } from './isFirstStarOfCurrentGalaxy'
+
 type Request = {
   starSlug: string
 }
@@ -23,8 +25,10 @@ export const AccessStarPageAction = (
       if (starResponse.isFailure) call.notFound()
 
       const star = Star.create(starResponse.body)
-      const isStarUnlocked = user.hasUnlockedStar(star.id)
-      if (isStarUnlocked.isFalse) call.notFound()
+      if (user.hasUnlockedStar(star.id).isFalse) {
+        const isFirstStar = await isFirstStarOfCurrentGalaxy(service, star.id)
+        if (!isFirstStar) call.notFound()
+      }
 
       return star.dto
     },

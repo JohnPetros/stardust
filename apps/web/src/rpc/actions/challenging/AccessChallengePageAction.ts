@@ -8,6 +8,8 @@ import { Star } from '@stardust/core/space/entities'
 import { User } from '@stardust/core/global/entities'
 import { Slug, type Id } from '@stardust/core/global/structures'
 
+import { isFirstStarOfCurrentGalaxy } from '../space/isFirstStarOfCurrentGalaxy'
+
 type Dependencies = {
   challengingService: ChallengingService
   spaceService: SpaceService
@@ -30,6 +32,25 @@ const EMPTY_NAVIGATION = {
   nextChallengeSlug: null,
 }
 
+async function isStarInaccessible(spaceService: SpaceService, user: User, starId: Id) {
+  const response = await spaceService.fetchStarById(starId)
+  if (response.isFailure) return false
+
+  const star = Star.create(response.body)
+  if (user.isGod.notAndNot(user.hasUnlockedStar(star.id)).isFalse) return false
+
+  return !(await isFirstStarOfCurrentGalaxy(spaceService, star.id))
+}
+
+async function fetchUserChallengeVote(
+  challengingService: ChallengingService,
+  challengeId: Id,
+) {
+  const response = await challengingService.fetchChallengeVote(challengeId)
+  if (response.isFailure) response.throwError()
+  return ChallengeVote.create(response.body.challengeVote)
+}
+
 export const AccessChallengePageAction = ({
   challengingService,
   spaceService,
@@ -41,18 +62,6 @@ export const AccessChallengePageAction = ({
     )
     if (response.isFailure) response.throwError()
     return Challenge.create(response.body)
-  }
-
-  async function fetchChallengeStar(starId: Id) {
-    const response = await spaceService.fetchStarById(starId)
-    if (response.isFailure) return null
-    return Star.create(response.body)
-  }
-
-  async function fetchUserChallengeVote(challengeId: Id) {
-    const response = await challengingService.fetchChallengeVote(challengeId)
-    if (response.isFailure) response.throwError()
-    return ChallengeVote.create(response.body.challengeVote)
   }
 
   async function fetchChallengeNavigation(challengeSlug: string) {
@@ -84,13 +93,11 @@ export const AccessChallengePageAction = ({
         }
       }
 
-      if (challenge.starId) {
-        const star = await fetchChallengeStar(challenge.starId)
-        if (star) {
-          if (user.isGod.notAndNot(user.hasUnlockedStar(star.id)).isTrue) {
-            call.notFound()
-          }
-        }
+      if (
+        challenge.starId &&
+        (await isStarInaccessible(spaceService, user, challenge.starId))
+      ) {
+        call.notFound()
       }
 
       const challengeNavigation = challenge.starId
@@ -103,7 +110,10 @@ export const AccessChallengePageAction = ({
         call.notFound()
       }
 
-      const userChallengeVote = await fetchUserChallengeVote(challenge.id)
+      const userChallengeVote = await fetchUserChallengeVote(
+        challengingService,
+        challenge.id,
+      )
 
       return {
         challengeDto: challenge.dto,
