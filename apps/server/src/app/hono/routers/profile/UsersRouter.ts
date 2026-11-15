@@ -1,4 +1,4 @@
-import { Hono } from 'hono'
+import { Hono, type Context } from 'hono'
 import { z } from 'zod'
 
 import {
@@ -13,6 +13,7 @@ import {
   dateSchema,
   listingOrderSchema,
 } from '@stardust/validation/global/schemas'
+import { galaxySlugSchema } from '@stardust/validation/space/schemas'
 import {
   userSchema,
   spaceCompletionStatusSchema,
@@ -42,6 +43,7 @@ import {
   FetchDailyActiveUsersReportController,
   FetchUsersListController,
   GenerateUsersXlsxFileController,
+  EnterGalaxyController,
 } from '@/rest/controllers/profile'
 import { ExcelJsXlsxProvider } from '@/provision/xlsx'
 import { AxiosRestClient } from '@/rest/axios/AxiosRestClient'
@@ -103,6 +105,28 @@ export class UsersRouter extends HonoRouter {
           http.getDatabaseAccess(),
         )
         const controller = new FetchUserController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
+  private registerEnterGalaxyRoute() {
+    this.router.put(
+      '/current-galaxy',
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate(
+        'json',
+        z.object({ galaxySlug: galaxySlugSchema }).strict(),
+      ),
+      this.spaceMiddleware.appendEnterableGalaxyToBody,
+      async (context) => {
+        const http = new HonoHttp(context as Context)
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const controller = new EnterGalaxyController(repository)
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -522,6 +546,7 @@ export class UsersRouter extends HonoRouter {
   registerRoutes(): Hono {
     this.registerFetchUserByIdRoute()
     this.registerFetchUserBySlugRoute()
+    this.registerEnterGalaxyRoute()
     this.registerUpdateUserRoute()
     this.registerRewardUserForStarCompletionRoute()
     this.registerRewardUserForStarChallengeCompletionRoute()

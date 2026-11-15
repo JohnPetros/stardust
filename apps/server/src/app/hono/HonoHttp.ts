@@ -62,7 +62,11 @@ export class HonoHttp<HonoContext extends Context>
     let body: HonoHttpSchema<HonoContext>['body']
 
     if (this.next) {
-      body = await this.context.req.json()
+      const method = this.context.req.method
+      body =
+        method === 'GET' || method === 'HEAD'
+          ? ({} as HonoHttpSchema<HonoContext>['body'])
+          : await this.context.req.json()
     } else {
       // @ts-expect-error Hono typing does not propagate validated json payload here.
       body = this.context.req.valid('json')

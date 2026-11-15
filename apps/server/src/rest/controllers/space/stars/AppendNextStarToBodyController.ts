@@ -1,5 +1,9 @@
 import type { Controller, Broker, Http } from '@stardust/core/global/interfaces'
-import type { PlanetsRepository, StarsRepository } from '@stardust/core/space/interfaces'
+import type {
+  GalaxiesRepository,
+  PlanetsRepository,
+  StarsRepository,
+} from '@stardust/core/space/interfaces'
 import { GetNextStarUseCase } from '@stardust/core/space/use-cases'
 
 type Schema = {
@@ -14,6 +18,7 @@ export class AppendNextStarToBodyController implements Controller<Schema> {
   constructor(
     private readonly starsRepository: StarsRepository,
     private readonly planetsRepository: PlanetsRepository,
+    private readonly galaxiesRepository: GalaxiesRepository,
     private readonly broker: Broker,
   ) {}
 
@@ -22,14 +27,15 @@ export class AppendNextStarToBodyController implements Controller<Schema> {
     const useCase = new GetNextStarUseCase(
       this.starsRepository,
       this.planetsRepository,
+      this.galaxiesRepository,
       this.broker,
     )
-    const star = await useCase.execute({
+    const { nextStar, isFirstGalaxy } = await useCase.execute({
       userName,
       userSlug,
       currentStarId: starId,
     })
-    http.extendBody({ nextStarId: star?.id ?? null })
+    http.extendBody({ nextStarId: nextStar?.id ?? null, isFirstGalaxy })
     return http.pass()
   }
 }

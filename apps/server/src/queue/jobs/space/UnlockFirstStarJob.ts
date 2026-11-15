@@ -1,4 +1,7 @@
-import type { PlanetsRepository } from '@stardust/core/space/interfaces'
+import type {
+  GalaxiesRepository,
+  PlanetsRepository,
+} from '@stardust/core/space/interfaces'
 import type { Broker } from '@stardust/core/global/interfaces'
 import type { Job, Amqp } from '@stardust/core/global/interfaces'
 import { UnlockFirstStarUseCase } from '@stardust/core/space/use-cases'
@@ -12,12 +15,17 @@ export class UnlockFirstStarJob implements Job<Payload> {
 
   constructor(
     private readonly planetsRepository: PlanetsRepository,
+    private readonly galaxiesRepository: GalaxiesRepository,
     private readonly broker: Broker,
   ) {}
 
   async handle(amqp: Amqp<Payload>) {
     const payload = amqp.getPayload()
-    const useCase = new UnlockFirstStarUseCase(this.planetsRepository, this.broker)
+    const useCase = new UnlockFirstStarUseCase(
+      this.planetsRepository,
+      this.galaxiesRepository,
+      this.broker,
+    )
 
     await amqp.run(
       async () =>

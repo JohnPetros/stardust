@@ -8,6 +8,8 @@ import {
   VerifyUserSocialAccountController,
   VerifyUserAbsenceController,
   CompleteSpaceController,
+  AppendUserGalaxyProgressToBodyController,
+  AppendUserCurrentGalaxyToBodyController,
 } from '@/rest/controllers/profile/users'
 import { SupabaseAuthService } from '@/rest/services'
 import { HonoHttp } from '../HonoHttp'
@@ -81,6 +83,26 @@ export class ProfileMiddleware {
       http.getDatabaseAccess(),
     )
     const controller = new AppendUserInfoToBodyController(usersRepository)
+    await controller.handle(http)
+  }
+
+  async appendUserGalaxyProgressToBody(context: Context, next: Next) {
+    const http = new HonoHttp(context, next)
+    const usersRepository = new DrizzleUsersRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
+    const controller = new AppendUserGalaxyProgressToBodyController(usersRepository)
+    await controller.handle(http)
+  }
+
+  async appendUserCurrentGalaxyToBody(context: Context, next: Next) {
+    const http = new HonoHttp(context, next)
+    const usersRepository = new DrizzleUsersRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
+    const controller = new AppendUserCurrentGalaxyToBodyController(usersRepository)
     await controller.handle(http)
   }
 

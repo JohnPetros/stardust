@@ -3,6 +3,7 @@ import z from 'zod'
 
 import { idSchema, nameSchema, stringSchema } from '@stardust/validation/global/schemas'
 import {
+  DrizzleGalaxiesRepository,
   DrizzlePlanetsRepository,
   DrizzleStarsRepository,
 } from '@/database/drizzle/repositories'
@@ -44,7 +45,14 @@ export class PlanetsRouter extends HonoRouter {
           http.getDatabase(),
           http.getDatabaseAccess(),
         )
-        const controller = new CreatePlanetController(planetsRepository)
+        const galaxiesRepository = new DrizzleGalaxiesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const controller = new CreatePlanetController(
+          planetsRepository,
+          galaxiesRepository,
+        )
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },
@@ -99,7 +107,11 @@ export class PlanetsRouter extends HonoRouter {
         http.getDatabase(),
         http.getDatabaseAccess(),
       )
-      const controller = new FetchAllPlanetsController(repository)
+      const galaxiesRepository = new DrizzleGalaxiesRepository(
+        http.getDatabase(),
+        http.getDatabaseAccess(),
+      )
+      const controller = new FetchAllPlanetsController(repository, galaxiesRepository)
       const response = await controller.handle(http)
       return http.sendResponse(response)
     })
@@ -174,8 +186,16 @@ export class PlanetsRouter extends HonoRouter {
           http.getDatabase(),
           http.getDatabaseAccess(),
         )
+        const galaxiesRepository = new DrizzleGalaxiesRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
         const broker = new InngestBroker()
-        const controller = new ReorderPlanetsController(repository, broker)
+        const controller = new ReorderPlanetsController(
+          repository,
+          galaxiesRepository,
+          broker,
+        )
         const response = await controller.handle(http)
         return http.sendResponse(response)
       },

@@ -31,6 +31,7 @@ type Schema = {
       coins: number
     }
     nextStarId?: string
+    isFirstGalaxy?: boolean
     starId: string
   }
 }
@@ -47,11 +48,12 @@ export class RewardUserForStarChallengeCompletionController
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const { userId } = http.getRouteParams()
-    const { starId, nextStarId, challengeId, challengeReward } = await http.getBody()
+    const { starId, nextStarId, isFirstGalaxy, challengeId, challengeReward } =
+      await http.getBody()
     const { maximumIncorrectAnswersCount, incorrectAnswersCount } =
       await this.getTrustedExecutionCounts(userId, challengeId)
 
-    await this.completeSpace(userId, nextStarId ?? null)
+    await this.completeSpace(userId, nextStarId ?? null, isFirstGalaxy ?? false)
 
     const { newCoins, newXp, accuracyPercentage } = await this.calculateReward(
       userId,
@@ -157,8 +159,12 @@ export class RewardUserForStarChallengeCompletionController
     return await useCase.execute({ userId, newCoins, newXp })
   }
 
-  private async completeSpace(userId: string, nextStarId: string | null) {
+  private async completeSpace(
+    userId: string,
+    nextStarId: string | null,
+    isFirstGalaxy: boolean,
+  ) {
     const useCase = new CompleteSpaceUseCase(this.usersRepository, this.broker)
-    await useCase.execute({ userId, nextStarId })
+    await useCase.execute({ userId, nextStarId, isFirstGalaxy })
   }
 }

@@ -1,0 +1,14 @@
+@URL = {{BASE_URL}}/space/galaxies
+@GALAXY_SLUG = logica-de-programacao
+
+### List galaxies
+GET {{URL}}
+Authorization: Bearer {{JWT}}
+
+### Resolve current galaxy
+GET {{URL}}/current
+Authorization: Bearer {{JWT}}
+
+### List galaxy planets
+GET {{URL}}/{{GALAXY_SLUG}}/planets
+Authorization: Bearer {{JWT}}
