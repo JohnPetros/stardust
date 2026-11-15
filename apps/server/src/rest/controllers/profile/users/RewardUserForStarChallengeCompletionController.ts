@@ -6,9 +6,7 @@ import type {
   ChallengeCodeExecutionsRepository,
   ChallengesRepository,
 } from '@stardust/core/challenging/interfaces'
-import { Id } from '@stardust/core/global/structures'
-import { NotAllowedError } from '@stardust/core/global/errors'
-import { ChallengeNotFoundError } from '@stardust/core/challenging/errors'
+import { GetChallengeCompletionAttemptsUseCase } from '@stardust/core/challenging/use-cases'
 import {
   CalculateRewardForChallengeCompletionUseCase,
   CompleteSpaceUseCase,
@@ -81,35 +79,11 @@ export class RewardUserForStarChallengeCompletionController
   }
 
   private async getTrustedExecutionCounts(userId: string, challengeId: string) {
-    const userIdObject = Id.create(userId)
-    const challengeIdObject = Id.create(challengeId)
-
-    const [challenge, latestExecution, incorrectAnswersCount] = await Promise.all([
-      this.challengesRepository.findById(challengeIdObject),
-      this.executionsRepository.findLatestByUserAndChallenge(
-        userIdObject,
-        challengeIdObject,
-      ),
-      this.executionsRepository.countIncorrectByUserAndChallenge(
-        userIdObject,
-        challengeIdObject,
-      ),
-    ])
-
-    if (!challenge) {
-      throw new ChallengeNotFoundError()
-    }
-
-    if (!latestExecution?.isAccepted) {
-      throw new NotAllowedError(
-        'É necessário executar o código com sucesso antes da recompensa',
-      )
-    }
-
-    return {
-      maximumIncorrectAnswersCount: challenge.maximumIncorrectAnswersCount.value,
-      incorrectAnswersCount: incorrectAnswersCount.value,
-    }
+    const useCase = new GetChallengeCompletionAttemptsUseCase(
+      this.challengesRepository,
+      this.executionsRepository,
+    )
+    return await useCase.execute({ userId, challengeId })
   }
 
   private async calculateReward(
