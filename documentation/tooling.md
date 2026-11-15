@@ -30,17 +30,18 @@ eval "$(node ./scripts/export-web-app-e2e-env.mjs)"
 
 ## Scripts de qualidade
 
-| Script                       | Ferramenta         | Comportamento                                      |
-| --- | --- | --- |
-| `pnpm run format`             | Biome              | formata e escreve arquivos                         |
-| `pnpm run check:code`         | Biome              | lint/check read-only                               |
-| `pnpm run check:types`        | TypeScript         | typecheck sem emissão                              |
-| `pnpm run check:architecture` | dependency-cruiser | valida dependências entre camadas/apps             |
-| `pnpm run check:complexity`   | CodeMultiVitals    | falha quando a complexidade ou a qualidade piora em relação ao baseline |
-| `pnpm run test:unit`          | Jest/Vitest        | executa testes unitários por workspace             |
-| `pnpm run test:integration`   | Jest/Playwright    | executa as integrações declaradas pelos workspaces |
-| `pnpm run check:spec-implementation` | Node.js       | valida o mapa `Path | Change | ...` da Spec contra Git e filesystem e valida o `plan.md` da Spec |
-| `pnpm run check:design`       | Node.js + API do Penpot | verifica o arquivo `stardust` do Penpot contra o baseline de design |
+| Script                               | Ferramenta              | Comportamento                                                           |
+| ------------------------------------ | ----------------------- | ----------------------------------------------------------------------- | ------ | --------------------------------------------------------------- |
+| `pnpm run format`                    | Biome                   | formata e escreve arquivos                                              |
+| `pnpm run check:code`                | Biome                   | lint/check read-only                                                    |
+| `pnpm run check:types`               | TypeScript              | typecheck sem emissão                                                   |
+| `pnpm run check:architecture`        | dependency-cruiser      | valida dependências entre camadas/apps                                  |
+| `pnpm run check:complexity`          | CodeMultiVitals         | falha quando a complexidade ou a qualidade piora em relação ao baseline |
+| `pnpm run test:unit`                 | Jest/Vitest             | executa testes unitários por workspace                                  |
+| `pnpm run test:integration`          | Jest/Playwright         | executa as integrações declaradas pelos workspaces                      |
+| `pnpm run check:spec-implementation` | Node.js                 | valida o mapa `Path                                                     | Change | ...`da Spec contra Git e filesystem e valida o`plan.md` da Spec |
+| `pnpm run check:design`              | Node.js + API do Penpot | verifica o arquivo `stardust` do Penpot contra o baseline de design     |
+| `pnpm run check:web-quality`         | Lighthouse + Playwright | mede páginas em execução e exige o mínimo de cada métrica               |
 
 Exemplos de ciclo curto:
 
@@ -61,15 +62,15 @@ mudança de apresentação na Web não exige testes do Server; uma mudança no S
 efeito observável no navegador não exige testes de browser. Contratos compartilhados
 acrescentam os testes dos consumidores realmente afetados, não todos os módulos.
 
-| Verificação | Durante a implementação | Verificação integrada | Após correção |
-| --- | --- | --- | --- |
-| Unit/componente | Rode os arquivos de teste afetados conforme o comportamento ficar coerente. | Confirme os resultados do comportamento no escopo e dos consumidores afetados. | Rerrode os arquivos que falharam ou foram invalidados. |
-| Integração do Server | Escreva as asserções de fronteira; use feedback unit e estático durante a construção. | Agrupe os arquivos de controller, rota ou migration afetados depois da integração, com fixtures descartáveis. | Rerrode a seleção afetada em sequência. |
-| Integração Web (Playwright) | Escreva os cenários de rota ou jornada afetados; use feedback de componente e estático durante a construção. | Rode somente os arquivos de cenário afetados. | Rerrode os cenários afetados. |
-| Tipos | Verifique depois de mudar tipos públicos, schemas, assinaturas ou consumidores. | Rode o typecheck dos workspaces afetados e dos consumidores, com a configuração real. | Rerrode os projetos produtor e consumidor impactados. |
-| Lint | `check:code` no workspace alterado, sem escrita. | Confirme o lint do escopo. | Reverifique os paths editados. |
-| Complexidade | `check:complexity -w <workspace>` quando a lógica alterada puder piorar o baseline e sempre que criar ou extrair um arquivo de código novo, inclusive Views (limite de erro de 70 linhas por função). | Rode `check:complexity` no workspace afetado antes de publicar: ele compara com o baseline e reprova funções novas em nível de aviso. Revise as entradas por função e, se forem aceitas, regenere com `update:complexity-baseline`. Registre o resultado e os limites. | Reverifique a lógica alterada; nunca relaxe regras nem atualize o baseline só para passar. |
-| Arquitetura e build | `check:architecture` quando dependências, exports ou composição mudarem. | Rode os gates exigidos; o build ocorre na verificação integrada, não a cada edição. | Rerrode os gates cujas entradas ou afirmações mudaram. |
+| Verificação                 | Durante a implementação                                                                                                                                                                                                        | Verificação integrada                                                                                                                                                                                                                                                  | Após correção                                                                              |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Unit/componente             | Rode os arquivos de teste afetados conforme o comportamento ficar coerente.                                                                                                                                                    | Confirme os resultados do comportamento no escopo e dos consumidores afetados.                                                                                                                                                                                         | Rerrode os arquivos que falharam ou foram invalidados.                                     |
+| Integração do Server        | Escreva as asserções de fronteira; use feedback unit e estático durante a construção.                                                                                                                                          | Agrupe os arquivos de controller, rota ou migration afetados depois da integração, com fixtures descartáveis.                                                                                                                                                          | Rerrode a seleção afetada em sequência.                                                    |
+| Integração Web (Playwright) | Escreva os cenários de rota ou jornada afetados; use feedback de componente e estático durante a construção.                                                                                                                   | Rode somente os arquivos de cenário afetados.                                                                                                                                                                                                                          | Rerrode os cenários afetados.                                                              |
+| Tipos                       | Verifique depois de mudar tipos públicos, schemas, assinaturas ou consumidores.                                                                                                                                                | Rode o typecheck dos workspaces afetados e dos consumidores, com a configuração real.                                                                                                                                                                                  | Rerrode os projetos produtor e consumidor impactados.                                      |
+| Lint                        | `check:code` no workspace alterado, sem escrita.                                                                                                                                                                               | Confirme o lint do escopo.                                                                                                                                                                                                                                             | Reverifique os paths editados.                                                             |
+| Complexidade                | `pnpm --filter @stardust/<workspace> run check:complexity` quando a lógica alterada puder piorar o baseline e sempre que criar ou extrair um arquivo de código novo, inclusive Views (limite de erro de 70 linhas por função). | Rode `check:complexity` no workspace afetado antes de publicar: ele compara com o baseline e reprova funções novas em nível de aviso. Revise as entradas por função e, se forem aceitas, regenere com `update:complexity-baseline`. Registre o resultado e os limites. | Reverifique a lógica alterada; nunca relaxe regras nem atualize o baseline só para passar. |
+| Arquitetura e build         | `check:architecture` quando dependências, exports ou composição mudarem.                                                                                                                                                       | Rode os gates exigidos; o build ocorre na verificação integrada, não a cada edição.                                                                                                                                                                                    | Rerrode os gates cujas entradas ou afirmações mudaram.                                     |
 
 A integração é um checkpoint, não um ritual por edição. Agrupe as seleções relacionadas
 do Server para reaproveitar o setup das fixtures e serialize os comandos que usam
@@ -81,11 +82,11 @@ Use estas formas de comando com caminhos de arquivo verificados no código. Os c
 relativos ao workspace. Filtros por nome exigem nomes verificados no código; evite globs
 amplos ou buscas por palavra-chave que incluam testes alheios.
 
-| Fronteira | Diretório | Forma do comando |
-| --- | --- | --- |
-| Unit Core, Server, Backoffice ou Web | Raiz | `pnpm run test:unit -w @stardust/<workspace> -- <arquivos-de-teste>` |
-| Integração do Server | Raiz | `pnpm --filter @stardust/server run test:integration <arquivos-de-teste>`, depois de `pnpm --filter @stardust/server run db:test` |
-| Integração da Web | Raiz | `pnpm --filter @stardust/web run test:integration <arquivos-de-teste>` |
+| Fronteira                            | Diretório | Forma do comando                                                                                                                  |
+| ------------------------------------ | --------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Unit Core, Server, Backoffice ou Web | Raiz      | `pnpm --filter @stardust/<workspace> run test:unit -- <arquivos-de-teste>`                                                        |
+| Integração do Server                 | Raiz      | `pnpm --filter @stardust/server run test:integration <arquivos-de-teste>`, depois de `pnpm --filter @stardust/server run db:test` |
+| Integração da Web                    | Raiz      | `pnpm --filter @stardust/web run test:integration <arquivos-de-teste>`                                                            |
 
 Os scripts completos (`test:unit`, `test:integration`, `test:coverage` e `check:coverage`)
 são comandos disponíveis, não um checklist local obrigatório. Amplie a seleção só quando o
@@ -125,13 +126,13 @@ centrado nas métricas por função.
 `check:design` lê o arquivo `stardust` pela API REST do Penpot e verifica as
 páginas de produto (todas, exceto `🎨 Design System`):
 
-| Categoria | Regras | Severidade |
-| --- | --- | --- |
-| `contrast` | texto WCAG AA (4,5:1; 3:1 para texto grande) sobre o fundo composto; ícones 3:1 | erro (texto), aviso (ícone) |
-| `tokens` | cor sem token, cor quase igual a um token, cor fora da paleta, token desatualizado ou inexistente | aviso (sem token), erro (demais) |
-| `typography` | tamanho mínimo, escala, família, peso, texto que não cabe na caixa ou é cortado por um board | erro (mínimo, família, overflow, corte), aviso (escala, peso) |
-| `spacing` | gap e padding fora da escala `space.*`; raio fora de `radius.*` ou totalmente arredondado | aviso |
-| `hygiene` | seções sobrepostas, camada solta na raiz, nome padrão, board vazio, camada oculta, cópia de componente removido | erro ou aviso |
+| Categoria    | Regras                                                                                                          | Severidade                                                    |
+| ------------ | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `contrast`   | texto WCAG AA (4,5:1; 3:1 para texto grande) sobre o fundo composto; ícones 3:1                                 | erro (texto), aviso (ícone)                                   |
+| `tokens`     | cor sem token, cor quase igual a um token, cor fora da paleta, token desatualizado ou inexistente               | aviso (sem token), erro (demais)                              |
+| `typography` | tamanho mínimo, escala, família, peso, texto que não cabe na caixa ou é cortado por um board                    | erro (mínimo, família, overflow, corte), aviso (escala, peso) |
+| `spacing`    | gap e padding fora da escala `space.*`; raio fora de `radius.*` ou totalmente arredondado                       | aviso                                                         |
+| `hygiene`    | seções sobrepostas, camada solta na raiz, nome padrão, board vazio, camada oculta, cópia de componente removido | erro ou aviso                                                 |
 
 O script exige `PENPOT_ACCESS_TOKEN` (Penpot → Your account → Access tokens) no
 `.env.local` da raiz ou no ambiente; nunca registre o valor. O token é enviado
@@ -162,41 +163,42 @@ partir da raiz.
 
 ### Raiz (`stardust`)
 
-| Script               | Descrição                                                                                           |
-| --- | --- |
-| `setup`              | Executa `scripts/setup-project.mjs` para configurar skills, comandos e MCP.                         |
-| `prepare`            | Inicializa os hooks do Husky após a instalação das dependências.                                    |
-| `dev`                | Inicia os processos de desenvolvimento definidos pelos workspaces via Turbo.                        |
-| `prod`               | Inicia os processos de produção definidos pelos workspaces via Turbo.                               |
-| `build`              | Compila os workspaces e substitui imports de pacotes pelos caminhos de build.                       |
-| `build:server`       | Compila o Server sem cache e substitui os imports de pacotes.                                       |
-| `build:backoffice`       | Compila apenas o Backoffice.                                                                            |
-| `dev:backoffice` | Inicia o painel administrativo em `http://localhost:8000`. |
-| `dev:studio` | Inicia o editor local de animações, preferindo a porta `3030`. |
-| `build:studio` | Compila o player de animações do pacote `@stardust/studio`. |
-| `build:web`          | Compila apenas a Web App.                                                                           |
-| `build:core`         | Compila apenas o pacote Core.                                                                       |
-| `format`             | Formata os arquivos dos workspaces via Turbo.                                                       |
-| `check:code`         | Executa as verificações Biome dos workspaces via Turbo.                                             |
-| `check:types`        | Executa os typechecks dos workspaces via Turbo.                                                     |
-| `check:architecture` | Verifica as dependências entre camadas com dependency-cruiser.                                      |
-| `check:complexity` | Verifica complexidade e manutenibilidade contra `.code-multivitals-baseline.json`. |
-| `update:complexity-baseline` | Atualiza o baseline compartilhado após uma revisão explícita das alterações de complexidade. |
-| `test`               | Alias para `test:unit`.                                                                             |
-| `test:unit`          | Executa os testes unitários dos workspaces via Turbo.                                               |
-| `test:coverage`      | Executa cobertura dos workspaces com ratchet habilitado.                                            |
-| `check:coverage`     | Compara os relatórios de cobertura com `coverage-baseline.json` e falha quando um baseline diminui. |
-| `check:test-integrity` | Falha quando testes são enfraquecidos ou código testável alterado não tem teste correspondente. |
-| `check:spec-implementation` | Valida o mapa canônico de paths da Spec contra o diff Git e o filesystem e, quando existe, o `plan.md` da Spec. `--plan-only` valida só o Plan contra a Spec (sem exigir paths entregues); `--require-plan` exige o Plan com todas as linhas `completed` e lê a chave `plan:` do `evaluation.md` irmão: `plan: <path>` exige o Plan, `plan: none` é o opt-out explícito de entregas anteriores ao Plan e a ausência da chave é erro; sem `evaluation.md`, o Plan continua exigido. |
-| `check:design` | Verifica contraste, tokens, tipografia, espaçamento e higiene do arquivo `stardust` do Penpot contra `.design-check-baseline.json`. |
-| `update:design-baseline` | Atualiza o baseline de design após uma revisão explícita dos findings. |
-| `test:spec-implementation` | Executa os testes do checker de conformidade de Spec.                                               |
-| `test:scripts`       | Executa os testes de todos os scripts auxiliares em `scripts/tests/`.                               |
-| `test:integration`   | Executa os testes de integração declarados pelos workspaces via Turbo.                              |
-| `test:server`        | Executa os testes unitários do `@stardust/server`.                                                  |
-| `test:backoffice`        | Executa os testes unitários do `@stardust/backoffice`.                                                  |
-| `test:web`           | Executa os testes unitários do `@stardust/web`.                                                     |
-| `test:core`          | Executa os testes unitários do `@stardust/core`.                                                    |
+| Script                       | Descrição                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `setup`                      | Executa `scripts/setup-project.mjs` para configurar skills, comandos e MCP.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `prepare`                    | Inicializa os hooks do Husky após a instalação das dependências.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `dev`                        | Inicia os processos de desenvolvimento definidos pelos workspaces via Turbo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `prod`                       | Inicia os processos de produção definidos pelos workspaces via Turbo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `build`                      | Compila os workspaces e substitui imports de pacotes pelos caminhos de build.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `build:server`               | Compila o Server sem cache e substitui os imports de pacotes.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `build:backoffice`           | Compila apenas o Backoffice.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `dev:backoffice`             | Inicia o painel administrativo em `http://localhost:8000`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `dev:studio`                 | Inicia o editor local de animações, preferindo a porta `3030`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `build:studio`               | Compila o player de animações do pacote `@stardust/studio`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `build:web`                  | Compila apenas a Web App.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `build:core`                 | Compila apenas o pacote Core.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `format`                     | Formata os arquivos dos workspaces via Turbo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `check:code`                 | Executa as verificações Biome dos workspaces via Turbo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `check:types`                | Executa os typechecks dos workspaces via Turbo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `check:architecture`         | Verifica as dependências entre camadas com dependency-cruiser.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `check:complexity`           | Verifica complexidade e manutenibilidade contra `.code-multivitals-baseline.json`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `update:complexity-baseline` | Atualiza o baseline compartilhado após uma revisão explícita das alterações de complexidade.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `test`                       | Alias para `test:unit`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `test:unit`                  | Executa os testes unitários dos workspaces via Turbo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `test:coverage`              | Executa cobertura dos workspaces com ratchet habilitado.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `check:coverage`             | Compara os relatórios de cobertura com `coverage-baseline.json` e falha quando um baseline diminui.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `check:test-integrity`       | Falha quando testes são enfraquecidos ou código testável alterado não tem teste correspondente.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `check:spec-implementation`  | Valida o mapa canônico de paths da Spec contra o diff Git e o filesystem e, quando existe, o `plan.md` da Spec. `--plan-only` valida só o Plan contra a Spec (sem exigir paths entregues); `--require-plan` exige o Plan com todas as linhas `completed` e lê a chave `plan:` do `evaluation.md` irmão: `plan: <path>` exige o Plan, `plan: none` é o opt-out explícito de entregas anteriores ao Plan e a ausência da chave é erro; sem `evaluation.md`, o Plan continua exigido.                                                                                                                                                                                               |
+| `check:design`               | Verifica contraste, tokens, tipografia, espaçamento e higiene do arquivo `stardust` do Penpot contra `.design-check-baseline.json`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `check:web-quality`          | Mede, com Lighthouse (mediana de 3 execuções por rota e preset), as rotas de `scripts/web-quality.config.json` numa aplicação já em execução (`--base <url>`, padrão `http://localhost:3000`; não faz build nem sobe servidor) e falha quando uma métrica não atinge o mínimo declarado: pontuações de categoria (`min`) e LCP, TBT e CLS (`max`). Rotas com `auth: true` entram com `WEB_APP_E2E_EMAIL` e `WEB_APP_E2E_PASSWORD` (`eval "$(node scripts/export-web-app-e2e-env.mjs --seed)"`). Meça um build de produção; contra o servidor de desenvolvimento o script avisa que os números não valem. `--route <nome>`, `--runs <n>` e `--json <caminho>` ajustam a execução. |
+| `update:design-baseline`     | Atualiza o baseline de design após uma revisão explícita dos findings.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `test:spec-implementation`   | Executa os testes do checker de conformidade de Spec.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `test:scripts`               | Executa os testes de todos os scripts auxiliares em `scripts/tests/`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `test:integration`           | Executa os testes de integração declarados pelos workspaces via Turbo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `test:server`                | Executa os testes unitários do `@stardust/server`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `test:backoffice`            | Executa os testes unitários do `@stardust/backoffice`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `test:web`                   | Executa os testes unitários do `@stardust/web`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `test:core`                  | Executa os testes unitários do `@stardust/core`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 
 `check:test-integrity` exige um teste alterado no mesmo workspace somente para
 source executável em alvos testáveis: controllers, jobs, use-cases, objetos de
@@ -217,31 +219,32 @@ locais aparece em `forbiddenTestPaths` e falha o CI.
 
 ### `apps/server`
 
-| Script             | Descrição                                                                                |
-| --- | --- |
-| `dev`              | Inicia a API em modo watch com `.env.local`.                                       |
-| `lint`             | Executa o lint de `src` com nível de diagnóstico de erro.                                |
-| `format`           | Formata `src` e grava as alterações.                                                     |
-| `check:code`       | Verifica `src` com Biome, sem aplicar correções.                                         |
-| `check:types`      | Executa o TypeScript sem emitir arquivos.                                                |
-| `check:complexity` | Verifica o escopo `apps/server` contra o baseline compartilhado.                          |
-| `check:architecture` | Verifica as dependências arquiteturais do Server com dependency-cruiser.               |
-| `check:updates`    | Lista atualizações de dependências com `ncu`.                                            |
-| `build`            | Compila o Server com tsup.                                                               |
-| `prod`             | Inicia o build do Server usando `.env`.                                                  |
-| `db:test`          | Inicia os serviços Supabase necessários e reinicia o banco local de testes.              |
-| `db:migrate`       | Aplica as migrations Drizzle com `tsx scripts/migrate-database.ts`.                      |
-| `db:prod`          | Vincula a CLI Supabase ao projeto de produção.                                           |
-| `db:dev`           | Vincula a CLI Supabase ao projeto de desenvolvimento.                                    |
-| `db:pull`          | Baixa os schemas Auth, Public, Storage e Realtime.                                       |
-| `db:push`          | Aplica migrations ao projeto Supabase vinculado.                                         |
-| `db:types`         | Gera os tipos TypeScript do banco de desenvolvimento.                                    |
-| `db:revert`        | Marca uma migration como revertida; o ID da migration é argumento posicional.            |
-| `update`           | Atualiza uma dependência específica com `ncu`; o nome da dependência é argumento posicional. |
-| `test:unit`        | Executa os testes unitários do projeto Server.                                           |
-| `test:coverage`    | Executa os testes unitários do Server com relatório JSON de cobertura.                   |
-| `test:coverage:merge` | Consolida a cobertura unitária e dos seis shards de integração do Server antes do ratchet. |
-| `test:integration` | Executa os testes de integração do Server.                                               |
+| Script                | Descrição                                                                                                 |
+| --------------------- | --------------------------------------------------------------------------------------------------------- |
+| `dev`                 | Inicia a API em modo watch com `.env.local`.                                                              |
+| `lint`                | Executa o lint de `src` com nível de diagnóstico de erro.                                                 |
+| `format`              | Formata `src` e grava as alterações.                                                                      |
+| `check:code`          | Verifica `src` com Biome, sem aplicar correções.                                                          |
+| `check:types`         | Executa o TypeScript sem emitir arquivos.                                                                 |
+| `check:complexity`    | Verifica o escopo `apps/server` contra o baseline compartilhado.                                          |
+| `check:architecture`  | Verifica as dependências arquiteturais do Server com dependency-cruiser.                                  |
+| `check:updates`       | Lista atualizações de dependências com `ncu`.                                                             |
+| `build`               | Compila o Server com tsup.                                                                                |
+| `prod`                | Inicia o build do Server usando `.env`.                                                                   |
+| `db:test`             | Inicia os serviços Supabase necessários e reinicia o banco local de testes.                               |
+| `db:migrate`          | Aplica as migrations Drizzle com `tsx scripts/migrate-database.ts`, inclusive as posteriores à transição. |
+| `db:preflight`        | Verifica o estado de transição ou, com migrations posteriores, o prefixo e o journal completo no ledger.  |
+| `db:prod`             | Vincula a CLI Supabase ao projeto de produção.                                                            |
+| `db:dev`              | Vincula a CLI Supabase ao projeto de desenvolvimento.                                                     |
+| `db:pull`             | Baixa os schemas Auth, Public, Storage e Realtime.                                                        |
+| `db:push`             | Aplica migrations ao projeto Supabase vinculado.                                                          |
+| `db:types`            | Gera os tipos TypeScript do banco de desenvolvimento.                                                     |
+| `db:revert`           | Marca uma migration como revertida; o ID da migration é argumento posicional.                             |
+| `update`              | Atualiza uma dependência específica com `ncu`; o nome da dependência é argumento posicional.              |
+| `test:unit`           | Executa os testes unitários do projeto Server.                                                            |
+| `test:coverage`       | Executa os testes unitários do Server com relatório JSON de cobertura.                                    |
+| `test:coverage:merge` | Consolida a cobertura unitária e dos seis shards de integração do Server antes do ratchet.                |
+| `test:integration`    | Executa os testes de integração do Server.                                                                |
 
 Exemplos de comandos de banco:
 
@@ -258,65 +261,65 @@ los.
 
 ### `apps/backoffice`
 
-| Script            | Descrição                                                              |
-| --- | --- |
-| `dev`             | Inicia o servidor de desenvolvimento do Backoffice na porta `8000`.        |
-| `build`           | Gera o build do Backoffice com React Router.                               |
-| `start`           | Serve o arquivo estático do Backoffice a partir de `build/client`.         |
-| `lint`            | Executa o lint de `src` com nível de diagnóstico de erro.              |
-| `format`          | Formata `src` e grava as alterações.                                   |
-| `check:code`      | Verifica `src` com Biome, sem aplicar correções.                       |
-| `check:types`     | Gera os tipos do React Router e executa o TypeScript.                  |
-| `check:complexity` | Verifica o escopo `apps/backoffice` contra o baseline compartilhado.       |
+| Script               | Descrição                                                                    |
+| -------------------- | ---------------------------------------------------------------------------- |
+| `dev`                | Inicia o servidor de desenvolvimento do Backoffice na porta `8000`.          |
+| `build`              | Gera o build do Backoffice com React Router.                                 |
+| `start`              | Serve o arquivo estático do Backoffice a partir de `build/client`.           |
+| `lint`               | Executa o lint de `src` com nível de diagnóstico de erro.                    |
+| `format`             | Formata `src` e grava as alterações.                                         |
+| `check:code`         | Verifica `src` com Biome, sem aplicar correções.                             |
+| `check:types`        | Gera os tipos do React Router e executa o TypeScript.                        |
+| `check:complexity`   | Verifica o escopo `apps/backoffice` contra o baseline compartilhado.         |
 | `check:architecture` | Verifica as dependências arquiteturais do Backoffice com dependency-cruiser. |
-| `test:unit`       | Executa os testes unitários do Backoffice.                                 |
-| `test:coverage`   | Executa os testes unitários do Backoffice com relatório JSON de cobertura. |
-| `test:unit:watch` | Executa os testes unitários do Backoffice em modo watch.                   |
+| `test:unit`          | Executa os testes unitários do Backoffice.                                   |
+| `test:coverage`      | Executa os testes unitários do Backoffice com relatório JSON de cobertura.   |
+| `test:unit:watch`    | Executa os testes unitários do Backoffice em modo watch.                     |
 
 ### `apps/web`
 
-| Script                     | Descrição                                                               |
-| --- | --- |
-| `dev`                      | Inicia a Web App em desenvolvimento na porta `3000`.                    |
-| `build`                    | Gera o build de produção da Web App com Next.js.                        |
-| `start`                    | Inicia o build standalone usando a porta definida em `PORT`.            |
-| `check:code`               | Verifica `src` com Biome, sem aplicar correções.                        |
-| `check:types`              | Executa o TypeScript sem emitir arquivos.                               |
-| `check:complexity`         | Verifica o escopo `apps/web` contra o baseline compartilhado.           |
+| Script                     | Descrição                                                                 |
+| -------------------------- | ------------------------------------------------------------------------- |
+| `dev`                      | Inicia a Web App em desenvolvimento na porta `3000`.                      |
+| `build`                    | Gera o build de produção da Web App com Next.js.                          |
+| `start`                    | Inicia o build standalone usando a porta definida em `PORT`.              |
+| `check:code`               | Verifica `src` com Biome, sem aplicar correções.                          |
+| `check:types`              | Executa o TypeScript sem emitir arquivos.                                 |
+| `check:complexity`         | Verifica o escopo `apps/web` contra o baseline compartilhado.             |
 | `check:architecture`       | Verifica as dependências arquiteturais da Web App com dependency-cruiser. |
-| `lint`                     | Executa o lint de `src` com nível de diagnóstico de erro.               |
-| `format`                   | Formata `src` e grava as alterações.                                    |
-| `test:unit`                | Executa os testes unitários da Web App.                                 |
-| `test:coverage`            | Executa os testes unitários da Web App com relatório JSON de cobertura. |
-| `test:unit:watch`          | Executa os testes unitários da Web App em modo watch.                   |
-| `test:integration`         | Executa os testes Playwright com a configuração de integração.          |
-| `test:integration:ui`      | Abre a interface do Playwright para os testes de integração.            |
-| `test:integration:debug`   | Executa os testes Playwright em modo de depuração.                      |
-| `test:integration:install` | Instala o navegador Chromium usado pela integração.                     |
+| `lint`                     | Executa o lint de `src` com nível de diagnóstico de erro.                 |
+| `format`                   | Formata `src` e grava as alterações.                                      |
+| `test:unit`                | Executa os testes unitários da Web App.                                   |
+| `test:coverage`            | Executa os testes unitários da Web App com relatório JSON de cobertura.   |
+| `test:unit:watch`          | Executa os testes unitários da Web App em modo watch.                     |
+| `test:integration`         | Executa os testes Playwright com a configuração de integração.            |
+| `test:integration:ui`      | Abre a interface do Playwright para os testes de integração.              |
+| `test:integration:debug`   | Executa os testes Playwright em modo de depuração.                        |
+| `test:integration:install` | Instala o navegador Chromium usado pela integração.                       |
 
 ### `packages/core`
 
-| Script          | Descrição                                                            |
-| --- | --- |
-| `build`         | Compila o pacote Core com tsup.                                      |
-| `check:types`   | Executa o TypeScript sem emitir arquivos.                            |
-| `check:code`    | Verifica `src` com Biome, sem aplicar correções.                     |
-| `check:complexity` | Verifica o escopo `packages/core` contra o baseline compartilhado. |
+| Script               | Descrição                                                              |
+| -------------------- | ---------------------------------------------------------------------- |
+| `build`              | Compila o pacote Core com tsup.                                        |
+| `check:types`        | Executa o TypeScript sem emitir arquivos.                              |
+| `check:code`         | Verifica `src` com Biome, sem aplicar correções.                       |
+| `check:complexity`   | Verifica o escopo `packages/core` contra o baseline compartilhado.     |
 | `check:architecture` | Verifica as dependências arquiteturais do Core com dependency-cruiser. |
-| `lint`          | Executa o lint de `src` com nível de diagnóstico de erro.            |
-| `format`        | Formata `src` e grava as alterações.                                 |
-| `test:unit`     | Executa os testes unitários do Core.                                 |
-| `test:coverage` | Executa os testes unitários do Core com relatório JSON de cobertura. |
+| `lint`               | Executa o lint de `src` com nível de diagnóstico de erro.              |
+| `format`             | Formata `src` e grava as alterações.                                   |
+| `test:unit`          | Executa os testes unitários do Core.                                   |
+| `test:coverage`      | Executa os testes unitários do Core com relatório JSON de cobertura.   |
 
 ### `packages/email`
 
-| Script        | Descrição                                   |
-| --- | --- |
-| `dev`         | Inicia o editor de emails na porta `3001`.  |
-| `build`       | Exporta os templates de email para `build`. |
-| `format`      | Formata os templates e partials.            |
-| `check:code`  | Verifica templates e partials com Biome.    |
-| `check:types` | Executa o TypeScript sem emitir arquivos.   |
+| Script             | Descrição                                                       |
+| ------------------ | --------------------------------------------------------------- |
+| `dev`              | Inicia o editor de emails na porta `3001`.                      |
+| `build`            | Exporta os templates de email para `build`.                     |
+| `format`           | Formata os templates e partials.                                |
+| `check:code`       | Verifica templates e partials com Biome.                        |
+| `check:types`      | Executa o TypeScript sem emitir arquivos.                       |
 | `check:complexity` | Verifica os templates de email contra o baseline compartilhado. |
 
 ### `packages/studio`
@@ -326,14 +329,14 @@ administrativo em `apps/backoffice`. Use `pnpm run dev:studio` na raiz.
 O Vite prefere a porta `3030` e informa outra porta se ela estiver ocupada.
 Não exige Server, Supabase, credenciais ou variáveis de ambiente.
 
-| Script | Efeito |
-| --- | --- |
-| `dev` | Inicia o editor Vite e o backend local de arquivos. |
-| `build` | Verifica tipos e gera o player estático em `dist`. |
-| `preview` | Serve o build estático, sem endpoints de edição. |
-| `check:code` | Verifica UI, plugin e scripts com Biome. |
-| `check:types` | Executa TypeScript sem emissão. |
-| `format` | Formata o código com Biome. |
+| Script        | Efeito                                                         |
+| ------------- | -------------------------------------------------------------- |
+| `dev`         | Inicia o editor Vite e o backend local de arquivos.            |
+| `build`       | Verifica tipos e gera o player estático em `dist`.             |
+| `preview`     | Serve o build estático, sem endpoints de edição.               |
+| `check:code`  | Verifica UI, plugin e scripts com Biome.                       |
+| `check:types` | Executa TypeScript sem emissão.                                |
+| `format`      | Formata o código com Biome.                                    |
 | `postinstall` | Copia o CanvasKit WASM para `public`, sem versionar o binário. |
 
 O `pnpm run dev` geral não inicia esta ferramenta. `pnpm run build:studio`
@@ -343,26 +346,26 @@ em `lottie.json`; não usa o fluxo autenticado do Backoffice administrativo.
 
 ### `packages/lsp`
 
-| Script        | Descrição                                           |
-| --- | --- |
-| `build`       | Compila o pacote LSP com tsup.                      |
-| `check:types` | Executa o TypeScript sem emitir arquivos.           |
-| `check:code`  | Verifica `src` com Biome, sem aplicar correções.    |
+| Script             | Descrição                                                         |
+| ------------------ | ----------------------------------------------------------------- |
+| `build`            | Compila o pacote LSP com tsup.                                    |
+| `check:types`      | Executa o TypeScript sem emitir arquivos.                         |
+| `check:code`       | Verifica `src` com Biome, sem aplicar correções.                  |
 | `check:complexity` | Verifica o escopo `packages/lsp` contra o baseline compartilhado. |
-| `lint`        | Executa o lint dos arquivos TypeScript de `src`.    |
-| `format`      | Formata os arquivos TypeScript de `src`.            |
-| `test:unit`   | Executa os testes Node do LSP com o carregador tsx. |
+| `lint`             | Executa o lint dos arquivos TypeScript de `src`.                  |
+| `format`           | Formata os arquivos TypeScript de `src`.                          |
+| `test:unit`        | Executa os testes Node do LSP com o carregador tsx.               |
 
 ### `packages/validation`
 
-| Script        | Descrição                                                 |
-| --- | --- |
-| `build`       | Compila o pacote Validation com tsup.                     |
-| `check:types` | Executa o TypeScript sem emitir arquivos.                 |
-| `check:code`  | Verifica `src` com Biome, sem aplicar correções.          |
+| Script             | Descrição                                                                |
+| ------------------ | ------------------------------------------------------------------------ |
+| `build`            | Compila o pacote Validation com tsup.                                    |
+| `check:types`      | Executa o TypeScript sem emitir arquivos.                                |
+| `check:code`       | Verifica `src` com Biome, sem aplicar correções.                         |
 | `check:complexity` | Verifica o escopo `packages/validation` contra o baseline compartilhado. |
-| `lint`        | Executa o lint de `src` com nível de diagnóstico de erro. |
-| `format`      | Formata `src` e grava as alterações.                      |
+| `lint`             | Executa o lint de `src` com nível de diagnóstico de erro.                |
+| `format`           | Formata `src` e grava as alterações.                                     |
 
 ## Seed local por módulo
 
@@ -417,13 +420,19 @@ As imagens dos planetas, conquistas, avatares, tiers e foguetes estão versionad
 `seeders/assets/images/planets/`, `seeders/assets/images/achievements/` e
 `seeders/assets/images/avatars/`, `seeders/assets/images/rankings/` e
 `seeders/assets/images/rockets/`.
-Execute `pnpm --filter @stardust/server run db:seed:assets` depois de preparar o MinIO
+Execute `pnpm --filter @stardust/server run storage:seed` depois de preparar o MinIO
 local. O comando usa o `.env.local` da raiz, exige endpoint HTTP em
 `127.0.0.1`, preserva os nomes do catálogo e publica 110 imagens, incluindo seis
 extras. Confirma por HTTP anônimo os 104 arquivos referenciados pelos oito
 planetas, pelas 17 conquistas, pelos 55 avatares, pelos seis tiers e pelos 10 foguetes. Não altera o banco; pode ser executado novamente para atualizar os
 arquivos. A policy existente é preservada e recebe permissão de leitura pública
-somente para `images/planets/*`, `images/achievements/*`, `images/avatars/*`, `images/rankings/*` e `images/rockets/*`. Uploads e outras pastas não recebem permissões.
+somente para `images/planets/*`, `images/achievements/*`, `images/avatars/*`, `images/rankings/*`, `images/rockets/*` e `lotties/galaxies/*`. Uploads e outras pastas não recebem permissões.
+
+O mesmo comando envia, para cada galáxia do catálogo, a cena
+`packages/studio/public/projects/galaxies/<slug>/lottie.json` como
+`lotties/galaxies/<animation>` com `Content-Type: application/json`, exigindo JSON com
+`layers`, e confirma a leitura anônima de cada arquivo. As cenas são editadas e
+visualizadas com `pnpm run dev:studio`.
 Configure `NEXT_PUBLIC_CDN_URL` na Web e `VITE_CDN_URL` no Backoffice com a URL
 impressa pelo comando (`http://127.0.0.1:<MINIO_API_PORT>/<MINIO_BUCKET>`).
 Os avatares preservam os nomes `.jpg` do catálogo; o Content-Type corresponde
@@ -450,6 +459,38 @@ STARDUST_LOCAL_SEED_TEST=1 node --env-file=.env.local --test scripts/tests/seed-
 A integração recria o seed duas vezes, autentica as contas pelo GoTrue local,
 verifica seus perfis e força uma falha de inserção para confirmar rollback.
 Sem `STARDUST_LOCAL_SEED_TEST=1`, esse teste não altera o banco.
+
+### Migrations posteriores à transição
+
+O estado `server-owned` admite ledger com mais de três linhas, desde que as três
+primeiras sejam exatamente as migrations da transição (`0000_baseline`,
+`0001_application_objects` e `0002_server_owned_access`). Com exatamente três
+linhas, `db:preflight --phase server-owned` mantém a comparação exata com o manifest
+legado; com mais linhas, confirma o prefixo idêntico, que todas as entradas do
+`meta/_journal.json` estão no ledger com o mesmo hash e `created_at` e que não há
+caminho de acesso externo (`auditExternalExposure`). O journal aceita entradas após
+as três da transição desde que tenham `idx` sequencial, `when` crescente e
+`breakpoints`; qualquer outro desvio falha com `Unexpected migration journal`.
+Os estados `legacy` e `adopted` não mudam.
+
+`db:migrate --phase server-owned` aplica as migrations pendentes sob a mesma sessão e o
+mesmo advisory lock e revalida o estado ao final. O rollback de acesso
+(`--rollback`) recusa ledgers com mais de três linhas.
+
+```bash
+pnpm --filter @stardust/server run db:preflight --phase server-owned
+pnpm --filter @stardust/server run db:migrate --phase server-owned
+pnpm --filter @stardust/server run db:preflight --phase server-owned
+```
+
+O teste de integração das migrations de galáxias é opt-in e só roda no banco local
+loopback já migrado. Ele executa tudo em uma transação sempre encerrada com
+`ROLLBACK`; sem a variável, não altera o banco.
+
+```bash
+eval "$(node scripts/export-local-database-env.mjs)"
+STARDUST_LOCAL_MIGRATION_TEST=1 node --env-file=.env.local --test scripts/tests/galaxies-migration.integration.test.mjs
+```
 
 ## Supabase local
 
@@ -581,13 +622,13 @@ aplicável. Os workflows E2E do GitHub Actions estão descritos em
 
 Os scripts listados acima ainda descrevem o estado implementado. Para a entrega da Issue #602, o contrato de tooling é:
 
-| Script Server | Destino aprovado |
-| --- | --- |
-| `db:generate` | Drizzle Kit generate sobre src/database/drizzle/schema.ts agregando models; out em src/database/drizzle/migrations; execução local, sem introspecção remota implícita. |
-| `db:migrate` | Aplica migrations Drizzle pendentes; URL por ambiente, sem reset, sem execução no boot. |
-| `db:preflight` | Compara catálogo/histórico com baseline, apenas leitura; não imprime dados nem credenciais. |
-| `db:adopt` | Adota baseline em banco existente somente após parity; nunca marca a migration de revogação como já aplicada. |
-| `db:test` | Prepara Compose com .env.local raiz, reset exclusivamente local, migrations Drizzle sem seed. |
+| Script Server  | Destino aprovado                                                                                                                                                       |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `db:generate`  | Drizzle Kit generate sobre src/database/drizzle/schema.ts agregando models; out em src/database/drizzle/migrations; execução local, sem introspecção remota implícita. |
+| `db:migrate`   | Aplica migrations Drizzle pendentes; URL por ambiente, sem reset, sem execução no boot.                                                                                |
+| `db:preflight` | Compara catálogo/histórico com baseline, apenas leitura; não imprime dados nem credenciais.                                                                            |
+| `db:adopt`     | Adota baseline em banco existente somente após parity; nunca marca a migration de revogação como já aplicada.                                                          |
+| `db:test`      | Prepara Compose com .env.local raiz, reset exclusivamente local, migrations Drizzle sem seed.                                                                          |
 
 Scripts Supabase CLI de diff/push/pull/repair e geração de Database.ts são retirados; a Web não gera tipos de banco. pnpm/`pnpm-lock.yaml` permanecem a fonte das versões. Antes de qualquer aplicação remota, exige-se preflight de Dev e produção e ensaio de rollback em restauração isolada, com evidências no workflow SDD. A indisponibilidade desses ambientes nesta autoria não é evidência de parity. A janela inicial é coordenada, sem release intermediário compatível.
 

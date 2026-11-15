@@ -313,6 +313,20 @@ supabase db push
 
 O container do server **não** contém a Supabase CLI nem o `postgresql-client`. Migrations são responsabilidade exclusiva do CI/CD.
 
+### Migrations posteriores à transição Drizzle
+
+Depois da transição, o ledger `drizzle.__drizzle_migrations` pode ter mais de três linhas: as três primeiras são sempre as migrations da transição e as seguintes seguem o `meta/_journal.json`. O fluxo de cada release com migrations novas é:
+
+1. `db:preflight --phase server-owned` no ambiente alvo (estado de transição exato ou prefixo mais journal aplicado);
+2. `db:migrate --phase server-owned` no job de migrations do Server, antes do deploy, sob o advisory lock da transição;
+3. `db:preflight --phase server-owned` novamente, confirmando que todas as entradas do journal estão no ledger e que não há caminho de acesso externo.
+
+O rollback de acesso continua restrito ao estado de transição exato (três linhas).
+
+#### Passo de release: animações das galáxias
+
+A Web carrega as animações das galáxias de `lotties/galaxies/` no storage (R2 em staging e produção). Antes do deploy da Web da release que introduz a Página de Galáxias, envie `logica-de-programacao.json` e `orientacao-a-objetos.json` (de `packages/studio/public/projects/galaxies/<slug>/lottie.json`) para `lotties/galaxies/` no R2, com `Content-Type: application/json` e leitura pública. A galáxia `galaxia-de-teste` existe apenas no seed local e não é enviada.
+
 ---
 
 ## Serviços externos
