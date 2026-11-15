@@ -10,7 +10,7 @@ import { RestResponse } from '@stardust/core/global/responses'
 import { Slug } from '@stardust/core/global/structures'
 import { UsersFaker } from '@stardust/core/profile/entities/fakers'
 import type { SpaceService } from '@stardust/core/space/interfaces'
-import { StarsFaker } from '@stardust/core/space/entities/fakers'
+import { PlanetsFaker, StarsFaker } from '@stardust/core/space/entities/fakers'
 
 import { AccessChallengePageAction } from '../AccessChallengePageAction'
 
@@ -205,6 +205,9 @@ describe('Access Challenge Page Action', () => {
       new RestResponse({ body: challengeDto }),
     )
     spaceService.fetchStarById.mockResolvedValue(new RestResponse({ body: starDto }))
+    spaceService.fetchCurrentGalaxy.mockResolvedValue(
+      new RestResponse({ statusCode: 500, errorMessage: 'Galaxy failed' }),
+    )
     call.getUser.mockResolvedValue(userDto)
 
     await expect(makeAction(true).handle(call)).rejects.toThrow('Not found')
@@ -212,6 +215,130 @@ describe('Access Challenge Page Action', () => {
     expect(call.getUser).toHaveBeenCalled()
     expect(call.notFound).toHaveBeenCalled()
     expect(challengingService.fetchChallengeNavigation).not.toHaveBeenCalled()
+    expect(challengingService.fetchChallengeVote).not.toHaveBeenCalled()
+  })
+
+  it('should allow the first star of the first planet of the galaxy without an unlock row', async () => {
+    const starDto = StarsFaker.fakeDto({ number: 1 })
+    const userDto = UsersFaker.fakeDto({ unlockedStarsIds: [], insigniaRoles: [] })
+    const challengeDto = ChallengesFaker.fakeDto({
+      slug: challengeSlug,
+      isPublic: true,
+      starId: starDto.id,
+      author: {
+        id: userDto.id as string,
+        entity: ChallengesFaker.fakeDto().author.entity,
+      },
+    })
+
+    challengingService.fetchChallengeBySlug.mockResolvedValue(
+      new RestResponse({ body: challengeDto }),
+    )
+    challengingService.fetchChallengeVote.mockResolvedValue(
+      new RestResponse({ body: { challengeVote: 'none' } }),
+    )
+    spaceService.fetchStarById.mockResolvedValue(new RestResponse({ body: starDto }))
+    spaceService.fetchCurrentGalaxy.mockResolvedValue(
+      new RestResponse({
+        body: {
+          galaxy: { id: 'galaxy-id', slug: 'galaxia-de-teste', name: 'Galáxia' },
+          isFirstGalaxy: false,
+          hasGalaxyChoice: true,
+        },
+      }),
+    )
+    spaceService.fetchGalaxyPlanets.mockResolvedValue(
+      new RestResponse({
+        body: [
+          PlanetsFaker.fakeDto({
+            position: 1,
+            stars: [StarsFaker.fakeDto({ number: 2 }), starDto],
+          }),
+        ],
+      }),
+    )
+    call.getUser.mockResolvedValue(userDto)
+
+    const response = await makeAction(true).handle(call)
+
+    expect(spaceService.fetchGalaxyPlanets).toHaveBeenCalledWith(
+      Slug.create('galaxia-de-teste'),
+    )
+    expect(call.notFound).not.toHaveBeenCalled()
+    expect(response.challengeDto.id).toBe(challengeDto.id)
+  })
+
+  it('should call notFound for a non-first star without an unlock row', async () => {
+    const starDto = StarsFaker.fakeDto({ number: 2 })
+    const userDto = UsersFaker.fakeDto({ unlockedStarsIds: [], insigniaRoles: [] })
+    const challengeDto = ChallengesFaker.fakeDto({
+      slug: challengeSlug,
+      isPublic: true,
+      starId: starDto.id,
+    })
+
+    challengingService.fetchChallengeBySlug.mockResolvedValue(
+      new RestResponse({ body: challengeDto }),
+    )
+    spaceService.fetchStarById.mockResolvedValue(new RestResponse({ body: starDto }))
+    spaceService.fetchCurrentGalaxy.mockResolvedValue(
+      new RestResponse({
+        body: {
+          galaxy: { id: 'galaxy-id', slug: 'galaxia-de-teste', name: 'Galáxia' },
+          isFirstGalaxy: false,
+          hasGalaxyChoice: true,
+        },
+      }),
+    )
+    spaceService.fetchGalaxyPlanets.mockResolvedValue(
+      new RestResponse({
+        body: [
+          PlanetsFaker.fakeDto({
+            position: 1,
+            stars: [StarsFaker.fakeDto({ number: 1 }), starDto],
+          }),
+        ],
+      }),
+    )
+    call.getUser.mockResolvedValue(userDto)
+
+    await expect(makeAction(true).handle(call)).rejects.toThrow('Not found')
+
+    expect(call.notFound).toHaveBeenCalled()
+    expect(challengingService.fetchChallengeVote).not.toHaveBeenCalled()
+  })
+
+  it('should call notFound when the planets lookup fails and there is no unlock row', async () => {
+    const starDto = StarsFaker.fakeDto()
+    const userDto = UsersFaker.fakeDto({ unlockedStarsIds: [], insigniaRoles: [] })
+    const challengeDto = ChallengesFaker.fakeDto({
+      slug: challengeSlug,
+      isPublic: true,
+      starId: starDto.id,
+    })
+
+    challengingService.fetchChallengeBySlug.mockResolvedValue(
+      new RestResponse({ body: challengeDto }),
+    )
+    spaceService.fetchStarById.mockResolvedValue(new RestResponse({ body: starDto }))
+    spaceService.fetchCurrentGalaxy.mockResolvedValue(
+      new RestResponse({
+        body: {
+          galaxy: { id: 'galaxy-id', slug: 'galaxia-de-teste', name: 'Galáxia' },
+          isFirstGalaxy: false,
+          hasGalaxyChoice: true,
+        },
+      }),
+    )
+    spaceService.fetchGalaxyPlanets.mockResolvedValue(
+      new RestResponse({ statusCode: 500, errorMessage: 'Planets failed' }),
+    )
+    call.getUser.mockResolvedValue(userDto)
+
+    await expect(makeAction(true).handle(call)).rejects.toThrow('Not found')
+
+    expect(spaceService.fetchGalaxyPlanets).toHaveBeenCalled()
+    expect(call.notFound).toHaveBeenCalled()
     expect(challengingService.fetchChallengeVote).not.toHaveBeenCalled()
   })
 

@@ -15,6 +15,10 @@ const FIRST_STAR_ID = '00000000-0000-4000-8000-000000000303'
 const NEW_STAR_ID = '00000000-0000-4000-8000-000000000304'
 const LAST_UNLOCKED_STAR_ID = '00000000-0000-4000-8000-000000000305'
 const LOCKED_STAR_ID = '00000000-0000-4000-8000-000000000306'
+const GALAXY_ID = '00000000-0000-4000-8000-000000000307'
+const GALAXY_SLUG = 'logica-de-programacao'
+const GALAXY_NAME = 'Lógica de Programação'
+const GALAXY_ROUTE = new RegExp(`/space/${GALAXY_SLUG}$`)
 
 const STAR_NAMES = {
   first: 'Primeira estrela',
@@ -103,7 +107,22 @@ function createAuthenticatedRoutes(
       status: 200,
       body: [],
     },
-    { method: 'GET', path: '/space/planets', status: 200, body: [fixtures.planet] },
+    {
+      method: 'GET',
+      path: '/space/galaxies/current',
+      status: 200,
+      body: {
+        galaxy: { id: GALAXY_ID, slug: GALAXY_SLUG, name: GALAXY_NAME },
+        isFirstGalaxy: true,
+        hasGalaxyChoice: false,
+      },
+    },
+    {
+      method: 'GET',
+      path: `/space/galaxies/${GALAXY_SLUG}/planets`,
+      status: 200,
+      body: [fixtures.planet],
+    },
     { method: 'GET', path: '/shop/insignias', status: 200, body: [] },
     {
       method: 'GET',
@@ -154,6 +173,7 @@ test.describe('/space', () => {
     const fixtures = await registerSpaceScenario(page, context)
 
     await page.goto('/space')
+    await expect(page).toHaveURL(GALAXY_ROUTE)
 
     await expect(page.getByText(fixtures.planet.name, { exact: true })).toBeVisible()
     await expect(page.getByRole('button', { name: STAR_NAMES.first })).toBeEnabled()
@@ -170,7 +190,7 @@ test.describe('/space', () => {
 
     await lockedStarButton.click({ force: true })
 
-    await expect(page).toHaveURL(/\/space$/)
+    await expect(page).toHaveURL(GALAXY_ROUTE)
   })
 
   test('falls back to the lesson when an unlocked star has no challenge', async ({
@@ -246,7 +266,7 @@ test.describe('/space', () => {
     const learnLink = page.getByRole('link', { name: 'Aprender' }).first()
     await expect(learnLink).toHaveAttribute('href', '/space')
 
-    await Promise.all([page.waitForURL('**/space'), learnLink.click()])
+    await Promise.all([page.waitForURL(`**/space/${GALAXY_SLUG}`), learnLink.click()])
     await expect(page.getByText(fixtures.planet.name, { exact: true })).toBeVisible()
 
     await context.clearCookies()

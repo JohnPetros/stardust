@@ -3,7 +3,19 @@ import { act, renderHook } from '@testing-library/react'
 import { UsersFaker } from '@stardust/core/profile/entities/fakers'
 import { PlanetsFaker, StarsFaker } from '@stardust/core/space/entities/fakers'
 
+import type { CurrentGalaxyDto } from '@stardust/core/space/entities/dtos'
+
 import { useSpaceContextProvider } from '../useSpaceContextProvider'
+
+const currentGalaxy: CurrentGalaxyDto = {
+  galaxy: {
+    id: 'galaxy-id',
+    slug: 'logica-de-programacao',
+    name: 'Lógica de Programação',
+  },
+  isFirstGalaxy: true,
+  hasGalaxyChoice: true,
+}
 
 function createRect({
   top,
@@ -46,7 +58,9 @@ describe('useSpaceContextProvider', () => {
   it('should return null as last unlocked star id when user is null', () => {
     const planets = PlanetsFaker.fakeMany(2)
 
-    const { result } = renderHook(() => useSpaceContextProvider(planets, null))
+    const { result } = renderHook(() =>
+      useSpaceContextProvider(planets, null, currentGalaxy),
+    )
 
     expect(result.current.lastUnlockedStarId).toBeNull()
   })
@@ -73,7 +87,9 @@ describe('useSpaceContextProvider', () => {
       ],
     })
 
-    const { result } = renderHook(() => useSpaceContextProvider(planets, user))
+    const { result } = renderHook(() =>
+      useSpaceContextProvider(planets, user, currentGalaxy),
+    )
 
     expect(result.current.lastUnlockedStarId).toBe(secondPlanetUnlockedStar.id.value)
   })
@@ -87,9 +103,68 @@ describe('useSpaceContextProvider', () => {
     ]
     const user = UsersFaker.fake({ unlockedStarsIds: [] })
 
-    const { result } = renderHook(() => useSpaceContextProvider(planets, user))
+    const { result } = renderHook(() =>
+      useSpaceContextProvider(planets, user, currentGalaxy),
+    )
 
     expect(result.current.lastUnlockedStarId).toBe(firstStar.id.value)
+  })
+
+  it('should expose the galaxy data received from the page', () => {
+    const planets = PlanetsFaker.fakeMany(1)
+
+    const { result } = renderHook(() =>
+      useSpaceContextProvider(planets, UsersFaker.fake(), {
+        ...currentGalaxy,
+        isFirstGalaxy: false,
+        hasGalaxyChoice: false,
+      }),
+    )
+
+    expect(result.current.galaxy).toEqual(currentGalaxy.galaxy)
+    expect(result.current.isFirstGalaxy).toBe(false)
+    expect(result.current.hasGalaxyChoice).toBe(false)
+  })
+
+  it('should consider the first star of the galaxy unlocked when the user has no unlocked stars', () => {
+    const firstStar = StarsFaker.fake({ number: 1 })
+    const secondStar = StarsFaker.fake({ number: 2 })
+    const planets = [PlanetsFaker.fake({ stars: [firstStar.dto, secondStar.dto] })]
+    const user = UsersFaker.fake({ unlockedStarsIds: [] })
+
+    const { result } = renderHook(() =>
+      useSpaceContextProvider(planets, user, currentGalaxy),
+    )
+
+    expect(result.current.isStarUnlocked(firstStar.id)).toBe(true)
+    expect(result.current.isStarUnlocked(secondStar.id)).toBe(false)
+    expect(result.current.lastUnlockedStarId).toBe(firstStar.id.value)
+  })
+
+  it('should keep the unlocked stars of the user as unlocked', () => {
+    const firstStar = StarsFaker.fake({ number: 1 })
+    const secondStar = StarsFaker.fake({ number: 2 })
+    const planets = [PlanetsFaker.fake({ stars: [firstStar.dto, secondStar.dto] })]
+    const user = UsersFaker.fake({ unlockedStarsIds: [secondStar.id.value] })
+
+    const { result } = renderHook(() =>
+      useSpaceContextProvider(planets, user, currentGalaxy),
+    )
+
+    expect(result.current.isStarUnlocked(secondStar.id)).toBe(true)
+    expect(result.current.lastUnlockedStarId).toBe(secondStar.id.value)
+  })
+
+  it('should not unlock stars that are not the first one of the galaxy for a null user', () => {
+    const firstStar = StarsFaker.fake({ number: 1 })
+    const secondStar = StarsFaker.fake({ number: 2 })
+    const planets = [PlanetsFaker.fake({ stars: [firstStar.dto, secondStar.dto] })]
+
+    const { result } = renderHook(() =>
+      useSpaceContextProvider(planets, null, currentGalaxy),
+    )
+
+    expect(result.current.isStarUnlocked(secondStar.id)).toBe(false)
   })
 
   it('should set last unlocked star position to above when star is below viewport', () => {
@@ -102,7 +177,9 @@ describe('useSpaceContextProvider', () => {
       .spyOn(starElement, 'getBoundingClientRect')
       .mockReturnValue(createRect({ top: 1200, bottom: 1260 }))
 
-    const { result } = renderHook(() => useSpaceContextProvider(planets, user))
+    const { result } = renderHook(() =>
+      useSpaceContextProvider(planets, user, currentGalaxy),
+    )
 
     setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
 
@@ -122,7 +199,9 @@ describe('useSpaceContextProvider', () => {
       .spyOn(starElement, 'getBoundingClientRect')
       .mockReturnValue(createRect({ top: -60, bottom: -20 }))
 
-    const { result } = renderHook(() => useSpaceContextProvider(planets, user))
+    const { result } = renderHook(() =>
+      useSpaceContextProvider(planets, user, currentGalaxy),
+    )
 
     setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
 
@@ -148,7 +227,9 @@ describe('useSpaceContextProvider', () => {
       .spyOn(starElement, 'getBoundingClientRect')
       .mockReturnValue(createRect({ top: 300, bottom: 350, height: 50 }))
 
-    const { result } = renderHook(() => useSpaceContextProvider(planets, user))
+    const { result } = renderHook(() =>
+      useSpaceContextProvider(planets, user, currentGalaxy),
+    )
 
     setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
 
@@ -198,7 +279,9 @@ describe('useSpaceContextProvider', () => {
       .spyOn(scrollContainer, 'getBoundingClientRect')
       .mockReturnValue(createRect({ top: 100, bottom: 500, height: 400 }))
 
-    const { result } = renderHook(() => useSpaceContextProvider(planets, user))
+    const { result } = renderHook(() =>
+      useSpaceContextProvider(planets, user, currentGalaxy),
+    )
 
     setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
 
@@ -267,7 +350,9 @@ describe('useSpaceContextProvider', () => {
       return createRect({ top: 180, bottom: 220, height: 40 })
     })
 
-    const { result } = renderHook(() => useSpaceContextProvider(planets, user))
+    const { result } = renderHook(() =>
+      useSpaceContextProvider(planets, user, currentGalaxy),
+    )
 
     setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
     containerScrollTo.mockClear()
@@ -322,7 +407,9 @@ describe('useSpaceContextProvider', () => {
       .spyOn(scrollContainer, 'getBoundingClientRect')
       .mockReturnValue(createRect({ top: 100, bottom: 420, height: 320 }))
 
-    const { result } = renderHook(() => useSpaceContextProvider(planets, user))
+    const { result } = renderHook(() =>
+      useSpaceContextProvider(planets, user, currentGalaxy),
+    )
 
     setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
 
@@ -362,7 +449,7 @@ describe('useSpaceContextProvider', () => {
       .mockReturnValue(createRect({ top: 0, bottom: 500 }))
 
     const { result, rerender } = renderHook(
-      ({ user }) => useSpaceContextProvider(planets, user),
+      ({ user }) => useSpaceContextProvider(planets, user, currentGalaxy),
       {
         initialProps: { user: null as ReturnType<typeof UsersFaker.fake> | null },
       },
