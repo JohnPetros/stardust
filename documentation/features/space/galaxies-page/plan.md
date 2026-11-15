@@ -1,7 +1,7 @@
 ---
 title: Mapa de galáxias e troca de curso na Página de Galáxias — plan
 spec: ./spec.md
-spec_revision: 3
+spec_revision: 4
 evaluation: ./evaluation.md
 status: completed
 updated_at: 2026-11-14
@@ -67,29 +67,32 @@ updated_at: 2026-11-14
 
 ### packages/core — profile e storage
 
-| Path                                                                              | Change | RF/CA                      | Status    | Notes |
-| --------------------------------------------------------------------------------- | ------ | -------------------------- | --------- | ----- |
-| `packages/core/src/profile/domain/aggregates/GalaxyAggregate.ts`                  | Create | RF-04, RF-05, CA-06, CA-09 | completed | none  |
-| `packages/core/src/profile/domain/aggregates/index.ts`                            | Modify | RF-04, RF-05, CA-06, CA-09 | completed | none  |
-| `packages/core/src/profile/domain/aggregates/dtos/GalaxyAggregateDto.ts`          | Create | RF-04, RF-05, CA-06, CA-09 | completed | none  |
-| `packages/core/src/profile/domain/aggregates/dtos/index.ts`                       | Modify | RF-04, RF-05, CA-06, CA-09 | completed | none  |
-| `packages/core/src/profile/domain/aggregates/fakers/GalaxyAggregatesFaker.ts`     | Create | RF-04, RF-05, CA-06, CA-09 | completed | none  |
-| `packages/core/src/profile/domain/aggregates/fakers/index.ts`                     | Modify | RF-04, RF-05, CA-06, CA-09 | completed | none  |
-| `packages/core/src/profile/interfaces/ProfileService.ts`                          | Modify | RF-05, RF-10, CA-09, CA-26 | completed | none  |
-| `packages/core/src/profile/domain/entities/User.ts`                               | Modify | RF-04, RF-05, CA-06, CA-09 | completed | none  |
-| `packages/core/src/profile/domain/entities/dtos/UserDto.ts`                       | Modify | RF-04, RF-05, CA-06, CA-09 | completed | none  |
-| `packages/core/src/profile/domain/entities/tests/User.test.ts`                    | Modify | RF-04, RF-05, CA-06, CA-09 | completed | none  |
-| `packages/core/src/profile/factories/UserFactory.ts`                              | Modify | RF-04, RF-05, CA-06, CA-09 | completed | none  |
-| `packages/core/src/profile/use-cases/EnterGalaxyUseCase.ts`                       | Create | RF-04, RF-05, CA-07, CA-09 | completed | none  |
-| `packages/core/src/profile/use-cases/CompleteSpaceUseCase.ts`                     | Modify | RF-07, CA-16               | completed | none  |
-| `packages/core/src/profile/use-cases/UpdateSpaceForAllUsersUseCase.ts`            | Modify | RF-07, CA-18               | completed | none  |
-| `packages/core/src/profile/use-cases/index.ts`                                    | Modify | RF-05, CA-09               | completed | none  |
-| `packages/core/src/profile/use-cases/tests/EnterGalaxyUseCase.test.ts`            | Create | RF-04, RF-05, CA-07, CA-09 | completed | none  |
-| `packages/core/src/profile/use-cases/tests/CompleteSpaceUseCase.test.ts`          | Modify | RF-07, CA-16               | completed | none  |
-| `packages/core/src/profile/use-cases/tests/UpdateSpaceForAllUsersUseCase.test.ts` | Modify | RF-07, CA-18               | completed | none  |
-| `packages/core/src/storage/types/FileStorageFolderPathValue.ts`                   | Modify | RF-13, CA-34               | completed | none  |
-| `packages/core/src/storage/domain/structures/FileStorageFolderPath.ts`            | Modify | RF-13, CA-34               | completed | none  |
-| `packages/core/src/storage/domain/structures/tests/FileStorageFolderPath.test.ts` | Create | RF-13, CA-34               | completed | none  |
+| Path                                                                                          | Change | RF/CA                      | Status    | Notes |
+| --------------------------------------------------------------------------------------------- | ------ | -------------------------- | --------- | ----- |
+| `packages/core/src/profile/domain/aggregates/GalaxyAggregate.ts`                              | Create | RF-04, RF-05, CA-06, CA-09 | completed | none  |
+| `packages/core/src/profile/domain/aggregates/index.ts`                                        | Modify | RF-04, RF-05, CA-06, CA-09 | completed | none  |
+| `packages/core/src/profile/domain/aggregates/dtos/GalaxyAggregateDto.ts`                      | Create | RF-04, RF-05, CA-06, CA-09 | completed | none  |
+| `packages/core/src/profile/domain/aggregates/dtos/index.ts`                                   | Modify | RF-04, RF-05, CA-06, CA-09 | completed | none  |
+| `packages/core/src/profile/domain/aggregates/fakers/GalaxyAggregatesFaker.ts`                 | Create | RF-04, RF-05, CA-06, CA-09 | completed | none  |
+| `packages/core/src/profile/domain/aggregates/fakers/index.ts`                                 | Modify | RF-04, RF-05, CA-06, CA-09 | completed | none  |
+| `packages/core/src/profile/interfaces/ProfileService.ts`                                      | Modify | RF-05, RF-10, CA-09, CA-26 | completed | none  |
+| `packages/core/src/profile/domain/entities/User.ts`                                           | Modify | RF-04, RF-05, CA-06, CA-09 | completed | none  |
+| `packages/core/src/profile/domain/entities/dtos/UserDto.ts`                                   | Modify | RF-04, RF-05, CA-06, CA-09 | completed | none  |
+| `packages/core/src/profile/domain/entities/tests/User.test.ts`                                | Modify | RF-04, RF-05, CA-06, CA-09 | completed | none  |
+| `packages/core/src/profile/factories/UserFactory.ts`                                          | Modify | RF-04, RF-05, CA-06, CA-09 | completed | none  |
+| `packages/core/src/profile/use-cases/EnterGalaxyUseCase.ts`                                   | Create | RF-04, RF-05, CA-07, CA-09 | completed | none  |
+| `packages/core/src/profile/use-cases/CompleteSpaceUseCase.ts`                                 | Modify | RF-07, CA-16               | completed | none  |
+| `packages/core/src/profile/use-cases/UpdateSpaceForAllUsersUseCase.ts`                        | Modify | RF-07, CA-18               | completed | none  |
+| `packages/core/src/profile/use-cases/index.ts`                                                | Modify | RF-05, CA-09               | completed | none  |
+| `packages/core/src/challenging/use-cases/GetChallengeCompletionAttemptsUseCase.ts`            | Create | RF-07, CA-16               | completed | none  |
+| `packages/core/src/challenging/use-cases/index.ts`                                            | Modify | RF-07, CA-16               | completed | none  |
+| `packages/core/src/challenging/use-cases/tests/GetChallengeCompletionAttemptsUseCase.test.ts` | Create | RF-07, CA-16               | completed | none  |
+| `packages/core/src/profile/use-cases/tests/EnterGalaxyUseCase.test.ts`                        | Create | RF-04, RF-05, CA-07, CA-09 | completed | none  |
+| `packages/core/src/profile/use-cases/tests/CompleteSpaceUseCase.test.ts`                      | Modify | RF-07, CA-16               | completed | none  |
+| `packages/core/src/profile/use-cases/tests/UpdateSpaceForAllUsersUseCase.test.ts`             | Modify | RF-07, CA-18               | completed | none  |
+| `packages/core/src/storage/types/FileStorageFolderPathValue.ts`                               | Modify | RF-13, CA-34               | completed | none  |
+| `packages/core/src/storage/domain/structures/FileStorageFolderPath.ts`                        | Modify | RF-13, CA-34               | completed | none  |
+| `packages/core/src/storage/domain/structures/tests/FileStorageFolderPath.test.ts`             | Create | RF-13, CA-34               | completed | none  |
 
 ### packages/validation
 

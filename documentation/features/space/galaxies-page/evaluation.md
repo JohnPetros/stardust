@@ -2,7 +2,7 @@
 title: Mapa de galáxias e troca de curso na Página de Galáxias — evaluation
 spec: ./spec.md
 plan: ./plan.md
-spec_revision: 3
+spec_revision: 4
 status: completed
 base_commit: dee1e3409b6041e963d72aedad129a4a3ff7a00d
 evaluated_commit: dee1e3409b6041e963d72aedad129a4a3ff7a00d
@@ -196,6 +196,7 @@ last_updated_at: 2026-11-15
 - ACH-16 [resolvido] — o CI (PR #660) reprovou `check-code-complexity` em Core, Server e Web: avisos fora do baseline (`--max-warnings 0`). A afirmação anterior de que os 50 avisos do Web eram "pré-existentes" estava errada (nunca comparada com o baseline nem com `origin/main`). Causa: o código novo, mais helpers extraídos, gerou avisos de índice de manutenibilidade; 32 funções estavam acima de limites explícitos (comprimento, Halstead, ciclomática) e foram refatoradas (Core 6, Server 2, Web 24, sem mudança de comportamento; Web unit 714/714, Playwright `galaxies.test.ts` 22/22, rotas AV-04 37/37). Os avisos restantes são só de índice de manutenibilidade e foram incorporados ao baseline com revisão do diff (0 arquivos removidos, 40 adicionados, 16 alterados; 0 entradas novas com métrica explícita em warn/error; `errorCount` 242 → 237; `warnCount` 2722 → 2811). Ação preventiva: `tooling.md`, `implement-spec-prompt.md`, `conclude-spec-prompt.md` e `AGENTS.md` agora exigem `check:complexity` com saída 0 em todo workspace alterado e prova antes de chamar um aviso de pré-existente.
 
 - ACH-17 [resolvido] — o CI (PR #660) reprovou `Integration tests` (Web): oito testes de `profile.test.ts`, `shop.test.ts` e `feedback-dialog.test.ts` navegam para `/space`, que agora chama `GET /space/galaxies/current` sem mock ("Unmocked request"). Causa: eu só rodei `galaxies.test.ts` localmente; o impacto em testes que visitam `/space` não foi medido (a Spec e o DT-06 já alteravam `/space`). Correção: mocks de `/space/galaxies/current` e `/space/galaxies/logica-de-programacao/planets` nesses três arquivos (fora do mapa da Spec); Playwright desses três arquivos 15/15. Ação preventiva: antes de commitar, buscar com `grep` por testes de integração que visitam rotas alteradas e rodar esses arquivos.
+- ACH-18 [resolvido] — feedback da Crew na PR #660 (P2): a regra "desafio existente e última execução aceita antes da recompensa" estava em `RewardUserForStarChallengeCompletionController`. A lógica já existia em `main`; a pedido do usuário foi movida para `GetChallengeCompletionAttemptsUseCase` (Core, `challenging`), sem mudança de comportamento (Spec revisão 4). Evidência: `GetChallengeCompletionAttemptsUseCase.test.ts` 4/4; teste do controller 3/3 inalterado. O teste de rota `RewardUserForStarChallengeCompletionRoute.test.ts` não rodou localmente (o stack Docker não sobe: pull de `quay.io/minio/mc` retorna 401); fica para o CI. Ação preventiva: não aplicável (regra preexistente, sem lição nova).
 
 ## Delivery
 
