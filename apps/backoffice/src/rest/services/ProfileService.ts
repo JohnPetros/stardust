@@ -242,5 +242,11 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
         achievementIds: achievementIds.map((id) => id.value),
       })
     },
+
+    async enterGalaxy(galaxySlug: Slug) {
+      return await restClient.put('/profile/users/current-galaxy', {
+        galaxySlug: galaxySlug.value,
+      })
+    },
   }
 }
