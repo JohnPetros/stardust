@@ -1,19 +1,16 @@
+import { redirect } from 'next/navigation'
+
+import { ROUTES } from '@/constants'
 import { NextServerRestClient } from '@/rest/next/NextServerRestClient'
 import { SpaceService } from '@/rest/services'
-import { SpacePage } from '@/ui/space/widgets/pages/Space'
-import { SpaceProvider } from '@/ui/space/contexts/SpaceContext'
 
 const Page = async () => {
-  const restClient = await NextServerRestClient({ isCacheEnabled: true })
+  const restClient = await NextServerRestClient({ isCacheEnabled: false })
   const spaceService = SpaceService(restClient)
-  const response = await spaceService.fetchPlanets()
+  const response = await spaceService.fetchCurrentGalaxy()
   if (response.isFailure) response.throwError()
 
-  return (
-    <SpaceProvider planetsDto={response.body}>
-      <SpacePage />
-    </SpaceProvider>
-  )
+  redirect(ROUTES.galaxy(response.body.galaxy.slug))
 }
 
 export default Page

@@ -21,6 +21,7 @@ export const Star = ({ id, name, number, slug }: StarProps) => {
   const { challengingService } = useRestContext()
   const { user } = useAuthContext()
   const {
+    isStarUnlocked,
     lastUnlockedStarId,
     lastUnlockedStarRef,
     lastUnlockedStarPosition,
@@ -48,7 +49,7 @@ export const Star = ({ id, name, number, slug }: StarProps) => {
       <StarView
         name={name.value}
         number={number.value}
-        isUnlocked={user?.hasUnlockedStar(id).isTrue}
+        isUnlocked={isStarUnlocked(id)}
         isRecentlyUnlocked={user?.hasRecentlyUnlockedStar(id).isTrue}
         isLastUnlockedStar={isLastUnlockedStar}
         lastUnlockedStarRef={starRef}

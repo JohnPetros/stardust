@@ -5,5 +5,7 @@ export type AnimationProps = {
   ref?: React.Ref<AnimationRef>
   size: number | 'full'
   name: AnimationName
+  src?: string
   hasLoop?: boolean
+  isStatic?: boolean
 }

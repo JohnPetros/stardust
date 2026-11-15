@@ -1,72 +1,38 @@
 'use client'
 
-import Link from 'next/link'
-
-import { Fab } from '@/ui/global/widgets/components/Fab'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
 import { useSpaceContext } from '@/ui/space/hooks/useSpaceContext'
 
 import { useSpacePage } from './useSpacePage'
-import { Planet } from './Planet'
-import { FAB_ICON } from './fab-icon'
-import { Particles } from './Particles'
-import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
-import { Animation } from '@/ui/global/widgets/components/Animation'
-import { ROUTES } from '@/constants'
+import { SpacePageView } from './SpacePageView'
 
 export function SpacePage() {
   const {
     planets,
+    galaxy,
+    isFirstGalaxy,
+    hasGalaxyChoice,
     lastUnlockedStarId,
     lastUnlockedStarPosition,
     scrollIntoLastUnlockedStar,
   } = useSpaceContext()
-  const { handleFabClick } = useSpacePage({
+  const { user } = useAuthContext()
+  const { shouldShowEnding, handleFabClick } = useSpacePage({
     lastUnlockedStarPosition,
     scrollIntoLastUnlockedStar,
+    hasCompletedSpace: Boolean(user?.hasCompletedSpace.isTrue),
+    isFirstGalaxy,
   })
-  const { user } = useAuthContext()
 
   return (
-    <>
-      <div className='pointer-events-none absolute top-0 bottom-0 left-0 right-0'>
-        <Particles />
-      </div>
-
-      <div className='flex flex-col items-center pb-6'>
-        {lastUnlockedStarId && (
-          <ul className='mt-10 flex max-w-[75vw] flex-col items-start justify-center gap-12 z-40'>
-            {planets.map((planet) => (
-              <li key={planet.id.value}>
-                <Planet
-                  name={planet.name.value}
-                  icon={planet.icon.value}
-                  image={planet.image.value}
-                  stars={planet.stars}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {user?.hasCompletedSpace.isTrue && (
-          <Link
-            href={ROUTES.lesson.ending}
-            className='block z-50 mt-12 pb-6 hover:scale-105 transition-transform duration-200'
-          >
-            <p className='text-medium text-gray-50 text-center translate-y-6'>
-              Agradecimentos.
-            </p>
-            <Animation name='galaxy' size={320} />
-          </Link>
-        )}
-
-        <Fab
-          isVisible={lastUnlockedStarPosition !== 'in'}
-          icon={FAB_ICON[lastUnlockedStarPosition]}
-          label='Ir até a última estrela desbloqueada'
-          onClick={handleFabClick}
-        />
-      </div>
-    </>
+    <SpacePageView
+      planets={planets}
+      lastUnlockedStarId={lastUnlockedStarId}
+      lastUnlockedStarPosition={lastUnlockedStarPosition}
+      galaxyName={galaxy.name}
+      hasGalaxyChoice={hasGalaxyChoice}
+      shouldShowEnding={shouldShowEnding}
+      onFabClick={handleFabClick}
+    />
   )
 }

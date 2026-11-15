@@ -13,6 +13,8 @@ export const ROUTES = {
   ranking: '/ranking',
   notes: '/notes',
   space: '/space',
+  galaxy: (galaxySlug: string) => `/space/${galaxySlug}`,
+  galaxies: '/space/galaxies',
   shop: '/shop',
   challenging: {
     challenges: {
