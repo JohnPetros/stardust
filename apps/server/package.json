@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
-    "@types/node": "^20.11.17",
+    "@types/node": "^20.19.43",
     "@types/supertest": "^7.2.1",
     "dependency-cruiser": "^18.1.0",
     "drizzle-kit": "0.31.11",
