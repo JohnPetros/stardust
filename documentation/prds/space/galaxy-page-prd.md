@@ -16,7 +16,9 @@ source:
     ref: Cada curso representado por uma galáxia, com progresso da trilha por galáxia e conta compartilhada, aprovado em 2026-11-14
   - type: direct-request
     ref: Página renomeada de Espaço para Galáxia, com nomes técnicos mantidos, aprovado em 2026-11-14
-last_updated_at: 2026-11-14
+  - type: direct-request
+    ref: Foguete indicador de posição removido definitivamente da Galáxia, aprovado em 2026-11-15
+last_updated_at: 2026-11-15
 ---
 
 # PRD — Trilha e Galáxia
@@ -180,7 +182,7 @@ Atores: aluno autenticado.
 
 - A estrela atual deve ser reconhecível pelo destaque e pelos estados do mapa.
 - A distinção entre estrela atual e estrela consultada para revisão deve permanecer clara.
-- O foguete indicador de posição deve preservar a identidade atual da aplicação. Ele é o foguete único da aplicação, igual para todos os alunos, conforme [Página de Loja](../shop/shop-page-prd.md).
+- A Galáxia não deve exibir foguete indicador de posição. O ponto de continuidade é indicado apenas pelo destaque da estrela ou do planeta atual e pelos estados do mapa.
 
 #### RP-03 — Entrada orientada e FAB de reposicionamento
 
@@ -479,7 +481,6 @@ Atores: aluno autenticado; área responsável pelo catálogo e pelo progresso.
 - O aluno novo deve começar na primeira galáxia, sem etapa de escolha de curso no cadastro.
 - Enquanto existir uma única galáxia visível, a Galáxia não deve apresentar seleção de galáxia; o aluno entra diretamente na trilha. Galáxias publicadas e anunciadas são visíveis, conforme a [Página de Galáxias](galaxies-page-prd.md).
 - Alternar entre galáxias não deve alterar o progresso de nenhuma delas.
-- O foguete deve ser o mesmo em todas as galáxias, conforme RP-02.
 - A seleção de galáxia na interface segue [Página de Galáxias](galaxies-page-prd.md), incluindo o controle de galáxia no topo da Galáxia.
 - A associação de planetas a galáxias no catálogo e a publicação de uma segunda galáxia exigem escopo próprio e não são autorizadas por este requisito isoladamente.
 

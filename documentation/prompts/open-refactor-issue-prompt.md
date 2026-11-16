@@ -122,10 +122,13 @@ milestone and explain why. Never create a label or milestone from this workflow.
 Use:
 
 ```text
-Refactor <short structural boundary or responsibility>
+Refatore <short structural boundary or responsibility>
 ```
 
-Name the responsibility or boundary being improved. Avoid vague titles such as `Refactor code`,
+Write the whole title in Brazilian Portuguese, including the `Refatore` verb prefix; keep only
+technical identifiers in English.
+
+Name the responsibility or boundary being improved. Avoid vague titles such as `Refatore código`,
 task lists, presumed root causes or filenames unless a file is itself the durable boundary.
 
 ## Issue body
@@ -133,18 +136,18 @@ task lists, presumed root causes or filenames unless a file is itself the durabl
 Use exactly this structure:
 
 ```md
-## Motivation
+## Motivação
 
 <Evidence-backed explanation of the current structural problem and why it matters.>
 
-## Scope
+## Escopo
 
 - <Desired structural outcome or ownership boundary.>
 - <Internal contract, compatibility, migration or architectural constraint.>
-- **Preserve:** <Observable behavior and external contracts that must remain unchanged.>
-- **Not included:** <Explicitly excluded adjacent behavior or cleanup.>
+- **Preservar:** <Observable behavior and external contracts that must remain unchanged.>
+- **Fora do escopo:** <Explicitly excluded adjacent behavior or cleanup.>
 
-## Acceptance criteria
+## Critérios de aceitação
 
 - <Observable structural result.>
 - <Architecture, ownership or dependency result.>
@@ -152,16 +155,16 @@ Use exactly this structure:
 - <Behavior-preservation and regression evidence.>
 - <Required static, automated and runtime validation at the affected boundaries.>
 
-## References
+## Referências
 
-- Evidence: <actual path, issue, PR, report or documentation link>
-- Architecture or Rule: <actual link when applicable>
-- PRD requirement: <actual link, or omit when not applicable>
-- Dependency: <actual issue or external dependency link, or omit when not applicable>
+- Evidência: <actual path, issue, PR, report or documentation link>
+- Arquitetura ou Regra: <actual link when applicable>
+- Requisito do PRD: <actual link, or omit when not applicable>
+- Dependência: <actual issue or external dependency link, or omit when not applicable>
 ```
 
-Keep Motivation factual and concise. Acceptance criteria must prove the desired structure and
-the absence of unintended behavior changes; avoid implementation checklists and generic criteria
+Keep the `Motivação` section factual and concise. The `Critérios de aceitação` must prove the
+desired structure and the absence of unintended behavior changes; avoid implementation checklists and generic criteria
 such as “code is cleaner.”
 
 ## Approval gate
