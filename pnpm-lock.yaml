@@ -32,8 +32,8 @@ importers:
         specifier: 3.1097.0
         version: 3.1097.0
       '@designliquido/delegua':
-        specifier: ^1.25.1
-        version: 1.25.1
+        specifier: ^0.73.0
+        version: 0.73.0
       '@faker-js/faker':
         specifier: 8.4.1
         version: 8.4.1
@@ -871,8 +871,8 @@ importers:
   packages/core:
     dependencies:
       '@designliquido/delegua':
-        specifier: ^0.61.0
-        version: 0.61.3
+        specifier: ^0.73.0
+        version: 0.73.0
       dayjs:
         specifier: ^1.11.21
         version: 1.11.21
@@ -936,8 +936,8 @@ importers:
   packages/lsp:
     dependencies:
       '@designliquido/delegua':
-        specifier: ^1.25.1
-        version: 1.25.1
+        specifier: ^0.73.0
+        version: 0.73.0
       '@stardust/core':
         specifier: workspace:*
         version: link:../core
@@ -2290,11 +2290,8 @@ packages:
   '@date-fns/tz@1.4.1':
     resolution: {integrity: sha512-P5LUNhtbj6YfI3iJjw5EL9eUAG6OitD0W3fWQcpQjDRc/QIsL0tRNuO1PcDvPccWL1fSTXXdE1ds+l95DV/OFA==}
 
-  '@designliquido/delegua@0.61.3':
-    resolution: {integrity: sha512-C2K7v+daGV7efl/ieinUProrQ5sHL9U9kKys4O59aMu7NVaeXVLmKCIUMTz4VpMRcW3kVYpDIpiHqHqHwXMgYA==}
-
-  '@designliquido/delegua@1.25.1':
-    resolution: {integrity: sha512-jXF7xjamFF50fbKVdcxXY7UjjiZp9uTZ0QSjGdNG6lCADHQv+DRLPmcCXAekpLfgsCWFbGbdb7CMGJJkRguN/w==}
+  '@designliquido/delegua@0.73.0':
+    resolution: {integrity: sha512-TOf4XfVslW3UjNm6LU9W3UTrkbkBmSfiH7/pWLcRiZypG8D8oPGzs/3+TJ34/NfXFd2cDzSW7dc8SU+uGIMThQ==}
 
   '@dimforge/rapier3d-compat@0.12.0':
     resolution: {integrity: sha512-uekIGetywIgopfD97oDL5PfeezkFpNhwlzlaEYNOA0N6ghdsOvh/HYjSMek5Q2O1PYvRSDFcqFVJl4r4ZBwOow==}
@@ -10667,6 +10664,7 @@ packages:
   postcss-selector-parser@7.2.0:
     resolution: {integrity: sha512-Khh/tERVBn0I1499dvBSHY0pWJloMJWUxDsOBM0CCDPAcVZ10Jl2L1qy1f19uEX22spa8Mv7DCdEQJc0cGwBhQ==}
     engines: {node: '>=4'}
+    deprecated: Double-escapes CSS Modules class names (#362). Use 7.2.1.
 
   postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
@@ -14194,14 +14192,7 @@ snapshots:
 
   '@date-fns/tz@1.4.1': {}
 
-  '@designliquido/delegua@0.61.3':
-    dependencies:
-      antlr4ts: 0.5.0-alpha.4
-      browser-process-hrtime: 1.0.0
-      esprima: 4.0.1
-      lodash.clonedeep: 4.5.0
-
-  '@designliquido/delegua@1.25.1':
+  '@designliquido/delegua@0.73.0':
     dependencies:
       antlr4ts: 0.5.0-alpha.4
       browser-process-hrtime: 1.0.0
