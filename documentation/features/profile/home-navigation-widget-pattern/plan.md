@@ -1,7 +1,7 @@
 ---
 title: Header e navegação lateral do layout Home no Widget Pattern — plan
 spec: ./spec.md
-spec_revision: 2
+spec_revision: 3
 evaluation: ./evaluation.md
 status: in_progress
 updated_at: 2026-11-17
@@ -24,7 +24,10 @@ updated_at: 2026-11-17
 | Path | Change | RF/CA | Status | Notes |
 | --- | --- | --- | --- | --- |
 | `apps/web/src/ui/profile/widgets/layouts/Home/HomeLayoutView.tsx` | Modify | RF-01, RF-05, CA-08 | completed | none |
-| `apps/web/src/ui/profile/widgets/layouts/Home/useHomeLayout.ts` | Modify | RF-04, CA-07 | completed | none |
+| `apps/web/src/ui/profile/widgets/layouts/Home/useHomeLayout.ts` | Modify | RF-04, CA-06, CA-07 | completed | revisão 3 (DT-07) |
+| `apps/web/src/ui/profile/widgets/layouts/Home/index.tsx` | Modify | RF-04, CA-06, CA-07 | completed | revisão 3 (DT-07, DT-09) |
+| `apps/web/src/ui/profile/widgets/layouts/Home/tests/useHomeLayout.test.ts` | Create | RF-04, CA-06, CA-09 | completed | revisão 3 |
+| `apps/web/src/ui/profile/widgets/layouts/Home/tests/HomeLayoutView.test.tsx` | Create | RF-02, CA-06, CA-09 | completed | revisão 3 |
 | `apps/web/src/ui/profile/widgets/layouts/Home/HomeNavigation/index.tsx` | Create | RF-01, RF-02, RF-03, CA-04, CA-06 | completed | none |
 | `apps/web/src/ui/profile/widgets/layouts/Home/HomeNavigation/HomeNavigationView.tsx` | Create | RF-01, RF-03, RF-07, CA-02, CA-03 | completed | reaberta na revisão 2: o contrato mudou |
 | `apps/web/src/ui/profile/widgets/layouts/Home/HomeNavigation/useHomeNavigation.ts` | Create | RF-01, RF-02, RF-07, CA-01, CA-02, CA-03, CA-04, CA-06 | completed | reaberta na revisão 2: o contrato mudou |

@@ -2,7 +2,7 @@
 title: Header e navegação lateral do layout Home no Widget Pattern — evaluation
 spec: ./spec.md
 plan: ./plan.md
-spec_revision: 2
+spec_revision: 3
 status: ready
 base_commit: f6c66f636
 evaluated_commit: f6c66f636 (working tree, uncommitted)
@@ -253,3 +253,18 @@ mesma seed e viewports 1440×900 e 390×844. A pasta `test-results` é ignorada 
 - Branch de entrega: `refactor/home-navigation-widget-pattern`, criada de `main` (`f6c66f636`), que já era igual a `origin/main` (0 commits atrás após `git fetch`); sem merge necessário.
 - Build: `pnpm --filter @stardust/web run build` passou (exit 0) no candidato final (EV-08).
 - Publicação autorizada pelo usuário em resposta à pergunta "Run conclude-spec, which commits and opens the PR?"; `commit` e `open-pr` mantêm seus gates.
+
+## Revisão 3 — `useHomeLayout` sem acesso a context
+
+- **Motivo (ACH-04).** O apontamento P2 do Crew na PR 666: `useHomeLayout` acessava `useSidebarContext`, contra a Regra do Hook da UI Rule. A revisão 1 o mantinha como
+  débito (DT-07); o usuário pediu a correção ("fix it") e também testes do hook e da View. Spec emendada para a revisão 3 (DT-07 e DT-09 revogadas), `plan.md` reconciliado
+  (35 caminhos: Create 11, Modify 16, Generate 1, Remove 7).
+- **Mudança.** `useHomeLayout` recebe `{ notifyUserChanges, isSidebarOpen, isAchievementsListVisible, onSidebarToggle, onAchievementsListHide }` e não acessa contexts;
+  `Home/index.tsx` (`HomeLayout`) resolve `useSidebarContext`. Comportamento preservado (clique no container, notificação em 320 ms, transição de 4 s).
+- **Testes novos (EV-09).** `Home/tests/useHomeLayout.test.ts` (6 testes) e `Home/tests/HomeLayoutView.test.tsx` (4 testes). Home: 8 suites, 44 testes passam.
+- **Sensores (EV-09).** `check:types`, `check:code` (0 erros), `check:architecture` (0 violações), `check:test-integrity` passam; `rg` de contexts em `useHomeLayout.ts` vazio (AV-04);
+  `check:complexity` passou após `update:complexity-baseline` (ACH-05: `HomeLayout` e `useHomeLayout` mudaram de métrica; só entradas do Home no diff, 20 linhas; refresh dentro da
+  aprovação Q6, que cobre o baseline desta entrega).
+- **Revisões da PR 666 (CI).** NavLinkView sem teste: corrigido (`NavLinkView.test.tsx`, 8 testes). Baseline com entradas fora do escopo: regeneração pelo script oficial, sem limite relaxado.
+- Implementation Reviewer da revisão 3: ver resultado abaixo.
+- **Implementation Reviewer (revisão 3):** `PASS`, sem findings bloqueantes; comportamento de `handleContainerClick`, notificação em 320 ms e transição de 4 s preservado. 3 `low` tratados: assertiva de "ainda visível em 3999 ms" e teste de desmontagem antes de 320 ms adicionados em `useHomeLayout.test.ts` (Home: 45 testes); o `any` nos mocks segue o padrão dos demais testes do Home e `check:code` passa.
