@@ -4,7 +4,7 @@ import { createContext, type ReactNode } from 'react'
 
 import { useSidebarProvider } from './hooks/useSidebarProvider'
 import type { SidebarContextValue } from './types/SidebarContextValue'
-import { useSiderbarContext } from './hooks/useSiderbarContext'
+import { useSidebarContext } from './hooks/useSidebarContext'
 
 type SidebarProviderProps = {
   children: ReactNode
@@ -30,4 +30,4 @@ export function SidebarProvider({ children }: SidebarProviderProps) {
   )
 }
 
-export { useSiderbarContext }
+export { useSidebarContext }

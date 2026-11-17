@@ -1,12 +1,13 @@
 'use client'
 
+import type { IconName } from '@/ui/global/widgets/components/Icon/types'
 import { NavLink } from '../NavLink'
 
 type TabNavViewProps = {
   links: Array<{
     route: string
     label: string
-    icon: string
+    icon: IconName
   }>
 }
 

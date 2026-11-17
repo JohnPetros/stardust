@@ -1,12 +1,13 @@
 'use client'
 
 import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
+import type { IconName } from '@/ui/global/widgets/components/Icon/types'
 import { NavLinkView } from './NavLinkView'
 
 type NavButtonProps = {
   route: string
   label: string
-  icon: string
+  icon: IconName
   isColumn?: boolean
   isExpanded?: boolean
 }

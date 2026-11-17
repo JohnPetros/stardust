@@ -1,16 +1,12 @@
 'use client'
 
-import { useRef } from 'react'
-
-import { useSiderbarContext } from '@/ui/profile/contexts/SidebarContext'
-import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
+import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { useSidebarContext } from '@/ui/profile/contexts/SidebarContext'
 import { HomeHeaderView } from './HomeHeaderView'
-import { useHomeHeader } from './useHomeHeader'
 
 export function HomeHeader() {
-  const streakAnimationRef = useRef<AnimationRef | null>(null)
-  const { isOpen, toggle } = useSiderbarContext()
-  const { user } = useHomeHeader(streakAnimationRef)
+  const { user } = useAuthContext()
+  const { isOpen, toggle } = useSidebarContext()
 
   if (!user) return null
 
@@ -25,7 +21,6 @@ export function HomeHeader() {
       email={user.email.value}
       avatarImage={user.avatar.image.value}
       avatarName={user.avatar.name.value}
-      streakAnimationRef={streakAnimationRef}
       onSidebarToggle={toggle}
     />
   )

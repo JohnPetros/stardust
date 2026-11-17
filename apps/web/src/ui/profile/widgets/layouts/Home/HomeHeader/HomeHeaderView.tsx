@@ -1,11 +1,8 @@
 'use client'
 
 import Image from 'next/image'
-import type { RefObject } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
-import { Animation } from '@/ui/global/widgets/components/Animation'
 import { CountBadge } from '@/ui/global/widgets/components/CountBadge'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { UserAvatar } from '@/ui/global/widgets/components/UserAvatar'
@@ -21,7 +18,6 @@ type HomeHeaderViewProps = {
   email: string
   avatarImage: string
   avatarName: string
-  streakAnimationRef: RefObject<AnimationRef | null>
   onSidebarToggle: VoidFunction
 }
 
@@ -35,7 +31,6 @@ export function HomeHeaderView({
   email,
   avatarImage,
   avatarName,
-  streakAnimationRef,
   onSidebarToggle,
 }: HomeHeaderViewProps) {
   return (
@@ -56,14 +51,19 @@ export function HomeHeaderView({
 
       <div className='flex items-center gap-2'>
         <div className='flex items-center gap-2'>
-          <Image src='/icons/coin.svg' width={26} height={26} alt='Star Coins' />
+          <Icon name='coins' size={26} weight='bold' className='text-yellow-400' />
           <span className='block pt-1 text-lg font-semibold text-yellow-400'>
             {coins}
           </span>
         </div>
 
         <div className='flex items-center'>
-          <Animation ref={streakAnimationRef} name='streak' size={32} hasLoop={false} />
+          <Icon
+            name='fire'
+            size={24}
+            weight='bold'
+            className={isTodayDone ? 'text-green-500' : 'text-gray-300'}
+          />
           <span
             className={twMerge(
               'text-lg font-semibold ',

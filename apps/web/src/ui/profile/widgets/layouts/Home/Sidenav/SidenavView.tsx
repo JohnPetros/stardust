@@ -7,6 +7,7 @@ import { CountBadge } from '@/ui/global/widgets/components/CountBadge'
 import { Icon } from '@/ui/global/widgets/components/Icon'
 import { SignOutAlertDialog } from '@/ui/global/widgets/components/SignOutAlertDialog'
 import { AchievementsList } from '../AchievementsList'
+import type { IconName } from '@/ui/global/widgets/components/Icon/types'
 import { NavLink } from '../NavLink'
 import { AnimatedAchievementsList } from './AnimatedAchievementsList'
 import { AnimatedContainer } from './AnimatedContainer'
@@ -18,7 +19,7 @@ type SidenavViewProps = {
   links: Array<{
     route: string
     label: string
-    icon: string
+    icon: IconName
   }>
   isNotesActive: boolean
   rescueableAchievementsCount: number
@@ -51,14 +52,14 @@ export function SidenavView({
         >
           {isExpanded ? (
             <Icon
-              name='arrow-left'
+              name='simple-arrow-left'
               className='text-sm text-gray-800'
               size={16}
               weight='bold'
             />
           ) : (
             <Icon
-              name='arrow-right'
+              name='simple-arrow-right'
               className='text-sm text-gray-800'
               size={16}
               weight='bold'

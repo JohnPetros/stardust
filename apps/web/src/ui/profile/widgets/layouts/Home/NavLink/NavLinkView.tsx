@@ -1,17 +1,18 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 
 import { twMerge } from 'tailwind-merge'
 
 import { Tooltip } from '@/ui/global/widgets/components/Tooltip'
+import { Icon } from '@/ui/global/widgets/components/Icon'
+import type { IconName } from '@/ui/global/widgets/components/Icon/types'
 import { AnimatedLabel } from './AnimatedLabel'
 
 type NavLinkViewProps = {
   route: string
   label: string
-  icon: string
+  icon: IconName
   isColumn: boolean
   isExpanded: boolean
   isActive: boolean
@@ -40,13 +41,7 @@ export function NavLinkView({
             isActive ? 'bg-green-400' : 'bg-green-800',
           )}
         >
-          <Image
-            src={`/icons/${icon}`}
-            width={28}
-            height={28}
-            className='text-gray-800'
-            alt={icon}
-          />
+          <Icon name={icon} size={24} className='text-gray-800' />
         </span>
 
         <AnimatedLabel isActive={isActive} isExpanded={isExpanded}>
