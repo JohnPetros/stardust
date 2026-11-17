@@ -1,31 +1,32 @@
 import { ROUTES } from '@/constants'
+import type { IconName } from '@/ui/global/widgets/components/Icon/types'
 
 type HomeLink = {
   route: string | ((param: string) => string)
   label: string
-  icon: string
+  icon: IconName
 }
 
 export const HOME_LINKS: HomeLink[] = [
   {
     route: ROUTES.space,
     label: 'Aprender',
-    icon: 'learn.svg',
+    icon: 'graduation-cap',
   },
   {
     route: ROUTES.challenging.challenges.list,
     label: 'Desafios',
-    icon: 'challenges.svg',
+    icon: 'terminal',
   },
   {
     route: ROUTES.shop,
     label: 'Loja',
-    icon: 'shop.svg',
+    icon: 'store',
   },
   {
     route: ROUTES.profile.user,
     label: 'Perfil',
-    icon: 'profile.svg',
+    icon: 'person',
   },
   // {
   //   route: ROUTES.ranking,

@@ -3,8 +3,7 @@ import type { PropsWithChildren } from 'react'
 import { PageTransitionAnimation } from '@/ui/global/widgets/components/PageTransitionAnimation'
 import { AnimatedContainer } from './AnimatedContainer'
 import { HomeHeader } from './HomeHeader'
-import { Sidebar } from './Sidebar'
-import { Sidenav } from './Sidenav'
+import { HomeNavigation } from './HomeNavigation'
 import { TabNav } from './TabNav'
 import { StreakBreakDialog } from './StreakBreakDialog'
 
@@ -37,10 +36,12 @@ export function HomeLayoutView({
   return (
     <>
       <HomeHeader />
-      <Sidenav isExpanded={isSidenavExpanded} toggleSidenav={onSidenavToggle} />
+      <HomeNavigation
+        isSidenavExpanded={isSidenavExpanded}
+        onSidenavToggle={onSidenavToggle}
+      />
       <PageTransitionAnimation isVisible={isTransitionVisible} />
       <StreakBreakDialog />
-      <Sidebar />
       <AnimatedContainer isSidenavExpanded={isSidenavExpanded} onClick={onContainerClick}>
         {children}
       </AnimatedContainer>

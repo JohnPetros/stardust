@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 
-import { useSiderbarContext } from '@/ui/profile/contexts/SidebarContext'
+import { useSidebarContext } from '@/ui/profile/contexts/SidebarContext'
 
 export function useHomeLayout(notifyUserChanges: () => void) {
   const [isSidenavExpanded, setIsSidenavExpanded] = useState(false)
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
   const { isOpen, isAchievementsListVisible, toggle, setIsAchievementsListVisible } =
-    useSiderbarContext()
+    useSidebarContext()
   const [hasNotifiedUserChanges, setHasNotifiedUserChanges] = useState(false)
 
   function toggleSidenav() {
