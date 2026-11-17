@@ -157,7 +157,11 @@ frozen Open Pencil source of this migration and is no longer edited.
 The auth references use the `stardust-dark` variant. Desktop frames are
 1440 × 900 and mobile frames are 390 × 844. Mobile frames are not drawn for auth
 error states, dialogs, or social account confirmation; those states follow the
-same components and layout rules. `Notificação / Toast`, `Diálogos / Diálogo` and
+same components and layout rules. The one dialog exception is
+`Espaço / Galáxia / Diálogo de vídeo de apresentação / Mobile` (📱 Mobile, 358 px
+wide), drawn to show that the planet video dialog fits the mobile width (RP-10 of
+`documentation/prds/space/galaxy-page-prd.md`); the other states of that dialog
+and the closing-video dialog follow it on mobile. `Notificação / Toast`, `Diálogos / Diálogo` and
 `Diálogos / Diálogo de alerta` were added to the file together with the Web
 alignment of the shared components (Issue #620).
 

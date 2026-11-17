@@ -52,7 +52,11 @@ ordem, separados por ` / `:
   tarefa em que alterar a versão Desktop e mantenha os nomes pareados. Não crie
   versão Mobile para os estados que `documentation/design.md` exclui (estados de
   erro de autenticação, diálogos e confirmação de conta social); eles seguem os
-  mesmos componentes e regras de layout. Nas telas Mobile, use a altura de
+  mesmos componentes e regras de layout. A única exceção é
+  `Espaço / Galáxia / Diálogo de vídeo de apresentação / Mobile`, que prova que o
+  diálogo de vídeo do planeta cabe na largura mobile (RP-10 de `galaxy-page-prd.md`);
+  os demais estados desse diálogo e o diálogo do vídeo de encerramento o seguem em
+  mobile. Nas telas Mobile, use a altura de
   controle de 44 px (`control-height`) como alvo de toque.
 - **Diálogos** são desenhados como frames independentes, com o tamanho do
   próprio diálogo (por exemplo `Lição / História / Diálogo / Energia esgotada / Desktop`),
