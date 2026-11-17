@@ -1,7 +1,7 @@
 {
-  "analysedAt": "2026-11-17T14:27:37.770Z",
+  "analysedAt": "2026-11-17T16:59:37.063Z",
   "totalFiles": 3569,
-  "totalFunctions": 9784,
+  "totalFunctions": 9785,
   "warnCount": 2811,
   "errorCount": 237,
   "averageMI": 54.4,
@@ -69245,8 +69245,8 @@
       "functions": [
         {
           "name": "HomeLayout",
-          "startLine": 10,
-          "endLine": 27,
+          "startLine": 11,
+          "endLine": 36,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -69262,7 +69262,7 @@
             },
             {
               "name": "functionLength",
-              "value": 18,
+              "value": 26,
               "threshold": 70,
               "severity": "ok"
             },
@@ -69274,21 +69274,21 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 93.21,
+              "value": 190.16,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 58.7,
+          "maintainabilityIndex": 53,
           "maintainabilityRating": "warn",
-          "healthScore": 86,
+          "healthScore": 82,
           "smells": []
         }
       ],
       "summary": {
-        "totalLines": 28,
-        "weightedMI": 58.7,
-        "weightedHealthScore": 86,
+        "totalLines": 37,
+        "weightedMI": 54.6,
+        "weightedHealthScore": 82.6,
         "worstSeverity": "warn",
         "smellIds": []
       }
@@ -69298,8 +69298,8 @@
       "functions": [
         {
           "name": "useHomeLayout",
-          "startLine": 5,
-          "endLine": 50,
+          "startLine": 11,
+          "endLine": 60,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -69315,7 +69315,7 @@
             },
             {
               "name": "functionLength",
-              "value": 46,
+              "value": 44,
               "threshold": 70,
               "severity": "warn"
             },
@@ -69327,21 +69327,21 @@
             },
             {
               "name": "halsteadVolume",
-              "value": 177.2,
+              "value": 121.11,
               "threshold": 800,
               "severity": "ok"
             }
           ],
-          "maintainabilityIndex": 47.3,
+          "maintainabilityIndex": 48.9,
           "maintainabilityRating": "warn",
-          "healthScore": 70,
+          "healthScore": 71,
           "smells": []
         }
       ],
       "summary": {
-        "totalLines": 51,
-        "weightedMI": 60,
-        "weightedHealthScore": 78.7,
+        "totalLines": 61,
+        "weightedMI": 60.3,
+        "weightedHealthScore": 78.9,
         "worstSeverity": "warn",
         "smellIds": []
       }
