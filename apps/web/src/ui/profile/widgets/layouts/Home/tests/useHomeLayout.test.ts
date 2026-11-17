@@ -5,7 +5,7 @@ import { type Params, useHomeLayout } from '../useHomeLayout'
 describe('useHomeLayout', () => {
   let notifyUserChanges: jest.Mock
   let onSidebarToggle: jest.Mock
-  let onAchievementsListHide: jest.Mock
+  let setIsAchievementsListVisible: jest.Mock
 
   const Hook = (params?: Partial<Params>) =>
     renderHook(() =>
@@ -14,7 +14,7 @@ describe('useHomeLayout', () => {
         isSidebarOpen: false,
         isAchievementsListVisible: false,
         onSidebarToggle,
-        onAchievementsListHide,
+        setIsAchievementsListVisible,
         ...params,
       }),
     )
@@ -23,7 +23,7 @@ describe('useHomeLayout', () => {
     jest.useFakeTimers()
     notifyUserChanges = jest.fn()
     onSidebarToggle = jest.fn()
-    onAchievementsListHide = jest.fn()
+    setIsAchievementsListVisible = jest.fn()
   })
 
   afterEach(() => {
@@ -65,7 +65,7 @@ describe('useHomeLayout', () => {
     act(() => result.current.handleContainerClick())
 
     expect(onSidebarToggle).toHaveBeenCalledTimes(1)
-    expect(onAchievementsListHide).not.toHaveBeenCalled()
+    expect(setIsAchievementsListVisible).not.toHaveBeenCalled()
   })
 
   it('should hide the visible achievements list when the container is clicked', () => {
@@ -73,7 +73,7 @@ describe('useHomeLayout', () => {
 
     act(() => result.current.handleContainerClick())
 
-    expect(onAchievementsListHide).toHaveBeenCalledTimes(1)
+    expect(setIsAchievementsListVisible).toHaveBeenCalledWith(false)
     expect(onSidebarToggle).not.toHaveBeenCalled()
   })
 
@@ -83,7 +83,7 @@ describe('useHomeLayout', () => {
     act(() => result.current.handleContainerClick())
 
     expect(onSidebarToggle).not.toHaveBeenCalled()
-    expect(onAchievementsListHide).not.toHaveBeenCalled()
+    expect(setIsAchievementsListVisible).not.toHaveBeenCalled()
   })
 
   it('should notify the user changes once after 320ms', () => {

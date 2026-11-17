@@ -5,7 +5,7 @@ export type Params = {
   isSidebarOpen: boolean
   isAchievementsListVisible: boolean
   onSidebarToggle: VoidFunction
-  onAchievementsListHide: VoidFunction
+  setIsAchievementsListVisible: (isVisible: boolean) => void
 }
 
 export function useHomeLayout({
@@ -13,7 +13,7 @@ export function useHomeLayout({
   isSidebarOpen,
   isAchievementsListVisible,
   onSidebarToggle,
-  onAchievementsListHide,
+  setIsAchievementsListVisible,
 }: Params) {
   const [isSidenavExpanded, setIsSidenavExpanded] = useState(false)
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
@@ -25,7 +25,7 @@ export function useHomeLayout({
 
   function handleContainerClick() {
     if (isSidebarOpen) onSidebarToggle()
-    if (isAchievementsListVisible) onAchievementsListHide()
+    if (isAchievementsListVisible) setIsAchievementsListVisible(false)
   }
 
   useEffect(() => {

@@ -18,7 +18,7 @@ export function HomeLayout({ children }: PropsWithChildren) {
       isSidebarOpen: isOpen,
       isAchievementsListVisible,
       onSidebarToggle: toggle,
-      onAchievementsListHide: () => setIsAchievementsListVisible(false),
+      setIsAchievementsListVisible,
     })
   const { currentRoute } = useNavigationProvider()
 
