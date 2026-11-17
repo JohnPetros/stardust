@@ -74,4 +74,22 @@ describe('NavLinkView', () => {
 
     expect(screen.getByRole('link').parentElement).toHaveAttribute('data-tooltip', 'Loja')
   })
+
+  it('should keep the tooltip empty when expanded', () => {
+    View({ isExpanded: true })
+
+    expect(screen.getByRole('link').parentElement).toHaveAttribute('data-tooltip', '')
+  })
+
+  it('should stack the icon and the label in a column when isColumn is true', () => {
+    View({ isColumn: true })
+
+    expect(screen.getByRole('link')).toHaveClass('flex-col')
+  })
+
+  it('should lay the icon and the label in a row when isColumn is false', () => {
+    View({ isColumn: false })
+
+    expect(screen.getByRole('link')).toHaveClass('flex-row')
+  })
 })
