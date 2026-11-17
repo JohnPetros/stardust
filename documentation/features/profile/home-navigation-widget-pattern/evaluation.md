@@ -259,7 +259,7 @@ mesma seed e viewports 1440×900 e 390×844. A pasta `test-results` é ignorada 
 - **Motivo (ACH-04).** O apontamento P2 do Crew na PR 666: `useHomeLayout` acessava `useSidebarContext`, contra a Regra do Hook da UI Rule. A revisão 1 o mantinha como
   débito (DT-07); o usuário pediu a correção ("fix it") e também testes do hook e da View. Spec emendada para a revisão 3 (DT-07 e DT-09 revogadas), `plan.md` reconciliado
   (35 caminhos: Create 11, Modify 16, Generate 1, Remove 7).
-- **Mudança.** `useHomeLayout` recebe `{ notifyUserChanges, isSidebarOpen, isAchievementsListVisible, onSidebarToggle, onAchievementsListHide }` e não acessa contexts;
+- **Mudança.** `useHomeLayout` recebe `{ notifyUserChanges, isSidebarOpen, isAchievementsListVisible, onSidebarToggle, setIsAchievementsListVisible }` e não acessa contexts;
   `Home/index.tsx` (`HomeLayout`) resolve `useSidebarContext`. Comportamento preservado (clique no container, notificação em 320 ms, transição de 4 s).
 - **Testes novos (EV-09).** `Home/tests/useHomeLayout.test.ts` (6 testes) e `Home/tests/HomeLayoutView.test.tsx` (4 testes). Home: 8 suites, 44 testes passam.
 - **Sensores (EV-09).** `check:types`, `check:code` (0 erros), `check:architecture` (0 violações), `check:test-integrity` passam; `rg` de contexts em `useHomeLayout.ts` vazio (AV-04);
