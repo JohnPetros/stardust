@@ -1,12 +1,22 @@
 import { useEffect, useState } from 'react'
 
-import { useSidebarContext } from '@/ui/profile/contexts/SidebarContext'
+export type Params = {
+  notifyUserChanges: () => void
+  isSidebarOpen: boolean
+  isAchievementsListVisible: boolean
+  onSidebarToggle: VoidFunction
+  onAchievementsListHide: VoidFunction
+}
 
-export function useHomeLayout(notifyUserChanges: () => void) {
+export function useHomeLayout({
+  notifyUserChanges,
+  isSidebarOpen,
+  isAchievementsListVisible,
+  onSidebarToggle,
+  onAchievementsListHide,
+}: Params) {
   const [isSidenavExpanded, setIsSidenavExpanded] = useState(false)
   const [isTransitionVisible, setIsTransitionVisible] = useState(true)
-  const { isOpen, isAchievementsListVisible, toggle, setIsAchievementsListVisible } =
-    useSidebarContext()
   const [hasNotifiedUserChanges, setHasNotifiedUserChanges] = useState(false)
 
   function toggleSidenav() {
@@ -14,8 +24,8 @@ export function useHomeLayout(notifyUserChanges: () => void) {
   }
 
   function handleContainerClick() {
-    if (isOpen) toggle()
-    if (isAchievementsListVisible) setIsAchievementsListVisible(false)
+    if (isSidebarOpen) onSidebarToggle()
+    if (isAchievementsListVisible) onAchievementsListHide()
   }
 
   useEffect(() => {
