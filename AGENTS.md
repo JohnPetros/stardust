@@ -99,23 +99,24 @@ example.
 - If the project is not indexed, use the local navigation and reading tools;
   do not initialize the index without a request.
 
-### Penpot MCP
+### Doop MCP
 
-Use the Penpot MCP for the `stardust` design file: node inspection or editing,
+Use the Doop MCP for the `StarDust` canvas: frame inspection or editing,
 design-system work, component and token reading, and visual validation tied to
 those designs.
 
-- Work only through the Penpot MCP. The Penpot file is the canonical visual
-  source; `design/stardust.fig` is a frozen legacy file and must not be opened
-  or edited.
-- Read `high_level_overview` once per session and `penpot_api_info` before the
-  first `execute_code` call of a task. Confirm with `penpot.currentFile.name`
-  that the connected file is `stardust`; the MCP server may be linked to another
-  file.
-- Locate pages and boards by name instead of hardcoding IDs.
-- Use the library's components and tokens, do not change library components
-  without a request, and verify every change by exporting the affected boards
-  with `export_shape`.
+- Work only through the Doop MCP. The Doop canvas `StarDust`
+  (https://doop.design/c/iTvx3bvEsu) is the canonical visual source;
+  `design/stardust.fig` is a frozen legacy file and must not be opened or
+  edited.
+- Read `get_guide` with the topic `doop-instructions` once per session, and with
+  the topic `components` before the first component change of a task. Confirm
+  with `get_canvas` that the connected canvas is `StarDust`; the account may
+  have other canvases.
+- Locate pages and frames by name instead of hardcoding IDs.
+- Use the canvas's components (`list_components`) and tokens (`get_tokens`), do
+  not change existing components without a request, and verify every change by
+  capturing the affected frames with `get_frame_screenshot`.
 - Draw a dialog as a standalone frame, never as a full page with a backdrop.
 
 ### Supabase MCP
@@ -143,20 +144,20 @@ the skill whose purpose matches the task instead of working from memory; project
 workflows under `documentation/prompts/` and the rules in this file take precedence
 over a skill's generic advice.
 
-| Skill                | Use when                                                                                       | Project notes                                                                                                   |
-| -------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `impeccable`         | Designing, critiquing, auditing or refining UI: hierarchy, type, color, layout, copy, motion. | In Penpot work, use it through `/design`; its `critique` runs only through the Design Reviewer.                 |
-| `penpot-uiux-design` | Building or changing boards, components or tokens in the Penpot file `stardust`.              | Invoke it before the first `execute_code` call; the Penpot MCP rules above still apply.                         |
-| `frontend-design`    | Choosing an aesthetic direction for new UI or a reshaped one.                                  | `documentation/design.md` and the Penpot file decide; use it only where they leave the direction open.          |
-| `accessibility`      | WCAG 2.2 audits and fixes: contrast, keyboard, focus, screen readers.                          | For Penpot boards, `pnpm run check:design --rule contrast` covers contrast.                                    |
-| `performance`        | Load speed, bundle size, caching and rendering cost.                                           | For a full diagnosis, use the `create-performance-report` workflow.                                            |
-| `core-web-vitals`    | LCP, INP and CLS problems.                                                                     |                                                                                                                 |
-| `best-practices`     | Security, compatibility and code-quality review of web code.                                   | For a security review, use the `create-security-report` workflow.                                               |
-| `seo`                | Meta tags, structured data, sitemaps and search visibility.                                    |                                                                                                                 |
-| `web-quality-audit`  | A combined audit of performance, accessibility, SEO and best practices.                        |                                                                                                                 |
-| `playwright-cli`     | Driving a real browser: exploration, inspection, diagnosis and one-off tasks.                 | Follow the Playwright sections below for environments, accounts and credentials.                                |
-| `gh-cli`             | GitHub operations through `gh`: issues, Pull Requests, CI checks and releases.                 | Pull Requests follow the `open-pr` workflow and the language rules above.                                       |
-| `pencil-design`      | Pencil (`.pen`) design files.                                                                  | Do not use it for StarDust: the Penpot file is the design source and `design/stardust.fig` is frozen.          |
+| Skill                | Use when                                                                                      | Project notes                                                                                          |
+| -------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `impeccable`         | Designing, critiquing, auditing or refining UI: hierarchy, type, color, layout, copy, motion. | In Doop work, use it through `/design`; its `critique` runs only through the Design Reviewer.          |
+| `penpot-uiux-design` | Not used for StarDust.                                                                        | The Doop canvas is the design source: follow the Doop MCP rules above and its `get_guide` instead.     |
+| `frontend-design`    | Choosing an aesthetic direction for new UI or a reshaped one.                                 | `documentation/design.md` and the Doop canvas decide; use it only where they leave the direction open. |
+| `accessibility`      | WCAG 2.2 audits and fixes: contrast, keyboard, focus, screen readers.                         | For Doop frames, contrast is judged by the Design Reviewer (`get_frame`, `get_tokens`).                |
+| `performance`        | Load speed, bundle size, caching and rendering cost.                                          | For a full diagnosis, use the `create-performance-report` workflow.                                    |
+| `core-web-vitals`    | LCP, INP and CLS problems.                                                                    |                                                                                                        |
+| `best-practices`     | Security, compatibility and code-quality review of web code.                                  | For a security review, use the `create-security-report` workflow.                                      |
+| `seo`                | Meta tags, structured data, sitemaps and search visibility.                                   |                                                                                                        |
+| `web-quality-audit`  | A combined audit of performance, accessibility, SEO and best practices.                       |                                                                                                        |
+| `playwright-cli`     | Driving a real browser: exploration, inspection, diagnosis and one-off tasks.                 | Follow the Playwright sections below for environments, accounts and credentials.                       |
+| `gh-cli`             | GitHub operations through `gh`: issues, Pull Requests, CI checks and releases.                | Pull Requests follow the `open-pr` workflow and the language rules above.                              |
+| `pencil-design`      | Pencil (`.pen`) design files.                                                                 | Do not use it for StarDust: the Doop canvas is the design source and `design/stardust.fig` is frozen.  |
 
 ### Project workflow skills
 
@@ -178,17 +179,17 @@ exposed as skills by the same script, and as subagents by `scripts/sync-agents.m
 - A workflow that is missing for a recurring task is a gap: ask before adding a prompt,
   as with the Rule router.
 
-| Group            | Skills                                                                                                    | Use when                                                                                  |
-| ---------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Issues           | `open-feat-issue`, `open-bug-issue`, `open-chore-issue`, `open-refactor-issue`                            | Creating a GitHub issue; each has an approval gate before anything is written.            |
-| PRD              | `create-prd`, `create-prd-from-implementation`                                                            | Writing or revising a canonical PRD, prospectively or from existing code.                 |
-| Design           | `design`, `review-design`                                                                                 | Drawing or reviewing the Penpot boards of a PRD.                                          |
-| SDD delivery     | `interview`, `create-spec`, `create-plan`, `create-evaluation`, `implement-spec`, `conclude-spec`         | Specifying, planning, implementing and closing a feature delivery.                        |
-| Bugs             | `create-bug-report`, `implement-bug-fix`, `conclude-bug-report`                                           | Diagnosing an approved bug issue, fixing it and closing the report.                       |
-| Reports          | `create-performance-report`, `find-performance-issues`, `create-security-report`, `conclude-report`       | Running a performance or security diagnosis and closing its report.                       |
-| Git and PRs      | `commit`, `open-pr`, `resolve-pr-feedback`, `resolve-merge-conflicts`, `create-release-pr`                | Committing, publishing or updating a PR, resolving CI/review feedback and conflicts, releasing. |
-| Tests            | `create-tests`, `increase-test-coverage`                                                                  | Writing tests or raising coverage without weakening baselines.                            |
-| Rules and docs   | `create-layer-rules`, `update-layer-rules`, `register-antipattern`, `update-archtecture`, `update-overview`, `refine-doc`, `create-prompt` | Maintaining Rules, Architecture, the overview, other documents and the prompts themselves. |
+| Group          | Skills                                                                                                                                     | Use when                                                                                        |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| Issues         | `open-feat-issue`, `open-bug-issue`, `open-chore-issue`, `open-refactor-issue`                                                             | Creating a GitHub issue; each has an approval gate before anything is written.                  |
+| PRD            | `create-prd`, `create-prd-from-implementation`                                                                                             | Writing or revising a canonical PRD, prospectively or from existing code.                       |
+| Design         | `design`, `review-design`                                                                                                                  | Drawing or reviewing the Doop frames of a PRD.                                                  |
+| SDD delivery   | `interview`, `create-spec`, `create-plan`, `create-evaluation`, `implement-spec`, `conclude-spec`                                          | Specifying, planning, implementing and closing a feature delivery.                              |
+| Bugs           | `create-bug-report`, `implement-bug-fix`, `conclude-bug-report`                                                                            | Diagnosing an approved bug issue, fixing it and closing the report.                             |
+| Reports        | `create-performance-report`, `find-performance-issues`, `create-security-report`, `conclude-report`                                        | Running a performance or security diagnosis and closing its report.                             |
+| Git and PRs    | `commit`, `open-pr`, `resolve-pr-feedback`, `resolve-merge-conflicts`, `create-release-pr`                                                 | Committing, publishing or updating a PR, resolving CI/review feedback and conflicts, releasing. |
+| Tests          | `create-tests`, `increase-test-coverage`                                                                                                   | Writing tests or raising coverage without weakening baselines.                                  |
+| Rules and docs | `create-layer-rules`, `update-layer-rules`, `register-antipattern`, `update-archtecture`, `update-overview`, `refine-doc`, `create-prompt` | Maintaining Rules, Architecture, the overview, other documents and the prompts themselves.      |
 
 The table groups the prompts for orientation; `documentation/prompts/` is the complete
 and current list. Skill names follow the file names exactly, including `update-archtecture`.

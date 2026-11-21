@@ -40,7 +40,6 @@ eval "$(node ./scripts/export-web-app-e2e-env.mjs)"
 | `pnpm run test:unit`                 | Jest/Vitest             | executa testes unitários por workspace                                  |
 | `pnpm run test:integration`          | Jest/Playwright         | executa as integrações declaradas pelos workspaces                      |
 | `pnpm run check:spec-implementation` | Node.js                 | valida o mapa `Path                                                     | Change | ...`da Spec contra Git e filesystem e valida o`plan.md` da Spec |
-| `pnpm run check:design`              | Node.js + API do Penpot | verifica o arquivo `stardust` do Penpot contra o baseline de design     |
 | `pnpm run check:web-quality`         | Lighthouse + Playwright | mede páginas em execução e exige o mínimo de cada métrica               |
 
 Exemplos de ciclo curto:
@@ -128,40 +127,6 @@ intencional e estiver revisada. A detecção de clones fica desabilitada no
 ratchet atual para evitar ruído e custo desproporcional no monorepo; o gate é
 centrado nas métricas por função.
 
-## Verificação do design
-
-`check:design` lê o arquivo `stardust` pela API REST do Penpot e verifica as
-páginas de produto (todas, exceto `🎨 Design System`):
-
-| Categoria    | Regras                                                                                                          | Severidade                                                    |
-| ------------ | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| `contrast`   | texto WCAG AA (4,5:1; 3:1 para texto grande) sobre o fundo composto; ícones 3:1                                 | erro (texto), aviso (ícone)                                   |
-| `tokens`     | cor sem token, cor quase igual a um token, cor fora da paleta, token desatualizado ou inexistente               | aviso (sem token), erro (demais)                              |
-| `typography` | tamanho mínimo, escala, família, peso, texto que não cabe na caixa ou é cortado por um board                    | erro (mínimo, família, overflow, corte), aviso (escala, peso) |
-| `spacing`    | gap e padding fora da escala `space.*`; raio fora de `radius.*` ou totalmente arredondado                       | aviso                                                         |
-| `hygiene`    | seções sobrepostas, camada solta na raiz, nome padrão, board vazio, camada oculta, cópia de componente removido | erro ou aviso                                                 |
-
-O script exige `PENPOT_ACCESS_TOKEN` (Penpot → Your account → Access tokens) no
-`.env.local` da raiz ou no ambiente; nunca registre o valor. O token é enviado
-apenas a `https://design.penpot.app`; outro host só pode ser definido pela
-variável de ambiente `PENPOT_URL` (https), nunca pelo arquivo de configuração. A configuração fica
-em `.design-check.json`: ID do arquivo, tema dos tokens, páginas excluídas,
-escalas de tipografia, espaçamento e raio, e exceções em `ignore`, cada uma com
-`rule`, `shapeId` ou `layer` e um `reason` obrigatório.
-
-```bash
-pnpm run check:design
-pnpm run check:design --board "Conquistas / Desktop" --rule contrast
-pnpm run check:design --page Mobile --all --json
-```
-
-O check falha somente com erros novos em relação a `.design-check-baseline.json`;
-avisos e dívida existente não falham. `--all` mostra também os findings do
-baseline e os ignorados, `--file <json>` analisa um arquivo salvo e `--save <json>`
-guarda a resposta da API e `--digest` imprime o digest de cada board, usado no registro de revisão do workflow `design`. Atualize o baseline com `pnpm run update:design-baseline`
-somente depois de revisar os findings, nunca para esconder uma regressão. O
-check roda localmente; não faz parte do CI.
-
 ## Scripts por workspace
 
 As descrições abaixo refletem os scripts declarados nos `package.json` atuais.
@@ -196,9 +161,7 @@ partir da raiz.
 | `check:coverage`             | Compara os relatórios de cobertura com `coverage-baseline.json` e falha quando um baseline diminui.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `check:test-integrity`       | Falha quando testes são enfraquecidos ou código testável alterado não tem teste correspondente.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `check:spec-implementation`  | Valida o mapa canônico de paths da Spec contra o diff Git e o filesystem e, quando existe, o `plan.md` da Spec. `--plan-only` valida só o Plan contra a Spec (sem exigir paths entregues); `--require-plan` exige o Plan com todas as linhas `completed` e lê a chave `plan:` do `evaluation.md` irmão: `plan: <path>` exige o Plan, `plan: none` é o opt-out explícito de entregas anteriores ao Plan e a ausência da chave é erro; sem `evaluation.md`, o Plan continua exigido.                                                                                                                                                                                               |
-| `check:design`               | Verifica contraste, tokens, tipografia, espaçamento e higiene do arquivo `stardust` do Penpot contra `.design-check-baseline.json`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `check:web-quality`          | Mede, com Lighthouse (mediana de 3 execuções por rota e preset), as rotas de `scripts/web-quality.config.json` numa aplicação já em execução (`--base <url>`, padrão `http://localhost:3000`; não faz build nem sobe servidor) e falha quando uma métrica não atinge o mínimo declarado: pontuações de categoria (`min`) e LCP, TBT e CLS (`max`). Rotas com `auth: true` entram com `WEB_APP_E2E_EMAIL` e `WEB_APP_E2E_PASSWORD` (`eval "$(node scripts/export-web-app-e2e-env.mjs --seed)"`). Meça um build de produção; contra o servidor de desenvolvimento o script avisa que os números não valem. `--route <nome>`, `--runs <n>` e `--json <caminho>` ajustam a execução. |
-| `update:design-baseline`     | Atualiza o baseline de design após uma revisão explícita dos findings.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | `test:spec-implementation`   | Executa os testes do checker de conformidade de Spec.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `test:scripts`               | Executa os testes de todos os scripts auxiliares em `scripts/tests/`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `test:integration`           | Executa os testes de integração declarados pelos workspaces via Turbo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |

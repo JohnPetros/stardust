@@ -340,7 +340,7 @@ A Web carrega as animações das galáxias de `lotties/galaxies/` no storage (R2
 | Sentry              | Monitoramento de erros                | Sentry Cloud     |
 | Discord             | Notificações de deploy                | Discord Webhooks |
 | Cloudflare          | DNS e (futuro) CDN/DDoS protection    | Cloudflare       |
-| Penpot              | Fonte canônica do design; lido por `check:design` via API REST | Penpot Cloud |
+| Doop                | Fonte canônica do design, lida e editada pelo Doop MCP | Doop Cloud       |
 
 ---
 
