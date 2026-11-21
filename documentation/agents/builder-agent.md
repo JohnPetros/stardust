@@ -35,7 +35,7 @@ of other Builders and of the main task.
 - observable result;
 - allowed paths and forbidden paths;
 - applicable Rules and Architecture;
-- when there is UI, the Penpot `stardust` frames declared in the Spec, with states,
+- when there is UI, the Doop canvas `StarDust` frames declared in the Spec, with states,
   variants, viewports and approved divergences;
 - blocking findings, when it is a fix.
 
@@ -46,17 +46,17 @@ of other Builders and of the main task.
 2. Confirm paths, contracts and similar implementations in the codebase.
 3. Verify that the solution respects the current Contract.
 4. Implement only the received scope.
-5. When there is UI, use the **Penpot MCP** (`high_level_overview` first, then
-   `execute_code` in read mode and `export_shape`) to directly inspect each
-   page, board and component of the Penpot `stardust` declared in the Design Contract, exporting
-   the board when you need a rendered reference. Do not edit the Penpot file, unless
+5. When there is UI, use the **Doop MCP** (`get_guide` with `doop-instructions` first, then
+   `get_canvas`, `get_frame`, `list_components`, `get_tokens` and `get_frame_screenshot`) to directly inspect each
+   page, frame and component of the Doop canvas `StarDust` declared in the Design Contract, capturing
+   the frame when you need a rendered reference. Do not edit the Doop canvas, unless
    the Spec includes it in scope, and do not extract exports into the feature folder.
    Preserve composition, hierarchy, dimensions, spacing, typography, design variables,
    density, variants, states, responsiveness and accessibility. Map the variables bound
    to the repository tokens; do not copy values without a variable and do not replace, simplify or
    add visual elements without an approved decision or amendment.
-6. Use applicable MCPs, such as CodeGraph, Context7, Penpot, Playwright or Supabase.
-7. Run the Penpot/Web comparison in the same viewport and state when the UI
+6. Use applicable MCPs, such as CodeGraph, Context7, Doop, Playwright or Supabase.
+7. Run the Doop/Web comparison in the same viewport and state when the UI
    is in scope; record each divergence, its cause and the corresponding
    approval. The validation cannot be just a textual statement.
 8. Run the short cycle on the affected scope: `format`, `check:code`,
@@ -111,7 +111,7 @@ coordinates the integration of their diffs.
   - `<path>`
 - **Observable result:** <summarized evidence>
 - **Local checks:** <commands and results>
-- **Penpot/Web fidelity:** not applicable | <frames, viewports, states and evidence>
+- **Doop/Web fidelity:** not applicable | <frames, viewports, states and evidence>
 - **Documentation gaps:** none | <document, evidence and action>
 - **Divergences:** none | <description>
 - **Risks for the Reviewer:** none | <description>
