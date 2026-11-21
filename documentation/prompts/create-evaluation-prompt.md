@@ -111,16 +111,16 @@ For frontend, also record:
 | Gate                  | State  | Evidence                                                                             |
 | --------------------- | ------ | ------------------------------------------------------------------------------------ |
 | UI Layer Audit        | passed | widget, paths and lines of Entry Point/View/Hook                                     |
-| Penpot/Web comparison | passed | frame, viewport, state, route, HEAD, anchors, divergence/approval and screenshot/diff |
+| Doop/Web comparison | passed | frame, viewport, state, route, HEAD, anchors, divergence/approval and screenshot/diff |
 
-When the Spec declares frames of the Penpot `stardust` file, inspect them through the Penpot MCP and record a matrix per frame. It must
+When the Spec declares frames of the Doop `StarDust` canvas, inspect them through the Doop MCP and record a matrix per frame. It must
 identify the frame name, viewport, state/variant, route, dimension and
 anchors of the reference, Web capture in the same context, evaluated HEAD and any approved
 divergence. `match` and `approved adaptation` are the only acceptable
 states; a frame that is missing, contradicted or added without approval keeps the
 evaluation blocked.
 
-Penpot boards are design inputs, not runtime evidence. The Evaluation must
+Doop frames are design inputs, not runtime evidence. The Evaluation must
 record separately the implementation capture, the visual comparison, the
 responsiveness/accessibility observations and the corresponding `EV-*`. If the Design Contract declares a state,
 viewport or supplementary extension, the absence of the required evidence keeps the Evaluation
@@ -131,9 +131,9 @@ viewport or supplementary extension, the absence of the required evidence keeps 
 One row per journey (`MV-*`) or per rendered state/viewport (`VV-*`) required by the Spec. Distinct
 states (page, dialog, mobile) are distinct rows; the evidence of one does not prove another.
 
-| MV/VV | CA | Surface/route | State | Viewport | Penpot board | Candidate | Artifact | Observed result | Reviewer disposition |
+| MV/VV | CA | Surface/route | State | Viewport | Doop frame | Candidate | Artifact | Observed result | Reviewer disposition |
 | ----- | ---- | ------------- | ----- | -------- | ------------ | --------- | -------- | --------------- | -------------------- |
-| VV-01 | CA-01 | `/space` | content | desktop | `<page/board>` | `<sha>` | `test-results/...` | pending | pending |
+| VV-01 | CA-01 | `/space` | content | desktop | `<page/frame>` | `<sha>` | `test-results/...` | pending | pending |
 
 ## Sensors and preflight
 
@@ -196,6 +196,6 @@ Failures of sensors, local builds or verifications must be recorded here immedia
 `EV-*` and, when there is a problem to fix, as `ACH-*`. PR CI results are not
 recorded in the Evaluation. The Spec remains `in_progress`; scope corrections use `Builder Fix ACH-*`, with
 a new sensor and a new Reviewer whenever the diff or any Contract,
-Rule, Penpot or Playwright evidence is invalidated. Any change after the
+Rule, Doop or Playwright evidence is invalidated. Any change after the
 Reviewer invalidates the previously evaluated commit, including when it affects design-to-code
 fidelity.

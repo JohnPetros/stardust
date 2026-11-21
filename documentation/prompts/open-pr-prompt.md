@@ -192,7 +192,7 @@ If this conformance fails, stop the publication and route the fix through
 `implement-spec`. Do not fix the implementation directly within the PR
 creation flow.
 
-For design-based UI, use the Penpot `stardust` frames declared in the Spec.
+For design-based UI, use the Doop canvas `StarDust` frames declared in the Spec.
 Confirm in `evaluation.md` the independent comparison of each mandatory state and viewport, including:
 
 - route, state, and name of the reference frame;
