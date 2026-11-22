@@ -67,15 +67,15 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 ##### Regras de Negocio
 
-- **Dados obrigatorios do planeta:** O cadastro exige nome, icone e imagem.
+- **Dados obrigatorios do planeta:** O cadastro exige nome e imagem.
 - **Validacao de nome:** O nome deve respeitar as validacoes de formato da plataforma.
 - **Estado inicial do planeta:** Um novo planeta nasce sem estrelas, com contadores zerados e indisponivel para usuarios finais.
 - **Posicionamento inicial:** O planeta criado entra no fim da ordem atual de planetas.
 
 ##### Regras de Experiência
 
-- **Formulario de cadastro:** O modal deve exibir campo de nome e uploads separados para imagem e icone.
-- **Preview visual:** A imagem e o icone devem ser exibidos em preview antes da confirmacao.
+- **Formulario de cadastro:** O modal deve exibir campo de nome e upload da imagem.
+- **Preview visual:** A imagem deve ser exibida em preview antes da confirmacao.
 - **Acessibilidade:** Inputs e botoes devem ser acessiveis por teclado e rotulados de forma clara.
 - **Feedback:** Em erro de criacao, exibir mensagem de falha; em sucesso, atualizar listagem.
 - **Performance:** A criacao deve refletir na lista sem exigir navegacao manual da pagina.
@@ -105,7 +105,7 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 
 ##### Regras de Negocio
 
-- **Edicao parcial:** Deve ser possivel alterar nome, icone e imagem de forma independente.
+- **Edicao parcial:** Deve ser possivel alterar nome e imagem de forma independente.
 - **Persistencia de alteracoes:** Mudancas validas devem substituir os dados anteriores do planeta.
 - **Exclusao destrutiva:** A exclusao de planeta remove o planeta e suas estrelas associadas.
 - **Precondicao de exclusao:** A acao de exclusao deve exigir confirmacao do operador.
@@ -256,7 +256,7 @@ Atores: 🚧 Em construção — atores não explicitados no documento legado.
 **Nome do fluxo:** Montar planeta completo no Studio.
 
 1. O usuario acessa a pagina de planetas no Studio.
-2. O usuario cria um novo planeta informando nome, imagem e icone.
+2. O usuario cria um novo planeta informando nome e imagem.
 3. O sistema valida os dados obrigatorios:
    - **Sucesso:** O planeta e criado e aparece na lista.
    - **Falha:** O sistema exibe mensagem de erro e mantem o formulario para ajuste.
