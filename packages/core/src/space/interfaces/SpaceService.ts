@@ -22,11 +22,7 @@ export interface SpaceService {
   fetchGalaxies(): Promise<RestResponse<GalaxySummaryDto[]>>
   fetchCurrentGalaxy(): Promise<RestResponse<CurrentGalaxyDto>>
   fetchGalaxyPlanets(galaxySlug: Slug): Promise<RestResponse<PlanetDto[]>>
-  createPlanet(
-    planetName: Name,
-    planetIcon: Image,
-    planetImage: Image,
-  ): Promise<RestResponse<PlanetDto[]>>
+  createPlanet(planetName: Name, planetImage: Image): Promise<RestResponse<PlanetDto[]>>
   createPlanetStar(planetId: Id): Promise<RestResponse<StarDto>>
   updatePlanet(planet: Planet): Promise<RestResponse<PlanetDto>>
   reorderPlanets(planetsIds: Id[]): Promise<RestResponse<PlanetDto[]>>

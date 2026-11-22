@@ -9,7 +9,6 @@ import { OrdinalNumber } from '#global/domain/structures/OrdinalNumber'
 type Request = {
   name: string
   image: string
-  icon: string
 }
 
 type Response = Promise<PlanetDto>
@@ -20,14 +19,13 @@ export class CreatePlanetUseCase implements UseCase<Request, Response> {
     private readonly galaxiesRepository: GalaxiesRepository,
   ) {}
 
-  async execute({ name, image, icon }: Request): Response {
+  async execute({ name, image }: Request): Response {
     const galaxy = await this.galaxiesRepository.findFirst()
     if (!galaxy) throw new GalaxyNotFoundError()
 
     const lastPlanetPosition = await this.findLastPlanetPosition(galaxy.id)
     const planet = Planet.create({
       name,
-      icon,
       image,
       isAvailable: false,
       galaxyId: galaxy.id.value,

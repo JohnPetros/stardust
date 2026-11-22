@@ -44,7 +44,7 @@ export class ZodStringValidation implements StringValidation {
   }
 
   image(message?: string) {
-    const extensions = ['.png', '.jpg', '.jpeg', '.gif', '.svg']
+    const extensions = ['.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp']
 
     this.zodEffects = z
       .string()

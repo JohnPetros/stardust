@@ -5,6 +5,7 @@ import {
   Name,
   Logical,
   Integer,
+  Text,
 } from '#global/domain/structures/index'
 import type { StarDto } from './dtos'
 
@@ -16,6 +17,7 @@ type StarsProps = {
   unlockCount: Integer
   isAvailable: Logical
   isChallenge: Logical
+  description: Text | null
 }
 
 export class Star extends Entity<StarsProps> {
@@ -38,6 +40,7 @@ export class Star extends Entity<StarsProps> {
           'Quantidade de usuários que completaram essa estrela',
         ),
         isChallenge: Logical.create(dto.isChallenge, 'A estrela é um desafio?'),
+        description: dto.description ? Text.create(dto.description) : null,
       },
       dto?.id,
     )
@@ -93,6 +96,10 @@ export class Star extends Entity<StarsProps> {
     this.props.isChallenge = isChallenge
   }
 
+  get description(): Text | null {
+    return this.props.description
+  }
+
   get isAvailable(): Logical {
     return this.props.isAvailable
   }
@@ -111,6 +118,7 @@ export class Star extends Entity<StarsProps> {
       unlockCount: this.unlockCount.value,
       isChallenge: this.isChallenge.value,
       isAvailable: this.isAvailable.value,
+      description: this.description?.value ?? null,
     }
   }
 }

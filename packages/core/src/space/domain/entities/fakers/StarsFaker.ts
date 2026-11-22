@@ -18,6 +18,7 @@ export class StarsFaker {
       isChallenge: faker.datatype.boolean(),
       unlockCount: faker.number.int({ min: 0, max: 100 }),
       userCount: faker.number.int({ min: 0, max: 100 }),
+      description: faker.lorem.sentence(),
       ...baseDto,
     }
   }

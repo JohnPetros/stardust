@@ -1,14 +1,12 @@
 import type { UseCase } from '#global/interfaces/UseCase'
 import type { UsersRepository } from '#profile/interfaces/UsersRepository'
-import type { User } from '../domain/entities'
 import { Id } from '#global/domain/structures/Id'
 import { Percentage } from '#global/domain/structures/Percentage'
 import { UserNotFoundError } from '#profile/domain/errors/UserNotFoundError'
 
 type Request = {
   userId: string
-  starId: string
-  nextStarId: string | null
+  isAlreadyCompleted: boolean
   questionsCount: number
   incorrectAnswersCount: number
 }
@@ -29,25 +27,21 @@ export class CalculateRewardForStarCompletionUseCase
 
   async execute({
     userId,
-    starId,
-    nextStarId,
+    isAlreadyCompleted,
     incorrectAnswersCount,
     questionsCount,
   }: Request) {
-    const user = await this.findUser(Id.create(userId))
-    const isNextStarUnlocked = this.checkNextStarIsUnlocked(
-      user,
-      Id.create(starId),
-      nextStarId ? Id.create(nextStarId) : null,
-    )
+    await this.findUser(Id.create(userId))
+
+    if (questionsCount === 0) return { newCoins: 0, newXp: 0, accuracyPercentage: 100 }
 
     const newXp = this.calculateXp(
-      isNextStarUnlocked.isTrue,
+      isAlreadyCompleted,
       questionsCount,
       incorrectAnswersCount,
     )
     const newCoins = this.calculateCoins(
-      isNextStarUnlocked.isTrue,
+      isAlreadyCompleted,
       questionsCount,
       incorrectAnswersCount,
     )
@@ -63,12 +57,6 @@ export class CalculateRewardForStarCompletionUseCase
     }
   }
 
-  private checkNextStarIsUnlocked(user: User, starId: Id, nextStarId: Id | null) {
-    const isLastSpaceStar = nextStarId === null
-    if (isLastSpaceStar) return user.hasCompletedSpace
-    return user.hasUnlockedStar(nextStarId).and(user.hasRecentlyUnlockedStar(starId))
-  }
-
   private calculateAccuracyPercentage(
     questionsCount: number,
     incorrectAnswersCount: number,
@@ -78,13 +66,13 @@ export class CalculateRewardForStarCompletionUseCase
   }
 
   private calculateCoins(
-    isNextStarUnlocked: boolean,
+    isAlreadyCompleted: boolean,
     questionsCount: number,
     incorrectAnswersCount: number,
   ) {
     let increase =
       questionsCount * CalculateRewardForStarCompletionUseCase.COINS_INCREASE_BASE
-    if (isNextStarUnlocked) increase /= 2
+    if (isAlreadyCompleted) increase /= 2
 
     const decrease = (increase / questionsCount) * incorrectAnswersCount
 
@@ -93,13 +81,13 @@ export class CalculateRewardForStarCompletionUseCase
   }
 
   private calculateXp(
-    isNextStarUnlocked: boolean,
+    isAlreadyCompleted: boolean,
     questionsCount: number,
     incorrectAnswersCount: number,
   ) {
     let increase =
       questionsCount * CalculateRewardForStarCompletionUseCase.XP_INCREASE_BASE
-    if (isNextStarUnlocked) increase /= 2
+    if (isAlreadyCompleted) increase /= 2
 
     const decrease = (increase / questionsCount) * incorrectAnswersCount
 
