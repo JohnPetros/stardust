@@ -10,7 +10,7 @@ PRD, Issue, Report ou demanda direta
 → design ou review-design (quando há UI: boards no Penpot + Design Reviewer + registro da revisão)
 → create-spec
 → Spec Reviewer + revisão do usuário da Spec escrita
-→ create-plan
+→ plan-spec
 → implement-spec
 → verificação integrada (automatizada + manual + visual)
 → Implementation Reviewer (+ Visual Reviewer em paralelo, quando há UI)
@@ -137,7 +137,7 @@ normalizados na próxima revisão, sem inventar conteúdo ausente.
 | Design Reviewer         | ativado pelos workflows `design` e `review-design`, revisa os boards desenhados contra o PRD e `design.md`: cobertura de regras e estados, fidelidade, crítica impeccable e resultados de `check:design` | não edita arquivos nem o Penpot; lê o Penpot só pelo MCP; consultivo |
 
 Subagentes são irmãos criados pela task principal na task atual. Nenhum subagente cria outro
-agente ou task. `design`, `review-design`, `create-spec`, `create-plan`, `implement-spec` e `conclude-spec` são workflows, não papéis.
+agente ou task. `design`, `review-design`, `create-spec`, `plan-spec`, `implement-spec` e `conclude-spec` são workflows, não papéis.
 
 ## Artefatos duráveis
 
@@ -145,7 +145,7 @@ agente ou task. `design`, `review-design`, `create-spec`, `create-plan`, `implem
 documentation/prds/<module>/<slug>-prd.md           # PRD canônico versionado do módulo
 documentation/features/<domínio>/<feature>/
 ├── spec.md
-├── plan.md                 # criado por create-plan, depois que a Spec fica open
+├── plan.md                 # criado por plan-spec, depois que a Spec fica open
 └── evaluation.md           # criado no kickoff da implementação
 ```
 
@@ -271,7 +271,7 @@ Rule Pack das camadas afetadas. O Reviewer verifica somente fronteiras, dependê
 e aderência às Rules; não avalia produto, Design, critérios ou validação. A task principal verifica
 cada finding, corrige a mesma Spec e retoma o Reviewer antes da implementação. A Spec só passa para
 `open` quando essa revisão estiver `clear` e nenhum finding bloqueante verificado permanecer;
-então o fluxo segue para `create-plan` e, em seguida, `implement-spec`. Amendment posterior invalida o resultado e exige
+então o fluxo segue para `plan-spec` e, em seguida, `implement-spec`. Amendment posterior invalida o resultado e exige
 nova revisão antes de implementar. A revision history registra a revisão, o resultado e as resoluções
 verificadas, sem incorporar o relatório bruto.
 
@@ -320,17 +320,17 @@ evidências afetadas.
 
 ## Plan
 
-`create-plan` cria `plan.md` ao lado da Spec `open`, antes de `implement-spec`, e o reconcilia
+`plan-spec` cria `plan.md` ao lado da Spec `open`, antes de `implement-spec`, e o reconcilia
 sempre que um amendment incrementa a revisão. O Plan tem uma linha por linha do mapa canônico
 de paths da Spec, na mesma ordem, com `Path`, `Change`, `RF/CA`, `Status` e `Notes`. Os links
-`RF-*`/`CA-*` são escritos por `create-plan` e verificados pelo checker. Cada linha usa
+`RF-*`/`CA-*` são escritos por `plan-spec` e verificados pelo checker. Cada linha usa
 `pending`, `in_progress` ou `completed`; uma falha ou um bloqueio mantém a linha `in_progress`
 com o `ACH-*` em `Notes`. Um `CA-*` está implementado quando todas as linhas que o citam estão
 `completed`; se ele está comprovado é registrado apenas no Evaluation.
 
 O Plan é a única fonte do progresso de implementação. Ele não possui Contract, tasks, fases,
 waves, estimativas nem evidência. Só a task principal o edita; Builders e Reviewers reportam.
-Não há Grilling em `create-plan`, porque as linhas derivam da Spec. Antes de `implement-spec`,
+Não há Grilling em `plan-spec`, porque as linhas derivam da Spec. Antes de `implement-spec`,
 `pnpm run check:spec-implementation <spec> --plan-only` valida o Plan contra a Spec sem exigir
 que os paths já estejam entregues.
 
@@ -344,7 +344,7 @@ Evaluation: `plan: <path>` exige o Plan, `plan: none` o dispensa e a ausência d
 para que nenhuma entrega fique sem Plan por omissão. O template do Evaluation declara
 `plan: ./plan.md`, então toda entrega nova usa o Plan; `plan: none` numa entrega nova é um
 desvio e deve ser rejeitado na revisão. Para adotar o Plan numa entrega em andamento, rode
-`create-plan`, marque como `completed` as linhas já entregues depois de inspecionar o diff,
+`plan-spec`, marque como `completed` as linhas já entregues depois de inspecionar o diff,
 remova a coluna `Implementation` do Evaluation e troque `plan: none` por `plan: ./plan.md`.
 
 ## Implementação e evidência viva
@@ -412,7 +412,7 @@ atuais e resolvidos.
 | Classe                    | Ação                                                                                                                                |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | Correção de implementação | mantém revisão; registra finding; reabre trabalho/evidência; retoma Builder; reexecuta somente exits invalidados                    |
-| Mudança de Contract       | pausa; Spec volta a `draft`; atualiza autoridade; incrementa revisão; reconcilia Design, Plan (via `create-plan`) e Evaluation; retoma `implement-spec` |
+| Mudança de Contract       | pausa; Spec volta a `draft`; atualiza autoridade; incrementa revisão; reconcilia Design, Plan (via `plan-spec`) e Evaluation; retoma `implement-spec` |
 
 Erro de teste, browser, console, runtime, migration, CI ou comparação visual dentro do Contract
 é correção automática. Não se pede autorização para tornar a implementação aderente. Pergunte

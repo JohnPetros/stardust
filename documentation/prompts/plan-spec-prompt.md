@@ -1,9 +1,9 @@
 ---
-name: create-plan
+name: plan-spec
 description: Create or reconcile the plan.md progress tracker of an SDD delivery from the Spec's canonical path map, after the Spec is open and before implement-spec starts.
 ---
 
-# Create Plan
+# Plan Spec
 
 `plan.md` is the single source of **implementation progress** of a delivery. It has one
 row per row of the Spec's canonical path map, and each row is linked to the `RF-*`/`CA-*`
@@ -12,7 +12,7 @@ Contract) and it records no evidence, findings or handoff (`evaluation.md` owns 
 Follow [`documentation/sdd.md`](../sdd.md).
 
 ```text
-create-spec (Spec open) → create-plan → implement-spec
+create-spec (Spec open) → plan-spec → implement-spec
 ```
 
 Run this prompt after the Spec Reviewer is `clear`, the user approved the written Spec and

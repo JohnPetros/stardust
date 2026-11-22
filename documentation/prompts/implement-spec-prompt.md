@@ -13,7 +13,7 @@ implementation entry point: do not ask the user to choose another prompt and do 
 create another thread.
 
 ```text
-implement-spec (requires the plan.md of the current revision, from create-plan)
+implement-spec (requires the plan.md of the current revision, from plan-spec)
 → Builder Direct or bounded Builders
 → plan.md rows completed
 → integrated candidate
@@ -73,8 +73,8 @@ context. Inspect `git status` and the diffs and preserve unrelated work. Use
 CodeGraph for each new code exploration, per `AGENTS.md`.
 
 Initial implementation requires an `open` Spec and a `plan.md` whose `spec_revision` is the
-Spec's current revision, created by [`create-plan`](create-plan-prompt.md). If the plan is
-missing or stale, stop and report that `create-plan` must run first; do not create it here.
+Spec's current revision, created by [`plan-spec`](plan-spec-prompt.md). If the plan is
+missing or stale, stop and report that `plan-spec` must run first; do not create it here.
 The only exception is a resumed delivery whose existing `evaluation.md` predates `plan.md` and
 declares `plan: none` in its frontmatter, an explicit opt-out that the checker reads: it
 continues without a plan and keeps its progress in the Evaluation's legacy `Implementation`
@@ -83,7 +83,7 @@ an error, and `plan: none` is never added to a new delivery.
 Resumed work requires the same revision and a `plan.md` with unfinished rows or an Evaluation
 with unfinished criteria or findings. Do not activate the Spec Reviewer for implementation
 evidence. A material Contract change goes through `create-spec`: preserve the history,
-reconcile source/design/sensors, increment the revision, rerun `create-plan` to reconcile
+reconcile source/design/sensors, increment the revision, rerun `plan-spec` to reconcile
 `plan.md` and invalidate the affected proof.
 
 Before any feature edit, create or reconcile `evaluation.md` per the
@@ -329,7 +329,7 @@ code or artifacts:
   resume the Builder and rerun its exits.
 - **Contract change:** pause, return the Spec to `draft`, invoke `create-spec`
   to obtain authority and update PRD, Architecture, Modules, Design, Tooling or Rules
-  when necessary; increment the revision, rerun `create-plan`, reconcile the Evaluation and only then resume.
+  when necessary; increment the revision, rerun `plan-spec`, reconcile the Evaluation and only then resume.
 
 Do not request authorization to fix a discrepancy within the Contract. Ask
 only when the classification, the product outcome, an authority, security or the
@@ -362,7 +362,7 @@ Contract, architectural ownership or global policy require user authority.
 Follow the structure of the [Evaluation](create-evaluation-prompt.md). Criteria evidence has
 one row per `CA-*` with Verification (`Pending`/`Partial`/`Passed`/`Failed`/`Blocked`/`Stale`),
 mapped checks/evidence and remaining work; implementation progress lives only in the `plan.md`
-rows (see [`create-plan`](create-plan-prompt.md)). Check Results includes the baseline checks and uses `Pending`,
+rows (see [`plan-spec`](plan-spec-prompt.md)). Check Results includes the baseline checks and uses `Pending`,
 `Passed`, `Failed`, `Blocked`, `Stale` or `Not applicable`, with `EV-*` IDs, exact
 procedures, real test selection and count, expected/observed results,
 candidate/date, environment/fixtures, artifact paths and limits. Preserve failed or
