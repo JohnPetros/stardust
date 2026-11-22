@@ -15,7 +15,6 @@ describe('Create Planet Controller', () => {
   type Schema = {
     body: {
       name: string
-      icon: string
       image: string
     }
   }
@@ -36,12 +35,10 @@ describe('Create Planet Controller', () => {
   it('should read body, call use case and send created planet', async () => {
     const body = {
       name: 'Variaveis',
-      icon: 'planet-1',
       image: 'https://cdn.stardust.dev/planets/variables.png',
     }
     const createdPlanetDto = PlanetsFaker.fakeDto({
       name: body.name,
-      icon: body.icon,
       image: body.image,
     })
     const restResponse = mock<RestResponse>()
@@ -59,7 +56,6 @@ describe('Create Planet Controller', () => {
     expect(http.getBody).toHaveBeenCalled()
     expect(executeSpy).toHaveBeenCalledWith({
       name: body.name,
-      icon: body.icon,
       image: body.image,
     })
     expect(http.statusCreated).toHaveBeenCalled()
@@ -70,7 +66,6 @@ describe('Create Planet Controller', () => {
   it('should propagate use case errors without sending response', async () => {
     const body = {
       name: 'Lacos',
-      icon: 'planet-2',
       image: 'https://cdn.stardust.dev/planets/loops.png',
     }
     const error = new Error('Planet already exists')

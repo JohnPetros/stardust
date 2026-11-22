@@ -10,7 +10,7 @@ import { CompleteSpaceController } from '../CompleteSpaceController'
 describe('Complete Space Controller', () => {
   type Schema = {
     body: {
-      nextStarId: string | null
+      isLastGalaxyStar: boolean
       isFirstGalaxy: boolean
     }
   }
@@ -30,7 +30,7 @@ describe('Complete Space Controller', () => {
 
   it('should read account and body, execute use case and pass request', async () => {
     const userId = 'user-1'
-    const body = { nextStarId: 'star-99', isFirstGalaxy: true }
+    const body = { isLastGalaxyStar: true, isFirstGalaxy: true }
     const restResponse = mock<RestResponse>()
 
     http.getAccountId.mockResolvedValue(userId)
@@ -47,16 +47,16 @@ describe('Complete Space Controller', () => {
     expect(http.getBody).toHaveBeenCalled()
     expect(executeSpy).toHaveBeenCalledWith({
       userId,
-      nextStarId: body.nextStarId,
+      isLastGalaxyStar: body.isLastGalaxyStar,
       isFirstGalaxy: body.isFirstGalaxy,
     })
     expect(http.pass).toHaveBeenCalled()
     expect(response).toBe(restResponse)
   })
 
-  it('should forward a non-first galaxy and a null next star id to the use case', async () => {
+  it('should forward a non-first galaxy and the last star flag to the use case', async () => {
     const userId = 'user-2'
-    const body = { nextStarId: null, isFirstGalaxy: false }
+    const body = { isLastGalaxyStar: true, isFirstGalaxy: false }
 
     http.getAccountId.mockResolvedValue(userId)
     http.getBody.mockResolvedValue(body)
@@ -70,7 +70,7 @@ describe('Complete Space Controller', () => {
 
     expect(executeSpy).toHaveBeenCalledWith({
       userId,
-      nextStarId: null,
+      isLastGalaxyStar: true,
       isFirstGalaxy: false,
     })
     expect(http.pass).toHaveBeenCalled()

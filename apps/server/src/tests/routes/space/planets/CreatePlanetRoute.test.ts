@@ -59,7 +59,6 @@ describe('[POST] /space/planets', () => {
 
     const response = await request(honoFixture.server).post('/space/planets').send({
       name: planet.name,
-      icon: planet.icon,
       image: planet.image,
     })
 
@@ -75,7 +74,6 @@ describe('[POST] /space/planets', () => {
       .set(authFixture.getAuthorizationHeader())
       .send({
         name: 'ab',
-        icon: 'icon.png',
         image: 'image.png',
       })
 
@@ -109,7 +107,7 @@ describe('[POST] /space/planets', () => {
     const addedIds: string[] = []
     for (const [index, account] of [authFixture, otherAccount].entries()) {
       const dto = PlanetsFaker.fakeDto()
-      const payload = { name: dto.name, icon: dto.icon, image: dto.image }
+      const payload = { name: dto.name, image: dto.image }
       const response = await request(honoFixture.server)
         .post('/space/planets')
         .set(account.getAuthorizationHeader())
@@ -119,6 +117,7 @@ describe('[POST] /space/planets', () => {
       expect(response.body).toEqual({
         id: response.body.id,
         ...payload,
+        concept: null,
         position: 3 + index + 1,
         galaxyId: firstGalaxy.id,
         isAvailable: false,
@@ -133,6 +132,7 @@ describe('[POST] /space/planets', () => {
       expect(persisted).toEqual({
         id: response.body.id,
         ...payload,
+        concept: null,
         position: 3 + index + 1,
         isAvailable: false,
         galaxyId: firstGalaxy.id,
@@ -152,7 +152,7 @@ describe('[POST] /space/planets', () => {
   it('should create and persist a shared planet for an authenticated common user', async () => {
     const galaxy = await createGalaxy({ position: 1, status: 'published' })
     const planet = PlanetsFaker.fakeDto()
-    const payload = { name: planet.name, icon: planet.icon, image: planet.image }
+    const payload = { name: planet.name, image: planet.image }
     const response = await request(honoFixture.server)
       .post('/space/planets')
       .set(authFixture.getAuthorizationHeader())

@@ -13,6 +13,7 @@ import { DrizzleUsersRepository } from '@/database/drizzle/repositories'
 import { AuthFixture } from '@/tests/fixtures/AuthFixture'
 import { HonoFixture } from '@/tests/fixtures/HonoFixture'
 import { ProfileFixture } from '@/tests/fixtures/ProfileFixture'
+import { SpaceFixture } from '@/tests/fixtures/SpaceFixture'
 import { SupabaseFixture } from '@/tests/fixtures/SupabaseFixture'
 
 describe('[GET] /profile/users/id/:userId', () => {
@@ -135,5 +136,26 @@ describe('[GET] /profile/users/id/:userId', () => {
         tier: user.dto.tier,
       }),
     )
+  })
+
+  it('should return the progress facts of the own profile', async () => {
+    const accountId = authFixture.getAccountId()
+    await profileFixture.createAccountUser(accountId)
+    const spaceFixture = new SpaceFixture(supabaseFixture.supabase)
+    const galaxy = await spaceFixture.createGalaxy()
+    const star = await spaceFixture.createStar(galaxy.id)
+    await profileFixture.openPlanet(accountId, star.planetId)
+    await profileFixture.completeStar(accountId, star.id)
+
+    const response = await request(honoFixture.server)
+      .get(`/profile/users/id/${accountId}`)
+      .set(authFixture.getAuthorizationHeader())
+
+    expect(response.status).toBe(HTTP_STATUS_CODE.ok)
+    expect(response.body.completedStarsIds).toEqual([star.id])
+    expect(response.body.openedPlanetsIds).toEqual([star.planetId])
+    expect(response.body).not.toHaveProperty('unlockedStarsIds')
+    expect(response.body).not.toHaveProperty('recentlyUnlockedStarsIds')
+    await spaceFixture.cleanupCreatedStars([star])
   })
 })

@@ -102,6 +102,7 @@ describe('[PUT] /profile/users/:userId/reward/star-challenge', () => {
     await createGalaxy({ position: 1, status: 'published' })
     const secondGalaxy = await createGalaxy({ position: 2, status: 'published' })
     const lastStar = await spaceFixture.createStar(secondGalaxy.id)
+    await profileFixture.openPlanet(authFixture.getAccountId(), lastStar.planetId)
     expect(await readHasCompletedSpace()).toBe(false)
 
     const response = await completeLastStarChallenge(lastStar.id)
@@ -120,10 +121,40 @@ describe('[PUT] /profile/users/:userId/reward/star-challenge', () => {
     const firstGalaxy = await createGalaxy({ position: 1, status: 'published' })
     await createGalaxy({ position: 2, status: 'published' })
     const lastStar = await spaceFixture.createStar(firstGalaxy.id)
+    await profileFixture.openPlanet(authFixture.getAccountId(), lastStar.planetId)
 
     const response = await completeLastStarChallenge(lastStar.id)
 
     expect(response.status).toBe(HTTP_STATUS_CODE.ok)
     expect(await readHasCompletedSpace()).toBe(true)
+    expect(await profileFixture.countCompletedStars(authFixture.getAccountId())).toBe(1)
+  })
+
+  it('should return 403 and record nothing for a locked star', async () => {
+    const galaxy = await createGalaxy({ position: 1, status: 'published' })
+    const star = await spaceFixture.createStar(galaxy.id)
+
+    const response = await completeLastStarChallenge(star.id)
+
+    expect(response.status).toBe(HTTP_STATUS_CODE.forbidden)
+    expect(await profileFixture.countCompletedStars(authFixture.getAccountId())).toBe(0)
+    expect(await readHasCompletedSpace()).toBe(false)
+  })
+
+  it('should complete the available star and never record the next one', async () => {
+    const accountId = authFixture.getAccountId()
+    const galaxy = await createGalaxy({ position: 1, status: 'published' })
+    const planet = await spaceFixture.createPlanet(galaxy.id, { position: 1 })
+    const first = await spaceFixture.createStar(galaxy.id, {
+      planetId: planet.id,
+      number: 1,
+    })
+    await spaceFixture.createStar(galaxy.id, { planetId: planet.id, number: 2 })
+    await profileFixture.openPlanet(accountId, planet.id)
+
+    const response = await completeLastStarChallenge(first.id)
+
+    expect(response.status).toBe(HTTP_STATUS_CODE.ok)
+    expect(await profileFixture.countCompletedStars(accountId)).toBe(1)
   })
 })
