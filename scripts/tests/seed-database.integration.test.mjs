@@ -54,6 +54,17 @@ test('local seed can be repeated, authenticates both accounts and rolls back all
       assert.ok(
         counts.planets > 0 && counts.stars > counts.planets && counts.challenges > 0,
       )
+      const [trail] = await sql`
+        SELECT
+          (SELECT count(*) FROM public.planets p JOIN public.galaxies g ON g.id = p.galaxy_id
+            WHERE g.slug = 'logica-de-programacao')::int AS planets,
+          (SELECT count(*) FROM public.stars s JOIN public.planets p ON p.id = s.planet_id
+            JOIN public.galaxies g ON g.id = p.galaxy_id
+            WHERE g.slug = 'logica-de-programacao')::int AS stars,
+          (SELECT count(*) FROM public.galaxies WHERE slug = 'trilha-anterior' AND status = 'unpublished')::int AS archive,
+          (SELECT count(*) FROM public.users_completed_stars)::int AS completed,
+          (SELECT count(*) FROM public.users_opened_planets)::int AS opened`
+      assert.deepEqual(trail, { planets: 10, stars: 41, archive: 1, completed: 0, opened: 0 })
       const [content] = await sql`
         SELECT count(*)::int AS count FROM public.stars
         WHERE texts IS NOT NULL AND jsonb_array_length(texts) > 0`
