@@ -614,6 +614,43 @@ test('requires a Tasks table unless the plan declares tasks: none', async () => 
     )
     const invalid = await runChecker(repositoryRoot, ['--plan-only'])
     assert.match(invalid.errors.join('\n'), /tasks must be absent or none \(found "T1"\)/)
+
+    await writeFile(
+      path.join(repositoryRoot, PLAN_PATH),
+      buildPlan({ legacy: true }).replace('tasks: none\n', ''),
+    )
+    const unmarkedLegacy = await runChecker(repositoryRoot, ['--plan-only'])
+    assert.equal(unmarkedLegacy.status, 'failed')
+    assert.match(
+      unmarkedLegacy.errors.join('\n'),
+      /plan has no tasks: add a Tasks table, or declare tasks: none/,
+    )
+  } finally {
+    await rm(repositoryRoot, { force: true, recursive: true })
+  }
+})
+
+test('rejects a completed task with unfinished rows and a truncated task row', async () => {
+  const repositoryRoot = await createRepositoryFixture()
+  try {
+    const rows = PLAN_ROWS.map((row, index) => ({
+      ...row,
+      requirements: 'RF-01, CA-01',
+      status: index === 0 ? 'completed' : 'pending',
+    }))
+    const plan = buildPlan({
+      rows,
+      tasks: [{ builder: 'Direct', dependsOn: 'none', id: 'T1', status: 'completed' }],
+    }).replace('| none |\n\n## Progress', '| none |\n| T2 | truncated |\n\n## Progress')
+    await writeFile(path.join(repositoryRoot, PLAN_PATH), plan)
+    const result = await runChecker(repositoryRoot, ['--plan-only'])
+    const messages = result.errors.join('\n')
+    assert.equal(result.status, 'failed')
+    assert.match(messages, /T1: task is completed but not every row is completed/)
+    assert.match(
+      messages,
+      /T2: task must have Task, Outcome, Builder, Depends on and Status cells/,
+    )
   } finally {
     await rm(repositoryRoot, { force: true, recursive: true })
   }
