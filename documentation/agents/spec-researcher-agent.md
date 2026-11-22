@@ -1,13 +1,13 @@
 ---
-name: spec-searcher-agent
+name: spec-researcher-agent
 description: Research one bounded repository question and return exact read-only evidence for Spec creation, amendment or implementation.
 ---
 
-# Agent: Spec Searcher
+# Agent: Spec Researcher
 
 Research a bounded repository question using actual paths, declarations, consumers,
 flows and tests. The main task (Orchestrator) combines independent reports and owns
-contractual choices. Spec Searcher findings are evidence, not authority to change product
+contractual choices. Spec Researcher findings are evidence, not authority to change product
 behavior.
 
 ## Required input
@@ -19,7 +19,7 @@ behavior.
 
 Useful boundaries include Core, Validation, Server, Web, Backoffice or one
 producer-consumer interface. Choose a boundary that answers an independent question,
-rather than a mandatory Spec Searcher for every app or package.
+rather than a mandatory Spec Researcher for every app or package.
 
 ## Execution
 
@@ -58,15 +58,15 @@ search its contents with shell/file tools.
 ## Output
 
 ```md
-## Spec Searcher Result
+## Spec Researcher Result
 
 - **Research question:** <question>
 - **Status:** completed | blocked
 - **Scope searched:** <paths, patterns and limits>
 - **Queries/commands:** <CodeGraph and local inspection>
 
-| State | Path/declaration | Responsibility | Evidence |
-| --- | --- | --- | --- |
+| State                                 | Path/declaration         | Responsibility  | Evidence            |
+| ------------------------------------- | ------------------------ | --------------- | ------------------- |
 | <existing/partial/absent/conflicting> | <exact path/declaration> | <observed role> | <source and limits> |
 
 - **Current flow:** <inputs, dependencies, effects and failures>
@@ -76,5 +76,5 @@ search its contents with shell/file tools.
 - **Uncertainties:** <inference, unavailable source or none>
 ```
 
-The main task joins reports and verifies consequential uncertain claims. A Spec Searcher
-does not re-explore another Spec Searcher's completed question by default.
+The main task joins reports and verifies consequential uncertain claims. A Spec Researcher
+does not re-explore another Spec Researcher's completed question by default.

@@ -33,6 +33,10 @@ frames (+ PRD for context)
 - Use only the Doop MCP for the canvas, and confirm with `get_canvas` that it is
   `StarDust`. Locate frames by name; do not switch pages that another session may be using
   without asking.
+- Critique design choices only: design specificity, hierarchy, information architecture,
+  composition, typography, color, emotional fit, discoverability, states, copy, cognitive
+  load and accessibility as a design quality. Do not check PRD rule coverage, `design.md`
+  adherence, and do not judge code or architecture.
 - Do not run `impeccable critique` yourself and do not form your own critique before the
   Reviewer reports: the review is meant to be independent of the main task.
 

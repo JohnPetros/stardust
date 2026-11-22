@@ -98,7 +98,7 @@ Os eventos são utilizados para promover a comunicação entre os módulos do St
 
 Um `event` deve seguir o padrão:
 
-- Ser nomeado no pretérito (tempo passado) e terminar com o sufixo `Event`, como `UserCreatedEvent`, `StarUnlockedEvent`, `LastTierReachedEvent`.
+- Ser nomeado no pretérito (tempo passado) e terminar com o sufixo `Event`, como `UserCreatedEvent`, `PlanetCompletedEvent`, `LastTierReachedEvent`.
 - Assegurar que todos os dados do `payload` sejam públicos e imutáveis.
 - Conter uma propriedade estática chamada `key`, do tipo `string`, que indica o nome do evento e o módulo onde ele foi disparado.
 

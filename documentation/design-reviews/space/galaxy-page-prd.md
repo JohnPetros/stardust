@@ -2,42 +2,24 @@
 prd: documentation/prds/space/galaxy-page-prd.md
 prd_last_updated_at: 2026-11-15
 reviewed_at: 2026-11-17
-penpot_revn: 622
+penpot_revn: 624
 verdict: pass
 boards:
   - page: 🖥️ Desktop
     board: Espaço / Galáxia / Desktop
-    digest: 9dd845d8b698595f
+    digest: 7fc9ea80c3e70387
   - page: 🖥️ Desktop
     board: Espaço / Galáxia / planeta liberado / Desktop
-    digest: 6aa8266a23ec6e16
+    digest: 18688474c49b93fd
   - page: 🖥️ Desktop
     board: Espaço / Galáxia / planeta aberto / Desktop
-    digest: 423b8e0106ebc7d0
-  - page: 🖥️ Desktop
-    board: Espaço / Galáxia / Diálogo de vídeo de apresentação / Desktop
-    digest: 1bf51e4299eb7859
-  - page: 🖥️ Desktop
-    board: Espaço / Galáxia / Diálogo de vídeo de apresentação / falha ao carregar / Desktop
-    digest: 16c7472059611946
-  - page: 🖥️ Desktop
-    board: Espaço / Galáxia / Diálogo de vídeo de apresentação / sem som / Desktop
-    digest: 21234dc581615bc1
-  - page: 🖥️ Desktop
-    board: Espaço / Galáxia / Diálogo de vídeo de apresentação / movimento reduzido / Desktop
-    digest: e981deb66adf042b
-  - page: 🖥️ Desktop
-    board: Espaço / Galáxia / Diálogo de vídeo de encerramento / Desktop
-    digest: 9aa53ceaff1958e7
-  - page: 🖥️ Desktop
-    board: Espaço / Galáxia / Diálogo de vídeo de encerramento / falha ao carregar / Desktop
-    digest: 7b58ea402fe76ef9
+    digest: 89b9e43796931497
   - page: 🖥️ Desktop
     board: Espaço / Galáxia / Planeta / animação de abertura do cadeado / Desktop
-    digest: e4518b6e8ff8593d
+    digest: 0a89275cf04590b3
   - page: 🖥️ Desktop
     board: Espaço / Galáxia / FAB de retorno / Desktop
-    digest: c43ce2450b3f1aad
+    digest: de5ae346e9df682c
   - page: 📱 Mobile
     board: Espaço / Galáxia / Mobile
     digest: b3babc75eeeab978
@@ -50,9 +32,6 @@ boards:
   - page: 📱 Mobile
     board: Espaço / Galáxia / planeta aberto / Mobile
     digest: 4507bece14d5ed97
-  - page: 📱 Mobile
-    board: Espaço / Galáxia / Diálogo de vídeo de apresentação / Mobile
-    digest: e1c76ecc1ecce481
   - page: 📱 Mobile
     board: Espaço / Galáxia / FAB de retorno / Mobile
     digest: 1730469f4c0464f9
@@ -78,10 +57,16 @@ JN-01, JN-07, JN-08 and JN-09, in the Penpot section "Galáxia · Trilha".
   scrolled so the current item is above the viewport, with the arrow-up button.
 - Star details on Mobile (RP-09): `Detalhes da estrela / Mobile`, the bottom panel
   drawn as a standalone frame (available story star, "Começar história").
-- Presentation video dialog (default, `falha ao carregar`, `sem som`,
-  `movimento reduzido`), closing video dialog (default, `falha ao carregar`) and
-  the `Planeta / animação de abertura do cadeado` storyboard, Desktop only, plus
-  the Mobile sample of the presentation video dialog.
+- The `Planeta / animação de abertura do cadeado` storyboard, Desktop only.
+- Re-review on 2026-11-17 (Penpot revn 624): the five Desktop map, return-button
+  and storyboard boards changed after revn 622 and were reviewed again.
+- **Not recorded as passing:** the six Desktop video dialog boards (presentation
+  default, `falha ao carregar`, `sem som`, `movimento reduzido`; closing default
+  and `falha ao carregar`) and `Diálogo de vídeo de apresentação / Mobile`. They
+  changed after revn 622, and the re-review found a contradiction with
+  `documentation/design.md`: the 40 px footer and retry buttons must be 44 px.
+  They need `/design` before the Spec of the video issue (RP-10 dialog, RP-11,
+  JN-09). The galaxy-trail Spec does not depend on them.
 
 ## Resolved findings
 
@@ -154,8 +139,9 @@ JN-01, JN-07, JN-08 and JN-09, in the Penpot section "Galáxia · Trilha".
   the same accessible name.
 - Meaning of the "X" in the closing video dialog → open PRD question left for the
   Spec (back to the map or to the thank-you page); not changed in the PRD.
-- Desktop video dialog controls at 32 px and footer buttons at 40 px (weak) →
-  kept; they predate this review and the dialogs are approved references.
+- Desktop video dialog controls at 32 px and footer buttons at 40 px → superseded
+  on 2026-11-17: the 40 px buttons contradict `design.md` and the dialogs are no
+  longer recorded as passing (see Scope).
 - Failure-state buttons are all secondary (weak) → kept; the Spec decides the
   primary recovery action.
 - No buffering or video-ended state (RP-10, missing, non-blocking) → kept as
@@ -187,3 +173,32 @@ JN-01, JN-07, JN-08 and JN-09, in the Penpot section "Galáxia · Trilha".
   stays unresolved.
 - The galaxy control chip overlaps star 3 in `FAB de retorno / Desktop` (debt) →
   kept; inherited from `Espaço / Galáxia / Desktop`.
+- Re-review 2026-11-17, map boards: no completed-trail board (RP-06, JN-07) and
+  no Desktop details panel for a completed star ("Revisar", RP-04, RP-09) → kept
+  as deliberately without a board, as decided above; the Spec defines both.
+- Re-review 2026-11-17: `Controle de galáxia` (x 136–477) overlaps the trail
+  column (x 471) and covers a star number on `Espaço / Galáxia / Desktop` and
+  `FAB de retorno / Desktop` (weak) → kept; the Spec requires that the control
+  never covers the trail in code.
+- Re-review 2026-11-17: no dotted segment between the last Aurora star and the
+  Trívia header on the four Desktop map boards (weak) → kept; the Spec requires
+  a continuous trail between planets.
+- Re-review 2026-11-17, other weak findings → kept: the ~113 px gap between the
+  star plates and the hover panel (the Spec keeps the panel open while the
+  pointer moves to it); the released "Abrir planeta" button versus the inline
+  "Aberto · Rever vídeo" text (the Spec makes planet and plate one target and
+  leaves "Rever vídeo" to the video issue); no focus frame (the `design.md`
+  focus extension has no Penpot frame yet); `planeta aberto / Desktop` shows the
+  hover panel where focus should be on the planet (the Spec defines focus);
+  the planet art is a placeholder in every state and frame 4 of the storyboard
+  differs from the map (provisional art); a possible faint glow on locked stars
+  (the Spec keeps locked stars neutral).
+- Re-review 2026-11-17, debt → kept: the `check:design` warnings on
+  `FAB de retorno / Desktop` and `planeta aberto / Desktop` are the baseline
+  layers of `Espaço / Galáxia / Desktop` copied into newer boards (6 px gaps,
+  unbound colors, 22 px panel title); copied layer names under
+  `Estrela p2s1 · bloqueada` and `Estrela p2s2 · bloqueada` on
+  `planeta liberado / Desktop`.
+- Video dialog player controls at 32 × 32 px (pause/play, sound) → accepted as a
+  compact-control exception when the dialogs are fixed; on Mobile they keep a
+  44 px tap area. The 40 px text buttons have no exception.
