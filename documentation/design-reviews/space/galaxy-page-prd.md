@@ -110,7 +110,7 @@ JN-01, JN-07, JN-08 and JN-09, in the Penpot section "Galáxia · Trilha".
 - The presentation video dialog had no Mobile board to prove it fits the width
   (RP-10) → drew `Diálogo de vídeo de apresentação / Mobile` (358 px wide, 44 px
   controls, skip button full width) and added it as the single dialog exception
-  to `documentation/design.md` and `documentation/rules/penpot-rules.md`.
+  to `documentation/design.md` and `documentation/rules/doop-rules.md`.
 - The return button (RP-03) was not drawn → drew `FAB de retorno / Desktop` and
   `/ Mobile`, modeled on the Web App `Fab` (48 × 48, `color.surface`,
   `radius.default`, 2 px `color.action` bottom border, bold arrow).
@@ -138,7 +138,7 @@ JN-01, JN-07, JN-08 and JN-09, in the Penpot section "Galáxia · Trilha".
   corners and drops the side and bottom stroke when docked; the panel is a plain
   board (three occurrences with the two Desktop hover panels, which keep their
   legacy names) and the component extraction waits for a task that changes them.
-- Dialogs → no Mobile boards, per `documentation/rules/penpot-rules.md`, except
+- Dialogs → no Mobile boards, per `documentation/rules/doop-rules.md`, except
   the presentation video dialog sample. Its other states and the closing video
   dialog follow that sample on Mobile.
 - Map with the trail completed (RP-06, JN-07) → deliberately without a board in

@@ -11,7 +11,7 @@
 }
 
 :root[data-theme="stardust-dark"] {
-  /* Semantic/Dark (Doop `StarDust`) */
+  /* Semantic/Dark (Doop `StarDust`): `--color-<papel>` do Doop vira `--theme-<papel>`. Ver documentation/design.md, seção 10. */
   --theme-background: #141a1b;
   --theme-canvas: #0b0e0f;
   --theme-surface: #1e2626;
@@ -32,7 +32,7 @@
   --theme-danger-surface: #431515;
   --theme-reward-surface: #443102;
 
-  /* Geometry (Doop `StarDust`) */
+  /* Geometry (Doop `StarDust`): `--radius-*` e `--spacing-control-*` do Doop viram `--theme-radius-*` e `--theme-control-*`. Ver documentation/design.md, seção 10. */
   --theme-radius-default: 8px;
   --theme-radius-full: 9999px;
   --theme-control-height: 44px;

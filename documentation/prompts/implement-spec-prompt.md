@@ -67,8 +67,8 @@ disappears, without asking for authority again.
 
 Read `AGENTS.md`, `documentation/sdd.md`, the current Spec, `plan.md` and `evaluation.md`,
 Architecture, Modules, the Rules selected by the affected paths,
-`documentation/tooling.md` and the Design Contract with the pages, boards and components of the
-Penpot `stardust` file through the Penpot MCP. Reuse complete sources still current in this
+`documentation/tooling.md` and the Design Contract with the pages, frames and components of the
+Doop `StarDust` canvas through the Doop MCP. Reuse complete sources still current in this
 context. Inspect `git status` and the diffs and preserve unrelated work. Use
 CodeGraph for each new code exploration, per `AGENTS.md`.
 
@@ -190,19 +190,19 @@ Evaluation. Generate routes and other artifacts with the repository's commands.
 
 ## Implementation with design
 
-Read the Spec's Design Contract and inspect the named boards and components of the Penpot
-`stardust` file through the **Penpot MCP** (the Builder and the Visual Reviewer use the MCP directly),
+Read the Spec's Design Contract and inspect the named frames and components of the Doop
+`StarDust` canvas through the **Doop MCP** (the Builder and the Visual Reviewer use the MCP directly),
 exporting them when you need a rendered reference.
 Map the variables bound to the repository tokens; do not copy values without a
 variable, do not invent missing details and use existing primitives and semantic tokens,
 accessible pt-BR copy and the selected UI/routing Rules. Preserve the
 canonical design: any unapproved simplification, substitution, addition or divergence
 is a blocking finding. Do not save exports in the feature folder nor edit the
-Penpot file, unless the Spec includes it in scope.
+Doop canvas, unless the Spec includes it in scope.
 
 The Spec defines the happy-path rendered states and the required viewports. Cover
 loading, empty, error, recovery, concurrency and unusual outcomes with automated
-tests; do not turn each board into another manual scenario. The required visual evidence
+tests; do not turn each frame into another manual scenario. The required visual evidence
 comes from the integrated candidate, after the last affected UI edit, with
 route/state/viewport/fixture and artifact path. An earlier capture of unchanged UI
 may remain valid when its dependencies and the rendered state have not changed;
@@ -212,14 +212,14 @@ explain the retained evidence in the Evaluation.
 
 Before running or delegating the verification, enumerate in the Evaluation each Manual
 and Visual obligation of the Contract, with one row per journey or per required rendered
-state/viewport: `MV`/`VV`/`CA` IDs, surface/route, state, viewport, Penpot board, candidate,
+state/viewport: `MV`/`VV`/`CA` IDs, surface/route, state, viewport, Doop frame, candidate,
 artifact path, observed result and review disposition. Keep the inventory in the
 Evaluation, without creating another planning artifact nor scenarios beyond the Contract.
 
 Page, dialog, mobile states and other surfaces are distinct obligations when
 required: the evidence of one surface does not establish the result of another, even if
 they share components. A capture remains `pending` until it is inspected against a
-current export of the specific board. Record concrete observations about the required visual
+current export of the specific frame. Record concrete observations about the required visual
 properties and any approved deviation; the mere existence of the image is not proof.
 Manual behavior and visual appearance have separate results: a journey that
 works does not prove design match, and a matching image does not prove real

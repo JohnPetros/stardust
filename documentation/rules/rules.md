@@ -181,7 +181,7 @@ papéis, artefatos, sensores e critérios de conclusão.
 - Ao explorar simbolos e caminhos de chamada com CodeGraph.
 - Ao consultar documentacao atualizada com Context7.
 - Ao interagir com Supabase Dev/Prod.
-- Ao inspecionar ou editar o arquivo Penpot `stardust` via Penpot MCP.
+- Ao inspecionar ou editar o canvas Doop `StarDust` via Doop MCP.
 
 ## Regras da Aplicação Web
 
@@ -310,12 +310,12 @@ papéis, artefatos, sensores e critérios de conclusão.
 - Para seguir os padrões de asserção e validação de regras de negócio no
   domínio.
 
-## Regras do Arquivo de Design (Penpot)
+## Regras do Canvas de Design (Doop)
 
-**Arquivo:** `/documentation/rules/penpot-rules.md`
+**Arquivo:** `/documentation/rules/doop-rules.md`
 **Quando consultar:**
 
-- Ao criar ou editar frames, componentes ou tokens no arquivo Penpot `stardust`.
+- Ao criar ou editar frames, componentes ou tokens no canvas Doop `StarDust`.
 - Para decidir qual página (Desktop, Mobile, Components ou Design System) é dona de um frame.
 - Para nomear telas, diálogos, componentes e propriedades de variantes.
 - Ao extrair um elemento repetido para um componente ou atualizar a página Design System.

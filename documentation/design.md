@@ -36,8 +36,8 @@ Sources:
 - Product architecture: `documentation/architecture.md` and
   `documentation/modules.md`
 - UI structure: `documentation/rules/ui-layer-rules.md`
-- Canonical design file: the Penpot file `stardust`, inspected through the Penpot MCP
-  (https://design.penpot.app/?screen=workspace&team-id=c6f51e89-5d00-81ce-8008-e191a517401c&file-id=c6f51e89-5d00-81ce-8008-e191fe8d104b)
+- Canonical design file: the Doop canvas `StarDust`, inspected through the Doop MCP
+  (https://doop.design/c/iTvx3bvEsu)
 - Legacy design file: `design/stardust.fig` (Open Pencil), frozen and kept only as history
 - Historical Pencil references: `design/stardust.pen`
 
@@ -136,38 +136,38 @@ Use semantic tokens rather than choosing colors directly from a primitive scale.
 
 ### Approved references
 
-The Penpot file `stardust` is the canonical design file. Its approved references
-are named boards and components, identified by page and name; the name is the
-contract because IDs change if a board is recreated. `design/stardust.fig` is the
+The Doop canvas `StarDust` is the canonical design file. Its approved references
+are named frames and components, identified by page and name; the name is the
+contract because IDs change if a frame is recreated. `design/stardust.fig` is the
 frozen Open Pencil source of this migration and is no longer edited.
 
-| Penpot `stardust` reference | Page | Role |
+| Doop canvas `StarDust` reference | Page | Role |
 | --- | --- | --- |
-| Section `Autenticação · Sign-in` | 🖥️ Desktop | `Autenticação / Desktop / Sign-in` and `Sign-in · Erro de validação` |
-| Section `Autenticação · Sign-up` | 🖥️ Desktop | `Autenticação / Desktop / Sign-up`, `Sign-up · Nome em uso` and `Sign-up · Confirme seu e-mail` |
-| Section `Autenticação · Reset password` | 🖥️ Desktop | `Autenticação / Desktop / Reset password`, `Reset password · E-mail inválido` and `Reset password · Pronto para redefinir`, plus the standalone dialogs `Reset password · Diálogo Nova senha`, `Reset password · Diálogo Senhas diferentes` and `Reset password · Diálogo Senha redefinida` |
-| Section `Autenticação · Account confirmation` | 🖥️ Desktop | `Autenticação / Desktop / Account confirmation · Criando perfil` and `Account confirmation · Perfil criado` |
-| Section `Autenticação · Social account confirmation` | 🖥️ Desktop | `Autenticação / Desktop / Social account confirmation · Conectando conta`, `Social account confirmation · Criando perfil` and `Social account confirmation · Perfil criado` |
-| Sections `Autenticação · Sign-in`, `Sign-up`, `Reset password` and `Account confirmation` | 📱 Mobile | `Autenticação / Mobile / Sign-in`, `Sign-up`, `Reset password`, `Reset password · Pronto para redefinir`, `Account confirmation · Criando perfil` and `Account confirmation · Perfil criado` at 390 × 844 |
-| `Autenticação / Título`, `Campo de texto`, `Botão social`, `Divisor de opções` and `Link de texto` | 🧩 Components | Auth component sets using the refined tokens, 8 px radius and 44 px controls |
-| `Botão` (Primário) and `Campo de texto` (Padrão, Ativo, Erro) | 🧩 Components | Shared `Button` and `Input`; the other `Botão` variants (Contorno, Perigo, Desabilitado) are not implementation targets yet |
-| `Notificação / Toast` (Erro, Sucesso) | 🧩 Components | Shared Web Toast, 360 px wide, with a 4 px timed progress bar |
-| `Diálogos / Diálogo` and `Diálogos / Diálogo de alerta` | 🧩 Components | Shared Web `Dialog` header and surface and the `AlertDialog`, 512 px wide |
+| Backdrop frame `Autenticação · Sign-in` | Desktop | `Autenticação / Desktop / Sign-in` and `Sign-in · Erro de validação` |
+| Backdrop frame `Autenticação · Sign-up` | Desktop | `Autenticação / Desktop / Sign-up`, `Sign-up · Nome em uso` and `Sign-up · Confirme seu e-mail` |
+| Backdrop frame `Autenticação · Reset password` | Desktop | `Autenticação / Desktop / Reset password`, `Reset password · E-mail inválido` and `Reset password · Pronto para redefinir`, plus the standalone dialogs `Reset password · Diálogo Nova senha`, `Reset password · Diálogo Senhas diferentes` and `Reset password · Diálogo Senha redefinida` |
+| Backdrop frame `Autenticação · Account confirmation` | Desktop | `Autenticação / Desktop / Account confirmation · Criando perfil` and `Account confirmation · Perfil criado` |
+| Backdrop frame `Autenticação · Social account confirmation` | Desktop | `Autenticação / Desktop / Social account confirmation · Conectando conta`, `Social account confirmation · Criando perfil` and `Social account confirmation · Perfil criado` |
+| Backdrop frames `Autenticação · Sign-in (mobile)`, `Sign-up (mobile)`, `Reset password (mobile)` and `Account confirmation (mobile)` | Mobile | `Autenticação / Mobile / Sign-in`, `Sign-up`, `Reset password`, `Reset password · Pronto para redefinir`, `Account confirmation · Criando perfil` and `Account confirmation · Perfil criado` at 390 × 844 |
+| `AuthTitle`, `PageTitle`, `TextField`, `SocialButton`, `OptionDivider` and `TextLink` | Components | Auth components using the refined tokens, 8 px radius and 44 px controls |
+| `Button` (default tone) and `FormField` (`default`, `error`) | Components | Shared `Button` and `Input`; the other `Button` tones (`outline`, `danger`) are not implementation targets yet |
+| `Toast` (`danger`, `success`) | Components | Shared Web Toast, 360 px wide, with a 4 px timed progress bar |
+| `Dialog` and `AlertDialog` | Components | Shared Web `Dialog` header and surface and the `AlertDialog`, 512 px wide |
 
 The auth references use the `stardust-dark` variant. Desktop frames are
 1440 × 900 and mobile frames are 390 × 844. Mobile frames are not drawn for auth
 error states, dialogs, or social account confirmation; those states follow the
 same components and layout rules. The one dialog exception is
-`Espaço / Galáxia / Diálogo de vídeo de apresentação / Mobile` (📱 Mobile, 358 px
+`Espaço / Galáxia / Diálogo de vídeo de apresentação / Mobile` (Mobile, 358 px
 wide), drawn to show that the planet video dialog fits the mobile width (RP-10 of
 `documentation/prds/space/galaxy-page-prd.md`); the other states of that dialog
-and the closing-video dialog follow it on mobile. `Notificação / Toast`, `Diálogos / Diálogo` and
-`Diálogos / Diálogo de alerta` were added to the file together with the Web
+and the closing-video dialog follow it on mobile. `Toast`, `Dialog` and
+`AlertDialog` were added to the canvas together with the Web
 alignment of the shared components (Issue #620).
 
 The following Pencil nodes in `design/stardust.pen` are historical references
 from the original token exploration. They remain valid as palette context until
-they are verified and migrated to the Penpot file `stardust`.
+they are verified and migrated to the Doop canvas `StarDust`.
 
 | Pencil node | Role |
 | --- | --- |
@@ -176,7 +176,7 @@ they are verified and migrated to the Penpot file `stardust`.
 | `YGjln` | Refined light alternative |
 | `vbxf1` | Profile using refined tokens |
 | `P7adY` | Sign-in using refined tokens; superseded by `Autenticação / Desktop / Sign-in` |
-| `ifIsM` | Dark/light token board |
+| `ifIsM` | Dark/light token frame |
 | `iJGU3` | Full-screen Poppins / Funnel Sans comparison; font decision pending |
 | `UEcrD` | Four theme families, each with dark/light editor previews; beside `ifIsM` |
 
@@ -215,14 +215,14 @@ icons so that color is not the only signal.
 Information-blue treatments have not been redefined in the refined palette.
 Existing app treatments remain implementation references until that role and its
 interaction states are explicitly designed and validated. Keyboard focus has no
-Penpot frame; the Web App uses the approved extension described under
+Doop frame; the Web App uses the approved extension described under
 "Keyboard focus (approved extension)" in section 10. Backoffice's existing
 shadcn semantic variables remain its local implementation contract until a
 deliberate migration is made.
 
 ### Supporting color scales — provisional
 
-The token board includes complete 50–950 proposals under
+The token frame includes complete 50–950 proposals under
 `$refined-scale-<family>-<step>`. Intermediate tones are not approved component
 assignments. The green proposal, in particular, still needs a lightness-order
 review before being treated as a graduated scale. Approved semantic values above
@@ -1001,8 +1001,8 @@ user settings.
 
 #### Web App token mapping (`stardust-dark`)
 
-The Web App implements only the `stardust-dark` variant. The Penpot token sets
-`Semantic/Dark` (all 18 colors; see the Web-only role below) and `Geometry` (radius, control height, padding,
+The Web App implements only the `stardust-dark` variant. The Doop color tokens
+(`--color-<role>`, all 18 semantic roles; see the Web-only role below) and the geometry tokens (radius, control height, padding,
 icon gap, border) are CSS variables declared in
 `apps/web/src/ui/global/styles/global.css` under
 `:root[data-theme="stardust-dark"]`. The Root layout sets
@@ -1010,26 +1010,26 @@ icon gap, border) are CSS variables declared in
 `apps/web/tailwind.config.js` exposes them in the `theme-*` namespace, which avoids
 collisions with the legacy `gray`, `green` and `border` utilities.
 
-| Penpot token | CSS variable | Tailwind utility |
+| Doop token | CSS variable | Tailwind utility |
 | --- | --- | --- |
-| `color.<role>` (`canvas`, `background`, `surface`, `border`, `border-quiet`, `text-primary`, `text-secondary`, `action`, `accent-text`, `success`, `reward`, `danger`, `tag-background`, `tag-foreground`, `selection`, `selection-surface`, `success-surface`, `danger-surface`) | `--theme-<role>` | `bg-theme-<role>`, `text-theme-<role>`, `border-theme-<role>`, `outline-theme-<role>`, `ring-theme-<role>` |
-| `radius.default` | `--theme-radius-default` | `rounded-theme` |
-| `radius.full` | `--theme-radius-full` | `rounded-theme-full` |
-| `control.height` | `--theme-control-height` | `h-theme-control` |
-| `control.padding-x` | `--theme-control-padding-x` | `px-theme-control-x` |
-| `control.icon-gap` | `--theme-control-icon-gap` | `gap-theme-control-gap` |
-| `control.border` | `--theme-control-border` | `border-theme-control` |
+| `--color-<role>` (`canvas`, `background`, `surface`, `border`, `border-quiet`, `text-primary`, `text-secondary`, `action`, `accent-text`, `success`, `reward`, `danger`, `tag-background`, `tag-foreground`, `selection`, `selection-surface`, `success-surface`, `danger-surface`) | `--theme-<role>` | `bg-theme-<role>`, `text-theme-<role>`, `border-theme-<role>`, `outline-theme-<role>`, `ring-theme-<role>` |
+| `--radius-default` | `--theme-radius-default` | `rounded-theme` |
+| `--radius-full` | `--theme-radius-full` | `rounded-theme-full` |
+| `--spacing-control-height` | `--theme-control-height` | `h-theme-control` |
+| `--spacing-control-padding-x` | `--theme-control-padding-x` | `px-theme-control-x` |
+| `--spacing-control-icon-gap` | `--theme-control-icon-gap` | `gap-theme-control-gap` |
+| `--spacing-control-border` | `--theme-control-border` | `border-theme-control` |
 
-The Web App also declares one Web-only role that has no counterpart in `Semantic/Dark`:
+The Web App also declares one Web-only role that has no counterpart among the semantic color tokens:
 `reward-surface` (`--theme-reward-surface`, `bg-theme-reward-surface`, `#443102`). In
-Penpot the unconfirmed-email notice binds its fill directly to the primitive
-`color.yellow.900` (`#443102`); the Web App exposes that value as a semantic role,
+Doop the unconfirmed-email notice (`ConfirmNotice`) binds its fill directly to the primitive
+`--color-yellow-900` (`#443102`); the Web App exposes that value as a semantic role,
 following the `*-surface` pattern, so components never use a primitive scale or a hex
 literal. It is consumed only by the unconfirmed-email notice on the sign-in page. The
-legacy Tailwind `yellow` palette is unchanged. If Penpot gains an equivalent
-`Semantic/Dark` token, this role should adopt its name.
+legacy Tailwind `yellow` palette is unchanged. If Doop gains an equivalent
+semantic color token, this role should adopt its name.
 
-Spacing `space.*`, Primitives, Story and Achievement tokens are not duplicated;
+Spacing (`--spacing-*`), primitive, Story and Achievement tokens are not duplicated;
 Tailwind's own spacing scale is used instead. Light mode and the Orbit, Sakura and
 Glacial families have no variables yet.
 
@@ -1042,7 +1042,7 @@ configuration (see `ButtonView.tsx` and `DialogAnimationView.tsx`).
 
 #### Keyboard focus (approved extension)
 
-No Penpot frame defines keyboard focus. The Web App applies this approved
+No Doop frame defines keyboard focus. The Web App applies this approved
 extension to the shared controls and the authentication controls, without a frame:
 
 - Buttons, links, social buttons, the password toggle and the close controls of
@@ -1092,7 +1092,7 @@ implementation still requires a deliberate migration.
 - Only the named references in section 3 carry the approved palette and
   geometry; other frames remain exploratory or historical. The historical
   `design/stardust.pen` nodes other than the sign-in reference have not yet been
-  verified in or migrated to the Penpot file `stardust`.
+  verified in or migrated to the Doop canvas `StarDust`.
 - Poppins versus Funnel Sans is still an open UI-family decision.
 - Paired editor palettes are defined in section 3, but require visual approval,
   runtime interaction validation, and mappings verified against the Delegua
@@ -1101,7 +1101,7 @@ implementation still requires a deliberate migration.
 - Supporting 50–950 scales are provisional, and their tone ordering needs review.
 - Hover, pressed, disabled, and loading treatments for the refined tokens still
   need specification and validation. Keyboard focus is implemented as the approved
-  extension in section 10, but it has no Penpot frame and still needs one.
+  extension in section 10, but it has no Doop frame and still needs one.
 - The `stardust-dark` palette and the standard geometry are migrated into the Web
   App as `theme-*` tokens and are consumed by the shared `Button`, `Input`,
   `ErrorMessage`, `Dialog`, `AlertDialog` and Toast. The light palettes, the Orbit,

@@ -41,7 +41,7 @@ before opening the Spec.
 
 Read all the sources of the request, `documentation/architecture.md`, applicable Rules,
 `documentation/sdd.md`, `documentation/tooling.md` (to write verification commands in the forms it
-defines and that exist in the manifests), and the real paths of the codebase. Use CodeGraph, Context7, Penpot, Playwright, or Supabase when
+defines and that exist in the manifests), and the real paths of the codebase. Use CodeGraph, Context7, Doop, Playwright, or Supabase when
 applicable.
 
 Resolve material ambiguities before writing or modifying `spec.md`. The clarification
@@ -107,7 +107,7 @@ the solution, consolidate:
 
 In multi-app flows, declare who exposes, who consumes, the transport, and the format
 of the contract. Use codebase tools for local evidence, official
-documentation for external APIs, Penpot for design, Playwright for browser
+documentation for external APIs, Doop for design, Playwright for browser
 behavior, and Supabase for schema/data when applicable. The project's Architecture and
 Rules prevail over generic recommendations from external tools.
 
@@ -120,14 +120,14 @@ resolve conflicts by direct inspection, and verify consequential claims before c
 The main task owns the Spec; Spec Searcher reports do not replace the required authority reading or
 become Contract artifacts.
 
-## Design and Penpot references
+## Design and Doop references
 
 When the scope involves frontend or UI, create the `## Design Contract` subsection inside
 `Implementation Contract` (omit it when there is no UI) and declare:
 
-- the canonical visual source, the Penpot file `stardust`;
-- the page and the name of each relevant board or component. Do not use IDs as a
-  reference: the name is the contract and the ID changes if the board is recreated in Penpot;
+- the canonical visual source, the Doop canvas `StarDust`;
+- the page and the name of each relevant frame or component. Do not use IDs as a
+  reference: the name is the contract and the ID changes if the frame is recreated in Doop;
 - the state, variant, and viewport represented, such as loading, error, empty,
   content, open/closed, desktop, or mobile;
 - the mapping between each visual reference and the respective `RF-*`/`CA-*`;
@@ -137,9 +137,9 @@ When the scope involves frontend or UI, create the `## Design Contract` subsecti
 Use this table as the core of the subsection, one row per required surface/state/viewport:
 
 ```md
-| Surface / route | State / viewport | Penpot page / board / components | CA / VV | Allowed deviations |
-| --- | --- | --- | --- | --- |
-| <affected surface> | <exact state and viewport> | <real names> | CA-01 / VV-01 | <accepted differences or none> |
+| Surface / route    | State / viewport           | Doop page / frame / components | CA / VV       | Allowed deviations             |
+| ------------------ | -------------------------- | ------------------------------ | ------------- | ------------------------------ |
+| <affected surface> | <exact state and viewport> | <real names>                   | CA-01 / VV-01 | <accepted differences or none> |
 ```
 
 Map the affected widgets to existing semantic tokens and variants of shared
@@ -161,19 +161,19 @@ contradicted, or unapproved added frame is blocking. Do not accept generic
 CSS as an approximation, and do not invent a file, frame, or visual detail when
 there is no canonical source; record the absence explicitly.
 
-Inspect the references with the Penpot MCP; do not deduce visual details only from
+Inspect the references with the Doop MCP; do not deduce visual details only from
 screenshots or descriptions. Do not extract the design into other artifacts: do not create
 `design/handoff.md`, do not export images to `design/`, and do not copy tokens, measurements, or recipes
-into the Spec. Builders and Reviewers inspect the same frames directly through the Penpot MCP.
+into the Spec. Builders and Reviewers inspect the same frames directly through the Doop MCP.
 The Spec records only the relevant frames, states, variants, and viewports, their links with
 `RF-*`/`CA-*`/`VV-*`, and the approved divergences. If the solution requires a change to the design,
-include the Penpot `stardust` in the scope and specify the affected boards. If there is no canonical
+include the Doop canvas `StarDust` in the scope and specify the affected frames. If there is no canonical
 visual source, record that explicitly and do not invent a file or frame.
 A material divergence must be resolved before the Spec reaches `open`.
 
 Frontend validation must require both the comparison with the frames in
-Penpot and the exercise of the real flow in Playwright, covering the specified states and
-viewports. Penpot validates the visual reference; Playwright validates
+Doop and the exercise of the real flow in Playwright, covering the specified states and
+viewports. Doop validates the visual reference; Playwright validates
 runtime behavior. Neither of them replaces the automated tests.
 
 When runtime visual validation is mandatory, write that
@@ -182,7 +182,7 @@ interactions, route, and the required evidence (for example, a screenshot of the
 open, loading, error, empty, content, and closed, or an equivalent visual comparison). For each frame, also declare the reference dimension,
 the state, the variant, and the expected comparison with the Web.
 Do not use only ambiguous expressions such as “verify visually”. Always distinguish
-the evidence of the reference in Penpot from the evidence of the real browser: the former
+the evidence of the reference in Doop from the evidence of the real browser: the former
 confirms alignment with the canonical design; the latter confirms rendering,
 responsiveness, and observable behavior at runtime.
 
@@ -413,7 +413,7 @@ use-case/controller/widget/job proof may support the same result). Explain why a
 | --- | --- | --- |
 | `## Automated` | `AV-*` | automated tests and gates: unit/component, integration, static, and baseline |
 | `## Manual` | `MV-*` | concise happy-path journey, executable by the agent, in a real browser or terminal |
-| `## Visual` | `VV-*` | comparison of a Penpot board with the corresponding Playwright capture |
+| `## Visual` | `VV-*` | comparison of a Doop frame with the corresponding Playwright capture |
 
 The `AV`, `MV`, and `VV` IDs are unique across the three categories and among themselves. Real results
 belong to the Evaluation (`EV-*`); the PR's CI is not recorded in the Evaluation. Keep existing IDs and
@@ -454,8 +454,8 @@ new proof where the historical result is not enough. Block in the format below:
 ### VV-01 — <surface, state, and viewport>
 
 **Criteria:** CA-01
-**Reference / setup:** <page, board, and components of the Penpot `stardust`; exact viewport; related MV>
-**Capture / comparison:** <current Penpot MCP export compared with the corresponding Playwright capture; reuse the capture from a current MV when possible>
+**Reference / setup:** <page, frame, and components of the Doop canvas `StarDust`; exact viewport; related MV>
+**Capture / comparison:** <current Doop frame screenshot compared with the corresponding Playwright capture; reuse the capture from a current MV when possible>
 **Approval condition:** <visual properties compared and accepted deviations>
 ```
 
@@ -499,7 +499,7 @@ Content rules:
 - Manual are concise happy paths; automated tests hold the systematic negative,
   failure/recovery, and concurrency matrices. Mocks do not prove required real
   authentication and persistence journeys. Follow `AGENTS.md` (manual Frontend verification).
-- Visual names the page, board, and related components, state, viewport, compared
+- Visual names the page, frame, and related components, state, viewport, compared
   properties, and accepted deviations. Capture during the linked MV when possible and inspect the
   images: saving a screenshot is not a visual approval. Keep runtime evidence in the ignored
   `test-results/` or CI artifacts; record paths and results in the Evaluation, without
@@ -532,14 +532,14 @@ covered by at least one `AV-*`, `MV-*`, or `VV-*` verification (unique IDs, each
 correct category and with **Criteria** and **Approval condition**); each `CA-*` has an
 observable result, verification method,
 viewport/state when applicable, and responsible path or layer; each visual
-requirement has separate evidence for Penpot and Playwright when both are
+requirement has separate evidence for Doop and Playwright when both are
 necessary; each UI change declares the Entry Point/View/Hook structure; and all
 applicable sensors are named. If a requirement appears only in the
 Evaluation, move it to the Contract before the review.
 
 For UI, the Contract must contain a visual reference matrix and a structural
 audit matrix. The first relates frame, viewport, state, route,
-Penpot/Web evidence, relevant dimensions/anchors, and approved divergences. The
+Doop/Web evidence, relevant dimensions/anchors, and approved divergences. The
 second relates each changed widget to
 `index.tsx`, `*View.tsx`, Hook, and applicable rule. The absence of either
 of these matrices prevents the `open` state when frontend is in scope.
@@ -548,11 +548,10 @@ When the Spec has a Design Contract, check the design review record before the S
 Reviewer; do not review the design yourself. Open
 `documentation/design-reviews/<module>/<prd-slug>.md` and confirm that its `verdict` is
 `pass`, that its `prd_last_updated_at` equals the PRD's current `last_updated_at`, and that
-every board in the Design Contract is listed with the digest that
-`pnpm run check:design --digest --board "<board>"` returns now. If the record is missing or
+every frame in the Design Contract is listed with the `updated_at` that `get_frame` returns
+now for that frame. If the record is missing or
 any of these differs, the review is stale: keep the Spec in `draft` and tell the user which
-boards need review before continuing: `/review-design` when the boards are complete, or
-`/design` when they must change. Reference the record in the
+frames need `/design` before continuing. Reference the record in the
 Design Contract.
 
 After the integrity check, and before `implement-spec`, activate exactly one read-only

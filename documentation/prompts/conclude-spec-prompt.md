@@ -95,7 +95,7 @@ git log -10 --format='%h %s'
 Classify the exact delivery paths, the required factual documentation, the operational
 ledger changes and the unrelated work. Include the required factual documentation in the
 ordinary commits; explicitly preserve and exclude the unrelated work. Read the
-Penpot file only through the Penpot MCP.
+Doop canvas only through the Doop MCP.
 
 For each selected criterion, confirm that the current implementation satisfies the Spec and its
 concrete sensor. Passing tests alone do not establish full coverage of the
@@ -143,7 +143,7 @@ concrete fix that requires them. Code review and visual review run in parallel o
 candidate. Also confirm the `ui-layer-rules.md` audit recorded in the Evaluation.
 
 For design-backed UI, confirm that the recorded visual comparisons used current
-Penpot MCP exports of the Design Contract's pages, boards and components, and that the matrix
+Doop MCP exports of the Design Contract's pages, frames and components, and that the matrix
 proves design-to-code fidelity at the current HEAD. A missing frame, a contradicted one, one added
 without approval, or a divergence without a traceable decision keeps the Spec `in_progress` and requires
 a fix or amendment. Reuse accepted and current comparisons; closure, by itself,

@@ -52,8 +52,9 @@ module.exports = {
         purple: {
           700: '#514869',
         },
-        // Tokens `--color-*` do Doop, definidos em global.css sob
-        // `:root[data-theme='stardust-dark']`.
+        // Cores semânticas do Doop (`--color-<papel>`), expostas como
+        // `--theme-<papel>` em global.css sob `:root[data-theme='stardust-dark']`.
+        // A tabela de correspondência está em documentation/design.md, seção 10.
         theme: {
           background: 'var(--theme-background)',
           canvas: 'var(--theme-canvas)',
@@ -76,7 +77,9 @@ module.exports = {
           'reward-surface': 'var(--theme-reward-surface)',
         },
       },
-      // Geometria (tokens `--radius-*` e `--spacing-control-*` do Doop): raio, altura, padding, gap e borda de controle.
+      // Geometria do Doop (`--radius-*` e `--spacing-control-*`), exposta como
+      // `--theme-radius-*` e `--theme-control-*` em global.css: raio, altura, padding,
+      // gap e borda de controle. Correspondência em documentation/design.md, seção 10.
       borderRadius: {
         theme: 'var(--theme-radius-default)',
         'theme-full': 'var(--theme-radius-full)',
