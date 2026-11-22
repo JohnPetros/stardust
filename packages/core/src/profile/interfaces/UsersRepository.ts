@@ -21,8 +21,6 @@ export interface UsersRepository {
   findByGithubAccountId(githubAccountId: Id): Promise<User | null>
   findByTierOrderedByXp(tierId: Id): Promise<User[]>
   findMany(params: UsersListingParams): Promise<ManyItems<User>>
-  findUnlockedStars(userId: Id): Promise<IdsList>
-  findRecentlyUnlockedStars(userId: Id): Promise<IdsList>
   containsWithEmail(email: Email): Promise<Logical>
   containsWithName(name: Name): Promise<Logical>
   findAll(): Promise<User[]>
@@ -31,9 +29,8 @@ export interface UsersRepository {
   addAcquiredAvatar(avatarId: Id, userId: Id): Promise<void>
   addAcquiredRocket(rocketId: Id, userId: Id): Promise<void>
   addAcquiredInsignia(insigniaRole: InsigniaRole, userId: Id): Promise<void>
-  addUnlockedStar(starId: Id, userId: Id): Promise<void>
-  addRecentlyUnlockedStar(starId: Id, userId: Id): Promise<void>
-  removeRecentlyUnlockedStar(starId: Id, userId: Id): Promise<void>
+  addCompletedStar(starId: Id, userId: Id): Promise<void>
+  addOpenedPlanet(planetId: Id, userId: Id): Promise<void>
   addUpvotedComment(commentId: Id, userId: Id): Promise<void>
   removeUpvotedComment(commentId: Id, userId: Id): Promise<void>
   addUnlockedAchievement(achievementId: Id, userId: Id): Promise<void>
@@ -42,8 +39,8 @@ export interface UsersRepository {
   addCompletedChallenge(challengeId: Id, userId: Id): Promise<void>
   countCompletedChallengesByMonth(month: Month): Promise<Integer>
   countAllCompletedChallenges(): Promise<Integer>
-  countAllUnlockedStars(): Promise<Integer>
-  countUnlockedStarsByMonth(month: Month): Promise<Integer>
+  countAllCompletedStars(): Promise<Integer>
+  countCompletedStarsByMonth(month: Month): Promise<Integer>
   replace(user: User): Promise<void>
   replaceMany(users: User[]): Promise<void>
   countByMonth(month: Month): Promise<Integer>

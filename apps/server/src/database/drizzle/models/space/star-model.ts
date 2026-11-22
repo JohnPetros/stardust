@@ -24,6 +24,7 @@ export const starModel = pgTable(
     texts: jsonb('texts').$type<TextBlockDto[]>(),
     questions: jsonb('questions').$type<QuestionDto[]>(),
     slug: text('slug').notNull(),
+    description: text('description'),
     story: text('story').default(sql`''::text`),
     isAvailable: boolean('is_available').notNull().default(sql`true`),
   },

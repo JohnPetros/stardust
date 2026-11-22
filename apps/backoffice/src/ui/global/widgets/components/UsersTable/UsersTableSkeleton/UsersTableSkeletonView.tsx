@@ -16,7 +16,7 @@ export const UsersTableSkeletonView = () => {
           <TableHead>Nome</TableHead>
           <TableHead>Nível</TableHead>
           <TableHead>XP Semanal</TableHead>
-          <TableHead>Estrelas Desbloqueadas</TableHead>
+          <TableHead>Estrelas Concluídas</TableHead>
           <TableHead>Conquistas Desbloqueadas</TableHead>
           <TableHead>Desafios Completados</TableHead>
           <TableHead>Status do Espaço</TableHead>

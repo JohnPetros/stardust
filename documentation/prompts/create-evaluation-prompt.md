@@ -29,7 +29,7 @@ changes/<change-name>/evaluation.md
 The main task updates this document at each significant checkpoint (accepted
 Builder work, sensor execution, finding or decision, lesson discovered), instead of one
 update per file edit. Evidence is invalidated by the claim and affected
-dependencies, not by the age of the commit. Requirements belong to `spec.md`; implementation progress belongs to `plan.md`; evidence and
+dependencies, not by the age of the commit. Requirements belong to `spec.md`; implementation progress and Builder assignments (tasks) belong to `plan.md`; evidence and
 operational findings belong to this document.
 
 ## Template
@@ -194,7 +194,7 @@ second Contract.
 
 Failures of sensors, local builds or verifications must be recorded here immediately as
 `EV-*` and, when there is a problem to fix, as `ACH-*`. PR CI results are not
-recorded in the Evaluation. The Spec remains `in_progress`; scope corrections use `Builder Fix ACH-*`, with
+recorded in the Evaluation. The Spec remains `in_progress`; scope corrections use `Builder Fix ACH-*` (recorded as the affected task's `Builder` in `plan.md`), with
 a new sensor and a new Reviewer whenever the diff or any Contract,
 Rule, Doop or Playwright evidence is invalidated. Any change after the
 Reviewer invalidates the previously evaluated commit, including when it affects design-to-code

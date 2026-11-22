@@ -1,2 +1,6 @@
 export { GalaxyStatus } from './GalaxyStatus'
 export { GalaxyCatalog } from './GalaxyCatalog'
+export { GalaxyTrail } from './GalaxyTrail'
+export type { GalaxyTrailCurrentItem } from './GalaxyTrail'
+export { StarProgressState } from './StarProgressState'
+export { PlanetProgressState } from './PlanetProgressState'

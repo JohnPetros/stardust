@@ -1,6 +1,7 @@
 ---
 title: Rate limiter global da aplicação Server — implementation plan
 status: completed
+tasks: none
 spec: ./spec.md
 spec_revision: 1
 evaluation: ./evaluation.md

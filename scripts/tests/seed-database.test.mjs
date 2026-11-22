@@ -29,7 +29,7 @@ function runSeed(argumentsList, overrides = {}) {
 test('seed preflight validates the snapshot without connecting to a database', () => {
   const result = runSeed(['--check'])
   assert.equal(result.status, 0, result.stderr)
-  assert.match(result.stdout, /9 planets, 41 stars, 27 challenges/)
+  assert.match(result.stdout, /19 planets, 82 stars, 27 challenges/)
   assert.match(result.stdout, /No database changes/)
 })
 
@@ -72,4 +72,47 @@ test('seed help works without credentials and unknown arguments fail without con
   const invalid = runSeed(['--remote'])
   assert.equal(invalid.status, 1)
   assert.match(invalid.stderr, /Unknown seed argument/)
+})
+
+const STAGING_URL =
+  'postgresql://postgres.rveubqzvfbqbcpmuevnm:secret@aws-0-sa-east-1.pooler.supabase.com:5432/postgres'
+const stagingEnvironment = {
+  DATABASE_URL: STAGING_URL,
+  GOD_ACCOUNT_IDS: '',
+  SEED_EXPLORER_PASSWORD: 'explorer-staging-password',
+  SEED_ADMIN_PASSWORD: 'admin-staging-password',
+}
+
+test('staging seed preflight accepts only the staging project with account passwords', () => {
+  const accepted = runSeed(['--environment', 'staging', '--check'], stagingEnvironment)
+  assert.equal(accepted.status, 0, accepted.stderr)
+  assert.match(accepted.stdout, /No database changes/)
+
+  const refusals = [
+    { SEED_EXPLORER_PASSWORD: '', SEED_ADMIN_PASSWORD: '' },
+    {
+      DATABASE_URL:
+        'postgresql://postgres.aukqejqsiqsqowafpppb:secret@aws-0-sa-east-1.pooler.supabase.com:5432/postgres',
+    },
+    { DATABASE_URL: 'postgresql://postgres:secret@db.otherprojectref.supabase.co:5432/postgres' },
+    { DATABASE_URL: 'postgresql://postgres@127.0.0.1:54322/postgres' },
+    { MODE: 'production' },
+  ]
+  for (const override of refusals) {
+    const result = runSeed(['--environment', 'staging', '--check'], {
+      ...stagingEnvironment,
+      ...override,
+    })
+    assert.equal(result.status, 1, JSON.stringify(Object.keys(override)))
+    assert.doesNotMatch(result.stderr + result.stdout, /explorer-staging-password|secret@/)
+  }
+})
+
+test('local environment keeps the loopback guard and rejects an unknown environment', () => {
+  const remote = runSeed(['--environment', 'local', '--check'], { DATABASE_URL: STAGING_URL })
+  assert.equal(remote.status, 1)
+  assert.match(remote.stderr, /remote reset is forbidden/)
+  const unknown = runSeed(['--environment', 'production', '--check'])
+  assert.equal(unknown.status, 1)
+  assert.match(unknown.stderr, /Unknown seed environment/)
 })

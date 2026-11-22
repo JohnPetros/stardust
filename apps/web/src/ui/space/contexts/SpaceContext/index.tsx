@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useEffect, type ReactNode } from 'react'
+import { createContext, useEffect, useMemo, type ReactNode } from 'react'
 
 import type { CurrentGalaxyDto, PlanetDto } from '@stardust/core/space/entities/dtos'
 import { Planet } from '@stardust/core/space/entities'
@@ -23,10 +23,12 @@ export function SpaceProvider({
   currentGalaxy,
 }: SpaceContextProps) {
   const { user, refetchUser } = useAuthContext()
+  const planets = useMemo(() => planetsDto.map(Planet.create), [planetsDto])
   const spaceContextValue = useSpaceContextProvider(
-    planetsDto.map(Planet.create),
+    planets,
     user,
     currentGalaxy,
+    refetchUser,
   )
 
   useEffect(() => {

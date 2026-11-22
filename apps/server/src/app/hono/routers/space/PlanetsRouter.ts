@@ -35,7 +35,6 @@ export class PlanetsRouter extends HonoRouter {
         'json',
         z.object({
           name: nameSchema,
-          icon: stringSchema,
           image: stringSchema,
         }),
       ),
@@ -74,14 +73,11 @@ export class PlanetsRouter extends HonoRouter {
         z
           .object({
             name: nameSchema.optional(),
-            icon: stringSchema.optional(),
             image: stringSchema.optional(),
           })
           .refine(
             (body) =>
-              typeof body.name !== 'undefined' ||
-              typeof body.icon !== 'undefined' ||
-              typeof body.image !== 'undefined',
+              typeof body.name !== 'undefined' || typeof body.image !== 'undefined',
             {
               message: 'At least one property must be provided',
             },

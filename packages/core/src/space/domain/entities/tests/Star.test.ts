@@ -1,4 +1,5 @@
 import { Name, OrdinalNumber, Logical } from '#global/domain/structures/index'
+import { Star } from '../Star'
 import { StarsFaker } from './fakers/StarsFaker'
 
 describe('Star Entity', () => {
@@ -36,6 +37,18 @@ describe('Star Entity', () => {
     expect(star.isAvailable).toEqual(newIsAvailable)
   })
 
+  it('should expose the description when present', () => {
+    const star = StarsFaker.fake({ description: 'Estrela de história sobre variáveis.' })
+    expect(star.description?.value).toBe('Estrela de história sobre variáveis.')
+    expect(star.dto.description).toBe('Estrela de história sobre variáveis.')
+  })
+
+  it('should have a null description when it is absent or null', () => {
+    expect(StarsFaker.fake({ description: null }).description).toBeNull()
+    const { description: _description, ...dtoWithoutDescription } = StarsFaker.fakeDto()
+    expect(Star.create(dtoWithoutDescription).dto.description).toBeNull()
+  })
+
   it('should return a dto', () => {
     const star = StarsFaker.fake()
     const dto = star.dto
@@ -48,6 +61,7 @@ describe('Star Entity', () => {
       isAvailable: star.isAvailable.value,
       unlockCount: star.unlockCount.value,
       userCount: star.userCount.value,
+      description: star.description?.value ?? null,
     })
   })
 })

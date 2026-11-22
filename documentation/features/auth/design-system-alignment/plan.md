@@ -1,6 +1,7 @@
 ---
 title: Componentes compartilhados e páginas de autenticação alinhados ao design system — implementation plan
 status: completed
+tasks: none
 spec: ./spec.md
 spec_revision: 6
 evaluation: ./evaluation.md

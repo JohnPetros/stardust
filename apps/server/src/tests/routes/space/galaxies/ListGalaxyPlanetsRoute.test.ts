@@ -105,6 +105,42 @@ describe('[GET] /space/galaxies/:galaxySlug/planets', () => {
     }
   })
 
+  it('should expose the planet concept and the star description, null when absent', async () => {
+    const galaxy = await createGalaxy({ position: 1, status: 'published' })
+    const withContent = await spaceFixture.createPlanet(galaxy.id, {
+      position: 1,
+      concept: 'Variáveis',
+    })
+    const withoutContent = await spaceFixture.createPlanet(galaxy.id, { position: 2 })
+    const described = await spaceFixture.createStar(galaxy.id, {
+      planetId: withContent.id,
+      number: 1,
+      description: 'Estrela de história sobre variáveis.',
+    })
+    const plain = await spaceFixture.createStar(galaxy.id, {
+      planetId: withoutContent.id,
+      number: 1,
+    })
+
+    const response = await request(honoFixture.server)
+      .get(`/space/galaxies/${galaxy.slug}/planets`)
+      .set(authFixture.getAuthorizationHeader())
+
+    expect(response.status).toBe(HTTP_STATUS_CODE.ok)
+    const [first, second] = response.body
+    expect(first.concept).toBe('Variáveis')
+    expect(first.stars[0]).toEqual(
+      expect.objectContaining({
+        id: described.id,
+        description: 'Estrela de história sobre variáveis.',
+      }),
+    )
+    expect(second.concept).toBeNull()
+    expect(second.stars[0]).toEqual(
+      expect.objectContaining({ id: plain.id, description: null }),
+    )
+  })
+
   it('should return 404 for announced, unpublished and unknown galaxies', async () => {
     const announced = await createGalaxy({ position: 1, status: 'announced' })
     const unpublished = await createGalaxy({ position: 2, status: 'unpublished' })

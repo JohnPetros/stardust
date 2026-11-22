@@ -24,7 +24,6 @@ describe('Update Planet Use Case', () => {
     const response = await useCase.execute({
       planetId: planet.id.value,
       name: updatedPlanetDto.name,
-      icon: updatedPlanetDto.icon,
       image: updatedPlanetDto.image,
     })
 
@@ -33,26 +32,26 @@ describe('Update Planet Use Case', () => {
     expect(planetsRepository.replace).toHaveBeenCalledTimes(1)
     expect(planetsRepository.replace).toHaveBeenCalledWith(planet)
     expect(planet.name.value).toBe(updatedPlanetDto.name)
-    expect(planet.icon.value).toBe(updatedPlanetDto.icon)
     expect(planet.image.value).toBe(updatedPlanetDto.image)
     expect(response).toEqual(planet.dto)
+    expect(response).not.toHaveProperty('icon')
   })
 
   it('should update only provided properties, leaving others untouched', async () => {
     const originalPlanet = PlanetsFaker.fake()
     const updatedPlanet = PlanetsFaker.fake()
     const previousName = originalPlanet.name.value
-    const previousImage = originalPlanet.image.value
-    const newIcon = updatedPlanet.icon.value
+    const previousPosition = originalPlanet.position.value
+    const newImage = updatedPlanet.image.value
 
     planetsRepository.findById.mockResolvedValue(originalPlanet)
     planetsRepository.replace.mockResolvedValue()
 
-    await useCase.execute({ planetId: originalPlanet.id.value, icon: newIcon })
+    await useCase.execute({ planetId: originalPlanet.id.value, image: newImage })
 
-    expect(originalPlanet.icon.value).toBe(newIcon)
+    expect(originalPlanet.image.value).toBe(newImage)
     expect(originalPlanet.name.value).toBe(previousName)
-    expect(originalPlanet.image.value).toBe(previousImage)
+    expect(originalPlanet.position.value).toBe(previousPosition)
   })
 
   it('should throw when the planet does not exist', async () => {

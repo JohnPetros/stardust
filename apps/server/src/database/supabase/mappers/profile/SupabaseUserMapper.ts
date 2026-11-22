@@ -50,10 +50,8 @@ export class SupabaseUserMapper {
         supabaseUser.users_rescuable_achievements?.map(
           ({ achievement_id }) => achievement_id,
         ) ?? [],
-      unlockedStarsIds:
-        supabaseUser.users_unlocked_stars?.map(({ star_id }) => star_id) ?? [],
-      recentlyUnlockedStarsIds:
-        supabaseUser.users_recently_unlocked_stars?.map(({ star_id }) => star_id) ?? [],
+      completedStarsIds: [],
+      openedPlanetsIds: [],
       acquiredRocketsIds:
         supabaseUser.users_acquired_rockets?.map(({ rocket_id }) => rocket_id) ?? [],
       acquiredAvatarsIds:

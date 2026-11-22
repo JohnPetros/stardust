@@ -33,6 +33,7 @@ import {
   VerifyUserEmailInUseController,
   UpdateUserController,
   RewardUserForStarCompletionController,
+  OpenPlanetController,
   RewardUserForStarChallengeCompletionController,
   RewardUserForChallengeCompletionController,
   UpvoteCommentController,
@@ -152,12 +153,33 @@ export class UsersRouter extends HonoRouter {
     )
   }
 
+  private registerOpenPlanetRoute() {
+    this.router.put(
+      '/planets/:planetId/open',
+      this.authMiddleware.verifyAuthentication,
+      this.validationMiddleware.validate('param', z.object({ planetId: idSchema })),
+      this.profileMiddleware.appendUserTrailFactsToBody,
+      this.spaceMiddleware.appendOpenablePlanetToBody,
+      async (context) => {
+        const http = new HonoHttp(context)
+        const repository = new DrizzleUsersRepository(
+          http.getDatabase(),
+          http.getDatabaseAccess(),
+        )
+        const controller = new OpenPlanetController(repository)
+        const response = await controller.handle(http)
+        return http.sendResponse(response)
+      },
+    )
+  }
+
   private registerRewardUserForStarCompletionRoute() {
     this.router.put(
       '/:userId/reward/star',
       this.authMiddleware.verifyAuthentication,
       this.profileMiddleware.appendUserInfoToBody,
-      this.spaceMiddleware.appendNextStarToBody,
+      this.profileMiddleware.appendUserTrailFactsToBody,
+      this.spaceMiddleware.appendStarCompletionToBody,
       this.validationMiddleware.validate(
         'param',
         z.object({
@@ -190,7 +212,8 @@ export class UsersRouter extends HonoRouter {
       '/:userId/reward/star-challenge',
       this.authMiddleware.verifyAuthentication,
       this.profileMiddleware.appendUserInfoToBody,
-      this.spaceMiddleware.appendNextStarToBody,
+      this.profileMiddleware.appendUserTrailFactsToBody,
+      this.spaceMiddleware.appendStarCompletionToBody,
       this.challengingMiddleware.appendChallengeRewardToBody,
       this.validationMiddleware.validate(
         'param',
@@ -547,6 +570,7 @@ export class UsersRouter extends HonoRouter {
     this.registerFetchUserByIdRoute()
     this.registerFetchUserBySlugRoute()
     this.registerEnterGalaxyRoute()
+    this.registerOpenPlanetRoute()
     this.registerUpdateUserRoute()
     this.registerRewardUserForStarCompletionRoute()
     this.registerRewardUserForStarChallengeCompletionRoute()

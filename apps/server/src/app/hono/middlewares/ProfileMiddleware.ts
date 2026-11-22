@@ -5,6 +5,7 @@ import {
   AppendUserCompletedChallengesIdsToBodyController,
   AppendIsSolutionUpvotedToBodyController,
   AppendUserInfoToBodyController,
+  AppendUserTrailFactsToBodyController,
   VerifyUserSocialAccountController,
   VerifyUserAbsenceController,
   CompleteSpaceController,
@@ -37,6 +38,16 @@ export class ProfileMiddleware {
       http.getDatabaseAccess(),
     )
     const controller = new AppendIsSolutionUpvotedToBodyController(usersRepository)
+    await controller.handle(http)
+  }
+
+  async appendUserTrailFactsToBody(context: Context, next: Next) {
+    const http = new HonoHttp(context, next)
+    const usersRepository = new DrizzleUsersRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
+    const controller = new AppendUserTrailFactsToBodyController(usersRepository)
     await controller.handle(http)
   }
 

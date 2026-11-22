@@ -8,4 +8,5 @@ export type AnimationProps = {
   src?: string
   hasLoop?: boolean
   isStatic?: boolean
+  onLoadError?: () => void
 }

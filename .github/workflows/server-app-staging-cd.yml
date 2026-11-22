@@ -1,0 +1,144 @@
+name: Server app staging CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/server-app-staging-cd.yml"
+      - "scripts/seed-staging-assets.mjs"
+      - "apps/server/**"
+      - "packages/core/**"
+      - "packages/validation/**"
+  workflow_dispatch:
+    inputs:
+      initial_cutover:
+        description: Adopt the legacy staging baseline once, then apply the server-owned migrations
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  # Shared with the Web staging CD and the release E2E workflow: staging must
+  # not be migrated or reseeded while a release candidate is being exercised.
+  group: stardust-web-staging
+  cancel-in-progress: false
+
+jobs:
+  migrate-seed-and-deploy:
+    name: Migrate, seed, and request deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    environment: staging
+    env:
+      # The staging Supabase project is the `dev` environment of the database scripts.
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate the requested operation
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.initial_cutover }}" != "true" ]; then
+            echo "Manual runs are only for the initial cutover." >&2
+            exit 1
+          fi
+
+      - name: Verify and adopt legacy baseline for initial cutover
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.initial_cutover == true }}
+        run: |
+          pnpm --filter @stardust/server run db:preflight --environment dev --phase legacy
+          pnpm --filter @stardust/server run db:adopt --environment dev --phase legacy
+
+      - name: Require completed cutover on normal pushes
+        if: ${{ github.event_name == 'push' }}
+        run: pnpm --filter @stardust/server run db:preflight --environment dev --phase server-owned
+
+      - name: Apply server-owned migrations
+        run: |
+          if [ "${{ inputs.initial_cutover }}" = "true" ]; then
+            pnpm --filter @stardust/server run db:migrate --environment dev --phase adopted
+          else
+            pnpm --filter @stardust/server run db:migrate --environment dev --phase server-owned
+          fi
+
+      - name: Verify server-owned catalog
+        run: pnpm --filter @stardust/server run db:preflight --environment dev --phase server-owned
+
+      - name: Upload planet images to the staging bucket
+        env:
+          S3_ACCOUNT_ID: ${{ secrets.S3_ACCOUNT_ID }}
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          STAGING_ASSETS_BUCKET: ${{ vars.STAGING_ASSETS_BUCKET }}
+          PRODUCTION_ASSETS_BUCKET: ${{ vars.PRODUCTION_ASSETS_BUCKET }}
+          STAGING_CDN_URL: ${{ vars.STAGING_CDN_URL }}
+        run: node scripts/seed-staging-assets.mjs
+
+      - name: Seed the staging database
+        env:
+          SEED_EXPLORER_PASSWORD: ${{ secrets.SEED_EXPLORER_PASSWORD }}
+          SEED_ADMIN_PASSWORD: ${{ secrets.SEED_ADMIN_PASSWORD }}
+        run: pnpm --filter @stardust/server run db:seed:staging
+
+      - name: Request Server deployment
+        env:
+          COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
+          COOLIFY_WEBHOOK_SERVER_STG: ${{ secrets.COOLIFY_WEBHOOK_SERVER_STG }}
+          EXPECTED_SHA: ${{ github.sha }}
+          HEALTH_URL: ${{ vars.SERVER_STG_HEALTH_URL }}
+        run: |
+          set -euo pipefail
+          test -n "$COOLIFY_API_TOKEN"
+          test -n "$COOLIFY_WEBHOOK_SERVER_STG"
+          test -n "$EXPECTED_SHA"
+          test -n "$HEALTH_URL"
+          api_base="${COOLIFY_WEBHOOK_SERVER_STG%%/api/v1/*}/api/v1"
+          request="$(curl --fail --silent --show-error \
+            -H "Authorization: Bearer ${COOLIFY_API_TOKEN}" \
+            "$COOLIFY_WEBHOOK_SERVER_STG")"
+          deployment_uuid="$(jq -er '.deployments[0].deployment_uuid // .deployment_uuid' <<<"$request")"
+          test -n "$deployment_uuid"
+          [[ "$deployment_uuid" =~ ^[A-Za-z0-9_-]+$ ]]
+
+          for attempt in $(seq 1 240); do
+            deployment="$(curl --fail --silent --show-error \
+              -H "Authorization: Bearer ${COOLIFY_API_TOKEN}" \
+              "${api_base}/deployments/${deployment_uuid}")"
+            status="$(jq -er '.status' <<<"$deployment")"
+            case "$status" in
+              queued|in_progress|running) sleep 15 ;;
+              successful|finished)
+                deployed_sha="$(jq -er '.commit' <<<"$deployment")"
+                test "$deployed_sha" = "$EXPECTED_SHA"
+                break
+                ;;
+              *) echo "Server deployment ended in unexpected status: $status" >&2; exit 1 ;;
+            esac
+            if [ "$attempt" -eq 240 ]; then echo "Server deployment timed out." >&2; exit 1; fi
+          done
+
+          for attempt in $(seq 1 20); do
+            http_status="$(curl --silent --show-error --output /dev/null --max-time 20 --write-out '%{http_code}' "$HEALTH_URL" || true)"
+            case "$http_status" in 2??) exit 0 ;; esac
+            sleep 15
+          done
+          echo "Server health check did not return 2xx." >&2
+          exit 1

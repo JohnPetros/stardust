@@ -38,8 +38,8 @@ type UserProps = {
   weekStatus: WeekStatus
   hasCompletedSpace: Logical
   insigniaRoles: InsigniaRole[]
-  unlockedStarsIds: IdsList
-  recentlyUnlockedStarsIds: IdsList
+  completedStarsIds: IdsList
+  openedPlanetsIds: IdsList
   acquiredRocketsIds: IdsList
   acquiredAvatarsIds: IdsList
   unlockedAchievementsIds: IdsList
@@ -69,13 +69,15 @@ export class User extends Entity<UserProps> {
     }
   }
 
-  unlockStar(starId: Id): void {
-    if (this.props.unlockedStarsIds.includes(starId).isFalse) {
-      this.props.unlockedStarsIds = this.props.unlockedStarsIds.add(starId)
+  completeStar(starId: Id): void {
+    if (this.props.completedStarsIds.includes(starId).isFalse) {
+      this.props.completedStarsIds = this.props.completedStarsIds.add(starId)
     }
-    if (this.props.recentlyUnlockedStarsIds.includes(starId).isTrue) {
-      this.props.recentlyUnlockedStarsIds =
-        this.props.recentlyUnlockedStarsIds.remove(starId)
+  }
+
+  openPlanet(planetId: Id): void {
+    if (this.props.openedPlanetsIds.includes(planetId).isFalse) {
+      this.props.openedPlanetsIds = this.props.openedPlanetsIds.add(planetId)
     }
   }
 
@@ -192,6 +194,7 @@ export class User extends Entity<UserProps> {
   }
 
   getAchievementCount(metric: AchievementMetricValue) {
+    if (metric === 'unlockedStarsCount') return this.completedStarsCount
     return this[metric]
   }
 
@@ -233,12 +236,12 @@ export class User extends Entity<UserProps> {
     return this.props.rescuableAchievementsIds.includes(achievementId)
   }
 
-  hasUnlockedStar(starId: Id): Logical {
-    return this.props.unlockedStarsIds.includes(starId)
+  hasCompletedStar(starId: Id): Logical {
+    return this.props.completedStarsIds.includes(starId)
   }
 
-  hasRecentlyUnlockedStar(starId: Id): Logical {
-    return this.props.recentlyUnlockedStarsIds.includes(starId)
+  hasOpenedPlanet(planetId: Id): Logical {
+    return this.props.openedPlanetsIds.includes(planetId)
   }
 
   hasCompletedChallenge(challengeId: Id): Logical {
@@ -316,13 +319,16 @@ export class User extends Entity<UserProps> {
     return this.props.hasCompletedSpace
   }
 
-  get unlockedStarsIds(): IdsList {
-    return this.props.unlockedStarsIds
+  get completedStarsIds(): IdsList {
+    return this.props.completedStarsIds
   }
 
-  get unlockedStarsCount(): Integer {
-    if (this.props.unlockedStarsIds.count.isZero.isTrue) return Integer.create(0)
-    return this.props.unlockedStarsIds.count.minus(Integer.create(1))
+  get openedPlanetsIds(): IdsList {
+    return this.props.openedPlanetsIds
+  }
+
+  get completedStarsCount(): Integer {
+    return this.props.completedStarsIds.count
   }
 
   get acquiredRocketsCount() {
@@ -477,8 +483,8 @@ export class User extends Entity<UserProps> {
 
   private get idsListsDto() {
     return {
-      unlockedStarsIds: this.props.unlockedStarsIds.dto,
-      recentlyUnlockedStarsIds: this.props.recentlyUnlockedStarsIds.dto,
+      completedStarsIds: this.props.completedStarsIds.dto,
+      openedPlanetsIds: this.props.openedPlanetsIds.dto,
       acquiredRocketsIds: this.props.acquiredRocketsIds.dto,
       acquiredAvatarsIds: this.props.acquiredAvatarsIds.dto,
       unlockedAchievementsIds: this.props.unlockedAchievementsIds.dto,

@@ -10,8 +10,8 @@ describe('Get Unlocked Stars Kpi Use Case', () => {
 
   beforeEach(() => {
     repository = mock<UsersRepository>()
-    repository.countAllUnlockedStars.mockImplementation()
-    repository.countUnlockedStarsByMonth.mockImplementation()
+    repository.countAllCompletedStars.mockImplementation()
+    repository.countCompletedStarsByMonth.mockImplementation()
     useCase = new GetUnlockedStarsKpiUseCase(repository)
   })
 
@@ -20,9 +20,11 @@ describe('Get Unlocked Stars Kpi Use Case', () => {
     const currentMonthUnlockedStars = Integer.create(25)
     const previousMonthUnlockedStars = Integer.create(20)
 
-    repository.countAllUnlockedStars.mockResolvedValue(allUnlockedStars)
-    repository.countUnlockedStarsByMonth.mockResolvedValueOnce(currentMonthUnlockedStars)
-    repository.countUnlockedStarsByMonth.mockResolvedValueOnce(previousMonthUnlockedStars)
+    repository.countAllCompletedStars.mockResolvedValue(allUnlockedStars)
+    repository.countCompletedStarsByMonth.mockResolvedValueOnce(currentMonthUnlockedStars)
+    repository.countCompletedStarsByMonth.mockResolvedValueOnce(
+      previousMonthUnlockedStars,
+    )
 
     const kpi = Kpi.create({
       value: allUnlockedStars.value,

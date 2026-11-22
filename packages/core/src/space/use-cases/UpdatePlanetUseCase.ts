@@ -9,7 +9,6 @@ import { PlanetNotFoundError } from '../domain/errors'
 type Request = {
   planetId: string
   name?: string
-  icon?: string
   image?: string
 }
 
@@ -18,16 +17,12 @@ type Response = Promise<PlanetDto>
 export class UpdatePlanetUseCase implements UseCase<Request, Response> {
   constructor(private readonly repository: PlanetsRepository) {}
 
-  async execute({ planetId, name, icon, image }: Request): Response {
+  async execute({ planetId, name, image }: Request): Response {
     const planet = await this.repository.findById(Id.create(planetId))
     if (!planet) throw new PlanetNotFoundError()
 
     if (typeof name !== 'undefined') {
       planet.name = Name.create(name)
-    }
-
-    if (typeof icon !== 'undefined') {
-      planet.icon = Image.create(icon)
     }
 
     if (typeof image !== 'undefined') {

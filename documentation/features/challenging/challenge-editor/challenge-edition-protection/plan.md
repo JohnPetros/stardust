@@ -2,6 +2,7 @@
 spec: ./spec.md
 spec_revision: 2
 status: completed
+tasks: none
 last_updated_at: 2026-08-01
 ---
 

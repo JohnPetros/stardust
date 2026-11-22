@@ -6,7 +6,7 @@ import { AuthError } from '@stardust/core/global/errors'
 
 import { ENV } from '@/constants'
 import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
-import { userModel, userUnlockedStarModel } from '@/database/drizzle/schema'
+import { userModel, userCompletedStarModel } from '@/database/drizzle/schema'
 import { AuthFixture } from '@/tests/fixtures/AuthFixture'
 import { HonoFixture } from '@/tests/fixtures/HonoFixture'
 import { ProfileFixture } from '@/tests/fixtures/ProfileFixture'
@@ -70,7 +70,7 @@ describe('[GET] /space/galaxies', () => {
     for (let index = 0; index < 10; index++) {
       stars.push(await spaceFixture.createStar(galaxy.id))
     }
-    await supabaseFixture.database.insert(userUnlockedStarModel).values(
+    await supabaseFixture.database.insert(userCompletedStarModel).values(
       stars.slice(0, 4).map((star) => ({
         userId: authFixture.getAccountId(),
         starId: star.id,

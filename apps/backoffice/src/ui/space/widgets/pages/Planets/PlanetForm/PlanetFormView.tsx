@@ -30,7 +30,7 @@ const PLANETS_FOLDER = FileStorageFolderPath.createAsPlanets()
 type Props = {
   planetDto?: PlanetDto
   storageService: StorageService
-  onSubmit: (planetDto: Pick<PlanetDto, 'name' | 'icon' | 'image'>) => void
+  onSubmit: (planetDto: Pick<PlanetDto, 'name' | 'image'>) => void
 }
 
 export const PlanetFormView = ({
@@ -42,14 +42,12 @@ export const PlanetFormView = ({
   const {
     form,
     planetImage,
-    planetIcon,
     isSubmitting,
     isDialogOpen,
     handleSubmit,
     handleDialogChange,
   } = usePlanetForm({ planetDto, storageService, onSubmit })
   const imageUrl = useFileStorage(PLANETS_FOLDER, planetImage)
-  const iconUrl = useFileStorage(PLANETS_FOLDER, planetIcon)
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
@@ -89,38 +87,8 @@ export const PlanetFormView = ({
                             <img
                               src={imageUrl}
                               className='h-full w-full object-contain'
-                              alt='Icon'
+                              alt='Imagem do planeta'
                             />
-                          ) : (
-                            <Icon name='upload' />
-                          )}
-                        </Button>
-                      </ImageInput>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='icon'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Ícone do planeta</FormLabel>
-                    <FormControl>
-                      <ImageInput folder={PLANETS_FOLDER.value} onSubmit={field.onChange}>
-                        <Button
-                          variant='ghost'
-                          className='border border-dashed mt-2 w-48 h-12'
-                        >
-                          {planetIcon ? (
-                            <div className='w-full h-full bg-primary'>
-                              <img
-                                src={iconUrl}
-                                className='h-full w-full object-contain'
-                                alt='Icon'
-                              />
-                            </div>
                           ) : (
                             <Icon name='upload' />
                           )}

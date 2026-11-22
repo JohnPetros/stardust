@@ -3,15 +3,10 @@ import type { DrizzleDatabase } from '@/database/drizzle/DrizzleClient'
 import { AccountSignedUpEvent } from '@stardust/core/auth/events'
 import type { EventPayload } from '@stardust/core/global/types'
 import {
-  PlanetsOrderChangedEvent,
-  StarsOrderChangedEvent,
-} from '@stardust/core/space/events'
-
-import {
   DrizzleGalaxiesRepository,
   DrizzlePlanetsRepository,
 } from '@/database/drizzle/repositories'
-import { HandleStarsNewOrderJob, UnlockFirstStarJob } from '@/queue/jobs/space'
+import { UnlockFirstStarJob } from '@/queue/jobs/space'
 import { InngestAmqp } from '../InngestAmqp'
 import { InngestFunctions } from './InngestFunctions'
 import { InngestBroker } from '../InngestBroker'
@@ -50,33 +45,7 @@ export class SpaceFunctions extends InngestFunctions {
     )
   }
 
-  private createHandleStarsNewOrderFunction(database: DrizzleDatabase) {
-    return this.createFunction(
-      {
-        id: HandleStarsNewOrderJob.KEY,
-        onFailure: (context) => this.handleFailure(context, HandleStarsNewOrderJob.name),
-        triggers: [
-          { event: eventType(PlanetsOrderChangedEvent._NAME) },
-          { event: eventType(StarsOrderChangedEvent._NAME) },
-        ],
-      },
-      async (context) => {
-        const repository = new DrizzlePlanetsRepository(database, { kind: 'system' })
-        const galaxiesRepository = new DrizzleGalaxiesRepository(database, {
-          kind: 'system',
-        })
-        const amqp = new InngestAmqp(context)
-        const broker = new InngestBroker()
-        const job = new HandleStarsNewOrderJob(repository, galaxiesRepository, broker)
-        return job.handle(amqp)
-      },
-    )
-  }
-
   getFunctions(database: DrizzleDatabase) {
-    return [
-      this.createUnlockFirstStarFunction(database),
-      this.createHandleStarsNewOrderFunction(database),
-    ]
+    return [this.createUnlockFirstStarFunction(database)]
   }
 }

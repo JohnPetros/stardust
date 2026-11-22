@@ -8,7 +8,6 @@ import { CreatePlanetUseCase } from '@stardust/core/space/use-cases'
 type Schema = {
   body: {
     name: string
-    icon: string
     image: string
   }
 }
@@ -20,12 +19,12 @@ export class CreatePlanetController implements Controller<Schema> {
   ) {}
 
   async handle(http: Http<Schema>) {
-    const { name, icon, image } = await http.getBody()
+    const { name, image } = await http.getBody()
     const useCase = new CreatePlanetUseCase(
       this.planetsRepository,
       this.galaxiesRepository,
     )
-    const planet = await useCase.execute({ name, icon, image })
+    const planet = await useCase.execute({ name, image })
     return http.statusCreated().send(planet)
   }
 }

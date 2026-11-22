@@ -46,7 +46,7 @@ export class ObserveNewUnlockedAchievementsUseCase implements UseCase<Request, R
 
     switch (achievement.metric.value) {
       case 'unlockedStarsCount':
-        return user.unlockedStarsCount.isGreaterThanOrEqualTo(achievement.requiredCount)
+        return user.completedStarsCount.isGreaterThanOrEqualTo(achievement.requiredCount)
       case 'completedPlanetsCount':
         return user.completedPlanetsCount.isGreaterThanOrEqualTo(
           achievement.requiredCount,

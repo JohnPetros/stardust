@@ -11,6 +11,7 @@ import { Id } from '@stardust/core/global/structures'
 import {
   AuthError,
   ConflictError,
+  ForbiddenError,
   NotAllowedError,
   NotFoundError,
   ValidationError,
@@ -160,6 +161,9 @@ export class HonoApp {
 
     if (error instanceof NotFoundError)
       return context.json(response, HTTP_STATUS_CODE.notFound)
+
+    if (error instanceof ForbiddenError)
+      return context.json(response, HTTP_STATUS_CODE.forbidden)
 
     if (error instanceof ConflictError)
       return context.json(response, HTTP_STATUS_CODE.conflict)

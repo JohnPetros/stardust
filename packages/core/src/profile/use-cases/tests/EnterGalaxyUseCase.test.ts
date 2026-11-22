@@ -71,7 +71,7 @@ describe('Enter Galaxy Use Case', () => {
       coins: 120,
       xp: 340,
       streak: 4,
-      unlockedStarsIds: [Id.create().value, Id.create().value],
+      completedStarsIds: [Id.create().value, Id.create().value],
     })
     const dtoBefore = user.dto
     repository.findById.mockResolvedValue(user)
@@ -85,7 +85,7 @@ describe('Enter Galaxy Use Case', () => {
     expect(response.xp).toBe(dtoBefore.xp)
     expect(response.level).toBe(dtoBefore.level)
     expect(response.streak).toBe(dtoBefore.streak)
-    expect(response.unlockedStarsIds).toEqual(dtoBefore.unlockedStarsIds)
+    expect(response.completedStarsIds).toEqual(dtoBefore.completedStarsIds)
     expect(response.completedPlanetsIds).toEqual(dtoBefore.completedPlanetsIds)
   })
 })

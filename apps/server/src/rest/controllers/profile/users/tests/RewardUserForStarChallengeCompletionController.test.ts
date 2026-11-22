@@ -17,9 +17,8 @@ import {
   CalculateRewardForChallengeCompletionUseCase,
   CompleteChallengeUseCase,
   CompleteSpaceUseCase,
-  RemoveRecentlyUnlockedStarUseCase,
   RewardUserUseCase,
-  UnlockStarUseCase,
+  CompleteStarUseCase,
 } from '@stardust/core/profile/use-cases'
 
 import { RewardUserForStarChallengeCompletionController } from '../RewardUserForStarChallengeCompletionController'
@@ -35,8 +34,10 @@ describe('Reward User For Star Challenge Completion Controller', () => {
         xp: number
         coins: number
       }
-      nextStarId?: string
+      isAlreadyCompleted?: boolean
+      isLastGalaxyStar?: boolean
       isFirstGalaxy?: boolean
+      completedPlanetName?: string | null
       starId: string
     }
   }
@@ -61,12 +62,14 @@ describe('Reward User For Star Challenge Completion Controller', () => {
     )
   })
 
-  it('should orchestrate star challenge reward flow when nextStarId is provided', async () => {
+  it('should complete the star and the challenge, never unlocking another star', async () => {
     const routeParams = { userId: IdFaker.fake().value }
     const body = {
       starId: IdFaker.fake().value,
-      nextStarId: IdFaker.fake().value,
+      isAlreadyCompleted: false,
+      isLastGalaxyStar: false,
       isFirstGalaxy: true,
+      completedPlanetName: 'Aurora',
       challengeId: IdFaker.fake().value,
       challengeReward: { xp: 20, coins: 5 },
     }
@@ -107,11 +110,8 @@ describe('Reward User For Star Challenge Completion Controller', () => {
     const completeSpaceSpy = jest
       .spyOn(CompleteSpaceUseCase.prototype, 'execute')
       .mockResolvedValue()
-    const unlockStarSpy = jest
-      .spyOn(UnlockStarUseCase.prototype, 'execute')
-      .mockResolvedValue(UsersFaker.fakeDto({ id: routeParams.userId }))
-    const removeRecentlyUnlockedStarSpy = jest
-      .spyOn(RemoveRecentlyUnlockedStarUseCase.prototype, 'execute')
+    const completeStarSpy = jest
+      .spyOn(CompleteStarUseCase.prototype, 'execute')
       .mockResolvedValue()
     const completeChallengeSpy = jest
       .spyOn(CompleteChallengeUseCase.prototype, 'execute')
@@ -132,16 +132,13 @@ describe('Reward User For Star Challenge Completion Controller', () => {
     })
     expect(completeSpaceSpy).toHaveBeenCalledWith({
       userId: routeParams.userId,
-      nextStarId: body.nextStarId,
+      isLastGalaxyStar: false,
       isFirstGalaxy: true,
     })
-    expect(unlockStarSpy).toHaveBeenCalledWith({
-      userId: routeParams.userId,
-      starId: body.nextStarId,
-    })
-    expect(removeRecentlyUnlockedStarSpy).toHaveBeenCalledWith({
+    expect(completeStarSpy).toHaveBeenCalledWith({
       userId: routeParams.userId,
       starId: body.starId,
+      completedPlanetName: 'Aurora',
     })
     expect(completeChallengeSpy).toHaveBeenCalledWith({
       userId: routeParams.userId,
@@ -162,7 +159,7 @@ describe('Reward User For Star Challenge Completion Controller', () => {
     })
   })
 
-  it('should not unlock a star when nextStarId is not provided', async () => {
+  it('should default the guard fields and not announce a planet completion', async () => {
     const routeParams = { userId: IdFaker.fake().value }
     const body = {
       starId: IdFaker.fake().value,
@@ -206,11 +203,8 @@ describe('Reward User For Star Challenge Completion Controller', () => {
     const completeSpaceSpy = jest
       .spyOn(CompleteSpaceUseCase.prototype, 'execute')
       .mockResolvedValue()
-    const unlockStarSpy = jest
-      .spyOn(UnlockStarUseCase.prototype, 'execute')
-      .mockResolvedValue(UsersFaker.fakeDto({ id: routeParams.userId }))
-    const removeRecentlyUnlockedStarSpy = jest
-      .spyOn(RemoveRecentlyUnlockedStarUseCase.prototype, 'execute')
+    const completeStarSpy = jest
+      .spyOn(CompleteStarUseCase.prototype, 'execute')
       .mockResolvedValue()
     const completeChallengeSpy = jest
       .spyOn(CompleteChallengeUseCase.prototype, 'execute')
@@ -231,13 +225,13 @@ describe('Reward User For Star Challenge Completion Controller', () => {
     })
     expect(completeSpaceSpy).toHaveBeenCalledWith({
       userId: routeParams.userId,
-      nextStarId: null,
+      isLastGalaxyStar: false,
       isFirstGalaxy: false,
     })
-    expect(unlockStarSpy).not.toHaveBeenCalled()
-    expect(removeRecentlyUnlockedStarSpy).toHaveBeenCalledWith({
+    expect(completeStarSpy).toHaveBeenCalledWith({
       userId: routeParams.userId,
       starId: body.starId,
+      completedPlanetName: null,
     })
     expect(completeChallengeSpy).toHaveBeenCalledWith({
       userId: routeParams.userId,
@@ -277,5 +271,96 @@ describe('Reward User For Star Challenge Completion Controller', () => {
 
     await expect(controller.handle(http)).rejects.toThrow(NotAllowedError)
     expect(completeSpaceSpy).not.toHaveBeenCalled()
+  })
+
+  describe('when the star or the challenge side effects behave differently', () => {
+    const userProgress = {
+      newLevel: 3,
+      newStreak: 5,
+      newWeekStatus: [
+        'todo',
+        'done',
+        'todo',
+        'todo',
+        'todo',
+        'todo',
+        'todo',
+      ] as WeekStatusValue,
+    }
+
+    function arrange(body: Schema['body'], routeParams: Schema['routeParams']) {
+      const challenge = ChallengesFaker.fake({ id: body.challengeId })
+      http.getRouteParams.mockReturnValue(routeParams)
+      http.getBody.mockResolvedValue(body)
+      challengesRepository.findById.mockResolvedValue(challenge)
+      executionsRepository.findLatestByUserAndChallenge.mockResolvedValue(
+        ChallengeCodeExecution.create({
+          code: 'escreva("ok")',
+          status: 'accepted',
+          testResults: [],
+          outputs: [],
+          error: null,
+        }),
+      )
+      executionsRepository.countIncorrectByUserAndChallenge.mockResolvedValue(
+        Integer.create(0),
+      )
+      jest
+        .spyOn(CalculateRewardForChallengeCompletionUseCase.prototype, 'execute')
+        .mockResolvedValue({ newCoins: 12, newXp: 30, accuracyPercentage: 100 })
+      jest.spyOn(CompleteSpaceUseCase.prototype, 'execute').mockResolvedValue()
+      jest
+        .spyOn(CompleteChallengeUseCase.prototype, 'execute')
+        .mockResolvedValue(UsersFaker.fakeDto({ id: routeParams.userId }))
+      return {
+        rewardUserSpy: jest
+          .spyOn(RewardUserUseCase.prototype, 'execute')
+          .mockResolvedValue(userProgress),
+      }
+    }
+
+    it('should not announce a planet completion when the star was already completed', async () => {
+      const routeParams = { userId: IdFaker.fake().value }
+      const body = {
+        starId: IdFaker.fake().value,
+        challengeId: IdFaker.fake().value,
+        challengeReward: { xp: 20, coins: 5 },
+        isAlreadyCompleted: true,
+        completedPlanetName: 'Aurora',
+      }
+      arrange(body, routeParams)
+      const completeStarSpy = jest
+        .spyOn(CompleteStarUseCase.prototype, 'execute')
+        .mockResolvedValue()
+
+      await controller.handle(http)
+
+      expect(completeStarSpy).toHaveBeenCalledTimes(1)
+      expect(completeStarSpy).toHaveBeenCalledWith({
+        userId: routeParams.userId,
+        starId: body.starId,
+        completedPlanetName: null,
+      })
+      expect(http.send).toHaveBeenCalledTimes(1)
+    })
+
+    it('should not reward the user nor respond when the star cannot be completed', async () => {
+      const routeParams = { userId: IdFaker.fake().value }
+      const body = {
+        starId: IdFaker.fake().value,
+        challengeId: IdFaker.fake().value,
+        challengeReward: { xp: 20, coins: 5 },
+      }
+      const { rewardUserSpy } = arrange(body, routeParams)
+      jest
+        .spyOn(CompleteStarUseCase.prototype, 'execute')
+        .mockRejectedValue(new NotAllowedError('star locked'))
+
+      await expect(controller.handle(http)).rejects.toThrow(NotAllowedError)
+
+      expect(rewardUserSpy).not.toHaveBeenCalled()
+      expect(CompleteChallengeUseCase.prototype.execute).not.toHaveBeenCalled()
+      expect(http.send).not.toHaveBeenCalled()
+    })
   })
 })

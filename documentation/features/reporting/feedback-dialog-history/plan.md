@@ -2,6 +2,7 @@
 spec: ./spec.md
 spec_revision: 3
 status: completed
+tasks: none
 judge_plan: accepted
 implementation_judgment_mode: final
 current_phase: F6

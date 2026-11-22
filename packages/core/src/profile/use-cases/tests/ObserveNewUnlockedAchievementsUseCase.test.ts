@@ -90,7 +90,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
         IdFaker.fake().value,
       ],
       acquiredRocketsIds: [IdFaker.fake().value],
-      unlockedStarsIds: [IdFaker.fake().value],
+      completedStarsIds: [IdFaker.fake().value],
     })
     usersRepository.findById.mockResolvedValue(user)
     const unlockedAchievements = [
@@ -101,7 +101,7 @@ describe('Observe New Unlocked Achievements Use Case', () => {
     ]
     const lockedAchievements = [
       AchievementsFaker.fakeDto({ metric: 'acquiredRocketsCount', requiredCount: 1 }),
-      AchievementsFaker.fakeDto({ metric: 'unlockedStarsCount', requiredCount: 1 }),
+      AchievementsFaker.fakeDto({ metric: 'unlockedStarsCount', requiredCount: 2 }),
     ]
     achievementsRepository.findAll.mockResolvedValue([
       ...unlockedAchievements.map(Achievement.create),

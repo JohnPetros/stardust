@@ -179,17 +179,17 @@ exposed as skills by the same script, and as subagents by `scripts/sync-agents.m
 - A workflow that is missing for a recurring task is a gap: ask before adding a prompt,
   as with the Rule router.
 
-| Group          | Skills                                                                                                                                     | Use when                                                                                        |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
-| Issues         | `open-feat-issue`, `open-bug-issue`, `open-chore-issue`, `open-refactor-issue`                                                             | Creating a GitHub issue; each has an approval gate before anything is written.                  |
-| PRD            | `create-prd`, `create-prd-from-implementation`                                                                                             | Writing or revising a canonical PRD, prospectively or from existing code.                       |
-| Design         | `design`, `review-design`                                                                                                                  | Drawing or reviewing the Doop frames of a PRD.                                                  |
-| SDD delivery   | `interview`, `create-spec`, `create-plan`, `create-evaluation`, `implement-spec`, `conclude-spec`                                          | Specifying, planning, implementing and closing a feature delivery.                              |
-| Bugs           | `create-bug-report`, `implement-bug-fix`, `conclude-bug-report`                                                                            | Diagnosing an approved bug issue, fixing it and closing the report.                             |
-| Reports        | `create-performance-report`, `find-performance-issues`, `create-security-report`, `conclude-report`                                        | Running a performance or security diagnosis and closing its report.                             |
-| Git and PRs    | `commit`, `open-pr`, `resolve-pr-feedback`, `resolve-merge-conflicts`, `create-release-pr`                                                 | Committing, publishing or updating a PR, resolving CI/review feedback and conflicts, releasing. |
-| Tests          | `create-tests`, `increase-test-coverage`                                                                                                   | Writing tests or raising coverage without weakening baselines.                                  |
-| Rules and docs | `create-layer-rules`, `update-layer-rules`, `register-antipattern`, `update-archtecture`, `update-overview`, `refine-doc`, `create-prompt` | Maintaining Rules, Architecture, the overview, other documents and the prompts themselves.      |
+| Group            | Skills                                                                                                    | Use when                                                                                  |
+| ---------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Issues           | `open-feat-issue`, `open-bug-issue`, `open-chore-issue`, `open-refactor-issue`                            | Creating a GitHub issue; each has an approval gate before anything is written.            |
+| PRD              | `create-prd`, `create-prd-from-implementation`                                                            | Writing or revising a canonical PRD, prospectively or from existing code.                 |
+| Design           | `design`, `review-design`                                                                                 | Drawing or reviewing the Doop frames of a PRD.                                            |
+| SDD delivery     | `interview`, `create-spec`, `plan-spec`, `create-evaluation`, `implement-spec`, `conclude-spec`           | Specifying, planning, implementing and closing a feature delivery.                        |
+| Bugs             | `create-bug-report`, `implement-bug-fix`, `conclude-bug-report`                                           | Diagnosing an approved bug issue, fixing it and closing the report.                       |
+| Reports          | `create-performance-report`, `find-performance-issues`, `create-security-report`, `conclude-report`       | Running a performance or security diagnosis and closing its report.                       |
+| Git and PRs      | `commit`, `open-pr`, `resolve-pr-feedback`, `resolve-merge-conflicts`, `create-release-pr`                | Committing, publishing or updating a PR, resolving CI/review feedback and conflicts, releasing. |
+| Tests            | `create-tests`, `increase-test-coverage`                                                                  | Writing tests or raising coverage without weakening baselines.                            |
+| Rules and docs   | `create-layer-rules`, `update-layer-rules`, `register-antipattern`, `update-archtecture`, `update-overview`, `refine-doc`, `create-prompt` | Maintaining Rules, Architecture, the overview, other documents and the prompts themselves. |
 
 The table groups the prompts for orientation; `documentation/prompts/` is the complete
 and current list. Skill names follow the file names exactly, including `update-archtecture`.

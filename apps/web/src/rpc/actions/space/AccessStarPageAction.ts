@@ -3,15 +3,33 @@ import type { StarDto } from '@stardust/core/space/entities/dtos'
 import type { SpaceService } from '@stardust/core/space/interfaces'
 import { User } from '@stardust/core/global/entities'
 import { Slug } from '@stardust/core/global/structures'
-import { Star } from '@stardust/core/space/entities'
-
-import { isFirstStarOfCurrentGalaxy } from './isFirstStarOfCurrentGalaxy'
+import { Planet, Star } from '@stardust/core/space/entities'
+import { GalaxyTrail } from '@stardust/core/space/structures'
 
 type Request = {
   starSlug: string
 }
 
 type Response = StarDto
+
+async function getCurrentGalaxyTrail(
+  service: SpaceService,
+  user: User,
+): Promise<GalaxyTrail | null> {
+  const currentGalaxyResponse = await service.fetchCurrentGalaxy()
+  if (currentGalaxyResponse.isFailure) return null
+
+  const planetsResponse = await service.fetchGalaxyPlanets(
+    Slug.create(currentGalaxyResponse.body.galaxy.slug),
+  )
+  if (planetsResponse.isFailure) return null
+
+  return GalaxyTrail.create({
+    planets: planetsResponse.body.map(Planet.create),
+    completedStarsIds: user.completedStarsIds,
+    openedPlanetsIds: user.openedPlanetsIds,
+  })
+}
 
 export const AccessStarPageAction = (
   service: SpaceService,
@@ -25,10 +43,8 @@ export const AccessStarPageAction = (
       if (starResponse.isFailure) call.notFound()
 
       const star = Star.create(starResponse.body)
-      if (user.hasUnlockedStar(star.id).isFalse) {
-        const isFirstStar = await isFirstStarOfCurrentGalaxy(service, star.id)
-        if (!isFirstStar) call.notFound()
-      }
+      const trail = await getCurrentGalaxyTrail(service, user)
+      if (!trail || trail.canAccessStar(star.id).isFalse) call.notFound()
 
       return star.dto
     },

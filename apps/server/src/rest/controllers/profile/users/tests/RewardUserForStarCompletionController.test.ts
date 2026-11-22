@@ -1,14 +1,13 @@
 import { mock, type Mock } from 'ts-jest-mocker'
 
 import type { Http } from '@stardust/core/global/interfaces'
-import { UsersFaker } from '@stardust/core/profile/entities/fakers'
 import type { UsersRepository } from '@stardust/core/profile/interfaces'
 import type { WeekStatusValue } from '@stardust/core/profile/types'
 import {
   CalculateRewardForStarCompletionUseCase,
-  RemoveRecentlyUnlockedStarUseCase,
+  CompleteSpaceUseCase,
+  CompleteStarUseCase,
   RewardUserUseCase,
-  UnlockStarUseCase,
 } from '@stardust/core/profile/use-cases'
 
 import { RewardUserForStarCompletionController } from '../RewardUserForStarCompletionController'
@@ -22,7 +21,10 @@ describe('Reward User For Star Completion Controller', () => {
       questionsCount: number
       incorrectAnswersCount: number
       starId: string
-      nextStarId?: string
+      isAlreadyCompleted?: boolean
+      isLastGalaxyStar?: boolean
+      isFirstGalaxy?: boolean
+      completedPlanetName?: string | null
     }
   }
 
@@ -30,71 +32,80 @@ describe('Reward User For Star Completion Controller', () => {
   let usersRepository: Mock<UsersRepository>
   let controller: RewardUserForStarCompletionController
 
+  const routeParams = { userId: 'user-1' }
+  const reward = { newCoins: 8, newXp: 24, accuracyPercentage: 80 }
+  const userProgress = {
+    newLevel: 2,
+    newStreak: 4,
+    newWeekStatus: [
+      'todo',
+      'done',
+      'todo',
+      'todo',
+      'todo',
+      'todo',
+      'todo',
+    ] as WeekStatusValue,
+  }
+
+  function spyOnUseCases() {
+    return {
+      calculateReward: jest
+        .spyOn(CalculateRewardForStarCompletionUseCase.prototype, 'execute')
+        .mockResolvedValue(reward),
+      completeStar: jest
+        .spyOn(CompleteStarUseCase.prototype, 'execute')
+        .mockResolvedValue(undefined),
+      completeSpace: jest
+        .spyOn(CompleteSpaceUseCase.prototype, 'execute')
+        .mockResolvedValue(undefined),
+      rewardUser: jest
+        .spyOn(RewardUserUseCase.prototype, 'execute')
+        .mockResolvedValue(userProgress),
+    }
+  }
+
   beforeEach(() => {
     jest.restoreAllMocks()
     http = mock()
     usersRepository = mock()
     http.send.mockImplementation()
+    http.getRouteParams.mockReturnValue(routeParams)
     controller = new RewardUserForStarCompletionController(usersRepository)
   })
 
-  it('should orchestrate star completion reward flow when nextStarId is provided', async () => {
-    const routeParams = { userId: 'user-1' }
+  it('should complete the star, never unlock another one, and reward the user', async () => {
     const body = {
       starId: 'star-1',
-      nextStarId: 'star-2',
       questionsCount: 5,
       incorrectAnswersCount: 1,
+      isAlreadyCompleted: false,
+      isLastGalaxyStar: false,
+      isFirstGalaxy: true,
+      completedPlanetName: 'Aurora',
     }
-    const reward = { newCoins: 8, newXp: 24, accuracyPercentage: 80 }
-    const userProgress = {
-      newLevel: 2,
-      newStreak: 4,
-      newWeekStatus: [
-        'todo',
-        'done',
-        'todo',
-        'todo',
-        'todo',
-        'todo',
-        'todo',
-      ] as WeekStatusValue,
-    }
-
-    http.getRouteParams.mockReturnValue(routeParams)
     http.getBody.mockResolvedValue(body)
-
-    const calculateRewardSpy = jest
-      .spyOn(CalculateRewardForStarCompletionUseCase.prototype, 'execute')
-      .mockResolvedValue(reward)
-    const unlockStarSpy = jest
-      .spyOn(UnlockStarUseCase.prototype, 'execute')
-      .mockResolvedValue(UsersFaker.fakeDto({ id: routeParams.userId }))
-    const removeRecentlyUnlockedStarSpy = jest
-      .spyOn(RemoveRecentlyUnlockedStarUseCase.prototype, 'execute')
-      .mockResolvedValue(undefined)
-    const rewardUserSpy = jest
-      .spyOn(RewardUserUseCase.prototype, 'execute')
-      .mockResolvedValue(userProgress)
+    const spies = spyOnUseCases()
 
     await controller.handle(http)
 
-    expect(calculateRewardSpy).toHaveBeenCalledWith({
+    expect(spies.calculateReward).toHaveBeenCalledWith({
       userId: routeParams.userId,
-      starId: body.starId,
-      nextStarId: body.nextStarId,
+      isAlreadyCompleted: false,
       questionsCount: body.questionsCount,
       incorrectAnswersCount: body.incorrectAnswersCount,
     })
-    expect(unlockStarSpy).toHaveBeenCalledWith({
-      userId: routeParams.userId,
-      starId: body.nextStarId,
-    })
-    expect(removeRecentlyUnlockedStarSpy).toHaveBeenCalledWith({
+    expect(spies.completeStar).toHaveBeenCalledWith({
       userId: routeParams.userId,
       starId: body.starId,
+      completedPlanetName: 'Aurora',
     })
-    expect(rewardUserSpy).toHaveBeenCalledWith({
+    expect(spies.completeSpace).toHaveBeenCalledWith({
+      userId: routeParams.userId,
+      isLastGalaxyStar: false,
+      isFirstGalaxy: true,
+    })
+    expect(spies.rewardUser).toHaveBeenCalledWith({
       userId: routeParams.userId,
       newCoins: reward.newCoins,
       newXp: reward.newXp,
@@ -109,62 +120,62 @@ describe('Reward User For Star Completion Controller', () => {
     })
   })
 
-  it('should not unlock a star when nextStarId is not provided', async () => {
-    const routeParams = { userId: 'user-1' }
-    const body = {
+  it('should not announce the planet completion when the star was already completed', async () => {
+    http.getBody.mockResolvedValue({
       starId: 'star-1',
       questionsCount: 5,
-      incorrectAnswersCount: 1,
-    }
-    const reward = { newCoins: 8, newXp: 24, accuracyPercentage: 80 }
-    const userProgress = {
-      newLevel: 2,
-      newStreak: 4,
-      newWeekStatus: [
-        'todo',
-        'done',
-        'todo',
-        'todo',
-        'todo',
-        'todo',
-        'todo',
-      ] as WeekStatusValue,
-    }
-
-    http.getRouteParams.mockReturnValue(routeParams)
-    http.getBody.mockResolvedValue(body)
-
-    const calculateRewardSpy = jest
-      .spyOn(CalculateRewardForStarCompletionUseCase.prototype, 'execute')
-      .mockResolvedValue(reward)
-    const unlockStarSpy = jest
-      .spyOn(UnlockStarUseCase.prototype, 'execute')
-      .mockResolvedValue(UsersFaker.fakeDto({ id: routeParams.userId }))
-    const removeRecentlyUnlockedStarSpy = jest
-      .spyOn(RemoveRecentlyUnlockedStarUseCase.prototype, 'execute')
-      .mockResolvedValue(undefined)
-    const rewardUserSpy = jest
-      .spyOn(RewardUserUseCase.prototype, 'execute')
-      .mockResolvedValue(userProgress)
+      incorrectAnswersCount: 0,
+      isAlreadyCompleted: true,
+      isLastGalaxyStar: true,
+      isFirstGalaxy: true,
+      completedPlanetName: 'Aurora',
+    })
+    const spies = spyOnUseCases()
 
     await controller.handle(http)
 
-    expect(calculateRewardSpy).toHaveBeenCalledWith({
+    expect(spies.calculateReward).toHaveBeenCalledWith(
+      expect.objectContaining({ isAlreadyCompleted: true }),
+    )
+    expect(spies.completeStar).toHaveBeenCalledWith({
       userId: routeParams.userId,
-      starId: body.starId,
-      nextStarId: null,
-      questionsCount: body.questionsCount,
-      incorrectAnswersCount: body.incorrectAnswersCount,
+      starId: 'star-1',
+      completedPlanetName: null,
     })
-    expect(unlockStarSpy).not.toHaveBeenCalled()
-    expect(removeRecentlyUnlockedStarSpy).toHaveBeenCalledWith({
+  })
+
+  it('should default the guard fields when the body has none', async () => {
+    http.getBody.mockResolvedValue({
+      starId: 'star-1',
+      questionsCount: 5,
+      incorrectAnswersCount: 1,
+    })
+    const spies = spyOnUseCases()
+
+    await controller.handle(http)
+
+    expect(spies.calculateReward).toHaveBeenCalledWith(
+      expect.objectContaining({ isAlreadyCompleted: false }),
+    )
+    expect(spies.completeSpace).toHaveBeenCalledWith({
       userId: routeParams.userId,
-      starId: body.starId,
+      isLastGalaxyStar: false,
+      isFirstGalaxy: false,
     })
-    expect(rewardUserSpy).toHaveBeenCalledWith({
-      userId: routeParams.userId,
-      newCoins: reward.newCoins,
-      newXp: reward.newXp,
+  })
+
+  it('should not reward the user when completing the star fails', async () => {
+    http.getBody.mockResolvedValue({
+      starId: 'star-1',
+      questionsCount: 5,
+      incorrectAnswersCount: 1,
     })
+    const spies = spyOnUseCases()
+    spies.completeStar.mockRejectedValue(new Error('boom'))
+
+    await expect(controller.handle(http)).rejects.toThrow('boom')
+
+    expect(spies.rewardUser).not.toHaveBeenCalled()
+    expect(http.send).not.toHaveBeenCalled()
   })
 })

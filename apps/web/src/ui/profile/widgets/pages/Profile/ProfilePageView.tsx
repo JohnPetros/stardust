@@ -29,7 +29,7 @@ export const ProfilePageView = ({ userDto }: Props) => {
         />
         <div className='mt-10 grid grid-cols-1 items-center justify-center gap-12 md:grid-cols-[1fr_2fr] md:flex-row'>
           <Statistics
-            unlockedStarsCount={user.unlockedStarsCount.value}
+            completedStarsCount={user.completedStarsCount.value}
             completedPlanetsCount={user.completedPlanetsCount.value}
             unlockedAchievementsCount={user.unlockedAchievementsCount.value}
           />

@@ -3,7 +3,6 @@ import type { StarDto } from './StarDto'
 export type PlanetDto = {
   id?: string
   name: string
-  icon: string
   image: string
   position: number
   completionCount: number
@@ -11,4 +10,5 @@ export type PlanetDto = {
   galaxyId?: string
   stars: StarDto[]
   isAvailable: boolean
+  concept?: string | null
 }

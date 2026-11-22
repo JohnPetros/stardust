@@ -37,7 +37,7 @@ import type { AchievementDto } from '@stardust/core/profile/entities/dtos'
 const ACHIEVEMENTS_FOLDER = FileStorageFolderPath.createAsAchievements()
 
 const METRIC_LABELS: Record<string, string> = {
-  unlockedStarsCount: 'Estrelas Desbloqueadas',
+  unlockedStarsCount: 'Estrelas Concluídas',
   acquiredRocketsCount: 'Foguetes Adquiridos',
   completedChallengesCount: 'Desafios Completados',
   completedPlanetsCount: 'Planetas Completados',

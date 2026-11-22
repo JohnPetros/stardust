@@ -852,96 +852,195 @@
         "animation": "galaxia-de-teste.json",
         "position": 3,
         "status": "published"
+      },
+      {
+        "id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a04",
+        "slug": "trilha-anterior",
+        "name": "Trilha anterior",
+        "description": "Trilha anterior da Lógica de Programação, preservada fora da trilha publicada.",
+        "animation": "logica-de-programacao.json",
+        "position": 4,
+        "status": "unpublished"
       }
     ],
     "planets": [
       {
         "id": "2ee862da-4b73-4fb3-984a-d6ed1743102b",
-        "icon": "planet-2ee862da-4b73-4fb3-984a-d6ed1743102b-icon.svg",
         "name": "Introdução",
-        "image": "planet-2ee862da-4b73-4fb3-984a-d6ed1743102b-image.svg",
+        "image": "planet-aurora-image.webp",
         "position": 1,
         "is_available": true,
-        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a04",
+        "concept": null
       },
       {
         "id": "6a4aca25-b962-4cad-9aa4-81e0a2b6c0ee",
-        "icon": "planet-6a4aca25-b962-4cad-9aa4-81e0a2b6c0ee-icon.svg",
         "name": "Laços",
-        "image": "planet-6a4aca25-b962-4cad-9aa4-81e0a2b6c0ee-image.svg",
+        "image": "planet-ciclade-image.webp",
         "position": 5,
         "is_available": true,
-        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a04",
+        "concept": null
       },
       {
         "id": "800775c1-b4f7-4dc7-8010-142f8dfb7ac9",
-        "icon": "planet-800775c1-b4f7-4dc7-8010-142f8dfb7ac9-icon.svg",
         "name": "Operadores",
-        "image": "planet-800775c1-b4f7-4dc7-8010-142f8dfb7ac9-image.svg",
+        "image": "planet-kalkulon-image.webp",
         "position": 3,
         "is_available": true,
-        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a04",
+        "concept": null
       },
       {
         "id": "83500701-a9b7-4f5b-8a63-599a08406f73",
-        "icon": "planet-83500701-a9b7-4f5b-8a63-599a08406f73-icon.svg",
         "name": "Condicionais",
-        "image": "planet-83500701-a9b7-4f5b-8a63-599a08406f73-image.svg",
+        "image": "planet-ifthenia-image.webp",
         "position": 4,
         "is_available": true,
-        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a04",
+        "concept": null
       },
       {
         "id": "8c3b6cab-d3c6-4d64-8701-c580d4a6d31a",
-        "icon": "planet-8c3b6cab-d3c6-4d64-8701-c580d4a6d31a-icon.svg",
         "name": "Tipos de dados",
-        "image": "planet-8c3b6cab-d3c6-4d64-8701-c580d4a6d31a-image.svg",
+        "image": "planet-trivia-image.webp",
         "position": 2,
         "is_available": true,
-        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a04",
+        "concept": null
       },
       {
         "id": "af70e6c2-49b3-4bdf-a548-6512b0f5dc94",
-        "icon": "planet-af70e6c2-49b3-4bdf-a548-6512b0f5dc94-icon.svg",
         "name": "Funções",
-        "image": "planet-4334d4ed-7b36-4e17-a917-7839f09f670e-image.svg",
+        "image": "planet-arcana-image.webp",
         "position": 7,
         "is_available": true,
-        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a04",
+        "concept": null
       },
       {
         "id": "d76aa273-902e-451c-b471-0c4574bafb0a",
-        "icon": "planet-4334d4ed-7b36-4e17-a917-7839f09f670e-image.svg-icon.svg",
         "name": "Dicionários",
-        "image": "planet-af70e6c2-49b3-4bdf-a548-6512b0f5dc94-image.svg",
+        "image": "planet-chavalor-image.webp",
         "position": 9,
         "is_available": true,
-        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a04",
+        "concept": null
       },
       {
         "id": "f0fa99e3-d5fb-4ff0-8c29-a3fc7cff21e8",
-        "icon": "planet-f0fa99e3-d5fb-4ff0-8c29-a3fc7cff21e8.icon.svg",
         "name": "Listas",
-        "image": "planet-f0fa99e3-d5fb-4ff0-8c29-a3fc7cff21e8.image.svg",
+        "image": "planet-o-comboio-parte-1-image.webp",
         "position": 6,
         "is_available": true,
-        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01"
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a04",
+        "concept": null
       },
       {
         "id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0b01",
-        "icon": "planet-f0fa99e3-d5fb-4ff0-8c29-a3fc7cff21e8.icon.svg",
         "name": "Planeta de Teste",
         "image": "planet-f0fa99e3-d5fb-4ff0-8c29-a3fc7cff21e8.image.svg",
         "position": 1,
         "is_available": true,
-        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a03"
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a03",
+        "concept": null
+      },
+      {
+        "id": "8f63bbe8-1a61-5e02-8203-02b2cced2c0e",
+        "name": "Aurora",
+        "image": "planet-aurora-image.webp",
+        "position": 1,
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01",
+        "concept": "Introdução"
+      },
+      {
+        "id": "8871e6f0-504e-5950-b143-2231834ddb59",
+        "name": "Trívia",
+        "image": "planet-trivia-image.webp",
+        "position": 2,
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01",
+        "concept": "Tipos de dados"
+      },
+      {
+        "id": "ce465553-4dd6-5269-8c65-476153c95672",
+        "name": "Kalkulon",
+        "image": "planet-kalkulon-image.webp",
+        "position": 3,
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01",
+        "concept": "Operadores"
+      },
+      {
+        "id": "c7ccb862-a6dd-545e-bc42-019982781071",
+        "name": "Ifthenia",
+        "image": "planet-ifthenia-image.webp",
+        "position": 4,
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01",
+        "concept": "Condicionais"
+      },
+      {
+        "id": "b70a8265-3da1-50b3-89e6-21670b16560e",
+        "name": "Cíclade",
+        "image": "planet-ciclade-image.webp",
+        "position": 5,
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01",
+        "concept": "Laços"
+      },
+      {
+        "id": "7c6cbba3-6885-5299-9e60-0292c805eb98",
+        "name": "O Comboio, parte 1",
+        "image": "planet-o-comboio-parte-1-image.webp",
+        "position": 6,
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01",
+        "concept": "Listas: acessar e modificar"
+      },
+      {
+        "id": "75d05e17-a249-5169-bf1f-f67416de64ca",
+        "name": "O Comboio, parte 2",
+        "image": "planet-o-comboio-parte-2-image.webp",
+        "position": 7,
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01",
+        "concept": "Listas: transformar e percorrer"
+      },
+      {
+        "id": "4577fd66-fe43-56ad-85d9-ef04b82a2b11",
+        "name": "Arcana",
+        "image": "planet-arcana-image.webp",
+        "position": 8,
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01",
+        "concept": "Funções"
+      },
+      {
+        "id": "a226fe90-e261-5674-b911-179c4fc4c87a",
+        "name": "Perene",
+        "image": "planet-perene-image.webp",
+        "position": 9,
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01",
+        "concept": "Tuplas"
+      },
+      {
+        "id": "b65124fd-d6c2-5f64-972e-56cfb29361c9",
+        "name": "Chavalor",
+        "image": "planet-chavalor-image.webp",
+        "position": 10,
+        "is_available": true,
+        "galaxy_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0a01",
+        "concept": "Dicionários"
       }
     ],
     "stars": [
       {
         "id": "0077876f-6693-4286-8340-be99ca0dba9f",
         "name": "Senão",
-        "slug": "senao",
+        "slug": "senao-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -1264,12 +1363,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "05a206ae-69f0-4263-87a5-1dd0018d15d8",
         "name": "Variáveis",
-        "slug": "variaveis",
+        "slug": "variaveis-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -1626,12 +1726,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "0f881798-84a1-4df3-a901-27a0dd7b8734",
         "name": "Para",
-        "slug": "para",
+        "slug": "para-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -1990,12 +2091,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "10fb460c-2dea-4ff9-ac2b-8dbd57d5e271",
         "name": "Índice de lista",
-        "slug": "indice-de-lista",
+        "slug": "indice-de-lista-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -2510,12 +2612,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "19729d0b-1aee-48f9-9c5d-ac5d6ecba725",
         "name": "Se",
-        "slug": "se",
+        "slug": "se-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -2962,12 +3065,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "1f1b43e7-916a-438c-9d2d-c8065c5996a9",
         "name": "Métodos de lista III",
-        "slug": "metodos-de-lista-iii",
+        "slug": "metodos-de-lista-iii-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -3446,24 +3550,26 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "23df5d23-56ec-42e2-89cf-3d73e21c4163",
         "name": "Desafio: Reconhecendo raça alienígena",
-        "slug": "desafio-reconhecendo-raca-alienigena",
+        "slug": "desafio-reconhecendo-raca-alienigena-trilha-anterior",
         "story": "",
         "texts": null,
         "number": 5,
         "planet_id": "83500701-a9b7-4f5b-8a63-599a08406f73",
         "questions": null,
         "is_available": true,
-        "is_challenge": true
+        "is_challenge": true,
+        "description": null
       },
       {
         "id": "27b66902-e7ee-4277-bbd3-69980a92720b",
         "name": "Tipo lógico",
-        "slug": "tipo-logico",
+        "slug": "tipo-logico-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -3670,12 +3776,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "2e58aa01-a355-421f-9c29-8b63ef62e0ef",
         "name": "Métodos de lista I",
-        "slug": "metodos-de-lista-i",
+        "slug": "metodos-de-lista-i-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -4045,12 +4152,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "306509d5-5e91-4328-b429-8647213808ff",
         "name": "Tipo número",
-        "slug": "tipo-numero",
+        "slug": "tipo-numero-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -4289,12 +4397,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "42e685cc-3224-4a0a-9f77-33602dc5a292",
         "name": "Criando funções",
-        "slug": "criando-funcoes",
+        "slug": "criando-funcoes-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -4694,12 +4803,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "4dbe565e-eb8d-404c-82e3-a1d0bef160d2",
         "name": "Funções nativas",
-        "slug": "funcoes-nativas",
+        "slug": "funcoes-nativas-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -5077,12 +5187,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "506f5514-6b54-40ae-8833-392ecbe5e422",
         "name": "Tipo texto",
-        "slug": "tipo-texto",
+        "slug": "tipo-texto-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -5312,12 +5423,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "523cfc35-1de8-4385-a15d-83ad5e246969",
         "name": "Funções avançadas",
-        "slug": "funcoes-avancadas",
+        "slug": "funcoes-avancadas-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -5815,12 +5927,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "5b9810e0-b0a8-4ae6-a956-ee0bfd016b15",
         "name": "Escolha caso",
-        "slug": "escolha-caso",
+        "slug": "escolha-caso-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -6200,12 +6313,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "5ca482b9-09e3-4aea-9575-6085f71b5537",
         "name": "Retorna",
-        "slug": "retorna",
+        "slug": "retorna-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -6630,24 +6744,26 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "6434a7cb-15a7-460f-8c43-4def4e6a89d7",
         "name": "Desafio: O castelo",
-        "slug": "desafio-o-castelo",
+        "slug": "desafio-o-castelo-trilha-anterior",
         "story": "",
         "texts": null,
         "number": 5,
         "planet_id": "af70e6c2-49b3-4bdf-a548-6512b0f5dc94",
         "questions": null,
         "is_available": true,
-        "is_challenge": true
+        "is_challenge": true,
+        "description": null
       },
       {
         "id": "6bd33a7d-33f6-47c3-b76e-2ad2db1cc0c5",
         "name": "Desestruturação",
-        "slug": "desestruturacao",
+        "slug": "desestruturacao-trilha-anterior",
         "story": "<Image picture='princesa-flutuando.jpg'>Estamos quase lá!</Image>\r\n----\r\n<Code>\r\nvar bombas = {\r\n  \"tomatomica\": [\"tomate\", \"tomate\", \"tomate\", \"tomate\"],\r\n  \"granatom\": [\"tomate\", \"tomate\", \"tomate\", \"tomate\"],\r\n  \"pomatox\": [\"tomate\", \"tomate\", \"tomate\", \"tomate\"],\r\n}\r\n</Code>\r\n----\r\n<Image picture='princesa-animada.jpg'>Bombas de tomates!</Image>\r\n----\r\n<Text picture='panda-pensando.jpg'>Podemos jogar essas bombas nos locais estratégicos que nos foram enviados por aquela pessoa desconhecida.</Text>\r\n----\r\n<Text picture='panda-segurando-bambu-de-pe.jpg'>Primeiro, permita-me colocá-los em variáveis.</Text>\r\n----\r\n<Code exec>\r\nvar bombas = {\r\n  \"tomatomica\": [\"tomate\", \"tomate\", \"tomate\", \"tomate\"],\r\n  \"granatom\": [\"tomate\", \"tomate\", \"tomate\", \"tomate\"],\r\n  \"pomatox\": [\"tomate\", \"tomate\", \"tomate\", \"tomate\"],\r\n}\r\n\r\nvar bomba1, bomba2, bomba3 = bombas[\"tomatomica\"], bombas[\"granatom\"], bombas[\"pomatox\"]\r\n\r\nescreva(bomba1, bomba2, bomba3)\r\n</Code>\r\n----\r\n<User>Mas o que você acabou de fazer?</User>\r\n----\r\n<Text picture='panda-sorrindo.jpg'>O que eu fiz é chamado de *atribuição de múltiplas variaveis*.</Text>\r\n----\r\n<Quote picture='panda-sorrindo-sentado.jpg' title='Atribuição de múltiplas variaveis'>É uma capacidade dos dicionários permitirem atribuir os valores de um dicionário a varias variáveis em uma única linha e com único uso da palavra-chave `var`.</Quote>\r\n----\r\n<Code exec>\r\nvar pessoa = {\"nome\": \"Alice\", \"idade\": 25, \"cidade\": \"São Paulo\"}\r\n\r\n// Atribuição de múltiplas variaveis\r\nvar nome, idade = pessoa[\"nome\"], pessoa[\"idade\"]\r\n\r\nescreva(nome) // Alice\r\nescreva(idade) // 25\r\n</Code>\r\n----\r\n<Alert picture='panda-olhando-de-lado.jpg'>Para aplicar essa técnica, as variáveis precisam estar sempre separadas por vírgula.</Alert>\r\n----\r\n<Image picture='princesa-flutuando.jpg'>Eu não faço a menor ideia como vocês conseguiram essa informação, mas antes de enviarmos essas bombas precisamos calcular a distância total até o nosso alvo principal.</Image>\r\n----\r\n<Code>\r\nvar distancias = {\r\n  \"estacaoTerraAteColoniaSolis\": 2000, // Distância entre Estação Terra e Colônia Solis\r\n  \"vilaOmegaAteCidadeNova\": 500, // Distância entre Vila Omega e Cidade Nova\r\n  \"luaZetAteBaseDelta\": 850, // Distância entre Lua Zeta e Base Delta\r\n}\r\n</Code>\r\n----\r\n<Image picture='princesa-lendo.jpg'>Por favor, calculem a distancia total para mim.</Image>\r\n----\r\n<Text picture='panda-piscando.jpg'>É pra já!</Text>\r\n----\r\n<Text picture='panda-olhando-de-lado.jpg'>Primeiro, coloquemos todos esses números em variáveis.</Text>\r\n----\r\n<Code exec>\r\nvar { estacaoTerraAteColoniaSolis, vilaOmegaAteCidadeNova, luaZetAteBaseDelta } = {\r\n  \"estacaoTerraAteColoniaSolis\": 2000,\r\n  \"vilaOmegaAteCidadeNova\": 500,\r\n  \"luaZetAteBaseDelta\": 850,\r\n}\r\n\r\nescreva(estacaoTerraAteColoniaSolis) // 2000\r\nescreva(vilaOmegaAteCidadeNova) // 500\r\nescreva(luaZetAteBaseDelta) // 850\r\n</Code>\r\n----\r\n<User>Outra bruxaria com variáveis?</User>\r\n----\r\n<Text picture='panda-sorrindo.jpg'>O que eu fiz é chamado de *desestruturação*.</Text>\r\n----\r\n<Quote picture='panda-sorrindo-sentado.jpg' title='Desestruturação'>Desestruturação é uma forma de \"desmontar\" dicionários para extrair valores específicos de forma rápida e prática.</Quote>\r\n----\r\n<Code exec>\r\nvar panda = {\r\n  \"nome\": \"Panda\",\r\n  \"idade\": 2500,\r\n  \"planeta\": \"Planeta dos Pandas\"\r\n}\r\n\r\n// Desestruturação\r\nvar { nome, idade, planeta } = panda\r\n\r\nescreva(nome) // Panda\r\nescreva(idade) // 2500\r\nescreva(planeta) // Planeta dos Pandas\r\n</Code>\r\n----\r\n<Quote picture='panda-deslumbrado.jpg'>É como abrir uma caixa organizada e pegar só o que você precisa, sem carregar a caixa inteira. E o nome das variáveis nem precisa estar em ordem.</Quote>\r\n----\r\n<Alert picture='panda-espantado.jpg'>Cuidado! os nomes das variáveis têm que estar iguaizinhos às chaves do dicionário, senão a variável terá valor `nulo`!</Alert>\r\n----\r\n<Code exec>\r\nvar panda = {\r\n  \"nome\": \"Panda\",\r\n  \"idade\": 2500,\r\n  \"planeta\": \"Planeta dos Pandas\",\r\n}\r\n\r\n// Desestruturação\r\nvar { nome, idade, cidade } = panda\r\n\r\nescreva(nome)   // Panda\r\nescreva(idade)  // 2500\r\nescreva(cidade) // nulo\r\n</Code>\r\n----\r\n<Text picture='panda-sorrindo.jpg'>Agora com as variáveis prontas só precisamos somá-las.</Text>\r\n----\r\n<Code exec>\r\nvar { estacaoTerraAteColoniaSolis, vilaOmegaAteCidadeNova, luaZetAteBaseDelta } = {\r\n  \"estacaoTerraAteColoniaSolis\": 2000,\r\n  \"vilaOmegaAteCidadeNova\": 500,\r\n  \"luaZetAteBaseDelta\": 850,\r\n}\r\n\r\nvar distanciaTotal = [\r\n  estacaoTerraAteColoniaSolis, \r\n  vilaOmegaAteCidadeNova, \r\n  luaZetAteBaseDelta\r\n].somar()\r\n\r\nescreva(distanciaTotal) // 3350\r\n</Code>\r\n----\r\n<Text picture='panda-piscando-sentado.jpg'>Antes que pergunte, sim é possível utilizar `métodos` sem a necessidade de variáveis</Text>\r\n----\r\n<Code exec>\r\nescreva(\"texto em maiusculo\".maiusculo()) // TEXTO EM MAIUSCULO\r\n\r\nescreva([1, 2, 3].fatiar(1)) // [2, 3]\r\n\r\nescreva([1, 2, 3].mapear(funcao (numero) {\r\n  retorna numero * 2\r\n})) // [2, 4, 6]\r\n</Code>\r\n----\r\n<Image picture='princesa-animada.jpg'>Muto bem! As bombas já estão chegando no alvo perfeito.</Image>\r\n----\r\n<Text picture='panda-espantado.jpg'>Acertou em cheio! E os macacos parecem estar fugindo.</Text>\r\n----\r\n<Image picture='salmonense-dando-tchau.jpg'>Já bricamos suficiente com vocês. Tchau tchau.</Image>\r\n----\r\n<User>Mas tão fácil assim?</User>\r\n----\r\n<Text picture='panda-pensando.jpg'>E tudo graças àquele ser desconhecido. Quem será que nos ajudou e por quê?</Text>\r\n----\r\n<Image picture='princesa-soltando-fogos.jpg'>Não sei como agradecer vocês. Por favor, aceitam um dos presentes que mostrei.</Image>\r\n----\r\n<Code>\r\nvar dicionarioQualquer = {\r\n  0: \"ganhar 1 milhão de yaggs, mas perder todos os seus órgãos\",\r\n  1: \"poder cuidar do meu tubarão para o resto da vida\",\r\n  2: \"voltar para sua casa\",\r\n  3: \"poder voar comigo no céu por 3 dias seguidos, mas depois ficar preso no espaço por 3 meses\",\r\n}\r\n</Code>\r\n----\r\n<Text picture='panda-triste.jpg'>Acho que não há outra escolha melhor a não ser voltar para casa.</Text>\r\n----\r\n<Text picture='panda-sentado-com-mochila.jpg'>A jornada pelo espaço foi mais incrível do que qualquer um poderia imaginar. Cada estrela, cada planeta, cada conceito aprendido...</Text>\r\n----\r\n<Text picture='panda-pulando-de-alegria.jpg'>Tudo ficará gravado na minha memória. Agora está na hora de voltarmos para casa, mas o que vivemos aqui vai permanecer conosco para sempre.</Text>\r\n----\r\n<Text picture='panda-fazendo-coracao.jpg'>Quem sabe um dia nossos caminhos se cruzem novamente. Até logo. Nossa aventura nunca vai ser esquecida.</Text>\r\n----\r\n<Text picture='panda.jpg'>Mas não antes de praticarmos o que aprendemos aqui ;).</Text>\r\n",
         "texts": [
           {
@@ -7076,12 +7192,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "79b9125a-2edc-4fd4-bcbb-2be732926662",
         "name": "Métodos de texto",
-        "slug": "metodos-de-texto",
+        "slug": "metodos-de-texto-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -7435,12 +7552,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "7a05dbca-b319-4588-8024-b7cf600b06bc",
         "name": "Operadores relacionais",
-        "slug": "operadores-relacionais",
+        "slug": "operadores-relacionais-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -7754,24 +7872,26 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "82279f67-c250-4015-9242-04eed9a1670a",
         "name": "Desafio: Análise do ambiente",
-        "slug": "desafio-analise-do-ambiente",
+        "slug": "desafio-analise-do-ambiente-trilha-anterior",
         "story": "",
         "texts": null,
         "number": 4,
         "planet_id": "8c3b6cab-d3c6-4d64-8701-c580d4a6d31a",
         "questions": null,
         "is_available": true,
-        "is_challenge": true
+        "is_challenge": true,
+        "description": null
       },
       {
         "id": "8d260fac-f904-42b3-b37b-88832caf0f6e",
         "name": "Operadores lógicos",
-        "slug": "operadores-logicos",
+        "slug": "operadores-logicos-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -8179,12 +8299,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "98633c62-9619-4280-94cc-18c933adeda1",
         "name": "Métodos de lista II",
-        "slug": "metodos-de-lista-ii",
+        "slug": "metodos-de-lista-ii-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -8562,12 +8683,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "99f67920-afc1-494c-a076-8b7bf6eb90b6",
         "name": "Laços com listas",
-        "slug": "lacos-com-listas",
+        "slug": "lacos-com-listas-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -9085,48 +9207,52 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "9dcadaae-ebf1-48aa-ac18-5beef61f5423",
         "name": "Desafio: Removendo sapos",
-        "slug": "desafio-removendo-sapos",
+        "slug": "desafio-removendo-sapos-trilha-anterior",
         "story": "",
         "texts": null,
         "number": 9,
         "planet_id": "f0fa99e3-d5fb-4ff0-8c29-a3fc7cff21e8",
         "questions": null,
         "is_available": true,
-        "is_challenge": true
+        "is_challenge": true,
+        "description": null
       },
       {
         "id": "af998c0b-2ee7-4111-9ee4-e244a2f3ecb8",
         "name": "Desafio: Chuva de asteroides",
-        "slug": "desafio-chuva-de-asteroides",
+        "slug": "desafio-chuva-de-asteroides-trilha-anterior",
         "story": "",
         "texts": null,
         "number": 4,
         "planet_id": "800775c1-b4f7-4dc7-8010-142f8dfb7ac9",
         "questions": null,
         "is_available": true,
-        "is_challenge": true
+        "is_challenge": true,
+        "description": null
       },
       {
         "id": "b087da48-a7b4-47fb-be8f-442636f182a1",
         "name": "Desafio: Planetas pares",
-        "slug": "desafio-planetas-encontrados",
+        "slug": "desafio-planetas-encontrados-trilha-anterior",
         "story": "",
         "texts": null,
         "number": 4,
         "planet_id": "6a4aca25-b962-4cad-9aa4-81e0a2b6c0ee",
         "questions": null,
         "is_available": true,
-        "is_challenge": true
+        "is_challenge": true,
+        "description": null
       },
       {
         "id": "b34a4a76-0615-4910-89a9-05d34925dc70",
         "name": "Lógica de Programação",
-        "slug": "logica-de-programacao",
+        "slug": "logica-de-programacao-trilha-anterior",
         "story": "\n<Text picture=\"panda.jpg\">Olá! Parabéns, você acaba de entrar na equipe de exploração espacial para desbravar os confins do universo.</Text>\n----\n<Text picture=\"panda-sorrindo.jpg\">Meu nome é Panda e serei seu guia até o fim. Muito prazer!!</Text>\n----\n<Text picture=\"panda-piscando.jpg\">Antes de partirmos para as estrelas, lembre-se: nossa jornada será recheada de desafios fascinantes. E, para enfrentá-los, é crucial dominar a arte de desenvolver programas.</Text>\n----\n<Text picture=\"panda.jpg\">Um programa é uma sequência escrita de passos que instrui computadores a realizar uma determinada tarefa.</Text>\n----\n<Text picture=\"panda-andando-com-bambu.jpg\">Imagine que você tem um robô de cozinha muito especial. Esse robô consegue fazer todo tipo de comida incrível, mas precisa de instruções muito específicas para saber o que fazer. Agora, vamos supor que você queira ensinar esse robô a preparar um sanduíche perfeito.</Text>\n----\n<Text picture=\"panda-sorrindo.jpg\">Um programa de computador é como uma lista de etapas que você escreve para o robô seguir. Imagine que esses passos estão escritos em uma linguagem que só o robô entende. Cada passo é como uma instrução que diz ao robô o que pegar, o que cortar, como montar o sanduíche e como servi-lo.</Text>\n----\n<Text picture=\"panda-deslumbrado.jpg\">Agora, pense em todos os programas de computador que usamos todos os dias. Quando você joga um jogo no computador, conversa com seus amigos em um aplicativo ou faz uma pesquisa na internet, tudo isso acontece porque um monte de instruções mágicas está sendo seguido por máquinas superespertas.</Text>\n----\n<Code>\nprograma preparar_cafe\n\nInicio\n\n  Colocar cafe no filtro.\n  Adicionar agua quente.\n  Iniciar processo de preparo.\n  Servir o cafe pronto.\n\nFim\n</Code>\n----\n<Text picture=\"panda.jpg\">Veja que um programa sempre tem início, meio e fim, e os passos devem ser colocados de maneira lógica, pois não dá para servir o café pronto sem antes prepará-lo, por exemplo.</Text>\n----\n<Text picture=\"panda-fazendo-coracao.jpg\">Essa abordagem de pensar logicamente para escrever um programa chamamos de lógica de programação.</Text>\n----\n<Image picture=\"apollo-teclando.jpg\">A lógica está em todo lugar...</Image>\n----\n<Text picture=\"panda-sorrindo.jpg\">E acredite, não é só coisa de tecnologia. É um modo de pensar que usamos até nas tarefas cotidianas.</Text>\n----\n<Text picture=\"panda-triste.jpg\">Por exemplo, você é um aspirante a explorador espacial, mas o problema é que não tem experiência nisso e muito menos sabe pilotar um foguete :(</Text>\n----\n<Text picture=\"panda-deslumbrado.jpg\">Então, você precisa pensar de forma lógica e organizada para criar uma sequência de passos que resolva esse problema.</Text>\n----\n<Text picture=\"panda.jpg\">Se o seu objetivo é preparar o foguete para o espaço, seu programa pode ser algo assim:</Text>\n----\n<Code>\nprograma preparar_foguete\n\nInicio\n\n  localizar um foguete disponivel.\n  verificar os niveis de combustivel.\n  verificar o suprimento a bordo.\n  verificar os niveis de oxigenio.\n\n  se necessario, obter recursos adicionais.\n  caso contrario, preparar a decolagem do foguete.\n\n  aguardar ate que o foguete entre em orbita.\n  aproveitar a jornada enquanto o foguete viaja pelo espaço.\n\nFim\n</Code>\n----\n<Text title=\"Mas é só isso?\" picture=\"panda-piscando.jpg\">Obviamente, há várias formas de chegar a esse mesmo resultado, assim como pode haver passos que devem vir antes de outros.</Text>\n----\n<Text picture=\"panda-deslumbrado.jpg\">Contudo, o objetivo sempre será este: pensar logicamente para estipular uma sequência de passos com início e fim para a resolução de um problema.</Text>\n----\n<Quote picture=\"panda-fazendo-coracao.jpg\">Agora que você compreende o básico da lógica de programação, vamos embarcar nesse foguete 🚀.</Quote>",
         "texts": [
           {
@@ -9323,12 +9449,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "b5698598-cd2a-44de-b560-31798581f9e5",
         "name": "Escreva e leia",
-        "slug": "escreva-e-leia",
+        "slug": "escreva-e-leia-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -9590,24 +9717,26 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "bda4c82c-9466-4619-bdd6-89f719c54c27",
         "name": "Desafio: A dúvida dos macacos",
-        "slug": "a-duvida-dos-macacos",
+        "slug": "a-duvida-dos-macacos-trilha-anterior",
         "story": "",
         "texts": null,
         "number": 4,
         "planet_id": "d76aa273-902e-451c-b471-0c4574bafb0a",
         "questions": null,
         "is_available": true,
-        "is_challenge": true
+        "is_challenge": true,
+        "description": null
       },
       {
         "id": "bda632fb-1b20-4b26-97a9-8fe94864946f",
         "name": "Acessando e alterando valores",
-        "slug": "acessando-e-alterando-valores",
+        "slug": "acessando-e-alterando-valores-trilha-anterior",
         "story": "<Text picture='panda-comemorando.jpg'>Muito bem!</Text>\r\n----\r\n<Text picture='panda-comemorando.jpg'>Achamos a princesa e parece que ela está são e salva.</Text>\r\n----\r\n<Text picture='panda-confuso.jpg'>Parece também que aquele tubarão foi embora...</Text>\r\n----\r\n<Image picture='princesa-sorrindo.jpg'>+>>+ +>+++!</Image>\r\n----\r\n<User>Mas o que ela disse?</User>\r\n----\r\n<Image picture='princesa-sorrindo.jpg'>+>>+ +>+++ +++>+ ++ +>+>+</Image>\r\n----\r\n<User>What?</User>\r\n----\r\n<Text picture='panda-triste.jpg'>A princesa fala um idioma completamente desconhecido até mesmo para o nosso tradutor</Text>\r\n----\r\n<User>E agora?</User>\r\n----\r\n<Text picture='panda-sorrindo-sentado.jpg'>Não se preocupe, acabo de achar um dicionário por perto</Text>\r\n----\r\n<Code>\r\n  var dicionario = {\r\n     \"+>+++\": \"obrigada\",\r\n  }\r\n</Code>\r\n----\r\n<Quote picture='panda-sorrindo.jpg'>Essa é a estrutura que chamamos de `dicionário` em programação</Quote>\r\n----\r\n<Quote picture='panda-oferecendo-bambu.jpg'>Ela parece complicada de início, então vamos com calma.</Quote>\r\n----\r\n<Text picture='panda-de-oculos.jpg'>Primeiro, um dicionário nada mais é que um conjunto de chaves e valores. Sempre separados por dois pontos `:` colocados entre chaves `{}`</Text>\r\n----\r\n<Code>\r\n  var dicionarioQualquer = {\r\n    \"primeira chave\": \"valor 1\",\r\n    \"segunda chave\": \"valor 2\",\r\n    \"terceira chave\": \"valor 3\",\r\n  }\r\n</Code>\r\n----\r\n<Alert picture='panda-de-oculos.jpg'>Importante dizer: os conjunto de chave e valor do dicionário são sempre separados por vírgula.</Alert>\r\n----\r\n<Text picture='panda-olhando-computador.jpg'>Por exemplo, pense em uma lista telefônica:</Text>\r\n----\r\n<Code>\r\n  var listaTelefonica = {\r\n    \"Leonel Sanches\": \"7777-7777\",\r\n    \"Ítalo Brandão\": \"1111-1111\",\r\n    \"Samuel Gonçalves\": \"5555-5555\",\r\n  }\r\n</Code>\r\n----\r\n<Text picture='panda-de-oculos.jpg'>Nessa estrutura em vez de procurar diretamente pelo número da pessoa, eu posso procurar pelo nome dela.</Text>\r\n----\r\n<Text picture='panda-sorrindo.jpg' title='Acessando valores de um dicionário'>E para acessar o valor contido em dicionário preciso colocar sua chave entre colchetes após o nome da variável que contém o dicionário</Text>\r\n----\r\n<Code exec>\r\n   var listaTelefonica = {\r\n    \"Leonel Sanches\": \"7777-7777\",\r\n    \"Ítalo Brandão\": \"1111-1111\",\r\n    \"Samuel Gonçalves\": \"5555-5555\",\r\n  }\r\n\r\n  var telefone = listaTelefonica['Ítalo Brandão']\r\n  escreva(telefone) // 1111-1111\r\n</Code>\r\n----\r\n<User>Mas e se o nome da pessoa não estivesse no dicionário?</User>\r\n----\r\n<Text picture='panda-sorrindo.jpg'>Seria retornado `nulo`, veja só:</Text>\r\n----\r\n<Code exec>\r\n   var listaTelefonica = {\r\n    \"Leonel Sanches\": \"7777-7777\",\r\n    \"Ítalo Brandão\": \"1111-1111\",\r\n    \"Samuel Gonçalves\": \"5555-5555\",\r\n  }\r\n\r\n  var telefone = listaTelefonica[\"Aristides da Costa\"]\r\n  escreva(telefone) // nulo\r\n</Code>\r\n----\r\n<Text picture='panda-deslumbrado.jpg'>Viu só? É uma mão na roda quando você quer encontrar um valor sem usar `laços` com `listas`, visto que com uma lista você seria obrigado a verificar cada elemento para encontrar o que você quer.</Text>\r\n----\r\n<Text picture='panda-meditando.jpg'>Mas voltando para o nosso problema.</Text>\r\n----\r\n<Code>\r\n  var frase = \"+>>+ +>+++ +++>+ ++ +>+>+\"\r\n\r\n  var dicionario = {\r\n        \"+++>+\": \"por\",\r\n  }\r\n</Code>\r\n----\r\n<Text picture='panda-olhando-computador.jpg'>Temos um belo dicionário e uma frase. Podemos, primeiro, transformar a frase em uma lista de palavras.</Text>\r\n----\r\n<Code exec>\r\n  var frase = \"+>>+ +>+++ +++>+ ++ +>+>+\"\r\n  var palavras = frase.dividir(' ')\r\n  escreva(palavras) // ['+>>+', '+>+++', '+++>+', '++', '+>+>+']\r\n\r\n  var dicionario = {\r\n        \"+>+>+\": \"salvarem\",\r\n  }\r\n</Code>\r\n----\r\n<Alert picture='panda-de-oculos.jpg'>Lembre-se do método lista `dividir()`. Eu coloquei um texto vazio como argumento para o método `dividir` para separar as palavras com nos espaços na frase.</Alert>\r\n----\r\n<Text picture='panda-olhando-computador.jpg'>Agora, criamos uma variável chamada `traducao` e escrevemos um laço `para cada` que percorre cada palavra na lista.</Text>\r\n----\r\n<Code>\r\n  var frase = \"+>>+ +>+++ +++>+ ++ +>+>+\"\r\n  var palavras = frase.dividir(' ')\r\n  var traducao = ''\r\n\r\n  var dicionario = {\r\n    \"+>>+\": \"muito\",\r\n  }\r\n\r\n  para cada palavra em palavras {\r\n\r\n  }\r\n</Code>\r\n----\r\n<User picture='panda-viajando.jpg'>Acho que sei onde você quer chegar.</User>\r\n----\r\n<Code>\r\n  var frase = \"+>>+ +>+++ +++>+ ++ +>+>+\"\r\n  var palavras = frase.dividir(' ')\r\n  var traducao = ''\r\n\r\n  var dicionario = {\r\n        \"++\": \"me\",\r\n  }\r\n\r\n  para cada palavra em palavras {\r\n    traducao += \"dicionario[palavra] \"\r\n  }\r\n</Code>\r\n----\r\n<Text picture='panda-comemorando.jpg'>Isso mesmo! Cada palavra pode ser usada como chave para acessar o seu valor correspondente</Text>\r\n----\r\n<Text picture='panda-olhando-computador.jpg'>E concatenando o valor da chave + um espaço vazio à variável `traducao` a cada iteração</Text>\r\n----\r\n<Code exec>\r\n  var frase = \"+>>+ +>+++ +++>+ ++ +>+>+\"\r\n  var palavras = frase.dividir(' ')\r\n  var traducao = ''\r\n\r\n  var dicionario = {\r\n    \"+>+++\": \"obrigada\",\r\n    \"+++>+\": \"por\",\r\n    \"+>+>+\": \"salvarem\",\r\n    \"+>>+\": \"muito\",\r\n    \"++\": \"me\",\r\n  }\r\n\r\n  para cada palavra de palavras {\r\n    var palavraTraduzida = dicionario[palavra]\r\n    traducao += \"${palavraTraduzida} \"\r\n  }\r\n\r\n  escreva(traducao) // muito obrigada por me salvarem\r\n</Code>\r\n----\r\n<Text picture='panda-deslumbrado.jpg'>Bom demais!</Text>\r\n----\r\n<Image picture='princesa-sorrindo.jpg'>++ +++ ++>>++ +>>> +>>+</Image>\r\n----\r\n<Text picture='panda-amando-bambu.jpg'>A princesa está falando de novo, vamos utilizar nossa estratégia novamente.</Text>\r\n----\r\n<Code exec>\r\n  var frase = \"++ +++ ++>>++ +>>> +>>+\"\r\n  var palavras = frase.dividir(' ')\r\n  var traducao = ''\r\n\r\n  var dicionario = {\r\n    \"+>>>\": \"uma\",\r\n    \"+++\": \"lhes\",\r\n    \"++>>++\": \"gar\",\r\n    \"+>>+\": \"recompensa\",\r\n    \"++\": \"vou\",\r\n  }\r\n\r\n  para cada palavra de palavras {\r\n    var palavraTraduzida = dicionario[palavra]\r\n    traducao += \"${palavraTraduzida} \"\r\n  }\r\n\r\n  escreva(traducao) // vou lhes gar uma recompensa\r\n</Code>\r\n----\r\n<User>'Gar' uma recompensa?.</User>\r\n----\r\n<Text picture='panda-chorando.jpg'>Pultz! Parece que uma palavra no dicionário deles está errada.</Text>\r\n----\r\n<Text picture='panda-piscando.jpg'>Mas ainda bem que é possível alterar qualquer um dos valores de um dicionário.</Text>\r\n----\r\n<Text title='Alterando o valor de um dicionário' picture='panda-de-oculos.jpg'>Suponhamos um boletim de um estudante com notas de 0 até 10.</Text>\r\n----\r\n<Code>\r\n  var boletim = {\r\n    \"1º ano\": 8,\r\n    \"2º ano\": 6.5,\r\n    \"3º ano\": 100,\r\n  }\r\n</Code>\r\n----\r\n<Text picture='panda-pensando.jpg'>O valor do `3º ano` está claramente errado porquê o máximo possível é 10.</Text>\r\n----\r\n<Quote title='Alterando o valor de um dicionário' picture='panda-olhando-computador.jpg'>Podemos mudar o valor da chave \"3º ano\" passando nome dessa chave entre colchetes e atribuindo um novo valor.</Quote>\r\n----\r\n<Code exec>\r\n  var boletim = {\r\n    \"1º ano\": 8,\r\n    \"2º ano\": 6.5,\r\n    \"3º ano\": 100,\r\n  }\r\n\r\n  boletim[\"3º ano\"] = 10\r\n\r\n  escreva(boletim[\"3º ano\"]) // 10\r\n</Code>\r\n----\r\n<User>E se acha chave `3º ano` não existisse no dicionário?</User>\r\n----\r\n<Quote title='Adicionando um valor a um dicionário' picture='panda-viajando.jpg'>Seria criado um novo conjunto de chave e valor no dicionário `boletim`.</Quote>\r\n----\r\n<Code exec>\r\n  var boletim = {\r\n    \"1º ano\": 8,\r\n    \"2º ano\": 6.5,\r\n  }\r\n\r\n  escreva(boletim[\"3º ano\"]) // nulo\r\n\r\n  boletim[\"3º ano\"] = 10\r\n\r\n  escreva(boletim[\"3º ano\"]) // 10\r\n</Code>\r\n----\r\n<Text picture='panda-sorrindo-sentado.jpg'>Muito bem. Agora, fazemos o mesmo com o dicionário da princesa corrigindo a palavra.</Text>\r\n----\r\n<Code exec>\r\n  var frase = \"++ +++ ++>>++ +>>> +>>+\"\r\n  var palavras = frase.dividir(' ')\r\n  var traducao = ''\r\n\r\n  var dicionario = {\r\n    \"+>>>\": \"uma\",\r\n    \"+++\": \"lhes\",\r\n    \"++>>++\": \"gar\",\r\n    \"+>>+\": \"recompensa\",\r\n    \"++\": \"vou\",\r\n  }\r\n\r\n  dicionario[\"++>>++\"] = \"dar\"\r\n\r\n  para cada palavra de palavras {\r\n    var palavraTraduzida = dicionario[palavra]\r\n    traducao += \"${palavraTraduzida} \"\r\n  }\r\n\r\n  escreva(traducao) // vou lhes dar uma recompensa\r\n</Code>\r\n----\r\n<Text picture='panda-olhando-de-lado.jpg'>Que recompensa é essa, princesa?</Text>\r\n----\r\n<Image picture='princess-floating.jpg'>...</Image>\r\n----\r\n<Text picture='panda-pensando.jpg'>Pensando bem. Porque a princesa agradeceu a genter por ter a salvado sendo que nó apenas a encontramos?</Text>\r\n----\r\n",
         "texts": [
           {
@@ -10039,12 +10168,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "c20e0e55-2a21-4512-a080-be80b037117a",
         "name": "Senão se",
-        "slug": "senao-se",
+        "slug": "senao-se-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -10354,12 +10484,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "c81c136a-879a-4548-a019-174b2dfe05d7",
         "name": "Métodos de lista V",
-        "slug": "metodos-de-lista-v",
+        "slug": "metodos-de-lista-v-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -10665,12 +10796,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "dfc95427-e31f-489a-96c7-5aadae45af86",
         "name": "Operadores aritméticos",
-        "slug": "operadores-aritmeticos",
+        "slug": "operadores-aritmeticos-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -11230,12 +11362,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "e14a0bb2-a191-44c8-b0c4-2f3cc65c7205",
         "name": "Chaves e valores",
-        "slug": "chaves-e-valores",
+        "slug": "chaves-e-valores-trilha-anterior",
         "story": "<Image picture='tubarao.jpg'>Haha! Eu voltei</Image>\r\n----\r\n<Text picture='panda-espantado.jpg'>O tubarãooo!</Text>\r\n----\r\n<Image picture='princesa-vomitando.jpg'>Acalme-se Sharkorno.</Image>\r\n----\r\n<Image picture='tubarao-acenando.jpg'>Sim, princesa!</Image>\r\n----\r\n<User>A princesa está falando a nossa língua.</User>\r\n----\r\n<Text picture='panda-segurando-bambu-de-pe.jpg'>Aparentemente, o tubarão tinha sumido para buscar um tradutor para a princesa e, pelo visto, ele não é tão malvado assim.</Text>\r\n----\r\n<Image picture='princesa-sorrindo.jpg'>Peço perdão pelo meu tubarão de estimação, às vezes ele não jeito.</Image>\r\n----\r\n<Image picture='princesa-animada.jpg'>Não temos tempo a perder. Já já os salmonenses estão perto de chegar ao meu mundo.</Image>\r\n----\r\n<User>Salmonenses?</User>\r\n----\r\n<Image picture='princesa-lendo.jpg'>Sim. são aliens parecidos com macacos que amam comer bananas.</Image>\r\n----\r\n<Image picture='salmonense-fisionomia.jpg'>Não se deixem enganar pela sua aparência fofa.</Image>\r\n----\r\n<Image picture='princesa-lendo.jpg'>Ele percorrem pela galáxia à procura de bananas destruindos mundos no processo.</Image>\r\n----\r\n<Image picture='princesa-animada.jpg'>E agora eles agora estão atrás das minhas bananas!</Image>\r\n----\r\n<User>O que você quer que a gente faça, princesa?</User>\r\n----\r\n<Image picture='princesa-vomitando.jpg'>Por favor, sejam os guerreiros das minhas bananas e em troca poderão escolher uma das recompensas:</Image>\r\n----\r\n<Code>\r\nvar dicionarioQualquer = {\r\n  0: \"ganhar 1 milhão de yaggs, mas perder todos os seus órgãos\",\r\n  1: \"poder cuidar do meu tubarão para o resto da vida\",\r\n  2: \"voltar para sua casa\",\r\n  3: \"poder voar comigo no céu por 3 dias seguidos, mas depois ficar preso no espaço por 3 meses\",\r\n}\r\n</Code>\r\n----\r\n<Alert picture='panda-deslumbrada.png'>Como pode bem ver, não é apenas possível definir as chaves de um dicionário usando tipo `texto`, mas `número` também.</Alert>\r\n----\r\n<Text picture='panda-rindo-deitado.jpg'>Com tanta opção ruim, é melhor escolher mais tarde.</Text>\r\n----\r\n<Image picture='princesa-lendo.jpg'>Antes de partirem para a batalha, é melhor saberem como combater os salmonenses</Image>\r\n----\r\n<Code>\r\nvar reservasDeBananas = {\r\n  \"reserva de bananas 1\": [\"banana\", \"banana\", \"banana\", \"banana\"],\r\n  \"reserva de bananas 2 \": [\"banana\", \"banana\"],\r\n  \"reserva de bananas 3 \": [\"banana\", \"banana\", \"banana\"],\r\n}\r\n</Code>\r\n----\r\n<User>Um dicionário contendo listas?</User>\r\n----\r\n<Text picture='panda-sorrindo.jpg'>Sim! O valor de um dicionário pode ser um tipo de dado mais complexo como listas ou ainda dicionários.</Text>\r\n----\r\n<Code exec>\r\nvar notasDeAlunos = {\r\n  \"Alice\": [9.0, 8.5, 7.5],\r\n  \"Bruno\": [6.0, 7.0, 8.0],\r\n  \"Clara\": [10.0, 9.5, 9.0]\r\n}\r\n\r\nescreva(notasDeAlunos)\r\n</Code>\r\n----\r\n<Text picture='panda-sorrindo.jpg'>É claro que é possível utilizar tudo o que nós aprendemos sobre listas com um dicionário de listas</Text>\r\n----\r\n<Code exec>\r\nvar notasDeAlunos = {\r\n  \"Alice\": [9.0, 8.5, 7.5],\r\n  \"Bruno\": [6.0, 7.0, 8.0],\r\n  \"Clara\": [10.0, 9.5, 9.0]\r\n}\r\n\r\nvar primeiraNotaDeBruno = notasDeAlunos[\"Bruno\"][0]\r\nescreva(primeiraNotaDeBruno) // 6\r\n\r\nvar ultimasNotasDeClara = notasDeAlunos[\"Clara\"].fatiar(1)\r\nescreva(ultimasNotasDeClara) // [9.5, 9]\r\n\r\nvar notasDaAliceEmDobro = notasDeAlunos[\"Alice\"].mapear(funcao(nota) { \r\n  retorna nota * 2\r\n})\r\nescreva(notasDaAliceEmDobro) // [18, 17, 15]\r\n</Code>\r\n----\r\n<Image picture='princesa-sorrindo.jpg'>O que vocês devem fazer é simples: substituir todos os tomates por bananas, porque os salmonenses são alérgicos a tomates. Mas primeiro vocês devem saber à quantidade de bananas que devem ser substituídas.</Image>\r\n----\r\n<Code>\r\nvar reservasDeBananas = {\r\n  \"reserva de bananas 1\": [\"banana\", \"banana\", \"banana\", \"banana\"],\r\n  \"reserva de bananas 2 \": [\"banana\", \"banana\"],\r\n  \"reserva de bananas 3 \": [\"banana\", \"banana\", \"banana\"],\r\n}\r\n\r\nvar totalDeBananas\r\n\r\n// Qual é a quantidade total de bananas?\r\n</Code>\r\n----\r\n<Text picture='panda-pensando.jpg'>Há várias formas de resolver esse problema. Primeiro, vamos pegar todos os valores desse dicionário.</Text>\r\n----\r\n<Code exec>\r\nvar reservasDeBananas = {\r\n  \"reserva de bananas 1\": [\"banana\", \"banana\", \"banana\", \"banana\"],\r\n  \"reserva de bananas 2 \": [\"banana\", \"banana\"],\r\n  \"reserva de bananas 3 \": [\"banana\", \"banana\", \"banana\"],\r\n}\r\n\r\nvar reservasDeBanana = reservasDeBananas.chaves()\r\n\r\nescreva(reservasDeBanana) // [\"reserva de bananas 1\", \"reserva de bananas 2\", \"reserva de bananas 3\"]\r\n</Code>\r\n----\r\n<Quote picture='panda-piscando.jpg' title=\"Método chaves( )\">O que acabei de fazer foi usar um método disponível para qualquer dicionário, `chaves()`, que justamente retorna todos os chaves de um dicionário dentro de uma `lista`.</Quote>\r\n----\r\n<Text picture='panda-segurando-bambu-de-pe.jpg'>Agora utilizando o básico de laços com listas que já aprendemos...</Text>\r\n----\r\n<Code exec>\r\nvar reservasDeBananas = {\r\n  \"reserva de bananas 1\": [\"banana\", \"banana\", \"banana\", \"banana\"],\r\n  \"reserva de bananas 2 \": [\"banana\", \"banana\"],\r\n  \"reserva de bananas 3 \": [\"banana\", \"banana\", \"banana\"],\r\n}\r\nvar nomesDeReservas = reservasDeBananas.chaves()\r\n\r\npara cada nomeDeReserva de nomesDeReservas {\r\n  var tomates = reservasDeBananas[nomeDeReserva].mapear(funcao() {\r\n    retorna \"tomate\"\r\n  })\r\n  reservasDeBananas[nomeDeReserva] = tomates\r\n}\r\n\r\nescreva(reservasDeBananas)\r\n</Code>\r\n----\r\n<Text picture='panda-olhando-computador.jpg'>Estou acessando cada lista de bananas pelo nome da reserva e transformando cada banana dessa lista em um tomate utilizando o método `mapear()`.</Text>\r\n----\r\n<Text picture='panda-olhando-computador.jpg'>No fim do laço, eu altero o valor da reserva atual passando a lista de tomates gerada no lugar da lista de bananas.</Text>\r\n----\r\n<Image picture='princesa-deslumbrado.png'>Muito bem!! Logicamente nós temos uma quantidade de tomates limitada, por isso mandei meu tubarão trazer todas as minhas de reservas de tomate.</Image>\r\n----\r\n<Code>\r\nvar reservasDeTomates = {\r\n  \"reserva de tomates 1\": {\r\n      \"tomates\": [\"tomate\", \"tomate\", \"tomate\", \"tomate\"],\r\n      \"quantidade\": 4,\r\n      \"localizacao\": \"Zona A\",\r\n  },\r\n  \"reserva de tomates 2\": {\r\n      \"tomates\": [\"tomate\", \"tomate\"],\r\n      \"quantidade\": 2,\r\n      \"localizacao\": \"Zona B\",\r\n  },\r\n  \"reserva de tomates 3\": {\r\n      \"tomates\": [\"tomate\", \"tomate\", \"tomate\"],\r\n      \"quantidade\": 3,\r\n      \"localizacao\": \"Zona C\",\r\n  }\r\n}\r\n</Code>\r\n----\r\n<User>Wow!! Um dicionário de dicionários.</User>\r\n----\r\n<Image picture='princesa-lendo.jpg'>Sua tarefa é criar uma lista única contendo todos os tomates que eu tenho em reserva.</Image>\r\n----\r\n<Text picture='panda-piscando-sentado.jpg'>Não priemos cânico! E sim, é possível criar um dicionário de dicionários, como no exemplo a seguir</Text>\r\n----\r\n<Code>\r\nvar biblioteca = {\r\n  \"Livro A\": {\"autor\": \"Autor 1\", \"ano\": 1990, \"genero\": \"Ficção\"},\r\n  \"Livro B\": {\"autor\": \"Autor 2\", \"ano\": 2005, \"genero\": \"História\"},\r\n  \"Livro C\": {\"autor\": \"Autor 3\", \"ano\": 2020, \"genero\": \"Tecnologia\"}\r\n}\r\n</Code>\r\n----\r\n<Quote picture='panda-segurando-bambu-de-pe.jpg'>Para acessar o valor de um dicionário interno é preciso passar entre colchetes `[]` o valor da chave desse dicionario após a chave do dicionário maior.</Quote>\r\n----\r\n<Code exec>\r\nvar biblioteca = {\r\n  \"Livro A\": {\"autor\": \"Autor 1\", \"ano\": 1990, \"genero\": \"Ficção\"},\r\n  \"Livro B\": {\"autor\": \"Autor 2\", \"ano\": 2005, \"genero\": \"História\"},\r\n  \"Livro C\": {\"autor\": \"Autor 3\", \"ano\": 2020, \"genero\": \"Tecnologia\"}\r\n}\r\n\r\nescreva(biblioteca[\"Livro B\"][\"genero\"]) // História\r\n</Code>\r\n----\r\n<Text picture='panda-sorrindo.jpg'>Claro, se houvesse um dicionário dentro do dicionário que está dentro do outro dicionário você repetiria o processo com os colchetes `[\"Chave 1\"][\"Chave 2\"][\"Chave 3\"]` e assim vai.</Text>\r\n----\r\n<Quote picture='panda-segurando-bambu-de-pe.jpg' title='Método valores( )'>Para o desafio proposto pela princesa podemos utilizar o método `valores()`.</Quote>\r\n----\r\n<User>Deixa eu adivinhar, ele retorna todos os valores do dicionário.</User>\r\n----\r\n<Text picture='panda-olhando-de-lado.jpg'>Isso mesmo!</Text>\r\n----\r\n<Code exec>\r\nvar reservasDeTomates = {\r\n  \"reserva de tomates 1\": {\r\n    \"tomates\": [\"tomate\", \"tomate\", \"tomate\", \"tomate\"],\r\n    \"quantidade\": 4,\r\n    \"localizacao\": \"Zona A\",\r\n  },\r\n  \"reserva de tomates 2\": {\r\n    \"tomates\": [\"tomate\", \"tomate\"],\r\n    \"quantidade\": 2,\r\n    \"localizacao\": \"Zona B\",\r\n  },\r\n  \"reserva de tomates 3\": {\r\n    \"tomates\": [\"tomate\", \"tomate\", \"tomate\"],\r\n    \"quantidade\": 3,\r\n    \"localizacao\": \"Zona C\",\r\n  }\r\n}\r\n\r\nvar reservas = reservasDeTomates.valores()\r\nescreva(reservas)\r\n</Code>\r\n----\r\n<Text picture='panda-deslumbrado.jpg'>Perceba que temos uma lista de dicionários agora.</Text>\r\n----\r\n<Text picture='panda-olhando-de-lado.jpg'>Podemos utilizar um laço `para cada` para criar uma nova lista de tomates.</Text>\r\n----\r\n<Code exec>\r\nvar reservasDeTomates = {\r\n  \"reserva de tomates 1\": {\r\n    \"tomates\": [\"tomate\", \"tomate\", \"tomate\", \"tomate\"],\r\n    \"quantidade\": 4,\r\n    \"localizacao\": \"Zona A\",\r\n  },\r\n  \"reserva de tomates 2\": {\r\n    \"tomates\": [\"tomate\", \"tomate\"],\r\n    \"quantidade\": 2,\r\n    \"localizacao\": \"Zona B\",\r\n  },\r\n  \"reserva de tomates 3\": {\r\n    \"tomates\": [\"tomate\", \"tomate\", \"tomate\"],\r\n    \"quantidade\": 3,\r\n    \"localizacao\": \"Zona C\",\r\n  }\r\n}\r\n\r\nvar reservas = reservasDeTomates.valores()\r\nvar todosTomates = []\r\n\r\npara cada reserva de reservas {\r\n  todosTomates.adicionar(reserva[\"tomates\"])\r\n}\r\n\r\nescreva(todosTomates)\r\n</Code>\r\n----\r\n<Image picture='princesa-chocada.jpg'>Eu quero uma lista simples e não uma lista de listas.</Image>\r\n----\r\n<Text picture='panda-sorrindo.jpg'>Ok, criemos mais um laço `para cada`, então</Text>\r\n----\r\n<Code exec>\r\nvar reservasDeTomates = {\r\n  \"reserva de tomates 1\": {\r\n    \"tomates\": [\"tomate\", \"tomate\", \"tomate\", \"tomate\"],\r\n    \"quantidade\": 4,\r\n    \"localizacao\": \"Zona A\",\r\n  },\r\n  \"reserva de tomates 2\": {\r\n    \"tomates\": [\"tomate\", \"tomate\"],\r\n    \"quantidade\": 2,\r\n    \"localizacao\": \"Zona B\",\r\n  },\r\n  \"reserva de tomates 3\": {\r\n    \"tomates\": [\"tomate\", \"tomate\", \"tomate\"],\r\n    \"quantidade\": 3,\r\n    \"localizacao\": \"Zona C\",\r\n  }\r\n}\r\n\r\nvar reservas = reservasDeTomates.valores()\r\nvar todosTomates = []\r\n\r\npara cada reserva de reservas {\r\n  para cada tomate de reserva[\"tomates\"] {\r\n    todosTomates.adiciona(tomate)\r\n  }\r\n}\r\n\r\nescreva(todosTomates)\r\n</Code>\r\n----\r\n<Image picture='princesa-deslumbrada.png'>Eba!! Agora temos um monte de tomates. Estamos prontos para guerrear, vamos lá!</Image>\r\n----\r\n<Text picture='panda-espantado.jpg'>Mas já?</Text>",
         "texts": [
           {
@@ -11715,12 +11848,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "e277d5fc-ba7d-4d84-b65c-c613680a22ac",
         "name": "Métodos de lista IV",
-        "slug": "metodos-de-lista-iv",
+        "slug": "metodos-de-lista-iv-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -12178,24 +12312,26 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "e35bba41-f5cd-4a37-9b67-533171a086cc",
         "name": "Desafio: Enviar mensagem",
-        "slug": "desafio-enviar-mensagem",
+        "slug": "desafio-enviar-mensagem-trilha-anterior",
         "story": "",
         "texts": null,
         "number": 4,
         "planet_id": "2ee862da-4b73-4fb3-984a-d6ed1743102b",
         "questions": null,
         "is_available": true,
-        "is_challenge": true
+        "is_challenge": true,
+        "description": null
       },
       {
         "id": "ee4d1bd4-2038-4440-828e-3e96121b3be1",
         "name": "Enquanto",
-        "slug": "enquanto",
+        "slug": "enquanto-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -12501,12 +12637,13 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "ff16187f-0754-4548-9362-250f0d216fcc",
         "name": "Fazer enquanto ",
-        "slug": "fazer-enquanto",
+        "slug": "fazer-enquanto-trilha-anterior",
         "story": "",
         "texts": [
           {
@@ -12881,7 +13018,8 @@
           }
         ],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0c01",
@@ -12893,7 +13031,8 @@
         "planet_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0b01",
         "questions": [],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
       },
       {
         "id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0c02",
@@ -12905,7 +13044,696 @@
         "planet_id": "7a0c1f4e-6c1b-4f2e-9a51-2d3b8e1c0b01",
         "questions": [],
         "is_available": true,
-        "is_challenge": false
+        "is_challenge": false,
+        "description": null
+      },
+      {
+        "id": "34a9d6e5-9992-560d-95bb-bb1dd642b31b",
+        "name": "Lógica de programação",
+        "slug": "logica-de-programacao",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 1,
+        "planet_id": "8f63bbe8-1a61-5e02-8203-02b2cced2c0e",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre lógica de programação."
+      },
+      {
+        "id": "6fcd9371-bcf1-5392-98ec-5679e5c3715e",
+        "name": "Variáveis",
+        "slug": "variaveis",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 2,
+        "planet_id": "8f63bbe8-1a61-5e02-8203-02b2cced2c0e",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre variáveis."
+      },
+      {
+        "id": "ecfa36b3-52a9-5c34-b69b-09cbb57765ed",
+        "name": "Escreva e leia",
+        "slug": "escreva-e-leia",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 3,
+        "planet_id": "8f63bbe8-1a61-5e02-8203-02b2cced2c0e",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre escreva e leia."
+      },
+      {
+        "id": "840e6889-a7ce-55fd-930a-f62274e07b9b",
+        "name": "Desafio: Decolar",
+        "slug": "desafio-decolar",
+        "story": null,
+        "texts": null,
+        "number": 4,
+        "planet_id": "8f63bbe8-1a61-5e02-8203-02b2cced2c0e",
+        "questions": null,
+        "is_available": true,
+        "is_challenge": true,
+        "description": "Desafio final de Aurora."
+      },
+      {
+        "id": "d108b809-c54c-58cf-833b-afe495b12dd0",
+        "name": "Tipo texto",
+        "slug": "tipo-texto",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 1,
+        "planet_id": "8871e6f0-504e-5950-b143-2231834ddb59",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre tipo texto."
+      },
+      {
+        "id": "5f956f61-8f15-5d65-978f-655b51e4d286",
+        "name": "Tipo número",
+        "slug": "tipo-numero",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 2,
+        "planet_id": "8871e6f0-504e-5950-b143-2231834ddb59",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre tipo número."
+      },
+      {
+        "id": "a649a09b-f470-533d-a800-7779f419a3dd",
+        "name": "Tipo lógico",
+        "slug": "tipo-logico",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 3,
+        "planet_id": "8871e6f0-504e-5950-b143-2231834ddb59",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre tipo lógico."
+      },
+      {
+        "id": "0ec4db70-858c-5af5-b48c-eeb19a8db2c2",
+        "name": "Desafio: Reunir os três pedaços",
+        "slug": "desafio-reunir-os-tres-pedacos",
+        "story": null,
+        "texts": null,
+        "number": 4,
+        "planet_id": "8871e6f0-504e-5950-b143-2231834ddb59",
+        "questions": null,
+        "is_available": true,
+        "is_challenge": true,
+        "description": "Desafio final de Trívia."
+      },
+      {
+        "id": "9fc20d4a-23e3-5d1f-a543-5bb2b6a4864c",
+        "name": "Operadores aritméticos",
+        "slug": "operadores-aritmeticos",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 1,
+        "planet_id": "ce465553-4dd6-5269-8c65-476153c95672",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre operadores aritméticos."
+      },
+      {
+        "id": "bc79a87d-f8bd-5fb0-8927-5ad360a67c0a",
+        "name": "Operadores relacionais",
+        "slug": "operadores-relacionais",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 2,
+        "planet_id": "ce465553-4dd6-5269-8c65-476153c95672",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre operadores relacionais."
+      },
+      {
+        "id": "336156eb-4edc-5f4e-a8d1-5dc19c63e0ab",
+        "name": "Operadores lógicos",
+        "slug": "operadores-logicos",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 3,
+        "planet_id": "ce465553-4dd6-5269-8c65-476153c95672",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre operadores lógicos."
+      },
+      {
+        "id": "7251f0b5-3409-5b9c-907a-77294b6d798e",
+        "name": "Desafio: Atravessar a chuva de asteroides",
+        "slug": "desafio-atravessar-a-chuva-de-asteroides",
+        "story": null,
+        "texts": null,
+        "number": 4,
+        "planet_id": "ce465553-4dd6-5269-8c65-476153c95672",
+        "questions": null,
+        "is_available": true,
+        "is_challenge": true,
+        "description": "Desafio final de Kalkulon."
+      },
+      {
+        "id": "3a790d12-9eb8-58fb-bda4-edb566ccfdfc",
+        "name": "Se",
+        "slug": "se",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 1,
+        "planet_id": "c7ccb862-a6dd-545e-bc42-019982781071",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre se."
+      },
+      {
+        "id": "0b9821ea-86b3-50b9-9c25-6ab9cd0c66b4",
+        "name": "Senão",
+        "slug": "senao",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 2,
+        "planet_id": "c7ccb862-a6dd-545e-bc42-019982781071",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre senão."
+      },
+      {
+        "id": "1d8725db-acec-5454-b7e1-067428a87e26",
+        "name": "Senão se",
+        "slug": "senao-se",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 3,
+        "planet_id": "c7ccb862-a6dd-545e-bc42-019982781071",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre senão se."
+      },
+      {
+        "id": "3a90e5bf-151c-55b5-ad6d-25449c3e0c45",
+        "name": "Escolha caso",
+        "slug": "escolha-caso",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 4,
+        "planet_id": "c7ccb862-a6dd-545e-bc42-019982781071",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre escolha caso."
+      },
+      {
+        "id": "c82a9b28-2b2c-5a4a-8745-cec95df5ea06",
+        "name": "Desafio: Reais ou Ocos",
+        "slug": "desafio-reais-ou-ocos",
+        "story": null,
+        "texts": null,
+        "number": 5,
+        "planet_id": "c7ccb862-a6dd-545e-bc42-019982781071",
+        "questions": null,
+        "is_available": true,
+        "is_challenge": true,
+        "description": "Desafio final de Ifthenia."
+      },
+      {
+        "id": "e970bacd-761f-5af5-8514-4f593dfc1e55",
+        "name": "Para",
+        "slug": "para",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 1,
+        "planet_id": "b70a8265-3da1-50b3-89e6-21670b16560e",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre para."
+      },
+      {
+        "id": "218b7e45-6300-54e9-97c8-87b2b65b968b",
+        "name": "Enquanto",
+        "slug": "enquanto",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 2,
+        "planet_id": "b70a8265-3da1-50b3-89e6-21670b16560e",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre enquanto."
+      },
+      {
+        "id": "4b66c0d1-0a98-552b-9a1f-7ac423498df4",
+        "name": "Fazer enquanto",
+        "slug": "fazer-enquanto",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 3,
+        "planet_id": "b70a8265-3da1-50b3-89e6-21670b16560e",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre fazer enquanto."
+      },
+      {
+        "id": "32622914-ed4a-5176-902a-b33def714d1d",
+        "name": "Desafio: Sair de Cíclade",
+        "slug": "desafio-sair-de-ciclade",
+        "story": null,
+        "texts": null,
+        "number": 4,
+        "planet_id": "b70a8265-3da1-50b3-89e6-21670b16560e",
+        "questions": null,
+        "is_available": true,
+        "is_challenge": true,
+        "description": "Desafio final de Cíclade."
+      },
+      {
+        "id": "c2b6bf48-3e3c-51f2-bf31-331467dcec41",
+        "name": "Índice",
+        "slug": "indice",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 1,
+        "planet_id": "7c6cbba3-6885-5299-9e60-0292c805eb98",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre índice."
+      },
+      {
+        "id": "0b7d4634-f770-5d3a-ae0e-88f59f82e36e",
+        "name": "Adicionar e remover",
+        "slug": "adicionar-e-remover",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 2,
+        "planet_id": "7c6cbba3-6885-5299-9e60-0292c805eb98",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre adicionar e remover."
+      },
+      {
+        "id": "2a8b06bf-8ba6-5cb4-8ca5-29be7fd33031",
+        "name": "Desafio: Alcançar a nave zero",
+        "slug": "desafio-alcancar-a-nave-zero",
+        "story": null,
+        "texts": null,
+        "number": 3,
+        "planet_id": "7c6cbba3-6885-5299-9e60-0292c805eb98",
+        "questions": null,
+        "is_available": true,
+        "is_challenge": true,
+        "description": "Desafio final de O Comboio, parte 1."
+      },
+      {
+        "id": "88c843a1-5e07-5f2d-91b7-50fd404417f3",
+        "name": "Ordenar e fatiar",
+        "slug": "ordenar-e-fatiar",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 1,
+        "planet_id": "75d05e17-a249-5169-bf1f-f67416de64ca",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre ordenar e fatiar."
+      },
+      {
+        "id": "b7931d2d-c253-550e-832c-e5557f3f71b7",
+        "name": "Métodos de texto",
+        "slug": "metodos-de-texto",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 2,
+        "planet_id": "75d05e17-a249-5169-bf1f-f67416de64ca",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre métodos de texto."
+      },
+      {
+        "id": "b5ce0a85-c636-53f0-ad4c-3c289c4e2f85",
+        "name": "Laços com listas",
+        "slug": "lacos-com-listas",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 3,
+        "planet_id": "75d05e17-a249-5169-bf1f-f67416de64ca",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre laços com listas."
+      },
+      {
+        "id": "0c3cf5f3-bc2d-5316-b3bd-abb8646bcbf7",
+        "name": "Desafio: Resgatar os tripulantes",
+        "slug": "desafio-resgatar-os-tripulantes",
+        "story": null,
+        "texts": null,
+        "number": 4,
+        "planet_id": "75d05e17-a249-5169-bf1f-f67416de64ca",
+        "questions": null,
+        "is_available": true,
+        "is_challenge": true,
+        "description": "Desafio final de O Comboio, parte 2."
+      },
+      {
+        "id": "0b141ff5-d51a-5e86-bc17-736339dc82e5",
+        "name": "Criando funções",
+        "slug": "criando-funcoes",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 1,
+        "planet_id": "4577fd66-fe43-56ad-85d9-ef04b82a2b11",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre criando funções."
+      },
+      {
+        "id": "71b47a25-af19-519a-956c-bbffd10f9867",
+        "name": "Retorna",
+        "slug": "retorna",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 2,
+        "planet_id": "4577fd66-fe43-56ad-85d9-ef04b82a2b11",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre retorna."
+      },
+      {
+        "id": "45cff843-d588-5fba-b34e-5304440c6b98",
+        "name": "Funções nativas",
+        "slug": "funcoes-nativas",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 3,
+        "planet_id": "4577fd66-fe43-56ad-85d9-ef04b82a2b11",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre funções nativas."
+      },
+      {
+        "id": "a94cae9b-75fb-5341-bd33-e2c7c080c825",
+        "name": "Funções avançadas",
+        "slug": "funcoes-avancadas",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 4,
+        "planet_id": "4577fd66-fe43-56ad-85d9-ef04b82a2b11",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre funções avançadas."
+      },
+      {
+        "id": "e36f98a4-9f0e-57cf-8ef8-ccba8d0e05b5",
+        "name": "Desafio: Abrir a Fortaleza",
+        "slug": "desafio-abrir-a-fortaleza",
+        "story": null,
+        "texts": null,
+        "number": 5,
+        "planet_id": "4577fd66-fe43-56ad-85d9-ef04b82a2b11",
+        "questions": null,
+        "is_available": true,
+        "is_challenge": true,
+        "description": "Desafio final de Arcana."
+      },
+      {
+        "id": "87324b0b-8e53-5d0d-a875-7693fd9a806b",
+        "name": "Criar tuplas",
+        "slug": "criar-tuplas",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 1,
+        "planet_id": "a226fe90-e261-5674-b911-179c4fc4c87a",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre criar tuplas."
+      },
+      {
+        "id": "0bcf8ce7-1084-5bea-83f3-3a3794190a6e",
+        "name": "Imutabilidade",
+        "slug": "imutabilidade",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 2,
+        "planet_id": "a226fe90-e261-5674-b911-179c4fc4c87a",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre imutabilidade."
+      },
+      {
+        "id": "41c5ff1c-1600-5e9e-aebc-96f9ef0be43b",
+        "name": "Tuplas ou listas",
+        "slug": "tuplas-ou-listas",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 3,
+        "planet_id": "a226fe90-e261-5674-b911-179c4fc4c87a",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre tuplas ou listas."
+      },
+      {
+        "id": "74917013-be25-5dcc-8b8a-5c233a3a5dec",
+        "name": "Desafio: Guardar o que precisa sobreviver",
+        "slug": "desafio-guardar-o-que-precisa-sobreviver",
+        "story": null,
+        "texts": null,
+        "number": 4,
+        "planet_id": "a226fe90-e261-5674-b911-179c4fc4c87a",
+        "questions": null,
+        "is_available": true,
+        "is_challenge": true,
+        "description": "Desafio final de Perene."
+      },
+      {
+        "id": "76b35caf-f823-5f8b-9ee4-ea28441d4c63",
+        "name": "Acessar e alterar valores",
+        "slug": "acessar-e-alterar-valores",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 1,
+        "planet_id": "b65124fd-d6c2-5f64-972e-56cfb29361c9",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre acessar e alterar valores."
+      },
+      {
+        "id": "e9cd5d67-dd69-533c-a7c5-bd9cccf83090",
+        "name": "Chaves e valores",
+        "slug": "chaves-e-valores",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 2,
+        "planet_id": "b65124fd-d6c2-5f64-972e-56cfb29361c9",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre chaves e valores."
+      },
+      {
+        "id": "27785235-a51f-5b97-a55e-25ec814c24a4",
+        "name": "Desestruturação",
+        "slug": "desestruturacao",
+        "story": null,
+        "texts": [
+          {
+            "type": "default",
+            "content": "Conteúdo desta estrela em produção."
+          }
+        ],
+        "number": 3,
+        "planet_id": "b65124fd-d6c2-5f64-972e-56cfb29361c9",
+        "questions": [],
+        "is_available": true,
+        "is_challenge": false,
+        "description": "Estrela de história sobre desestruturação."
+      },
+      {
+        "id": "e17ed797-ac71-5288-b311-4d3fa05b501e",
+        "name": "Desafio: Devolver o valor",
+        "slug": "desafio-devolver-o-valor",
+        "story": null,
+        "texts": null,
+        "number": 4,
+        "planet_id": "b65124fd-d6c2-5f64-972e-56cfb29361c9",
+        "questions": null,
+        "is_available": true,
+        "is_challenge": true,
+        "description": "Desafio final de Chavalor."
       }
     ],
     "questions": [],

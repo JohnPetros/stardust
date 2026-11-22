@@ -59,6 +59,12 @@ test('galaxies migrations backfill legacy planets, keep user rows and lock the c
         NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND ((table_name = 'planets' AND column_name = 'galaxy_id') OR (table_name = 'users' AND column_name = 'current_galaxy_id'))) AS no_columns`)
     assert.deepEqual(remaining, { no_table: true, no_type: true, no_columns: true })
 
+    // 0008 dropped the legacy progress tables; recreate them inside the rolled back transaction
+    // so the 0003-0005 assertions keep proving that user rows are untouched.
+    await sql.unsafe(`
+      CREATE TABLE public.users_unlocked_stars (user_id varchar NOT NULL, star_id uuid NOT NULL);
+      CREATE TABLE public.users_recently_unlocked_stars (user_id varchar NOT NULL, star_id uuid NOT NULL)`)
+
     // Legacy fixtures: only rows created here exist, so the unique constraint is deterministic.
     await sql.unsafe('DELETE FROM public.users')
     await sql.unsafe('DELETE FROM public.planets')

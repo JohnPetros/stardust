@@ -19,6 +19,7 @@ O Stardust é hospedado em uma VPS Hostinger (KVM 2 — 2 vCPU, 8 GB RAM, 100 GB
 | `stardust-web`         | `apps/web`    | Next.js SSR (standalone)    | 3000  | `stardust-app.com.br`, `www.stardust-app.com.br` |
 | `stardust-web-staging` | `apps/web`    | Next.js SSR (standalone)    | 3000  | `staging.stardust-app.com.br`                    |
 | `stardust-server`      | `apps/server` | Hono API (Node.js)          | 3333  | `api.stardust-app.com.br`                        |
+| `stardust-server-staging` | `apps/server` | Hono API (Node.js)       | 3333  | Definido pelo usuário ao configurar o Coolify de staging |
 | `stardust-studio`      | `apps/backoffice` | React Router v7 SPA (Nginx) | 80    | `studio.stardust-app.com.br`                     |
 | Crew                  | `apps/crew`   | Mastra / API de revisão    | 4111  | `crew.stardust-app.com.br`                      |
 
@@ -94,6 +95,7 @@ com `GET /health`. Credenciais não são passadas ao build nem ao job de CD.
 | web prod    | Desabilitado           | GitHub Actions workflow em `release: published` aciona webhook do Coolify                              |
 | web staging | Habilitado             | Push em `main` (paths: `apps/web/**`, `packages/core/**`, `packages/validation/**`, `packages/lsp/**`) |
 | server      | Depende da preferência | Push em `main` (paths: `apps/server/**`, `packages/core/**`, `packages/validation/**`) via workflow    |
+| server staging | Desabilitado no Coolify | Push relevante em `main` ou execução manual `initial_cutover` do workflow `Server app staging CD`, que migra, envia as imagens, roda o seed e aciona o webhook |
 | backoffice      | Habilitado             | Push em `main` (paths: `apps/backoffice/**`)                                                               |
 | crew        | Desabilitado no Coolify | Push relevante em `main` ou execução manual do workflow `Crew app CD`, que aciona o webhook e verifica revisão e saúde |
 
@@ -129,6 +131,7 @@ com `GET /health`. Credenciais não são passadas ao build nem ao job de CD.
 | --------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------- |
 | `server-app-ci.yaml`              | PR → `main` (paths server)   | Codecheck, typecheck, testes, build                                                          |
 | `server-app-cd-coolify.yml`       | Push → `main` (paths server) | Migra banco (Supabase CLI) → aciona webhook Coolify                                          |
+| `server-app-staging-cd.yml`       | Push → `main` (paths server) ou `workflow_dispatch` com `initial_cutover` | Preflight → migrate → preflight → imagens no R2 de staging → seed de staging → webhook Coolify → SHA e health; environment `staging`, grupo `stardust-web-staging` |
 | `web-app-ci.yaml`                 | PR → `main` (paths web)      | Codecheck, typecheck, testes, build                                                          |
 | `web-app-cd-coolify.yaml`         | Release published            | Aciona webhook Coolify → notifica Discord                                                    |
 | `web-app-staging-cd-coolify.yaml` | Push → `main` (paths web)    | Aciona webhook Coolify → notifica Discord                                                    |
@@ -258,6 +261,7 @@ workflows do GitHub Actions e pelo painel do Coolify.
 | `COOLIFY_WEBHOOK_SERVER_PROD`   | Webhook do serviço stardust-server                                 |
 | `COOLIFY_WEBHOOK_WEB_PROD`      | Webhook do serviço stardust-web                                    |
 | `COOLIFY_WEBHOOK_WEB_STG`       | Webhook do CD normal de `stardust-web-staging` (não usado pelo release E2E) |
+| `COOLIFY_WEBHOOK_SERVER_STG`    | Webhook do CD do `stardust-server-staging` (environment `staging`) |
 | `COOLIFY_WEBHOOK_CREW_PROD`     | Webhook HTTPS do Coolify para uma única aplicação Crew (`/api/v1/deploy?uuid=...`) |
 | `SERVER_TEST_ENV`               | Conteúdo do `.env.testing` do server (para CI)                     |
 | `WEB_DEV_ENV`                   | Conteúdo do `.env` de dev do web (para CI)                         |
@@ -265,12 +269,39 @@ workflows do GitHub Actions e pelo painel do Coolify.
 | `SUPABASE_ACCESS_TOKEN`         | Token de acesso Supabase CLI (para migrations)                     |
 | `SUPABASE_DB_PASSWORD`          | Senha do banco Supabase (para migrations)                          |
 | `DISCORD_WEBHOOK_URL`           | Notificações de deploy no Discord                                  |
+| `DATABASE_URL` (environment `staging`) | Conexão do projeto Supabase de staging (`rveubqzvfbqbcpmuevnm`) usada por migrations e seed |
+| `S3_ACCOUNT_ID`, `S3_BUCKET_NAME`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` (environment `staging`) | Credenciais e bucket do R2 de staging, usados só por `scripts/seed-staging-assets.mjs` |
+| `SEED_EXPLORER_PASSWORD`, `SEED_ADMIN_PASSWORD` (environment `staging`) | Senhas das duas contas de demonstração do seed de staging |
 | `HERMES_API_URL`                | Endpoint da Runs API do Hermes                                     |
 | `HERMES_E2E_TESTER_API_KEY`     | Autenticação do perfil `e2e-tester` do Hermes                      |
 | `CREW_API_URL`                | URL base HTTPS do serviço Crew implantado, sem o path do reviewer |
 | `PR_REVIEWER_API_KEY`          | Autenticação do `pr-reviewer` no serviço Crew                     |
 | `HERMES_GITHUB_APP_ID`          | ID da GitHub App usada para publicar a conclusão do E2E            |
 | `HERMES_GITHUB_APP_PRIVATE_KEY` | Chave privada da GitHub App usada para publicar a conclusão do E2E |
+
+### GitHub Variables do Server de staging
+
+Configuradas no environment `staging`, pelo usuário, junto com o Coolify de staging:
+
+| Variable                   | Uso                                                                                                                      |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `SERVER_STG_HEALTH_URL`    | URL de health do `stardust-server-staging`, consultada após o deploy                                                     |
+| `STAGING_ASSETS_BUCKET`    | Nome do bucket R2 de staging; `S3_BUCKET_NAME` precisa ser igual a ele                                                   |
+| `PRODUCTION_ASSETS_BUCKET` | Nome do bucket R2 de produção; o script de imagens recusa rodar se `S3_BUCKET_NAME` for igual a ele                      |
+| `STAGING_CDN_URL`          | URL pública (HTTPS) do bucket de staging, usada para confirmar a leitura pública de cada imagem enviada                  |
+
+### Server de staging
+
+O workflow `server-app-staging-cd.yml` (`Server app staging CD`) roda no environment `staging` a cada push em `main` que toque `apps/server/**`, `packages/core/**`, `packages/validation/**`, o próprio workflow ou `scripts/seed-staging-assets.mjs`, e manualmente uma única vez com `initial_cutover` (adota o baseline `legacy` do projeto de staging, ainda não adotado, e aplica as migrations na fase `adopted`). O projeto de staging é o ambiente `dev` dos scripts de banco (`--environment dev`). Pushes normais exigem o estado `server-owned`. A ordem dos passos é:
+
+1. `db:preflight` (`server-owned`; no `initial_cutover`, `legacy` seguido de `db:adopt`);
+2. `db:migrate`;
+3. `db:preflight` (`server-owned`);
+4. `node scripts/seed-staging-assets.mjs`: envia as dez imagens `images/planets/planet-<id>-image.webp` ao R2 de staging com `Content-Type: image/webp` e `CacheControl: no-cache`, confirma a leitura pública de cada uma em `STAGING_CDN_URL` e nunca lista, apaga nem altera policy de nenhum objeto; recusa antes de qualquer chamada ao R2 se faltarem credenciais, se `S3_BUCKET_NAME` diferir de `STAGING_ASSETS_BUCKET`, se for igual a `PRODUCTION_ASSETS_BUCKET` ou se `MODE=production`;
+5. `pnpm --filter @stardust/server run db:seed:staging`: recarrega o catálogo e as contas de demonstração só no projeto de staging, com as senhas de `SEED_EXPLORER_PASSWORD` e `SEED_ADMIN_PASSWORD`; recusa produção ou outro projeto antes de qualquer escrita;
+6. webhook do Coolify (`COOLIFY_WEBHOOK_SERVER_STG`), espera do deploy, conferência do SHA implantado e health `2xx` em `SERVER_STG_HEALTH_URL`.
+
+O grupo de concorrência `stardust-web-staging` é compartilhado com o CD da Web e com o E2E de release, sem cancelamento, para que o seed nunca recarregue o banco durante o E2E. O workflow não depende de `PRODUCTION_RELEASES_PAUSED`. Nenhum passo toca produção.
 
 ---
 
@@ -322,6 +353,14 @@ Depois da transição, o ledger `drizzle.__drizzle_migrations` pode ter mais de 
 3. `db:preflight --phase server-owned` novamente, confirmando que todas as entradas do journal estão no ledger e que não há caminho de acesso externo.
 
 O rollback de acesso continua restrito ao estado de transição exato (três linhas).
+
+#### Pré-condição de produção: trilha da galáxia
+
+As migrations `0006`–`0008` (fatos de progresso, catálogo de dez planetas e remoção das tabelas de desbloqueio) zeram o progresso da trilha e removem tabelas. O CD do Server de produção continua bloqueado pela variable `PRODUCTION_RELEASES_PAUSED` até o release conjunto com a Web, e liberar exige um backup verificado do banco de produção antes de despausar. O Server de staging valida o mesmo caminho antes, sem depender dessa variable.
+
+#### Passo de release: imagens dos planetas
+
+O `scripts/seed-staging-assets.mjs` só escreve no bucket de staging. Antes do deploy da release que introduz a trilha, envie manualmente ao R2 de produção as dez imagens `planet-<id>-image.webp` listadas em `seed-catalog.json` (de `apps/server/src/database/seeders/assets/images/planets/`) para `images/planets/`, com `Content-Type: image/webp` e leitura pública, sem apagar nem alterar outros objetos.
 
 #### Passo de release: animações das galáxias
 

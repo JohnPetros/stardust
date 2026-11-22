@@ -13,6 +13,7 @@ export const LottieAnimation = ({
   size,
   hasLoop = true,
   isStatic = false,
+  onLoadError,
 }: AnimationProps) => {
   const lottieRef = useRef(null)
   const { lottieData, windowWidth, shouldAutoplay, shouldLoop } = useLottieAnimation({
@@ -22,6 +23,7 @@ export const LottieAnimation = ({
     src,
     hasLoop,
     isStatic,
+    onLoadError,
   })
 
   return (
