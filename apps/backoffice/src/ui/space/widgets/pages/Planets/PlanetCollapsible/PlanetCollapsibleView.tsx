@@ -72,7 +72,6 @@ export const PlanetCollapsibleView = ({
                   onPlanetChange({
                     ...planet.dto,
                     name: planetDto.name,
-                    icon: planetDto.icon,
                     image: planetDto.image,
                   })
                 }
@@ -85,14 +84,6 @@ export const PlanetCollapsibleView = ({
                   />
                 </Button>
               </PlanetForm>
-            </div>
-            <div className='grid place-items-center bg-green-700 rounded-lg p-1'>
-              <StorageImage
-                folder='planets'
-                src={planet.icon.value}
-                alt={planet.name.value}
-                className='w-6 h-6 mt-1 object-contain'
-              />
             </div>
           </div>
         </div>

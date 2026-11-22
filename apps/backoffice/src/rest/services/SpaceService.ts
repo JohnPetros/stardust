@@ -28,10 +28,9 @@ export const SpaceService = (restClient: RestClient): ISpaceService => {
       return await restClient.get(`/space/galaxies/${galaxySlug.value}/planets`)
     },
 
-    async createPlanet(planetName: Name, planetIcon: Image, planetImage: Image) {
+    async createPlanet(planetName: Name, planetImage: Image) {
       return await restClient.post('/space/planets', {
         name: planetName.value,
-        icon: planetIcon.value,
         image: planetImage.value,
       })
     },

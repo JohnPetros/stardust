@@ -56,7 +56,7 @@ export const UsersTableView = ({ users, isLoading, orders, onOrderChange }: Prop
             onOrderChange={(order) => onOrderChange('weeklyXp', order)}
           />
           <SortableColumn
-            label='Estrelas Desbloqueadas'
+            label='Estrelas Concluídas'
             order={orders.unlockedStarCount}
             onOrderChange={(order) => onOrderChange('unlockedStarCount', order)}
           />
@@ -101,7 +101,7 @@ export const UsersTableView = ({ users, isLoading, orders, onOrderChange }: Prop
               </TableCell>
               <TableCell>{user.level ?? '-'}</TableCell>
               <TableCell>{user.weeklyXp ?? 0}</TableCell>
-              <TableCell>{user.unlockedStarsIds?.length ?? 0}</TableCell>
+              <TableCell>{user.completedStarsIds?.length ?? 0}</TableCell>
               <TableCell>{user.unlockedAchievementsIds?.length ?? 0}</TableCell>
               <TableCell>{user.completedChallengesIds?.length ?? 0}</TableCell>
               <TableCell>
