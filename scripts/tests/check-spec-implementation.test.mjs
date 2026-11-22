@@ -48,36 +48,68 @@ const PLAN_ROWS = [
   { change: 'Remove', path: 'src/removed.ts' },
 ]
 
+function deriveTaskStatus(rows) {
+  if (rows.every((row) => row.status === 'completed')) return 'completed'
+  if (rows.every((row) => row.status === 'pending')) return 'pending'
+  return 'in_progress'
+}
+
 function buildPlan({
+  legacy = false,
   revision = 1,
   rows,
   status = 'in_progress',
   rowStatus = 'pending',
+  tasks,
 } = {}) {
-  const planRows = (
+  const resolvedRows = (
     rows ??
     PLAN_ROWS.map((row) => ({ ...row, requirements: 'RF-01, CA-01', status: rowStatus }))
-  )
-    .map(
-      (row) =>
-        `| \`${row.path}\` | ${row.change} | ${row.requirements} | ${row.status} | none |`,
+  ).map((row) => ({ task: 'T1', ...row }))
+  const planRows = resolvedRows
+    .map((row) =>
+      legacy
+        ? `| \`${row.path}\` | ${row.change} | ${row.requirements} | ${row.status} | none |`
+        : `| \`${row.path}\` | ${row.change} | ${row.task} | ${row.requirements} | ${row.status} | none |`,
     )
     .join('\n')
+  const resolvedTasks = tasks ?? [
+    {
+      builder: 'Direct',
+      dependsOn: 'none',
+      id: 'T1',
+      status: deriveTaskStatus(resolvedRows),
+    },
+  ]
+  const tasksSection = legacy
+    ? ''
+    : `## Tasks
+
+| Task | Outcome | Builder | Depends on | Status | Notes |
+| --- | --- | --- | --- | --- | --- |
+${resolvedTasks
+  .map(
+    (task) =>
+      `| ${task.id} | outcome of ${task.id} | ${task.builder} | ${task.dependsOn} | ${task.status} | none |`,
+  )
+  .join('\n')}
+
+`
   return `---
 title: Path check — plan
 spec: ./spec.md
 spec_revision: ${revision}
 evaluation: ./evaluation.md
 status: ${status}
-updated_at: 2026-11-14
+${legacy ? 'tasks: none\n' : ''}updated_at: 2026-11-14
 ---
 
 # Plan — Path check
 
-## Progress
+${tasksSection}## Progress
 
-| Path | Change | RF/CA | Status | Notes |
-| --- | --- | --- | --- | --- |
+| Path | Change | ${legacy ? '' : 'Task | '}RF/CA | Status | Notes |
+| --- | --- | ${legacy ? '' : '--- | '}--- | --- | --- |
 ${planRows}
 `
 }
@@ -358,7 +390,7 @@ test('reports plan rows that do not have all required cells', async () => {
     const result = await runChecker(repositoryRoot, ['--plan-only'])
     assert.equal(result.status, 'failed')
     assert.deepEqual(result.errors, [
-      `${PLAN_PATH}: src/broken.ts: row must have Path, Change, RF/CA and Status cells`,
+      `${PLAN_PATH}: src/broken.ts: row must have Path, Change, Task, RF/CA and Status cells`,
     ])
   } finally {
     await rm(repositoryRoot, { force: true, recursive: true })
@@ -384,6 +416,7 @@ test('prints the plan summary and the plan-only mode in text output', async () =
       planOnly,
       /Plan: .*plan\.md \(4 rows: pending 4, in_progress 0, completed 0\)/,
     )
+    assert.match(planOnly, /Tasks: 1 \(pending 1, in_progress 0, completed 0\)/)
     assert.match(planOnly, /Mode: plan-only/)
     assert.doesNotMatch(planOnly, /Baseline:/)
 
@@ -469,6 +502,118 @@ test('pairs a legacy <name>-spec.md with <name>-plan.md', async () => {
     const result = await runChecker(repositoryRoot, ['--plan-only'], LEGACY_SPEC_PATH)
     assert.deepEqual(result.errors, [])
     assert.equal(result.plan.path, LEGACY_PLAN_PATH)
+  } finally {
+    await rm(repositoryRoot, { force: true, recursive: true })
+  }
+})
+
+test('validates the Tasks table and links every path row to one task', async () => {
+  const repositoryRoot = await createRepositoryFixture()
+  try {
+    const rows = PLAN_ROWS.map((row, index) => ({
+      ...row,
+      requirements: 'RF-01, CA-01',
+      status: index < 2 ? 'completed' : 'pending',
+      task: index < 2 ? 'T1' : 'T2',
+    }))
+    await writeFile(
+      path.join(repositoryRoot, PLAN_PATH),
+      buildPlan({
+        rows,
+        tasks: [
+          {
+            builder: 'Builder Fix ACH-03',
+            dependsOn: 'none',
+            id: 'T1',
+            status: 'completed',
+          },
+          { builder: 'unassigned', dependsOn: 'T1', id: 'T2', status: 'pending' },
+        ],
+      }),
+    )
+    const result = await runChecker(repositoryRoot, ['--plan-only'])
+    assert.deepEqual(result.errors, [])
+    assert.equal(result.plan.tasksCount, 2)
+    assert.deepEqual(result.plan.taskStatusCounts, {
+      completed: 1,
+      in_progress: 0,
+      pending: 1,
+    })
+  } finally {
+    await rm(repositoryRoot, { force: true, recursive: true })
+  }
+})
+
+test('rejects tasks that are malformed, unlinked or inconsistent with their rows', async () => {
+  const repositoryRoot = await createRepositoryFixture()
+  try {
+    const rows = PLAN_ROWS.map((row, index) => ({
+      ...row,
+      requirements: 'RF-01, CA-01',
+      status: ['in_progress', 'completed', 'pending', 'pending'][index],
+      task: ['T1', 'T2', 'T3', 'T9'][index],
+    }))
+    await writeFile(
+      path.join(repositoryRoot, PLAN_PATH),
+      buildPlan({
+        rows,
+        tasks: [
+          { builder: 'Direct', dependsOn: 'T3', id: 'T1', status: 'pending' },
+          { builder: 'someone', dependsOn: 'T2', id: 'T2', status: 'in_progress' },
+          { builder: 'unassigned', dependsOn: 'T1, T7', id: 'T3', status: 'done' },
+          { builder: 'unassigned', dependsOn: 'none', id: 'T4', status: 'in_progress' },
+          { builder: 'Direct', dependsOn: 'none', id: 'T4', status: 'pending' },
+        ],
+      }),
+    )
+    const result = await runChecker(repositoryRoot, ['--plan-only'])
+    const messages = result.errors.join('\n')
+    assert.equal(result.status, 'failed')
+    assert.match(messages, /T1: task is pending but some rows have started/)
+    assert.match(
+      messages,
+      /T2: Builder must be Direct, unassigned, builder_<owner> or Builder Fix ACH-<n>/,
+    )
+    assert.match(messages, /T2: depends on itself/)
+    assert.match(messages, /T2: every row is completed but the task is in_progress/)
+    assert.match(messages, /T3: status must be pending, in_progress or completed/)
+    assert.match(messages, /T3: depends on unknown task T7/)
+    assert.match(messages, /T4: task is in_progress but has no assigned Builder/)
+    assert.match(messages, /T4: task appears more than once/)
+    assert.match(messages, /T4: task has no path rows/)
+    assert.match(messages, /task dependencies form a cycle: T1 -> T3 -> T1/)
+    assert.match(messages, /src\/removed\.ts: Task "T9" is not declared in Tasks/)
+  } finally {
+    await rm(repositoryRoot, { force: true, recursive: true })
+  }
+})
+
+test('requires a Tasks table unless the plan declares tasks: none', async () => {
+  const repositoryRoot = await createRepositoryFixture()
+  try {
+    const withoutTasks = buildPlan({ tasks: [] })
+    await writeFile(path.join(repositoryRoot, PLAN_PATH), withoutTasks)
+    const missing = await runChecker(repositoryRoot, ['--plan-only'])
+    assert.equal(missing.status, 'failed')
+    assert.match(missing.errors.join('\n'), /plan has no tasks/)
+
+    await writeFile(path.join(repositoryRoot, PLAN_PATH), buildPlan({ legacy: true }))
+    const legacy = await runChecker(repositoryRoot, ['--plan-only'])
+    assert.deepEqual(legacy.errors, [])
+    assert.equal(legacy.plan.tasksCount, null)
+    const { stdout } = await execFileAsync(
+      process.execPath,
+      [SCRIPT_PATH, SPEC_PATH, '--plan-only'],
+      { cwd: repositoryRoot },
+    )
+    assert.match(stdout, /Tasks: none \(plan predates tasks\)/)
+
+    await writeFile(
+      path.join(repositoryRoot, PLAN_PATH),
+      buildPlan({ legacy: true }).replace('tasks: none', 'tasks: T1'),
+    )
+    const invalid = await runChecker(repositoryRoot, ['--plan-only'])
+    assert.match(invalid.errors.join('\n'), /tasks must be absent or none \(found "T1"\)/)
   } finally {
     await rm(repositoryRoot, { force: true, recursive: true })
   }

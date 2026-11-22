@@ -86,7 +86,7 @@ does not replace the approval gate of the exact version to be published.
 
 If the milestone or priority is not available, obtain it before the final approval.
 
-When the issue involves UI, check in the Penpot `stardust` file (page, board and frame, by name) the
+When the issue involves UI, check in the Doop `StarDust` canvas (page and frame, by name) the
 frames of each viewport and state that the issue will cite. If any is missing, take to the Grilling the
 decision of whether to draw it first or to cite only what exists; if it is drawn, cite the
 exact names created. States that follow an existing pattern (for example, loading and toast) do
@@ -114,7 +114,7 @@ placeholders; an English gloss follows the block.
 
 - <comportamento/capacidade incluída>
 - <restrição material de produto, Design ou integração>
-- <board do Penpot `stardust` exato (página e nome) quando fornecido>
+- <frame exato do canvas Doop `StarDust` (página e nome) quando fornecido>
 
 ## ✅ Critérios de Aceitação
 
@@ -160,7 +160,7 @@ Evidências esperadas:
 English gloss of the template (not part of the issue body):
 
 - `Objetivo` (Objective): outcome for the user or the business.
-- `Escopo da Entrega` (Delivery Scope): included behavior/capability, material product/Design/integration constraints and the exact Penpot `stardust` board (page and name) when provided.
+- `Escopo da Entrega` (Delivery Scope): included behavior/capability, material product/Design/integration constraints and the exact Doop canvas `StarDust` frame (page and name) when provided.
 - `Critérios de Aceitação` (Acceptance Criteria): observable success, validation/error, authorization/tenant, responsiveness/accessibility and any additional observable criterion.
 - `Validação` (Validation): relevant commands and tests for the backend and frontend when affected, and the expected evidence (automated tests, manual validation or E2E, visual/responsive/accessibility validation).
 - `Rastreabilidade` (Traceability): main PRD, complementary PRD, requirements, journeys, source Issue/User Story, Design, Spec, PR (`Pendente` — pending — until linked by the `open-pr` workflow) and Milestone; `Não aplicável` means not applicable.

@@ -9,7 +9,7 @@ test('agent synchronizer has valid syntax', () => assertScriptSyntax('sync-agent
 
 const AGENTS = [
   'builder-agent',
-  'spec-searcher-agent',
+  'spec-researcher-agent',
   'spec-reviewer-agent',
   'implementation-reviewer-agent',
   'visual-reviewer-agent',
@@ -57,7 +57,7 @@ test('generates per-agent tool restrictions for Claude Code, OpenCode and Codex'
     }
 
     for (const name of [
-      'spec-searcher-agent',
+      'spec-researcher-agent',
       'visual-reviewer-agent',
       'design-reviewer-agent',
     ]) {

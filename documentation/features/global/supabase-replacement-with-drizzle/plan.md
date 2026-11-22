@@ -1,6 +1,7 @@
 ---
 title: Persistência com Drizzle e confirmação de perfil via SSE — implementation plan
 status: superseded
+tasks: none
 spec: ./spec.md
 spec_revision: 20
 evaluation: ./evaluation.md

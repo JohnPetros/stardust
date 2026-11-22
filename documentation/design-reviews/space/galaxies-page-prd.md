@@ -139,7 +139,7 @@ Two notes on the evidence:
   the PRD defines no variant.
 - The first nine boards were renamed to the pattern
   `<Módulo> / <Página> / <Componente> / <Estado ou variante> / <Desktop|Mobile>` by the
-  user's decision of 2026-11-14, now in `documentation/rules/penpot-rules.md`. Only the
+  user's decision of 2026-11-14, now in `documentation/rules/doop-rules.md`. Only the
   names changed; `check:design` reported nothing new after the rename, at revision 412. The seven other boards of the section
   `Galáxia · Trilha` (six video dialogs and the lock animation) were renamed to the same
   pattern, for example `Espaço / Galáxia / Diálogo de vídeo de apresentação / sem som /
@@ -170,7 +170,7 @@ Two notes on the evidence:
   is the same layout with a full bar.
 - `Controle de galáxia` is a plain board duplicated in the two Space boards, not a
   library component → kept; it appears twice, below the three-use threshold of
-  `documentation/rules/penpot-rules.md`.
+  `documentation/rules/doop-rules.md`.
 - The back button uses the `Botão` component, variant `Contorno` → kept; this page
   makes that variant an implementation target.
 - The galaxy illustrations are provisional geometric drawings → kept; final art is out

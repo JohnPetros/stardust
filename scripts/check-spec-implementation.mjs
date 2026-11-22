@@ -9,6 +9,8 @@ const ALLOWED_CHANGES = new Set(['Create', 'Generate', 'Modify', 'Remove'])
 const PLAN_STATUSES = new Set(['pending', 'in_progress', 'completed'])
 const PLAN_DOCUMENT_STATUSES = new Set(['in_progress', 'completed'])
 const REQUIREMENT_ID_PATTERN = /\b(?:RF|CA)-\d+[A-Za-z]*\b/g
+const TASK_ID_PATTERN = /^T\d+$/
+const BUILDER_PATTERN = /^(?:Direct|unassigned|builder_[a-z0-9_]+|Builder Fix ACH-\d+)$/
 const USAGE =
   'Usage: pnpm run check:spec-implementation <documentation/features/.../spec.md|*-spec.md> [--base <git-ref>] [--plan-only] [--require-plan] [--json]'
 const execFileAsync = promisify(execFile)
@@ -77,6 +79,9 @@ function printHelp() {
   )
   console.log(
     '--require-plan requires the plan to exist and every row to be completed; the sibling evaluation.md may opt out with "plan: none" and must otherwise declare "plan:".',
+  )
+  console.log(
+    'A plan declares its Tasks (Task | Outcome | Builder | Depends on | Status | Notes) and links every path row to one task; a plan that predates tasks declares "tasks: none".',
   )
 }
 
@@ -281,30 +286,162 @@ function splitCells(line) {
     .map((cell) => cell.trim())
 }
 
+function stripTicks(value) {
+  return (value ?? '').replaceAll('`', '').trim()
+}
+
 /**
  * Plan rows share the first two cells with the Spec path map; the remaining
- * cells are fixed by position: RF/CA, Status, Notes.
+ * cells are fixed by position: Task, RF/CA, Status, Notes. A plan that predates
+ * tasks (`tasks: none`) has no Task cell: RF/CA, Status, Notes.
  */
-function parsePlanRows(markdown) {
+function parsePlanRows(markdown, { hasTasks }) {
   const rows = []
   const malformed = []
+  const offset = hasTasks ? 1 : 0
   for (const line of markdown.split(/\r?\n/)) {
     if (!line.trim().startsWith('|')) continue
     const cells = splitCells(line)
     const pathMatch = cells[0]?.match(/^`([^`]+)`$/)
     if (!pathMatch || !ALLOWED_CHANGES.has(cells[1])) continue
-    if (cells.length < 4) {
+    if (cells.length < 4 + offset) {
       malformed.push(pathMatch[1])
       continue
     }
     rows.push({
       change: cells[1],
       path: pathMatch[1],
-      requirements: cells[2],
-      status: cells[3].replaceAll('`', ''),
+      requirements: cells[2 + offset],
+      status: stripTicks(cells[3 + offset]),
+      task: hasTasks ? stripTicks(cells[2]) : undefined,
     })
   }
   return { malformed, rows }
+}
+
+/**
+ * Task rows are fixed by position: Task, Outcome, Builder, Depends on, Status, Notes.
+ */
+function parsePlanTasks(markdown) {
+  const tasks = []
+  const malformed = []
+  for (const line of markdown.split(/\r?\n/)) {
+    if (!line.trim().startsWith('|')) continue
+    const cells = splitCells(line)
+    const id = stripTicks(cells[0])
+    if (!TASK_ID_PATTERN.test(id)) continue
+    if (cells.length < 5) {
+      malformed.push(id)
+      continue
+    }
+    const dependsOn = stripTicks(cells[3])
+    tasks.push({
+      builder: stripTicks(cells[2]),
+      dependencies:
+        dependsOn === 'none'
+          ? []
+          : dependsOn
+              .split(',')
+              .map((dependency) => dependency.trim())
+              .filter(Boolean),
+      id,
+      status: stripTicks(cells[4]),
+    })
+  }
+  return { malformed, tasks }
+}
+
+function findDependencyCycle(tasksById) {
+  const visiting = new Set()
+  const visited = new Set()
+  const visit = (id, trail) => {
+    if (visiting.has(id)) return [...trail.slice(trail.indexOf(id)), id]
+    if (visited.has(id)) return undefined
+    visiting.add(id)
+    for (const dependency of tasksById.get(id)?.dependencies ?? []) {
+      if (!tasksById.has(dependency)) continue
+      const cycle = visit(dependency, [...trail, id])
+      if (cycle) return cycle
+    }
+    visiting.delete(id)
+    visited.add(id)
+    return undefined
+  }
+  for (const id of tasksById.keys()) {
+    const cycle = visit(id, [])
+    if (cycle) return cycle
+  }
+  return undefined
+}
+
+function checkTaskFields(task, tasksById, planErrors) {
+  if (!PLAN_STATUSES.has(task.status))
+    planErrors.push(
+      `${task.id}: status must be pending, in_progress or completed (found "${task.status}")`,
+    )
+  if (!BUILDER_PATTERN.test(task.builder))
+    planErrors.push(
+      `${task.id}: Builder must be Direct, unassigned, builder_<owner> or Builder Fix ACH-<n> (found "${task.builder}")`,
+    )
+  else if (task.builder === 'unassigned' && task.status !== 'pending')
+    planErrors.push(`${task.id}: task is ${task.status} but has no assigned Builder`)
+  for (const dependency of task.dependencies) {
+    if (dependency === task.id) planErrors.push(`${task.id}: depends on itself`)
+    else if (!tasksById.has(dependency))
+      planErrors.push(`${task.id}: depends on unknown task ${dependency}`)
+  }
+}
+
+/**
+ * Every path row belongs to exactly one task, and a task's status must agree with
+ * its rows: completed only when every row is completed, pending only while every
+ * row is pending.
+ */
+function checkTasks({ markdown, planErrors, rows }) {
+  const { malformed, tasks } = parsePlanTasks(markdown)
+  for (const malformedId of malformed)
+    planErrors.push(
+      `${malformedId}: task must have Task, Outcome, Builder, Depends on and Status cells`,
+    )
+  if (tasks.length === 0 && malformed.length === 0)
+    planErrors.push(
+      'plan has no tasks (declare tasks: none only for a plan that predates tasks)',
+    )
+
+  const tasksById = new Map()
+  for (const task of tasks) {
+    if (tasksById.has(task.id)) planErrors.push(`${task.id}: task appears more than once`)
+    else tasksById.set(task.id, task)
+  }
+  for (const task of tasksById.values()) checkTaskFields(task, tasksById, planErrors)
+  const cycle = findDependencyCycle(tasksById)
+  if (cycle) planErrors.push(`task dependencies form a cycle: ${cycle.join(' -> ')}`)
+
+  const rowsByTask = new Map([...tasksById.keys()].map((id) => [id, []]))
+  for (const row of rows) {
+    if (rowsByTask.has(row.task)) rowsByTask.get(row.task).push(row)
+    else planErrors.push(`${row.path}: Task "${row.task}" is not declared in Tasks`)
+  }
+  for (const [id, taskRows] of rowsByTask) {
+    const { status } = tasksById.get(id)
+    if (taskRows.length === 0) planErrors.push(`${id}: task has no path rows`)
+    else if (status === 'completed' && taskRows.some((row) => row.status !== 'completed'))
+      planErrors.push(`${id}: task is completed but not every row is completed`)
+    else if (status === 'pending' && taskRows.some((row) => row.status !== 'pending'))
+      planErrors.push(`${id}: task is pending but some rows have started`)
+    else if (
+      status !== 'completed' &&
+      taskRows.every((row) => row.status === 'completed')
+    )
+      planErrors.push(`${id}: every row is completed but the task is ${status}`)
+  }
+
+  return Object.fromEntries(
+    [...PLAN_STATUSES].map((status) => [
+      status,
+      [...tasksById.values()].filter((task) => task.status === status).length,
+    ]),
+  )
 }
 
 async function checkPlan({
@@ -343,13 +480,19 @@ async function checkPlan({
       `spec_revision "${fields.spec_revision ?? ''}" does not match the Spec revision "${specRevision}"`,
     )
 
-  const { malformed, rows } = parsePlanRows(markdown)
+  if (fields.tasks !== undefined && fields.tasks !== 'none')
+    planErrors.push(
+      `tasks must be absent or none (found "${fields.tasks}"); tasks live in the Tasks table`,
+    )
+  const hasTasks = fields.tasks !== 'none'
+  const { malformed, rows } = parsePlanRows(markdown, { hasTasks })
   for (const malformedPath of malformed)
     planErrors.push(
-      `${malformedPath}: row must have Path, Change, RF/CA and Status cells`,
+      `${malformedPath}: row must have Path, Change, ${hasTasks ? 'Task, ' : ''}RF/CA and Status cells`,
     )
   if (rows.length === 0 && malformed.length === 0)
     planErrors.push('plan has no rows using Create, Modify, Generate or Remove')
+  const taskStatusCounts = hasTasks ? checkTasks({ markdown, planErrors, rows }) : null
 
   const specIds = new Set(specMarkdown.match(REQUIREMENT_ID_PATTERN) ?? [])
   const specChanges = new Map(
@@ -416,7 +559,15 @@ async function checkPlan({
       rows.filter((row) => row.status === status).length,
     ]),
   )
-  return { path: relativePlanPath, rowsCount: rows.length, statusCounts }
+  return {
+    path: relativePlanPath,
+    rowsCount: rows.length,
+    statusCounts,
+    tasksCount: taskStatusCounts
+      ? Object.values(taskStatusCounts).reduce((total, count) => total + count, 0)
+      : null,
+    taskStatusCounts,
+  }
 }
 
 async function checkSpecImplementation({ base, planOnly, requirePlan, specArgument }) {
@@ -562,11 +713,17 @@ function printResult(result, shouldPrintJson) {
   console.log(
     `Contracted paths: ${result.pathsCount} (Create ${result.counts.Create}, Modify ${result.counts.Modify}, Generate ${result.counts.Generate}, Remove ${result.counts.Remove})`,
   )
-  if (result.plan)
+  if (result.plan) {
     console.log(
       `Plan: ${result.plan.path} (${result.plan.rowsCount} rows: pending ${result.plan.statusCounts.pending}, in_progress ${result.plan.statusCounts.in_progress}, completed ${result.plan.statusCounts.completed})`,
     )
-  else if (result.planOptOut)
+    const tasks = result.plan.taskStatusCounts
+    console.log(
+      tasks
+        ? `Tasks: ${result.plan.tasksCount} (pending ${tasks.pending}, in_progress ${tasks.in_progress}, completed ${tasks.completed})`
+        : 'Tasks: none (plan predates tasks)',
+    )
+  } else if (result.planOptOut)
     console.log('Plan: opted out (evaluation.md declares plan: none)')
   else console.log('Plan: not present')
   if (result.planOnly)

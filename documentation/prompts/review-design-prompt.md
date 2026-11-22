@@ -1,69 +1,62 @@
 ---
 name: review-design
-description: Review existing Stardust Penpot boards against their PRD and design.md with check:design and the Design Reviewer, report the verified findings and record the review when it passes, without changing the design.
+description: Critique the design choices of existing Stardust Doop frames with the impeccable critique, through the Design Reviewer, and report the verified findings without changing the design or writing a review record.
 ---
 
 # Review Design
 
-Review boards of the Penpot file `stardust` that already exist, without drawing or
-changing anything, and tell the user what is missing, contradicted or weak. Use it for
-boards drawn outside the `design` workflow, before a Spec when the review record is stale,
-or whenever the user wants an independent look at a screen. To change boards, use the
-`design` workflow (`/design`), which runs this same review at its end.
+Critique the design choices of frames of the Doop canvas `StarDust` that already exist,
+the way the `impeccable` critique does: is the design good for its users, authored for this
+product and easy to use. Do not draw or change anything. Use it when the user wants an
+independent design opinion on a screen. It does not check PRD coverage, fidelity to
+`design.md`, and it does not write the review record that `create-spec`
+requires: the `design` workflow (`/design`) does all of that and also changes frames.
 
 ```text
-PRD (+ RP-*/JN-* in scope) and the boards
-→ check:design
-→ Design Reviewer
-→ verified findings for the user
-→ review record, only when the review passes
+frames (+ PRD for context)
+→ Design Reviewer (impeccable critique only)
+→ verified critique for the user
 ```
 
 ## Input
 
-- The canonical PRD (`documentation/prds/<module>/<slug>-prd.md`) and the `RP-*`/`JN-*`
-  in scope.
-- The boards to review, by page and name, or the PRD alone: then find the boards of its
-  module by their section and board names and confirm the list with the user before
-  reviewing.
-
-Without a PRD, review only the critique, `design.md` and `check:design`, say so in the
-report, and do not write a record: `create-spec` accepts only reviews tied to a PRD.
+- The frames to review, by page and name.
+- Optionally the canonical PRD (`documentation/prds/<module>/<slug>-prd.md`) and the
+  `RP-*`/`JN-*` in scope, only so the Reviewer knows the audience and the goal of the
+  screen. Without frames, find the frames of the PRD's module by their section and frame
+  names and confirm the list with the user before reviewing.
 
 ## Rules
 
-- Do not change the boards, the PRD or the design baseline. This workflow only reads; fixes
-  go through `/design` or a PRD change the user approves.
-- Use only the Penpot MCP for the file, and confirm with `penpot.currentFile.name` that it is
-  `stardust`. Locate boards by name; do not switch pages that another session may be using
+- Do not change the frames or the PRD. This workflow only reads; fixes
+  go through `/design`.
+- Use only the Doop MCP for the canvas, and confirm with `get_canvas` that it is
+  `StarDust`. Locate frames by name; do not switch pages that another session may be using
   without asking.
+- Critique design choices only: design specificity, hierarchy, information architecture,
+  composition, typography, color, emotional fit, discoverability, states, copy, cognitive
+  load and accessibility as a design quality. Do not check PRD rule coverage, `design.md`
+  adherence, and do not judge code or architecture.
 - Do not run `impeccable critique` yourself and do not form your own critique before the
   Reviewer reports: the review is meant to be independent of the main task.
 
 ## Steps
 
-1. **Check.** For each board, save a full report outside the repository:
-   `pnpm run check:design --board "<name>" --all --json > <scratch path>`.
-2. **Review.** Activate one read-only `design-reviewer-agent` with the PRD path, the
-   `RP-*`/`JN-*` in scope, the exact page and board names and the report paths. Do not pass
-   your own conclusions or earlier findings.
-3. **Verify.** Check each finding against the boards and the PRD before reporting it.
-   Discard the ones that do not hold, and say why.
-4. **Report.** Present the verified findings to the user, most severe first, grouped as
-   `missing`, `contradicted`, `weak` and `debt`, each with the board or PRD item, the
-   observed fact and the smallest fix. Include the coverage table and the critique's score
-   table from the Reviewer. Then ask, following the interview protocol, how to handle each
-   `weak` and `debt` finding: fix it with `/design`, or keep it with a reason.
-5. **Record.** Only when no verified `missing` or `contradicted` finding remains and the user
-   has decided every `weak` and `debt` finding, write or update
-   `documentation/design-reviews/<module>/<prd-slug>.md` in the format defined by the
-   `design` workflow (`documentation/prompts/design-prompt.md`, section "Review record"),
-   with `verdict: pass`, the decisions and the digests from
-   `pnpm run check:design --digest --board "<name>"`. Otherwise, do not write or update the
-   record, and tell the user which boards need `/design`.
+1. **Review.** Activate one read-only `design-reviewer-agent` in critique-only mode: tell it
+   to run only the **Critique** step of its review and to skip Coverage, Fidelity, Design
+   system and Automated findings. Pass the exact page and frame names and, when given, the
+   PRD path and scope as context. Do not pass your own conclusions.
+2. **Verify.** Check each finding against the frames before reporting it. Discard the ones
+   that do not hold, and say why.
+3. **Report.** Present the critique in the structure of the impeccable critique: the design
+   specificity verdict, the Nielsen heuristics score table with the applicable maximum, the
+   cognitive load assessment, what is working, the priority issues (most severe first, each
+   with the frame, the observed fact and the smallest fix), persona red flags and minor
+   observations. Then ask, following the interview protocol, which findings the user wants
+   to fix with `/design`.
 
 ## Completion
 
-Finish when the user has the verified findings and either the record is written with the
-current digests or the boards that block it are named. Report what was reviewed, the
-verdict, the decisions recorded and the next step.
+Finish when the user has the verified critique. Report what was reviewed, the main
+strengths and priority issues, and the next step. Do not write or update
+`documentation/design-reviews/`; a record exists only after the `design` workflow.

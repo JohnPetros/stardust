@@ -41,7 +41,7 @@ before opening the Spec.
 
 Read all the sources of the request, `documentation/architecture.md`, applicable Rules,
 `documentation/sdd.md`, `documentation/tooling.md` (to write verification commands in the forms it
-defines and that exist in the manifests), and the real paths of the codebase. Use CodeGraph, Context7, Penpot, Playwright, or Supabase when
+defines and that exist in the manifests), and the real paths of the codebase. Use CodeGraph, Context7, Doop, Playwright, or Supabase when
 applicable.
 
 Resolve material ambiguities before writing or modifying `spec.md`. The clarification
@@ -98,36 +98,36 @@ written design artifact, with no second design document.
 Research only apps, packages, and layers reached by the scope. Before drafting
 the solution, consolidate:
 
-| Section        | Content                                                                  |
-| -------------- | ------------------------------------------------------------------------ |
-| Mapping        | real paths, contracts, dependencies, and similar implementations         |
-| Data flow      | current state, producers, consumers, transport, and required change      |
-| Attention      | risks, authorization, concurrency, security, performance, and couplings  |
-| Gaps           | expected elements not found and decisions without sufficient evidence    |
+| Section   | Content                                                                 |
+| --------- | ----------------------------------------------------------------------- |
+| Mapping   | real paths, contracts, dependencies, and similar implementations        |
+| Data flow | current state, producers, consumers, transport, and required change     |
+| Attention | risks, authorization, concurrency, security, performance, and couplings |
+| Gaps      | expected elements not found and decisions without sufficient evidence   |
 
 In multi-app flows, declare who exposes, who consumes, the transport, and the format
 of the contract. Use codebase tools for local evidence, official
-documentation for external APIs, Penpot for design, Playwright for browser
+documentation for external APIs, Doop for design, Playwright for browser
 behavior, and Supabase for schema/data when applicable. The project's Architecture and
 Rules prevail over generic recommendations from external tools.
 
 When there are two or more independent lanes, organize them as bounded investigations with
 explicit questions, paths, limits, and synthesis format. Research a lane directly, or delegate it
-to a bounded read-only [Spec Searcher](../agents/spec-searcher-agent.md) when it answers an independent
+to a bounded read-only [Spec Researcher](../agents/spec-researcher-agent.md) when it answers an independent
 question that can proceed in parallel. Assign questions and boundaries rather than a fixed
-Spec Searcher per layer, and give each one the applicable authorities and Rule Pack. Join the reports,
+Spec Researcher per layer, and give each one the applicable authorities and Rule Pack. Join the reports,
 resolve conflicts by direct inspection, and verify consequential claims before contracting them.
-The main task owns the Spec; Spec Searcher reports do not replace the required authority reading or
+The main task owns the Spec; Spec Researcher reports do not replace the required authority reading or
 become Contract artifacts.
 
-## Design and Penpot references
+## Design and Doop references
 
 When the scope involves frontend or UI, create the `## Design Contract` subsection inside
 `Implementation Contract` (omit it when there is no UI) and declare:
 
-- the canonical visual source, the Penpot file `stardust`;
-- the page and the name of each relevant board or component. Do not use IDs as a
-  reference: the name is the contract and the ID changes if the board is recreated in Penpot;
+- the canonical visual source, the Doop canvas `StarDust`;
+- the page and the name of each relevant frame or component. Do not use IDs as a
+  reference: the name is the contract and the ID changes if the frame is recreated in Doop;
 - the state, variant, and viewport represented, such as loading, error, empty,
   content, open/closed, desktop, or mobile;
 - the mapping between each visual reference and the respective `RF-*`/`CA-*`;
@@ -137,9 +137,9 @@ When the scope involves frontend or UI, create the `## Design Contract` subsecti
 Use this table as the core of the subsection, one row per required surface/state/viewport:
 
 ```md
-| Surface / route | State / viewport | Penpot page / board / components | CA / VV | Allowed deviations |
-| --- | --- | --- | --- | --- |
-| <affected surface> | <exact state and viewport> | <real names> | CA-01 / VV-01 | <accepted differences or none> |
+| Surface / route    | State / viewport           | Doop page / frame / components | CA / VV       | Allowed deviations             |
+| ------------------ | -------------------------- | ------------------------------ | ------------- | ------------------------------ |
+| <affected surface> | <exact state and viewport> | <real names>                   | CA-01 / VV-01 | <accepted differences or none> |
 ```
 
 Map the affected widgets to existing semantic tokens and variants of shared
@@ -161,19 +161,19 @@ contradicted, or unapproved added frame is blocking. Do not accept generic
 CSS as an approximation, and do not invent a file, frame, or visual detail when
 there is no canonical source; record the absence explicitly.
 
-Inspect the references with the Penpot MCP; do not deduce visual details only from
+Inspect the references with the Doop MCP; do not deduce visual details only from
 screenshots or descriptions. Do not extract the design into other artifacts: do not create
 `design/handoff.md`, do not export images to `design/`, and do not copy tokens, measurements, or recipes
-into the Spec. Builders and Reviewers inspect the same frames directly through the Penpot MCP.
+into the Spec. Builders and Reviewers inspect the same frames directly through the Doop MCP.
 The Spec records only the relevant frames, states, variants, and viewports, their links with
 `RF-*`/`CA-*`/`VV-*`, and the approved divergences. If the solution requires a change to the design,
-include the Penpot `stardust` in the scope and specify the affected boards. If there is no canonical
+include the Doop canvas `StarDust` in the scope and specify the affected frames. If there is no canonical
 visual source, record that explicitly and do not invent a file or frame.
 A material divergence must be resolved before the Spec reaches `open`.
 
 Frontend validation must require both the comparison with the frames in
-Penpot and the exercise of the real flow in Playwright, covering the specified states and
-viewports. Penpot validates the visual reference; Playwright validates
+Doop and the exercise of the real flow in Playwright, covering the specified states and
+viewports. Doop validates the visual reference; Playwright validates
 runtime behavior. Neither of them replaces the automated tests.
 
 When runtime visual validation is mandatory, write that
@@ -182,7 +182,7 @@ interactions, route, and the required evidence (for example, a screenshot of the
 open, loading, error, empty, content, and closed, or an equivalent visual comparison). For each frame, also declare the reference dimension,
 the state, the variant, and the expected comparison with the Web.
 Do not use only ambiguous expressions such as “verify visually”. Always distinguish
-the evidence of the reference in Penpot from the evidence of the real browser: the former
+the evidence of the reference in Doop from the evidence of the real browser: the former
 confirms alignment with the canonical design; the latter confirms rendering,
 responsiveness, and observable behavior at runtime.
 
@@ -210,11 +210,11 @@ last_updated_at: YYYY-MM-DD
 The body must contain exactly five first-level sections (listed below the table).
 Some have mandatory named subsections, when applicable:
 
-| Section | Named subsection |
-| --- | --- |
-| `Implementation Contract` | `## Design Contract` — only with UI |
-| `Technical Contract` | `## Expected file tree` — tree per app/package; `## Runtime Flow` — runtime flow (the path map and the per-layer detail live in the same section) |
-| `Verification Contract` | `## Shared setup`, followed by `## Automated`, `## Manual`, and `## Visual` |
+| Section                   | Named subsection                                                                                                                                  |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Implementation Contract` | `## Design Contract` — only with UI                                                                                                               |
+| `Technical Contract`      | `## Expected file tree` — tree per app/package; `## Runtime Flow` — runtime flow (the path map and the per-layer detail live in the same section) |
+| `Verification Contract`   | `## Shared setup`, followed by `## Automated`, `## Manual`, and `## Visual`                                                                       |
 
 The five first-level sections are:
 
@@ -235,9 +235,9 @@ verifications, and `EV-*` for the expected evidence. Use `SHI-*`
 when there is a Jira Shifu issue:
 
 ```md
-| CA    | RF    | Given        | When   | Then      | Expected evidence    |
-| ----- | ----- | ------------ | ------ | --------- | -------------------- |
-| CA-01 | RF-01 | precondition | action | result    | test/browser/sensor  |
+| CA    | RF    | Given        | When   | Then   | Expected evidence   |
+| ----- | ----- | ------------ | ------ | ------ | ------------------- |
+| CA-01 | RF-01 | precondition | action | result | test/browser/sensor |
 ```
 
 Security, performance, and architecture enter as acceptance criteria or
@@ -260,8 +260,8 @@ application and layer. Use one table per affected application/layer combination,
 always following this order in the first two columns:
 
 ```md
-| Path | Change | Declaration | Contract | Dependencies | Tests |
-| --- | --- | --- | --- | --- | --- |
+| Path                    | Change | Declaration      | Contract              | Dependencies      | Tests             |
+| ----------------------- | ------ | ---------------- | --------------------- | ----------------- | ----------------- |
 | `packages/core/src/...` | Modify | `<exact symbol>` | `<runtime guarantee>` | `<collaborators>` | `<test boundary>` |
 ```
 
@@ -286,58 +286,9 @@ the checker does not interpret ambiguous formats.
 ## Expected file tree
 
 Every `Technical Contract` includes the `## Expected file tree` subsection, in compact and
-full modes: a `text` block tree **per affected app/package** (`apps/server`, `apps/web`,
-`apps/backoffice`, `packages/core`, etc.). A tree only in chat, or only the path map in a
-table, does not replace it. The canonical map remains the source verified by
-`check:spec-implementation`; the tree shows structure and ownership, and must contain
-exactly the same paths as the map.
-
-- Scope: files created, modified, generated, or removed and the directories that contain them.
-  Use paths relative to the repository root and align the marker columns.
-- Markers: `[N]` (`Create`), `[M]` (`Modify`), `[G]` (`Generate`), `[D]` (`Remove`), and
-  `(unchanged)` only for a neighbor that clarifies ownership or composition. Do not list
-  unchanged private helpers nor exhaustive catalogs.
-- Core/Server layers: entities, structures, use-cases, ports, controllers, routers, jobs,
-  repositories, mappers, migrations (never invent migration names), and the allowed tests
-  in colocated `tests/`, plus the route group's `.rest` in
-  `apps/server/rest-client/`.
-- UI: the real ownership hierarchy: page/layout, reused components, child widgets
-  nested under the owner, each `index.tsx` (Entry Point), `*View.tsx`, the colocated
-  `use-*.ts` hook, and the allowed `tests/`. Do not stop at a top-level page or component when the
-  approved composition has children. Components reused by more than one owner live at the
-  appropriate module boundary. Explain the shared state and the local interaction
-  responsibilities without duplicating state. Do not fabricate hooks or tests for purely
-  structural children (View without behavior).
-- Domain contexts and hooks: include the affected contexts with concrete file names
-  (provider entry, value type, provider hook, consumer hook, and the allowed test of the
-  provider hook) and the domain query/action hooks, without a generic hooks directory.
-  Explain where the context is mounted, which branches share its state, and the direction between
-  provider, operation hooks, and widget hooks; avoid cycles and duplicated state. Query/action
-  hooks have no dedicated test files: point to the consumer or route that covers them
-  in the `Verification Contract`.
-- AI: with AI composition affected, show agent, structured output, workflow, Core port,
-  model/provider adapter, and composition that belong to the slice, with the allowed tests,
-  separating the included capabilities from the deferred ones.
-- Reconcile the tree with the approved names and composition, the declarations, the path map,
-  the Design Contract, and the paths of the `Verification Contract` before presenting the Spec. Private
-  helpers and ordinary decomposition remain implementation choices: changing them, alone,
-  does not require an amendment.
-
-```text
-apps/server/
-├── rest-client/<module>/<group>.rest                                  [M]
-├── src/<layer>/<module>/
-│   ├── use-cases/get-example-use-case.ts                              [N]
-│   └── tests/get-example-use-case.test.ts                             [N]
-apps/web/
-└── src/ui/<module>/widgets/pages/Example/
-    ├── index.tsx                                                      [M]
-    ├── ExamplePageView.tsx                                            [M]
-    ├── useExamplePage.ts                                              [M]
-    └── ExampleList/
-        ├── index.tsx                                                  [N]
-        └── ExampleListView.tsx                                        [N]
-```
+full modes: a `text` block tree **per affected app/package**, with exactly the same paths as the
+canonical map. Read [`create-spec/expected-file-tree.md`](create-spec/expected-file-tree.md) in full
+before writing it: it defines the markers, the per-layer content and the reconciliation checks.
 
 ## Technical detail per affected layer
 
@@ -403,111 +354,11 @@ Ordinary private helpers and unchanged concepts need no inventory.
 
 ## Verification Contract
 
-The `Verification Contract` (name in legacy Specs: `Validation Contract`) uses three categories,
-each as a `##` subsection with individually named `###` blocks, instead of long tables
-of commands and procedures. Each `CA-*` maps to sufficient concrete proof; it does not need to use
-all three categories. Give each distinct observable result its own block (complementary
-use-case/controller/widget/job proof may support the same result). Explain why a category is not applicable instead of keeping empty blocks.
-
-| Category | Prefix | Content |
-| --- | --- | --- |
-| `## Automated` | `AV-*` | automated tests and gates: unit/component, integration, static, and baseline |
-| `## Manual` | `MV-*` | concise happy-path journey, executable by the agent, in a real browser or terminal |
-| `## Visual` | `VV-*` | comparison of a Penpot board with the corresponding Playwright capture |
-
-The `AV`, `MV`, and `VV` IDs are unique across the three categories and among themselves. Real results
-belong to the Evaluation (`EV-*`); the PR's CI is not recorded in the Evaluation. Keep existing IDs and
-mappings on continuation; split an old group only with explicit mapping and
-new proof where the historical result is not enough. Block in the format below:
-
-```md
-## Shared setup
-
-<environment/URLs and health; actors and credential resolution; data and initial state; isolation, reruns, and cleanup; source paths of the fixtures>
-
-## Automated
-
-### AV-01 — <observable result>
-
-**Criteria:** CA-01
-**Target / boundary:** <exact test file and boundary (use-case, controller, widget, job)>
-**Command:** <real command, working directory, and verified selector>
-**Approval condition:** <assertions, intended selection, and limits of the evidence>
-
-### AV-02 — Applicable baseline checks
-
-**Scope:** <affected apps/packages and consumers>
-**Checks:** <sensors required by Tooling and Rules; feature exceptions>
-**Approval condition:** <required gates pass, static dispositions have real proof, and the intended tests execute>
-
-## Manual
-
-### MV-01 — <concise happy path executable by the agent>
-
-**Criteria:** CA-01
-**Tool / setup:** <Playwright or terminal; shared setup and differences>
-**Procedure:** <ordered, narrow actions against the intended runtime boundary>
-**Approval condition:** <final URL, visible/persisted effects, `2xx` requests, console, keyboard/focus, narrow viewport, and cleanup, as applicable>
-
-## Visual
-
-### VV-01 — <surface, state, and viewport>
-
-**Criteria:** CA-01
-**Reference / setup:** <page, board, and components of the Penpot `stardust`; exact viewport; related MV>
-**Capture / comparison:** <current Penpot MCP export compared with the corresponding Playwright capture; reuse the capture from a current MV when possible>
-**Approval condition:** <visual properties compared and accepted deviations>
-```
-
-Content rules:
-
-- Separate the baseline gates and reference the applicable Tooling and Rules checks, including the
-  affected consumers. Define separate obligations/dispositions for types (`check:types`),
-  lint/code (`check:code`), and complexity, with exact paths for lint and affected
-  configured projects for types. Complexity identifies its checker and real limits; a required
-  quantitative metric that is unavailable stays `Blocked`. Mark nonexistent
-  files/scenarios as planned and verify test names before prescribing filters.
-- Declare the applicable sensors: `format`, `check:code`, `check:types`, `test:unit`,
-  `check:architecture`, and `test:integration`, with the exact test files verified in the
-  code (local execution is scoped; see `documentation/tooling.md`). `test:coverage` and
-  `check:coverage` run in CI and only enter the Spec when the demonstrated impact spans the
-  workspace; both respect `coverage-baseline.json`. `check:dead-code` is not official. Checks
-  and build are also run by the PR's CI.
-- Record the executable setup of related checks only once in the
-  `## Shared setup` subsection (before `## Automated`); each AV/MV/VV block references the setup and cites only the
-  differences. Inspect accounts, fixtures,
-  seeders, manifests, and configuration defined in the source before prescribing: environment/URLs and
-  health, route/function registration, real/mocked/disposable services; actors, permissions, and
-  resolution of private credentials from exact paths (`seed-accounts.json`,
-  `export-*-app-e2e-env.mjs --seed`); required data relations/statuses, initial-state
-  assertions, and planned fixture fixes; isolation, rerun dependencies, and cleanup
-  of own resources. Drafting the setup does not require running tests nor authorize resetting/reseeding
-  shared data. Distinguish fixing the fixture source from applying it. Missing executable
-  setup is a gap in the Contract.
-- Automated covers authorization, isolation, persistence, contracted finite combinations,
-  limits, failure/recovery, and concurrency at the allowed boundaries. For unbounded domains,
-  specify equivalence classes and boundary values. Respect the test-integrity
-  Rules: a direct test of an excluded/indirect source or a forbidden directory is a
-  blocking defect of the Contract. Confirm that the intended tests execute; skip and empty selection are not
-  approval. Never invent coverage percentages nor a generic aggregate command.
-- Use focused unit/component and static feedback during construction. After integration,
-  run the affected integration selections (changes, consumers, and dependencies) with a
-  runner from the main task. Select tests only for changes in scope and directly
-  affected consumers; broaden only given demonstrated impact or a concrete gap, recording
-  why. A complete local suite requires a scope that covers it or an explicit user request.
-  Review and conclusion reuse the current unaffected proof.
-- Manual are concise happy paths; automated tests hold the systematic negative,
-  failure/recovery, and concurrency matrices. Mocks do not prove required real
-  authentication and persistence journeys. Follow `AGENTS.md` (manual Frontend verification).
-- Visual names the page, board, and related components, state, viewport, compared
-  properties, and accepted deviations. Capture during the linked MV when possible and inspect the
-  images: saving a screenshot is not a visual approval. Keep runtime evidence in the ignored
-  `test-results/` or CI artifacts; record paths and results in the Evaluation, without
-  new evidence folders in the feature.
-
-Legacy Specs with `VM-*`/`CI-*` tables and the subsections "Testes automatizados" (Automated tests), "Comandos" (Commands), and
-"Validações manuais" (Manual validations) remain valid as history; normalize to this format at the next
-material revision.
+The `Verification Contract` (legacy name: `Validation Contract`) has the subsections
+`## Shared setup`, `## Automated` (`AV-*`), `## Manual` (`MV-*`) and `## Visual` (`VV-*`), each
+with individually named `###` blocks. Each `CA-*` maps to sufficient concrete proof. Read
+[`create-spec/verification-contract.md`](create-spec/verification-contract.md) in full before writing
+it: it defines the block templates and the content rules, which are part of this workflow.
 
 ## Technical decisions and clarification
 
@@ -532,14 +383,14 @@ covered by at least one `AV-*`, `MV-*`, or `VV-*` verification (unique IDs, each
 correct category and with **Criteria** and **Approval condition**); each `CA-*` has an
 observable result, verification method,
 viewport/state when applicable, and responsible path or layer; each visual
-requirement has separate evidence for Penpot and Playwright when both are
+requirement has separate evidence for Doop and Playwright when both are
 necessary; each UI change declares the Entry Point/View/Hook structure; and all
 applicable sensors are named. If a requirement appears only in the
 Evaluation, move it to the Contract before the review.
 
 For UI, the Contract must contain a visual reference matrix and a structural
 audit matrix. The first relates frame, viewport, state, route,
-Penpot/Web evidence, relevant dimensions/anchors, and approved divergences. The
+Doop/Web evidence, relevant dimensions/anchors, and approved divergences. The
 second relates each changed widget to
 `index.tsx`, `*View.tsx`, Hook, and applicable rule. The absence of either
 of these matrices prevents the `open` state when frontend is in scope.
@@ -548,11 +399,10 @@ When the Spec has a Design Contract, check the design review record before the S
 Reviewer; do not review the design yourself. Open
 `documentation/design-reviews/<module>/<prd-slug>.md` and confirm that its `verdict` is
 `pass`, that its `prd_last_updated_at` equals the PRD's current `last_updated_at`, and that
-every board in the Design Contract is listed with the digest that
-`pnpm run check:design --digest --board "<board>"` returns now. If the record is missing or
+every frame in the Design Contract is listed with the `updated_at` that `get_frame` returns
+now for that frame. If the record is missing or
 any of these differs, the review is stale: keep the Spec in `draft` and tell the user which
-boards need review before continuing: `/review-design` when the boards are complete, or
-`/design` when they must change. Reference the record in the
+frames need `/design` before continuing. Reference the record in the
 Design Contract.
 
 After the integrity check, and before `implement-spec`, activate exactly one read-only
@@ -585,7 +435,7 @@ the revised Contract again.
 
 Only then change to `open`. Report the Spec's path/revision/status, the bounded
 outcome, the canonical source/version, the consequent decisions, the sensor coverage, and the
-result of the review. The next step is [`create-plan`](create-plan-prompt.md), then `implement-spec`; the main task
+result of the review. The next step is [`plan-spec`](plan-spec-prompt.md), then `implement-spec`; the main task
 decides the execution mechanics.
 
 ## Amendments and continuation
@@ -594,7 +444,7 @@ For a material change to the Contract, return the same Spec to `draft`, incremen
 re-read the affected authority, resolve the material decisions, and update the Contract and the
 sensor mapping. Preserve the historical evidence of the Evaluation and mark as `stale`
 only the affected results. Repeat the affected integrity and compatibility checks
-before returning to `open`, then rerun `create-plan` to reconcile `plan.md` with the new
+before returning to `open`, then rerun `plan-spec` to reconcile `plan.md` with the new
 revision. Structural reorganization, status change, reruns,
 publication, and conclusion do not increment the revision. A distinct change after
 conclusion may receive a new Spec (`changes/<change>/`).

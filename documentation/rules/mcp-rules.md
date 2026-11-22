@@ -13,8 +13,8 @@ trabalho, nao como substitutos de analise tecnica.
   SDKs, APIs e CLIs.
 - **CodeGraph**: explorar simbolos, caminhos de chamada e impacto de mudancas
   na codebase indexada.
-- **Penpot**: inspecionar e editar o arquivo Penpot `stardust`, exportar
-  imagens de boards, ler componentes e tokens e validar layout.
+- **Doop**: inspecionar e editar o canvas Doop `StarDust`, capturar imagens
+  de frames, ler componentes e tokens e validar layout.
 - **Pencil**: ler e editar arquivos `.pen`, validar layout e trabalhar com
   contexto de design.
 - **Supabase Dev**: inspecionar e operar o ambiente de desenvolvimento do
@@ -70,29 +70,29 @@ Boas praticas:
 - se o projeto nao estiver indexado, use as ferramentas locais de navegacao e
   leitura; nao inicialize o indice sem solicitacao.
 
-### Penpot
+### Doop
 
-Use para inspecionar ou editar o arquivo Penpot `stardust`, a fonte visual
-canonica do projeto. O MCP so funciona com o arquivo aberto no navegador e o
-plugin Penpot MCP carregado e conectado a ele.
+Use para inspecionar ou editar o canvas Doop `StarDust`
+(https://doop.design/c/iTvx3bvEsu), a fonte visual canonica do projeto. O MCP
+opera sobre a conta conectada e nao exige o canvas aberto no navegador.
 
 Boas praticas:
 
-- leia `high_level_overview` uma vez por sessao e consulte `penpot_api_info`
-  antes de usar `execute_code`;
-- confirme com `penpot.currentFile.name` que o arquivo conectado e `stardust`;
-  o servidor MCP pode estar ligado a outro arquivo Penpot;
-- localize paginas e boards por nome (`penpot.currentFile.pages`,
-  `penpotUtils.findShapes`); o nome e o contrato e IDs mudam se o board for
-  recriado;
-- leia a estrutura, os componentes (`penpot.library.local`) e os tokens antes
-  de deduzir cores, medidas ou componentes;
-- use `export_shape` apenas quando validacao visual for necessaria;
-- ao editar, use os componentes e tokens da biblioteca, nao altere
-  componentes da biblioteca sem pedido e confira o resultado com
-  `export_shape`; o Penpot salva automaticamente;
-- o sandbox do `execute_code` nao tem `fetch`; envie dados inline e nao dependa
-  de servidores locais.
+- leia `get_guide` com o topico `doop-instructions` uma vez por sessao, e com
+  o topico `components` antes da primeira alteracao de componente;
+- confirme com `get_canvas` que o canvas conectado e `StarDust`; a conta pode
+  ter outros canvases (`list_canvases`);
+- localize paginas e frames por nome (`get_canvas`, `get_frame`); o nome e o
+  contrato e IDs mudam se o frame for recriado;
+- leia a estrutura, os componentes (`list_components`, `get_component`) e os
+  tokens (`get_tokens`) antes de deduzir cores, medidas ou componentes;
+- use `get_frame_screenshot` apenas quando validacao visual for necessaria, e
+  `inspect_frame` para ler estilos e problemas de overflow como dado;
+- ao editar, use os componentes e tokens do canvas, nao altere componentes
+  existentes sem pedido e confira o resultado com `get_frame_screenshot`; o
+  Doop salva a cada chamada e propaga a edicao de um componente as instancias;
+- o Doop renderiza HTML/CSS: imagens e icones vem de URLs publicas ou de
+  `upload_asset`, nao de arquivos locais.
 
 ### Pencil
 

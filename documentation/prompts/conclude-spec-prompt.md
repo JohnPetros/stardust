@@ -31,7 +31,7 @@ contract.
 
 Require:
 
-- the current Spec is `in_progress`, every row of its `plan.md` is `completed` and the
+- the current Spec is `in_progress`, every task and row of its `plan.md` is `completed` and the
   Evaluation is `ready` for that revision. A legacy delivery (its Evaluation declares
   `plan: none`) has no plan: its Evaluation's `Implementation` column is checked instead;
 - every required `RF-*`, `CA-*`, `AV-*`, `MV-*` and `VV-*` verification has current approved evidence or an
@@ -47,7 +47,7 @@ A required check that failed, is missing, unavailable, skipped, waived or stale 
 a pass and cannot produce readiness or conclusion. Reconcile the `plan.md` rows, Check Results, Criteria evidence,
 Findings and the real candidate; a `passed` status without observed proof is insufficient. Keep the
 Evaluation `in_progress` while there is pending evidence or a pending fix, and retain a
-factual Handoff: verification per criterion, unfinished `plan.md` rows, current candidate, reusable and stale
+factual Handoff: verification per criterion, unfinished `plan.md` tasks and rows, current candidate, reusable and stale
 results, unfinished work, blockers and the concrete next action.
 
 For a defect within the Contract, add an `ACH-*`, invalidate only the affected evidence and
@@ -95,7 +95,7 @@ git log -10 --format='%h %s'
 Classify the exact delivery paths, the required factual documentation, the operational
 ledger changes and the unrelated work. Include the required factual documentation in the
 ordinary commits; explicitly preserve and exclude the unrelated work. Read the
-Penpot file only through the Penpot MCP.
+Doop canvas only through the Doop MCP.
 
 For each selected criterion, confirm that the current implementation satisfies the Spec and its
 concrete sensor. Passing tests alone do not establish full coverage of the
@@ -143,7 +143,7 @@ concrete fix that requires them. Code review and visual review run in parallel o
 candidate. Also confirm the `ui-layer-rules.md` audit recorded in the Evaluation.
 
 For design-backed UI, confirm that the recorded visual comparisons used current
-Penpot MCP exports of the Design Contract's pages, boards and components, and that the matrix
+Doop MCP exports of the Design Contract's pages, frames and components, and that the matrix
 proves design-to-code fidelity at the current HEAD. A missing frame, a contradicted one, one added
 without approval, or a divergence without a traceable decision keeps the Spec `in_progress` and requires
 a fix or amendment. Reuse accepted and current comparisons; closure, by itself,
