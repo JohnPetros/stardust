@@ -8,6 +8,7 @@ describe('Image structure', () => {
     expect(() => Image.create('image.jpeg')).not.toThrow()
     expect(() => Image.create('image.gif')).not.toThrow()
     expect(() => Image.create('image.svg')).not.toThrow()
+    expect(() => Image.create('image.webp')).not.toThrow()
     expect(() => Image.create('image.pdf')).toThrow(ValidationError)
     expect(() => Image.create('image')).toThrow(ValidationError)
     expect(() => Image.create('image.ghggghghg')).toThrow(ValidationError)

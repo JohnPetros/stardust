@@ -27,7 +27,6 @@ describe('Create Planet Use Case', () => {
 
     const response = await useCase.execute({
       name: planetDto.name,
-      icon: planetDto.icon,
       image: planetDto.image,
     })
     expect(planetsRepository.findLastPlanet).toHaveBeenCalledTimes(1)
@@ -36,7 +35,6 @@ describe('Create Planet Use Case', () => {
     const createdPlanet = planetsRepository.add.mock.calls[0][0]
     expect(createdPlanet.galaxyId.value).toBe(galaxy.id.value)
     expect(createdPlanet.name.value).toBe(planetDto.name)
-    expect(createdPlanet.icon.value).toBe(planetDto.icon)
     expect(createdPlanet.image.value).toBe(planetDto.image)
     // Expect increment
     expect(createdPlanet.position.value).toBe(6)
@@ -44,6 +42,7 @@ describe('Create Planet Use Case', () => {
     expect(createdPlanet.completionCount.value).toBe(0)
     expect(createdPlanet.stars).toHaveLength(0)
     expect(response).toEqual(createdPlanet.dto)
+    expect(response).not.toHaveProperty('icon')
   })
 
   it('should create the first planet with position 1 if no previous planet exists', async () => {
@@ -52,7 +51,6 @@ describe('Create Planet Use Case', () => {
 
     const response = await useCase.execute({
       name: planetDto.name,
-      icon: planetDto.icon,
       image: planetDto.image,
     })
 
@@ -71,7 +69,6 @@ describe('Create Planet Use Case', () => {
     await expect(
       useCase.execute({
         name: planetDto.name,
-        icon: planetDto.icon,
         image: planetDto.image,
       }),
     ).rejects.toThrow(GalaxyNotFoundError)

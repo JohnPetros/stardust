@@ -4,12 +4,23 @@ import type { UsersRepository } from '#profile/interfaces/UsersRepository'
 import { Id } from '#global/domain/structures/Id'
 import { UserNotFoundError } from '#profile/domain/errors/UserNotFoundError'
 import { UsersFaker } from '#profile/domain/entities/fakers/UsersFaker'
-import { PlanetsFaker } from '#space/domain/entities/tests/fakers/PlanetsFaker'
 import { CalculateRewardForStarCompletionUseCase } from '../CalculateRewardForStarCompletionUseCase'
 
 describe('Calculate Reward For Star Completion Use Case', () => {
   let repository: Mock<UsersRepository>
   let useCase: CalculateRewardForStarCompletionUseCase
+
+  const execute = (
+    userId: string,
+    incorrectAnswersCount: number,
+    isAlreadyCompleted = false,
+  ) =>
+    useCase.execute({
+      userId,
+      isAlreadyCompleted,
+      questionsCount: 10,
+      incorrectAnswersCount,
+    })
 
   beforeEach(() => {
     repository = mock<UsersRepository>()
@@ -17,12 +28,11 @@ describe('Calculate Reward For Star Completion Use Case', () => {
     useCase = new CalculateRewardForStarCompletionUseCase(repository)
   })
 
-  it('should throw an error if the user is not found', () => {
-    expect(
+  it('should throw an error if the user is not found', async () => {
+    await expect(
       useCase.execute({
         userId: Id.create().value,
-        starId: Id.create().value,
-        nextStarId: null,
+        isAlreadyCompleted: false,
         questionsCount: 0,
         incorrectAnswersCount: 0,
       }),
@@ -33,268 +43,96 @@ describe('Calculate Reward For Star Completion Use Case', () => {
     const user = UsersFaker.fake()
     repository.findById.mockResolvedValue(user)
 
-    let response = await useCase.execute({
-      incorrectAnswersCount: 0,
-      userId: user.id.value,
-      starId: Id.create().value,
-      nextStarId: null,
-      questionsCount: 10,
-    })
-
-    expect(response.accuracyPercentage).toBe(100) // 100% accuracy
-
-    response = await useCase.execute({
-      incorrectAnswersCount: 2,
-      userId: user.id.value,
-      starId: Id.create().value,
-      nextStarId: null,
-      questionsCount: 10,
-    })
-
-    expect(response.accuracyPercentage).toBe(80) // 80% accuracy
-
-    response = await useCase.execute({
-      incorrectAnswersCount: 5,
-      userId: user.id.value,
-      starId: Id.create().value,
-      nextStarId: null,
-      questionsCount: 10,
-    })
-
-    expect(response.accuracyPercentage).toBe(50) // 50% accuracy
+    expect((await execute(user.id.value, 0)).accuracyPercentage).toBe(100)
+    expect((await execute(user.id.value, 2)).accuracyPercentage).toBe(80)
+    expect((await execute(user.id.value, 5)).accuracyPercentage).toBe(50)
   })
 
-  it('should discount the new xp in percentage based on the incorrect answers count and questions count', async () => {
-    let user = UsersFaker.fake({ hasCompletedSpace: false })
+  it('should discount the new xp in percentage based on the incorrect answers count', async () => {
+    const user = UsersFaker.fake()
     repository.findById.mockResolvedValue(user)
 
-    let response = await useCase.execute({
-      incorrectAnswersCount: 0,
-      userId: user.id.value,
-      starId: Id.create().value,
-      nextStarId: null,
-      questionsCount: 10,
-    })
-
-    expect(response.newXp).toBe(60) // 100% of 60 xp
-
-    user = UsersFaker.fake({ hasCompletedSpace: false })
-    repository.findById.mockResolvedValue(user)
-
-    response = await useCase.execute({
-      incorrectAnswersCount: 2,
-      userId: user.id.value,
-      starId: Id.create().value,
-      nextStarId: null,
-      questionsCount: 10,
-    })
-
-    expect(response.newXp).toBe(48) // 80% of 60 xp
-
-    user = UsersFaker.fake({ hasCompletedSpace: false })
-    repository.findById.mockResolvedValue(user)
-
-    response = await useCase.execute({
-      incorrectAnswersCount: 5,
-      userId: user.id.value,
-      starId: Id.create().value,
-      nextStarId: null,
-      questionsCount: 10,
-    })
-
-    expect(response.newXp).toBe(30) // 50% of 60 xp
+    expect((await execute(user.id.value, 0)).newXp).toBe(60)
+    expect((await execute(user.id.value, 2)).newXp).toBe(48)
+    expect((await execute(user.id.value, 5)).newXp).toBe(30)
   })
 
-  it('should discount the new coins in percentage based on the incorrect answers count and questions count', async () => {
-    let user = UsersFaker.fake({ hasCompletedSpace: false })
+  it('should discount the new coins in percentage based on the incorrect answers count', async () => {
+    const user = UsersFaker.fake()
     repository.findById.mockResolvedValue(user)
 
-    let response = await useCase.execute({
-      incorrectAnswersCount: 0,
-      userId: user.id.value,
-      starId: Id.create().value,
-      nextStarId: null,
-      questionsCount: 10,
-    })
-
-    expect(response.newCoins).toBe(40) // 100% of 40 coins
-
-    user = UsersFaker.fake({ hasCompletedSpace: false })
-    repository.findById.mockResolvedValue(user)
-
-    response = await useCase.execute({
-      incorrectAnswersCount: 2,
-      userId: user.id.value,
-      starId: Id.create().value,
-      nextStarId: null,
-      questionsCount: 10,
-    })
-
-    expect(response.newCoins).toBe(32) // 80% of 40 coins
-
-    user = UsersFaker.fake({ hasCompletedSpace: false })
-    repository.findById.mockResolvedValue(user)
-
-    response = await useCase.execute({
-      incorrectAnswersCount: 5,
-      userId: user.id.value,
-      starId: Id.create().value,
-      nextStarId: null,
-      questionsCount: 10,
-    })
-
-    expect(response.newCoins).toBe(20) // 50% of 40 coins
-
-    user = UsersFaker.fake({
-      completedPlanetsIds: PlanetsFaker.fakeMany(8).map((planet) => planet.id.value),
-      hasCompletedSpace: true,
-    })
-    repository.findById.mockResolvedValue(user)
-
-    response = await useCase.execute({
-      incorrectAnswersCount: 0,
-      userId: user.id.value,
-      starId: Id.create().value,
-      nextStarId: null,
-      questionsCount: 10,
-    })
-
-    expect(response.newCoins).toBe(20) // 50% of 40 coins
+    expect((await execute(user.id.value, 0)).newCoins).toBe(40)
+    expect((await execute(user.id.value, 2)).newCoins).toBe(32)
+    expect((await execute(user.id.value, 5)).newCoins).toBe(20)
   })
 
-  it('should divide the new calculated coins by 2 if the next star was unlocked and the current star was recently unlocked', async () => {
-    const starId = Id.create().value
-    const nextStarId = Id.create().value
-    const user = UsersFaker.fake({
-      unlockedStarsIds: [nextStarId],
-      recentlyUnlockedStarsIds: [starId],
-      hasCompletedSpace: false,
-    })
+  it('should pay half of the coins and xp when the star was already completed', async () => {
+    const user = UsersFaker.fake()
     repository.findById.mockResolvedValue(user)
 
-    const response = await useCase.execute({
-      incorrectAnswersCount: 0,
-      userId: user.id.value,
-      starId,
-      nextStarId,
-      questionsCount: 10,
-    })
+    const response = await execute(user.id.value, 0, true)
 
-    expect(response.newCoins).toBe(20) // 50% of 40 coins
+    expect(response.newCoins).toBe(20)
+    expect(response.newXp).toBe(30)
   })
 
-  it('should not divide the new calculated coins if the current star was not recently unlocked', async () => {
-    const starId = Id.create().value
-    const nextStarId = Id.create().value
-    const user = UsersFaker.fake({
-      unlockedStarsIds: [nextStarId],
-      recentlyUnlockedStarsIds: [],
-      hasCompletedSpace: false,
-    })
+  it('should halve the xp, still discounted by the incorrect answers, when the star was already completed', async () => {
+    const user = UsersFaker.fake()
     repository.findById.mockResolvedValue(user)
 
-    const response = await useCase.execute({
-      incorrectAnswersCount: 0,
-      userId: user.id.value,
-      starId,
-      nextStarId,
-      questionsCount: 10,
-    })
+    expect((await execute(user.id.value, 0, true)).newXp).toBe(30)
+    expect((await execute(user.id.value, 2, true)).newXp).toBe(24)
+    expect((await execute(user.id.value, 5, true)).newXp).toBe(15)
+  })
+
+  it('should halve the coins, still discounted by the incorrect answers, when the star was already completed', async () => {
+    const user = UsersFaker.fake()
+    repository.findById.mockResolvedValue(user)
+
+    expect((await execute(user.id.value, 0, true)).newCoins).toBe(20)
+    expect((await execute(user.id.value, 2, true)).newCoins).toBe(16)
+    expect((await execute(user.id.value, 5, true)).newCoins).toBe(10)
+  })
+
+  it('should pay the full reward on the first completion of a star', async () => {
+    const user = UsersFaker.fake()
+    repository.findById.mockResolvedValue(user)
+
+    const response = await execute(user.id.value, 0, false)
 
     expect(response.newCoins).toBe(40)
-  })
-
-  it('should divide the new calculated coins by 2 if the user has completed the space', async () => {
-    const user = UsersFaker.fake({
-      unlockedStarsIds: [],
-      hasCompletedSpace: true,
-    })
-    repository.findById.mockResolvedValue(user)
-
-    const response = await useCase.execute({
-      incorrectAnswersCount: 0,
-      userId: user.id.value,
-      starId: Id.create().value,
-      nextStarId: null,
-      questionsCount: 10,
-    })
-
-    expect(response.newCoins).toBe(20) // 50% of 40 coins
-  })
-
-  it('should divide the new calculated xp by 2 if the next star was unlocked and the current star was recently unlocked', async () => {
-    const starId = Id.create().value
-    const nextStarId = Id.create().value
-    let user = UsersFaker.fake({
-      unlockedStarsIds: [nextStarId],
-      recentlyUnlockedStarsIds: [starId],
-      hasCompletedSpace: false,
-    })
-    repository.findById.mockResolvedValue(user)
-
-    let response = await useCase.execute({
-      incorrectAnswersCount: 0,
-      userId: user.id.value,
-      starId,
-      nextStarId,
-      questionsCount: 10,
-    })
-
-    expect(response.newXp).toBe(30) // 50% of 60 xp
-
-    user = UsersFaker.fake({
-      completedPlanetsIds: PlanetsFaker.fakeMany(8).map((planet) => planet.id.value),
-      hasCompletedSpace: true,
-    })
-    repository.findById.mockResolvedValue(user)
-
-    response = await useCase.execute({
-      incorrectAnswersCount: 0,
-      userId: user.id.value,
-      starId: Id.create().value,
-      nextStarId: null,
-      questionsCount: 10,
-    })
-
-    expect(response.newXp).toBe(30) // 50% of 60 xp
-  })
-
-  it('should not divide the new calculated xp if the current star was not recently unlocked', async () => {
-    const starId = Id.create().value
-    const nextStarId = Id.create().value
-    const user = UsersFaker.fake({
-      unlockedStarsIds: [nextStarId],
-      recentlyUnlockedStarsIds: [],
-      hasCompletedSpace: false,
-    })
-    repository.findById.mockResolvedValue(user)
-
-    const response = await useCase.execute({
-      incorrectAnswersCount: 0,
-      userId: user.id.value,
-      starId,
-      nextStarId,
-      questionsCount: 10,
-    })
-
     expect(response.newXp).toBe(60)
   })
 
-  it('should divide the new calculated xp by 2 if the user has completed the space', async () => {
-    const user = UsersFaker.fake({
-      unlockedStarsIds: [],
-      hasCompletedSpace: true,
-    })
+  it('should not change the accuracy percentage when the star was already completed', async () => {
+    const user = UsersFaker.fake()
+    repository.findById.mockResolvedValue(user)
+
+    expect((await execute(user.id.value, 2, true)).accuracyPercentage).toBe(80)
+    expect((await execute(user.id.value, 2, false)).accuracyPercentage).toBe(80)
+  })
+
+  it('should pay the full reward for a new star even when the user has completed the space', async () => {
+    const user = UsersFaker.fake({ hasCompletedSpace: true })
+    repository.findById.mockResolvedValue(user)
+
+    const response = await execute(user.id.value, 0, false)
+
+    expect(response.newCoins).toBe(40)
+    expect(response.newXp).toBe(60)
+  })
+
+  it('should reward nothing, with full accuracy, for a star without questions', async () => {
+    const user = UsersFaker.fake()
     repository.findById.mockResolvedValue(user)
 
     const response = await useCase.execute({
-      incorrectAnswersCount: 0,
       userId: user.id.value,
-      starId: Id.create().value,
-      nextStarId: null,
-      questionsCount: 10,
+      isAlreadyCompleted: false,
+      questionsCount: 0,
+      incorrectAnswersCount: 0,
     })
 
-    expect(response.newXp).toBe(30) // 50% of 60 xp
+    expect(response).toEqual({ newCoins: 0, newXp: 0, accuracyPercentage: 100 })
   })
 })

@@ -14,33 +14,30 @@ import { Platform, WeekStatus } from '../../structures'
 import { AchievementsFaker, UsersFaker } from '../fakers'
 
 describe('User Entity', () => {
-  it('should have the unlocked star id if User unlocks the star', () => {
-    const user = UsersFaker.fake({ unlockedStarsIds: [] })
+  it('should have the completed star id only once when User completes the star', () => {
+    const user = UsersFaker.fake({ completedStarsIds: [] })
     const starId = Id.create()
 
-    expect(user.hasUnlockedStar(starId).value).toBeFalsy()
+    expect(user.hasCompletedStar(starId).value).toBeFalsy()
 
-    user.unlockStar(starId)
+    user.completeStar(starId)
+    user.completeStar(starId)
 
-    expect(user.hasUnlockedStar(starId).value).toBeTruthy()
+    expect(user.hasCompletedStar(starId).value).toBeTruthy()
+    expect(user.completedStarsIds.count.value).toBe(1)
   })
 
-  it('should have the recently unlocked star id if User recectly unlocks the star', () => {
-    const recentlyUnlockedStarsIds = [Id.create(), Id.create()]
-    const user = UsersFaker.fake({
-      recentlyUnlockedStarsIds: [
-        recentlyUnlockedStarsIds[0].value,
-        recentlyUnlockedStarsIds[1].value,
-      ],
-    })
+  it('should have the opened planet id only once when User opens the planet', () => {
+    const user = UsersFaker.fake({ openedPlanetsIds: [] })
+    const planetId = Id.create()
 
-    recentlyUnlockedStarsIds.push(Id.create())
+    expect(user.hasOpenedPlanet(planetId).value).toBeFalsy()
 
-    expect(user.hasRecentlyUnlockedStar(recentlyUnlockedStarsIds[0]).value).toBeTruthy()
-    expect(user.hasRecentlyUnlockedStar(recentlyUnlockedStarsIds[1]).value).toBeTruthy()
-    expect(
-      user.hasRecentlyUnlockedStar(recentlyUnlockedStarsIds[2]).value,
-    ).not.toBeTruthy()
+    user.openPlanet(planetId)
+    user.openPlanet(planetId)
+
+    expect(user.hasOpenedPlanet(planetId).value).toBeTruthy()
+    expect(user.openedPlanetsIds.count.value).toBe(1)
   })
 
   it('should have the unlocked and rescuable achievement id if User unlocks the achievement', () => {
@@ -566,12 +563,12 @@ describe('User Entity', () => {
     expect(user.tier.id).toEqual(newTier.id)
   })
 
-  it('should decrement the count of the unlocked stars when returns it', () => {
+  it('should return the count of the completed stars', () => {
     const user = UsersFaker.fake({
-      unlockedStarsIds: [Id.create().value, Id.create().value, Id.create().value],
+      completedStarsIds: [Id.create().value, Id.create().value, Id.create().value],
     })
 
-    expect(user.unlockedStarsCount).toEqual(Integer.create(2))
+    expect(user.completedStarsCount).toEqual(Integer.create(3))
   })
 
   it('should increment the count of the acquired rockets when returns it', () => {
@@ -607,13 +604,13 @@ describe('User Entity', () => {
   })
 
   it('should keep the progress untouched when enters a galaxy', () => {
-    const unlockedStarsIds = [Id.create().value, Id.create().value]
+    const completedStarsIds = [Id.create().value, Id.create().value]
     const user = UsersFaker.fake({
       coins: 120,
       xp: 340,
       weeklyXp: 50,
       streak: 4,
-      unlockedStarsIds,
+      completedStarsIds,
       completedPlanetsIds: [Id.create().value],
       unlockedAchievementsIds: [Id.create().value],
       hasCompletedSpace: true,
@@ -628,7 +625,7 @@ describe('User Entity', () => {
     expect(user.coins.value).toBe(120)
     expect(user.xp.value).toBe(340)
     expect(user.streak.value).toBe(4)
-    expect(user.unlockedStarsIds.dto).toEqual(unlockedStarsIds)
+    expect(user.completedStarsIds.dto).toEqual(completedStarsIds)
   })
 
   it('should convert the current galaxy back to the dto', () => {
