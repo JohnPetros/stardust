@@ -1,8 +1,8 @@
 {
-  "analysedAt": "2026-11-22T00:03:59.624Z",
-  "totalFiles": 3589,
-  "totalFunctions": 9878,
-  "warnCount": 2851,
+  "analysedAt": "2026-11-22T12:47:23.601Z",
+  "totalFiles": 3588,
+  "totalFunctions": 9879,
+  "warnCount": 2852,
   "errorCount": 234,
   "averageMI": 54.5,
   "averageHealthScore": 72.5,
@@ -45963,9 +45963,50 @@
       "filePath": "apps/web/src/rpc/actions/challenging/AccessChallengePageAction.ts",
       "functions": [
         {
+          "name": "getCurrentGalaxyTrail",
+          "startLine": 34,
+          "endLine": 51,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 3,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 2,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 15,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 1,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 265.93,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 57,
+          "maintainabilityRating": "warn",
+          "healthScore": 77,
+          "smells": []
+        },
+        {
           "name": "isStarInaccessible",
-          "startLine": 35,
-          "endLine": 44,
+          "startLine": 53,
+          "endLine": 62,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -46005,8 +46046,8 @@
         },
         {
           "name": "accessAsUser",
-          "startLine": 118,
-          "endLine": 135,
+          "startLine": 136,
+          "endLine": 153,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -46046,8 +46087,8 @@
         },
         {
           "name": "handle",
-          "startLine": 143,
-          "endLine": 159,
+          "startLine": 161,
+          "endLine": 177,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -46087,9 +46128,9 @@
         }
       ],
       "summary": {
-        "totalLines": 162,
-        "weightedMI": 65.4,
-        "weightedHealthScore": 83.5,
+        "totalLines": 180,
+        "weightedMI": 64.4,
+        "weightedHealthScore": 82.8,
         "worstSeverity": "warn",
         "smellIds": []
       }
@@ -46551,9 +46592,50 @@
       "filePath": "apps/web/src/rpc/actions/space/AccessStarPageAction.ts",
       "functions": [
         {
-          "name": "handle",
-          "startLine": 20,
+          "name": "getCurrentGalaxyTrail",
+          "startLine": 15,
           "endLine": 32,
+          "metrics": [
+            {
+              "name": "cyclomaticComplexity",
+              "value": 3,
+              "threshold": 15,
+              "severity": "ok"
+            },
+            {
+              "name": "cognitiveComplexity",
+              "value": 2,
+              "threshold": 25,
+              "severity": "ok"
+            },
+            {
+              "name": "functionLength",
+              "value": 15,
+              "threshold": 70,
+              "severity": "ok"
+            },
+            {
+              "name": "nestingDepth",
+              "value": 1,
+              "threshold": 4,
+              "severity": "ok"
+            },
+            {
+              "name": "halsteadVolume",
+              "value": 265.93,
+              "threshold": 800,
+              "severity": "ok"
+            }
+          ],
+          "maintainabilityIndex": 57,
+          "maintainabilityRating": "warn",
+          "healthScore": 77,
+          "smells": []
+        },
+        {
+          "name": "handle",
+          "startLine": 38,
+          "endLine": 50,
           "metrics": [
             {
               "name": "cyclomaticComplexity",
@@ -46593,9 +46675,9 @@
         }
       ],
       "summary": {
-        "totalLines": 35,
-        "weightedMI": 65.2,
-        "weightedHealthScore": 79.9,
+        "totalLines": 53,
+        "weightedMI": 62.2,
+        "weightedHealthScore": 78.9,
         "worstSeverity": "warn",
         "smellIds": []
       }
@@ -144474,59 +144556,6 @@
         "totalLines": 40,
         "weightedMI": 68.8,
         "weightedHealthScore": 89,
-        "worstSeverity": "warn",
-        "smellIds": []
-      }
-    },
-    {
-      "filePath": "apps/web/src/rpc/actions/space/getCurrentGalaxyTrail.ts",
-      "functions": [
-        {
-          "name": "getCurrentGalaxyTrail",
-          "startLine": 7,
-          "endLine": 24,
-          "metrics": [
-            {
-              "name": "cyclomaticComplexity",
-              "value": 3,
-              "threshold": 15,
-              "severity": "ok"
-            },
-            {
-              "name": "cognitiveComplexity",
-              "value": 2,
-              "threshold": 25,
-              "severity": "ok"
-            },
-            {
-              "name": "functionLength",
-              "value": 15,
-              "threshold": 70,
-              "severity": "ok"
-            },
-            {
-              "name": "nestingDepth",
-              "value": 1,
-              "threshold": 4,
-              "severity": "ok"
-            },
-            {
-              "name": "halsteadVolume",
-              "value": 265.93,
-              "threshold": 800,
-              "severity": "ok"
-            }
-          ],
-          "maintainabilityIndex": 57,
-          "maintainabilityRating": "warn",
-          "healthScore": 77,
-          "smells": []
-        }
-      ],
-      "summary": {
-        "totalLines": 25,
-        "weightedMI": 57,
-        "weightedHealthScore": 77,
         "worstSeverity": "warn",
         "smellIds": []
       }
