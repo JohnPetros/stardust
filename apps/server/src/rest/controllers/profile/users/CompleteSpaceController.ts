@@ -6,7 +6,7 @@ import { CompleteSpaceUseCase } from '@stardust/core/profile/use-cases'
 
 type Schema = {
   body: {
-    nextStarId: string | null
+    isLastGalaxyStar: boolean
     isFirstGalaxy: boolean
   }
 }
@@ -19,9 +19,9 @@ export class CompleteSpaceController implements Controller<Schema> {
 
   async handle(http: Http<Schema>): Promise<RestResponse> {
     const userId = await http.getAccountId()
-    const { nextStarId, isFirstGalaxy } = await http.getBody()
+    const { isLastGalaxyStar, isFirstGalaxy } = await http.getBody()
     const useCase = new CompleteSpaceUseCase(this.repository, this.broker)
-    await useCase.execute({ userId, nextStarId, isFirstGalaxy })
+    await useCase.execute({ userId, isLastGalaxyStar, isFirstGalaxy })
     return await http.pass()
   }
 }

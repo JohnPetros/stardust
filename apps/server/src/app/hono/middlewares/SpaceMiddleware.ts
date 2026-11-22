@@ -5,21 +5,20 @@ import {
   DrizzlePlanetsRepository,
   DrizzleStarsRepository,
 } from '@/database/drizzle/repositories'
-import { InngestBroker } from '@/queue/inngest/InngestBroker'
 import {
   AppendEnterableGalaxyToBodyController,
   ResolveCurrentGalaxyController,
 } from '@/rest/controllers/space/galaxies'
+import { AppendOpenablePlanetToBodyController } from '@/rest/controllers/space/planets'
 import {
-  AppendNextStarToBodyController,
+  AppendStarCompletionToBodyController,
   VerifyStarExistsController,
 } from '@/rest/controllers/space/stars'
 import { HonoHttp } from '../HonoHttp'
 
 export class SpaceMiddleware {
-  async appendNextStarToBody(context: Context, next: Next) {
+  async appendStarCompletionToBody(context: Context, next: Next) {
     const http = new HonoHttp(context, next)
-    const Broker = new InngestBroker()
     const starsRepository = new DrizzleStarsRepository(
       http.getDatabase(),
       http.getDatabaseAccess(),
@@ -32,12 +31,21 @@ export class SpaceMiddleware {
       http.getDatabase(),
       http.getDatabaseAccess(),
     )
-    const controller = new AppendNextStarToBodyController(
+    const controller = new AppendStarCompletionToBodyController(
       starsRepository,
       planetsRepository,
       galaxiesRepository,
-      Broker,
     )
+    await controller.handle(http)
+  }
+
+  async appendOpenablePlanetToBody(context: Context, next: Next) {
+    const http = new HonoHttp(context, next)
+    const planetsRepository = new DrizzlePlanetsRepository(
+      http.getDatabase(),
+      http.getDatabaseAccess(),
+    )
+    const controller = new AppendOpenablePlanetToBodyController(planetsRepository)
     await controller.handle(http)
   }
 

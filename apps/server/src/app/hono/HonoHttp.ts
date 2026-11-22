@@ -66,7 +66,7 @@ export class HonoHttp<HonoContext extends Context>
       body =
         method === 'GET' || method === 'HEAD'
           ? ({} as HonoHttpSchema<HonoContext>['body'])
-          : await this.context.req.json()
+          : await this.readJsonBody()
     } else {
       // @ts-expect-error Hono typing does not propagate validated json payload here.
       body = this.context.req.valid('json')
@@ -76,6 +76,12 @@ export class HonoHttp<HonoContext extends Context>
       ...(body as object),
       ...extraBody,
     } as HonoHttpSchema<HonoContext>['body']
+  }
+
+  private async readJsonBody(): Promise<HonoHttpSchema<HonoContext>['body']> {
+    const text = await this.context.req.text()
+    if (text.trim().length === 0) return {} as HonoHttpSchema<HonoContext>['body']
+    return JSON.parse(text)
   }
 
   getRouteParams(): HonoHttpSchema<HonoContext>['routeParams'] {

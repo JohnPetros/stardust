@@ -8,6 +8,8 @@ export { RewardUserForStarCompletionController } from './RewardUserForStarComple
 export { RewardUserForStarChallengeCompletionController } from './RewardUserForStarChallengeCompletionController'
 export { RewardUserForChallengeCompletionController } from './RewardUserForChallengeCompletionController'
 export { AppendUserCompletedChallengesIdsToBodyController } from './AppendUserCompletedChallengesIdsToBodyController'
+export { AppendUserTrailFactsToBodyController } from './AppendUserTrailFactsToBodyController'
+export { OpenPlanetController } from './OpenPlanetController'
 export { AppendUserInfoToBodyController } from './AppendUserInfoToBodyController'
 export { UpvoteCommentController } from './UpvoteCommentController'
 export { AppendIsSolutionUpvotedToBodyController } from './AppendIsSolutionUpvotedToBodyController'

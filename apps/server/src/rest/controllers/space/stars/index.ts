@@ -1,4 +1,4 @@
-export { AppendNextStarToBodyController } from './AppendNextStarToBodyController'
+export { AppendStarCompletionToBodyController } from './AppendStarCompletionToBodyController'
 export { VerifyStarExistsController } from './VerifyStarExistsController'
 export { FetchStarController } from './FetchStarController'
 export { EditStarNameController } from './EditStarNameController'
