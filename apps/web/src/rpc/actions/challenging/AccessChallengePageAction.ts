@@ -4,11 +4,10 @@ import type { SpaceService } from '@stardust/core/space/interfaces'
 import type { ChallengeDto } from '@stardust/core/challenging/entities/dtos'
 import { Challenge } from '@stardust/core/challenging/entities'
 import { ChallengeVote } from '@stardust/core/challenging/structures'
-import { Star } from '@stardust/core/space/entities'
+import { Planet, Star } from '@stardust/core/space/entities'
+import { GalaxyTrail } from '@stardust/core/space/structures'
 import { User } from '@stardust/core/global/entities'
 import { Slug, type Id } from '@stardust/core/global/structures'
-
-import { getCurrentGalaxyTrail } from '../space/getCurrentGalaxyTrail'
 
 type Dependencies = {
   challengingService: ChallengingService
@@ -30,6 +29,25 @@ type Response = {
 const EMPTY_NAVIGATION = {
   previousChallengeSlug: null,
   nextChallengeSlug: null,
+}
+
+async function getCurrentGalaxyTrail(
+  service: SpaceService,
+  user: User,
+): Promise<GalaxyTrail | null> {
+  const currentGalaxyResponse = await service.fetchCurrentGalaxy()
+  if (currentGalaxyResponse.isFailure) return null
+
+  const planetsResponse = await service.fetchGalaxyPlanets(
+    Slug.create(currentGalaxyResponse.body.galaxy.slug),
+  )
+  if (planetsResponse.isFailure) return null
+
+  return GalaxyTrail.create({
+    planets: planetsResponse.body.map(Planet.create),
+    completedStarsIds: user.completedStarsIds,
+    openedPlanetsIds: user.openedPlanetsIds,
+  })
 }
 
 async function isStarInaccessible(spaceService: SpaceService, user: User, starId: Id) {
