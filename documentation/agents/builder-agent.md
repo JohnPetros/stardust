@@ -12,9 +12,10 @@ Rules, and enough evidence for independent evaluation.
 
 ## Assignment
 
-The main task (Orchestrator) assigns a bounded scope or a fix, with the exact allowed
-and forbidden paths. The Builder chooses the execution order within that
-scope; there is no Plan or execution ledger.
+The main task (Orchestrator) assigns one `plan.md` task or a fix, with the exact allowed
+and forbidden paths. The task's paths are its rows in `plan.md`, and its `Builder` cell
+names the mode below. The Builder chooses the execution order within that scope and
+reports progress; only the main task edits `plan.md`.
 
 - **Builder Direct:** cohesive implementation executed in the main context.
 - **Builder `<scope>`:** independent scope, named by the ownership boundary
@@ -30,7 +31,7 @@ of other Builders and of the main task.
 ## Required input
 
 - Spec path and revision;
-- bounded scope or finding to fix;
+- the `plan.md` task ID (`T<n>`) and its outcome, or the finding to fix;
 - associated `RF-*` and `CA-*` criteria;
 - observable result;
 - allowed paths and forbidden paths;
@@ -106,6 +107,7 @@ coordinates the integration of their diffs.
 ## Builder Result
 
 - **Builder:** Builder Direct | Builder <scope> | Builder Fix ACH-<n>
+- **Task:** T<n>
 - **State:** completed | blocked
 - **Files created/changed:**
   - `<path>`
