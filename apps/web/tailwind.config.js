@@ -52,7 +52,7 @@ module.exports = {
         purple: {
           700: '#514869',
         },
-        // Tokens `Semantic/Dark` do Penpot, definidos em global.css sob
+        // Tokens `--color-*` do Doop, definidos em global.css sob
         // `:root[data-theme='stardust-dark']`.
         theme: {
           background: 'var(--theme-background)',
@@ -76,7 +76,7 @@ module.exports = {
           'reward-surface': 'var(--theme-reward-surface)',
         },
       },
-      // Geometria (`Geometry` do Penpot): raio, altura, padding, gap e borda de controle.
+      // Geometria (tokens `--radius-*` e `--spacing-control-*` do Doop): raio, altura, padding, gap e borda de controle.
       borderRadius: {
         theme: 'var(--theme-radius-default)',
         'theme-full': 'var(--theme-radius-full)',

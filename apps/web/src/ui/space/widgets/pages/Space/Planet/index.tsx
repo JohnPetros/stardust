@@ -1,31 +1,43 @@
 'use client'
 
-import { memo } from 'react'
-import type { Star as StarEntity } from '@stardust/core/space/entities'
+import type { Planet as PlanetEntity } from '@stardust/core/space/entities'
 import { FileStorageFolderPath } from '@stardust/core/storage/structures'
 
+import { useToastContext } from '@/ui/global/contexts/ToastContext'
 import { useFileStorage } from '@/ui/global/hooks/useFileStorage'
+import { useOpenPlanetAction } from '@/ui/space/hooks/useOpenPlanetAction'
+import { useSpaceContext } from '@/ui/space/hooks/useSpaceContext'
 import { PlanetView } from './PlanetView'
+import { usePlanet } from './usePlanet'
 
 type PlanetProps = {
-  name: string
-  image: string
-  icon: string
-  stars: StarEntity[]
+  planet: PlanetEntity
+  previousPlanetName: string | null
 }
 
-export const Widget = ({ name, image, icon, stars }: PlanetProps) => {
-  const planetImage = useFileStorage(FileStorageFolderPath.createAsImagesPlanets(), image)
-  const planetIconImage = useFileStorage(
-    FileStorageFolderPath.createAsImagesPlanets(),
-    icon,
-  )
+export const Planet = ({ planet, previousPlanetName }: PlanetProps) => {
+  const space = useSpaceContext()
+  const { openPlanet, openingPlanetId } = useOpenPlanetAction()
+  const { showError } = useToastContext()
+  const folder = FileStorageFolderPath.createAsImagesPlanets()
+  const image = useFileStorage(folder, planet.image.value)
+  const { view, handleOpen } = usePlanet({
+    planet,
+    space,
+    openingPlanetId,
+    openPlanet,
+    showError,
+  })
 
   return (
-    <PlanetView name={name} image={planetImage} icon={planetIconImage} stars={stars} />
+    <PlanetView
+      {...view}
+      image={image}
+      stars={planet.stars}
+      planetId={planet.id}
+      previousPlanetName={previousPlanetName}
+      currentItemRef={space.currentItemRef}
+      onOpen={handleOpen}
+    />
   )
 }
-
-export const Planet = memo(Widget, (previousProps, currentProps) => {
-  return Object.is(previousProps, currentProps)
-})

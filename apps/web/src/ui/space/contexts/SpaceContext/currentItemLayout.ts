@@ -1,5 +1,5 @@
-export type LastUnlockedStarLayoutMetrics = {
-  starRect: DOMRect
+export type CurrentItemLayoutMetrics = {
+  itemRect: DOMRect
   scrollContainer: HTMLElement | null
   scrollTop: number
   scrollHeight: number
@@ -9,15 +9,15 @@ export type LastUnlockedStarLayoutMetrics = {
 
 const SCROLL_CENTER_TOLERANCE_IN_PX = 4
 
-export function createLastUnlockedStarLayoutMetrics(
-  starElement: HTMLDivElement,
+export function createCurrentItemLayoutMetrics(
+  itemElement: HTMLDivElement,
   scrollContainer: HTMLElement | null,
-): LastUnlockedStarLayoutMetrics {
-  const starRect = starElement.getBoundingClientRect()
+): CurrentItemLayoutMetrics {
+  const itemRect = itemElement.getBoundingClientRect()
 
   if (scrollContainer) {
     return {
-      starRect,
+      itemRect,
       scrollContainer,
       scrollTop: scrollContainer.scrollTop,
       scrollHeight: scrollContainer.scrollHeight,
@@ -27,7 +27,7 @@ export function createLastUnlockedStarLayoutMetrics(
   }
 
   return {
-    starRect,
+    itemRect,
     scrollContainer: null,
     scrollTop: window.scrollY,
     scrollHeight: document.documentElement.scrollHeight,
@@ -36,15 +36,13 @@ export function createLastUnlockedStarLayoutMetrics(
   }
 }
 
-export function getLastUnlockedStarLayoutSnapshot(
-  layoutMetrics: LastUnlockedStarLayoutMetrics,
-) {
-  const { starRect, scrollTop, scrollHeight, clientHeight, containerRect } = layoutMetrics
+export function getCurrentItemLayoutSnapshot(layoutMetrics: CurrentItemLayoutMetrics) {
+  const { itemRect, scrollTop, scrollHeight, clientHeight, containerRect } = layoutMetrics
 
   return [
-    Math.round(starRect.top),
-    Math.round(starRect.bottom),
-    Math.round(starRect.height),
+    Math.round(itemRect.top),
+    Math.round(itemRect.bottom),
+    Math.round(itemRect.height),
     Math.round(scrollTop),
     Math.round(scrollHeight),
     Math.round(clientHeight),
@@ -54,9 +52,9 @@ export function getLastUnlockedStarLayoutSnapshot(
   ].join(':')
 }
 
-export function isLastUnlockedStarCentered(layoutMetrics: LastUnlockedStarLayoutMetrics) {
-  const { starRect, containerRect, scrollContainer } = layoutMetrics
-  const starCenter = starRect.top + starRect.height / 2
+export function isCurrentItemCentered(layoutMetrics: CurrentItemLayoutMetrics) {
+  const { itemRect, containerRect, scrollContainer } = layoutMetrics
+  const starCenter = itemRect.top + itemRect.height / 2
 
   if (scrollContainer && containerRect) {
     const viewportCenter = containerRect.top + containerRect.height / 2
@@ -67,19 +65,17 @@ export function isLastUnlockedStarCentered(layoutMetrics: LastUnlockedStarLayout
   return Math.abs(starCenter - window.innerHeight / 2) <= SCROLL_CENTER_TOLERANCE_IN_PX
 }
 
-export function getLastUnlockedStarScrollTarget(
-  layoutMetrics: LastUnlockedStarLayoutMetrics,
-) {
-  const { starRect, scrollContainer, containerRect } = layoutMetrics
+export function getCurrentItemScrollTarget(layoutMetrics: CurrentItemLayoutMetrics) {
+  const { itemRect, scrollContainer, containerRect } = layoutMetrics
 
   if (scrollContainer && containerRect) {
     return (
       scrollContainer.scrollTop +
-      (starRect.top - containerRect.top) -
-      (scrollContainer.clientHeight - starRect.height) / 2
+      (itemRect.top - containerRect.top) -
+      (scrollContainer.clientHeight - itemRect.height) / 2
     )
   }
 
-  const starTopPosition = starRect.top + window.scrollY
-  return starTopPosition - (window.innerHeight - starRect.height) / 2
+  const starTopPosition = itemRect.top + window.scrollY
+  return starTopPosition - (window.innerHeight - itemRect.height) / 2
 }

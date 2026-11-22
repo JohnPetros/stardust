@@ -1,60 +1,41 @@
 'use client'
 
-import type { Id, Name, OrdinalNumber, Slug } from '@stardust/core/global/structures'
+import type { Id, Name, OrdinalNumber } from '@stardust/core/global/structures'
 
-import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
-import { useRef } from 'react'
-import { useStar } from './useStar'
-import { useRestContext } from '@/ui/global/hooks/useRestContext'
-import { StarView } from './StarView'
-import { useAuthContext } from '@/ui/global/hooks/useAuthContext'
 import { useSpaceContext } from '@/ui/space/hooks/useSpaceContext'
+import { StarView } from './StarView'
+import { useStar } from './useStar'
 
 type StarProps = {
   id: Id
+  planetId: Id
   name: Name
-  slug: Slug
   number: OrdinalNumber
+  isChallenge: boolean
+  previousStarNumber: number | null
 }
 
-export const Star = ({ id, name, number, slug }: StarProps) => {
-  const { challengingService } = useRestContext()
-  const { user } = useAuthContext()
-  const {
-    isStarUnlocked,
-    lastUnlockedStarId,
-    lastUnlockedStarRef,
-    lastUnlockedStarPosition,
-    getLastUnlockedStarLayoutSnapshot,
-    scrollIntoLastUnlockedStar,
-    setLastUnlockedStarPosition,
-  } = useSpaceContext()
-  const isLastUnlockedStar = lastUnlockedStarId === id.value
-  const starAnimationRef = useRef<AnimationRef>(null)
-  const { lastUnlockedStarRef: starRef, handleStarClick } = useStar({
-    starId: id,
-    starSlug: slug,
-    isLastUnlockedStar,
-    starAnimationRef,
-    challengingService,
-    lastUnlockedStarRef,
-    lastUnlockedStarPosition,
-    getLastUnlockedStarLayoutSnapshot,
-    scrollIntoLastUnlockedStar,
-    setLastUnlockedStarPosition,
-  })
+export const Star = ({
+  id,
+  planetId,
+  name,
+  number,
+  isChallenge,
+  previousStarNumber,
+}: StarProps) => {
+  const space = useSpaceContext()
+  const star = useStar({ starId: id, planetId, isChallenge, previousStarNumber, space })
 
-  if (user)
-    return (
-      <StarView
-        name={name.value}
-        number={number.value}
-        isUnlocked={isStarUnlocked(id)}
-        isRecentlyUnlocked={user?.hasRecentlyUnlockedStar(id).isTrue}
-        isLastUnlockedStar={isLastUnlockedStar}
-        lastUnlockedStarRef={starRef}
-        starAnimationRef={starAnimationRef}
-        onClick={handleStarClick}
-      />
-    )
+  if (!star.hasTrail) return null
+
+  return (
+    <StarView
+      {...star.view}
+      name={name.value}
+      number={number.value}
+      currentItemRef={space.currentItemRef}
+      onSelect={star.handleSelect}
+      onClick={star.handleClick}
+    />
+  )
 }

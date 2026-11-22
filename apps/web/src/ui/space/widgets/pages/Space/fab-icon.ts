@@ -1,8 +1,8 @@
-import type { LastUnlockedStarViewPortPosition } from '@/ui/space/contexts/SpaceContext/types'
+import type { CurrentItemViewportPosition } from '@/ui/space/contexts/SpaceContext/types'
 import type { IconName } from '@/ui/global/widgets/components/Icon/types'
 
-export const FAB_ICON: Record<LastUnlockedStarViewPortPosition, IconName> = {
-  above: 'arrow-down',
-  bellow: 'arrow-up',
+export const FAB_ICON: Record<CurrentItemViewportPosition, IconName> = {
+  above: 'arrow-up',
+  below: 'arrow-down',
   in: 'arrow-down',
 }

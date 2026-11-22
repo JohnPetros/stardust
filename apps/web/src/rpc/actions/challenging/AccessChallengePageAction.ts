@@ -8,7 +8,7 @@ import { Star } from '@stardust/core/space/entities'
 import { User } from '@stardust/core/global/entities'
 import { Slug, type Id } from '@stardust/core/global/structures'
 
-import { isFirstStarOfCurrentGalaxy } from '../space/isFirstStarOfCurrentGalaxy'
+import { getCurrentGalaxyTrail } from '../space/getCurrentGalaxyTrail'
 
 type Dependencies = {
   challengingService: ChallengingService
@@ -37,9 +37,10 @@ async function isStarInaccessible(spaceService: SpaceService, user: User, starId
   if (response.isFailure) return false
 
   const star = Star.create(response.body)
-  if (user.isGod.notAndNot(user.hasUnlockedStar(star.id)).isFalse) return false
+  if (user.isGod.isTrue) return false
 
-  return !(await isFirstStarOfCurrentGalaxy(spaceService, star.id))
+  const trail = await getCurrentGalaxyTrail(spaceService, user)
+  return !trail || trail.canAccessStar(star.id).isFalse
 }
 
 async function fetchUserChallengeVote(

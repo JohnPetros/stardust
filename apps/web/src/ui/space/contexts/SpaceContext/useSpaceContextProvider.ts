@@ -1,87 +1,127 @@
-import { useCallback, useMemo } from 'react'
+import { type RefObject, useCallback, useMemo, useRef, useState } from 'react'
 
-import type { Id } from '@stardust/core/global/structures'
 import type { User } from '@stardust/core/profile/entities'
 import type { Planet } from '@stardust/core/space/entities'
 import type { CurrentGalaxyDto } from '@stardust/core/space/entities/dtos'
+import { GalaxyTrail, type GalaxyTrailCurrentItem } from '@stardust/core/space/structures'
 
-import { useLastUnlockedStarScroll } from './useLastUnlockedStarScroll'
+import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
+import { useCurrentItemScroll } from './useCurrentItemScroll'
 
-function findLastUnlockedStarId(
-  planets: Planet[],
-  firstStarId: Id,
-  isStarUnlocked: (starId: Id) => boolean,
-) {
-  const reversedPlanets = [...planets]
-  reversedPlanets.reverse()
+function getCurrentItemId(currentItem: GalaxyTrailCurrentItem) {
+  if (!currentItem) return null
 
-  for (const planet of reversedPlanets) {
-    const reversedStars = [...planet.stars]
-    reversedStars.reverse()
-
-    for (const star of reversedStars) {
-      if (isStarUnlocked(star.id)) {
-        return star.id.value
-      }
-    }
-  }
-
-  return firstStarId?.value
+  return currentItem.kind === 'star'
+    ? currentItem.starId.value
+    : currentItem.planetId.value
 }
 
-function useStarUnlocking(planets: Planet[], user: User | null) {
-  const firstStarId = planets[0]?.stars[0]?.id
+function useTrail(planets: Planet[], user: User | null) {
+  return useMemo(() => {
+    if (!user) return { trail: null, currentItem: null, currentItemId: null }
 
-  const isStarUnlocked = useCallback(
-    (starId: Id) => {
-      if (firstStarId && starId.value === firstStarId.value) return true
+    const trail = GalaxyTrail.create({
+      planets,
+      completedStarsIds: user.completedStarsIds,
+      openedPlanetsIds: user.openedPlanetsIds,
+    })
+    const currentItem = trail.currentItem
 
-      return Boolean(user?.hasUnlockedStar(starId).isTrue)
+    return { trail, currentItem, currentItemId: getCurrentItemId(currentItem) }
+  }, [planets, user])
+}
+
+function useStarAnimations() {
+  const animationsRef = useRef(new Map<string, RefObject<AnimationRef | null>>())
+
+  const registerStarAnimation = useCallback(
+    (starId: string, animationRef: RefObject<AnimationRef | null>) => {
+      animationsRef.current.set(starId, animationRef)
+
+      return () => {
+        if (animationsRef.current.get(starId) === animationRef) {
+          animationsRef.current.delete(starId)
+        }
+      }
     },
-    [user, firstStarId],
+    [],
   )
 
-  const lastUnlockedStarId = useMemo(() => {
-    if (!user) return null
+  const restartStarAnimation = useCallback((starId: string) => {
+    animationsRef.current.get(starId)?.current?.restart()
+  }, [])
 
-    return findLastUnlockedStarId(planets, firstStarId, isStarUnlocked)
-  }, [user, planets, firstStarId, isStarUnlocked])
+  return useMemo(
+    () => ({ registerStarAnimation, restartStarAnimation }),
+    [registerStarAnimation, restartStarAnimation],
+  )
+}
 
-  return { isStarUnlocked, lastUnlockedStarId }
+function useStarSelection(currentItem: GalaxyTrailCurrentItem) {
+  const [selectedStarId, setSelectedStarId] = useState<string | null>(null)
+  const [isStarDetailsOpen, setIsStarDetailsOpen] = useState(false)
+  const currentStarId = currentItem?.kind === 'star' ? currentItem.starId.value : null
+
+  const selectStar = useCallback((starId: string) => setSelectedStarId(starId), [])
+  const openStarDetails = useCallback(() => setIsStarDetailsOpen(true), [])
+  const closeStarDetails = useCallback(() => setIsStarDetailsOpen(false), [])
+
+  return useMemo(
+    () => ({
+      selectedStarId: selectedStarId ?? currentStarId,
+      isStarDetailsOpen,
+      selectStar,
+      openStarDetails,
+      closeStarDetails,
+    }),
+    [
+      selectedStarId,
+      currentStarId,
+      isStarDetailsOpen,
+      selectStar,
+      openStarDetails,
+      closeStarDetails,
+    ],
+  )
 }
 
 export function useSpaceContextProvider(
   planets: Planet[],
   user: User | null,
   currentGalaxy: CurrentGalaxyDto,
+  refetchUser: () => Promise<unknown>,
 ) {
-  const { isStarUnlocked, lastUnlockedStarId } = useStarUnlocking(planets, user)
+  const { trail, currentItem, currentItemId } = useTrail(planets, user)
+  const scroll = useCurrentItemScroll(currentItemId)
+  const selection = useStarSelection(currentItem)
+  const animations = useStarAnimations()
 
-  const scroll = useLastUnlockedStarScroll(lastUnlockedStarId)
+  const refreshTrail = useCallback(async () => {
+    await refetchUser()
+  }, [refetchUser])
 
-  const spaceContextValue = useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
       planets,
       galaxy: currentGalaxy.galaxy,
       isFirstGalaxy: currentGalaxy.isFirstGalaxy,
       hasGalaxyChoice: currentGalaxy.hasGalaxyChoice,
-      isStarUnlocked,
-      lastUnlockedStarId,
-      lastUnlockedStarRef: scroll.lastUnlockedStarRef,
-      lastUnlockedStarPosition: scroll.lastUnlockedStarPosition,
-      getLastUnlockedStarLayoutSnapshot: scroll.getLastUnlockedStarLayoutSnapshot,
-      scrollIntoLastUnlockedStar: scroll.scrollIntoLastUnlockedStar,
-      setLastUnlockedStarPosition: scroll.setLastUnlockedStarPosition,
-    }
-  }, [
-    planets,
-    currentGalaxy,
-    isStarUnlocked,
-    lastUnlockedStarId,
-    scroll.lastUnlockedStarPosition,
-    scroll.getLastUnlockedStarLayoutSnapshot,
-    scroll.scrollIntoLastUnlockedStar,
-  ])
-
-  return spaceContextValue
+      trail,
+      currentItem,
+      ...selection,
+      ...animations,
+      ...scroll,
+      refreshTrail,
+    }),
+    [
+      planets,
+      currentGalaxy,
+      trail,
+      currentItem,
+      selection,
+      animations,
+      scroll,
+      refreshTrail,
+    ],
+  )
 }

@@ -21,6 +21,7 @@ export type AnimationName =
   | 'rocket-floating'
   | 'rocket-exploring'
   | 'unlocked-star'
+  | 'planet-lock'
   | 'space'
   | 'streak'
   | 'spinner'

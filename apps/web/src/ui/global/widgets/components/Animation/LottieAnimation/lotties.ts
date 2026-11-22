@@ -15,6 +15,7 @@ export const LOTTIE_PATHS: Record<AnimationName, string> = {
   'apollo-congratulating': '/lotties/apollo-congratulating.json',
   'apollo-greeting': '/lotties/apollo-greeting.json',
   'unlocked-star': '/lotties/unlocked-star.json',
+  'planet-lock': '/lotties/planet-lock.json',
   'planets-exploration': '/lotties/planets-exploration.json',
   'fast-rocket': '/lotties/fast-rocket.json',
   'internal-error': '/lotties/internal-error.json',
