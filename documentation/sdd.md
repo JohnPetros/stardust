@@ -343,7 +343,8 @@ estão `completed`; se ele está comprovado é registrado apenas no Evaluation.
 O Plan é a única fonte do progresso de implementação e das assignments de Builder. Ele não
 possui Contract, fases, waves, estimativas nem evidência: `Depends on` é a única ordenação. Só
 a task principal o edita; Builders e Reviewers reportam. A decisão foi tomada por pedido
-direto em 2026-11-22, sem Spec própria. Um Plan criado antes das tasks declara `tasks: none`
+direto do mantenedor em 2026-11-22, sem Spec própria, e está registrada no PR
+[#671](https://github.com/JohnPetros/stardust/pull/671). Um Plan criado antes das tasks declara `tasks: none`
 no frontmatter e mantém o layout antigo das linhas; `tasks: none` num Plan novo é um desvio e
 deve ser rejeitado na revisão.
 Não há Grilling em `plan-spec`, porque as linhas derivam da Spec. Antes de `implement-spec`,
