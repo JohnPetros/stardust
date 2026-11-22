@@ -2,7 +2,7 @@
 title: Trilha da galáxia — evaluation
 spec: ./spec.md
 plan: ./plan.md
-spec_revision: 10
+spec_revision: 11
 status: ready
 base_commit: 17ff18282d8b55ef2181ce2997862d4516f9c37a
 evaluated_commit: 17ff18282d8b55ef2181ce2997862d4516f9c37a (working tree)
@@ -13,7 +13,7 @@ last_updated_at: 2026-11-19
 
 ## Evaluated scope
 
-- Spec: `./spec.md` (revisão 10)
+- Spec: `./spec.md` (revisão 11)
 - Plan: `./plan.md`
 - Base commit: `17ff18282d8b55ef2181ce2997862d4516f9c37a` (branch `feat/new-galaxy-page`)
 - Evaluated commit: working tree (nada commitado)
@@ -262,3 +262,10 @@ last_updated_at: 2026-11-19
 - `ACH-28` (resolved: mesmo update de baseline, aprovado em 2026-11-21): `check:complexity` do Web falha (exit 2) em `PlanetArt` (MI 57,6), `buildFlags` (63,8) e `buildPlanetView` (60), funções novas ou deslocadas que não estão no `.code-multivitals-baseline.json`; foram divididas em funções menores, e o gate pede MI acima de cerca de 65. Soma-se ao `ACH-27` (Server, `PlanetsRouter.ts`). Os dois pedem a aprovação do usuário para `update:complexity-baseline`.
 - `ACH-26` (resolved, 2026-11-22; baixa): a arte do planeta de 140 px trocava em `md` (768 px) enquanto o resto da placa troca em `lg` (1024 px). Decisão do usuário: `lg`. `PlanetView.tsx` agora usa `lg:h-[140px] lg:w-[140px]` e `sizes='(min-width: 1024px) 140px, 88px'`. Reverificação: testes do Planet (6 suítes, 52 testes) passam; `check:code` (exit 0, só avisos preexistentes), `check:types` e `check:complexity` do Web exit 0. As capturas de AV-10/VV anteriores foram feitas nos viewports da Spec, 1440 px (desktop) e 390 px (mobile), ambos fora da faixa 768–1023 px, então o resultado visual não muda.
 - AV-10 (mobile) waived pelo usuário em 2026-11-21: performance 47 a 49 (mínimo 50) e TBT 1384 a 1701 ms (máximo 1000) ficam registrados como falha aceita, sem afirmar aprovação. Antes da revisão 7 a mesma rota passava no mobile (56 e 809 ms). Desktop passou na última medição (performance 91, TBT 96 ms). Os critérios que dependiam de AV-10 ficam `Waived` no que toca ao mobile.
+
+## Revisão 11 — `getCurrentGalaxyTrail` interno (feedback do PR #669)
+
+- Decisão do usuário: o helper vira função interna de `AccessStarPageAction.ts`; `AccessChallengePageAction.ts` também o usava, então ganhou cópia interna (opção escolhida pelo usuário). `getCurrentGalaxyTrail.ts` removido; caminho retirado do mapa da Spec e do plano (283 linhas). Sem mudança de comportamento.
+- `ACH-29` (resolved): `check:complexity` do Web reprovou o helper movido (MI 57, mesmo valor de antes; chave nova por arquivo). Baseline atualizado com aprovação do usuário em 2026-11-22; `check:complexity` exit 0 nos quatro workspaces.
+- Reverificação: testes de `src/rpc/actions` (11 suítes, 47 testes) passam, incluindo os ramos de sucesso, falha da galáxia e falha dos planetas de `AccessStarPageAction.test.ts`; `check:code` e `check:types` do Web exit 0.
+- Crew review do PR: P1 (God Account nas rotas de planeta) é preexistente em `main` e fora do escopo; P2 (migrations destrutivas) é decisão da Spec (Q5/Q5a, sem backfill, backup antes do release); P3 já coberto pelos testes de `AccessStarPageAction`.

@@ -1,7 +1,7 @@
 ---
 title: Trilha da galáxia com progresso por fatos, abertura de planetas e staging automatizado — plan
 spec: ./spec.md
-spec_revision: 10
+spec_revision: 11
 evaluation: ./evaluation.md
 status: in_progress
 updated_at: 2026-11-19
@@ -253,7 +253,6 @@ updated_at: 2026-11-19
 | --- | --- | --- | --- | --- |
 | `apps/web/src/app/(home)/space/[galaxySlug]/loading.tsx` | Create | RF-13, CA-35 | completed | none |
 | `apps/web/src/app/(home)/space/[galaxySlug]/error.tsx` | Create | RF-13, CA-35 | completed | none |
-| `apps/web/src/rpc/actions/space/getCurrentGalaxyTrail.ts` | Create | RF-03, RF-12, CA-37 | completed | none |
 | `apps/web/src/rpc/actions/space/isFirstStarOfCurrentGalaxy.ts` | Remove | RF-03, RF-12, CA-37 | completed | none |
 | `apps/web/src/rpc/actions/space/AccessStarPageAction.ts` | Modify | RF-12, CA-37 | completed | none |
 | `apps/web/src/rpc/actions/space/tests/AccessStarPageAction.test.ts` | Modify | RF-12, CA-37 | completed | none |

@@ -1,7 +1,7 @@
 ---
 title: Trilha da galáxia com progresso por fatos, abertura de planetas e staging automatizado
 status: in_progress
-revision: 10
+revision: 11
 source:
   - type: issue
     ref: https://github.com/JohnPetros/stardust/issues/613
@@ -308,7 +308,7 @@ própria.
 | DT-08 | Adapter Supabase legado de usuários lança `MethodNotImplementedError` nos métodos novos | Precedente DT-07 da Spec de Galáxias (`SupabasePlanetsRepository`) | Implementar no adapter legado | Não é composto por nenhuma rota |
 | DT-09 | `description` e `concept` opcionais nos DTOs | Campos opcionais já existem nos DTOs (`id?`, `galaxyId?`) | Obrigatórios | Evita tocar mappers legados e fakers não relacionados |
 | DT-10 | Carregamento e falha da página pelo App Router (`loading.tsx`, `error.tsx` com `reset`) delegando a widgets | A página já busca no servidor; não há query cliente de planetas | Query SWR cliente | Sem nova camada de cache; "Tentar novamente" refaz a renderização do servidor |
-| DT-11 | Guardas RPC constroem a trilha da galáxia atual (`getCurrentGalaxyTrail`) | `isFirstStarOfCurrentGalaxy` já busca galáxia atual e planetas | Endpoint de acesso no Server | Mesma derivação da página, sem rota nova |
+| DT-11 | Guardas RPC constroem a trilha da galáxia atual (função interna `getCurrentGalaxyTrail` em cada action, sem arquivo compartilhado, revisão 11) | `isFirstStarOfCurrentGalaxy` já busca galáxia atual e planetas | Endpoint de acesso no Server | Mesma derivação da página, sem rota nova |
 | DT-12 | Seed de staging com `--environment staging`, projeto e senhas validados antes de qualquer escrita | `validateSeedDatabase` já recusa tudo que não é loopback; `check-drizzle-transition.mjs` já usa `--environment` | Seed só do catálogo (Q17 C) | Staging reproduzível sem login privilegiado público |
 | DT-13 | Workflow de staging espelha o de produção, inclusive a verificação de SHA e health, no grupo `stardust-web-staging` | `server-app-production-cd.yml`; `web-app-staging-cd.yaml` e o E2E de release compartilham o grupo | Workflow mínimo só com webhook | Reseed nunca acontece durante o E2E de release |
 
@@ -653,7 +653,6 @@ apps/web/
 │   │           └── profile.test.ts                                                              [M]
 │   ├── rpc/actions/
 │   │   ├── space/
-│   │   │   ├── getCurrentGalaxyTrail.ts                                                         [N]
 │   │   │   ├── isFirstStarOfCurrentGalaxy.ts                                                    [D]
 │   │   │   ├── AccessStarPageAction.ts                                                          [M]
 │   │   │   └── tests/
@@ -1052,11 +1051,10 @@ documentation/
 | --- | --- | --- | --- | --- |
 | `apps/web/src/app/(home)/space/[galaxySlug]/loading.tsx` | Create | `Loading` | Renderiza `TrailLoading` | AV-07 |
 | `apps/web/src/app/(home)/space/[galaxySlug]/error.tsx` | Create | `Error({ reset })` (client) | Renderiza `TrailLoadFailure` com `onRetry={reset}` | AV-07 |
-| `apps/web/src/rpc/actions/space/getCurrentGalaxyTrail.ts` | Create | `getCurrentGalaxyTrail(service: SpaceService, user: User): Promise<GalaxyTrail \| null>` | Galáxia atual + planetas + fatos do usuário | AV-06 |
 | `apps/web/src/rpc/actions/space/isFirstStarOfCurrentGalaxy.ts` | Remove | `isFirstStarOfCurrentGalaxy` | Substituído pela derivação | — |
-| `apps/web/src/rpc/actions/space/AccessStarPageAction.ts` | Modify | `AccessStarPageAction` | `notFound` salvo estrela acessível | AV-06 |
+| `apps/web/src/rpc/actions/space/AccessStarPageAction.ts` | Modify | `AccessStarPageAction`; função interna `getCurrentGalaxyTrail(service, user)` | `notFound` salvo estrela acessível; a derivação da trilha (galáxia atual + planetas + fatos do usuário) fica numa função interna do arquivo | AV-06 |
 | `apps/web/src/rpc/actions/space/tests/AccessStarPageAction.test.ts` | Modify | teste | Bloqueada → 404; disponível/concluída → acesso | AV-06 |
-| `apps/web/src/rpc/actions/challenging/AccessChallengePageAction.ts` | Modify | `isStarInaccessible` | Usa a derivação; God Account mantém o bypass | AV-06 |
+| `apps/web/src/rpc/actions/challenging/AccessChallengePageAction.ts` | Modify | `isStarInaccessible`; função interna `getCurrentGalaxyTrail(service, user)` | Usa a derivação (cópia interna do arquivo); God Account mantém o bypass | AV-06 |
 | `apps/web/src/rpc/actions/challenging/tests/AccessChallengePageAction.test.ts` | Modify | teste | Bloqueada → 404; disponível/concluída → acesso | AV-06 |
 | `apps/web/src/rest/services/ProfileService.ts` | Modify | `openPlanet(planetId)` | `PUT /profile/users/planets/:planetId/open` | AV-07 |
 | `apps/web/src/rest/services/SpaceService.ts` | Modify | `createPlanet(planetName, planetImage)` | Sem `planetIcon` | — |
@@ -1613,3 +1611,4 @@ aceita.
 | 8 | 2026-11-19 | Amendment da implementação: as dez imagens de planeta passam de WebP estático 512 × 512 para WebP animado 256 × 256 em loop (24 a 30 quadros, 221 a 373 KB cada, cerca de 3,2 MB no total), com o planeta parado e só os elementos ao redor se movendo (luzes, órbitas, água, engrenagens, brilhos e estrelas). Foram gerados por script a partir das imagens estáticas, sem arte nova; `PlanetView` serve a arte com `unoptimized` e 88 px (mobile) ou 140 px (desktop). Nenhum path novo no mapa. Pendentes: alternativo estático para `prefers-reduced-motion`, revalidação de AV-10 e das capturas visuais, e envio das imagens novas ao R2 de staging. |
 | 9 | 2026-11-21 | Revisão visual pelo Doop MCP (Visual Reviewer, rodada 5, FAIL com três achados baixos): o usuário aceitou como adaptações o texto "Abra o planeta para liberar" nas estrelas de planeta não aberto (ACH-22), o painel de detalhes ancorado ao topo da coluna no desktop (ACH-23) e a cor lilás acinzentada da estrela bloqueada (ACH-24); registrados em "Precedência e mapeamento". A fonte canônica do design passa a ser o canvas Doop `StarDust`, com os mesmos nomes de frame. Nenhum path novo no mapa. |
 | 10 | 2026-11-21 | Decisão do usuário após a falha de AV-10 no mobile: só o planeta atual anima. `usePlanet` expõe `isAnimated` (planeta que é o item atual ou que contém a estrela atual) e `PlanetView` aplica `unoptimized` só a ele; os outros nove planetas passam pelo otimizador do Next.js e mostram o primeiro quadro (em telas de densidade alta, onde a largura pedida passa de 256 px, o otimizador devolve o arquivo original e o planeta também anima). Nenhum path novo no mapa. |
+| 11 | 2026-11-22 | Decisão do usuário ao resolver o feedback do PR: `getCurrentGalaxyTrail` deixa de ser arquivo próprio e vira função interna de `AccessStarPageAction.ts`, com cópia interna em `AccessChallengePageAction.ts`. O caminho `apps/web/src/rpc/actions/space/getCurrentGalaxyTrail.ts` sai do mapa; nenhum comportamento muda. O baseline de complexidade foi atualizado com aprovação do usuário (mesmo MI, novos arquivos). |
