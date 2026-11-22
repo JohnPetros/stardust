@@ -405,7 +405,7 @@ function checkTasks({ markdown, planErrors, rows }) {
     )
   if (tasks.length === 0 && malformed.length === 0)
     planErrors.push(
-      'plan has no tasks (declare tasks: none only for a plan that predates tasks)',
+      'plan has no tasks: add a Tasks table, or declare tasks: none only for a plan that predates tasks',
     )
 
   const tasksById = new Map()
