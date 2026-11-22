@@ -2,7 +2,7 @@ import { readFile, readdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 
 const require = createRequire(new URL('../apps/server/package.json', import.meta.url))
-const { S3Client, PutObjectCommand, GetBucketPolicyCommand, PutBucketPolicyCommand } = require('@aws-sdk/client-s3')
+const { S3Client, PutObjectCommand, GetBucketPolicyCommand, PutBucketPolicyCommand, ListObjectsV2Command, DeleteObjectsCommand } = require('@aws-sdk/client-s3')
 
 async function seedAssets() {
   const endpoint = new URL(process.env.S3_ENDPOINT)
@@ -21,7 +21,7 @@ async function seedAssets() {
   const folders = ['planets', 'achievements', 'avatars', 'rankings', 'rockets']
   for (const folder of folders) {
     const directory = new URL(`../apps/server/src/database/seeders/assets/images/${folder}/`, import.meta.url)
-    const files = (await readdir(directory)).filter((file) => /\.(svg|jpg)$/.test(file))
+    const files = (await readdir(directory)).filter((file) => /\.(svg|jpg|webp)$/.test(file))
     const records = catalog.tables[folder === 'rankings' ? 'tiers' : folder]
     if (!Array.isArray(records)) throw new Error('Asset catalog required')
     for (const record of records) {
@@ -45,9 +45,13 @@ async function seedAssets() {
 
   const galaxies = catalog.tables.galaxies
   if (!Array.isArray(galaxies)) throw new Error('Galaxy catalog required')
+  const galaxyAnimations = new Set()
   for (const galaxy of galaxies) {
-    if (!/^[a-z0-9-]+$/.test(galaxy.slug) || galaxy.animation !== `${galaxy.slug}.json`) throw new Error('Invalid galaxy animation')
-    const body = await readFile(new URL(`../packages/studio/public/projects/galaxies/${galaxy.slug}/lottie.json`, import.meta.url))
+    const animationMatch = /^([a-z0-9-]+)\.json$/.exec(galaxy.animation)
+    if (!/^[a-z0-9-]+$/.test(galaxy.slug) || !animationMatch) throw new Error('Invalid galaxy animation')
+    if (galaxyAnimations.has(galaxy.animation)) continue
+    galaxyAnimations.add(galaxy.animation)
+    const body = await readFile(new URL(`../packages/studio/public/projects/galaxies/${animationMatch[1]}/lottie.json`, import.meta.url))
     if (!Array.isArray(JSON.parse(body.toString()).layers)) throw new Error('Invalid galaxy Lottie')
     assets.push({ key: `lotties/galaxies/${galaxy.animation}`, body, contentType: 'application/json' })
     references.add(`lotties/galaxies/${galaxy.animation}`)
@@ -65,6 +69,21 @@ async function seedAssets() {
     for (const { key, body, contentType } of assets) {
       await client.send(new PutObjectCommand({ Bucket: bucket, Key: key, Body: body, ContentType: contentType, CacheControl: 'no-cache' }))
     }
+    const seededKeys = new Set(assets.map((asset) => asset.key))
+    const staleKeys = []
+    for (const prefix of [...folders.map((folder) => `images/${folder}/`), 'lotties/galaxies/']) {
+      let ContinuationToken
+      do {
+        const page = await client.send(new ListObjectsV2Command({ Bucket: bucket, Prefix: prefix, ContinuationToken }))
+        for (const { Key } of page.Contents ?? []) if (!seededKeys.has(Key)) staleKeys.push(Key)
+        ContinuationToken = page.IsTruncated ? page.NextContinuationToken : undefined
+      } while (ContinuationToken)
+    }
+    for (let index = 0; index < staleKeys.length; index += 1000) {
+      const Objects = staleKeys.slice(index, index + 1000).map((Key) => ({ Key }))
+      const response = await client.send(new DeleteObjectsCommand({ Bucket: bucket, Delete: { Objects, Quiet: true } }))
+      if (response.Errors?.length) throw new Error('Stale asset removal failed')
+    }
     const sid = 'StardustLocalSeedPlanetsRead'
     policy.Statement = policy.Statement.filter((statement) => statement.Sid !== sid)
     policy.Statement.push({ Sid: sid, Effect: 'Allow', Principal: { AWS: ['*'] }, Action: ['s3:GetObject'], Resource: [...folders.map((folder) => `arn:aws:s3:::${bucket}/images/${folder}/*`), `arn:aws:s3:::${bucket}/lotties/galaxies/*`] })
@@ -75,6 +94,7 @@ async function seedAssets() {
       const body = Buffer.from(await response.arrayBuffer())
       if (!response.ok || !response.headers.get('content-type')?.includes(asset.contentType) || !body.equals(asset.body)) throw new Error('Public asset verification failed')
     }
+    console.log(`Removed ${staleKeys.length} stale catalog assets.`)
     console.log(`Uploaded ${assets.length} catalog assets; verified ${references.size} catalog references with anonymous HTTP access.`)
     console.log(`Local CDN URL: ${endpoint.origin}/${bucket}`)
   } finally {
