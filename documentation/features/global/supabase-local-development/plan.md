@@ -1,6 +1,7 @@
 ---
 title: Supabase local development — implementation plan
 status: in_progress
+tasks: none
 spec: ./spec.md
 spec_revision: 40
 evaluation: ./evaluation.md

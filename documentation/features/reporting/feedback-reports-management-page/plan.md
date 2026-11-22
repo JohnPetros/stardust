@@ -2,6 +2,7 @@
 spec: ./spec.md
 spec_revision: 5
 status: completed
+tasks: none
 judge_plan: accepted
 implementation_judgment_mode: final
 last_updated_at: 2026-08-03
