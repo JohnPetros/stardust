@@ -37,7 +37,7 @@ function createProfileDto(overrides: Partial<UserDto> = {}): UserDto {
     level: 7,
     xp: 420,
     streak: 12,
-    unlockedStarsIds: [
+    completedStarsIds: [
       '00000000-0000-4000-8000-000000000406',
       '00000000-0000-4000-8000-000000000407',
     ],
@@ -206,7 +206,7 @@ test.describe('/profile/[userSlug]', () => {
       page.getByRole('main').getByText('Visitante Estelar', { exact: true }).first(),
     ).toBeVisible()
     await expect(page.getByText('Nível 7 - 420 xp', { exact: true })).toBeVisible()
-    await expect(page.getByText('Estrelas completadas', { exact: true })).toBeVisible()
+    await expect(page.getByText('Estrelas concluídas', { exact: true })).toBeVisible()
     await expect(page.getByText('Planetas concluídos', { exact: true })).toBeVisible()
     await expect(
       page.getByRole('heading', { name: 'Conquistas adquiridas', exact: true }),

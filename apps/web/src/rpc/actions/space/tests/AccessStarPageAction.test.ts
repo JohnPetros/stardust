@@ -20,26 +20,18 @@ describe('Access Star Page Action', () => {
     isFirstGalaxy: false,
     hasGalaxyChoice: true,
   }
+  const firstStarDto = StarsFaker.fakeDto({ number: 1 })
+  const secondStarDto = StarsFaker.fakeDto({ number: 2 })
+  const planetDto = PlanetsFaker.fakeDto({
+    position: 1,
+    stars: [secondStarDto, firstStarDto],
+  })
 
-  function mockGalaxyPlanets(firstStarDto = StarsFaker.fakeDto({ number: 1 })) {
-    const laterStarDto = StarsFaker.fakeDto({ number: 2 })
-    const firstPlanet = PlanetsFaker.fakeDto({
-      position: 1,
-      stars: [laterStarDto, firstStarDto],
-    })
-    const secondPlanet = PlanetsFaker.fakeDto({
-      position: 2,
-      stars: [StarsFaker.fakeDto({ number: 1 })],
-    })
-
+  function mockGalaxyPlanets() {
     service.fetchCurrentGalaxy.mockResolvedValue(
       new RestResponse({ body: currentGalaxy }),
     )
-    service.fetchGalaxyPlanets.mockResolvedValue(
-      new RestResponse({ body: [secondPlanet, firstPlanet] }),
-    )
-
-    return { firstStarDto, laterStarDto }
+    service.fetchGalaxyPlanets.mockResolvedValue(new RestResponse({ body: [planetDto] }))
   }
 
   beforeEach(() => {
@@ -52,28 +44,19 @@ describe('Access Star Page Action', () => {
     })
   })
 
-  it('should return the star when the user has an unlock row without looking up the galaxy', async () => {
-    const starDto = StarsFaker.fakeDto()
+  it('should return the available star of an opened planet', async () => {
+    mockGalaxyPlanets()
     call.getUser.mockResolvedValue(
-      UsersFaker.fakeDto({ unlockedStarsIds: [starDto.id as string] }),
+      UsersFaker.fakeDto({
+        completedStarsIds: [],
+        openedPlanetsIds: [planetDto.id as string],
+      }),
     )
-    service.fetchStarBySlug.mockResolvedValue(new RestResponse({ body: starDto }))
-
-    const response = await AccessStarPageAction(service).handle(call)
-
-    expect(service.fetchStarBySlug).toHaveBeenCalledWith(Slug.create(starSlug))
-    expect(response.id).toBe(starDto.id)
-    expect(service.fetchCurrentGalaxy).not.toHaveBeenCalled()
-    expect(service.fetchGalaxyPlanets).not.toHaveBeenCalled()
-  })
-
-  it('should return the first star of the first planet of the galaxy without an unlock row', async () => {
-    const { firstStarDto } = mockGalaxyPlanets()
-    call.getUser.mockResolvedValue(UsersFaker.fakeDto({ unlockedStarsIds: [] }))
     service.fetchStarBySlug.mockResolvedValue(new RestResponse({ body: firstStarDto }))
 
     const response = await AccessStarPageAction(service).handle(call)
 
+    expect(service.fetchStarBySlug).toHaveBeenCalledWith(Slug.create(starSlug))
     expect(service.fetchGalaxyPlanets).toHaveBeenCalledWith(
       Slug.create(currentGalaxy.galaxy.slug),
     )
@@ -81,20 +64,58 @@ describe('Access Star Page Action', () => {
     expect(call.notFound).not.toHaveBeenCalled()
   })
 
-  it('should call notFound for a non-first star without an unlock row', async () => {
-    const { laterStarDto } = mockGalaxyPlanets()
-    call.getUser.mockResolvedValue(UsersFaker.fakeDto({ unlockedStarsIds: [] }))
-    service.fetchStarBySlug.mockResolvedValue(new RestResponse({ body: laterStarDto }))
+  it('should return a completed star', async () => {
+    mockGalaxyPlanets()
+    call.getUser.mockResolvedValue(
+      UsersFaker.fakeDto({
+        completedStarsIds: [firstStarDto.id as string],
+        openedPlanetsIds: [planetDto.id as string],
+      }),
+    )
+    service.fetchStarBySlug.mockResolvedValue(new RestResponse({ body: firstStarDto }))
+
+    const response = await AccessStarPageAction(service).handle(call)
+
+    expect(response.id).toBe(firstStarDto.id)
+  })
+
+  it('should call notFound for a locked star of an opened planet', async () => {
+    mockGalaxyPlanets()
+    call.getUser.mockResolvedValue(
+      UsersFaker.fakeDto({
+        completedStarsIds: [],
+        openedPlanetsIds: [planetDto.id as string],
+      }),
+    )
+    service.fetchStarBySlug.mockResolvedValue(new RestResponse({ body: secondStarDto }))
+
+    await expect(AccessStarPageAction(service).handle(call)).rejects.toThrow('Not found')
+  })
+
+  it('should call notFound for the first star of a planet that was not opened', async () => {
+    mockGalaxyPlanets()
+    call.getUser.mockResolvedValue(
+      UsersFaker.fakeDto({ completedStarsIds: [], openedPlanetsIds: [] }),
+    )
+    service.fetchStarBySlug.mockResolvedValue(new RestResponse({ body: firstStarDto }))
+
+    await expect(AccessStarPageAction(service).handle(call)).rejects.toThrow('Not found')
+  })
+
+  it('should call notFound when the star does not exist', async () => {
+    call.getUser.mockResolvedValue(UsersFaker.fakeDto())
+    service.fetchStarBySlug.mockResolvedValue(
+      new RestResponse({ statusCode: 404, errorMessage: 'Star not found' }),
+    )
 
     await expect(AccessStarPageAction(service).handle(call)).rejects.toThrow('Not found')
 
-    expect(call.notFound).toHaveBeenCalled()
+    expect(service.fetchGalaxyPlanets).not.toHaveBeenCalled()
   })
 
-  it('should call notFound when the galaxy lookup fails and there is no unlock row', async () => {
-    const starDto = StarsFaker.fakeDto()
-    call.getUser.mockResolvedValue(UsersFaker.fakeDto({ unlockedStarsIds: [] }))
-    service.fetchStarBySlug.mockResolvedValue(new RestResponse({ body: starDto }))
+  it('should call notFound when the galaxy lookup fails', async () => {
+    call.getUser.mockResolvedValue(UsersFaker.fakeDto())
+    service.fetchStarBySlug.mockResolvedValue(new RestResponse({ body: firstStarDto }))
     service.fetchCurrentGalaxy.mockResolvedValue(
       new RestResponse({ statusCode: 500, errorMessage: 'Galaxy failed' }),
     )
@@ -104,10 +125,9 @@ describe('Access Star Page Action', () => {
     expect(service.fetchGalaxyPlanets).not.toHaveBeenCalled()
   })
 
-  it('should call notFound when the planets lookup fails and there is no unlock row', async () => {
-    const starDto = StarsFaker.fakeDto()
-    call.getUser.mockResolvedValue(UsersFaker.fakeDto({ unlockedStarsIds: [] }))
-    service.fetchStarBySlug.mockResolvedValue(new RestResponse({ body: starDto }))
+  it('should call notFound when the planets lookup fails', async () => {
+    call.getUser.mockResolvedValue(UsersFaker.fakeDto())
+    service.fetchStarBySlug.mockResolvedValue(new RestResponse({ body: firstStarDto }))
     service.fetchCurrentGalaxy.mockResolvedValue(
       new RestResponse({ body: currentGalaxy }),
     )
@@ -116,10 +136,22 @@ describe('Access Star Page Action', () => {
     )
 
     await expect(AccessStarPageAction(service).handle(call)).rejects.toThrow('Not found')
+  })
 
-    expect(service.fetchGalaxyPlanets).toHaveBeenCalledWith(
-      Slug.create(currentGalaxy.galaxy.slug),
+  it('should call notFound for a star that is not part of the current galaxy trail', async () => {
+    mockGalaxyPlanets()
+    call.getUser.mockResolvedValue(
+      UsersFaker.fakeDto({
+        completedStarsIds: [],
+        openedPlanetsIds: [planetDto.id as string],
+      }),
     )
-    expect(call.notFound).toHaveBeenCalled()
+    const foreignStarDto = StarsFaker.fakeDto({ number: 1 })
+    service.fetchStarBySlug.mockResolvedValue(new RestResponse({ body: foreignStarDto }))
+
+    await expect(AccessStarPageAction(service).handle(call)).rejects.toThrow('Not found')
+
+    expect(service.fetchGalaxyPlanets).toHaveBeenCalledTimes(1)
+    expect(call.notFound).toHaveBeenCalledTimes(1)
   })
 })

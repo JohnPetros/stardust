@@ -99,7 +99,6 @@ function planetsOf(galaxy: GalaxyRef) {
     PlanetsFaker.fakeDto({
       id: `${galaxy.id.slice(0, -3)}902`,
       name: `Planeta de ${galaxy.name}`,
-      icon: 'planet-icon.png',
       image: 'planet-image.png',
       stars: [star],
     }),
@@ -111,7 +110,7 @@ type Scenario = {
   current?: GalaxyRef
   hasGalaxyChoice?: boolean
   userCurrentGalaxy?: GalaxyRef | null
-  hasUnlockRows?: boolean
+  hasProgressFacts?: boolean
   galaxiesRoute?: Partial<ServerMockRoute>
   enterRoute?: Partial<ServerMockRoute>
   extraRoutes?: ServerMockRoute[]
@@ -134,13 +133,16 @@ function createRoutes(scenario: Scenario = {}): ServerMockRoute[] {
     name: account.name,
     email: account.email,
     slug: 'explorador-de-galaxias',
-    unlockedStarsIds:
-      scenario.hasUnlockRows === false
+    completedStarsIds:
+      scenario.hasProgressFacts === false
         ? []
         : planets
             .flatMap((planet) => planet.stars.map((star) => star.id))
             .filter((starId): starId is string => Boolean(starId)),
-    recentlyUnlockedStarsIds: [],
+    openedPlanetsIds:
+      scenario.hasProgressFacts === false
+        ? []
+        : planets.map((planet) => planet.id).filter((id): id is string => Boolean(id)),
     lastWeekRankingPosition: null,
     currentGalaxy: userCurrentGalaxy
       ? {
@@ -423,7 +425,9 @@ test.describe('Galaxies page', () => {
         'Verifique sua conexão e tente de novo. Seu progresso continua salvo.',
       ),
     ).toBeVisible()
-    await expect(page.getByText('detalhe-interno-do-servidor')).toHaveCount(0)
+    await expect(
+      page.getByRole('main').getByText('detalhe-interno-do-servidor'),
+    ).toHaveCount(0)
     await expect(page.getByTestId('back-button')).toHaveText(
       `Voltar para ${PROGRAMMING.name}`,
     )
@@ -530,7 +534,9 @@ test.describe('Galaxies page', () => {
 
       const message = `Não foi possível entrar em ${TEST_GALAXY.name}. Tente de novo.`
       await expect(page.getByText(message, { exact: true })).toBeVisible()
-      await expect(page.getByText('detalhe-interno-do-servidor')).toHaveCount(0)
+      await expect(
+        page.getByRole('main').getByText('detalhe-interno-do-servidor'),
+      ).toHaveCount(0)
       await page.screenshot({
         path: `${SCREENSHOTS_DIR}/vv-07-galaxies-enter-error-toast-${viewport.label}.png`,
       })
@@ -579,7 +585,7 @@ test.describe('Galaxies page', () => {
     await expect(galaxyButton(page, PROGRAMMING)).not.toContainText('Você está aqui')
   })
 
-  test('opens the first star of a galaxy without an unlock row without a 404', async ({
+  test('does not read the first star of a galaxy as available before opening its planet', async ({
     page,
     context,
   }) => {
@@ -591,44 +597,15 @@ test.describe('Galaxies page', () => {
         { ...TEST_PUBLISHED, isCurrent: true },
       ],
       current: TEST_GALAXY,
-      hasUnlockRows: false,
-      extraRoutes: [
-        {
-          method: 'GET',
-          path: `/challenging/challenges/star/${star.id}`,
-          status: 404,
-          body: { message: 'Challenge not found' },
-        },
-        {
-          method: 'GET',
-          path: `/space/stars/slug/${star.slug}`,
-          status: 200,
-          body: star,
-        },
-        {
-          method: 'GET',
-          path: `/lesson/questions/star/${star.id}`,
-          status: 200,
-          body: [],
-        },
-        {
-          method: 'GET',
-          path: `/lesson/text-blocks/star/${star.id}`,
-          status: 200,
-          body: [],
-        },
-      ],
+      hasProgressFacts: false,
     })
 
     await page.goto(`/space/${TEST_GALAXY.slug}`)
-    const starButton = page.getByRole('button', { name: star.name })
-    await expect(starButton).toBeEnabled()
 
-    const lessonNavigation = page.waitForURL(`**/lesson/${star.slug}`)
-    await starButton.click()
-    await lessonNavigation
-
-    await expect(page.getByText('404')).toHaveCount(0)
+    await expect(page.getByRole('button', { name: new RegExp(star.name) })).toHaveCount(0)
+    await expect(
+      page.getByRole('button', { name: `Abrir planeta ${planets[0].name}` }),
+    ).toBeVisible()
   })
 
   test('redirects to /space when there is a single visible galaxy', async ({

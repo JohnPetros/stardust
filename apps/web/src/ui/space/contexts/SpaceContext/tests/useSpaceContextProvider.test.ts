@@ -1,9 +1,9 @@
 import { act, renderHook } from '@testing-library/react'
 
 import { UsersFaker } from '@stardust/core/profile/entities/fakers'
-import { PlanetsFaker, StarsFaker } from '@stardust/core/space/entities/fakers'
-
+import type { User } from '@stardust/core/profile/entities'
 import type { CurrentGalaxyDto } from '@stardust/core/space/entities/dtos'
+import { PlanetsFaker, StarsFaker } from '@stardust/core/space/entities/fakers'
 
 import { useSpaceContextProvider } from '../useSpaceContextProvider'
 
@@ -40,9 +40,28 @@ function createRect({
 }
 
 describe('useSpaceContextProvider', () => {
-  const setLastUnlockedStarRef = (ref: unknown, element: HTMLDivElement) => {
-    ;(ref as { current: HTMLDivElement | null }).current = element
+  const refetchUser = jest.fn()
+  const firstStar = StarsFaker.fake({ number: 1 })
+  const secondStar = StarsFaker.fake({ number: 2 })
+  const firstPlanet = PlanetsFaker.fake({
+    position: 1,
+    stars: [firstStar.dto, secondStar.dto],
+  })
+  const secondPlanet = PlanetsFaker.fake({
+    position: 2,
+    stars: [StarsFaker.fake({ number: 1 }).dto],
+  })
+  const planets = [firstPlanet, secondPlanet]
+
+  function makeUser(facts: { completed?: string[]; opened?: string[] }) {
+    return UsersFaker.fake({
+      completedStarsIds: facts.completed ?? [],
+      openedPlanetsIds: facts.opened ?? [],
+    })
   }
+
+  const Hook = (user: User | null = makeUser({})) =>
+    renderHook(() => useSpaceContextProvider(planets, user, currentGalaxy, refetchUser))
 
   beforeEach(() => {
     jest.useFakeTimers()
@@ -55,416 +74,213 @@ describe('useSpaceContextProvider', () => {
     jest.useRealTimers()
   })
 
-  it('should return null as last unlocked star id when user is null', () => {
-    const planets = PlanetsFaker.fakeMany(2)
+  it('should not create a trail nor a current item without a user', () => {
+    const { result } = Hook(null)
 
-    const { result } = renderHook(() =>
-      useSpaceContextProvider(planets, null, currentGalaxy),
-    )
-
-    expect(result.current.lastUnlockedStarId).toBeNull()
+    expect(result.current.trail).toBeNull()
+    expect(result.current.currentItem).toBeNull()
+    expect(result.current.selectedStarId).toBeNull()
   })
 
-  it('should return most recent unlocked star id from planets', () => {
-    const firstPlanetUnlockedStar = StarsFaker.fake({ number: 1 })
-    const secondPlanetUnlockedStar = StarsFaker.fake({ number: 1 })
+  it('should point the current item to the first planet of a user without facts', () => {
+    const { result } = Hook()
 
-    const planets = [
-      PlanetsFaker.fake({
-        position: 1,
-        stars: [firstPlanetUnlockedStar.dto, StarsFaker.fake({ number: 2 }).dto],
-      }),
-      PlanetsFaker.fake({
-        position: 2,
-        stars: [secondPlanetUnlockedStar.dto],
-      }),
-    ]
+    expect(result.current.currentItem).toEqual({
+      kind: 'planet',
+      planetId: firstPlanet.id,
+    })
+    expect(result.current.selectedStarId).toBeNull()
+  })
 
-    const user = UsersFaker.fake({
-      unlockedStarsIds: [
-        firstPlanetUnlockedStar.id.value,
-        secondPlanetUnlockedStar.id.value,
-      ],
+  it('should point the current item and the selected star to the available star', () => {
+    const user = makeUser({
+      opened: [firstPlanet.id.value],
+      completed: [firstStar.id.value],
     })
 
-    const { result } = renderHook(() =>
-      useSpaceContextProvider(planets, user, currentGalaxy),
-    )
+    const { result } = Hook(user)
 
-    expect(result.current.lastUnlockedStarId).toBe(secondPlanetUnlockedStar.id.value)
+    expect(result.current.currentItem).toEqual({ kind: 'star', starId: secondStar.id })
+    expect(result.current.selectedStarId).toBe(secondStar.id.value)
+    expect(result.current.trail?.getStarState(firstStar.id).isCompleted.isTrue).toBe(true)
   })
 
-  it('should fallback to first star id when user has no unlocked stars', () => {
-    const firstStar = StarsFaker.fake({ number: 1 })
-    const planets = [
-      PlanetsFaker.fake({
-        stars: [firstStar.dto, StarsFaker.fake({ number: 2 }).dto],
-      }),
-    ]
-    const user = UsersFaker.fake({ unlockedStarsIds: [] })
+  it('should keep the star details closed until they are opened', () => {
+    const { result } = Hook()
 
-    const { result } = renderHook(() =>
-      useSpaceContextProvider(planets, user, currentGalaxy),
-    )
-
-    expect(result.current.lastUnlockedStarId).toBe(firstStar.id.value)
+    expect(result.current.isStarDetailsOpen).toBe(false)
+    expect(result.current.hasGalaxyChoice).toBe(true)
+    expect(result.current.galaxy.slug).toBe(currentGalaxy.galaxy.slug)
   })
 
-  it('should expose the galaxy data received from the page', () => {
-    const planets = PlanetsFaker.fakeMany(1)
+  it('should expose the planets of the galaxy in the given order', () => {
+    const { result } = Hook()
 
-    const { result } = renderHook(() =>
-      useSpaceContextProvider(planets, UsersFaker.fake(), {
-        ...currentGalaxy,
-        isFirstGalaxy: false,
-        hasGalaxyChoice: false,
-      }),
-    )
-
-    expect(result.current.galaxy).toEqual(currentGalaxy.galaxy)
-    expect(result.current.isFirstGalaxy).toBe(false)
-    expect(result.current.hasGalaxyChoice).toBe(false)
+    expect(result.current.planets.map((planet) => planet.id.value)).toEqual([
+      firstPlanet.id.value,
+      secondPlanet.id.value,
+    ])
+    expect(result.current.isFirstGalaxy).toBe(true)
   })
 
-  it('should consider the first star of the galaxy unlocked when the user has no unlocked stars', () => {
-    const firstStar = StarsFaker.fake({ number: 1 })
-    const secondStar = StarsFaker.fake({ number: 2 })
-    const planets = [PlanetsFaker.fake({ stars: [firstStar.dto, secondStar.dto] })]
-    const user = UsersFaker.fake({ unlockedStarsIds: [] })
+  it('should keep the last selected star after selecting another one', () => {
+    const user = makeUser({ opened: [firstPlanet.id.value] })
+    const { result } = Hook(user)
 
-    const { result } = renderHook(() =>
-      useSpaceContextProvider(planets, user, currentGalaxy),
-    )
+    act(() => {
+      result.current.selectStar(secondStar.id.value)
+    })
 
-    expect(result.current.isStarUnlocked(firstStar.id)).toBe(true)
-    expect(result.current.isStarUnlocked(secondStar.id)).toBe(false)
-    expect(result.current.lastUnlockedStarId).toBe(firstStar.id.value)
+    expect(result.current.selectedStarId).toBe(secondStar.id.value)
   })
 
-  it('should keep the unlocked stars of the user as unlocked', () => {
-    const firstStar = StarsFaker.fake({ number: 1 })
-    const secondStar = StarsFaker.fake({ number: 2 })
-    const planets = [PlanetsFaker.fake({ stars: [firstStar.dto, secondStar.dto] })]
-    const user = UsersFaker.fake({ unlockedStarsIds: [secondStar.id.value] })
+  it('should open and close the star details', () => {
+    const { result } = Hook()
 
-    const { result } = renderHook(() =>
-      useSpaceContextProvider(planets, user, currentGalaxy),
-    )
+    act(() => {
+      result.current.openStarDetails()
+    })
+    expect(result.current.isStarDetailsOpen).toBe(true)
 
-    expect(result.current.isStarUnlocked(secondStar.id)).toBe(true)
-    expect(result.current.lastUnlockedStarId).toBe(secondStar.id.value)
+    act(() => {
+      result.current.closeStarDetails()
+    })
+    expect(result.current.isStarDetailsOpen).toBe(false)
   })
 
-  it('should not unlock stars that are not the first one of the galaxy for a null user', () => {
-    const firstStar = StarsFaker.fake({ number: 1 })
-    const secondStar = StarsFaker.fake({ number: 2 })
-    const planets = [PlanetsFaker.fake({ stars: [firstStar.dto, secondStar.dto] })]
+  it('should restart only the registered animation of the star and unregister it', () => {
+    const { result } = Hook()
+    const restart = jest.fn()
+    const animationRef = { current: { restart, stopAt: jest.fn(), setSpeed: jest.fn() } }
+    let unregister = () => {}
 
-    const { result } = renderHook(() =>
-      useSpaceContextProvider(planets, null, currentGalaxy),
-    )
+    act(() => {
+      unregister = result.current.registerStarAnimation('star-id', animationRef)
+    })
+    result.current.restartStarAnimation('star-id')
+    result.current.restartStarAnimation('other-star-id')
 
-    expect(result.current.isStarUnlocked(secondStar.id)).toBe(false)
+    expect(restart).toHaveBeenCalledTimes(1)
+
+    unregister()
+    result.current.restartStarAnimation('star-id')
+
+    expect(restart).toHaveBeenCalledTimes(1)
   })
 
-  it('should set last unlocked star position to above when star is below viewport', () => {
+  it('should reload the user when refreshing the trail', async () => {
+    const { result } = Hook()
+
+    await act(async () => {
+      await result.current.refreshTrail()
+    })
+
+    expect(refetchUser).toHaveBeenCalledTimes(1)
+  })
+
+  it('should set the position to below when the current item is under the viewport', () => {
     Object.defineProperty(window, 'innerHeight', { value: 1000, configurable: true })
-    const planets = PlanetsFaker.fakeMany(1)
-    const user = UsersFaker.fake()
-    const starElement = document.createElement('div')
-
+    const element = document.createElement('div')
     jest
-      .spyOn(starElement, 'getBoundingClientRect')
+      .spyOn(element, 'getBoundingClientRect')
       .mockReturnValue(createRect({ top: 1200, bottom: 1260 }))
-
-    const { result } = renderHook(() =>
-      useSpaceContextProvider(planets, user, currentGalaxy),
-    )
-
-    setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
+    const { result } = Hook()
+    ;(result.current.currentItemRef as { current: HTMLDivElement | null }).current =
+      element
 
     act(() => {
       window.dispatchEvent(new Event('scroll'))
     })
 
-    expect(result.current.lastUnlockedStarPosition).toBe('above')
+    expect(result.current.currentItemPosition).toBe('below')
   })
 
-  it('should set last unlocked star position to bellow when star is above viewport', () => {
-    const planets = PlanetsFaker.fakeMany(1)
-    const user = UsersFaker.fake()
-    const starElement = document.createElement('div')
-
+  it('should set the position to above when the current item is over the viewport', () => {
+    const element = document.createElement('div')
     jest
-      .spyOn(starElement, 'getBoundingClientRect')
+      .spyOn(element, 'getBoundingClientRect')
       .mockReturnValue(createRect({ top: -60, bottom: -20 }))
-
-    const { result } = renderHook(() =>
-      useSpaceContextProvider(planets, user, currentGalaxy),
-    )
-
-    setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
+    const { result } = Hook()
+    ;(result.current.currentItemRef as { current: HTMLDivElement | null }).current =
+      element
 
     act(() => {
       window.dispatchEvent(new Event('scroll'))
     })
 
-    expect(result.current.lastUnlockedStarPosition).toBe('bellow')
+    expect(result.current.currentItemPosition).toBe('above')
   })
 
-  it('should scroll window to center last unlocked star', () => {
+  it('should scroll the window to center the current item on demand', () => {
     Object.defineProperty(window, 'innerHeight', { value: 1000, configurable: true })
     Object.defineProperty(window, 'scrollY', { value: 200, configurable: true })
-
-    const planets = PlanetsFaker.fakeMany(1)
-    const user = UsersFaker.fake()
-    const starElement = document.createElement('div')
     const windowScrollTo = jest
       .spyOn(window, 'scrollTo')
       .mockImplementation(() => undefined)
-
+    const element = document.createElement('div')
     jest
-      .spyOn(starElement, 'getBoundingClientRect')
+      .spyOn(element, 'getBoundingClientRect')
       .mockReturnValue(createRect({ top: 300, bottom: 350, height: 50 }))
-
-    const { result } = renderHook(() =>
-      useSpaceContextProvider(planets, user, currentGalaxy),
-    )
-
-    setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
+    const { result } = Hook()
+    ;(result.current.currentItemRef as { current: HTMLDivElement | null }).current =
+      element
 
     act(() => {
-      result.current.scrollIntoLastUnlockedStar()
+      result.current.scrollToCurrentItem()
     })
 
-    expect(windowScrollTo).toHaveBeenCalledWith({
-      top: 25,
-      behavior: 'smooth',
-    })
+    expect(windowScrollTo).toHaveBeenCalledWith({ top: 25, behavior: 'smooth' })
   })
 
-  it('should scroll parent container to center last unlocked star', () => {
-    const planets = PlanetsFaker.fakeMany(1)
-    const user = UsersFaker.fake()
-    const starElement = document.createElement('div')
-    const scrollContainer = document.createElement('section')
-    const containerScrollTo = jest.fn()
-
-    scrollContainer.style.overflowY = 'auto'
-    Object.defineProperty(scrollContainer, 'scrollHeight', {
-      value: 600,
-      configurable: true,
-    })
-    Object.defineProperty(scrollContainer, 'clientHeight', {
-      value: 200,
-      configurable: true,
-    })
-    Object.defineProperty(scrollContainer, 'scrollTop', {
-      value: 120,
-      configurable: true,
-      writable: true,
-    })
-    Object.defineProperty(scrollContainer, 'scrollTo', {
-      value: containerScrollTo,
-      configurable: true,
-    })
-
-    scrollContainer.appendChild(starElement)
-    document.body.appendChild(scrollContainer)
-
+  it('should scroll once to the current item after the layout is stable and never again', () => {
+    Object.defineProperty(window, 'innerHeight', { value: 1000, configurable: true })
+    Object.defineProperty(window, 'scrollY', { value: 0, configurable: true })
+    const windowScrollTo = jest
+      .spyOn(window, 'scrollTo')
+      .mockImplementation(() => undefined)
+    const element = document.createElement('div')
     jest
-      .spyOn(starElement, 'getBoundingClientRect')
-      .mockReturnValue(createRect({ top: 300, bottom: 340, height: 40 }))
-    jest
-      .spyOn(scrollContainer, 'getBoundingClientRect')
-      .mockReturnValue(createRect({ top: 100, bottom: 500, height: 400 }))
-
-    const { result } = renderHook(() =>
-      useSpaceContextProvider(planets, user, currentGalaxy),
-    )
-
-    setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
-
-    act(() => {
-      result.current.scrollIntoLastUnlockedStar()
-    })
-
-    expect(containerScrollTo).toHaveBeenCalledWith({
-      top: 240,
-      behavior: 'smooth',
-    })
-  })
-
-  it('should retry centering when layout keeps shifting after the first scroll', () => {
-    const planets = PlanetsFaker.fakeMany(1)
-    const user = UsersFaker.fake()
-    const starElement = document.createElement('div')
-    const scrollContainer = document.createElement('section')
-    let isRecentering = false
-    let recenterLayoutReads = 0
-    const containerScrollTo = jest.fn(({ top }: { top: number }) => {
-      scrollContainer.scrollTop = top
-    })
-    jest.spyOn(window, 'requestAnimationFrame').mockReturnValue(1)
-
-    scrollContainer.style.overflowY = 'auto'
-    Object.defineProperty(scrollContainer, 'clientHeight', {
-      value: 200,
-      configurable: true,
-    })
-    Object.defineProperty(scrollContainer, 'scrollHeight', {
-      value: 800,
-      configurable: true,
-    })
-    Object.defineProperty(scrollContainer, 'scrollTop', {
-      value: 120,
-      configurable: true,
-      writable: true,
-    })
-    Object.defineProperty(scrollContainer, 'scrollTo', {
-      value: containerScrollTo,
-      configurable: true,
-    })
-
-    scrollContainer.appendChild(starElement)
-    document.body.appendChild(scrollContainer)
-
-    jest
-      .spyOn(scrollContainer, 'getBoundingClientRect')
-      .mockReturnValue(createRect({ top: 100, bottom: 300, height: 200 }))
-    jest.spyOn(starElement, 'getBoundingClientRect').mockImplementation(() => {
-      if (!isRecentering) {
-        return createRect({ top: 180, bottom: 220, height: 40 })
-      }
-
-      recenterLayoutReads += 1
-
-      if (recenterLayoutReads === 1) {
-        return createRect({ top: 320, bottom: 360, height: 40 })
-      }
-
-      if (recenterLayoutReads === 2) {
-        return createRect({ top: 260, bottom: 300, height: 40 })
-      }
-
-      return createRect({ top: 180, bottom: 220, height: 40 })
-    })
-
-    const { result } = renderHook(() =>
-      useSpaceContextProvider(planets, user, currentGalaxy),
-    )
-
-    setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
-    containerScrollTo.mockClear()
-    isRecentering = true
-
-    act(() => {
-      result.current.scrollIntoLastUnlockedStar()
-    })
-
-    expect(containerScrollTo).toHaveBeenNthCalledWith(1, {
-      top: 260,
-      behavior: 'smooth',
-    })
-
-    act(() => {
-      jest.advanceTimersByTime(150)
-    })
-
-    expect(containerScrollTo).toHaveBeenNthCalledWith(2, {
-      top: 260,
-      behavior: 'smooth',
-    })
-  })
-
-  it('should expose a layout snapshot based on the resolved scroll container', () => {
-    const planets = PlanetsFaker.fakeMany(1)
-    const user = UsersFaker.fake()
-    const starElement = document.createElement('div')
-    const scrollContainer = document.createElement('section')
-
-    scrollContainer.style.overflowY = 'auto'
-    Object.defineProperty(scrollContainer, 'scrollHeight', {
-      value: 1800,
-      configurable: true,
-    })
-    Object.defineProperty(scrollContainer, 'clientHeight', {
-      value: 320,
-      configurable: true,
-    })
-    Object.defineProperty(scrollContainer, 'scrollTop', {
-      value: 480,
-      configurable: true,
-    })
-
-    scrollContainer.appendChild(starElement)
-    document.body.appendChild(scrollContainer)
-
-    jest
-      .spyOn(starElement, 'getBoundingClientRect')
-      .mockReturnValue(createRect({ top: 640, bottom: 720, height: 80 }))
-    jest
-      .spyOn(scrollContainer, 'getBoundingClientRect')
-      .mockReturnValue(createRect({ top: 100, bottom: 420, height: 320 }))
-
-    const { result } = renderHook(() =>
-      useSpaceContextProvider(planets, user, currentGalaxy),
-    )
-
-    setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
-
-    expect(result.current.getLastUnlockedStarLayoutSnapshot()).toBe(
-      '640:720:80:480:1800:320:100:420:320',
-    )
-  })
-
-  it('should track scroll position on container after user refetch', () => {
-    const unlockedStar = StarsFaker.fake({ number: 1 })
-    const planets = [
-      PlanetsFaker.fake({
-        stars: [unlockedStar.dto, StarsFaker.fake({ number: 2 }).dto],
-      }),
-    ]
-    const scrollContainer = document.createElement('section')
-    const starElement = document.createElement('div')
-
-    scrollContainer.style.overflowY = 'auto'
-    Object.defineProperty(scrollContainer, 'scrollHeight', {
-      value: 600,
-      configurable: true,
-    })
-    Object.defineProperty(scrollContainer, 'clientHeight', {
-      value: 400,
-      configurable: true,
-    })
-
-    scrollContainer.appendChild(starElement)
-    document.body.appendChild(scrollContainer)
-
-    jest
-      .spyOn(starElement, 'getBoundingClientRect')
-      .mockReturnValue(createRect({ top: 700, bottom: 760 }))
-    jest
-      .spyOn(scrollContainer, 'getBoundingClientRect')
-      .mockReturnValue(createRect({ top: 0, bottom: 500 }))
-
+      .spyOn(element, 'getBoundingClientRect')
+      .mockReturnValue(createRect({ top: 300, bottom: 350, height: 50 }))
     const { result, rerender } = renderHook(
-      ({ user }) => useSpaceContextProvider(planets, user, currentGalaxy),
-      {
-        initialProps: { user: null as ReturnType<typeof UsersFaker.fake> | null },
-      },
+      ({ user }) => useSpaceContextProvider(planets, user, currentGalaxy, refetchUser),
+      { initialProps: { user: makeUser({}) } },
     )
-
-    setLastUnlockedStarRef(result.current.lastUnlockedStarRef, starElement)
-
-    rerender({
-      user: UsersFaker.fake({ unlockedStarsIds: [unlockedStar.id.value] }),
-    })
+    ;(result.current.currentItemRef as { current: HTMLDivElement | null }).current =
+      element
 
     act(() => {
-      scrollContainer.dispatchEvent(new Event('scroll'))
+      jest.advanceTimersByTime(3000)
+    })
+    const callsAfterFirstScroll = windowScrollTo.mock.calls.length
+
+    rerender({ user: makeUser({ opened: [firstPlanet.id.value] }) })
+    act(() => {
+      jest.advanceTimersByTime(1000)
     })
 
-    expect(result.current.lastUnlockedStarPosition).toBe('above')
+    expect(callsAfterFirstScroll).toBeGreaterThan(0)
+    expect(windowScrollTo.mock.calls.length).toBe(callsAfterFirstScroll)
+  })
+
+  it('should not scroll when there is no current item', () => {
+    const windowScrollTo = jest
+      .spyOn(window, 'scrollTo')
+      .mockImplementation(() => undefined)
+    const allStarsIds = planets.flatMap((planet) =>
+      planet.stars.map((star) => star.id.value),
+    )
+    const user = makeUser({
+      opened: planets.map((planet) => planet.id.value),
+      completed: allStarsIds,
+    })
+
+    const { result } = Hook(user)
+    act(() => {
+      jest.advanceTimersByTime(5000)
+    })
+
+    expect(result.current.currentItem).toBeNull()
+    expect(windowScrollTo).not.toHaveBeenCalled()
   })
 })
