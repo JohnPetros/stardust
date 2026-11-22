@@ -15,7 +15,6 @@ describe('Update Planet Controller', () => {
     }
     body: {
       name?: string
-      icon?: string
       image?: string
     }
   }
@@ -38,13 +37,11 @@ describe('Update Planet Controller', () => {
     }
     const body = {
       name: 'Variaveis',
-      icon: 'https://cdn.stardust.dev/space/planets/variables-icon.png',
       image: 'https://cdn.stardust.dev/space/planets/variables-cover.png',
     }
     const updatedPlanetDto = PlanetsFaker.fakeDto({
       id: routeParams.planetId,
       name: body.name,
-      icon: body.icon,
       image: body.image,
     })
     const restResponse = mock<RestResponse>()
@@ -64,7 +61,6 @@ describe('Update Planet Controller', () => {
     expect(executeSpy).toHaveBeenCalledWith({
       planetId: routeParams.planetId,
       name: body.name,
-      icon: body.icon,
       image: body.image,
     })
     expect(http.statusOk).toHaveBeenCalledTimes(1)
@@ -97,7 +93,6 @@ describe('Update Planet Controller', () => {
     expect(executeSpy).toHaveBeenCalledWith({
       planetId: routeParams.planetId,
       name: body.name,
-      icon: undefined,
       image: undefined,
     })
     expect(http.statusOk).toHaveBeenCalledTimes(1)

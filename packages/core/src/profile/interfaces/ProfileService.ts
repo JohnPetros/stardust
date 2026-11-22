@@ -49,6 +49,7 @@ export interface ProfileService {
   fetchUnlockedAchievements(userId: Id): Promise<RestResponse<AchievementDto[]>>
   fetchCreatedUsersKpi(): Promise<RestResponse<KpiDto>>
   fetchUnlockedStarsKpi(): Promise<RestResponse<KpiDto>>
+  openPlanet(planetId: Id): Promise<RestResponse<{ openedPlanetId: string }>>
   fetchCompletedChallengesKpi(): Promise<RestResponse<KpiDto>>
   fetchDailyActiveUsersReport(days: Integer): Promise<RestResponse<DailyActiveUsersDto>>
   fetchUsersList(

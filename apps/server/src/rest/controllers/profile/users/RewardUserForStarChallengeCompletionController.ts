@@ -11,9 +11,8 @@ import {
   CalculateRewardForChallengeCompletionUseCase,
   CompleteSpaceUseCase,
   CompleteChallengeUseCase,
-  RemoveRecentlyUnlockedStarUseCase,
   RewardUserUseCase,
-  UnlockStarUseCase,
+  CompleteStarUseCase,
 } from '@stardust/core/profile/use-cases'
 
 import { InngestBroker } from '@/queue/inngest/InngestBroker'
@@ -28,9 +27,11 @@ type Schema = {
       xp: number
       coins: number
     }
-    nextStarId?: string
-    isFirstGalaxy?: boolean
     starId: string
+    isAlreadyCompleted?: boolean
+    isLastGalaxyStar?: boolean
+    isFirstGalaxy?: boolean
+    completedPlanetName?: string | null
   }
 }
 
@@ -55,11 +56,10 @@ export class RewardUserForStarChallengeCompletionController
     const { challengeId } = body
     const counts = await this.getTrustedExecutionCounts(userId, challengeId)
 
-    await this.completeSpace(userId, body.nextStarId ?? null, body.isFirstGalaxy ?? false)
-
     const reward = await this.calculateReward(userId, body, counts)
 
-    await this.progressStars(userId, body)
+    await this.completeStar(userId, body)
+    await this.completeSpace(userId, body)
     await this.completeChallenge(userId, challengeId)
 
     const user = await this.rewardUser(userId, reward.newCoins, reward.newXp)
@@ -73,9 +73,15 @@ export class RewardUserForStarChallengeCompletionController
     }
   }
 
-  private async progressStars(userId: string, body: Schema['body']) {
-    if (body.nextStarId) await this.unlockStar(userId, body.nextStarId)
-    await this.removeRecentlyUnlockedStar(userId, body.starId)
+  private async completeStar(userId: string, body: Schema['body']) {
+    const useCase = new CompleteStarUseCase(this.usersRepository, this.broker)
+    await useCase.execute({
+      userId,
+      starId: body.starId,
+      completedPlanetName: body.isAlreadyCompleted
+        ? null
+        : (body.completedPlanetName ?? null),
+    })
   }
 
   private async getTrustedExecutionCounts(userId: string, challengeId: string) {
@@ -106,27 +112,17 @@ export class RewardUserForStarChallengeCompletionController
     await useCase.execute({ userId, challengeId })
   }
 
-  private async unlockStar(userId: string, starId: string) {
-    const useCase = new UnlockStarUseCase(this.usersRepository, this.broker)
-    await useCase.execute({ userId, starId })
-  }
-
-  private async removeRecentlyUnlockedStar(userId: string, starId: string) {
-    const useCase = new RemoveRecentlyUnlockedStarUseCase(this.usersRepository)
-    return await useCase.execute({ userId, starId })
-  }
-
   private async rewardUser(userId: string, newCoins: number, newXp: number) {
     const useCase = new RewardUserUseCase(this.usersRepository, this.broker)
     return await useCase.execute({ userId, newCoins, newXp })
   }
 
-  private async completeSpace(
-    userId: string,
-    nextStarId: string | null,
-    isFirstGalaxy: boolean,
-  ) {
+  private async completeSpace(userId: string, body: Schema['body']) {
     const useCase = new CompleteSpaceUseCase(this.usersRepository, this.broker)
-    await useCase.execute({ userId, nextStarId, isFirstGalaxy })
+    await useCase.execute({
+      userId,
+      isLastGalaxyStar: body.isLastGalaxyStar ?? false,
+      isFirstGalaxy: body.isFirstGalaxy ?? false,
+    })
   }
 }

@@ -98,6 +98,10 @@ export const ProfileService = (restClient: RestClient): IProfileService => {
       return await restClient.post(`/profile/achievements/${userId.value}/observe`)
     },
 
+    async openPlanet(planetId: Id) {
+      return await restClient.put(`/profile/users/planets/${planetId.value}/open`)
+    },
+
     async fetchNotes({ page, itemsPerPage, search }) {
       restClient.clearQueryParams()
       restClient.setQueryParam('page', String(page.value))

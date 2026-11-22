@@ -7,4 +7,5 @@ export type StarDto = {
   unlockCount: number
   isAvailable: boolean
   isChallenge: boolean
+  description?: string | null
 }

@@ -9,8 +9,8 @@ import { ENV } from '@/constants'
 import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
 import {
   userModel,
-  userRecentlyUnlockedStarModel,
-  userUnlockedStarModel,
+  userCompletedStarModel,
+  userOpenedPlanetModel,
 } from '@/database/drizzle/schema'
 import { AuthFixture } from '@/tests/fixtures/AuthFixture'
 import { HonoFixture } from '@/tests/fixtures/HonoFixture'
@@ -112,22 +112,22 @@ describe('[PUT] /profile/users/current-galaxy', () => {
     expect(extra.status).toBe(HTTP_STATUS_CODE.badRequest)
   })
 
-  it('should enter a published galaxy without changing progress or writing star rows', async () => {
+  it('should enter a published galaxy without changing the progress facts', async () => {
     const first = await createGalaxy({ position: 1, status: 'published' })
     const target = await createGalaxy({ position: 2, status: 'published' })
     const firstStar = await spaceFixture.createStar(first.id)
     await spaceFixture.createStar(target.id)
     await setCurrentGalaxy(first.id)
-    await supabaseFixture.database.insert(userUnlockedStarModel).values({
+    await supabaseFixture.database.insert(userCompletedStarModel).values({
       userId: authFixture.getAccountId(),
       starId: firstStar.id,
     })
     const before = await readUser()
-    const unlockedBefore = await supabaseFixture.database
+    const completedBefore = await supabaseFixture.database
       .select()
-      .from(userUnlockedStarModel)
-      .where(eq(userUnlockedStarModel.userId, authFixture.getAccountId()))
-    expect(unlockedBefore).toHaveLength(1)
+      .from(userCompletedStarModel)
+      .where(eq(userCompletedStarModel.userId, authFixture.getAccountId()))
+    expect(completedBefore).toHaveLength(1)
 
     const response = await enter(target.slug)
 
@@ -148,14 +148,14 @@ describe('[PUT] /profile/users/current-galaxy', () => {
     expect(
       await supabaseFixture.database
         .select()
-        .from(userUnlockedStarModel)
-        .where(eq(userUnlockedStarModel.userId, authFixture.getAccountId())),
-    ).toEqual(unlockedBefore)
+        .from(userCompletedStarModel)
+        .where(eq(userCompletedStarModel.userId, authFixture.getAccountId())),
+    ).toEqual(completedBefore)
     expect(
       await supabaseFixture.database
         .select()
-        .from(userRecentlyUnlockedStarModel)
-        .where(eq(userRecentlyUnlockedStarModel.userId, authFixture.getAccountId())),
+        .from(userOpenedPlanetModel)
+        .where(eq(userOpenedPlanetModel.userId, authFixture.getAccountId())),
     ).toEqual([])
   })
 

@@ -267,7 +267,7 @@ export class SupabasePlanetsRepository
     const input = {
       id: planet.id.value,
       name: planet.name.value,
-      icon: planet.icon.value,
+      icon: '',
       image: planet.image.value,
       position: planet.position.value,
       is_available: planet.isAvailable.value,
@@ -279,7 +279,7 @@ export class SupabasePlanetsRepository
       const { error: fallbackError } = await this.supabase.from('planets').insert({
         id: planet.id.value,
         name: planet.name.value,
-        icon: planet.icon.value,
+        icon: '',
         image: planet.image.value,
         position: planet.position.value,
       })
@@ -301,7 +301,6 @@ export class SupabasePlanetsRepository
       .from('planets')
       .update({
         name: planet.name.value,
-        icon: planet.icon.value,
         image: planet.image.value,
         position: planet.position.value,
       })

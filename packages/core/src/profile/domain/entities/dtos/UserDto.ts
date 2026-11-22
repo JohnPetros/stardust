@@ -22,8 +22,8 @@ export type UserDto = {
   currentGalaxy?: GalaxyAggregateDto | null
   hasCompletedSpace?: boolean
   hasEngineerInsignia?: boolean
-  unlockedStarsIds?: string[]
-  recentlyUnlockedStarsIds?: string[]
+  completedStarsIds?: string[]
+  openedPlanetsIds?: string[]
   acquiredRocketsIds?: string[]
   unlockedDocsIds?: string[]
   acquiredAvatarsIds?: string[]

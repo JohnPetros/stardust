@@ -48,8 +48,8 @@ describe('Inngest function assembly', () => {
 
     const functions = instance.getFunctions()
 
-    expect(functions).toHaveLength(16)
-    expect(createFunction).toHaveBeenCalledTimes(16)
+    expect(functions).toHaveLength(15)
+    expect(createFunction).toHaveBeenCalledTimes(15)
   })
 
   it('should assemble challenging functions', () => {
@@ -128,8 +128,8 @@ describe('Inngest function assembly', () => {
 
     const functions = instance.getFunctions(database)
 
-    expect(functions).toHaveLength(2)
-    expect(createFunction).toHaveBeenCalledTimes(2)
+    expect(functions).toHaveLength(1)
+    expect(createFunction).toHaveBeenCalledTimes(1)
   })
 
   it('should assemble storage functions', () => {

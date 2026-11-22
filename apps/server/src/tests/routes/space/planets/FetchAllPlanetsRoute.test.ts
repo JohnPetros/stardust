@@ -88,7 +88,6 @@ describe('[GET] /space/planets', () => {
         id: planet.id,
         name: planet.name,
         image: planet.image,
-        icon: planet.icon,
         position: planet.position,
         galaxyId: galaxy.id,
       })

@@ -11,7 +11,6 @@ import type { EventPayload } from '@stardust/core/global/types'
 import {
   ChallengeCompletedEvent,
   ShopItemPurchasedEvent,
-  StarUnlockedEvent,
   UserCreatedEvent,
   UserRewardedEvent,
 } from '@stardust/core/profile/events'
@@ -39,7 +38,6 @@ import { InngestFunctions } from './InngestFunctions'
 type AccountSignedUpPayload = EventPayload<typeof AccountSignedUpEvent>
 type AccountSignedInPayload = EventPayload<typeof AccountSignedInEvent>
 type UserCreatedPayload = EventPayload<typeof UserCreatedEvent>
-type StarUnlockedPayload = EventPayload<typeof StarUnlockedEvent>
 type FirstStarUnlockedPayload = EventPayload<typeof FirstStarUnlockedEvent>
 type PlanetCompletedPayload = EventPayload<typeof PlanetCompletedEvent>
 type SpaceCompletedPayload = EventPayload<typeof SpaceCompletedEvent>
@@ -163,35 +161,6 @@ export class AnalyticsFunctions extends InngestFunctions {
             userName: payload.userName,
             userEmail: payload.userEmail,
             userSlug: payload.userSlug,
-          }),
-        )
-
-        return await job.handle(amqp)
-      },
-    )
-  }
-
-  private createTrackStarUnlockedFunction() {
-    return this.createFunction(
-      {
-        id: `${TrackAnalyticsEventJob.KEY}.star.unlocked`,
-        onFailure: this.handleJobFailure(TrackAnalyticsEventJob.name),
-        triggers: {
-          event: eventType(StarUnlockedEvent._NAME, {
-            schema: z.object({
-              userId: idSchema,
-              starId: idSchema,
-            }),
-          }),
-        },
-      },
-      async (context) => {
-        const payload = context.event.data as StarUnlockedPayload
-        const amqp = new InngestAmqp<StarUnlockedPayload>(context)
-        const job = new TrackAnalyticsEventJob(
-          new PostHogAnalyticsProvider(),
-          this.toAnalyticsEventDto('star unlocked', payload.userId, context.event.id, {
-            starId: payload.starId,
           }),
         )
 
@@ -573,7 +542,6 @@ export class AnalyticsFunctions extends InngestFunctions {
       this.createTrackAccountSignedUpFunction(),
       this.createTrackAccountSignedInFunction(),
       this.createTrackUserCreatedFunction(),
-      this.createTrackStarUnlockedFunction(),
       this.createTrackFirstStarUnlockedFunction(),
       this.createTrackPlanetCompletedFunction(),
       this.createTrackSpaceCompletedFunction(),

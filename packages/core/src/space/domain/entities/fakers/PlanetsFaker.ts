@@ -15,12 +15,12 @@ export class PlanetsFaker {
       name: faker.person.firstName(),
       galaxyId: faker.string.uuid(),
       position: faker.number.int({ min: 1, max: 20 }),
-      icon: `${faker.image.avatar()}.jpg`,
       image: `${faker.image.avatar()}.jpg`,
       stars: StarsFaker.fakeManyDto(faker.number.int({ min: 3, max: 10 })),
       completionCount: faker.number.int({ min: 0, max: 100 }),
       userCount: faker.number.int({ min: 0, max: 100 }),
       isAvailable: faker.datatype.boolean(),
+      concept: faker.lorem.words(2),
       ...baseDto,
     }
   }

@@ -22,10 +22,10 @@ export class DrizzlePlanetMapper {
     row: DrizzlePlanet,
   ): Pick<
     DrizzlePlanet,
-    'id' | 'name' | 'image' | 'icon' | 'position' | 'isAvailable' | 'galaxyId'
+    'id' | 'name' | 'image' | 'position' | 'isAvailable' | 'galaxyId' | 'concept'
   > {
-    const { id, name, image, icon, position, isAvailable, galaxyId } = row
-    return { id, name, image, icon, position, isAvailable, galaxyId }
+    const { id, name, image, position, isAvailable, galaxyId, concept } = row
+    return { id, name, image, position, isAvailable, galaxyId, concept }
   }
   private static progress(
     row: DrizzlePlanet,
@@ -38,8 +38,8 @@ export class DrizzlePlanetMapper {
   }
   private static persistenceCatalog(
     planet: Planet,
-  ): Pick<DrizzleInsertPlanet, 'name' | 'image' | 'icon'> {
-    const { name, image, icon } = planet.dto
-    return { name, image, icon }
+  ): Pick<DrizzleInsertPlanet, 'name' | 'image' | 'concept'> {
+    const { name, image, concept } = planet.dto
+    return { name, image, concept }
   }
 }

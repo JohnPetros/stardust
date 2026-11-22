@@ -245,6 +245,10 @@ export const ProfileService = (
       })
     },
 
+    async openPlanet(planetId: Id) {
+      return await restClient.put(`/profile/users/planets/${planetId.value}/open`)
+    },
+
     async enterGalaxy(galaxySlug: Slug) {
       return await restClient.put('/profile/users/current-galaxy', {
         galaxySlug: galaxySlug.value,

@@ -8,7 +8,6 @@ type Schema = {
   }
   body: {
     name?: string
-    icon?: string
     image?: string
   }
 }
@@ -18,9 +17,9 @@ export class UpdatePlanetController implements Controller<Schema> {
 
   async handle(http: Http<Schema>) {
     const { planetId } = http.getRouteParams()
-    const { name, icon, image } = await http.getBody()
+    const { name, image } = await http.getBody()
     const useCase = new UpdatePlanetUseCase(this.planetsRepository)
-    const planet = await useCase.execute({ planetId, name, icon, image })
+    const planet = await useCase.execute({ planetId, name, image })
     return http.statusOk().send(planet)
   }
 }

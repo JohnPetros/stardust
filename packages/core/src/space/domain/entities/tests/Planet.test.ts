@@ -13,6 +13,19 @@ describe('Planet Entity', () => {
     expect(Planet.create(planet.dto).galaxyId.value).toBe(galaxyId)
   })
 
+  it('should expose the concept when present', () => {
+    const planet = PlanetsFaker.fake({ concept: 'Variáveis' })
+
+    expect(planet.concept?.value).toBe('Variáveis')
+    expect(planet.dto.concept).toBe('Variáveis')
+  })
+
+  it('should have a null concept when it is absent or null', () => {
+    expect(PlanetsFaker.fake({ concept: null }).concept).toBeNull()
+    const { concept: _concept, ...dtoWithoutConcept } = PlanetsFaker.fakeDto()
+    expect(Planet.create(dtoWithoutConcept).dto.concept).toBeNull()
+  })
+
   it('should get the next star based on the given current star', () => {
     const currentStar = StarsFaker.fake({ number: 1 })
     const nextStar = StarsFaker.fake({ number: 2 })

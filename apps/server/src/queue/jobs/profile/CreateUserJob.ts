@@ -8,7 +8,6 @@ import {
   AcquireAvatarUseCase,
   AcquireRocketUseCase,
   FinishUserCreationUseCase,
-  UnlockStarUseCase,
 } from '@stardust/core/profile/use-cases'
 import type { ShopItemsAcquiredByDefaultEvent } from '@stardust/core/shop/events'
 
@@ -29,7 +28,6 @@ export class CreateUserJob implements Job<Payload> {
     const {
       user,
       firstReachedTierId,
-      firstUnlockedStarId,
       acquiredAvatarsByDefaultIds,
       acquiredRocketsByDefaultIds,
       selectedAvatarByDefaultId,
@@ -37,7 +35,6 @@ export class CreateUserJob implements Job<Payload> {
     } = amqp.getPayload()
 
     const createUserUseCase = new CreateUserUseCase(this.usersRepository)
-    const unlockStarUseCase = new UnlockStarUseCase(this.usersRepository, this.noopBroker)
     const acquireRocketUseCase = new AcquireRocketUseCase(
       this.usersRepository,
       this.noopBroker,
@@ -59,15 +56,6 @@ export class CreateUserJob implements Job<Payload> {
           selectedRocketByDefaultId,
         }),
       CreateUserUseCase.name,
-    )
-
-    await amqp.run(
-      async () =>
-        await unlockStarUseCase.execute({
-          userId: user.id,
-          starId: firstUnlockedStarId,
-        }),
-      UnlockStarUseCase.name,
     )
 
     await amqp.run(async () => {

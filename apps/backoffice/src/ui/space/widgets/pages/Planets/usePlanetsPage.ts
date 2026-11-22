@@ -20,12 +20,9 @@ export function usePlanetsPage({
   toastProvider,
   uiProvider,
 }: Params) {
-  async function handlePlanetCreate(
-    planetDto: Pick<PlanetDto, 'name' | 'icon' | 'image'>,
-  ) {
+  async function handlePlanetCreate(planetDto: Pick<PlanetDto, 'name' | 'image'>) {
     const response = await service.createPlanet(
       Name.create(planetDto.name),
-      Image.create(planetDto.icon),
       Image.create(planetDto.image),
     )
 

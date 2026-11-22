@@ -1,38 +1,28 @@
 'use client'
 
 import { useAuthContext } from '@/ui/auth/contexts/AuthContext'
+import { useBreakpoint } from '@/ui/global/hooks/useBreakpoint'
 import { useSpaceContext } from '@/ui/space/hooks/useSpaceContext'
 
 import { useSpacePage } from './useSpacePage'
 import { SpacePageView } from './SpacePageView'
 
 export function SpacePage() {
-  const {
-    planets,
-    galaxy,
-    isFirstGalaxy,
-    hasGalaxyChoice,
-    lastUnlockedStarId,
-    lastUnlockedStarPosition,
-    scrollIntoLastUnlockedStar,
-  } = useSpaceContext()
+  const space = useSpaceContext()
   const { user } = useAuthContext()
-  const { shouldShowEnding, handleFabClick } = useSpacePage({
-    lastUnlockedStarPosition,
-    scrollIntoLastUnlockedStar,
+  const { lg: isMobile } = useBreakpoint()
+  const { view, handleFabClick, handleSheetClose } = useSpacePage({
+    space,
+    isFirstGalaxy: space.isFirstGalaxy,
     hasCompletedSpace: Boolean(user?.hasCompletedSpace.isTrue),
-    isFirstGalaxy,
+    isMobile,
   })
 
   return (
     <SpacePageView
-      planets={planets}
-      lastUnlockedStarId={lastUnlockedStarId}
-      lastUnlockedStarPosition={lastUnlockedStarPosition}
-      galaxyName={galaxy.name}
-      hasGalaxyChoice={hasGalaxyChoice}
-      shouldShowEnding={shouldShowEnding}
+      {...view}
       onFabClick={handleFabClick}
+      onSheetClose={handleSheetClose}
     />
   )
 }

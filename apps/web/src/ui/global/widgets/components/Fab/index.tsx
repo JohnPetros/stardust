@@ -34,7 +34,7 @@ export function Fab({ isVisible, icon, onClick, label }: FabProps) {
           exit='hidden'
           whileTap='tap'
           onClick={onClick}
-          className='fixed bottom-8 right-24 grid h-12 w-12 place-content-center rounded-md border-b-2 border-green-500 bg-gray-900'
+          className='fixed z-50 bottom-[7.5rem] right-4 md:bottom-8 md:right-24 grid h-12 w-12 place-content-center rounded-md border-b-2 border-green-500 bg-gray-900'
           tabIndex={0}
           aria-label={label}
         >

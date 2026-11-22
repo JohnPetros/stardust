@@ -46,6 +46,8 @@ const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   images: {
     remotePatterns: [cdnRemotePattern],
+    // The development CDN is always a loopback endpoint (validated above), which the optimizer blocks by default.
+    ...(appMode === 'development' ? { dangerouslyAllowLocalIP: true } : {}),
   },
   env: {
     NEXT_PUBLIC_CDN_URL: process.env.NEXT_PUBLIC_CDN_URL,

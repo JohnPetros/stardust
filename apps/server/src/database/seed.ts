@@ -15,12 +15,12 @@ import { RankingSeeder } from './seeders/RankingSeeder'
 import { ReportingSeeder } from './seeders/ReportingSeeder'
 import { ShopSeeder } from './seeders/ShopSeeder'
 import { SpaceSeeder } from './seeders/SpaceSeeder'
-import { readSeedConfig, type SeedAccount } from './seeders/seed-config'
 import {
-  buildSeedProfiles,
-  readSeedCatalog,
-  seedProfileProgress,
-} from './seeders/seed-data'
+  readSeedConfig,
+  type SeedAccount,
+  type SeedEnvironment,
+} from './seeders/seed-config'
+import { buildSeedProfiles, readSeedCatalog } from './seeders/seed-data'
 
 function createSeeders(sql: TransactionSql, accounts: SeedAccount[]) {
   const database = new SeedDatabase(sql)
@@ -103,7 +103,6 @@ async function seedCatalog(
     ...catalog,
     challenges: catalog.challenges.map((row) => ({ ...row, user_id: accounts[1].id })),
   })
-  await seedProfileProgress(seeders.profile, catalog, accounts)
 }
 
 async function seedRanking(
@@ -202,8 +201,10 @@ async function seedFeedback(seeders: Seeders, accounts: SeedAccount[]) {
   })
 }
 
-export async function seedDatabase(): Promise<void> {
-  const config = readSeedConfig()
+export async function seedDatabase(
+  seedEnvironment: SeedEnvironment = 'local',
+): Promise<void> {
+  const config = readSeedConfig(seedEnvironment)
   const catalog = readSeedCatalog()
   const client = postgres(config.databaseUrl, {
     max: 1,
@@ -219,29 +220,49 @@ export async function seedDatabase(): Promise<void> {
     await client.end({ timeout: 5 })
   }
   console.log(
-    'Local seed complete: staging catalog, two Auth accounts and fictional activity.',
+    `${seedEnvironment === 'staging' ? 'Staging' : 'Local'} seed complete: staging catalog, two Auth accounts and fictional activity.`,
   )
+}
+
+function readSeedEnvironment(argumentsList: string[]): SeedEnvironment {
+  const index = argumentsList.indexOf('--environment')
+  if (index === -1) return 'local'
+  const value = argumentsList[index + 1]
+  if (value !== 'local' && value !== 'staging')
+    throw new AppError('Unknown seed environment')
+  return value
+}
+
+function readSeedFlags(argumentsList: string[]) {
+  const flags: string[] = []
+  for (let index = 0; index < argumentsList.length; index++) {
+    if (argumentsList[index] === '--environment') index++
+    else flags.push(argumentsList[index])
+  }
+  return flags
 }
 
 async function runSeedCli(): Promise<void> {
   const argumentsList = process.argv.slice(2)
   if (argumentsList.includes('--help')) {
     console.log(
-      'db:seed replaces local application data and Auth users. Configure root .env.local; staging is never contacted.',
+      'db:seed replaces local application data and Auth users. Configure root .env.local. db:seed:staging (--environment staging) only accepts the staging project and takes the account passwords from secrets; production is never contacted.',
     )
     return
   }
-  if (argumentsList.some((argument) => argument !== '--check'))
+  const seedEnvironment = readSeedEnvironment(argumentsList)
+  const flags = readSeedFlags(argumentsList)
+  if (flags.some((argument) => argument !== '--check'))
     throw new AppError('Unknown seed argument')
-  if (argumentsList.includes('--check')) {
-    readSeedConfig()
+  if (flags.includes('--check')) {
+    readSeedConfig(seedEnvironment)
     const catalog = readSeedCatalog()
     console.log(
       `Seed preflight passed: ${catalog.planets.length} planets, ${catalog.stars.length} stars, ${catalog.challenges.length} challenges. No database changes.`,
     )
     return
   }
-  await seedDatabase()
+  await seedDatabase(seedEnvironment)
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

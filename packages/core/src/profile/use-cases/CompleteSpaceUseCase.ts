@@ -7,7 +7,7 @@ import { UserNotFoundError } from '../domain/errors'
 
 type Request = {
   userId: string
-  nextStarId: string | null
+  isLastGalaxyStar: boolean
   isFirstGalaxy: boolean
 }
 
@@ -20,9 +20,11 @@ export class CompleteSpaceUseCase implements UseCase<Request, void> {
   async execute(request: Request): Promise<void> {
     const user = await this.findUser(Id.create(request.userId))
 
-    const isLastSpaceStar = request.nextStarId === null
-
-    if (isLastSpaceStar && request.isFirstGalaxy && user.hasCompletedSpace.isFalse) {
+    if (
+      request.isLastGalaxyStar &&
+      request.isFirstGalaxy &&
+      user.hasCompletedSpace.isFalse
+    ) {
       user.completeSpace()
       await this.repository.replace(user)
 

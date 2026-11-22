@@ -6,6 +6,7 @@ import {
   Integer,
   Logical,
   Id,
+  Text,
 } from '#global/domain/structures/index'
 import type { PlanetDto } from './dtos'
 import { EmptyPlanetError, StarNotFoundError } from '../errors'
@@ -13,7 +14,6 @@ import { Star } from './Star'
 
 type PlanetProps = {
   name: Name
-  icon: Image
   image: Image
   galaxyId: Id
   position: OrdinalNumber
@@ -21,6 +21,7 @@ type PlanetProps = {
   completionCount: Integer
   isAvailable: Logical
   stars: Star[]
+  concept: Text | null
 }
 
 export class Planet extends Entity<PlanetProps> {
@@ -30,12 +31,12 @@ export class Planet extends Entity<PlanetProps> {
     return new Planet(
       {
         name: Name.create(dto.name),
-        icon: Image.create(dto.icon),
         image: Image.create(dto.image),
         galaxyId: Id.create(dto.galaxyId),
         position: OrdinalNumber.create(dto.position, 'Posição do planeta'),
         ...Planet.createCounters(dto),
         stars,
+        concept: dto.concept ? Text.create(dto.concept) : null,
       },
       dto.id,
     )
@@ -156,12 +157,8 @@ export class Planet extends Entity<PlanetProps> {
     this.props.image = image
   }
 
-  get icon(): Image {
-    return this.props.icon
-  }
-
-  set icon(icon: Image) {
-    this.props.icon = icon
+  get concept(): Text | null {
+    return this.props.concept
   }
 
   get galaxyId(): Id {
@@ -201,13 +198,13 @@ export class Planet extends Entity<PlanetProps> {
       id: this.id.value,
       name: this.name.value,
       image: this.image.value,
-      icon: this.icon.value,
       galaxyId: this.galaxyId.value,
       position: this.position.value,
       completionCount: this.completionCount.value,
       userCount: this.userCount.value,
       isAvailable: this.isAvailable.value,
       stars: this.stars.map((star) => star.dto),
+      concept: this.concept?.value ?? null,
     }
   }
 }

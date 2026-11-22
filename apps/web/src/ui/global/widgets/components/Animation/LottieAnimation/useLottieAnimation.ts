@@ -18,12 +18,14 @@ export type Params = {
   src?: string
   hasLoop: boolean
   isStatic: boolean
+  onLoadError?: () => void
 }
 
 async function loadLottieData(
   lottieUrl: string,
   signal: AbortSignal,
   setLottieData: (lottieData: unknown) => void,
+  onLoadError?: () => void,
 ) {
   try {
     const response = await fetch(lottieUrl, { signal })
@@ -38,11 +40,12 @@ async function loadLottieData(
   } catch {
     if (!signal.aborted) {
       setLottieData(null)
+      onLoadError?.()
     }
   }
 }
 
-function useLottieData(lottieUrl: string) {
+function useLottieData(lottieUrl: string, onLoadError?: () => void) {
   const [lottieData, setLottieData] = useState<unknown>(
     () => lottieDataCache.get(lottieUrl) ?? null,
   )
@@ -58,7 +61,7 @@ function useLottieData(lottieUrl: string) {
     const abortController = new AbortController()
 
     setLottieData(null)
-    void loadLottieData(lottieUrl, abortController.signal, setLottieData)
+    void loadLottieData(lottieUrl, abortController.signal, setLottieData, onLoadError)
 
     return () => {
       abortController.abort()
@@ -104,9 +107,10 @@ export function useLottieAnimation({
   src,
   hasLoop,
   isStatic,
+  onLoadError,
 }: Params) {
   const [windowWidth, setWindowWidth] = useState(0)
-  const lottieData = useLottieData(src ?? LOTTIE_PATHS[name])
+  const lottieData = useLottieData(src ?? LOTTIE_PATHS[name], onLoadError)
   const { restart, stopAt, setSpeed } = useLottieControls(lottieRef)
 
   useEffect(() => {

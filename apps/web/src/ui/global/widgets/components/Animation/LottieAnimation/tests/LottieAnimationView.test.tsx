@@ -42,6 +42,15 @@ describe('LottieAnimationView', () => {
     expect(screen.queryByTestId('lottie')).not.toBeInTheDocument()
   })
 
+  it('should reserve the square box of a numeric size while the lottie data is not available', () => {
+    const { container } = View({ lottieData: null, size: 200 })
+
+    expect(container.firstElementChild).toHaveStyle({
+      width: 'min(200px, 100vw, 100vh)',
+      height: 'min(200px, 100vw, 100vh)',
+    })
+  })
+
   it('should render a square animation limited by the viewport for a numeric size', () => {
     View({ size: 200 })
 

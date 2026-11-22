@@ -8,7 +8,7 @@ import type { SortableItem } from '@/ui/global/widgets/components/SortableList/t
 
 type Props = {
   planets: SortableItem<Planet>[]
-  onPlanetFormSubmit: (planetDto: Pick<PlanetDto, 'name' | 'icon' | 'image'>) => void
+  onPlanetFormSubmit: (planetDto: Pick<PlanetDto, 'name' | 'image'>) => void
   onDragEnd: (reorderedPlanets: SortableItem<Planet>[]) => void
 }
 

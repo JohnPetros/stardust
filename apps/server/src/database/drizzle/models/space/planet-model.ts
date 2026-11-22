@@ -17,7 +17,7 @@ export const planetModel = pgTable(
     id: uuid('id').notNull().default(sql`uuid_generate_v4()`),
     name: text('name').notNull(),
     image: text('image').notNull(),
-    icon: text('icon').notNull(),
+    concept: text('concept'),
     position: integer('position').notNull(),
     isAvailable: boolean('is_available').notNull().default(sql`true`),
     galaxyId: uuid('galaxy_id').notNull(),

@@ -13,7 +13,6 @@ const PLANETS_FOLDER = FileStorageFolderPath.createAsPlanets()
 
 const formSchema = z.object({
   name: nameSchema,
-  icon: stringSchema,
   image: stringSchema,
 })
 
@@ -22,7 +21,7 @@ type FormData = z.infer<typeof formSchema>
 type Params = {
   planetDto?: PlanetDto
   storageService: StorageService
-  onSubmit: (planetDto: Pick<PlanetDto, 'name' | 'icon' | 'image'>) => void
+  onSubmit: (planetDto: Pick<PlanetDto, 'name' | 'image'>) => void
 }
 
 export function usePlanetForm({ planetDto, storageService, onSubmit }: Params) {
@@ -30,7 +29,6 @@ export function usePlanetForm({ planetDto, storageService, onSubmit }: Params) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: planetDto?.name,
-      icon: planetDto?.icon,
       image: planetDto?.image,
     },
   })
@@ -39,7 +37,6 @@ export function usePlanetForm({ planetDto, storageService, onSubmit }: Params) {
   function handleSubmit(data: FormData) {
     onSubmit({
       name: data.name,
-      icon: data.icon,
       image: data.image,
     })
     setIsDialogOpen(false)
@@ -47,11 +44,9 @@ export function usePlanetForm({ planetDto, storageService, onSubmit }: Params) {
 
   async function handleDialogChange(isOpen: boolean) {
     if (!isOpen) {
-      const { image, icon } = form.getValues()
+      const { image } = form.getValues()
       if (image && planetDto?.image !== image)
         await storageService.removeFile(PLANETS_FOLDER, Text.create(image))
-      if (icon && planetDto?.icon !== icon)
-        await storageService.removeFile(PLANETS_FOLDER, Text.create(icon))
       form.reset()
     }
     setIsDialogOpen(isOpen)
@@ -61,7 +56,6 @@ export function usePlanetForm({ planetDto, storageService, onSubmit }: Params) {
     form,
     isSubmitting: form.formState.isSubmitting,
     planetImage: form.watch('image'),
-    planetIcon: form.watch('icon'),
     isDialogOpen,
     handleSubmit: form.handleSubmit(handleSubmit),
     handleDialogChange,

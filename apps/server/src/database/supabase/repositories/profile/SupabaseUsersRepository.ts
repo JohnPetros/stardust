@@ -1,3 +1,4 @@
+import { MethodNotImplementedError } from '@stardust/core/global/errors'
 import {
   type Email,
   type Id,
@@ -27,7 +28,6 @@ export class SupabaseUsersRepository
       avatar:avatars(*), 
       rocket:rockets(*), 
       tier:tiers(*),
-      users_unlocked_stars(star_id),
       users_unlocked_achievements(achievement_id),
       users_rescuable_achievements(achievement_id),
       users_acquired_rockets(rocket_id),
@@ -37,16 +37,13 @@ export class SupabaseUsersRepository
       users_upvoted_comments(comment_id)`
 
   private static readonly FULL_USER_SELECT =
-    `${SupabaseUsersRepository.FALLBACK_USER_SELECT}, insignias(role), users_recently_unlocked_stars(star_id)`
+    `${SupabaseUsersRepository.FALLBACK_USER_SELECT}, insignias(role)`
 
   private shouldFallbackUserSelect(error: { message: string } | null) {
     return Boolean(
       error?.message.includes(
         "Could not find a relationship between 'users' and 'insignias'",
-      ) ||
-        error?.message.includes(
-          "Could not find a relationship between 'users' and 'users_recently_unlocked_stars'",
-        ),
+      ),
     )
   }
 
@@ -54,7 +51,6 @@ export class SupabaseUsersRepository
     return {
       ...data,
       insignias: data.insignias ?? [],
-      users_recently_unlocked_stars: data.users_recently_unlocked_stars ?? [],
     }
   }
 
@@ -104,8 +100,6 @@ export class SupabaseUsersRepository
           rocket:rockets(*), 
           tier:tiers(*),
           insignias(role),
-          users_unlocked_stars(star_id),
-          users_recently_unlocked_stars(star_id),
           users_unlocked_achievements(achievement_id),
           users_rescuable_achievements(achievement_id),
           users_acquired_rockets(rocket_id),
@@ -171,8 +165,6 @@ export class SupabaseUsersRepository
           rocket:rockets(*), 
           tier:tiers(*),
           insignias(role),
-          users_unlocked_stars(star_id),
-          users_recently_unlocked_stars(star_id),
           users_unlocked_achievements(achievement_id),
           users_rescuable_achievements(achievement_id),
           users_acquired_rockets(rocket_id),
@@ -254,8 +246,6 @@ export class SupabaseUsersRepository
         rocket:rockets(*), 
         tier:tiers(*),
         insignias(role),
-        users_unlocked_stars(star_id),
-        users_recently_unlocked_stars(star_id),
         users_unlocked_achievements(achievement_id),
         users_rescuable_achievements(achievement_id),
         users_acquired_rockets(rocket_id),
@@ -283,8 +273,6 @@ export class SupabaseUsersRepository
         rocket:rockets(*), 
         tier:tiers(*),
         insignias(role),
-        users_unlocked_stars(star_id),
-        users_recently_unlocked_stars(star_id),
         users_unlocked_achievements(achievement_id),
         users_rescuable_achievements(achievement_id),
         users_acquired_rockets(rocket_id),
@@ -364,9 +352,9 @@ export class SupabaseUsersRepository
       }
 
       if (params.unlockedStarCountOrder.isAscending.isTrue) {
-        query = query.order('count_user_unlocked_stars', { ascending: true })
+        query = query.order('count_user_completed_stars', { ascending: true })
       } else if (params.unlockedStarCountOrder.isDescending.isTrue) {
-        query = query.order('count_user_unlocked_stars', { ascending: false })
+        query = query.order('count_user_completed_stars', { ascending: false })
       }
 
       if (params.unlockedAchievementCountOrder.isAscending.isTrue) {
@@ -408,8 +396,6 @@ export class SupabaseUsersRepository
       rocket:rockets(*), 
       tier:tiers(*),
       ${params.insigniaRoles.length ? 'insignias!inner(role)' : 'insignias(role)'},
-      users_unlocked_stars(star_id),
-      users_recently_unlocked_stars(star_id),
       users_unlocked_achievements(achievement_id),
       users_rescuable_achievements(achievement_id),
       users_acquired_rockets(rocket_id),
@@ -422,7 +408,6 @@ export class SupabaseUsersRepository
       avatar:avatars(*), 
       rocket:rockets(*), 
       tier:tiers(*),
-      users_unlocked_stars(star_id),
       users_unlocked_achievements(achievement_id),
       users_rescuable_achievements(achievement_id),
       users_acquired_rockets(rocket_id),
@@ -454,39 +439,6 @@ export class SupabaseUsersRepository
       items: users,
       count: count ?? users.length,
     }
-  }
-
-  async findUnlockedStars(userId: Id): Promise<IdsList> {
-    const { data, error } = await this.supabase
-      .from('users_unlocked_stars')
-      .select('star_id, stars(name, number, planets(position))')
-      .eq('user_id', userId.value)
-      .order('stars(number)', { ascending: true })
-
-    if (error) throw new SupabasePostgreError(error)
-
-    data.sort((a, b) => a.stars.planets.position - b.stars.planets.position)
-
-    return IdsList.create(data.map(({ star_id }) => star_id))
-  }
-
-  async findRecentlyUnlockedStars(userId: Id): Promise<IdsList> {
-    const { data, error } = await this.supabase
-      .from('users_recently_unlocked_stars')
-      .select('star_id, stars(number, planets(position))')
-      .eq('user_id', userId.value)
-      .order('position', {
-        referencedTable: 'stars.planets',
-        ascending: true,
-      })
-      .order('number', {
-        referencedTable: 'stars',
-        ascending: true,
-      })
-
-    if (error) throw new SupabasePostgreError(error)
-
-    return IdsList.create(data.map(({ star_id }) => star_id))
   }
 
   async containsWithEmail(email: Email): Promise<Logical> {
@@ -607,14 +559,6 @@ export class SupabaseUsersRepository
     if (error) throw new SupabasePostgreError(error)
   }
 
-  async addUnlockedStar(starId: Id, userId: Id): Promise<void> {
-    const { error } = await this.supabase
-      .from('users_unlocked_stars')
-      .insert({ star_id: starId.value, user_id: userId.value })
-
-    if (error) throw new SupabasePostgreError(error)
-  }
-
   async addUnlockedAchievement(achievementId: Id, userId: Id): Promise<void> {
     const { error } = await this.supabase
       .from('users_unlocked_achievements')
@@ -639,23 +583,6 @@ export class SupabaseUsersRepository
     const { error } = await this.supabase
       .from('users_upvoted_comments')
       .insert({ comment_id: commentId.value, user_id: userId.value })
-
-    if (error) throw new SupabasePostgreError(error)
-  }
-
-  async addRecentlyUnlockedStar(starId: Id, userId: Id): Promise<void> {
-    const { error } = await this.supabase
-      .from('users_recently_unlocked_stars')
-      .insert({ star_id: starId.value, user_id: userId.value })
-
-    if (error) throw new SupabasePostgreError(error)
-  }
-
-  async removeRecentlyUnlockedStar(starId: Id, userId: Id): Promise<void> {
-    const { error } = await this.supabase
-      .from('users_recently_unlocked_stars')
-      .delete()
-      .match({ star_id: starId.value, user_id: userId.value })
 
     if (error) throw new SupabasePostgreError(error)
   }
@@ -755,25 +682,19 @@ export class SupabaseUsersRepository
     return Integer.create(count ?? 0)
   }
 
-  async countAllUnlockedStars(): Promise<Integer> {
-    const { count, error } = await this.supabase
-      .from('users_unlocked_stars')
-      .select('*', { count: 'exact', head: true })
-
-    if (error) throw new SupabasePostgreError(error)
-
-    return Integer.create(count ?? 0)
+  async addCompletedStar(_starId: Id, _userId: Id): Promise<void> {
+    throw new MethodNotImplementedError('addCompletedStar')
   }
 
-  async countUnlockedStarsByMonth(month: Month): Promise<Integer> {
-    const { count, error } = await this.supabase
-      .from('users_unlocked_stars')
-      .select('*', { count: 'exact', head: true })
-      .gte('created_at', month.firstDay.toISOString())
-      .lte('created_at', month.lastDay.toISOString())
+  async addOpenedPlanet(_planetId: Id, _userId: Id): Promise<void> {
+    throw new MethodNotImplementedError('addOpenedPlanet')
+  }
 
-    if (error) throw new SupabasePostgreError(error)
+  async countAllCompletedStars(): Promise<Integer> {
+    throw new MethodNotImplementedError('countAllCompletedStars')
+  }
 
-    return Integer.create(count ?? 0)
+  async countCompletedStarsByMonth(_month: Month): Promise<Integer> {
+    throw new MethodNotImplementedError('countCompletedStarsByMonth')
   }
 }

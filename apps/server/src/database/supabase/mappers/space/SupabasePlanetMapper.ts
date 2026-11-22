@@ -14,7 +14,6 @@ export class SupabasePlanetMapper {
       id: supabasePlanet.id ?? '',
       name: supabasePlanet.name ?? '',
       image: supabasePlanet.image ?? '',
-      icon: supabasePlanet.icon ?? '',
       position: supabasePlanet.position ?? 1,
       completionCount: supabasePlanet.completion_count ?? 0,
       userCount: supabasePlanet.user_count ?? 0,
@@ -31,7 +30,7 @@ export class SupabasePlanetMapper {
     const supabasePlanet: SupabasePlanet = {
       id: planet.id.value,
       name: planetDto.name,
-      icon: planetDto.icon,
+      icon: '',
       image: planetDto.image,
       position: planetDto.position,
       completion_count: 0,

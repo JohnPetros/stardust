@@ -67,7 +67,9 @@ export class SpaceFixture {
 
   async createPlanet(
     galaxyId: string,
-    overrides: Partial<Pick<CreatedPlanet, 'position'>> = {},
+    overrides: Partial<Pick<CreatedPlanet, 'position'>> & {
+      concept?: string | null
+    } = {},
   ): Promise<CreatedPlanet> {
     const planet = PlanetsFaker.fakeDto({
       position: Math.floor(Math.random() * 100000) + 1000,
@@ -79,9 +81,9 @@ export class SpaceFixture {
       .values({
         id: planet.id,
         name: planet.name,
-        icon: planet.icon,
         image: planet.image,
         position: planet.position,
+        concept: overrides.concept ?? null,
         galaxyId,
       })
       .returning()
@@ -92,10 +94,19 @@ export class SpaceFixture {
     }
   }
 
-  async createStar(galaxyId?: string): Promise<CreatedStar> {
+  async createStar(
+    galaxyId?: string,
+    overrides: { planetId?: string; number?: number; description?: string | null } = {},
+  ): Promise<CreatedStar> {
     const galaxy = galaxyId ? { id: galaxyId } : await this.createGalaxy()
-    const planet = await this.createPlanet(galaxy.id)
-    const star = StarsFaker.fakeDto({ number: Math.floor(Math.random() * 100000) + 1 })
+    const planet = overrides.planetId
+      ? { id: overrides.planetId }
+      : await this.createPlanet(galaxy.id)
+    const star = StarsFaker.fakeDto({
+      number: overrides.number ?? Math.floor(Math.random() * 100000) + 1,
+      isChallenge: false,
+      description: overrides.description ?? null,
+    })
     const [persistedStar] = await this.database
       .insert(starModel)
       .values({
@@ -104,6 +115,7 @@ export class SpaceFixture {
         number: star.number,
         slug: star.slug,
         isChallenge: star.isChallenge,
+        description: star.description ?? null,
         planetId: planet.id,
       })
       .returning()

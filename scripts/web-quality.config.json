@@ -22,6 +22,29 @@
           "cls": { "max": 0.1 }
         }
       }
+    },
+    {
+      "name": "galaxy",
+      "path": "/space/logica-de-programacao",
+      "auth": true,
+      "presets": {
+        "mobile": {
+          "performance": { "min": 50 },
+          "accessibility": { "min": 90 },
+          "best-practices": { "min": 90 },
+          "lcp": { "max": 10000 },
+          "tbt": { "max": 1000 },
+          "cls": { "max": 0.1 }
+        },
+        "desktop": {
+          "performance": { "min": 65 },
+          "accessibility": { "min": 90 },
+          "best-practices": { "min": 90 },
+          "lcp": { "max": 6000 },
+          "tbt": { "max": 200 },
+          "cls": { "max": 0.1 }
+        }
+      }
     }
   ]
 }

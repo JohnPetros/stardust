@@ -1,122 +1,100 @@
-import { type RefObject, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
-import type { ChallengingService } from '@stardust/core/challenging/interfaces'
-import type { Id, Slug } from '@stardust/core/global/structures'
-import type { LastUnlockedStarViewPortPosition } from '@/ui/space/contexts/SpaceContext/types'
+import type { Id } from '@stardust/core/global/structures'
 
-import { ROUTES } from '@/constants'
+import type { SpaceContextValue } from '@/ui/space/contexts/SpaceContext/types'
 import type { AnimationRef } from '@/ui/global/widgets/components/Animation/types'
-import { useNavigationProvider } from '@/ui/global/hooks/useNavigationProvider'
-import { useAudioContext } from '@/ui/global/hooks/useAudioContext'
 
-type Params = {
+export type StarState = 'locked' | 'available' | 'completed'
+export type StarPlanetState = 'locked' | 'liberated' | 'opened'
+
+type Space = Pick<
+  SpaceContextValue,
+  | 'trail'
+  | 'currentItem'
+  | 'selectedStarId'
+  | 'selectStar'
+  | 'openStarDetails'
+  | 'registerStarAnimation'
+>
+
+export type Params = {
   starId: Id
-  starSlug: Slug
-  isLastUnlockedStar: boolean
-  starAnimationRef: RefObject<AnimationRef | null>
-  challengingService: ChallengingService
-  lastUnlockedStarRef: RefObject<HTMLDivElement | null>
-  lastUnlockedStarPosition: LastUnlockedStarViewPortPosition
-  getLastUnlockedStarLayoutSnapshot: () => string | null
-  scrollIntoLastUnlockedStar: () => void
-  setLastUnlockedStarPosition: (position: LastUnlockedStarViewPortPosition) => void
+  planetId: Id
+  isChallenge: boolean
+  previousStarNumber: number | null
+  space: Space
 }
 
-export function useStar({
+const STATE_LABEL: Record<StarState, string | null> = {
+  locked: null,
+  available: 'Disponível',
+  completed: 'Concluída',
+}
+
+function getUnlockHint(
+  state: StarState,
+  planetState: StarPlanetState,
+  previousStarNumber: number | null,
+) {
+  if (state !== 'locked') return null
+  if (planetState !== 'opened') return 'Abra o planeta para liberar'
+  if (previousStarNumber === null) return 'Conclua a estrela anterior para liberar'
+
+  return `Conclua a estrela ${previousStarNumber} para liberar`
+}
+
+type ViewParams = Params & { state: StarState; planetState: StarPlanetState }
+
+function buildStarView({
   starId,
-  starSlug,
-  isLastUnlockedStar,
-  starAnimationRef,
-  challengingService,
-  lastUnlockedStarRef,
-  lastUnlockedStarPosition,
-  getLastUnlockedStarLayoutSnapshot,
-  scrollIntoLastUnlockedStar,
-  setLastUnlockedStarPosition,
-}: Params) {
-  const { playAudio } = useAudioContext()
-  const isFirstScroll = useRef(true)
-  const navigationProvider = useNavigationProvider()
-  const isInView = lastUnlockedStarPosition === 'in'
-
-  async function handleStarNavigation() {
-    const response = await challengingService.fetchChallengeByStarId(starId)
-
-    if (response.isFailure) {
-      navigationProvider.goTo(ROUTES.lesson.star(starSlug.value))
-      return
-    }
-
-    const challenge = response.body
-    if (challenge.slug)
-      navigationProvider.goTo(ROUTES.challenging.challenges.challenge(challenge.slug))
-  }
-
-  function handleStarClick() {
-    playAudio('star.wav')
-    starAnimationRef.current?.restart()
-
-    setTimeout(() => {
-      handleStarNavigation()
-    }, 50)
-  }
-
-  useEffect(() => {
-    if (isLastUnlockedStar && isInView) {
-      setLastUnlockedStarPosition('in')
-    }
-  }, [isLastUnlockedStar, isInView, setLastUnlockedStarPosition])
-
-  useEffect(() => {
-    let timeout: number | undefined
-
-    if (isLastUnlockedStar && lastUnlockedStarRef.current && isFirstScroll.current) {
-      let attempts = 0
-      let stableIterations = 0
-      let previousSnapshot = getLastUnlockedStarLayoutSnapshot()
-
-      const waitForStableLayout = () => {
-        if (!lastUnlockedStarRef.current || !isFirstScroll.current) {
-          return
-        }
-
-        const currentSnapshot = getLastUnlockedStarLayoutSnapshot()
-
-        if (!currentSnapshot) {
-          return
-        }
-
-        attempts += 1
-
-        if (currentSnapshot === previousSnapshot) {
-          stableIterations += 1
-        } else {
-          previousSnapshot = currentSnapshot
-          stableIterations = 0
-        }
-
-        if (stableIterations >= 2 || attempts >= 30) {
-          scrollIntoLastUnlockedStar()
-          isFirstScroll.current = false
-          return
-        }
-
-        timeout = window.setTimeout(waitForStableLayout, 100)
-      }
-
-      timeout = window.setTimeout(waitForStableLayout, 100)
-    }
-
-    return () => window.clearTimeout(timeout)
-  }, [
-    getLastUnlockedStarLayoutSnapshot,
-    isLastUnlockedStar,
-    lastUnlockedStarRef,
-    scrollIntoLastUnlockedStar,
-  ])
+  isChallenge,
+  previousStarNumber,
+  space,
+  state,
+  planetState,
+}: ViewParams) {
+  const { currentItem, selectedStarId } = space
 
   return {
-    lastUnlockedStarRef,
-    handleStarClick,
+    id: starId.value,
+    state,
+    isAccessible: state !== 'locked',
+    isChallenge,
+    isCurrent: currentItem?.kind === 'star' && currentItem.starId.value === starId.value,
+    isSelected: selectedStarId === starId.value,
+    typeLabel: isChallenge ? 'Desafio de código' : 'História',
+    stateLabel: STATE_LABEL[state],
+    unlockHint: getUnlockHint(state, planetState, previousStarNumber),
+  }
+}
+
+export function useStar(params: Params) {
+  const { starId, planetId, space } = params
+  const { trail, selectStar, openStarDetails, registerStarAnimation } = space
+  const starAnimationRef = useRef<AnimationRef>(null)
+  const state: StarState = trail?.getStarState(starId).value ?? 'locked'
+  const planetState: StarPlanetState = trail?.getPlanetState(planetId).value ?? 'locked'
+
+  useEffect(() => {
+    return registerStarAnimation(starId.value, starAnimationRef)
+  }, [starId.value, registerStarAnimation])
+
+  function handleSelect() {
+    if (state !== 'locked') selectStar(starId.value)
+  }
+
+  function handleClick() {
+    if (state === 'locked') return
+
+    selectStar(starId.value)
+    openStarDetails()
+  }
+
+  return {
+    hasTrail: trail !== null,
+    handleSelect,
+    handleClick,
+    view: { ...buildStarView({ ...params, state, planetState }), starAnimationRef },
   }
 }

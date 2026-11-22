@@ -40,7 +40,6 @@ eval "$(node ./scripts/export-web-app-e2e-env.mjs)"
 | `pnpm run test:unit`                 | Jest/Vitest             | executa testes unitários por workspace                                  |
 | `pnpm run test:integration`          | Jest/Playwright         | executa as integrações declaradas pelos workspaces                      |
 | `pnpm run check:spec-implementation` | Node.js                 | valida o mapa `Path                                                     | Change | ...`da Spec contra Git e filesystem e valida o`plan.md` da Spec |
-| `pnpm run check:design`              | Node.js + API do Penpot | verifica o arquivo `stardust` do Penpot contra o baseline de design     |
 | `pnpm run check:web-quality`         | Lighthouse + Playwright | mede páginas em execução e exige o mínimo de cada métrica               |
 
 Exemplos de ciclo curto:
@@ -53,6 +52,9 @@ pnpm --filter @stardust/core run test:unit <arquivos-de-teste>
 ```
 
 ## Execução local escopada
+
+Esta seção é a fonte das verificações aplicáveis a uma mudança: as Specs e os workflows de
+implementação derivam dela quais checks rodar, quando e em que forma de comando.
 
 As suítes completas não são o padrão local. Execute só as verificações que o escopo da
 alteração exige: o comportamento da Spec, as fronteiras de produção alteradas e os
@@ -71,6 +73,7 @@ acrescentam os testes dos consumidores realmente afetados, não todos os módulo
 | Lint                        | `check:code` no workspace alterado, sem escrita.                                                                                                                                                                               | Confirme o lint do escopo.                                                                                                                                                                                                                                             | Reverifique os paths editados.                                                             |
 | Complexidade                | `pnpm --filter @stardust/<workspace> run check:complexity` quando a lógica alterada puder piorar o baseline e sempre que criar ou extrair um arquivo de código novo, inclusive Views (limite de erro de 70 linhas por função). | Rode `check:complexity` no workspace afetado antes de publicar: ele compara com o baseline e reprova funções novas em nível de aviso. Revise as entradas por função e, se forem aceitas, regenere com `update:complexity-baseline`. Registre o resultado e os limites. | Reverifique a lógica alterada; nunca relaxe regras nem atualize o baseline só para passar. |
 | Arquitetura e build         | `check:architecture` quando dependências, exports ou composição mudarem.                                                                                                                                                       | Rode os gates exigidos; o build ocorre na verificação integrada, não a cada edição.                                                                                                                                                                                    | Rerrode os gates cujas entradas ou afirmações mudaram.                                     |
+| Qualidade web               | Quando a mudança alterar a composição, os assets ou o carregamento de uma rota de página da Web, inclua ou mantenha a rota em `scripts/web-quality.config.json`, com os mínimos de cada preset.                                | Rode `pnpm run check:web-quality --route <nome>` contra um build de produção em execução; rotas com `auth: true` usam o exportador `--seed`. Se a rota já existia, meça-a antes da mudança para separar regressão de dívida anterior.                                  | Rerrode a rota afetada.                                                                    |
 
 A integração é um checkpoint, não um ritual por edição. Agrupe as seleções relacionadas
 do Server para reaproveitar o setup das fixtures e serialize os comandos que usam
@@ -128,40 +131,6 @@ intencional e estiver revisada. A detecção de clones fica desabilitada no
 ratchet atual para evitar ruído e custo desproporcional no monorepo; o gate é
 centrado nas métricas por função.
 
-## Verificação do design
-
-`check:design` lê o arquivo `stardust` pela API REST do Penpot e verifica as
-páginas de produto (todas, exceto `🎨 Design System`):
-
-| Categoria    | Regras                                                                                                          | Severidade                                                    |
-| ------------ | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| `contrast`   | texto WCAG AA (4,5:1; 3:1 para texto grande) sobre o fundo composto; ícones 3:1                                 | erro (texto), aviso (ícone)                                   |
-| `tokens`     | cor sem token, cor quase igual a um token, cor fora da paleta, token desatualizado ou inexistente               | aviso (sem token), erro (demais)                              |
-| `typography` | tamanho mínimo, escala, família, peso, texto que não cabe na caixa ou é cortado por um board                    | erro (mínimo, família, overflow, corte), aviso (escala, peso) |
-| `spacing`    | gap e padding fora da escala `space.*`; raio fora de `radius.*` ou totalmente arredondado                       | aviso                                                         |
-| `hygiene`    | seções sobrepostas, camada solta na raiz, nome padrão, board vazio, camada oculta, cópia de componente removido | erro ou aviso                                                 |
-
-O script exige `PENPOT_ACCESS_TOKEN` (Penpot → Your account → Access tokens) no
-`.env.local` da raiz ou no ambiente; nunca registre o valor. O token é enviado
-apenas a `https://design.penpot.app`; outro host só pode ser definido pela
-variável de ambiente `PENPOT_URL` (https), nunca pelo arquivo de configuração. A configuração fica
-em `.design-check.json`: ID do arquivo, tema dos tokens, páginas excluídas,
-escalas de tipografia, espaçamento e raio, e exceções em `ignore`, cada uma com
-`rule`, `shapeId` ou `layer` e um `reason` obrigatório.
-
-```bash
-pnpm run check:design
-pnpm run check:design --board "Conquistas / Desktop" --rule contrast
-pnpm run check:design --page Mobile --all --json
-```
-
-O check falha somente com erros novos em relação a `.design-check-baseline.json`;
-avisos e dívida existente não falham. `--all` mostra também os findings do
-baseline e os ignorados, `--file <json>` analisa um arquivo salvo e `--save <json>`
-guarda a resposta da API e `--digest` imprime o digest de cada board, usado no registro de revisão do workflow `design`. Atualize o baseline com `pnpm run update:design-baseline`
-somente depois de revisar os findings, nunca para esconder uma regressão. O
-check roda localmente; não faz parte do CI.
-
 ## Scripts por workspace
 
 As descrições abaixo refletem os scripts declarados nos `package.json` atuais.
@@ -196,9 +165,7 @@ partir da raiz.
 | `check:coverage`             | Compara os relatórios de cobertura com `coverage-baseline.json` e falha quando um baseline diminui.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `check:test-integrity`       | Falha quando testes são enfraquecidos ou código testável alterado não tem teste correspondente.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `check:spec-implementation`  | Valida o mapa canônico de paths da Spec contra o diff Git e o filesystem e, quando existe, o `plan.md` da Spec. `--plan-only` valida só o Plan contra a Spec (sem exigir paths entregues); `--require-plan` exige o Plan com todas as linhas `completed` e lê a chave `plan:` do `evaluation.md` irmão: `plan: <path>` exige o Plan, `plan: none` é o opt-out explícito de entregas anteriores ao Plan e a ausência da chave é erro; sem `evaluation.md`, o Plan continua exigido.                                                                                                                                                                                               |
-| `check:design`               | Verifica contraste, tokens, tipografia, espaçamento e higiene do arquivo `stardust` do Penpot contra `.design-check-baseline.json`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `check:web-quality`          | Mede, com Lighthouse (mediana de 3 execuções por rota e preset), as rotas de `scripts/web-quality.config.json` numa aplicação já em execução (`--base <url>`, padrão `http://localhost:3000`; não faz build nem sobe servidor) e falha quando uma métrica não atinge o mínimo declarado: pontuações de categoria (`min`) e LCP, TBT e CLS (`max`). Rotas com `auth: true` entram com `WEB_APP_E2E_EMAIL` e `WEB_APP_E2E_PASSWORD` (`eval "$(node scripts/export-web-app-e2e-env.mjs --seed)"`). Meça um build de produção; contra o servidor de desenvolvimento o script avisa que os números não valem. `--route <nome>`, `--runs <n>` e `--json <caminho>` ajustam a execução. |
-| `update:design-baseline`     | Atualiza o baseline de design após uma revisão explícita dos findings.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | `test:spec-implementation`   | Executa os testes do checker de conformidade de Spec.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `test:scripts`               | Executa os testes de todos os scripts auxiliares em `scripts/tests/`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `test:integration`           | Executa os testes de integração declarados pelos workspaces via Turbo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
@@ -406,6 +373,32 @@ redirecionem o destino e modo de produção. Limpeza e inserção acontecem numa
 única transação, com lock para serializar execuções concorrentes. Uma falha
 reverte também o reset de Auth; o pool fecha ao concluir ou falhar.
 
+### Seed de staging
+
+`pnpm --filter @stardust/server run db:seed:staging` (`seed.ts --environment staging`)
+carrega o mesmo catálogo versionado e as contas de demonstração no projeto de staging
+(`rveubqzvfbqbcpmuevnm`), sem ler o `.env.local`: `DATABASE_URL`, `SEED_EXPLORER_PASSWORD`
+e `SEED_ADMIN_PASSWORD` vêm só de variáveis de ambiente (no CD, de secrets do
+environment `staging`). A guarda recusa, antes de qualquer escrita, a ausência das
+senhas, o host de produção (`aukqejqsiqsqowafpppb`) ou de outro projeto e `MODE=production`;
+`--environment local` (o padrão de `db:seed`) mantém a guarda de loopback e as senhas
+do fixture. Não rode localmente contra staging: o comando existe para o workflow
+`Server app staging CD`.
+
+`node scripts/seed-staging-assets.mjs` envia ao R2 de staging as dez imagens
+`images/planets/planet-<id>-image.webp` referenciadas por `seed-catalog.json`
+(`Content-Type: image/webp`, `CacheControl: no-cache`, endpoint
+`https://<S3_ACCOUNT_ID>.r2.cloudflarestorage.com`) e confirma a leitura pública de cada
+uma em `STAGING_CDN_URL`. Lê `S3_ACCOUNT_ID`, `S3_BUCKET_NAME`, `S3_ACCESS_KEY_ID` e
+`S3_SECRET_ACCESS_KEY` (secrets) e as variables `STAGING_ASSETS_BUCKET`,
+`PRODUCTION_ASSETS_BUCKET` e `STAGING_CDN_URL`. Recusa, antes de qualquer chamada ao R2,
+credenciais ausentes, bucket diferente de `STAGING_ASSETS_BUCKET`, bucket igual a
+`PRODUCTION_ASSETS_BUCKET`, `MODE=production`, catálogo ou imagem ausente. Nunca lista,
+apaga nem altera policy, e não imprime credenciais. O teste, sem rede, é
+`node --test scripts/tests/seed-staging-assets.test.mjs`. Produção não tem script:
+o envio das dez imagens ao R2 de produção é um passo manual do release
+(`documentation/infrastructure.md`).
+
 O snapshot contém 55 avatares, 10 foguetes, 2 insígnias, 6 tiers, 17 conquistas,
 8 planetas, 39 estrelas, 27 desafios públicos ou associados a estrelas,
 60 vínculos de categorias, 10 categorias e 10 guias. Textos, histórias e questões
@@ -429,10 +422,12 @@ As imagens dos planetas, conquistas, avatares, tiers e foguetes estão versionad
 `seeders/assets/images/rockets/`.
 Execute `pnpm --filter @stardust/server run storage:seed` depois de preparar o MinIO
 local. O comando usa o `.env.local` da raiz, exige endpoint HTTP em
-`127.0.0.1`, preserva os nomes do catálogo e publica 110 imagens, incluindo seis
-extras. Confirma por HTTP anônimo os 104 arquivos referenciados pelos oito
-planetas, pelas 17 conquistas, pelos 55 avatares, pelos seis tiers e pelos 10 foguetes. Não altera o banco; pode ser executado novamente para atualizar os
-arquivos. A policy existente é preservada e recebe permissão de leitura pública
+`127.0.0.1`, preserva os nomes do catálogo e publica 115 imagens (`.svg`, `.jpg`
+e `.webp`), incluindo as que não são referenciadas pelo catálogo. Confirma por HTTP anônimo os 102 arquivos
+referenciados pelos dez planetas, pelas 17 conquistas, pelos 55 avatares, pelos seis tiers e pelos 10 foguetes. Não altera o banco; pode ser executado novamente para atualizar os
+arquivos. Remove do bucket os objetos em `images/planets/`, `images/achievements/`,
+`images/avatars/`, `images/rankings/`, `images/rockets/` e `lotties/galaxies/` que não
+existem mais no repositório; outras pastas, como uploads, não são tocadas. A policy existente é preservada e recebe permissão de leitura pública
 somente para `images/planets/*`, `images/achievements/*`, `images/avatars/*`, `images/rankings/*`, `images/rockets/*` e `lotties/galaxies/*`. Uploads e outras pastas não recebem permissões.
 
 O mesmo comando envia, para cada galáxia do catálogo, a cena
@@ -443,7 +438,9 @@ visualizadas com `pnpm run dev:studio`.
 Configure `NEXT_PUBLIC_CDN_URL` na Web e `VITE_CDN_URL` no Backoffice com a URL
 impressa pelo comando (`http://127.0.0.1:<MINIO_API_PORT>/<MINIO_BUCKET>`).
 Os avatares preservam os nomes `.jpg` do catálogo; o Content-Type corresponde
-aos bytes originais (JPEG, AVIF ou WebP). A verificação HTTP compara os bytes
+aos bytes originais (JPEG, AVIF ou WebP). As imagens principais dos oito planetas da
+trilha são `planet-<id>-image.webp` (512 × 512, fundo transparente); os ícones e o
+planeta de teste continuam em SVG. A verificação HTTP compara os bytes
 recebidos com o arquivo versionado. Arquivos de outros itens ainda precisam ser
 fornecidos.
 
@@ -456,7 +453,7 @@ revise conteúdo e referências e execute as validações locais. Nunca versione
 um dump de Auth ou de tabelas pessoais.
 
 ```bash
-node --test scripts/tests/seed-database.test.mjs
+node --test scripts/tests/seed-database.test.mjs scripts/tests/seed-staging-assets.test.mjs
 
 # Validação explícita e destrutiva, exclusivamente no banco local
 eval "$(node scripts/export-local-database-env.mjs)"

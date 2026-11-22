@@ -20,10 +20,10 @@ version reaches `production` only through a release Pull Request from
 
 ## Permanent branches
 
-| Branch       | Responsibility                            | Deployment                                           |
-| ------------ | ----------------------------------------- | ---------------------------------------------------- |
-| `main`       | Integration of approved changes           | Web staging; Server, Backoffice and Crew CD          |
-| `production` | Published production state of the Web App | Web production, through the published GitHub Release |
+| Branch       | Responsibility                            | Deployment                                             |
+| ------------ | ----------------------------------------- | ------------------------------------------------------ |
+| `main`       | Integration of approved changes           | Web and Server staging; Server, Backoffice and Crew CD |
+| `production` | Published production state of the Web App | Web production, through the published GitHub Release   |
 
 Rules:
 
@@ -207,9 +207,19 @@ Merging a PR into `main` triggers `web-app-staging-cd.yaml` when the change
 touches `apps/web`, `packages/core`, `packages/validation` or `packages/lsp`.
 It triggers the Web App Coolify webhook for the staging environment.
 
-The staging deployment shares the `stardust-web-staging` concurrency group with
-the release E2E workflow, so staging does not change while a release candidate
-is being exercised in the browser.
+Merging a PR into `main` that touches `apps/server`, `packages/core` or
+`packages/validation` also triggers `server-app-staging-cd.yml` in the `staging`
+GitHub Environment. It runs the preflight, applies the Server migrations,
+uploads the planet images to the staging bucket, reseeds the staging database
+(`db:seed:staging`), requests the Coolify deploy and checks the deployed SHA and
+the health endpoint. A single manual run with `initial_cutover` adopts the
+legacy staging baseline before the first migration. It never touches production
+and does not depend on `PRODUCTION_RELEASES_PAUSED`.
+
+The staging deployments of the Web App and of the Server share the
+`stardust-web-staging` concurrency group with the release E2E workflow, so
+staging does not change (and is not reseeded) while a release candidate is being
+exercised in the browser.
 
 ---
 
@@ -225,6 +235,13 @@ is being exercised in the browser.
 The production jobs use the `production` GitHub Environment. The repository
 variable `PRODUCTION_RELEASES_PAUSED` must be `false` for the normal Web and
 Server deployments to proceed; set it to `true` to pause production releases.
+
+Precondition for the galaxy trail release: the Server production deployment stays
+paused (`PRODUCTION_RELEASES_PAUSED=true`) until a joint release with the Web App
+is ready, because the migrations reset the trail progress and drop the unlock
+tables. Unpausing requires a verified production database backup first. The
+planet images must be uploaded manually to the production bucket before the
+release (see `documentation/infrastructure.md`).
 
 `packages/*` have no independent deployment. They are built, tested and shipped
 through their consuming applications.

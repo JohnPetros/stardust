@@ -22,7 +22,7 @@ export const LottieAnimationView = ({
   autoplay,
   loop,
 }: Props) => {
-  if (!lottieData) return null
+  if (size === 'full' && !lottieData) return null
 
   if (size === 'full')
     return (
@@ -41,18 +41,26 @@ export const LottieAnimationView = ({
       />
     )
 
+  const boxSize = `min(${size}px, 100vw, 100vh)`
+
   return (
-    <Lottie
-      lottieRef={lottieRef}
-      animationData={lottieData}
-      style={{
-        width: `min(${size}px, 100vw, 100vh)`,
-        height: `min(${size}px, 100vw, 100vh)`,
-        maxWidth: '100vw',
-        maxHeight: '100vh',
-      }}
-      autoplay={autoplay}
-      loop={loop}
-    />
+    <div
+      style={{ width: boxSize, height: boxSize, maxWidth: '100vw', maxHeight: '100vh' }}
+    >
+      {lottieData ? (
+        <Lottie
+          lottieRef={lottieRef}
+          animationData={lottieData}
+          style={{
+            width: boxSize,
+            height: boxSize,
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+          }}
+          autoplay={autoplay}
+          loop={loop}
+        />
+      ) : null}
+    </div>
   )
 }

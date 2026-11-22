@@ -29,20 +29,20 @@ describe('CompleteSpaceUseCase', () => {
     await expect(
       useCase.execute({
         userId: user.id.value,
-        nextStarId: null,
+        isLastGalaxyStar: true,
         isFirstGalaxy: true,
       }),
     ).rejects.toThrow(UserNotFoundError)
   })
 
-  it('should complete the space and publish the space completed event if the next star is null', async () => {
+  it('should complete the space and publish the space completed event on the last galaxy star', async () => {
     const user = UsersFaker.fake()
     repository.findById.mockResolvedValue(user)
     user.completeSpace = jest.fn()
 
     await useCase.execute({
       userId: user.id.value,
-      nextStarId: null,
+      isLastGalaxyStar: true,
       isFirstGalaxy: true,
     })
 
@@ -56,14 +56,14 @@ describe('CompleteSpaceUseCase', () => {
     )
   })
 
-  it('should not complete the space and publish the space completed event if the next star is not null', async () => {
+  it('should not complete the space and publish the space completed event if it is not the last galaxy star', async () => {
     const user = UsersFaker.fake()
     repository.findById.mockResolvedValue(user)
     user.completeSpace = jest.fn()
 
     await useCase.execute({
       userId: user.id.value,
-      nextStarId: 'next-star-id',
+      isLastGalaxyStar: false,
       isFirstGalaxy: true,
     })
 
@@ -81,7 +81,7 @@ describe('CompleteSpaceUseCase', () => {
 
     await useCase.execute({
       userId: user.id.value,
-      nextStarId: 'next-star-id',
+      isLastGalaxyStar: false,
       isFirstGalaxy: true,
     })
 
@@ -97,7 +97,7 @@ describe('CompleteSpaceUseCase', () => {
 
     await useCase.execute({
       userId: user.id.value,
-      nextStarId: null,
+      isLastGalaxyStar: true,
       isFirstGalaxy: false,
     })
 
@@ -107,14 +107,14 @@ describe('CompleteSpaceUseCase', () => {
     expect(user.hasCompletedSpace.isFalse).toBe(true)
   })
 
-  it('should keep not completing the space on a galaxy that is not the first one while there is a next star', async () => {
+  it('should keep not completing the space on a galaxy that is not the first one while it is not the last star', async () => {
     const user = UsersFaker.fake()
     repository.findById.mockResolvedValue(user)
     user.completeSpace = jest.fn()
 
     await useCase.execute({
       userId: user.id.value,
-      nextStarId: 'next-star-id',
+      isLastGalaxyStar: false,
       isFirstGalaxy: false,
     })
 

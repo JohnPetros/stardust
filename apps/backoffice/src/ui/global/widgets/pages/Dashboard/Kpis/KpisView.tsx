@@ -20,7 +20,7 @@ export const KpisView = ({
       <KpiCard title='Usuários criados' kpi={createdUsersKpi} />
       <KpiCard title='Desafios publicados' kpi={postedChallengesKpi} />
       <KpiCard title='Desafios completados' kpi={completedChallengesKpi} />
-      <KpiCard title='Estrelas desbloqueadas' kpi={unlockedStarsKpi} />
+      <KpiCard title='Estrelas concluídas' kpi={unlockedStarsKpi} />
     </div>
   )
 }

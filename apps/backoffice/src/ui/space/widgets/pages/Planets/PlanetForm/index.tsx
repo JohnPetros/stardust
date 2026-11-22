@@ -5,7 +5,7 @@ import type { PropsWithChildren } from 'react'
 
 type Props = {
   planetDto?: PlanetDto
-  onSubmit: (planetDto: Pick<PlanetDto, 'name' | 'icon' | 'image'>) => void
+  onSubmit: (planetDto: Pick<PlanetDto, 'name' | 'image'>) => void
 }
 
 export const PlanetForm = ({

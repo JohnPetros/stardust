@@ -32,6 +32,13 @@ Content-Type: application/json
   "galaxySlug": "logica-de-programacao"
 }
 
+### Open planet
+# Opens a planet already liberated for the session account. Idempotent.
+# 200 { "openedPlanetId" } | 401 without session | 403 locked planet | 404 unknown planet
+@PLANET_ID = 2ee862da-4b73-4fb3-984a-d6ed1743102b
+PUT {{URL}}/planets/{{PLANET_ID}}/open
+Authorization: Bearer {{JWT}}
+
 ### Update user
 PUT {{URL}}/{{USER_ID}}
 Authorization: Bearer {{JWT}}
@@ -130,6 +137,7 @@ Content-Type: application/json
 
 
 ### Reward user for star completion
+# 403 when the star is locked for the account; the next star is never recorded.
 PUT {{URL}}/{{USER_ID}}/reward/star
 Authorization: Bearer {{JWT}}
 Content-Type: application/json

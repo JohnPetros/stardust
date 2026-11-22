@@ -7,7 +7,7 @@ import { GalaxyNotFoundError } from '@stardust/core/space/errors'
 
 import { ENV } from '@/constants'
 import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
-import { galaxyModel, userModel, userUnlockedStarModel } from '@/database/drizzle/schema'
+import { galaxyModel, userModel, userCompletedStarModel } from '@/database/drizzle/schema'
 import { AuthFixture } from '@/tests/fixtures/AuthFixture'
 import { HonoFixture } from '@/tests/fixtures/HonoFixture'
 import { ProfileFixture } from '@/tests/fixtures/ProfileFixture'
@@ -123,12 +123,12 @@ describe('[GET] /space/galaxies/current', () => {
   })
 
   it.each(['announced', 'unpublished'] as const)(
-    'should replace a current galaxy that became %s and keep its unlocked stars',
+    'should replace a current galaxy that became %s and keep its completed stars',
     async (status) => {
       const first = await createGalaxy({ position: 1, status: 'published' })
       const withdrawn = await createGalaxy({ position: 2, status: 'published' })
       const star = await spaceFixture.createStar(withdrawn.id)
-      await supabaseFixture.database.insert(userUnlockedStarModel).values({
+      await supabaseFixture.database.insert(userCompletedStarModel).values({
         userId: authFixture.getAccountId(),
         starId: star.id,
       })
@@ -150,11 +150,11 @@ describe('[GET] /space/galaxies/current', () => {
       })
       expect(response.body.isFirstGalaxy).toBe(true)
       expect(await readStoredGalaxyId()).toBe(first.id)
-      const unlockedStars = await supabaseFixture.database
+      const completedStars = await supabaseFixture.database
         .select()
-        .from(userUnlockedStarModel)
-        .where(eq(userUnlockedStarModel.userId, authFixture.getAccountId()))
-      expect(unlockedStars.map((unlocked) => unlocked.starId)).toEqual([star.id])
+        .from(userCompletedStarModel)
+        .where(eq(userCompletedStarModel.userId, authFixture.getAccountId()))
+      expect(completedStars.map((completed) => completed.starId)).toEqual([star.id])
     },
   )
 

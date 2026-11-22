@@ -32,8 +32,8 @@ import { DrizzleRepository } from '../../DrizzleRepository'
 import type { DrizzleTransaction } from '../../DrizzleClient'
 import {
   userModel,
-  userUnlockedStarModel,
-  userRecentlyUnlockedStarModel,
+  userCompletedStarModel,
+  userOpenedPlanetModel,
   userUnlockedAchievementModel,
   userRescuableAchievementModel,
   userAcquiredRocketModel,
@@ -52,8 +52,6 @@ import { planetModel } from '../../models/space/planet-model'
 import { galaxyModel } from '../../models/space/galaxy-model'
 import { DrizzleUserMapper } from '../../mappers/profile/DrizzleUserMapper'
 import type { DrizzleUser } from '../../types/entities/profile'
-
-type StarUnlockTable = typeof userUnlockedStarModel | typeof userRecentlyUnlockedStarModel
 
 export class DrizzleUsersRepository extends DrizzleRepository implements UsersRepository {
   private authorize(): void {
@@ -118,10 +116,8 @@ export class DrizzleUsersRepository extends DrizzleRepository implements UsersRe
 
   private starProgressSelection() {
     return {
-      usersUnlockedStars: this.relationshipProjection('usersUnlockedStars'),
-      usersRecentlyUnlockedStars: this.relationshipProjection(
-        'usersRecentlyUnlockedStars',
-      ),
+      usersCompletedStars: this.relationshipProjection('usersCompletedStars'),
+      usersOpenedPlanets: this.relationshipProjection('usersOpenedPlanets'),
     }
   }
 
@@ -321,7 +317,7 @@ export class DrizzleUsersRepository extends DrizzleRepository implements UsersRe
 
   private progressCountColumns() {
     return {
-      unlockedStars: sql`public.count_user_unlocked_stars(${userModel})`,
+      completedStars: sql`public.count_user_completed_stars(${userModel})`,
       unlockedAchievements: sql`public.count_user_unlocked_achievements(${userModel})`,
       completedChallenges: sql`public.count_user_completed_challenges(${userModel})`,
     }
@@ -347,7 +343,7 @@ export class DrizzleUsersRepository extends DrizzleRepository implements UsersRe
     counts: ReturnType<DrizzleUsersRepository['progressCountColumns']>,
   ) {
     return [
-      [params.unlockedStarCountOrder, counts.unlockedStars],
+      [params.unlockedStarCountOrder, counts.completedStars],
       [params.unlockedAchievementCountOrder, counts.unlockedAchievements],
       [params.completedChallengeCountOrder, counts.completedChallenges],
     ] satisfies readonly (readonly [UsersListingParams['levelOrder'], SQLWrapper])[]
@@ -468,21 +464,23 @@ export class DrizzleUsersRepository extends DrizzleRepository implements UsersRe
     })
   }
 
-  async addUnlockedStar(starId: Id, userId: Id): Promise<void> {
+  async addCompletedStar(starId: Id, userId: Id): Promise<void> {
     this.authorizeOwner(userId)
     await this.executeQuery(async () => {
       await this.database
-        .insert(userUnlockedStarModel)
+        .insert(userCompletedStarModel)
         .values({ userId: userId.value, starId: starId.value })
+        .onConflictDoNothing()
     })
   }
 
-  async addRecentlyUnlockedStar(starId: Id, userId: Id): Promise<void> {
+  async addOpenedPlanet(planetId: Id, userId: Id): Promise<void> {
     this.authorizeOwner(userId)
     await this.executeQuery(async () => {
       await this.database
-        .insert(userRecentlyUnlockedStarModel)
-        .values({ userId: userId.value, starId: starId.value })
+        .insert(userOpenedPlanetModel)
+        .values({ userId: userId.value, planetId: planetId.value })
+        .onConflictDoNothing()
     })
   }
 
@@ -520,22 +518,6 @@ export class DrizzleUsersRepository extends DrizzleRepository implements UsersRe
         .insert(userCompletedChallengeModel)
         .values({ userId: userId.value, challengeId: challengeId.value })
     })
-  }
-
-  async removeRecentlyUnlockedStar(starId: Id, userId: Id): Promise<void> {
-    this.authorizeOwner(userId)
-    await this.executeQuery(async () =>
-      this.database
-        .delete(userRecentlyUnlockedStarModel)
-        .where(
-          this.relationshipFilter(
-            userRecentlyUnlockedStarModel.userId,
-            userRecentlyUnlockedStarModel.starId,
-            userId,
-            starId,
-          ),
-        ),
-    )
   }
 
   async removeUpvotedComment(commentId: Id, userId: Id): Promise<void> {
@@ -608,47 +590,11 @@ export class DrizzleUsersRepository extends DrizzleRepository implements UsersRe
       .values({ userId: userId.value, insigniaId: row.id })
   }
 
-  async findUnlockedStars(userId: Id): Promise<IdsList> {
-    this.authorizeOwner(userId)
-    return this.unlockedStarIds(userUnlockedStarModel, userId)
-  }
-
-  async findRecentlyUnlockedStars(userId: Id): Promise<IdsList> {
-    this.authorizeOwner(userId)
-    return this.unlockedStarIds(userRecentlyUnlockedStarModel, userId)
-  }
-
-  private starProgressQuery(table: StarUnlockTable) {
-    return this.database
-      .select({ starId: table.starId })
-      .from(table)
-      .innerJoin(starModel, eq(starModel.id, table.starId))
-      .innerJoin(planetModel, eq(planetModel.id, starModel.planetId))
-      .innerJoin(galaxyModel, eq(galaxyModel.id, planetModel.galaxyId))
-  }
-
-  private orderedStarProgressQuery(table: StarUnlockTable, userId: Id) {
-    return this.starProgressQuery(table)
-      .where(eq(table.userId, userId.value))
-      .orderBy(
-        asc(galaxyModel.position),
-        asc(planetModel.position),
-        asc(starModel.number),
-      )
-  }
-
-  private unlockedStarIds(table: StarUnlockTable, userId: Id): Promise<IdsList> {
-    return this.executeQuery(async () => {
-      const rows = await this.orderedStarProgressQuery(table, userId)
-      return IdsList.create(rows.map((row) => row.starId))
-    })
-  }
-
   private countQuery(
     table:
       | typeof userModel
       | typeof userCompletedChallengeModel
-      | typeof userUnlockedStarModel,
+      | typeof userCompletedStarModel,
     filter?: SQL,
   ) {
     return this.database
@@ -686,14 +632,14 @@ export class DrizzleUsersRepository extends DrizzleRepository implements UsersRe
     return this.countInMonth(userCompletedChallengeModel, month)
   }
 
-  async countAllUnlockedStars(): Promise<Integer> {
+  async countAllCompletedStars(): Promise<Integer> {
     this.authorize()
-    return this.countResult(this.countQuery(userUnlockedStarModel))
+    return this.countResult(this.countQuery(userCompletedStarModel))
   }
 
-  async countUnlockedStarsByMonth(month: Month): Promise<Integer> {
+  async countCompletedStarsByMonth(month: Month): Promise<Integer> {
     this.authorize()
-    return this.countInMonth(userUnlockedStarModel, month)
+    return this.countInMonth(userCompletedStarModel, month)
   }
 
   private monthFilter(createdAt: SQLWrapper, month: Month) {
@@ -711,17 +657,17 @@ export class DrizzleUsersRepository extends DrizzleRepository implements UsersRe
 }
 
 const relationshipMetadata = {
-  usersUnlockedStars: {
-    table: userUnlockedStarModel,
+  usersCompletedStars: {
+    table: userCompletedStarModel,
     jsonKey: 'starId',
-    column: userUnlockedStarModel.starId,
-    owner: userUnlockedStarModel.userId,
+    column: userCompletedStarModel.starId,
+    owner: userCompletedStarModel.userId,
   },
-  usersRecentlyUnlockedStars: {
-    table: userRecentlyUnlockedStarModel,
-    jsonKey: 'starId',
-    column: userRecentlyUnlockedStarModel.starId,
-    owner: userRecentlyUnlockedStarModel.userId,
+  usersOpenedPlanets: {
+    table: userOpenedPlanetModel,
+    jsonKey: 'planetId',
+    column: userOpenedPlanetModel.planetId,
+    owner: userOpenedPlanetModel.userId,
   },
   usersUnlockedAchievements: {
     table: userUnlockedAchievementModel,

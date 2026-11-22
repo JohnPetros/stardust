@@ -1,10 +1,12 @@
-import { and, eq } from 'drizzle-orm'
+import { and, count, eq } from 'drizzle-orm'
 import { DrizzleClient } from '@/database/drizzle/DrizzleClient'
 import {
   avatarModel,
   rocketModel,
   tierModel,
+  userCompletedStarModel,
   userModel,
+  userOpenedPlanetModel,
   userRescuableAchievementModel,
 } from '@/database/drizzle/schema'
 import { randomUUID } from 'node:crypto'
@@ -113,6 +115,36 @@ export class ProfileFixture {
       .where(eq(userModel.id, userId))
     if (!row) throw new Error('Expected a persisted fixture user')
     return row.coins
+  }
+
+  async completeStar(userId: string, starId: string) {
+    await DrizzleClient.getInstance()
+      .insert(userCompletedStarModel)
+      .values({ userId, starId })
+      .onConflictDoNothing()
+  }
+
+  async openPlanet(userId: string, planetId: string) {
+    await DrizzleClient.getInstance()
+      .insert(userOpenedPlanetModel)
+      .values({ userId, planetId })
+      .onConflictDoNothing()
+  }
+
+  async countCompletedStars(userId: string) {
+    const [row] = await DrizzleClient.getInstance()
+      .select({ total: count() })
+      .from(userCompletedStarModel)
+      .where(eq(userCompletedStarModel.userId, userId))
+    return row.total
+  }
+
+  async countOpenedPlanets(userId: string) {
+    const [row] = await DrizzleClient.getInstance()
+      .select({ total: count() })
+      .from(userOpenedPlanetModel)
+      .where(eq(userOpenedPlanetModel.userId, userId))
+    return row.total
   }
 
   async getRescuableAchievements(userId: string, achievementId: string) {

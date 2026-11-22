@@ -1,2 +1,2 @@
 export type { SpaceContextValue } from './SpaceContextValue'
-export type { LastUnlockedStarViewPortPosition } from './LastUnlockedStarViewPortPosition'
+export type { CurrentItemViewportPosition } from './CurrentItemViewportPosition'
