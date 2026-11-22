@@ -89,7 +89,10 @@ ordem, separados por `/`:
   `var(--token)` nas telas e nos componentes, nunca um hexadecimal avulso, e
   atualize o frame `StarDust / Tokens · Dark & Light` na mesma tarefa em que
   `documentation/design.md` ou os tokens mudarem. É material de referência: não
-  coloque telas nem componentes principais nele.
+  coloque telas nem componentes principais nele. No código, os tokens do canvas
+  têm o prefixo `--theme-` (`--color-<papel>` vira `--theme-<papel>`,
+  `--spacing-control-height` vira `--theme-control-height`); a tabela de
+  correspondência está em `documentation/design.md`, seção 10.
 - Não crie páginas novas sem perguntar ao usuário. Uma tela sem página
   correspondente continua pertencendo a Desktop ou Mobile.
 
