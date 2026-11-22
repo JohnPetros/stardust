@@ -130,11 +130,8 @@ function achievementProgress(row: DrizzleUser) {
 }
 function starUnlocks(row: DrizzleUser) {
   return {
-    unlockedStarsIds: relationshipIds(row.usersUnlockedStars, (item) => item.starId),
-    recentlyUnlockedStarsIds: relationshipIds(
-      row.usersRecentlyUnlockedStars,
-      (item) => item.starId,
-    ),
+    completedStarsIds: relationshipIds(row.usersCompletedStars, (item) => item.starId),
+    openedPlanetsIds: relationshipIds(row.usersOpenedPlanets, (item) => item.planetId),
   }
 }
 function acquisitions(row: DrizzleUser) {

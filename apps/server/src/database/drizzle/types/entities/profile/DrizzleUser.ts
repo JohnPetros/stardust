@@ -5,8 +5,8 @@ import type { tierModel } from '../../../models/ranking/tier-model'
 import type { galaxyModel } from '../../../models/space/galaxy-model'
 import type { planetModel } from '../../../models/space/planet-model'
 import type { insigniaModel } from '../../../models/shop/insignia-model'
-import type { userUnlockedStarModel } from '../../../models/profile/user-unlocked-star-model'
-import type { userRecentlyUnlockedStarModel } from '../../../models/profile/user-recently-unlocked-star-model'
+import type { userCompletedStarModel } from '../../../models/profile/user-completed-star-model'
+import type { userOpenedPlanetModel } from '../../../models/profile/user-opened-planet-model'
 import type { userUnlockedAchievementModel } from '../../../models/profile/user-unlocked-achievement-model'
 import type { userRescuableAchievementModel } from '../../../models/profile/user-rescuable-achievement-model'
 import type { userAcquiredRocketModel } from '../../../models/profile/user-acquired-rocket-model'
@@ -21,11 +21,8 @@ export type DrizzleUser = typeof userModel.$inferSelect & {
   tier?: typeof tierModel.$inferSelect | null
   currentGalaxy?: Pick<typeof galaxyModel.$inferSelect, 'id' | 'name' | 'slug'> | null
   insignias?: Pick<typeof insigniaModel.$inferSelect, 'role'>[]
-  usersUnlockedStars?: Pick<typeof userUnlockedStarModel.$inferSelect, 'starId'>[]
-  usersRecentlyUnlockedStars?: Pick<
-    typeof userRecentlyUnlockedStarModel.$inferSelect,
-    'starId'
-  >[]
+  usersCompletedStars?: Pick<typeof userCompletedStarModel.$inferSelect, 'starId'>[]
+  usersOpenedPlanets?: Pick<typeof userOpenedPlanetModel.$inferSelect, 'planetId'>[]
   usersUnlockedAchievements?: Pick<
     typeof userUnlockedAchievementModel.$inferSelect,
     'achievementId'

@@ -20,9 +20,9 @@ export class DrizzleStarMapper {
   }
   private static identity(
     row: DrizzleStar,
-  ): Pick<DrizzleStar, 'id' | 'name' | 'number' | 'slug'> {
-    const { id, name, number, slug } = row
-    return { id, name, number, slug }
+  ): Pick<DrizzleStar, 'id' | 'name' | 'number' | 'slug' | 'description'> {
+    const { id, name, number, slug, description } = row
+    return { id, name, number, slug, description }
   }
   private static activity(
     row: DrizzleStar,
@@ -32,8 +32,8 @@ export class DrizzleStarMapper {
   }
   private static persistenceIdentity(
     star: Star,
-  ): Pick<DrizzleInsertStar, 'id' | 'name' | 'number' | 'slug'> {
-    const { id, name, number, slug } = star.dto
-    return { id, name, number, slug }
+  ): Pick<DrizzleInsertStar, 'id' | 'name' | 'number' | 'slug' | 'description'> {
+    const { id, name, number, slug, description } = star.dto
+    return { id, name, number, slug, description }
   }
 }

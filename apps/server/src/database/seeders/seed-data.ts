@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { z } from 'zod'
 import { AppError } from '@stardust/core/global/errors'
-import type { ModuleSeed, ModuleSeeder } from './ModuleSeeder'
+import type { ModuleSeed } from './ModuleSeeder'
 import type { SeedAccount } from './seed-config'
 
 export const CATALOG_TABLES = [
@@ -100,32 +100,4 @@ export function buildSeedProfiles(
       },
     ],
   }
-}
-
-export async function seedProfileProgress(
-  seeder: ModuleSeeder,
-  catalog: ModuleSeed,
-  accounts: SeedAccount[],
-) {
-  const galaxy = [...catalog.galaxies].sort(
-    (a, b) => Number(a.position) - Number(b.position),
-  )[0]
-  const planet = catalog.planets
-    .filter((row) => row.galaxy_id === galaxy?.id)
-    .sort((a, b) => Number(a.position) - Number(b.position))[0]
-  if (!planet) throw new AppError('Catalog is missing the first planet')
-  const firstStar = catalog.stars
-    .filter((row) => row.planet_id === planet.id)
-    .sort((a, b) => Number(a.number) - Number(b.number))[0]
-  if (!firstStar) throw new AppError('Catalog is missing the first star')
-  await seeder.run({
-    users_unlocked_stars: accounts.map((account) => ({
-      user_id: account.id,
-      star_id: firstStar.id,
-    })),
-    users_recently_unlocked_stars: accounts.map((account) => ({
-      user_id: account.id,
-      star_id: firstStar.id,
-    })),
-  })
 }

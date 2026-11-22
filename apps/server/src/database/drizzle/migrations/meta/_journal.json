@@ -43,6 +43,34 @@
       "when": 1794705436693,
       "tag": "0005_planets_galaxy_required",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1795023870548,
+      "tag": "0006_trail_progress_facts",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1795023991324,
+      "tag": "0007_galaxy_trail_catalog",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1795023995270,
+      "tag": "0008_drop_unlocked_stars",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1795127005790,
+      "tag": "0009_drop_planet_icon",
+      "breakpoints": true
     }
   ]
 }
