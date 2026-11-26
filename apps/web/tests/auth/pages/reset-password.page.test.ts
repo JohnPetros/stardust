@@ -1,10 +1,10 @@
 import { expect, test, type BrowserContext, type Page } from '@playwright/test'
 
 import type { SessionDto } from '@stardust/core/auth/structures/dtos'
-import { SessionFaker } from '../../../../../../packages/core/src/auth/domain/structures/fakers'
-import { IdFaker } from '../../../../../../packages/core/src/global/domain/structures/fakers'
-import { ServerMock } from '../shared/mocks/ServerMock'
-import type { ServerMockRoute } from '../shared/types/ServerMockRoute'
+import { SessionFaker } from '../../../../../packages/core/src/auth/domain/structures/fakers'
+import { IdFaker } from '../../../../../packages/core/src/global/domain/structures/fakers'
+import { ServerMock } from '@/app/tests/shared/mocks/ServerMock'
+import type { ServerMockRoute } from '@/app/tests/shared/types/ServerMockRoute'
 
 const RESET_PASSWORD_ROUTE = '/auth/reset-password'
 const SIGN_IN_ROUTE = '/auth/sign-in'

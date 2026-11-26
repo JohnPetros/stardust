@@ -6,7 +6,8 @@
   },
   "include": [
     "playwright.config.ts",
-    "src/app/tests/**/*.ts",
-    "src/app/tests/**/*.tsx"
+    "tests/**/*.ts",
+    "src/app/tests/shared/**/*.ts",
+    "src/app/tests/shared/**/*.tsx"
   ]
 }

@@ -5,7 +5,7 @@
     "dev": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=1 next dev --port 3000",
     "build": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=1 next build",
     "start": "node .next/standalone/apps/web/server.js -p $PORT",
-    "check:code": "biome check src",
+    "check:code": "biome check src tests",
     "check:types": "tsc --noEmit",
     "check:complexity": "node ../../scripts/check-complexity.mjs --scope apps/web",
     "check:architecture": "depcruise --config .dependency-cruiser.cjs src",

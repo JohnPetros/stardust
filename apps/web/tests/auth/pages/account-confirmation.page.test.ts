@@ -1,13 +1,13 @@
 import { expect, test, type BrowserContext, type Page } from '@playwright/test'
 
-import type { AccountDto } from '../../../../../../packages/core/src/auth/domain/entities/dtos/AccountDto'
-import type { UserDto } from '../../../../../../packages/core/src/profile/domain/entities/dtos/UserDto'
-import type { SessionDto } from '../../../../../../packages/core/src/auth/domain/structures/dtos/SessionDto'
-import { AccountsFaker } from '../../../../../../packages/core/src/auth/domain/entities/fakers'
-import { UsersFaker } from '../../../../../../packages/core/src/profile/domain/entities/fakers'
-import { IdFaker } from '../../../../../../packages/core/src/global/domain/structures/fakers'
-import { ServerMock } from '../shared/mocks/ServerMock'
-import type { ServerMockRoute } from '../shared/types/ServerMockRoute'
+import type { AccountDto } from '../../../../../packages/core/src/auth/domain/entities/dtos/AccountDto'
+import type { UserDto } from '../../../../../packages/core/src/profile/domain/entities/dtos/UserDto'
+import type { SessionDto } from '../../../../../packages/core/src/auth/domain/structures/dtos/SessionDto'
+import { AccountsFaker } from '../../../../../packages/core/src/auth/domain/entities/fakers'
+import { UsersFaker } from '../../../../../packages/core/src/profile/domain/entities/fakers'
+import { IdFaker } from '../../../../../packages/core/src/global/domain/structures/fakers'
+import { ServerMock } from '@/app/tests/shared/mocks/ServerMock'
+import type { ServerMockRoute } from '@/app/tests/shared/types/ServerMockRoute'
 
 type UserCreatedPayload = {
   userId: string

@@ -6,18 +6,18 @@ import {
   type Request,
 } from '@playwright/test'
 
-import { AccountsFaker } from '../../../../../../packages/core/src/auth/domain/entities/fakers'
-import { UsersFaker } from '../../../../../../packages/core/src/profile/domain/entities/fakers'
+import { AccountsFaker } from '../../../../../packages/core/src/auth/domain/entities/fakers'
+import { UsersFaker } from '../../../../../packages/core/src/profile/domain/entities/fakers'
 import {
   PlanetsFaker,
   StarsFaker,
-} from '../../../../../../packages/core/src/space/domain/entities/fakers'
+} from '../../../../../packages/core/src/space/domain/entities/fakers'
 import type {
   CurrentGalaxyDto,
   GalaxySummaryDto,
-} from '../../../../../../packages/core/src/space/domain/entities/dtos'
-import { ServerMock } from '../shared/mocks/ServerMock'
-import type { ServerMockRoute } from '../shared/types/ServerMockRoute'
+} from '../../../../../packages/core/src/space/domain/entities/dtos'
+import { ServerMock } from '@/app/tests/shared/mocks/ServerMock'
+import type { ServerMockRoute } from '@/app/tests/shared/types/ServerMockRoute'
 
 const USER_ID = '00000000-0000-4000-8000-000000000401'
 const TEST_SERVER_ROUTE = '/api/tests/server'

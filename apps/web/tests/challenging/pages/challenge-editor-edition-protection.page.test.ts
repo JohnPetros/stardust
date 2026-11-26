@@ -1,11 +1,11 @@
 import { expect, test, type BrowserContext, type Page } from '@playwright/test'
 
-import { AccountsFaker } from '../../../../../../packages/core/src/auth/domain/entities/fakers/AccountsFaker'
-import { ChallengeCategoriesFaker } from '../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengeCategoriesFaker'
-import { ChallengesFaker } from '../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengesFaker'
-import { UsersFaker } from '../../../../../../packages/core/src/profile/domain/entities/fakers/UsersFaker'
-import { ServerMock } from '../shared/mocks/ServerMock'
-import type { ServerMockRoute } from '../shared/types/ServerMockRoute'
+import { AccountsFaker } from '../../../../../packages/core/src/auth/domain/entities/fakers/AccountsFaker'
+import { ChallengeCategoriesFaker } from '../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengeCategoriesFaker'
+import { ChallengesFaker } from '../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengesFaker'
+import { UsersFaker } from '../../../../../packages/core/src/profile/domain/entities/fakers/UsersFaker'
+import { ServerMock } from '@/app/tests/shared/mocks/ServerMock'
+import type { ServerMockRoute } from '@/app/tests/shared/types/ServerMockRoute'
 
 const USER_ID = '00000000-0000-4000-8000-000000000102'
 const CHALLENGE_ID = '00000000-0000-4000-8000-000000000101'

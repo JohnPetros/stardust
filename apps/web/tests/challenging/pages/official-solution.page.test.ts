@@ -6,12 +6,12 @@ import {
   type Request,
 } from '@playwright/test'
 
-import { AccountsFaker } from '../../../../../../packages/core/src/auth/domain/entities/fakers/AccountsFaker'
-import { ChallengesFaker } from '../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengesFaker'
-import { CodePlaybacksFaker } from '../../../../../../packages/core/src/global/domain/structures/fakers/CodePlaybacksFaker'
-import { UsersFaker } from '../../../../../../packages/core/src/profile/domain/entities/fakers/UsersFaker'
-import { ServerMock } from '../shared/mocks/ServerMock'
-import type { ServerMockRoute } from '../shared/types/ServerMockRoute'
+import { AccountsFaker } from '../../../../../packages/core/src/auth/domain/entities/fakers/AccountsFaker'
+import { ChallengesFaker } from '../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengesFaker'
+import { CodePlaybacksFaker } from '../../../../../packages/core/src/global/domain/structures/fakers/CodePlaybacksFaker'
+import { UsersFaker } from '../../../../../packages/core/src/profile/domain/entities/fakers/UsersFaker'
+import { ServerMock } from '@/app/tests/shared/mocks/ServerMock'
+import type { ServerMockRoute } from '@/app/tests/shared/types/ServerMockRoute'
 
 const CHALLENGE_ID = '00000000-0000-4000-8000-000000000101'
 const BLOCKED_CHALLENGE_ID = '00000000-0000-4000-8000-000000000104'

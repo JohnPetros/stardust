@@ -6,12 +6,12 @@ import {
   type Request,
 } from '@playwright/test'
 
-import { AccountsFaker } from '../../../../../../packages/core/src/auth/domain/entities/fakers/AccountsFaker'
-import { ChallengeCategoriesFaker } from '../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengeCategoriesFaker'
-import { ChallengesFaker } from '../../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengesFaker'
-import { UsersFaker } from '../../../../../../packages/core/src/profile/domain/entities/fakers/UsersFaker'
-import { ServerMock } from '../shared/mocks/ServerMock'
-import type { ServerMockRoute } from '../shared/types/ServerMockRoute'
+import { AccountsFaker } from '../../../../../packages/core/src/auth/domain/entities/fakers/AccountsFaker'
+import { ChallengeCategoriesFaker } from '../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengeCategoriesFaker'
+import { ChallengesFaker } from '../../../../../packages/core/src/challenging/domain/entities/fakers/ChallengesFaker'
+import { UsersFaker } from '../../../../../packages/core/src/profile/domain/entities/fakers/UsersFaker'
+import { ServerMock } from '@/app/tests/shared/mocks/ServerMock'
+import type { ServerMockRoute } from '@/app/tests/shared/types/ServerMockRoute'
 
 const CHALLENGES_ROUTE = '/challenging/challenges'
 const CHALLENGE_PAGE_ROUTE = `${CHALLENGES_ROUTE}/soma-complementar/challenge`

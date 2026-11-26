@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { ServerMock } from '../shared/mocks/ServerMock'
-import type { ServerMockRoute } from '../shared/types/ServerMockRoute'
+import { ServerMock } from '@/app/tests/shared/mocks/ServerMock'
+import type { ServerMockRoute } from '@/app/tests/shared/types/ServerMockRoute'
 
 type UserCreatedPayload = {
   userId: string

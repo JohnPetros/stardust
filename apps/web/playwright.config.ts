@@ -17,7 +17,7 @@ process.env.NEXT_PUBLIC_STARDUST_WEB_URL = baseURL
 process.env.NEXT_PUBLIC_STARDUST_SERVER_URL = `${baseURL}/api/tests/server`
 
 export default defineConfig({
-  testDir: './src/app/tests',
+  testDir: './tests',
   testMatch: '**/*.test.ts',
   tsconfig: './tsconfig.playwright.json',
   fullyParallel: false,
