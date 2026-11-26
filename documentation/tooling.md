@@ -88,7 +88,8 @@ amplos ou buscas por palavra-chave que incluam testes alheios.
 | Fronteira                            | Diretório | Forma do comando                                                                                                                  |
 | ------------------------------------ | --------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | Unit Core, Server, Backoffice ou Web | Raiz      | `pnpm --filter @stardust/<workspace> run test:unit -- <arquivos-de-teste>`                                                        |
-| Integração do Server                 | Raiz      | `pnpm --filter @stardust/server run test:integration <arquivos-de-teste>`, depois de `pnpm --filter @stardust/server run db:test` |
+| Rotas Hono do Server                 | Raiz      | `pnpm --filter @stardust/server run test:hono <arquivos-de-teste>`, depois de `pnpm --filter @stardust/server run db:test`        |
+| Integração do Server (todas)         | Raiz      | `pnpm --filter @stardust/server run test:integration <arquivos-de-teste>`, depois de `pnpm --filter @stardust/server run db:test` |
 | Integração da Web                    | Raiz      | `pnpm --filter @stardust/web run test:integration <arquivos-de-teste>`                                                            |
 
 Os scripts completos (`test:unit`, `test:integration`, `test:coverage` e `check:coverage`)
@@ -177,7 +178,7 @@ partir da raiz.
 `check:test-integrity` exige um teste alterado no mesmo workspace somente para
 source executável em alvos testáveis: controllers, jobs, use-cases, objetos de
 domínio (`entities`, `structures`, `aggregates`), hooks, views/widgets, rotas
-Web (`app/page`, `app/layout`, `app/route`), rotas Server (`tests/routes`),
+Web (`app/page`, `app/layout`, `app/route`), rotas Server (`tests/hono/routes`),
 RPC actions e AI tools.
 Barrels (`index.*`), services/repositories genéricos, constantes, interfaces,
 tipos e código gerado, fixtures, mocks e a própria infraestrutura de testes
@@ -188,7 +189,7 @@ ou no diretório `tests/` da própria camada: objetos de domínio
 jobs, hooks, widgets/views, páginas/rotas Web, rotas Server, RPC actions e AI
 tools. Testes colocalizados de views e hooks de `contexts`
 (`ui/**/contexts/**/tests`) também são locais permitidos; testes dedicados de
-constantes, providers e fixtures continuam rejeitados. Um teste fora desses
+constantes, providers, fixtures e clients (objetos `*Client`) continuam rejeitados. Um teste fora desses
 locais aparece em `forbiddenTestPaths` e falha o CI.
 
 ### `apps/server`
@@ -215,10 +216,12 @@ locais aparece em `forbiddenTestPaths` e falha o CI.
 | `db:types`            | Gera os tipos TypeScript do banco de desenvolvimento.                                                     |
 | `db:revert`           | Marca uma migration como revertida; o ID da migration é argumento posicional.                             |
 | `update`              | Atualiza uma dependência específica com `ncu`; o nome da dependência é argumento posicional.              |
-| `test:unit`           | Executa os testes unitários do projeto Server.                                                            |
+| `test:unit`           | Executa o projeto Jest `unit` do Server (controllers, jobs, tools e demais testes sem serviço externo).   |
 | `test:coverage`       | Executa os testes unitários do Server com relatório JSON de cobertura.                                    |
 | `test:coverage:merge` | Consolida a cobertura unitária e dos seis shards de integração do Server antes do ratchet.                |
-| `test:integration`    | Executa os testes de integração do Server.                                                                |
+| `test:hono`           | Executa o projeto Jest `hono` do Server (testes de rotas HTTP; exige Supabase local).                     |
+| `test:inngest`        | Executa o projeto Jest `inngest` do Server (exige Supabase local e o Inngest Dev Server).                 |
+| `test:integration`    | Executa os projetos `hono` e `inngest` do Server.                                                         |
 
 Exemplos de comandos de banco:
 
@@ -257,16 +260,19 @@ los.
 | `dev`                      | Inicia a Web App em desenvolvimento na porta `3000`.                      |
 | `build`                    | Gera o build de produção da Web App com Next.js.                          |
 | `start`                    | Inicia o build standalone usando a porta definida em `PORT`.              |
-| `check:code`               | Verifica `src` com Biome, sem aplicar correções.                          |
+| `check:code`               | Verifica `src` e `tests` com Biome, sem aplicar correções.                |
 | `check:types`              | Executa o TypeScript sem emitir arquivos.                                 |
 | `check:complexity`         | Verifica o escopo `apps/web` contra o baseline compartilhado.             |
 | `check:architecture`       | Verifica as dependências arquiteturais da Web App com dependency-cruiser. |
 | `lint`                     | Executa o lint de `src` com nível de diagnóstico de erro.                 |
 | `format`                   | Formata `src` e grava as alterações.                                      |
-| `test:unit`                | Executa os testes unitários da Web App.                                   |
+| `test:unit`                | Executa os projetos Jest `widgets`, `handlers` e `app`.                   |
+| `test:widgets`             | Executa o projeto Jest `widgets` (hooks e views de `src/ui`).             |
+| `test:handlers`            | Executa o projeto Jest `handlers` (actions e controllers).                |
+| `test:app`                 | Executa o projeto Jest `app` (páginas, slots e rotas).                    |
 | `test:coverage`            | Executa os testes unitários da Web App com relatório JSON de cobertura.   |
 | `test:unit:watch`          | Executa os testes unitários da Web App em modo watch.                     |
-| `test:integration`         | Executa os testes Playwright com a configuração de integração.            |
+| `test:integration`         | Executa os testes Playwright de `apps/web/tests`.                         |
 | `test:integration:ui`      | Abre a interface do Playwright para os testes de integração.              |
 | `test:integration:debug`   | Executa os testes Playwright em modo de depuração.                        |
 | `test:integration:install` | Instala o navegador Chromium usado pela integração.                       |
@@ -530,6 +536,14 @@ da suíte:
 pnpm --filter @stardust/server run db:test
 pnpm --filter @stardust/server run test:integration
 ```
+
+Os projetos Jest do Server separam os testes por tipo: `unit` (controllers, jobs e
+tools, sem serviço externo), `hono` (rotas HTTP) e `inngest` (Inngest Functions
+executadas por um Inngest Dev Server real). `test:integration` executa `hono` e
+`inngest`; use `test:hono` ou `test:inngest` para um deles. O projeto `inngest`
+exige o container `inngest` do `docker-compose.yml`, que chama o Server de volta em
+`host.docker.internal:3334`. Pare o Server local antes de executá-lo, porque a
+fixture ocupa essa porta fixa.
 
 As portas host padrão são Kong `54321`, PostgreSQL `54322`, Mailpit HTTP
 `54324`/SMTP `54325`, Redis `6379` e MinIO API `9000`/console `9001`, sempre

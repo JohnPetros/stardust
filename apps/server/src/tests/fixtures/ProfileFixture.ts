@@ -49,63 +49,79 @@ export class ProfileFixture {
     await this.usersRepository.addMany(usersDto.map(User.create))
   }
 
+  async createUserDefaults() {
+    return await DrizzleClient.getInstance().transaction(
+      async (transaction) => await this.insertUserDefaults(transaction),
+    )
+  }
+
   async createAccountUser(accountId: string) {
-    const avatarId = randomUUID()
-    const rocketId = randomUUID()
-    const tierId = randomUUID()
-
-    const avatar = AvatarsFaker.fakeDto({
-      name: `Avatar ${avatarId}`,
-      image: `https://stardust.dev/test/avatar-${avatarId}.jpg`,
-    })
-    const rocket = RocketsFaker.fake({
-      name: `Rocket ${rocketId}`,
-      image: `https://stardust.dev/test/rocket-${rocketId}.jpg`,
-    }).dto
-    const tier = TiersFaker.fakeDto({
-      name: `Tier ${tierId}`,
-      image: `https://stardust.dev/test/tier-${tierId}.jpg`,
-      position: Math.floor(Math.random() * 100000) + 1000,
-    })
-
     await DrizzleClient.getInstance().transaction(async (transaction) => {
-      await transaction.insert(avatarModel).values({
-        id: avatar.id,
-        name: avatar.name,
-        image: avatar.image,
-        price: avatar.price,
-        isAcquiredByDefault: avatar.isAcquiredByDefault ?? false,
-        isSelectedByDefault: avatar.isSelectedByDefault ?? false,
-      })
-      await transaction.insert(rocketModel).values({
-        id: rocket.id,
-        name: rocket.name,
-        image: rocket.image,
-        price: rocket.price,
-        isAcquiredByDefault: rocket.isAcquiredByDefault ?? false,
-        isSelectedByDefault: rocket.isSelectedByDefault ?? false,
-      })
-      await transaction.insert(tierModel).values({
-        id: tier.id,
-        name: tier.name,
-        image: tier.image,
-        position: tier.position,
-        reward: tier.reward,
-      })
+      const { avatarId, rocketId, tierId } = await this.insertUserDefaults(transaction)
       await transaction.insert(userModel).values({
         id: accountId,
         email: `test-${randomUUID()}@stardust.dev`,
         name: `Test User ${randomUUID()}`,
         slug: `user-${randomUUID()}`,
-        avatarId: avatar.id,
-        rocketId: rocket.id,
-        tierId: tier.id,
+        avatarId,
+        rocketId,
+        tierId,
       })
     })
 
     return {
       id: Id.create(accountId),
     }
+  }
+
+  private async insertUserDefaults(
+    transaction: Parameters<
+      Parameters<ReturnType<typeof DrizzleClient.getInstance>['transaction']>[0]
+    >[0],
+  ) {
+    const avatarSuffix = randomUUID()
+    const rocketSuffix = randomUUID()
+    const tierSuffix = randomUUID()
+
+    const avatar = AvatarsFaker.fakeDto({
+      name: `Avatar ${avatarSuffix}`,
+      image: `https://stardust.dev/test/avatar-${avatarSuffix}.jpg`,
+    })
+    const rocket = RocketsFaker.fake({
+      name: `Rocket ${rocketSuffix}`,
+      image: `https://stardust.dev/test/rocket-${rocketSuffix}.jpg`,
+    }).dto
+    const tier = TiersFaker.fakeDto({
+      name: `Tier ${tierSuffix}`,
+      image: `https://stardust.dev/test/tier-${tierSuffix}.jpg`,
+      position: Math.floor(Math.random() * 100000) + 1000,
+    })
+
+    await transaction.insert(avatarModel).values({
+      id: avatar.id,
+      name: avatar.name,
+      image: avatar.image,
+      price: avatar.price,
+      isAcquiredByDefault: avatar.isAcquiredByDefault ?? false,
+      isSelectedByDefault: avatar.isSelectedByDefault ?? false,
+    })
+    await transaction.insert(rocketModel).values({
+      id: rocket.id,
+      name: rocket.name,
+      image: rocket.image,
+      price: rocket.price,
+      isAcquiredByDefault: rocket.isAcquiredByDefault ?? false,
+      isSelectedByDefault: rocket.isSelectedByDefault ?? false,
+    })
+    await transaction.insert(tierModel).values({
+      id: tier.id,
+      name: tier.name,
+      image: tier.image,
+      position: tier.position,
+      reward: tier.reward,
+    })
+
+    return { avatarId: avatar.id, rocketId: rocket.id, tierId: tier.id }
   }
 
   async getUserCoins(userId: string) {

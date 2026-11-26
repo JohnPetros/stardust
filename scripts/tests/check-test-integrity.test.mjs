@@ -16,7 +16,9 @@ test('accepts canonical and colocated Web browser test directories', async () =>
   const repositoryRoot = await createRepositoryFixture()
   try {
     for (const testPath of [
-      'apps/web/src/app/tests/auth/sign-up.test.ts',
+      'apps/web/tests/auth/pages/sign-up.page.test.ts',
+      'apps/web/tests/reporting/layouts/feedback-dialog.layout.test.ts',
+      'apps/web/tests/auth/endpoints/confirm-email.endpoint.test.ts',
       'apps/web/src/app/api/auth/sign-up/tests/route.test.ts',
     ]) {
       await mkdir(path.dirname(path.join(repositoryRoot, testPath)), { recursive: true })
@@ -164,12 +166,13 @@ test('fails when a test is outside the allowed workspace locations', async () =>
   }
 })
 
-test('rejects dedicated tests for constants, providers and fixtures', async () => {
+test('rejects dedicated tests for constants, providers, fixtures and clients', async () => {
   const repositoryRoot = await createRepositoryFixture()
   const forbiddenTestPaths = [
     'apps/web/src/constants/tests/client-env.test.ts',
     'apps/server/src/rest/controllers/tests/StorageProvider.test.ts',
-    'apps/server/src/tests/routes/fixtures/AccountFactory.test.ts',
+    'apps/server/src/tests/hono/routes/fixtures/AccountFactory.test.ts',
+    'apps/web/src/rest/next/tests/NextRestClient.test.ts',
   ]
   try {
     await Promise.all(
@@ -307,7 +310,8 @@ test('allows RPC action and AI tool test locations', async () => {
   const allowedTestPaths = [
     'apps/web/src/rpc/actions/tests/value.test.ts',
     'apps/server/src/ai/lesson/tools/tests/value.test.ts',
-    'apps/server/src/tests/jobs/ValueJob.integration.test.ts',
+    'apps/server/src/tests/hono/routes/value/ValueRoute.test.ts',
+    'apps/server/src/tests/inngest/functions/lesson/ValueFunction.test.ts',
   ]
   try {
     await Promise.all(

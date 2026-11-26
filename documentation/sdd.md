@@ -479,7 +479,7 @@ métrica ficar abaixo do baseline versionado em `coverage-baseline.json`. O
 `check:test-integrity` exige pareamento
 somente para controllers, jobs, use-cases, entidades/structures/aggregates,
 hooks, views/widgets, Web routes (`app/page|layout|route`) e Server routes
-(`tests/routes`), RPC actions e AI tools; barrels, services/repositories genéricos,
+(`tests/hono/routes`), RPC actions e AI tools; barrels, services/repositories genéricos,
 tipos/código gerado, fixtures, mocks e infraestrutura de testes são excluídos e
 listados no resultado JSON. Testes devem ficar em `scripts/tests/**` ou em
 `tests/` co-localizado com o alvo permitido (domínio, use-case, controller,
