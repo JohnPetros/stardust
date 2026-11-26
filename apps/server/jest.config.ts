@@ -51,22 +51,22 @@ const config: Config = {
   projects: [
     {
       ...sharedConfig,
-      displayName: 'server',
+      displayName: 'unit',
       testMatch: ['**/tests/**/*.test.ts'],
       testPathIgnorePatterns: [
-        '<rootDir>/src/app/hono/routers/',
-        '<rootDir>/src/tests/routes/',
-        '<rootDir>/src/tests/.*\\.integration\\.test\\.ts$',
+        '<rootDir>/src/tests/hono/',
+        '<rootDir>/src/tests/inngest/',
       ],
     },
     {
       ...sharedConfig,
-      displayName: 'server-integration',
-      testMatch: [
-        '<rootDir>/src/tests/routes/**/*.test.ts',
-        '<rootDir>/src/tests/jobs/**/*.integration.test.ts',
-        '<rootDir>/src/app/hono/routers/**/tests/**/*.test.ts',
-      ],
+      displayName: 'hono',
+      testMatch: ['<rootDir>/src/tests/hono/routes/**/*.test.ts'],
+    },
+    {
+      ...sharedConfig,
+      displayName: 'inngest',
+      testMatch: ['<rootDir>/src/tests/inngest/functions/**/*.test.ts'],
     },
   ],
 }

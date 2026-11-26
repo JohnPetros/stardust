@@ -12,7 +12,9 @@ import type {
 } from '@stardust/core/global/interfaces'
 
 import { ENV } from '@/constants'
+import { AuthFixture } from '@/tests/fixtures/AuthFixture'
 import { HonoFixture } from '@/tests/fixtures/HonoFixture'
+import { SupabaseFixture } from '@/tests/fixtures/SupabaseFixture'
 import { IORedisRateLimiterProvider } from '@/provision/rate-limiter'
 
 class CountingRateLimiter implements RateLimiterProvider {
@@ -26,6 +28,18 @@ class CountingRateLimiter implements RateLimiterProvider {
     return {
       isAllowed: count <= input.limit,
       retryAfterInSeconds: 7,
+    }
+  }
+}
+
+class AccountDenyingRateLimiter implements RateLimiterProvider {
+  readonly calls: RateLimitInput[] = []
+
+  async consume(input: RateLimitInput): Promise<RateLimitDecision> {
+    this.calls.push(input)
+    return {
+      isAllowed: !input.key.includes(':account:'),
+      retryAfterInSeconds: 1,
     }
   }
 }
@@ -211,5 +225,34 @@ describe('global rate limiter HTTP contract', () => {
       await cleanup.quit()
       await provider.shutdown()
     }
+  })
+
+  describe('account limiting on an authenticated route [GET /profile/achievements]', () => {
+    const supabaseFixture = new SupabaseFixture()
+    const authFixture = new AuthFixture(supabaseFixture.supabase)
+
+    beforeEach(async () => {
+      await supabaseFixture.clearDatabase()
+      await authFixture.createAccount()
+    })
+
+    it('runs IP limiting before verified authentication and account limiting after it', async () => {
+      const provider = new AccountDenyingRateLimiter()
+      const fixture = new HonoFixture(provider, createTelemetry())
+      await fixture.setup()
+
+      const response = await request(fixture.server)
+        .get('/profile/achievements')
+        .set(authFixture.getAuthorizationHeader())
+        .set('X-Forwarded-For', '198.51.100.30')
+
+      expect(response.status).toBe(HTTP_STATUS_CODE.tooManyRequests)
+      expect(provider.calls).toHaveLength(2)
+      expect(provider.calls[0]?.key).toContain(':ip:')
+      const accountDigest = createHash('sha256')
+        .update(authFixture.getAccountId())
+        .digest('hex')
+      expect(provider.calls[1]?.key).toBe(`rate-limit:general:account:${accountDigest}`)
+    })
   })
 })
