@@ -10,7 +10,6 @@ config({ path: '.env.testing' })
 const jestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   preset: 'ts-jest',
-  testPathIgnorePatterns: ['<rootDir>/src/app/tests/'],
   testEnvironment: 'jest-environment-jsdom',
   testEnvironmentOptions: {
     customExportConditions: [],
@@ -34,11 +33,33 @@ const jestConfig = {
   },
 }
 
-const createJestConfig = nextJest({
-  dir: './src',
-})(jestConfig)
+const TEST_FILES = '*.test.{ts,tsx}'
 
-export default async () => {
+// Widgets are the hooks and views under src/ui; handlers are the actions, controllers and
+// other non-UI tests (the complement of the other two, so a new test is never skipped);
+// app holds the page, layout and route tests co-located under src/app.
+const projects = [
+  {
+    displayName: 'widgets',
+    testMatch: [`<rootDir>/src/ui/**/${TEST_FILES}`],
+  },
+  {
+    displayName: 'handlers',
+    testMatch: [`<rootDir>/src/**/${TEST_FILES}`],
+    testPathIgnorePatterns: ['<rootDir>/src/ui/', '<rootDir>/src/app/'],
+  },
+  {
+    displayName: 'app',
+    testMatch: [`<rootDir>/src/app/**/${TEST_FILES}`],
+    testPathIgnorePatterns: ['<rootDir>/src/app/tests/'],
+  },
+]
+
+async function createProjectConfig(project: (typeof projects)[number]) {
+  const createJestConfig = nextJest({
+    dir: './src',
+  })({ ...jestConfig, ...project })
+
   // Create Next.js jest configuration presets
   const finalJestConfig = await createJestConfig()
 
@@ -49,5 +70,11 @@ export default async () => {
       '<rootDir>/../../packages/core/src/$1/domain/$2/fakers/index.ts',
   }
 
-  return { ...finalJestConfig, moduleNameMapper, maxWorkers: 1 }
+  return { ...finalJestConfig, moduleNameMapper }
 }
+
+export default async () => ({
+  projects: await Promise.all(projects.map(createProjectConfig)),
+  collectCoverageFrom: jestConfig.collectCoverageFrom,
+  maxWorkers: 1,
+})
