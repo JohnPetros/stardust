@@ -17,6 +17,11 @@ de domínio ou casos de uso e retornar uma resposta formatada.
 | **Job**        | Queue  | `Amqp<T>`          | `Promise<U>`            |
 | **Tool**       | AI     | `Mcp<T>`           | `Promise<U>`            |
 
+Os objetos de contexto e de transporte (`NextHttp`, `NextCall`, `NextRestClient`,
+`AxiosRestClient` e demais `*Client`) e os `utils` que os apoiam não recebem
+arquivos de teste dedicados. Eles são exercitados pelos testes dos handlers que
+os consomem.
+
 ---
 
 ## 2. Controllers (REST)
@@ -286,5 +291,6 @@ describe("Get Mdx Guide Tool", () => {
   - `ts-jest-mocker` para mocks type-safe de interfaces.
 - Comandos:
   - Global (Turbo): `pnpm run test`.
+  - Actions e controllers da Web (projeto Jest `handlers`): `pnpm --filter @stardust/web run test:handlers`.
   - Por workspace: `pnpm --filter @stardust/server run test:unit`, `pnpm --filter @stardust/web run test:unit`, `pnpm --filter @stardust/backoffice run test:unit`, `pnpm --filter @stardust/core run test:unit`.
 - Referencia geral: `documentation/tooling.md`.

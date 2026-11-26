@@ -136,7 +136,7 @@ environments.
 ### Authentication and mocks
 
 - The authentication tests use `ServerMock` and deterministic data. The
-  credentials present in `apps/web/src/app/tests/auth/sign-in.test.ts` are
+  credentials present in `apps/web/tests/auth/pages/sign-in.page.test.ts` are
   only test fixtures; they are not valid credentials for the real application.
 - Use the `data-testid`s already defined in the components, such as
   `email-input`, `password-input` and `submit-button`, and wait on
@@ -195,9 +195,9 @@ await page.goto("/space");
 await expect(page).toHaveURL(/\/space$/);
 ```
 
-The test `apps/web/src/app/tests/challenging/assistant-history.test.ts`
+The test `apps/web/tests/challenging/pages/assistant-history.page.test.ts`
 contains a complete example of this pattern. To test the login itself, use the
-flow of `apps/web/src/app/tests/auth/sign-in.test.ts`, which registers
+flow of `apps/web/tests/auth/pages/sign-in.page.test.ts`, which registers
 `/auth/sign-in`, `/auth/account` and `/auth/refresh-session` in `ServerMock`
 before navigating to `/space`.
 

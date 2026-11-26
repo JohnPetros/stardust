@@ -2,7 +2,7 @@
 
 Esta documentação define os padrões e práticas para escrever testes de rotas
 HTTP em `apps/server`, com base nos testes existentes em
-`apps/server/src/tests/routes`.
+`apps/server/src/tests/hono/routes`.
 
 ## 1. Visão Geral
 
@@ -16,7 +16,7 @@ possível.
 
 ## 2. Localização e Nomenclatura
 
-- **Localização:** `apps/server/src/tests/routes/<dominio>/...`
+- **Localização:** `apps/server/src/tests/hono/routes/<dominio>/...`
 - **Nomenclatura:** `[NomeDaRota].test.ts`
 - **Organização:** espelhe o domínio e o recurso testado, como em
   `profile/achievements`.
@@ -26,8 +26,8 @@ possível.
 
 Exemplos:
 
-- `apps/server/src/tests/routes/profile/achievements/CreateAchievementRoute.test.ts`
-- `apps/server/src/tests/routes/profile/achievements/FetchAchievementsRoute.test.ts`
+- `apps/server/src/tests/hono/routes/profile/achievements/CreateAchievementRoute.test.ts`
+- `apps/server/src/tests/hono/routes/profile/achievements/FetchAchievementsRoute.test.ts`
 
 ## 3. Stack e Ferramentas
 
@@ -45,7 +45,7 @@ com o script de teste do workspace:
 
 ```bash
 pnpm --filter @stardust/server run db:test
-pnpm --filter @stardust/server run test:integration
+pnpm --filter @stardust/server run test:hono
 ```
 
 O `db:test` prepara o stack Supabase do root `docker-compose.yml` usando as
@@ -55,9 +55,11 @@ inicie outro stack por `supabase start` para esses testes. A fixture de Auth
 confirma cada conta efêmera pelo email capturado no Mailpit local; mantenha a
 confirmação de email ativa e nunca registre OTP, token ou corpo da mensagem.
 
-Os testes em `apps/server/src/tests/routes/**` dependem do Supabase local mesmo
-quando executados pelo projeto Jest `server`, pois usam `SupabaseFixture`,
-`AuthFixture`, repositories reais e validação de efeitos persistidos.
+Os testes em `apps/server/src/tests/hono/routes/**` rodam no projeto Jest `hono`
+e dependem do Supabase local, pois usam `SupabaseFixture`, `AuthFixture`,
+repositories reais e validação de efeitos persistidos. Eles não rodam no projeto
+`unit`, que não exige nenhum serviço externo. `test:integration` executa os
+projetos `hono` e `inngest` juntos.
 
 ## 5. Estrutura Base do Teste
 
@@ -327,8 +329,8 @@ Antes de considerar um teste de rota completo, confirme:
 ## Tooling
 
 - Workspace server: `pnpm --filter @stardust/server run test:unit`
-- Integração server: `pnpm --filter @stardust/server run db:test` antes de
-  `pnpm --filter @stardust/server run test:integration`
+- Rotas Hono: `pnpm --filter @stardust/server run db:test` antes de
+  `pnpm --filter @stardust/server run test:hono`
 - Global (Turbo): `pnpm run test`
 - Qualidade antes de abrir PR: `pnpm --filter @stardust/server run check:types` e
   `pnpm --filter @stardust/server run check:code`

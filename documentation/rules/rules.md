@@ -263,6 +263,16 @@ papéis, artefatos, sensores e critérios de conclusão.
 - Ao padronizar testes de endpoints expostos pelo `apps/server`.
 - Ao criar ou alterar fixtures de integracao, que nao recebem testes dedicados.
 
+## Regras de Testes de Inngest Functions da App Server
+
+**Arquivo:** `/documentation/rules/inngest-functions-testing-rules.md`
+**Quando consultar:**
+
+- Ao escrever testes de integração para Inngest Functions do `apps/server`.
+- Para entender como enviar um evento ao Inngest Dev Server real e esperar a run.
+- Ao criar ou alterar `InngestFixture`, que não recebe testes dedicados.
+- Ao diagnosticar falhas de serialização entre steps de um job.
+
 ## Regras de Testes de Rotas da App Web
 
 **Arquivo:** `/documentation/rules/web-app-routes-testing-rules.md`
@@ -272,7 +282,7 @@ papéis, artefatos, sensores e critérios de conclusão.
   `apps/web/src/app/**`.
 - Para padronizar testes co-localizados de `page.tsx` e entradas do App Router.
 - Para escrever testes de navegador com Playwright em
-  `apps/web/src/app/tests/**`.
+  `apps/web/tests/<dominio>/{pages,layouts,endpoints}/**`.
 - Ao validar composicao de borda web, requests da rota, redirects, `notFound()`
   e bridges test-only da app web.
 - Ao definir a cobertura obrigatoria de navegacao autenticada e de

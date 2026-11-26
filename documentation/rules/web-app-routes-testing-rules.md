@@ -27,7 +27,8 @@ Esta rule se aplica a:
 
 - paginas em `apps/web/src/app/**/page.tsx`
 - slots/defaults do App Router quando tiverem comportamento proprio
-- fluxos de navegador organizados em `apps/web/src/app/tests/**`
+- paginas, layouts e endpoints testados no navegador, organizados em
+  `apps/web/tests/**`
 - rotas test-only ou handlers HTTP locais da app web quando forem suporte de um
   fluxo da propria web
 
@@ -49,10 +50,35 @@ Ela nao substitui:
 
 ### 3.2 Fluxos reais de navegador
 
-- **Localizacao:** `apps/web/src/app/tests/<dominio>/...`
-- **Exemplo:** `apps/web/src/app/tests/auth/sign-up.test.ts`
-- **Extensao:** `.test.ts`
+- **Localizacao:** `apps/web/tests/<dominio>/<tipo>/`, onde `<tipo>` e `pages`,
+  `layouts` ou `endpoints`.
+- **Nome:** `<nome>.<tipo-singular>.test.ts`.
 - **Runner:** `@playwright/test`
+
+| Tipo     | Diretorio                    | Sufixo             | O que cobre                                                                                                |
+| -------- | ---------------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------- |
+| Pagina   | `<dominio>/pages/`           | `.page.test.ts`    | A pagina renderizada por uma rota                                                                          |
+| Layout   | `<dominio>/layouts/`         | `.layout.test.ts`  | Comportamento do layout compartilhado entre paginas, como o shell da aplicacao e o dialogo de feedback     |
+| Endpoint | `<dominio>/endpoints/`       | `.endpoint.test.ts`| Um handler HTTP da web que responde sem renderizar pagina                                                  |
+
+```text
+apps/web/tests/
+├── auth/
+│   └── pages/
+│       ├── sign-in.page.test.ts
+│       └── sign-up.page.test.ts
+└── reporting/
+    └── layouts/
+        └── feedback-dialog.layout.test.ts
+```
+
+Nao repita o tipo no nome: use `sign-in.page.test.ts`, nao
+`sign-in-page.page.test.ts`. O dominio espelha o modulo (`auth`, `challenging`,
+`profile`, `reporting`, `shop`, `space`).
+
+Os helpers compartilhados continuam em `apps/web/src/app/tests/shared/` (veja a
+secao 7) e sao importados pelo alias `@/app/tests/shared/...`. Nao crie arquivos
+`*.test.ts` em `apps/web/src/app/tests/`: o Jest e o Playwright ignoram essa pasta.
 
 ## 4. Ferramentas e Stack
 
@@ -167,7 +193,7 @@ durante a transicao devem ser aguardadas com `page.waitForRequest(...)` ou
 
 Testes co-localizados de composicao de `page.tsx` com Jest nao precisam abrir
 um navegador nem duplicar este fluxo; a exigencia se aplica às suites em
-`apps/web/src/app/tests/**`.
+`apps/web/tests/**`.
 
 ### 6.2 Infra padrao
 
@@ -217,6 +243,9 @@ test.describe('/auth/sign-up', () => {
 
 ## 7. Regras para Infra Test-Only da Web
 
+- O codigo de suporte fica em `apps/web/src/app/tests/shared/`, e nao junto dos
+  testes em `apps/web/tests/`, porque o codigo de producao o importa
+  (`ClientProvidersView` e as rotas `app/api/tests/server`).
 - Mocks stateful compartilhados devem ficar em `apps/web/src/app/tests/shared/mocks/`.
 - Factories de suporte compartilhadas entre suites de Playwright devem ficar em `apps/web/src/app/tests/shared/mocks/` quando controlarem estado ou contratos HTTP test-only.
 - Utils browser-safe e bridges globais devem ficar em
@@ -242,7 +271,7 @@ test.describe('/auth/sign-up', () => {
 ## 9. Checklist
 
 1. O teste cobre uma entrada real da app web, e nao apenas um widget isolado.
-2. A localizacao do arquivo segue `tests/page.test.tsx` ou `src/app/tests/**`.
+2. A localizacao do arquivo segue `tests/page.test.tsx` (Jest) ou `apps/web/tests/<dominio>/<tipo>/` (Playwright).
 3. Se for pagina App Router, `params`/`searchParams` foram simulados no shape real.
 4. Se for Playwright, o cenario configurou explicitamente `ServerMock(page)`.
 5. Se o teste precisou de mock server, reutilizou a factory compartilhada em vez de duplicar implementacao local.
@@ -258,6 +287,7 @@ test.describe('/auth/sign-up', () => {
 ## Tooling
 
 - Workspace web: `pnpm --filter @stardust/web run test:unit`
+- Paginas, slots e rotas em Jest (projeto `app`): `pnpm --filter @stardust/web run test:app`
 - Suite Playwright web: `pnpm --filter @stardust/web run test:integration`
 - Qualidade local: `pnpm --filter @stardust/web run check:types` e
   `pnpm --filter @stardust/web run check:code`

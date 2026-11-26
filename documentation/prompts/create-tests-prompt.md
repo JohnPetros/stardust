@@ -83,8 +83,8 @@ receive dedicated tests according to the project rules.
 ### Structure and naming
 
 - **Default location:** create **co-located** tests in a `tests/` subfolder in the directory of the original file.
-- **Exception for server routes:** create the tests in `apps/server/src/tests/routes/<domain>/...`, mirroring the domain and the tested resource.
-- **Exception for web app pages:** create co-located tests in `tests/page.test.tsx` in the page directory; for browser flows, use `apps/web/src/app/tests/<domain>/...`.
+- **Exception for server routes:** create the tests in `apps/server/src/tests/hono/routes/<domain>/...`, mirroring the domain and the tested resource.
+- **Exception for web app pages:** create co-located tests in `tests/page.test.tsx` in the page directory; for browser flows, use `apps/web/tests/<domain>/{pages,layouts,endpoints}/<name>.{page,layout,endpoint}.test.ts`.
 - **Extension:**
 
 | Type | Extension |
@@ -98,7 +98,7 @@ receive dedicated tests according to the project rules.
   - Original: `src/auth/actions/SignInAction.ts`
   - Test: `src/auth/actions/tests/SignInAction.test.ts`
   - Server route: `apps/server/src/app/hono/routers/profile/achievements/CreateAchievementRoute.ts`
-  - Test: `apps/server/src/tests/routes/profile/achievements/CreateAchievementRoute.test.ts`
+  - Test: `apps/server/src/tests/hono/routes/profile/achievements/CreateAchievementRoute.test.ts`
 
 ### Testing stack
 
@@ -133,7 +133,7 @@ receive dedicated tests according to the project rules.
 ### Suggested workflow
 
 1. Setup: create `tests/` and the file `<Name>.test.ts(x)`.
-   For server routes, create the file in `apps/server/src/tests/routes/<domain>/`.
+   For server routes, create the file in `apps/server/src/tests/hono/routes/<domain>/`.
 2. Mocking: identify dependency interfaces and instantiate `mocks`.
    For server routes, prepare real fixtures instead of mocking the internal stack.
 3. Implementation: start with the success path and then cover error/exception scenarios.
