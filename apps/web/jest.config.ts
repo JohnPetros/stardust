@@ -76,5 +76,7 @@ async function createProjectConfig(project: (typeof projects)[number]) {
 export default async () => ({
   projects: await Promise.all(projects.map(createProjectConfig)),
   collectCoverageFrom: jestConfig.collectCoverageFrom,
+  // LCOV paths are relative to the repository root, as the changed-lines gate expects.
+  coverageReporters: ['json-summary', 'text-summary', ['lcov', { projectRoot: '../..' }]],
   maxWorkers: 1,
 })
