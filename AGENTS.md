@@ -266,6 +266,8 @@ tests.
   affected journeys.
 - PR CI also requires coverage of the changed lines and branches in Core, Server and Web;
   see "Gates de cobertura" in `documentation/tooling.md` for the thresholds.
+- PR CI also gates the mutation score of the Core use cases; see "Gate de mutação" in
+  `documentation/tooling.md`. Always `await` asynchronous assertions.
 - Run only the tests of the code that changed and of the directly affected
   consumers. A full suite (`pnpm run test:unit`, `test:integration`,
   `test:coverage` and `check:coverage`) only runs when the user asks; the CI

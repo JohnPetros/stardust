@@ -477,7 +477,8 @@ workspace inteiro e roda no CI de `@stardust/core`, `@stardust/server`, `@stardu
 workspace, quando a Spec o exigir ou quando o usuário pedir. Os checks falham se qualquer
 métrica ficar abaixo do baseline versionado em `coverage-baseline.json`. Em PRs, o CI de
 Core, Server e Web também exige cobertura das linhas e branches alteradas, com os limiares
-de "Gates de cobertura" em `documentation/tooling.md`. O
+de "Gates de cobertura" em `documentation/tooling.md`, e o do Core aplica o "Gate de
+mutação" aos casos de uso. O
 `check:test-integrity` exige pareamento
 somente para controllers, jobs, use-cases, entidades/structures/aggregates,
 hooks, views/widgets, Web routes (`app/page|layout|route`) e Server routes

@@ -130,6 +130,7 @@ com `GET /health`. Credenciais não são passadas ao build nem ao job de CD.
 | Workflow                          | Trigger                      | O que faz                                                                                    |
 | --------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------- |
 | `server-app-ci.yaml`              | PR → `main` (paths server)   | Codecheck, typecheck, testes, build                                                          |
+| `core-mutation-ci.yaml`           | PR → `main` (paths core)     | Testes de mutação (Stryker) dos casos de uso do Core e gate de score                         |
 | `server-app-cd-coolify.yml`       | Push → `main` (paths server) | Migra banco (Supabase CLI) → aciona webhook Coolify                                          |
 | `server-app-staging-cd.yml`       | Push → `main` (paths server) ou `workflow_dispatch` com `initial_cutover` | Preflight → migrate → preflight → imagens no R2 de staging → seed de staging → webhook Coolify → SHA e health; environment `staging`, grupo `stardust-web-staging` |
 | `web-app-ci.yaml`                 | PR → `main` (paths web)      | Codecheck, typecheck, testes, build                                                          |

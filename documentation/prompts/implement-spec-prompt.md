@@ -252,7 +252,9 @@ After integrating all implementation flows and the generated artifacts:
    impact on the workspace, a Spec requirement or a user request (CI runs them). In Core,
    Server and Web, PR CI also gates the coverage of the changed lines and branches (see
    "Gates de cobertura" in `documentation/tooling.md`): write the tests that cover the
-   changed behavior.
+   changed behavior. Changed Core use cases also pass the CI mutation score gate ("Gate de
+   mutação"): run `test:mutation` on them and strengthen the assertions that let mutants
+   survive.
    Run `pnpm --filter @stardust/<workspace> run check:complexity` for every workspace that
    gains or changes code, Server included (new files and extracted Views count). The gate compares
    the change with the merge base of `origin/main` (see "Gate de complexidade" in

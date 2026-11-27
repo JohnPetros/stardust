@@ -187,6 +187,7 @@ Pull Requests targeting `main` run the CI of every area their paths touch:
 | Workflow                   | Checks                                                                                         |
 | -------------------------- | ---------------------------------------------------------------------------------------------- |
 | `core-package-ci.yaml`     | Architecture, code, complexity, types, tests and build for `@stardust/core`                    |
+| `core-mutation-ci.yaml`    | Mutation score gate for the `@stardust/core` use cases                                         |
 | `server-app-ci.yaml`       | Architecture, code, complexity, types, unit and integration tests, and build for `apps/server` |
 | `web-app-ci.yaml`          | Architecture, code, complexity, types, unit and integration tests, and build for `apps/web`    |
 | `backoffice-app-ci.yaml`   | Architecture, code, complexity, types, unit tests and build for `apps/backoffice`              |
