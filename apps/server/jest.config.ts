@@ -35,16 +35,26 @@ const sharedConfig: Config = {
     'node_modules/(?!(\\.pnpm/|(@mastra|@sindresorhus|escape-string-regexp|p-map|@workflow|tokenx|ai|@ai-sdk)/))',
   ],
   setupFiles: ['<rootDir>/jest.setup.js'],
-  collectCoverageFrom: [
-    'src/**/*.ts',
-    '!src/**/*.test.ts',
-    '!src/**/tests/**',
-    '!src/**/fakers/**',
-  ],
 }
 
 const config: Config = {
   coverageProvider: 'v8',
+  // Jest reads this only at the root, not inside `projects`. It also reports the
+  // production files that no test loads, so an untested file stays visible at 0%.
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/**/*.test.ts',
+    '!src/**/*.d.ts',
+    '!src/**/tests/**',
+    '!src/**/fakers/**',
+    '!src/**/index.ts',
+    // The V8 provider counts every line of a type-only file as uncovered.
+    '!src/**/types/**',
+    '!src/database/drizzle/DatabaseAccess.ts',
+    // Development seed run by hand; no Jest boundary owns it.
+    '!src/database/seed.ts',
+    '!src/database/seeders/**',
+  ],
   clearMocks: true,
   maxWorkers: isCoverageRun ? '50%' : 1,
   testTimeout: 30000,
