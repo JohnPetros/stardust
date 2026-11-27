@@ -110,9 +110,9 @@ dispositions for types (`check:types`), lint/code (`check:code`) and complexity 
 the scoped changes and the affected consuming projects. Reuse applicable
 results; configured complexity lint does not prove a quantitative metric, and
 required tooling that is missing blocks closure. `check:complexity` must exit 0 in every
-workspace with new or changed code, Server included: its gate fails on warnings outside
-`.code-multivitals-baseline.json`, and a warning is called pre-existing only when the baseline
-or the same command on `origin/main` proves it.
+workspace with new or changed code, Server included: it compares the change with the target
+branch and fails when a function goes over an error limit or one already over it gets worse. New
+warnings are reported and do not block.
 
 The evidence includes the exact command and working directory, the result, the code
 revision or worktree identity, the relevant fixture/configuration and the criteria
