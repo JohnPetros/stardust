@@ -13,6 +13,10 @@ on:
       - ".dependency-cruiser.cjs"
       - "coverage-baseline.json"
       - "scripts/check-coverage-baseline.mjs"
+      - "scripts/check-changed-coverage.mjs"
+      - "scripts/write-coverage-report.mjs"
+      - "scripts/tests/check-changed-coverage.test.mjs"
+      - "scripts/tests/write-coverage-report.test.mjs"
       - ".code-multivitals.json"
       - "scripts/check-complexity.mjs"
       - "scripts/comment-complexity-report.mjs"
@@ -146,10 +150,16 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          # The changed-lines coverage gate diffs against the first parent.
+          fetch-depth: 2
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
@@ -169,8 +179,58 @@ jobs:
       - name: Run tests
         run: pnpm --filter @stardust/core run test:coverage
 
-      - name: Check coverage baseline
+      - name: Check coverage floors
+        id: floors
         run: pnpm run check:coverage @stardust/core
+
+      - name: Write coverage report
+        if: ${{ !cancelled() && hashFiles('packages/core/coverage/coverage-summary.json') != '' }}
+        run: node scripts/write-coverage-report.mjs core packages/core/coverage/coverage-summary.json packages/core/coverage/coverage-comment.md
+        env:
+          COVERAGE_OUTCOME: ${{ steps.floors.outcome }}
+
+      - name: Check coverage of changed lines
+        if: ${{ !cancelled() && github.event_name == 'pull_request' && hashFiles('packages/core/coverage/lcov.info') != '' }}
+        run: |
+          node --test scripts/tests/check-changed-coverage.test.mjs scripts/tests/write-coverage-report.test.mjs
+          node scripts/check-changed-coverage.mjs core packages/core/coverage/lcov.info --base HEAD^1 --output packages/core/coverage/coverage-comment.md
+
+      - name: Publish coverage on pull request
+        if: ${{ !cancelled() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && hashFiles('packages/core/coverage/coverage-comment.md') != '' }}
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const fs = require('node:fs')
+            const marker = '<!-- coverage-report:core -->'
+            const body = fs.readFileSync('packages/core/coverage/coverage-comment.md', 'utf8')
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              per_page: 100,
+            })
+            const existing = comments.find(
+              (comment) => comment.user?.type === 'Bot' && comment.body?.includes(marker),
+            )
+            const request = { owner: context.repo.owner, repo: context.repo.repo, body }
+            if (existing) {
+              await github.rest.issues.updateComment({ ...request, comment_id: existing.id })
+            } else {
+              await github.rest.issues.createComment({
+                ...request,
+                issue_number: context.issue.number,
+              })
+            }
+
+      - name: Upload coverage report
+        if: ${{ !cancelled() && hashFiles('packages/core/coverage/lcov.info') != '' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: core-coverage-report
+          path: |
+            packages/core/coverage/coverage-summary.json
+            packages/core/coverage/lcov.info
+          retention-days: 14
 
   build:
     name: Build
