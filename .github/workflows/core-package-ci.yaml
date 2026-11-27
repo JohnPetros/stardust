@@ -16,6 +16,7 @@ on:
       - "scripts/check-changed-coverage.mjs"
       - "scripts/write-coverage-report.mjs"
       - "scripts/comment-coverage-report.mjs"
+      - "scripts/upsert-report-comment.mjs"
       - "scripts/tests/check-changed-coverage.test.mjs"
       - "scripts/tests/write-coverage-report.test.mjs"
       - "scripts/tests/comment-coverage-report.test.mjs"
