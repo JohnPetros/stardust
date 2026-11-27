@@ -18,8 +18,10 @@ on:
       - "scripts/check-coverage-baseline.mjs"
       - "scripts/check-changed-coverage.mjs"
       - "scripts/write-coverage-report.mjs"
+      - "scripts/comment-coverage-report.mjs"
       - "scripts/tests/check-changed-coverage.test.mjs"
       - "scripts/tests/write-coverage-report.test.mjs"
+      - "scripts/tests/comment-coverage-report.test.mjs"
       - ".code-multivitals.json"
       - "scripts/check-complexity.mjs"
       - "scripts/comment-complexity-report.mjs"
@@ -178,9 +180,8 @@ jobs:
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
+    outputs:
+      coverage-comment: ${{ steps.coverage-comment.outputs.artifact-id }}
 
     steps:
       - name: Checkout code
@@ -246,35 +247,17 @@ jobs:
       - name: Check coverage of changed lines
         if: ${{ !cancelled() && github.event_name == 'pull_request' && hashFiles('apps/web/coverage/lcov.info') != '' }}
         run: |
-          node --test scripts/tests/check-changed-coverage.test.mjs scripts/tests/write-coverage-report.test.mjs
+          node --test scripts/tests/check-changed-coverage.test.mjs scripts/tests/write-coverage-report.test.mjs scripts/tests/comment-coverage-report.test.mjs
           node scripts/check-changed-coverage.mjs web apps/web/coverage/lcov.info --base HEAD^1 --output apps/web/coverage/coverage-comment.md
 
-      - name: Publish coverage on pull request
-        if: ${{ !cancelled() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && hashFiles('apps/web/coverage/coverage-comment.md') != '' }}
-        uses: actions/github-script@v9
+      - name: Upload coverage comment
+        id: coverage-comment
+        if: ${{ !cancelled() && github.event_name == 'pull_request' && hashFiles('apps/web/coverage/coverage-comment.md') != '' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          script: |
-            const fs = require('node:fs')
-            const marker = '<!-- coverage-report:web -->'
-            const body = fs.readFileSync('apps/web/coverage/coverage-comment.md', 'utf8')
-            const comments = await github.paginate(github.rest.issues.listComments, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              per_page: 100,
-            })
-            const existing = comments.find(
-              (comment) => comment.user?.type === 'Bot' && comment.body?.includes(marker),
-            )
-            const request = { owner: context.repo.owner, repo: context.repo.repo, body }
-            if (existing) {
-              await github.rest.issues.updateComment({ ...request, comment_id: existing.id })
-            } else {
-              await github.rest.issues.createComment({
-                ...request,
-                issue_number: context.issue.number,
-              })
-            }
+          name: web-coverage-comment
+          path: apps/web/coverage/coverage-comment.md
+          retention-days: 1
 
       - name: Upload coverage report
         if: ${{ !cancelled() && hashFiles('apps/web/coverage/lcov.info') != '' }}
@@ -285,6 +268,44 @@ jobs:
             apps/web/coverage/coverage-summary.json
             apps/web/coverage/lcov.info
           retention-days: 14
+
+  coverage-comment:
+    name: Publish coverage comment
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    # Only this job can write on the pull request, and it installs no dependencies.
+    if: ${{ !cancelled() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && needs.unit-tests.outputs.coverage-comment != '' }}
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts
+
+      - name: Download coverage comment
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: web-coverage-comment
+          path: coverage-comment
+
+      - name: Publish coverage on pull request
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { commentCoverageReport } = await import(
+              `${process.env.GITHUB_WORKSPACE}/scripts/comment-coverage-report.mjs`
+            )
+            const outcome = await commentCoverageReport({
+              github,
+              context,
+              workspace: 'web',
+              reportPath: `${process.env.GITHUB_WORKSPACE}/coverage-comment/coverage-comment.md`,
+            })
+            core.info(`Coverage comment: ${outcome}`)
 
   integration-tests:
     name: Integration tests
