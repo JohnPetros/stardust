@@ -13,6 +13,8 @@ node_modules/
 # testing
 /coverage
 coverage/
+.stryker-tmp/
+**/reports/mutation/
 issue.md
 apps/web/playwright-report
 
