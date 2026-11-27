@@ -25,6 +25,9 @@ on:
       - "scripts/tests/check-complexity.test.mjs"
       - "scripts/tests/comment-complexity-report.test.mjs"
 
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: "24"
 
