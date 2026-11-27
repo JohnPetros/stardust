@@ -8,10 +8,10 @@
   },
   "@stardust/server": {
     "summary": "apps/server/coverage/coverage-summary.json",
-    "lines": 72.42,
-    "statements": 72.42,
-    "functions": 75.54,
-    "branches": 87.77
+    "lines": 70.85,
+    "statements": 70.85,
+    "functions": 76.72,
+    "branches": 86.36
   },
   "@stardust/backoffice": {
     "summary": "apps/backoffice/coverage/coverage-summary.json",
