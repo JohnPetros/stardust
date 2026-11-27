@@ -235,7 +235,11 @@ o Stryker e o runner do Jest. O Stryker introduz pequenos defeitos no código e
 roda os testes relacionados; um defeito que nenhum teste detecta mostra uma
 asserção fraca ou ausente. Os alvos são apenas os casos de uso,
 `packages/core/src/<módulo>/use-cases/*.ts`, sem o `index.ts`. Web, Server e os
-demais pacotes não têm esse gate.
+demais pacotes não têm esse gate. O Core declara o `jest-environment-node` na
+mesma versão do seu Jest, porque o runner do Stryker o carrega a partir do pacote.
+
+Os testes de casos de uso devem fixar os valores dos quais o resultado depende.
+Um valor aleatório do faker faz o score variar entre execuções.
 
 O score divide os mutantes detectados (`Killed` e `Timeout`) por todos, exceto
 `Ignored`, `RuntimeError` e `CompileError`. Mutantes sem cobertura contam contra

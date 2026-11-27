@@ -90,6 +90,7 @@ O StarDust usa uma arquitetura **Hexagonal (Ports and Adapters)** onde o pacote 
 | **Monorepo** | TurboRepo, pnpm | Orquestração e gerenciamento de dependências |
 | **Linter/Formatter** | Biome | Qualidade e padronização de código |
 | **Testes** | Jest, Vitest (Crew), Playwright | Testes unitários, de composição e fluxos reais de navegador |
+| **Testes de mutação** | Stryker (runner do Jest) | Score de detecção de defeitos nos casos de uso do Core |
 
 ## Estrutura de Diretórios Geral
 
