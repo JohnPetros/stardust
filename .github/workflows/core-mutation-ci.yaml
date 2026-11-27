@@ -1,0 +1,195 @@
+name: Core mutation CI
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/core-mutation-ci.yaml"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "packages/core/**"
+      - "scripts/check-mutation-score.mjs"
+      - "scripts/mutation-targets.mjs"
+      - "scripts/test-mutation.mjs"
+      - "scripts/upsert-report-comment.mjs"
+      - "scripts/tests/check-mutation-score.test.mjs"
+      - "scripts/tests/test-mutation.test.mjs"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: core-mutation-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "24"
+
+jobs:
+  mutation:
+    name: Mutation ${{ matrix.variant }} (${{ matrix.shard }}/4)
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        # The candidate is the merge commit; the baseline is the target branch in it.
+        variant: [baseline, candidate]
+        shard: [1, 2, 3, 4]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Prepare the candidate
+        if: matrix.variant == 'candidate'
+        run: |
+          pnpm install --frozen-lockfile
+          echo "MUTATION_ROOT=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+
+      # The target branch keeps its own sources, tests, Jest configuration and
+      # dependencies. Only the mutation harness of the candidate is laid over it.
+      - name: Prepare the target branch
+        if: matrix.variant == 'baseline'
+        run: |
+          base="$RUNNER_TEMP/core-mutation-base"
+          git worktree add --detach "$base" HEAD^1
+          # Stryker loads the Jest environment from Core, so it is part of the toolchain.
+          tools="$(node -p "const { devDependencies: d } = require('./packages/core/package.json'); ['@stryker-mutator/core', '@stryker-mutator/jest-runner', 'jest-environment-node'].map((name) => name + '@' + d[name]).join(' ')")"
+          cd "$base"
+          pnpm install --frozen-lockfile
+          pnpm --filter @stardust/core add --save-dev --save-exact $tools
+          cp "$GITHUB_WORKSPACE/packages/core/stryker.config.mjs" packages/core/
+          cp "$GITHUB_WORKSPACE/scripts/mutation-targets.mjs" \
+            "$GITHUB_WORKSPACE/scripts/test-mutation.mjs" scripts/
+          echo "MUTATION_ROOT=$base" >> "$GITHUB_ENV"
+
+      - name: Run the mutation shard
+        run: |
+          cd "$MUTATION_ROOT/packages/core"
+          node ../../scripts/test-mutation.mjs --all --shard "${{ matrix.shard }}/4"
+
+      - name: Upload the mutation report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: core-mutation-${{ matrix.variant }}-${{ matrix.shard }}
+          path: ${{ env.MUTATION_ROOT }}/packages/core/reports/mutation/
+          overwrite: true
+          retention-days: 14
+
+  mutation-score:
+    name: Mutation score
+    needs: mutation
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    outputs:
+      comment: ${{ steps.comment.outputs.artifact-id }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          # The gate reads the files changed against the first parent.
+          fetch-depth: 2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Test the mutation scripts
+        run: node --test scripts/tests/test-mutation.test.mjs scripts/tests/check-mutation-score.test.mjs
+
+      - name: Download the candidate reports
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: core-mutation-candidate-*
+          path: mutation-reports/candidate
+
+      - name: Download the target branch reports
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: core-mutation-baseline-*
+          path: mutation-reports/baseline
+
+      - name: Check the mutation score
+        run: >-
+          node scripts/check-mutation-score.mjs mutation-reports/candidate
+          --baseline-root mutation-reports/baseline
+          --base-ref HEAD^1 --head-ref HEAD
+          --output mutation-score.md --comment-output mutation-comment.md
+
+      - name: Upload the score report
+        if: ${{ !cancelled() && hashFiles('mutation-score.md') != '' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: core-mutation-score
+          path: mutation-score.md
+          overwrite: true
+          retention-days: 14
+
+      - name: Upload the pull request comment
+        id: comment
+        if: ${{ !cancelled() && hashFiles('mutation-comment.md') != '' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: core-mutation-comment
+          path: mutation-comment.md
+          overwrite: true
+          retention-days: 1
+
+  mutation-comment:
+    name: Publish mutation comment
+    runs-on: ubuntu-latest
+    needs: mutation-score
+    # Only this job can write on the pull request, and it installs no dependencies.
+    if: ${{ !cancelled() && github.event.pull_request.head.repo.full_name == github.repository && needs.mutation-score.outputs.comment != '' }}
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts
+
+      - name: Download the comment
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: core-mutation-comment
+          path: comment
+
+      - name: Publish the mutation score on the pull request
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { readFileSync } = require('node:fs')
+            const { upsertReportComment } = await import(
+              `${process.env.GITHUB_WORKSPACE}/scripts/upsert-report-comment.mjs`
+            )
+            const outcome = await upsertReportComment({
+              github,
+              context,
+              marker: '<!-- mutation-report:core -->',
+              body: readFileSync(
+                `${process.env.GITHUB_WORKSPACE}/comment/mutation-comment.md`,
+                'utf8',
+              ),
+            })
+            core.info(`Mutation comment: ${outcome}`)
