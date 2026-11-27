@@ -264,9 +264,8 @@ tests.
   the code. In the Web, additionally run
   `pnpm --filter @stardust/web run test:integration <files>` only for the
   affected journeys.
-- PR CI also requires 80% of the changed executable lines and 70% of the changed-line
-  branches to be covered in Core, Server and Web; see "Gates de cobertura" in
-  `documentation/tooling.md`.
+- PR CI also requires coverage of the changed lines and branches in Core, Server and Web;
+  see "Gates de cobertura" in `documentation/tooling.md` for the thresholds.
 - Run only the tests of the code that changed and of the directly affected
   consumers. A full suite (`pnpm run test:unit`, `test:integration`,
   `test:coverage` and `check:coverage`) only runs when the user asks; the CI
