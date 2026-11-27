@@ -21,11 +21,11 @@ describe('Create User Use Case', () => {
     useCase = new CreateUserUseCase(repositoryMock)
   })
 
-  it('should throw an error if the given user email is already in use', () => {
+  it('should throw an error if the given user email is already in use', async () => {
     const dto = UsersFaker.fakeDto()
     repositoryMock.findByEmail.mockResolvedValue(UsersFaker.fake())
 
-    expect(
+    await expect(
       useCase.execute({
         userId: String(dto.id),
         userEmail: dto.email,
@@ -37,12 +37,12 @@ describe('Create User Use Case', () => {
     ).rejects.toThrow(UserEmailAlreadyInUseError)
   })
 
-  it('should throw an error if the given user name is already in use', () => {
+  it('should throw an error if the given user name is already in use', async () => {
     const dto = UsersFaker.fakeDto()
     repositoryMock.findByEmail.mockResolvedValue(null)
     repositoryMock.findByName.mockResolvedValue(UsersFaker.fake())
 
-    expect(
+    await expect(
       useCase.execute({
         userId: String(dto.id),
         userEmail: dto.email,

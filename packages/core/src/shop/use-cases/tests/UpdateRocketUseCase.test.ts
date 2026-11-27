@@ -17,11 +17,11 @@ describe('Update Rocket Use Case', () => {
     useCase = new UpdateRocketUseCase(repository)
   })
 
-  it('should throw an error if the rocket is not found', () => {
+  it('should throw an error if the rocket is not found', async () => {
     const rocketDto = RocketsFaker.fake().dto
     repository.findById.mockResolvedValue(null)
 
-    expect(useCase.execute({ rocketDto })).rejects.toThrow(RocketNotFoundError)
+    await expect(useCase.execute({ rocketDto })).rejects.toThrow(RocketNotFoundError)
   })
 
   it('should update the rocket when isSelectedByDefault is false', async () => {

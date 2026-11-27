@@ -55,7 +55,7 @@ importers:
         version: 19.8.1
       '@mastra/core':
         specifier: 1.81.0
-        version: 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@6.0.3))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
+        version: 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@6.0.3))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
       '@react-three/fiber':
         specifier: 9.7.0
         version: 9.7.0(@types/react@19.2.18)(immer@11.1.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(three@0.185.1)
@@ -380,13 +380,13 @@ importers:
         version: 0.27.0(@aws-sdk/credential-provider-node@3.972.74)(@smithy/signature-v4@5.6.11)(ws@8.22.1)(zod@4.4.3)
       '@composio/mastra':
         specifier: 0.10.6
-        version: 0.10.6(@composio/core@0.27.0(@aws-sdk/credential-provider-node@3.972.74)(@smithy/signature-v4@5.6.11)(ws@8.22.1)(zod@4.4.3))(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)
+        version: 0.10.6(@composio/core@0.27.0(@aws-sdk/credential-provider-node@3.972.74)(@smithy/signature-v4@5.6.11)(ws@8.22.1)(zod@4.4.3))(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)
       '@mastra/core':
         specifier: 1.81.0
-        version: 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
+        version: 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
       '@mastra/pg':
         specifier: 1.32.0
-        version: 1.32.0(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))
+        version: 1.32.0(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))
       drizzle-orm:
         specifier: 0.45.3
         version: 0.45.3(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(pg@8.23.1)(postgres@3.4.9)
@@ -402,7 +402,7 @@ importers:
     devDependencies:
       '@mastra/evals':
         specifier: 1.10.8
-        version: 1.10.8(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@22.10.7)(jsdom@26.1.0(supports-color@8.1.1))(vite@8.2.2(@types/node@22.10.7)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.10)(yaml@2.9.1)))
+        version: 1.10.8(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@22.10.7)(jsdom@26.1.0(supports-color@8.1.1))(vite@8.2.2(@types/node@22.10.7)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.10)(yaml@2.9.1)))
       '@testcontainers/postgresql':
         specifier: 12.0.4
         version: 12.0.4(supports-color@8.1.1)
@@ -414,7 +414,7 @@ importers:
         version: 0.31.11
       mastra:
         specifier: 1.35.0
-        version: 1.35.0(@hono/node-server@1.19.14(hono@4.13.1))(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(@opentelemetry/api@1.9.1)(supports-color@8.1.1)(zod@4.4.3)
+        version: 1.35.0(@hono/node-server@1.19.14(hono@4.13.1))(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(@opentelemetry/api@1.9.1)(rxjs@7.8.2)(supports-color@8.1.1)(zod@4.4.3)
       testcontainers:
         specifier: 12.0.4
         version: 12.0.4(supports-color@8.1.1)
@@ -441,10 +441,10 @@ importers:
         version: 0.9.0(hono@4.13.1)(zod@3.25.76)
       '@mastra/core':
         specifier: 1.57.0
-        version: 1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(zod@3.25.76)
+        version: 1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(zod@3.25.76)
       '@mastra/hono':
         specifier: ^1.5.11
-        version: 1.5.11(@hono/node-server@2.1.0(hono@4.13.1))(@mastra/core@1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(zod@3.25.76))(hono@4.13.1)(zod@3.25.76)
+        version: 1.5.11(@hono/node-server@2.1.0(hono@4.13.1))(@mastra/core@1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(zod@3.25.76))(hono@4.13.1)(zod@3.25.76)
       '@modelcontextprotocol/sdk':
         specifier: 1.32.2
         version: 1.32.2(@cfworker/json-schema@4.1.4)(supports-color@8.1.1)(zod@3.25.76)
@@ -498,7 +498,7 @@ importers:
         version: 3.4.9
       posthog-node:
         specifier: ^5.46.1
-        version: 5.61.1(@opentelemetry/api@1.9.1)
+        version: 5.61.1(@opentelemetry/api@1.9.1)(rxjs@7.8.2)
       zod:
         specifier: ^3.24.4
         version: 3.25.76
@@ -889,6 +889,12 @@ importers:
       '@faker-js/faker':
         specifier: 8.4.1
         version: 8.4.1
+      '@stryker-mutator/core':
+        specifier: 10.1.1
+        version: 10.1.1(@types/node@20.19.7)
+      '@stryker-mutator/jest-runner':
+        specifier: 10.1.1
+        version: 10.1.1(@stryker-mutator/core@10.1.1(@types/node@20.19.7))
       '@types/jest':
         specifier: ^29.5.14
         version: 29.5.14
@@ -901,6 +907,9 @@ importers:
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.19.7)(supports-color@8.1.1)(ts-node@10.9.2(@swc/core@1.15.47)(@types/node@20.19.7)(typescript@5.5.3))
+      jest-environment-node:
+        specifier: 29.7.0
+        version: 29.7.0
       ts-jest:
         specifier: ^29.4.12
         version: 29.4.12(@babel/core@7.29.7(supports-color@8.1.1))(@jest/transform@30.4.1(supports-color@8.1.1))(@jest/types@30.4.1)(babel-jest@30.4.1(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(esbuild@0.28.1)(jest-util@30.4.1)(jest@29.7.0(@types/node@20.19.7)(supports-color@8.1.1)(ts-node@10.9.2(@swc/core@1.15.47)(@types/node@20.19.7)(typescript@5.5.3)))(typescript@5.5.3)
@@ -1549,6 +1558,12 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0
 
+  '@babel/plugin-proposal-decorators@8.0.2':
+    resolution: {integrity: sha512-+C6O6KKXU7BBq1GNaIkFJxrALUVGRcr+WeWm4OcuRl3h+l/CmNfcTLMrT2Lm3uvGBimBH/8pEBRrXJFLoO67Gg==}
+    engines: {node: ^22.18.0 || >=24.11.0}
+    peerDependencies:
+      '@babel/core': ^8.0.0
+
   '@babel/plugin-proposal-private-property-in-object@7.21.0-placeholder-for-preset-env.2':
     resolution: {integrity: sha512-SOSkfJDddaM7mak6cPEpswyTRnuRltl429hMraQEglW+OkovnCzsiszTmsrlY//qLFjCpQDFRvjdm2wA5pPm9w==}
     engines: {node: '>=6.9.0'}
@@ -1575,6 +1590,12 @@ packages:
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
+
+  '@babel/plugin-syntax-decorators@8.0.1':
+    resolution: {integrity: sha512-NI+0S/6MvR6GlcQFwjDZ+WIc2qvG6TXN534lYs9llNldwW4b7Dh6KTtk030FA0xWdYGs4t1lWo+OEWN8wGB+Nw==}
+    engines: {node: ^22.18.0 || >=24.11.0}
+    peerDependencies:
+      '@babel/core': ^8.0.0
 
   '@babel/plugin-syntax-import-assertions@7.28.6':
     resolution: {integrity: sha512-pSJUpFHdx9z5nqTSirOCMtYVP2wFgoWhP0p3g8ONK/4IHhLIBd0B9NYqAvIUAhq+OkhO4VM1tENCt0cjlsNShw==}
@@ -1730,6 +1751,12 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
 
+  '@babel/plugin-transform-destructuring@8.0.5':
+    resolution: {integrity: sha512-evjxc5fGvpXG2WMGSalpX8IJZVumLIDgk5r5eRhvXRDqFX/GPWq1BeRfJalPCcwJfrR5A/wvegUhx9W5Nr7/mg==}
+    engines: {node: ^22.18.0 || >=24.11.0}
+    peerDependencies:
+      '@babel/core': ^8.0.0
+
   '@babel/plugin-transform-dotall-regex@7.28.6':
     resolution: {integrity: sha512-SljjowuNKB7q5Oayv4FoPzeB74g3QgLt8IVJw9ADvWy3QnUb/01aw8I4AVv8wYnPvQz2GDDZ/g3GhcNyDBI4Bg==}
     engines: {node: '>=6.9.0'}
@@ -1759,6 +1786,12 @@ packages:
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
+
+  '@babel/plugin-transform-explicit-resource-management@8.1.3':
+    resolution: {integrity: sha512-svM0Ro/94YLzXunVFCuBU1hF70mRylSwyD97OhcCxD0tdp2V2jDuEUrZMeRWtgZA2SnZQBB3y4hJyRDc/NyT/w==}
+    engines: {node: ^22.18.0 || >=24.11.0}
+    peerDependencies:
+      '@babel/core': ^8.0.0
 
   '@babel/plugin-transform-exponentiation-operator@7.28.6':
     resolution: {integrity: sha512-WitabqiGjV/vJ0aPOLSFfNY1u9U3R7W36B03r5I2KoNix+a3sOhJ3pKFB3R5It9/UiK78NiO0KE9P21cMhlPkw==}
@@ -2855,6 +2888,140 @@ packages:
 
   '@inngest/ai@0.1.7':
     resolution: {integrity: sha512-5xWatW441jacGf9czKEZdgAmkvoy7GS2tp7X8GSbdGeRXzjisHR6vM+q8DQbv6rqRsmQoCQ5iShh34MguELvUQ==}
+
+  '@inquirer/ansi@2.1.1':
+    resolution: {integrity: sha512-WwCc5T9554vU/M3W6mztOJvZK/5RgMwQsGlSZSZpKA/H2IfsTWIPdn1WiS8+HHjhe3H0IsmQCXUlDbvGM6vvuA==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+
+  '@inquirer/checkbox@5.3.1':
+    resolution: {integrity: sha512-AWb8O1kl/olRQt0fReEIlu8iCn8qaQ0OEIffeFsMrfhIlVSz/ud1EeeBhWnm057xhRqD+kYVD7Fk2X9Bk/oW6w==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
+  '@inquirer/confirm@6.4.1':
+    resolution: {integrity: sha512-ZLvGnS/+OtditM3RxULWDI3FVl3lR8mvh1ljZ8GCK8XKyfjI6Fq+ni6/2gbbH6n3gj6tinfNbE3QPplZ/xNVtQ==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
+  '@inquirer/core@12.1.1':
+    resolution: {integrity: sha512-JrVSjoB/+B4le+A/0GyZGv/oIK30KgGNUA0eVtEMNQLUmdpizfyXM0zglUZnwTtHLjpKGRlU/q6Iv5z2GYQw9w==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
+  '@inquirer/editor@5.5.0':
+    resolution: {integrity: sha512-g6wUVWLXDkW7/M+Jm82vMfPHEeZpJB2ltuSTZ/1Ovs/+h5eY65Bey91ZFoaVXaSKD0l+Sf4WCm/8km/e7oe7dg==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
+  '@inquirer/expand@5.2.1':
+    resolution: {integrity: sha512-PPHYJokseQ7RQoAZ8fVh3gL7jD+lhQ6O5ikQXNTPtpxwprsoGNocJIPt+GTLJL3reTqhkJEsIsZeTTcvdNDFzg==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
+  '@inquirer/external-editor@3.1.1':
+    resolution: {integrity: sha512-XMDPBC6m7/3ZfeRrzgfz86pkyGcUAxHpsPEk2PumQ7Dfzh8EwV9VywkK1D+bFytxFHzQBTRF6O2HlhdSWwwqmA==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
+  '@inquirer/figures@2.1.1':
+    resolution: {integrity: sha512-63AOoKi9Wlsd1G+X5dKRg15GzN/WIEf0VghxHkcVn9JswideMlwq40qJMAO3II6JyhpDZPmi3CmVKjwOSYBAmA==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+
+  '@inquirer/input@5.2.1':
+    resolution: {integrity: sha512-HvxWvTZ+Yn7Ad0HJ6C4ajlLWL+cEIPMPjwkcqythTxu4nxwvFSNkEpBQJbnhSW3zbEi0JQ84I93CRsCz9P/opw==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
+  '@inquirer/number@4.3.1':
+    resolution: {integrity: sha512-9ApB+70Yin5Ty0dgR9GIAj4sNAu7IHJ9na6MLXjV0q8w51aaK8oMa2HUwWdNomNOX7c7UgykZkqtcPr8TY8d+Q==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
+  '@inquirer/password@5.3.1':
+    resolution: {integrity: sha512-j9QfwKO4vJ5Y1elu9MwZMxq9zjX5GES+9lSKqa9cy4xXV5qo/eDZUpdIzsPn/rbao78PxxMUPEGkUvSoMPB2ug==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
+  '@inquirer/prompts@8.8.1':
+    resolution: {integrity: sha512-8zlCcD72QWvFAKnrT2TFckcgKOMXjPAaeBjp0IXXMpPLo8v41OZ8hS6MDUI5mw/Ow8NfOnSXguONheAxwdzrNw==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
+  '@inquirer/rawlist@5.4.1':
+    resolution: {integrity: sha512-hihU5YgysNOU7TxZcLtVijYPFbXKNwBsAGjuD/TSDU5RKtN6ElEAOdO/trfc3r7G//VmIGTFoaR65HdBRYNZBA==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
+  '@inquirer/search@4.4.1':
+    resolution: {integrity: sha512-9YpLazL6mR0TU77ldZ7mm7sCQpYE/aopXB1RLX7Zt5nSU27l40PQc2H317L+OudSe0xyr8N5WJl23bjnzNWuUw==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
+  '@inquirer/select@5.3.1':
+    resolution: {integrity: sha512-V5LBhmayDvTJwcY0ADCyikptINrzSr+SIsoflkWovVTJ3qETyVhyX96hfFgy80jK8YaUe/wjTb9to3oPaw5VyQ==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
+  '@inquirer/type@4.3.1':
+    resolution: {integrity: sha512-WzfM7UPG5F8fhKPey5pTkAZQrGcGjOHbm6YLotuDdiuAkXEHiHSZh59yNeZs4RyrMHcZEZrl+GOcuLzzfLKJqg==}
+    engines: {node: '>=23.5.0 || ^22.13.0 || ^20.17.0'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
 
   '@ioredis/commands@1.10.0':
     resolution: {integrity: sha512-UmeW7z4LfctwoQ5wkhVzgq8tXkreED2xZGpX+Bg+zA+WJFZCT6c062AfCK/Dfk81xZnnwdhJCUMkitihRaoC2Q==}
@@ -5738,6 +5905,28 @@ packages:
   '@standard-schema/utils@0.3.0':
     resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
+  '@stryker-mutator/api@10.1.1':
+    resolution: {integrity: sha512-3s/ECsrD1Tf1WEB7amBk0HxjN7zgkabKvmqnI2C831rTNszJ6o2HoV9PVxtElDEWxb2+t4iavK5x25G+DTUOUA==}
+    engines: {node: '>=22.0.0'}
+
+  '@stryker-mutator/core@10.1.1':
+    resolution: {integrity: sha512-4xJAOCw9utJMLyrTk9gINi434tBxnyuwt8lU/InyoKagKd2/zh/2ui7ncWoD0qZeJrxClYzblg8iUh5ewBAB3Q==}
+    engines: {node: '>=22.0.0'}
+    hasBin: true
+
+  '@stryker-mutator/instrumenter@10.1.1':
+    resolution: {integrity: sha512-Vyude2i8LhDciLV1q6J55KtdA7gZpRuMfZcBcmWV6hLHAvWocoPKnCKc5BlZt1mwGWkX3Olc0457I7Ue6F1WEg==}
+    engines: {node: '>=22.0.0'}
+
+  '@stryker-mutator/jest-runner@10.1.1':
+    resolution: {integrity: sha512-/Zsog+SkmuiS6ouA3WDM+ab/7lIkplCwlGslIBhSXP0L1L89mZ6JUVAyj3vAqTXhn+T6UKizzL8jCOTelpwqRQ==}
+    engines: {node: '>=22.0.0'}
+    peerDependencies:
+      '@stryker-mutator/core': 10.1.1
+
+  '@stryker-mutator/util@10.1.1':
+    resolution: {integrity: sha512-Z0zDzsmhoSykE1gT3DvD1knFxySgNMfBlpSSs1j87kWvjEMfeMqfLOk0bqEPRg/rTFIUNSEXLZapxePUhZmfZA==}
+
   '@supabase/auth-js@2.111.0':
     resolution: {integrity: sha512-hbRLgyQZEX0SDyF4LYXpv94qOIQyFATfpT5SIs2V0SisHnisVRkYgiPQWzv80l4S2mO3qof78rmoH9j5zoFsYQ==}
     engines: {node: '>=22.0.0'}
@@ -7082,6 +7271,10 @@ packages:
   ajv@8.20.0:
     resolution: {integrity: sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==}
 
+  angular-html-parser@10.11.0:
+    resolution: {integrity: sha512-3vERzJ65UFDr3C7uozLJwsNcQS3FS784dSh583oDgDTTZMgXe3/pdyXgKndxiP5R2lvYRfW6gSl145Hnyf2OFA==}
+    engines: {node: '>= 14'}
+
   ansi-colors@4.1.3:
     resolution: {integrity: sha512-/6w/C21Pm1A7aZitlI5Ni/2J6FFQN8i1Cvz3kHABAAbw93v/NlvKdVOqz7CCWz/3iv/JplRSEEZ83XION15ovw==}
     engines: {node: '>=6'}
@@ -7574,6 +7767,9 @@ packages:
   character-entities@2.0.2:
     resolution: {integrity: sha512-shx7oQ0Awen/BRIdkjkvz54PnEEI/EjwXDSIZp86/KKdbafHh1Df/RYGBhn4hbe2+uKC9FnT5UCEdyPz3ai9hQ==}
 
+  chardet@2.2.0:
+    resolution: {integrity: sha512-rddelWYNPRrXq6PtNEN2S3f6t9ILzvqaN5pVgi4kqt9jHQaXIial9PznB5iSPVlQSLNaaH22ItWz3EJtQ10+OA==}
+
   chat@4.43.0:
     resolution: {integrity: sha512-9ICxMewK1+4J0pEbR7eMBTh3JCL3NkyDHAgGrU/gblyyw/+QUcwFHCXIoQMt0Xlyup1c5smS0/gYytTt8NVc6w==}
     engines: {node: '>=20'}
@@ -7648,6 +7844,10 @@ packages:
   cli-spinners@2.9.2:
     resolution: {integrity: sha512-ywqV+5MmyL4E7ybXgKys4DugZbX0FC6LnwrhjuykIjnK9k8OQacQ7axGKnjDXWNhns0xot3bZI5h55H8yo9cJg==}
     engines: {node: '>=6'}
+
+  cli-width@4.1.0:
+    resolution: {integrity: sha512-ouuZd4/dm2Sw5Gmqy6bGyNNNe1qt9RpmxveLSO7KcgsTnU7RXfsw+/bukWGo1abgBiMAic068rclZsO4IWmmxQ==}
+    engines: {node: '>= 12'}
 
   client-only@0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
@@ -8166,6 +8366,9 @@ packages:
 
   didyoumean@1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}
+
+  diff-match-patch@1.0.5:
+    resolution: {integrity: sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw==}
 
   diff-sequences@29.6.3:
     resolution: {integrity: sha512-EjePK1srD3P08o2j4f0ExnylqRs5B9tJjcp9t1krH2qRi8CCdsYfwe9JgSLurFBWwq4uOlipzfk5fHNvwFKr8Q==}
@@ -9674,6 +9877,9 @@ packages:
     resolution: {integrity: sha512-c80Qupofp43y4cJ7+8TTDN/AsDwLi5oOm/plBrWI+iQt485vKXCco+yVmOwEgdo9VOdsYTuV0UlTeetVPTriXA==}
     engines: {node: '>=12'}
 
+  js-md4@0.3.2:
+    resolution: {integrity: sha512-/GDnfQYsltsjRswQhN9fhv3EMw2sCpUdrdxyWDOUK7eyD++r3gRhzgiQgc/x4MAv2i1iuQ4lxO5mvqM3vj4bwA==}
+
   js-tokens@10.0.0:
     resolution: {integrity: sha512-lM/UBzQmfJRo9ABXbPWemivdCW8V2G8FHaHdypQaIy523snUjog0W71ayWXTjiR+ixeMyVHN2XcpnTd/liPg/Q==}
 
@@ -9707,6 +9913,9 @@ packages:
 
   json-parse-even-better-errors@2.3.1:
     resolution: {integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==}
+
+  json-rpc-2.0@1.8.1:
+    resolution: {integrity: sha512-BmN42JKn6FI36pcMMzHCXQhpKNEfbeqgSIcUYHKnifq0/4Ey6PDinovwUOgajT7NsgUtpWdDXaCWlpI4LHXN3g==}
 
   json-schema-to-zod@2.8.1:
     resolution: {integrity: sha512-fRr1mHgZ7hboLKBUdR428gd9dIHUFGivUqOeiDcSmyXkNZCtB1uGaZLvsjZ4GaN5pwBIs+TGIOf6s+Rp5/R/zA==}
@@ -9996,6 +10205,9 @@ packages:
 
   lodash.debounce@4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+
+  lodash.groupby@4.6.0:
+    resolution: {integrity: sha512-5dcWxm23+VAoz+awKmBaiBvzox8+RqMgFhi7UvX9DHZr2HdxHXM/Wrf8cfKpsW37RNrvtPn6hSwNqurSILbmJw==}
 
   lodash.includes@4.3.0:
     resolution: {integrity: sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==}
@@ -10480,6 +10692,23 @@ packages:
 
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
+
+  mutation-server-protocol@0.4.1:
+    resolution: {integrity: sha512-SBGK0j8hLDne7bktgThKI8kGvGTx3rY3LAeQTmOKZ5bVnL/7TorLMvcVF7dIPJCu5RNUWhkkuF53kurygYVt3g==}
+    engines: {node: '>=18'}
+
+  mutation-testing-elements@3.8.4:
+    resolution: {integrity: sha512-5CF1SNa7at5ZH33vEr+21wNebTSrtNIVvnzaUlxortHajOrIPaSLczIWvg6sI/fsExekQ7jookwf2cHftkckqQ==}
+
+  mutation-testing-metrics@3.8.4:
+    resolution: {integrity: sha512-DZcmndJBH6nrNs3tpiB3OcMVq9KkG2cHCpJSnDxSxPwi9qrafRmoec40xjhkbzOoX1n7/4UkDqg5tIj4A6nvCw==}
+
+  mutation-testing-report-schema@3.8.4:
+    resolution: {integrity: sha512-s4G71R6Lt/PpZ0cqeglIcgyBdzLM8E+SeCHZAPg1wkSsPtRBa4XfPzAozYKdiJk/TLbNEEb7En9t0/bveuPuxA==}
+
+  mute-stream@3.0.0:
+    resolution: {integrity: sha512-dkEJPVvun4FryqBmZ5KhDo0K9iDXAwn08tMLDinNdRBNPcYEDiWYysLcc6k3mjTMlbP9KyylvRpd4wFtwrT9rw==}
+    engines: {node: ^20.17.0 || >=22.9.0}
 
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
@@ -11281,6 +11510,10 @@ packages:
   pusher-js@8.6.0:
     resolution: {integrity: sha512-wShJPfCS/kYkCBVzVW67wa9cnQIgHTszEK2XHNrFkOgGruuGw081aERAxfRjfdFU+WcIt8x6dvbwkTW4iZuQ8Q==}
 
+  qs@6.15.1:
+    resolution: {integrity: sha512-6YHEFRL9mfgcAvql/XhwTvf5jKcOiiupt2FiJxHkiX1z4j7WL8J/jRHYLluORvc1XxB5rV20KoeK00gVJamspg==}
+    engines: {node: '>=0.6'}
+
   qs@6.17.1:
     resolution: {integrity: sha512-jd3COkaKVgGUW+ZHyEHCG9bH7RoaaiWuMgzsIBjUMVjLAaWGWpoUAVwljVvBHxRu/2qEHnadLGZrkutYUBPQJA==}
     engines: {node: '>=0.6'}
@@ -11693,6 +11926,9 @@ packages:
 
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
+
+  rxjs@7.8.2:
+    resolution: {integrity: sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA==}
 
   safe-buffer@5.1.2:
     resolution: {integrity: sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==}
@@ -12439,6 +12675,10 @@ packages:
   tunnel-rat@0.1.2:
     resolution: {integrity: sha512-lR5VHmkPhzdhrM092lI2nACsLO4QubF0/yoOhzX7c+wIpbN1GjHNzCc91QlpxBi+cnx8vVJ+Ur6vL5cEoQPFpQ==}
 
+  tunnel@0.0.6:
+    resolution: {integrity: sha512-1h/Lnq9yajKY2PEbBadPXj3VxsDDu844OnaAo52UVmIzIvwwtBPIuNvkjuzBlTWpfJyUbG3ez0KSBibQkj4ojg==}
+    engines: {node: '>=0.6.11 <=0.7.0 || >=0.7.3'}
+
   turbo@2.10.8:
     resolution: {integrity: sha512-9+8YX5QOkGXzZxcIykTHgaooRHGMWO+jfdyRK0o+rN0U7hBIig2MrJ8r/aNzIPDPhdA73SGb0O+tIztaModTMg==}
     hasBin: true
@@ -12479,8 +12719,16 @@ packages:
     resolution: {integrity: sha512-nAYYwfY3qnzX30IkA6AQZjVbtK6duGontcQm1WSG1MD94YLqK0515GNApXkoxKOWMusVssAHWLh9SeaoefYFGw==}
     engines: {node: '>= 0.4'}
 
+  typed-inject@5.0.0:
+    resolution: {integrity: sha512-0Ql2ORqBORLMdAW89TQKZsb1PQkFGImFfVmncXWe7a+AA3+7dh7Se9exxZowH4kbnlvKEFkMxUYdHUpjYWFJaA==}
+    engines: {node: '>=18'}
+
   typed-query-selector@2.12.3:
     resolution: {integrity: sha512-/dtuMZyutHLlrxWhhC1uib00ELUr2dZ8C9B8YzZYsJmeE3V56OxRblrSM2UaF142pcMtak7ehZ6+poWGeehNIg==}
+
+  typed-rest-client@2.3.1:
+    resolution: {integrity: sha512-k4kX5Up6qA68D0Cby2AK+6+vM5k3qTxe+/3FqhnHRExjY5cfbOnzjQZbP/LXleF8hVoDvDqxlgk9KK83HoBZlQ==}
+    engines: {node: '>= 16.0.0'}
 
   typescript@5.5.3:
     resolution: {integrity: sha512-/hreyEujaB0w76zKo6717l3L0o/qEUtRgdvUBvlkhoWeOVMjMuHNHk0BRBzikzuGDqNmPQbg5ifMEqsHLiIUcQ==}
@@ -12526,6 +12774,9 @@ packages:
   ulid@2.4.0:
     resolution: {integrity: sha512-fIRiVTJNcSRmXKPZtGzFQv9WRrZ3M9eoptl/teFJvjOzmpU+/K/JH6HZ8deBfb5vMEpicJcLn7JmvdknlMq7Zg==}
     hasBin: true
+
+  underscore@1.13.8:
+    resolution: {integrity: sha512-DXtD3ZtEQzc7M8m4cXotyHR+FAS18C64asBYY5vqZexfYryNNnDc02W4hKg3rdQuqOYas1jkseX0+nZXjTXnvQ==}
 
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
@@ -12815,6 +13066,9 @@ packages:
     resolution: {integrity: sha512-jfiuDABaxSkC71T6oZ3vCS99roYkSHm/+As+G0Dz8taAHQb+SJBvLEm5RlsgG71XdfAj3rv7eudUBTgwcQUPlQ==}
     engines: {node: ^22.13||^24||>=26}
     hasBin: true
+
+  weapon-regex@2.0.6:
+    resolution: {integrity: sha512-iJC2vqYp+bh3r4X6zjuP0h65XqXjgUX3nJgmhj0PQMrdhAbUwCfN76CSTEEQqV3G7468kjOJ69PmytTG8l/8Gg==}
 
   web-streams-polyfill@3.3.3:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
@@ -13775,6 +14029,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@babel/plugin-proposal-decorators@8.0.2(@babel/core@8.0.10)':
+    dependencies:
+      '@babel/core': 8.0.10
+      '@babel/helper-create-class-features-plugin': 8.0.10(@babel/core@8.0.10)
+      '@babel/helper-plugin-utils': 8.0.1(@babel/core@8.0.10)
+      '@babel/plugin-syntax-decorators': 8.0.1(@babel/core@8.0.10)
+
   '@babel/plugin-proposal-private-property-in-object@7.21.0-placeholder-for-preset-env.2(@babel/core@7.29.7(supports-color@8.1.1))':
     dependencies:
       '@babel/core': 7.29.7(supports-color@8.1.1)
@@ -13798,6 +14059,11 @@ snapshots:
     dependencies:
       '@babel/core': 7.29.7(supports-color@8.1.1)
       '@babel/helper-plugin-utils': 7.29.7
+
+  '@babel/plugin-syntax-decorators@8.0.1(@babel/core@8.0.10)':
+    dependencies:
+      '@babel/core': 8.0.10
+      '@babel/helper-plugin-utils': 8.0.1(@babel/core@8.0.10)
 
   '@babel/plugin-syntax-import-assertions@7.28.6(@babel/core@7.29.7(supports-color@8.1.1))':
     dependencies:
@@ -13828,6 +14094,11 @@ snapshots:
     dependencies:
       '@babel/core': 7.29.7(supports-color@8.1.1)
       '@babel/helper-plugin-utils': 8.0.1(@babel/core@7.29.7(supports-color@8.1.1))
+
+  '@babel/plugin-syntax-jsx@8.0.1(@babel/core@8.0.10)':
+    dependencies:
+      '@babel/core': 8.0.10
+      '@babel/helper-plugin-utils': 8.0.1(@babel/core@8.0.10)
 
   '@babel/plugin-syntax-logical-assignment-operators@7.10.4(@babel/core@7.29.7(supports-color@8.1.1))':
     dependencies:
@@ -13960,6 +14231,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@babel/plugin-transform-destructuring@8.0.5(@babel/core@8.0.10)':
+    dependencies:
+      '@babel/core': 8.0.10
+      '@babel/helper-plugin-utils': 8.0.1(@babel/core@8.0.10)
+
   '@babel/plugin-transform-dotall-regex@7.28.6(@babel/core@7.29.7(supports-color@8.1.1))':
     dependencies:
       '@babel/core': 7.29.7(supports-color@8.1.1)
@@ -13989,6 +14265,12 @@ snapshots:
       '@babel/plugin-transform-destructuring': 7.28.5(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
+
+  '@babel/plugin-transform-explicit-resource-management@8.1.3(@babel/core@8.0.10)':
+    dependencies:
+      '@babel/core': 8.0.10
+      '@babel/helper-plugin-utils': 8.0.1(@babel/core@8.0.10)
+      '@babel/plugin-transform-destructuring': 8.0.5(@babel/core@8.0.10)
 
   '@babel/plugin-transform-exponentiation-operator@7.28.6(@babel/core@7.29.7(supports-color@8.1.1))':
     dependencies:
@@ -14162,10 +14444,20 @@ snapshots:
       '@babel/core': 7.29.7(supports-color@8.1.1)
       '@babel/helper-plugin-utils': 8.0.1(@babel/core@7.29.7(supports-color@8.1.1))
 
+  '@babel/plugin-transform-react-display-name@8.0.1(@babel/core@8.0.10)':
+    dependencies:
+      '@babel/core': 8.0.10
+      '@babel/helper-plugin-utils': 8.0.1(@babel/core@8.0.10)
+
   '@babel/plugin-transform-react-jsx-development@8.0.1(@babel/core@7.29.7(supports-color@8.1.1))':
     dependencies:
       '@babel/core': 7.29.7(supports-color@8.1.1)
       '@babel/plugin-transform-react-jsx': 8.0.1(@babel/core@7.29.7(supports-color@8.1.1))
+
+  '@babel/plugin-transform-react-jsx-development@8.0.1(@babel/core@8.0.10)':
+    dependencies:
+      '@babel/core': 8.0.10
+      '@babel/plugin-transform-react-jsx': 8.0.1(@babel/core@8.0.10)
 
   '@babel/plugin-transform-react-jsx@8.0.1(@babel/core@7.29.7(supports-color@8.1.1))':
     dependencies:
@@ -14176,11 +14468,26 @@ snapshots:
       '@babel/plugin-syntax-jsx': 8.0.1(@babel/core@7.29.7(supports-color@8.1.1))
       '@babel/types': 8.0.10
 
+  '@babel/plugin-transform-react-jsx@8.0.1(@babel/core@8.0.10)':
+    dependencies:
+      '@babel/core': 8.0.10
+      '@babel/helper-annotate-as-pure': 8.0.0
+      '@babel/helper-module-imports': 8.0.0
+      '@babel/helper-plugin-utils': 8.0.1(@babel/core@8.0.10)
+      '@babel/plugin-syntax-jsx': 8.0.1(@babel/core@8.0.10)
+      '@babel/types': 8.0.10
+
   '@babel/plugin-transform-react-pure-annotations@8.0.1(@babel/core@7.29.7(supports-color@8.1.1))':
     dependencies:
       '@babel/core': 7.29.7(supports-color@8.1.1)
       '@babel/helper-annotate-as-pure': 8.0.0
       '@babel/helper-plugin-utils': 8.0.1(@babel/core@7.29.7(supports-color@8.1.1))
+
+  '@babel/plugin-transform-react-pure-annotations@8.0.1(@babel/core@8.0.10)':
+    dependencies:
+      '@babel/core': 8.0.10
+      '@babel/helper-annotate-as-pure': 8.0.0
+      '@babel/helper-plugin-utils': 8.0.1(@babel/core@8.0.10)
 
   '@babel/plugin-transform-regenerator@7.29.0(@babel/core@7.29.7(supports-color@8.1.1))':
     dependencies:
@@ -14361,6 +14668,16 @@ snapshots:
       '@babel/plugin-transform-react-jsx': 8.0.1(@babel/core@7.29.7(supports-color@8.1.1))
       '@babel/plugin-transform-react-jsx-development': 8.0.1(@babel/core@7.29.7(supports-color@8.1.1))
       '@babel/plugin-transform-react-pure-annotations': 8.0.1(@babel/core@7.29.7(supports-color@8.1.1))
+
+  '@babel/preset-react@8.0.1(@babel/core@8.0.10)':
+    dependencies:
+      '@babel/core': 8.0.10
+      '@babel/helper-plugin-utils': 8.0.1(@babel/core@8.0.10)
+      '@babel/helper-validator-option': 8.0.0
+      '@babel/plugin-transform-react-display-name': 8.0.1(@babel/core@8.0.10)
+      '@babel/plugin-transform-react-jsx': 8.0.1(@babel/core@8.0.10)
+      '@babel/plugin-transform-react-jsx-development': 8.0.1(@babel/core@8.0.10)
+      '@babel/plugin-transform-react-pure-annotations': 8.0.1(@babel/core@8.0.10)
 
   '@babel/preset-typescript@7.29.7(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)':
     dependencies:
@@ -14636,10 +14953,10 @@ snapshots:
       re2js: 2.9.1
       zod: 4.4.3
 
-  '@composio/mastra@0.10.6(@composio/core@0.27.0(@aws-sdk/credential-provider-node@3.972.74)(@smithy/signature-v4@5.6.11)(ws@8.22.1)(zod@4.4.3))(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)':
+  '@composio/mastra@0.10.6(@composio/core@0.27.0(@aws-sdk/credential-provider-node@3.972.74)(@smithy/signature-v4@5.6.11)(ws@8.22.1)(zod@4.4.3))(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)':
     dependencies:
       '@composio/core': 0.27.0(@aws-sdk/credential-provider-node@3.972.74)(@smithy/signature-v4@5.6.11)(ws@8.22.1)(zod@4.4.3)
-      '@mastra/core': 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
+      '@mastra/core': 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
       '@mastra/schema-compat': 1.3.17(zod@4.4.3)
       zod: 4.4.3
 
@@ -15089,6 +15406,126 @@ snapshots:
     dependencies:
       '@types/node': 22.10.7
       typescript: 5.8.3
+
+  '@inquirer/ansi@2.1.1': {}
+
+  '@inquirer/checkbox@5.3.1(@types/node@20.19.7)':
+    dependencies:
+      '@inquirer/ansi': 2.1.1
+      '@inquirer/core': 12.1.1(@types/node@20.19.7)
+      '@inquirer/figures': 2.1.1
+      '@inquirer/type': 4.3.1(@types/node@20.19.7)
+    optionalDependencies:
+      '@types/node': 20.19.7
+
+  '@inquirer/confirm@6.4.1(@types/node@20.19.7)':
+    dependencies:
+      '@inquirer/core': 12.1.1(@types/node@20.19.7)
+      '@inquirer/type': 4.3.1(@types/node@20.19.7)
+    optionalDependencies:
+      '@types/node': 20.19.7
+
+  '@inquirer/core@12.1.1(@types/node@20.19.7)':
+    dependencies:
+      '@inquirer/ansi': 2.1.1
+      '@inquirer/figures': 2.1.1
+      '@inquirer/type': 4.3.1(@types/node@20.19.7)
+      cli-width: 4.1.0
+      fast-string-width: 3.0.2
+      fast-wrap-ansi: 0.2.2
+      mute-stream: 3.0.0
+      signal-exit: 4.1.0
+    optionalDependencies:
+      '@types/node': 20.19.7
+
+  '@inquirer/editor@5.5.0(@types/node@20.19.7)':
+    dependencies:
+      '@inquirer/core': 12.1.1(@types/node@20.19.7)
+      '@inquirer/external-editor': 3.1.1(@types/node@20.19.7)
+      '@inquirer/type': 4.3.1(@types/node@20.19.7)
+    optionalDependencies:
+      '@types/node': 20.19.7
+
+  '@inquirer/expand@5.2.1(@types/node@20.19.7)':
+    dependencies:
+      '@inquirer/core': 12.1.1(@types/node@20.19.7)
+      '@inquirer/type': 4.3.1(@types/node@20.19.7)
+    optionalDependencies:
+      '@types/node': 20.19.7
+
+  '@inquirer/external-editor@3.1.1(@types/node@20.19.7)':
+    dependencies:
+      chardet: 2.2.0
+      iconv-lite: 0.7.3
+    optionalDependencies:
+      '@types/node': 20.19.7
+
+  '@inquirer/figures@2.1.1': {}
+
+  '@inquirer/input@5.2.1(@types/node@20.19.7)':
+    dependencies:
+      '@inquirer/core': 12.1.1(@types/node@20.19.7)
+      '@inquirer/type': 4.3.1(@types/node@20.19.7)
+    optionalDependencies:
+      '@types/node': 20.19.7
+
+  '@inquirer/number@4.3.1(@types/node@20.19.7)':
+    dependencies:
+      '@inquirer/core': 12.1.1(@types/node@20.19.7)
+      '@inquirer/type': 4.3.1(@types/node@20.19.7)
+    optionalDependencies:
+      '@types/node': 20.19.7
+
+  '@inquirer/password@5.3.1(@types/node@20.19.7)':
+    dependencies:
+      '@inquirer/ansi': 2.1.1
+      '@inquirer/core': 12.1.1(@types/node@20.19.7)
+      '@inquirer/type': 4.3.1(@types/node@20.19.7)
+    optionalDependencies:
+      '@types/node': 20.19.7
+
+  '@inquirer/prompts@8.8.1(@types/node@20.19.7)':
+    dependencies:
+      '@inquirer/checkbox': 5.3.1(@types/node@20.19.7)
+      '@inquirer/confirm': 6.4.1(@types/node@20.19.7)
+      '@inquirer/editor': 5.5.0(@types/node@20.19.7)
+      '@inquirer/expand': 5.2.1(@types/node@20.19.7)
+      '@inquirer/input': 5.2.1(@types/node@20.19.7)
+      '@inquirer/number': 4.3.1(@types/node@20.19.7)
+      '@inquirer/password': 5.3.1(@types/node@20.19.7)
+      '@inquirer/rawlist': 5.4.1(@types/node@20.19.7)
+      '@inquirer/search': 4.4.1(@types/node@20.19.7)
+      '@inquirer/select': 5.3.1(@types/node@20.19.7)
+    optionalDependencies:
+      '@types/node': 20.19.7
+
+  '@inquirer/rawlist@5.4.1(@types/node@20.19.7)':
+    dependencies:
+      '@inquirer/core': 12.1.1(@types/node@20.19.7)
+      '@inquirer/type': 4.3.1(@types/node@20.19.7)
+    optionalDependencies:
+      '@types/node': 20.19.7
+
+  '@inquirer/search@4.4.1(@types/node@20.19.7)':
+    dependencies:
+      '@inquirer/core': 12.1.1(@types/node@20.19.7)
+      '@inquirer/figures': 2.1.1
+      '@inquirer/type': 4.3.1(@types/node@20.19.7)
+    optionalDependencies:
+      '@types/node': 20.19.7
+
+  '@inquirer/select@5.3.1(@types/node@20.19.7)':
+    dependencies:
+      '@inquirer/ansi': 2.1.1
+      '@inquirer/core': 12.1.1(@types/node@20.19.7)
+      '@inquirer/figures': 2.1.1
+      '@inquirer/type': 4.3.1(@types/node@20.19.7)
+    optionalDependencies:
+      '@types/node': 20.19.7
+
+  '@inquirer/type@4.3.1(@types/node@20.19.7)':
+    optionalDependencies:
+      '@types/node': 20.19.7
 
   '@ioredis/commands@1.10.0': {}
 
@@ -15579,7 +16016,7 @@ snapshots:
     dependencies:
       '@lukeed/csprng': 1.1.0
 
-  '@mastra/core@1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(zod@3.25.76)':
+  '@mastra/core@1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(zod@3.25.76)':
     dependencies:
       '@a2a-js/sdk': 0.3.14(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(express@5.3.0(supports-color@8.1.1))
       '@ai-sdk/provider-utils-v5': '@ai-sdk/provider-utils@3.0.30(zod@3.25.76)'
@@ -15608,7 +16045,7 @@ snapshots:
       p-map: 7.1.1
       p-retry: 7.1.1
       picomatch: 4.0.7
-      posthog-node: 5.61.1(@opentelemetry/api@1.9.1)
+      posthog-node: 5.61.1(@opentelemetry/api@1.9.1)(rxjs@7.8.2)
       tokenx: 1.6.0
       ws: 8.22.1
       xxhash-wasm: 1.1.0
@@ -15626,7 +16063,7 @@ snapshots:
       - utf-8-validate
       - workflow
 
-  '@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)':
+  '@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)':
     dependencies:
       '@a2a-js/sdk-v0_3': '@a2a-js/sdk@0.3.14(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(express@5.3.0(supports-color@8.1.1))'
       '@a2a-js/sdk-v1': '@a2a-js/sdk@1.0.1(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(express@5.3.0(supports-color@8.1.1))'
@@ -15653,7 +16090,7 @@ snapshots:
       p-map: 7.1.1
       p-retry: 7.1.1
       picomatch: 4.0.7
-      posthog-node: 5.61.1(@opentelemetry/api@1.9.1)
+      posthog-node: 5.61.1(@opentelemetry/api@1.9.1)(rxjs@7.8.2)
       re2js: 2.9.1
       ws: 8.22.1
       xxhash-wasm: 1.1.0
@@ -15679,7 +16116,7 @@ snapshots:
       - zod-openapi
       - zod-to-json-schema
 
-  '@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@6.0.3))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)':
+  '@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@6.0.3))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)':
     dependencies:
       '@a2a-js/sdk-v0_3': '@a2a-js/sdk@0.3.14(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(express@5.3.0(supports-color@8.1.1))'
       '@a2a-js/sdk-v1': '@a2a-js/sdk@1.0.1(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(express@5.3.0(supports-color@8.1.1))'
@@ -15706,7 +16143,7 @@ snapshots:
       p-map: 7.1.1
       p-retry: 7.1.1
       picomatch: 4.0.7
-      posthog-node: 5.61.1(@opentelemetry/api@1.9.1)
+      posthog-node: 5.61.1(@opentelemetry/api@1.9.1)(rxjs@7.8.2)
       re2js: 2.9.1
       ws: 8.22.1
       xxhash-wasm: 1.1.0
@@ -15732,14 +16169,14 @@ snapshots:
       - zod-openapi
       - zod-to-json-schema
 
-  '@mastra/deployer@1.81.0(@hono/node-server@1.19.14(hono@4.13.1))(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(supports-color@8.1.1)(zod@4.4.3)':
+  '@mastra/deployer@1.81.0(@hono/node-server@1.19.14(hono@4.13.1))(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(supports-color@8.1.1)(zod@4.4.3)':
     dependencies:
       '@babel/core': 8.0.10
       '@babel/preset-typescript': 8.0.7(@babel/core@8.0.10)
       '@babel/traverse': 8.0.10
       '@hono/node-ws': 1.3.1(@hono/node-server@1.19.14(hono@4.13.1))(hono@4.13.1)
-      '@mastra/core': 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
-      '@mastra/server': 1.81.0(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)
+      '@mastra/core': 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
+      '@mastra/server': 1.81.0(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)
       '@optimize-lodash/rollup-plugin': 5.1.0(rollup@4.67.2)
       '@rollup/plugin-alias': 6.0.0(rollup@4.67.2)
       '@rollup/plugin-commonjs': 29.0.2(rollup@4.67.2)
@@ -15769,9 +16206,9 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@mastra/evals@1.10.8(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@22.10.7)(jsdom@26.1.0(supports-color@8.1.1))(vite@8.2.2(@types/node@22.10.7)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.10)(yaml@2.9.1)))':
+  '@mastra/evals@1.10.8(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(vitest@4.1.9(@opentelemetry/api@1.9.1)(@types/node@22.10.7)(jsdom@26.1.0(supports-color@8.1.1))(vite@8.2.2(@types/node@22.10.7)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.10)(yaml@2.9.1)))':
     dependencies:
-      '@mastra/core': 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
+      '@mastra/core': 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
       compromise: 14.19.0
       keyword-extractor: 0.0.28
       sentiment: 5.0.2
@@ -15779,11 +16216,11 @@ snapshots:
     optionalDependencies:
       vitest: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@22.10.7)(jsdom@26.1.0(supports-color@8.1.1))(vite@8.2.2(@types/node@22.10.7)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.10)(yaml@2.9.1))
 
-  '@mastra/hono@1.5.11(@hono/node-server@2.1.0(hono@4.13.1))(@mastra/core@1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(zod@3.25.76))(hono@4.13.1)(zod@3.25.76)':
+  '@mastra/hono@1.5.11(@hono/node-server@2.1.0(hono@4.13.1))(@mastra/core@1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(zod@3.25.76))(hono@4.13.1)(zod@3.25.76)':
     dependencies:
       '@hono/node-ws': 1.3.1(@hono/node-server@2.1.0(hono@4.13.1))(hono@4.13.1)
-      '@mastra/core': 1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(zod@3.25.76)
-      '@mastra/server': 1.54.0(@mastra/core@1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(zod@3.25.76))(zod@3.25.76)
+      '@mastra/core': 1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(zod@3.25.76)
+      '@mastra/server': 1.54.0(@mastra/core@1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(zod@3.25.76))(zod@3.25.76)
       fetch-to-node: 2.1.0
       hono: 4.13.1
       ws: 8.22.1
@@ -15793,15 +16230,15 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@mastra/loggers@1.3.10(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))':
+  '@mastra/loggers@1.3.10(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))':
     dependencies:
-      '@mastra/core': 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
+      '@mastra/core': 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
       pino: 10.4.0
       pino-pretty: 13.2.0
 
-  '@mastra/pg@1.32.0(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))':
+  '@mastra/pg@1.32.0(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))':
     dependencies:
-      '@mastra/core': 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
+      '@mastra/core': 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
       async-mutex: 0.5.0
       pg: 8.23.1
       pg-connection-string: 2.14.1
@@ -15823,15 +16260,15 @@ snapshots:
       zod-from-json-schema-v3: zod-from-json-schema@0.0.5
       zod-to-json-schema: 3.25.2(zod@3.25.76)
 
-  '@mastra/server@1.54.0(@mastra/core@1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(zod@3.25.76))(zod@3.25.76)':
+  '@mastra/server@1.54.0(@mastra/core@1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(zod@3.25.76))(zod@3.25.76)':
     dependencies:
-      '@mastra/core': 1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(zod@3.25.76)
+      '@mastra/core': 1.57.0(@bufbuild/protobuf@2.13.0)(@cfworker/json-schema@4.1.4)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@3.25.76))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(zod@3.25.76)
       hono: 4.13.1
       zod: 3.25.76
 
-  '@mastra/server@1.81.0(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)':
+  '@mastra/server@1.81.0(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)':
     dependencies:
-      '@mastra/core': 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
+      '@mastra/core': 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
       hono: 4.13.1
       zod: 4.4.3
 
@@ -18788,6 +19225,71 @@ snapshots:
 
   '@standard-schema/utils@0.3.0': {}
 
+  '@stryker-mutator/api@10.1.1':
+    dependencies:
+      mutation-testing-metrics: 3.8.4
+      mutation-testing-report-schema: 3.8.4
+      tslib: 2.8.1
+      typed-inject: 5.0.0
+
+  '@stryker-mutator/core@10.1.1(@types/node@20.19.7)':
+    dependencies:
+      '@inquirer/prompts': 8.8.1(@types/node@20.19.7)
+      '@stryker-mutator/api': 10.1.1
+      '@stryker-mutator/instrumenter': 10.1.1
+      '@stryker-mutator/util': 10.1.1
+      ajv: 8.20.0
+      chalk: 5.6.2
+      commander: 14.0.3
+      diff-match-patch: 1.0.5
+      emoji-regex: 10.6.0
+      execa: 9.6.1
+      json-rpc-2.0: 1.8.1
+      lodash.groupby: 4.6.0
+      minimatch: 10.2.5
+      mutation-server-protocol: 0.4.1
+      mutation-testing-elements: 3.8.4
+      mutation-testing-metrics: 3.8.4
+      mutation-testing-report-schema: 3.8.4
+      npm-run-path: 6.0.0
+      progress: 2.0.3
+      rxjs: 7.8.2
+      semver: 7.8.5
+      source-map: 0.7.6
+      tree-kill: 1.2.2
+      tslib: 2.8.1
+      typed-inject: 5.0.0
+      typed-rest-client: 2.3.1
+    transitivePeerDependencies:
+      - '@types/node'
+
+  '@stryker-mutator/instrumenter@10.1.1':
+    dependencies:
+      '@babel/core': 8.0.10
+      '@babel/generator': 8.0.10
+      '@babel/parser': 8.0.10
+      '@babel/plugin-proposal-decorators': 8.0.2(@babel/core@8.0.10)
+      '@babel/plugin-transform-explicit-resource-management': 8.1.3(@babel/core@8.0.10)
+      '@babel/preset-react': 8.0.1(@babel/core@8.0.10)
+      '@babel/preset-typescript': 8.0.7(@babel/core@8.0.10)
+      '@babel/traverse': 8.0.10
+      '@stryker-mutator/api': 10.1.1
+      '@stryker-mutator/util': 10.1.1
+      angular-html-parser: 10.11.0
+      semver: 7.8.5
+      tslib: 2.8.1
+      weapon-regex: 2.0.6
+
+  '@stryker-mutator/jest-runner@10.1.1(@stryker-mutator/core@10.1.1(@types/node@20.19.7))':
+    dependencies:
+      '@stryker-mutator/api': 10.1.1
+      '@stryker-mutator/core': 10.1.1(@types/node@20.19.7)
+      '@stryker-mutator/util': 10.1.1
+      semver: 7.8.5
+      tslib: 2.8.1
+
+  '@stryker-mutator/util@10.1.1': {}
+
   '@supabase/auth-js@2.111.0':
     dependencies:
       tslib: 2.8.1
@@ -20127,6 +20629,8 @@ snapshots:
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
+  angular-html-parser@10.11.0: {}
+
   ansi-colors@4.1.3: {}
 
   ansi-escapes@4.3.2:
@@ -20685,6 +21189,8 @@ snapshots:
 
   character-entities@2.0.2: {}
 
+  chardet@2.2.0: {}
+
   chat@4.43.0(ai@7.0.41(zod@3.25.76))(supports-color@8.1.1)(zod@3.25.76):
     dependencies:
       '@chat-adapter/catalog': 4.43.0
@@ -20781,6 +21287,8 @@ snapshots:
       restore-cursor: 5.1.0
 
   cli-spinners@2.9.2: {}
+
+  cli-width@4.1.0: {}
 
   client-only@0.0.1: {}
 
@@ -21354,6 +21862,8 @@ snapshots:
       wrappy: 1.0.2
 
   didyoumean@1.2.2: {}
+
+  diff-match-patch@1.0.5: {}
 
   diff-sequences@29.6.3: {}
 
@@ -23474,6 +23984,8 @@ snapshots:
 
   js-library-detector@6.7.0: {}
 
+  js-md4@0.3.2: {}
+
   js-tokens@10.0.0: {}
 
   js-tokens@4.0.0: {}
@@ -23521,6 +24033,8 @@ snapshots:
       bignumber.js: 9.3.1
 
   json-parse-even-better-errors@2.3.1: {}
+
+  json-rpc-2.0@1.8.1: {}
 
   json-schema-to-zod@2.8.1: {}
 
@@ -23786,6 +24300,8 @@ snapshots:
 
   lodash.debounce@4.0.8: {}
 
+  lodash.groupby@4.6.0: {}
+
   lodash.includes@4.3.0: {}
 
   lodash.isboolean@3.0.3: {}
@@ -23912,15 +24428,15 @@ snapshots:
 
   marky@1.3.0: {}
 
-  mastra@1.35.0(@hono/node-server@1.19.14(hono@4.13.1))(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(@opentelemetry/api@1.9.1)(supports-color@8.1.1)(zod@4.4.3):
+  mastra@1.35.0(@hono/node-server@1.19.14(hono@4.13.1))(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(@opentelemetry/api@1.9.1)(rxjs@7.8.2)(supports-color@8.1.1)(zod@4.4.3):
     dependencies:
       '@babel/parser': 8.0.10
       '@babel/types': 8.0.10
       '@clack/prompts': 1.8.1
       '@expo/devcert': 1.2.2(supports-color@8.1.1)
-      '@mastra/core': 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
-      '@mastra/deployer': 1.81.0(@hono/node-server@1.19.14(hono@4.13.1))(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(supports-color@8.1.1)(zod@4.4.3)
-      '@mastra/loggers': 1.3.10(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))
+      '@mastra/core': 1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3)
+      '@mastra/deployer': 1.81.0(@hono/node-server@1.19.14(hono@4.13.1))(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))(supports-color@8.1.1)(zod@4.4.3)
+      '@mastra/loggers': 1.3.10(@mastra/core@1.81.0(@bufbuild/protobuf@2.13.0)(@grpc/grpc-js@1.14.4)(@opentelemetry/api@1.9.1)(ai@7.0.41(zod@4.4.3))(express@5.3.0(supports-color@8.1.1))(rxjs@7.8.2)(supports-color@8.1.1)(valibot@1.4.2(typescript@5.9.2))(zod-to-json-schema@3.25.2(zod@4.4.3))(zod@4.4.3))
       archiver: 8.0.0
       commander: 14.0.3
       dotenv: 17.4.2
@@ -23930,7 +24446,7 @@ snapshots:
       local-pkg: 1.2.1
       openapi-fetch: 0.17.0
       picocolors: 1.1.1
-      posthog-node: 5.61.1(@opentelemetry/api@1.9.1)
+      posthog-node: 5.61.1(@opentelemetry/api@1.9.1)(rxjs@7.8.2)
       semver: 7.8.5
       serve-handler: 6.1.7
       strip-json-comments: 5.0.3
@@ -24394,6 +24910,20 @@ snapshots:
   ms@2.0.0: {}
 
   ms@2.1.3: {}
+
+  mutation-server-protocol@0.4.1:
+    dependencies:
+      zod: 4.4.3
+
+  mutation-testing-elements@3.8.4: {}
+
+  mutation-testing-metrics@3.8.4:
+    dependencies:
+      mutation-testing-report-schema: 3.8.4
+
+  mutation-testing-report-schema@3.8.4: {}
+
+  mute-stream@3.0.0: {}
 
   mz@2.7.0:
     dependencies:
@@ -25022,11 +25552,12 @@ snapshots:
     transitivePeerDependencies:
       - preact-render-to-string
 
-  posthog-node@5.61.1(@opentelemetry/api@1.9.1):
+  posthog-node@5.61.1(@opentelemetry/api@1.9.1)(rxjs@7.8.2):
     dependencies:
       '@posthog/core': 1.62.0
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
+      rxjs: 7.8.2
 
   potpack@1.0.2: {}
 
@@ -25264,6 +25795,10 @@ snapshots:
   pusher-js@8.6.0:
     dependencies:
       tweetnacl: 1.0.3
+
+  qs@6.15.1:
+    dependencies:
+      side-channel: 1.1.1
 
   qs@6.17.1:
     dependencies:
@@ -25809,6 +26344,10 @@ snapshots:
   run-parallel@1.2.0:
     dependencies:
       queue-microtask: 1.2.3
+
+  rxjs@7.8.2:
+    dependencies:
+      tslib: 2.8.1
 
   safe-buffer@5.1.2: {}
 
@@ -26937,6 +27476,8 @@ snapshots:
       - immer
       - react
 
+  tunnel@0.0.6: {}
+
   turbo@2.10.8:
     optionalDependencies:
       '@turbo/darwin-64': 2.10.8
@@ -26976,7 +27517,17 @@ snapshots:
       es-errors: 1.3.0
       is-typed-array: 1.1.15
 
+  typed-inject@5.0.0: {}
+
   typed-query-selector@2.12.3: {}
+
+  typed-rest-client@2.3.1:
+    dependencies:
+      des.js: 1.1.0
+      js-md4: 0.3.2
+      qs: 6.15.1
+      tunnel: 0.0.6
+      underscore: 1.13.8
 
   typescript@5.5.3: {}
 
@@ -27003,6 +27554,8 @@ snapshots:
   uint8array-extras@1.5.0: {}
 
   ulid@2.4.0: {}
+
+  underscore@1.13.8: {}
 
   undici-types@5.26.5: {}
 
@@ -27340,6 +27893,8 @@ snapshots:
       makeerror: 1.0.12
 
   watskeburt@6.0.0: {}
+
+  weapon-regex@2.0.6: {}
 
   web-streams-polyfill@3.3.3: {}
 

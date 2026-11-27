@@ -27,12 +27,12 @@ describe('Post Solution Use Case', () => {
     useCase = new PostSolutionUseCase(solutionsRepository, challengesRepository)
   })
 
-  it('should throw an error if the solution title is already in use', () => {
+  it('should throw an error if the solution title is already in use', async () => {
     const solution = SolutionsFaker.fake()
     const challenge = ChallengesFaker.fake()
     solutionsRepository.findBySlug.mockResolvedValue(solution)
 
-    expect(
+    await expect(
       useCase.execute({
         solutionTitle: solution.title.value,
         solutionContent: solution.content.value,
@@ -42,13 +42,13 @@ describe('Post Solution Use Case', () => {
     ).rejects.toThrow(SolutionTitleAlreadyInUseError)
   })
 
-  it('should throw an error if the challenge does not exist', () => {
+  it('should throw an error if the challenge does not exist', async () => {
     const solution = SolutionsFaker.fake()
     const challenge = ChallengesFaker.fake()
     solutionsRepository.findBySlug.mockResolvedValue(null)
     challengesRepository.findById.mockResolvedValue(null)
 
-    expect(
+    await expect(
       useCase.execute({
         solutionTitle: solution.title.value,
         solutionContent: solution.content.value,

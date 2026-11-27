@@ -176,8 +176,8 @@ workspace against the final HEAD. Coverage/ratchet
 (`test:coverage`, `check:coverage`) and full suites only apply with demonstrated impact on the
 workspace, a Spec requirement or a user request; CI runs them, including the changed-lines
 coverage gate of Core, Server and Web (see "Gates de cobertura" in
-`documentation/tooling.md`). Reuse the current recorded results and run only what is
-missing or stale. A green local build
+`documentation/tooling.md`) and the Core mutation score gate ("Gate de mutação"). Reuse
+the current recorded results and run only what is missing or stale. A green local build
 is a precondition for calling `commit`; if there is no current build evidence, run
 it once. A result other than `passed` prevents the conclusion.
 

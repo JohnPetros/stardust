@@ -18,8 +18,8 @@ describe('Edit Solution Use Case', () => {
     useCase = new EditSolutionUseCase(repository)
   })
 
-  it('should throw an error if the solution does not exist', () => {
-    expect(
+  it('should throw an error if the solution does not exist', async () => {
+    await expect(
       useCase.execute({
         solutionId: '',
         solutionTitle: '',
@@ -28,13 +28,13 @@ describe('Edit Solution Use Case', () => {
     ).rejects.toThrow(SolutionNotFoundError)
   })
 
-  it('should throw an error if the solution title is already in use', () => {
+  it('should throw an error if the solution title is already in use', async () => {
     const solution = SolutionsFaker.fake()
     repository.findById.mockResolvedValue(solution)
     repository.findBySlug.mockResolvedValue(solution)
     const newSolutionTitle = 'new-solution-title'
 
-    expect(
+    await expect(
       useCase.execute({
         solutionId: solution.id.value,
         solutionTitle: newSolutionTitle,

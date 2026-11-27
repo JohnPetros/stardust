@@ -19,10 +19,10 @@ describe('Verify User Insignia Use Case', () => {
     useCase = new VerifyUserInsigniaUseCase(repository)
   })
 
-  it('should throw an error if the user is not found', () => {
+  it('should throw an error if the user is not found', async () => {
     repository.findById.mockResolvedValue(null)
 
-    expect(
+    await expect(
       useCase.execute({
         userId: Id.create().value,
         insigniaRole: InsigniaRole.createAsEngineer().value,
@@ -37,7 +37,7 @@ describe('Verify User Insignia Use Case', () => {
     repository.findById.mockResolvedValue(user)
     const insignia = InsigniaRole.createAsEngineer()
 
-    expect(
+    await expect(
       useCase.execute({
         userId: user.id.value,
         insigniaRole: insignia.value,
@@ -49,7 +49,7 @@ describe('Verify User Insignia Use Case', () => {
     })
     repository.findById.mockResolvedValue(user)
 
-    expect(
+    await expect(
       useCase.execute({
         userId: user.id.value,
         insigniaRole: insignia.value,

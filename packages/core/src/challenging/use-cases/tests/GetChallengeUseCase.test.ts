@@ -18,7 +18,7 @@ describe('Get Challenge Use Case', () => {
 
   it('should throw an error if the challenge is not found', async () => {
     const challenge = ChallengesFaker.fake()
-    expect(
+    await expect(
       useCase.execute({
         challengeSlug: challenge.slug.value,
       }),

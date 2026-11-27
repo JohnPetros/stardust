@@ -17,8 +17,10 @@ describe('Delete Solution Use Case', () => {
     useCase = new DeleteSolutionUseCase(repository)
   })
 
-  it('should throw an error if the solution does not exist', () => {
-    expect(useCase.execute({ solutionId: '' })).rejects.toThrow(SolutionNotFoundError)
+  it('should throw an error if the solution does not exist', async () => {
+    await expect(useCase.execute({ solutionId: '' })).rejects.toThrow(
+      SolutionNotFoundError,
+    )
   })
 
   it('should remove the solution from the repository', async () => {

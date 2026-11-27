@@ -21,10 +21,10 @@ describe('Get Last Week Ranking Winners Use Case', () => {
     useCase = new GetLastWeekRankingWinnersUseCase(tiersRepository, rankersRepository)
   })
 
-  it('should throw an error if tier is not found', () => {
+  it('should throw an error if tier is not found', async () => {
     tiersRepository.findById.mockResolvedValue(null)
 
-    expect(
+    await expect(
       useCase.execute({
         currentWeekTierId: Id.create().value,
       }),

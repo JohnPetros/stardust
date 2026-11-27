@@ -17,8 +17,8 @@ describe('Calculate Reward For Challenge Completion Use Case', () => {
     useCase = new CalculateRewardForChallengeCompletionUseCase(repository)
   })
 
-  it('should throw an error if the user is not found', () => {
-    expect(
+  it('should throw an error if the user is not found', async () => {
+    await expect(
       useCase.execute({
         userId: Id.create().value,
         challengeId: Id.create().value,

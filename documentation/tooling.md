@@ -228,6 +228,62 @@ node scripts/check-changed-coverage.mjs core packages/core/coverage/lcov.info --
 Cobertura complementa as asserções de comportamento; sozinha, não prova
 aceitação, autorização, falhas ou persistência.
 
+## Gate de mutação
+
+Em PRs que tocam o Core, o workflow `Core mutation CI` roda testes de mutação com
+o Stryker e o runner do Jest. O Stryker introduz pequenos defeitos no código e
+roda os testes relacionados; um defeito que nenhum teste detecta mostra uma
+asserção fraca ou ausente. Os alvos são apenas os casos de uso,
+`packages/core/src/<módulo>/use-cases/*.ts`, sem o `index.ts`. Web, Server e os
+demais pacotes não têm esse gate. O Core declara o `jest-environment-node` na
+mesma versão do seu Jest, porque o runner do Stryker o carrega a partir do pacote.
+
+Os testes de casos de uso devem fixar os valores dos quais o resultado depende.
+Um valor aleatório do faker faz o score variar entre execuções.
+
+O score divide os mutantes detectados (`Killed` e `Timeout`) por todos, exceto
+`Ignored`, `RuntimeError` e `CompileError`. Mutantes sem cobertura contam contra
+o score.
+
+| Caso                                              | Exigência                                           |
+| ------------------------------------------------- | --------------------------------------------------- |
+| Módulo                                            | Ao menos **70%**; já abaixo disso, não pode cair    |
+| Arquivo novo                                      | Ao menos **70%**                                    |
+| Arquivo alterado que estava com 70% ou mais       | Ao menos **70%**                                    |
+| Arquivo alterado que estava abaixo de 70%         | Não pode cair, ou deve atingir 70%                  |
+| Arquivo não alterado                              | Não pode cair                                       |
+
+Os scores são comparados com o branch de destino, sem arredondamento. Um arquivo
+sem mutantes passa. Um relatório ou arquivo ausente reprova. Renomear um caso de
+uso conta como arquivo novo.
+
+O CI mede o branch de destino e o merge do PR em quatro partes cada. O branch de
+destino usa os próprios fontes, testes, configuração do Jest e dependências, e
+recebe apenas as versões do PR para o Stryker e o `jest-environment-node`, além do
+harness (`stryker.config.mjs`, `scripts/test-mutation.mjs` e
+`scripts/mutation-targets.mjs`). O job `Mutation score` aplica o gate com
+`scripts/check-mutation-score.mjs`, grava o resultado no resumo e envia a tabela
+por arquivo no artifact `core-mutation-score`. O job `mutation-comment`, o único
+com `pull-requests: write`, publica no PR a tabela por módulo e os arquivos
+reprovados. PRs de forks não são comentados.
+
+Para rodar localmente:
+
+```bash
+pnpm --filter @stardust/core run test:mutation --files src/ranking/use-cases/GetRankingUseCase.ts
+```
+
+Sem argumentos, o comando seleciona os casos de uso alterados desde o ponto em
+que o branch saiu de `origin/main` e todos os do módulo quando um teste de caso de
+uso muda. Mudanças em configuração compartilhada exigem `--files` ou `--all`, e
+`--base <ref>` troca o ponto de comparação. `--shard N/M` requer `--all` e
+`--dry-run` apenas lista o escopo. Uma seleção vazia falha. Os relatórios HTML e
+JSON ficam em `packages/core/reports/mutation/`. O comando local não aplica o
+gate, que compara os dois lados.
+
+Aguarde toda asserção assíncrona com `await`. Sem ele, o mutante derruba o
+processo do Jest, vira `RuntimeError` e fica fora do score.
+
 ## Scripts por workspace
 
 As descrições abaixo refletem os scripts declarados nos `package.json` atuais.
@@ -385,6 +441,7 @@ los.
 | `format`             | Formata `src` e grava as alterações.                                   |
 | `test:unit`          | Executa os testes unitários do Core.                                   |
 | `test:coverage`      | Executa os testes unitários do Core com relatório JSON de cobertura.   |
+| `test:mutation`      | Roda testes de mutação nos casos de uso do Core (ver "Gate de mutação"). |
 
 ### `packages/email`
 

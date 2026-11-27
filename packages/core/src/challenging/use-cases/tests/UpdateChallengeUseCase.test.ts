@@ -23,7 +23,7 @@ describe('Update Challenge Use Case', () => {
     const challenge = ChallengesFaker.fake()
     repository.findById.mockResolvedValue(null)
 
-    expect(
+    await expect(
       useCase.execute({
         challengeDto: challenge.dto,
       }),
@@ -37,7 +37,7 @@ describe('Update Challenge Use Case', () => {
     )
     repository.findBySlug.mockResolvedValue(challenge)
 
-    expect(
+    await expect(
       useCase.execute({
         challengeDto: challenge.dto,
       }),
