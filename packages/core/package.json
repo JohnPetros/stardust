@@ -24,7 +24,7 @@
     "lint": "biome lint src --diagnostic-level=error",
     "format": "biome format src --write",
     "test:unit": "jest",
-    "test:coverage": "jest --coverage --coverageReporters=json-summary --coverageReporters=text-summary"
+    "test:coverage": "jest --coverage"
   },
   "exports": {
     ".": "./build/main.js",

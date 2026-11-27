@@ -13,7 +13,13 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   preset: 'ts-jest',
-  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.test.ts', '!src/**/tests/**', '!src/**/fakers/**'],
-  coverageReporters: ['json-summary', 'text-summary'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/**/*.test.ts',
+    '!src/**/tests/**',
+    '!src/**/fakers/**',
+  ],
+  // LCOV paths are relative to the repository root, as the changed-lines gate expects.
+  coverageReporters: ['json-summary', 'text-summary', ['lcov', { projectRoot: '../..' }]],
   coverageDirectory: 'coverage',
 }

@@ -70,6 +70,68 @@ test('fails on missing or empty shard reports without replacing the summary', ()
   }
 })
 
+function createUnloadedReport() {
+  const location = { start: { line: 1, column: 0 }, end: { line: 2, column: 20 } }
+  const lines = [1, 2].map((line) => ({
+    start: { line, column: 0 },
+    end: { line, column: 20 },
+  }))
+  return {
+    '/server/adapter.ts': {
+      path: '/server/adapter.ts',
+      statementMap: { ...lines },
+      fnMap: { 0: { name: '(empty-report)', decl: location, loc: location, line: 1 } },
+      branchMap: {
+        0: { type: 'branch', line: 1, loc: location, locations: [location] },
+      },
+      s: { 0: 0, 1: 0 },
+      f: { 0: 0 },
+      b: { 0: [0] },
+    },
+  }
+}
+
+function mergeToLcov(reports) {
+  const directory = mkdtempSync(join(tmpdir(), 'stardust-coverage-'))
+  try {
+    const inputs = reports.map((report, index) => {
+      const input = join(directory, `${index}.json`)
+      writeFileSync(input, JSON.stringify(report))
+      return input
+    })
+    const lcovPath = join(directory, 'lcov.info')
+    const summary = mergeCoverageReports(inputs, join(directory, 'summary.json'), {
+      lcovPath,
+      root: '/server',
+    })
+    return { summary, lcov: readFileSync(lcovPath, 'utf8') }
+  } finally {
+    rmSync(directory, { recursive: true, force: true })
+  }
+}
+
+test('ignores the unloaded record of a file that another shard loaded', () => {
+  for (const reports of [
+    [createUnloadedReport(), createReport([1, 0])],
+    [createReport([1, 0]), createUnloadedReport()],
+  ]) {
+    const { summary } = mergeToLcov(reports)
+
+    assert.equal(summary.total.functions.total, 2)
+    assert.equal(summary.total.branches.total, 0)
+    assert.equal(summary.total.lines.covered, 1)
+  }
+})
+
+test('keeps a file that no shard loaded as uncovered', () => {
+  const { summary, lcov } = mergeToLcov([createUnloadedReport(), createUnloadedReport()])
+
+  assert.equal(summary.total.lines.total, 2)
+  assert.equal(summary.total.lines.covered, 0)
+  assert.equal(summary.total.functions.total, 1)
+  assert.equal(lcov, 'SF:adapter.ts\nDA:1,0\nDA:2,0\nBRDA:1,0,0,0\nend_of_record\n')
+})
+
 test('resolves one unit report locally and one per shard in CI, plus six integration shards', () => {
   const relative = (paths) => paths.map((path) => path.replace('/coverage/', ''))
   const integration = [1, 2, 3, 4, 5, 6].map(

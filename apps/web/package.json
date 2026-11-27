@@ -15,7 +15,7 @@
     "test:widgets": "jest --selectProjects widgets",
     "test:handlers": "jest --selectProjects handlers",
     "test:app": "jest --selectProjects app",
-    "test:coverage": "jest --coverage --coverageReporters=json-summary --coverageReporters=text-summary",
+    "test:coverage": "jest --coverage",
     "test:unit:watch": "jest --watchAll",
     "test:integration": "playwright test --config=playwright.config.ts",
     "test:integration:ui": "playwright test --config=playwright.config.ts --ui",

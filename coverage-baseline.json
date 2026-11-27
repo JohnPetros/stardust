@@ -3,15 +3,15 @@
     "summary": "packages/core/coverage/coverage-summary.json",
     "lines": 81.34,
     "statements": 81.67,
-    "functions": 64.43,
-    "branches": 65.89
+    "functions": 65.16,
+    "branches": 66.5
   },
   "@stardust/server": {
     "summary": "apps/server/coverage/coverage-summary.json",
-    "lines": 51.51,
-    "statements": 51.51,
-    "functions": 36.35,
-    "branches": 82.98
+    "lines": 70.85,
+    "statements": 70.85,
+    "functions": 76.72,
+    "branches": 86.36
   },
   "@stardust/backoffice": {
     "summary": "apps/backoffice/coverage/coverage-summary.json",
@@ -22,9 +22,9 @@
   },
   "@stardust/web": {
     "summary": "apps/web/coverage/coverage-summary.json",
-    "lines": 24.76,
-    "statements": 23.93,
-    "functions": 21.59,
-    "branches": 27.07
+    "lines": 26.72,
+    "statements": 26.19,
+    "functions": 25.45,
+    "branches": 30.15
   }
 }
