@@ -257,9 +257,9 @@ tests.
   for each changed workspace and for the affected consumers. The typecheck uses
   the workspace's entire project; do not pass files to `tsc`.
 - `pnpm --filter @stardust/<workspace> run check:complexity` for each workspace with new or
-  changed code. It fails on any warning outside `.code-multivitals-baseline.json`; a non-zero
-  exit is a failed check, and a warning is "pre-existing" only when the baseline or the same
-  command on `origin/main` proves it.
+  changed code, after `git fetch origin`. It compares the change with `origin/main` and fails
+  when a function goes over an error limit or one already over it gets worse; a non-zero exit
+  is a failed check. New warnings are listed and do not block.
 - `pnpm run test:unit -w <workspace> -- <test-files>`, with paths verified in
   the code. In the Web, additionally run
   `pnpm --filter @stardust/web run test:integration <files>` only for the

@@ -23,10 +23,11 @@ on:
       - ".dependency-cruiser.cjs"
       - "coverage-baseline.json"
       - "scripts/check-coverage-baseline.mjs"
-      - ".code-multivitals-baseline.json"
       - ".code-multivitals.json"
       - "scripts/check-complexity.mjs"
+      - "scripts/comment-complexity-report.mjs"
       - "scripts/tests/check-complexity.test.mjs"
+      - "scripts/tests/comment-complexity-report.test.mjs"
 
 permissions:
   contents: read
@@ -84,10 +85,16 @@ jobs:
   check-code-complexity:
     name: check-code-complexity
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          # The complexity gate diffs against the first parent.
+          fetch-depth: 2
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
@@ -102,7 +109,29 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Check complexity
-        run: pnpm --filter @stardust/server run check:complexity
+        id: complexity
+        run: |
+          node --test scripts/tests/check-complexity.test.mjs scripts/tests/comment-complexity-report.test.mjs
+          pnpm --filter @stardust/server run check:complexity --base HEAD^1 --output "$GITHUB_WORKSPACE/complexity-report.md"
+
+      - name: Publish complexity on pull request
+        if: ${{ !cancelled() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && steps.complexity.outputs.findings != '' }}
+        uses: actions/github-script@v9
+        env:
+          HAS_FINDINGS: ${{ steps.complexity.outputs.findings }}
+        with:
+          script: |
+            const { commentComplexityReport } = await import(
+              `${process.env.GITHUB_WORKSPACE}/scripts/comment-complexity-report.mjs`
+            )
+            const outcome = await commentComplexityReport({
+              github,
+              context,
+              workspace: 'server',
+              reportPath: `${process.env.GITHUB_WORKSPACE}/complexity-report.md`,
+              hasFindings: process.env.HAS_FINDINGS === 'true',
+            })
+            core.info(`Complexity comment: ${outcome}`)
 
   check-types:
     name: Check types

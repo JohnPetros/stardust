@@ -1,297 +1,368 @@
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
-import os from 'node:os'
-import path from 'node:path'
-import process from 'node:process'
-import { spawnSync } from 'node:child_process'
-import { fileURLToPath, pathToFileURL } from 'node:url'
+import { execFileSync } from 'node:child_process'
+import {
+  appendFileSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs'
+import { tmpdir } from 'node:os'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const SCRIPT_DIRECTORY = path.dirname(fileURLToPath(import.meta.url))
-const ROOT_DIRECTORY = path.resolve(SCRIPT_DIRECTORY, '..')
-const BASELINE_PATH = path.join(ROOT_DIRECTORY, '.code-multivitals-baseline.json')
-const CONFIG_PATH = path.join(ROOT_DIRECTORY, '.code-multivitals.json')
-const CODE_MULTIVITALS_PATH = path.join(
-  ROOT_DIRECTORY,
-  'node_modules',
-  '.bin',
-  process.platform === 'win32' ? 'code-multivitals.cmd' : 'code-multivitals',
-)
-const EXCLUDE_PATTERNS = [
-  '!**/*.test.ts',
-  '!**/*.test.tsx',
-  '!**/tests/**',
-  '!**/routeTree.gen.ts',
-  '!apps/server/src/database/supabase/types/Database.ts',
-]
-const SOURCE_PATTERNS = [
-  'apps/server/src/**/*.ts',
-  'apps/web/src/**/*.{ts,tsx}',
-  'apps/backoffice/src/**/*.{ts,tsx}',
-  'packages/core/src/**/*.ts',
-  'packages/validation/src/**/*.ts',
-  'packages/email/templates/**/*.{ts,tsx}',
-  'packages/lsp/src/**/*.ts',
-  ...EXCLUDE_PATTERNS,
-]
-const SOURCE_PATTERNS_BY_SCOPE = {
-  'apps/server': ['apps/server/src/**/*.ts'],
-  'apps/web': ['apps/web/src/**/*.{ts,tsx}'],
-  'apps/backoffice': ['apps/backoffice/src/**/*.{ts,tsx}'],
-  'packages/core': ['packages/core/src/**/*.ts'],
-  'packages/validation': ['packages/validation/src/**/*.ts'],
-  'packages/email': ['packages/email/templates/**/*.{ts,tsx}'],
-  'packages/lsp': ['packages/lsp/src/**/*.ts'],
+import { analyseFile, DEFAULT_THRESHOLDS } from 'code-multivitals'
+
+const ROOT_DIRECTORY = fileURLToPath(new URL('..', import.meta.url))
+const CONFIG_FILE = '.code-multivitals.json'
+const SOURCE_SCOPES = {
+  'apps/server': { directory: 'apps/server/src/', extension: /\.ts$/ },
+  'apps/web': { directory: 'apps/web/src/', extension: /\.tsx?$/ },
+  'apps/backoffice': { directory: 'apps/backoffice/src/', extension: /\.tsx?$/ },
+  'packages/core': { directory: 'packages/core/src/', extension: /\.ts$/ },
+  'packages/validation': { directory: 'packages/validation/src/', extension: /\.ts$/ },
+  'packages/email': { directory: 'packages/email/templates/', extension: /\.tsx?$/ },
+  'packages/lsp': { directory: 'packages/lsp/src/', extension: /\.ts$/ },
 }
-
-function toRepositoryPath(filePath) {
-  return path
-    .relative(ROOT_DIRECTORY, path.resolve(ROOT_DIRECTORY, filePath))
-    .split(path.sep)
-    .join('/')
+const EXCLUDED_SOURCE =
+  /\.test\.tsx?$|\/tests\/|\/routeTree\.gen\.ts$|^apps\/server\/src\/database\/supabase\/types\/Database\.ts$/
+// How much a metric that is already over its error limit may grow in one change.
+const METRICS = {
+  cyclomaticComplexity: { label: 'Cyclomatic complexity', growth: 0 },
+  cognitiveComplexity: { label: 'Cognitive complexity', growth: 0 },
+  functionLength: { label: 'Function length', growth: 0.1 },
+  nestingDepth: { label: 'Nesting depth', growth: 0 },
+  halsteadVolume: { label: 'Halstead volume', growth: 0.1 },
 }
+const USAGE =
+  'Usage: node scripts/check-complexity.mjs [--scope <app-or-package-path>] [--base <git-ref>] [--head <git-ref>] [--output <path>]'
 
-function toAbsolutePath(filePath) {
-  return path.resolve(ROOT_DIRECTORY, filePath)
-}
-
-function getWorstSeverity(functionResult) {
-  const severities = [
-    functionResult.maintainabilityRating,
-    ...functionResult.metrics.map((metric) => metric.severity),
-  ]
-  if (severities.includes('error')) return 'error'
-  if (severities.includes('warn')) return 'warn'
-  return 'ok'
-}
-
-function isBaselineViolation(functionResult) {
-  return getWorstSeverity(functionResult) !== 'ok'
-}
-
-function mapClonePaths(clone) {
-  return {
-    ...clone,
-    blockA: { ...clone.blockA, filePath: toRepositoryPath(clone.blockA.filePath) },
-    blockB: { ...clone.blockB, filePath: toRepositoryPath(clone.blockB.filePath) },
-  }
-}
-
-function normalizeBaseline(baseline, previousBaseline = { files: [] }) {
-  const previousOrder = new Map(
-    previousBaseline.files.map((file, index) => [file.filePath, index]),
+export function isProductionSource(path, scope) {
+  const scopes = scope ? [SOURCE_SCOPES[scope]] : Object.values(SOURCE_SCOPES)
+  return (
+    !EXCLUDED_SOURCE.test(path) &&
+    scopes.some(
+      ({ directory, extension }) => path.startsWith(directory) && extension.test(path),
+    )
   )
+}
+
+// Reads `git diff --name-status -z`: renames carry the old path and the new path.
+export function parseNameStatus(output) {
+  const fields = output.split('\0').filter(Boolean)
+  const changes = []
+  for (let index = 0; index < fields.length; ) {
+    const status = fields[index][0]
+    const hasTwoPaths = status === 'R' || status === 'C'
+    const first = fields[index + 1]
+    const second = hasTwoPaths ? fields[index + 2] : first
+    changes.push({
+      basePath: status === 'A' ? undefined : first,
+      headPath: status === 'D' ? undefined : second,
+    })
+    index += hasTwoPaths ? 3 : 2
+  }
+  return changes
+}
+
+function measureDistance(previous, current) {
+  return current.metrics.reduce(
+    (total, metric, index) =>
+      total + Math.abs(metric.value - previous.metrics[index].value) / metric.threshold,
+    0,
+  )
+}
+
+// Pairs functions of one file by name, never by line. Functions sharing a name pair with
+// the closest measurements first, so unchanged ones always find themselves.
+export function pairFunctions(before, after) {
+  const candidates = after.flatMap((current) =>
+    before
+      .filter((previous) => previous.name === current.name)
+      .map((previous) => ({
+        current,
+        previous,
+        distance: measureDistance(previous, current),
+        offset: Math.abs(previous.startLine - current.startLine),
+      })),
+  )
+  candidates.sort((a, b) => a.distance - b.distance || a.offset - b.offset)
+  const pairs = new Map()
+  const paired = new Set()
+  for (const { current, previous } of candidates) {
+    if (pairs.has(current) || paired.has(previous)) continue
+    pairs.set(current, previous)
+    paired.add(previous)
+  }
+  return pairs
+}
+
+function judgeMetric(metric, previous) {
+  if (previous?.severity === 'error') {
+    const allowed = previous.value * (1 + METRICS[metric.name].growth)
+    if (metric.value <= allowed) return undefined
+    return { allowed, reason: 'Already over the error limit and grew' }
+  }
+  if (metric.severity !== 'error') return undefined
   return {
-    ...baseline,
-    files: baseline.files
-      .map((file) => ({
-        ...file,
-        filePath: toRepositoryPath(file.filePath),
-        functions: file.functions.filter(isBaselineViolation),
-      }))
-      .filter((file) => file.functions.length > 0)
-      .sort(
-        (left, right) =>
-          (previousOrder.get(left.filePath) ?? Infinity) -
-            (previousOrder.get(right.filePath) ?? Infinity) ||
-          left.filePath.localeCompare(right.filePath),
-      ),
-    clones: baseline.clones.map(mapClonePaths),
+    allowed: metric.threshold,
+    reason: previous ? 'Went over the error limit' : 'New function over the error limit',
   }
 }
 
-function materializeBaseline(baseline) {
-  return {
-    ...baseline,
-    files: baseline.files.map((file) => ({
-      ...file,
-      filePath: toAbsolutePath(file.filePath),
-    })),
-    clones: baseline.clones.map(mapClonePaths).map((clone) => ({
-      ...clone,
-      blockA: { ...clone.blockA, filePath: toAbsolutePath(clone.blockA.filePath) },
-      blockB: { ...clone.blockB, filePath: toAbsolutePath(clone.blockB.filePath) },
-    })),
+export function compareFunctions(before, after) {
+  const pairs = pairFunctions(before, after)
+  const violations = []
+  const warnings = []
+  for (const current of after) {
+    for (const metric of current.metrics) {
+      const previous = pairs
+        .get(current)
+        ?.metrics.find(({ name }) => name === metric.name)
+      const result = {
+        name: current.name,
+        line: current.startLine,
+        metric: metric.name,
+        before: previous?.value,
+        after: metric.value,
+      }
+      const violation = judgeMetric(metric, previous)
+      if (violation) violations.push({ ...result, ...violation })
+      else if (metric.severity === 'warn' && (previous?.severity ?? 'ok') === 'ok') {
+        warnings.push(result)
+      }
+    }
   }
+  return { violations, warnings }
 }
 
-function alignBaselineLocations(baseline, current) {
-  const currentFiles = new Map(current.files.map((file) => [file.filePath, file]))
-  return {
-    ...baseline,
-    files: baseline.files.map((file) => ({
-      ...file,
-      functions: file.functions.map((fn) => {
-        const matches =
-          currentFiles
-            .get(file.filePath)
-            ?.functions.filter((candidate) => candidate.name === fn.name) ?? []
-        const sameNameCount = file.functions.filter(
-          (candidate) => candidate.name === fn.name,
-        ).length
-        if (fn.name === '<anonymous>' || sameNameCount !== 1 || matches.length !== 1)
-          return fn
-        const candidate = matches[0]
-        // Only relocate unchanged metrics. New, ambiguous or worsened functions
-        // must still be reported against the committed baseline.
-        if (
-          JSON.stringify(fn.metrics) !== JSON.stringify(candidate.metrics) ||
-          fn.maintainabilityIndex !== candidate.maintainabilityIndex ||
-          fn.maintainabilityRating !== candidate.maintainabilityRating
-        )
-          return fn
-        return { ...fn, startLine: candidate.startLine, endLine: candidate.endLine }
-      }),
-    })),
-  }
-}
-
-function createCliArguments(
-  baselinePath,
-  saveBaselinePath,
-  sourcePatterns = SOURCE_PATTERNS,
-) {
-  const argumentsList = [
-    ...sourcePatterns,
-    '--config',
-    CONFIG_PATH,
-    '--max-errors',
-    '0',
-    '--max-warnings',
-    '0',
-    '--min-duplicate-lines',
-    '999999',
-  ]
-  if (baselinePath) argumentsList.push('--baseline', baselinePath)
-  if (saveBaselinePath) argumentsList.push('--save-baseline', saveBaselinePath)
-  return argumentsList
-}
-
-function getScopePatterns(scope) {
-  if (!scope) return SOURCE_PATTERNS
-  const patterns = SOURCE_PATTERNS_BY_SCOPE[scope]
-  if (!patterns) {
-    throw new Error(
-      `Unknown complexity scope "${scope}". Expected one of ${Object.keys(
-        SOURCE_PATTERNS_BY_SCOPE,
-      ).join(', ')}.`,
-    )
-  }
-  return [...patterns, ...EXCLUDE_PATTERNS]
-}
-
-function readScope() {
-  const scopeIndex = process.argv.indexOf('--scope')
-  if (scopeIndex === -1) return undefined
-  const scope = process.argv[scopeIndex + 1]
-  if (!scope || scope.startsWith('--')) {
-    throw new Error('The --scope option requires an app or package path.')
-  }
-  return scope
-}
-
-function runCodeMultiVitals(argumentsList) {
-  if (!existsSync(CODE_MULTIVITALS_PATH)) {
-    throw new Error(
-      `Missing CodeMultiVitals executable at ${toRepositoryPath(CODE_MULTIVITALS_PATH)}. Run pnpm install --frozen-lockfile first.`,
-    )
-  }
-  const result = spawnSync(CODE_MULTIVITALS_PATH, argumentsList, {
-    cwd: ROOT_DIRECTORY,
-    stdio: 'inherit',
+function runGit(root, argumentsList) {
+  return execFileSync('git', ['-c', 'core.quotePath=false', ...argumentsList], {
+    cwd: root,
+    encoding: 'utf8',
+    maxBuffer: 256 * 1024 * 1024,
+    stdio: ['ignore', 'pipe', 'pipe'],
   })
-  if (result.error) throw result.error
-  return result.status ?? 1
 }
 
-function updateBaseline(tempDirectory) {
-  const temporaryBaselinePath = path.join(tempDirectory, 'baseline.json')
-  runCodeMultiVitals([
-    ...createCliArguments(null, temporaryBaselinePath),
-    '--reporter',
-    'json',
-    '--output',
-    path.join(tempDirectory, 'report.json'),
-  ])
-  if (!existsSync(temporaryBaselinePath)) {
-    throw new Error('CodeMultiVitals did not produce a baseline file.')
-  }
-  const baseline = JSON.parse(readFileSync(temporaryBaselinePath, 'utf8'))
-  const previousBaseline = existsSync(BASELINE_PATH)
-    ? JSON.parse(readFileSync(BASELINE_PATH, 'utf8'))
-    : undefined
-  writeFileSync(
-    BASELINE_PATH,
-    `${JSON.stringify(normalizeBaseline(baseline, previousBaseline), null, 2)}\n`,
-  )
-  console.log(`CodeMultiVitals baseline updated at ${toRepositoryPath(BASELINE_PATH)}`)
-}
-
-function checkAgainstBaseline(tempDirectory) {
-  if (!existsSync(BASELINE_PATH)) {
+function findMergeBase(root, base, head) {
+  try {
+    return runGit(root, ['merge-base', base, head ?? 'HEAD']).trim()
+  } catch {
     throw new Error(
-      `Missing ${toRepositoryPath(BASELINE_PATH)}. Run pnpm run update:complexity-baseline first.`,
+      `Cannot find the merge base of ${base} and ${head ?? 'HEAD'}. Fetch the target branch or pass --base.`,
     )
   }
-  const baseline = JSON.parse(readFileSync(BASELINE_PATH, 'utf8'))
-  const sourcePatterns = getScopePatterns(readScope())
-  const currentPath = path.join(tempDirectory, 'current.json')
-  runCodeMultiVitals([
-    ...createCliArguments(null, null, sourcePatterns),
-    '--reporter',
-    'json',
-    '--output',
-    currentPath,
-  ])
-  if (!existsSync(currentPath)) {
-    throw new Error('CodeMultiVitals did not produce the current analysis.')
+}
+
+// Without a head revision the working tree is compared, including untracked files.
+function listChanges(root, base, head) {
+  const revisions = head ? [base, head] : [base]
+  const changes = parseNameStatus(
+    runGit(root, [
+      'diff',
+      '--name-status',
+      '--find-renames',
+      '--no-ext-diff',
+      '-z',
+      ...revisions,
+      '--',
+    ]),
+  )
+  if (head) return changes
+  const untracked = runGit(root, ['ls-files', '--others', '--exclude-standard', '-z'])
+  return [
+    ...changes,
+    ...untracked
+      .split('\0')
+      .filter(Boolean)
+      .map((path) => ({ basePath: undefined, headPath: path })),
+  ]
+}
+
+function readThresholds(root) {
+  const config = JSON.parse(readFileSync(join(root, CONFIG_FILE), 'utf8'))
+  return { ...DEFAULT_THRESHOLDS, ...config.thresholds }
+}
+
+// The analyser reads from disk, so each revision of a file gets its own copy.
+function analyseSource({ directory, thresholds }, side, path, source) {
+  const copy = join(directory, side, path)
+  mkdirSync(dirname(copy), { recursive: true })
+  writeFileSync(copy, source)
+  return analyseFile(copy, thresholds)
+}
+
+// A change must never pass unmeasured, so unreadable code fails the gate.
+function measureHead(analysis, path, source) {
+  const report = analyseSource(analysis, 'head', path, source)
+  if (report.parseError) {
+    throw new Error(
+      `Cannot parse ${path}. The analyser reads every file as TSX, so write a generic arrow as \`<T,>() => {}\`.\n${report.parseError}`,
+    )
   }
-  const current = JSON.parse(readFileSync(currentPath, 'utf8'))
-  const temporaryBaselinePath = path.join(tempDirectory, 'baseline.json')
-  writeFileSync(
-    temporaryBaselinePath,
-    `${JSON.stringify(alignBaselineLocations(materializeBaseline(baseline), current), null, 2)}\n`,
+  return report.functions
+}
+
+export function checkComplexity({ root = ROOT_DIRECTORY, scope, base, head }) {
+  const mergeBase = findMergeBase(root, base, head)
+  const changes = listChanges(root, mergeBase, head).filter(
+    ({ headPath }) => headPath && isProductionSource(headPath, scope),
   )
-  return runCodeMultiVitals(
-    createCliArguments(temporaryBaselinePath, null, getScopePatterns(readScope())),
+  const directory = mkdtempSync(join(tmpdir(), 'stardust-complexity-'))
+  const analysis = { directory, thresholds: readThresholds(root) }
+  const result = { mergeBase, files: changes.length, violations: [], warnings: [] }
+  try {
+    for (const { basePath, headPath } of changes) {
+      // A file that was not readable production source before has no functions to
+      // compare with, so everything in it counts as new.
+      const before =
+        basePath && isProductionSource(basePath)
+          ? analyseSource(
+              analysis,
+              'base',
+              basePath,
+              runGit(root, ['show', `${mergeBase}:${basePath}`]),
+            ).functions
+          : []
+      const after = measureHead(
+        analysis,
+        headPath,
+        head
+          ? runGit(root, ['show', `${head}:${headPath}`])
+          : readFileSync(join(root, headPath), 'utf8'),
+      )
+      const comparison = compareFunctions(before, after)
+      for (const key of ['violations', 'warnings']) {
+        result[key].push(...comparison[key].map((item) => ({ path: headPath, ...item })))
+      }
+    }
+  } finally {
+    rmSync(directory, { recursive: true, force: true })
+  }
+  return result
+}
+
+function formatValue(value) {
+  return value === undefined ? '—' : String(Math.floor(value * 100) / 100)
+}
+
+function renderLocation({ path, line, name }) {
+  return `| ${path}:${line} | \`${name}\` |`
+}
+
+function renderTitle(scope) {
+  return `## Complexity: ${scope ?? 'all workspaces'}`
+}
+
+export function renderFailure(scope, message) {
+  return [
+    renderTitle(scope),
+    '',
+    '**FAIL**: the gate could not measure the change.',
+    '',
+    '```text',
+    message,
+    '```',
+    '',
+  ].join('\n')
+}
+
+export function renderComplexity(scope, result) {
+  const { mergeBase, files, violations, warnings } = result
+  const summary = violations.length
+    ? `**FAIL**: ${violations.length} blocking result(s).`
+    : '**PASS**'
+  const violationRows = violations.map(
+    (item) =>
+      `${renderLocation(item)} ${METRICS[item.metric].label} | ${formatValue(item.before)} | ${formatValue(item.after)} | ≤ ${formatValue(item.allowed)} | ${item.reason} |`,
   )
+  const warningRows = warnings.map(
+    (item) =>
+      `${renderLocation(item)} ${METRICS[item.metric].label} | ${formatValue(item.before)} | ${formatValue(item.after)} |`,
+  )
+  return [
+    renderTitle(scope),
+    '',
+    `Compared ${files} changed source file(s) with ${mergeBase.slice(0, 8)}.`,
+    '',
+    summary,
+    '',
+    ...(violationRows.length
+      ? [
+          '| File | Function | Metric | Before | After | Allowed | Reason |',
+          '| --- | --- | --- | ---: | ---: | ---: | --- |',
+          ...violationRows,
+          '',
+        ]
+      : []),
+    ...(warningRows.length
+      ? [
+          `<details><summary>${warningRows.length} new warning(s), not blocking</summary>`,
+          '',
+          '| File | Function | Metric | Before | After |',
+          '| --- | --- | --- | ---: | ---: |',
+          ...warningRows,
+          '',
+          '</details>',
+          '',
+        ]
+      : []),
+  ].join('\n')
+}
+
+export function parseArguments(argumentsList) {
+  const options = { base: 'origin/main' }
+  const rest = argumentsList.filter((argument) => argument !== '--')
+  for (let index = 0; index < rest.length; index += 2) {
+    const [flag, value] = [rest[index], rest[index + 1]]
+    if (!value || value.startsWith('--')) throw new Error(USAGE)
+    if (flag === '--scope') options.scope = value
+    else if (flag === '--base') options.base = value
+    else if (flag === '--head') options.head = value
+    else if (flag === '--output') options.output = value
+    else throw new Error(`Unknown option: ${flag}\n${USAGE}`)
+  }
+  if (options.scope && !SOURCE_SCOPES[options.scope]) {
+    throw new Error(
+      `Unknown complexity scope "${options.scope}". Expected one of ${Object.keys(SOURCE_SCOPES).join(', ')}.`,
+    )
+  }
+  return options
+}
+
+// The output file and the `findings` step output drive the pull-request comment.
+function publishReport({ output }, markdown, hasFindings) {
+  process.stdout.write(markdown)
+  if (output) {
+    mkdirSync(dirname(resolve(output)), { recursive: true })
+    writeFileSync(output, markdown)
+  }
+  const { GITHUB_OUTPUT, GITHUB_STEP_SUMMARY } = process.env
+  if (GITHUB_STEP_SUMMARY) appendFileSync(GITHUB_STEP_SUMMARY, `\n${markdown}`)
+  if (GITHUB_OUTPUT) appendFileSync(GITHUB_OUTPUT, `findings=${hasFindings}\n`)
 }
 
 function main() {
-  const shouldUpdateBaseline = process.argv.includes('--update-baseline')
-  const scope = readScope()
-  if (shouldUpdateBaseline && scope) {
-    throw new Error(
-      'The shared complexity baseline cannot be updated for a single scope. Omit --scope.',
-    )
-  }
-  const temporaryDirectory = mkdtempSync(
-    path.join(os.tmpdir(), 'stardust-code-multivitals-'),
-  )
+  const options = parseArguments(process.argv.slice(2))
+  let result
   try {
-    if (shouldUpdateBaseline) {
-      updateBaseline(temporaryDirectory)
-      return 0
-    }
-    return checkAgainstBaseline(temporaryDirectory)
-  } finally {
-    rmSync(temporaryDirectory, { recursive: true, force: true })
+    result = checkComplexity(options)
+  } catch (error) {
+    publishReport(options, renderFailure(options.scope, error.message), true)
+    throw error
   }
+  const { violations, warnings } = result
+  const hasFindings = violations.length + warnings.length > 0
+  publishReport(options, renderComplexity(options.scope, result), hasFindings)
+  if (violations.length) process.exitCode = 1
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
-    process.exitCode = main()
+    main()
   } catch (error) {
-    console.error(error instanceof Error ? error.message : error)
+    console.error(`Complexity: ${error.message}`)
     process.exitCode = 1
   }
-}
-
-export {
-  alignBaselineLocations,
-  createCliArguments,
-  getScopePatterns,
-  materializeBaseline,
-  normalizeBaseline,
-  toAbsolutePath,
-  toRepositoryPath,
 }
