@@ -212,9 +212,11 @@ A cobertura da Web vem apenas do Jest: cenários Playwright não contam. No Serv
 ela combina testes unitários e de integração, a partir do relatório consolidado
 por `test:coverage:merge`.
 
-Cada job grava o resultado no resumo, publica um comentário por workspace no PR,
-com métricas, pisos e linhas sem cobertura, e envia o resumo e o LCOV como
-artifact por 14 dias. PRs de forks não são comentados.
+Cada job de testes grava no resumo as métricas, os pisos e as linhas sem
+cobertura e envia o resumo e o LCOV como artifact por 14 dias. O comentário de
+cada workspace no PR é publicado pelo job `coverage-comment`, com
+`scripts/comment-coverage-report.mjs`: só esse job tem `pull-requests: write` e
+ele não instala dependências. PRs de forks não são comentados.
 
 Para reproduzir o gate depois de gerar a cobertura de um workspace:
 
