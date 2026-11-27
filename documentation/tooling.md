@@ -175,6 +175,57 @@ mantém um único comentário, atualizado nas execuções seguintes, inclusive p
 `PASS`. Um PR sem nada a reportar não recebe comentário, e PRs de forks não são
 comentados. `--output <path>` grava o relatório publicado no comentário.
 
+## Gates de cobertura
+
+A cobertura tem dois gates no CI: os pisos por workspace e a cobertura das linhas
+alteradas.
+
+### Pisos por workspace
+
+`coverage-baseline.json` guarda o piso de linhas, statements, funções e branches
+de Core, Server, Backoffice e Web. `pnpm run check:coverage <workspace>` falha
+quando qualquer métrica fica abaixo dele. Os pisos ficam cerca de um ponto abaixo
+dos últimos resultados do CI, para absorver pequenas variações. Eleve-os quando os
+resultados subirem e nunca os reduza para uma mudança passar. O Backoffice mantém
+o piso anterior onde um ponto de margem o reduziria.
+
+O Core e a Web já relatavam os arquivos de produção que nenhum teste importa. O
+Server também os inclui, para que um arquivo sem teste apareça com `0%`. Ficam
+fora do relatório do Server os testes, fakers, declarações, barrels `index.ts`,
+pastas `types/`, `database/drizzle/DatabaseAccess.ts` e o seed de
+desenvolvimento (`database/seed.ts` e `database/seeders/`). O provider V8 do
+Server conta como não cobertas todas as linhas de um arquivo que nenhum teste
+carrega, inclusive comentários, e todas as linhas de um arquivo só de tipos:
+mantenha tipos puros em pastas `types/`. O adapter legado `database/supabase`
+continua medido.
+
+### Cobertura das linhas alteradas
+
+Em PRs, os jobs de testes de Core, Server e Web também exigem a cobertura das
+linhas alteradas. `scripts/check-changed-coverage.mjs` cruza o relatório LCOV do
+workspace com as linhas que o PR adiciona ou modifica em `src/` e exige ao menos
+**80% das linhas executáveis** e **70% das branches** nessas linhas. Arquivos
+excluídos do relatório não são medidos, e uma mudança sem linhas executáveis
+passa. Backoffice e os demais pacotes não têm esse gate.
+
+A cobertura da Web vem apenas do Jest: cenários Playwright não contam. No Server
+ela combina testes unitários e de integração, a partir do relatório consolidado
+por `test:coverage:merge`.
+
+Cada job grava o resultado no resumo, publica um comentário por workspace no PR,
+com métricas, pisos e linhas sem cobertura, e envia o resumo e o LCOV como
+artifact por 14 dias. PRs de forks não são comentados.
+
+Para reproduzir o gate depois de gerar a cobertura de um workspace:
+
+```bash
+node scripts/check-changed-coverage.mjs core packages/core/coverage/lcov.info --base "$(git merge-base origin/main HEAD)" --working-tree
+```
+
+`--working-tree` também mede linhas não commitadas e arquivos não rastreados.
+Cobertura complementa as asserções de comportamento; sozinha, não prova
+aceitação, autorização, falhas ou persistência.
+
 ## Scripts por workspace
 
 As descrições abaixo refletem os scripts declarados nos `package.json` atuais.
@@ -236,34 +287,34 @@ locais aparece em `forbiddenTestPaths` e falha o CI.
 
 ### `apps/server`
 
-| Script                | Descrição                                                                                                 |
-| --------------------- | --------------------------------------------------------------------------------------------------------- |
-| `dev`                 | Inicia a API em modo watch com `.env.local`.                                                              |
-| `lint`                | Executa o lint de `src` com nível de diagnóstico de erro.                                                 |
-| `format`              | Formata `src` e grava as alterações.                                                                      |
-| `check:code`          | Verifica `src` com Biome, sem aplicar correções.                                                          |
-| `check:types`         | Executa o TypeScript sem emitir arquivos.                                                                 |
-| `check:complexity`    | Verifica a complexidade do código alterado em `apps/server`.                                              |
-| `check:architecture`  | Verifica as dependências arquiteturais do Server com dependency-cruiser.                                  |
-| `check:updates`       | Lista atualizações de dependências com `ncu`.                                                             |
-| `build`               | Compila o Server com tsup.                                                                                |
-| `prod`                | Inicia o build do Server usando `.env`.                                                                   |
-| `db:test`             | Inicia os serviços Supabase necessários e reinicia o banco local de testes.                               |
-| `db:migrate`          | Aplica as migrations Drizzle com `tsx scripts/migrate-database.ts`, inclusive as posteriores à transição. |
-| `db:preflight`        | Verifica o estado de transição ou, com migrations posteriores, o prefixo e o journal completo no ledger.  |
-| `db:prod`             | Vincula a CLI Supabase ao projeto de produção.                                                            |
-| `db:dev`              | Vincula a CLI Supabase ao projeto de desenvolvimento.                                                     |
-| `db:pull`             | Baixa os schemas Auth, Public, Storage e Realtime.                                                        |
-| `db:push`             | Aplica migrations ao projeto Supabase vinculado.                                                          |
-| `db:types`            | Gera os tipos TypeScript do banco de desenvolvimento.                                                     |
-| `db:revert`           | Marca uma migration como revertida; o ID da migration é argumento posicional.                             |
-| `update`              | Atualiza uma dependência específica com `ncu`; o nome da dependência é argumento posicional.              |
-| `test:unit`           | Executa o projeto Jest `unit` do Server (controllers, jobs, tools e demais testes sem serviço externo).   |
-| `test:coverage`       | Executa os testes unitários do Server com relatório JSON de cobertura.                                    |
-| `test:coverage:merge` | Consolida a cobertura unitária e dos seis shards de integração do Server antes do ratchet.                |
-| `test:hono`           | Executa o projeto Jest `hono` do Server (testes de rotas HTTP; exige Supabase local).                     |
-| `test:inngest`        | Executa o projeto Jest `inngest` do Server (exige Supabase local e o Inngest Dev Server).                 |
-| `test:integration`    | Executa os projetos `hono` e `inngest` do Server.                                                         |
+| Script                | Descrição                                                                                                  |
+| --------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `dev`                 | Inicia a API em modo watch com `.env.local`.                                                               |
+| `lint`                | Executa o lint de `src` com nível de diagnóstico de erro.                                                  |
+| `format`              | Formata `src` e grava as alterações.                                                                       |
+| `check:code`          | Verifica `src` com Biome, sem aplicar correções.                                                           |
+| `check:types`         | Executa o TypeScript sem emitir arquivos.                                                                  |
+| `check:complexity`    | Verifica a complexidade do código alterado em `apps/server`.                                               |
+| `check:architecture`  | Verifica as dependências arquiteturais do Server com dependency-cruiser.                                   |
+| `check:updates`       | Lista atualizações de dependências com `ncu`.                                                              |
+| `build`               | Compila o Server com tsup.                                                                                 |
+| `prod`                | Inicia o build do Server usando `.env`.                                                                    |
+| `db:test`             | Inicia os serviços Supabase necessários e reinicia o banco local de testes.                                |
+| `db:migrate`          | Aplica as migrations Drizzle com `tsx scripts/migrate-database.ts`, inclusive as posteriores à transição.  |
+| `db:preflight`        | Verifica o estado de transição ou, com migrations posteriores, o prefixo e o journal completo no ledger.   |
+| `db:prod`             | Vincula a CLI Supabase ao projeto de produção.                                                             |
+| `db:dev`              | Vincula a CLI Supabase ao projeto de desenvolvimento.                                                      |
+| `db:pull`             | Baixa os schemas Auth, Public, Storage e Realtime.                                                         |
+| `db:push`             | Aplica migrations ao projeto Supabase vinculado.                                                           |
+| `db:types`            | Gera os tipos TypeScript do banco de desenvolvimento.                                                      |
+| `db:revert`           | Marca uma migration como revertida; o ID da migration é argumento posicional.                              |
+| `update`              | Atualiza uma dependência específica com `ncu`; o nome da dependência é argumento posicional.               |
+| `test:unit`           | Executa o projeto Jest `unit` do Server (controllers, jobs, tools e demais testes sem serviço externo).    |
+| `test:coverage`       | Executa os testes unitários do Server com relatório JSON de cobertura.                                     |
+| `test:coverage:merge` | Consolida a cobertura unitária e dos seis shards de integração do Server em resumo e LCOV antes dos gates. |
+| `test:hono`           | Executa o projeto Jest `hono` do Server (testes de rotas HTTP; exige Supabase local).                      |
+| `test:inngest`        | Executa o projeto Jest `inngest` do Server (exige Supabase local e o Inngest Dev Server).                  |
+| `test:integration`    | Executa os projetos `hono` e `inngest` do Server.                                                          |
 
 Exemplos de comandos de banco:
 
@@ -648,10 +699,8 @@ rota protegida além da tela de login. Credenciais devem permanecer em
    aplicáveis do preflight.
 7. Build no CI, depois dos checks aplicáveis.
 
-Os checks do PR são a composição dos checks normais. A cobertura possui um
-quality ratchet por workspace para Core, Server, Backoffice e Web; os thresholds
-versionados em `coverage-baseline.json` nunca podem diminuir sem uma alteração
-revisada desse arquivo.
+Os checks do PR são a composição dos checks normais. A cobertura segue os gates
+descritos em [Gates de cobertura](#gates-de-cobertura).
 
 No Server, o ratchet considera a cobertura conjunta dos testes unitários e dos
 seis shards de integração, incluindo os adapters Drizzle exercitados pelas

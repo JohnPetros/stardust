@@ -475,7 +475,9 @@ adicionar, mover ou remover testes. O ratchet de cobertura
 workspace inteiro e roda no CI de `@stardust/core`, `@stardust/server`, `@stardust/backoffice` e
 `@stardust/web`; execute-o localmente apenas quando o impacto demonstrado abranger o
 workspace, quando a Spec o exigir ou quando o usuário pedir. Os checks falham se qualquer
-métrica ficar abaixo do baseline versionado em `coverage-baseline.json`. O
+métrica ficar abaixo do baseline versionado em `coverage-baseline.json`. Em PRs, o CI de
+Core, Server e Web também exige 80% das linhas executáveis e 70% das branches alteradas,
+conforme "Gates de cobertura" em `documentation/tooling.md`. O
 `check:test-integrity` exige pareamento
 somente para controllers, jobs, use-cases, entidades/structures/aggregates,
 hooks, views/widgets, Web routes (`app/page|layout|route`) e Server routes

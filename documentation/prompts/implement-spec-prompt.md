@@ -249,7 +249,9 @@ After integrating all implementation flows and the generated artifacts:
    consumers, `test:unit` with the affected test files, `check:test-integrity` and
    `check:architecture` when applicable, per "Execução local escopada" in
    `documentation/tooling.md`. Coverage/ratchet and full suites only come in with demonstrated
-   impact on the workspace, a Spec requirement or a user request (CI runs them).
+   impact on the workspace, a Spec requirement or a user request (CI runs them). In Core,
+   Server and Web, PR CI also requires 80% of the changed executable lines and 70% of the
+   changed-line branches to be covered: write the tests that cover the changed behavior.
    Run `pnpm --filter @stardust/<workspace> run check:complexity` for every workspace that
    gains or changes code, Server included (new files and extracted Views count). The gate compares
    the change with the merge base of `origin/main` (see "Gate de complexidade" in
