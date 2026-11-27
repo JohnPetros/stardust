@@ -17,8 +17,8 @@ describe('View Solution Use Case', () => {
     useCase = new ViewSolutionUseCase(repository)
   })
 
-  it('should throw an error if the solution does not exist', () => {
-    expect(useCase.execute({ solutionSlug: 'fake-slug' })).rejects.toThrow(
+  it('should throw an error if the solution does not exist', async () => {
+    await expect(useCase.execute({ solutionSlug: 'fake-slug' })).rejects.toThrow(
       SolutionNotFoundError,
     )
   })

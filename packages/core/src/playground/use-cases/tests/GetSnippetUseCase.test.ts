@@ -19,7 +19,7 @@ describe('Get Snippet Use Case', () => {
     const snippet = SnippetsFaker.fake()
     repository.findById.mockResolvedValue(null)
 
-    expect(
+    await expect(
       useCase.execute({
         snippetId: snippet.id.value,
         authorId: snippet.author.id.value,

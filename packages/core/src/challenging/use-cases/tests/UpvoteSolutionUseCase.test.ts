@@ -18,8 +18,8 @@ describe('Upvote Solution Use Case', () => {
     useCase = new UpvoteSolutionUseCase(repository)
   })
 
-  it('should throw an error if the solution does not exist', () => {
-    expect(
+  it('should throw an error if the solution does not exist', async () => {
+    await expect(
       useCase.execute({
         solutionId: '',
         userId: '',

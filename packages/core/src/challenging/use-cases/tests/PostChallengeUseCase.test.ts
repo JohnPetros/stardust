@@ -32,7 +32,7 @@ describe('Post Challenge Use Case', () => {
     const challenge = ChallengesFaker.fake()
     repository.findBySlug.mockResolvedValue(challenge)
 
-    expect(
+    await expect(
       useCase.execute({
         challengeDto: challenge.dto,
       }),

@@ -22,11 +22,11 @@ describe('Reach First Tier Use Case', () => {
     useCase = new ReachFirstTierUseCase(tiersRepository, Broker)
   })
 
-  it('should throw if tier is not found', () => {
+  it('should throw if tier is not found', async () => {
     const user = UsersFaker.fake()
     tiersRepository.findByPosition.mockResolvedValue(null)
 
-    expect(
+    await expect(
       useCase.execute({
         user: { id: user.id.value, name: user.name.value, email: user.email.value },
         firstUnlockedStarId: Id.create().value,

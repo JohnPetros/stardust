@@ -20,11 +20,13 @@ describe('Get Ranking Use Case', () => {
     useCase = new GetRankingUseCase(tiersRepository, rankersRepository)
   })
 
-  it('should throw if tier is not found', () => {
+  it('should throw if tier is not found', async () => {
     const tierId = Id.create()
     tiersRepository.findById.mockResolvedValue(null)
 
-    expect(useCase.execute({ tierId: tierId.value })).rejects.toThrow(TierNotFoundError)
+    await expect(useCase.execute({ tierId: tierId.value })).rejects.toThrow(
+      TierNotFoundError,
+    )
   })
 
   it('should return the rankers of the tier', async () => {

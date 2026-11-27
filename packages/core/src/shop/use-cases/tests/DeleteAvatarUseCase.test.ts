@@ -17,10 +17,10 @@ describe('Delete Avatar Use Case', () => {
     useCase = new DeleteAvatarUseCase(repository)
   })
 
-  it('should throw an error if the avatar is not found', () => {
+  it('should throw an error if the avatar is not found', async () => {
     repository.findById.mockResolvedValue(null)
 
-    expect(useCase.execute({ avatarId: Id.create().value })).rejects.toThrow(
+    await expect(useCase.execute({ avatarId: Id.create().value })).rejects.toThrow(
       AvatarNotFoundError,
     )
   })

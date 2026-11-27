@@ -23,7 +23,7 @@ describe('Vote Challenge Use Case', () => {
   })
 
   it('should throw an error if challenge is not found', async () => {
-    expect(
+    await expect(
       useCase.execute({
         challengeId: Id.create().value,
         userId: Id.create().value,

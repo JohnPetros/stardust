@@ -17,10 +17,10 @@ describe('Delete Rocket Use Case', () => {
     useCase = new DeleteRocketUseCase(repository)
   })
 
-  it('should throw an error if the rocket is not found', () => {
+  it('should throw an error if the rocket is not found', async () => {
     repository.findById.mockResolvedValue(null)
 
-    expect(useCase.execute({ rocketId: Id.create().value })).rejects.toThrow(
+    await expect(useCase.execute({ rocketId: Id.create().value })).rejects.toThrow(
       RocketNotFoundError,
     )
   })

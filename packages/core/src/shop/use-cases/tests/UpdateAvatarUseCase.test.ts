@@ -17,11 +17,11 @@ describe('Update Avatar Use Case', () => {
     useCase = new UpdateAvatarUseCase(repository)
   })
 
-  it('should throw an error if the avatar is not found', () => {
+  it('should throw an error if the avatar is not found', async () => {
     const avatarDto = AvatarsFaker.fake().dto
     repository.findById.mockResolvedValue(null)
 
-    expect(useCase.execute({ avatarDto })).rejects.toThrow(AvatarNotFoundError)
+    await expect(useCase.execute({ avatarDto })).rejects.toThrow(AvatarNotFoundError)
   })
 
   it('should update the avatar when isSelectedByDefault is false', async () => {

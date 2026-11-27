@@ -22,7 +22,7 @@ describe('Get Challenge Vote Use Case', () => {
   it('should throw an error if the challenge is not found', async () => {
     const challenge = ChallengesFaker.fake()
     const userId = Id.create()
-    expect(
+    await expect(
       useCase.execute({
         challengeId: challenge.id.value,
         userId: userId.value,
