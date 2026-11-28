@@ -245,16 +245,16 @@ After integrating all implementation flows and the generated artifacts:
    filesystem. With `--require-plan` it also requires the `plan.md` of the current revision, with
    one row per mapped path, linked `RF-*`/`CA-*` IDs that exist in the Spec and every row
    `completed`. It is structural and does not replace tests, sensors, Reviewers nor Evaluation.
-3. Run `format`, `check:code` and `check:types` in the affected workspaces and in their
-   consumers, `test:unit` with the affected test files, `check:test-integrity` and
-   `check:architecture` when applicable, per "Execução local escopada" in
-   `documentation/tooling.md`. Coverage/ratchet and full suites only come in with demonstrated
-   impact on the workspace, a Spec requirement or a user request (CI runs them). In Core,
-   Server and Web, PR CI also gates the coverage of the changed lines and branches (see
-   "Gates de cobertura" in `documentation/tooling.md`): write the tests that cover the
-   changed behavior. Changed Core use cases also pass the CI mutation score gate ("Gate de
-   mutação"): run `test:mutation` on them and strengthen the assertions that let mutants
-   survive.
+3. Run `format`, `check:code` and `check:types` in the affected workspaces and in their consumers,
+   `test:unit` with the affected test files, `check:test-integrity` and `check:architecture` when
+   applicable, per "Execução local escopada" in `documentation/tooling.md`; `pnpm run
+   check:changed` runs most of this selection ("Verificação do que mudou"), and what it skips or
+   leaves out still applies. Coverage/ratchet and full suites only come in with demonstrated
+   impact on the workspace, a Spec requirement or a user request (CI runs them). In Core, Server
+   and Web, PR CI also gates the coverage of the changed lines and branches (see "Gates de
+   cobertura" in `documentation/tooling.md`): write the tests that cover the changed behavior.
+   Changed Core use cases also pass the CI mutation score gate ("Gate de mutação"): run
+   `test:mutation` on them and strengthen the assertions that let mutants survive.
    Run `pnpm --filter @stardust/<workspace> run check:complexity` for every workspace that
    gains or changes code, Server included (new files and extracted Views count). The gate compares
    the change with the merge base of `origin/main` (see "Gate de complexidade" in

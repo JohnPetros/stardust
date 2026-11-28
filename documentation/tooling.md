@@ -33,6 +33,7 @@ eval "$(node ./scripts/export-web-app-e2e-env.mjs)"
 | Script                               | Ferramenta              | Comportamento                                                                                      |
 | ------------------------------------ | ----------------------- | -------------------------------------------------------------------------------------------------- |
 | `pnpm run format`                    | Biome                   | formata e escreve arquivos                                                                         |
+| `pnpm run check:changed`             | Node.js                 | verifica só o que mudou desde o ponto em que o branch saiu de `origin/main`                        |
 | `pnpm run check:code`                | Biome                   | lint/check read-only                                                                               |
 | `pnpm run check:types`               | TypeScript              | typecheck sem emissão                                                                              |
 | `pnpm run check:architecture`        | dependency-cruiser      | valida dependências entre camadas/apps                                                             |
@@ -58,7 +59,9 @@ implementação derivam dela quais checks rodar, quando e em que forma de comand
 
 As suítes completas não são o padrão local. Execute só as verificações que o escopo da
 alteração exige: o comportamento da Spec, as fronteiras de produção alteradas e os
-consumidores diretamente afetados. Determine o impacto pelo diff e pelas dependências
+consumidores diretamente afetados. O comando da seção
+[Verificação do que mudou](#verificação-do-que-mudou) aplica a parte automática
+dessa seleção. Determine o impacto pelo diff e pelas dependências
 reais, não por arquivos de nome parecido nem pelo fato de um app ter sido tocado. Uma
 mudança de apresentação na Web não exige testes do Server; uma mudança no Server sem
 efeito observável no navegador não exige testes de browser. Contratos compartilhados
@@ -109,6 +112,68 @@ os resultados de unit, integração do Server e integração da Web.
 Os limites do dependency-cruiser ficam em `.dependency-cruiser.cjs`. Altere essa
 configuração somente para representar limites legítimos, nunca para ocultar uma
 regressão.
+
+## Verificação do que mudou
+
+`pnpm run check:changed` reúne em um comando as verificações locais desta seção
+para o que mudou desde o ponto em que o branch saiu de `origin/main`, incluindo
+alterações não commitadas e arquivos não rastreados. Ele não roda uma suíte
+inteira nem substitui o CI.
+
+```bash
+git fetch origin
+pnpm run check:changed --dry-run
+pnpm run check:changed
+```
+
+| Verificação                    | O que entra                                                                                                               |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| Lint                           | Arquivos alterados dentro dos caminhos do `check:code` de cada workspace.                                                 |
+| Complexidade                   | Gate sobre a mudança, quando há código alterado em um workspace com o gate.                                               |
+| Tipos                          | Workspaces alterados e, quando muda algo além de testes, os consumidores.                                                 |
+| Arquitetura                    | `check:architecture` da raiz para Core, Server, Web e Backoffice; o do Crew quando só ele muda.                           |
+| Integridade e scripts          | `check:test-integrity` quando um teste muda, e o teste de mesmo nome de cada script alterado.                             |
+| Testes                         | Testes alterados, os de mesmo nome e os que importam os arquivos alterados (Jest e Vitest). No LSP, só os dois primeiros. |
+| Cobertura das linhas alteradas | Core, Server e Web, medida sobre os testes selecionados.                                                                  |
+| Playwright                     | Apenas os cenários alterados ou informados.                                                                               |
+| Mutação                        | Casos de uso do Core alterados, e todos os do módulo quando um teste deles muda.                                          |
+
+Opções:
+
+- `--base <ref>` troca o ponto de comparação;
+- `--tests <arquivos>` acrescenta testes, com caminhos relativos à raiz;
+- `--integration` inclui os testes de integração do Server;
+- `--dry-run` lista as verificações e os testes selecionados sem executá-los.
+
+Limites da seleção:
+
+- quando mais de **40** arquivos de teste importam as mudanças de um workspace,
+  rodam só os alterados, os de mesmo nome e os informados. Sem `--tests` para o
+  workspace, a execução fica incompleta; com `--tests`, a cobertura é medida
+  sobre essa seleção;
+- os testes dos consumidores de um pacote não são selecionados; informe os
+  afetados com `--tests`;
+- os testes de integração do Server limpam o banco local. Eles só rodam com
+  `--integration` e Docker ativo, depois de `db:test`, em série e junto dos
+  unitários. A cobertura local do Server conta apenas os testes selecionados,
+  enquanto o CI soma toda a integração;
+- os testes de integração alterados do Crew usam containers descartáveis e rodam
+  quando o Docker está ativo;
+- evals do Crew e testes de scripts que exigem banco não rodam;
+- quando o pacote LSP muda ou não tem build, ele é compilado antes dos testes dos
+  apps.
+
+```bash
+pnpm --filter @stardust/server run db:test
+pnpm run check:changed --integration --tests apps/server/src/tests/hono/routes/auth/SignInRoute.test.ts
+```
+
+O resumo marca cada verificação como `PASS`, `FAIL`, `SKIPPED` ou `REVIEW`. A
+mutação termina em `REVIEW`, porque o gate compara dois lados: confira os scores
+por arquivo com o [Gate de mutação](#gate-de-mutação). O código de saída é `1`
+quando algo falha, `2` quando alguma verificação foi pulada e `0` nos demais
+casos. Uma verificação pulada não conta como aprovada, e as notas impressas ao
+final indicam o que ainda precisa ser escolhido manualmente.
 
 ## Gate de complexidade
 
@@ -311,6 +376,7 @@ partir da raiz.
 | `check:types`               | Executa os typechecks dos workspaces via Turbo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `check:architecture`        | Verifica as dependências entre camadas com dependency-cruiser.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `check:complexity`          | Compara a complexidade das funções alteradas com o branch de destino, sem baseline versionado.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `check:changed`             | Roda as verificações locais do que mudou desde o ponto em que o branch saiu de `origin/main`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `test`                      | Alias para `test:unit`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `test:unit`                 | Executa os testes unitários dos workspaces via Turbo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `test:coverage`             | Executa cobertura dos workspaces com ratchet habilitado.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |

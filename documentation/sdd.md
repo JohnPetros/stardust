@@ -469,7 +469,9 @@ Após alteração de código, execute os detectores de `AGENTS.md` no escopo afe
 `check:code` e `check:types` nos workspaces alterados e nos consumidores, e `test:unit`
 com os arquivos de teste verificados no código. Acrescente `check:architecture`, testes
 de integração (somente os arquivos ou cenários afetados), geração, browser, Supabase Dev e
-build conforme Rules, Spec, paths e risco. Execute `pnpm run check:test-integrity` depois de
+build conforme Rules, Spec, paths e risco. `pnpm run check:changed` executa a maior parte
+dessa seleção ("Verificação do que mudou" em `documentation/tooling.md`); o que ele pula ou
+não seleciona continua exigido. Execute `pnpm run check:test-integrity` depois de
 adicionar, mover ou remover testes. O ratchet de cobertura
 (`pnpm run test:coverage -w <workspace>` e `pnpm run check:coverage <workspace>`) mede o
 workspace inteiro e roda no CI de `@stardust/core`, `@stardust/server`, `@stardust/backoffice` e
