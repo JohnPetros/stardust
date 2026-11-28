@@ -111,7 +111,10 @@ test('asks for a choice when the related tests are close to the whole suite', ()
   }
   const result = plan([source], options)
 
-  assert.match(command(result, 'Tests: packages/core'), new RegExp(`Path ${named} --`))
+  assert.match(
+    command(result, 'Tests: packages/core'),
+    new RegExp(`--runTestsByPath ${named} --`),
+  )
   assert.match(
     find(result, 'Related tests: packages/core').skip,
     /41 test files import the changed files/,
