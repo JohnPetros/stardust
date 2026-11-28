@@ -253,6 +253,10 @@ presentation change in the Web does not require Server tests, and a change in
 the Server with no observable effect in the browser does not require browser
 tests.
 
+- `pnpm run check:changed` runs most of the detectors below for what changed since the
+  branch left `origin/main`, without whole suites; see "Verificação do que mudou" in
+  `documentation/tooling.md` for the selection and its limits. A skipped check is not a
+  pass: act on the notes it prints.
 - `pnpm run check:code -w <workspace>` and `pnpm run check:types -w <workspace>`
   for each changed workspace and for the affected consumers. The typecheck uses
   the workspace's entire project; do not pass files to `tsc`.

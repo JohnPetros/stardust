@@ -39,6 +39,15 @@ const sharedConfig: Config = {
 
 const config: Config = {
   coverageProvider: 'v8',
+  // `json` writes the report that the coverage merge reads. LCOV paths are relative to
+  // the repository root, as the changed-lines gate expects. The CI scripts pass their
+  // own reporters.
+  coverageReporters: [
+    'json',
+    'json-summary',
+    'text-summary',
+    ['lcov', { projectRoot: '../..' }],
+  ],
   // Jest reads this only at the root, not inside `projects`. It also reports the
   // production files that no test loads, so an untested file stays visible at 0%.
   collectCoverageFrom: [

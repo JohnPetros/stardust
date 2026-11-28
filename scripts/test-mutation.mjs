@@ -94,7 +94,7 @@ function gitPaths(root, argumentsList) {
   return git(root, argumentsList).split('\0').filter(Boolean)
 }
 
-function listUseCases(root, directory) {
+export function listUseCases(root, directory) {
   return gitPaths(root, [
     'ls-files',
     '-z',
