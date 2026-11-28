@@ -636,6 +636,25 @@ function listChanges(base) {
   return [...changes, ...untracked.map((path) => ({ path, deleted: false }))]
 }
 
+// Reads the JSON list that Jest and Vitest print, after any line written before it.
+export function parseRelatedFiles(output, cwd) {
+  const failure = `The test runner printed no readable list of test files in ${cwd}`
+  const start = output.search(/^\[/m)
+  if (start < 0) throw new Error(failure)
+  let files
+  try {
+    files = JSON.parse(output.slice(start))
+  } catch (cause) {
+    throw new Error(failure, { cause })
+  }
+  // Jest lists paths, and Vitest lists objects with a `file` path.
+  return files.map((item) =>
+    relative(cwd, item.file ?? item)
+      .split(sep)
+      .join('/'),
+  )
+}
+
 // Asks the runner which test files import the changed sources, without running them.
 function createRelatedLister(base) {
   return (directory, sources) => {
@@ -654,12 +673,7 @@ function createRelatedLister(base) {
       encoding: 'utf8',
       maxBuffer: 64 * 1024 * 1024,
     })
-    const files = JSON.parse(output.slice(output.search(/^\[/m)))
-    return files.map((item) =>
-      relative(cwd, item.file ?? item)
-        .split(sep)
-        .join('/'),
-    )
+    return parseRelatedFiles(output, cwd)
   }
 }
 

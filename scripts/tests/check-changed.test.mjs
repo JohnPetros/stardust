@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
+import { join, resolve } from 'node:path'
 import test from 'node:test'
 import { fileURLToPath } from 'node:url'
 
@@ -7,6 +8,7 @@ import {
   executeSteps,
   exitCodeFor,
   parseArguments,
+  parseRelatedFiles,
   planChecks,
   RELATED_TESTS_LIMIT,
 } from '../check-changed.mjs'
@@ -362,6 +364,30 @@ test('reads its options and rejects anything else', () => {
     () => plan([], { tests: ['apps/crew/src/mastra/agents/a/tests/a.test.ts'] }),
     /Not a test file/,
   )
+})
+
+test('reads the related tests that Jest and Vitest print', () => {
+  const cwd = resolve('packages/core')
+  const file = join(cwd, 'src', 'tests', 'a.test.ts')
+  const jest = JSON.stringify([file])
+  const vitest = JSON.stringify([{ file, projectName: 'unit' }], null, 2)
+  const expected = ['src/tests/a.test.ts']
+
+  assert.deepEqual(parseRelatedFiles(`${jest}\n`, cwd), expected)
+  assert.deepEqual(
+    parseRelatedFiles(`Running one project: unit\n${vitest}\n`, cwd),
+    expected,
+  )
+  assert.deepEqual(parseRelatedFiles('[]\n', cwd), [])
+})
+
+test('explains a runner output without a readable list of tests', () => {
+  for (const output of ['', 'No tests found', '[warn] unexpected line']) {
+    assert.throws(
+      () => parseRelatedFiles(output, '/repo/core'),
+      /no readable list of test files in \/repo\/core/,
+    )
+  }
 })
 
 test('lists the planned checks without running them', () => {
